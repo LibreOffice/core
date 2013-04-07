@@ -40,7 +40,7 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
 
 //------------------------------------------------------------------------------
 OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess,
-                                       const staruno::Sequence< ::rtl::OUString >&           _aNames  )
+                                       const staruno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)

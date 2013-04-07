@@ -224,16 +224,16 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
 }
 
 //==================================================================================================
-struct FctHashOUString : public ::std::unary_function< ::rtl::OUString const &, size_t >
+struct FctHashOUString : public ::std::unary_function< OUString const &, size_t >
 {
-    size_t operator()( ::rtl::OUString const & rKey ) const
+    size_t operator()( OUString const & rKey ) const
         { return (size_t)rKey.hashCode(); }
 };
 
 /** Template instance for OUString keys, Any values.<br>
 */
-typedef LRU_Cache< ::rtl::OUString, ::com::sun::star::uno::Any,
-                   FctHashOUString, ::std::equal_to< ::rtl::OUString > >
+typedef LRU_Cache< OUString, ::com::sun::star::uno::Any,
+                   FctHashOUString, ::std::equal_to< OUString > >
     LRU_CacheAnyByOUString;
 
 

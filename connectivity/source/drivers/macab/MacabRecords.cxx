@@ -229,7 +229,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int3
 }
 
 // -------------------------------------------------------------------------
-macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const ::rtl::OUString _columnName) const
+macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString _columnName) const
 {
     if(header != NULL)
     {
@@ -247,7 +247,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const ::rtl::O
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 MacabRecords::getFieldNumber(const ::rtl::OUString _columnName) const
+sal_Int32 MacabRecords::getFieldNumber(const OUString _columnName) const
 {
     if(header != NULL)
         return header->getColumnNumber(_columnName);
@@ -437,8 +437,8 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         else
         {
             // Couldn't find a required property...
-            OSL_FAIL(::rtl::OString(::rtl::OString("MacabRecords::createHeaderForRecordType: could not find required property: ") +
-                                    ::rtl::OUStringToOString(CFStringToOUString(requiredProperties[i]), RTL_TEXTENCODING_ASCII_US)).getStr());
+            OSL_FAIL(OString(OString("MacabRecords::createHeaderForRecordType: could not find required property: ") +
+                                    OUStringToOString(CFStringToOUString(requiredProperties[i]), RTL_TEXTENCODING_ASCII_US)).getStr());
         }
     }
 
@@ -538,9 +538,9 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
 
             sal_Int32 multiLength = ABMultiValueCount((ABMutableMultiValueRef) _propertyValue);
             CFStringRef multiLabel, localizedMultiLabel;
-            ::rtl::OUString multiLabelString;
-            ::rtl::OUString multiPropertyString;
-            ::rtl::OUString headerNameString;
+            OUString multiLabelString;
+            OUString multiPropertyString;
+            OUString headerNameString;
             ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType((ABMutableMultiValueRef) _propertyValue) - 0x100);
 
             length = multiLength;
@@ -557,7 +557,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 multiLabelString = CFStringToOUString(localizedMultiLabel);
                 CFRelease(multiLabel);
                 CFRelease(localizedMultiLabel);
-                headerNameString = multiPropertyString + ::rtl::OUString(": ") + fixLabel(multiLabelString);
+                headerNameString = multiPropertyString + OUString(": ") + fixLabel(multiLabelString);
                 headerNames[i] = new macabfield;
                 headerNames[i]->value = OUStringToCFString(headerNameString);
                 headerNames[i]->type = multiType;
@@ -587,8 +587,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
 
                 CFStringRef multiLabel, localizedMultiLabel;
                 CFTypeRef multiValue;
-                ::rtl::OUString multiLabelString;
-                ::rtl::OUString multiPropertyString;
+                OUString multiLabelString;
+                OUString multiPropertyString;
                 MacabHeader **multiHeaders = new MacabHeader *[multiLengthFirstLevel];
                 ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType((ABMutableMultiValueRef) _propertyValue) - 0x100);
 
@@ -608,7 +608,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                     if(multiValue && multiLabel)
                     {
                         localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
-                        multiLabelString = multiPropertyString + ::rtl::OUString(": ") + fixLabel(CFStringToOUString(localizedMultiLabel));
+                        multiLabelString = multiPropertyString + OUString(": ") + fixLabel(CFStringToOUString(localizedMultiLabel));
                         CFRelease(multiLabel);
                         CFRelease(localizedMultiLabel);
                         multiLabel = OUStringToCFString(multiLabelString);
@@ -668,10 +668,10 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             CFTypeRef *dictValues;
 
             sal_Int32 i,j,k;
-            ::rtl::OUString dictKeyString, propertyNameString;
+            OUString dictKeyString, propertyNameString;
             ABPropertyType dictType;
             MacabHeader **dictHeaders = new MacabHeader *[numRecords];
-            ::rtl::OUString dictLabelString;
+            OUString dictLabelString;
             CFStringRef dictLabel, localizedDictKey;
 
             /* Get the keys and values */
@@ -696,7 +696,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 dictType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(dictValues[i]) );
                 localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                 dictKeyString = CFStringToOUString(localizedDictKey);
-                dictLabelString = propertyNameString + ::rtl::OUString(": ") + fixLabel(dictKeyString);
+                dictLabelString = propertyNameString + OUString(": ") + fixLabel(dictKeyString);
                 dictLabel = OUStringToCFString(dictLabelString);
                 dictHeaders[i] = createHeaderForProperty(dictType, dictValues[i], dictLabel);
                 if (!dictHeaders[i])
@@ -743,8 +743,8 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 CFTypeRef arrValue;
                 ABPropertyType arrType;
                 MacabHeader **arrHeaders = new MacabHeader *[arrLength];
-                ::rtl::OUString propertyNameString = CFStringToOUString(_propertyName);
-                ::rtl::OUString arrLabelString;
+                OUString propertyNameString = CFStringToOUString(_propertyName);
+                OUString arrLabelString;
                 CFStringRef arrLabel;
 
                 length = 0;
@@ -761,7 +761,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
                 {
                     arrValue = (CFTypeRef) CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
                     arrType = (ABPropertyType) getABTypeFromCFType( CFGetTypeID(arrValue) );
-                    arrLabelString = propertyNameString + ::rtl::OUString::valueOf(i);
+                    arrLabelString = propertyNameString + OUString::valueOf(i);
                     arrLabel = OUStringToCFString(arrLabelString);
                     arrHeaders[i] = createHeaderForProperty(arrType, arrValue, arrLabel);
                     if (!arrHeaders[i])
@@ -834,9 +834,9 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
         if(count != 1)
         {
             // There is probably a better way to do this...
-            ::rtl::OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
+            OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
             CFRelease(_headerNames[i]->value);
-            newName += ::rtl::OUString(" (") + ::rtl::OUString::valueOf(count) + ::rtl::OUString(")");
+            newName += OUString(" (") + OUString::valueOf(count) + OUString(")");
             _headerNames[i]->value = OUStringToCFString(newName);
         }
     }
@@ -866,7 +866,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
     ABPropertyType propertyType;
 
     CFStringRef propertyName, localizedPropertyName;
-    ::rtl::OUString propertyNameString;
+    OUString propertyNameString;
     for(i = 0; i < numProperties; i++)
     {
         propertyName = (CFStringRef) CFArrayGetValueAtIndex(recordProperties, i);
@@ -895,7 +895,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
  * receives the property value). It is called when we aren't given the
  * property's type already.
  */
-void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const ::rtl::OUString _propertyName, const CFTypeRef _propertyValue) const
+void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const OUString _propertyName, const CFTypeRef _propertyValue) const
 {
     CFTypeID cf_type = CFGetTypeID(_propertyValue);
     ABPropertyType ab_type = getABTypeFromCFType( cf_type );
@@ -908,7 +908,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const M
 /* Inserts a given property into a MacabRecord. This method is recursive
  * because properties can contain many sub-properties.
  */
-void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const ::rtl::OUString _propertyName, const CFTypeRef _propertyValue) const
+void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString _propertyName, const CFTypeRef _propertyValue) const
 {
     /* If there is no value, return */
     if(_propertyValue == NULL)
@@ -942,7 +942,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
              * property into the record.
              */
             sal_Bool bPlaced = sal_False;
-            ::rtl::OUString columnName = ::rtl::OUString(_propertyName);
+            OUString columnName = OUString(_propertyName);
             sal_Int32 i = 1;
 
             // A big safeguard to prevent two fields from having the same name.
@@ -957,7 +957,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     {
                         bPlaced = sal_False;
                         i++;
-                        columnName = ::rtl::OUString(_propertyName) + ::rtl::OUString(" (") + ::rtl::OUString::valueOf(i) + ::rtl::OUString(")");
+                        columnName = OUString(_propertyName) + OUString(" (") + OUString::valueOf(i) + OUString(")");
                     }
 
                     // success!
@@ -980,13 +980,13 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 sal_Int32 arrLength = (sal_Int32) CFArrayGetCount( (CFArrayRef) _propertyValue);
                 sal_Int32 i;
                 const void *arrValue;
-                ::rtl::OUString newPropertyName;
+                OUString newPropertyName;
 
                 /* Going through each element... */
                 for(i = 0; i < arrLength; i++)
                 {
                     arrValue = CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
-                    newPropertyName = _propertyName + ::rtl::OUString::valueOf(i);
+                    newPropertyName = _propertyName + OUString::valueOf(i);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, arrValue);
                     CFRelease(arrValue);
                 }
@@ -1008,9 +1008,9 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                  */
 
                 sal_Int32 numRecords = (sal_Int32) CFDictionaryGetCount((CFDictionaryRef) _propertyValue);
-                ::rtl::OUString dictKeyString;
+                OUString dictKeyString;
                 sal_Int32 i;
-                ::rtl::OUString newPropertyName;
+                OUString newPropertyName;
 
                 /* Unfortunately, the only way to get both keys and values out
                  * of a dictionary in Carbon is to get them all at once, so we
@@ -1029,7 +1029,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                     localizedDictKey = ABCopyLocalizedPropertyOrLabel(dictKeys[i]);
                     dictKeyString = CFStringToOUString(localizedDictKey);
                     CFRelease(localizedDictKey);
-                    newPropertyName = _propertyName + ::rtl::OUString(": ") + fixLabel(dictKeyString);
+                    newPropertyName = _propertyName + OUString(": ") + fixLabel(dictKeyString);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, dictValues[i]);
                 }
 
@@ -1060,7 +1060,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 sal_Int32 multiLength = ABMultiValueCount((ABMutableMultiValueRef) _propertyValue);
                 CFStringRef multiLabel, localizedMultiLabel;
                 CFTypeRef multiValue;
-                ::rtl::OUString multiLabelString, newPropertyName;
+                OUString multiLabelString, newPropertyName;
                 ABPropertyType multiType = (ABPropertyType) (ABMultiValuePropertyType((ABMutableMultiValueRef) _propertyValue) - 0x100);
 
                 /* Go through each element... */
@@ -1072,7 +1072,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
 
                     localizedMultiLabel = ABCopyLocalizedPropertyOrLabel(multiLabel);
                     multiLabelString = CFStringToOUString(localizedMultiLabel);
-                    newPropertyName = _propertyName + ::rtl::OUString(": ") + fixLabel(multiLabelString);
+                    newPropertyName = _propertyName + OUString(": ") + fixLabel(multiLabelString);
                     insertPropertyIntoMacabRecord(multiType, _abrecord, _header, newPropertyName, multiValue);
 
                     /* free our variables */
@@ -1190,13 +1190,13 @@ void MacabRecords::swap(const sal_Int32 _id1, const sal_Int32 _id2)
 }
 
 // -------------------------------------------------------------------------
-void MacabRecords::setName(const ::rtl::OUString _sName)
+void MacabRecords::setName(const OUString _sName)
 {
     m_sName = _sName;
 }
 
 // -------------------------------------------------------------------------
-::rtl::OUString MacabRecords::getName() const
+OUString MacabRecords::getName() const
 {
     return m_sName;
 }

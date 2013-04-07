@@ -56,32 +56,32 @@ typedef ::std::map<
  */
 class XMLRedlineExport
 {
-    const ::rtl::OUString sDelete;
-    const ::rtl::OUString sDeletion;
-    const ::rtl::OUString sFormat;
-    const ::rtl::OUString sFormatChange;
-    const ::rtl::OUString sInsert;
-    const ::rtl::OUString sInsertion;
-    const ::rtl::OUString sIsCollapsed;
-    const ::rtl::OUString sIsStart;
-    const ::rtl::OUString sRedlineAuthor;
-    const ::rtl::OUString sRedlineComment;
-    const ::rtl::OUString sRedlineDateTime;
-    const ::rtl::OUString sRedlineSuccessorData;
-    const ::rtl::OUString sRedlineText;
-    const ::rtl::OUString sRedlineType;
-    const ::rtl::OUString sStyle;
-    const ::rtl::OUString sTextTable;
-    const ::rtl::OUString sUnknownChange;
-    const ::rtl::OUString sStartRedline;
-    const ::rtl::OUString sEndRedline;
-    const ::rtl::OUString sRedlineIdentifier;
-    const ::rtl::OUString sIsInHeaderFooter;
-    const ::rtl::OUString sRedlineProtectionKey;
-    const ::rtl::OUString sRecordChanges;
-    const ::rtl::OUString sMergeLastPara;
+    const OUString sDelete;
+    const OUString sDeletion;
+    const OUString sFormat;
+    const OUString sFormatChange;
+    const OUString sInsert;
+    const OUString sInsertion;
+    const OUString sIsCollapsed;
+    const OUString sIsStart;
+    const OUString sRedlineAuthor;
+    const OUString sRedlineComment;
+    const OUString sRedlineDateTime;
+    const OUString sRedlineSuccessorData;
+    const OUString sRedlineText;
+    const OUString sRedlineType;
+    const OUString sStyle;
+    const OUString sTextTable;
+    const OUString sUnknownChange;
+    const OUString sStartRedline;
+    const OUString sEndRedline;
+    const OUString sRedlineIdentifier;
+    const OUString sIsInHeaderFooter;
+    const OUString sRedlineProtectionKey;
+    const OUString sRecordChanges;
+    const OUString sMergeLastPara;
 
-    const ::rtl::OUString sChangePrefix;
+    const OUString sChangePrefix;
 
     SvXMLExport& rExport;
 
@@ -188,15 +188,15 @@ private:
                     ::com::sun::star::beans::PropertyValue> & rValues);
 
     /// convert the change type from API to XML names
-    const ::rtl::OUString ConvertTypeName(const ::rtl::OUString& sApiName);
+    const OUString ConvertTypeName(const OUString& sApiName);
 
     /// Get ID string!
-    const ::rtl::OUString GetRedlineID(
+    const OUString GetRedlineID(
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::beans::XPropertySet> & rPropSet);
 
     /// write a comment string as sequence of <text:p> elements
-    void WriteComment(const ::rtl::OUString& rComment);
+    void WriteComment(const OUString& rComment);
 };
 
 #endif

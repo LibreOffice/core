@@ -151,11 +151,11 @@ public:
 
     /** returns the full qualified name of the type.
      */
-    inline ::rtl::OUString  getTypeName() const;
+    inline OUString  getTypeName() const;
 
     /** returns the full qualified name of the supertype.
      */
-    inline ::rtl::OUString  getSuperTypeName() const;
+    inline OUString  getSuperTypeName() const;
 
     /** @deprecated
         returns the unique identifier for an interface type as an out parameter.
@@ -168,11 +168,11 @@ public:
 
     /** returns the documentation string of this type.
      */
-    inline ::rtl::OUString  getDoku() const;
+    inline OUString  getDoku() const;
 
     /** returns the IDL filename where the type is defined.
      */
-    inline ::rtl::OUString  getFileName() const;
+    inline OUString  getFileName() const;
 
     /** returns the number of fields (attributes/properties, enum values or number
         of constants in a module).
@@ -182,11 +182,11 @@ public:
 
     /** returns the name of the field specified by index.
      */
-    inline ::rtl::OUString  getFieldName( sal_uInt16 index ) const;
+    inline OUString  getFieldName( sal_uInt16 index ) const;
 
     /** returns the full qualified name of the field specified by index.
      */
-    inline ::rtl::OUString  getFieldType( sal_uInt16 index ) const;
+    inline OUString  getFieldType( sal_uInt16 index ) const;
 
     /** returns the access mode of the field specified by index.
      */
@@ -202,14 +202,14 @@ public:
 
         Each field of a type can have their own documentation.
      */
-    inline ::rtl::OUString  getFieldDoku( sal_uInt16 index ) const;
+    inline OUString  getFieldDoku( sal_uInt16 index ) const;
 
     /** returns the IDL filename of the field specified by index.
 
         The IDL filename of a field can differ from the filename of the ype itself
         because modules and also constants can be defined in different IDL files.
      */
-    inline ::rtl::OUString  getFieldFileName( sal_uInt16 index ) const;
+    inline OUString  getFieldFileName( sal_uInt16 index ) const;
 
     /** returns the number of methods of an interface type.
      */
@@ -217,7 +217,7 @@ public:
 
     /** returns the name of the method specified by index.
      */
-    inline ::rtl::OUString  getMethodName( sal_uInt16 index ) const;
+    inline OUString  getMethodName( sal_uInt16 index ) const;
 
     /** returns number of parameters of the method specified by index.
      */
@@ -228,14 +228,14 @@ public:
         @param index indicates the method
         @param paramIndex indeciates the parameter which type will be returned.
      */
-    inline ::rtl::OUString  getMethodParamType( sal_uInt16 index, sal_uInt16 paramIndex ) const;
+    inline OUString  getMethodParamType( sal_uInt16 index, sal_uInt16 paramIndex ) const;
 
     /** returns the name of a parameter.
 
         @param index indicates the method
         @param paramIndex indiciates the parameter which name will be returned.
      */
-    inline ::rtl::OUString  getMethodParamName( sal_uInt16 index, sal_uInt16 paramIndex ) const;
+    inline OUString  getMethodParamName( sal_uInt16 index, sal_uInt16 paramIndex ) const;
 
     /** returns the parameter mode, if it is an in, out or inout parameter.
 
@@ -255,11 +255,11 @@ public:
         @param index indicates the method
         @param excIndex indeciates the exception which typename will be returned.
      */
-    inline ::rtl::OUString  getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const;
+    inline OUString  getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const;
 
     /** returns the full qualified return type of the method specified by index.
      */
-    inline ::rtl::OUString  getMethodReturnType( sal_uInt16 index ) const;
+    inline OUString  getMethodReturnType( sal_uInt16 index ) const;
 
     /** returns the full qualified exception type of the specified exception.
 
@@ -271,7 +271,7 @@ public:
 
         @param index indicates the method.
      */
-    inline ::rtl::OUString  getMethodDoku( sal_uInt16 index ) const;
+    inline OUString  getMethodDoku( sal_uInt16 index ) const;
 
     /** returns the number of references (supported interfaces, exported services).
      */
@@ -281,7 +281,7 @@ public:
 
         @param index indicates the reference.
      */
-    inline ::rtl::OUString  getReferenceName( sal_uInt16 index ) const;
+    inline OUString  getReferenceName( sal_uInt16 index ) const;
 
     /** returns the type of the reference specified by index.
 
@@ -293,7 +293,7 @@ public:
 
         @param index indicates the reference.
     */
-    inline ::rtl::OUString  getReferenceDoku( sal_uInt16 index ) const;
+    inline OUString  getReferenceDoku( sal_uInt16 index ) const;
 
     /** returns the access mode of the reference specified by index.
 
@@ -356,16 +356,16 @@ inline sal_uInt16 RegistryTypeReader::getMajorVersion() const
 inline RTTypeClass RegistryTypeReader::getTypeClass() const
     {  return m_pApi->getTypeClass(m_hImpl); }
 
-inline ::rtl::OUString RegistryTypeReader::getTypeName() const
+inline OUString RegistryTypeReader::getTypeName() const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getTypeName(m_hImpl, &sRet.pData);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getSuperTypeName() const
+inline OUString RegistryTypeReader::getSuperTypeName() const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getSuperTypeName(m_hImpl, &sRet.pData);
         return sRet;
     }
@@ -373,16 +373,16 @@ inline ::rtl::OUString RegistryTypeReader::getSuperTypeName() const
 inline void RegistryTypeReader::getUik(RTUik& uik) const
     {  m_pApi->getUik(m_hImpl, &uik); }
 
-inline ::rtl::OUString RegistryTypeReader::getDoku() const
+inline OUString RegistryTypeReader::getDoku() const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getDoku(m_hImpl, &sRet.pData);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getFileName() const
+inline OUString RegistryTypeReader::getFileName() const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getFileName(m_hImpl, &sRet.pData);
         return sRet;
     }
@@ -390,16 +390,16 @@ inline ::rtl::OUString RegistryTypeReader::getFileName() const
 inline sal_uInt32 RegistryTypeReader::getFieldCount() const
     {   return m_pApi->getFieldCount(m_hImpl); }
 
-inline ::rtl::OUString RegistryTypeReader::getFieldName( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getFieldName( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getFieldName(m_hImpl, &sRet.pData, index);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getFieldType( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getFieldType( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getFieldType(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -414,16 +414,16 @@ inline RTConstValue RegistryTypeReader::getFieldConstValue( sal_uInt16 index ) c
         return ret;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getFieldDoku( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getFieldDoku( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getFieldDoku(m_hImpl, &sRet.pData, index);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getFieldFileName(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -431,9 +431,9 @@ inline ::rtl::OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) 
 inline sal_uInt32 RegistryTypeReader::getMethodCount() const
     {  return m_pApi->getMethodCount(m_hImpl); }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodName( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getMethodName( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodName(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -441,16 +441,16 @@ inline ::rtl::OUString RegistryTypeReader::getMethodName( sal_uInt16 index ) con
 inline sal_uInt32 RegistryTypeReader::getMethodParamCount( sal_uInt16 index ) const
     {  return m_pApi->getMethodParamCount(m_hImpl, index); }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodParamType( sal_uInt16 index, sal_uInt16 paramIndex ) const
+inline OUString RegistryTypeReader::getMethodParamType( sal_uInt16 index, sal_uInt16 paramIndex ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodParamType(m_hImpl, &sRet.pData, index, paramIndex);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodParamName( sal_uInt16 index, sal_uInt16 paramIndex ) const
+inline OUString RegistryTypeReader::getMethodParamName( sal_uInt16 index, sal_uInt16 paramIndex ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodParamName(m_hImpl, &sRet.pData, index, paramIndex);
         return sRet;
     }
@@ -461,16 +461,16 @@ inline RTParamMode RegistryTypeReader::getMethodParamMode( sal_uInt16 index, sal
 inline sal_uInt32 RegistryTypeReader::getMethodExcCount( sal_uInt16 index ) const
     {  return m_pApi->getMethodExcCount(m_hImpl, index); }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const
+inline OUString RegistryTypeReader::getMethodExcType( sal_uInt16 index, sal_uInt16 excIndex ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodExcType(m_hImpl, &sRet.pData, index, excIndex);
         return sRet;
     }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodReturnType( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getMethodReturnType( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodReturnType(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -478,9 +478,9 @@ inline ::rtl::OUString RegistryTypeReader::getMethodReturnType( sal_uInt16 index
 inline RTMethodMode RegistryTypeReader::getMethodMode( sal_uInt16 index ) const
     {  return m_pApi->getMethodMode(m_hImpl, index); }
 
-inline ::rtl::OUString RegistryTypeReader::getMethodDoku( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getMethodDoku( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getMethodDoku(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -488,9 +488,9 @@ inline ::rtl::OUString RegistryTypeReader::getMethodDoku( sal_uInt16 index ) con
 inline sal_uInt32 RegistryTypeReader::getReferenceCount() const
     {  return m_pApi->getReferenceCount(m_hImpl); }
 
-inline ::rtl::OUString RegistryTypeReader::getReferenceName( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getReferenceName( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getReferenceName(m_hImpl, &sRet.pData, index);
         return sRet;
     }
@@ -498,9 +498,9 @@ inline ::rtl::OUString RegistryTypeReader::getReferenceName( sal_uInt16 index ) 
 inline RTReferenceType RegistryTypeReader::getReferenceType( sal_uInt16 index ) const
     {  return m_pApi->getReferenceType(m_hImpl, index); }
 
-inline ::rtl::OUString RegistryTypeReader::getReferenceDoku( sal_uInt16 index ) const
+inline OUString RegistryTypeReader::getReferenceDoku( sal_uInt16 index ) const
     {
-        ::rtl::OUString sRet;
+        OUString sRet;
         m_pApi->getReferenceDoku(m_hImpl, &sRet.pData, index);
         return sRet;
     }

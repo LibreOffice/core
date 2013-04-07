@@ -46,10 +46,10 @@ public:
     /// This version handles graphics.
     void makeStringAndClear(RtfAttributeOutput* pAttributeOutput);
     /// This one doesn't.
-    rtl::OString makeStringAndClear();
+    OString makeStringAndClear();
     bool isGraphic() const;
 
-    rtl::OStringBuffer m_aBuffer;
+    OStringBuffer m_aBuffer;
     const SwFlyFrmFmt* m_pFlyFrmFmt;
     const SwGrfNode* m_pGrfNode;
 };
@@ -64,10 +64,10 @@ public:
     /// Writes the contents of the buffer directly to the supplied stream.
     void makeStringAndClear(RtfAttributeOutput* pAttributeOutput);
     /// Returns the bufferent strings as a string (ignores graphic elements!)
-    rtl::OString makeStringAndClear();
+    OString makeStringAndClear();
     /// Access to the last buffer.
-    rtl::OStringBuffer& getLastBuffer();
-    rtl::OStringBuffer* operator->();
+    OStringBuffer& getLastBuffer();
+    OStringBuffer* operator->();
     /// Similar to ->setLength(0), but for all buffers.
     void clear();
     /// Same as ->append(), but for graphics and without expanding contents to save memory.

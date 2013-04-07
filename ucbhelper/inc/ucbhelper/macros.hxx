@@ -580,19 +580,19 @@ GETTYPES_IMPL_END
 //=========================================================================
 
 #define XSERVICEINFO_NOFACTORY_DECL()                                       \
-    virtual rtl::OUString SAL_CALL                                          \
+    virtual OUString SAL_CALL                                          \
     getImplementationName()                                                 \
         throw( com::sun::star::uno::RuntimeException );                     \
     virtual sal_Bool SAL_CALL                                               \
-    supportsService( const rtl::OUString& ServiceName )                     \
+    supportsService( const OUString& ServiceName )                     \
         throw( com::sun::star::uno::RuntimeException );                     \
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL         \
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL         \
     getSupportedServiceNames()                                              \
         throw( com::sun::star::uno::RuntimeException );                     \
                                                                             \
-    static rtl::OUString                                                    \
+    static OUString                                                    \
     getImplementationName_Static();                                         \
-    static com::sun::star::uno::Sequence< rtl::OUString >                   \
+    static com::sun::star::uno::Sequence< OUString >                   \
     getSupportedServiceNames_Static();
 
 #define XSERVICEINFO_DECL()                                                 \
@@ -610,24 +610,24 @@ GETTYPES_IMPL_END
 //=========================================================================
 
 #define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
-rtl::OUString SAL_CALL Class::getImplementationName()                       \
+OUString SAL_CALL Class::getImplementationName()                       \
     throw( com::sun::star::uno::RuntimeException )                          \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
                                                                             \
-rtl::OUString Class::getImplementationName_Static()                         \
+OUString Class::getImplementationName_Static()                         \
 {                                                                           \
     return ImplName;                                                        \
 }                                                                           \
                                                                             \
 sal_Bool SAL_CALL                                                           \
-Class::supportsService( const rtl::OUString& ServiceName )                  \
+Class::supportsService( const OUString& ServiceName )                  \
     throw( com::sun::star::uno::RuntimeException )                          \
 {                                                                           \
-    com::sun::star::uno::Sequence< rtl::OUString > aSNL =                   \
+    com::sun::star::uno::Sequence< OUString > aSNL =                   \
                                         getSupportedServiceNames();         \
-    const rtl::OUString* pArray = aSNL.getArray();                          \
+    const OUString* pArray = aSNL.getArray();                          \
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
     {                                                                       \
         if( pArray[ i ] == ServiceName )                                    \
@@ -637,7 +637,7 @@ Class::supportsService( const rtl::OUString& ServiceName )                  \
     return sal_False;                                                       \
 }                                                                           \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL                     \
+com::sun::star::uno::Sequence< OUString > SAL_CALL                     \
 Class::getSupportedServiceNames()                                           \
     throw( com::sun::star::uno::RuntimeException )                          \
 {                                                                           \
@@ -697,17 +697,17 @@ Class::createServiceFactory( const com::sun::star::uno::Reference<          \
 #define XSERVICEINFO_NOFACTORY_IMPL_0( Class, ImplName )                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()
 
 // 1 service name
 #define XSERVICEINFO_NOFACTORY_IMPL_1( Class, ImplName, Service1 )          \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );               \
+    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }
@@ -719,7 +719,7 @@ Class::getSupportedServiceNames_Static()                                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()
 
 // Own implementation of getSupportedServiceNames_Static().
@@ -727,7 +727,7 @@ Class::getSupportedServiceNames_Static()
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()
 
 // 1 service name
@@ -735,10 +735,10 @@ Class::getSupportedServiceNames_Static()
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );               \
+    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }
@@ -748,10 +748,10 @@ Class::getSupportedServiceNames_Static()                                    \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
                                                                             \
-com::sun::star::uno::Sequence< rtl::OUString >                              \
+com::sun::star::uno::Sequence< OUString >                              \
 Class::getSupportedServiceNames_Static()                                    \
 {                                                                           \
-    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );               \
+    com::sun::star::uno::Sequence< OUString > aSNS( 1 );               \
     aSNS.getArray()[ 0 ] = Service1;                                        \
     return aSNS;                                                            \
 }

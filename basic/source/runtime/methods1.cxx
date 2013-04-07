@@ -1063,7 +1063,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
             {
                 // without any length information! without end-identifier!
                 // What does that mean for Unicode?! Choosing conversion to ByteString...
-                rtl::OString aByteStr(rtl::OUStringToOString(rStr, osl_getThreadTextEncoding()));
+                OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
                 *pStrm << (const char*)aByteStr.getStr();
             }
         }
@@ -1322,7 +1322,7 @@ RTLFUNC(Environ)
     }
     OUString aResult;
     // should be ANSI but that's not possible under Win16 in the DLL
-    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetOUString(),
+    OString aByteStr(OUStringToOString(rPar.Get(1)->GetOUString(),
                                                  osl_getThreadTextEncoding()));
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
@@ -2661,7 +2661,7 @@ RTLFUNC(Round)
     rPar.Get(0)->PutDouble( dRes );
 }
 
-void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUString& sFuncName, SbxVariable* pRet )
+void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const OUString& sFuncName, SbxVariable* pRet )
 {
     static Reference< XFunctionAccess > xFunc;
     Any aRes;
@@ -3268,7 +3268,7 @@ RTLFUNC(Input)
         return;
     }
 
-    rtl::OString aByteBuffer;
+    OString aByteBuffer;
     SbError err = pSbStrm->Read( aByteBuffer, nByteCount, true );
     if( !err )
         err = pIosys->GetError();
@@ -3278,7 +3278,7 @@ RTLFUNC(Input)
         StarBASIC::Error( err );
         return;
     }
-    rPar.Get(0)->PutString(rtl::OStringToOUString(aByteBuffer, osl_getThreadTextEncoding()));
+    rPar.Get(0)->PutString(OStringToOUString(aByteBuffer, osl_getThreadTextEncoding()));
 }
 
 RTLFUNC(Me)

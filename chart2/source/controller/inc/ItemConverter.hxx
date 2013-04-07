@@ -82,7 +82,7 @@ public:
     // typedefs -------------------------------
 
     typedef sal_uInt16          tWhichIdType;
-    typedef ::rtl::OUString tPropertyNameType;
+    typedef OUString tPropertyNameType;
     typedef sal_uInt8            tMemberIdType;
 
     typedef ::std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;

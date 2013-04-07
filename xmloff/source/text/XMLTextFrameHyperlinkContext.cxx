@@ -30,8 +30,6 @@
 // OD 2004-04-21 #i26791#
 #include <txtparaimphint.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

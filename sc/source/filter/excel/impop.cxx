@@ -713,7 +713,7 @@ void ImportExcel::Boundsheet( void )
         aIn >> nGrbit;
     }
 
-    rtl::OUString aName( aIn.ReadByteString( false ) );
+    OUString aName( aIn.ReadByteString( false ) );
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )

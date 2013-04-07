@@ -44,14 +44,14 @@ public:
                             ~SfxAllEnumItem();
 
     void                    InsertValue( sal_uInt16 nValue );
-    void                    InsertValue( sal_uInt16 nValue, const rtl::OUString &rText );
+    void                    InsertValue( sal_uInt16 nValue, const OUString &rText );
     void                    RemoveValue( sal_uInt16 nValue );
 
     sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
 
     virtual sal_uInt16      GetValueCount() const;
     virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const;
-    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const;
     virtual sal_Bool        IsEnabled( sal_uInt16 ) const;

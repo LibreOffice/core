@@ -28,7 +28,6 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::xml::sax::XAttributeList;

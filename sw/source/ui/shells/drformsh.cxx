@@ -56,7 +56,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFORM))
 {
@@ -122,7 +121,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                             {
                                 uno::Any aTmp;
                                 // Ja!
-                                ::rtl::OUString sLabel("Label");
+                                OUString sLabel("Label");
                                 if( xPropInfoSet->hasPropertyByName(sLabel) )
                                 {
                                     aTmp <<= OUString(rHLinkItem.GetName());
@@ -252,7 +251,7 @@ SwDrawFormShell::SwDrawFormShell(SwView &_rView) :
 {
     SetHelpId(SW_DRAWFORMSHELL);
     GetShell().NoEdit(true);
-    SetName(rtl::OUString("DrawForm"));
+    SetName(OUString("DrawForm"));
 }
 
 SwDrawFormShell::~SwDrawFormShell()

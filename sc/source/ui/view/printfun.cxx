@@ -1646,7 +1646,7 @@ sal_Bool ScPrintFunc::IsLeft( long nPageNo )            // left foot notes?
 
 void ScPrintFunc::MakeTableString()
 {
-    rtl::OUString aTmp;
+    OUString aTmp;
     pDoc->GetName(nPrintTab, aTmp);
     aFieldData.aTabName = aTmp;
 }
@@ -1841,7 +1841,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, sal_Bool bDoPrint, ScPreviewLocation
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
     pDev->SetFont( aMarkFont );
-    long nMarkLen = pDev->GetTextWidth(rtl::OUString("GW99999:"));
+    long nMarkLen = pDev->GetTextWidth(OUString("GW99999:"));
     // without Space-Char, because it rarle arrives there
 
     Size aDataSize = aPageRect.GetSize();
@@ -2377,7 +2377,7 @@ sal_Bool ScPrintFunc::UpdatePages()
             nZoom = ZOOM_MIN;
     }
 
-    rtl::OUString aName = pDoc->GetPageStyle( nPrintTab );
+    OUString aName = pDoc->GetPageStyle( nPrintTab );
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if ( nTab==nPrintTab || pDoc->GetPageStyle(nTab)==aName )

@@ -43,7 +43,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using rtl::OUString;
 
 
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
@@ -241,22 +240,22 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
 }
 
 
-rtl::OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
+OUString SAL_CALL SwXTextDefaults::getImplementationName(  )
     throw (RuntimeException)
 {
     return OUString("SwXTextDefaults");
 }
 
 
-sal_Bool SAL_CALL SwXTextDefaults::supportsService( const ::rtl::OUString& rServiceName )
+sal_Bool SAL_CALL SwXTextDefaults::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq(getSupportedServiceNames());
+    uno::Sequence< OUString > aSeq(getSupportedServiceNames());
     return std::find(comphelper::stl_begin(aSeq), comphelper::stl_end(aSeq), rServiceName) != comphelper::stl_end(aSeq);
 }
 
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL SwXTextDefaults::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     uno::Sequence< OUString > aRet(7);

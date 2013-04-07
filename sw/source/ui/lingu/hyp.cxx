@@ -38,7 +38,6 @@
 #define PSH         (&pView->GetWrtShell())
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
      Description: interactive separation

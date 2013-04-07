@@ -100,8 +100,8 @@ private:
     sal_Bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;
-    rtl::OUString m_lastTableInserted;
-    rtl::OString m_lastQuery;
+    OUString m_lastTableInserted;
+    OString m_lastQuery;
 
 public:
     /**
@@ -125,11 +125,11 @@ public: // XCloseable
 
 public: // XStatement
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(
-        const ::rtl::OUString& sql )
+        const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql )
+    virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql )
+    virtual sal_Bool SAL_CALL execute( const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -194,7 +194,7 @@ public: // XResultSetMetaDataSupplier (is required by framework (see
 
 private:
     void checkClosed() throw (com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException);
-    void raiseSQLException( const ::rtl::OUString & sql, const char * errorMsg, const char *errorType = 0 )
+    void raiseSQLException( const OUString & sql, const char * errorMsg, const char *errorType = 0 )
         throw ( com::sun::star::sdbc::SQLException );
 };
 
@@ -205,22 +205,22 @@ struct CommandData
     sal_Int32 *pLastOidInserted;
     sal_Int32 *pMultipleResultUpdateCount;
     sal_Bool *pMultipleResultAvailable;
-    ::rtl::OUString *pLastTableInserted;
+    OUString *pLastTableInserted;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > *pLastResultset;
-    ::rtl::OString *pLastQuery;
+    OString *pLastQuery;
     ::rtl::Reference< RefCountedMutex > refMutex;
     ::com::sun::star::uno::Reference< com::sun::star::uno::XInterface > owner;
     ::com::sun::star::uno::Reference< com::sun::star::sdbcx::XTablesSupplier > tableSupplier;
     sal_Int32 concurrency;
 };
 
-bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data );
+bool executePostgresCommand( const OString & cmd, struct CommandData *data );
 com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet > getGeneratedValuesFromLastInsert(
     ConnectionSettings *pConnectionSettings,
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &connection,
     sal_Int32 nLastOid,
-    const rtl::OUString & lastTableInserted,
-    const rtl::OString & lastQuery );
+    const OUString & lastTableInserted,
+    const OString & lastQuery );
 
 
 }

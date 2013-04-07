@@ -40,12 +40,12 @@ class OleInputObjectBase : public InputObjectBase
 protected:
     inline explicit     OleInputObjectBase() {}
 
-    ::rtl::OUString     dumpAnsiString32( const String& rName );
-    ::rtl::OUString     dumpUniString32( const String& rName );
+    OUString     dumpAnsiString32( const String& rName );
+    OUString     dumpUniString32( const String& rName );
 
     sal_Int32           dumpStdClipboardFormat( const String& rName = EMPTY_STRING );
-    ::rtl::OUString     dumpAnsiString32OrStdClip( const String& rName );
-    ::rtl::OUString     dumpUniString32OrStdClip( const String& rName );
+    OUString     dumpAnsiString32OrStdClip( const String& rName );
+    OUString     dumpUniString32OrStdClip( const String& rName );
 
     void                writeOleColorItem( const String& rName, sal_uInt32 nColor );
     sal_uInt32          dumpOleColor( const String& rName );
@@ -80,7 +80,7 @@ protected:
 class OleStreamObject : public OleInputObjectBase
 {
 public:
-    explicit            OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    explicit            OleStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 };
 
 // ============================================================================
@@ -88,7 +88,7 @@ public:
 class OleCompObjObject : public OleStreamObject
 {
 public:
-    explicit            OleCompObjObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    explicit            OleCompObjObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 
 protected:
     virtual void        implDump();
@@ -100,13 +100,13 @@ protected:
 class OlePropertyStreamObject : public InputObjectBase
 {
 public:
-    explicit            OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    explicit            OlePropertyStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
 
 protected:
     virtual void        implDump();
 
 private:
-    void                dumpSection( const ::rtl::OUString& rGuid, sal_uInt32 nStartPos );
+    void                dumpSection( const OUString& rGuid, sal_uInt32 nStartPos );
 
     void                dumpProperty( sal_Int32 nPropId, sal_uInt32 nStartPos );
     void                dumpCodePageProperty( sal_uInt32 nStartPos );
@@ -119,15 +119,15 @@ private:
 
     sal_uInt16          dumpPropertyType();
     void                dumpBlob( sal_Int32 nPropId, const String& rName );
-    ::rtl::OUString     dumpString8( const String& rName );
-    ::rtl::OUString     dumpCharArray8( const String& rName, sal_Int32 nLen );
-    ::rtl::OUString     dumpString16( const String& rName );
-    ::rtl::OUString     dumpCharArray16( const String& rName, sal_Int32 nLen );
+    OUString     dumpString8( const String& rName );
+    OUString     dumpCharArray8( const String& rName, sal_Int32 nLen );
+    OUString     dumpString16( const String& rName );
+    OUString     dumpCharArray16( const String& rName, sal_Int32 nLen );
     bool                dumpTypedProperty( const String& rName, sal_uInt16 nExpectedType );
     void                dumpHlinks( sal_Int32 nSize );
 
     bool                startElement( sal_uInt32 nStartPos );
-    void                writeSectionHeader( const ::rtl::OUString& rGuid, sal_uInt32 nStartPos );
+    void                writeSectionHeader( const OUString& rGuid, sal_uInt32 nStartPos );
     void                writePropertyHeader( sal_Int32 nPropId, sal_uInt32 nStartPos );
 
 private:
@@ -141,19 +141,19 @@ private:
 class OleStorageObject : public StorageObjectBase
 {
 public:
-    explicit            OleStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
+    explicit            OleStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
 protected:
     inline explicit     OleStorageObject() {}
 
     using               StorageObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
+    void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 };
 
 // ============================================================================
@@ -296,7 +296,7 @@ protected:
     void                construct(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             const String& rPropNameList,
                             bool b64BitPropFlags = false );
     void                construct(
@@ -317,7 +317,7 @@ protected:
 
     void                setAlignAnchor();
     bool                startNextProperty();
-    ::rtl::OUString     getPropertyName() const;
+    OUString     getPropertyName() const;
 
     template< typename Type >
     Type                dumpDecProperty( Type nDefault, const NameListWrapper& rListWrp = NO_LIST );
@@ -345,8 +345,8 @@ protected:
 
     void                dumpPosProperty();
     void                dumpSizeProperty();
-    void                dumpGuidProperty( ::rtl::OUString* pValue = 0 );
-    void                dumpStringProperty( ::rtl::OUString* pValue = 0 );
+    void                dumpGuidProperty( OUString* pValue = 0 );
+    void                dumpStringProperty( OUString* pValue = 0 );
     void                dumpStringArrayProperty();
     void                dumpStreamProperty();
 
@@ -357,7 +357,7 @@ private:
     void                constructAxPropObj( const String& rPropNameList, bool b64BitPropFlags );
 
     void                dumpVersion();
-    ::rtl::OUString     dumpString( const String& rName, sal_uInt32 nSize, bool bArray );
+    OUString     dumpString( const String& rName, sal_uInt32 nSize, bool bArray );
     void                dumpShortProperties();
     void                dumpLargeProperties();
 
@@ -367,17 +367,17 @@ private:
         enum LargePropertyType { PROPTYPE_POS, PROPTYPE_SIZE, PROPTYPE_GUID, PROPTYPE_STRING, PROPTYPE_STRINGARRAY };
 
         LargePropertyType   mePropType;
-        ::rtl::OUString     maItemName;
+        OUString     maItemName;
         sal_uInt32          mnDataSize;
-        ::rtl::OUString*    mpItemValue;
-        inline explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, ::rtl::OUString* pItemValue = 0 ) :
+        OUString*    mpItemValue;
+        inline explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = 0 ) :
                                 mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
     };
     typedef ::std::vector< LargeProperty > LargePropertyVector;
 
     struct StreamProperty
     {
-        ::rtl::OUString     maItemName;
+        OUString     maItemName;
         sal_uInt16          mnData;
         inline explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
                                 maItemName( rItemName ), mnData( nData ) {}
@@ -547,21 +547,21 @@ public:
     explicit            FormControlStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
-                            const ::rtl::OUString* pProgId = 0 );
+                            const OUString& rSysFileName,
+                            const OUString* pProgId = 0 );
     explicit            FormControlStreamObject(
                             const OutputObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString* pProgId = 0 );
+                            const OUString* pProgId = 0 );
 
 protected:
     virtual void        implDump();
 
 private:
-    void                constructFormCtrlStrmObj( const ::rtl::OUString* pProgId );
+    void                constructFormCtrlStrmObj( const OUString* pProgId );
 
 private:
-    ::rtl::OUString     maProgId;
+    OUString     maProgId;
     bool                mbReadGuid;
 };
 
@@ -570,7 +570,7 @@ private:
 
 struct VbaFormSiteInfo
 {
-    ::rtl::OUString     maProgId;
+    OUString     maProgId;
     sal_Int32           mnId;
     sal_uInt32          mnLength;
     bool                mbInStream;
@@ -635,7 +635,7 @@ public:
     explicit            VbaFStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             VbaFormSharedData& rFormData );
 
 protected:
@@ -661,7 +661,7 @@ public:
     explicit            VbaOStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             VbaFormSharedData& rFormData );
 
 protected:
@@ -705,7 +705,7 @@ public:
     explicit            VbaXStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             VbaFormSharedData& rFormData );
 
 protected:
@@ -723,22 +723,22 @@ public:
     explicit            VbaContainerStorageObject(
                             const ObjectBase& rParent,
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rSysPath );
+                            const OUString& rSysPath );
 
 protected:
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 
     virtual void        implDumpStorage(
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rSysPath );
+                            const OUString& rStrgPath,
+                            const OUString& rSysPath );
 
 private:
-    bool                isFormStorage( const ::rtl::OUString& rStrgPath ) const;
+    bool                isFormStorage( const OUString& rStrgPath ) const;
 
 private:
     VbaFormSharedData   maFormData;
@@ -749,15 +749,15 @@ private:
 
 struct VbaSharedData
 {
-    typedef ::std::map< ::rtl::OUString, sal_Int32 > StreamOffsetMap;
+    typedef ::std::map< OUString, sal_Int32 > StreamOffsetMap;
 
     StreamOffsetMap     maStrmOffsets;
     rtl_TextEncoding    meTextEnc;
 
     explicit            VbaSharedData();
 
-    bool                isModuleStream( const ::rtl::OUString& rStrmName ) const;
-    sal_Int32           getStreamOffset( const ::rtl::OUString& rStrmName ) const;
+    bool                isModuleStream( const OUString& rStrmName ) const;
+    sal_Int32           getStreamOffset( const OUString& rStrmName ) const;
 };
 
 // ============================================================================
@@ -768,7 +768,7 @@ public:
     explicit            VbaDirStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             VbaSharedData& rVbaData );
 
 protected:
@@ -777,15 +777,15 @@ protected:
     virtual void        implDumpRecordBody();
 
 private:
-    ::rtl::OUString     dumpByteString( const String& rName = EMPTY_STRING );
-    ::rtl::OUString     dumpUniString( const String& rName = EMPTY_STRING );
+    OUString     dumpByteString( const String& rName = EMPTY_STRING );
+    OUString     dumpUniString( const String& rName = EMPTY_STRING );
 
-    ::rtl::OUString     dumpByteStringWithLength( const String& rName = EMPTY_STRING );
+    OUString     dumpByteStringWithLength( const String& rName = EMPTY_STRING );
 
 private:
     VbaSharedData&      mrVbaData;
     BinaryInputStreamRef mxInStrm;
-    ::rtl::OUString     maCurrStream;
+    OUString     maCurrStream;
     sal_Int32           mnCurrOffset;
 };
 
@@ -797,7 +797,7 @@ public:
     explicit            VbaModuleStreamObject(
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName,
+                            const OUString& rSysFileName,
                             VbaSharedData& rVbaData,
                             sal_Int32 nStrmOffset );
 
@@ -817,15 +817,15 @@ public:
     explicit            VbaStorageObject(
                             const ObjectBase& rParent,
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rSysPath,
+                            const OUString& rSysPath,
                             VbaSharedData& rVbaData );
 
 protected:
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 
 private:
     VbaSharedData&      mrVbaData;
@@ -839,15 +839,15 @@ public:
     explicit            VbaFormStorageObject(
                             const ObjectBase& rParent,
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rSysPath,
+                            const OUString& rSysPath,
                             VbaSharedData& rVbaData );
 
 protected:
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 
 private:
     VbaSharedData&      mrVbaData;
@@ -858,19 +858,19 @@ private:
 class VbaProjectStorageObject : public OleStorageObject
 {
 public:
-    explicit            VbaProjectStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
+    explicit            VbaProjectStorageObject( const ObjectBase& rParent, const StorageRef& rxStrg, const OUString& rSysPath );
 
 protected:
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 
     virtual void        implDumpStorage(
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rSysPath );
+                            const OUString& rStrgPath,
+                            const OUString& rSysPath );
 
 private:
     VbaSharedData       maVbaData;
@@ -885,12 +885,12 @@ public:
     explicit            ActiveXStorageObject(
                             const ObjectBase& rParent,
                             const StorageRef& rxStrg,
-                            const ::rtl::OUString& rSysPath );
+                            const OUString& rSysPath );
 
 protected:
     virtual void        implDumpBaseStream(
                             const BinaryInputStreamRef& rxStrm,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rSysFileName );
 };
 
 // ============================================================================

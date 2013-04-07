@@ -29,7 +29,6 @@ namespace xls {
 
 using namespace ::oox::core;
 
-using ::rtl::OUString;
 
 // ============================================================================
 

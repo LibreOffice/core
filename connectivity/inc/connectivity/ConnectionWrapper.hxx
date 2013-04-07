@@ -80,11 +80,11 @@ namespace connectivity
             @param  _rPassword
                 The password.
         */
-        static void createUniqueId( const ::rtl::OUString& _rURL
+        static void createUniqueId( const OUString& _rURL
                     ,::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo
                     ,sal_uInt8* _pBuffer
-                    ,const ::rtl::OUString& _rUserName = ::rtl::OUString()
-                    ,const ::rtl::OUString& _rPassword = ::rtl::OUString());
+                    ,const OUString& _rUserName = OUString()
+                    ,const OUString& _rPassword = OUString());
     };
 }
 #endif // _CONNECTIVITY_ZCONNECTIONWRAPPER_HXX_

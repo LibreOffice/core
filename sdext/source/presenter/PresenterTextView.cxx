@@ -712,7 +712,7 @@ void PresenterTextParagraph::AddWord (
     if ( ! maLines.empty())
         nLineStart = rCurrentLine.startPos;
 
-    const ::rtl::OUString sLineCandidate (
+    const OUString sLineCandidate (
         msParagraphText.copy(nLineStart, nWordBoundary-nLineStart));
 
     css::geometry::RealRectangle2D aLineBox (
@@ -792,7 +792,7 @@ sal_Unicode PresenterTextParagraph::GetCharacter (
     }
 }
 
-::rtl::OUString PresenterTextParagraph::GetText (void) const
+OUString PresenterTextParagraph::GetText (void) const
 {
     return msParagraphText;
 }
@@ -859,7 +859,7 @@ TextSegment PresenterTextParagraph::GetTextSegment (
             return CreateTextSegment(nIndex+nOffset, nIndex+nOffset+1);
     }
 
-    return TextSegment(::rtl::OUString(), 0,0);
+    return TextSegment(OUString(), 0,0);
 }
 
 TextSegment PresenterTextParagraph::GetWordTextSegment (
@@ -913,7 +913,7 @@ TextSegment PresenterTextParagraph::CreateTextSegment (
 {
     if (nEndIndex <= nStartIndex)
         return TextSegment(
-            ::rtl::OUString(),
+            OUString(),
             nStartIndex,
             nEndIndex);
     else
@@ -1239,7 +1239,7 @@ void PresenterTextParagraph::Line::ProvideCellBoxes (void)
 }
 
 void PresenterTextParagraph::Line::ProvideLayoutedLine (
-    const ::rtl::OUString& rsParagraphText,
+    const OUString& rsParagraphText,
     const PresenterTheme::SharedFontDescriptor& rpFont,
     const sal_Int8 nTextDirection)
 {

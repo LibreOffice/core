@@ -56,7 +56,7 @@ public:
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const;
-    virtual rtl::OUString    GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual OUString    GetValueTextByPos( sal_uInt16 nPos ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;

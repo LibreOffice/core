@@ -41,9 +41,9 @@ private:
     bool                              mbHasStartSound;
     bool                              mbLoopSound;
     bool                              mbStopSound;
-    ::rtl::OUString                   msEmbedded;
-    ::rtl::OUString                   msLink;
-    ::rtl::OUString                   msSndName;
+    OUString                   msEmbedded;
+    OUString                   msLink;
+    OUString                   msSndName;
 };
 
 } }

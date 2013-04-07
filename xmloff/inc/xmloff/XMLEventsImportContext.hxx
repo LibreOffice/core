@@ -39,7 +39,7 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 typedef ::std::pair<
-            ::rtl::OUString,
+            OUString,
             ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyValue> > EventNameValuesPair;
 
@@ -70,26 +70,26 @@ public:
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName);
+        const OUString& rLocalName);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
 
     ~XMLEventsImportContext();
 
     void AddEventValues(
-        const ::rtl::OUString& rEventName,
+        const OUString& rEventName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues);
 
@@ -108,7 +108,7 @@ public:
     /// if the import operates indelayed mode, you can use this method
     /// to obtain the value sequence for a specific event
     sal_Bool GetEventSequence(
-        const ::rtl::OUString& rName,
+        const OUString& rName,
         ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue> & rSequence );
 
@@ -122,7 +122,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

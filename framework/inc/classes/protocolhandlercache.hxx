@@ -54,7 +54,7 @@ struct FWI_DLLPUBLIC ProtocolHandler
     public:
 
         /// the uno implementation name of this handler
-        ::rtl::OUString m_sUNOName;
+        OUString m_sUNOName;
         /// list of URL pattern which defines the protocols which this handler is registered for
         OUStringList m_lProtocols;
 };
@@ -66,12 +66,12 @@ struct FWI_DLLPUBLIC ProtocolHandler
     uno implementation names as value. Overloading of the index operator makes it possible
     to search for a key by using a full qualified URL on list of all possible pattern keys.
 */
-class FWI_DLLPUBLIC PatternHash : public BaseHash< ::rtl::OUString >
+class FWI_DLLPUBLIC PatternHash : public BaseHash< OUString >
 {
     /* interface */
     public:
 
-        PatternHash::iterator findPatternKey( const ::rtl::OUString& sURL );
+        PatternHash::iterator findPatternKey( const OUString& sURL );
 };
 
 //_________________________________________________________________________________________________________________
@@ -123,7 +123,7 @@ class FWI_DLLPUBLIC HandlerCache
                  HandlerCache();
         virtual ~HandlerCache();
 
-        sal_Bool search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const;
+        sal_Bool search( const OUString& sURL, ProtocolHandler* pReturn ) const;
         sal_Bool search( const css::util::URL&  aURL, ProtocolHandler* pReturn ) const;
 
         void takeOver(HandlerHash* pHandler, PatternHash* pPattern);
@@ -152,12 +152,12 @@ class FWI_DLLPUBLIC HandlerCFGAccess : public ::utl::ConfigItem
 
     /* interface */
     public:
-                 HandlerCFGAccess( const ::rtl::OUString& sPackage  );
+                 HandlerCFGAccess( const OUString& sPackage  );
         void     read            (       HandlerHash**    ppHandler ,
                                          PatternHash**    ppPattern );
 
         void setCache(HandlerCache* pCache) {m_pCache = pCache;};
-        virtual void Notify(const css::uno::Sequence< rtl::OUString >& lPropertyNames);
+        virtual void Notify(const css::uno::Sequence< OUString >& lPropertyNames);
         virtual void Commit();
 };
 

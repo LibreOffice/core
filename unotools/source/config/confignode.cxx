@@ -128,9 +128,9 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OConfigurationNode::getLocalName() const
+    OUString OConfigurationNode::getLocalName() const
     {
-        ::rtl::OUString sLocalName;
+        OUString sLocalName;
         try
         {
             Reference< XNamed > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
@@ -144,9 +144,9 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OConfigurationNode::getNodePath() const
+    OUString OConfigurationNode::getNodePath() const
     {
-        ::rtl::OUString sNodePath;
+        OUString sNodePath;
         try
         {
             Reference< XHierarchicalName > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
@@ -160,9 +160,9 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OConfigurationNode::normalizeName(const ::rtl::OUString& _rName, NAMEORIGIN _eOrigin) const
+    OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
-        ::rtl::OUString sName(_rName);
+        OUString sName(_rName);
         if (getEscape())
         {
             Reference< XStringEscape > xEscaper(m_xDirectAccess, UNO_QUERY);
@@ -185,17 +185,17 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OConfigurationNode::getNodeNames() const throw()
+    Sequence< OUString > OConfigurationNode::getNodeNames() const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::getNodeNames: object is invalid!");
-        Sequence< ::rtl::OUString > aReturn;
+        Sequence< OUString > aReturn;
         if (m_xDirectAccess.is())
         {
             try
             {
                 aReturn = m_xDirectAccess->getElementNames();
                 // normalize the names
-                ::rtl::OUString* pNames = aReturn.getArray();
+                OUString* pNames = aReturn.getArray();
                 for (sal_Int32 i=0; i<aReturn.getLength(); ++i, ++pNames)
                     *pNames = normalizeName(*pNames, NO_CONFIGURATION);
             }
@@ -209,23 +209,23 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::removeNode(const ::rtl::OUString& _rName) const throw()
+    sal_Bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xContainerAccess.is(), "OConfigurationNode::removeNode: object is invalid!");
         if (m_xContainerAccess.is())
         {
             try
             {
-                ::rtl::OUString sName = normalizeName(_rName, NO_CALLER);
+                OUString sName = normalizeName(_rName, NO_CALLER);
                 m_xContainerAccess->removeByName(sName);
                 return sal_True;
             }
             catch (NoSuchElementException&)
             {
                 #if OSL_DEBUG_LEVEL > 0
-                rtl::OStringBuffer aBuf( 256 );
+                OStringBuffer aBuf( 256 );
                 aBuf.append("OConfigurationNode::removeNode: there is no element named!");
-                aBuf.append( rtl::OUStringToOString( _rName, RTL_TEXTENCODING_ASCII_US ) );
+                aBuf.append( OUStringToOString( _rName, RTL_TEXTENCODING_ASCII_US ) );
                 aBuf.append( "!" );
                 OSL_FAIL(aBuf.getStr());
                 #endif
@@ -242,13 +242,13 @@ namespace utl
         return sal_False;
     }
     //------------------------------------------------------------------------
-    OConfigurationNode OConfigurationNode::insertNode(const ::rtl::OUString& _rName,const Reference< XInterface >& _xNode) const throw()
+    OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const throw()
     {
         if(_xNode.is())
         {
             try
             {
-                ::rtl::OUString sName = normalizeName(_rName, NO_CALLER);
+                OUString sName = normalizeName(_rName, NO_CALLER);
                 m_xContainerAccess->insertByName(sName, makeAny(_xNode));
                 // if we're here, all was ok ...
                 return OConfigurationNode( _xNode );
@@ -267,7 +267,7 @@ namespace utl
         return OConfigurationNode();
     }
     //------------------------------------------------------------------------
-    OConfigurationNode OConfigurationNode::createNode(const ::rtl::OUString& _rName) const throw()
+    OConfigurationNode OConfigurationNode::createNode(const OUString& _rName) const throw()
     {
         Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
         OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
@@ -290,13 +290,13 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationNode OConfigurationNode::openNode(const ::rtl::OUString& _rPath) const throw()
+    OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::openNode: object is invalid!");
         try
         {
-            ::rtl::OUString sNormalized = normalizeName(_rPath, NO_CALLER);
+            OUString sNormalized = normalizeName(_rPath, NO_CALLER);
 
             Reference< XInterface > xNode;
             if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalized))
@@ -315,9 +315,9 @@ namespace utl
         catch(const NoSuchElementException&)
         {
             #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aBuf( 256 );
+            OStringBuffer aBuf( 256 );
             aBuf.append("OConfigurationNode::openNode: there is no element named ");
-            aBuf.append( rtl::OUStringToOString( _rPath, RTL_TEXTENCODING_ASCII_US ) );
+            aBuf.append( OUStringToOString( _rPath, RTL_TEXTENCODING_ASCII_US ) );
             aBuf.append("!");
             OSL_FAIL(aBuf.getStr());
             #endif
@@ -342,20 +342,20 @@ namespace utl
         Reference< XServiceInfo > xSI(m_xHierarchyAccess, UNO_QUERY);
         if (xSI.is())
         {
-            try { bIsSet = xSI->supportsService(::rtl::OUString("com.sun.star.configuration.SetAccess")); }
+            try { bIsSet = xSI->supportsService(OUString("com.sun.star.configuration.SetAccess")); }
             catch(Exception&) { }
         }
         return bIsSet;
     }
 
-    sal_Bool OConfigurationNode::hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw()
+    sal_Bool OConfigurationNode::hasByHierarchicalName( const OUString& _rName ) const throw()
     {
         OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );
         try
         {
             if ( m_xHierarchyAccess.is() )
             {
-                ::rtl::OUString sName = normalizeName( _rName, NO_CALLER );
+                OUString sName = normalizeName( _rName, NO_CALLER );
                 return m_xHierarchyAccess->hasByHierarchicalName( sName );
             }
         }
@@ -366,12 +366,12 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::hasByName(const ::rtl::OUString& _rName) const throw()
+    sal_Bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         try
         {
-            ::rtl::OUString sName = normalizeName(_rName, NO_CALLER);
+            OUString sName = normalizeName(_rName, NO_CALLER);
             if (m_xDirectAccess.is())
                 return m_xDirectAccess->hasByName(sName);
         }
@@ -382,7 +382,7 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OConfigurationNode::setNodeValue(const ::rtl::OUString& _rPath, const Any& _rValue) const throw()
+    sal_Bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
     {
         sal_Bool bResult = false;
 
@@ -392,7 +392,7 @@ namespace utl
             try
             {
                 // check if _rPath is a level-1 path
-                ::rtl::OUString sNormalizedName = normalizeName(_rPath, NO_CALLER);
+                OUString sNormalizedName = normalizeName(_rPath, NO_CALLER);
                 if (m_xReplaceAccess->hasByName(sNormalizedName))
                 {
                     m_xReplaceAccess->replaceByName(sNormalizedName, _rValue);
@@ -404,7 +404,7 @@ namespace utl
                 {
                     OSL_ASSERT(!_rPath.isEmpty());
 
-                    ::rtl::OUString sParentPath, sLocalName;
+                    OUString sParentPath, sLocalName;
 
                     if ( splitLastFromConfigurationPath(_rPath, sParentPath, sLocalName) )
                     {
@@ -443,14 +443,14 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    Any OConfigurationNode::getNodeValue(const ::rtl::OUString& _rPath) const throw()
+    Any OConfigurationNode::getNodeValue(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
         Any aReturn;
         try
         {
-            ::rtl::OUString sNormalizedPath = normalizeName(_rPath, NO_CALLER);
+            OUString sNormalizedPath = normalizeName(_rPath, NO_CALLER);
             if (m_xDirectAccess.is() && m_xDirectAccess->hasByName(sNormalizedPath) )
             {
                 aReturn = m_xDirectAccess->getByName(sNormalizedPath);
@@ -498,7 +498,7 @@ namespace utl
 
         //--------------------------------------------------------------------
         Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
-            const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
+            const OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
         {
             ENSURE_OR_RETURN( i_rxConfigProvider.is(), "invalid provider", NULL );
             try
@@ -508,9 +508,9 @@ namespace utl
                 aArgs.put( "lazywrite", i_bLazyWrite );
                 aArgs.put( "depth", i_nDepth );
 
-                ::rtl::OUString sAccessService( i_bUpdatable ?
-                                ::rtl::OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ) :
-                                ::rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" ));
+                OUString sAccessService( i_bUpdatable ?
+                                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ) :
+                                OUString( "com.sun.star.configuration.ConfigurationAccess" ));
 
                 Reference< XInterface > xRoot(
                     i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),
@@ -534,7 +534,7 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable )
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
             i_rNodePath, i_bUpdatable, -1, false ).get() )
         ,m_xCommitter()
@@ -576,7 +576,7 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
             _rxConfProvider, _rPath, _eMode != CM_READONLY, _nDepth, _bLazyWrite ) );
@@ -586,14 +586,14 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite )
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite )
     {
         return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
 
     //------------------------------------------------------------------------
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
-        const ::rtl::OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
+        const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
     {
         OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithComponentContext: invalid XComponentContext!" );
         try

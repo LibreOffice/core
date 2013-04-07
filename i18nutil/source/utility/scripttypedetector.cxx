@@ -47,14 +47,14 @@ static sal_Int16 scriptDirection[] = {
     ScriptDirection::NEUTRAL,           // DirectionProperty_BOUNDARY_NEUTRAL = 18,
 };
 
-sal_Int16 ScriptTypeDetector::getScriptDirection( const rtl::OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
+sal_Int16 ScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
 {
     sal_Int16 dir = scriptDirection[unicode::getUnicodeDirection(Text[nPos])];
     return (dir == ScriptDirection::NEUTRAL) ? defaultScriptDirection : dir;
 }
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
-sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction )
+sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
         sal_Int32 cPos = nPos;
 
@@ -67,7 +67,7 @@ sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const rtl::OUString& Text,
         return cPos == nPos ? -1 : cPos + 1;
 }
 
-sal_Int32 ScriptTypeDetector::endOfScriptDirection( const rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction )
+sal_Int32 ScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
         sal_Int32 cPos = nPos;
         sal_Int32 len = Text.getLength();
@@ -81,7 +81,7 @@ sal_Int32 ScriptTypeDetector::endOfScriptDirection( const rtl::OUString& Text, s
         return cPos == nPos ? -1 : cPos;
 }
 
-sal_Int16 ScriptTypeDetector::getCTLScriptType( const rtl::OUString& Text, sal_Int32 nPos )
+sal_Int16 ScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     static ScriptTypeList typeList[] = {
         { UnicodeScript_kHebrew, UnicodeScript_kHebrew, CTLScriptType::CTL_HEBREW },    // 10
@@ -95,7 +95,7 @@ sal_Int16 ScriptTypeDetector::getCTLScriptType( const rtl::OUString& Text, sal_I
 }
 
 // Begin of Script Type is inclusive.
-sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const rtl::OUString& Text, sal_Int32 nPos )
+sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     if (nPos < 0)
         return 0;
@@ -112,7 +112,7 @@ sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const rtl::OUString& Text, s
 }
 
 // End of the Script Type is exclusive, the return value pointing to the begin of next script type
-sal_Int32 ScriptTypeDetector::endOfCTLScriptType( const rtl::OUString& Text, sal_Int32 nPos )
+sal_Int32 ScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     if (nPos < 0)
         return 0;

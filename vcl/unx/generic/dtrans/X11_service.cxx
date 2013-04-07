@@ -35,7 +35,6 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::awt;
 using namespace x11;
 
-using ::rtl::OUString;
 
 Sequence< OUString > SAL_CALL x11::X11Clipboard_getSupportedServiceNames()
 {
@@ -62,7 +61,7 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static boost::unordered_map< OUString, ::boost::unordered_map< Atom, Reference< XClipboard > >, OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;

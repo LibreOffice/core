@@ -33,10 +33,10 @@ using namespace xmloff::token;
 
 ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
-                                      rtl::OUStringBuffer& sTempValue) :
+                                      OUStringBuffer& sTempValue) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sOUText(),
     sValue(sTempValue)
@@ -48,7 +48,7 @@ ScXMLContentContext::~ScXMLContentContext()
 }
 
 SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -60,9 +60,9 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const rtl::OUString& sAttrValue(xAttrList->getValueByIndex( i ));
-            rtl::OUString aLocalName;
+            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+            const OUString& sAttrValue(xAttrList->getValueByIndex( i ));
+            OUString aLocalName;
             sal_uInt16 nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
@@ -81,7 +81,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-void ScXMLContentContext::Characters( const ::rtl::OUString& rChars )
+void ScXMLContentContext::Characters( const OUString& rChars )
 {
     sOUText.append(rChars);
 }

@@ -52,7 +52,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     StorageOutputStream::StorageOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                 const Reference< XStorage >& i_rParentStorage,
-                                                const ::rtl::OUString& i_rStreamName
+                                                const OUString& i_rStreamName
                                              )
         :m_rContext( i_rContext )
     {
@@ -85,7 +85,7 @@ namespace dbaccess
     //--------------------------------------------------------------------
     StorageInputStream::StorageInputStream( const Reference<XComponentContext>& i_rContext,
                                             const Reference< XStorage >& i_rParentStorage,
-                                            const ::rtl::OUString& i_rStreamName
+                                            const OUString& i_rStreamName
                                           )
         :m_rContext( i_rContext )
     {

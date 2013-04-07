@@ -32,8 +32,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 
@@ -176,7 +174,7 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
 }
 
 // ____ XServiceName ____
-::rtl::OUString SAL_CALL RegressionCurveModel::getServiceName()
+OUString SAL_CALL RegressionCurveModel::getServiceName()
     throw (uno::RuntimeException)
 {
     switch( m_eRegressionCurveType )
@@ -193,7 +191,7 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
             return OUString("com.sun.star.chart2.PotentialRegressionCurve");
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // ____ XModifyBroadcaster ____
@@ -299,9 +297,9 @@ MeanValueRegressionCurve::MeanValueRegressionCurve(
 {}
 MeanValueRegressionCurve::~MeanValueRegressionCurve()
 {}
-uno::Sequence< ::rtl::OUString > MeanValueRegressionCurve::getSupportedServiceNames_Static()
+uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.MeanValueRegressionCurve";
     return aServices;
@@ -327,9 +325,9 @@ LinearRegressionCurve::LinearRegressionCurve(
 {}
 LinearRegressionCurve::~LinearRegressionCurve()
 {}
-uno::Sequence< ::rtl::OUString > LinearRegressionCurve::getSupportedServiceNames_Static()
+uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.LinearRegressionCurve";
     return aServices;
@@ -355,9 +353,9 @@ LogarithmicRegressionCurve::LogarithmicRegressionCurve(
 {}
 LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 {}
-uno::Sequence< ::rtl::OUString > LogarithmicRegressionCurve::getSupportedServiceNames_Static()
+uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.LogarithmicRegressionCurve";
     return aServices;
@@ -383,9 +381,9 @@ ExponentialRegressionCurve::ExponentialRegressionCurve(
 {}
 ExponentialRegressionCurve::~ExponentialRegressionCurve()
 {}
-uno::Sequence< ::rtl::OUString > ExponentialRegressionCurve::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.ExponentialRegressionCurve";
     return aServices;
@@ -411,9 +409,9 @@ PotentialRegressionCurve::PotentialRegressionCurve(
 {}
 PotentialRegressionCurve::~PotentialRegressionCurve()
 {}
-uno::Sequence< ::rtl::OUString > PotentialRegressionCurve::getSupportedServiceNames_Static()
+uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.PotentialRegressionCurve";
     return aServices;

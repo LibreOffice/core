@@ -57,7 +57,7 @@ class EditToolbarController : public IEditListener,
                                ToolBox*     pToolBar,
                                sal_uInt16       nID,
                                sal_Int32    nWidth,
-                               const rtl::OUString& aCommand );
+                               const OUString& aCommand );
         virtual ~EditToolbarController();
 
         // XComponent

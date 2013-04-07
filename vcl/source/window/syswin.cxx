@@ -45,7 +45,7 @@ public:
 
     TaskPaneList*   mpTaskPaneList;
     Size            maMaxOutSize;
-    rtl::OUString   maRepresentedURL;
+    OUString   maRepresentedURL;
     Link maCloseHdl;
 };
 
@@ -229,7 +229,7 @@ void SystemWindow::Resizing( Size& )
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetRepresentedURL( const rtl::OUString& i_rURL )
+void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
 {
     bool bChanged = (i_rURL != mpImplData->maRepresentedURL);
     mpImplData->maRepresentedURL = i_rURL;
@@ -437,11 +437,11 @@ Size SystemWindow::GetResizeOutputSizePixel() const
 // -----------------------------------------------------------------------
 
 static void ImplWindowStateFromStr(WindowStateData& rData,
-    const rtl::OString& rStr)
+    const OString& rStr)
 {
     sal_uLong       nValidMask  = 0;
     sal_Int32 nIndex      = 0;
-    rtl::OString aTokenStr;
+    OString aTokenStr;
 
     aTokenStr = rStr.getToken(0, ',', nIndex);
     if (!aTokenStr.isEmpty())
@@ -552,13 +552,13 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
 
 // -----------------------------------------------------------------------
 
-static rtl::OString ImplWindowStateToStr(const WindowStateData& rData)
+static OString ImplWindowStateToStr(const WindowStateData& rData)
 {
     sal_uLong nValidMask = rData.GetMask();
     if ( !nValidMask )
-        return rtl::OString();
+        return OString();
 
-    rtl::OStringBuffer rStrBuf;
+    OStringBuffer rStrBuf;
 
     if ( nValidMask & WINDOWSTATE_MASK_X )
         rStrBuf.append(static_cast<sal_Int32>(rData.GetX()));
@@ -895,7 +895,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 
 // -----------------------------------------------------------------------
 
-void SystemWindow::SetWindowState(const rtl::OString& rStr)
+void SystemWindow::SetWindowState(const OString& rStr)
 {
     if (rStr.isEmpty())
         return;
@@ -907,7 +907,7 @@ void SystemWindow::SetWindowState(const rtl::OString& rStr)
 
 // -----------------------------------------------------------------------
 
-rtl::OString SystemWindow::GetWindowState( sal_uLong nMask ) const
+OString SystemWindow::GetWindowState( sal_uLong nMask ) const
 {
     WindowStateData aData;
     aData.SetMask( nMask );
@@ -1016,7 +1016,7 @@ void SystemWindow::SetScreenNumber(unsigned int nDisplayScreen)
     mpWindowImpl->mpFrame->SetScreenNumber( nDisplayScreen );
 }
 
-void SystemWindow::SetApplicationID(const rtl::OUString &rApplicationID)
+void SystemWindow::SetApplicationID(const OUString &rApplicationID)
 {
     mpWindowImpl->mpFrame->SetApplicationID( rApplicationID );
 }

@@ -121,10 +121,10 @@ class theCurrentComponent : public rtl::Static< WeakReference< XInterface >, the
 #ifndef DISABLE_SCRIPTING
 
 // remember all registered components for VBA compatibility, to be able to remove them on disposing the model
-typedef ::std::map< XInterface*, ::rtl::OString > VBAConstantNameMap;
+typedef ::std::map< XInterface*, OString > VBAConstantNameMap;
 static VBAConstantNameMap s_aRegisteredVBAConstants;
 
-::rtl::OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
+OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 {
     OSL_ENSURE( rxComponent.is(), "lclGetVBAGlobalConstName - missing component" );
 
@@ -135,14 +135,14 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
     uno::Reference< beans::XPropertySet > xProps( rxComponent, uno::UNO_QUERY );
     if( xProps.is() ) try
     {
-        ::rtl::OUString aConstName;
-        xProps->getPropertyValue( ::rtl::OUString( "ThisVBADocObj"  ) ) >>= aConstName;
-        return ::rtl::OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
+        OUString aConstName;
+        xProps->getPropertyValue( OUString( "ThisVBADocObj"  ) ) >>= aConstName;
+        return OUStringToOString( aConstName, RTL_TEXTENCODING_ASCII_US );
     }
     catch (const uno::Exception&) // not supported
     {
     }
-    return ::rtl::OString();
+    return OString();
 }
 
 #endif
@@ -401,7 +401,7 @@ SfxObjectShell::~SfxObjectShell()
     // The removing of the temporary file must be done as the latest step in the document destruction
     if ( pImp->aTempName.Len() )
     {
-        rtl::OUString aTmp;
+        OUString aTmp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
         ::utl::UCBContentHelper::Kill( aTmp );
     }
@@ -627,7 +627,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
                 SfxHelp::OpenHelpAgent( &pFirst->GetFrame(), HID_CLOSE_WARNING );
             }
             const Reference< XTitle > xTitle( *pImp->pBaseModel.get(), UNO_QUERY_THROW );
-            const ::rtl::OUString     sTitle = xTitle->getTitle ();
+            const OUString     sTitle = xTitle->getTitle ();
             nRet = ExecuteQuerySaveDocument(&pFrame->GetWindow(),sTitle);
         }
         /*HACK for plugin::destroy()*/
@@ -880,16 +880,16 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 //--------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
+uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 {
-    static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
+    static uno::Sequence< OUString >* pEventNameContainer = NULL;
 
     if ( !pEventNameContainer )
     {
         SolarMutexGuard aGuard;
         if ( !pEventNameContainer )
         {
-            static uno::Sequence< ::rtl::OUString > aEventNameContainer = GlobalEventConfig().getElementNames();
+            static uno::Sequence< OUString > aEventNameContainer = GlobalEventConfig().getElementNames();
             pEventNameContainer = &aEventNameContainer;
         }
     }
@@ -956,7 +956,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         // set new current component for VBA compatibility
         if ( _rxComponent.is() )
         {
-            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
+            OString aVBAConstName = lclGetVBAGlobalConstName( _rxComponent );
             if ( !aVBAConstName.isEmpty() )
             {
                 pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( _rxComponent ) );
@@ -966,7 +966,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
         // no new component passed -> remove last registered VBA component
         else if ( xOldCurrentComp.is() )
         {
-            ::rtl::OString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
+            OString aVBAConstName = lclGetVBAGlobalConstName( xOldCurrentComp );
             if ( !aVBAConstName.isEmpty() )
             {
                 pAppMgr->SetGlobalUNOConstant( aVBAConstName.getStr(), Any( Reference< XInterface >() ) );
@@ -987,7 +987,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
 {
     //! Remove everything behind name!
     String aFact( rFact );
-    String aPrefix = rtl::OUString("private:factory/");
+    String aPrefix = OUString("private:factory/");
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
     sal_uInt16 nPos = aFact.Search( '?' );
@@ -1005,50 +1005,50 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     // a factory short name. Set return value directly to this service name as fallback
     // in case next lines of code does nothing ...
     // use rFact instead of normed aFact value !
-    ::rtl::OUString aServiceName = rFact;
+    OUString aServiceName = rFact;
 
     if ( aFact.EqualsAscii("swriter") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.text.TextDocument");
+        aServiceName = OUString("com.sun.star.text.TextDocument");
     }
     else if ( aFact.EqualsAscii("sweb") || aFact.EqualsAscii("swriter/web") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.text.WebDocument");
+        aServiceName = OUString("com.sun.star.text.WebDocument");
     }
     else if ( aFact.EqualsAscii("sglobal") || aFact.EqualsAscii("swriter/globaldocument") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.text.GlobalDocument");
+        aServiceName = OUString("com.sun.star.text.GlobalDocument");
     }
     else if ( aFact.EqualsAscii("scalc") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.sheet.SpreadsheetDocument");
+        aServiceName = OUString("com.sun.star.sheet.SpreadsheetDocument");
     }
     else if ( aFact.EqualsAscii("sdraw") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.drawing.DrawingDocument");
+        aServiceName = OUString("com.sun.star.drawing.DrawingDocument");
     }
     else if ( aFact.EqualsAscii("simpress") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.presentation.PresentationDocument");
+        aServiceName = OUString("com.sun.star.presentation.PresentationDocument");
     }
     else if ( aFact.EqualsAscii("schart") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.chart.ChartDocument");
+        aServiceName = OUString("com.sun.star.chart.ChartDocument");
     }
     else if ( aFact.EqualsAscii("smath") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.formula.FormulaProperties");
+        aServiceName = OUString("com.sun.star.formula.FormulaProperties");
     }
 #ifndef DISABLE_SCRIPTING
     else if ( aFact.EqualsAscii("sbasic") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.script.BasicIDE");
+        aServiceName = OUString("com.sun.star.script.BasicIDE");
     }
 #endif
 #ifndef DISABLE_DBCONNECTIVITY
     else if ( aFact.EqualsAscii("sdatabase") )
     {
-        aServiceName = ::rtl::OUString("com.sun.star.sdb.OfficeDatabaseDocument");
+        aServiceName = OUString("com.sun.star.sdb.OfficeDatabaseDocument");
     }
 #endif
 
@@ -1090,8 +1090,8 @@ Reference<lang::XComponent> SfxObjectShell::CreateAndLoadComponent( const SfxIte
     TransformItems( SID_OPENDOC, rSet, aProps );
     SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
     SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
-    ::rtl::OUString aURL;
-    ::rtl::OUString aTarget("_blank");
+    OUString aURL;
+    OUString aTarget("_blank");
     if ( pFileNameItem )
         aURL = pFileNameItem->GetValue();
     if ( pTargetItem )

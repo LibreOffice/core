@@ -265,7 +265,7 @@ namespace XPath
 
     static OUString make_error_message(xmlErrorPtr pError)
     {
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         if (pError->message) {
             buf.appendAscii(pError->message);
         }
@@ -300,7 +300,7 @@ namespace XPath
             vsnprintf(str, sizeof(str), format, args);
             va_end(args);
 
-            ::rtl::OUStringBuffer buf(
+            OUStringBuffer buf(
                 "libxml2 error:\n");
             buf.appendAscii(str);
             OString msg = OUStringToOString(buf.makeStringAndClear(),
@@ -311,7 +311,7 @@ namespace XPath
         static void structured_error_func(void * userData, xmlErrorPtr error)
         {
             (void) userData;
-            ::rtl::OUStringBuffer buf(
+            OUStringBuffer buf(
                 "libxml2 error:\n");
             if (error) {
                 buf.append(make_error_message(error));

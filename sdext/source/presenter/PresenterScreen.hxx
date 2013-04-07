@@ -62,8 +62,8 @@ class PresenterScreenJob
       public PresenterScreenJobInterfaceBase
 {
 public:
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static (void);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
@@ -153,7 +153,7 @@ private:
         {
         }
     };
-    typedef ::std::map<rtl::OUString,ViewDescriptor> ViewDescriptorContainer;
+    typedef ::std::map<OUString,ViewDescriptor> ViewDescriptorContainer;
     ViewDescriptorContainer maViewDescriptors;
 
     void ShutdownPresenterScreen (void);
@@ -181,7 +181,7 @@ private:
     */
     void ProcessLayout (
         PresenterConfigurationAccess& rConfiguration,
-        const ::rtl::OUString& rsLayoutName,
+        const OUString& rsLayoutName,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
 
@@ -189,7 +189,7 @@ private:
         configuration list.
     */
     void ProcessComponent (
-        const ::rtl::OUString& rsKey,
+        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues,
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId);
@@ -202,14 +202,14 @@ private:
     /** Called by ProcessViewDescriptions for a single entry.
     */
     void ProcessViewDescription (
-        const ::rtl::OUString& rsKey,
+        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 
     void SetupView (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxAnchorId,
-        const ::rtl::OUString& rsPaneURL,
-        const ::rtl::OUString& rsViewURL,
+        const OUString& rsPaneURL,
+        const OUString& rsViewURL,
         const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization,
         const double nLeft,
         const double nTop,

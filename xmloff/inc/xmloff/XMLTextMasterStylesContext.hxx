@@ -28,12 +28,12 @@ class XMLOFF_DLLPUBLIC XMLTextMasterStylesContext : public SvXMLStylesContext
 {
 protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
-        sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -43,7 +43,7 @@ public:
     TYPEINFO();
 
     XMLTextMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
 

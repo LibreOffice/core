@@ -92,7 +92,7 @@ namespace dbaui
 
         // ----------------------------------------------------------------
         // access to the data source / document
-        ::rtl::OUString getDataSourceName() const;
+        OUString getDataSourceName() const;
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&
                     getDataSource() const;
         sal_Bool    haveDataSource() const;
@@ -107,7 +107,7 @@ namespace dbaui
         /** appends an error in the current environment.
         */
         void appendError(
-                        const ::rtl::OUString& _rErrorMessage,
+                        const OUString& _rErrorMessage,
                         const ::dbtools::StandardSQLState _eSQLState = ::dbtools::SQL_GENERAL_ERROR,
                         const sal_Int32 _nErrorCode = 1000
                      );
@@ -160,7 +160,7 @@ namespace dbaui
         virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTitle
-        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB);

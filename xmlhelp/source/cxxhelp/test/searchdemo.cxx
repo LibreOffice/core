@@ -43,7 +43,7 @@ extern RandomAccessStream* theFile();
 
 void print_rtl_OUString( const OUString bla )
 {
-    rtl::OString bluber = rtl::OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
+    OString bluber = OString( bla.getStr(),bla.getLength(),RTL_TEXTENCODING_UTF8 );
     char* bluberChr = new char[ 1+bluber.getLength() ];
     const sal_Char* jux = bluber.getStr();
 

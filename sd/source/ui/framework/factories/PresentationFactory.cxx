@@ -33,7 +33,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 
@@ -107,19 +106,19 @@ Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
 
 
 
-::rtl::OUString PresentationFactoryProvider_getImplementationName (void) throw(RuntimeException)
+OUString PresentationFactoryProvider_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.PresentationFactoryProvider");
+    return OUString("com.sun.star.comp.Draw.framework.PresentationFactoryProvider");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.PresentationFactoryProvider");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.framework.PresentationFactoryProvider");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -127,7 +126,7 @@ Sequence<rtl::OUString> SAL_CALL PresentationFactoryProvider_getSupportedService
 
 //===== PresentationFactory ===================================================
 
-const ::rtl::OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
+const OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
 
 
 PresentationFactory::PresentationFactory (

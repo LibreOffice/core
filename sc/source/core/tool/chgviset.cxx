@@ -81,7 +81,7 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
     return *this;
 }
 
-sal_Bool ScChangeViewSettings::IsValidComment(const ::rtl::OUString* pCommentStr) const
+sal_Bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
 {
     sal_Bool nTheFlag=sal_True;
 
@@ -94,7 +94,7 @@ sal_Bool ScChangeViewSettings::IsValidComment(const ::rtl::OUString* pCommentStr
     return nTheFlag;
 }
 
-void ScChangeViewSettings::SetTheComment(const ::rtl::OUString& rString)
+void ScChangeViewSettings::SetTheComment(const OUString& rString)
 {
     aComment=rString;
     if(pCommentSearcher!=NULL)

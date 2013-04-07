@@ -60,7 +60,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 static OUString
 lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
@@ -196,12 +195,12 @@ public:
     StyleAccess_Impl(SwXDocumentIndex& rParentIdx);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL
-        supportsService(const ::rtl::OUString& rServiceName)
+        supportsService(const OUString& rServiceName)
         throw (uno::RuntimeException);
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException);
 
     // XElementAccess
@@ -242,12 +241,12 @@ public:
     TokenAccess_Impl(SwXDocumentIndex& rParentIdx);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL
-        supportsService(const ::rtl::OUString& rServiceName)
+        supportsService(const OUString& rServiceName)
         throw (uno::RuntimeException);
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (uno::RuntimeException);
 
     // XElementAccess
@@ -1201,7 +1200,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndex::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1211,7 +1210,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndex::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1221,7 +1220,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndex::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1231,7 +1230,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndex::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1926,7 +1925,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
     if (!bMark && !rMark.GetAlternativeText().Len())
     {
-        rMark.SetAlternativeText( rtl::OUString(' ') );
+        rMark.SetAlternativeText( OUString(' ') );
     }
 
     const bool bForceExpandHints( (!bMark && pTextCursor)
@@ -1975,7 +1974,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
             "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute")),
             0);
     }
@@ -2314,7 +2313,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndexMark::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2324,7 +2323,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndexMark::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2334,7 +2333,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndexMark::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2344,7 +2343,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXDocumentIndexMark::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)

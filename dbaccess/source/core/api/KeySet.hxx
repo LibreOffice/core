@@ -36,9 +36,9 @@ namespace dbaccess
 {
     struct SelectColumnDescription
     {
-        ::rtl::OUString sRealName;      // may be empty
-        ::rtl::OUString sTableName;      // may be empty
-        ::rtl::OUString sDefaultValue;
+        OUString sRealName;      // may be empty
+        OUString sTableName;      // may be empty
+        OUString sDefaultValue;
         sal_Int32       nPosition;
         sal_Int32       nType;
         sal_Int32       nScale;
@@ -52,7 +52,7 @@ namespace dbaccess
         {
         }
 
-        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale,sal_Bool _bNullable, const ::rtl::OUString& _rDefaultValue )
+        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale,sal_Bool _bNullable, const OUString& _rDefaultValue )
             :sDefaultValue( _rDefaultValue )
             ,nPosition( _nPosition )
             ,nType( _nType )
@@ -61,12 +61,12 @@ namespace dbaccess
         {
         }
     };
-    typedef ::std::map< ::rtl::OUString, SelectColumnDescription, ::comphelper::UStringMixLess >    SelectColumnsMetaData;
+    typedef ::std::map< OUString, SelectColumnDescription, ::comphelper::UStringMixLess >    SelectColumnsMetaData;
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxQueryColumns,
-                            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rColumnNames,
-                            const ::rtl::OUString& _rsUpdateTableName,
+                            const ::com::sun::star::uno::Sequence< OUString >& _rColumnNames,
+                            const OUString& _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames /* out */,
                             bool i_bAppendTableName = false);
 
@@ -80,7 +80,7 @@ namespace dbaccess
         OKeySetMatrix                                           m_aKeyMap;
         OKeySetMatrix::iterator                                 m_aKeyIter;
 
-        ::std::vector< ::rtl::OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
+        ::std::vector< OUString >                        m_aAutoColumns;  // contains all columns which are autoincrement ones
 
         OUpdatedParameter                                       m_aUpdatedParameter;    // contains all parameter which have been updated and are needed for refetching
         ORowSetValueVector                                      m_aParameterValueForCache;
@@ -105,9 +105,9 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >   m_xComposer;
-        const ::rtl::OUString                                   m_sUpdateTableName;
-        ::rtl::OUString                                         m_sRowSetFilter;
-        ::std::vector< ::rtl::OUString >                        m_aFilterColumns;
+        const OUString                                   m_sUpdateTableName;
+        OUString                                         m_sRowSetFilter;
+        ::std::vector< OUString >                        m_aFilterColumns;
         sal_Int32&                                              m_rRowCount;
 
         sal_Bool m_bRowCountFinal;
@@ -130,7 +130,7 @@ namespace dbaccess
         void initColumns();
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         void findTableColumnsMatching_throw( const ::com::sun::star::uno::Any& i_aTable,
-                                             const ::rtl::OUString& i_rUpdateTableName,
+                                             const OUString& i_rUpdateTableName,
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& i_xMeta,
                                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& i_xQueryColumns,
                                              ::std::auto_ptr<SelectColumnsMetaData>& o_pKeyColumnNames);
@@ -142,29 +142,29 @@ namespace dbaccess
                                        const connectivity::ORowSetValue &_rValue,
                                        sal_Int32 _nType,
                                        sal_Int32 _nScale ) const;
-        ::rtl::OUStringBuffer createKeyFilter( );
+        OUStringBuffer createKeyFilter( );
         bool doTryRefetch_throw() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);;
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
-        void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
-        void executeInsert( const ORowSetRow& _rInsertRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName = ::rtl::OUString(),bool bRefetch = false);
-        void executeStatement(::rtl::OUStringBuffer& io_aFilter, ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
+        void executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
+        void executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName = OUString(),bool bRefetch = false);
+        void executeStatement(OUStringBuffer& io_aFilter, ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& io_xAnalyzer);
 
         virtual ~OKeySet();
     public:
         OKeySet(const connectivity::OSQLTable& _xTable,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xTableKeys,
-                const ::rtl::OUString& _rUpdateTableName,
+                const OUString& _rUpdateTableName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
                 const ORowSetValueVector& _aParameterValueForCache,
                 sal_Int32 i_nMaxRows,
                 sal_Int32& o_nRowCount);
 
         // late ctor which can throw exceptions
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

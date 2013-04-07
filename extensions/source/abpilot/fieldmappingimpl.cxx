@@ -50,16 +50,16 @@ namespace abp
     using namespace ::com::sun::star::ui::dialogs;
 
     //---------------------------------------------------------------------
-    static const ::rtl::OUString& lcl_getDriverSettingsNodeName()
+    static const OUString& lcl_getDriverSettingsNodeName()
     {
-        static const ::rtl::OUString s_sDriverSettingsNodeName( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
+        static const OUString s_sDriverSettingsNodeName( "/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver" );
         return s_sDriverSettingsNodeName;
     }
 
     //---------------------------------------------------------------------
-    static const ::rtl::OUString& lcl_getAddressBookNodeName()
+    static const OUString& lcl_getAddressBookNodeName()
     {
-        static const ::rtl::OUString s_sAddressBookNodeName( "/org.openoffice.Office.DataAccess/AddressBook" );
+        static const OUString s_sAddressBookNodeName( "/org.openoffice.Office.DataAccess/AddressBook" );
         return s_sAddressBookNodeName;
     }
 
@@ -84,7 +84,7 @@ namespace abp
                 // ........................................................
                 // create an instance of the dialog service
                 Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface( _pParent );
-                ::rtl::OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
+                OUString sTitle = String( ModuleRes( RID_STR_FIELDDIALOGTITLE ) );
                 Reference< XExecutableDialog > xDialog = AddressBookSourceDialog::createWithDataSource(_rxORB,
                                                            // the parent window
                                                            xDialogParent,
@@ -104,7 +104,7 @@ namespace abp
 #ifdef DBG_UTIL
                     sal_Bool bSuccess =
 #endif
-                    xDialogProps->getPropertyValue( ::rtl::OUString( "FieldMapping" ) ) >>= aMapping;
+                    xDialogProps->getPropertyValue( OUString( "FieldMapping" ) ) >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map
@@ -169,8 +169,8 @@ namespace abp
 
 
                 // access the configuration information which the driver uses for determining it's column names
-                ::rtl::OUString sDriverAliasesNodeName = lcl_getDriverSettingsNodeName();
-                sDriverAliasesNodeName += ::rtl::OUString( "/ColumnAliases" );
+                OUString sDriverAliasesNodeName = lcl_getDriverSettingsNodeName();
+                sDriverAliasesNodeName += OUString( "/ColumnAliases" );
 
                 // create a config node for this
                 OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithComponentContext(
@@ -183,16 +183,16 @@ namespace abp
                 sal_Int32 nIntersectedProgrammatics = SAL_N_ELEMENTS( pMappingProgrammatics ) / 2;
 
                 const sal_Char** pProgrammatic = pMappingProgrammatics;
-                ::rtl::OUString sAddressProgrammatic;
-                ::rtl::OUString sDriverProgrammatic;
-                ::rtl::OUString sDriverUI;
+                OUString sAddressProgrammatic;
+                OUString sDriverProgrammatic;
+                OUString sDriverUI;
                 for (   sal_Int32 i=0;
                         i < nIntersectedProgrammatics;
                         ++i
                     )
                 {
-                    sAddressProgrammatic = ::rtl::OUString::createFromAscii( *pProgrammatic++ );
-                    sDriverProgrammatic = ::rtl::OUString::createFromAscii( *pProgrammatic++ );
+                    sAddressProgrammatic = OUString::createFromAscii( *pProgrammatic++ );
+                    sDriverProgrammatic = OUString::createFromAscii( *pProgrammatic++ );
 
                     if ( aDriverFieldAliasing.hasByName( sDriverProgrammatic ) )
                     {
@@ -224,26 +224,26 @@ namespace abp
             MapString2String aFieldAssignment( _rFieldAssignment );
 
             // access the configuration information which the driver uses for determining it's column names
-            const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
+            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            OConfigurationNode aFields = aAddressBookSettings.openNode( ::rtl::OUString( "Fields" ) );
+            OConfigurationNode aFields = aAddressBookSettings.openNode( OUString( "Fields" ) );
 
             // loop through all existent fields
-            Sequence< ::rtl::OUString > aExistentFields = aFields.getNodeNames();
-            const ::rtl::OUString* pExistentFields = aExistentFields.getConstArray();
-            const ::rtl::OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
+            Sequence< OUString > aExistentFields = aFields.getNodeNames();
+            const OUString* pExistentFields = aExistentFields.getConstArray();
+            const OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
 
-            const ::rtl::OUString sProgrammaticNodeName( "ProgrammaticFieldName" );
-            const ::rtl::OUString sAssignedNodeName( "AssignedFieldName" );
+            const OUString sProgrammaticNodeName( "ProgrammaticFieldName" );
+            const OUString sAssignedNodeName( "AssignedFieldName" );
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {
 #ifdef DBG_UTIL
-                ::rtl::OUString sRedundantProgrammaticName;
+                OUString sRedundantProgrammaticName;
                 aFields.openNode( *pExistentFields ).getNodeValue( sProgrammaticNodeName ) >>= sRedundantProgrammaticName;
 #endif
                 DBG_ASSERT( sRedundantProgrammaticName == *pExistentFields,
@@ -298,18 +298,18 @@ namespace abp
 
         //-----------------------------------------------------------------
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rTableName ) SAL_THROW ( ( ) )
+            const OUString& _rDataSourceName, const OUString& _rTableName ) SAL_THROW ( ( ) )
         {
             // access the configuration information which the driver uses for determining it's column names
-            const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
+            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
-            aAddressBookSettings.setNodeValue( ::rtl::OUString( "DataSourceName" ), makeAny( _rDataSourceName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString( "Command" ), makeAny( _rTableName ) );
-            aAddressBookSettings.setNodeValue( ::rtl::OUString( "CommandType" ), makeAny( (sal_Int32)CommandType::TABLE ) );
+            aAddressBookSettings.setNodeValue( OUString( "DataSourceName" ), makeAny( _rDataSourceName ) );
+            aAddressBookSettings.setNodeValue( OUString( "Command" ), makeAny( _rTableName ) );
+            aAddressBookSettings.setNodeValue( OUString( "CommandType" ), makeAny( (sal_Int32)CommandType::TABLE ) );
 
             // commit the changes done
             aAddressBookSettings.commit();
@@ -319,14 +319,14 @@ namespace abp
         void markPilotSuccess( const Reference< XComponentContext >& _rxContext ) SAL_THROW ( ( ) )
         {
             // access the configuration information which the driver uses for determining it's column names
-            const ::rtl::OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
+            const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
 
             // create a config node for this
             OConfigurationTreeRoot aAddressBookSettings = OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, sAddressBookNodeName, -1, OConfigurationTreeRoot::CM_UPDATABLE);
 
             // set the flag
-            aAddressBookSettings.setNodeValue( ::rtl::OUString( "AutoPilotCompleted" ), makeAny( (sal_Bool)sal_True ) );
+            aAddressBookSettings.setNodeValue( OUString( "AutoPilotCompleted" ), makeAny( (sal_Bool)sal_True ) );
 
             // commit the changes done
             aAddressBookSettings.commit();

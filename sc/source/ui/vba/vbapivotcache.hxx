@@ -35,8 +35,8 @@ public:
 
     virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif //SC_VBA_PIVOTCACHE_HXX

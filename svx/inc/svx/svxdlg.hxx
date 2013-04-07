@@ -185,9 +185,9 @@ class AbstractSvxNameDialog :public VclAbstractDialog  //add for SvxNameDialog
 public:
     virtual void    GetName( String& rName ) = 0;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) = 0;
-    virtual void    SetEditHelpId(const rtl::OString&) = 0;
+    virtual void    SetEditHelpId(const OString&) = 0;
     //from class Window
-    virtual void    SetHelpId( const rtl::OString& ) = 0;
+    virtual void    SetHelpId( const OString& ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
@@ -233,7 +233,7 @@ public:
     //from SvxMultiPathDialog
     virtual void    SetClassPathMode() = 0;
     //From Class Window
-    virtual void    SetHelpId( const rtl::OString& ) = 0;
+    virtual void    SetHelpId( const OString& ) = 0;
 };
 
 class AbstractSvxHpLinkDlg : public VclAbstractDialog  //add for SvxHpLinkDlg
@@ -491,7 +491,7 @@ public:
 
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) = 0;
 
-    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId ) = 0;
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId ) = 0;
 };
 
 #endif

@@ -64,13 +64,13 @@ namespace svgio
 
         const SvgStyleAttributes* SvgImageNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("image"));
+            static OUString aClassStr(OUString::createFromAscii("image"));
             maSvgStyleAttributes.checkForCssStyle(aClassStr);
 
             return &maSvgStyleAttributes;
         }
 
-        void SvgImageNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgImageNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
@@ -236,8 +236,8 @@ namespace svgio
                     }
                     else if(maUrl.getLength())
                     {
-                        const rtl::OUString& rPath = getDocument().getAbsolutePath();
-                        const rtl::OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
+                        const OUString& rPath = getDocument().getAbsolutePath();
+                        const OUString aAbsUrl(rtl::Uri::convertRelToAbs(rPath, maUrl));
 
                         if(aAbsUrl.getLength())
                         {

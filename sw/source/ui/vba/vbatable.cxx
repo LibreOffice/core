@@ -78,7 +78,7 @@ SwVbaTable::ConvertToText( const uno::Any& /*Separator*/, const uno::Any& /*Nest
     throw uno::RuntimeException();
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaTable::getName() throw (uno::RuntimeException)
 {
     uno::Reference< container::XNamed > xNamed( mxTextTable, uno::UNO_QUERY_THROW );
@@ -117,20 +117,20 @@ SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaTable::getServiceImplName()
 {
-    return rtl::OUString("SwVbaTable");
+    return OUString("SwVbaTable");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaTable::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Table" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Table" );
     }
     return aServiceNames;
 }

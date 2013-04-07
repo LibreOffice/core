@@ -68,7 +68,6 @@
 #include <svx/svxids.hrc>
 #include <editeng/editerr.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1263,7 +1262,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, sal_False);
 
         SetStatusEventHdl(Link());
-        ::rtl::OUString sViewURL;
+        OUString sViewURL;
         switch (ePageKind)
         {
             case PK_STANDARD:

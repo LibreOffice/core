@@ -89,7 +89,7 @@ public: // XAppend
                ::com::sun::star::uno::RuntimeException);
 
 public: // XDrop
-//     virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName )
+//     virtual void SAL_CALL dropByName( const OUString& elementName )
 //         throw (::com::sun::star::sdbc::SQLException,
 //                ::com::sun::star::container::NoSuchElementException,
 //                ::com::sun::star::uno::RuntimeException);

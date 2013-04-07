@@ -47,7 +47,6 @@ using com::sun::star::uno::XInterface;
 using com::sun::star::lang::EventObject;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::IllegalArgumentException;
-using rtl::OUString;
 using osl::Mutex;
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
@@ -282,7 +281,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (!(uri.is() && uri->isAbsolute()))
         {
             throw css::lang::IllegalArgumentException(
-                (rtl::OUString(
+                (OUString(
                         "XSystemShellExecute.execute URIS_ONLY with"
                         " non-absolute URI reference ")
                  + aCommand),

@@ -26,19 +26,19 @@ namespace rptui
     // =============================================================================
     // -----------------------------------------------------------------------------
     ConditionalExpression::ConditionalExpression( const sal_Char* _pAsciiPattern )
-        :m_sPattern( ::rtl::OUString::createFromAscii( _pAsciiPattern ) )
+        :m_sPattern( OUString::createFromAscii( _pAsciiPattern ) )
     {
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString ConditionalExpression::assembleExpression( const ::rtl::OUString& _rFieldDataSource, const ::rtl::OUString& _rLHS, const ::rtl::OUString& _rRHS ) const
+    OUString ConditionalExpression::assembleExpression( const OUString& _rFieldDataSource, const OUString& _rLHS, const OUString& _rRHS ) const
     {
-        ::rtl::OUString sExpression( m_sPattern );
+        OUString sExpression( m_sPattern );
 
         sal_Int32 nPatternIndex = sExpression.indexOf( '$' );
         while ( nPatternIndex > -1 )
         {
-            const ::rtl::OUString* pReplace = NULL;
+            const OUString* pReplace = NULL;
             switch ( sExpression.getStr()[ nPatternIndex + 1 ] )
             {
             case '$': pReplace = &_rFieldDataSource; break;
@@ -60,7 +60,7 @@ namespace rptui
     }
 
     // -----------------------------------------------------------------------------
-    bool ConditionalExpression::matchExpression( const ::rtl::OUString& _rExpression, const ::rtl::OUString& _rFieldDataSource, ::rtl::OUString& _out_rLHS, ::rtl::OUString& _out_rRHS ) const
+    bool ConditionalExpression::matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const
     {
         (void)_rExpression;
         (void)_rFieldDataSource;
@@ -72,8 +72,8 @@ namespace rptui
         // Unfortunately, we don't have such a regexp engine ...
 
         // Okay, let's start with replacing all $$ in our pattern with the actual field data source
-        ::rtl::OUString sMatchExpression( m_sPattern );
-        const ::rtl::OUString sFieldDataPattern( "$$" );
+        OUString sMatchExpression( m_sPattern );
+        const OUString sFieldDataPattern( "$$" );
         sal_Int32 nIndex( sMatchExpression.indexOf( sFieldDataPattern ) );
         while ( nIndex != -1 )
         {
@@ -81,8 +81,8 @@ namespace rptui
             nIndex = sMatchExpression.indexOf( sFieldDataPattern, nIndex + _rFieldDataSource.getLength() );
         }
 
-        const ::rtl::OUString sLHSPattern( "$1" );
-        const ::rtl::OUString sRHSPattern( "$2" );
+        const OUString sLHSPattern( "$1" );
+        const OUString sRHSPattern( "$2" );
         sal_Int32 nLHSIndex( sMatchExpression.indexOf( sLHSPattern ) );
         sal_Int32 nRHSIndex( sMatchExpression.indexOf( sRHSPattern ) );
 
@@ -99,8 +99,8 @@ namespace rptui
         // must be identical
         if ( _rExpression.getLength() < nLHSIndex )
             return false;
-        const ::rtl::OUString sExprPart1( _rExpression.copy( 0, nLHSIndex ) );
-        const ::rtl::OUString sMatchExprPart1( sMatchExpression.copy( 0, nLHSIndex ) );
+        const OUString sExprPart1( _rExpression.copy( 0, nLHSIndex ) );
+        const OUString sMatchExprPart1( sMatchExpression.copy( 0, nLHSIndex ) );
         if ( sExprPart1 != sMatchExprPart1 )
             // the left-most expression parts do not match
             return false;
@@ -109,11 +109,11 @@ namespace rptui
         // must be identical, too
         bool bHaveRHS( nRHSIndex != -1 );
         sal_Int32 nRightMostIndex( bHaveRHS ? nRHSIndex : nLHSIndex );
-        const ::rtl::OUString sMatchExprPart3( sMatchExpression.copy( nRightMostIndex + 2 ) );
+        const OUString sMatchExprPart3( sMatchExpression.copy( nRightMostIndex + 2 ) );
         if ( _rExpression.getLength() < sMatchExprPart3.getLength() )
             // the expression is not even long enough to hold the right-most part of the match expression
             return false;
-        const ::rtl::OUString sExprPart3( _rExpression.copy( _rExpression.getLength() - sMatchExprPart3.getLength() ) );
+        const OUString sExprPart3( _rExpression.copy( _rExpression.getLength() - sMatchExprPart3.getLength() ) );
         if ( sExprPart3 != sMatchExprPart3 )
             // the right-most expression parts do not match
             return false;
@@ -127,12 +127,12 @@ namespace rptui
 
         // strip the match expression by its right-most and left-most part, and by the placeholders $1 and $2
         sal_Int32 nMatchExprPart2Start( nLHSIndex + sLHSPattern.getLength() );
-        ::rtl::OUString sMatchExprPart2 = sMatchExpression.copy(
+        OUString sMatchExprPart2 = sMatchExpression.copy(
             nMatchExprPart2Start,
             sMatchExpression.getLength() - nMatchExprPart2Start - sMatchExprPart3.getLength() - 2
         );
         // strip the expression by its left-most and right-most part
-        const ::rtl::OUString sExpression( _rExpression.copy(
+        const OUString sExpression( _rExpression.copy(
             sExprPart1.getLength(),
             _rExpression.getLength() - sExprPart1.getLength() - sExprPart3.getLength()
         ) );

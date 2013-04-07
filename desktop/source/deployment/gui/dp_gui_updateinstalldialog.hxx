@@ -84,8 +84,8 @@ private:
         ERROR_INSTALLATION,
         ERROR_LICENSE_DECLINED
     };
-    void setError(INSTALL_ERROR err, ::rtl::OUString const & sExtension, ::rtl::OUString const & exceptionMessage);
-    void setError(::rtl::OUString const & exceptionMessage);
+    void setError(INSTALL_ERROR err, OUString const & sExtension, OUString const & exceptionMessage);
+    void setError(OUString const & exceptionMessage);
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const
             { return m_xExtensionManager; }
 
@@ -97,14 +97,14 @@ private:
     bool m_bNoEntry;
     bool m_bActivated;
 
-    ::rtl::OUString m_sInstalling;
-    ::rtl::OUString m_sFinished;
-    ::rtl::OUString m_sNoErrors;
-    ::rtl::OUString m_sErrorDownload;
-    ::rtl::OUString m_sErrorInstallation;
-    ::rtl::OUString m_sErrorLicenseDeclined;
-    ::rtl::OUString m_sNoInstall;
-    ::rtl::OUString m_sThisErrorOccurred;
+    OUString m_sInstalling;
+    OUString m_sFinished;
+    OUString m_sNoErrors;
+    OUString m_sErrorDownload;
+    OUString m_sErrorInstallation;
+    OUString m_sErrorLicenseDeclined;
+    OUString m_sNoInstall;
+    OUString m_sThisErrorOccurred;
 
     FixedText m_ft_action;
     ProgressBar m_statusbar;

@@ -108,7 +108,7 @@ void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     {
         sal_Bool bIsDark = sal_False;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, rtl::OUString( "IsBackgroundDark" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
             aAny >>= bIsDark;
         nFontColor = bIsDark ? 0xffffff : 0x000000;
     }
@@ -239,7 +239,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
         {
             sal_Bool bFixedLineSpacing = sal_False;
-            uno::Any aAny = rXPropSet->getPropertyValue( ::rtl::OUString( "FontIndependentLineSpacing" ) );
+            uno::Any aAny = rXPropSet->getPropertyValue( OUString( "FontIndependentLineSpacing" ) );
             if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
             {
                 const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
@@ -351,7 +351,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, sal_Bo
     {
         sal_Bool bIsDark = sal_False;
         ::com::sun::star::uno::Any aAny;
-        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, rtl::OUString( "IsBackgroundDark" ), sal_True ) )
+        if ( PropValue::GetPropertyValue( aAny, rPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
             aAny >>= bIsDark;
         nBulletColor = bIsDark ? 0xffffff : 0x000000;
     }

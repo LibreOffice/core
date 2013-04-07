@@ -50,17 +50,17 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
+    Sequence< OUString > SAL_CALL OAddConditionDialog_GetSupportedServiceNames()
     {
         ::comphelper::StringSequence aSupported( 1 );
-        aSupported.getArray()[0] = ::rtl::OUString( "com.sun.star.xforms.ui.dialogs.AddCondition"  );
+        aSupported.getArray()[0] = OUString( "com.sun.star.xforms.ui.dialogs.AddCondition"  );
         return aSupported;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAddConditionDialog_GetImplementationName()
+    OUString SAL_CALL OAddConditionDialog_GetImplementationName()
     {
-        return ::rtl::OUString("org.openoffice.comp.svx.OAddConditionDialog");
+        return OUString("org.openoffice.comp.svx.OAddConditionDialog");
     }
 
     //====================================================================
@@ -71,7 +71,7 @@ namespace svxform
         :OAddConditionDialogBase( _rxORB )
     {
         registerProperty(
-            ::rtl::OUString( "Binding"  ),
+            OUString( "Binding"  ),
             PROPERTY_ID_BINDING,
             PropertyAttribute::TRANSIENT,
             &m_xBinding,
@@ -79,7 +79,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( "FacetName"  ),
+            OUString( "FacetName"  ),
             PROPERTY_ID_FACET_NAME,
             PropertyAttribute::TRANSIENT,
             &m_sFacetName,
@@ -87,7 +87,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( "ConditionValue"  ),
+            OUString( "ConditionValue"  ),
             PROPERTY_ID_CONDITION_VALUE,
             PropertyAttribute::TRANSIENT,
             &m_sConditionValue,
@@ -95,7 +95,7 @@ namespace svxform
         );
 
         registerProperty(
-            ::rtl::OUString( "FormModel"  ),
+            OUString( "FormModel"  ),
             PROPERTY_ID_FORM_MODEL,
             PropertyAttribute::TRANSIENT,
             &m_xWorkModel,
@@ -126,13 +126,13 @@ namespace svxform
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAddConditionDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OAddConditionDialog::getImplementationName() throw(RuntimeException)
     {
         return OAddConditionDialog_GetImplementationName();
     }
 
     //-------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OAddConditionDialog::getSupportedServiceNames() throw(RuntimeException)
     {
         return OAddConditionDialog_GetSupportedServiceNames();
     }
@@ -161,7 +161,7 @@ namespace svxform
     Dialog* OAddConditionDialog::createDialog(Window* _pParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
-            throw RuntimeException( ::rtl::OUString(), *this );
+            throw RuntimeException( OUString(), *this );
 
         return new AddConditionDialog( _pParent, m_sFacetName, m_xBinding );
     }

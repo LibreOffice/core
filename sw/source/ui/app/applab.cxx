@@ -73,7 +73,6 @@
 #include <IDocumentDeviceAccess.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 // is in appenv.cxx
 extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
@@ -143,7 +142,7 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
     String sDBName;
     if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
     {
-        sDBName.SetToken( 3, DB_DELIM, rtl::OUString("True"));
+        sDBName.SetToken( 3, DB_DELIM, OUString("True"));
         SwInsertFld_Data aData(TYP_DBNEXTSETFLD, 0, sDBName, aEmptyStr, 0, &rSh );
         rFldMgr.InsertFld( aData );
     }
@@ -329,7 +328,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                                     pSh->SetMark();     // set only the mark
 
                                 SwSectionData aSect(CONTENT_SECTION,
-                                    rtl::OUString(MASTER_LABEL));
+                                    OUString(MASTER_LABEL));
                                 pSh->InsertSection(aSect);
                             }
                         }
@@ -337,7 +336,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                         {
                             SwSectionData aSect(FILE_LINK_SECTION,
                                     pSh->GetUniqueSectionName());
-                            rtl::OUStringBuffer sLinkName;
+                            OUStringBuffer sLinkName;
                             sLinkName.append(sfx2::cTokenSeperator);
                             sLinkName.append(sfx2::cTokenSeperator);
                             sLinkName.append(MASTER_LABEL);

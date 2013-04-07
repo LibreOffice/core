@@ -34,7 +34,6 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

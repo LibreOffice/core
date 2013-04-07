@@ -65,14 +65,14 @@ FunctionDescription::getExceptions() const {
         css::uno::Reference< css::reflection::XCompoundTypeDescription > >
             exceptions(n);
     for (sal_uInt16 i = 0; i < n; ++i) {
-        rtl::OUString name(
+        OUString name(
             reader.getMethodExceptionTypeName(m_index, i).replace('/', '.'));
         css::uno::Any any;
         try {
             any = m_manager->getByHierarchicalName(name);
         } catch (const css::container::NoSuchElementException & e) {
             throw new css::uno::RuntimeException(
-                (rtl::OUString(
+                (OUString(
                         "com.sun.star.container.NoSuchElementException: ")
                  + e.Message),
                 css::uno::Reference< css::uno::XInterface >()); //TODO
@@ -81,7 +81,7 @@ FunctionDescription::getExceptions() const {
             || exceptions[i]->getTypeClass() != css::uno::TypeClass_EXCEPTION)
         {
             throw new css::uno::RuntimeException(
-                (rtl::OUString("not an exception type: ")
+                (OUString("not an exception type: ")
                  + name),
                 css::uno::Reference< css::uno::XInterface >()); //TODO
         }

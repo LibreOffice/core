@@ -245,9 +245,9 @@ void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< u
     if (xSet.is())
     {
         if (!m_pImpl->m_bReadOnly)
-            xSet->addPropertyChangeListener( ::rtl::OUString(), this );
+            xSet->addPropertyChangeListener( OUString(), this );
         else
-            xSet->removePropertyChangeListener( ::rtl::OUString(), this );
+            xSet->removePropertyChangeListener( OUString(), this );
     }
 }
 
@@ -302,9 +302,9 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
             if ( xProps.is() )
             {
                 if ( _bStartListening )
-                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->addPropertyChangeListener( OUString(), this );
                 else
-                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->removePropertyChangeListener( OUString(), this );
             }
         }
 

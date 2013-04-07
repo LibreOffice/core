@@ -52,7 +52,7 @@ namespace connectivity
                                     public OIndex_BASE
         {
         protected:
-            ::rtl::OUString m_Catalog;
+            OUString m_Catalog;
             sal_Bool        m_IsUnique;
             sal_Bool        m_IsPrimaryKeyIndex;
             sal_Bool        m_IsClustered;
@@ -66,8 +66,8 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         public:
             OIndex(sal_Bool _bCase);
-            OIndex( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Catalog,
+            OIndex( const OUString& _Name,
+                    const OUString& _Catalog,
                     sal_Bool _isUnique,
                     sal_Bool _isPrimaryKeyIndex,
                     sal_Bool _isClustered,
@@ -93,8 +93,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
         };

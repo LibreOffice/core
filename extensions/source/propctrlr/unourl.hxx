@@ -38,11 +38,11 @@ namespace pcr
 
     public:
         UnoURL(
-            const ::rtl::OUString& _rCompleteURL,
+            const OUString& _rCompleteURL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
 
-        inline operator const ::rtl::OUString&             () const { return m_aURL.Complete; }
+        inline operator const OUString&             () const { return m_aURL.Complete; }
         inline operator const ::com::sun::star::util::URL& () const { return m_aURL;          }
 
     private:

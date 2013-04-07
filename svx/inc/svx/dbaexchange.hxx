@@ -45,18 +45,18 @@ namespace svx
     {
     protected:
         ODataAccessDescriptor   m_aDescriptor;
-        ::rtl::OUString         m_sCompatibleFormat;
+        OUString         m_sCompatibleFormat;
         sal_Int32               m_nFormatFlags;
 
     public:
         /** construct the transferable
         */
         OColumnTransferable(
-             const ::rtl::OUString& _rDatasource
-            ,const ::rtl::OUString& _rConnectionResource
+             const OUString& _rDatasource
+            ,const OUString& _rConnectionResource
             ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
-            ,const ::rtl::OUString& _rFieldName
+            ,const OUString& _rCommand
+            ,const OUString& _rFieldName
             ,sal_Int32  _nFormats
         );
 
@@ -102,7 +102,7 @@ namespace svx
         */
         OColumnTransferable(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
-            const ::rtl::OUString& _rFieldName,
+            const OUString& _rFieldName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             sal_Int32   _nFormats
@@ -120,12 +120,12 @@ namespace svx
         */
         static sal_Bool extractColumnDescriptor(
              const TransferableDataHelper&  _rData
-            ,::rtl::OUString&               _rDatasource
-            ,::rtl::OUString&               _rDatabaseLocation
-            ,::rtl::OUString&               _rConnectionResource
+            ,OUString&               _rDatasource
+            ,OUString&               _rDatabaseLocation
+            ,OUString&               _rConnectionResource
             ,sal_Int32&                     _nCommandType
-            ,::rtl::OUString&               _rCommand
-            ,::rtl::OUString&               _rFieldName
+            ,OUString&               _rCommand
+            ,OUString&               _rFieldName
         );
 
         /** extracts a column descriptor from the transferable given
@@ -154,11 +154,11 @@ namespace svx
 
     private:
         SVX_DLLPRIVATE void implConstruct(
-            const ::rtl::OUString&  _rDatasource
-            ,const ::rtl::OUString& _rConnectionResource
+            const OUString&  _rDatasource
+            ,const OUString& _rConnectionResource
             ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
-            ,const ::rtl::OUString& _rFieldName
+            ,const OUString& _rCommand
+            ,const OUString& _rFieldName
         );
     };
 
@@ -170,7 +170,7 @@ namespace svx
     class SVX_DLLPUBLIC ODataAccessObjectTransferable : public TransferableHelper
     {
         ODataAccessDescriptor   m_aDescriptor;
-        ::rtl::OUString         m_sCompatibleObjectDescription;
+        OUString         m_sCompatibleObjectDescription;
             // needed to provide a SOT_FORMATSTR_ID_SBA_DATAEXCHANGE format
 
     public:
@@ -183,10 +183,10 @@ namespace svx
                 The command, either a name of a table or query or a SQL statement.
         */
         ODataAccessObjectTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
-            ,const ::rtl::OUString& _rConnectionResource
+            const OUString&  _rDatasourceOrLocation
+            ,const OUString& _rConnectionResource
             ,const sal_Int32            _nCommandType
-            ,const ::rtl::OUString& _rCommand
+            ,const OUString& _rCommand
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
         );
 
@@ -199,10 +199,10 @@ namespace svx
                 The command, either a name of a table or query or a SQL statement.
         */
         ODataAccessObjectTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
-            ,const ::rtl::OUString& _rConnectionResource
+            const OUString&  _rDatasourceOrLocation
+            ,const OUString& _rConnectionResource
             ,const sal_Int32        _nCommandType
-            ,const ::rtl::OUString& _rCommand
+            ,const OUString& _rCommand
         );
 
         /** with this ctor, only the object descriptor format will be provided
@@ -241,13 +241,13 @@ namespace svx
             // derived classes (our class is the only one which should be contaminated with this)
 
     private:
-        SVX_DLLPRIVATE void construct(  const ::rtl::OUString&  _rDatasourceOrLocation
-                        ,const ::rtl::OUString& _rConnectionResource
+        SVX_DLLPRIVATE void construct(  const OUString&  _rDatasourceOrLocation
+                        ,const OUString& _rConnectionResource
                         ,const sal_Int32        _nCommandType
-                        ,const ::rtl::OUString& _rCommand
+                        ,const OUString& _rCommand
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
                         ,sal_Bool _bAddCommand
-                        ,const ::rtl::OUString& _sActiveCommand);
+                        ,const OUString& _sActiveCommand);
     };
 
     //====================================================================

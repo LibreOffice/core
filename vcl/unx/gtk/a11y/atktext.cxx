@@ -68,7 +68,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
                    gint * start_offset, gint * end_offset )
 {
     accessibility::TextSegment aTextSegment;
-    rtl::OUString aString;
+    OUString aString;
     gint start = 0, end = 0;
 
     if( !rTextSegment.SegmentText.isEmpty() )
@@ -274,7 +274,7 @@ text_wrapper_get_text (AtkText *text,
         if( pTextSegment->SegmentStart == start_offset &&
             pTextSegment->SegmentEnd == end_offset )
         {
-            rtl::OString aUtf8 = rtl::OUStringToOString( pTextSegment->SegmentText, RTL_TEXTENCODING_UTF8 );
+            OString aUtf8 = OUStringToOString( pTextSegment->SegmentText, RTL_TEXTENCODING_UTF8 );
             return g_strdup( aUtf8.getStr() );
         }
     }
@@ -283,7 +283,7 @@ text_wrapper_get_text (AtkText *text,
         accessibility::XAccessibleText* pText = getText( text );
         if( pText )
         {
-            rtl::OUString aText;
+            OUString aText;
             sal_Int32 n = pText->getCharacterCount();
 
             if( -1 == end_offset )
@@ -291,7 +291,7 @@ text_wrapper_get_text (AtkText *text,
             else if( start_offset < n )
                 aText = pText->getTextRange(start_offset, end_offset);
 
-            ret = g_strdup( rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
+            ret = g_strdup( OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
     catch(const uno::Exception& e) {
@@ -537,7 +537,7 @@ text_wrapper_get_run_attributes( AtkText        *text,
         if( pText && pTextAttributes )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
-                pTextAttributes->getRunAttributes( offset, uno::Sequence< rtl::OUString > () );
+                pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
             //  #i100938#
@@ -615,7 +615,7 @@ text_wrapper_get_default_attributes( AtkText *text )
         if( pTextAttributes )
         {
             uno::Sequence< beans::PropertyValue > aAttributeList =
-                pTextAttributes->getDefaultAttributes( uno::Sequence< rtl::OUString > () );
+                pTextAttributes->getDefaultAttributes( uno::Sequence< OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, false, text );
         }

@@ -86,14 +86,14 @@ namespace frm
 
     // macros for quickly declaring/implementing XServiceInfo
     #define DECLARE_XPERSISTOBJECT() \
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);    \
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);    \
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);    \
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);   \
 
     // old macro for quickly implementing XServiceInfo::getImplementationName
     #define IMPLEMENTATION_NAME(ImplName)                                       \
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
-        { return ::rtl::OUString("com.sun.star.comp.forms.") + ::rtl::OUString(#ImplName); }
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
+        { return OUString("com.sun.star.comp.forms.") + OUString(#ImplName); }
 
     class OControlModel;
 
@@ -203,7 +203,7 @@ public:
     */
     OControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory,
-        const ::rtl::OUString& _rAggregateService,
+        const OUString& _rAggregateService,
         const sal_Bool _bSetDelegator = sal_True
     );
 
@@ -247,9 +247,9 @@ protected:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
     virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
 
 // XServiceInfo - static version
     static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
@@ -270,7 +270,7 @@ protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
         // overwrite this and call the base class if you have additional types
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
+    ::com::sun::star::uno::Sequence< OUString > getAggregateServiceNames();
 
 private:
     void    impl_resetStateGuard_nothrow();
@@ -288,7 +288,7 @@ class OBoundControl :public OControl
 protected:
     sal_Bool    m_bLocked : 1;
 
-    ::rtl::OUString m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
+    OUString m_sOriginalHelpText;                // as long as the text/value is invalid, we change the help text of our peer
     ::com::sun::star::awt::FontDescriptor
                     m_aOriginalFont;                    // as long as the text/value is invalid, we also change the font
     sal_Int32       m_nOriginalTextLineColor;           // (we add red underlining)
@@ -296,7 +296,7 @@ protected:
 public:
     OBoundControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
-        const ::rtl::OUString& _rAggregateService,
+        const OUString& _rAggregateService,
         const sal_Bool _bSetDelegator = sal_True
     );
 
@@ -360,8 +360,8 @@ protected:
         getContext() const { return m_aContext; }
 
 // <properties>
-    ::rtl::OUString                 m_aName;                    // name of the control
-    ::rtl::OUString                 m_aTag;                     // tag for additional data
+    OUString                 m_aName;                    // name of the control
+    OUString                 m_aTag;                     // tag for additional data
     sal_Int16                       m_nTabIndex;                // index within the taborder
     sal_Int16                       m_nClassId;                 // type of the control
     sal_Bool                        m_bNativeLook;              // should the control use the native platform look?
@@ -372,8 +372,8 @@ protected:
 protected:
     OControlModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,   // factory to create the aggregate with
-        const ::rtl::OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
-        const ::rtl::OUString& rDefault = ::rtl::OUString(),                    // service name of the default control
+        const OUString& _rUnoControlModelTypeName,                       // service name of te model to aggregate
+        const OUString& rDefault = OUString(),                    // service name of the default control
         const sal_Bool _bSetDelegator = sal_True                                // set to sal_False if you want to call setDelegator later (after returning from this ctor)
     );
     OControlModel(
@@ -402,7 +402,7 @@ protected:
     void    doSetDelegator();
     void    doResetDelegator();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
+    ::com::sun::star::uno::Sequence< OUString > getAggregateServiceNames();
 
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
@@ -416,19 +416,19 @@ public:
     virtual void SAL_CALL disposing();
 
 // XNamed
-    virtual ::rtl::OUString SAL_CALL    getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               setName(const ::rtl::OUString& aName) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               setName(const OUString& aName) throw(::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
-    virtual sal_Bool SAL_CALL           supportsService(const ::rtl::OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL           supportsService(const OUString& ServiceName) throw (::com::sun::star::uno::RuntimeException);
     virtual StringSequence SAL_CALL     getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual OUString SAL_CALL    getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
 
 // XSericeInfo - static version(s)
     static  StringSequence SAL_CALL     getSupportedServiceNames_Static() throw(::com::sun::star::uno::RuntimeException);
 
 // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException) = 0;
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -459,8 +459,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
 // XPropertyContainer
-    virtual void SAL_CALL addProperty( const ::rtl::OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeProperty( const ::rtl::OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
 
 // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -542,8 +542,8 @@ public:
 #define DECLARE_DEFAULT_XTOR( classname )   \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
-        const ::rtl::OUString& _rUnoControlModelTypeName, \
-        const ::rtl::OUString& _rDefault \
+        const OUString& _rUnoControlModelTypeName, \
+        const OUString& _rDefault \
     ); \
     DECLARE_DEFAULT_CLONE_CTOR( classname )  \
     DECLARE_DEFAULT_DTOR( classname )   \
@@ -552,8 +552,8 @@ public:
 #define DECLARE_DEFAULT_BOUND_XTOR( classname ) \
     classname( \
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, \
-        const ::rtl::OUString& _rUnoControlModelTypeName, \
-        const ::rtl::OUString& _rDefault, \
+        const OUString& _rUnoControlModelTypeName, \
+        const OUString& _rDefault, \
         const sal_Bool _bSupportExternalBinding, \
         const sal_Bool _bSupportsValidation \
     ); \
@@ -631,7 +631,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
                                         m_xAmbientForm;
 
-    ::rtl::OUString                     m_sValuePropertyName;
+    OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
     sal_Int32                           m_nFieldType;
     ::com::sun::star::uno::Type         m_aValuePropertyType;
@@ -648,7 +648,7 @@ private:
     ::com::sun::star::uno::Type         m_aExternalValueType;
 
 // <properties>
-    ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
+    OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
     sal_Bool                            m_bInputRequired;
@@ -672,7 +672,7 @@ private:
     ValueChangeInstigator       m_eControlValueChangeInstigator;
 
 protected:
-    ::rtl::OUString                     m_aLabelServiceName;
+    OUString                     m_aLabelServiceName;
         // when setting the label for our control (property FM_PROP_CONTROLLABEL, member m_xLabelControl),
         // we accept only objects supporting an XControlModel interface, an XServiceInfo interface and
         // support for a service (XServiceInfo::supportsService) determined by this string.
@@ -687,9 +687,9 @@ protected:
                                         m_xColumn;
 
 protected:
-    inline const ::rtl::OUString&   getValuePropertyName( ) const       { return m_sValuePropertyName; }
+    inline const OUString&   getValuePropertyName( ) const       { return m_sValuePropertyName; }
     inline sal_Int32                getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
-    inline const ::rtl::OUString&   getControlSource( ) const           { return m_aControlSource; }
+    inline const OUString&   getControlSource( ) const           { return m_aControlSource; }
     inline sal_Bool                 isRequired() const                  { return m_bRequired; }
     inline sal_Bool                 isLoaded() const                    { return m_bLoaded; }
 
@@ -698,8 +698,8 @@ protected:
     OBoundControlModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rFactory,
                                                             // factory to create the aggregate with
-        const ::rtl::OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
-        const ::rtl::OUString& _rDefault,                   // service name of the default control
+        const OUString& _rUnoControlModelTypeName,   // service name of te model to aggregate
+        const OUString& _rDefault,                   // service name of the default control
         const sal_Bool _bCommitable,                        // is the control (model) commitable ?
         const sal_Bool _bSupportExternalBinding,            // set to sal_True if you want to support XBindableValue
         const sal_Bool _bSupportsValidation                 // set to sal_True if you want to support XValidatable
@@ -746,7 +746,7 @@ protected:
         @see describeFixedProperties
     */
     void                    initValueProperty(
-                                const ::rtl::OUString& _rValuePropertyName,
+                                const OUString& _rValuePropertyName,
                                 sal_Int32 _nValuePropertyExternalHandle
                             );
 
@@ -759,7 +759,7 @@ protected:
         value and external validation. (This is not a conceptual limit, but simply missing implementation.)</p>
     */
     void                    initOwnValueProperty(
-                                const ::rtl::OUString& i_rValuePropertyName
+                                const OUString& i_rValuePropertyName
                             );
 
     /** suspends listening at the value property
@@ -804,7 +804,7 @@ protected:
         @see initValueProperty
         @see _propertyChanged
     */
-    void                    startAggregatePropertyListening( const ::rtl::OUString& _rPropertyName );
+    void                    startAggregatePropertyListening( const OUString& _rPropertyName );
 
     /** returns the default which should be used when resetting the control
 

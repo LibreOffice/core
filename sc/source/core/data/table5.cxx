@@ -1097,11 +1097,11 @@ void ScTable::EndListening( const ScAddress& rAddress, SvtListener* pListener )
     aCol[rAddress.Col()].EndListening( *pListener, rAddress.Row() );
 }
 
-void ScTable::SetPageStyle( const rtl::OUString& rName )
+void ScTable::SetPageStyle( const OUString& rName )
 {
     if ( aPageStyle != rName )
     {
-        rtl::OUString           aStrNew    = rName;
+        OUString           aStrNew    = rName;
         SfxStyleSheetBasePool*  pStylePool = pDocument->GetStyleSheetPool();
         SfxStyleSheetBase*      pNewStyle  = pStylePool->Find( aStrNew, SFX_STYLE_FAMILY_PAGE );
 

@@ -49,13 +49,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 
 static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
-                         const rtl::OUString& rNew );
+                         const OUString& rNew );
 static void AddUserData( const uno::Reference< XDictionary > &rDic );
 
 
@@ -308,13 +307,13 @@ void DicList::SearchForDictionaries(
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    const uno::Sequence< rtl::OUString > aDirCnt( utl::LocalFileHelper::
+    const uno::Sequence< OUString > aDirCnt( utl::LocalFileHelper::
                                         GetFolderContents( rDicDirURL, sal_False ) );
-    const rtl::OUString *pDirCnt = aDirCnt.getConstArray();
+    const OUString *pDirCnt = aDirCnt.getConstArray();
     sal_Int32 nEntries = aDirCnt.getLength();
 
-    rtl::OUString aDCN("dcn");
-    rtl::OUString aDCP("dcp");
+    OUString aDCN("dcn");
+    OUString aDCP("dcp");
     for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
         String  aURL( pDirCnt[i] );
@@ -421,7 +420,7 @@ uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
 }
 
 uno::Reference< XDictionary > SAL_CALL
-        DicList::getDictionaryByName( const rtl::OUString& aDictionaryName )
+        DicList::getDictionaryByName( const OUString& aDictionaryName )
             throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -553,8 +552,8 @@ sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException)
 }
 
 uno::Reference< XDictionary > SAL_CALL
-    DicList::createDictionary( const rtl::OUString& rName, const Locale& rLocale,
-            DictionaryType eDicType, const rtl::OUString& rURL )
+    DicList::createDictionary( const OUString& rName, const Locale& rLocale,
+            DictionaryType eDicType, const OUString& rURL )
         throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -566,7 +565,7 @@ uno::Reference< XDictionary > SAL_CALL
 
 
 uno::Reference< XDictionaryEntry > SAL_CALL
-    DicList::queryDictionaryEntry( const rtl::OUString& rWord, const Locale& rLocale,
+    DicList::queryDictionaryEntry( const OUString& rWord, const Locale& rLocale,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry )
         throw(RuntimeException)
 {
@@ -649,9 +648,9 @@ void DicList::_CreateDicList()
     bInCreation = sal_True;
 
     // look for dictionaries
-    const rtl::OUString aWriteablePath( GetDictionaryWriteablePath() );
-    uno::Sequence< rtl::OUString > aPaths( GetDictionaryPaths() );
-    const rtl::OUString *pPaths = aPaths.getConstArray();
+    const OUString aWriteablePath( GetDictionaryWriteablePath() );
+    uno::Sequence< OUString > aPaths( GetDictionaryPaths() );
+    const OUString *pPaths = aPaths.getConstArray();
     for (sal_Int32 i = 0;  i < aPaths.getLength();  ++i)
     {
         const sal_Bool bIsWriteablePath = (pPaths[i] == aWriteablePath);
@@ -660,10 +659,10 @@ void DicList::_CreateDicList()
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    rtl::OUString aDicName( "IgnoreAllList" );
+    OUString aDicName( "IgnoreAllList" );
     uno::Reference< XDictionary > xIgnAll(
             createDictionary( aDicName, LinguLanguageToLocale( LANGUAGE_NONE ),
-                              DictionaryType_POSITIVE, rtl::OUString() ) );
+                              DictionaryType_POSITIVE, OUString() ) );
     if (xIgnAll.is())
     {
         AddUserData( xIgnAll );
@@ -677,8 +676,8 @@ void DicList::_CreateDicList()
     //! configuration with incorrect arguments during the following
     //! activation of the dictionaries
     pDicEvtLstnrHelper->BeginCollectEvents();
-    const uno::Sequence< rtl::OUString > aActiveDics( aOpt.GetActiveDics() );
-    const rtl::OUString *pActiveDic = aActiveDics.getConstArray();
+    const uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
+    const OUString *pActiveDic = aActiveDics.getConstArray();
     sal_Int32 nLen = aActiveDics.getLength();
     for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
@@ -731,20 +730,20 @@ void DicList::SaveDics()
 
 // Service specific part
 
-rtl::OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL DicList::getImplementationName(  ) throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     return getImplementationName_Static();
 }
 
 
-sal_Bool SAL_CALL DicList::supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL DicList::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString * pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
@@ -752,7 +751,7 @@ sal_Bool SAL_CALL DicList::supportsService( const rtl::OUString& ServiceName )
 }
 
 
-uno::Sequence< rtl::OUString > SAL_CALL DicList::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
         throw(RuntimeException)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
@@ -760,11 +759,11 @@ uno::Sequence< rtl::OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 }
 
 
-uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw()
+uno::Sequence< OUString > DicList::getSupportedServiceNames_Static() throw()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< rtl::OUString > aSNS( 1 );   // more than 1 service possible
+    uno::Sequence< OUString > aSNS( 1 );   // more than 1 service possible
     aSNS.getArray()[0] = "com.sun.star.linguistic2.DictionaryList";
     return aSNS;
 }
@@ -824,14 +823,14 @@ xub_StrLen lcl_GetToken( String &rToken,
 
 static void AddInternal(
         const uno::Reference<XDictionary> &rDic,
-        const rtl::OUString& rNew )
+        const OUString& rNew )
 {
     if (rDic.is())
     {
         //! TL TODO: word iterator should be used to break up the text
         static const char aDefWordDelim[] =
                 "!\"#$%&'()*+,-/:;<=>?[]\\_^`{|}~\t \n";
-        rtl::OUString aDelim(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
+        OUString aDelim(RTL_CONSTASCII_USTRINGPARAM(aDefWordDelim));
         OSL_ENSURE(aDelim.indexOf(static_cast<sal_Unicode>('.')) == -1,
             "ensure no '.'");
 
@@ -842,7 +841,7 @@ static void AddInternal(
         {
             if( aToken.Len()  &&  !IsNumeric( aToken ) )
             {
-                rDic->add( aToken, sal_False, rtl::OUString() );
+                rDic->add( aToken, sal_False, OUString() );
             }
         }
     }
@@ -867,7 +866,7 @@ static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bo
 {
     if (rFileURL.Len() == 0)
         return sal_False;
-    rtl::OUString aDIC("dic");
+    OUString aDIC("dic");
     String aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );
     if (STRING_NOTFOUND != nPos)

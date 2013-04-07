@@ -51,7 +51,7 @@ DBG_NAME( rpt_OXMLCell )
 
 OXMLCell::OXMLCell( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCell) :
@@ -72,10 +72,10 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -101,14 +101,14 @@ OXMLCell::~OXMLCell()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLCell::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const ::rtl::OUString& _rLocalName,
+        const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
     ORptFilter& rImport = GetOwnImport();
     const SvXMLTokenMap&    rTokenMap   = rImport.GetCellElemTokenMap();
     Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
-    static const ::rtl::OUString s_sStringConcat(" & ");
+    static const OUString s_sStringConcat(" & ");
 
     const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
     switch( nToken )
@@ -120,10 +120,10 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             }
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
+            m_sText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
+            m_sText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
             break;
         case XML_TOK_FORMATTED_TEXT:
             {
@@ -204,7 +204,7 @@ void OXMLCell::EndElement()
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
         uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
         Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-        xControl->setDataField(::rtl::OUString("rpt:") + m_sText);
+        xControl->setDataField(OUString("rpt:") + m_sText);
 
         OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
         setComponent(xControl.get());
@@ -254,14 +254,14 @@ void OXMLCell::setComponent(const uno::Reference< report::XReportComponent >& _x
     m_xComponent = _xComponent;
 }
 // -----------------------------------------------------------------------------
-void OXMLCell::Characters( const ::rtl::OUString& rChars )
+void OXMLCell::Characters( const OUString& rChars )
 {
     if ( !rChars.isEmpty() )
     {
-        static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
+        static const OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
         if ( !m_sText.isEmpty() )
         {
-            static const ::rtl::OUString s_sStringConcat(" & ");
+            static const OUString s_sStringConcat(" & ");
             m_sText += s_sStringConcat;
         }
 

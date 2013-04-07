@@ -116,7 +116,6 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using rtl::OUString;
 
 namespace
 {
@@ -366,10 +365,10 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
 
 APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
 
-    uno::Sequence< rtl::OUString > ChartView
+    uno::Sequence< OUString > ChartView
 ::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_VIEW_SERVICE_NAME;
     return aSNS;
 }
@@ -410,7 +409,7 @@ VCoordinateSystem* addCooSysToList( std::vector< VCoordinateSystem* >& rVCooSysL
         pVCooSys = VCoordinateSystem::createCoordinateSystem(xCooSys );
         if(pVCooSys)
         {
-            rtl::OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel ) );
+            OUString aCooSysParticle( ObjectIdentifier::createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             pVCooSys->setParticle(aCooSysParticle);
 
             pVCooSys->setExplicitCategoriesProvider( new ExplicitCategoriesProvider(xCooSys,xChartModel) );
@@ -726,7 +725,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 pSeries->setMissingValueTreatment( nMissingValueTreatment );
 
-                rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
+                OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
 
                 OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
@@ -769,7 +768,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     //transport seriesnames to the coordinatesystems if needed
     if( !m_aSeriesPlotterList.empty() )
     {
-        uno::Sequence< rtl::OUString > aSeriesNames;
+        uno::Sequence< OUString > aSeriesNames;
         bool bSeriesNamesInitialized = false;
         for( size_t nC=0; nC < m_rVCooSysList.size(); nC++)
         {
@@ -1224,7 +1223,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                             uno::Reference< container::XNameAccess > xPageStyles( xStylesFamilies->getByName( "PageStyles" ), uno::UNO_QUERY );
                             if( xPageStyles.is() )
                             {
-                                rtl::OUString aPageStyle;
+                                OUString aPageStyle;
 
                                 uno::Reference< text::XTextDocument > xTextDocument( xParentProps, uno::UNO_QUERY );
                                 if( xTextDocument.is() )
@@ -1238,7 +1237,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                         uno::Reference< container::XNameAccess > xEmbeddedObjects( xTextEmbeddedObjectsSupplier->getEmbeddedObjects() );
                                         if( xEmbeddedObjects.is() )
                                         {
-                                            uno::Sequence< rtl::OUString > aNames( xEmbeddedObjects->getElementNames() );
+                                            uno::Sequence< OUString > aNames( xEmbeddedObjects->getElementNames() );
 
                                             sal_Int32 nCount = aNames.getLength();
                                             for( sal_Int32 nN=0; nN<nCount; nN++ )
@@ -1246,8 +1245,8 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
                                                 uno::Reference< beans::XPropertySet > xEmbeddedProps( xEmbeddedObjects->getByName( aNames[nN] ), uno::UNO_QUERY );
                                                 if( xEmbeddedProps.is() )
                                                 {
-                                                    static rtl::OUString aChartCLSID = rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
-                                                    rtl::OUString aCLSID;
+                                                    static OUString aChartCLSID = OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName());
+                                                    OUString aCLSID;
                                                     xEmbeddedProps->getPropertyValue( "CLSID" ) >>= aCLSID;
                                                     if( aCLSID.equals(aChartCLSID) )
                                                     {
@@ -1500,7 +1499,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     {
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
-        rtl::OUString aCID; //III
+        OUString aCID; //III
         uno::Reference< drawing::XShapes > xSeriesTarget(0);
         if( pSeriesPlotter->WantToPlotInFrontOfAxisLine() )
             xSeriesTarget = xSeriesTargetInFrontOfAxis;
@@ -1701,7 +1700,7 @@ SdrPage* ChartView::getSdrPage()
     return pPage;
 }
 
-uno::Reference< drawing::XShape > ChartView::getShapeForCID( const rtl::OUString& rObjectCID )
+uno::Reference< drawing::XShape > ChartView::getShapeForCID( const OUString& rObjectCID )
 {
     SolarMutexGuard aSolarGuard;
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
@@ -1716,7 +1715,7 @@ awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
     return m_aResultingDiagramRectangleExcludingAxes;
 }
 
-awt::Rectangle ChartView::getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect )
+awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect )
 {
     impl_updateView();
 
@@ -1828,7 +1827,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     if( !xSeriesOrPointProp.is() )
         return nFormat;
 
-    rtl::OUString aPropName( "NumberFormat" );
+    OUString aPropName( "NumberFormat" );
     if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
@@ -1907,28 +1906,28 @@ awt::Rectangle ExplicitValueProvider::addAxisTitleSizes(
 
             if( xTitle_Height.is() )
             {
-                rtl::OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, xChartModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, xChartModel ) );
                 nTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nTitleSpaceHeight )
                     nTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xTitle_Width.is() )
             {
-                rtl::OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, xChartModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, xChartModel ) );
                 nTitleSpaceWidth = pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if(nTitleSpaceWidth)
                     nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Height.is() )
             {
-                rtl::OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, xChartModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, xChartModel ) );
                 nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nSecondTitleSpaceHeight )
                     nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Width.is() )
             {
-                rtl::OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, xChartModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, xChartModel ) );
                 nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if( nSecondTitleSpaceWidth )
                     nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
@@ -1974,28 +1973,28 @@ awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
 
             if( xTitle_Height.is() )
             {
-                rtl::OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, xChartModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, xChartModel ) );
                 nTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nTitleSpaceHeight )
                     nTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xTitle_Width.is() )
             {
-                rtl::OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, xChartModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, xChartModel ) );
                 nTitleSpaceWidth = pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if(nTitleSpaceWidth)
                     nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Height.is() )
             {
-                rtl::OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, xChartModel ) );
+                OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, xChartModel ) );
                 nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nSecondTitleSpaceHeight )
                     nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
             }
             if( xSecondTitle_Width.is() )
             {
-                rtl::OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, xChartModel ) );
+                OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, xChartModel ) );
                 nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if( nSecondTitleSpaceWidth )
                     nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
@@ -2169,12 +2168,12 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     }
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
-    rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
+    OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
     if( !aCompleteString.isEmpty() )
     {
         //create title
         apVTitle.reset(new VTitle(xTitle));
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, xChartModel ) );
         apVTitle->init(xPageShapes,xShapeFactory,aCID);
         apVTitle->createShapes( awt::Point(0,0), rPageSize );
         awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
@@ -2349,8 +2348,8 @@ void formatPage(
             tPropertyNameValueMap aNameValueMap;
             PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
-            rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) );
-            aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID rtl::OUString
+            OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
+            aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID OUString
 
             tNameSequence aNames;
             tAnySequence aValues;
@@ -2473,7 +2472,7 @@ void ChartView::createShapes()
 
         //create the group shape for diagram and axes first to have title and legends on top of it
         uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
-        rtl::OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) ) );//todo: other index if more than one diagram is possible
+        OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::valueOf( sal_Int32(0) ) ) );//todo: other index if more than one diagram is possible
         uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes( ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,aDiagramCID) );
 
         uno::Reference< drawing::XShape > xDiagram_MarkHandles( ShapeFactory(m_xShapeFactory).createInvisibleRectangle(
@@ -2713,7 +2712,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartModel->getCurrentController(), uno::UNO_QUERY );
         if ( xSelectionSupplier.is() )
         {
-            ::rtl::OUString aSelObjCID;
+            OUString aSelObjCID;
             uno::Any aSelObj( xSelectionSupplier->getSelection() );
             aSelObj >>= aSelObjCID;
             if ( !aSelObjCID.isEmpty() )
@@ -2764,7 +2763,7 @@ void ChartView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         xModifiable->setModified( sal_True );
 }
 
-void ChartView::impl_notifyModeChangeListener( const rtl::OUString& rNewMode )
+void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 {
     try
     {
@@ -2835,7 +2834,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
     return 0;
 }
 
-void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
+void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
                                                      , const Any& rValue )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException
           , lang::WrappedTargetException, uno::RuntimeException)
@@ -2890,7 +2889,7 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
         throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard", 0 );
 }
 
-Any SAL_CALL ChartView::getPropertyValue( const ::rtl::OUString& rPropertyName )
+Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -2904,25 +2903,25 @@ Any SAL_CALL ChartView::getPropertyValue( const ::rtl::OUString& rPropertyName )
 }
 
 void SAL_CALL ChartView::addPropertyChangeListener(
-    const ::rtl::OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* xListener */ )
+    const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 void SAL_CALL ChartView::removePropertyChangeListener(
-    const ::rtl::OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* aListener */ )
+    const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ChartView::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void SAL_CALL ChartView::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void SAL_CALL ChartView::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
@@ -2930,7 +2929,7 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const ::rtl::OUString& /*
 
 // ____ XMultiServiceFactory ____
 
-Reference< uno::XInterface > ChartView::createInstance( const ::rtl::OUString& aServiceSpecifier )
+Reference< uno::XInterface > ChartView::createInstance( const OUString& aServiceSpecifier )
     throw (uno::Exception, uno::RuntimeException)
 {
     SdrModel* pModel = ( m_pDrawModelWrapper ? &m_pDrawModelWrapper->getSdrModel() : NULL );
@@ -2989,7 +2988,7 @@ Reference< uno::XInterface > ChartView::createInstance( const ::rtl::OUString& a
     return 0;
 }
 
-Reference< uno::XInterface > ChartView::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
+Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
     throw (uno::Exception, uno::RuntimeException)
 {
     OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
@@ -2997,9 +2996,9 @@ Reference< uno::XInterface > ChartView::createInstanceWithArguments( const ::rtl
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServiceNames( 6 );
+    uno::Sequence< OUString > aServiceNames( 6 );
 
     aServiceNames[0] = "com.sun.star.drawing.DashTable";
     aServiceNames[1] = "com.sun.star.drawing.GradientTable";
@@ -3011,14 +3010,14 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
     return aServiceNames;
 }
 
-rtl::OUString ChartView::dump() throw (uno::RuntimeException)
+OUString ChartView::dump() throw (uno::RuntimeException)
 {
     impl_updateView();
     uno::Reference<drawing::XShapes> xPageShapes( ShapeFactory(m_xShapeFactory)
         .getOrCreateChartRootShape( m_xDrawPage ) );
 
     if (!xPageShapes.is())
-        return rtl::OUString();
+        return OUString();
     else
     {
         XShapeDumper dumper;

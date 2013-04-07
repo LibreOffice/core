@@ -114,7 +114,7 @@ void SwNavigationConfig::Commit()
     PutProperties(aNames, aValues);
 }
 
-void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwNavigationConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

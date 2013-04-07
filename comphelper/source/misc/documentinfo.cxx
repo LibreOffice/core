@@ -59,12 +59,12 @@ namespace comphelper {
     //====================================================================
     namespace
     {
-        ::rtl::OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
+        OUString lcl_getTitle( const Reference< XInterface >& _rxComponent )
         {
             Reference< XTitle > xTitle( _rxComponent, UNO_QUERY );
             if ( xTitle.is() )
                 return xTitle->getTitle();
-            return ::rtl::OUString();
+            return OUString();
         }
     }
 
@@ -72,14 +72,14 @@ namespace comphelper {
     //= DocumentInfo
     //====================================================================
     //--------------------------------------------------------------------
-    ::rtl::OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
+    OUString DocumentInfo::getDocumentTitle( const Reference< XModel >& _rxDocument )
     {
-        ::rtl::OUString sTitle;
+        OUString sTitle;
 
         if ( !_rxDocument.is() )
             return sTitle;
 
-        ::rtl::OUString sDocURL;
+        OUString sDocURL;
         try
         {
             // 1. ask the model and the controller for their XTitle::getTitle
@@ -96,7 +96,7 @@ namespace comphelper {
             // private:object as URL
             sDocURL = _rxDocument->getURL();
             if ( sDocURL.matchAsciiL( "private:", 8 ) )
-                sDocURL = ::rtl::OUString();
+                sDocURL = OUString();
 
             // 2. if the document is not saved, yet, check the frame title
             if ( sDocURL.isEmpty() )
@@ -161,13 +161,13 @@ namespace comphelper {
         catch ( const Exception& )
         {
             ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() );
-            ::rtl::OString sMessage( "caught an exception!" );
+            OString sMessage( "caught an exception!" );
             sMessage += "\ntype   : ";
-            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
+            sMessage += OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
             sMessage += "\nmessage: ";
             ::com::sun::star::uno::Exception exception;
             caught >>= exception;
-            sMessage += ::rtl::OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
+            sMessage += OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
             sMessage += "\nin function:\n";
             sMessage += BOOST_CURRENT_FUNCTION;
             sMessage += "\n";

@@ -22,9 +22,6 @@
 
 #include <typelib/typedescription.hxx>
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;

@@ -40,14 +40,14 @@ namespace com { namespace sun { namespace star { namespace task
 
 namespace pdfi
 {
-    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > PropertyMap;
+    typedef boost::unordered_map< OUString, OUString, OUStringHash > PropertyMap;
     typedef sal_Int32 ImageId;
 
     /// What to do with a polygon. values can be ORed together
     enum PolygonAction { PATH_STROKE=1, PATH_FILL=2, PATH_EOFILL=4 };
 
-    rtl::OUString unitMMString( double fMM );
-    rtl::OUString convertPixelToUnitString( double fPix );
+    OUString unitMMString( double fMM );
+    OUString convertPixelToUnitString( double fPix );
 
     inline double convPx2mm( double fPix )
     {
@@ -69,7 +69,7 @@ namespace pdfi
     }
 
     /// Convert color to "#FEFEFE" color notation
-    rtl::OUString getColorString( const ::com::sun::star::rendering::ARGBColor& );
+    OUString getColorString( const ::com::sun::star::rendering::ARGBColor& );
 
     struct FontAttrHash
     {
@@ -181,9 +181,9 @@ namespace pdfi
      */
     bool getPassword( const ::com::sun::star::uno::Reference<
                             ::com::sun::star::task::XInteractionHandler >& xHandler,
-                      rtl::OUString&                                       rOutPwd,
+                      OUString&                                       rOutPwd,
                       bool                                                 bFirstTry,
-                      const rtl::OUString&                                 rDocName
+                      const OUString&                                 rDocName
                       );
 
     void reportUnsupportedEncryptionFormat(

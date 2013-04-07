@@ -302,7 +302,7 @@ bool XclExpRoot::IsDocumentEncrypted() const
     return false;
 }
 
-uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const ::rtl::OUString& aPass ) const
+uno::Sequence< beans::NamedValue > XclExpRoot::GenerateEncryptionData( const OUString& aPass ) const
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
 

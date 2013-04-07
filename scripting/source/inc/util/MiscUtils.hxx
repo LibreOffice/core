@@ -45,9 +45,9 @@ namespace sf_misc
 class MiscUtils
 {
 public:
-    static css::uno::Sequence< ::rtl::OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
+    static css::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
 {
-    css::uno::Sequence< ::rtl::OUString > result;
+    css::uno::Sequence< OUString > result;
     try
     {
         if ( !xCtx.is() )
@@ -63,7 +63,7 @@ public:
     return result;
 }
 
-    static ::rtl::OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
+    static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
                                             const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
@@ -76,7 +76,7 @@ public:
             css::uno::Reference<
                 css::frame::XTransientDocumentsDocumentContentFactory >(
                     xMCF->createInstanceWithContext(
-                        rtl::OUString(
+                        OUString(
                                 "com.sun.star.frame.TransientDocumentsDocumentContentFactory" ),
                         xContext ),
                 css::uno::UNO_QUERY );
@@ -101,16 +101,16 @@ public:
     }
 
     OSL_FAIL( "Unable to obtain URL for document model!" );
-    return rtl::OUString();
+    return OUString();
 }
-    static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const ::rtl::OUString& url )
+    static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
 {
     css::uno::Any result;
 
     try
     {
         ::ucbhelper::Content root( url, NULL, comphelper::getProcessComponentContext() );
-        ::rtl::OUString propName =  "DocumentModel";
+        OUString propName =  "DocumentModel";
         result = getUCBProperty( root, propName );
     }
     catch ( css::ucb::ContentCreationException& )
@@ -129,7 +129,7 @@ public:
 }
 
 
-    static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, ::rtl::OUString& prop )
+    static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString& prop )
 {
     css::uno::Any result;
     try
@@ -143,11 +143,11 @@ public:
 }
 
 private:
-static ::rtl::OUString parseLocationName( const ::rtl::OUString& location )
+static OUString parseLocationName( const OUString& location )
 {
     // strip out the last leaf of location name
     // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    ::rtl::OUString temp = location;
+    OUString temp = location;
     INetURLObject aURLObj( temp );
     if ( !aURLObj.HasError() )
         temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );

@@ -49,7 +49,7 @@ struct CondFormatRuleModel
     typedef ::std::vector< ApiTokenSequence > ApiTokenSequenceVector;
 
     ApiTokenSequenceVector maFormulas;      /// Formulas for rule conditions.
-    ::rtl::OUString     maText;             /// Text for 'contains' rules.
+    OUString     maText;             /// Text for 'contains' rules.
     sal_Int32           mnPriority;         /// Priority of this rule.
     sal_Int32           mnType;             /// Type of the rule.
     sal_Int32           mnOperator;         /// In cell-is rules: Comparison operator.
@@ -81,7 +81,7 @@ struct ColorScaleRuleModelEntry
     bool mbMax;
     bool mbPercent;
     bool mbPercentile;
-    rtl::OUString maFormula;
+    OUString maFormula;
 
     ColorScaleRuleModelEntry():
         maColor(),
@@ -140,7 +140,7 @@ public:
 private:
     std::vector< ColorScaleRuleModelEntry > maEntries;
     ScIconSetFormatData* mpFormatData;
-    rtl::OUString maIconSetType;
+    OUString maIconSetType;
 };
 
 
@@ -156,7 +156,7 @@ public:
     /** Imports rule settings from the cfRule element. */
     void                importCfRule( const AttributeList& rAttribs );
     /** Appends a new condition formula string. */
-    void                appendFormula( const ::rtl::OUString& rFormula );
+    void                appendFormula( const OUString& rFormula );
 
     /** Imports rule settings from a CFRULE record. */
     void                importCfRule( SequenceInputStream& rStrm );

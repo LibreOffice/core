@@ -28,11 +28,11 @@ namespace connectivity
 {
     struct OTypeInfo
     {
-        ::rtl::OUString aTypeName;      // Name of the type in the database
-        ::rtl::OUString aLiteralPrefix; // Prefix for quoting
-        ::rtl::OUString aLiteralSuffix; // Suffix for quoting
-        ::rtl::OUString aCreateParams;  // Parameter for creating
-        ::rtl::OUString aLocalTypeName;
+        OUString aTypeName;      // Name of the type in the database
+        OUString aLiteralPrefix; // Prefix for quoting
+        OUString aLiteralSuffix; // Suffix for quoting
+        OUString aCreateParams;  // Parameter for creating
+        OUString aLocalTypeName;
 
         sal_Int32       nPrecision;     // Length of the type
 
@@ -76,7 +76,7 @@ namespace connectivity
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
 
-        inline ::rtl::OUString getDBName() const { return aTypeName; }
+        inline OUString getDBName() const { return aTypeName; }
     };
 }
 #endif // _CONNECTIVITY_OTYPEINFO_HXX_

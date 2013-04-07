@@ -23,9 +23,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <sal/types.h>
-
-namespace rtl { class OUString; }
-
+#include <rtl/ustring.hxx>
 
 /**
  * Handling of tokens in XML:
@@ -3191,12 +3189,12 @@ namespace xmloff { namespace token {
 
 
     /// return the OUString representation for eToken
-    XMLOFF_DLLPUBLIC const ::rtl::OUString& GetXMLToken(
+    XMLOFF_DLLPUBLIC const OUString& GetXMLToken(
         enum XMLTokenEnum eToken );
 
     /// compare eToken to the string
     XMLOFF_DLLPUBLIC sal_Bool IsXMLToken(
-        const ::rtl::OUString& rString,
+        const OUString& rString,
         enum XMLTokenEnum eToken );
 
     // gives all allocated memory for OUString* back

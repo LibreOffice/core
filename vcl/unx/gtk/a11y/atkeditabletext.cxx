@@ -84,7 +84,7 @@ editable_text_wrapper_set_text_contents( AtkEditableText  *text,
         accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
         if( pEditableText )
         {
-            rtl::OUString aString ( string, strlen(string), RTL_TEXTENCODING_UTF8 );
+            OUString aString ( string, strlen(string), RTL_TEXTENCODING_UTF8 );
             pEditableText->setText( aString );
         }
     }
@@ -103,7 +103,7 @@ editable_text_wrapper_insert_text( AtkEditableText  *text,
         accessibility::XAccessibleEditableText* pEditableText = getEditableText( text );
         if( pEditableText )
         {
-            rtl::OUString aString ( string, length, RTL_TEXTENCODING_UTF8 );
+            OUString aString ( string, length, RTL_TEXTENCODING_UTF8 );
             if( pEditableText->insertText( aString, *pos ) )
                 *pos += length;
         }

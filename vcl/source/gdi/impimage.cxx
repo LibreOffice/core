@@ -38,7 +38,7 @@ ImageAryData::ImageAryData( const ImageAryData& rData ) :
 {
 }
 
-ImageAryData::ImageAryData( const rtl::OUString &aName,
+ImageAryData::ImageAryData( const OUString &aName,
                             sal_uInt16 nId, const BitmapEx &aBitmap )
         : maName( aName ), mnId( nId ), maBitmapEx( aBitmap )
 {
@@ -82,7 +82,7 @@ ImplImageList::~ImplImageList()
         delete *aIt;
 }
 
-void ImplImageList::AddImage( const ::rtl::OUString &aName,
+void ImplImageList::AddImage( const OUString &aName,
                               sal_uInt16 nId, const BitmapEx &aBitmapEx )
 {
     ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );

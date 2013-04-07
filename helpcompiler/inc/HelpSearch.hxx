@@ -37,8 +37,8 @@
 
 class L10N_DLLPUBLIC HelpSearch{
 	private:
-		rtl::OUString d_lang;
-		rtl::OString d_indexDir;
+                OUString d_lang;
+                OString d_indexDir;
 
 	public:
 
@@ -46,7 +46,7 @@ class L10N_DLLPUBLIC HelpSearch{
 	 * @param lang Help files language.
 	 * @param indexDir The directory where the index files are stored.
 	 */
-	HelpSearch(rtl::OUString const &lang, rtl::OUString const &indexDir);
+        HelpSearch(OUString const &lang, OUString const &indexDir);
 
 	/**
 	 * Query the index for a certain query string.
@@ -55,8 +55,8 @@ class L10N_DLLPUBLIC HelpSearch{
 	 * @param rDocuments Vector to write the paths of the found documents.
 	 * @param rScores Vector to write the scores to.
 	 */
-	bool query(rtl::OUString const &queryStr, bool captionOnly,
-		std::vector<rtl::OUString> &rDocuments, std::vector<float> &rScores);
+        bool query(OUString const &queryStr, bool captionOnly,
+            std::vector<OUString> &rDocuments, std::vector<float> &rScores);
 };
 
 #endif

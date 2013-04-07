@@ -131,7 +131,7 @@ public:
     virtual void SAL_CALL addConfigurationChangeListener (
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeListener>& rxListener,
-        const ::rtl::OUString& rsEventType,
+        const OUString& rsEventType,
         const css::uno::Any& rUserData)
         throw (css::uno::RuntimeException);
 
@@ -159,12 +159,12 @@ public:
     // XResourceFactoryManager
 
     virtual void SAL_CALL addResourceFactory(
-        const ::rtl::OUString& sResourceURL,
+        const OUString& sResourceURL,
         const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxResourceFactory)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL removeResourceFactoryForURL(
-        const ::rtl::OUString& sResourceURL)
+        const OUString& sResourceURL)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL removeResourceFactoryForReference(
@@ -173,7 +173,7 @@ public:
 
     virtual css::uno::Reference<css::drawing::framework::XResourceFactory>
         SAL_CALL getResourceFactory (
-        const ::rtl::OUString& sResourceURL)
+        const OUString& sResourceURL)
         throw (css::uno::RuntimeException);
 
 

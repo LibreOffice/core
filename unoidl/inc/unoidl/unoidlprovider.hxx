@@ -28,17 +28,17 @@ namespace unoidl {
 class LO_DLLPUBLIC_UNOIDL UnoidlProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
-    explicit UnoidlProvider(rtl::OUString const & uri);
+    explicit UnoidlProvider(OUString const & uri);
 
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const;
 
     // throws FileFormatException:
-    virtual rtl::Reference< Entity > findEntity(rtl::OUString const & name)
+    virtual rtl::Reference< Entity > findEntity(OUString const & name)
         const;
 
     // throws FileFormatException:
-    sal_uInt32 find(rtl::OUString const & name, bool * constant = 0) const;
+    sal_uInt32 find(OUString const & name, bool * constant = 0) const;
 
     // throws FileFormatException:
     rtl::Reference< Entity > getEntity(sal_uInt32 offset) const;

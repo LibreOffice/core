@@ -119,7 +119,7 @@ public:
     virtual bool isValid( const T& t ) const
     {
         const com::sun::star::beans::PropertyValue* pValues = t.getConstArray();
-        rtl::OUString sInstance( "Instance" );
+        OUString sInstance( "Instance" );
         sal_Bool bFound = sal_False;
         for( sal_Int32 i = 0; ( ! bFound ) && ( i < t.getLength() ); i++ )
         {
@@ -135,23 +135,23 @@ public:
 //
 
 sal_Int32 lcl_findInstance( const InstanceCollection*,
-                            const rtl::OUString& );
+                            const OUString& );
 
 
 // get values from Sequence<PropertyValue> describing an Instance
 void getInstanceData(
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
-    rtl::OUString* pID,
+    OUString* pID,
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,
-    rtl::OUString* pURL,
+    OUString* pURL,
     bool* pURLOnce );
 
 // set values on Sequence<PropertyValue> for an Instance
 void setInstanceData(
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&,
-    const rtl::OUString* pID,
+    const OUString* pID,
     const com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument>*,
-    const rtl::OUString* pURL,
+    const OUString* pURL,
     const bool* pURLOnce );
 
 } // namespace xforms

@@ -64,8 +64,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace xmloff::token;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::container::XIndexAccess;
@@ -792,11 +790,11 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         // are the names of the XForm models, and which in turn provides named sequences of
         // PropertyValues - which denote the actual property values of the given named model.
 
-        Sequence< ::rtl::OUString > aModelNames( _rXForms->getElementNames() );
+        Sequence< OUString > aModelNames( _rXForms->getElementNames() );
 
         Reference< XNameContainer > xModelSettings = document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );
 
-        for (   const ::rtl::OUString* pModelName = aModelNames.getConstArray();
+        for (   const OUString* pModelName = aModelNames.getConstArray();
                 pModelName != aModelNames.getConstArray() + aModelNames.getLength();
                 ++pModelName
             )

@@ -106,7 +106,7 @@ public:
      */
     XFColor GetColor();
 
-    rtl::OUString   ToString();
+    OUString   ToString();
 
     virtual void    ToXml(IXFStream *pStrm);
 

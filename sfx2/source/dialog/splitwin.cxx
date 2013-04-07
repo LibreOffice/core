@@ -232,7 +232,7 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         //  Read Configuration
-        String aWindowId = rtl::OUString("SplitWindow");
+        String aWindowId = OUString("SplitWindow");
         aWindowId += OUString::number( (sal_Int32) eTbxAlign );
         SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
         String aWinData;
@@ -306,7 +306,7 @@ SfxSplitWindow::~SfxSplitWindow()
 void SfxSplitWindow::SaveConfig_Impl()
 {
     // Save configuration
-    rtl::OUStringBuffer aWinData;
+    OUStringBuffer aWinData;
     aWinData.append('V');
     aWinData.append(static_cast<sal_Int32>(VERSION));
     aWinData.append(',');
@@ -335,7 +335,7 @@ void SfxSplitWindow::SaveConfig_Impl()
         aWinData.append(static_cast<sal_Int32>(pDock->nType));
     }
 
-    String aWindowId = rtl::OUString("SplitWindow");
+    String aWindowId = OUString("SplitWindow");
     aWindowId += OUString::number( (sal_Int32) GetAlign() );
     SvtViewOptions aWinOpt( E_WINDOW, aWindowId );
     aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );

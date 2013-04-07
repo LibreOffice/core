@@ -44,7 +44,6 @@
 
 // --------------------------------------------------------------------
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -237,7 +236,7 @@ SvXMLStyleContext* XMLTableImport::CreateTableTemplateContext( sal_uInt16 nPrfx,
 
 // --------------------------------------------------------------------
 
-void XMLTableImport::addTableTemplate( const rtl::OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
+void XMLTableImport::addTableTemplate( const OUString& rsStyleName, XMLTableTemplate& xTableTemplate )
 {
     boost::shared_ptr< XMLTableTemplate > xPtr( new XMLTableTemplate );
     xPtr->swap( xTableTemplate );

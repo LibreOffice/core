@@ -115,26 +115,26 @@ public:
 
     /** Imports a graphic from the storage stream with the passed path and name. */
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
+                        importEmbeddedGraphic( const OUString& rStreamName ) const;
 
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
-    ::rtl::OUString     createGraphicObject(
+    OUString     createGraphicObject(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic ) const;
 
     /** Creates a persistent graphic object from the passed input stream.
         @return  The URL of the created and internally cached graphic object. */
-    ::rtl::OUString     importGraphicObject(
+    OUString     importGraphicObject(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
                             const WMF_EXTERNALHEADER* pExtHeader = NULL ) const;
 
     /** Creates a persistent graphic object from the passed binary memory block.
         @return  The URL of the created and internally cached graphic object. */
-    ::rtl::OUString     importGraphicObject( const StreamDataSequence& rGraphicData ) const;
+    OUString     importGraphicObject( const StreamDataSequence& rGraphicData ) const;
 
     /** Imports a graphic object from the storage stream with the passed path and name.
         @return  The URL of the created and internally cached graphic object. */
-    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
+    OUString     importEmbeddedGraphicObject( const OUString& rStreamName ) const;
 
     /** calculates the orignal size of a graphic which is necessary to be able to calculate cropping values
         @return The original Graphic size in 100thmm */
@@ -144,7 +144,7 @@ public:
 private:
     typedef ::std::map< sal_Int32, sal_Int32 > SystemPalette;
     typedef ::std::deque< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > > GraphicObjectDeque;
-    typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > EmbeddedGraphicMap;
+    typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > EmbeddedGraphicMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicProvider > mxGraphicProvider;
@@ -154,7 +154,7 @@ private:
     StorageRef          mxStorage;                  ///< Storage containing embedded graphics.
     mutable GraphicObjectDeque maGraphicObjects;    ///< Caches all created graphic objects to keep them alive.
     mutable EmbeddedGraphicMap maEmbeddedGraphics;  ///< Maps all embedded graphics by their storage path.
-    const ::rtl::OUString maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
+    const OUString maGraphicObjScheme;       ///< The URL scheme name for graphic objects.
     double              mfPixelPerHmmX;             ///< Number of screen pixels per 1/100 mm in X direction.
     double              mfPixelPerHmmY;             ///< Number of screen pixels per 1/100 mm in Y direction.
 };

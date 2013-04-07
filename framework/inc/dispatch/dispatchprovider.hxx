@@ -107,7 +107,7 @@ class DispatchProvider  :   // interfaces
                           const css::uno::Reference< css::frame::XFrame >&              xFrame   );
 
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
-                                                                                                             const ::rtl::OUString&                                      sTargetFrameName ,
+                                                                                                             const OUString&                                      sTargetFrameName ,
                                                                                                                    sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
 
@@ -119,16 +119,16 @@ class DispatchProvider  :   // interfaces
     private:
         css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
                                                                                           const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
-                                                                                          const ::rtl::OUString&                           sTarget = ::rtl::OUString()   ,
+                                                                                          const OUString&                           sTarget = OUString()   ,
                                                                                                 sal_Int32                                  nSearchFlags = 0              );
         sal_Bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
         css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >  xDesktop                      ,
                                                                                           const css::util::URL&                            aURL                          ,
-                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
+                                                                                          const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
         css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >  xFrame                        ,
                                                                                           const css::util::URL&                            aURL                          ,
-                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
+                                                                                          const OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
         css::uno::Reference< css::frame::XDispatch > implts_searchProtocolHandler       ( const css::util::URL&                            aURL                          );
 

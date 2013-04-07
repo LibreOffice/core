@@ -94,7 +94,6 @@
 #include "Window.hxx"
 #include "fuformatpaintbrush.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;

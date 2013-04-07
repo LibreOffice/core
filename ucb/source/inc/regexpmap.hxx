@@ -33,18 +33,18 @@ template< typename Val >
 class RegexpMapEntry
 {
 public:
-    inline RegexpMapEntry(rtl::OUString const & rTheRegexp,
+    inline RegexpMapEntry(OUString const & rTheRegexp,
                           Val * pTheValue):
         m_aRegexp(rTheRegexp), m_pValue(pTheValue) {}
 
-    rtl::OUString getRegexp() const { return m_aRegexp; }
+    OUString getRegexp() const { return m_aRegexp; }
 
     Val const & getValue() const { return *m_pValue; }
 
     Val & getValue() { return *m_pValue; }
 
 private:
-    rtl::OUString m_aRegexp;
+    OUString m_aRegexp;
     Val * m_pValue;
 };
 
@@ -130,11 +130,11 @@ public:
 
     RegexpMap & operator =(RegexpMap const & rOther);
 
-    bool add(rtl::OUString const & rKey, Val const & rValue, bool bOverwrite,
-             rtl::OUString * pReverse = 0);
+    bool add(OUString const & rKey, Val const & rValue, bool bOverwrite,
+             OUString * pReverse = 0);
         // throws com::sun::star::lang::IllegalArgumentException
 
-    iterator find(rtl::OUString const & rKey, rtl::OUString * pReverse = 0);
+    iterator find(OUString const & rKey, OUString * pReverse = 0);
         // throws com::sun::star::lang::IllegalArgumentException
 
     void erase(iterator const & rPos);
@@ -151,8 +151,8 @@ public:
 
     size_type size() const;
 
-    Val const * map(rtl::OUString const & rString,
-                    rtl::OUString * pTranslation = 0, bool * pTranslated = 0)
+    Val const * map(OUString const & rString,
+                    OUString * pTranslation = 0, bool * pTranslated = 0)
         const;
 
 private:

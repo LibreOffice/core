@@ -80,9 +80,9 @@ GtkPrintWrapper::~GtkPrintWrapper()
 
 void GtkPrintWrapper::impl_load()
 {
-    m_aModule.load(rtl::OUString("libgtk-x11-2.0.so.0"));
+    m_aModule.load(OUString("libgtk-x11-2.0.so.0"));
     if (!m_aModule.is())
-        m_aModule.load(rtl::OUString("libgtk-x11-2.0.so"));
+        m_aModule.load(OUString("libgtk-x11-2.0.so"));
     if (!m_aModule.is())
         return;
 

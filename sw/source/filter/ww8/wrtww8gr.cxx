@@ -225,7 +225,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     pDataAdr = pSpecOLE + 2; //WW6 sprm is 1 but has 1 byte len as well.
 
     SvStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
+        OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is()  )
@@ -245,7 +245,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
             nPictureId = aRes.first->second;
             Set_UInt32(pDataAdr, nPictureId);
-            String sStorageName = rtl::OUString('_');
+            String sStorageName = OUString('_');
             sStorageName += OUString::number( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
                                 STREAM_READWRITE| STREAM_SHARE_DENYALL );
@@ -262,7 +262,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                     GetOLEExp().ExportOLEObject( aObjRef, *xOleStg );
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
-                        ::rtl::OUString aObjInfo( "\3ObjInfo" );
+                        OUString aObjInfo( "\3ObjInfo" );
                         if ( !xOleStg->IsStream( aObjInfo ) )
                         {
                             const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
@@ -338,14 +338,14 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
     }
 }
 
-void WW8Export::OutputLinkedOLE( const rtl::OUString& rOleId )
+void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 {
     uno::Reference< embed::XStorage > xDocStg = pDoc->GetDocStorage();
     uno::Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement( "OLELinks", embed::ElementModes::READ );
     SotStorageRef xObjSrc = SotStorage::OpenOLEStorage( xOleStg, rOleId, STREAM_READ );
 
     SotStorageRef xObjStg = GetWriter().GetStorage().OpenSotStorage(
-        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
+        OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL );
 
     if( xObjStg.Is() && xObjSrc.Is() )

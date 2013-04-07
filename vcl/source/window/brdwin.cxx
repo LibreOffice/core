@@ -1156,7 +1156,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
                 if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                                  CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                                  CTRL_STATE_ENABLED, aControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
@@ -1367,14 +1367,14 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         Rectangle aContentRgn( aCtrlRegion );
         if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
             pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
-                                          nState, aControlValue, rtl::OUString(),
+                                          nState, aControlValue, OUString(),
                                           aBoundingRgn, aContentRgn ))
         {
             aCtrlRegion=aContentRgn;
         }
 
         bNativeOK = pWin->DrawNativeControl( aCtrlType, aCtrlPart, aCtrlRegion, nState,
-                aControlValue, rtl::OUString() );
+                aControlValue, OUString() );
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though.... (TODO: improve)

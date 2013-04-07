@@ -66,8 +66,6 @@
 #include <algorithm>
 
 using ::std::map;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::container::XChild;
 using ::com::sun::star::util::XCloneable;
@@ -91,7 +89,7 @@ using namespace ::com::sun::star::presentation;
 namespace ppt
 {
 
-void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTranslateMode )
+void ImplTranslateAttribute( OUString& rString, const TranslateMode eTranslateMode )
 {
     if ( eTranslateMode != TRANSLATE_NONE )
     {
@@ -108,7 +106,7 @@ void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTransl
             {
                 if ( eTranslateMode & TRANSLATE_VALUE )
                 {
-                    rString = rtl::OUString( (sal_Unicode)'#' );
+                    rString = OUString( (sal_Unicode)'#' );
                     rString += OUString::createFromAscii( p->mpMSName );
                 }
                 else
@@ -147,7 +145,7 @@ void ImplTranslateAttribute( rtl::OUString& rString, const TranslateMode eTransl
     }
 }
 
-sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const rtl::OUString& rPresetSubType )
+sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const OUString& rPresetSubType )
 {
     sal_uInt32  nPresetSubType = 0;
     sal_Bool    bTranslated = sal_False;
@@ -659,7 +657,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                 if( xAudio.is() )
                 {
                     Any aAny( xAudio->getSource() );
-                    rtl::OUString aURL;
+                    OUString aURL;
 
                     if ( ( aAny >>= aURL)  &&  !aURL.isEmpty()  )
                     {
@@ -908,17 +906,17 @@ void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, co
     }
 }
 
-sal_uInt32 AnimationExporter::GetPresetID( const rtl::OUString& rPreset, sal_uInt32 nAPIPresetClass, sal_Bool& bPresetId )
+sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 nAPIPresetClass, sal_Bool& bPresetId )
 {
     sal_uInt32 nPresetId = 0;
     bPresetId = sal_False;
 
-    if ( rPreset.match( rtl::OUString( "ppt_" ), 0 ) )
+    if ( rPreset.match( OUString( "ppt_" ), 0 ) )
     {
     sal_Int32 nLast = rPreset.lastIndexOf( '_' );
     if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
     {
-        rtl::OUString aNumber( rPreset.copy( nLast + 1 ) );
+        OUString aNumber( rPreset.copy( nLast + 1 ) );
         nPresetId = aNumber.toInt32();
         bPresetId = sal_True;
     }
@@ -1024,14 +1022,14 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     }
     if ( pAny[ DFF_ANIM_PRESET_ID ] )
     {
-        rtl::OUString sPreset;
+        OUString sPreset;
         if ( *pAny[ DFF_ANIM_PRESET_ID ] >>= sPreset )
             nPresetId = GetPresetID( sPreset, nAPIPresetClass, bPresetId );
     }
 
     if ( pAny[ DFF_ANIM_PRESET_SUB_TYPE ] )
     {
-        rtl::OUString sPresetSubType;
+        OUString sPresetSubType;
         if ( *pAny[ DFF_ANIM_PRESET_SUB_TYPE ] >>= sPresetSubType )
         {
             nPresetSubType = TranslatePresetSubType( nPresetClass, nPresetId, sPresetSubType );
@@ -1157,7 +1155,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
                     if ( eTranslateMode & TRANSLATE_NUMBER_TO_STRING )
                     {
                         Any aAny;
-                        rtl::OUString aNumber( rtl::OUString::valueOf( fVal ) );
+                        OUString aNumber( OUString::valueOf( fVal ) );
                         aAny <<= aNumber;
                         exportAnimPropertyString( rStrm, nPropertyId, aNumber, eTranslateMode );
                     }
@@ -1171,7 +1169,7 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
             break;
             case ::com::sun::star::uno::TypeClass_STRING :
             {
-                rtl::OUString aStr;
+                OUString aStr;
                 if ( rAny >>= aStr )
                 {
                     exportAnimPropertyString( rStrm, nPropertyId, aStr, eTranslateMode );
@@ -1185,12 +1183,12 @@ sal_Bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt1
     }
     return bRet;
 }
-void AnimationExporter::exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const rtl::OUString& rVal, const TranslateMode eTranslateMode )
+void AnimationExporter::exportAnimPropertyString( SvStream& rStrm, const sal_uInt16 nPropertyId, const OUString& rVal, const TranslateMode eTranslateMode )
 {
     EscherExAtom aExAtom( rStrm, DFF_msofbtAnimAttributeValue, nPropertyId );
     sal_uInt8 nType = DFF_ANIM_PROP_TYPE_UNISTRING;
     rStrm << nType;
-    rtl::OUString aStr( rVal );
+    OUString aStr( rVal );
     if ( eTranslateMode != TRANSLATE_NONE )
         ImplTranslateAttribute( aStr, eTranslateMode );
     writeZString( rStrm, aStr );
@@ -1221,7 +1219,7 @@ void AnimationExporter::exportAnimPropertyByte( SvStream& rStrm, const sal_uInt1
           << nVal;
 }
 
-void AnimationExporter::writeZString( SvStream& rStrm, const rtl::OUString& rVal )
+void AnimationExporter::writeZString( SvStream& rStrm, const OUString& rVal )
 {
     sal_Int32 i;
     for ( i = 0; i < rVal.getLength(); i++ )
@@ -1393,16 +1391,16 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
     }
 }
 
-Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::OUString& rAttributeName )
+Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUString& rAttributeName )
 {
-    rtl::OUString aDest;
+    OUString aDest;
     if ( rAttributeName == "X"
             || rAttributeName == "Y"
             || rAttributeName == "Width"
             || rAttributeName == "Height"
         )
     {
-        rtl::OUString aStr;
+        OUString aStr;
         if ( rSourceValue >>= aStr )
         {
             ImplTranslateAttribute( aStr, TRANSLATE_MEASURE );
@@ -1417,7 +1415,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     {
         double fNumber = 0.0;
         if ( rSourceValue >>= fNumber )
-            aDest += rtl::OUString::valueOf( fNumber );
+            aDest += OUString::valueOf( fNumber );
     }
     else if ( rAttributeName == "Color"
             || rAttributeName == "FillColor"     // "Fillcolor" or "FillColor" ?
@@ -1427,25 +1425,25 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const rtl::
     {
         sal_Int32 nColor = 0;
         Sequence< double > aHSL( 3 );
-        rtl::OUString aP( "," );
+        OUString aP( "," );
         if ( rSourceValue >>= aHSL )
         {
             aDest += "hsl(";
-            aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
+            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 0 ] / ( 360.0 / 255 ) ) );
             aDest += aP;
-            aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
+            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 1 ] * 255.0 ) );
             aDest += aP;
-            aDest += rtl::OUString::valueOf( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
+            aDest += OUString::valueOf( (sal_Int32)( aHSL[ 2 ] * 255.0 ) );
             aDest += ")";
         }
         else if ( rSourceValue >>= nColor )
         {
             aDest += "rgb(";
-            aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)nColor ) );
+            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)nColor ) );
             aDest += aP;
-            aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 8 ) ) );
+            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 8 ) ) );
             aDest += aP;
-            aDest += rtl::OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 16 ) ) );
+            aDest += OUString::valueOf( (sal_Int32)( (sal_Int8)( nColor >> 16 ) ) );
             aDest += ")";
         }
     }
@@ -1542,7 +1540,7 @@ void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAni
     }
 }
 
-sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const rtl::OUString& rAttributeName )
+sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAttributeName )
 {
     sal_uInt32 nValueType = 0;
 
@@ -1680,7 +1678,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
         if ( !xAnimate->getAttributeName().isEmpty() || nForceAttributeNames )
         {
             EscherExContainer aAnimateAttributeNames( rStrm, DFF_msofbtAnimateAttributeNames, 1 );
-            rtl::OUString aAttributeName( xAnimate->getAttributeName() );
+            OUString aAttributeName( xAnimate->getAttributeName() );
             if ( nForceAttributeNames )
             {
                 if( nForceAttributeNames == 1 )
@@ -1744,7 +1742,7 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
                 Reference< XTextRange > xTextRange( xTextParagraphEnumeration->nextElement(), UNO_QUERY );
                 if ( xTextRange.is() )
                 {
-                rtl::OUString aParaText( xTextRange->getString() );
+                OUString aParaText( xTextRange->getString() );
                 sal_Int32 nLength = aParaText.getLength() + 1;
                 rEnd += nLength;
                 if ( nCurrentParagraph == nParagraph )

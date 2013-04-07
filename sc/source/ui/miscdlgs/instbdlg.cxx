@@ -98,7 +98,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 
     if(nTableCount==1)
     {
-        rtl::OUString aName;
+        OUString aName;
         rDoc.CreateValidTabName( aName );
         m_pEdName->SetText( aName );
     }
@@ -194,7 +194,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
     if ( pSrcDoc )
     {
         SCTAB nCount = pSrcDoc->GetTableCount();
-        rtl::OUString aName;
+        OUString aName;
 
         for ( SCTAB i=0; i<nCount; i++ )
         {
@@ -260,7 +260,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
     nTableCount = static_cast<SCTAB>(m_pNfCount->GetValue());
     if ( nTableCount==1)
     {
-        rtl::OUString aName;
+        OUString aName;
         rDoc.CreateValidTabName( aName );
         m_pEdName->SetText( aName );
         m_pFtName->Enable();
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
     if ( pDocInserter )
         delete pDocInserter;
     pDocInserter = new ::sfx2::DocumentInserter(
-            rtl::OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
+            OUString::createFromAscii( ScDocShell::Factory().GetShortName() ) );
     pDocInserter->StartExecuteModal( LINK( this, ScInsertTableDlg, DialogClosedHdl ) );
     return 0;
 }

@@ -53,12 +53,12 @@ namespace test {
 class OOO_DLLPUBLIC_UNOTEST BootstrapFixtureBase : public CppUnit::TestFixture
 {
 protected:
-  ::rtl::OUString m_aSrcRootURL;
-  ::rtl::OUString m_aSrcRootPath;
-  ::rtl::OUString m_aSolverRootURL;
-  ::rtl::OUString m_aSolverRootPath;
-  ::rtl::OUString m_aWorkdirRootURL;
-  ::rtl::OUString m_aWorkdirRootPath;
+  OUString m_aSrcRootURL;
+  OUString m_aSrcRootPath;
+  OUString m_aSolverRootURL;
+  OUString m_aSolverRootPath;
+  OUString m_aWorkdirRootURL;
+  OUString m_aWorkdirRootPath;
 
   com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xSFactory;
@@ -73,21 +73,21 @@ public:
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>
 	          getMultiServiceFactory() { return m_xSFactory; }
 
-  ::rtl::OUString getSrcRootURL()       { return m_aSrcRootURL; }
-  ::rtl::OUString getSrcRootPath()      { return m_aSrcRootPath; }
+  OUString getSrcRootURL()       { return m_aSrcRootURL; }
+  OUString getSrcRootPath()      { return m_aSrcRootPath; }
 
   // return a URL to a given c-str path from the source directory
-  ::rtl::OUString getURLFromSrc( const char *pPath );
+  OUString getURLFromSrc( const char *pPath );
 
   // return a Path to a given c-str path from the source directory
-  ::rtl::OUString getPathFromSrc( const char *pPath );
+  OUString getPathFromSrc( const char *pPath );
 
 
   // return a URL to a given c-str path from the workdir directory
-  ::rtl::OUString getURLFromWorkdir( const char *pPath );
+  OUString getURLFromWorkdir( const char *pPath );
 
   // return a Path to a given c-str path from the workdir directory
-  ::rtl::OUString getPathFromWorkdir( const char *pPath );
+  OUString getPathFromWorkdir( const char *pPath );
   virtual void setUp();
   virtual void tearDown();
 

@@ -146,7 +146,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  @throw  [com::sun::star::beans::UnknownPropertyException]
          *          if no property with the specified name exists.
          */
-        virtual void SAL_CALL impl_removePropertyInfo(const ::rtl::OUString& sProperty)
+        virtual void SAL_CALL impl_removePropertyInfo(const OUString& sProperty)
             throw(css::beans::UnknownPropertyException,
                   css::uno::Exception                 );
 
@@ -163,11 +163,11 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         //---------------------------------------------------------------------
         /**
          */
-        virtual void SAL_CALL impl_setPropertyValue(const ::rtl::OUString& sProperty,
+        virtual void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
                                                           sal_Int32        nHandle  ,
                                                     const css::uno::Any&   aValue   ) = 0;
 
-        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const ::rtl::OUString& sProperty,
+        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                    sal_Int32        nHandle  ) = 0;
 
     //-------------------------------------------------------------------------
@@ -178,7 +178,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
             throw(css::uno::RuntimeException);
 
-        virtual void SAL_CALL setPropertyValue(const ::rtl::OUString& sProperty,
+        virtual void SAL_CALL setPropertyValue(const OUString& sProperty,
                                                const css::uno::Any&   aValue   )
             throw(css::beans::UnknownPropertyException,
                   css::beans::PropertyVetoException   ,
@@ -186,30 +186,30 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
                   css::lang::WrappedTargetException   ,
                   css::uno::RuntimeException          );
 
-        virtual css::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& sProperty)
+        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& sProperty)
             throw(css::beans::UnknownPropertyException,
                   css::lang::WrappedTargetException   ,
                   css::uno::RuntimeException          );
 
-        virtual void SAL_CALL addPropertyChangeListener(const ::rtl::OUString&                                            sProperty,
+        virtual void SAL_CALL addPropertyChangeListener(const OUString&                                            sProperty,
                                                         const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
             throw(css::beans::UnknownPropertyException,
                   css::lang::WrappedTargetException   ,
                   css::uno::RuntimeException          );
 
-        virtual void SAL_CALL removePropertyChangeListener(const ::rtl::OUString&                                            sProperty,
+        virtual void SAL_CALL removePropertyChangeListener(const OUString&                                            sProperty,
                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
             throw(css::beans::UnknownPropertyException,
                   css::lang::WrappedTargetException   ,
                   css::uno::RuntimeException          );
 
-        virtual void SAL_CALL addVetoableChangeListener(const ::rtl::OUString&                                            sProperty,
+        virtual void SAL_CALL addVetoableChangeListener(const OUString&                                            sProperty,
                                                         const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
             throw(css::beans::UnknownPropertyException,
                   css::lang::WrappedTargetException   ,
                   css::uno::RuntimeException          );
 
-        virtual void SAL_CALL removeVetoableChangeListener(const ::rtl::OUString&                                            sProperty,
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString&                                            sProperty,
                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
             throw(css::beans::UnknownPropertyException,
                   css::lang::WrappedTargetException   ,
@@ -219,11 +219,11 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
         virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
             throw(css::uno::RuntimeException);
 
-        virtual css::beans::Property SAL_CALL getPropertyByName(const ::rtl::OUString& sName)
+        virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& sName)
             throw(css::beans::UnknownPropertyException,
                   css::uno::RuntimeException          );
 
-        virtual sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& sName)
+        virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& sName)
             throw(css::uno::RuntimeException);
 
     //-------------------------------------------------------------------------

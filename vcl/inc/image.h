@@ -68,18 +68,18 @@ enum ImageType { IMAGETYPE_BITMAP, IMAGETYPE_IMAGE };
 
 struct ImageAryData
 {
-    ::rtl::OUString maName;
+    OUString maName;
     // Images identified by either name, or by id
     sal_uInt16          mnId;
     BitmapEx        maBitmapEx;
 
-    ImageAryData( const rtl::OUString &aName,
+    ImageAryData( const OUString &aName,
                   sal_uInt16 nId, const BitmapEx &aBitmap );
     ImageAryData( const ImageAryData& rData );
     ~ImageAryData();
 
     bool IsLoadable() { return maBitmapEx.IsEmpty() && !maName.isEmpty(); }
-    void Load(const rtl::OUString &rPrefix);
+    void Load(const OUString &rPrefix);
 
     ImageAryData&   operator=( const ImageAryData& rData );
 };
@@ -89,12 +89,12 @@ struct ImageAryData
 struct ImplImageList
 {
     typedef std::vector<ImageAryData *> ImageAryDataVec;
-    typedef boost::unordered_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
+    typedef boost::unordered_map< OUString, ImageAryData *, OUStringHash >
         ImageAryDataNameHash;
 
     ImageAryDataVec             maImages;
     ImageAryDataNameHash        maNameHash;
-    rtl::OUString               maPrefix;
+    OUString               maPrefix;
     Size                        maImageSize;
     sal_uIntPtr                       mnRefCount;
 
@@ -102,7 +102,7 @@ struct ImplImageList
     ImplImageList( const ImplImageList &aSrc );
     ~ImplImageList();
 
-    void AddImage( const ::rtl::OUString &aName,
+    void AddImage( const OUString &aName,
                    sal_uInt16 nId, const BitmapEx &aBitmapEx );
     void RemoveImage( sal_uInt16 nPos );
 };

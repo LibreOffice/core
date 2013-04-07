@@ -144,7 +144,7 @@ void Slider::ImplUpdateRects( sal_Bool bUpdate )
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
             Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_HORZ,
-                                         aControlRegion, 0, ImplControlValue(), rtl::OUString(),
+                                         aControlRegion, 0, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Left() = mnThumbPixPos - aThumbBounds.GetWidth()/2;
@@ -178,7 +178,7 @@ void Slider::ImplUpdateRects( sal_Bool bUpdate )
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
             Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_VERT,
-                                         aControlRegion, 0, ImplControlValue(), rtl::OUString(),
+                                         aControlRegion, 0, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Top() = mnThumbPixPos - aThumbBounds.GetHeight()/2;
@@ -347,7 +347,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
 
     const Rectangle aCtrlRegion( Point(0,0), GetOutputSizePixel() );
     bool bNativeOK = DrawNativeControl( CTRL_SLIDER, nPart,
-                                        aCtrlRegion, nState, sldValue, rtl::OUString() );
+                                        aCtrlRegion, nState, sldValue, OUString() );
     if( bNativeOK )
         return;
 

@@ -57,7 +57,7 @@ class ZipFile
 protected:
     ::osl::Mutex    m_aMutex;
 
-    ::rtl::OUString sComment;       /* zip file comment */
+    OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
     ZipUtils::Inflater aInflater;
@@ -87,7 +87,7 @@ protected:
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bDecrypt,
-            ::rtl::OUString aMediaType = ::rtl::OUString() );
+            OUString aMediaType = OUString() );
 
     sal_Bool hasValidPassword ( ZipEntry & rEntry, const rtl::Reference < EncryptionData > &rData );
 
@@ -137,7 +137,7 @@ public:
 
     static void StaticFillHeader ( const ::rtl::Reference < EncryptionData > & rData,
                                     sal_Int64 nSize,
-                                    const ::rtl::OUString& aMediaType,
+                                    const OUString& aMediaType,
                                     sal_Int8 * & pHeader );
 
     static sal_Bool StaticFillData ( ::rtl::Reference < BaseEncryptionData > & rData,
@@ -146,7 +146,7 @@ public:
                                      sal_Int32 &rDerivedKeySize,
                                      sal_Int32 &rStartKeyGenID,
                                      sal_Int32 &rSize,
-                                     ::rtl::OUString& aMediaType,
+                                     OUString& aMediaType,
                                      const ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StaticGetDataFromRawStream(
@@ -183,7 +183,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            const ::rtl::OUString& aMediaType,
+            const OUString& aMediaType,
             SotMutexHolderRef aMutexHolder )
         throw ( ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException,

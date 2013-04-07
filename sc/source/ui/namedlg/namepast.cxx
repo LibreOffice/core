@@ -42,12 +42,12 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     get(m_pBtnClose, "close");
 
     ScDocument* pDoc = pShell->GetDocument();
-    std::map<rtl::OUString, ScRangeName*> aCopyMap;
+    std::map<OUString, ScRangeName*> aCopyMap;
     pDoc->GetRangeNameMap(aCopyMap);
-    std::map<rtl::OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
+    std::map<OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
     for (; itr != itrEnd; ++itr)
     {
-        rtl::OUString aTemp(itr->first);
+        OUString aTemp(itr->first);
         maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
     }
 
@@ -103,7 +103,7 @@ IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )
 
 //------------------------------------------------------------------
 
-std::vector<rtl::OUString> ScNamePasteDlg::GetSelectedNames() const
+std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
 {
     return maSelectedNames;
 }

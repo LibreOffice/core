@@ -42,60 +42,60 @@ public:
     virtual com::sun::star::uno::Sequence < com::sun::star::lang::Locale > SAL_CALL getLocaleList()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence < rtl::OUString > SAL_CALL getAlgorithmList(
+    virtual com::sun::star::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
         const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
         const com::sun::star::lang::Locale& rLocale,
-        const rtl::OUString& SortAlgorithm, sal_Int32 collatorOptions )
+        const OUString& SortAlgorithm, sal_Int32 collatorOptions )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL usePhoneticEntry(
         const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& IndexEntry,
+    virtual OUString SAL_CALL getPhoneticCandidate( const OUString& IndexEntry,
         const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& IndexEntry,
-        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
+    virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
+        const OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Int16 SAL_CALL compareIndexEntry( const rtl::OUString& IndexEntry1,
-        const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
-        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,
+    virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
+        const OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
+        const OUString& IndexEntry2, const OUString& PhoneticEntry2,
         const com::sun::star::lang::Locale& rLocale2 )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& IndexEntry,
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& SortAlgorithm )
+    virtual OUString SAL_CALL getIndexCharacter( const OUString& IndexEntry,
+        const com::sun::star::lang::Locale& rLocale, const OUString& SortAlgorithm )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
+    virtual OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
         const com::sun::star::lang::Locale& rLocale )
         throw (com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
 
 private:
-    rtl::OUString aServiceName;
+    OUString aServiceName;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const rtl::OUString& name) throw( com::sun::star::uno::RuntimeException );
+    sal_Bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > SAL_CALL getLocaleSpecificIndexEntrySupplier(
-        const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
+        const com::sun::star::lang::Locale& rLocale, const OUString& rSortAlgorithm) throw (com::sun::star::uno::RuntimeException);
 
 protected:
     com::sun::star::lang::Locale aLocale;
-    rtl::OUString aSortAlgorithm;
+    OUString aSortAlgorithm;
 };
 
 } } } }

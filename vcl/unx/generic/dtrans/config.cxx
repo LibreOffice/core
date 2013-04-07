@@ -33,7 +33,7 @@ class DtransX11ConfigItem : public ::utl::ConfigItem
 {
     sal_Int32           m_nSelectionTimeout;
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames );
     virtual void Commit();
 public:
     DtransX11ConfigItem();
@@ -48,7 +48,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace x11;
 
-using ::rtl::OUString;
 
 sal_Int32 SelectionManager::getSelectionTimeout()
 {

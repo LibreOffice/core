@@ -78,17 +78,17 @@ class ConfigurationAccess_UICategory : // Order is necessary for right initializ
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
     public:
-                                  ConfigurationAccess_UICategory( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
+                                  ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory();
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
@@ -107,21 +107,21 @@ class ConfigurationAccess_UICategory : // Order is necessary for right initializ
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     protected:
-        Any                       getUINameFromID( const rtl::OUString& rId );
-        Any                       getUINameFromCache( const rtl::OUString& rId );
-        Sequence< rtl::OUString > getAllIds();
+        Any                       getUINameFromID( const OUString& rId );
+        Any                       getUINameFromCache( const OUString& rId );
+        Sequence< OUString > getAllIds();
         sal_Bool                  fillCache();
 
     private:
-        typedef ::boost::unordered_map< ::rtl::OUString,
-                                 ::rtl::OUString,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > IdToInfoCache;
+        typedef ::boost::unordered_map< OUString,
+                                 OUString,
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > IdToInfoCache;
 
         sal_Bool initializeConfigAccess();
 
-        rtl::OUString                     m_aConfigCategoryAccess;
-        rtl::OUString                     m_aPropUIName;
+        OUString                     m_aConfigCategoryAccess;
+        OUString                     m_aPropUIName;
         Reference< XNameAccess >          m_xGenericUICategories;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
@@ -135,7 +135,7 @@ class ConfigurationAccess_UICategory : // Order is necessary for right initializ
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
 
-ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
+ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUIName( CONFIGURATION_PROPERTY_NAME ),
@@ -146,7 +146,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUStr
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::ConfigurationAccess_UICategory" );
     // Create configuration hierachical access name
     m_aConfigCategoryAccess += aModuleName;
-    m_aConfigCategoryAccess += rtl::OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
+    m_aConfigCategoryAccess += OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
@@ -161,7 +161,7 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 }
 
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_UICategory::getByName( const ::rtl::OUString& rId )
+Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getByName" );
@@ -182,14 +182,14 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
     return a;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
+Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
 throw ( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getElementNames" );
     return getAllIds();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const ::rtl::OUString& rId )
+sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
 throw (::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::hasByName" );
@@ -201,7 +201,7 @@ Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
 throw ( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getElementType" );
-    return( ::getCppuType( (const rtl::OUString*)NULL ) );
+    return( ::getCppuType( (const OUString*)NULL ) );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
@@ -221,8 +221,8 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
         return sal_True;
 
     sal_Int32            i( 0 );
-    rtl::OUString        aUIName;
-    Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
+    OUString        aUIName;
+    Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
     for ( i = 0; i < aNameSeq.getLength(); i++ )
     {
@@ -249,7 +249,7 @@ sal_Bool ConfigurationAccess_UICategory::fillCache()
     return sal_True;
 }
 
-Any ConfigurationAccess_UICategory::getUINameFromID( const rtl::OUString& rId )
+Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getUINameFromID" );
     Any a;
@@ -285,7 +285,7 @@ Any ConfigurationAccess_UICategory::getUINameFromID( const rtl::OUString& rId )
     return a;
 }
 
-Any ConfigurationAccess_UICategory::getUINameFromCache( const rtl::OUString& rId )
+Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getUINameFromCache" );
     Any a;
@@ -297,7 +297,7 @@ Any ConfigurationAccess_UICategory::getUINameFromCache( const rtl::OUString& rId
     return a;
 }
 
-Sequence< rtl::OUString > ConfigurationAccess_UICategory::getAllIds()
+Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_UICategory::getAllIds" );
     // SAFE
@@ -317,18 +317,18 @@ Sequence< rtl::OUString > ConfigurationAccess_UICategory::getAllIds()
 
         try
         {
-            Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
+            Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
             if ( m_xGenericUICategories.is() )
             {
                 // Create concat list of supported user interface commands of the module
-                Sequence< ::rtl::OUString > aGenericNameSeq = m_xGenericUICategories->getElementNames();
+                Sequence< OUString > aGenericNameSeq = m_xGenericUICategories->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
 
                 aNameSeq.realloc( nCount1 + nCount2 );
-                ::rtl::OUString* pNameSeq = aNameSeq.getArray();
-                const ::rtl::OUString* pGenericSeq = aGenericNameSeq.getConstArray();
+                OUString* pNameSeq = aNameSeq.getArray();
+                const OUString* pGenericSeq = aGenericNameSeq.getConstArray();
                 for ( sal_uInt32 i = 0; i < nCount2; i++ )
                     pNameSeq[nCount1+i] = pGenericSeq[i];
             }
@@ -343,7 +343,7 @@ Sequence< rtl::OUString > ConfigurationAccess_UICategory::getAllIds()
         }
     }
 
-    return Sequence< rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
@@ -354,7 +354,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = rtl::OUString( "nodepath" );
+        aPropValue.Name  = OUString( "nodepath" );
         aPropValue.Value <<= m_aConfigCategoryAccess;
         aArgs[0] <<= aPropValue;
 
@@ -427,12 +427,12 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
     UICommandDescription(rxContext,true)
 {
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericCategories( "GenericCategories" );
+    OUString aGenericCategories( "GenericCategories" );
     m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
-        rtl::OUString(GENERIC_MODULE_NAME ), aGenericCategories ));
+        OUString(GENERIC_MODULE_NAME ), aGenericCategories ));
 
     UICommandsHashMap::iterator pCatIter = m_aUICommandsHashMap.find( aGenericCategories );
     if ( pCatIter != m_aUICommandsHashMap.end() )
@@ -444,7 +444,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
 UICategoryDescription::~UICategoryDescription()
 {
 }
-Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const ::rtl::OUString& _sName)
+Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const OUString& _sName)
 {
     return new ConfigurationAccess_UICategory( _sName, m_xGenericUICommands, m_xContext );
 }

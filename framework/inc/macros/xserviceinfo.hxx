@@ -60,7 +60,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     /* XServiceInfo                                                                                              */                                 \
     /*===========================================================================================================*/                                 \
-    ::rtl::OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                     \
+    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException )                                                     \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
@@ -68,7 +68,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     /* XServiceInfo                                                                                              */                                 \
     /*===========================================================================================================*/                                 \
-    sal_Bool SAL_CALL CLASS::supportsService( const ::rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )                             \
+    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                             \
     {                                                                                                                                               \
         return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;                                        \
     }                                                                                                                                               \
@@ -76,7 +76,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     /* XServiceInfo                                                                                              */                                 \
     /*===========================================================================================================*/                                 \
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                            \
+    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                            \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
@@ -84,9 +84,9 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     /* Helper for XServiceInfo                                                                                   */                                 \
     /*===========================================================================================================*/                                 \
-    css::uno::Sequence< ::rtl::OUString > CLASS::impl_getStaticSupportedServiceNames()                                                              \
+    css::uno::Sequence< OUString > CLASS::impl_getStaticSupportedServiceNames()                                                              \
     {                                                                                                                                               \
-        css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );                                                                                 \
+        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                 \
         seqServiceNames.getArray() [0] = SERVICENAME ;                                                                                              \
         return seqServiceNames;                                                                                                                     \
     }                                                                                                                                               \
@@ -94,7 +94,7 @@ ________________________________________________________________________________
     /*===========================================================================================================*/                                 \
     /* Helper for XServiceInfo                                                                                   */                                 \
     /*===========================================================================================================*/                                 \
-    ::rtl::OUString CLASS::impl_getStaticImplementationName()                                                                                       \
+    OUString CLASS::impl_getStaticImplementationName()                                                                                       \
     {                                                                                                                                               \
         return IMPLEMENTATIONNAME ;                                                                                                                 \
     }
@@ -185,12 +185,12 @@ ________________________________________________________________________________
 
 #define DECLARE_XSERVICEINFO_NOFACTORY                                                                                                                                                                                                  \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
-    virtual ::rtl::OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );   \
-    virtual sal_Bool                                               SAL_CALL supportsService                    ( const ::rtl::OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );   \
-    virtual css::uno::Sequence< ::rtl::OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );   \
+    virtual OUString                                        SAL_CALL getImplementationName              (                                                                               ) throw( css::uno::RuntimeException );   \
+    virtual sal_Bool                                               SAL_CALL supportsService                    ( const OUString&                                        sServiceName    ) throw( css::uno::RuntimeException );   \
+    virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                                                               ) throw( css::uno::RuntimeException );   \
     /* Helper for XServiceInfo */                                                                                                                                                                                                       \
-    static css::uno::Sequence< ::rtl::OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );                                       \
-    static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );                                       \
+    static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );                                       \
+    static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );                                       \
     /* Helper for initialization of service by using own reference! */                                                                                                                                                                  \
     virtual void                                                   SAL_CALL impl_initService                   (                                                                               );                                       \
 

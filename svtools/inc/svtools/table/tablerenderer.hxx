@@ -268,7 +268,7 @@ namespace svt { namespace table
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
                             ColPos const i_colPos, RowPos const i_rowPos,
-                            ::rtl::OUString & o_cellString
+                            OUString & o_cellString
                         ) const = 0;
 
         /// deletes the renderer instance

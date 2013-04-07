@@ -36,8 +36,8 @@ class HyphenatedWord :
         ::com::sun::star::linguistic2::XHyphenatedWord
     >
 {
-    ::rtl::OUString     aWord;
-    ::rtl::OUString     aHyphenatedWord;
+    OUString     aWord;
+    OUString     aHyphenatedWord;
     sal_Int16               nHyphPos;
     sal_Int16               nHyphenationPos;
     sal_Int16               nLanguage;
@@ -48,12 +48,12 @@ class HyphenatedWord :
     HyphenatedWord & operator = (const HyphenatedWord &);
 
 public:
-    HyphenatedWord(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
-                   const ::rtl::OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
+    HyphenatedWord(const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+                   const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
     virtual ~HyphenatedWord();
 
     // XHyphenatedWord
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getWord()
             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL
@@ -62,7 +62,7 @@ public:
     virtual sal_Int16 SAL_CALL
         getHyphenationPos()
             throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getHyphenatedWord()
             throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL
@@ -72,15 +72,15 @@ public:
         isAlternativeSpelling()
             throw(::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString GetWord()           { return aWord; }
-    ::rtl::OUString GetHyphenatedWord() { return aHyphenatedWord; }
+    OUString GetWord()           { return aWord; }
+    OUString GetHyphenatedWord() { return aHyphenatedWord; }
     sal_Int16           GetLanguage()       { return nLanguage; }
-    void            SetWord( ::rtl::OUString &rTxt )            { aWord = rTxt; }
-    void            SetHyphenatedWord( ::rtl::OUString &rTxt )  { aHyphenatedWord = rTxt; }
+    void            SetWord( OUString &rTxt )            { aWord = rTxt; }
+    void            SetHyphenatedWord( OUString &rTxt )  { aHyphenatedWord = rTxt; }
     void            SetLanguage( sal_Int16 nLang )                  { nLanguage = nLang; }
     static com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
-        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
-        const ::rtl::OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
+        const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+        const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
 };
 
 
@@ -90,8 +90,8 @@ class PossibleHyphens :
         ::com::sun::star::linguistic2::XPossibleHyphens
     >
 {
-    ::rtl::OUString             aWord;
-    ::rtl::OUString             aWordWithHyphens;
+    OUString             aWord;
+    OUString             aWordWithHyphens;
     ::com::sun::star::uno::Sequence< sal_Int16 >    aOrigHyphenPos;
     sal_Int16                       nLanguage;
 
@@ -100,33 +100,33 @@ class PossibleHyphens :
     PossibleHyphens & operator = (const PossibleHyphens &);
 
 public:
-    PossibleHyphens(const ::rtl::OUString &rWord, sal_Int16 nLang,
-            const ::rtl::OUString &rHyphWord,
+    PossibleHyphens(const OUString &rWord, sal_Int16 nLang,
+            const OUString &rHyphWord,
             const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens();
 
     // XPossibleHyphens
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getWord()
             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL
         getLocale()
             throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getPossibleHyphens()
             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions()
             throw(::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString GetWord()       { return aWord; }
+    OUString GetWord()       { return aWord; }
     sal_Int16           GetLanguage()   { return nLanguage; }
-    void            SetWord( ::rtl::OUString &rTxt )    { aWord = rTxt; }
+    void            SetWord( OUString &rTxt )    { aWord = rTxt; }
     void            SetLanguage( sal_Int16 nLang )          { nLanguage = nLang; }
 
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
-        (const ::rtl::OUString &rWord, sal_Int16 nLang,
-         const ::rtl::OUString &rHyphWord,
+        (const OUString &rWord, sal_Int16 nLang,
+         const OUString &rHyphWord,
          const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
 };
 } // namespace linguistic

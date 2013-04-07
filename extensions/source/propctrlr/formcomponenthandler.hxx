@@ -80,9 +80,9 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >    m_xBrowserUI;
 
         /// the string indicating a "default" (VOID) value in list-like controls
-        ::rtl::OUString                 m_sDefaultValueString;
+        OUString                 m_sDefaultValueString;
         /// all properties to whose control's we added ->m_sDefaultValueString
-        ::std::set< ::rtl::OUString >   m_aPropertiesWithDefListEntry;
+        ::std::set< OUString >   m_aPropertiesWithDefListEntry;
         /// type of our component
         ComponentClassification         m_eComponentClass;
         /// is our component a (database) sub form?
@@ -104,8 +104,8 @@ namespace pcr
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
-        static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         ~FormComponentPropertyHandler();
@@ -114,19 +114,19 @@ namespace pcr
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         // XPropertyHandler overridables
-        virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual void                                                SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToControlValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::beans::PropertyState              SAL_CALL getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual void                                                SAL_CALL setPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rControlValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any                          SAL_CALL convertToControlValue( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rPropertyValue, const ::com::sun::star::uno::Type& _rControlValueType ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::PropertyState              SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual void                                                SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
         virtual void                                                SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::inspection::LineDescriptor        SAL_CALL describePropertyLine( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::inspection::LineDescriptor        SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::inspection::InteractiveSelectionResult
-                                                                    SAL_CALL onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
-        virtual void                                                SAL_CALL actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+                                                                    SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, ::com::sun::star::uno::Any& _rData, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual void                                                SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
@@ -152,7 +152,7 @@ namespace pcr
 
         /** const-version of ->getPropertyValue
         */
-        ::com::sun::star::uno::Any impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName ) const;
+        ::com::sun::star::uno::Any impl_getPropertyValue_throw( const OUString& _rPropertyName ) const;
 
         // some property values are faked, and not used in the way they're provided by our component
         void impl_normalizePropertyValue_nothrow( ::com::sun::star::uno::Any& _rValue, PropertyId _nPropId ) const;
@@ -164,7 +164,7 @@ namespace pcr
         /** initializes the list of field names, if we're handling a control which supports the
             DataField property
         */
-        void impl_initFieldList_nothrow( ::std::vector< ::rtl::OUString >& rFieldNames ) const;
+        void impl_initFieldList_nothrow( ::std::vector< OUString >& rFieldNames ) const;
 
         /** obtaines the RowSet to which our component belongs
 
@@ -216,14 +216,14 @@ namespace pcr
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillTableNames_throw( ::std::vector< ::rtl::OUString >& _out_rNames ) const;
+        void impl_fillTableNames_throw( ::std::vector< OUString >& _out_rNames ) const;
 
         /** describes the UI for selecting a query name
 
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillQueryNames_throw( ::std::vector< ::rtl::OUString >& _out_rNames ) const;
+        void impl_fillQueryNames_throw( ::std::vector< OUString >& _out_rNames ) const;
 
         /** describes the UI for selecting a query name
 
@@ -231,8 +231,8 @@ namespace pcr
                 m_xRowSetConnection is not <NULL/>
         */
         void impl_fillQueryNames_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xQueryNames
-                    ,::std::vector< ::rtl::OUString >& _out_rNames
-                    ,const ::rtl::OUString& _sName = ::rtl::OUString() ) const;
+                    ,::std::vector< OUString >& _out_rNames
+                    ,const OUString& _sName = OUString() ) const;
 
         /** describes the UI for selecting a ListSource (for list-like form controls)
             @precond
@@ -254,7 +254,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if the user successfully changed the property
         */
-        bool impl_dialogListSelection_nothrow( const ::rtl::OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogListSelection_nothrow( const OUString& _rProperty, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog for chosing a filter or sort criterion for a database form
             @param _bFilter
@@ -267,7 +267,7 @@ namespace pcr
             @return
                 <TRUE/> if and only if the user successfully chose a clause
         */
-        bool impl_dialogFilterOrSort_nothrow( bool _bFilter, ::rtl::OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogFilterOrSort_nothrow( bool _bFilter, OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** executes a dialog which allows the user to chose the columns linking
             a sub to a master form, and sets the respective MasterFields / SlaveFields
@@ -428,7 +428,7 @@ namespace pcr
         /** returns the URL of our context document
             @return
         */
-        ::rtl::OUString impl_getDocumentURL_nothrow() const;
+        OUString impl_getDocumentURL_nothrow() const;
 
     private:
         DECL_LINK( OnDesignerClosed, void* );

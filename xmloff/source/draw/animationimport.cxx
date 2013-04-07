@@ -67,8 +67,6 @@
 #include "animations.hxx"
 #include "animationimport.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;
@@ -630,7 +628,7 @@ TYPEINIT1( AnimationNodeContext, SvXMLImportContext );
 
 AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
-        SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         AnimationsImportHelperImpl* pHelper /* = NULL */ )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
@@ -1245,7 +1243,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     }
 }
 
-SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * AnimationNodeContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     if( mxNode.is())

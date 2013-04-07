@@ -32,17 +32,17 @@ class IndexEntryResourceData
 {
     friend class IndexEntryResource;
     private: /* data */
-        rtl::OUString  ma_Name;
-        rtl::OUString  ma_Translation;
+        OUString  ma_Name;
+        OUString  ma_Translation;
     private: /* member functions */
         IndexEntryResourceData () {}
     public:
-        IndexEntryResourceData ( const rtl::OUString &r_Algorithm, const rtl::OUString &r_Translation)
+        IndexEntryResourceData ( const OUString &r_Algorithm, const OUString &r_Translation)
                 : ma_Name (r_Algorithm), ma_Translation (r_Translation) {}
 
-        const rtl::OUString& GetAlgorithm () const { return ma_Name; }
+        const OUString& GetAlgorithm () const { return ma_Name; }
 
-        const rtl::OUString& GetTranslation () const { return ma_Translation; }
+        const OUString& GetTranslation () const { return ma_Translation; }
 
         ~IndexEntryResourceData () {}
 
@@ -99,10 +99,10 @@ IndexEntryResource::~IndexEntryResource()
     delete[] mp_Data;
 }
 
-const rtl::OUString& IndexEntryResource::GetTranslation(const rtl::OUString &r_Algorithm)
+const OUString& IndexEntryResource::GetTranslation(const OUString &r_Algorithm)
 {
     sal_Int32 nIndex = r_Algorithm.indexOf('.');
-    rtl::OUString aLocaleFreeAlgorithm;
+    OUString aLocaleFreeAlgorithm;
 
     if (nIndex == -1)
         aLocaleFreeAlgorithm = r_Algorithm;

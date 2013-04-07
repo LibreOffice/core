@@ -1474,7 +1474,7 @@ void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 
     bReadOnly = pDocSh->IsReadOnly();
 
-    SetName(rtl::OUString("View")); // fuer SBX
+    SetName(OUString("View")); // fuer SBX
     Color aColBlack( COL_BLACK );
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( GetActiveWin() );
@@ -1777,7 +1777,7 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab = GetViewData()->GetTabNo();
-    rtl::OUString aTmp;
+    OUString aTmp;
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 

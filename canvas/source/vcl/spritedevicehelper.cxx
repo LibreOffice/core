@@ -130,9 +130,9 @@ namespace vclcanvas
 
         if( mpBackBuffer )
         {
-            rtl::OUString aFilename("dbg_backbuffer");
-            aFilename += rtl::OUString::valueOf(nFilePostfixCount);
-            aFilename += rtl::OUString(".bmp");
+            OUString aFilename("dbg_backbuffer");
+            aFilename += OUString::valueOf(nFilePostfixCount);
+            aFilename += OUString(".bmp");
 
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 

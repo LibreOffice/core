@@ -54,7 +54,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XParser>& xParser,
         com::sun::star::xml::sax::InputSource& aParserInput,
-        const rtl::OUString& sComponentName, const rtl::OUString& sDocName, const rtl::OUString& sOldDocName,
+        const OUString& sComponentName, const OUString& sDocName, const OUString& sOldDocName,
         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         sal_Bool bMustBeSuccessfull);
 
@@ -62,7 +62,7 @@ class ScXMLImportWrapper
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
         com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
-        const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
+        const OUString& sName, const OUString& sMediaType, const OUString& sComponentName,
         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,
         ScMySharedData*& pSharedData);
 

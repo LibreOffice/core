@@ -48,20 +48,20 @@ private:
     OKButton        m_aOKBtn;
     CancelButton    m_aCancelBtn;
     HelpButton      m_aHelpBtn;
-    rtl::OUString   m_sAddDialogText;
-    rtl::OUString    m_sManual;
+    OUString   m_sAddDialogText;
+    OUString    m_sManual;
 
     DECL_LINK(CheckHdl_Impl, SvxSimpleTable *);
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(OKHdl_Impl, void *);
 
     void HandleCheckEntry(SvTreeListEntry* _pEntry);
-    void AddCertPath(const rtl::OUString &rProfile, const rtl::OUString &rPath);
+    void AddCertPath(const OUString &rProfile, const OUString &rPath);
 public:
     CertPathDialog(Window* pParent);
     ~CertPathDialog();
 
-    rtl::OUString getDirectory() const;
+    OUString getDirectory() const;
 };
 
 #endif

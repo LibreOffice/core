@@ -37,14 +37,14 @@ namespace ucbhelper {
 //
 //============================================================================
 
-rtl::OUString
+OUString
 getLocalFileURL() SAL_THROW((uno::RuntimeException))
 {
     // If there were more file systems than just "file:///" (e.g., the obsolete
     // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
     // their com.sun.star.ucb.XFileIdentifierConverter.getFileProviderLocality
     // and return the most local one:
-    return rtl::OUString("file:///");
+    return OUString("file:///");
 }
 
 //============================================================================
@@ -53,11 +53,11 @@ getLocalFileURL() SAL_THROW((uno::RuntimeException))
 //
 //============================================================================
 
-rtl::OUString
+OUString
 getFileURLFromSystemPath(
     uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
-    rtl::OUString const & rBaseURL,
-    rtl::OUString const & rSystemPath)
+    OUString const & rBaseURL,
+    OUString const & rSystemPath)
     SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rUcb.is());
@@ -67,7 +67,7 @@ getFileURLFromSystemPath(
     if (xConverter.is())
         return xConverter->getFileURLFromSystemPath(rBaseURL, rSystemPath);
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 //============================================================================
@@ -76,10 +76,10 @@ getFileURLFromSystemPath(
 //
 //============================================================================
 
-rtl::OUString
+OUString
 getSystemPathFromFileURL(
     uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
-    rtl::OUString const & rURL)
+    OUString const & rURL)
     SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rUcb.is());
@@ -89,7 +89,7 @@ getSystemPathFromFileURL(
     if (xConverter.is())
         return xConverter->getSystemPathFromFileURL(rURL);
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 }

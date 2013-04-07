@@ -50,22 +50,22 @@ struct LdapUserProfile;
 struct LdapDefinition
 {
     /** LDAP server name */
-    rtl::OUString mServer ;
+    OUString mServer ;
     /** LDAP server port number */
     sal_Int32 mPort ;
     /** Repository base DN */
-    rtl::OUString mBaseDN ;
+    OUString mBaseDN ;
     /** DN to use for "anonymous" connection */
-    rtl::OUString mAnonUser ;
+    OUString mAnonUser ;
     /** Credentials to use for "anonymous" connection */
-    rtl::OUString mAnonCredentials ;
+    OUString mAnonCredentials ;
     /** User Entity Object Class */
-    rtl::OUString mUserObjectClass;
+    OUString mUserObjectClass;
     /** User Entity Unique Attribute */
-    rtl::OUString mUserUniqueAttr;
+    OUString mUserUniqueAttr;
  } ;
 
-typedef std::map< rtl::OUString, rtl::OUString > LdapData; // key/value pairs
+typedef std::map< OUString, OUString > LdapData; // key/value pairs
 
 /** Class encapulating all LDAP functionality */
 class LdapConnection
@@ -91,7 +91,7 @@ public:
          @throws com::sun::star::ldap::LdapGenericException
                   if an LDAP error occurs.
     */
-    void getUserProfile(const rtl::OUString& aUser, LdapData * data)
+    void getUserProfile(const OUString& aUser, LdapData * data)
          throw (lang::IllegalArgumentException,
                  ldap::LdapConnectionException,
                  ldap::LdapGenericException);
@@ -99,7 +99,7 @@ public:
     /** finds DN of user
         @return  DN of User
     */
-    rtl::OUString findUserDn(const rtl::OUString& aUser)
+    OUString findUserDn(const OUString& aUser)
         throw (lang::IllegalArgumentException,
                 ldap::LdapConnectionException,
                 ldap::LdapGenericException);

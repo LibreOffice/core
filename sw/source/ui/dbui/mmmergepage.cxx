@@ -51,7 +51,7 @@ SwMailMergeMergePage::SwMailMergeMergePage( SwMailMergeWizard* _pParent) :
 {
     FreeResource();
     String sTemp(m_aEditFI.GetText());
-    sTemp.SearchAndReplace(rtl::OUString("%1"), m_aEditPB.GetText());
+    sTemp.SearchAndReplace(OUString("%1"), m_aEditPB.GetText());
     m_aEditFI.SetText(sTemp);
     m_aEditPB.SetClickHdl( LINK( this, SwMailMergeMergePage, EditDocumentHdl_Impl));
     m_aFindPB.SetClickHdl( LINK( this, SwMailMergeMergePage, FindHdl_Impl ));

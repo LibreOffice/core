@@ -27,9 +27,9 @@
 
 namespace test {
 
-bool getTestArgument(rtl::OUString const & name, rtl::OUString * value) {
+bool getTestArgument(OUString const & name, OUString * value) {
     return detail::getArgument(
-        rtl::OUString("testarg.") + name, value);
+        OUString("testarg.") + name, value);
 }
 
 }

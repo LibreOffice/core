@@ -30,7 +30,7 @@ DBG_NAME(OQueryTableWindowData)
 // class OQueryTableWindowData
 //==================================================================
 //------------------------------------------------------------------------------
-OQueryTableWindowData::OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias )
+OQueryTableWindowData::OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias )
     :OTableWindowData(NULL,_rComposedName, rTableName, rTableAlias)
 {
     DBG_CTOR(OQueryTableWindowData,NULL);

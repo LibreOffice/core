@@ -69,7 +69,7 @@ void SdOptionsItem::Commit()
         mrParent.Commit( *this );
 };
 
-void SdOptionsItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+void SdOptionsItem::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {}
 
 

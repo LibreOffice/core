@@ -69,10 +69,10 @@ protected:
     sal_Int16 ReadShortRes()
     { return m_pResMgr->ReadShort(); }
     // read a string from resource data and increment pointer
-    rtl::OUString ReadStringRes()
+    OUString ReadStringRes()
     { return m_pResMgr->ReadString(); }
     // read a byte string from resource data and increment pointer
-    rtl::OString ReadByteStringRes()
+    OString ReadByteStringRes()
     { return m_pResMgr->ReadByteString(); }
 
     // free the resource from m_pResMgr's stack (pass this ptr for validation)

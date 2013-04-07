@@ -85,7 +85,7 @@ namespace ftp {
     public:
 
         FTPURL(
-            const rtl::OUString& aIdent,
+            const OUString& aIdent,
             FTPHandleProvider* pFCP = 0
         )
             throw(
@@ -96,28 +96,28 @@ namespace ftp {
 
         ~FTPURL();
 
-        rtl::OUString host() const { return m_aHost; }
+        OUString host() const { return m_aHost; }
 
-        rtl::OUString port() const { return m_aPort; }
+        OUString port() const { return m_aPort; }
 
-        rtl::OUString username() const { return m_aUsername; }
+        OUString username() const { return m_aUsername; }
 
         /** This returns the URL, but cleaned from
          *  unnessary ellipses.
          */
 
-        rtl::OUString ident(bool withslash,bool internal) const;
+        OUString ident(bool withslash,bool internal) const;
 
         /** returns the parent url.
          */
 
-        rtl::OUString parent(bool internal = false) const;
+        OUString parent(bool internal = false) const;
 
         /** sets the unencoded title */
-        void child(const rtl::OUString& title);
+        void child(const OUString& title);
 
         /** returns the unencoded title */
-        rtl::OUString child(void) const;
+        OUString child(void) const;
 
         std::vector<FTPDirentry> list(sal_Int16 nMode) const
             throw(curl_exception);
@@ -134,7 +134,7 @@ namespace ftp {
         void mkdir(bool ReplaceExisting) const
             throw(curl_exception);
 
-        rtl::OUString ren(const rtl::OUString& NewTitle)
+        OUString ren(const OUString& NewTitle)
             throw(curl_exception);
 
         void del() const
@@ -147,22 +147,22 @@ namespace ftp {
 
         FTPHandleProvider *m_pFCP;
 
-        mutable rtl::OUString m_aUsername;
+        mutable OUString m_aUsername;
         bool m_bShowPassword;
-        mutable rtl::OUString m_aHost;
-        mutable rtl::OUString m_aPort;
-        mutable rtl::OUString m_aType;
+        mutable OUString m_aHost;
+        mutable OUString m_aPort;
+        mutable OUString m_aType;
 
         /** Contains the encoded pathsegments of the url.
          */
-        std::vector<rtl::OUString> m_aPathSegmentVec;
+        std::vector<OUString> m_aPathSegmentVec;
 
-        void parse(const rtl::OUString& url)
+        void parse(const OUString& url)
             throw(
                 malformed_exception
             );
 
-        rtl::OUString net_title() const throw(curl_exception);
+        OUString net_title() const throw(curl_exception);
     };
 
 }

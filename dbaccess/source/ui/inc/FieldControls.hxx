@@ -46,7 +46,7 @@ namespace dbaui
         short                m_nPos;
         String               m_strHelpText;
     public:
-        inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
+        inline OPropColumnEditCtrl(Window* pParent, OUString& _rAllowedChars, sal_uInt16 nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
         inline sal_Bool IsModified() const { return GetText() != GetSavedValue(); }
 
@@ -60,7 +60,7 @@ namespace dbaui
         }
     };
     inline OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
-                                                    ::rtl::OUString& _rAllowedChars,
+                                                    OUString& _rAllowedChars,
                                                     sal_uInt16 nHelpId,
                                                     short nPosition,
                                                     WinBits nWinStyle)

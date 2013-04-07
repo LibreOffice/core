@@ -385,7 +385,7 @@ void SfxTemplateDialogWrapper::SetParagraphFamily()
 }
 
 //=========================================================================
-typedef std::vector<rtl::OUString> ExpandedEntries_t;
+typedef std::vector<OUString> ExpandedEntries_t;
 
 /*  [Description]
 
@@ -681,7 +681,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 
 
 inline sal_Bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
-                             const rtl::OUString &rStr)
+                             const OUString &rStr)
 {
     for (size_t n = 0; n < rEntries.size(); ++n)
     {
@@ -1268,7 +1268,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
             SvTreeListEntry* pEntry = aFmtLb.First();
-            std::vector<rtl::OUString> aStrings;
+            std::vector<OUString> aStrings;
 
             comphelper::string::NaturalStringSorter aSorter(
                 ::comphelper::getProcessComponentContext(),
@@ -1287,7 +1287,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             size_t nCount = aStrings.size();
             size_t nPos = 0;
             while(nPos < nCount && pEntry &&
-                  aStrings[nPos] == rtl::OUString(aFmtLb.GetEntryText(pEntry)))
+                  aStrings[nPos] == OUString(aFmtLb.GetEntryText(pEntry)))
             {
                 ++nPos;
                 pEntry = aFmtLb.Next( pEntry );
@@ -1845,12 +1845,12 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
 
 //-------------------------------------------------------------------------
 
-static rtl::OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModMgr, SfxObjectShell* i_pObjSh )
+static OUString getModuleIdentifier( const Reference< XModuleManager2 >& i_xModMgr, SfxObjectShell* i_pObjSh )
 {
     OSL_ENSURE( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
     OSL_ENSURE( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
 
-    ::rtl::OUString sIdentifier;
+    OUString sIdentifier;
 
     try
     {
@@ -2321,7 +2321,7 @@ void SfxTemplateDialog_Impl::EnableFamilyItem( sal_uInt16 nId, sal_Bool bEnable 
 
 void SfxTemplateDialog_Impl::InsertFamilyItem(sal_uInt16 nId,const SfxStyleFamilyItem *pItem)
 {
-    rtl::OString sHelpId;
+    OString sHelpId;
     switch( (sal_uInt16) pItem->GetFamily() )
     {
         case SFX_STYLE_FAMILY_CHAR:     sHelpId = ".uno:CharStyle"; break;
@@ -2557,9 +2557,9 @@ IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox 
 IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 
 //-------------------------------------------------------------------------
-static ::rtl::OUString lcl_GetLabel(uno::Any& rAny)
+static OUString lcl_GetLabel(uno::Any& rAny)
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     uno::Sequence< beans::PropertyValue >aPropSeq;
     if ( rAny >>= aPropSeq )
     {
@@ -2597,7 +2597,7 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
                 frame::UICommandDescription::create(
                     ::comphelper::getProcessComponentContext()) );
         uno::Reference< container::XNameAccess > xUICommands;
-        rtl::OUString sTextDoc("com.sun.star.text.TextDocument");
+        OUString sTextDoc("com.sun.star.text.TextDocument");
         if(xNameAccess->hasByName(sTextDoc))
         {
             uno::Any a = xNameAccess->getByName( sTextDoc );
@@ -2608,18 +2608,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(".uno:StyleNewByExample"));
-            ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
+            uno::Any aCommand = xUICommands->getByName(OUString(".uno:StyleNewByExample"));
+            OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString(".uno:StyleUpdateByExample"));
+            aCommand = xUICommands->getByName(OUString(".uno:StyleUpdateByExample"));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString(".uno:LoadStyles"));
+            aCommand = xUICommands->getByName(OUString(".uno:LoadStyles"));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, ".uno:LoadStyles");

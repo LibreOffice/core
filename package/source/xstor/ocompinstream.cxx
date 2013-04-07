@@ -335,7 +335,7 @@ void SAL_CALL OInputCompStream::removeEventListener( const uno::Reference< lang:
 }
 
 //-----------------------------------------------
-sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
+sal_Bool SAL_CALL OInputCompStream::hasByID(  const OUString& sID )
         throw ( io::IOException,
                 uno::RuntimeException )
 {
@@ -362,7 +362,7 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL OInputCompStream::getTargetByID(  const ::rtl::OUString& sID  )
+OUString SAL_CALL OInputCompStream::getTargetByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -383,11 +383,11 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
         if ( aSeq[nInd].First == "Target" )
             return aSeq[nInd].Second;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL OInputCompStream::getTypeByID(  const ::rtl::OUString& sID  )
+OUString SAL_CALL OInputCompStream::getTypeByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -408,11 +408,11 @@ sal_Bool SAL_CALL OInputCompStream::hasByID(  const ::rtl::OUString& sID )
         if ( aSeq[nInd].First == "Type" )
             return aSeq[nInd].Second;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
-uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const ::rtl::OUString& sID  )
+uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -443,7 +443,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
 }
 
 //-----------------------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const ::rtl::OUString& sType  )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::getRelationshipsByType(  const OUString& sType  )
         throw ( io::IOException,
                 uno::RuntimeException )
 {
@@ -508,7 +508,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::insertRelationshipByID(  const ::rtl::OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
+void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException )
@@ -528,7 +528,7 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const ::rtl::OUString& 
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::removeRelationshipByID(  const ::rtl::OUString& /*sID*/  )
+void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -603,7 +603,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
 }
 
 //-----------------------------------------------
-void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& /*aValue*/ )
+void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& /*aValue*/ )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -632,7 +632,7 @@ void SAL_CALL OInputCompStream::setPropertyValue( const ::rtl::OUString& aProper
 
 
 //-----------------------------------------------
-uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aProp )
+uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -645,7 +645,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
         throw lang::DisposedException();
     }
 
-    ::rtl::OUString aPropertyName;
+    OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
         aPropertyName = "Encrypted";
     else
@@ -669,7 +669,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const ::rtl::OUString& aPr
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::addPropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
+    const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -689,7 +689,7 @@ void SAL_CALL OInputCompStream::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::removePropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
+    const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -709,7 +709,7 @@ void SAL_CALL OInputCompStream::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::addVetoableChangeListener(
-    const ::rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -729,7 +729,7 @@ void SAL_CALL OInputCompStream::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OInputCompStream::removeVetoableChangeListener(
-    const ::rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,

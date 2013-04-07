@@ -675,7 +675,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, s
                          (m_pBmpAcc->HasPalette() ? m_pBmpAcc->GetPaletteEntryCount() : 0 ) : 0 );
     OSL_ENSURE(nIndex >= 0 && nIndex < nCount,"Palette index out of range");
     if( nIndex < 0 || nIndex >= nCount )
-        throw lang::IndexOutOfBoundsException(::rtl::OUString("Palette index out of range"),
+        throw lang::IndexOutOfBoundsException(OUString("Palette index out of range"),
                                               static_cast<rendering::XBitmapPalette*>(this));
 
     const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(sal::static_int_cast<sal_uInt16>(nIndex));
@@ -697,7 +697,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal
 
     OSL_ENSURE(nIndex >= 0 && nIndex < nCount,"Palette index out of range");
     if( nIndex < 0 || nIndex >= nCount )
-        throw lang::IndexOutOfBoundsException(::rtl::OUString("Palette index out of range"),
+        throw lang::IndexOutOfBoundsException(OUString("Palette index out of range"),
                                               static_cast<rendering::XBitmapPalette*>(this));
 
     return sal_False; // read-only implementation

@@ -54,8 +54,8 @@ class TgaFilterTest
 public:
     TgaFilterTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    virtual bool load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int);
 
     /**
@@ -68,8 +68,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool TgaFilterTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &,
+bool TgaFilterTest::load(const OUString &,
+    const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
@@ -79,9 +79,9 @@ bool TgaFilterTest::load(const rtl::OUString &,
 
 void TgaFilterTest::testCVEs()
 {
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/filter/qa/cppunit/data/tga/"),
-        rtl::OUString());
+        OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TgaFilterTest);

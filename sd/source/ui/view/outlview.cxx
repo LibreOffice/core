@@ -70,7 +70,6 @@
 #include "undo/undomanager.hxx"
 #include "stlsheet.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 

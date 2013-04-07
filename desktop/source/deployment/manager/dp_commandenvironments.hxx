@@ -86,14 +86,14 @@ public:
 class LicenseCommandEnv : public BaseCommandEnv
 {
 private:
-    ::rtl::OUString m_repository;
+    OUString m_repository;
     bool m_bSuppressLicense;
 public:
     LicenseCommandEnv() : m_bSuppressLicense(false) {};
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
-        ::rtl::OUString const & repository);
+        OUString const & repository);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(

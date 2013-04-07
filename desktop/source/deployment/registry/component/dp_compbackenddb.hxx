@@ -65,18 +65,18 @@ namespace component {
 class ComponentBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual ::rtl::OUString getDbNSName();
-    virtual ::rtl::OUString getNSPrefix();
-    virtual ::rtl::OUString getRootElementName();
-    virtual ::rtl::OUString getKeyElementName();
+    virtual OUString getDbNSName();
+    virtual OUString getNSPrefix();
+    virtual OUString getRootElementName();
+    virtual OUString getKeyElementName();
 
 public:
     struct Data
     {
         Data(): javaTypeLibrary(false) {};
 
-        ::std::list< ::rtl::OUString> implementationNames;
-        ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> >singletons;
+        ::std::list< OUString> implementationNames;
+        ::std::vector< ::std::pair< OUString, OUString> >singletons;
             // map from singleton names to implementation names
         bool javaTypeLibrary;
     };
@@ -84,11 +84,11 @@ public:
 public:
 
     ComponentBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        ::rtl::OUString const & url);
+                        OUString const & url);
 
-    void addEntry(::rtl::OUString const & url, Data const & data);
+    void addEntry(OUString const & url, Data const & data);
 
-    Data getEntry(::rtl::OUString const & url);
+    Data getEntry(OUString const & url);
 
 
 };

@@ -55,7 +55,7 @@ namespace rptui
         virtual void            applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor ) = 0;
         virtual void            moveConditionUp( size_t _nCondIndex ) = 0;
         virtual void            moveConditionDown( size_t _nCondIndex ) = 0;
-        virtual ::rtl::OUString getDataField() const = 0;
+        virtual OUString getDataField() const = 0;
 
     protected:
         ~IConditionalFormatAction() {}
@@ -107,7 +107,7 @@ namespace rptui
         virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor );
         virtual void moveConditionUp( size_t _nCondIndex );
         virtual void moveConditionDown( size_t _nCondIndex );
-        virtual ::rtl::OUString getDataField() const;
+        virtual OUString getDataField() const;
 
     protected:
         virtual long        PreNotify( NotifyEvent& rNEvt );

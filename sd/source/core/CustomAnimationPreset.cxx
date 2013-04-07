@@ -49,7 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-using ::rtl::OUString;
 using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNameAccess;
@@ -171,7 +170,7 @@ UStringList CustomAnimationPreset::getSubTypes()
     return aSubTypes;
 }
 
-Reference< XAnimationNode > CustomAnimationPreset::create( const rtl::OUString& rstrSubType )
+Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrSubType )
 {
     try
     {
@@ -320,16 +319,16 @@ void CustomAnimationPresets::importEffects()
             xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
-        uno::Sequence< rtl::OUString > aFiles;
+        uno::Sequence< OUString > aFiles;
         xNameAccess->getByName( "EffectFiles" ) >>= aFiles;
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            rtl::OUString aURL = aFiles[i];
+            OUString aURL = aFiles[i];
             if( aURL.startsWith( EXPAND_PROTOCOL ) )
             {
                 // cut protocol
-                rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+                OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
                 // decode uric class chars
                 aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                 // expand macro string
@@ -492,15 +491,15 @@ void CustomAnimationPresets::importPresets( const Reference< XMultiServiceFactor
 #ifdef DEBUG
     if( aMissedPresetIds.Len() )
     {
-        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n"));
-        aTmp.append(rtl::OUStringToOString(aMissedPresetIds,
+        OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("sd::CustomAnimationPresets::importPresets(), invalid preset id!\n"));
+        aTmp.append(OUStringToOString(aMissedPresetIds,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aTmp.getStr());
     }
 #endif
 }
 
-CustomAnimationPresetPtr CustomAnimationPresets::getEffectDescriptor( const rtl::OUString& rPresetId ) const
+CustomAnimationPresetPtr CustomAnimationPresets::getEffectDescriptor( const OUString& rPresetId ) const
 {
     EffectDescriptorMap::const_iterator aIter( maEffectDiscriptorMap.find( rPresetId ) );
 
@@ -514,17 +513,17 @@ CustomAnimationPresetPtr CustomAnimationPresets::getEffectDescriptor( const rtl:
     }
 }
 
-const rtl::OUString& CustomAnimationPresets::getUINameForPresetId( const rtl::OUString& rPresetId ) const
+const OUString& CustomAnimationPresets::getUINameForPresetId( const OUString& rPresetId ) const
 {
     return translateName( rPresetId, maEffectNameMap );
 }
 
-const rtl::OUString& CustomAnimationPresets::getUINameForProperty( const rtl::OUString& rPresetId ) const
+const OUString& CustomAnimationPresets::getUINameForProperty( const OUString& rPresetId ) const
 {
     return translateName( rPresetId, maPropertyNameMap );
 }
 
-const rtl::OUString& CustomAnimationPresets::translateName( const rtl::OUString& rId, const UStringMap& rNameMap ) const
+const OUString& CustomAnimationPresets::translateName( const OUString& rId, const UStringMap& rNameMap ) const
 {
     UStringMap::const_iterator aIter( rNameMap.find( rId ) );
 
@@ -537,7 +536,7 @@ const rtl::OUString& CustomAnimationPresets::translateName( const rtl::OUString&
         return rId;
     }
 }
-void CustomAnimationPresets::changePresetSubType( CustomAnimationEffectPtr pEffect, const rtl::OUString& rPresetSubType ) const
+void CustomAnimationPresets::changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const
 {
     if( pEffect.get() && pEffect->getPresetSubType() != rPresetSubType )
     {

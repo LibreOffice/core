@@ -269,7 +269,7 @@ public:
     /** Notification from eventmultiplexer that a hyperlink
         has been clicked.
     */
-    bool notifyHyperLinkClicked( rtl::OUString const& hyperLink );
+    bool notifyHyperLinkClicked( OUString const& hyperLink );
 
     /** Notification from eventmultiplexer that an animation event has occoured.
         This will be forewarded to all registered XSlideShowListener
@@ -545,7 +545,7 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     }
 
     // HyperlinkHandler
-    virtual bool handleHyperlink( ::rtl::OUString const& rLink )
+    virtual bool handleHyperlink( OUString const& rLink )
     {
         return mrShow.notifyHyperLinkClicked(rLink);
     }
@@ -614,7 +614,7 @@ SlideShowImpl::SlideShowImpl(
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
                 xFactory->createInstanceWithContext(
-                    ::rtl::OUString("com.sun.star.presentation.TransitionFactory" ),
+                    OUString("com.sun.star.presentation.TransitionFactory" ),
                     mxComponentContext ),
                 uno::UNO_QUERY );
         }
@@ -707,7 +707,7 @@ void SlideShowImpl::stopSlideTransitionSound()
 SoundPlayerSharedPtr SlideShowImpl::resetSlideTransitionSound( const uno::Any& rSound, bool bLoopSound )
 {
     sal_Bool bStopSound = sal_False;
-    rtl::OUString url;
+    OUString url;
 
     if( !(rSound >>= bStopSound) )
         bStopSound = sal_False;
@@ -1055,7 +1055,7 @@ public:
         }
         else
         {
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             rProperty.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1446,17 +1446,17 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
 
     //Layer Name which enables to catch annotations
-    rtl::OUString layerName = rtl::OUString("DrawnInSlideshow");
+    OUString layerName = OUString("DrawnInSlideshow");
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
-    xLayerPropSet->setPropertyValue(rtl::OUString("Name"), aPropLayer);
+    xLayerPropSet->setPropertyValue(OUString("Name"), aPropLayer);
 
     aPropLayer <<= true;
-    xLayerPropSet->setPropertyValue(rtl::OUString("IsVisible"), aPropLayer);
+    xLayerPropSet->setPropertyValue(OUString("IsVisible"), aPropLayer);
 
     aPropLayer <<= false;
-    xLayerPropSet->setPropertyValue(rtl::OUString("IsLocked"), aPropLayer);
+    xLayerPropSet->setPropertyValue(OUString("IsLocked"), aPropLayer);
 
     PolygonMap::iterator aIter=maPolygons.begin();
 
@@ -1488,7 +1488,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 {
                     //create the PolyLineShape
                     uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
-                                                                    rtl::OUString("com.sun.star.drawing.PolyLineShape") ) );
+                                                                    OUString("com.sun.star.drawing.PolyLineShape") ) );
                     uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
 
                     //Add the shape to the slide
@@ -1518,27 +1518,27 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     //Give the built PointSequenceSequence.
                     uno::Any aParam;
                     aParam <<= aRetval;
-                    aXPropSet->setPropertyValue( rtl::OUString("PolyPolygon"), aParam );
+                    aXPropSet->setPropertyValue( OUString("PolyPolygon"), aParam );
 
                     //LineStyle : SOLID by default
                     uno::Any            aAny;
                     drawing::LineStyle  eLS;
                     eLS = drawing::LineStyle_SOLID;
                     aAny <<= eLS;
-                    aXPropSet->setPropertyValue( rtl::OUString("LineStyle"), aAny );
+                    aXPropSet->setPropertyValue( OUString("LineStyle"), aAny );
 
                     //LineColor
                     sal_uInt32          nLineColor;
                     nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
                     aAny <<= RGBAColor2UnoColor(nLineColor);
-                    aXPropSet->setPropertyValue( rtl::OUString("LineColor"), aAny );
+                    aXPropSet->setPropertyValue( OUString("LineColor"), aAny );
 
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
                     aAny <<= (sal_Int32)fLineWidth;
-                    aXPropSet->setPropertyValue( rtl::OUString("LineWidth"), aAny );
+                    aXPropSet->setPropertyValue( OUString("LineWidth"), aAny );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);
@@ -2113,7 +2113,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_FAIL( OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -2162,7 +2162,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nChange,
                            xPropSet,
-                           ::rtl::OUString(
+                           OUString(
                                "Change")) )
     {
         OSL_TRACE(
@@ -2175,7 +2175,7 @@ void queryAutomaticSlideTransition( uno::Reference<drawing::XDrawPage> const& xD
     if( !xPropSet.is() ||
         !getPropertyValue( nAutomaticNextSlideTimeout,
                            xPropSet,
-                           ::rtl::OUString(
+                           OUString(
                                "HighResDuration")) )
     {
         OSL_TRACE(
@@ -2338,7 +2338,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
             sal_Bool(bReverse)));
 }
 
-bool SlideShowImpl::notifyHyperLinkClicked( rtl::OUString const& hyperLink )
+bool SlideShowImpl::notifyHyperLinkClicked( OUString const& hyperLink )
 {
     osl::MutexGuard const guard( m_aMutex );
 

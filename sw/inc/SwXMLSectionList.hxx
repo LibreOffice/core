@@ -28,7 +28,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const ::rtl::OUString& rLocalName,
+                  const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
@@ -49,11 +49,11 @@ private:
 public:
     SvXMLSectionListContext ( SwXMLSectionList& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLSectionListContext ( void );
@@ -66,11 +66,11 @@ private:
 public:
     SvXMLIgnoreSectionListContext ( SwXMLSectionList& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLIgnoreSectionListContext ( void );

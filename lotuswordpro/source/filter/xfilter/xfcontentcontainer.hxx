@@ -95,7 +95,7 @@ public:
     /**
      * @descr   convience function for add text content.
      */
-    virtual void    Add(const rtl::OUString& text);
+    virtual void    Add(const OUString& text);
 
     /**
      * @descr   return the number of contents in the container.

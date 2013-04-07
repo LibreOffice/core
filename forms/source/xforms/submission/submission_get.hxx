@@ -29,7 +29,7 @@ class CSubmissionGet : public CSubmission
 private:
     CSS::uno::Reference< CSS::uno::XComponentContext > m_xContext;
 public:
-    CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
+    CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
     virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler);
 
 };

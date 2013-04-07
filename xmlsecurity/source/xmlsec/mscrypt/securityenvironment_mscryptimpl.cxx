@@ -51,7 +51,6 @@ using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
 using ::com::sun::star::lang::XSingleServiceFactory ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
@@ -537,7 +536,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
     //Create cert info from issue and serial
-    rtl::OString oissuer = rtl::OUStringToOString( issuerName , encoding ) ;
+    OString oissuer = OUStringToOString( issuerName , encoding ) ;
     pszName = ( char* )oissuer.getStr() ;
 
     if( ! ( CertStrToName(
@@ -865,7 +864,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFr
     xmlChar* chCert ;
     xmlSecSize certSize ;
 
-    rtl::OString oscert = rtl::OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
+    OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
 
     chCert = xmlStrndup( ( const xmlChar* )oscert.getStr(), ( int )oscert.getLength() ) ;
 
@@ -1159,9 +1158,9 @@ X509Certificate_MSCryptImpl* MswcryCertContextToXCert( PCCERT_CONTEXT cert )
     return xcert ;
 }
 
-::rtl::OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
+OUString SecurityEnvironment_MSCryptImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return rtl::OUString("Microsoft Crypto API");
+    return OUString("Microsoft Crypto API");
 }
 
 /* Native methods */

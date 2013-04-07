@@ -42,7 +42,7 @@ private:
 
 private:
     void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::uno::RuntimeException);
-    void GetStyleInfo(rtl::OUString& aStyleName, rtl::OUString& aStyleType ) throw ( css::uno::RuntimeException );
+    void GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw ( css::uno::RuntimeException );
 public:
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
     SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, sal_Bool _bMaySpanEndOfDocument = sal_False ) throw (css::uno::RuntimeException);
@@ -56,8 +56,8 @@ public:
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
 
     // Attribute
-    virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setText( const OUString& rText ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getStyle() throw (css::uno::RuntimeException);
@@ -84,8 +84,8 @@ public:
     virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_RANGE_HXX */
 

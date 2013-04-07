@@ -181,8 +181,8 @@ SvtToolPanelOptions_Impl::~SvtToolPanelOptions_Impl()
     Commit();
 }
 
-static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
-                const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
+static int lcl_MapPropertyName( const OUString rCompare,
+                const uno::Sequence< OUString>& aInternalPropertyNames)
 {
     for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
     {
@@ -194,7 +194,7 @@ static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
 
 void SvtToolPanelOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 {
-    const uno::Sequence< ::rtl::OUString> aInternalPropertyNames( GetPropertyNames());
+    const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > seqValues = GetProperties( rPropertyNames  );
 
     // Safe impossible cases.

@@ -44,7 +44,7 @@ namespace uui
 {
 
 NewerVersionWarningDialog::NewerVersionWarningDialog(
-    Window* pParent, const ::rtl::OUString& rVersion, ResMgr& rResMgr ) :
+    Window* pParent, const OUString& rVersion, ResMgr& rResMgr ) :
 
     ModalDialog( pParent, ResId( RID_DLG_NEWER_VERSION_WARNING, rResMgr ) ),
 
@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             if ( !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                    sNotifyURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else
@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
                     xDispatchProvider = uno::Reference < frame::XDispatchProvider > ( xDesktop, uno::UNO_QUERY );
 
                 uno::Reference< frame::XDispatch > xDispatch =
-                    xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
+                    xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
                 if ( xDispatch.is() )
                     xDispatch->dispatch( aURL, uno::Sequence< beans::PropertyValue >() );
             }

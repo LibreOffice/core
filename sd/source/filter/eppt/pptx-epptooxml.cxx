@@ -70,9 +70,6 @@
                       FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main", \
                       FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
@@ -348,7 +345,7 @@ bool PowerPointExport::exportDocument() throw()
     mXModel.set( getModel(), UNO_QUERY );
     mXStatusIndicator.set( getStatusIndicator(), UNO_QUERY );
 
-    rtl::OUString sBaseURI( "BaseURI");
+    OUString sBaseURI( "BaseURI");
     std::vector< PropertyValue > aProperties;
     PropertyValue aProperty;
     aProperty.Name = sBaseURI;
@@ -421,7 +418,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
       </p:grpSpPr>"
 
 #define GETA(propName) \
-    ImplGetPropertyValue( mXPagePropSet, rtl::OUString( #propName ) )
+    ImplGetPropertyValue( mXPagePropSet, OUString( #propName ) )
 
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
@@ -1024,7 +1021,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     sal_uInt32 nPresetId = 0;
     sal_Bool bPresetId = sal_False;
     if ( pAny[ DFF_ANIM_PRESET_ID ] ) {
-    rtl::OUString sPreset;
+    OUString sPreset;
     if ( *pAny[ DFF_ANIM_PRESET_ID ] >>= sPreset )
         nPresetId = AnimationExporter::GetPresetID( sPreset, nPresetClass, bPresetId );
     }
@@ -1032,7 +1029,7 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     sal_uInt32 nPresetSubType = 0;
     sal_Bool bPresetSubType = sal_False;
     if ( pAny[ DFF_ANIM_PRESET_SUB_TYPE ] ) {
-    rtl::OUString sPresetSubType;
+    OUString sPresetSubType;
     if ( *pAny[ DFF_ANIM_PRESET_SUB_TYPE ] >>= sPresetSubType ) {
         nPresetSubType = AnimationExporter::TranslatePresetSubType( nPresetClass, nPresetId, sPresetSubType );
         bPresetSubType = sal_True;
@@ -2098,7 +2095,7 @@ sal_Bool PowerPointExport::WriteNotesMaster()
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    if( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) &&
+    if( ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) &&
             ( mAny >>= aXBackgroundPropSet ) )
         ImplWriteBackground( pFS, aXBackgroundPropSet );
 

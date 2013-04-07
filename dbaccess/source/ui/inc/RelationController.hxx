@@ -41,7 +41,7 @@ namespace dbaui
 
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
-        TTableWindowData::value_type existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase) const;
+        TTableWindowData::value_type existsTable(const OUString& _rComposedTableName,sal_Bool _bCase) const;
 
         // load the window positions out of the datasource
         void loadLayoutInformation();
@@ -58,11 +58,11 @@ namespace dbaui
         virtual sal_Bool Construct(Window* pParent);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -75,7 +75,7 @@ namespace dbaui
         virtual short saveModified();
         virtual void reset();
         virtual void impl_initialize();
-        virtual ::rtl::OUString getPrivateTitle( ) const;
+        virtual OUString getPrivateTitle( ) const;
         DECL_LINK( OnThreadFinished, void* );
     };
 }

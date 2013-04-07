@@ -42,11 +42,11 @@ OMySQLCatalog::OMySQLCatalog(const Reference< XConnection >& _xConnection) : OCa
 {
 }
 // -----------------------------------------------------------------------------
-void OMySQLCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames)
+void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-                                                            ::rtl::OUString("%"),
-                                                            ::rtl::OUString("%"),
+                                                            OUString("%"),
+                                                            OUString("%"),
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
@@ -54,11 +54,11 @@ void OMySQLCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfOb
 void OMySQLCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const ::rtl::OUString s_sTableTypeView("VIEW");
-    static const ::rtl::OUString s_sTableTypeTable("TABLE");
-    static const ::rtl::OUString s_sAll("%");
+    static const OUString s_sTableTypeView("VIEW");
+    static const OUString s_sTableTypeTable("TABLE");
+    static const OUString s_sAll("%");
 
-    Sequence< ::rtl::OUString > sTableTypes(3);
+    Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
     sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
@@ -73,8 +73,8 @@ void OMySQLCatalog::refreshTables()
 // -------------------------------------------------------------------------
 void OMySQLCatalog::refreshViews()
 {
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("VIEW");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("VIEW");
 
     // let's simply assume the server is new enough to support views. Current drivers
     // as of this writing might not return the proper information in getTableTypes, so
@@ -100,7 +100,7 @@ void OMySQLCatalog::refreshUsers()
 {
     TStringVector aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(::rtl::OUString("select User from mysql.user group by User"));
+    Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("select User from mysql.user group by User"));
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

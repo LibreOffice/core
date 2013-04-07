@@ -242,14 +242,14 @@ Rectangle GtkSalSystem::GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScre
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
+OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
 {
     gchar *pStr;
     gint nMonitor;
     GdkScreen *pScreen;
     pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
-        return rtl::OUString();
+        return OUString();
 
 #if GTK_CHECK_VERSION(3,0,0) || GTK_CHECK_VERSION(2,14,0)
     pStr = gdk_screen_get_monitor_plug_name (pScreen, nMonitor);
@@ -267,23 +267,23 @@ rtl::OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
     else
         pStr = g_strdup_printf ("%d", nScreen);
 #endif
-    rtl::OUString aRet (pStr, strlen (pStr), RTL_TEXTENCODING_UTF8);
+    OUString aRet (pStr, strlen (pStr), RTL_TEXTENCODING_UTF8);
     g_free (pStr);
     return aRet;
 }
 
 // convert ~ to indicate mnemonic to '_'
-static rtl::OString MapToGtkAccelerator(const rtl::OUString &rStr)
+static OString MapToGtkAccelerator(const OUString &rStr)
 {
-    return rtl::OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
+    return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
 }
 
-int GtkSalSystem::ShowNativeDialog (const rtl::OUString& rTitle, const rtl::OUString& rMessage,
-                                    const std::list< rtl::OUString >& rButtonNames,
+int GtkSalSystem::ShowNativeDialog (const OUString& rTitle, const OUString& rMessage,
+                                    const std::list< OUString >& rButtonNames,
                                     int nDefaultButton)
 {
-    rtl::OString aTitle (rtl::OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
-    rtl::OString aMessage (rtl::OUStringToOString (rMessage, RTL_TEXTENCODING_UTF8));
+    OString aTitle (OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
+    OString aMessage (OUStringToOString (rMessage, RTL_TEXTENCODING_UTF8));
 
     GtkDialog *pDialog = GTK_DIALOG (
         g_object_new (GTK_TYPE_MESSAGE_DIALOG,
@@ -292,7 +292,7 @@ int GtkSalSystem::ShowNativeDialog (const rtl::OUString& rTitle, const rtl::OUSt
                       "text", aMessage.getStr(),
                       NULL));
     int nButton = 0;
-    std::list< rtl::OUString >::const_iterator it;
+    std::list< OUString >::const_iterator it;
     for (it = rButtonNames.begin(); it != rButtonNames.end(); ++it)
         gtk_dialog_add_button (pDialog, MapToGtkAccelerator(*it).getStr(), nButton++);
     gtk_dialog_set_default_response (pDialog, nDefaultButton);

@@ -59,10 +59,10 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
             new ucbhelper::PropertyValueSet(rxContext);
 
         for( int i = 0; i < seqProp.getLength(); ++i) {
-            const rtl::OUString& Name = seqProp[i].Name;
+            const OUString& Name = seqProp[i].Name;
             if(Name.compareToAscii("ContentType") == 0 )
                 xRow->appendString(seqProp[i],
-                                   rtl::OUString( "application/ftp" ));
+                                   OUString( "application/ftp" ));
             else if(Name.compareToAscii("Title") == 0)
                 xRow->appendString(seqProp[i],dirvec[n].m_aName);
             else if(Name.compareToAscii("IsReadOnly") == 0)

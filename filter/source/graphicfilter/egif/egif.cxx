@@ -90,7 +90,7 @@ sal_Bool GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterC
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }

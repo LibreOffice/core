@@ -32,8 +32,8 @@ class OOo2OasisTransformer :
         public ::com::sun::star::document::XImporter,
         public ::com::sun::star::document::XFilter
 {
-    ::rtl::OUString m_aImplName;
-    ::rtl::OUString m_aSubServiceName;
+    OUString m_aImplName;
+    OUString m_aSubServiceName;
 
     XMLTransformerActions       *m_aActions[MAX_OOO_ACTIONS];
     XMLTransformerOOoEventMap_Impl *m_pEventMap;
@@ -41,7 +41,7 @@ protected:
 
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
-                                      const ::rtl::OUString& rQName,
+                                      const OUString& rQName,
                                          sal_Bool bPersistent=sal_False );
 
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
@@ -74,9 +74,9 @@ public:
 
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -97,7 +97,7 @@ public:
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName,
+    virtual OUString GetEventName( const OUString& rName,
                                             sal_Bool bForm = sal_False );
 };
 

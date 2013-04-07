@@ -101,16 +101,16 @@ private:
     com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_connection;
     ConnectionSettings *m_pSettings;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > m_lastResultset;
-    ::rtl::OString m_stmt;
-    ::rtl::OString m_executedStatement;
+    OString m_stmt;
+    OString m_executedStatement;
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     OStringVector m_vars;
     OStringVector m_splittedStatement;
     sal_Bool  m_multipleResultAvailable;
     sal_Int32 m_multipleResultUpdateCount;
     sal_Int32 m_lastOidInserted;
-    rtl::OUString m_lastTableInserted;
-    rtl::OString m_lastQuery;
+    OUString m_lastTableInserted;
+    OString m_lastQuery;
 
 public:
     /**
@@ -120,7 +120,7 @@ public:
     PreparedStatement( const rtl::Reference< RefCountedMutex > & refMutex,
                        const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection> & con,
                        struct ConnectionSettings *pSettings,
-                       const rtl::OString &stmt );
+                       const OString &stmt );
 
      virtual ~PreparedStatement();
 public: // XInterface
@@ -146,7 +146,7 @@ public: // XParameters
     virtual void SAL_CALL setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setObjectNull(
-        sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName )
+        sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setBoolean( sal_Int32 parameterIndex, sal_Bool x )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -162,7 +162,7 @@ public: // XParameters
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDouble( sal_Int32 parameterIndex, double x )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setString( sal_Int32 parameterIndex, const ::rtl::OUString& x )
+    virtual void SAL_CALL setString( sal_Int32 parameterIndex, const OUString& x )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setBytes(
         sal_Int32 parameterIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x )
@@ -274,7 +274,7 @@ private:
     void checkClosed() throw (com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException);
     void raiseSQLException( const char * errorMsg, const char *errorType = 0 )
         throw ( com::sun::star::sdbc::SQLException );
-//     PGresult *pgExecute( ::rtl::OString *pQuery );
+//     PGresult *pgExecute( OString *pQuery );
 };
 
 }

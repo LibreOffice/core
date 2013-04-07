@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 
 namespace accessibility {
@@ -248,18 +247,18 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessiblePageShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
-    return ::rtl::OUString("AccessiblePageShape");
+    return OUString("AccessiblePageShape");
 }
 
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessiblePageShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -307,17 +306,17 @@ void AccessiblePageShape::dispose (void)
 
 //=====  protected internal  ==================================================
 
-::rtl::OUString
+OUString
     AccessiblePageShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ("PageShape");
+    return OUString ("PageShape");
 }
 
 
 
 
-::rtl::OUString
+OUString
     AccessiblePageShape::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -342,11 +341,11 @@ void AccessiblePageShape::dispose (void)
 
 
 
-::rtl::OUString
+OUString
     AccessiblePageShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ("Page Shape");
+    return OUString ("Page Shape");
 }
 
 

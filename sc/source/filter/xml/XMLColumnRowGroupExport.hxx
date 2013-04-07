@@ -41,7 +41,7 @@ class ScXMLExport;
 class ScMyOpenCloseColumnRowGroup
 {
     ScXMLExport&                rExport;
-    const rtl::OUString         rName;
+    const OUString         rName;
     ScMyColumnRowGroupVec       aTableStart;
     ScMyFieldGroupVec           aTableEnd;
 

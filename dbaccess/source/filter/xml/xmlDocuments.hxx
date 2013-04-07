@@ -30,8 +30,8 @@ namespace dbaxml
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xContainer;
-        ::rtl::OUString     m_sCollectionServiceName;
-        ::rtl::OUString     m_sComponentServiceName;
+        OUString     m_sCollectionServiceName;
+        OUString     m_sComponentServiceName;
 
         ODBFilter& GetOwnImport();
     public:
@@ -39,23 +39,23 @@ namespace dbaxml
         // for forms and reports
         OXMLDocuments( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
-                    ,const ::rtl::OUString& _sCollectionServiceName
-                    ,const ::rtl::OUString& _sComponentServiceName);
+                    ,const OUString& _sCollectionServiceName
+                    ,const OUString& _sComponentServiceName);
 
         // for queries
         OXMLDocuments( ODBFilter& rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
-                    ,const ::rtl::OUString& _sCollectionServiceName = ::rtl::OUString()
+                    ,const OUString& _sCollectionServiceName = OUString()
                     );
 
         virtual ~OXMLDocuments();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     };
 // -----------------------------------------------------------------------------

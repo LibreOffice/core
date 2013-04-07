@@ -109,8 +109,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 /****************************************************************************
     Hilfsklassen
@@ -178,7 +176,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
 #endif
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
-    SwReaderWriter::GetWriter( rtl::OUString(FILTER_TEXT_DLG), String(), xWrt );
+    SwReaderWriter::GetWriter( OUString(FILTER_TEXT_DLG), String(), xWrt );
     if( xWrt.Is() )
     {
         SwWriter aWriter( aStream, rPam );
@@ -205,7 +203,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
             long lUniLen = (lLen / sizeof( sal_Unicode ));
             rtl_uString *pStr = rtl_uString_alloc(lUniLen);
             aStream.Read(pStr->buffer, lUniLen * sizeof(sal_Unicode));
-            rBuffer = rtl::OUString(pStr, SAL_NO_ACQUIRE);
+            rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
         }
         xWrt->bShowProgress = bOldShowProgress;
     }
@@ -546,7 +544,7 @@ throw (lang::IllegalArgumentException)
             // #i91601#
             else if (FN_UNO_LIST_ID == rEntry.nWID)
             {
-                ::rtl::OUString sListId;
+                OUString sListId;
                 if (rValue >>= sListId)
                 {
                     pTxtNd->SetListId( sListId );
@@ -825,7 +823,7 @@ SwXTextCursor::~SwXTextCursor()
 {
 }
 
-void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
+void SwXTextCursor::DeleteAndInsert(const OUString& rText,
         const bool bForceExpandHints)
 {
     SwUnoCrsr *const pUnoCrsr = m_pImpl->GetCursor();
@@ -1879,7 +1877,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         return;
 
     SwDoc *const pDoc = rPaM.GetDoc();
-    rtl::OUString aUnknownExMsg, aPropertyVetoExMsg;
+    OUString aUnknownExMsg, aPropertyVetoExMsg;
 
     // Build set of attributes we want to fetch
     std::vector<sal_uInt16> aWhichPairs;
@@ -1887,7 +1885,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     aEntries.reserve(rPropertyValues.getLength());
     for (sal_Int32 i = 0; i < rPropertyValues.getLength(); ++i)
     {
-        const rtl::OUString &rPropertyName = rPropertyValues[i].Name;
+        const OUString &rPropertyName = rPropertyValues[i].Name;
 
         SfxItemPropertySimpleEntry const* pEntry =
             rPropSet.getPropertyMap().getByName(rPropertyName);
@@ -2249,7 +2247,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextCursor::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2259,7 +2257,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextCursor::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2269,7 +2267,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextCursor::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -2279,7 +2277,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextCursor::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -2333,7 +2331,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 void SAL_CALL SwXTextCursor::setPropertyValues(
-    const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+    const uno::Sequence< OUString >& aPropertyNames,
     const uno::Sequence< uno::Any >& aValues )
     throw (
         css::beans::PropertyVetoException, css::lang::IllegalArgumentException,
@@ -2369,7 +2367,7 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
 }
 
 uno::Sequence< uno::Any > SAL_CALL
-SwXTextCursor::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+SwXTextCursor::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames )
     throw (css::uno::RuntimeException)
 {
     // a banal implementation for now
@@ -2380,7 +2378,7 @@ SwXTextCursor::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPrope
 }
 
 void SAL_CALL SwXTextCursor::addPropertiesChangeListener(
-        const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
+        const uno::Sequence< OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
     throw (css::uno::RuntimeException)
 {
@@ -2394,7 +2392,7 @@ void SAL_CALL SwXTextCursor::removePropertiesChangeListener(
 }
 
 void SAL_CALL SwXTextCursor::firePropertiesChangeEvent(
-        const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */,
+        const uno::Sequence< OUString >& /* aPropertyNames */,
         const uno::Reference< css::beans::XPropertiesChangeListener >& /* xListener */ )
     throw (css::uno::RuntimeException)
 {
@@ -2576,7 +2574,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextCursor::makeRedline(
-    const ::rtl::OUString& rRedlineType,
+    const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {

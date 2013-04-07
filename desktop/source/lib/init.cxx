@@ -87,7 +87,7 @@ aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 }
 
 static void
-initialize_uno( const rtl::OUString &aAppURL )
+initialize_uno( const OUString &aAppURL )
 {
     rtl::Bootstrap::setIniFilename( aAppURL + "/fundamentalrc" );
 
@@ -108,7 +108,7 @@ initialize_uno( const rtl::OUString &aAppURL )
 
     // set UserInstallation to user profile dir in test/user-template
 //    rtl::Bootstrap aDefaultVars;
-//    aDefaultVars.set(rtl::OUString("UserInstallation"), aAppURL + "../registry" );
+//    aDefaultVars.set(OUString("UserInstallation"), aAppURL + "../registry" );
     // configmgr setup ?
 }
 

@@ -61,7 +61,7 @@ void SAL_CALL JavaContext::release(  ) throw ()
         delete this;
 }
 
-Any SAL_CALL JavaContext::getValueByName( const ::rtl::OUString& Name) throw (RuntimeException)
+Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeException)
 {
     Any retVal;
 

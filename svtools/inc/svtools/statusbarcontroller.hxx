@@ -52,7 +52,7 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
     public:
         StatusbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                             const rtl::OUString& aCommandURL,
+                             const OUString& aCommandURL,
                              unsigned short       nID );
         StatusbarController();
         virtual ~StatusbarController();
@@ -108,19 +108,19 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 ::rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
-        void addStatusListener( const rtl::OUString& aCommandURL );
+        void addStatusListener( const OUString& aCommandURL );
         void bindListener();
 
         // execute methods
         // execute bound status bar controller command/execute various commands
         void execute( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
-        void execute( const rtl::OUString& aCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
+        void execute( const OUString& aCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;
@@ -128,7 +128,7 @@ class SVT_DLLPUBLIC StatusbarController : public ::com::sun::star::frame::XStatu
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  m_xParentWindow;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        rtl::OUString                                                                       m_aCommandURL;
+        OUString                                                                       m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;

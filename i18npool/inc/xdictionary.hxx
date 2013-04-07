@@ -57,15 +57,15 @@ private:
 public:
     xdictionary(const sal_Char *lang);
     ~xdictionary();
-    Boundary nextWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
-    Boundary previousWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
-    Boundary getWordBoundary( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType, sal_Bool bDirection );
+    Boundary nextWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
+    Boundary previousWord( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
+    Boundary getWordBoundary( const OUString& rText, sal_Int32 nPos, sal_Int16 wordType, sal_Bool bDirection );
     void setJapaneseWordBreak();
 
 private:
     WordBreakCache cache[CACHE_MAX];
 
-    sal_Bool        seekSegment(const rtl::OUString& rText, sal_Int32 pos, Boundary& boundary);
+    sal_Bool        seekSegment(const OUString& rText, sal_Int32 pos, Boundary& boundary);
     WordBreakCache& getCache(const sal_Unicode *text, Boundary& boundary);
     sal_Bool        exists(const sal_uInt32 u);
     sal_Int32       getLongestMatch(const sal_Unicode *text, sal_Int32 len);

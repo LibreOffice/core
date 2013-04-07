@@ -57,7 +57,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     if( !*ppFactory )                                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
-            rtl::OUString( #ClassName ), ClassName::CreateInstance );     \
+            OUString( #ClassName ), ClassName::CreateInstance );     \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
@@ -93,7 +93,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     if( !*ppFactory )                                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
-            rtl::OUString( #ClassName ), ClassName::CreateInstance );     \
+            OUString( #ClassName ), ClassName::CreateInstance );     \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
     }                                                                     \
     return *ppFactory;                                                    \
@@ -134,7 +134,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     if( !*ppFactory )                                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
-            rtl::OUString( #ClassName ), ClassName::CreateInstance );     \
+            OUString( #ClassName ), ClassName::CreateInstance );     \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
     }                                                                     \
@@ -175,7 +175,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     if( !*ppFactory )                                                     \
     {                                                                     \
         *ppFactory = new FactoryName( GlobalName,                         \
-            rtl::OUString( #ClassName ), ClassName::CreateInstance );     \
+            OUString( #ClassName ), ClassName::CreateInstance );     \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super3::ClassFactory() );            \
@@ -220,7 +220,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     if( !*ppFactory )                                                     \
     {                                                                     \
         *ppFactory = new SotFactory( GlobalName,                           \
-            rtl::OUString( #ClassName ), ClassName::CreateInstance );     \
+            OUString( #ClassName ), ClassName::CreateInstance );     \
         (*ppFactory)->PutSuperClass( Super1::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super2::ClassFactory() );            \
         (*ppFactory)->PutSuperClass( Super3::ClassFactory() );            \

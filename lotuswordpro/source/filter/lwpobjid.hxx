@@ -143,14 +143,14 @@ inline void LwpObjectID::SetHigh(sal_uInt16 nh)
 }
 inline size_t LwpObjectID::HashCode() const
 {
-    rtl::OUString str;
+    OUString str;
     if(m_nIndex)
     {
-        str = rtl::OUString(m_nIndex) + rtl::OUString(m_nHigh);
+        str = OUString(m_nIndex) + OUString(m_nHigh);
     }
     else
     {
-        str = rtl::OUString(m_nLow) + rtl::OUString(m_nHigh);
+        str = OUString(m_nLow) + OUString(m_nHigh);
     }
     return str.hashCode();
 }

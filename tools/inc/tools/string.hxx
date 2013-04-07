@@ -121,12 +121,12 @@ private:
     TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
 
     //detect and reject wrong way to attempt to create a UniString from a substring of
-    //a rtl::OString
-    TOOLS_DLLPRIVATE UniString(const rtl::OString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
+    //a OString
+    TOOLS_DLLPRIVATE UniString(const OString& rByteStr, xub_StrLen nPos, xub_StrLen nLen,
     sal_uInt32       nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS);
 
     //no longer implemented
-    TOOLS_DLLPRIVATE UniString( const rtl::OString& rByteStr,
+    TOOLS_DLLPRIVATE UniString( const OString& rByteStr,
                                    rtl_TextEncoding eTextEncoding,
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
@@ -139,7 +139,7 @@ public:
                         UniString( const ResId& rResId );
                         UniString( const UniString& rStr );
                         UniString( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen );
-                        UniString( const rtl::OUString& rStr );
+                        UniString( const OUString& rStr );
                         UniString(char c); // ...but allow "UniString('a')"
                         UniString( const sal_Char* pByteStr,
                                    rtl_TextEncoding eTextEncoding,
@@ -149,19 +149,19 @@ public:
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
                         ~UniString();
 
-    operator rtl::OUString () const
+    operator OUString () const
     {
-        return rtl::OUString( rtl_uStringBuffer_refReturn(
+        return OUString( rtl_uStringBuffer_refReturn(
                                 reinterpret_cast<rtl_uString*>(mpData)), SAL_NO_ACQUIRE );
     }
 
 #ifdef RTL_FAST_STRING
     template< typename T1, typename T2 >
     UniString( const rtl::OUStringConcat< T1, T2 >& concat )
-        : mpData(NULL) { Assign( rtl::OUString( concat )); }
+        : mpData(NULL) { Assign( OUString( concat )); }
     template< typename T1, typename T2 >
     UniString&          operator =( const rtl::OUStringConcat< T1, T2 >& concat )
-                            { return Assign( rtl::OUString( concat )); }
+                            { return Assign( OUString( concat )); }
     template< typename T1, typename T2 >
     UniString&          operator +=( const rtl::OUStringConcat< T1, T2 >& concat )
                             { return Append( UniString( concat ) ); }
@@ -172,7 +172,7 @@ public:
     sal_Int64           ToInt64() const;
 
     UniString&          Assign( const UniString& rStr );
-    UniString&          Assign( const rtl::OUString& rStr );
+    UniString&          Assign( const OUString& rStr );
     UniString&          Assign( const sal_Unicode* pCharStr );
     UniString&          Assign( sal_Unicode c );
     inline UniString & Assign(char c) // ...but allow "Assign('a')"
@@ -181,7 +181,7 @@ public:
     UniString&          AssignAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
     UniString&          operator =( const UniString& rStr )
                             { return Assign( rStr ); }
-    UniString&          operator =( const rtl::OUString& rStr )
+    UniString&          operator =( const OUString& rStr )
                             { return Assign( rStr ); }
     UniString&          operator =( const sal_Unicode* pCharStr )
                             { return Assign( pCharStr ); }
@@ -200,7 +200,7 @@ public:
     UniString&          AppendAscii( const sal_Char* pAsciiStr, xub_StrLen nLen );
     UniString&          operator +=( const UniString& rStr )
                             { return Append( rStr ); }
-    UniString&          operator +=( const rtl::OUString& rStr )
+    UniString&          operator +=( const OUString& rStr )
                             { return Append( UniString(rStr) ); }
     UniString&          operator +=( const sal_Unicode* pCharStr )
                             { return Append( pCharStr ); }
@@ -312,7 +312,7 @@ operator <<(
     std::basic_ostream<charT, traits> & stream, UniString const & string)
 {
     return stream <<
-        rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
+        OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr();
         // best effort; potentially loses data due to conversion failures
         // (stray surrogate halves) and embedded null characters
 }
@@ -334,24 +334,24 @@ struct ToStringHelper< UniString >
 
 // some compare operators, so that conversions from String to OUString don't
 // have to insert conversions all over the place
-inline bool operator==(UniString const& rLeft, ::rtl::OUString const& rRight)
+inline bool operator==(UniString const& rLeft, OUString const& rRight)
 {
-    return ::rtl::OUString(rLeft) == rRight;
+    return OUString(rLeft) == rRight;
 }
 
-inline bool operator==(::rtl::OUString const& rLeft, UniString const& rRight)
+inline bool operator==(OUString const& rLeft, UniString const& rRight)
 {
-    return rLeft == ::rtl::OUString(rRight);
+    return rLeft == OUString(rRight);
 }
 
-inline bool operator!=(UniString const& rLeft, ::rtl::OUString const& rRight)
+inline bool operator!=(UniString const& rLeft, OUString const& rRight)
 {
-    return ::rtl::OUString(rLeft) != rRight;
+    return OUString(rLeft) != rRight;
 }
 
-inline bool operator!=(::rtl::OUString const& rLeft, UniString const& rRight)
+inline bool operator!=(OUString const& rLeft, UniString const& rRight)
 {
-    return rLeft != ::rtl::OUString(rRight);
+    return rLeft != OUString(rRight);
 }
 
 #ifdef RTL_FAST_STRING

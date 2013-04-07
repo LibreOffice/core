@@ -41,7 +41,7 @@ public:
     // remove default entry
     XNamedRanges();
     // removes given entry
-    XNamedRanges(const rtl::OUString& rNameToRemove);
+    XNamedRanges(const OUString& rNameToRemove);
 
     virtual ~XNamedRanges();
 
@@ -57,7 +57,7 @@ protected:
     uno::Reference< sheet::XSpreadsheet > xSheet;
 
 private:
-    rtl::OUString maNameToRemove;
+    OUString maNameToRemove;
 };
 
 }

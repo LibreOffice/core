@@ -44,7 +44,7 @@ using namespace xmloff::token;
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -56,11 +56,11 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
 
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -94,7 +94,7 @@ ScXMLTableColContext::~ScXMLTableColContext()
 }
 
 SvXMLImportContext *ScXMLTableColContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -145,7 +145,7 @@ void ScXMLTableColContext::EndElement()
                         }
                     }
                 }
-                rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
+                OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
                 bool bValue(true);
                 if (!IsXMLToken(sVisibility, XML_VISIBLE))
                     bValue = false;
@@ -157,14 +157,14 @@ void ScXMLTableColContext::EndElement()
     // #i57915# ScXMLImport::SetStyleToRange can't handle empty style names.
     // The default for a column if there is no attribute is the style "Default" (programmatic API name).
     if ( sCellStyleName.isEmpty() )
-        sCellStyleName = rtl::OUString( "Default" );
+        sCellStyleName = OUString( "Default" );
 
     GetScImport().GetTables().AddColStyle(nColCount, sCellStyleName);
 }
 
 ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempHeader, const bool bTempGroup) :
@@ -186,11 +186,11 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            rtl::OUString aLocalName;
+            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+            OUString aLocalName;
             sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+            const OUString& sValue(xAttrList->getValueByIndex( i ));
 
             if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
             {
@@ -206,7 +206,7 @@ ScXMLTableColsContext::~ScXMLTableColsContext()
 }
 
 SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

@@ -67,8 +67,8 @@ private:
     ::com::sun::star::awt::Rectangle m_aObjRect;
     ::com::sun::star::frame::BorderWidths m_aBorderWidths;
 
-    ::rtl::OUString m_aContainerName;
-    ::rtl::OUString m_aDocumentNamePart;
+    OUString m_aContainerName;
+    OUString m_aDocumentNamePart;
 
     sal_Bool m_bReadOnly;
 
@@ -97,7 +97,7 @@ private:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
-                const ::rtl::OUString& aContModuleName );
+                const OUString& aContModuleName );
 
 public:
 
@@ -109,7 +109,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenusForInplace(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xContMenu,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
-        const ::rtl::OUString& aContModuleName,
+        const OUString& aContModuleName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xOwnMenu,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xOwnDisp )
             throw ( ::com::sun::star::uno::Exception );
@@ -129,12 +129,12 @@ public:
     void CloseDocument( sal_Bool bDeliverOwnership, sal_Bool bWaitForClose );
     void CloseFrame();
 
-    rtl::OUString GetTitle() const
+    OUString GetTitle() const
     {
-        return m_aContainerName + ::rtl::OUString( " - " ) + m_aDocumentNamePart;
+        return m_aContainerName + OUString( " - " ) + m_aDocumentNamePart;
     }
 
-    rtl::OUString GetContainerName() const { return m_aContainerName; }
+    OUString GetContainerName() const { return m_aContainerName; }
 
     void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aProps )
         { m_aOutplaceFrameProps = aProps; }
@@ -151,7 +151,7 @@ public:
     sal_Bool ShowUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP,
-        const ::rtl::OUString& aContModuleName );
+        const OUString& aContModuleName );
     sal_Bool HideUI(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
 

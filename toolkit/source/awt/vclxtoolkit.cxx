@@ -354,7 +354,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 
 
     ComponentInfo aSearch;
-    rtl::OString aServiceName(rtl::OUStringToOString(rServiceName, osl_getThreadTextEncoding()).toAsciiLowerCase());
+    OString aServiceName(OUStringToOString(rServiceName, osl_getThreadTextEncoding()).toAsciiLowerCase());
     if ( !aServiceName.isEmpty() )
         aSearch.pName = aServiceName.getStr();
     else
@@ -1059,7 +1059,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
          )
     {
 #ifndef DISABLE_DYNLOADING
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName(
+        OUString aLibName = ::vcl::unohelper::CreateLibraryName(
 #ifdef LIBO_MERGELIBS
                                                                        "merged",
 #else
@@ -1070,7 +1070,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
         {
-            ::rtl::OUString aFunctionName( "CreateWindow" );
+            OUString aFunctionName( "CreateWindow" );
             fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
         }
 #else
@@ -1205,7 +1205,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
                 // system child window could not be created
                 OSL_TRACE(
                     "VCLXToolkit::createSystemChild: caught %s\n",
-                    ::rtl::OUStringToOString(
+                    OUStringToOString(
                         rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
                 pChildWindow = NULL;
             }
@@ -1233,10 +1233,10 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessageBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent,
     const ::com::sun::star::awt::Rectangle& aPosSize,
-    const ::rtl::OUString& aType,
+    const OUString& aType,
     ::sal_Int32 aButtons,
-    const ::rtl::OUString& aTitle,
-    const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException)
+    const OUString& aTitle,
+    const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::awt::WindowDescriptor aDescriptor;
 
@@ -1327,7 +1327,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const ::rtl::OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException)
 {
     if( clipboardName.isEmpty() )
     {
@@ -1351,18 +1351,18 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 }
 
 // XServiceInfo
-::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString("stardiv.Toolkit.VCLXToolkit");
+    return OUString("stardiv.Toolkit.VCLXToolkit");
 }
 
-sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString* pArray = aSNL.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    ::com::sun::star::uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getConstArray();
+    const OUString* pArrayEnd = aSNL.getConstArray();
     for (; pArray != pArrayEnd; ++pArray )
         if( *pArray == rServiceName )
             break;
@@ -1370,10 +1370,10 @@ sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) thr
     return pArray != pArrayEnd;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) );
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >( &aServiceName, 1);
+    OUString aServiceName( OUString::createFromAscii( szServiceName2_Toolkit ) );
+    return ::com::sun::star::uno::Sequence< OUString >( &aServiceName, 1);
 }
 
 // css::awt::XExtendedToolkit:
@@ -1615,7 +1615,7 @@ void VCLXToolkit::callTopWindowListeners(
                 {
                     OSL_TRACE(
                         "VCLXToolkit::callTopWindowListeners: caught %s\n",
-                        ::rtl::OUStringToOString(
+                        OUStringToOString(
                             rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
                 }
             }
@@ -1663,7 +1663,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             {
                 OSL_TRACE(
                     "VCLXToolkit::callKeyHandlers: caught %s\n",
-                    ::rtl::OUStringToOString(
+                    OUStringToOString(
                        rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
@@ -1711,7 +1711,7 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
                 {
                     OSL_TRACE(
                         "VCLXToolkit::callFocusListeners: caught %s\n",
-                        ::rtl::OUStringToOString(
+                        OUStringToOString(
                             rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
                 }
             }

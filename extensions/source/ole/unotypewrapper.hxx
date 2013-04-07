@@ -31,7 +31,7 @@
    Returns true if the object could be created and initialized.
  */
 bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVariant);
-bool createUnoTypeWrapper(const rtl::OUString& sTypeName, VARIANT * pVar);
+bool createUnoTypeWrapper(const OUString& sTypeName, VARIANT * pVar);
 
 class UnoTypeWrapper:
       public CComObjectRootEx<CComMultiThreadModel>,

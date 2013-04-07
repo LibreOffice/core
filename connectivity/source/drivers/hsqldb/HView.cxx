@@ -60,8 +60,8 @@ namespace connectivity { namespace hsqldb
     //====================================================================
     //--------------------------------------------------------------------
     HView::HView( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
-        const ::rtl::OUString& _rSchemaName, const ::rtl::OUString& _rName )
-        :HView_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, ::rtl::OUString(), _rSchemaName, ::rtl::OUString() )
+        const OUString& _rSchemaName, const OUString& _rName )
+        :HView_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, OUString() )
         ,m_xConnection( _rxConnection )
     {
     }
@@ -76,7 +76,7 @@ namespace connectivity { namespace hsqldb
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( HView, HView_Base, HView_IBASE )
 
     //--------------------------------------------------------------------
-    void SAL_CALL HView::alterCommand( const ::rtl::OUString& _rNewCommand ) throw (SQLException, RuntimeException)
+    void SAL_CALL HView::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException)
     {
         // not really atomic ... as long as we do not have something like
         //   ALTER VIEW <name> TO <command>
@@ -90,25 +90,25 @@ namespace connectivity { namespace hsqldb
         // However, there's not much chance to prevent this kind of errors without
         // backend support.
 
-        ::rtl::OUString sQualifiedName( ::dbtools::composeTableName(
+        OUString sQualifiedName( ::dbtools::composeTableName(
             m_xMetaData, m_CatalogName, m_SchemaName, m_Name, true, ::dbtools::eInDataManipulation ) );
 
         ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
 
         // create a statement which can be used to re-create the original view, in case
         // dropping it succeeds, but creating it with a new statement fails
-        ::rtl::OUStringBuffer aRestoreCommand;
+        OUStringBuffer aRestoreCommand;
         aRestoreCommand.appendAscii( "CREATE VIEW " );
         aRestoreCommand.append     ( sQualifiedName );
         aRestoreCommand.appendAscii( " AS " );
         aRestoreCommand.append     ( impl_getCommand_throw( true ) );
-        ::rtl::OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
+        OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
 
         bool bDropSucceeded( false );
         try
         {
             // drop the existing view
-            ::rtl::OUStringBuffer aCommand;
+            OUStringBuffer aCommand;
             aCommand.appendAscii( "DROP VIEW " );
             aCommand.append     ( sQualifiedName );
             xStatement->execute( aCommand.makeStringAndClear() );
@@ -158,13 +158,13 @@ namespace connectivity { namespace hsqldb
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString HView::impl_getCommand_throw( bool _bAllowSQLException ) const
+    OUString HView::impl_getCommand_throw( bool _bAllowSQLException ) const
     {
-        ::rtl::OUString sCommand;
+        OUString sCommand;
 
         try
         {
-            ::rtl::OUStringBuffer aCommand;
+            OUStringBuffer aCommand;
             aCommand.appendAscii( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
             HTools::appendTableFilterCrit( aCommand, m_CatalogName, m_SchemaName, m_Name, false );
             ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );

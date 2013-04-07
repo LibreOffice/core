@@ -26,12 +26,12 @@ using namespace ucbhelper;
 
 //=========================================================================
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
-                                      const rtl::OUString & rURL,
-                                      const rtl::OUString & rServerName,
-                                      const rtl::OUString & rRealm,
-                                      const rtl::OUString & rUserName,
-                                      const rtl::OUString & rPassword,
-                                      const rtl::OUString & rAccount,
+                                      const OUString & rURL,
+                                      const OUString & rServerName,
+                                      const OUString & rRealm,
+                                      const OUString & rUserName,
+                                      const OUString & rPassword,
+                                      const OUString & rAccount,
                                       sal_Bool bAllowPersistentStoring,
                                       sal_Bool bAllowUseSystemCredentials )
 {
@@ -66,16 +66,16 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
 
 //=========================================================================
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
-                                      const rtl::OUString & rURL,
-                                      const rtl::OUString & rServerName,
+                                      const OUString & rURL,
+                                      const OUString & rServerName,
                                       EntityType eRealmType,
-                                      const rtl::OUString & rRealm,
+                                      const OUString & rRealm,
                                       EntityType eUserNameType,
-                                      const rtl::OUString & rUserName,
+                                      const OUString & rUserName,
                                       EntityType ePasswordType,
-                                      const rtl::OUString & rPassword,
+                                      const OUString & rPassword,
                                       EntityType eAccountType,
-                                      const rtl::OUString & rAccount )
+                                      const OUString & rAccount )
 {
     // Fill request...
     ucb::URLAuthenticationRequest aRequest;

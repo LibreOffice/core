@@ -70,41 +70,41 @@ public :
     com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > createWindowPeer( com::sun::star::uno::Reference< com::sun::star::awt::XWindowPeer > xParentPeer )
         throw ( com::sun::star::uno::Exception );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > insertControlModel( const rtl::OUString& rServiceName, const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > insertControlModel( const OUString& rServiceName, const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString >& rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
-    void setVisible( const rtl::OUString& rName, sal_Bool bVisible );
+    void setVisible( const OUString& rName, sal_Bool bVisible );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const rtl::OUString& rName,
-        com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
+    com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const OUString& rName,
+        com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< OUString >& rPropertyNames,
             const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XFixedText > insertFixedText( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XFixedText > insertFixedText( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > insertCheckBox( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XCheckBox > insertCheckBox( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertFormattedField( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertFormattedField( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XComboBox > insertComboBox( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XComboBox > insertComboBox( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XRadioButton > insertRadioButton( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XRadioButton > insertRadioButton( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XListBox > insertListBox( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XListBox > insertListBox( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertImage( const rtl::OUString& rName,
-        const com::sun::star::uno::Sequence< rtl::OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
+    com::sun::star::uno::Reference< com::sun::star::awt::XControl > insertImage( const OUString& rName,
+        const com::sun::star::uno::Sequence< OUString > rPropertyNames, const com::sun::star::uno::Sequence< com::sun::star::uno::Any > rPropertyValues );
 
-    void setControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
-    com::sun::star::uno::Any getControlProperty( const rtl::OUString& rControlName, const rtl::OUString& rPropertyName );
+    void setControlProperty( const OUString& rControlName, const OUString& rPropertyName, const com::sun::star::uno::Any& rPropertyValue );
+    com::sun::star::uno::Any getControlProperty( const OUString& rControlName, const OUString& rPropertyName );
 
-    void enableControl( const rtl::OUString& rControlName );
-    void disableControl( const rtl::OUString& rControlName );
+    void enableControl( const OUString& rControlName );
+    void disableControl( const OUString& rControlName );
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >        mxMSF;
     com::sun::star::uno::Reference< com::sun::star::frame::XController >            mxController;

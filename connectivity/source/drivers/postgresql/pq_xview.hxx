@@ -98,14 +98,14 @@ public: // XDataDescriptorFactory
     createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException);
 
 public: // XRename
-    virtual void SAL_CALL rename( const ::rtl::OUString& newName )
+    virtual void SAL_CALL rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException);
 
 public: // XNamed
-    virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 

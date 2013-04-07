@@ -85,7 +85,7 @@ class APChooseDriverPage : public APTabPage
     DECL_LINK( ClickBtnHdl, PushButton* );
     DECL_LINK( DelPressedHdl, ListBox* );
 
-    void updateDrivers( bool bRefresh = false, const rtl::OUString& rSelectDriver = rtl::OUString( "SGENPRT" ) );
+    void updateDrivers( bool bRefresh = false, const OUString& rSelectDriver = OUString( "SGENPRT" ) );
 public:
     APChooseDriverPage( AddPrinterDialog* pParent );
     ~APChooseDriverPage();

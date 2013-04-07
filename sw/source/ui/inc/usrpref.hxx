@@ -33,13 +33,13 @@ class SwContentViewConfig : public utl::ConfigItem
     SwMasterUsrPref&        rParent;
     sal_Bool                    bWeb;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwContentViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames );
     virtual void    Commit();
 
     void                    Load();
@@ -51,12 +51,12 @@ class SwLayoutViewConfig : public utl::ConfigItem
     SwMasterUsrPref&    rParent;
     sal_Bool                bWeb;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwLayoutViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void            Commit();
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
@@ -66,13 +66,13 @@ class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwGridConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -81,13 +81,13 @@ class SwCursorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     public:
         SwCursorConfig(SwMasterUsrPref& rParent);
         ~SwCursorConfig();
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -95,14 +95,14 @@ class SwCursorConfig : public utl::ConfigItem
 class SwWebColorConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
-    com::sun::star::uno::Sequence<rtl::OUString> aPropNames;
+    com::sun::star::uno::Sequence<OUString> aPropNames;
 
     public:
         SwWebColorConfig(SwMasterUsrPref& rParent);
         ~SwWebColorConfig();
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

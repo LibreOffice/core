@@ -55,19 +55,19 @@
 
 struct ScDPName
 {
-    ::rtl::OUString     maName;         /// Original name of the dimension.
-    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
+    OUString     maName;         /// Original name of the dimension.
+    OUString     maLayoutName;   /// Layout name (display name)
 
-    explicit ScDPName(const ::rtl::OUString& rName, const ::rtl::OUString& rLayoutName);
+    explicit ScDPName(const OUString& rName, const OUString& rLayoutName);
 };
 
 // ============================================================================
 
 struct ScDPLabelData
 {
-    rtl::OUString       maName;         /// Original name of the dimension.
-    rtl::OUString       maLayoutName;   /// Layout name (display name)
-    rtl::OUString       maSubtotalName;
+    OUString       maName;         /// Original name of the dimension.
+    OUString       maLayoutName;   /// Layout name (display name)
+    OUString       maSubtotalName;
     SCCOL               mnCol;          /// 0-based field index (not the source column index)
     long                mnOriginalDim;  /// original dimension index (>= 0 for duplicated dimension)
     sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
@@ -79,8 +79,8 @@ struct ScDPLabelData
 
     struct Member
     {
-        ::rtl::OUString maName;
-        ::rtl::OUString maLayoutName;
+        OUString maName;
+        OUString maLayoutName;
         bool mbVisible;
         bool mbShowDetails;
 
@@ -91,10 +91,10 @@ struct ScDPLabelData
          * when the layout name is present, use it, or else use the original
          * name.
          */
-        ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
+        OUString SC_DLLPUBLIC getDisplayName() const;
     };
     ::std::vector<Member>                               maMembers;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  maHiers;        /// Hierarchies.
+    ::com::sun::star::uno::Sequence< OUString >  maHiers;        /// Hierarchies.
     ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
@@ -105,7 +105,7 @@ struct ScDPLabelData
      * return the name that should be displayed in the dp dialogs i.e. when
      * the layout name is present, use it, or else use the original name.
      */
-    ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
+    OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
 typedef boost::ptr_vector<ScDPLabelData> ScDPLabelDataVector;

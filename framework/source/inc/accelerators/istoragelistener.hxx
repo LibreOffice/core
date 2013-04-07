@@ -40,7 +40,7 @@ class IStorageListener
 
         //--------------------------------------
         /** @short  TODO */
-        virtual void changesOccurred(const ::rtl::OUString& sPath) = 0;
+        virtual void changesOccurred(const OUString& sPath) = 0;
 
     protected:
         ~IStorageListener() {}

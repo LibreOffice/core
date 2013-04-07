@@ -79,9 +79,9 @@ public:
             value are not empty. False otherwise.
      */
     static bool         extractKeyValue(
-                            ::rtl::OUString& rKey,
-                            ::rtl::OUString& rValue,
-                            const ::rtl::OUString& rKeyValue );
+                            OUString& rKey,
+                            OUString& rValue,
+                            const OUString& rKeyValue );
 
 private:
                         VbaHelper();

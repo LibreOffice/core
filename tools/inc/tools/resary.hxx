@@ -32,10 +32,10 @@ class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
 private:
     struct ImplResStringItem
     {
-        rtl::OUString m_aStr;
+        OUString m_aStr;
         long        m_nValue;
 
-        ImplResStringItem( const rtl::OUString& rStr, long nValue = 0 ) :
+        ImplResStringItem( const OUString& rStr, long nValue = 0 ) :
         m_aStr( rStr ),
         m_nValue( nValue )
         {}
@@ -47,8 +47,8 @@ public:
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
 
-    const rtl::OUString GetString( sal_uInt32 nIndex ) const
-    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : rtl::OUString(); }
+    const OUString GetString( sal_uInt32 nIndex ) const
+    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : OUString(); }
     long                GetValue( sal_uInt32 nIndex ) const
     { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
     sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }

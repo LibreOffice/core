@@ -101,7 +101,7 @@ namespace frm
         virtual void            dispatchWithArgument( sal_Int16 _nFeatureId, const sal_Char* _pParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
         virtual bool            isEnabled( sal_Int16 _nFeatureId ) const;
         virtual bool            getBooleanState( sal_Int16 _nFeatureId ) const;
-        virtual ::rtl::OUString getStringState( sal_Int16 _nFeatureId ) const;
+        virtual OUString getStringState( sal_Int16 _nFeatureId ) const;
         virtual sal_Int32       getIntegerState( sal_Int16 _nFeatureId ) const;
 
         // own overridables
@@ -216,7 +216,7 @@ namespace frm
                 the id of the feature URL, or -1 if the URl is not known
                 (which is a valid usage)
         */
-        sal_Int16   getFeatureId( const ::rtl::OUString& _rCompleteURL );
+        sal_Int16   getFeatureId( const OUString& _rCompleteURL );
 
     private:
         OFormNavigationMapper( );                                           // never implemented

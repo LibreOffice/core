@@ -30,7 +30,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/component-registry/2010"
 #define NS_PREFIX "comp"
@@ -43,7 +42,7 @@ namespace component {
 
 ComponentBackendDb::ComponentBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):BackendDb(xContext, url)
+    OUString const & url):BackendDb(xContext, url)
 {
 
 }
@@ -68,7 +67,7 @@ OUString ComponentBackendDb::getKeyElementName()
     return OUString(KEY_ELEMENT_NAME);
 }
 
-void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void ComponentBackendDb::addEntry(OUString const & url, Data const & data)
 {
     try{
         if (!activateEntry(url))
@@ -104,7 +103,7 @@ void ComponentBackendDb::addEntry(::rtl::OUString const & url, Data const & data
     }
 }
 
-ComponentBackendDb::Data ComponentBackendDb::getEntry(::rtl::OUString const & url)
+ComponentBackendDb::Data ComponentBackendDb::getEntry(OUString const & url)
 {
     try
     {

@@ -53,8 +53,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -226,7 +224,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
 
 //////////////////////////////////////////////////////////////////////////////
 
-sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< beans::XPropertySet >& xPropSet, const rtl::OUString& rClass )
+sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< beans::XPropertySet >& xPropSet, const OUString& rClass )
 {
     sal_Bool bIsEmpty = sal_False;
 
@@ -1143,12 +1141,12 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 xPropSet->getPropertyValue( OUString("GraphicURL")) >>= sImageURL;
 
                 OUString aResolveURL( sImageURL );
-                const rtl::OUString sPackageURL( "vnd.sun.star.Package:" );
+                const OUString sPackageURL( "vnd.sun.star.Package:" );
 
                     // sj: trying to preserve the filename
                 if ( aStreamURL.match( sPackageURL, 0 ) )
                 {
-                    rtl::OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
+                    OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
                     sal_Int32 nLastIndex = sRequestedName.lastIndexOf( '/' ) + 1;
                     if ( ( nLastIndex > 0 ) && ( nLastIndex < sRequestedName.getLength() ) )
                         sRequestedName = sRequestedName.copy( nLastIndex, sRequestedName.getLength() - nLastIndex );
@@ -1717,9 +1715,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     // this is an alien object ( currently MSOLE is the only supported type of such objects )
                     // in case it is not an OASIS format the object should be asked to store replacement image if possible
 
-                    ::rtl::OUString sURLRequest( sURL );
+                    OUString sURLRequest( sURL );
                     if ( ( mrExport.getExportFlags() & EXPORT_OASIS ) == 0 )
-                        sURLRequest += ::rtl::OUString(  "?oasis=false"  );
+                        sURLRequest += OUString(  "?oasis=false"  );
                     mrExport.AddEmbeddedObjectAsBase64( sURLRequest );
                 }
             }
@@ -1987,7 +1985,7 @@ void XMLShapeExport::ImpExportPluginShape(
 static void lcl_CopyStream(
         uno::Reference<io::XInputStream> const& xInStream,
         uno::Reference<embed::XStorage> const& xTarget,
-        ::rtl::OUString const& rPath)
+        OUString const& rPath)
 {
     ::comphelper::LifecycleProxy proxy;
     uno::Reference<io::XStream> const xStream(
@@ -1999,19 +1997,19 @@ static void lcl_CopyStream(
     {
         SAL_WARN("xmloff", "no output stream");
         throw uno::Exception(
-            ::rtl::OUString("no output stream"),0);
+            OUString("no output stream"),0);
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
-            ::rtl::OUString("MediaType"),
-            uno::makeAny(::rtl::OUString(
+            OUString("MediaType"),
+            uno::makeAny(OUString(
             //FIXME how to detect real media type?
             //but currently xmloff has this one hardcoded anyway...
                     "application/vnd.sun.star.media")));
         xStreamProps->setPropertyValue( // turn off compression
-            ::rtl::OUString("Compressed"),
+            OUString("Compressed"),
             uno::makeAny(sal_False));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
@@ -2021,10 +2019,10 @@ static void lcl_CopyStream(
 
 static char const s_PkgScheme[] = "vnd.sun.star.Package:";
 
-static ::rtl::OUString
+static OUString
 lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    ::rtl::OUString const& rURL)
+    OUString const& rURL)
 {
     if (0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 rURL.getStr(), rURL.getLength(),
@@ -2036,16 +2034,16 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
                     rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
             uno::Reference<io::XInputStream> xInStream;
             xPropSet->getPropertyValue(
-                ::rtl::OUString("PrivateStream"))
+                OUString("PrivateStream"))
                     >>= xInStream;
 
             if (!xInStream.is())
             {
                 SAL_WARN("xmloff", "no input stream");
-                return ::rtl::OUString();
+                return OUString();
             }
 
-            ::rtl::OUString const urlPath(
+            OUString const urlPath(
                     rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
 
             lcl_CopyStream(xInStream, xTarget, rURL);
@@ -2057,7 +2055,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
             SAL_INFO("xmloff", "exception while storing embedded media: '"
                         << e.Message << "'");
         }
-        return ::rtl::OUString();
+        return OUString();
     }
     else
     {

@@ -91,8 +91,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -1031,7 +1029,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
 
-            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maLatinFont.mnFamily ), maApiData.maLatinFont.maName, rtl::OUString(),
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maLatinFont.mnFamily ), maApiData.maLatinFont.maName, OUString(),
                 PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
             ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO : ATTR_FONT, bSkipPoolDefs );
         }
@@ -1041,7 +1039,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             // taken from binary importer
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
-            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maAsianFont.mnFamily ), maApiData.maAsianFont.maName, rtl::OUString(),
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maAsianFont.mnFamily ), maApiData.maAsianFont.maName, OUString(),
                 PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
             ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO_CJK : ATTR_CJK_FONT, bSkipPoolDefs );
         }
@@ -1051,7 +1049,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             // taken from binary importer
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
-            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maCmplxFont.mnFamily ), maApiData.maCmplxFont.maName, rtl::OUString(),
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maCmplxFont.mnFamily ), maApiData.maCmplxFont.maName, OUString(),
                 PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
             ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO_CTL : ATTR_CTL_FONT, bSkipPoolDefs );
         }

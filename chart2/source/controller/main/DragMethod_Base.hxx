@@ -33,12 +33,12 @@ namespace chart
 class DragMethod_Base : public SdrDragMethod
 {
 public:
-    DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const rtl::OUString& rObjectCID
+    DragMethod_Base( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::MOVE );
     virtual ~DragMethod_Base();
 
-    virtual rtl::OUString getUndoDescription() const;
+    virtual OUString getUndoDescription() const;
 
     virtual void TakeSdrDragComment(String& rStr) const;
     virtual Pointer GetSdrDragPointer() const;
@@ -48,7 +48,7 @@ protected:
 
 protected:
     DrawViewWrapper&    m_rDrawViewWrapper;
-    rtl::OUString       m_aObjectCID;
+    OUString       m_aObjectCID;
     ActionDescriptionProvider::ActionType m_eActionType;
 
 private:

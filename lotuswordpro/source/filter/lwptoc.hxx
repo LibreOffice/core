@@ -133,7 +133,7 @@ private:
 
     std::vector<std::pair<OUString,OUString> > m_TOCList;
 
-    rtl::OUString m_TabStyleName;
+    OUString m_TabStyleName;
 
     XFContentContainer* m_pCont;
 };

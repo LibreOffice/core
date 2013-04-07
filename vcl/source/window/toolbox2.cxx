@@ -42,7 +42,6 @@
 
 using namespace vcl;
 
-using ::rtl::OUString;
 
 // =======================================================================
 
@@ -353,9 +352,9 @@ sal_Bool ImplToolItem::IsClipped() const
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
-const rtl::OUString ToolBox::ImplConvertMenuString( const XubString& rStr )
+const OUString ToolBox::ImplConvertMenuString( const XubString& rStr )
 {
-    rtl::OUString aCvtStr( rStr );
+    OUString aCvtStr( rStr );
     if ( mbMenuStrings )
         aCvtStr = comphelper::string::stripEnd(aCvtStr, '.');
     aCvtStr = MnemonicGenerator::EraseAllMnemonicChars( aCvtStr );
@@ -1693,7 +1692,7 @@ const XubString& ToolBox::GetHelpText( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-void ToolBox::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
+void ToolBox::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1703,9 +1702,9 @@ void ToolBox::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
 
 // -----------------------------------------------------------------------
 
-rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
+OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
 {
-    rtl::OString aRet;
+    OString aRet;
 
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
@@ -1714,7 +1713,7 @@ rtl::OString ToolBox::GetHelpId( sal_uInt16 nItemId ) const
         if ( !pItem->maHelpId.isEmpty() )
             aRet = pItem->maHelpId;
         else
-            aRet = ::rtl::OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
+            aRet = OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
     }
 
     return aRet;

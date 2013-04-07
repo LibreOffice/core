@@ -35,8 +35,8 @@ private:
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     css::uno::Reference< css::drawing::XShapes > getShapes() throw (css::uno::RuntimeException) ;
 public:
     ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape, const css::uno::Reference< css::frame::XModel >& xModel );
@@ -47,8 +47,8 @@ public:
     virtual void SAL_CALL IncrementRotation( double Increment ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL IncrementLeft( double Increment ) throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL IncrementTop( double Increment ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);

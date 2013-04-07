@@ -100,7 +100,6 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-using ::rtl::OUString;
 
 #include <drawinglayer/primitive2d/structuretagprimitive2d.hxx>
 
@@ -188,7 +187,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
     // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
     {
-        { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
+        { MAP_CHAR_LEN("BuildId"),                      WID_MODEL_BUILDID,  &::getCppuType(static_cast< const OUString * >(0)), 0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_CharLocale),           WID_MODEL_LANGUAGE, &::getCppuType((const lang::Locale*)0),     0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_TabStop),              WID_MODEL_TABSTOP,  &::getCppuType((const sal_Int32*)0),        0,  0},
         { MAP_CHAR_LEN(sUNO_Prop_VisibleArea),          WID_MODEL_VISAREA,  &::getCppuType((const awt::Rectangle*)0),   0,  0},
@@ -198,7 +197,7 @@ const SvxItemPropertySet* ImplGetDrawModelPropertySet()
         { MAP_CHAR_LEN(sUNO_Prop_ApplyFrmDsgnMode), WID_MODEL_DSGNMODE,     &::getBooleanCppuType(),                    0,  0},
         { MAP_CHAR_LEN("BasicLibraries"),               WID_MODEL_BASICLIBS,&::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN("DialogLibraries"),              WID_MODEL_DIALOGLIBS,   &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const rtl::OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
+        { MAP_CHAR_LEN(sUNO_Prop_RuntimeUID),           WID_MODEL_RUNTIMEUID,   &::getCppuType(static_cast< const OUString * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN(sUNO_Prop_HasValidSignatures),   WID_MODEL_HASVALIDSIGNATURES, &::getCppuType(static_cast< const sal_Bool * >(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN("Fonts"),                        WID_MODEL_FONTS,   SEQTYPE(::getCppuType((uno::Sequence<uno::Any>*)0)), beans::PropertyAttribute::READONLY, 0},
         { 0,0,0,0,0,0 }
@@ -1544,7 +1543,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
     sal_Int32 nPage = -1;
 
     OSL_TRACE("GotoBookmark %s",
-        ::rtl::OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
 
     String aBookmark( rBookmark );
 
@@ -1605,9 +1604,9 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
 
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
-    const rtl::OUString sGroup   ( "com.sun.star.drawing.GroupShape");
-    const rtl::OUString sOnClick ( "OnClick" );
-    const rtl::OUString sBookmark( "Bookmark" );
+    const OUString sGroup   ( "com.sun.star.drawing.GroupShape");
+    const OUString sOnClick ( "OnClick" );
+    const OUString sBookmark( "Bookmark" );
 
     if ( xShape->getShapeType().equals( sGroup ) )
     {
@@ -1683,7 +1682,7 @@ void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, Sd
                     case presentation::ClickAction_BOOKMARK :
                     case presentation::ClickAction_DOCUMENT :
                     {
-                        rtl::OUString aBookmark;
+                        OUString aBookmark;
                         xShapePropSet->getPropertyValue( sBookmark ) >>= aBookmark;
                         if( !aBookmark.isEmpty() )
                         {
@@ -1989,8 +1988,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                         // exporting transition effects to pdf
                                         if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
                                         {
-                                            const rtl::OUString sEffect( "Effect" );
-                                            const rtl::OUString sSpeed ( "Speed" );
+                                            const OUString sEffect( "Effect" );
+                                            const OUString sSpeed ( "Speed" );
                                             sal_Int32 nTime = 800;
                                             presentation::AnimationSpeed aAs;
                                             if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )
@@ -3036,7 +3035,7 @@ rtl::Reference< SdXImpressDocument > SdXImpressDocument::GetModel( SdDrawDocumen
     return xRet;
 }
 
-void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName )
+void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName )
 {
     rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
 
@@ -3048,7 +3047,7 @@ void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEvent
     }
 }
 
-void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
+void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const uno::Reference< uno::XInterface >& xSource )
 {
     rtl::Reference< SdXImpressDocument > xModel( SdXImpressDocument::GetModel( pDocument ) );
 

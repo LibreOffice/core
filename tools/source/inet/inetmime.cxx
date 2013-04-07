@@ -100,25 +100,25 @@ namespace unnamed_tools_inetmime {
 struct Parameter
 {
     Parameter * m_pNext;
-    rtl::OString m_aAttribute;
-    rtl::OString m_aCharset;
-    rtl::OString m_aLanguage;
-    rtl::OString m_aValue;
+    OString m_aAttribute;
+    OString m_aCharset;
+    OString m_aLanguage;
+    OString m_aValue;
     sal_uInt32 m_nSection;
     bool m_bExtended;
 
-    inline Parameter(Parameter * pTheNext, const rtl::OString& rTheAttribute,
-                     const rtl::OString& rTheCharset,
-                     const rtl::OString& rTheLanguage,
-                     const rtl::OString& rTheValue, sal_uInt32 nTheSection,
+    inline Parameter(Parameter * pTheNext, const OString& rTheAttribute,
+                     const OString& rTheCharset,
+                     const OString& rTheLanguage,
+                     const OString& rTheValue, sal_uInt32 nTheSection,
                      bool bTheExtended);
 };
 
 inline Parameter::Parameter(Parameter * pTheNext,
-                            const rtl::OString& rTheAttribute,
-                            const rtl::OString& rTheCharset,
-                            const rtl::OString& rTheLanguage,
-                            const rtl::OString& rTheValue,
+                            const OString& rTheAttribute,
+                            const OString& rTheCharset,
+                            const OString& rTheLanguage,
+                            const OString& rTheValue,
                             sal_uInt32 nTheSection, bool bTheExtended):
     m_pNext(pTheNext),
     m_aAttribute(rTheAttribute),
@@ -137,7 +137,7 @@ struct ParameterList
 
     inline ~ParameterList();
 
-    Parameter ** find(const rtl::OString& rAttribute, sal_uInt32 nSection,
+    Parameter ** find(const OString& rAttribute, sal_uInt32 nSection,
                       bool & rPresent);
 };
 
@@ -222,7 +222,7 @@ void INetMIMECharsetList_Impl::reset()
 
 //  ParameterList
 
-Parameter ** ParameterList::find(const rtl::OString& rAttribute,
+Parameter ** ParameterList::find(const OString& rAttribute,
                                  sal_uInt32 nSection, bool & rPresent)
 {
     Parameter ** p = &m_pList;
@@ -304,7 +304,7 @@ bool parseParameters(ParameterList const & rInput,
                     bBadEncoding = true;
                     break;
                 }
-                aValue += rtl::OUString(pUnicode, static_cast<sal_Int32>(nSize));
+                aValue += OUString(pUnicode, static_cast<sal_Int32>(nSize));
                 delete[] pUnicode;
                 pNext = pNext->m_pNext;
             }
@@ -759,7 +759,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        rtl::OString aAttribute = rtl::OString(
+        OString aAttribute = OString(
             pAttributeBegin, p - pAttributeBegin,
             RTL_TEXTENCODING_ASCII_US);
         if (bDowncaseAttribute)
@@ -793,9 +793,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
 
         p = skipLinearWhiteSpaceComment(p + 1, pEnd);
 
-        rtl::OString aCharset;
-        rtl::OString aLanguage;
-        rtl::OString aValue;
+        OString aCharset;
+        OString aLanguage;
+        OString aValue;
         if (bExtended)
         {
             if (nSection == 0)
@@ -811,7 +811,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aCharset = rtl::OString(
+                    aCharset = OString(
                         pCharsetBegin,
                         p - pCharsetBegin,
                         RTL_TEXTENCODING_ASCII_US);
@@ -846,7 +846,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aLanguage = rtl::OString(
+                    aLanguage = OString(
                         pLanguageBegin,
                         p - pLanguageBegin,
                         RTL_TEXTENCODING_ASCII_US);
@@ -942,7 +942,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
             if (p == pTokenBegin)
                 break;
             if (pParameters)
-                aValue = rtl::OString(
+                aValue = OString(
                     pTokenBegin, p - pTokenBegin,
                     RTL_TEXTENCODING_UTF8);
         }
@@ -1579,7 +1579,7 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
 // static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
-                                    const rtl::OUString& rBody,
+                                    const OUString& rBody,
                                     rtl_TextEncoding ePreferredEncoding,
                                     bool bInitialSpace)
 {
@@ -2387,8 +2387,8 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
 }
 
 // static
-rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
-                                          const rtl::OString& rBody)
+OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
+                                          const OString& rBody)
 {
     // Due to a bug in INetCoreRFC822MessageStream::ConvertTo7Bit(), old
     // versions of StarOffice send mails with header fields where encoded
@@ -2423,7 +2423,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
     for (const sal_Char * p = pBegin; p != pEnd;)
     {
-        rtl::OUString sEncodedText;
+        OUString sEncodedText;
         if (p != pEnd && *p == '=' /* && bStartEncodedWord */)
         {
             const sal_Char * q = p + 1;
@@ -2517,7 +2517,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '?';
 
-            rtl::OStringBuffer sText;
+            OStringBuffer sText;
             if (bEncodedWord)
             {
                 if (bEncodingB)
@@ -2671,7 +2671,7 @@ rtl::OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                         static_cast< xub_StrLen >(nUnicodeSize));
                 else if (nCommentLevel == 0)
                 {
-                    sEncodedText = rtl::OUString(pUnicodeBuffer, nUnicodeSize);
+                    sEncodedText = OUString(pUnicodeBuffer, nUnicodeSize);
                     if (!bQuotedEncodedText)
                     {
                         const sal_Unicode * pTextPtr = pUnicodeBuffer;
@@ -3732,7 +3732,7 @@ void INetContentTypeParameterList::Clear()
 }
 
 const INetContentTypeParameter *
-INetContentTypeParameterList::find(const rtl::OString& rAttribute) const
+INetContentTypeParameterList::find(const OString& rAttribute) const
 {
     boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)

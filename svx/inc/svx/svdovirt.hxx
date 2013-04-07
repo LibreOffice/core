@@ -143,7 +143,7 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
-    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
     // OD 30.06.2003 #108784# - virtual <GetOffset()> returns Point(0,0)
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)

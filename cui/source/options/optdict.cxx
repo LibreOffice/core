@@ -54,9 +54,9 @@ static long nStaticTabs[]=
 
 // static function -------------------------------------------------------
 
-static String getNormDicEntry_Impl(const rtl::OUString &rText)
+static String getNormDicEntry_Impl(const OUString &rText)
 {
-    rtl::OUString aTmp(comphelper::string::stripEnd(rText, '.'));
+    OUString aTmp(comphelper::string::stripEnd(rText, '.'));
     return comphelper::string::remove(aTmp, '=');
 }
 
@@ -606,7 +606,7 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelHdl, PushButton*, pBtn)
                 //! ...IsVisible should reflect whether the dictionary is a negativ
                 //! or not (hopefully...)
                 sal_Bool bIsNegEntry = aReplaceFT.IsVisible();
-                ::rtl::OUString aRplcText;
+                OUString aRplcText;
                 if(bIsNegEntry)
                     aRplcText = aReplaceStr;
 

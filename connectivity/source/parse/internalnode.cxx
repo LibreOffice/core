@@ -35,7 +35,7 @@ OSQLInternalNode::OSQLInternalNode(const sal_Char* pNewValue,
 }
 
 //-----------------------------------------------------------------------------
-OSQLInternalNode::OSQLInternalNode(const ::rtl::OString &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const OString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)
@@ -45,7 +45,7 @@ OSQLInternalNode::OSQLInternalNode(const ::rtl::OString &_NewValue,
 }
 
 //-----------------------------------------------------------------------------
-OSQLInternalNode::OSQLInternalNode(const ::rtl::OUString &_NewValue,
+OSQLInternalNode::OSQLInternalNode(const OUString &_NewValue,
                                  SQLNodeType eNodeType,
                                  sal_uInt32 nNodeID)
                 :OSQLParseNode(_NewValue,eNodeType,nNodeID)

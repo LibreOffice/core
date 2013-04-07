@@ -58,7 +58,7 @@ static ::osl::Mutex m_aMetaMutex;
 
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -108,7 +108,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-        Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
+        Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = xMozillaBootstrap->shutdownProfile() > 0;
@@ -200,7 +200,7 @@ static nsresult insertPABDescription()
 
 // -------------------------------------------------------------------------
 // Case where we get a parent uri, and need to list its children.
-static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **aSubs)
+static nsresult getSubsFromParent(const OString& aParent, nsIEnumerator **aSubs)
 {
 
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
@@ -218,7 +218,7 @@ static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **a
 
     nsCOMPtr<nsIRDFDataSource> rdfDirectory ;
 
-    rtl::OString dir("rdf:addressdirectory");
+    OString dir("rdf:addressdirectory");
     retCode = rdfService->GetDataSource(dir.getStr(),getter_AddRefs(rdfDirectory)) ;
 
 
@@ -267,7 +267,7 @@ static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array)
 }
 
 // Case where we get a factory uri and need to have it build the directories.
-static nsresult getSubsFromFactory(const rtl::OString& aFactory, nsIEnumerator **aSubs)
+static nsresult getSubsFromFactory(const OString& aFactory, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
     *aSubs = nsnull ;
@@ -299,7 +299,7 @@ static nsresult getSubsFromFactory(const rtl::OString& aFactory, nsIEnumerator *
 }
 
 // Case where the uri itself is the directory we're looking for.
-static nsresult getSubsFromURI(const rtl::OString& aUri, nsIEnumerator **aSubs)
+static nsresult getSubsFromURI(const OString& aUri, nsIEnumerator **aSubs)
 {
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
     *aSubs = nsnull ;
@@ -370,8 +370,8 @@ namespace
 }
 
 nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
-                        ::std::vector< ::rtl::OUString >*   _rStrings,
-                        ::std::vector< ::rtl::OUString >*   _rTypes,
+                        ::std::vector< OUString >*   _rStrings,
+                        ::std::vector< OUString >*   _rTypes,
                         sal_Int32* pErrorId )
 {
     if (!sAbURI || !nmap || !_rStrings || !_rTypes || !pErrorId)
@@ -408,7 +408,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     PRUnichar              *name = nsnull;
     PRBool                  bIsMailList = PR_FALSE;
 
-    ::rtl::OUString aTableName;
+    OUString aTableName;
     nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &rv)) ;
     NS_ENSURE_SUCCESS(rv, rv) ;
 
@@ -440,7 +440,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
 
         // Insert table into map
         if ( aTableName.isEmpty() )
-            aTableName = rtl::OUString("AddressBook");
+            aTableName = OUString("AddressBook");
 
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
@@ -454,12 +454,12 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
             //map mailing lists as views
             _rStrings->push_back( aTableName ); // Table name
             if (!bIsMailList) {
-                ::rtl::OUString aTableType(::rtl::OUString("TABLE"));
+                OUString aTableType(OUString("TABLE"));
                 _rTypes->push_back( aTableType ); // Table type
             }
             else
             {
-                ::rtl::OUString aTableType(::rtl::OUString("VIEW"));
+                OUString aTableType(OUString("VIEW"));
                 _rTypes->push_back( aTableType ); // Table type
             }
         }
@@ -469,12 +469,12 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
     return( NS_OK );
 }
 sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                        _pCon,
-                                                   ::std::vector< ::rtl::OUString >&   _rStrings,
-                                                   ::std::vector< ::rtl::OUString >&   _rTypes)
+                                                   ::std::vector< OUString >&   _rStrings,
+                                                   ::std::vector< OUString >&   _rTypes)
 {
     sal_Bool                                    bGivenURI;
-    ::rtl::OUString                             sAbURI;
-    ::rtl::OString                                      sAbURIString;
+    OUString                             sAbURI;
+    OString                                      sAbURIString;
 
     OSL_TRACE( "IN MDatabaseMetaDataHelper::getTableStrings( 0x%08X, %s)", _pCon, _pCon->getForceLoadTables()?"True":"False" );
 
@@ -495,7 +495,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     if ( sAbURI.isEmpty() )
         bGivenURI = sal_False;
     else {
-        sAbURIString = ::rtl::OUStringToOString( sAbURI,
+        sAbURIString = OUStringToOString( sAbURI,
                                                  RTL_TEXTENCODING_ASCII_US);
         bGivenURI = sal_True;
     }
@@ -550,7 +550,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         Reference<XMozillaBootstrap> xMozillaBootstrap;
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
-         Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
+         Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
         m_bProfileExists = sal_False;
@@ -609,8 +609,8 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
 }
 
 sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
-                                             const ::rtl::OUString& tableNamePattern,
-                                             const Sequence< ::rtl::OUString >& types,
+                                             const OUString& tableNamePattern,
+                                             const Sequence< OUString >& types,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
 
@@ -622,9 +622,9 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
 
-    ::std::vector< ::rtl::OUString > tables;
-    ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString("%");
+    ::std::vector< OUString > tables;
+    ::std::vector< OUString > tabletypes;
+    OUString matchAny = OUString("%");
 
     if ( !getTableStrings( _pCon, tables,tabletypes ) )
         return sal_False;
@@ -632,8 +632,8 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     for ( size_t i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
-        ::rtl::OUString aTableName  = tables[i];
-        ::rtl::OUString aTableType      = tabletypes[i];
+        OUString aTableName  = tables[i];
+        OUString aTableType      = tabletypes[i];
         OSL_TRACE("TableName = >%s<", OUtoCStr( aTableName ) );
 
 
@@ -643,7 +643,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
                        0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
                        0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength())) {
             if ( aTableName.isEmpty() ) {
-                aTableName = rtl::OUString("AddressBook");
+                aTableName = OUString("AddressBook");
             }
 
             OSL_TRACE( "TableName = %s ; TableType = %s", OUtoCStr(aTableName), OUtoCStr(aTableType) );
@@ -668,9 +668,9 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     const sal_Char*   MOZ_SCHEMA = "moz-abldapdirectory://";
     const sal_Char*   LDAP_SCHEMA = "ldap://";
 
-    rtl::OString   sAbURI;
-    rtl::OUString   sAbBindDN;
-    rtl::OUString   sAbPassword;
+    OString   sAbURI;
+    OUString   sAbBindDN;
+    OUString   sAbPassword;
     sal_Bool      useSSL    = _pCon->getUseSSL();
 
     nsresult       rv(0);
@@ -682,13 +682,13 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
 
     sal_Int32 pos = sAbURI.indexOf( MOZ_SCHEMA );
     if ( pos != -1 ) {
-        sAbURI = sAbURI.replaceAt (pos, rtl_str_getLength( MOZ_SCHEMA ), ::rtl::OString(LDAP_SCHEMA) );
+        sAbURI = sAbURI.replaceAt (pos, rtl_str_getLength( MOZ_SCHEMA ), OString(LDAP_SCHEMA) );
     }
 
     pos = sAbURI.indexOf( QUERY_CHAR );
     if ( pos != -1 ) {
         sal_Int32 len =  sAbURI.getLength();
-        sAbURI = sAbURI.replaceAt( pos, len - pos, ::rtl::OString("") );
+        sAbURI = sAbURI.replaceAt( pos, len - pos, OString("") );
     }
     const sal_Unicode* bindDN=nsnull;
     if (!sAbBindDN.isEmpty())
@@ -705,7 +705,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     args.arg4 = (void*)&useSSL;
 
     MNSMozabProxy xMProxy;
-    rv = xMProxy.StartProxy( &args, m_ProductType, ::rtl::OUString() );
+    rv = xMProxy.StartProxy( &args, m_ProductType, OUString() );
     if ( NS_SUCCEEDED( rv ) )   //Init LDAP,pass OUString() to StarProxy to ignore profile switch
     {
         args.funcIndex = ProxiedFunc::FUNC_TESTLDAP_IS_LDAP_CONNECTED;
@@ -713,7 +713,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
         sal_Int32               times=0;
         while ( times++ < 30 )
         {
-            rv = xMProxy.StartProxy( &args, m_ProductType, ::rtl::OUString() );
+            rv = xMProxy.StartProxy( &args, m_ProductType, OUString() );
             if ( NS_SUCCEEDED( rv ) )
                 // connected successfully
                 break;
@@ -730,7 +730,7 @@ MDatabaseMetaDataHelper::testLDAPConnection( OConnection* _pCon )
     return NS_SUCCEEDED( rv ) ? sal_True : sal_False;
 }
 
-sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl::OUString & aTableName)
+sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const OUString & aTableName)
 {
     sal_Bool                                    bIsMozillaAB;
 
@@ -759,19 +759,19 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
     }
     else if (NS_FAILED(rv))
     {
-        m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, ::rtl::OUString::valueOf( sal_Int32(rv), 16 ) );
+        m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, OUString::valueOf( sal_Int32(rv), 16 ) );
     }
     OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()" );
     return( NS_SUCCEEDED(rv) ? sal_True : sal_False );
 }
-nsresult NewAddressBook(const ::rtl::OUString * aName)
+nsresult NewAddressBook(const OUString * aName)
 {
     if (isProfileLocked(NULL))
         return NS_ERROR_FILE_IS_LOCKED;
     nsresult rv;
     nsCOMPtr<nsIAbDirectoryProperties> aProperties = do_CreateInstance(NS_ABDIRECTORYPROPERTIES_CONTRACTID, &rv);
     NS_ENSURE_ARG_POINTER(aProperties);
-    const ::rtl::OUString& uName = *aName;
+    const OUString& uName = *aName;
     nsString nsName;
     MTypeConverter::ouStringToNsString(uName,nsName);
     aProperties->SetDescription(nsName);

@@ -55,14 +55,14 @@ namespace com { namespace sun { namespace star {
 class MultiPropertySetHelper
 {
     /// names of all properties
-    ::rtl::OUString* pPropertyNames;
+    OUString* pPropertyNames;
 
     /// length of pPropertyNames array
     sal_Int16 nLength;
 
     /// the sequence of property names that the current (multi)
     /// property set implementation supports
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertySequence;
+    ::com::sun::star::uno::Sequence< OUString > aPropertySequence;
 
     /// an array of indices that maps from pPropertyNames indices to
     /// aPropertySequence indices

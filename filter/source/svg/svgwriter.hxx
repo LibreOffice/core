@@ -112,7 +112,7 @@ public:
     virtual                 ~SVGAttributeWriter();
 
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
-    void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, ::rtl::OUString& rGradientId );
+    void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
                                           const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
 
@@ -121,7 +121,7 @@ public:
     void                    endFontSettings();
     void                    setFontFamily();
 
-    static void             ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr );
+    static void             ImplGetColorStr( const Color& rColor, OUString& rColorStr );
 };
 
 struct SVGShapeDescriptor
@@ -132,7 +132,7 @@ struct SVGShapeDescriptor
     sal_Int32                   mnStrokeWidth;
     SvtGraphicStroke::DashArray maDashArray;
     ::std::auto_ptr< Gradient > mapShapeGradient;
-    ::rtl::OUString             maId;
+    OUString             maId;
 
     basegfx::B2DLineJoin                maLineJoin;
     com::sun::star::drawing::LineCap    maLineCap;
@@ -172,7 +172,7 @@ struct BulletListItemInfo
 
 struct OUStringHasher
 {
-    size_t operator()( const ::rtl::OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
+    size_t operator()( const OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
 };
 
 
@@ -182,7 +182,7 @@ struct OUStringHasher
 class SVGTextWriter
 {
   public:
-    typedef ::boost::unordered_map< ::rtl::OUString, BulletListItemInfo, OUStringHasher >         BulletListItemInfoMap;
+    typedef ::boost::unordered_map< OUString, BulletListItemInfo, OUStringHasher >         BulletListItemInfoMap;
 
   private:
     SVGExport&                                  mrExport;
@@ -190,7 +190,7 @@ class SVGTextWriter
     VirtualDevice*                              mpVDev;
     sal_Bool                                    mbIsTextShapeStarted;
     Reference<XText>                            mrTextShape;
-    ::rtl::OUString                             msShapeId;
+    OUString                             msShapeId;
     Reference<XEnumeration>                     mrParagraphEnumeration;
     Reference<XTextContent>                     mrCurrentTextParagraph;
     Reference<XEnumeration>                     mrTextPortionEnumeration;
@@ -211,8 +211,8 @@ class SVGTextWriter
     sal_Bool                                    mbIsListLevelStyleImage;
     sal_Bool                                    mbLineBreak;
     sal_Bool                                    mbIsURLField;
-    ::rtl::OUString                             msUrl;
-    ::rtl::OUString                             msHyperlinkIdList;
+    OUString                             msUrl;
+    OUString                             msHyperlinkIdList;
     sal_Bool                                    mbIsPlacehlolderShape;
     sal_Bool                                    mbIWS;
     Font                                        maCurrentFont;
@@ -290,7 +290,7 @@ class SVGTextWriter
     sal_Bool implGetTextPositionFromBitmap( const MetaAction* pAction, Point& raPos, sal_Bool& rbEmpty );
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
-    const ::rtl::OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
 
 
 };
@@ -375,7 +375,7 @@ private:
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,
-                                              const ::rtl::OUString* pElementId,
+                                              const OUString* pElementId,
                                               const Reference< XShape >* pXShape = NULL,
                                               const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
 
@@ -383,7 +383,7 @@ private:
 
 public:
 
-    static ::rtl::OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
+    static OUString  GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine );
     static sal_uLong        GetChecksum( const MetaAction* pAction );
 
 public:
@@ -395,7 +395,7 @@ public:
                                            const Size& rSize100thmm,
                                            const GDIMetaFile& rMtf,
                                            sal_uInt32 nWriteFlags,
-                                           const ::rtl::OUString* pElementId = NULL,
+                                           const OUString* pElementId = NULL,
                                            const Reference< XShape >* pXShape = NULL,
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
 };

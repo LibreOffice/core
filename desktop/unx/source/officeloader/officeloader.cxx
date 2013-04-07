@@ -24,7 +24,6 @@
 
 #include "../../../source/inc/exithelper.h"
 
-using ::rtl::OUString;
 
 SAL_IMPLEMENT_MAIN()
 {

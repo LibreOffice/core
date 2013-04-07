@@ -39,11 +39,11 @@ class XMLIndexSimpleEntryContext : public SvXMLImportContext
 {
 
     // entry type
-    const ::rtl::OUString& rEntryType;
+    const OUString& rEntryType;
 
 protected:
     // character style
-    ::rtl::OUString sCharStyleName;
+    OUString sCharStyleName;
     sal_Bool bCharStyleNameOK;
 
     // surrounding template
@@ -58,10 +58,10 @@ public:
 
     XMLIndexSimpleEntryContext(
         SvXMLImport& rImport,
-        const ::rtl::OUString& rEntry,
+        const OUString& rEntry,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLIndexSimpleEntryContext();
 

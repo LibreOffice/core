@@ -47,7 +47,7 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::lang::XMu
 {
     if (!m_xParentWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Cant work without a parent window!"),
+                OUString("Cant work without a parent window!"),
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 
@@ -57,7 +57,7 @@ VCLStatusIndicator::~VCLStatusIndicator()
 }
 
 //-----------------------------------------------
-void SAL_CALL VCLStatusIndicator::start(const ::rtl::OUString& sText ,
+void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
     throw(css::uno::RuntimeException)
 {
@@ -117,7 +117,7 @@ void SAL_CALL VCLStatusIndicator::end()
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
-    m_sText  = ::rtl::OUString();
+    m_sText  = OUString();
     m_nRange = 0;
     m_nValue = 0;
     aWriteLock.unlock();
@@ -139,7 +139,7 @@ void SAL_CALL VCLStatusIndicator::end()
 }
 
 //-----------------------------------------------
-void SAL_CALL VCLStatusIndicator::setText(const ::rtl::OUString& sText)
+void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------

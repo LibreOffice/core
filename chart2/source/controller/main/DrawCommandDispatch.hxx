@@ -45,7 +45,7 @@ public:
     // late initialisation, especially for adding as listener
     virtual void initialize();
 
-    virtual bool isFeatureSupported( const ::rtl::OUString& rCommandURL );
+    virtual bool isFeatureSupported( const OUString& rCommandURL );
 
     void setAttributes( SdrObject* pObj );
     void setLineEnds( SfxItemSet& rAttr );
@@ -59,10 +59,10 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand );
+    virtual FeatureState getState( const OUString& rCommand );
 
     // execute a feature
-    virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
+    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures();
@@ -71,10 +71,10 @@ private:
     void setInsertObj( sal_uInt16 eObj );
     SdrObject* createDefaultObject( const sal_uInt16 nID );
 
-    bool parseCommandURL( const ::rtl::OUString& rCommandURL, sal_uInt16* pnFeatureId, ::rtl::OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType );
+    bool parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId, OUString* pBaseCommand, OUString* pCustomShapeType );
 
     ChartController* m_pChartController;
-    ::rtl::OUString m_aCustomShapeType;
+    OUString m_aCustomShapeType;
 };
 
 //.............................................................................

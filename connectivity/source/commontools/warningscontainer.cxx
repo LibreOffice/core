@@ -103,9 +103,9 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void WarningsContainer::appendWarning( const ::rtl::OUString& _rWarning, const sal_Char* _pAsciiSQLState, const Reference< XInterface >& _rxContext )
+    void WarningsContainer::appendWarning( const OUString& _rWarning, const sal_Char* _pAsciiSQLState, const Reference< XInterface >& _rxContext )
     {
-        appendWarning( SQLWarning( _rWarning, _rxContext, ::rtl::OUString::createFromAscii( _pAsciiSQLState ), 0, Any() ) );
+        appendWarning( SQLWarning( _rWarning, _rxContext, OUString::createFromAscii( _pAsciiSQLState ), 0, Any() ) );
     }
 
 //........................................................................

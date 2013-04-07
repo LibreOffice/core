@@ -92,11 +92,11 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
                         sal_Int32 _nFlags)
     :m_aDescription(_pParent, ModuleRes (FT_DESCRIPTION))
     ,m_aCatalogLbl(_pParent, ModuleRes (FT_CATALOG))
-    ,m_aCatalog(_pParent, ModuleRes (ET_CATALOG), ::rtl::OUString())
+    ,m_aCatalog(_pParent, ModuleRes (ET_CATALOG), OUString())
     ,m_aSchemaLbl(_pParent, ModuleRes (FT_SCHEMA))
-    ,m_aSchema(_pParent, ModuleRes (ET_SCHEMA), ::rtl::OUString())
+    ,m_aSchema(_pParent, ModuleRes (ET_SCHEMA), OUString())
     ,m_aLabel(_pParent, ModuleRes (FT_TITLE))
-    ,m_aTitle(_pParent, ModuleRes (ET_TITLE), ::rtl::OUString())
+    ,m_aTitle(_pParent, ModuleRes (ET_TITLE), OUString())
     ,m_aPB_OK(_pParent, ModuleRes( PB_OK ) )
     ,m_aPB_CANCEL(_pParent, ModuleRes( PB_CANCEL ))
     ,m_aPB_HELP(_pParent, ModuleRes( PB_HELP))
@@ -112,7 +112,7 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
 
     if ( m_xMetaData.is() )
     {
-        ::rtl::OUString sExtraNameChars( m_xMetaData->getExtraNameCharacters() );
+        OUString sExtraNameChars( m_xMetaData->getExtraNameCharacters() );
         m_aCatalog.setAllowedChars( sExtraNameChars );
         m_aSchema.setAllowedChars( sExtraNameChars );
         m_aTitle.setAllowedChars( sExtraNameChars );
@@ -156,7 +156,7 @@ namespace
     typedef Reference< XResultSet > (SAL_CALL XDatabaseMetaData::*FGetMetaStrings)();
 
     void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxConnection,
-        FGetMetaStrings _GetAll, const ::rtl::OUString& _rCurrent )
+        FGetMetaStrings _GetAll, const OUString& _rCurrent )
     {
         try
         {
@@ -164,7 +164,7 @@ namespace
 
             Reference< XResultSet > xRes = (xMetaData.get()->*_GetAll)();
             Reference< XRow > xRow( xRes, UNO_QUERY_THROW );
-            ::rtl::OUString sValue;
+            OUString sValue;
             while ( xRes->next() )
             {
                 sValue = xRow->getString( 1 );
@@ -248,7 +248,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 OSL_ENSURE(m_pImpl->m_xMetaData.is(),"The metadata can not be null!");
                 if(m_pImpl->m_aName.Search('.') != STRING_NOTFOUND)
                 {
-                    ::rtl::OUString sCatalog,sSchema,sTable;
+                    OUString sCatalog,sSchema,sTable;
                     ::dbtools::qualifiedNameComponents(m_pImpl->m_xMetaData,
                                                         m_pImpl->m_aName,
                                                         sCatalog,
@@ -327,7 +327,7 @@ IMPL_LINK(OSaveAsDlg, ButtonClickHdl, Button *, pButton)
     {
         m_pImpl->m_aName = m_pImpl->m_aTitle.GetText();
 
-        ::rtl::OUString sNameToCheck( m_pImpl->m_aName );
+        OUString sNameToCheck( m_pImpl->m_aName );
 
         if ( m_pImpl->m_nType == CommandType::TABLE )
         {

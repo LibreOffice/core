@@ -133,9 +133,9 @@ namespace dbaui
 
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Contruct();
-        OPropNumericEditCtrl* CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId);
+        OPropNumericEditCtrl* CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId);
         FixedText*          CreateText(sal_uInt16 _nTextRes);
-        void                InitializeControl(Control* _pControl,const rtl::OString& _sHelpId,bool _bAddChangeHandler);
+        void                InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
         inline  void    setRightAligned()       { m_bRightAligned = true; }
@@ -163,7 +163,7 @@ namespace dbaui
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
 
         virtual sal_Bool                        isAutoIncrementValueEnabled() const = 0;
-        virtual ::rtl::OUString                 getAutoIncrementValue() const = 0;
+        virtual OUString                 getAutoIncrementValue() const = 0;
 
         String                                  BoolStringPersistent(const String& rUIString) const;
         String                                  BoolStringUI(const String& rPersistentString) const;

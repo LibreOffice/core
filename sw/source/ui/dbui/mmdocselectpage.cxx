@@ -80,7 +80,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent 
     m_aBrowseDocPB.SetClickHdl(aFileSelectHdl);
     m_aBrowseTemplatePB.SetClickHdl(aFileSelectHdl);
 
-    const uno::Sequence< ::rtl::OUString >& rDocs =
+    const uno::Sequence< OUString >& rDocs =
                             m_pWizard->GetConfigItem().GetSavedDocuments();
     for(sal_Int32 nDoc = 0; nDoc < rDocs.getLength(); ++nDoc)
     {
@@ -134,7 +134,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
         xFP->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
         SfxObjectFactory &rFact = m_pWizard->GetSwView()->GetDocShell()->GetFactory();
-        SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(rFact.GetShortName()) );
+        SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
         SfxFilterMatcherIter aIter( aMatcher );
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         const SfxFilter* pFlt = aIter.First();
@@ -171,7 +171,7 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageRea
     bool bNext = _eReason == ::svt::WizardTypes::eTravelForward;
     if(bNext || _eReason == ::svt::WizardTypes::eValidate )
     {
-        ::rtl::OUString sReloadDocument;
+        OUString sReloadDocument;
         bReturn = m_aCurrentDocRB.IsChecked() ||
                 m_aNewDocRB.IsChecked() ||
                 (!(sReloadDocument = m_sLoadFileName).isEmpty() && m_aLoadDocRB.IsChecked() )||

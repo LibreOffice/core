@@ -25,15 +25,11 @@
 #include <map>
 #include <list>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 struct ini_NameValue
 {
-    rtl::OUString sName;
-    rtl::OUString sValue;
+    OUString sName;
+    OUString sValue;
 
     inline ini_NameValue() SAL_THROW(())
         {}
@@ -50,10 +46,10 @@ typedef std::list<
 
 struct ini_Section
 {
-    rtl::OUString sName;
+    OUString sName;
     NameValueList lList;
 };
-typedef std::map<rtl::OUString,
+typedef std::map<OUString,
                 ini_Section
                 >IniSectionMap;
 

@@ -120,7 +120,7 @@ sal_Bool OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const String& rSo
 }
 
 //------------------------------------------------------------------------
-sal_Bool OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
+sal_Bool OTableConnectionData::AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();

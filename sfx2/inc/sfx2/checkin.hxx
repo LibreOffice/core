@@ -26,7 +26,7 @@ class SfxCheckinDialog : public ModalDialog
     public:
         SfxCheckinDialog( Window* pParent );
 
-        rtl::OUString GetComment( );
+        OUString GetComment( );
         bool IsMajor( );
 };
 

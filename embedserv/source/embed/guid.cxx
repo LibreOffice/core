@@ -24,144 +24,144 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-::rtl::OUString getStorageTypeFromGUID_Impl( GUID* guid )
+OUString getStorageTypeFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( "soffice.StarWriterDocument.6" );
+        return OUString( "soffice.StarWriterDocument.6" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( "LibreOffice.WriterDocument.1" );
+        return OUString( "LibreOffice.WriterDocument.1" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( "soffice.StarCalcDocument.6" );
+        return OUString( "soffice.StarCalcDocument.6" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( "LibreOffice.CalcDocument.1" );
+        return OUString( "LibreOffice.CalcDocument.1" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( "soffice.StarDrawDocument.6" );
+        return OUString( "soffice.StarDrawDocument.6" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( "LibreOffice.DrawDocument.1" );
+        return OUString( "LibreOffice.DrawDocument.1" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( "soffice.StarImpressDocument.6" );
+        return OUString( "soffice.StarImpressDocument.6" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( "LibreOffice.ImpressDocument.1" );
+        return OUString( "LibreOffice.ImpressDocument.1" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( "soffice.StarMathDocument.6" );
+        return OUString( "soffice.StarMathDocument.6" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( "LibreOffice.MathDocument.1" );
+        return OUString( "LibreOffice.MathDocument.1" );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString getServiceNameFromGUID_Impl( GUID* guid )
+OUString getServiceNameFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
+        return OUString( "com.sun.star.comp.Writer.TextDocument" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
+        return OUString( "com.sun.star.comp.Writer.TextDocument" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+        return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+        return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+        return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+        return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+        return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( "com.sun.star.comp.Math.FormulaDocument" );
+        return OUString( "com.sun.star.comp.Math.FormulaDocument" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( "com.sun.star.comp.Math.FormulaDocument" );
+        return OUString( "com.sun.star.comp.Math.FormulaDocument" );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString getFilterNameFromGUID_Impl( GUID* guid )
+OUString getFilterNameFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Writer)" ) );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( "writer8" );
+        return OUString( "writer8" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Calc)" ) );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( "calc8" );
+        return OUString( "calc8" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Draw)" ) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Draw)" ) );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( "draw8" );
+        return OUString( "draw8" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Impress)" ) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Impress)" ) );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( "impress8" );
+        return OUString( "impress8" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
+        return OUString( RTL_CONSTASCII_USTRINGPARAM ( "StarOffice XML (Math)" ) );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( "math8" );
+        return OUString( "math8" );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid )
+OUString getTestFileURLFromGUID_Impl( GUID* guid )
 {
     if ( *guid == OID_WriterTextServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxw" );
+        return OUString( "file:///d:/OLE_TEST/test.sxw" );
 
     if ( *guid == OID_WriterOASISTextServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odt" );
+        return OUString( "file:///d:/OLE_TEST/test.odt" );
 
     if ( *guid == OID_CalcServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxc" );
+        return OUString( "file:///d:/OLE_TEST/test.sxc" );
 
     if ( *guid == OID_CalcOASISServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.ods" );
+        return OUString( "file:///d:/OLE_TEST/test.ods" );
 
     if ( *guid == OID_DrawingServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxd" );
+        return OUString( "file:///d:/OLE_TEST/test.sxd" );
 
     if ( *guid == OID_DrawingOASISServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odg" );
+        return OUString( "file:///d:/OLE_TEST/test.odg" );
 
     if ( *guid == OID_PresentationServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxi" );
+        return OUString( "file:///d:/OLE_TEST/test.sxi" );
 
     if ( *guid == OID_PresentationOASISServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odp" );
+        return OUString( "file:///d:/OLE_TEST/test.odp" );
 
     if ( *guid == OID_MathServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.sxm" );
+        return OUString( "file:///d:/OLE_TEST/test.sxm" );
 
     if ( *guid == OID_MathOASISServer )
-        return ::rtl::OUString( "file:///d:/OLE_TEST/test.odf" );
+        return OUString( "file:///d:/OLE_TEST/test.odf" );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // Fix strange warnings about some

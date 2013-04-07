@@ -44,14 +44,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace dbtools;
 
-sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
-    ::rtl::OUString aName,aSchema;
-    aSchema = ::rtl::OUString("%");
+    OUString aName,aSchema;
+    aSchema = OUString("%");
     aName = _rName;
 
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("%");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("%");
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 

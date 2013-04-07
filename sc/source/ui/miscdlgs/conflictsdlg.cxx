@@ -426,7 +426,7 @@ ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocume
     long nTabs[] = { 3, 10, 216, 266 };
     maLbConflicts.SetTabs( nTabs );
 
-    rtl::OUString aTab('\t');
+    OUString aTab('\t');
     String aHeader( maStrTitleConflict );
     aHeader += aTab;
     aHeader += maStrTitleAuthor;
@@ -464,7 +464,7 @@ ScConflictsDlg::~ScConflictsDlg()
 
 String ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflictEntry )
 {
-    rtl::OUString aString;
+    OUString aString;
     if ( mpOwnTrack )
     {
         const ScChangeAction* pAction = mpOwnTrack->GetAction( rConflictEntry.maOwnActions[ 0 ] );
@@ -485,7 +485,7 @@ String ScConflictsDlg::GetActionString( const ScChangeAction* pAction, ScDocumen
     OSL_ENSURE( pDoc, "ScConflictsDlg::GetActionString(): pDoc is null!" );
     if ( pAction && pDoc )
     {
-        rtl::OUString aDesc;
+        OUString aDesc;
         pAction->GetDescription(aDesc, pDoc, true, false);
         aString += String(aDesc);
         aString += '\t';

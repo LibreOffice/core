@@ -54,25 +54,25 @@ class FuncData
     friend class FuncCollection;
 
     const ModuleData* pModuleData;
-    rtl::OUString aInternalName;
-    rtl::OUString aFuncName;
+    OUString aInternalName;
+    OUString aFuncName;
     sal_uInt16      nNumber;
     sal_uInt16      nParamCount;
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
 public:
     FuncData(const ModuleData*pModule,
-             const rtl::OUString& rIName,
-             const rtl::OUString& rFName,
+             const OUString& rIName,
+             const OUString& rFName,
                    sal_uInt16     nNo,
                    sal_uInt16     nCount,
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
 
-    const rtl::OUString& GetModuleName() const;
-    const rtl::OUString& GetInternalName() const { return aInternalName; }
-    const rtl::OUString& GetFuncName() const { return aFuncName; }
+    const OUString& GetModuleName() const;
+    const OUString& GetInternalName() const { return aInternalName; }
+    const OUString& GetFuncName() const { return aFuncName; }
             sal_uInt16      GetParamCount() const { return nParamCount; }
             ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
             ParamType   GetReturnType() const { return eParamType[0]; }
@@ -83,13 +83,13 @@ public:
                 // name and description of parameter nParam.
                 // nParam==0 => Desc := function description,
                 // Name := n/a
-    bool getParamDesc( ::rtl::OUString& aName, ::rtl::OUString& aDesc, sal_uInt16 nParam ) const;
+    bool getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam ) const;
 };
 
 
 class FuncCollection
 {
-    typedef boost::ptr_map<rtl::OUString, FuncData> MapType;
+    typedef boost::ptr_map<OUString, FuncData> MapType;
     MapType maData;
 public:
     typedef MapType::const_iterator const_iterator;
@@ -97,8 +97,8 @@ public:
     FuncCollection();
     FuncCollection(const FuncCollection& r);
 
-    const FuncData* findByName(const rtl::OUString& rName) const;
-    FuncData* findByName(const rtl::OUString& rName);
+    const FuncData* findByName(const OUString& rName) const;
+    FuncData* findByName(const OUString& rName);
     void insert(FuncData* pNew);
 
     const_iterator begin() const;
@@ -106,7 +106,7 @@ public:
 };
 
 
-bool InitExternalFunc(const rtl::OUString& rModuleName);
+bool InitExternalFunc(const OUString& rModuleName);
 void ExitExternalFunc();
 
 #endif

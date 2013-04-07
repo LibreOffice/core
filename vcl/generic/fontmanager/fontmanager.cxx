@@ -87,14 +87,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
 using ::comphelper::string::getToken;
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringHash;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -120,7 +112,7 @@ inline sal_uInt32 getUInt32BE( const sal_uInt8*& pBuffer )
 
 // -------------------------------------------------------------------------
 
-static FontWeight parseWeight( const rtl::OString& rWeight )
+static FontWeight parseWeight( const OString& rWeight )
 {
     FontWeight eWeight = WEIGHT_DONTKNOW;
     if (rWeight.indexOf("bold") != -1)
@@ -237,7 +229,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 {
     bool bSuccess = false;
 
-    rtl::OString aFile( PrintFontManager::get().getFontFile( this ) );
+    OString aFile( PrintFontManager::get().getFontFile( this ) );
 
     TrueTypeFont* pTTFont = NULL;
 
@@ -611,7 +603,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
         m_eItalic = ITALIC_NONE;
 
     // weight
-    rtl::OString aWeight( pInfo->gfi->weight );
+    OString aWeight( pInfo->gfi->weight );
     m_eWeight = parseWeight( aWeight.toAsciiLowerCase() );
 
     // pitch
@@ -810,7 +802,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                     continue;
                 }
 
-                rtl::OStringBuffer aTranslate;
+                OStringBuffer aTranslate;
                 if( pChar->code & 0xff000000 )
                     aTranslate.append((char)(pChar->code >> 24));
                 if( pChar->code & 0xffff0000 )
@@ -818,7 +810,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                 if( pChar->code & 0xffffff00 )
                     aTranslate.append((char)((pChar->code & 0x0000ff00) >> 8 ));
                 aTranslate.append((char)(pChar->code & 0xff));
-                rtl::OUString aUni(rtl::OStringToOUString(aTranslate.makeStringAndClear(), m_aEncoding));
+                OUString aUni(OStringToOUString(aTranslate.makeStringAndClear(), m_aEncoding));
                 pUnicodes[i] = aUni.toChar();
             }
             else
@@ -990,8 +982,8 @@ PrintFontManager::PrintFontManager()
 {
     for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAdobeCodes ); i++ )
     {
-        m_aUnicodeToAdobename.insert( ::boost::unordered_multimap< sal_Unicode, ::rtl::OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
-        m_aAdobenameToUnicode.insert( ::boost::unordered_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
+        m_aUnicodeToAdobename.insert( ::boost::unordered_multimap< sal_Unicode, OString >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].pAdobename ) );
+        m_aAdobenameToUnicode.insert( ::boost::unordered_multimap< OString, sal_Unicode, OStringHash >::value_type( aAdobeCodes[i].pAdobename, aAdobeCodes[i].aUnicode ) );
         if( aAdobeCodes[i].aAdobeStandardCode )
         {
             m_aUnicodeToAdobecode.insert( ::boost::unordered_multimap< sal_Unicode, sal_uInt8 >::value_type( aAdobeCodes[i].aUnicode, aAdobeCodes[i].aAdobeStandardCode ) );
@@ -1043,7 +1035,7 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate 
 
 // -------------------------------------------------------------------------
 
-std::vector<fontID> PrintFontManager::addFontFile( const ::rtl::OString& rFileName )
+std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( OStringToOUString( rFileName, aEncoding ), INetURLObject::FSYS_DETECT );
@@ -1103,7 +1095,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     }
     if (eFormat == UNKNOWN)
     {
-        rtl::OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
+        OString aExt( rFontFile.copy( rFontFile.lastIndexOf( '.' )+1 ) );
         if( aExt.equalsIgnoreAsciiCase("pfb") || aExt.equalsIgnoreAsciiCase("pfa") )
             eFormat = TYPE1;
         else if( aExt.equalsIgnoreAsciiCase("afm"))
@@ -1124,7 +1116,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
 
         for( unsigned int i = 0; i < SAL_N_ELEMENTS(pSuffix); i++ )
         {
-            rtl::OString aName = rtl::OStringBuffer(
+            OString aName = OStringBuffer(
                 rFontFile.copy(0, rFontFile.getLength() - 4)).
                 append(pSuffix[i]).makeStringAndClear();
 
@@ -1470,7 +1462,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 {
     bool bSuccess = false;
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    rtl::OString aFile = getFontFile( pFont );
+    OString aFile = getFontFile( pFont );
     TrueTypeFont* pTTFont = NULL;
 
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
@@ -1524,8 +1516,8 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
         SAL_WARN_IF( !aInfo.psname, "vcl", "No PostScript name in font:" << aFile.getStr() );
 
-        rtl::OUString sPSName = aInfo.psname ?
-            rtl::OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
+        OUString sPSName = aInfo.psname ?
+            OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
             m_pAtoms->getString(ATOM_FAMILYNAME, pFont->m_nFamilyName); // poor font does not have a postscript name
 
         pFont->m_nPSName = m_pAtoms->getAtom( ATOM_PSNAME, sPSName, sal_True );
@@ -1685,13 +1677,13 @@ void PrintFontManager::initialize()
 
     // part one - look for downloadable fonts
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    const ::rtl::OUString &rSalPrivatePath = psp::getFontPath();
+    const OUString &rSalPrivatePath = psp::getFontPath();
 
     // search for the fonts in SAL_PRIVATE_FONTPATH first; those are
     // the fonts installed with the office
     if( !rSalPrivatePath.isEmpty() )
     {
-        OString aPath = rtl::OUStringToOString( rSalPrivatePath, aEncoding );
+        OString aPath = OUStringToOString( rSalPrivatePath, aEncoding );
         const bool bAreFCSubstitutionsEnabled = AreFCSubstitutionsEnabled();
         sal_Int32 nIndex = 0;
         do
@@ -1819,7 +1811,7 @@ void PrintFontManager::initialize()
 
             while( ! readdir_r( pDIR, (struct dirent*)aDirEntBuffer, &pDirEntry ) && pDirEntry )
             {
-                rtl::OStringBuffer aFile(aDir);
+                OStringBuffer aFile(aDir);
                 aFile.append('/').append(pDirEntry->d_name);
                 struct stat aStat;
                 if( ! stat( aFile.getStr(), &aStat )
@@ -1868,7 +1860,7 @@ void PrintFontManager::initialize()
               m_aFamilyTypes.find( font_it->second->m_nFamilyName );
         if (it != m_aFamilyTypes.end())
             continue;
-        const ::rtl::OUString& rFamily =
+        const OUString& rFamily =
             m_pAtoms->getString( ATOM_FAMILYNAME, font_it->second->m_nFamilyName);
         FontFamily eType = matchFamilyName( rFamily );
         m_aFamilyTypes[ font_it->second->m_nFamilyName ] = eType;
@@ -2213,7 +2205,7 @@ int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
 // -------------------------------------------------------------------------
 
 
-FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
+FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily ) const
 {
     typedef struct {
         const char*  mpName;
@@ -2251,7 +2243,7 @@ FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) c
         { InitializeClass( "zapfchancery",           FAMILY_SCRIPT ) }
     };
 
-    rtl::OString aFamily = rtl::OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
+    OString aFamily = OUStringToOString( rFamily, RTL_TEXTENCODING_ASCII_US );
     sal_uInt32 nLower = 0;
     sal_uInt32 nUpper = SAL_N_ELEMENTS(pFamilyMatch);
 
@@ -2336,7 +2328,7 @@ OString PrintFontManager::getFontFile( PrintFont* pFont ) const
 
 // -------------------------------------------------------------------------
 
-const ::rtl::OUString& PrintFontManager::getPSName( fontID nFontID ) const
+const OUString& PrintFontManager::getPSName( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
     if( pFont && pFont->m_nPSName == 0 )
@@ -2442,7 +2434,7 @@ bool PrintFontManager::isFontDownloadingAllowedForPrinting( fontID nFont ) const
             if( pTTFontFile->m_nTypeFlags & TYPEFLAG_INVALID )
             {
                 TrueTypeFont* pTTFont = NULL;
-                rtl::OString aFile = getFontFile( pFont );
+                OString aFile = getFontFile( pFont );
                 if( OpenTTFontFile( aFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
                 {
                     // get type flags
@@ -2616,7 +2608,7 @@ bool PrintFontManager::createFontSubset(
 
     // prepare system name for read access for subset source file
     // TODO: since this file is usually already mmapped there is no need to open it again
-    const rtl::OString aFromFile = getFontFile( pFont );
+    const OString aFromFile = getFontFile( pFont );
 
     TrueTypeFont* pTTFont = NULL; // TODO: rename to SfntFont
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
@@ -2628,7 +2620,7 @@ bool PrintFontManager::createFontSubset(
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
         return false;
     const rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    const rtl::OString aToFile( OUStringToOString( aSysPath, aEncoding ) );
+    const OString aToFile( OUStringToOString( aSysPath, aEncoding ) );
 
     // do CFF subsetting if possible
     int nCffLength = 0;
@@ -2713,7 +2705,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     {
         TrueTypeFont* pTTFont = NULL;
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-        rtl::OString aFromFile = getFontFile( pFont );
+        OString aFromFile = getFontFile( pFont );
         if( OpenTTFontFile( aFromFile.getStr(), pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
             return;
         int nGlyphs = GetTTGlyphCount( pTTFont );
@@ -2791,7 +2783,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
 
 // -------------------------------------------------------------------------
 
-const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded ) const
+const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded ) const
 {
     PrintFont* pFont = getFont( nFont );
     if( !pFont ||
@@ -2812,8 +2804,8 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 
 std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aChar ) const
 {
-    std::pair< boost::unordered_multimap< sal_Unicode, rtl::OString >::const_iterator,
-        boost::unordered_multimap< sal_Unicode, rtl::OString >::const_iterator > range
+    std::pair< boost::unordered_multimap< sal_Unicode, OString >::const_iterator,
+        boost::unordered_multimap< sal_Unicode, OString >::const_iterator > range
         =  m_aUnicodeToAdobename.equal_range( aChar );
 
     std::list< OString > aRet;
@@ -2831,10 +2823,10 @@ std::list< OString > PrintFontManager::getAdobeNameFromUnicode( sal_Unicode aCha
 }
 
 // -------------------------------------------------------------------------
-std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const rtl::OString& rName ) const
+std::list< sal_Unicode >  PrintFontManager::getUnicodeFromAdobeName( const OString& rName ) const
 {
-    std::pair< boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-        boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator > range
+    std::pair< boost::unordered_multimap< OString, sal_Unicode, OStringHash >::const_iterator,
+        boost::unordered_multimap< OString, sal_Unicode, OStringHash >::const_iterator > range
         =  m_aAdobenameToUnicode.equal_range( rName );
 
     std::list< sal_Unicode > aRet;

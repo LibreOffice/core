@@ -31,8 +31,6 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -41,7 +39,7 @@ using namespace ::xmloff::token;
 
 XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_uInt16 p_nPrefix,
-                                    const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
@@ -50,11 +48,11 @@ XMLCalculationSettingsContext::XMLCalculationSettingsContext( SvXMLImport& rImpo
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {

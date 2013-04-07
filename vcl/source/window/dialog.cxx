@@ -50,9 +50,9 @@
 
 // =======================================================================
 
-static rtl::OString ImplGetDialogText( Dialog* pDialog )
+static OString ImplGetDialogText( Dialog* pDialog )
 {
-    rtl::OStringBuffer aErrorStr(rtl::OUStringToOString(
+    OStringBuffer aErrorStr(OUStringToOString(
         pDialog->GetText(), RTL_TEXTENCODING_UTF8));
     if ( (pDialog->GetType() == WINDOW_MESSBOX) ||
          (pDialog->GetType() == WINDOW_INFOBOX) ||
@@ -61,7 +61,7 @@ static rtl::OString ImplGetDialogText( Dialog* pDialog )
          (pDialog->GetType() == WINDOW_QUERYBOX) )
     {
         aErrorStr.append(", ");
-        aErrorStr.append(rtl::OUStringToOString(
+        aErrorStr.append(OUStringToOString(
             ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
     }
     return aErrorStr.makeStringAndClear();
@@ -477,18 +477,18 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
-#define BASEPATH_SHARE_LAYER rtl::OUString("UIConfig")
-#define RELPATH_SHARE_LAYER rtl::OUString("soffice.cfg")
-#define SERVICENAME_PATHSETTINGS rtl::OUString("com.sun.star.util.PathSettings")
+#define BASEPATH_SHARE_LAYER OUString("UIConfig")
+#define RELPATH_SHARE_LAYER OUString("soffice.cfg")
+#define SERVICENAME_PATHSETTINGS OUString("com.sun.star.util.PathSettings")
 
-rtl::OUString VclBuilderContainer::getUIRootDir()
+OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/
     css::uno::Reference< css::beans::XPropertySet > xPathSettings(
         ::comphelper::getProcessServiceFactory()->createInstance(SERVICENAME_PATHSETTINGS),
                 css::uno::UNO_QUERY_THROW);
 
-    ::rtl::OUString sShareLayer;
+    OUString sShareLayer;
     xPathSettings->getPropertyValue(BASEPATH_SHARE_LAYER) >>= sShareLayer;
 
     // "UIConfig" is a "multi path" ... use first part only here!
@@ -520,7 +520,7 @@ void Dialog::doDeferredInit(bool bResizable)
     mbIsDefferedInit = false;
 }
 
-Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : SystemWindow( WINDOW_DIALOG )
     , mbIsDefferedInit(true)
 {
@@ -529,7 +529,7 @@ Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rU
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
-Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
+Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow( nType )
     , mbIsDefferedInit(true)
 {
@@ -815,7 +815,7 @@ sal_Bool Dialog::ImplStartExecuteModal()
     if ( mbInExecute )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aErrorStr;
+        OStringBuffer aErrorStr;
         aErrorStr.append("Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): ");
         aErrorStr.append(ImplGetDialogText(this));
         OSL_FAIL(aErrorStr.getStr());
@@ -1261,7 +1261,7 @@ void Dialog::Resize()
     queue_layout();
 }
 
-bool Dialog::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool Dialog::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "border-width")
         set_border_width(rValue.toInt32());
@@ -1293,7 +1293,7 @@ ModelessDialog::ModelessDialog( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-ModelessDialog::ModelessDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+ModelessDialog::ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
 {
 }
@@ -1315,7 +1315,7 @@ ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
     init( pParent, rResId );
 }
 
-ModalDialog::ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+ModalDialog::ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
 {
 }

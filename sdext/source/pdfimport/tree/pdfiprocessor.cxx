@@ -425,7 +425,7 @@ void PDFIProcessor::processGlyph( double       fPreAvarageSpaceValue,
     }
 }
 
-void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
+void PDFIProcessor::drawGlyphLine( const OUString&             rGlyphs,
                                    const geometry::RealRectangle2D& rRect,
                                    const geometry::Matrix2D&        rFontMatrix )
 {
@@ -455,8 +455,8 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
 
     if( !m_bIsWhiteSpaceInLine )
     {
-        static rtl::OUString tempWhiteSpaceStr( 0x20 );
-        static rtl::OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
+        static OUString tempWhiteSpaceStr( 0x20 );
+        static OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
         m_bIsWhiteSpaceInLine=(rGlyphs.equals( tempWhiteSpaceStr ) || rGlyphs.equals( tempWhiteSpaceNonBreakingStr ));
     }
 }
@@ -485,7 +485,7 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
   return rGlyph.getGC();
 }
 
-void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
+void PDFIProcessor::drawCharGlyphs( OUString&             rGlyphs,
                                     geometry::RealRectangle2D& rRect,
                                     const GraphicsContext& aGC,
                                     ParagraphElement* pPara,
@@ -494,7 +494,7 @@ void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
 {
 
 
-    rtl::OUString tempStr( 32 );
+    OUString tempStr( 32 );
     geometry::RealRectangle2D aRect(rRect);
 
     ::basegfx::B2DRange aRect2;
@@ -523,7 +523,7 @@ void PDFIProcessor::drawCharGlyphs( rtl::OUString&             rGlyphs,
 
 }
 
-void PDFIProcessor::drawGlyphs( const rtl::OUString&             rGlyphs,
+void PDFIProcessor::drawGlyphs( const OUString&             rGlyphs,
                                 const geometry::RealRectangle2D& rRect,
                                 const geometry::Matrix2D&        rFontMatrix )
 {
@@ -712,7 +712,7 @@ void PDFIProcessor::intersectEoClip(const uno::Reference< rendering::XPolyPolygo
 }
 
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
-                               const ::rtl::OUString&           rURI )
+                               const OUString&           rURI )
 {
     if( !rURI.isEmpty() )
     {
@@ -780,7 +780,7 @@ void PDFIProcessor::startPage( const geometry::RealSize2D& rSize )
     if( m_xStatusIndicator.is() )
     {
         if( nNextPageNr == 1 )
-            startIndicator( rtl::OUString( " " ) );
+            startIndicator( OUString( " " ) );
         m_xStatusIndicator->setValue( nNextPageNr );
     }
     m_pCurPage = m_pElFactory->createPageElement(m_pDocument.get(), nNextPageNr);
@@ -802,7 +802,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     ElementTreeVisitorSharedPtr optimizingVisitor(
         rVisitorFactory.createOptimizingVisitor(*this));
     // FIXME: localization
-    startIndicator( rtl::OUString( " " ) );
+    startIndicator( OUString( " " ) );
     m_pDocument->visitedBy( *optimizingVisitor, std::list<Element*>::const_iterator());
 
 #if OSL_DEBUG_LEVEL > 1
@@ -855,14 +855,14 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
     endIndicator();
 }
 
-void PDFIProcessor::startIndicator( const rtl::OUString& rText, sal_Int32 nElements )
+void PDFIProcessor::startIndicator( const OUString& rText, sal_Int32 nElements )
 {
     if( nElements == -1 )
         nElements = m_nPages;
     if( m_xStatusIndicator.is() )
     {
         sal_Int32 nUnicodes = rText.getLength();
-        rtl::OUStringBuffer aStr( nUnicodes*2 );
+        OUStringBuffer aStr( nUnicodes*2 );
         const sal_Unicode* pText = rText.getStr();
         for( int i = 0; i < nUnicodes; i++ )
         {
@@ -1009,10 +1009,10 @@ void PDFIProcessor::sortElements( Element* pEle, bool bDeep )
         }
 
 // helper method: get a mirrored string
-rtl::OUString PDFIProcessor::mirrorString( const rtl::OUString& i_rString ) const
+OUString PDFIProcessor::mirrorString( const OUString& i_rString ) const
 {
     const sal_Int32 nLen = i_rString.getLength();
-    rtl::OUStringBuffer aMirror( nLen );
+    OUStringBuffer aMirror( nLen );
 
     sal_Int32 i = 0;
     while(i < nLen)

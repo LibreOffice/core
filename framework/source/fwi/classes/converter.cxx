@@ -42,7 +42,7 @@ css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNa
 /**
  * converts a sequence of unicode strings into a vector of such items
  */
-OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >& lSource )
+OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequence< OUString >& lSource )
 {
     OUStringList lDestination;
     sal_Int32 nCount = lSource.getLength();
@@ -55,9 +55,9 @@ OUStringList Converter::convert_seqOUString2OUStringList( const css::uno::Sequen
     return lDestination;
 }
 
-::rtl::OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
+OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
 {
-    ::rtl::OUStringBuffer sBuffer(25);
+    OUStringBuffer sBuffer(25);
 
     sal_Int32 nYear  = aSource.GetYear();
     sal_Int32 nMonth = aSource.GetMonth();

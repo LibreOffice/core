@@ -296,7 +296,7 @@ void OViewsWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 //----------------------------------------------------------------------------
-void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
+void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
     ::boost::shared_ptr<OSectionWindow> pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
@@ -343,7 +343,7 @@ sal_uInt16 OViewsWindow::getSectionCount() const
     return static_cast<sal_uInt16>(m_aSections.size());
 }
 //----------------------------------------------------------------------------
-void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
@@ -353,7 +353,7 @@ void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeT
     m_sShapeType = _sShapeType;
 }
 //----------------------------------------------------------------------------
-rtl::OUString OViewsWindow::GetInsertObjString() const
+OUString OViewsWindow::GetInsertObjString() const
 {
     return m_sShapeType;
 }
@@ -1017,7 +1017,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
 
         if ( &rView != &_rSection )
         {
-            SdrObject *pNewObj = new SdrUnoObj(::rtl::OUString("com.sun.star.form.component.FixedText"));
+            SdrObject *pNewObj = new SdrUnoObj(OUString("com.sun.star.form.component.FixedText"));
             if (pNewObj)
             {
                 pNewObj->SetLogicRect(_aRect);

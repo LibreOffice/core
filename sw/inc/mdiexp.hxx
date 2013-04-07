@@ -39,7 +39,7 @@ extern void SizeNotify(ViewShell* pVwSh, const Size &);
 extern void PageNumNotify( ViewShell* pVwSh,
                             sal_uInt16 nPhyNum,
                             sal_uInt16 nVirtNum,
-                           const rtl::OUString& rPg );
+                           const OUString& rPg );
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
@@ -63,7 +63,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc );
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
-bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark );
+bool JumpToSwMark( ViewShell* pVwSh, const OUString& rMark );
 
 
 #endif

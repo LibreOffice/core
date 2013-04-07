@@ -62,12 +62,12 @@ namespace dbaui
     public:
         OCollectionView( Window * pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
-                        ,const ::rtl::OUString& _sDefaultName
+                        ,const OUString& _sDefaultName
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
         virtual ~OCollectionView();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const;
-        ::rtl::OUString getName() const;
+        OUString getName() const;
     };
 //.........................................................................
 }   // namespace dbaui

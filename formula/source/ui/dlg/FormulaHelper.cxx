@@ -33,18 +33,18 @@ namespace formula
             OEmptyFunctionDescription(){}
             virtual ~OEmptyFunctionDescription(){}
 
-            virtual ::rtl::OUString getFunctionName() const { return ::rtl::OUString(); }
+            virtual OUString getFunctionName() const { return OUString(); }
             virtual const IFunctionCategory* getCategory() const { return NULL; }
-            virtual ::rtl::OUString getDescription() const { return ::rtl::OUString(); }
+            virtual OUString getDescription() const { return OUString(); }
             virtual xub_StrLen getSuppressedArgumentCount() const { return 0; }
-            virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& ) const { return ::rtl::OUString(); }
+            virtual OUString getFormula(const ::std::vector< OUString >& ) const { return OUString(); }
             virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& ) const {}
             virtual void initArgumentInfo()  const {}
-            virtual ::rtl::OUString getSignature() const { return ::rtl::OUString(); }
-            virtual rtl::OString getHelpId() const { return ""; }
+            virtual OUString getSignature() const { return OUString(); }
+            virtual OString getHelpId() const { return ""; }
             virtual sal_uInt32 getParameterCount() const { return 0; }
-            virtual ::rtl::OUString getParameterName(sal_uInt32 ) const { return ::rtl::OUString(); }
-            virtual ::rtl::OUString getParameterDescription(sal_uInt32 ) const { return ::rtl::OUString(); }
+            virtual OUString getParameterName(sal_uInt32 ) const { return OUString(); }
+            virtual OUString getParameterDescription(sal_uInt32 ) const { return OUString(); }
             virtual bool isParameterOptional(sal_uInt32 ) const { return sal_False; }
         };
     }
@@ -70,7 +70,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
                                  xub_StrLen&    rFStart,   // Input and output
                                  xub_StrLen*    pFEnd,     // = NULL
                                  const IFunctionDescription**   ppFDesc,   // = NULL
-                                 ::std::vector< ::rtl::OUString>*   pArgs )  const // = NULL
+                                 ::std::vector< OUString>*   pArgs )  const // = NULL
 {
     xub_StrLen  nOldStart = rFStart;
     String      aFname;
@@ -86,7 +86,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
         if ( ppFDesc )
         {
             *ppFDesc = NULL;
-            const ::rtl::OUString sTemp( aFname );
+            const OUString sTemp( aFname );
             const sal_uInt32 nCategoryCount = m_pFunctionManager->getCount();
             for(sal_uInt32 j= 0; j < nCategoryCount && !*ppFDesc; ++j)
             {
@@ -124,7 +124,7 @@ sal_Bool FormulaHelper::GetNextFunc( const String&  rFormula,
 void FormulaHelper::FillArgStrings( const String&   rFormula,
                                     xub_StrLen      nFuncPos,
                                     sal_uInt16          nArgs,
-                                    ::std::vector< ::rtl::OUString >& _rArgs ) const
+                                    ::std::vector< OUString >& _rArgs ) const
 {
     xub_StrLen  nStart  = 0;
     xub_StrLen  nEnd    = 0;
@@ -161,7 +161,7 @@ void FormulaHelper::FillArgStrings( const String&   rFormula,
 
 //------------------------------------------------------------------------
 
-void FormulaHelper::GetArgStrings( ::std::vector< ::rtl::OUString >& _rArgs
+void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs
                                       ,const String& rFormula,
                                        xub_StrLen nFuncPos,
                                        sal_uInt16 nArgs ) const

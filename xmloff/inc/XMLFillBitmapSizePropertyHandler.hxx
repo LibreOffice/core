@@ -40,13 +40,13 @@ public:
 
     /// Imports the given value in cas of the given XML-data-type
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 
     /// Exports the given value in cas of the given XML-data-type
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 };

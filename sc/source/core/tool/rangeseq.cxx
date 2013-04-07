@@ -181,12 +181,12 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument* pDoc, c
 
     bool bHasErrors = false;
 
-    uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
-    uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
+    uno::Sequence< uno::Sequence<OUString> > aRowSeq( nRowCount );
+    uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
     for (long nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<rtl::OUString> aColSeq( nColCount );
-        rtl::OUString* pColAry = aColSeq.getArray();
+        uno::Sequence<OUString> aColSeq( nColCount );
+        OUString* pColAry = aColSeq.getArray();
         for (long nCol = 0; nCol < nColCount; nCol++)
         {
             sal_uInt16 nErrCode = pDoc->GetStringForFormula(
@@ -213,12 +213,12 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
     SCSIZE nRowCount;
     pMatrix->GetDimensions( nColCount, nRowCount );
 
-    uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
-    uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
+    uno::Sequence< uno::Sequence<OUString> > aRowSeq( static_cast<sal_Int32>(nRowCount) );
+    uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
     for (SCSIZE nRow = 0; nRow < nRowCount; nRow++)
     {
-        uno::Sequence<rtl::OUString> aColSeq( static_cast<sal_Int32>(nColCount) );
-        rtl::OUString* pColAry = aColSeq.getArray();
+        uno::Sequence<OUString> aColSeq( static_cast<sal_Int32>(nColCount) );
+        OUString* pColAry = aColSeq.getArray();
         for (SCSIZE nCol = 0; nCol < nColCount; nCol++)
         {
             String aStr;
@@ -233,7 +233,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
                 Color* pColor;
                 pFormatter->GetOutputString( fVal, 0, aStr, &pColor );
             }
-            pColAry[nCol] = rtl::OUString( aStr );
+            pColAry[nCol] = OUString( aStr );
         }
 
         pRowAry[nRow] = aColSeq;
@@ -314,7 +314,7 @@ sal_Bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMat
                 String aStr;
                 if ( !pMatrix->IsEmpty( nCol, nRow ) )
                     aStr = pMatrix->GetString( nCol, nRow );
-                pColAry[nCol] <<= rtl::OUString( aStr );
+                pColAry[nCol] <<= OUString( aStr );
             }
             else
             {
@@ -385,7 +385,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
         }
         if ( nMaxColCount && nRowCount )
         {
-            rtl::OUString aUStr;
+            OUString aUStr;
             xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
                     static_cast<SCSIZE>(nRowCount), 0.0);

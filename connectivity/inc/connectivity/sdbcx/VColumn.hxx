@@ -50,9 +50,9 @@ namespace connectivity
                                     public ODescriptor
         {
         protected:
-            ::rtl::OUString m_TypeName;
-            ::rtl::OUString m_Description;
-            ::rtl::OUString m_DefaultValue;
+            OUString m_TypeName;
+            OUString m_Description;
+            OUString m_DefaultValue;
 
             sal_Int32       m_IsNullable;
             sal_Int32       m_Precision;
@@ -63,9 +63,9 @@ namespace connectivity
             sal_Bool        m_IsRowVersion;
             sal_Bool        m_IsCurrency;
 
-            ::rtl::OUString m_CatalogName;
-            ::rtl::OUString m_SchemaName;
-            ::rtl::OUString m_TableName;
+            OUString m_CatalogName;
+            OUString m_SchemaName;
+            OUString m_TableName;
 
             using OColumnDescriptor_BASE::rBHelper;
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
@@ -77,10 +77,10 @@ namespace connectivity
             virtual void    SAL_CALL release() throw();
 
             OColumn(    sal_Bool _bCase);
-            OColumn(    const ::rtl::OUString& _Name,
-                        const ::rtl::OUString& _TypeName,
-                        const ::rtl::OUString& _DefaultValue,
-                        const ::rtl::OUString& _Description,
+            OColumn(    const OUString& _Name,
+                        const OUString& _TypeName,
+                        const OUString& _DefaultValue,
+                        const OUString& _Description,
                         sal_Int32       _IsNullable,
                         sal_Int32       _Precision,
                         sal_Int32       _Scale,
@@ -89,9 +89,9 @@ namespace connectivity
                         sal_Bool        _IsRowVersion,
                         sal_Bool        _IsCurrency,
                         sal_Bool        _bCase,
-                        const ::rtl::OUString& _CatalogName,
-                        const ::rtl::OUString& _SchemaName,
-                        const ::rtl::OUString& _TableName);
+                        const OUString& _CatalogName,
+                        const OUString& _SchemaName,
+                        const OUString& _TableName);
 
             DECLARE_SERVICE_INFO();
             //XInterface
@@ -105,8 +105,8 @@ namespace connectivity
             // XPropertySet
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
         };

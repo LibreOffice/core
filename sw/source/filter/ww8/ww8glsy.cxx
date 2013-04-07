@@ -43,7 +43,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
 
     if (aWwFib.nFibBack >= 0x6A)   //Word97
     {
-        xTableStream = pStg->OpenSotStream(rtl::OUString::createFromAscii(
+        xTableStream = pStg->OpenSotStream(OUString::createFromAscii(
             aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
 
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
@@ -158,7 +158,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 while( (sal_uInt16)-1 != nCurPos )
                 {
                     sShortcut.Erase( nLen ) +=
-                        rtl::OUString::valueOf(++nStart);    // add an Number to it
+                        OUString::valueOf(++nStart);    // add an Number to it
                     nCurPos = rBlocks.GetIndex( sShortcut );
                 }
 

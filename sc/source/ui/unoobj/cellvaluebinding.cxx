@@ -85,7 +85,7 @@ namespace calc
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString( "BoundCell" ),
+            OUString( "BoundCell" ),
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -185,7 +185,7 @@ namespace calc
             if ( m_xCellText.is() )
             {
                 // an XTextRange can be used to set/get "string" values
-                aTypes[1] = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+                aTypes[1] = ::getCppuType( static_cast< OUString* >( NULL ) );
                 // and additionally, we use it to handle booleans
                 aTypes[2] = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
             }
@@ -232,7 +232,7 @@ namespace calc
             if ( m_xCellText.is() )
                 aReturn <<= m_xCellText->getString();
             else
-                aReturn <<= ::rtl::OUString();
+                aReturn <<= OUString();
             break;
 
         case TypeClass_BOOLEAN:
@@ -254,7 +254,7 @@ namespace calc
                         if ( xProp.is() )
                         {
                             CellContentType eResultType;
-                            if ( (xProp->getPropertyValue(::rtl::OUString( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
+                            if ( (xProp->getPropertyValue(OUString( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
                                 bHasValue = sal_True;
                         }
                     }
@@ -318,7 +318,7 @@ namespace calc
             {
                 OSL_ENSURE( m_xCellText.is(), "OCellValueBinding::setValue: don't have a text!" );
 
-                ::rtl::OUString sText;
+                OUString sText;
                 aValue >>= sText;
                 if ( m_xCellText.is() )
                     m_xCellText->setString( sText );
@@ -392,7 +392,7 @@ namespace calc
     {
         // set boolean number format if not already set
 
-        ::rtl::OUString sPropName( "NumberFormat" );
+        OUString sPropName( "NumberFormat" );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( xSupplier.is() && xCellProp.is() )
@@ -417,10 +417,10 @@ namespace calc
                 if ( xOldFormat.is() )
                 {
                     // use the locale of the existing format
-                    xOldFormat->getPropertyValue( ::rtl::OUString( "Locale" ) ) >>= aLocale;
+                    xOldFormat->getPropertyValue( OUString( "Locale" ) ) >>= aLocale;
 
                     sal_Int16 nOldType = ::comphelper::getINT16(
-                        xOldFormat->getPropertyValue( ::rtl::OUString( "Type" ) ) );
+                        xOldFormat->getPropertyValue( OUString( "Type" ) ) );
                     if ( nOldType & NumberFormat::LOGICAL )
                         bWasBoolean = sal_True;
                 }
@@ -456,9 +456,9 @@ namespace calc
         OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
         if ( !pNonConstThis->supportsType( _rType ) )
         {
-            ::rtl::OUString sMessage( "The given type (" );
+            OUString sMessage( "The given type (" );
             sMessage += _rType.getTypeName();
-            sMessage += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ") is not supported by this binding." ) );
+            sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM( ") is not supported by this binding." ) );
                 // TODO: localize this error message
 
             throw IncompatibleTypesException( sMessage, *pNonConstThis );
@@ -467,21 +467,21 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OCellValueBinding::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL OCellValueBinding::getImplementationName(  ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
-        return ::rtl::OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
+        return OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OCellValueBinding::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
-        Sequence< ::rtl::OUString > aSupportedServices( getSupportedServiceNames() );
-        const ::rtl::OUString* pLookup = aSupportedServices.getConstArray();
-        const ::rtl::OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
+        Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
+        const OUString* pLookup = aSupportedServices.getConstArray();
+        const OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
         while ( pLookup != pLookupEnd )
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
@@ -490,15 +490,15 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
-        Sequence< ::rtl::OUString > aServices( m_bListPos ? 3 : 2 );
-        aServices[ 0 ] =  ::rtl::OUString( "com.sun.star.table.CellValueBinding" );
-        aServices[ 1 ] =  ::rtl::OUString( "com.sun.star.form.binding.ValueBinding" );
+        Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
+        aServices[ 0 ] =  OUString( "com.sun.star.table.CellValueBinding" );
+        aServices[ 1 ] =  OUString( "com.sun.star.form.binding.ValueBinding" );
         if ( m_bListPos )
-            aServices[ 2 ] =  ::rtl::OUString( "com.sun.star.table.ListPositionCellBinding" );
+            aServices[ 2 ] =  OUString( "com.sun.star.table.ListPositionCellBinding" );
         return aServices;
     }
 

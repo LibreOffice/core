@@ -48,7 +48,7 @@ namespace sw { namespace mark
             virtual const SwPosition& GetOtherMarkPos() const =0;
             virtual const SwPosition& GetMarkStart() const =0;
             virtual const SwPosition& GetMarkEnd() const =0;
-            virtual const ::rtl::OUString& GetName() const =0;
+            virtual const OUString& GetName() const =0;
             virtual bool IsExpanded() const =0;
             virtual bool IsCoveringPosition(const SwPosition& rPos) const =0;
 
@@ -71,16 +71,16 @@ namespace sw { namespace mark
             bool EndsAfter(const SwPosition& rPos) const
                 { return GetMarkEnd() > rPos; }
 
-            virtual rtl::OUString ToString( ) const =0;
+            virtual OUString ToString( ) const =0;
     };
 
     class SAL_DLLPUBLIC_EXPORT IBookmark
         : virtual public IMark
     {
         public:
-            virtual const ::rtl::OUString& GetShortName() const =0;
+            virtual const OUString& GetShortName() const =0;
             virtual const KeyCode& GetKeyCode() const =0;
-            virtual void SetShortName(const ::rtl::OUString&) =0;
+            virtual void SetShortName(const OUString&) =0;
             virtual void SetKeyCode(const KeyCode&) =0;
     };
 
@@ -88,16 +88,16 @@ namespace sw { namespace mark
         : virtual public IMark
     {
         public:
-            typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any> parameter_map_t;
+            typedef ::std::map< OUString, ::com::sun::star::uno::Any> parameter_map_t;
             //getters
-            virtual ::rtl::OUString GetFieldname() const =0;
-            virtual ::rtl::OUString GetFieldHelptext() const =0;
+            virtual OUString GetFieldname() const =0;
+            virtual OUString GetFieldHelptext() const =0;
             virtual parameter_map_t* GetParameters() =0;
             virtual const parameter_map_t* GetParameters() const =0;
 
             //setters
-            virtual void SetFieldname(const ::rtl::OUString& rFieldname) =0;
-            virtual void SetFieldHelptext(const ::rtl::OUString& rFieldHelptext) =0;
+            virtual void SetFieldname(const OUString& rFieldname) =0;
+            virtual void SetFieldHelptext(const OUString& rFieldHelptext) =0;
             virtual void Invalidate() = 0;
     };
 

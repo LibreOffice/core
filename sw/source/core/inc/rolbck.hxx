@@ -257,11 +257,11 @@ class SwHistoryBookmark : public SwHistoryHint
         virtual void SetInDoc(SwDoc * pDoc, bool);
 
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
-        const ::rtl::OUString& GetName() const;
+        const OUString& GetName() const;
 
     private:
-        const ::rtl::OUString m_aName;
-        ::rtl::OUString m_aShortName;
+        const OUString m_aName;
+        OUString m_aShortName;
         KeyCode m_aKeycode;
         const sal_uLong m_nNode;
         const sal_uLong m_nOtherNode;

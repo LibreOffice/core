@@ -33,23 +33,23 @@ namespace migration
 //.........................................................................
 
 
-    #define sSourceUserBasic ::rtl::OUString( "/user/basic" )
-    #define sTargetUserBasic ::rtl::OUString( "/user/__basic_80" )
+    #define sSourceUserBasic OUString( "/user/basic" )
+    #define sTargetUserBasic OUString( "/user/__basic_80" )
 
     // =============================================================================
     // component operations
     // =============================================================================
 
-    ::rtl::OUString BasicMigration_getImplementationName()
+    OUString BasicMigration_getImplementationName()
     {
-        return ::rtl::OUString("com.sun.star.comp.desktop.migration.Basic");
+        return OUString("com.sun.star.comp.desktop.migration.Basic");
     }
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > BasicMigration_getSupportedServiceNames()
+    Sequence< OUString > BasicMigration_getSupportedServiceNames()
     {
-        Sequence< ::rtl::OUString > aNames(1);
+        Sequence< OUString > aNames(1);
         aNames.getArray()[0] = "com.sun.star.migration.Basic";
         return aNames;
     }
@@ -70,7 +70,7 @@ namespace migration
 
     // -----------------------------------------------------------------------------
 
-    TStringVectorPtr BasicMigration::getFiles( const ::rtl::OUString& rBaseURL ) const
+    TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
     {
         TStringVectorPtr aResult( new TStringVector );
         ::osl::Directory aDir( rBaseURL);
@@ -127,7 +127,7 @@ namespace migration
 
     void BasicMigration::copyFiles()
     {
-        ::rtl::OUString sTargetDir;
+        OUString sTargetDir;
         ::utl::Bootstrap::PathStatus aStatus = ::utl::Bootstrap::locateUserInstallation( sTargetDir );
         if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
         {
@@ -136,17 +136,17 @@ namespace migration
             TStringVector::const_iterator aI = aFileList->begin();
             while ( aI != aFileList->end() )
             {
-                ::rtl::OUString sLocalName = aI->copy( m_sSourceDir.getLength() );
-                ::rtl::OUString sTargetName = sTargetDir + sLocalName;
+                OUString sLocalName = aI->copy( m_sSourceDir.getLength() );
+                OUString sTargetName = sTargetDir + sLocalName;
                 INetURLObject aURL( sTargetName );
                 aURL.removeSegment();
                 checkAndCreateDirectory( aURL );
                 ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                 if ( aResult != ::osl::FileBase::E_None )
                 {
-                    ::rtl::OString aMsg( "BasicMigration::copyFiles: cannot copy " );
-                    aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
-                         +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
+                    OString aMsg( "BasicMigration::copyFiles: cannot copy " );
+                    aMsg += OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
+                         +  OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
                     OSL_FAIL( aMsg.getStr() );
                 }
                 ++aI;
@@ -162,7 +162,7 @@ namespace migration
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicMigration::getImplementationName() throw (RuntimeException)
+    OUString BasicMigration::getImplementationName() throw (RuntimeException)
     {
         return BasicMigration_getImplementationName();
     }
@@ -177,7 +177,7 @@ namespace migration
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return BasicMigration_getSupportedServiceNames();
     }

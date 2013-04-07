@@ -68,7 +68,7 @@ public:
     void AddListener(
         const css::uno::Reference<
             css::drawing::framework::XConfigurationChangeListener>& rxListener,
-        const ::rtl::OUString& rsEventType,
+        const OUString& rsEventType,
         const css::uno::Any& rUserData);
 
     /** Remove all references to the given listener.  When one listener has
@@ -96,7 +96,7 @@ public:
         the given arguments.
     */
     void NotifyListeners (
-        const ::rtl::OUString& rsEventType,
+        const OUString& rsEventType,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const css::uno::Reference<css::drawing::framework::XResource>& rxResourceObject);
 
@@ -117,9 +117,9 @@ private:
     };
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     typedef ::boost::unordered_map
-        <rtl::OUString,
+        <OUString,
          ListenerList,
-         ::rtl::OUStringHash,
+         OUStringHash,
          ::comphelper::UStringEqual> ListenerMap;
     ListenerMap maListenerMap;
 

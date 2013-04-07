@@ -68,7 +68,7 @@ namespace xmloff
         SvXMLImportContext* createOfficeFormsContext(
             SvXMLImport& _rImport,
             sal_uInt16 _nPrefix,
-            const rtl::OUString& _rLocalName);
+            const OUString& _rLocalName);
 
         /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
             element.
@@ -80,7 +80,7 @@ namespace xmloff
         */
         SvXMLImportContext* createContext(
             const sal_uInt16 _nPrefix,
-            const rtl::OUString& _rLocalName,
+            const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttribs);
 
         /** lookup a control given by id.
@@ -92,7 +92,7 @@ namespace xmloff
             @see startPage
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                lookupControl(const ::rtl::OUString& _rId);
+                lookupControl(const OUString& _rId);
 
         /** end importing the forms of the current page
 
@@ -115,7 +115,7 @@ namespace xmloff
         */
         void applyControlNumberStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rControlNumerStyleName
+            const OUString& _rControlNumerStyleName
         );
 
         /** to be called when the document has been completely imported

@@ -299,9 +299,9 @@ SdrModel::~SdrModel()
 #ifdef DBG_UTIL
     if(pAktUndoGroup)
     {
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "In the Dtor of the SdrModel there is an open Undo left: \""));
-        aStr.append(rtl::OUStringToOString(pAktUndoGroup->GetComment(), osl_getThreadTextEncoding()))
+        aStr.append(OUStringToOString(pAktUndoGroup->GetComment(), osl_getThreadTextEncoding()))
             .append('\"');
         OSL_FAIL(aStr.getStr());
     }
@@ -913,7 +913,7 @@ uno::Reference<embed::XStorage> SdrModel::GetDocumentStorage() const
 }
 
 uno::Reference<io::XInputStream>
-SdrModel::GetDocumentStream( ::rtl::OUString const& rURL,
+SdrModel::GetDocumentStream( OUString const& rURL,
                 ::comphelper::LifecycleProxy & rProxy) const
 {
     uno::Reference<embed::XStorage> const xStorage(GetDocumentStorage());
@@ -1239,7 +1239,7 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
     }
 }
 
-void SdrModel::TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
+void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_Int32 nNumDigits) const
 {
     // #i22167#
     // change to double precision usage to not lose decimal places
@@ -1277,7 +1277,7 @@ void SdrModel::TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars, 
         nKomma = nNumDigits;
     }
 
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(static_cast<sal_Int32>(fLocalValue + 0.5));
 
     if(nKomma < 0)
@@ -1355,14 +1355,14 @@ void SdrModel::TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars, 
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar) const
+void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
 {
     bool bNeg = nWink < 0;
 
     if(bNeg)
         nWink = -nWink;
 
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(static_cast<sal_Int32>(nWink));
 
     SvtSysLocale aSysLoc;

@@ -28,7 +28,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -327,7 +326,7 @@ PresenterPaneContainer::SharedPaneDescriptor PresenterPaneContainer::FindViewURL
     return SharedPaneDescriptor();
 }
 
-::rtl::OUString PresenterPaneContainer::GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL)
+OUString PresenterPaneContainer::GetPaneURLForViewURL (const OUString& rsViewURL)
 {
     SharedPaneDescriptor pDescriptor (FindViewURL(rsViewURL));
     if (pDescriptor.get() != NULL)

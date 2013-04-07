@@ -32,13 +32,12 @@
 
 #include <node.hxx>
 
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 
 namespace DOM
 {
-    typedef ::std::pair< ::rtl::OString, ::rtl::OString > stringpair_t;
+    typedef ::std::pair< OString, OString > stringpair_t;
 
     typedef ::cppu::ImplInheritanceHelper1< CNode, XAttr > CAttr_Base;
 

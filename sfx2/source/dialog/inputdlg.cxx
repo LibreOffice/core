@@ -18,7 +18,7 @@
 
 #define LABEL_TEXT_SPACE 5
 
-InputDialog::InputDialog (const rtl::OUString &rLabelText, Window *pParent)
+InputDialog::InputDialog (const OUString &rLabelText, Window *pParent)
     : ModalDialog(pParent,SfxResId(DLG_INPUT_BOX)),
       mpEntry(new Edit(this,SfxResId(EDT_INPUT_FIELD))),
       mpLabel(new FixedText(this,SfxResId(LABEL_INPUT_TEXT))),
@@ -68,7 +68,7 @@ InputDialog::~InputDialog()
     delete mpCancel;
 }
 
-rtl::OUString InputDialog::getEntryText () const
+OUString InputDialog::getEntryText () const
 {
     return mpEntry->GetText();
 }

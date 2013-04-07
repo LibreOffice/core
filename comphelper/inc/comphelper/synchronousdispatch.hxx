@@ -52,8 +52,8 @@ namespace comphelper
     public:
         static COMPHELPER_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::lang::XComponent > dispatch(
             const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &xStartPoint,
-            const rtl::OUString &sURL,
-            const rtl::OUString &sTarget,
+            const OUString &sURL,
+            const OUString &sTarget,
             const sal_Int32 nFlags,
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &lArguments );
     };

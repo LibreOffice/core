@@ -319,19 +319,19 @@ void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
         rFont.SetColor( *pTxtColor );
 }
 
-const rtl::OUString& EditCharAttribField::GetFieldValue() const
+const OUString& EditCharAttribField::GetFieldValue() const
 {
     return aFieldValue;
 }
 
-void EditCharAttribField::SetFieldValue(const rtl::OUString& rVal)
+void EditCharAttribField::SetFieldValue(const OUString& rVal)
 {
     aFieldValue = rVal;
 }
 
 void EditCharAttribField::Reset()
 {
-    aFieldValue = rtl::OUString();
+    aFieldValue = OUString();
     delete pTxtColor; pTxtColor = NULL;
     delete pFldColor; pFldColor = NULL;
 }

@@ -77,22 +77,22 @@ public:
     /**
      * @descr   get style name.
      */
-    virtual rtl::OUString   GetStyleName();
+    virtual OUString   GetStyleName();
 
     /**
      * @descr   set style name.
      */
-    virtual void            SetStyleName(const rtl::OUString& styleName);
+    virtual void            SetStyleName(const OUString& styleName);
 
     /**
      * @descr   Set parent style name.
      */
-    virtual rtl::OUString   GetParentStyleName();
+    virtual OUString   GetParentStyleName();
 
     /**
      * @descr   return parent style name.
      */
-    virtual void            SetParentStyleName(const rtl::OUString& styleName);
+    virtual void            SetParentStyleName(const OUString& styleName);
 
     /**
      * @descr   get styel family.
@@ -110,8 +110,8 @@ public:
     virtual sal_Bool        Equal(IXFStyle *pStyle);
 
 protected:
-    rtl::OUString   m_strStyleName;
-    rtl::OUString   m_strParentStyleName;
+    OUString   m_strStyleName;
+    OUString   m_strParentStyleName;
     enumXFStyle     m_enumFamily;
 };
 

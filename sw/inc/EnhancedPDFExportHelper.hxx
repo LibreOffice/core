@@ -239,7 +239,7 @@ class SwEnhancedPDFExportHelper
 
     SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                OutputDevice& rOut,
-                               const rtl::OUString& rPageRange,
+                               const OUString& rPageRange,
                                bool bSkipEmptyPages,
                                bool bEditEngineOnly );
 

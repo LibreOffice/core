@@ -217,7 +217,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree ( String aStrURL )
     xub_StrLen nPos = aStrURL.Search ( sal_Unicode('#') );
 
     if( nPos != 0 )
-        aUStrURL = ::rtl::OUString( aStrURL );
+        aUStrURL = OUString( aStrURL );
 
     if( !RefreshFromDoc ( aUStrURL ) )
         maLbTree.Invalidate();

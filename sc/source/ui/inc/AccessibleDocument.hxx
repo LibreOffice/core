@@ -163,13 +163,13 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -261,12 +261,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -306,8 +306,8 @@ private:
     void AddChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
     void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, sal_Bool bFireEvent);
 
-    rtl::OUString GetCurrentCellName() const;
-    rtl::OUString GetCurrentCellDescription() const;
+    OUString GetCurrentCellName() const;
+    OUString GetCurrentCellDescription() const;
 
     Rectangle GetVisibleArea_Impl() const;
 };

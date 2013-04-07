@@ -37,8 +37,6 @@
 // Implementation class for the XFilePicker Interface
 //----------------------------------------------------------
 
-using ::rtl::OUString;
-using ::rtl::OString;
 struct FilterEntry;
 struct ElementEntry_Impl;
 
@@ -80,7 +78,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         // XExecutableDialog functions
         //------------------------------------------------------------------------------------
 
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
+        virtual void SAL_CALL setTitle( const OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
         virtual sal_Int16 SAL_CALL execute()
@@ -93,44 +91,44 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL setDefaultName( const ::rtl::OUString& aName )
+        virtual void SAL_CALL setDefaultName( const OUString& aName )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& aDirectory )
+        virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
             throw( com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  )
+        virtual OUString SAL_CALL getDisplayDirectory(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
          //------------------------------------------------------------------------------------
         // XFilePicker2 functions
         //------------------------------------------------------------------------------------
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedFiles()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles()
                 throw (::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------------------------------------------
         // XFilterManager functions
         //------------------------------------------------------------------------------------
 
-        virtual void SAL_CALL appendFilter( const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilter )
+        virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
             throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& aTitle )
+        virtual void SAL_CALL setCurrentFilter( const OUString& aTitle )
             throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
-        virtual ::rtl::OUString SAL_CALL getCurrentFilter(  )
+        virtual OUString SAL_CALL getCurrentFilter(  )
             throw( ::com::sun::star::uno::RuntimeException );
 
         //------------------------------------------------------------------------------------
         // XFilterGroupManager functions
         //------------------------------------------------------------------------------------
 
-        virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
+        virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------------------------------------------
@@ -146,10 +144,10 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable )
             throw(::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL setLabel( sal_Int16 nControlId, const ::rtl::OUString& aLabel )
+        virtual void SAL_CALL setLabel( sal_Int16 nControlId, const OUString& aLabel )
             throw (::com::sun::star::uno::RuntimeException);
 
-        virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 nControlId )
+        virtual OUString SAL_CALL getLabel( sal_Int16 nControlId )
             throw (::com::sun::star::uno::RuntimeException);
 
         //------------------------------------------------
@@ -208,10 +206,10 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         SalGtkFilePicker( const SalGtkFilePicker& );
         SalGtkFilePicker& operator=( const SalGtkFilePicker& );
 
-        sal_Bool FilterNameExists( const ::rtl::OUString& rTitle );
+        sal_Bool FilterNameExists( const OUString& rTitle );
         sal_Bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
-        void ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter );
+        void ensureFilterList( const OUString& _rInitialCurrentFilter );
 
         void impl_fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
         void impl_directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
@@ -220,7 +218,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
             m_xListener;
-        ::rtl::OUString msPlayLabel;
+        OUString msPlayLabel;
         FilterList *m_pFilterList;
         GtkWidget  *m_pVBox;
 
@@ -244,7 +242,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         bool mbToggleVisibility[TOGGLE_LAST];
         bool mbToggleChecked[TOGGLE_LAST];
 
-        static const rtl::OString m_ToggleLabels[TOGGLE_LAST];
+        static const OString m_ToggleLabels[TOGGLE_LAST];
 
         enum {
             PLAY,
@@ -269,8 +267,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         gulong mnHID_FolderChange;
         gulong mnHID_SelectionChange;
 
-        ::rtl::OUString m_aCurrentFilter;
-        ::rtl::OUString m_aInitialFilter;
+        OUString m_aCurrentFilter;
+        OUString m_aInitialFilter;
 
         bool bVersionWidthUnset;
         sal_Bool mbPreviewState;

@@ -69,7 +69,7 @@ namespace svgio
             return &maSvgStyleAttributes;
         }
 
-        void SvgGradientNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgGradientNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
@@ -197,9 +197,9 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrPad(rtl::OUString::createFromAscii("pad"));
-                        static rtl::OUString aStrReflect(rtl::OUString::createFromAscii("reflect"));
-                        static rtl::OUString aStrRepeat(rtl::OUString::createFromAscii("repeat"));
+                        static OUString aStrPad(OUString::createFromAscii("pad"));
+                        static OUString aStrReflect(OUString::createFromAscii("reflect"));
+                        static OUString aStrRepeat(OUString::createFromAscii("repeat"));
 
                         if(aContent.match(aStrPad, 0))
                         {

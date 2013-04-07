@@ -46,7 +46,7 @@ namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC SimpleLicenseAttributes
 {
-    ::rtl::OUString acceptBy;
+    OUString acceptBy;
     //Attribute suppress-on-update. Default is false.
     bool suppressOnUpdate;
     //Attribute suppress-if-required. Default is false.
@@ -86,7 +86,7 @@ public:
        @return
        the identifier, or an empty <code>optional</code> if none is specified
     */
-    ::boost::optional< ::rtl::OUString > getIdentifier() const;
+    ::boost::optional< OUString > getIdentifier() const;
 
     /**
        Return the textual version representation.
@@ -94,7 +94,7 @@ public:
        @return
        textual version representation
     */
-    ::rtl::OUString getVersion() const;
+    OUString getVersion() const;
 
     /**
         Returns a list of supported platforms.
@@ -111,27 +111,27 @@ public:
         The value attribute can contain various platform tokens. They must be separated by
         commas.Each token will be stripped from leading and trailing white space (trim()).
     */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedPlaforms() const;
+    ::com::sun::star::uno::Sequence< OUString > getSupportedPlaforms() const;
 
     /**
         Returns the localized publisher name and the corresponding URL.
 
         In case there is no publisher element then a pair of two empty strings is returned.
     */
-    ::std::pair< ::rtl::OUString, ::rtl::OUString > getLocalizedPublisherNameAndURL() const;
+    ::std::pair< OUString, OUString > getLocalizedPublisherNameAndURL() const;
 
     /**
         Returns the URL for the release notes corresponding to the office's locale.
 
         In case there is no release-notes element then an empty string is returned.
     */
-    ::rtl::OUString getLocalizedReleaseNotesURL() const;
+    OUString getLocalizedReleaseNotesURL() const;
 
     /** returns the relative path to the license file.
 
         In case there is no simple-license element then an empty string is returned.
     */
-    ::rtl::OUString getLocalizedLicenseURL() const;
+    OUString getLocalizedLicenseURL() const;
 
     /** returns the attributes of the simple-license element
 
@@ -144,7 +144,7 @@ public:
 
         In case there is no localized display-name then an empty string is returned.
     */
-    ::rtl::OUString getLocalizedDisplayName() const;
+    OUString getLocalizedDisplayName() const;
 
     /**
         returns the download website URL from the update information.
@@ -165,13 +165,13 @@ public:
         the download website URL, or an empty <code>optional</code> if none is
         specified
     */
-    ::boost::optional< ::rtl::OUString > getLocalizedUpdateWebsiteURL() const;
+    ::boost::optional< OUString > getLocalizedUpdateWebsiteURL() const;
 
     /** returns the relative URL to the description.
 
        The URL is relative to the root directory of the extensions.
     */
-    ::rtl::OUString getLocalizedDescriptionURL() const;
+    OUString getLocalizedDescriptionURL() const;
     /**
        Return the dependencies.
 
@@ -187,7 +187,7 @@ public:
        @return
        update information URLs
     */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
     getUpdateInformationUrls() const;
 
      /**
@@ -200,22 +200,22 @@ public:
         @return
         download URLs
      */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
     getUpdateDownloadUrls() const;
 
     /**
         Returns the URL for the icon image.
     */
-    ::rtl::OUString getIconURL( sal_Bool bHighContrast ) const;
+    OUString getIconURL( sal_Bool bHighContrast ) const;
 
     bool hasDescription() const;
 
 private:
-    SAL_DLLPRIVATE ::boost::optional< ::rtl::OUString > getOptionalValue(
-        ::rtl::OUString const & expression) const;
+    SAL_DLLPRIVATE ::boost::optional< OUString > getOptionalValue(
+        OUString const & expression) const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > getUrls(
-        ::rtl::OUString const & expression) const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< OUString > getUrls(
+        OUString const & expression) const;
 
     /** Retrieves a child element which as lang attribute which matches the office locale.
 
@@ -227,7 +227,7 @@ private:
         Then a null reference is returned.
     */
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode >
-        getLocalizedChild( ::rtl::OUString const & sParent) const;
+        getLocalizedChild( OUString const & sParent) const;
     SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
         matchLanguageTag(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent,
@@ -247,15 +247,15 @@ private:
         @param out_bParentExists
             indicates if the element node specified in sXPathParent exists.
     */
-    SAL_DLLPRIVATE ::rtl::OUString getLocalizedHREFAttrFromChild(
-        ::rtl::OUString const & sXPathParent, bool * out_bParentExists) const;
+    SAL_DLLPRIVATE OUString getLocalizedHREFAttrFromChild(
+        OUString const & sXPathParent, bool * out_bParentExists) const;
 
     /** Gets the node value for a given expression. The expression is used in
         m_xpath-selectSingleNode. The value of the returned node is return value
         of this function.
     */
-    SAL_DLLPRIVATE ::rtl::OUString
-        getNodeValueFromExpression(::rtl::OUString const & expression) const;
+    SAL_DLLPRIVATE OUString
+        getNodeValueFromExpression(OUString const & expression) const;
 
     /** Check the extensions blacklist if additional extension meta data (e.g. dependencies)
         are defined for this extension and have to be taken into account.
@@ -266,8 +266,8 @@ private:
     /** Helper method to compare the versions with the current version
      */
     SAL_DLLPRIVATE bool
-        checkBlacklistVersion(::rtl::OUString currentversion,
-                              ::com::sun::star::uno::Sequence< ::rtl::OUString > const & versions) const;
+        checkBlacklistVersion(OUString currentversion,
+                              ::com::sun::star::uno::Sequence< OUString > const & versions) const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > m_context;
@@ -288,7 +288,7 @@ inline  bool DescriptionInfoset::hasDescription() const
     the description.xml.
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-DescriptionInfoset getDescriptionInfoset(::rtl::OUString const & sExtensionFolderURL);
+DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL);
 }
 
 #endif

@@ -35,11 +35,17 @@
 #include "cppuhelper/shlib.hxx"
 #include "cppuhelper/supportsservice.hxx"
 #include "osl/file.hxx"
-#include "registry/registry.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/uri.hxx"
 #include "rtl/ustring.hxx"
+#include "rtl/strbuf.hxx"
 #include "sal/log.hxx"
+
+using rtl::OUString;
+using rtl::OString;
+using rtl::OStringBuffer;
+
+#include "registry/registry.hxx"
 #include "xmlreader/xmlreader.hxx"
 
 #include "paths.hxx"

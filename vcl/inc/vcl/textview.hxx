@@ -82,7 +82,7 @@ protected:
     void                ImpHideDDCursor();
     void                ImpShowDDCursor();
 
-    bool                ImplTruncateNewText( rtl::OUString& rNewText ) const;
+    bool                ImplTruncateNewText( OUString& rNewText ) const;
     sal_Bool                ImplCheckTextLen( const String& rNewText );
 
     VirtualDevice*      GetVirtualDevice();
@@ -125,7 +125,7 @@ public:
     String              GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
-    void                InsertNewText( const rtl::OUString& rNew, sal_Bool bSelect = sal_False );
+    void                InsertNewText( const OUString& rNew, sal_Bool bSelect = sal_False );
     // deprecated: use InsertNewText instead
     void                InsertText( const String& rNew, sal_Bool bSelect = sal_False );
 

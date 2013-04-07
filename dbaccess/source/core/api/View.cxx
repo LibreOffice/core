@@ -46,9 +46,9 @@ namespace dbaccess
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::sdbc::XRow;
 
-    ::rtl::OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& i_sSetting)
+    OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
     {
-        ::rtl::OUString sSupportService;
+        OUString sSupportService;
         Any aValue;
         if ( dbtools::getDataSourceSetting(_xConnection,i_sSetting,aValue) )
         {
@@ -60,14 +60,14 @@ namespace dbaccess
     //= View
     //====================================================================
     View::View( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
-        const ::rtl::OUString& _rCatalogName,const ::rtl::OUString& _rSchemaName, const ::rtl::OUString& _rName )
-        :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, ::rtl::OUString(), _rSchemaName, _rCatalogName )
+        const OUString& _rCatalogName,const OUString& _rSchemaName, const OUString& _rName )
+        :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, _rCatalogName )
     {
         m_nCommandHandle = getProperty(PROPERTY_COMMAND).Handle;
         try
         {
             Reference<XMultiServiceFactory> xFac(_rxConnection,UNO_QUERY_THROW);
-            static const ::rtl::OUString s_sViewAccess("ViewAccessServiceName");
+            static const OUString s_sViewAccess("ViewAccessServiceName");
             m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,s_sViewAccess)),UNO_QUERY);
         }
         catch(const Exception& )
@@ -113,7 +113,7 @@ namespace dbaccess
         return Sequence< Type >(pTypes, aOwnTypes.size());
     }
 
-    void SAL_CALL View::alterCommand( const ::rtl::OUString& _rNewCommand ) throw (SQLException, RuntimeException)
+    void SAL_CALL View::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException)
     {
         OSL_ENSURE(m_xViewAccess.is(),"Illegal call to AlterView!");
         m_xViewAccess->alterCommand(this,_rNewCommand);

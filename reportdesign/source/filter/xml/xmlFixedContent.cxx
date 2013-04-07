@@ -47,7 +47,7 @@ public:
             SvXMLImport& rImport,
             OXMLFixedContent* _pFixedContent,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
             sal_Bool bCount );
@@ -55,18 +55,18 @@ public:
             SvXMLImport& rImport,
             OXMLFixedContent* _pFixedContent,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
 
     virtual void InsertControlCharacter(sal_Int16   _nControl);
-    virtual void InsertString(const ::rtl::OUString& _sString);
+    virtual void InsertString(const OUString& _sString);
 };
 OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Unicode c,
         sal_Bool bCount )
@@ -79,7 +79,7 @@ OXMLCharContent::OXMLCharContent(
         SvXMLImport& rImport,
         OXMLFixedContent* _pFixedContent,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         sal_Int16 nControl )
     : XMLCharContext(rImport,nPrfx,rLName,xAttrList,nControl)
@@ -92,7 +92,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
     switch( _nControl )
     {
         case ControlCharacter::LINE_BREAK:
-            m_pFixedContent->Characters(::rtl::OUString("\n"));
+            m_pFixedContent->Characters(OUString("\n"));
             break;
         default:
             OSL_FAIL("Not supported control character");
@@ -100,7 +100,7 @@ void OXMLCharContent::InsertControlCharacter(sal_Int16   _nControl)
     }
 }
 // -----------------------------------------------------------------------------
-void OXMLCharContent::InsertString(const ::rtl::OUString& _sString)
+void OXMLCharContent::InsertString(const OUString& _sString)
 {
     m_pFixedContent->Characters(_sString);
 }
@@ -109,7 +109,7 @@ void OXMLCharContent::InsertString(const ::rtl::OUString& _sString)
 DBG_NAME( rpt_OXMLFixedContent )
 
 OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName
+                sal_uInt16 nPrfx, const OUString& rLName
                 ,OXMLCell& _rCell
                 ,OXMLTable* _pContainer
                 ,OXMLFixedContent* _pInP) :
@@ -131,14 +131,14 @@ OXMLFixedContent::~OXMLFixedContent()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(nPrefix,rLocalName,xAttrList);
     if ( pContext )
         return pContext;
 
-    static const ::rtl::OUString s_sStringConcat(" & ");
+    static const OUString s_sStringConcat(" & ");
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
     Reference<XComponentContext> xContext = m_rImport.GetComponentContext();
 
@@ -167,11 +167,11 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
                                                 0x0020, sal_True );
             break;
         case XML_TOK_PAGE_NUMBER:
-            m_sPageText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
+            m_sPageText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
             m_bFormattedField = true;
             break;
         case XML_TOK_PAGE_COUNT:
-            m_sPageText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
+            m_sPageText += s_sStringConcat + OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
             m_bFormattedField = true;
             break;
         default:
@@ -189,7 +189,7 @@ void OXMLFixedContent::EndElement()
         {
             uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
             Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
-            xControl->setDataField(::rtl::OUString("rpt:") + m_sPageText);
+            xControl->setDataField(OUString("rpt:") + m_sPageText);
              OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
             m_pInP->m_xComponent = xControl.get();
             m_xComponent = xControl.get();
@@ -210,15 +210,15 @@ void OXMLFixedContent::EndElement()
     }
 }
 // -----------------------------------------------------------------------------
-void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
+void OXMLFixedContent::Characters( const OUString& rChars )
 {
     m_sLabel += rChars;
     if ( !rChars.isEmpty() )
     {
-        static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
+        static const OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
         if ( !m_sPageText.isEmpty() )
         {
-            static const ::rtl::OUString s_sStringConcat(" & ");
+            static const OUString s_sStringConcat(" & ");
             m_sPageText += s_sStringConcat;
         }
 

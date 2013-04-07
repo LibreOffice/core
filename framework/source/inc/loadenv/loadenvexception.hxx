@@ -100,7 +100,7 @@ class LoadEnvException
 
         /** @short  contains a suitable message, which describes the reason for this
                     exception. */
-        ::rtl::OString m_sMessage;
+        OString m_sMessage;
 
         /** @short  An ID, which make this exception unique among others. */
         sal_Int32 m_nID;
@@ -158,7 +158,7 @@ class LoadEnvException
          */
         ~LoadEnvException()
         {
-            m_sMessage = ::rtl::OString();
+            m_sMessage = OString();
             m_nID      = 0;
             m_bHandled = false;
             m_exOriginal.clear();

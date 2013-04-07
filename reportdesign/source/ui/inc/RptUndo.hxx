@@ -40,7 +40,7 @@ namespace rptui
     protected:
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> >
                                                     m_aControls;
-        ::std::vector< ::std::pair< ::rtl::OUString ,::com::sun::star::uno::Any> >
+        ::std::vector< ::std::pair< OUString ,::com::sun::star::uno::Any> >
                                                     m_aValues;
         Action                                      m_eAction;
         sal_uInt16                                  m_nSlot;
@@ -95,7 +95,7 @@ namespace rptui
         ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >
                                     ,OGroupHelper> m_pMemberFunction;
 
-        mutable ::rtl::OUString                     m_sName;
+        mutable OUString                     m_sName;
 
         void    implReInsert( );
         void    implReRemove( );
@@ -112,7 +112,7 @@ namespace rptui
                             ,Action _eAction
                             ,sal_uInt16 nCommentID);
 
-        virtual rtl::OUString GetComment() const;
+        virtual OUString GetComment() const;
     };
 
     /** /class OGroupUndo

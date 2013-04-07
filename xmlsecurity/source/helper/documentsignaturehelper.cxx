@@ -32,11 +32,10 @@
 #include "rtl/uri.hxx"
 
 using namespace ::com::sun::star::uno;
-using rtl::OUString;
 
 namespace
 {
-::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
+OUString getElement(OUString const & version, ::sal_Int32 * index)
 {
     while (*index < version.getLength() && version[*index] == '0') {
         ++*index;
@@ -49,11 +48,11 @@ namespace
 // Return 1 if version1 is greater then version 2, 0 if they are equal
 //and -1 if version1 is less version 2
 int compareVersions(
-    ::rtl::OUString const & version1, ::rtl::OUString const & version2)
+    OUString const & version1, OUString const & version2)
 {
     for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        ::rtl::OUString e1(getElement(version1, &i1));
-        ::rtl::OUString e2(getElement(version2, &i2));
+        OUString e1(getElement(version1, &i1));
+        OUString e2(getElement(version2, &i2));
         if (e1.getLength() < e2.getLength()) {
             return -1;
         } else if (e1.getLength() > e2.getLength()) {
@@ -76,18 +75,18 @@ int compareVersions(
 //If 'bSigning' is false, then we validate. If the user enabled validating according to OOo 3.0
 //then mimetype and all content of META-INF must be excluded.
 void ImplFillElementList(
-    std::vector< rtl::OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
-    const ::rtl::OUString rRootStorageName, const bool bRecursive,
+    std::vector< OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
+    const OUString rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
-    ::rtl::OUString aMetaInfName(  "META-INF"  );
-    ::rtl::OUString sMimeTypeName ("mimetype");
-    ::rtl::OUString aSep(  "/"  );
+    OUString aMetaInfName(  "META-INF"  );
+    OUString sMimeTypeName ("mimetype");
+    OUString aSep(  "/"  );
 
     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
-    Sequence< ::rtl::OUString > aElements = xElements->getElementNames();
+    Sequence< OUString > aElements = xElements->getElementNames();
     sal_Int32 nElements = aElements.getLength();
-    const ::rtl::OUString* pNames = aElements.getConstArray();
+    const OUString* pNames = aElements.getConstArray();
 
     for ( sal_Int32 n = 0; n < nElements; n++ )
     {
@@ -99,11 +98,11 @@ void ImplFillElementList(
         }
         else
         {
-            ::rtl::OUString sEncName = ::rtl::Uri::encode(
+            OUString sEncName = ::rtl::Uri::encode(
                 pNames[n], rtl_UriCharClassRelSegment,
                 rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8);
             if (sEncName.isEmpty() && !pNames[n].isEmpty())
-                throw css::uno::Exception(::rtl::OUString(
+                throw css::uno::Exception(OUString(
                 "Failed to encode element name of XStorage"), 0);
 
             if ( rxStore->isStreamElement( pNames[n] ) )
@@ -112,13 +111,13 @@ void ImplFillElementList(
                 if (pNames[n].equals(
                     DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()))
                     continue;
-                ::rtl::OUString aFullName( rRootStorageName + sEncName );
+                OUString aFullName( rRootStorageName + sEncName );
                 rList.push_back(aFullName);
             }
             else if ( bRecursive && rxStore->isStorageElement( pNames[n] ) )
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], css::embed::ElementModes::READ );
-                rtl::OUString aFullRootName( rRootStorageName + sEncName + aSep );
+                OUString aFullRootName( rRootStorageName + sEncName + aSep );
                 ImplFillElementList(rList, xSubStore, aFullRootName, bRecursive, mode);
             }
         }
@@ -126,7 +125,7 @@ void ImplFillElementList(
 }
 
 
-bool DocumentSignatureHelper::isODFPre_1_2(const ::rtl::OUString & sVersion)
+bool DocumentSignatureHelper::isODFPre_1_2(const OUString & sVersion)
 {
     //The property version exists only if the document is at least version 1.2
     //That is, if the document has version 1.1 and sVersion is empty.
@@ -138,7 +137,7 @@ bool DocumentSignatureHelper::isODFPre_1_2(const ::rtl::OUString & sVersion)
 
 bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & sigInfo)
 {
-    ::rtl::OUString sManifestURI("META-INF/manifest.xml");
+    OUString sManifestURI("META-INF/manifest.xml");
     bool bOOo3_2 = false;
     typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
     for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
@@ -155,7 +154,7 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
 
 DocumentSignatureAlgorithm
 DocumentSignatureHelper::getDocumentAlgorithm(
-    const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo)
+    const OUString & sODFVersion, const SignatureInformation & sigInfo)
 {
     OSL_ASSERT(!sODFVersion.isEmpty());
     DocumentSignatureAlgorithm mode = OOo3_2Document;
@@ -184,14 +183,14 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 //
 //When a signature is created then we always use the latest algorithm. That is, we use
 //that of OOo 3.2
-std::vector< rtl::OUString >
+std::vector< OUString >
 DocumentSignatureHelper::CreateElementList(
     const Reference < css::embed::XStorage >& rxStore,
-    const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode,
+    const OUString /*rRootStorageName*/, DocumentSignatureMode eMode,
     const DocumentSignatureAlgorithm mode)
 {
-    std::vector< rtl::OUString > aElements;
-    ::rtl::OUString aSep(  "/"  );
+    std::vector< OUString > aElements;
+    OUString aSep(  "/"  );
 
     switch ( eMode )
     {
@@ -200,10 +199,10 @@ DocumentSignatureHelper::CreateElementList(
             if (mode == OOo2Document) //that is, ODF 1.0, 1.1
             {
                 // 1) Main content
-                ImplFillElementList(aElements, rxStore, ::rtl::OUString(), false, mode);
+                ImplFillElementList(aElements, rxStore, OUString(), false, mode);
 
                 // 2) Pictures...
-                rtl::OUString aSubStorageName( "Pictures" );
+                OUString aSubStorageName( "Pictures" );
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -214,7 +213,7 @@ DocumentSignatureHelper::CreateElementList(
                     ; // Doesn't have to exist...
                 }
                 // 3) OLE....
-                aSubStorageName = rtl::OUString("ObjectReplacements");
+                aSubStorageName = OUString("ObjectReplacements");
                 try
                 {
                     Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -222,11 +221,11 @@ DocumentSignatureHelper::CreateElementList(
                     xSubStore.clear();
 
                     // Object folders...
-                    rtl::OUString aMatchStr( "Object " );
+                    OUString aMatchStr( "Object " );
                     Reference < css::container::XNameAccess > xElements( rxStore, UNO_QUERY );
-                    Sequence< ::rtl::OUString > aElementNames = xElements->getElementNames();
+                    Sequence< OUString > aElementNames = xElements->getElementNames();
                     sal_Int32 nElements = aElementNames.getLength();
-                    const ::rtl::OUString* pNames = aElementNames.getConstArray();
+                    const OUString* pNames = aElementNames.getConstArray();
                     for ( sal_Int32 n = 0; n < nElements; n++ )
                     {
                         if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
@@ -244,14 +243,14 @@ DocumentSignatureHelper::CreateElementList(
             else
             {
                 // Everything except META-INF
-                ImplFillElementList(aElements, rxStore, ::rtl::OUString(), true, mode);
+                ImplFillElementList(aElements, rxStore, OUString(), true, mode);
             }
         }
         break;
         case SignatureModeMacros:
         {
             // 1) Macros
-            rtl::OUString aSubStorageName( "Basic" );
+            OUString aSubStorageName( "Basic" );
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -263,7 +262,7 @@ DocumentSignatureHelper::CreateElementList(
             }
 
             // 2) Dialogs
-            aSubStorageName = rtl::OUString("Dialogs") ;
+            aSubStorageName = OUString("Dialogs") ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -274,7 +273,7 @@ DocumentSignatureHelper::CreateElementList(
                 ; // Doesn't have to exist...
             }
             // 3) Scripts
-            aSubStorageName = rtl::OUString("Scripts") ;
+            aSubStorageName = OUString("Scripts") ;
             try
             {
                 Reference < css::embed::XStorage > xSubStore = rxStore->openStorageElement( aSubStorageName, css::embed::ElementModes::READ );
@@ -289,7 +288,7 @@ DocumentSignatureHelper::CreateElementList(
         case SignatureModePackage:
         {
             // Everything except META-INF
-            ImplFillElementList(aElements, rxStore, ::rtl::OUString(), true, mode);
+            ImplFillElementList(aElements, rxStore, OUString(), true, mode);
         }
         break;
     }
@@ -308,11 +307,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
     try
     {
-        ::rtl::OUString aSIGStoreName(  "META-INF"  );
+        OUString aSIGStoreName(  "META-INF"  );
         aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
         if ( aHelper.xSignatureStorage.is() )
         {
-            ::rtl::OUString aSIGStreamName;
+            OUString aSIGStreamName;
             if ( eDocSigMode == SignatureModeDocumentContent )
                 aSIGStreamName = DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
             else if ( eDocSigMode == SignatureModeMacros )
@@ -338,7 +337,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 //the uri s in the Reference elements in the signature, were not properly encoded.
 // For example: <Reference URI="ObjectReplacements/Object 1">
 bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
-    const ::std::vector< ::rtl::OUString > & sElementList,
+    const ::std::vector< OUString > & sElementList,
     const SignatureInformation & sigInfo,
     const DocumentSignatureAlgorithm alg)
 {
@@ -350,7 +349,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
         // There is also an extra entry of type TYPE_SAMEDOCUMENT_REFERENCE because of signature date.
         if ( ( rInf.nType == TYPE_BINARYSTREAM_REFERENCE ) || ( rInf.nType == TYPE_XMLSTREAM_REFERENCE ) )
         {
-            ::rtl::OUString sReferenceURI = rInf.ouURI;
+            OUString sReferenceURI = rInf.ouURI;
             if (alg == OOo2Document)
             {
                 //Comparing URIs is a difficult. Therefore we kind of normalize
@@ -362,10 +361,10 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
             }
 
             //find the file in the element list
-            typedef ::std::vector< ::rtl::OUString >::const_iterator CIT;
+            typedef ::std::vector< OUString >::const_iterator CIT;
             for (CIT aIter = sElementList.begin(); aIter != sElementList.end(); ++aIter)
             {
-                ::rtl::OUString sElementListURI = *aIter;
+                OUString sElementListURI = *aIter;
                 if (alg == OOo2Document)
                 {
                     sElementListURI =
@@ -433,19 +432,19 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
     return retVal;
 }
 
-::rtl::OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
+OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
-    return ::rtl::OUString(  "documentsignatures.xml"  );
+    return OUString(  "documentsignatures.xml"  );
 }
 
-::rtl::OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
+OUString DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName()
 {
-    return ::rtl::OUString(  "macrosignatures.xml"  );
+    return OUString(  "macrosignatures.xml"  );
 }
 
-::rtl::OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
+OUString DocumentSignatureHelper::GetPackageSignatureDefaultStreamName()
 {
-    return ::rtl::OUString(  "packagesignatures.xml"  );
+    return OUString(  "packagesignatures.xml"  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

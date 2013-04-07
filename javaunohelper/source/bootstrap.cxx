@@ -41,13 +41,11 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OString;
-using ::rtl::OUString;
 
 namespace javaunohelper
 {
 
-inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
+inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 {
     OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
     jsize len = jni_env->GetStringLength( jstr );
@@ -58,7 +56,7 @@ inline ::rtl::OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
     ustr->refCount = 1;
     ustr->length = len;
     ustr->buffer[ len ] = '\0';
-    return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
+    return OUString( ustr, SAL_NO_ACQUIRE );
 }
 
 }
@@ -154,7 +152,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
         {
-            OString cstr( ::rtl::OUStringToOString(
+            OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding RuntimeException: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );
@@ -165,7 +163,7 @@ extern "C" SAL_JNI_EXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstra
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (0 != c)
         {
-            OString cstr( ::rtl::OUStringToOString(
+            OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );

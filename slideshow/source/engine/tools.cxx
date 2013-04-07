@@ -61,7 +61,7 @@ namespace slideshow
             class NamedValueStringComparator
             {
             public:
-                NamedValueStringComparator( const ::rtl::OUString& rSearchString ) :
+                NamedValueStringComparator( const OUString& rSearchString ) :
                     mrSearchString( rSearchString )
                 {
                 }
@@ -72,7 +72,7 @@ namespace slideshow
                 }
 
             private:
-                const ::rtl::OUString&      mrSearchString;
+                const OUString&      mrSearchString;
             };
 
             class NamedValueComparator
@@ -164,7 +164,7 @@ namespace slideshow
             }
 
             // try to extract string
-            ::rtl::OUString aString;
+            OUString aString;
             if( !(rSourceAny >>= aString) )
                 return false; // nothing left to try
 
@@ -323,7 +323,7 @@ namespace slideshow
             }
 
             // try to extract string
-            ::rtl::OUString aString;
+            OUString aString;
             if( !(rSourceAny >>= aString) )
                 return false; // nothing left to try
 
@@ -373,7 +373,7 @@ namespace slideshow
         }
 
         /// extract plain string from Any
-        bool extractValue( ::rtl::OUString&             o_rValue,
+        bool extractValue( OUString&             o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
@@ -402,7 +402,7 @@ namespace slideshow
             }
 
             // try to extract string
-            ::rtl::OUString aString;
+            OUString aString;
             if( !(rSourceAny >>= aString) )
                 return false; // nothing left to try
 
@@ -745,7 +745,7 @@ namespace slideshow
             // read bound rect
             awt::Rectangle aTmpRect;
             if( !(xPropSet->getPropertyValue(
-                      ::rtl::OUString("BoundRect") ) >>= aTmpRect) )
+                      OUString("BoundRect") ) >>= aTmpRect) )
             {
                 ENSURE_OR_THROW( false,
                                   "getAPIShapeBounds(): Could not get \"BoundRect\" property from shape" );
@@ -767,7 +767,7 @@ namespace slideshow
             // read prio
             sal_Int32 nPrio(0);
             if( !(xPropSet->getPropertyValue(
-                      ::rtl::OUString("ZOrder") ) >>= nPrio) )
+                      OUString("ZOrder") ) >>= nPrio) )
             {
                 ENSURE_OR_THROW( false,
                                   "getAPIShapePrio(): Could not get \"ZOrder\" property from shape" );

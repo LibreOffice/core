@@ -45,7 +45,7 @@ class CDocument;
 namespace events {
 
 typedef std::multimap< xmlNodePtr, Reference< com::sun::star::xml::dom::events::XEventListener> > ListenerMap;
-typedef std::map< ::rtl::OUString, ListenerMap*> TypeListenerMap;
+typedef std::map< OUString, ListenerMap*> TypeListenerMap;
 typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 
 class CEventDispatcher
@@ -57,20 +57,20 @@ private:
 public:
     void addListener(
         xmlNodePtr pNode,
-        ::rtl::OUString aType,
+        OUString aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     void removeListener(
         xmlNodePtr pNode,
-        ::rtl::OUString aType,
+        OUString aType,
         const Reference<com::sun::star::xml::dom::events::XEventListener>& aListener,
         sal_Bool bCapture);
 
     static void callListeners(
         TypeListenerMap const& rTMap,
         xmlNodePtr const pNode,
-        ::rtl::OUString aType,
+        OUString aType,
         const Reference< XEvent >& xEvent);
 
     bool dispatchEvent(

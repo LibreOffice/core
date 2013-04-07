@@ -68,7 +68,7 @@ TaskManager::startTask(
 
 void SAL_CALL
 TaskManager::endTask( sal_Int32 CommandId,
-                      const rtl::OUString& aUncPath,
+                      const OUString& aUncPath,
                       BaseContent* pContent)
 {
     osl::MutexGuard aGuard( m_aMutex );

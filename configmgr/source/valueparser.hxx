@@ -66,7 +66,7 @@ public:
     int getLayer() const;
 
     Type type_;
-    rtl::OString separator_;
+    OString separator_;
 
 private:
     template< typename T > com::sun::star::uno::Any convertItems();

@@ -55,15 +55,15 @@ class SVX_DLLPUBLIC SvXMLEmbeddedObjectHelper : public ::cppu::WeakComponentImpl
     ::com::sun::star::document::XEmbeddedObjectResolver,
     ::com::sun::star::container::XNameAccess >
 {
-    typedef ::std::map< ::rtl::OUString, OutputStorageWrapper_Impl*,
+    typedef ::std::map< OUString, OutputStorageWrapper_Impl*,
                          OUStringLess > SvXMLEmbeddedObjectHelper_Impl;
 private:
 
     ::osl::Mutex                maMutex;
 
-    const ::rtl::OUString       maReplacementGraphicsContainerStorageName;
-    const ::rtl::OUString       maReplacementGraphicsContainerStorageName60;
-    ::rtl::OUString             maCurContainerStorageName;
+    const OUString       maReplacementGraphicsContainerStorageName;
+    const OUString       maReplacementGraphicsContainerStorageName60;
+    OUString             maCurContainerStorageName;
 
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxRootStorage;  // package
@@ -75,25 +75,25 @@ private:
     SvXMLEmbeddedObjectHelper_Impl      *mpStreamMap;
 
     SVX_DLLPRIVATE sal_Bool                 ImplGetStorageNames(
-                                    const ::rtl::OUString& rURLStr,
-                                    ::rtl::OUString& rContainerStorageName,
-                                    ::rtl::OUString& rObjectStorageName,
+                                    const OUString& rURLStr,
+                                    OUString& rContainerStorageName,
+                                    OUString& rObjectStorageName,
                                     sal_Bool bInternalToExternal,
                                        sal_Bool *pGraphicRepl=0,
                                     sal_Bool *pOasisFormat=0 ) const;
 
     SVX_DLLPRIVATE com::sun::star::uno::Reference < com::sun::star::embed::XStorage > ImplGetContainerStorage(
-                                    const ::rtl::OUString& rStorageName );
+                                    const OUString& rStorageName );
 
     SVX_DLLPRIVATE String                      ImplGetUniqueName( ::comphelper::IEmbeddedHelper*, const sal_Char* p ) const;
     SVX_DLLPRIVATE sal_Bool                 ImplReadObject(
-                                    const ::rtl::OUString& rContainerStorageName,
-                                    ::rtl::OUString& rObjName,
+                                    const OUString& rContainerStorageName,
+                                    OUString& rObjName,
                                     const SvGlobalName *pClassId,
                                     SvStream* pTemp );
 
-    SVX_DLLPRIVATE ::rtl::OUString              ImplInsertEmbeddedObjectURL(
-                                    const ::rtl::OUString& rURLStr );
+    SVX_DLLPRIVATE OUString              ImplInsertEmbeddedObjectURL(
+                                    const OUString& rURLStr );
 
     SVX_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > ImplGetReplacementImage(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj );
@@ -126,21 +126,21 @@ public:
     void                        Flush();
 
     // XEmbeddedObjectResolver
-    virtual ::rtl::OUString SAL_CALL resolveEmbeddedObjectURL( const ::rtl::OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL resolveEmbeddedObjectURL( const OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
     // XNameAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
 
-    static void splitObjectURL(::rtl::OUString aURLNoPar,
-        ::rtl::OUString& rContainerStorageName,
-        ::rtl::OUString& rObjectStorageName);
+    static void splitObjectURL(OUString aURLNoPar,
+        OUString& rContainerStorageName,
+        OUString& rObjectStorageName);
 };
 
 #endif

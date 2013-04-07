@@ -42,7 +42,7 @@ struct PTFieldItemModel
 {
     sal_Int32           mnCacheItem;        /// Index to shared item in pivot cache.
     sal_Int32           mnType;             /// Type of the item.
-    rtl::OUString       msCaption;          /// User caption of the item
+    OUString       msCaption;          /// User caption of the item
     bool                mbShowDetails;      /// True = show item details (items of child fields).
     bool                mbHidden;           /// True = item is hidden.
 
@@ -95,7 +95,7 @@ struct PTFieldModel
 
 struct PTPageFieldModel
 {
-    ::rtl::OUString     maName;             /// Unique name of the page field.
+    OUString     maName;             /// Unique name of the page field.
     sal_Int32           mnField;            /// Base pivot field.
     sal_Int32           mnItem;             /// Index of field item that is shown by the page field.
 
@@ -106,7 +106,7 @@ struct PTPageFieldModel
 
 struct PTDataFieldModel
 {
-    ::rtl::OUString     maName;             /// Name of the data field.
+    OUString     maName;             /// Name of the data field.
     sal_Int32           mnField;            /// Base pivot field.
     sal_Int32           mnSubtotal;         /// Subtotal aggregation function.
     sal_Int32           mnShowDataAs;       /// Show data as, based on another field.
@@ -161,7 +161,7 @@ public:
                             PivotCacheGroupItemVector& orItemNames );
 
     /** Returns the name of the DataPilot field in the fields collection. */
-    inline const ::rtl::OUString& getDPFieldName() const { return maDPFieldName; }
+    inline const OUString& getDPFieldName() const { return maDPFieldName; }
 
     /** Converts dimension and other settings for a row field. */
     void                convertRowField();
@@ -185,7 +185,7 @@ private:
     PivotTable&         mrPivotTable;       /// The parent pivot table object.
     ItemModelVector     maItems;            /// All items of this field.
     PTFieldModel        maModel;            /// Pivot field settings.
-    ::rtl::OUString     maDPFieldName;      /// Name of the field in DataPilot field collection.
+    OUString     maDPFieldName;      /// Name of the field in DataPilot field collection.
     sal_Int32           mnFieldIndex;       /// Zero-based index of this field.
 };
 
@@ -193,10 +193,10 @@ private:
 
 struct PTFilterModel
 {
-    ::rtl::OUString     maName;             /// Name of the field filter.
-    ::rtl::OUString     maDescription;      /// Description of the field filter.
-    ::rtl::OUString     maStrValue1;        /// First string value for label filter.
-    ::rtl::OUString     maStrValue2;        /// Second string value for label filter.
+    OUString     maName;             /// Name of the field filter.
+    OUString     maDescription;      /// Description of the field filter.
+    OUString     maStrValue1;        /// First string value for label filter.
+    OUString     maStrValue2;        /// Second string value for label filter.
     double              mfValue;            /// Number of items or percent or sum to be shown.
     sal_Int32           mnField;            /// Base pivot field.
     sal_Int32           mnMemPropField;     /// Member property field.
@@ -239,17 +239,17 @@ private:
 
 struct PTDefinitionModel : public AutoFormatModel
 {
-    ::rtl::OUString     maName;
-    ::rtl::OUString     maDataCaption;
-    ::rtl::OUString     maGrandTotalCaption;
-    ::rtl::OUString     maRowHeaderCaption;
-    ::rtl::OUString     maColHeaderCaption;
-    ::rtl::OUString     maErrorCaption;
-    ::rtl::OUString     maMissingCaption;
-    ::rtl::OUString     maPageStyle;
-    ::rtl::OUString     maPivotTableStyle;
-    ::rtl::OUString     maVacatedStyle;
-    ::rtl::OUString     maTag;
+    OUString     maName;
+    OUString     maDataCaption;
+    OUString     maGrandTotalCaption;
+    OUString     maRowHeaderCaption;
+    OUString     maColHeaderCaption;
+    OUString     maErrorCaption;
+    OUString     maMissingCaption;
+    OUString     maPageStyle;
+    OUString     maPivotTableStyle;
+    OUString     maVacatedStyle;
+    OUString     maTag;
     sal_Int32           mnCacheId;
     sal_Int32           mnDataPosition;
     sal_Int32           mnPageWrap;
@@ -352,7 +352,7 @@ public:
 
     /** Returns the associated data pilot field for the specified pivot table field. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
-                        getDataPilotField( const ::rtl::OUString& rFieldName ) const;
+                        getDataPilotField( const OUString& rFieldName ) const;
     /** Returns the associated data pilot field for the specified pivot table field. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >
                         getDataPilotField( sal_Int32 nFieldIdx ) const;

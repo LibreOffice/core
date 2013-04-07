@@ -96,37 +96,37 @@ public:
     /**
      * @descr   Generate a name for the section.
      */
-    static rtl::OUString    GenSectionName();
+    static OUString    GenSectionName();
 
     /**
      * @descr   Gen a name for the frame.
      */
-    static rtl::OUString    GenFrameName();
+    static OUString    GenFrameName();
 
     /**
      * @descr   Generate a name for a table.
      */
-    static rtl::OUString    GenTableName();
+    static OUString    GenTableName();
 
     /**
      * @descr   Generate a name for a note.
      */
-    static rtl::OUString    GenNoteName();
+    static OUString    GenNoteName();
 
     /**
      * @descr   Generate a name for the stroke style.
      */
-    static rtl::OUString    GenStrokeDashName();
+    static OUString    GenStrokeDashName();
 
     /**
      * @descr   Generate a name for the area fill style.
      */
-    static rtl::OUString    GenAreaName();
+    static OUString    GenAreaName();
 
     /**
      * @descr   Generate a name for an image object
      */
-    static rtl::OUString    GenImageName();
+    static OUString    GenImageName();
 
     /**
      * @descr   Reset all global variables.

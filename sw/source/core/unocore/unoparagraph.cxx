@@ -48,7 +48,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 class SwParaSelection
 {
@@ -113,7 +112,7 @@ public:
     bool                        m_bIsDescriptor;
     sal_Int32                   m_nSelectionStartPos;
     sal_Int32                   m_nSelectionEndPos;
-    ::rtl::OUString             m_sText;
+    OUString             m_sText;
     uno::Reference<text::XText> m_xParentText;
 
     Impl(   SwXParagraph & rThis,
@@ -151,7 +150,7 @@ public:
     bool IsDescriptor() const { return m_bIsDescriptor; }
 
     void SetPropertyValues_Impl(
-            const uno::Sequence< ::rtl::OUString >& rPropertyNames,
+            const uno::Sequence< OUString >& rPropertyNames,
             const uno::Sequence< uno::Any >& rValues)
         throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
@@ -159,13 +158,13 @@ public:
 
     uno::Sequence< uno::Any >
         GetPropertyValues_Impl(
-            const uno::Sequence< ::rtl::OUString >& rPropertyNames)
+            const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult >
         GetPropertyValuesTolerant_Impl(
-            const uno::Sequence< ::rtl::OUString >& rPropertyNames,
+            const uno::Sequence< OUString >& rPropertyNames,
             bool bDirectValuesOnly)
         throw (uno::RuntimeException);
 protected:
@@ -811,7 +810,7 @@ bool ::sw::GetDefaultTextContentValue(
 
 void SAL_CALL
 SwXParagraph::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -821,7 +820,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXParagraph::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -831,7 +830,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXParagraph::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -841,7 +840,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXParagraph::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)

@@ -90,8 +90,8 @@ namespace connectivity
             virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException);
 
             // XTableUIProvider
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getTableIcon( const ::rtl::OUString& TableName, ::sal_Int32 ColorMode ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const ::rtl::OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         private:
 
@@ -116,11 +116,11 @@ namespace connectivity
                 @precond
                     We're not disposed.
             */
-            void    impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName );
+            void    impl_checkExistingTable_throw( const OUString& _rTableName );
 
             /** checks whether the given table name refers to a HSQL TEXT TABLE
             */
-            bool    impl_isTextTable_nothrow( const ::rtl::OUString& _rTableName );
+            bool    impl_isTextTable_nothrow( const OUString& _rTableName );
 
             /** retrieves the icon for HSQL TEXT TABLEs
             */

@@ -211,8 +211,8 @@ void ScAcceptChgDlg::Init()
         pChanges->SetModifiedLink( LINK( this, ScAcceptChgDlg,ChgTrackModHdl));
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         pTPFilter->ClearAuthors();
-        const std::set<rtl::OUString>& rUserColl = pChanges->GetUserCollection();
-        std::set<rtl::OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
+        const std::set<OUString>& rUserColl = pChanges->GetUserCollection();
+        std::set<OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
         for (; it != itEnd; ++it)
             pTPFilter->InsertAuthor(*it);
     }
@@ -271,9 +271,9 @@ void ScAcceptChgDlg::ClearView()
     pTheView->SetUpdateMode(true);
 }
 
-rtl::OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
+OUString* ScAcceptChgDlg::MakeTypeString(ScChangeActionType eType)
 {
-    rtl::OUString* pStr;
+    OUString* pStr;
 
     switch(eType)
     {
@@ -304,7 +304,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
     ScChangeActionType eType=pScChangeAction->GetType();
-    rtl::OUString aDesc;
+    OUString aDesc;
 
     String aComment = comphelper::string::remove(pScChangeAction->GetComment(), '\n');
 
@@ -359,10 +359,10 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
     String aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
-    rtl::OUString aRefStr;
+    OUString aRefStr;
     ScChangeActionType eType=pScChangeAction->GetType();
-    rtl::OUStringBuffer aBuf;
-    rtl::OUString aDesc;
+    OUStringBuffer aBuf;
+    OUString aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
     pNewData->pData=(void *)pScChangeAction;
@@ -536,10 +536,10 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
     if(bFlag)
     {
 
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         ScChangeActionType eType=pScChangeAction->GetType();
         String aString;
-        rtl::OUString aDesc;
+        OUString aDesc;
 
         ScRedlinData* pNewData=new ScRedlinData;
         pNewData->pData=(void *)pScChangeAction;
@@ -655,14 +655,14 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
             bFlag=true;
     }
 
-    rtl::OUString aRefStr;
+    OUString aRefStr;
     String aString;
     String a2String;
     String aDesc;
 
     if(nSpecial==RD_SPECIAL_CONTENT)
     {
-        rtl::OUString aTmp;
+        OUString aTmp;
         pScChangeAction->GetOldString(aTmp);
         a2String = aTmp;
         if(a2String.Len()==0) a2String=aStrEmpty;
@@ -676,7 +676,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
     }
     else
     {
-        rtl::OUString aTmp;
+        OUString aTmp;
         pScChangeAction->GetNewString(aTmp);
         a2String = aTmp;
         if(a2String.Len()==0)
@@ -1225,8 +1225,8 @@ bool ScAcceptChgDlg::InsertAcceptedORejected(SvTreeListEntry* pParent)
     bool bTheTestFlag = true;
 
     ScChangeActionState eState = SC_CAS_VIRGIN;
-    rtl::OUString aString = pTheView->GetEntryText(pParent);
-    rtl::OUString a2String = aString.copy(0, aStrAllAccepted.getLength());
+    OUString aString = pTheView->GetEntryText(pParent);
+    OUString a2String = aString.copy(0, aStrAllAccepted.getLength());
     if (a2String.equals(aStrAllAccepted))
         eState=SC_CAS_ACCEPTED;
     else
@@ -1793,7 +1793,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( pInfo->aExtraString.Len() )
         {
             xub_StrLen nPos = pInfo->aExtraString.Search(
-                rtl::OUString("AcceptChgDat:"));
+                OUString("AcceptChgDat:"));
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor

@@ -29,8 +29,8 @@
 #define REGISTER_SERVICE(ImplName, ServiceName)                         \
     sString = (ServiceName);                                        \
     xSingleFactory = ::cppu::createSingleFactory(xServiceFactory,               \
-                        ::rtl::OUString(), ImplName##_NewInstance_Impl,             \
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString>(&sString, 1));    \
+                        OUString(), ImplName##_NewInstance_Impl,             \
+                        ::com::sun::star::uno::Sequence< OUString>(&sString, 1));    \
     if (xSingleFactory.is())                                            \
         xSet->insert(::com::sun::star::uno::makeAny(xSingleFactory));
 
@@ -47,8 +47,8 @@ namespace svxform
 #define DECL_SELFAWARE_SERVICE( ClassName )                     \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClassName##_Create(      \
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );  \
-    ::rtl::OUString SAL_CALL ClassName##_GetImplementationName();                                           \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ClassName##_GetSupportedServiceNames();     \
+    OUString SAL_CALL ClassName##_GetImplementationName();                                           \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL ClassName##_GetSupportedServiceNames();     \
 
 
 #define REGISTER_SELFAWARE_SERVICE( ClassName )                     \
@@ -72,15 +72,15 @@ namespace svxform
         if (!xSet.is())
             return;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString> aServices;
+        ::com::sun::star::uno::Sequence< OUString> aServices;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >  xSingleFactory;
 
-        ::rtl::OUString sString;
+        OUString sString;
 
         // ------------------------------------------------------------------------
         // FormController
         REGISTER_SERVICE( FormController, OUString( "com.sun.star.form.runtime.FormController" ) );
-        REGISTER_SERVICE( LegacyFormController, ::rtl::OUString( "com.sun.star.form.FormController" ) );
+        REGISTER_SERVICE( LegacyFormController, OUString( "com.sun.star.form.FormController" ) );
 
         // ------------------------------------------------------------------------
         // FormController

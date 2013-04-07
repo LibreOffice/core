@@ -49,7 +49,7 @@ namespace xforms
 class ComputedExpression
 {
     /// the expression string
-    rtl::OUString msExpression;
+    OUString msExpression;
 
     /// is msExpression empty?
     bool mbIsEmpty;
@@ -66,14 +66,14 @@ protected:
     bool _checkExpression( const sal_Char* pExpression ) const;
 
     /// allow manipulation of the expression before it is evaluated
-    const rtl::OUString _getExpressionForEvaluation() const;
+    const OUString _getExpressionForEvaluation() const;
 
     /// obtain a (suitable) XPathAPI implementation
     com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
 
     /// evaluate the expression relative to the content node.
     bool _evaluate( const xforms::EvaluationContext& rContext,
-                    const rtl::OUString& sExpression );
+                    const OUString& sExpression );
 
 
 public:
@@ -82,10 +82,10 @@ public:
 
 
     /// get the expression string
-    rtl::OUString getExpression() const;
+    OUString getExpression() const;
 
     /// set a new expression string
-    void setExpression( const rtl::OUString& rExpression );
+    void setExpression( const OUString& rExpression );
 
     /// get the namespaces that are used to interpret the expression string
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> getNamespaces() const;
@@ -119,7 +119,7 @@ public:
     // must call evaluate to ensure current results.)
     com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const;
     bool getBool( bool bDefault = false ) const;
-    rtl::OUString getString( const rtl::OUString& rDefault = rtl::OUString() ) const;
+    OUString getString( const OUString& rDefault = OUString() ) const;
 
 };
 

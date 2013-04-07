@@ -51,7 +51,7 @@ namespace formula
                                                  xub_StrLen&    rFStart, // Ein- und Ausgabe
                                                  xub_StrLen*    pFEnd = NULL,
                                                  const IFunctionDescription** ppFDesc = NULL,
-                                                 ::std::vector< ::rtl::OUString>*      pArgs = NULL ) const;
+                                                 ::std::vector< OUString>*      pArgs = NULL ) const;
 
         xub_StrLen          GetFunctionStart( const String& rFormula, xub_StrLen nStart,
                                                         sal_Bool bBack, String* pFuncName = NULL ) const;
@@ -61,7 +61,7 @@ namespace formula
         xub_StrLen          GetArgStart     ( const String& rFormula, xub_StrLen nStart,
                                                       sal_uInt16 nArg ) const;
 
-        void                GetArgStrings   ( ::std::vector< ::rtl::OUString >& _rArgs,
+        void                GetArgStrings   ( ::std::vector< OUString >& _rArgs,
                                                       const String& rFormula,
                                                       xub_StrLen    nFuncPos,
                                                       sal_uInt16        nArgs ) const;
@@ -69,7 +69,7 @@ namespace formula
         void                FillArgStrings  ( const String& rFormula,
                                                       xub_StrLen    nFuncPos,
                                                       sal_uInt16        nArgs,
-                                                      ::std::vector< ::rtl::OUString >&      _rArgs ) const;
+                                                      ::std::vector< OUString >&      _rArgs ) const;
     };
 // =============================================================================
 } // formula

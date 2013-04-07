@@ -55,10 +55,10 @@ namespace basegfx2d
 class b2dsvgdimpex : public CppUnit::TestFixture
 {
 private:
-    ::rtl::OUString aPath0;
-    ::rtl::OUString aPath1;
-    ::rtl::OUString aPath2;
-    ::rtl::OUString aPath3;
+    OUString aPath0;
+    OUString aPath1;
+    OUString aPath2;
+    OUString aPath3;
 
 public:
     // initialise your test code values here.
@@ -139,7 +139,7 @@ public:
     void impex()
     {
         B2DPolyPolygon  aPoly;
-        ::rtl::OUString aExport;
+        OUString aExport;
 
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D",
                                tools::importFromSvgD( aPoly,

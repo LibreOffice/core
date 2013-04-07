@@ -44,7 +44,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.registry.NestedRegistry"
 #define IMPLNAME       "com.sun.star.comp.stoc.NestedRegistry"

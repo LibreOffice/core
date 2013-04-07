@@ -26,7 +26,7 @@
 
 using namespace ::rtl;
 
-AstUnion::AstUnion(const ::rtl::OString& name, AstType* pDiscType, AstScope* pScope)
+AstUnion::AstUnion(const OString& name, AstType* pDiscType, AstScope* pScope)
     : AstStruct(NT_union, name, NULL, pScope)
     , m_pDiscriminantType(pDiscType)
     , m_discExprType(ET_long)
@@ -354,7 +354,7 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
     return sal_True;
 }
 
-AstUnionBranch::AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const ::rtl::OString& name, AstScope* pScope)
+AstUnionBranch::AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const OString& name, AstScope* pScope)
     : AstMember(NT_union_branch, pType, name, pScope)
     , m_pLabel(pLabel)
 {

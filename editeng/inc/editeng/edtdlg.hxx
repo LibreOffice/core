@@ -73,7 +73,7 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
     virtual void    SetCurrentString(
                     const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
+                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true )=0;
     virtual String  GetCurrentString( ) const =0;
     virtual editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const =0;

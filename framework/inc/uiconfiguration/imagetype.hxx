@@ -33,14 +33,14 @@ enum ImageType
     ImageType_COUNT
 };
 
-typedef boost::unordered_map< rtl::OUString,
-                       rtl::OUString,
-                       rtl::OUStringHash,
-                       ::std::equal_to< ::rtl::OUString > > CommandToImageNameMap;
-typedef boost::unordered_map< rtl::OUString,
+typedef boost::unordered_map< OUString,
+                       OUString,
+                       OUStringHash,
+                       ::std::equal_to< OUString > > CommandToImageNameMap;
+typedef boost::unordered_map< OUString,
                        bool,
-                       rtl::OUStringHash,
-                       ::std::equal_to< ::rtl::OUString > > CommandMap;
+                       OUStringHash,
+                       ::std::equal_to< OUString > > CommandMap;
 
 }
 

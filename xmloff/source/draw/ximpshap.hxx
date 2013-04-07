@@ -50,11 +50,11 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::container::XIdentifierContainer > mxGluePoints;
     com::sun::star::uno::Reference< com::sun::star::document::XActionLockable > mxLockable;
 
-    rtl::OUString               maDrawStyleName;
-    rtl::OUString               maTextStyleName;
-    rtl::OUString               maPresentationClass;
-    rtl::OUString               maShapeName;
-    rtl::OUString               maThumbnailURL;
+    OUString               maDrawStyleName;
+    OUString               maTextStyleName;
+    OUString               maPresentationClass;
+    OUString               maShapeName;
+    OUString               maThumbnailURL;
 
     /// whether to restore list context (#91964#)
     bool                        mbListContextPushed;
@@ -65,12 +65,12 @@ protected:
     bool                        mbClearDefaultAttributes;
     sal_Bool                    mbIsUserTransformed;
     sal_Int32                   mnZOrder;
-    rtl::OUString               maShapeId;
-    rtl::OUString               maLayerName;
+    OUString               maShapeId;
+    OUString               maLayerName;
 
     // #i68101#
-    rtl::OUString               maShapeTitle;
-    rtl::OUString               maShapeDescription;
+    OUString               maShapeTitle;
+    OUString               maShapeDescription;
 
     SdXMLImExTransform2D        mnTransform;
     com::sun::star::awt::Size   maSize;
@@ -100,7 +100,7 @@ public:
 
     SdXMLShapeContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -109,11 +109,11 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ public:
     TYPEINFO();
 
     SdXMLRectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -135,7 +135,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -152,7 +152,7 @@ public:
     TYPEINFO();
 
     SdXMLLineShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -160,7 +160,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ public:
     TYPEINFO();
 
     SdXMLEllipseShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -188,7 +188,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -196,22 +196,22 @@ public:
 
 class SdXMLPolygonShapeContext : public SdXMLShapeContext
 {
-    rtl::OUString               maPoints;
-    rtl::OUString               maViewBox;
+    OUString               maPoints;
+    OUString               maViewBox;
     sal_Bool                    mbClosed;
 
 public:
     TYPEINFO();
 
     SdXMLPolygonShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes, sal_Bool bClosed, sal_Bool bTemporaryShape);
     virtual ~SdXMLPolygonShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -219,14 +219,14 @@ public:
 
 class SdXMLPathShapeContext : public SdXMLShapeContext
 {
-    rtl::OUString               maD;
-    rtl::OUString               maViewBox;
+    OUString               maD;
+    OUString               maViewBox;
 
 public:
     TYPEINFO();
 
     SdXMLPathShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -234,7 +234,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ public:
     TYPEINFO();
 
     SdXMLTextBoxShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -256,7 +256,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -265,13 +265,13 @@ public:
 class SdXMLControlShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString maFormId;
+    OUString maFormId;
 
 public:
     TYPEINFO();
 
     SdXMLControlShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -279,7 +279,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -293,9 +293,9 @@ private:
 
     sal_uInt16      mnType;
 
-    rtl::OUString   maStartShapeId;
+    OUString   maStartShapeId;
     sal_Int32       mnStartGlueId;
-    rtl::OUString   maEndShapeId;
+    OUString   maEndShapeId;
     sal_Int32       mnEndGlueId;
 
     sal_Int32   mnDelta1;
@@ -308,7 +308,7 @@ public:
     TYPEINFO();
 
     SdXMLConnectorShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -316,7 +316,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -332,7 +332,7 @@ public:
     TYPEINFO();
 
     SdXMLMeasureShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -341,7 +341,7 @@ public:
     virtual void EndElement();
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ public:
     TYPEINFO();
 
     SdXMLPageShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -363,7 +363,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -379,7 +379,7 @@ public:
     TYPEINFO();
 
     SdXMLCaptionShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -387,7 +387,7 @@ public:
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -396,14 +396,14 @@ public:
 class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
 {
 private:
-    ::rtl::OUString maURL;
+    OUString maURL;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
     TYPEINFO();
 
     SdXMLGraphicObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -411,11 +411,11 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -429,7 +429,7 @@ public:
     TYPEINFO();
 
     SdXMLChartShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -437,8 +437,8 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
-    virtual void Characters( const ::rtl::OUString& rChars );
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual void Characters( const OUString& rChars );
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 
@@ -448,8 +448,8 @@ public:
 class SdXMLObjectShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString maCLSID;
-    rtl::OUString maHref;
+    OUString maCLSID;
+    OUString maHref;
 
     // #100592#
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
@@ -458,7 +458,7 @@ public:
     TYPEINFO();
 
     SdXMLObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -468,11 +468,11 @@ public:
     virtual void EndElement();
 
     // #100592#
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -481,9 +481,9 @@ public:
 class SdXMLAppletShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString maAppletName;
-    rtl::OUString maAppletCode;
-    rtl::OUString maHref;
+    OUString maAppletName;
+    OUString maAppletCode;
+    OUString maHref;
     sal_Bool mbIsScript;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
@@ -492,7 +492,7 @@ public:
     TYPEINFO();
 
     SdXMLAppletShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -501,11 +501,11 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -514,8 +514,8 @@ public:
 class SdXMLPluginShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString   maMimeType;
-    rtl::OUString   maHref;
+    OUString   maMimeType;
+    OUString   maHref;
     bool            mbMedia;
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > maParams;
@@ -524,7 +524,7 @@ public:
     TYPEINFO();
 
     SdXMLPluginShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -533,11 +533,11 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -546,14 +546,14 @@ public:
 class SdXMLFloatingFrameShapeContext : public SdXMLShapeContext
 {
 private:
-    rtl::OUString maFrameName;
-    rtl::OUString maHref;
+    OUString maFrameName;
+    OUString maHref;
 
 public:
     TYPEINFO();
 
     SdXMLFloatingFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -563,7 +563,7 @@ public:
     virtual void EndElement();
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -578,26 +578,26 @@ private:
 
 protected:
     /// helper to get the created xShape instance, needs to be overloaded
-    virtual rtl::OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
+    virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const;
 
 public:
     TYPEINFO();
 
     SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
     virtual ~SdXMLFrameShapeContext();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 class SdXMLCustomShapeContext : public SdXMLShapeContext
@@ -605,8 +605,8 @@ class SdXMLCustomShapeContext : public SdXMLShapeContext
 
 protected :
 
-    rtl::OUString maCustomShapeEngine;
-    rtl::OUString maCustomShapeData;
+    OUString maCustomShapeEngine;
+    OUString maCustomShapeData;
 
     std::vector< com::sun::star::beans::PropertyValue > maCustomShapeGeometry;
 
@@ -614,7 +614,7 @@ public:
 
     TYPEINFO();
 
-    SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+    SdXMLCustomShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -623,11 +623,11 @@ public:
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -639,7 +639,7 @@ public:
     TYPEINFO();
 
     SdXMLTableShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes );
     virtual ~SdXMLTableShapeContext();
@@ -647,14 +647,14 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     // this is called from the parent group for each unparsed attribute in the attribute list
-    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 
 private:
     SvXMLImportContextRef mxTableImportContext;
-    rtl::OUString msTemplateStyleName;
+    OUString msTemplateStyleName;
     sal_Bool maTemplateStylesUsed[6];
 };
 

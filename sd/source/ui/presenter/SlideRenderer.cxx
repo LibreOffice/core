@@ -27,7 +27,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sd { namespace presenter {
 
@@ -42,7 +41,7 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 
 
-::rtl::OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
+OUString SlideRenderer_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.SlideRenderer");
 }
@@ -50,11 +49,11 @@ Reference<XInterface> SAL_CALL SlideRenderer_createInstance (
 
 
 
-Sequence<rtl::OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL SlideRenderer_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.SlideRenderer");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.SlideRenderer");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -216,7 +215,7 @@ BitmapEx SlideRenderer::CreatePreview (
     const Image aPreview = maPreviewRenderer.RenderPage (
         pPage,
         Size(aPreviewSize.Width*nFactor, aPreviewSize.Height*nFactor),
-        ::rtl::OUString());
+        OUString());
     if (nFactor == 1)
         return aPreview.GetBitmapEx();
     else

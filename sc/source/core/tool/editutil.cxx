@@ -685,7 +685,7 @@ String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if (!pFieldData)
-        return rtl::OUString("?");
+        return OUString("?");
 
     OUString aRet;
     sal_Int32 nClsId = pFieldData->GetClassId();
@@ -753,11 +753,11 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     sal_uInt16 /* nPara */, sal_uInt16 /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     const SvxFieldData* pFieldData = rField.GetField();
 
     if (!pFieldData)
-        return rtl::OUString(" ");
+        return OUString(" ");
 
     sal_uInt16 nClsId = pFieldData->GetClassId();
     switch (nClsId)
@@ -765,7 +765,7 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         case text::textfield::Type::URL:
         {
             const SvxURLField* pField = static_cast<const SvxURLField*>(pFieldData);
-            rtl::OUString aURL = pField->GetURL();
+            OUString aURL = pField->GetURL();
 
             switch (pField->GetFormat())
             {
@@ -810,7 +810,7 @@ String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         {
             const SvxTableField* pField = static_cast<const SvxTableField*>(pFieldData);
             SCTAB nTab = pField->GetTab();
-            rtl::OUString aName;
+            OUString aName;
             if (mpDoc->GetName(nTab, aName))
                 aRet = aName;
             else

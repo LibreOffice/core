@@ -213,7 +213,7 @@ public:
         throw( css::uno::RuntimeException );
 
     // XContentAccess
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     queryContentIdentifierString()
         throw( css::uno::RuntimeException );
     virtual css::uno::Reference<
@@ -286,7 +286,7 @@ public:
     virtual sal_Bool SAL_CALL
     wasNull() throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex )
     throw( css::sdbc::SQLException, css::uno::RuntimeException );
 
@@ -384,7 +384,7 @@ public:
         throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    setPropertyValue( const rtl::OUString& PropertyName,
+    setPropertyValue( const OUString& PropertyName,
                       const css::uno::Any& Value )
         throw( css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
@@ -393,13 +393,13 @@ public:
                css::uno::RuntimeException );
 
     virtual css::uno::Any SAL_CALL
-    getPropertyValue( const rtl::OUString& PropertyName )
+    getPropertyValue( const OUString& PropertyName )
         throw( css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
         css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addPropertyChangeListener( const rtl::OUString& PropertyName,
+    addPropertyChangeListener( const OUString& PropertyName,
                                const css::uno::Reference<
                                        css::beans::XPropertyChangeListener >& Listener )
         throw( css::beans::UnknownPropertyException,
@@ -407,7 +407,7 @@ public:
                css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removePropertyChangeListener( const rtl::OUString& PropertyName,
+    removePropertyChangeListener( const OUString& PropertyName,
                                   const css::uno::Reference<
                                       css::beans::XPropertyChangeListener >& Listener )
         throw( css::beans::UnknownPropertyException,
@@ -415,7 +415,7 @@ public:
                css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addVetoableChangeListener( const rtl::OUString& PropertyName,
+    addVetoableChangeListener( const OUString& PropertyName,
                                const css::uno::Reference<
                                        css::beans::XVetoableChangeListener >& Listener )
         throw( css::beans::UnknownPropertyException,
@@ -423,7 +423,7 @@ public:
                css::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeVetoableChangeListener( const rtl::OUString& PropertyName,
+    removeVetoableChangeListener( const OUString& PropertyName,
                                   const css::uno::Reference<
                                       css::beans::XVetoableChangeListener >& aListener )
         throw( css::beans::UnknownPropertyException,

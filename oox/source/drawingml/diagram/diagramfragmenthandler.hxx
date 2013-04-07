@@ -62,7 +62,7 @@ class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler2
 public:
     DiagramQStylesFragmentHandler(
         oox::core::XmlFilterBase& rFilter,
-        const ::rtl::OUString& rFragmentPath,
+        const OUString& rFragmentPath,
         DiagramQStyleMap& rStylesMap );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -75,7 +75,7 @@ private:
                                                             const AttributeList& rAttribs,
                                                             ShapeStyleRef& o_rStyle);
 
-    ::rtl::OUString   maStyleName;
+    OUString   maStyleName;
     DiagramStyle      maStyleEntry;
     DiagramQStyleMap& mrStylesMap;
 };
@@ -85,7 +85,7 @@ class ColorFragmentHandler : public ::oox::core::FragmentHandler2
 public:
     ColorFragmentHandler(
         ::oox::core::XmlFilterBase& rFilter,
-        const ::rtl::OUString& rFragmentPath,
+        const OUString& rFragmentPath,
         DiagramColorMap& rColorMap );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
@@ -94,7 +94,7 @@ public:
     virtual void onEndElement();
 
 private:
-    ::rtl::OUString   maColorName;
+    OUString   maColorName;
     DiagramColor      maColorEntry;
     DiagramColorMap&  mrColorsMap;
 };

@@ -47,7 +47,7 @@ public:
     /** It's slow to iterate through a stylepool looking for a special name, but if
      the style has been inserted via "cacheAutomaticStyle" instead of "getAutomaticStyle",
      it's faster */
-    virtual StylePool::SfxItemSet_Pointer_t getByName( const rtl::OUString& rName,
+    virtual StylePool::SfxItemSet_Pointer_t getByName( const OUString& rName,
                                                                SwAutoStyleFamily eFamily ) = 0;
     /// insert the style to the pool and the cache (used during import)
     virtual StylePool::SfxItemSet_Pointer_t cacheAutomaticStyle( const SfxItemSet& rSet,

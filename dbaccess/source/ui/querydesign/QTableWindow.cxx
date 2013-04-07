@@ -59,14 +59,14 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
 {
     DBG_CTOR(OQueryTableWindow,NULL);
     if (pszInitialAlias != NULL)
-        m_strInitialAlias = ::rtl::OUString(pszInitialAlias);
+        m_strInitialAlias = OUString(pszInitialAlias);
     else
         m_strInitialAlias = GetAliasName();
 
     // if table name matches alias, do not pass to InitialAlias,
     // as the appending of a possible token could not succeed...
     if (m_strInitialAlias == pTabWinData->GetTableName())
-        m_strInitialAlias = ::rtl::OUString();
+        m_strInitialAlias = OUString();
 
     SetHelpId(HID_CTL_QRYDGNTAB);
 }
@@ -87,7 +87,7 @@ sal_Bool OQueryTableWindow::Init()
     OQueryTableView* pContainer = static_cast<OQueryTableView*>(getTableView());
 
     // first determine Alias
-    ::rtl::OUString sAliasName;
+    OUString sAliasName;
 
     TTableWindowData::value_type pWinData = GetData();
 
@@ -102,8 +102,8 @@ sal_Bool OQueryTableWindow::Init()
     // Alias with successive number
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
-        sAliasName += ::rtl::OUString('_');
-        sAliasName += ::rtl::OUString::valueOf(m_nAliasNum);
+        sAliasName += OUString('_');
+        sAliasName += OUString::valueOf(m_nAliasNum);
     }
 
 
@@ -174,7 +174,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo)
+sal_Bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
     OSL_ENSURE(m_pListBox != NULL, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");
@@ -190,7 +190,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
 
             while (pEntry)
             {
-                if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
+                if (bCase(strFieldName,OUString(m_pListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
                     OSL_ENSURE(pInf != NULL, "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");

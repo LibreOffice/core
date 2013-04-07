@@ -287,11 +287,11 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
 
 
 static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
-    const rtl::OUString& rName)
+    const OUString& rName)
 {
     if(!rLst.empty())
     {
-        String sSrch = rtl::OUString(' ');
+        String sSrch = OUString(' ');
         switch( eFam )
         {
         case SFX_STYLE_FAMILY_CHAR:  sSrch = cCHAR;     break;
@@ -331,7 +331,7 @@ bool FindPhyStyle( SwDoc& rDoc, const String& rName, SfxStyleFamily eFam )
 // Add Strings to the list of templates
 void SwPoolFmtList::Append( char cChar, const String& rStr )
 {
-    String aStr = rtl::OUString(cChar);
+    String aStr = OUString(cChar);
     aStr += rStr;
     for(std::vector<String>::const_iterator i = begin(); i != end(); ++i)
         if(*i == aStr)
@@ -633,7 +633,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
 {
     IntlWrapper aIntlWrapper( SvtSysLocale().GetLanguageTag() );
 
-    rtl::OUString sPlus(" + ");
+    OUString sPlus(" + ");
     if ( SFX_STYLE_FAMILY_PAGE == nFamily )
     {
         if( !pSet )
@@ -683,7 +683,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         String aDesc;
         const SfxPoolItem* pItem = aIter.FirstItem();
 
-        rtl::OUString sPageNum;
+        OUString sPageNum;
         String sModel, sBreak;
         bool bHasWesternFontPrefix = false;
         bool bHasCJKFontPrefix = false;
@@ -2789,7 +2789,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::Next()
     return 0;
 }
 
-SfxStyleSheetBase*  SwStyleSheetIterator::Find(const rtl::OUString& rName)
+SfxStyleSheetBase*  SwStyleSheetIterator::Find(const OUString& rName)
 {
     // searching
     if( !bFirstCalled )

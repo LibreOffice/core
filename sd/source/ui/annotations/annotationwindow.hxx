@@ -66,7 +66,7 @@ public:
 
     void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 
-    virtual rtl::OUString GetSurroundingText() const;
+    virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
     virtual void    GetFocus();

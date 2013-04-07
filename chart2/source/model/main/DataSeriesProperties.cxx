@@ -29,7 +29,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Reference;
 

@@ -128,7 +128,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                     }
                 }
             }
-            rtl::OUString uTypeMapping = sTypeMapping;
+            OUString uTypeMapping = sTypeMapping;
 
             uno::Reference< form::XForm >  xForm = pDatMan->getForm();
             uno::Reference< sdbcx::XColumnsSupplier >  xSupplyCols(xForm, UNO_QUERY);
@@ -149,8 +149,8 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                     // getShort returns zero if the value is not a number
                     if (!nTempVal || xCol->wasNull())
                     {
-                        rtl::OUString sTempVal = xCol->getString();
-                        if(sTempVal != rtl::OUString('0'))
+                        OUString sTempVal = xCol->getString();
+                        if(sTempVal != OUString('0'))
                             nTempVal = -1;
                     }
                 }
@@ -432,7 +432,7 @@ void BibGeneralPage::CommitActiveControl()
 }
 //-----------------------------------------------------------------------------
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                String& rErrorString, String aColumnUIName, const rtl::OString& sHelpId, sal_uInt16 nIndexInFTArray )
+                                String& rErrorString, String aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
@@ -456,7 +456,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
 //-----------------------------------------------------------------------------
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const String& rName,
-        ::Point rPos, ::Size rSize, const rtl::OString& sHelpId, sal_Int16& rIndex )
+        ::Point rPos, ::Size rSize, const OString& sHelpId, sal_Int16& rIndex )
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
@@ -472,15 +472,15 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
 
                 uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
-                rtl::OUString aControlName;
+                OUString aControlName;
                 aAny >>= aControlName;
 
-                rtl::OUString uProp("HelpURL");
+                OUString uProp("HelpURL");
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
-                    ::rtl::OUString sId = ::rtl::OUString::createFromAscii( INET_HID_SCHEME );
-                    DBG_ASSERT( INetURLObject( rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
-                    sId += ::rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 );
+                    OUString sId = OUString::createFromAscii( INET_HID_SCHEME );
+                    DBG_ASSERT( INetURLObject( OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+                    sId += OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 );
                     xPropSet->setPropertyValue( uProp, makeAny( sId ) );
                 }
 
@@ -493,23 +493,23 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     aAny.setValue( &eSet, ::getCppuType((const ListSourceType*)0) );
                     xPropSet->setPropertyValue("ListSourceType", aAny);
 
-                    uno::Sequence<rtl::OUString> aListSource(TYPE_COUNT);
-                    rtl::OUString* pListSourceArr = aListSource.getArray();
+                    uno::Sequence<OUString> aListSource(TYPE_COUNT);
+                    OUString* pListSourceArr = aListSource.getArray();
                     //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                     for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
-                        pListSourceArr[i] = rtl::OUString::valueOf(i);
-                    aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<rtl::OUString>*)0));
+                        pListSourceArr[i] = OUString::valueOf(i);
+                    aAny.setValue(&aListSource, ::getCppuType((uno::Sequence<OUString>*)0));
 
                     xPropSet->setPropertyValue("ListSource", aAny);
 
-                    uno::Sequence<rtl::OUString> aValues(TYPE_COUNT + 1);
-                    rtl::OUString* pValuesArr = aValues.getArray();
+                    uno::Sequence<OUString> aValues(TYPE_COUNT + 1);
+                    OUString* pValuesArr = aValues.getArray();
                     for(sal_uInt16 j = 0; j < TYPE_COUNT; j++)
                         pValuesArr[j]  = aBibTypeArr[j];
                     // empty string if an invalid value no values is set
-                    pValuesArr[TYPE_COUNT] = rtl::OUString();
+                    pValuesArr[TYPE_COUNT] = OUString();
 
-                    aAny.setValue(&aValues, ::getCppuType((uno::Sequence<rtl::OUString>*)0));
+                    aAny.setValue(&aValues, ::getCppuType((uno::Sequence<OUString>*)0));
 
                     xPropSet->setPropertyValue("StringItemList", aAny);
 

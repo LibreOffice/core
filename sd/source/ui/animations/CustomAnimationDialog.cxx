@@ -78,7 +78,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
@@ -110,7 +109,7 @@ public:
     virtual Control* getControl();
 
 private:
-    std::map< sal_uInt16, rtl::OUString > maPropertyValues;
+    std::map< sal_uInt16, OUString > maPropertyValues;
     ListBox* mpControl;
 };
 
@@ -567,7 +566,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMenu = new PopupMenu();
     for( sal_Int32 i = 25; i < 101; i += 25 )
     {
-        String aStr(rtl::OUString::valueOf(i));
+        String aStr(OUString::valueOf(i));
         aStr += sal_Unicode('%');
         mpMenu->InsertItem( i, aStr );
     }
@@ -1908,7 +1907,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
                 mpCBDuration->SelectEntryPos( nPos );
             else
-                mpCBDuration->SetText(rtl::OUString::valueOf(fDuration));
+                mpCBDuration->SetText(OUString::valueOf(fDuration));
         }
     }
 
@@ -1939,7 +1938,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
                 mpCBRepeat->SelectEntryPos( nPos );
             else
-                mpCBRepeat->SetText(rtl::OUString::valueOf(fRepeat));
+                mpCBRepeat->SetText(OUString::valueOf(fRepeat));
         }
         else if( aRepeatCount.getValueType() == ::getCppuType((const Timing*)0) )
         {
@@ -2083,7 +2082,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             break;
         default:
             {
-                rtl::OUString aText( mpCBRepeat->GetText() );
+                OUString aText( mpCBRepeat->GetText() );
                 if( !aText.isEmpty() )
                     aRepeatCount <<= aText.toDouble();
             }
@@ -2114,7 +2113,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     }
     else
     {
-        rtl::OUString aText( mpCBDuration->GetText() );
+        OUString aText( mpCBDuration->GetText() );
         if( !aText.isEmpty() )
         {
             fDuration = aText.toDouble();

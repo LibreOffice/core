@@ -35,7 +35,7 @@ namespace jfw
 
 /** gets the value of the updated element from the javavendors.xml.
  */
-rtl::OString getElementUpdated();
+OString getElementUpdated();
 
 /** create the child elements within the root structure for each platform.
 
@@ -66,7 +66,7 @@ public:
         It is not used, when the javaInfo node is written.
         see writeToNode
      */
-    ::rtl::OString sAttrVendorUpdate;
+    OString sAttrVendorUpdate;
     /** contains the nil value of the /java/javaInfo@xsi:nil attribute.
         Default is true;
      */
@@ -78,9 +78,9 @@ public:
         jfw_findAndSelectJRE sets the attribute to true.
      */
     bool bAutoSelect;
-    ::rtl::OUString sVendor;
-    ::rtl::OUString sLocation;
-    ::rtl::OUString sVersion;
+    OUString sVendor;
+    OUString sLocation;
+    OUString sVersion;
     sal_uInt64 nFeatures;
     sal_uInt64 nRequirements;
     ::rtl::ByteSequence arVendorData;
@@ -137,11 +137,11 @@ private:
         depends on the member m_layer and the bootstrap parameters
         UNO_JAVA_JFW_USER_DATA and UNO_JAVA_JFW_SHARED_DATA.
     */
-    ::rtl::OString getSettingsPath() const;
+    OString getSettingsPath() const;
 
     /** returns the file URL to the data file which is to be used. See getSettingsPath.
     */
-    ::rtl::OUString getSettingsURL() const;
+    OUString getSettingsURL() const;
 
     /** Verifies if the respective settings file exist.
      */
@@ -162,7 +162,7 @@ private:
         If /java/userClassPath@xsi:nil == true then the value is uninitialized
         after a call to load().
     */
-    boost::optional< ::rtl::OUString> m_userClassPath;
+    boost::optional< OUString> m_userClassPath;
     /** User configurable option.  /java/javaInfo
         If /java/javaInfo@xsi:nil == true then the value is uninitialized
         after a call to load.
@@ -172,12 +172,12 @@ private:
         If /java/vmParameters@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< ::rtl::OUString> > m_vmParameters;
+    boost::optional< ::std::vector< OUString> > m_vmParameters;
     /** User configurable option. /java/jreLocations
         If /java/jreLocaltions@xsi:nil == true then the value is uninitialized
         after a call to load.
     */
-    boost::optional< ::std::vector< ::rtl::OUString> > m_JRELocations;
+    boost::optional< ::std::vector< OUString> > m_JRELocations;
 
 public:
 
@@ -190,7 +190,7 @@ public:
 
     /** sets m_sUserClassPath. See setEnabled.
      */
-    void setUserClassPath(const ::rtl::OUString & sClassPath);
+    void setUserClassPath(const OUString & sClassPath);
 
     /** sets m_aInfo. See setEnabled.
         @param bAutoSelect
@@ -232,7 +232,7 @@ public:
     const boost::optional<sal_Bool> & getEnabled() const;
     /** returns the value of the element /java/userClassPath.
      */
-    const boost::optional< ::rtl::OUString> & getUserClassPath() const;
+    const boost::optional< OUString> & getUserClassPath() const;
 
     /** returns the value of the element /java/javaInfo.
      */
@@ -240,11 +240,11 @@ public:
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const boost::optional< ::std::vector< ::rtl::OUString> > & getVmParameters() const;
+    const boost::optional< ::std::vector< OUString> > & getVmParameters() const;
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const boost::optional< ::std::vector< ::rtl::OUString> > & getJRELocations() const;
+    const boost::optional< ::std::vector< OUString> > & getJRELocations() const;
 };
 
 /** merges the settings for shared, user and installation during construction.
@@ -277,11 +277,11 @@ private:
 
     bool m_bEnabled;
 
-    ::rtl::OUString m_sClassPath;
+    OUString m_sClassPath;
 
-    ::std::vector< ::rtl::OUString> m_vmParams;
+    ::std::vector< OUString> m_vmParams;
 
-    ::std::vector< ::rtl::OUString> m_JRELocations;
+    ::std::vector< OUString> m_JRELocations;
 
     CNodeJavaInfo m_javaInfo;
 
@@ -293,9 +293,9 @@ public:
      */
     bool getEnabled() const;
 
-    const ::rtl::OUString & getUserClassPath() const;
+    const OUString & getUserClassPath() const;
 
-    ::std::vector< ::rtl::OString> getVmParametersUtf8() const;
+    ::std::vector< OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
         /java/javaInfo. Every time a new JavaInfo structure is created
         which needs to be freed by the caller.
@@ -305,7 +305,7 @@ public:
 
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
-    ::rtl::OString const & getJavaInfoAttrVendorUpdate() const;
+    OString const & getJavaInfoAttrVendorUpdate() const;
 
 #ifdef WNT
     /** returns the javaInfo@autoSelect attribute.
@@ -326,23 +326,23 @@ public:
      */
     void getJRELocations(rtl_uString *** parLocations, sal_Int32 * size) const;
 
-    const ::std::vector< ::rtl::OUString> & getJRELocations() const;
+    const ::std::vector< OUString> & getJRELocations() const;
 };
 
 
 class VersionInfo
 {
-    ::std::vector< ::rtl::OUString> vecExcludeVersions;
+    ::std::vector< OUString> vecExcludeVersions;
     rtl_uString ** arVersions;
 
 public:
     VersionInfo();
     ~VersionInfo();
 
-    void addExcludeVersion(const ::rtl::OUString& sVersion);
+    void addExcludeVersion(const OUString& sVersion);
 
-    ::rtl::OUString sMinVersion;
-    ::rtl::OUString sMaxVersion;
+    OUString sMinVersion;
+    OUString sMaxVersion;
 
     /** The caller DOES NOT get ownership of the strings. That is he
         does not need to release the strings.
@@ -358,16 +358,16 @@ struct PluginLibrary
     PluginLibrary()
     {
     }
-    PluginLibrary(rtl::OUString vendor,::rtl::OUString path) :
+    PluginLibrary(OUString vendor,OUString path) :
         sVendor(vendor), sPath(path)
     {
     }
     /** contains the vendor string which is later userd in the xml API
      */
-    ::rtl::OUString sVendor;
+    OUString sVendor;
     /** File URL the plug-in library
      */
-    ::rtl::OUString sPath;
+    OUString sPath;
 };
 
 } //end namespace

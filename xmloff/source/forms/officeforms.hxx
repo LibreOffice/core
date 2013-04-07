@@ -42,11 +42,11 @@ namespace xmloff
     public:
         TYPEINFO();
 
-        OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const rtl::OUString& _rLocalName);
+        OFormsRootImport( SvXMLImport& _rImport, sal_uInt16 _nPrfx, const OUString& _rLocalName);
         virtual ~OFormsRootImport();
 
         // SvXMLImportContext overriabled
-        virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
         virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
         virtual void EndElement();
@@ -57,7 +57,7 @@ namespace xmloff
             OfficeFormsAttributes _eAttribute,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
-            const ::rtl::OUString& _rPropName,
+            const OUString& _rPropName,
             sal_Bool _bDefault
             );
     };
@@ -82,7 +82,7 @@ namespace xmloff
             OfficeFormsAttributes _eAttribute,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >& _rxPropInfo,
-            const ::rtl::OUString& _rPropName,
+            const OUString& _rPropName,
             sal_Bool _bDefault
             );
     };

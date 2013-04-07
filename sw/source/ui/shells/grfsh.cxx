@@ -737,7 +737,7 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
     SwBaseShell(_rView)
 
 {
-    SetName(rtl::OUString("Graphic"));
+    SetName(OUString("Graphic"));
     SetHelpId(SW_GRFSHELL);
 }
 

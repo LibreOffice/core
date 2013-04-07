@@ -66,8 +66,8 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        static rtl::OString getHelpId( const ::rtl::OUString& _rHelpURL );
-        static ::rtl::OUString getHelpURL( const rtl::OString& );
+        static OString getHelpId( const OUString& _rHelpURL );
+        static OUString getHelpURL( const OString& );
     };
 
     //====================================================================

@@ -147,8 +147,8 @@ ODesignView::~ODesignView()
     }
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( UID_RPT_RPT_APP_VIEW ) );
-        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
+        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pAddField);
@@ -158,7 +158,7 @@ ODesignView::~ODesignView()
     if ( m_pReportExplorer )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_NAVIGATOR) );
-        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_pReportExplorer->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<Window> aTemp2(m_pReportExplorer);
@@ -312,13 +312,13 @@ void ODesignView::SetMode( DlgEdMode _eNewMode )
     m_aScrollWindow.SetMode(_eNewMode);
 }
 //----------------------------------------------------------------------------
-void ODesignView::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void ODesignView::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_eActObj = eObj;
     m_aScrollWindow.SetInsertObj( eObj,_sShapeType );
 }
 //----------------------------------------------------------------------------
-rtl::OUString ODesignView::GetInsertObjString() const
+OUString ODesignView::GetInsertObjString() const
 {
     return m_aScrollWindow.GetInsertObjString();
 }
@@ -404,7 +404,7 @@ void ODesignView::removeSection(sal_uInt16 _nPosition)
      m_aScrollWindow.removeSection(_nPosition);
 }
 //----------------------------------------------------------------------------
-void ODesignView::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
+void ODesignView::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
      m_aScrollWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
@@ -510,7 +510,7 @@ void ODesignView::toggleReportExplorer()
         m_pReportExplorer = new ONavigator(this,rReportController);
         SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_NAVIGATOR) );
         if ( aDlgOpt.Exists() )
-            m_pReportExplorer->SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_pReportExplorer->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pReportExplorer->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pReportExplorer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
@@ -545,9 +545,9 @@ void ODesignView::toggleAddField()
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
         m_pAddField = new OAddFieldWindow(this,xSet);
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( UID_RPT_RPT_APP_VIEW ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
         if ( aDlgOpt.Exists() )
-            m_pAddField->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pAddField->Update();
         m_pAddField->AddEventListener(LINK(&rReportController,OReportController,EventLstHdl));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::AddWindow));
@@ -601,12 +601,12 @@ void ODesignView::collapseSections(const uno::Sequence< beans::PropertyValue>& _
     m_aScrollWindow.collapseSections(_aCollpasedSections);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODesignView::getCurrentPage() const
+OUString ODesignView::getCurrentPage() const
 {
-    return m_pPropWin ? m_pPropWin->getCurrentPage() : ::rtl::OUString();
+    return m_pPropWin ? m_pPropWin->getCurrentPage() : OUString();
 }
 // -----------------------------------------------------------------------------
-void ODesignView::setCurrentPage(const ::rtl::OUString& _sLastActivePage)
+void ODesignView::setCurrentPage(const OUString& _sLastActivePage)
 {
     if ( m_pPropWin )
         m_pPropWin->setCurrentPage(_sLastActivePage);

@@ -50,15 +50,15 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
 
-typedef boost::unordered_map< ::rtl::OUString,
+typedef boost::unordered_map< OUString,
                        WeakReference< XImageManager >,
-                       ::rtl::OUStringHash,
-                       ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
+                       OUStringHash,
+                       ::std::equal_to< OUString > > ModuleIdToImagegMgr;
 
 
 Image SAL_CALL GetImage(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
+    const OUString& aURL,
     bool bBig
 )
 {
@@ -76,7 +76,7 @@ Image SAL_CALL GetImage(
     if ( xController.is() )
         xModel = xController->getModel();
 
-    rtl::OUString aCommandURL( aURL );
+    OUString aCommandURL( aURL );
     if ( nProtocol == INET_PROT_SLOT )
     {
         sal_uInt16 nId = ( sal_uInt16 ) String(aURL).Copy(5).ToInt32();
@@ -98,11 +98,11 @@ Image SAL_CALL GetImage(
 
         if ( pSlot )
         {
-            aCommandURL = rtl::OUString( ".uno:" );
-            aCommandURL += rtl::OUString::createFromAscii( pSlot->GetUnoName() );
+            aCommandURL = OUString( ".uno:" );
+            aCommandURL += OUString::createFromAscii( pSlot->GetUnoName() );
         }
         else
-            aCommandURL = rtl::OUString();
+            aCommandURL = OUString();
     }
 
     Reference< XImageManager > xDocImgMgr;
@@ -124,7 +124,7 @@ Image SAL_CALL GetImage(
     if ( xDocImgMgr.is() )
     {
         Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
-        Sequence< rtl::OUString > aImageCmdSeq( 1 );
+        Sequence< OUString > aImageCmdSeq( 1 );
         aImageCmdSeq[0] = aCommandURL;
 
         try
@@ -156,7 +156,7 @@ Image SAL_CALL GetImage(
         if ( !aCommandURL.isEmpty() )
         {
             Reference< XImageManager > xModuleImageManager;
-            rtl::OUString aModuleId = xModuleManager->identify( rFrame );
+            OUString aModuleId = xModuleManager->identify( rFrame );
 
             static ModuleIdToImagegMgr m_aModuleIdToImageMgrMap;
 
@@ -183,7 +183,7 @@ Image SAL_CALL GetImage(
             }
 
             Sequence< Reference< ::com::sun::star::graphic::XGraphic > > aGraphicSeq;
-            Sequence< rtl::OUString > aImageCmdSeq( 1 );
+            Sequence< OUString > aImageCmdSeq( 1 );
             aImageCmdSeq[0] = aCommandURL;
 
             aGraphicSeq = xModuleImageManager->getImages( nImageType, aImageCmdSeq );

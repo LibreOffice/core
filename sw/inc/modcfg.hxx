@@ -58,13 +58,13 @@ class SwRevisionConfig : public utl::ConfigItem
     sal_uInt16          nMarkAlign;     //Revision/LinesChanged/Mark
     Color           aMarkColor;     //Revision/LinesChanged/Color
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwRevisionConfig();
         ~SwRevisionConfig();
 
     virtual void            Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -78,13 +78,13 @@ class SwCompareConfig : public utl::ConfigItem
     sal_Bool        bIgnorePieces;	//Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwCompareConfig();
         ~SwCompareConfig();
 
     virtual void    Commit();
-    virtual void    Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ){ };
+    virtual void    Notify( const ::com::sun::star::uno::Sequence< OUString >& ){ };
     void            Load();
     void            SetModified() {ConfigItem::SetModified(); }
 };
@@ -104,13 +104,13 @@ class SwInsertConfig : public utl::ConfigItem
     SwInsertTableOptions    aInsTblOpts;
     sal_Bool            bIsWeb;
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwInsertConfig(sal_Bool bWeb);
         ~SwInsertConfig();
 
     virtual void            Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -129,13 +129,13 @@ class SwTableConfig : public utl::ConfigItem
     sal_Bool    bInsTblChangeNumFormat; // Table/Input/NumberFormatRecognition  // Automatic recognition of number formats.
     sal_Bool    bInsTblAlignNum;        // Table/Input/Alignment                // Align numbers.
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwTableConfig(sal_Bool bWeb);
         ~SwTableConfig();
 
     virtual void            Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -157,13 +157,13 @@ class SwMiscConfig : public utl::ConfigItem
     String      sMailingPath;               // FormLetter/FileOutput/Path
     String      sMailName;                  // FormLetter/FileOutput/FileName/FromManualSetting (string!)
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     public:
         SwMiscConfig();
         ~SwMiscConfig();
 
     virtual void            Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

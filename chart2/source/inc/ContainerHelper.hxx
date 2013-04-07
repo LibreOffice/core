@@ -136,7 +136,7 @@ template< typename T >
 
     example:
 
-    ::std::multimap< sal_Int32, ::rtl::OUString > aMyMultiMap;
+    ::std::multimap< sal_Int32, OUString > aMyMultiMap;
     uno::Sequence< sal_Int32 > aMyKeys( ContainerHelper::MapKeysToSequence( aMyMultiMap ));
     // note: aMyKeys may contain duplicate keys here
  */
@@ -154,8 +154,8 @@ template< class Map >
 
     example:
 
-    ::std::map< sal_Int32, ::rtl::OUString > aMyMultiMap;
-    uno::Sequence< ::rtl::OUString > aMyValues( ContainerHelper::MapValuesToSequence( aMyMultiMap ));
+    ::std::map< sal_Int32, OUString > aMyMultiMap;
+    uno::Sequence< OUString > aMyValues( ContainerHelper::MapValuesToSequence( aMyMultiMap ));
  */
 template< class Map >
 ::com::sun::star::uno::Sequence< typename Map::mapped_type > MapValuesToSequence(

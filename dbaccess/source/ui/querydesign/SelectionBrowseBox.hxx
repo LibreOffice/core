@@ -90,7 +90,7 @@ namespace dbaui
         void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const String& rAliasName );
 
-        bool                        HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
+        bool                        HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
 
         // AddGroupBy:: inserts a field with function == grouping. If the fields already exists and uses an aggregate function,
         // the flag is not set
@@ -162,7 +162,7 @@ namespace dbaui
             @return
                 The header text of the specified row.
         */
-        virtual ::rtl::OUString     GetRowDescription( sal_Int32 _nRow ) const;
+        virtual OUString     GetRowDescription( sal_Int32 _nRow ) const;
 
         /** return the name of the specified object.
             @param  eObjType
@@ -172,7 +172,7 @@ namespace dbaui
             @return
                 The name of the specified object.
         */
-        virtual ::rtl::OUString     GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+        virtual OUString     GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
         // IAccessibleTableProvider
         /** Creates the accessible object of a data table cell.
@@ -233,7 +233,7 @@ namespace dbaui
         void            appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow);
         OTableFields&   getFields() const;
         void            enableControl(const OTableFieldDescRef& _rEntry,Window* _pControl);
-        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const rtl::OString& _sHelpId);
+        void            setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const OString& _sHelpId);
         void            invalidateUndoRedo();
         OTableFieldDescRef getEntry(OTableFields::size_type _nPos);
 
@@ -259,7 +259,7 @@ namespace dbaui
             @return
                 <TRUE/> if the table name was set otherwise <FALSE/>
         */
-        sal_Bool        fillEntryTable(OTableFieldDescRef& _pEntry,const ::rtl::OUString& _sTableName);
+        sal_Bool        fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName);
 
         /** uses the parse node to fill all information into the field
             @param  _pColumnRef
@@ -277,8 +277,8 @@ namespace dbaui
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                         OTableFieldDescRef& _pEntry,
                                         sal_Bool& _bListAction);
-        sal_Bool        fillColumnRef(  const ::rtl::OUString& _sColumnName,
-                                        const ::rtl::OUString& _sTableRange,
+        sal_Bool        fillColumnRef(  const OUString& _sColumnName,
+                                        const OUString& _sTableRange,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
                                         OTableFieldDescRef& _pEntry,
                                         sal_Bool& _bListAction);

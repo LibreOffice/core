@@ -21,10 +21,9 @@
 #define INCLUDED_CODEMAKER_UNOTYPE_HXX
 
 #include "sal/types.h"
+#include <rtl/ustring.hxx>
 
 #include <vector>
-
-namespace rtl { class OString; }
 
 namespace codemaker {
 
@@ -64,7 +63,7 @@ namespace UnoType {
        is a UNO type registry name that denotes something other than a UNO type,
        SORT_COMPLEX is returned)
      */
-    Sort getSort(rtl::OString const & type);
+    Sort getSort(OString const & type);
 
     /**
        Determines whether a UNO type name or UNO type registry name denotes a
@@ -75,7 +74,7 @@ namespace UnoType {
        @return true iff the given type denotes a UNO sequence type; the
        detection is purely syntactical
      */
-    bool isSequenceType(rtl::OString const & type);
+    bool isSequenceType(OString const & type);
 
     /**
        Decomposes a UNO type name or UNO type registry name.
@@ -92,9 +91,9 @@ namespace UnoType {
 
        @return the base part of the given type
      */
-    rtl::OString decompose(
-        rtl::OString const & type, sal_Int32 * rank = 0,
-        std::vector< rtl::OString > * arguments = 0);
+    OString decompose(
+        OString const & type, sal_Int32 * rank = 0,
+        std::vector< OString > * arguments = 0);
 }
 
 }

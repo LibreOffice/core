@@ -508,7 +508,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             if ( nNewTextLen != nOriginalTextLen )
                             {
                                 sal_Unicode nUniChar = aText.GetChar(i);
-                                rtl::OString aTmp(&nUniChar, 1, pOut->GetCharSet());
+                                OString aTmp(&nUniChar, 1, pOut->GetCharSet());
                                 if ( aTmp.getLength() > 1 )
                                 {
                                     sal_Int32 nDxCount = aTmp.getLength() - 1;

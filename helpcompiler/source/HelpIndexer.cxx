@@ -41,14 +41,14 @@
 
 using namespace lucene::document;
 
-HelpIndexer::HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
-    rtl::OUString const &srcDir, rtl::OUString const &outDir)
+HelpIndexer::HelpIndexer(OUString const &lang, OUString const &module,
+    OUString const &srcDir, OUString const &outDir)
     : d_lang(lang), d_module(module)
 {
-    d_indexDir = rtl::OUStringBuffer(outDir).append('/').
+    d_indexDir = OUStringBuffer(outDir).append('/').
         append(module).appendAscii(RTL_CONSTASCII_STRINGPARAM(".idxl")).toString();
-    d_captionDir = srcDir + rtl::OUString("/caption");
-    d_contentDir = srcDir + rtl::OUString("/content");
+    d_captionDir = srcDir + OUString("/caption");
+    d_contentDir = srcDir + OUString("/content");
 }
 
 bool HelpIndexer::indexDocuments()
@@ -58,7 +58,7 @@ bool HelpIndexer::indexDocuments()
 
     try
     {
-        rtl::OUString sLang = d_lang.getToken(0, '-');
+        OUString sLang = d_lang.getToken(0, '-');
         bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
 
         // Construct the analyzer appropriate for the given language
@@ -68,10 +68,10 @@ bool HelpIndexer::indexDocuments()
         else
             analyzer.reset(new lucene::analysis::standard::StandardAnalyzer());
 
-        rtl::OUString ustrSystemPath;
+        OUString ustrSystemPath;
         osl::File::getSystemPathFromFileURL(d_indexDir, ustrSystemPath);
 
-        rtl::OString indexDirStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+        OString indexDirStr = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
         lucene::index::IndexWriter writer(indexDirStr.getStr(), analyzer.get(), true);
         //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
         //exception for ja help. Could alternative ignore the exception and get
@@ -80,7 +80,7 @@ bool HelpIndexer::indexDocuments()
 
         // Index the identified help files
         Document doc;
-        for (std::set<rtl::OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
+        for (std::set<OUString>::iterator i = d_files.begin(); i != d_files.end(); ++i) {
             helpDocument(*i, &doc);
             writer.addDocument(&doc);
             doc.clear();
@@ -92,14 +92,14 @@ bool HelpIndexer::indexDocuments()
     }
     catch (CLuceneError &e)
     {
-        d_error = rtl::OUString::createFromAscii(e.what());
+        d_error = OUString::createFromAscii(e.what());
         return false;
     }
 
     return true;
 }
 
-rtl::OUString const & HelpIndexer::getErrorMessage() {
+OUString const & HelpIndexer::getErrorMessage() {
     return d_error;
 }
 
@@ -113,11 +113,11 @@ bool HelpIndexer::scanForFiles() {
     return true;
 }
 
-bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
+bool HelpIndexer::scanForFiles(OUString const & path) {
 
     osl::Directory dir(path);
     if (osl::FileBase::E_None != dir.open()) {
-        d_error = rtl::OUString("Error reading directory ") + path;
+        d_error = OUString("Error reading directory ") + path;
         return true;
     }
 
@@ -133,36 +133,36 @@ bool HelpIndexer::scanForFiles(rtl::OUString const & path) {
     return true;
 }
 
-bool HelpIndexer::helpDocument(rtl::OUString const & fileName, Document *doc) {
+bool HelpIndexer::helpDocument(OUString const & fileName, Document *doc) {
     // Add the help path as an indexed, untokenized field.
 
-    rtl::OUString path = rtl::OUString("#HLP#") +
-        d_module + rtl::OUString("/") + fileName;
+    OUString path = OUString("#HLP#") +
+        d_module + OUString("/") + fileName;
     std::vector<TCHAR> aPath(OUStringToTCHARVec(path));
     doc->add(*_CLNEW Field(_T("path"), &aPath[0], Field::STORE_YES | Field::INDEX_UNTOKENIZED));
 
-    rtl::OUString sEscapedFileName =
+    OUString sEscapedFileName =
         rtl::Uri::encode(fileName,
         rtl_UriCharClassUric, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
 
     // Add the caption as a field.
-    rtl::OUString captionPath = d_captionDir + rtl::OUString("/") + sEscapedFileName;
+    OUString captionPath = d_captionDir + OUString("/") + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("caption"), helpFileReader(captionPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     // Add the content as a field.
-    rtl::OUString contentPath = d_contentDir + rtl::OUString("/") + sEscapedFileName;
+    OUString contentPath = d_contentDir + OUString("/") + sEscapedFileName;
     doc->add(*_CLNEW Field(_T("content"), helpFileReader(contentPath), Field::STORE_NO | Field::INDEX_TOKENIZED));
 
     return true;
 }
 
-lucene::util::Reader *HelpIndexer::helpFileReader(rtl::OUString const & path) {
+lucene::util::Reader *HelpIndexer::helpFileReader(OUString const & path) {
     osl::File file(path);
     if (osl::FileBase::E_None == file.open(osl_File_OpenFlag_Read)) {
         file.close();
-        rtl::OUString ustrSystemPath;
+        OUString ustrSystemPath;
         osl::File::getSystemPathFromFileURL(path, ustrSystemPath);
-        rtl::OString pathStr = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+        OString pathStr = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
         return _CLNEW lucene::util::FileReader(pathStr.getStr(), "UTF-8");
     } else {
         return _CLNEW lucene::util::StringReader(L"");

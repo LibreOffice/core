@@ -50,8 +50,8 @@ class XMLAutoTextEventExport : public SvXMLExport
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameAccess> xEvents;
 
-    const ::rtl::OUString sEventType;
-    const ::rtl::OUString sNone;
+    const OUString sEventType;
+    const OUString sNone;
 
 
 public:
@@ -102,11 +102,11 @@ protected:
 
 // global functions to support the component
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
     XMLAutoTextEventExport_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventExport_getImplementationName()
+OUString SAL_CALL XMLAutoTextEventExport_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
@@ -115,11 +115,11 @@ protected:
             ::com::sun::star::lang::XMultiServiceFactory > & )
     throw( ::com::sun::star::uno::Exception );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
     XMLAutoTextEventExportOOO_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName()
+OUString SAL_CALL XMLAutoTextEventExportOOO_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

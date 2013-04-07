@@ -275,8 +275,8 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
 
 //XUIFunctionExecute
 void SAL_CALL ToolBarWrapper::functionExecute(
-    const ::rtl::OUString& aUIElementName,
-    const ::rtl::OUString& aCommand )
+    const OUString& aUIElementName,
+    const OUString& aCommand )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );

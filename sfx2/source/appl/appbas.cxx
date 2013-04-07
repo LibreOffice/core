@@ -106,7 +106,7 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
     (void) eClassType;
     return 0;
 #else
-    SbxVariable *pVar = pBas->Make( rtl::OUString::createFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
+    SbxVariable *pVar = pBas->Make( OUString::createFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
     pVar->SetUserData( nSID );
     pVar->SetFlag( SBX_DONTSTORE );
     pObject->StartListening( pVar->GetBroadcaster() );

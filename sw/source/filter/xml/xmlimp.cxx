@@ -67,7 +67,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -908,7 +907,7 @@ void SwXMLImport::endDocument( void )
             {
                 Sequence< beans::PropertyValue > aXFormsSettings;
 
-                ::rtl::OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
+                OUString sXFormsSettingsName( GetXMLToken( XML_XFORM_MODEL_SETTINGS ) );
                 if ( xLateInitSettings.is() && xLateInitSettings->hasByName( sXFormsSettingsName ) )
                 {
                     OSL_VERIFY( xLateInitSettings->getByName( sXFormsSettingsName ) >>= aXFormsSettings );
@@ -1469,7 +1468,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
 
 void SwXMLImport::SetDocumentSpecificSettings(
-    const ::rtl::OUString& _rSettingsGroupName,
+    const OUString& _rSettingsGroupName,
     const Sequence< PropertyValue>& _rSettings )
 {
     // the only doc-specific settings group we know so far are the XForms settings

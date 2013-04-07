@@ -124,7 +124,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
     if ( !m_bInitialized )
     {
-        rtl::OUString aModuleIdentifier;
+        OUString aModuleIdentifier;
         UIConfigElementWrapperBase::initialize( aArguments );
 
         Reference< XFrame > xFrame( m_xWeakFrame );
@@ -276,7 +276,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
 // XNameAccess
 Any SAL_CALL MenuBarWrapper::getByName(
-    const ::rtl::OUString& aName )
+    const OUString& aName )
 throw ( container::NoSuchElementException,
         lang::WrappedTargetException,
         uno::RuntimeException)
@@ -299,7 +299,7 @@ throw ( container::NoSuchElementException,
         throw container::NoSuchElementException();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL MenuBarWrapper::getElementNames()
+Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -309,7 +309,7 @@ throw (::com::sun::star::uno::RuntimeException)
 
     fillPopupControllerCache();
 
-    Sequence< rtl::OUString > aSeq( m_aPopupControllerCache.size() );
+    Sequence< OUString > aSeq( m_aPopupControllerCache.size() );
 
     sal_Int32 i( 0 );
     PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.begin();
@@ -323,7 +323,7 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 ::sal_Bool SAL_CALL MenuBarWrapper::hasByName(
-    const ::rtl::OUString& aName )
+    const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );

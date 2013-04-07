@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-using ::rtl::OUString;
 using namespace ::utl                       ;   // getProcessServiceFactory
 using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
@@ -40,7 +39,7 @@ using namespace ::com::sun::star::container ;   //
 using namespace ::com::sun::star::configuration;   //
 using namespace ::com::sun::star::task      ;   // XStatusIndicator
 
-static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const rtl::OUString& rTree )
+static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
 {
     sal_Bool bAvailable = !rTree.isEmpty();
     if ( bAvailable )
@@ -89,7 +88,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
                     bAvailable = sal_False;
                 else
                 {
-                    rtl::OUString aNode( getToken(rTree, i, '/') );
+                    OUString aNode( getToken(rTree, i, '/') );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = sal_False;
                     else
@@ -420,7 +419,7 @@ Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {
     Reference< XStatusIndicator > xStatusIndicator;
-    const rtl::OUString sStatusIndicator( "StatusIndicator" );
+    const OUString sStatusIndicator( "StatusIndicator" );
 
     sal_Int32 i, nCount = aFilterData.getLength();
     for ( i = 0; i < nCount; i++ )

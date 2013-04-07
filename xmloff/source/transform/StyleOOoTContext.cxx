@@ -42,7 +42,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -155,15 +154,15 @@ public:
     TYPEINFO();
 
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLTypedPropertiesOOoTContext_Impl();
 
     using XMLPersAttrListTContext::AddAttribute;
-    void AddAttribute( const ::rtl::OUString &sName ,
-                       const ::rtl::OUString &sValue );
+    void AddAttribute( const OUString &sName ,
+                       const OUString &sValue );
     void AddAttribute( sal_uInt16 nPrefix, XMLTokenEnum eToken,
-                       const ::rtl::OUString &sValue );
+                       const OUString &sValue );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
 
@@ -185,8 +184,8 @@ XMLTypedPropertiesOOoTContext_Impl::~XMLTypedPropertiesOOoTContext_Impl()
 }
 
 void XMLTypedPropertiesOOoTContext_Impl::AddAttribute(
-    const ::rtl::OUString &sName ,
-    const ::rtl::OUString &sValue )
+    const OUString &sName ,
+    const OUString &sValue )
 {
     static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
             ->AddAttribute( sName, sValue );
@@ -194,7 +193,7 @@ void XMLTypedPropertiesOOoTContext_Impl::AddAttribute(
 
 void XMLTypedPropertiesOOoTContext_Impl::AddAttribute(
     sal_uInt16 nPrefix, XMLTokenEnum eToken,
-    const ::rtl::OUString &sValue )
+    const OUString &sValue )
 {
     OUString sName(
             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -246,7 +245,7 @@ public:
     TYPEINFO();
 
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                                XMLPropTypes& rTypes,
                                sal_Bool bPersistent );
 
@@ -262,7 +261,7 @@ public:
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void Export();
 
@@ -344,20 +343,20 @@ XMLTypedPropertiesOOoTContext_Impl
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||
                 (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]) ) )
     {
-        ::rtl::OString aTmp("Didnt't find property: ");
-        const ::rtl::OUString& rPrefix =
+        OString aTmp("Didnt't find property: ");
+        const OUString& rPrefix =
             GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
-        aTmp += ::rtl::OString( rPrefix.getStr(), rPrefix.getLength(),
+        aTmp += OString( rPrefix.getStr(), rPrefix.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
-        aTmp += ::rtl::OString::valueOf( ':' );
-        aTmp += ::rtl::OString( rLocalName.getStr(), rLocalName.getLength(),
+        aTmp += OString::valueOf( ':' );
+        aTmp += OString( rLocalName.getStr(), rLocalName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
-        aTmp += ::rtl::OString(", assuming <style:");
-        const ::rtl::OUString& rName =
+        aTmp += OString(", assuming <style:");
+        const OUString& rName =
             ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] );
-        aTmp += ::rtl::OString( rName.getStr(), rName.getLength(),
+        aTmp += OString( rName.getStr(), rName.getLength(),
                                 RTL_TEXTENCODING_ASCII_US );
-        aTmp += ::rtl::OString::valueOf( '>' );
+        aTmp += OString::valueOf( '>' );
 
         OSL_FAIL(aTmp.getStr());
     }
@@ -875,7 +874,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                     if( nValue )
                     {
                         nValue /= 100;
-                        rtl::OUStringBuffer aOut;
+                        OUStringBuffer aOut;
                         ::sax::Converter::convertPercent( aOut, nValue );
                         aAttrValue = aOut.makeStringAndClear();
                     }
@@ -919,7 +918,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( !aStyleMirrorAttrValue.isEmpty() )
                     {
-                        aStyleMirrorAttrValue += rtl::OUString(" " );
+                        aStyleMirrorAttrValue += OUString(" " );
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
@@ -944,7 +943,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 double fValue = sAttrValue.toDouble();
                 sal_Int32 nValue = (sal_Int32)((fValue * 100.0) + ( fValue > 0 ? 0.5 : - 0.5 ) );
 
-                rtl::OUStringBuffer aOut;
+                OUStringBuffer aOut;
                 ::sax::Converter::convertPercent( aOut, nValue );
                 OUString aAttrValue( aOut.makeStringAndClear() );
                 pContext->AddAttribute( sAttrName, aAttrValue );
@@ -963,7 +962,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 }
                 nValue = 100 - nValue;
 
-                rtl::OUStringBuffer aOut;
+                OUStringBuffer aOut;
                 ::sax::Converter::convertPercent( aOut, nValue );
                 pContext->AddAttribute( sAttrName, aOut.makeStringAndClear() );
             }
@@ -1021,7 +1020,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             sal_Int32 nIntervalMinorDivisor = static_cast< sal_Int32 >(
                 ::rtl::math::round( fIntervalMajor / fIntervalMinor ));
 
-            ::rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             ::sax::Converter::convertNumber( aBuf, nIntervalMinorDivisor );
             pIntervalMinorDivisorContext->AddAttribute(
                 GetTransformer().GetNamespaceMap().GetQNameByKey(

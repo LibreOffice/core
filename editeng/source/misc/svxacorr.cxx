@@ -421,7 +421,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
                     }
                 }
                 sal_Unicode cSave = rTxt.GetChar( nSttPos );
-                rtl::OUString sChar( cSave );
+                OUString sChar( cSave );
                 sChar = rCC.lowercase( sChar );
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
@@ -482,7 +482,7 @@ sal_Bool SvxAutoCorrect::FnChgOrdinalNumber(
         uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
                 = i18n::OrdinalSuffix::create( comphelper::getProcessComponentContext() );
 
-        uno::Sequence< rtl::OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
+        uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix( nNum, rCC.getLanguageTag().getLocale( ) );
         for ( sal_Int32 nSuff = 0; nSuff < aSuffixes.getLength(); nSuff++ )
         {
             String sSuffix( aSuffixes[ nSuff ] );
@@ -534,17 +534,17 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                     ;
 
                 // found: " --[<AnySttChars>][A-z0-9]
-                if( rCC.isLetterNumeric( rtl::OUString(cCh) ) )
+                if( rCC.isLetterNumeric( OUString(cCh) ) )
                 {
                     for( n = nSttPos-1; n && lcl_IsInAsciiArr(
                             sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
                         ;
 
                     // found: "[A-z0-9][<AnyEndChars>] --[<AnySttChars>][A-z0-9]
-                    if( rCC.isLetterNumeric( rtl::OUString(cCh) ))
+                    if( rCC.isLetterNumeric( OUString(cCh) ))
                     {
                         rDoc.Delete( nSttPos, nSttPos + 2 );
-                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? rtl::OUString(cEmDash) : rtl::OUString(cEnDash) );
+                        rDoc.Insert( nSttPos, bAlwaysUseEmDash ? OUString(cEmDash) : OUString(cEnDash) );
                         bRet = sal_True;
                     }
                 }
@@ -569,17 +569,17 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
                     ;
 
                 // found: " - [<AnySttChars>][A-z0-9]
-                if( rCC.isLetterNumeric( rtl::OUString(cCh) ) )
+                if( rCC.isLetterNumeric( OUString(cCh) ) )
                 {
                     cCh = ' ';
                     for( n = nTmpPos-1; n && lcl_IsInAsciiArr(
                             sImplEndSkipChars,(cCh = rTxt.GetChar( --n ))); )
                             ;
                     // found: "[A-z0-9][<AnyEndChars>] - [<AnySttChars>][A-z0-9]
-                    if( rCC.isLetterNumeric( rtl::OUString(cCh) ))
+                    if( rCC.isLetterNumeric( OUString(cCh) ))
                     {
                         rDoc.Delete( nTmpPos, nTmpPos + nLen );
-                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? rtl::OUString(cEmDash) : rtl::OUString(cEnDash) );
+                        rDoc.Insert( nTmpPos, bAlwaysUseEmDash ? OUString(cEmDash) : OUString(cEnDash) );
                         bRet = sal_True;
                     }
                 }
@@ -603,7 +603,7 @@ sal_Bool SvxAutoCorrect::FnChgToEnEmDash(
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
-            rDoc.Insert( nSttPos, (bEnDash ? rtl::OUString(cEnDash) : rtl::OUString(cEmDash)) );
+            rDoc.Insert( nSttPos, (bEnDash ? OUString(cEnDash) : OUString(cEmDash)) );
             bRet = sal_True;
         }
     }
@@ -650,7 +650,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
 
             // Check the presence of "://" in the word
-            xub_StrLen nStrPos = rTxt.Search( rtl::OUString( "://" ), nSttWdPos + 1 );
+            xub_StrLen nStrPos = rTxt.Search( OUString( "://" ), nSttWdPos + 1 );
             if ( STRING_NOTFOUND == nStrPos && nEndPos > 0 )
             {
                 // Check the previous char
@@ -672,7 +672,7 @@ sal_Bool SvxAutoCorrect::FnAddNonBrkSpace(
 
                     // Add the non-breaking space at the end pos
                     if ( bHasSpace )
-                        rDoc.Insert( nPos, rtl::OUString(CHAR_HARDBLANK) );
+                        rDoc.Insert( nPos, OUString(CHAR_HARDBLANK) );
                     bRunNext = true;
                     bRet = true;
                 }
@@ -868,7 +868,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         if( !pPrevPara )
         {
             // valid separator -> replace
-            rtl::OUString sChar( *pWordStt );
+            OUString sChar( *pWordStt );
             sChar = rCC.titlecase(sChar); //see fdo#56740
             return  !comphelper::string::equals(sChar, *pWordStt) &&
                     rDoc.ReplaceRange( xub_StrLen( pWordStt - pStart ), 1, sChar );
@@ -1013,7 +1013,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // check on the basis of the exception list
     if( pExceptStt )
     {
-        sWord = rtl::OUString(pStr, pExceptStt - pStr + 1);
+        sWord = OUString(pStr, pExceptStt - pStr + 1);
         if( FindInCplSttExceptList(eLang, sWord) )
             return sal_False;
 
@@ -1043,7 +1043,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     // Ok, then replace
     sal_Unicode cSave = *pWordStt;
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
-    rtl::OUString sChar( cSave );
+    OUString sChar( cSave );
     sChar = rCC.titlecase(sChar); //see fdo#56740
     sal_Bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
@@ -1072,8 +1072,8 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
         return false;
 
     String aConverted;
-    aConverted.Append( rCC.uppercase(rtl::OUString(rTxt.GetChar(nSttPos))) );
-    aConverted.Append( rCC.lowercase(rtl::OUString(rTxt.GetChar(nSttPos+1))) );
+    aConverted.Append( rCC.uppercase(OUString(rTxt.GetChar(nSttPos))) );
+    aConverted.Append( rCC.lowercase(OUString(rTxt.GetChar(nSttPos+1))) );
 
     for (xub_StrLen i = nSttPos+2; i < nEndPos; ++i)
     {
@@ -1083,7 +1083,7 @@ bool SvxAutoCorrect::FnCorrectCapsLock( SvxAutoCorrDoc& rDoc, const String& rTxt
 
         if ( IsUpperLetter(rCC.getCharacterType(rTxt, i)) )
             // Another uppercase letter.  Convert it.
-            aConverted.Append(rCC.lowercase(rtl::OUString(rTxt.GetChar(i))));
+            aConverted.Append(rCC.lowercase(OUString(rTxt.GetChar(i))));
         else
             // This is not an alphabetic letter.  Leave it as-is.
             aConverted.Append(rTxt.GetChar(i));
@@ -1134,13 +1134,13 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    rtl::OUString sChg( cInsChar );
+    OUString sChg( cInsChar );
     if( bIns )
         rDoc.Insert( nInsPos, sChg );
     else
         rDoc.Replace( nInsPos, sChg );
 
-    sChg = rtl::OUString(cRet);
+    sChg = OUString(cRet);
 
     if( '\"' == cInsChar )
     {
@@ -1154,7 +1154,7 @@ void SvxAutoCorrect::InsertQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
         case LANGUAGE_FRENCH_SWISS:
         case LANGUAGE_FRENCH_LUXEMBOURG:
             {
-                rtl::OUString s( static_cast< sal_Unicode >(0xA0) );
+                OUString s( static_cast< sal_Unicode >(0xA0) );
                     // UNICODE code for no break space
                 if( rDoc.Insert( bSttQuote ? nInsPos+1 : nInsPos, s ))
                 {
@@ -1175,7 +1175,7 @@ String SvxAutoCorrect::GetQuote( SvxAutoCorrDoc& rDoc, xub_StrLen nInsPos,
     LanguageType eLang = rDoc.GetLanguage( nInsPos, sal_False );
     sal_Unicode cRet = GetQuote( cInsChar, bSttQuote, eLang );
 
-    String sRet = rtl::OUString(cRet);
+    String sRet = OUString(cRet);
 
     if( '\"' == cInsChar )
     {
@@ -1237,9 +1237,9 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             }
 
             if( bInsert )
-                rDoc.Insert( nInsPos, rtl::OUString(cChar) );
+                rDoc.Insert( nInsPos, OUString(cChar) );
             else
-                rDoc.Replace( nInsPos, rtl::OUString(cChar) );
+                rDoc.Replace( nInsPos, OUString(cChar) );
 
             // Hardspaces autocorrection
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
@@ -1695,8 +1695,8 @@ static void GeneratePackageName ( const String& rShort, String& rPackageName )
     rPackageName = rShort;
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    rtl::OString sByte(rtl::OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
-    rPackageName = rtl::OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
+    OString sByte(OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
+    rPackageName = OStringToOUString(sByte, RTL_TEXTENCODING_ASCII_US);
     while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
     {
         rPackageName.SetChar( nPos, '_' );
@@ -1825,7 +1825,7 @@ sal_Bool SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
 
 static sal_Bool lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
-    String sAbk(rtl::OUString('~'));
+    String sAbk(OUString('~'));
     SvStringsISortDtor::const_iterator it = pList->find( &sAbk );
     sal_uInt16 nPos = it - pList->begin();
     if( nPos < pList->size() )
@@ -2071,7 +2071,7 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 OUString aMime( "text/xml" );
                 uno::Any aAny;
                 aAny <<= aMime;
-                xStrm->SetProperty( rtl::OUString("MediaType"), aAny );
+                xStrm->SetProperty( OUString("MediaType"), aAny );
 
 
                 uno::Reference< uno::XComponentContext > xContext =
@@ -2330,7 +2330,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         aDest = INetURLObject ( sUserAutoCorrFile );
         if ( SotStorage::IsOLEStorage ( sShareAutoCorrFile ) )
         {
-            aDest.SetExtension ( rtl::OUString("bak") );
+            aDest.SetExtension ( OUString("bak") );
             bConvert = sal_True;
         }
         bCopy = sal_True;
@@ -2339,7 +2339,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         aSource = INetURLObject ( sUserAutoCorrFile );
         aDest = INetURLObject ( sUserAutoCorrFile );
-        aDest.SetExtension ( rtl::OUString("bak") );
+        aDest.SetExtension ( OUString("bak") );
         bCopy = bConvert = sal_True;
     }
     if (bCopy)
@@ -2426,7 +2426,7 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
-            String aPropName( rtl::OUString( "MediaType" ) );
+            String aPropName( OUString( "MediaType" ) );
             OUString aMime( "text/xml" );
             uno::Any aAny;
             aAny <<= aMime;
@@ -2693,8 +2693,8 @@ bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord)
 {
     if ( maSet.empty() ) // use the hash
     {
-        rtl::OUString aShort( pWord->GetShort() );
-        return maHash.insert( std::pair<rtl::OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
+        OUString aShort( pWord->GetShort() );
+        return maHash.insert( std::pair<OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
     }
     else
         return maSet.insert( pWord ).second;
@@ -2771,7 +2771,7 @@ bool SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *pFnd,
         {
             TransliterationWrapper& rCmp = GetIgnoreTranslWrapper();
 
-            rtl::OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
+            OUString sWord(rTxt.GetBuffer() + nCalcStt, rChk.Len());
             if( rCmp.isEqual( rChk, sWord ))
             {
                 rStt = nCalcStt;

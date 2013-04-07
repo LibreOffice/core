@@ -22,9 +22,9 @@
 
 #include <rtl/ustring.hxx>
 
-const ::rtl::OUString BACKSLASH( "\\" );
-const ::rtl::OUString FILTER_SEPARATOR( "------------------------------------------" );
-const ::rtl::OUString ALL_FILES_WILDCARD( "*.*" );
+const OUString BACKSLASH( "\\" );
+const OUString FILTER_SEPARATOR( "------------------------------------------" );
+const OUString ALL_FILES_WILDCARD( "*.*" );
 const ::sal_Bool      ALLOW_DUPLICATES   = sal_True;
 
 #endif

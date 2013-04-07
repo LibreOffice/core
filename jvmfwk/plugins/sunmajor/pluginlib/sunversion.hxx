@@ -82,7 +82,7 @@ protected:
     PreRelease m_preRelease;
 public:
     SunVersion(const char * szVer);
-    SunVersion(const rtl::OUString& usVer);
+    SunVersion(const OUString& usVer);
     ~SunVersion();
 
     /**
@@ -100,7 +100,7 @@ public:
     /** Will always contain a value if the object has been constructed with
         a version string.
      */
-    rtl::OUString usVersion;
+    OUString usVersion;
 
 protected:
     bool init(const char * szVer);

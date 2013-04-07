@@ -45,7 +45,7 @@ public:
     NeonPropFindRequest( HttpSession* inSession,
                          const char*  inPath,
                          const Depth  inDepth,
-                         const std::vector< ::rtl::OUString > & inPropNames,
+                         const std::vector< OUString > & inPropNames,
                          std::vector< DAVResource > & ioResources,
                          int & nError );
     // propnames

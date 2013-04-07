@@ -64,16 +64,16 @@ class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
     virtual void impl_refresh() throw(RuntimeException);
-    virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+    virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName);
 public:
-    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
+    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< OUString>()){}
 };
 
 void OEmptyCollection::impl_refresh() throw(RuntimeException)
 {
 }
 
-connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUString& /*_rName*/)
+connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const OUString& /*_rName*/)
 {
     return connectivity::sdbcx::ObjectType();
 }
@@ -279,7 +279,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     return m_aEmptyValue;
 }
 
-::rtl::OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ORowSetBase::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::getString" );
     ::osl::MutexGuard aGuard( *m_pMutex );
@@ -592,7 +592,7 @@ Reference< XResultSetMetaData > SAL_CALL ORowSetBase::getMetaData(  ) throw(SQLE
 }
 
 // XColumnLocate
-sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ORowSetBase::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetBase::findColumn" );
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);

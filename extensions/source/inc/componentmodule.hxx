@@ -47,9 +47,9 @@ namespace COMPMOD_NAMESPACE
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
-            const ::rtl::OUString & _rComponentName,
+            const OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            const ::com::sun::star::uno::Sequence< OUString > & _rServiceNames,
             rtl_ModuleCount* _pModuleCounter
         );
 
@@ -70,12 +70,12 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
         static ::osl::Mutex     s_aMutex;       /// access safety
         static sal_Int32        s_nClients;     /// number of registered clients
         static OModuleImpl*     s_pImpl;        /// impl class. lives as long as at least one client for the module is registered
-        static ::rtl::OString   s_sResPrefix;
+        static OString   s_sResPrefix;
 
         // auto registration administration
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >*
+        static  ::com::sun::star::uno::Sequence< OUString >*
             s_pImplementationNames;
-        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
+        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >*
             s_pSupportedServices;
         static  ::com::sun::star::uno::Sequence< sal_Int64 >*
             s_pCreationFunctionPointers;
@@ -84,7 +84,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 
     public:
         // can be set as long as no resource has been accessed ...
-        static void     setResourceFilePrefix(const ::rtl::OString& _rPrefix);
+        static void     setResourceFilePrefix(const OString& _rPrefix);
 
         /// get the vcl res manager of the module
         static ResMgr*  getResManager();
@@ -101,8 +101,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             @see revokeComponent
         */
         static void registerComponent(
-            const ::rtl::OUString& _rImplementationName,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
+            const OUString& _rImplementationName,
+            const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
             ::cppu::ComponentInstantiation _pCreateFunction,
             FactoryInstantiation _pFactoryFunction);
 
@@ -111,7 +111,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
                 the implementation name of the component
         */
         static void revokeComponent(
-            const ::rtl::OUString& _rImplementationName);
+            const OUString& _rImplementationName);
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
@@ -123,7 +123,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
                         the XInterface access to a factory for the component
         */
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-            const ::rtl::OUString& _rImplementationName,
+            const OUString& _rImplementationName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
             );
 
@@ -173,8 +173,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
         /** automatically registeres a multi instance component
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_Static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><li/>
+                    <li><code>static OUString getImplementationName_Static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><li/>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>
@@ -215,8 +215,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
         /** automatically registeres a single instance component
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_Static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><li/>
+                    <li><code>static OUString getImplementationName_Static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><li/>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>

@@ -143,7 +143,7 @@ namespace dbaui
         {
             // throw if the instance is already disposed
             if ( i_impl.bDisposed )
-                throw DisposedException( ::rtl::OUString(), i_impl.getThis() );
+                throw DisposedException( OUString(), i_impl.getThis() );
         }
         virtual ~UndoManagerMethodGuard()
         {
@@ -222,7 +222,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL UndoManager::enterUndoContext( const ::rtl::OUString& i_title ) throw (RuntimeException)
+    void SAL_CALL UndoManager::enterUndoContext( const OUString& i_title ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->aUndoHelper.enterUndoContext( i_title, aGuard );
@@ -282,28 +282,28 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getCurrentUndoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getCurrentRedoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getAllUndoActionTitles();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->aUndoHelper.getAllRedoActionTitles();
@@ -376,7 +376,7 @@ namespace dbaui
     void SAL_CALL UndoManager::setParent( const Reference< XInterface >& i_parent ) throw (NoSupportException, RuntimeException)
     {
         (void)i_parent;
-        throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
+        throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
 //......................................................................................................................

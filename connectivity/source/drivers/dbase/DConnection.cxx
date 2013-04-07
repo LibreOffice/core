@@ -45,7 +45,7 @@ DBG_NAME(ODbaseConnection)
 ODbaseConnection::ODbaseConnection(ODriver* _pDriver) : OConnection(_pDriver)
 {
     DBG_CTOR(ODbaseConnection,NULL);
-    m_aFilenameExtension = rtl::OUString("dbf");
+    m_aFilenameExtension = OUString("dbf");
 }
 //-----------------------------------------------------------------------------
 ODbaseConnection::~ODbaseConnection()
@@ -98,7 +98,7 @@ Reference< XStatement > SAL_CALL ODbaseConnection::createStatement(  ) throw(SQL
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -111,7 +111,7 @@ Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareStatement( con
     return pStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL ODbaseConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;

@@ -54,12 +54,12 @@ static char const minimalVersionOpenOfficeOrg[] =
 static char const maximalVersionOpenOfficeOrg[] =
     "OpenOffice.org-maximal-version";
 
-rtl::OUString getLibreOfficeMajorMinorMicro() {
+OUString getLibreOfficeMajorMinorMicro() {
     return utl::ConfigManager::getAboutBoxProductVersion();
 }
 
-rtl::OUString getReferenceOpenOfficeOrgMajorMinor() {
-    rtl::OUString v(
+OUString getReferenceOpenOfficeOrgMajorMinor() {
+    OUString v(
             "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:ReferenceOOoMajorMinor}");
     rtl::Bootstrap::expandMacros(v); //TODO: check for failure
@@ -67,19 +67,19 @@ rtl::OUString getReferenceOpenOfficeOrgMajorMinor() {
 }
 
 bool satisfiesMinimalVersion(
-    rtl::OUString const & actual, rtl::OUString const & specified)
+    OUString const & actual, OUString const & specified)
 {
     return dp_misc::compareVersions(actual, specified) != dp_misc::LESS;
 }
 
 bool satisfiesMaximalVersion(
-    rtl::OUString const & actual, rtl::OUString const & specified)
+    OUString const & actual, OUString const & specified)
 {
     return dp_misc::compareVersions(actual, specified) != dp_misc::GREATER;
 }
 
-rtl::OUString produceErrorText(
-    rtl::OUString const & reason, rtl::OUString const & version)
+OUString produceErrorText(
+    OUString const & reason, OUString const & version)
 {
     return reason.replaceFirst("%VERSION",
         (version.isEmpty()
@@ -136,7 +136,7 @@ check(dp_misc::DescriptionInfoset const & infoset) {
     return unsatisfied;
 }
 
-rtl::OUString getErrorText(
+OUString getErrorText(
     css::uno::Reference< css::xml::dom::XElement > const & dependency)
 {
     OSL_ASSERT(dependency.is());

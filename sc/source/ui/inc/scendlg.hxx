@@ -36,10 +36,10 @@ public:
         ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit = false, sal_Bool bSheetProtected = false );
         ~ScNewScenarioDlg();
 
-    void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
+    void SetScenarioData( const OUString& rName, const OUString& rComment,
                           const Color& rColor, sal_uInt16 nFlags );
 
-    void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
+    void GetScenarioData( OUString& rName, OUString& rComment,
                           Color& rColor, sal_uInt16& rFlags ) const;
 
 private:

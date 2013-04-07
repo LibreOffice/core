@@ -261,11 +261,11 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
 // -----------------------------------------------------------------------------
 
-SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
+SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize,
                                    bool const bLink )
 {
-    ::rtl::OUString realURL;
+    OUString realURL;
     if (bLink)
     {
         realURL = rMediaURL;
@@ -368,7 +368,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            rtl::OUString aURLStr;
+            OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aCurrentDropFile, aURLStr );
             aURL = INetURLObject( aURLStr );
         }
@@ -404,7 +404,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
 
                 if( pFoundFilter && !nErr )
                 {
-                    ::std::vector< ::rtl::OUString > aFilterVector;
+                    ::std::vector< OUString > aFilterVector;
                     const String            aFilterName( pFoundFilter->GetFilterName() );
                     String                  aLowerAsciiFileName( aCurrentDropFile );
                     aLowerAsciiFileName.ToLowerAscii();
@@ -466,10 +466,10 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl)
                     try
                     {
                         //TODO/MBA: testing
-                        ::rtl::OUString aName;
+                        OUString aName;
                         uno::Sequence < beans::PropertyValue > aMedium(1);
                         aMedium[0].Name = "URL" ;
-                        aMedium[0].Value <<=  ::rtl::OUString(aCurrentDropFile) ;
+                        aMedium[0].Value <<=  OUString(aCurrentDropFile) ;
 
                         uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().
                                 InsertEmbeddedObject( aMedium, aName );

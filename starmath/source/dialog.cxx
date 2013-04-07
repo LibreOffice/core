@@ -313,7 +313,7 @@ IMPL_LINK( SmFontDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_FONTDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_FONTDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -436,7 +436,7 @@ IMPL_LINK( SmFontSizeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_FONTSIZEDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_FONTSIZEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -556,7 +556,7 @@ IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_FONTTYPEDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_FONTTYPEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -687,7 +687,7 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, sal_uInt16 nCategoryIdx) :
 
             if (IsAvailableRes(ResId(nI2,*rResId.GetResMgr()).SetRT(RSC_STRING)))
             {
-                Strings  [i] = new rtl::OUString(ResId(nI2,*rResId.GetResMgr()).toString());
+                Strings  [i] = new OUString(ResId(nI2,*rResId.GetResMgr()).toString());
                 Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
             }
             else
@@ -769,7 +769,7 @@ IMPL_LINK( SmDistanceDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_DISTANCEDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_DISTANCEDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -789,7 +789,7 @@ IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, CheckBox *, pCheckBox )
 }
 
 
-void SmDistanceDialog::SetHelpId(MetricField &rField, const rtl::OString& sHelpId)
+void SmDistanceDialog::SetHelpId(MetricField &rField, const OString& sHelpId)
 {
     const OUString aEmptyText;
 
@@ -884,7 +884,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
         {
             eUnit   = FUNIT_CUSTOM;
             nDigits = 0;
-            pMF->SetCustomUnitText(rtl::OUString('%'));
+            pMF->SetCustomUnitText(OUString('%'));
         }
         else
         {
@@ -1083,7 +1083,7 @@ IMPL_LINK( SmAlignDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_ALIGNDIALOG" ), &aHelpButton1 );
+        pHelp->Start( OUString( "HID_SMA_ALIGNDIALOG" ), &aHelpButton1 );
     }
     return 0;
 }
@@ -1526,7 +1526,7 @@ IMPL_LINK( SmSymbolDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_SYMBOLDIALOG" ), &aHelpBtn );
+        pHelp->Start( OUString( "HID_SMA_SYMBOLDIALOG" ), &aHelpBtn );
     }
     return 0;
 }
@@ -1551,7 +1551,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
         FreeResource();
 
     aHelpBtn.SetClickHdl(LINK(this, SmSymbolDialog, HelpButtonClickHdl));
-    aSymbolSetName = rtl::OUString();
+    aSymbolSetName = OUString();
     aSymbolSet.clear();
     FillSymbolSets();
     if (aSymbolSets.GetEntryCount() > 0)
@@ -1616,7 +1616,7 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
     bool    bRet = false;
     sal_uInt16  nPos = aSymbolSets.GetEntryPos(rSymbolSetName);
 
-    aSymbolSetName = rtl::OUString();
+    aSymbolSetName = OUString();
     aSymbolSet.clear();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
@@ -1717,7 +1717,7 @@ void SmSymDefineDialog::FillSymbols(ComboBox &rComboBox, bool bDeleteText)
 
     rComboBox.Clear();
     if (bDeleteText)
-        rComboBox.SetText(rtl::OUString());
+        rComboBox.SetText(OUString());
 
     ComboBox &rBox = &rComboBox == &aOldSymbols ? aOldSymbolSets : aSymbolSets;
     SymbolPtrVec_t aSymSet( aSymbolMgrCopy.GetSymbolSet( rBox.GetText() ) );
@@ -1735,7 +1735,7 @@ void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
 
     rComboBox.Clear();
     if (bDeleteText)
-        rComboBox.SetText(rtl::OUString());
+        rComboBox.SetText(OUString());
 
     const std::set< OUString >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
     std::set< OUString >::const_iterator aIt( aSymbolSetNames.begin() );
@@ -1766,7 +1766,7 @@ void SmSymDefineDialog::FillStyles(bool bDeleteText)
 {
     aStyles.Clear();
     if (bDeleteText)
-        aStyles.SetText(rtl::OUString());
+        aStyles.SetText(OUString());
 
     OUString aText (aFonts.GetSelectEntry());
     if (!aText.isEmpty())
@@ -1910,7 +1910,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
     UpdateButtons();
 
     // display Unicode position as symbol name while iterating over characters
-    const OUString aHex(rtl::OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
+    const OUString aHex(OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
     const OUString aPattern( (aHex.getLength() > 4) ? OUString("Ux000000") : OUString("Ux0000") );
     OUString aUnicodePos( aPattern.copy( 0, aPattern.getLength() - aHex.getLength() ) );
     aUnicodePos += aHex;
@@ -1974,7 +1974,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
 
     // clear display for original symbol if necessary
     if (bNameChanged)
-        SetOrigSymbol(NULL, rtl::OUString());
+        SetOrigSymbol(NULL, OUString());
 
     // update display of new symbol
     aSymbolDisplay.SetSymbol( &aNewSymbol );
@@ -2006,7 +2006,7 @@ IMPL_LINK( SmSymDefineDialog, DeleteClickHdl, Button *, EMPTYARG pButton )
         aSymbolMgrCopy.RemoveSymbol( pOrigSymbol->GetName() );
 
         // clear display for original symbol
-        SetOrigSymbol(NULL, rtl::OUString());
+        SetOrigSymbol(NULL, OUString());
 
         // update list box entries
         FillSymbolSets(aOldSymbolSets, false);
@@ -2063,7 +2063,7 @@ IMPL_LINK( SmSymDefineDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/
     Help* pHelp = Application::GetHelp();
     if( pHelp )
     {
-        pHelp->Start( rtl::OUString( "HID_SMA_SYMDEFINEDIALOG" ), &aHelpBtn );
+        pHelp->Start( OUString( "HID_SMA_SYMDEFINEDIALOG" ), &aHelpBtn );
     }
     return 0;
 }
@@ -2254,7 +2254,7 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(rtl::OUString());
+        rComboBox.SetText(OUString());
 
     bool  bIsOld = &rComboBox == &aOldSymbolSets;
 
@@ -2301,7 +2301,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
     }
     else
     {   // delete displayed symbols
-        aOldSymbolDisplay.SetText(rtl::OUString());
+        aOldSymbolDisplay.SetText(OUString());
         aOldSymbolDisplay.Invalidate();
     }
     aOldSymbolName   .SetText(aSymName);
@@ -2359,7 +2359,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
         bRet = true;
     }
     else if (bDeleteText)
-        rComboBox.SetText(rtl::OUString());
+        rComboBox.SetText(OUString());
 
     if (bIsOld)
     {
@@ -2467,7 +2467,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
         bRet = sal_True;
     }
     else
-        aStyles.SetText(rtl::OUString());
+        aStyles.SetText(OUString());
 
     UpdateButtons();
 

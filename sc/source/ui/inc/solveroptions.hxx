@@ -48,8 +48,8 @@ class ScSolverOptionsDialog : public ModalDialog
     CancelButton    maBtnCancel;
 
     SvLBoxButtonData* mpCheckButtonData;
-    com::sun::star::uno::Sequence<rtl::OUString> maImplNames;
-    com::sun::star::uno::Sequence<rtl::OUString> maDescriptions;
+    com::sun::star::uno::Sequence<OUString> maImplNames;
+    com::sun::star::uno::Sequence<OUString> maDescriptions;
     String          maEngine;
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
@@ -64,8 +64,8 @@ class ScSolverOptionsDialog : public ModalDialog
 
 public:
     ScSolverOptionsDialog( Window* pParent,
-                           const com::sun::star::uno::Sequence<rtl::OUString>& rImplNames,
-                           const com::sun::star::uno::Sequence<rtl::OUString>& rDescriptions,
+                           const com::sun::star::uno::Sequence<OUString>& rImplNames,
+                           const com::sun::star::uno::Sequence<OUString>& rDescriptions,
                            const String& rEngine,
                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
     ~ScSolverOptionsDialog();

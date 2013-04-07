@@ -59,7 +59,7 @@ ScDPTableData::~ScDPTableData()
 {
 }
 
-rtl::OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
 {
     const ScDPCache* pCache = GetCacheTable().getCache();
     return pCache->GetFormattedString(nDim, rItem);

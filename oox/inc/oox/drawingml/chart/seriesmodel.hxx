@@ -37,7 +37,7 @@ struct DataLabelModelBase
     ShapeRef            mxShapeProp;        /// Data label frame formatting.
     TextBodyRef         mxTextProp;         /// Data label text formatting.
     NumberFormat        maNumberFormat;     /// Number format for numeric data labels.
-    OptValue< ::rtl::OUString > moaSeparator;/// Separator between label components.
+    OptValue< OUString > moaSeparator;/// Separator between label components.
     OptValue< sal_Int32 > monLabelPos;      /// Data label position.
     OptValue< bool >    mobShowBubbleSize;  /// True = show size of bubbles in bubble charts.
     OptValue< bool >    mobShowCatName;     /// True = show category name of data points.
@@ -148,7 +148,7 @@ struct TrendlineModel
 
     ShapeRef            mxShapeProp;        /// Trendline formatting.
     TrendlineLabelRef   mxLabel;            /// Trendline label text object.
-    ::rtl::OUString     maName;             /// User-defined name of the trendline.
+    OUString     maName;             /// User-defined name of the trendline.
     OptValue< double >  mfBackward;         /// Size of trendline before first data point.
     OptValue< double >  mfForward;          /// Size of trendline behind last data point.
     OptValue< double >  mfIntercept;        /// Crossing point with Y axis.

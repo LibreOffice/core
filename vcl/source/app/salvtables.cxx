@@ -47,7 +47,7 @@ void SalFrame::Flush( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-void SalFrame::SetRepresentedURL( const rtl::OUString& )
+void SalFrame::SetRepresentedURL( const OUString& )
 {
     // currently this is Mac only functionality
 }
@@ -58,7 +58,7 @@ SalInstance::~SalInstance()
 {
 }
 
-void SalInstance::FillFontPathList( std::list< rtl::OString >& )
+void SalInstance::FillFontPathList( std::list< OString >& )
 {
     // do nothing
 }
@@ -106,7 +106,7 @@ SalPrinter::~SalPrinter()
 {
 }
 
-sal_Bool SalPrinter::StartJob( const rtl::OUString*, const rtl::OUString&, const rtl::OUString&,
+sal_Bool SalPrinter::StartJob( const OUString*, const OUString&, const OUString&,
                            ImplJobSetup*, vcl::PrinterController& )
 {
     return sal_False;

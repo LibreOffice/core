@@ -325,9 +325,9 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
         {
             OSL_TRACE (
                 "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                ::rtl::OUStringToOString(msURL,
+                OUStringToOString(msURL,
                     RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
+                OUStringToOString(rException.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
 
@@ -355,9 +355,9 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
         {
             OSL_TRACE (
                 "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                ::rtl::OUStringToOString(msURL,
+                OUStringToOString(msURL,
                     RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
+                OUStringToOString(rException.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
     }
@@ -365,9 +365,9 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
     {
         OSL_TRACE (
             "caught exception while trying to access tuhmbnail of %s: %s",
-            ::rtl::OUStringToOString(msURL,
+            OUStringToOString(msURL,
                 RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message,
+            OUStringToOString(rException.Message,
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 

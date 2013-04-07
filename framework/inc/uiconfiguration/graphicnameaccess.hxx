@@ -34,15 +34,15 @@ namespace framework
             GraphicNameAccess();
             virtual ~GraphicNameAccess();
 
-            void addElement( const rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rElement );
+            void addElement( const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rElement );
 
             // XNameAccess
-            virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+            virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                 throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
                     ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
                 throw(::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+            virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
                 throw(::com::sun::star::uno::RuntimeException);
 
             // XElementAccess
@@ -54,7 +54,7 @@ namespace framework
         private:
             typedef BaseHash< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > NameGraphicHashMap;
             NameGraphicHashMap m_aNameToElementMap;
-            ::com::sun::star::uno::Sequence< rtl::OUString > m_aSeq;
+            ::com::sun::star::uno::Sequence< OUString > m_aSeq;
     };
 }
 

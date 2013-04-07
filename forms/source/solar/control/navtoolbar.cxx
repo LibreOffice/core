@@ -57,13 +57,13 @@ namespace frm
 
         static String getLabelString( sal_uInt16 _nResId )
         {
-            String sLabel = rtl::OUString( " " );
+            String sLabel = OUString( " " );
             sLabel += String( FRM_RES_STRING( _nResId ) );
-            sLabel += rtl::OUString( " " );
+            sLabel += OUString( " " );
             return sLabel;
         }
 
-        ::rtl::OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
+        OUString lcl_getCommandURL( const sal_Int16 _nFormFeature )
         {
             const sal_Char* pAsciiCommandName = NULL;
             switch ( _nFormFeature )
@@ -89,10 +89,10 @@ namespace frm
                 case FormFeature::RemoveFilterAndSort   : pAsciiCommandName = "RemoveFilterSort";   break;
             }
             if ( pAsciiCommandName != NULL )
-                return ::rtl::OUString( ".uno:" ) + ::rtl::OUString::createFromAscii( pAsciiCommandName );
+                return OUString( ".uno:" ) + OUString::createFromAscii( pAsciiCommandName );
 
             OSL_FAIL( "lcl_getCommandURL: unknown FormFeature!" );
-            return ::rtl::OUString();
+            return OUString();
         }
     }
 
@@ -230,7 +230,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText )
+    void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
             "NavigationToolBar::checkFeature: invalid id!" );
@@ -299,7 +299,7 @@ namespace frm
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
                 {
-                    ::rtl::OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
+                    OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
                     m_pToolbar->SetItemCommand( pSupportedFeatures->nId, sCommandURL );
                     if ( m_pDescriptionProvider )
                         m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, m_pDescriptionProvider->getCommandDescription( sCommandURL ) );
@@ -634,11 +634,11 @@ namespace frm
             break;
 
         case FormFeature::MoveAbsolute:
-            sItemText = rtl::OUString( "12345678" );
+            sItemText = OUString( "12345678" );
             break;
 
         case FormFeature::TotalRecords:
-            sItemText = rtl::OUString( "123456" );
+            sItemText = OUString( "123456" );
             break;
         }
 

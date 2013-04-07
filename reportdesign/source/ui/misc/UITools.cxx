@@ -161,15 +161,15 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
     OSL_ENSURE(_xGroup.is(),"Group is NULL -> GPF");
     if ( _xGroup->getHeaderOn() && _xGroup->getHeader()->getName().isEmpty() )
     {
-        ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
-        sName += ::rtl::OUString::valueOf(_nPos);
+        OUString sName = String(ModuleRes(RID_STR_GROUPHEADER));
+        sName += OUString::valueOf(_nPos);
         _xGroup->getHeader()->setName(sName);
     }
 
     if ( _xGroup->getFooterOn() && _xGroup->getFooter()->getName().isEmpty() )
     {
-        ::rtl::OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
-        sName += ::rtl::OUString::valueOf(_nPos);
+        OUString sName = String(ModuleRes(RID_STR_GROUPFOOTER));
+        sName += OUString::valueOf(_nPos);
         _xGroup->getFooter()->setName(sName);
     }
 }
@@ -365,7 +365,7 @@ namespace
     }
 
     // -------------------------------------------------------------------------
-    void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const ::rtl::OUString& _sName, const uno::Any& _rValue )
+    void lcl_pushBack( uno::Sequence< beans::NamedValue >& _out_rProperties, const OUString& _sName, const uno::Any& _rValue )
     {
         sal_Int32 nLen( _out_rProperties.getLength() );
         _out_rProperties.realloc( nLen + 1 );
@@ -445,11 +445,11 @@ namespace
         // create an AWT font
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString("Font"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, OUString("Font"), uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString("FontAsian"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, OUString("FontAsian"), uno::makeAny( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
-        lcl_pushBack( _out_rProperties, ::rtl::OUString("FontComplex"), uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, OUString("FontComplex"), uno::makeAny( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_SHADOWED,sal_True,&pItem) && pItem->ISA(SvxShadowedItem))
@@ -515,8 +515,8 @@ namespace
         {
             const SvxTwoLinesItem* pFontItem = static_cast<const SvxTwoLinesItem*>(pItem);
             lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::makeAny( pFontItem->GetValue() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( ::rtl::OUString( pFontItem->GetStartBracket() ) ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( ::rtl::OUString( pFontItem->GetEndBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( OUString( pFontItem->GetStartBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( OUString( pFontItem->GetEndBracket() ) ) );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_COLOR,sal_True,&pItem) && pItem->ISA(SvxColorItem))
         {
@@ -535,7 +535,7 @@ namespace
         }
         struct Items {
                 sal_uInt16 nWhich;
-                ::rtl::OUString sPropertyName;
+                OUString sPropertyName;
         };
         const Items pItems[] = { {ITEMID_LANGUAGE,PROPERTY_CHARLOCALE}
                                 ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
@@ -572,9 +572,9 @@ namespace
     // -------------------------------------------------------------------------
     void lcl_applyFontAttribute( const ::comphelper::NamedValueCollection& _rAttrValues, const sal_Char* _pAttributeName,
         const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
-        void (SAL_CALL report::XReportControlFormat::*pSetter)( const ::rtl::OUString& ) )
+        void (SAL_CALL report::XReportControlFormat::*pSetter)( const OUString& ) )
     {
-        ::rtl::OUString aAttributeValue;
+        OUString aAttributeValue;
         if ( _rAttrValues.get_ensureType( _pAttributeName, aAttributeValue ) )
             (_rxReportControlFormat.get()->*pSetter)( aAttributeValue );
     }
@@ -704,7 +704,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         0
     };
 
-    SfxItemPool* pPool( new SfxItemPool(rtl::OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
+    SfxItemPool* pPool( new SfxItemPool(OUString("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
     // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
     bool bSuccess = false;
@@ -787,22 +787,22 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
         awt::FontDescriptor aAwtFont;
         if ( aSettings.get( "Font" ) >>= aAwtFont )
         {
-            ::rtl::OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = ::rtl::OUString(); // hack to
+            OUString sTemp = aAwtFont.Name;
+            aAwtFont.Name = OUString(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
         }
         if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
         {
-            ::rtl::OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = ::rtl::OUString(); // hack to
+            OUString sTemp = aAwtFont.Name;
+            aAwtFont.Name = OUString(); // hack to
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
         }
         if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
         {
-            ::rtl::OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = ::rtl::OUString(); // hack to
+            OUString sTemp = aAwtFont.Name;
+            aAwtFont.Name = OUString(); // hack to
             _rxReportControlFormat->setFontDescriptorComplex( aAwtFont );
             _rxReportControlFormat->setCharFontNameComplex( sTemp );
         }
@@ -925,9 +925,9 @@ SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMark
 }
 
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > getParameterNames( const uno::Reference< sdbc::XRowSet >& _rxRowSet )
+uno::Sequence< OUString > getParameterNames( const uno::Reference< sdbc::XRowSet >& _rxRowSet )
 {
-    uno::Sequence< ::rtl::OUString > aNames;
+    uno::Sequence< OUString > aNames;
 
     try
     {
@@ -939,7 +939,7 @@ uno::Sequence< ::rtl::OUString > getParameterNames( const uno::Reference< sdbc::
             aNames.realloc( count );
 
             uno::Reference< beans::XPropertySet > xParam;
-            ::rtl::OUString sParamName;
+            OUString sParamName;
             for ( sal_Int32 i=0; i<count; ++i )
             {
                 xParam.set( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
@@ -1003,7 +1003,7 @@ void setZoomFactor(const Fraction& _aZoom,Window& _rWindow)
     _rWindow.SetMapMode(aMapMode);
 }
 // -----------------------------------------------------------------------------
-bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
+bool openDialogFormula_nothrow( OUString& _in_out_rFormula
                                , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
                                , const uno::Reference< awt::XWindow>& _xInspectorWindow
                                , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
@@ -1023,7 +1023,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
         xServiceFactory.set(xFactory,uno::UNO_QUERY);
         Window* pParent = VCLUnoHelper::GetWindow( _xInspectorWindow );
 
-        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(::rtl::OUString("org.libreoffice.report.pentaho.SOFunctionManager"),_xContext),uno::UNO_QUERY);
+        uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext(OUString("org.libreoffice.report.pentaho.SOFunctionManager"),_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
             ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
@@ -1036,7 +1036,7 @@ bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
                 xub_StrLen nIndex = 0;
                 if ( sFormula.GetChar(0) == '=' )
                     nIndex = 1;
-                _in_out_rFormula = ::rtl::OUString("rpt:") + sFormula.Copy(nIndex);
+                _in_out_rFormula = OUString("rpt:") + sFormula.Copy(nIndex);
             }
         }
     }

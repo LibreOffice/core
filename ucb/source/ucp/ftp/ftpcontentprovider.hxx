@@ -79,25 +79,25 @@ namespace ftp {
 
         virtual CURL* handle();
 
-        virtual bool forHost(const rtl::OUString& host,
-                             const rtl::OUString& port,
-                             const rtl::OUString& username,
-                             rtl::OUString& password,
-                             rtl::OUString& account);
+        virtual bool forHost(const OUString& host,
+                             const OUString& port,
+                             const OUString& username,
+                             OUString& password,
+                             OUString& account);
 
-        virtual bool setHost(const rtl::OUString& host,
-                             const rtl::OUString& port,
-                             const rtl::OUString& username,
-                             const rtl::OUString& password,
-                             const rtl::OUString& account);
+        virtual bool setHost(const OUString& host,
+                             const OUString& port,
+                             const OUString& username,
+                             const OUString& password,
+                             const OUString& account);
 
 
         struct ServerInfo {
-            rtl::OUString host;
-            rtl::OUString port;
-            rtl::OUString username;
-            rtl::OUString password;
-            rtl::OUString account;
+            OUString host;
+            OUString port;
+            OUString username;
+            OUString password;
+            OUString account;
         };
 
     private:

@@ -72,7 +72,7 @@ StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(Runtime
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GROUPBOX;
     return aSupported;
 }
@@ -95,7 +95,7 @@ void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_GROUPBOX;  // old (non-sun) name for compatibility !
 }
@@ -152,7 +152,7 @@ StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(Runti
     StringSequence aSupported = OControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_GROUPBOX;
     return aSupported;
 }

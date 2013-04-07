@@ -120,10 +120,10 @@ namespace dbaccess
         void checkUpdateConditions(sal_Int32 columnIndex);
         sal_Bool checkJoin( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
-                            const ::rtl::OUString& _sUpdateTableName);
+                            const OUString& _sUpdateTableName);
         sal_Bool checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-                            ,const ::rtl::OUString& _sUpdateTableName);
+                            ,const OUString& _sUpdateTableName);
 
         // clears the insert row
         void                    clearInsertRow();
@@ -137,11 +137,11 @@ namespace dbaccess
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xRs,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext,
-                     const ::rtl::OUString& _rUpdateTableName,
+                     const OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew,
                      const ORowSetValueVector& _aParameterValueForCache,
-                     const ::rtl::OUString& i_sRowSetFilter,
+                     const OUString& i_sRowSetFilter,
                      sal_Int32 i_nMaxRows);
         ~ORowSetCache();
 

@@ -97,7 +97,7 @@ OConnection::~OConnection()
 {
 }
 //-----------------------------------------------------------------------------
-void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -105,7 +105,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
+    OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
     if ( aDSN.startsWith("access:") )
         aDSN = aDSN.copy(7);
 
@@ -138,8 +138,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             WpADOProperties aProps = m_pAdoConnection->get_Properties();
             if(aProps.IsValid())
             {
-                OTools::putValue(aProps,::rtl::OUString("Jet OLEDB:ODBC Parsing"),sal_True);
-                OLEVariant aVar(OTools::getValue(aProps,::rtl::OUString("Jet OLEDB:Engine Type")));
+                OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),sal_True);
+                OLEVariant aVar(OTools::getValue(aProps,OUString("Jet OLEDB:Engine Type")));
                 if(!aVar.isNull() && !aVar.isEmpty())
                     m_nEngineType = aVar;
             }
@@ -174,7 +174,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return pStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -186,7 +186,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return xPStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -198,17 +198,17 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     return xPStmt;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& _sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    ::rtl::OUString sql = _sql;
+    OUString sql = _sql;
     WpADOProperties aProps = m_pAdoConnection->get_Properties();
     if(aProps.IsValid())
     {
-        OTools::putValue(aProps,::rtl::OUString("Jet OLEDB:ODBC Parsing"),sal_True);
+        OTools::putValue(aProps,OUString("Jet OLEDB:ODBC Parsing"),sal_True);
         WpADOCommand aCommand;
         aCommand.Create();
         aCommand.put_ActiveConnection((IDispatch*)*m_pAdoConnection);
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return m_pAdoConnection->get_Mode() == adModeRead;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -311,7 +311,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     ADOS::ThrowException(*m_pAdoConnection,*this);
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -435,7 +435,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         if ( bOk )
         {
             // HACK for access
-            static const ::rtl::OUString s_sVarChar("VarChar");
+            static const OUString s_sVarChar("VarChar");
             do
             {
                 sal_Int32 nPos = 1;
@@ -527,7 +527,7 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                            DataTypeEnum _nType,
-                           const ::rtl::OUString& _sTypeName,
+                           const OUString& _sTypeName,
                            sal_Int32 _nPrecision,
                            sal_Int32 _nScale,
                            sal_Bool& _brForceToType)
@@ -544,7 +544,7 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
             // search the best matching type
             OExtendedTypeInfo* pInfo = aIter->second;
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName = pInfo->aSimpleType.aTypeName;
+            OUString sDBTypeName = pInfo->aSimpleType.aTypeName;
             sal_Int32       nDBTypePrecision = pInfo->aSimpleType.nPrecision;   (void)nDBTypePrecision;
             sal_Int32       nDBTypeScale = pInfo->aSimpleType.nMaximumScale;    (void)nDBTypeScale;
             sal_Int32       nAdoType = pInfo->eType;                            (void)nAdoType;
@@ -571,11 +571,11 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
                 {
 // we can not assert here because we could be in d&d
 /*
-                    OSL_FAIL((  ::rtl::OString("getTypeInfoFromType: assuming column type ")
-                        +=  ::rtl::OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), osl_getThreadTextEncoding())
-                        +=  ::rtl::OString("\" (expected type name ")
-                        +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), osl_getThreadTextEncoding())
-                        +=  ::rtl::OString(" matches the type's local name).")).getStr());
+                    OSL_FAIL((  OString("getTypeInfoFromType: assuming column type ")
+                        +=  OString(aIter->second->aTypeName.getStr(), aIter->second->aTypeName.getLength(), osl_getThreadTextEncoding())
+                        +=  OString("\" (expected type name ")
+                        +=  OString(_sTypeName.getStr(), _sTypeName.getLength(), osl_getThreadTextEncoding())
+                        +=  OString(" matches the type's local name).")).getStr());
 */
                     break;
                 }

@@ -39,26 +39,26 @@ namespace cmis
     class URL
     {
         private:
-            rtl::OUString m_sBindingUrl;
-            rtl::OUString m_sRepositoryId;
-            rtl::OUString m_sPath;
-            rtl::OUString m_sId;
-            rtl::OUString m_sUser;
-            rtl::OUString m_sPass;
+            OUString m_sBindingUrl;
+            OUString m_sRepositoryId;
+            OUString m_sPath;
+            OUString m_sId;
+            OUString m_sUser;
+            OUString m_sPass;
 
         public:
-            URL( rtl::OUString const & urlStr );
+            URL( OUString const & urlStr );
 
-            rtl::OUString& getObjectPath( );
-            rtl::OUString& getObjectId( );
-            rtl::OUString& getBindingUrl( );
-            rtl::OUString& getRepositoryId( );
-            rtl::OUString& getUsername( ) { return m_sUser; }
-            rtl::OUString& getPassword( ) { return m_sPass; }
-            void setObjectPath( rtl::OUString sPath );
-            void setObjectId( rtl::OUString sId );
+            OUString& getObjectPath( );
+            OUString& getObjectId( );
+            OUString& getBindingUrl( );
+            OUString& getRepositoryId( );
+            OUString& getUsername( ) { return m_sUser; }
+            OUString& getPassword( ) { return m_sPass; }
+            void setObjectPath( OUString sPath );
+            void setObjectId( OUString sId );
 
-            rtl::OUString asString( );
+            OUString asString( );
     };
 }
 

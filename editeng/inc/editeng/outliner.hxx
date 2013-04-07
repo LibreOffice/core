@@ -127,15 +127,15 @@ private:
     Paragraph& operator=(const Paragraph& rPara );
 
     sal_uInt16          nFlags;
-    rtl::OUString       aBulText;
+    OUString       aBulText;
     Size                aBulSize;
     sal_Bool            bVisible;
 
     sal_Bool                IsVisible() const { return bVisible; }
-    void                SetText( const rtl::OUString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
+    void                SetText( const OUString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
     void                Invalidate() { aBulSize.Width() = -1; }
     void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
-    const rtl::OUString& GetText() const { return aBulText; }
+    const OUString& GetText() const { return aBulText; }
 
                         Paragraph( sal_Int16 nDepth );
                         Paragraph( const Paragraph& );

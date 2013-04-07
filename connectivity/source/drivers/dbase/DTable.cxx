@@ -320,7 +320,7 @@ void ODbaseTable::fillColumns()
 
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
-    ::rtl::OUString aTypeName;
+    OUString aTypeName;
     const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 
@@ -343,7 +343,7 @@ void ODbaseTable::fillColumns()
         char cType[2];
         cType[0] = aDBFColumn.db_typ;
         cType[1] = 0;
-        aTypeName = ::rtl::OUString::createFromAscii(cType);
+        aTypeName = OUString::createFromAscii(cType);
 OSL_TRACE("column type: %c",aDBFColumn.db_typ);
 
         switch (aDBFColumn.db_typ)
@@ -427,8 +427,8 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
 
         Reference< XPropertySet> xCol = new sdbcx::OColumn(aColumnName,
                                                     aTypeName,
-                                                    ::rtl::OUString(),
-                                                    ::rtl::OUString(),
+                                                    OUString(),
+                                                    OUString(),
                                                     ColumnValue::NULLABLE,
                                                     nPrecision,
                                                     aDBFColumn.db_dez,
@@ -458,11 +458,11 @@ ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnec
 }
 // -------------------------------------------------------------------------
 ODbaseTable::ODbaseTable(sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description ,
+                    const OUString& _SchemaName,
+                    const OUString& _CatalogName
                 ) : ODbaseTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
@@ -609,18 +609,18 @@ sal_Bool ODbaseTable::ReadMemoHeader()
     return sal_True;
 }
 // -------------------------------------------------------------------------
-String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _sName )
+String ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getEntry" );
-    ::rtl::OUString sURL;
+    OUString sURL;
     try
     {
         Reference< XResultSet > xDir = _pConnection->getDir()->getStaticResultSet();
         Reference< XRow> xRow(xDir,UNO_QUERY);
-        ::rtl::OUString sName;
-        ::rtl::OUString sExt;
+        OUString sName;
+        OUString sExt;
         INetURLObject aURL;
-        static const ::rtl::OUString s_sSeparator("/");
+        static const OUString s_sSeparator("/");
         xDir->beforeFirst();
         while(xDir->next())
         {
@@ -635,7 +635,7 @@ String ODbaseTable::getEntry(OConnection* _pConnection,const ::rtl::OUString& _s
             // name and extension have to coincide
             if ( _pConnection->matchesExtension( sExt ) )
             {
-                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,OUString());
                 if ( sName == _sName )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
@@ -683,7 +683,7 @@ void ODbaseTable::refreshIndexes()
         Config aInfFile(aURL.getFSysPath(INetURLObject::FSYS_DETECT));
         aInfFile.SetGroup(dBASE_III_GROUP);
         sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-        rtl::OString aKeyName;
+        OString aKeyName;
 
         for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
         {
@@ -692,8 +692,8 @@ void ODbaseTable::refreshIndexes()
             //...if yes, add the index list of the table
             if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
             {
-                rtl::OString aIndexName = aInfFile.ReadKey(aKeyName);
-                aURL.setName(rtl::OStringToOUString(aIndexName, m_eEncoding));
+                OString aIndexName = aInfFile.ReadKey(aKeyName);
+                aURL.setName(OStringToOUString(aIndexName, m_eEncoding));
                 try
                 {
                     Content aCnt(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
@@ -873,7 +873,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
             else
             {
                 // Commit the string.  Use intern() to ref-count it.
-                *(_rRow->get())[i] = ::rtl::OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
+                *(_rRow->get())[i] = OUString::intern(pData, static_cast<sal_Int32>(nLastPos+1), m_eEncoding);
             }
         } // if (nType == DataType::CHAR || nType == DataType::VARCHAR)
         else if ( DataType::TIMESTAMP == nType )
@@ -946,7 +946,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                 continue;
             }
 
-            ::rtl::OUString aStr = ::rtl::OUString::intern(pData+nPos1, nPos2-nPos1+1, m_eEncoding);
+            OUString aStr = OUString::intern(pData+nPos1, nPos2-nPos1+1, m_eEncoding);
 
             switch (nType)
             {
@@ -1026,9 +1026,9 @@ sal_Bool ODbaseTable::CreateImpl()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::CreateImpl" );
     OSL_ENSURE(!m_pFileStream, "SequenceError");
 
-    if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,::rtl::OUString()) != m_Name )
+    if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,OUString()) != m_Name )
     {
-        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_SQL_NAME_ERROR,
                 "$name$", m_Name
              ) );
@@ -1040,7 +1040,7 @@ sal_Bool ODbaseTable::CreateImpl()
     String aName = getEntry(m_pConnection,m_Name);
     if(!aName.Len())
     {
-        ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
+        OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
             aIdent += "/";
         aIdent += m_Name;
@@ -1114,7 +1114,7 @@ sal_Bool ODbaseTable::CreateImpl()
             catch(const Exception&)
             {
 
-                const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                         STR_COULD_NOT_DELETE_FILE,
                         "$name$", aName
                      ) );
@@ -1136,7 +1136,7 @@ sal_Bool ODbaseTable::CreateImpl()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl::OUString& _sColumnName)
+void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::throwInvalidColumnType" );
     try
@@ -1148,7 +1148,7 @@ void ODbaseTable::throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl:
     {
     }
 
-    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+    const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
             _nErrorId,
             "$columnname$", _sColumnName
          ) );
@@ -1170,7 +1170,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
     sal_uInt8 nDbaseType = dBaseIII;
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
     Reference<XPropertySet> xCol;
-    const ::rtl::OUString sPropType = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
+    const OUString sPropType = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
 
     try
     {
@@ -1223,10 +1223,10 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
 
     sal_uInt16 nRecLength = 1;                                              // Length 1 for deleted flag
     sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
-    ::rtl::OUString aName;
-    const ::rtl::OUString sPropName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    const ::rtl::OUString sPropPrec = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION);
-    const ::rtl::OUString sPropScale = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE);
+    OUString aName;
+    const OUString sPropName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const OUString sPropPrec = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION);
+    const OUString sPropScale = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE);
 
     try
     {
@@ -1240,7 +1240,7 @@ sal_Bool ODbaseTable::CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMe
 
             xCol->getPropertyValue(sPropName) >>= aName;
 
-            ::rtl::OString aCol;
+            OString aCol;
             if ( DBTypeConversion::convertUnicodeString( aName, aCol, m_eEncoding ) > nMaxFieldLength)
             {
                 throwInvalidColumnType( STR_INVALID_COLUMN_NAME_LENGTH, aName );
@@ -1425,7 +1425,7 @@ sal_Bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
+sal_Bool ODbaseTable::Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,OCollection* _pIndexes )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::Drop_Static" );
     INetURLObject aURL;
@@ -1595,7 +1595,7 @@ sal_Bool ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         return sal_False;
 
     Reference<XPropertySet> xCol;
-    ::rtl::OUString aColName;
+    OUString aColName;
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     for (sal_uInt16 i = 0; i < m_pColumns->getCount(); i++)
     {
@@ -1644,7 +1644,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
         Reference<XPropertySet> xCol;
         m_pColumns->getByIndex(_nColumnPos) >>= xCol;
         OSL_ENSURE(xCol.is(),"ODbaseTable::isUniqueByColumnName column is null!");
-        ::rtl::OUString sColName;
+        OUString sColName;
         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sColName;
 
         Reference<XPropertySet> xIndex;
@@ -1663,7 +1663,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
     return Reference<XPropertySet>();
 }
 //------------------------------------------------------------------
-static double toDouble(const rtl::OString& rString)
+static double toDouble(const OString& rString)
 {
     return ::rtl::math::stringToDouble( rString, '.', ',', NULL, NULL );
 }
@@ -1681,7 +1681,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
     Reference<XPropertySet> xCol;
     Reference<XPropertySet> xIndex;
     sal_uInt16 i;
-    ::rtl::OUString aColName;
+    OUString aColName;
     const sal_Int32 nColumnCount = m_pColumns->getCount();
     ::std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
 
@@ -1735,7 +1735,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
                         xCol.clear();
                     } // if ( !aColName.getLength() )
-                    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                    const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                             STR_DUPLICATE_VALUE_IN_COLUMN
                             ,"$columnname$", aColName
                          ) );
@@ -1913,7 +1913,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
 
                     // one, because const_cast GetFormatPrecision on SvNumberFormat is not constant,
                     // even though it really could and should be
-                    const rtl::OString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
+                    const OString aDefaultValue( ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0));
                     const sal_Int32 nValueLen = aDefaultValue.getLength();
                     if ( nValueLen <= nLen )
                     {
@@ -1927,13 +1927,13 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                        ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > aStringToSubstitutes;
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$columnname$", aColName));
+                        ::std::list< ::std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$columnname$", aColName));
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
                         aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , ::rtl::OUString >("$value$", ::rtl::OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
+                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
 
-                        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+                        const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                                 STR_INVALID_COLUMN_DECIMAL_VALUE
                                 ,aStringToSubstitutes
                              ) );
@@ -1956,9 +1956,9 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                     if (!m_pMemoStream || !WriteMemo(thisColVal, nBlockNo))
                         break;
 
-                    rtl::OString aBlock(OString::number(nBlockNo));
+                    OString aBlock(OString::number(nBlockNo));
                     //align aBlock at the right of a nLen sequence, fill to the left with '0'
-                    rtl::OStringBuffer aStr;
+                    OStringBuffer aStr;
                     comphelper::string::padToLength(aStr, nLen - aBlock.getLength(), '0');
                     aStr.append(aBlock);
 
@@ -1969,10 +1969,10 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
                 {
                     memset(pData,' ',nLen); // Clear to NULL
 
-                    ::rtl::OUString sStringToWrite( thisColVal.getString() );
+                    OUString sStringToWrite( thisColVal.getString() );
 
                     // convert the string, using the connection's encoding
-                    ::rtl::OString sEncoded;
+                    OString sEncoded;
 
                     DBTypeConversion::convertUnicodeStringToLength( sStringToWrite, sEncoded, nLen, m_eEncoding );
                     memcpy( pData, sEncoded.getStr(), sEncoded.getLength() );
@@ -1992,7 +1992,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, 
             if ( xCol.is() )
                 xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
 
-            const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+            const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_INVALID_COLUMN_VALUE,
                     "$columnname$", aColName
                  ) );
@@ -2011,7 +2011,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
     sal_uIntPtr nSize = 0;
-    ::rtl::OString aStr;
+    OString aStr;
     ::com::sun::star::uno::Sequence<sal_Int8> aValue;
     sal_uInt8 nHeader[4];
     const bool bBinary = aVariable.getTypeKind() == DataType::LONGVARBINARY && m_aMemoHeader.db_typ == MemoFoxPro;
@@ -2142,7 +2142,7 @@ sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlo
 
 // -----------------------------------------------------------------------------
 // XAlterTable
-void SAL_CALL ODbaseTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -2196,7 +2196,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
-        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
+        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"ODbaseTable::alterColumn: No XAppend interface!");
 
@@ -2235,7 +2235,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         // construct the new table
         if(!pNewTable->CreateImpl())
         {
-            const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+            const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_COLUMN_NOT_ALTERABLE,
                     "$columnname$", ::comphelper::getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
                  ) );
@@ -2283,7 +2283,7 @@ Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
     return getConnection()->getMetaData();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -2302,15 +2302,15 @@ void SAL_CALL ODbaseTable::rename( const ::rtl::OUString& newName ) throw(::com:
 }
 namespace
 {
-    void renameFile(OConnection* _pConenction,const ::rtl::OUString& oldName,
-                    const ::rtl::OUString& newName,const String& _sExtension)
+    void renameFile(OConnection* _pConenction,const OUString& oldName,
+                    const OUString& newName,const String& _sExtension)
     {
         String aName = ODbaseTable::getEntry(_pConenction,oldName);
         if(!aName.Len())
         {
-            ::rtl::OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
+            OUString aIdent = _pConenction->getContent()->getIdentifier()->getContentIdentifier();
             if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
-                aIdent += ::rtl::OUString("/");
+                aIdent += OUString("/");
             aIdent += oldName;
             aName = aIdent;
         }
@@ -2329,7 +2329,7 @@ namespace
             Sequence< PropertyValue > aProps( 1 );
             aProps[0].Name      = "Title";
             aProps[0].Handle    = -1; // n/a
-            aProps[0].Value     = makeAny( ::rtl::OUString(sNewName) );
+            aProps[0].Value     = makeAny( OUString(sNewName) );
             Sequence< Any > aValues;
             aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())
@@ -2342,7 +2342,7 @@ namespace
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::getEntry" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -2353,7 +2353,7 @@ void SAL_CALL ODbaseTable::renameImpl( const ::rtl::OUString& newName ) throw(::
     renameFile(m_pConnection,m_Name,newName,m_pConnection->getExtension());
     if ( HasMemoFields() )
     {  // delete the memo fields
-        rtl::OUString sExt("dbt");
+        OUString sExt("dbt");
         renameFile(m_pConnection,m_Name,newName,sExt);
     }
 }
@@ -2365,7 +2365,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
@@ -2394,7 +2394,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     // construct the new table
     if(!pNewTable->CreateImpl())
     {
-        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_ADDABLE,
                 "$columnname$", ::comphelper::getString(_xNewColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)))
              ) );
@@ -2438,7 +2438,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 
     ODbaseTable* pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
     Reference< XPropertySet > xHold = pNewTable;
-    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
+    pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
@@ -2467,7 +2467,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     if(!pNewTable->CreateImpl())
     {
         xHold = pNewTable = NULL;
-        const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_DROP,
                 "$position$", OUString::number(_nPos)
              ) );
@@ -2490,7 +2490,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 String ODbaseTable::createTempFile()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::createTempFile" );
-    ::rtl::OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
+    OUString aIdent = m_pConnection->getContent()->getIdentifier()->getContentIdentifier();
     if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
         aIdent += "/";
     String sTempName(aIdent);
@@ -2576,7 +2576,7 @@ void ODbaseTable::throwInvalidDbaseFormat()
     FileClose();
     // no dbase file
 
-    const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
+    const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_INVALID_DBASE_FILE,
                 "$filename$", getEntry(m_pConnection,m_Name)
              ) );
@@ -2685,7 +2685,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
         case MemodBaseIII: // dBase III-Memofield, ends with Ctrl-Z
         {
             const char cEOF = (char) DBF_EOL;
-            rtl::OStringBuffer aBStr;
+            OStringBuffer aBStr;
             static char aBuf[514];
             aBuf[512] = 0;          // avoid random value
             sal_Bool bReady = sal_False;
@@ -2704,7 +2704,7 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
 
             } while (!bReady && !m_pMemoStream->IsEof());
 
-            aVariable = rtl::OStringToOUString(aBStr.makeStringAndClear(),
+            aVariable = OStringToOUString(aBStr.makeStringAndClear(),
                 m_eEncoding);
 
         } break;
@@ -2733,11 +2733,11 @@ sal_Bool ODbaseTable::ReadMemo(sal_uIntPtr nBlockNo, ORowSetValue& aVariable)
             {
                 if ( bIsText )
                 {
-                    rtl::OStringBuffer aBuffer(read_uInt8s_ToOString(*m_pMemoStream, nLength));
+                    OStringBuffer aBuffer(read_uInt8s_ToOString(*m_pMemoStream, nLength));
                     //pad it out with ' ' to expected length on short read
                     sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(nLength);
                     comphelper::string::padToLength(aBuffer, nRequested, ' ');
-                    aVariable = rtl::OStringToOUString(aBuffer.makeStringAndClear(), m_eEncoding);
+                    aVariable = OStringToOUString(aBuffer.makeStringAndClear(), m_eEncoding);
                 } // if ( bIsText )
                 else
                 {

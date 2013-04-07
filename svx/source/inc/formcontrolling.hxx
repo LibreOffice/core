@@ -44,7 +44,7 @@ namespace svx
     {
     public:
         /// retrieves the feature id for a given feature URL
-        static  sal_Int32       getControllerFeatureSlotIdForURL( const ::rtl::OUString& _rMainURL );
+        static  sal_Int32       getControllerFeatureSlotIdForURL( const OUString& _rMainURL );
 
         /// retrieves the css.form.runtime.FormFeature ID for a given slot ID
         static  sal_Int16       getFormFeatureForSlotId( sal_Int32 _nSlotId );
@@ -192,7 +192,7 @@ namespace svx
                     ) const;
         sal_Bool    isEnabled( sal_Int32 _nSlotId ) const;
         void        execute( sal_Int32 _nSlotId ) const;
-        void        execute( sal_Int32 _nSlotId, const ::rtl::OUString& _rParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
+        void        execute( sal_Int32 _nSlotId, const OUString& _rParamName, const ::com::sun::star::uno::Any& _rParamValue ) const;
         sal_Bool    commitCurrentRecord() const;
         sal_Bool    commitCurrentControl( ) const;
         sal_Bool    isInsertionRow() const;

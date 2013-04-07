@@ -114,7 +114,7 @@ namespace
             size_t lhsCount = m_aComponentInfo.childCount( _components.first );
             size_t rhsCount = m_aComponentInfo.childCount( _components.second );
             if  ( lhsCount != rhsCount )
-                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (1)!" ) ), NULL );
+                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (1)!" ) ), NULL );
             return lhsCount;
         }
 
@@ -144,7 +144,7 @@ namespace
             Reference< XControlModel > lhsControlModel( _component.first, UNO_QUERY );
             Reference< XControlModel > rhsControlModel( _component.second, UNO_QUERY );
             if ( lhsControlModel.is() != rhsControlModel.is() )
-                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (2)!" ) ), NULL );
+                throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Found inconsistent form component hierarchies (2)!" ) ), NULL );
 
             if ( lhsControlModel.is() )
                 m_rControlModelMap[ lhsControlModel ] = rhsControlModel;
@@ -328,7 +328,7 @@ const Reference< XNameContainer >& FmFormPageImpl::getForms( bool _bForceCreate 
     {
         m_bAttemptedFormCreation = true;
 
-        const ::rtl::OUString sFormsCollectionServiceName("com.sun.star.form.Forms");
+        const OUString sFormsCollectionServiceName("com.sun.star.form.Forms");
         m_xForms = Reference< XNameContainer > (
             ::comphelper::getProcessServiceFactory()->createInstance( sFormsCollectionServiceName ),
             UNO_QUERY
@@ -404,7 +404,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         if ( xForms->hasElements() )
         {
             // suche die Standardform
-            ::rtl::OUString sStandardFormname = String( SVX_RES( RID_STR_STDFORMNAME ) );
+            OUString sStandardFormname = String( SVX_RES( RID_STR_STDFORMNAME ) );
 
             try
             {
@@ -436,7 +436,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         {
             XubString aStr(SVX_RES(RID_STR_FORM));
             XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+            aUndoStr.SearchAndReplace(OUString('#'), aStr);
             pModel->BegUndo(aUndoStr);
         }
 
@@ -449,7 +449,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
             xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny( sal_Int32( CommandType::TABLE ) ) );
 
             // and the "Standard" name
-            ::rtl::OUString sName = String( SVX_RES( RID_STR_STDFORMNAME ) );
+            OUString sName = String( SVX_RES( RID_STR_STDFORMNAME ) );
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
             Reference< XIndexContainer > xContainer( xForms, UNO_QUERY );
@@ -480,7 +480,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
-    const ::rtl::OUString& rDBTitle, const ::rtl::OUString& rCursorSource, sal_Int32 nCommandType )
+    const OUString& rDBTitle, const OUString& rCursorSource, sal_Int32 nCommandType )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findPlaceInFormComponentHierarchy" );
     // if the control already is child of a form, don't do anything
@@ -520,7 +520,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             {
                 XubString aStr(SVX_RES(RID_STR_FORM));
                 XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                aUndoStr.SearchAndReplace(OUString('#'), aStr);
                 pModel->BegUndo(aUndoStr);
             }
 
@@ -545,8 +545,8 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             Reference< ::com::sun::star::container::XNameAccess >  xNamedSet( getForms(), UNO_QUERY );
 
             const bool bTableOrQuery = ( CommandType::TABLE == nCommandType ) || ( CommandType::QUERY == nCommandType );
-            ::rtl::OUString sName = FormControlFactory::getUniqueName( xNamedSet,
-                bTableOrQuery ? rCursorSource : ::rtl::OUString( String( SVX_RES( RID_STR_STDFORMNAME ) ) ) );
+            OUString sName = FormControlFactory::getUniqueName( xNamedSet,
+                bTableOrQuery ? rCursorSource : OUString( String( SVX_RES( RID_STR_STDFORMNAME ) ) ) );
 
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
@@ -575,7 +575,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
 //------------------------------------------------------------------------------
 Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
-        const ::rtl::OUString& _rCursorSource, sal_Int32 nCommandType)
+        const OUString& _rCursorSource, sal_Int32 nCommandType)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPageImpl::findFormForDataSource" );
     Reference< XForm >          xResultForm;
@@ -585,8 +585,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         return xResultForm;
 
     OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::findFormForDataSource: invalid data source!");
-    ::rtl::OUString sLookupName;            // the name of the data source we're looking for
-    ::rtl::OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
+    OUString sLookupName;            // the name of the data source we're looking for
+    OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
     try
     {
         Reference< XPropertySet > xDSProps(_rxDatabase, UNO_QUERY);
@@ -627,7 +627,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     if (sLookupName == sFormDataSourceName)
     {
         // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
-        ::rtl::OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
+        OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xFormProps->getPropertyValue(FM_PROP_COMMANDTYPE));
         if (aCursorSource.isEmpty() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
         {
@@ -656,7 +656,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
+OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
 #if OSL_DEBUG_LEVEL > 0
     try
@@ -669,7 +669,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         DBG_UNHANDLED_EXCEPTION();
     }
 #endif
-    ::rtl::OUString sName;
+    OUString sName;
     Reference< ::com::sun::star::beans::XPropertySet >  xSet(xFormComponent, UNO_QUERY);
     if (xSet.is())
     {
@@ -682,7 +682,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             sal_Int16 nClassId( FormComponentType::CONTROL );
             xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
-            ::rtl::OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
+            OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
                 Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
 
             // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!

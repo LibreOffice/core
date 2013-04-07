@@ -122,7 +122,7 @@ public:
         also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefor uses the address
         convention associated with rPos::nTab by default. */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                    const rtl::OUString& rFormula,
+                    const OUString& rFormula,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     sal_uInt8 cMatInd = MM_NONE );
 
@@ -132,9 +132,9 @@ public:
 
     ScFormulaVectorState GetVectorState() const;
 
-    void            GetFormula( rtl::OUString& rFormula,
+    void            GetFormula( OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    void            GetFormula( rtl::OUStringBuffer& rBuffer,
+    void            GetFormula( OUStringBuffer& rBuffer,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     void            SetDirty( bool bDirtyFlag=true );
@@ -148,7 +148,7 @@ public:
     void            ResetDirty() { bDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
-    void            Compile(const rtl::OUString& rFormula,
+    void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            CompileTokenArray( bool bNoListening = false );
@@ -188,7 +188,7 @@ public:
     void            UpdateInsertTabAbs(SCTAB nTable);
     bool            UpdateDeleteTab(SCTAB nTable, bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
-    void            UpdateRenameTab(SCTAB nTable, const rtl::OUString& rName);
+    void            UpdateRenameTab(SCTAB nTable, const OUString& rName);
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
@@ -202,7 +202,7 @@ public:
     bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     double          GetValueAlways();   // ignore errors
-    rtl::OUString   GetString();
+    OUString   GetString();
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );
@@ -253,13 +253,13 @@ public:
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridString( const rtl::OUString& r )
+    void            SetHybridString( const OUString& r )
                         { aResult.SetHybridString( r); }
     /** For import only: set a temporary formula string to be compiled later.
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridFormula( const rtl::OUString& r,
+    void            SetHybridFormula( const OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
 

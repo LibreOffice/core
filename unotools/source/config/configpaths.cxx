@@ -28,8 +28,6 @@ namespace utl
 {
 //----------------------------------------------------------------------------
 
-    using ::rtl::OUString;
-    using ::rtl::OUStringBuffer;
 
 //----------------------------------------------------------------------------
 
@@ -253,7 +251,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     if (pBeginContent == pEndContent)
         return _sType;
 
-    rtl::OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
+    OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
 
     // prefix: type, opening bracket and quote
     aNormalized.append( _sType ).append( "['" );

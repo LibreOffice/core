@@ -73,8 +73,8 @@ public:
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
     // Access to (anyway) private buffers, used by the sdr exporter
-    rtl::OStringBuffer& RunText();
-    rtl::OStringBuffer& Styles();
+    OStringBuffer& RunText();
+    OStringBuffer& Styles();
 
     /// Output text (without markup).
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
@@ -206,7 +206,7 @@ public:
         const SvxBrushItem* pBrush = 0);//For i120928,to export graphic of bullet
 
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
-    void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
+    void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr, bool bTitlepg );
 
 protected:
@@ -456,20 +456,20 @@ private:
     /*
      * This is written after runs.
      */
-    rtl::OStringBuffer m_aAfterRuns;
+    OStringBuffer m_aAfterRuns;
     /*
      * Same for colors and stylesheets: first we just want to output colors,
      * need to buffer the stylesheet table to output it after the color one.
      */
-    rtl::OStringBuffer m_aStylesheet;
+    OStringBuffer m_aStylesheet;
     /*
      * This one just holds the style commands in the current style.
      */
-    rtl::OStringBuffer m_aStyles;
+    OStringBuffer m_aStyles;
     /*
      * This is the same as m_aStyles but the conents of it is written last.
      */
-    rtl::OStringBuffer m_aStylesEnd;
+    OStringBuffer m_aStylesEnd;
 
     /*
      * We just get a "end of strike" mark at the end of strike, store here what to finish: single or double strike.
@@ -499,7 +499,7 @@ private:
     /*
      * For late output of row definitions.
      */
-    rtl::OStringBuffer m_aRowDefs;
+    OStringBuffer m_aRowDefs;
 
     /*
      * Is a column break needed after the next \par?
@@ -510,14 +510,14 @@ private:
      * If section breaks should be buffered to m_aSectionBreaks
      */
     bool m_bBufferSectionBreaks;
-    rtl::OStringBuffer m_aSectionBreaks;
+    OStringBuffer m_aSectionBreaks;
 
     /*
      * If section headers (and footers) should be buffered to
      * m_aSectionHeaders.
      */
     bool m_bBufferSectionHeaders;
-    rtl::OStringBuffer m_aSectionHeaders;
+    OStringBuffer m_aSectionHeaders;
 
     /*
      * Support for starting multiple tables at the same cell.
@@ -528,7 +528,7 @@ private:
      * List of already started but not yet defined tables (need to be defined
      * after the nested tables).
      */
-    std::vector< rtl::OString > m_aTables;
+    std::vector< OString > m_aTables;
     /*
      * If cell info is already output.
      */
@@ -560,7 +560,7 @@ public:
     /// Return the right export class.
     virtual MSWordExportBase& GetExport();
 
-    rtl::OStringBuffer m_aTabStop;
+    OStringBuffer m_aTabStop;
 
     /// Access to the page style of the previous paragraph.
     const SwPageDesc* m_pPrevPageDesc;
@@ -585,7 +585,7 @@ public:
     void FontPitchType( FontPitch ePitch ) const;
 
     /// Writes binary data as a hex dump.
-    static rtl::OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
+    static OString WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream = 0, sal_uInt32 nLimit = 64);
 };
 
 #endif // _RTFATTRIBUTEOUTPUT_HXX_

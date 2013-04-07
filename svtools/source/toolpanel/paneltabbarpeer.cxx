@@ -65,7 +65,7 @@ namespace svt
     {
         SolarMutexGuard aSolarGuard;
         if ( m_pTabBar == NULL )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
 
 
 

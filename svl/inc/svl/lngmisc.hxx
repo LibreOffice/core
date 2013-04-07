@@ -43,12 +43,12 @@ namespace linguistic
         return cChar < static_cast<sal_Unicode>(' ');
     }
 
-    SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
+    SVL_DLLPRIVATE sal_Int32 GetNumControlChars( const OUString &rTxt );
 
-    SVL_DLLPUBLIC bool RemoveHyphens(rtl::OUString &rTxt);
-    SVL_DLLPUBLIC bool RemoveControlChars(rtl::OUString &rTxt);
-    SVL_DLLPUBLIC bool ReplaceControlChars(rtl::OUString &rTxt);
-    SVL_DLLPUBLIC ::rtl::OUString GetThesaurusReplaceText(const ::rtl::OUString &rText);
+    SVL_DLLPUBLIC bool RemoveHyphens(OUString &rTxt);
+    SVL_DLLPUBLIC bool RemoveControlChars(OUString &rTxt);
+    SVL_DLLPUBLIC bool ReplaceControlChars(OUString &rTxt);
+    SVL_DLLPUBLIC OUString GetThesaurusReplaceText(const OUString &rText);
 } // namespace linguistic
 
 #endif

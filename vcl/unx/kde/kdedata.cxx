@@ -127,8 +127,8 @@ void KDEXLib::Init()
     m_nFakeCmdLineArgs = 1;
     sal_uInt16 nIdx;
     int nParams = osl_getCommandArgCount();
-    rtl::OString aDisplay;
-    rtl::OUString aParam, aBin;
+    OString aDisplay;
+    OUString aParam, aBin;
 
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
@@ -136,7 +136,7 @@ void KDEXLib::Init()
         if ( !m_pFreeCmdLineArgs && aParam == "-display" && nIdx + 1 < nParams )
         {
             osl_getCommandArg( nIdx + 1, &aParam.pData );
-            aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
+            aDisplay = OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
             m_nFakeCmdLineArgs = 3;
             m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs ];
@@ -149,7 +149,7 @@ void KDEXLib::Init()
 
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
-    rtl::OString aExec = rtl::OUStringToOString( aBin, osl_getThreadTextEncoding() );
+    OString aExec = OUStringToOString( aBin, osl_getThreadTextEncoding() );
     m_pFreeCmdLineArgs[0] = strdup( aExec.getStr() );
 
     // make a copy of the string list for freeing it since
@@ -214,7 +214,7 @@ extern "C" {
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
-        rtl::OString aVersion( qVersion() );
+        OString aVersion( qVersion() );
         SAL_INFO( "vcl.kde", "qt version string is \"" << aVersion << "\"" );
 
         sal_Int32 nIndex = 0, nMajor = 0, nMinor = 0, nMicro = 0;

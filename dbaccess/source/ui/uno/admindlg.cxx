@@ -60,15 +60,15 @@ Reference< XInterface > SAL_CALL ODataSourcePropertyDialog::Create(const Referen
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL ODataSourcePropertyDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(RuntimeException)
+OUString ODataSourcePropertyDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
+    return OUString("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Reference< XInterface > SAL_CALL ODataSourcePropertyDialog::Create(const Referen
 ::comphelper::StringSequence ODataSourcePropertyDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
     return aSupported;
 }
 

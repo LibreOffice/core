@@ -29,8 +29,6 @@ namespace xls {
 
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 

@@ -63,7 +63,7 @@ sal_Bool UCB_DeleteFile( const String& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand(rtl::OUString("delete"),
+        aTempContent.executeCommand(OUString("delete"),
                         ::com::sun::star::uno::makeAny( sal_True ) );
         bRemoved = sal_True;
     }
@@ -96,7 +96,7 @@ sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopy
         aInfo.SourceURL = rURL;
         aInfo.MoveData = bCopyIsMove;
         aAny <<= aInfo;
-        aTempContent.executeCommand( rtl::OUString("transfer"),
+        aTempContent.executeCommand( OUString("transfer"),
                                      aAny );
     }
     catch( ::com::sun::star::uno::Exception& )
@@ -142,7 +142,7 @@ sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
     {
         ucbhelper::Content aCnt( rURL, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue(
-            rtl::OUString("IsReadOnly"));
+            OUString("IsReadOnly"));
         if(aAny.hasValue())
             bIsReadOnly = *(sal_Bool*)aAny.getValue();
     }
@@ -198,11 +198,11 @@ bool UCB_GetFileListOfFolder( const String& rURL,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
 
         sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
-        ::com::sun::star::uno::Sequence < rtl::OUString > aProps( nSeqSize );
-        rtl::OUString* pProps = aProps.getArray();
-        pProps[ 0 ] = rtl::OUString("Title");
+        ::com::sun::star::uno::Sequence < OUString > aProps( nSeqSize );
+        OUString* pProps = aProps.getArray();
+        pProps[ 0 ] = OUString("Title");
         if( pDateTimeList )
-            pProps[ 1 ] = rtl::OUString("DateModified");
+            pProps[ 1 ] = OUString("DateModified");
 
         try
         {

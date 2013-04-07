@@ -158,7 +158,7 @@ void ODatabaseMetaDataResultSet::setRows(const ORows& _rRows)
     m_bEOF = m_aRows.empty();
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
@@ -295,7 +295,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -666,55 +666,55 @@ ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getBasicValue()
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getSelectValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("SELECT"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("SELECT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getInsertValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("INSERT"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("INSERT"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDeleteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("DELETE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("DELETE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getUpdateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("UPDATE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("UPDATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getCreateValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("CREATE"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("CREATE"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getReadValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("READ"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("READ"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getAlterValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("ALTER"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("ALTER"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getDropValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("DROP"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("DROP"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
 ORowSetValueDecoratorRef ODatabaseMetaDataResultSet::getQuoteValue()
 {
-    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(::rtl::OUString("'"));
+    static ORowSetValueDecoratorRef aValueRef = new ORowSetValueDecorator(OUString("'"));
     return aValueRef;
 }
 // -----------------------------------------------------------------------------
@@ -796,7 +796,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                                 break;
                             case TypeClass_STRING:
                                 {
-                                    ::rtl::OUString sValue;
+                                    OUString sValue;
                                     *pRowIter >>= sValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(sValue));
                                 }
@@ -816,9 +816,9 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 // XServiceInfo
     // --------------------------------------------------------------------------------
     //------------------------------------------------------------------------------
-    rtl::OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString ODatabaseMetaDataResultSet::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet");
+        return OUString("org.openoffice.comp.helper.DatabaseMetaDataResultSet");
     }
     //------------------------------------------------------------------------------
     Sequence< OUString > ODatabaseMetaDataResultSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
@@ -828,24 +828,24 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
         return aSNS;
     }
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL ODatabaseMetaDataResultSet::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //------------------------------------------------------------------
-    sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    sal_Bool SAL_CALL ODatabaseMetaDataResultSet::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+        Sequence< OUString > aSupported(getSupportedServiceNames());
+        const OUString* pSupported = aSupported.getConstArray();
+        const OUString* pEnd = pSupported + aSupported.getLength();
         for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
             ;
 
         return pSupported != pEnd;
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ODatabaseMetaDataResultSet::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
@@ -869,7 +869,6 @@ namespace
         { 0, 0, 0, 0, 0, 0 }
     };
 }
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;

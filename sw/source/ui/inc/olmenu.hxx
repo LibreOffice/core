@@ -45,16 +45,16 @@ class SwSpellPopup : public PopupMenu
     ::com::sun::star::linguistic2::ProofreadingResult xGrammarResult;
     sal_Int32 nGrammarError;
 
-    ::com::sun::star::uno::Sequence< rtl::OUString >  aSuggestions;
-    rtl::OUString sExplanationLink;
+    ::com::sun::star::uno::Sequence< OUString >  aSuggestions;
+    OUString sExplanationLink;
 
     LanguageType                nCheckedLanguage;
     LanguageType                nGuessLangWord;
     LanguageType                nGuessLangPara;
 
-    std::map< sal_Int16, ::rtl::OUString > aLangTable_Text;
-    std::map< sal_Int16, ::rtl::OUString > aLangTable_Paragraph;
-//    std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
+    std::map< sal_Int16, OUString > aLangTable_Text;
+    std::map< sal_Int16, OUString > aLangTable_Paragraph;
+//    std::map< sal_Int16, OUString > aLangTable_Document;
 
     String  aDicNameSingle;
     bool    bGrammarResults;    // show grammar results? Or show spellcheck results?
@@ -62,8 +62,8 @@ class SwSpellPopup : public PopupMenu
     Image   aInfo16;
 
     void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq, SwWrtShell* pWrtSh,
-            std::map< sal_Int16, ::rtl::OUString > &rLangTable );
+            ::com::sun::star::uno::Sequence< OUString > aSeq, SwWrtShell* pWrtSh,
+            std::map< sal_Int16, OUString > &rLangTable );
 
     using PopupMenu::Execute;
 
@@ -76,7 +76,7 @@ public:
     SwSpellPopup( SwWrtShell *pWrtSh,
             const ::com::sun::star::linguistic2::ProofreadingResult &rResult,
             sal_Int32 nErrorInResult,
-            const ::com::sun::star::uno::Sequence< rtl::OUString > &rSuggestions,
+            const ::com::sun::star::uno::Sequence< OUString > &rSuggestions,
             const String & rParaText );
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );

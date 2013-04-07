@@ -64,7 +64,6 @@
 #include <pausethreadstarting.hxx> // #i73788#
 
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
@@ -446,7 +445,7 @@ void SwXMLExport::SetBodyAttributes()
         pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
     {
         sal_Bool bValue = sal_True;
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, bValue);
         AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
             sBuffer.makeStringAndClear());
@@ -494,7 +493,7 @@ void SwXMLExport::_ExportContent()
         aAny >>= nYear;
         if (nYear != 1930 )
         {
-            rtl::OUStringBuffer sBuffer;
+            OUStringBuffer sBuffer;
             ::sax::Converter::convertNumber(sBuffer, nYear);
             AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
             SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True);

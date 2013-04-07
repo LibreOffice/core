@@ -37,7 +37,7 @@ namespace xmloff
     //= OFormEventsImportContext
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName, IEventAttacher& _rEventAttacher)
+    OFormEventsImportContext::OFormEventsImportContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rLocalName, IEventAttacher& _rEventAttacher)
         :XMLEventsImportContext(_rImport, _nPrefix, _rLocalName)
         ,m_rEventAttacher(_rEventAttacher)
     {
@@ -64,7 +64,7 @@ namespace xmloff
             pTranslated->ListenerType = aEvent->first.copy(0, nSeparatorPos);
             pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + sizeof(EVENT_NAME_SEPARATOR) - 1);
 
-            ::rtl::OUString sLibrary;
+            OUString sLibrary;
 
             // the local macro name and the event type are specified as properties
             pEventDescription       =                       aEvent->second.getConstArray();
@@ -89,7 +89,7 @@ namespace xmloff
                 {
                     // for StarBasic, the library is prepended
                     sal_Unicode cLibSeparator = ':';
-                    sLibrary += ::rtl::OUString( &cLibSeparator, 1 );
+                    sLibrary += OUString( &cLibSeparator, 1 );
                 }
                 sLibrary += pTranslated->ScriptCode;
                 pTranslated->ScriptCode = sLibrary;

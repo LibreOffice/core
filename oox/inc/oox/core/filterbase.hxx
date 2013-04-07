@@ -148,10 +148,10 @@ public:
     ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
-    const ::rtl::OUString& getFileUrl() const;
+    const OUString& getFileUrl() const;
 
     /** Returns an absolute URL for the passed relative or absolute URL. */
-    ::rtl::OUString     getAbsoluteUrl( const ::rtl::OUString& rUrl ) const;
+    OUString     getAbsoluteUrl( const OUString& rUrl ) const;
 
     /** Returns the base storage of the imported/exported file. */
     StorageRef          getStorage() const;
@@ -165,7 +165,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        openInputStream( const ::rtl::OUString& rStreamName ) const;
+                        openInputStream( const OUString& rStreamName ) const;
 
     /** Opens and returns the specified output stream from the base storage.
 
@@ -176,7 +176,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        openOutputStream( const ::rtl::OUString& rStreamName ) const;
+                        openOutputStream( const OUString& rStreamName ) const;
 
     /** Commits changes to base storage (and substorages) */
     void                commitStorage() const;
@@ -198,19 +198,19 @@ public:
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
-    bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );
+    bool                importBinaryData( StreamDataSequence& orDataSeq, const OUString& rStreamName );
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
                         getImplementationName()
                             throw( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
-                        supportsService( const ::rtl::OUString& rServiceName )
+                        supportsService( const OUString& rServiceName )
                             throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                         getSupportedServiceNames()
                             throw( ::com::sun::star::uno::RuntimeException );
 
@@ -272,7 +272,7 @@ private:
     /** Derived classes create a VBA project manager object. */
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
 
-    virtual ::rtl::OUString implGetImplementationName() const = 0;
+    virtual OUString implGetImplementationName() const = 0;
 
     virtual StorageRef  implCreateStorage(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream ) const = 0;

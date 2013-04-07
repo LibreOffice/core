@@ -123,7 +123,7 @@ public:
     //  XController2
     //____________________________________________________________________________________________________
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getViewControllerName() throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCreationArguments() throw (css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
@@ -253,7 +253,7 @@ public:
     */
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &    aURL            ,
-                                                                                  const   ::rtl::OUString &   sTargetFrameName,
+                                                                                  const   OUString &   sTargetFrameName,
                                                                                   FrameSearchFlags            eSearchFlags    ) throw( css::uno::RuntimeException ) ;
 
     /**___________________________________________________________________________________________________
@@ -343,8 +343,8 @@ public:
     virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( sal_Int16 nCommandGroup ) throw (css::uno::RuntimeException);
 
     // css::frame::XTitle
-    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const OUString& sTitle ) throw (css::uno::RuntimeException);
 
     // css::frame::XTitleChangeBroadcaster
     virtual void SAL_CALL addTitleChangeListener( const css::uno::Reference< css::frame::XTitleChangeListener >& xListener )     throw (css::uno::RuntimeException);

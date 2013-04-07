@@ -47,7 +47,7 @@ protected:
 public:
     explicit            FragmentHandler2(
                             XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             bool bEnableTrimSpace = true );
     virtual             ~FragmentHandler2();
 
@@ -70,7 +70,7 @@ public:
                             throw(  ::com::sun::star::xml::sax::SAXException,
                                     ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL characters( const ::rtl::OUString& rChars )
+    virtual void SAL_CALL characters( const OUString& rChars )
                             throw(  ::com::sun::star::xml::sax::SAXException,
                                     ::com::sun::star::uno::RuntimeException );
 
@@ -98,7 +98,7 @@ public:
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
     virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );

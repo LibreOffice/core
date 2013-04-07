@@ -30,16 +30,16 @@ namespace dp_misc
 {
 
 
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString const & getPlatformString();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString const & getPlatformString();
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-    bool platform_fits( ::rtl::OUString const & platform_string );
+    bool platform_fits( OUString const & platform_string );
 
 /** determines if the current platform corresponds to one of the platform strings.
 
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool hasValidPlatform( ::com::sun::star::uno::Sequence< ::rtl::OUString > const & platformStrings);
+bool hasValidPlatform( ::com::sun::star::uno::Sequence< OUString > const & platformStrings);
 
 }
 

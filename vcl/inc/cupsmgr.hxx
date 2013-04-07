@@ -38,19 +38,19 @@ struct FPtrHash
 
 class CUPSManager : public PrinterInfoManager
 {
-    boost::unordered_map< FILE*, rtl::OString, FPtrHash >       m_aSpoolFiles;
+    boost::unordered_map< FILE*, OString, FPtrHash >       m_aSpoolFiles;
     int                                                         m_nDests;
     void*                                                       m_pDests;
     bool                                                        m_bNewDests;
-    boost::unordered_map< rtl::OUString, int, rtl::OUStringHash >       m_aCUPSDestMap;
+    boost::unordered_map< OUString, int, OUStringHash >       m_aCUPSDestMap;
 
-    boost::unordered_map< rtl::OUString, PPDContext, rtl::OUStringHash > m_aDefaultContexts;
+    boost::unordered_map< OUString, PPDContext, OUStringHash > m_aDefaultContexts;
 
-    rtl::OString                                                m_aUser;
+    OString                                                m_aUser;
     // this is a security risk, but the CUPS API demands
     // to deliver a pointer to a static buffer containing
     // the password, so this cannot be helped
-    rtl::OString                                                m_aPassword;
+    OString                                                m_aPassword;
 
     osl::Mutex                                                  m_aCUPSMutex;
     oslThread                                                   m_aDestThread;
@@ -72,27 +72,27 @@ public:
 
     static CUPSManager* tryLoadCUPS();
 
-    const PPDParser* createCUPSParser( const rtl::OUString& rPrinter );
+    const PPDParser* createCUPSParser( const OUString& rPrinter );
     // wraps cupsGetPPD, so unlink after use !
 
     const char* authenticateUser( const char* );
 
-    virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
+    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand );
+    virtual int endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
     virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer
-    virtual void changePrinterInfo( const ::rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
+    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo );
 
     // check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait );
 
     // members for administration (->padmin)
     // disable for CUPS
-    virtual bool addPrinter( const rtl::OUString& rPrinterName, const ::rtl::OUString& rDriverName );
-    virtual bool removePrinter( const rtl::OUString& rPrinterName, bool bCheckOnly = false );
+    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName );
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );
     virtual bool writePrinterConfig();
-    virtual bool setDefaultPrinter( const rtl::OUString& rPrinterName );
+    virtual bool setDefaultPrinter( const OUString& rPrinterName );
 
     virtual bool addOrRemovePossible() const;
 };

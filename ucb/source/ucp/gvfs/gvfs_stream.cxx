@@ -28,7 +28,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace gvfs;
 
-using ::rtl::OUString;
 
 Stream::Stream( GnomeVFSHandle         *handle,
         const GnomeVFSFileInfo *aInfo ) :
@@ -322,7 +321,7 @@ void Stream::throwOnError( GnomeVFSResult result )
            RuntimeException )
 {
     if( result != GNOME_VFS_OK ) {
-        ::rtl::OUString aMsg = ::rtl::OUString::createFromAscii
+        OUString aMsg = OUString::createFromAscii
               ( gnome_vfs_result_to_string( result ) );
 
         g_warning( "Input Stream exceptional result '%s' (%d)",

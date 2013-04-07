@@ -183,12 +183,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = rtl::OUString(",");
+                rStr = OUString(",");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = rtl::OUString(";");
+                rStr = OUString(";");
                 return true;
             }
         }
@@ -197,12 +197,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = rtl::OUString(",");
+                rStr = OUString(",");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = rtl::OUString(";");
+                rStr = OUString(";");
                 return true;
             }
         }
@@ -211,12 +211,12 @@ bool OpCodeList::getOpCodeString( String& rStr, sal_uInt16 nOp )
         {
             if (meSepType == COMMA_BASE)
             {
-                rStr = rtl::OUString(";");
+                rStr = OUString(";");
                 return true;
             }
             else if (meSepType == SEMICOLON_BASE)
             {
-                rStr = rtl::OUString("|");
+                rStr = OUString("|");
                 return true;
             }
         }
@@ -265,13 +265,13 @@ void FormulaCompiler::OpCodeMap::putExternalSoftly( const String & rSymbol, cons
     if (bOk)
         mpExternalHashMap->insert( ExternalHashMap::value_type( rSymbol, rAddIn));
 }
-uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,const uno::Sequence< ::rtl::OUString >& rNames ) const
+uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,const uno::Sequence< OUString >& rNames ) const
 {
     const sal_Int32 nLen = rNames.getLength();
     uno::Sequence< sheet::FormulaToken > aTokens( nLen);
     sheet::FormulaToken* pToken = aTokens.getArray();
-    ::rtl::OUString const * pName = rNames.getConstArray();
-    ::rtl::OUString const * const pStop = pName + nLen;
+    OUString const * pName = rNames.getConstArray();
+    OUString const * const pStop = pName + nLen;
     for ( ; pName < pStop; ++pName, ++pToken)
     {
         OpCodeHashMap::const_iterator iLook( mpHashMap->find( *pName));
@@ -279,7 +279,7 @@ uno::Sequence< sheet::FormulaToken > FormulaCompiler::OpCodeMap::createSequenceO
             pToken->OpCode = (*iLook).second;
         else
         {
-            ::rtl::OUString aIntName;
+            OUString aIntName;
             if (hasExternals())
             {
                 ExternalHashMap::const_iterator iExt( mpExternalHashMap->find( *pName));
@@ -461,7 +461,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 {
                     FormulaOpCodeMapEntry aEntry;
                     aEntry.Name = (*it).first;
-                    aEntry.Token.Data <<= ::rtl::OUString( (*it).second);
+                    aEntry.Token.Data <<= OUString( (*it).second);
                     aEntry.Token.OpCode = ocExternal;
                     aVec.push_back( aEntry);
                 }
@@ -485,10 +485,10 @@ void FormulaCompiler::OpCodeMap::putOpCode( const String & rStr, const OpCode eO
         DBG_ASSERT( (mpTable[eOp].Len() == 0) || (mpTable[eOp] == rStr) ||
             (eOp == ocCurrency) || (eOp == ocSep) || (eOp == ocArrayColSep) ||
             (eOp == ocArrayRowSep),
-            rtl::OStringBuffer(
+            OStringBuffer(
                 RTL_CONSTASCII_STRINGPARAM("OpCodeMap::putOpCode: reusing OpCode ")).
             append(sal_Int32(eOp)).append(RTL_CONSTASCII_STRINGPARAM(" (")).
-            append(rtl::OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US)).
+            append(OUStringToOString(rStr, RTL_TEXTENCODING_ASCII_US)).
             append(')').getStr());
         mpTable[eOp] = rStr;
         mpHashMap->insert( OpCodeHashMap::value_type( rStr, eOp));
@@ -595,7 +595,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
             xMap->putOpCode( pArr2->Name, eOp);
         else
         {
-            ::rtl::OUString aExternalName;
+            OUString aExternalName;
             if (pArr2->Token.Data >>= aExternalName)
                 xMap->putExternal( pArr2->Name, aExternalName);
             else
@@ -672,9 +672,9 @@ void FormulaCompiler::InitSymbolsEnglishXL() const
     // TODO: For now, just replace the separators to the Excel English
     // variants. Later, if we want to properly map Excel functions with Calc
     // functions, we'll need to do a little more work here.
-    mxSymbolsEnglishXL->putOpCode(rtl::OUString(','), ocSep);
-    mxSymbolsEnglishXL->putOpCode(rtl::OUString(','), ocArrayColSep);
-    mxSymbolsEnglishXL->putOpCode(rtl::OUString(';'), ocArrayRowSep);
+    mxSymbolsEnglishXL->putOpCode(OUString(','), ocSep);
+    mxSymbolsEnglishXL->putOpCode(OUString(','), ocArrayColSep);
+    mxSymbolsEnglishXL->putOpCode(OUString(';'), ocArrayRowSep);
 }
 
 // -----------------------------------------------------------------------------
@@ -857,7 +857,7 @@ sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName ) const
 }
 
 
-void FormulaCompiler::AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError )
+void FormulaCompiler::AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError )
 {
     OpCode eOp;
     switch (nError)
@@ -1615,12 +1615,12 @@ void FormulaCompiler::PopTokenArray()
 // -----------------------------------------------------------------------------
 void FormulaCompiler::CreateStringFromTokenArray( String& rFormula )
 {
-    rtl::OUStringBuffer aBuffer( pArr->GetLen() * 5 );
+    OUStringBuffer aBuffer( pArr->GetLen() * 5 );
     CreateStringFromTokenArray( aBuffer );
     rFormula = aBuffer.makeStringAndClear();
 }
 
-void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
+void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
 {
     rBuffer.setLength(0);
     if( !pArr->GetLen() )
@@ -1655,13 +1655,13 @@ void FormulaCompiler::CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer )
 // -----------------------------------------------------------------------------
 FormulaToken* FormulaCompiler::CreateStringFromToken( String& rFormula, FormulaToken* pTokenP,bool bAllowArrAdvance )
 {
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     FormulaToken* p = CreateStringFromToken( aBuffer, pTokenP, bAllowArrAdvance );
     rFormula += aBuffer.makeStringAndClear();
     return p;
 }
 
-FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP,bool bAllowArrAdvance )
+FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pTokenP,bool bAllowArrAdvance )
 {
     bool bNext = true;
     bool bSpaces = false;
@@ -1792,7 +1792,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
 }
 // -----------------------------------------------------------------------------
 
-void FormulaCompiler::AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal )
+void FormulaCompiler::AppendDouble( OUStringBuffer& rBuffer, double fVal )
 {
     if ( mxSymbols->isEnglish() )
     {
@@ -1811,12 +1811,12 @@ void FormulaCompiler::AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal )
     }
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal )
+void FormulaCompiler::AppendBoolean( OUStringBuffer& rBuffer, bool bVal )
 {
     rBuffer.append( mxSymbols->getSymbol(static_cast<OpCode>(bVal ? ocTrue : ocFalse)) );
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr )
+void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const String & rStr )
 {
     rBuffer.append(sal_Unicode('"'));
     if ( lcl_UnicodeStrChr( rStr.GetBuffer(), '"' ) == NULL )
@@ -1824,14 +1824,14 @@ void FormulaCompiler::AppendString( rtl::OUStringBuffer& rBuffer, const String &
     else
     {
         String aStr( rStr );
-        aStr.SearchAndReplaceAll( rtl::OUString('"'), rtl::OUString("\"\"") );
+        aStr.SearchAndReplaceAll( OUString('"'), OUString("\"\"") );
         rBuffer.append(aStr);
     }
     rBuffer.append(sal_Unicode('"'));
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(
-    const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep )
+    const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep )
 {
     NonConstOpCodeMapPtr xSymbolsNative;
     lcl_fillNativeSymbols(xSymbolsNative);
@@ -1992,23 +1992,23 @@ bool FormulaCompiler::HandleDbData()
     return true;
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromSingleRef(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromSingleRef(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromDoubleRef(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromDoubleRef(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromIndex(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromIndex(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromMatrix(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromMatrix(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------
-void FormulaCompiler::CreateStringFromExternal(rtl::OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
+void FormulaCompiler::CreateStringFromExternal(OUStringBuffer& /*rBuffer*/,FormulaToken* /*pTokenP*/)
 {
 }
 // -----------------------------------------------------------------------------

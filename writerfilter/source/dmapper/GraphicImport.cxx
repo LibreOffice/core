@@ -934,9 +934,9 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
 
                             text::GraphicCrop aGraphicCrop( 0, 0, 0, 0 );
                             uno::Reference< beans::XPropertySet > xSourceGraphProps( xShape, uno::UNO_QUERY );
-                            uno::Any aAny = xSourceGraphProps->getPropertyValue( rtl::OUString("GraphicCrop"));
+                            uno::Any aAny = xSourceGraphProps->getPropertyValue( OUString("GraphicCrop"));
                             if(aAny >>= aGraphicCrop) {
-                                xGraphProps->setPropertyValue( rtl::OUString("GraphicCrop"),
+                                xGraphProps->setPropertyValue( OUString("GraphicCrop"),
                                     uno::makeAny( aGraphicCrop ) );
                             }
 

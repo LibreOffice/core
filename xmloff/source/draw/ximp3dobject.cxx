@@ -32,8 +32,6 @@
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 

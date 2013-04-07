@@ -25,11 +25,6 @@
 
 #include <cppuhelper/typeprovider.hxx>
 
-using rtl::OUStringToOString;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OString;
-using rtl::OStringBuffer;
 
 using com::sun::star::beans::XIntrospectionAccess;
 using com::sun::star::beans::XIntrospection;

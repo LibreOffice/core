@@ -54,8 +54,6 @@
 #include <cstdio>
 
 using ::com::sun::star::i18n::LocaleDataItem;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // Err527 Workaroand
 extern const ScFormulaCell* pLastFormulaTreeTop; // in cellform.cxx
@@ -852,10 +850,10 @@ ScBaseCell* ScColumn::CloneCell(
             if ( bCloneSpecialBoolean )
             {
                 ScFormulaCell& rForm = (ScFormulaCell&)rSource;
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 // FIXME: do we have a localisation issue here?
                 rForm.GetFormula( aBuf );
-                rtl::OUString aVal( aBuf.makeStringAndClear() );
+                OUString aVal( aBuf.makeStringAndClear() );
                 if ( aVal == "=TRUE()" || aVal == "=FALSE()" )
                     bForceFormula = true;
             }
@@ -1526,7 +1524,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
 {
     bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
-    rtl::OUString aString;
+    OUString aString;
     SCSIZE nIndex;
 
     Search( nStartRow, nIndex );
@@ -1753,7 +1751,7 @@ void ScColumn::SetValue( SCROW nRow, const double& rVal)
 }
 
 
-void ScColumn::GetString( SCROW nRow, rtl::OUString& rString ) const
+void ScColumn::GetString( SCROW nRow, OUString& rString ) const
 {
     SCSIZE  nIndex;
     Color* pColor;
@@ -1799,7 +1797,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
     return static_cast<ScValueCell*>(pCell)->GetValuePtr();
 }
 
-void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
+void ScColumn::GetInputString( SCROW nRow, OUString& rString ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1812,10 +1810,10 @@ void ScColumn::GetInputString( SCROW nRow, rtl::OUString& rString ) const
             ScCellFormat::GetInputString(aCell, nFormat, rString, *(pDocument->GetFormatTable()));
         }
         else
-            rString = rtl::OUString();
+            rString = OUString();
     }
     else
-        rString = rtl::OUString();
+        rString = OUString();
 }
 
 
@@ -1873,7 +1871,7 @@ void ScColumn::RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr
     pEditCell->RemoveCharAttribs(rAttr);
 }
 
-void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
+void ScColumn::GetFormula( SCROW nRow, OUString& rFormula ) const
 {
     SCSIZE  nIndex;
     if (Search(nRow, nIndex))
@@ -1882,10 +1880,10 @@ void ScColumn::GetFormula( SCROW nRow, rtl::OUString& rFormula ) const
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
             ((ScFormulaCell*)pCell)->GetFormula( rFormula );
         else
-            rFormula = rtl::OUString();
+            rFormula = OUString();
     }
     else
-        rFormula = rtl::OUString();
+        rFormula = OUString();
 }
 
 const ScTokenArray* ScColumn::GetFormulaTokens( SCROW nRow ) const
@@ -1976,8 +1974,8 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
     sal_Int32 nStringLen = 0;
     if ( !maItems.empty() )
     {
-        rtl::OUString aString;
-        rtl::OString aOString;
+        OUString aString;
+        OString aOString;
         bool bIsOctetTextEncoding = rtl_isOctetTextEncoding( eCharSet);
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
         SCSIZE nIndex;
@@ -2030,7 +2028,7 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
 
     if ( !maItems.empty() )
     {
-        rtl::OUString aString;
+        OUString aString;
         SvNumberFormatter* pNumFmt = pDocument->GetFormatTable();
         SCSIZE nIndex;
         SCROW nRow;
@@ -2202,7 +2200,7 @@ void ScColumn::RebuildFormulaGroups()
 #if OSL_DEBUG_LEVEL > 0
     if ( maDoubles.size() + maFnGroups.size() > 0 )
     {
-        rtl::OUString aStr;
+        OUString aStr;
         fprintf( stderr, "column %2d has %2d double span(s): ", (int)nCol, (int)maDoubles.size() );
         for (std::vector< ColDoubleEntry *>::iterator it = maDoubles.begin();
              it != maDoubles.end(); ++it )

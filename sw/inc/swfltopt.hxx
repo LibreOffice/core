@@ -30,7 +30,7 @@ public:
     void GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                      sal_uInt32* pValues );
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

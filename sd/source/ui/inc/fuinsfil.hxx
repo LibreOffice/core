@@ -37,7 +37,7 @@ public:
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
     virtual void DoExecute( SfxRequest& rReq );
 
-    static void     GetSupportedFilterVector( ::std::vector< ::rtl::OUString >& rFilterVector );
+    static void     GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector );
 
 private:
     FuInsertFile (

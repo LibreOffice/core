@@ -76,7 +76,7 @@ class ModuleManager:
 
     public:
 
-        static rtl::OUString SAL_CALL impl_getStaticImplementationName();
+        static OUString SAL_CALL impl_getStaticImplementationName();
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
         impl_createFactory(
@@ -85,7 +85,7 @@ class ModuleManager:
 
     private:
 
-        static css::uno::Sequence< rtl::OUString >
+        static css::uno::Sequence< OUString >
         impl_getSupportedServiceNames();
 
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
@@ -98,24 +98,24 @@ class ModuleManager:
         virtual ~ModuleManager(                                                                   );
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw (css::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL supportsService(
-            rtl::OUString const & ServiceName)
+            OUString const & ServiceName)
             throw (css::uno::RuntimeException);
 
-        virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames() throw (css::uno::RuntimeException);
 
         // XModuleManager
-        virtual ::rtl::OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
+        virtual OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
             throw(css::lang::IllegalArgumentException,
                   css::frame::UnknownModuleException,
                   css::uno::RuntimeException         );
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName(const ::rtl::OUString& sName ,
+        virtual void SAL_CALL replaceByName(const OUString& sName ,
                                             const css::uno::Any&   aValue)
             throw (css::lang::IllegalArgumentException   ,
                    css::container::NoSuchElementException,
@@ -123,15 +123,15 @@ class ModuleManager:
                    css::uno::RuntimeException            );
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName(const ::rtl::OUString& sName)
+        virtual css::uno::Any SAL_CALL getByName(const OUString& sName)
             throw(css::container::NoSuchElementException,
                   css::lang::WrappedTargetException     ,
                   css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw(css::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName(const ::rtl::OUString& sName)
+        virtual sal_Bool SAL_CALL hasByName(const OUString& sName)
             throw(css::uno::RuntimeException);
 
         // XElementAccess
@@ -142,7 +142,7 @@ class ModuleManager:
             throw(css::uno::RuntimeException);
 
         // XContainerQuery
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
             throw(css::uno::RuntimeException);
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
@@ -198,7 +198,7 @@ class ModuleManager:
 
             @threadsafe
          */
-        ::rtl::OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
+        OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
 };
 
 } // namespace framework

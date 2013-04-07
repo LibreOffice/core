@@ -44,8 +44,8 @@ private:
     boost::scoped_ptr<ScImportParam> mpImportParam;
 
     // DBParam
-    const ::rtl::OUString aName;
-    ::rtl::OUString aUpper;
+    const OUString aName;
+    OUString aUpper;
     SCTAB           nTable;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -75,20 +75,20 @@ public:
         bool operator() (const ScDBData& left, const ScDBData& right) const;
     };
 
-    SC_DLLPUBLIC ScDBData(const ::rtl::OUString& rName,
+    SC_DLLPUBLIC ScDBData(const OUString& rName,
              SCTAB nTab,
              SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
              bool bByR = true, bool bHasH = true);
     ScDBData(const ScDBData& rData);
-    ScDBData(const ::rtl::OUString& rName, const ScDBData& rData);
+    ScDBData(const OUString& rName, const ScDBData& rData);
     ~ScDBData();
 
     ScDBData&   operator= (const ScDBData& rData);
 
     bool        operator== (const ScDBData& rData) const;
 
-    const ::rtl::OUString& GetName() const { return aName; }
-    const ::rtl::OUString& GetUpperName() const { return aUpper; }
+    const OUString& GetName() const { return aName; }
+    const OUString& GetUpperName() const { return aUpper; }
     void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
     void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
@@ -106,8 +106,8 @@ public:
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
 
-    ::rtl::OUString GetSourceString() const;
-    ::rtl::OUString GetOperations() const;
+    OUString GetSourceString() const;
+    OUString GetOperations() const;
 
     void        GetSortParam(ScSortParam& rSortParam) const;
     void        SetSortParam(const ScSortParam& rSortParam);
@@ -176,7 +176,7 @@ public:
         const_iterator begin() const;
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
-        ScDBData* findByUpperName(const ::rtl::OUString& rName);
+        ScDBData* findByUpperName(const OUString& rName);
         bool insert(ScDBData* p);
         void erase(iterator itr);
         void erase(const ScDBData& r);

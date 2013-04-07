@@ -78,7 +78,7 @@ public:
 class ScInputCfg : public ScInputOptions,
                   public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
             ScInputCfg();
@@ -86,7 +86,7 @@ public:
     void            SetOptions( const ScInputOptions& rNew );
     void            OptionsChanged();   // after direct access to SetOptions base class
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
     virtual void    Commit();
 };
 

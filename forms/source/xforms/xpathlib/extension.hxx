@@ -46,8 +46,8 @@ private:
 public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL Create(
         const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& aFactory);
-    static rtl::OUString SAL_CALL getImplementationName_Static();
-    static com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+    static OUString SAL_CALL getImplementationName_Static();
+    static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
 
     com::sun::star::uno::Reference< com::sun::star::xforms::XModel > getModel();
     com::sun::star::uno::Reference< com::sun::star::xml::dom::XNode > getContextNode();

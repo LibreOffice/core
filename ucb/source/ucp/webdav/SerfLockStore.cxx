@@ -142,12 +142,12 @@ void SerfLockStore::registerSession( HttpSession * pHttpSession )
 }
 
 // -------------------------------------------------------------------
-SerfLock * SerfLockStore::findByUri( rtl::OUString const & rUri )
+SerfLock * SerfLockStore::findByUri( OUString const & rUri )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     ne_uri aUri;
-    ne_uri_parse( rtl::OUStringToOString(
+    ne_uri_parse( OUStringToOString(
         rUri, RTL_TEXTENCODING_UTF8 ).getStr(), &aUri );
     return ne_lockstore_findbyuri( m_pSerfLockStore, &aUri );
 }

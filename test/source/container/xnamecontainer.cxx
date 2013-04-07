@@ -41,7 +41,7 @@ XNameContainer::XNameContainer(): maNameToRemove(RTL_CONSTASCII_USTRINGPARAM("XN
 {
 }
 
-XNameContainer::XNameContainer(const rtl::OUString& rNameToRemove):
+XNameContainer::XNameContainer(const OUString& rNameToRemove):
         maNameToRemove(rNameToRemove)
 {
 }

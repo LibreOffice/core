@@ -128,7 +128,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     return true;
 }
 
-bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
+bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rPageRectangle

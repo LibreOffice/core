@@ -89,9 +89,9 @@ OQueryContainer::OQueryContainer(
 
         // fill my structures
         ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
-        Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-        const ::rtl::OUString* pDefinitionName = sDefinitionNames.getConstArray();
-        const ::rtl::OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
+        Sequence< OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
+        const OUString* pDefinitionName = sDefinitionNames.getConstArray();
+        const OUString* pEnd = pDefinitionName + sDefinitionNames.getLength();
         for ( ; pDefinitionName != pEnd; ++pDefinitionName )
         {
             rDefinitions.insert( *pDefinitionName, TContentPtr() );
@@ -152,7 +152,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 {
     ResettableMutexGuard aGuard(m_aMutex);
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
 
     // first clone this object's CommandDefinition part
     Reference< css::sdb::XQueryDefinition > xCommandDefinitionPart = css::sdb::QueryDefinition::create(m_aContext);
@@ -163,7 +163,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
     // create a wrapper for the object (*before* inserting into our command definition container)
     Reference< XContent > xNewObject( implCreateWrapper( Reference< XContent>( xCommandDefinitionPart, UNO_QUERY_THROW ) ) );
 
-    ::rtl::OUString sNewObjectName;
+    OUString sNewObjectName;
     _rxDesc->getPropertyValue(PROPERTY_NAME) >>= sNewObjectName;
 
     try
@@ -189,14 +189,14 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
 }
 
 // XDrop
-void SAL_CALL OQueryContainer::dropByName( const ::rtl::OUString& _rName ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL OQueryContainer::dropByName( const OUString& _rName ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if ( !checkExistence(_rName) )
         throw NoSuchElementException(_rName,*this);
 
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
 
     // now simply forward the remove request to the CommandDefinition container, we're a listener for the removal
     // and thus we do everything necessary in ::elementRemoved
@@ -210,9 +210,9 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
         throw IndexOutOfBoundsException();
 
     if ( !m_xCommandDefinitions.is() )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
 
-    ::rtl::OUString sName;
+    OUString sName;
     Reference<XPropertySet> xProp(Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getByIndex(_nIndex),UNO_QUERY);
     if ( xProp.is() )
         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
@@ -223,7 +223,7 @@ void SAL_CALL OQueryContainer::dropByIndex( sal_Int32 _nIndex ) throw(SQLExcepti
 void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
     Reference< XContent > xNewElement;
-    ::rtl::OUString sElementName;
+    OUString sElementName;
     _rEvent.Accessor >>= sElementName;
     {
         MutexGuard aGuard(m_aMutex);
@@ -244,7 +244,7 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
 
 void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sAccessor;
+    OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
     {
         OSL_ENSURE(!sAccessor.isEmpty(), "OQueryContainer::elementRemoved : invalid name !");
@@ -259,7 +259,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
 {
     Reference< XPropertySet > xReplacedElement;
     Reference< XContent > xNewElement;
-    ::rtl::OUString sAccessor;
+    OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
 
     {
@@ -277,7 +277,7 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
 
 Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const ContainerEvent& Event ) throw (WrappedTargetException, RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
     OSL_VERIFY( Event.Accessor >>= sName );
     Reference< XContent > xElement( Event.Element, UNO_QUERY_THROW );
 
@@ -288,7 +288,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     }
     catch( const Exception& )
     {
-        xReturn = new Veto( ::rtl::OUString(), ::cppu::getCaughtException() );
+        xReturn = new Veto( OUString(), ::cppu::getCaughtException() );
     }
     return xReturn;
 }
@@ -328,12 +328,12 @@ void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObj
     }
 }
 
-::rtl::OUString OQueryContainer::determineContentType() const
+OUString OQueryContainer::determineContentType() const
 {
-    return ::rtl::OUString( "application/vnd.org.openoffice.DatabaseQueryContainer" );
+    return OUString( "application/vnd.org.openoffice.DatabaseQueryContainer" );
 }
 
-Reference< XContent > OQueryContainer::implCreateWrapper(const ::rtl::OUString& _rName)
+Reference< XContent > OQueryContainer::implCreateWrapper(const OUString& _rName)
 {
     Reference< XContent > xObject(m_xCommandDefinitions->getByName(_rName),UNO_QUERY);
     return implCreateWrapper(xObject);
@@ -361,12 +361,12 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
     return xReturn;
 }
 
-Reference< XContent > OQueryContainer::createObject( const ::rtl::OUString& _rName)
+Reference< XContent > OQueryContainer::createObject( const OUString& _rName)
 {
     return implCreateWrapper(_rName);
 }
 
-sal_Bool OQueryContainer::checkExistence(const ::rtl::OUString& _rName)
+sal_Bool OQueryContainer::checkExistence(const OUString& _rName)
 {
     sal_Bool bRet = sal_False;
     if ( !m_bInPropertyChange )
@@ -398,7 +398,7 @@ sal_Int32 SAL_CALL OQueryContainer::getCount(  ) throw(RuntimeException)
     return Reference<XIndexAccess>(m_xCommandDefinitions,UNO_QUERY)->getCount();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OQueryContainer::getElementNames(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 

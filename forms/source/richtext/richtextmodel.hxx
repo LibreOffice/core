@@ -62,10 +62,10 @@ namespace frm
         ::com::sun::star::uno::Any  m_aBackgroundColor;
         ::com::sun::star::uno::Any  m_aBorderColor;
         ::com::sun::star::uno::Any  m_aVerticalAlignment;
-        ::rtl::OUString             m_sDefaultControl;
-        ::rtl::OUString             m_sHelpText;
-        ::rtl::OUString             m_sHelpURL;
-        ::rtl::OUString             m_sLastKnownEngineText;
+        OUString             m_sDefaultControl;
+        OUString             m_sHelpText;
+        OUString             m_sHelpURL;
+        OUString             m_sLastKnownEngineText;
         sal_Int16                   m_nLineEndFormat;
         sal_Int16                   m_nTextWritingMode;
         sal_Int16                   m_nContextWritingMode;
@@ -164,7 +164,7 @@ namespace frm
         @precond
             our mutex is not locked
         */
-        void    impl_smlock_setEngineText( const ::rtl::OUString& _rText );
+        void    impl_smlock_setEngineText( const OUString& _rText );
 
         DECL_LINK( OnEngineContentModified, void* );
 

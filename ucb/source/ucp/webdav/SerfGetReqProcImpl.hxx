@@ -42,7 +42,7 @@ public:
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
-                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                        const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource );
 
     SerfGetReqProcImpl( const char* inPath,
@@ -52,7 +52,7 @@ public:
     SerfGetReqProcImpl( const char* inPath,
                         const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
-                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                        const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource );
 
     virtual ~SerfGetReqProcImpl();
@@ -73,7 +73,7 @@ protected:
 private:
     com::sun::star::uno::Reference< SerfInputStream > xInputStream;
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutputStream;
-    const std::vector< ::rtl::OUString > * mpHeaderNames;
+    const std::vector< OUString > * mpHeaderNames;
     DAVResource* mpResource;
 };
 

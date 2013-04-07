@@ -863,7 +863,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
     }
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
     {
-        String sEntry = rtl::OUString('~');
+        String sEntry = OUString('~');
         String sIndex = OUString::number( aValueTbl[i] + 1 );
         sEntry += sIndex;
         m_pTextArr[i]->SetText( sEntry );

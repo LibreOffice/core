@@ -38,7 +38,7 @@ BoolExpression::~BoolExpression()
 {
 }
 
-void BoolExpression::setExpression( const rtl::OUString& rExpression )
+void BoolExpression::setExpression( const OUString& rExpression )
 {
     ComputedExpression::setExpression( rExpression );
     mbIsSimple = _checkExpression( " *(true)|(false) *\\( *\\) *" );

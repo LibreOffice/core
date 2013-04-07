@@ -31,7 +31,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 using ::sd::tools::ConfigurationAccess;
 
 namespace sd { namespace framework {
@@ -44,9 +43,9 @@ static const sal_uInt32 snStartupPropertyCount (1);
 
 class ModuleController::ResourceToFactoryMap
     : public ::boost::unordered_map<
-    rtl::OUString,
-    rtl::OUString,
-    ::rtl::OUStringHash,
+    OUString,
+    OUString,
+    OUStringHash,
     ::comphelper::UStringEqual>
 {
 public:
@@ -56,9 +55,9 @@ public:
 
 class ModuleController::LoadedFactoryContainer
     : public ::boost::unordered_map<
-    rtl::OUString,
+    OUString,
     WeakReference<XInterface>,
-    ::rtl::OUStringHash,
+    OUStringHash,
     ::comphelper::UStringEqual>
 {
 public:
@@ -78,19 +77,19 @@ Reference<XInterface> SAL_CALL ModuleController_createInstance (
 
 
 
-::rtl::OUString ModuleController_getImplementationName (void) throw(RuntimeException)
+OUString ModuleController_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.module.ModuleController");
+    return OUString("com.sun.star.comp.Draw.framework.module.ModuleController");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.ModuleController");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.framework.ModuleController");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -149,7 +148,7 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/ResourceFactories"),
             UNO_QUERY);
-        ::std::vector<rtl::OUString> aProperties (snFactoryPropertyCount);
+        ::std::vector<OUString> aProperties (snFactoryPropertyCount);
         aProperties[0] = "ServiceName";
         aProperties[1] = "ResourceList";
         ConfigurationAccess::ForAll(
@@ -171,12 +170,12 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     OSL_ASSERT(rValues.size() == snFactoryPropertyCount);
 
     // Get the service name of the factory.
-    rtl::OUString sServiceName;
+    OUString sServiceName;
     rValues[0] >>= sServiceName;
 
     // Get all resource URLs that are created by the factory.
     Reference<container::XNameAccess> xResources (rValues[1], UNO_QUERY);
-    ::std::vector<rtl::OUString> aURLs;
+    ::std::vector<OUString> aURLs;
     tools::ConfigurationAccess::FillList(
         xResources,
         "URL",
@@ -186,7 +185,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
         OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
 
     // Add the resource URLs to the map.
-    ::std::vector<rtl::OUString>::const_iterator iResource;
+    ::std::vector<OUString>::const_iterator iResource;
     for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
     {
         (*mpResourceToFactoryMap)[*iResource] = sServiceName;
@@ -208,7 +207,7 @@ void ModuleController::InstantiateStartupServices (void)
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode("MultiPaneGUI/Framework/StartupServices"),
             UNO_QUERY);
-        ::std::vector<rtl::OUString> aProperties (snStartupPropertyCount);
+        ::std::vector<OUString> aProperties (snStartupPropertyCount);
         aProperties[0] = "ServiceName";
         tools::ConfigurationAccess::ForAll(
             xFactories,
@@ -231,7 +230,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
     try
     {
         // Get the service name of the startup service.
-        rtl::OUString sServiceName;
+        OUString sServiceName;
         rValues[0] >>= sServiceName;
 
         // Instantiate service.

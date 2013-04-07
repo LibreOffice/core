@@ -96,7 +96,6 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 #define DEF_FLY_WIDTH    2268   // Default width for FlyFrms (2268 == 4cm)
 

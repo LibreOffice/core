@@ -58,7 +58,7 @@ class SAL_DLLPRIVATE RDFaReader
     const SvXMLImport & GetImport() const { return m_rImport; }
 
     //FIXME: this is an ugly hack to workaround buggy SvXMLImport::GetAbsolute
-    ::rtl::OUString GetAbsoluteReference(::rtl::OUString const & i_rURI) const
+    OUString GetAbsoluteReference(OUString const & i_rURI) const
     {
         if (i_rURI.isEmpty() || i_rURI[0] == '#')
         {
@@ -76,13 +76,13 @@ public:
     { }
 
     // returns URI or blank node!
-    ::rtl::OUString ReadCURIE(::rtl::OUString const & i_rCURIE) const;
+    OUString ReadCURIE(OUString const & i_rCURIE) const;
 
-    std::vector< ::rtl::OUString >
-    ReadCURIEs(::rtl::OUString const & i_rCURIEs) const;
+    std::vector< OUString >
+    ReadCURIEs(OUString const & i_rCURIEs) const;
 
-    ::rtl::OUString
-    ReadURIOrSafeCURIE( ::rtl::OUString const & i_rURIOrSafeCURIE) const;
+    OUString
+    ReadURIOrSafeCURIE( OUString const & i_rURIOrSafeCURIE) const;
 };
 
 /** helper to insert RDFa statements into the RDF repository */
@@ -91,7 +91,7 @@ class SAL_DLLPRIVATE RDFaInserter
     const uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference< rdf::XDocumentRepository > m_xRepository;
 
-    typedef ::std::map< ::rtl::OUString, uno::Reference< rdf::XBlankNode > >
+    typedef ::std::map< OUString, uno::Reference< rdf::XBlankNode > >
         BlankNodeMap_t;
 
     BlankNodeMap_t m_BlankNodeMap;
@@ -104,13 +104,13 @@ public:
     {}
 
     uno::Reference< rdf::XBlankNode >
-    LookupBlankNode(::rtl::OUString const & i_rNodeId );
+    LookupBlankNode(OUString const & i_rNodeId );
 
     uno::Reference< rdf::XURI >
-    MakeURI( ::rtl::OUString const & i_rURI) const;
+    MakeURI( OUString const & i_rURI) const;
 
     uno::Reference< rdf::XResource>
-    MakeResource( ::rtl::OUString const & i_rResource);
+    MakeResource( OUString const & i_rResource);
 
     void InsertRDFaEntry(struct RDFaEntry const & i_rEntry);
 };
@@ -118,16 +118,16 @@ public:
 /** store parsed RDFa attributes */
 struct SAL_DLLPRIVATE ParsedRDFaAttributes
 {
-    ::rtl::OUString m_About;
-    ::std::vector< ::rtl::OUString > m_Properties;
-    ::rtl::OUString m_Content;
-    ::rtl::OUString m_Datatype;
+    OUString m_About;
+    ::std::vector< OUString > m_Properties;
+    OUString m_Content;
+    OUString m_Datatype;
 
     ParsedRDFaAttributes(
-            ::rtl::OUString const & i_rAbout,
-            ::std::vector< ::rtl::OUString > const & i_rProperties,
-            ::rtl::OUString const & i_rContent,
-            ::rtl::OUString const & i_rDatatype)
+            OUString const & i_rAbout,
+            ::std::vector< OUString > const & i_rProperties,
+            OUString const & i_rContent,
+            OUString const & i_rDatatype)
         : m_About(i_rAbout)
         , m_Properties(i_rProperties)
         , m_Content(i_rContent)
@@ -157,7 +157,7 @@ static inline bool isWS(const sal_Unicode i_Char)
         || (' ' == i_Char);
 }
 
-static ::rtl::OUString splitAtWS(::rtl::OUString & io_rString)
+static OUString splitAtWS(OUString & io_rString)
 {
     const sal_Int32 len( io_rString.getLength() );
     sal_Int32 idxstt(0);
@@ -166,21 +166,21 @@ static ::rtl::OUString splitAtWS(::rtl::OUString & io_rString)
     sal_Int32 idxend(idxstt);
     while ((idxend < len) && (!isWS(io_rString[idxend])))
         ++idxend; // the CURIE
-    const ::rtl::OUString ret(io_rString.copy(idxstt, idxend - idxstt));
+    const OUString ret(io_rString.copy(idxstt, idxend - idxstt));
     io_rString = io_rString.copy(idxend); // rest
     return ret;
 }
 
-::rtl::OUString
-RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
+OUString
+RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
 {
     // the RDFa spec says that a prefix is required (it may be empty: ":foo")
     const sal_Int32 idx( i_rCURIE.indexOf(':') );
     if (idx >= 0)
     {
-        ::rtl::OUString Prefix;
-        ::rtl::OUString LocalName;
-        ::rtl::OUString Namespace;
+        OUString Prefix;
+        OUString LocalName;
+        OUString Namespace;
         sal_uInt16 nKey( GetImport().GetNamespaceMap()._GetKeyByAttrName(
             i_rCURIE, &Prefix, &LocalName, &Namespace) );
         if ( Prefix == "_" )
@@ -196,30 +196,30 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
                 (XML_NAMESPACE_XMLNS   != nKey))
             {
                 // N.B.: empty LocalName is valid!
-                const ::rtl::OUString URI(Namespace + LocalName);
+                const OUString URI(Namespace + LocalName);
                 return GetAbsoluteReference(URI);
             }
             else
             {
                 OSL_TRACE( "ReadCURIE: invalid CURIE: invalid prefix" );
-                return ::rtl::OUString();
+                return OUString();
             }
         }
     }
     OSL_TRACE( "ReadCURIE: invalid CURIE: no prefix" );
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::std::vector< ::rtl::OUString >
-RDFaReader::ReadCURIEs(::rtl::OUString const & i_rCURIEs) const
+::std::vector< OUString >
+RDFaReader::ReadCURIEs(OUString const & i_rCURIEs) const
 {
-    std::vector< ::rtl::OUString > vec;
-    ::rtl::OUString CURIEs(i_rCURIEs);
+    std::vector< OUString > vec;
+    OUString CURIEs(i_rCURIEs);
     do {
-      ::rtl::OUString curie( splitAtWS(CURIEs) );
+      OUString curie( splitAtWS(CURIEs) );
       if (!curie.isEmpty())
       {
-          const ::rtl::OUString uri(ReadCURIE(curie));
+          const OUString uri(ReadCURIE(curie));
           if (!uri.isEmpty())
           {
               vec.push_back(uri);
@@ -234,8 +234,8 @@ RDFaReader::ReadCURIEs(::rtl::OUString const & i_rCURIEs) const
     return vec;
 }
 
-::rtl::OUString
-RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
+OUString
+RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
 {
     const sal_Int32 len(i_rURIOrSafeCURIE.getLength());
     if (len && (i_rURIOrSafeCURIE[0] == '['))
@@ -247,7 +247,7 @@ RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
         else
         {
             OSL_TRACE( "ReadURIOrSafeCURIE: invalid SafeCURIE" );
-            return ::rtl::OUString();
+            return OUString();
         }
     }
     else
@@ -255,7 +255,7 @@ RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
         if (i_rURIOrSafeCURIE.matchAsciiL("_:", 2)) // blank node
         {
             OSL_TRACE( "ReadURIOrSafeCURIE: invalid URI: scheme is _" );
-            return ::rtl::OUString();
+            return OUString();
         }
         else
         {
@@ -267,7 +267,7 @@ RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
 ////////////////////////////////////////////////////////////////////////////
 
 uno::Reference< rdf::XBlankNode >
-RDFaInserter::LookupBlankNode(::rtl::OUString const & i_rNodeId )
+RDFaInserter::LookupBlankNode(OUString const & i_rNodeId )
 {
     uno::Reference< rdf::XBlankNode > & rEntry( m_BlankNodeMap[ i_rNodeId ] );
     if (!rEntry.is())
@@ -278,7 +278,7 @@ RDFaInserter::LookupBlankNode(::rtl::OUString const & i_rNodeId )
 }
 
 uno::Reference< rdf::XURI >
-RDFaInserter::MakeURI( ::rtl::OUString const & i_rURI) const
+RDFaInserter::MakeURI( OUString const & i_rURI) const
 {
     if (i_rURI.matchAsciiL("_:", 2)) // blank node
     {
@@ -300,14 +300,14 @@ RDFaInserter::MakeURI( ::rtl::OUString const & i_rURI) const
 }
 
 uno::Reference< rdf::XResource>
-RDFaInserter::MakeResource( ::rtl::OUString const & i_rResource)
+RDFaInserter::MakeResource( OUString const & i_rResource)
 {
     if (i_rResource.matchAsciiL("_:", 2)) // blank node
     {
         // we cannot use the blank node label as-is: it must be distinct
         // from labels in other graphs, so create fresh ones per XML stream
         // N.B.: content.xml and styles.xml are distinct graphs
-        ::rtl::OUString name( i_rResource.copy(2) );
+        OUString name( i_rResource.copy(2) );
         const uno::Reference< rdf::XBlankNode > xBNode( LookupBlankNode(name) );
         OSL_ENSURE(xBNode.is(), "no blank node?");
         return uno::Reference<rdf::XResource>( xBNode, uno::UNO_QUERY);
@@ -405,10 +405,10 @@ RDFaImportHelper::~RDFaImportHelper()
 
 ::boost::shared_ptr<ParsedRDFaAttributes>
 RDFaImportHelper::ParseRDFa(
-    ::rtl::OUString const & i_rAbout,
-    ::rtl::OUString const & i_rProperty,
-    ::rtl::OUString const & i_rContent,
-    ::rtl::OUString const & i_rDatatype)
+    OUString const & i_rAbout,
+    OUString const & i_rProperty,
+    OUString const & i_rContent,
+    OUString const & i_rDatatype)
 {
     if (i_rProperty.isEmpty())
     {
@@ -417,18 +417,18 @@ RDFaImportHelper::ParseRDFa(
     }
     // must parse CURIEs here: need namespace declaration context
     RDFaReader reader(GetImport());
-    const ::rtl::OUString about( reader.ReadURIOrSafeCURIE(i_rAbout) );
+    const OUString about( reader.ReadURIOrSafeCURIE(i_rAbout) );
     if (about.isEmpty()) {
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
-    const ::std::vector< ::rtl::OUString > properties(
+    const ::std::vector< OUString > properties(
         reader.ReadCURIEs(i_rProperty) );
     if (!properties.size()) {
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
-    const ::rtl::OUString datatype( !i_rDatatype.isEmpty()
+    const OUString datatype( !i_rDatatype.isEmpty()
         ?   reader.ReadCURIE(i_rDatatype)
-        :   ::rtl::OUString() );
+        :   OUString() );
     return ::boost::shared_ptr<ParsedRDFaAttributes>(
             new ParsedRDFaAttributes(about, properties, i_rContent, datatype));
 }
@@ -454,10 +454,10 @@ RDFaImportHelper::AddRDFa(
 void
 RDFaImportHelper::ParseAndAddRDFa(
     uno::Reference<rdf::XMetadatable> const & i_xObject,
-    ::rtl::OUString const & i_rAbout,
-    ::rtl::OUString const & i_rProperty,
-    ::rtl::OUString const & i_rContent,
-    ::rtl::OUString const & i_rDatatype)
+    OUString const & i_rAbout,
+    OUString const & i_rProperty,
+    OUString const & i_rContent,
+    OUString const & i_rDatatype)
 {
     ::boost::shared_ptr<ParsedRDFaAttributes> pAttributes(
         ParseRDFa(i_rAbout, i_rProperty, i_rContent, i_rDatatype) );

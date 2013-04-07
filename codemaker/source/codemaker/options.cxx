@@ -20,7 +20,6 @@
 
 #include "codemaker/options.hxx"
 
-using ::rtl::OString;
 
 Options::Options()
 {

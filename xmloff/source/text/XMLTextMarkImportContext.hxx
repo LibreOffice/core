@@ -47,7 +47,7 @@ public:
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
@@ -66,15 +66,15 @@ class XMLTextMarkImportContext : public SvXMLImportContext
 {
 
     XMLTextImportHelper & m_rHelper;
-    ::rtl::OUString m_sBookmarkName;
-    ::rtl::OUString m_sFieldName;
-    ::rtl::OUString m_sXmlId;
+    OUString m_sBookmarkName;
+    OUString m_sFieldName;
+    OUString m_sXmlId;
     // RDFa
     bool m_bHaveAbout;
-    ::rtl::OUString m_sAbout;
-    ::rtl::OUString m_sProperty;
-    ::rtl::OUString m_sContent;
-    ::rtl::OUString m_sDatatype;
+    OUString m_sAbout;
+    OUString m_sProperty;
+    OUString m_sContent;
+    OUString m_sDatatype;
 
 public:
 
@@ -84,7 +84,7 @@ public:
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
 protected:
 
@@ -94,18 +94,18 @@ protected:
     virtual void EndElement();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextContent > CreateAndInsertMark(
         SvXMLImport& rImport,
-        const ::rtl::OUString& sServiceName,
-        const ::rtl::OUString& sMarkName,
+        const OUString& sServiceName,
+        const OUString& sMarkName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XTextRange> & rRange,
-        const ::rtl::OUString& i_rXmlId = ::rtl::OUString());
+        const OUString& i_rXmlId = OUString());
 
     sal_Bool FindName(
         SvXMLImport& rImport,

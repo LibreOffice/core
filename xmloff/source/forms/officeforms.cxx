@@ -48,7 +48,7 @@ namespace xmloff
     //=========================================================================
     TYPEINIT1(OFormsRootImport, SvXMLImportContext);
     //-------------------------------------------------------------------------
-    OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName )
+    OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName )
         :SvXMLImportContext(rImport, nPrfx, rLocalName)
     {
     }
@@ -59,7 +59,7 @@ namespace xmloff
     }
 
     //-------------------------------------------------------------------------
-    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
@@ -68,15 +68,15 @@ namespace xmloff
     //-------------------------------------------------------------------------
     void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
-            const ::rtl::OUString& _rPropName, sal_Bool _bDefault)
+            const OUString& _rPropName, sal_Bool _bDefault)
     {
         // the complete attribute name to look for
-        ::rtl::OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
+        OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
             OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
-            ::rtl::OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
+            OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
 
         // get and convert the value
-        ::rtl::OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
+        OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
         bool bValue = _bDefault;
         ::sax::Converter::convertBool(bValue, sAttributeValue);
 
@@ -141,7 +141,7 @@ namespace xmloff
     //-------------------------------------------------------------------------
     void OFormsRootExport::implExportBool(SvXMLExport& _rExp, OfficeFormsAttributes _eAttribute,
         const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
-        const ::rtl::OUString& _rPropName, sal_Bool _bDefault)
+        const OUString& _rPropName, sal_Bool _bDefault)
     {
         // retrieve the property value
         sal_Bool bValue = _bDefault;
@@ -149,7 +149,7 @@ namespace xmloff
             bValue = ::cppu::any2bool(_rxProps->getPropertyValue(_rPropName));
 
         // convert into a string
-        ::rtl::OUStringBuffer aValue;
+        OUStringBuffer aValue;
         ::sax::Converter::convertBool(aValue, bValue);
 
         // add the attribute

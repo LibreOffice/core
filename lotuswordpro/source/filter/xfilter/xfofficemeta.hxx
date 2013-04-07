@@ -69,23 +69,23 @@ public:
     XFOfficeMeta(){}
     virtual ~XFOfficeMeta(){}
 
-    void    SetCreator(rtl::OUString creator);
-    void    SetDescription(rtl::OUString dsr);
-    void SetKeywords(rtl::OUString keywords);
-    void SetCreationTime(rtl::OUString crtime);
-    void SetLastTime(rtl::OUString lstime);
-    void SetEditTime(rtl::OUString edtime);
+    void    SetCreator(OUString creator);
+    void    SetDescription(OUString dsr);
+    void SetKeywords(OUString keywords);
+    void SetCreationTime(OUString crtime);
+    void SetLastTime(OUString lstime);
+    void SetEditTime(OUString edtime);
 
     virtual void ToXml(IXFStream *pStream);
 private:
-    rtl::OUString   m_strGenerator;
-    rtl::OUString   m_strTitle;
-    rtl::OUString   m_strCreator;
-    rtl::OUString   m_strDsr;
-    rtl::OUString   m_strKeywords;
-    rtl::OUString   m_strCrtime;
-    rtl::OUString   m_strLstime;
-    rtl::OUString   m_strEdtime;
+    OUString   m_strGenerator;
+    OUString   m_strTitle;
+    OUString   m_strCreator;
+    OUString   m_strDsr;
+    OUString   m_strKeywords;
+    OUString   m_strCrtime;
+    OUString   m_strLstime;
+    OUString   m_strEdtime;
 
 };
 

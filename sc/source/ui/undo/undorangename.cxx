@@ -41,11 +41,11 @@ using ::std::auto_ptr;
 
 ScUndoAllRangeNames::ScUndoAllRangeNames(
     ScDocShell* pDocSh,
-    const std::map<rtl::OUString, ScRangeName*>& rOldNames,
-    const boost::ptr_map<rtl::OUString, ScRangeName>& rNewNames) :
+    const std::map<OUString, ScRangeName*>& rOldNames,
+    const boost::ptr_map<OUString, ScRangeName>& rNewNames) :
     ScSimpleUndo(pDocSh)
 {
-    std::map<rtl::OUString, ScRangeName*>::const_iterator itr, itrEnd;
+    std::map<OUString, ScRangeName*>::const_iterator itr, itrEnd;
     for (itr = rOldNames.begin(), itrEnd = rOldNames.end(); itr != itrEnd; ++itr)
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -54,7 +54,7 @@ ScUndoAllRangeNames::ScUndoAllRangeNames(
         maOldNames.insert(itr->first, p);
     }
 
-    boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator it, itEnd;
+    boost::ptr_map<OUString, ScRangeName>::const_iterator it, itEnd;
     for (it = rNewNames.begin(), itEnd = rNewNames.end(); it != itEnd; ++it)
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -87,12 +87,12 @@ sal_Bool ScUndoAllRangeNames::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
     return sal_False;
 }
 
-rtl::OUString ScUndoAllRangeNames::GetComment() const
+OUString ScUndoAllRangeNames::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }
 
-void ScUndoAllRangeNames::DoChange(const boost::ptr_map<rtl::OUString, ScRangeName>& rNames)
+void ScUndoAllRangeNames::DoChange(const boost::ptr_map<OUString, ScRangeName>& rNames)
 {
     ScDocument& rDoc = *pDocShell->GetDocument();
 
@@ -160,7 +160,7 @@ sal_Bool ScUndoAddRangeData::CanRepeat(SfxRepeatTarget& /*rTarget*/) const
     return sal_False;
 }
 
-rtl::OUString ScUndoAddRangeData::GetComment() const
+OUString ScUndoAddRangeData::GetComment() const
 {
     return ScGlobal::GetRscString(STR_UNDO_RANGENAMES);
 }

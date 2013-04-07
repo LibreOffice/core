@@ -38,7 +38,7 @@ namespace connectivity
 
             inline MacabConnection* getConnection() const { return m_pConnection; }
 
-            static const ::rtl::OUString& getDot();
+            static const OUString& getDot();
 
             // implementation of the pure virtual methods
             virtual void refreshTables();

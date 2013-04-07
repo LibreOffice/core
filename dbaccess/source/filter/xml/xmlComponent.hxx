@@ -28,9 +28,9 @@ namespace dbaxml
     class ODBFilter;
     class OXMLComponent : public SvXMLImportContext
     {
-        ::rtl::OUString m_sName;
-        ::rtl::OUString m_sHREF;
-        ::rtl::OUString m_sComponentServiceName;
+        OUString m_sName;
+        OUString m_sHREF;
+        OUString m_sComponentServiceName;
         sal_Bool        m_bAsTemplate;
 
         ODBFilter& GetOwnImport();
@@ -38,10 +38,10 @@ namespace dbaxml
 
         OXMLComponent( ODBFilter& rImport
                     , sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
-                    ,const ::rtl::OUString& _sComponentServiceName
+                    ,const OUString& _sComponentServiceName
                     );
         virtual ~OXMLComponent();
     };

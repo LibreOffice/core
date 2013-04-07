@@ -56,9 +56,9 @@ namespace fileaccess {
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
 
-        void notifyChildInserted( const rtl::OUString& aChildName );
+        void notifyChildInserted( const OUString& aChildName );
         void notifyDeleted( void );
-        void notifyRemoved( const rtl::OUString& aChildName );
+        void notifyRemoved( const OUString& aChildName );
         void notifyExchanged( );
     };
 
@@ -76,12 +76,12 @@ namespace fileaccess {
             const com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >& sListeners );
 
-        void SAL_CALL notifyPropertyAdded( const rtl::OUString & aPropertyName );
-        void SAL_CALL notifyPropertyRemoved( const rtl::OUString & aPropertyName );
+        void SAL_CALL notifyPropertyAdded( const OUString & aPropertyName );
+        void SAL_CALL notifyPropertyRemoved( const OUString & aPropertyName );
     };
 
 
-    typedef boost::unordered_map< rtl::OUString,
+    typedef boost::unordered_map< OUString,
                            com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::uno::XInterface > >,
                            hashOUString,
                            equalOUString >      ListenerMap;
@@ -109,13 +109,13 @@ namespace fileaccess {
     {
     public:
         // Side effect of this function is the change of the name
-        virtual ContentEventNotifier*          cEXC( const rtl::OUString aNewName ) = 0;
+        virtual ContentEventNotifier*          cEXC( const OUString aNewName ) = 0;
         // Side effect is the change of the state of the object to "deleted".
         virtual ContentEventNotifier*          cDEL( void ) = 0;
         virtual ContentEventNotifier*          cCEL( void ) = 0;
         virtual PropertySetInfoChangeNotifier* cPSL( void ) = 0;
         virtual PropertyChangeNotifier*        cPCL( void ) = 0;
-        virtual rtl::OUString                  getKey( void ) = 0;
+        virtual OUString                  getKey( void ) = 0;
 
     protected:
         ~Notifier() {}

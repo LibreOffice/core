@@ -175,8 +175,8 @@ private:
     LtTm m_nLastRevisionTime;
     LtTm m_nTotalEditTime;
 private:
-    rtl::OUString DateTimeToOUString(LtTm& dt);
-    rtl::OUString TimeToOUString(LtTm& dt);
+    OUString DateTimeToOUString(LtTm& dt);
+    OUString TimeToOUString(LtTm& dt);
 
 public:
     void Read();

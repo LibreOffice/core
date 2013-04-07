@@ -36,8 +36,8 @@ namespace connectivity
         virtual ~java_lang_Throwable();
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Throwable( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
-        ::rtl::OUString getMessage() const;
-        ::rtl::OUString getLocalizedMessage() const;
+        OUString getMessage() const;
+        OUString getLocalizedMessage() const;
 
 #if OSL_DEBUG_LEVEL > 0
         void printStackTrace() const;

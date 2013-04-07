@@ -33,12 +33,12 @@ private:
 public:
     SwXMLBlockListContext( SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLBlockListContext ( void );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -49,7 +49,7 @@ class SwXMLBlockContext : public SvXMLImportContext
 public:
     SwXMLBlockContext(     SwXMLBlockListImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLBlockContext ( void );
@@ -63,11 +63,11 @@ private:
 public:
     SwXMLTextBlockDocumentContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockDocumentContext ( void );
@@ -81,11 +81,11 @@ private:
 public:
     SwXMLTextBlockBodyContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockBodyContext ( void );
@@ -99,11 +99,11 @@ private:
 public:
     SwXMLTextBlockTextContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockTextContext ( void );
@@ -117,10 +117,10 @@ private:
 public:
     SwXMLTextBlockParContext(     SwXMLTextBlockImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
     ~SwXMLTextBlockParContext ( void );
 };
 

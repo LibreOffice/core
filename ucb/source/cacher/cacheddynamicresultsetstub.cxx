@@ -31,7 +31,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 CachedDynamicResultSetStub::CachedDynamicResultSetStub(
         Reference< XDynamicResultSet > xOrigin

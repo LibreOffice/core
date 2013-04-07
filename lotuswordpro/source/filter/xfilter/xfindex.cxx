@@ -92,7 +92,7 @@ XFIndex::~XFIndex()
     }
 }
 
-void    XFIndex::AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ)
+void    XFIndex::AddTemplate(OUString level, OUString style, XFIndexTemplate* templ)
 {
     templ->SetLevel( level );
     if(m_eType != enumXFIndexTOC) // TOC's styles are applied to template entries separately
@@ -112,7 +112,7 @@ void    XFIndex::SetSeparator(sal_Bool sep)
     m_bSeparator = sep;
 }
 
-void XFIndex::AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName)
+void XFIndex::AddTocSource(sal_uInt16 nLevel, const OUString sStyleName)
 {
     if (nLevel > MAX_TOC_LEVEL)
     {
@@ -126,9 +126,9 @@ void    XFIndex::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
-    rtl::OUString strIndexName;
-    rtl::OUString strTplName;
-    rtl::OUString strSourceName;
+    OUString strIndexName;
+    OUString strTplName;
+    OUString strSourceName;
 
     if(m_eType == enumXFIndexTOC )
     {
@@ -221,7 +221,7 @@ void    XFIndex::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute( A2OUSTR("text:outline-level"), Int32ToOUString(i));
             pStrm->StartElement( A2OUSTR("text:index-source-styles") );
 
-            std::vector<rtl::OUString>::iterator it_str;
+            std::vector<OUString>::iterator it_str;
             for (it_str = m_aTOCSource[i].begin(); it_str != m_aTOCSource[i].end(); ++it_str)
             {
                 pAttrList->Clear();

@@ -30,7 +30,7 @@ namespace svgio
         {
         private:
             /// contained chars
-            rtl::OUString           maText;
+            OUString           maText;
 
         public:
             SvgTitleDescNode(
@@ -40,10 +40,10 @@ namespace svgio
             virtual ~SvgTitleDescNode();
 
             /// add new chars
-            void concatenate(const rtl::OUString& rChars);
+            void concatenate(const OUString& rChars);
 
             /// x content, set if found in current context
-            const rtl::OUString& getText() const { return maText; }
+            const OUString& getText() const { return maText; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

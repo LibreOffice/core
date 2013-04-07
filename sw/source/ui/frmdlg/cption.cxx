@@ -84,7 +84,7 @@ public:
     String  GetCharacterStyle() const;
 };
 
-String SwCaptionDialog::our_aSepTextSave = rtl::OUString(": "); // Caption separator text
+String SwCaptionDialog::our_aSepTextSave = OUString(": "); // Caption separator text
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
@@ -432,7 +432,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
                                         RES_SETEXPFLD, aFldTypeName );
 
     sal_Unicode nLvl = MAXLEVEL;
-    rtl::OUString sDelim(": ");
+    OUString sDelim(": ");
     if( pFldType )
     {
         sDelim = pFldType->GetDelimiter();
@@ -463,14 +463,14 @@ void SwSequenceOptionDialog::Apply()
     bool bUpdate = true;
     if( pFldType )
     {
-        pFldType->SetDelimiter( rtl::OUString(cDelim) );
+        pFldType->SetDelimiter( OUString(cDelim) );
         pFldType->SetOutlineLvl( nLvl );
     }
     else if( aFldTypeName.Len() && nLvl < MAXLEVEL )
     {
         // then we have to insert that
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
-        aFldType.SetDelimiter( rtl::OUString(cDelim) );
+        aFldType.SetDelimiter( OUString(cDelim) );
         aFldType.SetOutlineLvl( nLvl );
         rSh.InsertFldType( aFldType );
     }
@@ -508,7 +508,7 @@ long CategoryBox::PreNotify( NotifyEvent& rNEvt )
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
         {
-            rtl::OUString sKey( pEvent->GetCharCode() );
+            OUString sKey( pEvent->GetCharCode() );
             String sName( GetText() );
             Selection aSel( GetSelection() );
             aSel.Justify();

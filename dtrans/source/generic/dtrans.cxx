@@ -26,7 +26,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::uno;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 extern "C"
 {

@@ -53,23 +53,23 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > SAL_CALL getCipherContext( ::sal_Int32 nCipherID, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aKey, const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aInitializationVector, ::sal_Bool bEncryption, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
-rtl::OUString ONSSInitializer_getImplementationName()
+OUString ONSSInitializer_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL ONSSInitializer_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ONSSInitializer_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames()
+com::sun::star::uno::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames()
     throw ( ::com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

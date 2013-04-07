@@ -26,19 +26,19 @@ typedef InheritedHelperInterfaceImpl1< ov::XGlobalsBase > Globals_BASE;
 class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
 {
 protected:
-    rtl::OUString msDocCtxName;
-    rtl::OUString msApplication;
+    OUString msDocCtxName;
+    OUString msApplication;
 
-    bool hasServiceName( const rtl::OUString& serviceName );
+    bool hasServiceName( const OUString& serviceName );
     void init(  const css::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
 
 public:
-    VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString& sDocCtxName );
+    VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const OUString& sDocCtxName );
     virtual ~VbaGlobalsBase();
     // XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (css::uno::Exception, css::uno::RuntimeException);
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException);
 };
 #endif
 

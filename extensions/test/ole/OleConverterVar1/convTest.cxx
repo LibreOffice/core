@@ -53,7 +53,6 @@ using namespace com::sun::star::uno;
 using namespace oletest;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 HRESULT doTest();
 HRESULT InitializeParameter();

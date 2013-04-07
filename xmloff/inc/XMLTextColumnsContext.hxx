@@ -30,14 +30,14 @@ class SvXMLTokenMap;
 
 class XMLTextColumnsContext :public XMLElementPropertyContext
 {
-    const ::rtl::OUString sSeparatorLineIsOn;
-    const ::rtl::OUString sSeparatorLineWidth;
-    const ::rtl::OUString sSeparatorLineColor;
-    const ::rtl::OUString sSeparatorLineRelativeHeight;
-    const ::rtl::OUString sSeparatorLineVerticalAlignment;
-    const ::rtl::OUString sIsAutomatic;
-    const ::rtl::OUString sAutomaticDistance;
-    const ::rtl::OUString sSeparatorLineStyle;
+    const OUString sSeparatorLineIsOn;
+    const OUString sSeparatorLineWidth;
+    const OUString sSeparatorLineColor;
+    const OUString sSeparatorLineRelativeHeight;
+    const OUString sSeparatorLineVerticalAlignment;
+    const OUString sIsAutomatic;
+    const OUString sAutomaticDistance;
+    const OUString sSeparatorLineStyle;
 
 
     XMLTextColumnsArray_Impl *pColumns;
@@ -53,7 +53,7 @@ public:
 
     XMLTextColumnsContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
@@ -62,7 +62,7 @@ public:
     virtual ~XMLTextColumnsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();

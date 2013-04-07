@@ -50,7 +50,7 @@ namespace svx
     public:
         /** returns the name of the property which this provider is responsible for
         */
-        virtual ::rtl::OUString getPropertyName() const = 0;
+        virtual OUString getPropertyName() const = 0;
 
         /** returns the current value of the property which the provider is responsible for
         */
@@ -74,18 +74,18 @@ namespace svx
     public:
         PropertyValueProvider( ::cppu::OWeakObject& _rContext, const sal_Char* _pAsciiPropertyName )
             :m_rContext( _rContext )
-            ,m_sPropertyName( ::rtl::OUString::createFromAscii( _pAsciiPropertyName ) )
+            ,m_sPropertyName( OUString::createFromAscii( _pAsciiPropertyName ) )
         {
         }
 
-        virtual ::rtl::OUString getPropertyName() const;
+        virtual OUString getPropertyName() const;
         virtual void getCurrentValue( ::com::sun::star::uno::Any& _out_rValue ) const;
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }
     private:
         ::cppu::OWeakObject&    m_rContext;
-        const ::rtl::OUString   m_sPropertyName;
+        const OUString   m_sPropertyName;
     };
 
     //====================================================================
@@ -110,8 +110,8 @@ namespace svx
         ~PropertyChangeNotifier();
 
         // listener maintanance
-        void addPropertyChangeListener( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
-        void removePropertyChangeListener( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
+        void addPropertyChangeListener( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
+        void removePropertyChangeListener( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxListener );
 
         /** registers a IPropertyValueProvider
         */

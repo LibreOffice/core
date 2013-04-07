@@ -37,7 +37,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
-void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, const rtl::OUString& rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
+void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, const OUString& rCustomShowName, std::vector< Reference< XDrawPage > >& rUsedPageList )
 {
     try
     {
@@ -79,7 +79,7 @@ void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference
     }
 }
 
-void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, const rtl::OUString& rCustomShowName, std::vector< Reference< XDrawPage > >& rNonUsedPageList )
+void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, const OUString& rCustomShowName, std::vector< Reference< XDrawPage > >& rNonUsedPageList )
 {
     try
     {

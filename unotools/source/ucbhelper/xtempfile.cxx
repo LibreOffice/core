@@ -27,7 +27,7 @@ OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentCont
 : ::cppu::PropertySetMixin< css::io::XTempFile >(
     context
     , static_cast< Implements >( IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET | IMPLEMENTS_PROPERTY_ACCESS )
-    , com::sun::star::uno::Sequence< rtl::OUString >() )
+    , com::sun::star::uno::Sequence< OUString >() )
 , mpStream( NULL )
 , mbRemoveFile( sal_True )
 , mbInClosed( sal_False )
@@ -123,7 +123,7 @@ throw ( css::uno::RuntimeException )
     mbRemoveFile = _removefile;
     mpTempFile->EnableKillingFile( mbRemoveFile );
 };
-::rtl::OUString SAL_CALL OTempFileService::getUri()
+OUString SAL_CALL OTempFileService::getUri()
 throw ( css::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -133,10 +133,10 @@ throw ( css::uno::RuntimeException )
         throw css::uno::RuntimeException();
     }
 
-    return ::rtl::OUString( mpTempFile->GetURL() );
+    return OUString( mpTempFile->GetURL() );
 
 };
-::rtl::OUString SAL_CALL OTempFileService::getResourceName()
+OUString SAL_CALL OTempFileService::getResourceName()
 throw ( css::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -146,7 +146,7 @@ throw ( css::uno::RuntimeException )
         throw css::uno::RuntimeException();
 }
 
-    return ::rtl::OUString( mpTempFile->GetFileName() );
+    return OUString( mpTempFile->GetFileName() );
 };
 
 
@@ -158,11 +158,11 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
     if (nBytesToRead < 0)
-        throw css::io::BufferSizeExceededException( ::rtl::OUString(), static_cast< css::uno::XWeak * >(this));
+        throw css::io::BufferSizeExceededException( OUString(), static_cast< css::uno::XWeak * >(this));
 
     aData.realloc(nBytesToRead);
 
@@ -191,13 +191,13 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
     checkError();
 
     if (nMaxBytesToRead < 0)
-        throw css::io::BufferSizeExceededException( ::rtl::OUString(), static_cast < css::uno::XWeak * >( this ) );
+        throw css::io::BufferSizeExceededException( OUString(), static_cast < css::uno::XWeak * >( this ) );
 
     if (mpStream->IsEof())
     {
@@ -212,7 +212,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
     checkError();
@@ -224,7 +224,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
 
@@ -245,7 +245,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak  * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak  * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     mbInClosed = sal_True;
 
@@ -269,20 +269,20 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
     sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
     checkError();
     if  ( nWritten != (sal_uInt32)aData.getLength())
-        throw css::io::BufferSizeExceededException( ::rtl::OUString(),static_cast < css::uno::XWeak * > ( this ) );
+        throw css::io::BufferSizeExceededException( OUString(),static_cast < css::uno::XWeak * > ( this ) );
 }
 void SAL_CALL OTempFileService::flush(  )
 throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
     mpStream->Flush();
@@ -293,7 +293,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     mbOutClosed = sal_True;
 
@@ -325,7 +325,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 void OTempFileService::checkError () const
 {
     if (!mpStream || mpStream->SvStream::GetError () != ERRCODE_NONE )
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 }
 void OTempFileService::checkConnected ()
 {
@@ -349,7 +349,7 @@ void OTempFileService::checkConnected ()
     }
 
     if (!mpStream)
-        throw css::io::NotConnectedException ( ::rtl::OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 }
 
 // XSeekable
@@ -423,20 +423,20 @@ throw ( css::io::IOException, css::uno::RuntimeException )
 
 // XServiceInfo
 
-::rtl::OUString SAL_CALL OTempFileService::getImplementationName()
+OUString SAL_CALL OTempFileService::getImplementationName()
 throw ( css::uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL OTempFileService::supportsService( ::rtl::OUString const & rServiceName )
+sal_Bool SAL_CALL OTempFileService::supportsService( OUString const & rServiceName )
 throw ( css::uno::RuntimeException )
 {
-    css::uno::Sequence< ::rtl::OUString > aServices(getSupportedServiceNames_Static());
+    css::uno::Sequence< OUString > aServices(getSupportedServiceNames_Static());
     return rServiceName == aServices[0];
 }
 
-css::uno::Sequence < ::rtl::OUString > SAL_CALL OTempFileService::getSupportedServiceNames()
+css::uno::Sequence < OUString > SAL_CALL OTempFileService::getSupportedServiceNames()
 throw ( css::uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -444,13 +444,13 @@ throw ( css::uno::RuntimeException )
 
 
 
-::rtl::OUString OTempFileService::getImplementationName_Static ()
+OUString OTempFileService::getImplementationName_Static ()
 {
-    return ::rtl::OUString ( "com.sun.star.io.comp.TempFile" );
+    return OUString ( "com.sun.star.io.comp.TempFile" );
 }
-css::uno::Sequence < ::rtl::OUString > OTempFileService::getSupportedServiceNames_Static()
+css::uno::Sequence < OUString > OTempFileService::getSupportedServiceNames_Static()
 {
-    css::uno::Sequence < ::rtl::OUString > aNames ( 1 );
+    css::uno::Sequence < OUString > aNames ( 1 );
     aNames[0] = "com.sun.star.io.TempFile";
     return aNames;
 }

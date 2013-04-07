@@ -129,7 +129,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                     // #52709 DIM AS NEW for Uno with full-qualified name
                     if( Peek() == DOT )
                     {
-                        rtl::OUString aDotStr( '.' );
+                        OUString aDotStr( '.' );
                         while( Peek() == DOT )
                         {
                             aCompleteName += aDotStr;
@@ -663,8 +663,8 @@ void SbiParser::DefType( bool bPrivate )
         }
     }
 
-    pType->Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
-    pType->Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
+    pType->Remove( OUString("Name"), SbxCLASS_DONTCARE );
+    pType->Remove( OUString("Parent"), SbxCLASS_DONTCARE );
 
     rTypeArray->Insert (pType,rTypeArray->Count());
 }
@@ -800,8 +800,8 @@ void SbiParser::DefEnum( bool bPrivate )
         }
     }
 
-    pEnum->Remove( rtl::OUString("Name"), SbxCLASS_DONTCARE );
-    pEnum->Remove( rtl::OUString("Parent"), SbxCLASS_DONTCARE );
+    pEnum->Remove( OUString("Name"), SbxCLASS_DONTCARE );
+    pEnum->Remove( OUString("Parent"), SbxCLASS_DONTCARE );
 
     rEnumArray->Insert( pEnum, rEnumArray->Count() );
 }

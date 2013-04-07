@@ -57,7 +57,7 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
     TDatabaseDataProvider(m_aMutex),
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >(
         context, static_cast< Implements >(
-            IMPLEMENTS_PROPERTY_SET), uno::Sequence< ::rtl::OUString >()),
+            IMPLEMENTS_PROPERTY_SET), uno::Sequence< OUString >()),
     m_aParameterManager( m_aMutex, context ),
     m_aFilterManager( uno::Reference< lang::XMultiServiceFactory >(context->getServiceManager(),uno::UNO_QUERY) ),
     m_xContext(context),
@@ -112,13 +112,13 @@ OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::Runti
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL DatabaseDataProvider::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const ::rtl::OUString& _rServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL DatabaseDataProvider::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
@@ -131,7 +131,7 @@ uno::Sequence< OUString > DatabaseDataProvider::getSupportedServiceNames_Static(
     return aSNS;
 }
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -200,8 +200,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
         {
             uno::Reference< chart::XChartDataArray> xChartData( m_xInternal, uno::UNO_QUERY_THROW );
             xChartData->setData( uno::Sequence< uno::Sequence< double > >() );
-            xChartData->setColumnDescriptions( uno::Sequence< ::rtl::OUString >() );
-            if ( m_xInternal->hasDataByRangeRepresentation( ::rtl::OUString::valueOf( sal_Int32(0) ) ) )
+            xChartData->setColumnDescriptions( uno::Sequence< OUString >() );
+            if ( m_xInternal->hasDataByRangeRepresentation( OUString::valueOf( sal_Int32(0) ) ) )
                 m_xInternal->deleteSequence(0);
         }
         catch( const uno::Exception& )
@@ -211,8 +211,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );
         const sal_Bool bHasCategories = aArgs.getOrDefault( "HasCategories", sal_True );
-        uno::Sequence< ::rtl::OUString > aColumnNames =
-            aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< ::rtl::OUString >() );
+        uno::Sequence< OUString > aColumnNames =
+            aArgs.getOrDefault( "ColumnDescriptions", uno::Sequence< OUString >() );
 
         bool bRet = false;
         if ( !m_Command.isEmpty() && m_xActiveConnection.is() )
@@ -280,20 +280,20 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
 }
 // -----------------------------------------------------------------------------
 
-::sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const ::rtl::OUString & /*aRangeRepresentation*/) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString & /*aRangeRepresentation*/) throw (uno::RuntimeException)
 {
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const ::rtl::OUString & _sRangeRepresentation) const
+uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const
 {
-    ::std::map< ::rtl::OUString,com::sun::star::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
+    ::std::map< OUString,com::sun::star::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
     if ( aFind != m_aNumberFormats.end() )
         return aFind->second;
     return uno::makeAny(sal_Int32(0));
 }
 // -----------------------------------------------------------------------------
-uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentation(const ::rtl::OUString & _sRangeRepresentation) throw (uno::RuntimeException, lang::IllegalArgumentException)
+uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentation(const OUString & _sRangeRepresentation) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::MutexGuard g(m_aMutex);
     uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
@@ -306,19 +306,19 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     return xData;
 }
 
-uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
+uno::Sequence< uno::Sequence< OUString > > SAL_CALL DatabaseDataProvider::getComplexRowDescriptions() throw (uno::RuntimeException)
 {
     return m_xComplexDescriptionAccess->getComplexRowDescriptions();
 }
-void SAL_CALL DatabaseDataProvider::setComplexRowDescriptions( const uno::Sequence< uno::Sequence< ::rtl::OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setComplexRowDescriptions( const uno::Sequence< uno::Sequence< OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
 {
     m_xComplexDescriptionAccess->setComplexRowDescriptions(aRowDescriptions);
 }
-uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL DatabaseDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
+uno::Sequence< uno::Sequence< OUString > > SAL_CALL DatabaseDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
 {
     return m_xComplexDescriptionAccess->getComplexColumnDescriptions();
 }
-void SAL_CALL DatabaseDataProvider::setComplexColumnDescriptions( const uno::Sequence< uno::Sequence< rtl::OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setComplexColumnDescriptions( const uno::Sequence< uno::Sequence< OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
 {
     m_xComplexDescriptionAccess->setComplexColumnDescriptions(aColumnDescriptions);
 }
@@ -333,22 +333,22 @@ void SAL_CALL DatabaseDataProvider::setData( const uno::Sequence< uno::Sequence<
     m_xComplexDescriptionAccess->setData(rDataInRows);
 }
 
-void SAL_CALL DatabaseDataProvider::setRowDescriptions( const uno::Sequence< rtl::OUString >& aRowDescriptions )    throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setRowDescriptions( const uno::Sequence< OUString >& aRowDescriptions )    throw (uno::RuntimeException)
 {
     m_xComplexDescriptionAccess->setRowDescriptions(aRowDescriptions);
 }
 
-void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< rtl::OUString >& aColumnDescriptions )    throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setColumnDescriptions( const uno::Sequence< OUString >& aColumnDescriptions )    throw (uno::RuntimeException)
 {
     m_xComplexDescriptionAccess->setColumnDescriptions(aColumnDescriptions);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getRowDescriptions()    throw (uno::RuntimeException)
 {
     return m_xComplexDescriptionAccess->getRowDescriptions();
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getColumnDescriptions()    throw (uno::RuntimeException)
 {
     return m_xComplexDescriptionAccess->getColumnDescriptions();
 }
@@ -387,14 +387,14 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL DatabaseDataProvider::getRange
 }
 // -----------------------------------------------------------------------------
 // chart2::data::XRangeXMLConversion:
-::rtl::OUString SAL_CALL DatabaseDataProvider::convertRangeToXML(const ::rtl::OUString & _sRangeRepresentation) throw (uno::RuntimeException, lang::IllegalArgumentException)
+OUString SAL_CALL DatabaseDataProvider::convertRangeToXML(const OUString & _sRangeRepresentation) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_xRangeConversion->convertRangeToXML(_sRangeRepresentation);
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL DatabaseDataProvider::convertRangeFromXML(const ::rtl::OUString & _sXMLRange) throw (uno::RuntimeException, lang::IllegalArgumentException)
+OUString SAL_CALL DatabaseDataProvider::convertRangeFromXML(const OUString & _sXMLRange) throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_xRangeConversion->convertRangeFromXML(_sXMLRange);
@@ -408,72 +408,72 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL DatabaseDataProvider::getProp
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::setPropertyValue(const ::rtl::OUString & aPropertyName, const uno::Any & aValue) throw (uno::RuntimeException, beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException)
+void SAL_CALL DatabaseDataProvider::setPropertyValue(const OUString & aPropertyName, const uno::Any & aValue) throw (uno::RuntimeException, beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::setPropertyValue(aPropertyName, aValue);
 }
 // -----------------------------------------------------------------------------
 
-uno::Any SAL_CALL DatabaseDataProvider::getPropertyValue(const ::rtl::OUString & aPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
+uno::Any SAL_CALL DatabaseDataProvider::getPropertyValue(const OUString & aPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     return ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::getPropertyValue(aPropertyName);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::addPropertyChangeListener(const ::rtl::OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
+void SAL_CALL DatabaseDataProvider::addPropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::addPropertyChangeListener(aPropertyName, xListener);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::removePropertyChangeListener(const ::rtl::OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
+void SAL_CALL DatabaseDataProvider::removePropertyChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XPropertyChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::removePropertyChangeListener(aPropertyName, xListener);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::addVetoableChangeListener(const ::rtl::OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
+void SAL_CALL DatabaseDataProvider::addVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::addVetoableChangeListener(aPropertyName, xListener);
 }
 
-void SAL_CALL DatabaseDataProvider::removeVetoableChangeListener(const ::rtl::OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
+void SAL_CALL DatabaseDataProvider::removeVetoableChangeListener(const OUString & aPropertyName, const uno::Reference< beans::XVetoableChangeListener > & xListener) throw (uno::RuntimeException, beans::UnknownPropertyException, lang::WrappedTargetException)
 {
     ::cppu::PropertySetMixin< chart2::data::XDatabaseDataProvider >::removeVetoableChangeListener(aPropertyName, xListener);
 }
 
 // chart2::data::XDatabaseDataProvider:
-uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getMasterFields() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getMasterFields() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_MasterFields;
 }
 
-void SAL_CALL DatabaseDataProvider::setMasterFields(const uno::Sequence< ::rtl::OUString > & the_value) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setMasterFields(const uno::Sequence< OUString > & the_value) throw (uno::RuntimeException)
 {
     impl_invalidateParameter_nothrow();
     set(OUString("MasterFields"),the_value,m_MasterFields);
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL DatabaseDataProvider::getDetailFields() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL DatabaseDataProvider::getDetailFields() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_DetailFields;
 }
 
-void SAL_CALL DatabaseDataProvider::setDetailFields(const uno::Sequence< ::rtl::OUString > & the_value) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setDetailFields(const uno::Sequence< OUString > & the_value) throw (uno::RuntimeException)
 {
     set("DetailFields",the_value,m_DetailFields);
 }
 
-::rtl::OUString SAL_CALL DatabaseDataProvider::getCommand() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getCommand() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_Command;
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::setCommand(const ::rtl::OUString & the_value) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setCommand(const OUString & the_value) throw (uno::RuntimeException)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -501,14 +501,14 @@ void SAL_CALL DatabaseDataProvider::setCommandType(::sal_Int32 the_value) throw 
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL DatabaseDataProvider::getFilter() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getFilter() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_aFilterManager.getFilterComponent( dbtools::FilterManager::fcPublicFilter );
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL DatabaseDataProvider::setFilter(const ::rtl::OUString & the_value) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setFilter(const OUString & the_value) throw (uno::RuntimeException)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -532,13 +532,13 @@ void SAL_CALL DatabaseDataProvider::setApplyFilter( ::sal_Bool the_value ) throw
     set(PROPERTY_APPLYFILTER,the_value,m_ApplyFilter);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL DatabaseDataProvider::getHavingClause() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getHavingClause() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_HavingClause;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL DatabaseDataProvider::setHavingClause( const ::rtl::OUString& the_value ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setHavingClause( const OUString& the_value ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -547,13 +547,13 @@ void SAL_CALL DatabaseDataProvider::setHavingClause( const ::rtl::OUString& the_
     set(PROPERTY_HAVING_CLAUSE,the_value,m_HavingClause);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL DatabaseDataProvider::getGroupBy() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getGroupBy() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_GroupBy;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL DatabaseDataProvider::setGroupBy( const ::rtl::OUString& the_value ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setGroupBy( const OUString& the_value ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -562,13 +562,13 @@ void SAL_CALL DatabaseDataProvider::setGroupBy( const ::rtl::OUString& the_value
     set(PROPERTY_GROUP_BY,the_value,m_GroupBy);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL DatabaseDataProvider::getOrder() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getOrder() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_Order;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL DatabaseDataProvider::setOrder( const ::rtl::OUString& the_value ) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value ) throw (uno::RuntimeException)
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -612,13 +612,13 @@ void SAL_CALL DatabaseDataProvider::setActiveConnection(const uno::Reference< sd
     set(PROPERTY_ACTIVE_CONNECTION,the_value,m_xActiveConnection);
 }
 
-::rtl::OUString SAL_CALL DatabaseDataProvider::getDataSourceName() throw (uno::RuntimeException)
+OUString SAL_CALL DatabaseDataProvider::getDataSourceName() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_DataSourceName;
 }
 
-void SAL_CALL DatabaseDataProvider::setDataSourceName(const ::rtl::OUString& the_value) throw (uno::RuntimeException)
+void SAL_CALL DatabaseDataProvider::setDataSourceName(const OUString& the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_DATASOURCENAME,the_value,m_DataSourceName);
 }
@@ -633,7 +633,7 @@ namespace
 {
     struct ColumnDescription
     {
-        ::rtl::OUString sName;
+        OUString sName;
         sal_Int32       nResultSetPosition;
         sal_Int32       nDataType;
 
@@ -643,7 +643,7 @@ namespace
             ,nDataType( sdbc::DataType::VARCHAR )
         {
         }
-        explicit ColumnDescription( const ::rtl::OUString& i_rName )
+        explicit ColumnDescription( const OUString& i_rName )
             :sName( i_rName )
             ,nResultSetPosition( 0 )
             ,nDataType( sdbc::DataType::VARCHAR )
@@ -651,29 +651,29 @@ namespace
         }
     };
 
-    struct CreateColumnDescription : public ::std::unary_function< ::rtl::OUString, ColumnDescription >
+    struct CreateColumnDescription : public ::std::unary_function< OUString, ColumnDescription >
     {
-        ColumnDescription operator()( const ::rtl::OUString& i_rName )
+        ColumnDescription operator()( const OUString& i_rName )
         {
             return ColumnDescription( i_rName );
         }
     };
 
-    struct SelectColumnName : public ::std::unary_function< ColumnDescription, ::rtl::OUString >
+    struct SelectColumnName : public ::std::unary_function< ColumnDescription, OUString >
     {
-        const ::rtl::OUString& operator()( const ColumnDescription& i_rColumn )
+        const OUString& operator()( const ColumnDescription& i_rColumn )
         {
             return i_rColumn.sName;
         }
     };
 }
 
-void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< ::rtl::OUString >& i_aColumnNames)
+void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< OUString >& i_aColumnNames)
 {
     // clear the data before fill the new one
     uno::Reference< sdbcx::XColumnsSupplier > xColSup(m_xRowSet,uno::UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xColumns( xColSup->getColumns(), uno::UNO_SET_THROW );
-    const uno::Sequence< ::rtl::OUString > aRowSetColumnNames( xColumns->getElementNames() );
+    const uno::Sequence< OUString > aRowSetColumnNames( xColumns->getElementNames() );
 
     typedef ::std::vector< ColumnDescription > ColumnDescriptions;
     ColumnDescriptions aColumns;
@@ -681,7 +681,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     if ( i_aColumnNames.getLength() )
     {
         // some normalizations ...
-        uno::Sequence< ::rtl::OUString > aImposedColumnNames( i_aColumnNames );
+        uno::Sequence< OUString > aImposedColumnNames( i_aColumnNames );
 
         // strangely, there exist documents where the ColumnDescriptions end with a number of empty strings. /me
         // thinks they're generated when you have a chart based on a result set with n columns, but remove some
@@ -709,7 +709,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         const sal_Int32 nCount = aImposedColumnNames.getLength();
         for ( sal_Int32 i = 0 ; i < nCount; ++i )
         {
-            const ::rtl::OUString sColumnName( aImposedColumnNames[i] );
+            const OUString sColumnName( aImposedColumnNames[i] );
             if ( !xColumns->hasByName( sColumnName ) )
                 continue;
 
@@ -754,11 +754,11 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_TYPE ) >>= col->nDataType );
 
         const sal_Int32 columnIndex = col - aColumns.begin();
-        const ::rtl::OUString sRangeName = ::rtl::OUString::valueOf( columnIndex );
-        m_aNumberFormats.insert( ::std::map< ::rtl::OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
+        const OUString sRangeName = OUString::valueOf( columnIndex );
+        m_aNumberFormats.insert( ::std::map< OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
     }
 
-    ::std::vector< ::rtl::OUString > aRowLabels;
+    ::std::vector< OUString > aRowLabels;
     ::std::vector< ::std::vector< double > > aDataValues;
     sal_Int32 nRowCount = 0;
     ::connectivity::ORowSetValue aValue;
@@ -803,7 +803,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
               4.30, 9.02, 6.20 };
         for(sal_Int32 h = 0,k = 0; h < nRowCount; ++h,++k )
         {
-            aRowLabels.push_back(::rtl::OUString::valueOf(h+1));
+            aRowLabels.push_back(OUString::valueOf(h+1));
             ::std::vector< double > aRow;
             const sal_Int32 nSize = sizeof(fDefaultData)/sizeof(fDefaultData[0]);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
@@ -817,10 +817,10 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     }
 
     uno::Reference< chart::XChartDataArray> xData(m_xInternal,uno::UNO_QUERY);
-    xData->setRowDescriptions(uno::Sequence< ::rtl::OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
+    xData->setRowDescriptions(uno::Sequence< OUString >(&(*aRowLabels.begin()),aRowLabels.size()));
 
     const size_t nOffset = bFirstColumnIsCategory ? 1 : 0;
-    uno::Sequence< ::rtl::OUString > aColumnDescriptions( aColumns.size() - nOffset );
+    uno::Sequence< OUString > aColumnDescriptions( aColumns.size() - nOffset );
     ::std::transform(
         aColumns.begin() + nOffset,
         aColumns.end(),
@@ -866,7 +866,7 @@ void SAL_CALL DatabaseDataProvider::setNull(sal_Int32 parameterIndex, sal_Int32 
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL DatabaseDataProvider::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw( SQLException, RuntimeException )
+void SAL_CALL DatabaseDataProvider::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw( SQLException, RuntimeException )
 {
     m_aParameterManager.setObjectNull(parameterIndex, sqlType, typeName);
 }
@@ -914,7 +914,7 @@ void SAL_CALL DatabaseDataProvider::setDouble(sal_Int32 parameterIndex, double x
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL DatabaseDataProvider::setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw( SQLException, RuntimeException )
+void SAL_CALL DatabaseDataProvider::setString(sal_Int32 parameterIndex, const OUString& x) throw( SQLException, RuntimeException )
 {
     m_aParameterManager.setString(parameterIndex, x);
 }

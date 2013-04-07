@@ -47,7 +47,7 @@ namespace reportdesign
      *
      * \return A sequence of all properties which should be removed for none char able implementations.
      */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > lcl_getCharOptionals();
+    ::com::sun::star::uno::Sequence< OUString > lcl_getCharOptionals();
 
     /** uses the XChild interface to get the section from any child of it.
      *
@@ -63,7 +63,7 @@ namespace reportdesign
      * \param ArgumentPosition_ The argument position.
      * \param Context_ The context to get the factory service.
      */
-    void throwIllegallArgumentException(const ::rtl::OUString& _sTypeName
+    void throwIllegallArgumentException(const OUString& _sTypeName
                                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& ExceptionContext_
                                         ,const ::sal_Int16& ArgumentPosition_
                                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context_);
@@ -78,7 +78,7 @@ namespace reportdesign
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > cloneObject(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xReportComponent
                                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xFactory
-                                        ,const ::rtl::OUString& _sServiceName);
+                                        ,const OUString& _sServiceName);
 
     class OShapeHelper
     {

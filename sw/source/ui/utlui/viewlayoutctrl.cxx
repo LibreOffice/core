@@ -155,7 +155,7 @@ sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
     aViewLayout.QueryValue( a );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = rtl::OUString( "ViewLayout" );
+    aArgs[0].Name = OUString( "ViewLayout" );
     aArgs[0].Value = a;
 
     execute( aArgs );

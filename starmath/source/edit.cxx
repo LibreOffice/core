@@ -225,7 +225,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         //! see also SmDocShell::GetEditEngine() !
         //!
 
-        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(rtl::OUString("XXXX"))));
+        pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(OUString("XXXX"))));
 
         SetEditEngineDefaultFonts(*pEditEngineItemPool);
 
@@ -343,7 +343,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
         aEvent.ExecutePosition.X = aPoint.X();
         aEvent.ExecutePosition.Y = aPoint.Y();
-        ::rtl::OUString sDummy;
+        OUString sDummy;
         if ( GetView()->TryContextMenuInterception( *pPopupMenu, sDummy, pMenu, aEvent ) )
         {
             if ( pMenu )

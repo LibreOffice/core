@@ -109,7 +109,7 @@ ScVbaMenus::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw( u
     return uno::makeAny( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
 }
 
-uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const rtl::OUString& Caption, const css::uno::Any& Before, const css::uno::Any& Restore ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const css::uno::Any& Before, const css::uno::Any& Restore ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     sal_Int32 nType = office::MsoControlType::msoControlPopup;
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add( uno::makeAny( nType ), uno::Any(), uno::Any(), Before, Restore );
@@ -118,20 +118,20 @@ uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const rtl::OUString& Ca
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 ScVbaMenus::getServiceImplName()
 {
-    return rtl::OUString("ScVbaMenus");
+    return OUString("ScVbaMenus");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaMenus::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Menus" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Menus" );
     }
     return aServiceNames;
 }

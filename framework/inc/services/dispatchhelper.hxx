@@ -87,8 +87,8 @@ class DispatchHelper : public ThreadHelpBase                      // must be the
         // XDispatchHelper
         virtual css::uno::Any SAL_CALL executeDispatch(
                                         const css::uno::Reference< css::frame::XDispatchProvider >& xDispatchProvider ,
-                                        const ::rtl::OUString&                                      sURL              ,
-                                        const ::rtl::OUString&                                      sTargetFrameName  ,
+                                        const OUString&                                      sURL              ,
+                                        const OUString&                                      sTargetFrameName  ,
                                               sal_Int32                                             nSearchFlags      ,
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException);

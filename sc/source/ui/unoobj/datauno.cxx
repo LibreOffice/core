@@ -112,7 +112,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((OUString*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD), 0, &getCppuType((sal_Int32*)0),                0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0, 0},
@@ -217,28 +217,28 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     aDescriptor.setDataSource(rParam.aDBName);
     if (aDescriptor.has( svx::daDataSource ))
     {
-        pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DBNAME ));
+        pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DBNAME ));
         pArray[0].Value <<= rParam.aDBName;
     }
     else if (aDescriptor.has( svx::daConnectionResource ))
     {
-        pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CONRES ));
+        pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CONRES ));
         pArray[0].Value <<= rParam.aDBName;
     }
 
-    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCTYPE ));
+    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCTYPE ));
     pArray[1].Value <<= eMode;
 
-    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCOBJ ));
+    pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SRCOBJ ));
     pArray[2].Value <<= rParam.aStatement;
 
-    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISNATIVE ));
+    pArray[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISNATIVE ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[3].Value, rParam.bNative );
 }
 
 void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
-    rtl::OUString aStrVal;
+    OUString aStrVal;
     const beans::PropertyValue* pPropArray = rSeq.getConstArray();
     long nPropCount = rSeq.getLength();
     for (long i = 0; i < nPropCount; i++)
@@ -340,31 +340,31 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
     //  Sequence fuellen
 
-    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISSORTCOLUMNS ));
+    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISSORTCOLUMNS ));
     pArray[0].Value = ::cppu::bool2any(!rParam.bByRow);
 
-    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CONTHDR ));
+    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CONTHDR ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, rParam.bHasHeader );
 
-    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_MAXFLD ));
+    pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_MAXFLD ));
     pArray[2].Value <<= static_cast<sal_Int32>( rParam.GetSortKeyCount() );
 
-    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SORTFLD ));
+    pArray[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SORTFLD ));
     pArray[3].Value <<= aFields;
 
-    pArray[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_BINDFMT ));
+    pArray[4].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_BINDFMT ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[4].Value, rParam.bIncludePattern );
 
-    pArray[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_COPYOUT ));
+    pArray[5].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_COPYOUT ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[5].Value, !rParam.bInplace );
 
-    pArray[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_OUTPOS ));
+    pArray[6].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_OUTPOS ));
     pArray[6].Value <<= aOutPos;
 
-    pArray[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISULIST ));
+    pArray[7].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ISULIST ));
     ScUnoHelpFunctions::SetBoolInAny( pArray[7].Value, rParam.bUserDef );
 
-    pArray[8].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_UINDEX ));
+    pArray[8].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_UINDEX ));
     pArray[8].Value <<= static_cast<sal_Int32>( rParam.nUserIndex );
 }
 
@@ -485,7 +485,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_COLLALG ))
         {
-            rtl::OUString sStr;
+            OUString sStr;
             if ( rProp.Value >>= sStr )
                 rParam.aCollatorAlgorithm = sStr;
         }
@@ -675,7 +675,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScSubTotalDescriptorBase::creat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SubTotalFieldsEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SubTotalFieldsEnumeration"));
 }
 
 // XIndexAccess
@@ -728,7 +728,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSubTotalDescriptorBase::getPr
 }
 
 void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -771,7 +771,7 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     PutData(aParam);
 }
 
-uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScSubTotalDescriptorBase::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1476,7 +1476,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFilterDescriptorBase::getProp
 }
 
 void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1523,7 +1523,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     PutData(aParam);
 }
 
-uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1736,13 +1736,13 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
 
 // XNamed
 
-rtl::OUString SAL_CALL ScDatabaseRangeObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDatabaseRangeObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aName;
 }
 
-void SAL_CALL ScDatabaseRangeObj::setName( const rtl::OUString& aNewName )
+void SAL_CALL ScDatabaseRangeObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2048,7 +2048,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDatabaseRangeObj::getProperty
 }
 
 void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -2140,7 +2140,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -2168,7 +2168,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
             // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_DBAREA );
         }
         else if ( aString.EqualsAscii( SC_UNO_LINKDISPNAME ) )
-            aRet <<= rtl::OUString( aName );
+            aRet <<= OUString( aName );
         else if (aString.EqualsAscii( SC_UNONAME_AUTOFLT ))
         {
             sal_Bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());
@@ -2216,12 +2216,12 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDatabaseRangeObj )
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScDatabaseRangeObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDatabaseRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScDatabaseRangeObj" );
+    return OUString( "ScDatabaseRangeObj" );
 }
 
-sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -2229,13 +2229,13 @@ sal_Bool SAL_CALL ScDatabaseRangeObj::supportsService( const rtl::OUString& rSer
            aServiceStr.EqualsAscii( SCLINKTARGET_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDATABASERANGEOBJ_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDATABASERANGEOBJ_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
     return aRet;
 }
 
@@ -2284,7 +2284,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
     return new ScDatabaseRangeObj(pDocShell, itr->GetName());
 }
 
-ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const rtl::OUString& aName)
+ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
     {
@@ -2295,7 +2295,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByName_Impl(const rtl::OUStrin
 }
 
 
-void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
+void SAL_CALL ScDatabaseRangesObj::addNewByName( const OUString& aName,
                                         const table::CellRangeAddress& aRange )
                                         throw(uno::RuntimeException)
 {
@@ -2314,7 +2314,7 @@ void SAL_CALL ScDatabaseRangesObj::addNewByName( const rtl::OUString& aName,
         throw uno::RuntimeException();      // no other exceptions specified
 }
 
-void SAL_CALL ScDatabaseRangesObj::removeByName( const rtl::OUString& aName )
+void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2335,7 +2335,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScDatabaseRangesObj::createEnum
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.DatabaseRangesEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DatabaseRangesEnumeration"));
 }
 
 // XIndexAccess
@@ -2384,7 +2384,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasElements() throw(uno::RuntimeException
 
 // XNameAccess
 
-uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2397,7 +2397,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const rtl::OUString& aName )
 //    return uno::Any();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2410,7 +2410,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
         if (pNames)
         {
             const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
-            uno::Sequence<rtl::OUString> aSeq(rDBs.size());
+            uno::Sequence<OUString> aSeq(rDBs.size());
             ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
             for (size_t i = 0; itr != itrEnd; ++itr, ++i)
                 aSeq[i] = itr->GetName();
@@ -2418,10 +2418,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
             return aSeq;
         }
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
-sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

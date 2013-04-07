@@ -33,13 +33,13 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
  public:
     SalGenericSystem();
     virtual ~SalGenericSystem();
-    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
-                                  const rtl::OUString& rMessage,
-                                  const std::list< rtl::OUString >& rButtons,
+    virtual int ShowNativeDialog( const OUString& rTitle,
+                                  const OUString& rMessage,
+                                  const std::list< OUString >& rButtons,
                                   int nDefButton ) = 0;
 
-    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                      const rtl::OUString& rMessage,
+    virtual int ShowNativeMessageBox( const OUString& rTitle,
+                                      const OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton, bool bUseResources);
 
@@ -47,7 +47,7 @@ class VCL_DLLPUBLIC SalGenericSystem : public SalSystem
     // Simple helpers for X11 WM_CLASS hints
     static const char *getFrameResName();
     static const char *getFrameClassName();
-    static rtl::OString getFrameResName( SalExtStyle nStyle );
+    static OString getFrameResName( SalExtStyle nStyle );
 #endif
 };
 

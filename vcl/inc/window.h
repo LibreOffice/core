@@ -274,8 +274,8 @@ public:
     long                mnY;
     long                mnAbsScreenX;
     Point               maPos;
-    rtl::OString        maHelpId;
-    rtl::OString        maUniqId;
+    OString        maHelpId;
+    OString        maUniqId;
     XubString           maHelpText;
     XubString           maQuickHelpText;
     InputContext        maInputContext;

@@ -56,7 +56,6 @@ using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::util          ;
 using namespace ::cppu                          ;
-    using ::rtl::OUString;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 

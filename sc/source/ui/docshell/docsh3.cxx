@@ -362,7 +362,7 @@ void ScDocShell::CalcOutputFactor()
         return;
     }
 
-    rtl::OUString aTestString(
+    OUString aTestString(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890123456789");
     long nPrinterWidth = 0;
     long nWindowWidth = 0;
@@ -766,9 +766,9 @@ static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScD
                 pAction->GetDateTimeUTC() == pA->GetDateTimeUTC() ) &&
              pAction->GetBigRange() == pA->GetBigRange() )
         {
-            rtl::OUString aActionDesc;
+            OUString aActionDesc;
             pAction->GetDescription(aActionDesc, pDoc, true);
-            rtl::OUString aADesc;
+            OUString aADesc;
             pA->GetDescription(aADesc, pSearchDoc, true);
             if (aActionDesc.equals(aADesc))
             {
@@ -847,7 +847,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         return;             //! nichts zu tun - Fehlermeldung?
                             //  ab hier kein return mehr
 
-    ScProgress aProgress( this, rtl::OUString("..."),
+    ScProgress aProgress( this, OUString("..."),
                     nNewActionCount );
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
@@ -938,10 +938,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
 #if OSL_DEBUG_LEVEL > 0
-                rtl::OUString aValue;
+                OUString aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
-                rtl::OStringBuffer aError(rtl::OUStringToOString(aValue,
+                OStringBuffer aError(OUStringToOString(aValue,
                     osl_getThreadTextEncoding()));
                 aError.append(RTL_CONSTASCII_STRINGPARAM(" weggelassen"));
                 OSL_FAIL( aError.getStr() );
@@ -1004,7 +1004,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                             OSL_ENSURE( aSourceRange.aStart == aSourceRange.aEnd, "huch?" );
                             ScAddress aPos = aSourceRange.aStart;
-                            rtl::OUString aValue;
+                            OUString aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                             sal_uInt8 eMatrix = MM_NONE;
                             const ScCellValue& rCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
@@ -1041,7 +1041,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         break;
                         case SC_CAT_INSERT_TABS :
                         {
-                            rtl::OUString aName;
+                            OUString aName;
                             aDocument.CreateValidTabName( aName );
                             GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, false );
                         }
@@ -1208,7 +1208,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             ScDocument* pTmpDoc = new ScDocument;
             for ( sal_Int32 nIndex = 0; nIndex < aDocument.GetTableCount(); ++nIndex )
             {
-                rtl::OUString sTabName;
+                OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }
@@ -1253,7 +1253,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             pTmpDoc = new ScDocument;
             for ( sal_Int32 nIndex = 0; nIndex < aDocument.GetTableCount(); ++nIndex )
             {
-                rtl::OUString sTabName;
+                OUString sTabName;
                 pTmpDoc->CreateValidTabName( sTabName );
                 pTmpDoc->InsertTab( SC_TAB_APPEND, sTabName );
             }

@@ -45,7 +45,7 @@ ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
                                   const String&   rTitle,
                                   const String&   rTabBgColorNoColorText,
                                   const Color&    rDefaultColor,
-                                  const rtl::OString& sHelpId ) :
+                                  const OString& sHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
     aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
     aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),

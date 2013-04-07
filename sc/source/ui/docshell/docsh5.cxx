@@ -49,7 +49,7 @@
 #include "clipparam.hxx"
 
 // defined in docfunc.cxx
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sModuleSource );
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sModuleSource );
 
 using com::sun::star::script::XLibraryContainer;
 using com::sun::star::script::vba::XVBACompatibility;
@@ -277,7 +277,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             }
             else
             {
-                aNewName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+                aNewName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
                 pNoNameData = new ScDBData(aNewName , nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 sal_True, bHasHeader );
@@ -448,9 +448,9 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     }
 }
 
-static rtl::OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
+static OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
-    rtl::OUString aName;
+    OUString aName;
     sal_Bool bOk = false;
     ScDBData* pData = pDoc->GetDBAtArea( pArea->nTab, pArea->nColStart, pArea->nRowStart,
                                                         pArea->nColEnd, pArea->nRowEnd );
@@ -630,7 +630,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
         SCTAB   nTabCount = aDocument.GetTableCount();
         SCTAB   nSrcTab = SCTAB_MAX;
         SCTAB   nEndTab = nTab;
-        rtl::OUString aCompare;
+        OUString aCompare;
         while ( nEndTab+1 < nTabCount && aDocument.IsScenario(nEndTab+1) )
         {
             ++nEndTab;
@@ -666,7 +666,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, sal_Bool bRecord 
                     for (SCTAB i=nTab+1; i<=nEndTab; i++)
                     {
                         pUndoDoc->SetScenario( i, sal_True );
-                        rtl::OUString aComment;
+                        OUString aComment;
                         Color  aColor;
                         sal_uInt16 nScenFlags;
                         aDocument.GetScenarioData( i, aComment, aColor, nScenFlags );
@@ -718,9 +718,9 @@ void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& 
                                     const Color& rColor, sal_uInt16 nFlags )
 {
     //  Undo
-    rtl::OUString aOldName;
+    OUString aOldName;
     aDocument.GetName( nTab, aOldName );
-    rtl::OUString aOldComment;
+    OUString aOldComment;
     Color aOldColor;
     sal_uInt16 nOldFlags;
     aDocument.GetScenarioData( nTab, aOldComment, aOldColor, nOldFlags );
@@ -832,7 +832,7 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
 
     if(nErrVal>0 && pSrcDoc->IsScenario( nSrcPos ))
     {
-        rtl::OUString aComment;
+        OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
 
@@ -872,7 +872,7 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
         if (bRecord)
             aDocument.BeginDrawUndo();          // drawing layer must do its own undo actions
 
-        rtl::OUString sSrcCodeName;
+        OUString sSrcCodeName;
         aDocument.GetCodeName( nSrcTab, sSrcCodeName );
         if (!aDocument.CopyTab( nSrcTab, nDestTab ))
         {
@@ -913,8 +913,8 @@ sal_Bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, sal_Bool bCopy, s
                 SCTAB nTabToUse = nDestTab;
                 if ( nDestTab == SC_TAB_APPEND )
                     nTabToUse = aDocument.GetMaxTableNumber() - 1;
-                rtl::OUString sCodeName;
-                rtl::OUString sSource;
+                OUString sCodeName;
+                OUString sSource;
                 try
                 {
                     Reference< XNameContainer > xLib;

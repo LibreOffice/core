@@ -55,9 +55,9 @@ enum IndexTypeEnum
  */
 class XMLIndexTOCContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sIsProtected;
-    const ::rtl::OUString sName;
+    const OUString sTitle;
+    const OUString sIsProtected;
+    const OUString sName;
 
     /** XPropertySet of the index */
     ::com::sun::star::uno::Reference<
@@ -76,7 +76,7 @@ public:
     XMLIndexTOCContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLIndexTOCContext();
 
@@ -90,7 +90,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

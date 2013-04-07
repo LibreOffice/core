@@ -26,6 +26,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <rtl/ustring.hxx>
 
 #include "lrucache.hxx"
 
@@ -52,8 +53,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
-using ::rtl::OUString;
-
 
 namespace stoc_corefl
 {

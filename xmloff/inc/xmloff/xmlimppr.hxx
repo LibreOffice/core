@@ -97,7 +97,7 @@ public:
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
+            const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const;
 
@@ -177,7 +177,7 @@ public:
             ::com::sun::star::beans::XPropertySetInfo> & rPropSetInfo,
         const UniReference<XMLPropertySetMapper> & rPropMapper,
         _ContextID_Index_Pair* pSpecialContextIds,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
+        ::com::sun::star::uno::Sequence< OUString >& rNames,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues);
 };
 

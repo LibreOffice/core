@@ -397,7 +397,7 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
 
     m_aRecordText.SetText(XubString(SVX_RES(RID_STR_REC_TEXT)));
     m_aRecordOf.SetText(XubString(SVX_RES(RID_STR_REC_FROM_TEXT)));
-    m_aRecordCount.SetText(rtl::OUString('?'));
+    m_aRecordCount.SetText(OUString('?'));
 
     m_nDefaultWidth = ArrangeControls();
 
@@ -473,9 +473,9 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     nX = sal::static_int_cast< sal_uInt16 >(nX + nTextWidth + aBorder.Width());
 
     // count an extra hairspace (U+200A) left and right
-    const rtl::OUString sevenDigits(m_aAbsolute.CreateFieldText(6000000));
-    const rtl::OUString hairSpace(static_cast<sal_Unicode>(0x200A));
-    rtl::OUString textPattern(hairSpace);
+    const OUString sevenDigits(m_aAbsolute.CreateFieldText(6000000));
+    const OUString hairSpace(static_cast<sal_Unicode>(0x200A));
+    OUString textPattern(hairSpace);
     textPattern += sevenDigits;
     textPattern += hairSpace;
     nTextWidth = m_aAbsolute.GetTextWidth( textPattern );
@@ -695,7 +695,7 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 else
                     aText = m_aAbsolute.CreateFieldText(pParent->GetRowCount());
                 if(!pParent->m_bRecordCountFinal)
-                    aText += rtl::OUString(" *");
+                    aText += OUString(" *");
             }
             else
                 aText = String();
@@ -1455,7 +1455,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         // retrieve the datebase of the Numberformatter
         try
         {
-            xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString("NullDate")) >>= m_aNullDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(OUString("NullDate")) >>= m_aNullDate;
         }
         catch(Exception&)
         {
@@ -3488,7 +3488,7 @@ void DbGridControl::ShowColumn(sal_uInt16 nId)
 
     DeactivateCell();
 
-    ::rtl::OUString aName;
+    OUString aName;
     pColumn->getModel()->getPropertyValue(FM_PROP_LABEL) >>= aName;
     InsertDataColumn(nId, aName, CalcZoom(pColumn->m_nLastVisibleWidth), HIB_CENTER | HIB_VCENTER | HIB_CLICKABLE, nNewViewPos);
     pColumn->m_bHidden = sal_False;

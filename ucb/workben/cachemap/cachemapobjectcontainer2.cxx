@@ -36,7 +36,7 @@ ObjectContainer2::ObjectContainer2()
 ObjectContainer2::~ObjectContainer2() SAL_THROW(())
 {}
 
-rtl::Reference< Object2 > ObjectContainer2::get(rtl::OUString const & rKey)
+rtl::Reference< Object2 > ObjectContainer2::get(OUString const & rKey)
 {
     rtl::Reference< Object2 > xElement;
     {

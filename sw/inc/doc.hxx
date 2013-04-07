@@ -802,9 +802,9 @@ public:
     virtual sfx2::LinkManager& GetLinkManager();
     virtual const sfx2::LinkManager& GetLinkManager() const;
     virtual void UpdateLinks(bool bUI);
-    virtual bool GetData(const rtl::OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
-    virtual bool SetData(const rtl::OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
-    virtual ::sfx2::SvLinkSource* CreateLinkSource(const rtl::OUString& rItem);
+    virtual bool GetData(const OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
+    virtual bool SetData(const OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
+    virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem);
     virtual bool EmbedAllLinks();
     virtual void SetLinksUpdated(const bool bNewLinksUpdated);
     virtual bool LinksUpdated() const;
@@ -1722,7 +1722,7 @@ public:
 
     /** @return names of all references that are set in document.
      If array pointer is 0 return only whether a RefMark is set in document. */
-    sal_uInt16 GetRefMarks( std::vector<rtl::OUString>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
 
     /// Insert label. If a FlyFormat is created, return it.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,

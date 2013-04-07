@@ -23,11 +23,6 @@
 
 #include <typelib/typedescription.hxx>
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-using rtl::OStringBuffer;
 
 using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::Type;

@@ -480,7 +480,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         aLbLevel.InsertEntry(OUString::number(i + 1));
 
     sal_Unicode nLvl = MAXLEVEL;
-    rtl::OUString sDelim(": ");
+    OUString sDelim(": ");
 
     if (pSh)
     {
@@ -574,9 +574,9 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     SetOptions(nPos++, GRAPHIC_CAP);
 
     // get Productname and -version
-    rtl::OUString sWithoutVersion( utl::ConfigManager::getProductName() );
-    rtl::OUString sComplete(
-        sWithoutVersion + rtl::OUString(" ") +
+    OUString sWithoutVersion( utl::ConfigManager::getProductName() );
+    OUString sComplete(
+        sWithoutVersion + OUString(" ") +
         utl::ConfigManager::getProductVersion() );
 
     SvObjectServerList aObjS;

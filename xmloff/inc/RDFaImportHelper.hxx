@@ -25,9 +25,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/uno/Reference.h>
-
-
-namespace rtl { class OUString; }
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
@@ -62,10 +60,10 @@ public:
 
     /** Parse RDFa attributes */
     ::boost::shared_ptr<ParsedRDFaAttributes> ParseRDFa(
-        ::rtl::OUString const & i_rAbout,
-        ::rtl::OUString const & i_rProperty,
-        ::rtl::OUString const & i_rContent,
-        ::rtl::OUString const & i_rDatatype);
+        OUString const & i_rAbout,
+        OUString const & i_rProperty,
+        OUString const & i_rContent,
+        OUString const & i_rDatatype);
 
     /** Add a RDFa statement; must have been parsed with ParseRDFa */
     void AddRDFa(
@@ -77,10 +75,10 @@ public:
     void ParseAndAddRDFa(
         ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable>
             const & i_xObject,
-        ::rtl::OUString const & i_rAbout,
-        ::rtl::OUString const & i_rProperty,
-        ::rtl::OUString const & i_rContent,
-        ::rtl::OUString const & i_rDatatype);
+        OUString const & i_rAbout,
+        OUString const & i_rProperty,
+        OUString const & i_rContent,
+        OUString const & i_rDatatype);
 
     /** Insert all added statements into the RDF repository.
         <p> This is done <em>after</em> the input file has been read,

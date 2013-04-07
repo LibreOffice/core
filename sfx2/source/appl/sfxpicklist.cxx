@@ -66,40 +66,40 @@ class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
         virtual ~StringLength() {}
 
         // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const ::rtl::OUString& aString )
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
             throw (::com::sun::star::uno::RuntimeException)
         {
             return aString.getLength();
         }
 };
 
-void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const ::rtl::OUString& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const OUString& aURLString, sal_uInt32 nNo )
 {
-    ::rtl::OUStringBuffer aPickEntry;
+    OUStringBuffer aPickEntry;
 
     if ( nNo < 9 )
     {
         aPickEntry.append('~');
-        aPickEntry.append(::rtl::OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
+        aPickEntry.append(OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
     }
     else if ( nNo == 9 )
         aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM("1~0"));
     else
-        aPickEntry.append(::rtl::OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
+        aPickEntry.append(OUString::valueOf(static_cast<sal_Int32>(nNo + 1)));
     aPickEntry.appendAscii(RTL_CONSTASCII_STRINGPARAM(": "));
 
     INetURLObject   aURL( aURLString );
-    rtl::OUString   aTipHelpText;
-    rtl::OUString   aAccessibleName = aPickEntry.toString();
+    OUString   aTipHelpText;
+    OUString   aAccessibleName = aPickEntry.toString();
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         // Do handle file URL differently => convert it to a system
         // path and abbreviate it with a special function:
-        ::rtl::OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        OUString aFileSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        ::rtl::OUString aSystemPath( aFileSystemPath );
-        ::rtl::OUString aCompactedSystemPath;
+        OUString aSystemPath( aFileSystemPath );
+        OUString aCompactedSystemPath;
 
         aTipHelpText = aSystemPath;
         aAccessibleName += aSystemPath;
@@ -118,7 +118,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, cons
     else
     {
         // Use INetURLObject to abbreviate all other URLs
-        ::rtl::OUString aShortURL;
+        OUString aShortURL;
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         aPickEntry.append(aShortURL);
         aTipHelpText = aURLString;
@@ -167,7 +167,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         return;
 
     // Help not in History
-    INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
+    INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
     if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
         return;
 
@@ -183,8 +183,8 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if ( !SfxViewFrame::GetFirst( pDocSh, sal_True ) )
         return;
 
-    ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-    ::rtl::OUString  aFilter;
+    OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+    OUString  aFilter;
     const SfxFilter* pFilter = pMed->GetOrigFilter();
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
@@ -197,7 +197,7 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
             OUString() );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
-        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : ::rtl::OUString() );
+        Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : OUString() );
 }
 
 SfxPickList& SfxPickList::Get()
@@ -234,9 +234,9 @@ void SfxPickList::CreatePickListEntries()
         Sequence< PropertyValue > seqPropertySet = seqPicklist[ nItem ];
 
         INetURLObject   aURL;
-        ::rtl::OUString sURL;
-        ::rtl::OUString sFilter;
-        ::rtl::OUString sTitle;
+        OUString sURL;
+        OUString sFilter;
+        OUString sTitle;
 
         sal_uInt32 nPropertyCount = seqPropertySet.getLength();
         for( sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
@@ -286,7 +286,7 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
             != MENUITEM_SEPARATOR && m_nAllowedMenuSize )
         pMenu->InsertSeparator();
 
-    rtl::OUString aEmptyString;
+    OUString aEmptyString;
     for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
@@ -316,7 +316,7 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         sal_uInt16 nPos=aFilter.Search('|');
         if( nPos != STRING_NOTFOUND )
         {
-            rtl::OUString aOptions(aFilter.Copy(nPos).GetBuffer()+1);
+            OUString aOptions(aFilter.Copy(nPos).GetBuffer()+1);
             aFilter.Erase( nPos );
             aReq.AppendItem( SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
         }
@@ -387,12 +387,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     return;
 
                 // Help not in History
-                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
+                INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
 
-                ::rtl::OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
-                ::rtl::OUString  aFilter;
+                OUString  aTitle = pDocSh->GetTitle(SFX_TITLE_PICKLIST);
+                OUString  aFilter;
                 const SfxFilter* pFilter = pMed->GetOrigFilter();
                 if ( pFilter )
                     aFilter = pFilter->GetFilterName();
@@ -425,7 +425,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 // not a "new" document) to the "Recent Documents" list before we
                 // switch to the new path.
                 // If the current document is new, path will be empty.
-                rtl::OUString path = pMedium->GetOrigURL();
+                OUString path = pMedium->GetOrigURL();
                 if (!path.isEmpty())
                 {
                     AddDocumentToPickList(pDocSh);

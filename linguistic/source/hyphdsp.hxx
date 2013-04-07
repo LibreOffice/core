@@ -76,7 +76,7 @@ class HyphenatorDispatcher :
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XHyphenatedWord>
-            buildHyphWord( const rtl::OUString rOrigWord,
+            buildHyphWord( const OUString rOrigWord,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
                 sal_Int16 nLang, sal_Int16 nMaxLeading );
@@ -103,7 +103,7 @@ public:
     // XHyphenator
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-        hyphenate( const ::rtl::OUString& aWord,
+        hyphenate( const OUString& aWord,
                 const ::com::sun::star::lang::Locale& aLocale,
                 sal_Int16 nMaxLeading,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
@@ -111,7 +111,7 @@ public:
                   ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-        queryAlternativeSpelling( const ::rtl::OUString& aWord,
+        queryAlternativeSpelling( const OUString& aWord,
                 const ::com::sun::star::lang::Locale& aLocale,
                 sal_Int16 nIndex,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
@@ -120,7 +120,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
-                const ::rtl::OUString& aWord,
+                const OUString& aWord,
                 const ::com::sun::star::lang::Locale& aLocale,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
@@ -130,8 +130,8 @@ public:
     virtual void
         SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
                 const ::com::sun::star::uno::Sequence<
-                    rtl::OUString > &rSvcImplNames );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString >
+                    OUString > &rSvcImplNames );
+    virtual ::com::sun::star::uno::Sequence< OUString >
         GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
     virtual DspType
         GetDspType() const;

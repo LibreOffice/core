@@ -81,10 +81,10 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_REPR),     0,  &getCppuType((rtl::OUString*)0),    0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_TARGET),   0,  &getCppuType((rtl::OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_REPR),     0,  &getCppuType((OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TARGET),   0,  &getCppuType((OUString*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_URL),      0,  &getCppuType((rtl::OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_URL),      0,  &getCppuType((OUString*)0),    0, 0},
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aURLPropertySet_Impl( aURLPropertyMap_Impl );
@@ -392,7 +392,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.text.TextFieldEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
 }
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
@@ -572,7 +572,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumer
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.text.TextFieldEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
 }
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(
@@ -662,7 +662,7 @@ SvxFieldData* ScEditFieldObj::getData()
             break;
             case text::textfield::Type::EXTENDED_FILE:
                 mpData.reset(
-                    new SvxExtFileField(rtl::OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT));
+                    new SvxExtFileField(OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT));
             break;
             case text::textfield::Type::PAGE:
                 mpData.reset(new SvxPageField);
@@ -689,7 +689,7 @@ SvxFieldData* ScEditFieldObj::getData()
             break;
             case text::textfield::Type::URL:
                 mpData.reset(
-                    new SvxURLField(rtl::OUString(), rtl::OUString(), SVXURLFORMAT_APPDEFAULT));
+                    new SvxURLField(OUString(), OUString(), SVXURLFORMAT_APPDEFAULT));
             break;
             default:
                 mpData.reset(new SvxFieldData);
@@ -698,9 +698,9 @@ SvxFieldData* ScEditFieldObj::getData()
     return mpData.get();
 }
 
-void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::sun::star::uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const com::sun::star::uno::Any& rVal)
 {
-    rtl::OUString aStrVal;
+    OUString aStrVal;
     if (mpEditSource)
     {
         // Edit engine instance already exists for this field item.  Use it.
@@ -768,7 +768,7 @@ void ScEditFieldObj::setPropertyValueURL(const rtl::OUString& rName, const com::
         throw beans::UnknownPropertyException();
 }
 
-uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
+uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
 {
     uno::Any aRet;
 
@@ -820,7 +820,7 @@ uno::Any ScEditFieldObj::getPropertyValueURL(const rtl::OUString& rName)
     return aRet;
 }
 
-void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueFile(const OUString& rName, const uno::Any& rVal)
 {
     if (rName == SC_UNONAME_FILEFORM)
     {
@@ -855,7 +855,7 @@ void ScEditFieldObj::setPropertyValueFile(const rtl::OUString& rName, const uno:
         throw beans::UnknownPropertyException();
 }
 
-uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
+uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
 {
     uno::Any aRet;
     if (rName == SC_UNONAME_FILEFORM)
@@ -887,7 +887,7 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const rtl::OUString& rName)
     return aRet;
 }
 
-void ScEditFieldObj::setPropertyValueDateTime(const rtl::OUString& rName, const uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueDateTime(const OUString& rName, const uno::Any& rVal)
 {
     if (mpEditSource)
     {
@@ -981,7 +981,7 @@ void ScEditFieldObj::setPropertyValueDateTime(const rtl::OUString& rName, const 
     }
 }
 
-uno::Any ScEditFieldObj::getPropertyValueDateTime(const rtl::OUString& rName)
+uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
 {
     if (mpEditSource)
     {
@@ -1086,7 +1086,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const rtl::OUString& rName)
     throw beans::UnknownPropertyException();
 }
 
-void ScEditFieldObj::setPropertyValueSheet(const rtl::OUString& rName, const uno::Any& rVal)
+void ScEditFieldObj::setPropertyValueSheet(const OUString& rName, const uno::Any& rVal)
 {
     if (mpEditSource)
     {
@@ -1221,13 +1221,13 @@ bool ScEditFieldObj::IsInserted() const
 
 // XTextField
 
-rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
+OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     if (!mpEditSource)
-        return rtl::OUString();
+        return OUString();
 
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
@@ -1238,7 +1238,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         aSelection.nStartPara, aSelection.nStartPos, text::textfield::Type::UNSPECIFIED);
     OSL_ENSURE(pField,"getPresentation: Feld nicht gefunden");
     if (!pField)
-        return rtl::OUString();
+        return OUString();
 
     switch (meType)
     {
@@ -1255,7 +1255,7 @@ rtl::OUString SAL_CALL ScEditFieldObj::getPresentation( sal_Bool bShowCommand )
         default:
             ;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 // XTextContent
@@ -1312,7 +1312,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScEditFieldObj::getPropertySetI
 }
 
 void SAL_CALL ScEditFieldObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1346,7 +1346,7 @@ void SAL_CALL ScEditFieldObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1431,22 +1431,22 @@ ScEditFieldObj* ScEditFieldObj::getImplementation(const uno::Reference<text::XTe
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScEditFieldObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScEditFieldObj");
+    return OUString("ScEditFieldObj");
 }
 
-sal_Bool SAL_CALL ScEditFieldObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScEditFieldObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     return rServiceName == SCTEXTFIELD_SERVICE || rServiceName == SCTEXTCONTENT_SERVICE;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScEditFieldObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
     pArray[0] = SCTEXTFIELD_SERVICE;
     pArray[1] = SCTEXTCONTENT_SERVICE;
     return aRet;

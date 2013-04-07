@@ -34,12 +34,12 @@ class RscTop;
 class RscTypCont;
 
 /******************* G l o b a l   V a r i a b l e s *********************/
-extern rtl::OString* pStdParType;
-extern rtl::OString* pStdPar1;
-extern rtl::OString* pStdPar2;
-extern rtl::OString* pWinParType;
-extern rtl::OString* pWinPar1;
-extern rtl::OString* pWinPar2;
+extern OString* pStdParType;
+extern OString* pStdPar1;
+extern OString* pStdPar2;
+extern OString* pWinParType;
+extern OString* pWinPar1;
+extern OString* pWinPar2;
 extern sal_uInt32       nRefDeep;
 extern sal_uInt32       nRsc_XYMAPMODEId;
 extern sal_uInt32       nRsc_WHMAPMODEId;

@@ -49,10 +49,10 @@ public:
     virtual PROPERTYTYPE getValueFromSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet ) const =0;
     virtual void setValueToSeries( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesPropertySet, PROPERTYTYPE aNewValue ) const =0;
 
-    explicit WrappedSeriesOrDiagramProperty( const ::rtl::OUString& rName, const ::com::sun::star::uno::Any& rDefaulValue
+    explicit WrappedSeriesOrDiagramProperty( const OUString& rName, const ::com::sun::star::uno::Any& rDefaulValue
         , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
         , tSeriesOrDiagramPropertyType ePropertyType )
-            : WrappedProperty(rName,::rtl::OUString())
+            : WrappedProperty(rName,OUString())
             , m_spChart2ModelContact(spChart2ModelContact)
             , m_aOuterValue(rDefaulValue)
             , m_aDefaultValue(rDefaulValue)

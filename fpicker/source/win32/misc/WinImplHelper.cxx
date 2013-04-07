@@ -27,8 +27,6 @@
 // namespace directives
 //------------------------------------------------------------
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
@@ -39,9 +37,9 @@ using ::com::sun::star::uno::Sequence;
 //
 //------------------------------------------------------------
 
-const rtl::OUString TILDE( "~" );
+const OUString TILDE( "~" );
 const sal_Unicode   TILDE_SIGN = L'~';
-const rtl::OUString AMPERSAND( "&" );
+const OUString AMPERSAND( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------
@@ -447,7 +445,7 @@ void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, 
 // '&'  -> '&&'
 //------------------------------------------------------------
 
-OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel )
+OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
 {
     OUString aWinLabel = aSOLabel;
 
@@ -459,7 +457,7 @@ OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel )
         // doubled in length, maybe some waste
         // of memory but how long is a label
         // normaly(?)
-        rtl::OUStringBuffer aBuffer( nStrLen * 2 );
+        OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer );
 
@@ -478,7 +476,7 @@ OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel )
 // '~'  -> '~~'
 //------------------------------------------------------------
 
-OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel )
+OUString WindowsToSOfficeLabel( const OUString& aWinLabel )
 {
     OUString aSOLabel = aWinLabel;
 
@@ -490,7 +488,7 @@ OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel )
         // doubled in length, maybe some waste
         // of memory but how long is a label
         // normaly(?)
-        rtl::OUStringBuffer aBuffer( nStrLen * 2 );
+        OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer );
 

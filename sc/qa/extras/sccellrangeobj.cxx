@@ -80,17 +80,17 @@ uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
         UnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XSearchable(rtl::OUString("15"), 1),
-        apitest::XReplaceable(rtl::OUString("15"), rtl::OUString("35"))
+        apitest::XSearchable(OUString("15"), 1),
+        apitest::XReplaceable(OUString("15"), OUString("35"))
 {
 }
 
 uno::Reference< uno::XInterface > ScCellRangeObj::init()
 {
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase("xcellrangesquery.ods");
+    OUString aFileURL;
+    const OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     if( !mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);
@@ -107,10 +107,10 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
 
 uno::Reference< uno::XInterface > ScCellRangeObj::getXCellRangeData()
 {
-    rtl::OUString aFileURL;
-    const rtl::OUString aFileBase("xcellrangesquery.ods");
+    OUString aFileURL;
+    const OUString aFileBase("xcellrangesquery.ods");
     createFileURL(aFileBase, aFileURL);
-    std::cout << rtl::OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << OUStringToOString(aFileURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     if( !mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     uno::Reference< sheet::XSpreadsheetDocument> xDoc (mxComponent, UNO_QUERY_THROW);

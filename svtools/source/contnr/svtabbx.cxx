@@ -84,7 +84,7 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
-            aToken = rtl::OUString(pCurToken, nCurTokenLen);
+            aToken = OUString(pCurToken, nCurTokenLen);
         else
             aToken.Erase();
         SvLBoxString* pStr = new SvLBoxString( pEntry, 0, aToken );
@@ -331,7 +331,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvTreeListEntry* pEntry,
             if( nCol == 0xffff )
             {
                 if( pCurToken )
-                    aTemp = rtl::OUString(pCurToken, nCurTokenLen);
+                    aTemp = OUString(pCurToken, nCurTokenLen);
                 else
                     aTemp.Erase(); // delete all columns without a token
                 ((SvLBoxString*)pStr)->SetText( aTemp );
@@ -342,7 +342,7 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvTreeListEntry* pEntry,
             {
                 if( !nCol )
                 {
-                    aTemp = rtl::OUString(pCurToken, nCurTokenLen);
+                    aTemp = OUString(pCurToken, nCurTokenLen);
                     ((SvLBoxString*)pStr)->SetText( aTemp );
                     if( !pNextToken )
                         break;
@@ -796,14 +796,14 @@ sal_uInt16 SvHeaderTabListBox::GetCurrColumn() const
     return nPos;
 }
 // -----------------------------------------------------------------------
-::rtl::OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
+OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
 {
-    return ::rtl::OUString( GetEntryText( _nRow ) );
+    return OUString( GetEntryText( _nRow ) );
 }
 // -----------------------------------------------------------------------
-::rtl::OUString SvHeaderTabListBox::GetColumnDescription( sal_uInt16 _nColumn ) const
+OUString SvHeaderTabListBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
-    return ::rtl::OUString( m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) ) );
+    return OUString( m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) ) );
 }
 // -----------------------------------------------------------------------
 sal_Bool SvHeaderTabListBox::HasRowHeader() const
@@ -891,7 +891,7 @@ sal_Bool SvHeaderTabListBox::IsCellVisible( sal_Int32, sal_uInt16 ) const
 // -----------------------------------------------------------------------
 String SvHeaderTabListBox::GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const
 {
-    return ::rtl::OUString( GetTabEntryText( _nRow, _nColumnPos ) );
+    return OUString( GetTabEntryText( _nRow, _nColumnPos ) );
 }
 // -----------------------------------------------------------------------
 Rectangle SvHeaderTabListBox::calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen )
@@ -1050,16 +1050,16 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
     return sal_False;
 }
 // -----------------------------------------------------------------------
-::rtl::OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
-    ::rtl::OUString aRetText;
+    OUString aRetText;
     switch( _eType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
         case ::svt::BBTYPE_TABLE:
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             // should be empty now (see #i63983)
-            aRetText = ::rtl::OUString();
+            aRetText = OUString();
             break;
 
         case ::svt::BBTYPE_TABLECELL:
@@ -1089,7 +1089,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
 
         case ::svt::BBTYPE_ROWHEADERBAR:
         case ::svt::BBTYPE_ROWHEADERCELL:
-            aRetText = ::rtl::OUString( "error" );
+            aRetText = OUString( "error" );
             break;
 
         default:
@@ -1098,9 +1098,9 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16&, const Poin
     return aRetText;
 }
 // -----------------------------------------------------------------------
-::rtl::OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
-    ::rtl::OUString aRetText;
+    OUString aRetText;
 
     if( _eType == ::svt::BBTYPE_TABLECELL && _nPos != -1 )
     {

@@ -79,7 +79,7 @@ public:
     void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
     void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);
     void SetPanePosSizeAbsolute (
-        const ::rtl::OUString& rsPaneURL,
+        const OUString& rsPaneURL,
         const double nX,
         const double nY,
         const double nWidth,
@@ -214,7 +214,7 @@ private:
 
     css::awt::Size CalculatePaneSize (
         const double nOuterWidth,
-        const ::rtl::OUString& rsPaneURL);
+        const OUString& rsPaneURL);
 
     /** Notify changes of the layout mode and of the slide sorter state.
     */

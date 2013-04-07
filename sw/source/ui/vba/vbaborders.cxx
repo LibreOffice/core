@@ -39,7 +39,7 @@ typedef InheritedHelperInterfaceImpl1<word::XBorder > SwVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 static const sal_Int16 supportedIndexTable[] = { word::WdBorderType::wdBorderBottom, word::WdBorderType::wdBorderDiagonalDown, word::WdBorderType::wdBorderDiagonalUp, word::WdBorderType::wdBorderHorizontal, word::WdBorderType::wdBorderLeft, word::WdBorderType::wdBorderRight, word::WdBorderType::wdBorderTop, word::WdBorderType::wdBorderVertical };
 
-const static rtl::OUString sTableBorder("TableBorder");
+const static OUString sTableBorder("TableBorder");
 
 //  Equiv widths in in 1/100 mm
 const static sal_Int32 OOLineThin = 35;
@@ -140,18 +140,18 @@ private:
     }
     SwVbaBorder(); // no impl
 protected:
-    virtual rtl::OUString getServiceImplName()
+    virtual OUString getServiceImplName()
     {
-        return rtl::OUString("SwVbaBorder");
+        return OUString("SwVbaBorder");
     }
 
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames()
+    virtual css::uno::Sequence<OUString> getServiceNames()
     {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Border" );
+            aServiceNames[ 0 ] = OUString("ooo.vba.word.Border" );
         }
         return aServiceNames;
     }
@@ -226,12 +226,12 @@ public:
                     break;
                 }
                 default:
-                    throw uno::RuntimeException( rtl::OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( rtl::OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
     }
 };
 
@@ -351,20 +351,20 @@ void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::Runtim
     // TODO:
 }
 
-rtl::OUString
+OUString
 SwVbaBorders::getServiceImplName()
 {
-    return rtl::OUString("SwVbaBorders");
+    return OUString("SwVbaBorders");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaBorders::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Borders" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Borders" );
     }
     return aServiceNames;
 }

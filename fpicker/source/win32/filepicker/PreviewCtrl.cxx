@@ -402,7 +402,7 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
 // occurred (the file in not there or not accessible etc.)
 //---------------------------------------------------
 
-sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )
+sal_Bool SAL_CALL CFilePreview::update( const OUString& aFileName )
 {
     OSL_PRECOND( IsWindow( m_hwnd ), "Preview window not initialized" );
 
@@ -484,7 +484,7 @@ void SAL_CALL CFilePreview::onPaint( HWND hWnd, HDC hDC )
 //
 //---------------------------------------------------
 
-sal_Bool CFilePreview::loadFile( const rtl::OUString& aFileName )
+sal_Bool CFilePreview::loadFile( const OUString& aFileName )
 {
     HANDLE      hFile   = 0;
     HGLOBAL     hGlobal = 0;

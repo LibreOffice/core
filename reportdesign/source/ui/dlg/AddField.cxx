@@ -276,22 +276,22 @@ void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt )
 //-----------------------------------------------------------------------
 namespace
 {
-    void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Sequence< ::rtl::OUString >& _rEntries )
+    void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Sequence< OUString >& _rEntries )
     {
-        const ::rtl::OUString* pEntries = _rEntries.getConstArray();
+        const OUString* pEntries = _rEntries.getConstArray();
         sal_Int32 nEntries = _rEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
             _rListBox.InsertEntry( *pEntries,NULL,sal_False,LIST_APPEND,new ColumnInfo(*pEntries) );
     }
     void lcl_addToList( OAddFieldWindowListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
     {
-        uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
-        const ::rtl::OUString* pEntries = aEntries.getConstArray();
+        uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+        const OUString* pEntries = aEntries.getConstArray();
         sal_Int32 nEntries = aEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
         {
             uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),UNO_QUERY_THROW);
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )
@@ -324,10 +324,10 @@ void OAddFieldWindow::Update()
         SetText(aTitle);
         if ( m_xRowSet.is() )
         {
-            ::rtl::OUString sCommand( m_aCommandName );
+            OUString sCommand( m_aCommandName );
             sal_Int32       nCommandType( m_nCommandType );
             sal_Bool        bEscapeProcessing( m_bEscapeProcessing );
-            ::rtl::OUString sFilter( m_sFilter );
+            OUString sFilter( m_sFilter );
 
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
             OSL_VERIFY( m_xRowSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType );
@@ -353,7 +353,7 @@ void OAddFieldWindow::Update()
 
             // add the parameter columns to the list
             uno::Reference< ::com::sun::star::sdbc::XRowSet > xRowSet(m_xRowSet,uno::UNO_QUERY);
-            Sequence< ::rtl::OUString > aParamNames( getParameterNames( xRowSet ) );
+            Sequence< OUString > aParamNames( getParameterNames( xRowSet ) );
             lcl_addToList( *m_pListBox, aParamNames );
 
             // set title
@@ -454,11 +454,11 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
 {
     if ( m_pListBox.get() )
     {
-        ::rtl::OUString sName;
+        OUString sName;
         if ( (_rEvent.Accessor >>= sName) && m_xColumns->hasByName(sName) )
         {
             uno::Reference< beans::XPropertySet> xColumn(m_xColumns->getByName(sName),UNO_QUERY_THROW);
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             if ( !sLabel.isEmpty() )

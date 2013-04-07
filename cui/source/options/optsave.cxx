@@ -458,8 +458,8 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         {
             (void) e;
             OSL_FAIL(
-                rtl::OUStringToOString(
-                    (rtl::OUString(
+                OUStringToOString(
+                    (OUString(
                             "exception in FilterFactory access: ") +
                      e.Message),
                     RTL_TEXTENCODING_UTF8).

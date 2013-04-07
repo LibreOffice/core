@@ -52,8 +52,8 @@ namespace vcl
             Size                maPreviewSize;
             VirtualDevice       maPageVDev;
             Bitmap              maPreviewBitmap;
-            rtl::OUString       maReplacementString;
-            rtl::OUString       maToolTipString;
+            OUString       maReplacementString;
+            OUString       maToolTipString;
             bool                mbGreyscale;
             FixedLine           maHorzDim;
             FixedLine           maVertDim;
@@ -70,8 +70,8 @@ namespace vcl
             virtual void DataChanged( const DataChangedEvent& );
 
             void setPreview( const GDIMetaFile&, const Size& i_rPaperSize,
-                             const rtl::OUString& i_rPaperName,
-                             const rtl::OUString& i_rNoPageString,
+                             const OUString& i_rPaperName,
+                             const OUString& i_rNoPageString,
                              sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
                              bool i_bGreyscale
                             );
@@ -200,16 +200,16 @@ namespace vcl
         CancelButton*                           mpCancelButton;
         HelpButton*                             mpHelpButton;
 
-        rtl::OUString                           maPageStr;
-        rtl::OUString                           maNoPageStr;
+        OUString                           maPageStr;
+        OUString                           maNoPageStr;
         sal_Int32                               mnCurPage;
         sal_Int32                               mnCachedPages;
 
-        std::map< Window*, rtl::OUString >      maControlToPropertyMap;
-        std::map< rtl::OUString, std::vector< Window* > >
+        std::map< Window*, OUString >      maControlToPropertyMap;
+        std::map< OUString, std::vector< Window* > >
                                                 maPropertyToWindowMap;
         std::map< Window*, sal_Int32 >          maControlToNumValMap;
-        std::set< rtl::OUString >               maReverseDependencySet;
+        std::set< OUString >               maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;
@@ -217,9 +217,9 @@ namespace vcl
         // internal, used for automatic Nup-Portrait/landscape
         Size                                    maFirstPageSize;
 
-        rtl::OUString                           maPrintToFileText;
-        rtl::OUString                           maPrintText;
-        rtl::OUString                           maDefPrtText;
+        OUString                           maPrintToFileText;
+        OUString                           maPrintText;
+        OUString                           maDefPrtText;
 
         Size                                    maDetailsCollapsedSize;
         Size                                    maDetailsExpandedSize;
@@ -235,7 +235,7 @@ namespace vcl
         void checkControlDependencies();
         void checkOptionalControlDependencies();
         void makeEnabled( Window* );
-        void updateWindowFromProperty( const rtl::OUString& );
+        void updateWindowFromProperty( const OUString& );
         void setupOptionalUI();
         void readFromSettings();
         void storeToSettings();

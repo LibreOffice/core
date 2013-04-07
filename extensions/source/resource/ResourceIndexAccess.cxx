@@ -47,9 +47,6 @@ using namespace ::com::sun::star::container;
 
 using ::comphelper::stl_begin;
 using ::comphelper::stl_end;
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 namespace
 {
@@ -94,7 +91,7 @@ namespace
             virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
             // XElementAccessBase
             virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
-                { return ::getCppuType(static_cast< ::rtl::OUString*>(0)); };
+                { return ::getCppuType(static_cast< OUString*>(0)); };
     };
 
     class ResourceStringListIndexAccess : public ResourceIndexAccessBase

@@ -58,7 +58,7 @@ using namespace ::svxform;
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
-FmFormObj::FmFormObj(const ::rtl::OUString& rModelName)
+FmFormObj::FmFormObj(const OUString& rModelName)
           :SdrUnoObj                ( rModelName    )
           ,m_nPos                   ( -1            )
           ,m_pLastKnownRefDevice    ( NULL          )
@@ -133,7 +133,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
         Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
         Reference< XPropertySetInfo > xPropertyInfo( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
 
-        static const ::rtl::OUString sRefDevicePropName( "ReferenceDevice" );
+        static const OUString sRefDevicePropName( "ReferenceDevice" );
         if ( xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
         {
             VCLXDevice* pUnoRefDevice = new VCLXDevice;
@@ -359,7 +359,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     Reference< XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = Reference< XIndexContainer >(
-        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.form.Forms") ),
+        ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.form.Forms") ),
         UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
@@ -418,7 +418,7 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
 //------------------------------------------------------------------
 namespace
 {
-    rtl::OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
+    OUString lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
     {
         Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
         Reference< ::com::sun::star::container::XIndexAccess> xParent;
@@ -457,7 +457,7 @@ namespace
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
-    rtl::OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
+    OUString sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
         // something went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
@@ -469,7 +469,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     sal_Int32 nTokIndex = 0;
     do
     {
-        rtl::OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
+        OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
         sal_uInt16 nIndex = (sal_uInt16)aToken.toInt32();
 
         // get the DSS of the source form (we have to find an aquivalent for)
@@ -564,7 +564,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                 {
                     // create and insert (into the destination) a copy of the form
                     xCurrentDestForm.set(
-                        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString( "com.sun.star.form.component.DataForm" ) ),
+                        ::comphelper::getProcessServiceFactory()->createInstance(OUString( "com.sun.star.form.component.DataForm" ) ),
                         UNO_QUERY_THROW );
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 

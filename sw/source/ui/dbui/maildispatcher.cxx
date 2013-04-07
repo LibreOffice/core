@@ -23,7 +23,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 typedef std::list< ::rtl::Reference<IMailDispatcherListener> > MailDispatcherListenerContainer_t;
 
@@ -75,7 +74,7 @@ namespace /* private */
         MailDeliveryErrorNotifier(
             ::rtl::Reference<MailDispatcher> xMailDispatcher,
             uno::Reference<mail::XMailMessage> message,
-            const ::rtl::OUString& error_message) :
+            const OUString& error_message) :
             mail_dispatcher_(xMailDispatcher),
             message_(message),
             error_message_(error_message)
@@ -87,7 +86,7 @@ namespace /* private */
     private:
         ::rtl::Reference<MailDispatcher> mail_dispatcher_;
         uno::Reference<mail::XMailMessage> message_;
-        ::rtl::OUString error_message_;
+        OUString error_message_;
     };
 
 } // namespace private

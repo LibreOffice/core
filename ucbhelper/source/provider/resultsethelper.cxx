@@ -97,9 +97,9 @@ XTYPEPROVIDER_IMPL_3( ResultSetImplHelper,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( ResultSetImplHelper,
-                               rtl::OUString(
+                               OUString(
                                    "ResultSetImplHelper" ),
-                               rtl::OUString(
+                               OUString(
                                    DYNAMICRESULTSET_SERVICE_NAME ) );
 
 //=========================================================================

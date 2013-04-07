@@ -288,23 +288,23 @@ namespace svt { namespace table
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
+    OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
-        ::rtl::OUString aRetText;
+        OUString aRetText;
         //Window* pWin;
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = ::rtl::OUString( "Grid control" );
+                aRetText = OUString( "Grid control" );
                 break;
             case TCTYPE_TABLE:
-                aRetText = ::rtl::OUString( "Grid conrol" );
+                aRetText = OUString( "Grid conrol" );
                 break;
             case TCTYPE_ROWHEADERBAR:
-                aRetText = ::rtl::OUString( "RowHeaderBar" );
+                aRetText = OUString( "RowHeaderBar" );
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                aRetText = ::rtl::OUString( "ColumnHeaderBar" );
+                aRetText = OUString( "ColumnHeaderBar" );
                 break;
             case TCTYPE_TABLECELL:
                 //the name of the cell constists of column name and row name if defined
@@ -312,12 +312,12 @@ namespace svt { namespace table
                 if(GetModel()->hasColumnHeaders())
                 {
                     aRetText = GetColumnName(_nCol);
-                    aRetText += rtl::OUString::createFromAscii(" , ");
+                    aRetText += OUString::createFromAscii(" , ");
                 }
                 if(GetModel()->hasRowHeaders())
                 {
                     aRetText += GetRowName(_nRow);
-                    aRetText += rtl::OUString::createFromAscii(" , ");
+                    aRetText += OUString::createFromAscii(" , ");
                 }
                 //aRetText = GetAccessibleCellText(_nRow, _nCol);
                 break;
@@ -334,22 +334,22 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType, sal_Int32 ) const
+    OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType, sal_Int32 ) const
     {
-        ::rtl::OUString aRetText;
+        OUString aRetText;
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
-                aRetText = ::rtl::OUString( "Grid control description" );
+                aRetText = OUString( "Grid control description" );
                 break;
             case TCTYPE_TABLE:
-                    aRetText = ::rtl::OUString( "TABLE description" );
+                    aRetText = OUString( "TABLE description" );
                 break;
             case TCTYPE_ROWHEADERBAR:
-                    aRetText = ::rtl::OUString( "ROWHEADERBAR description" );
+                    aRetText = OUString( "ROWHEADERBAR description" );
                 break;
             case TCTYPE_COLUMNHEADERBAR:
-                    aRetText = ::rtl::OUString( "COLUMNHEADERBAR description" );
+                    aRetText = OUString( "COLUMNHEADERBAR description" );
                 break;
             case TCTYPE_TABLECELL:
                 // the description of the cell consists of column name and row name if defined
@@ -357,7 +357,7 @@ namespace svt { namespace table
                 if ( GetModel()->hasColumnHeaders() )
                 {
                     aRetText = GetColumnName( GetCurrentColumn() );
-                    aRetText += rtl::OUString::createFromAscii( " , " );
+                    aRetText += OUString::createFromAscii( " , " );
                 }
                 if ( GetModel()->hasRowHeaders() )
                 {
@@ -365,39 +365,39 @@ namespace svt { namespace table
                 }
                 break;
             case TCTYPE_ROWHEADERCELL:
-                    aRetText = ::rtl::OUString( "ROWHEADERCELL description" );
+                    aRetText = OUString( "ROWHEADERCELL description" );
                 break;
             case TCTYPE_COLUMNHEADERCELL:
-                    aRetText = ::rtl::OUString( "COLUMNHEADERCELL description" );
+                    aRetText = OUString( "COLUMNHEADERCELL description" );
                 break;
         }
         return aRetText;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetRowDescription( sal_Int32 _nRow) const
+    OUString TableControl::GetRowDescription( sal_Int32 _nRow) const
     {
         (void)_nRow;
-        return rtl::OUString( "row description" );
+        return OUString( "row description" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetRowName( sal_Int32 _nIndex) const
+    OUString TableControl::GetRowName( sal_Int32 _nIndex) const
     {
-        ::rtl::OUString sRowName;
+        OUString sRowName;
         GetModel()->getRowHeading( _nIndex ) >>= sRowName;
         return sRowName;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetColumnDescription( sal_uInt16 _nColumn) const
+    OUString TableControl::GetColumnDescription( sal_uInt16 _nColumn) const
     {
         (void)_nColumn;
-        return rtl::OUString( "col description" );
+        return OUString( "col description" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetColumnName( sal_Int32 _nIndex) const
+    OUString TableControl::GetColumnName( sal_Int32 _nIndex) const
     {
         return GetModel()->getColumnModel(_nIndex)->getName();
     }
@@ -411,7 +411,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
+    OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
     {
         return m_pImpl->getCellContentAsString( _nRowPos, _nColPos );
     }

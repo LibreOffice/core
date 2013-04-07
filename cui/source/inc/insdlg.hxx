@@ -50,7 +50,7 @@ protected:
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
     virtual sal_Bool IsCreateNew() const;
 };
 
@@ -89,7 +89,7 @@ public:
     virtual short Execute();
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType );
 };
 
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl

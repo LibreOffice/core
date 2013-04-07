@@ -35,7 +35,6 @@ using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::DisposedException;
 using com::sun::star::lang::IllegalArgumentException;
-using rtl::OUString;
 using osl::MutexGuard;
 
 using namespace cppu;

@@ -41,14 +41,14 @@ using namespace com::sun::star::uno;
 
 namespace apitest {
 
-std::vector< rtl::OUString > XDataPilotDescriptor::maFieldNames;
+std::vector< OUString > XDataPilotDescriptor::maFieldNames;
 
 void XDataPilotDescriptor::testTag()
 {
-    rtl::OUString aTag("DataPilotDescriptor_Tag");
+    OUString aTag("DataPilotDescriptor_Tag");
     uno::Reference< sheet::XDataPilotDescriptor > xDescr(init(), UNO_QUERY_THROW);
     xDescr->setTag(aTag);
-    rtl::OUString aNewTag = xDescr->getTag();
+    OUString aNewTag = xDescr->getTag();
     CPPUNIT_ASSERT( aTag == aNewTag );
 }
 
@@ -99,12 +99,12 @@ void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::X
 
     sal_Int32 nCount = xIndex->getCount();
 
-    rtl::OUString aOrientation("Orientation");
+    OUString aOrientation("Orientation");
     for (sal_Int32 i = 0; i < nCount && i < 5; ++i)
     {
         uno::Reference< container::XNamed > xNamed( xIndex->getByIndex( i ), UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xNamed.is());
-        rtl::OUString aName = xNamed->getName();
+        OUString aName = xNamed->getName();
         maFieldNames.push_back(aName);
         CPPUNIT_ASSERT( aName != "Data" );
 

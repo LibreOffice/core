@@ -1557,7 +1557,7 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
         pCTLOptions->IsCTLFontEnabled() &&
         pCTLOptions->IsCTLSequenceChecking() &&
         nFirstPos != 0 && /* first char needs not to be checked */
-        _xBI.is() && i18n::ScriptType::COMPLEX == _xBI->getScriptType( rtl::OUString( nChar ), 0 );
+        _xBI.is() && i18n::ScriptType::COMPLEX == _xBI->getScriptType( OUString( nChar ), 0 );
 
     return bIsSequenceChecking;
 }
@@ -1595,7 +1595,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
         const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
         while ( pField )
         {
-            rtl::OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
+            OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
             if ( !aFldText.isEmpty() )
             {
                 aText.SetChar( pField->GetStart(), aFldText.getStr()[0] );
@@ -1625,7 +1625,7 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
             pField = pField->GetEnd() ? pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, pField->GetEnd() ) : NULL;
         }
 
-        ::rtl::OUString aOUText( aText );
+        OUString aOUText( aText );
         sal_uInt16 nTextLen = (sal_uInt16)aOUText.getLength();
 
         sal_Int32 nPos = 0;
@@ -2521,8 +2521,8 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
-                rtl::OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
-                rtl::OUString aNewText( aOldText );
+                OUString aOldText( aPaM.GetNode()->Copy(0, nTmpPos) );
+                OUString aNewText( aOldText );
                 if (pCTLOptions->IsCTLSequenceCheckingTypeAndReplace())
                 {
                     /*const xub_StrLen nPrevPos = static_cast< xub_StrLen >*/( _xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode ) );
@@ -2560,12 +2560,12 @@ EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
 
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), rtl::OUString(c));
+            EditUndoInsertChars* pNewUndo = new EditUndoInsertChars(pEditEngine, CreateEPaM(aPaM), OUString(c));
             sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
             InsertUndo( pNewUndo, bTryMerge );
         }
 
-        aEditDoc.InsertText( (const EditPaM&)aPaM, rtl::OUString(c) );
+        aEditDoc.InsertText( (const EditPaM&)aPaM, OUString(c) );
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );
@@ -2842,7 +2842,7 @@ EditPaM ImpEditEngine::InsertParaBreak( EditSelection aCurSel )
             if ( aPrevParaText.GetChar(n) == '\t' )
                 aPaM = ImpInsertFeature( aPaM, SfxVoidItem( EE_FEATURE_TAB ) );
             else
-                aPaM = ImpInsertText( aPaM, rtl::OUString(aPrevParaText.GetChar(n)) );
+                aPaM = ImpInsertText( aPaM, OUString(aPrevParaText.GetChar(n)) );
             n++;
         }
 
@@ -2883,7 +2883,7 @@ sal_Bool ImpEditEngine::UpdateFields()
                 if ( aStatus.MarkFields() )
                     rField.GetFldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
 
-                rtl::OUString aFldValue =
+                OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
                         static_cast<const SvxFieldItem&>(*rField.GetItem()),
                         nPara, rField.GetStart(), rField.GetTxtColor(), rField.GetFldColor());
@@ -3476,7 +3476,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 try
                 {
                     uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                    ::rtl::OUString aText;
+                    OUString aText;
                     aData >>= aText;
                     aNewSelection = ImpInsertText( rPaM, aText );
                        bDone = sal_True;

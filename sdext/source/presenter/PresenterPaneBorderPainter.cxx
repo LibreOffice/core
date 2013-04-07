@@ -42,7 +42,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -173,7 +172,7 @@ PresenterPaneBorderPainter::~PresenterPaneBorderPainter (void)
 //----- XPaneBorderPainter ----------------------------------------------------
 
 awt::Rectangle SAL_CALL PresenterPaneBorderPainter::addBorder (
-    const rtl::OUString& rsPaneBorderStyleName,
+    const OUString& rsPaneBorderStyleName,
     const css::awt::Rectangle& rRectangle,
     drawing::framework::BorderType eBorderType)
     throw(css::uno::RuntimeException)
@@ -186,7 +185,7 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::addBorder (
 }
 
 awt::Rectangle SAL_CALL PresenterPaneBorderPainter::removeBorder (
-    const rtl::OUString& rsPaneBorderStyleName,
+    const OUString& rsPaneBorderStyleName,
     const css::awt::Rectangle& rRectangle,
     drawing::framework::BorderType eBorderType)
     throw(css::uno::RuntimeException)
@@ -199,11 +198,11 @@ awt::Rectangle SAL_CALL PresenterPaneBorderPainter::removeBorder (
 }
 
 void SAL_CALL PresenterPaneBorderPainter::paintBorder (
-    const rtl::OUString& rsPaneBorderStyleName,
+    const OUString& rsPaneBorderStyleName,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rOuterBorderRectangle,
     const css::awt::Rectangle& rRepaintArea,
-    const rtl::OUString& rsTitle)
+    const OUString& rsTitle)
     throw(css::uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -234,11 +233,11 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
 }
 
 void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
-    const rtl::OUString& rsPaneBorderStyleName,
+    const OUString& rsPaneBorderStyleName,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const css::awt::Rectangle& rOuterBorderRectangle,
     const css::awt::Rectangle& rRepaintArea,
-    const rtl::OUString& rsTitle,
+    const OUString& rsTitle,
     const css::awt::Point& rCalloutAnchor)
     throw(css::uno::RuntimeException)
 {
@@ -271,7 +270,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
 }
 
 awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
-    const rtl::OUString& rsPaneBorderStyleName)
+    const OUString& rsPaneBorderStyleName)
     throw(css::uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -351,7 +350,7 @@ void PresenterPaneBorderPainter::SetTheme (const ::boost::shared_ptr<PresenterTh
 }
 
 awt::Rectangle PresenterPaneBorderPainter::AddBorder (
-    const ::rtl::OUString& rsPaneURL,
+    const OUString& rsPaneURL,
     const awt::Rectangle& rInnerBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
@@ -365,7 +364,7 @@ awt::Rectangle PresenterPaneBorderPainter::AddBorder (
 }
 
 awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
-    const ::rtl::OUString& rsPaneURL,
+    const OUString& rsPaneURL,
     const css::awt::Rectangle& rOuterBox,
     const css::drawing::framework::BorderType eBorderType) const
 {

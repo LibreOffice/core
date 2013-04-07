@@ -49,9 +49,6 @@
 
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 namespace jfw
 {
@@ -193,13 +190,13 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     return ret;
 }
 
-rtl::OUString getDirFromFile(const rtl::OUString& usFilePath)
+OUString getDirFromFile(const OUString& usFilePath)
 {
     sal_Int32 index= usFilePath.lastIndexOf('/');
-    return rtl::OUString(usFilePath.getStr(), index);
+    return OUString(usFilePath.getStr(), index);
 }
 
-rtl::OUString getExecutableDirectory()
+OUString getExecutableDirectory()
 {
     rtl_uString* sExe = NULL;
     if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
@@ -207,14 +204,14 @@ rtl::OUString getExecutableDirectory()
             JFW_E_ERROR,
             "[Java framework] Error in function getExecutableDirectory (fwkutil.cxx)");
 
-    rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
+    OUString ouExe(sExe, SAL_NO_ACQUIRE);
     return getDirFromFile(ouExe);
 }
 
-rtl::OUString findPlugin(
-    const rtl::OUString & baseUrl, const rtl::OUString & plugin)
+OUString findPlugin(
+    const OUString & baseUrl, const OUString & plugin)
 {
-    rtl::OUString expandedPlugin;
+    OUString expandedPlugin;
     try
     {
         expandedPlugin = cppu::bootstrap_expandUri(plugin);
@@ -223,13 +220,13 @@ rtl::OUString findPlugin(
     {
         throw FrameworkException(
             JFW_E_ERROR,
-            (rtl::OString(
+            (OString(
                 RTL_CONSTASCII_STRINGPARAM(
                     "[Java framework] IllegalArgumentException in"
                     " findPlugin: "))
-             + rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding())));
+             + OUStringToOString(e.Message, osl_getThreadTextEncoding())));
     }
-    rtl::OUString sUrl;
+    OUString sUrl;
     try
     {
         sUrl = rtl::Uri::convertRelToAbs(baseUrl, expandedPlugin);
@@ -238,20 +235,20 @@ rtl::OUString findPlugin(
     {
         throw FrameworkException(
             JFW_E_ERROR,
-            (rtl::OString(
+            (OString(
                 RTL_CONSTASCII_STRINGPARAM(
                     "[Java framework] rtl::MalformedUriException in"
                     " findPlugin: "))
-             + rtl::OUStringToOString(
+             + OUStringToOString(
                  e.getMessage(), osl_getThreadTextEncoding())));
     }
     if (checkFileURL(sUrl) == jfw::FILE_OK)
     {
         return sUrl;
     }
-    rtl::OUString retVal;
-    rtl::OUString sProgDir = getExecutableDirectory();
-    sUrl = sProgDir + rtl::OUString("/")
+    OUString retVal;
+    OUString sProgDir = getExecutableDirectory();
+    sUrl = sProgDir + OUString("/")
         + plugin;
     jfw::FileStatus s = checkFileURL(sUrl);
     if (s == jfw::FILE_INVALID || s == jfw::FILE_DOES_NOT_EXIST)
@@ -260,16 +257,16 @@ rtl::OUString findPlugin(
         //use PATH, LD_LIBRARY_PATH etc. to locate the plugin
         if (plugin.indexOf('/') == -1)
         {
-            rtl::OUString url;
+            OUString url;
 #ifdef UNX
 #if defined(MACOSX)
-            rtl::OUString path = rtl::OUString("DYLD_LIBRARY_PATH");
+            OUString path = OUString("DYLD_LIBRARY_PATH");
 #elif defined(AIX)
-            rtl::OUString path = rtl::OUString("LIBPATH");
+            OUString path = OUString("LIBPATH");
 #else
-            rtl::OUString path = rtl::OUString("LD_LIBRARY_PATH");
+            OUString path = OUString("LD_LIBRARY_PATH");
 #endif
-            rtl::OUString env_path;
+            OUString env_path;
             oslProcessError err = osl_getEnvironment(path.pData, &env_path.pData);
             if (err != osl_Process_E_None && err != osl_Process_E_NotFound)
                 throw FrameworkException(
@@ -297,11 +294,11 @@ rtl::OUString findPlugin(
     return retVal;
 }
 
-rtl::OUString getLibraryLocation()
+OUString getLibraryLocation()
 {
-    rtl::OString sExcMsg("[Java framework] Error in function getLibraryLocation "
+    OString sExcMsg("[Java framework] Error in function getLibraryLocation "
                          "(fwkutil.cxx).");
-    rtl::OUString libraryFileUrl;
+    OUString libraryFileUrl;
 
     if (!osl::Module::getUrlFromAddress(
             reinterpret_cast< oslGenericFunction >(getLibraryLocation),
@@ -311,7 +308,7 @@ rtl::OUString getLibraryLocation()
     return getDirFromFile(libraryFileUrl);
 }
 
-jfw::FileStatus checkFileURL(const rtl::OUString & sURL)
+jfw::FileStatus checkFileURL(const OUString & sURL)
 {
     jfw::FileStatus ret = jfw::FILE_OK;
     DirectoryItem item;

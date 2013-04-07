@@ -50,7 +50,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
 
 const Type       CPPUTYPE_SALINT32   = getCppuType((sal_Int32*)0);
 const Type       CPPUTYPE_SALINT8    = getCppuType((sal_Int8*)0);

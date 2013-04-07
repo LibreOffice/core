@@ -70,7 +70,7 @@ String aEmptyStr;
 SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( "applicat.rdb" ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( OUString( "applicat.rdb" ), sal_True );
 
    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory> xMSch;
    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xComponentContext;
@@ -114,7 +114,7 @@ private:
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText(rtl::OUString("VCL - Workbench"));
+    aMainWin.SetText(OUString("VCL - Workbench"));
     aMainWin.Show();
 
     Application::Execute();

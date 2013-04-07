@@ -69,7 +69,7 @@ class RepoContent : public ::ucbhelper::ContentImplHelper,
 private:
     ContentProvider*       m_pProvider;
     URL                    m_aURL;
-    rtl::OUString          m_sRepositoryId;
+    OUString          m_sRepositoryId;
 
     std::list< libcmis::RepositoryPtr > m_aRepositories;
 
@@ -108,21 +108,21 @@ public:
         getCommands( const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     XINTERFACE_DECL()
 
     XTYPEPROVIDER_DECL()
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
             throw( com::sun::star::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
             throw( com::sun::star::uno::RuntimeException );
 

@@ -59,9 +59,9 @@ namespace dbtools
     {
         const Reference< XConnection >          xConnection;
         Reference< XSingleSelectQueryComposer > xComposer;
-        ::rtl::OUString                         sCommand;
-        ::rtl::OUString                         sFilter;
-        ::rtl::OUString                         sOrder;
+        OUString                         sCommand;
+        OUString                         sFilter;
+        OUString                         sOrder;
         sal_Int32                               nCommandType;
         sal_Bool                                bEscapeProcessing;
         bool                                    bComposerDirty;
@@ -112,7 +112,7 @@ namespace dbtools
 
             try
             {
-                ::rtl::OUString sStatement;
+                OUString sStatement;
                 switch ( _rData.nCommandType )
                 {
                     case CommandType::COMMAND:
@@ -126,9 +126,9 @@ namespace dbtools
                         if ( _rData.sCommand.isEmpty() )
                             break;
 
-                        sStatement = ::rtl::OUString( "SELECT * FROM " );
+                        sStatement = OUString( "SELECT * FROM " );
 
-                        ::rtl::OUString sCatalog, sSchema, sTable;
+                        OUString sCatalog, sSchema, sTable;
                         qualifiedNameComponents( _rData.xConnection->getMetaData(), _rData.sCommand, sCatalog, sSchema, sTable, eInDataManipulation );
 
                         sStatement += composeTableNameForSelect( _rData.xConnection, sCatalog, sSchema, sTable );
@@ -148,12 +148,12 @@ namespace dbtools
 
                         //  a native query ?
                         sal_Bool bQueryEscapeProcessing = sal_False;
-                        xQuery->getPropertyValue( ::rtl::OUString( "EscapeProcessing" ) ) >>= bQueryEscapeProcessing;
+                        xQuery->getPropertyValue( OUString( "EscapeProcessing" ) ) >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
 
                         // the command used by the query
-                        xQuery->getPropertyValue( ::rtl::OUString( "Command" ) ) >>= sStatement;
+                        xQuery->getPropertyValue( OUString( "Command" ) ) >>= sStatement;
                         if ( sStatement.isEmpty() )
                             break;
 
@@ -161,7 +161,7 @@ namespace dbtools
                         Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
                         xComposer.set(
-                            xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
+                            xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
                             UNO_QUERY_THROW
                         );
 
@@ -169,17 +169,17 @@ namespace dbtools
                         xComposer->setElementaryQuery( sStatement );
 
                         // the sort order
-                        const ::rtl::OUString sPropOrder( ::rtl::OUString( "Order" ) );
+                        const OUString sPropOrder( OUString( "Order" ) );
                         if ( ::comphelper::hasProperty( sPropOrder, xQuery ) )
                         {
-                            ::rtl::OUString sOrder;
+                            OUString sOrder;
                             OSL_VERIFY( xQuery->getPropertyValue( sPropOrder ) >>= sOrder );
                             xComposer->setOrder( sOrder );
                         }
 
                         // the filter
                         sal_Bool bApplyFilter = sal_True;
-                        const ::rtl::OUString sPropApply( "ApplyFilter" );
+                        const OUString sPropApply( "ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
                         {
                             OSL_VERIFY( xQuery->getPropertyValue( sPropApply ) >>= bApplyFilter );
@@ -187,8 +187,8 @@ namespace dbtools
 
                         if ( bApplyFilter )
                         {
-                            ::rtl::OUString sFilter;
-                            OSL_VERIFY( xQuery->getPropertyValue( ::rtl::OUString( "Filter" ) ) >>= sFilter );
+                            OUString sFilter;
+                            OSL_VERIFY( xQuery->getPropertyValue( OUString( "Filter" ) ) >>= sFilter );
                             xComposer->setFilter( sFilter );
                         }
 
@@ -206,7 +206,7 @@ namespace dbtools
                 {
                     // create an composer
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
-                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
+                    Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ),
                         UNO_QUERY_THROW );
                     xComposer->setElementaryQuery( sStatement );
 
@@ -238,7 +238,7 @@ namespace dbtools
     //====================================================================
     //--------------------------------------------------------------------
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
-        const ::rtl::OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
+        const OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
         :m_pData( new StatementComposer_Data( _rxConnection ) )
     {
         OSL_PRECOND( _rxConnection.is(), "StatementComposer::StatementComposer: illegal connection!" );
@@ -260,14 +260,14 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void StatementComposer::setFilter( const ::rtl::OUString& _rFilter )
+    void StatementComposer::setFilter( const OUString& _rFilter )
     {
         m_pData->sFilter = _rFilter;
         m_pData->bComposerDirty = true;
     }
 
     //--------------------------------------------------------------------
-    void StatementComposer::setOrder( const ::rtl::OUString& _rOrder )
+    void StatementComposer::setOrder( const OUString& _rOrder )
     {
         m_pData->sOrder = _rOrder;
         m_pData->bComposerDirty = true;
@@ -281,14 +281,14 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString StatementComposer::getQuery()
+    OUString StatementComposer::getQuery()
     {
         if ( lcl_ensureUpToDateComposer_nothrow( *m_pData ) )
         {
             return m_pData->xComposer->getQuery();
         }
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
 //........................................................................

@@ -142,7 +142,7 @@ IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
 // -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
 {
-    ::rtl::OUString sSelected;
+    OUString sSelected;
     if (m_aDatasource.GetEntryCount())
          sSelected = m_aDatasource.GetSelectEntry();
     m_aDatasource.Clear();

@@ -65,7 +65,7 @@ namespace logging
     //--------------------------------------------------------------------
     void LogHandlerHelper::initFromSettings( const ::comphelper::NamedValueCollection& _rSettings )
     {
-        ::rtl::OUString sEncoding;
+        OUString sEncoding;
         if ( _rSettings.get_ensureType( "Encoding", sEncoding ) )
         {
             if ( !setEncoding( sEncoding ) )
@@ -82,10 +82,10 @@ namespace logging
         m_rMutex.acquire();
 
         if ( !getIsInitialized() )
-            throw DisposedException( ::rtl::OUString( "component not initialized" ), NULL );
+            throw DisposedException( OUString( "component not initialized" ), NULL );
 
         if ( m_rBHelper.bDisposed )
-            throw DisposedException( ::rtl::OUString( "component already disposed" ), NULL );
+            throw DisposedException( OUString( "component already disposed" ), NULL );
 
         // fallback settings, in case they weren't passed at construction time
         if ( !getFormatter().is() )
@@ -103,22 +103,22 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    bool LogHandlerHelper::getEncoding( ::rtl::OUString& _out_rEncoding ) const
+    bool LogHandlerHelper::getEncoding( OUString& _out_rEncoding ) const
     {
         const char* pMimeCharset = rtl_getMimeCharsetFromTextEncoding( m_eEncoding );
         if ( pMimeCharset )
         {
-            _out_rEncoding = ::rtl::OUString::createFromAscii( pMimeCharset );
+            _out_rEncoding = OUString::createFromAscii( pMimeCharset );
             return true;
         }
-        _out_rEncoding = ::rtl::OUString();
+        _out_rEncoding = OUString();
         return false;
     }
 
     //--------------------------------------------------------------------
-    bool LogHandlerHelper::setEncoding( const ::rtl::OUString& _rEncoding )
+    bool LogHandlerHelper::setEncoding( const OUString& _rEncoding )
     {
-        ::rtl::OString sAsciiEncoding( ::rtl::OUStringToOString( _rEncoding, RTL_TEXTENCODING_ASCII_US ) );
+        OString sAsciiEncoding( OUStringToOString( _rEncoding, RTL_TEXTENCODING_ASCII_US ) );
         rtl_TextEncoding eEncoding = rtl_getTextEncodingFromMimeCharset( sAsciiEncoding.getStr() );
         if ( eEncoding != RTL_TEXTENCODING_DONTKNOW )
         {
@@ -129,7 +129,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, ::rtl::OString& _out_rEntry ) const
+    bool LogHandlerHelper::formatForPublishing( const LogRecord& _rRecord, OString& _out_rEntry ) const
     {
         if ( _rRecord.Level < getLevel() )
             // not to be published due to low level
@@ -138,8 +138,8 @@ namespace logging
         try
         {
             Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
-            ::rtl::OUString sEntry( xFormatter->format( _rRecord ) );
-            _out_rEntry = ::rtl::OUStringToOString( sEntry, getTextEncoding() );
+            OUString sEntry( xFormatter->format( _rRecord ) );
+            _out_rEntry = OUStringToOString( sEntry, getTextEncoding() );
             return true;
         }
         catch( const Exception& )
@@ -150,13 +150,13 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    bool LogHandlerHelper::getEncodedHead( ::rtl::OString& _out_rHead ) const
+    bool LogHandlerHelper::getEncodedHead( OString& _out_rHead ) const
     {
         try
         {
             Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
-            ::rtl::OUString sHead( xFormatter->getHead() );
-            _out_rHead = ::rtl::OUStringToOString( sHead, getTextEncoding() );
+            OUString sHead( xFormatter->getHead() );
+            _out_rHead = OUStringToOString( sHead, getTextEncoding() );
             return true;
         }
         catch( const Exception& )
@@ -167,13 +167,13 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    bool LogHandlerHelper::getEncodedTail( ::rtl::OString& _out_rTail ) const
+    bool LogHandlerHelper::getEncodedTail( OString& _out_rTail ) const
     {
         try
         {
             Reference< XLogFormatter > xFormatter( getFormatter(), UNO_QUERY_THROW );
-            ::rtl::OUString sTail( xFormatter->getTail() );
-            _out_rTail = ::rtl::OUStringToOString( sTail, getTextEncoding() );
+            OUString sTail( xFormatter->getTail() );
+            _out_rTail = OUStringToOString( sTail, getTextEncoding() );
             return true;
         }
         catch( const Exception& )

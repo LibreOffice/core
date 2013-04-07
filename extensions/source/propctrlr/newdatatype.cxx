@@ -32,7 +32,7 @@ namespace pcr
     //= NewDataTypeDialog
     //====================================================================
     //--------------------------------------------------------------------
-    NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const ::rtl::OUString& _rNameBase, const ::std::vector< ::rtl::OUString >& _rProhibitedNames )
+    NewDataTypeDialog::NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
         :ModalDialog( _pParent, PcrRes( RID_DLG_NEW_DATA_TYPE ) )
         ,m_aLabel   ( this, PcrRes( FT_LABEL  ) )
         ,m_aName    ( this, PcrRes( ED_NAME   ) )
@@ -64,7 +64,7 @@ namespace pcr
         sal_Int32 nPostfixNumber = 1;
         do
         {
-            ( sInitialName = sNameBase ) += rtl::OUString::valueOf(nPostfixNumber++);
+            ( sInitialName = sNameBase ) += OUString::valueOf(nPostfixNumber++);
         }
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 

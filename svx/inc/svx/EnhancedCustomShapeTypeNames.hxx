@@ -24,8 +24,8 @@
 
 namespace EnhancedCustomShapeTypeNames
 {
-    SVX_DLLPUBLIC MSO_SPT Get( const rtl::OUString& );
-    SVX_DLLPUBLIC rtl::OUString Get( const MSO_SPT );
+    SVX_DLLPUBLIC MSO_SPT Get( const OUString& );
+    SVX_DLLPUBLIC OUString Get( const MSO_SPT );
 }
 
 #endif

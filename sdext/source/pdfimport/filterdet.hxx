@@ -48,7 +48,7 @@ public:
                                 ::com::sun::star::uno::XComponentContext >& xContext );
 
     // XExtendedFilterDetection
-    virtual rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence<
+    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<
                                                com::sun::star::beans::PropertyValue >& io_rDescriptor )
         throw (com::sun::star::uno::RuntimeException);
 };
@@ -82,22 +82,22 @@ public:
     password
  */
 com::sun::star::uno::Reference< com::sun::star::io::XStream >
-   getAdditionalStream( const rtl::OUString&                                                            rPDFFile,
-                        rtl::OUString&                                                                  o_rOutMimetype,
-                        rtl::OUString&                                                                  io_rOutPwd,
+   getAdditionalStream( const OUString&                                                            rPDFFile,
+                        OUString&                                                                  o_rOutMimetype,
+                        OUString&                                                                  io_rOutPwd,
                         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& xContext,
                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >&    rFilterData,
                         bool                                                                            bMayUseUI );
 
 
-bool checkDocChecksum( const rtl::OUString& rInPDFFileURL,
+bool checkDocChecksum( const OUString& rInPDFFileURL,
                        sal_uInt32           nBytes,
-                       const rtl::OUString& rChkSum );
+                       const OUString& rChkSum );
 
 bool getPassword( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
-                  rtl::OUString&                                                                     o_rPwd,
+                  OUString&                                                                     o_rPwd,
                   bool                                                                               bFirstTry,
-                  const rtl::OUString&                                                               i_rDocName
+                  const OUString&                                                               i_rDocName
                   );
 
 }

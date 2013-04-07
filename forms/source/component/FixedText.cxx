@@ -78,7 +78,7 @@ StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com:
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FIXEDTEXT;
     return aSupported;
 }
@@ -91,7 +91,7 @@ void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggre
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OFixedTextModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_FIXEDTEXT; // old (non-sun) name for compatibility !
 }

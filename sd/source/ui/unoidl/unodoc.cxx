@@ -32,14 +32,14 @@ using namespace ::com::sun::star;
 
 // com.sun.star.comp.Draw.DrawingDocument
 
-::rtl::OUString SAL_CALL SdDrawingDocument_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SdDrawingDocument_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( "com.sun.star.comp.Draw.DrawingDocument" );
+    return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 2 );
+    uno::Sequence< OUString > aSeq( 2 );
     aSeq[0] = "com.sun.star.drawing.DrawingDocument";
     aSeq[1] = "com.sun.star.drawing.DrawingDocumentFactory";
 
@@ -61,14 +61,14 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
 
 // com.sun.star.comp.Draw.PresentationDocument
 
-::rtl::OUString SAL_CALL SdPresentationDocument_getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL SdPresentationDocument_getImplementationName() throw( uno::RuntimeException )
 {
-    return rtl::OUString( "com.sun.star.comp.Draw.PresentationDocument" );
+    return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq( 2 );
+    uno::Sequence< OUString > aSeq( 2 );
     aSeq[0] = "com.sun.star.drawing.DrawingDocumentFactory";
     aSeq[1] = "com.sun.star.presentation.PresentationDocument";
 

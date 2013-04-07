@@ -41,7 +41,7 @@ namespace pcr
 {
 //........................................................................
 
-    typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::std::less< ::rtl::OUString > >
+    typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::std::less< OUString > >
             MapStringToPropertySet;
 
     //====================================================================
@@ -117,16 +117,16 @@ namespace pcr
 
         /** retrieves the names of all XForms models in the document the control lives in
         */
-        void    getFormModelNames( ::std::vector< ::rtl::OUString >& /* [out] */ _rModelNames ) const SAL_THROW(());
+        void    getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(());
 
         /** retrieves the names of all bindings for a given model
             @see getFormModelNames
         */
-        void    getBindingNames( const ::rtl::OUString& _rModelName, ::std::vector< ::rtl::OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(());
+        void    getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(());
 
         /// retrieves the XForms model (within the control model's document) with the given name
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XModel >
-                getFormModelByName( const ::rtl::OUString& _rModelName ) const SAL_THROW(());
+                getFormModelByName( const OUString& _rModelName ) const SAL_THROW(());
 
         /** retrieves the model which the active binding of the control model belongs to
         */
@@ -135,7 +135,7 @@ namespace pcr
 
         /** retrieves the name of the model which the active binding of the control model belongs to
         */
-        ::rtl::OUString
+        OUString
                 getCurrentFormModelName() const SAL_THROW(());
 
         /** retrieves the binding instance which is currently attached to the control model
@@ -145,7 +145,7 @@ namespace pcr
 
         /** retrieves the name of the binding instance which is currently attached to the control model
         */
-        ::rtl::OUString
+        OUString
                 getCurrentBindingName() const SAL_THROW(());
 
         /** sets a new binding at the control model
@@ -172,7 +172,7 @@ namespace pcr
                 have a binding with this name, a new binding is created and returned.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            getOrCreateBindingForModel( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
+            getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(());
 
         /** types of sub-elements of a model
         */
@@ -186,7 +186,7 @@ namespace pcr
             @see getModelElementFromUIName
             @see getAllElementUINames
         */
-        ::rtl::OUString
+        OUString
                 getModelElementUIName(
                     const ModelElementType _eType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement
@@ -202,7 +202,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 getModelElementFromUIName(
                     const ModelElementType _eType,
-                    const ::rtl::OUString& _rUIName
+                    const OUString& _rUIName
                 ) const SAL_THROW(());
 
         /** retrieves the UI names of all elements of all models in our document
@@ -215,7 +215,7 @@ namespace pcr
         */
         void    getAllElementUINames(
                     const ModelElementType _eType,
-                    ::std::vector< ::rtl::OUString >& /* [out] */ _rElementNames,
+                    ::std::vector< OUString >& /* [out] */ _rElementNames,
                     bool _bPrepentEmptyEntry
                 );
 
@@ -223,14 +223,14 @@ namespace pcr
         void    firePropertyChanges(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxOldProps,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxNewProps,
-                    ::std::set< ::rtl::OUString >& _rFilter
+                    ::std::set< OUString >& _rFilter
                 ) const;
 
         /** fires a change in a single property, if the property value changed, and if we have a listener
             interested in property changes
         */
         void    firePropertyChange(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     const ::com::sun::star::uno::Any& _rOldValue,
                     const ::com::sun::star::uno::Any& _rNewValue
                 ) const;
@@ -240,7 +240,7 @@ namespace pcr
 
         /// implementation for both <member>getOrCreateBindingForModel</member>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(());
+            implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(());
 
         void
             impl_toggleBindingPropertyListening_throw( bool _bDoListen, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );

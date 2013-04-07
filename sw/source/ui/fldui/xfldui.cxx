@@ -62,7 +62,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
     SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetNewDBMgr();
 
-    ::rtl::OUString sSource(rDBName);
+    OUString sSource(rDBName);
     Reference< XConnection> xConnection =
                     pDBMgr->RegisterConnection(sSource);
 
@@ -125,7 +125,7 @@ sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName
             Any aCol = xCols->getByName(rFldName);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(rtl::OUString("Type"));
+            Any aType = xCol->getPropertyValue(OUString("Type"));
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)

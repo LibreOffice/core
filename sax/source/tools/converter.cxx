@@ -34,8 +34,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::i18n;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace sax {
 
@@ -603,14 +601,14 @@ void Converter::convertDouble(  OUStringBuffer& rBuffer,
 }
 
 /** convert double number to string (using ::rtl::math) */
-void Converter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double fNumber)
+void Converter::convertDouble( OUStringBuffer& rBuffer, double fNumber)
 {
     ::rtl::math::doubleToUStringBuffer( rBuffer, fNumber, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
 }
 
 /** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+    const OUString& rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
@@ -629,7 +627,7 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
-bool Converter::convertDouble(double& rValue, const ::rtl::OUString& rString)
+bool Converter::convertDouble(double& rValue, const OUString& rString)
 {
     rtl_math_ConversionStatus eStatus;
     rValue = ::rtl::math::stringToDouble( rString, (sal_Unicode)('.'), (sal_Unicode)(','), &eStatus, NULL );
@@ -637,7 +635,7 @@ bool Converter::convertDouble(double& rValue, const ::rtl::OUString& rString)
 }
 
 /** convert double to ISO "duration" string; negative durations allowed */
-void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
+void Converter::convertDuration(OUStringBuffer& rBuffer,
                                 const double fTime)
 {
     double fValue = fTime;
@@ -695,7 +693,7 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
     rBuffer.append( sal_Int32( fSecsValue));
     if (f100SecsValue > 0.0)
     {
-        ::rtl::OUString a100th( ::rtl::math::doubleToUString( fValue,
+        OUString a100th( ::rtl::math::doubleToUString( fValue,
                     rtl_math_StringFormat_F, XML_MAXDIGITSCOUNT_TIME - 5, '.',
                     true));
         if ( a100th.getLength() > 2 )
@@ -709,9 +707,9 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
 
 /** convert ISO "duration" string to double; negative durations allowed */
 bool Converter::convertDuration(double& rfTime,
-                                const ::rtl::OUString& rString)
+                                const OUString& rString)
 {
-    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
+    OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     // negative time duration?
@@ -725,7 +723,7 @@ bool Converter::convertDuration(double& rfTime,
     if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
         return false;
 
-    rtl::OUString sDoubleStr;
+    OUString sDoubleStr;
     bool bSuccess = true;
     bool bDone = false;
     bool bTimePart = false;
@@ -838,7 +836,7 @@ bool Converter::convertDuration(double& rfTime,
 }
 
 /** convert util::Duration to ISO "duration" string */
-void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
+void Converter::convertDuration(OUStringBuffer& rBuffer,
         const ::util::Duration& rDuration)
 {
     if (rDuration.Negative)
@@ -926,7 +924,7 @@ void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
 enum Result { R_NOTHING, R_OVERFLOW, R_SUCCESS };
 
 static Result
-readUnsignedNumber(const ::rtl::OUString & rString,
+readUnsignedNumber(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & o_rNumber)
 {
     bool bOverflow(false);
@@ -964,7 +962,7 @@ readUnsignedNumber(const ::rtl::OUString & rString,
 }
 
 static bool
-readDurationT(const ::rtl::OUString & rString, sal_Int32 & io_rnPos)
+readDurationT(const OUString & rString, sal_Int32 & io_rnPos)
 {
     if ((io_rnPos < rString.getLength()) &&
         (rString[io_rnPos] == sal_Unicode('T')))
@@ -976,7 +974,7 @@ readDurationT(const ::rtl::OUString & rString, sal_Int32 & io_rnPos)
 }
 
 static bool
-readDurationComponent(const ::rtl::OUString & rString,
+readDurationComponent(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
     sal_Int32 & o_rnTarget, const sal_Unicode c)
 {
@@ -1007,9 +1005,9 @@ readDurationComponent(const ::rtl::OUString & rString,
 
 /** convert ISO "duration" string to util::Duration */
 bool Converter::convertDuration(util::Duration& rDuration,
-                                const ::rtl::OUString& rString)
+                                const OUString& rString)
 {
-    const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
+    const OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
 
     bool bIsNegativeDuration(false);
@@ -1175,7 +1173,7 @@ bool Converter::convertDuration(util::Duration& rDuration,
 
 /** convert util::Date to ISO "date" string */
 void Converter::convertDate(
-        ::rtl::OUStringBuffer& i_rBuffer,
+        OUStringBuffer& i_rBuffer,
         const util::Date& i_rDate)
 {
     const util::DateTime dt(
@@ -1185,7 +1183,7 @@ void Converter::convertDate(
 
 /** convert util::DateTime to ISO "date" or "dateTime" string */
 void Converter::convertDateTime(
-        ::rtl::OUStringBuffer& i_rBuffer,
+        OUStringBuffer& i_rBuffer,
         const com::sun::star::util::DateTime& i_rDateTime,
         bool i_bAddTimeIf0AM )
 {
@@ -1247,7 +1245,7 @@ void Converter::convertDateTime(
 
 /** convert ISO "date" or "dateTime" string to util::DateTime */
 bool Converter::convertDateTime( util::DateTime& rDateTime,
-                                 const ::rtl::OUString& rString )
+                                 const OUString& rString )
 {
     bool isDateTime;
     util::Date date;
@@ -1272,7 +1270,7 @@ bool Converter::convertDateTime( util::DateTime& rDateTime,
 }
 
 static bool
-readDateTimeComponent(const ::rtl::OUString & rString,
+readDateTimeComponent(const OUString & rString,
     sal_Int32 & io_rnPos, sal_Int32 & o_rnTarget,
     const sal_Int32 nMinLength, const bool bExactLength)
 {
@@ -1314,11 +1312,11 @@ lcl_MaxDaysPerMonth(const sal_Int32 nMonth, const sal_Int32 nYear)
 /** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
 bool Converter::convertDateOrDateTime(
                 util::Date & rDate, util::DateTime & rDateTime,
-                bool & rbDateTime, const ::rtl::OUString & rString )
+                bool & rbDateTime, const OUString & rString )
 {
     bool bSuccess = true;
 
-    const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
+    const OUString string = rString.trim().toAsciiUpperCase();
     sal_Int32 nPos(0);
     if (string.getLength() > nPos)
     {
@@ -1618,7 +1616,7 @@ const
 
 
 
-void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, rtl::OUStringBuffer& sBuffer)
+void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, OUStringBuffer& sBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)
@@ -1671,7 +1669,7 @@ void ThreeByteToFourByte (const sal_Int8* pBuffer, const sal_Int32 nStart, const
     sBuffer.append(buf, SAL_N_ELEMENTS(buf));
 }
 
-void Converter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
+void Converter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aPass)
 {
     sal_Int32 i(0);
     sal_Int32 nBufferLength(aPass.getLength());
@@ -1683,7 +1681,7 @@ void Converter::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Sequenc
     }
 }
 
-void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUString& sBuffer)
+void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
 {
 #if OSL_DEBUG_LEVEL > 0
     sal_Int32 nCharsDecoded =
@@ -1694,7 +1692,7 @@ void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const rtl::OUStri
 
 sal_Int32 Converter::decodeBase64SomeChars(
         uno::Sequence<sal_Int8>& rOutBuffer,
-        const rtl::OUString& rInBuffer)
+        const OUString& rInBuffer)
 {
     sal_Int32 nInBufferLen = rInBuffer.getLength();
     sal_Int32 nMinOutBufferLen = (nInBufferLen / 4) * 3;
@@ -1762,7 +1760,7 @@ sal_Int32 Converter::decodeBase64SomeChars(
     return nCharsDecoded;
 }
 
-double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
 {
     double fRetval(1.0);
     rUnit.setLength(0L);
@@ -2117,7 +2115,7 @@ double Converter::GetConversionFactor(::rtl::OUStringBuffer& rUnit, sal_Int16 nS
     return fRetval;
 }
 
-sal_Int16 Converter::GetUnitFromString(const ::rtl::OUString& rString, sal_Int16 nDefaultUnit)
+sal_Int16 Converter::GetUnitFromString(const OUString& rString, sal_Int16 nDefaultUnit)
 {
     sal_Int32 nPos = 0L;
     sal_Int32 nLen = rString.getLength();
@@ -2203,8 +2201,8 @@ sal_Int16 Converter::GetUnitFromString(const ::rtl::OUString& rString, sal_Int16
 }
 
 
-bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
-                           ::rtl::OUStringBuffer&    rsType ,
+bool Converter::convertAny(OUStringBuffer&    rsValue,
+                           OUStringBuffer&    rsType ,
                            const com::sun::star::uno::Any& rValue)
 {
     bool bConverted = false;
@@ -2257,7 +2255,7 @@ bool Converter::convertAny(::rtl::OUStringBuffer&    rsValue,
 
         case com::sun::star::uno::TypeClass_STRING :
             {
-                ::rtl::OUString sTempValue;
+                OUString sTempValue;
                 if (rValue >>= sTempValue)
                 {
                     rsType.appendAscii("string");

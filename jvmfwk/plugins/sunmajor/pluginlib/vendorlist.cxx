@@ -27,10 +27,6 @@
 
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OString;
 
 namespace jfw_plugin
 {
@@ -64,7 +60,7 @@ Sequence<OUString> getVendorNames()
     return Sequence<OUString>(arNames, count);
 }
 
-bool isVendorSupported(const rtl::OUString& sVendor)
+bool isVendorSupported(const OUString& sVendor)
 {
     Sequence<OUString> seqNames = getVendorNames();
     const OUString * arNames = seqNames.getConstArray();

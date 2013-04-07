@@ -64,7 +64,7 @@ public:
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
-    void                SetName( const rtl::OUString& rFamilyName );
+    void                SetName( const OUString& rFamilyName );
     const String&       GetName() const;
     void                SetStyleName( const String& rStyleName );
     const String&       GetStyleName() const;

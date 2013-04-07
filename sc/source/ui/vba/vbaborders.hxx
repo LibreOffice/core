@@ -60,8 +60,8 @@ public:
     virtual css::uno::Any SAL_CALL getWeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWeight( const  css::uno::Any& ) throw (css::uno::RuntimeException);
     // xxxxBASE
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif //SC_VBA_BORDERS_HXX

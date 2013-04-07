@@ -40,20 +40,20 @@ uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInt
     return xRet;
 }
 // -----------------------------------------------------------------------------
-void throwIllegallArgumentException( const ::rtl::OUString& _sTypeName
+void throwIllegallArgumentException( const OUString& _sTypeName
                                     ,const uno::Reference< uno::XInterface >& ExceptionContext_
                                     ,const ::sal_Int16& ArgumentPosition_
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& Context_
                                     )
 {
-    ::rtl::OUString sErrorMessage(RPT_RESSTRING(RID_STR_ERROR_WRONG_ARGUMENT,Context_->getServiceManager()));
+    OUString sErrorMessage(RPT_RESSTRING(RID_STR_ERROR_WRONG_ARGUMENT,Context_->getServiceManager()));
     sErrorMessage = sErrorMessage.replaceAt(sErrorMessage.indexOf('#'),2,_sTypeName);
     throw lang::IllegalArgumentException(sErrorMessage,ExceptionContext_,ArgumentPosition_);
 }
 // -----------------------------------------------------------------------------
 uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XReportComponent>& _xReportComponent
     ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
-    ,const ::rtl::OUString& _sServiceName)
+    ,const OUString& _sServiceName)
 {
     OSL_ENSURE(_xReportComponent.is() && _xFactory.is() ,"reportcomponent is null -> GPF");
     uno::Reference< report::XReportComponent> xClone(_xFactory->createInstance(_sServiceName),uno::UNO_QUERY_THROW);

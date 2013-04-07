@@ -26,8 +26,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "com/sun/star/uno/Sequence.h"
 
-rtl::OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence< sal_Int8 > serial );
-::com::sun::star::uno::Sequence< sal_Int8 > numericStringToBigInteger ( rtl::OUString serialNumber );
+OUString bigIntegerToNumericString( ::com::sun::star::uno::Sequence< sal_Int8 > serial );
+::com::sun::star::uno::Sequence< sal_Int8 > numericStringToBigInteger ( OUString serialNumber );
 
 #endif
 

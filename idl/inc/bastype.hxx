@@ -92,23 +92,23 @@ public:
 
     sal_Bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     sal_Bool        WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm );
-    rtl::OString    GetSvIdlString( SvStringHashEntry * pName );
+    OString    GetSvIdlString( SvStringHashEntry * pName );
 };
 
 
 class SvIdentifier
 {
 private:
-    rtl::OString m_aStr;
+    OString m_aStr;
 public:
     SvIdentifier()
     {
     }
-    void setString(const rtl::OString& rStr)
+    void setString(const OString& rStr)
     {
         m_aStr = rStr;
     }
-    const rtl::OString& getString() const
+    const OString& getString() const
     {
         return m_aStr;
     }
@@ -150,14 +150,14 @@ public:
 class SvString
 {
 private:
-    rtl::OString m_aStr;
+    OString m_aStr;
 public:
     SvString() {}
-    void setString(const rtl::OString& rStr)
+    void setString(const OString& rStr)
     {
         m_aStr = rStr;
     }
-    const rtl::OString& getString() const
+    const OString& getString() const
     {
         return m_aStr;
     }

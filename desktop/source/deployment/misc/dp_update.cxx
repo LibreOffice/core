@@ -26,18 +26,16 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OString;
 
 
 namespace dp_misc {
 namespace {
 
 int determineHighestVersion(
-    ::rtl::OUString const & userVersion,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion)
+    OUString const & userVersion,
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion)
 {
     int index = 0;
     OUString  greatest = userVersion;
@@ -134,7 +132,7 @@ void getDefaultUpdateInfos(
     UpdateInfoMap& inout_map,
      std::vector<std::pair<Reference<deployment::XPackage>, uno::Any> > & out_errors)
 {
-    const rtl::OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
+    const OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
     OSL_ASSERT(!sDefaultURL.isEmpty());
 
     Any anyError;
@@ -216,7 +214,7 @@ bool onlyBundledExtensions(
 
 OUString getExtensionDefaultUpdateURL()
 {
-    ::rtl::OUString sUrl(
+    OUString sUrl(
         "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version")
         ":Version:ExtensionUpdateURL}");
     ::rtl::Bootstrap::expandMacros(sUrl);
@@ -228,10 +226,10 @@ OUString getExtensionDefaultUpdateURL()
  */
 UPDATE_SOURCE isUpdateUserExtension(
     bool bReadOnlyShared,
-    ::rtl::OUString const & userVersion,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion)
+    OUString const & userVersion,
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion)
 {
     UPDATE_SOURCE retVal = UPDATE_SOURCE_NONE;
     if (bReadOnlyShared)
@@ -278,9 +276,9 @@ UPDATE_SOURCE isUpdateUserExtension(
 
 UPDATE_SOURCE isUpdateSharedExtension(
     bool bReadOnlyShared,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion)
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion)
 {
     if (bReadOnlyShared)
         return UPDATE_SOURCE_NONE;
@@ -389,10 +387,10 @@ UpdateInfoMap getOnlineUpdateInfos(
     return infoMap;
 }
 OUString getHighestVersion(
-    ::rtl::OUString const & userVersion,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion)
+    OUString const & userVersion,
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion)
 {
     int index = determineHighestVersion(userVersion, sharedVersion, bundledVersion, onlineVersion);
     switch (index)

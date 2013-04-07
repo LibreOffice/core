@@ -44,7 +44,7 @@ TYPEINIT1(SwWebListShell,SwListShell)
 SwWebListShell::SwWebListShell(SwView &_rView) :
     SwListShell(_rView)
 {
-    SetName(rtl::OUString("List"));
+    SetName(OUString("List"));
     SetHelpId(SW_LISTSHELL);
 }
 

@@ -82,7 +82,7 @@ public:
 void ColorListBox::ImplInit()
 {
     pColorList = new ImpColorList();
-    aImageSize.Width()  = GetTextWidth( rtl::OUString("xxx") );
+    aImageSize.Width()  = GetTextWidth( OUString("xxx") );
     aImageSize.Height() = GetTextHeight();
     aImageSize.Height() -= 2;
 
@@ -120,7 +120,7 @@ namespace
     bool extractDropdown(VclBuilder::stringmap &rMap)
     {
         bool bDropdown = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("dropdown")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("dropdown")));
         if (aFind != rMap.end())
         {
             bDropdown = toBool(aFind->second);
@@ -746,7 +746,7 @@ void LineListBox::ImpGetLine( long nLine1, long nLine2, long nDistance,
 
 void LineListBox::ImplInit()
 {
-    aTxtSize.Width()  = GetTextWidth( rtl::OUString( " " ) );
+    aTxtSize.Width()  = GetTextWidth( OUString( " " ) );
     aTxtSize.Height() = GetTextHeight();
     pLineList   = new ImpLineList();
     eUnit       = FUNIT_POINT;
@@ -974,7 +974,7 @@ void LineListBox::UpdateEntries( long nOldWidth )
                     GetColorLine2( GetEntryCount( ) ),
                     GetColorDist( GetEntryCount( ) ),
                     pData->GetStyle(), aBmp );
-            ListBox::InsertEntry( rtl::OUString( " " ), aBmp, LISTBOX_APPEND );
+            ListBox::InsertEntry( OUString( " " ), aBmp, LISTBOX_APPEND );
             if ( n == nTypePos )
                 SelectEntryPos( GetEntryCount() - 1 );
         }
@@ -1072,7 +1072,7 @@ FontNameBox::~FontNameBox()
 
 void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep ) const
 {
-    rtl::OString aEntries(rtl::OUStringToOString(GetMRUEntries(cSep),
+    OString aEntries(OUStringToOString(GetMRUEntries(cSep),
         RTL_TEXTENCODING_UTF8));
 
     if (aEntries.isEmpty() || !aFontMRUEntriesFile.Len())
@@ -1083,14 +1083,14 @@ void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", rtl::OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).getStr() );
+        fprintf( stderr, "FontNameBox::SaveMRUEntries: opening mru entries file %s failed\n", OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
         return;
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
     aStream.WriteLine( aEntries );
-    aStream.WriteLine( rtl::OString() );
+    aStream.WriteLine( OString() );
 }
 
 // -------------------------------------------------------------------
@@ -1104,14 +1104,14 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", rtl::OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8).getStr() );
+        fprintf( stderr, "FontNameBox::LoadMRUEntries: opening mru entries file %s failed\n", OUStringToOString(aFontMRUEntriesFile, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
         return;
     }
 
-    rtl::OString aLine;
+    OString aLine;
     aStream.ReadLine( aLine );
-    rtl::OUString aEntries = rtl::OStringToOUString(aLine,
+    OUString aEntries = OStringToOUString(aLine,
         RTL_TEXTENCODING_UTF8);
     SetMRUEntries( aEntries, cSep );
 }
@@ -1120,7 +1120,7 @@ void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode
 
 void FontNameBox::InitFontMRUEntriesFile()
 {
-    rtl::OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
+    OUString sUserConfigDir("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}");
     rtl::Bootstrap::expandMacros(sUserConfigDir);
 
     maFontMRUEntriesFile = sUserConfigDir;
@@ -1208,7 +1208,7 @@ void FontNameBox::ImplCalcUserItemSize()
 
 namespace
 {
-    long shrinkFontToFit(rtl::OUString &rSampleText, long nH, Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
+    long shrinkFontToFit(OUString &rSampleText, long nH, Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
     {
         long nWidth = 0;
 
@@ -1264,7 +1264,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         Rectangle aTextRect;
 
         // Preview the font name
-        rtl::OUString sFontName = rInfo.GetName();
+        OUString sFontName = rInfo.GetName();
 
         //If it shouldn't or can't draw its own name because it doesn't have the glyphs
         if (!canRenderNameOfSelectedFont(*rUDEvt.GetDevice()))
@@ -1291,7 +1291,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         if (!bUsingCorrectFont)
             rUDEvt.GetDevice()->SetFont( aFont );
 
-        rtl::OUString sSampleText;
+        OUString sSampleText;
 
         if (!bSymbolFont)
         {
@@ -1343,7 +1343,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aScripts); ++i)
             {
-                rtl::OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
+                OUString sText = makeShortRepresentativeTextForScript(aScripts[i]);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
@@ -1363,7 +1363,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
             for (size_t i = 0; i < SAL_N_ELEMENTS(aMinimalScripts); ++i)
             {
-                rtl::OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
+                OUString sText = makeShortMinimalTextForScript(aMinimalScripts[i]);
                 if (!sText.isEmpty())
                 {
                     bool bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sText));
@@ -1913,7 +1913,7 @@ void FontSizeBox::SetRelative( sal_Bool bNewRelative )
                 SetDecimalDigits( 0 );
                 SetMin( nRelMin );
                 SetMax( nRelMax );
-                SetCustomUnitText(rtl::OUString('%'));
+                SetCustomUnitText(OUString('%'));
                 SetUnit( FUNIT_CUSTOM );
 
                 Clear();

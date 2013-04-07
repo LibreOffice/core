@@ -75,7 +75,7 @@ public:
 
     OCommandDefinition(
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
-            ,const ::rtl::OUString& _rElementName
+            ,const OUString& _rElementName
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
         );
@@ -87,34 +87,34 @@ public:
     DECLARE_XINTERFACE( )
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XRename
-    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
     // overrides to resolve ambiguity
-    virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const com::sun::star::uno::Any& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
         { OComponentDefinition::setPropertyValue(p1, p2); }
-    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
         { return OComponentDefinition::getPropertyValue(p1); }
-    virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
         { OComponentDefinition::addPropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
         { OComponentDefinition::removePropertyChangeListener(p1, p2); }
-    virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
         { OComponentDefinition::addVetoableChangeListener(p1, p2); }
-    virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener>& p2) throw( ::com::sun::star::uno::RuntimeException )
         { OComponentDefinition::removeVetoableChangeListener(p1, p2); }
     virtual com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> SAL_CALL getIdentifier() throw( ::com::sun::star::uno::RuntimeException )
         { return OComponentDefinition::getIdentifier(); }
-    virtual rtl::OUString SAL_CALL getContentType() throw( ::com::sun::star::uno::RuntimeException )
+    virtual OUString SAL_CALL getContentType() throw( ::com::sun::star::uno::RuntimeException )
         { return OComponentDefinition::getContentType(); }
     virtual void SAL_CALL addContentEventListener(const com::sun::star::uno::Reference<com::sun::star::ucb::XContentEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException )
         { OComponentDefinition::addContentEventListener(p1); }
@@ -128,17 +128,17 @@ public:
         { OComponentDefinition::removeEventListener(p1); }
 
     // XQueryDefinition properties
-    virtual rtl::OUString getName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setCommand(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString getName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setCommand(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
     virtual void setEscapeProcessing(sal_Bool) throw( ::com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateTableName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateCatalogName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setUpdateSchemaName(const rtl::OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateTableName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateCatalogName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setUpdateSchemaName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
 
     // OPropertySetHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );

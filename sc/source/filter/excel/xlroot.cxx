@@ -52,7 +52,6 @@
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -211,7 +210,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         aFont.SetCharSet( rFontData.GetFontEncoding() );
         aFont.SetWeight( rFontData.GetScWeight() );
         pPrinter->SetFont( aFont );
-        mrData.mnCharWidth = pPrinter->GetTextWidth( rtl::OUString('0') );
+        mrData.mnCharWidth = pPrinter->GetTextWidth( OUString('0') );
     }
     if( mrData.mnCharWidth <= 0 )
     {

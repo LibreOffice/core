@@ -77,17 +77,17 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
         getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexRowDescriptions(
         const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aRowDescriptions )
+        ::com::sun::star::uno::Sequence< OUString > >& aRowDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
         getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexColumnDescriptions(
         const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
+        ::com::sun::star::uno::Sequence< OUString > >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
@@ -100,16 +100,16 @@ protected:
                                    double > >& aData )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
-        ::rtl::OUString > SAL_CALL getRowDescriptions()
+        OUString > SAL_CALL getRowDescriptions()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowDescriptions( const ::com::sun::star::uno::Sequence<
-                                              ::rtl::OUString >& aRowDescriptions )
+                                              OUString >& aRowDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
-        ::rtl::OUString > SAL_CALL getColumnDescriptions()
+        OUString > SAL_CALL getColumnDescriptions()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setColumnDescriptions( const ::com::sun::star::uno::Sequence<
-                                                 ::rtl::OUString >& aColumnDescriptions )
+                                                 OUString >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartData (base of XChartDataArray) ____

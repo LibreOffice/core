@@ -711,7 +711,7 @@ void SvtSecurityOptions_Impl::Commit()
                         Sequence< Sequence< com::sun::star::beans::PropertyValue > > lPropertyValuesSeq( nCnt );
                         for( sal_Int32 i = 0 ; i < nCnt ; ++i )
                         {
-                            rtl::OUString aPrefix = rtl::OUStringBuffer(s).append(i).append('/').makeStringAndClear();
+                            OUString aPrefix = OUStringBuffer(s).append(i).append('/').makeStringAndClear();
                             Sequence< com::sun::star::beans::PropertyValue >    lPropertyValues( 3 );
                             lPropertyValues[ 0 ].Name = aPrefix + PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME;
                             lPropertyValues[ 0 ].Value <<= m_seqTrustedAuthors[ i ][0];

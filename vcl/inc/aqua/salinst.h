@@ -67,7 +67,7 @@ class AquaSalInstance : public SalInstance
 
 public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
-    rtl::OUString                           maDefaultPrinter;
+    OUString                           maDefaultPrinter;
     oslThreadIdentifier                     maMainThread;
     bool                                    mbWaitingYield;
     int                                     mnActivePrintJobs;
@@ -102,7 +102,7 @@ public:
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual rtl::OUString             GetDefaultPrinter();
+    virtual OUString             GetDefaultPrinter();
     virtual SalTimer*           CreateSalTimer();
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
@@ -119,7 +119,7 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
     virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
 
@@ -133,7 +133,7 @@ public:
 
     // check whether a particular string is passed on the command line
     // this is needed to avoid duplicate open events through a) command line and b) NSApp's openFile
-    static bool isOnCommandLine( const rtl::OUString& );
+    static bool isOnCommandLine( const OUString& );
 
     void wakeupYield();
 

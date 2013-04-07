@@ -762,7 +762,7 @@ rtl::Reference< MapCursor > LegacyProvider::createRootCursor() const {
     return new Cursor(manager_, ucr_, ucr_);
 }
 
-rtl::Reference< Entity > LegacyProvider::findEntity(rtl::OUString const & name)
+rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & name)
     const
 {
     return readEntity(manager_, ucr_, ucr_, name.replace('.', '/'), true);

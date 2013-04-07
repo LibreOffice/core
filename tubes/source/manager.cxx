@@ -289,7 +289,7 @@ static void TeleManager_TransferDone( EmpathyFTHandler *handler, TpFileTransferC
     SAL_INFO( "tubes", "TeleManager_TransferDone: hooray!");
     GFile *gfile = empathy_ft_handler_get_gfile( handler);
     char *uri = g_file_get_uri( gfile);
-    rtl::OUString aUri( OUString::createFromAscii( uri ) );
+    OUString aUri( OUString::createFromAscii( uri ) );
     g_free( uri);
 
     TeleManager_fileReceived( aUri, empathy_ft_handler_get_description( handler ) );
@@ -609,8 +609,8 @@ TeleConference* TeleManager::startDemoSession()
 
 /* TODO: factor out common code with startBuddySession() */
 TeleConference* TeleManager::startGroupSession( TpAccount *pAccount,
-                                     const rtl::OUString& rUConferenceRoom,
-                                     const rtl::OUString& rUConferenceServer )
+                                     const OUString& rUConferenceRoom,
+                                     const OUString& rUConferenceServer )
 {
     INFO_LOGGER_F( "TeleManager::startGroupSession");
 
@@ -824,21 +824,21 @@ AccountContactPairV TeleManager::getContacts()
     return pairs;
 }
 
-rtl::OString TeleManager::getFullClientName()
+OString TeleManager::getFullClientName()
 {
     OStringBuffer aBuf(64);
     aBuf.append( LIBO_CLIENT_SUFFIX ).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
-rtl::OString TeleManager::getFullServiceName()
+OString TeleManager::getFullServiceName()
 {
     OStringBuffer aBuf(64);
     aBuf.append( LIBO_DTUBE_SERVICE ).append( pImpl->msNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
-rtl::OString TeleManager::getFullObjectPath()
+OString TeleManager::getFullObjectPath()
 {
     OStringBuffer aBuf(64);
     aBuf.append( '/').append( LIBO_DTUBE_SERVICE ).append( pImpl->msNameSuffix);
@@ -846,7 +846,7 @@ rtl::OString TeleManager::getFullObjectPath()
     return aStr;
 }
 
-rtl::OString TeleManager::createUuid()
+OString TeleManager::createUuid()
 {
     sal_uInt8 nId[16];
     rtl_createUuid( nId, 0, sal_True);
@@ -856,7 +856,7 @@ rtl::OString TeleManager::createUuid()
         snprintf( aBuf+2*i, 3, "%02x", (unsigned char)nId[i]);
     }
     aBuf[32] = 0;
-    return rtl::OString( aBuf);
+    return OString( aBuf);
 }
 
 Mutex& TeleManager::GetMutex()

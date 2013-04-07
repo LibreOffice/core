@@ -171,12 +171,12 @@ namespace pcr
 
         /** gets the current value of the command property
         */
-        ::rtl::OUString
+        OUString
                 impl_getCommandPropertyValue_nothrow();
 
         /** sets anew value for the command property
         */
-        void    impl_setCommandPropertyValue_nothrow( const ::rtl::OUString& _rCommand ) const;
+        void    impl_setCommandPropertyValue_nothrow( const OUString& _rCommand ) const;
 
     private:
         SQLCommandDesigner();                                       // never implemented
@@ -193,12 +193,12 @@ namespace pcr
     {
     public:
         /// retrieves the current SQL command of the component
-        virtual ::rtl::OUString getSQLCommand() const = 0;
+        virtual OUString getSQLCommand() const = 0;
         /// retrieves the current value of the EscapeProcessing property of the component
         virtual sal_Bool        getEscapeProcessing() const = 0;
 
         /// sets a new SQL command
-        virtual void    setSQLCommand( const ::rtl::OUString& _rCommand ) const = 0;
+        virtual void    setSQLCommand( const OUString& _rCommand ) const = 0;
         /// sets a new EscapeProcessing property value
         virtual void    setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const = 0;
 

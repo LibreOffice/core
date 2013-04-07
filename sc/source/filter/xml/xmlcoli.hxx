@@ -27,9 +27,9 @@ class ScXMLImport;
 class ScXMLTableColContext : public SvXMLImportContext
 {
     sal_Int32               nColCount;
-    rtl::OUString           sStyleName;
-    rtl::OUString           sVisibility;
-    rtl::OUString           sCellStyleName;
+    OUString           sStyleName;
+    OUString           sVisibility;
+    OUString           sCellStyleName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -37,14 +37,14 @@ class ScXMLTableColContext : public SvXMLImportContext
 public:
 
     ScXMLTableColContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableColContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -67,7 +67,7 @@ class ScXMLTableColsContext : public SvXMLImportContext
 public:
 
     ScXMLTableColsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         const bool bHeader, const bool bGroup);
@@ -75,7 +75,7 @@ public:
     virtual ~ScXMLTableColsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

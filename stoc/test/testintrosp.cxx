@@ -52,10 +52,6 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans::PropertyAttribute;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
 
 
 typedef WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess > ImplIntroTestHelper;

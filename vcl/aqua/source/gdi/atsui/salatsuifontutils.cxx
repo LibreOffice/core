@@ -40,7 +40,7 @@
 // and SFNT fonts on Mac usually do not contain an OS/2 table.
 static void UpdateAttributesFromPSName( const String& rPSName, ImplDevFontAttributes& rDFA )
 {
-    rtl::OString aPSName( rtl::OUStringToOString( rPSName, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase() );
+    OString aPSName( OUStringToOString( rPSName, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase() );
 
     // TODO: use a multi-string ignore-case matcher once it becomes available
     if( (aPSName.indexOf("regular") != -1)

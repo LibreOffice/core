@@ -21,7 +21,6 @@
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
 
-using ::rtl::OUString;
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
@@ -67,10 +66,10 @@ namespace sw { namespace mark
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefHeadingBookmark_NamePrefix))
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, OUString(CrossRefHeadingBookmark_NamePrefix))
     { }
 
-    bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
+    bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
     {
         return rName.match(CrossRefHeadingBookmark_NamePrefix);
     }
@@ -81,10 +80,10 @@ namespace sw { namespace mark
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefNumItemBookmark_NamePrefix))
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, OUString(CrossRefNumItemBookmark_NamePrefix))
     { }
 
-    bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
+    bool CrossRefNumItemBookmark::IsLegalName(const OUString& rName)
     {
         return rName.match(CrossRefNumItemBookmark_NamePrefix);
     }

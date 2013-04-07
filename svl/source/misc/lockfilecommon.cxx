@@ -54,11 +54,11 @@ using namespace ::com::sun::star;
 namespace svt {
 
 // ----------------------------------------------------------------------
-LockFileCommon::LockFileCommon( const ::rtl::OUString& aOrigURL, const ::rtl::OUString& aPrefix )
+LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix )
 {
     INetURLObject aDocURL = ResolveLinks( INetURLObject( aOrigURL ) );
 
-    ::rtl::OUString aShareURLString = aDocURL.GetPartBeforeLastName();
+    OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
     aShareURLString += "%23"; // '#'
@@ -76,7 +76,7 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
     if ( aDocURL.HasError() )
         throw lang::IllegalArgumentException();
 
-    ::rtl::OUString aURLToCheck = aDocURL.GetMainURL(INetURLObject::NO_DECODE);
+    OUString aURLToCheck = aDocURL.GetMainURL(INetURLObject::NO_DECODE);
 
     // there is currently no UCB functionality to resolve the symbolic links;
     // since the lock files are used only for local file systems the osl
@@ -95,11 +95,11 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< uno::Sequence< ::rtl::OUString > > LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer )
+uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer )
 {
     sal_Int32 nCurPos = 0;
     sal_Int32 nCurEntry = 0;
-    uno::Sequence< uno::Sequence< ::rtl::OUString > > aResult( 10 );
+    uno::Sequence< uno::Sequence< OUString > > aResult( 10 );
 
     while ( nCurPos < aBuffer.getLength() )
     {
@@ -114,9 +114,9 @@ uno::Sequence< uno::Sequence< ::rtl::OUString > > LockFileCommon::ParseList( con
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
+uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
-    uno::Sequence< ::rtl::OUString > aResult( LOCKFILE_ENTRYSIZE );
+    uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
 
     for ( int nInd = 0; nInd < LOCKFILE_ENTRYSIZE; nInd++ )
     {
@@ -131,9 +131,9 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
 }
 
 // ----------------------------------------------------------------------
-::rtl::OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
+OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
-    ::rtl::OStringBuffer aResult;
+    OStringBuffer aResult;
     sal_Bool bHaveName = sal_False;
     sal_Bool bEscape = sal_False;
 
@@ -165,13 +165,13 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
         }
     }
 
-    return ::rtl::OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
+    return OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
 // ----------------------------------------------------------------------
-::rtl::OUString LockFileCommon::EscapeCharacters( const ::rtl::OUString& aSource )
+OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     const sal_Unicode* pStr = aSource.getStr();
     for ( sal_Int32 nInd = 0; nInd < aSource.getLength() && pStr[nInd] != 0; nInd++ )
     {
@@ -184,10 +184,10 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
 }
 
 // ----------------------------------------------------------------------
-::rtl::OUString LockFileCommon::GetOOOUserName()
+OUString LockFileCommon::GetOOOUserName()
 {
     SvtUserOptions aUserOpt;
-    ::rtl::OUString aName = aUserOpt.GetFirstName();
+    OUString aName = aUserOpt.GetFirstName();
     if ( !aName.isEmpty() )
         aName += " ";
     aName += aUserOpt.GetLastName();
@@ -196,9 +196,9 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
 }
 
 // ----------------------------------------------------------------------
-::rtl::OUString LockFileCommon::GetCurrentLocalTime()
+OUString LockFileCommon::GetCurrentLocalTime()
 {
-    ::rtl::OUString aTime;
+    OUString aTime;
 
     TimeValue aSysTime;
     if ( osl_getSystemTime( &aSysTime ) )
@@ -211,7 +211,7 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
             {
                 char pDateTime[20];
                 sprintf( pDateTime, "%02d.%02d.%4d %02d:%02d", aDateTime.Day, aDateTime.Month, aDateTime.Year, aDateTime.Hours, aDateTime.Minutes );
-                aTime = ::rtl::OUString::createFromAscii( pDateTime );
+                aTime = OUString::createFromAscii( pDateTime );
             }
         }
     }
@@ -220,9 +220,9 @@ uno::Sequence< ::rtl::OUString > LockFileCommon::ParseEntry( const uno::Sequence
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > LockFileCommon::GenerateOwnEntry()
+uno::Sequence< OUString > LockFileCommon::GenerateOwnEntry()
 {
-    uno::Sequence< ::rtl::OUString > aResult( LOCKFILE_ENTRYSIZE );
+    uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
 
     aResult[LOCKFILE_OOOUSERNAME_ID] = GetOOOUserName();
 

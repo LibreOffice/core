@@ -25,9 +25,9 @@
 #include <globals.hxx>
 #include <rtl/strbuf.hxx>
 
-rtl::OString SvToken::GetTokenAsString() const
+OString SvToken::GetTokenAsString() const
 {
-    rtl::OString aStr;
+    OString aStr;
     switch( nType )
     {
         case SVTOKEN_EMPTY:
@@ -48,7 +48,7 @@ rtl::OString SvToken::GetTokenAsString() const
             aStr = aString;
             break;
         case SVTOKEN_CHAR:
-            aStr = rtl::OString(cChar);
+            aStr = OString(cChar);
             break;
         case SVTOKEN_RTTIBASE:
             aStr = "RTTIBASE";
@@ -85,8 +85,8 @@ SvToken & SvToken::operator = ( const SvToken & rObj )
 
 void SvTokenStream::InitCtor()
 {
-    aStrTrue = rtl::OString(RTL_CONSTASCII_STRINGPARAM("TRUE"));
-    aStrFalse = rtl::OString(RTL_CONSTASCII_STRINGPARAM("FALSE"));
+    aStrTrue = OString(RTL_CONSTASCII_STRINGPARAM("TRUE"));
+    aStrFalse = OString(RTL_CONSTASCII_STRINGPARAM("FALSE"));
     nLine       = nColumn = 0;
     nBufPos     = 0;
     nTabSize    = 4;
@@ -161,7 +161,7 @@ int SvTokenStream::GetNextChar()
         }
         else
         {
-            aBufStr = rtl::OString();
+            aBufStr = OString();
             nColumn = 0;
             nBufPos = 0;
             return '\0';
@@ -275,7 +275,7 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( c == '"' )
     {
-        rtl::OStringBuffer aStr;
+        OStringBuffer aStr;
         sal_Bool bDone = sal_False;
         while( !bDone && !IsEof() && c )
         {
@@ -322,13 +322,13 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     else if( isalpha (c) || (c == '_') )
     {
-        rtl::OStringBuffer aBuf;
+        OStringBuffer aBuf;
         while( isalnum( c ) || c == '_' )
         {
             aBuf.append(static_cast<char>(c));
             c = GetFastNextChar();
         }
-        rtl::OString aStr = aBuf.makeStringAndClear();
+        OString aStr = aBuf.makeStringAndClear();
         if( aStr.equalsIgnoreAsciiCase( aStrTrue ) )
         {
             rToken.nType = SVTOKEN_BOOL;

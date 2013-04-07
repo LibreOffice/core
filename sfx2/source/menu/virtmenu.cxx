@@ -112,8 +112,8 @@ void SfxMenuImageControl_Impl::Update()
 //=========================================================================
 
 static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFrame,
-                                 const rtl::OUString& aImageId,
-                                 const rtl::OUString& aURL,
+                                 const OUString& aImageId,
+                                 const OUString& aURL,
                                  bool bBigImage
 )
 {
@@ -391,8 +391,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
-                    rtl::OUString aSlotURL( "slot:" );
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
+                    OUString aSlotURL( "slot:" );
+                    aSlotURL += OUString::valueOf( sal_Int32( nSlotId ));
                     Image aImage = GetImage( xFrame, aSlotURL, false );
                     pSVMenu->SetItemImage( nSlotId, aImage );
                 }
@@ -455,7 +455,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         Image aImage;
                         if ( bIsAddonPopupMenu || framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                         {
-                            rtl::OUString aImageId;
+                            OUString aImageId;
 
                             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                                 (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
@@ -467,8 +467,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         }
                         else
                         {
-                            rtl::OUString aSlotURL( "slot:" );
-                            aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
+                            OUString aSlotURL( "slot:" );
+                            aSlotURL += OUString::valueOf( sal_Int32( nSlotId ));
                             aImage = GetImage( xFrame, aSlotURL, false );
                         }
 
@@ -535,8 +535,8 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                 if ( framework::AddonMenuManager::IsAddonMenuId( nSlotId ))
                 {
                     // Special code for Add-On menu items. They can appear inside the help menu.
-                    rtl::OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
-                    rtl::OUString aImageId;
+                    OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
+                    OUString aImageId;
 
                     ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                         (::framework::MenuConfiguration::Attributes*)pSVMenu->GetUserValue( nSlotId );
@@ -548,8 +548,8 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                 }
                 else
                 {
-                    rtl::OUString aSlotURL( "slot:" );
-                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlotId ));
+                    OUString aSlotURL( "slot:" );
+                    aSlotURL += OUString::valueOf( sal_Int32( nSlotId ));
                     pSVMenu->SetItemImage( nSlotId, GetImage( xFrame, aSlotURL, false ));
                 }
             }
@@ -604,7 +604,7 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
             PopupMenu* pPopup = pMenu->GetPopupMenu( nSlotId );
             if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
             {
-                rtl::OUString aImageId;
+                OUString aImageId;
 
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                     (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nSlotId );
@@ -671,7 +671,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
                 // Check if the popup is an Add-On popup menu
                 // Either the popup menu has a special ID  or a special command URL prefix!
-                rtl::OUString aCommand = pSVMenu->GetItemCommand( nSID );
+                OUString aCommand = pSVMenu->GetItemCommand( nSID );
                 if ( ( nSID == SID_ADDONS ) ||
                      ( nSID == SID_ADDONHELP ) ||
                      (( (sal_uInt32)aCommand.getLength() > nAddonsPopupPrefixLen ) &&
@@ -782,7 +782,7 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
     if ( pAddonMenu && pAddonMenu->GetItemCount() > 0 )
     {
         sal_uInt16 nItemCount = pMenu->GetItemCount();
-        rtl::OUString aAddonsTitle(SfxResId(STR_MENU_ADDONS).toString());
+        OUString aAddonsTitle(SfxResId(STR_MENU_ADDONS).toString());
         if ( nItemCount > 0 && pMenu->GetItemType( nItemCount-1 ) != MENUITEM_SEPARATOR )
             pMenu->InsertSeparator();
         pMenu->InsertItem( SID_ADDONS, aAddonsTitle );
@@ -790,8 +790,8 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
 
         if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
         {
-               rtl::OUString aSlotURL( "slot:" );
-               aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
+               OUString aSlotURL( "slot:" );
+               aSlotURL += OUString::valueOf( sal_Int32( SID_ADDONS ));
          pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, false ));
         }
     }
@@ -840,7 +840,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         if ( pParent && pSVMenu == pParent->pWindowMenu )
         {
             // update window list
-            ::std::vector< ::rtl::OUString > aNewWindowListVector;
+            ::std::vector< OUString > aNewWindowListVector;
             Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
 
             sal_uInt16  nActiveItemId = 0;

@@ -20,7 +20,6 @@
 #include "TransformerActions.hxx"
 
 
-using ::rtl::OUString;
 
 using namespace ::osl;
 using namespace ::xmloff::token;

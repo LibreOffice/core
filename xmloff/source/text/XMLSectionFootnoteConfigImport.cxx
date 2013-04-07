@@ -40,7 +40,6 @@
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::style;
 
-using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

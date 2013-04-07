@@ -32,20 +32,20 @@ ScVbaPivotCache::Refresh() throw (css::uno::RuntimeException)
     m_xTable->refresh();
 }
 
-rtl::OUString
+OUString
 ScVbaPivotCache::getServiceImplName()
 {
-    return rtl::OUString("ScVbaPivotCache");
+    return OUString("ScVbaPivotCache");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaPivotCache::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.PivotCache" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.PivotCache" );
     }
     return aServiceNames;
 }

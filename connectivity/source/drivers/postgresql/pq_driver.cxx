@@ -65,8 +65,6 @@
 
 #include "pq_driver.hxx"
 
-using rtl::OUString;
-using rtl::OUStringToOString;
 using osl::MutexGuard;
 
 using cppu::WeakComponentImplHelper2;
@@ -138,7 +136,7 @@ Reference< XConnection > Driver::connect(
         UNO_QUERY );
 }
 
-sal_Bool Driver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool Driver::acceptsURL( const OUString& url )
     throw (SQLException, RuntimeException)
 {
     return url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:postgresql:" ) );
@@ -201,7 +199,7 @@ Reference< XTablesSupplier > Driver::getDataDefinitionByConnection(
 }
 
 Reference< XTablesSupplier > Driver::getDataDefinitionByURL(
-    const ::rtl::OUString& url, const Sequence< PropertyValue >& info )
+    const OUString& url, const Sequence< PropertyValue >& info )
         throw (SQLException, RuntimeException)
 {
     return Reference< XTablesSupplier > ( connect( url, info ), UNO_QUERY );
@@ -317,8 +315,8 @@ void OOneInstanceComponentFactory::disposing()
 
 //  Reference< XSingleComponentFactory > createOneInstanceComponentFactory(
 //      cppu::ComponentFactoryFunc fptr,
-//      ::rtl::OUString const & rImplementationName,
-//      ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+//      OUString const & rImplementationName,
+//      ::com::sun::star::uno::Sequence< OUString > const & rServiceNames,
 //      rtl_ModuleCount * pModCount = 0 )
 //      SAL_THROW(())
 //  {

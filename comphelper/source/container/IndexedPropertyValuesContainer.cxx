@@ -65,13 +65,13 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static versions (used for component registration)
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
-    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static OUString SAL_CALL getImplementationName_static();
+    static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
 private:
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
 }
 
 //XServiceInfo
-::rtl::OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getImplementationName_static();
 }
@@ -224,19 +224,19 @@ OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName_static( 
     return OUString( "IndexedPropertyValuesContainer" );
 }
 
-sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL IndexedPropertyValuesContainer::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
     return aServiceName == ServiceName;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer::getSupportedServiceNames_static(  )
 {
     const OUString aServiceName( "com.sun.star.document.IndexedPropertyValues" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );

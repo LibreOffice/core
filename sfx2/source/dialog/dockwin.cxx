@@ -89,11 +89,11 @@ namespace
 {
     struct WindowState
     {
-        ::rtl::OUString sTitle;
+        OUString sTitle;
     };
 }
 
-static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const ::rtl::OUString& rResourceURL, WindowState& rWindowState )
+static bool lcl_getWindowState( const uno::Reference< container::XNameAccess >& xWindowStateMgr, const OUString& rResourceURL, WindowState& rWindowState )
 {
     bool bResult = false;
 
@@ -130,7 +130,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
                     : SfxChildWindow( pParentWnd , nId )
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    const rtl::OUString aDockWindowResourceURL( "private:resource/dockingwindow/" );
+    const OUString aDockWindowResourceURL( "private:resource/dockingwindow/" );
 
     SfxTitleDockingWindow* pTitleDockWindow = new SfxTitleDockingWindow( pBindings, this, pParentWnd,
         WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
@@ -145,14 +145,14 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
     uno::Reference< frame::XFrame > xFrame( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     uno::Sequence< uno::Any > aArgs(2);
     beans::PropertyValue      aPropValue;
-    aPropValue.Name  = rtl::OUString( "Frame" );
+    aPropValue.Name  = OUString( "Frame" );
     aPropValue.Value = uno::makeAny( xFrame );
     aArgs[0] <<= aPropValue;
-    aPropValue.Name  = rtl::OUString( "ResourceURL" );
+    aPropValue.Name  = OUString( "ResourceURL" );
 
     // create a resource URL from the nId provided by the sfx2
-    ::rtl::OUString aResourceURL( aDockWindowResourceURL );
-    aResourceURL += ::rtl::OUString::valueOf(sal_Int32(nId));
+    OUString aResourceURL( aDockWindowResourceURL );
+    aResourceURL += OUString::valueOf(sal_Int32(nId));
     aPropValue.Value = uno::makeAny( aResourceURL );
     aArgs[1] <<= aPropValue;
 
@@ -181,7 +181,7 @@ SfxDockingWrapper::SfxDockingWrapper( Window* pParentWnd ,
             m_xWindowStateConfiguration = xWindowStateConfiguration;
         }
 
-        ::rtl::OUString sModuleIdentifier = xModuleManager->identify( xFrame );
+        OUString sModuleIdentifier = xModuleManager->identify( xFrame );
 
         uno::Reference< container::XNameAccess > xModuleWindowState(
                                                     xWindowStateConfiguration->getByName( sModuleIdentifier ),
@@ -350,7 +350,7 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
     The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
     in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
+void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
 {
     SolarMutexGuard aGuard;
     sal_uInt16 nID = sal_uInt16(rDockingWindowName.toInt32());
@@ -376,7 +376,7 @@ void SAL_CALL SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rF
     a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
     range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const rtl::OUString& rDockingWindowName )
+bool SAL_CALL IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
 {
     SolarMutexGuard aGuard;
 
@@ -421,7 +421,7 @@ friend class SfxDockingWindow;
     sal_uInt16              nDockPos;
     sal_Bool                bNewLine;
     sal_Bool                bDockingPrevented;
-    rtl::OString aWinState;
+    OString aWinState;
 
     SfxChildAlignment   GetLastAlignment() const
                         { return eLastAlignment; }
@@ -874,7 +874,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
         const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
         if ( pSlot )
         {
-            rtl::OString aCmd("SFXDOCKINGWINDOW_");
+            OString aCmd("SFXDOCKINGWINDOW_");
             aCmd += pSlot->GetUnoName();
             SetUniqueId( aCmd );
         }
@@ -925,7 +925,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
         const SfxSlot* pSlot = pSlotPool->GetSlot( pCW->GetType() );
         if ( pSlot )
         {
-            rtl::OString aCmd("SFXDOCKINGWINDOW_");
+            OString aCmd("SFXDOCKINGWINDOW_");
             aCmd += pSlot->GetUnoName();
             SetUniqueId( aCmd );
         }
@@ -1782,7 +1782,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
             pMgr->Activate_Impl();
 
         Window* pWindow = rEvt.GetWindow();
-        rtl::OString sHelpId;
+        OString sHelpId;
         while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();

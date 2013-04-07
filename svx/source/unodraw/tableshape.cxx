@@ -25,7 +25,6 @@
 
 ///////////////////////////////////////////////////////////////////////
 
-using ::rtl::OUString;
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -39,7 +38,7 @@ using namespace ::com::sun::star::beans;
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_TABLE), getSvxMapProvider().GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString( "com.sun.star.drawing.TableShape" ) );
+    SetShapeType( OUString( "com.sun.star.drawing.TableShape" ) );
 }
 
 //----------------------------------------------------------------------
@@ -50,7 +49,7 @@ SvxTableShape::~SvxTableShape() throw()
 //----------------------------------------------------------------------
 
 bool SvxTableShape::setPropertyValueImpl(
-    const ::rtl::OUString& rName,
+    const OUString& rName,
     const SfxItemPropertySimpleEntry* pProperty,
     const ::com::sun::star::uno::Any& rValue )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -105,7 +104,7 @@ bool SvxTableShape::setPropertyValueImpl(
 extern Graphic SvxGetGraphicForShape( SdrObject& rShape, bool bVector );
 
 bool SvxTableShape::getPropertyValueImpl(
-    const ::rtl::OUString& rName,
+    const OUString& rName,
     const SfxItemPropertySimpleEntry* pProperty,
     ::com::sun::star::uno::Any& rValue )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)

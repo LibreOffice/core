@@ -222,8 +222,8 @@ struct EmbeddedObjectRef_Impl
     uno::Reference <embed::XEmbeddedObject> mxObj;
 
     EmbedEventListener_Impl*                    xListener;
-    ::rtl::OUString                             aPersistName;
-    ::rtl::OUString                             aMediaType;
+    OUString                             aPersistName;
+    OUString                             aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
     Graphic*                                    pGraphic;
     sal_Int64                                   nViewAspect;
@@ -372,13 +372,13 @@ bool EmbeddedObjectRef::is() const
     return mpImpl->mxObj.is();
 }
 
-void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName )
+void EmbeddedObjectRef::AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const OUString& rPersistName )
 {
     mpImpl->pContainer = pContainer;
     mpImpl->aPersistName = rPersistName;
 
     if ( mpImpl->pGraphic && !mpImpl->bNeedUpdate && pContainer )
-        SetGraphicToContainer( *mpImpl->pGraphic, *pContainer, mpImpl->aPersistName, ::rtl::OUString() );
+        SetGraphicToContainer( *mpImpl->pGraphic, *pContainer, mpImpl->aPersistName, OUString() );
 }
 
 comphelper::EmbeddedObjectContainer* EmbeddedObjectRef::GetContainer() const
@@ -411,7 +411,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     if ( bUpdate )
     {
         DELETEZ( mpImpl->pGraphic );
-        mpImpl->aMediaType = ::rtl::OUString();
+        mpImpl->aMediaType = OUString();
         mpImpl->pGraphic = new Graphic;
         mpImpl->mnGraphicVersion++;
     }
@@ -510,7 +510,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 }
 
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
-                                            const ::rtl::OUString& rMediaType )
+                                            const OUString& rMediaType )
 {
     if ( mpImpl->pGraphic )
         delete mpImpl->pGraphic;
@@ -541,7 +541,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
 
 }
 
-void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType )
+void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const OUString& rMediaType )
 {
     if ( mpImpl->pGraphic )
         delete mpImpl->pGraphic;
@@ -617,7 +617,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
 {
     MapMode aMM( MAP_APPFONT );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );
-    Font aFnt( rtl::OUString("Helvetica"), aAppFontSz );
+    Font aFnt( OUString("Helvetica"), aAppFontSz );
     aFnt.SetTransparent( true );
     aFnt.SetColor( Color( COL_LIGHTRED ) );
     aFnt.SetWeight( WEIGHT_BOLD );
@@ -739,8 +739,8 @@ bool EmbeddedObjectRef::TryRunningState( const uno::Reference < embed::XEmbedded
 
 void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
                                                 comphelper::EmbeddedObjectContainer& aContainer,
-                                                const ::rtl::OUString& aName,
-                                                const ::rtl::OUString& aMediaType )
+                                                const OUString& aName,
+                                                const OUString& aMediaType )
 {
     SvMemoryStream aStream;
     aStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
@@ -758,7 +758,7 @@ void EmbeddedObjectRef::SetGraphicToContainer( const Graphic& rGraphic,
 uno::Reference< io::XInputStream > EmbeddedObjectRef::GetGraphicReplacementStream(
                                                                 sal_Int64 nViewAspect,
                                                                 const uno::Reference< embed::XEmbeddedObject >& xObj,
-                                                                ::rtl::OUString* pMediaType )
+                                                                OUString* pMediaType )
     throw()
 {
     return ::comphelper::EmbeddedObjectContainer::GetGraphicReplacementStream(nViewAspect,xObj,pMediaType);

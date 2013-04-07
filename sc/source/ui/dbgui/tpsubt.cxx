@@ -266,7 +266,7 @@ void ScTpSubTotalGroup::FillListBoxes()
         SCTAB   nTab        = pViewData->GetTabNo();
         SCCOL   nMaxCol     = rSubTotalData.nCol2;
         SCCOL   col;
-        rtl::OUString  aFieldName;
+        OUString  aFieldName;
 
         aLbGroup.Clear();
         aLbColumns.Clear();
@@ -278,7 +278,7 @@ void ScTpSubTotalGroup::FillListBoxes()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
                 aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
             }

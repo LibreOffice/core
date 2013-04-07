@@ -46,7 +46,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 
 namespace sd { namespace presenter {
 
@@ -61,7 +60,7 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 
 
 
-::rtl::OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
+OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterTextView");
 }
@@ -69,11 +68,11 @@ Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
 
 
 
-Sequence<rtl::OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.PresenterTextView");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.PresenterTextView");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -215,7 +214,7 @@ Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)
 
 
 Any PresenterTextView::SetPropertyValue (
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Any& rValue)
 {
     ThrowIfDisposed();
@@ -392,7 +391,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
 
         pEditEngine->EnableUndo (sal_True);
         pEditEngine->SetDefTab (sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth(rtl::OUString("XXXX"))));
+            Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))));
 
         pEditEngine->SetControlWord(
                 (pEditEngine->GetControlWord()
@@ -400,7 +399,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
                 (~EE_CNTRL_UNDOATTRIBS) &
                 (~EE_CNTRL_PASTESPECIAL));
 
-        pEditEngine->SetWordDelimiters (rtl::OUString(" .=+-*/(){}[];\""));
+        pEditEngine->SetWordDelimiters (OUString(" .=+-*/(){}[];\""));
         pEditEngine->SetRefMapMode (MAP_PIXEL);
         pEditEngine->SetPaperSize (Size(800, 0));
         pEditEngine->EraseVirtualDevice();

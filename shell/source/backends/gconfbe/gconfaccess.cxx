@@ -45,10 +45,6 @@ namespace {
 
 namespace uno = css::uno ;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringBuffer;
 
 GConfClient* getGconfClient()
 {
@@ -72,7 +68,7 @@ GConfClient* getGconfClient()
         mClient = gconf_client_get_default();
         if (!mClient)
         {
-            throw uno::RuntimeException(rtl::OUString("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
+            throw uno::RuntimeException(OUString("GconfBackend:GconfLayer: Cannot Initialize Gconf connection"),NULL);
         }
 
         static const char * const PreloadValuesList[] =
@@ -111,7 +107,7 @@ static OUString xdg_user_dir_lookup (const char *type)
 
     if (!aSecurity.getHomeDir( aHomeDirURL ) )
     {
-        osl::FileBase::getFileURLFromSystemPath(rtl::OUString("/tmp"), aDocumentsDirURL);
+        osl::FileBase::getFileURLFromSystemPath(OUString("/tmp"), aDocumentsDirURL);
         return aDocumentsDirURL;
     }
 
@@ -215,7 +211,7 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
             return uno::makeAny( (sal_Int32) gconf_value_get_int( pGconfValue ) );
 
         case GCONF_VALUE_STRING:
-            return uno::makeAny( OStringToOUString( rtl::OString(
+            return uno::makeAny( OStringToOUString( OString(
                 gconf_value_get_string(pGconfValue) ), RTL_TEXTENCODING_UTF8 ) );
 
         default:
@@ -228,20 +224,20 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 
 //------------------------------------------------------------------------------
 
-static void splitFontName( GConfValue *pGconfValue, rtl::OUString &rName, sal_Int16 &rHeight)
+static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &rHeight)
 {
-   rtl::OString aFont( gconf_value_get_string( pGconfValue ) );
+   OString aFont( gconf_value_get_string( pGconfValue ) );
    aFont = aFont.trim();
    sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
    if (nIdx < 1) { // urk
        rHeight = 12;
        nIdx = aFont.getLength();
    } else {
-       rtl::OString aSize = aFont.copy( nIdx + 1 );
+       OString aSize = aFont.copy( nIdx + 1 );
        rHeight = static_cast<sal_Int16>( aSize.toInt32() );
    }
 
-   rName = rtl::OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
+   rName = OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
 }
 
 //------------------------------------------------------------------------------
@@ -253,7 +249,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
     {
         case SETTING_PROXY_MODE:
         {
-            rtl::OUString aProxyMode;
+            OUString aProxyMode;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= aProxyMode;
 
@@ -266,7 +262,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
         case SETTING_NO_PROXY_FOR:
         {
-            rtl::OStringBuffer aBuffer;
+            OStringBuffer aBuffer;
             if( (GCONF_VALUE_LIST == pGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(pGconfValue)) )
             {
                 GSList * list = gconf_value_get_list(pGconfValue);
@@ -276,7 +272,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 }
                 // Remove trailing ";"
                 aBuffer.setLength(aBuffer.getLength()-1);
-                return uno::makeAny(rtl::OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+                return uno::makeAny(OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
             }
             else
                 g_warning( "unexpected type for ignore_hosts" );
@@ -285,7 +281,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
         case SETTING_MAILER_PROGRAM:
         {
-            rtl::OUString aMailer;
+            OUString aMailer;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= aMailer;
             sal_Int32 nIndex = 0;
@@ -314,22 +310,22 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
             sal_Bool bBooleanValue = false;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
             aOriginalValue >>= bBooleanValue;
-            return uno::makeAny( rtl::OUString::valueOf( (sal_Bool) bBooleanValue ) );
+            return uno::makeAny( OUString::valueOf( (sal_Bool) bBooleanValue ) );
         }
 
         case SETTING_WORK_DIRECTORY:
         {
-            rtl::OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+            OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
 
             return uno::makeAny( aDocumentsDirURL );
         }
 
         case SETTING_USER_GIVENNAME:
         {
-            rtl::OUString aCompleteName( rtl::OStringToOUString(
+            OUString aCompleteName( OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             sal_Int32 nIndex = 0;
-            rtl::OUString aGivenName;
+            OUString aGivenName;
             do
                 aGivenName = aCompleteName.getToken( 0, ' ', nIndex );
             while ( nIndex == 0 );
@@ -340,10 +336,10 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
 
         case SETTING_USER_SURNAME:
         {
-            rtl::OUString aCompleteName( rtl::OStringToOUString(
+            OUString aCompleteName( OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             sal_Int32 nIndex = 0;
-            rtl::OUString aSurname;
+            OUString aSurname;
             do
                 aSurname = aCompleteName.getToken( 0, ' ', nIndex );
             while ( nIndex >= 0 );
@@ -354,7 +350,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         case SETTING_SOURCEVIEWFONT_NAME:
         case SETTING_SOURCEVIEWFONT_HEIGHT:
         {
-            rtl::OUString aName;
+            OUString aName;
             sal_Int16 nHeight;
 
             splitFontName (pGconfValue, aName, nHeight);
@@ -394,7 +390,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 
         case SETTING_WORK_DIRECTORY:
         {
-            rtl::OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
+            OUString aDocumentsDirURL = xdg_user_dir_lookup("DOCUMENTS");
             osl::Directory aDocumentsDir( aDocumentsDirURL );
 
             if( osl::FileBase::E_None == aDocumentsDir.open() )
@@ -404,7 +400,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 
         case SETTING_USER_GIVENNAME:
         {
-            rtl::OUString aCompleteName( rtl::OStringToOUString(
+            OUString aCompleteName( OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( aCompleteName != "Unknown" )
                 return sal_True;
@@ -413,7 +409,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
 
         case SETTING_USER_SURNAME:
         {
-            rtl::OUString aCompleteName( rtl::OStringToOUString(
+            OUString aCompleteName( OStringToOUString(
                 g_get_real_name(), osl_getThreadTextEncoding() ) );
             if( aCompleteName != "Unknown" )
             {

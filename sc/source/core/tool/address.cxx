@@ -35,7 +35,6 @@
 #include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 const ScAddress::Details ScAddress::detailsOOOa1( formula::FormulaGrammar::CONV_OOO, 0, 0 );
 
@@ -363,7 +362,7 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, String& rExtern
             {
                 case sheet::ExternalLinkType::DOCUMENT :
                     {
-                        rtl::OUString aStr;
+                        OUString aStr;
                         if (!(rInfo.Data >>= aStr))
                         {
                             OSL_TRACE( "ScRange::Parse_XL_Header: Data type mismatch for ExternalLinkInfo %d", i);
@@ -1119,7 +1118,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         }
         else
         {
-            rtl::OUString aTmp( p );
+            OUString aTmp( p );
             long n = aTmp.toInt32() - 1;
             while (CharClass::isAsciiDigit( *p ))
                 p++;
@@ -1698,7 +1697,7 @@ void ScAddress::Format( String& r, sal_uInt16 nFlags, const ScDocument* pDoc,
         if( nFlags & SCA_TAB_3D )
         {
             String aTabName, aDocName;
-            rtl::OUString aTmp;
+            OUString aTmp;
             pDoc->GetName(nTab, aTmp);
             aTabName = aTmp; // TODO: remove use of String here.
             // External Reference, same as in ScCompiler::MakeTabStr()
@@ -1775,7 +1774,7 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
                   sal_uInt16 nFlags,
                   String& rTabName, String& rDocName )
 {
-    rtl::OUString aTmp;
+    OUString aTmp;
     pDoc->GetName(nTab, aTmp);
     rTabName = aTmp;
     rDocName.Erase();
@@ -2033,7 +2032,7 @@ String ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
 
 //------------------------------------------------------------------------
 
-void ScColToAlpha( rtl::OUStringBuffer& rBuf, SCCOL nCol )
+void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
 {
     if (nCol < 26*26)
     {

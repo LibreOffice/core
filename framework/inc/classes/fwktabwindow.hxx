@@ -52,19 +52,19 @@ public:
 class FwkTabPage : public TabPage
 {
 private:
-    rtl::OUString                                                   m_sPageURL;
-    rtl::OUString                                                   m_sEventHdl;
+    OUString                                                   m_sPageURL;
+    OUString                                                   m_sEventHdl;
     css::uno::Reference< css::awt::XWindow >                        m_xPage;
     css::uno::Reference< css::awt::XContainerWindowEventHandler >   m_xEventHdl;
     css::uno::Reference< css::awt::XContainerWindowProvider >       m_xWinProvider;
 
     void            CreateDialog();
-    sal_Bool        CallMethod( const rtl::OUString& rMethod );
+    sal_Bool        CallMethod( const OUString& rMethod );
 
 public:
     FwkTabPage(
         Window* pParent,
-        const rtl::OUString& rPageURL,
+        const OUString& rPageURL,
     const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
         const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider );
 
@@ -79,13 +79,13 @@ struct TabEntry
 {
     sal_Int32           m_nIndex;
     FwkTabPage*         m_pPage;
-    ::rtl::OUString     m_sPageURL;
+    OUString     m_sPageURL;
     css::uno::Reference< css::awt::XContainerWindowEventHandler > m_xEventHdl;
 
     TabEntry() :
         m_nIndex( -1 ), m_pPage( NULL ) {}
 
-    TabEntry( sal_Int32 nIndex, ::rtl::OUString sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
+    TabEntry( sal_Int32 nIndex, OUString sURL, const css::uno::Reference< css::awt::XContainerWindowEventHandler > & rEventHdl ) :
         m_nIndex( nIndex ), m_pPage( NULL ), m_sPageURL( sURL ), m_xEventHdl( rEventHdl ) {}
 
     ~TabEntry() { delete m_pPage; }

@@ -37,9 +37,9 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
+uno::Sequence< OUString > lcl_getImageOptionals()
 {
-    ::rtl::OUString pProps[] = {
+    OUString pProps[] = {
             PROPERTY_CHARCOLOR
             ,PROPERTY_CHAREMPHASIS
             ,PROPERTY_CHARFONTCHARSET
@@ -109,7 +109,7 @@ uno::Sequence< ::rtl::OUString > lcl_getImageOptionals()
             , PROPERTY_CHARLOCALECOMPLEX
 
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
 DBG_NAME( rpt_OImageControl )
@@ -171,20 +171,20 @@ void SAL_CALL OImageControl::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OImageControl::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OImageControl");
+    return OUString("com.sun.star.comp.report.OImageControl");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OImageControl::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OImageControl::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OImageControl::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OImageControl::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_IMAGECONTROL;
 
     return aServices;
@@ -196,12 +196,12 @@ uno::Reference< uno::XInterface > OImageControl::create(uno::Reference< uno::XCo
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OImageControl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OImageControl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OImageControl::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OImageControl::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -211,30 +211,30 @@ REPORTCOMPONENT_IMPL(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_IMPL2(OImageControl,m_aProps.aComponent)
 REPORTCOMPONENT_NOMASTERDETAIL(OImageControl)
 NO_REPORTCONTROLFORMAT_IMPL(OImageControl)
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OImageControl::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aFormatProperties.sHyperLinkURL;
 }
-void SAL_CALL OImageControl::setHyperLinkURL(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OImageControl::setHyperLinkURL(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     set(PROPERTY_HYPERLINKURL,the_value,m_aProps.aFormatProperties.sHyperLinkURL);
 }
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OImageControl::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aFormatProperties.sHyperLinkTarget;
 }
-void SAL_CALL OImageControl::setHyperLinkTarget(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OImageControl::setHyperLinkTarget(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     set(PROPERTY_HYPERLINKTARGET,the_value,m_aProps.aFormatProperties.sHyperLinkTarget);
 }
-::rtl::OUString SAL_CALL OImageControl::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OImageControl::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aFormatProperties.sHyperLinkName;
 }
-void SAL_CALL OImageControl::setHyperLinkName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OImageControl::setHyperLinkName(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     set(PROPERTY_HYPERLINKNAME,the_value,m_aProps.aFormatProperties.sHyperLinkName);
 }
@@ -273,44 +273,44 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OImageControl::getPropertySet
     return ImageControlPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OImageControl::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OImageControl::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OImageControl::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return ImageControlPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OImageControl::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OImageControl::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OImageControl::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OImageControl::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ImageControlPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 // XReportControlModel
-::rtl::OUString SAL_CALL OImageControl::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OImageControl::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aDataField;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setDataField( const ::rtl::OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OImageControl::setDataField( const OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_DATAFIELD,_datafield,m_aProps.aDataField);
 }
@@ -327,13 +327,13 @@ void SAL_CALL OImageControl::setPrintWhenGroupChange( ::sal_Bool _printwhengroup
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OImageControl::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OImageControl::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OImageControl::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
@@ -351,13 +351,13 @@ uno::Reference< util::XCloneable > SAL_CALL OImageControl::createClone(  ) throw
 
 // XImageControl
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OImageControl::getImageURL() throw (uno::RuntimeException)
+OUString SAL_CALL OImageControl::getImageURL() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aImageURL;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OImageControl::setImageURL( const ::rtl::OUString& _imageurl ) throw (uno::RuntimeException)
+void SAL_CALL OImageControl::setImageURL( const OUString& _imageurl ) throw (uno::RuntimeException)
 {
     set(PROPERTY_IMAGEURL,_imageurl,m_aImageURL);
 }
@@ -456,9 +456,9 @@ void SAL_CALL OImageControl::setSize( const awt::Size& aSize ) throw (beans::Pro
 // -----------------------------------------------------------------------------
 
 // XShapeDescriptor
-::rtl::OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OImageControl::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
+   return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 ::sal_Int16 SAL_CALL OImageControl::getScaleMode() throw (uno::RuntimeException)

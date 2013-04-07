@@ -42,25 +42,25 @@ uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) cons
     return xShape;
 }
 
-::rtl::OUString SAL_CALL ScPageObj::getImplementationName()
+OUString SAL_CALL ScPageObj::getImplementationName()
                                 throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScPageObj");
+    return OUString("ScPageObj");
 }
 
-sal_Bool SAL_CALL ScPageObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScPageObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( "com.sun.star.sheet.SpreadsheetDrawPage" );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScPageObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString("com.sun.star.sheet.SpreadsheetDrawPage");
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString("com.sun.star.sheet.SpreadsheetDrawPage");
     return aRet;
 }
 

@@ -67,7 +67,7 @@ SdPresentationLayoutUndoAction::~SdPresentationLayoutUndoAction()
 {
 }
 
-rtl::OUString SdPresentationLayoutUndoAction::GetComment() const
+OUString SdPresentationLayoutUndoAction::GetComment() const
 {
     return aComment;
 }

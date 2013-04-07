@@ -34,7 +34,7 @@
 
 class SvXMLAutoStylePoolP;
 class SvXMLAutoStylePoolParentsP_Impl;
-typedef std::set<rtl::OUString> SvXMLAutoStylePoolNamesP_Impl;
+typedef std::set<OUString> SvXMLAutoStylePoolNamesP_Impl;
 class SvXMLExportPropertyMapper;
 class SvXMLExport;
 
@@ -45,7 +45,7 @@ class SvXMLExport;
 // Implementationclass for stylefamily-information
 //
 
-typedef ::rtl::OUString* OUStringPtr;
+typedef OUString* OUStringPtr;
 typedef ::std::vector< OUStringPtr > SvXMLAutoStylePoolCache_Impl;
 
 class XMLFamilyData_Impl
@@ -53,20 +53,20 @@ class XMLFamilyData_Impl
 public:
     SvXMLAutoStylePoolCache_Impl        *pCache;
     sal_uInt32                          mnFamily;
-    ::rtl::OUString                     maStrFamilyName;
+    OUString                     maStrFamilyName;
     UniReference < SvXMLExportPropertyMapper >  mxMapper;
 
     SvXMLAutoStylePoolParentsP_Impl*    mpParentList;
     SvXMLAutoStylePoolNamesP_Impl*      mpNameList;
     sal_uInt32                          mnCount;
     sal_uInt32                          mnName;
-    ::rtl::OUString                     maStrPrefix;
+    OUString                     maStrPrefix;
     sal_Bool                            bAsFamily;
 
 public:
-    XMLFamilyData_Impl( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
+    XMLFamilyData_Impl( sal_Int32 nFamily, const OUString& rStrName,
             const UniReference < SvXMLExportPropertyMapper > &  rMapper,
-            const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
+            const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
 
     XMLFamilyData_Impl( sal_Int32 nFamily ) :
         pCache( 0 ),
@@ -91,7 +91,7 @@ typedef boost::ptr_set<XMLFamilyData_Impl> XMLFamilyDataList_Impl;
 
 class SvXMLAutoStylePoolPropertiesP_Impl
 {
-    ::rtl::OUString                     msName;
+    OUString                     msName;
     ::std::vector< XMLPropertyState >   maProperties;
     sal_uInt32                          mnPos;
 
@@ -103,11 +103,11 @@ public:
     {
     }
 
-    const ::rtl::OUString& GetName() const { return msName; }
+    const OUString& GetName() const { return msName; }
     const ::std::vector< XMLPropertyState >& GetProperties() const { return maProperties; }
     sal_uInt32 GetPos() const { return mnPos; }
 
-    void SetName( const ::rtl::OUString& rNew ) { msName = rNew; }
+    void SetName( const OUString& rNew ) { msName = rNew; }
 };
 
 typedef SvXMLAutoStylePoolPropertiesP_Impl* SvXMLAutoStylePoolPropertiesPPtr;
@@ -120,25 +120,25 @@ typedef ::std::vector< SvXMLAutoStylePoolPropertiesPPtr > SvXMLAutoStylePoolProp
 
 class SvXMLAutoStylePoolParentP_Impl
 {
-    ::rtl::OUString                         msParent;
+    OUString                         msParent;
     SvXMLAutoStylePoolPropertiesPList_Impl  maPropertiesList;
 
 public:
 
-    SvXMLAutoStylePoolParentP_Impl( const ::rtl::OUString & rParent ) :
+    SvXMLAutoStylePoolParentP_Impl( const OUString & rParent ) :
         msParent( rParent )
     {
     }
 
     ~SvXMLAutoStylePoolParentP_Impl();
 
-    sal_Bool Add( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, ::rtl::OUString& rName, bool bDontSeek = false );
+    sal_Bool Add( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek = false );
 
-    sal_Bool AddNamed( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const ::rtl::OUString& rName );
+    sal_Bool AddNamed( XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties, const OUString& rName );
 
-    ::rtl::OUString Find( const XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    OUString Find( const XMLFamilyData_Impl& rFamilyData, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
-    const ::rtl::OUString& GetParent() const { return msParent; }
+    const OUString& GetParent() const { return msParent; }
 
     const SvXMLAutoStylePoolPropertiesPList_Impl& GetPropertiesList() const
     {
@@ -177,26 +177,26 @@ public:
 
     SvXMLExport& GetExport() const { return rExport; }
 
-    void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
+    void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > & rMapper,
-        const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
+        const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
         const UniReference < SvXMLExportPropertyMapper > & rMapper );
-    void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
+    void RegisterName( sal_Int32 nFamily, const OUString& rName );
     void GetRegisteredNames(
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
-        com::sun::star::uno::Sequence<rtl::OUString>& aNames );
+        com::sun::star::uno::Sequence<OUString>& aNames );
 
-    sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
-                const ::rtl::OUString& rParent,
+    sal_Bool Add( OUString& rName, sal_Int32 nFamily,
+                const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties,
                 sal_Bool bCache = sal_False,
                 bool bDontSeek = false );
-    sal_Bool AddNamed( const ::rtl::OUString& rName, sal_Int32 nFamily,
-                const ::rtl::OUString& rParent,
+    sal_Bool AddNamed( const OUString& rName, sal_Int32 nFamily,
+                const OUString& rParent,
                 const ::std::vector< XMLPropertyState >& rProperties );
 
-    ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,
+    OUString Find( sal_Int32 nFamily, const OUString& rParent,
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     void exportXML( sal_Int32 nFamily,
@@ -210,7 +210,7 @@ public:
 
 struct SvXMLAutoStylePoolPExport_Impl
 {
-    const ::rtl::OUString                   *mpParent;
+    const OUString                   *mpParent;
     const SvXMLAutoStylePoolPropertiesP_Impl    *mpProperties;
 };
 

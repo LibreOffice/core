@@ -324,7 +324,7 @@ sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
             SetError( ERRCODE_IO_BROKENPACKAGE, OSL_LOG_PREFIX );
 
         // TODO/LATER: correct error handling?!
-        //pStore->SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        //pStore->SetError( SVSTREAM_WRONGVERSION, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         else
             SetError( ERRCODE_ABORT, OSL_LOG_PREFIX );
     }
@@ -411,7 +411,7 @@ sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    const rtl::OUString    aFilterName( rMedium.GetFilter()->GetFilterName() );
+    const OUString    aFilterName( rMedium.GetFilter()->GetFilterName() );
     sal_Bool            bRet = sal_False;
     bool    bStartPresentation = false;
 
@@ -556,7 +556,7 @@ sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
     if( mpDoc->GetPageCount() )
     {
         const SfxFilter*    pMediumFilter = rMedium.GetFilter();
-        const rtl::OUString aTypeName( pMediumFilter->GetTypeName() );
+        const OUString aTypeName( pMediumFilter->GetTypeName() );
         SdFilter*           pFilter = NULL;
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
@@ -670,14 +670,14 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
         sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = NULL;
 
-        rtl::OUString sBookmark( rBookmark );
-        const rtl::OUString sInteraction( "action?" );
+        OUString sBookmark( rBookmark );
+        const OUString sInteraction( "action?" );
         if ( sBookmark.match( sInteraction ) )
         {
-            const rtl::OUString sJump( "jump=" );
+            const OUString sJump( "jump=" );
             if ( sBookmark.match( sJump, sInteraction.getLength() ) )
             {
-                rtl::OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
+                OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
                 if ( aDestination.match( "firstslide" ) )
                 {
                     nPageNumber = 1;
@@ -741,7 +741,7 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
             {
                 // change work area
                 GetFrameView()->SetPageKind(eNewPageKind);
-                ::rtl::OUString sViewURL;
+                OUString sViewURL;
                 switch (eNewPageKind)
                 {
                     case PK_STANDARD:

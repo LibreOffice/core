@@ -77,7 +77,7 @@ namespace rptui
     // -----------------------------------------------------------------------------
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
-        ::rtl::OUString sDataField;
+        OUString sDataField;
 
         try
         {
@@ -92,11 +92,11 @@ namespace rptui
                     bool bSet = true;
                     if ( aFormula.getType() == ReportFormula::Field )
                     {
-                        const ::rtl::OUString sColumnName = aFormula.getFieldName();
-                        ::rtl::OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
+                        const OUString sColumnName = aFormula.getFieldName();
+                        OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
                         if ( !sLabel.isEmpty() )
                         {
-                            ::rtl::OUStringBuffer aBuffer;
+                            OUStringBuffer aBuffer;
                             aBuffer.appendAscii( "=" );
                             aBuffer.append( sLabel );
                             sDataField = aBuffer.makeStringAndClear();
@@ -118,7 +118,7 @@ namespace rptui
     }
 
     // -----------------------------------------------------------------------------
-    void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, const ::rtl::OUString& _rText )
+    void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, const OUString& _rText )
     {
         OSL_ENSURE( _xVclWindowPeer.is(), "FormattedFieldBeautifier::setPlaceholderText: invalid peer!" );
         if ( !_xVclWindowPeer.is() )

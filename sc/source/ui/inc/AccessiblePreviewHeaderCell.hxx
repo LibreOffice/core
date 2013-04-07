@@ -99,9 +99,9 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
     ///=====  XTypeProvider  ===================================================
@@ -117,8 +117,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
 
     virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
     virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);

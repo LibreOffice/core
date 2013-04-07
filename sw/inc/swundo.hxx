@@ -24,7 +24,7 @@
 #include <rtl/ustring.hxx>
 
 
-typedef ::std::vector< ::rtl::OUString > SwUndoComments_t;
+typedef ::std::vector< OUString > SwUndoComments_t;
 
 
 // The IDs for StdActions.

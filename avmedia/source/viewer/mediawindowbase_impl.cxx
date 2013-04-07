@@ -50,7 +50,7 @@ MediaWindowBaseImpl::~MediaWindowBaseImpl()
 
 // -------------------------------------------------------------------------
 
-uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl::OUString& rURL )
+uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const OUString& rURL )
 {
     uno::Reference< media::XPlayer > xPlayer;
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -66,7 +66,7 @@ uno::Reference< media::XPlayer > MediaWindowBaseImpl::createPlayer( const ::rtl:
 
     for( sal_uInt32 i = 0; !xPlayer.is() && i < SAL_N_ELEMENTS( aServiceManagers ); ++i )
     {
-        const rtl::OUString aServiceName( aServiceManagers[ i ],
+        const OUString aServiceName( aServiceManagers[ i ],
                                           strlen( aServiceManagers[ i ] ),
                                           RTL_TEXTENCODING_ASCII_US );
 

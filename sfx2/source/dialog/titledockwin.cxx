@@ -237,7 +237,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
+    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
         const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );

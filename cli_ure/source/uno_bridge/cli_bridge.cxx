@@ -33,9 +33,6 @@
 #include "cli_proxy.h"
 
 namespace sri= System::Runtime::InteropServices;
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 namespace cli_uno
 {
@@ -147,8 +144,8 @@ void SAL_CALL Mapping_uno2cli(
     catch (BridgeRuntimeError & err)
     {
 #if OSL_DEBUG_LEVEL >= 1
-        rtl::OString cstr_msg(
-            rtl::OUStringToOString(
+        OString cstr_msg(
+            OUStringToOString(
                 "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else

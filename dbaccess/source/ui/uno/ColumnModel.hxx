@@ -57,7 +57,7 @@ class OColumnControlModel :  public ::comphelper::OMutexAndBroadcastHelper
 // [properties]
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xColumn;
-    ::rtl::OUString                 m_sDefaultControl;
+    OUString                 m_sDefaultControl;
     ::com::sun::star::uno::Any      m_aTabStop;
     sal_Bool                        m_bEnable;
     sal_Int16                       m_nBorder;
@@ -87,7 +87,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
 
 //  ::com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 

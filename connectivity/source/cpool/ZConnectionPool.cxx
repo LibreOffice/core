@@ -51,9 +51,9 @@ void SAL_CALL OPoolTimer::onShot()
 namespace
 {
     //--------------------------------------------------------------------
-    static const ::rtl::OUString& getTimeoutNodeName()
+    static const OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName( "Timeout" );
+        static OUString s_sNodeName( "Timeout" );
         return s_sNodeName;
     }
 
@@ -167,7 +167,7 @@ m_xDriverNode.clear();
 m_xDriver.clear();
 }
 //--------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -209,7 +209,7 @@ void SAL_CALL OConnectionPool::disposing( const ::com::sun::star::lang::EventObj
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection> OConnectionPool::createNewConnection(const ::rtl::OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
+Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rURL,const Sequence< PropertyValue >& _rInfo)
 {
     // create new pooled conenction
     Reference< XPooledConnection > xPooledConnection = new ::connectivity::OPooledConnection(m_xDriver->connect(_rURL,_rInfo),m_xProxyFactory);

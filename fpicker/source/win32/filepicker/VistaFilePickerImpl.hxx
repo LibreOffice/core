@@ -74,26 +74,26 @@ static const ::sal_Int32 FEATURE_PLAY           =  256;
 static const ::sal_Int32 FEATURE_READONLY       =  512;
 static const ::sal_Int32 FEATURE_VERSION        = 1024;
 
-static const ::rtl::OUString PROP_PICKER_LISTENER("picker_listener"   ); // [XFilePickerListenert]
-static const ::rtl::OUString PROP_DIALOG_SHOW_RESULT("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
-static const ::rtl::OUString PROP_SELECTED_FILES("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
-static const ::rtl::OUString PROP_MULTISELECTION_MODE("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
-static const ::rtl::OUString PROP_TITLE("title"              ); // [OUString]
-static const ::rtl::OUString PROP_FILENAME("filename"          ); // [OUString]
-static const ::rtl::OUString PROP_DIRECTORY("directory"          ); // [OUString]
-static const ::rtl::OUString PROP_FEATURES("features"           ); // [sal_Int32]
-static const ::rtl::OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
-static const ::rtl::OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
-static const ::rtl::OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
-static const ::rtl::OUString PROP_FORCE("force"              ); // [sal_Bool]
-static const ::rtl::OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
+static const OUString PROP_PICKER_LISTENER("picker_listener"   ); // [XFilePickerListenert]
+static const OUString PROP_DIALOG_SHOW_RESULT("dialog_show_result" ); // [sal_Bool] true=OK, false=CANCEL
+static const OUString PROP_SELECTED_FILES("selected_files"     ); // [seq< OUString >] contains all user selected files (can be empty!)
+static const OUString PROP_MULTISELECTION_MODE("multiselection_mode"); // [sal_Bool] true=ON, false=OFF
+static const OUString PROP_TITLE("title"              ); // [OUString]
+static const OUString PROP_FILENAME("filename"          ); // [OUString]
+static const OUString PROP_DIRECTORY("directory"          ); // [OUString]
+static const OUString PROP_FEATURES("features"           ); // [sal_Int32]
+static const OUString PROP_TEMPLATE_DESCR("templatedescription"); // [sal_Int32]
+static const OUString PROP_FILTER_TITLE("filter_title"       ); // [OUString]
+static const OUString PROP_FILTER_VALUE("filter_value"       ); // [OUString]
+static const OUString PROP_FORCE("force"              ); // [sal_Bool]
+static const OUString PROP_FILTER_GROUP("filter-group"       ); // [seq< css:beans::StringPair >] contains a group of filters
 
-static const ::rtl::OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
-static const ::rtl::OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
-static const ::rtl::OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
-static const ::rtl::OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
-static const ::rtl::OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
-static const ::rtl::OUString STRING_SEPARATOR("------------------------------------------" );
+static const OUString PROP_CONTROL_ID("control_id"         ); // [sal_Int16]
+static const OUString PROP_CONTROL_ACTION("control_action"     ); // [sal_Int16]
+static const OUString PROP_CONTROL_VALUE("control_value"      ); // [Any]
+static const OUString PROP_CONTROL_LABEL("control_label"      ); // [OUString]
+static const OUString PROP_CONTROL_ENABLE("control_enable"     ); // [sal_Bool] true=ON, false=OFF
+static const OUString STRING_SEPARATOR("------------------------------------------" );
 
 //-----------------------------------------------------------------------------
 /** native implementation of the file picker on Vista and upcoming windows versions.
@@ -282,7 +282,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         /// fill filter list of internal used dialog.
         void impl_sta_setFiltersOnDialog();
 
-        void impl_SetDefaultExtension( const rtl::OUString& currentFilter );
+        void impl_SetDefaultExtension( const OUString& currentFilter );
 
    private:
 
@@ -309,7 +309,7 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
          *  Because the outside provided UNO API decouple showing the dialog
          *  and asking for results .-)
          */
-        css::uno::Sequence< ::rtl::OUString > m_lLastFiles;
+        css::uno::Sequence< OUString > m_lLastFiles;
 
         //---------------------------------------------------------------------
         /** help us to handle dialog events and provide them to interested office
@@ -327,10 +327,10 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
         HWND m_hParentWindow;
 
         //
-        ::rtl::OUString m_sDirectory;
+        OUString m_sDirectory;
 
         //
-        ::rtl::OUString m_sFilename;
+        OUString m_sFilename;
 
         // Resource provider
         CResourceProvider m_ResProvider;

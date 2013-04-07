@@ -51,7 +51,7 @@ class SdrObject;
 class FmUndoPropertyAction: public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xObj;
-    ::rtl::OUString         aPropertyName;
+    OUString         aPropertyName;
     ::com::sun::star::uno::Any          aNewValue;
     ::com::sun::star::uno::Any          aOldValue;
 
@@ -61,7 +61,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 };
 
@@ -123,7 +123,7 @@ public:
     virtual void Undo();
     virtual void Redo() { Undo(); }
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
     static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xReplaced );
 };

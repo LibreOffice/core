@@ -35,7 +35,6 @@
 
 using ::osl::Mutex;
 using ::osl::Guard;
-using ::rtl::OUString;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;

@@ -107,20 +107,20 @@ namespace connectivity
             return s_aMap;
         }
         // -----------------------------------------------------------------------------
-        ::rtl::OUString lcl_getNextCount()
+        OUString lcl_getNextCount()
         {
             static sal_Int32 s_nCount = 0;
-            return ::rtl::OUString::valueOf(s_nCount++);
+            return OUString::valueOf(s_nCount++);
         }
         // -----------------------------------------------------------------------------
-        ::rtl::OUString StorageContainer::removeURLPrefix(const ::rtl::OUString& _sURL,const ::rtl::OUString& _sFileURL)
+        OUString StorageContainer::removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL)
         {
             return _sURL.copy(_sFileURL.getLength()+1);
         }
         // -----------------------------------------------------------------------------
-        ::rtl::OUString StorageContainer::removeOldURLPrefix(const ::rtl::OUString& _sURL)
+        OUString StorageContainer::removeOldURLPrefix(const OUString& _sURL)
         {
-            ::rtl::OUString sRet = _sURL;
+            OUString sRet = _sURL;
 #if defined(WNT)
             sal_Int32 nIndex = sRet.lastIndexOf('\\');
 #else
@@ -136,20 +136,20 @@ namespace connectivity
         /*****************************************************************************/
         /* convert jstring to rtl_uString */
 
-        ::rtl::OUString StorageContainer::jstring2ustring(JNIEnv * env, jstring jstr)
+        OUString StorageContainer::jstring2ustring(JNIEnv * env, jstring jstr)
         {
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_FAIL("ExceptionClear");
             }
-            ::rtl::OUString aStr;
+            OUString aStr;
             if ( jstr )
             {
                 jboolean bCopy(sal_True);
                 const jchar* pChar = env->GetStringChars(jstr,&bCopy);
                 jsize len = env->GetStringLength(jstr);
-                aStr = ::rtl::OUString(pChar,len);
+                aStr = OUString(pChar,len);
 
                 if(bCopy)
                     env->ReleaseStringChars(jstr,pChar);
@@ -164,7 +164,7 @@ namespace connectivity
         }
 
         // -----------------------------------------------------------------------------
-        ::rtl::OUString StorageContainer::registerStorage(const Reference< XStorage>& _xStorage,const ::rtl::OUString& _sURL)
+        OUString StorageContainer::registerStorage(const Reference< XStorage>& _xStorage,const OUString& _sURL)
         {
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
@@ -182,7 +182,7 @@ namespace connectivity
             return aFind->first;
         }
         // -----------------------------------------------------------------------------
-        TStorages::mapped_type StorageContainer::getRegisteredStorage(const ::rtl::OUString& _sKey)
+        TStorages::mapped_type StorageContainer::getRegisteredStorage(const OUString& _sKey)
         {
             TStorages::mapped_type aRet;
             TStorages& rMap = lcl_getStorageMap();
@@ -194,9 +194,9 @@ namespace connectivity
             return aRet;
         }
         // -----------------------------------------------------------------------------
-        ::rtl::OUString StorageContainer::getRegisteredKey(const Reference< XStorage>& _xStorage)
+        OUString StorageContainer::getRegisteredKey(const Reference< XStorage>& _xStorage)
         {
-            ::rtl::OUString sKey;
+            OUString sKey;
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
@@ -210,7 +210,7 @@ namespace connectivity
             return sKey;
         }
         // -----------------------------------------------------------------------------
-        void StorageContainer::revokeStorage(const ::rtl::OUString& _sKey,const Reference<XTransactionListener>& _xListener)
+        void StorageContainer::revokeStorage(const OUString& _sKey,const Reference<XTransactionListener>& _xListener)
         {
             TStorages& rMap = lcl_getStorageMap();
             TStorages::iterator aFind = rMap.find(_sKey);
@@ -239,7 +239,7 @@ namespace connectivity
         {
             TStreamMap::mapped_type pHelper;
             TStorages& rMap = lcl_getStorageMap();
-            ::rtl::OUString sKey = jstring2ustring(env,key);
+            OUString sKey = jstring2ustring(env,key);
             TStorages::iterator aFind = rMap.find(sKey);
             OSL_ENSURE(aFind != rMap.end(),"Storage could not be found in list!");
             if ( aFind != rMap.end() )
@@ -248,8 +248,8 @@ namespace connectivity
                 OSL_ENSURE(aStoragePair.first.first.is(),"No Storage available!");
                 if ( aStoragePair.first.first.is() )
                 {
-                    ::rtl::OUString sOrgName = StorageContainer::jstring2ustring(env,name);
-                    ::rtl::OUString sName = removeURLPrefix(sOrgName,aStoragePair.first.second);
+                    OUString sOrgName = StorageContainer::jstring2ustring(env,name);
+                    OUString sName = removeURLPrefix(sOrgName,aStoragePair.first.second);
                     TStreamMap::iterator aStreamFind = aFind->second.second.find(sName);
                     OSL_ENSURE( aStreamFind == aFind->second.second.end(),"A Stream was already registered for this object!");
                     if ( aStreamFind != aFind->second.second.end() )
@@ -266,7 +266,7 @@ namespace connectivity
                             }
                             catch(const Exception&)
                             {
-                                ::rtl::OUString sStrippedName = removeOldURLPrefix(sOrgName);
+                                OUString sStrippedName = removeOldURLPrefix(sOrgName);
 
                                 if ( ((_nMode & ElementModes::WRITE) != ElementModes::WRITE ) )
                                 {
@@ -289,13 +289,13 @@ namespace connectivity
                         catch(const Exception& e)
                         {
 #if OSL_DEBUG_LEVEL > 0
-                            ::rtl::OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
+                            OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
                             sMessage += "Name: ";
-                            sMessage += ::rtl::OString( sName.getStr(), sName.getLength(), osl_getThreadTextEncoding() );
+                            sMessage += OString( sName.getStr(), sName.getLength(), osl_getThreadTextEncoding() );
                             sMessage += "\nMode: 0x";
                             if ( _nMode < 16 )
                                 sMessage += "0";
-                            sMessage += ::rtl::OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
+                            sMessage += OString::valueOf( _nMode, 16 ).toAsciiUpperCase();
                             OSL_FAIL( sMessage.getStr() );
 #endif
                             StorageContainer::throwJavaException(e,env);
@@ -335,7 +335,7 @@ namespace connectivity
         {
             if (JNI_FALSE != env->ExceptionCheck())
                 env->ExceptionClear();
-            ::rtl::OString cstr( ::rtl::OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
+            OString cstr( OUStringToOString(_aException.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }

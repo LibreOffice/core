@@ -82,7 +82,7 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
 }
 
 //-----------------------------------------------
-void StaticAddLog( const ::rtl::OUString& aMessage )
+void StaticAddLog( const OUString& aMessage )
 {
     try
     {
@@ -203,7 +203,7 @@ bool SequencesEqual( const uno::Sequence< beans::NamedValue >& aSequence1, const
 }
 
 //-----------------------------------------------
-sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
+sal_Bool KillFile( const OUString& aURL, const uno::Reference< uno::XComponentContext >& xContext )
 {
     if ( !xContext.is() )
         return sal_False;
@@ -229,9 +229,9 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComp
 const sal_Int32 n_ConstBufferSize = 32000;
 
 //-----------------------------------------------
-::rtl::OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext )
+OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext > xContext )
 {
-    ::rtl::OUString aTempURL;
+    OUString aTempURL;
 
     uno::Reference < beans::XPropertySet > xTempFile(
             io::TempFile::create(xContext),
@@ -307,7 +307,7 @@ OWriteStream_Impl::~OWriteStream_Impl()
     if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL = ::rtl::OUString();
+        m_aTempURL = OUString();
     }
 
     CleanCacheStream();
@@ -342,7 +342,7 @@ void OWriteStream_Impl::CleanCacheStream()
 }
 
 //-----------------------------------------------
-void OWriteStream_Impl::AddLog( const ::rtl::OUString& aMessage )
+void OWriteStream_Impl::AddLog( const OUString& aMessage )
 {
     if ( !m_xLogRing.is() )
     {
@@ -363,7 +363,7 @@ void OWriteStream_Impl::AddLog( const ::rtl::OUString& aMessage )
 
 
 //-----------------------------------------------
-void OWriteStream_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
+void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
                                                   const uno::Reference< container::XNameContainer >& xParentPackageFolder )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
@@ -532,11 +532,11 @@ void OWriteStream_Impl::DisposeWrappers()
 }
 
 //-----------------------------------------------
-::rtl::OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
+OUString OWriteStream_Impl::GetFilledTempFileIfNo( const uno::Reference< io::XInputStream >& xStream )
 {
     if ( !m_aTempURL.getLength() )
     {
-        ::rtl::OUString aTempURL = GetNewTempFileURL( m_xContext );
+        OUString aTempURL = GetNewTempFileURL( m_xContext );
 
         try {
             if ( !aTempURL.isEmpty() && xStream.is() )
@@ -582,7 +582,7 @@ void OWriteStream_Impl::DisposeWrappers()
 }
 
 //-----------------------------------------------
-::rtl::OUString OWriteStream_Impl::FillTempGetFileName()
+OUString OWriteStream_Impl::FillTempGetFileName()
 {
     // should try to create cache first, if the amount of contents is too big, the temp file should be taken
     if ( !m_xCacheStream.is() && m_aTempURL.isEmpty() )
@@ -645,14 +645,14 @@ void OWriteStream_Impl::DisposeWrappers()
                 catch( const packages::WrongPasswordException& )
                 {
                     KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL = ::rtl::OUString();
+                    m_aTempURL = OUString();
 
                     throw;
                 }
                 catch( const uno::Exception& )
                 {
                     KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL = ::rtl::OUString();
+                    m_aTempURL = OUString();
                 }
             }
         }
@@ -880,7 +880,7 @@ void OWriteStream_Impl::Commit()
 
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
-        m_aTempURL = ::rtl::OUString();
+        m_aTempURL = OUString();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -955,7 +955,7 @@ void OWriteStream_Impl::Revert()
     if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL = ::rtl::OUString();
+        m_aTempURL = OUString();
     }
 
     m_aProps.realloc( 0 );
@@ -1390,7 +1390,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( !m_aTempURL.isEmpty() )
             {
                 KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                m_aTempURL = ::rtl::OUString();
+                m_aTempURL = OUString();
             }
             if ( m_xCacheStream.is() )
                 CleanCacheStream();
@@ -1635,7 +1635,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
 }
 
 //-----------------------------------------------
-void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const ::rtl::OUString& aOrigStreamName, const ::rtl::OUString& aNewStreamName )
+void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const OUString& aOrigStreamName, const OUString& aNewStreamName )
 {
     // at this point of time the old stream must be already cleaned
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::OFOPXML, "The method should be used only with OFOPXML format!\n" );
@@ -1651,10 +1651,10 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
         if ( m_nRelInfoStatus == RELINFO_BROKEN || m_nRelInfoStatus == RELINFO_CHANGED_BROKEN )
             throw io::IOException(); // TODO:
 
-        ::rtl::OUString aOrigRelStreamName = aOrigStreamName;
+        OUString aOrigRelStreamName = aOrigStreamName;
         aOrigRelStreamName += ".rels";
 
-        ::rtl::OUString aNewRelStreamName = aNewStreamName;
+        OUString aNewRelStreamName = aNewStreamName;
         aNewRelStreamName += ".rels";
 
         sal_Bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
@@ -2623,7 +2623,7 @@ void SAL_CALL OWriteStream::removeEventListener(
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass )
+void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
     throw ( uno::RuntimeException,
             io::IOException )
 {
@@ -2705,7 +2705,7 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
 }
 
 //-----------------------------------------------
-sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
+sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
         throw ( io::IOException,
                 uno::RuntimeException )
 {
@@ -2735,7 +2735,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL OWriteStream::getTargetByID(  const ::rtl::OUString& sID  )
+OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2756,11 +2756,11 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         if ( aSeq[nInd].First == "Target" )
             return aSeq[nInd].Second;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL OWriteStream::getTypeByID(  const ::rtl::OUString& sID  )
+OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2781,11 +2781,11 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
         if ( aSeq[nInd].First == "Type" )
             return aSeq[nInd].Second;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
-uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  const ::rtl::OUString& sID  )
+uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2816,7 +2816,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
 }
 
 //-----------------------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRelationshipsByType(  const ::rtl::OUString& sType  )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRelationshipsByType(  const OUString& sType  )
         throw ( io::IOException,
                 uno::RuntimeException )
 {
@@ -2870,7 +2870,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::insertRelationshipByID(  const ::rtl::OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, ::sal_Bool bReplace  )
+void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, ::sal_Bool bReplace  )
         throw ( container::ElementExistException,
                 io::IOException,
                 uno::RuntimeException )
@@ -2935,7 +2935,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const ::rtl::OUString& sID,
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::removeRelationshipByID(  const ::rtl::OUString& sID  )
+void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
         throw ( container::NoSuchElementException,
                 io::IOException,
                 uno::RuntimeException )
@@ -3091,7 +3091,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetI
 }
 
 //-----------------------------------------------
-void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
         throw ( beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -3113,7 +3113,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
         sal_Bool bCompressedValueFromType = sal_True;
-        ::rtl::OUString aType;
+        OUString aType;
         aValue >>= aType;
 
         if ( !m_pImpl->m_bCompressedSetExplicit )
@@ -3216,7 +3216,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
 
 
 //-----------------------------------------------
-uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
+uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -3234,7 +3234,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         return uno::makeAny( m_pImpl->GetNewRelId() );
     }
 
-    ::rtl::OUString aPropertyName;
+    OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
         aPropertyName = "Encrypted";
     else
@@ -3272,7 +3272,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::addPropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
+    const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -3292,7 +3292,7 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::removePropertyChangeListener(
-    const ::rtl::OUString& /*aPropertyName*/,
+    const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -3312,7 +3312,7 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::addVetoableChangeListener(
-    const ::rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
@@ -3332,7 +3332,7 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
 
 //-----------------------------------------------
 void SAL_CALL OWriteStream::removeVetoableChangeListener(
-    const ::rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,

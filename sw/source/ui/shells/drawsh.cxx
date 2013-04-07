@@ -352,7 +352,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SwDrawBaseShell(_rView)
 {
     SetHelpId(SW_DRAWSHELL);
-    SetName(rtl::OUString("Draw"));
+    SetName(OUString("Draw"));
 }
 
 /*************************************************************************

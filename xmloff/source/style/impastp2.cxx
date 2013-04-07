@@ -22,8 +22,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 //#############################################################################
 //

@@ -308,7 +308,7 @@ MasterPageDescriptor::URLClassification MasterPageDescriptor::GetURLClassificati
 
 //===== URLComparator =========================================================
 
-MasterPageDescriptor::URLComparator::URLComparator (const ::rtl::OUString& sURL)
+MasterPageDescriptor::URLComparator::URLComparator (const OUString& sURL)
     : msURL(sURL)
 {
 }
@@ -330,7 +330,7 @@ bool MasterPageDescriptor::URLComparator::operator() (
 
 // ===== StyleNameComparator ==================================================
 
-MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const ::rtl::OUString& sStyleName)
+MasterPageDescriptor::StyleNameComparator::StyleNameComparator (const OUString& sStyleName)
     : msStyleName(sStyleName)
 {
 }

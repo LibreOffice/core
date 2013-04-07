@@ -64,23 +64,23 @@ class PackageInformationProvider :
                  PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
     virtual     ~PackageInformationProvider();
 
-    static uno::Sequence< rtl::OUString > getServiceNames();
-    static rtl::OUString getImplName();
+    static uno::Sequence< OUString > getServiceNames();
+    static OUString getImplName();
 
     // XPackageInformationProvider
-    virtual rtl::OUString SAL_CALL getPackageLocation( const rtl::OUString& extensionId )
+    virtual OUString SAL_CALL getPackageLocation( const OUString& extensionId )
         throw ( uno::RuntimeException );
-    virtual uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL isUpdateAvailable( const rtl::OUString& extensionId )
+    virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL isUpdateAvailable( const OUString& extensionId )
         throw ( uno::RuntimeException );
-    virtual uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL getExtensionList()
+    virtual uno::Sequence< uno::Sequence< OUString > > SAL_CALL getExtensionList()
         throw ( uno::RuntimeException );
 //---------
 private:
 
     uno::Reference< uno::XComponentContext> mxContext;
 
-    rtl::OUString getPackageLocation( const rtl::OUString& repository,
-                                      const rtl::OUString& _sExtensionId );
+    OUString getPackageLocation( const OUString& repository,
+                                      const OUString& _sExtensionId );
 
     uno::Reference< deployment::XUpdateInformationProvider > mxUpdateInformation;
 };
@@ -100,11 +100,11 @@ PackageInformationProvider::~PackageInformationProvider()
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString PackageInformationProvider::getPackageLocation(
-    const rtl::OUString & repository,
-    const rtl::OUString& _rExtensionId )
+OUString PackageInformationProvider::getPackageLocation(
+    const OUString & repository,
+    const OUString& _rExtensionId )
 {
-    rtl::OUString aLocationURL;
+    OUString aLocationURL;
     uno::Reference<deployment::XExtensionManager> xManager =
         deployment::ExtensionManager::get(mxContext);
 
@@ -120,7 +120,7 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
         {
             try
             {
-                const beans::Optional< rtl::OUString > aID = packages[ pos ]->getIdentifier();
+                const beans::Optional< OUString > aID = packages[ pos ]->getIdentifier();
                 if ( aID.IsPresent && (aID.Value == _rExtensionId ) )
                 {
                     aLocationURL = packages[ pos ]->getURL();
@@ -136,19 +136,19 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL
-PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtensionId )
+OUString SAL_CALL
+PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     throw ( uno::RuntimeException )
 {
-    rtl::OUString aLocationURL = getPackageLocation( rtl::OUString("user"), _sExtensionId );
+    OUString aLocationURL = getPackageLocation( OUString("user"), _sExtensionId );
 
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( rtl::OUString("shared"), _sExtensionId );
+        aLocationURL = getPackageLocation( OUString("shared"), _sExtensionId );
     }
     if ( aLocationURL.isEmpty() )
     {
-        aLocationURL = getPackageLocation( rtl::OUString("bundled"), _sExtensionId );
+        aLocationURL = getPackageLocation( OUString("bundled"), _sExtensionId );
     }
     if ( !aLocationURL.isEmpty() )
     {
@@ -160,11 +160,11 @@ PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtension
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL
-PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionId )
+uno::Sequence< uno::Sequence< OUString > > SAL_CALL
+PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< uno::Sequence< rtl::OUString > > aList;
+    uno::Sequence< uno::Sequence< OUString > > aList;
 
     uno::Reference<deployment::XExtensionManager> extMgr =
         deployment::ExtensionManager::get(mxContext);
@@ -205,7 +205,7 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
     {
         dp_misc::UpdateInfo const & info = i->second;
 
-        rtl::OUString sOnlineVersion;
+        OUString sOnlineVersion;
         if (info.info.is())
         {
             // check, if there are unsatisfied dependencies and ignore this online update
@@ -216,9 +216,9 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
                 sOnlineVersion = info.version;
         }
 
-        rtl::OUString sVersionUser;
-        rtl::OUString sVersionShared;
-        rtl::OUString sVersionBundled;
+        OUString sVersionUser;
+        OUString sVersionShared;
+        OUString sVersionBundled;
         uno::Sequence< uno::Reference< deployment::XPackage> > extensions;
         try {
             extensions = extMgr->getExtensionsWithSameIdentifier(
@@ -242,15 +242,15 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
         dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
             bSharedReadOnly, sVersionShared, sVersionBundled, sOnlineVersion);
 
-        rtl::OUString updateVersionUser;
-        rtl::OUString updateVersionShared;
+        OUString updateVersionUser;
+        OUString updateVersionShared;
         if (sourceUser != dp_misc::UPDATE_SOURCE_NONE)
             updateVersionUser = dp_misc::getHighestVersion(
-                rtl::OUString(), sVersionShared, sVersionBundled, sOnlineVersion);
+                OUString(), sVersionShared, sVersionBundled, sOnlineVersion);
         if (sourceShared  != dp_misc::UPDATE_SOURCE_NONE)
             updateVersionShared = dp_misc::getHighestVersion(
-                rtl::OUString(), rtl::OUString(), sVersionBundled, sOnlineVersion);
-        rtl::OUString updateVersion;
+                OUString(), OUString(), sVersionBundled, sOnlineVersion);
+        OUString updateVersion;
         if (dp_misc::compareVersions(updateVersionUser, updateVersionShared) == dp_misc::GREATER)
             updateVersion = updateVersionUser;
         else
@@ -258,32 +258,32 @@ PackageInformationProvider::isUpdateAvailable( const rtl::OUString& _sExtensionI
         if (!updateVersion.isEmpty())
         {
 
-            rtl::OUString aNewEntry[2];
+            OUString aNewEntry[2];
             aNewEntry[0] = i->first;
             aNewEntry[1] = updateVersion;
             aList.realloc( ++nCount );
-            aList[ nCount-1 ] = ::uno::Sequence< rtl::OUString >( aNewEntry, 2 );
+            aList[ nCount-1 ] = ::uno::Sequence< OUString >( aNewEntry, 2 );
         }
     }
     return aList;
 }
 
 //------------------------------------------------------------------------------
-uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
+uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::getExtensionList()
     throw ( uno::RuntimeException )
 {
     const uno::Reference<deployment::XExtensionManager> mgr =
         deployment::ExtensionManager::get(mxContext);
 
     if (!mgr.is())
-        return uno::Sequence< uno::Sequence< rtl::OUString > >();
+        return uno::Sequence< uno::Sequence< OUString > >();
 
     const uno::Sequence< uno::Sequence< uno::Reference<deployment::XPackage > > >
         allExt =  mgr->getAllExtensions(
             uno::Reference< task::XAbortChannel >(),
             uno::Reference< css_ucb::XCommandEnvironment > () );
 
-    uno::Sequence< uno::Sequence< rtl::OUString > > retList;
+    uno::Sequence< uno::Sequence< OUString > > retList;
 
     sal_Int32 cAllIds = allExt.getLength();
     retList.realloc(cAllIds);
@@ -303,10 +303,10 @@ uno::Sequence< uno::Sequence< rtl::OUString > > SAL_CALL PackageInformationProvi
             uno::Reference< deployment::XPackage > const & xExtension( seqExtension[j] );
             if (xExtension.is())
             {
-                rtl::OUString aNewEntry[2];
+                OUString aNewEntry[2];
                 aNewEntry[0] = dp_misc::getIdentifier(xExtension);
                 aNewEntry[1] = xExtension->getVersion();
-                retList[i] = ::uno::Sequence< rtl::OUString >( aNewEntry, 2 );
+                retList[i] = ::uno::Sequence< OUString >( aNewEntry, 2 );
                 break;
             }
         }

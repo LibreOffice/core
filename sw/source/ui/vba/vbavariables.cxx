@@ -61,33 +61,33 @@ SwVbaVariables::createCollectionObject( const css::uno::Any& aSource )
 }
 
 uno::Any SAL_CALL
-SwVbaVariables::Add( const rtl::OUString& rName, const uno::Any& rValue ) throw (uno::RuntimeException)
+SwVbaVariables::Add( const OUString& rName, const uno::Any& rValue ) throw (uno::RuntimeException)
 {
     uno::Any aValue;
     if( rValue.hasValue() )
         aValue = rValue;
     else
-        aValue <<= rtl::OUString();
+        aValue <<= OUString();
     uno::Reference< beans::XPropertyContainer > xPropertyContainer( mxUserDefined, uno::UNO_QUERY_THROW );
     xPropertyContainer->addProperty( rName, beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::REMOVABLE, aValue );
 
     return uno::makeAny( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaVariables::getServiceImplName()
 {
-    return rtl::OUString("SwVbaVariables");
+    return OUString("SwVbaVariables");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaVariables::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Variables");
+        sNames[0] = OUString("ooo.vba.word.Variables");
     }
     return sNames;
 }

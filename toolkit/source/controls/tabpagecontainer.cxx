@@ -33,7 +33,6 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -61,9 +60,9 @@ UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Referenc
     ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
-::rtl::OUString UnoControlTabPageContainerModel::getServiceName() throw(RuntimeException)
+OUString UnoControlTabPageContainerModel::getServiceName() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
+    return OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
 }
 
 uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -71,7 +70,7 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
     switch(nPropId)
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainer ) );
+            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlTabPageContainer ) );
         case BASEPROPERTY_BORDER:
             return uno::makeAny((sal_Int16) 0);              // No Border
         default:
@@ -137,7 +136,7 @@ Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::createTabPa
     return lcl_createTabPageModel( m_xContext, aInitArgs, this );
 }
 
-Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const ::rtl::OUString& i_resourceURL ) throw (RuntimeException)
+Reference< XTabPageModel > SAL_CALL UnoControlTabPageContainerModel::loadTabPage( ::sal_Int16 i_tabPageID, const OUString& i_resourceURL ) throw (RuntimeException)
 {
     Sequence< Any > aInitArgs(2);
     aInitArgs[0] <<= i_tabPageID;
@@ -160,11 +159,11 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
             m_aTabPageVector.insert( aIter, xTabPageModel );
         }
         else
-            throw IndexOutOfBoundsException( ::rtl::OUString(), (OWeakObject *)this );
+            throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
         ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= aElement;
-        aEvent.Accessor <<= ::rtl::OUString::valueOf(nIndex);
+        aEvent.Accessor <<= OUString::valueOf(nIndex);
         maContainerListeners.elementInserted( aEvent );
     }
     else
@@ -324,7 +323,7 @@ void UnoControlTabPageContainer::updateFromModel()
         xContainerListener->elementInserted( aEvent );
     }
 }
-void SAL_CALL UnoControlTabPageContainer::addControl( const ::rtl::OUString& Name, const Reference< ::com::sun::star::awt::XControl >& Control ) throw (RuntimeException)
+void SAL_CALL UnoControlTabPageContainer::addControl( const OUString& Name, const Reference< ::com::sun::star::awt::XControl >& Control ) throw (RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ControlContainerBase::addControl(Name,Control);

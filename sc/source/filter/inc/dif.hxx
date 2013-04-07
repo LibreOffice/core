@@ -72,9 +72,9 @@ private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
     sal_Bool                bPlain;
-    rtl::OUString       aLookAheadLine;
+    OUString       aLookAheadLine;
 
-    bool                ReadNextLine( rtl::OUString& rStr );
+    bool                ReadNextLine( OUString& rStr );
     bool                LookAhead();
     DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
     static inline sal_Bool  IsBOT( const sal_Unicode* pRef );

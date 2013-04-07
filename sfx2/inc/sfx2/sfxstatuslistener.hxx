@@ -51,7 +51,7 @@ class SFX2_DLLPUBLIC SfxStatusListener :
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
+        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxStatusListener();
 
         // old methods from SfxControllerItem

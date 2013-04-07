@@ -51,59 +51,59 @@ namespace {
 static char const separator = static_cast< char >(
     static_cast< unsigned char >(0xFF));
 
-::rtl::OString oldKey(::rtl::OUString const & fileName) {
-    return ::rtl::OUStringToOString(fileName, RTL_TEXTENCODING_UTF8);
+OString oldKey(OUString const & fileName) {
+    return OUStringToOString(fileName, RTL_TEXTENCODING_UTF8);
 }
 
-::rtl::OString newKey(::rtl::OUString const & id) {
-    ::rtl::OStringBuffer b;
+OString newKey(OUString const & id) {
+    OStringBuffer b;
     b.append(separator);
-    b.append(::rtl::OUStringToOString(id, RTL_TEXTENCODING_UTF8));
+    b.append(OUStringToOString(id, RTL_TEXTENCODING_UTF8));
     return b.makeStringAndClear();
 }
 
 ::dp_manager::ActivePackages::Data decodeOldData(
-    ::rtl::OUString const & fileName, ::rtl::OString const & value)
+    OUString const & fileName, OString const & value)
 {
     ::dp_manager::ActivePackages::Data d;
     sal_Int32 i = value.indexOf(';');
     OSL_ASSERT(i >= 0);
-    d.temporaryName = ::rtl::OUString(value.getStr(), i, RTL_TEXTENCODING_UTF8);
+    d.temporaryName = OUString(value.getStr(), i, RTL_TEXTENCODING_UTF8);
     d.fileName = fileName;
-    d.mediaType = ::rtl::OUString(
+    d.mediaType = OUString(
         value.getStr() + i + 1, value.getLength() - i - 1,
         RTL_TEXTENCODING_UTF8);
     return d;
 }
 
-::dp_manager::ActivePackages::Data decodeNewData(::rtl::OString const & value) {
+::dp_manager::ActivePackages::Data decodeNewData(OString const & value) {
     ::dp_manager::ActivePackages::Data d;
     sal_Int32 i1 = value.indexOf(separator);
     OSL_ASSERT(i1 >= 0);
-    d.temporaryName = ::rtl::OUString(
+    d.temporaryName = OUString(
         value.getStr(), i1, RTL_TEXTENCODING_UTF8);
     sal_Int32 i2 = value.indexOf(separator, i1 + 1);
     OSL_ASSERT(i2 >= 0);
-    d.fileName = ::rtl::OUString(
+    d.fileName = OUString(
         value.getStr() + i1 + 1, i2 - i1 - 1, RTL_TEXTENCODING_UTF8);
     sal_Int32 i3 = value.indexOf(separator, i2 + 1);
 
     if (i3 < 0)
     {
         //Before ActivePackages::Data::version was added
-        d.mediaType = ::rtl::OUString(
+        d.mediaType = OUString(
             value.getStr() + i2 + 1, value.getLength() - i2 - 1,
             RTL_TEXTENCODING_UTF8);
     }
     else
     {
         sal_Int32 i4 = value.indexOf(separator, i3 + 1);
-        d.mediaType = ::rtl::OUString(
+        d.mediaType = OUString(
             value.getStr() + i2 + 1, i3 - i2 -1, RTL_TEXTENCODING_UTF8);
-        d.version = ::rtl::OUString(
+        d.version = OUString(
             value.getStr() + i3 + 1, i4 - i3 - 1,
             RTL_TEXTENCODING_UTF8);
-        d.failedPrerequisites = ::rtl::OUString(
+        d.failedPrerequisites = OUString(
             value.getStr() + i4 + 1, value.getLength() - i4 - 1,
             RTL_TEXTENCODING_UTF8);
     }
@@ -117,7 +117,7 @@ namespace dp_manager {
 
 ActivePackages::ActivePackages() {}
 
-ActivePackages::ActivePackages(::rtl::OUString const & url, bool readOnly)
+ActivePackages::ActivePackages(OUString const & url, bool readOnly)
 #if HAVE_FEATURE_EXTENSIONS
     : m_map(url, readOnly)
 #endif
@@ -129,17 +129,17 @@ ActivePackages::ActivePackages(::rtl::OUString const & url, bool readOnly)
 ActivePackages::~ActivePackages() {}
 
 bool ActivePackages::has(
-    ::rtl::OUString const & id, ::rtl::OUString const & fileName) const
+    OUString const & id, OUString const & fileName) const
 {
     return get(NULL, id, fileName);
 }
 
 bool ActivePackages::get(
-    Data * data, ::rtl::OUString const & id, ::rtl::OUString const & fileName)
+    Data * data, OUString const & id, OUString const & fileName)
     const
 {
 #if HAVE_FEATURE_EXTENSIONS
-    ::rtl::OString v;
+    OString v;
     if (m_map.get(&v, newKey(id))) {
         if (data != NULL) {
             *data = decodeNewData(v);
@@ -171,13 +171,13 @@ ActivePackages::Entries ActivePackages::getEntries() const {
         if (!i->first.isEmpty() && i->first[0] == separator) {
             es.push_back(
                 ::std::make_pair(
-                    ::rtl::OUString(
+                    OUString(
                         i->first.getStr() + 1, i->first.getLength() - 1,
                         RTL_TEXTENCODING_UTF8),
                     decodeNewData(i->second)));
         } else {
-            ::rtl::OUString fn(
-                ::rtl::OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
+            OUString fn(
+                OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
             es.push_back(
                 ::std::make_pair(
                     ::dp_misc::generateLegacyIdentifier(fn),
@@ -188,19 +188,19 @@ ActivePackages::Entries ActivePackages::getEntries() const {
     return es;
 }
 
-void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
+void ActivePackages::put(OUString const & id, Data const & data) {
 #if HAVE_FEATURE_EXTENSIONS
-    ::rtl::OStringBuffer b;
+    OStringBuffer b;
     b.append(
-        ::rtl::OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
+        OUStringToOString(data.temporaryName, RTL_TEXTENCODING_UTF8));
     b.append(separator);
-    b.append(::rtl::OUStringToOString(data.fileName, RTL_TEXTENCODING_UTF8));
+    b.append(OUStringToOString(data.fileName, RTL_TEXTENCODING_UTF8));
     b.append(separator);
-    b.append(::rtl::OUStringToOString(data.mediaType, RTL_TEXTENCODING_UTF8));
+    b.append(OUStringToOString(data.mediaType, RTL_TEXTENCODING_UTF8));
     b.append(separator);
-    b.append(::rtl::OUStringToOString(data.version, RTL_TEXTENCODING_UTF8));
+    b.append(OUStringToOString(data.version, RTL_TEXTENCODING_UTF8));
     b.append(separator);
-    b.append(::rtl::OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8));
+    b.append(OUStringToOString(data.failedPrerequisites, RTL_TEXTENCODING_UTF8));
     m_map.put(newKey(id), b.makeStringAndClear());
 #else
     (void) id;
@@ -209,7 +209,7 @@ void ActivePackages::put(::rtl::OUString const & id, Data const & data) {
 }
 
 void ActivePackages::erase(
-    ::rtl::OUString const & id, ::rtl::OUString const & fileName)
+    OUString const & id, OUString const & fileName)
 {
 #if HAVE_FEATURE_EXTENSIONS
     m_map.erase(newKey(id), true) || m_map.erase(oldKey(fileName), true);

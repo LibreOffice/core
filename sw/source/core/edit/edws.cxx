@@ -284,14 +284,14 @@ SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
 
-bool     SwEditShell::GetLastUndoInfo(::rtl::OUString *const o_pStr,
+bool     SwEditShell::GetLastUndoInfo(OUString *const o_pStr,
                                       SwUndoId *const o_pId) const
 { return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr, o_pId); }
 
-bool     SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+bool     SwEditShell::GetFirstRedoInfo(OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr); }
 
-SwUndoId SwEditShell::GetRepeatInfo(::rtl::OUString *const o_pStr) const
+SwUndoId SwEditShell::GetRepeatInfo(OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
 

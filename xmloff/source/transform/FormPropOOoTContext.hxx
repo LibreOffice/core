@@ -32,7 +32,7 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
 
     ::rtl::Reference< XMLFormPropValueTContext_Impl > m_xValueContext;
 
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
 
     sal_Int16 m_nValueTypeAttr;
 
@@ -45,13 +45,13 @@ public:
     TYPEINFO();
 
     XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLFormPropOOoTransformerContext();
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );

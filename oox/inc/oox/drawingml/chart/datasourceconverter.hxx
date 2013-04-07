@@ -42,7 +42,7 @@ public:
 
     /** Creates a data sequence object from the contained formula link. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-                        createDataSequence( const ::rtl::OUString& rRole );
+                        createDataSequence( const OUString& rRole );
 };
 
 // ============================================================================
@@ -57,7 +57,7 @@ public:
 
     /** Creates a data sequence object from the contained series data. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-                        createDataSequence( const ::rtl::OUString& rRole );
+                        createDataSequence( const OUString& rRole );
 };
 
 // ============================================================================

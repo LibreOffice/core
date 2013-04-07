@@ -85,7 +85,7 @@ void SwAnnotationWin::SetPostItText()
     //If the new text is the same as the old text, keep the same insertion
     //point .e.g. fdo#33599
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
-    rtl::OUString sNewText = mpFld->GetPar2();
+    OUString sNewText = mpFld->GetPar2();
     bool bTextUnchanged = sNewText.equals(Engine()->GetEditEngine().GetText());
     ESelection aOrigSelection(GetOutlinerView()->GetEditView().GetSelection());
 
@@ -229,9 +229,9 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, pWin->GetAuthor());
         aText = aRewriter.Apply(aText);
-        aText.Append(String(rtl::OUString(" (") +
-        String(rLocalData.getDate( pWin->GetDate())) + rtl::OUString(", ") +
-        String(rLocalData.getTime( pWin->GetTime(),false)) + rtl::OUString("): \"")));
+        aText.Append(String(OUString(" (") +
+        String(rLocalData.getDate( pWin->GetDate())) + OUString(", ") +
+        String(rLocalData.getTime( pWin->GetTime(),false)) + OUString("): \"")));
     GetOutlinerView()->InsertText(aText,false);
 
     // insert old, selected text or "..."
@@ -239,8 +239,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     if (pText->GetTextObject().GetText(0).Len())
         GetOutlinerView()->GetEditView().InsertText(pText->GetTextObject());
     else
-        GetOutlinerView()->InsertText(rtl::OUString("..."),false);
-    GetOutlinerView()->InsertText(rtl::OUString("\"\n"),false);
+        GetOutlinerView()->InsertText(OUString("..."),false);
+    GetOutlinerView()->InsertText(OUString("\"\n"),false);
 
     GetOutlinerView()->SetSelection(ESelection(0x0,0x0,0xFFFF,0xFFFF));
     SfxItemSet aAnswerSet( DocView().GetDocShell()->GetPool() );

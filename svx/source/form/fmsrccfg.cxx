@@ -112,7 +112,7 @@ namespace svxform
         return s_aSearchPositionMap;
     }
 
-    static sal_Int16 lcl_implMapAsciiValue( const ::rtl::OUString& _rAsciiValue, const Ascii2Int16* _pMap )
+    static sal_Int16 lcl_implMapAsciiValue( const OUString& _rAsciiValue, const Ascii2Int16* _pMap )
     {
         // search the map for the given ascii value
         const Ascii2Int16* pSearch = _pMap;
@@ -125,9 +125,9 @@ namespace svxform
         }
 
         OSL_FAIL(
-            (   ::rtl::OString( "lcl_implMapAsciiValue: could not convert the ascii value " )
-            +=  ::rtl::OString( _rAsciiValue.getStr(), _rAsciiValue.getLength(), RTL_TEXTENCODING_ASCII_US )
-            +=  ::rtl::OString( " !" )
+            (   OString( "lcl_implMapAsciiValue: could not convert the ascii value " )
+            +=  OString( _rAsciiValue.getStr(), _rAsciiValue.getLength(), RTL_TEXTENCODING_ASCII_US )
+            +=  OString( " !" )
             ).getStr()
         );
         return -1;
@@ -146,9 +146,9 @@ namespace svxform
         }
 
         OSL_FAIL(
-            (   ::rtl::OString( "lcl_implMapIntValue: could not convert the integer value " )
-            +=  ::rtl::OString::valueOf( (sal_Int32)_nValue )
-            +=  ::rtl::OString( " !" )
+            (   OString( "lcl_implMapIntValue: could not convert the integer value " )
+            +=  OString::valueOf( (sal_Int32)_nValue )
+            +=  OString( " !" )
             ).getStr()
         );
         static const sal_Char* s_pDummy = "";
@@ -248,10 +248,10 @@ namespace svxform
     void FmSearchConfigItem::implTranslateToConfig( )
     {
         // the search-for string
-        m_sSearchForType = ::rtl::OUString::createFromAscii( lcl_implMapIntValue( nSearchForType, lcl_getSearchForTypeValueMap() ) );
+        m_sSearchForType = OUString::createFromAscii( lcl_implMapIntValue( nSearchForType, lcl_getSearchForTypeValueMap() ) );
 
         // the search position
-        m_sSearchPosition = ::rtl::OUString::createFromAscii( lcl_implMapIntValue( nPosition, lcl_getSearchPositionValueMap() ) );
+        m_sSearchPosition = OUString::createFromAscii( lcl_implMapIntValue( nPosition, lcl_getSearchPositionValueMap() ) );
 
         // the transliteration flags
 

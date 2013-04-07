@@ -531,7 +531,7 @@ static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
     const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
     if (pEvents)
     {
-        const rtl::OUString* pScript = pEvents->GetScript(nEvent);
+        const OUString* pScript = pEvents->GetScript(nEvent);
         if (pScript)
         {
             uno::Any aRet;
@@ -986,7 +986,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SpreadsheetViewPanesEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SpreadsheetViewPanesEnumeration"));
 }
 
 // XIndexAccess
@@ -1240,7 +1240,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
         if (pEvents)
         {
-            const rtl::OUString* pScript = pEvents->GetScript(nEvent);
+            const OUString* pScript = pEvents->GetScript(nEvent);
             if (pScript)
             {
                 // the macro parameter is the clicked object, as in the mousePressed call above
@@ -1760,7 +1760,7 @@ void ScTabViewObj::SelectionChanged()
     const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
     if (pEvents)
     {
-        const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_SELECT);
+        const OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_SELECT);
         if (pScript)
         {
             // the macro parameter is the selection as returned by getSelection
@@ -1806,7 +1806,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTabViewObj::getPropertySetInf
 }
 
 void SAL_CALL ScTabViewObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1930,7 +1930,7 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1990,7 +1990,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
     return aRet;
 }
 
-void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
+void SAL_CALL ScTabViewObj::addPropertyChangeListener( const OUString& /* aPropertyName */,
                                     const uno::Reference<beans::XPropertyChangeListener >& xListener )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -2002,7 +2002,7 @@ void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& /*
     aPropertyChgListeners.push_back( pObj );
 }
 
-void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
+void SAL_CALL ScTabViewObj::removePropertyChangeListener( const OUString& /* aPropertyName */,
                                     const uno::Reference<beans::XPropertyChangeListener >& xListener )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -2020,7 +2020,7 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString&
     }
 }
 
-void SAL_CALL ScTabViewObj::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+void SAL_CALL ScTabViewObj::addVetoableChangeListener( const OUString& /* PropertyName */,
                                     const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -2028,7 +2028,7 @@ void SAL_CALL ScTabViewObj::addVetoableChangeListener( const ::rtl::OUString& /*
 {
 }
 
-void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const OUString& /* PropertyName */,
                                     const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -2059,7 +2059,7 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
         sal_Bool bSingleCell = false;
         sal_Bool bMultiSelection = false;
 
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         const beans::PropertyValue* pPropArray = aArguments.getConstArray();
         long nPropCount = aArguments.getLength();
         for (long i = 0; i < nPropCount; i++)
@@ -2153,7 +2153,7 @@ void ScTabViewObj::RangeSelDone( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = rtl::OUString( rText );
+    aEvent.RangeDescriptor = OUString( rText );
 
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
@@ -2166,7 +2166,7 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = rtl::OUString( rText );
+    aEvent.RangeDescriptor = OUString( rText );
 
     // copy on the stack because listener could remove itself
     XRangeSelectionListenerVector const listeners(aRangeSelListeners);
@@ -2179,7 +2179,7 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
 {
     sheet::RangeSelectionEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    aEvent.RangeDescriptor = rtl::OUString( rText );
+    aEvent.RangeDescriptor = OUString( rText );
 
     // copy on the stack because listener could remove itself
     XRangeSelectionChangeListenerVector const listener(aRangeChgListeners);
@@ -2190,12 +2190,12 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScTabViewObj" );
+    return OUString( "ScTabViewObj" );
 }
 
-sal_Bool SAL_CALL ScTabViewObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScTabViewObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -2203,13 +2203,13 @@ sal_Bool SAL_CALL ScTabViewObj::supportsService( const rtl::OUString& rServiceNa
            aServiceStr.EqualsAscii( SCVIEWSETTINGS_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTABVIEWOBJ_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCVIEWSETTINGS_SERVICE ));
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCTABVIEWOBJ_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCVIEWSETTINGS_SERVICE ));
     return aRet;
 }
 
@@ -2277,7 +2277,7 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     SolarMutexGuard aGuard;
     ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pShell)
-        pShell->GetEditView()->InsertText( xTrans, ::rtl::OUString(), false );
+        pShell->GetEditView()->InsertText( xTrans, OUString(), false );
     else
     {
         ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
@@ -2288,7 +2288,7 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
             OutlinerView* pOutView = pView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                pOutView->GetEditView().InsertText( xTrans, ::rtl::OUString(), false );
+                pOutView->GetEditView().InsertText( xTrans, OUString(), false );
                 return;
             }
         }

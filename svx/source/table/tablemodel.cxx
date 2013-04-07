@@ -38,7 +38,6 @@
 #include "svx/svdstr.hrc"
 #include "svx/svdglob.hxx"
 
-using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
@@ -474,7 +473,7 @@ Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL TableModel::setPropertyValue( const ::rtl::OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
 }
 

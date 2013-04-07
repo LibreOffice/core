@@ -48,7 +48,6 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
-using ::rtl::OUString;
 
 namespace ucbhelper_impl {
 
@@ -443,7 +442,7 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
     const Type& rType = m_aProps.getConstArray()[ column - 1 ].Type;
     sal_Int32 nType = DataType::OTHER;
 
-    if ( rType == getCppuType( static_cast< const rtl::OUString * >( 0 ) ) )
+    if ( rType == getCppuType( static_cast< const OUString * >( 0 ) ) )
         nType = DataType::VARCHAR;  // XRow::getString
     else if ( rType == getCppuBooleanType() )
         nType = DataType::BIT;      // XRow::getBoolean

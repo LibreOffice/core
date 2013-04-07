@@ -545,32 +545,32 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, sal_Bool Kapt, s
           case 92500: case 92501: case 92504: case 92505:
           {
 #if defined(WNT)
-              FNam=rtl::OUString("Times New Roman");  // CG Times ist unter Windows Times New Roman
+              FNam=OUString("Times New Roman");  // CG Times ist unter Windows Times New Roman
 #else
-              FNam=rtl::OUString("Times");            // ansonsten ist das einfach Times
+              FNam=OUString("Times");            // ansonsten ist das einfach Times
 #endif
               StdBrei=40;
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
 #if defined(WNT)
-              FNam=rtl::OUString("Arial");            // Univers ist unter Windows Arial
+              FNam=OUString("Arial");            // Univers ist unter Windows Arial
 #else
-              FNam=rtl::OUString("Helvetica");        // und ansonsten Helvetica
+              FNam=OUString("Helvetica");        // und ansonsten Helvetica
 #endif
               aFont.SetFamily(FAMILY_SWISS);
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
 #if defined(WNT)
-              FNam=rtl::OUString("Courier New");      // Der Vector-Courierfont unter Windows heisst Courier New
+              FNam=OUString("Courier New");      // Der Vector-Courierfont unter Windows heisst Courier New
 #else
-              FNam=rtl::OUString("Courier");          // ansonsten ist und bleibt Courier immer Courier
+              FNam=OUString("Courier");          // ansonsten ist und bleibt Courier immer Courier
 #endif
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);
           } break;
-          default: FNam = rtl::OUString("Helvetica");
+          default: FNam = OUString("Helvetica");
         }
         aFont.SetName(FNam);
         //aFont.SetCharSet(CHARSET_SYSTEM);
@@ -666,7 +666,7 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
 
     if (c==' ')
     {
-        ChrWidth=(sal_uInt16)rOut.GetTextWidth( rtl::OUString('A') );
+        ChrWidth=(sal_uInt16)rOut.GetTextWidth( OUString('A') );
         if (rOut.GetFont().GetPitch()!=PITCH_FIXED) {
             ChrWidth=MulDiv(ChrWidth,DefaultSpace,100);
         }
@@ -679,11 +679,11 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
         BOOST_STATIC_ASSERT(sizeof(UCHAR) == 1);
         if (c>=MinChar /*&& c<=MaxChar*/)
         {
-            ChrWidth=(sal_uInt16)rOut.GetTextWidth(rtl::OUString(reinterpret_cast<sal_Char*>(&c), 1, RTL_TEXTENCODING_IBM_437));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(OUString(reinterpret_cast<sal_Char*>(&c), 1, RTL_TEXTENCODING_IBM_437));
         }
         else
         {
-            ChrWidth=(sal_uInt16)rOut.GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('A')));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(OUString(static_cast<sal_Unicode>('A')));
         }
     }
     return ChrWidth;
@@ -951,7 +951,7 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
 {
     SetTextContext(rOut,T,UpcasePossible(c),DrehWink,FitXMul,FitXDiv,FitYMul,FitYDiv);
     if ((T.Schnitt & TextKaptBit)!=0 && UpcasePossible(c)) c=Upcase(c);
-    rtl::OUString s(reinterpret_cast<const sal_Char*>(&c), 1,
+    OUString s(reinterpret_cast<const sal_Char*>(&c), 1,
         RTL_TEXTENCODING_IBM_437);
     rOut.DrawText( Point( Pos.x, Pos.y ), s );
 }
@@ -1130,7 +1130,7 @@ SgfFontOne::SgfFontOne()
     SVWidth=40;
 }
 
-void SgfFontOne::ReadOne( const rtl::OString& rID, rtl::OString& Dsc )
+void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
 {
     if ( Dsc.getLength() < 4 || ( Dsc[0] != '(' ) )
         return;
@@ -1148,14 +1148,14 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, rtl::OString& Dsc )
         i--;
         j++;
     }
-    SVFName = rtl::OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // SV-Fontname rausholen
-    Dsc = rtl::OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
+    SVFName = OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // SV-Fontname rausholen
+    Dsc = OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
 
     IFID = (sal_uInt32)rID.toInt32();
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(Dsc, ' ');
     for (sal_Int32 nIdx = 0; nIdx < nTokenCount; ++nIdx)
     {
-        rtl::OString s(Dsc.getToken(nIdx, ' '));
+        OString s(Dsc.getToken(nIdx, ' '));
         if (!s.isEmpty())
         {
             s = s.toAsciiUpperCase();
@@ -1227,8 +1227,8 @@ void SgfFontLst::ReadList()
         aCfg.SetGroup("SGV Fonts fuer StarView");
         sal_uInt16 Anz=aCfg.GetKeyCount();
         sal_uInt16 i;
-        rtl::OString FID;
-        rtl::OString Dsc;
+        OString FID;
+        OString Dsc;
 
         for (i=0;i<Anz;i++)
         {

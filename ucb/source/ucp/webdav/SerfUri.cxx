@@ -39,7 +39,7 @@ using namespace http_dav_ucp;
 
 namespace {
 
-inline bool matchIgnoreAsciiCase(rtl::OString const & rStr1,
+inline bool matchIgnoreAsciiCase(OString const & rStr1,
                                  sal_Char const * pStr2,
                                  sal_Int32 nStr2Len) SAL_THROW(())
 {
@@ -74,7 +74,7 @@ SerfUri::SerfUri( const apr_uri_t * inUri )
     calculateURI();
 }
 
-SerfUri::SerfUri( const rtl::OUString & inUri )
+SerfUri::SerfUri( const OUString & inUri )
     throw ( DAVException )
     : mAprUri()
     , mURI()
@@ -88,9 +88,9 @@ SerfUri::SerfUri( const rtl::OUString & inUri )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     // #i77023#
-    rtl::OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
+    OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
 
-    rtl::OString theInputUri(
+    OString theInputUri(
         aEscapedUri.getStr(), aEscapedUri.getLength(), RTL_TEXTENCODING_UTF8 );
 
     if ( apr_uri_parse( apr_environment::AprEnv::getAprEnv()->getAprPool(),
@@ -114,22 +114,22 @@ SerfUri::SerfUri( const rtl::OUString & inUri )
 
 void SerfUri::init( const apr_uri_t * pUri )
 {
-    mScheme   = rtl::OStringToOUString( pUri->scheme, RTL_TEXTENCODING_UTF8 );
-    mUserInfo = rtl::OStringToOUString( pUri->user, RTL_TEXTENCODING_UTF8 );
-    mHostName = rtl::OStringToOUString( pUri->hostname, RTL_TEXTENCODING_UTF8 );
+    mScheme   = OStringToOUString( pUri->scheme, RTL_TEXTENCODING_UTF8 );
+    mUserInfo = OStringToOUString( pUri->user, RTL_TEXTENCODING_UTF8 );
+    mHostName = OStringToOUString( pUri->hostname, RTL_TEXTENCODING_UTF8 );
     mPort     = pUri->port;
-    mPath     = rtl::OStringToOUString( pUri->path, RTL_TEXTENCODING_UTF8 );
+    mPath     = OStringToOUString( pUri->path, RTL_TEXTENCODING_UTF8 );
 
     if ( pUri->query )
     {
-        mPath += rtl::OUString::createFromAscii( "?" );
-        mPath += rtl::OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
+        mPath += OUString::createFromAscii( "?" );
+        mPath += OStringToOUString( pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += rtl::OUString::createFromAscii( "#" );
-        mPath += rtl::OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
+        mPath += OUString::createFromAscii( "#" );
+        mPath += OStringToOUString( pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
 }
 
@@ -139,7 +139,7 @@ SerfUri::~SerfUri( )
 
 void SerfUri::calculateURI ()
 {
-    rtl::OUStringBuffer aBuf( mScheme );
+    OUStringBuffer aBuf( mScheme );
     aBuf.append( "://" );
     if ( mUserInfo.getLength() > 0 )
     {
@@ -174,14 +174,14 @@ void SerfUri::calculateURI ()
     if ( bAppendPort )
     {
         aBuf.append( ":" );
-        aBuf.append( rtl::OUString::valueOf( mPort ) );
+        aBuf.append( OUString::valueOf( mPort ) );
     }
     aBuf.append( mPath );
 
     mURI = aBuf.makeStringAndClear();
 }
 
-::rtl::OUString SerfUri::GetPathBaseName () const
+OUString SerfUri::GetPathBaseName () const
 {
     sal_Int32 nPos = mPath.lastIndexOf ('/');
     sal_Int32 nTrail = 0;
@@ -193,7 +193,7 @@ void SerfUri::calculateURI ()
     }
     if (nPos != -1)
     {
-        rtl::OUString aTemp(
+        OUString aTemp(
             mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail) );
 
         // query, fragment present?
@@ -207,7 +207,7 @@ void SerfUri::calculateURI ()
         return aTemp;
     }
     else
-        return rtl::OUString::createFromAscii ("/");
+        return OUString::createFromAscii ("/");
 }
 
 bool SerfUri::operator== ( const SerfUri & rOther ) const
@@ -215,22 +215,22 @@ bool SerfUri::operator== ( const SerfUri & rOther ) const
     return ( mURI == rOther.mURI );
 }
 
-::rtl::OUString SerfUri::GetPathBaseNameUnescaped () const
+OUString SerfUri::GetPathBaseNameUnescaped () const
 {
     return unescape( GetPathBaseName() );
 }
 
-void SerfUri::AppendPath (const rtl::OUString& rPath)
+void SerfUri::AppendPath (const OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += rtl::OUString::createFromAscii ("/");
+        mPath += OUString::createFromAscii ("/");
 
     mPath += rPath;
     calculateURI ();
 };
 
 // static
-rtl::OUString SerfUri::escapeSegment( const rtl::OUString& segment )
+OUString SerfUri::escapeSegment( const OUString& segment )
 {
     return rtl::Uri::encode( segment,
                              rtl_UriCharClassPchar,
@@ -239,7 +239,7 @@ rtl::OUString SerfUri::escapeSegment( const rtl::OUString& segment )
 }
 
 // static
-rtl::OUString SerfUri::unescape( const rtl::OUString& segment )
+OUString SerfUri::unescape( const OUString& segment )
 {
     return rtl::Uri::decode( segment,
                              rtl_UriDecodeWithCharset,
@@ -247,10 +247,10 @@ rtl::OUString SerfUri::unescape( const rtl::OUString& segment )
 }
 
 // static
-rtl::OUString SerfUri::makeConnectionEndPointString(
-                                const rtl::OUString & rHostName, int nPort )
+OUString SerfUri::makeConnectionEndPointString(
+                                const OUString & rHostName, int nPort )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
 
     // Is host a numeric IPv6 address?
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
@@ -268,7 +268,7 @@ rtl::OUString SerfUri::makeConnectionEndPointString(
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
         aBuf.append( ":" );
-        aBuf.append( rtl::OUString::valueOf( sal_Int32( nPort ) ) );
+        aBuf.append( OUString::valueOf( sal_Int32( nPort ) ) );
     }
     return aBuf.makeStringAndClear();
 }

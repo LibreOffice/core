@@ -60,7 +60,7 @@ class KeyMapping
         //---------------------------------------
         /** @short  hash structure to map key codes to identifier. */
         typedef ::boost::unordered_map< sal_Int16                    ,
-                                 ::rtl::OUString              ,
+                                 OUString              ,
                                  ShortHashCode                ,
                                  ::std::equal_to< sal_Int16 > > Code2IdentifierHash;
 
@@ -102,7 +102,7 @@ class KeyMapping
                     if the given identifier does not describe
                     a well known key code.
          */
-        virtual sal_uInt16 mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
+        virtual sal_uInt16 mapIdentifierToCode(const OUString& sIdentifier)
             throw(css::lang::IllegalArgumentException);
 
         //----------------------------------
@@ -114,7 +114,7 @@ class KeyMapping
 
             @return The corresponding string identifier.
          */
-        virtual ::rtl::OUString mapCodeToIdentifier(sal_uInt16 nCode);
+        virtual OUString mapCodeToIdentifier(sal_uInt16 nCode);
 
     //______________________________________
     // helper
@@ -136,7 +136,7 @@ class KeyMapping
             @return [boolean]
                     sal_True if convertion was successfully.
           */
-        sal_Bool impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUString& sIdentifier,
+        sal_Bool impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                 sal_uInt16&      rCode      );
 };
 

@@ -158,7 +158,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     if ( ! xWindow.is() )
         return;
 
-    ::rtl::OUString sApplicationID;
+    OUString sApplicationID;
     try
     {
         // SYNCHRONIZED ->
@@ -170,33 +170,33 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
             css::frame::ModuleManager::create( comphelper::getComponentContext(xSMGR) );
 
-        rtl::OUString aModuleId = xModuleManager->identify(xFrame);
-        rtl::OUString sDesktopName;
+        OUString aModuleId = xModuleManager->identify(xFrame);
+        OUString sDesktopName;
 
         if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.GlobalDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.WebDocument")) ||
              aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.xforms.XMLFormDocument")) )
-            sDesktopName = ::rtl::OUString("writer");
+            sDesktopName = OUString("writer");
         else if ( aModuleId == "com.sun.star.sheet.SpreadsheetDocument" )
-            sDesktopName = ::rtl::OUString("calc");
+            sDesktopName = OUString("calc");
         else if ( aModuleId == "com.sun.star.presentation.PresentationDocument" )
-            sDesktopName = ::rtl::OUString("impress");
+            sDesktopName = OUString("impress");
         else if ( aModuleId == "com.sun.star.drawing.DrawingDocument" )
-            sDesktopName = ::rtl::OUString("draw");
+            sDesktopName = OUString("draw");
         else if ( aModuleId == "com.sun.star.formula.FormulaProperties" )
-            sDesktopName = ::rtl::OUString("math");
+            sDesktopName = OUString("math");
         else if ( aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DatabaseDocument")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.RelationDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.QueryDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.TableDesign")) ||
                   aModuleId.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sdb.DataSourceBrowser")) )
-            sDesktopName = ::rtl::OUString("base");
+            sDesktopName = OUString("base");
         else
-            sDesktopName = ::rtl::OUString("startcenter");
+            sDesktopName = OUString("startcenter");
         sApplicationID = utl::ConfigManager::getProductName().toAsciiLowerCase();
-        sApplicationID += ::rtl::OUString(sal_Unicode('-'));
+        sApplicationID += OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;
     }
     catch(const css::uno::Exception&)
@@ -240,7 +240,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         rInfo.sID = xModuleManager->identify(xFrame);
         ::comphelper::SequenceAsHashMap lProps    = xModuleManager->getByName (rInfo.sID);
 
-        rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
+        rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ICON  , INVALID_ICON_ID  );
 
         // Note: If we could retrieve a module id ... everything is OK.
@@ -344,7 +344,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
         pWorkWindow->SetIcon( (sal_uInt16)nIcon );
 
         css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
-        rtl::OUString aURL;
+        OUString aURL;
         if( xModel.is() )
             aURL = xModel->getURL();
         pWorkWindow->SetRepresentedURL( aURL );
@@ -364,7 +364,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     if ( ! xTitle.is() )
         return;
 
-    const ::rtl::OUString sTitle = xTitle->getTitle ();
+    const OUString sTitle = xTitle->getTitle ();
 
     // VCL SYNCHRONIZED ->
     SolarMutexGuard aSolarGuard;

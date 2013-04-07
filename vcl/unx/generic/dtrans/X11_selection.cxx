@@ -82,9 +82,6 @@ using namespace cppu;
 
 using namespace x11;
 
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
-using ::rtl::OStringToOUString;
 
 // stubs to satisfy solaris compiler's rather rigid linking warning
 extern "C"
@@ -1022,7 +1019,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
 // ------------------------------------------------------------------------
 
-bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData )
+bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequence< sal_Int8 >& rData )
 {
     bool bSuccess = false;
 

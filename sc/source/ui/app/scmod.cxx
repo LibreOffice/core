@@ -150,7 +150,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
 {
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
 
-    SetName(rtl::OUString("StarCalc"));       // fuer Basic
+    SetName(OUString("StarCalc"));       // fuer Basic
 
     ResetDragObject();
     SetClipObject( NULL, NULL );
@@ -378,13 +378,13 @@ void ScModule::Execute( SfxRequest& rReq )
     {
         case SID_CHOOSE_DESIGN:
             {
-                rtl::OUString aMacroName("Template.Samples.ShowStyles");
+                OUString aMacroName("Template.Samples.ShowStyles");
                 SfxApplication::CallAppBasic( aMacroName );
             }
             break;
         case SID_EURO_CONVERTER:
             {
-                rtl::OUString aMacroName("Euro.ConvertRun.Main");
+                OUString aMacroName("Euro.ConvertRun.Main");
                 SfxApplication::CallAppBasic( aMacroName );
             }
             break;
@@ -641,11 +641,11 @@ void ScModule::ResetDragObject()
     mpDragData->pCellTransfer = NULL;
     mpDragData->pDrawTransfer = NULL;
     mpDragData->pJumpLocalDoc = NULL;
-    mpDragData->aLinkDoc = rtl::OUString();
-    mpDragData->aLinkTable = rtl::OUString();
-    mpDragData->aLinkArea = rtl::OUString();
-    mpDragData->aJumpTarget = rtl::OUString();
-    mpDragData->aJumpText = rtl::OUString();
+    mpDragData->aLinkDoc = OUString();
+    mpDragData->aLinkTable = OUString();
+    mpDragData->aLinkArea = OUString();
+    mpDragData->aJumpTarget = OUString();
+    mpDragData->aJumpText = OUString();
 }
 
 const ScDragData& ScModule::GetDragData() const
@@ -661,7 +661,7 @@ void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawO
 }
 
 void ScModule::SetDragLink(
-    const rtl::OUString& rDoc, const rtl::OUString& rTab, const rtl::OUString& rArea )
+    const OUString& rDoc, const OUString& rTab, const OUString& rArea )
 {
     ResetDragObject();
     mpDragData->aLinkDoc   = rDoc;
@@ -670,7 +670,7 @@ void ScModule::SetDragLink(
 }
 
 void ScModule::SetDragJump(
-    ScDocument* pLocalDoc, const rtl::OUString& rTarget, const rtl::OUString& rText )
+    ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText )
 {
     ResetDragObject();
 
@@ -2245,7 +2245,7 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
         else
         {
             OSL_FAIL("unbekannter Feldbefehl");
-            pInfo->SetRepresentation(rtl::OUString('?'));
+            pInfo->SetRepresentation(OUString('?'));
         }
     }
 

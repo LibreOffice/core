@@ -82,7 +82,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void fireStatusEvent(
-        const ::rtl::OUString & rURL,
+        const OUString & rURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
 
     // ____ XModifyListener ____
@@ -97,13 +97,13 @@ protected:
 
 private:
     void fireStatusEventForURLImpl(
-        const ::rtl::OUString & rURL,
+        const OUString & rURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
 
-    bool commandAvailable( const ::rtl::OUString & rCommand );
+    bool commandAvailable( const OUString & rCommand );
     void updateCommandAvailability();
 
-    bool isShapeControllerCommandAvailable( const ::rtl::OUString& rCommand );
+    bool isShapeControllerCommandAvailable( const OUString& rCommand );
 
     ChartController* m_pChartController;
     ::com::sun::star::uno::Reference<
@@ -116,8 +116,8 @@ private:
     ::std::auto_ptr< impl::ModelState > m_apModelState;
     ::std::auto_ptr< impl::ControllerState > m_apControllerState;
 
-    mutable ::std::map< ::rtl::OUString, bool > m_aCommandAvailability;
-    mutable ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any > m_aCommandArguments;
+    mutable ::std::map< OUString, bool > m_aCommandAvailability;
+    mutable ::std::map< OUString, ::com::sun::star::uno::Any > m_aCommandArguments;
 
     CommandDispatchContainer* m_pDispatchContainer;
 };

@@ -65,30 +65,30 @@ namespace pq_sdbc_driver
 
 class KeyColumns : public Container
 {
-    rtl::OUString m_schemaName;
-    rtl::OUString m_tableName;
-    com::sun::star::uno::Sequence< rtl::OUString > m_columnNames;
-    com::sun::star::uno::Sequence< rtl::OUString > m_foreignColumnNames;
+    OUString m_schemaName;
+    OUString m_tableName;
+    com::sun::star::uno::Sequence< OUString > m_columnNames;
+    com::sun::star::uno::Sequence< OUString > m_foreignColumnNames;
 
 public: // instances KeyColumns 'exception safe'
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > create(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const com::sun::star::uno::Sequence< rtl::OUString > &keyColumns,
-        const com::sun::star::uno::Sequence< rtl::OUString > &foreignColumnNames );
+        const OUString &schemaName,
+        const OUString &tableName,
+        const com::sun::star::uno::Sequence< OUString > &keyColumns,
+        const com::sun::star::uno::Sequence< OUString > &foreignColumnNames );
 
 protected:
     KeyColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const com::sun::star::uno::Sequence< rtl::OUString > &keyColumns,
-        const com::sun::star::uno::Sequence< rtl::OUString > &foreignColumnNames);
+        const OUString &schemaName,
+        const OUString &tableName,
+        const com::sun::star::uno::Sequence< OUString > &keyColumns,
+        const com::sun::star::uno::Sequence< OUString > &foreignColumnNames);
 
     virtual ~KeyColumns();
 

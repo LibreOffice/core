@@ -35,12 +35,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
-sdbcx::ObjectType MacabColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
-    const ::rtl::OUString sCatalogName;
-    const ::rtl::OUString sSchemaName(m_pTable->getSchema());
-    const ::rtl::OUString sTableName(m_pTable->getTableName());
+    const OUString sCatalogName;
+    const OUString sSchemaName(m_pTable->getSchema());
+    const OUString sTableName(m_pTable->getTableName());
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
         aCatalog, sSchemaName, sTableName, _rName);
 

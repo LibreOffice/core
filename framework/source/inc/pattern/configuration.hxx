@@ -89,8 +89,8 @@ class ConfigurationHelper
                     see enum EOpenMode for further informations.
          */
         static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
-                                                                      const ::rtl::OUString&                                        sPackage  ,
-                                                                      const ::rtl::OUString&                                        sRelPath  ,
+                                                                      const OUString&                                        sPackage  ,
+                                                                      const OUString&                                        sRelPath  ,
                                                                             sal_Int32                                               nOpenFlags)
         {
             css::uno::Reference< css::uno::XInterface > xCFG;
@@ -100,7 +100,7 @@ class ConfigurationHelper
                 css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
                     css::configuration::theDefaultProvider::get( rxContext );
 
-                ::rtl::OUStringBuffer sPath(1024);
+                OUStringBuffer sPath(1024);
                 sPath.append(sPackage      );
                 sPath.append(static_cast<sal_Unicode>('/'));
                 sPath.append(sRelPath      );
@@ -115,13 +115,13 @@ class ConfigurationHelper
                 css::uno::Sequence< css::uno::Any > lParams(c);
                 css::beans::PropertyValue           aParam;
 
-                aParam.Name    = ::rtl::OUString("nodepath");
+                aParam.Name    = OUString("nodepath");
                 aParam.Value <<= sPath.makeStringAndClear();
                 lParams[0]   <<= aParam;
 
                 if (bAllLocales)
                 {
-                    aParam.Name    = ::rtl::OUString("*");
+                    aParam.Name    = OUString("*");
                     aParam.Value <<= sal_True;
                     lParams[1]   <<= aParam;
                 }

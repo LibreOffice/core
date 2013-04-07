@@ -135,7 +135,7 @@ namespace {
                                     ? nTxtFrmTextEndPos
                                     : nTxtNodeChangeTrackEnd;
 
-                pMarkupList->Insert( rtl::OUString(), 0,
+                pMarkupList->Insert( OUString(), 0,
                                      nTxtFrmChangeTrackStart,
                                      nTxtFrmChangeTrackEnd - nTxtFrmChangeTrackStart,
                                      pMarkupList->Count() );

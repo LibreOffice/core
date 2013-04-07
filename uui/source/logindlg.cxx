@@ -244,8 +244,8 @@ LoginDialog::LoginDialog
 (
     Window* pParent,
     sal_uInt16 nFlags,
-    const rtl::OUString& rServer,
-    const rtl::OUString& rRealm,
+    const OUString& rServer,
+    const OUString& rRealm,
     ResMgr* pResMgr
 ) :
 

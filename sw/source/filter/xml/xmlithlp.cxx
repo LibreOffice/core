@@ -37,7 +37,6 @@
 #include <xmloff/xmluconv.hxx>
 
 using ::editeng::SvxBorderLine;
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 

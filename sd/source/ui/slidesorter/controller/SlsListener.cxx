@@ -224,7 +224,7 @@ void Listener::ConnectToController (void)
         {
             try
             {
-                xSet->addPropertyChangeListener(rtl::OUString("CurrentPage"), this);
+                xSet->addPropertyChangeListener(OUString("CurrentPage"), this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -232,7 +232,7 @@ void Listener::ConnectToController (void)
             }
             try
             {
-                xSet->addPropertyChangeListener(rtl::OUString("IsMasterPageMode"), this);
+                xSet->addPropertyChangeListener(OUString("IsMasterPageMode"), this);
             }
             catch (beans::UnknownPropertyException&)
             {
@@ -268,10 +268,10 @@ void Listener::DisconnectFromController (void)
             if (xSet.is())
             {
                 xSet->removePropertyChangeListener (
-                    rtl::OUString("CurrentPage"),
+                    OUString("CurrentPage"),
                     this);
                 xSet->removePropertyChangeListener (
-                    rtl::OUString("IsMasterPageMode"),
+                    OUString("IsMasterPageMode"),
                     this);
             }
 
@@ -479,8 +479,8 @@ void SAL_CALL Listener::propertyChange (
 {
     ThrowIfDisposed();
 
-    static const ::rtl::OUString sCurrentPagePropertyName ("CurrentPage");
-    static const ::rtl::OUString sEditModePropertyName ("IsMasterPageMode");
+    static const OUString sCurrentPagePropertyName ("CurrentPage");
+    static const OUString sEditModePropertyName ("IsMasterPageMode");
 
     if (rEvent.PropertyName.equals(sCurrentPagePropertyName))
     {

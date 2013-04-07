@@ -116,7 +116,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
 #ifndef DISABLE_DYNLOADING
-            const ::rtl::OUString sModuleName( SVLIBRARY( "dbtools" )
+            const OUString sModuleName( SVLIBRARY( "dbtools" )
             );
 
             // load the dbtools library
@@ -126,7 +126,7 @@ namespace svxform
             if (NULL != s_hDbtoolsModule)
             {
                 // get the symbol for the method creating the factory
-                const ::rtl::OUString sFactoryCreationFunc( "createDataAccessToolsFactory" );
+                const OUString sFactoryCreationFunc( "createDataAccessToolsFactory" );
                 //  reinterpret_cast<createDataAccessToolsFactoryFunction>
                 s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
@@ -198,8 +198,8 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    Reference< XConnection> OStaticDataAccessTools::getConnection_withFeedback(const ::rtl::OUString& _rDataSourceName,
-        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference<XComponentContext>& _rxContext) const
+    Reference< XConnection> OStaticDataAccessTools::getConnection_withFeedback(const OUString& _rDataSourceName,
+        const OUString& _rUser, const OUString& _rPwd, const Reference<XComponentContext>& _rxContext) const
             SAL_THROW ( (SQLException) )
     {
         Reference< XConnection > xReturn;
@@ -237,25 +237,25 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OStaticDataAccessTools::quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName) const
+    OUString OStaticDataAccessTools::quoteName(const OUString& _rQuote, const OUString& _rName) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         if ( ensureLoaded() )
             sReturn = m_xDataAccessTools->quoteName(_rQuote, _rName);
         return sReturn;
     }
 
     // ------------------------------------------------
-    ::rtl::OUString OStaticDataAccessTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
+    OUString OStaticDataAccessTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         if ( ensureLoaded() )
             sReturn = m_xDataAccessTools->composeTableNameForSelect( _rxConnection, _xTable );
         return sReturn;
     }
 
     //----------------------------------------------------------------
-    Reference< XDataSource > OStaticDataAccessTools::getDataSource( const ::rtl::OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
+    Reference< XDataSource > OStaticDataAccessTools::getDataSource( const OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
         Reference< XDataSource > xReturn;
         if ( ensureLoaded() )
@@ -283,7 +283,7 @@ namespace svxform
 
     //----------------------------------------------------------------
     Reference< XNameAccess > OStaticDataAccessTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
-        const sal_Int32 _nCommandType, const ::rtl::OUString& _rCommand,
+        const sal_Int32 _nCommandType, const OUString& _rCommand,
             Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
     {
         Reference< XNameAccess > aFields;

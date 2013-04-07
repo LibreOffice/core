@@ -35,8 +35,6 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -228,7 +226,7 @@ sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary) {
  * @param pos : Position of the given character.
  * @return true if CJK.
  */
-sal_Bool xdictionary::seekSegment(const rtl::OUString &rText, sal_Int32 pos,
+sal_Bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     Boundary& segBoundary)
 {
     sal_Int32 indexUtf16;

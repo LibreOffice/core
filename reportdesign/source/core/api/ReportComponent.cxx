@@ -83,11 +83,11 @@ OFormatProperties::OFormatProperties()
         SvtLinguConfig aLinguConfig;
         using namespace ::com::sun::star::i18n::ScriptType;
 
-        aLinguConfig.GetProperty(::rtl::OUString("DefaultLocale")) >>= aCharLocale;
+        aLinguConfig.GetProperty(OUString("DefaultLocale")) >>= aCharLocale;
         LanguageType eCurLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocale).getLanguageType(false), LATIN);
-        aLinguConfig.GetProperty(::rtl::OUString("DefaultLocale_CJK"))  >>= aCharLocaleAsian;
+        aLinguConfig.GetProperty(OUString("DefaultLocale_CJK"))  >>= aCharLocaleAsian;
         LanguageType eCurLangCJK = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocaleAsian).getLanguageType(false), ASIAN);
-        aLinguConfig.GetProperty(::rtl::OUString("DefaultLocale_CTL"))  >>= aCharLocaleComplex;
+        aLinguConfig.GetProperty(OUString("DefaultLocale_CTL"))  >>= aCharLocaleComplex;
         LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aCharLocaleComplex).getLanguageType(false), COMPLEX);
 
         Font aLatin,aCJK,aCTL;

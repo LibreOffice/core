@@ -267,10 +267,10 @@ public:
                             const String& rEncodedUrl );
 
     static void         DecodeUrl(
-                            ::rtl::OUString& rUrl,
+                            OUString& rUrl,
                             bool& rbSameWb,
                             const XclImpRoot& rRoot,
-                            const ::rtl::OUString& rEncodedUrl );
+                            const OUString& rEncodedUrl );
 
     /** Decodes the passed URL to OLE or DDE link components.
         @descr  For DDE links: Decodes to application name and topic.

@@ -33,33 +33,33 @@ class XMLEmbeddedObjectImportContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XComponent > xComp;
 
-    ::rtl::OUString sFilterService;
+    OUString sFilterService;
     // #100592#
-    ::rtl::OUString sCLSID;
+    OUString sCLSID;
 
 public:
     TYPEINFO();
 
-    const ::rtl::OUString& GetFilterServiceName() const { return sFilterService; }
+    const OUString& GetFilterServiceName() const { return sFilterService; }
     // #100592#
-    const ::rtl::OUString& GetFilterCLSID() const { return sCLSID; }
+    const OUString& GetFilterCLSID() const { return sCLSID; }
 
     XMLEmbeddedObjectImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& rLName,
+                                    const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~XMLEmbeddedObjectImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     sal_Bool SetComponent(
         ::com::sun::star::uno::Reference<

@@ -60,16 +60,16 @@ class PresenterTheme
 public:
     PresenterTheme (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const rtl::OUString& rsThemeName,
+        const OUString& rsThemeName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
     ~PresenterTheme (void);
 
     bool HasCanvas (void) const;
     void ProvideCanvas (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
 
-    ::rtl::OUString GetStyleName (const ::rtl::OUString& rsResourceURL) const;
+    OUString GetStyleName (const OUString& rsResourceURL) const;
     ::std::vector<sal_Int32> GetBorderSize (
-        const ::rtl::OUString& rsStyleName,
+        const OUString& rsStyleName,
         const bool bOuter) const;
 
     class Theme;
@@ -78,11 +78,11 @@ public:
     public:
         explicit FontDescriptor (const ::boost::shared_ptr<FontDescriptor>& rpDescriptor);
 
-        ::rtl::OUString msFamilyName;
-        ::rtl::OUString msStyleName;
+        OUString msFamilyName;
+        OUString msStyleName;
         sal_Int32 mnSize;
         sal_uInt32 mnColor;
-        ::rtl::OUString msAnchor;
+        OUString msAnchor;
         sal_Int32 mnXOffset;
         sal_Int32 mnYOffset;
         css::uno::Reference<css::rendering::XCanvasFont> mxFont;
@@ -100,20 +100,20 @@ public:
     typedef ::boost::shared_ptr<FontDescriptor> SharedFontDescriptor;
 
     SharedBitmapDescriptor GetBitmap (
-        const ::rtl::OUString& rsStyleName,
-        const ::rtl::OUString& rsBitmapName) const;
+        const OUString& rsStyleName,
+        const OUString& rsBitmapName) const;
 
     SharedBitmapDescriptor GetBitmap (
-        const ::rtl::OUString& rsBitmapName) const;
+        const OUString& rsBitmapName) const;
 
     ::boost::shared_ptr<PresenterBitmapContainer> GetBitmapContainer (void) const;
 
     SharedFontDescriptor GetFont (
-        const ::rtl::OUString& rsStyleName) const;
+        const OUString& rsStyleName) const;
 
     static SharedFontDescriptor ReadFont (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const ::rtl::OUString& rsFontPath,
+        const OUString& rsFontPath,
         const SharedFontDescriptor& rDefaultFount);
 
     static bool ConvertToColor (
@@ -121,11 +121,11 @@ public:
         sal_uInt32& rColor);
 
     ::boost::shared_ptr<PresenterConfigurationAccess> GetNodeForViewStyle (
-        const ::rtl::OUString& rsStyleName) const;
+        const OUString& rsStyleName) const;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
-    const ::rtl::OUString msThemeName;
+    const OUString msThemeName;
     ::boost::shared_ptr<Theme> mpTheme;
     ::boost::shared_ptr<PresenterBitmapContainer> mpBitmapContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;

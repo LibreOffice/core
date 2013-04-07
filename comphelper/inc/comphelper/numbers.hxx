@@ -55,7 +55,7 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Any getNumberFormatProperty(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
         sal_Int32 _nKey,
-        const rtl::OUString& _rPropertyName
+        const OUString& _rPropertyName
     );
 
 //.........................................................................

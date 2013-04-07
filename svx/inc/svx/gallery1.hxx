@@ -38,7 +38,7 @@ class GalleryThemeEntry
 {
 private:
 
-    rtl::OUString           aName;
+    OUString           aName;
     INetURLObject           aThmURL;
     INetURLObject           aSdgURL;
     INetURLObject           aSdvURL;
@@ -58,7 +58,7 @@ public:
                                                sal_Bool bNewFile, sal_uInt32 nId, sal_Bool bThemeNameFromResource );
                             ~GalleryThemeEntry() {};
 
-    const rtl::OUString&    GetThemeName() const { return aName; }
+    const OUString&    GetThemeName() const { return aName; }
     sal_uInt32              GetFileNumber() const { return nFileNumber; }
 
     const INetURLObject&    GetThmURL() const { return aThmURL; }
@@ -73,7 +73,7 @@ public:
     sal_Bool                IsModified() const { return bModified; }
     void                    SetModified( sal_Bool bSet ) { bModified = ( bSet && !IsReadOnly() ); }
 
-    void                    SetName( const rtl::OUString& rNewName );
+    void                    SetName( const OUString& rNewName );
     sal_Bool                IsNameFromResource() const { return bThemeNameFromResource; }
 
     sal_uInt32              GetId() const { return nId; }
@@ -88,8 +88,8 @@ typedef ::std::vector< GalleryThemeEntry* > GalleryThemeList;
 
 struct GalleryImportThemeEntry
 {
-    rtl::OUString aThemeName;
-    rtl::OUString aUIName;
+    OUString aThemeName;
+    OUString aUIName;
     INetURLObject aURL;
 };
 
@@ -111,7 +111,7 @@ class GalleryThemeCacheEntry;
 class Gallery : public SfxBroadcaster
 {
     // only for gengal utility!
-    friend Gallery* createGallery( const rtl::OUString& );
+    friend Gallery* createGallery( const OUString& );
     friend void disposeGallery( Gallery* );
 
     typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
@@ -127,16 +127,16 @@ private:
     sal_uIntPtr                     nLastFileNumber;
     sal_Bool                        bMultiPath;
 
-    void                        ImplLoad( const rtl::OUString& rMultiPath );
+    void                        ImplLoad( const OUString& rMultiPath );
     void                        ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbIsReadOnly );
 
-    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const rtl::OUString& rThemeName );
+    SVX_DLLPUBLIC GalleryThemeEntry*            ImplGetThemeEntry( const OUString& rThemeName );
     GalleryThemeEntry*          ImplGetThemeEntry( sal_uIntPtr nThemeId );
 
     GalleryTheme*               ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     void                        ImplDeleteCachedTheme( GalleryTheme* pTheme );
 
-                                SVX_DLLPUBLIC Gallery( const rtl::OUString& rMultiPath );
+                                SVX_DLLPUBLIC Gallery( const OUString& rMultiPath );
                                 SVX_DLLPUBLIC ~Gallery();
 
 public:
@@ -149,7 +149,7 @@ public:
     const GalleryThemeEntry*    GetThemeInfo( const String& rThemeName ) { return ImplGetThemeEntry( rThemeName ); }
 
     SVX_DLLPUBLIC sal_Bool          HasTheme( const String& rThemeName );
-    rtl::OUString                   GetThemeName( sal_uIntPtr nThemeId ) const;
+    OUString                   GetThemeName( sal_uIntPtr nThemeId ) const;
 
     SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom = 0 );
     sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );

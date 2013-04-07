@@ -1157,7 +1157,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
         pView->GetAttributes(aSet);
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
-        rtl::OUString aNewText(pBrowse->GetNewEntryValue());
+        OUString aNewText(pBrowse->GetNewEntryValue());
         sal_Bool bDel( aNewText == "del"
             || aNewText == "Del"
             || aNewText == "DEL"
@@ -1184,7 +1184,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
             if (nPos!=01)
             {
                 bPairX=nPos>0;
-                rtl::OUString s(aNewText.copy(nPos+nSepLen));
+                OUString s(aNewText.copy(nPos+nSepLen));
                 bPairY = !aNewText.isEmpty();
                 nLongY = s.toInt32();
             }

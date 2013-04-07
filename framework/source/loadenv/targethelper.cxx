@@ -21,7 +21,7 @@
 
 namespace framework{
 
-sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
+sal_Bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
                                                 ESpecialTarget   eSpecialTarget)
 {
     switch(eSpecialTarget)
@@ -57,7 +57,7 @@ sal_Bool TargetHelper::matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
     }
 }
 
-sal_Bool TargetHelper::isValidNameForFrame(const ::rtl::OUString& sName)
+sal_Bool TargetHelper::isValidNameForFrame(const OUString& sName)
 {
     // some special targets are realy special ones :-)
     // E.g. the are realy used to locate one frame inside the frame tree.

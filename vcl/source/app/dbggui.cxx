@@ -506,7 +506,7 @@ DbgWindow::DbgWindow() :
     SetOutputSizePixel( Size( 600, 480 ) );
     if ( pData->aDbgWinState )
     {
-        rtl::OString aState( pData->aDbgWinState );
+        OString aState( pData->aDbgWinState );
         SetWindowState( aState );
     }
 
@@ -520,7 +520,7 @@ DbgWindow::DbgWindow() :
 sal_Bool DbgWindow::Close()
 {
     // remember window position
-    rtl::OString aState( GetWindowState() );
+    OString aState( GetWindowState() );
     DbgData* pData = DbgGetData();
     size_t nCopy = (sizeof( pData->aDbgWinState ) < size_t(aState.getLength() + 1U ))
     ? sizeof( pData->aDbgWinState ) : size_t(aState.getLength() + 1U );
@@ -574,7 +574,7 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
             if ( rCommand.GetCommand() == COMMAND_CONTEXTMENU )
             {
                 PopupMenu aMenu;
-                aMenu.InsertItem( 1, rtl::OUString("copy to clipboard") );
+                aMenu.InsertItem( 1, OUString("copy to clipboard") );
 
                 Point aPos;
                 if ( rCommand.IsMouseEvent() )
@@ -593,9 +593,9 @@ long DbgWindow::PreNotify( NotifyEvent& rNEvt )
                     GetAssertionEntryRange( maLstBox.GetSelectEntryPos(), nAssertionFirst, nAssertionLast );
 
                     // build the string to copy to the clipboard
-                    rtl::OUStringBuffer sAssertion;
-                    rtl::OUString sLineFeed = convertLineEnd(
-                        rtl::OUString("\n"),
+                    OUStringBuffer sAssertion;
+                    OUString sLineFeed = convertLineEnd(
+                        OUString("\n"),
                         GetSystemLineEnd());
                     while ( nAssertionFirst < nAssertionLast )
                     {
@@ -782,7 +782,7 @@ DbgDialog::DbgDialog() :
 
     {
     maDebugName.Show();
-    maDebugName.SetText(rtl::OStringToOUString(pData->aDebugName, RTL_TEXTENCODING_UTF8));
+    maDebugName.SetText(OStringToOUString(pData->aDebugName, RTL_TEXTENCODING_UTF8));
     maDebugName.SetMaxTextLen( sizeof( pData->aDebugName ) );
     maDebugName.SetPosSizePixel( LogicToPixel( Point( 10, 130 ), aAppMap ),
                                  LogicToPixel( Size( 185, 14 ), aAppMap ) );
@@ -815,7 +815,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclClassFilter.Show();
-    maInclClassFilter.SetText(rtl::OStringToOUString(pData->aInclClassFilter, RTL_TEXTENCODING_UTF8));
+    maInclClassFilter.SetText(OStringToOUString(pData->aInclClassFilter, RTL_TEXTENCODING_UTF8));
     maInclClassFilter.SetMaxTextLen( sizeof( pData->aInclClassFilter ) );
     maInclClassFilter.SetPosSizePixel( LogicToPixel( Point( 10, 160 ), aAppMap ),
                                        LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -830,7 +830,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclClassFilter.Show();
-    maExclClassFilter.SetText(rtl::OStringToOUString(pData->aExclClassFilter, RTL_TEXTENCODING_UTF8));
+    maExclClassFilter.SetText(OStringToOUString(pData->aExclClassFilter, RTL_TEXTENCODING_UTF8));
     maExclClassFilter.SetMaxTextLen( sizeof( pData->aExclClassFilter ) );
     maExclClassFilter.SetPosSizePixel( LogicToPixel( Point( 115, 160 ), aAppMap ),
                                        LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -845,7 +845,7 @@ DbgDialog::DbgDialog() :
 
     {
     maInclFilter.Show();
-    maInclFilter.SetText(rtl::OStringToOUString(pData->aInclFilter, RTL_TEXTENCODING_UTF8));
+    maInclFilter.SetText(OStringToOUString(pData->aInclFilter, RTL_TEXTENCODING_UTF8));
     maInclFilter.SetMaxTextLen( sizeof( pData->aInclFilter ) );
     maInclFilter.SetPosSizePixel( LogicToPixel( Point( 10, 190 ), aAppMap ),
                                   LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -860,7 +860,7 @@ DbgDialog::DbgDialog() :
 
     {
     maExclFilter.Show();
-    maExclFilter.SetText(rtl::OStringToOUString(pData->aExclFilter, RTL_TEXTENCODING_UTF8));
+    maExclFilter.SetText(OStringToOUString(pData->aExclFilter, RTL_TEXTENCODING_UTF8));
     maExclFilter.SetMaxTextLen( sizeof( pData->aExclFilter ) );
     maExclFilter.SetPosSizePixel( LogicToPixel( Point( 115, 190 ), aAppMap ),
                                   LogicToPixel( Size( 95, 14 ), aAppMap ) );
@@ -993,11 +993,11 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aData.nWarningOut = ImplGetChannelId( maWarningBox, 0 );
         aData.nErrorOut   = ImplGetChannelId( maErrorBox, mnErrorOff );
 
-        strncpy( aData.aDebugName, rtl::OUStringToOString(maDebugName.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aDebugName ) );
-        strncpy( aData.aInclClassFilter, rtl::OUStringToOString(maInclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclClassFilter ) );
-        strncpy( aData.aExclClassFilter, rtl::OUStringToOString(maExclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclClassFilter ) );
-        strncpy( aData.aInclFilter, rtl::OUStringToOString(maInclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclFilter ) );
-        strncpy( aData.aExclFilter, rtl::OUStringToOString(maExclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclFilter ) );
+        strncpy( aData.aDebugName, OUStringToOString(maDebugName.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aDebugName ) );
+        strncpy( aData.aInclClassFilter, OUStringToOString(maInclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclClassFilter ) );
+        strncpy( aData.aExclClassFilter, OUStringToOString(maExclClassFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclClassFilter ) );
+        strncpy( aData.aInclFilter, OUStringToOString(maInclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aInclFilter ) );
+        strncpy( aData.aExclFilter, OUStringToOString(maExclFilter.GetText(), RTL_TEXTENCODING_UTF8).getStr(), sizeof( aData.aExclFilter ) );
         aData.aDebugName[sizeof( aData.aDebugName )-1] = '\0';
         aData.aInclClassFilter[sizeof( aData.aInclClassFilter )-1] = '\0';
         aData.aExclClassFilter[sizeof( aData.aExclClassFilter )-1] = '\0';
@@ -1066,7 +1066,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            InfoBox aBox( this, rtl::OUString(
+            InfoBox aBox( this, OUString(
                 "Some of the changed settings will only be active after "
                 "restarting the process"
                 ) );
@@ -1296,7 +1296,7 @@ void DbgDialogTest( Window* pWindow )
                         DbgOutTypef( DBG_OUT_ERROR,
                                  "%s should have a mnemonic char (~): %s",
                                  pClass,
-                                 rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
 
                     // check text width
                     int aWidth=0;
@@ -1319,7 +1319,7 @@ void DbgDialogTest( Window* pWindow )
                         DbgOutTypef( DBG_OUT_ERROR,
                                  "%s exceeds window width: %s",
                                  pClass,
-                                 rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                 }
             }
 
@@ -1328,7 +1328,7 @@ void DbgDialogTest( Window* pWindow )
                 if ( pChild->GetSizePixel().Width() < pChild->GetTextWidth( aText ) )
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "FixedLine exceeds window width: %s",
-                                 rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
             }
 
             if ( pChild->GetType() == WINDOW_FIXEDTEXT )
@@ -1338,7 +1338,7 @@ void DbgDialogTest( Window* pWindow )
                 {
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "FixedText greater than one line, but WordBreak is not set: %s",
-                                 rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                 }
 
                 if ( pChild->IsVisible() )
@@ -1356,7 +1356,7 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "FixedText exceeds window width: %s",
-                                         rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                 }
 
@@ -1386,13 +1386,13 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Labels befor Fields (Edit,ListBox,...) should have a mnemonic char (~): %s",
-                                         rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                         if ( !pTempChild->IsEnabled() && pChild->IsEnabled() )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Labels befor Fields (Edit,ListBox,...) should be disabled, when the field is disabled: %s",
-                                         rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                     }
                 }
@@ -1481,7 +1481,7 @@ void DbgDialogTest( Window* pWindow )
                 {
                     DbgOutTypef( DBG_OUT_ERROR,
                                  "No Max-Value is set: %s",
-                                 rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                 OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                 }
 
                 if ( (pChild->GetType() == WINDOW_RADIOBUTTON) ||
@@ -1524,7 +1524,7 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Possible wrong childorder for dialogcontrol: %s",
-                                         rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                         aTabPos = aNewPos;
                     }
@@ -1536,7 +1536,7 @@ void DbgDialogTest( Window* pWindow )
                         {
                             DbgOutTypef( DBG_OUT_ERROR,
                                          "Window overlaps with sibling window: %s",
-                                         rtl::OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
+                                         OUStringToOString(aErrorText, RTL_TEXTENCODING_UTF8).getStr() );
                         }
                     }
                     pRectAry[i] = aChildRect;
@@ -1565,7 +1565,7 @@ class DbgMessageBox : public ErrorBox
        m_aMessage( rMessage )
     {
         SetText("Debug Output");
-        AddButton(rtl::OUString("Copy"), COPY_BUTTON_ID, 0);
+        AddButton(OUString("Copy"), COPY_BUTTON_ID, 0);
     }
 
     virtual void Click()
@@ -1737,7 +1737,7 @@ void DbgPrintWindow( const char* pLine )
 
 void DbgAbort( char const * i_message )
 {
-    ::rtl::OUString const message( i_message, strlen( i_message ), osl_getThreadTextEncoding() );
+    OUString const message( i_message, strlen( i_message ), osl_getThreadTextEncoding() );
     Application::Abort( message );
 }
 

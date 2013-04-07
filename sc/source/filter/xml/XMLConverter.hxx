@@ -50,55 +50,55 @@ public:
 // IMPORT: GeneralFunction / ScSubTotalFunc
     static ::com::sun::star::sheet::GeneralFunction
                         GetFunctionFromString(
-                            const ::rtl::OUString& rString );
+                            const OUString& rString );
     static ScSubTotalFunc GetSubTotalFuncFromString(
-                            const ::rtl::OUString& rString );
+                            const OUString& rString );
 
 // EXPORT: GeneralFunction / ScSubTotalFunc
     static void         GetStringFromFunction(
-                            ::rtl::OUString& rString,
+                            OUString& rString,
                             const ::com::sun::star::sheet::GeneralFunction eFunction,
                             bool bAppendStr = false );
     static void         GetStringFromFunction(
-                            ::rtl::OUString& rString,
+                            OUString& rString,
                             const ScSubTotalFunc eFunction,
                             bool bAppendStr = false );
 
 // IMPORT: DataPilotFieldOrientation
     static ::com::sun::star::sheet::DataPilotFieldOrientation
                         GetOrientationFromString(
-                            const ::rtl::OUString& rString );
+                            const OUString& rString );
 
 // EXPORT: DataPilotFieldOrientation
     static void         GetStringFromOrientation(
-                            ::rtl::OUString& rString,
+                            OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
                             bool bAppendStr = false );
 
 // IMPORT: Detective
     static ScDetectiveObjType
                         GetDetObjTypeFromString(
-                            const ::rtl::OUString& rString );
+                            const OUString& rString );
     static bool         GetDetOpTypeFromString(
                             ScDetOpType& rDetOpType,
-                            const ::rtl::OUString& rString );
+                            const OUString& rString );
 
 // EXPORT: Detective
     static void         GetStringFromDetObjType(
-                            ::rtl::OUString& rString,
+                            OUString& rString,
                             const ScDetectiveObjType eObjType,
                             bool bAppendStr = false );
     static void         GetStringFromDetOpType(
-                            ::rtl::OUString& rString,
+                            OUString& rString,
                             const ScDetOpType eOpType,
                             bool bAppendStr = false );
 
 // IMPORT: Formulas
     static void         ParseFormula(
-                            ::rtl::OUString& sFormula,
+                            OUString& sFormula,
                             const bool bIsFormula = sal_True);
 // EXPORT: Core Date Time
-    static void         ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate);
+    static void         ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate);
     static void         ConvertCoreToAPIDateTime(const DateTime& aDateTime, com::sun::star::util::DateTime& rDateTime);
 
     static void         ConvertAPIToCoreDateTime(const com::sun::star::util::DateTime& aDateTime, DateTime& rDateTime);
@@ -136,8 +136,8 @@ struct ScXMLConditionParseResult
                         meValidation;       /// A data validation type if existing.
     ::com::sun::star::sheet::ConditionOperator
                         meOperator;         /// A comparison operator if existing.
-    ::rtl::OUString     maOperand1;         /// First operand of the token or comparison value.
-    ::rtl::OUString     maOperand2;         /// Second operand of 'between' conditions.
+    OUString     maOperand1;         /// First operand of the token or comparison value.
+    OUString     maOperand2;         /// Second operand of 'between' conditions.
     sal_Int32           mnEndIndex;         /// Index of first character following the condition.
 };
 
@@ -151,10 +151,10 @@ public:
      */
     static void         parseCondition(
                             ScXMLConditionParseResult& rParseResult,
-                            const ::rtl::OUString& rAttribute,
+                            const OUString& rAttribute,
                             sal_Int32 nStartIndex );
 
-    static rtl::OUString getExpression(const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar );
+    static OUString getExpression(const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar );
 
 private:
                         ScXMLConditionHelper();

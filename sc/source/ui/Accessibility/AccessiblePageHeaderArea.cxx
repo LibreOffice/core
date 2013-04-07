@@ -181,23 +181,23 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        ScAccessiblePageHeaderArea::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessiblePageHeaderArea");
+    return OUString("ScAccessiblePageHeaderArea");
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
        ScAccessiblePageHeaderArea::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.sheet.AccessiblePageHeaderFooterAreasView");
+    pNames[nOldSize] = OUString("com.sun.star.sheet.AccessiblePageHeaderFooterAreasView");
 
     return aSequence;
 }
@@ -217,10 +217,10 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
 //===== internal ==============================================================
-rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
     throw(uno::RuntimeException)
 {
-    rtl::OUString sDesc;
+    OUString sDesc;
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :
@@ -239,10 +239,10 @@ rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(v
     return sDesc;
 }
 
-rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
+OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sName;
+    OUString sName;
     switch (meAdjust)
     {
     case SVX_ADJUST_LEFT :

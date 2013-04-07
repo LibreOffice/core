@@ -60,7 +60,7 @@ struct SC_DLLPUBLIC ScSortParam
     SCROW       nDestRow;
     ScSortKeyStateVec maKeyState;
     ::com::sun::star::lang::Locale aCollatorLocale;
-    ::rtl::OUString aCollatorAlgorithm;
+    OUString aCollatorAlgorithm;
     sal_uInt16  nCompatHeader;
 
 

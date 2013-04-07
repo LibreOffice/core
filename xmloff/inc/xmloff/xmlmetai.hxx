@@ -43,14 +43,14 @@ private:
 
 public:
     SvXMLMetaDocumentContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XDocumentProperties>& xDocProps);
 
     virtual ~SvXMLMetaDocumentContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -60,7 +60,7 @@ public:
     virtual void EndElement();
 
 public:
-    static void setBuildId(const ::rtl::OUString & rGenerator,
+    static void setBuildId(const OUString & rGenerator,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xImportInfo );
 };
 

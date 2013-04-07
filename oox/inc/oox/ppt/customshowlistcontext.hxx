@@ -28,9 +28,9 @@ namespace oox { namespace ppt {
 
     struct CustomShow
     {
-        ::rtl::OUString             maName;
-        ::rtl::OUString             mnId;
-        std::vector< rtl::OUString >maSldLst;
+        OUString             maName;
+        OUString             mnId;
+        std::vector< OUString >maSldLst;
     };
 
     /** CT_ */

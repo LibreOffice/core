@@ -45,8 +45,8 @@ inline LineEnd GetSystemLineEnd()
 #endif
 }
 
-TOOLS_DLLPUBLIC rtl::OString convertLineEnd(const rtl::OString &rIn, LineEnd eLineEnd);
-TOOLS_DLLPUBLIC rtl::OUString convertLineEnd(const rtl::OUString &rIn, LineEnd eLineEnd);
+TOOLS_DLLPUBLIC OString convertLineEnd(const OString &rIn, LineEnd eLineEnd);
+TOOLS_DLLPUBLIC OUString convertLineEnd(const OUString &rIn, LineEnd eLineEnd);
 
 #endif
 

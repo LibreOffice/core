@@ -158,7 +158,7 @@ ConfigChangeListener_Impl::~ConfigChangeListener_Impl()
 }
 
 static sal_Bool lcl_Find(
-        const rtl::OUString& rTemp,
+        const OUString& rTemp,
         const OUString* pCheckPropertyNames,
         sal_Int32 nLength)
 {
@@ -391,7 +391,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
     }
 }
 
-Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Sequence< OUString >& rNames)
 {
     sal_Int32 i;
 
@@ -1101,7 +1101,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
     return bRet;
 }
 
-sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, ::rtl::OUString& _rName)
+sal_Bool ConfigItem::getUniqueSetElementName( const OUString& _rSetNode, OUString& _rName)
 {
     Reference<XHierarchicalNameAccess> xHierarchyAccess = GetTree();
     sal_Bool bRet = sal_False;
@@ -1122,8 +1122,8 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
 
                 for (; 1 != nFieldElement; nFieldElement = (nFieldElement * nEngendering) % nPrime)
                 {
-                    ::rtl::OUString sThisRoundTrial = _rName;
-                    sThisRoundTrial += ::rtl::OUString::valueOf((sal_Int32)nFieldElement);
+                    OUString sThisRoundTrial = _rName;
+                    sThisRoundTrial += OUString::valueOf((sal_Int32)nFieldElement);
 
                     if (!xSetNode->hasByName(sThisRoundTrial))
                     {
@@ -1139,7 +1139,7 @@ sal_Bool ConfigItem::getUniqueSetElementName( const ::rtl::OUString& _rSetNode, 
     return bRet;
 }
 
-sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rNewNode)
+sal_Bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
 {
     ValueCounter_Impl aCounter(pImpl->nInValueChange);
     sal_Bool bRet = sal_True;

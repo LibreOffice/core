@@ -77,15 +77,15 @@ class Key : public ReflectionBase,
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XDatabaseMetaData > m_meta;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_keyColumns;
 
-    rtl::OUString m_schemaName;
-    rtl::OUString m_tableName;
+    OUString m_schemaName;
+    OUString m_tableName;
 
 public:
     Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
          const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
          ConnectionSettings *pSettings,
-         const rtl::OUString &schemaName,
-         const rtl::OUString &tableName);
+         const OUString &schemaName,
+         const OUString &tableName);
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() { OComponentHelper::acquire(); }

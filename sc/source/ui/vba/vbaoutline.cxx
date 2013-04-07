@@ -37,20 +37,20 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
     }
 }
 
-rtl::OUString
+OUString
 ScVbaOutline::getServiceImplName()
 {
-    return rtl::OUString("ScVbaOutline");
+    return OUString("ScVbaOutline");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaOutline::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Outline" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Outline" );
     }
     return aServiceNames;
 }

@@ -40,7 +40,6 @@
 
 #include "glob.hrc"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -200,7 +199,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
+OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -210,7 +209,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
+OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -490,7 +489,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterObject::getBackground (void)
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        AccessibleSlideSorterObject::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -508,7 +507,7 @@ sal_Bool SAL_CALL
 
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    uno::Sequence< ::rtl::OUString> aSupportedServices (
+    uno::Sequence< OUString> aSupportedServices (
         getSupportedServiceNames ());
     for (int i=0; i<aSupportedServices.getLength(); i++)
         if (sServiceName == aSupportedServices[i])
@@ -519,7 +518,7 @@ sal_Bool SAL_CALL
 
 
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterObject::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

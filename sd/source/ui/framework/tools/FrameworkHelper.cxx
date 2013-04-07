@@ -50,7 +50,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 
 namespace {
 
@@ -193,12 +192,12 @@ const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBa
 
 
 // Task panel URLs.
-const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/");
-const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
-const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts");
-const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign");
-const ::rtl::OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations");
-const ::rtl::OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions");
+const OUString FrameworkHelper::msTaskPanelURLPrefix("private:resource/toolpanel/DrawingFramework/");
+const OUString FrameworkHelper::msMasterPagesTaskPanelURL( msTaskPanelURLPrefix + "MasterPages");
+const OUString FrameworkHelper::msLayoutTaskPanelURL( msTaskPanelURLPrefix + "Layouts");
+const OUString FrameworkHelper::msTableDesignPanelURL( msTaskPanelURLPrefix + "TableDesign");
+const OUString FrameworkHelper::msCustomAnimationTaskPanelURL( msTaskPanelURLPrefix + "CustomAnimations");
+const OUString FrameworkHelper::msSlideTransitionTaskPanelURL( msTaskPanelURLPrefix + "SlideTransitions");
 
 
 // Event URLs.
@@ -262,9 +261,9 @@ namespace
 */
 class FrameworkHelper::ViewURLMap
     : public ::boost::unordered_map<
-          rtl::OUString,
+          OUString,
           ViewShell::ShellType,
-          ::rtl::OUStringHash,
+          OUStringHash,
           ::comphelper::UStringEqual>
 {
 public:
@@ -571,7 +570,7 @@ void FrameworkHelper::RequestTaskPanel (
 
 
 
-ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
+ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
 {
     if (mpViewURLMap->empty())
     {
@@ -594,7 +593,7 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
 
 
 
-::rtl::OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
+OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 {
     switch (eType)
     {
@@ -656,7 +655,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         Reference<XView> xView (GetView(xPaneId));
         ::boost::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
 
-        ::rtl::OUString sRequestedView;
+        OUString sRequestedView;
         if (bIsActive)
         {
             switch (nSlotId)
@@ -721,7 +720,7 @@ void FrameworkHelper::HandleModeChangeSlot (
 
 
 void FrameworkHelper::RunOnConfigurationEvent(
-    const ::rtl::OUString& rsEventType,
+    const OUString& rsEventType,
     const Callback& rCallback)
 {
     RunOnEvent(
@@ -814,7 +813,7 @@ void FrameworkHelper::WaitForUpdate (void) const
 
 
 void FrameworkHelper::RunOnEvent(
-    const ::rtl::OUString& rsEventType,
+    const OUString& rsEventType,
     const ConfigurationChangeEventFilter& rFilter,
     const Callback& rCallback) const
 {
@@ -878,7 +877,7 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
 
 
 
-Reference<XResourceId> FrameworkHelper::CreateResourceId (const ::rtl::OUString& rsResourceURL)
+Reference<XResourceId> FrameworkHelper::CreateResourceId (const OUString& rsResourceURL)
 {
     return new ::sd::framework::ResourceId(rsResourceURL);
 }
@@ -911,7 +910,7 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 
 
 Reference<XResourceId> FrameworkHelper::CreateResourceId (
-    const ::rtl::OUString& rsResourceURL,
+    const OUString& rsResourceURL,
     const Reference<XResourceId>& rxAnchorId)
 {
     if (rxAnchorId.is())

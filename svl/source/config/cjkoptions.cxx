@@ -63,7 +63,7 @@ public:
     SvtCJKOptions_Impl();
     ~SvtCJKOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
     virtual void    Commit();
     void            Load();
 

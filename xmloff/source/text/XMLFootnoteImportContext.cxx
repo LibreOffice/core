@@ -37,8 +37,6 @@
 #include <com/sun/star/text/XFootnote.hpp>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

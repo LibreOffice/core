@@ -37,8 +37,8 @@ namespace connectivity { namespace hsqldb
     LogFile::LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
     {
         m_sFileName = StorageContainer::jstring2ustring(env,streamName);
-        m_sFileName += ::rtl::OUString(".");
-        m_sFileName += ::rtl::OUString::createFromAscii( _pAsciiSuffix );
+        m_sFileName += OUString(".");
+        m_sFileName += OUString::createFromAscii( _pAsciiSuffix );
     }
 
     //---------------------------------------------------------------------
@@ -47,7 +47,7 @@ namespace connectivity { namespace hsqldb
         FILE*& pLogFile = getStreams()[m_sFileName];
         if ( !pLogFile )
         {
-            ::rtl::OString sByteLogName = ::rtl::OUStringToOString(m_sFileName,osl_getThreadTextEncoding());
+            OString sByteLogName = OUStringToOString(m_sFileName,osl_getThreadTextEncoding());
             pLogFile = fopen( sByteLogName.getStr(), "a+" );
         }
         return pLogFile;

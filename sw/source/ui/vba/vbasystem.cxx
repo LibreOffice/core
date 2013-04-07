@@ -43,19 +43,19 @@ PrivateProfileStringListener::~PrivateProfileStringListener()
 {
 }
 
-void PrivateProfileStringListener::Initialize( const rtl::OUString& rFileName, const rtl::OString& rGroupName, const rtl::OString& rKey )
+void PrivateProfileStringListener::Initialize( const OUString& rFileName, const OString& rGroupName, const OString& rKey )
 {
     maFileName = rFileName;
     maGroupName = rGroupName;
     maKey = rKey;
 }
 #ifdef WNT
-void lcl_getRegKeyInfo( const rtl::OString& sKeyInfo, HKEY& hBaseKey, rtl::OString& sSubKey )
+void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
 {
     sal_Int32 nBaseKeyIndex = sKeyInfo.indexOf('\\');
     if( nBaseKeyIndex > 0 )
     {
-        rtl::OString sBaseKey = sKeyInfo.copy( 0, nBaseKeyIndex );
+        OString sBaseKey = sKeyInfo.copy( 0, nBaseKeyIndex );
         sSubKey = sKeyInfo.copy( nBaseKeyIndex + 1 );
         if( sBaseKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HKEY_CURRENT_USER")) )
         {
@@ -84,20 +84,20 @@ void lcl_getRegKeyInfo( const rtl::OString& sKeyInfo, HKEY& hBaseKey, rtl::OStri
 uno::Any PrivateProfileStringListener::getValueEvent()
 {
     // get the private profile string
-    rtl::OUString sValue;
+    OUString sValue;
     if(!maFileName.isEmpty())
     {
         // get key/value from a file
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
-        sValue = rtl::OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
+        sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
     }
     else
     {
         // get key/value from windows register
 #ifdef WNT
         HKEY hBaseKey = NULL;
-        rtl::OString sSubKey;
+        OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
@@ -112,13 +112,13 @@ uno::Any PrivateProfileStringListener::getValueEvent()
                 LPCTSTR lpValueName = TEXT(maKey.getStr());
                 lResult = RegQueryValueEx( hKey, lpValueName, NULL, NULL, (LPBYTE)szBuffer, &cbData );
                 RegCloseKey( hKey );
-                sValue = rtl::OUString::createFromAscii(szBuffer);
+                sValue = OUString::createFromAscii(szBuffer);
             }
         }
 
         return uno::makeAny( sValue );
 #else
-        throw uno::RuntimeException( rtl::OUString("Only support on Windows"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Only support on Windows"), uno::Reference< uno::XInterface >() );
 #endif
     }
 
@@ -128,21 +128,21 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
 {
     // set the private profile string
-    rtl::OUString aValue;
+    OUString aValue;
     value >>= aValue;
     if(!maFileName.isEmpty())
     {
         // set value into a file
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
-        aCfg.WriteKey( maKey, rtl::OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
+        aCfg.WriteKey( maKey, OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
     }
     else
     {
         //set value into windows register
 #ifdef WNT
         HKEY hBaseKey = NULL;
-        rtl::OString sSubKey;
+        OString sSubKey;
         lcl_getRegKeyInfo( maGroupName, hBaseKey, sSubKey );
         if( hBaseKey != NULL )
         {
@@ -152,7 +152,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
             lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
             if( ERROR_SUCCESS == lResult )
             {
-                LPCTSTR szValue = TEXT( rtl::OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                LPCTSTR szValue = TEXT( OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                 DWORD cbData = sizeof(TCHAR) * (_tcslen(szValue) + 1);
                 LPCTSTR lpValueName = TEXT(maKey.getStr());
                 lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)szValue, cbData );
@@ -161,7 +161,7 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
         }
         return;
 #else
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 #endif
     }
 
@@ -229,7 +229,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
                 break;
             }
             default:
-                throw uno::RuntimeException( rtl::OUString("Unknown value for Cursor pointer"), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( OUString("Unknown value for Cursor pointer"), uno::Reference< uno::XInterface >() );
                 // TODO: isn't this a flaw in the API? It should be allowed to throw an
                 // IllegalArgumentException, or so
         }
@@ -241,11 +241,11 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OUString& rSection, const rtl::OUString& rKey ) throw ( uno::RuntimeException )
+SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( uno::RuntimeException )
 {
     // FIXME: need to detect whether it is a relative file path
     // we need to detect if this is a URL, if not then assume its a file path
-    rtl::OUString sFileUrl;
+    OUString sFileUrl;
     if( !rFilename.isEmpty() )
     {
         INetURLObject aObj;
@@ -257,27 +257,27 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
             osl::FileBase::getFileURLFromSystemPath( rFilename, sFileUrl);
     }
 
-    rtl::OString aGroupName(rtl::OUStringToOString(rSection, RTL_TEXTENCODING_DONTKNOW));
-    rtl::OString aKey(rtl::OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));
+    OString aGroupName(OUStringToOString(rSection, RTL_TEXTENCODING_DONTKNOW));
+    OString aKey(OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));
     maPrivateProfileStringListener.Initialize( sFileUrl, aGroupName, aKey );
 
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaSystem::getServiceImplName()
 {
-    return rtl::OUString("SwVbaSystem");
+    return OUString("SwVbaSystem");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaSystem::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.System" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.System" );
     }
     return aServiceNames;
 }

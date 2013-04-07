@@ -29,7 +29,7 @@ namespace formula
 
     // -----------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const ::rtl::OUString& _rServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL FormulaOpCodeMapperObj::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
     return ::comphelper::findValue( getSupportedServiceNames_Static(), _rServiceName, sal_True ).getLength() != 0;
 }
@@ -62,7 +62,7 @@ FormulaOpCodeMapperObj::~FormulaOpCodeMapperObj()
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
 SAL_CALL FormulaOpCodeMapperObj::getMappings(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
+        const ::com::sun::star::uno::Sequence< OUString >& rNames,
         sal_Int32 nLanguage )
     throw ( ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::uno::RuntimeException)
@@ -86,24 +86,24 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
     return xMap->createSequenceOfAvailableMappings( *m_pCompiler,nGroups);
 }
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
+OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
 {
-    return rtl::OUString( "simple.formula.FormulaOpCodeMapperObj" );
+    return OUString( "simple.formula.FormulaOpCodeMapperObj" );
 }
 // --------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-uno::Sequence< rtl::OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
+uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( "com.sun.star.sheet.FormulaOpCodeMapper" );
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq[0] = OUString( "com.sun.star.sheet.FormulaOpCodeMapper" );
     return aSeq;
 }
 

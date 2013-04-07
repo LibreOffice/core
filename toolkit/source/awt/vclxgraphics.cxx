@@ -448,7 +448,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
     }
 }
 
-void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -459,7 +459,7 @@ void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rT
     }
 }
 
-void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const ::rtl::OUString& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rLongs ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rLongs ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 

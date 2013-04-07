@@ -45,8 +45,6 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 

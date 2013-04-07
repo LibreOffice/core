@@ -133,9 +133,9 @@ class IosSalSystem : public SvpSalSystem {
 public:
     IosSalSystem() : SvpSalSystem() {}
     virtual ~IosSalSystem() {}
-    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
-                                  const rtl::OUString& rMessage,
-                                  const std::list< rtl::OUString >& rButtons,
+    virtual int ShowNativeDialog( const OUString& rTitle,
+                                  const OUString& rMessage,
+                                  const std::list< OUString >& rButtons,
                                   int nDefButton );
 };
 
@@ -176,7 +176,7 @@ public:
     virtual void UpdateSettings( AllSettings &rSettings )
     {
         // Clobber the UI fonts
-        Font aFont( rtl::OUString( "Helvetica" ), Size( 0, 14 ) );
+        Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
@@ -251,9 +251,9 @@ void DestroySalInstance( SalInstance *pInst )
     delete pInst;
 }
 
-int IosSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
-                                    const rtl::OUString& rMessage,
-                                    const std::list< rtl::OUString >& rButtons,
+int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
+                                    const OUString& rMessage,
+                                    const std::list< OUString >& rButtons,
                                     int nDefButton )
 {
     (void)rButtons;

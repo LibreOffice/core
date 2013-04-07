@@ -41,7 +41,6 @@
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 
 namespace
@@ -50,7 +49,7 @@ namespace
     {
         static const OUString sStart = OUString(String(SW_RES(STR_START_QUOTE)));
         static const OUString sEnd = OUString(String(SW_RES(STR_END_QUOTE)));
-        ::rtl::OUStringBuffer sBuf(64);
+        OUStringBuffer sBuf(64);
         return sBuf.append(sStart).append(rName).append(sEnd).makeStringAndClear();
     }
 }
@@ -70,7 +69,7 @@ public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     SwDoc *                     m_pDoc;
     ::sw::mark::IMark *         m_pRegisteredBookmark;
-    ::rtl::OUString             m_sMarkName;
+    OUString             m_sMarkName;
 
 
     Impl(   SwXBookmark & rThis,
@@ -440,7 +439,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     uno::RuntimeException)
 {
     // nothing to set here
-    throw lang::IllegalArgumentException( ::rtl::OUString("Property is read-only: ")
+    throw lang::IllegalArgumentException( OUString("Property is read-only: ")
             + PropertyName, static_cast< cppu::OWeakObject * >(this), 0 );
 }
 
@@ -463,7 +462,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXBookmark::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -473,7 +472,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXBookmark::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -483,7 +482,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXBookmark::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -493,7 +492,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXBookmark::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -607,7 +606,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
                      ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
 }
 
-::rtl::OUString SwXFieldmark::getFieldType(void)
+OUString SwXFieldmark::getFieldType(void)
     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -617,7 +616,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
     return pBkm->GetFieldname();
 }
 
-void SwXFieldmark::setFieldType(const::rtl::OUString & fieldType)
+void SwXFieldmark::setFieldType(const OUString & fieldType)
     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -667,7 +666,7 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
 SwXFieldmark::getCheckboxFieldmark()
 {
     ::sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
-    if ( getFieldType() == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX) ) )
+    if ( getFieldType() == OUString( RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX) ) )
     {
         // evil #TODO #FIXME casting away the const-ness
         pCheckboxFm = const_cast<sw::mark::ICheckboxFieldmark*>(dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));

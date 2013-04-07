@@ -37,7 +37,7 @@ class ScAccessibleFilterMenuItem :
 public:
     explicit ScAccessibleFilterMenuItem(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos);
+            ::com::sun::star::accessibility::XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
 
     virtual ~ScAccessibleFilterMenuItem();
 
@@ -56,7 +56,7 @@ public:
         getAccessibleStateSet()
             throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleAction
@@ -67,7 +67,7 @@ public:
     virtual ::sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex)
+    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
@@ -105,7 +105,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
 
     ScMenuFloatingWindow* mpWindow;
-    ::rtl::OUString maName;
+    OUString maName;
     size_t mnMenuPos;
     bool mbEnabled;
 };

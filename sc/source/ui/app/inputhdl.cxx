@@ -105,7 +105,7 @@ sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
 
 ScTypedCaseStrSet::const_iterator findText(
     const ScTypedCaseStrSet& rDataSet, ScTypedCaseStrSet::const_iterator itPos,
-    const rtl::OUString& rStart, rtl::OUString& rResult, bool bBack)
+    const OUString& rStart, OUString& rResult, bool bBack)
 {
     if (bBack)                                    // rueckwaerts
     {
@@ -161,7 +161,7 @@ ScTypedCaseStrSet::const_iterator findText(
     return rDataSet.end(); // no matching text found.
 }
 
-rtl::OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const rtl::OUString& rString)
+OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const OUString& rString)
 {
     ScTypedCaseStrSet::const_iterator it = rDataSet.begin(), itEnd = rDataSet.end();
     for (; it != itEnd; ++it)
@@ -178,9 +178,9 @@ rtl::OUString getExactMatch(const ScTypedCaseStrSet& rDataSet, const rtl::OUStri
     return rString;
 }
 
-void removeChars(rtl::OUString& rStr, sal_Unicode c)
+void removeChars(OUString& rStr, sal_Unicode c)
 {
-    rtl::OUStringBuffer aBuf(rStr);
+    OUStringBuffer aBuf(rStr);
     for (sal_Int32 i = 0, n = aBuf.getLength(); i < n; ++i)
     {
         if (aBuf[i] == c)
@@ -202,7 +202,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
         return;
 
     String aDelimiters = ScEditUtil::ModifyDelimiters(
-                            rtl::OUString::createFromAscii( pMinDelimiters ) );
+                            OUString::createFromAscii( pMinDelimiters ) );
 
     xub_StrLen nColon = aDelimiters.Search(':');
     if ( nColon != STRING_NOTFOUND )
@@ -384,12 +384,12 @@ inline String GetEditText(EditEngine* pEng)
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
 }
 
-static void lcl_RemoveTabs(rtl::OUString& rStr)
+static void lcl_RemoveTabs(OUString& rStr)
 {
     removeChars(rStr, sal_Unicode('\t'));
 }
 
-static void lcl_RemoveLineEnd(rtl::OUString& rStr)
+static void lcl_RemoveLineEnd(OUString& rStr)
 {
     rStr = convertLineEnd(rStr, LINEEND_LF);
     removeChars(rStr, sal_Unicode('\n'));
@@ -787,7 +787,7 @@ void ScInputHandler::HideTip()
         nTipVisible = 0;
         pTipVisibleParent = NULL;
     }
-    aManualTip = rtl::OUString();
+    aManualTip = OUString();
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -799,7 +799,7 @@ void ScInputHandler::HideTipBelow()
         nTipVisibleSec = 0;
         pTipVisibleSecParent = NULL;
     }
-    aManualTip = rtl::OUString();
+    aManualTip = OUString();
 }
 
 void ScInputHandler::ShowTipCursor()
@@ -826,7 +826,7 @@ void ScInputHandler::ShowTipCursor()
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
-            ::std::vector< ::rtl::OUString> aArgs;
+            ::std::vector< OUString> aArgs;
             sal_uInt16      nArgs;
             bool bFound = false;
             FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
@@ -848,7 +848,7 @@ void ScInputHandler::ShowTipCursor()
                             nArgPos = aHelper.GetArgStart( aSelText, nNextFStart, 0 );
                             nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
 
-                            rtl::OUString aNew;
+                            OUString aNew;
                             ScTypedCaseStrSet::const_iterator it =
                                 findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
                             if (it != pFormulaDataPara->end())
@@ -934,7 +934,7 @@ void ScInputHandler::ShowTipCursor()
 
                                     if (nStartPosition > 0)
                                     {
-                                        rtl::OUStringBuffer aBuf;
+                                        OUStringBuffer aBuf;
                                         aBuf.append(aNew.copy(0, nStartPosition));
                                         aBuf.append(static_cast<sal_Unicode>(0x25BA));
                                         aBuf.append(aNew.copy(nStartPosition));
@@ -960,7 +960,7 @@ void ScInputHandler::ShowTipCursor()
                     {
                         break;
                     }
-                    rtl::OUString aNew;
+                    OUString aNew;
                     nPosition = aText.Len()+1;
                     ScTypedCaseStrSet::const_iterator it =
                         findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
@@ -1062,14 +1062,14 @@ void ScInputHandler::UseFormulaData()
             xub_StrLen  nNextFEnd = 0;
             xub_StrLen  nArgPos = 0;
             const IFunctionDescription* ppFDesc;
-            ::std::vector< ::rtl::OUString> aArgs;
+            ::std::vector< OUString> aArgs;
             sal_uInt16      nArgs;
             bool bFound = false;
 
-            rtl::OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
+            OUString aText = pEngine->GetWord( 0, aSel.nEndPos-1 );
             if (!aText.isEmpty())
             {
-                rtl::OUString aNew;
+                OUString aNew;
                 miAutoPosFormula = pFormulaData->end();
                 miAutoPosFormula = findText(*pFormulaData, miAutoPosFormula, aText, aNew, false);
                 if (miAutoPosFormula != pFormulaData->end())
@@ -1099,7 +1099,7 @@ void ScInputHandler::UseFormulaData()
                         nArgPos = aHelper.GetArgStart( aFormula, nNextFStart, 0 );
                         nArgs = static_cast<sal_uInt16>(ppFDesc->getParameterCount());
 
-                        rtl::OUString aNew;
+                        OUString aNew;
                         ScTypedCaseStrSet::const_iterator it =
                             findText(*pFormulaDataPara, pFormulaDataPara->end(), ppFDesc->getFunctionName(), aNew, false);
                         if (it != pFormulaDataPara->end())
@@ -1185,7 +1185,7 @@ void ScInputHandler::UseFormulaData()
 
                                 if (nStartPosition > 0)
                                 {
-                                    rtl::OUStringBuffer aBuf;
+                                    OUStringBuffer aBuf;
                                     aBuf.append(aNew.copy(0, nStartPosition));
                                     aBuf.append(static_cast<sal_Unicode>(0x25BA));
                                     aBuf.append(aNew.copy(nStartPosition));
@@ -1212,7 +1212,7 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pFormulaData )
     {
-        rtl::OUString aNew;
+        OUString aNew;
         ScTypedCaseStrSet::const_iterator itNew = findText(*pFormulaData, miAutoPosFormula, aAutoSearch, aNew, bBack);
         if (itNew != pFormulaData->end())
         {
@@ -1275,7 +1275,7 @@ void ScInputHandler::PasteFunctionData()
     if (pFormulaData && miAutoPosFormula != pFormulaData->end())
     {
         const ScTypedStrData& rData = *miAutoPosFormula;
-        const rtl::OUString& aInsert = rData.GetString();
+        const OUString& aInsert = rData.GetString();
         bool bParInserted = false;
 
         DataChanging();                         // kann nicht neu sein
@@ -1321,7 +1321,7 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
             if ( pCell->GetCode()->GetCodeLen() <= 1 )
             {   // ==1: einzelner ist als Parameter immer Bereich
                 // ==0: es waere vielleicht einer, wenn..
-                rtl::OUStringBuffer aBraced;
+                OUStringBuffer aBraced;
                 aBraced.append('(');
                 aBraced.append(rFormula);
                 aBraced.append(')');
@@ -1378,7 +1378,7 @@ static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScA
 
 void ScInputHandler::FormulaPreview()
 {
-    rtl::OUString aValue;
+    OUString aValue;
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if ( pActiveView && pActiveViewSh )
     {
@@ -1555,10 +1555,10 @@ void ScInputHandler::UseColData()           // beim Tippen
             xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
             if ( aSel.nEndPos == nParLen )
             {
-                rtl::OUString aText = GetEditText(pEngine);
+                OUString aText = GetEditText(pEngine);
                 if (!aText.isEmpty())
                 {
-                    rtl::OUString aNew;
+                    OUString aNew;
                     miAutoPosColumn = pColumnData->end();
                     miAutoPosColumn = findText(*pColumnData, miAutoPosColumn, aText, aNew, false);
                     if (miAutoPosColumn != pColumnData->end())
@@ -1573,7 +1573,7 @@ void ScInputHandler::UseColData()           // beim Tippen
 
                         // ein Space zwischen Absaetzen:
                         sal_Int32 nEdLen = pEngine->GetTextLen() + nParCnt - 1;
-                        rtl::OUString aIns = aNew.copy(nEdLen);
+                        OUString aIns = aNew.copy(nEdLen);
 
                         //  selection must be "backwards", so the cursor stays behind the last
                         //  typed character
@@ -1599,7 +1599,7 @@ void ScInputHandler::UseColData()           // beim Tippen
                             //  Wenn der eingegebene Text gefunden wurde, TAB nur dann
                             //  verschlucken, wenn noch etwas kommt
 
-                            rtl::OUString aDummy;
+                            OUString aDummy;
                             ScTypedCaseStrSet::const_iterator itNextPos =
                                 findText(*pColumnData, miAutoPosColumn, aText, aDummy, false);
                             bUseTab = itNextPos != pColumnData->end();
@@ -1627,12 +1627,12 @@ void ScInputHandler::NextAutoEntry( bool bBack )
             sal_uInt16 nParCnt = pEngine->GetParagraphCount();
             if ( aSel.nEndPara+1 == nParCnt && aSel.nStartPara == aSel.nEndPara )
             {
-                rtl::OUString aText = GetEditText(pEngine);
+                OUString aText = GetEditText(pEngine);
                 xub_StrLen nSelLen = aSel.nEndPos - aSel.nStartPos;
                 xub_StrLen nParLen = pEngine->GetTextLen( aSel.nEndPara );
                 if ( aSel.nEndPos == nParLen && aText.getLength() == aAutoSearch.getLength() + nSelLen )
                 {
-                    rtl::OUString aNew;
+                    OUString aNew;
                     ScTypedCaseStrSet::const_iterator itNew =
                         findText(*pColumnData, miAutoPosColumn, aAutoSearch, aNew, bBack);
 
@@ -1643,7 +1643,7 @@ void ScInputHandler::NextAutoEntry( bool bBack )
                         bInOwnChange = true;        // disable ModifyHdl (reset below)
 
                         lcl_RemoveLineEnd( aNew );
-                        rtl::OUString aIns = aNew.copy(aAutoSearch.getLength());
+                        OUString aIns = aNew.copy(aAutoSearch.getLength());
 
                         //  when editing in input line, apply to both edit views
                         if ( pTableView )
@@ -2060,7 +2060,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 pEngine->SetText(aCurrentText);
                 aStr = aCurrentText;
                 bTextValid = false;
-                aCurrentText = rtl::OUString();
+                aCurrentText = OUString();
             }
             else
                 aStr = GetEditText(pEngine);
@@ -2154,7 +2154,7 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl)
         //  update input line from ModifyHdl for changes that are not
         //  wrapped by DataChanging/DataChanged calls (like Drag&Drop)
 
-        rtl::OUString aText;
+        OUString aText;
         if ( pInputWin->IsMultiLineInput() )
             aText = ScEditUtil::GetMultilineString(*pEngine);
         else
@@ -2207,7 +2207,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
-        rtl::OUString aText;
+        OUString aText;
         if ( pInputWin && pInputWin->IsMultiLineInput() )
             aText = ScEditUtil::GetMultilineString(*pEngine);
         else
@@ -2496,7 +2496,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     ScPatternAttr*  pCellAttrs  = NULL;
     bool            bForget     = false;    // wegen Gueltigkeit streichen ?
 
-    rtl::OUString aString = GetEditText(pEngine);
+    OUString aString = GetEditText(pEngine);
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && !aString.isEmpty() && !lcl_IsNumber(aString))
     {
@@ -2753,37 +2753,37 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get().GetAutoCorrect();
             if ( pAuto )
             {
-                rtl::OUString aReplace(pAuto->GetStartDoubleQuote());
+                OUString aReplace(pAuto->GetStartDoubleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart();
                 if (!aReplace.equalsAsciiL("\"", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
 
-                aReplace = rtl::OUString(pAuto->GetEndDoubleQuote());
+                aReplace = OUString(pAuto->GetEndDoubleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd();
                 if (!aReplace.equalsAsciiL("\"", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("\"")));
 
-                aReplace = rtl::OUString(pAuto->GetStartSingleQuote());
+                aReplace = OUString(pAuto->GetStartSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkStart();
                 if (!aReplace.equalsAsciiL("'", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString("'"));
+                        OUString("'"));
 
-                aReplace = rtl::OUString(pAuto->GetEndSingleQuote());
+                aReplace = OUString(pAuto->GetEndSingleQuote());
                 if (aReplace.isEmpty())
                     aReplace = ScGlobal::pLocaleData->getQuotationMarkEnd();
                 if (!aReplace.equalsAsciiL("'", 1))
                     aString = aString.replaceAll(
                         aReplace,
-                        rtl::OUString("'"));
+                        OUString("'"));
             }
         }
 
@@ -2828,7 +2828,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText = rtl::OUString();
+    aFormText = OUString();
 
     bInOwnChange = false;
     bInEnterHandler = false;
@@ -2880,7 +2880,7 @@ void ScInputHandler::CancelHandler()
         NotifyChange( pLastState, true );
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText = rtl::OUString();
+    aFormText = OUString();
 
     bInOwnChange = false;
 }
@@ -2905,9 +2905,9 @@ void ScInputHandler::AddRefEntry()
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( rtl::OUString(cSep), false );
+        pTableView->InsertText( OUString(cSep), false );
     if (pTopView)
-        pTopView->InsertText( rtl::OUString(cSep), false );
+        pTopView->InsertText( OUString(cSep), false );
 
     DataChanged();
 }
@@ -3502,7 +3502,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                     const ScAddress&        rSPos   = pState->GetStartPos();
                     const ScAddress&        rEPos   = pState->GetEndPos();
                     const EditTextObject*   pData   = pState->GetEditData();
-                    rtl::OUString aString = pState->GetString();
+                    OUString aString = pState->GetString();
                     bool bTxtMod = false;
                     ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
                     ScDocument* pDoc = pDocSh->GetDocument();
@@ -3529,7 +3529,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aString = GetEditText(pEngine);
                             lcl_RemoveTabs(aString);
                             bTextValid = false;
-                            aCurrentText = rtl::OUString();
+                            aCurrentText = OUString();
                         }
                         else
                         {
@@ -3543,7 +3543,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     if ( pInputWin )                        // Bereichsanzeige
                     {
-                        rtl::OUString aPosStr;
+                        OUString aPosStr;
                         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
 
                         //  Ist der Bereich ein Name?
@@ -3730,7 +3730,7 @@ void ScInputHandler::InputChanged( EditView* pView, bool bFromNotify )
     SyncViews( pView );
 }
 
-const rtl::OUString& ScInputHandler::GetEditString()
+const OUString& ScInputHandler::GetEditString()
 {
     if (pEngine)
     {
@@ -3779,7 +3779,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
             {
                 xub_StrLen nLen = rDestEngine.GetTextLen( (sal_uInt16)0 );
                 ESelection aSel( 0,nLen, 1,0 );
-                rDestEngine.QuickInsertText( rtl::OUString(' '), aSel );       // Umbruch durch Space ersetzen
+                rDestEngine.QuickInsertText( OUString(' '), aSel );       // Umbruch durch Space ersetzen
                 --nParCnt;
             }
 
@@ -3852,7 +3852,7 @@ void ScInputHandler::InputSetSelection( xub_StrLen nStart, xub_StrLen nEnd )
 
 //------------------------------------------------------------------------
 
-void ScInputHandler::InputReplaceSelection( const rtl::OUString& rStr )
+void ScInputHandler::InputReplaceSelection( const OUString& rStr )
 {
     if (!pRefViewSh)
         pRefViewSh = pActiveViewSh;
@@ -3862,7 +3862,7 @@ void ScInputHandler::InputReplaceSelection( const rtl::OUString& rStr )
     sal_Int32 nOldLen = nFormSelEnd - nFormSelStart;
     sal_Int32 nNewLen = rStr.getLength();
 
-    rtl::OUStringBuffer aBuf(aFormText);
+    OUStringBuffer aBuf(aFormText);
     if (nOldLen)
         aBuf.remove(nFormSelStart, nOldLen);
     if (nNewLen)

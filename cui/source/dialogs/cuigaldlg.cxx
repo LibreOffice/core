@@ -822,12 +822,12 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 // ------------------------------------------------------------------------
 
-::rtl::OUString TPGalleryThemeProperties::addExtension( const ::rtl::OUString& _rDisplayText, const ::rtl::OUString& _rExtension )
+OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
-    ::rtl::OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
-    ::rtl::OUString sOpenBracket( " (" );
-    ::rtl::OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
-    ::rtl::OUString sRet = _rDisplayText;
+    OUString sAllFilter( RTL_CONSTASCII_USTRINGPARAM( "(*.*)" ) );
+    OUString sOpenBracket( " (" );
+    OUString sCloseBracket( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+    OUString sRet = _rDisplayText;
 
     if ( sRet.indexOf( sAllFilter ) == -1 )
     {
@@ -901,7 +901,7 @@ void TPGalleryThemeProperties::FillFilterList()
     }
 
     // media filters
-    static const ::rtl::OUString aWildcard( "*." );
+    static const OUString aWildcard( "*." );
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
 
@@ -909,7 +909,7 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            ::rtl::OUString aFilterWildcard( aWildcard );
+            OUString aFilterWildcard( aWildcard );
 
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
@@ -1008,7 +1008,7 @@ void TPGalleryThemeProperties::SearchFiles()
     aLbxFound.Clear();
 
     pProgress->SetFileType( aCbbFileType.GetText() );
-    pProgress->SetDirectory( rtl::OUString() );
+    pProgress->SetDirectory( OUString() );
     pProgress->Update();
 
     pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );

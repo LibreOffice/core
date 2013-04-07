@@ -84,10 +84,10 @@ void SAL_CALL ImplXMLSignatureListener::endDocument(  )
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::startElement( const rtl::OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
-    if ( aName == rtl::OUString("Signature") )
+    if ( aName == OUString("Signature") )
     {
             maStartVerifySignatureElementListener.Call( (void*)&xAttribs );
     }
@@ -98,7 +98,7 @@ void SAL_CALL ImplXMLSignatureListener::startElement( const rtl::OUString& aName
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::endElement( const rtl::OUString& aName )
+void SAL_CALL ImplXMLSignatureListener::endElement( const OUString& aName )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -107,7 +107,7 @@ void SAL_CALL ImplXMLSignatureListener::endElement( const rtl::OUString& aName )
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::characters( const rtl::OUString& aChars )
+void SAL_CALL ImplXMLSignatureListener::characters( const OUString& aChars )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -116,7 +116,7 @@ void SAL_CALL ImplXMLSignatureListener::characters( const rtl::OUString& aChars 
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::ignorableWhitespace( const rtl::OUString& aWhitespaces )
+void SAL_CALL ImplXMLSignatureListener::ignorableWhitespace( const OUString& aWhitespaces )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -125,7 +125,7 @@ void SAL_CALL ImplXMLSignatureListener::ignorableWhitespace( const rtl::OUString
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
+void SAL_CALL ImplXMLSignatureListener::processingInstruction( const OUString& aTarget, const OUString& aData )
     throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -157,12 +157,12 @@ UriBindingHelper::UriBindingHelper( const com::sun::star::uno::Reference < com::
 }
 
 
-void SAL_CALL UriBindingHelper::setUriBinding( const rtl::OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
+void SAL_CALL UriBindingHelper::setUriBinding( const OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
     throw (uno::Exception, uno::RuntimeException)
 {
 }
 
-uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( const rtl::OUString& uri )
+uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( const OUString& uri )
     throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< io::XInputStream > xInputStream;
@@ -182,7 +182,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     return xInputStream;
 }
 
-uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
+uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI )
 {
     OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;
@@ -192,10 +192,10 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     {
         // Cloning because of I can't keep all storage references open
         // MBA with think about a better API...
-        const ::rtl::OUString sName = ::rtl::Uri::decode(
+        const OUString sName = ::rtl::Uri::decode(
             rURI, rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (sName.isEmpty() && !rURI.isEmpty())
-            throw uno::Exception(::rtl::OUString(
+            throw uno::Exception(OUString(
             "Could not decode URI for stream element."), 0);
 
         uno::Reference< io::XStream > xStream;
@@ -206,14 +206,14 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     }
     else
     {
-        const rtl::OUString aStoreName = ::rtl::Uri::decode(
+        const OUString aStoreName = ::rtl::Uri::decode(
             rURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (aStoreName.isEmpty() && !rURI.isEmpty())
             throw uno::Exception(
-            ::rtl::OUString(
+            OUString(
             "Could not decode URI for stream element."), 0);
 
-        rtl::OUString aElement = rURI.copy( nSepPos+1 );
+        OUString aElement = rURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
         xInStream = OpenInputStream( xSubStore, aElement );
     }

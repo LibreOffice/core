@@ -37,7 +37,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::osl;
 
-void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
+void WrappedResultSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::construct" );
     OCacheSet::construct(_xDriverSet,i_sRowSetFilter);

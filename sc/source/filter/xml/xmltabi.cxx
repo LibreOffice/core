@@ -55,7 +55,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::rtl::OUString;
 
 /**
  * Determine whether this table is an external reference cache from its
@@ -69,7 +68,7 @@ using ::rtl::OUString;
  *
  * @return
  */
-static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rUrl, rtl::OUString& rExtTabName)
+static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUString& rExtTabName)
 {
     // 'file:///path/to/file.ods'#MySheet
     // 'file:///path/to/file.ods'#MySheet with space
@@ -85,10 +84,10 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
     if ( eProt == INET_PROT_NOT_VALID )
         return false;
 
-    rtl::OUString aPrefix = INetURLObject::GetScheme( eProt );
+    OUString aPrefix = INetURLObject::GetScheme( eProt );
     sal_Int32 nPrefLen = aPrefix.getLength();
 
-    rtl::OUStringBuffer aUrlBuf, aTabNameBuf;
+    OUStringBuffer aUrlBuf, aTabNameBuf;
     aUrlBuf.append( aPrefix );
     sal_Int32 n = rName.getLength();
     const sal_Unicode* p = rName.getStr();
@@ -140,7 +139,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -153,17 +152,17 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
     nStartOffset = GetScImport().GetByteOffset();
 
     ScXMLTabProtectionData aProtectData;
-    rtl::OUString sName;
-    rtl::OUString sStyleName;
+    OUString sName;
+    OUString sStyleName;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -197,7 +196,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         }
     }
 
-    rtl::OUString aExtUrl, aExtTabName;
+    OUString aExtUrl, aExtTabName;
     if (lcl_isExternalRefCache(sName, aExtUrl, aExtTabName))
     {
         // This is an external ref cache table.
@@ -224,7 +223,7 @@ ScXMLTableContext::~ScXMLTableContext()
 }
 
 SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

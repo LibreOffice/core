@@ -41,7 +41,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mail;
 using namespace ::com::sun::star::beans;
-using ::rtl::OUString;
 
 class SwTestAccountSettingsDialog : public SfxModalDialog
 {
@@ -320,7 +319,7 @@ void SwTestAccountSettingsDialog::Test()
 {
     uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
 
-    rtl::OUString sException;
+    OUString sException;
 
     bool bIsLoggedIn = false;
     bool bIsServer = false;
@@ -357,7 +356,7 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_pConfigItem->GetInServerName(),
                         m_pParent->m_pConfigItem->GetInServerPort(),
-                        ::rtl::OUString("Insecure"));
+                        OUString("Insecure"));
             xInMailService->connect(xConnectionContext, xAuthenticator);
         }
         if(m_bStop)
@@ -419,7 +418,7 @@ void SwTestAccountSettingsDialog::Test()
 
     if(!bIsServer || !bIsLoggedIn )
     {
-        rtl::OUStringBuffer aErrorMessage(m_sErrorServer);
+        OUStringBuffer aErrorMessage(m_sErrorServer);
         if (!sException.isEmpty())
             aErrorMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n--\n")).append(sException);
         m_eErrorsED.SetText(aErrorMessage.makeStringAndClear());

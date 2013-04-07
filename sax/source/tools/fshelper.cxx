@@ -33,7 +33,7 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext(), UNO_SET_THROW );
     Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), UNO_SET_THROW );
-    mxTokenHandler.set( xFactory->createInstanceWithContext( rtl::OUString( "com.sun.star.xml.sax.FastTokenHandler"), xContext ), UNO_QUERY_THROW );
+    mxTokenHandler.set( xFactory->createInstanceWithContext( OUString( "com.sun.star.xml.sax.FastTokenHandler"), xContext ), UNO_QUERY_THROW );
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );
@@ -107,10 +107,10 @@ void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttribut
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)
 {
-    return write(rtl::OUString::createFromAscii(value));
+    return write(OUString::createFromAscii(value));
 }
 
-FastSerializerHelper* FastSerializerHelper::write(const rtl::OUString& value)
+FastSerializerHelper* FastSerializerHelper::write(const OUString& value)
 {
     mpSerializer->characters(value);
     return this;
@@ -118,25 +118,25 @@ FastSerializerHelper* FastSerializerHelper::write(const rtl::OUString& value)
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int32 value)
 {
-    return write(::rtl::OUString::valueOf(value));
+    return write(OUString::valueOf(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(sal_Int64 value)
 {
-    return write(::rtl::OUString::valueOf(value));
+    return write(OUString::valueOf(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::write(double value)
 {
-    return write(::rtl::OUString::valueOf(value));
+    return write(OUString::valueOf(value));
 }
 
 FastSerializerHelper* FastSerializerHelper::writeEscaped(const char* value)
 {
-    return writeEscaped(::rtl::OUString::createFromAscii(value));
+    return writeEscaped(OUString::createFromAscii(value));
 }
 
-FastSerializerHelper* FastSerializerHelper::writeEscaped(const ::rtl::OUString& value)
+FastSerializerHelper* FastSerializerHelper::writeEscaped(const OUString& value)
 {
     return write(FastSaxSerializer::escapeXml(value));
 }

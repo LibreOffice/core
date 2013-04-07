@@ -48,7 +48,7 @@ class UCBHELPER_DLLPUBLIC ContentIdentifier :
                   public com::sun::star::ucb::XContentIdentifier
 {
 public:
-    ContentIdentifier( const rtl::OUString& rURL );
+    ContentIdentifier( const OUString& rURL );
     virtual ~ContentIdentifier();
 
     // XInterface
@@ -69,10 +69,10 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     // XContentIdentifier
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentIdentifier()
         throw( com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentProviderScheme()
         throw( com::sun::star::uno::RuntimeException );
 

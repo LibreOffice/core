@@ -498,7 +498,7 @@ void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
 // -----------------------------------------------------------------------------
 
 void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
-                                            const rtl::OString& rStr )
+                                            const OString& rStr )
 {
     CopyAnyData( nFormatId, rStr.getStr(), rStr.getLength() );
 }
@@ -553,7 +553,7 @@ void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
     {
         TDataCntnrEntry_Impl aEntry;
         aEntry.nId = nFmt;
-        rtl::OUString aStr( rStr );
+        OUString aStr( rStr );
         aEntry.aAny <<= aStr;
         pImpl->aFmtList.push_back( aEntry );
          AddFormat( aEntry.nId );

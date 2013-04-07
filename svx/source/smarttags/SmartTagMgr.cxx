@@ -49,7 +49,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
 
-SmartTagMgr::SmartTagMgr( const rtl::OUString& rApplicationName )
+SmartTagMgr::SmartTagMgr( const OUString& rApplicationName )
     : maApplicationName( rApplicationName ),
       maRecognizerList(),
       maActionList(),
@@ -64,7 +64,7 @@ SmartTagMgr::~SmartTagMgr()
 {
 }
 
-void SmartTagMgr::Init( const rtl::OUString& rConfigurationGroupName )
+void SmartTagMgr::Init( const OUString& rConfigurationGroupName )
 {
     // get component context to pass to components:
     if ( mxContext.is() )
@@ -86,7 +86,7 @@ void SmartTagMgr::CreateBreakIterator() const
 
 /** Dispatches the recognize call to all installed smart tag recognizers
 */
-void SmartTagMgr::Recognize( const rtl::OUString& rText,
+void SmartTagMgr::Recognize( const OUString& rText,
                              const Reference< text::XTextMarkup > xMarkup,
                              const Reference< frame::XController > xController,
                              const lang::Locale& rLocale,
@@ -102,7 +102,7 @@ void SmartTagMgr::Recognize( const rtl::OUString& rText,
         const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
         for ( sal_uInt32 j = 0; j < nSmartTagCount && !bCallRecognizer; ++j )
         {
-            const rtl::OUString aSmartTagName = xRecognizer->getSmartTagName(j);
+            const OUString aSmartTagName = xRecognizer->getSmartTagName(j);
             if ( IsSmartTagTypeEnabled( aSmartTagName ) )
                 bCallRecognizer = true;
         }
@@ -118,9 +118,9 @@ void SmartTagMgr::Recognize( const rtl::OUString& rText,
     }
 }
 
-typedef std::multimap < rtl::OUString, ActionReference >::const_iterator SmartTagMapIter;
+typedef std::multimap < OUString, ActionReference >::const_iterator SmartTagMapIter;
 
-void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes,
+void SmartTagMgr::GetActionSequences( Sequence < OUString >& rSmartTagTypes,
                                       Sequence < Sequence< Reference< smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                       Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence ) const
 {
@@ -129,7 +129,7 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
 
     for ( sal_uInt16 j = 0; j < rSmartTagTypes.getLength(); ++j )
     {
-        const rtl::OUString& rSmartTagType = rSmartTagTypes[j];
+        const OUString& rSmartTagType = rSmartTagTypes[j];
 
         const sal_Int32 nNumberOfActionRefs = maSmartTagMap.count( rSmartTagType );
 
@@ -153,9 +153,9 @@ void SmartTagMgr::GetActionSequences( Sequence < rtl::OUString >& rSmartTagTypes
 
 /** Returns the caption for a smart tag type.
 */
-rtl::OUString SmartTagMgr::GetSmartTagCaption( const rtl::OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const
+OUString SmartTagMgr::GetSmartTagCaption( const OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
     SmartTagMapIter aLower = maSmartTagMap.lower_bound( rSmartTagType );
 
@@ -177,7 +177,7 @@ rtl::OUString SmartTagMgr::GetSmartTagCaption( const rtl::OUString& rSmartTagTyp
 
 /** Returns true if the given smart tag type is enabled.
 */
-bool SmartTagMgr::IsSmartTagTypeEnabled( const rtl::OUString& rSmartTagType ) const
+bool SmartTagMgr::IsSmartTagTypeEnabled( const OUString& rSmartTagType ) const
 {
     return maDisabledSmartTagTypes.end() == maDisabledSmartTagTypes.find( rSmartTagType );
 }
@@ -185,7 +185,7 @@ bool SmartTagMgr::IsSmartTagTypeEnabled( const rtl::OUString& rSmartTagType ) co
 /** Writes currently disabled smart tag types to configuration.
 */
 void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
-                                      const std::vector< rtl::OUString >* pDisabledTypes ) const
+                                      const std::vector< OUString >* pDisabledTypes ) const
 {
     if ( mxConfigurationSettings.is() )
     {
@@ -208,9 +208,9 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
         if ( pDisabledTypes )
         {
             const sal_Int32 nNumberOfDisabledSmartTagTypes = pDisabledTypes->size();
-            Sequence< rtl::OUString > aTypes( nNumberOfDisabledSmartTagTypes );
+            Sequence< OUString > aTypes( nNumberOfDisabledSmartTagTypes );
 
-            std::vector< rtl::OUString >::const_iterator aIter;
+            std::vector< OUString >::const_iterator aIter;
             sal_Int32 nCount = 0;
             for ( aIter = pDisabledTypes->begin(); aIter != pDisabledTypes->end(); ++aIter )
                 aTypes[ nCount++ ] = *aIter;
@@ -291,7 +291,7 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
 
     for( sal_Int32 i = 0; i < nNumberOfChanges; ++i)
     {
-        rtl::OUString sTemp;
+        OUString sTemp;
         pElementChanges[i].Accessor >>= sTemp;
 
         if ( sTemp == "ExcludedSmartTagTypes" )
@@ -373,7 +373,7 @@ void SmartTagMgr::LoadLibraries()
 
 /**
 */
-void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroupName )
+void SmartTagMgr::PrepareConfiguration( const OUString& rConfigurationGroupName )
 {
     Any aAny = makeAny( "/org.openoffice.Office.Common/SmartTags/" + rConfigurationGroupName );
     beans::PropertyValue aPathArgument;
@@ -423,7 +423,7 @@ void SmartTagMgr::ReadConfiguration( bool bExcludedTypes, bool bRecognize )
             maDisabledSmartTagTypes.clear();
 
             Any aAny = mxConfigurationSettings->getPropertyValue( "ExcludedSmartTagTypes" );
-            Sequence< rtl::OUString > aValues;
+            Sequence< OUString > aValues;
             aAny >>= aValues;
 
             const sal_Int32 nValues = aValues.getLength();
@@ -473,7 +473,7 @@ void SmartTagMgr::RegisterListener()
     }
 }
 
-typedef std::pair < const rtl::OUString, ActionReference > SmartTagMapElement;
+typedef std::pair < const OUString, ActionReference > SmartTagMapElement;
 
 /** Sets up a map that maps smart tag type names to actions references.
 */
@@ -488,7 +488,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
         const sal_uInt32 nSmartTagCount = xRecognizer->getSmartTagCount();
         for ( sal_uInt32 j = 0; j < nSmartTagCount; ++j )
         {
-            const rtl::OUString aSmartTagName = xRecognizer->getSmartTagName(j);
+            const OUString aSmartTagName = xRecognizer->getSmartTagName(j);
 
             // check if smart tag type has already been processed:
             if ( maSmartTagMap.find( aSmartTagName ) != maSmartTagMap.end() )
@@ -501,7 +501,7 @@ void SmartTagMgr::AssociateActionsWithRecognizers()
                 const sal_uInt32 nSmartTagCountInActionLib = xActionLib->getSmartTagCount();
                 for ( sal_uInt32 l = 0; l < nSmartTagCountInActionLib; ++l )
                 {
-                    const rtl::OUString aSmartTagNameInActionLib = xActionLib->getSmartTagName(l);
+                    const OUString aSmartTagNameInActionLib = xActionLib->getSmartTagName(l);
                     if ( aSmartTagName.equals( aSmartTagNameInActionLib ) )
                     {
                         // found actions and recognizer for same smarttag

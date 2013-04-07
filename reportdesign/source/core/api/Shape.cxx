@@ -41,14 +41,14 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-uno::Sequence< ::rtl::OUString > lcl_getShapeOptionals()
+uno::Sequence< OUString > lcl_getShapeOptionals()
 {
-    ::rtl::OUString pProps[] = {
+    OUString pProps[] = {
         PROPERTY_DATAFIELD
         ,PROPERTY_CONTROLBACKGROUND
         ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
 DBG_NAME( rpt_OShape )
@@ -67,7 +67,7 @@ OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext)
 OShape::OShape(uno::Reference< uno::XComponentContext > const & _xContext
                ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
                ,uno::Reference< drawing::XShape >& _xShape
-               ,const ::rtl::OUString& _sServiceName)
+               ,const OUString& _sServiceName)
 :ShapeBase(m_aMutex)
 ,ShapePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getShapeOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
@@ -118,20 +118,20 @@ void SAL_CALL OShape::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OShape::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.Shape");
+    return OUString("com.sun.star.comp.report.Shape");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OShape::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OShape::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OShape::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_SHAPE;
 
     return aServices;
@@ -143,12 +143,12 @@ uno::Reference< uno::XInterface > OShape::create(uno::Reference< uno::XComponent
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OShape::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OShape::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OShape::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
 
     return m_sServiceName == ServiceName || ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
@@ -200,7 +200,7 @@ cppu::IPropertyArrayHelper& OShape::getInfoHelper()
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OShape::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
@@ -210,7 +210,7 @@ void SAL_CALL OShape::setPropertyValue( const ::rtl::OUString& aPropertyName, co
         ShapePropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OShape::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OShape::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
@@ -221,7 +221,7 @@ uno::Any SAL_CALL OShape::getPropertyValue( const ::rtl::OUString& PropertyName 
     return uno::Any();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OShape::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || aPropertyName.isEmpty() )
@@ -231,7 +231,7 @@ void SAL_CALL OShape::addPropertyChangeListener( const ::rtl::OUString& aPropert
         ShapePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OShape::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || aPropertyName.isEmpty() )
@@ -241,7 +241,7 @@ void SAL_CALL OShape::removePropertyChangeListener( const ::rtl::OUString& aProp
         ShapePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OShape::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || PropertyName.isEmpty() )
@@ -251,7 +251,7 @@ void SAL_CALL OShape::addVetoableChangeListener( const ::rtl::OUString& Property
         ShapePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OShape::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
     if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || PropertyName.isEmpty() )
@@ -262,12 +262,12 @@ void SAL_CALL OShape::removeVetoableChangeListener( const ::rtl::OUString& Prope
 }
 // -----------------------------------------------------------------------------
 // XReportControlModel
-::rtl::OUString SAL_CALL OShape::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OShape::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::setDataField( const ::rtl::OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OShape::setDataField( const OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
@@ -283,13 +283,13 @@ void SAL_CALL OShape::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange 
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OShape::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OShape::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OShape::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
@@ -412,9 +412,9 @@ void SAL_CALL OShape::setSize( const awt::Size& aSize ) throw (beans::PropertyVe
 // -----------------------------------------------------------------------------
 
 // XShapeDescriptor
-::rtl::OUString SAL_CALL OShape::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OShape::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString("com.sun.star.drawing.CustomShape");
+   return OUString("com.sun.star.drawing.CustomShape");
 }
 // -----------------------------------------------------------------------------
 ::sal_Int32 SAL_CALL OShape::getZOrder() throw (uno::RuntimeException)
@@ -456,7 +456,7 @@ void SAL_CALL OShape::setTransformation( const drawing::HomogenMatrix3& _transfo
     set(PROPERTY_TRANSFORMATION,_transformation,m_Transformation);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OShape::getCustomShapeEngine() throw (uno::RuntimeException)
+OUString SAL_CALL OShape::getCustomShapeEngine() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps.aComponent.m_xProperty->getPropertyValue(PROPERTY_CUSTOMSHAPEENGINE) >>= m_CustomShapeEngine;
@@ -464,20 +464,20 @@ void SAL_CALL OShape::setTransformation( const drawing::HomogenMatrix3& _transfo
     return m_CustomShapeEngine;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::setCustomShapeEngine( const ::rtl::OUString& _customshapeengine ) throw (uno::RuntimeException)
+void SAL_CALL OShape::setCustomShapeEngine( const OUString& _customshapeengine ) throw (uno::RuntimeException)
 {
     m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEENGINE,uno::makeAny(_customshapeengine));
     set(PROPERTY_CUSTOMSHAPEENGINE,_customshapeengine,m_CustomShapeEngine);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OShape::getCustomShapeData() throw (uno::RuntimeException)
+OUString SAL_CALL OShape::getCustomShapeData() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps.aComponent.m_xProperty->getPropertyValue(PROPERTY_CUSTOMSHAPEDATA) >>= m_CustomShapeData;
     return m_CustomShapeData;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OShape::setCustomShapeData( const ::rtl::OUString& _customshapedata ) throw (uno::RuntimeException)
+void SAL_CALL OShape::setCustomShapeData( const OUString& _customshapedata ) throw (uno::RuntimeException)
 {
     m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEDATA,uno::makeAny(_customshapedata));
     set(PROPERTY_CUSTOMSHAPEDATA,_customshapedata,m_CustomShapeData);

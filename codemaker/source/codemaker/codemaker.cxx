@@ -39,7 +39,7 @@
 
 namespace {
 
-void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
+void checkNoTypeArguments(std::vector< OString > const & arguments) {
     if (!arguments.empty()) {
         throw CannotDumpException("Bad type information");
             //TODO
@@ -50,8 +50,8 @@ void checkNoTypeArguments(std::vector< rtl::OString > const & arguments) {
 
 namespace codemaker {
 
-rtl::OString convertString(rtl::OUString const & string) {
-    rtl::OString s;
+OString convertString(OUString const & string) {
+    OString s;
     if (!string.convertToString(
             &s, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
@@ -63,14 +63,14 @@ rtl::OString convertString(rtl::OUString const & string) {
 }
 
 codemaker::UnoType::Sort decomposeAndResolve(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments)
+    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
+    std::vector< OString > * arguments)
 {
     OSL_ASSERT(typeClass != 0 && name != 0 && rank != 0 && arguments != 0);
     *rank = 0;
-    for (rtl::OString t(type);;) {
+    for (OString t(type);;) {
         sal_Int32 n = 0;
         *name = codemaker::UnoType::decompose(t, &n, arguments);
         if (n > SAL_MAX_INT32 - *rank) {

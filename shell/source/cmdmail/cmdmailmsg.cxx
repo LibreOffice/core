@@ -32,7 +32,6 @@ using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::container::NoSuchElementException;
 using com::sun::star::container::XNameAccess;
-using rtl::OUString;
 using osl::MutexGuard;
 
 using namespace cppu;
@@ -41,7 +40,7 @@ using namespace com::sun::star::uno;
 
 //------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
+void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -50,7 +49,7 @@ void SAL_CALL CmdMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 
 //------------------------------------------------
 
-::rtl::OUString SAL_CALL CmdMailMsg::getRecipient(  )
+OUString SAL_CALL CmdMailMsg::getRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -131,7 +130,7 @@ OUString SAL_CALL CmdMailMsg::getSubject(  )
 
 //------------------------------------------------
 
-void SAL_CALL CmdMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachment )
+void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
     throw (IllegalArgumentException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
@@ -210,7 +209,7 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 
 //------------------------------------------------
 
- sal_Bool SAL_CALL CmdMailMsg::hasByName( const ::rtl::OUString& aName )
+ sal_Bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );

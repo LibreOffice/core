@@ -25,7 +25,7 @@ namespace comphelper
 //.........................................................................
 
 //------------------------------------------------------------------------------
-staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst)
+staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, sal_Bool _bOnlyFirst)
 {
     sal_Int32 nLength = _rList.getLength();
 
@@ -34,7 +34,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
         //////////////////////////////////////////////////////////////////////
         // An welcher Position finde ich den Wert?
         sal_Int32 nPos = -1;
-        const ::rtl::OUString* pTArray = _rList.getConstArray();
+        const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
             if( pTArray->equals(_rValue) )
@@ -64,7 +64,7 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
 
         //////////////////////////////////////////////////////////////////////
         // Wie oft kommt der Wert vor?
-        const ::rtl::OUString* pTArray = _rList.getConstArray();
+        const OUString* pTArray = _rList.getConstArray();
         for (sal_Int32 i = 0; i < nLength; ++i, ++pTArray)
         {
             if( pTArray->equals(_rValue) )
@@ -80,10 +80,10 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool existsValue(const ::rtl::OUString& Value,const staruno::Sequence< ::rtl::OUString >& _aList)
+sal_Bool existsValue(const OUString& Value,const staruno::Sequence< OUString >& _aList)
 {
-    const ::rtl::OUString * pIter   = _aList.getConstArray();
-    const ::rtl::OUString * pEnd    = pIter + _aList.getLength();
+    const OUString * pIter   = _aList.getConstArray();
+    const OUString * pEnd    = pIter + _aList.getLength();
     return ::std::find(pIter,pEnd,Value) != pEnd;
 }
 

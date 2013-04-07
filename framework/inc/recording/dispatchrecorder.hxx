@@ -79,7 +79,7 @@ class DispatchRecorder
         virtual void SAL_CALL            recordDispatch         ( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL            recordDispatchAsComment( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
         virtual void SAL_CALL            endRecording           () throw( css::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getRecordedMacro       () throw( css::uno::RuntimeException );
+        virtual OUString SAL_CALL getRecordedMacro       () throw( css::uno::RuntimeException );
 
     virtual com::sun::star::uno::Type SAL_CALL getElementType() throw (::com::sun::star::uno::RuntimeException);
 
@@ -93,10 +93,10 @@ class DispatchRecorder
 
     // private functions
     private:
-        void SAL_CALL implts_recordMacro( const ::rtl::OUString& aURL,
+        void SAL_CALL implts_recordMacro( const OUString& aURL,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                sal_Bool bAsComment, ::rtl::OUStringBuffer& );
-        void SAL_CALL AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer );
+                                                sal_Bool bAsComment, OUStringBuffer& );
+        void SAL_CALL AppendToBuffer( css::uno::Any aValue, OUStringBuffer& aArgumentBuffer );
 
 }; // class DispatcRecorder
 

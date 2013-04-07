@@ -42,17 +42,17 @@ public:
      // XGraphicObject
     virtual uno::Reference< graphic::XGraphic > SAL_CALL getGraphic() throw (uno::RuntimeException);
     virtual void SAL_CALL setGraphic( const uno::Reference< graphic::XGraphic >& _graphic ) throw (uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getUniqueID() throw (uno::RuntimeException);
+    OUString SAL_CALL getUniqueID() throw (uno::RuntimeException);
 };
 
 GObjectImpl::GObjectImpl( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & /*xComponentContext*/ ) throw (uno::RuntimeException)
 {
     if ( args.getLength() == 1 )
     {
-        rtl::OUString sId;
+        OUString sId;
         if ( !( args[ 0 ] >>= sId ) || sId.isEmpty() )
             throw lang::IllegalArgumentException();
-        rtl::OString bsId(rtl::OUStringToOString(sId, RTL_TEXTENCODING_UTF8));
+        OString bsId(OUStringToOString(sId, RTL_TEXTENCODING_UTF8));
         mpGObject.reset( new GraphicObject( bsId ) );
     }
     else
@@ -76,12 +76,12 @@ void SAL_CALL GObjectImpl::setGraphic( const uno::Reference< graphic::XGraphic >
     mpGObject->SetGraphic( aGraphic );
 }
 
-::rtl::OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
+OUString SAL_CALL GObjectImpl::getUniqueID() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    rtl::OUString sId;
+    OUString sId;
     if ( mpGObject.get() )
-        sId = rtl::OStringToOUString(mpGObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
+        sId = OStringToOUString(mpGObject->GetUniqueID(), RTL_TEXTENCODING_ASCII_US);
     return sId;
 }
 

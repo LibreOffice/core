@@ -135,7 +135,7 @@ public:
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual rtl::OUString   GetDefaultPrinter();
+    virtual OUString   GetDefaultPrinter();
     virtual void            PostPrintersChanged();
 
     // SalTimer
@@ -158,7 +158,7 @@ public:
 
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 
-    virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
 
     virtual GenPspGraphics *CreatePrintGraphics();
 };

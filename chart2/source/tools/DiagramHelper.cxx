@@ -65,7 +65,6 @@ using namespace ::std;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::com::sun::star::chart2::XAnyDescriptionAccess;
 
 namespace chart
@@ -955,12 +954,12 @@ Reference< data::XLabeledDataSequence >
 }
 
 void lcl_generateAutomaticCategoriesFromChartType(
-            Sequence< rtl::OUString >& rRet,
+            Sequence< OUString >& rRet,
             const Reference< XChartType >& xChartType )
 {
     if(!xChartType.is())
         return;
-    rtl::OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
+    OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
         Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
     if( xSeriesCnt.is() )
     {
@@ -984,9 +983,9 @@ void lcl_generateAutomaticCategoriesFromChartType(
     }
 }
 
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
+Sequence< OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
 {
-    Sequence< rtl::OUString > aRet;
+    Sequence< OUString > aRet;
 
     Reference< XChartTypeContainer > xTypeCntr( xCooSys, uno::UNO_QUERY );
     if( xTypeCntr.is() )
@@ -1002,10 +1001,10 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( 
     return aRet;
 }
 
-Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
+Sequence< OUString > DiagramHelper::getExplicitSimpleCategories(
             const Reference< XChartDocument >& xChartDoc )
 {
-    Sequence< rtl::OUString > aRet;
+    Sequence< OUString > aRet;
     uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
     if(xChartModel.is())
     {
@@ -1251,8 +1250,8 @@ bool DiagramHelper::areChartTypesCompatible( const Reference< ::chart2::XChartTy
     if( !xFirstType.is() || !xSecondType.is() )
         return false;
 
-    ::std::vector< ::rtl::OUString > aFirstRoles( ContainerHelper::SequenceToVector( xFirstType->getSupportedMandatoryRoles() ) );
-    ::std::vector< ::rtl::OUString > aSecondRoles( ContainerHelper::SequenceToVector( xSecondType->getSupportedMandatoryRoles() ) );
+    ::std::vector< OUString > aFirstRoles( ContainerHelper::SequenceToVector( xFirstType->getSupportedMandatoryRoles() ) );
+    ::std::vector< OUString > aSecondRoles( ContainerHelper::SequenceToVector( xSecondType->getSupportedMandatoryRoles() ) );
     ::std::sort( aFirstRoles.begin(), aFirstRoles.end() );
     ::std::sort( aSecondRoles.begin(), aSecondRoles.end() );
     return ( aFirstRoles == aSecondRoles );
@@ -1497,7 +1496,7 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
 
     if( xChartType .is() )
     {
-        rtl::OUString aChartType = xChartType->getChartType();
+        OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return true;
     }

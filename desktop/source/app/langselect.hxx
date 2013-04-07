@@ -39,25 +39,25 @@ public:
         LS_STATUS_CONFIGURATIONACCESS_BROKEN
     };
 
-    static rtl::OUString getLanguageString();
+    static OUString getLanguageString();
     static bool prepareLanguage();
     static LanguageSelectionStatus getStatus();
 
 private:
-    static rtl::OUString aFoundLanguage;
+    static OUString aFoundLanguage;
     static sal_Bool bFoundLanguage;
     static LanguageSelectionStatus m_eStatus;
 
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
         getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate=sal_False);
-    static com::sun::star::uno::Sequence< rtl::OUString > getInstalledLanguages();
-    static sal_Bool isInstalledLanguage(rtl::OUString& usLocale, sal_Bool bExact=sal_False);
-    static rtl::OUString getFirstInstalledLanguage();
-    static rtl::OUString getUserUILanguage();
-    static rtl::OUString getUserLanguage();
-    static rtl::OUString getSystemLanguage();
+    static com::sun::star::uno::Sequence< OUString > getInstalledLanguages();
+    static sal_Bool isInstalledLanguage(OUString& usLocale, sal_Bool bExact=sal_False);
+    static OUString getFirstInstalledLanguage();
+    static OUString getUserUILanguage();
+    static OUString getUserLanguage();
+    static OUString getSystemLanguage();
     static void resetUserLanguage();
-    static void setDefaultLanguage(const rtl::OUString&);
+    static void setDefaultLanguage(const OUString&);
 };
 
 } //namespace desktop

@@ -111,7 +111,7 @@ void OPropertyChangeMultiplexer::dispose()
     {
         Reference< XPropertyChangeListener> xPreventDelete(this);
 
-        const ::rtl::OUString* pProperties = m_aProperties.getConstArray();
+        const OUString* pProperties = m_aProperties.getConstArray();
         for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i, ++pProperties)
             m_xSet->removePropertyChangeListener(*pProperties, static_cast< XPropertyChangeListener*>(this));
 
@@ -155,7 +155,7 @@ void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeE
 }
 
 //------------------------------------------------------------------
-void OPropertyChangeMultiplexer::addProperty(const ::rtl::OUString& _sPropertyName)
+void OPropertyChangeMultiplexer::addProperty(const OUString& _sPropertyName)
 {
     if (m_xSet.is())
     {

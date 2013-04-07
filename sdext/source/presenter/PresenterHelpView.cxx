@@ -37,7 +37,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 using ::std::vector;
 
 namespace sdext { namespace presenter {
@@ -88,9 +87,9 @@ namespace {
         const OUString msText;
         ::boost::shared_ptr<vector<LineDescriptor> > mpLineDescriptors;
 
-        void SplitText (const ::rtl::OUString& rsText, vector<rtl::OUString>& rTextParts);
+        void SplitText (const OUString& rsText, vector<OUString>& rTextParts);
         void FormatText (
-            const vector<rtl::OUString>& rTextParts,
+            const vector<OUString>& rTextParts,
             const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
             const sal_Int32 nMaximalWidth);
     };

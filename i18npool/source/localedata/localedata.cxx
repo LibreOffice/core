@@ -31,8 +31,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
 

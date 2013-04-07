@@ -58,9 +58,6 @@ using namespace com::sun::star::container;
 using namespace osl;
 using namespace cppu;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 
 Reference<XMultiServiceFactory> getProcessServiceManager()

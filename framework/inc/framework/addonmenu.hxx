@@ -50,10 +50,10 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
         ~AddonPopupMenu();
 
         // Check if command URL string has the unique prefix to identify addon popup menus
-        static sal_Bool         IsCommandURLPrefix( const rtl::OUString& aCmdURL );
+        static sal_Bool         IsCommandURLPrefix( const OUString& aCmdURL );
 
-        void                    SetCommandURL( const rtl::OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
-        const rtl::OUString&    GetCommandURL() const { return m_aCommandURL; }
+        void                    SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
+        const OUString&    GetCommandURL() const { return m_aCommandURL; }
 
     protected:
         void Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
@@ -61,7 +61,7 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
     private:
         AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
-        rtl::OUString               m_aCommandURL;
+        OUString               m_aCommandURL;
 
     friend class AddonMenuManager;
 };
@@ -80,7 +80,7 @@ class FWE_DLLPUBLIC AddonMenuManager
         static sal_Bool   IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 
         // Check if the context string matches the provided xModel context
-        static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
+        static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const OUString& aContext );
 
         // Factory method to create different Add-On menu types
         static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
@@ -112,11 +112,11 @@ class FWE_DLLPUBLIC AddonMenuManager
 
         // Retrieve the menu entry property values from a sequence
         static void       GetMenuEntry( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
-                                        ::rtl::OUString& rTitle,
-                                        ::rtl::OUString& rURL,
-                                        ::rtl::OUString& rTarget,
-                                        ::rtl::OUString& rImageId,
-                                        ::rtl::OUString& rContext,
+                                        OUString& rTitle,
+                                        OUString& rURL,
+                                        OUString& rTarget,
+                                        OUString& rImageId,
+                                        OUString& rContext,
                                         com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonSubMenu );
 };
 

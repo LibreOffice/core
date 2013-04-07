@@ -95,7 +95,7 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -305,10 +305,10 @@ void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
     BEGIN_DESCRIBE_PROPERTIES( 6, OBoundControlModel )
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
-        DECL_PROP1(LISTSOURCE,          ::rtl::OUString,            BOUND);
+        DECL_PROP1(LISTSOURCE,          OUString,            BOUND);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                              BOUND);
-        DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
-        DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,BOUND);
+        DECL_PROP1(DEFAULT_TEXT,        OUString,            BOUND);
+        DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -322,7 +322,7 @@ void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggreg
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_COMBOBOX;  // old (non-sun) name for compatibility !
 }
@@ -391,9 +391,9 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (nVersion > 0x0006)
     {
         OSL_FAIL("OComboBoxModel::read : invalid (means unknown) version !");
-        m_aListSource = ::rtl::OUString();
+        m_aListSource = OUString();
         m_aBoundColumn <<= (sal_Int16)0;
-        m_aDefaultText = ::rtl::OUString();
+        m_aDefaultText = OUString();
         m_eListSourceType = ListSourceType_TABLE;
         m_bEmptyIsNull = sal_True;
         defaultCommonProperties();
@@ -411,10 +411,10 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     }
     else // nVersion == 4
     {
-        m_aListSource = ::rtl::OUString();
+        m_aListSource = OUString();
         StringSequence aListSource;
         _rxInStream >> aListSource;
-        const ::rtl::OUString* pToken = aListSource.getConstArray();
+        const OUString* pToken = aListSource.getConstArray();
         sal_Int32 nLen = aListSource.getLength();
         for (sal_Int32 i = 0; i < nLen; ++i, ++pToken)
             m_aListSource += *pToken;
@@ -511,7 +511,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
                 Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
-                ::rtl::OUString aFieldName;
+                OUString aFieldName;
                 if ( xFieldsByName.is() && xFieldsByName->hasByName( getControlSource() ) )
                 {
                     aFieldName = getControlSource();
@@ -521,7 +521,7 @@ void OComboBoxModel::loadData( bool _bForce )
                     // otherwise look for the alias
                     Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
                     Reference< XColumnsSupplier > xSupplyFields;
-                    xFormProp->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
+                    xFormProp->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
 
                     // search the field
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");
@@ -543,12 +543,12 @@ void OComboBoxModel::loadData( bool _bForce )
                 OSL_ENSURE(xMeta.is(),"No database meta data!");
                 if ( xMeta.is() )
                 {
-                    ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
+                    OUString aQuote = xMeta->getIdentifierQuoteString();
 
-                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
 
-                    ::rtl::OUStringBuffer aStatement;
+                    OUStringBuffer aStatement;
                     aStatement.appendAscii( "SELECT DISTINCT " );
                     aStatement.append     ( quoteName( aQuote, aFieldName ) );
                     aStatement.appendAscii( " FROM " );
@@ -597,7 +597,7 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-    ::std::vector< ::rtl::OUString >    aStringList;
+    ::std::vector< OUString >    aStringList;
     aStringList.reserve(16);
     try
     {
@@ -646,7 +646,7 @@ void OComboBoxModel::loadData( bool _bForce )
                 {
                     StringSequence seqNames = xFieldNames->getElementNames();
                     sal_Int32 nFieldsCount = seqNames.getLength();
-                    const ::rtl::OUString* pustrNames = seqNames.getConstArray();
+                    const OUString* pustrNames = seqNames.getConstArray();
 
                     for (sal_Int32 k=0; k<nFieldsCount; ++k)
                         aStringList.push_back(pustrNames[k]);
@@ -671,7 +671,7 @@ void OComboBoxModel::loadData( bool _bForce )
 
     // Create StringSequence for ListBox
     StringSequence aStringSeq(aStringList.size());
-    ::rtl::OUString* pStringAry = aStringSeq.getArray();
+    OUString* pStringAry = aStringSeq.getArray();
     for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
         pStringAry[i] = aStringList[i];
 
@@ -726,7 +726,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
-    ::rtl::OUString sNewValue;
+    OUString sNewValue;
     aNewValue >>= sNewValue;
 
     bool bModified = ( aNewValue != m_aLastKnownValue );
@@ -771,7 +771,7 @@ sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         StringSequence aStringItemList;
         if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
-            const ::rtl::OUString* pStringItems = aStringItemList.getConstArray();
+            const OUString* pStringItems = aStringItemList.getConstArray();
             sal_Int32 i;
             for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
             {
@@ -801,7 +801,7 @@ Any OComboBoxModel::translateDbColumnToControlValue()
     OSL_PRECOND( m_pValueFormatter.get(), "OComboBoxModel::translateDbColumnToControlValue: no value formatter!" );
     if ( m_pValueFormatter.get() )
     {
-        ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
+        OUString sValue( m_pValueFormatter->getFormattedValue() );
         if  (   sValue.isEmpty()
             &&  m_pValueFormatter->getColumn().is()
             &&  m_pValueFormatter->getColumn()->wasNull()
@@ -818,7 +818,7 @@ Any OComboBoxModel::translateDbColumnToControlValue()
     else
         m_aLastKnownValue.clear();
 
-    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( OUString() );
         // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 
@@ -890,7 +890,7 @@ StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(Runti
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_COMBOBOX;
     return aSupported;
 }

@@ -36,13 +36,13 @@ private:
 
     ScUnoAddInHelpIdGenerator(); // disabled
 public:
-                                ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName );
+                                ScUnoAddInHelpIdGenerator( const OUString& rServiceName );
 
     /** Sets service name of the AddIn. Has to be done before requesting help IDs. */
-    void                        SetServiceName( const ::rtl::OUString& rServiceName );
+    void                        SetServiceName( const OUString& rServiceName );
 
     /** @return  The help ID of the function with given built-in name or 0 if not found. */
-    rtl::OString                GetHelpId( const ::rtl::OUString& rFuncName ) const;
+    OString                GetHelpId( const OUString& rFuncName ) const;
 };
 
 

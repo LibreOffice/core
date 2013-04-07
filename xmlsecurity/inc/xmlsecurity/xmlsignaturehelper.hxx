@@ -130,7 +130,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StatrtMission().
     //sODFVersion indicates  the ODF version
-    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage, ::rtl::OUString sODFVersion );
+    void        SetStorage( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage, OUString sODFVersion );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
@@ -166,12 +166,12 @@ public:
         for finding the certificate apparently use memcmp - hence they fail to find the
         certificate.
      */
-    void SetX509Certificate(sal_Int32 nSecurityId, const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber, const rtl::OUString& ouX509Cert);
+    void SetX509Certificate(sal_Int32 nSecurityId, const OUString& ouX509IssuerName,
+        const OUString& ouX509SerialNumber, const OUString& ouX509Cert);
 
     void        SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime );
 
-    void        AddForSigning( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary );
+    void        AddForSigning( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, sal_Bool bBinary );
     bool        CreateAndWriteSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler );
     bool        ReadAndVerifySignature( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& xInputStream );
 

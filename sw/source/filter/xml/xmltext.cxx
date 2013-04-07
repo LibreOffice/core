@@ -20,7 +20,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include "xmlimp.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

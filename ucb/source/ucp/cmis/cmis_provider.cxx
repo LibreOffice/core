@@ -80,10 +80,10 @@ ContentProvider::queryContent(
     return xContent;
 }
 
-libcmis::Session* ContentProvider::getSession( const rtl::OUString& sBindingUrl )
+libcmis::Session* ContentProvider::getSession( const OUString& sBindingUrl )
 {
     libcmis::Session* pSession = NULL;
-    std::map< rtl::OUString, libcmis::Session* >::iterator it = m_aSessionCache.find( sBindingUrl );
+    std::map< OUString, libcmis::Session* >::iterator it = m_aSessionCache.find( sBindingUrl );
     if ( it != m_aSessionCache.end( ) )
     {
         pSession = it->second;
@@ -91,9 +91,9 @@ libcmis::Session* ContentProvider::getSession( const rtl::OUString& sBindingUrl 
     return pSession;
 }
 
-void ContentProvider::registerSession( const rtl::OUString& sBindingUrl, libcmis::Session* pSession )
+void ContentProvider::registerSession( const OUString& sBindingUrl, libcmis::Session* pSession )
 {
-    m_aSessionCache.insert( std::pair< rtl::OUString, libcmis::Session* >( sBindingUrl, pSession ) );
+    m_aSessionCache.insert( std::pair< OUString, libcmis::Session* >( sBindingUrl, pSession ) );
 }
 
 ContentProvider::ContentProvider(
@@ -117,8 +117,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString("com.sun.star.comp.CmisContentProvider"),
-                     rtl::OUString("com.sun.star.ucb.CmisContentProvider") );
+                     OUString("com.sun.star.comp.CmisContentProvider"),
+                     OUString("com.sun.star.ucb.CmisContentProvider") );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

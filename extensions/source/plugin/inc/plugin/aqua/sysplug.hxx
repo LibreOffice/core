@@ -60,13 +60,13 @@ class XPlugin_Impl;
 
 namespace plugstringhelper
 {
-rtl::OUString           getString( CFStringRef i_xString );
-rtl::OUString           getString( CFURLRef i_xURL );
-CFMutableStringRef      createString( const rtl::OUString& i_rString );
-CFURLRef                createURL( const rtl::OUString& i_rString );
-rtl::OUString           getURLFromPath( const rtl::OUString& i_rPath );
-CFURLRef                createURLFromPath( const rtl::OUString& i_rPath );
-rtl::OUString           CFURLtoOSLURL( CFURLRef i_xURL );
+OUString           getString( CFStringRef i_xString );
+OUString           getString( CFURLRef i_xURL );
+CFMutableStringRef      createString( const OUString& i_rString );
+CFURLRef                createURL( const OUString& i_rString );
+OUString           getURLFromPath( const OUString& i_rPath );
+CFURLRef                createURLFromPath( const OUString& i_rPath );
+OUString           CFURLtoOSLURL( CFURLRef i_xURL );
 }
 
 //==================================================================================================
@@ -100,7 +100,7 @@ class MacPluginComm :
 
     virtual long        doIt();
 public:
-                        MacPluginComm( const rtl::OUString& rMIME, const rtl::OUString& rName, NSView* pView );
+                        MacPluginComm( const OUString& rMIME, const OUString& rName, NSView* pView );
     virtual             ~MacPluginComm();
 
     // FIXME:

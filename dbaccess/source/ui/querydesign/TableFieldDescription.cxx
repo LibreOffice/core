@@ -57,7 +57,7 @@ OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
 }
 
 //------------------------------------------------------------------------------
-OTableFieldDesc::OTableFieldDesc(const ::rtl::OUString& rT, const ::rtl::OUString& rF )
+OTableFieldDesc::OTableFieldDesc(const OUString& rT, const OUString& rF )
     :m_pTabWindow(0)
     ,m_eFunctionType( FKT_NONE )
     ,m_eOrderDir( ORDER_NONE )
@@ -117,7 +117,7 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 }
 
 //------------------------------------------------------------------------------
-void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit)
+void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
     if (nIdx < m_aCriteria.size())
@@ -125,16 +125,16 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit
     else
     {
         for(sal_Int32 i=m_aCriteria.size();i<nIdx;++i)
-            m_aCriteria.push_back( ::rtl::OUString());
+            m_aCriteria.push_back( OUString());
         m_aCriteria.push_back(rCrit);
     }
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
+OUString OTableFieldDesc::GetCriteria( sal_uInt16 nIdx ) const
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
-    ::rtl::OUString aRetStr;
+    OUString aRetStr;
     if( nIdx < m_aCriteria.size())
         aRetStr = m_aCriteria[nIdx];
 
@@ -144,11 +144,11 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit
 // -----------------------------------------------------------------------------
 namespace
 {
-    struct SelectPropertyValueAsString : public ::std::unary_function< PropertyValue, ::rtl::OUString >
+    struct SelectPropertyValueAsString : public ::std::unary_function< PropertyValue, OUString >
     {
-        ::rtl::OUString operator()( const PropertyValue& i_rPropValue ) const
+        OUString operator()( const PropertyValue& i_rPropValue ) const
         {
-            ::rtl::OUString sValue;
+            OUString sValue;
             OSL_VERIFY( i_rPropValue.Value >>= sValue );
             return sValue;
         }
@@ -211,12 +211,12 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, con
         {
             sal_Int32 c = 0;
             Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
-            for (   ::std::vector< ::rtl::OUString >::const_iterator crit = m_aCriteria.begin();
+            for (   ::std::vector< OUString >::const_iterator crit = m_aCriteria.begin();
                     crit != m_aCriteria.end();
                     ++crit, ++c
                 )
             {
-                aCriteria[c].Name = ::rtl::OUString( "Criterion_" ) + ::rtl::OUString::valueOf( c );
+                aCriteria[c].Name = OUString( "Criterion_" ) + OUString::valueOf( c );
                 aCriteria[c].Value <<= *crit;
             }
 

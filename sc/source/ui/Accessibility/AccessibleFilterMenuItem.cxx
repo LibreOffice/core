@@ -40,7 +40,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
-using ::rtl::OUString;
 
 ScAccessibleFilterMenuItem::ScAccessibleFilterMenuItem(
     const Reference<XAccessible>& rxParent, ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos) :

@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace dp_misc;
-using ::rtl::OUString;
 
 namespace dp_registry {
 namespace backend {
@@ -75,7 +74,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     friend class ExecutablePackageImpl;
 
     typedef ::boost::unordered_map< OUString, Reference<XInterface>,
-                             ::rtl::OUStringHash > t_string2object;
+                             OUStringHash > t_string2object;
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(

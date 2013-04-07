@@ -48,8 +48,8 @@ public:
     ScAccessibleEditObject(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, const rtl::OUString& rName,
-        const rtl::OUString& rDescription, EditObjectType eObjectType);
+        EditView* pEditView, Window* pWin, const OUString& rName,
+        const OUString& rDescription, EditObjectType eObjectType);
 
 protected:
     virtual ~ScAccessibleEditObject();
@@ -105,12 +105,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -137,7 +137,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 

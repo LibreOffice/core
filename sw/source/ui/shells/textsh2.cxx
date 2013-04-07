@@ -87,7 +87,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
     sal_uInt16 nSlot = rReq.GetSlot();
-    ::rtl::OUString sSourceArg, sCommandArg;
+    OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
 
     const SfxPoolItem* pSourceItem = 0;
@@ -194,7 +194,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, sal_False, &pColumnItem);
                 pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, sal_False, &pColumnNameItem);
 
-                ::rtl::OUString sColumnName;
+                OUString sColumnName;
                 if(pColumnNameItem)
                     ((SfxUsrAnyItem*)pColumnNameItem)->GetValue() >>= sColumnName;
                 String sDBName = sSourceArg;

@@ -78,7 +78,7 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
 
         // XUIElement
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
-        virtual  ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual  OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
         virtual  ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
@@ -103,7 +103,7 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
         static  const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
         ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListenerContainer;   /// container for ALL Listener
-        rtl::OUString                                                       m_aResourceURL;
+        OUString                                                       m_aResourceURL;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame > m_xWeakFrame;
         sal_Int16                                                           m_nType;
         sal_Bool                                                            m_bInitialized : 1,

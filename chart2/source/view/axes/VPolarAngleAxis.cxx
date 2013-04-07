@@ -78,7 +78,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     if(pColorAny)
         *pColorAny >>= nColor;
 
-    const uno::Sequence< rtl::OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : 0;
+    const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : 0;
 
     //------------------------------------------------
 
@@ -107,7 +107,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             bool bHasExtraColor=false;
             sal_Int32 nExtraColor=0;
 
-            rtl::OUString aLabel;
+            OUString aLabel;
             if(pLabels)
             {
                 sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
@@ -133,7 +133,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
 
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
-            rtl::OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
+            OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
             pTickInfo->xTextShape = aShapeFactory.createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
         }

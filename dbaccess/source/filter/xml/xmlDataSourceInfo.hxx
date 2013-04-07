@@ -30,7 +30,7 @@ namespace dbaxml
     public:
 
         OXMLDataSourceInfo( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
+                    const OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const sal_uInt16 _nToken);
         virtual ~OXMLDataSourceInfo();

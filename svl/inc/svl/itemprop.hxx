@@ -72,7 +72,7 @@ struct SfxItemPropertySimpleEntry
 };
 struct SfxItemPropertyNamedEntry : public SfxItemPropertySimpleEntry
 {
-    ::rtl::OUString sName;
+    OUString sName;
     SfxItemPropertyNamedEntry( const String& rName, const SfxItemPropertySimpleEntry& rSimpleEntry) :
         SfxItemPropertySimpleEntry( rSimpleEntry ),
         sName( rName ){}
@@ -88,11 +88,11 @@ public:
     SfxItemPropertyMap( const SfxItemPropertyMap& rSource );
     ~SfxItemPropertyMap();
 
-    const SfxItemPropertySimpleEntry*  getByName( const ::rtl::OUString &rName ) const;
+    const SfxItemPropertySimpleEntry*  getByName( const OUString &rName ) const;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property > getProperties() const;
-    com::sun::star::beans::Property getPropertyByName( const ::rtl::OUString rName ) const
+    com::sun::star::beans::Property getPropertyByName( const OUString rName ) const
         throw( ::com::sun::star::beans::UnknownPropertyException );
-    sal_Bool hasPropertyByName( const ::rtl::OUString& rName ) const;
+    sal_Bool hasPropertyByName( const OUString& rName ) const;
 
     void mergeProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rPropSeq );
     PropertyEntryVector_t getPropertyEntries() const;
@@ -116,13 +116,13 @@ public:
                                           const SfxItemSet& rSet,
                                           com::sun::star::uno::Any& rAny) const
                                           throw(::com::sun::star::uno::RuntimeException);
-    void getPropertyValue( const ::rtl::OUString &rName,
+    void getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet,
                                             com::sun::star::uno::Any& rAny) const
                                             throw(::com::sun::star::uno::RuntimeException,
                                                     ::com::sun::star::beans::UnknownPropertyException);
     com::sun::star::uno::Any
-        getPropertyValue( const ::rtl::OUString &rName,
+        getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet ) const
                                             throw(::com::sun::star::uno::RuntimeException,
                                                     ::com::sun::star::beans::UnknownPropertyException);
@@ -131,7 +131,7 @@ public:
                                           SfxItemSet& rSet ) const
                                           throw(::com::sun::star::uno::RuntimeException,
                                                   com::sun::star::lang::IllegalArgumentException);
-    void                    setPropertyValue( const ::rtl::OUString& rPropertyName,
+    void                    setPropertyValue( const OUString& rPropertyName,
                                             const com::sun::star::uno::Any& aVal,
                                             SfxItemSet& rSet ) const
                                             throw(::com::sun::star::uno::RuntimeException,
@@ -139,7 +139,7 @@ public:
                                                     ::com::sun::star::beans::UnknownPropertyException);
 
     com::sun::star::beans::PropertyState
-        getPropertyState(const ::rtl::OUString& rName, const SfxItemSet& rSet)const
+        getPropertyState(const OUString& rName, const SfxItemSet& rSet)const
                                     throw(com::sun::star::beans::UnknownPropertyException);
     com::sun::star::beans::PropertyState
         getPropertyState(const SfxItemPropertySimpleEntry& rEntry, const SfxItemSet& rSet) const
@@ -166,12 +166,12 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::beans::Property SAL_CALL
-        getPropertyByName( const ::rtl::OUString& aName )
+        getPropertyByName( const OUString& aName )
             throw(::com::sun::star::beans::UnknownPropertyException,
                     ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
-        hasPropertyByName( const ::rtl::OUString& Name )
+        hasPropertyByName( const OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
 
 };
@@ -190,11 +190,11 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::beans::Property SAL_CALL
-        getPropertyByName( const ::rtl::OUString& aName )
+        getPropertyByName( const OUString& aName )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL
-        hasPropertyByName( const ::rtl::OUString& Name )
+        hasPropertyByName( const OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
 };
 

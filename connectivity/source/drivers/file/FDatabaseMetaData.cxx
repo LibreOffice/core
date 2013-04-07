@@ -65,15 +65,15 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTypeInfo );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
+OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getCatalogSeparator_throw" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*tableNamePattern*/,
-        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
+        const OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getColumns" );
     OSL_FAIL("Should be overloaded!");
@@ -165,8 +165,8 @@ namespace
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schemaPattern*/,
+        const OUString& tableNamePattern, const Sequence< OUString >& types ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getTables" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -178,7 +178,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static const ::rtl::OUString aTable("TABLE");
+    static const OUString aTable("TABLE");
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -186,8 +186,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         bTableFound = sal_False;
 
-        const ::rtl::OUString* pBegin = types.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + nLength;
+        const OUString* pBegin = types.getConstArray();
+        const OUString* pEnd = pBegin + nLength;
         for(;pBegin != pEnd;++pBegin)
         {
             if(*pBegin == aTable)
@@ -220,7 +220,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     String sThisContentExtension;
     ODatabaseMetaDataResultSet::ORows aRows;
     // scan the directory for tables
-    ::rtl::OUString aName;
+    OUString aName;
     INetURLObject aURL;
     xResultSet->beforeFirst();
 
@@ -232,7 +232,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     {
         aName = xRow->getString(1);
         aURL.SetSmartProtocol(INET_PROT_FILE);
-        String sUrl = m_pConnection->getURL() + ::rtl::OUString("/") + aName;
+        String sUrl = m_pConnection->getURL() + OUString("/") + aName;
         aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();
 
@@ -270,7 +270,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
             if ( sThisContentExtension == aFilenameExtension )
             {
-                aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
+                aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,OUString());
                 sal_Unicode nChar = aName.toChar();
                 if ( match(tableNamePattern,aName,'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                 {
@@ -289,7 +289,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     sal_Unicode nChar = aURL.getBase().getStr()[0];
                     if(match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || ( bCheckEnabled && ((nChar < '0' || nChar > '9')))) )
                     {
-                        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(aURL.getBase())));
+                        aRow.push_back(new ORowSetValueDecorator(OUString(aURL.getBase())));
                         bNewRow = sal_True;
                     }
                     break;
@@ -388,7 +388,7 @@ sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getTablePrivileges" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -402,9 +402,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     if( xTabSup.is())
     {
         Reference< XNameAccess> xNames      = xTabSup->getTables();
-        Sequence< ::rtl::OUString > aNames  = xNames->getElementNames();
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+        Sequence< OUString > aNames  = xNames->getElementNames();
+        const OUString* pBegin = aNames.getConstArray();
+        const OUString* pEnd = pBegin + aNames.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
             if(match(tableNamePattern,*pBegin,'\0'))
@@ -413,7 +413,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
                 aRow[2] = new ORowSetValueDecorator(*pBegin);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-                aRow[7] = new ORowSetValueDecorator(::rtl::OUString("NO"));
+                aRow[7] = new ORowSetValueDecorator(OUString("NO"));
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
@@ -523,23 +523,23 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getCatalogTerm" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getIdentifierQuoteString_throw" );
-    static const ::rtl::OUString sQuote("\"");
+    static const OUString sQuote("\"");
     return sQuote;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getExtraNameCharacters" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw(SQLException, RuntimeException)
@@ -692,7 +692,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("TABLE")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("TABLE")));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
@@ -951,53 +951,53 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getURL" );
-    static const ::rtl::OUString aValue(  "sdbc:file:" );
+    static const OUString aValue(  "sdbc:file:" );
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getUserName" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getDriverName" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getDriverVersion" );
-    return ::rtl::OUString::valueOf((sal_Int32)1);
+    return OUString::valueOf((sal_Int32)1);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getDatabaseProductVersion" );
-    return ::rtl::OUString::valueOf((sal_Int32)0);
+    return OUString::valueOf((sal_Int32)0);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getDatabaseProductName" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getProcedureTerm" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getSchemaTerm" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) throw(RuntimeException)
@@ -1018,40 +1018,40 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     return 0;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getSQLKeywords" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getSearchStringEscape" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getStringFunctions" );
-    return ::rtl::OUString("UCASE,LCASE,ASCII,LENGTH,OCTET_LENGTH,CHAR_LENGTH,CHARACTER_LENGTH,CHAR,CONCAT,LOCATE,SUBSTRING,LTRIM,RTRIM,SPACE,REPLACE,REPEAT,INSERT,LEFT,RIGHT");
+    return OUString("UCASE,LCASE,ASCII,LENGTH,OCTET_LENGTH,CHAR_LENGTH,CHARACTER_LENGTH,CHAR,CONCAT,LOCATE,SUBSTRING,LTRIM,RTRIM,SPACE,REPLACE,REPEAT,INSERT,LEFT,RIGHT");
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getTimeDateFunctions" );
-    return ::rtl::OUString("DAYOFWEEK,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,CURDATE,CURTIME,NOW");
+    return OUString("DAYOFWEEK,DAYOFMONTH,DAYOFYEAR,MONTH,DAYNAME,MONTHNAME,QUARTER,WEEK,YEAR,HOUR,MINUTE,SECOND,CURDATE,CURTIME,NOW");
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getSystemFunctions" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getNumericFunctions" );
-    return ::rtl::OUString("ABS,SIGN,MOD,FLOOR,CEILING,ROUND,EXP,LN,LOG,LOG10,POWER,SQRT,PI,COS,SIN,TAN,ACOS,ASIN,ATAN,ATAN2,DEGREES,RADIANS");
+    return OUString("ABS,SIGN,MOD,FLOOR,CEILING,ROUND,EXP,LN,LOG,LOG10,POWER,SQRT,PI,COS,SIN,TAN,ACOS,ASIN,ATAN,ATAN2,DEGREES,RADIANS");
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
@@ -1196,7 +1196,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
     return sal_False;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getUDTs" );
     return NULL;

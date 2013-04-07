@@ -47,7 +47,7 @@ namespace dbaui
         FixedText           m_aFT_Connection;
         OConnectionURLEdit  m_aConnectionURL;
         PushButton          m_aPB_Connection;
-        ::rtl::OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
+        OUString     m_eType;          // the type can't be changed in this class, so we hold it as member.
 
     public:
 
@@ -78,7 +78,7 @@ namespace dbaui
         sal_Int32   checkPathExistence(const String& _rURL);
 
 
-        IS_PATH_EXIST   pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const;
+        IS_PATH_EXIST   pathExists(const OUString& _rURL, sal_Bool bIsFile) const;
         sal_Bool        createDirectoryDeep(const String& _rPathNormalized);
         sal_Bool        commitURL();
 

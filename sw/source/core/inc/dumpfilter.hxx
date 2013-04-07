@@ -71,11 +71,11 @@ namespace sw {
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
     };

@@ -94,11 +94,11 @@ void MIP::resetRelevant()         { mbHasRelevant = false; mbRelevant = true; }
 
 bool MIP::hasConstraint() const   { return mbHasConstraint; }
 bool MIP::isConstraint() const    { return mbConstraint; }
-void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; msConstraintExplanation = rtl::OUString(); }
-void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation = rtl::OUString(); }
+void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; msConstraintExplanation = OUString(); }
+void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation = OUString(); }
 
-void MIP::setConstraintExplanation( const rtl::OUString& s ) { msConstraintExplanation = s; }
-rtl::OUString MIP::getConstraintExplanation() const { return msConstraintExplanation; }
+void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanation = s; }
+OUString MIP::getConstraintExplanation() const { return msConstraintExplanation; }
 
 
 bool MIP::hasCalculate() const    { return mbHasCalculate; }
@@ -106,9 +106,9 @@ void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
 void MIP::resetCalculate()        { mbHasCalculate = false; }
 
 bool MIP::hasTypeName() const     { return mbHasTypeName; }
-    rtl::OUString MIP::getTypeName() const      { return msTypeName; }
-void MIP::setTypeName( const rtl::OUString& s ) { msTypeName = s; mbHasTypeName = true; }
-void MIP::resetTypeName()         { msTypeName = rtl::OUString(); mbHasTypeName = false; }
+    OUString MIP::getTypeName() const      { return msTypeName; }
+void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
+void MIP::resetTypeName()         { msTypeName = OUString(); mbHasTypeName = false; }
 
 
 

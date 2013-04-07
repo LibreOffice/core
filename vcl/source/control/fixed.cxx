@@ -215,7 +215,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
 {
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     WinBits                 nWinStyle = GetStyle();
-    rtl::OUString           aText( GetText() );
+    OUString           aText( GetText() );
     sal_uInt16              nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
     Point                   aPos = rPos;
 
@@ -449,7 +449,7 @@ void FixedText::setMinWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool FixedText::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "max-width-chars")
         setMaxWidthChars(rValue.toInt32());
@@ -1213,7 +1213,7 @@ const Image& FixedImage::GetModeImage( ) const
     return maImage;
 }
 
-bool FixedImage::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool FixedImage::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "pixbuf")
     {

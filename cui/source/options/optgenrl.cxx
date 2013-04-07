@@ -371,11 +371,11 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
     // updating the initial
     if (nField < nInits && rShortName.pEdit->IsEnabled())
     {
-        rtl::OUString sShortName = rShortName.pEdit->GetText();
+        OUString sShortName = rShortName.pEdit->GetText();
         while ((unsigned)sShortName.getLength() < nInits)
-            sShortName += rtl::OUString(' ');
-        rtl::OUString sName = pEdit->GetText();
-        rtl::OUString sLetter = rtl::OUString(sName.getLength() ? sName.toChar() : ' ');
+            sShortName += OUString(' ');
+        OUString sName = pEdit->GetText();
+        OUString sLetter = OUString(sName.getLength() ? sName.toChar() : ' ');
         rShortName.pEdit->SetText(sShortName.replaceAt(nField, 1, sLetter).trim());
     }
     return 0;

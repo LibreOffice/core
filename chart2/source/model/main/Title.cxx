@@ -373,9 +373,9 @@ void Title::fireModifyEvent()
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > Title::getSupportedServiceNames_Static()
+uno::Sequence< OUString > Title::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 4 );
+    uno::Sequence< OUString > aServices( 4 );
     aServices[ 0 ] = "com.sun.star.chart2.Title";
     aServices[ 1 ] = "com.sun.star.style.ParagraphProperties";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";

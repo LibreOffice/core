@@ -27,9 +27,6 @@
 
 #include <vector>
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 using namespace ::com::sun::star;
 
@@ -64,7 +61,7 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
     return xNewDecr;
 }
 
-::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const ::rtl::OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
     o_rEncryptionData = OnVerifyPassword( rPassword );
     mnError = o_rEncryptionData.getLength() ? ERRCODE_NONE : ERRCODE_ABORT;
@@ -132,7 +129,7 @@ XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
     return new XclImpBiff5Decrypter( *this );
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const ::rtl::OUString& rPassword )
+uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const OUString& rPassword )
 {
     maEncryptionData.realloc( 0 );
 
@@ -226,7 +223,7 @@ XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
     return new XclImpBiff8Decrypter( *this );
 }
 
-uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const ::rtl::OUString& rPassword )
+uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const OUString& rPassword )
 {
     maEncryptionData.realloc( 0 );
 

@@ -34,8 +34,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const rtl::OUString& rLocalName,
-                                        const rtl::OUString& rValue )
+                                        const OUString& rLocalName,
+                                        const OUString& rValue )
 {
     // TODO: use a map here
     if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_PAGE_USAGE ) )
@@ -51,7 +51,7 @@ void PageStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 TYPEINIT1( PageStyleContext, XMLPropStyleContext );
 
 PageStyleContext::PageStyleContext( SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const rtl::OUString& rLName,
+        sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles,
         sal_Bool bDefaultStyle) :
@@ -66,7 +66,7 @@ PageStyleContext::~PageStyleContext()
 
 SvXMLImportContext *PageStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = NULL;

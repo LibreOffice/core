@@ -150,7 +150,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             if (!mbInSwitch)
             {
-                std::map<rtl::OUString, ScRangeName*> aRangeMap;
+                std::map<OUString, ScRangeName*> aRangeMap;
                 pDoc->GetRangeNameMap(aRangeMap);
                 pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
                                 ScAddress( GetViewData()->GetCurX(),
@@ -159,11 +159,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             }
             else
             {
-                std::map<rtl::OUString, ScRangeName*> aRangeMap;
-                for (boost::ptr_map<rtl::OUString, ScRangeName>::iterator itr = maRangeMap.begin();
+                std::map<OUString, ScRangeName*> aRangeMap;
+                for (boost::ptr_map<OUString, ScRangeName>::iterator itr = maRangeMap.begin();
                         itr != maRangeMap.end(); ++itr)
                 {
-                    aRangeMap.insert(std::pair<rtl::OUString, ScRangeName*>(itr->first, itr->second));
+                    aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr->first, itr->second));
                 }
                 pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
                                 ScAddress( GetViewData()->GetCurX(),

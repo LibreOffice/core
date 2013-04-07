@@ -28,7 +28,6 @@
 
 
 using namespace utl;
-using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
@@ -132,7 +131,7 @@ SwPrintOptions::~SwPrintOptions()
 }
 
 
-void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwPrintOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void    SwPrintOptions::Commit()
 {

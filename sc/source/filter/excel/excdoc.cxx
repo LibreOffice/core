@@ -76,7 +76,6 @@
 #include <oox/token/tokens.hxx>
 #include <boost/shared_ptr.hpp>
 
-using ::rtl::OString;
 using namespace oox;
 
 static String lcl_GetVbaTabName( SCTAB n )
@@ -180,7 +179,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new ExcBofW8 );
 
     SCTAB   nC;
-    rtl::OUString aTmpString;
+    OUString aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
@@ -425,7 +424,7 @@ void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
         // notes
         const ScPostIt* pScNote = itr->second;
         ScAddress aScPos( itr->first.first, itr->first.second, mnScTab );
-        mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, rtl::OUString() ) );
+        mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, OUString() ) );
     }
 
     if( GetOutput() != EXC_OUTPUT_BINARY )

@@ -154,7 +154,7 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
                 Can be SELF or CREATE only and are set only if sTargetFrameName isn't a special target
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL JobDispatch::queryDispatch( /*IN*/ const css::util::URL&  aURL             ,
-                                                                                  /*IN*/ const ::rtl::OUString& /*sTargetFrameName*/ ,
+                                                                                  /*IN*/ const OUString& /*sTargetFrameName*/ ,
                                                                                   /*IN*/       sal_Int32        /*nSearchFlags*/     ) throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
@@ -224,7 +224,7 @@ void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL
     JobURL aAnalyzedURL(aURL.Complete);
     if (aAnalyzedURL.isValid())
     {
-        ::rtl::OUString sRequest;
+        OUString sRequest;
         if (aAnalyzedURL.getEvent(sRequest))
             impl_dispatchEvent(sRequest, lArgs, xListener);
         else
@@ -253,7 +253,7 @@ void SAL_CALL JobDispatch::dispatchWithNotification( /*IN*/ const css::util::URL
     @param  xListener
                 an interested listener for possible results of this operation
 */
-void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&                                            sEvent    ,
+void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                                            sEvent    ,
                                       /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -262,7 +262,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
     // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
+    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
     aReadLock.unlock();
     /* } SAFE */
 
@@ -336,7 +336,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
     @param  xListener
                 an interested listener for possible results of this operation
 */
-void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&                                            sService  ,
+void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                                            sService  ,
                                         /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                         /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
@@ -387,7 +387,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     @param  xListener
                 an interested listener for possible results of this operation
 */
-void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&                                            sAlias    ,
+void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                                            sAlias    ,
                                       /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {

@@ -28,7 +28,7 @@ namespace formula
     class FORMULA_DLLPUBLIC SAL_NO_VTABLE ExternalReferenceHelper
     {
         public:
-            virtual ::rtl::OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const = 0;
+            virtual OUString getCacheTableName(sal_uInt16 nFileId, size_t nTabIndex) const = 0;
 
         protected:
             ~ExternalReferenceHelper() {}

@@ -53,12 +53,12 @@ public:
     GetStartEndCharLocales() const;
 
     bool GetStartEndChars(
-        com::sun::star::lang::Locale const & locale, rtl::OUString & startChars,
-        rtl::OUString & endChars) const;
+        com::sun::star::lang::Locale const & locale, OUString & startChars,
+        OUString & endChars) const;
 
     void SetStartEndChars(
         com::sun::star::lang::Locale const & locale,
-        rtl::OUString const * startChars, rtl::OUString const * endChars);
+        OUString const * startChars, OUString const * endChars);
 
 private:
     struct Impl;

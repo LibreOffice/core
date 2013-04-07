@@ -35,7 +35,7 @@ using namespace xmloff::token;
 
 ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -49,11 +49,11 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
         if(nPrefix == XML_NAMESPACE_XLINK)
         {
             if (IsXMLToken(aLocalName, XML_HREF))
@@ -87,7 +87,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 }
 
 SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {

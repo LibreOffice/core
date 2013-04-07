@@ -251,7 +251,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     const OAttribute2Property::AttributeAssignment* OAttribute2Property::getAttributeTranslation(
-            const ::rtl::OUString& _rAttribName)
+            const OUString& _rAttribName)
     {
         ConstAttributeAssignmentsIterator aPos = m_aKnownProperties.find(_rAttribName);
         if (m_aKnownProperties.end() != aPos)
@@ -261,19 +261,19 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     void OAttribute2Property::addStringProperty(
-        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Char* _pAttributeDefault)
     {
-        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),
-            _pAttributeDefault ? ::rtl::OUString::createFromAscii(_pAttributeDefault) : ::rtl::OUString());
+        implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< OUString* >(NULL) ),
+            _pAttributeDefault ? OUString::createFromAscii(_pAttributeDefault) : OUString());
     }
 
     //---------------------------------------------------------------------
     void OAttribute2Property::addBooleanProperty(
-        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics)
     {
-        ::rtl::OUStringBuffer aDefault;
+        OUStringBuffer aDefault;
         ::sax::Converter::convertBool(aDefault, _bAttributeDefault);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, ::getBooleanCppuType(), aDefault.makeStringAndClear());
         aAssignment.bInverseSemantics = _bInverseSemantics;
@@ -281,31 +281,31 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     void OAttribute2Property::addInt16Property(
-        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int16 _nAttributeDefault)
     {
-        ::rtl::OUStringBuffer aDefault;
+        OUStringBuffer aDefault;
         ::sax::Converter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
         implAdd(_pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int16* >(NULL) ), aDefault.makeStringAndClear());
     }
 
     //---------------------------------------------------------------------
     void OAttribute2Property::addInt32Property(
-        const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int32 _nAttributeDefault)
     {
-        ::rtl::OUStringBuffer aDefault;
+        OUStringBuffer aDefault;
         ::sax::Converter::convertNumber( aDefault, _nAttributeDefault );
         implAdd( _pAttributeName, _rPropertyName, ::getCppuType( static_cast< sal_Int32* >(NULL) ), aDefault.makeStringAndClear() );
     }
 
     //---------------------------------------------------------------------
     void OAttribute2Property::addEnumProperty(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
             const ::com::sun::star::uno::Type* _pType)
     {
-        ::rtl::OUStringBuffer aDefault;
+        OUStringBuffer aDefault;
         SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName,
             _pType ? *_pType : ::getCppuType( static_cast< sal_Int32* >(NULL) ),
@@ -316,13 +316,13 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& /*_rDefaultString*/)
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const ::com::sun::star::uno::Type& _rType, const OUString& /*_rDefaultString*/)
     {
-        OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(::rtl::OUString::createFromAscii(_pAttributeName)),
+        OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(OUString::createFromAscii(_pAttributeName)),
             "OAttribute2Property::implAdd: already have this attribute!");
 
-        ::rtl::OUString sAttributeName = ::rtl::OUString::createFromAscii(_pAttributeName);
+        OUString sAttributeName = OUString::createFromAscii(_pAttributeName);
 
         AttributeAssignment aAssignment;
         aAssignment.sAttributeName = sAttributeName;

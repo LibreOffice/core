@@ -22,7 +22,6 @@
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
-using ::rtl::OUString;
 
 namespace xmloff { namespace token {
 
@@ -33,7 +32,7 @@ namespace xmloff { namespace token {
         {
             sal_Int32 nLength;
             const sal_Char* pChar;
-            ::rtl::OUString* pOUString;
+            OUString* pOUString;
 #if OSL_DEBUG_LEVEL > 0
             XMLTokenEnum eToken;
 #endif

@@ -158,12 +158,12 @@ const ScUnoAddInHelpId pDateFuncHelpIds[] =
 // ============================================================================
 
 
-ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName )
+ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const OUString& rServiceName )
 {
     SetServiceName( rServiceName );
 }
 
-void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceName )
+void ScUnoAddInHelpIdGenerator::SetServiceName( const OUString& rServiceName )
 {
     pCurrHelpIds = NULL;
     sal_uInt32 nSize = 0;
@@ -182,10 +182,10 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceN
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
+OString ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
-        return rtl::OString();
+        return OString();
 
     const ScUnoAddInHelpId* pFirst = pCurrHelpIds;
     const ScUnoAddInHelpId* pLast = pCurrHelpIds + nArrayCount - 1;
@@ -202,7 +202,7 @@ rtl::OString ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncN
             pFirst = pMiddle + 1;
     }
 
-    return rtl::OString();
+    return OString();
 }
 
 

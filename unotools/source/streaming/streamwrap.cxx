@@ -66,7 +66,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(staruno::Sequence< sal_Int8 >&
     checkConnected();
 
     if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(staruno::Sequence< sal_Int
     checkError();
 
     if (nMaxBytesToRead < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
 
     if (m_pSvStream->IsEof())
     {
@@ -144,7 +144,7 @@ void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedExcep
 void OInputStreamWrapper::checkConnected() const
 {
     if (!m_pSvStream)
-        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
+        throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
 //------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ void OInputStreamWrapper::checkError() const
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
+        throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
 //==================================================================
@@ -229,7 +229,7 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
         ||  (nWritten != (sal_uInt32)aData.getLength())
         )
     {
-        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
     }
 }
 
@@ -250,7 +250,7 @@ void OOutputStreamWrapper::checkError() const
 {
     if (rStream.GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw stario::NotConnectedException(::rtl::OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
+        throw stario::NotConnectedException(OUString(), const_cast<staruno::XWeak*>(static_cast<const staruno::XWeak*>(this)));
 }
 
 //==================================================================
@@ -342,7 +342,7 @@ void SAL_CALL OStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8 >& aD
         ||  (nWritten != (sal_uInt32)aData.getLength())
         )
     {
-        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
     }
 }
 
@@ -351,7 +351,7 @@ void SAL_CALL OStreamWrapper::flush() throw(stario::NotConnectedException, stari
 {
     m_pSvStream->Flush();
     if (m_pSvStream->GetError() != ERRCODE_NONE)
-        throw stario::NotConnectedException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(OUString(),static_cast<staruno::XWeak*>(this));
 }
 
 //------------------------------------------------------------------------------

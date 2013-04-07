@@ -86,15 +86,15 @@ namespace
     }
 
     //....................................................................
-    struct StringCompare : public ::std::unary_function< ::rtl::OUString, bool >
+    struct StringCompare : public ::std::unary_function< OUString, bool >
     {
     private:
-        const ::rtl::OUString m_sReference;
+        const OUString m_sReference;
 
     public:
-        StringCompare( const ::rtl::OUString& _rReference ) : m_sReference( _rReference ) { }
+        StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
 
-        inline bool operator()( const ::rtl::OUString& _rCompare )
+        inline bool operator()( const OUString& _rCompare )
         {
             return ( _rCompare == m_sReference );
         }
@@ -124,7 +124,7 @@ sal_Bool FormCellBindingHelper::livesInSpreadsheetDocument( const Reference< XPr
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress, sal_Int16 /*_nAssumeSheet*/ ) const
+bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress, sal_Int16 /*_nAssumeSheet*/ ) const
 {
     Any aAddress;
     return doConvertAddressRepresentations(
@@ -138,7 +138,7 @@ bool FormCellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddre
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddressDescription,
+bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescription,
                         CellRangeAddress& /* [out] */ _rAddress ) const
 {
     Any aAddress;
@@ -153,7 +153,7 @@ bool FormCellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddre
 }
 
 //------------------------------------------------------------------------
-Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAddress( const ::rtl::OUString& _rAddress, bool _bUseIntegerBinding ) const
+Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAddress( const OUString& _rAddress, bool _bUseIntegerBinding ) const
 {
     Reference< XValueBinding > xBinding;
     if ( !m_xDocument.is() )
@@ -175,7 +175,7 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
 }
 
 //------------------------------------------------------------------------
-Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStringAddress( const ::rtl::OUString& _rAddress ) const
+Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStringAddress( const OUString& _rAddress ) const
 {
     Reference< XListEntrySource > xSource;
 
@@ -194,11 +194,11 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
+OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
 {
     OSL_PRECOND( !_rxBinding.is() || isCellBinding( _rxBinding ), "FormCellBindingHelper::getStringAddressFromCellBinding: this is no cell binding!" );
 
-    ::rtl::OUString sAddress;
+    OUString sAddress;
     try
     {
         Reference< XPropertySet > xBindingProps( _rxBinding, UNO_QUERY );
@@ -224,11 +224,11 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
+OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
 {
     OSL_PRECOND( !_rxSource.is() || isCellRangeListSource( _rxSource ), "FormCellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
 
-    ::rtl::OUString sAddress;
+    OUString sAddress;
     try
     {
         Reference< XPropertySet > xSourceProps( _rxSource, UNO_QUERY );
@@ -253,7 +253,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference< XSpreadsheetDocument >& _rxDocument, const ::rtl::OUString& _rService ) SAL_THROW(())
+bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference< XSpreadsheetDocument >& _rxDocument, const OUString& _rService ) SAL_THROW(())
 {
     bool bYesItIs = false;
 
@@ -265,11 +265,11 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
             Reference< XMultiServiceFactory > xDocumentFactory( _rxDocument, UNO_QUERY );
             OSL_ENSURE( xDocumentFactory.is(), "FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies: spreadsheet document, but no factory?" );
 
-            Sequence< ::rtl::OUString > aAvailableServices;
+            Sequence< OUString > aAvailableServices;
             if ( xDocumentFactory.is() )
                 aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            const ::rtl::OUString* pFound = ::std::find_if(
+            const OUString* pFound = ::std::find_if(
                 aAvailableServices.getConstArray(),
                 aAvailableServices.getConstArray() + aAvailableServices.getLength(),
                 StringCompare( _rService )
@@ -289,7 +289,7 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const ::rtl::OUString& _rService ) const SAL_THROW(())
+bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const SAL_THROW(())
 {
     return isSpreadsheetDocumentWhichSupplies( m_xDocument, _rService );
 }
@@ -361,7 +361,7 @@ bool FormCellBindingHelper::isCellRangeListSource( const Reference< XListEntrySo
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const ::rtl::OUString& _rService ) const
+bool FormCellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
 {
     Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );
     bool bDoes = xSI.is() && xSI->supportsService( _rService );
@@ -407,7 +407,7 @@ void FormCellBindingHelper::setListSource( const Reference< XListEntrySource >& 
 }
 
 //------------------------------------------------------------------------
-Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( const ::rtl::OUString& _rService, const ::rtl::OUString& _rArgumentName,
+Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( const OUString& _rService, const OUString& _rArgumentName,
     const Any& _rArgumentValue ) const
 {
     Reference< XInterface > xReturn;
@@ -443,15 +443,15 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
 }
 
 //------------------------------------------------------------------------
-bool FormCellBindingHelper::doConvertAddressRepresentations( const ::rtl::OUString& _rInputProperty, const Any& _rInputValue,
-    const ::rtl::OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
+bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
+    const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
 {
     bool bSuccess = false;
 
     Reference< XPropertySet > xConverter(
         createDocumentDependentInstance(
             _bIsRange ? OUString(SERVICE_RANGEADDRESS_CONVERSION) : OUString(SERVICE_ADDRESS_CONVERSION),
-            ::rtl::OUString(),
+            OUString(),
             Any()
         ),
         UNO_QUERY

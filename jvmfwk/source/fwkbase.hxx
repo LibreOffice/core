@@ -27,7 +27,7 @@ namespace jfw
 
 class VendorSettings
 {
-    ::rtl::OUString m_xmlDocVendorSettingsFileUrl;
+    OUString m_xmlDocVendorSettingsFileUrl;
     CXmlDocPtr m_xmlDocVendorSettings;
     CXPathContextPtr m_xmlPathContextVendorSettings;
 
@@ -45,11 +45,11 @@ public:
 
     /* returns the file URL to the plugin.
      */
-    ::rtl::OUString getPluginLibrary(const ::rtl::OUString& sVendor);
+    OUString getPluginLibrary(const OUString& sVendor);
 
-    VersionInfo getVersionInformation(const ::rtl::OUString & sVendor);
+    VersionInfo getVersionInformation(const OUString & sVendor);
 
-    ::std::vector< ::rtl::OUString> getSupportedVendors();
+    ::std::vector< OUString> getSupportedVendors();
 };
 
 /* The class offers functions to retrieve verified bootstrap parameters.
@@ -62,24 +62,24 @@ namespace  BootParams
 
    In direct mode either of them must be set. If not an exception is thrown.
 */
-::rtl::OUString getJREHome();
+OUString getJREHome();
 
-::std::vector< ::rtl::OString> getVMParameters();
+::std::vector< OString> getVMParameters();
 
-::rtl::OUString getUserData();
+OUString getUserData();
 
-::rtl::OUString getSharedData();
+OUString getSharedData();
 
 /* returns the file URL to the vendor settings xml file.
  */
-::rtl::OUString getVendorSettings();
+OUString getVendorSettings();
 
 /* User the parameter UNO_JAVA_JFW_CLASSPATH and UNO_JAVA_JFW_ENV_CLASSPATH
    to compose a classpath
  */
-::rtl::OString getClasspath();
+OString getClasspath();
 
-::rtl::OUString getClasspathUrls();
+OUString getClasspathUrls();
 
 } //end namespace
 
@@ -97,9 +97,9 @@ JFW_MODE getMode();
 /** creates the -Djava.class.path option with the complete classpath, including
     the paths which are set by UNO_JAVA_JFW_CLASSPATH_URLS.
  */
-::rtl::OString makeClassPathOption(::rtl::OUString const & sUserClassPath);
+OString makeClassPathOption(OUString const & sUserClassPath);
 
-::rtl::OString getSettingsPath( const ::rtl::OUString & sURL);
+OString getSettingsPath( const OUString & sURL);
 
 /** Get the system path to the javasettings.xml
     Converts the URL returned from getUserSettingsURL to a
@@ -107,20 +107,20 @@ JFW_MODE getMode();
     does not exist.
    @throws FrameworkException
  */
-::rtl::OString getUserSettingsPath();
+OString getUserSettingsPath();
 
 /** Returns the system path of the share settings file.
     Returns a valid string or throws an exception.
    @throws FrameworkException
  */
-::rtl::OString getSharedSettingsPath();
+OString getSharedSettingsPath();
 
 /* returns a valid string or throws an exception.
    @throws FrameworkException
  */
-::rtl::OString getVendorSettingsPath();
+OString getVendorSettingsPath();
 
-::rtl::OUString buildClassPathFromDirectory(const ::rtl::OUString & relPath);
+OUString buildClassPathFromDirectory(const OUString & relPath);
 
 /** Called from writeJavaInfoData. It sets the process identifier. When
 java is to be started, then the current id is compared to the one set by
@@ -137,7 +137,7 @@ void setJavaSelected();
 bool wasJavaSelectedInSameProcess();
 /* Only for application mode.
  */
-::rtl::OUString getApplicationClassPath();
+OUString getApplicationClassPath();
 }
 
 #endif

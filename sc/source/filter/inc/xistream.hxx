@@ -57,7 +57,7 @@ public:
     XclImpDecrypterRef  Clone() const;
 
     /** Implementation of the ::comphelper::IDocPasswordVerifier interface */
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
     virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
@@ -76,7 +76,7 @@ private:
     /** Derived classes implement password verification and initialization of
         the decoder. */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword ) = 0;
+        OnVerifyPassword( const OUString& rPassword ) = 0;
     virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData ) = 0;
 
     /** Implementation of updating the decrypter. */
@@ -106,7 +106,7 @@ private:
     virtual XclImpBiff5Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword );
+        OnVerifyPassword( const OUString& rPassword );
     virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
@@ -137,7 +137,7 @@ private:
     virtual XclImpBiff8Decrypter* OnClone() const;
     /** Implements password verification and initialization of the decoder. */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
-        OnVerifyPassword( const ::rtl::OUString& rPassword );
+        OnVerifyPassword( const OUString& rPassword );
     virtual bool OnVerifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );

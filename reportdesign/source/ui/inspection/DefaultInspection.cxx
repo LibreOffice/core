@@ -33,10 +33,10 @@
 //........................................................................
 namespace rptui
 {
-    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
+    OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
-        ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
+        OUStringBuffer aBuffer;
+        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
         aBuffer.appendAscii( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );
@@ -71,34 +71,34 @@ namespace rptui
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL DefaultComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //------------------------------------------------------------------------
-    sal_Bool SAL_CALL DefaultComponentInspectorModel::supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException)
+    sal_Bool SAL_CALL DefaultComponentInspectorModel::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
         return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DefaultComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL DefaultComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString DefaultComponentInspectorModel::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString DefaultComponentInspectorModel::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.DefaultComponentInspectorModel");
+        return OUString("com.sun.star.comp.report.DefaultComponentInspectorModel");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > DefaultComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.report.inspection.DefaultComponentInspectorModel");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.report.inspection.DefaultComponentInspectorModel");
         return aSupported;
     }
 
@@ -134,7 +134,7 @@ namespace rptui
         Any* pReturn = aReturn.getArray();
         for ( size_t i = 0; i < nFactories; ++i )
         {
-            *pReturn++ <<= ::rtl::OUString::createFromAscii( aFactories[i].serviceName );
+            *pReturn++ <<= OUString::createFromAscii( aFactories[i].serviceName );
         }
 
         return aReturn;
@@ -188,12 +188,12 @@ namespace rptui
         if ( _arguments.getLength() == 2 )
         {   // constructor: "createWithHelpSection( long, long )"
             if ( !( _arguments[0] >>= nMinHelpTextLines ) || !( _arguments[1] >>= nMaxHelpTextLines ) )
-                throw lang::IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+                throw lang::IllegalArgumentException( OUString(), *this, 0 );
             createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );
             return;
         }
 
-        throw lang::IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw lang::IllegalArgumentException( OUString(), *this, 0 );
     }
 
     //--------------------------------------------------------------------
@@ -205,7 +205,7 @@ namespace rptui
     void DefaultComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )
-            throw lang::IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw lang::IllegalArgumentException( OUString(), *this, 0 );
 
         m_bHasHelpSection = true;
         m_nMinHelpTextLines = _nMinHelpTextLines;
@@ -221,7 +221,7 @@ namespace rptui
         {
             const sal_Char* programmaticName;
             sal_uInt16          uiNameResId;
-            rtl::OString    helpId;
+            OString    helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
@@ -232,7 +232,7 @@ namespace rptui
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( size_t i=0; i<nCategories; ++i, ++pReturn )
         {
-            pReturn->ProgrammaticName = ::rtl::OUString::createFromAscii( aCategories[i].programmaticName );
+            pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
             pReturn->UIName = String( ModuleRes( aCategories[i].uiNameResId ) );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
@@ -241,7 +241,7 @@ namespace rptui
     }
 
     //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getPropertyOrderIndex( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL DefaultComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         const sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
@@ -251,7 +251,7 @@ namespace rptui
         if ( !m_xComponent.is() )
             try
             {
-                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"),m_xContext),UNO_QUERY_THROW);
+                m_xComponent.set(m_xContext->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel"),m_xContext),UNO_QUERY_THROW);
             }
             catch(const Exception &)
             {

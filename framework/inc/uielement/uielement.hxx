@@ -71,8 +71,8 @@ struct UIElement
                   m_nStyle( BUTTON_SYMBOL )
                   {}
 
-    UIElement( const rtl::OUString& rName,
-               const rtl::OUString& rType,
+    UIElement( const OUString& rName,
+               const OUString& rType,
                const com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& rUIElement,
                bool bFloating = false
                ) : m_aType( rType ),
@@ -94,9 +94,9 @@ struct UIElement
     bool operator< ( const UIElement& aUIElement ) const;
     UIElement& operator=( const UIElement& rUIElement );
 
-    rtl::OUString                                                      m_aType;
-    rtl::OUString                                                      m_aName;
-    rtl::OUString                                                      m_aUIName;
+    OUString                                                      m_aType;
+    OUString                                                      m_aName;
+    OUString                                                      m_aUIName;
     com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > m_xUIElement;
     bool                                                               m_bFloating,
                                                                        m_bVisible,

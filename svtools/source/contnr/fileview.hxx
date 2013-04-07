@@ -23,10 +23,9 @@
 #include "sal/config.h"
 
 #include "sal/types.h"
+#include <rtl/ustring.hxx>
 
-namespace rtl { class OUString; }
-
-rtl::OUString CreateExactSizeText(sal_Int64 nSize);
+OUString CreateExactSizeText(sal_Int64 nSize);
 
 #endif
 

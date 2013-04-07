@@ -89,14 +89,14 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     pResMgr->ReadLong();
 
     const String aFileName( pResMgr->ReadString() );
-    ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
     if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aErrorStr(
+        OStringBuffer aErrorStr(
             "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <");
-        aErrorStr.append(rtl::OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append('>');
+        aErrorStr.append(OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append('>');
         OSL_FAIL(aErrorStr.getStr());
 #endif
     }

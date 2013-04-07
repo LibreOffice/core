@@ -100,8 +100,8 @@ public:
     operator ::JavaInfo const * () const;
     ::JavaInfo* cloneJavaInfo() const;
 
-    rtl::OUString getVendor() const;
-    rtl::OUString getLocation() const;
+    OUString getVendor() const;
+    OUString getLocation() const;
     sal_uInt64 getFeatures() const;
 };
 
@@ -109,12 +109,12 @@ class FrameworkException
 {
 public:
 
-    FrameworkException(javaFrameworkError err, const rtl::OString& msg):
+    FrameworkException(javaFrameworkError err, const OString& msg):
         errorCode(err), message(msg)
         {
         }
     javaFrameworkError errorCode;
-    rtl::OString message;
+    OString message;
 };
 }
 #endif

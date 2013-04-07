@@ -25,44 +25,44 @@
 
 #include "quartz/utils.h"
 
-rtl::OUString GetOUString( CFStringRef rStr )
+OUString GetOUString( CFStringRef rStr )
 {
     if( rStr == 0 )
-        return rtl::OUString();
+        return OUString();
     CFIndex nLength = CFStringGetLength( rStr );
     if( nLength == 0 )
-        return rtl::OUString();
+        return OUString();
     const UniChar* pConstStr = CFStringGetCharactersPtr( rStr );
     if( pConstStr )
-        return rtl::OUString( pConstStr, nLength );
+        return OUString( pConstStr, nLength );
     UniChar* pStr = reinterpret_cast<UniChar*>( rtl_allocateMemory( sizeof(UniChar)*nLength ) );
     CFRange aRange = { 0, nLength };
     CFStringGetCharacters( rStr, aRange, pStr );
-    rtl::OUString aRet( pStr, nLength );
+    OUString aRet( pStr, nLength );
     rtl_freeMemory( pStr );
     return aRet;
 }
 
-rtl::OUString GetOUString( NSString* pStr )
+OUString GetOUString( NSString* pStr )
 {
     if( ! pStr )
-        return rtl::OUString();
+        return OUString();
     int nLen = [pStr length];
     if( nLen == 0 )
-        return rtl::OUString();
+        return OUString();
 
-    rtl::OUStringBuffer aBuf( nLen+1 );
+    OUStringBuffer aBuf( nLen+1 );
     aBuf.setLength( nLen );
     [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
     return aBuf.makeStringAndClear();
 }
 
-CFStringRef CreateCFString( const rtl::OUString& rStr )
+CFStringRef CreateCFString( const OUString& rStr )
 {
     return CFStringCreateWithCharacters(kCFAllocatorDefault, rStr.getStr(), rStr.getLength() );
 }
 
-NSString* CreateNSString( const rtl::OUString& rStr )
+NSString* CreateNSString( const OUString& rStr )
 {
     return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
 }

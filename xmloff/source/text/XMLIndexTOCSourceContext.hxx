@@ -36,11 +36,11 @@ namespace rtl { class OUString; }
  */
 class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
 {
-    const ::rtl::OUString sCreateFromMarks;
-    const ::rtl::OUString sLevel;
-    const ::rtl::OUString sCreateFromChapter;
-    const ::rtl::OUString sCreateFromOutline;
-    const ::rtl::OUString sCreateFromLevelParagraphStyles;
+    const OUString sCreateFromMarks;
+    const OUString sLevel;
+    const OUString sCreateFromChapter;
+    const OUString sCreateFromOutline;
+    const OUString sCreateFromLevelParagraphStyles;
 
     sal_Int32 nOutlineLevel;
     sal_Bool bUseOutline;
@@ -54,7 +54,7 @@ public:
     XMLIndexTOCSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
@@ -64,13 +64,13 @@ protected:
 
     virtual void ProcessAttribute(
         enum IndexSourceParamEnum eParam,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

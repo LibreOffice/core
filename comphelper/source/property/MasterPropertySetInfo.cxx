@@ -20,7 +20,6 @@
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <comphelper/TypeGeneration.hxx>
 
-using ::rtl::OUString;
 using ::comphelper::PropertyInfo;
 using ::comphelper::GenerateCppuType;
 using ::comphelper::MasterPropertySetInfo;
@@ -116,7 +115,7 @@ Sequence< ::Property > SAL_CALL MasterPropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
+Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     PropertyDataHash::iterator aIter = maMap.find( rName );
@@ -136,7 +135,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const ::rtl::OUStrin
     return aProperty;
 }
 
-sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName )
+sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );

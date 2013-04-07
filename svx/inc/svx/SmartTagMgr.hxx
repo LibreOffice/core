@@ -85,11 +85,11 @@ class SVX_DLLPUBLIC SmartTagMgr : public cppu::WeakImplHelper2< ::com::sun::star
 {
 private:
 
-    const rtl::OUString maApplicationName;
+    const OUString maApplicationName;
     std::vector< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagRecognizer > > maRecognizerList;
     std::vector< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > maActionList;
-    std::set< rtl::OUString > maDisabledSmartTagTypes;
-    std::multimap < rtl::OUString, ActionReference > maSmartTagMap;
+    std::set< OUString > maDisabledSmartTagTypes;
+    std::multimap < OUString, ActionReference > maSmartTagMap;
     mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > mxBreakIter;
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext> mxContext;
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > mxConfigurationSettings;
@@ -102,7 +102,7 @@ private:
 
     /** Prepare configuration access.
     */
-    void PrepareConfiguration( const rtl::OUString& rConfigurationGroupName );
+    void PrepareConfiguration( const OUString& rConfigurationGroupName );
 
     /** Reads the configuration data.
     */
@@ -120,13 +120,13 @@ private:
 
 public:
 
-    SmartTagMgr( const rtl::OUString& rApplicationName );
+    SmartTagMgr( const OUString& rApplicationName );
     virtual ~SmartTagMgr();
 
     /** Triggeres configuration reading, library loading and listener registration
         NOTE: MUST BE CALLED AFTER CONSTRUCTION!
     */
-    void Init( const rtl::OUString& rConfigurationGroupName );
+    void Init( const OUString& rConfigurationGroupName );
 
     /** Dispatches the recognize call to all installed smart tag recognizers
 
@@ -149,7 +149,7 @@ public:
             The length of the text to be scanned.
 
     */
-    void Recognize( const rtl::OUString& rText,
+    void Recognize( const OUString& rText,
                     const com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xMarkup,
                     const com::sun::star::uno::Reference< com::sun::star::frame::XController > xController,
                     const com::sun::star::lang::Locale& rLocale,
@@ -166,7 +166,7 @@ public:
         @param rActionIndicesSequence
             Output parameter
     */
-    void GetActionSequences( com::sun::star::uno::Sequence < rtl::OUString >& rSmartTagTypes,
+    void GetActionSequences( com::sun::star::uno::Sequence < OUString >& rSmartTagTypes,
                              com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                              com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence ) const;
 
@@ -178,11 +178,11 @@ public:
         @param rLocale
             The locale.
     */
-    rtl::OUString GetSmartTagCaption( const rtl::OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const;
+    OUString GetSmartTagCaption( const OUString& rSmartTagType, const com::sun::star::lang::Locale& rLocale ) const;
 
     /** Returns true if the given smart tag type is enabled.
     */
-    bool IsSmartTagTypeEnabled( const rtl::OUString& rSmartTagType ) const;
+    bool IsSmartTagTypeEnabled( const OUString& rSmartTagType ) const;
 
     /** Enable or disable smart tags.
     */
@@ -205,11 +205,11 @@ public:
     /** Writes configuration settings.
     */
     void WriteConfiguration( const bool* bLabelTextWithSmartTags,
-                             const std::vector< rtl::OUString >* pDisabledTypes ) const;
+                             const std::vector< OUString >* pDisabledTypes ) const;
 
     /** Returns the name of the application this instance has been created by.
     */
-    const rtl::OUString GetApplicationName() const { return maApplicationName; }
+    const OUString GetApplicationName() const { return maApplicationName; }
 
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);

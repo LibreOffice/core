@@ -42,7 +42,7 @@ struct Bad {};
 }
 
 Dependencies::Dependencies(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type):
+    rtl::Reference< TypeManager > const & manager, OString const & type):
     m_voidDependency(false), m_booleanDependency(false),
     m_byteDependency(false), m_shortDependency(false),
     m_unsignedShortDependency(false), m_longDependency(false),
@@ -122,8 +122,8 @@ Dependencies::Dependencies(
 Dependencies::~Dependencies()
 {}
 
-void Dependencies::insert(rtl::OUString const & type, bool base) {
-    rtl::OString t;
+void Dependencies::insert(OUString const & type, bool base) {
+    OString t;
     if (!type.convertToString(
             &t, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
@@ -134,10 +134,10 @@ void Dependencies::insert(rtl::OUString const & type, bool base) {
     insert(t, base);
 }
 
-void Dependencies::insert(rtl::OString const & type, bool base) {
+void Dependencies::insert(OString const & type, bool base) {
     sal_Int32 rank;
-    std::vector< rtl::OString > args;
-    rtl::OString t(UnoType::decompose(type, &rank, &args));
+    std::vector< OString > args;
+    OString t(UnoType::decompose(type, &rank, &args));
     if (rank > 0) {
         m_sequenceDependency = true;
     }
@@ -249,7 +249,7 @@ void Dependencies::insert(rtl::OString const & type, bool base) {
 
     case UnoType::SORT_COMPLEX:
         {
-            for (std::vector< rtl::OString >::iterator i(args.begin());
+            for (std::vector< OString >::iterator i(args.begin());
                  i != args.end(); ++i)
             {
                 insert(*i, false);

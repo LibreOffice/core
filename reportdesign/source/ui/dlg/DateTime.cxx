@@ -177,12 +177,12 @@ short ODateTimeDialog::Execute()
     return nRet;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const uno::Reference< util::XNumberFormats>& _xFormats,bool _bTime)
+OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const uno::Reference< util::XNumberFormats>& _xFormats,bool _bTime)
 {
     uno::Reference< beans::XPropertySet> xFormSet = _xFormats->getByKey(_nNumberFormatKey);
     OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
-    ::rtl::OUString sFormat;
-    xFormSet->getPropertyValue(::rtl::OUString("FormatString")) >>= sFormat;
+    OUString sFormat;
+    xFormSet->getPropertyValue(OUString("FormatString")) >>= sFormat;
 
     double nValue = 0;
     if ( _bTime )

@@ -57,7 +57,7 @@ ComplexToolbarController::ComplexToolbarController(
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
     sal_uInt16                                   nID,
-    const ::rtl::OUString&                          aCommand ) :
+    const OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
@@ -93,7 +93,7 @@ Sequence<PropertyValue> ComplexToolbarController::getExecuteArgs(sal_Int16 KeyMo
     Sequence<PropertyValue> aArgs( 1 );
 
     // Add key modifier to argument list
-    aArgs[0].Name = rtl::OUString( "KeyModifier" );
+    aArgs[0].Name = OUString( "KeyModifier" );
     aArgs[0].Value <<= KeyModifier;
     return aArgs;
 }
@@ -103,7 +103,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    ::rtl::OUString                     aCommandURL;
+    OUString                     aCommandURL;
     ::com::sun::star::util::URL  aTargetURL;
     Sequence<PropertyValue> aArgs;
 
@@ -156,7 +156,7 @@ throw ( RuntimeException )
         TriState eTri = STATE_NOCHECK;
 
         sal_Bool        bValue = sal_Bool();
-        rtl::OUString   aStrValue;
+        OUString   aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
         ControlCommand  aControlCommand;
@@ -173,7 +173,7 @@ throw ( RuntimeException )
         }
         else if ( Event.State >>= aStrValue )
         {
-            ::rtl::OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
+            OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
             m_pToolbar->SetItemText( m_nID, aText );
             m_pToolbar->SetQuickHelpText( m_nID, aText );
 
@@ -256,7 +256,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ComplexToolbarController, Notify_Impl, NotifyInfo*,
 // ------------------------------------------------------------------
 
 void ComplexToolbarController::addNotifyInfo(
-    const rtl::OUString&                      aEventName,
+    const OUString&                      aEventName,
     const uno::Reference< frame::XDispatch >& xDispatch,
     const uno::Sequence< beans::NamedValue >& rInfo )
 {
@@ -275,7 +275,7 @@ void ComplexToolbarController::addNotifyInfo(
         sal_Int32 nCount = rInfo.getLength();
         uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
         aInfoSeq.realloc( nCount+1 );
-        aInfoSeq[nCount].Name  = ::rtl::OUString( "Source" );
+        aInfoSeq[nCount].Name  = OUString( "Source" );
         aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
         pNotifyInfo->aInfoSeq  = aInfoSeq;
 
@@ -297,7 +297,7 @@ sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
 
 // --------------------------------------------------------
 
-uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromCommand( const rtl::OUString& aCommand ) const
+uno::Reference< frame::XDispatch > ComplexToolbarController::getDispatchFromCommand( const OUString& aCommand ) const
 {
     uno::Reference< frame::XDispatch > xDispatch;
 
@@ -327,7 +327,7 @@ void ComplexToolbarController::notifyFocusGet()
 {
     // send focus get notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( rtl::OUString( "FocusSet" ),
+    addNotifyInfo( OUString( "FocusSet" ),
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
@@ -336,18 +336,18 @@ void ComplexToolbarController::notifyFocusLost()
 {
     // send focus lost notification
     uno::Sequence< beans::NamedValue > aInfo;
-    addNotifyInfo( rtl::OUString( "FocusLost" ),
+    addNotifyInfo( OUString( "FocusLost" ),
                     getDispatchFromCommand( m_aCommandURL ),
                     aInfo );
 }
 
-void ComplexToolbarController::notifyTextChanged( const ::rtl::OUString& aText )
+void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
     uno::Sequence< beans::NamedValue > aInfo( 1 );
-    aInfo[0].Name  = rtl::OUString( "Text" );
+    aInfo[0].Name  = OUString( "Text" );
     aInfo[0].Value <<= aText;
-    addNotifyInfo( rtl::OUString( "TextChanged" ),
+    addNotifyInfo( OUString( "TextChanged" ),
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );
 }

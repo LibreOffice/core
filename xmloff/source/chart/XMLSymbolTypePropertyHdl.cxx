@@ -23,8 +23,6 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::xmloff::token;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace
 {

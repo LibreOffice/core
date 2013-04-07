@@ -58,7 +58,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::com::sun::star::uno::RuntimeException;
 
 using ::sd::framework::FrameworkHelper;
@@ -946,7 +945,7 @@ void SlideTransitionPane::openSoundFileDialog()
             else
             {
                 String aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
-                rtl::OUString aStr('%');
+                OUString aStr('%');
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox.SetModalInputMode (sal_True);

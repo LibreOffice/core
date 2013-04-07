@@ -46,7 +46,7 @@ const sal_Int32 AX_FONTDATA_CENTER          = 3;
 /** All entries of a font property. */
 struct OOX_DLLPUBLIC AxFontData
 {
-    ::rtl::OUString     maFontName;         ///< Name of the used font.
+    OUString     maFontName;         ///< Name of the used font.
     sal_uInt32          mnFontEffects;      ///< Font effect flags.
     sal_Int32           mnFontHeight;       ///< Height of the font (not really twips, see code).
     sal_Int32           mnFontCharSet;      ///< Windows character set of the font.

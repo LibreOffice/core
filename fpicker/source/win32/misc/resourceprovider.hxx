@@ -33,7 +33,7 @@ public:
     CResourceProvider( );
     ~CResourceProvider( );
 
-    rtl::OUString getResString( sal_Int16 aId );
+    OUString getResString( sal_Int16 aId );
 
 private:
     CResourceProvider_Impl* m_pImpl;

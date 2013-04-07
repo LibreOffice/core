@@ -52,7 +52,7 @@ struct UpdateData
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > aInstalledPackage;
 
     //The version of the update
-    ::rtl::OUString updateVersion;
+    OUString updateVersion;
 
     //For online update
     // ======================
@@ -62,9 +62,9 @@ struct UpdateData
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
     //The URL of the locally downloaded extension. It will only be set if there were no errors
     //during the download
-    ::rtl::OUString sLocalURL;
+    OUString sLocalURL;
     //The URL of the website wher the download can be obtained.
-    ::rtl::OUString sWebsiteURL;
+    OUString sWebsiteURL;
 
     //For local update
     //=====================

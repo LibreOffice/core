@@ -127,7 +127,7 @@ private:
 
     sal_Bool            bIsTemplateFolder;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
                         GetNewDocContents() const;
 
 public:
@@ -161,7 +161,7 @@ class SvtDocInfoTable_Impl : public ResStringArray
 public:
     SvtDocInfoTable_Impl();
 
-    rtl::OUString GetString( long nId ) const;
+    OUString GetString( long nId ) const;
 };
 
 class SvtFrameWindow_Impl : public Window
@@ -181,7 +181,7 @@ private:
     ::com::sun::star::lang::Locale  aLocale;
     SvtDocInfoTable_Impl            aInfoTable;
     String                          aCurrentURL;
-    ::rtl::OUString                 m_aOpenURL;
+    OUString                 m_aOpenURL;
     sal_Bool                        bDocInfo;
 
     void                    ShowDocInfo( const String& rURL );

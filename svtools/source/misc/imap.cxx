@@ -86,7 +86,7 @@ void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
     rOStm << GetVersion();
     rOStm << ( (sal_uInt16) eEncoding );
 
-    const rtl::OString aRelURL = rtl::OUStringToOString(
+    const OString aRelURL = OUStringToOString(
         URIHelper::simpleNormalizedMakeRelative(rBaseURL, aURL), eEncoding);
     write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, aRelURL);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aAltText, eEncoding);
@@ -951,7 +951,7 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
     rOStm << IMAPMAGIC;
     rOStm << GetVersion();
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); //dummy
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, OString()); //dummy
     rOStm << nCount;
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStm, aImageName, eEncoding);
 

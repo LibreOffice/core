@@ -43,7 +43,6 @@ using com::sun::star::beans::Property;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::PropertyAttribute::READONLY;
-using rtl::OUString;
 
 
 void xforms::copy( const Reference<XPropertySet>& xFrom,

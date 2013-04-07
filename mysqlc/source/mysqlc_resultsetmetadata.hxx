@@ -33,7 +33,6 @@ namespace connectivity
     {
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
-        using ::rtl::OUString;
         //**************************************************************
         //************ Class: ResultSetMetaData
         //**************************************************************
@@ -52,9 +51,9 @@ namespace connectivity
             {
             }
 
-            inline ::rtl::OUString convert( const ::std::string& _string ) const
+            inline OUString convert( const ::std::string& _string ) const
             {
-                return ::rtl::OUString( _string.c_str(), _string.size(), m_encoding );
+                return OUString( _string.c_str(), _string.size(), m_encoding );
             }
 
             /// Avoid ambigous cast error from the compiler.

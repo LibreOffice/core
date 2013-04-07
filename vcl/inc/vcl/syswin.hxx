@@ -188,7 +188,7 @@ public:
     sal_uInt16          GetIcon() const { return mnIcon; }
     // for systems like MacOSX which can display the URL a document is loaded from
     // separately from the window title
-    void            SetRepresentedURL( const rtl::OUString& );
+    void            SetRepresentedURL( const OUString& );
 
     void            EnableSaveBackground( sal_Bool bSave = sal_True );
     sal_Bool            IsSaveBackgroundEnabled() const;
@@ -212,8 +212,8 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
     Size            GetResizeOutputSizePixel() const;
 
-    void            SetWindowState(const rtl::OString& rStr);
-    rtl::OString    GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;
+    void            SetWindowState(const OString& rStr);
+    OString    GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;
 
     void            SetMenuBar( MenuBar* pMenuBar );
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
@@ -259,7 +259,7 @@ public:
     */
     void            SetScreenNumber( unsigned int nNewScreen );
 
-    void            SetApplicationID( const rtl::OUString &rApplicationID );
+    void            SetApplicationID( const OUString &rApplicationID );
 
     void SetCloseHdl(const Link& rLink);
     const Link& GetCloseHdl() const;

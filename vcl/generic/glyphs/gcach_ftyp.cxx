@@ -156,7 +156,7 @@ static int nDefaultPrioAntiAlias   = 1;
 // FreetypeManager
 // =======================================================================
 
-FtFontFile::FtFontFile( const ::rtl::OString& rNativeFileName )
+FtFontFile::FtFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
     mpFileMap( NULL ),
     mnFileSize( 0 ),
@@ -184,7 +184,7 @@ FtFontFile::FtFontFile( const ::rtl::OString& rNativeFileName )
 
 // -----------------------------------------------------------------------
 
-FtFontFile* FtFontFile::FindFontFile( const ::rtl::OString& rNativeFileName )
+FtFontFile* FtFontFile::FindFontFile( const OString& rNativeFileName )
 {
     // font file already known? (e.g. for ttc, synthetic, aliased fonts)
     const char* pFileName = rNativeFileName.getStr();
@@ -299,7 +299,7 @@ const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, siz
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
-    const ::rtl::OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
+    const OString& rNativeFileName, int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
     const ExtraKernInfo* pExtraKernInfo )
 :
     maFaceFT( NULL ),
@@ -568,7 +568,7 @@ FreetypeManager::~FreetypeManager()
 
 // -----------------------------------------------------------------------
 
-void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
+void FreetypeManager::AddFontFile( const OString& rNormalizedName,
     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes& rDevFontAttr,
     const ExtraKernInfo* pExtraKernInfo )
 {
@@ -885,7 +885,7 @@ boost::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
     return mpFontOptions;
 }
 
-const ::rtl::OString* ServerFont::GetFontFileName() const
+const OString* ServerFont::GetFontFileName() const
 {
     return mpFontInfo->GetFontFileName();
 }

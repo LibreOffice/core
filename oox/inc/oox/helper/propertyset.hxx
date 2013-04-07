@@ -108,7 +108,7 @@ public:
         @param rPropNames  The property names. MUST be ordered alphabetically.
         @param rValues  The related property values. */
     void                setProperties(
-                            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropNames,
+                            const ::com::sun::star::uno::Sequence< OUString >& rPropNames,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues );
 
     /** Puts the passed property map into the property set. Tries to use the XMultiPropertySet interface.
@@ -123,10 +123,10 @@ public:
 private:
     /** Gets the specified property from the property set.
         @return  true, if the any could be filled with the property value. */
-    bool                implGetPropertyValue( ::com::sun::star::uno::Any& orValue, const ::rtl::OUString& rPropName ) const;
+    bool                implGetPropertyValue( ::com::sun::star::uno::Any& orValue, const OUString& rPropName ) const;
 
     /** Puts the passed any into the property set. */
-    bool                implSetPropertyValue( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+    bool                implSetPropertyValue( const OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >

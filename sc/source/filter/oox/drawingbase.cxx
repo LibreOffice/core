@@ -35,7 +35,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
 
-using ::rtl::OUString;
 
 // ============================================================================
 

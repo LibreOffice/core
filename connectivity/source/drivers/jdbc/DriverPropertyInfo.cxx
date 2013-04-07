@@ -60,9 +60,9 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
     return aInfo;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::name()
+OUString java_sql_DriverPropertyInfo::name()
 {
-    ::rtl::OUString aStr;
+    OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
@@ -73,9 +73,9 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
     return aStr;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::description()
+OUString java_sql_DriverPropertyInfo::description()
 {
-    ::rtl::OUString aStr;
+    OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
@@ -86,9 +86,9 @@ java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
     return aStr;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString java_sql_DriverPropertyInfo::value()
+OUString java_sql_DriverPropertyInfo::value()
 {
-    ::rtl::OUString aStr;
+    OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
@@ -112,7 +112,7 @@ sal_Bool java_sql_DriverPropertyInfo::required()
     return out;
 }
 // --------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices()
+Sequence< OUString> java_sql_DriverPropertyInfo::choices()
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
@@ -121,11 +121,11 @@ Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices()
         if(id)
         {
             const java_lang_String * pEmpty = NULL;
-            const ::rtl::OUString * pEmpty2 = NULL;
+            const OUString * pEmpty2 = NULL;
             return copyArrayAndDelete(t.pEnv,(jobjectArray)t.pEnv->GetObjectField( object, id), pEmpty2, pEmpty);
         }
     } //t.pEnv
-    return Sequence< ::rtl::OUString>();
+    return Sequence< OUString>();
 }
 // --------------------------------------------------------------------------------
 

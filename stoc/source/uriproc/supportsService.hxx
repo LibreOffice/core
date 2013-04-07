@@ -27,8 +27,8 @@ namespace rtl { class OUString; }
 namespace stoc { namespace uriproc {
 
 bool supportsService(
-    com::sun::star::uno::Sequence< rtl::OUString > const & serviceNames,
-    rtl::OUString const & serviceName);
+    com::sun::star::uno::Sequence< OUString > const & serviceNames,
+    OUString const & serviceName);
 
 } }
 

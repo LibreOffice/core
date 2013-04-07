@@ -375,7 +375,7 @@ namespace svxform
         HelpButton              m_aHelpBtn;
 
         Timer                   m_aResultTimer;
-        ::rtl::OUString         m_sPropertyName;
+        OUString         m_sPropertyName;
 
         XFormsUIHelper1_ref     m_xUIHelper;
         XPropertySet_ref        m_xBinding;
@@ -387,7 +387,7 @@ namespace svxform
 
     public:
         AddConditionDialog( Window* pParent,
-            const ::rtl::OUString& _rPropertyName, const XPropertySet_ref& _rBinding );
+            const OUString& _rPropertyName, const XPropertySet_ref& _rBinding );
         ~AddConditionDialog();
 
         inline XFormsUIHelper1_ref  GetUIHelper() const { return m_xUIHelper; }
@@ -405,7 +405,7 @@ namespace svxform
     class NamespaceItemDialog : public ModalDialog
     {
     private:
-        typedef std::vector< ::rtl::OUString > PrefixList;
+        typedef std::vector< OUString > PrefixList;
 
         FixedText           m_aNamespacesFT;
         SvxSimpleTableContainer m_aNamespacesListContainer;

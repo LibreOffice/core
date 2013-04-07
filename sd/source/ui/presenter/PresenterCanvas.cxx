@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sd { namespace presenter {
 
@@ -52,7 +51,7 @@ Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
 
 
 
-::rtl::OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
+OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterCanvasFactory");
 }
@@ -60,11 +59,11 @@ Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
 
 
 
-Sequence<rtl::OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.rendering.Canvas");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.rendering.Canvas");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

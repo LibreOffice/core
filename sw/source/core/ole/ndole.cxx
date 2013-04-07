@@ -54,7 +54,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
 
-using ::rtl::OUString;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;

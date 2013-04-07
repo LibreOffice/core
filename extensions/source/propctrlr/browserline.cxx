@@ -57,7 +57,7 @@ namespace pcr
     DBG_NAME(OBrowserLine)
     //------------------------------------------------------------------
 
-    OBrowserLine::OBrowserLine( const ::rtl::OUString& _rEntryName, Window* pParent )
+    OBrowserLine::OBrowserLine( const OUString& _rEntryName, Window* pParent )
             :m_sEntryName( _rEntryName )
             ,m_aFtTitle(pParent)
             ,m_pControlWindow( NULL )
@@ -94,7 +94,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::SetComponentHelpIds( const rtl::OString& _rHelpId, const rtl::OString& _sPrimaryButtonId, const rtl::OString& _sSecondaryButtonId )
+    void OBrowserLine::SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId )
     {
         if ( m_pControlWindow )
             m_pControlWindow->SetHelpId( _rHelpId );
@@ -294,7 +294,7 @@ namespace pcr
     //------------------------------------------------------------------
     XubString OBrowserLine::GetTitle() const
     {
-        rtl::OUString sDisplayName = m_aFtTitle.GetText();
+        OUString sDisplayName = m_aFtTitle.GetText();
 
         // for Issue 69452
         if (Application::GetSettings().GetLayoutRTL())
@@ -390,7 +390,7 @@ namespace pcr
             rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
-            rpButton->SetText(rtl::OUString("..."));
+            rpButton->SetText(OUString("..."));
         }
 
         rpButton->Show();
@@ -401,7 +401,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage )
+    void OBrowserLine::impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage )
     {
         try
         {
@@ -409,7 +409,7 @@ namespace pcr
             Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create(xContext) );
 
             Sequence< PropertyValue > aMediaProperties(1);
-            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
+            aMediaProperties[0].Name = OUString( "URL" );
             aMediaProperties[0].Value <<= _rImageURL;
 
             Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
@@ -422,7 +422,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::ShowBrowseButton( const ::rtl::OUString& _rImageURL, sal_Bool _bPrimary )
+    void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, sal_Bool _bPrimary )
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
 

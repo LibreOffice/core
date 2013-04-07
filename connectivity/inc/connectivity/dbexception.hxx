@@ -81,7 +81,7 @@ public:
     In those cases, you can use this constructor, which behaves as if you would have used
     an SQLException containing exactly the given error message.
     */
-    SQLExceptionInfo( const ::rtl::OUString& _rSimpleErrorMessage );
+    SQLExceptionInfo( const OUString& _rSimpleErrorMessage );
 
     SQLExceptionInfo(const SQLExceptionInfo& _rCopySource);
 
@@ -97,7 +97,7 @@ public:
         @param  _nErrorCode
             the ErrorCode of the to-be-constructed SQLException
     */
-    void    prepend( const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+    void    prepend( const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
 
     /** appends a plain message to the chain of exceptions
         @param  _eType
@@ -110,7 +110,7 @@ public:
         @param  _nErrorCode
             the error code of the exception to append
     */
-    void    append( TYPE _eType, const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
+    void    append( TYPE _eType, const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState = NULL, const sal_Int32 _nErrorCode = 0 );
 
     /** throws (properly typed) the exception contained in the object
         @precond
@@ -221,7 +221,7 @@ public:
     @raises RuntimeException
         in case of an internal error
 */
-OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getStandardSQLState( StandardSQLState _eState );
+OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 
 //----------------------------------------------------------------------------------
 /** returns a standard ASCII string for a given SQLState
@@ -237,7 +237,7 @@ OOO_DLLPUBLIC_DBTOOLS const sal_Char* getStandardSQLStateAscii( StandardSQLState
 
 //----------------------------------------------------------------------------------
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedException(
-        const ::rtl::OUString& _rMsg,
+        const OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next = ::com::sun::star::uno::Any()
     )
@@ -275,7 +275,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
-        const ::rtl::OUString& _rMsg,
+        const OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource
     )
     throw (::com::sun::star::sdbc::SQLException);
@@ -284,7 +284,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
-        const ::rtl::OUString& _rMsg,
+        const OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource,
         const ::com::sun::star::uno::Any& _rNextException
     )
@@ -335,7 +335,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
 /** throws an SQLException
 */
 OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
-        const ::rtl::OUString& _rMessage,
+        const OUString& _rMessage,
         StandardSQLState _eSQLState,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,

@@ -124,7 +124,7 @@ public:
         @return the generated function object.
        */
 
-    static ExpressionNodeSharedPtr parseFunction( const ::rtl::OUString& _sFunction);
+    static ExpressionNodeSharedPtr parseFunction( const OUString& _sFunction);
 
 private:
     // disabled constructor/destructor, since this is

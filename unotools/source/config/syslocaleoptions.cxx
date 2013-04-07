@@ -39,7 +39,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
 
 SvtSysLocaleOptions_Impl*   SvtSysLocaleOptions::pOptions = NULL;
 sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
@@ -75,7 +74,7 @@ public:
                                 SvtSysLocaleOptions_Impl();
     virtual                     ~SvtSysLocaleOptions_Impl();
 
-    virtual void                Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void                Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void                Commit();
 
             const OUString&     GetLocaleString() const
@@ -470,7 +469,7 @@ void SvtSysLocaleOptions_Impl::SetIgnoreLanguageChange( sal_Bool bSet)
     }
 }
 
-void SvtSysLocaleOptions_Impl::Notify( const Sequence< rtl::OUString >& seqPropertyNames )
+void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
     sal_uLong nHint = 0;
     Sequence< Any > seqValues = GetProperties( seqPropertyNames );
@@ -669,7 +668,7 @@ sal_Bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
 
 // static
 void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
-        LanguageType& eLang, const ::rtl::OUString& rConfigString )
+        LanguageType& eLang, const OUString& rConfigString )
 {
     sal_Int32 nDelim = rConfigString.indexOf( '-' );
     if ( nDelim >= 0 )
@@ -687,13 +686,13 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( String& rAbbrev,
 
 
 // static
-::rtl::OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
+OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const String& rAbbrev, LanguageType eLang )
 {
     String aIsoStr( LanguageTag( eLang ).getBcp47() );
     if ( aIsoStr.Len() )
     {
-        ::rtl::OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
+        OUStringBuffer aStr( rAbbrev.Len() + 1 + aIsoStr.Len() );
         aStr.append( rAbbrev );
         aStr.append( sal_Unicode('-') );
         aStr.append( aIsoStr );

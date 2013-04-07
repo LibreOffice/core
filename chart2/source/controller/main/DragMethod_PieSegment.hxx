@@ -28,7 +28,7 @@ namespace chart
 class DragMethod_PieSegment : public DragMethod_Base
 {
 public:
-    DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper, const rtl::OUString& rObjectCID
+    DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper, const OUString& rObjectCID
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
     virtual ~DragMethod_PieSegment();
 

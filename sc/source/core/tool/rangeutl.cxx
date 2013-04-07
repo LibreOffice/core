@@ -28,8 +28,6 @@
 #include "externalrefmgr.hxx"
 #include "compiler.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::formula::FormulaGrammar;
 using namespace ::com::sun::star;
 
@@ -267,13 +265,13 @@ sal_Bool ScRangeUtil::MakeRangeFromName (
     if( eScope==RUTL_NAMES )
     {
         //first handle ui names like local1 (Sheet1), which point to a local range name
-        rtl::OUString aName(rName);
+        OUString aName(rName);
         sal_Int32 nEndPos = aName.lastIndexOf(')');
         sal_Int32 nStartPos = aName.lastIndexOfAsciiL(" (",2);
         SCTAB nTable = nCurTab;
         if (nEndPos != -1 && nStartPos != -1)
         {
-            rtl::OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
+            OUString aSheetName = aName.copy(nStartPos+2, nEndPos-nStartPos-2);
             if (pDoc->GetTable(aSheetName, nTable))
             {
                 aName = aName.copy(0, nStartPos);
@@ -357,7 +355,7 @@ void ScRangeStringConverter::AssignString(
         if( !rNewStr.isEmpty() )
         {
             if( !rString.isEmpty() )
-                rString += rtl::OUString(cSeperator);
+                rString += OUString(cSeperator);
             rString += rNewStr;
         }
     }
@@ -794,7 +792,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
 }
 
 static void lcl_appendCellAddress(
-    rtl::OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell,
+    OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell,
     const ScAddress::ExternalInfo& rExtInfo)
 {
     if (rExtInfo.mbExternal)
@@ -826,7 +824,7 @@ static void lcl_appendCellAddress(
 }
 
 static void lcl_appendCellRangeAddress(
-    rtl::OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell1, const ScAddress& rCell2,
+    OUStringBuffer& rBuf, ScDocument* pDoc, const ScAddress& rCell1, const ScAddress& rCell2,
     const ScAddress::ExternalInfo& rExtInfo1, const ScAddress::ExternalInfo& rExtInfo2)
 {
     if (rExtInfo1.mbExternal)
@@ -994,11 +992,11 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
     rString = aRetStr.makeStringAndClear();
 }
 
-ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const rtl::OUString& rString, const SCTAB nTab, const ScDocument* pDoc)
+ScRangeData* ScRangeStringConverter::GetRangeDataFromString(const OUString& rString, const SCTAB nTab, const ScDocument* pDoc)
 {
     ScRangeName* pLocalRangeName = pDoc->GetRangeName(nTab);
     ScRangeData* pData = NULL;
-    rtl::OUString aUpperName = ScGlobal::pCharClass->uppercase(rString);
+    OUString aUpperName = ScGlobal::pCharClass->uppercase(rString);
     if(pLocalRangeName)
     {
         pData = pLocalRangeName->findByUpperName(aUpperName);
@@ -1071,9 +1069,9 @@ ScAreaNameIterator::ScAreaNameIterator( ScDocument* pDoc ) :
     }
 }
 
-bool ScAreaNameIterator::Next( rtl::OUString& rName, ScRange& rRange )
+bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
 {
-    // Just a wrapper for rtl::OUString for now.  It should replace the method
+    // Just a wrapper for OUString for now.  It should replace the method
     // below eventually.
     String aTmp;
     bool bRet = Next(aTmp, rRange);

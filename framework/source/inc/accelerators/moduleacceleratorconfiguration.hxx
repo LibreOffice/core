@@ -51,8 +51,8 @@ class ModuleAcceleratorConfiguration : public XCUBasedAcceleratorConfiguration
         //----------------------------------
         /** identify the application module, where this accelerator
             configuration cache should work on. */
-        ::rtl::OUString m_sModule;
-        ::rtl::OUString m_sLocale;
+        OUString m_sModule;
+        OUString m_sLocale;
 
     //______________________________________
     // interface

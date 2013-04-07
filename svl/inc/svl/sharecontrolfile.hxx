@@ -47,7 +47,7 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xSeekable;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate > m_xTruncate;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > m_aUsersData;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > m_aUsersData;
 
     void OpenStream();
     void Close();
@@ -59,14 +59,14 @@ class SVL_DLLPUBLIC ShareControlFile : public LockFileCommon
 public:
 
     // The constructor will throw exception in case the stream can not be opened
-    ShareControlFile( const ::rtl::OUString& aOrigURL );
+    ShareControlFile( const OUString& aOrigURL );
     ~ShareControlFile();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > GetUsersData();
-    void SetUsersDataAndStore( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aUserNames );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > InsertOwnEntry();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > GetUsersData();
+    void SetUsersDataAndStore( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >& aUserNames );
+    ::com::sun::star::uno::Sequence< OUString > InsertOwnEntry();
     bool HasOwnEntry();
-    void RemoveEntry( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aOptionalSpecification = ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
+    void RemoveEntry( const ::com::sun::star::uno::Sequence< OUString >& aOptionalSpecification = ::com::sun::star::uno::Sequence< OUString >() );
     void RemoveFile();
 };
 

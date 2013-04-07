@@ -31,8 +31,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
 using ::boost::unordered_map;
 using ::std::list;
 using ::std::for_each;
@@ -120,9 +118,9 @@ public:
     virtual void SAL_CALL elementInserted( const container::ContainerEvent& /*Event*/ ) throw(RuntimeException){}
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& Event ) throw(RuntimeException)
     {
-        rtl::OUString sModuleName;
+        OUString sModuleName;
         Event.Accessor >>= sModuleName;
-        OSL_TRACE("VBAProjectListener::elementReplaced(%s)", rtl::OUStringToOString( sModuleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("VBAProjectListener::elementReplaced(%s)", OUStringToOString( sModuleName, RTL_TEXTENCODING_UTF8 ).getStr() );
         mpMacroMgr->InitUserFuncData();
         mpMacroMgr->BroadcastModuleUpdate(sModuleName);
     }

@@ -306,7 +306,7 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
             SFX_ITEMSET_ARG( aParams, pContentTypeItem, SfxStringItem, SID_CONTENTTYPE, sal_False );
             if ( pContentTypeItem )
             {
-                const SfxFilter* pFilter = SfxFilterMatcher( rtl::OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
+                const SfxFilter* pFilter = SfxFilterMatcher( OUString::createFromAscii(GetFactory().GetShortName()) ).GetFilter4Mime( pContentTypeItem->GetValue(), SFX_FILTER_EXPORT );
                 if ( pFilter )
                     aFilterName = pFilter->GetName();
             }
@@ -389,7 +389,7 @@ void SfxObjectShell::CheckIn( )
         SfxCheckinDialog checkinDlg( &GetFrame( )->GetWindow( ) );
         if ( checkinDlg.Execute( ) == RET_OK )
         {
-            rtl::OUString sComment = checkinDlg.GetComment( );
+            OUString sComment = checkinDlg.GetComment( );
             sal_Bool bMajor = checkinDlg.IsMajor( );
             xCmisDoc->checkIn( bMajor, sComment );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
@@ -669,7 +669,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
                 {
                     bDialogUsed = aHelper.GUIStoreModel( GetModel(),
-                                                         ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
+                                                         OUString::createFromAscii( pSlot->GetUnoName() ),
                                                          aDispatchArgs,
                                                          bPreselectPassword,
                                                          GetSharedFileURL(),
@@ -678,7 +678,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 else
                 {
                     // the user has decided not to store the document
-                    throw task::ErrorCodeIOException( ::rtl::OUString(),
+                    throw task::ErrorCodeIOException( OUString(),
                                                       uno::Reference< uno::XInterface >(),
                                                       ERRCODE_IO_ABORT );
                 }
@@ -692,8 +692,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 rReq.SetArgs( aResultParams );
 
                 SFX_REQUEST_ARG( rReq, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-                ::rtl::OUString aFilterName = pFilterNameItem ? ::rtl::OUString( pFilterNameItem->GetValue() )
-                                                              : ::rtl::OUString();
+                OUString aFilterName = pFilterNameItem ? OUString( pFilterNameItem->GetValue() )
+                                                              : OUString();
                 const SfxFilter* pFilt = GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName );
 
                 OSL_ENSURE( nId == SID_SAVEDOC || pFilt, "The filter can not be zero since it was used for storing!\n" );
@@ -1143,21 +1143,21 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 
         case SID_DOCINFO_AUTHOR :
         {
-            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setAuthor( aStr );
             break;
         }
 
         case SID_DOCINFO_COMMENTS :
         {
-            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setDescription( aStr );
             break;
         }
 
         case SID_DOCINFO_KEYWORDS :
         {
-            ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
+            OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
             getDocProperties()->setKeywords(
                 ::comphelper::string::convertCommaSeparated(aStr) );
             break;
@@ -1339,7 +1339,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
                 try
                 {
                     uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-                    xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
+                    xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
@@ -1412,12 +1412,12 @@ void SfxObjectShell::ImplSign( sal_Bool bScriptingContent )
     SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
 
     // the document is not new and is not modified
-    ::rtl::OUString aODFVersion;
+    OUString aODFVersion;
     try
     {
         // check the version of the document
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( ::rtl::OUString( "Version" ) ) >>= aODFVersion;
+        xPropSet->getPropertyValue( OUString( "Version" ) ) >>= aODFVersion;
     }
     catch( uno::Exception& )
     {}

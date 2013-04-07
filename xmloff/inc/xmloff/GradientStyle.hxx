@@ -23,6 +23,7 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 class SvXMLImport;
 class SvXMLExport;
@@ -31,7 +32,6 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace uno { class Any; }
 } } }
-namespace rtl { class OUString; }
 
 
 class XMLOFF_DLLPUBLIC XMLGradientStyleImport
@@ -46,7 +46,7 @@ public:
         const ::com::sun::star::uno::Reference<
            ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
-        ::rtl::OUString& rStrName );
+        OUString& rStrName );
 };
 
 
@@ -59,7 +59,7 @@ public:
     ~XMLGradientStyleExport();
 
     sal_Bool exportXML(
-        const ::rtl::OUString& rStrName,
+        const OUString& rStrName,
         const ::com::sun::star::uno::Any& rValue );
 };
 

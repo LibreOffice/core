@@ -84,23 +84,23 @@ void OCallableStatement::release() throw ()
 }
 
 // XServiceInfo
-rtl::OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException)
+OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getImplementationName" );
-    return rtl::OUString("com.sun.star.sdb.OCallableStatement");
+    return OUString("com.sun.star.sdb.OCallableStatement");
 }
 
-Sequence< ::rtl::OUString > OCallableStatement::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OCallableStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getSupportedServiceNames" );
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = SERVICE_SDBC_CALLABLESTATEMENT;
     aSNS.getArray()[1] = SERVICE_SDB_CALLABLESTATEMENT;
     return aSNS;
 }
 
 // XOutParameters
-void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
+void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::registerOutParameter" );
     MutexGuard aGuard(m_aMutex);
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->wasNull();
 }
 
-::rtl::OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCallableStatement::getString" );
     MutexGuard aGuard(m_aMutex);

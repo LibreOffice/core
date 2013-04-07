@@ -32,7 +32,7 @@ namespace connectivity
     namespace kab
     {
         QString valueOfKabField(const ::KABC::Addressee &aAddressee, sal_Int32 nFieldNumber);
-        sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(::com::sun::star::sdbc::SQLException);
+        sal_uInt32 findKabField(const OUString& columnName) throw(::com::sun::star::sdbc::SQLException);
     }
 }
 

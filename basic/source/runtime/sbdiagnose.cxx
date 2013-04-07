@@ -63,7 +63,7 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
     SbxArrayRef const xArguments( new SbxArray( SbxVARIANT ) );
     SbxVariableRef const xMessageText = new SbxVariable( SbxSTRING );
-    xMessageText->PutString( rtl::OUString::createFromAscii(i_assertionMessage) );
+    xMessageText->PutString( OUString::createFromAscii(i_assertionMessage) );
     xArguments->Put( xMessageText, 1 );
 
     ErrCode const nError = xAssertionChannelBasic->Call( sCaptureFunctionName, xArguments );

@@ -45,7 +45,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

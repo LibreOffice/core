@@ -29,12 +29,12 @@ class UNOTOOLS_DLLPUBLIC SvtFilterOptions : public utl::ConfigItem
 {
     SvtFilterOptions_Impl* pImp;
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 public:
                     SvtFilterOptions();
     virtual        ~SvtFilterOptions();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     virtual void            Commit();
     void                    Load();
 

@@ -44,7 +44,7 @@ namespace writerfilter {
                 void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
                 void resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine);
             private:
-                void createShape(rtl::OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
+                void createShape(OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
 
                 RTFDocumentImpl& m_rImport;
                 uno::Reference<drawing::XDrawPage> m_xDrawPage;

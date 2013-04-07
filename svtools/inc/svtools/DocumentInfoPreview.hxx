@@ -53,16 +53,16 @@ public:
     void fill(
         com::sun::star::uno::Reference<
             com::sun::star::document::XDocumentProperties > const & xDocProps,
-        rtl::OUString const & rURL);
+        OUString const & rURL);
 
 private:
     ExtMultiLineEdit m_pEditWin;
     boost::scoped_ptr< SvtDocInfoTable_Impl > m_pInfoTable;
     com::sun::star::lang::Locale m_aLocale;
 
-    void insertEntry(rtl::OUString const & title, rtl::OUString const & value);
+    void insertEntry(OUString const & title, OUString const & value);
 
-    void insertNonempty(long id, rtl::OUString const & value);
+    void insertNonempty(long id, OUString const & value);
 
     void insertDateTime(long id, com::sun::star::util::DateTime const & value);
 };

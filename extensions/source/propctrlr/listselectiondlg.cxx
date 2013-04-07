@@ -38,7 +38,7 @@ namespace pcr
     //====================================================================
     //--------------------------------------------------------------------
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
-            const ::rtl::OUString& _rPropertyName, const String& _rPropertyUIName )
+            const OUString& _rPropertyName, const String& _rPropertyUIName )
         :ModalDialog( _pParent, PcrRes( RID_DLG_SELECTION ) )
         ,m_aLabel   ( this, PcrRes( FT_ENTRIES ) )
         ,m_aEntries ( this, PcrRes( LB_ENTRIES ) )
@@ -85,7 +85,7 @@ namespace pcr
             m_aEntries.EnableMultiSelection( bMultiSelection );
 
             // fill the list box with all entries
-            Sequence< ::rtl::OUString > aListEntries;
+            Sequence< OUString > aListEntries;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aListEntries );
             fillEntryList( aListEntries );
 
@@ -120,11 +120,11 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void ListSelectionDialog::fillEntryList( const Sequence< ::rtl::OUString >& _rListEntries )
+    void ListSelectionDialog::fillEntryList( const Sequence< OUString >& _rListEntries )
     {
         m_aEntries.Clear();
-        const ::rtl::OUString* _pListEntries = _rListEntries.getConstArray();
-        const ::rtl::OUString* _pListEntriesEnd = _rListEntries.getConstArray() + _rListEntries.getLength();
+        const OUString* _pListEntries = _rListEntries.getConstArray();
+        const OUString* _pListEntriesEnd = _rListEntries.getConstArray() + _rListEntries.getLength();
         for ( ; _pListEntries < _pListEntriesEnd; ++_pListEntries )
             m_aEntries.InsertEntry( *_pListEntries );
     }

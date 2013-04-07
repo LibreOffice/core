@@ -95,7 +95,7 @@ namespace drawinglayer
 
         MediaPrimitive2D::MediaPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
-            const rtl::OUString& rURL,
+            const OUString& rURL,
             const basegfx::BColor& rBackgroundColor,
             sal_uInt32 nDiscreteBorder,
             const Graphic &rSnapshot)

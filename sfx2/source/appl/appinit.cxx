@@ -81,9 +81,9 @@ public:
     virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& sServiceName ) throw (RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 };
 
 void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
@@ -122,14 +122,14 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     Application::Quit();
 }
 
-::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
+OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
+    return OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
 }
 
-::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (RuntimeException)
+::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > lNames  = getSupportedServiceNames();
+    Sequence< OUString > lNames  = getSupportedServiceNames();
     ::sal_Int32                 c       = lNames.getLength();
     ::sal_Int32                 i       = 0;
 
@@ -142,7 +142,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
+Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
 {
     // Note: That service  does not realy exists .-)
     // But this implementation is not thought to be registered realy within our service.rdb.
@@ -150,8 +150,8 @@ Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServ
     // The desktop must know, which listener will terminate the SfxApplication in real !
     // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
     // can react ...
-    static const ::rtl::OUString SERVICENAME("com.sun.star.frame.TerminateListener");
-    Sequence< ::rtl::OUString > lNames(1);
+    static const OUString SERVICENAME("com.sun.star.frame.TerminateListener");
+    Sequence< OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
 }
@@ -195,7 +195,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
             &thisModule, aLibName.pData, 0 );
 
         // get symbol
-        ::rtl::OUString aSymbol( "GetSpecialCharsForEdit"  );
+        OUString aSymbol( "GetSpecialCharsForEdit"  );
         pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
 #else

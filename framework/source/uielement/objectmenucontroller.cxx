@@ -80,7 +80,7 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
 
     if ( pVCLPopupMenu )
     {
-        const rtl::OUString aVerbCommand( ".uno:ObjectMenue?VerbID:short=" );
+        const OUString aVerbCommand( ".uno:ObjectMenue?VerbID:short=" );
         for ( sal_uInt16 i = 0; i < rVerbCommandSeq.getLength(); i++ )
         {
             const com::sun::star::embed::VerbDescriptor& rVerb = pVerbCommandArray[i];
@@ -89,8 +89,8 @@ void ObjectMenuController::fillPopupMenu( const Sequence< com::sun::star::embed:
                 m_xPopupMenu->insertItem( i+1, rVerb.VerbName, 0, i );
                 // use VCL popup menu pointer to set vital information that are not part of the awt implementation
 
-                rtl::OUString aCommand( aVerbCommand );
-                aCommand += rtl::OUString::valueOf( rVerb.VerbID );
+                OUString aCommand( aVerbCommand );
+                aCommand += OUString::valueOf( rVerb.VerbID );
                 pVCLPopupMenu->SetItemCommand( i+1, aCommand ); // Store verb command
             }
         }

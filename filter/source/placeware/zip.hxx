@@ -31,7 +31,7 @@ public:
     ZipFile( osl::File& rFile );
     ~ZipFile();
 
-    bool addFile( osl::File& rFile, const rtl::OString& rName );
+    bool addFile( osl::File& rFile, const OString& rName );
     bool close();
 
 private:

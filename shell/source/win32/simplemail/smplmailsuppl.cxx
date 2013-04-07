@@ -27,7 +27,6 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::system::XSimpleMailClientSupplier;
 using com::sun::star::system::XSimpleMailClient;
-using rtl::OUString;
 using osl::Mutex;
 
 using namespace cppu;

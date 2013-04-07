@@ -50,9 +50,9 @@ namespace connectivity
                         public ODescriptor
         {
         protected:
-            ::rtl::OUString m_CatalogName;
-            ::rtl::OUString m_SchemaName;
-            ::rtl::OUString m_Command;
+            OUString m_CatalogName;
+            OUString m_SchemaName;
+            OUString m_Command;
             sal_Int32       m_CheckOption;
             // need for the getName method
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
@@ -67,12 +67,12 @@ namespace connectivity
 
             OView(sal_Bool _bCase,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
             OView(  sal_Bool _bCase,
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
                     sal_Int32 _nCheckOption = 0,
-                    const ::rtl::OUString& _rCommand = ::rtl::OUString(),
-                    const ::rtl::OUString& _rSchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _rCatalogName = ::rtl::OUString());
+                    const OUString& _rCommand = OUString(),
+                    const OUString& _rSchemaName = OUString(),
+                    const OUString& _rCatalogName = OUString());
             virtual ~OView();
 
             // ODescriptor
@@ -90,8 +90,8 @@ namespace connectivity
             // XPropertySet
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setName( const ::rtl::OUString& ) throw(::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }

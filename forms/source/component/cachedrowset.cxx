@@ -59,7 +59,7 @@ namespace frm
     struct CachedRowSet_Data
     {
         ::comphelper::ComponentContext  aContext;
-        ::rtl::OUString                 sCommand;
+        OUString                 sCommand;
         sal_Bool                        bEscapeProcessing;
         Reference< XConnection >        xConnection;
 
@@ -91,7 +91,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void CachedRowSet::setCommand( const ::rtl::OUString& _rCommand )
+    void CachedRowSet::setCommand( const OUString& _rCommand )
     {
         if ( m_pData->sCommand == _rCommand )
             return;
@@ -101,7 +101,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void CachedRowSet::setCommandFromQuery( const ::rtl::OUString& _rQueryName )
+    void CachedRowSet::setCommandFromQuery( const OUString& _rQueryName )
     {
         Reference< XQueriesSupplier > xSupplyQueries( m_pData->xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
@@ -111,7 +111,7 @@ namespace frm
         OSL_VERIFY( xQuery->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
         setEscapeProcessing( bEscapeProcessing );
 
-        ::rtl::OUString sCommand;
+        OUString sCommand;
         OSL_VERIFY( xQuery->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
         setCommand( sCommand );
     }

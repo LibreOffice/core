@@ -29,7 +29,6 @@
 #include "xlroot.hxx"
 #include "xltools.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::drawing::XShape;

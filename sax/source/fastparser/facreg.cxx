@@ -27,7 +27,6 @@ using namespace sax_fastparser;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
-using ::rtl::OUString;
 using namespace ::com::sun::star::lang;
 
 namespace sax_fastparser

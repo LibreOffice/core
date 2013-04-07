@@ -55,15 +55,15 @@ namespace comphelper
     //--------------------------------------------------------------------------
     /** compare two properties by name
      */
-    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
+    struct PropertyStringEqualFunctor : ::std::binary_function< ::com::sun::star::beans::Property, OUString, bool >
     {
         // ................................................................
-        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
+        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const OUString& rhs ) const
         {
             return lhs.Name == rhs ;
         }
         // ................................................................
-        inline bool operator()( const ::rtl::OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
+        inline bool operator()( const OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
         {
             return lhs == rhs.Name ;
         }
@@ -80,7 +80,7 @@ namespace comphelper
 
 //------------------------------------------------------------------
 /// remove the property with the given name from the given sequence
-COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const ::rtl::OUString& _rPropName);
+COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const OUString& _rPropName);
 
 //------------------------------------------------------------------
 /** within the given property sequence, modify attributes of a special property
@@ -89,12 +89,12 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>&
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */
-COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const ::rtl::OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
+COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 //------------------------------------------------------------------
 /** check if the given set has the given property.
 */
-COMPHELPER_DLLPUBLIC sal_Bool hasProperty(const rtl::OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC sal_Bool hasProperty(const OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
 
 //------------------------------------------------------------------
 /** copy properties between property sets, in compliance with the property

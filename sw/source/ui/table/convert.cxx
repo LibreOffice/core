@@ -132,7 +132,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
             case 3:
                 mpOtherBtn->Check();
                 if(uOther)
-                    mpOtherEd->SetText(rtl::OUString(uOther));
+                    mpOtherEd->SetText(OUString(uOther));
             break;
         }
 

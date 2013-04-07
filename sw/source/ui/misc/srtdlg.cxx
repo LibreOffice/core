@@ -65,7 +65,6 @@ static sal_Unicode    cDeli  = '\t';
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
@@ -223,7 +222,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     m_pDelimTabRB->Check(cDeli == '\t');
     if(!m_pDelimTabRB->IsChecked())
     {
-        m_pDelimEdt->SetText(rtl::OUString(cDeli));
+        m_pDelimEdt->SetText(OUString(cDeli));
         m_pDelimFreeRB->Check(sal_True);
         DelimHdl(m_pDelimFreeRB);
     }
@@ -380,7 +379,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
             if ( pItem )
-                m_pDelimEdt->SetText( rtl::OUString(pItem->GetValue()) );
+                m_pDelimEdt->SetText( OUString(pItem->GetValue()) );
         }
 
         delete pMap;

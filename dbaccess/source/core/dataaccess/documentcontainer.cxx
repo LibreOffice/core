@@ -652,7 +652,7 @@ OUString SAL_CALL ODocumentContainer::getHierarchicalName() throw (RuntimeExcept
 
 OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
     aBuffer.append( sal_Unicode( '/' ) );
     aBuffer.append( i_rRelativeName );

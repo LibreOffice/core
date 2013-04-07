@@ -53,7 +53,7 @@ namespace connectivity
             ::com::sun::star::sdbc::SQLWarning  m_aLastWarning;
 
         protected:
-            ::std::list< ::rtl::OUString>       m_aBatchList;
+            ::std::list< OUString>       m_aBatchList;
             connectivity::OSQLParser            m_aParser;
             connectivity::OSQLParseTreeIterator m_aSQLIterator;
             connectivity::OSQLParseNode*        m_pParseTree;
@@ -67,7 +67,7 @@ namespace connectivity
                 const OSQLParseNode *pParseNode) const throw(::com::sun::star::sdbc::SQLException);
             class MacabOrder *analyseOrderByClause(
                 const OSQLParseNode *pParseNode) const throw(::com::sun::star::sdbc::SQLException);
-            ::rtl::OUString getTableName( ) const;
+            OUString getTableName( ) const;
             void setMacabFields(class MacabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);
             void selectRecords(MacabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);
             void sortRecords(MacabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);
@@ -90,7 +90,7 @@ namespace connectivity
                     sal_Int32 nHandle) const;
 
             virtual void resetParameters() const throw(::com::sun::star::sdbc::SQLException);
-            virtual void getNextParameter(::rtl::OUString &rParameter) const throw(::com::sun::star::sdbc::SQLException);
+            virtual void getNextParameter(OUString &rParameter) const throw(::com::sun::star::sdbc::SQLException);
             virtual ~MacabCommonStatement();
 
         public:
@@ -119,11 +119,11 @@ namespace connectivity
 
             // XStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(
-                    const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                    const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL executeUpdate(
-                     const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                     const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL execute(
-                    const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                    const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(
                     ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 

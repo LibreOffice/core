@@ -203,9 +203,9 @@ namespace vcl
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
         {
-            ::rtl::OStringBuffer aTrace;
+            OStringBuffer aTrace;
             aTrace.append( "ReferenceDeviceTextLayout::GetTextArray( " );
-            aTrace.append( ::rtl::OUStringToOString( _rText, RTL_TEXTENCODING_UTF8 ) );
+            aTrace.append( OUStringToOString( _rText, RTL_TEXTENCODING_UTF8 ) );
             aTrace.append( " ): " );
             aTrace.append( nTextWidth );
             aTrace.append( " = ( " );

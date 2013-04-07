@@ -128,7 +128,7 @@ namespace rptui
         TSectionsMap                            m_aSections;
         svtools::ColorConfig                    m_aColorConfig;
         OReportWindow*                          m_pParent;
-        ::rtl::OUString                         m_sShapeType;
+        OUString                         m_sShapeType;
         sal_Bool                                m_bInSplitHandler;
         sal_Bool                                m_bInUnmark;
 
@@ -177,7 +177,7 @@ namespace rptui
             If the position is grater than the current elements, the section will be appended.
         */
         void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                                    ,const ::rtl::OUString& _sColorEntry
+                                    ,const OUString& _sColorEntry
                                     ,sal_uInt16 _nPosition = USHRT_MAX);
 
         sal_uInt16          getSectionCount() const;
@@ -202,8 +202,8 @@ namespace rptui
 
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
-        rtl::OUString   GetInsertObjString() const;
+        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
+        OUString   GetInsertObjString() const;
         /** copies the current selection in this section
         */
         void Copy();
@@ -277,7 +277,7 @@ namespace rptui
         *
         * \return \member m_sShapeType
         */
-        inline ::rtl::OUString getShapeType() const { return m_sShapeType; }
+        inline OUString getShapeType() const { return m_sShapeType; }
 
         /** returns the current position in the list
         */

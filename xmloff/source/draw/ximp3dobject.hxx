@@ -46,7 +46,7 @@ public:
 
     SdXML3DObjectContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -70,7 +70,7 @@ public:
     TYPEINFO();
 
     SdXML3DCubeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -94,7 +94,7 @@ public:
     TYPEINFO();
 
     SdXML3DSphereObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -109,14 +109,14 @@ public:
 
 class SdXML3DPolygonBasedShapeContext : public SdXML3DObjectContext
 {
-    rtl::OUString               maPoints;
-    rtl::OUString               maViewBox;
+    OUString               maPoints;
+    OUString               maViewBox;
 
 public:
     TYPEINFO();
 
     SdXML3DPolygonBasedShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -135,7 +135,7 @@ public:
     TYPEINFO();
 
     SdXML3DLatheObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);
@@ -154,7 +154,7 @@ public:
     TYPEINFO();
 
     SdXML3DExtrudeObjectShapeContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape);

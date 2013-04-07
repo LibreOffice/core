@@ -74,7 +74,7 @@ namespace connectivity
                          SQL_NODE_EQUAL,SQL_NODE_LESS,SQL_NODE_GREAT,SQL_NODE_LESSEQ,SQL_NODE_GREATEQ,SQL_NODE_NOTEQUAL,
                          SQL_NODE_PUNCTUATION, SQL_NODE_AMMSC, SQL_NODE_ACCESS_DATE,SQL_NODE_DATE,SQL_NODE_CONCAT};
 
-    typedef ::std::set< ::rtl::OUString >   QueryNameSet;
+    typedef ::std::set< OUString >   QueryNameSet;
     //==================================================================
     //= SQLParseNodeParameter
     //==================================================================
@@ -118,9 +118,9 @@ namespace connectivity
 
         OSQLParseNodes                  m_aChildren;
         OSQLParseNode*                  m_pParent;      // pParent for reverse linkage in the tree
-        ::rtl::OUString                 m_aNodeValue;   // token name, or empty in case of rules,
-                                                        // or ::rtl::OUString in case of
-                                                        // ::rtl::OUString, INT, etc.
+        OUString                 m_aNodeValue;   // token name, or empty in case of rules,
+                                                        // or OUString in case of
+                                                        // OUString, INT, etc.
         SQLNodeType                     m_eNodeType;    // see above
         sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule())
                                                         // or Token ID (if !IsRule())
@@ -241,11 +241,11 @@ namespace connectivity
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 
-        OSQLParseNode(const ::rtl::OString& _rValue,
+        OSQLParseNode(const OString& _rValue,
                       SQLNodeType eNewNodeType,
                       sal_uInt32 nNewNodeID=0);
 
-        OSQLParseNode(const ::rtl::OUString& _rValue,
+        OSQLParseNode(const OUString& _rValue,
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 
@@ -272,7 +272,7 @@ namespace connectivity
 
         OSQLParseNode* removeAt(sal_uInt32 nPos);
 
-        void replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::rtl::OUString& rColumnName);
+        void replaceNodeValue(const OUString& rTableAlias,const OUString& rColumnName);
 
         /** parses the node to a string which can be passed to a driver's connection for execution
 
@@ -310,26 +310,26 @@ namespace connectivity
                 If this method returns <FALSE/>, you're encouraged to check and handle the error in
                 <arg>_pErrorHolder</arg>.
         */
-        bool parseNodeToExecutableStatement( ::rtl::OUString& _out_rString,
+        bool parseNodeToExecutableStatement( OUString& _out_rString,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             OSQLParser& _rParser,
             ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const;
 
-        void parseNodeToStr(::rtl::OUString& rString,
+        void parseNodeToStr(OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const IParseContext* pContext = NULL,
                             sal_Bool _bIntl = sal_False,
                             sal_Bool _bQuote= sal_True) const;
 
         // quoted and internationalised
-        void parseNodeToPredicateStr(::rtl::OUString& rString,
+        void parseNodeToPredicateStr(OUString& rString,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::lang::Locale& rIntl,
                                      sal_Char _cDec,
                                      const IParseContext* pContext = NULL ) const;
 
-        void parseNodeToPredicateStr(::rtl::OUString& rString,
+        void parseNodeToPredicateStr(OUString& rString,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
@@ -341,8 +341,8 @@ namespace connectivity
 
 #if OSL_DEBUG_LEVEL > 1
         // shows the ParseTree with tabs and linefeeds
-        void showParseTree( ::rtl::OUString& rString ) const;
-        void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
+        void showParseTree( OUString& rString ) const;
+        void showParseTree( OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
 #endif
 
         SQLNodeType getNodeType() const {return m_eNodeType;};
@@ -367,9 +367,9 @@ namespace connectivity
             // IsToken tests whether a Node is a Token (Terminal but not a rule)
         sal_Bool isToken() const {return !isRule();}
 
-        const ::rtl::OUString& getTokenValue() const {return m_aNodeValue;}
+        const OUString& getTokenValue() const {return m_aNodeValue;}
 
-        void setTokenValue(const ::rtl::OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
+        void setTokenValue(const OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
 
         sal_Bool isLeaf() const {return m_aChildren.empty();}
 
@@ -396,8 +396,8 @@ namespace connectivity
         // _pTableNode must be a rule of that above or a SQL_TOKEN_NAME
         static sal_Bool getTableComponents(const OSQLParseNode* _pTableNode,
                                             ::com::sun::star::uno::Any &_rCatalog,
-                                            ::rtl::OUString &_rSchema,
-                                            ::rtl::OUString &_rTable
+                                            OUString &_rSchema,
+                                            OUString &_rTable
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
 
         // substitute all occurrences of :var or [name] into the dynamic parameter ?
@@ -406,11 +406,11 @@ namespace connectivity
 
         /** return a table range when it exists.
         */
-        static ::rtl::OUString getTableRange(const OSQLParseNode* _pTableRef);
+        static OUString getTableRange(const OSQLParseNode* _pTableRef);
 
     protected:
         // ParseNodeToStr concatenates all Tokens (leaves) of the ParseNodes.
-        void parseNodeToStr(::rtl::OUString& rString,
+        void parseNodeToStr(OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xField,
@@ -423,22 +423,22 @@ namespace connectivity
                             bool _bSubstitute) const;
 
     private:
-        void impl_parseNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
-        void impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
-        void impl_parseTableRangeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
+        void impl_parseLikeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
+        void impl_parseTableRangeNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
         /** parses a table_name node into a SQL statement particle.
             @return
                 <TRUE/> if and only if parsing was successful, <FALSE/> if default handling should
                 be applied.
         */
-        bool impl_parseTableNameNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
+        bool impl_parseTableNameNodeToString_throw( OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const;
 
-        sal_Bool addDateValue(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
-        ::rtl::OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
-        ::rtl::OUString convertDateString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
-        ::rtl::OUString convertTimeString(const SQLParseNodeParameter& rParam, const ::rtl::OUString& rString) const;
-        void parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
+        sal_Bool addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
+        OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
+        OUString convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
+        OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString) const;
+        void parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };
 
     //-----------------------------------------------------------------------------

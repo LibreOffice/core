@@ -170,15 +170,15 @@ namespace connectivity
                 return aRet;
             }
 
-            inline WrapT GetItem(const ::rtl::OUString& sStr) const
+            inline WrapT GetItem(const OUString& sStr) const
             {
                 WrapT aRet(NULL);
                 T* pT = NULL;
                 if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OString sTemp("Unknown Item: ");
-                    sTemp += ::rtl::OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
+                    OString sTemp("Unknown Item: ");
+                    sTemp += OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
                     OSL_FAIL(sTemp.getStr());
 #endif
                 }
@@ -222,7 +222,7 @@ namespace connectivity
                 return SUCCEEDED(pInterface->Append(OLEVariant((T*)aWrapT)));
             };
 
-            inline sal_Bool Delete(const ::rtl::OUString& sName)
+            inline sal_Bool Delete(const OUString& sName)
             {
                 return SUCCEEDED(pInterface->Delete(OLEVariant(sName)));
             };

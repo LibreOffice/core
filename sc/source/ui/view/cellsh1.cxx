@@ -93,7 +93,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 //------------------------------------------------------------------
 void ScCellShell::ExecuteEdit( SfxRequest& rReq )
@@ -326,7 +325,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = rtl::OUString('A');
+                    String  aFlags = OUString('A');
 
                     if( pReqArgs->HasItem( SID_DELETE, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
@@ -440,7 +439,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
-                    String  aFlags = rtl::OUString('A');
+                    String  aFlags = OUString('A');
 
                     if( pReqArgs->HasItem( FID_FILL_TAB, &pItem ) )
                         aFlags = ((const SfxStringItem*)pItem)->GetValue();
@@ -937,7 +936,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                         {
-                            rtl::OUString aNewDimName( pDlg->GetDimensionName() );
+                            OUString aNewDimName( pDlg->GetDimensionName() );
                             pTabViewShell->SetDataPilotDetails( true, &aNewDimName );
                         }
                     }
@@ -1041,7 +1040,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        rtl::OUString aCol = bColumns ? rtl::OUString('C') : rtl::OUString('R');
+                        OUString aCol = bColumns ? OUString('C') : OUString('R');
                         rReq.AppendItem( SfxStringItem( SID_OUTLINE_MAKE, aCol ) );
                         rReq.Done();
                     }
@@ -1107,7 +1106,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if( ! rReq.IsAPI() )
                     {
-                        rtl::OUString aCol = bColumns ? rtl::OUString('C') : rtl::OUString('R');
+                        OUString aCol = bColumns ? OUString('C') : OUString('R');
                         rReq.AppendItem( SfxStringItem( SID_OUTLINE_REMOVE, aCol ) );
                         rReq.Done();
                     }
@@ -1204,7 +1203,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;
-                        String  aFlags = rtl::OUString('A');
+                        String  aFlags = OUString('A');
 
                         if( pReqArgs->HasItem( FID_INS_CELL_CONTENTS, &pItem ) )
                             aFlags = ((const SfxStringItem*)pItem)->GetValue();
@@ -1387,7 +1386,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
             {
                 rReq.SetSlot( FID_INS_CELL_CONTENTS );
-                rtl::OUString aFlags;
+                OUString aFlags;
                 if ( nSlot == SID_PASTE_ONLY_VALUE )
                     aFlags = "V";
                 else if ( nSlot == SID_PASTE_ONLY_TEXT )
@@ -1606,7 +1605,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -1616,7 +1615,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString("ParentWindow");
+                            aParam.Name = OUString("ParentWindow");
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -1634,9 +1633,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue( rtl::OUString("IsDirectionToSimplified") ) >>= bToSimplified;
-                                        xProp->getPropertyValue( rtl::OUString("IsUseCharacterVariants") ) >>= bUseVariants;
-                                        xProp->getPropertyValue( rtl::OUString("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                        xProp->getPropertyValue( OUString("IsDirectionToSimplified") ) >>= bToSimplified;
+                                        xProp->getPropertyValue( OUString("IsUseCharacterVariants") ) >>= bUseVariants;
+                                        xProp->getPropertyValue( OUString("IsTranslateCommonTerms") ) >>= bCommonTerms;
                                     }
                                     catch( Exception& )
                                     {
@@ -2010,11 +2009,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 //  "=" in KeyEvent, switches to input-mode
                                 pScMod->InputKeyEvent( KeyEvent('=',KeyCode()) );
 
-                                std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
+                                std::vector<OUString> aNames = pDlg->GetSelectedNames();
                                 if (!aNames.empty())
                                 {
-                                    rtl::OUStringBuffer aBuffer;
-                                    for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();
+                                    OUStringBuffer aBuffer;
+                                    for (std::vector<OUString>::const_iterator itr = aNames.begin();
                                             itr != aNames.end(); ++itr)
                                     {
                                         aBuffer.append(*itr).append(' ');
@@ -2497,7 +2496,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         {
             if ( pTypeDlg->IsExternal() )
             {
-                uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
+                uno::Sequence<OUString> aSources = ScDPObject::GetRegisteredSources();
                 ::boost::scoped_ptr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
                         pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));

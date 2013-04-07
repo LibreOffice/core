@@ -57,7 +57,7 @@ MSFILTER_DLLPUBLIC DateTime DTTM2DateTime( long lDTTM );
 I guess there must be an implementation of this somewhere in LO, but I failed
 to find it, unfortunately :-(
 */
-MSFILTER_DLLPUBLIC rtl::OString DateTimeToOString( const DateTime& rDateTime );
+MSFILTER_DLLPUBLIC OString DateTimeToOString( const DateTime& rDateTime );
 
 /// Given a cBullet in encoding r_ioChrSet and fontname r_ioFontName return a
 /// suitable new Bullet and change r_ioChrSet and r_ioFontName to form the
@@ -68,7 +68,7 @@ MSFILTER_DLLPUBLIC rtl::OString DateTimeToOString( const DateTime& rDateTime );
 ///
 /// Used to map from [Open|Star]Symbol to some Windows font or other.
 MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
-    rtl_TextEncoding& r_ioChrSet, rtl::OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
+    rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
 
 
 enum TextCategory
@@ -86,7 +86,7 @@ enum TextCategory
   and indicating its been submitting to the standards working group
   as a proposed resolution.
 */
-MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const rtl::OUString &rBcp47LanguageTag);
+MSFILTER_DLLPUBLIC TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag);
 
 }
 }

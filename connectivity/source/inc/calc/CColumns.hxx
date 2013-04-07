@@ -29,7 +29,7 @@ namespace connectivity
         class OCalcColumns : public file::OColumns
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
         public:
             OCalcColumns(file::OFileTable* _pTable,
                             ::osl::Mutex& _rMutex,

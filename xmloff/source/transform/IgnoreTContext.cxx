@@ -20,7 +20,6 @@
 #include "IgnoreTContext.hxx"
 #include "TransformerBase.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -41,7 +40,7 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
 
 XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
         XMLTransformerBase& rTransformer,
-        const ::rtl::OUString& rQName,
+        const OUString& rQName,
         sal_Bool bAllowCharactersRecursive ) :
     XMLTransformerContext( rTransformer, rQName ),
     m_bIgnoreCharacters( sal_False ),

@@ -41,7 +41,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::drawingml::chart::DataSequenceModel;
-using ::rtl::OUString;
 
 // ============================================================================
 

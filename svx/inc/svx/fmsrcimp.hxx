@@ -134,28 +134,28 @@ namespace svxform {
         ControlTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xControl) { m_xControl = _xControl; }
         virtual ~ControlTextWrapper() { }
 
-        virtual ::rtl::OUString getCurrentText() const = 0;
+        virtual OUString getCurrentText() const = 0;
     };
     class SimpleTextWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >  m_xText;
     public:
         SimpleTextWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& _xText);
-        virtual ::rtl::OUString getCurrentText() const;
+        virtual OUString getCurrentText() const;
     };
     class ListBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >  m_xBox;
     public:
         ListBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >& _xBox);
-        virtual ::rtl::OUString getCurrentText() const;
+        virtual OUString getCurrentText() const;
     };
     class CheckBoxWrapper : public ControlTextWrapper
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >  m_xBox;
     public:
         CheckBoxWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox >& _xBox);
-        virtual ::rtl::OUString getCurrentText() const;
+        virtual OUString getCurrentText() const;
     };
 }
 
@@ -206,7 +206,7 @@ class SVX_DLLPUBLIC FmSearchEngine
     FieldCollectionIterator     m_iterPreviousLocField;             // field of the last finding
 
     // Kommunikation mit dem Thread, der die eigentliche Suche durchfuehrt
-    ::rtl::OUString             m_strSearchExpression;              // forward direction
+    OUString             m_strSearchExpression;              // forward direction
     SEARCHFOR_TYPE      m_eSearchForType;                   // ditto
     SEARCH_RESULT       m_srResult;                         // backward direction
 
@@ -296,13 +296,13 @@ public:
     FmSearchEngine(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
-        const ::rtl::OUString& strVisibleFields,
+        const OUString& strVisibleFields,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
         FMSEARCH_MODE eMode);
     FmSearchEngine(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
-        const ::rtl::OUString& strVisibleFields,
+        const OUString& strVisibleFields,
         const InterfaceArray& arrFields,
         FMSEARCH_MODE eMode);
 
@@ -315,11 +315,11 @@ public:
     void SetProgressHandler(Link aHdl) { m_aProgressHandler = aHdl; }
 
     /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
-    void SearchNext(const ::rtl::OUString& strExpression);
+    void SearchNext(const OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void SearchNextSpecial(sal_Bool _bSearchForNull);
     /// search for the next appearance, dependent on nDirection from the start or end
-    void StartOver(const ::rtl::OUString& strExpression);
+    void StartOver(const OUString& strExpression);
     /// analogous, search for "NULL" (_bSearchForNull==sal_True) or "not NULL"
     void StartOverSpecial(sal_Bool _bSearchForNull);
     /// invalidate previous search reference
@@ -330,7 +330,7 @@ public:
         (calls InvalidatePreviousLoc)
     */
     void RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce = sal_False);
-    ::rtl::OUString FormatField(sal_Int32 nWhich);
+    OUString FormatField(sal_Int32 nWhich);
 
     /// returns directly; once it was really aborted, ProgressHandler is called with STATE_CANCELED
     void CancelSearch();
@@ -338,11 +338,11 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    sal_Bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const ::rtl::OUString& strVisibleFields, const InterfaceArray& arrFields,
+    sal_Bool SwitchToContext(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 protected:
-    void Init(const ::rtl::OUString& strVisibleFields);
+    void Init(const OUString& strVisibleFields);
 
     void SearchNextImpl();
         // this Impl method is running in SearchThread
@@ -359,9 +359,9 @@ private:
     // starting the loop), not in every loop step
     SVX_DLLPRIVATE SEARCH_RESULT SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
-    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
+    SVX_DLLPRIVATE SEARCH_RESULT SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos, FieldCollectionIterator& iterFieldLoop,
         const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd);
 
     SVX_DLLPRIVATE void PropagateProgress(sal_Bool _bDontPropagateOverflow);
@@ -375,7 +375,7 @@ private:
     SVX_DLLPRIVATE void BuildAndInsertFieldInfo(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xAllFields, sal_Int32 nField);
         // builds a FieldInfo in relation to field number nField (in xAllFields) and adds it to m_arrUsedFields
         // xAllFields needs to support the DatabaseRecord service
-    SVX_DLLPRIVATE ::rtl::OUString FormatField(const FieldInfo& rField);
+    SVX_DLLPRIVATE OUString FormatField(const FieldInfo& rField);
         // formats the field with the NumberFormatter
 
     SVX_DLLPRIVATE sal_Bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }

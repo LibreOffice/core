@@ -34,12 +34,10 @@
 #include <rscdb.hxx>
 #include <rscrsc.hxx>
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
 
 RscTypCont :: RscTypCont( RscError * pErrHdl,
                           RSCBYTEORDER_TYPE nOrder,
-                          const rtl::OString& rSearchPath,
+                          const OString& rSearchPath,
                           sal_uInt32 nFlagsP )
     :
       nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
@@ -75,9 +73,9 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     Init();
 }
 
-rtl::OString RscTypCont::ChangeLanguage(const rtl::OString& rNewLang)
+OString RscTypCont::ChangeLanguage(const OString& rNewLang)
 {
-    rtl::OString aRet = aLanguage;
+    OString aRet = aLanguage;
     aLanguage = rNewLang;
 
     ::std::vector< OUString > aFallbacks;
@@ -99,7 +97,7 @@ rtl::OString RscTypCont::ChangeLanguage(const rtl::OString& rNewLang)
 
     for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
     {
-        rtl::OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
+        OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
         sal_uInt32 nID = GetLangId( aLang );
         bool bAdd = (nID == 0);
         if ( bAdd )

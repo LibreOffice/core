@@ -70,7 +70,7 @@ public:
 
     void registerSession( HttpSession * pHttpSession );
 
-    SerfLock * findByUri( rtl::OUString const & rUri );
+    SerfLock * findByUri( OUString const & rUri );
 
     void addLock( SerfLock * pLock,
                   rtl::Reference< SerfSession > const & xSession,

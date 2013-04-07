@@ -141,7 +141,7 @@ void CertificateChooser::ImplInitialize()
             // Do we already use that?
             if( nCertificatesToIgnore )
             {
-                rtl::OUString aIssuerName = xCert->getIssuerName();
+                OUString aIssuerName = xCert->getIssuerName();
                 for( sal_Int32 nSig = 0; nSig < nCertificatesToIgnore; ++nSig )
                 {
                     const SignatureInformation& rInf = maCertsToIgnore[ nSig ];

@@ -45,44 +45,44 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
     {
         case word::WdDefaultFilePath::wdDocumentsPath:
         {
-            msDefaultFilePath = rtl::OUString("Work");
+            msDefaultFilePath = OUString("Work");
             break;
         }
         case word::WdDefaultFilePath::wdPicturesPath:
         {
-            msDefaultFilePath = rtl::OUString("Gallery");
+            msDefaultFilePath = OUString("Gallery");
             break;
         }
         case word::WdDefaultFilePath::wdUserTemplatesPath:
         case word::WdDefaultFilePath::wdWorkgroupTemplatesPath:
         {
-            msDefaultFilePath = rtl::OUString("Template");
+            msDefaultFilePath = OUString("Template");
             break;
         }
         case word::WdDefaultFilePath::wdStartupPath:
         {
-            msDefaultFilePath = rtl::OUString("Addin");
+            msDefaultFilePath = OUString("Addin");
             break;
         }
         case word::WdDefaultFilePath::wdUserOptionsPath:
         {
-            msDefaultFilePath = rtl::OUString("UserConfig");
+            msDefaultFilePath = OUString("UserConfig");
             break;
         }
         case word::WdDefaultFilePath::wdToolsPath:
         case word::WdDefaultFilePath::wdProgramPath:
         {
-            msDefaultFilePath = rtl::OUString("Module");
+            msDefaultFilePath = OUString("Module");
             break;
         }
         case word::WdDefaultFilePath::wdTempFilePath:
         {
-            msDefaultFilePath = rtl::OUString("Temp");
+            msDefaultFilePath = OUString("Temp");
             break;
         }
         default:
         {
-            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() );
+            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, OUString() );
             break;
         }
     }
@@ -91,12 +91,12 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path ) throw ( uno::RuntimeException )
 
 void SwVbaOptions::setValueEvent( const uno::Any& value )
 {
-    rtl::OUString sNewPath;
+    OUString sNewPath;
     value >>= sNewPath;
-    rtl::OUString sNewPathUrl;
+    OUString sNewPathUrl;
     ::osl::File::getFileURLFromSystemPath( sNewPath, sNewPathUrl );
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
-    rtl::OUString sOldPathUrl;
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    OUString sOldPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
     // only the last path is from interest.
@@ -110,8 +110,8 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
 
 uno::Any SwVbaOptions::getValueEvent()
 {
-    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( rtl::OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
-    rtl::OUString sPathUrl;
+    uno::Reference< beans::XPropertySet > xPathSettings( mxFactory->createInstance( OUString("com.sun.star.util.PathSettings") ), uno::UNO_QUERY_THROW );
+    OUString sPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
     // path could be a multipath, Microsoft doesn't support this feature in Word currently
     // only the last path is from interest.
@@ -120,7 +120,7 @@ uno::Any SwVbaOptions::getValueEvent()
     {
         sPathUrl = sPathUrl.copy( nIndex + 1 );
     }
-    rtl::OUString sPath;
+    OUString sPath;
     ::osl::File::getSystemPathFromFileURL( sPathUrl, sPath );
     return uno::makeAny( sPath );
 }
@@ -255,20 +255,20 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autof
     // not support in Writer
 }
 
-rtl::OUString
+OUString
 SwVbaOptions::getServiceImplName()
 {
-    return rtl::OUString("SwVbaOptions");
+    return OUString("SwVbaOptions");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaOptions::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Options" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Options" );
     }
     return aServiceNames;
 }

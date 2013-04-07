@@ -149,10 +149,10 @@ namespace canvas
         // dump polygons
         OSL_TRACE( "Original clip polygon: %s\n"
                    "Triangulated polygon: %s\n",
-                   rtl::OUStringToOString(
+                   OUStringToOString(
                        basegfx::tools::exportToSvgD( rClipPoly ),
                        RTL_TEXTENCODING_ASCII_US).getStr(),
-                   rtl::OUStringToOString(
+                   OUStringToOString(
                        basegfx::tools::exportToSvgD(
                            basegfx::B2DPolyPolygon(rTriangulatedPolygon) ),
                        RTL_TEXTENCODING_ASCII_US).getStr() );

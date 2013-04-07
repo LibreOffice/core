@@ -39,22 +39,22 @@ public:
     NamedCollection() {}
     virtual ~NamedCollection() {}
 
-    const T& getItem( const rtl::OUString& rName ) const
+    const T& getItem( const OUString& rName ) const
     {
         OSL_ENSURE( hasItem( rName ), "invalid name" );
         return *findItem( rName );
     }
 
-    bool hasItem( const rtl::OUString& rName ) const
+    bool hasItem( const OUString& rName ) const
     {
         return findItem( rName ) != maItems.end();
     }
 
-    typedef com::sun::star::uno::Sequence<rtl::OUString> Names_t;
+    typedef com::sun::star::uno::Sequence<OUString> Names_t;
     Names_t getNames() const
     {
         // iterate over members, and collect all those that have names
-        std::vector<rtl::OUString> aNames;
+        std::vector<OUString> aNames;
         for( typename std::vector<T>::const_iterator aIter = maItems.begin();
              aIter != maItems.end();
              ++aIter )
@@ -67,14 +67,14 @@ public:
 
         // copy names to Sequence and return
         Names_t aResult( aNames.size() );
-        rtl::OUString* pStrings = aResult.getArray();
+        OUString* pStrings = aResult.getArray();
         std::copy( aNames.begin(), aNames.end(), pStrings );
 
         return aResult;
     }
 
 protected:
-    typename std::vector<T>::const_iterator findItem( const rtl::OUString& rName ) const
+    typename std::vector<T>::const_iterator findItem( const OUString& rName ) const
     {
         for( typename std::vector<T>::const_iterator aIter = maItems.begin();
              aIter != maItems.end();
@@ -105,7 +105,7 @@ public:
 
     // XNameAccess : XElementAccess
     virtual typename Collection<T>::Any_t SAL_CALL getByName(
-        const rtl::OUString& aName )
+        const OUString& aName )
         throw( typename Collection<T>::NoSuchElementException_t,
                typename Collection<T>::WrappedTargetException_t,
                typename Collection<T>::RuntimeException_t )
@@ -124,7 +124,7 @@ public:
     }
 
     virtual sal_Bool SAL_CALL hasByName(
-        const rtl::OUString& aName )
+        const OUString& aName )
         throw( typename Collection<T>::RuntimeException_t )
     {
         return hasItem( aName ) ? sal_True : sal_False;

@@ -51,18 +51,18 @@ void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( ::sal_Bool /*_linktoprevious
 
 uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno::RuntimeException)
 {
-    rtl::OUString sPropsNameText;
+    OUString sPropsNameText;
     if( mbHeader )
     {
-        sPropsNameText = rtl::OUString("HeaderText");
+        sPropsNameText = OUString("HeaderText");
     }
     else
     {
-        sPropsNameText = rtl::OUString("FooterText");
+        sPropsNameText = OUString("FooterText");
     }
     if( mnIndex == word::WdHeaderFooterIndex::wdHeaderFooterEvenPages )
     {
-        sPropsNameText = sPropsNameText.concat( rtl::OUString("Left") );
+        sPropsNameText = sPropsNameText.concat( OUString("Left") );
     }
 
     uno::Reference< text::XText > xText( mxPageStyleProps->getPropertyValue( sPropsNameText ), uno::UNO_QUERY_THROW );
@@ -83,20 +83,20 @@ SwVbaHeaderFooter::Shapes( const uno::Any& index ) throw (uno::RuntimeException)
     return uno::makeAny( xCol );
 }
 
-rtl::OUString
+OUString
 SwVbaHeaderFooter::getServiceImplName()
 {
-    return rtl::OUString("SwVbaHeaderFooter");
+    return OUString("SwVbaHeaderFooter");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaHeaderFooter::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Pane" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Pane" );
     }
     return aServiceNames;
 }

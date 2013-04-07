@@ -22,7 +22,7 @@ private:
 
 public:
 
-    Place( OUString sName, rtl::OUString sUrl, bool bEditable = false ) :
+    Place( OUString sName, OUString sUrl, bool bEditable = false ) :
         msName( sName ),
         maUrl( sUrl ),
         mbEditable( bEditable ) {};

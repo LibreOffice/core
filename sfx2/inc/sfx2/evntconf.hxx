@@ -111,7 +111,7 @@ public:
 class SFX2_DLLPUBLIC SfxEventConfiguration
 {
 public:
-    static void                         ConfigureEvent( ::rtl::OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
+    static void                         ConfigureEvent( OUString aName, const SvxMacro&, SfxObjectShell* pObjSh);
     static SvxMacro*                    ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp );
 };
 

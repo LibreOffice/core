@@ -45,7 +45,7 @@ ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
 {
 }
 // -----------------------------------------------------------------------------
-ONDXKey::ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec)
+ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
     : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
      ,nRecord(nRec)
 {
@@ -665,12 +665,12 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
     else
     {
         sal_uInt16 nLen = rIndex.getHeader().db_keylen;
-        rtl::OString aBuf = read_uInt8s_ToOString(rStream, nLen);
+        OString aBuf = read_uInt8s_ToOString(rStream, nLen);
         //get length minus trailing whitespace
         sal_Int32 nContentLen = aBuf.getLength();
         while (nContentLen && aBuf[nContentLen-1] == ' ')
             --nContentLen;
-        aKey = ONDXKey(::rtl::OUString(aBuf.getStr(), nContentLen, rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
+        aKey = ONDXKey(OUString(aBuf.getStr(), nContentLen, rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
 }
@@ -706,8 +706,8 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
         memset(&pBuf[0], 0x20, nLen);
         if (!aKey.getValue().isNull())
         {
-            ::rtl::OUString sValue = aKey.getValue();
-            rtl::OString aText(rtl::OUStringToOString(sValue, rIndex.m_pTable->getConnection()->getTextEncoding()));
+            OUString sValue = aKey.getValue();
+            OString aText(OUStringToOString(sValue, rIndex.m_pTable->getConnection()->getTextEncoding()));
             strncpy(reinterpret_cast<char *>(&pBuf[0]), aText.getStr(),
                 std::min<size_t>(nLen, aText.getLength()));
         }
@@ -909,7 +909,7 @@ void ONDXPage::PrintPage()
         }
         else
         {
-            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), rtl::OUStringToOString(rKey.getValue().getString(), rIndex.m_pTable->getConnection()->getTextEncoding()).getStr(),rNode.GetChild().GetPagePos());
+            OSL_TRACE("SDB: [%d,%s,%d]",rKey.GetRecord(), OUStringToOString(rKey.getValue().getString(), rIndex.m_pTable->getConnection()->getTextEncoding()).getStr(),rNode.GetChild().GetPagePos());
         }
     }
     OSL_TRACE("SDB: -----------------------------------------------");

@@ -25,8 +25,8 @@
 using namespace ::com::sun::star;
 
 #define DECLARE_SERVICE( classname )    \
-    extern ::rtl::OUString SAL_CALL classname##_getImplementationName() throw();   \
-    extern uno::Sequence< ::rtl::OUString > SAL_CALL classname##_getSupportedServiceNames() throw();   \
+    extern OUString SAL_CALL classname##_getImplementationName() throw();   \
+    extern uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw();   \
     extern uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(   \
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
 
@@ -70,8 +70,8 @@ DECLARE_SERVICE( XMLImpressImportOOO )
 // ----------------------------------------------------------------------------
 namespace
 {
-    typedef ::rtl::OUString (SAL_CALL * GetImplementationName)();
-    typedef uno::Sequence< ::rtl::OUString > (SAL_CALL * GetSupportedServiceNames)();
+    typedef OUString (SAL_CALL * GetImplementationName)();
+    typedef uno::Sequence< OUString > (SAL_CALL * GetSupportedServiceNames)();
     typedef uno::Reference< ::uno::XInterface > (SAL_CALL * CreateInstance)(
         const uno::Reference< lang::XMultiServiceFactory >& );
 

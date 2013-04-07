@@ -62,9 +62,6 @@ using ::com::sun::star::registry::InvalidRegistryException;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::utl::OStreamWrapper;
 using ::std::vector;
 
@@ -330,7 +327,7 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
 // Xcl has an obscure sense of whether starting a new record or not,
 // and crashes if it encounters the string header at the very end of a record.
 // Thus we add 1 to give some room, seems like they do it that way but with another count (10?)
-void XclExpStream::WriteByteString( const rtl::OString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
+void XclExpStream::WriteByteString( const OString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
 {
     SetSliceSize( 0 );
     sal_Size nLen = ::std::min< sal_Size >( rString.getLength(), nMaxLen );

@@ -96,7 +96,7 @@ namespace svt
         void                    SetIndex( ItemIndex _Index );
         ItemIndex               GetIndex() const;
 
-        void                    Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText );
+        void                    Update( ItemIndex _RMIndex, const OUString& _rText );
 
         void                    SetPosition( RoadmapItem* OldHyperLabel );
 
@@ -267,7 +267,7 @@ namespace svt
 
        //---------------------------------------------------------------------
 
-    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const ::rtl::OUString& _sLabel, ItemId _RMID, sal_Bool _bEnabled)
+    RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, sal_Bool _bEnabled)
     {
         if ( m_pImpl->getItemCount() == 0 )
             m_pImpl->initItemSize();
@@ -338,7 +338,7 @@ namespace svt
             }
         }
         else if ( bWasComplete )
-            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), rtl::OUString("..."), RMINCOMPLETE );
+            m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), OUString("..."), RMINCOMPLETE );
     }
 
     //---------------------------------------------------------------------
@@ -363,12 +363,12 @@ namespace svt
         {
             RoadmapItem* pOldItem = GetPreviousHyperLabel( m_pImpl->getItemCount() );
             m_pImpl->InCompleteHyperLabel->SetPosition( pOldItem );
-            m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), rtl::OUString("...") );
+            m_pImpl->InCompleteHyperLabel->Update( m_pImpl->getItemCount(), OUString("...") );
         }
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _RMID, sal_Bool _bEnabled )
+    void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _RMID, sal_Bool _bEnabled )
     {
         RoadmapItem* pItem = GetByIndex( _Index);
         if ( pItem != NULL )
@@ -395,7 +395,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
+    void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
     {
         InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
             // Todo: YPos is superfluous, if items are always appended
@@ -427,7 +427,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const ::rtl::OUString& _sLabel, ItemIndex _nStartIndex )
+    void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, ItemIndex _nStartIndex )
     {
         RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
         if ( pItem != NULL )
@@ -762,7 +762,7 @@ namespace svt
 
         if ( mpID )
         {
-            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString( "." );
+            OUString aIDText = OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  OUString( "." );
              mpID->SetText( aIDText );
         }
 
@@ -838,7 +838,7 @@ namespace svt
     {
         // calculate widths
         long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString( "100." ) );
+        long nMaxIDWidth = mpID->GetTextWidth( OUString( "100." ) );
         nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
         // check how many space the description would need
@@ -854,7 +854,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void RoadmapItem::Update( ItemIndex _RMIndex, const ::rtl::OUString& _rText )
+    void RoadmapItem::Update( ItemIndex _RMIndex, const OUString& _rText )
     {
         // update description label
         mpDescription->SetLabel( _rText );

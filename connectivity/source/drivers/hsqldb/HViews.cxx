@@ -60,9 +60,9 @@ HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObje
 }
 
 // -------------------------------------------------------------------------
-sdbcx::ObjectType HViews::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType HViews::createObject(const OUString& _rName)
 {
-    ::rtl::OUString sCatalog,sSchema,sTable;
+    OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,
                                         _rName,
                                         sCatalog,
@@ -92,14 +92,14 @@ Reference< XPropertySet > HViews::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType HViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType HViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
-void HViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
+void HViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     if ( m_bInDrop )
         return;
@@ -108,7 +108,7 @@ void HViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
-        ::rtl::OUString aSql(  "DROP VIEW" );
+        OUString aSql(  "DROP VIEW" );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
@@ -120,7 +120,7 @@ void HViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     }
 }
 // -----------------------------------------------------------------------------
-void HViews::dropByNameImpl(const ::rtl::OUString& elementName)
+void HViews::dropByNameImpl(const OUString& elementName)
 {
     m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
@@ -131,12 +131,12 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
 
-    ::rtl::OUString aSql(  "CREATE VIEW " );
-    ::rtl::OUString sCommand;
+    OUString aSql(  "CREATE VIEW " );
+    OUString sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
-    aSql += ::rtl::OUString(" AS ");
+    aSql += OUString(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 
@@ -151,7 +151,7 @@ void HViews::createView( const Reference< XPropertySet >& descriptor )
     OTables* pTables = static_cast<OTables*>(static_cast<OHCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
     {
-        ::rtl::OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
+        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
         pTables->appendNew(sName);
     }
 }

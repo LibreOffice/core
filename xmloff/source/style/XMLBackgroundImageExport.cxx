@@ -28,8 +28,6 @@
 #include <xmloff/xmlexp.hxx>
 #include "XMLBackgroundImageExport.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -50,7 +48,7 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             const Any *pFilter,
             const Any *pTransparency,
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName )
+            const OUString& rLocalName )
 {
     GraphicLocation ePos;
     if( !(pPos && ((*pPos) >>= ePos)) )

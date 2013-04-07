@@ -69,7 +69,7 @@ namespace drawinglayer
         Primitive2DSequence TextCharacterStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // strikeout with character
-            const rtl::OUString aSingleCharString(getStrikeoutChar());
+            const OUString aSingleCharString(getStrikeoutChar());
             basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
 

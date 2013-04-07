@@ -125,8 +125,8 @@ public:
             SV_DECL_META_FACTORY1( SvMetaName, SvMetaObject, 15 )
             SvMetaName();
 
-    virtual sal_Bool            SetName( const rtl::OString& rName, SvIdlDataBase * = NULL  );
-    void                        SetDescription( const rtl::OString& rText )
+    virtual sal_Bool            SetName( const OString& rName, SvIdlDataBase * = NULL  );
+    void                        SetDescription( const OString& rText )
                                 { aDescription.setString(rText); }
     const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
     virtual const SvString &    GetName() const { return aName; }

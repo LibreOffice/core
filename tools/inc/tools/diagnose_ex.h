@@ -46,17 +46,17 @@
     */
     #define DBG_UNHANDLED_EXCEPTION()   \
         ::com::sun::star::uno::Any caught( ::cppu::getCaughtException() ); \
-        ::rtl::OString sMessage( "caught an exception!" ); \
+        OString sMessage( "caught an exception!" ); \
         sMessage += "\nin function:"; \
         sMessage += BOOST_CURRENT_FUNCTION; \
         sMessage += "\ntype: "; \
-        sMessage += ::rtl::OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() ); \
+        sMessage += OUStringToOString( caught.getValueTypeName(), osl_getThreadTextEncoding() ); \
         ::com::sun::star::uno::Exception exception; \
         caught >>= exception; \
         if ( !exception.Message.isEmpty() ) \
         { \
             sMessage += "\nmessage: "; \
-            sMessage += ::rtl::OUStringToOString( exception.Message, osl_getThreadTextEncoding() ); \
+            sMessage += OUStringToOString( exception.Message, osl_getThreadTextEncoding() ); \
         } \
         if ( exception.Context.is() ) \
         { \
@@ -70,7 +70,7 @@
             if ( caught >>= specialized ) \
             { \
                 sMessage += "\ndetails: "; \
-                sMessage += ::rtl::OUStringToOString( \
+                sMessage += OUStringToOString( \
                     specialized.Details, osl_getThreadTextEncoding() ); \
             } \
         } \
@@ -79,7 +79,7 @@
             if ( caught >>= specialized ) \
             { \
                 sMessage += "\ndetails: "; \
-                sMessage += ::rtl::OString::valueOf( specialized.ErrCode ); \
+                sMessage += OString::valueOf( specialized.ErrCode ); \
             } \
         } \
         sMessage += "\n"; \

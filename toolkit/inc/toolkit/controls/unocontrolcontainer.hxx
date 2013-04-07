@@ -87,10 +87,10 @@ public:
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControlContainer
-    void SAL_CALL setStatusText( const ::rtl::OUString& StatusText ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setStatusText( const OUString& StatusText ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > > SAL_CALL getControls(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addControl( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getControl( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addControl( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XUnoControlContainer
@@ -132,7 +132,7 @@ private:
     */
     sal_Int32 impl_addControl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
-        const ::rtl::OUString* _pName = NULL
+        const OUString* _pName = NULL
     );
 
     /** removes the given control from the container, including necessary notifications and the like
@@ -148,7 +148,7 @@ private:
     void      impl_removeControl(
         sal_Int32 _nId,
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
-        const ::rtl::OUString* _pNameAccessor
+        const OUString* _pNameAccessor
     );
 
 };

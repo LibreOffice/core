@@ -171,18 +171,18 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 
 void SwCompatibilityOptPage::ReplaceFormatName( String& rEntry )
 {
-    rtl::OUString sFormatName(utl::ConfigManager::getProductName());
-    rtl::OUString sFormatVersion;
+    OUString sFormatName(utl::ConfigManager::getProductName());
+    OUString sFormatVersion;
     bool bOpenOffice = ( sFormatName == "OpenOffice.org" );
     if ( bOpenOffice )
-        sFormatVersion = rtl::OUString("1.1");
+        sFormatVersion = OUString("1.1");
     else
-        sFormatVersion = rtl::OUString("6.0/7");
+        sFormatVersion = OUString("6.0/7");
     if ( !bOpenOffice && ( sFormatName != "StarSuite" ) )
-        sFormatName = rtl::OUString("StarOffice");
+        sFormatName = OUString("StarOffice");
 
-    rEntry.SearchAndReplace( rtl::OUString("%FORMATNAME"), sFormatName );
-    rEntry.SearchAndReplace( rtl::OUString("%FORMATVERSION"), sFormatVersion );
+    rEntry.SearchAndReplace( OUString("%FORMATNAME"), sFormatName );
+    rEntry.SearchAndReplace( OUString("%FORMATVERSION"), sFormatVersion );
 }
 
 sal_uLong convertBools2Ulong_Impl
@@ -264,7 +264,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         m_aDefaultPB.Disable();
     }
     String sText = m_aMainFL.GetText();
-    sText.SearchAndReplace( rtl::OUString("%DOCNAME"), sDocTitle );
+    sText.SearchAndReplace( OUString("%DOCNAME"), sDocTitle );
     m_aMainFL.SetText( sText );
 
     // loading file formats

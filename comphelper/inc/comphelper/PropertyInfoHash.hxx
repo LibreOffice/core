@@ -44,21 +44,21 @@ namespace comphelper
     };
     struct eqFunc
     {
-        sal_Bool operator()( const rtl::OUString &r1,
-                             const rtl::OUString &r2) const
+        sal_Bool operator()( const OUString &r1,
+                             const OUString &r2) const
         {
             return r1 == r2;
         }
     };
 }
 
-typedef boost::unordered_map < ::rtl::OUString,
+typedef boost::unordered_map < OUString,
                         ::comphelper::PropertyInfo*,
-                        ::rtl::OUStringHash,
+                        OUStringHash,
                         ::comphelper::eqFunc > PropertyInfoHash;
-typedef boost::unordered_map < ::rtl::OUString,
+typedef boost::unordered_map < OUString,
                         ::comphelper::PropertyData*,
-                        ::rtl::OUStringHash,
+                        OUStringHash,
                         ::comphelper::eqFunc > PropertyDataHash;
 #endif
 

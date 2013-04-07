@@ -29,7 +29,7 @@ class EditView;
 
 class TextConvWrapper : public editeng::HangulHanjaConversion
 {
-    rtl::OUString   aConvText;      // convertible text part found last time
+    OUString   aConvText;      // convertible text part found last time
     LanguageType    nConvTextLang;  // language of aConvText
     sal_uInt16          nLastPos;       // starting position of the last found text portion (word)
     sal_uInt16          nUnitOffset;    // offset of current unit in the current text portion (word)
@@ -63,7 +63,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
                                     const sal_Int32 nUnitEnd );
 
     void        ChangeText( const String &rNewText,
-                            const ::rtl::OUString& rOrigText,
+                            const OUString& rOrigText,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
     void        ChangeText_impl( const String &rNewText, sal_Bool bKeepAttributes );
@@ -73,15 +73,15 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
     TextConvWrapper & operator= (const TextConvWrapper &);
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion,
+    virtual void    GetNextPortion( OUString& /* [out] */ rNextPortion,
                         LanguageType& /* [out] */ rLangOfPortion,
                         sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
-                        const ::rtl::OUString& rOrigText,
-                        const ::rtl::OUString& rReplaceWith,
+                        const OUString& rOrigText,
+                        const OUString& rReplaceWith,
                         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage );

@@ -42,7 +42,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-using ::rtl::OUString;
 
 
 namespace framework
@@ -65,16 +64,16 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
 }
 
 
-::rtl::OUString RetrieveLabelFromCommand(
-    const ::rtl::OUString& aCmdURL,
+OUString RetrieveLabelFromCommand(
+    const OUString& aCmdURL,
     const uno::Reference< uno::XComponentContext >& _xContext,
     uno::Reference< container::XNameAccess >& _xUICommandLabels,
     const uno::Reference< frame::XFrame >& _xFrame,
-    ::rtl::OUString& _rModuleIdentifier,
+    OUString& _rModuleIdentifier,
     sal_Bool& _rIni,
     const sal_Char* _pName)
 {
-    ::rtl::OUString aLabel;
+    OUString aLabel;
 
     // Retrieve popup menu labels
     if ( !_xUICommandLabels.is() )
@@ -109,7 +108,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         {
             if ( !aCmdURL.isEmpty() )
             {
-                rtl::OUString aStr;
+                OUString aStr;
                 Sequence< PropertyValue > aPropSeq;
                 if( _xUICommandLabels->hasByName( aCmdURL ) )
                 {

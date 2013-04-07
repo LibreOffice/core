@@ -158,21 +158,21 @@ IMPL_LINK( SvpElementContainer, processRequest, void*, pSocket )
 {
     int nFile = (int)pSocket;
 
-    rtl::OStringBuffer aBuf( 256 ), aAnswer( 256 );
+    OStringBuffer aBuf( 256 ), aAnswer( 256 );
     char c;
     while( read( nFile, &c, 1 ) && c != '\n' )
         aBuf.append( sal_Char(c) );
-    rtl::OString aCommand( aBuf.makeStringAndClear() );
+    OString aCommand( aBuf.makeStringAndClear() );
     if( aCommand.startsWith( "list" ) )
     {
-        boost::unordered_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash > aMap;
+        boost::unordered_map< OString, std::list<SvpElement*>, OStringHash > aMap;
         for( std::list< SvpElement* >::const_iterator it = m_aElements.begin();
              it != m_aElements.end(); ++it )
         {
             std::list<SvpElement*>& rList = aMap[matchType(*it)];
             rList.push_back( *it );
         }
-        for( boost::unordered_map< rtl::OString, std::list<SvpElement*>, rtl::OStringHash>::const_iterator hash_it = aMap.begin();
+        for( boost::unordered_map< OString, std::list<SvpElement*>, OStringHash>::const_iterator hash_it = aMap.begin();
              hash_it != aMap.end(); ++hash_it )
         {
             aAnswer.append( "ElementType: " );

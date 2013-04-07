@@ -34,16 +34,16 @@ class SfxURLRelocator_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XMacroExpander >                 mxMacroExpander;
 
 public:
-    static bool                 propertyCanContainOfficeDir( const rtl::OUString & rPropName );
+    static bool                 propertyCanContainOfficeDir( const OUString & rPropName );
     void                        initOfficeInstDirs();
-    void                        makeRelocatableURL( rtl::OUString & rURL );
-    void                        makeAbsoluteURL( rtl::OUString & rURL );
+    void                        makeRelocatableURL( OUString & rURL );
+    void                        makeAbsoluteURL( OUString & rURL );
 
     SfxURLRelocator_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
     ~SfxURLRelocator_Impl();
 
 private:
-    void implExpandURL( ::rtl::OUString& io_url );
+    void implExpandURL( OUString& io_url );
 };
 
 #endif

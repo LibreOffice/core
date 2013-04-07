@@ -38,7 +38,6 @@
 #include "thessubmenu.hxx"
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 OUString SfxThesSubMenuHelper::GetText(
     const String &rLookUpString,

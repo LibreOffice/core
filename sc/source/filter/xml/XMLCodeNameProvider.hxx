@@ -29,8 +29,8 @@ class String;
 class XMLCodeNameProvider : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameAccess >
 {
     ScDocument* mpDoc;
-    ::rtl::OUString msDocName;
-    ::rtl::OUString msCodeNameProp;
+    OUString msDocName;
+    OUString msCodeNameProp;
 
     static sal_Bool _getCodeName( const ::com::sun::star::uno::Any& aAny,
                            String& rCodeName );
@@ -39,15 +39,15 @@ public:
     XMLCodeNameProvider( ScDocument* pDoc );
     virtual ~XMLCodeNameProvider();
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )

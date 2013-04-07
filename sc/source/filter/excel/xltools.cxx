@@ -38,7 +38,6 @@
 #include "xiroot.hxx"
 #include "xltools.hxx"
 
-using ::rtl::OUString;
 
 // GUID import/export =========================================================
 
@@ -482,21 +481,21 @@ OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
 
     if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
-        return rtl::OUString::createFromAscii(ppcDefNames[cBuiltIn]);
+        return OUString::createFromAscii(ppcDefNames[cBuiltIn]);
     else
         return OUString::number(cBuiltIn);
 }
 
 OUString XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    rtl::OUStringBuffer aBuf(maDefNamePrefix);
+    OUStringBuffer aBuf(maDefNamePrefix);
     aBuf.append(GetXclBuiltInDefName(cBuiltIn));
     return aBuf.makeStringAndClear();
 }
 
 OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 {
-    rtl::OUStringBuffer aBuf(maDefNamePrefixXml);
+    OUStringBuffer aBuf(maDefNamePrefixXml);
     aBuf.append(GetXclBuiltInDefName(cBuiltIn));
     return aBuf.makeStringAndClear();
 }
@@ -552,7 +551,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
     }
     else
     {
-        rtl::OUStringBuffer aBuf(maStyleNamePrefix1);
+        OUStringBuffer aBuf(maStyleNamePrefix1);
         if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
             aBuf.appendAscii(ppcStyleNames[nStyleId]);
         else if (!rName.isEmpty())
@@ -594,7 +593,7 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
         {
             if( nId != EXC_STYLE_NORMAL )
             {
-                OUString aShortName = rtl::OUString::createFromAscii(ppcStyleNames[nId]);
+                OUString aShortName = OUString::createFromAscii(ppcStyleNames[nId]);
                 if( String(rStyleName).EqualsIgnoreCaseAscii( aShortName, nPrefixLen, aShortName.getLength() ) &&
                     (nNextChar < nPrefixLen + aShortName.getLength()))
                 {
@@ -651,9 +650,9 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
 const OUString XclTools::maCFStyleNamePrefix1( RTL_CONSTASCII_USTRINGPARAM( "Excel_CondFormat_" ) );
 const OUString XclTools::maCFStyleNamePrefix2( RTL_CONSTASCII_USTRINGPARAM( "ConditionalStyle_" ) );
 
-rtl::OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
+OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat, sal_uInt16 nCondition )
 {
-    rtl::OUStringBuffer aBuf(maCFStyleNamePrefix1);
+    OUStringBuffer aBuf(maCFStyleNamePrefix1);
     aBuf.append(static_cast<sal_Int32>(nScTab+1));
     aBuf.append(sal_Unicode('_'));
     aBuf.append(static_cast<sal_Int32>(nFormat+1));
@@ -711,7 +710,7 @@ OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
         sal_Int32 nPrjDot = rSbMacroUrl.indexOf( '.', maSbMacroPrefix.getLength() ) + 1;
         return rSbMacroUrl.copy( nPrjDot, nSbMacroUrlLen - nPrjDot - maSbMacroSuffix.getLength() );
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 // read/write colors ----------------------------------------------------------

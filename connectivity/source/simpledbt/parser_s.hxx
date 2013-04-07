@@ -44,8 +44,8 @@ namespace connectivity
 
         // ISQLParser
         virtual ::rtl::Reference< simple::ISQLParseNode > predicateTree(
-            ::rtl::OUString& rErrorMessage,
-            const ::rtl::OUString& rStatement,
+            OUString& rErrorMessage,
+            const OUString& rStatement,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
         ) const;

@@ -36,18 +36,18 @@ public:
                         ~ScFormulaParserPool();
 
     /** Returns true, if a formula parser is registered for the passed namespace. */
-    bool                hasFormulaParser( const ::rtl::OUString& rNamespace );
+    bool                hasFormulaParser( const OUString& rNamespace );
 
     /** Returns the formula parser that is registered for the passed namespace. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >
-                        getFormulaParser( const ::rtl::OUString& rNamespace );
+                        getFormulaParser( const OUString& rNamespace );
 
 private:
     typedef ::boost::unordered_map<
-        ::rtl::OUString,
+        OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser >,
-        ::rtl::OUStringHash,
-        ::std::equal_to< ::rtl::OUString > > ParserMap;
+        OUStringHash,
+        ::std::equal_to< OUString > > ParserMap;
 
     const ScDocument&   mrDoc;
     ParserMap           maParsers;

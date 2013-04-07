@@ -82,7 +82,7 @@ namespace dbaccess
     namespace
     {
         // .........................................................................
-        static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, ::rtl::OUStringBuffer& o_rBuffer )
+        static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, OUStringBuffer& o_rBuffer )
         {
             o_rBuffer.append( i_rComponentDesc.first );
             o_rBuffer.append( sal_Unicode( '=' ) );
@@ -92,7 +92,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        static bool lcl_extractCompDesc( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
+        static bool lcl_extractCompDesc( const OUString& i_rIniLine, OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
             const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( sal_Unicode( '=' ) );
             if ( nEqualSignPos < 1 )
@@ -147,7 +147,7 @@ namespace dbaccess
                     ++stor
                 )
             {
-                ::rtl::OUStringBuffer aLine;
+                OUStringBuffer aLine;
                 lcl_getPersistentRepresentation( *stor, aLine );
 
                 aTextOutput.writeLine( aLine.makeStringAndClear() );
@@ -157,7 +157,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        static bool lcl_isSectionStart( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rSectionName )
+        static bool lcl_isSectionStart( const OUString& i_rIniLine, OUString& o_rSectionName )
         {
             const sal_Int32 nLen = i_rIniLine.getLength();
             if ( ( nLen > 0 ) && ( i_rIniLine.getStr()[0] == '[' ) && ( i_rIniLine.getStr()[ nLen - 1 ] == ']' ) )
@@ -169,7 +169,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        static void lcl_stripTrailingLineFeed( ::rtl::OUString& io_rLine )
+        static void lcl_stripTrailingLineFeed( OUString& io_rLine )
         {
             const sal_Int32 nLen = io_rLine.getLength();
             if ( ( nLen > 0 ) && ( io_rLine.getStr()[ nLen - 1 ] == '\n' ) )
@@ -194,11 +194,11 @@ namespace dbaccess
             xTextInput->setEncoding( lcl_getMapStreamEncodingName() );
             xTextInput->setInputStream( xIniStream->getInputStream() );
 
-            ::rtl::OUString sCurrentSection;
+            OUString sCurrentSection;
             bool bCurrentSectionIsKnownToBeUnsupported = true;
             while ( !xTextInput->isEOF() )
             {
-                ::rtl::OUString sLine = xTextInput->readLine();
+                OUString sLine = xTextInput->readLine();
                 lcl_stripTrailingLineFeed( sLine );
 
                 if ( sLine.isEmpty() )
@@ -220,7 +220,7 @@ namespace dbaccess
                     continue;
                 }
 
-                ::rtl::OUString sStorageName;
+                OUString sStorageName;
                 SubComponentDescriptor aCompDesc;
                 if ( !lcl_extractCompDesc( sLine, sStorageName, aCompDesc ) )
                     continue;
@@ -370,15 +370,15 @@ namespace dbaccess
                     ++stor
                 )
             {
-                const ::rtl::OUString sComponentName( stor->second.sName );
+                const OUString sComponentName( stor->second.sName );
                 if ( !xComponentsStor->hasByName( stor->first ) )
                 {
                 #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OStringBuffer message;
+                    OStringBuffer message;
                     message.append( "DatabaseDocumentRecovery::recoverSubDocuments: inconsistent recovery storage: storage '" );
-                    message.append( ::rtl::OUStringToOString( stor->first, RTL_TEXTENCODING_ASCII_US ) );
+                    message.append( OUStringToOString( stor->first, RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "' not found in '" );
-                    message.append( ::rtl::OUStringToOString( SubComponentRecovery::getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
+                    message.append( OUStringToOString( SubComponentRecovery::getComponentsStorageName( eComponentType ), RTL_TEXTENCODING_ASCII_US ) );
                     message.append( "', but required per map file!" );
                     OSL_FAIL( message.getStr() );
                 #endif

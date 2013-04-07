@@ -30,9 +30,9 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-typedef  boost::unordered_map< rtl::OUString,
-sal_Int32, ::rtl::OUStringHash,
-::std::equal_to< ::rtl::OUString > > NameIndexHash;
+typedef  boost::unordered_map< OUString,
+sal_Int32, OUStringHash,
+::std::equal_to< OUString > > NameIndexHash;
 
 
 static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any& aApplication )
@@ -130,7 +130,7 @@ public:
                 uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
                 uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
                 ScVbaWindow window( xTemp, m_xContext, xModel, xController );
-                rtl::OUString sCaption;
+                OUString sCaption;
                 window.getCaption() >>= sCaption;
                 namesToIndices[ sCaption ] = nIndex++;
             }
@@ -168,7 +168,7 @@ public:
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
@@ -177,10 +177,10 @@ public:
 
     }
 
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< ::rtl::OUString > names( namesToIndices.size() );
-        ::rtl::OUString* pString = names.getArray();
+        uno::Sequence< OUString > names( namesToIndices.size() );
+        OUString* pString = names.getArray();
         NameIndexHash::const_iterator it = namesToIndices.begin();
         NameIndexHash::const_iterator it_end = namesToIndices.end();
         for ( ; it != it_end; ++it, ++pString )
@@ -188,7 +188,7 @@ public:
         return names;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
@@ -225,20 +225,20 @@ ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWor
 }
 
 
-rtl::OUString
+OUString
 ScVbaWindows::getServiceImplName()
 {
-    return rtl::OUString("ScVbaWindows");
+    return OUString("ScVbaWindows");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaWindows::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.excel.Windows");
+        sNames[0] = OUString("ooo.vba.excel.Windows");
     }
     return sNames;
 }

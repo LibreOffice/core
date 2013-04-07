@@ -123,7 +123,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
 void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 {
     SdrObject* pObject = pE->pObject;
-    rtl::OStringBuffer aBuf;
+    OStringBuffer aBuf;
     aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).append('=').
         append(static_cast<sal_Int32>(pE->aSize.Width()));
     aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).append('=').
@@ -135,7 +135,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
         aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).append('=').
             append(static_cast<sal_Int32>(pE->aSpace.Height()));
     }
-    rtl::OString aOpt = aBuf.makeStringAndClear();
+    OString aOpt = aBuf.makeStringAndClear();
     switch ( pObject->GetObjIdentifier() )
     {
         case OBJ_GRAF:
@@ -182,7 +182,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 
 
 void ScHTMLExport::WriteImage( String& rLinkName, const Graphic& rGrf,
-            const rtl::OString& rImgOptions, sal_uLong nXOutFlags )
+            const OString& rImgOptions, sal_uLong nXOutFlags )
 {
     // Embedded graphic -> create an image file
     if( !rLinkName.Len() )

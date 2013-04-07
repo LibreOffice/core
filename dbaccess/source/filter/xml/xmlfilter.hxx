@@ -99,14 +99,14 @@ private:
     */
     void fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap);
 
-    SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const ::rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateStylesContext(sal_uInt16 nPrefix,const OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle );
-    SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
+    SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
 
 protected:
     // SvXMLImport
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
+                                      const OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual ~ODBFilter()  throw();

@@ -103,7 +103,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 TYPEINIT1(SwFmtVertOrient, SfxPoolItem);
 TYPEINIT1(SwFmtHoriOrient, SfxPoolItem);

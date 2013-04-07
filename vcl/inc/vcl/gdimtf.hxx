@@ -238,8 +238,8 @@ public:
     @param nDataSize
     Length, in byte, of raw data
  */
-MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererServiceName,
-                                                const rtl::OUString& rGraphicServiceName,
+MetaCommentAction* makePluggableRendererAction( const OUString& rRendererServiceName,
+                                                const OUString& rGraphicServiceName,
                                                 const void* pData,
                                                 sal_uInt32 nDataSize );
 

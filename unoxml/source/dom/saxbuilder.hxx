@@ -41,7 +41,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::sax;

@@ -54,9 +54,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -146,7 +143,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
         // get list of dictionaries-to-use
         std::list< SvtLinguConfigDictionaryEntry > aDics;
-        uno::Sequence< rtl::OUString > aFormatList;
+        uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Thesauri",
                 "org.openoffice.lingu.new.Thesaurus", aFormatList );
         sal_Int32 nLen = aFormatList.getLength();
@@ -173,11 +170,11 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
         {
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
-            std::set< rtl::OUString, lt_rtl_OUString > aLocaleNamesSet;
+            std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
-                uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
@@ -186,7 +183,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
             }
             // ... and add them to the resulting sequence
             aSuppLocales.realloc( aLocaleNamesSet.size() );
-            std::set< rtl::OUString, lt_rtl_OUString >::const_iterator aItB;
+            std::set< OUString, lt_rtl_OUString >::const_iterator aItB;
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
@@ -216,7 +213,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                 if (aDictIt->aLocaleNames.getLength() > 0 &&
                     aDictIt->aLocations.getLength() > 0)
                 {
-                    uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                    uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
                     // currently only one language per dictionary is supported in the actual implementation...
@@ -232,7 +229,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
-                        rtl::OUString aLocation = aDictIt->aLocations[0];
+                        OUString aLocation = aDictIt->aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
                         aTNames[k] = aLocation;

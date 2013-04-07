@@ -53,21 +53,21 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context):
         m_context(context) {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL
-    translateToInternal(rtl::OUString const & externalUriReference)
+    virtual OUString SAL_CALL
+    translateToInternal(OUString const & externalUriReference)
         throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL
-    translateToExternal(rtl::OUString const & internalUriReference)
+    virtual OUString SAL_CALL
+    translateToExternal(OUString const & internalUriReference)
         throw (css::uno::RuntimeException);
 
 private:
@@ -79,29 +79,29 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_context;
 };
 
-rtl::OUString Translator::getImplementationName()
+OUString Translator::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return
         stoc_services::ExternalUriReferenceTranslator::getImplementationName();
 }
 
-sal_Bool Translator::supportsService(rtl::OUString const & serviceName)
+sal_Bool Translator::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
     return stoc::uriproc::supportsService(
         getSupportedServiceNames(), serviceName);
 }
 
-css::uno::Sequence< rtl::OUString > Translator::getSupportedServiceNames()
+css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return stoc_services::ExternalUriReferenceTranslator::
         getSupportedServiceNames();
 }
 
-rtl::OUString Translator::translateToInternal(
-    rtl::OUString const & externalUriReference)
+OUString Translator::translateToInternal(
+    OUString const & externalUriReference)
     throw (css::uno::RuntimeException)
 {
     if (!externalUriReference.matchIgnoreAsciiCaseAsciiL(
@@ -110,7 +110,7 @@ rtl::OUString Translator::translateToInternal(
         return externalUriReference;
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file:");
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append(externalUriReference.getStr(), i);
     // Some environments (e.g., Java) produce illegal file URLs without an
     // authority part; treat them as having an empty authority part:
@@ -128,7 +128,7 @@ rtl::OUString Translator::translateToInternal(
             ++j;
         }
         if (j != i) {
-            rtl::OUString seg(
+            OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(
                         externalUriReference.copy(i, j - i),
@@ -136,7 +136,7 @@ rtl::OUString Translator::translateToInternal(
                     rtl_UriCharClassPchar, rtl_UriEncodeStrict,
                     RTL_TEXTENCODING_UTF8));
             if (seg.isEmpty()) {
-                return rtl::OUString();
+                return OUString();
             }
             buf.append(seg);
         }
@@ -150,8 +150,8 @@ rtl::OUString Translator::translateToInternal(
     return buf.makeStringAndClear();
 }
 
-rtl::OUString Translator::translateToExternal(
-    rtl::OUString const & internalUriReference)
+OUString Translator::translateToExternal(
+    OUString const & internalUriReference)
     throw (css::uno::RuntimeException)
 {
     if (!internalUriReference.matchIgnoreAsciiCaseAsciiL(
@@ -160,7 +160,7 @@ rtl::OUString Translator::translateToExternal(
         return internalUriReference;
     }
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file://");
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append(internalUriReference.getStr(), i);
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {
@@ -175,7 +175,7 @@ rtl::OUString Translator::translateToExternal(
             // Use rtl_UriDecodeToIuri -> rtl_UriEncodeStrictKeepEscapes instead
             // of rtl_UriDecodeStrict -> rtl_UriEncodeStrict, so that spurious
             // non--UTF-8 octets like "%FE" are copied verbatim:
-            rtl::OUString seg(
+            OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(
                         internalUriReference.copy(i, j - i),
@@ -183,7 +183,7 @@ rtl::OUString Translator::translateToExternal(
                     rtl_UriCharClassPchar, rtl_UriEncodeStrictKeepEscapes,
                     encoding));
             if (seg.isEmpty()) {
-                return rtl::OUString();
+                return OUString();
             }
             buf.append(seg);
         }
@@ -209,17 +209,17 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Translator(context));
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString("std::bad_alloc"), 0);
+            OUString("std::bad_alloc"), 0);
     }
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.uri.ExternalUriReferenceTranslator");
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.uri.ExternalUriReferenceTranslator");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString("com.sun.star.uri.ExternalUriReferenceTranslator");
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    css::uno::Sequence< OUString > s(1);
+    s[0] = OUString("com.sun.star.uri.ExternalUriReferenceTranslator");
     return s;
 }
 

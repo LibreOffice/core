@@ -46,7 +46,6 @@ using namespace ::com::sun::star::xml::sax;
 
 using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
-using ::rtl::OUString;
 
 // ============================================================================
 

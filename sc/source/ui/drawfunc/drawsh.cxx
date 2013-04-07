@@ -197,7 +197,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
         case SID_DRAW_HLINK_DELETE:
             if ( pSingleSelectedObj )
-                SetHlinkForObject( pSingleSelectedObj, rtl::OUString() );
+                SetHlinkForObject( pSingleSelectedObj, OUString() );
             break;
 
         case SID_OPEN_HYPERLINK:
@@ -296,8 +296,8 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     if ( !pInfo->GetMacro().isEmpty() )
     {
         SvxMacroTableDtor aTab;
-        rtl::OUString sMacro = pInfo->GetMacro();
-        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, SvxMacro(sMacro, rtl::OUString()));
+        OUString sMacro = pInfo->GetMacro();
+        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, SvxMacro(sMacro, OUString()));
         aItem.SetMacroTable( aTab );
     }
 
@@ -321,7 +321,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
-            rtl::OUString sMacro;
+            OUString sMacro;
             const SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
             if ( pMacro )
                 sMacro = pMacro->GetMacName();
@@ -444,7 +444,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 /* nTabPage *
     delete( pDlg );
 }
 
-void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk )
+void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk )
 {
     if ( pObj )
     {

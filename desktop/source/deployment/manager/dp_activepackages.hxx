@@ -38,50 +38,50 @@ namespace dp_manager {
 class ActivePackages {
 public:
     struct Data {
-        Data(): failedPrerequisites(::rtl::OUString::valueOf((sal_Int32)0))
+        Data(): failedPrerequisites(OUString::valueOf((sal_Int32)0))
             {}
         /* name of the temporary file (shared, user extension) or the name of
            the folder of the bundled extension.
            It does not contain the trailing '_' of the folder.
            UTF-8 encoded
         */
-        ::rtl::OUString temporaryName;
+        OUString temporaryName;
         /* The file name (shared, user) or the folder name (bundled)
            If the key is the file name, then file name is not encoded.
            If the key is the idendifier then the file name is UTF-8 encoded.
          */
-        ::rtl::OUString fileName;
-        ::rtl::OUString mediaType;
-        ::rtl::OUString version;
+        OUString fileName;
+        OUString mediaType;
+        OUString version;
         /* If this string contains the value according to
            com::sun::star::deployment::Prerequisites or "0". That is, if
            the value is > 0 then
            the call to XPackage::checkPrerequisites failed.
            In this case the extension must not be registered.
          */
-        ::rtl::OUString failedPrerequisites;
+        OUString failedPrerequisites;
     };
 
-    typedef ::std::vector< ::std::pair< ::rtl::OUString, Data > > Entries;
+    typedef ::std::vector< ::std::pair< OUString, Data > > Entries;
 
     ActivePackages();
 
-    ActivePackages(::rtl::OUString const & url, bool readOnly);
+    ActivePackages(OUString const & url, bool readOnly);
 
     ~ActivePackages();
 
-    bool has(::rtl::OUString const & id, ::rtl::OUString const & fileName)
+    bool has(OUString const & id, OUString const & fileName)
         const;
 
     bool get(
-        Data * data, ::rtl::OUString const & id,
-        ::rtl::OUString const & fileName) const;
+        Data * data, OUString const & id,
+        OUString const & fileName) const;
 
     Entries getEntries() const;
 
-    void put(::rtl::OUString const & id, Data const & value);
+    void put(OUString const & id, Data const & value);
 
-    void erase(::rtl::OUString const & id, ::rtl::OUString const & fileName);
+    void erase(OUString const & id, OUString const & fileName);
 
 private:
     ActivePackages(ActivePackages &); // not defined

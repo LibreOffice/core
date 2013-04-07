@@ -108,7 +108,7 @@ void XPropertySet::testRemoveVetoableChangeListener()
     // TODO: implement this.
 }
 
-bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
+bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
 {
     uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
     try
@@ -163,11 +163,11 @@ bool XPropertySet::isPropertyValueChangeable(const rtl::OUString& rName)
             double fNew = fOld + 1.3;
             xPropSet->setPropertyValue(rName, makeAny(fNew));
         }
-        else if (type == getCppuType<rtl::OUString>())
+        else if (type == getCppuType<OUString>())
         {
             // string type
-            rtl::OUString aOld = any.get<rtl::OUString>();
-            rtl::OUString aNew = aOld + rtl::OUString("foo");
+            OUString aOld = any.get<OUString>();
+            OUString aNew = aOld + OUString("foo");
             xPropSet->setPropertyValue(rName, makeAny(aNew));
         }
         else if (type == getCppuType<util::DateTime>())
@@ -203,7 +203,7 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
     // some properties should not be changed in a unspecific way.
     // TODO: Maybe we should mark these properties read-only, instead of
     // giving them a special treatment here?
-    std::set<rtl::OUString> aSkip;
+    std::set<OUString> aSkip;
     aSkip.insert("PrinterName");
     aSkip.insert("CharRelief");
     aSkip.insert("IsLayerMode");
@@ -241,7 +241,7 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
 }
 
 bool XPropertySet::getSinglePropertyValue(
-    const uno::Reference<beans::XPropertySet>& xPropSet, const rtl::OUString& rName)
+    const uno::Reference<beans::XPropertySet>& xPropSet, const OUString& rName)
 {
     try
     {

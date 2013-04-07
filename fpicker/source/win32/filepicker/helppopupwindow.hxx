@@ -74,7 +74,7 @@ public:
         The client may set the text the window is showing
         on next activation.
     */
-    void SAL_CALL setText( const rtl::OUString& aHelpText );
+    void SAL_CALL setText( const OUString& aHelpText );
 
     /*
         Shows the window with the text that was last set.
@@ -111,7 +111,7 @@ private:
     HWND            m_hwndParent;
     HINSTANCE       m_hInstance;
     sal_Bool        m_bWndClassRegistered;
-    ::rtl::OUString m_HelpText;
+    OUString m_HelpText;
     HBITMAP         m_hBitmapShadow;
     HBRUSH          m_hBrushShadow;
 

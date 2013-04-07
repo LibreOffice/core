@@ -113,7 +113,7 @@ typedef cppu::WeakComponentImplHelper1<presentation::XTransition> OGLTransitione
 class TimerContext
 {
 public:
-    explicit TimerContext(rtl::OUString const& rWhat)
+    explicit TimerContext(OUString const& rWhat)
         : m_aWhat(rWhat)
         , m_aStartTime(microsec_clock::local_time())
     {
@@ -124,7 +124,7 @@ public:
         SAL_INFO("slideshow.opengl", m_aWhat << " took: " << aDuration);
     }
 private:
-    rtl::OUString const m_aWhat;
+    OUString const m_aWhat;
     ptime const m_aStartTime;
 };
 #endif
@@ -643,7 +643,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     uno::Sequence< uno::Any > aDeviceParams;
     ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams );
 
-    ::rtl::OUString aImplName;
+    OUString aImplName;
     aDeviceParams[ 0 ] >>= aImplName;
 
     sal_Int64 aVal = 0;

@@ -74,7 +74,7 @@ public:
     virtual ~SvXMLItemMapEntries();
 
     SvXMLItemMapEntry* getByName( sal_uInt16 nNameSpace,
-                                  const ::rtl::OUString& rString,
+                                  const OUString& rString,
                                   SvXMLItemMapEntry* pStartAt = NULL ) const;
     SvXMLItemMapEntry* getByIndex( sal_uInt16 nIndex ) const;
 

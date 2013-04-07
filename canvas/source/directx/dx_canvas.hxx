@@ -93,7 +93,7 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase1_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                maArguments;
@@ -150,7 +150,7 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( BitmapCanvas, GraphicDeviceBase2_Base, ::cppu::WeakComponentImplHelperBase );
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const;

@@ -129,7 +129,7 @@ protected:
 public:
                                     SfxItemPool( const SfxItemPool &rPool,
                                                  sal_Bool bCloneStaticDefaults = sal_False );
-                                    SfxItemPool( const rtl::OUString &rName,
+                                    SfxItemPool( const OUString &rName,
                                                  sal_uInt16 nStart, sal_uInt16 nEnd,
                                                  const SfxItemInfo *pItemInfos,
                                                  SfxPoolItem **pDefaults = 0,
@@ -158,7 +158,7 @@ public:
                                         const IntlWrapper * pIntlWrapper
                                          = 0 ) const;
     virtual SfxItemPool*            Clone() const;
-    const rtl::OUString&            GetName() const;
+    const OUString&            GetName() const;
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );

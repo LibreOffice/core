@@ -64,13 +64,13 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xMasterForm;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                                         m_aRelationDetailColumns;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                                         m_aRelationMasterColumns;
 
-        ::rtl::OUString                 m_sDetailLabel;
-        ::rtl::OUString                 m_sMasterLabel;
+        OUString                 m_sDetailLabel;
+        OUString                 m_sMasterLabel;
 
     public:
         FormLinkDialog(
@@ -78,9 +78,9 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDetailForm,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxMasterForm,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::rtl::OUString& _sExplanation = ::rtl::OUString(),
-            const ::rtl::OUString& _sDetailLabel = ::rtl::OUString(),
-            const ::rtl::OUString& _sMasterLabel = ::rtl::OUString()
+            const OUString& _sExplanation = OUString(),
+            const OUString& _sDetailLabel = OUString(),
+            const OUString& _sMasterLabel = OUString()
         );
         ~FormLinkDialog( );
 
@@ -100,8 +100,8 @@ namespace pcr
         void        commitLinkPairs();
 
         void        initializeFieldRowsFrom(
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rDetailFields,
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rMasterFields
+                        ::com::sun::star::uno::Sequence< OUString >& _rDetailFields,
+                        ::com::sun::star::uno::Sequence< OUString >& _rMasterFields
                     );
 
         String      getFormDataSourceType(
@@ -110,7 +110,7 @@ namespace pcr
 
         void        getFormFields(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForm,
-                            ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rNames
+                            ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rNames
                     ) const SAL_THROW(());
 
         void        ensureFormConnection(
@@ -128,8 +128,8 @@ namespace pcr
         sal_Bool    getExistingRelation(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLHS,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRHS,
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rLeftFields,
-                        ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rRightFields
+                        ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rLeftFields,
+                        ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rRightFields
                     ) const;
     };
 

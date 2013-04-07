@@ -567,7 +567,7 @@ void RecoveryCore::impl_stopListening()
 }
 
 //===============================================
-css::util::URL RecoveryCore::impl_getParsedURL(const ::rtl::OUString& sURL)
+css::util::URL RecoveryCore::impl_getParsedURL(const OUString& sURL)
 {
     css::util::URL aURL;
     aURL.Complete = sURL;
@@ -635,12 +635,12 @@ void SAL_CALL PluginProgress::removeEventListener( const css::uno::Reference< cs
 }
 
 //===============================================
-void SAL_CALL PluginProgress::start(const ::rtl::OUString&,
+void SAL_CALL PluginProgress::start(const OUString&,
                                           sal_Int32        nRange)
     throw(css::uno::RuntimeException)
 {
     if (m_xProgress.is())
-        m_xProgress->start(::rtl::OUString(), nRange);
+        m_xProgress->start(OUString(), nRange);
 }
 
 //===============================================
@@ -652,7 +652,7 @@ void SAL_CALL PluginProgress::end()
 }
 
 //===============================================
-void SAL_CALL PluginProgress::setText(const ::rtl::OUString& sText)
+void SAL_CALL PluginProgress::setText(const OUString& sText)
     throw(css::uno::RuntimeException)
 {
     if (m_xProgress.is())
@@ -971,9 +971,9 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     FreeResource();
 
-    ::rtl::OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/" );
-    ::rtl::OUString CFG_PATH_CRASHREPORTER( "CrashReporter"                 );
-    ::rtl::OUString CFG_ENTRY_ENABLED( "Enabled"                       );
+    OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/" );
+    OUString CFG_PATH_CRASHREPORTER( "CrashReporter"                 );
+    OUString CFG_ENTRY_ENABLED( "Enabled"                       );
 
     sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
@@ -1442,7 +1442,7 @@ void BrokenRecoveryDialog::impl_refresh()
         sal_uInt16 nPos = m_aFileListLB.InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
         m_aFileListLB.SetEntryData( nPos, (void*)&rInfo );
     }
-    m_sSavePath = ::rtl::OUString();
+    m_sSavePath = OUString();
     m_aOkBtn.GrabFocus();
 }
 
@@ -1453,7 +1453,7 @@ sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 }
 
 //===============================================
-::rtl::OUString BrokenRecoveryDialog::getSaveDirURL()
+OUString BrokenRecoveryDialog::getSaveDirURL()
 {
     return m_sSavePath;
 }
@@ -1462,7 +1462,7 @@ sal_Bool BrokenRecoveryDialog::isExecutionNeeded()
 IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl)
 {
     String sPhysicalPath = comphelper::string::strip(m_aSaveDirED.GetText(), ' ');
-    rtl::OUString sURL;
+    OUString sURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sPhysicalPath, sURL );
     m_sSavePath = sURL;
     while (m_sSavePath.isEmpty())
@@ -1932,7 +1932,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
     ///////////////////////////////////////////////////////////////////////
 
 
-        static ::rtl::OUString GetCrashConfigDir()
+        static OUString GetCrashConfigDir()
         {
 
 #if defined(WNT)
@@ -1956,17 +1956,17 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 #define PRVFILE ".crash_report_preview"
 #endif
 
-        static ::rtl::OUString GetPreviewURL()
+        static OUString GetPreviewURL()
         {
-            ::rtl::OUString aURL = GetCrashConfigDir();
+            OUString aURL = GetCrashConfigDir();
 
-            aURL += ::rtl::OUString( "/"  );
-            aURL += ::rtl::OUString( PRVFILE  );
+            aURL += OUString( "/"  );
+            aURL += OUString( PRVFILE  );
 
             return aURL;
         }
 
-        static String LoadCrashFile( const ::rtl::OUString &rURL )
+        static String LoadCrashFile( const OUString &rURL )
         {
             String  aFileContent;
             ::osl::File aFile( rURL );
@@ -1974,7 +1974,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
             if ( ::osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
             {
-                ::rtl::OString  aContent;
+                OString  aContent;
                 ::osl::FileBase::RC result;
                 sal_uInt64  aBytesRead;
 
@@ -1986,12 +1986,12 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
                     if ( ::osl::FileBase::E_None == result )
                     {
-                        ::rtl::OString  aTemp( aBuffer, static_cast< xub_StrLen >( aBytesRead ) );
+                        OString  aTemp( aBuffer, static_cast< xub_StrLen >( aBytesRead ) );
                         aContent += aTemp;
                     }
                 } while ( ::osl::FileBase::E_None == result && aBytesRead );
 
-                ::rtl::OUString ustrContent( aContent.getStr(), aContent.getLength(), RTL_TEXTENCODING_UTF8 );
+                OUString ustrContent( aContent.getStr(), aContent.getLength(), RTL_TEXTENCODING_UTF8 );
                 aFileContent = ustrContent;
 
                 aFile.close();
@@ -2019,7 +2019,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             String  aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
 
-            String aSeperator = ::rtl::OUString( "\r\n\r\n================\r\n\r\n"  );
+            String aSeperator = OUString( "\r\n\r\n================\r\n\r\n"  );
 
             String aContent = pMainDlg->GetDocType();
             if ( aContent.Len() > 0 )

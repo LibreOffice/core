@@ -39,7 +39,7 @@ public:
                   sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
-    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
+    virtual OUString queryContentIdentifierString( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference<
                 com::sun::star::ucb::XContentIdentifier >
     queryContentIdentifier( sal_uInt32 nIndex );
@@ -61,7 +61,7 @@ public:
     virtual void validate()
         throw( com::sun::star::ucb::ResultSetException );
 
-    ::rtl::OUString assembleChildURL( const ::rtl::OUString& aName );
+    OUString assembleChildURL( const OUString& aName );
 };
 
 }

@@ -61,7 +61,7 @@ public:
     SvtCTLOptions_Impl();
     ~SvtCTLOptions_Impl();
 
-    virtual void    Notify( const Sequence< rtl::OUString >& _aPropertyNames );
+    virtual void    Notify( const Sequence< OUString >& _aPropertyNames );
     virtual void    Commit();
     void            Load();
 
@@ -92,7 +92,7 @@ public:
 namespace
 {
     struct PropertyNames
-        : public rtl::Static< Sequence< rtl::OUString >, PropertyNames > {};
+        : public rtl::Static< Sequence< OUString >, PropertyNames > {};
 }
 //------------------------------------------------------------------------------
 bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
@@ -136,7 +136,7 @@ SvtCTLOptions_Impl::~SvtCTLOptions_Impl()
         Commit();
 }
 // -----------------------------------------------------------------------------
-void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& )
+void SvtCTLOptions_Impl::Notify( const Sequence< OUString >& )
 {
     Load();
     NotifyListeners(SFX_HINT_CTL_SETTINGS_CHANGED);
@@ -144,14 +144,14 @@ void SvtCTLOptions_Impl::Notify( const Sequence< rtl::OUString >& )
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Commit()
 {
-    Sequence< rtl::OUString > &rPropertyNames = PropertyNames::get();
-    rtl::OUString* pOrgNames = rPropertyNames.getArray();
+    Sequence< OUString > &rPropertyNames = PropertyNames::get();
+    OUString* pOrgNames = rPropertyNames.getArray();
     sal_Int32 nOrgCount = rPropertyNames.getLength();
 
-    Sequence< rtl::OUString > aNames( nOrgCount );
+    Sequence< OUString > aNames( nOrgCount );
     Sequence< Any > aValues( nOrgCount );
 
-    rtl::OUString* pNames = aNames.getArray();
+    OUString* pNames = aNames.getArray();
     Any* pValues = aValues.getArray();
     sal_Int32 nRealCount = 0;
 
@@ -236,11 +236,11 @@ void SvtCTLOptions_Impl::Commit()
 // -----------------------------------------------------------------------------
 void SvtCTLOptions_Impl::Load()
 {
-    Sequence< rtl::OUString >& rPropertyNames = PropertyNames::get();
+    Sequence< OUString >& rPropertyNames = PropertyNames::get();
     if ( !rPropertyNames.getLength() )
     {
         rPropertyNames.realloc(6);
-        rtl::OUString* pNames = rPropertyNames.getArray();
+        OUString* pNames = rPropertyNames.getArray();
         pNames[0] = "CTLFont";
         pNames[1] = "CTLSequenceChecking";
         pNames[2] = "CTLCursorMovement";

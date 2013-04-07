@@ -42,7 +42,7 @@ public:
     SimpleResMgr * get(LanguageTag const & locale);
 
 private:
-    typedef std::map< rtl::OUString, SimpleResMgr * > Map;
+    typedef std::map< OUString, SimpleResMgr * > Map;
 
     Map map_;
         // one SimpleResMgr for each language for which a resource was requested
@@ -76,7 +76,7 @@ struct theResMgrMap: public rtl::Static< ResMgrMap, theResMgrMap > {};
 
 namespace svl {
 
-rtl::OUString getStringResource(sal_uInt16 id, LanguageTag const & locale)
+OUString getStringResource(sal_uInt16 id, LanguageTag const & locale)
 {
     return theResMgrMap::get().get(locale)->ReadString(id);
 }

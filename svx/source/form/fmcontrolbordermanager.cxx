@@ -414,7 +414,7 @@ namespace svxform
             // update the explanation for invalidity (this is always done, even if the validity did not change)
             Reference< XValidator > xValidator = _rxValidatable->getValidator();
             OSL_ENSURE( xValidator.is(), "ControlBorderManager::validityChanged: invalid, but no validator?" );
-            ::rtl::OUString sExplainInvalidity = xValidator.is() ? xValidator->explainInvalid( _rxValidatable->getCurrentValue() ) : ::rtl::OUString();
+            OUString sExplainInvalidity = xValidator.is() ? xValidator->explainInvalid( _rxValidatable->getCurrentValue() ) : OUString();
             xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( sExplainInvalidity ) );
         }
         catch( const Exception& )

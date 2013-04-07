@@ -45,7 +45,6 @@
 #include <cmath>
 #include <limits>
 
-using rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -162,7 +161,7 @@ HexColorControl::HexColorControl( Window* pParent, const ResId& rResId )
 
 void HexColorControl::SetColor( sal_Int32 nColor )
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     sax::Converter::convertColor( aBuffer, nColor );
     SetText( aBuffer.makeStringAndClear().copy(1) );
 }
@@ -233,7 +232,7 @@ void HexColorControl::Paste()
             try
             {
                 ::com::sun::star::uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
+                OUString aText;
                 aData >>= aText;
 
                 if( !aText.isEmpty() && aText.matchAsciiL( "#", 1, 0 ) )

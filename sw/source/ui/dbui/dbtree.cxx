@@ -65,7 +65,7 @@ using namespace ::com::sun::star::beans;
 
 struct SwConnectionData
 {
-    ::rtl::OUString                sSourceName;
+    OUString                sSourceName;
     Reference<XConnection>  xConnection;
 };
 
@@ -91,7 +91,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
     void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
     Reference<XDatabaseContext>    GetContext() const {return xDBContext;}
-    Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
+    Reference<XConnection>      GetConnection(const OUString& rSourceName);
 };
 
 SwDBTreeList_Impl::~SwDBTreeList_Impl()
@@ -117,7 +117,7 @@ void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (Runtime
 void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ::rtl::OUString sSource;
+    OUString sSource;
     rEvent.Accessor >>= sSource;
     for(SwConnectionArr::iterator i = aConnections.begin(); i != aConnections.end(); ++i)
     {
@@ -152,7 +152,7 @@ sal_Bool SwDBTreeList_Impl::HasContext()
     return xDBContext.is();
 }
 
-Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rSourceName)
+Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSourceName)
 {
     Reference<XConnection> xRet;
     for(SwConnectionArr::const_iterator i = aConnections.begin(); i != aConnections.end(); ++i)
@@ -233,8 +233,8 @@ void SwDBTreeList::InitTreeList()
 
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
-    Sequence< ::rtl::OUString > aDBNames = pImpl->GetContext()->getElementNames();
-    const ::rtl::OUString* pDBNames = aDBNames.getConstArray();
+    Sequence< OUString > aDBNames = pImpl->GetContext()->getElementNames();
+    const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
     Image aImg = aImageList.GetImage(IMG_DB);
@@ -349,8 +349,8 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                 if(xColsSupplier.is())
                 {
                     Reference <XNameAccess> xCols = xColsSupplier->getColumns();
-                    Sequence< ::rtl::OUString> aColNames = xCols->getElementNames();
-                    const ::rtl::OUString* pColNames = aColNames.getConstArray();
+                    Sequence< OUString> aColNames = xCols->getElementNames();
+                    const OUString* pColNames = aColNames.getConstArray();
                     long nCount = aColNames.getLength();
                     for (long i = 0; i < nCount; i++)
                     {
@@ -377,10 +377,10 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     if(xTSupplier.is())
                     {
                         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                        Sequence< ::rtl::OUString> aTblNames = xTbls->getElementNames();
+                        Sequence< OUString> aTblNames = xTbls->getElementNames();
                         String sTableName;
                         long nCount = aTblNames.getLength();
-                        const ::rtl::OUString* pTblNames = aTblNames.getConstArray();
+                        const OUString* pTblNames = aTblNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
                         for (long i = 0; i < nCount; i++)
                         {
@@ -395,10 +395,10 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                     if(xQSupplier.is())
                     {
                         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                        Sequence< ::rtl::OUString> aQueryNames = xQueries->getElementNames();
+                        Sequence< OUString> aQueryNames = xQueries->getElementNames();
                         String sQueryName;
                         long nCount = aQueryNames.getLength();
-                        const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
+                        const OUString* pQueryNames = aQueryNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBQUERY);
                         for (long i = 0; i < nCount; i++)
                         {
@@ -506,7 +506,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
             // drag database field
             svx::OColumnTransferable aColTransfer(
                             sDBName
-                            ,::rtl::OUString()
+                            ,OUString()
                             , sdb::CommandType::TABLE
                             ,sTableName
                             , sColumnName

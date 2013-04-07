@@ -28,7 +28,7 @@
 
 namespace ucb_impl { namespace urihelper {
 
-    inline ::rtl::OUString encodeSegment( const ::rtl::OUString & rSegment )
+    inline OUString encodeSegment( const OUString & rSegment )
     {
         return rtl::Uri::encode( rSegment,
                                  rtl_UriCharClassPchar,
@@ -36,18 +36,18 @@ namespace ucb_impl { namespace urihelper {
                                  RTL_TEXTENCODING_UTF8 );
     }
 
-    inline ::rtl::OUString decodeSegment( const rtl::OUString& rSegment )
+    inline OUString decodeSegment( const OUString& rSegment )
     {
         return rtl::Uri::decode( rSegment,
                                  rtl_UriDecodeWithCharset,
                                  RTL_TEXTENCODING_UTF8 );
     }
 
-    inline ::rtl::OUString encodeURI( const ::rtl::OUString & rURI )
+    inline OUString encodeURI( const OUString & rURI )
     {
-        rtl::OUString aFragment;
-        rtl::OUString aParams;
-        rtl::OUString aURI;
+        OUString aFragment;
+        OUString aParams;
+        OUString aURI;
 
         sal_Int32 nFragment = rURI.lastIndexOf( sal_Unicode( '#' ) );
         if ( nFragment != -1 )
@@ -81,7 +81,7 @@ namespace ucb_impl { namespace urihelper {
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 );
 
-        rtl::OUStringBuffer aResult;
+        OUStringBuffer aResult;
         sal_Int32 nIndex = 0;
         do
         {

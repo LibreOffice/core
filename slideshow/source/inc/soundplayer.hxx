@@ -63,7 +63,7 @@ namespace slideshow
              */
             static ::boost::shared_ptr<SoundPlayer> create(
                 EventMultiplexer & rEventMultiplexer,
-                const ::rtl::OUString& rSoundURL,
+                const OUString& rSoundURL,
                 const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>& rComponentContext );
 
@@ -92,7 +92,7 @@ namespace slideshow
         private:
             SoundPlayer(
                 EventMultiplexer & rEventMultiplexer,
-                const ::rtl::OUString& rSoundURL,
+                const OUString& rSoundURL,
                 const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>& rComponentContext );
 

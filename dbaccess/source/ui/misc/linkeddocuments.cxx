@@ -114,7 +114,7 @@ namespace dbaui
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
-        const Reference< XConnection>& _xConnection, const ::rtl::OUString& _sDataSourceName )
+        const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
         :m_xContext(_rxContext)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
@@ -132,7 +132,7 @@ namespace dbaui
         DBG_DTOR(OLinkedDocumentsAccess,NULL);
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::impl_open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
+    Reference< XComponent> OLinkedDocumentsAccess::impl_open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
         Reference< XComponent> xRet;
@@ -144,11 +144,11 @@ namespace dbaui
         WaitObject aWaitCursor( m_pDialogParent );
 
         ::comphelper::NamedValueCollection aArguments;
-        ::rtl::OUString sOpenMode;
+        OUString sOpenMode;
         switch ( _eOpenMode )
         {
             case E_OPEN_NORMAL:
-                sOpenMode = ::rtl::OUString( "open" );
+                sOpenMode = OUString( "open" );
                 break;
 
             case E_OPEN_FOR_MAIL:
@@ -156,7 +156,7 @@ namespace dbaui
                 // fall through
 
             case E_OPEN_DESIGN:
-                sOpenMode = ::rtl::OUString( "openDesign" );
+                sOpenMode = OUString( "openDesign" );
                 break;
 
             default:
@@ -165,7 +165,7 @@ namespace dbaui
         }
         aArguments.put( "OpenMode", sOpenMode );
 
-        aArguments.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
+        aArguments.put( (OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
         try
         {
             Reference<XHierarchicalNameContainer> xHier(m_xDocumentContainer,UNO_QUERY);
@@ -176,7 +176,7 @@ namespace dbaui
 
             aArguments.merge( _rAdditionalArgs, true );
 
-            xRet = xComponentLoader->loadComponentFromURL( _rLinkName, ::rtl::OUString(), 0, aArguments.getPropertyValues() );
+            xRet = xComponentLoader->loadComponentFromURL( _rLinkName, OUString(), 0, aArguments.getPropertyValues() );
         }
         catch(const Exception&)
         {
@@ -187,7 +187,7 @@ namespace dbaui
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
-        const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+        const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
         try
         {
@@ -209,13 +209,13 @@ namespace dbaui
             {
                 WaitObject aWaitCursor( m_pDialogParent );
                 xWizard.set( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    ::rtl::OUString::createFromAscii( _pWizardService ),
+                    OUString::createFromAscii( _pWizardService ),
                     aArgs.getWrappedPropertyValues(),
                     m_xContext
                     ), UNO_QUERY_THROW );
             }
 
-            xWizard->trigger( ::rtl::OUString( "start" ) );
+            xWizard->trigger( OUString( "start" ) );
             ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception&)
@@ -224,25 +224,25 @@ namespace dbaui
         }
     }
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const OUString& _rObjectName )
     {
         impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _nCommandType, _rObjectName );
     }
 
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const OUString& _rObjectName )
     {
         impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _nCommandType, _rObjectName );
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, OUString() );
     }
     //------------------------------------------------------------------
     void OLinkedDocumentsAccess::newQueryWithPilot()
     {
-        impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, OUString() );
     }
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
@@ -293,7 +293,7 @@ namespace dbaui
                 ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
                 if ( aClassId.getLength() )
                     aCreationArgs.put( "ClassID", aClassId );
-                aCreationArgs.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
+                aCreationArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
                 // separate values which are real creation args from args relevant for opening the doc
                 ::comphelper::NamedValueCollection aCommandArgs;
@@ -317,7 +317,7 @@ namespace dbaui
                 aCommandArgs.put( "OpenMode", aOpenModeArg );
 
                 Command aCommand;
-                aCommand.Name = ::rtl::OUString( "openDesign" );
+                aCommand.Name = OUString( "openDesign" );
                 aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 WaitObject aWaitCursor( m_pDialogParent );
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
@@ -332,7 +332,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::open( const ::rtl::OUString& _rLinkName, Reference< XComponent >& _xDefinition,
+    Reference< XComponent > OLinkedDocumentsAccess::open( const OUString& _rLinkName, Reference< XComponent >& _xDefinition,
         ElementOpenMode _eOpenMode, const ::comphelper::NamedValueCollection& _rAdditionalArgs )
     {
         dbtools::SQLExceptionInfo aInfo;
@@ -379,7 +379,7 @@ namespace dbaui
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
                 // more like a hack, insert an empty message
-                aInfo.prepend(::rtl::OUString(" \n"));
+                aInfo.prepend(OUString(" \n"));
 
                 String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
                 sMessage.SearchAndReplaceAscii("$file$",_rLinkName);

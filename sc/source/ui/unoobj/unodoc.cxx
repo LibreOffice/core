@@ -30,15 +30,15 @@
 
 using namespace ::com::sun::star;
 
-::rtl::OUString SAL_CALL ScDocument_getImplementationName() throw()
+OUString SAL_CALL ScDocument_getImplementationName() throw()
 {
-    return rtl::OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
+    return OUString( "com.sun.star.comp.Calc.SpreadsheetDocument" );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
 {
-    uno::Sequence< rtl::OUString > aSeq( 1 );
-    aSeq[0] = ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq[0] = OUString( "com.sun.star.sheet.SpreadsheetDocument" );
     return aSeq;
 }
 

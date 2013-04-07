@@ -96,17 +96,17 @@ namespace
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y1,386.0) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.X2,166.7) &&
                                     rtl::math::approxEqual(m_aHyperlinkBounds.Y2,406.2) );
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", m_aURI, ::rtl::OUString("http://download.openoffice.org/") );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "Correct hyperlink URI", m_aURI, OUString("http://download.openoffice.org/") );
 
             const char* sText = " \n \nThis is a testtext\nNew paragraph,\nnew line\n"
                 "Hyperlink, this is\n?\nThis is more text\noutline mode\n?\nNew paragraph\n";
-            ::rtl::OString aTmp;
+            OString aTmp;
             m_aTextOut.makeStringAndClear().convertToString( &aTmp,
                                                              RTL_TEXTENCODING_ASCII_US,
                                                              OUSTRING_TO_OSTRING_CVTFLAGS );
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "Imported text is \"This is a testtext New paragraph, new line"
                                     " Hyperlink, this is * This is more text outline mode * New paragraph\"",
-                                    rtl::OString(sText), aTmp );
+                                    OString(sText), aTmp );
 
             CPPUNIT_ASSERT_MESSAGE( "red circle seen in input", m_bRedCircleSeen );
             CPPUNIT_ASSERT_MESSAGE( "green stroke seen in input", m_bGreenStrokeSeen );
@@ -133,7 +133,7 @@ namespace
         }
 
         virtual void hyperLink( const geometry::RealRectangle2D& rBounds,
-                                const ::rtl::OUString&             rURI )
+                                const OUString&             rURI )
         {
             m_aHyperlinkBounds = rBounds;
             m_aURI = rURI;
@@ -346,7 +346,7 @@ namespace
             getCurrentContext().Clip = aNewClip;
         }
 
-        virtual void drawGlyphs( const rtl::OUString&             rGlyphs,
+        virtual void drawGlyphs( const OUString&             rGlyphs,
                                  const geometry::RealRectangle2D& /*rRect*/,
                                  const geometry::Matrix2D&        /*rFontMatrix*/ )
         {
@@ -355,7 +355,7 @@ namespace
 
         virtual void endText()
         {
-            m_aTextOut.append( ::rtl::OUString("\n") );
+            m_aTextOut.append( OUString("\n") );
         }
 
         virtual void drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -443,8 +443,8 @@ namespace
         GraphicsContextStack      m_aGCStack;
         geometry::RealSize2D      m_aPageSize;
         geometry::RealRectangle2D m_aHyperlinkBounds;
-        ::rtl::OUString           m_aURI;
-        ::rtl::OUStringBuffer     m_aTextOut;
+        OUString           m_aURI;
+        OUStringBuffer     m_aTextOut;
         sal_Int32                 m_nNumPages;
         bool                      m_bPageEnded;
         bool                      m_bRedCircleSeen;
@@ -461,7 +461,7 @@ namespace
             pdfi::xpdf_ImportFromFile( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                        pSink,
                                        uno::Reference< task::XInteractionHandler >(),
-                                       rtl::OUString(),
+                                       OUString(),
                                        getComponentContext() );
 
             // make destruction explicit, a bunch of things are
@@ -474,7 +474,7 @@ namespace
             pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
-            ::rtl::OUString tempFileURL;
+            OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
@@ -489,7 +489,7 @@ namespace
             pdfi::PDFIRawAdaptor aAdaptor( getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
-            ::rtl::OUString tempFileURL;
+            OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",

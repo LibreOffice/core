@@ -34,7 +34,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-using ::rtl::OUString;
 
 using namespace ::accessibility;
 using namespace ::sdr::table;

@@ -95,7 +95,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                 {
                     role = ATK_ROLE_TOOL_TIP;
                     pChild->SetAccessibleRole( AccessibleRole::LABEL );
-                    accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                    accessible->name = g_strdup( OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
                 else if ( pWindow->GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_FLOATINGWINDOW )
                 {
@@ -105,7 +105,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                         // This is a top-level menu popup.  Register it.
                         role = ATK_ROLE_POPUP_MENU;
                         pChild->SetAccessibleRole( AccessibleRole::POPUP_MENU );
-                        accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                        accessible->name = g_strdup( OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
             }

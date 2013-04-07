@@ -161,9 +161,9 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
                 rEvent.State >>= nTemp ;
                 pItem = new SfxUInt32Item( pCtrlItem->GetId(), nTemp );
             }
-            else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+            else if ( pType == ::getCppuType((const OUString*)0) )
             {
-                ::rtl::OUString sTemp ;
+                OUString sTemp ;
                 rEvent.State >>= sTemp ;
                 pItem = new SfxStringItem( pCtrlItem->GetId(), sTemp );
             }
@@ -219,7 +219,7 @@ void SfxUnoControllerItem::GetNewDispatch()
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame = rFrame.GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
-            xDispatch = xProv->queryDispatch( aCommand, ::rtl::OUString(), 0 );
+            xDispatch = xProv->queryDispatch( aCommand, OUString(), 0 );
     }
 
     if ( xDispatch.is() )
@@ -243,7 +243,7 @@ void SfxUnoControllerItem::GetNewDispatch()
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pFrame->GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
-            xDisp = xProv->queryDispatch( aCommand, ::rtl::OUString(), 0 );
+            xDisp = xProv->queryDispatch( aCommand, OUString(), 0 );
     }
 
     return xDisp;
@@ -423,9 +423,9 @@ sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::UR
     return sal_False;
 }
 
-rtl::OUString SfxOfficeDispatch::GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
+OUString SfxOfficeDispatch::GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {
-    rtl::OUString aMasterCommand;
+    OUString aMasterCommand;
     if ( IsMasterUnoCommand( aURL ))
     {
         sal_Int32 nIndex = aURL.Path.indexOf( '.' );
@@ -454,9 +454,9 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
 {
     if ( aDispatchURL.Protocol == "slot:" && pUnoName )
     {
-        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
+        OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM(".uno:"));
         aTmp.append(pUnoName);
-        aDispatchURL.Complete = ::rtl::OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+        aDispatchURL.Complete = OStringToOUString(aTmp.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aDispatchURL );
     }
@@ -516,23 +516,23 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
     sal_Int32 nQueryIndex = aURL.Complete.indexOf( '?' );
     if ( nQueryIndex > 0 )
     {
-        rtl::OUString aParamString( aURL.Complete.copy( nQueryIndex+1 ));
+        OUString aParamString( aURL.Complete.copy( nQueryIndex+1 ));
         sal_Int32 nIndex = 0;
         do
         {
-            rtl::OUString aToken = aParamString.getToken( 0, '&', nIndex );
+            OUString aToken = aParamString.getToken( 0, '&', nIndex );
 
             sal_Int32 nParmIndex = 0;
-            rtl::OUString aParamType;
-            rtl::OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
-            rtl::OUString aValue     = (nParmIndex!=-1) ? aToken.getToken( 0, '=', nParmIndex ) : ::rtl::OUString();
+            OUString aParamType;
+            OUString aParamName = aToken.getToken( 0, '=', nParmIndex );
+            OUString aValue     = (nParmIndex!=-1) ? aToken.getToken( 0, '=', nParmIndex ) : OUString();
 
             if ( !aParamName.isEmpty() )
             {
                 nParmIndex = 0;
                 aToken = aParamName;
-                aParamName = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : ::rtl::OUString();
-                aParamType = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : ::rtl::OUString();
+                aParamName = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : OUString();
+                aParamType = (nParmIndex!=-1) ? aToken.getToken( 0, ':', nParmIndex ) : OUString();
             }
 
             sal_Int32 nLen = rArgs.getLength();
@@ -577,7 +577,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
             {
                 // STRING support
-                rArgs[nLen].Value <<= rtl::OUString( INetURLObject::decode( aValue, '%', INetURLObject::DECODE_WITH_CHARSET ));
+                rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, '%', INetURLObject::DECODE_WITH_CHARSET ));
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
             {
@@ -595,9 +595,9 @@ SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uI
     return rPool.GetMetric( nWhich );
 }
 
-rtl::OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::util::URL& rURL )
+OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::util::URL& rURL )
 {
-    rtl::OUString   aSlaveCommand;
+    OUString   aSlaveCommand;
     sal_Int32       nIndex = rURL.Path.indexOf( '.' );
     if (( nIndex > 0 ) && ( nIndex < rURL.Path.getLength() ))
         aSlaveCommand = rURL.Path.copy( nIndex+1 );
@@ -676,7 +676,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             // so we must retrieve this as an argument from the parsed URL
             lNewArgs.realloc( lNewArgs.getLength()+1 );
             nMarkArg = lNewArgs.getLength()-1;
-            lNewArgs[nMarkArg].Name = ::rtl::OUString("Bookmark");
+            lNewArgs[nMarkArg].Name = OUString("Bookmark");
             lNewArgs[nMarkArg].Value <<= aURL.Mark;
         }
 
@@ -710,7 +710,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         // have a argument that has the same name as the master slot and type is SfxStringItem.
                         sal_Int32 nIndex = lNewArgs.getLength();
                         lNewArgs.realloc( nIndex+1 );
-                        lNewArgs[nIndex].Name   = rtl::OUString::createFromAscii( pSlot->pUnoName );
+                        lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
                         lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
                     }
 

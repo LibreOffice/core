@@ -42,7 +42,7 @@ public:
     DECLARE_XSERVICEINFO
 
     // ::com::sun::star::util::XStringAbbreviation:
-    virtual ::rtl::OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const ::rtl::OUString & aString) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL abbreviateString(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (::com::sun::star::uno::RuntimeException);
 
 private:
     UriAbbreviation(UriAbbreviation &); // not defined

@@ -62,8 +62,8 @@ class ScTokenArray;
 class ScRangeData
 {
 private:
-    rtl::OUString   aName;
-    rtl::OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
+    OUString   aName;
+    OUString   aUpperName;     // #i62977# for faster searching (aName is never modified after ctor)
     ScTokenArray*   pCode;
     ScAddress       aPos;
     RangeType       eType;
@@ -83,18 +83,18 @@ public:
     typedef ::std::map<sal_uInt16, sal_uInt16> IndexMap;
 
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const rtl::OUString& rName,
+                                 const OUString& rName,
                                  const String& rSymbol,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME,
                                  const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const rtl::OUString& rName,
+                                 const OUString& rName,
                                  const ScTokenArray& rArr,
                                  const ScAddress& rAdr = ScAddress(),
                                  RangeType nType = RT_NAME );
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
-                                 const rtl::OUString& rName,
+                                 const OUString& rName,
                                  const ScAddress& rTarget );
                                 // rTarget is ABSPOS jump label
                     ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument = NULL);
@@ -103,9 +103,9 @@ public:
 
     bool            operator== (const ScRangeData& rData) const;
 
-    void            GetName( rtl::OUString& rName ) const  { rName = aName; }
-    const rtl::OUString&   GetName( void ) const           { return aName; }
-    const rtl::OUString&   GetUpperName( void ) const      { return aUpperName; }
+    void            GetName( OUString& rName ) const  { rName = aName; }
+    const OUString&   GetName( void ) const           { return aName; }
+    const OUString&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
     // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( sal_uInt16 nInd )         { nIndex = nInd; }
@@ -123,9 +123,9 @@ public:
     bool            HasType( RangeType nType ) const;
     sal_uInt32      GetUnoType() const;
     SC_DLLPUBLIC void GetSymbol( String& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    SC_DLLPUBLIC void GetSymbol( rtl::OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    SC_DLLPUBLIC void GetSymbol( rtl::OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
-    void            UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress&,
+    SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    SC_DLLPUBLIC void GetSymbol( OUString& rSymbol, const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
+    void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress&,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            UpdateReference( UpdateRefMode eUpdateRefMode,
                              const ScRange& r,
@@ -170,7 +170,7 @@ class ScRangeName
 {
 private:
     typedef std::vector<ScRangeData*> IndexDataType;
-    typedef ::boost::ptr_map<rtl::OUString, ScRangeData> DataType;
+    typedef ::boost::ptr_map<OUString, ScRangeData> DataType;
     DataType maData;
     IndexDataType maIndexToData;
 
@@ -187,8 +187,8 @@ public:
     SC_DLLPUBLIC ScRangeName(const ScRangeName& r);
 
     SC_DLLPUBLIC const ScRangeData* findByRange(const ScRange& rRange) const;
-    SC_DLLPUBLIC ScRangeData* findByUpperName(const rtl::OUString& rName);
-    SC_DLLPUBLIC const ScRangeData* findByUpperName(const rtl::OUString& rName) const;
+    SC_DLLPUBLIC ScRangeData* findByUpperName(const OUString& rName);
+    SC_DLLPUBLIC const ScRangeData* findByUpperName(const OUString& rName) const;
     SC_DLLPUBLIC ScRangeData* findByIndex(sal_uInt16 i) const;
     void UpdateReference(UpdateRefMode eUpdateRefMode, const ScRange& rRange,
                          SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bLocal = false);
@@ -216,7 +216,7 @@ public:
     SC_DLLPUBLIC bool insert(ScRangeData* p);
 
     void erase(const ScRangeData& r);
-    void erase(const rtl::OUString& rName);
+    void erase(const OUString& rName);
 
     /**
      * Erase by iterator position.  Note that this method doesn't check for

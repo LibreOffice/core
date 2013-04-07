@@ -2027,9 +2027,9 @@ size_t EditDoc::Count() const
     return maContents.size();
 }
 
-rtl::OUString EditDoc::GetSepStr( LineEnd eEnd )
+OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
-    rtl::OUString aSep;
+    OUString aSep;
     if ( eEnd == LINEEND_CR )
         aSep = aCR;
     else if ( eEnd == LINEEND_LF )
@@ -2044,9 +2044,9 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
     sal_uLong nLen = GetTextLen();
     size_t nNodes = Count();
     if (nNodes == 0)
-        return rtl::OUString();
+        return OUString();
 
-    rtl::OUString aSep = EditDoc::GetSepStr( eEnd );
+    OUString aSep = EditDoc::GetSepStr( eEnd );
     sal_Int32 nSepSize = aSep.getLength();
 
     if ( nSepSize )
@@ -2067,7 +2067,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
         }
     }
     assert(pCur - newStr->buffer == newStr->length);
-    return rtl::OUString(newStr, SAL_NO_ACQUIRE);
+    return OUString(newStr, SAL_NO_ACQUIRE);
 }
 
 XubString EditDoc::GetParaAsString( sal_uInt16 nNode ) const
@@ -2267,7 +2267,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
 {
     DBG_ASSERT( aPaM.GetNode(), "Blinder PaM in EditDoc::InsertFeature" );
 
-    aPaM.GetNode()->Insert( rtl::OUString(CH_FEATURE), aPaM.GetIndex() );
+    aPaM.GetNode()->Insert( OUString(CH_FEATURE), aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
     // Create a feature-attribute for the feature...

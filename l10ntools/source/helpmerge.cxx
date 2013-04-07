@@ -54,9 +54,9 @@ void HelpParser::Dump(XMLHashMap* rElem_in)
     }
 }
 
-void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
+void HelpParser::Dump(LangHashMap* rElem_in,const OString & sKey_in)
 {
-    rtl::OString x;
+    OString x;
     OString y;
     fprintf(stdout,"+------------%s-----------+\n",sKey_in.getStr() );
     for(LangHashMap::iterator posn=rElem_in->begin();posn!=rElem_in->end();++posn)
@@ -69,7 +69,7 @@ void HelpParser::Dump(LangHashMap* rElem_in,const rtl::OString & sKey_in)
 }
 #endif
 
-HelpParser::HelpParser( const rtl::OString &rHelpFile )
+HelpParser::HelpParser( const OString &rHelpFile )
         : sHelpFile( rHelpFile )
           {};
 
@@ -79,8 +79,8 @@ bool HelpParser::CreatePO(
     const OString &rPOFile_in, const OString &sHelpFile, const OString &rLanguage,
     XMLFile *pXmlFile, const OString &rGsi1){
     SimpleXMLParser aParser;
-    rtl::OUString sXmlFile(
-        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
+    OUString sXmlFile(
+        OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
     std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile, pXmlFile ) );
@@ -90,7 +90,7 @@ bool HelpParser::CreatePO(
         printf(
             "%s: %s\n",
             sHelpFile.getStr(),
-            (rtl::OUStringToOString(
+            (OUStringToOString(
                 aParser.GetError().sMessage, RTL_TEXTENCODING_ASCII_US).
              getStr()));
         exit(-1);
@@ -111,18 +111,18 @@ bool HelpParser::CreatePO(
     LangHashMap* pElem;
     XMLElement*  pXMLElement  = NULL;
 
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
     aLanguages.push_back( rLanguage );
 
-    std::vector<rtl::OString> order = file->getOrder();
-    std::vector<rtl::OString>::iterator pos;
+    std::vector<OString> order = file->getOrder();
+    std::vector<OString>::iterator pos;
     XMLHashMap::iterator posm;
 
     for( pos = order.begin(); pos != order.end() ; ++pos )
     {
         posm = aXMLStrHM->find( *pos );
         pElem = posm->second;
-        rtl::OString sCur;
+        OString sCur;
 
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
@@ -153,26 +153,26 @@ bool HelpParser::CreatePO(
     return sal_True;
 }
 
-bool HelpParser::Merge( const rtl::OString &rPOFile, const rtl::OString &rDestinationFile,
-    const rtl::OString& rLanguage , MergeDataFile& aMergeDataFile )
+bool HelpParser::Merge( const OString &rPOFile, const OString &rDestinationFile,
+    const OString& rLanguage , MergeDataFile& aMergeDataFile )
 {
 
     (void) rPOFile;
 
     SimpleXMLParser aParser;
 
-    rtl::OUString sXmlFile(
-        rtl::OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
+    OUString sXmlFile(
+        OStringToOUString(sHelpFile, RTL_TEXTENCODING_ASCII_US));
     //TODO: explicit BOM handling?
 
-    XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( rtl::OUString('0') ) ) );
+    XMLFile* xmlfile = ( aParser.Execute( sXmlFile, new XMLFile( OUString('0') ) ) );
     bool hasNoError = MergeSingleFile( xmlfile , aMergeDataFile , rLanguage , rDestinationFile );
     delete xmlfile;
     return hasNoError;
 }
 
-bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage ,
-                                  rtl::OString const & sPath )
+bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const OString& sLanguage ,
+                                  OString const & sPath )
 {
     file->Extract();
 
@@ -202,12 +202,12 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
 }
 
 /* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
-void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
+void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile ){
 
     XMLElement*   pXMLElement = NULL;
     PFormEntrys   *pEntrys    = NULL;
 
-    rtl::OString sLId;
+    OString sLId;
 
     pEntrys = NULL;
 
@@ -225,15 +225,15 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
             pEntrys = aMergeDataFile.GetPFormEntrys( pResData );
             if( pEntrys != NULL)
             {
-                rtl::OString sNewText;
-                rtl::OUString sSourceText(
+                OString sNewText;
+                OUString sSourceText(
                     pXMLElement->ToOUString().
                     replaceAll(
-                        rtl::OUString("\n"),
-                        rtl::OUString()).
+                        OUString("\n"),
+                        OUString()).
                     replaceAll(
-                        rtl::OUString("\t"),
-                        rtl::OUString()));
+                        OUString("\t"),
+                        OUString()));
                 // re-add spaces to the beginning of translated string,
                 // important for indentation of Basic code examples
                 sal_Int32 nPreSpaces = 0;
@@ -269,7 +269,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , 
                     pResData->sResTyp.getStr());
             }
             pXMLElement->ChangeLanguageTag(
-                rtl::OStringToOUString(sCur, RTL_TEXTENCODING_ASCII_US));
+                OStringToOUString(sCur, RTL_TEXTENCODING_ASCII_US));
         }
 
     }

@@ -272,21 +272,21 @@ public:
     bool                IsEmbedInDocument() const { return bEmbedInDocument; }
     void                SetEmbedInDocument(bool b) { bEmbedInDocument = b; }
 
-    static rtl::OUString GetDefaultExt(XPropertyListType t);
-    static rtl::OUString GetDefaultExtFilter(XPropertyListType t);
-    rtl::OUString        GetDefaultExt() const { return GetDefaultExt( eType ); }
+    static OUString GetDefaultExt(XPropertyListType t);
+    static OUString GetDefaultExtFilter(XPropertyListType t);
+    OUString        GetDefaultExt() const { return GetDefaultExt( eType ); }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
         createInstance() = 0;
     bool                Load();
     bool                LoadFrom( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::embed::XStorage > &xStorage,
-                                  const rtl::OUString &rURL );
+                                  const OUString &rURL );
     bool                Save();
     bool                SaveTo  ( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::embed::XStorage > &xStorage,
-                                  const rtl::OUString &rURL,
-                                  rtl::OUString *pOptName );
+                                  const OUString &rURL,
+                                  OUString *pOptName );
     virtual sal_Bool    Create() = 0;
     virtual sal_Bool    CreateBitmapsForUI() = 0;
     virtual Bitmap*     CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True ) = 0;
@@ -297,7 +297,7 @@ public:
                                                 XOutdevItemPool* pXPool = NULL );
     // as above but initializes name as expected
     static XPropertyListRef CreatePropertyListFromURL( XPropertyListType t,
-                                                       const rtl::OUString & rUrl,
+                                                       const OUString & rUrl,
                                                        XOutdevItemPool* pXPool = NULL );
 
     // helper accessors

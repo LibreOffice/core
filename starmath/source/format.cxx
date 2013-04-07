@@ -73,7 +73,7 @@ String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
             "index out opd range" );
 
     if (FNT_MATH == nIdent)
-        return rtl::OUString(FNTNAME_MATH);
+        return OUString(FNTNAME_MATH);
     else
     {
         const sal_uInt16 *pTable;
@@ -139,10 +139,10 @@ SmFormat::SmFormat()
     vFont[FNT_FUNCTION] =
     vFont[FNT_NUMBER]   =
     vFont[FNT_TEXT]     =
-    vFont[FNT_SERIF]    = SmFace(rtl::OUString(FNTNAME_TIMES), aBaseSize);
-    vFont[FNT_SANS]     = SmFace(rtl::OUString(FNTNAME_HELV),  aBaseSize);
-    vFont[FNT_FIXED]    = SmFace(rtl::OUString(FNTNAME_COUR),  aBaseSize);
-    vFont[FNT_MATH]     = SmFace(rtl::OUString(FNTNAME_MATH),  aBaseSize);
+    vFont[FNT_SERIF]    = SmFace(OUString(FNTNAME_TIMES), aBaseSize);
+    vFont[FNT_SANS]     = SmFace(OUString(FNTNAME_HELV),  aBaseSize);
+    vFont[FNT_FIXED]    = SmFace(OUString(FNTNAME_COUR),  aBaseSize);
+    vFont[FNT_MATH]     = SmFace(OUString(FNTNAME_MATH),  aBaseSize);
 
     vFont[FNT_MATH].SetCharSet( RTL_TEXTENCODING_UNICODE );
 

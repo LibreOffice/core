@@ -53,7 +53,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 namespace accessibility {
 
@@ -222,7 +221,7 @@ void AccessibleShape::UpdateStates (void)
                 try
                 {
                     drawing::FillStyle aFillStyle;
-                    bShapeIsOpaque =  ( xSet->getPropertyValue (::rtl::OUString("FillStyle")) >>= aFillStyle)
+                    bShapeIsOpaque =  ( xSet->getPropertyValue (OUString("FillStyle")) >>= aFillStyle)
                                         && aFillStyle == drawing::FillStyle_SOLID;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException&)
@@ -371,8 +370,8 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString("shape has no child with index ")
-            + rtl::OUString::valueOf(nIndex),
+            OUString("shape has no child with index ")
+            + OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
     return xChild;
@@ -541,7 +540,7 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == NULL)
-            throw uno::RuntimeException (::rtl::OUString (
+            throw uno::RuntimeException (OUString (
                 "AccessibleShape has no valid view forwarder"),
                 static_cast<uno::XWeak*>(this));
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
@@ -763,11 +762,11 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessibleShape");
+    return OUString("AccessibleShape");
 }
 
 
@@ -961,7 +960,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 //=====  protected internal  ==================================================
 /// Set this object's name if is different to the current name.
-::rtl::OUString
+OUString
     AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -969,7 +968,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 }
 
 
-::rtl::OUString
+OUString
     AccessibleShape::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -987,7 +986,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString("ZOrder")));
+                uno::Any aZOrder (xSet->getPropertyValue (OUString("ZOrder")));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -997,7 +996,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         catch (const beans::UnknownPropertyException &)
         {
             // We throw our own exception that is a bit more informative.
-            throw uno::RuntimeException (::rtl::OUString (
+            throw uno::RuntimeException (OUString (
                 "AccessibleShape has invalid index and no ZOrder property"),
                 static_cast<uno::XWeak*>(this));
         }
@@ -1014,7 +1013,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 
 
 
-::rtl::OUString
+OUString
     AccessibleShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

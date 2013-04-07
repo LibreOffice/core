@@ -71,8 +71,8 @@ namespace svt
     using namespace ::utl;
 
     DECLARE_STL_VECTOR( String, StringArray );
-    DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
-    DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, MapString2String );
+    DECLARE_STL_STDKEY_SET( OUString, StringBag );
+    DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
 
     namespace
     {
@@ -98,10 +98,10 @@ namespace svt
         virtual ~IAssigmentData();
 
         /// the data source to use for the address book
-        virtual ::rtl::OUString getDatasourceName() const = 0;
+        virtual OUString getDatasourceName() const = 0;
 
         /// the command to use for the address book
-        virtual ::rtl::OUString getCommand() const = 0;
+        virtual OUString getCommand() const = 0;
 
         /** the command type to use for the address book
             @return
@@ -110,17 +110,17 @@ namespace svt
         virtual sal_Int32       getCommandType() const = 0;
 
         /// checks whether or not there is an assignment for a given logical field
-        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName) = 0;
         /// retrieves the assignment for a given logical field
-        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        virtual OUString getFieldAssignment(const OUString& _rLogicalName) = 0;
 
         /// set the assignment for a given logical field
-        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment) = 0;
+        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment) = 0;
         /// clear the assignment for a given logical field
-        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName) = 0;
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName) = 0;
 
-        virtual void    setDatasourceName(const ::rtl::OUString& _rName) = 0;
-        virtual void    setCommand(const ::rtl::OUString& _rCommand) = 0;
+        virtual void    setDatasourceName(const OUString& _rName) = 0;
+        virtual void    setCommand(const OUString& _rCommand) = 0;
     };
 
     // -------------------------------------------------------------------
@@ -135,35 +135,35 @@ namespace svt
     {
     protected:
         Reference< XDataSource >    m_xDataSource;
-        ::rtl::OUString             m_sDSName;
-        ::rtl::OUString             m_sTableName;
+        OUString             m_sDSName;
+        OUString             m_sTableName;
         MapString2String            m_aAliases;
 
 public:
         AssigmentTransientData(
             const Reference< XDataSource >& _rxDataSource,
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rTableName,
+            const OUString& _rDataSourceName,
+            const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields
         );
 
         // IAssigmentData overridables
-        virtual ::rtl::OUString getDatasourceName() const;
-        virtual ::rtl::OUString getCommand() const;
+        virtual OUString getDatasourceName() const;
+        virtual OUString getCommand() const;
         virtual sal_Int32       getCommandType() const;
 
-        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
-        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName);
+        virtual OUString getFieldAssignment(const OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
 
-        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
-        virtual void    setCommand(const ::rtl::OUString& _rCommand);
+        virtual void    setDatasourceName(const OUString& _rName);
+        virtual void    setCommand(const OUString& _rCommand);
     };
 
     // -------------------------------------------------------------------
     AssigmentTransientData::AssigmentTransientData( const Reference< XDataSource >& _rxDataSource,
-            const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rTableName,
+            const OUString& _rDataSourceName, const OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
         :m_xDataSource( _rxDataSource )
         ,m_sDSName( _rDataSourceName )
@@ -173,11 +173,11 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        rtl::OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
+        OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
         sal_Int32 nIndex = 0;
         do
         {
-            rtl::OUString aToken = sLogicalFieldNames.getToken(0, ';', nIndex);
+            OUString aToken = sLogicalFieldNames.getToken(0, ';', nIndex);
             aKnownNames.insert(aToken);
         }
         while ( nIndex >= 0);
@@ -194,9 +194,9 @@ public:
             }
             else
             {
-                OSL_FAIL(   (   ::rtl::OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
-                                +=  ::rtl::OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                                +=  ::rtl::OString(")!")
+                OSL_FAIL(   (   OString("AssigmentTransientData::AssigmentTransientData: unknown programmatic name (")
+                                +=  OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
+                                +=  OString(")!")
                                 ).getStr()
                             );
             }
@@ -204,13 +204,13 @@ public:
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssigmentTransientData::getDatasourceName() const
+    OUString AssigmentTransientData::getDatasourceName() const
     {
         return m_sDSName;
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssigmentTransientData::getCommand() const
+    OUString AssigmentTransientData::getCommand() const
     {
         return m_sTableName;
     }
@@ -222,7 +222,7 @@ public:
     }
 
     // -------------------------------------------------------------------
-    sal_Bool AssigmentTransientData::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    sal_Bool AssigmentTransientData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
         return  ( m_aAliases.end() != aPos )
@@ -230,9 +230,9 @@ public:
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssigmentTransientData::getFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    OUString AssigmentTransientData::getFieldAssignment(const OUString& _rLogicalName)
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         ConstMapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
         if ( m_aAliases.end() != aPos )
             sReturn = aPos->second;
@@ -241,13 +241,13 @@ public:
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
+    void AssigmentTransientData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
     {
         m_aAliases[ _rLogicalName ] = _rAssignment;
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::clearFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    void AssigmentTransientData::clearFieldAssignment(const OUString& _rLogicalName)
     {
         MapString2StringIterator aPos = m_aAliases.find( _rLogicalName );
         if ( m_aAliases.end() != aPos )
@@ -255,13 +255,13 @@ public:
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::setDatasourceName(const ::rtl::OUString&)
+    void AssigmentTransientData::setDatasourceName(const OUString&)
     {
         OSL_FAIL( "AssigmentTransientData::setDatasourceName: cannot be implemented for transient data!" );
     }
 
     // -------------------------------------------------------------------
-    void AssigmentTransientData::setCommand(const ::rtl::OUString&)
+    void AssigmentTransientData::setCommand(const OUString&)
     {
         OSL_FAIL( "AssigmentTransientData::setCommand: cannot be implemented for transient data!" );
     }
@@ -278,40 +278,40 @@ public:
 
     protected:
         ::com::sun::star::uno::Any
-                        getProperty(const ::rtl::OUString& _rLocalName) const;
+                        getProperty(const OUString& _rLocalName) const;
         ::com::sun::star::uno::Any
                         getProperty(const sal_Char* _pLocalName) const;
 
-        ::rtl::OUString getStringProperty(const sal_Char* _pLocalName) const;
+        OUString getStringProperty(const sal_Char* _pLocalName) const;
         sal_Int32       getInt32Property(const sal_Char* _pLocalName) const;
 
-        ::rtl::OUString getStringProperty(const ::rtl::OUString& _rLocalName) const;
+        OUString getStringProperty(const OUString& _rLocalName) const;
 
-        void            setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue);
+        void            setStringProperty(const sal_Char* _pLocalName, const OUString& _rValue);
 
     public:
         AssignmentPersistentData();
         ~AssignmentPersistentData();
 
         // IAssigmentData overridables
-        virtual ::rtl::OUString getDatasourceName() const;
-        virtual ::rtl::OUString getCommand() const;
+        virtual OUString getDatasourceName() const;
+        virtual OUString getCommand() const;
         virtual sal_Int32       getCommandType() const;
 
-        virtual sal_Bool        hasFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual ::rtl::OUString getFieldAssignment(const ::rtl::OUString& _rLogicalName);
-        virtual void            setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment);
-        virtual void            clearFieldAssignment(const ::rtl::OUString& _rLogicalName);
+        virtual sal_Bool        hasFieldAssignment(const OUString& _rLogicalName);
+        virtual OUString getFieldAssignment(const OUString& _rLogicalName);
+        virtual void            setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment);
+        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
 
-        virtual void    setDatasourceName(const ::rtl::OUString& _rName);
-        virtual void    setCommand(const ::rtl::OUString& _rCommand);
+        virtual void    setDatasourceName(const OUString& _rName);
+        virtual void    setCommand(const OUString& _rCommand);
 
-        virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+        virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
         virtual void    Commit();
     };
 
 
-void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+void AssignmentPersistentData::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {
 }
 
@@ -321,10 +321,10 @@ void AssignmentPersistentData::Commit()
 
     // -------------------------------------------------------------------
     AssignmentPersistentData::AssignmentPersistentData()
-        :ConfigItem( ::rtl::OUString( "Office.DataAccess/AddressBook" ))
+        :ConfigItem( OUString( "Office.DataAccess/AddressBook" ))
     {
-        Sequence< ::rtl::OUString > aStoredNames = GetNodeNames(::rtl::OUString("Fields"));
-        const ::rtl::OUString* pStoredNames = aStoredNames.getConstArray();
+        Sequence< OUString > aStoredNames = GetNodeNames(OUString("Fields"));
+        const OUString* pStoredNames = aStoredNames.getConstArray();
         for (sal_Int32 i=0; i<aStoredNames.getLength(); ++i, ++pStoredNames)
             m_aStoredFields.insert(*pStoredNames);
     }
@@ -335,20 +335,20 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    sal_Bool AssignmentPersistentData::hasFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    sal_Bool AssignmentPersistentData::hasFieldAssignment(const OUString& _rLogicalName)
     {
         return (m_aStoredFields.end() != m_aStoredFields.find(_rLogicalName));
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssignmentPersistentData::getFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    OUString AssignmentPersistentData::getFieldAssignment(const OUString& _rLogicalName)
     {
-        ::rtl::OUString sAssignment;
+        OUString sAssignment;
         if (hasFieldAssignment(_rLogicalName))
         {
-            ::rtl::OUString sFieldPath("Fields/");
+            OUString sFieldPath("Fields/");
             sFieldPath += _rLogicalName;
-            sFieldPath += ::rtl::OUString("/AssignedFieldName");
+            sFieldPath += OUString("/AssignedFieldName");
             sAssignment = getStringProperty(sFieldPath);
         }
         return sAssignment;
@@ -357,30 +357,30 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     Any AssignmentPersistentData::getProperty(const sal_Char* _pLocalName) const
     {
-        return getProperty(::rtl::OUString::createFromAscii(_pLocalName));
+        return getProperty(OUString::createFromAscii(_pLocalName));
     }
 
     // -------------------------------------------------------------------
-    Any AssignmentPersistentData::getProperty(const ::rtl::OUString& _rLocalName) const
+    Any AssignmentPersistentData::getProperty(const OUString& _rLocalName) const
     {
-        Sequence< ::rtl::OUString > aProperties(&_rLocalName, 1);
+        Sequence< OUString > aProperties(&_rLocalName, 1);
         Sequence< Any > aValues = const_cast<AssignmentPersistentData*>(this)->GetProperties(aProperties);
         DBG_ASSERT(aValues.getLength() == 1, "AssignmentPersistentData::getProperty: invalid sequence length!");
         return aValues[0];
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssignmentPersistentData::getStringProperty(const ::rtl::OUString& _rLocalName) const
+    OUString AssignmentPersistentData::getStringProperty(const OUString& _rLocalName) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         getProperty( _rLocalName ) >>= sReturn;
         return sReturn;
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
+    OUString AssignmentPersistentData::getStringProperty(const sal_Char* _pLocalName) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         getProperty( _pLocalName ) >>= sReturn;
         return sReturn;
     }
@@ -394,17 +394,17 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    void AssignmentPersistentData::setStringProperty(const sal_Char* _pLocalName, const ::rtl::OUString& _rValue)
+    void AssignmentPersistentData::setStringProperty(const sal_Char* _pLocalName, const OUString& _rValue)
     {
-        Sequence< ::rtl::OUString > aNames(1);
+        Sequence< OUString > aNames(1);
         Sequence< Any > aValues(1);
-        aNames[0] = ::rtl::OUString::createFromAscii(_pLocalName);
+        aNames[0] = OUString::createFromAscii(_pLocalName);
         aValues[0] <<= _rValue;
         PutProperties(aNames, aValues);
     }
 
     // -------------------------------------------------------------------
-    void AssignmentPersistentData::setFieldAssignment(const ::rtl::OUString& _rLogicalName, const ::rtl::OUString& _rAssignment)
+    void AssignmentPersistentData::setFieldAssignment(const OUString& _rLogicalName, const OUString& _rAssignment)
     {
         if (_rAssignment.isEmpty())
         {
@@ -417,21 +417,21 @@ void AssignmentPersistentData::Commit()
         }
 
         // Fields
-        ::rtl::OUString sDescriptionNodePath("Fields");
+        OUString sDescriptionNodePath("Fields");
 
         // Fields/<field>
-        ::rtl::OUString sFieldElementNodePath(sDescriptionNodePath);
-        sFieldElementNodePath += ::rtl::OUString("/");
+        OUString sFieldElementNodePath(sDescriptionNodePath);
+        sFieldElementNodePath += OUString("/");
         sFieldElementNodePath += _rLogicalName;
 
         Sequence< PropertyValue > aNewFieldDescription(2);
         // Fields/<field>/ProgrammaticFieldName
         aNewFieldDescription[0].Name = sFieldElementNodePath;
-        aNewFieldDescription[0].Name += ::rtl::OUString("/ProgrammaticFieldName");
+        aNewFieldDescription[0].Name += OUString("/ProgrammaticFieldName");
         aNewFieldDescription[0].Value <<= _rLogicalName;
         // Fields/<field>/AssignedFieldName
         aNewFieldDescription[1].Name = sFieldElementNodePath;
-        aNewFieldDescription[1].Name += ::rtl::OUString("/AssignedFieldName");
+        aNewFieldDescription[1].Name += OUString("/AssignedFieldName");
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value
@@ -443,37 +443,37 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    void AssignmentPersistentData::clearFieldAssignment(const ::rtl::OUString& _rLogicalName)
+    void AssignmentPersistentData::clearFieldAssignment(const OUString& _rLogicalName)
     {
         if (!hasFieldAssignment(_rLogicalName))
             // nothing to do
             return;
 
-        ::rtl::OUString sDescriptionNodePath("Fields");
-        Sequence< ::rtl::OUString > aNames(&_rLogicalName, 1);
+        OUString sDescriptionNodePath("Fields");
+        Sequence< OUString > aNames(&_rLogicalName, 1);
         ClearNodeElements(sDescriptionNodePath, aNames);
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssignmentPersistentData::getDatasourceName() const
+    OUString AssignmentPersistentData::getDatasourceName() const
     {
         return getStringProperty( "DataSourceName" );
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString AssignmentPersistentData::getCommand() const
+    OUString AssignmentPersistentData::getCommand() const
     {
         return getStringProperty( "Command" );
     }
 
     // -------------------------------------------------------------------
-    void AssignmentPersistentData::setDatasourceName(const ::rtl::OUString& _rName)
+    void AssignmentPersistentData::setDatasourceName(const OUString& _rName)
     {
         setStringProperty( "DataSourceName", _rName );
     }
 
     // -------------------------------------------------------------------
-    void AssignmentPersistentData::setCommand(const ::rtl::OUString& _rCommand)
+    void AssignmentPersistentData::setCommand(const OUString& _rCommand)
     {
         setStringProperty( "Command", _rCommand );
     }
@@ -524,8 +524,8 @@ void AssignmentPersistentData::Commit()
         }
 
         // ................................................................
-        AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
+        AddressBookSourceDialogData( const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
+            const OUString& _rTableName, const Sequence< AliasProgrammaticPair >& _rFields )
             :m_xTransientDataSource( _rxTransientDS )
             ,nFieldScrollPos(0)
             ,nLastVisibleListIndex(0)
@@ -573,8 +573,8 @@ void AssignmentPersistentData::Commit()
 
     // -------------------------------------------------------------------
     AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XComponentContext >& _rxORB,
-        const Reference< XDataSource >& _rxTransientDS, const ::rtl::OUString& _rDataSourceName,
-        const ::rtl::OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
+        const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
+        const OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
         :INIT_FIELDS()
         ,m_pImpl( new AddressBookSourceDialogData( _rxTransientDS, _rDataSourceName, _rTable, _rMapping ) )
     {
@@ -685,7 +685,7 @@ void AssignmentPersistentData::Commit()
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        rtl::OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
+        OUString sLogicalFieldNames(SVT_RESSTR(STR_LOGICAL_FIELD_NAMES));
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
@@ -722,7 +722,7 @@ void AssignmentPersistentData::Commit()
         _rMapping.realloc( m_pImpl->aLogicalFieldNames.size() );
         AliasProgrammaticPair* pPair = _rMapping.getArray();
 
-        ::rtl::OUString sCurrent;
+        OUString sCurrent;
         for (   ConstStringArrayIterator aProgrammatic = m_pImpl->aLogicalFieldNames.begin();
                 aProgrammatic != m_pImpl->aLogicalFieldNames.end();
                 ++aProgrammatic
@@ -744,7 +744,7 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::loadConfiguration()
     {
-        ::rtl::OUString sName = m_pImpl->pConfigData->getDatasourceName();
+        OUString sName = m_pImpl->pConfigData->getDatasourceName();
         INetURLObject aURL( sName );
         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
@@ -798,7 +798,7 @@ void AssignmentPersistentData::Commit()
             catch(const Exception&) { }
             if (!m_xDatabaseContext.is())
             {
-                const rtl::OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
+                const OUString sContextServiceName("com.sun.star.sdb.DatabaseContext");
                 ShowServiceNotAvailableError( this, sContextServiceName, sal_False);
                 return;
             }
@@ -806,7 +806,7 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.Clear();
 
         // fill the datasources listbox
-        Sequence< ::rtl::OUString > aDatasourceNames;
+        Sequence< OUString > aDatasourceNames;
         try
         {
             aDatasourceNames = m_xDatabaseContext->getElementNames();
@@ -815,8 +815,8 @@ void AssignmentPersistentData::Commit()
         {
             OSL_FAIL("AddressBookSourceDialog::initializeDatasources: caught an exception while asking for the data source names!");
         }
-        const ::rtl::OUString* pDatasourceNames = aDatasourceNames.getConstArray();
-        const ::rtl::OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
+        const OUString* pDatasourceNames = aDatasourceNames.getConstArray();
+        const OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
         for (; pDatasourceNames < pEnd; ++pDatasourceNames)
             m_aDatasource.InsertEntry(*pDatasourceNames);
     }
@@ -850,20 +850,20 @@ void AssignmentPersistentData::Commit()
         catch(const Exception&) { }
         if (!xHandler.is())
         {
-            const rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
+            const OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
             return;
         }
 
         // the currently selected table
-        ::rtl::OUString sOldTable = m_aTable.GetText();
+        OUString sOldTable = m_aTable.GetText();
 
         m_aTable.Clear();
 
         m_xCurrentDatasourceTables= NULL;
 
         // get the tables of the connection
-        Sequence< ::rtl::OUString > aTableNames;
+        Sequence< OUString > aTableNames;
         Any aException;
         try
         {
@@ -917,8 +917,8 @@ void AssignmentPersistentData::Commit()
 
         sal_Bool bKnowOldTable = sal_False;
         // fill the table list
-        const ::rtl::OUString* pTableNames = aTableNames.getConstArray();
-        const ::rtl::OUString* pEnd = pTableNames + aTableNames.getLength();
+        const OUString* pTableNames = aTableNames.getConstArray();
+        const OUString* pEnd = pTableNames + aTableNames.getLength();
         for (;pTableNames != pEnd; ++pTableNames)
         {
             m_aTable.InsertEntry(*pTableNames);
@@ -928,7 +928,7 @@ void AssignmentPersistentData::Commit()
 
         // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
         if (!bKnowOldTable)
-            sOldTable = ::rtl::OUString();
+            sOldTable = OUString();
         m_aTable.SetText(sOldTable);
 
         resetFields();
@@ -943,7 +943,7 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.SaveValue();
 
         String sSelectedTable = m_aTable.GetText();
-        Sequence< ::rtl::OUString > aColumnNames;
+        Sequence< OUString > aColumnNames;
         try
         {
             if (m_xCurrentDatasourceTables.is())
@@ -965,8 +965,8 @@ void AssignmentPersistentData::Commit()
         }
 
 
-        const ::rtl::OUString* pColumnNames = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd = pColumnNames + aColumnNames.getLength();
+        const OUString* pColumnNames = aColumnNames.getConstArray();
+        const OUString* pEnd = pColumnNames + aColumnNames.getLength();
 
         // for quicker access
         ::std::set< String > aColumnNameSet;
@@ -1223,7 +1223,7 @@ void AssignmentPersistentData::Commit()
         catch(const Exception&) { }
         if (!xAdminDialog.is())
         {
-            ShowServiceNotAvailableError(this, rtl::OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), sal_True);
+            ShowServiceNotAvailableError(this, OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot"), sal_True);
             return 1L;
         }
 
@@ -1235,8 +1235,8 @@ void AssignmentPersistentData::Commit()
                 Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
                 if ( xProp.is() )
                 {
-                    ::rtl::OUString sName;
-                    xProp->getPropertyValue(::rtl::OUString("DataSourceName")) >>= sName;
+                    OUString sName;
+                    xProp->getPropertyValue(OUString("DataSourceName")) >>= sName;
 
                     INetURLObject aURL( sName );
                     if( aURL.GetProtocol() != INET_PROT_NOT_VALID )

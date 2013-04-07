@@ -36,10 +36,10 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-uno::Sequence< ::rtl::OUString > lcl_getFixedTextOptionals()
+uno::Sequence< OUString > lcl_getFixedTextOptionals()
 {
-    ::rtl::OUString pProps[] = { PROPERTY_DATAFIELD,PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    OUString pProps[] = { PROPERTY_DATAFIELD,PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 DBG_NAME( rpt_OFixedText )
 // -----------------------------------------------------------------------------
@@ -97,20 +97,20 @@ void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
     uno::Reference< report::XFixedText> xHoldAlive = this;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OFixedText::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OFixedText::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OFixedText");
+    return OUString("com.sun.star.comp.report.OFixedText");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedText::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OFixedText::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OFixedText::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OFixedText::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FIXEDTEXT;
 
     return aServices;
@@ -122,12 +122,12 @@ uno::Reference< uno::XInterface > OFixedText::create(uno::Reference< uno::XCompo
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OFixedText::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OFixedText::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFixedText::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OFixedText::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -143,43 +143,43 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OFixedText::getPropertySetInf
     return FixedTextPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedText::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedTextPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OFixedText::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFixedText::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return FixedTextPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedText::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedTextPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedText::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedTextPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedText::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedTextPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedText::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedTextPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 // XReportControlModel
-::rtl::OUString SAL_CALL OFixedText::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedText::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::setDataField( const ::rtl::OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedText::setDataField( const OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
@@ -197,13 +197,13 @@ void SAL_CALL OFixedText::setPrintWhenGroupChange( ::sal_Bool _printwhengroupcha
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedText::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedText::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedText::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
@@ -219,13 +219,13 @@ uno::Reference< util::XCloneable > SAL_CALL OFixedText::createClone(  ) throw (u
 // -----------------------------------------------------------------------------
 
 // XFixedText
-::rtl::OUString SAL_CALL OFixedText::getLabel() throw (uno::RuntimeException)
+OUString SAL_CALL OFixedText::getLabel() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sLabel;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedText::setLabel( const ::rtl::OUString& _label ) throw (uno::RuntimeException)
+void SAL_CALL OFixedText::setLabel( const OUString& _label ) throw (uno::RuntimeException)
 {
     set(PROPERTY_LABEL,_label,m_sLabel);
 }
@@ -319,9 +319,9 @@ void SAL_CALL OFixedText::setSize( const awt::Size& aSize ) throw (beans::Proper
 // -----------------------------------------------------------------------------
 
 // XShapeDescriptor
-::rtl::OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OFixedText::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
+   return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

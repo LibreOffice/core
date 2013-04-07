@@ -47,8 +47,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::xmloff::token;
@@ -57,8 +55,6 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::beans::UnknownPropertyException;
 using ::com::sun::star::beans::PropertyVetoException;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 SvXMLImportPropertyMapper::SvXMLImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -713,7 +709,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillTolerantMultiPropertySet(
             {
                 Sequence<OUString> aSeq(1);
                 aSeq[0] = aResults[i].Name;
-                rtl::OUString sMessage;
+                OUString sMessage;
                 switch (aResults[i].Result)
                 {
                 case TolerantPropertySetResultType::UNKNOWN_PROPERTY :

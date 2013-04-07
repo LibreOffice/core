@@ -74,7 +74,7 @@ namespace dbaccess
 
     protected:
         // <properties>
-        ::rtl::OUString m_sName;
+        OUString m_sName;
         // </properties>
 
     protected:
@@ -99,21 +99,21 @@ namespace dbaccess
         virtual void SAL_CALL disposing(void);
 
     // ::com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XNamed
-        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setName( const OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
 
         virtual void fireValueChange( const ::connectivity::ORowSetValue& _rOldValue );
 
     protected:
         // IPropertyContainer
-        virtual void registerProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType );
-        virtual void registerMayBeVoidProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType );
-        virtual void registerPropertyNoMember( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue );
+        virtual void registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType );
+        virtual void registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType );
+        virtual void registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue );
     };
 
     //============================================================
@@ -125,7 +125,7 @@ namespace dbaccess
         /** creates a OColumn object which should represent the column with a given name
         */
         virtual OColumn*
-            createColumn( const ::rtl::OUString& _rName ) const = 0;
+            createColumn( const OUString& _rName ) const = 0;
 
         /** creates a column descriptor object.
 
@@ -140,7 +140,7 @@ namespace dbaccess
 
         /** notifies that a column with a given name has been dropped
         */
-        virtual void columnDropped( const ::rtl::OUString& _sName ) = 0;
+        virtual void columnDropped( const OUString& _sName ) = 0;
 
     protected:
         ~IColumnFactory() {}
@@ -151,7 +151,7 @@ namespace dbaccess
     //= general columns map, could be used for readonly access
     //= no appending and dropping is supported
     //============================================================
-    typedef ::boost::unordered_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
+    typedef ::boost::unordered_map<OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
     typedef ::std::vector<OColumn*> OColumnArray;
 
     class OContainerMediator;
@@ -175,13 +175,13 @@ namespace dbaccess
         sal_Bool                                    m_bDropColumn   : 1;
 
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
-        virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
-        virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+        virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
 
     public:
-        connectivity::sdbcx::ObjectType createBaseObject(const ::rtl::OUString& _rName)
+        connectivity::sdbcx::ObjectType createBaseObject(const OUString& _rName)
         {
             return OColumns_BASE::createObject(_rName);
         }
@@ -203,7 +203,7 @@ namespace dbaccess
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 sal_Bool _bCaseSensitive,
-                const ::std::vector< ::rtl::OUString>& _rVector,
+                const ::std::vector< OUString>& _rVector,
                 IColumnFactory* _pColFactory,
                 ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                 sal_Bool _bAddColumn = sal_False,
@@ -215,7 +215,7 @@ namespace dbaccess
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxDrvColumns,
             sal_Bool _bCaseSensitive,
-            const ::std::vector< ::rtl::OUString> &_rVector,
+            const ::std::vector< OUString> &_rVector,
             IColumnFactory* _pColFactory,
             ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
             sal_Bool _bAddColumn = sal_False,
@@ -231,15 +231,15 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::container::XChild
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-        void append(const ::rtl::OUString& rName, OColumn*);
+        void append(const OUString& rName, OColumn*);
         void clearColumns();
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);

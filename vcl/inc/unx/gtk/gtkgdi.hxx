@@ -45,13 +45,13 @@ public:
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart,
                                                const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const rtl::OUString& rCaption );
+                                               const OUString& rCaption );
     virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
-                                                    const rtl::OUString& rCaption,
+                                                    const OUString& rCaption,
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion );
     void updateSettings( AllSettings& rSettings );
@@ -132,9 +132,9 @@ public:
                                               const Point& aPos, sal_Bool& rIsInside );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
-                                           const rtl::OUString& rCaption );
+                                           const OUString& rCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const rtl::OUString& rCaption,
+                                                const ImplControlValue& aValue, const OUString& rCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     //helper methods for frame's UpdateSettings

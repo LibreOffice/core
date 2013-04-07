@@ -99,16 +99,16 @@ class CLabelControlCommand : public CControlCommand
 public:
     CLabelControlCommand(
         sal_Int16 aControlId,
-        const rtl::OUString& aLabel );
+        const OUString& aLabel );
 
     virtual void SAL_CALL exec( CFilePickerState* aFilePickerState );
 
     virtual CControlCommandResult* SAL_CALL handleRequest( CControlCommandRequest* aRequest );
 
-    rtl::OUString SAL_CALL getLabel( ) const;
+    OUString SAL_CALL getLabel( ) const;
 
 private:
-    rtl::OUString m_aLabel;
+    OUString m_aLabel;
 };
 
 //---------------------------------------------

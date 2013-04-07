@@ -51,8 +51,8 @@ public:
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
     CFormatEtc    SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
-    CFormatEtc    SAL_CALL getFormatEtcForClipformatName( const rtl::OUString& aClipFmtName ) const;
-    rtl::OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
+    CFormatEtc    SAL_CALL getFormatEtcForClipformatName( const OUString& aClipFmtName ) const;
+    OUString SAL_CALL getClipboardFormatName( CLIPFORMAT aClipformat ) const;
 
     sal_Bool SAL_CALL isHTMLFormat( CLIPFORMAT cf ) const;
     sal_Bool SAL_CALL isTextHtmlFormat( CLIPFORMAT cf ) const;
@@ -61,7 +61,7 @@ public:
     sal_Bool SAL_CALL isTextFormat( CLIPFORMAT cf ) const;
 
 private:
-    rtl::OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
+    OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
 
 private:
     com::sun::star::uno::Reference< com::sun::star::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;

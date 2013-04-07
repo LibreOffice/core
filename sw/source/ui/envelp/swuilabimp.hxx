@@ -117,8 +117,8 @@ class SwVisitingCardPage : public SfxTabPage
 
     using SfxTabPage::SetUserData;
     void            SetUserData( sal_uInt32 nCnt,
-                                    const rtl::OUString* pNames,
-                                    const rtl::OUString* pValues );
+                                    const OUString* pNames,
+                                    const OUString* pValues );
 
     SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet);
     ~SwVisitingCardPage();

@@ -116,27 +116,27 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString Graphic::getImplementationName_Static()
+OUString Graphic::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.graphic.Graphic" );
+    return OUString( "com.sun.star.comp.graphic.Graphic" );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > Graphic::getSupportedServiceNames_Static()
+uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.Graphic" );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.Graphic" );
 
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL Graphic::getImplementationName()
+OUString SAL_CALL Graphic::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -144,15 +144,15 @@ uno::Sequence< ::rtl::OUString > Graphic::getSupportedServiceNames_Static()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL Graphic::supportsService( const ::rtl::OUString& rServiceName )
+sal_Bool SAL_CALL Graphic::supportsService( const OUString& rServiceName )
     throw( uno::RuntimeException )
 {
     if( ::unographic::GraphicDescriptor::supportsService( rServiceName ) )
         return true;
     else
     {
-        uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-        const ::rtl::OUString*              pArray = aSNL.getConstArray();
+        uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+        const OUString*              pArray = aSNL.getConstArray();
 
         for( int i = 0; i < aSNL.getLength(); i++ )
             if( pArray[i] == rServiceName )
@@ -164,11 +164,11 @@ sal_Bool SAL_CALL Graphic::supportsService( const ::rtl::OUString& rServiceName 
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL Graphic::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Graphic::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
-    uno::Sequence< ::rtl::OUString >    aNew( getSupportedServiceNames_Static() );
+    uno::Sequence< OUString >    aRet( ::unographic::GraphicDescriptor::getSupportedServiceNames() );
+    uno::Sequence< OUString >    aNew( getSupportedServiceNames_Static() );
     sal_Int32                           nOldCount = aRet.getLength();
 
     aRet.realloc( nOldCount + aNew.getLength() );

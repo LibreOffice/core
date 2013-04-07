@@ -32,12 +32,12 @@ SwVbaReplacement::~SwVbaReplacement()
 {
 }
 
-::rtl::OUString SAL_CALL SwVbaReplacement::getText() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaReplacement::getText() throw (uno::RuntimeException)
 {
     return mxPropertyReplace->getReplaceString();
 }
 
-void SAL_CALL SwVbaReplacement::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaReplacement::setText( const OUString& _text ) throw (uno::RuntimeException)
 {
     mxPropertyReplace->setReplaceString( _text );
 }
@@ -48,20 +48,20 @@ void SAL_CALL SwVbaReplacement::ClearFormatting( ) throw (uno::RuntimeException)
     mxPropertyReplace->setReplaceAttributes( aPropValues );
 }
 
-rtl::OUString
+OUString
 SwVbaReplacement::getServiceImplName()
 {
-    return rtl::OUString("SwVbaReplacement");
+    return OUString("SwVbaReplacement");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaReplacement::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Replacement" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Replacement" );
     }
     return aServiceNames;
 }

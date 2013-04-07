@@ -54,7 +54,7 @@ struct PDFExtOutDevBookmarkEntry
 
     /** link target name, respectively destination name
     */
-    rtl::OUString   aBookmark;
+    OUString   aBookmark;
 
     PDFExtOutDevBookmarkEntry()
         :nLinkId( -1 )
@@ -285,7 +285,7 @@ public :
         0 for success
         -1 in case the link id does not exist
     */
-    sal_Int32 SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL );
+    sal_Int32 SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     /** Create a new outline item
 
         @param nParent
@@ -302,7 +302,7 @@ public :
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const rtl::OUString& rText = rtl::OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
 
     /** Create a new note on a page
 
@@ -354,7 +354,7 @@ public :
     @returns
     the id of the newly created structural element
      */
-     sal_Int32 BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias = rtl::OUString() );
+     sal_Int32 BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias = OUString() );
     /** end a logical structure element
 
     @see BeginStructureElement

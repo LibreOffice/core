@@ -26,7 +26,6 @@
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLReplacementImageContext.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star::xml::sax;

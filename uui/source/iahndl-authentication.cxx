@@ -60,7 +60,7 @@ void
 executeLoginDialog(
     Window * pParent,
     LoginErrorInfo & rInfo,
-    rtl::OUString const & rRealm)
+    OUString const & rRealm)
     SAL_THROW((uno::RuntimeException))
 {
     try
@@ -190,7 +190,7 @@ handleAuthenticationRequest_(
     ucb::AuthenticationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
-    const rtl::OUString & rURL)
+    const OUString & rURL)
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
@@ -275,7 +275,7 @@ handleAuthenticationRequest_(
                             && xSupplyAuthentication->canSetUserName());
     executeLoginDialog(pParent,
                        aInfo,
-                       rRequest.HasRealm ? rRequest.Realm : rtl::OUString());
+                       rRequest.HasRealm ? rRequest.Realm : OUString());
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
@@ -327,8 +327,8 @@ handleAuthenticationRequest_(
               {
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          rtl::OUString(), // empty u/p -> sys creds
-                          uno::Sequence< rtl::OUString >(),
+                          OUString(), // empty u/p -> sys creds
+                          uno::Sequence< OUString >(),
                           xIH,
                           ePreferredRememberMode
                               == ucb::RememberAuthentication_PERSISTENT))
@@ -342,8 +342,8 @@ handleAuthenticationRequest_(
               {
                   if (!aPwContainerHelper.addRecord(
                           !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          rtl::OUString(), // empty u/p -> sys creds
-                          uno::Sequence< rtl::OUString >(),
+                          OUString(), // empty u/p -> sys creds
+                          uno::Sequence< OUString >(),
                           xIH,
                           false /* SESSION */))
                   {
@@ -355,7 +355,7 @@ handleAuthenticationRequest_(
           // Empty user name can not be valid:
           else if (aInfo.GetUserName().Len() != 0)
           {
-              uno::Sequence< rtl::OUString >
+              uno::Sequence< OUString >
                   aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
               aPassList[0] = aInfo.GetPassword();
               if (aInfo.GetAccount().Len() != 0)
@@ -411,7 +411,7 @@ executeMasterPasswordDialog(
     task::PasswordRequestMode nMode)
         SAL_THROW((uno::RuntimeException))
 {
-    rtl::OString aMaster;
+    OString aMaster;
     try
     {
         SolarMutexGuard aGuard;
@@ -423,7 +423,7 @@ executeMasterPasswordDialog(
                 new MasterPasswordCreateDialog(pParent, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            aMaster = rtl::OUStringToOString(
+            aMaster = OUStringToOString(
                 xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
         else
@@ -432,7 +432,7 @@ executeMasterPasswordDialog(
                 new MasterPasswordDialog(pParent, nMode, xManager.get()));
             rInfo.SetResult(xDialog->Execute()
                 == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            aMaster = rtl::OUStringToOString(
+            aMaster = OUStringToOString(
                 xDialog->GetMasterPassword(), RTL_TEXTENCODING_UTF8);
         }
     }
@@ -452,7 +452,7 @@ executeMasterPasswordDialog(
                       32,
                       1000);
 
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     for (int i = 0; i < RTL_DIGEST_LENGTH_MD5; ++i)
     {
         aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] >> 4)));
@@ -507,7 +507,7 @@ executePasswordDialog(
     Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
-    ::rtl::OUString aDocName,
+    OUString aDocName,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest )
@@ -569,7 +569,7 @@ handlePasswordRequest_(
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
-    ::rtl::OUString aDocumentName,
+    OUString aDocumentName,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest = false )
@@ -647,7 +647,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
                                      m_xContext,
                                      aAuthenticationRequest,
                                      rRequest->getContinuations(),
-                                     rtl::OUString());
+                                     OUString());
         return true;
     }
     return false;
@@ -680,7 +680,7 @@ UUIInteractionHelper::handlePasswordRequest(
     Window * pParent = getParentProperty();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
-    ::rtl::OUString aDocumentName;
+    OUString aDocumentName;
     bool bMSCryptoMode          = false;
     bool bIsPasswordToModify    = false;
 
@@ -745,7 +745,7 @@ UUIInteractionHelper::handlePasswordRequest(
         handlePasswordRequest_(getParentProperty(),
                                aPasswordRequest.Mode,
                                rRequest->getContinuations(),
-                               rtl::OUString(),
+                               OUString(),
                                false /* bool bMSCryptoMode */,
                                false /* bool bIsPasswordToModify */,
                                true  /* bool bIsSimplePasswordRequest */ );

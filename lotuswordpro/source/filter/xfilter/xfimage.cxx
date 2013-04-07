@@ -66,7 +66,7 @@ XFImage::XFImage() : m_bUseLink(sal_False)
     m_strName = XFGlobal::GenImageName();
 }
 
-void XFImage::SetFileURL(rtl::OUString url)
+void XFImage::SetFileURL(OUString url)
 {
     m_strImageFile = url;
     m_bUseLink  = sal_True;

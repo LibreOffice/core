@@ -83,8 +83,8 @@ struct AddressUserData_Impl
     SharedConnection                        xConnection;
     uno::Reference< XColumnsSupplier>       xColumnsSupplier;
     uno::Reference< sdbc::XResultSet>       xResultSet;
-    ::rtl::OUString                    sFilter;
-    ::rtl::OUString                    sURL; // data is editable
+    OUString                    sFilter;
+    OUString                    sURL; // data is editable
     sal_Int32                          nCommandType;
     sal_Int32                          nTableAndQueryCount;
     AddressUserData_Impl() :
@@ -93,12 +93,12 @@ struct AddressUserData_Impl
         {}
 };
 
-static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
+static OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
 {
-    ::rtl::OUString sURL;
+    OUString sURL;
     if(xSourceProperties.is())
     {
-        rtl::OUString sDBURL;
+        OUString sDBURL;
         xSourceProperties->getPropertyValue("URL") >>= sDBURL;
         if(String(sDBURL).SearchAscii("sdbc:flat:") == 0)
         {
@@ -108,10 +108,10 @@ static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSou
             xSourceProperties->getPropertyValue("Info") >>= aInfo;
             if(aFilters.getLength() == 1 && aInfo.getLength() )
             {
-                ::rtl::OUString sFieldDelim;
-                ::rtl::OUString sStringDelim;
-                ::rtl::OUString sExtension;
-                ::rtl::OUString sCharSet;
+                OUString sFieldDelim;
+                OUString sStringDelim;
+                OUString sExtension;
+                OUString sCharSet;
                 for(sal_Int32 nInfo = 0; nInfo < aInfo.getLength(); ++nInfo)
                 {
                     if(aInfo[nInfo].Name == "FieldDelimiter")
@@ -217,9 +217,9 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     m_aListLB.SelectAll( sal_False );
 
     SwDBConfig aDb;
-    ::rtl::OUString sBibliography = aDb.GetBibliographySource().sDataSource;
-    uno::Sequence< ::rtl::OUString> aNames = m_xDBContext->getElementNames();
-    const ::rtl::OUString* pNames = aNames.getConstArray();
+    OUString sBibliography = aDb.GetBibliographySource().sDataSource;
+    uno::Sequence< OUString> aNames = m_xDBContext->getElementNames();
+    const OUString* pNames = aNames.getConstArray();
     for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
     {
         if ( pNames[nName] == sBibliography )
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
                 xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
                 xRowSet->execute();
 
-                ::rtl::OUString sQuery;
+                OUString sQuery;
                 xRowProperties->getPropertyValue("ActiveCommand")>>= sQuery;
                 xComposer->setQuery(sQuery);
                 if(!pUserData->sFilter.isEmpty())
@@ -388,15 +388,15 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             pInfo[1].Name = "StringDelimiter";
             pInfo[1].Value <<= OUString('"');
             pInfo[2].Name = "Extension";
-            pInfo[2].Value <<= ::rtl::OUString(aURL.getExtension());//"csv";
+            pInfo[2].Value <<= OUString(aURL.getExtension());//"csv";
             pInfo[3].Name = "CharSet";
-            pInfo[3].Value <<= rtl::OUString::createFromAscii(cUTF8);
+            pInfo[3].Value <<= OUString::createFromAscii(cUTF8);
             aAny <<= aInfo;
             xDataProperties->setPropertyValue("Info", aAny);
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
             uno::Reference<frame::XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
-            String sExt = rtl::OUString(".odb");
+            String sExt = OUString(".odb");
             String sTmpName;
             {
                 String sHomePath(SvtPathOptions().GetWorkPath());
@@ -549,8 +549,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
         if(pUserData->xConnection.is())
         {
             sal_Int32 nTables = 0;
-            uno::Sequence<rtl::OUString> aTables;
-            uno::Sequence<rtl::OUString> aQueries;
+            uno::Sequence<OUString> aTables;
+            uno::Sequence<OUString> aQueries;
             uno::Reference<XTablesSupplier> xTSupplier(pUserData->xConnection, UNO_QUERY);
             if(xTSupplier.is())
             {
@@ -687,9 +687,9 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
     return xRet;
 }
 
-::rtl::OUString     SwAddressListDialog::GetFilter()
+OUString     SwAddressListDialog::GetFilter()
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {

@@ -48,13 +48,13 @@ public:
     explicit SequenceInputStreamService();
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException );
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString & ServiceName ) throw ( uno::RuntimeException );
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException );
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString & ServiceName ) throw ( uno::RuntimeException );
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( uno::RuntimeException );
 
     // XServiceInfo - static versions (used for component registration)
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
-    static uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static OUString SAL_CALL getImplementationName_static();
+    static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
 
     // ::com::sun::star::io::XInputStream:
@@ -90,7 +90,7 @@ SequenceInputStreamService::SequenceInputStreamService()
 {}
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL SequenceInputStreamService::getImplementationName() throw ( uno::RuntimeException )
+OUString SAL_CALL SequenceInputStreamService::getImplementationName() throw ( uno::RuntimeException )
 {
     return getImplementationName_static();
 }
@@ -100,9 +100,9 @@ OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
     return OUString( "com.sun.star.comp.SequenceInputStreamService" );
 }
 
-::sal_Bool SAL_CALL SequenceInputStreamService::supportsService( ::rtl::OUString const & serviceName ) throw ( uno::RuntimeException )
+::sal_Bool SAL_CALL SequenceInputStreamService::supportsService( OUString const & serviceName ) throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > serviceNames = getSupportedServiceNames();
+    uno::Sequence< OUString > serviceNames = getSupportedServiceNames();
     for ( ::sal_Int32 i = 0; i < serviceNames.getLength(); ++i ) {
         if ( serviceNames[i] == serviceName )
             return sal_True;
@@ -110,7 +110,7 @@ OUString SAL_CALL SequenceInputStreamService::getImplementationName_static()
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServiceNames() throw ( uno::RuntimeException )
 {
     return getSupportedServiceNames_static();
 }

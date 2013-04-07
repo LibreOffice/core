@@ -164,7 +164,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     //protect:
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
-        rtl::OUString protect;
+        OUString protect;
         if( m_bProtectContent )
             protect += A2OUSTR("content");
         if( m_bProtectSize )
@@ -190,7 +190,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     //clip:
     if( FABS(m_fClipLeft)>FLOAT_MIN || FABS(m_fClipRight)>FLOAT_MIN || FABS(m_fClipTop)>FLOAT_MIN || FABS(m_fClipBottom)>FLOAT_MIN )
     {
-        rtl::OUString clip = A2OUSTR("rect(");
+        OUString clip = A2OUSTR("rect(");
         clip += DoubleToOUString(m_fClipTop) + A2OUSTR("cm ");
         clip += DoubleToOUString(m_fClipRight) + A2OUSTR("cm ");
         clip += DoubleToOUString(m_fClipBottom) + A2OUSTR("cm ");

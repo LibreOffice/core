@@ -26,9 +26,9 @@
 using namespace pdfi;
 using namespace com::sun::star;
 
-rtl::OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
+OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
 {
-    rtl::OUStringBuffer aBuf( 7 );
+    OUStringBuffer aBuf( 7 );
     const sal_uInt8 nRed  ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Red * 255.0 ) ) );
     const sal_uInt8 nGreen( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Green * 255.0 ) ) );
     const sal_uInt8 nBlue ( sal::static_int_cast<sal_Int8>( basegfx::fround( rCol.Blue * 255.0 ) ) );
@@ -49,18 +49,18 @@ rtl::OUString pdfi::getColorString( const rendering::ARGBColor& rCol )
     return aBuf.makeStringAndClear();
 }
 
-rtl::OUString pdfi::unitMMString( double fMM )
+OUString pdfi::unitMMString( double fMM )
 {
-    rtl::OUStringBuffer aBuf( 32 );
+    OUStringBuffer aBuf( 32 );
     aBuf.append( rtl_math_round( fMM, 2, rtl_math_RoundingMode_Floor ) );
     aBuf.appendAscii( "mm" );
 
     return aBuf.makeStringAndClear();
 }
 
-rtl::OUString pdfi::convertPixelToUnitString( double fPix )
+OUString pdfi::convertPixelToUnitString( double fPix )
 {
-    rtl::OUStringBuffer aBuf( 32 );
+    OUStringBuffer aBuf( 32 );
     aBuf.append( rtl_math_round( convPx2mm( fPix ), 2, rtl_math_RoundingMode_Floor ) );
     aBuf.appendAscii( "mm" );
 

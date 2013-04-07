@@ -94,15 +94,15 @@ public:
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
 
-    void            SetMacro( const rtl::OUString& rMacro ) { maMacro = rMacro; }
-    const rtl::OUString& GetMacro() const { return maMacro; }
+    void            SetMacro( const OUString& rMacro ) { maMacro = rMacro; }
+    const OUString& GetMacro() const { return maMacro; }
 
-    void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
-    const rtl::OUString& GetHlink() const { return maHlink; }
+    void            SetHlink( const OUString& rHlink ) { maHlink = rHlink; }
+    const OUString& GetHlink() const { return maHlink; }
 
 private:
-    rtl::OUString   maMacro;
-    rtl::OUString   maHlink;
+    OUString   maMacro;
+    OUString   maHlink;
 };
 
 //-------------------------------------------------------------------------

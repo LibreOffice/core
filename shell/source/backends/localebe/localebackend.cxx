@@ -39,7 +39,7 @@
 #pragma warning(pop)
 #endif
 
-rtl::OUString ImplGetLocale(LCID lcid)
+OUString ImplGetLocale(LCID lcid)
 {
     TCHAR buffer[8];
     LPTSTR cp = buffer;
@@ -51,10 +51,10 @@ rtl::OUString ImplGetLocale(LCID lcid)
             // #i50822# minus character must be written before cp
             *(cp - 1) = '-';
 
-        return rtl::OUString::createFromAscii(buffer);
+        return OUString::createFromAscii(buffer);
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 #elif defined(MACOSX)
@@ -71,7 +71,7 @@ rtl::OUString ImplGetLocale(LCID lcid)
 namespace /* private */
 {
 
-    void OUStringBufferAppendCFString(rtl::OUStringBuffer& buffer, const CFStringRef s)
+    void OUStringBufferAppendCFString(OUStringBuffer& buffer, const CFStringRef s)
     {
         CFIndex lstr = CFStringGetLength(s);
         for (CFIndex i = 0; i < lstr; i++)
@@ -119,12 +119,12 @@ namespace /* private */
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
 
-    rtl::OUString ImplGetLocale(const char* pref)
+    OUString ImplGetLocale(const char* pref)
     {
         CFStringRef sref = ImplGetAppPreference(pref);
         CFStringGuard srefGuard(sref);
 
-        rtl::OUStringBuffer aLocaleBuffer;
+        OUStringBuffer aLocaleBuffer;
         aLocaleBuffer.appendAscii("en-US"); // initialize with fallback value
 
         if (sref != NULL)
@@ -168,13 +168,13 @@ namespace /* private */
  * is called from the main thread only.
  */
 
-static rtl::OUString ImplGetLocale(int category)
+static OUString ImplGetLocale(int category)
 {
     const char *locale = setlocale(category, "");
 
     // Return "en-US" for C locales
     if( (locale == NULL) || ( locale[0] == 'C' && locale[1] == '\0' ) )
-        return rtl::OUString( "en-US"  );
+        return OUString( "en-US"  );
 
 
     const char *cp;
@@ -191,7 +191,7 @@ static rtl::OUString ImplGetLocale(int category)
             break;
     }
 
-    rtl::OUStringBuffer aLocaleBuffer;
+    OUStringBuffer aLocaleBuffer;
     if( uscore != NULL )
     {
         aLocaleBuffer.appendAscii(locale, uscore++ - locale);
@@ -229,7 +229,7 @@ LocaleBackend* LocaleBackend::createInstance()
 
 // ---------------------------------------------------------------------------------------
 
-rtl::OUString LocaleBackend::getLocale(void)
+OUString LocaleBackend::getLocale(void)
 {
 #if defined WNT
     return ImplGetLocale( GetUserDefaultLCID() );
@@ -242,7 +242,7 @@ rtl::OUString LocaleBackend::getLocale(void)
 
 //------------------------------------------------------------------------------
 
-rtl::OUString LocaleBackend::getUILocale(void)
+OUString LocaleBackend::getUILocale(void)
 {
 #if defined WNT
     return ImplGetLocale( MAKELCID(GetUserDefaultUILanguage(), SORT_DEFAULT) );
@@ -255,7 +255,7 @@ rtl::OUString LocaleBackend::getUILocale(void)
 
 // ---------------------------------------------------------------------------------------
 
-rtl::OUString LocaleBackend::getSystemLocale(void)
+OUString LocaleBackend::getSystemLocale(void)
 {
 // note: the implementation differs from getLocale() only on Windows
 #if defined WNT
@@ -267,20 +267,20 @@ rtl::OUString LocaleBackend::getSystemLocale(void)
 //------------------------------------------------------------------------------
 
 void LocaleBackend::setPropertyValue(
-    rtl::OUString const &, css::uno::Any const &)
+    OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString(
+        OUString(
             "setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
 css::uno::Any LocaleBackend::getPropertyValue(
-    rtl::OUString const & PropertyName)
+    OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -307,13 +307,13 @@ css::uno::Any LocaleBackend::getPropertyValue(
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocaleBackend::getBackendName(void) {
-    return rtl::OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
+OUString SAL_CALL LocaleBackend::getBackendName(void) {
+    return OUString("com.sun.star.comp.configuration.backend.LocaleBackend") ;
 }
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void)
+OUString SAL_CALL LocaleBackend::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getBackendName() ;
@@ -321,19 +321,19 @@ rtl::OUString SAL_CALL LocaleBackend::getImplementationName(void)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LocaleBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = rtl::OUString( "com.sun.star.configuration.backend.LocaleBackend") ;
+    uno::Sequence<OUString> aServiceNameList(1);
+    aServiceNameList[0] = OUString( "com.sun.star.configuration.backend.LocaleBackend") ;
     return aServiceNameList ;
 }
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LocaleBackend::supportsService(const rtl::OUString& aServiceName)
+sal_Bool SAL_CALL LocaleBackend::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > const svc = getBackendServiceNames();
+    uno::Sequence< OUString > const svc = getBackendServiceNames();
 
     for(sal_Int32 i = 0; i < svc.getLength(); ++i )
         if(svc[i] == aServiceName)
@@ -344,7 +344,7 @@ sal_Bool SAL_CALL LocaleBackend::supportsService(const rtl::OUString& aServiceNa
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LocaleBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
     return getBackendServiceNames() ;

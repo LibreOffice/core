@@ -118,7 +118,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        SvgDocHdl::SvgDocHdl(const rtl::OUString& aAbsolutePath)
+        SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
             mpTarget(0),
             maCssContents()
@@ -149,7 +149,7 @@ namespace svgio
             OSL_ENSURE(!maCssContents.size(), "SvgDocHdl endDocument with active css style stack entry (!)");
         }
 
-        void SvgDocHdl::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
             if(aName.getLength())
             {
@@ -308,7 +308,7 @@ namespace svgio
 
                         if(pNew->isTextCss())
                         {
-                            maCssContents.push_back(rtl::OUString());
+                            maCssContents.push_back(OUString());
                         }
                         break;
                     }
@@ -353,9 +353,9 @@ namespace svgio
                         /// invalid token, ignore
 #ifdef DBG_UTIL
                         myAssert(
-                            rtl::OUString::createFromAscii("Unknown Base SvgToken <") +
+                            OUString::createFromAscii("Unknown Base SvgToken <") +
                             aName +
-                            rtl::OUString::createFromAscii("> (!)"));
+                            OUString::createFromAscii("> (!)"));
 #endif
                         break;
                     }
@@ -363,7 +363,7 @@ namespace svgio
             }
         }
 
-        void SvgDocHdl::endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
             if(aName.getLength())
             {
@@ -449,7 +449,7 @@ namespace svgio
 
                 if(pSvgTitleDescNode && mpTarget)
                 {
-                    const rtl::OUString aText(pSvgTitleDescNode->getText());
+                    const OUString aText(pSvgTitleDescNode->getText());
 
                     if(aText.getLength())
                     {
@@ -487,7 +487,7 @@ namespace svgio
             }
         }
 
-        void SvgDocHdl::characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
         {
             const sal_uInt32 nLength(aChars.getLength());
 
@@ -529,11 +529,11 @@ namespace svgio
                             // collect characters for css style
                             if(maCssContents.size())
                             {
-                                const ::rtl::OUString aTrimmedChars(aChars.trim());
+                                const OUString aTrimmedChars(aChars.trim());
 
                                 if(aTrimmedChars.getLength())
                                 {
-                                    std::vector< rtl::OUString >::iterator aString(maCssContents.end() - 1);
+                                    std::vector< OUString >::iterator aString(maCssContents.end() - 1);
                                     (*aString) += aTrimmedChars;
                                 }
                             }
@@ -562,11 +562,11 @@ namespace svgio
             }
         }
 
-        void SvgDocHdl::ignorableWhitespace(const ::rtl::OUString& /*aWhitespaces*/) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::ignorableWhitespace(const OUString& /*aWhitespaces*/) throw (xml::sax::SAXException, uno::RuntimeException)
         {
         }
 
-        void SvgDocHdl::processingInstruction(const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/) throw (xml::sax::SAXException, uno::RuntimeException)
+        void SvgDocHdl::processingInstruction(const OUString& /*aTarget*/, const OUString& /*aData*/) throw (xml::sax::SAXException, uno::RuntimeException)
         {
         }
 

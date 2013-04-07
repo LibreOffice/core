@@ -58,7 +58,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
 
-using ::rtl::OUString;
 using ::rtl::Uri;
 
 XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF )
@@ -162,13 +161,13 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = ::rtl::OUString( "StorageFormat" );
+        aArg.Name = OUString( "StorageFormat" );
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( "com.sun.star.packages.comp.ZipPackage" ),
+                OUString( "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -262,13 +261,13 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         // let ZipPackage be used ( no manifest.xml is required )
         beans::NamedValue aArg;
-        aArg.Name = ::rtl::OUString( "StorageFormat" );
+        aArg.Name = OUString( "StorageFormat" );
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
         aArguments[ 1 ] <<= aArg;
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString( "com.sun.star.packages.comp.ZipPackage" ),
+                OUString( "com.sun.star.packages.comp.ZipPackage" ),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )

@@ -76,8 +76,6 @@
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 
-using ::rtl::OString;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::oox::drawingml::DrawingML;
@@ -1122,7 +1120,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,
             XML_name,               XclXmlUtils::ToOString( sUnicodeName ).getStr(),
-            XML_sheetId,            rtl::OString::valueOf( (sal_Int32)( nTab+1 ) ).getStr(),
+            XML_sheetId,            OString::valueOf( (sal_Int32)( nTab+1 ) ).getStr(),
             XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
             FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
             FSEND );
@@ -1207,7 +1205,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
     String  sTmpName;
     String  sTmpComm;
-    rtl::OUString aTmp;
+    OUString aTmp;
     Color   aDummyCol;
     sal_uInt16  nFlags;
 

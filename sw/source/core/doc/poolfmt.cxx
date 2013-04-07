@@ -1928,7 +1928,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             pNewRule->Set( 1, aFmt );
 
             aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
-            aFmt.SetSuffix(rtl::OUString(static_cast<sal_Unicode>(')')));
+            aFmt.SetSuffix(OUString(static_cast<sal_Unicode>(')')));
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetStart( 3 );
 

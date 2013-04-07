@@ -66,7 +66,7 @@ namespace pcr
                 <TRUE/> if and only if the component could be successfully created
         */
         template < class INTERFACE >
-        bool createComponent( const ::rtl::OUString& _rServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
+        bool createComponent( const OUString& _rServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
             _out_rxComponent.clear();
             _out_rxComponent = _out_rxComponent.query(
@@ -83,7 +83,7 @@ namespace pcr
         template < class INTERFACE >
         bool createComponent( const sal_Char* _pAsciiServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
-            return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ), _out_rxComponent );
+            return createComponent( OUString::createFromAscii( _pAsciiServiceName ), _out_rxComponent );
         }
 
         /** creates a component using our component factory/context
@@ -95,7 +95,7 @@ namespace pcr
             @return
                 the newly created component. Is never <NULL/>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const ::rtl::OUString& _rServiceName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const OUString& _rServiceName ) const;
 
         /** creates a component using our component factory/context
 
@@ -108,7 +108,7 @@ namespace pcr
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const sal_Char* _pAsciiServiceName ) const
         {
-            return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
+            return createComponent( OUString::createFromAscii( _pAsciiServiceName ) );
         }
 
         /** returns the ->XMultiServiceFactory interface of ->m_xORB, for passing to
@@ -128,7 +128,7 @@ namespace pcr
             @seealso getContextValueByAsciiName
         */
         ::com::sun::star::uno::Any
-                getContextValueByName( const ::rtl::OUString& _rName ) const;
+                getContextValueByName( const OUString& _rName ) const;
 
         /** retrieves a value from our component context, specified by 8-bit ASCII string
             @param _rName
@@ -141,7 +141,7 @@ namespace pcr
         inline ::com::sun::star::uno::Any
                 getContextValueByAsciiName( const sal_Char* _pAsciiName ) const
         {
-            return getContextValueByName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+            return getContextValueByName( OUString::createFromAscii( _pAsciiName ) );
         }
 
         /** retrieve context to create interfaces by the ctors

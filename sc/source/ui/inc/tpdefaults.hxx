@@ -64,7 +64,7 @@ private:
     Edit          aEdSheetPrefix;
 
     // Stores old Sheet Prefix
-    ::rtl::OUString maOldPrefixValue;
+    OUString maOldPrefixValue;
 };
 
 #endif

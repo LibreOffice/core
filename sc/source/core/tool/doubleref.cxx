@@ -28,7 +28,6 @@
 #include <memory>
 #include <vector>
 
-using ::rtl::OUString;
 using ::std::auto_ptr;
 using ::std::vector;
 
@@ -186,7 +185,7 @@ bool lcl_createExcelQuery(
                     if (nIndex < nNewEntries)
                     {
                         pParam->GetEntry(nIndex).nField = aFields[nCol];
-                        pParam->FillInExcelSyntax(rtl::OUString(aCellStr), nIndex);
+                        pParam->FillInExcelSyntax(OUString(aCellStr), nIndex);
                         nIndex++;
                         if (nIndex < nNewEntries)
                             pParam->GetEntry(nIndex).eConnect = SC_AND;

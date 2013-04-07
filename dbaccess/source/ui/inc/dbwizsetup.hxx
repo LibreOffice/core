@@ -67,8 +67,8 @@ private:
     OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
-    ::rtl::OUString         m_sURL;
-    ::rtl::OUString         m_sOldURL;
+    OUString         m_sURL;
+    OUString         m_sOldURL;
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
@@ -116,9 +116,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
-    virtual void setTitle(const ::rtl::OUString& _sTitle);
+    virtual void setTitle(const OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
     virtual sal_Bool saveDatasource();
     virtual String  getStateDisplayName( WizardState _nState ) const;
@@ -144,7 +144,7 @@ protected:
     inline void     disabledUI() { m_bUIEnabled = sal_False; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
-    void implSelectDatasource(const ::rtl::OUString& _rRegisteredName);
+    void implSelectDatasource(const OUString& _rRegisteredName);
     void resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
 
     enum ApplyResult
@@ -167,9 +167,9 @@ private:
             the first state in this path, following by an arbitrary number of others, as in
             RoadmapWizard::declarePath.
     */
-    void declareAuthDepPath( const ::rtl::OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths);
+    void declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths);
 
-    void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
+    void RegisterDataSourceByLocation(const OUString& sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath();
     String createUniqueFileName(const INetURLObject& rURL);
@@ -177,7 +177,7 @@ private:
     void createUniqueFolderName(INetURLObject* pURL);
     ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
 
-    ::rtl::OUString getDefaultDatabaseType() const;
+    OUString getDefaultDatabaseType() const;
 
     void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();

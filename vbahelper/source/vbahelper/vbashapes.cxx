@@ -415,7 +415,7 @@ ScVbaShapes::setDefaultShapeProperties( uno::Reference< drawing::XShape > xShape
     xPropertySet->setPropertyValue( "FillColor", uno::makeAny( sal_Int32(0xFFFFFF) )  );
     xPropertySet->setPropertyValue( "TextWordWrap", uno::makeAny( text::WrapTextMode_THROUGHT )  );
     //not find in OOo2.3
-    //xPropertySet->setPropertyValue( rtl::OUString("Opaque"), uno::makeAny( sal_True )  );
+    //xPropertySet->setPropertyValue( OUString("Opaque"), uno::makeAny( sal_True )  );
 }
 
 void

@@ -85,8 +85,8 @@ class MenuManager : public ThreadHelpBase           ,
         void UpdateSpecialWindowMenu( Menu* pMenu );
         void ClearMenuDispatch(const css::lang::EventObject& Source = css::lang::EventObject(),bool _bRemoveOnly = true);
         void SetHdl();
-        void AddMenu(PopupMenu* _pPopupMenu,const ::rtl::OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
-        sal_uInt16 FillItemCommand(::rtl::OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
+        void AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,sal_Bool _bDelete,sal_Bool _bDeleteChildren);
+        sal_uInt16 FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
 
 
         struct MenuItemHandler
@@ -95,11 +95,11 @@ class MenuManager : public ThreadHelpBase           ,
                 nItemId( aItemId ), pSubMenuManager( pManager ), xMenuItemDispatch( rDispatch ) {}
 
             sal_uInt16                  nItemId;
-            ::rtl::OUString         aTargetFrame;
-            ::rtl::OUString         aMenuItemURL;
-            ::rtl::OUString         aFilter;
-            ::rtl::OUString         aPassword;
-            ::rtl::OUString         aTitle;
+            OUString         aTargetFrame;
+            OUString         aMenuItemURL;
+            OUString         aFilter;
+            OUString         aPassword;
+            OUString         aTitle;
             MenuManager*            pSubMenuManager;
             css::uno::Reference< css::frame::XDispatch >  xMenuItemDispatch;
         };
@@ -116,7 +116,7 @@ class MenuManager : public ThreadHelpBase           ,
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
         sal_Bool                            m_bShowMenuImages;
-        ::rtl::OUString                     m_aMenuItemCommand;
+        OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                 m_xFrame;
         ::std::vector< MenuItemHandler* >   m_aMenuItemHandlerVector;

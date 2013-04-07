@@ -74,8 +74,8 @@ public:
 
     css::uno::Reference<css::awt::XWindow> GetBorderWindow (void) const;
     void SetBackground (const SharedBitmapDescriptor& rpBackground);
-    void SetTitle (const ::rtl::OUString& rsTitle);
-    ::rtl::OUString GetTitle (void) const;
+    void SetTitle (const OUString& rsTitle);
+    OUString GetTitle (void) const;
     css::uno::Reference<css::drawing::framework::XPaneBorderPainter> GetPaneBorderPainter (void) const;
     void SetCalloutAnchor (const css::awt::Point& rAnchorPosition);
     css::awt::Point GetCalloutAnchor (void) const;
@@ -122,7 +122,7 @@ protected:
     css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
     css::uno::Reference<css::drawing::framework::XPaneBorderPainter> mxBorderPainter;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
-    ::rtl::OUString msTitle;
+    OUString msTitle;
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     SharedBitmapDescriptor mpViewBackground;
     bool mbHasCallout;

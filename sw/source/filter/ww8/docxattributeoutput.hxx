@@ -273,7 +273,7 @@ public:
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
     void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
-    void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
+    void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
@@ -589,8 +589,8 @@ private:
     sal_Int32 m_nNextMarkId;
 
     /// Bookmarks to output
-    std::vector<rtl::OString> m_rMarksStart;
-    std::vector<rtl::OString> m_rMarksEnd;
+    std::vector<OString> m_rMarksStart;
+    std::vector<OString> m_rMarksEnd;
 
     /// Is there a postit start to output?
     bool m_bPostitStart;
@@ -598,7 +598,7 @@ private:
     bool m_bPostitEnd;
 
     /// Maps of the bookmarks ids
-    std::map<rtl::OString, sal_uInt16> m_rOpenedMarksIds;
+    std::map<OString, sal_uInt16> m_rOpenedMarksIds;
 
     /// The current table helper
     SwWriteTable *m_pTableWrt;

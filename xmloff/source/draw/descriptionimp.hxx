@@ -30,13 +30,13 @@ class SdXMLDescriptionContext : public SvXMLImportContext
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxShape;
-    ::rtl::OUString msText;
+    OUString msText;
 public:
     TYPEINFO();
 
     SdXMLDescriptionContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rxShape );
     virtual ~SdXMLDescriptionContext();
@@ -45,7 +45,7 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 #endif  //  _XMLOFF_EVENTIMP_HXX

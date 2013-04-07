@@ -119,18 +119,18 @@ public:
     void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
-                  ::rtl::OUString> & rParams,  /// parameters for error message
-        const ::rtl::OUString& rExceptionMessage, /// original exception string
+                  OUString> & rParams,  /// parameters for error message
+        const OUString& rExceptionMessage, /// original exception string
         sal_Int32 nRow,                     /// XLocator: file row number
         sal_Int32 nColumn,                  /// XLocator: file column number
-        const ::rtl::OUString& rPublicId,   /// XLocator: file public ID
-        const ::rtl::OUString& rSystemId ); /// XLocator: file system ID
+        const OUString& rPublicId,   /// XLocator: file public ID
+        const OUString& rSystemId ); /// XLocator: file system ID
 
     void AddRecord(
         sal_Int32 nId, /// error ID == error flags + error class + error number
         const ::com::sun::star::uno::Sequence<
-                  ::rtl::OUString> & rParams,  /// parameters for error message
-        const ::rtl::OUString& rExceptionMessage, /// original exception string
+                  OUString> & rParams,  /// parameters for error message
+        const OUString& rExceptionMessage, /// original exception string
         const ::com::sun::star::uno::Reference<
                  ::com::sun::star::xml::sax::XLocator> & rLocator); /// location
 

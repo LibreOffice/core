@@ -37,8 +37,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 

@@ -97,7 +97,7 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorExce
 ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
 {
         sal_Int32 aFileFormat = 0;
-        rtl::OUString aFilterName;
+        OUString aFilterName;
         uno::Sequence< beans::PropertyValue > aArgs = getModel()->getArgs();
 
         // #FIXME - seems suspect should we not walk through the properties
@@ -251,14 +251,14 @@ void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDispl
 }
 
 void
-ScVbaWorkbook::SaveCopyAs( const rtl::OUString& sFileName ) throw ( uno::RuntimeException)
+ScVbaWorkbook::SaveCopyAs( const OUString& sFileName ) throw ( uno::RuntimeException)
 {
-    rtl::OUString aURL;
+    OUString aURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, aURL );
     uno::Reference< frame::XStorable > xStor( getModel(), uno::UNO_QUERY_THROW );
     uno::Sequence<  beans::PropertyValue > storeProps(1);
-    storeProps[0].Name = rtl::OUString( "FilterName" );
-    storeProps[0].Value <<= rtl::OUString( "MS Excel 97" );
+    storeProps[0].Name = OUString( "FilterName" );
+    storeProps[0].Value <<= OUString( "MS Excel 97" );
     xStor->storeToURL( aURL, storeProps );
 }
 
@@ -279,36 +279,36 @@ ScVbaWorkbook::Names( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_SET_THROW );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, xModel ) );
     if ( aIndex.hasValue() )
         return uno::Any( xNames->Item( aIndex, uno::Any() ) );
     return uno::Any( xNames );
 }
 
-rtl::OUString
+OUString
 ScVbaWorkbook::getServiceImplName()
 {
-    return rtl::OUString("ScVbaWorkbook");
+    return OUString("ScVbaWorkbook");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaWorkbook::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Workbook" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Workbook" );
     }
     return aServiceNames;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
-    return xModelProp->getPropertyValue( ::rtl::OUString( "CodeName" ) ).get< ::rtl::OUString >();
+    return xModelProp->getPropertyValue( OUString( "CodeName" ) ).get< OUString >();
 }
 
 sal_Int64

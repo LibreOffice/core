@@ -64,7 +64,7 @@ struct FWCharacterData                  // representing a single character
 };
 struct FWParagraphData                  // representing a single paragraph
 {
-    rtl::OUString                       aString;
+    OUString                       aString;
     std::vector< FWCharacterData >      vCharacters;
     Rectangle                           aBoundRect;
     sal_Int16                           nFrameDirection;
@@ -219,7 +219,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
     std::vector< FWParagraphData >::iterator aParagraphIEnd( rTextArea.vParagraphs.end() );
     while( aParagraphIter != aParagraphIEnd )
     {
-        const rtl::OUString& rText = aParagraphIter->aString;
+        const OUString& rText = aParagraphIter->aString;
         if ( !rText.isEmpty() )
         {
             // generating vcl/font
@@ -282,7 +282,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 for ( i = 0; i < rText.getLength(); i++ )
                 {
                     FWCharacterData aCharacterData;
-                    rtl::OUString aCharText( (sal_Unicode)rText[ i ] );
+                    OUString aCharText( (sal_Unicode)rText[ i ] );
                     if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, STRING_LEN, sal_True, nWidth, pDXArry ) )
                     {
                         sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText, 0, STRING_LEN );
@@ -427,8 +427,8 @@ void GetFontWorkOutline( FWData& rFWData, const SdrObject* pCustomShape )
 
     sal_Bool bSameLetterHeights = sal_False;
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-    const rtl::OUString sTextPath( "TextPath"  );
-    const rtl::OUString sSameLetterHeights( "SameLetterHeights"  );
+    const OUString sTextPath( "TextPath"  );
+    const OUString sSameLetterHeights( "SameLetterHeights"  );
     com::sun::star::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sSameLetterHeights );
     if ( pAny )
         *pAny >>= bSameLetterHeights;

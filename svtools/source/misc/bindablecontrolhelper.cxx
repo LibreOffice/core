@@ -38,10 +38,10 @@ namespace svt
 
 using namespace ::com::sun::star;
 
-bool lcl_isNamedRange( const rtl::OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
+bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< frame::XModel >& xModel, table::CellRangeAddress& aAddress )
 {
     bool bRes = false;
-    const static rtl::OUString sNamedRanges("NamedRanges");
+    const static OUString sNamedRanges("NamedRanges");
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;
     try
     {
@@ -67,7 +67,7 @@ bool lcl_isNamedRange( const rtl::OUString& sAddress, const uno::Reference< fram
 
 
 void
-BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const rtl::OUString& rsCtrlSource, const rtl::OUString& rsRowSource, sal_uInt16 nRefTab )
+BindableControlHelper::ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab )
 {
 // XBindable etc.
     uno::Reference< lang::XMultiServiceFactory > xFac;

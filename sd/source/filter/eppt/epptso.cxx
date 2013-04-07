@@ -111,7 +111,7 @@ PPTExBulletProvider::~PPTExBulletProvider()
     delete pGraphicProv;
 }
 
-sal_uInt16 PPTExBulletProvider::GetId( const rtl::OString& rUniqueId, Size& rGraphicSize )
+sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
 
@@ -385,12 +385,12 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
 {
     sal_uInt32 nHyperId = ++mnExEmbed;
 
-    rtl::OUString sBookmarkURL( rBookmarkURL );
+    OUString sBookmarkURL( rBookmarkURL );
     INetURLObject aBaseURI( maBaseURI );
     INetURLObject aBookmarkURI( rBookmarkURL );
     if( aBaseURI.GetProtocol() == aBookmarkURI.GetProtocol() )
     {
-        rtl::OUString aRelUrl( INetURLObject::GetRelURL( maBaseURI, rBookmarkURL,
+        OUString aRelUrl( INetURLObject::GetRelURL( maBaseURI, rBookmarkURL,
            INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI, RTL_TEXTENCODING_UTF8, INetURLObject::FSYS_DETECT ) );
         if ( !aRelUrl.isEmpty() )
             sBookmarkURL = aRelUrl;
@@ -820,7 +820,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             {
                 sal_Bool bIsDark = sal_False;
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "IsBackgroundDark" ), sal_True ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
                     aAny >>= bIsDark;
                 nBulletColor = bIsDark ? 0xffffff : 0x000000;
             }
@@ -871,7 +871,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             {
                 sal_Bool bIsDark = sal_False;
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "IsBackgroundDark" ), sal_True ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundDark" ), sal_True ) )
                     aAny >>= bIsDark;
                 nCharColor = bIsDark ? 0xffffff : 0x000000;
             }
@@ -889,7 +889,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
 
                 ::com::sun::star::uno::Any aAny;
                 ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
-                if ( PropValue::GetPropertyValue( aAny, mXPropSet, rtl::OUString( "FillStyle" ) ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "FillStyle" ) ) )
                     aAny >>= aFS;
                 switch( aFS )
                 {
@@ -904,7 +904,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     break;
                     case ::com::sun::star::drawing::FillStyle_SOLID :
                     {
-                        if ( PropValue::GetPropertyValue( aAny, mXPropSet, rtl::OUString( "FillColor" ) ) )
+                        if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "FillColor" ) ) )
                             nBackgroundColor = mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) );
                     }
                     break;
@@ -912,7 +912,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     {
                         ::com::sun::star::uno::Any aBackAny;
                         ::com::sun::star::drawing::FillStyle aBackFS( ::com::sun::star::drawing::FillStyle_NONE );
-                        if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, rtl::OUString( "FillStyle" ) ) )
+                        if ( PropValue::GetPropertyValue( aBackAny, mXBackgroundPropSet, OUString( "FillStyle" ) ) )
                             aBackAny >>= aBackFS;
                         switch( aBackFS )
                         {
@@ -927,7 +927,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             break;
                             case ::com::sun::star::drawing::FillStyle_SOLID :
                             {
-                                if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, rtl::OUString( "FillColor" ) ) )
+                                if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, OUString( "FillColor" ) ) )
                                     nBackgroundColor = mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) );
                             }
                             break;
@@ -961,7 +961,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             if ( aPropSetOfNextShape.is() )
                             {
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
-                                                    rtl::OUString( "FillColor" ), sal_True ) )
+                                                    OUString( "FillColor" ), sal_True ) )
                                 {
                                     if ( nCharColor == mpPptEscherEx->GetColor( *((sal_uInt32*)aAny.getValue()) ) )
                                     {
@@ -1051,7 +1051,7 @@ sal_Bool PPTWriter::ImplGetText()
     {
         mnTextSize = mXText->getString().getLength();
         ::com::sun::star::uno::Any aAny;
-        if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "FontIndependentLineSpacing" ) ), sal_True )
+        if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ) ), sal_True )
             aAny >>= mbFontIndependentLineSpacing;
     }
     return ( mnTextSize != 0 );
@@ -1211,17 +1211,17 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 String aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
                                 aPage.Erase( 0, 1 );
 
-                                rtl::OUString aUPage(aPage);
-                                std::vector<rtl::OUString>::const_iterator pIter = std::find(
+                                OUString aUPage(aPage);
+                                std::vector<OUString>::const_iterator pIter = std::find(
                                             maSlideNameList.begin(),maSlideNameList.end(),aUPage);
 
                                 if ( pIter != maSlideNameList.end() )
                                 {
                                     nPageIndex = pIter - maSlideNameList.begin();
-                                    aPageUrl = rtl::OUString::valueOf(static_cast<sal_Int32>(256 + nPageIndex));
-                                    aPageUrl.Append( rtl::OUString( "," ) );
+                                    aPageUrl = OUString::valueOf(static_cast<sal_Int32>(256 + nPageIndex));
+                                    aPageUrl.Append( OUString( "," ) );
                                     aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
-                                    aPageUrl.Append( rtl::OUString( ",Slide " ) );
+                                    aPageUrl.Append( OUString( ",Slide " ) );
                                     aPageUrl.Append( OUString::number( nPageIndex + 1 ) );
                                 }
                             }
@@ -1312,7 +1312,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             const uno::Reference< beans::XPropertySet > xPropSet( mXModel, uno::UNO_QUERY );
             if ( xPropSet.is() )
             {
-                ImplGetPropertyValue( xPropSet, rtl::OUString( "TabStop" ) );
+                ImplGetPropertyValue( xPropSet, OUString( "TabStop" ) );
                 sal_Int32 nTabStop( 0 );
                 if ( mAny >>= nTabStop )
                     nDefaultTabSizeSrc = nTabStop;
@@ -1934,15 +1934,15 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         nFlags |= 4;
     if ( eTe != ::com::sun::star::presentation::AnimationEffect_NONE )
         nBuildType = 2;
-    if ( ImplGetPropertyValue( rtl::OUString( "SoundOn" ) ) )
+    if ( ImplGetPropertyValue( OUString( "SoundOn" ) ) )
     {
         sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
         {
-            if ( ImplGetPropertyValue( rtl::OUString( "Sound" ) ) )
+            if ( ImplGetPropertyValue( OUString( "Sound" ) ) )
             {
-                nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)mAny.getValue() );
+                nSoundRef = maSoundCollection.GetId( *(OUString*)mAny.getValue() );
                 if ( nSoundRef )
                     nFlags |= 0x10;
             }
@@ -1950,15 +1950,15 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     }
     sal_Bool bDimHide = sal_False;
     sal_Bool bDimPrevious = sal_False;
-    if ( ImplGetPropertyValue( rtl::OUString( "DimHide" ) ) )
+    if ( ImplGetPropertyValue( OUString( "DimHide" ) ) )
         mAny >>= bDimHide;
-    if ( ImplGetPropertyValue( rtl::OUString( "DimPrevious" ) ) )
+    if ( ImplGetPropertyValue( OUString( "DimPrevious" ) ) )
         mAny >>= bDimPrevious;
     if ( bDimPrevious )
         nAfterEffect |= 1;
     if ( bDimHide )
         nAfterEffect |= 2;
-    if ( ImplGetPropertyValue( rtl::OUString( "DimColor" ) ) )
+    if ( ImplGetPropertyValue( OUString( "DimColor" ) ) )
         nDimColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) ) | 0xfe000000;
 
     rSt << nDimColor << nFlags << nSoundRef << nDelayTime
@@ -2025,15 +2025,15 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         break;
         case ::com::sun::star::presentation::ClickAction_SOUND :
         {
-            if ( ImplGetPropertyValue( rtl::OUString( "Bookmark" ) ) )
-                nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)mAny.getValue() );
+            if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
+                nSoundRef = maSoundCollection.GetId( *(OUString*)mAny.getValue() );
         }
         break;
         case ::com::sun::star::presentation::ClickAction_PROGRAM :
         {
-            if ( ImplGetPropertyValue( rtl::OUString( "Bookmark" ) ) )
+            if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
-                INetURLObject aUrl( *(::rtl::OUString*)mAny.getValue() );
+                INetURLObject aUrl( *(OUString*)mAny.getValue() );
                 if ( INET_PROT_FILE == aUrl.GetProtocol() )
                 {
                     aFile = aUrl.PathToFileName();
@@ -2045,11 +2045,11 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
         case ::com::sun::star::presentation::ClickAction_BOOKMARK :
         {
-            if ( ImplGetPropertyValue( rtl::OUString( "Bookmark" ) ) )
+            if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
-                rtl::OUString  aBookmark( *(::rtl::OUString*)mAny.getValue() );
+                OUString  aBookmark( *(OUString*)mAny.getValue() );
                 sal_uInt32 nIndex = 0;
-                std::vector<rtl::OUString>::const_iterator pIter;
+                std::vector<OUString>::const_iterator pIter;
                 for ( pIter = maSlideNameList.begin(); pIter != maSlideNameList.end(); ++pIter, nIndex++ )
                 {
                     if ( *pIter == aBookmark )
@@ -2059,10 +2059,10 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                         nHyperLinkType = 7;
 
                         String aEmpty;
-                        String aHyperString = rtl::OUString::valueOf(static_cast<sal_Int32>(256 + nIndex));
-                        aHyperString.Append( rtl::OUString( "," ) );
+                        String aHyperString = OUString::valueOf(static_cast<sal_Int32>(256 + nIndex));
+                        aHyperString.Append( OUString( "," ) );
                         aHyperString.Append( OUString::number( nIndex + 1 ) );
-                        aHyperString.Append( rtl::OUString( ",Slide " ) );
+                        aHyperString.Append( OUString( ",Slide " ) );
                         aHyperString.Append( OUString::number( nIndex + 1 ) );
                         nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ), aBookmark, aEmpty, aEmpty, aHyperString );
                     }
@@ -2073,9 +2073,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
 
         case ::com::sun::star::presentation::ClickAction_DOCUMENT :
         {
-            if ( ImplGetPropertyValue( rtl::OUString( "Bookmark" ) ) )
+            if ( ImplGetPropertyValue( OUString( "Bookmark" ) ) )
             {
-                String aBookmark( *(::rtl::OUString*)mAny.getValue() );
+                String aBookmark( *(OUString*)mAny.getValue() );
                 if ( aBookmark.Len() )
                 {
                     nAction = 4;
@@ -2134,16 +2134,16 @@ sal_Bool PPTWriter::ImplGetEffect( const ::com::sun::star::uno::Reference< ::com
                                 sal_Bool& bIsSound )
 {
     ::com::sun::star::uno::Any aAny;
-    if ( GetPropertyValue( aAny, rPropSet, rtl::OUString( "Effect" ) ) )
+    if ( GetPropertyValue( aAny, rPropSet, OUString( "Effect" ) ) )
         aAny >>= eEffect;
     else
         eEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
 
-    if ( GetPropertyValue( aAny, rPropSet, rtl::OUString( "TextEffect" ) ) )
+    if ( GetPropertyValue( aAny, rPropSet, OUString( "TextEffect" ) ) )
         aAny >>= eTextEffect;
     else
         eTextEffect = ::com::sun::star::presentation::AnimationEffect_NONE;
-    if ( GetPropertyValue( aAny, rPropSet, rtl::OUString( "SoundOn" ) ) )
+    if ( GetPropertyValue( aAny, rPropSet, OUString( "SoundOn" ) ) )
         aAny >>= bIsSound;
     else
         bIsSound = sal_False;
@@ -2281,12 +2281,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             ::com::sun::star::presentation::AnimationEffect eAe;
             ::com::sun::star::presentation::AnimationEffect eTe;
 
-            if ( ImplGetPropertyValue( rtl::OUString( "PresentationOrder" ) ) )
+            if ( ImplGetPropertyValue( OUString( "PresentationOrder" ) ) )
                 nEffectCount = *(sal_uInt16*)mAny.getValue();
 
             sal_Bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             ::com::sun::star::presentation::ClickAction eCa = ::com::sun::star::presentation::ClickAction_NONE;
-            if ( ImplGetPropertyValue( rtl::OUString( "OnClick" ) ) )
+            if ( ImplGetPropertyValue( OUString( "OnClick" ) ) )
                 mAny >>= eCa;
 
             sal_Bool bGroup = mType == "drawing.Group";
@@ -2329,16 +2329,16 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 sal_Bool bIsHatching = sal_False;
                 ::com::sun::star::uno::Any aAny;
                 ::com::sun::star::drawing::FillStyle eFS;
-                if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "IsFontwork" ), sal_True ) )
+                if ( GetPropertyValue( aAny, mXPropSet, OUString( "IsFontwork" ), sal_True ) )
                     aAny >>= bIsFontwork;
-                if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "FillStyle" ), sal_True ) )
+                if ( GetPropertyValue( aAny, mXPropSet, OUString( "FillStyle" ), sal_True ) )
                 {
                     aAny >>= eFS;
                     bIsHatching = eFS == ::com::sun::star::drawing::FillStyle_HATCH;
                 }
                 if ( bIsHatching || bIsFontwork || ( mType == "drawing.Measure" ) || ( mType == "drawing.Caption" ) )
                 {
-                    if ( ImplGetPropertyValue( rtl::OUString( "BoundRect" ) ) )
+                    if ( ImplGetPropertyValue( OUString( "BoundRect" ) ) )
                     {
                         ::com::sun::star::awt::Rectangle aRect( *(::com::sun::star::awt::Rectangle*)mAny.getValue() );
                         maPosition = MapPoint( ::com::sun::star::awt::Point( aRect.X, aRect.Y ) );
@@ -2357,12 +2357,12 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nMirrorFlags;
-                rtl::OUString sCustomShapeType;
+                OUString sCustomShapeType;
                 MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
                 if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "MetaFile" ), sal_False ) )
+                    if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "MetaFile" ), sal_False ) )
                     {
                         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                         SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
@@ -2392,7 +2392,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 sal_Int32 nRadius = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                if ( ImplGetPropertyValue( rtl::OUString( "CornerRadius" ) ) )
+                if ( ImplGetPropertyValue( OUString( "CornerRadius" ) ) )
                 {
                     mAny >>= nRadius;
                     nRadius = MapSize( ::com::sun::star::awt::Size( nRadius, 0 ) ).Width;
@@ -2422,7 +2422,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 ::com::sun::star::drawing::CircleKind  eCircleKind( ::com::sun::star::drawing::CircleKind_FULL );
                 PolyStyle ePolyKind = POLY_CHORD;
-                if ( ImplGetPropertyValue( rtl::OUString( "CircleKind" ) ) )
+                if ( ImplGetPropertyValue( OUString( "CircleKind" ) ) )
                 {
                     mAny >>= eCircleKind;
                     switch ( eCircleKind )
@@ -2459,10 +2459,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 else
                 {
                     sal_Int32 nStartAngle, nEndAngle;
-                    if ( !ImplGetPropertyValue( rtl::OUString( "CircleStartAngle" ) ) )
+                    if ( !ImplGetPropertyValue( OUString( "CircleStartAngle" ) ) )
                         continue;
                     nStartAngle = *( (sal_Int32*)mAny.getValue() );
-                    if( !ImplGetPropertyValue( rtl::OUString( "CircleEndAngle" ) ) )
+                    if( !ImplGetPropertyValue( OUString( "CircleEndAngle" ) ) )
                         continue;
                     nEndAngle = *( (sal_Int32*)mAny.getValue() );
                     ::com::sun::star::awt::Point aPoint( mXShape->getPosition() );
@@ -2538,7 +2538,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     // try to get the aspect when available
                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
-                    xShapeProps->getPropertyValue( ::rtl::OUString( "Aspect" ) ) >>= nAspect;
+                    xShapeProps->getPropertyValue( OUString( "Aspect" ) ) >>= nAspect;
                 }
                 catch( ::com::sun::star::uno::Exception& )
                 {}
@@ -2572,7 +2572,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             << (sal_uInt32)0x0012de00;
 
                 ::com::sun::star::awt::Size     aSize;
-                rtl::OUString          aControlName;
+                OUString          aControlName;
                 SvStorageRef    xTemp( new SvStorage( new SvMemoryStream(), sal_True ) );
                 if ( oox::ole::MSConvertOCXControls::WriteOCXStream( mXModel, xTemp, aXControlModel, aSize, aControlName ) )
                 {
@@ -2581,7 +2581,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( aUserName.Len() )
                     {
                         SvStorageStreamRef xCompObj = xTemp->OpenSotStream(
-                            rtl::OUString( "\1CompObj" ),
+                            OUString( "\1CompObj" ),
                                 STREAM_READ | STREAM_NOCREATE | STREAM_SHARE_DENYALL );
                         xCompObj->Seek( STREAM_SEEK_TO_END );
                         sal_uInt32  nStreamLen = xCompObj->Tell();
@@ -2604,8 +2604,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *xCompObj   >> nStringLen;
                                 if ( ( nStringLen > 1 ) && ( ( xCompObj->Tell() + nStringLen ) < nStreamLen ) )
                                 {   // i think that the OleIdentifier will follow
-                                    rtl::OString aTemp = read_uInt8s_ToOString(*xCompObj, nStringLen - 1);
-                                    aOleIdentifier = rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_MS_1252);
+                                    OString aTemp = read_uInt8s_ToOString(*xCompObj, nStringLen - 1);
+                                    aOleIdentifier = OStringToOUString(aTemp, RTL_TEXTENCODING_MS_1252);
                                 }
                             }
                         }
@@ -2627,7 +2627,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nSpFlags = SHAPEFLAG_HAVESPT | SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_OLESHAPE;
                 ImplCreateShape( ESCHER_ShpInst_HostControl, nSpFlags, aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "MetaFile" ), sal_False  ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "MetaFile" ), sal_False  ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureId, mnExEmbed );
                 aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
@@ -2801,7 +2801,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         have to create a simpe Rectangle with fill bitmap instead (while not allowing BitmapMode_Repeat).
                         */
                         ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa00, aSolverContainer );       // Flags: Connector | HasSpt
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "GraphicURL" ), sal_True, sal_True, sal_False ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "GraphicURL" ), sal_True, sal_True, sal_False ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
                             aPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
@@ -2815,7 +2815,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     else
                     {
                         ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "GraphicURL" ), sal_False, sal_True ) )
+                        if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "GraphicURL" ), sal_False, sal_True ) )
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                     }
                 }
@@ -2853,7 +2853,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         {
                             if ( mnTextSize )
                             {
-                                ::rtl::OUString aUString( mXText->getString() );
+                                OUString aUString( mXText->getString() );
                                 sal_uInt16 nChar;
 
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -3087,7 +3087,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         // try to get the aspect when available
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                             xShapeProps( mXShape, ::com::sun::star::uno::UNO_QUERY_THROW );
-                        xShapeProps->getPropertyValue( ::rtl::OUString( "Aspect" ) ) >>= nAspect;
+                        xShapeProps->getPropertyValue( OUString( "Aspect" ) ) >>= nAspect;
                     }
                     catch( ::com::sun::star::uno::Exception& )
                     {}
@@ -3164,13 +3164,13 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             else if ( (mType.getLength() > 9) && (mType[8] == '3') && (mType[9] == 'D') )  // drawing.3D
             {
                 // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
-                if ( !ImplGetPropertyValue( rtl::OUString( "Bitmap" ) ) )
+                if ( !ImplGetPropertyValue( OUString( "Bitmap" ) ) )
                     continue;
 
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
 
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "Bitmap" ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "Bitmap" ), sal_False ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else if ( mType == "drawing.Media" )
@@ -3180,9 +3180,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
 
                 ::com::sun::star::uno::Any aAny;
-                if ( PropValue::GetPropertyValue( aAny, mXPropSet, rtl::OUString( "MediaURL" ), sal_True ) )
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, OUString( "MediaURL" ), sal_True ) )
                 {
-                    rtl::OUString aMediaURL;
+                    OUString aMediaURL;
                     if ( (aAny >>= aMediaURL ) &&  !aMediaURL.isEmpty() )
                     {
                         // SJ: creating the Media RefObj
@@ -3253,7 +3253,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mnAngle = 0;
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                if ( aPropOpt.CreateGraphicProperties( mXPropSet, rtl::OUString( "MetaFile" ), sal_False ) )
+                if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "MetaFile" ), sal_False ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
             else
@@ -3452,7 +3452,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             ::com::sun::star::uno::Any  aAny;
             EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
-                mXPropSet, rtl::OUString( "RotateAngle" ), sal_True ) )
+                mXPropSet, OUString( "RotateAngle" ), sal_True ) )
                     ? *((sal_Int32*)aAny.getValue() )
                     : 0;
 
@@ -3586,9 +3586,9 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
     EscherPropertyContainer aPropOpt2;
     try
     {
-        static const rtl::OUString  sModel( "Model" );
-        static const rtl::OUString sWidth( "Width" );
-        static const rtl::OUString sHeight( "Height" );
+        static const OUString  sModel( "Model" );
+        static const OUString sWidth( "Width" );
+        static const OUString sHeight( "Height" );
 
         uno::Reference< table::XTable > xTable;
         if ( mXPropSet->getPropertyValue( sModel ) >>= xTable )
@@ -3685,7 +3685,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             mnTextSize = mXText->getString().getLength();
 
                             ::com::sun::star::uno::Any aAny;
-                            if ( GetPropertyValue( aAny, mXPropSet, rtl::OUString( "FontIndependentLineSpacing" ) ), sal_True )
+                            if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ) ), sal_True )
                                 aAny >>= mbFontIndependentLineSpacing;
 
                             EscherPropertyContainer aPropOptSp;
@@ -3717,10 +3717,10 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                     }
                 }
 
-                static const rtl::OUString sTopBorder( "TopBorder" );
-                static const rtl::OUString sBottomBorder( "BottomBorder" );
-                static const rtl::OUString sLeftBorder( "LeftBorder" );
-                static const rtl::OUString sRightBorder( "RightBorder" );
+                static const OUString sTopBorder( "TopBorder" );
+                static const OUString sBottomBorder( "BottomBorder" );
+                static const OUString sLeftBorder( "LeftBorder" );
+                static const OUString sRightBorder( "RightBorder" );
 
                 // creating horz lines
                 sal_Int32 nYPos = MapPoint( rXShape->getPosition() ).Y;

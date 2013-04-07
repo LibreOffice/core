@@ -25,7 +25,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::rtl::OUString;
 
 sal_Char const sXML_np__block_list[] = "_block-list";
 sal_Char const sXML_np__office[] = "_ooffice";

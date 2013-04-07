@@ -72,7 +72,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
         css::uno::Reference< css::uno::XInterface > m_xConfig;
 
         /** knows the root of the opened config access point */
-        ::rtl::OUString m_sRoot;
+        OUString m_sRoot;
 
         /** represent the current open mode */
         EOpenMode m_eMode;
@@ -83,7 +83,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
     public:
 
                  ConfigAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                               const ::rtl::OUString&                                    sRoot );
+                               const OUString&                                    sRoot );
         virtual ~ConfigAccess();
 
         virtual void      open   ( EOpenMode eMode );

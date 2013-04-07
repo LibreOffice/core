@@ -73,8 +73,6 @@
 using osl::MutexGuard;
 using osl::Mutex;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XIndexAccess;
@@ -112,8 +110,8 @@ namespace pq_sdbc_driver
 Key::Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
           const Reference< com::sun::star::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,
-          const rtl::OUString & schemaName,
-          const rtl::OUString & tableName )
+          const OUString & schemaName,
+          const OUString & tableName )
     : ReflectionBase(
         getStatics().refl.key.implName,
         getStatics().refl.key.serviceNames,

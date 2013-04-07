@@ -65,8 +65,8 @@ SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
 SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 {
     SfxPopupWindow *pWin = NULL;
-    rtl::OUString aToolBarResStr;
-    rtl::OUStringBuffer aTbxResName( "private:resource/toolbar/" );
+    OUString aToolBarResStr;
+    OUStringBuffer aTbxResName( "private:resource/toolbar/" );
     switch( GetSlotId() )
     {
         case SID_OBJECT_ALIGN:
@@ -148,8 +148,8 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
             }
             else
             {
-                rtl::OUString aSlotURL( "slot:" );
-                aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
+                OUString aSlotURL( "slot:" );
+                aSlotURL += OUString::valueOf( sal_Int32( nImage ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages()

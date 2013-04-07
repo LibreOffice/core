@@ -216,11 +216,11 @@ namespace
 
     //------------------------------------------------------------------------------
     /// strips the [OOoBase] vendor identifier from the given error message, if applicable
-    ::rtl::OUString lcl_stripOOoBaseVendor( const ::rtl::OUString& _rErrorMessage )
+    OUString lcl_stripOOoBaseVendor( const OUString& _rErrorMessage )
     {
-        ::rtl::OUString sErrorMessage( _rErrorMessage );
+        OUString sErrorMessage( _rErrorMessage );
 
-        const ::rtl::OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
+        const OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
         if ( sErrorMessage.indexOf( sVendorIdentifier ) == 0 )
         {
             // characters to strip
@@ -630,14 +630,14 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
     {
         lcl_addButton( *this, BUTTON_HELP, false );
 
-        rtl::OUString aTmp;
+        OUString aTmp;
         INetURLObject aHID( m_sHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
               aTmp = aHID.GetURLPath();
         else
             aTmp = m_sHelpURL;
 
-        SetHelpId( rtl::OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
+        SetHelpId( OUStringToOString( aTmp, RTL_TEXTENCODING_UTF8 ) );
     }
 }
 
@@ -679,7 +679,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 {
     SetText(
         utl::ConfigManager::getProductName() +
-        rtl::OUString( " Base" ) );
+        OUString( " Base" ) );
 
     // position and size the controls and the dialog, depending on whether we have one or two texts to display
     impl_positionControls();
@@ -704,7 +704,7 @@ void OSQLMessageBox::Construct( WinBits _nStyle, MessageType _eImage )
 }
 
 //------------------------------------------------------------------------------
-OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const ::rtl::OUString& _rHelpURL )
+OSQLMessageBox::OSQLMessageBox(Window* _pParent, const SQLExceptionInfo& _rException, WinBits _nStyle, const OUString& _rHelpURL )
     :ButtonDialog( _pParent, WB_HORZ | WB_STDDIALOG )
     ,m_aInfoImage( this )
     ,m_aTitle( this, WB_WORDBREAK | WB_LEFT )

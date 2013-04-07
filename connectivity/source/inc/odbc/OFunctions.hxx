@@ -28,8 +28,8 @@ namespace connectivity
 {
 
 //  sal_Bool LoadFunctions(oslModule pODBCso, sal_Bool _bDS=sal_True);
-//  sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath);
-//  sal_Bool LoadLibrary_ADABAS(::rtl::OUString &_rPath);
+//  sal_Bool LoadLibrary_ODBC3(OUString &_rPath);
+//  sal_Bool LoadLibrary_ADABAS(OUString &_rPath);
 
     // Connecting to a data source
     typedef SQLRETURN  (SQL_API  *T3SQLAllocHandle) (SQLSMALLINT HandleType,SQLHANDLE InputHandle,SQLHANDLE *   OutputHandlePtr);

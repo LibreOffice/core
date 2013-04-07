@@ -61,7 +61,7 @@ protected:
         SfxRequest& rReq);
 
 private:
-    rtl::OUString aCustomShape;
+    OUString aCustomShape;
 };
 
 } // end of namespace sd

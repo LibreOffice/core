@@ -61,7 +61,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
     public:
         ToolboxController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                           const rtl::OUString& aCommandURL );
+                           const OUString& aCommandURL );
         ToolboxController();
         virtual ~ToolboxController();
 
@@ -69,7 +69,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
 
-        void updateStatus( const rtl::OUString aCommandURL );
+        void updateStatus( const OUString aCommandURL );
         void updateStatus();
 
         // XInterface
@@ -111,10 +111,10 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 
-        const rtl::OUString& getCommandURL() const { return  m_aCommandURL; }
-        const rtl::OUString& getModuleName() const;
+        const OUString& getCommandURL() const { return  m_aCommandURL; }
+        const OUString& getModuleName() const;
 
-        void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+        void dispatchCommand( const OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
         void enable( bool bEnable );
 
@@ -130,14 +130,14 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 ::rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > URLToDispatchMap;
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
-        void addStatusListener( const rtl::OUString& aCommandURL );
-        void removeStatusListener( const rtl::OUString& aCommandURL );
+        void addStatusListener( const OUString& aCommandURL );
+        void removeStatusListener( const OUString& aCommandURL );
         void bindListener();
         void unbindListener();
         sal_Bool isBound() const;
@@ -150,7 +150,7 @@ class SVT_DLLPUBLIC ToolboxController : public ::com::sun::star::frame::XStatusL
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xFrame;
         ToolboxController_Impl*                                                             m_pImpl;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        rtl::OUString                                                                       m_aCommandURL;
+        OUString                                                                       m_aCommandURL;
         URLToDispatchMap                                                                    m_aListenerMap;
         ::cppu::OMultiTypeInterfaceContainerHelper                                          m_aListenerContainer;   /// container for ALL Listener
 };

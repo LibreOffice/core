@@ -45,7 +45,7 @@ pfunc_setToolBoxControllerCreator SAL_CALL SetToolBoxControllerCreator( pfunc_se
     return pOldSetToolBoxControllerCreator;
 }
 
-svt::ToolboxController* SAL_CALL CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
+svt::ToolboxController* SAL_CALL CreateToolBoxController( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     pfunc_setToolBoxControllerCreator pFactory = NULL;
     {
@@ -67,7 +67,7 @@ pfunc_setStatusBarControllerCreator SAL_CALL SetStatusBarControllerCreator( pfun
     return pOldSetStatusBarControllerCreator;
 }
 
-svt::StatusbarController* SAL_CALL CreateStatusBarController( const Reference< XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const ::rtl::OUString& aCommandURL )
+svt::StatusbarController* SAL_CALL CreateStatusBarController( const Reference< XFrame >& rFrame, StatusBar* pStatusBar, unsigned short nID, const OUString& aCommandURL )
 {
     pfunc_setStatusBarControllerCreator pFactory = NULL;
     {
@@ -111,7 +111,7 @@ pfunc_createDockingWindow SAL_CALL SetDockingWindowCreator( pfunc_createDockingW
     return pOldFunc;
 }
 
-void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL )
+void SAL_CALL CreateDockingWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rResourceURL )
 {
     pfunc_createDockingWindow pFactory = NULL;
     {
@@ -132,7 +132,7 @@ pfunc_isDockingWindowVisible SAL_CALL SetIsDockingWindowVisible( pfunc_isDocking
     return pOldFunc;
 }
 
-bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rResourceURL )
+bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const OUString& rResourceURL )
 {
     pfunc_isDockingWindowVisible pCall = NULL;
     {
@@ -154,7 +154,7 @@ pfunc_activateToolPanel SAL_CALL SetActivateToolPanel( pfunc_activateToolPanel i
     return pOldFunc;
 }
 
-void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
+void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
 {
     pfunc_activateToolPanel pActivator = NULL;
     {

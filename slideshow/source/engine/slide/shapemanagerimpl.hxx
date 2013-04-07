@@ -168,7 +168,7 @@ private:
                                 sal_Int16                                nCursor );
 
 
-    ::rtl::OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
+    OUString checkForHyperlink( ::basegfx::B2DPoint const& hitPos )const;
 
 
     typedef std::map<ShapeSharedPtr,

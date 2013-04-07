@@ -88,20 +88,20 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule ) throw (
     setHeight( uno::makeAny( height ) );
 }
 
-rtl::OUString
+OUString
 SwVbaCell::getServiceImplName()
 {
-    return rtl::OUString("SwVbaCell");
+    return OUString("SwVbaCell");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaCell::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Cell" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Cell" );
     }
     return aServiceNames;
 }

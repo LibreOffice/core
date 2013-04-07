@@ -82,7 +82,7 @@ ScColorScaleEntry::~ScColorScaleEntry()
         mpCell->EndListeningTo(mpCell->GetDocument());
 }
 
-void ScColorScaleEntry::SetFormula( const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
+void ScColorScaleEntry::SetFormula( const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar )
 {
     mpCell.reset(new ScFormulaCell( pDoc, rAddr, rFormula, eGrammar ));
     mpCell->StartListeningTo( pDoc );
@@ -98,9 +98,9 @@ const ScTokenArray* ScColorScaleEntry::GetFormula() const
     return NULL;
 }
 
-rtl::OUString ScColorScaleEntry::GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const
+OUString ScColorScaleEntry::GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const
 {
-    rtl::OUString aFormula;
+    OUString aFormula;
     if(mpCell)
     {
         mpCell->GetFormula(aFormula, eGrammar);

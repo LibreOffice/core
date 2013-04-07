@@ -197,7 +197,7 @@ namespace drawinglayer
                     xBreakIterator = ::com::sun::star::i18n::BreakIterator::create(xContext);
                 }
 
-                const rtl::OUString& rTxt = mrSource.getText();
+                const OUString& rTxt = mrSource.getText();
                 const sal_Int32 nTextLength(mrSource.getTextLength());
                 const ::com::sun::star::lang::Locale& rLocale = mrSource.getLocale();
                 const sal_Int32 nTextPosition(mrSource.getTextPosition());

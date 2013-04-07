@@ -59,13 +59,13 @@ namespace
 //.............................................................................
 
     // comparing two PropertyValue instances
-    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, ::rtl::OUString, bool >
+    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString, bool >
     {
-        bool operator() ( const beans::PropertyValue& rPropValue, const ::rtl::OUString& rName ) const
+        bool operator() ( const beans::PropertyValue& rPropValue, const OUString& rName ) const
         {
             return rPropValue.Name.equals( rName );
         }
-        bool operator() ( const ::rtl::OUString& rName, const beans::PropertyValue& rPropValue ) const
+        bool operator() ( const OUString& rName, const beans::PropertyValue& rPropValue ) const
         {
             return rName.equals( rPropValue.Name );
         }
@@ -97,11 +97,11 @@ void DrawCommandDispatch::initialize()
     FeatureCommandDispatchBase::initialize();
 }
 
-bool DrawCommandDispatch::isFeatureSupported( const ::rtl::OUString& rCommandURL )
+bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
 {
     sal_uInt16 nFeatureId = 0;
-    ::rtl::OUString aBaseCommand;
-    ::rtl::OUString aCustomShapeType;
+    OUString aBaseCommand;
+    OUString aCustomShapeType;
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
 }
 
@@ -137,7 +137,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
             sal_Bool bAttributesAppliedFromGallery = sal_False;
             if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
             {
-                ::std::vector< ::rtl::OUString > aObjList;
+                ::std::vector< OUString > aObjList;
                 if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
                 {
                     for ( sal_uInt16 i = 0; i < aObjList.size(); ++i )
@@ -244,15 +244,15 @@ void DrawCommandDispatch::disposing( const lang::EventObject& /* Source */ )
 {
 }
 
-FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
+FeatureState DrawCommandDispatch::getState( const OUString& rCommand )
 {
     FeatureState aReturn;
     aReturn.bEnabled = false;
     aReturn.aState <<= false;
 
     sal_uInt16 nFeatureId = 0;
-    ::rtl::OUString aBaseCommand;
-    ::rtl::OUString aCustomShapeType;
+    OUString aBaseCommand;
+    OUString aCustomShapeType;
     if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
         switch ( nFeatureId )
@@ -288,7 +288,7 @@ FeatureState DrawCommandDispatch::getState( const ::rtl::OUString& rCommand )
     return aReturn;
 }
 
-void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
+void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
 {
     (void)rArgs;
 
@@ -297,8 +297,8 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
     bool bCreate = false;
 
     sal_uInt16 nFeatureId = 0;
-    ::rtl::OUString aBaseCommand;
-    ::rtl::OUString aCustomShapeType;
+    OUString aBaseCommand;
+    OUString aCustomShapeType;
     if ( parseCommandURL( rCommand, &nFeatureId, &aBaseCommand, &aCustomShapeType ) )
     {
         m_nFeatureId = nFeatureId;
@@ -382,7 +382,7 @@ void DrawCommandDispatch::execute( const ::rtl::OUString& rCommand, const Sequen
                     pDrawViewWrapper->SetCreateMode();
                 }
 
-                const ::rtl::OUString sKeyModifier( "KeyModifier" );
+                const OUString sKeyModifier( "KeyModifier" );
                 const beans::PropertyValue* pIter = rArgs.getConstArray();
                 const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
                 const beans::PropertyValue* pKeyModifier = ::std::find_if(
@@ -577,7 +577,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
 }
 
 bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt16* pnFeatureId,
-    OUString* pBaseCommand, ::rtl::OUString* pCustomShapeType )
+    OUString* pBaseCommand, OUString* pCustomShapeType )
 {
     bool bFound = true;
     sal_uInt16 nFeatureId = 0;

@@ -182,7 +182,7 @@ bool SfxStyleSheetBase::SetName( const XubString& rName )
     return sal_True;
 }
 
-rtl::OUString SfxStyleSheetBase::GetDisplayName() const
+OUString SfxStyleSheetBase::GetDisplayName() const
 {
     if( maDisplayName.isEmpty() )
     {
@@ -194,7 +194,7 @@ rtl::OUString SfxStyleSheetBase::GetDisplayName() const
     }
 }
 
-void SfxStyleSheetBase::SetDisplayName( const rtl::OUString& rDisplayName )
+void SfxStyleSheetBase::SetDisplayName( const OUString& rDisplayName )
 {
     maDisplayName = rDisplayName;
 }
@@ -491,7 +491,7 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
 }
 
 
-SfxStyleSheetBase* SfxStyleSheetIterator::Find(const rtl::OUString& rStr)
+SfxStyleSheetBase* SfxStyleSheetIterator::Find(const OUString& rStr)
 {
     for ( sal_uInt16 n = 0; n < pBasePool->aStyles.size(); ++n )
     {

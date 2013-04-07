@@ -236,9 +236,9 @@ public:
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw();
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw();
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw();
+    virtual OUString SAL_CALL getImplementationName() throw();
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw();
 
 // ::com::sun::star::awt::XControl
     virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent) throw(::com::sun::star::uno::RuntimeException);
@@ -277,24 +277,24 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const ::com::sun::star::uno::Type& xType ) throw(::com::sun::star::uno::RuntimeException);
 
 // UnoControl
-    virtual ::rtl::OUString GetComponentServiceName();
+    virtual OUString GetComponentServiceName();
 
 // ::com::sun::star::util::XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& l) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::util::XModeSelector
-    virtual void SAL_CALL setMode(const ::rtl::OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsMode(const ::rtl::OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMode(const OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsMode(const OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainer
     virtual void SAL_CALL addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::frame::XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::frame::XDispatchProviderInterception
@@ -348,7 +348,7 @@ class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
                                             m_aSelectionListeners,
                                             m_aGridControlListeners;
 
-    ::rtl::OUString         m_aMode;
+    OUString         m_aMode;
     sal_Int32               m_nCursorListening;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
@@ -437,8 +437,8 @@ public:
     virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw(::com::sun::star::uno::RuntimeException);
 
 // VCLXWindow
-    virtual void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
 
@@ -477,10 +477,10 @@ public:
     void stopCursorListening();
 
 // ::com::sun::star::util::XModeSelector
-    virtual void SAL_CALL setMode(const ::rtl::OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsMode(const ::rtl::OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMode(const OUString& Mode) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMode() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsMode(const OUString& Mode) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainer
     virtual void SAL_CALL addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l) throw(::com::sun::star::uno::RuntimeException);
@@ -493,7 +493,7 @@ public:
     virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::frame::XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::frame::XDispatchProviderInterception

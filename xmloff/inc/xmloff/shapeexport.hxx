@@ -126,8 +126,8 @@ enum XmlShapeType
 /** caches style and type info after a collectShapeAutostyle for later use in exportShape */
 struct ImplXMLShapeExportInfo
 {
-    rtl::OUString   msStyleName;
-    rtl::OUString   msTextStyleName;
+    OUString   msStyleName;
+    OUString   msTextStyleName;
     sal_Int32       mnFamily;
     XmlShapeType    meShapeType;
 
@@ -168,7 +168,7 @@ private:
     sal_Bool                                    mbExportLayer;
     ImplXMLShapeExportInfoVector                maShapeInfos;
     ImplXMLShapeExportInfoVector::iterator      maCurrentInfo;
-    rtl::OUString                               msPresentationStylePrefix;
+    OUString                               msPresentationStylePrefix;
 
     // #88546# possibility to swich progress bar handling on/off
     sal_Bool                                    mbHandleProgressBar;
@@ -182,30 +182,30 @@ private:
 
     SAL_DLLPRIVATE UniReference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
 
-    const rtl::OUString                         msZIndex;
-    const rtl::OUString                         msPrintable;
-    const rtl::OUString                         msVisible;
+    const OUString                         msZIndex;
+    const OUString                         msPrintable;
+    const OUString                         msVisible;
 
-    const rtl::OUString                         msEmptyPres;
-    const rtl::OUString                         msModel;
-    const rtl::OUString                         msStartShape;
-    const rtl::OUString                         msEndShape;
-    const rtl::OUString                         msOnClick;
-    const rtl::OUString                         msEventType;
-    const rtl::OUString                         msPresentation;
-    const rtl::OUString                         msMacroName;
-    const rtl::OUString                         msScript;
-    const rtl::OUString                         msLibrary;
-    const rtl::OUString                         msClickAction;
-    const rtl::OUString                         msBookmark;
-    const rtl::OUString                         msEffect;
-    const rtl::OUString                         msPlayFull;
-    const rtl::OUString                         msVerb;
-    const rtl::OUString                         msSoundURL;
-    const rtl::OUString                         msSpeed;
-    const rtl::OUString                         msStarBasic;
+    const OUString                         msEmptyPres;
+    const OUString                         msModel;
+    const OUString                         msStartShape;
+    const OUString                         msEndShape;
+    const OUString                         msOnClick;
+    const OUString                         msEventType;
+    const OUString                         msPresentation;
+    const OUString                         msMacroName;
+    const OUString                         msScript;
+    const OUString                         msLibrary;
+    const OUString                         msClickAction;
+    const OUString                         msBookmark;
+    const OUString                         msEffect;
+    const OUString                         msPlayFull;
+    const OUString                         msVerb;
+    const OUString                         msSoundURL;
+    const OUString                         msSpeed;
+    const OUString                         msStarBasic;
 
-    rtl::OUStringBuffer msBuffer;
+    OUStringBuffer msBuffer;
 
     SAL_DLLPRIVATE void ImpCalcShapeType(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, XmlShapeType& eShapeType);
 
@@ -213,7 +213,7 @@ private:
     SAL_DLLPRIVATE void ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& rMatrix, const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet);
     SAL_DLLPRIVATE void ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMat, ::basegfx::B2DTuple& rTRScale, double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, com::sun::star::awt::Point* pRefPoint);
     SAL_DLLPRIVATE void ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear, double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const sal_Int32 nFeatures);
-    SAL_DLLPRIVATE sal_Bool ImpExportPresentationAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet, const rtl::OUString& rClass );
+    SAL_DLLPRIVATE sal_Bool ImpExportPresentationAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet, const OUString& rClass );
     SAL_DLLPRIVATE void ImpExportText( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     SAL_DLLPRIVATE void ImpExportEvents( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     SAL_DLLPRIVATE void ImpExportDescription( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape ); // #i68101#
@@ -304,7 +304,7 @@ public:
     void enableHandleProgressBar( sal_Bool bEnable = sal_True ) { mbHandleProgressBar = bEnable; }
     sal_Bool IsHandleProgressBarEnabled() const { return mbHandleProgressBar; }
 
-    void setPresentationStylePrefix( const rtl::OUString& rPrefix ) { msPresentationStylePrefix = rPrefix; }
+    void setPresentationStylePrefix( const OUString& rPrefix ) { msPresentationStylePrefix = rPrefix; }
 
     /** helper for chart that adds all attributes of a 3d scene element to the export */
     void export3DSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet );

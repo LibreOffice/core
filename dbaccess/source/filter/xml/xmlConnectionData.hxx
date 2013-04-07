@@ -34,11 +34,11 @@ namespace dbaxml
     public:
 
         OXMLConnectionData( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName);
+                    const OUString& rLName);
         virtual ~OXMLConnectionData();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     };
 // -----------------------------------------------------------------------------

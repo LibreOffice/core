@@ -38,10 +38,10 @@ class OutputDevice;
 class SVGFontExport
 {
     typedef ::std::vector< ObjectRepresentation >                               ObjectVector;
-    typedef ::std::set< ::rtl::OUString, ::std::greater< ::rtl::OUString > >    GlyphSet;
+    typedef ::std::set< OUString, ::std::greater< OUString > >    GlyphSet;
     typedef ::std::map< FontItalic, GlyphSet >                                  FontItalicMap;
     typedef ::std::map< FontWeight, FontItalicMap >                             FontWeightMap;
-    typedef ::std::map< ::rtl::OUString, FontWeightMap >                        FontNameMap;
+    typedef ::std::map< OUString, FontWeightMap >                        FontNameMap;
     typedef FontNameMap                                                         GlyphTree;
 
 private:
@@ -54,7 +54,7 @@ private:
     GlyphSet&           implGetGlyphSet( const Font& rFont );
     void                implCollectGlyphs();
     void                implEmbedFont( const Font& rFont );
-    void                implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rCellStr );
+    void                implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr );
 
 public:
 
@@ -62,7 +62,7 @@ public:
                         ~SVGFontExport();
 
     void                EmbedFonts();
-    ::rtl::OUString     GetMappedFontName( const ::rtl::OUString& rFontName ) const;
+    OUString     GetMappedFontName( const OUString& rFontName ) const;
 };
 
 #endif

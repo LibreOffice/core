@@ -554,7 +554,7 @@ void    UCBStream::SetSize( sal_uIntPtr nSize )
 
 
 SbError SbiStream::Open
-( short nCh, const rtl::OString& rName, short nStrmMode, short nFlags, short nL )
+( short nCh, const OString& rName, short nStrmMode, short nFlags, short nL )
 {
     nMode   = nFlags;
     nLen    = nL;
@@ -565,7 +565,7 @@ SbError SbiStream::Open
     {
         nStrmMode |= STREAM_NOCREATE;
     }
-    OUString aStr(rtl::OStringToOUString(rName, osl_getThreadTextEncoding()));
+    OUString aStr(OStringToOUString(rName, osl_getThreadTextEncoding()));
     OUString aNameStr = getFullPath( aStr );
 
     if( hasUno() )
@@ -632,7 +632,7 @@ SbError SbiStream::Close()
     return nError;
 }
 
-SbError SbiStream::Read(rtl::OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
+SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
 {
     nExpandOnWriteTo = 0;
     if( !bForceReadingPerByte && IsText() )
@@ -650,7 +650,7 @@ SbError SbiStream::Read(rtl::OString& rBuf, sal_uInt16 n, bool bForceReadingPerB
         {
             return nError = SbERR_BAD_RECORD_LENGTH;
         }
-        rtl::OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
+        OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
         //Pad it out with ' ' to the requested length on short read
         sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
         comphelper::string::padToLength(aBuffer, nRequested, ' ');
@@ -670,7 +670,7 @@ SbError SbiStream::Read( char& ch )
     if (aLine.isEmpty())
     {
         Read( aLine, 0 );
-        aLine = aLine + rtl::OString('\n');
+        aLine = aLine + OString('\n');
     }
     ch = aLine[0];
     aLine = aLine.copy(1);
@@ -701,15 +701,15 @@ void SbiStream::ExpandFile()
 
 namespace
 {
-    void WriteLines(SvStream &rStream, const rtl::OString& rStr)
+    void WriteLines(SvStream &rStream, const OString& rStr)
     {
-        rtl::OString aStr(convertLineEnd(rStr, rStream.GetLineDelimiter()) );
+        OString aStr(convertLineEnd(rStr, rStream.GetLineDelimiter()) );
         write_uInt8s_FromOString(rStream, aStr);
         endl( rStream );
     }
 }
 
-SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
+SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
 {
     ExpandFile();
     if( IsAppend() )
@@ -730,7 +730,7 @@ SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
                 aLine = aLine.copy(0, nLineLen);
             }
             WriteLines(*pStrm, aLine);
-            aLine = rtl::OString();
+            aLine = OString();
         }
     }
     else
@@ -779,7 +779,7 @@ SbError SbiIoSystem::GetError()
     return n;
 }
 
-void SbiIoSystem::Open(short nCh, const rtl::OString& rName, short nMode, short nFlags, short nLen)
+void SbiIoSystem::Open(short nCh, const OString& rName, short nMode, short nFlags, short nLen)
 {
     nError = 0;
     if( nCh >= CHANNELS || !nCh )
@@ -842,7 +842,7 @@ void SbiIoSystem::Shutdown()
     // anything left to PRINT?
     if( !aOut.isEmpty() )
     {
-        OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
+        OUString aOutStr(OStringToOUString(aOut, osl_getThreadTextEncoding()));
 #if defined __GNUC__
         Window* pParent = Application::GetDefDialogParent();
         MessBox( pParent, WinBits( WB_OK ), OUString(), aOutStr ).Execute();
@@ -850,11 +850,11 @@ void SbiIoSystem::Shutdown()
         MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOutStr ).Execute();
 #endif
     }
-    aOut = rtl::OString();
+    aOut = OString();
 }
 
 
-void SbiIoSystem::Read(rtl::OString& rBuf, short n)
+void SbiIoSystem::Read(OString& rBuf, short n)
 {
     if( !nChan )
     {
@@ -878,7 +878,7 @@ char SbiIoSystem::Read()
         if( aIn.isEmpty() )
         {
             ReadCon( aIn );
-            aIn = aIn + rtl::OString('\n');
+            aIn = aIn + OString('\n');
         }
         ch = aIn[0];
         aIn = aIn.copy(1);
@@ -894,7 +894,7 @@ char SbiIoSystem::Read()
     return ch;
 }
 
-void SbiIoSystem::Write(const rtl::OString& rBuf, short n)
+void SbiIoSystem::Write(const OString& rBuf, short n)
 {
     if( !nChan )
     {
@@ -946,9 +946,9 @@ void SbiIoSystem::CloseAll(void)
 ***************************************************************************/
 
 
-void SbiIoSystem::ReadCon(rtl::OString& rIn)
+void SbiIoSystem::ReadCon(OString& rIn)
 {
-    OUString aPromptStr(rtl::OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
+    OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
     {
@@ -958,12 +958,12 @@ void SbiIoSystem::ReadCon(rtl::OString& rIn)
     {
         nError = SbERR_USER_ABORT;
     }
-    aPrompt = rtl::OString();
+    aPrompt = OString();
 }
 
 // output of a MessageBox, if theres a CR in the console-buffer
 
-void SbiIoSystem::WriteCon(const rtl::OString& rText)
+void SbiIoSystem::WriteCon(const OString& rText)
 {
     aOut += rText;
     sal_Int32 n1 = aOut.indexOf('\n');
@@ -988,7 +988,7 @@ void SbiIoSystem::WriteCon(const rtl::OString& rText)
         {
             aOut = aOut.copy(1);
         }
-        OUString aStr(rtl::OStringToOUString(s, osl_getThreadTextEncoding()));
+        OUString aStr(OStringToOUString(s, osl_getThreadTextEncoding()));
         {
             SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),

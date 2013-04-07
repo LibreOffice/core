@@ -66,9 +66,9 @@ class FolderDescriptor
 public:
     FolderDescriptor (
         int nPriority,
-        const ::rtl::OUString& rsTitle,
-        const ::rtl::OUString& rsTargetDir,
-        const ::rtl::OUString& rsContentIdentifier,
+        const OUString& rsTitle,
+        const OUString& rsTargetDir,
+        const OUString& rsContentIdentifier,
         const Reference<com::sun::star::ucb::XCommandEnvironment>& rxFolderEnvironment)
         : mnPriority(nPriority),
           msTitle(rsTitle),
@@ -77,9 +77,9 @@ public:
           mxFolderEnvironment(rxFolderEnvironment)
     { }
     int mnPriority;
-    ::rtl::OUString msTitle;
-    ::rtl::OUString msTargetDir;
-    ::rtl::OUString msContentIdentifier;
+    OUString msTitle;
+    OUString msTargetDir;
+    OUString msContentIdentifier;
     //    Reference<sdbc::XResultSet> mxFolderResultSet;
     Reference<com::sun::star::ucb::XCommandEnvironment> mxFolderEnvironment;
 
@@ -94,7 +94,7 @@ public:
 /** Use a heuristic based on the URL of a top-level template folder to
     assign a priority that is used to sort the folders.
 */
-int Classify (const ::rtl::OUString&, const ::rtl::OUString& rsURL)
+int Classify (const OUString&, const OUString& rsURL)
 {
     int nPriority (0);
 
@@ -232,10 +232,10 @@ TemplateScanner::State TemplateScanner::InitializeEntryScanning (void)
 
         //  We are interested only in three properties: the entry's name,
         //  its URL, and its content type.
-        Sequence<rtl::OUString> aProps (3);
-        aProps[0] = rtl::OUString(TITLE);
-        aProps[1] = rtl::OUString(TARGET_URL);
-        aProps[2] = rtl::OUString(DESCRIPTION);
+        Sequence<OUString> aProps (3);
+        aProps[0] = OUString(TITLE);
+        aProps[1] = OUString(TARGET_URL);
+        aProps[2] = OUString(DESCRIPTION);
 
         //  Create a cursor to iterate over the templates in this folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_DOCUMENTS_ONLY;
@@ -262,11 +262,11 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
     {
         if (mxEntryResultSet->next())
         {
-            ::rtl::OUString sTitle (xRow->getString (1));
-            ::rtl::OUString sTargetURL (xRow->getString (2));
-            ::rtl::OUString sContentType (xRow->getString (3));
+            OUString sTitle (xRow->getString (1));
+            OUString sTargetURL (xRow->getString (2));
+            OUString sContentType (xRow->getString (3));
 
-            ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+            OUString aId = xContentAccess->queryContentIdentifierString();
             ::ucbhelper::Content  aContent = ::ucbhelper::Content (aId, mxEntryEnvironment, comphelper::getProcessComponentContext());
             if (aContent.isDocument ())
             {
@@ -279,7 +279,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                     ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE)))
                     ||  (sContentType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(IMPRESS_XML_TEMPLATE_B))))
                 {
-                    ::rtl::OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
+                    OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
                     mpLastAddedEntry = new TemplateEntry(sLocalisedTitle, sTargetURL);
                     mpTemplateDirectory->InsertEntry(mpLastAddedEntry);
@@ -326,9 +326,9 @@ TemplateScanner::State TemplateScanner::InitializeFolderScanning (void)
         ::ucbhelper::Content aTemplateDir (mxTemplateRoot, mxFolderEnvironment, comphelper::getProcessComponentContext());
 
         //  Define the list of properties we are interested in.
-        Sequence<rtl::OUString> aProps (2);
-        aProps[0] = rtl::OUString(TITLE);
-        aProps[1] = rtl::OUString(TARGET_DIR_URL);
+        Sequence<OUString> aProps (2);
+        aProps[0] = OUString(TITLE);
+        aProps[1] = OUString(TARGET_DIR_URL);
 
         //  Create an cursor to iterate over the template folders.
         ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_ONLY;
@@ -360,9 +360,9 @@ TemplateScanner::State TemplateScanner::GatherFolderList (void)
             Reference<sdbc::XRow> xRow (mxFolderResultSet, UNO_QUERY);
             if (xRow.is())
             {
-                ::rtl::OUString sTitle (xRow->getString (1));
-                ::rtl::OUString sTargetDir (xRow->getString (2));
-                ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+                OUString sTitle (xRow->getString (1));
+                OUString sTargetDir (xRow->getString (2));
+                OUString aId = xContentAccess->queryContentIdentifierString();
 
                 mpFolderDescriptors->insert(
                     FolderDescriptor(
@@ -392,9 +392,9 @@ TemplateScanner::State TemplateScanner::ScanFolder (void)
         FolderDescriptor aDescriptor (*mpFolderDescriptors->begin());
         mpFolderDescriptors->erase(mpFolderDescriptors->begin());
 
-        ::rtl::OUString sTitle (aDescriptor.msTitle);
-        ::rtl::OUString sTargetDir (aDescriptor.msTargetDir);
-        ::rtl::OUString aId (aDescriptor.msContentIdentifier);
+        OUString sTitle (aDescriptor.msTitle);
+        OUString sTargetDir (aDescriptor.msTargetDir);
+        OUString aId (aDescriptor.msContentIdentifier);
 
         maFolderContent = ::ucbhelper::Content (aId, aDescriptor.mxFolderEnvironment, comphelper::getProcessComponentContext());
         if (maFolderContent.isFolder())

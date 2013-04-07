@@ -48,8 +48,8 @@ private:
     sal_Bool        m_bFirstFetchSizePropagationDone;
     sal_Int32       m_nLastFetchSize;
     sal_Bool        m_bLastFetchDirection;
-    const rtl::OUString     m_aPropertyNameForFetchSize;
-    const rtl::OUString     m_aPropertyNameForFetchDirection;
+    const OUString     m_aPropertyNameForFetchSize;
+    const OUString     m_aPropertyNameForFetchDirection;
 
 
     void SAL_CALL

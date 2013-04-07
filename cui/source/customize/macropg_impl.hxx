@@ -48,15 +48,15 @@ private:
     CancelButton    maCancelButton;
     HelpButton      maHelpButton;
 
-    ::rtl::OUString maURL;
+    OUString maURL;
 
     DECL_LINK(ButtonHandler, void *);
 
 public:
-    AssignComponentDialog( Window * pParent, const ::rtl::OUString& rURL );
+    AssignComponentDialog( Window * pParent, const OUString& rURL );
     ~AssignComponentDialog();
 
-    ::rtl::OUString getURL( void ) const
+    OUString getURL( void ) const
         { return maURL; }
 };
 

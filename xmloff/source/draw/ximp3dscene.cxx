@@ -30,8 +30,6 @@
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -42,7 +40,7 @@ using namespace ::xmloff::token;
 SdXML3DLightContext::SdXML3DLightContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
-    const rtl::OUString& rLName,
+    const OUString& rLName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
 :   SvXMLImportContext( rImport, nPrfx, rLName),
     maDiffuseColor(0x00000000),
@@ -243,7 +241,7 @@ SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
 }
 
 /** creates a 3d ligth context and adds it to the internal list for later processing */
-SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const rtl::OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
+SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLImportContext* pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);
 
@@ -258,7 +256,7 @@ SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uIn
 }
 
 /** this should be called for each scene attribute */
-void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     if( XML_NAMESPACE_DR3D == nPrefix )
     {

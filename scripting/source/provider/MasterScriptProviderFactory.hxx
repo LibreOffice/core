@@ -54,14 +54,14 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & xComponentContext );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( css::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
-        supportsService( ::rtl::OUString const & serviceName )
+        supportsService( OUString const & serviceName )
             throw ( css::uno::RuntimeException );
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw ( css::uno::RuntimeException );
 

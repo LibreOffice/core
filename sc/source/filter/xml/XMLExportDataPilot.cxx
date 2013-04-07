@@ -54,7 +54,6 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::rtl::OUString;
 
 ScXMLExportDataPilot::ScXMLExportDataPilot(ScXMLExport& rTempExport)
     : rExport(rTempExport),
@@ -66,7 +65,7 @@ ScXMLExportDataPilot::~ScXMLExportDataPilot()
 {
 }
 
-rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
+OUString ScXMLExportDataPilot::getDPOperatorXML(
     const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const
 {
     switch (aFilterOperator)
@@ -76,27 +75,27 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_MATCH);
             else
-                return rtl::OUString("=");
+                return OUString("=");
         }
         case SC_NOT_EQUAL :
         {
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_NOMATCH);
             else
-                return rtl::OUString("!=");
+                return OUString("!=");
         }
         case SC_BOTPERC :
             return GetXMLToken(XML_BOTTOM_PERCENT);
         case SC_BOTVAL :
             return GetXMLToken(XML_BOTTOM_VALUES);
         case SC_GREATER :
-            return rtl::OUString(">");
+            return OUString(">");
         case SC_GREATER_EQUAL :
-            return rtl::OUString(">=");
+            return OUString(">=");
         case SC_LESS :
-            return rtl::OUString("<");
+            return OUString("<");
         case SC_LESS_EQUAL :
-            return rtl::OUString("<=");
+            return OUString("<=");
         case SC_TOPPERC :
             return GetXMLToken(XML_TOP_PERCENT);
         case SC_TOPVAL :
@@ -104,16 +103,16 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(
         default:
             OSL_FAIL("This FilterOperator is not supported.");
     }
-    return rtl::OUString("=");
+    return OUString("=");
 }
 
 void ScXMLExportDataPilot::WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions)
 {
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(sal_Int32(aQueryEntry.nField)));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, OUString::valueOf(sal_Int32(aQueryEntry.nField)));
     if (bIsCaseSensitive)
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     const ScQueryEntry::Item& rItem = aQueryEntry.GetQueryItem();
-    const rtl::OUString& rQueryStr = rItem.maString;
+    const OUString& rQueryStr = rItem.maString;
     if (rItem.meType == ScQueryEntry::ByString)
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, rQueryStr);
@@ -177,7 +176,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             {
                 ScRange aConditionRange(aQueryParam.nCol1, aQueryParam.nRow1, aQueryParam.nTab,
                     aQueryParam.nCol2, aQueryParam.nRow2, aQueryParam.nTab);
-                rtl::OUString sConditionRange;
+                OUString sConditionRange;
                 ScRangeStringConverter::GetStringFromRange( sConditionRange, aConditionRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sConditionRange);
             }
@@ -211,7 +210,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 ScQueryEntry aPrevFilterField(aQueryParam.GetEntry(0));
                 ScQueryConnect aConnection = aQueryParam.GetEntry(1).eConnect;
                 bool bOpenAndElement;
-                rtl::OUString aName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND)));
+                OUString aName(rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND)));
                 if (aConnection == SC_AND)
                 {
                     rExport.StartElement( aName, true );
@@ -270,7 +269,7 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
     const sheet::DataPilotFieldReference* pRef = pDim->GetReferenceValue();
     if (pRef)
     {
-        rtl::OUString sValueStr;
+        OUString sValueStr;
         switch (pRef->ReferenceType)
         {
             case sheet::DataPilotFieldReferenceType::NONE :
@@ -314,7 +313,7 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
         }
         else
         {
-            sValueStr = rtl::OUString();
+            sValueStr = OUString();
             switch(pRef->ReferenceItemType)
             {
                 case sheet::DataPilotFieldReferenceItemType::PREVIOUS :
@@ -342,7 +341,7 @@ void ScXMLExportDataPilot::WriteSortInfo(ScDPSaveDimension* pDim)
         else
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
 
-        rtl::OUString sValueStr;
+        OUString sValueStr;
         switch (pSortInfo->Mode)
         {
             case sheet::DataPilotFieldSortMode::NONE:
@@ -376,7 +375,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
         else
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ENABLED, XML_FALSE);
 
-        rtl::OUString sValueStr;
+        OUString sValueStr;
         switch (pAutoInfo->ShowItemsMode)
         {
             case sheet::DataPilotFieldShowItemsMode::FROM_TOP:
@@ -389,7 +388,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
         if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
 
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
         ::sax::Converter::convertNumber(sBuffer, pAutoInfo->ItemCount);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, sBuffer.makeStringAndClear());
 
@@ -409,7 +408,7 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
         else
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_FALSE);
 
-        rtl::OUString sValueStr;
+        OUString sValueStr;
         switch (pLayoutInfo->LayoutMode)
         {
             case sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT:
@@ -444,7 +443,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
         rExport.CheckAttrList();
         for (sal_Int32 nSubTotal = 0; nSubTotal < nSubTotalCount; nSubTotal++)
         {
-            rtl::OUString sFunction;
+            OUString sFunction;
             GeneralFunction nFunc = static_cast<GeneralFunction>(pDim->GetSubTotalFunc(nSubTotal));
             ScXMLConverter::GetStringFromFunction( sFunction, nFunc);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
@@ -464,7 +463,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
         rExport.CheckAttrList();
         for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; ++i)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, rtl::OUString((*i)->GetName()));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, OUString((*i)->GetName()));
 
             if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
@@ -474,7 +473,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
             }
 
-            rtl::OUStringBuffer sBuffer;
+            OUStringBuffer sBuffer;
             ::sax::Converter::convertBool(sBuffer, (*i)->GetIsVisible());
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, sBuffer.makeStringAndClear());
             ::sax::Converter::convertBool(sBuffer, (*i)->GetShowDetails());
@@ -490,7 +489,7 @@ void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
     // #i114202# GetShowEmpty is only valid if HasShowEmpty is true.
     if (pDim->HasShowEmpty())
     {
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, pDim->GetShowEmpty());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     }
@@ -555,7 +554,7 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_START, XML_AUTO);
         else
         {
-            rtl::OUStringBuffer sDate;
+            OUStringBuffer sDate;
             rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.mfStart);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_START, sDate.makeStringAndClear());
         }
@@ -563,7 +562,7 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_END, XML_AUTO);
         else
         {
-            rtl::OUStringBuffer sDate;
+            OUStringBuffer sDate;
             rExport.GetMM100UnitConverter().convertDateTime(sDate, rGroupInfo.mfEnd);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_END, sDate.makeStringAndClear());
         }
@@ -574,7 +573,7 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START, XML_AUTO);
         else
         {
-            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStart,
+            OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStart,
                         rtl_math_StringFormat_Automatic,
                         rtl_math_DecimalPlaces_Max, '.', true));
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_START, sValue);
@@ -583,13 +582,13 @@ void ScXMLExportDataPilot::WriteNumGroupInfo(const ScDPNumGroupInfo& rGroupInfo)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END, XML_AUTO);
         else
         {
-            rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfEnd,
+            OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfEnd,
                         rtl_math_StringFormat_Automatic,
                         rtl_math_DecimalPlaces_Max, '.', true));
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_END, sValue);
         }
     }
-    rtl::OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStep,
+    OUString sValue( ::rtl::math::doubleToUString( rGroupInfo.mfStep,
                 rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true));
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STEP, sValue);
@@ -658,7 +657,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
                         sal_Int32 nElemCount = pGroup->GetElementCount();
                         for(sal_Int32 j = 0; j < nElemCount; ++j)
                         {
-                            const rtl::OUString* pElem = pGroup->GetElementByIndex(j);
+                            const OUString* pElem = pGroup->GetElementByIndex(j);
                             if (pElem)
                             {
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
@@ -686,14 +685,14 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
 
     if (pDim->IsDataLayout())
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD, XML_TRUE);
-    rtl::OUString sValueStr;
+    OUString sValueStr;
     ScXMLConverter::GetStringFromOrientation( sValueStr,
         (sheet::DataPilotFieldOrientation) pDim->GetOrientation() );
     if( !sValueStr.isEmpty() )
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
     if (pDim->GetUsedHierarchy() != 1)
     {
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
         ::sax::Converter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, sBuffer.makeStringAndClear());
     }
@@ -749,14 +748,14 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             continue;
 
         ScRange aOutRange((*pDPs)[i]->GetOutRange());
-        rtl::OUString sTargetRangeAddress;
+        OUString sTargetRangeAddress;
         ScRangeStringConverter::GetStringFromRange( sTargetRangeAddress, aOutRange, pDoc, ::formula::FormulaGrammar::CONV_OOO );
         ScDocAttrIterator aAttrItr(pDoc, aOutRange.aStart.Tab(),
             aOutRange.aStart.Col(), aOutRange.aStart.Row(),
             aOutRange.aEnd.Col(), aOutRange.aEnd.Row());
         SCCOL nCol;
         SCROW nRow1, nRow2;
-        rtl::OUString sOUButtonList;
+        OUString sOUButtonList;
         const ScPatternAttr* pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
         while (pAttr)
         {
@@ -772,8 +771,8 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             }
             pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
         }
-        rtl::OUString sName((*pDPs)[i]->GetName());
-        rtl::OUString sApplicationData((*pDPs)[i]->GetTag());
+        OUString sName((*pDPs)[i]->GetName());
+        OUString sApplicationData((*pDPs)[i]->GetTag());
         bool bRowGrand = pDPSave->GetRowGrand();
         bool bColumnGrand = pDPSave->GetColumnGrand();
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sName);
@@ -883,7 +882,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OBJECT_NAME, pServSource->aParName);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USER_NAME, pServSource->aParUser);
             // #i111754# leave out password attribute as long as DataPilotSource doesn't specify the content
-            // rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORD, rtl::OUString(pServSource->aParPass));
+            // rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORD, OUString(pServSource->aParPass));
             SvXMLElementExport aElemSD(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE, true, true);
             rExport.CheckAttrList();
         }

@@ -162,10 +162,10 @@ public:
 
 sal_Bool ConvertBufferToFormat( void* pBuf,
                                 sal_uInt32 nBufSize,
-                                const ::rtl::OUString& aFormatShortName,
+                                const OUString& aFormatShortName,
                                 uno::Any& aResult );
 
-::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
+OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 
 typedef ::std::vector< FORMATETC* > FormatEtcList;
 
@@ -189,28 +189,28 @@ struct OleComponentNative_Impl {
         m_aSupportedGraphFormats.realloc( 5 );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )),
-            ::rtl::OUString( "Windows Enhanced Metafile" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )),
+            OUString( "Windows Enhanced Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
-            ::rtl::OUString( "Windows Metafile" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+            OUString( "Windows Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
-            ::rtl::OUString( "Bitmap" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+            OUString( "Bitmap" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
-            ::rtl::OUString( "image/png" ),
-            ::rtl::OUString( "PNG" ),
+            OUString( "image/png" ),
+            OUString( "PNG" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
-            ::rtl::OUString( "GDIMetafile" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" )),
+            OUString( "GDIMetafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
     }
 
@@ -241,16 +241,16 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 }
 
 //----------------------------------------------
-::rtl::OUString GetFlavorSuffixFromAspect( DWORD nAsp )
+OUString GetFlavorSuffixFromAspect( DWORD nAsp )
 {
-    ::rtl::OUString aResult;
+    OUString aResult;
 
     if ( nAsp == DVASPECT_THUMBNAIL )
-        aResult = ::rtl::OUString( ";Aspect=THUMBNAIL" );
+        aResult = OUString( ";Aspect=THUMBNAIL" );
     else if ( nAsp == DVASPECT_ICON )
-        aResult = ::rtl::OUString( ";Aspect=ICON" );
+        aResult = OUString( ";Aspect=ICON" );
     else if ( nAsp == DVASPECT_DOCPRINT )
-        aResult = ::rtl::OUString( ";Aspect=DOCPRINT" );
+        aResult = OUString( ";Aspect=DOCPRINT" );
 
     // no suffix for DVASPECT_CONTENT
 
@@ -258,11 +258,11 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 }
 
 //----------------------------------------------
-HRESULT OpenIStorageFromURL_Impl( const ::rtl::OUString& aURL, IStorage** ppIStorage )
+HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
 {
     OSL_ENSURE( ppIStorage, "The pointer must not be empty!" );
 
-    ::rtl::OUString aFilePath;
+    OUString aFilePath;
     if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
@@ -288,11 +288,11 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
         unsigned char* pBuf = NULL;
         sal_uInt32 nBufSize = 0;
-        ::rtl::OUString aFormat;
+        OUString aFormat;
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
-            aFormat = ::rtl::OUString("image/x-wmf");
+            aFormat = OUString("image/x-wmf");
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
@@ -323,7 +323,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
-            aFormat = ::rtl::OUString("image/x-emf");
+            aFormat = OUString("image/x-emf");
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
@@ -337,7 +337,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
-            aFormat = ::rtl::OUString("image/x-MS-bmp");
+            aFormat = OUString("image/x-MS-bmp");
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
@@ -398,9 +398,9 @@ sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aRe
 }
 
 //----------------------------------------------
-::rtl::OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
+OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 {
-    ::rtl::OUString aResult;
+    OUString aResult;
 
     if( pStr )
     {
@@ -408,12 +408,12 @@ sal_Bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > aSeq, CLSID& aRe
         {
             if ( *pStr == '&' )
             {
-                aResult += ::rtl::OUString( "~" );
+                aResult += OUString( "~" );
                 while( *( ++pStr ) == '&' );
             }
             else
             {
-                aResult += ::rtl::OUString( pStr, 1 );
+                aResult += OUString( pStr, 1 );
                 pStr++;
             }
         }
@@ -556,7 +556,7 @@ void OleComponent::CreateNewIStorage_Impl()
     // TODO: in future a global memory could be used instead of file.
 
     // write the stream to the temporary file
-    ::rtl::OUString aTempURL;
+    OUString aTempURL;
 
     OSL_ENSURE( m_pUnoOleObject, "Unexpected object absence!" );
     if ( m_pUnoOleObject )
@@ -568,7 +568,7 @@ void OleComponent::CreateNewIStorage_Impl()
         throw uno::RuntimeException(); // TODO
 
     // open an IStorage based on the temporary file
-    ::rtl::OUString aTempFilePath;
+    OUString aTempFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
@@ -584,7 +584,7 @@ uno::Sequence< datatransfer::DataFlavor > OleComponentNative_Impl::GetFlavorsFor
     for ( sal_uInt32 nAsp = 1; nAsp <= 8; nAsp *= 2 )
         if ( ( nSupportedAspects & nAsp ) == nAsp )
         {
-            ::rtl::OUString aAspectSuffix = GetFlavorSuffixFromAspect( nAsp );
+            OUString aAspectSuffix = GetFlavorSuffixFromAspect( nAsp );
 
             sal_Int32 nLength = aResult.getLength();
             aResult.realloc( nLength + m_aSupportedGraphFormats.getLength() );
@@ -718,7 +718,7 @@ sal_Bool OleComponent::InitializeObject_Impl()
 }
 
 //----------------------------------------------
-void OleComponent::LoadEmbeddedObject( const ::rtl::OUString& aTempURL )
+void OleComponent::LoadEmbeddedObject( const OUString& aTempURL )
 {
     if ( !aTempURL.getLength() )
         throw lang::IllegalArgumentException(); // TODO
@@ -827,7 +827,7 @@ void OleComponent::CreateObjectFromData( const uno::Reference< datatransfer::XTr
 }
 
 //----------------------------------------------
-void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
+void OleComponent::CreateObjectFromFile( const OUString& aFileURL )
 {
     if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
@@ -836,7 +836,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
     if ( !m_pNativeImpl->m_pIStorage )
         throw uno::RuntimeException(); // TODO:
 
-    ::rtl::OUString aFilePath;
+    OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
@@ -857,7 +857,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
 }
 
 //----------------------------------------------
-void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL )
+void OleComponent::CreateLinkFromFile( const OUString& aFileURL )
 {
     if ( m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO:the object is already initialized
@@ -866,7 +866,7 @@ void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL )
     if ( !m_pNativeImpl->m_pIStorage )
         throw uno::RuntimeException(); // TODO:
 
-    ::rtl::OUString aFilePath;
+    OUString aFilePath;
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happened
 
@@ -937,7 +937,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
             hr = pOleLink->GetSourceDisplayName( &pOleStr );
             if ( SUCCEEDED( hr ) && pOleStr )
             {
-                ::rtl::OUString aFilePath( ( sal_Unicode* )pOleStr );
+                OUString aFilePath( ( sal_Unicode* )pOleStr );
                 if ( pMalloc )
                     pMalloc->Free( ( void* )pOleStr );
 
@@ -1096,8 +1096,8 @@ void OleComponent::ExecuteVerb( sal_Int32 nVerbID )
 }
 
 //----------------------------------------------
-void OleComponent::SetHostName( const ::rtl::OUString&,
-                                const ::rtl::OUString& )
+void OleComponent::SetHostName( const OUString&,
+                                const OUString& )
 {
     if ( !m_pNativeImpl->m_pOleObject )
         throw embed::WrongStateException(); // TODO: the object is in wrong state
@@ -1405,7 +1405,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
-             ::rtl::OUString("com.sun.star.awt.AsyncCallback")),
+             OUString("com.sun.star.awt.AsyncCallback")),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
     }
@@ -1426,7 +1426,7 @@ void OleComponent::OnClose_Impl()
     {
         uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
-             ::rtl::OUString("com.sun.star.awt.AsyncCallback")),
+             OUString("com.sun.star.awt.AsyncCallback")),
              uno::UNO_QUERY );
         xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
     }

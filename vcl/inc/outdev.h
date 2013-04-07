@@ -189,7 +189,7 @@ class ImplGlyphFallbackFontSubstitution
 :   public ImplFontSubstitution
 {
 public:
-    virtual bool FindFontSubstitute( FontSelectPattern&, rtl::OUString& rMissingCodes ) const = 0;
+    virtual bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const = 0;
 };
 
 // -----------------
@@ -220,7 +220,7 @@ public:
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
                     FontSelectPattern&, ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, FontSelectPattern&,
-                            int nFallbackLevel, rtl::OUString& rMissingCodes );
+                            int nFallbackLevel, OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
     void                Invalidate();
 };

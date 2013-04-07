@@ -105,7 +105,7 @@ throw ( WrappedTargetException )
 
 PopupMenu* MenuConfiguration::CreateBookmarkMenu(
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL )
+    const OUString& aURL )
 throw ( ::com::sun::star::lang::WrappedTargetException )
 {
     if ( aURL == BOOKMARK_NEWMENU )

@@ -75,15 +75,15 @@ namespace pcr
         m_aControlTree.SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
 
         // fill the description
-        rtl::OUString sDescription = m_aMainDesc.GetText();
+        OUString sDescription = m_aMainDesc.GetText();
         sal_Int16 nClassID = FormComponentType::CONTROL;
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
 
-        sDescription = sDescription.replaceAll(rtl::OUString("$control_class$"),
+        sDescription = sDescription.replaceAll(OUString("$control_class$"),
             GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
-        rtl::OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
-        sDescription = sDescription.replaceAll(rtl::OUString("$control_name$"), sName);
+        OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
+        sDescription = sDescription.replaceAll(OUString("$control_name$"), sName);
         m_aMainDesc.SetText(sDescription);
 
         // search for the root of the form hierarchy
@@ -174,7 +174,7 @@ namespace pcr
             return 0;
 
         sal_Int32 nChildren = 0;
-        rtl::OUString sName;
+        OUString sName;
         Reference< XPropertySet >  xAsSet;
         for (sal_Int32 i=0; i<xContainer->getCount(); ++i)
         {
@@ -222,7 +222,7 @@ namespace pcr
             if (!::comphelper::hasProperty(PROPERTY_LABEL, xAsSet))
                 continue;
 
-            rtl::OUString sDisplayName = rtl::OUStringBuffer(
+            OUString sDisplayName = OUStringBuffer(
                 ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL))).
                 appendAscii(RTL_CONSTASCII_STRINGPARAM(" (")).append(sName).append(')').
                 makeStringAndClear();

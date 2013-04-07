@@ -45,8 +45,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::container::XIndexContainer;
@@ -102,26 +100,26 @@ class XMLImageMapObjectContext : public SvXMLImportContext
 
 protected:
 
-    const ::rtl::OUString sBoundary;
-    const ::rtl::OUString sCenter;
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sDescription;
-    const ::rtl::OUString sImageMap;
-    const ::rtl::OUString sIsActive;
-    const ::rtl::OUString sName;
-    const ::rtl::OUString sPolygon;
-    const ::rtl::OUString sRadius;
-    const ::rtl::OUString sTarget;
-    const ::rtl::OUString sURL;
+    const OUString sBoundary;
+    const OUString sCenter;
+    const OUString sTitle;
+    const OUString sDescription;
+    const OUString sImageMap;
+    const OUString sIsActive;
+    const OUString sName;
+    const OUString sPolygon;
+    const OUString sRadius;
+    const OUString sTarget;
+    const OUString sURL;
 
     Reference<XIndexContainer> xImageMap;   /// the image map
     Reference<XPropertySet> xMapEntry;      /// one map-entry (one area)
 
-    ::rtl::OUString sUrl;
-    ::rtl::OUString sTargt;
-    ::rtl::OUStringBuffer sDescriptionBuffer;
-    ::rtl::OUStringBuffer sTitleBuffer;
-    ::rtl::OUString sNam;
+    OUString sUrl;
+    OUString sTargt;
+    OUStringBuffer sDescriptionBuffer;
+    OUStringBuffer sTitleBuffer;
+    OUString sNam;
     sal_Bool bIsActive;
 
     sal_Bool bValid;
@@ -132,7 +130,7 @@ public:
     XMLImageMapObjectContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap,
         const sal_Char* pServiceName);
@@ -145,7 +143,7 @@ public:
 
     SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
@@ -153,7 +151,7 @@ protected:
 
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
@@ -326,7 +324,7 @@ public:
     XMLImageMapRectangleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
 
@@ -335,7 +333,7 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
@@ -424,8 +422,8 @@ void XMLImageMapRectangleContext::Prepare(
 
 class XMLImageMapPolygonContext : public XMLImageMapObjectContext
 {
-    ::rtl::OUString sViewBoxString;
-    ::rtl::OUString sPointsString;
+    OUString sViewBoxString;
+    OUString sPointsString;
 
     sal_Bool bViewBoxOK;
     sal_Bool bPointsOK;
@@ -436,7 +434,7 @@ public:
     XMLImageMapPolygonContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
 
@@ -445,7 +443,7 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<
@@ -537,7 +535,7 @@ public:
     XMLImageMapCircleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
 
@@ -546,7 +544,7 @@ public:
 protected:
     virtual void ProcessAttribute(
         enum XMLImageMapToken eToken,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void Prepare(
         ::com::sun::star::uno::Reference<

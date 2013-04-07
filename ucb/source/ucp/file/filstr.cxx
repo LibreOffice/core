@@ -89,7 +89,7 @@ XTYPEPROVIDER_IMPL_7( XStream_impl,
 
 
 
-XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock )
+XStream_impl::XStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock )
     : m_bInputStreamCalled( false ),
       m_bOutputStreamCalled( false ),
       m_pMyShell( pMyShell ),
@@ -175,10 +175,10 @@ void SAL_CALL XStream_impl::truncate(void)
     throw( io::IOException, uno::RuntimeException )
 {
     if (osl::FileBase::E_None != m_aFile.setSize(0))
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     if (osl::FileBase::E_None != m_aFile.setPos(osl_Pos_Absolut,sal_uInt64(0)))
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -197,7 +197,7 @@ XStream_impl::readBytes(
            uno::RuntimeException)
 {
     if( ! m_nIsOpen )
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     sal_Int8 * buffer;
     try
@@ -207,7 +207,7 @@ XStream_impl::readBytes(
     catch (const std::bad_alloc&)
     {
         if( m_nIsOpen ) m_aFile.close();
-        throw io::BufferSizeExceededException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::BufferSizeExceededException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     }
 
     sal_uInt64 nrc(0);
@@ -215,7 +215,7 @@ XStream_impl::readBytes(
        != osl::FileBase::E_None)
     {
         delete[] buffer;
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     }
     aData = uno::Sequence< sal_Int8 > ( buffer, (sal_uInt32)nrc );
     delete[] buffer;
@@ -273,7 +273,7 @@ XStream_impl::writeBytes( const uno::Sequence< sal_Int8 >& aData )
         const sal_Int8* p = aData.getConstArray();
         if(osl::FileBase::E_None != m_aFile.write(((void*)(p)),sal_uInt64(length),nWrittenBytes) ||
            nWrittenBytes != length )
-            throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -291,7 +291,7 @@ XStream_impl::closeStream(
 
         if( err != osl::FileBase::E_None ) {
             io::IOException ex;
-            ex.Message = rtl::OUString( "could not close file");
+            ex.Message = OUString( "could not close file");
             throw ex;
         }
 
@@ -337,9 +337,9 @@ XStream_impl::seek(
            uno::RuntimeException )
 {
     if( location < 0 )
-        throw lang::IllegalArgumentException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), 0 );
+        throw lang::IllegalArgumentException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >(), 0 );
     if( osl::FileBase::E_None != m_aFile.setPos( osl_Pos_Absolut, sal_uInt64( location ) ) )
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -351,7 +351,7 @@ XStream_impl::getPosition(
 {
     sal_uInt64 uPos;
     if( osl::FileBase::E_None != m_aFile.getPos( uPos ) )
-        throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
     return sal_Int64( uPos );
 }
 
@@ -363,7 +363,7 @@ XStream_impl::getLength(
 {
         sal_uInt64 uEndPos;
         if ( m_aFile.getSize(uEndPos) != osl::FileBase::E_None )
-                throw io::IOException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                throw io::IOException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
         else
                 return sal_Int64( uEndPos );
 }
@@ -384,7 +384,7 @@ void XStream_impl::waitForCompletion()
     // afterwards, there appears to be no cheaper way than to call fsync:
     if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
         throw io::IOException(
-            rtl::OUString( "could not synchronize file to disc"),
+            OUString( "could not synchronize file to disc"),
             static_cast< OWeakObject * >(this));
     }
 }

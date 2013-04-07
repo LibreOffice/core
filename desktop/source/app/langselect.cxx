@@ -50,9 +50,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 namespace desktop {
 
@@ -113,7 +110,7 @@ bool LanguageSelection::prepareLanguage()
     {
         Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.System/L10N/", sal_False), UNO_QUERY_THROW);
         Any aWin16SysLocale = xProp->getPropertyValue("SystemLocale");
-        ::rtl::OUString sWin16SysLocale;
+        OUString sWin16SysLocale;
         aWin16SysLocale >>= sWin16SysLocale;
         if( !sWin16SysLocale.isEmpty())
             setDefaultLanguage(sWin16SysLocale);

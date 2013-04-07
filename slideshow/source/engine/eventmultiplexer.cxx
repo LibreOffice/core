@@ -1235,7 +1235,7 @@ bool EventMultiplexer::notifyViewClobbered(
 }
 
 bool EventMultiplexer::notifyHyperlinkClicked(
-    rtl::OUString const& hyperLink )
+    OUString const& hyperLink )
 {
     return mpImpl->maHyperlinkHandlers.apply(
         boost::bind(&HyperlinkHandler::handleHyperlink,

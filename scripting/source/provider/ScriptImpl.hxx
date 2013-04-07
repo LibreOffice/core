@@ -48,7 +48,7 @@ public:
     ScriptImpl(
         const css::uno::Reference< css::beans::XPropertySet > & scriptingContext,
         const css::uno::Reference< ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation > & runtimeMgr,
-        const ::rtl::OUString& scriptURI )
+        const OUString& scriptURI )
     throw ( css::uno::RuntimeException );
 
     /*************************************************************
@@ -90,7 +90,7 @@ public:
 private:
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
     css::uno::Reference < ::drafts::com::sun::star::script::framework::runtime::XScriptInvocation > m_RunTimeManager;
-    ::rtl::OUString m_ScriptURI;
+    OUString m_ScriptURI;
 
     /* copy ctor disabled, i.e. not defined */
     ScriptImpl( const ScriptImpl& );

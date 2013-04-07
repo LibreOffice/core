@@ -26,7 +26,6 @@
 #include "IgnoreTContext.hxx"
 #include "xmloff/xmlnmspe.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -37,15 +36,15 @@ public:
     TYPEINFO();
 
     XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLParagraphTransformerContext();
 
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // StartElement is called after a context has been constructed and
@@ -60,7 +59,7 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 TYPEINIT1( XMLParagraphTransformerContext, XMLTransformerContext );
@@ -112,19 +111,19 @@ public:
 
     XMLPersTextContentRNGTransformTContext(
         XMLTransformerBase& rTransformer,
-        const ::rtl::OUString& rQName,
+        const OUString& rQName,
         sal_uInt16 nPrefix,
         ::xmloff::token::XMLTokenEnum eToken );
     virtual ~XMLPersTextContentRNGTransformTContext();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 TYPEINIT1( XMLPersTextContentRNGTransformTContext, XMLPersAttrListTContext );
 
 XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
     XMLTransformerBase& rTransformer,
-    const ::rtl::OUString& rQName,
+    const OUString& rQName,
     sal_uInt16 nPrefix,
     ::xmloff::token::XMLTokenEnum eToken ) :
         XMLPersTextContentTContext(
@@ -134,7 +133,7 @@ XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
 XMLPersTextContentRNGTransformTContext::~XMLPersTextContentRNGTransformTContext()
 {}
 
-void XMLPersTextContentRNGTransformTContext::Characters( const ::rtl::OUString& rChars )
+void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars )
 {
     OUString aConvChars( rChars );
     GetTransformer().ConvertRNGDateTimeToISO( aConvChars );

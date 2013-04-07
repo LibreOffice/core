@@ -64,7 +64,7 @@ private:
     SfxItemSet*             m_pOutSet;
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
-    ::rtl::OUString         m_eType;
+    OUString         m_eType;
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
@@ -88,10 +88,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
-    virtual void setTitle(const ::rtl::OUString& _sTitle);
+    virtual void setTitle(const OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
 
 protected:
@@ -108,7 +108,7 @@ protected:
     inline void     disabledUI() { m_bUIEnabled = sal_False; }
 
     /// select a datasource with a given name, adjust the item set accordingly, and everything like that ..
-    void implSelectDatasource(const ::rtl::OUString& _rRegisteredName);
+    void implSelectDatasource(const OUString& _rRegisteredName);
     void resetPages(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDatasource);
 
     enum ApplyResult

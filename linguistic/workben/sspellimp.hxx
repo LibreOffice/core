@@ -152,7 +152,7 @@ public:
 
 inline OUString SpellChecker::getImplementationName_Static() throw()
 {
-    return ::rtl::OUString( "com.sun.star.lingu.examples.SpellChecker" );
+    return OUString( "com.sun.star.lingu.examples.SpellChecker" );
 }
 
 

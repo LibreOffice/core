@@ -403,7 +403,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         catch(const Exception&)
         {
             throw WrappedTargetException(
-                ::rtl::OUString( "Could not clone the given database form." ),
+                OUString( "Could not clone the given database form." ),
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
                 ::cppu::getCaughtException()
             );
@@ -478,22 +478,22 @@ ODatabaseForm::~ODatabaseForm()
 //==============================================================================
 // html tools
 //------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
+OUString ODatabaseForm::GetDataURLEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
     return GetDataEncoded(true,SubmitButton,MouseEvt);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
+OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
     // Fill List of successful Controls
     HtmlSuccessfulObjList aSuccObjList;
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Aggregate Liste to ::rtl::OUString
-    ::rtl::OUStringBuffer aResult;
-    ::rtl::OUString aName;
-    ::rtl::OUString aValue;
+    // Aggregate Liste to OUString
+    OUStringBuffer aResult;
+    OUString aName;
+    OUString aValue;
 
     for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
@@ -536,13 +536,13 @@ ODatabaseForm::~ODatabaseForm()
 //==============================================================================
 // html tools
 //------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
+OUString ODatabaseForm::GetDataTextEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
     return GetDataEncoded(false,SubmitButton,MouseEvt);
 }
 
 //------------------------------------------------------------------------
-Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt, ::rtl::OUString& rContentType)
+Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt, OUString& rContentType)
 {
 
     // Create Parent
@@ -555,7 +555,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Aggregate Liste to ::rtl::OUString
+    // Aggregate Liste to OUString
     for (   HtmlSuccessfulObjListIterator pSuccObj = aSuccObjList.begin();
             pSuccObj < aSuccObjList.end();
             ++pSuccObj
@@ -596,7 +596,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 //------------------------------------------------------------------------
 namespace
 {
-    static void appendDigits( sal_Int32 _nNumber, sal_Int8 nDigits, ::rtl::OUStringBuffer& _rOut )
+    static void appendDigits( sal_Int32 _nNumber, sal_Int8 nDigits, OUStringBuffer& _rOut )
     {
         sal_Int32 nCurLen = _rOut.getLength();
         _rOut.append( _nNumber );
@@ -606,7 +606,7 @@ namespace
 }
 
 //------------------------------------------------------------------------
-void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, const ::rtl::OUString& rNamePrefix,
+void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Reference<XPropertySet>& xComponentSet, const OUString& rNamePrefix,
                      const Reference<XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt)
 {
     if (!xComponentSet.is())
@@ -622,7 +622,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
     sal_Int16 nClassId = 0;
     xComponentSet->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
-    ::rtl::OUString aName;
+    OUString aName;
     xComponentSet->getPropertyValue( PROPERTY_NAME ) >>= aName;
     if( aName.isEmpty() && nClassId != FormComponentType::IMAGEBUTTON)
         return;
@@ -642,7 +642,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 if (xSubmitButtonComponent == xComponentSet && hasProperty(PROPERTY_LABEL, xComponentSet))
                 {
                     // <name>=<label>
-                    ::rtl::OUString aLabel;
+                    OUString aLabel;
                     xComponentSet->getPropertyValue( PROPERTY_LABEL ) >>= aLabel;
                     rList.push_back( HtmlSuccessfulObj(aName, aLabel) );
                 }
@@ -660,10 +660,10 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 if (xSubmitButtonComponent == xComponentSet)
                 {
                     // <name>.x=<pos.X>&<name>.y=<pos.Y>
-                    ::rtl::OUString aRhs = ::rtl::OUString::valueOf( MouseEvt.X );
+                    OUString aRhs = OUString::valueOf( MouseEvt.X );
 
                     // Only if a name is available we have a name.x
-                    rtl::OUStringBuffer aLhs(aName);
+                    OUStringBuffer aLhs(aName);
                     if (!aName.isEmpty())
                         aLhs.append(".x");
                     else
@@ -671,7 +671,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     rList.push_back( HtmlSuccessfulObj(aLhs.makeStringAndClear(), aRhs) );
 
                     aLhs.append(aName);
-                    aRhs = ::rtl::OUString::valueOf( MouseEvt.Y );
+                    aRhs = OUString::valueOf( MouseEvt.Y );
                     if (!aName.isEmpty())
                         aLhs.append(".y");
                     else
@@ -693,7 +693,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if( nChecked != 1 )
                 break;
 
-            ::rtl::OUString aStrValue;
+            OUString aStrValue;
             if( hasProperty(PROPERTY_REFVALUE, xComponentSet) )
                 xComponentSet->getPropertyValue( PROPERTY_REFVALUE ) >>= aStrValue;
 
@@ -712,7 +712,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             sal_Bool bMulti =   rxSubmitButton.is()
                             && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
-            ::rtl::OUString sText;
+            OUString sText;
             if ( bMulti )   // For multiline edit, get the text at the control
             {
 
@@ -754,7 +754,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             // <name>=<text>
             if( hasProperty(PROPERTY_TEXT, xComponentSet) )
             {
-                ::rtl::OUString aText;
+                OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= aText;
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -766,7 +766,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_VALUE, xComponentSet) )
             {
-                ::rtl::OUString aText;
+                OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_VALUE );
 
                 double aDoubleVal = 0;
@@ -785,13 +785,13 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_DATE, xComponentSet) )
             {
-                ::rtl::OUString aText;
+                OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_DATE );
                 sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
                     ::Date aDate( nInt32Val );
-                    ::rtl::OUStringBuffer aBuffer;
+                    OUStringBuffer aBuffer;
                     appendDigits( aDate.GetMonth(), 2, aBuffer );
                     aBuffer.append( (sal_Unicode)'-' );
                     appendDigits( aDate.GetDay(), 2, aBuffer );
@@ -808,13 +808,13 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_TIME, xComponentSet) )
             {
-                ::rtl::OUString aText;
+                OUString aText;
                 Any aVal  = xComponentSet->getPropertyValue( PROPERTY_TIME );
                 sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
                     ::Time aTime(nInt32Val);
-                    ::rtl::OUStringBuffer aBuffer;
+                    OUStringBuffer aBuffer;
                     appendDigits( aTime.GetHour(), 2, aBuffer );
                     aBuffer.append( (sal_Unicode)'-' );
                     appendDigits( aTime.GetMin(), 2, aBuffer );
@@ -833,7 +833,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             // <name>=<value>
             if( hasProperty(PROPERTY_HIDDEN_VALUE, xComponentSet) )
             {
-                ::rtl::OUString aText;
+                OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_HIDDEN_VALUE ) >>= aText;
                 rList.push_back( HtmlSuccessfulObj(aName, aText) );
             }
@@ -846,7 +846,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if( hasProperty(PROPERTY_TEXT, xComponentSet) )
             {
 
-                ::rtl::OUString aText;
+                OUString aText;
                 xComponentSet->getPropertyValue( PROPERTY_TEXT ) >>= aText;
                 rList.push_back( HtmlSuccessfulObj(aName, aText, SUCCESSFUL_REPRESENT_FILE) );
             }
@@ -862,16 +862,16 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 break;
 
             // Displayed values
-            Sequence< ::rtl::OUString > aVisibleList;
+            Sequence< OUString > aVisibleList;
             xComponentSet->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aVisibleList;
             sal_Int32 nStringCnt = aVisibleList.getLength();
-            const ::rtl::OUString* pStrings = aVisibleList.getConstArray();
+            const OUString* pStrings = aVisibleList.getConstArray();
 
             // Value list
-            Sequence< ::rtl::OUString > aValueList;
+            Sequence< OUString > aValueList;
             xComponentSet->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueList;
             sal_Int32 nValCnt = aValueList.getLength();
-            const ::rtl::OUString* pVals = aValueList.getConstArray();
+            const OUString* pVals = aValueList.getConstArray();
 
             // Selection
             Sequence<sal_Int16> aSelectList;
@@ -894,7 +894,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                     ++nCurCnt;
             }
 
-            ::rtl::OUString aSubValue;
+            OUString aSubValue;
             for(i=0; i<nCurCnt; ++i )
             {
                 sal_Int16  nSelPos = pSels[i];
@@ -917,7 +917,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if (!xContainer.is())
                 break;
 
-            aName += rtl::OUString(static_cast<sal_Unicode>('.'));
+            aName += OUString(static_cast<sal_Unicode>('.'));
 
             Reference<XPropertySet>  xSet;
             sal_Int32 nCount = xContainer->getCount();
@@ -942,7 +942,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     rList.clear();
     // Iterate over Components
     Reference<XPropertySet>         xComponentSet;
-    ::rtl::OUString aPrefix;
+    OUString aPrefix;
 
     // we know already how many objects should be appended,
     // so why not allocate the space for them
@@ -955,9 +955,9 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
 }
 
 //------------------------------------------------------------------------
-void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
+void ODatabaseForm::Encode( OUString& rString ) const
 {
-    ::rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
 
     // Line endings are represented as CR
     rString = convertLineEnd(rString, LINEEND_CR);
@@ -1010,8 +1010,8 @@ void ODatabaseForm::Encode( ::rtl::OUString& rString ) const
 }
 
 //------------------------------------------------------------------------
-void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUString& rName,
-    const ::rtl::OUString& rData )
+void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rName,
+    const OUString& rData )
 {
 
     // Create part as MessageChild
@@ -1019,21 +1019,21 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 
 
     // Header
-    ::rtl::OUStringBuffer aContentDisp;
+    OUStringBuffer aContentDisp;
     aContentDisp.append("form-data; name=\"");
     aContentDisp.append(rName);
     aContentDisp.append('\"');
     pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
-    pChild->SetContentType(::rtl::OUString("text/plain"));
+    pChild->SetContentType(OUString("text/plain"));
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
-    rtl::OUString aBestMatchingEncoding = rtl::OUString::createFromAscii(pBestMatchingEncoding);
+    OUString aBestMatchingEncoding = OUString::createFromAscii(pBestMatchingEncoding);
     pChild->SetContentTransferEncoding(aBestMatchingEncoding);
 
     // Body
     SvMemoryStream* pStream = new SvMemoryStream;
-    pStream->WriteLine( rtl::OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
+    pStream->WriteLine( OUStringToOString(rData, rtl_getTextEncodingFromMimeCharset(pBestMatchingEncoding)) );
     pStream->Flush();
     pStream->Seek( 0 );
     pChild->SetDocumentLB( new SvLockBytes(pStream, sal_True) );
@@ -1041,11 +1041,11 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const ::rtl::OUStr
 }
 
 //------------------------------------------------------------------------
-sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::OUString& rName,
-    const ::rtl::OUString& rFileName )
+sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rName,
+    const OUString& rFileName )
 {
-    rtl::OUString aFileName(rFileName);
-    rtl::OUString aContentType(CONTENT_TYPE_STR_TEXT_PLAIN);
+    OUString aFileName(rFileName);
+    OUString aContentType(CONTENT_TYPE_STR_TEXT_PLAIN);
     SvStream *pStream = 0;
 
     if (!aFileName.isEmpty())
@@ -1081,7 +1081,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
 
 
     // Header
-    ::rtl::OUStringBuffer aContentDisp;
+    OUStringBuffer aContentDisp;
     aContentDisp.append("form-data; name=\"");
     aContentDisp.append(rName);
     aContentDisp.append('\"');
@@ -1090,7 +1090,7 @@ sal_Bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const ::rtl::O
     aContentDisp.append('\"');
     pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
     pChild->SetContentType( aContentType );
-    pChild->SetContentTransferEncoding(::rtl::OUString("8bit"));
+    pChild->SetContentTransferEncoding(OUString("8bit"));
 
 
     // Body
@@ -1109,7 +1109,7 @@ void ODatabaseForm::onError( const SQLErrorEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::onError( const SQLException& _rException, const ::rtl::OUString& _rContextDescription )
+void ODatabaseForm::onError( const SQLException& _rException, const OUString& _rContextDescription )
 {
     if ( !m_aErrorListeners.getLength() )
         return;
@@ -1385,20 +1385,20 @@ void ODatabaseForm::describeFixedAndAggregateProperties(
 
         DECL_IFACE_PROP4(ACTIVE_CONNECTION, XConnection,                    BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
         DECL_BOOL_PROP2 ( APPLYFILTER,                                      BOUND, MAYBEDEFAULT            );
-        DECL_PROP1      ( NAME,             ::rtl::OUString,                BOUND                          );
-        DECL_PROP1      ( MASTERFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
-        DECL_PROP1      ( DETAILFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
-        DECL_PROP2      ( DATASOURCE,       ::rtl::OUString,                BOUND, CONSTRAINED             );
+        DECL_PROP1      ( NAME,             OUString,                BOUND                          );
+        DECL_PROP1      ( MASTERFIELDS,     Sequence< OUString >,    BOUND                          );
+        DECL_PROP1      ( DETAILFIELDS,     Sequence< OUString >,    BOUND                          );
+        DECL_PROP2      ( DATASOURCE,       OUString,                BOUND, CONSTRAINED             );
         DECL_PROP3      ( CYCLE,            TabulatorCycle,                 BOUND, MAYBEVOID, MAYBEDEFAULT );
-        DECL_PROP2      ( FILTER,           ::rtl::OUString,                BOUND, MAYBEDEFAULT            );
+        DECL_PROP2      ( FILTER,           OUString,                BOUND, MAYBEDEFAULT            );
         DECL_BOOL_PROP2 ( INSERTONLY,                                       BOUND, MAYBEDEFAULT            );
         DECL_PROP1      ( NAVIGATION,       NavigationBarMode,              BOUND                          );
         DECL_BOOL_PROP1 ( ALLOWADDITIONS,                                   BOUND                          );
         DECL_BOOL_PROP1 ( ALLOWEDITS,                                       BOUND                          );
         DECL_BOOL_PROP1 ( ALLOWDELETIONS,                                   BOUND                          );
         DECL_PROP2      ( PRIVILEGES,       sal_Int32,                      TRANSIENT, READONLY            );
-        DECL_PROP1      ( TARGET_URL,       ::rtl::OUString,                BOUND                          );
-        DECL_PROP1      ( TARGET_FRAME,     ::rtl::OUString,                BOUND                          );
+        DECL_PROP1      ( TARGET_URL,       OUString,                BOUND                          );
+        DECL_PROP1      ( TARGET_FRAME,     OUString,                BOUND                          );
         DECL_PROP1      ( SUBMIT_METHOD,    FormSubmitMethod,               BOUND                          );
         DECL_PROP1      ( SUBMIT_ENCODING,  FormSubmitEncoding,             BOUND                          );
         DECL_BOOL_PROP3 ( DYNAMIC_CONTROL_BORDER,                           BOUND, MAYBEVOID, MAYBEDEFAULT );
@@ -1427,13 +1427,13 @@ Reference< XPropertySetInfo > ODatabaseForm::getPropertySetInfo() throw( Runtime
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL ODatabaseForm::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL ODatabaseForm::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
     m_aPropertyBagHelper.removeProperty( _rName );
 }
@@ -1625,7 +1625,7 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
         {
             Any aAggregateProperty;
             getFastPropertyValue(aAggregateProperty, PROPERTY_ID_DATASOURCE);
-            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const ::rtl::OUString*>(NULL)));
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const OUString*>(NULL)));
         }
         break;
         case PROPERTY_ID_TARGET_URL:
@@ -1701,7 +1701,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
         case PROPERTY_ID_FILTER:
         {
-            ::rtl::OUString sNewFilter;
+            OUString sNewFilter;
             rValue >>= sNewFilter;
             m_aFilterManager.setFilterComponent( FilterManager::fcPublicFilter, sNewFilter );
         }
@@ -1912,7 +1912,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_FILTER:
-            aReturn <<= ::rtl::OUString();
+            aReturn <<= OUString();
             break;
 
         case PROPERTY_ID_APPLYFILTER:
@@ -2012,7 +2012,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
                 if ( xColProps.is() )
                     xPSI = xColProps->getPropertySetInfo( );
 
-                static const ::rtl::OUString PROPERTY_CONTROLDEFAULT( "ControlDefault" );
+                static const OUString PROPERTY_CONTROLDEFAULT( "ControlDefault" );
                 if ( xPSI.is() && xPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
                 {
                     Any aDefault = xColProps->getPropertyValue( PROPERTY_CONTROLDEFAULT );
@@ -2147,8 +2147,8 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
     }
 }
 // -----------------------------------------------------------------------------
-void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const ::rtl::OUString& aURLStr,const ::rtl::OUString& aReferer,const ::rtl::OUString& aTargetName
-                  ,const ::rtl::OUString& aData,rtl_TextEncoding _eEncoding)
+void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const OUString& aURLStr,const OUString& aReferer,const OUString& aTargetName
+                  ,const OUString& aData,rtl_TextEncoding _eEncoding)
 {
     URL aURL;
     aURL.Complete = aURLStr;
@@ -2161,16 +2161,16 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
     if (xDisp.is())
     {
         Sequence<PropertyValue> aArgs(2);
-        aArgs.getArray()[0].Name = ::rtl::OUString("Referer");
+        aArgs.getArray()[0].Name = OUString("Referer");
         aArgs.getArray()[0].Value <<= aReferer;
 
         // build a sequence from the to-be-submitted string
-        rtl::OString a8BitData(rtl::OUStringToOString(aData, _eEncoding));
+        OString a8BitData(OUStringToOString(aData, _eEncoding));
         // always ANSI #58641
         Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
-        aArgs.getArray()[1].Name = ::rtl::OUString("PostData");
+        aArgs.getArray()[1].Name = OUString("PostData");
         aArgs.getArray()[1].Value <<= xPostData;
 
         xDisp->dispatch(aURL, aArgs);
@@ -2197,9 +2197,9 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
 
     FormSubmitEncoding eSubmitEncoding;
     FormSubmitMethod eSubmitMethod;
-    ::rtl::OUString aURLStr;
-    ::rtl::OUString aReferer;
-    ::rtl::OUString aTargetName;
+    OUString aURLStr;
+    OUString aReferer;
+    OUString aTargetName;
     Reference< XModel >  xModel;
     {
         SolarMutexGuard aGuard;
@@ -2232,7 +2232,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     // URL encoding
     if( eSubmitEncoding == FormSubmitEncoding_URL )
     {
-        ::rtl::OUString aData;
+        OUString aData;
         {
             SolarMutexGuard aGuard;
             aData = GetDataURLEncoded( Control, MouseEvt );
@@ -2255,7 +2255,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
             if (xDisp.is())
             {
                 Sequence<PropertyValue> aArgs(1);
-                aArgs.getArray()->Name = ::rtl::OUString("Referer");
+                aArgs.getArray()->Name = OUString("Referer");
                 aArgs.getArray()->Value <<= aReferer;
                 xDisp->dispatch(aURL, aArgs);
             }
@@ -2278,7 +2278,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
 
         if (xDisp.is())
         {
-            ::rtl::OUString aContentType;
+            OUString aContentType;
             Sequence<sal_Int8> aData;
             {
                 SolarMutexGuard aGuard;
@@ -2288,15 +2288,15 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
                 return;
 
             Sequence<PropertyValue> aArgs(3);
-            aArgs.getArray()[0].Name = ::rtl::OUString("Referer");
+            aArgs.getArray()[0].Name = OUString("Referer");
             aArgs.getArray()[0].Value <<= aReferer;
-            aArgs.getArray()[1].Name = ::rtl::OUString("ContentType");
+            aArgs.getArray()[1].Name = OUString("ContentType");
             aArgs.getArray()[1].Value <<= aContentType;
 
             // build a sequence from the to-be-submitted string
             Reference< XInputStream > xPostData = new SequenceInputStream(aData);
 
-            aArgs.getArray()[2].Name = ::rtl::OUString("PostData");
+            aArgs.getArray()[2].Name = OUString("PostData");
             aArgs.getArray()[2].Value <<= xPostData;
 
             xDisp->dispatch(aURL, aArgs);
@@ -2304,7 +2304,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const ::com:
     }
     else if( eSubmitEncoding == FormSubmitEncoding_TEXT )
     {
-        ::rtl::OUString aData;
+        OUString aData;
         {
             SolarMutexGuard aGuard;
             aData = GetDataTextEncoded( Reference<XControl> (), MouseEvt );
@@ -2429,7 +2429,7 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     sal_Bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
 
     if ( bIsEmbedded )
-        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
+        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, makeAny( OUString() ) );
 }
 
 //==============================================================================
@@ -2499,7 +2499,7 @@ Sequence<Reference<XControlModel> > SAL_CALL ODatabaseForm::getControlModels() t
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >& _rGroup, const ::rtl::OUString& Name ) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >& _rGroup, const OUString& Name ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -2507,7 +2507,7 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
     // first control of the sequence
     const Reference<XControlModel>* pControls = _rGroup.getConstArray();
     Reference< XPropertySet > xSet;
-    ::rtl::OUString sGroupName( Name );
+    OUString sGroupName( Name );
 
     for( sal_Int32 i=0; i<_rGroup.getLength(); ++i, ++pControls )
     {
@@ -2535,11 +2535,11 @@ sal_Int32 SAL_CALL ODatabaseForm::getGroupCount() throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName ) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XControlModel> >& _rGroup, OUString& _rName ) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     _rGroup.realloc(0);
-    _rName = ::rtl::OUString();
+    _rName = OUString();
 
     if ((nGroup < 0) || (nGroup >= m_pGroupManager->getGroupCount()))
         return;
@@ -2547,7 +2547,7 @@ void SAL_CALL ODatabaseForm::getGroup( sal_Int32 nGroup, Sequence<Reference<XCon
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::getGroupByName(const ::rtl::OUString& Name, Sequence< Reference<XControlModel>  >& _rGroup) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::getGroupByName(const OUString& Name, Sequence< Reference<XControlModel>  >& _rGroup) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     _rGroup.realloc(0);
@@ -2679,11 +2679,11 @@ void SAL_CALL ODatabaseForm::load() throw( RuntimeException )
 sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxParentProps )
 {
     // our own data source
-    ::rtl::OUString sOwnDatasource;
+    OUString sOwnDatasource;
     m_xAggregateSet->getPropertyValue( PROPERTY_DATASOURCE ) >>= sOwnDatasource;
 
     // our parents data source
-    ::rtl::OUString sParentDataSource;
+    OUString sParentDataSource;
     OSL_ENSURE( _rxParentProps.is() && _rxParentProps->getPropertySetInfo().is() && _rxParentProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_DATASOURCE ),
         "ODatabaseForm::doShareConnection: invalid parent form!" );
     if ( _rxParentProps.is() )
@@ -2700,8 +2700,8 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
         else
         {   // the data source name is empty
             // -> ook for the URL
-            ::rtl::OUString sParentURL;
-            ::rtl::OUString sMyURL;
+            OUString sParentURL;
+            OUString sMyURL;
             _rxParentProps->getPropertyValue( PROPERTY_URL ) >>= sParentURL;
             m_xAggregateSet->getPropertyValue( PROPERTY_URL ) >>= sMyURL;
 
@@ -2714,11 +2714,11 @@ sal_Bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rx
         // check for the user/password
 
         // take the user property on the rowset (if any) into account
-        ::rtl::OUString sParentUser, sParentPwd;
+        OUString sParentUser, sParentPwd;
         _rxParentProps->getPropertyValue( PROPERTY_USER ) >>= sParentUser;
         _rxParentProps->getPropertyValue( PROPERTY_PASSWORD ) >>= sParentPwd;
 
-        ::rtl::OUString sMyUser, sMyPwd;
+        OUString sMyUser, sMyPwd;
         m_xAggregateSet->getPropertyValue( PROPERTY_USER ) >>= sMyUser;
         m_xAggregateSet->getPropertyValue( PROPERTY_PASSWORD ) >>= sMyPwd;
 
@@ -3625,7 +3625,7 @@ void SAL_CALL ODatabaseForm::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw( SQLException, RuntimeException )
+void SAL_CALL ODatabaseForm::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw( SQLException, RuntimeException )
 {
     m_aParameterManager.setObjectNull(parameterIndex, sqlType, typeName);
 }
@@ -3673,7 +3673,7 @@ void SAL_CALL ODatabaseForm::setDouble(sal_Int32 parameterIndex, double x) throw
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw( SQLException, RuntimeException )
+void SAL_CALL ODatabaseForm::setString(sal_Int32 parameterIndex, const OUString& x) throw( SQLException, RuntimeException )
 {
     m_aParameterManager.setString(parameterIndex, x);
 }
@@ -3775,16 +3775,16 @@ void SAL_CALL ODatabaseForm::propertyChange( const PropertyChangeEvent& evt ) th
 
 // com::sun::star::lang::XServiceInfo
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
+OUString SAL_CALL ODatabaseForm::getImplementationName_Static()
 {
-    return ::rtl::OUString( "com.sun.star.comp.forms.ODatabaseForm" );
+    return OUString( "com.sun.star.comp.forms.ODatabaseForm" );
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCompatibleServiceNames_Static()
+Sequence< OUString > SAL_CALL ODatabaseForm::getCompatibleServiceNames_Static()
 {
-    Sequence< ::rtl::OUString > aServices( 1 );
-    ::rtl::OUString* pServices = aServices.getArray();
+    Sequence< OUString > aServices( 1 );
+    OUString* pServices = aServices.getArray();
 
     *pServices++ = FRM_COMPONENT_FORM;
 
@@ -3792,13 +3792,13 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCompatibleServiceNames_St
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Static()
+Sequence< OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Static()
 {
-    Sequence< ::rtl::OUString > aServices( 5 );
-    ::rtl::OUString* pServices = aServices.getArray();
+    Sequence< OUString > aServices( 5 );
+    OUString* pServices = aServices.getArray();
 
     *pServices++ = FRM_SUN_FORMCOMPONENT;
-    *pServices++ = ::rtl::OUString("com.sun.star.form.FormComponents");
+    *pServices++ = OUString("com.sun.star.form.FormComponents");
     *pServices++ = FRM_SUN_COMPONENT_FORM;
     *pServices++ = FRM_SUN_COMPONENT_HTMLFORM;
     *pServices++ = FRM_SUN_COMPONENT_DATAFORM;
@@ -3807,7 +3807,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getCurrentServiceNames_Stati
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Static()
+Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Static()
 {
     return ::comphelper::concatSequences(
         getCurrentServiceNames_Static(),
@@ -3816,16 +3816,16 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames_Sta
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL ODatabaseForm::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() throw( RuntimeException )
 {
     // the services of our aggregate
-    Sequence< ::rtl::OUString > aServices;
+    Sequence< OUString > aServices;
     Reference< XServiceInfo > xInfo;
     if (query_aggregation(m_xAggregate, xInfo))
         aServices = xInfo->getSupportedServiceNames();
@@ -3842,10 +3842,10 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() t
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseForm::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
+sal_Bool SAL_CALL ODatabaseForm::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
+    Sequence< OUString > aSupported( getSupportedServiceNames() );
+    const OUString* pArray = aSupported.getConstArray();
     for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
         if( pArray->equals( ServiceName ) )
             return sal_True;
@@ -3860,7 +3860,7 @@ const sal_uInt16 CYCLE              = 0x0001;
 const sal_uInt16 DONTAPPLYFILTER    = 0x0002;
 
 //------------------------------------------------------------------------------
-::rtl::OUString ODatabaseForm::getServiceName() throw( RuntimeException )
+OUString ODatabaseForm::getServiceName() throw( RuntimeException )
 {
     return FRM_COMPONENT_FORM;  // old (non-sun) name for compatibility !
 }
@@ -3879,13 +3879,13 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     // Name
     _rxOutStream << m_sName;
 
-    ::rtl::OUString sDataSource;
+    OUString sDataSource;
     if (m_xAggregateSet.is())
         m_xAggregateSet->getPropertyValue(PROPERTY_DATASOURCE) >>= sDataSource;
     _rxOutStream << sDataSource;
 
     // former CursorSource
-    ::rtl::OUString sCommand;
+    OUString sCommand;
     if (m_xAggregateSet.is())
         m_xAggregateSet->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
     _rxOutStream << sCommand;
@@ -3932,7 +3932,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeBoolean(m_bAllowDelete);
 
     // html form stuff
-    ::rtl::OUString sTmp = INetURLObject::decode( m_aTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
+    OUString sTmp = INetURLObject::decode( m_aTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
     _rxOutStream << sTmp;
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitMethod );
     _rxOutStream->writeShort( (sal_Int16)m_eSubmitEncoding );
@@ -3951,8 +3951,8 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
 
     _rxOutStream->writeShort((sal_Int16)m_eNavigation);
 
-    ::rtl::OUString sFilter;
-    ::rtl::OUString sOrder;
+    OUString sFilter;
+    OUString sOrder;
     if (m_xAggregateSet.is())
     {
         m_xAggregateSet->getPropertyValue(PROPERTY_FILTER) >>= sFilter;
@@ -3992,7 +3992,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
     _rxInStream >> m_sName;
 
-    ::rtl::OUString sAggregateProp;
+    OUString sAggregateProp;
     _rxInStream >> sAggregateProp;
     if (m_xAggregateSet.is())
         m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, makeAny(sAggregateProp));
@@ -4040,7 +4040,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     m_bAllowDelete      = _rxInStream->readBoolean();
 
     // html stuff
-    ::rtl::OUString sTmp;
+    OUString sTmp;
     _rxInStream >> sTmp;
     m_aTargetURL = INetURLObject::decode( sTmp, '%', INetURLObject::DECODE_UNAMBIGUOUS);
     m_eSubmitMethod     = (FormSubmitMethod)_rxInStream->readShort();
@@ -4115,15 +4115,15 @@ void SAL_CALL ODatabaseForm::errorOccured(const SQLErrorEvent& _rEvent) throw( R
 
 // com::sun::star::container::XNamed
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseForm::getName() throw( RuntimeException )
+OUString SAL_CALL ODatabaseForm::getName() throw( RuntimeException )
 {
-    ::rtl::OUString sReturn;
+    OUString sReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= sReturn;
     return sReturn;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL ODatabaseForm::setName(const ::rtl::OUString& aName) throw( RuntimeException )
+void SAL_CALL ODatabaseForm::setName(const OUString& aName) throw( RuntimeException )
 {
     setFastPropertyValue(PROPERTY_ID_NAME, makeAny(aName));
 }

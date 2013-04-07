@@ -211,7 +211,7 @@ Application* GetpApp()
 Application::Application()
 {
     // useful for themes at least, perhaps extensions too
-    rtl::OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
+    OUString aVar("LIBO_VERSION"), aValue(LIBO_VERSION_DOTTED);
     osl_setEnvironment(aVar.pData, aValue.pData);
 
     if( ! ImplGetSVData() )
@@ -289,7 +289,7 @@ sal_uInt16 Application::GetCommandLineParamCount()
 
 XubString Application::GetCommandLineParam( sal_uInt16 nParam )
 {
-    rtl::OUString aParam;
+    OUString aParam;
     osl_getCommandArg( nParam, &aParam.pData );
     return aParam;
 }
@@ -310,11 +310,11 @@ const XubString& Application::GetAppFileName()
     static String aAppFileName;
     if( !aAppFileName.Len() )
     {
-        rtl::OUString aExeFileName;
+        OUString aExeFileName;
         osl_getExecutableFile( &aExeFileName.pData );
 
         // convert path to native file format
-        rtl::OUString aNativeFileName;
+        OUString aNativeFileName;
         osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
         aAppFileName = aNativeFileName;
     }
@@ -338,17 +338,17 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 #ifdef DBG_UTIL
         case EXC_RSCNOTLOADED:
-            Abort(rtl::OUString("Resource not loaded"));
+            Abort(OUString("Resource not loaded"));
             break;
         case EXC_SYSOBJNOTCREATED:
-            Abort(rtl::OUString("System Object not created"));
+            Abort(OUString("System Object not created"));
             break;
         default:
-            Abort(rtl::OUString("Unknown Error"));
+            Abort(OUString("Unknown Error"));
             break;
 #else
         default:
-            Abort(rtl::OUString());
+            Abort(OUString());
             break;
 #endif
     }
@@ -1600,7 +1600,7 @@ UnoWrapperBase* Application::GetUnoWrapper( sal_Bool bCreateIfNotExist )
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
 #ifndef DISABLE_DYNLOADING
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName(
+        OUString aLibName = ::vcl::unohelper::CreateLibraryName(
 #ifdef LIBO_MERGELIBS
                                                                        "merged",
 #else
@@ -1758,7 +1758,7 @@ bool Application::IsHeadlessModeRequested()
 {
     sal_uInt32 n = rtl_getAppCommandArgCount();
     for (sal_uInt32 i = 0; i < n; ++i) {
-        rtl::OUString arg;
+        OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
         if ( arg == "--headless" || arg == "-headless" ) {
             return true;
@@ -1812,12 +1812,12 @@ bool Application::GetShowImeStatusWindowDefault()
         && aInfo.MaximumCharSize > 1;
 }
 
-const ::rtl::OUString& Application::GetDesktopEnvironment()
+const OUString& Application::GetDesktopEnvironment()
 {
     return SalGetDesktopEnvironment();
 }
 
-void Application::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType)
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType);

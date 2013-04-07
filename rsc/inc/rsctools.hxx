@@ -40,10 +40,10 @@ enum RSCBYTEORDER_TYPE { RSC_BIGENDIAN, RSC_LITTLEENDIAN, RSC_SYSTEMENDIAN };
 #define ALIGNED_SIZE( nSize )                               \
             (nSize + sizeof( void * ) -1) / sizeof( void * ) * sizeof( void * )
 /******************* F u n c t i o n   F o r w a r d s *******************/
-rtl::OString GetTmpFileName();
-sal_Bool Append(const rtl::OString &rDestFile, const rtl::OString &rSourceFile);
-sal_Bool Append(FILE * fDest, rtl::OString &raSourceFile);
-rtl::OString OutputFile(const rtl::OString &rInput, const char * ext);
+OString GetTmpFileName();
+sal_Bool Append(const OString &rDestFile, const OString &rSourceFile);
+sal_Bool Append(FILE * fDest, OString &raSourceFile);
+OString OutputFile(const OString &rInput, const char * ext);
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
                      sal_uInt32 nArgc );
 void RscExit( sal_uInt32 nExit );
@@ -55,7 +55,7 @@ char* rsc_strdup( const char* );
 
 /****************** C L A S S E S ****************************************/
 
-typedef ::std::vector< rtl::OString* > RscStrList;
+typedef ::std::vector< OString* > RscStrList;
 
 /*********** R s c C h a r ***********************************************/
 class RscChar

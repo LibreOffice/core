@@ -26,8 +26,8 @@
 
 typedef ::boost::unordered_map
 <
-    ::rtl::OString,
-    ::rtl::OString,
+    OString,
+    OString,
     HashString,
     EqualString
 > OptionMap;
@@ -35,10 +35,10 @@ typedef ::boost::unordered_map
 class IllegalArgument
 {
 public:
-    IllegalArgument(const ::rtl::OString& msg)
+    IllegalArgument(const OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString  m_message;
+    OString  m_message;
 };
 
 class Options
@@ -50,11 +50,11 @@ public:
     virtual sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
         throw( IllegalArgument ) = 0;
 
-    virtual ::rtl::OString  prepareHelp() = 0;
+    virtual OString  prepareHelp() = 0;
 
-    const ::rtl::OString&   getProgramName() const;
-    sal_Bool                isValid(const ::rtl::OString& option);
-    const ::rtl::OString    getOption(const ::rtl::OString& option)
+    const OString&   getProgramName() const;
+    sal_Bool                isValid(const OString& option);
+    const OString    getOption(const OString& option)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles();
@@ -64,7 +64,7 @@ public:
     inline const StringVector& getExtraInputFiles() const
         { return m_extra_input_files; }
 protected:
-    ::rtl::OString  m_program;
+    OString  m_program;
     StringVector    m_inputFiles;
     StringVector    m_extra_input_files;
     OptionMap       m_options;

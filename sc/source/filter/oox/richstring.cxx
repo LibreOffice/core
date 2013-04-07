@@ -35,9 +35,6 @@ namespace xls {
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -476,7 +473,7 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
     }
 }
 
-void RichString::createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
+void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen )
 {
     maPhonPortions.clear();
     if( !rText.isEmpty())

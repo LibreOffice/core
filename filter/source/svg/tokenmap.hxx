@@ -35,7 +35,7 @@
 namespace svgi
 {
     sal_Int32   getTokenId( const char* sIdent, sal_Int32 nLen );
-    sal_Int32   getTokenId( const rtl::OUString& sIdent );
+    sal_Int32   getTokenId( const OUString& sIdent );
     const char* getTokenName( sal_Int32 nTokenId );
 
 } // namespace svgi

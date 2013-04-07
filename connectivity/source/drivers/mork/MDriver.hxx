@@ -53,9 +53,9 @@ class MorkDriver:
 {
 public:
     MorkDriver(css::uno::Reference< css::uno::XComponentContext > const context);
-    static ::rtl::OUString getImplementationName_Static()
+    static OUString getImplementationName_Static()
         throw(css::uno::RuntimeException);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
         throw (css::uno::RuntimeException);
 
     css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > getFactory(){return m_xFactory;}
@@ -64,27 +64,27 @@ private:
     ProfileAccess* m_ProfileAccess;
     virtual ~MorkDriver() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect(
-        rtl::OUString const & url,
+        OUString const & url,
         css::uno::Sequence< css::beans::PropertyValue > const & info)
         throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL acceptsURL(
-        rtl::OUString const & url)
+        OUString const & url)
         throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
     virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL
     getPropertyInfo(
-        rtl::OUString const & url,
+        OUString const & url,
         css::uno::Sequence< css::beans::PropertyValue > const & info)
         throw (css::sdbc::SQLException, css::uno::RuntimeException);
 

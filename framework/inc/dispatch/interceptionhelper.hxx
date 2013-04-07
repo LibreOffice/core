@@ -73,7 +73,7 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
                    XInterceptorInfo, it will be registered for one pattern "*" by default.
                    That would make it possible to handle it in the same manner then real
                    registered interceptor objects and we must not implement any special code. */
-        css::uno::Sequence< ::rtl::OUString > lURLPattern;
+        css::uno::Sequence< OUString > lURLPattern;
     };
 
     //_____________________________________________________
@@ -120,13 +120,13 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
                 @return An iterator object, which points directly to the located item inside this list.
                         In case no interceptor could be found, it points to the end of this list!
               */
-            iterator findByPattern(const ::rtl::OUString& sURL)
+            iterator findByPattern(const OUString& sURL)
             {
                 iterator pIt;
                 for (pIt=begin(); pIt!=end(); ++pIt)
                 {
                     sal_Int32              c        = pIt->lURLPattern.getLength();
-                    const ::rtl::OUString* pPattern = pIt->lURLPattern.getConstArray();
+                    const OUString* pPattern = pIt->lURLPattern.getConstArray();
 
                     for (sal_Int32 i=0; i<c; ++i)
                     {
@@ -221,7 +221,7 @@ class InterceptionHelper : public  css::frame::XDispatchProvider
                     or NULL otherwise.
          */
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(const css::util::URL&  aURL            ,
-                                                                                    const ::rtl::OUString& sTargetFrameName,
+                                                                                    const OUString& sTargetFrameName,
                                                                                           sal_Int32        nSearchFlags    )
             throw(css::uno::RuntimeException);
 

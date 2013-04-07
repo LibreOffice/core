@@ -59,8 +59,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-using rtl::OUStringBuffer;
-using rtl::OUString;
 using com::sun::star::uno::Any;
 
 using com::sun::star::uno::RuntimeException;
@@ -132,20 +130,20 @@ sal_Int32 SequenceResultSetMetaData::getColumnDisplaySize( sal_Int32 /* column *
     return 50;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getColumnLabel( sal_Int32 column )
+OUString SequenceResultSetMetaData::getColumnLabel( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].columnName;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString SequenceResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].columnName;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].schemaTableName;
@@ -167,14 +165,14 @@ sal_Int32 SequenceResultSetMetaData::getScale( sal_Int32 column )
     return m_columnData[column-1].scale;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getTableName( sal_Int32 column )
+OUString SequenceResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].tableName;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 /* column */ )
+OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     // can do this through XConnection.getCatalog() !
@@ -187,7 +185,7 @@ sal_Int32 SequenceResultSetMetaData::getColumnType( sal_Int32 column )
     return m_columnData[column-1].type;
 }
 
-::rtl::OUString SequenceResultSetMetaData::getColumnTypeName( sal_Int32 column )
+OUString SequenceResultSetMetaData::getColumnTypeName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     checkColumnIndex( column );
@@ -212,7 +210,7 @@ sal_Bool SequenceResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
-::rtl::OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
+OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
     return OUString();

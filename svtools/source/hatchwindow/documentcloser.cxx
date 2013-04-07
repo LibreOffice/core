@@ -87,7 +87,7 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
                 xWindow->setVisible( sal_False );
 
                 // reparent the window
-                xWinPeer->setProperty( ::rtl::OUString( "PluginParent" ),
+                xWinPeer->setProperty( OUString( "PluginParent" ),
                                         uno::makeAny( (sal_Int64) 0 ) );
 
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -206,13 +206,13 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
     sal_Int32 nLen = aArguments.getLength();
     if ( nLen != 1 )
         throw lang::IllegalArgumentException(
-                        ::rtl::OUString("Wrong count of parameters!" ),
+                        OUString("Wrong count of parameters!" ),
                         uno::Reference< uno::XInterface >(),
                         0 );
 
     if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
         throw lang::IllegalArgumentException(
-                ::rtl::OUString("Nonempty reference is expected as the first argument!" ),
+                OUString("Nonempty reference is expected as the first argument!" ),
                 uno::Reference< uno::XInterface >(),
                 0 );
 
@@ -222,17 +222,17 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
 
 // XServiceInfo
 // --------------------------------------------------------
-::rtl::OUString SAL_CALL ODocumentCloser::getImplementationName(  )
+OUString SAL_CALL ODocumentCloser::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return impl_staticGetImplementationName();
 }
 
 // --------------------------------------------------------
-::sal_Bool SAL_CALL ODocumentCloser::supportsService( const ::rtl::OUString& ServiceName )
+::sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -242,7 +242,7 @@ void SAL_CALL ODocumentCloser::initialize( const uno::Sequence< uno::Any >& aArg
 }
 
 // --------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     return impl_staticGetSupportedServiceNames();
@@ -250,16 +250,16 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::getSupportedServiceNa
 
 // Static methods
 // --------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL ODocumentCloser::impl_staticGetSupportedServiceNames()
 {
-    const rtl::OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
-    return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
+    const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
+    return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
 // --------------------------------------------------------
-::rtl::OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
+OUString SAL_CALL ODocumentCloser::impl_staticGetImplementationName()
 {
-    return rtl::OUString( "com.sun.star.comp.embed.DocumentCloser" );
+    return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
 // --------------------------------------------------------

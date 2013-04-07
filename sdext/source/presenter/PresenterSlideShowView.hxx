@@ -235,9 +235,9 @@ private:
     bool mbIsInModifyNotification;
     bool mbIsForcedPaintPending;
     bool mbIsPaintPending;
-    ::rtl::OUString msClickToExitPresentationText;
-    ::rtl::OUString msClickToExitPresentationTitle;
-    ::rtl::OUString msTitleTemplate;
+    OUString msClickToExitPresentationText;
+    OUString msClickToExitPresentationTitle;
+    OUString msTitleTemplate;
     bool mbIsEndSlideVisible;
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
 

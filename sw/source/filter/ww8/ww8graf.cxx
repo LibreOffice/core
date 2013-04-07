@@ -150,7 +150,7 @@ Color WW8TransCol(SVBT32 nWC)
     return Color(nWC[0], nWC[1], nWC[2]);
 }
 
-void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const rtl::OUString &rFixed)
+void wwFrameNamer::SetUniqueGraphName(SwFrmFmt *pFrmFmt, const OUString &rFixed)
 {
     if (mbIsDisabled || rFixed.isEmpty())
         return;
@@ -666,7 +666,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                     if (bSymbol == false && bDoingSymbol)
                     {
                         bDoingSymbol = false;
-                        rtl::OUStringBuffer sTemp;
+                        OUStringBuffer sTemp;
                         comphelper::string::padToLength(sTemp,
                             nTxtStart - nStartReplace, cReplaceSymbol);
                         mpDrawEditEngine->QuickInsertText(sTemp.makeStringAndClear(),
@@ -955,7 +955,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(String &rString, WW8_CP nS
         rString = comphelper::string::remove(rString, 0x1);
         rString = comphelper::string::remove(rString, 0x5);
         rString = comphelper::string::remove(rString, 0x8);
-        rString.SearchAndReplaceAllAscii("\007\007", rtl::OUString("\007\012"));
+        rString.SearchAndReplaceAllAscii("\007\007", OUString("\007\012"));
         rString.SearchAndReplaceAll(0x7, ' ');
 
     }

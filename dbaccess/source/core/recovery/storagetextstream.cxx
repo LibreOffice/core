@@ -67,9 +67,9 @@ namespace dbaccess
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        static const ::rtl::OUString& lcl_getLineFeed()
+        static const OUString& lcl_getLineFeed()
         {
-            static const ::rtl::OUString s_sLineFeed( sal_Unicode( '\n' ) );
+            static const OUString s_sLineFeed( sal_Unicode( '\n' ) );
             return s_sLineFeed;
         }
     }
@@ -80,7 +80,7 @@ namespace dbaccess
     //------------------------------------------------------------------------------------------------------------------
     StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,
                                                         const Reference< XStorage >& i_rParentStorage,
-                                                        const ::rtl::OUString& i_rStreamName
+                                                        const OUString& i_rStreamName
                                                     )
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageTextOutputStream_Data )
@@ -96,7 +96,7 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void StorageTextOutputStream::writeLine( const ::rtl::OUString& i_rLine )
+    void StorageTextOutputStream::writeLine( const OUString& i_rLine )
     {
         m_pData->xTextOutput->writeString( i_rLine );
         m_pData->xTextOutput->writeString( lcl_getLineFeed() );

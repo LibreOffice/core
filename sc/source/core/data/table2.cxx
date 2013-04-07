@@ -1397,12 +1397,12 @@ void ScTable::SetValue( SCCOL nCol, SCROW nRow, const double& rVal )
 }
 
 
-void ScTable::GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const
+void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetString( nRow, rString );
     else
-        rString = rtl::OUString();
+        rString = OUString();
 }
 
 const OUString* ScTable::GetStringCell( SCCOL nCol, SCROW nRow ) const
@@ -1421,12 +1421,12 @@ double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetValueCell(nRow);
 }
 
-void ScTable::GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const
+void ScTable::GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetInputString( nRow, rString );
     else
-        rString = rtl::OUString();
+        rString = OUString();
 }
 
 
@@ -1453,12 +1453,12 @@ void ScTable::RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPattern
     return aCol[nCol].RemoveEditTextCharAttribs(nRow, rAttr);
 }
 
-void ScTable::GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const
+void ScTable::GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetFormula( nRow, rFormula );
     else
-        rFormula = rtl::OUString();
+        rFormula = OUString();
 }
 
 const ScTokenArray* ScTable::GetFormulaTokens( SCCOL nCol, SCROW nRow ) const
@@ -3466,7 +3466,7 @@ bool ScTable::RefVisible(ScFormulaCell* pCell)
 }
 
 
-void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, rtl::OUString& rStr)
+void ScTable::GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr)
 {
     GetInputString(nCol, nRow, rStr);
     rStr = ScGlobal::pCharClass->uppercase(rStr.trim());

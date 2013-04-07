@@ -82,8 +82,6 @@
 #include "buttonset.hxx"
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -939,7 +937,7 @@ bool HtmlExport::SavePresentation()
             aProperties[ 0 ].Name = "Overwrite";
             aProperties[ 0 ].Value <<= (sal_Bool)sal_True;
             aProperties[ 1 ].Name = "FilterName";
-            aProperties[ 1 ].Value <<= rtl::OUString("impress8");
+            aProperties[ 1 ].Value <<= OUString("impress8");
             xStorable->storeToURL( aURL, aProperties );
 
             mpDocSh->EnableSetModified( false );
@@ -1148,7 +1146,7 @@ bool HtmlExport::WriteHtml( const String& rFileName, bool bAddExtension, const S
     nErr = aFile.createStream(aFull , pStr);
     if(nErr == 0)
     {
-        rtl::OString aStr(rtl::OUStringToOString(rHtmlData,
+        OString aStr(OUStringToOString(rHtmlData,
             RTL_TEXTENCODING_UTF8));
         *pStr << aStr.getStr();
         nErr = aFile.close();
@@ -2868,7 +2866,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
     String      aScript;
 
-    aURL.Append( rtl::OUString("webcast") );
+    aURL.Append( OUString("webcast") );
     aURL.Append( rSource );
 
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
@@ -2878,7 +2876,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
 
     if( pIStm )
     {
-        rtl::OString aLine;
+        OString aLine;
 
         while( pIStm->ReadLine( aLine ) )
         {
@@ -2926,7 +2924,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
         nErr = aFile.createStream(aDest, pStr);
         if(nErr == 0)
         {
-            rtl::OString aStr(rtl::OUStringToOString(aScript,
+            OString aStr(OUStringToOString(aScript,
                 RTL_TEXTENCODING_UTF8));
             *pStr << aStr.getStr();
 
@@ -2977,10 +2975,10 @@ bool HtmlExport::CreatePERLScripts()
             return false;
     }
 
-    if(!CopyScript(maExportPath, rtl::OUString("edit.pl"), maIndex, true ))
+    if(!CopyScript(maExportPath, OUString("edit.pl"), maIndex, true ))
         return false;
 
-    if(!CopyScript(maExportPath, rtl::OUString("index.pl"), maIndexUrl, true ))
+    if(!CopyScript(maExportPath, OUString("index.pl"), maIndexUrl, true ))
         return false;
 
     return true;
@@ -3086,7 +3084,7 @@ bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileA
     catch( com::sun::star::uno::Exception& )
     {
         OSL_FAIL(OString(OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
-             rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+             OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
     }
 
     return false;
@@ -3148,7 +3146,7 @@ bool HtmlExport::checkForExistingFiles()
     catch( Exception& )
     {
         OSL_FAIL(OString(OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
-             rtl::OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+             OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
         bFound = false;
     }
 
@@ -3238,7 +3236,7 @@ sal_uLong EasyFile::createFileName(  const String& rURL, String& rFileName )
 
         if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            rtl::OUString aURLStr;
+            OUString aURLStr;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rURL, aURLStr );
             aURL = INetURLObject( aURLStr );
         }
@@ -3294,8 +3292,8 @@ sal_Bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
 
     rCtxStr = SdResId( mnResId );
 
-    rCtxStr = rCtxStr.replaceAll( rtl::OUString("$(URL1)"), maURL1 );
-    rCtxStr = rCtxStr.replaceAll( rtl::OUString("$(URL2)"), maURL2 );
+    rCtxStr = rCtxStr.replaceAll( OUString("$(URL1)"), maURL1 );
+    rCtxStr = rCtxStr.replaceAll( OUString("$(URL2)"), maURL2 );
 
     return true;
 }

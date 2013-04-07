@@ -53,7 +53,6 @@
 #include <com/sun/star/uno/Any.hxx>
 
 using ::editeng::SvxBorderLine;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;
@@ -228,7 +227,7 @@ SvXMLImportItemMapper::finished(SfxItemSet &, SvXMLUnitConverter const&) const
 // put an XML-string value into an item
 bool SvXMLImportItemMapper::PutXMLValue(
     SfxPoolItem& rItem,
-    const ::rtl::OUString& rValue,
+    const OUString& rValue,
     sal_uInt16 nMemberId,
     const SvXMLUnitConverter& rUnitConverter )
 {

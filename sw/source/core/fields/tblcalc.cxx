@@ -30,7 +30,6 @@
 #include <unofldmid.h>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 
 SwTblFieldType::SwTblFieldType(SwDoc* pDocPtr)
@@ -64,7 +63,7 @@ SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
     nSubType(nType)
 {
-    sExpand = rtl::OUString('0');
+    sExpand = OUString('0');
 }
 
 
@@ -160,13 +159,13 @@ void SwTblField::SetValue( const double& rVal )
  --------------------------------------------------------------------*/
 
 
-rtl::OUString SwTblField::GetPar2() const
+OUString SwTblField::GetPar2() const
 {
     return SwTableFormula::GetFormula();
 }
 
 
-void SwTblField::SetPar2(const rtl::OUString& rStr)
+void SwTblField::SetPar2(const OUString& rStr)
 {
     SetFormula( rStr );
 }
@@ -181,7 +180,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             sal_uInt16 nOldSubType = nSubType;
             SwTblField* pThis = (SwTblField*)this;
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
-            rAny <<= rtl::OUString( Expand() );
+            rAny <<= OUString( Expand() );
             pThis->nSubType = nOldSubType;
         }
         break;
@@ -192,7 +191,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= rtl::OUString(GetExpStr());
+        rAny <<= OUString(GetExpStr());
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();

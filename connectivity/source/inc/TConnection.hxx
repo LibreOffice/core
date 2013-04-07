@@ -50,7 +50,7 @@ namespace connectivity
         connectivity::OWeakRefArray     m_aStatements;  //  vector containing a list
                                                         //  of all the Statement objects
                                                         //  for this Connection
-        ::rtl::OUString                 m_sURL;
+        OUString                 m_sURL;
         rtl_TextEncoding                m_nTextEncoding; // the encoding which is used for all text conversions
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >
                                         m_xMetaData;
@@ -62,8 +62,8 @@ namespace connectivity
         OMetaConnection();
 
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
-        inline ::rtl::OUString  getURL() const  { return m_sURL; }
-        inline void             setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
+        inline OUString  getURL() const  { return m_sURL; }
+        inline void             setURL(const OUString& _rsUrl) { m_sURL = _rsUrl; }
         void                    throwGenericSQLException( sal_uInt16 _nErrorResourceId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext  );
         const SharedResources& getResources() const { return m_aResources;}
 

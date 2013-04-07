@@ -66,7 +66,7 @@ void ORowSetImportExport::initialize()
 
     m_xTargetResultSetMetaData = Reference<XResultSetMetaDataSupplier>(m_xTargetResultSetUpdate,UNO_QUERY)->getMetaData();
     if(!m_xTargetResultSetMetaData.is() || !xColumnLocate.is() || !m_xResultSetMetaData.is() )
-        throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,::rtl::OUString("S1000") ,0,Any());
+        throw SQLException(String(ModuleRes(STR_UNEXPECTED_ERROR)),*this,OUString("S1000") ,0,Any());
 
     sal_Int32 nCount = m_xTargetResultSetMetaData->getColumnCount();
     m_aColumnMapping.reserve(nCount);
@@ -78,7 +78,7 @@ void ORowSetImportExport::initialize()
         {
             try
             {
-                ::rtl::OUString sColumnName = m_xTargetResultSetMetaData->getColumnName(i);
+                OUString sColumnName = m_xTargetResultSetMetaData->getColumnName(i);
                 nPos = xColumnLocate->findColumn(sColumnName);
             }
             catch(const SQLException&)

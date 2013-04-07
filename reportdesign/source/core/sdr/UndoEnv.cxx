@@ -77,7 +77,7 @@ struct PropertyInfo
     }
 };
 
-typedef ::boost::unordered_map< ::rtl::OUString, PropertyInfo, ::rtl::OUStringHash >    PropertiesInfo;
+typedef ::boost::unordered_map< OUString, PropertyInfo, OUStringHash >    PropertiesInfo;
 
 struct ObjectInfo
 {
@@ -545,9 +545,9 @@ void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & 
     if (xSet.is())
     {
         if (!m_pImpl->m_bReadOnly)
-            xSet->addPropertyChangeListener( ::rtl::OUString(), this );
+            xSet->addPropertyChangeListener( OUString(), this );
         else
-            xSet->removePropertyChangeListener( ::rtl::OUString(), this );
+            xSet->removePropertyChangeListener( OUString(), this );
     }
 }
 
@@ -602,9 +602,9 @@ void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObjec
             if ( xProps.is() )
             {
                 if ( _bStartListening )
-                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->addPropertyChangeListener( OUString(), this );
                 else
-                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->removePropertyChangeListener( OUString(), this );
             }
         }
 

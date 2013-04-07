@@ -24,7 +24,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 //.............................................................................
 namespace chart
@@ -105,7 +104,7 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
 //-----------------------------------------------------------------------------
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
-    : WrappedProperty( "LinkNumberFormatToSource", rtl::OUString() )
+    : WrappedProperty( "LinkNumberFormatToSource", OUString() )
         , m_pWrappedNumberFormatProperty( pWrappedNumberFormatProperty )
 {
     if( m_pWrappedNumberFormatProperty )

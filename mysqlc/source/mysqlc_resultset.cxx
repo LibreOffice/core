@@ -42,7 +42,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
-using ::rtl::OUString;
 
 #include <cppconn/resultset.h>
 #include <cppconn/resultset_metadata.h>
@@ -56,7 +55,7 @@ OUString SAL_CALL OResultSet::getImplementationName()
     throw (RuntimeException)
 {
     OSL_TRACE("OResultSet::getImplementationName");
-    return ::rtl::OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
+    return OUString( "com.sun.star.sdbcx.mysqlc.ResultSet" );
 }
 /* }}} */
 

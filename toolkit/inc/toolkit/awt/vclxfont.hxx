@@ -74,12 +74,12 @@ public:
     ::com::sun::star::awt::SimpleFontMetric         SAL_CALL getFontMetric(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16                                       SAL_CALL getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int16 >    SAL_CALL getCharWidths( sal_Unicode nFirst, sal_Unicode nLast ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32                                       SAL_CALL getStringWidth( const ::rtl::OUString& str ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32                                       SAL_CALL getStringWidthArray( const ::rtl::OUString& str, ::com::sun::star::uno::Sequence< sal_Int32 >& rDXArray ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int32                                       SAL_CALL getStringWidth( const OUString& str ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int32                                       SAL_CALL getStringWidthArray( const OUString& str, ::com::sun::star::uno::Sequence< sal_Int32 >& rDXArray ) throw(::com::sun::star::uno::RuntimeException);
     void                                            SAL_CALL getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars1, ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars2, ::com::sun::star::uno::Sequence< sal_Int16 >& rnKerns ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XFont2
-    sal_Bool                                        SAL_CALL hasGlyphs( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool                                        SAL_CALL hasGlyphs( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 

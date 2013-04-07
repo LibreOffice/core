@@ -68,11 +68,11 @@ public:
     template< typename Type >
     inline BinaryOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
 
-    void writeCompressedUnicodeArray( const ::rtl::OUString& rString, bool bCompressed, bool bAllowNulChars = false );
+    void writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars = false );
 
-    void writeCharArrayUC( const ::rtl::OUString& rString, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+    void writeCharArrayUC( const OUString& rString, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
-    void writeUnicodeArray( const ::rtl::OUString& rString, bool bAllowNulChars = false );
+    void writeUnicodeArray( const OUString& rString, bool bAllowNulChars = false );
 
 protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base

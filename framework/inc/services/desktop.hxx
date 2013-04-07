@@ -220,8 +220,8 @@ class Desktop   :   // interfaces
         virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL getCurrentFrame            (                                                                                 ) throw( css::uno::RuntimeException          );
 
         //  XComponentLoader
-        virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL loadComponentFromURL       ( const ::rtl::OUString&                                         sURL             ,
-                                                                                                                          const ::rtl::OUString&                                         sTargetFrameName ,
+        virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL loadComponentFromURL       ( const OUString&                                         sURL             ,
+                                                                                                                          const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ,
                                                                                                                           const css::uno::Sequence< css::beans::PropertyValue >&         lArguments       ) throw( css::io::IOException                ,
                                                                                                                                                                                                                    css::lang::IllegalArgumentException ,
@@ -233,7 +233,7 @@ class Desktop   :   // interfaces
 
         //  XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch >                        SAL_CALL queryDispatch              ( const css::util::URL&                                          aURL             ,
-                                                                                                                          const ::rtl::OUString&                                         sTargetFrameName ,
+                                                                                                                          const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) throw( css::uno::RuntimeException          );
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches            ( const css::uno::Sequence< css::frame::DispatchDescriptor >&    lQueries         ) throw( css::uno::RuntimeException          );
 
@@ -248,14 +248,14 @@ class Desktop   :   // interfaces
 
         //   XFrame
         //  Attention: findFrame() is implemented only! Other methods make no sense for our desktop!
-        virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL findFrame                  ( const ::rtl::OUString&                                         sTargetFrameName ,
+        virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL findFrame                  ( const OUString&                                         sTargetFrameName ,
                                                                                                                                 sal_Int32                                                nSearchFlags     ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL initialize                 ( const css::uno::Reference< css::awt::XWindow >&                xWindow          ) throw( css::uno::RuntimeException          );
         virtual css::uno::Reference< css::awt::XWindow >                            SAL_CALL getContainerWindow         (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL setCreator                 ( const css::uno::Reference< css::frame::XFramesSupplier >&      xCreator         ) throw( css::uno::RuntimeException          );
         virtual css::uno::Reference< css::frame::XFramesSupplier >                  SAL_CALL getCreator                 (                                                                                 ) throw( css::uno::RuntimeException          );
-        virtual ::rtl::OUString                                                     SAL_CALL getName                    (                                                                                 ) throw( css::uno::RuntimeException          );
-        virtual void                                                                SAL_CALL setName                    ( const ::rtl::OUString&                                         sName            ) throw( css::uno::RuntimeException          );
+        virtual OUString                                                     SAL_CALL getName                    (                                                                                 ) throw( css::uno::RuntimeException          );
+        virtual void                                                                SAL_CALL setName                    ( const OUString&                                         sName            ) throw( css::uno::RuntimeException          );
         virtual sal_Bool                                                            SAL_CALL isTop                      (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL activate                   (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual void                                                                SAL_CALL deactivate                 (                                                                                 ) throw( css::uno::RuntimeException          );
@@ -299,7 +299,7 @@ class Desktop   :   // interfaces
                    css::uno::RuntimeException         );
 
         // css.frame.XUntitledNumbers
-        virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
+        virtual OUString SAL_CALL getUntitledPrefix()
             throw (css::uno::RuntimeException);
 
         // we need this wrapped terminate()-call to terminate even the QuickStarter
@@ -428,8 +428,8 @@ class Desktop   :   // interfaces
         css::uno::Any                                                   m_aInteractionRequest       ;
         sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
         SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
-        ::rtl::OUString                                                 m_sName                     ;
-        ::rtl::OUString                                                 m_sTitle                    ;
+        OUString                                                 m_sName                     ;
+        OUString                                                 m_sTitle                    ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
 
         //---------------------------------------------------------------------

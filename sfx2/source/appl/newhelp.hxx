@@ -440,7 +440,7 @@ private:
     String                  aIndexOffText;
     String                  aSearchText;
     String                  aOnStartupText;
-    ::rtl::OUString         sCurrentFactory;
+    OUString         sCurrentFactory;
 
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
@@ -568,15 +568,15 @@ public:
     sal_Bool            HasHistoryPredecessor() const;      // forward to interceptor
     sal_Bool            HasHistorySuccessor() const;        // forward to interceptor
 
-    void                openDone(const ::rtl::OUString& sURL    ,
+    void                openDone(const OUString& sURL    ,
                                        sal_Bool         bSuccess);
 
-    static ::rtl::OUString  buildHelpURL(const ::rtl::OUString& sFactory        ,
-                                         const ::rtl::OUString& sContent        ,
-                                         const ::rtl::OUString& sAnchor         ,
+    static OUString  buildHelpURL(const OUString& sFactory        ,
+                                         const OUString& sContent        ,
+                                         const OUString& sAnchor         ,
                                                sal_Bool         bUseQuestionMark);
 
-    void                loadHelpContent(const ::rtl::OUString& sHelpURL                ,
+    void                loadHelpContent(const OUString& sHelpURL                ,
                                               sal_Bool         bAddToHistory = sal_True);
 };
 
@@ -598,7 +598,7 @@ public:
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL
-void AppendConfigToken(OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang = rtl::OUString());
+void AppendConfigToken(OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang = OUString());
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
 

@@ -84,13 +84,13 @@ protected:
     sal_Bool                    m_aResult;
 
     ::osl::Condition            m_aGetCurrentFilterCondition;
-    ::rtl::OUString             m_aGetCurrentFilter;
+    OUString             m_aGetCurrentFilter;
 
     ::osl::Condition            m_aGetDirectoryCondition;
-    ::rtl::OUString             m_aGetDirectory;
+    OUString             m_aGetDirectory;
 
     ::osl::Condition            m_aGetFilesCondition;
-    ::std::list< ::rtl::OUString > m_aGetFiles;
+    ::std::list< OUString > m_aGetFiles;
 
     ::osl::Condition            m_aGetValueCondition;
     ::com::sun::star::uno::Any  m_aGetValue;
@@ -103,13 +103,13 @@ public:
     sal_Bool SAL_CALL           result();
 
     ::osl::Condition& SAL_CALL  getCurrentFilterCondition() { return m_aGetCurrentFilterCondition; }
-    ::rtl::OUString SAL_CALL    getCurrentFilter();
+    OUString SAL_CALL    getCurrentFilter();
 
     ::osl::Condition& SAL_CALL  getDirectoryCondition() { return m_aGetDirectoryCondition; }
-    ::rtl::OUString SAL_CALL    getDirectory();
+    OUString SAL_CALL    getDirectory();
 
     ::osl::Condition& SAL_CALL  getFilesCondition() { return m_aGetFilesCondition; }
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles();
 
     ::osl::Condition& SAL_CALL  getValueCondition() { return m_aGetValueCondition; }
     ::com::sun::star::uno::Any SAL_CALL getValue();
@@ -117,8 +117,8 @@ public:
 protected:
     virtual void SAL_CALL       run();
 
-    virtual void SAL_CALL       handleCommand( const ::rtl::OUString &rCommand/*, sal_Bool &rQuit*/ );
-    ::std::list< ::rtl::OUString > SAL_CALL tokenize( const ::rtl::OUString &rCommand );
+    virtual void SAL_CALL       handleCommand( const OUString &rCommand/*, sal_Bool &rQuit*/ );
+    ::std::list< OUString > SAL_CALL tokenize( const OUString &rCommand );
 };
 
 #endif // _UNXCOMMANDTHREAD_HXX_

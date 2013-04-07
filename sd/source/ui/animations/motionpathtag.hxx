@@ -109,7 +109,7 @@ private:
     SdrPathObj* mpPathObj;
     ::com::sun::star::awt::Point maOriginPos;
     SdrMark* mpMark;
-    rtl::OUString msLastPath;
+    OUString msLastPath;
     bool mbInUpdatePath;
 };
 

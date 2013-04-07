@@ -97,7 +97,7 @@ namespace dbaui
 
         // try some known item types
         if  (   ItemAdapter< SfxBoolItem, sal_Bool >::tryGet( rItem, _out_rValue )
-            ||  ItemAdapter< SfxStringItem, ::rtl::OUString >::tryGet( rItem, _out_rValue )
+            ||  ItemAdapter< SfxStringItem, OUString >::tryGet( rItem, _out_rValue )
             )
             return;
 
@@ -109,7 +109,7 @@ namespace dbaui
     {
         // try some known item types
         if  (   ItemAdapter< SfxBoolItem, sal_Bool >::trySet( m_rItemSet, m_nItemID, _rValue )
-            ||  ItemAdapter< SfxStringItem, ::rtl::OUString >::trySet( m_rItemSet, m_nItemID, _rValue )
+            ||  ItemAdapter< SfxStringItem, OUString >::trySet( m_rItemSet, m_nItemID, _rValue )
             )
             return;
 

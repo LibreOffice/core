@@ -40,7 +40,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::rtl::math::cos;
 using ::rtl::math::sin;
 using ::rtl::math::tan;
@@ -1339,8 +1338,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
 
-        rtl::OUString aPercentDiagonalPropertyName( "PercentDiagonal" );
-        rtl::OUString aBorderStylePropertyName( "BorderStyle" );
+        OUString aPercentDiagonalPropertyName( "PercentDiagonal" );
+        OUString aBorderStylePropertyName( "BorderStyle" );
 
         for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
         {

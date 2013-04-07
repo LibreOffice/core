@@ -433,23 +433,23 @@ String SvxHyperlinkTabPageBase::GetSchemeFromURL( String aStrURL )
     {
         if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTP_SCHEME, 0, 7 ) )
         {
-            aStrScheme = rtl::OUString( INET_HTTP_SCHEME );
+            aStrScheme = OUString( INET_HTTP_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_HTTPS_SCHEME, 0, 8 ) )
         {
-            aStrScheme = rtl::OUString( INET_HTTPS_SCHEME );
+            aStrScheme = OUString( INET_HTTPS_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_FTP_SCHEME, 0, 6 ) )
         {
-            aStrScheme = rtl::OUString( INET_FTP_SCHEME );
+            aStrScheme = OUString( INET_FTP_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_MAILTO_SCHEME, 0, 7 ) )
         {
-            aStrScheme = rtl::OUString( INET_MAILTO_SCHEME );
+            aStrScheme = OUString( INET_MAILTO_SCHEME );
         }
         else if ( aStrURL.EqualsIgnoreCaseAscii( INET_NEWS_SCHEME, 0, 5 ) )
         {
-            aStrScheme = rtl::OUString( INET_NEWS_SCHEME );
+            aStrScheme = OUString( INET_NEWS_SCHEME );
         }
     }
     else

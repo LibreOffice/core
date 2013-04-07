@@ -29,7 +29,6 @@
 #include "MutableAttrList.hxx"
 #include "MetaTContext.hxx"
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

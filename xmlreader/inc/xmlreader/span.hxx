@@ -24,10 +24,9 @@
 
 #include "rtl/string.hxx"
 #include "rtl/stringutils.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "xmlreader/detail/xmlreaderdllapi.hxx"
-
-namespace rtl { class OUString; }
 
 namespace xmlreader {
 
@@ -54,7 +53,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         return equals(Span(textBegin, textLength));
     }
 
-    inline bool equals(rtl::OString const & text) const {
+    inline bool equals(OString const & text) const {
         return rtl_str_compare_WithLength(
             begin, length, text.getStr(), text.getLength()) == 0;
     }
@@ -70,7 +69,7 @@ struct OOO_DLLPUBLIC_XMLREADER Span {
         return rtl_str_compare_WithLength( begin, length, literal, rtl::internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
-    rtl::OUString convertFromUtf8() const;
+    OUString convertFromUtf8() const;
 };
 
 }

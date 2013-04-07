@@ -42,7 +42,7 @@ struct ExecuteInfo
 
 struct NotifyInfo
 {
-    ::rtl::OUString                                                                           aEventName;
+    OUString                                                                           aEventName;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XControlNotificationListener > xNotifyListener;
     ::com::sun::star::util::URL                                                               aSourceURL;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >                    aInfoSeq;
@@ -58,7 +58,7 @@ class ComplexToolbarController : public svt::ToolboxController
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox*     pToolBar,
                                   sal_uInt16       nID,
-                                  const rtl::OUString& aCommand );
+                                  const OUString& aCommand );
         virtual ~ComplexToolbarController();
 
         // XComponent
@@ -75,8 +75,8 @@ class ComplexToolbarController : public svt::ToolboxController
 
     protected:
         static sal_Int32 getFontSizePixel( const Window* pWindow );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const rtl::OUString& aCommand ) const;
-        void addNotifyInfo( const ::rtl::OUString&                                                        aEventName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommand( const OUString& aCommand ) const;
+        void addNotifyInfo( const OUString&                                                        aEventName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& xDispatch,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rInfo );
 
@@ -85,7 +85,7 @@ class ComplexToolbarController : public svt::ToolboxController
         const ::com::sun::star::util::URL& getInitializedURL();
         void notifyFocusGet();
         void notifyFocusLost();
-        void notifyTextChanged( const ::rtl::OUString& aText );
+        void notifyTextChanged( const OUString& aText );
 
         ToolBox*                                                                    m_pToolbar;
         sal_uInt16                                                                  m_nID;

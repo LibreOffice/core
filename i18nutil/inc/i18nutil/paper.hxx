@@ -137,8 +137,8 @@ public:
     static PaperInfo getSystemDefaultPaper();
     static PaperInfo getDefaultPaperForLocale(const ::com::sun::star::lang::Locale & rLocale);
 
-    static Paper fromPSName(const rtl::OString &rName);
-    static rtl::OString toPSName(Paper eType);
+    static Paper fromPSName(const OString &rName);
+    static OString toPSName(Paper eType);
 
     static long sloppyFitPageDimension(long nDimension);
 };

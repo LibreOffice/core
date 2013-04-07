@@ -70,7 +70,7 @@ class CWinClipboard :
 {
 public:
     CWinClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                   const ::rtl::OUString& aClipboardName );
+                   const OUString& aClipboardName );
 
     //------------------------------------------------
     // XClipboard
@@ -84,7 +84,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getName(  )
+    virtual OUString SAL_CALL getName(  )
         throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
@@ -122,13 +122,13 @@ public:
     // XServiceInfo
     //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
 private:

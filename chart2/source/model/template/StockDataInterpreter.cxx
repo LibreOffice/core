@@ -37,7 +37,6 @@ using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using namespace ::chart::ContainerHelper;
 
 namespace chart

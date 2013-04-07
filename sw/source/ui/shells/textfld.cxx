@@ -402,7 +402,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 if (pRedline)
                 {
-                    rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
+                    OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
                     sal_Bool bTravel = sal_False;
 
@@ -492,7 +492,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             case FN_JAVAEDIT:
             {
-                rtl::OUString aType, aText;
+                OUString aType, aText;
                 sal_Bool bIsUrl=sal_False;
                 sal_Bool bNew=sal_False;
                 bool bUpdate = false;
@@ -801,7 +801,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->SwapPam();
 
         pRedline = pSh->GetCurrRedline();
-        rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
+        OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
         pDlg->SetNote(sComment);
         pDlg->ShowLastAuthor( pRedline->GetAuthorString(),
@@ -848,7 +848,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
         pDlg->EnableTravel(sal_True, bEnable);
 
         pRedline = pSh->GetCurrRedline();
-        rtl::OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
+        OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
         pDlg->SetNote(sComment);
         pDlg->ShowLastAuthor(pRedline->GetAuthorString(),

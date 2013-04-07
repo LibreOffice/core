@@ -152,7 +152,7 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_columnIndex < 0 ) || ( size_t( i_columnIndex ) >= m_aColumns.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         Columns::iterator const pos = m_aColumns.begin() + i_columnIndex;
         Reference< XGridColumn > const xColumn( *pos );
@@ -242,7 +242,7 @@ namespace toolkit
             {
                 ::rtl::Reference< GridColumn > const pGridColumn = new GridColumn();
                 Reference< XGridColumn > const xColumn( pGridColumn.get() );
-                ::rtl::OUStringBuffer colTitle;
+                OUStringBuffer colTitle;
                 colTitle.appendAscii( "Column " );
                 colTitle.append( i + 1 );
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
@@ -299,15 +299,15 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.toolkit.DefaultGridColumnModel" );
+        return OUString( "org.openoffice.comp.toolkit.DefaultGridColumnModel" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const ::rtl::OUString& i_serviceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
         for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
             if ( aServiceNames[i] == i_serviceName )
                 return sal_True;
@@ -315,10 +315,10 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_DefaultGridColumnModel ) );
-        const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
+        const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridColumnModel ) );
+        const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
 

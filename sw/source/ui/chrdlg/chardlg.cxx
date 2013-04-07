@@ -235,7 +235,7 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
 
 sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
 {
-   ::rtl::OUString sURL = m_pURLED->GetText();
+   OUString sURL = m_pURLED->GetText();
    if(!sURL.isEmpty())
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
@@ -243,7 +243,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
         static const sal_Char* pFile = "file:";
        sal_Int32 nLength = ((sal_Int32)sizeof(pFile)-1);
        if( sURL.copy(0, nLength ).equalsAsciiL( pFile, nLength ))
-            sURL = URIHelper::simpleNormalizedMakeRelative(::rtl::OUString(), sURL);
+            sURL = URIHelper::simpleNormalizedMakeRelative(OUString(), sURL);
     }
 
     SwFmtINetFmt aINetFmt(sURL, m_pTargetFrmLB->GetText());

@@ -47,7 +47,7 @@
     #define LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )                                                               \
                 /* new scope to prevent us against multiple definitions of variables ... */                     \
                 {                                                                                               \
-                    ::rtl::OStringBuffer _sBuffer( 256 );                                                       \
+                    OStringBuffer _sBuffer( 256 );                                                       \
                     _sBuffer.append( "Set framework lock type to fallback: \"" );                               \
                     switch( _EFALLBACK )                                                                        \
                     {                                                                                           \

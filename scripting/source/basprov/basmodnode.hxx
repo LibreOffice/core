@@ -45,18 +45,18 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::rtl::OUString m_sScriptingContext;
+    OUString m_sScriptingContext;
         SbModule* m_pModule;
         bool m_bIsAppScript;
 
     public:
         BasicModuleNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::rtl::OUString& sScriptingContext,
+            const OUString& sScriptingContext,
             SbModule* pModule, bool isAppScript = true );
         virtual ~BasicModuleNodeImpl();
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  )
+        virtual OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);

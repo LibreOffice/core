@@ -37,7 +37,7 @@ IMPLEMENT_SERVICE_INFO(OCallableStatement,"com.sun.star.sdbcx.ACallableStatement
 //**************************************************************
 //************ Class: java.sql.CallableStatement
 //**************************************************************
-OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql )
+OCallableStatement::OCallableStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql )
                 : OPreparedStatement( _pConnection, _TypeInfo, sql )
 {
     m_Command.put_CommandType(adCmdStoredProc);
@@ -124,7 +124,7 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(S
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     GET_PARAM()
     return m_aValue;
@@ -145,7 +145,7 @@ sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(S
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     ADOParameter* pParam = NULL;
     m_pParameters->get_Item(OLEVariant(sal_Int32(parameterIndex-1)),&pParam);

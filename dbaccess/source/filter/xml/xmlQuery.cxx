@@ -40,7 +40,7 @@ DBG_NAME(OXMLQuery)
 
 OXMLQuery::OXMLQuery( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                 ) :
@@ -56,10 +56,10 @@ OXMLQuery::OXMLQuery( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -82,7 +82,7 @@ OXMLQuery::~OXMLQuery()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLQuery::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext* pContext = OXMLTable::CreateChildContext(nPrefix, rLocalName,xAttrList );
@@ -95,7 +95,7 @@ SvXMLImportContext* OXMLQuery::CreateChildContext(
             case XML_TOK_UPDATE_TABLE:
                 {
                     GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                    ::rtl::OUString s1;
+                    OUString s1;
                     fillAttributes(nPrefix, rLocalName,xAttrList,s1,m_sTable,m_sSchema,m_sCatalog);
                 }
                 break;

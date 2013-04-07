@@ -43,10 +43,10 @@ uno::Reference< uno::XInterface > OFormattedField::create(uno::Reference< uno::X
     return *(new OFormattedField(xContext));
 }
 
-uno::Sequence< ::rtl::OUString > lcl_getFormattedFieldOptionals()
+uno::Sequence< OUString > lcl_getFormattedFieldOptionals()
 {
-    ::rtl::OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    OUString pProps[] = { PROPERTY_MASTERFIELDS,PROPERTY_DETAILFIELDS };
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 DBG_NAME( rpt_OFormattedField )
 // -----------------------------------------------------------------------------
@@ -105,32 +105,32 @@ void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException)
     m_xFunction.clear();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OFormattedField");
+    return OUString("com.sun.star.comp.report.OFormattedField");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedField::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OFormattedField::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OFormattedField::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(2);
+    uno::Sequence< OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_FORMATTEDFIELD;
-    aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.UnoControlFormattedFieldModel");
+    aServices.getArray()[1] = OUString("com.sun.star.awt.UnoControlFormattedFieldModel");
 
     return aServices;
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFormattedField::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OFormattedField::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -147,7 +147,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormattedField::getPropertyS
     return FormattedFieldPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFormattedField::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     // special case here /// TODO check
     if ( !aValue.hasValue() && aPropertyName == PROPERTY_FORMATKEY )
@@ -156,39 +156,39 @@ void SAL_CALL OFormattedField::setPropertyValue( const ::rtl::OUString& aPropert
         FormattedFieldPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OFormattedField::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFormattedField::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return FormattedFieldPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFormattedField::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FormattedFieldPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFormattedField::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FormattedFieldPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFormattedField::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FormattedFieldPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFormattedField::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FormattedFieldPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 // XReportControlModel
-::rtl::OUString SAL_CALL OFormattedField::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFormattedField::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aDataField;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::setDataField( const ::rtl::OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFormattedField::setDataField( const OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_DATAFIELD,_datafield,m_aProps.aDataField);
 }
@@ -204,13 +204,13 @@ void SAL_CALL OFormattedField::setPrintWhenGroupChange( ::sal_Bool _printwhengro
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedField::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFormattedField::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFormattedField::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFormattedField::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
@@ -262,7 +262,7 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
         {
             uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
             if ( xProp.is() )
-                m_xFormatsSupplier.set(xProp->getPropertyValue(::rtl::OUString("NumberFormatsSupplier")),uno::UNO_QUERY);
+                m_xFormatsSupplier.set(xProp->getPropertyValue(OUString("NumberFormatsSupplier")),uno::UNO_QUERY);
         }
     }
     return m_xFormatsSupplier;
@@ -362,9 +362,9 @@ void SAL_CALL OFormattedField::setSize( const awt::Size& aSize ) throw (beans::P
 // -----------------------------------------------------------------------------
 
 // XShapeDescriptor
-::rtl::OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
+   return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
 // =============================================================================

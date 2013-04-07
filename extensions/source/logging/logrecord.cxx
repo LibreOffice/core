@@ -43,16 +43,16 @@ namespace logging
                 We need a way to retrieve the current UNO thread ID as string,
                 which is issue #i77342#
         */
-        ::rtl::OUString getCurrentThreadID()
+        OUString getCurrentThreadID()
         {
             oslThreadIdentifier nThreadID( osl_getThreadIdentifier( NULL ) );
-            return ::rtl::OUString::valueOf( (sal_Int64)nThreadID );
+            return OUString::valueOf( (sal_Int64)nThreadID );
         }
     }
 
     //--------------------------------------------------------------------
-    LogRecord createLogRecord( const ::rtl::OUString& _rLoggerName, const ::rtl::OUString& _rClassName,
-        const ::rtl::OUString& _rMethodName, const ::rtl::OUString& _rMessage,
+    LogRecord createLogRecord( const OUString& _rLoggerName, const OUString& _rClassName,
+        const OUString& _rMethodName, const OUString& _rMessage,
         sal_Int32 _nLogLevel, oslInterlockedCount _nEventNumber )
     {
         TimeValue aTimeValue;

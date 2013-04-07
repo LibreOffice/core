@@ -67,15 +67,15 @@ namespace basprov
     // component operations
     // =============================================================================
 
-    static ::rtl::OUString getImplementationName_BasicProviderImpl()
+    static OUString getImplementationName_BasicProviderImpl()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
+                static OUString aImplName( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
                 pImplName = &aImplName;
             }
         }
@@ -84,19 +84,19 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_BasicProviderImpl()
+    static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(4);
-                aNames.getArray()[0] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProviderForBasic"  );
-                aNames.getArray()[1] = ::rtl::OUString( "com.sun.star.script.provider.LanguageScriptProvider"  );
-                aNames.getArray()[2] = ::rtl::OUString( "com.sun.star.script.provider.ScriptProvider"  );
-                aNames.getArray()[3] = ::rtl::OUString( "com.sun.star.script.browse.BrowseNode"  );
+                static Sequence< OUString > aNames(4);
+                aNames.getArray()[0] = OUString( "com.sun.star.script.provider.ScriptProviderForBasic"  );
+                aNames.getArray()[1] = OUString( "com.sun.star.script.provider.LanguageScriptProvider"  );
+                aNames.getArray()[2] = OUString( "com.sun.star.script.provider.ScriptProvider"  );
+                aNames.getArray()[3] = OUString( "com.sun.star.script.browse.BrowseNode"  );
                 pNames = &aNames;
             }
         }
@@ -126,34 +126,34 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const ::rtl::OUString& rLibName )
+    bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const OUString& rLibName )
     {
         bool bIsShared = false;
 
         Reference< script::XLibraryContainer2 > xLibContainer( rxLibContainer, UNO_QUERY );
         if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) && xLibContainer->isLibraryLink( rLibName ) )
         {
-            ::rtl::OUString aFileURL;
+            OUString aFileURL;
             if ( m_xContext.is() )
             {
                 Reference< uri::XUriReferenceFactory > xUriFac( uri::UriReferenceFactory::create( m_xContext ) );
 
-                ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
+                OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
                 Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
 
                 if ( xUriRef.is() )
                 {
-                    ::rtl::OUString aScheme = xUriRef->getScheme();
+                    OUString aScheme = xUriRef->getScheme();
                     if ( aScheme.equalsIgnoreAsciiCase("file") )
                     {
                         aFileURL = aLinkURL;
                     }
                     else if ( aScheme.equalsIgnoreAsciiCase("vnd.sun.star.pkg") )
                     {
-                        ::rtl::OUString aAuthority = xUriRef->getAuthority();
+                        OUString aAuthority = xUriRef->getAuthority();
                         if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
                         {
-                            ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
+                            OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                             aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                             Reference<util::XMacroExpander> xMacroExpander =
                                 util::theMacroExpander::get(m_xContext);
@@ -169,10 +169,10 @@ namespace basprov
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 OSL_VERIFY( osl::DirectoryItem::get( aFileURL, aFileItem ) == osl::FileBase::E_None );
                 OSL_VERIFY( aFileItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None );
-                ::rtl::OUString aCanonicalFileURL( aFileStatus.getFileURL() );
+                OUString aCanonicalFileURL( aFileStatus.getFileURL() );
 
-                ::rtl::OUString aSearchURL1( "share/basic"  );
-                ::rtl::OUString aSearchURL2( "share/uno_packages"  );
+                OUString aSearchURL1( "share/basic"  );
+                OUString aSearchURL2( "share/uno_packages"  );
                 if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
                     bIsShared = true;
             }
@@ -185,18 +185,18 @@ namespace basprov
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicProviderImpl::getImplementationName(  ) throw (RuntimeException)
+    OUString BasicProviderImpl::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_BasicProviderImpl();
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool BasicProviderImpl::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+        Sequence< OUString > aNames( getSupportedServiceNames() );
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pEnd = pNames + aNames.getLength();
         for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
             ;
 
@@ -205,7 +205,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > BasicProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_BasicProviderImpl();
     }
@@ -223,7 +223,7 @@ namespace basprov
         if ( aArguments.getLength() != 1 )
         {
             throw IllegalArgumentException(
-                ::rtl::OUString( "BasicProviderImpl::initialize: incorrect argument count."  ),
+                OUString( "BasicProviderImpl::initialize: incorrect argument count."  ),
                 *this,
                 1
             );
@@ -238,7 +238,7 @@ namespace basprov
             if ( !xModel.is() )
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context."  ),
+                    OUString( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context."  ),
                     *this,
                     1
                 );
@@ -249,13 +249,13 @@ namespace basprov
             if ( !( aArguments[0] >>= m_sScriptingContext ) )
             {
                 throw IllegalArgumentException(
-                    ::rtl::OUString( "BasicProviderImpl::initialize: incorrect argument type "   ).concat(  aArguments[0].getValueTypeName() ),
+                    OUString( "BasicProviderImpl::initialize: incorrect argument type "   ).concat(  aArguments[0].getValueTypeName() ),
                     *this,
                     1
                 );
             }
 
-            ::rtl::OUString sDoc = "vnd.sun.star.tdoc";
+            OUString sDoc = "vnd.sun.star.tdoc";
             if ( m_sScriptingContext.indexOf( sDoc  ) == 0 )
             {
                 xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
@@ -287,7 +287,7 @@ namespace basprov
             {
                 /*
                 throw RuntimeException(
-                    ::rtl::OUString( "BasicProviderImpl::initialize: no scripting context!"  ),
+                    OUString( "BasicProviderImpl::initialize: no scripting context!"  ),
                     Reference< XInterface >() );
                 */
             }
@@ -306,7 +306,7 @@ namespace basprov
     // XScriptProvider
     // -----------------------------------------------------------------------------
 
-    Reference < provider::XScript > BasicProviderImpl::getScript( const ::rtl::OUString& scriptURI )
+    Reference < provider::XScript > BasicProviderImpl::getScript( const OUString& scriptURI )
         throw ( provider::ScriptFrameworkErrorException, RuntimeException)
     {
         // TODO
@@ -323,7 +323,7 @@ namespace basprov
 
         if ( !uriRef.is() || !sfUri.is() )
         {
-            ::rtl::OUString errorMsg("BasicProviderImpl::getScript: failed to parse URI: ");
+            OUString errorMsg("BasicProviderImpl::getScript: failed to parse URI: ");
             errorMsg = errorMsg.concat( scriptURI );
             throw provider::ScriptFrameworkErrorException(
                 errorMsg, Reference< XInterface >(),
@@ -332,9 +332,9 @@ namespace basprov
         }
 
 
-        ::rtl::OUString aDescription = sfUri->getName();
-        ::rtl::OUString aLocation = sfUri->getParameter(
-            ::rtl::OUString("location") );
+        OUString aDescription = sfUri->getName();
+        OUString aLocation = sfUri->getParameter(
+            OUString("location") );
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an
@@ -349,25 +349,25 @@ namespace basprov
         {
             pBasicMgr = m_pAppBasicManager;
         }
-        rtl::OUString sProjectName;
+        OUString sProjectName;
         if (  pBasicMgr )
             sProjectName = pBasicMgr->GetName();
 
-        ::rtl::OUString aLibrary;
+        OUString aLibrary;
         if ( !sProjectName.isEmpty() && aDescription.match( sProjectName ) )
         {
             OSL_TRACE("LibraryName %s is part of the url %s",
-                rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( aDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
+                OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                OUStringToOString( aDescription, RTL_TEXTENCODING_UTF8 ).getStr() );
             aLibrary = sProjectName;
             nIndex = sProjectName.getLength() + 1;
         }
         else
             aLibrary = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
-        ::rtl::OUString aModule;
+        OUString aModule;
         if ( nIndex != -1 )
             aModule = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
-        ::rtl::OUString aMethod;
+        OUString aMethod;
         if ( nIndex != -1 )
             aMethod = aDescription.getToken( 0, (sal_Unicode)'.', nIndex );
 
@@ -410,7 +410,7 @@ namespace basprov
 
         if ( !xScript.is() )
         {
-            ::rtl::OUStringBuffer aMessage;
+            OUStringBuffer aMessage;
             aMessage.appendAscii( "The following Basic script could not be found:\n" );
             aMessage.appendAscii( "library: '" ).append( aLibrary ).appendAscii( "'\n" );
             aMessage.appendAscii( "module: '" ).append( aModule ).appendAscii( "'\n" );
@@ -430,13 +430,13 @@ namespace basprov
     // XBrowseNode
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicProviderImpl::getName(  ) throw (RuntimeException)
+    OUString BasicProviderImpl::getName(  ) throw (RuntimeException)
     {
         // TODO
 
         SolarMutexGuard aGuard;
 
-        return ::rtl::OUString("Basic");
+        return OUString("Basic");
     }
 
     // -----------------------------------------------------------------------------
@@ -463,9 +463,9 @@ namespace basprov
 
         if ( pBasicManager && xLibContainer.is() )
         {
-            Sequence< ::rtl::OUString > aLibNames = xLibContainer->getElementNames();
+            Sequence< OUString > aLibNames = xLibContainer->getElementNames();
             sal_Int32 nLibCount = aLibNames.getLength();
-            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+            const OUString* pLibNames = aLibNames.getConstArray();
             aChildNodes.realloc( nLibCount );
             Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
             sal_Int32 childrenFound = 0;

@@ -42,12 +42,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
+OUString SalGtkPicker::uritounicode(const gchar* pIn)
 {
     if (!pIn)
-        return rtl::OUString();
+        return OUString();
 
-    rtl::OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
+    OUString sURL( const_cast<const sal_Char *>(pIn), strlen(pIn),
         RTL_TEXTENCODING_UTF8 );
 
     INetURLObject aURL(sURL);
@@ -58,7 +58,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
         gchar *pEncodedFileName = g_filename_from_uri(pIn, NULL, NULL);
         if ( pEncodedFileName )
         {
-            rtl::OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
+            OUString sEncoded(pEncodedFileName, strlen(pEncodedFileName),
                 osl_getThreadTextEncoding());
             INetURLObject aCurrentURL(sEncoded, INetURLObject::FSYS_UNX);
             aCurrentURL.SetHost(aURL.GetHost());
@@ -74,7 +74,7 @@ rtl::OUString SalGtkPicker::uritounicode(const gchar* pIn)
     return sURL;
 }
 
-rtl::OString SalGtkPicker::unicodetouri(const rtl::OUString &rURL)
+OString SalGtkPicker::unicodetouri(const OUString &rURL)
 {
     // all the URLs are handled by office in UTF-8 ( and encoded with "%xx" codes based on UTF-8 )
     // so the Gnome FP related URLs should be converted accordingly
@@ -182,7 +182,7 @@ void SalGtkPicker::setGtkLanguage()
     OUString aLocaleString( Application::GetSettings().GetUILanguageTag().getGlibcLocaleString( ".UTF-8"));
     if (!aLocaleString.isEmpty())
     {
-        rtl::OUString envVar( "LANGUAGE" );
+        OUString envVar( "LANGUAGE" );
         osl_setEnvironment( envVar.pData, aLocaleString.pData );
     }
     bSet = true;
@@ -204,7 +204,7 @@ SalGtkPicker::~SalGtkPicker()
     }
 }
 
-void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirectory )
+void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
@@ -223,23 +223,23 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const rtl::OUString& aDirec
         aTxt.getStr() );
 }
 
-rtl::OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
-    ::rtl::OUString aCurrentFolderName = uritounicode(pCurrentFolder);
+    OUString aCurrentFolderName = uritounicode(pCurrentFolder);
     g_free( pCurrentFolder );
 
     return aCurrentFolderName;
 }
 
-void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle ) throw( uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != NULL );
 
-    ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
+    OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }

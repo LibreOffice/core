@@ -59,40 +59,40 @@ namespace abp
         void    getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ));
 
         /// disambiguates the given name by appending auccessive numbers
-        ::rtl::OUString& disambiguate(::rtl::OUString& _rDataSourceName);
+        OUString& disambiguate(OUString& _rDataSourceName);
 
         /// creates a new MORK data source
-        ODataSource createNewMORK( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewMORK( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Thunderbird data source
-        ODataSource createNewThunderbird( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewThunderbird( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Evolution local data source
-        ODataSource createNewEvolution( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolution( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Evolution LDAP data source
-        ODataSource createNewEvolutionLdap( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolutionLdap( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Evolution GROUPWISE data source
-        ODataSource createNewEvolutionGroupwise( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolutionGroupwise( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new KDE address book data source
-        ODataSource createNewKab( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewKab( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Mac OS X address book data source
-        ODataSource createNewMacab( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewMacab( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new LDAP data source
-        ODataSource createNewLDAP( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewLDAP( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Outlook data source
-        ODataSource createNewOutlook( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewOutlook( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new Outlook express data source
-        ODataSource createNewOE( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewOE( const OUString& _rName ) SAL_THROW (( ));
 
         /// creates a new dBase data source
-        ODataSource createNewDBase( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewDBase( const OUString& _rName ) SAL_THROW (( ));
     };
 
     //=====================================================================
@@ -139,11 +139,11 @@ namespace abp
             // TODO: put this into the context class
 
         /// returns the name of the data source
-        ::rtl::OUString
+        OUString
                     getName() const SAL_THROW (( ));
 
         /// renames the data source
-        sal_Bool    rename( const ::rtl::OUString& _rName ) SAL_THROW (( ));
+        sal_Bool    rename( const OUString& _rName ) SAL_THROW (( ));
             // TODO: put this into the context class
 
         // ----------------------------------------------------------------
@@ -167,7 +167,7 @@ namespace abp
         void        store() SAL_THROW (( ));
 
         /// register the data source under the given name in the configuration
-        void        registerDataSource( const ::rtl::OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
+        void        registerDataSource( const OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
 
         // ----------------------------------------------------------------
         /** retrieves the tables names from the connection
@@ -177,7 +177,7 @@ namespace abp
 
         /** determines whether a given table exists
         */
-        bool    hasTable( const ::rtl::OUString& _rTableName ) const;
+        bool    hasTable( const OUString& _rTableName ) const;
 
         /// return the intern data source object
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const SAL_THROW (( ));
@@ -189,7 +189,7 @@ namespace abp
         */
         void        setDataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDS
-            ,const ::rtl::OUString& _sName
+            ,const OUString& _sName
             ,PackageAccessControl
         );
 

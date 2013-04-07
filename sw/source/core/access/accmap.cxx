@@ -66,7 +66,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 using namespace ::sw::access;
 
 struct SwFrmFunc

@@ -63,7 +63,7 @@ ConditionField::ConditionField( Condition* _pParent, const ResId& _rResId ) : Ed
     m_pSubEdit->EnableRTL( sal_False );
     m_pSubEdit->SetPosPixel( Point() );
 
-    m_aFormula.SetText(::rtl::OUString("..."));
+    m_aFormula.SetText(OUString("..."));
     m_aFormula.SetClickHdl( LINK( this, ConditionField, OnFormula ) );
     m_aFormula.Show();
     m_pSubEdit->Show();
@@ -88,7 +88,7 @@ void ConditionField::Resize()
 // -----------------------------------------------------------------------------
 IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
 {
-    ::rtl::OUString sFormula(m_pSubEdit->GetText());
+    OUString sFormula(m_pSubEdit->GetText());
     const sal_Int32 nLen = sFormula.getLength();
     if ( nLen )
     {
@@ -569,21 +569,21 @@ void Condition::impl_layoutOperands()
 }
 
 // -----------------------------------------------------------------------------
-void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
+void Condition::impl_setCondition( const OUString& _rConditionFormula )
 {
     // determine the condition's type and comparison operation
     ConditionType eType( eFieldValueComparison );
     ComparisonOperation eOperation( eBetween );
 
     // LHS and RHS, matched below
-    ::rtl::OUString sLHS, sRHS;
+    OUString sLHS, sRHS;
 
     if ( !_rConditionFormula.isEmpty() )
     {
         // the unprefixed expression which forms the condition
         ReportFormula aFormula( _rConditionFormula );
         OSL_ENSURE( aFormula.getType() == ReportFormula::Expression, "Condition::setCondition: illegal formula!" );
-        ::rtl::OUString sExpression;
+        OUString sExpression;
         if ( aFormula.getType() == ReportFormula::Expression )
             sExpression = aFormula.getExpression();
         // as fallback, if the below matching does not succeed, assume
@@ -593,7 +593,7 @@ void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
 
         // the data field (or expression) to which our control is bound
         const ReportFormula aFieldContentFormula( m_rAction.getDataField() );
-        const ::rtl::OUString sUnprefixedFieldContent( aFieldContentFormula.getBracketedFieldOrExpression() );
+        const OUString sUnprefixedFieldContent( aFieldContentFormula.getBracketedFieldOrExpression() );
 
         // check whether one of the Field Value Expression Factories recognizes the expression
         for (   ConditionalExpressions::const_iterator exp = m_aConditionalExpressions.begin();
@@ -627,7 +627,7 @@ void Condition::setCondition( const uno::Reference< report::XFormatCondition >& 
     if ( !_rxCondition.is() )
         return;
 
-    ::rtl::OUString sConditionFormula;
+    OUString sConditionFormula;
     try
     {
         if ( _rxCondition.is() )
@@ -678,15 +678,15 @@ void Condition::fillFormatCondition(const uno::Reference< report::XFormatConditi
     const ConditionType eType( impl_getCurrentConditionType() );
     const ComparisonOperation eOperation( impl_getCurrentComparisonOperation() );
 
-    const ::rtl::OUString sLHS( m_aCondLHS.GetText() );
-    const ::rtl::OUString sRHS( m_aCondRHS.GetText() );
+    const OUString sLHS( m_aCondLHS.GetText() );
+    const OUString sRHS( m_aCondRHS.GetText() );
 
-    ::rtl::OUString sUndecoratedFormula( sLHS );
+    OUString sUndecoratedFormula( sLHS );
 
     if ( eType == eFieldValueComparison )
     {
         ReportFormula aFieldContentFormula( m_rAction.getDataField() );
-        ::rtl::OUString sUnprefixedFieldContent( aFieldContentFormula.getBracketedFieldOrExpression() );
+        OUString sUnprefixedFieldContent( aFieldContentFormula.getBracketedFieldOrExpression() );
 
         PConditionalExpression pFactory( m_aConditionalExpressions[ eOperation ] );
         sUndecoratedFormula = pFactory->assembleExpression( sUnprefixedFieldContent, sLHS, sRHS );

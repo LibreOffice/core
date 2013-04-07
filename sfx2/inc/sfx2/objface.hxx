@@ -70,8 +70,8 @@ public:
 
     const char*             GetClassName() const { return pName; }
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
-    rtl::OUString           GetName() const
-                            { return HasName() ? aNameResId.toString() : rtl::OUString(); }
+    OUString           GetName() const
+                            { return HasName() ? aNameResId.toString() : OUString(); }
     ResMgr*                 GetResMgr() const
                             { return aNameResId.GetResMgr(); }
 

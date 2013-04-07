@@ -41,9 +41,9 @@ public:
         OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
     }
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
-    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
+    static OUString SAL_CALL impl_staticGetImplementationName();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         impl_staticCreateSelfInstance(
@@ -54,9 +54,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent, const ::com::sun::star::awt::Rectangle& aBounds, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException);
 
 };
 

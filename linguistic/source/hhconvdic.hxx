@@ -44,21 +44,21 @@ public:
     virtual ~HHConvDic();
 
     // XConversionDictionary
-    virtual void SAL_CALL addEntry( const ::rtl::OUString& aLeftText, const ::rtl::OUString& aRightText ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEntry( const OUString& aLeftText, const OUString& aRightText ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 
-    static inline ::rtl::OUString
+    static inline OUString
         getImplementationName_Static() throw();
-    static com::sun::star::uno::Sequence< ::rtl::OUString >
+    static com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static() throw();
 };
 
-inline ::rtl::OUString HHConvDic::getImplementationName_Static() throw()
+inline OUString HHConvDic::getImplementationName_Static() throw()
 {
     return OUString( "com.sun.star.lingu2.HHConvDic" );
 }

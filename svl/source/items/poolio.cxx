@@ -550,7 +550,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
     // Einzel-Header
     int bOwnPool = sal_True;
-    rtl::OUString aExternName;
+    OUString aExternName;
     {
         // Header-Record suchen
         SfxMiniRecordReader aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER );
@@ -705,7 +705,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
     // wenn nicht own-Pool, dann kein Name
     if ( aExternName != pImp->aName )
-        pImp->aName = rtl::OUString();
+        pImp->aName = OUString();
 
     pImp->bStreaming = sal_False;
     return rStream;
@@ -734,7 +734,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     }
     sal_uInt32 nAttribSize(0);
     int bOwnPool = sal_True;
-    rtl::OUString aExternName;
+    OUString aExternName;
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 2 )
         rStream >> pImp->nLoadingVersion;
     aExternName = SfxPoolItem::readByteString(rStream);
@@ -1011,7 +1011,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     }
 
     if ( aExternName != pImp->aName )
-        pImp->aName = rtl::OUString();
+        pImp->aName = OUString();
 
     pImp->bStreaming = sal_False;
     return rStream;

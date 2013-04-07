@@ -99,7 +99,7 @@ class CGMImpressOutAct : public CGMOutAct
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        maXMultiServiceFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >                   maXShape;
-    sal_Bool                        ImplCreateShape( const ::rtl::OUString& rType );
+    sal_Bool                        ImplCreateShape( const OUString& rType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           maXPropSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >                  maXShapes;

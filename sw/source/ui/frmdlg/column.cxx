@@ -884,7 +884,7 @@ void SwColumnPage::UpdateCols()
 
 void SwColumnPage::SetLabels( sal_uInt16 nVis )
 {
-    rtl::OUString sLbl( '~' );
+    OUString sLbl( '~' );
 
     String sLbl2( OUString::number( nVis + 1 ));
     String tmp1(sLbl2);

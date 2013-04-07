@@ -47,9 +47,9 @@ namespace dp_misc {
    the given optional identifier if present, otherwise a legacy identifier based
    on the given file name
 */
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString generateIdentifier(
-    ::boost::optional< ::rtl::OUString > const & optional,
-    ::rtl::OUString const & fileName);
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
+    ::boost::optional< OUString > const & optional,
+    OUString const & fileName);
 
 /**
    Gets the identifier of a package.
@@ -63,7 +63,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString generateIdentifier(
 
    @throws com::sun::star::uno::RuntimeException
 */
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString getIdentifier(
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getIdentifier(
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
         const & package);
 
@@ -76,8 +76,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString getIdentifier(
    @return
    a legacy identifier based on the given file name
 */
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString generateLegacyIdentifier(
-    ::rtl::OUString const & fileName);
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateLegacyIdentifier(
+    OUString const & fileName);
 
 }
 

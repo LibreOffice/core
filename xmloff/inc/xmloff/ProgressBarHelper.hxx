@@ -48,7 +48,7 @@ public:
                                 const sal_Bool bStrict);
             ~ProgressBarHelper();
 
-            void SetText(::rtl::OUString& rText) { if (xStatusIndicator.is()) xStatusIndicator->setText(rText); }
+            void SetText(OUString& rText) { if (xStatusIndicator.is()) xStatusIndicator->setText(rText); }
             void SetRange(sal_Int32 nVal) { nRange = nVal; }
             void SetReference(sal_Int32 nVal) { nReference = nVal; }
             void SetValue(sal_Int32 nValue);

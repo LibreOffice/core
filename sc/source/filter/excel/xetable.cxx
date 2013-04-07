@@ -37,9 +37,6 @@
 
 using namespace ::oox;
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 

@@ -42,23 +42,23 @@ public:
 
 void Test::test() {
     struct Data {
-        rtl::OUString version1;
-        rtl::OUString version2;
+        OUString version1;
+        OUString version2;
         ::dp_misc::Order order;
     };
     static Data const data[] = {
-        { rtl::OUString(),
-          rtl::OUString("0.0000.00.0"),
+        { OUString(),
+          OUString("0.0000.00.0"),
           ::dp_misc::EQUAL },
-        { rtl::OUString(".01"),
-          rtl::OUString("0.1"),
+        { OUString(".01"),
+          OUString("0.1"),
           ::dp_misc::EQUAL },
-        { rtl::OUString("10"),
-          rtl::OUString("2"),
+        { OUString("10"),
+          OUString("2"),
           ::dp_misc::GREATER },
-        { rtl::OUString("9223372036854775808"),
+        { OUString("9223372036854775808"),
               // 2^63
-          rtl::OUString("9223372036854775807"),
+          OUString("9223372036854775807"),
           ::dp_misc::GREATER }
     };
     for (::std::size_t i = 0; i < sizeof data / sizeof (Data); ++i) {

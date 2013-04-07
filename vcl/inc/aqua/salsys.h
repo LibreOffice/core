@@ -39,9 +39,9 @@ public:
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
 
-    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );
-    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                      const rtl::OUString& rMessage,
+    virtual OUString GetDisplayScreenName( unsigned int nScreen );
+    virtual int ShowNativeMessageBox( const OUString& rTitle,
+                                      const OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton, bool bUseResources);
 };

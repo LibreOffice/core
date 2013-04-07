@@ -53,7 +53,7 @@ class BrowseNodeAggregator :
     public ::cppu::WeakImplHelper1< browse::XBrowseNode >
 {
 private:
-    ::rtl::OUString m_Name;
+    OUString m_Name;
     Sequence< Reference< browse::XBrowseNode > > m_Nodes;
 
 public:
@@ -77,7 +77,7 @@ public:
         m_Nodes[ index ] = node;
     }
 
-    virtual ::rtl::OUString
+    virtual OUString
     SAL_CALL getName()
             throw ( RuntimeException )
     {
@@ -158,16 +158,16 @@ public:
 };
 
 
-//typedef ::std::map< ::rtl::OUString, Reference< browse::XBrowseNode > >
-typedef ::boost::unordered_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
-    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+//typedef ::std::map< OUString, Reference< browse::XBrowseNode > >
+typedef ::boost::unordered_map< OUString, Reference< browse::XBrowseNode >,
+    OUStringHash, ::std::equal_to< OUString > >
         BrowseNodeAggregatorHash;
-typedef ::std::vector< ::rtl::OUString > vString;
+typedef ::std::vector< OUString > vString;
 
 
 struct alphaSort
 {
-    bool operator()( const ::rtl::OUString& a, const ::rtl::OUString& b )
+    bool operator()( const OUString& a, const OUString& b )
     {
         return a.compareTo( b ) < 0;
     }
@@ -178,7 +178,7 @@ class LocationBrowseNode :
 private:
     BrowseNodeAggregatorHash* m_hBNA;
     vString m_vStr;
-    ::rtl::OUString m_sNodeName;
+    OUString m_sNodeName;
     Reference< browse::XBrowseNode > m_origNode;
 
 public:
@@ -202,7 +202,7 @@ public:
     // XBrowseNode
     // -------------------------------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw ( RuntimeException )
     {
         return m_sNodeName;
@@ -297,7 +297,7 @@ namespace
 
 Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference< XComponentContext >& xCtx )
 {
-    Sequence< ::rtl::OUString > openDocs =
+    Sequence< OUString > openDocs =
         MiscUtils::allOpenTDocUrls( xCtx );
 
     Reference< provider::XScriptProviderFactory > xFac;
@@ -309,15 +309,15 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     {
         xFac = provider::theMasterScriptProviderFactory::get( xCtx );
 
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("user") ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( ::rtl::OUString("share") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("user") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( const Exception& e )
     {
         (void)e;
         OSL_TRACE("Caught Exception %s",
-            ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         locnBNs.realloc( mspIndex );
         return locnBNs;
     }
@@ -469,7 +469,7 @@ public:
         return m_xWrappedBrowseNode->getType();
     }
 
-    virtual ::rtl::OUString
+    virtual OUString
     SAL_CALL getName()
     throw ( RuntimeException )
     {
@@ -537,7 +537,7 @@ class DefaultRootBrowseNode :
 
 private:
     vXBrowseNodes m_vNodes;
-    ::rtl::OUString m_Name;
+    OUString m_Name;
 
     DefaultRootBrowseNode();
 public:
@@ -550,7 +550,7 @@ public:
         {
             m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
         }
-        m_Name = ::rtl::OUString("Root");
+        m_Name = OUString("Root");
     }
 
     ~DefaultRootBrowseNode()
@@ -578,7 +578,7 @@ public:
         return browse::BrowseNodeTypes::ROOT;
     }
 
-    virtual ::rtl::OUString
+    virtual OUString
     SAL_CALL getName()
     throw ( RuntimeException )
     {
@@ -615,10 +615,10 @@ public:
     {
     }
 
-    virtual ::rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw ( RuntimeException )
     {
-        return ::rtl::OUString("Root");
+        return OUString("Root");
     }
 
     virtual Sequence< Reference< browse::XBrowseNode > > SAL_CALL
@@ -712,21 +712,21 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 // Namespace global methods for setting up BrowseNodeFactory service
 //############################################################################
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
     SAL_THROW(())
 {
-    ::rtl::OUString str_name(
+    OUString str_name(
         "com.sun.star.script.browse.BrowseNodeFactory");
 
-    return Sequence< ::rtl::OUString >( &str_name, 1 );
+    return Sequence< OUString >( &str_name, 1 );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 bnf_getImplementationName( )
     SAL_THROW(())
 {
-    return ::rtl::OUString(
+    return OUString(
         "com.sun.star.script.browse.BrowseNodeFactory" );
 }
 
@@ -742,14 +742,14 @@ bnf_create( Reference< XComponentContext > const & xComponentContext )
 // Implementation of XServiceInfo
 //############################################################################
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 BrowseNodeFactoryImpl::getImplementationName()
     throw (RuntimeException)
 {
     return bnf_getImplementationName();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 BrowseNodeFactoryImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -757,15 +757,15 @@ BrowseNodeFactoryImpl::getSupportedServiceNames()
 }
 
 sal_Bool BrowseNodeFactoryImpl::supportsService(
-    ::rtl::OUString const & serviceName )
+    OUString const & serviceName )
     throw (RuntimeException)
 {
 //     check();
 
-    Sequence< ::rtl::OUString > supported_services(
+    Sequence< OUString > supported_services(
         getSupportedServiceNames() );
 
-    ::rtl::OUString const * ar = supported_services.getConstArray();
+    OUString const * ar = supported_services.getConstArray();
 
     for ( sal_Int32 pos = supported_services.getLength(); pos--; )
     {

@@ -142,7 +142,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
-using ::rtl::OUString;
 using ::osl::FileBase;
 
 #define SW_CREATE_DASH_TABLE            0x01
@@ -2128,7 +2127,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_VBA_DOCOBJ:
         {
             beans::PropertyValue aProp;
-            aProp.Name = rtl::OUString("ThisWordDoc");
+            aProp.Name = OUString("ThisWordDoc");
             aProp.Value <<= pDocShell->GetModel();
             aAny <<= aProp;
         }
@@ -2491,7 +2490,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
     SolarMutexGuard aGuard;
     if(!IsValid())
     {
-        throw DisposedException( ::rtl::OUString(),
+        throw DisposedException( OUString(),
                 static_cast< XTextDocument* >(this) );
     }
 
@@ -2664,7 +2663,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     SolarMutexGuard aGuard;
     if(!IsValid())
     {
-        throw DisposedException( ::rtl::OUString(),
+        throw DisposedException( OUString(),
                 static_cast< XTextDocument* >(this) );
     }
 
@@ -2930,7 +2929,7 @@ void SAL_CALL SwXTextDocument::render(
     SolarMutexGuard aGuard;
     if(!IsValid())
     {
-        throw DisposedException( ::rtl::OUString(),
+        throw DisposedException( OUString(),
                 static_cast< XTextDocument* >(this) );
     }
 
@@ -2999,7 +2998,7 @@ void SAL_CALL SwXTextDocument::render(
 
                 if(pVwSh && pOut && m_pRenderData->HasSwPrtOptions())
                 {
-                    const rtl::OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
+                    const OUString aPageRange  = m_pPrintUIOptions->getStringValue( "PageRange", OUString() );
                     const bool bFirstPage           = m_pPrintUIOptions->getBoolValue( "IsFirstPage", sal_False );
                     bool bIsSkipEmptyPages          = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
 
@@ -3086,7 +3085,7 @@ Reference<XNameContainer> SAL_CALL SwXTextDocument::getXForms()
 {
     SolarMutexGuard aGuard;
     if ( !pDocShell )
-        throw DisposedException( ::rtl::OUString(), static_cast< XTextDocument* >( this ) );
+        throw DisposedException( OUString(), static_cast< XTextDocument* >( this ) );
     SwDoc* pDoc = pDocShell->GetDoc();
     return pDoc->getXForms();
 }
@@ -3158,7 +3157,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     const bool bComplex = 0 != (nScriptTypes & nComplex);
 
     if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
-        throw IllegalArgumentException(::rtl::OUString("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
+        throw IllegalArgumentException(OUString("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
     if (!pDocShell)
         throw DisposedException();
     SwDoc* pDoc = pDocShell->GetDoc();
@@ -3355,10 +3354,10 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     if(!pxDoc)
         throw RuntimeException();
     String sToCompare(rName);
-    String sSuffix = rtl::OUString('|');
+    String sSuffix = OUString('|');
     if(sToCompare == sTables)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToTable);
+        sSuffix += OUString::createFromAscii(pMarkToTable);
 
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), sToCompare, sSuffix );
@@ -3367,7 +3366,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sFrames)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToFrame);
+        sSuffix += OUString::createFromAscii(pMarkToFrame);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3375,7 +3374,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sSections)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToRegion);
+        sSuffix += OUString::createFromAscii(pMarkToRegion);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3383,7 +3382,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sGraphics)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToGraphic);
+        sSuffix += OUString::createFromAscii(pMarkToGraphic);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3391,7 +3390,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOLEs)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToOLE);
+        sSuffix += OUString::createFromAscii(pMarkToOLE);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3399,7 +3398,7 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
     }
     else if(sToCompare == sOutlines)
     {
-        sSuffix += rtl::OUString::createFromAscii(pMarkToOutline);
+        sSuffix += OUString::createFromAscii(pMarkToOutline);
         Reference< XNameAccess >  xTbls = new SwXLinkNameAccessWrapper(
                                         *pxDoc, sToCompare, sSuffix );
         Reference< XPropertySet >  xRet(xTbls, UNO_QUERY);
@@ -3570,8 +3569,8 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames(void)
         sal_uInt16 nOutlineCount = rOutlineNodes.size();
         aRet.realloc(nOutlineCount);
         OUString* pResArr = aRet.getArray();
-        String sSuffix = rtl::OUString('|');
-        sSuffix += rtl::OUString::createFromAscii(pMarkToOutline);
+        String sSuffix = OUString('|');
+        sSuffix += OUString::createFromAscii(pMarkToOutline);
         const SwNumRule* pOutlRule = pDoc->GetOutlineNumRule();
         for (sal_uInt16 i = 0; i < nOutlineCount; ++i)
         {

@@ -43,7 +43,7 @@ protected:
     explicit LineChartType( const LineChartType & rOther );
 
     // ____ XChartType ____
-    virtual ::rtl::OUString SAL_CALL getChartType()
+    virtual OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ OPropertySet ____

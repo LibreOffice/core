@@ -46,20 +46,20 @@ void ScGlobal::InitAddIns()
 {
     // multi paths separated by semicolons
     SvtPathOptions aPathOpt;
-    rtl::OUString aMultiPath = aPathOpt.GetAddinPath();
+    OUString aMultiPath = aPathOpt.GetAddinPath();
     if (aMultiPath.isEmpty())
         return;
 
     sal_Int32 nTokens = comphelper::string::getTokenCount(aMultiPath, ';');
     for (sal_Int32 j = 0; j < nTokens; ++j)
     {
-        rtl::OUString aPath = comphelper::string::getToken(aMultiPath, j, ';');
+        OUString aPath = comphelper::string::getToken(aMultiPath, j, ';');
         if (aPath.isEmpty())
             continue;
 
         //  use LocalFileHelper to convert the path to a URL that always points
         //  to the file on the server
-        rtl::OUString aUrl;
+        OUString aUrl;
         if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( aPath, aUrl ) )
             aPath = aUrl;
 
@@ -72,7 +72,7 @@ void ScGlobal::InitAddIns()
                 Reference< XCommandEnvironment >(),
                 comphelper::getProcessComponentContext() );
             Reference< sdbc::XResultSet > xResultSet;
-            Sequence< rtl::OUString > aProps;
+            Sequence< OUString > aProps;
             try
             {
                 xResultSet = aCnt.createCursor(
@@ -95,7 +95,7 @@ void ScGlobal::InitAddIns()
                     {
                         do
                         {
-                            rtl::OUString aId = xContentAccess->queryContentIdentifierString();
+                            OUString aId = xContentAccess->queryContentIdentifierString();
                             InitExternalFunc( aId );
                         }
                         while ( xResultSet->next() );
@@ -127,7 +127,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
         {
             xOrdinalSuffix = i18n::OrdinalSuffix::create( ::comphelper::getProcessComponentContext() );
         }
-        uno::Sequence< rtl::OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
+        uno::Sequence< OUString > aSuffixes = xOrdinalSuffix->getOrdinalSuffix( nNumber,
                 ScGlobal::pLocaleData->getLanguageTag().getLocale());
         if ( aSuffixes.getLength() > 0 )
             return aSuffixes[0];

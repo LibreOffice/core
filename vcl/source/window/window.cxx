@@ -105,7 +105,6 @@ using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
 using namespace com::sun;
 
-using ::rtl::OUString;
 
 using ::com::sun::star::awt::XTopWindow;
 
@@ -238,7 +237,7 @@ void Window::ImplInitAppFontData( Window* pWindow )
         Rectangle aBoundingRgn( aCtrlRegion );
         Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                             CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                             CTRL_STATE_ENABLED, aControlValue, OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {
             // comment: the magical +6 is for the extra border in bordered
@@ -1221,9 +1220,9 @@ void Window::ImplCallMove()
 
 // -----------------------------------------------------------------------
 
-static rtl::OString ImplAutoHelpID( ResMgr* pResMgr )
+static OString ImplAutoHelpID( ResMgr* pResMgr )
 {
-    rtl::OString aRet;
+    OString aRet;
 
     if( pResMgr && Application::IsAutoHelpIdEnabled() )
         aRet = pResMgr->GetAutoHelpId();
@@ -4215,7 +4214,7 @@ Window::Window( Window* pParent, const ResId& rResId )
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {
-    rtl::OString lcl_createWindowInfo(const Window& i_rWindow)
+    OString lcl_createWindowInfo(const Window& i_rWindow)
     {
         // skip border windows, they don't carry information which helps diagnosing the problem
         const Window* pWindow( &i_rWindow );
@@ -4224,11 +4223,11 @@ namespace
         if ( !pWindow )
             pWindow = &i_rWindow;
 
-        rtl::OStringBuffer aErrorString;
+        OStringBuffer aErrorString;
         aErrorString.append(' ');
         aErrorString.append(typeid( *pWindow ).name());
         aErrorString.append(" (");
-        aErrorString.append(rtl::OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
+        aErrorString.append(OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
         aErrorString.append(")");
         return aErrorString.makeStringAndClear();
     }
@@ -4358,7 +4357,7 @@ Window::~Window()
 #if OSL_DEBUG_LEVEL > 0
     if ( sal_True ) // always perform these tests in non-pro versions
     {
-        rtl::OStringBuffer aErrorStr;
+        OStringBuffer aErrorStr;
         sal_Bool        bError = sal_False;
         Window*     pTempWin;
         if (mpWindowImpl->mpFrameData != 0)
@@ -4375,15 +4374,15 @@ Window::~Window()
             }
             if ( bError )
             {
-                rtl::OStringBuffer aTempStr;
+                OStringBuffer aTempStr;
                 aTempStr.append("Window (");
-                aTempStr.append(rtl::OUStringToOString(GetText(),
+                aTempStr.append(OUStringToOString(GetText(),
                                                        RTL_TEXTENCODING_UTF8));
                 aTempStr.append(") with live SystemWindows destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
                 // abort in non-pro version, this must be fixed!
-                GetpApp()->Abort(rtl::OStringToOUString(
+                GetpApp()->Abort(OStringToOUString(
                                      aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
             }
         }
@@ -4401,18 +4400,18 @@ Window::~Window()
         }
         if ( bError )
         {
-            rtl::OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTempStr( "Window (" );
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstChild )
         {
-            rtl::OStringBuffer aTempStr("Window (");
-            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") with live children destroyed: ");
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
@@ -4421,13 +4420,13 @@ Window::~Window()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
         {
-            rtl::OStringBuffer aTempStr("Window (");
-            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") with live SystemWindows destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
@@ -4436,7 +4435,7 @@ Window::~Window()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
 
         Window* pMyParent = this;
@@ -4450,11 +4449,11 @@ Window::~Window()
         }
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
-            rtl::OStringBuffer aTempStr("Window (");
-            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") still in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
+            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in non-pro version, this must be fixed!
         }
     }
 #endif
@@ -4476,8 +4475,8 @@ Window::~Window()
         }
         else
         {
-            rtl::OStringBuffer aTempStr("Window (");
-            aTempStr.append(rtl::OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTempStr("Window (");
+            aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") not found in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
         }
@@ -4518,12 +4517,12 @@ Window::~Window()
         // #122232#, this must not happen and is an application bug ! but we try some cleanup to hopefully avoid crashes, see below
         bHasFocussedChild = sal_True;
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aTempStr("Window (");
-        aTempStr.append(rtl::OUStringToOString(GetText(),
+        OStringBuffer aTempStr("Window (");
+        aTempStr.append(OUStringToOString(GetText(),
             RTL_TEXTENCODING_UTF8)).
                 append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
         OSL_FAIL( aTempStr.getStr() );
-        GetpApp()->Abort(rtl::OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in non-pro version, this must be fixed!
+        GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in non-pro version, this must be fixed!
 #endif
     }
 
@@ -4900,7 +4899,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     }
     else
     {
-        String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+        String aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
         if ( aStrHelpId.Len() == 0 && ImplGetParent() )
             ImplGetParent()->RequestHelp( rHEvt );
         else
@@ -4911,7 +4910,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
                 if( aStrHelpId.Len() > 0 )
                     pHelp->Start( aStrHelpId, this );
                 else
-                    pHelp->Start( rtl::OUString( OOO_HELP_INDEX  ), this );
+                    pHelp->Start( OUString( OOO_HELP_INDEX  ), this );
             }
         }
     }
@@ -7926,7 +7925,7 @@ const XubString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    String aStrHelpId( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+    String aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = (aStrHelpId.Len() > 0);
 
     if ( !mpWindowImpl->maHelpText.Len() && bStrHelpId )
@@ -7946,10 +7945,10 @@ const XubString& Window::GetHelpText() const
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
         {
-            rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
+            OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
             aTxt.append( mpWindowImpl->maHelpText );
             aTxt.appendAscii( "\n------------------\n" );
-            aTxt.append( rtl::OUString( aStrHelpId ) );
+            aTxt.append( OUString( aStrHelpId ) );
             mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
         }
         mpWindowImpl->mbHelpTextDynamic = sal_False;
@@ -9689,9 +9688,9 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
         SetParent( pRealParent );
 }
 
-rtl::OUString Window::GetSurroundingText() const
+OUString Window::GetSurroundingText() const
 {
-  return rtl::OUString();
+  return OUString();
 }
 
 Selection Window::GetSurroundingTextSelection() const

@@ -71,7 +71,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
-         ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
+         ::com::sun::star::uno::Sequence< OUString >     m_aProperties;
          ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
         OPropertyChangeListener*                    m_pListener;
         sal_Int32                                   m_nLockCount;
@@ -96,7 +96,7 @@ namespace comphelper
         /// get the lock count
         sal_Int32   locked() const { return m_nLockCount; }
 
-        void addProperty(const ::rtl::OUString& aPropertyName);
+        void addProperty(const OUString& aPropertyName);
         void dispose();
     };
 

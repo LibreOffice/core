@@ -66,21 +66,21 @@ public:
     XFHyperlink();
 
 public:
-    void    SetHRef(rtl::OUString href);
+    void    SetHRef(OUString href);
 
-    void    SetText(rtl::OUString text);
+    void    SetText(OUString text);
 
-    void    SetName(rtl::OUString name);
+    void    SetName(OUString name);
 
-    void    SetTargetFrame(rtl::OUString frame=A2OUSTR("_self"));
+    void    SetTargetFrame(OUString frame=A2OUSTR("_self"));
 
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strHRef;
-    rtl::OUString   m_strName;
-    rtl::OUString   m_strFrame;
-    rtl::OUString   m_strText;
+    OUString   m_strHRef;
+    OUString   m_strName;
+    OUString   m_strFrame;
+    OUString   m_strText;
 };
 
 inline XFHyperlink::XFHyperlink()
@@ -88,22 +88,22 @@ inline XFHyperlink::XFHyperlink()
     m_strFrame = A2OUSTR("_self");
 }
 
-inline void XFHyperlink::SetHRef(rtl::OUString href)
+inline void XFHyperlink::SetHRef(OUString href)
 {
     m_strHRef = href;
 }
 
-inline void XFHyperlink::SetName(rtl::OUString name)
+inline void XFHyperlink::SetName(OUString name)
 {
     m_strName = name;
 }
 
-inline void XFHyperlink::SetTargetFrame(rtl::OUString frame)
+inline void XFHyperlink::SetTargetFrame(OUString frame)
 {
     m_strFrame = frame;
 }
 
-inline void XFHyperlink::SetText(rtl::OUString text)
+inline void XFHyperlink::SetText(OUString text)
 {
     m_strText = text;
 }

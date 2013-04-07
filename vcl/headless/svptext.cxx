@@ -341,7 +341,7 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
-        const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
+        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
    }
 

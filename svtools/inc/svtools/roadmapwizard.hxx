@@ -79,7 +79,7 @@ namespace svt
         );
         ~RoadmapWizard( );
 
-        void            SetRoadmapHelpId( const rtl::OString& _rId );
+        void            SetRoadmapHelpId( const OString& _rId );
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
         virtual void    Resize();

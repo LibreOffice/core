@@ -77,14 +77,14 @@ private:
 void ScMacrosTest::testStarBasic()
 {
     const OUString aFileNameBase("StarBasic.ods");
-    rtl::OUString aFileName;
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileName);
     std::cout << "StarBasic test" << std::endl;
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
-    rtl::OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
+    OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -109,97 +109,97 @@ void ScMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            rtl::OUString("TestAddress."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("TestAddress."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("vba."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"),
+            OUString("vba."),
+            OUString("vnd.sun.Star.script:VBAProject.Modul1.Modul1?language=Basic&location=document"),
         },
         {
-            rtl::OUString("MiscRangeTests."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("MiscRangeTests."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("bytearraystring."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document")
+            OUString("bytearraystring."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacro.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("AutoFilter."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("AutoFilter."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("CalcFont."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("CalcFont."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("TestIntersection."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("TestIntersection."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("TestUnion."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("TestUnion."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("range-4."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("range-4."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("Ranges-3."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("Ranges-3."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("TestCalc_Rangetest."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("TestCalc_Rangetest."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("TestCalc_Rangetest2."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("TestCalc_Rangetest2."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #if defined FIXRANGEADDRESSING
 //ScVbaRange::getRangeForName()/getScRangeListForAddress() seems to get confused
 //about the addressing mode of the document vs the addressing mode of a named
 //range ( need to fix that )
         {
-            rtl::OUString("Ranges-2."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("Ranges-2."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #endif
         {
-            rtl::OUString("pagesetup."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("pagesetup."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("Window."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("Window."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("window2."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("window2."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("PageBreaks."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("PageBreaks."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
         {
-            rtl::OUString("Shapes."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("Shapes."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #if defined VBA_TEST_WORKING
         {
-            rtl::OUString("Ranges."),
-            rtl::OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
+            OUString("Ranges."),
+            OUString("vnd.sun.Star.script:VBAProject.testMacros.test?language=Basic&location=document")
         },
 #endif
     };
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
-        rtl::OUString aFileName;
+        OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName + "xls", aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
-        rtl::OUString sMsg( "Failed to load " + aFileName );
-        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
+        OUString sMsg( "Failed to load " + aFileName );
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg, RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
         String sUrl = testInfo[i].sMacroUrl;
         Any aRet;
@@ -210,12 +210,12 @@ void ScMacrosTest::testVba()
         SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-        std::cout << "about to invoke vba test in " << rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        std::cout << "about to invoke vba test in " << OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
 
         pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
-        rtl::OUString aStringRes;
+        OUString aStringRes;
         aRet >>= aStringRes;
-        std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
         CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
     }

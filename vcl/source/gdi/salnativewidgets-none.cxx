@@ -20,7 +20,6 @@
 
 #include <salgdi.hxx>
 
-using ::rtl::OUString;
 
 /****************************************************************
  *  Placeholder for no native widgets

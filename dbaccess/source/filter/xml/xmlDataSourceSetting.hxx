@@ -35,29 +35,29 @@ namespace dbaxml
         sal_Bool m_bIsList;
 
         ODBFilter& GetOwnImport();
-        ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters);
+        ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
     public:
 
         OXMLDataSourceSetting( ODBFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
+                    const OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,OXMLDataSourceSetting* _pContainer = NULL);
         virtual ~OXMLDataSourceSetting();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual void EndElement();
 
-        virtual void Characters( const ::rtl::OUString& rChars );
+        virtual void Characters( const OUString& rChars );
 
 
         /** adds value to property
             @param  _sValue
                 The value to add.
         */
-        void addValue(const ::rtl::OUString& _sValue);
+        void addValue(const OUString& _sValue);
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml

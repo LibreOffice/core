@@ -1534,7 +1534,7 @@ String GetFontToSubsFontName( FontToSubsFontConverter hConverter )
         return String();
 
     const char* pName = ((ConvertChar*)hConverter)->mpSubsFontName;
-    return rtl::OUString::createFromAscii( pName );
+    return OUString::createFromAscii( pName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

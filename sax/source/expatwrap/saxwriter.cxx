@@ -118,7 +118,7 @@ public:
 // returns whether it works correct or invalid characters were in the string
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
-    inline sal_Bool writeString(const rtl::OUString& rWriteOutString,
+    inline sal_Bool writeString(const OUString& rWriteOutString,
                         sal_Bool bDoNormalization,
                         sal_Bool bNormalizeWhitespace) throw( SAXException );
 
@@ -130,26 +130,26 @@ public:
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in one of the strings it returns sal_False.
 // Than the calling method has to throw the needed Exception.
-    inline SaxInvalidCharacterError startElement(const rtl::OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException );
+    inline SaxInvalidCharacterError startElement(const OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException );
     inline sal_Bool FinishEmptyElement() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the string
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
-    inline sal_Bool endElement(const rtl::OUString& rName) throw( SAXException );
+    inline sal_Bool endElement(const OUString& rName) throw( SAXException );
     inline void endDocument() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
-    inline sal_Bool processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException );
+    inline sal_Bool processingInstruction(const OUString& rTarget, const OUString& rData) throw( SAXException );
     inline void startCDATA() throw( SAXException );
     inline void endCDATA() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
-    inline sal_Bool comment(const rtl::OUString& rComment) throw( SAXException );
+    inline sal_Bool comment(const OUString& rComment) throw( SAXException );
 
     inline void clearBuffer() throw( SAXException );
 };
@@ -503,7 +503,7 @@ inline void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel) throw( SAXEx
     }
 }
 
-inline sal_Bool SaxWriterHelper::writeString( const rtl::OUString& rWriteOutString,
+inline sal_Bool SaxWriterHelper::writeString( const OUString& rWriteOutString,
                         sal_Bool bDoNormalization,
                         sal_Bool bNormalizeWhitespace ) throw( SAXException )
 {
@@ -538,7 +538,7 @@ inline void SaxWriterHelper::startDocument() throw( SAXException )
         nCurrentPos = writeSequence();
 }
 
-inline SaxInvalidCharacterError SaxWriterHelper::startElement(const rtl::OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException )
+inline SaxInvalidCharacterError SaxWriterHelper::startElement(const OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException )
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';
@@ -605,7 +605,7 @@ inline sal_Bool SaxWriterHelper::FinishEmptyElement() throw( SAXException )
     return sal_True;
 }
 
-inline sal_Bool SaxWriterHelper::endElement(const rtl::OUString& rName) throw( SAXException )
+inline sal_Bool SaxWriterHelper::endElement(const OUString& rName) throw( SAXException )
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';
@@ -650,7 +650,7 @@ inline void SaxWriterHelper::clearBuffer() throw( SAXException )
     }
 }
 
-inline sal_Bool SaxWriterHelper::processingInstruction(const rtl::OUString& rTarget, const rtl::OUString& rData) throw( SAXException )
+inline sal_Bool SaxWriterHelper::processingInstruction(const OUString& rTarget, const OUString& rData) throw( SAXException )
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';
@@ -712,7 +712,7 @@ inline void SaxWriterHelper::endCDATA() throw( SAXException )
         nCurrentPos = writeSequence();
 }
 
-inline sal_Bool SaxWriterHelper::comment(const rtl::OUString& rComment) throw( SAXException )
+inline sal_Bool SaxWriterHelper::comment(const OUString& rComment) throw( SAXException )
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';

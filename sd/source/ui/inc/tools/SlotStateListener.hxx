@@ -56,7 +56,7 @@ public:
         Link& rCallback,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider,
-        const ::rtl::OUString& rSlotName);
+        const OUString& rSlotName);
 
     /** The constructor de-registers all remaining listeners.  Usually a prior
         dispose() call should have done that already.
@@ -86,7 +86,7 @@ public:
             ".uno:VerticalTextState".
         @throws DisposedException
     */
-    void ObserveSlot (const ::rtl::OUString& rSlotName);
+    void ObserveSlot (const OUString& rSlotName);
 
     //=====  frame::XStatusListener  ==========================================
 
@@ -136,7 +136,7 @@ private:
 
     /** Transform the given string into a URL object.
     */
-    ::com::sun::star::util::URL MakeURL (const ::rtl::OUString& rSlotName) const;
+    ::com::sun::star::util::URL MakeURL (const OUString& rSlotName) const;
 
     /** Return an XDispatch object for the given URL.
     */

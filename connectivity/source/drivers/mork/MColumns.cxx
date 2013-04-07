@@ -40,12 +40,12 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
-    const ::rtl::OUString sCatalogName;
-    const ::rtl::OUString sSchemaName(m_pTable->getSchema());
-    const ::rtl::OUString sTableName(m_pTable->getTableName());
+    const OUString sCatalogName;
+    const OUString sSchemaName(m_pTable->getSchema());
+    const OUString sTableName(m_pTable->getTableName());
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
         aCatalog, sSchemaName, sTableName, _rName);
 
@@ -58,7 +58,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
             if(xRow->getString(4) == _rName)
             {
                 sal_Int32 nType             = xRow->getInt(5);
-                ::rtl::OUString sTypeName   = xRow->getString(6);
+                OUString sTypeName   = xRow->getString(6);
                 sal_Int32 nPrec             = xRow->getInt(7);
 
                 OColumn* pRet = new OColumn(_rName,

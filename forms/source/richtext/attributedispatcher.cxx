@@ -97,9 +97,9 @@ namespace frm
 #if OSL_DEBUG_LEVEL > 0
         if ( _rArguments.getLength() )
         {
-            ::rtl::OString sMessage( "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all" );
+            OString sMessage( "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all" );
             sMessage += "\n (URL: ";
-            sMessage += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
+            sMessage += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += ")";
             OSL_FAIL( sMessage.getStr() );
         }

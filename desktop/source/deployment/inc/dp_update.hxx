@@ -39,7 +39,7 @@ namespace dp_misc {
     is used when an extension does not provide its own URL.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString getExtensionDefaultUpdateURL();
+OUString getExtensionDefaultUpdateURL();
 
 enum UPDATE_SOURCE
 {
@@ -59,10 +59,10 @@ enum UPDATE_SOURCE
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 UPDATE_SOURCE isUpdateUserExtension(
     bool bReadOnlyShared,
-    ::rtl::OUString const & userVersion,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion);
+    OUString const & userVersion,
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion);
 
 /* determine if an update is available which is installed in the
    shared repository.
@@ -74,9 +74,9 @@ UPDATE_SOURCE isUpdateUserExtension(
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 UPDATE_SOURCE isUpdateSharedExtension(
     bool bReadOnlyShared,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion);
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion);
 
 /* determines the extension with the highest identifier and returns it
 
@@ -95,11 +95,11 @@ struct UpdateInfo
     ::com::sun::star::uno::Reference<
         ::com::sun::star::deployment::XPackage> extension;
 //version of the update
-    ::rtl::OUString version;
+    OUString version;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > info;
 };
 
-typedef std::map< ::rtl::OUString, UpdateInfo > UpdateInfoMap;
+typedef std::map< OUString, UpdateInfo > UpdateInfoMap;
 
 /*
   @param extensionList
@@ -128,11 +128,11 @@ UpdateInfoMap getOnlineUpdateInfos(
 /* retunrs the highest version from the provided arguments.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString getHighestVersion(
-    ::rtl::OUString const & userVersion,
-    ::rtl::OUString const & sharedVersion,
-    ::rtl::OUString const & bundledVersion,
-    ::rtl::OUString const & onlineVersion);
+OUString getHighestVersion(
+    OUString const & userVersion,
+    OUString const & sharedVersion,
+    OUString const & bundledVersion,
+    OUString const & onlineVersion);
 
 }
 

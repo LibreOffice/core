@@ -106,7 +106,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
             ::com::sun::star::uno::Any aHidden = xCurCol->getPropertyValue(CUIFM_PROP_HIDDEN);
             bIsHidden = ::comphelper::getBOOL(aHidden);
 
-            ::rtl::OUString sName;
+            OUString sName;
             xCurCol->getPropertyValue(CUIFM_PROP_LABEL) >>= sName;
             sCurName = sName;
         }

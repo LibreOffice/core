@@ -40,7 +40,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 class SdDrawDocument;
@@ -427,7 +426,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
         {
                 try
                 {
-                    xSet->addPropertyChangeListener(rtl::OUString(aCurrentPagePropertyName), this);
+                    xSet->addPropertyChangeListener(OUString(aCurrentPagePropertyName), this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -436,7 +435,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
 
                 try
                 {
-                    xSet->addPropertyChangeListener(rtl::OUString(aEditModePropertyName), this);
+                    xSet->addPropertyChangeListener(OUString(aEditModePropertyName), this);
                 }
                 catch (const beans::UnknownPropertyException&)
                 {
@@ -474,7 +473,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         {
             try
             {
-                xSet->removePropertyChangeListener(rtl::OUString(aCurrentPagePropertyName), this);
+                xSet->removePropertyChangeListener(OUString(aCurrentPagePropertyName), this);
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -483,7 +482,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
 
             try
             {
-                xSet->removePropertyChangeListener(rtl::OUString(aEditModePropertyName), this);
+                xSet->removePropertyChangeListener(OUString(aEditModePropertyName), this);
             }
             catch (const beans::UnknownPropertyException&)
             {

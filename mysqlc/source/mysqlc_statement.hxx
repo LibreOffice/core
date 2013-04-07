@@ -44,7 +44,6 @@ namespace connectivity
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::Any;
         using ::com::sun::star::uno::RuntimeException;
-        using ::rtl::OUString;
 
         typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
                                                     ::com::sun::star::sdbc::XWarningsSupplier,

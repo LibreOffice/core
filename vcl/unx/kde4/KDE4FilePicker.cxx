@@ -74,23 +74,23 @@ namespace
     const bool STARTUP_SUSPENDED = true;
     const bool STARTUP_ALIVE     = false;
 
-    uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
+    uno::Sequence<OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
-        aRet[2] = rtl::OUString("com.sun.star.ui.dialogs.KDE4FilePicker");
+        uno::Sequence<OUString> aRet(3);
+        aRet[0] = OUString("com.sun.star.ui.dialogs.FilePicker");
+        aRet[1] = OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+        aRet[2] = OUString("com.sun.star.ui.dialogs.KDE4FilePicker");
         return aRet;
     }
 }
 
-rtl::OUString toOUString(const QString& s)
+OUString toOUString(const QString& s)
 {
     // QString stores UTF16, just like OUString
-    return rtl::OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
+    return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
-QString toQString(const rtl::OUString& s)
+QString toQString(const OUString& s)
 {
     return QString::fromUtf16(s.getStr(), s.getLength());
 }
@@ -133,7 +133,7 @@ void SAL_CALL KDE4FilePicker::removeFilePickerListener( const uno::Reference<XFi
     m_xListener.clear();
 }
 
-void SAL_CALL KDE4FilePicker::setTitle( const rtl::OUString &title )
+void SAL_CALL KDE4FilePicker::setTitle( const OUString &title )
     throw( uno::RuntimeException )
 {
     _dialog->setCaption(toQString(title));
@@ -194,28 +194,28 @@ void SAL_CALL KDE4FilePicker::setMultiSelectionMode( sal_Bool multiSelect )
         _dialog->setMode(KFile::File | KFile::LocalOnly);
 }
 
-void SAL_CALL KDE4FilePicker::setDefaultName( const ::rtl::OUString &name )
+void SAL_CALL KDE4FilePicker::setDefaultName( const OUString &name )
     throw( uno::RuntimeException )
 {
     const QString url = toQString(name);
     _dialog->setSelection(url);
 }
 
-void SAL_CALL KDE4FilePicker::setDisplayDirectory( const rtl::OUString &dir )
+void SAL_CALL KDE4FilePicker::setDisplayDirectory( const OUString &dir )
     throw( uno::RuntimeException )
 {
     const QString url = toQString(dir);
     _dialog->setUrl(KUrl(url));
 }
 
-rtl::OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
+OUString SAL_CALL KDE4FilePicker::getDisplayDirectory()
     throw( uno::RuntimeException )
 {
     QString dir = _dialog->baseUrl().url();
     return toOUString(dir);
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
+uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
     throw( uno::RuntimeException )
 {
     QStringList rawFiles = _dialog->selectedFiles();
@@ -252,10 +252,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     }
 
     // add all files and leading directory to outgoing OO sequence
-    uno::Sequence< ::rtl::OUString > seq(files.size());
+    uno::Sequence< OUString > seq(files.size());
     for (int i = 0; i < files.size(); ++i)
     {
-        rtl::OUString aFile(toOUString(files[i])), aURL;
+        OUString aFile(toOUString(files[i])), aURL;
         osl_getFileURLFromSystemPath(aFile.pData, &aURL.pData );
         seq[i] = aURL;
     }
@@ -263,13 +263,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     return seq;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
+uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
     throw( uno::RuntimeException )
 {
     return getFiles();
 }
 
-void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const ::rtl::OUString &filter )
+void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUString &filter )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     QString t = toQString(title);
@@ -291,7 +291,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     _filter.append(QString("%1|%2").arg(f).arg(t));
 }
 
-void SAL_CALL KDE4FilePicker::setCurrentFilter( const rtl::OUString &title )
+void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     QString t = toQString(title);
@@ -299,7 +299,7 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const rtl::OUString &title )
     _dialog->filterWidget()->setCurrentFilter(t);
 }
 
-rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
+OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     throw( uno::RuntimeException )
 {
     // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
@@ -315,7 +315,7 @@ rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     return toOUString(filter);
 }
 
-void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const uno::Sequence<beans::StringPair>& filters)
+void SAL_CALL KDE4FilePicker::appendFilterGroup( const OUString& , const uno::Sequence<beans::StringPair>& filters)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     const sal_uInt16 length = filters.getLength();
@@ -419,7 +419,7 @@ void SAL_CALL KDE4FilePicker::enableControl( sal_Int16 controlId, sal_Bool enabl
     }
 }
 
-void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const ::rtl::OUString &label )
+void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const OUString &label )
     throw( uno::RuntimeException )
 {
     QWidget* widget = _customWidgets[controlId];
@@ -453,7 +453,7 @@ void SAL_CALL KDE4FilePicker::setLabel( sal_Int16 controlId, const ::rtl::OUStri
     }
 }
 
-rtl::OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
+OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     throw ( uno::RuntimeException )
 {
     QWidget* widget = _customWidgets[controlId];
@@ -550,7 +550,7 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 
             if (_resMgr && resId != -1)
             {
-                rtl::OUString s = String(ResId( resId, *_resMgr ));
+                OUString s = String(ResId( resId, *_resMgr ));
                 label = toQString(s);
                 label.replace("~", "&");
             }
@@ -591,7 +591,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     if (args.getLength() == 0)
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString( "no arguments" ),
+                OUString( "no arguments" ),
                 static_cast< XFilePicker2* >( this ), 1 );
     }
 
@@ -601,7 +601,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         ( arg.getValueType() != ::getCppuType((sal_Int8*)0)))
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString( "invalid argument type" ),
+                OUString( "invalid argument type" ),
                 static_cast< XFilePicker2* >( this ), 1 );
     }
 
@@ -673,7 +673,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
 
         default:
             throw lang::IllegalArgumentException(
-                    rtl::OUString( "Unknown template" ),
+                    OUString( "Unknown template" ),
                     static_cast< XFilePicker2* >( this ),
                     1 );
     }
@@ -699,16 +699,16 @@ void SAL_CALL KDE4FilePicker::disposing( const lang::EventObject &rEvent )
     }
 }
 
-rtl::OUString SAL_CALL KDE4FilePicker::getImplementationName()
+OUString SAL_CALL KDE4FilePicker::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_IMPL_NAME ));
 }
 
-sal_Bool SAL_CALL KDE4FilePicker::supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL KDE4FilePicker::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > SupportedServicesNames = FilePicker_getSupportedServiceNames();
+    uno::Sequence< OUString > SupportedServicesNames = FilePicker_getSupportedServiceNames();
 
     for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
     {
@@ -719,7 +719,7 @@ sal_Bool SAL_CALL KDE4FilePicker::supportsService( const rtl::OUString& ServiceN
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return FilePicker_getSupportedServiceNames();

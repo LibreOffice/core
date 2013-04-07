@@ -44,8 +44,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
 //------------------------------------------------------------------------
 // returns a windows codepage appropriate to the

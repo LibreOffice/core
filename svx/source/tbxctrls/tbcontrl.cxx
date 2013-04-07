@@ -102,7 +102,6 @@ static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
 // namespaces
-using ::rtl::OUString;
 using namespace ::editeng;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -145,7 +144,7 @@ public:
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
     inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
 
-    void            SetDefaultStyle( const ::rtl::OUString& rDefault ) { sDefaultStyle = rDefault; }
+    void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
     DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );
 
 protected:
@@ -304,7 +303,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
     public:
         SfxStyleControllerItem_Impl( const Reference< XDispatchProvider >& rDispatchProvider,
                                      sal_uInt16 nSlotId,
-                                     const rtl::OUString& rCommand,
+                                     const OUString& rCommand,
                                      SvxStyleToolBoxControl& rTbxCtl );
 
     protected:
@@ -320,7 +319,7 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(
     Window*                                 pParent,
-    const rtl::OUString&                    rCommand,
+    const OUString&                    rCommand,
     SfxStyleFamily                          eFamily,
     const Reference< XDispatchProvider >&   rDispatchProvider,
     const Reference< XFrame >&              _xFrame,
@@ -1048,7 +1047,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         Reference< XDispatchProvider > aDisp( GetFrame()->getController(), UNO_QUERY );
         SfxQueryStatus aQueryStatus( aDisp,
                                      SID_ATTR_AUTO_COLOR_INVALID,
-                                     rtl::OUString( ".uno:AutoColorInvalid" ));
+                                     OUString( ".uno:AutoColorInvalid" ));
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
         if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
@@ -1102,7 +1101,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetText( rWndTitle );
     aColorSet.Show();
 
-    AddStatusListener( rtl::OUString( ".uno:ColorTableState" ));
+    AddStatusListener( OUString( ".uno:ColorTableState" ));
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1248,7 +1247,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
 
 {
     BindListener();
-    AddStatusListener(rtl::OUString(".uno:BorderReducedMode"));
+    AddStatusListener(OUString(".uno:BorderReducedMode"));
     aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
     /*
@@ -1522,7 +1521,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     try
     {
         Reference< lang::XServiceInfo > xServices( rFrame->getController()->getModel(), UNO_QUERY_THROW );
-        m_bIsWriter = xServices->supportsService(::rtl::OUString("com.sun.star.text.TextDocument"));
+        m_bIsWriter = xServices->supportsService(OUString("com.sun.star.text.TextDocument"));
     }
     catch(const uno::Exception& )
     {
@@ -1659,7 +1658,7 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider,
     sal_uInt16                                nSlotId,      // Family-ID
-    const rtl::OUString&                  rCommand,     // .uno: command bound to this item
+    const OUString&                  rCommand,     // .uno: command bound to this item
     SvxStyleToolBoxControl&               rTbxCtl )     // Controller-Instanz, dem dieses Item zugeordnet ist.
     :   SfxStatusListener( rDispatchProvider, nSlotId, rCommand ),
         rControl( rTbxCtl )
@@ -1705,7 +1704,7 @@ struct SvxStyleToolBoxControl::Impl
 {
     String                              aClearForm;
     String                              aMore;
-    ::std::vector< ::rtl::OUString >    aDefaultStyles;
+    ::std::vector< OUString >    aDefaultStyles;
     sal_Bool                        bListening;
     sal_Bool                        bSpecModeWriter;
     sal_Bool                        bSpecModeCalc;
@@ -1727,11 +1726,11 @@ struct SvxStyleToolBoxControl::Impl
         {
             Reference< style::XStyleFamiliesSupplier > xStylesSupplier( xModel, UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServices( xModel, UNO_QUERY_THROW );
-            bSpecModeWriter = xServices->supportsService(::rtl::OUString("com.sun.star.text.TextDocument"));
+            bSpecModeWriter = xServices->supportsService(OUString("com.sun.star.text.TextDocument"));
             if(bSpecModeWriter)
             {
                 Reference<container::XNameAccess> xParaStyles;
-                    xStylesSupplier->getStyleFamilies()->getByName(::rtl::OUString("ParagraphStyles")) >>=
+                    xStylesSupplier->getStyleFamilies()->getByName(OUString("ParagraphStyles")) >>=
                     xParaStyles;
                 static const sal_Char* aWriterStyles[] =
                 {
@@ -1748,9 +1747,9 @@ struct SvxStyleToolBoxControl::Impl
                     try
                     {
                         Reference< beans::XPropertySet > xStyle;
-                        xParaStyles->getByName( rtl::OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
-                        ::rtl::OUString sName;
-                        xStyle->getPropertyValue(::rtl::OUString("DisplayName")) >>= sName;
+                        xParaStyles->getByName( OUString::createFromAscii( aWriterStyles[nStyle] )) >>= xStyle;
+                        OUString sName;
+                        xStyle->getPropertyValue(OUString("DisplayName")) >>= sName;
                         if( !sName.isEmpty() )
                             aDefaultStyles.push_back(sName);
                     }
@@ -1760,7 +1759,7 @@ struct SvxStyleToolBoxControl::Impl
 
             }
             else if( 0 != (
-                bSpecModeCalc = xServices->supportsService(::rtl::OUString(
+                bSpecModeCalc = xServices->supportsService(OUString(
                     "com.sun.star.sheet.SpreadsheetDocument"))))
             {
                 static const sal_Char* aCalcStyles[] =
@@ -1772,18 +1771,18 @@ struct SvxStyleToolBoxControl::Impl
                 };
                 Reference<container::XNameAccess> xCellStyles;
                     xStylesSupplier->getStyleFamilies()->getByName(
-                        ::rtl::OUString("CellStyles")) >>=
+                        OUString("CellStyles")) >>=
                         xCellStyles;
                 for( sal_uInt32 nStyle = 0; nStyle < sizeof( aCalcStyles ) / sizeof( sal_Char*); ++nStyle )
                 {
                     try
                     {
-                        const rtl::OUString sStyleName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] ) );
+                        const OUString sStyleName( OUString::createFromAscii( aCalcStyles[nStyle] ) );
                         if( xCellStyles->hasByName( sStyleName ) )
                         {
                             Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
-                            ::rtl::OUString sName;
-                            xStyle->getPropertyValue(::rtl::OUString("DisplayName")) >>= sName;
+                            OUString sName;
+                            xStyle->getPropertyValue(OUString("DisplayName")) >>= sName;
                             if( !sName.isEmpty() )
                                 aDefaultStyles.push_back(sName);
                         }
@@ -1973,7 +1972,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
                     {
                         // sort out default styles
                         bInsert = true;
-                        ::rtl::OUString aName( pStyle->GetName() );
+                        OUString aName( pStyle->GetName() );
                         for( _i = 0 ; _i < nCnt ; ++_i )
                         {
                             if( pImpl->aDefaultStyles[_i] == aName )
@@ -2818,7 +2817,7 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
     ToolBox& rBox = GetToolBox();
     if ( pItem && eState != SFX_ITEM_DISABLED )
     {
-        ::rtl::OUString aNewText( MnemonicGenerator::EraseAllMnemonicChars( pItem->GetValue() ) );
+        OUString aNewText( MnemonicGenerator::EraseAllMnemonicChars( pItem->GetValue() ) );
         rBox.SetQuickHelpText( GetId(), aNewText );
     }
     if ( eState == SFX_ITEM_DISABLED )

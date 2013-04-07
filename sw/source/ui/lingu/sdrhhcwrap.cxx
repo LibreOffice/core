@@ -43,7 +43,6 @@
 #include <edtwin.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 //////////////////////////////////////////////////////////////////////
 

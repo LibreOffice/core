@@ -64,8 +64,8 @@ int main(int argc, const char *argv[])
         printf( "Passing URL: %s\n", url );
 
         // test the encoding functionality from shellexec.cxx
-        rtl::OString aURL( url );
-        rtl::OStringBuffer aBuffer;
+        OString aURL( url );
+        OStringBuffer aBuffer;
         escapeForShell(aBuffer, aURL);
 
         // append encoded URL as (only) parameter to the script

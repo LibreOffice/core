@@ -69,8 +69,8 @@ public:
 
     UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext);
 
-    static uno::Sequence< rtl::OUString > getServiceNames();
-    static rtl::OUString getImplName();
+    static uno::Sequence< OUString > getServiceNames();
+    static OUString getImplName();
 
     // Allows runtime exceptions to be thrown by const methods
     inline SAL_CALL operator uno::Reference< uno::XInterface > () const
@@ -81,11 +81,11 @@ public:
         throw (lang::IllegalArgumentException, uno::Exception);
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (uno::RuntimeException);
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
     // XEventListener
@@ -162,20 +162,20 @@ UpdateCheckJob::~UpdateCheckJob()
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()
 {
-    uno::Sequence< rtl::OUString > aServiceList(1);
+    uno::Sequence< OUString > aServiceList(1);
     aServiceList[0] = "com.sun.star.setup.UpdateCheck";
     return aServiceList;
 };
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckJob::getImplName()
 {
-    return rtl::OUString("vnd.sun.UpdateCheck");
+    return OUString("vnd.sun.UpdateCheck");
 }
 
 
@@ -214,7 +214,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     uno::Sequence<beans::NamedValue> aEnvironment =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "Environment");
 
-    rtl::OUString aEventName = getValue< rtl::OUString > (aEnvironment, "EventName");
+    OUString aEventName = getValue< OUString > (aEnvironment, "EventName");
 
     m_pInitThread.reset(
         new InitUpdateCheckJobThread(
@@ -228,8 +228,8 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp )
 {
     try {
-        uno::Sequence< uno::Sequence< rtl::OUString > > aList =
-            getValue< uno::Sequence< uno::Sequence< rtl::OUString > > > ( rListProp, "updateList" );
+        uno::Sequence< uno::Sequence< OUString > > aList =
+            getValue< uno::Sequence< uno::Sequence< OUString > > > ( rListProp, "updateList" );
         bool bPrepareOnly = getValue< bool > ( rListProp, "prepareOnly" );
 
         // we will first store any new found updates and then check, if there are any
@@ -258,13 +258,13 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
     catch( const uno::Exception& e )
     {
          OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplName();
@@ -272,7 +272,7 @@ UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getServiceNames();
@@ -281,9 +281,9 @@ UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
 //------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
-UpdateCheckJob::supportsService( rtl::OUString const & serviceName ) throw (uno::RuntimeException)
+UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > aServiceNameList = getServiceNames();
+    uno::Sequence< OUString > aServiceNameList = getServiceNames();
 
     for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
         if( aServiceNameList[n].equals(serviceName) )

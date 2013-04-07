@@ -56,7 +56,7 @@ public:
 virtual ~RangeChooserTabPage();
 
     //RangeSelectionListenerParent
-    virtual void listeningFinished( const ::rtl::OUString & rNewRange );
+    virtual void listeningFinished( const OUString & rNewRange );
     virtual void disposingRangeSelection();
 
     void commitPage();

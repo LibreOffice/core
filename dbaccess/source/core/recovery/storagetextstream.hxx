@@ -39,11 +39,11 @@ namespace dbaccess
         StorageTextOutputStream(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
-            const ::rtl::OUString& i_rStreamName
+            const OUString& i_rStreamName
         );
         ~StorageTextOutputStream();
 
-        void    writeLine( const ::rtl::OUString& i_rLine );
+        void    writeLine( const OUString& i_rLine );
         void    writeLine();
 
     private:

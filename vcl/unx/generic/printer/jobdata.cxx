@@ -79,7 +79,7 @@ bool JobData::setPaper( int i_nWidth, int i_nHeight )
     bool bSuccess = false;
     if( m_pParser )
     {
-        rtl::OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
+        OUString aPaper( m_pParser->matchPaper( i_nWidth, i_nHeight ) );
 
         const PPDKey*   pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
         const PPDValue* pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
@@ -114,12 +114,12 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     SvMemoryStream aStream;
 
     // write header job data
-    aStream.WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("JobData 1")));
+    aStream.WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("JobData 1")));
 
-    rtl::OStringBuffer aLine;
+    OStringBuffer aLine;
 
     aLine.append(RTL_CONSTASCII_STRINGPARAM("printer="));
-    aLine.append(rtl::OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
+    aLine.append(OUStringToOString(m_aPrinterName, RTL_TEXTENCODING_UTF8));
     aStream.WriteLine(aLine.makeStringAndClear());
 
     aLine.append(RTL_CONSTASCII_STRINGPARAM("orientation="));
@@ -176,7 +176,7 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
 bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobData )
 {
     SvMemoryStream aStream( pData, bytes, STREAM_READ );
-    rtl::OString aLine;
+    OString aLine;
     bool bVersion       = false;
     bool bPrinter       = false;
     bool bOrientation   = false;
@@ -205,7 +205,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(printerEquals)))
         {
             bPrinter = true;
-            rJobData.m_aPrinterName = rtl::OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
+            rJobData.m_aPrinterName = OStringToOUString(aLine.copy(RTL_CONSTASCII_LENGTH(printerEquals)), RTL_TEXTENCODING_UTF8);
         }
         else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(orientatationEquals)))
         {
@@ -220,7 +220,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         else if (aLine.matchL(RTL_CONSTASCII_STRINGPARAM(margindajustmentEquals)))
         {
             bMargin = true;
-            rtl::OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
+            OString aValues(aLine.copy(RTL_CONSTASCII_LENGTH(margindajustmentEquals)));
             rJobData.m_nLeftMarginAdjust = aValues.getToken(0, ',').toInt32();
             rJobData.m_nRightMarginAdjust = aValues.getToken(1, ',').toInt32();
             rJobData.m_nTopMarginAdjust = aValues.getToken(2, ',').toInt32();

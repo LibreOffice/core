@@ -180,7 +180,7 @@ sal_Bool OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString("*") );
+        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( OUString("*") );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -198,9 +198,9 @@ sal_Bool OTableWindow::FillListBox()
         Reference< XNameAccess > xColumns = m_pData->getColumns();
         if( xColumns.is() )
         {
-            Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
-            const ::rtl::OUString* pIter = aColumns.getConstArray();
-            const ::rtl::OUString* pEnd = pIter + aColumns.getLength();
+            Sequence< OUString> aColumns = xColumns->getElementNames();
+            const OUString* pIter = aColumns.getConstArray();
+            const OUString* pEnd = pIter + aColumns.getLength();
 
             SvTreeListEntry* pEntry = NULL;
             for (; pIter != pEnd; ++pIter)
@@ -553,7 +553,7 @@ sal_Bool OTableWindow::ExistsAConn() const
     return getTableView()->ExistsAConn(this);
 }
 //------------------------------------------------------------------------------
-void OTableWindow::EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields)
+void OTableWindow::EnumValidFields(::std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
     // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written

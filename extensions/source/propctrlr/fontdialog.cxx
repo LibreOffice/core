@@ -79,14 +79,14 @@ namespace pcr
             _rxProps );
 
     public:
-        sal_Bool        getCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
-        ::rtl::OUString getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
-        sal_Int16       getInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
-        sal_Int32       getInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault);
-        float           getFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
+        sal_Bool        getCheckFontProperty(const OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
+        OUString getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault);
+        sal_Int16       getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault);
+        sal_Int32       getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault);
+        float           getFloatFontProperty(const OUString& _rPropName, const float _nDefault);
 
         void            invalidateItem(
-                            const ::rtl::OUString& _rPropName,
+                            const OUString& _rPropName,
                             sal_uInt16 _nItemId,
                             SfxItemSet& _rSet,
                             sal_Bool _bForceInvalidation = sal_False);
@@ -101,7 +101,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OFontPropertyExtractor::getCheckFontProperty(const ::rtl::OUString& _rPropName, Any& _rValue)
+    sal_Bool OFontPropertyExtractor::getCheckFontProperty(const OUString& _rPropName, Any& _rValue)
     {
         _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
         if (m_xPropStateAccess.is())
@@ -111,7 +111,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OFontPropertyExtractor::getStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault)
+    OUString OFontPropertyExtractor::getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault)
     {
         Any aValue;
         if (getCheckFontProperty(_rPropName, aValue))
@@ -121,7 +121,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int16 OFontPropertyExtractor::getInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault)
+    sal_Int16 OFontPropertyExtractor::getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault)
     {
         Any aValue;
         if (getCheckFontProperty(_rPropName, aValue))
@@ -133,7 +133,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OFontPropertyExtractor::getInt32FontProperty(const ::rtl::OUString& _rPropName, const sal_Int32 _nDefault)
+    sal_Int32 OFontPropertyExtractor::getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault)
     {
         Any aValue;
         if (getCheckFontProperty(_rPropName, aValue))
@@ -145,7 +145,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    float OFontPropertyExtractor::getFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault)
+    float OFontPropertyExtractor::getFloatFontProperty(const OUString& _rPropName, const float _nDefault)
     {
         Any aValue;
         if (getCheckFontProperty(_rPropName, aValue))
@@ -155,7 +155,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OFontPropertyExtractor::invalidateItem(const ::rtl::OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
+    void OFontPropertyExtractor::invalidateItem(const OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
     {
         if  (   _bForceInvalidation
             ||  (   m_xPropStateAccess.is()
@@ -200,8 +200,8 @@ namespace pcr
             ::com::sun::star::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
 
             // get the current properties
-            ::rtl::OUString aFontName       = aPropExtractor.getStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
-            ::rtl::OUString aFontStyleName  = aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
+            OUString aFontName       = aPropExtractor.getStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
+            OUString aFontStyleName  = aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
             sal_Int16   nFontFamily         = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
             sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
             float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
@@ -288,7 +288,7 @@ namespace pcr
     //------------------------------------------------------------------------
     namespace
     {
-        void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const ::rtl::OUString& _name, const Any& _value )
+        void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const OUString& _name, const Any& _value )
         {
             _out_properties.realloc( _out_properties.getLength() + 1 );
             _out_properties[ _out_properties.getLength() - 1 ] = NamedValue( _name, _value );
@@ -311,8 +311,8 @@ namespace pcr
                 const SvxFontItem& rFontItem =
                     static_cast<const SvxFontItem&>(_rSet.Get(CFID_FONT));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(::rtl::OUString(rFontItem.GetFamilyName())));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(::rtl::OUString(rFontItem.GetStyleName())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(OUString(rFontItem.GetFamilyName())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(OUString(rFontItem.GetStyleName())));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
             }
@@ -539,7 +539,7 @@ namespace pcr
             { SID_ATTR_CHAR_FONTLIST,           0 }
         };
 
-        _rpPool = new SfxItemPool(rtl::OUString("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
+        _rpPool = new SfxItemPool(OUString("PCRControlFontItemPool"), CFID_FIRST_ITEM_ID, CFID_LAST_ITEM_ID,
             aItemInfos, _rppDefaults);
         _rpPool->FreezeIdRanges();
 

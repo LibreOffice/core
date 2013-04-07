@@ -209,7 +209,7 @@ public:
      */
     static bool         parseOoxAddress2d(
                             sal_Int32& ornColumn, sal_Int32& ornRow,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
@@ -234,7 +234,7 @@ public:
     static bool         parseOoxRange2d(
                             sal_Int32& ornStartColumn, sal_Int32& ornStartRow,
                             sal_Int32& ornEndColumn, sal_Int32& ornEndRow,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int32 nStart = 0,
                             sal_Int32 nLength = SAL_MAX_INT32 );
 
@@ -313,7 +313,7 @@ public:
      */
     bool                convertToCellAddressUnchecked(
                             ::com::sun::star::table::CellAddress& orAddress,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a single cell address.
@@ -327,7 +327,7 @@ public:
      */
     bool                convertToCellAddress(
                             ::com::sun::star::table::CellAddress& orAddress,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
@@ -340,7 +340,7 @@ public:
         @return  A valid API cell address struct. */
     ::com::sun::star::table::CellAddress
                         createValidCellAddress(
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 
@@ -445,7 +445,7 @@ public:
      */
     bool                convertToCellRangeUnchecked(
                             ::com::sun::star::table::CellRangeAddress& orRange,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet );
 
     /** Tries to convert the passed string to a cell range address.
@@ -474,7 +474,7 @@ public:
      */
     bool                convertToCellRange(
                             ::com::sun::star::table::CellRangeAddress& orRange,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet,
                             bool bAllowOverflow, bool bTrackOverflow );
 
@@ -549,7 +549,7 @@ public:
      */
     void                convertToCellRangeList(
                             ApiCellRangeList& orRanges,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
 

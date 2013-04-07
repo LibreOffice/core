@@ -46,8 +46,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::comphelper;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 enum SwViewSettingsPropertyHandles
 {
@@ -713,7 +711,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 break;
                 default:
                     throw IllegalArgumentException(
-                        ::rtl::OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
+                        OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
             }
             mpViewOption->SetZoomType( eZoom );
             mbApplyZoom = sal_True;
@@ -747,7 +745,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 
                 INetURLObject aHID( sHelpURL );
                 if ( aHID.GetProtocol() == INET_PROT_HID )
-                      pView->GetEditWin().SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+                      pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
                     throw IllegalArgumentException ();
             }
@@ -930,7 +928,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
                 OUStringBuffer sHelpURL;
                 sHelpURL.appendAscii ( INET_HID_SCHEME );
                 SwEditWin &rEditWin = pView->GetEditWin();
-                sHelpURL.append( rtl::OStringToOUString( rEditWin.GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                sHelpURL.append( OStringToOUString( rEditWin.GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
                 rValue <<= sHelpURL.makeStringAndClear();
             }
             else

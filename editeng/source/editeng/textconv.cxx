@@ -34,7 +34,6 @@
 #include <textconv.hxx>
 
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -238,7 +237,7 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
     // modified version of EditSpellWrapper::SpellContinue
 
     // get next convertible text portion and its language
-    aConvText = rtl::OUString();
+    aConvText = OUString();
     nConvTextLang = LANGUAGE_NONE;
     pEditView->GetImpEditEngine()->ImpConvert( aConvText, nConvTextLang,
             pEditView, GetSourceLanguage(), aConvSel,
@@ -298,7 +297,7 @@ void TextConvWrapper::SelectNewUnit_impl(
 
 
 void TextConvWrapper::GetNextPortion(
-        ::rtl::OUString& /* [out] */ rNextPortion,
+        OUString& /* [out] */ rNextPortion,
         LanguageType&    /* [out] */ rLangOfPortion,
         sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText )
 {
@@ -339,8 +338,8 @@ namespace
 
 void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
-        const ::rtl::OUString& rOrigText,
-        const ::rtl::OUString& rReplaceWith,
+        const OUString& rOrigText,
+        const OUString& rReplaceWith,
         const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )

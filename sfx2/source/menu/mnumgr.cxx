@@ -134,11 +134,11 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 //--------------------------------------------------------------------
 
 
-static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
+static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 {
     Image aRes;
 
-    ::rtl::OUString aTmp;
+    OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
 
     Graphic aGraphic;
@@ -171,9 +171,9 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     if (aThesLookUpStr.Len() > 0 && nDelimPos != STRING_NOTFOUND)
     {
         // get synonym list for sub menu
-        std::vector< ::rtl::OUString > aSynonyms;
+        std::vector< OUString > aSynonyms;
         SfxThesSubMenuHelper aHelper;
-        ::rtl::OUString aText( aHelper.GetText( aThesLookUpStr, nDelimPos ) );
+        OUString aText( aHelper.GetText( aThesLookUpStr, nDelimPos ) );
         lang::Locale aLocale;
         aHelper.GetLocale( aLocale, aThesLookUpStr, nDelimPos );
         const bool bHasMoreSynonyms = aHelper.GetMeanings( aSynonyms, aText, aLocale, 7 /*max number of synonyms to retrieve*/ );
@@ -188,7 +188,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
-            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
+            OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
             if (sThesImplName.Len() > 0 && !aSynonymsImageUrl.isEmpty())
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
@@ -199,7 +199,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
                 String aItemText( linguistic::GetThesaurusReplaceText( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd(".uno:ThesaurusFromContext?WordReplace:string=" );
+                OUString aCmd(".uno:ThesaurusFromContext?WordReplace:string=" );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -209,16 +209,16 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         }
         else // nNumSynonyms == 0
         {
-            const rtl::OUString aItemText( SfxResId(STR_MENU_NO_SYNONYM_FOUND).toString() );
+            const OUString aItemText( SfxResId(STR_MENU_NO_SYNONYM_FOUND).toString() );
             pThesSubMenu->InsertItem( 1, aItemText, MIB_NOSELECT );
         }
         pThesSubMenu->InsertSeparator();
-        const rtl::OUString sThesaurus( SfxResId(STR_MENU_THESAURUS).toString() );
+        const OUString sThesaurus( SfxResId(STR_MENU_THESAURUS).toString() );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(".uno:ThesaurusDialog") );
+        pThesSubMenu->SetItemCommand( 100, OUString(".uno:ThesaurusDialog") );
 
         pSVMenu->InsertSeparator();
-        const rtl::OUString sSynonyms( SfxResId(STR_MENU_SYNONYMS).toString() );
+        const OUString sSynonyms( SfxResId(STR_MENU_SYNONYMS).toString() );
         pSVMenu->InsertItem( SID_THES, sSynonyms );
         pSVMenu->SetPopupMenu( SID_THES, pThesSubMenu );
     }
@@ -331,7 +331,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();
-    ::rtl::OUString sDummyMenuName;
+    OUString sDummyMenuName;
     if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, sDummyMenuName, pMenu, aEvent ) )
     {
         if ( pMenu )
@@ -381,7 +381,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( pWindow );
     aEvent.ExecutePosition.X = rPoint.X();
     aEvent.ExecutePosition.Y = rPoint.Y();
-    ::rtl::OUString sDummyMenuName;
+    OUString sDummyMenuName;
     if ( pFrame->GetViewShell()->TryContextMenuInterception( *pSVMenu, sDummyMenuName, pMenu, aEvent ) )
     {
         if ( pMenu )

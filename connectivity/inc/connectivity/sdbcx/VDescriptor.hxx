@@ -41,7 +41,7 @@ namespace connectivity
                     ,public ::com::sun::star::lang::XUnoTunnel
         {
         protected:
-            ::rtl::OUString         m_Name;
+            OUString         m_Name;
 
             /** helper for derived classes to implement OPropertyArrayUsageHelper::createArrayHelper
 
@@ -74,7 +74,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // compare
-            inline sal_Bool operator == ( const ::rtl::OUString & _rRH )
+            inline sal_Bool operator == ( const OUString & _rRH )
             {
                 return m_aCase(m_Name,_rRH);
             }

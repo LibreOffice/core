@@ -85,8 +85,8 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
         { MAP_CHAR_LEN("FrameIsScrollingMode"), WID_FRAME_IS_SCROLLING_MODE, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
         { MAP_CHAR_LEN("FrameMarginHeight"),    WID_FRAME_MARGIN_HEIGHT,    &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
         { MAP_CHAR_LEN("FrameMarginWidth"),     WID_FRAME_MARGIN_WIDTH,     &::getCppuType( (sal_Int32*)0 ), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameName"),            WID_FRAME_NAME,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("FrameURL"),             WID_FRAME_URL,              &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameName"),            WID_FRAME_NAME,             &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("FrameURL"),             WID_FRAME_URL,              &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
         {0,0,0,0,0,0}
     };
     return aIFramePropertyMap_Impl;
@@ -144,7 +144,7 @@ throw( uno::RuntimeException )
         uno::Reference< frame::XDispatchProvider > xProv( mxFrame, uno::UNO_QUERY );
 
         util::URL aTargetURL;
-        aTargetURL.Complete = ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+        aTargetURL.Complete = OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getComponentContext(mxFact) ) );
         xTrans->parseStrict( aTargetURL );
 
@@ -200,7 +200,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetI
     return xInfo;
 }
 
-void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
+void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
@@ -210,14 +210,14 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     {
     case WID_FRAME_URL:
     {
-        ::rtl::OUString aURL;
+        OUString aURL;
         aAny >>= aURL;
         maFrmDescr.SetURL( String(aURL) );
     }
     break;
     case WID_FRAME_NAME:
     {
-        ::rtl::OUString aName;
+        OUString aName;
         if ( aAny >>= aName )
             maFrmDescr.SetName( aName );
     }
@@ -281,7 +281,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
     }
 }
 
-uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropertyName)
+uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
@@ -292,12 +292,12 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
     {
     case WID_FRAME_URL:
     {
-        aAny <<= ::rtl::OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+        aAny <<= OUString( maFrmDescr.GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
     }
     break;
     case WID_FRAME_NAME:
     {
-        aAny <<= ::rtl::OUString( maFrmDescr.GetName() );
+        aAny <<= OUString( maFrmDescr.GetName() );
     }
     break;
     case WID_FRAME_IS_AUTO_SCROLL:
@@ -338,19 +338,19 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const ::rtl::OUString& aPropert
     return aAny;
 }
 
-void SAL_CALL IFrameObject::addPropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::addPropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::removePropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::removePropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::addVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::addVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
@@ -363,7 +363,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const ::rtl::OUString&,
     return 0;
 }
 
-void SAL_CALL IFrameObject::setTitle( const ::rtl::OUString& ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 

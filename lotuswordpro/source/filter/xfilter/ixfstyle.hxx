@@ -72,21 +72,21 @@ public:
     /**
      * @descr:  return the style name.
      */
-    virtual rtl::OUString   GetStyleName() = 0;
+    virtual OUString   GetStyleName() = 0;
 
     /**
      * @descr:  set the name of the style.
      */
-    virtual void    SetStyleName(const rtl::OUString& styleName) = 0;
+    virtual void    SetStyleName(const OUString& styleName) = 0;
 
     /**
      * @descr   return the parent style name.
      */
-    virtual rtl::OUString   GetParentStyleName() = 0;
+    virtual OUString   GetParentStyleName() = 0;
     /**
      * @descr:  Parant paragraph style.
      */
-    virtual void    SetParentStyleName(const rtl::OUString& parent) = 0;
+    virtual void    SetParentStyleName(const OUString& parent) = 0;
     /**
      * @descr:  return the style family. You can reference to enumXFStyle.
      */

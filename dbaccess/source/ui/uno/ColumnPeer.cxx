@@ -74,7 +74,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
             sal_Int32 nScale        = 0;
             sal_Int32 nPrecision    = 0;
             sal_Bool bAutoIncrement = sal_False;
-            ::rtl::OUString sTypeName;
+            OUString sTypeName;
 
             try
             {
@@ -91,7 +91,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 
             m_pActFieldDescr = new OFieldDescription(_xColumn,sal_True);
             // search for type
-            ::rtl::OUString sCreateParam("x");
+            OUString sCreateParam("x");
             sal_Bool bForce;
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
@@ -112,7 +112,7 @@ void OColumnPeer::setConnection(const Reference< XConnection>& _xCon)
         pFieldControl->setConnection(_xCon);
 }
 //------------------------------------------------------------------------------
-void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& Value) throw( RuntimeException )
+void OColumnPeer::setProperty( const OUString& _rPropertyName, const Any& Value) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -130,7 +130,7 @@ void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any&
         VCLXWindow::setProperty(_rPropertyName,Value);
 }
 // -----------------------------------------------------------------------------
-Any OColumnPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( RuntimeException )
+Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
 {
     Any aProp;
     OFieldDescControl* pFieldControl = static_cast<OFieldDescControl*>( GetWindow() );

@@ -54,7 +54,7 @@ namespace dlgprov
     // class DialogProviderImpl
     // =============================================================================
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext);
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > lcl_getStringResourceManager(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,const ::rtl::OUString& i_sURL);
+    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > lcl_getStringResourceManager(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,const OUString& i_sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > lcl_createDialogModel(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_xContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInput,
@@ -81,8 +81,8 @@ namespace dlgprov
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
 
-    rtl::OUString msDialogLibName;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const ::rtl::OUString& sURL );
+    OUString msDialogLibName;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModel( const OUString& sURL );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > createDialogControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxDialogModel,
@@ -103,7 +103,7 @@ namespace dlgprov
 
         // XDialogProvider / XDialogProvider2 impl method
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(
-            const ::rtl::OUString& URL,
+            const OUString& URL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
             bool bDialogProviderMode )
@@ -115,11 +115,11 @@ namespace dlgprov
         virtual ~DialogProviderImpl();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
@@ -128,22 +128,22 @@ namespace dlgprov
 
         // XDialogProvider
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialog(
-            const ::rtl::OUString& URL )
+            const OUString& URL )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         // XDialogProvider2
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogWithHandler(
-            const ::rtl::OUString& URL,
+            const OUString& URL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XDialog > SAL_CALL createDialogWithArguments(
-            const ::rtl::OUString& URL,
+            const OUString& URL,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createContainerWindow(
-            const ::rtl::OUString& URL, const ::rtl::OUString& WindowType,
+            const OUString& URL, const OUString& WindowType,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

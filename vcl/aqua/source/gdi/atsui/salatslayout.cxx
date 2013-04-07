@@ -236,7 +236,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     ByteCount nDummy;
     ATSUGetAttribute( mrATSUStyle, kATSUSizeTag, sizeof(fFontSize), &fFontSize, &nDummy);
     String aUniName( &rArgs.mpStr[rArgs.mnMinCharPos], mnCharCount );
-    rtl::OString aCName(rtl::OUStringToOString(aUniName, RTL_TEXTENCODING_UTF8));
+    OString aCName(OUStringToOString(aUniName, RTL_TEXTENCODING_UTF8));
     fprintf( stderr, "ATSLayout( \"%s\" %d..%d of %d) with h=%4.1f\n",
         aCName.getStr(),rArgs.mnMinCharPos,rArgs.mnEndCharPos,rArgs.mnLength,Fix2X(fFontSize) );
 #endif

@@ -185,7 +185,7 @@ void ThumbnailViewItem::updateTitleEditSize()
     mpTitleED->SetPosSizePixel(aPos, aSize);
 }
 
-void ThumbnailViewItem::setTitle (const rtl::OUString& rTitle)
+void ThumbnailViewItem::setTitle (const OUString& rTitle)
 {
     if (mrParent.renameItem(this, rTitle))
         maTitle = rTitle;
@@ -288,13 +288,13 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     pProcessor->process(aSeq);
 }
 
-void ThumbnailViewItem::addTextPrimitives (const rtl::OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, Primitive2DSequence& rSeq)
+void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const ThumbnailItemAttributes *pAttrs, Point aPos, Primitive2DSequence& rSeq)
 {
     drawinglayer::primitive2d::TextLayouterDevice aTextDev;
 
     aPos.setY(aPos.getY() + aTextDev.getTextHeight());
 
-    rtl::OUString aText (rText);
+    OUString aText (rText);
 
     TextEngine aTextEngine;
     aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
@@ -314,7 +314,7 @@ void ThumbnailViewItem::addTextPrimitives (const rtl::OUString& rText, const Thu
         if (bTooLong && (nLineLength + nLineStart) < rText.getLength())
         {
             // Add the '...' to the last line to show, even though it may require to shorten the line
-            double nDotsWidth = aTextDev.getTextWidth(rtl::OUString("..."),0,3);
+            double nDotsWidth = aTextDev.getTextWidth(OUString("..."),0,3);
 
             sal_uInt16 nLength = nLineLength - 1;
             while ( nDotsWidth + aTextDev.getTextWidth(aText, nLineStart, nLength) > maDrawArea.getWidth() && nLength > 0)

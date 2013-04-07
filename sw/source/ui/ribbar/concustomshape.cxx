@@ -56,15 +56,15 @@ ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, 
     aCustomShape = ConstCustomShape::GetShapeTypeFromRequest( rReq );
 }
 
-rtl::OUString ConstCustomShape::GetShapeType() const
+OUString ConstCustomShape::GetShapeType() const
 {
     return aCustomShape;
 }
 
 //static
-rtl::OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
+OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
@@ -142,7 +142,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
-        std::vector< rtl::OUString > aObjList;
+        std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
             sal_uInt16 i;

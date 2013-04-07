@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -126,7 +125,7 @@ namespace chart
 AreaChartTypeTemplate::AreaChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
+    const OUString & rServiceName,
     StackMode eStackMode,
     sal_Int32 nDim /* = 2 */ ) :
         ChartTypeTemplate( xContext, rServiceName ),
@@ -248,9 +247,9 @@ Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForN
 
 // ----------------------------------------
 
-uno::Sequence< ::rtl::OUString > AreaChartTypeTemplate::getSupportedServiceNames_Static()
+uno::Sequence< OUString > AreaChartTypeTemplate::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;

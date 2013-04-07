@@ -38,7 +38,7 @@ private:
                 sal_uInt32 aWidth, sal_uInt32 aHeight, sal_uInt64 &rSize );
 
     void sendNotes( sal_uInt32 aSlideNumber );
-    rtl::OString prepareNotes( sal_uInt32 aSlideNumber );
+    OString prepareNotes( sal_uInt32 aSlideNumber );
 };
 
 }

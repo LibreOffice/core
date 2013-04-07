@@ -84,8 +84,6 @@ static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
 static const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

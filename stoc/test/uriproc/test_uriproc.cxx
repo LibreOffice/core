@@ -58,32 +58,32 @@ namespace {
         (actual) == (expected))
 
 template< typename T > void append(
-    rtl::OUStringBuffer & buffer, T const & value)
+    OUStringBuffer & buffer, T const & value)
 {
     buffer.append(value);
 }
 
-template<> void append(rtl::OUStringBuffer & buffer, bool const & value) {
+template<> void append(OUStringBuffer & buffer, bool const & value) {
     buffer.append(static_cast< sal_Bool >(value));
 }
 
-template<> void append(rtl::OUStringBuffer & buffer, std::size_t const & value)
+template<> void append(OUStringBuffer & buffer, std::size_t const & value)
 {
     buffer.append(static_cast< sal_Int32 >(value));
 }
 
-template<> void append(rtl::OUStringBuffer & buffer, char const * const & value)
+template<> void append(OUStringBuffer & buffer, char const * const & value)
 {
     buffer.appendAscii(value);
 }
 
 template< typename T1, typename T2, typename T3, typename T4 >
-rtl::OString createTestAssertEqualMessage(
+OString createTestAssertEqualMessage(
     char const * token1, T1 const & token2, T2 const & token3,
     char const * expectedExpr, char const * actualExpr, T3 const & expected,
     T4 const & actual)
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii(token1);
     buf.append(static_cast< sal_Unicode >('|'));
     append(buf, token2);
@@ -98,7 +98,7 @@ rtl::OString createTestAssertEqualMessage(
     buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("> != <"));
     append(buf, actual);
     buf.append(static_cast< sal_Unicode >('>'));
-    return rtl::OUStringToOString(
+    return OUStringToOString(
         buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
@@ -196,24 +196,24 @@ void Test::testParse() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].uriReference)));
+                OUString::createFromAscii(data[i].uriReference)));
         CPPUNIT_ASSERT(uriRef.is() == (data[i].schemeSpecificPart != 0));
         if (uriRef.is()) {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].uriReference),
+                OUString::createFromAscii(data[i].uriReference),
                 uriRef->getUriReference());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].scheme != 0, uriRef->isAbsolute());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                     data[i].scheme == 0 ? "" : data[i].scheme),
                 uriRef->getScheme());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].schemeSpecificPart),
+                OUString::createFromAscii(data[i].schemeSpecificPart),
                 uriRef->getSchemeSpecificPart());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -224,12 +224,12 @@ void Test::testParse() {
                 data[i].authority != 0, uriRef->hasAuthority());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                     data[i].authority == 0 ? "" : data[i].authority),
                 uriRef->getAuthority());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].path),
+                OUString::createFromAscii(data[i].path),
                 uriRef->getPath());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -240,36 +240,36 @@ void Test::testParse() {
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(""), uriRef->getPathSegment(-1));
+                OUString(""), uriRef->getPathSegment(-1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].pathSegment0),
+                OUString::createFromAscii(data[i].pathSegment0),
                 uriRef->getPathSegment(0));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].pathSegment1),
+                OUString::createFromAscii(data[i].pathSegment1),
                 uriRef->getPathSegment(1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].pathSegment2),
+                OUString::createFromAscii(data[i].pathSegment2),
                 uriRef->getPathSegment(2));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].pathSegment3),
+                OUString::createFromAscii(data[i].pathSegment3),
                 uriRef->getPathSegment(3));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].pathSegment4),
+                OUString::createFromAscii(data[i].pathSegment4),
                 uriRef->getPathSegment(4));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(), uriRef->getPathSegment(5));
+                OUString(), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].query != 0, uriRef->hasQuery());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                     data[i].query == 0 ? "" : data[i].query),
                 uriRef->getQuery());
             TEST_ASSERT_EQUAL(
@@ -277,7 +277,7 @@ void Test::testParse() {
                 data[i].fragment != 0, uriRef->hasFragment());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                     data[i].fragment == 0 ? "" : data[i].fragment),
                 uriRef->getFragment());
         }
@@ -586,11 +586,11 @@ void Test::testMakeAbsolute() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].baseUriReference)));
+                OUString::createFromAscii(data[i].baseUriReference)));
         CPPUNIT_ASSERT(baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].uriReference)));
+                OUString::createFromAscii(data[i].uriReference)));
         CPPUNIT_ASSERT(uriRef.is());
         css::uno::Reference< css::uri::XUriReference > absolute(
             m_uriFactory->makeAbsolute(
@@ -602,7 +602,7 @@ void Test::testMakeAbsolute() {
         if (absolute.is()) {
             TEST_ASSERT_EQUAL(
                 "testMakeAbsolute", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].absolute),
+                OUString::createFromAscii(data[i].absolute),
                 absolute->getUriReference());
         }
     }
@@ -691,11 +691,11 @@ void Test::testMakeRelative() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].baseUriReference)));
+                OUString::createFromAscii(data[i].baseUriReference)));
         CPPUNIT_ASSERT(baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].uriReference)));
+                OUString::createFromAscii(data[i].uriReference)));
         CPPUNIT_ASSERT(uriRef.is());
         css::uno::Reference< css::uri::XUriReference > relative(
             m_uriFactory->makeRelative(
@@ -708,7 +708,7 @@ void Test::testMakeRelative() {
         if (relative.is()) {
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].relative),
+                OUString::createFromAscii(data[i].relative),
                 relative->getUriReference());
             css::uno::Reference< css::uri::XUriReference > absolute(
                 m_uriFactory->makeAbsolute(
@@ -717,7 +717,7 @@ void Test::testMakeRelative() {
             CPPUNIT_ASSERT(absolute.is());
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(
+                OUString::createFromAscii(
                     data[i].absolute == 0
                     ? data[i].uriReference : data[i].absolute),
                 absolute->getUriReference());
@@ -737,12 +737,12 @@ void Test::testVndSunStarExpand() {
         { "vnd.sun.star.expand:%5C$%5C%24%5C%5C", "$$\\" } };
     css::uno::Reference< css::util::XMacroExpander > expander(
         m_context->getValueByName(
-              rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander")),
+              OUString( "/singletons/com.sun.star.util.theMacroExpander")),
         css::uno::UNO_QUERY_THROW);
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].uriReference)));
+                OUString::createFromAscii(data[i].uriReference)));
         TEST_ASSERT_EQUAL(
             "testVndSunStarExpand", i, data[i].uriReference,
             data[i].expanded != 0, uriRef.is());
@@ -751,7 +751,7 @@ void Test::testVndSunStarExpand() {
                 expandUrl(uriRef, css::uno::UNO_QUERY_THROW);
             TEST_ASSERT_EQUAL(
                 "testVndSunStarExpand", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].expanded),
+                OUString::createFromAscii(data[i].expanded),
                 expandUrl->expand(expander));
         }
     }
@@ -782,7 +782,7 @@ void Test::testVndSunStarScript() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
-                rtl::OUString::createFromAscii(data[i].uriReference)));
+                OUString::createFromAscii(data[i].uriReference)));
         TEST_ASSERT_EQUAL(
             "testVndSunStarScript", i, data[i].uriReference, data[i].name != 0,
             uriRef.is());
@@ -791,13 +791,13 @@ void Test::testVndSunStarScript() {
                 scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
             TEST_ASSERT_EQUAL(
                 "testVndSunStarScript", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].uriReference),
+                OUString::createFromAscii(data[i].uriReference),
                 scriptUrl->getUriReference());
             TEST_ASSERT_EQUAL(
                 "testVndSunStarScript", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(data[i].name),
+                OUString::createFromAscii(data[i].name),
                 scriptUrl->getName());
-            rtl::OUString originalReference(uriRef->getUriReference());
+            OUString originalReference(uriRef->getUriReference());
             for (std::size_t j = 0; j < parameterCount; ++j) {
                 if (data[i].parameters[j].key != 0) {
                     TEST_ASSERT_EQUAL(
@@ -807,35 +807,35 @@ void Test::testVndSunStarScript() {
                         data[i].uriReference,
                         data[i].parameters[j].value != 0,
                         scriptUrl->hasParameter(
-                            rtl::OUString::createFromAscii(
+                            OUString::createFromAscii(
                                 data[i].parameters[j].key)));
                     TEST_ASSERT_EQUAL(
                         "testVndSunStarScript",
                         static_cast< double >(i)
                         + static_cast< double >(j) / 10.0,
                         data[i].uriReference,
-                        rtl::OUString::createFromAscii(
+                        OUString::createFromAscii(
                             data[i].parameters[j].value),
                         scriptUrl->getParameter(
-                            rtl::OUString::createFromAscii(
+                            OUString::createFromAscii(
                                 data[i].parameters[j].key)));
 
                     // setting the parameter to its original value should not change
                     // the overall uri reference (provided it was normalized before)
                     if ( data[i].normalized ) {
-                        if ( scriptUrl->hasParameter(rtl::OUString::createFromAscii(
+                        if ( scriptUrl->hasParameter(OUString::createFromAscii(
                             data[i].parameters[j].key)) ) {
                             scriptUrl->setParameter(
-                                rtl::OUString::createFromAscii(
+                                OUString::createFromAscii(
                                     data[i].parameters[j].key),
                                 scriptUrl->getParameter(
-                                    rtl::OUString::createFromAscii(
+                                    OUString::createFromAscii(
                                         data[i].parameters[j].key)));
                             TEST_ASSERT_EQUAL(
                                 "testVndSunStarScript",
                                 static_cast< double >(i)
                                 + static_cast< double >(j) / 10.0,
-                                ::rtl::OUString("setParameter"),
+                                OUString("setParameter"),
                                 originalReference,
                                 uriRef->getUriReference());
                         }
@@ -847,7 +847,7 @@ void Test::testVndSunStarScript() {
                 TEST_ASSERT_EQUAL(
                     "testVndSunStarScript",
                     i,
-                    ::rtl::OUString("setName"),
+                    OUString("setName"),
                     originalReference,
                     uriRef->getUriReference());
             }
@@ -856,55 +856,55 @@ void Test::testVndSunStarScript() {
 
     css::uno::Reference< css::uri::XUriReference > uriRef(
         m_uriFactory->parse(
-            rtl::OUString( "vnd.sun.star.script:Hello?location=Library.Module")),
+            OUString( "vnd.sun.star.script:Hello?location=Library.Module")),
         css::uno::UNO_SET_THROW);
     css::uno::Reference< css::uri::XVndSunStarScriptUrlReference >
         scriptUrl(uriRef, css::uno::UNO_QUERY_THROW);
 
     scriptUrl->setParameter(
-        ::rtl::OUString("location"),
-        ::rtl::OUString("foo"));
+        OUString("location"),
+        OUString("foo"));
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript", (sal_Int32)10, (sal_Int32)1,
         uriRef->getUriReference(),
-        ::rtl::OUString("vnd.sun.star.script:Hello?location=foo"));
+        OUString("vnd.sun.star.script:Hello?location=foo"));
 
     scriptUrl->setParameter(
-        ::rtl::OUString("language"),
-        ::rtl::OUString("StarBasic"));
+        OUString("language"),
+        OUString("StarBasic"));
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript", (sal_Int32)10, (sal_Int32)2,
         uriRef->getUriReference(),
-        ::rtl::OUString("vnd.sun.star.script:Hello?location=foo&language=StarBasic"));
+        OUString("vnd.sun.star.script:Hello?location=foo&language=StarBasic"));
 
 
     bool caughtExpected = false;
     try {
-        scriptUrl->setName(::rtl::OUString());
+        scriptUrl->setName(OUString());
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString("illegal arguments"),
-        ::rtl::OUString("name"),
+        OUString("illegal arguments"),
+        OUString("name"),
         caughtExpected,
         true);
 
     caughtExpected = false;
     try {
         scriptUrl->setParameter(
-            ::rtl::OUString(),
-            ::rtl::OUString("non-empty"));
+            OUString(),
+            OUString("non-empty"));
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString("illegal arguments"),
-        ::rtl::OUString("parameter"),
+        OUString("illegal arguments"),
+        OUString("parameter"),
         caughtExpected,
         true);
 }
@@ -939,17 +939,17 @@ void Test::testTranslator() {
             TEST_ASSERT_EQUAL(
                 "testTranslator, translateToInternal", i,
                 data[i].externalUriReference,
-                rtl::OUString::createFromAscii(data[i].internalUriReference),
+                OUString::createFromAscii(data[i].internalUriReference),
                 translator->translateToInternal(
-                    rtl::OUString::createFromAscii(
+                    OUString::createFromAscii(
                         data[i].externalUriReference)));
         }
         TEST_ASSERT_EQUAL(
             "testTranslator, translateToExternal", i,
             data[i].internalUriReference,
-            rtl::OUString::createFromAscii(data[i].externalUriReference),
+            OUString::createFromAscii(data[i].externalUriReference),
             translator->translateToExternal(
-                rtl::OUString::createFromAscii(data[i].internalUriReference)));
+                OUString::createFromAscii(data[i].internalUriReference)));
     }
 }
 
@@ -969,14 +969,14 @@ void Test::testPkgUrlFactory() {
         css::uno::Reference< css::uri::XUriReference > url(
             factory->createVndSunStarPkgUrlReference(
                 m_uriFactory->parse(
-                    rtl::OUString::createFromAscii(data[i].authority))));
+                    OUString::createFromAscii(data[i].authority))));
         TEST_ASSERT_EQUAL(
             "testVndSunStarPkgFactory", i, data[i].authority,
             data[i].result != 0, static_cast< bool >(url.is()));
         if (data[i].result != 0) {
             TEST_ASSERT_EQUAL(
                 "testVndSunStarPkgFactory", i, data[i].authority,
-                rtl::OUString::createFromAscii(data[i].result),
+                OUString::createFromAscii(data[i].result),
                 url->getUriReference());
         }
     }

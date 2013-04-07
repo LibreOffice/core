@@ -239,7 +239,7 @@ void OTableEditorCtrl::InitCellController()
     //////////////////////////////////////////////////////////////////////
     // Cell Field name
     xub_StrLen nMaxTextLen = EDIT_NOLIMIT;
-    ::rtl::OUString sExtraNameChars;
+    OUString sExtraNameChars;
     Reference<XConnection> xCon;
     try
     {
@@ -250,7 +250,7 @@ void OTableEditorCtrl::InitCellController()
 
         if( nMaxTextLen == 0 )
             nMaxTextLen = EDIT_NOLIMIT;
-        sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString();
+        sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : OUString();
 
     }
     catch(SQLException&)
@@ -380,7 +380,7 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     Reference<XPropertySet> xTable = GetView()->getController().getTable();
     if (IsReadOnly() || (   xTable.is() &&
                             xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
-                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString("VIEW")))
+                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == OUString("VIEW")))
         return NULL;
 
     //////////////////////////////////////////////////////////////////////
@@ -1083,7 +1083,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const TOTypeIn
         default:
             OSL_FAIL("OTableEditorCtrl::SetCellData: invalid column!");
     }
-    SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : ::rtl::OUString());
+    SetControlText(nRow,nColId,_pTypeInfo.get() ? _pTypeInfo->aUIName : OUString());
 }
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::sun::star::uno::Any& _rNewData )
@@ -1155,7 +1155,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
             sValue = GetView()->GetDescWin()->BoolStringPersistent(::comphelper::getString(_rNewData));
-            pFieldDescr->SetControlDefault(makeAny(::rtl::OUString(sValue)));
+            pFieldDescr->SetControlDefault(makeAny(OUString(sValue)));
             break;
 
         case FIELD_PROPERTY_FORMAT:
@@ -1185,7 +1185,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 
     static const String strYes(ModuleRes(STR_VALUE_YES));
     static const String strNo(ModuleRes(STR_VALUE_NO));
-    ::rtl::OUString sValue;
+    OUString sValue;
     //////////////////////////////////////////////////////////////////////
     // Read out the fields
     switch( nColId )
@@ -1246,7 +1246,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    ::rtl::OUString sCellText;
+    OUString sCellText;
     const_cast< OTableEditorCtrl* >( this )->GetCellData( nRow, nColId ) >>= sCellText;
     return sCellText;
 }
@@ -1255,7 +1255,7 @@ String OTableEditorCtrl::GetCellText( long nRow, sal_uInt16 nColId ) const
 sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
-    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth(rtl::OUString('0'));
+    return GetTextWidth(GetCellText(nRow, nColId)) + 2 * GetTextWidth(OUString('0'));
 }
 
 //------------------------------------------------------------------------------

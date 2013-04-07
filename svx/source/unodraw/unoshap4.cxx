@@ -85,7 +85,7 @@ SvxOle2Shape::~SvxOle2Shape() throw()
 }
 
 //XPropertySet
-bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxOle2Shape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -163,7 +163,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
             {
                 GraphicObject aGrafObj( xGraphic );
                 const Graphic aGraphic( aGrafObj.GetGraphic() );
-                pOle->SetGraphicToObj( aGraphic, rtl::OUString() );
+                pOle->SetGraphicToObj( aGraphic, OUString() );
             }
             return true;
         }
@@ -196,7 +196,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
     throw IllegalArgumentException();
 }
 
-bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -210,7 +210,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
 
     case OWN_ATTR_INTERNAL_OLE:
     {
-        rtl::OUString sCLSID;
+        OUString sCLSID;
         rValue <<= SotExchange::IsInternal( GetClassName_Impl(sCLSID) );
         break;
     }
@@ -350,7 +350,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
             {
                 GraphicObject aObj( *pGraphic );
                 aURL = OUString( UNO_NAME_GRAPHOBJ_URLPREFIX);
-                aURL += rtl::OStringToOUString(aObj.GetUniqueID(),
+                aURL += OStringToOUString(aObj.GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
             }
         }
@@ -408,7 +408,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 
     // create storage and inplace object
     ::comphelper::IEmbeddedHelper*     pPersist = mpModel->GetPersist();
-    ::rtl::OUString              aPersistName;
+    OUString              aPersistName;
     OUString            aTmpStr;
     if( SvxShape::getPropertyValue( UNO_NAME_OLE2_PERSISTNAME ) >>= aTmpStr )
         aPersistName = aTmpStr;
@@ -451,7 +451,7 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     return xObj.is();
 }
 
-sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
+sal_Bool SvxOle2Shape::createLink( const OUString& aLinkURL )
 {
     DBG_TESTSOLARMUTEX();
 
@@ -459,19 +459,19 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
     if ( !pOle2Obj || !pOle2Obj->IsEmpty() )
         return sal_False;
 
-    ::rtl::OUString aPersistName;
+    OUString aPersistName;
 
     ::comphelper::IEmbeddedHelper* pPersist = mpModel->GetPersist();
 
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
-    aMediaDescr[0].Name = ::rtl::OUString("URL");
+    aMediaDescr[0].Name = OUString("URL");
     aMediaDescr[0].Value <<= aLinkURL;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
     if ( xInteraction.is() )
     {
         aMediaDescr.realloc( 2 );
-        aMediaDescr[1].Name = ::rtl::OUString(  "InteractionHandler"  );
+        aMediaDescr[1].Name = OUString(  "InteractionHandler"  );
         aMediaDescr[1].Value <<= xInteraction;
     }
 
@@ -530,7 +530,7 @@ void SvxOle2Shape::resetModifiedState()
     }
 }
 
-const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
+const SvGlobalName SvxOle2Shape::GetClassName_Impl(OUString& rHexCLSID)
 {
     DBG_TESTSOLARMUTEX();
     SvGlobalName aClassName;
@@ -538,7 +538,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 
     if( pOle2Obj )
     {
-        rHexCLSID = rtl::OUString();
+        rHexCLSID = OUString();
 
         if( pOle2Obj->IsEmpty() )
         {
@@ -574,7 +574,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.AppletShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.AppletShape"  ) );
 }
 
 SvxAppletShape::~SvxAppletShape() throw()
@@ -586,22 +586,22 @@ void SvxAppletShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
     createObject(aAppletClassId);
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.AppletShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.AppletShape"  ) );
 }
 
-void SAL_CALL SvxAppletShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxAppletShape::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxAppletShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxAppletShape::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
-bool SvxAppletShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxAppletShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -622,7 +622,7 @@ bool SvxAppletShape::setPropertyValueImpl( const ::rtl::OUString& rName, const S
     }
 }
 
-bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_APPLET_DOCBASE) && (pProperty->nWID <= OWN_ATTR_APPLET_ISSCRIPT) )
     {
@@ -647,7 +647,7 @@ bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.PluginShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.PluginShape"  ) );
 }
 
 SvxPluginShape::~SvxPluginShape() throw()
@@ -659,22 +659,22 @@ void SvxPluginShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
     createObject(aPluginClassId);
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.PluginShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.PluginShape"  ) );
 }
 
-void SAL_CALL SvxPluginShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxPluginShape::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxPluginShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxPluginShape::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 	SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
-bool SvxPluginShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxPluginShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -695,7 +695,7 @@ bool SvxPluginShape::setPropertyValueImpl( const ::rtl::OUString& rName, const S
     }
 }
 
-bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_PLUGIN_MIMETYPE) && (pProperty->nWID <= OWN_ATTR_PLUGIN_COMMANDS) )
     {
@@ -720,7 +720,7 @@ bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
 : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.FrameShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.FrameShape"  ) );
 }
 
 SvxFrameShape::~SvxFrameShape() throw()
@@ -732,22 +732,22 @@ void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw ()
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
     createObject(aIFrameClassId);
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.FrameShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.FrameShape"  ) );
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxFrameShape::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SvxShape::setPropertyValue( aPropertyName, rValue );
     resetModifiedState();
 }
 
-void SAL_CALL SvxFrameShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxFrameShape::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
 	SvxShape::setPropertyValues( aPropertyNames, rValues );
     resetModifiedState();
 }
 
-bool SvxFrameShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -768,7 +768,7 @@ bool SvxFrameShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
     }
 }
 
-bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxFrameShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
@@ -795,7 +795,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
-    SetShapeType( rtl::OUString(  "com.sun.star.drawing.MediaShape"  ) );
+    SetShapeType( OUString(  "com.sun.star.drawing.MediaShape"  ) );
 }
 
 //----------------------------------------------------------------------
@@ -805,7 +805,7 @@ SvxMediaShape::~SvxMediaShape() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxMediaShape::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( (pProperty->nWID >= OWN_ATTR_MEDIA_URL) && (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM) )
     {
@@ -894,7 +894,7 @@ bool SvxMediaShape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 
 //----------------------------------------------------------------------
 
-bool SvxMediaShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if (   ((pProperty->nWID >= OWN_ATTR_MEDIA_URL) &&
             (pProperty->nWID <= OWN_ATTR_MEDIA_ZOOM))

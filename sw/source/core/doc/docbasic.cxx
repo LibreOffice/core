@@ -33,7 +33,6 @@
 #include <swevent.hxx>
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
@@ -117,7 +116,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             Sequence< sal_Int16 > aOutArgsIndex;
             Sequence< Any > aOutArgs;
 
-            OSL_TRACE( "SwDoc::ExecMacro URL is %s", rtl::OUStringToOString( rMacro.GetMacName(),
+            OSL_TRACE( "SwDoc::ExecMacro URL is %s", OUStringToOString( rMacro.GetMacName(),
                 RTL_TEXTENCODING_UTF8).getStr() );
 
             eErr = mpDocShell->CallXScript(
@@ -229,7 +228,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 Sequence< sal_Int16 > aOutArgsIndex;
                 Sequence< Any > aOutArgs;
 
-                OSL_TRACE( "SwDoc::CallEvent URL is %s", rtl::OUStringToOString(
+                OSL_TRACE( "SwDoc::CallEvent URL is %s", OUStringToOString(
                     rMacro.GetMacName(), RTL_TEXTENCODING_UTF8).getStr() );
 
                 nRet += 0 == mpDocShell->CallXScript(

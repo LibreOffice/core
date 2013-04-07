@@ -124,9 +124,9 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
                 aAny >>= nTemp ;
                 pItem = new SfxUInt32Item( nId, nTemp );
             }
-            else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+            else if ( pType == ::getCppuType((const OUString*)0) )
             {
-                ::rtl::OUString sTemp ;
+                OUString sTemp ;
                 aAny >>= sTemp ;
                 pItem = new SfxStringItem( nId, sTemp );
             }
@@ -272,13 +272,13 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             ::com::sun::star::util::URL aURL;
             OUString aCmd = ".uno:";
             aURL.Protocol = aCmd;
-            aURL.Path = ::rtl::OUString::createFromAscii( pSlot->GetUnoName() );
+            aURL.Path = OUString::createFromAscii( pSlot->GetUnoName() );
             aCmd += aURL.Path;
             aURL.Complete = aCmd;
             aURL.Main = aCmd;
 
             // try to get a dispatch object for this command
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
             if ( xDisp.is() )
             {
                 // test the dispatch object if it is just a wrapper for a SfxDispatcher

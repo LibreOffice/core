@@ -31,7 +31,7 @@
 
 
 #define OU2ENC(rtlOUString, rtlEncoding) \
-    ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
+    OString((rtlOUString).getStr(), (rtlOUString).getLength(), \
     rtlEncoding, RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr()
 
 
@@ -41,7 +41,7 @@ struct SvtLinguConfigDictionaryEntry;
 
 struct lt_rtl_OUString
 {
-    bool operator() (const rtl::OUString &r1, const rtl::OUString &r2) const
+    bool operator() (const OUString &r1, const OUString &r2) const
     {
         return r1 < r2;
     }
@@ -61,7 +61,7 @@ inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const :
 // a restriction of only about 110-130 characters length to a path name in order
 // for it to work with 'fopen'. And that length is usually easily exceeded
 // when using extensions...
-rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName );
+OString Win_GetShortPathName( const OUString &rLongPathName );
 #endif
 
 ///////////////////////////////////////////////////////////////////////////

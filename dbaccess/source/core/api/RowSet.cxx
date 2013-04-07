@@ -475,9 +475,9 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType ) throw(RuntimeExcepti
     return aRet;
 }
 
-rtl::OUString ORowSet::getImplementationName_static(  ) throw(RuntimeException)
+OUString ORowSet::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.dba.ORowSet");
+    return OUString("com.sun.star.comp.dba.ORowSet");
 }
 
 // ::com::sun::star::XServiceInfo
@@ -493,7 +493,7 @@ sal_Bool SAL_CALL ORowSet::supportsService( const OUString& _rServiceName ) thro
 
 Sequence< OUString > ORowSet::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
-    Sequence< rtl::OUString > aSNS( 5 );
+    Sequence< OUString > aSNS( 5 );
     aSNS[0] = SERVICE_SDBC_RESULTSET;
     aSNS[1] = SERVICE_SDBC_ROWSET;
     aSNS[2] = SERVICE_SDBCX_RESULTSET;
@@ -2330,7 +2330,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
             }
             else
             {
-                sCommand = rtl::OUString("SELECT * FROM ");
+                sCommand = OUString("SELECT * FROM ");
                 OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
@@ -2559,11 +2559,11 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
     try
     {
         Sequence <sal_Int8> aData;
-        rtl::OUString aDataStr;
+        OUString aDataStr;
         // the data is given as character data and the length defines the character length
         sal_Int32 nSize = x->readBytes(aData, length * sizeof(sal_Unicode));
         if (nSize / sizeof(sal_Unicode))
-            aDataStr = rtl::OUString((sal_Unicode*)aData.getConstArray(), nSize / sizeof(sal_Unicode));
+            aDataStr = OUString((sal_Unicode*)aData.getConstArray(), nSize / sizeof(sal_Unicode));
         rParamValue = aDataStr;
         rParamValue.setTypeKind( DataType::LONGVARCHAR );
         x->closeInput();
@@ -2837,9 +2837,9 @@ void ORowSetClone::release() throw()
 }
 
 // XServiceInfo
-rtl::OUString ORowSetClone::getImplementationName(  ) throw(RuntimeException)
+OUString ORowSetClone::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.ORowSetClone");
+    return OUString("com.sun.star.sdb.ORowSetClone");
 }
 
 sal_Bool ORowSetClone::supportsService( const OUString& _rServiceName ) throw (RuntimeException)

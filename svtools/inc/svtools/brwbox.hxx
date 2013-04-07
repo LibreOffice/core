@@ -751,7 +751,7 @@ public:
         @return
             The name of the specified object.
     */
-    virtual ::rtl::OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     /** return the description of the specified object.
         @param  eObjType
@@ -761,13 +761,13 @@ public:
         @return
             The description of the specified object.
     */
-    virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     /** @return  The header text of the specified row. */
-    virtual ::rtl::OUString GetRowDescription( sal_Int32 nRow ) const;
+    virtual OUString GetRowDescription( sal_Int32 nRow ) const;
 
     /** @return  The header text of the specified column. */
-    virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumn ) const;
+    virtual OUString GetColumnDescription( sal_uInt16 _nColumn ) const;
 
     /** Fills the StateSet with all states (except DEFUNC and SHOWING, done by
         the accessible object), depending on the specified object type. */

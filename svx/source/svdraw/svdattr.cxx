@@ -728,7 +728,7 @@ SfxPoolItem* SdrOnOffItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrOnOffItem(Which(),rIn);
 }
 
-rtl::OUString SdrOnOffItem::GetValueTextByVal(sal_Bool bVal) const
+OUString SdrOnOffItem::GetValueTextByVal(sal_Bool bVal) const
 {
     if (bVal)
         return ImpGetResStr(STR_ItemValON);
@@ -965,7 +965,7 @@ SfxPoolItem* SdrCaptionTypeItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 sal_uInt16 SdrCaptionTypeItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCaptionTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValCAPTIONTYPE1+nPos);
 }
@@ -991,7 +991,7 @@ SfxPoolItem* SdrCaptionEscDirItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 
 sal_uInt16 SdrCaptionEscDirItem::GetValueCount() const { return 3; }
 
-rtl::OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCaptionEscDirItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValCAPTIONESCHORI+nPos);
 }
@@ -1022,7 +1022,7 @@ SfxPoolItem* SdrTextFitToSizeTypeItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/
 
 sal_uInt16 SdrTextFitToSizeTypeItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextFitToSizeTypeItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValFITTOSIZENONE+nPos);
 }
@@ -1079,7 +1079,7 @@ SfxPoolItem* SdrTextVertAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 sal_uInt16 SdrTextVertAdjustItem::GetValueCount() const { return 5; }
 
-rtl::OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextVertAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValTEXTVADJTOP+nPos);
 }
@@ -1128,7 +1128,7 @@ SfxPoolItem* SdrTextHorzAdjustItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 
 sal_uInt16 SdrTextHorzAdjustItem::GetValueCount() const { return 5; }
 
-rtl::OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextHorzAdjustItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValTEXTHADJLEFT+nPos);
 }
@@ -1177,7 +1177,7 @@ SfxPoolItem* SdrTextAniKindItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 sal_uInt16 SdrTextAniKindItem::GetValueCount() const { return 5; }
 
-rtl::OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextAniKindItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValTEXTANI_NONE+nPos);
 }
@@ -1225,7 +1225,7 @@ SfxPoolItem* SdrTextAniDirectionItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
 
 sal_uInt16 SdrTextAniDirectionItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrTextAniDirectionItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValTEXTANI_LEFT+nPos);
 }
@@ -1572,7 +1572,7 @@ SfxPoolItem* SdrEdgeKindItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const  
 
 sal_uInt16 SdrEdgeKindItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrEdgeKindItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValEDGE_ORTHOLINES+nPos);
 }
@@ -1761,7 +1761,7 @@ SfxPoolItem* SdrMeasureKindItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 sal_uInt16 SdrMeasureKindItem::GetValueCount() const { return 2; }
 
-rtl::OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureKindItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValMEASURE_STD+nPos);
 }
@@ -1809,7 +1809,7 @@ SfxPoolItem* SdrMeasureTextHPosItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) 
 
 sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValMEASURE_TEXTHAUTO+nPos);
 }
@@ -1857,7 +1857,7 @@ SfxPoolItem* SdrMeasureTextVPosItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) 
 
 sal_uInt16 SdrMeasureTextVPosItem::GetValueCount() const { return 5; }
 
-rtl::OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureTextVPosItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValMEASURE_TEXTVAUTO+nPos);
 }
@@ -1905,7 +1905,7 @@ SfxPoolItem* SdrMeasureUnitItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
 
 sal_uInt16 SdrMeasureUnitItem::GetValueCount() const { return 14; }
 
-rtl::OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrMeasureUnitItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     OUString aRetval;
 
@@ -1958,7 +1958,7 @@ SfxPoolItem* SdrCircKindItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const {
 
 sal_uInt16 SdrCircKindItem::GetValueCount() const { return 4; }
 
-rtl::OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrCircKindItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
     return ImpGetResStr(STR_ItemValCIRC_FULL+nPos);
 }
@@ -2197,9 +2197,9 @@ sal_uInt16 SdrGrafModeItem::GetValueCount() const
     return 4;
 }
 
-rtl::OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos) const
+OUString SdrGrafModeItem::GetValueTextByPos(sal_uInt16 nPos) const
 {
-    rtl::OUString aStr;
+    OUString aStr;
 
     switch(nPos)
     {

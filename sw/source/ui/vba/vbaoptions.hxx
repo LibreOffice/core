@@ -31,7 +31,7 @@ class SwVbaOptions : public SwVbaOptions_BASE,
                     public PropListener
 {
 private:
-    rtl::OUString msDefaultFilePath;
+    OUString msDefaultFilePath;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;
 public:
     SwVbaOptions( css::uno::Reference< css::uno::XComponentContext >& m_xContext ) throw ( css::uno::RuntimeException );
@@ -73,8 +73,8 @@ public:
     virtual css::uno::Any getValueEvent();
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_OPTIONS_HXX */
 

@@ -59,7 +59,7 @@ namespace svt
         virtual void SAL_CALL release() throw ();
 
         // XCurrentContext
-        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
             throw (com::sun::star::uno::RuntimeException);
 
     private:

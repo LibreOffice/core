@@ -1120,8 +1120,8 @@ sal_Bool T602ImportFilterDialog::OptionsDlg()
 
 void T602ImportFilterDialog::initLocale()
 {
-    rtl::OString aModName( "t602filter" );
-    aModName += rtl::OString::valueOf( sal_Int32( SUPD ) );
+    OString aModName( "t602filter" );
+    aModName += OString::valueOf( sal_Int32( SUPD ) );
 
     mpResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( meLocale) );
 }

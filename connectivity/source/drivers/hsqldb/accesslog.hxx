@@ -32,7 +32,7 @@ namespace connectivity { namespace hsqldb
     class LogFile
     {
     private:
-        ::rtl::OUString     m_sFileName;
+        OUString     m_sFileName;
 
     public:
         LogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix );
@@ -50,7 +50,7 @@ namespace connectivity { namespace hsqldb
     {
     public:
         OperationLogFile( JNIEnv* env, jstring streamName, const sal_Char* _pAsciiSuffix )
-            :LogFile( env, streamName, ( ::rtl::OString( _pAsciiSuffix ) += ".op" ).getStr() )
+            :LogFile( env, streamName, ( OString( _pAsciiSuffix ) += ".op" ).getStr() )
         {
         }
 
@@ -61,24 +61,24 @@ namespace connectivity { namespace hsqldb
 
         void logOperation( const sal_Char* _pOp, jlong _nLongArg )
         {
-            ::rtl::OString sLine( _pOp );
+            OString sLine( _pOp );
             sLine += "( ";
-            sLine += ::rtl::OString::valueOf( _nLongArg );
+            sLine += OString::valueOf( _nLongArg );
             sLine += " )";
             writeString( sLine.getStr(), true );
         }
 
         void logReturn( jlong _nRetVal )
         {
-            ::rtl::OString sLine( " -> " );
-            sLine += ::rtl::OString::valueOf( _nRetVal );
+            OString sLine( " -> " );
+            sLine += OString::valueOf( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 
         void logReturn( jint _nRetVal )
         {
-            ::rtl::OString sLine( " -> " );
-            sLine += ::rtl::OString::valueOf( _nRetVal );
+            OString sLine( " -> " );
+            sLine += OString::valueOf( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 

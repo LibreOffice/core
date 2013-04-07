@@ -44,7 +44,7 @@ public:
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
         does not exist then an empty Any is returned.
     */
-    ::com::sun::star::uno::Any GetValue (const ::rtl::OUString& rName);
+    ::com::sun::star::uno::Any GetValue (const OUString& rName);
 
 private:
     /** When a caller holds a reference after we have released ours we use

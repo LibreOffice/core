@@ -102,7 +102,7 @@ public:
 
     /** Returns true, if named line markers are supported, and the specified
         line marker has already been inserted into the marker table. */
-    bool                hasNamedLineMarkerInTable( const ::rtl::OUString& rMarkerName ) const;
+    bool                hasNamedLineMarkerInTable( const OUString& rMarkerName ) const;
 
     /** Sets the specified shape property to the passed value. */
     bool                setAnyProperty( ShapePropertyId ePropId, const ::com::sun::star::uno::Any& rValue );

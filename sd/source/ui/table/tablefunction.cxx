@@ -62,7 +62,6 @@
 #include "sdresid.hxx"
 #include "undo/undoobjects.hxx"
 
-using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;

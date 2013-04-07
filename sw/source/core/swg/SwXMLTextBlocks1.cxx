@@ -44,7 +44,6 @@ const char XMLN_BLOCKLIST[] = "BlockList.xml";
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
-using ::rtl::OUString;
 
 using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;

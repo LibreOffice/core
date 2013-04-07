@@ -232,9 +232,9 @@ void DrawViewShell::SelectionHasChanged (void)
     catch( ::com::sun::star::uno::Exception& )
     {
         OSL_FAIL(
-            OString(rtl::OString("sd::DrawViewShell::SelectionHasChanged(), "
+            OString(OString("sd::DrawViewShell::SelectionHasChanged(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }

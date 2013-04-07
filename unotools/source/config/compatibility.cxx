@@ -283,8 +283,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
         void                                    Clear();
         Sequence< Sequence< PropertyValue > >   GetList() const;
-        void                                    AppendItem( const ::rtl::OUString& _sName,
-                                                            const ::rtl::OUString& _sModule,
+        void                                    AppendItem( const OUString& _sName,
+                                                            const OUString& _sModule,
                                                             bool _bUsePrtMetrics,
                                                             bool _bAddSpacing,
                                                             bool _bAddSpacingAtPages,
@@ -532,8 +532,8 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
 //  public method
 //*****************************************************************************************************************
 
-void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
-                                                const ::rtl::OUString& _sModule,
+void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
+                                                const OUString& _sModule,
                                                 bool _bUsePrtMetrics,
                                                 bool _bAddSpacing,
                                                 bool _bAddSpacingAtPages,
@@ -689,7 +689,7 @@ void SvtCompatibilityOptions::Clear()
     m_pDataContainer->Clear();
 }
 
-void SvtCompatibilityOptions::SetDefault( ::rtl::OUString sName, bool bValue )
+void SvtCompatibilityOptions::SetDefault( OUString sName, bool bValue )
 {
     m_pDataContainer->SetDefault( sName, bValue );
 }
@@ -697,8 +697,8 @@ void SvtCompatibilityOptions::SetDefault( ::rtl::OUString sName, bool bValue )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtCompatibilityOptions::AppendItem( const ::rtl::OUString& sName,
-                                          const ::rtl::OUString& sModule,
+void SvtCompatibilityOptions::AppendItem( const OUString& sName,
+                                          const OUString& sModule,
                                           bool bUsePrtMetrics,
                                           bool bAddSpacing,
                                           bool bAddSpacingAtPages,

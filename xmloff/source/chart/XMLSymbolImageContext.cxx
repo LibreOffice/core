@@ -50,7 +50,7 @@ static SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 
 XMLSymbolImageContext::XMLSymbolImageContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const ::rtl::OUString& rLName,
+    const OUString& rLName,
     const XMLPropertyState& rProp,
     ::std::vector< XMLPropertyState > &rProps ) :
         XMLElementPropertyContext(
@@ -64,16 +64,16 @@ XMLSymbolImageContext::~XMLSymbolImageContext()
 void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLTokenMap aTokenMap( aSymbolImageAttrTokenMap );
-    ::rtl::OUString aLocalName;
+    OUString aLocalName;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        const ::rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
+        const OUString& rAttrName = xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
-        const ::rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+        const OUString& rValue = xAttrList->getValueByIndex( i );
 
         switch( aTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -91,7 +91,7 @@ void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttri
 }
 
 SvXMLImportContext* XMLSymbolImageContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -117,7 +117,7 @@ SvXMLImportContext* XMLSymbolImageContext::CreateChildContext(
 
 void XMLSymbolImageContext::EndElement()
 {
-    ::rtl::OUString sResolvedURL;
+    OUString sResolvedURL;
 
     if( !msURL.isEmpty() )
     {

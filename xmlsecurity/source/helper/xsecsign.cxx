@@ -41,7 +41,7 @@ namespace cssxs = com::sun::star::xml::sax;
 #define SIGNATURECREATOR_COMPONENT "com.sun.star.xml.crypto.sax.SignatureCreator"
 
 /* protected: for signature generation */
-rtl::OUString XSecController::createId()
+OUString XSecController::createId()
 {
     cssu::Sequence< sal_Int8 > aSeq( 16 );
     rtl_createUuid ((sal_uInt8 *)aSeq.getArray(), 0, sal_True);
@@ -53,7 +53,7 @@ rtl::OUString XSecController::createId()
         length += sprintf(str+length, "%04x", (unsigned char)aSeq[i]);
     }
 
-    return rtl::OUString::createFromAscii(str);
+    return OUString::createFromAscii(str);
 }
 
 cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepareSignatureToWrite(
@@ -76,15 +76,15 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
         xMCF->createInstanceWithContext(
-            rtl::OUString(SIGNATURECREATOR_COMPONENT), mxCtx),
+            OUString(SIGNATURECREATOR_COMPONENT), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 
     cssu::Sequence<cssu::Any> args(5);
-    args[0] = cssu::makeAny(rtl::OUString::valueOf(nSecurityId));
+    args[0] = cssu::makeAny(OUString::valueOf(nSecurityId));
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
-    args[2] = cssu::makeAny(rtl::OUString::valueOf(nIdOfSignatureElementCollector));
+    args[2] = cssu::makeAny(OUString::valueOf(nIdOfSignatureElementCollector));
 
     //i39448 : for nss, the internal module is used for signing, which needs to be improved later
     sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;
@@ -175,15 +175,15 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     for(i=0; i<size; ++i)
     {
         SignatureReferenceInformation& refInfor = vReferenceInfors[i];
-        refInfor.ouDigestValue = rtl::OUString(CHAR_BLANK);
+        refInfor.ouDigestValue = OUString(CHAR_BLANK);
     }
 
-    internalSignatureInfor.signatureInfor.ouSignatureValue = rtl::OUString(CHAR_BLANK);
+    internalSignatureInfor.signatureInfor.ouSignatureValue = OUString(CHAR_BLANK);
 
     return xReferenceResolvedListener;
 }
 
-void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& /*objectURL*/, sal_Bool isBinary)
+void XSecController::signAStream( sal_Int32 securityId, const OUString& uri, const OUString& /*objectURL*/, sal_Bool isBinary)
 {
         sal_Int32 type = ((isBinary==sal_True)?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
 
@@ -203,9 +203,9 @@ void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri
 
 void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
-    const rtl::OUString& ouX509IssuerName,
-    const rtl::OUString& ouX509SerialNumber,
-    const rtl::OUString& ouX509Cert)
+    const OUString& ouX509IssuerName,
+    const OUString& ouX509SerialNumber,
+    const OUString& ouX509Cert)
 {
     setX509Certificate(nSecurityId, -1, ouX509IssuerName, ouX509SerialNumber, ouX509Cert);
 }
@@ -213,9 +213,9 @@ void XSecController::setX509Certificate(
 void XSecController::setX509Certificate(
     sal_Int32 nSecurityId,
     const sal_Int32 nSecurityEnvironmentIndex,
-    const rtl::OUString& ouX509IssuerName,
-    const rtl::OUString& ouX509SerialNumber,
-    const rtl::OUString& ouX509Cert)
+    const OUString& ouX509IssuerName,
+    const OUString& ouX509SerialNumber,
+    const OUString& ouX509Cert)
 {
     int index = findSignatureInfor( nSecurityId );
 

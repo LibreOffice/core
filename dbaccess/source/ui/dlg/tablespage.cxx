@@ -154,7 +154,7 @@ DBG_NAME(OTableSubscriptionPage)
         }
     }
     //------------------------------------------------------------------------
-    void OTableSubscriptionPage::implCheckTables(const Sequence< ::rtl::OUString >& _rTables)
+    void OTableSubscriptionPage::implCheckTables(const Sequence< OUString >& _rTables)
     {
         // the meta data for the current connection, used for splitting up table names
         Reference< XDatabaseMetaData > xMeta;
@@ -172,13 +172,13 @@ DBG_NAME(OTableSubscriptionPage)
         CheckAll(sal_False);
 
         // check the ones which are in the list
-        ::rtl::OUString sCatalog, sSchema, sName;
+        OUString sCatalog, sSchema, sName;
 
         SvTreeListEntry* pRootEntry = m_aTablesList.getAllObjectsEntry();
         sal_Bool bAllTables = sal_False;
         sal_Bool bAllSchemas = sal_False;
 
-        const ::rtl::OUString* pIncludeTable = _rTables.getConstArray();
+        const OUString* pIncludeTable = _rTables.getConstArray();
         for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
         {
             if (xMeta.is())
@@ -221,7 +221,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter )
+    void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter )
     {
         if (!_rTableFilter.getLength())
         {   // no tables visible
@@ -304,11 +304,11 @@ DBG_NAME(OTableSubscriptionPage)
                     Reference<XModifiable> xModi(getDataSourceOrModel(xProp),UNO_QUERY);
                     sal_Bool bModified = ( xModi.is() && xModi->isModified() );
 
-                    Sequence< ::rtl::OUString > aNewTableFilter(1);
-                    aNewTableFilter[0] = ::rtl::OUString("%");
+                    Sequence< OUString > aNewTableFilter(1);
+                    aNewTableFilter[0] = OUString("%");
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
 
-                    xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< ::rtl::OUString >() ) );
+                    xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< OUString >() ) );
                     Reference< ::com::sun::star::lang::XEventListener> xEvt;
                     aErrorInfo = ::dbaui::createConnection(xProp, m_xORB, xEvt, m_xCurrentConnection);
 
@@ -351,7 +351,7 @@ DBG_NAME(OTableSubscriptionPage)
             else
             {
                 // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = ::rtl::OUString(".");    // (default)
+                m_sCatalogSeparator = OUString(".");    // (default)
                 m_bCatalogAtStart = sal_True;   // (default)
                 try
                 {
@@ -376,7 +376,7 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the current table filter
         SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
-        Sequence< ::rtl::OUString > aTableFilter;
+        Sequence< OUString > aTableFilter;
         if (pTableFilter)
             aTableFilter = pTableFilter->getList();
 
@@ -464,13 +464,13 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OTableSubscriptionPage::collectDetailedSelection() const
+    Sequence< OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
-        Sequence< ::rtl::OUString > aTableFilter;
-        static const ::rtl::OUString sDot(".");
-        static const ::rtl::OUString sWildcard("%");
+        Sequence< OUString > aTableFilter;
+        static const OUString sDot(".");
+        static const OUString sWildcard("%");
 
-        ::rtl::OUString sComposedName;
+        OUString sComposedName;
         const SvTreeListEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();
         if (!pAllObjectsEntry)
             return aTableFilter;
@@ -484,7 +484,7 @@ DBG_NAME(OTableSubscriptionPage)
 
             if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
-                ::rtl::OUString sCatalog;
+                OUString sCatalog;
                 if(m_aTablesList.GetModel()->HasParent(pEntry))
                 {
                     pSchema = m_aTablesList.GetModel()->GetParent(pEntry);
@@ -516,7 +516,7 @@ DBG_NAME(OTableSubscriptionPage)
                                     if (bCatalogWildcard)
                                         sCatalog = sWildcard;
                                     else
-                                        sCatalog = ::rtl::OUString();
+                                        sCatalog = OUString();
                                     sCatalog += m_sCatalogSeparator;
                                     sCatalog += m_aTablesList.GetEntryText( pCatalog );
                                 }
@@ -543,7 +543,7 @@ DBG_NAME(OTableSubscriptionPage)
                 aTableFilter[nOldLen] = sComposedName;
 
                 // reset the composed name
-                sComposedName = ::rtl::OUString();
+                sComposedName = OUString();
             }
 
             if (bCatalogWildcard)
@@ -584,11 +584,11 @@ DBG_NAME(OTableSubscriptionPage)
         // create the output string which contains all the table names
         if ( m_xCurrentConnection.is() )
         {   // collect the table filter data only if we have a connection - else no tables are displayed at all
-            Sequence< ::rtl::OUString > aTableFilter;
+            Sequence< OUString > aTableFilter;
             if (m_aTablesList.isWildcardChecked(m_aTablesList.getAllObjectsEntry()))
             {
                 aTableFilter.realloc(1);
-                aTableFilter[0] = ::rtl::OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
+                aTableFilter[0] = OUString("%", 1, RTL_TEXTENCODING_ASCII_US);
             }
             else
             {

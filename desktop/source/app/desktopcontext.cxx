@@ -25,7 +25,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::task;
 
-using ::rtl::OUString;
 
 namespace desktop
 {

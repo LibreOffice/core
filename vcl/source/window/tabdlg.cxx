@@ -231,7 +231,7 @@ TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
     init(pParent, rResId);
 }
 
-TabDialog::TabDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription ) :
+TabDialog::TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
 {
     ImplInitTabDialogData();

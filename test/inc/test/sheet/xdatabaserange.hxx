@@ -38,7 +38,7 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XDatabaseRange
 {
 public:
-    virtual uno::Reference< uno::XInterface > init(const rtl::OUString& rDBName) = 0;
+    virtual uno::Reference< uno::XInterface > init(const OUString& rDBName) = 0;
 
     void testDataArea();
     void testGetSortDescriptor();

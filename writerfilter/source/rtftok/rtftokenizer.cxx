@@ -34,11 +34,6 @@
 #include <rtftokenizer.hxx>
 #include <rtfskipdestination.hxx>
 
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 namespace writerfilter {
 namespace rtftok {

@@ -108,7 +108,7 @@ FmFormObjFactory::~FmFormObjFactory()
 \************************************************************************/
 namespace
 {
-    void    lcl_initProperty( FmFormObj* _pObject, const ::rtl::OUString& _rPropName, const Any& _rValue )
+    void    lcl_initProperty( FmFormObj* _pObject, const OUString& _rPropName, const Any& _rValue )
     {
         try
         {
@@ -127,9 +127,9 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
 {
     if (pObjFactory->nInventor == FmFormInventor)
     {
-        ::rtl::OUString sServiceSpecifier;
+        OUString sServiceSpecifier;
 
-        typedef ::std::vector< ::std::pair< ::rtl::OUString, Any > > PropertyValueArray;
+        typedef ::std::vector< ::std::pair< OUString, Any > > PropertyValueArray;
         PropertyValueArray aInitialProperties;
 
         switch ( pObjFactory->nIdentifier )

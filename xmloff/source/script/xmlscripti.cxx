@@ -29,7 +29,6 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -38,7 +37,6 @@ using namespace com::sun::star::document;
 using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-using rtl::OUString;
 
 // =============================================================================
 // XMLScriptChildContext: context for <office:script> element
@@ -49,15 +47,15 @@ class XMLScriptChildContext : public SvXMLImportContext
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                 m_xModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts >    m_xDocumentScripts;
-    ::rtl::OUString m_aLanguage;
+    OUString m_aLanguage;
 
 public:
-    XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& rxModel,
-        const ::rtl::OUString& rLanguage );
+        const OUString& rLanguage );
     virtual ~XMLScriptChildContext();
 
-    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
@@ -65,8 +63,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
-        const Reference< frame::XModel >& rxModel, const ::rtl::OUString& rLanguage )
+XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
+        const Reference< frame::XModel >& rxModel, const OUString& rLanguage )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
     ,m_xDocumentScripts( rxModel, UNO_QUERY )
@@ -83,7 +81,7 @@ XMLScriptChildContext::~XMLScriptChildContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -143,11 +141,11 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext(
         }
         else if ( IsXMLToken( rLName, XML_SCRIPT ) )
         {
-            ::rtl::OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) );
+            OUString aAttrName( GetImport().GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_SCRIPT ) );
             aAttrName += ":language";
             if ( xAttrList.is() )
             {
-                ::rtl::OUString aLanguage = xAttrList->getValueByName( aAttrName );
+                OUString aLanguage = xAttrList->getValueByName( aAttrName );
 
                 if ( m_xModel.is() )
                 {

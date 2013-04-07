@@ -75,8 +75,8 @@ class ResultSet : public BaseResultSet
 {
 protected:
     PGresult *m_result;
-    ::rtl::OUString m_schema;
-    ::rtl::OUString m_table;
+    OUString m_schema;
+    OUString m_table;
     ConnectionSettings **m_ppSettings;
 
 protected:
@@ -95,8 +95,8 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
-        const rtl::OUString &schema,
-        const rtl::OUString &table );
+        const OUString &schema,
+        const OUString &table );
     ~ResultSet();
 
 public: // XCloseable
@@ -108,7 +108,7 @@ public: // XResultSetMetaDataSupplier
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 public: // XColumnLocate
-    virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName )
+    virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 public:

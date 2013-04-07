@@ -47,7 +47,7 @@ public:
 private:
 
     /// Implementatio of the filter abstract method.
-    virtual ::rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
 
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const
     {

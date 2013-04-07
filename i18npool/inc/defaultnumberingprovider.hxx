@@ -39,9 +39,9 @@ class DefaultNumberingProvider : public cppu::WeakImplHelper4
     com::sun::star::lang::XServiceInfo
 >
 {
-    void GetCharStrN( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
-    void GetCharStr( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
-    void GetRomanString( sal_Int32 nValue, sal_Int16 nType, rtl::OUString& rStr ) const;
+    void GetCharStrN( sal_Int32 nValue, sal_Int16 nType, OUString& rStr ) const;
+    void GetCharStr( sal_Int32 nValue, sal_Int16 nType, OUString& rStr ) const;
+    void GetRomanString( sal_Int32 nValue, sal_Int16 nType, OUString& rStr ) const;
     void impl_loadTranslit();
 public:
     DefaultNumberingProvider(
@@ -60,7 +60,7 @@ public:
         throw(com::sun::star::uno::RuntimeException);
 
     //XNumberingFormatter
-    virtual rtl::OUString SAL_CALL makeNumberingString(
+    virtual OUString SAL_CALL makeNumberingString(
         const com::sun::star::uno::Sequence<
         com::sun::star::beans::PropertyValue >& aProperties,
         const com::sun::star::lang::Locale& aLocale )
@@ -70,27 +70,27 @@ public:
     //XNumberingTypeInfo
     virtual com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int16 SAL_CALL getNumberingType( const rtl::OUString& NumberingIdentifier )
+    virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier )
         throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasNumberingType( const rtl::OUString& NumberingIdentifier )
+    virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier )
         throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
+    virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
         throw(com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
                 throw( com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
                 throw( com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
                 throw( com::sun::star::uno::RuntimeException );
 private:
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
     com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     TransliterationImpl* translit;
-    rtl::OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
+    OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
         throw(com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL isScriptFlagEnabled(const rtl::OUString& aName )
+    sal_Bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
         throw(com::sun::star::uno::RuntimeException);
 };
 } } } }

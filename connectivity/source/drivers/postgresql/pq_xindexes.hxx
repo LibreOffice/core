@@ -64,24 +64,24 @@ namespace pq_sdbc_driver
 {
 class Indexes : public Container
 {
-    rtl::OUString m_schemaName;
-    rtl::OUString m_tableName;
+    OUString m_schemaName;
+    OUString m_tableName;
 
 public: // instances Columns 'exception safe'
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > create(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName);
+        const OUString &schemaName,
+        const OUString &tableName);
 
 protected:
     Indexes(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName);
+        const OUString &schemaName,
+        const OUString &tableName);
 
     virtual ~Indexes();
 

@@ -157,7 +157,7 @@ class XMLTextFieldExport
     /// store used text field master names (NULL means: don't collect)
     ::std::map<
             ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >,
-            ::std::set< ::rtl::OUString > > *
+            ::std::set< OUString > > *
         pUsedMasters;
 
 public:
@@ -207,7 +207,7 @@ public:
     static enum ::xmloff::token::XMLTokenEnum MapReferenceSource(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapReferenceType(sal_Int16 nType);
     static enum ::xmloff::token::XMLTokenEnum MapCountFieldName(FieldIdEnum nToken);
-    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(::rtl::OUString sName);
+    static enum ::xmloff::token::XMLTokenEnum MapBibliographyFieldName(OUString sName);
     static enum ::xmloff::token::XMLTokenEnum MapMeasureKind(sal_Int16 nKind);
     enum ::xmloff::token::XMLTokenEnum MapPageNumberName(const ::com::sun::star::uno::Reference<
                       ::com::sun::star::beans::XPropertySet> & xPropSet,
@@ -239,14 +239,14 @@ protected:
 
     /// export an element with string content
     void ExportElement(enum ::xmloff::token::XMLTokenEnum eElement, /// element token
-                       const ::rtl::OUString& sContent, /// element content
+                       const OUString& sContent, /// element content
                        sal_Bool bAddSpace = sal_False); /// add blanks around
                                                         /// element?
 
     /// export a macro (as used in the macro field)
     void ExportMacro( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::beans::XPropertySet> & rPropSet,
-                      const ::rtl::OUString& rContent);
+                      const OUString& rContent);
 
     /// export text:meta-field (RDF metadata)
     void ExportMetaField( const ::com::sun::star::uno::Reference<
@@ -273,7 +273,7 @@ protected:
     /// export a string attribute
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
-        const ::rtl::OUString& sValue,  /// attribute value
+        const OUString& sValue,  /// attribute value
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
@@ -281,7 +281,7 @@ protected:
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,
-        const ::rtl::OUString& sValue,  /// attribute value
+        const OUString& sValue,  /// attribute value
         sal_Bool bOmitEmpty = sal_False, /// omit attribute, if value is empty
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
@@ -289,16 +289,16 @@ protected:
     /// export a string attribute, omit if default
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
-        const ::rtl::OUString& sValue,  /// attribute value
-        const ::rtl::OUString& sDefault, /// default value; omit if equal
+        const OUString& sValue,  /// attribute value
+        const OUString& sDefault, /// default value; omit if equal
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute, omit if default
     void ProcessString(
         enum ::xmloff::token::XMLTokenEnum eXmlName,        /// attribute token (namespace text)
         sal_uInt16 nValuePrefix,
-        const ::rtl::OUString& sValue,  /// attribute value
-        const ::rtl::OUString& sDefault, /// default value; omit if equal
+        const OUString& sValue,  /// attribute value
+        const OUString& sDefault, /// default value; omit if equal
         sal_uInt16 nPrefix = XML_NAMESPACE_TEXT);   /// attribute name prefix
 
     /// export a string attribute
@@ -318,7 +318,7 @@ protected:
     /// export a string as a sequence of paragraphs
     void ProcessParagraphSequence(
         /// string containing the paragraphs
-        const ::rtl::OUString& sParagraphSequence);
+        const OUString& sParagraphSequence);
 
     /// export a numbering format (numeric, roman, alphabetic, etc.)
     void ProcessNumberingType(
@@ -333,8 +333,8 @@ protected:
     void ProcessValueAndType(
         sal_Bool bIsString,     /// do we process a string or a number?
         sal_Int32 nFormatKey,   /// format key for NumberFormatter; possibly -1
-        const ::rtl::OUString& sContent, /// string content; possibly invalid
-        const ::rtl::OUString& sDefault, /// default string
+        const OUString& sContent, /// string content; possibly invalid
+        const OUString& sDefault, /// default string
         double fValue,          /// float content; possibly invalid
         sal_Bool bExportValue,  /// export value attribute?
         sal_Bool bExportValueType,  /// export value-type attribute?
@@ -377,17 +377,17 @@ protected:
         sal_Int32 nCommandType);        /// com::sun::star::sdb::CommandType
 
     void ProcessStringSequence(
-        const ::com::sun::star::uno::Sequence<rtl::OUString>& rSequence,
-        const rtl::OUString sSelected );
+        const ::com::sun::star::uno::Sequence<OUString>& rSequence,
+        const OUString sSelected );
 
     void ProcessStringSequence(
-        const ::com::sun::star::uno::Sequence<rtl::OUString>& rSequence,
+        const ::com::sun::star::uno::Sequence<OUString>& rSequence,
         sal_Int32 nSelected );
 
     /// export attributes that describe a data source
     void ExportDataBaseElement(
         enum ::xmloff::token::XMLTokenEnum eElement,
-        const ::rtl::OUString& sContent,
+        const OUString& sContent,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet > & rPropertySet,
         const ::com::sun::star::uno::Reference <
@@ -413,7 +413,7 @@ protected:
                           ::com::sun::star::beans::XPropertySet > & xPropSet);
 
     /// get field ID from XTextField service name (and it's PropertySet)
-    enum FieldIdEnum MapFieldName(const ::rtl::OUString& sFieldName,
+    enum FieldIdEnum MapFieldName(const OUString& sFieldName,
                             const ::com::sun::star::uno::Reference <
                             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
@@ -425,100 +425,100 @@ protected:
 
     /// explode a field master name into field type and field name
     sal_Bool ExplodeFieldMasterName(
-        const ::rtl::OUString& sMasterName, /// name as returned by SO API
-        ::rtl::OUString& sFieldType,        /// out: field type
-        ::rtl::OUString& sVarName);         /// out: variable name
+        const OUString& sMasterName, /// name as returned by SO API
+        OUString& sFieldType,        /// out: field type
+        OUString& sVarName);         /// out: variable name
 
     /// make reference name for a foot- or endnote
-    static ::rtl::OUString MakeFootnoteRefName(sal_Int16 nSeqNo);
+    static OUString MakeFootnoteRefName(sal_Int16 nSeqNo);
 
     /// make reference name for a sequence field
-    static ::rtl::OUString MakeSequenceRefName(sal_Int16 nSeqNo,
-                                              const ::rtl::OUString& rSeqName);
+    static OUString MakeSequenceRefName(sal_Int16 nSeqNo,
+                                              const OUString& rSeqName);
 
 private:
     // constants
 
     // service names
-    const ::rtl::OUString sServicePrefix;
-    const ::rtl::OUString sFieldMasterPrefix;
-    const ::rtl::OUString sPresentationServicePrefix;
+    const OUString sServicePrefix;
+    const OUString sFieldMasterPrefix;
+    const OUString sPresentationServicePrefix;
 
     // property names
-    const ::rtl::OUString sPropertyAdjust;
-    const ::rtl::OUString sPropertyAuthor;
-    const ::rtl::OUString sPropertyChapterFormat;
-    const ::rtl::OUString sPropertyChapterNumberingLevel;
-    const ::rtl::OUString sPropertyCharStyleNames;
-    const ::rtl::OUString sPropertyCondition;
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyDataBaseName;
-    const ::rtl::OUString sPropertyDataBaseURL;
-    const ::rtl::OUString sPropertyDataColumnName;
-    const ::rtl::OUString sPropertyDataCommandType;
-    const ::rtl::OUString sPropertyDataTableName;
-    const ::rtl::OUString sPropertyDate;
-    const ::rtl::OUString sPropertyDateTime;
-    const ::rtl::OUString sPropertyDateTimeValue;
-    const ::rtl::OUString sPropertyDDECommandElement;
-    const ::rtl::OUString sPropertyDDECommandFile;
-    const ::rtl::OUString sPropertyDDECommandType;
-    const ::rtl::OUString sPropertyDependentTextFields;
-    const ::rtl::OUString sPropertyFalseContent;
-    const ::rtl::OUString sPropertyFields;
-    const ::rtl::OUString sPropertyFieldSubType;
-    const ::rtl::OUString sPropertyFileFormat;
-    const ::rtl::OUString sPropertyFullName;
-    const ::rtl::OUString sPropertyHint;
-    const ::rtl::OUString sPropertyInitials;
-    const ::rtl::OUString sPropertyInstanceName;
-    const ::rtl::OUString sPropertyIsAutomaticUpdate;
-    const ::rtl::OUString sPropertyIsConditionTrue;
-    const ::rtl::OUString sPropertyIsDataBaseFormat;
-    const ::rtl::OUString sPropertyIsDate;
-    const ::rtl::OUString sPropertyIsExpression;
-    const ::rtl::OUString sPropertyIsFixed;
-    const ::rtl::OUString sPropertyIsFixedLanguage;
-    const ::rtl::OUString sPropertyIsHidden;
-    const ::rtl::OUString sPropertyIsInput;
-    const ::rtl::OUString sPropertyIsShowFormula;
-    const ::rtl::OUString sPropertyIsVisible;
-    const ::rtl::OUString sPropertyItems;
-    const ::rtl::OUString sPropertyLevel;
-    const ::rtl::OUString sPropertyMacro;
-    const ::rtl::OUString sPropertyMeasureKind;
-    const ::rtl::OUString sPropertyName;
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyNumberingSeparator;
-    const ::rtl::OUString sPropertyNumberingType;
-    const ::rtl::OUString sPropertyOffset;
-    const ::rtl::OUString sPropertyOn;
-    const ::rtl::OUString sPropertyPlaceholder;
-    const ::rtl::OUString sPropertyPlaceholderType;
-    const ::rtl::OUString sPropertyReferenceFieldPart;
-    const ::rtl::OUString sPropertyReferenceFieldSource;
-    const ::rtl::OUString sPropertyReferenceFieldType;
-    const ::rtl::OUString sPropertyRevision;
-    const ::rtl::OUString sPropertyScriptType;
-    const ::rtl::OUString sPropertySelectedItem;
-    const ::rtl::OUString sPropertySequenceNumber;
-    const ::rtl::OUString sPropertySequenceValue;
-    const ::rtl::OUString sPropertySetNumber;
-    const ::rtl::OUString sPropertySourceName;
-    const ::rtl::OUString sPropertySubType;
-    const ::rtl::OUString sPropertyTargetFrame;
-    const ::rtl::OUString sPropertyTrueContent;
-    const ::rtl::OUString sPropertyURL;
-    const ::rtl::OUString sPropertyURLContent;
-    const ::rtl::OUString sPropertyUserText;
-    const ::rtl::OUString sPropertyValue;
-    const ::rtl::OUString sPropertyVariableName;
-    const ::rtl::OUString sPropertyVariableSubType;
-    const ::rtl::OUString sPropertyHelp;
-    const ::rtl::OUString sPropertyTooltip;
-    const ::rtl::OUString sPropertyTextRange;
+    const OUString sPropertyAdjust;
+    const OUString sPropertyAuthor;
+    const OUString sPropertyChapterFormat;
+    const OUString sPropertyChapterNumberingLevel;
+    const OUString sPropertyCharStyleNames;
+    const OUString sPropertyCondition;
+    const OUString sPropertyContent;
+    const OUString sPropertyDataBaseName;
+    const OUString sPropertyDataBaseURL;
+    const OUString sPropertyDataColumnName;
+    const OUString sPropertyDataCommandType;
+    const OUString sPropertyDataTableName;
+    const OUString sPropertyDate;
+    const OUString sPropertyDateTime;
+    const OUString sPropertyDateTimeValue;
+    const OUString sPropertyDDECommandElement;
+    const OUString sPropertyDDECommandFile;
+    const OUString sPropertyDDECommandType;
+    const OUString sPropertyDependentTextFields;
+    const OUString sPropertyFalseContent;
+    const OUString sPropertyFields;
+    const OUString sPropertyFieldSubType;
+    const OUString sPropertyFileFormat;
+    const OUString sPropertyFullName;
+    const OUString sPropertyHint;
+    const OUString sPropertyInitials;
+    const OUString sPropertyInstanceName;
+    const OUString sPropertyIsAutomaticUpdate;
+    const OUString sPropertyIsConditionTrue;
+    const OUString sPropertyIsDataBaseFormat;
+    const OUString sPropertyIsDate;
+    const OUString sPropertyIsExpression;
+    const OUString sPropertyIsFixed;
+    const OUString sPropertyIsFixedLanguage;
+    const OUString sPropertyIsHidden;
+    const OUString sPropertyIsInput;
+    const OUString sPropertyIsShowFormula;
+    const OUString sPropertyIsVisible;
+    const OUString sPropertyItems;
+    const OUString sPropertyLevel;
+    const OUString sPropertyMacro;
+    const OUString sPropertyMeasureKind;
+    const OUString sPropertyName;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyNumberingSeparator;
+    const OUString sPropertyNumberingType;
+    const OUString sPropertyOffset;
+    const OUString sPropertyOn;
+    const OUString sPropertyPlaceholder;
+    const OUString sPropertyPlaceholderType;
+    const OUString sPropertyReferenceFieldPart;
+    const OUString sPropertyReferenceFieldSource;
+    const OUString sPropertyReferenceFieldType;
+    const OUString sPropertyRevision;
+    const OUString sPropertyScriptType;
+    const OUString sPropertySelectedItem;
+    const OUString sPropertySequenceNumber;
+    const OUString sPropertySequenceValue;
+    const OUString sPropertySetNumber;
+    const OUString sPropertySourceName;
+    const OUString sPropertySubType;
+    const OUString sPropertyTargetFrame;
+    const OUString sPropertyTrueContent;
+    const OUString sPropertyURL;
+    const OUString sPropertyURLContent;
+    const OUString sPropertyUserText;
+    const OUString sPropertyValue;
+    const OUString sPropertyVariableName;
+    const OUString sPropertyVariableSubType;
+    const OUString sPropertyHelp;
+    const OUString sPropertyTooltip;
+    const OUString sPropertyTextRange;
 
-    const ::rtl::OUString sEmpty;
+    const OUString sEmpty;
 
     XMLPropertyState* pCombinedCharactersPropertyState;
 

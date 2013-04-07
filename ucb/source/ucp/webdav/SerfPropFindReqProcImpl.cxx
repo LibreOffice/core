@@ -32,7 +32,7 @@ namespace http_dav_ucp
 SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
                                                   const DAVRequestHeaders& inRequestHeaders,
                                                   const Depth inDepth,
-                                                  const std::vector< ::rtl::OUString > & inPropNames,
+                                                  const std::vector< OUString > & inPropNames,
                                                   std::vector< DAVResource > & ioResources )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mDepthStr( 0 )
@@ -89,7 +89,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 
     // body bucket - certain properties OR all properties OR only property names
     serf_bucket_t* body_bkt = 0;
-    rtl::OUString aBodyText;
+    OUString aBodyText;
     {
         // create and fill body bucket with requested properties
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
@@ -105,33 +105,33 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    thePropName );
 
                 /* <*propname* xmlns="*propns*" /> */
-                aBodyText += rtl::OUString::createFromAscii( "<" );
-                aBodyText += rtl::OUString::createFromAscii( thePropName.name );
-                aBodyText += rtl::OUString::createFromAscii( " xmlnx=\"" );
-                aBodyText += rtl::OUString::createFromAscii( thePropName.nspace );
-                aBodyText += rtl::OUString::createFromAscii( "\"/>" );
+                aBodyText += OUString::createFromAscii( "<" );
+                aBodyText += OUString::createFromAscii( thePropName.name );
+                aBodyText += OUString::createFromAscii( " xmlnx=\"" );
+                aBodyText += OUString::createFromAscii( thePropName.nspace );
+                aBodyText += OUString::createFromAscii( "\"/>" );
             }
 
-            aBodyText = rtl::OUString::createFromAscii( "<prop>" ) +
+            aBodyText = OUString::createFromAscii( "<prop>" ) +
                         aBodyText +
-                        rtl::OUString::createFromAscii( "</prop>" );
+                        OUString::createFromAscii( "</prop>" );
         }
         else
         {
             if ( mbOnlyPropertyNames )
             {
-                aBodyText = rtl::OUString::createFromAscii( "<propname/>" );
+                aBodyText = OUString::createFromAscii( "<propname/>" );
             }
             else
             {
-                aBodyText = rtl::OUString::createFromAscii( "<allprop/>" );
+                aBodyText = OUString::createFromAscii( "<allprop/>" );
             }
         }
 
-        aBodyText = rtl::OUString::createFromAscii( PROPFIND_HEADER ) +
+        aBodyText = OUString::createFromAscii( PROPFIND_HEADER ) +
                     aBodyText +
-                    rtl::OUString::createFromAscii( PROPFIND_TRAILER );
-        body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
+                    OUString::createFromAscii( PROPFIND_TRAILER );
+        body_bkt = SERF_BUCKET_SIMPLE_STRING( OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
                                               pSerfBucketAlloc );
         if ( useChunkedEncoding() )
         {
@@ -161,7 +161,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
         }
         serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
         serf_bucket_headers_set( hdrs_bkt, "Content-Length",
-                                 rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
+                                 OUStringToOString( OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
     }
 
     return req_bkt;

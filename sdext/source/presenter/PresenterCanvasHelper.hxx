@@ -63,12 +63,12 @@ public:
 
     static css::geometry::RealRectangle2D GetTextBoundingBox (
         const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-        const ::rtl::OUString& rsText,
+        const OUString& rsText,
         const sal_Int8 = css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 
     static css::geometry::RealSize2D GetTextSize (
         const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-        const ::rtl::OUString& rsText,
+        const OUString& rsText,
         const sal_Int8 = css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 
 private:

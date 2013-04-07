@@ -53,8 +53,8 @@ struct CommandStruct
 
 //***********************************************************
 
-sal_Int16       GetCommandContextIndex( const rtl::OUString &rContextName );
-rtl::OUString   GetCommandContextByIndex( sal_Int16 nIndex );
+sal_Int16       GetCommandContextIndex( const OUString &rContextName );
+OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
 //***********************************************************
 

@@ -233,7 +233,7 @@ private:
 
 protected:
 
-    rtl::OUString       aFilterPath;
+    OUString       aFilterPath;
     FilterConfigCache*  pConfig;
     FilterErrorEx*      pErrorEx;
     sal_Bool            bAbort;
@@ -245,7 +245,7 @@ public:
                     GraphicFilter( sal_Bool bUseConfig = sal_True );
                     ~GraphicFilter();
 
-    void            SetFilterPath( const rtl::OUString& rFilterPath ) { aFilterPath = rFilterPath; };
+    void            SetFilterPath( const OUString& rFilterPath ) { aFilterPath = rFilterPath; };
 
     sal_uInt16          GetImportFormatCount();
     sal_uInt16          GetImportFormatNumber( const String& rFormatName );

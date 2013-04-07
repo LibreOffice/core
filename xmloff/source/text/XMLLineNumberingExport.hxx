@@ -29,17 +29,17 @@ class SvXMLExport;
 /** export <text:linenumbering-configuration> and it's child elements */
 class XMLLineNumberingExport
 {
-    const ::rtl::OUString sCharStyleName;
-    const ::rtl::OUString sCountEmptyLines;
-    const ::rtl::OUString sCountLinesInFrames;
-    const ::rtl::OUString sDistance;
-    const ::rtl::OUString sInterval;
-    const ::rtl::OUString sSeparatorText;
-    const ::rtl::OUString sNumberPosition;
-    const ::rtl::OUString sNumberingType;
-    const ::rtl::OUString sIsOn;
-    const ::rtl::OUString sRestartAtEachPage;
-    const ::rtl::OUString sSeparatorInterval;
+    const OUString sCharStyleName;
+    const OUString sCountEmptyLines;
+    const OUString sCountLinesInFrames;
+    const OUString sDistance;
+    const OUString sInterval;
+    const OUString sSeparatorText;
+    const OUString sNumberPosition;
+    const OUString sNumberingType;
+    const OUString sIsOn;
+    const OUString sRestartAtEachPage;
+    const OUString sSeparatorInterval;
 
     SvXMLExport& rExport;
 

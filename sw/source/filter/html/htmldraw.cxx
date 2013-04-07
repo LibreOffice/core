@@ -682,7 +682,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( !pOutlinerParaObj )
         return rWrt;
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_marquee);
 
     // Die Attribute des Objektd holen
@@ -823,7 +823,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     sal_uInt32 nFrmFlags = HTML_FRMOPTS_MARQUEE;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         nFrmFlags |= HTML_FRMOPTS_MARQUEE_CSS1;
-    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmFlags );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmFlags );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmFlags, &rSdrObject );
 

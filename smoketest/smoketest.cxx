@@ -58,7 +58,7 @@ namespace {
 struct Result: private boost::noncopyable {
     osl::Condition condition;
     bool success;
-    rtl::OUString result;
+    OUString result;
 };
 
 class Listener:
@@ -135,22 +135,22 @@ void Test::tearDown() {
 }
 
 void Test::test() {
-    rtl::OUString doc;
+    OUString doc;
     CPPUNIT_ASSERT(
         test::getTestArgument(
-            rtl::OUString("smoketest.doc"), &doc));
+            OUString("smoketest.doc"), &doc));
     css::uno::Sequence< css::beans::PropertyValue > args(2);
-    args[0].Name = rtl::OUString("MacroExecutionMode");
+    args[0].Name = OUString("MacroExecutionMode");
     args[0].Handle = -1;
     args[0].Value <<=
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = css::beans::PropertyState_DIRECT_VALUE;
-    args[1].Name = rtl::OUString("ReadOnly");
+    args[1].Name = OUString("ReadOnly");
     args[1].Handle = -1;
     args[1].Value <<= sal_True;
     args[1].State = css::beans::PropertyState_DIRECT_VALUE;
     css::util::URL url;
-    url.Complete = rtl::OUString(
+    url.Complete = OUString(
             "vnd.sun.star.script:Standard.Global.StartTestWithDefaultOptions?"
             "language=Basic&location=document");
 
@@ -162,12 +162,12 @@ void Test::test() {
                 css::uno::Reference< css::frame::XModel >(
                     xDesktop->loadComponentFromURL(
                             test::toAbsoluteFileUrl(doc),
-                            rtl::OUString("_default"),
+                            OUString("_default"),
                             0, args),
                     css::uno::UNO_QUERY_THROW)->getCurrentController(),
                 css::uno::UNO_SET_THROW)->getFrame(),
             css::uno::UNO_QUERY_THROW)->queryDispatch(
-                url, rtl::OUString("_self"), 0),
+                url, OUString("_self"), 0),
         css::uno::UNO_QUERY_THROW);
     Result result;
     // Shifted to main thread to work around potential deadlocks (i112867):
@@ -188,7 +188,7 @@ void Test::test() {
         CPPUNIT_ASSERT(connection_.isStillAlive());
     }
     CPPUNIT_ASSERT(result.success);
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(), result.result);
+    CPPUNIT_ASSERT_EQUAL(OUString(), result.result);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

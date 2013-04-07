@@ -27,8 +27,6 @@ using namespace ::swf;
 using namespace ::std;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
-using ::rtl::OUString;
-using ::rtl::OString;
 
 // -----------------------------------------------------------------------------
 
@@ -462,7 +460,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 
     // let the virtual device convert the character to polygons
     PolyPolygon aPolyPoly;
-    pVDev->GetTextOutline( aPolyPoly, rtl::OUString(nChar) );
+    pVDev->GetTextOutline( aPolyPoly, OUString(nChar) );
 
     maGlyphOffsets.push_back( _uInt16( maGlyphData.getOffset() ) );
 

@@ -104,7 +104,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
 #ifndef DISABLE_DYNLOADING
-        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
+        const OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
 
         // load the dbtools library
         getDbToolsClientModule() = osl_loadModuleRelative(
@@ -113,7 +113,7 @@ void SwDbtoolsClient::registerClient()
         if (NULL != getDbToolsClientModule())
         {
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc("createDataAccessToolsFactory");
+            const OUString sFactoryCreationFunc("createDataAccessToolsFactory");
             //  reinterpret_cast<createDataAccessToolsFactoryFunction> removed for gcc permissive
             getDbToolsClientFactoryFunction() = reinterpret_cast< createDataAccessToolsFactoryFunction >(
                 osl_getFunctionSymbol(getDbToolsClientModule(), sFactoryCreationFunc.pData));
@@ -190,7 +190,7 @@ void SwDbtoolsClient::getFactory()
 }
 
 Reference< XDataSource > SwDbtoolsClient::getDataSource(
-        const ::rtl::OUString& rRegisteredName,
+        const OUString& rRegisteredName,
         const Reference<XComponentContext>& rxContext
             )
 {
@@ -214,7 +214,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
     return nRet;
 }
 
-::rtl::OUString SwDbtoolsClient::getFormattedValue(
+OUString SwDbtoolsClient::getFormattedValue(
         const uno::Reference< beans::XPropertySet>& _rxColumn,
         const uno::Reference< util::XNumberFormatter>& _rxFormatter,
         const lang::Locale& _rLocale,
@@ -224,7 +224,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
 {
     ::rtl::Reference< ::connectivity::simple::IDataAccessTypeConversion > xConversion =
                     getAccessTypeConversion();
-    rtl::OUString sRet;
+    OUString sRet;
     if(xConversion.is())
         sRet = xConversion->getFormattedValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
     return sRet;

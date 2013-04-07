@@ -23,8 +23,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

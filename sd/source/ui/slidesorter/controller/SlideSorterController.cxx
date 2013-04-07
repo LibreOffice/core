@@ -1010,8 +1010,8 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
     if (pChild == NULL || pChild->GetPage() == NULL)
         return;
 
-    ::rtl::OUString sOldName (rsOldName);
-    ::rtl::OUString sNewName (pChild->GetPage()->GetName());
+    OUString sOldName (rsOldName);
+    OUString sNewName (pChild->GetPage()->GetName());
     pChild->FireAccessibleEvent(
         ::com::sun::star::accessibility::AccessibleEventId::NAME_CHANGED,
         makeAny(sOldName),

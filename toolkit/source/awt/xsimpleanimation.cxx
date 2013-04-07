@@ -76,7 +76,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSimpleAnimation::setProperty( const ::rtl::OUString& PropertyName, const uno::Any& Value )
+    void SAL_CALL XSimpleAnimation::setProperty( const OUString& PropertyName, const uno::Any& Value )
         throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -110,7 +110,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    uno::Any SAL_CALL XSimpleAnimation::getProperty( const ::rtl::OUString& PropertyName )
+    uno::Any SAL_CALL XSimpleAnimation::getProperty( const OUString& PropertyName )
         throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;

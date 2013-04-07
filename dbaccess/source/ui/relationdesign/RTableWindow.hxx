@@ -33,7 +33,7 @@ namespace dbaui
             @return
                 The composed name or the window name.
         */
-        virtual ::rtl::OUString GetName() const { return GetComposedName(); }
+        virtual OUString GetName() const { return GetComposedName(); }
     };
 }
 #endif //DBAUI_RELTABLEWINDOW_HXX

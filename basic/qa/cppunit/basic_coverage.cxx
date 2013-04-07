@@ -77,7 +77,7 @@ void Coverage::test_failed()
 void Coverage::test_success()
 {
     m_nb_tests_ok += 1;
-    fprintf(stderr,"%s,PASS\n", rtl::OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
+    fprintf(stderr,"%s,PASS\n", OUStringToOString( m_sCurrentTest, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 void Coverage::run_test(OUString sFileURL)

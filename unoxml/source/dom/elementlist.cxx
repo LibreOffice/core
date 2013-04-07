@@ -28,10 +28,10 @@
 namespace DOM
 {
 
-    static xmlChar* lcl_initXmlString(::rtl::OUString const& rString)
+    static xmlChar* lcl_initXmlString(OUString const& rString)
     {
-        ::rtl::OString const os =
-            ::rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
+        OString const os =
+            OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
         xmlChar *const pRet = new xmlChar[os.getLength() + 1];
         strcpy(reinterpret_cast<char*>(pRet), os.getStr());
         return pRet;

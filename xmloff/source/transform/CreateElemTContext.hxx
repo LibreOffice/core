@@ -35,7 +35,7 @@ public:
     TYPEINFO();
 
     XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nActionMap );
 
     virtual ~XMLCreateElemTransformerContext();

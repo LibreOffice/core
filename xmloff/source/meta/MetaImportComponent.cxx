@@ -46,7 +46,7 @@ XMLMetaImportComponent::~XMLMetaImportComponent() throw()
 
 SvXMLImportContext* XMLMetaImportComponent::CreateContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference<xml::sax::XAttributeList > & xAttrList )
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
@@ -77,7 +77,7 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
             "XDocumentProperties"), uno::Reference<uno::XInterface>(*this), 0);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
     XMLMetaImportComponent_getSupportedServiceNames()
         throw()
 {

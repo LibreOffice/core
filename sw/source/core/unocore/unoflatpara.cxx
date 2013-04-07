@@ -61,7 +61,7 @@ CreateFlatParagraphIterator(SwDoc & rDoc, sal_Int32 const nTextMarkupType,
  * SwXFlatParagraph
  ******************************************************************************/
 
-SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper& rMap ) :
+SwXFlatParagraph::SwXFlatParagraph( SwTxtNode& rTxtNode, OUString aExpandText, const ModelToViewHelper& rMap ) :
     SwXTextMarkup( rTxtNode, rMap ),
     maExpandText( aExpandText )
 {
@@ -119,14 +119,14 @@ css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::
     return SwXTextMarkup::getMarkupInfoContainer();
 }
 
-void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const ::rtl::OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException)
+void SAL_CALL SwXFlatParagraph::commitTextMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitTextMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
 }
 
 // text::XFlatParagraph:
-::rtl::OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException)
+OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException)
 {
     return maExpandText;
 }
@@ -201,7 +201,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const ::rtl::OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     SolarMutexGuard aGuard;
 
@@ -419,7 +419,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     {
         // Expand the string:
         const ModelToViewHelper aConversionMap(*pRet);
-        rtl::OUString aExpandText = aConversionMap.getViewText();
+        OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
         // keep hard references...
@@ -471,7 +471,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     {
         // Expand the string:
         const ModelToViewHelper aConversionMap(*pNextTxtNode);
-        rtl::OUString aExpandText = aConversionMap.getViewText();
+        OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pNextTxtNode, aExpandText, aConversionMap );
         // keep hard references...
@@ -517,7 +517,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     {
         // Expand the string:
         const ModelToViewHelper aConversionMap(*pPrevTxtNode);
-        rtl::OUString aExpandText = aConversionMap.getViewText();
+        OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pPrevTxtNode, aExpandText, aConversionMap );
         // keep hard references...

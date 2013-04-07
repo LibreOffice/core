@@ -50,22 +50,22 @@ enum LineNumberingToken
 /** import <text:linenumbering-configuration> elements */
 class XMLLineNumberingImportContext : public SvXMLStyleContext
 {
-    const ::rtl::OUString sCharStyleName;
-    const ::rtl::OUString sCountEmptyLines;
-    const ::rtl::OUString sCountLinesInFrames;
-    const ::rtl::OUString sDistance;
-    const ::rtl::OUString sInterval;
-    const ::rtl::OUString sSeparatorText;
-    const ::rtl::OUString sNumberPosition;
-    const ::rtl::OUString sNumberingType;
-    const ::rtl::OUString sIsOn;
-    const ::rtl::OUString sRestartAtEachPage;
-    const ::rtl::OUString sSeparatorInterval;
+    const OUString sCharStyleName;
+    const OUString sCountEmptyLines;
+    const OUString sCountLinesInFrames;
+    const OUString sDistance;
+    const OUString sInterval;
+    const OUString sSeparatorText;
+    const OUString sNumberPosition;
+    const OUString sNumberingType;
+    const OUString sIsOn;
+    const OUString sRestartAtEachPage;
+    const OUString sSeparatorInterval;
 
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sNumFormat;
-    ::rtl::OUString sNumLetterSync;
-    ::rtl::OUString sSeparator;
+    OUString sStyleName;
+    OUString sNumFormat;
+    OUString sNumLetterSync;
+    OUString sSeparator;
     sal_Int32 nOffset;
     sal_Int16 nNumberPosition;
     sal_Int16 nIncrement;
@@ -82,14 +82,14 @@ public:
     XMLLineNumberingImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     ~XMLLineNumberingImportContext();
 
     // to be used by child context: set separator info
-    void SetSeparatorText(const ::rtl::OUString& sText);
+    void SetSeparatorText(const OUString& sText);
     void SetSeparatorIncrement(sal_Int16 nIncr);
 
 protected:
@@ -100,19 +100,19 @@ protected:
 
     void ProcessAttribute(
         enum LineNumberingToken eToken,
-        ::rtl::OUString sValue);
+        OUString sValue);
 
     virtual void CreateAndInsert(sal_Bool bOverwrite);
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
     void ProcessAttribute(
-        const ::rtl::OUString sLocalName,
-        const ::rtl::OUString sValue);
+        const OUString sLocalName,
+        const OUString sValue);
 };
 
 #endif

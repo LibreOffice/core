@@ -49,7 +49,7 @@ OUsers::OUsers( ::cppu::OWeakObject& _rParent,
 }
 // -----------------------------------------------------------------------------
 
-sdbcx::ObjectType OUsers::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
 {
     return new OMySQLUser(m_xConnection,_rName);
 }
@@ -66,20 +66,20 @@ Reference< XPropertySet > OUsers::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql(  "GRANT USAGE ON * TO " );
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString sUserName( _rForName );
+    OUString aSql(  "GRANT USAGE ON * TO " );
+    OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
+    OUString sUserName( _rForName );
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString(" @\"%\" ");
-    ::rtl::OUString sPassword;
+                + OUString(" @\"%\" ");
+    OUString sPassword;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPassword;
     if ( !sPassword.isEmpty() )
     {
-        aSql += ::rtl::OUString(" IDENTIFIED BY '");
+        aSql += OUString(" IDENTIFIED BY '");
         aSql += sPassword;
-        aSql += ::rtl::OUString("'");
+        aSql += OUString("'");
     }
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
@@ -91,10 +91,10 @@ sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const 
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OUsers::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
-    ::rtl::OUString aSql(  "REVOKE ALL ON * FROM " );
-    ::rtl::OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
+    OUString aSql(  "REVOKE ALL ON * FROM " );
+    OUString aQuote  = m_xConnection->getMetaData()->getIdentifierQuoteString(  );
     aSql += ::dbtools::quoteName(aQuote,_sElementName);
 
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );

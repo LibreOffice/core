@@ -77,7 +77,7 @@ class SAL_DLLPRIVATE FmFieldWin :public SfxFloatingWindow
     FmFieldWinData*    pData;
     ::svxform::SharedConnection
                        m_aConnection;
-    ::rtl::OUString    m_aDatabaseName,
+    OUString    m_aDatabaseName,
                        m_aObjectName;
     sal_Int32          m_nObjectType;
 
@@ -101,9 +101,9 @@ public:
     void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const;
 
-    const ::rtl::OUString&      GetDatabaseName() const { return m_aDatabaseName; }
+    const OUString&      GetDatabaseName() const { return m_aDatabaseName; }
     ::svxform::SharedConnection GetConnection() const { return m_aConnection; }
-    const ::rtl::OUString&      GetObjectName() const { return m_aObjectName; }
+    const OUString&      GetObjectName() const { return m_aObjectName; }
     sal_Int32                   GetObjectType() const { return m_nObjectType; }
 
     sal_Bool    createSelectionControls( );

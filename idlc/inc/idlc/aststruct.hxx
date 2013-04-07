@@ -31,12 +31,12 @@ class AstStruct : public AstType
 {
 public:
     AstStruct(
-        const ::rtl::OString& name,
-        std::vector< rtl::OString > const & typeParameters,
+        const OString& name,
+        std::vector< OString > const & typeParameters,
         AstStruct* pBaseType, AstScope* pScope);
 
     AstStruct(const NodeType type,
-              const ::rtl::OString& name,
+              const OString& name,
               AstStruct* pBaseType,
               AstScope* pScope);
     virtual ~AstStruct();
@@ -47,7 +47,7 @@ public:
     DeclList::size_type getTypeParameterCount() const
     { return m_typeParameters.size(); }
 
-    AstDeclaration const * findTypeParameter(rtl::OString const & name) const;
+    AstDeclaration const * findTypeParameter(OString const & name) const;
 
     virtual bool isType() const;
 

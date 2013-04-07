@@ -38,7 +38,7 @@ class GenericToolbarController : public svt::ToolboxController
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16   nID,
-                                  const rtl::OUString& aCommand );
+                                  const OUString& aCommand );
         virtual ~GenericToolbarController();
 
         // XComponent
@@ -57,7 +57,7 @@ class GenericToolbarController : public svt::ToolboxController
         sal_uInt16      m_nID;
         sal_Bool        m_bEnumCommand : 1,
                         m_bMadeInvisible : 1;
-        rtl::OUString   m_aEnumCommand;
+        OUString   m_aEnumCommand;
 };
 
 class MenuToolbarController : public GenericToolbarController
@@ -65,14 +65,14 @@ class MenuToolbarController : public GenericToolbarController
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_xMenuDesc;
     PopupMenu* pMenu;
     com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xMenuManager;
-    rtl::OUString m_aModuleIdentifier;
+    OUString m_aModuleIdentifier;
     public:
         MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBar,
                                   sal_uInt16   nID,
-                                  const rtl::OUString& aCommand,
-                                  const rtl::OUString& aModuleIdentifier,
+                                  const OUString& aCommand,
+                                  const OUString& aModuleIdentifier,
                                   const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );
 
     ~MenuToolbarController();

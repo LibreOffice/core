@@ -31,10 +31,8 @@
 namespace writerfilter {
 namespace rtftok {
 
-using rtl::OString;
-using rtl::OUString;
 
-RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
+RTFValue::RTFValue(int nValue, OUString sValue, RTFSprms rAttributes,
         RTFSprms rSprms, uno::Reference<drawing::XShape> xShape,
         uno::Reference<io::XInputStream> xStream, uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString)
     : m_nValue(nValue),

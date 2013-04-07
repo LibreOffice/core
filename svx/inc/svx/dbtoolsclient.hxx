@@ -98,9 +98,9 @@ namespace svxform
 
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rUser,
-            const ::rtl::OUString& _rPwd,
+            const OUString& _rDataSourceName,
+            const OUString& _rUser,
+            const OUString& _rPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
@@ -126,20 +126,20 @@ namespace svxform
         ) const;
 
         // ------------------------------------------------
-        ::rtl::OUString quoteName(
-            const ::rtl::OUString& _rQuote,
-            const ::rtl::OUString& _rName
+        OUString quoteName(
+            const OUString& _rQuote,
+            const OUString& _rName
         ) const;
 
         // ------------------------------------------------
-        ::rtl::OUString composeTableNameForSelect(
+        OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
 
         // ------------------------------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
-                const ::rtl::OUString& _rsRegisteredName,
+                const OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             ) const;
 
@@ -160,7 +160,7 @@ namespace svxform
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
-                const ::rtl::OUString& _rCommand,
+                const OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );

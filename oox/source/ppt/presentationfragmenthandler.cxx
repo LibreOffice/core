@@ -281,7 +281,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Bool bFirst
             {
                 // Comments are present and commentAuthors.xml has still not been read
                 mbCommentAuthorsRead = true;
-                rtl::OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
+                OUString aCommentAuthorsFragmentPath = "ppt/commentAuthors.xml";
                 Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
                 Reference< XDrawPage > xCommentAuthorsPage( xPresentationPage->getNotesPage() );
                 SlidePersistPtr pCommentAuthorsPersistPtr(

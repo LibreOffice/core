@@ -49,7 +49,7 @@ struct BaseLock
 };
 
 
-typedef ::comphelper::SequenceAsVector< ::rtl::OUString > OUStringList;
+typedef ::comphelper::SequenceAsVector< OUString > OUStringList;
 
 //_______________________________________________
 
@@ -148,7 +148,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
                     Its needed to address the UIName property inside
                     the list of possible ones.
          */
-        void validateUINames(const ::rtl::OUString& sActLocale);
+        void validateUINames(const OUString& sActLocale);
 
         //---------------------------------------
 
@@ -172,10 +172,10 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef ::boost::unordered_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< OUString                    ,
                          CacheItem                          ,
-                         ::rtl::OUStringHash                ,
-                         ::std::equal_to< ::rtl::OUString > > CacheItemList;
+                         OUStringHash                ,
+                         ::std::equal_to< OUString > > CacheItemList;
 
 //_______________________________________________
 
@@ -191,10 +191,10 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
             there we need key-value pairs too, which cant be provided
             by a pure vector!
  */
-typedef ::boost::unordered_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< OUString                    ,
                          OUStringList                       ,
-                         ::rtl::OUStringHash                ,
-                         ::std::equal_to< ::rtl::OUString > > CacheItemRegistration;
+                         OUStringHash                ,
+                         ::std::equal_to< OUString > > CacheItemRegistration;
 
 //_______________________________________________
 
@@ -209,7 +209,7 @@ typedef ::boost::unordered_map< ::rtl::OUString                    ,
 struct FlatDetectionInfo
 {
     // the internal type name
-    ::rtl::OUString sType;
+    OUString sType;
 
     // this type was found by a matching the URL extension
     bool bMatchByExtension;

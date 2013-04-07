@@ -82,7 +82,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 //.............................................................................
 namespace chart
@@ -134,9 +133,9 @@ bool lcl_MoveObjectLogic(
 void lcl_insertMenuCommand(
     const uno::Reference< awt::XPopupMenu > & xMenu,
     const uno::Reference< awt::XMenuExtended > & xMenuEx,
-    sal_Int16 nId, const ::rtl::OUString & rCommand )
+    sal_Int16 nId, const OUString & rCommand )
 {
-    static ::rtl::OUString aEmptyString;
+    static OUString aEmptyString;
     xMenu->insertItem( nId, aEmptyString, 0, -1 );
     xMenuEx->setCommand( nId, rCommand );
 }
@@ -729,7 +728,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            rtl::OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
+            OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
             if( aDragMethodServiceName.equals( ObjectIdentifier::getPieSegmentDragMethodServiceName() ) )
                 pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
         }
@@ -936,7 +935,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
     bool bEditText = false;
     if ( m_aSelection.hasSelection() )
     {
-        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        OUString aCID( m_aSelection.getSelectedCID() );
         if ( !aCID.isEmpty() )
         {
             ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
@@ -1404,7 +1403,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                 nCode == KEY_DOWN )
             {
                 bDrag = true;
-                rtl::OUString aParameter( ObjectIdentifier::getDragParameterString( m_aSelection.getSelectedCID() ));
+                OUString aParameter( ObjectIdentifier::getDragParameterString( m_aSelection.getSelectedCID() ));
                 sal_Int32 nOffsetPercentDummy( 0 );
                 awt::Point aMinimumPosition( 0, 0 );
                 awt::Point aMaximumPosition( 0, 0 );
@@ -1577,7 +1576,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 bool ChartController::requestQuickHelp(
     ::Point aAtLogicPosition,
     bool bIsBalloonHelp,
-    ::rtl::OUString & rOutQuickHelpText,
+    OUString & rOutQuickHelpText,
     awt::Rectangle & rOutEqualRect )
 {
     uno::Reference< frame::XModel > xChartModel;
@@ -1587,7 +1586,7 @@ bool ChartController::requestQuickHelp(
         return false;
 
     // help text
-    ::rtl::OUString aCID;
+    OUString aCID;
     if( m_pDrawViewWrapper )
     {
         aCID = SelectionHelper::getHitObjectCID(
@@ -1622,9 +1621,9 @@ bool ChartController::requestQuickHelp(
     if ( rSelection.hasValue() )
     {
         const uno::Type& rType = rSelection.getValueType();
-        if ( rType == ::getCppuType( static_cast< const ::rtl::OUString* >( 0 ) ) )
+        if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
         {
-            ::rtl::OUString aNewCID;
+            OUString aNewCID;
             if ( ( rSelection >>= aNewCID ) && m_aSelection.setSelection( aNewCID ) )
             {
                 bSuccess = true;
@@ -1672,7 +1671,7 @@ bool ChartController::requestQuickHelp(
     uno::Any aReturn;
     if ( m_aSelection.hasSelection() )
     {
-        ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+        OUString aCID( m_aSelection.getSelectedCID() );
         if ( !aCID.isEmpty() )
         {
             aReturn = uno::makeAny( aCID );
@@ -1746,7 +1745,7 @@ void ChartController::impl_selectObjectAndNotiy()
 }
 
 bool ChartController::impl_moveOrResizeObject(
-    const ::rtl::OUString & rCID,
+    const OUString & rCID,
     eMoveOrResizeType eType,
     double fAmountLogicX,
     double fAmountLogicY )
@@ -1829,7 +1828,7 @@ bool ChartController::impl_moveOrResizeObject(
     return bResult;
 }
 
-bool ChartController::impl_DragDataPoint( const ::rtl::OUString & rCID, double fAdditionalOffset )
+bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditionalOffset )
 {
     bool bResult = false;
     if( fAdditionalOffset < -1.0 || fAdditionalOffset > 1.0 || fAdditionalOffset == 0.0 )
@@ -1985,7 +1984,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
                 return;
             }
 
-            ::rtl::OUString aHitObjectCID(
+            OUString aHitObjectCID(
                 SelectionHelper::getHitObjectCID(
                     aMousePos, *m_pDrawViewWrapper, true /*bGetDiagramInsteadOf_Wall*/ ));
 

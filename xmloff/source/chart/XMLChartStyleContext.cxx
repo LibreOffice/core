@@ -41,8 +41,8 @@ TYPEINIT1( XMLChartStyleContext, XMLPropStyleContext );
 
 void XMLChartStyleContext::SetAttribute(
     sal_uInt16 nPrefixKey,
-    const ::rtl::OUString& rLocalName,
-    const ::rtl::OUString& rValue )
+    const OUString& rLocalName,
+    const OUString& rValue )
 {
     if( IsXMLToken( rLocalName, XML_DATA_STYLE_NAME ) )
     {
@@ -63,7 +63,7 @@ void XMLChartStyleContext::SetAttribute(
 // CTOR
 XMLChartStyleContext::XMLChartStyleContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const ::rtl::OUString& rLName,
+    const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     SvXMLStylesContext& rStyles, sal_uInt16 nFamily ) :
 
@@ -78,7 +78,7 @@ XMLChartStyleContext::~XMLChartStyleContext()
 namespace
 {
 
-    void lcl_NumberFormatStyleToProperty( const ::rtl::OUString& rStyleName, const ::rtl::OUString& rPropertyName,
+    void lcl_NumberFormatStyleToProperty( const OUString& rStyleName, const OUString& rPropertyName,
                                       const SvXMLStylesContext& rStylesContext,
                                       const uno::Reference< beans::XPropertySet >& rPropSet )
 {
@@ -116,7 +116,7 @@ void XMLChartStyleContext::FillPropertySet(
 
 SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext* pContext = NULL;

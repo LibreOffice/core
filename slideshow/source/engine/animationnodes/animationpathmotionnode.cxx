@@ -36,7 +36,7 @@ void AnimationPathMotionNode::dispose()
 
 AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
 {
-    rtl::OUString aString;
+    OUString aString;
     ENSURE_OR_THROW( (mxPathMotionNode->getPath() >>= aString),
                       "no string-based SVG:d path found" );
 

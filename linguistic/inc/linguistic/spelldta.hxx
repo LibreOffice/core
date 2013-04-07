@@ -43,28 +43,28 @@ namespace com { namespace sun { namespace star {
 namespace linguistic
 {
 
-::com::sun::star::uno::Sequence< ::rtl::OUString >
+::com::sun::star::uno::Sequence< OUString >
         MergeProposalSeqs(
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt1,
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt2,
+                ::com::sun::star::uno::Sequence< OUString > &rAlt1,
+                ::com::sun::star::uno::Sequence< OUString > &rAlt2,
                 sal_Bool bAllowDuplicates );
 
 void    SeqRemoveNegEntries(
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
+                ::com::sun::star::uno::Sequence< OUString > &rSeq,
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XSearchableDictionaryList > &rxDicList,
                 sal_Int16 nLanguage );
 
 sal_Bool    SeqHasEntry(
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSeq,
-                const ::rtl::OUString &rTxt);
+                const ::com::sun::star::uno::Sequence< OUString > &rSeq,
+                const OUString &rTxt);
 
 ///////////////////////////////////////////////////////////////////////////
 
-void SearchSimilarText( const rtl::OUString &rText, sal_Int16 nLanguage,
+void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList,
-        std::vector< rtl::OUString > & rDicListProps );
+        std::vector< OUString > & rDicListProps );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -77,34 +77,34 @@ class SpellAlternatives
     >
     , private ::boost::noncopyable
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aAlt;   // list of alternatives, may be empty.
-    ::rtl::OUString         aWord;
+    ::com::sun::star::uno::Sequence< OUString >  aAlt;   // list of alternatives, may be empty.
+    OUString         aWord;
     sal_Int16                   nType;          // type of failure
     sal_Int16                   nLanguage;
 
 public:
     LNG_DLLPUBLIC SpellAlternatives();
-    SpellAlternatives(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
-                      const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlternatives );
+    SpellAlternatives(const OUString &rWord, sal_Int16 nLang, sal_Int16 nFailureType,
+                      const ::com::sun::star::uno::Sequence< OUString > &rAlternatives );
     virtual ~SpellAlternatives();
 
     // XSpellAlternatives
-    virtual ::rtl::OUString SAL_CALL getWord(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getWord(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL getFailureType(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAlternatives(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XSetSpellAlternatives
-    virtual void SAL_CALL setAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAlternatives ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setAlternatives( const ::com::sun::star::uno::Sequence< OUString >& aAlternatives ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (::com::sun::star::uno::RuntimeException);
 
     // non-interface specific functions
-    void    LNG_DLLPUBLIC SetWordLanguage(const ::rtl::OUString &rWord, sal_Int16 nLang);
+    void    LNG_DLLPUBLIC SetWordLanguage(const OUString &rWord, sal_Int16 nLang);
     void    LNG_DLLPUBLIC SetFailureType(sal_Int16 nTypeP);
-    void    LNG_DLLPUBLIC SetAlternatives( const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
+    void    LNG_DLLPUBLIC SetAlternatives( const ::com::sun::star::uno::Sequence< OUString > &rAlt );
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > LNG_DLLPUBLIC CreateSpellAlternatives(
-        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt );
+        const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< OUString > &rAlt );
 };
 
 

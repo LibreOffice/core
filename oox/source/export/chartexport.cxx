@@ -2302,7 +2302,7 @@ void ChartExport::exportDataLabels(
             {
                 (void)rEx; // avoid warning for pro build
                 OSL_TRACE( "Exception caught during Export of data label: %s",
-                                rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                                OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 
             if( xPropSet.is() )

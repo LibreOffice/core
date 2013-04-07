@@ -60,28 +60,28 @@ namespace framework
     {
         public:
             CmdImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                          const ::rtl::OUString& aModuleIdentifier );
+                          const OUString& aModuleIdentifier );
             virtual ~CmdImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual ::std::vector< rtl::OUString >& getImageNames();
-            virtual ::std::vector< rtl::OUString >& getImageCommandNames();
+            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL );
+            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL );
+            virtual ::std::vector< OUString >& getImageNames();
+            virtual ::std::vector< OUString >& getImageCommandNames();
 
         protected:
             void                            impl_fillCommandToImageNameMap();
             ImageList*                      impl_getImageList( sal_Int16 nImageType );
-            std::vector< ::rtl::OUString >& impl_getImageNameVector();
-            std::vector< ::rtl::OUString >& impl_getImageCommandNameVector();
+            std::vector< OUString >& impl_getImageNameVector();
+            std::vector< OUString >& impl_getImageCommandNameVector();
 
         private:
             sal_Bool                                                                         m_bVectorInit;
-            rtl::OUString                                                                    m_aModuleIdentifier;
+            OUString                                                                    m_aModuleIdentifier;
             ImageList*                                                                       m_pImageList[ImageType_COUNT];
             CommandToImageNameMap                                                            m_aCommandToImageNameMap;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >     m_xContext;
-            ::std::vector< rtl::OUString >                                                   m_aImageNameVector;
-            ::std::vector< rtl::OUString >                                                   m_aImageCommandNameVector;
+            ::std::vector< OUString >                                                   m_aImageNameVector;
+            ::std::vector< OUString >                                                   m_aImageCommandNameVector;
             sal_Int16                                                                        m_nSymbolsStyle;
     };
 
@@ -91,10 +91,10 @@ namespace framework
             GlobalImageList( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
             virtual ~GlobalImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual bool                            hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL );
-            virtual ::std::vector< rtl::OUString >& getImageNames();
-            virtual ::std::vector< rtl::OUString >& getImageCommandNames();
+            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL );
+            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL );
+            virtual ::std::vector< OUString >& getImageNames();
+            virtual ::std::vector< OUString >& getImageCommandNames();
 
             // ÍReference
             virtual oslInterlockedCount SAL_CALL acquire();
@@ -120,12 +120,12 @@ namespace framework
 
             // XImageManager
             void reset() throw (::com::sun::star::uno::RuntimeException);
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (::com::sun::star::uno::RuntimeException);
-            ::sal_Bool hasImage( ::sal_Int16 nImageType, const ::rtl::OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCommandURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            void replaceImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicsSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-            void removeImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aResourceURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-            void insertImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicSequence ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (::com::sun::star::uno::RuntimeException);
+            ::sal_Bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            void replaceImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicsSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            void removeImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aResourceURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            void insertImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& aGraphicSequence ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 
             // XUIConfiguration
             void addConfigurationListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
@@ -140,10 +140,10 @@ namespace framework
 
             void clear();
 
-            typedef boost::unordered_map< rtl::OUString,
+            typedef boost::unordered_map< OUString,
                                    sal_Bool,
-                                   rtl::OUStringHash,
-                                   ::std::equal_to< ::rtl::OUString > > ImageNameMap;
+                                   OUStringHash,
+                                   ::std::equal_to< OUString > > ImageNameMap;
 
             enum Layer
             {
@@ -183,9 +183,9 @@ namespace framework
             ::cppu::OWeakObject*                                                            m_pOwner;
             rtl::Reference< GlobalImageList >                                               m_pGlobalImageList;
             CmdImageList*                                                                   m_pDefaultImageList;
-            rtl::OUString                                                                   m_aXMLPostfix;
-            rtl::OUString                                                                   m_aModuleIdentifier;
-            rtl::OUString                                                                   m_aResourceString;
+            OUString                                                                   m_aXMLPostfix;
+            OUString                                                                   m_aModuleIdentifier;
+            OUString                                                                   m_aResourceString;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
             ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
             bool                                                                            m_bUserImageListModified[ImageType_COUNT];

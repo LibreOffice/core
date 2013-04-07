@@ -67,35 +67,35 @@ public:
     sal_uInt32  release()
         { return --m_refCount; }
 
-    RegError    initRegistry(const rtl::OUString& name,
+    RegError    initRegistry(const OUString& name,
                              RegAccessMode accessMode);
 
     RegError    closeRegistry();
 
-    RegError    destroyRegistry(const rtl::OUString& name);
+    RegError    destroyRegistry(const OUString& name);
 
     RegError    acquireKey(RegKeyHandle hKey);
     RegError    releaseKey(RegKeyHandle hKey);
 
     RegError    createKey(RegKeyHandle hKey,
-                          const rtl::OUString& keyName,
+                          const OUString& keyName,
                           RegKeyHandle* phNewKey);
 
     RegError    openKey(RegKeyHandle hKey,
-                        const rtl::OUString& keyName,
+                        const OUString& keyName,
                         RegKeyHandle* phOpenKey);
 
     RegError    closeKey(RegKeyHandle hKey);
 
-    RegError    deleteKey(RegKeyHandle hKey, const rtl::OUString& keyName);
+    RegError    deleteKey(RegKeyHandle hKey, const OUString& keyName);
 
     RegError    loadKey(RegKeyHandle hKey,
-                        const rtl::OUString& regFileName,
+                        const OUString& regFileName,
                         sal_Bool bWarings=sal_False,
                         sal_Bool bReport=sal_False);
 
     RegError    saveKey(RegKeyHandle hKey,
-                        const rtl::OUString& regFileName,
+                        const OUString& regFileName,
                         sal_Bool bWarings=sal_False,
                         sal_Bool bReport=sal_False);
 
@@ -114,25 +114,25 @@ public:
     const store::OStoreFile& getStoreFile() const
         { return m_file; }
 
-    const rtl::OUString&    getName() const
+    const OUString&    getName() const
         { return m_name; }
 
     friend class ORegKey;
 
 private:
-    RegError    eraseKey(ORegKey* pKey, const rtl::OUString& keyName);
+    RegError    eraseKey(ORegKey* pKey, const OUString& keyName);
 
     RegError    deleteSubkeysAndValues(ORegKey* pKey);
 
     RegError    loadAndSaveValue(ORegKey* pTargetKey,
                                  ORegKey* pSourceKey,
-                                 const rtl::OUString& valueName,
+                                 const OUString& valueName,
                                  sal_uInt32 nCut,
                                  sal_Bool bWarnings=sal_False,
                                  sal_Bool bReport=sal_False);
 
     RegError    checkBlop(store::OStoreStream& rValue,
-                          const rtl::OUString& sTargetPath,
+                          const OUString& sTargetPath,
                           sal_uInt32 srcValueSize,
                           sal_uInt8* pSrcBuffer,
                           sal_Bool bReport=sal_False);
@@ -143,30 +143,30 @@ private:
 
     RegError    loadAndSaveKeys(ORegKey* pTargetKey,
                                 ORegKey* pSourceKey,
-                                const rtl::OUString& keyName,
+                                const OUString& keyName,
                                 sal_uInt32 nCut,
                                 sal_Bool bWarnings=sal_False,
                                 sal_Bool bReport=sal_False);
 
-    RegError    dumpValue(const rtl::OUString& sPath,
-                          const rtl::OUString& sName,
+    RegError    dumpValue(const OUString& sPath,
+                          const OUString& sName,
                           sal_Int16 nSpace) const;
 
-    RegError    dumpKey(const rtl::OUString& sPath,
-                        const rtl::OUString& sName,
+    RegError    dumpKey(const OUString& sPath,
+                        const OUString& sName,
                         sal_Int16 nSpace) const;
 
-    typedef boost::unordered_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
+    typedef boost::unordered_map< OUString, ORegKey*, OUStringHash > KeyMap;
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;
     bool            m_readOnly;
     bool            m_isOpen;
-    rtl::OUString       m_name;
+    OUString       m_name;
     store::OStoreFile   m_file;
     KeyMap          m_openKeyTable;
 
-    const rtl::OUString ROOT;
+    const OUString ROOT;
 };
 
 #endif

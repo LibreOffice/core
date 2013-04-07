@@ -63,13 +63,13 @@ public:
                                   Dialog *pWindow );
     virtual        ~DialogHelper();
 
-    void            openWebBrowser( const ::rtl::OUString & sURL, const ::rtl::OUString & sTitle ) const;
+    void            openWebBrowser( const OUString & sURL, const OUString & sTitle ) const;
     Dialog*         getWindow() const { return m_pVCLWindow; };
     void            PostUserEvent( const Link& rLink, void* pCaller );
     void            clearEventID() { m_nEventID = 0; }
 
     virtual void    showProgress( bool bStart ) = 0;
-    virtual void    updateProgress( const ::rtl::OUString &rText,
+    virtual void    updateProgress( const OUString &rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) = 0;
     virtual void    updateProgress( const long nProgress ) = 0;
 
@@ -90,7 +90,7 @@ public:
 
     void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
     bool            isBusy() const { return m_bIsBusy; }
-    bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
+    bool            installExtensionWarn( const OUString &rExtensionURL ) const;
     bool            installForAllUsers( bool &bInstallForAll ) const;
 };
 
@@ -126,7 +126,7 @@ class ExtMgrDialog : public ModelessDialog,
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
 
-    bool removeExtensionWarn( const ::rtl::OUString &rExtensionTitle ) const;
+    bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
 
     DECL_DLLPRIVATE_LINK( HandleAddBtn, void * );
     DECL_DLLPRIVATE_LINK( HandleUpdateBtn, void * );
@@ -145,13 +145,13 @@ public:
     virtual sal_Bool    Close();
 
     virtual void    showProgress( bool bStart );
-    virtual void    updateProgress( const ::rtl::OUString &rText,
+    virtual void    updateProgress( const OUString &rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
     virtual void    updateProgress( const long nProgress );
 
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    void            setGetExtensionsURL( const ::rtl::OUString &rURL );
+    void            setGetExtensionsURL( const OUString &rURL );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       bool bLicenseMissing = false );
     bool enablePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
@@ -165,7 +165,7 @@ public:
     virtual void    prepareChecking();
     virtual void    checkEntries();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker();
+    ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
 };
 
 //==============================================================================
@@ -219,7 +219,7 @@ public:
     virtual sal_Bool    Close();
 
     virtual void    showProgress( bool bStart );
-    virtual void    updateProgress( const ::rtl::OUString &rText,
+    virtual void    updateProgress( const OUString &rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel);
     virtual void    updateProgress( const long nProgress );
 
@@ -233,10 +233,10 @@ public:
     virtual void    prepareChecking();
     virtual void    checkEntries();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker();
+    ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
 
     bool            installForAllUsers( bool &bInstallForAll ) const;
-    bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;
+    bool            installExtensionWarn( const OUString &rExtensionURL ) const;
 };
 
 //==============================================================================
@@ -258,14 +258,14 @@ class UpdateRequiredDialogService : public ::cppu::WeakImplHelper1< ::com::sun::
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xParent;
-    ::rtl::OUString m_sInitialTitle;
+    OUString m_sInitialTitle;
 
 public:
     UpdateRequiredDialogService( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xComponentContext );
 
     // XExecutableDialog
-    virtual void SAL_CALL         setTitle( rtl::OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException );
 };
 

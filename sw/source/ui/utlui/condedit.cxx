@@ -23,7 +23,6 @@
 #include <condedit.hxx>
 #include <svx/dbaexchange.hxx>
 using namespace ::svx;
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 
 // STATIC DATA

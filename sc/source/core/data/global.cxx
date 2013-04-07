@@ -80,8 +80,6 @@
 
 // -----------------------------------------------------------------------
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
@@ -104,7 +102,7 @@ CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 IntlWrapper*    ScGlobal::pScIntlWrapper = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
-::rtl::OUString*       ScGlobal::pEmptyOUString = NULL;
+OUString*       ScGlobal::pEmptyOUString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
 
 SvxBrushItem*   ScGlobal::pEmptyBrushItem = NULL;
@@ -514,7 +512,7 @@ const String& ScGlobal::GetEmptyString()
     return *pEmptyString;
 }
 
-const ::rtl::OUString& ScGlobal::GetEmptyOUString()
+const OUString& ScGlobal::GetEmptyOUString()
 {
     return *pEmptyOUString;
 }
@@ -530,7 +528,7 @@ ImageList* ScGlobal::GetOutlineSymbols()
 void ScGlobal::Init()
 {
     pEmptyString = new String;
-    pEmptyOUString = new ::rtl::OUString;
+    pEmptyOUString = new OUString;
 
     //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
     //  muss immer LANGUAGE_SYSTEM sein
@@ -735,7 +733,7 @@ String ScGlobal::GetCharsetString( CharSet eVal )
         default:
             return OUString::number( eVal );
     }
-    return rtl::OUString::createFromAscii(pChar);
+    return OUString::createFromAscii(pChar);
 }
 
 //------------------------------------------------------------------------
@@ -803,7 +801,7 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
 OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
     sal_Unicode cSep, sal_Int32 nSepCount, bool bForceSep)
 {
-    rtl::OUStringBuffer aBuf(rTokenList);
+    OUStringBuffer aBuf(rTokenList);
     if( bForceSep || (!rToken.isEmpty() && !rTokenList.isEmpty()) )
         comphelper::string::padToLength(aBuf, aBuf.getLength() + nSepCount, cSep);
     aBuf.append(rToken);
@@ -822,7 +820,7 @@ void ScGlobal::AddQuotes( OUString& rString, sal_Unicode cQuote, bool bEscapeEmb
         sal_Unicode pQ[3];
         pQ[0] = pQ[1] = cQuote;
         pQ[2] = 0;
-        rtl::OUString aQuotes( pQ );
+        OUString aQuotes( pQ );
         rString = rString.replaceAll( OUString(cQuote), aQuotes);
     }
     rString = OUString( cQuote ) + OUString( cQuote );
@@ -838,7 +836,7 @@ void ScGlobal::EraseQuotes( OUString& rString, sal_Unicode cQuote, bool bUnescap
             sal_Unicode pQ[3];
             pQ[0] = pQ[1] = cQuote;
             pQ[2] = 0;
-            rtl::OUString aQuotes( pQ );
+            OUString aQuotes( pQ );
             rString = rString.replaceAll( aQuotes, OUString(cQuote));
         }
     }
@@ -943,7 +941,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
     SfxStringItem aTarget( SID_TARGETNAME, rTarget );
-    aTarget.SetValue(rtl::OUString("_blank"));
+    aTarget.SetValue(OUString("_blank"));
     SfxViewFrame* pFrame = NULL;
     String aReferName;
     if ( pScActiveViewShell )

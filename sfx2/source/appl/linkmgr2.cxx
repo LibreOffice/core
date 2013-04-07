@@ -49,8 +49,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::util::XCloseable;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace sfx2
 {
@@ -285,8 +283,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 }
 
 bool LinkManager::GetDisplayNames(
-    const SvBaseLink* pLink, rtl::OUString* pType, rtl::OUString* pFile,
-    rtl::OUString* pLinkStr, rtl::OUString* pFilter) const
+    const SvBaseLink* pLink, OUString* pType, OUString* pFile,
+    OUString* pLinkStr, OUString* pFilter) const
 {
     String aType, aFile, aLinkStr, aFilter;
     bool bRet = GetDisplayNames(pLink, &aType, &aFile, &aLinkStr, &aFilter);
@@ -436,7 +434,7 @@ void LinkManager::ReconnectDdeLink(SfxObjectShell& rServer)
             // DDE connections between OOo apps are always named 'soffice'.
             continue;
 
-        rtl::OUString aTmp;
+        OUString aTmp;
         OUString aURL = aFile;
         if (utl::LocalFileHelper::ConvertPhysicalNameToURL(aFile, aTmp))
             aURL = aTmp;
@@ -486,13 +484,13 @@ bool LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink,
 }
 
 bool LinkManager::InsertFileLink(
-    sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const rtl::OUString& rFileNm,
-    const rtl::OUString* pFilterNm, const rtl::OUString* pRange)
+    sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const OUString& rFileNm,
+    const OUString* pFilterNm, const OUString* pRange)
 {
     if (!(OBJECT_CLIENT_SO & rLink.GetObjType()))
         return false;
 
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(rFileNm);
     aBuf.append(sfx2::cTokenSeperator);
 
@@ -535,7 +533,7 @@ sal_uIntPtr LinkManager::RegisterStatusInfoId()
     if( !nFormat )
     {
         nFormat = SotExchange::RegisterFormatName(
-                    rtl::OUString("StatusInfo from SvxInternalLink"));
+                    OUString("StatusInfo from SvxInternalLink"));
     }
     return nFormat;
 }
@@ -689,7 +687,7 @@ sal_Bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxStringItem aName( SID_FILE_NAME, sTopic );
             SfxBoolItem aMinimized(SID_MINIMIZED, sal_True);
             SfxBoolItem aHidden(SID_HIDDEN, sal_True);
-            SfxStringItem aTarget( SID_TARGETNAME, rtl::OUString("_blank") );
+            SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
             SfxBoolItem aReadOnly(SID_DOC_READONLY, false);

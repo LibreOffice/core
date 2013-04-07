@@ -145,9 +145,9 @@ public:
     void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
     void                SetDragLink(
-        const rtl::OUString& rDoc, const rtl::OUString& rTab, const rtl::OUString& rArea );
+        const OUString& rDoc, const OUString& rTab, const OUString& rArea );
     void                SetDragJump(
-        ScDocument* pLocalDoc, const rtl::OUString& rTarget, const rtl::OUString& rText );
+        ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText );
 
     //  clipboard:
     const ScClipData&   GetClipData() const;

@@ -44,12 +44,12 @@ public:
 
     static sal_Bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    const ::rtl::OUString& aPropertyName,
+                                    const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue );
     static ::com::sun::star::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,
-                                    const ::rtl::OUString& PropertyName );
+                                    const OUString& PropertyName );
 };
 
 
@@ -66,7 +66,7 @@ public:
 
     // get/setPropertyValue overloaded to used stored options instead of document
 
-    virtual void SAL_CALL   setPropertyValue( const ::rtl::OUString& aPropertyName,
+    virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::beans::PropertyVetoException,
@@ -74,7 +74,7 @@ public:
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-                                    const ::rtl::OUString& PropertyName )
+                                    const OUString& PropertyName )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);

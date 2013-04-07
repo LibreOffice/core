@@ -77,7 +77,7 @@ bool importShapeGraphic(
     GraphicObject & o_rGraphic,
     uno::Reference<beans::XPropertySet> const& xPropSet )
 {
-    rtl::OUString aURL;
+    OUString aURL;
     if( !getPropertyValue( aURL, xPropSet, "GraphicURL") ||
         aURL.isEmpty() )
     {
@@ -85,7 +85,7 @@ bool importShapeGraphic(
         return false;
     }
 
-    rtl::OUString const aVndUrl(
+    OUString const aVndUrl(
         "vnd.sun.star.GraphicObject:"  );
     sal_Int32 nIndex( aURL.indexOf( aVndUrl ) );
 
@@ -103,7 +103,7 @@ bool importShapeGraphic(
 
         // unique ID string found in URL, extract
         // to separate string
-        rtl::OUString const aUniqueId(
+        OUString const aUniqueId(
             aURL.copy( nIndex, aURL.getLength() - nIndex ) );
 
         // TODO(T2): Creating a GraphicObject is not
@@ -111,7 +111,7 @@ bool importShapeGraphic(
         // unguarded internal singleton mpGlobalMgr)
 
         // fetch already loaded graphic from graphic manager.
-        rtl::OString const aOldString(rtl::OUStringToOString(aUniqueId,
+        OString const aOldString(OUStringToOString(aUniqueId,
             RTL_TEXTENCODING_UTF8));
         o_rGraphic = GraphicObject( aOldString );
 
@@ -280,7 +280,7 @@ bool ShapeOfGroup::isBackgroundDetached() const
 ShapeSharedPtr ShapeImporter::createShape(
     uno::Reference<drawing::XShape> const& xCurrShape,
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    rtl::OUString const& shapeType ) const
+    OUString const& shapeType ) const
 {
     if( shapeType == "com.sun.star.drawing.MediaShape" || shapeType == "com.sun.star.presentation.MediaShape" )
     {
@@ -302,7 +302,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Netscape)Plugin shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  ::rtl::OUString( "com.sun.star.comp.sfx2.PluginObject" ),
+                                  OUString( "com.sun.star.comp.sfx2.PluginObject" ),
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
@@ -322,7 +322,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // (Java)Applet shape. This is a special object
         return createAppletShape( xCurrShape,
                                   mnAscendingPrio,
-                                  ::rtl::OUString( "com.sun.star.comp.sfx2.AppletObject" ),
+                                  OUString( "com.sun.star.comp.sfx2.AppletObject" ),
                                   aPropertyValues,
                                   SAL_N_ELEMENTS(aPropertyValues),
                                   mrContext );
@@ -436,7 +436,7 @@ ShapeSharedPtr ShapeImporter::createShape(
 
 bool ShapeImporter::isSkip(
     uno::Reference<beans::XPropertySet> const& xPropSet,
-    rtl::OUString const& shapeType,
+    OUString const& shapeType,
     uno::Reference< drawing::XLayer> const& xLayer )
 {
     // skip empty presentation objects:
@@ -452,10 +452,10 @@ bool ShapeImporter::isSkip(
     //skip shapes which corresponds to annotations
     if(xLayer.is())
     {
-        rtl::OUString layerName;
+        OUString layerName;
         uno::Reference<beans::XPropertySet> xPropLayerSet(
                                                           xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString("Name")) );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(OUString("Name")) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
@@ -574,7 +574,7 @@ ShapeSharedPtr ShapeImporter::importShape() // throw (ShapeLoadFailedException)
                    xDrawnInSlideshow = xLayerManager->getLayerForShape(xCurrShape);
             }
 
-            rtl::OUString const shapeType( xCurrShape->getShapeType());
+            OUString const shapeType( xCurrShape->getShapeType());
 
             // is this shape presentation-invisible?
             if( !isSkip(xPropSet, shapeType, xDrawnInSlideshow) )

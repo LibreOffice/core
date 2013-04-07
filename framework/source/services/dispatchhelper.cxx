@@ -84,8 +84,8 @@ DispatchHelper::~DispatchHelper()
  */
 css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                                 const css::uno::Reference< css::frame::XDispatchProvider >& xDispatchProvider ,
-                                const ::rtl::OUString&                                      sURL              ,
-                                const ::rtl::OUString&                                      sTargetFrameName  ,
+                                const OUString&                                      sURL              ,
+                                const OUString&                                      sTargetFrameName  ,
                                       sal_Int32                                             nSearchFlags      ,
                                 const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
     throw(css::uno::RuntimeException)
@@ -120,7 +120,7 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
     css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
     sal_Int32 nLength = lArguments.getLength();
     aArguments.realloc( nLength + 1 );
-    aArguments[ nLength ].Name = ::rtl::OUString("SynchronMode");
+    aArguments[ nLength ].Name = OUString("SynchronMode");
     aArguments[ nLength ].Value <<= (sal_Bool) sal_True;
 
     css::uno::Any aResult;

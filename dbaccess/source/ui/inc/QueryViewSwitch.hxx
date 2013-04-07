@@ -54,9 +54,9 @@ namespace dbaui
         // check if the statement is correct when not returning false
         virtual sal_Bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const ::rtl::OUString& _rsStatement);
+        virtual void setStatement(const OUString& _rsStatement);
         // returns the current sql statement
-        virtual ::rtl::OUString getStatement();
+        virtual OUString getStatement();
         /// late construction
         virtual void Construct();
         virtual void initialize();

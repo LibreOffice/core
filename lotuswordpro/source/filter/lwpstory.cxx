@@ -511,12 +511,12 @@ OUString LwpStory::RegisterFirstFribStyle()
     return A2OUSTR("");
 }
 
-sal_Bool LwpStory::IsBullStyleUsedBefore(const rtl::OUString& rStyleName, const sal_uInt8& nPos)
+sal_Bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)
 {
     std::vector <NamePosPair>::reverse_iterator rIter;
     for (rIter = m_vBulletStyleNameList.rbegin(); rIter != m_vBulletStyleNameList.rend(); ++rIter)
     {
-        rtl::OUString aName = (*rIter).first;
+        OUString aName = (*rIter).first;
         sal_uInt8 nPosition = (*rIter).second;
         if (aName == rStyleName && nPosition == nPos)
         {

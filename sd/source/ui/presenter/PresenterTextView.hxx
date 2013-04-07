@@ -59,9 +59,9 @@ protected:
     virtual void SAL_CALL disposing (void);
 
     virtual css::uno::Any GetPropertyValue (
-        const ::rtl::OUString& rsPropertyName);
+        const OUString& rsPropertyName);
     virtual css::uno::Any SetPropertyValue (
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsPropertyName,
         const css::uno::Any& rValue);
 
 private:

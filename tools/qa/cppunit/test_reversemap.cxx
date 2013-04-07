@@ -80,14 +80,14 @@ namespace
 
         //Some slots are unused, so don't map to private, just set them to 'X'
         sal_uInt32 convertFlags = OUSTRING_TO_OSTRING_CVTFLAGS ^ RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE;
-        rtl::OUString sOrigText(&aAllChars[0], aAllChars.size(), eEncoding, convertFlags);
+        OUString sOrigText(&aAllChars[0], aAllChars.size(), eEncoding, convertFlags);
         sOrigText = sOrigText.replace( 0xfffd, 'X' );
 
         //Should clearly be equal
         sal_Int32 nLength = aAllChars.size();
         CPPUNIT_ASSERT_EQUAL(sOrigText.getLength(), nLength);
 
-        rtl::OUString sFinalText;
+        OUString sFinalText;
 
         //Split up in chunks of the same encoding returned by
         //getBestMSEncodingByChar, convert to it, and back
@@ -99,16 +99,16 @@ namespace
             rtl_TextEncoding eCurrEncoding = getBestMSEncodingByChar(pStr[i]);
             if (eCurrEncoding != ePrevEncoding)
             {
-                rtl::OString aChunk(pStr+nChunkStart, i-nChunkStart, ePrevEncoding);
-                sFinalText += rtl::OStringToOUString(aChunk, ePrevEncoding);
+                OString aChunk(pStr+nChunkStart, i-nChunkStart, ePrevEncoding);
+                sFinalText += OStringToOUString(aChunk, ePrevEncoding);
                 nChunkStart = i;
             }
             ePrevEncoding = eCurrEncoding;
         }
         if (nChunkStart < 255)
         {
-            rtl::OString aChunk(pStr+nChunkStart, 255-nChunkStart, ePrevEncoding);
-            sFinalText += rtl::OStringToOUString(aChunk, ePrevEncoding);
+            OString aChunk(pStr+nChunkStart, 255-nChunkStart, ePrevEncoding);
+            sFinalText += OStringToOUString(aChunk, ePrevEncoding);
         }
 
         //Final text should be the same as original

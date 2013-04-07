@@ -62,7 +62,7 @@ public:
                     ((sal_Int32)aExp.aLong.nHi << 16);
          }
     sal_Bool Evaluate( sal_Int32 * pValue ) const;
-    void AppendMacro( rtl::OStringBuffer & ) const;
+    void AppendMacro( OStringBuffer & ) const;
 };
 
 /*********** R s c I d ***************************************************/
@@ -96,7 +96,7 @@ public:
 
     static void    SetNames( sal_Bool bSet = sal_True );
     operator         sal_Int32() const;   // Gibt Nummer zurueck
-    rtl::OString GetName()  const;   // Gibt den Namen des Defines zurueck
+    OString GetName()  const;   // Gibt den Namen des Defines zurueck
     sal_Bool    operator <  ( const RscId& rRscId ) const;
     sal_Bool    operator >  ( const RscId& rRscId ) const;
     sal_Bool    operator == ( const RscId& rRscId ) const;
@@ -121,16 +121,16 @@ friend class RscId;
     RscExpression * pExp;       // Ausdruck
 protected:
 
-            RscDefine( sal_uLong lFileKey, const rtl::OString& rDefName,
+            RscDefine( sal_uLong lFileKey, const OString& rDefName,
                        sal_Int32 lDefId );
-            RscDefine( sal_uLong lFileKey, const rtl::OString& rDefName,
+            RscDefine( sal_uLong lFileKey, const OString& rDefName,
                        RscExpression * pExpression );
             ~RscDefine();
     void    IncRef(){ nRefCount++; }
     sal_uInt32  GetRefCount() const    { return nRefCount; }
     void    DecRef();
     void    DefineToNumber();
-    void    SetName(const rtl::OString& rNewName) { m_aName = rNewName; }
+    void    SetName(const OString& rNewName) { m_aName = rNewName; }
 
     using StringNode::Search;
 public:
@@ -138,7 +138,7 @@ public:
     sal_uLong       GetFileKey() const { return lFileKey; }
     sal_Bool        Evaluate();
     sal_Int32       GetNumber() const  { return lId;      }
-    rtl::OString    GetMacro();
+    OString    GetMacro();
 };
 
 typedef ::std::vector< RscDefine* > RscSubDefList;
@@ -149,9 +149,9 @@ friend class RscFileTab;
 private:
     RscSubDefList   maList;
                 // pExpression wird auf jedenfall Eigentum der Liste
-    RscDefine * New( sal_uLong lFileKey, const rtl::OString& rDefName,
+    RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
                      sal_Int32 lDefId, size_t lPos );
-    RscDefine * New( sal_uLong lFileKey, const rtl::OString& rDefName,
+    RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
                      RscExpression * pExpression, size_t lPos );
     sal_Bool        Remove();
     size_t      GetPos( RscDefine* item ) {
@@ -175,7 +175,7 @@ public:
                                RscExpType aRE );
                 ~RscExpression();
     sal_Bool        Evaluate( sal_Int32 * pValue );
-    rtl::OString GetMacro();
+    OString GetMacro();
 };
 
 /********************** R S C F I L E ************************************/
@@ -197,8 +197,8 @@ public:
     sal_Bool            bLoaded;    // Ist die Datei geladen
     sal_Bool            bScanned;   // Wurde Datei nach Inclide abgesucht
     sal_Bool            bDirty;     // Dirty-Flag
-    rtl::OString aFileName;  // Name der Datei
-    rtl::OString aPathName;  // Pfad und Name der Datei
+    OString aFileName;  // Name der Datei
+    OString aPathName;  // Pfad und Name der Datei
     RscDefineList   aDefLst;    // Liste der Defines
     RscDependList   aDepLst;    // List of Depend
 
@@ -228,13 +228,13 @@ public:
 class RscFileTab : public RscSubFileTab
 {
     RscDefTree aDefTree;
-    sal_uLong       Find(const rtl::OString& rName);
+    sal_uLong       Find(const OString& rName);
 public:
                 RscFileTab();
                 ~RscFileTab();
 
     RscDefine * FindDef( const char * );
-    RscDefine * FindDef(const rtl::OString& rStr)
+    RscDefine * FindDef(const OString& rStr)
     {
         return FindDef(rStr.getStr());
     }
@@ -245,15 +245,15 @@ public:
     sal_Bool        TestDef( sal_uLong lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
-    RscDefine * NewDef( sal_uLong lKey, const rtl::OString& rDefName,
+    RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
                         sal_Int32 lId, sal_uLong lPos );
-    RscDefine * NewDef( sal_uLong lKey, const rtl::OString& rDefName,
+    RscDefine * NewDef( sal_uLong lKey, const OString& rDefName,
                         RscExpression *, sal_uLong lPos );
 
            // Alle Defines die in dieser Datei Definiert sind loeschen
     void   DeleteFileContext( sal_uLong lKey );
-    sal_uLong  NewCodeFile(const rtl::OString& rName);
-    sal_uLong  NewIncFile(const rtl::OString& rName, const rtl::OString& rPath);
+    sal_uLong  NewCodeFile(const OString& rName);
+    sal_uLong  NewIncFile(const OString& rName, const OString& rPath);
     RscFile * GetFile( sal_uLong lFileKey ){ return Get( lFileKey ); }
 };
 

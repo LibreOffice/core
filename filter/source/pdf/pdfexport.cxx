@@ -378,7 +378,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
     if( aURL.GetProtocol() != INET_PROT_FILE )
     {
-        rtl::OUString aTmp;
+        OUString aTmp;
 
         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFile, aTmp ) )
             aURL = INetURLObject(aTmp);
@@ -394,7 +394,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             OUString                    aPageRange;
             Any                         aSelection;
             PDFWriter::PDFWriterContext aContext;
-            rtl::OUString aOpenPassword, aPermissionPassword;
+            OUString aOpenPassword, aPermissionPassword;
             Reference< beans::XMaterialHolder > xEnc;
             Sequence< beans::NamedValue > aPreparedPermissionPassword;
 
@@ -715,8 +715,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             // after this point we don't need the legacy clear passwords anymore
             // however they are still inside the passed filter data sequence
             // which is sadly out out our control
-            aPermissionPassword = rtl::OUString();
-            aOpenPassword = rtl::OUString();
+            aPermissionPassword = OUString();
+            aOpenPassword = OUString();
 
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there

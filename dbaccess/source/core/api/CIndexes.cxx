@@ -38,7 +38,7 @@ using namespace dbaccess;
 using namespace cppu;
 
 
-ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
+ObjectType OIndexes::createObject(const OUString& _rName)
 {
     ObjectType xRet;
     if ( m_xIndexes.is() && m_xIndexes->hasByName(_rName) )
@@ -59,7 +59,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 
 // XAppend
-ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
     if ( !xData.is() )
@@ -70,7 +70,7 @@ ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Refer
 }
 
 // XDrop
-void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     if ( m_xIndexes.is() )
     {

@@ -38,7 +38,7 @@ class SVT_DLLPUBLIC FileChangedChecker
 {
 private :
     Timer                    mTimer;
-    rtl::OUString            mFileName;
+    OUString            mFileName;
     TimeValue                mLastModTime;
     ::boost::function0<void> mpCallback;
 
@@ -48,7 +48,7 @@ private :
 public :
     void resetTimer();
     bool hasFileChanged();
-    FileChangedChecker(const rtl::OUString& rFilename, const ::boost::function0<void>& rCallback);
+    FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback);
 };
 
 #endif

@@ -57,7 +57,7 @@ namespace dbaui
         IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix);
         ~IndexFieldsControl();
 
-        void Init(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rAvailableFields);
+        void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields);
 
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);

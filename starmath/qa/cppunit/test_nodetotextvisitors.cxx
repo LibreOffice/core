@@ -49,7 +49,7 @@ struct assertion_traits<String>
     static std::string toString(const String& x)
     {
         OStringStream ost;
-        ost << rtl::OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
+        ost << OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
         return ost.str();
     }
 };

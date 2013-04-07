@@ -95,7 +95,7 @@ oslGenericFunction OConnection::getOdbcFunction(sal_Int32 _nIndex)  const
     return m_pDriver->getOdbcFunction(_nIndex);
 }
 //-----------------------------------------------------------------------------
-SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent)
+SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -108,7 +108,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     SQLSMALLINT cbConnStrOut;
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
-    ::rtl::OString aConStr(::rtl::OUStringToOString(aConnectStr,getTextEncoding()));
+    OString aConStr(OUStringToOString(aConnectStr,getTextEncoding()));
     memcpy(szConnStrIn, (SDB_ODBC_CHAR*) aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 #ifndef MACOSX
@@ -149,7 +149,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 
     try
     {
-        ::rtl::OUString aVal;
+        OUString aVal;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DATA_SOURCE_READ_ONLY,aVal,*this,getTextEncoding());
         m_bReadOnly = !aVal.compareToAscii("Y");
     }
@@ -159,9 +159,9 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     }
     try
     {
-        ::rtl::OUString sVersion;
+        OUString sVersion;
         OTools::GetInfo(this,m_aConnectionHandle,SQL_DRIVER_ODBC_VER,sVersion,*this,getTextEncoding());
-        m_bUseOldDateFormat =  sVersion == ::rtl::OUString("02.50") || sVersion == ::rtl::OUString("02.00");
+        m_bUseOldDateFormat =  sVersion == OUString("02.50") || sVersion == OUString("02.00");
     }
     catch(Exception&)
     {
@@ -176,7 +176,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     return nSQLRETURN;
 }
 //-----------------------------------------------------------------------------
-SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     m_sURL  = url;
@@ -188,7 +188,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
+    OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
     const char* pUser       = "user";
@@ -228,19 +228,19 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         }
         else if(!pBegin->Name.compareToAscii(pRetriStmt))
         {
-            ::rtl::OUString sGeneratedValueStatement;
+            OUString sGeneratedValueStatement;
             OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
             setAutoRetrievingStatement(sGeneratedValueStatement);
         }
         else if(!pBegin->Name.compareToAscii(pUser))
         {
             OSL_VERIFY( pBegin->Value >>= aUID );
-            aDSN = aDSN + ::rtl::OUString(";UID=") + aUID;
+            aDSN = aDSN + OUString(";UID=") + aUID;
         }
         else if(!pBegin->Name.compareToAscii(pPwd))
         {
             OSL_VERIFY( pBegin->Value >>= aPWD );
-            aDSN = aDSN + ::rtl::OUString(";PWD=") + aPWD;
+            aDSN = aDSN + OUString(";PWD=") + aPWD;
         }
         else if(!pBegin->Name.compareToAscii(pUseCatalog))
         {
@@ -249,12 +249,12 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         else if(!pBegin->Name.compareToAscii(pSysDrv))
         {
             OSL_VERIFY( pBegin->Value >>= aSysDrvSettings );
-            aDSN += ::rtl::OUString(";");
+            aDSN += OUString(";");
             aDSN += aSysDrvSettings;
         }
         else if(0 == pBegin->Name.compareToAscii(pCharSet))
         {
-            ::rtl::OUString sIanaName;
+            OUString sIanaName;
             OSL_VERIFY( pBegin->Value >>= sIanaName );
 
             ::dbtools::OCharsetMap aLookupIanaName;
@@ -291,7 +291,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -301,21 +301,21 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OString aSql(::rtl::OUStringToOString(sql.getStr(),getTextEncoding()));
+    OString aSql(OUStringToOString(sql.getStr(),getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
     OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,(SDB_ODBC_CHAR*)aSql.getStr(),aSql.getLength(),(SDB_ODBC_CHAR*)pOut,sizeof pOut - 1,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
-    return ::rtl::OUString(pOut,nOutLen,getTextEncoding());
+    return OUString(pOut,nOutLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException)
@@ -399,19 +399,19 @@ sal_Bool SAL_CALL OConnection::isReadOnly() throw(SQLException, RuntimeException
     return m_bReadOnly;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    ::rtl::OString aCat(::rtl::OUStringToOString(catalog.getStr(),getTextEncoding()));
+    OString aCat(OUStringToOString(catalog.getStr(),getTextEncoding()));
     OTools::ThrowException(this,
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)aCat.getStr(),SQL_NTS),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -423,7 +423,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
         N3SQLGetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,(SDB_ODBC_CHAR*)pCat,(sizeof pCat)-1,&nValueLen),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);
 
-    return ::rtl::OUString(pCat,nValueLen,getTextEncoding());
+    return OUString(pCat,nValueLen,getTextEncoding());
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException)

@@ -58,7 +58,7 @@ using namespace css;
 //--------------------------------------------------------------------------------------------------------
     //  --- XNameReplace ---
 //--------------------------------------------------------------------------------------------------------
-void SAL_CALL SfxEvents_Impl::replaceByName( const rtl::OUString & aName, const uno::Any & rElement )
+void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
                                 throw( lang::IllegalArgumentException, container::NoSuchElementException,
                                        lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -83,7 +83,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const rtl::OUString & aName, const 
             ::comphelper::NamedValueCollection aNormalizedDescriptor;
             NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
 
-            ::rtl::OUString sType;
+            OUString sType;
             if  (   ( aNormalizedDescriptor.size() == 1 )
                 &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE) == 0 )
                 &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
@@ -116,7 +116,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const rtl::OUString & aName, const 
 //--------------------------------------------------------------------------------------------------------
 //  --- XNameAccess ---
 //--------------------------------------------------------------------------------------------------------
-uno::Any SAL_CALL SfxEvents_Impl::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
                                 throw( container::NoSuchElementException, lang::WrappedTargetException,
                                        uno::RuntimeException )
 {
@@ -136,13 +136,13 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const rtl::OUString& aName )
 }
 
 //--------------------------------------------------------------------------------------------------------
-uno::Sequence< rtl::OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException )
 {
     return maEventNames;
 }
 
 //--------------------------------------------------------------------------------------------------------
-sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const rtl::OUString& aName ) throw ( uno::RuntimeException )
+sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -184,10 +184,10 @@ static void Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigg
     uno::Sequence < beans::PropertyValue > aProperties;
     if ( aEventData >>= aProperties )
     {
-        rtl::OUString aType;
-        rtl::OUString aScript;
-        rtl::OUString aLibrary;
-        rtl::OUString aMacroName;
+        OUString aType;
+        OUString aScript;
+        OUString aLibrary;
+        OUString aMacroName;
 
         sal_Int32 nCount = aProperties.getLength();
 
@@ -249,7 +249,7 @@ static void Execute( uno::Any& aEventData, const document::DocumentEvent& aTrigg
 
                 uno::Reference < frame::XDispatch > xDisp;
                 if ( xProv.is() )
-                    xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+                    xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
                 if ( xDisp.is() )
                 {
@@ -281,7 +281,7 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
 
     // get the event name, find the coresponding data, execute the data
 
-    rtl::OUString aName   = aEvent.EventName;
+    OUString aName   = aEvent.EventName;
     long        nCount  = maEventNames.getLength();
     long        nIndex  = 0;
     sal_Bool    bFound  = sal_False;
@@ -354,10 +354,10 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
 
     if ( aAny >>= aProperties )
     {
-        rtl::OUString aType;
-        rtl::OUString aScriptURL;
-        rtl::OUString aLibrary;
-        rtl::OUString aMacroName;
+        OUString aType;
+        OUString aScriptURL;
+        OUString aLibrary;
+        OUString aMacroName;
 
         long nCount = aProperties.getLength();
         long nIndex = 0;
@@ -398,7 +398,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
             if ( aLibrary == "application" )
                 aLibrary = SFX_APP()->GetName();
             else
-                aLibrary = ::rtl::OUString();
+                aLibrary = OUString();
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
         }
         else if ( eType == EXTENDED_STYPE )
@@ -425,10 +425,10 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     if ( !pDoc )
         pDoc = SfxObjectShell::Current();
 
-    ::rtl::OUString aType = i_eventDescriptor.getOrDefault( PROP_EVENT_TYPE, ::rtl::OUString() );
-    ::rtl::OUString aScript = i_eventDescriptor.getOrDefault( PROP_SCRIPT, ::rtl::OUString() );
-    ::rtl::OUString aLibrary = i_eventDescriptor.getOrDefault( PROP_LIBRARY, ::rtl::OUString() );
-    ::rtl::OUString aMacroName = i_eventDescriptor.getOrDefault( PROP_MACRO_NAME, ::rtl::OUString() );
+    OUString aType = i_eventDescriptor.getOrDefault( PROP_EVENT_TYPE, OUString() );
+    OUString aScript = i_eventDescriptor.getOrDefault( PROP_SCRIPT, OUString() );
+    OUString aLibrary = i_eventDescriptor.getOrDefault( PROP_LIBRARY, OUString() );
+    OUString aMacroName = i_eventDescriptor.getOrDefault( PROP_MACRO_NAME, OUString() );
 
     if ( !aType.isEmpty() )
         o_normalizedDescriptor.put( PROP_EVENT_TYPE, aType );
@@ -445,7 +445,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
                 if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
                 {
-                    rtl::OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+                    OUString aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
                     if ( aBasMgrName == "." )
                         aLibrary = pDoc->GetTitle();
                     else
@@ -462,13 +462,13 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         }
         else if ( !aMacroName.isEmpty() )
         {
-            aScript = rtl::OUString( MACRO_PRFIX  );
+            aScript = OUString( MACRO_PRFIX  );
             if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("StarDesktop")) && !aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("application")) )
-                aScript += rtl::OUString('.');
+                aScript += OUString('.');
 
-            aScript += rtl::OUString('/');
+            aScript += OUString('/');
             aScript += aMacroName;
-            aScript += rtl::OUString( MACRO_POSTFIX  );
+            aScript += OUString( MACRO_POSTFIX  );
         }
         else
             // wrong properties
@@ -477,9 +477,9 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         if (!aLibrary.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("document")))
         {
             if ( aLibrary.isEmpty() || (pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() )) )
-                aLibrary = rtl::OUString("document");
+                aLibrary = OUString("document");
             else
-                aLibrary = rtl::OUString("application");
+                aLibrary = OUString("application");
         }
 
         o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
@@ -526,7 +526,7 @@ uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     ::osl::ResettableMutexGuard aLock(m_aLock);
     if (m_pEnumerationIt == m_lModels.end())
         throw container::NoSuchElementException(
-                    ::rtl::OUString("End of model enumeration reached."),
+                    OUString("End of model enumeration reached."),
                     static_cast< container::XEnumeration* >(this));
     uno::Reference< frame::XModel > xModel(*m_pEnumerationIt, uno::UNO_QUERY);
     ++m_pEnumerationIt;
@@ -600,12 +600,12 @@ void SAL_CALL SfxGlobalEvents_Impl::removeDocumentEventListener( const uno::Refe
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const ::rtl::OUString& /*_EventName*/,
+void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const OUString& /*_EventName*/,
         const uno::Reference< frame::XController2 >& /*_ViewController*/, const uno::Any& /*_Supplement*/ )
         throw (lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException)
 {
     // we're a multiplexer only, no chance to generate artifical events here
-    throw lang::NoSupportException(::rtl::OUString(), *this);
+    throw lang::NoSupportException(OUString(), *this);
 }
 
 //-----------------------------------------------------------------------------
@@ -672,7 +672,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                ::rtl::OUString("Cant locate at least the model parameter."),
+                OUString("Cant locate at least the model parameter."),
                 static_cast< container::XSet* >(this),
                 0);
 
@@ -681,7 +681,7 @@ void SAL_CALL SfxGlobalEvents_Impl::insert( const uno::Any& aElement )
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt != m_lModels.end())
         throw container::ElementExistException(
-                ::rtl::OUString(),
+                OUString(),
                 static_cast< container::XSet* >(this));
     m_lModels.push_back(xDoc);
     aLock.clear();
@@ -709,7 +709,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     aElement >>= xDoc;
     if (!xDoc.is())
         throw lang::IllegalArgumentException(
-                ::rtl::OUString("Cant locate at least the model parameter."),
+                OUString("Cant locate at least the model parameter."),
                 static_cast< container::XSet* >(this),
                 0);
 
@@ -718,7 +718,7 @@ void SAL_CALL SfxGlobalEvents_Impl::remove( const uno::Any& aElement )
     TModelList::iterator pIt = impl_searchDoc(xDoc);
     if (pIt == m_lModels.end())
         throw container::NoSuchElementException(
-                ::rtl::OUString(),
+                OUString(),
                 static_cast< container::XSet* >(this));
     m_lModels.erase(pIt);
     aLock.clear();

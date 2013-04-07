@@ -550,7 +550,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             //we start without wizard
 
             //check whether we should load a template document
-            const ::rtl::OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
+            const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
             String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
 
             if( aStandardTemplate.Len() > 0 )
@@ -591,7 +591,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
                         SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
-                        SfxStringItem aReferer( SID_REFERER, rtl::OUString());
+                        SfxStringItem aReferer( SID_REFERER, OUString());
                         SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, com::sun::star::uno::makeAny(aPasswrd) );
 
                         if ( xTargetFrame.is() )
@@ -620,7 +620,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 aRequest.AppendItem (aPassword);
                             aRequest.AppendItem (SfxStringItem (
                                 SID_TARGETNAME,
-                                rtl::OUString("_default")));
+                                OUString("_default")));
                             try
                             {
                                 const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot (aRequest);

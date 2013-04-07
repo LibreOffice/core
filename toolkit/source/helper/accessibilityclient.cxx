@@ -201,12 +201,12 @@ namespace toolkit
             if ( !s_pFactory.get() )
             {
 #ifndef DISABLE_DYNLOADING
-                const ::rtl::OUString sModuleName( SVLIBRARY( "acc" ) );
+                const OUString sModuleName( SVLIBRARY( "acc" ) );
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
-                    const ::rtl::OUString sFactoryCreationFunc =
-                        ::rtl::OUString("getStandardAccessibleFactory");
+                    const OUString sFactoryCreationFunc =
+                        OUString("getStandardAccessibleFactory");
                     s_pAccessibleFactoryFunc = (GetStandardAccComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

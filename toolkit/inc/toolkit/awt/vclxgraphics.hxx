@@ -118,8 +118,8 @@ public:
     void        SAL_CALL drawPie( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int32 X1, sal_Int32 Y1, sal_Int32 X2, sal_Int32 Y2 ) throw(::com::sun::star::uno::RuntimeException);
     void        SAL_CALL drawChord( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int32 nX1, sal_Int32 nY1, sal_Int32 nX2, sal_Int32 nY2 ) throw(::com::sun::star::uno::RuntimeException);
     void        SAL_CALL drawGradient( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 Height, const ::com::sun::star::awt::Gradient& aGradient ) throw(::com::sun::star::uno::RuntimeException);
-    void        SAL_CALL drawText( sal_Int32 X, sal_Int32 Y, const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
-    void        SAL_CALL drawTextArray( sal_Int32 X, sal_Int32 Y, const ::rtl::OUString& Text, const ::com::sun::star::uno::Sequence< sal_Int32 >& Longs ) throw(::com::sun::star::uno::RuntimeException);
+    void        SAL_CALL drawText( sal_Int32 X, sal_Int32 Y, const OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    void        SAL_CALL drawTextArray( sal_Int32 X, sal_Int32 Y, const OUString& Text, const ::com::sun::star::uno::Sequence< sal_Int32 >& Longs ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 

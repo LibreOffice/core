@@ -42,7 +42,7 @@ MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XCo
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Sequence< sal_Int8 >& aClassID )
+OUString MimeConfigurationHelper::GetStringClassIDRepresentation( const uno::Sequence< sal_Int8 >& aClassID )
 {
     OUString aResult;
 
@@ -55,8 +55,8 @@ MimeConfigurationHelper::MimeConfigurationHelper( const uno::Reference< uno::XCo
 
             sal_Int32 nDigit1 = (sal_Int32)( (sal_uInt8)aClassID[nInd] / 16 );
             sal_Int32 nDigit2 = (sal_uInt8)aClassID[nInd] % 16;
-            aResult += ::rtl::OUString::valueOf( nDigit1, 16 );
-            aResult += ::rtl::OUString::valueOf( nDigit2, 16 );
+            aResult += OUString::valueOf( nDigit1, 16 );
+            aResult += OUString::valueOf( nDigit2, 16 );
         }
     }
 
@@ -77,12 +77,12 @@ sal_uInt8 GetDigit_Impl( sal_Char aChar )
 }
 
 //-----------------------------------------------------------------------
-uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( const ::rtl::OUString& aClassID )
+uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( const OUString& aClassID )
 {
     sal_Int32 nLength = aClassID.getLength();
     if ( nLength == 36 )
     {
-        ::rtl::OString aCharClassID = ::rtl::OUStringToOString( aClassID, RTL_TEXTENCODING_ASCII_US );
+        OString aCharClassID = OUStringToOString( aClassID, RTL_TEXTENCODING_ASCII_US );
         const sal_Char* pString = aCharClassID.getStr();
         if ( pString )
         {
@@ -113,7 +113,7 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
 }
 
 //-----------------------------------------------------------------------
-uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPath( const ::rtl::OUString& aPath )
+uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetConfigurationByPath( const OUString& aPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -173,7 +173,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetMediaTypeCo
 
     if ( !m_xMediaTypeConfig.is() )
         m_xMediaTypeConfig = GetConfigurationByPath(
-                    ::rtl::OUString( "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations" ));
+                    OUString( "/org.openoffice.Office.Embedding/MimeTypeClassIDRelations" ));
 
     return m_xMediaTypeConfig;
 }
@@ -192,9 +192,9 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName )
+OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const OUString& aFilterName )
 {
-    ::rtl::OUString aDocServiceName;
+    OUString aDocServiceName;
 
     try
     {
@@ -218,7 +218,7 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const ::rtl::OUString& aMediaType )
+OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString& aMediaType )
 {
     uno::Reference< container::XContainerQuery > xTypeCFG(
             m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
@@ -257,11 +257,11 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
         {}
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const ::rtl::OUString& aVerbShortcut,
+sal_Bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
                                                 embed::VerbDescriptor& aDescriptor )
 {
     sal_Bool bResult = sal_False;
@@ -301,7 +301,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
     {
         try
         {
-            uno::Sequence< ::rtl::OUString > aObjPropNames = xObjectProps->getElementNames();
+            uno::Sequence< OUString > aObjPropNames = xObjectProps->getElementNames();
 
             aResult.realloc( aObjPropNames.getLength() + 1 );
             aResult[0].Name = "ClassID";
@@ -313,7 +313,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
 
                 if ( aObjPropNames[nInd] == "ObjectVerbs" )
                 {
-                    uno::Sequence< ::rtl::OUString > aVerbShortcuts;
+                    uno::Sequence< OUString > aVerbShortcuts;
                     if ( xObjectProps->getByName( aObjPropNames[nInd] ) >>= aVerbShortcuts )
                     {
                         uno::Sequence< embed::VerbDescriptor > aVerbDescriptors( aVerbShortcuts.getLength() );
@@ -340,9 +340,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetExplicitlyRegisteredObjClassID( const ::rtl::OUString& aMediaType )
+OUString MimeConfigurationHelper::GetExplicitlyRegisteredObjClassID( const OUString& aMediaType )
 {
-    ::rtl::OUString aStringClassID;
+    OUString aStringClassID;
 
     uno::Reference< container::XNameAccess > xMediaTypeConfig = GetMediaTypeConfiguration();
     try
@@ -360,7 +360,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjPropsFromConfi
 
 //-----------------------------------------------------------------------
 uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByStringClassID(
-                                                                const ::rtl::OUString& aStringClassID )
+                                                                const OUString& aStringClassID )
 {
     uno::Sequence< beans::NamedValue > aObjProps;
 
@@ -402,12 +402,12 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
     {
         aObjProps.realloc(2);
         aObjProps[0].Name = "ObjectFactory";
-        aObjProps[0].Value <<= ::rtl::OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
+        aObjProps[0].Value <<= OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
         aObjProps[1].Name = "ClassID";
         aObjProps[1].Value <<= aClassID;
     }
 
-    ::rtl::OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
+    OUString aStringClassID = GetStringClassIDRepresentation( aClassID );
     if ( !aStringClassID.isEmpty() )
     {
         uno::Reference< container::XNameAccess > xObjConfig = GetObjConfiguration();
@@ -426,14 +426,14 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByClas
 }
 
 //-----------------------------------------------------------------------
-uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMediaType( const ::rtl::OUString& aMediaType )
+uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMediaType( const OUString& aMediaType )
 {
     uno::Sequence< beans::NamedValue > aObject =
                                     GetObjectPropsByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
     if ( aObject.getLength() )
         return aObject;
 
-    ::rtl::OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
+    OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
     if ( !aDocumentName.isEmpty() )
         return GetObjectPropsByDocumentName( aDocumentName );
 
@@ -441,9 +441,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByMedi
 }
 
 //-----------------------------------------------------------------------
-uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilter( const ::rtl::OUString& aFilterName )
+uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByFilter( const OUString& aFilterName )
 {
-    ::rtl::OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
+    OUString aDocumentName = GetDocServiceNameFromFilter( aFilterName );
     if ( !aDocumentName.isEmpty() )
         return GetObjectPropsByDocumentName( aDocumentName );
 
@@ -460,7 +460,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         {
             try
             {
-                uno::Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
+                uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
                 for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
                 {
                     uno::Reference< container::XNameAccess > xObjectProps;
@@ -484,15 +484,15 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetFactoryNameByClassID( const uno::Sequence< sal_Int8 >& aClassID )
+OUString MimeConfigurationHelper::GetFactoryNameByClassID( const uno::Sequence< sal_Int8 >& aClassID )
 {
     return GetFactoryNameByStringClassID( GetStringClassIDRepresentation( aClassID ) );
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const ::rtl::OUString& aStringClassID )
+OUString MimeConfigurationHelper::GetFactoryNameByStringClassID( const OUString& aStringClassID )
 {
-    ::rtl::OUString aResult;
+    OUString aResult;
 
     if ( !aStringClassID.isEmpty() )
     {
@@ -501,13 +501,13 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         try
         {
             if ( xObjConfig.is() && ( xObjConfig->getByName( aStringClassID.toAsciiUpperCase() ) >>= xObjectProps ) && xObjectProps.is() )
-                xObjectProps->getByName( ::rtl::OUString( "ObjectFactory" ) ) >>= aResult;
+                xObjectProps->getByName( OUString( "ObjectFactory" ) ) >>= aResult;
         }
         catch( uno::Exception& )
         {
             uno::Sequence< sal_Int8 > aClassID = GetSequenceClassIDRepresentation( aStringClassID );
             if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_DUMMY_CLASSID ) ) )
-                return ::rtl::OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
+                return OUString( "com.sun.star.embed.OOoSpecialEmbeddedObjectFactory" );
         }
     }
 
@@ -515,9 +515,9 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const ::rtl::OUString& aDocName )
+OUString MimeConfigurationHelper::GetFactoryNameByDocumentName( const OUString& aDocName )
 {
-    ::rtl::OUString aResult;
+    OUString aResult;
 
     if ( !aDocName.isEmpty() )
     {
@@ -526,7 +526,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         {
             try
             {
-                uno::Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
+                uno::Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
                 for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
                 {
                     uno::Reference< container::XNameAccess > xObjectProps;
@@ -552,13 +552,13 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const ::rtl::OUString& aMediaType )
+OUString MimeConfigurationHelper::GetFactoryNameByMediaType( const OUString& aMediaType )
 {
-    ::rtl::OUString aResult = GetFactoryNameByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
+    OUString aResult = GetFactoryNameByStringClassID( GetExplicitlyRegisteredObjClassID( aMediaType ) );
 
     if ( aResult.isEmpty() )
     {
-        ::rtl::OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
+        OUString aDocumentName = GetDocServiceNameFromMediaType( aMediaType );
         if ( !aDocumentName.isEmpty() )
             aResult = GetFactoryNameByDocumentName( aDocumentName );
     }
@@ -567,11 +567,11 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
+OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                                         uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                         sal_Bool bIgnoreType )
 {
-    ::rtl::OUString aFilterName;
+    OUString aFilterName;
 
     for ( sal_Int32 nInd = 0; nInd < aMediaDescr.getLength(); nInd++ )
         if ( aMediaDescr[nInd].Name == "FilterName" )
@@ -592,7 +592,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
         uno::Sequence< beans::PropertyValue > aTempMD( aMediaDescr );
 
         // get TypeName
-        ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMD, sal_True );
+        OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMD, sal_True );
 
         // get FilterName
         for ( sal_Int32 nInd = 0; nInd < aTempMD.getLength(); nInd++ )
@@ -632,11 +632,11 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
     return aFilterName;
 }
 
-::rtl::OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
+OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
                         uno::Sequence< beans::PropertyValue >& aMediaDescr,
                         uno::Sequence< beans::NamedValue >& aObject )
 {
-    ::rtl::OUString aDocName;
+    OUString aDocName;
     for ( sal_Int32 nInd = 0; nInd < aObject.getLength(); nInd++ )
         if ( aObject[nInd].Name == "ObjectDocumentServiceName" )
         {
@@ -669,7 +669,7 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 
 #ifdef WNT
 
-sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilterName )
+sal_Int32 MimeConfigurationHelper::GetFilterFlags( const OUString& aFilterName )
 {
     sal_Int32 nFlags = 0;
     try
@@ -699,7 +699,7 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 {
     sal_Bool bResult = sal_False;
 
-    ::rtl::OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
+    OUString aFilterName = UpdateMediaDescriptorWithFilterName( aMediaDescr, sal_False );
     if ( !aFilterName.isEmpty() )
     {
         sal_Int32 nFlags = GetFilterFlags( aFilterName );
@@ -712,9 +712,9 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 #endif
 
 //-----------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const ::rtl::OUString& aServiceName, sal_Int32 nVersion )
+OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUString& aServiceName, sal_Int32 nVersion )
 {
-    rtl::OUString aResult;
+    OUString aResult;
 
     if ( !aServiceName.isEmpty() && nVersion )
         try
@@ -764,9 +764,9 @@ sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const ::rtl::OUString& aImportFilterName )
+OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUString& aImportFilterName )
 {
-    ::rtl::OUString aExportFilterName;
+    OUString aExportFilterName;
 
     try
     {
@@ -851,7 +851,7 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
             if ( xFilterEnum->nextElement() >>= aProps )
             {
                 SequenceAsHashMap aPropsHM( aProps );
-                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString("Flags"),
+                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( OUString("Flags"),
                                                                         (sal_Int32)0 );
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {

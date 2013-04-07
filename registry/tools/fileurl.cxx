@@ -33,7 +33,6 @@
 #define SEPARATOR '\\'
 #endif
 
-using rtl::OUString;
 using osl::FileBase;
 
 namespace registry

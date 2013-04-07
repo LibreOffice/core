@@ -61,9 +61,9 @@ class SdFiltersTest
 public:
     SdFiltersTest();
 
-    ::sd::DrawDocShellRef loadURL( const rtl::OUString &rURL );
-    virtual bool load( const rtl::OUString &rFilter,
-        const rtl::OUString &rURL, const rtl::OUString &rUserData,
+    ::sd::DrawDocShellRef loadURL( const OUString &rURL );
+    virtual bool load( const OUString &rFilter,
+        const OUString &rURL, const OUString &rUserData,
         unsigned int nFilterFlags, unsigned int nClipboardID,
         unsigned int nFilterVersion);
 
@@ -98,7 +98,7 @@ FileFormat aFileFormats[] = {
     { 0, 0, 0, 0 }
 };
 
-::sd::DrawDocShellRef SdFiltersTest::loadURL( const rtl::OUString &rURL )
+::sd::DrawDocShellRef SdFiltersTest::loadURL( const OUString &rURL )
 {
     FileFormat *pFmt = NULL;
 
@@ -114,11 +114,11 @@ FileFormat aFileFormats[] = {
     if (pFmt->nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
-        rtl::OUString::createFromAscii( pFmt->pFilterName ),
-        rtl::OUString(), pFmt->nFormatType, nFormat,
-        rtl::OUString::createFromAscii( pFmt->pTypeName ),
-        0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString("private:factory/sdraw*") );
+        OUString::createFromAscii( pFmt->pFilterName ),
+        OUString(), pFmt->nFormatType, nFormat,
+        OUString::createFromAscii( pFmt->pTypeName ),
+        0, OUString(), OUString(), /* userdata */
+        OUString("private:factory/sdraw*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -181,14 +181,14 @@ void SdFiltersTest::testN778859()
     }
 }
 
-bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
+bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
     unsigned int nFilterVersion)
 {
     SfxFilter aFilter(
         rFilter,
-        rtl::OUString(), nFilterFlags, nClipboardID, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
+        OUString(), nFilterFlags, nClipboardID, OUString(), 0, OUString(),
+        rUserData, OUString() );
     aFilter.SetVersion(nFilterVersion);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -202,13 +202,13 @@ bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 void SdFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(rtl::OUString("MS PowerPoint 97"),
+    testDir(OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
-            rtl::OUString("sdfilt"));
+            OUString("sdfilt"));
 
-    testDir(rtl::OUString("draw8"),
+    testDir(OUString("draw8"),
             getURLFromSrc("/sd/qa/unit/data/odg/"),
-            rtl::OUString("sdfilt"));
+            OUString("sdfilt"));
 #endif
 }
 

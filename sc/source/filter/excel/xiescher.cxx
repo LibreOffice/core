@@ -107,8 +107,6 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
@@ -390,7 +388,7 @@ void XclImpDrawObjBase::SetAnchor( const XclObjAnchor& rAnchor )
 }
 
 void XclImpDrawObjBase::SetDffData(
-    const DffObjData& rDffObjData, const rtl::OUString& rObjName, const rtl::OUString& rHyperlink,
+    const DffObjData& rDffObjData, const OUString& rObjName, const OUString& rHyperlink,
     bool bVisible, bool bAutoMargin )
 {
     mnDffShapeId = rDffObjData.nShapeId;
@@ -505,7 +503,7 @@ void XclImpDrawObjBase::PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrO
 
 void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 {
-    maObjName = rtl::OUString();
+    maObjName = OUString();
     if( nNameLen > 0 )
     {
         // name length field is repeated before the name
@@ -517,7 +515,7 @@ void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 
 void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = rtl::OUString();
+    maMacroName = OUString();
     rStrm.Ignore( nMacroSize );
     // skip padding byte for word boundaries, not contained in nMacroSize
     if( rStrm.GetRecPos() & 1 ) rStrm.Ignore( 1 );
@@ -525,19 +523,19 @@ void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 
 void XclImpDrawObjBase::ReadMacro4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = rtl::OUString();
+    maMacroName = OUString();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro5( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = rtl::OUString();
+    maMacroName = OUString();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
 {
-    maMacroName = rtl::OUString();
+    maMacroName = OUString();
     if( rStrm.GetRecLeft() > 6 )
     {
         // macro is stored in a tNameXR token containing a link to a defined name
@@ -1453,7 +1451,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
                     {
                         double fAngle = 180.0;
                         com::sun::star::beans::PropertyValue aTextRotateAngle;
-                        aTextRotateAngle.Name = rtl::OUString( "TextRotateAngle" );
+                        aTextRotateAngle.Name = OUString( "TextRotateAngle" );
                         aTextRotateAngle.Value <<= fAngle;
                         SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
                         aGeometryItem.SetPropertyValue( aTextRotateAngle );
@@ -2228,10 +2226,10 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
             if ( xCtrlModel.is() )
             {
                 ScfPropertySet aProps( xCtrlModel );
-                rtl::OUString sGroupName = rtl::OUString::valueOf( static_cast< sal_Int32 >( pLeader->GetDffShapeId() ) );
+                OUString sGroupName = OUString::valueOf( static_cast< sal_Int32 >( pLeader->GetDffShapeId() ) );
 
                 aProps.SetStringProperty( "GroupName", sGroupName );
-                aProps.SetStringProperty( "RefValue", rtl::OUString::valueOf( nRefVal++ ) );
+                aProps.SetStringProperty( "RefValue", OUString::valueOf( nRefVal++ ) );
                 if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
                 {
                     // propagate cell link info
@@ -3207,7 +3205,7 @@ XclImpDffConverter::~XclImpDffConverter()
 
 String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
 {
-    rtl::OUString sOleName;
+    OUString sOleName;
     String sCodeName = GetExtDocOptions().GetCodeName( nTab );
 
     if (mxOleCtrlNameOverride.is() && mxOleCtrlNameOverride->hasByName(sCodeName))
@@ -3217,8 +3215,8 @@ String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
         xIdToOleName->getByIndex( nObjId ) >>= sOleName;
     }
     OSL_TRACE("XclImpObjectManager::GetOleNameOverride tab %d, ( module %s ) object id ( %d ) is %s", nTab,
-        rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(), nObjId,
-        rtl::OUStringToOString( sOleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(), nObjId,
+        OUStringToOString( sOleName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     return sOleName;
 }
@@ -4191,7 +4189,7 @@ void XclImpObjectManager::ConvertObjects()
 
 OUString XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const
 {
-    rtl::OUStringBuffer aDefName;
+    OUStringBuffer aDefName;
     DefObjNameMap::const_iterator aIt = maDefObjNames.find( rDrawObj.GetObjType() );
     if( aIt != maDefObjNames.end() )
         aDefName.append(aIt->second);

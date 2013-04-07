@@ -89,7 +89,7 @@ BibConfig*  BibModul::GetConfig()
 
 
 // PropertyNames
-#define STATIC_USTRING(a,b) rtl::OUString a(b)
+#define STATIC_USTRING(a,b) OUString a(b)
 STATIC_USTRING(FM_PROP_LABEL,"Label");
 STATIC_USTRING(FM_PROP_CONTROLSOURCE,"DataField");
 STATIC_USTRING(FM_PROP_NAME,"Name");

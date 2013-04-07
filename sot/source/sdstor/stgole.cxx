@@ -92,7 +92,7 @@ void StgInternalStream::Commit()
 ///////////////////////// class StgCompObjStream /////////////////////////
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, sal_Bool bWr )
-            : StgInternalStream( rStg, rtl::OUString("\1CompObj"), bWr )
+            : StgInternalStream( rStg, OUString("\1CompObj"), bWr )
 {
     memset( &aClsId, 0, sizeof( ClsId ) );
     nCbFormat = 0;
@@ -144,7 +144,7 @@ sal_Bool StgCompObjStream::Store()
     if( GetError() != SVSTREAM_OK )
         return sal_False;
     Seek( 0L );
-    rtl::OString aAsciiUserName(rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
+    OString aAsciiUserName(OUStringToOString(aUserName, RTL_TEXTENCODING_MS_1252));
     *this << (sal_Int16) 1          // Version?
               << (sal_Int16) -2                     // 0xFFFE = Byte Order Indicator
               << (sal_Int32) 0x0A03         // Windows 3.10
@@ -162,7 +162,7 @@ sal_Bool StgCompObjStream::Store()
 /////////////////////////// class StgOleStream ///////////////////////////
 
 StgOleStream::StgOleStream( BaseStorage& rStg, sal_Bool bWr )
-            : StgInternalStream( rStg, rtl::OUString("\1Ole"), bWr )
+            : StgInternalStream( rStg, OUString("\1Ole"), bWr )
 {
     nFlags = 0;
 }

@@ -62,13 +62,13 @@ class Package : protected ::dp_misc::MutexHolder, public t_PackageBase
 
 protected:
     ::rtl::Reference<PackageRegistryBackend> m_myBackend;
-    const ::rtl::OUString m_url;
-    ::rtl::OUString m_name;
-    ::rtl::OUString m_displayName;
+    const OUString m_url;
+    OUString m_name;
+    OUString m_displayName;
     const css::uno::Reference<css::deployment::XPackageTypeInfo> m_xPackageType;
     const bool m_bRemoved;
     //Only set if m_bRemoved = true;
-    const ::rtl::OUString m_identifier;
+    const OUString m_identifier;
 
     void check() const;
     void fireModified();
@@ -94,43 +94,43 @@ protected:
 
     virtual ~Package();
     Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
-             ::rtl::OUString const & url,
-             ::rtl::OUString const & name,
-             ::rtl::OUString const & displayName,
+             OUString const & url,
+             OUString const & name,
+             OUString const & displayName,
              css::uno::Reference<css::deployment::XPackageTypeInfo> const &
              xPackageType,
              bool bRemoved,
-             ::rtl::OUString const & identifier);
+             OUString const & identifier);
 
 public:
 
     class TypeInfo :
         public ::cppu::WeakImplHelper1<css::deployment::XPackageTypeInfo>
     {
-        const ::rtl::OUString m_mediaType;
-        const ::rtl::OUString m_fileFilter;
-        const ::rtl::OUString m_shortDescr;
+        const OUString m_mediaType;
+        const OUString m_fileFilter;
+        const OUString m_shortDescr;
         const sal_uInt16 m_smallIcon;
     public:
         virtual ~TypeInfo();
-        TypeInfo( ::rtl::OUString const & mediaType,
-                  ::rtl::OUString const & fileFilter,
-                  ::rtl::OUString const & shortDescr,
+        TypeInfo( OUString const & mediaType,
+                  OUString const & fileFilter,
+                  OUString const & shortDescr,
                   sal_uInt16 smallIcon)
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
               m_smallIcon(smallIcon)
             {}
         // XPackageTypeInfo
-        virtual ::rtl::OUString SAL_CALL getMediaType()
+        virtual OUString SAL_CALL getMediaType()
             throw (css::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getDescription()
+        virtual OUString SAL_CALL getDescription()
             throw (css::deployment::ExtensionRemovedException,
                    css::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getShortDescription()
+        virtual OUString SAL_CALL getShortDescription()
             throw (css::deployment::ExtensionRemovedException,
                    css::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getFileFilter()
+        virtual OUString SAL_CALL getFileFilter()
             throw (css::uno::RuntimeException);
         virtual css::uno::Any SAL_CALL getIcon( sal_Bool highContrast,
                                                 sal_Bool smallIcon )
@@ -212,25 +212,25 @@ public:
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw (css::uno::RuntimeException);
-    virtual css::beans::Optional< ::rtl::OUString > SAL_CALL getIdentifier()
+    virtual css::beans::Optional< OUString > SAL_CALL getIdentifier()
         throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getVersion()
+    virtual OUString SAL_CALL getVersion()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getURL()
+    virtual OUString SAL_CALL getURL()
         throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDisplayName()
+    virtual OUString SAL_CALL getDisplayName()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getDescription()
+    virtual OUString SAL_CALL getDescription()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLicenseText()
+    virtual OUString SAL_CALL getLicenseText()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getUpdateInformationURLs()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
@@ -244,16 +244,16 @@ public:
     virtual css::uno::Reference<css::deployment::XPackageTypeInfo> SAL_CALL
     getPackageType() throw (css::uno::RuntimeException);
     virtual void SAL_CALL exportTo(
-        ::rtl::OUString const & destFolderURL,
-        ::rtl::OUString const & newTitle,
+        OUString const & destFolderURL,
+        OUString const & newTitle,
         sal_Int32 nameClashAction,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::ExtensionRemovedException,
                css::ucb::CommandFailedException,
                css::ucb::CommandAbortedException, css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRepositoryName()
+    virtual OUString SAL_CALL getRepositoryName()
         throw (css::uno::RuntimeException);
-    virtual css::beans::Optional< ::rtl::OUString > SAL_CALL getRegistrationDataURL()
+    virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isRemoved()
@@ -277,15 +277,15 @@ class PackageRegistryBackend
     //of bindPackage calls which are costly. Therefore we keep hard references in
     //the map now.
     typedef ::boost::unordered_map<
-        ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
-        ::rtl::OUStringHash > t_string2ref;
+        OUString, css::uno::Reference<css::deployment::XPackage>,
+        OUStringHash > t_string2ref;
     t_string2ref m_bound;
 
 protected:
-    ::rtl::OUString m_cachePath;
+    OUString m_cachePath;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
 
-    ::rtl::OUString m_context;
+    OUString m_context;
     // currently only for library containers:
     enum {
         CONTEXT_UNKNOWN,
@@ -301,8 +301,8 @@ protected:
 
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
-        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
-        sal_Bool bRemoved, ::rtl::OUString const & identifier,
+        OUString const & url, OUString const & mediaType,
+        sal_Bool bRemoved, OUString const & identifier,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 
@@ -318,8 +318,8 @@ protected:
        If url is empty then it is created in the backend folder, otherwise
        at a location relative to that folder specified by url.
     */
-    ::rtl::OUString createFolder(
-        ::rtl::OUString const & relUrl,
+    OUString createFolder(
+        OUString const & relUrl,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
     /* deletes folders and files.
 
@@ -327,15 +327,15 @@ protected:
        not used are deleted.
      */
     void deleteUnusedFolders(
-        ::rtl::OUString const & relUrl,
-        ::std::list< ::rtl::OUString> const & usedFolders);
+        OUString const & relUrl,
+        ::std::list< OUString> const & usedFolders);
     /* deletes one folder with a "temporary" name and the corresponding
        tmp file, which was used to derive the folder name.
     */
     static void deleteTempFolder(
-        ::rtl::OUString const & folderUrl);
+        OUString const & folderUrl);
 
-    ::rtl::OUString getSharedRegistrationDataURL(
+    OUString getSharedRegistrationDataURL(
         css::uno::Reference<css::deployment::XPackage> const & extension,
         css::uno::Reference<css::deployment::XPackage> const & item);
 
@@ -344,7 +344,7 @@ protected:
        This ensure that the backends clean up their registration data
        when an extension was removed.
     */
-//    virtual void deleteDbEntry( ::rtl::OUString const & url) = 0;
+//    virtual void deleteDbEntry( OUString const & url) = 0;
 
 
 
@@ -357,10 +357,10 @@ public:
     inline css::uno::Reference<css::uno::XComponentContext> const &
     getComponentContext() const { return m_xComponentContext; }
 
-    inline ::rtl::OUString const & getCachePath() const { return m_cachePath; }
+    inline OUString const & getCachePath() const { return m_cachePath; }
     inline bool transientMode() const { return m_cachePath.isEmpty(); }
 
-    inline ::rtl::OUString getContext() const {return m_context; }
+    inline OUString getContext() const {return m_context; }
 
     // XEventListener
     virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
@@ -368,8 +368,8 @@ public:
 
     // XPackageRegistry
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL bindPackage(
-        ::rtl::OUString const & url, ::rtl::OUString const & mediaType,
-        sal_Bool bRemoved, ::rtl::OUString const & identifier,
+        OUString const & url, OUString const & mediaType,
+        sal_Bool bRemoved, OUString const & identifier,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
                css::deployment::InvalidRemovedParameterException,
@@ -377,7 +377,7 @@ public:
                css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
 //     virtual void SAL_CALL packageRemoved(
-//         ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+//         OUString const & url, OUString const & mediaType)
 //         throw (css::deployment::DeploymentException,
 //                css::uno::RuntimeException);
 

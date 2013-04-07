@@ -39,7 +39,7 @@ namespace comphelper
 {
     namespace xml
     {
-        COMPHELPER_DLLPUBLIC rtl::OString makeXMLChaff();
+        COMPHELPER_DLLPUBLIC OString makeXMLChaff();
     }
 }
 

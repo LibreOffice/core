@@ -88,12 +88,12 @@ class CXmlCharPtr
 public:
     CXmlCharPtr();
     CXmlCharPtr(xmlChar* aDoc);
-    CXmlCharPtr(const ::rtl::OUString &);
+    CXmlCharPtr(const OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
     operator xmlChar* () const;
-    operator ::rtl::OUString ();
-    operator ::rtl::OString ();
+    operator OUString ();
+    operator OString ();
 };
 
 

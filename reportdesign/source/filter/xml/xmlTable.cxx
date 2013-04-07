@@ -46,7 +46,7 @@ namespace rptxml
     using namespace ::com::sun::star::xml::sax;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    sal_uInt16 lcl_getForceNewPageOption(const ::rtl::OUString& _sValue)
+    sal_uInt16 lcl_getForceNewPageOption(const OUString& _sValue)
     {
         sal_uInt16 nRet = report::ForceNewPage::NONE;
         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetForceNewPageOptions();
@@ -57,7 +57,7 @@ DBG_NAME( rpt_OXMLTable )
 
 OXMLTable::OXMLTable( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XSection >& _xSection
                 )
@@ -74,15 +74,15 @@ OXMLTable::OXMLTable( ORptFilter& rImport
     const SvXMLTokenMap& rTokenMap = rImport.GetSectionElemTokenMap();
 
     const sal_Int16 nLength = (m_xSection.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -123,7 +123,7 @@ OXMLTable::~OXMLTable()
 
 SvXMLImportContext* OXMLTable::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const ::rtl::OUString& _rLocalName,
+        const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

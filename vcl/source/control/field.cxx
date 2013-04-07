@@ -94,7 +94,7 @@ static sal_Bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_Bool bCurrency = sal_False )
 {
     OUString            aStr = rStr;
-    rtl::OUStringBuffer aStr1, aStr2;
+    OUStringBuffer aStr1, aStr2;
     sal_Bool            bNegative = sal_False;
     sal_Int32           nDecPos;
 
@@ -226,7 +226,7 @@ static void ImplUpdateSeparatorString( String& io_rText,
                                        const String& rOldDecSep, const String& rNewDecSep,
                                        const String& rOldThSep, const String& rNewThSep )
 {
-    rtl::OUStringBuffer aBuf( io_rText.Len() );
+    OUStringBuffer aBuf( io_rText.Len() );
     xub_StrLen nIndexDec = 0, nIndexTh = 0, nIndex = 0;
 
     const sal_Unicode* pBuffer = io_rText.GetBuffer();
@@ -810,7 +810,7 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-bool NumericField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool NumericField::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "digits")
         SetDecimalDigits(rValue.toInt32());
@@ -935,15 +935,15 @@ namespace
 {
     Size calcMinimumSize(const SpinField &rSpinField, const NumericFormatter &rFormatter)
     {
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         sal_Int32 nTextLen;
 
-        nTextLen = rtl::OUString::valueOf(rFormatter.GetMin()).getLength();
+        nTextLen = OUString::valueOf(rFormatter.GetMin()).getLength();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
-        nTextLen = rtl::OUString::valueOf(rFormatter.GetMax()).getLength();
+        nTextLen = OUString::valueOf(rFormatter.GetMax()).getLength();
         string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
@@ -1093,10 +1093,10 @@ static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
 // -----------------------------------------------------------------------
 
-static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
+static OUString ImplMetricGetUnitText(const OUString& rStr)
 {
     // fetch unit text
-    rtl::OUStringBuffer aStr;
+    OUStringBuffer aStr;
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
         sal_Unicode c = rStr[i];
@@ -1131,7 +1131,7 @@ static const OUString ImplMetricToString( FieldUnit rUnit )
     return OUString();
 }
 
-static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
+static FieldUnit ImplStringToMetric(const OUString &rMetricString)
 {
     FieldUnitStringList* pList = ImplGetCleanedFieldUnits();
     if( pList )
@@ -1151,9 +1151,9 @@ static FieldUnit ImplStringToMetric(const rtl::OUString &rMetricString)
 
 // -----------------------------------------------------------------------
 
-static FieldUnit ImplMetricGetUnit(const rtl::OUString& rStr)
+static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 {
-    rtl::OUString aStr = ImplMetricGetUnitText( rStr );
+    OUString aStr = ImplMetricGetUnitText( rStr );
     return ImplStringToMetric( aStr );
 }
 
@@ -1714,11 +1714,11 @@ Size MetricField::CalcMinimumSize() const
     return calcMinimumSize(*this, *this);
 }
 
-bool MetricField::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool MetricField::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "format")
     {
-        maCustomUnitText = rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
+        maCustomUnitText = OStringToOUString(rValue, RTL_TEXTENCODING_UTF8);
         meUnit = FUNIT_CUSTOM;
     }
     else if (rKey == "digits")

@@ -73,15 +73,15 @@ namespace connectivity
 
         class MQueryExpressionString : public MQueryExpressionBase {
         protected:
-            ::rtl::OUString     m_aName;         // LHS
+            OUString     m_aName;         // LHS
             MQueryOp::cond_type m_aBooleanCondition;
-            ::rtl::OUString     m_aValue;        // RHS
+            OUString     m_aValue;        // RHS
 
         public:
 
-            MQueryExpressionString( ::rtl::OUString&    lhs,
+            MQueryExpressionString( OUString&    lhs,
                                     MQueryOp::cond_type cond,
-                                    ::rtl::OUString     rhs )
+                                    OUString     rhs )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )
                 , m_aBooleanCondition( cond )
@@ -89,18 +89,18 @@ namespace connectivity
             {
             }
 
-            MQueryExpressionString( ::rtl::OUString&    lhs,
+            MQueryExpressionString( OUString&    lhs,
                                     MQueryOp::cond_type cond )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )
                 , m_aBooleanCondition( cond )
-                , m_aValue( ::rtl::OUString() )
+                , m_aValue( OUString() )
             {
             }
 
-            const ::rtl::OUString&    getName() const { return m_aName; }
+            const OUString&    getName() const { return m_aName; }
             MQueryOp::cond_type getCond() const { return m_aBooleanCondition; }
-            const ::rtl::OUString&    getValue() const { return m_aValue; }
+            const OUString&    getValue() const { return m_aValue; }
         };
 
         class MQuery;
@@ -192,14 +192,14 @@ namespace connectivity
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
-            ::rtl::OUString                 m_aAddressbook;
+            OUString                 m_aAddressbook;
             sal_Int32                       m_nMaxNrOfReturns;
             sal_Bool                        m_bQuerySubDirs;
             MQueryExpression                m_aExpr;
             const OColumnAlias&             m_rColumnAlias;
             ::com::sun::star::mozilla::MozillaProductType
                                             m_Product;
-            ::rtl::OUString                 m_Profile;
+            OUString                 m_Profile;
             ErrorDescriptor                 m_aError;
 
             void construct();
@@ -226,7 +226,7 @@ namespace connectivity
 
             sal_uInt32                      InsertLoginInfo(OConnection* _pCon);
 
-            void                            setAddressbook( ::rtl::OUString&);
+            void                            setAddressbook( OUString&);
 
             const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
 
@@ -241,11 +241,11 @@ namespace connectivity
             sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
             sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,
-                                                         const rtl::OUString& aDBColumnName,
+                                                         const OUString& aDBColumnName,
                                                          sal_Int32 nType ) const;
             sal_Bool                        setRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,
-                                                         const rtl::OUString& aDBColumnName,
+                                                         const OUString& aDBColumnName,
                                                          sal_Int32 nType ) const;
             sal_Int32                       getRowStates(sal_Int32 nDBRow);
             sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState);

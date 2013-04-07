@@ -25,7 +25,7 @@
 #include "common.hxx"
 #include "export.hxx"
 
-typedef std::vector< rtl::OString* > LngLineList;
+typedef std::vector< OString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_COULD_NOT_OPEN  0x0001
@@ -39,17 +39,17 @@ class LngParser
 private:
     sal_uInt16 nError;
     LngLineList *pLines;
-    rtl::OString sSource;
+    OString sSource;
     sal_Bool bULF;
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
 
-    bool isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_in);
-    void ReadLine(const rtl::OString &rLine_in,
+    bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
+    void ReadLine(const OString &rLine_in,
         OStringHashMap &rText_inout);
     void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
-        const rtl::OString &rActFileName, const rtl::OString &rID);
+        const OString &rActFileName, const OString &rID);
 public:
-    LngParser(const rtl::OString &rLngFile,
+    LngParser(const OString &rLngFile,
         sal_Bool bULFFormat);
     ~LngParser();
 

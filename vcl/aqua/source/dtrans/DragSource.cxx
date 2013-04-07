@@ -51,7 +51,6 @@ using namespace com::sun::star::lang;
 using namespace comphelper;
 using namespace std;
 
-using ::rtl::OUString;
 
 // For OOo internal D&D we provide the Transferable without NSDragPboard
 // interference as a shortcut

@@ -32,8 +32,6 @@
 #include "xmloff/xmlnmspe.hxx"
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
@@ -49,7 +47,7 @@ private:
 
 public:
     XMLDocumentBuilderContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         const ::com::sun::star::uno::Reference<
@@ -58,20 +56,20 @@ public:
     virtual ~XMLDocumentBuilderContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void EndElement();
 };
 
 XMLDocumentBuilderContext::XMLDocumentBuilderContext(SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>&,
         const uno::Reference<xml::dom::XSAXDocumentBuilder2>& rDocBuilder) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -85,7 +83,7 @@ XMLDocumentBuilderContext::~XMLDocumentBuilderContext()
 
 SvXMLImportContext *
 XMLDocumentBuilderContext::CreateChildContext( sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrs)
 {
     return new XMLDocumentBuilderContext(
@@ -100,7 +98,7 @@ void XMLDocumentBuilderContext::StartElement(
       xAttrList);
 }
 
-void XMLDocumentBuilderContext::Characters( const ::rtl::OUString& rChars )
+void XMLDocumentBuilderContext::Characters( const OUString& rChars )
 {
     mxDocBuilder->characters(rChars);
 }
@@ -137,7 +135,7 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(
+            OUString(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
                 "properties init exception"),
             rImport, makeAny(e));
@@ -156,7 +154,7 @@ lcl_initGenerator(SvXMLImport & rImport,
         xPath->registerNS(GetXMLToken(XML_NP_OFFICE),GetXMLToken(XML_N_OFFICE));
         xPath->registerNS(GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META));
 
-        ::rtl::OUString const expr( "string(/office:document-meta/office:meta/meta:generator)");
+        OUString const expr( "string(/office:document-meta/office:meta/meta:generator)");
         uno::Reference< xml::xpath::XXPathObject > const xObj(
             xPath->eval(xDoc.get(), expr), uno::UNO_SET_THROW);
         OUString const value(xObj->getString());
@@ -165,14 +163,14 @@ lcl_initGenerator(SvXMLImport & rImport,
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString(
+            OUString(
                                 "SvXMLMetaDocumentContext::initGenerator: exception"),
             rImport, makeAny(e));
     }
 }
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-            sal_uInt16 nPrfx, const rtl::OUString& rLName,
+            sal_uInt16 nPrfx, const OUString& rLName,
             const uno::Reference<document::XDocumentProperties>& xDocProps) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mxDocProps(xDocProps),
@@ -189,7 +187,7 @@ SvXMLMetaDocumentContext::~SvXMLMetaDocumentContext()
 }
 
 SvXMLImportContext *SvXMLMetaDocumentContext::CreateChildContext(
-             sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+             sal_uInt16 nPrefix, const OUString& rLocalName,
              const uno::Reference<xml::sax::XAttributeList>& rAttrs)
 {
     if (  (XML_NAMESPACE_OFFICE == nPrefix) &&
@@ -233,7 +231,7 @@ void SvXMLMetaDocumentContext::EndElement()
     }
 }
 
-void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )
+void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno::Reference<beans::XPropertySet>& xImportInfo )
 {
     OUString sBuildId;
     // skip to second product

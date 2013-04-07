@@ -324,9 +324,9 @@ void PieChart::createShapes()
     //therefore create an own group for the texts to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
     uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
@@ -531,7 +531,7 @@ void PieChart::createShapes()
                         aNewOrigin, m_xLogicTarget, m_pShapeFactory, m_nDimension ) );
 
                     //enable draging of piesegments
-                    rtl::OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
+                    OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
                         , pSeries->getSeriesParticle()
                         , ObjectIdentifier::getPieSegmentDragMethodServiceName()
                         , ObjectIdentifier::createPieSegmentDragParameterString(

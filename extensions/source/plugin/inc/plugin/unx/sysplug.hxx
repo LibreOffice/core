@@ -76,7 +76,7 @@ public:
     virtual NPError NPP_SetValue( NPP instance, NPNVariable variable,
                                  void *value);
 
-    static bool getPluginappPath(rtl::OString * path);
+    static bool getPluginappPath(OString * path);
 };
 
 #endif

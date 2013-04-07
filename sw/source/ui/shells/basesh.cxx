@@ -848,7 +848,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( SfxRequest::HasMacroRecorder(pViewFrame) )
                 {
                     SfxRequest aReq( pViewFrame, nSlot);
-                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, rtl::OUString(cDelim) ));
+                    aReq.AppendItem( SfxStringItem( FN_PARAM_1, OUString(cDelim) ));
                     if(bToTable)
                     {
                         if(pTAFmt)
@@ -1921,7 +1921,7 @@ SwBaseShell::SwBaseShell(SwView& rVw) :
     SwWrtShell& rWrtSh = rView.GetWrtShell();
 
     SetPool(&rWrtSh.GetAttrPool());
-    SetName(rtl::OUString("Base"));
+    SetName(OUString("Base"));
     rWrtSh.SetGrfArrivedLnk( LINK( this, SwBaseShell, GraphicArrivedHdl));
 }
 

@@ -56,14 +56,14 @@ public:
     virtual void SAL_CALL ResetColors(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Colors( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getFileFormat(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL SaveCopyAs( const rtl::OUString& Filename ) throw ( css::uno::RuntimeException);
+    virtual void SAL_CALL SaveCopyAs( const OUString& Filename ) throw ( css::uno::RuntimeException);
 
     // code name
-    virtual ::rtl::OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
     // XUnoTunnel
     virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);

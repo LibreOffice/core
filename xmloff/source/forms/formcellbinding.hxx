@@ -77,14 +77,14 @@ namespace xmloff
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
                         createCellBindingFromStringAddress(
-                            const ::rtl::OUString& _rAddress,
+                            const OUString& _rAddress,
                             bool _bUseIntegerBinding
                         ) const;
 
         /** gets a cell range list source binding for the given address
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
-                        createCellListSourceFromStringAddress( const ::rtl::OUString& _rAddress ) const;
+                        createCellListSourceFromStringAddress( const OUString& _rAddress ) const;
 
         /** creates a string representation for the given value binding's address
 
@@ -95,7 +95,7 @@ namespace xmloff
                 The binding is a valid cell binding, or <NULL/>
             @see isCellBinding
         */
-        ::rtl::OUString getStringAddressFromCellBinding(
+        OUString getStringAddressFromCellBinding(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                         ) const;
 
@@ -109,7 +109,7 @@ namespace xmloff
                 The object is a valid cell range list source, or <NULL/>
             @see isCellRangeListSource
         */
-        ::rtl::OUString getStringAddressFromCellListSource(
+        OUString getStringAddressFromCellListSource(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxSource
                         ) const;
 
@@ -186,7 +186,7 @@ namespace xmloff
         /** creates an address object from a string representation of a cell address
         */
         bool            convertStringAddress(
-                            const ::rtl::OUString& _rAddressDescription,
+                            const OUString& _rAddressDescription,
                             ::com::sun::star::table::CellAddress& /* [out] */ _rAddress,
                             sal_Int16 _nAssumeSheet = -1
                         ) const;
@@ -194,28 +194,28 @@ namespace xmloff
         /** creates an address range object from a string representation of a cell range address
         */
         bool            convertStringAddress(
-                            const ::rtl::OUString& _rAddressDescription,
+                            const OUString& _rAddressDescription,
                             ::com::sun::star::table::CellRangeAddress& /* [out] */ _rAddress
                         ) const;
 
         /** determines if our document is a spreadsheet document, *and* can supply
             the given service
         */
-        bool            isSpreadsheetDocumentWhichSupplies( const ::rtl::OUString& _rService ) const  SAL_THROW(());
+        bool            isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const  SAL_THROW(());
 
         /** determines if our document is a spreadsheet document, *and* can supply
             the given service
         */
         static bool     isSpreadsheetDocumentWhichSupplies(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument,
-                            const ::rtl::OUString& _rService
+                            const OUString& _rService
                         ) SAL_THROW(());
 
         /** checkes whether a given component supports a given servive
         */
         bool            doesComponentSupport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
-                            const ::rtl::OUString& _rService
+                            const OUString& _rService
                         ) const;
 
         /** uses the document (it's factory interface, respectively) to create a component instance
@@ -230,8 +230,8 @@ namespace xmloff
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         createDocumentDependentInstance(
-                            const ::rtl::OUString& _rService,
-                            const ::rtl::OUString& _rArgumentName,
+                            const OUString& _rService,
+                            const OUString& _rArgumentName,
                             const ::com::sun::star::uno::Any& _rArgumentValue
                         ) const;
 
@@ -256,9 +256,9 @@ namespace xmloff
             @see com::sun::star::table::CellRangeAddressConversion
         */
         bool            doConvertAddressRepresentations(
-                            const ::rtl::OUString& _rInputProperty,
+                            const OUString& _rInputProperty,
                             const ::com::sun::star::uno::Any& _rInputValue,
-                            const ::rtl::OUString& _rOutputProperty,
+                            const OUString& _rOutputProperty,
                                   ::com::sun::star::uno::Any& _rOutputValue,
                             bool _bIsRange
                         ) const SAL_THROW(());

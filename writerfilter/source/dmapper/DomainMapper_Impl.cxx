@@ -3132,9 +3132,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_SEQ          :
                     {
                         // command looks like: " SEQ Table \* ARABIC "
-                        ::rtl::OUString sCmd(pContext->GetCommand());
+                        OUString sCmd(pContext->GetCommand());
                         // find the sequence name, e.g. "SEQ"
-                        ::rtl::OUString sSeqName = lcl_FindQuotedText(sCmd, "SEQ ", '\\');
+                        OUString sSeqName = lcl_FindQuotedText(sCmd, "SEQ ", '\\');
                         sSeqName = sSeqName.trim();
 
                         // create a sequence field master using the sequence name

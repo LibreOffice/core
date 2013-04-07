@@ -43,7 +43,6 @@
 
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
 
-using ::rtl::OUStringBuffer;
 
 //zhangyun
 ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri) :

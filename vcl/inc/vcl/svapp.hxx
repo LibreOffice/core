@@ -101,17 +101,17 @@ public:
     ApplicationEvent() {}
 
     explicit ApplicationEvent(
-        Type rEvent, const rtl::OUString& rData = rtl::OUString()):
+        Type rEvent, const OUString& rData = OUString()):
         aEvent(rEvent),
         aData(rData)
     {}
 
     Type GetEvent() const { return aEvent; }
-    const rtl::OUString& GetData() const { return aData; }
+    const OUString& GetData() const { return aData; }
 
 private:
     Type aEvent;
-    rtl::OUString aData;
+    OUString aData;
 };
 
 
@@ -348,7 +348,7 @@ public:
     /** Returns a string representing the desktop environment
         the process is currently running in.
      */
-    static const ::rtl::OUString& GetDesktopEnvironment();
+    static const OUString& GetDesktopEnvironment();
 
     /** Add a file to the system shells recent document list if there is any.
           This function may have no effect under Unix because there is no
@@ -362,7 +362,7 @@ public:
           If an empty string will be provided "application/octet-stream"
           will be used.
     */
-    static void AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    static void AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
 
     /** Do we have a native / system file selector available ?
      */

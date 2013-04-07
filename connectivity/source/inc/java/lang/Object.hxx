@@ -98,7 +98,7 @@ namespace connectivity
         void clearObject(JNIEnv& rEnv);
         void clearObject();
 
-        virtual ::rtl::OUString toString() const;
+        virtual OUString toString() const;
 
         static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(
@@ -117,13 +117,13 @@ namespace connectivity
         jobject         callResultSetMethod( JNIEnv& _rEnv, const char* _pMethodName, jmethodID& _inout_MethodID ) const;
         sal_Int32       callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID,bool _bIgnoreException = false ) const;
         sal_Int32       callIntMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument ) const;
-        sal_Int32       callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const ::rtl::OUString& _nArgument ) const;
-        ::rtl::OUString callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
-        ::rtl::OUString callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
+        sal_Int32       callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const;
+        OUString callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const;
+        OUString callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
         void            callVoidMethod( const char* _pMethodName, jmethodID& _inout_MethodID) const;
         void            callVoidMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument,bool _bIgnoreException = false ) const;
         void            callVoidMethodWithBoolArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument,bool _bIgnoreException = false ) const;
-        void            callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID, const ::rtl::OUString& _nArgument ) const;
+        void            callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID, const OUString& _nArgument ) const;
         jobject         callObjectMethod( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID ) const;
         jobject         callObjectMethodWithIntArg( JNIEnv * pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const;
 

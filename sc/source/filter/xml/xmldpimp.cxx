@@ -51,15 +51,13 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::rtl::OUString;
 
-using rtl::OUString;
 
 //------------------------------------------------------------------
 
 ScXMLDataPilotTablesContext::ScXMLDataPilotTablesContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -74,7 +72,7 @@ ScXMLDataPilotTablesContext::~ScXMLDataPilotTablesContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotTablesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -106,7 +104,7 @@ ScXMLDataPilotTableContext::GrandTotalItem::GrandTotalItem() :
 
 ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -133,11 +131,11 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotTableAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -224,7 +222,7 @@ ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -582,7 +580,7 @@ void ScXMLDataPilotTableContext::SetGrandTotal(
 
 ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -593,11 +591,11 @@ ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceSQLAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -625,7 +623,7 @@ ScXMLDPSourceSQLContext::~ScXMLDPSourceSQLContext()
 }
 
 SvXMLImportContext *ScXMLDPSourceSQLContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -643,7 +641,7 @@ void ScXMLDPSourceSQLContext::EndElement()
 
 ScXMLDPSourceTableContext::ScXMLDPSourceTableContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -654,11 +652,11 @@ ScXMLDPSourceTableContext::ScXMLDPSourceTableContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceTableAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -681,7 +679,7 @@ ScXMLDPSourceTableContext::~ScXMLDPSourceTableContext()
 }
 
 SvXMLImportContext *ScXMLDPSourceTableContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -699,7 +697,7 @@ void ScXMLDPSourceTableContext::EndElement()
 
 ScXMLDPSourceQueryContext::ScXMLDPSourceQueryContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -710,11 +708,11 @@ ScXMLDPSourceQueryContext::ScXMLDPSourceQueryContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceQueryAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -737,7 +735,7 @@ ScXMLDPSourceQueryContext::~ScXMLDPSourceQueryContext()
 }
 
 SvXMLImportContext *ScXMLDPSourceQueryContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -755,7 +753,7 @@ void ScXMLDPSourceQueryContext::EndElement()
 
 ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -766,11 +764,11 @@ ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotTableSourceServiceAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -808,7 +806,7 @@ ScXMLSourceServiceContext::~ScXMLSourceServiceContext()
 }
 
 SvXMLImportContext *ScXMLSourceServiceContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -874,7 +872,7 @@ ScXMLDataPilotGrandTotalContext::~ScXMLDataPilotGrandTotalContext()
 }
 
 SvXMLImportContext* ScXMLDataPilotGrandTotalContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
+    sal_uInt16 nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& /*xAttrList*/ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
@@ -901,7 +899,7 @@ void ScXMLDataPilotGrandTotalContext::EndElement()
 
 ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -912,11 +910,11 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotTableSourceCellRangeAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -940,7 +938,7 @@ ScXMLSourceCellRangeContext::~ScXMLSourceCellRangeContext()
 }
 
 SvXMLImportContext *ScXMLSourceCellRangeContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -966,7 +964,7 @@ void ScXMLSourceCellRangeContext::EndElement()
 
 ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
@@ -992,11 +990,11 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -1053,7 +1051,7 @@ ScXMLDataPilotFieldContext::~ScXMLDataPilotFieldContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1098,7 +1096,7 @@ void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
         pDim->SetSubtotalName(rName);
 }
 
-void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<rtl::OUString>& rMembers, const rtl::OUString& rName)
+void ScXMLDataPilotFieldContext::AddGroup(const ::std::vector<OUString>& rMembers, const OUString& rName)
 {
     ScXMLDataPilotGroup aGroup;
     aGroup.aMembers = rMembers;
@@ -1140,8 +1138,8 @@ void ScXMLDataPilotFieldContext::EndElement()
                     while (aItr != aEndItr)
                     {
                         ScDPSaveGroupItem aItem(aItr->aName);
-                        ::std::vector<rtl::OUString>::const_iterator aMembersItr(aItr->aMembers.begin());
-                        ::std::vector<rtl::OUString>::const_iterator aMembersEndItr(aItr->aMembers.end());
+                        ::std::vector<OUString>::const_iterator aMembersItr(aItr->aMembers.begin());
+                        ::std::vector<OUString>::const_iterator aMembersEndItr(aItr->aMembers.end());
                         while (aMembersItr != aMembersEndItr)
                         {
                             aItem.AddElement(*aMembersItr);
@@ -1165,7 +1163,7 @@ void ScXMLDataPilotFieldContext::EndElement()
 }
 
 ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -1175,11 +1173,11 @@ ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLI
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        OUString sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+        OUString sValue(xAttrList->getValueByIndex( i ));
 
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
@@ -1232,7 +1230,7 @@ ScXMLDataPilotFieldReferenceContext::~ScXMLDataPilotFieldReferenceContext()
 
 ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
@@ -1243,11 +1241,11 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotLevelAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -1265,7 +1263,7 @@ ScXMLDataPilotLevelContext::~ScXMLDataPilotLevelContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotLevelContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1302,7 +1300,7 @@ void ScXMLDataPilotLevelContext::EndElement()
 }
 
 ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
@@ -1313,11 +1311,11 @@ ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport&
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        OUString sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+        OUString sValue(xAttrList->getValueByIndex( i ));
 
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
@@ -1353,7 +1351,7 @@ ScXMLDataPilotDisplayInfoContext::~ScXMLDataPilotDisplayInfoContext()
 }
 
 ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
@@ -1364,11 +1362,11 @@ ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImpo
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        OUString sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+        OUString sValue(xAttrList->getValueByIndex( i ));
 
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
@@ -1402,7 +1400,7 @@ ScXMLDataPilotSortInfoContext::~ScXMLDataPilotSortInfoContext()
 }
 
 ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLDataPilotFieldContext* pDataPilotField) :
@@ -1413,11 +1411,11 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        OUString sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+        OUString sValue(xAttrList->getValueByIndex( i ));
 
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
@@ -1447,7 +1445,7 @@ ScXMLDataPilotLayoutInfoContext::~ScXMLDataPilotLayoutInfoContext()
 
 ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
@@ -1465,7 +1463,7 @@ ScXMLDataPilotSubTotalsContext::~ScXMLDataPilotSubTotalsContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1519,7 +1517,7 @@ void ScXMLDataPilotSubTotalsContext::SetDisplayName(const OUString& rName)
 
 ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotSubTotalsContext* pTempDataPilotSubTotals) :
@@ -1530,11 +1528,11 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotSubTotalAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -1557,7 +1555,7 @@ ScXMLDataPilotSubTotalContext::~ScXMLDataPilotSubTotalContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotSubTotalContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -1575,7 +1573,7 @@ void ScXMLDataPilotSubTotalContext::EndElement()
 
 ScXMLDataPilotMembersContext::ScXMLDataPilotMembersContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
@@ -1590,7 +1588,7 @@ ScXMLDataPilotMembersContext::~ScXMLDataPilotMembersContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotMembersContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1616,7 +1614,7 @@ void ScXMLDataPilotMembersContext::EndElement()
 
 ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
@@ -1630,11 +1628,11 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotMemberAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -1669,7 +1667,7 @@ ScXMLDataPilotMemberContext::~ScXMLDataPilotMemberContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotMemberContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -1696,14 +1694,14 @@ void ScXMLDataPilotMemberContext::EndElement()
 
 ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotField(pTempDataPilotField)
 {
-    rtl::OUString               sGroupSource;
+    OUString               sGroupSource;
     double                      fStart(0.0);
     double                      fEnd(0.0);
     double                      fStep(0.0);
@@ -1715,11 +1713,11 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
 
         (void)nPrefix;  //! compare below!
 
@@ -1797,7 +1795,7 @@ ScXMLDataPilotGroupsContext::~ScXMLDataPilotGroupsContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotGroupsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1821,7 +1819,7 @@ void ScXMLDataPilotGroupsContext::EndElement()
 
 ScXMLDataPilotGroupContext::ScXMLDataPilotGroupContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotFieldContext* pTempDataPilotField) :
@@ -1831,11 +1829,11 @@ ScXMLDataPilotGroupContext::ScXMLDataPilotGroupContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1850,7 +1848,7 @@ ScXMLDataPilotGroupContext::~ScXMLDataPilotGroupContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotGroupContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1875,7 +1873,7 @@ void ScXMLDataPilotGroupContext::EndElement()
 
 ScXMLDataPilotGroupMemberContext::ScXMLDataPilotGroupMemberContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotGroupContext* pTempDataPilotGroup) :
@@ -1885,11 +1883,11 @@ ScXMLDataPilotGroupMemberContext::ScXMLDataPilotGroupMemberContext( ScXMLImport&
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1904,7 +1902,7 @@ ScXMLDataPilotGroupMemberContext::~ScXMLDataPilotGroupMemberContext()
 }
 
 SvXMLImportContext *ScXMLDataPilotGroupMemberContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {

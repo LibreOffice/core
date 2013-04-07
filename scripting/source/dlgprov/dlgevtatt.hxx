@@ -42,10 +42,10 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
-    typedef boost::unordered_map< rtl::OUString,
+    typedef boost::unordered_map< OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
-        ::rtl::OUStringHash,
-        ::std::equal_to< ::rtl::OUString > > ListenerHash;
+        OUStringHash,
+        ::std::equal_to< OUString > > ListenerHash;
 
     typedef ::cppu::WeakImplHelper1<
         ::com::sun::star::script::XScriptEventsAttacher > DialogEventsAttacherImpl_BASE;
@@ -58,9 +58,9 @@ namespace dlgprov
         ListenerHash listernersForTypes;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacher > m_xEventAttacher;
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > getScriptListenerForKey( const rtl::OUString& sScriptName ) throw ( ::com::sun::star::uno::RuntimeException );
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, rtl::OUString& sCodeName );
-        void nestedAttachEvents( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects, const ::com::sun::star::uno::Any& Helper, rtl::OUString& sDialogCodeName );
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > getScriptListenerForKey( const OUString& sScriptName ) throw ( ::com::sun::star::uno::RuntimeException );
+        ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, OUString& sCodeName );
+        void nestedAttachEvents( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& Objects, const ::com::sun::star::uno::Any& Helper, OUString& sDialogCodeName );
         void  SAL_CALL attachEventsToControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& xControl, const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptEventsSupplier >& events, const ::com::sun::star::uno::Any& Helper  );
     public:
         DialogEventsAttacherImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
@@ -69,7 +69,7 @@ namespace dlgprov
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
              const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >& xIntrospect,
              bool bProviderMode,
-             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener ,const rtl::OUString& sDialogLibName );
+             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xRTLListener ,const OUString& sDialogLibName );
         virtual ~DialogEventsAttacherImpl();
 
         // XScriptEventsAttacher
@@ -97,14 +97,14 @@ namespace dlgprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener > m_xScriptListener;
-        ::rtl::OUString m_sScriptType;
-        ::rtl::OUString m_sScriptCode;
+        OUString m_sScriptType;
+        OUString m_sScriptCode;
 
         virtual void firing_impl( const ::com::sun::star::script::AllEventObject& Event, ::com::sun::star::uno::Any* pRet );
 
     public:
         DialogAllListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& rxListener,
-            const ::rtl::OUString& rScriptType, const ::rtl::OUString& rScriptCode );
+            const OUString& rScriptType, const OUString& rScriptCode );
         virtual ~DialogAllListenerImpl();
 
         // XEventListener

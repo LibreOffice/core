@@ -39,7 +39,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -52,9 +51,9 @@ OUString PresenterPaneBorderManager::getImplementationName_static (void)
 
 Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (void)
 {
-    static const ::rtl::OUString sServiceName(
+    static const OUString sServiceName(
         "com.sun.star.drawing.PresenterPaneBorderManager");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::XComponentContext>& rxContext)
@@ -504,7 +503,7 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString( "PresenterPaneBorderManager object has already been disposed"),
+            OUString( "PresenterPaneBorderManager object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

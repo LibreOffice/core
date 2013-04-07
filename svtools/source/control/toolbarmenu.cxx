@@ -31,7 +31,6 @@
 #include "svtools/toolbarmenu.hxx"
 #include "toolbarmenuimp.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
@@ -1301,7 +1300,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
 
         bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
                                                   i_rRect, nState, aControlValue,
-                                                  rtl::OUString() );
+                                                  OUString() );
     }
 
     if( ! bNativeOk )
@@ -1566,7 +1565,7 @@ Reference< ::com::sun::star::accessibility::XAccessible > ToolbarMenu::CreateAcc
 // --------------------------------------------------------------------
 
 // todo: move to new base class that will replace SfxPopupWindo
-void ToolbarMenu::AddStatusListener( const rtl::OUString& rCommandURL )
+void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
 {
     initStatusListener();
     mpImpl->mxStatusListener->addStatusListener( rCommandURL );

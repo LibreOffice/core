@@ -448,7 +448,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByPositi
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
-                        const rtl::OUString& rRange ) throw(uno::RuntimeException)
+                        const OUString& rRange ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByName(rRange);
@@ -456,12 +456,12 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScCellCursorObj" );
+    return OUString( "ScCellCursorObj" );
 }
 
-sal_Bool SAL_CALL ScCellCursorObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -470,19 +470,19 @@ sal_Bool SAL_CALL ScCellCursorObj::supportsService( const rtl::OUString& rServic
            ScCellRangeObj::supportsService(rServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
     //  get all service names from cell range
-    uno::Sequence<rtl::OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
+    uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());
     sal_Int32 nParentLen = aParentSeq.getLength();
-    const rtl::OUString* pParentArr = aParentSeq.getConstArray();
+    const OUString* pParentArr = aParentSeq.getConstArray();
 
     //  SheetCellCursor should be first (?)
-    uno::Sequence<rtl::OUString> aTotalSeq( nParentLen + 2 );
-    rtl::OUString* pTotalArr = aTotalSeq.getArray();
-    pTotalArr[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLCURSOR_SERVICE ));
-    pTotalArr[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLCURSOR_SERVICE ));
+    uno::Sequence<OUString> aTotalSeq( nParentLen + 2 );
+    OUString* pTotalArr = aTotalSeq.getArray();
+    pTotalArr[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLCURSOR_SERVICE ));
+    pTotalArr[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLCURSOR_SERVICE ));
 
     //  append cell range services
     for (long i=0; i<nParentLen; i++)

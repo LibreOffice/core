@@ -169,12 +169,12 @@ public:
     short               GetListPos4Entry(sal_uInt32 nIdx);
     short               GetListPos4Entry( const String& rFmtString );
 
-    void                GetCurrencySymbols(std::vector<rtl::OUString>& rList, sal_uInt16* pPos );
-    void                GetCurrencySymbols(std::vector<rtl::OUString>& rList, bool bFlag );
+    void                GetCurrencySymbols(std::vector<OUString>& rList, sal_uInt16* pPos );
+    void                GetCurrencySymbols(std::vector<OUString>& rList, bool bFlag );
 
     sal_uInt16          FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking );
     bool                IsInTable(sal_uInt16 nPos, bool bTmpBanking,
-                            ::rtl::OUString const& rFmtString);
+                            OUString const& rFmtString);
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
     bool                IsUseStarFormat( void ) { return bUseStarFormat; }

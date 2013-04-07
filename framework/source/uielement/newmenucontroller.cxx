@@ -84,7 +84,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
             if ( bSetImages )
             {
                 sal_Bool        bImageSet( sal_False );
-                ::rtl::OUString aImageId;
+                OUString aImageId;
 
                 AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
                 if ( pInfo != m_aAddInfoForItem.end() )
@@ -121,7 +121,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
     sal_uInt16        nCount( pPopupMenu->GetItemCount() );
     sal_uInt16        nId( 0 );
     sal_Bool      bFound( sal_False );
-    rtl::OUString aCommand;
+    OUString aCommand;
 
     if ( !m_aEmptyDocURL.isEmpty() )
     {
@@ -146,7 +146,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
     if ( !bFound )
     {
         // Search for the default module name
-        rtl::OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
+        OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
         if ( !aDefaultModuleName.isEmpty() )
         {
             for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
@@ -223,7 +223,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         KeyCode                         aEmptyKeyCode;
         sal_uInt32                      nItemCount( pPopupMenu->GetItemCount() );
         std::vector< KeyCode >          aMenuShortCuts;
-        std::vector< rtl::OUString >    aCmds;
+        std::vector< OUString >    aCmds;
         std::vector< sal_uInt32 >       aIds;
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
         {
@@ -241,7 +241,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         if ( m_bNewMenu )
             nSeqCount+=1;
 
-        Sequence< rtl::OUString > aSeq( nSeqCount );
+        Sequence< OUString > aSeq( nSeqCount );
 
         // Add a special command for our "New" menu.
         if ( m_bNewMenu )
@@ -277,7 +277,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
 void NewMenuController::retrieveShortcutsFromConfiguration(
     const Reference< XAcceleratorConfiguration >& rAccelCfg,
-    const Sequence< rtl::OUString >& rCommands,
+    const Sequence< OUString >& rCommands,
     std::vector< KeyCode >& aMenuShortCuts )
 {
     if ( rAccelCfg.is() )
@@ -418,10 +418,10 @@ void SAL_CALL NewMenuController::select( const css::awt::MenuEvent& rEvent ) thr
 
             xURLTransformer->parseStrict( aTargetURL );
 
-            aArgsList[0].Name = ::rtl::OUString( "Referer" );
-            aArgsList[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
+            aArgsList[0].Name = OUString( "Referer" );
+            aArgsList[0].Value = makeAny( OUString(SFX_REFERER_USER ));
 
-            rtl::OUString aTargetFrame( m_aTargetFrame );
+            OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
             if ( pItem != m_aAddInfoForItem.end() )
                 aTargetFrame = pItem->second.aTargetFrame;

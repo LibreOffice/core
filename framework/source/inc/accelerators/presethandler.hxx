@@ -56,13 +56,13 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
     public:
 
-        static ::rtl::OUString PRESET_DEFAULT();
-        static ::rtl::OUString TARGET_CURRENT();
+        static OUString PRESET_DEFAULT();
+        static OUString TARGET_CURRENT();
 
-        static ::rtl::OUString RESOURCETYPE_MENUBAR();
-        static ::rtl::OUString RESOURCETYPE_TOOLBAR();
-        static ::rtl::OUString RESOURCETYPE_ACCELERATOR();
-        static ::rtl::OUString RESOURCETYPE_STATUSBAR();
+        static OUString RESOURCETYPE_MENUBAR();
+        static OUString RESOURCETYPE_TOOLBAR();
+        static OUString RESOURCETYPE_ACCELERATOR();
+        static OUString RESOURCETYPE_STATUSBAR();
 
     //-------------------------------------------
     // types
@@ -134,7 +134,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @descr  e.g. menubars, toolbars, accelerators
          */
-        ::rtl::OUString m_sResourceType;
+        OUString m_sResourceType;
 
         //---------------------------------------
         /** @short  specify the application module for a module
@@ -144,7 +144,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     "module". Further it must be a valid module identifier
                     then ...
          */
-        ::rtl::OUString m_sModule;
+        OUString m_sModule;
 
         //---------------------------------------
         /** @short  provides access to the:
@@ -209,9 +209,9 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
         //---------------------------------------
         /** @short  knows the relative path from the root. */
-        ::rtl::OUString m_sRelPathShare;
-        ::rtl::OUString m_sRelPathNoLang;
-        ::rtl::OUString m_sRelPathUser;
+        OUString m_sRelPathShare;
+        OUString m_sRelPathNoLang;
+        OUString m_sRelPathUser;
 
     //-------------------------------------------
     // native interface
@@ -322,8 +322,8 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     if the specified resource couldn't be located.
          */
         void connectToResource(      EConfigType                                  eConfigType   ,
-                               const ::rtl::OUString&                             sResourceType ,
-                               const ::rtl::OUString&                             sModule       ,
+                               const OUString&                             sResourceType ,
+                               const OUString&                             sModule       ,
                                const css::uno::Reference< css::embed::XStorage >& xDocumentRoot ,
                                const LanguageTag&                                 rLanguageTag  = LanguageTag(LANGUAGE_USER_PRIV_NOTRANSLATE));
 
@@ -348,8 +348,8 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @throw  com::sun::star::io::IOException
                     if copying failed.
          */
-        void copyPresetToTarget(const ::rtl::OUString& sPreset,
-                                const ::rtl::OUString& sTarget);
+        void copyPresetToTarget(const OUString& sPreset,
+                                const OUString& sTarget);
 
         //---------------------------------------
         /** @short  open the specified preset as stream object
@@ -366,7 +366,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @return The opened preset stream ... or NULL if the preset does not exists.
          */
-        css::uno::Reference< css::io::XStream > openPreset(const ::rtl::OUString& sPreset,
+        css::uno::Reference< css::io::XStream > openPreset(const OUString& sPreset,
                                                            sal_Bool bUseNoLangGlobal = sal_False);
 
         //---------------------------------------
@@ -388,7 +388,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @return The opened target stream ... or NULL if the target does not exists
                     or couldnt be created as new one.
          */
-        css::uno::Reference< css::io::XStream > openTarget(const ::rtl::OUString& sTarget         ,
+        css::uno::Reference< css::io::XStream > openTarget(const OUString& sTarget         ,
                                                                  sal_Bool         bCreateIfMissing);
 
         //---------------------------------------
@@ -427,7 +427,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @return An opened storage in case method was successfully - null otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const ::rtl::OUString& sPath ,
+        css::uno::Reference< css::embed::XStorage > impl_openPathIgnoringErrors(const OUString& sPath ,
                                                                                       sal_Int32        eMode ,
                                                                                       sal_Bool         bShare);
 
@@ -454,7 +454,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @return An iterator, which points directly into lLocalizedValue list.
                     As a negative result the special iterator lLocalizedValues.end() will be returned.
          */
-        ::std::vector< ::rtl::OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
+        ::std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< OUString >& lLocalizedValues,
                                                                                                OUString&             rLanguageTag         ,
                                                                                                sal_Bool                          bAllowFallbacks );
 
@@ -486,7 +486,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
 
             @return An opened storage in case method was successfully - null otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
+        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(OUString&      sPath         ,
                                                                                          sal_Int32             eMode         ,
                                                                                          sal_Bool              bShare        ,
                                                                                          OUString&             rLanguageTag  ,
@@ -501,7 +501,7 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
             @return [vector< string >]
                     a list of folder names.
          */
-        ::std::vector< ::rtl::OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
+        ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
 } // namespace framework

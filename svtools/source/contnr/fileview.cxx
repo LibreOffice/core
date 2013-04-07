@@ -82,7 +82,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using ::svt::SortingData_Impl;
 using ::svt::FolderDescriptor;
-using ::rtl::OUString;
 
 #define ALL_FILES_FILTER    "*.*"
 
@@ -190,7 +189,7 @@ private:
 
 protected:
     virtual sal_Bool            DoubleClickHdl();
-    virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const;
 
 public:
     ViewTabListBox_Impl( Window* pParentWin, SvtFileView_Impl* pParent, sal_Int16 nFlags );
@@ -198,7 +197,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -288,8 +287,8 @@ class NameTranslationEntry : public HashedEntry
 protected:
     OUString                maTranslatedName;
 public:
-    inline                  NameTranslationEntry( const rtl::OUString& rOriginalName, const rtl::OUString& rTranslatedName );
-    inline                  NameTranslationEntry( const rtl::OString& rOriginalName, const rtl::OString& rTranslatedName );
+    inline                  NameTranslationEntry( const OUString& rOriginalName, const OUString& rTranslatedName );
+    inline                  NameTranslationEntry( const OString& rOriginalName, const OString& rTranslatedName );
 
     inline const OUString&  GetTranslation() const;
 };
@@ -300,9 +299,9 @@ inline NameTranslationEntry::NameTranslationEntry( const OUString& rOrg, const O
 {
 }
 
-inline NameTranslationEntry::NameTranslationEntry( const rtl::OString& rOrg, const rtl::OString& rTrans )
-    : HashedEntry(rtl::OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
-    , maTranslatedName(rtl::OStringToOUString(rTrans, RTL_TEXTENCODING_UTF8))
+inline NameTranslationEntry::NameTranslationEntry( const OString& rOrg, const OString& rTrans )
+    : HashedEntry(OStringToOUString(rOrg, RTL_TEXTENCODING_ASCII_US))
+    , maTranslatedName(OStringToOUString(rTrans, RTL_TEXTENCODING_UTF8))
 {
 }
 
@@ -365,7 +364,7 @@ void NameTranslationList::Init()
             String          aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
-            aConfig.SetGroup( rtl::OString(RTL_CONSTASCII_STRINGPARAM("TRANSLATIONNAMES")) );
+            aConfig.SetGroup( OString(RTL_CONSTASCII_STRINGPARAM("TRANSLATIONNAMES")) );
 
             sal_uInt16          nKeyCnt = aConfig.GetKeyCount();
 
@@ -379,7 +378,7 @@ void NameTranslationList::Init()
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
     maTransFile( rBaseURL ),
     maHashedURL( rBaseURL ),
-    maTransFileName( rtl::OUString(".nametranslation.table") )
+    maTransFileName( OUString(".nametranslation.table") )
 {
     maTransFile.insertName( maTransFileName );
     Init();
@@ -489,12 +488,12 @@ public:
     FileViewResult          GetFolderContent_Impl(
         const String& rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
+        const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >() );
 
     FileViewResult          GetFolderContent_Impl(
         const FolderDescriptor& _rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
+        const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >());
     void                    FilterFolderContent_Impl( const OUString &rFilter );
     void                    CancelRunningAsyncAction();
 
@@ -594,7 +593,7 @@ OUString CreateExactSizeText( sal_Int64 nSize )
     long nMega = 1024 * 1024;
     long nGiga = nMega * 1024;
 
-    rtl::OUString aUnitStr(' ');
+    OUString aUnitStr(' ');
 
     if ( nSize < 10000 )
     {
@@ -906,7 +905,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     SvTreeListEntry* pEntry = FirstSelected();
     String aURL;
 
-    rtl::OString sDialogPosition;
+    OString sDialogPosition;
     while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
     {
         SvTreeListEntry *pCurEntry = pEntry;
@@ -971,7 +970,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 
 // -----------------------------------------------------------------------
 sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
-                                 const rtl::OUString& rNewText )
+                                 const OUString& rNewText )
 {
     sal_Bool bRet = sal_False;
 
@@ -1082,9 +1081,9 @@ sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
         // who knows ...)
 }
 
-::rtl::OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
+OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
 {
-    ::rtl::OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
+    OUString sRet = SvHeaderTabListBox::GetAccessibleObjectDescription( _eType, _nPos );
     if ( ::svt::BBTYPE_TABLECELL == _eType )
     {
         sal_Int32 nRow = -1;
@@ -1102,7 +1101,7 @@ sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
                 String aText( msAccessibleDescText );
                 aText.SearchAndReplace( sVar1, pData->mbIsFolder ? msFolder : msFile );
                 aText.SearchAndReplace( sVar2, pData->maURL );
-                sRet += ::rtl::OUString( aText );
+                sRet += OUString( aText );
             }
         }
     }
@@ -1268,14 +1267,14 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
 
 // -----------------------------------------------------------------------
 
-const rtl::OString& SvtFileView::GetHelpId( ) const
+const OString& SvtFileView::GetHelpId( ) const
 {
     return mpImp->mpView->GetHelpId( );
 }
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::SetHelpId( const rtl::OString& rHelpId )
+void SvtFileView::SetHelpId( const OString& rHelpId )
 {
     mpImp->mpView->SetHelpId( rHelpId );
 }
@@ -1323,7 +1322,7 @@ FileViewResult SvtFileView::Initialize(
     const String& rURL,
     const String& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList  )
+    const ::com::sun::star::uno::Sequence< OUString >& rBlackList  )
 {
     WaitObject aWaitCursor( this );
     mpBlackList = rBlackList;
@@ -1355,7 +1354,7 @@ FileViewResult SvtFileView::Initialize(
     const String& rFilter,
     const FileViewAsyncAction* pAsyncDescriptor )
 {
-    return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< ::rtl::OUString >());
+    return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< OUString >());
 }
 
 // -----------------------------------------------------------------------
@@ -1716,7 +1715,7 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     ,mxCmdEnv ( xEnv )
 
 {
-    maAllFilter = rtl::OUString("*.*");
+    maAllFilter = OUString("*.*");
     mpView = new ViewTabListBox_Impl( mpAntiImpl, this, nFlags );
     mpView->EnableCellFocus();
 }
@@ -1752,7 +1751,7 @@ void SvtFileView_Impl::Clear()
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const String& rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
+    const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
     INetURLObject aFolderObj( rFolder );
@@ -1771,7 +1770,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
+    const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
     DBG_TESTSOLARMUTEX();
     ::osl::ClearableMutexGuard aGuard( maMutex );

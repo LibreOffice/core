@@ -127,7 +127,7 @@ class RootItemContainer : public ::com::sun::star::lang::XTypeProvider          
 
         mutable ShareableMutex                                                                  m_aShareMutex;
         std::vector< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >    m_aItemVector;
-        rtl::OUString                                                                           m_aUIName;
+        OUString                                                                           m_aUIName;
 };
 
 }

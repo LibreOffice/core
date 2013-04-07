@@ -44,8 +44,6 @@ using namespace vcl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
-using ::rtl::OStringToOUString;
 
 // =======================================================================
 
@@ -225,7 +223,7 @@ void AquaSalInfoPrinter::setPaperSize( long i_nWidth, long i_nHeight, Orientatio
 
     if( pPaper )
     {
-        NSString* pPaperName = [CreateNSString( rtl::OStringToOUString(PaperInfo::toPSName(pPaper->getPaper()), RTL_TEXTENCODING_ASCII_US) ) autorelease];
+        NSString* pPaperName = [CreateNSString( OStringToOUString(PaperInfo::toPSName(pPaper->getPaper()), RTL_TEXTENCODING_ASCII_US) ) autorelease];
         [mpPrintInfo setPaperName: pPaperName];
     }
     else if( i_nWidth > 0 && i_nHeight > 0 )
@@ -286,9 +284,9 @@ sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
+OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -376,9 +374,9 @@ static Size getPageSize( vcl::PrinterController& i_rController, sal_Int32 i_nPag
     return aPageSize;
 }
 
-sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
-                                   const rtl::OUString& i_rJobName,
-                                   const rtl::OUString& /*i_rAppName*/,
+sal_Bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
+                                   const OUString& i_rJobName,
+                                   const OUString& /*i_rAppName*/,
                                    ImplJobSetup* i_pSetupData,
                                    vcl::PrinterController& i_rController
                                    )
@@ -401,7 +399,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
 
     // do we want a progress panel ?
     sal_Bool bShowProgressPanel = sal_True;
-    beans::PropertyValue* pMonitor = i_rController.getValue( rtl::OUString( "MonitorVisible" ) );
+    beans::PropertyValue* pMonitor = i_rController.getValue( OUString( "MonitorVisible" ) );
     if( pMonitor )
         pMonitor->Value >>= bShowProgressPanel;
     if( ! i_rController.isShowDialogs() )
@@ -409,7 +407,7 @@ sal_Bool AquaSalInfoPrinter::StartJob( const rtl::OUString* i_pFileName,
 
     // possibly create one job for collated output
     sal_Bool bSinglePrintJobs = sal_False;
-    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( "PrintCollateAsSingleJobs" ) );
+    beans::PropertyValue* pSingleValue = i_rController.getValue( OUString( "PrintCollateAsSingleJobs" ) );
     if( pSingleValue )
     {
         pSingleValue->Value >>= bSinglePrintJobs;
@@ -621,9 +619,9 @@ AquaSalPrinter::~AquaSalPrinter()
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const rtl::OUString* i_pFileName,
-                               const rtl::OUString& i_rJobName,
-                               const rtl::OUString& i_rAppName,
+sal_Bool AquaSalPrinter::StartJob( const OUString* i_pFileName,
+                               const OUString& i_rJobName,
+                               const OUString& i_rAppName,
                                ImplJobSetup* i_pSetupData,
                                vcl::PrinterController& i_rController )
 {
@@ -632,9 +630,9 @@ sal_Bool AquaSalPrinter::StartJob( const rtl::OUString* i_pFileName,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalPrinter::StartJob( const rtl::OUString* /*i_pFileName*/,
-                               const rtl::OUString& /*i_rJobName*/,
-                               const rtl::OUString& /*i_rAppName*/,
+sal_Bool AquaSalPrinter::StartJob( const OUString* /*i_pFileName*/,
+                               const OUString& /*i_rJobName*/,
+                               const OUString& /*i_rAppName*/,
                                sal_uLong /*i_nCopies*/,
                                bool /*i_bCollate*/,
                                bool /*i_bDirect*/,
@@ -696,7 +694,7 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
                 {
                     NSString* pPaper = [pPaperNames objectAtIndex: i];
                     // first try to match the name
-                    rtl::OString aPaperName( [pPaper UTF8String] );
+                    OString aPaperName( [pPaper UTF8String] );
                     Paper ePaper = PaperInfo::fromPSName( aPaperName );
                     if( ePaper != PAPER_USER )
                     {

@@ -95,7 +95,7 @@ public:
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
     const String            GetFontFormatId( size_t nPos ) const;
-    const rtl::OUString     GetNewFontFormatId() const;
+    const OUString     GetNewFontFormatId() const;
     size_t                  GetCount() const    { return aEntries.size(); }
 
     bool    IsModified() const          { return bModified; }
@@ -125,11 +125,11 @@ class SmMathConfig : public utl::ConfigItem
     void    Save();
 
     void    ReadSymbol( SmSym &rSymbol,
-                        const rtl::OUString &rSymbolName,
-                        const rtl::OUString &rBaseNode ) const;
+                        const OUString &rSymbolName,
+                        const OUString &rBaseNode ) const;
     void    ReadFontFormat( SmFontFormat &rFontFormat,
-                        const rtl::OUString &rSymbolName,
-                        const rtl::OUString &rBaseNode ) const;
+                        const OUString &rSymbolName,
+                        const OUString &rBaseNode ) const;
 
     void            SetOtherIfNotEqual( bool &rbItem, bool bNewVal );
 
@@ -159,7 +159,7 @@ public:
     virtual ~SmMathConfig();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames );
     virtual void    Commit();
 
     SmSymbolManager &   GetSymbolManager();

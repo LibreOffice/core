@@ -37,16 +37,16 @@ namespace connectivity
         public:
             OTable( sdbcx::OCollection* _pTables,
                     OConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description );
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description );
 
             OConnection* getConnection() { return m_pConnection;}
 
             sal_Bool isReadOnly() const { return sal_False; }
 
-            ::rtl::OUString getTableName() const { return m_Name; }
-            ::rtl::OUString getSchema() const { return m_SchemaName; }
+            OUString getTableName() const { return m_Name; }
+            OUString getSchema() const { return m_SchemaName; }
 
             // OTableHelper overridables
             virtual sdbcx::OCollection* createColumns( const TStringVector& _rNames );

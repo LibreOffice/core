@@ -32,14 +32,14 @@ class SwWrongList;
 class SwWrongArea
 {
 public:
-    rtl::OUString maType;
+    OUString maType;
     com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxPropertyBag;
     xub_StrLen mnPos;
     xub_StrLen mnLen;
     SwWrongList* mpSubList;
 
     SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL) {}
-    SwWrongArea( const rtl::OUString& rType,
+    SwWrongArea( const OUString& rType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                  xub_StrLen nPos,
                  xub_StrLen nLen,
@@ -122,7 +122,7 @@ public:
 
     inline sal_uInt16 Count() const { return (sal_uInt16)maList.size(); }
 
-    inline void Insert( const rtl::OUString& rType,
+    inline void Insert( const OUString& rType,
                         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                         xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uInt16 nWhere )
     {
@@ -134,7 +134,7 @@ public:
         maList.insert(i, SwWrongArea( rType, xPropertyBag, nNewPos, nNewLen, 0 ) );
     }
 
-    void Insert( const rtl::OUString& rType,
+    void Insert( const OUString& rType,
                  com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                  xub_StrLen nNewPos, xub_StrLen nNewLen );
 

@@ -30,7 +30,6 @@
 #include <svx/svxerr.hxx>
 
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

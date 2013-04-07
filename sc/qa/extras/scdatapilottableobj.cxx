@@ -84,13 +84,13 @@ uno::Reference< lang::XComponent > ScDataPilotTableObj::mxComponent;
 
 ScDataPilotTableObj::ScDataPilotTableObj()
     : UnoApiTest("/sc/qa/extras/testdocuments"),
-      apitest::XNamed(rtl::OUString("DataPilotTable"))
+      apitest::XNamed(OUString("DataPilotTable"))
 {
 }
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
 {
-    rtl::OUString aFileURL;
+    OUString aFileURL;
     createFileURL("ScDataPilotTableObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
@@ -112,7 +112,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
 
-    uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(rtl::OUString("DataPilotTable")),UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(OUString("DataPilotTable")),UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;
@@ -127,8 +127,8 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::getSheets()
 
 uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
 {
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString("ScDataPilotTableObj.ods"), aFileURL);
+    OUString aFileURL;
+    createFileURL(OUString("ScDataPilotTableObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -149,7 +149,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
 
-    uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(rtl::OUString("DataPilotTable2")),UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotTable > xDPTable(xDPT->getByName(OUString("DataPilotTable2")),UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xDPTable.is());
     return xDPTable;

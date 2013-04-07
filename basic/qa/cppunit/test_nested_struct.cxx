@@ -53,7 +53,7 @@ namespace
 
 // tests the new behaviour, we should be able to
 // directly modify the value of the nested 'HorizontalLine' struct
-rtl::OUString sTestSource1(
+OUString sTestSource1(
     "Function doUnitTest() as Integer\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
@@ -61,7 +61,7 @@ rtl::OUString sTestSource1(
     "End Function\n"
 );
 
-rtl::OUString sTestSource1Alt(
+OUString sTestSource1Alt(
     "Function doUnitTest() as Object\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "b0.HorizontalLine.OuterLineWidth = 9\n"
@@ -75,7 +75,7 @@ rtl::OUString sTestSource1Alt(
 // b) cloning the new instance with the value of b0.HorizontalLine
 // c) modifying the new instance
 // d) setting b0.HorizontalLine with the value of the new instance
-rtl::OUString sTestSource2(
+OUString sTestSource2(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
@@ -85,7 +85,7 @@ rtl::OUString sTestSource2(
 "End Function\n"
 );
 
-rtl::OUString sTestSource2Alt(
+OUString sTestSource2Alt(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
@@ -99,7 +99,7 @@ rtl::OUString sTestSource2Alt(
 // a reference copy of b0.HorizontalLine, each one should have an
 // OuterLineWidth of 4 & 9 respectively and we should be returning
 // 13 the sum of the two ( hopefully unique values if we haven't copied by reference )
-rtl::OUString sTestSource3(
+OUString sTestSource3(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
@@ -110,7 +110,7 @@ rtl::OUString sTestSource3(
 "End Function\n"
 );
 
-rtl::OUString sTestSource3Alt(
+OUString sTestSource3Alt(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
     "l = b0.HorizontalLine\n"
@@ -126,7 +126,7 @@ rtl::OUString sTestSource3Alt(
 
 // nearly the same as above but this time for a fixed type
 // variable
-rtl::OUString sTestSource4(
+OUString sTestSource4(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
@@ -137,7 +137,7 @@ rtl::OUString sTestSource4(
 "End Function\n"
 );
 
-rtl::OUString sTestSource4Alt(
+OUString sTestSource4Alt(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
     "l = b0.HorizontalLine\n"
@@ -156,7 +156,7 @@ rtl::OUString sTestSource4Alt(
 // in the debugger shows the expected values )
 // We need to additionally check the actual uno struct to see if the
 // changes made are *really* reflected in the object
-rtl::OUString sTestSource5(
+OUString sTestSource5(
     "Function doUnitTest() as Object\n"
     "Dim aWinDesc as new \"com.sun.star.awt.WindowDescriptor\"\n"
     "Dim aRect as new \"com.sun.star.awt.Rectangle\"\n"

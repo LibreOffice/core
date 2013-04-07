@@ -38,7 +38,7 @@ static void lcl_FillGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
-    const Sequence< ::rtl::OUString> rEntries = rConfig.GetGreetings(eType);
+    const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
@@ -48,7 +48,7 @@ static void lcl_FillGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
-    const Sequence< ::rtl::OUString> rEntries = rConfig.GetGreetings(eType);
+    const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
         rBox.InsertEntry(rEntries[nEntry]);
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
@@ -58,8 +58,8 @@ static void lcl_StoreGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
-    Sequence< ::rtl::OUString> aEntries(rBox.GetEntryCount());
-    ::rtl::OUString* pEntries = aEntries.getArray();
+    Sequence< OUString> aEntries(rBox.GetEntryCount());
+    OUString* pEntries = aEntries.getArray();
     for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
@@ -70,8 +70,8 @@ static void lcl_StoreGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
-    Sequence< ::rtl::OUString> aEntries(rBox.GetEntryCount());
-    ::rtl::OUString* pEntries = aEntries.getArray();
+    Sequence< OUString> aEntries(rBox.GetEntryCount());
+    OUString* pEntries = aEntries.getArray();
     for(sal_uInt16 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
         pEntries[nEntry] = rBox.GetEntry(nEntry);
     rConfig.SetGreetings(eType, aEntries);
@@ -160,8 +160,8 @@ void SwMailMergeGreetingsPage::UpdatePreview()
     bool bNoValue = !m_pFemaleColumnLB->IsEnabled();
     if( !bNoValue )
     {
-        ::rtl::OUString sFemaleValue = m_aFemaleFieldCB.GetText();
-        ::rtl::OUString sFemaleColumn = m_aFemaleColumnLB.GetSelectEntry();
+        OUString sFemaleValue = m_aFemaleFieldCB.GetText();
+        OUString sFemaleColumn = m_aFemaleColumnLB.GetSelectEntry();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_pWizard->GetConfigItem().GetResultSet(), UNO_QUERY);
         Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
         if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
@@ -176,19 +176,19 @@ void SwMailMergeGreetingsPage::UpdatePreview()
             {
                 try
                 {
-                    ::rtl::OUString sFemaleColumnValue = xColumn->getString();
+                    OUString sFemaleColumnValue = xColumn->getString();
                     bFemale = sFemaleColumnValue == sFemaleValue;
                     //bNoValue = !sFemaleColumnValue.getLength();
                     if( !bNoValue )
                     {
                         //no last name value marks the greeting also als neutral
                         SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
-                        ::rtl::OUString sLastNameColumn = rConfig.GetAssignedColumn(MM_PART_LASTNAME);
+                        OUString sLastNameColumn = rConfig.GetAssignedColumn(MM_PART_LASTNAME);
                         if ( xColAccess->hasByName(sLastNameColumn) )
                         {
                             aCol = xColAccess->getByName(sLastNameColumn);
                             aCol >>= xColumn;
-                            ::rtl::OUString sLastNameColumnValue = xColumn->getString();
+                            OUString sLastNameColumnValue = xColumn->getString();
                             bNoValue = sLastNameColumnValue.isEmpty();
                         }
                     }
@@ -338,12 +338,12 @@ void SwMailMergeGreetingsPage::ActivatePage()
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
-        Sequence< ::rtl::OUString > aColumns = xColAccess->getElementNames();
+        Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
             m_aFemaleColumnLB.InsertEntry(aColumns[nName]);
     }
 
-    ::rtl::OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
+    OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
     m_aFemaleColumnLB.SelectEntry(sGenderColumn);
     m_aFemaleColumnLB.SaveValue();
 
@@ -361,7 +361,7 @@ sal_Bool    SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPage
     if(m_aFemaleColumnLB.GetSelectEntryPos() != m_aFemaleColumnLB.GetSavedValue())
     {
         const SwDBData& rDBData = rConfig.GetCurrentDBData();
-        Sequence< ::rtl::OUString> aAssignment = rConfig.GetColumnAssignment( rDBData );
+        Sequence< OUString> aAssignment = rConfig.GetColumnAssignment( rDBData );
         if(aAssignment.getLength() <= MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER + 1);
         aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
@@ -516,12 +516,12 @@ SwMailBodyDialog::SwMailBodyDialog(Window* pParent, SwMailMergeWizard* _pWizard)
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
-        Sequence< ::rtl::OUString > aColumns = xColAccess->getElementNames();
+        Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
             m_aFemaleColumnLB.InsertEntry(aColumns[nName]);
     }
 
-    ::rtl::OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
+    OUString sGenderColumn = rConfig.GetAssignedColumn(MM_PART_GENDER);
     m_aFemaleColumnLB.SelectEntry(sGenderColumn);
     m_aFemaleColumnLB.SaveValue();
 
@@ -551,14 +551,14 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
     if(m_aFemaleColumnLB.GetSelectEntryPos() != m_aFemaleColumnLB.GetSavedValue())
     {
         const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
-        Sequence< ::rtl::OUString> aAssignment = rConfigItem.GetColumnAssignment( rDBData );
+        Sequence< OUString> aAssignment = rConfigItem.GetColumnAssignment( rDBData );
         sal_Int32 nPos = m_aFemaleColumnLB.GetSelectEntryPos();
         if(aAssignment.getLength() < MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER);
         if( nPos > 0 )
             aAssignment[MM_PART_GENDER] = m_aFemaleColumnLB.GetSelectEntry();
         else
-            aAssignment[MM_PART_GENDER] = ::rtl::OUString();
+            aAssignment[MM_PART_GENDER] = OUString();
         rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if(m_aFemaleFieldCB.GetText() != m_aFemaleFieldCB.GetSavedValue())

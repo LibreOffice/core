@@ -25,7 +25,7 @@
 #include <vector>
 
 typedef ::std::vector< String* > StringList;
-typedef ::std::vector< rtl::OString* > ByteStringList;
+typedef ::std::vector< OString* > ByteStringList;
 
 class SvCommand
 {

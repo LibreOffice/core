@@ -107,7 +107,7 @@ SwVbaDocuments::createCollectionObject( const uno::Any& aSource )
 uno::Any SAL_CALL
 SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, const uno::Any& /*DocumentType*/, const uno::Any& /*Visible*/ ) throw (uno::RuntimeException)
 {
-    rtl::OUString sFileName;
+    OUString sFileName;
     if( Template.hasValue() && ( Template >>= sFileName ) )
     {
         return  Open( sFileName, uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any(), uno::Any());
@@ -128,10 +128,10 @@ SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*Origin
 
 // #TODO# #FIXME# can any of the unused params below be used?
 uno::Any SAL_CALL
-SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ ) throw (uno::RuntimeException)
+SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ ) throw (uno::RuntimeException)
 {
     // we need to detect if this is a URL, if not then assume its a file path
-    rtl::OUString aURL;
+    OUString aURL;
     INetURLObject aObj;
     aObj.SetURL( Filename );
     bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
@@ -150,20 +150,20 @@ SwVbaDocuments::Open( const ::rtl::OUString& Filename, const uno::Any& /*Confirm
     return aRet;
 }
 
-rtl::OUString
+OUString
 SwVbaDocuments::getServiceImplName()
 {
-    return rtl::OUString("SwVbaDocuments");
+    return OUString("SwVbaDocuments");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaDocuments::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Documents");
+        sNames[0] = OUString("ooo.vba.word.Documents");
     }
     return sNames;
 }

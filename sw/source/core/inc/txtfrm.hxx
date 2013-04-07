@@ -205,7 +205,7 @@ class SwTxtFrm: public SwCntntFrm
     void _CalcHeightOfLastLine( const bool _bUseFont = false );
 
     // ST2
-    SwWrongList* _SmartTagScan ( ::rtl::OUString aTxtToScan, SwWrongList *pSmartTagList,
+    SwWrongList* _SmartTagScan ( OUString aTxtToScan, SwWrongList *pSmartTagList,
                                  xub_StrLen nBegin,xub_StrLen nEnd,
                                  xub_StrLen nInsertPos, xub_StrLen nActPos,
                                  xub_StrLen &nChgStart, xub_StrLen &nChgEnd,

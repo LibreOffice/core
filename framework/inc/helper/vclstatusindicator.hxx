@@ -63,7 +63,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
         StatusBar* m_pStatusBar;
 
         /** knows the current info text of the progress. */
-        ::rtl::OUString m_sText;
+        OUString m_sText;
 
         /** knows the current range of the progress. */
         sal_Int32 m_nRange;
@@ -86,7 +86,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
         virtual ~VCLStatusIndicator();
 
         /// XStatusIndicator
-        virtual void SAL_CALL start(const ::rtl::OUString& sText ,
+        virtual void SAL_CALL start(const OUString& sText ,
                                           sal_Int32        nRange)
             throw(css::uno::RuntimeException);
 
@@ -96,7 +96,7 @@ class VCLStatusIndicator : public  css::task::XStatusIndicator
         virtual void SAL_CALL end()
             throw(css::uno::RuntimeException);
 
-        virtual void SAL_CALL setText(const ::rtl::OUString& sText)
+        virtual void SAL_CALL setText(const OUString& sText)
             throw(css::uno::RuntimeException);
 
         virtual void SAL_CALL setValue(sal_Int32 nValue)

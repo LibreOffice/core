@@ -66,12 +66,12 @@ using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::osl;
 
-DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUStringBuffer,TSQLStatements);
+DECLARE_STL_USTRINGACCESS_MAP(OUStringBuffer,TSQLStatements);
 namespace
 {
-    void lcl_fillKeyCondition(const ::rtl::OUString& i_sTableName,const ::rtl::OUString& i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)
+    void lcl_fillKeyCondition(const OUString& i_sTableName,const OUString& i_sQuotedColumnName,const ORowSetValue& i_aValue,TSQLStatements& io_aKeyConditions)
     {
-        ::rtl::OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
+        OUStringBuffer& rKeyCondition = io_aKeyConditions[i_sTableName];
         if ( !rKeyCondition.isEmpty() )
             rKeyCondition.append(" AND ");
         rKeyCondition.append(i_sQuotedColumnName);
@@ -90,7 +90,7 @@ OptimisticSet::OptimisticSet(const Reference<XComponentContext>& _rContext,
                              const ORowSetValueVector& _aParameterValueForCache,
                              sal_Int32 i_nMaxRows,
                              sal_Int32& o_nRowCount)
-            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
+            :OKeySet(NULL,NULL,OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
             ,m_aSqlParser( _rContext )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
@@ -104,7 +104,7 @@ OptimisticSet::~OptimisticSet()
     DBG_DTOR(OptimisticSet,NULL);
 }
 
-void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
+void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::construct" );
 
@@ -119,9 +119,9 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xTables = xTabSup->getTables();
-    const Sequence< ::rtl::OUString> aTableNames = xTables->getElementNames();
-    const ::rtl::OUString* pTableNameIter = aTableNames.getConstArray();
-    const ::rtl::OUString* pTableNameEnd = pTableNameIter + aTableNames.getLength();
+    const Sequence< OUString> aTableNames = xTables->getElementNames();
+    const OUString* pTableNameIter = aTableNames.getConstArray();
+    const OUString* pTableNameEnd = pTableNameIter + aTableNames.getLength();
     for( ; pTableNameIter != pTableNameEnd ; ++pTableNameIter)
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -140,15 +140,15 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
 
 void OptimisticSet::makeNewStatement( )
 {
-    ::rtl::OUStringBuffer aFilter = createKeyFilter();
+    OUStringBuffer aFilter = createKeyFilter();
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-    ::rtl::OUString sQuery = xSourceComposer->getQuery();
+    OUString sQuery = xSourceComposer->getQuery();
     xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
     // check for joins
-    ::rtl::OUString aErrorMsg;
+    OUString aErrorMsg;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<OSQLParseNode> pStatementNode( m_aSqlParser.parseTree( aErrorMsg, sQuery ) );
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -156,7 +156,7 @@ void OptimisticSet::makeNewStatement( )
     m_aSqlIterator.traverseAll();
     fillJoinedColumns_throw(m_aSqlIterator.getJoinConditions());
 
-    const ::rtl::OUString sComposerFilter = m_xComposer->getFilter();
+    const OUString sComposerFilter = m_xComposer->getFilter();
     if ( !m_sRowSetFilter.isEmpty() || !sComposerFilter.isEmpty() )
     {
         FilterCreator aFilterCreator;
@@ -184,10 +184,10 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
     // list all cloumns that should be set
-    static ::rtl::OUString s_sPara(" = ?");
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    static OUString s_sPara(" = ?");
+    OUString aQuote  = getIdentifierQuoteString();
 
-    ::std::map< ::rtl::OUString,bool > aResultSetChanged;
+    ::std::map< OUString,bool > aResultSetChanged;
     TSQLStatements aKeyConditions;
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
@@ -199,7 +199,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     {
         if ( aResultSetChanged.find( aIter->second.sTableName ) == aResultSetChanged.end() )
             aResultSetChanged[aIter->second.sTableName] = false;
-        const ::rtl::OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
+        const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             aResultSetChanged[aIter->second.sTableName] = m_aJoinedKeyColumns.find(aIter->second.nPosition) != m_aJoinedKeyColumns.end();
@@ -215,7 +215,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
             {
                 (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[aIter->second.nPosition];
             }
-            ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
+            OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( !rPart.isEmpty() )
                 rPart.append(", ");
             rPart.append(sQuotedColumnName + s_sPara);
@@ -228,8 +228,8 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
     if( aKeyConditions.empty() )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), SQL_GENERAL_ERROR, m_xConnection );
 
-    static const ::rtl::OUString s_sUPDATE("UPDATE ");
-    static const ::rtl::OUString s_sSET(" SET ");
+    static const OUString s_sUPDATE("UPDATE ");
+    static const OUString s_sSET(" SET ");
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
 
@@ -240,11 +240,11 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
         if ( aSqlIter->second.getLength() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
-            ::rtl::OUString sCatalog,sSchema,sTable;
+            OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-            ::rtl::OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
+            OUStringBuffer sSql(s_sUPDATE + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
                                        s_sSET + aSqlIter->second.toString());
-            ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
+            OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
                 sSql.append(" WHERE " + rCondition.toString() );
 
@@ -259,8 +259,8 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
     TSQLStatements aSql;
     TSQLStatements aParameter;
     TSQLStatements aKeyConditions;
-    ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::std::map< OUString,bool > aResultSetChanged;
+    OUString aQuote  = getIdentifierQuoteString();
 
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
@@ -270,7 +270,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         if ( aResultSetChanged.find( aIter->second.sTableName ) == aResultSetChanged.end() )
             aResultSetChanged[aIter->second.sTableName] = false;
 
-        const ::rtl::OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
+        const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
         if ( (_rInsertRow->get())[aIter->second.nPosition].isModified() )
         {
             if ( m_aJoinedKeyColumns.find(aIter->second.nPosition) != m_aJoinedKeyColumns.end() )
@@ -283,11 +283,11 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
             {
                 (_rInsertRow->get())[aJoinIter->second] = (_rInsertRow->get())[aIter->second.nPosition];
             }
-            ::rtl::OUStringBuffer& rPart = aSql[aIter->second.sTableName];
+            OUStringBuffer& rPart = aSql[aIter->second.sTableName];
             if ( !rPart.isEmpty() )
                 rPart.append(", ");
             rPart.append(sQuotedColumnName);
-            ::rtl::OUStringBuffer& rParam = aParameter[aIter->second.sTableName];
+            OUStringBuffer& rParam = aParameter[aIter->second.sTableName];
             if ( !rParam.isEmpty() )
                 rParam.append(", ");
             rParam.append("?");
@@ -297,8 +297,8 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_VALUE_CHANGED ), SQL_GENERAL_ERROR, m_xConnection );
 
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    static const ::rtl::OUString s_sINSERT("INSERT INTO ");
-    static const ::rtl::OUString s_sVALUES(") VALUES ( ");
+    static const OUString s_sINSERT("INSERT INTO ");
+    static const OUString s_sVALUES(") VALUES ( ");
     TSQLStatements::iterator aSqlIter = aSql.begin();
     TSQLStatements::iterator aSqlEnd  = aSql.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
@@ -306,16 +306,16 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
         if ( aSqlIter->second.getLength() )
         {
             m_bResultSetChanged = m_bResultSetChanged || aResultSetChanged[aSqlIter->first];
-            ::rtl::OUString sCatalog,sSchema,sTable;
+            OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-            ::rtl::OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-            ::rtl::OUString sSql(s_sINSERT + sComposedTableName + " ( " + aSqlIter->second.toString() +
+            OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
+            OUString sSql(s_sINSERT + sComposedTableName + " ( " + aSqlIter->second.toString() +
                                  s_sVALUES + aParameter[aSqlIter->first].toString() + " )");
 
-            ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
+            OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
             {
-                ::rtl::OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName +
+                OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName +
                                        " WHERE " + rCondition.toString());
 
                 try
@@ -353,7 +353,7 @@ void SAL_CALL OptimisticSet::insertRow( const ORowSetRow& _rInsertRow,const conn
 
 void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& /*_xTable*/   ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    OUString aQuote  = getIdentifierQuoteString();
     TSQLStatements aKeyConditions;
     TSQLStatements aIndexConditions;
     TSQLStatements aSql;
@@ -366,7 +366,7 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
         if ( m_aJoinedKeyColumns.find(aIter->second.nPosition) == m_aJoinedKeyColumns.end() && m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             // only delete rows which aren't the key in the join
-            const ::rtl::OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
+            const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aIter->second.sRealName);
             lcl_fillKeyCondition(aIter->second.sTableName,sQuotedColumnName,(_rDeleteRow->get())[aIter->second.nPosition],aKeyConditions);
         }
     }
@@ -375,19 +375,19 @@ void SAL_CALL OptimisticSet::deleteRow(const ORowSetRow& _rDeleteRow,const conne
     TSQLStatements::iterator aSqlEnd  = aKeyConditions.end();
     for(;aSqlIter != aSqlEnd ; ++aSqlIter)
     {
-        ::rtl::OUStringBuffer& rCondition = aSqlIter->second;
+        OUStringBuffer& rCondition = aSqlIter->second;
         if ( !rCondition.isEmpty() )
         {
-            ::rtl::OUString sCatalog,sSchema,sTable;
+            OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-            ::rtl::OUString sSql("DELETE FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
+            OUString sSql("DELETE FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable ) +
                                  " WHERE " + rCondition.toString() );
             executeDelete(_rDeleteRow, sSql, aSqlIter->first);
         }
     }
 }
 
-void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const ::rtl::OUString& i_sSQL,const ::rtl::OUString& i_sTableName)
+void OptimisticSet::executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OptimisticSet::executeDelete" );
 
@@ -420,16 +420,16 @@ void OptimisticSet::fillJoinedColumns_throw(const ::std::vector< TNodePair >& i_
     ::std::vector< TNodePair >::const_iterator aIter = i_aJoinColumns.begin();
     for(;aIter != i_aJoinColumns.end();++aIter)
     {
-        ::rtl::OUString sColumnName,sTableName;
+        OUString sColumnName,sTableName;
         m_aSqlIterator.getColumnRange(aIter->first,sColumnName,sTableName);
-        ::rtl::OUString sLeft(sTableName + "." + sColumnName);
+        OUString sLeft(sTableName + "." + sColumnName);
         m_aSqlIterator.getColumnRange(aIter->second,sColumnName,sTableName);
-        ::rtl::OUString sRight(sTableName + "." + sColumnName);
+        OUString sRight(sTableName + "." + sColumnName);
         fillJoinedColumns_throw(sLeft, sRight);
     }
 }
 
-void OptimisticSet::fillJoinedColumns_throw(const ::rtl::OUString& i_sLeftColumn,const ::rtl::OUString& i_sRightColumn)
+void OptimisticSet::fillJoinedColumns_throw(const OUString& i_sLeftColumn,const OUString& i_sRightColumn)
 {
     sal_Int32 nLeft = 0,nRight = 0;
     SelectColumnsMetaData::const_iterator aLeftIter  = m_pKeyColumnNames->find(i_sLeftColumn);
@@ -478,7 +478,7 @@ bool OptimisticSet::isResultSetChanged() const
 
 void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
 {
-    OCacheSet::construct(_xDriverSet,::rtl::OUString());
+    OCacheSet::construct(_xDriverSet,OUString());
     m_bRowCountFinal = sal_False;
     m_aKeyMap.clear();
     OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
@@ -515,8 +515,8 @@ namespace
     };
     struct TableNameFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
     {
-        ::rtl::OUString m_sTableName;
-        TableNameFunctor(const ::rtl::OUString& i_sTableName)
+        OUString m_sTableName;
+        TableNameFunctor(const OUString& i_sTableName)
             : m_sTableName(i_sTableName)
         {
         }
@@ -537,7 +537,7 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
         SelectColumnsMetaData::const_iterator aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),PositionFunctor(*aColIdxIter));
         if ( aFind != m_pKeyColumnNames->end() )
         {
-            const ::rtl::OUString sTableName = aFind->second.sTableName;
+            const OUString sTableName = aFind->second.sTableName;
             aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),TableNameFunctor(sTableName));
             while( aFind != m_pKeyColumnNames->end() )
             {
@@ -575,7 +575,7 @@ bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow
         SelectColumnsMetaData::const_iterator aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),PositionFunctor(aIter->second.nPosition));
         if ( aFind != m_pKeyColumnNames->end() )
         {
-            const ::rtl::OUString sTableName = aFind->second.sTableName;
+            const OUString sTableName = aFind->second.sTableName;
             aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),TableNameFunctor(sTableName));
             while( aFind != m_pKeyColumnNames->end() )
             {
@@ -608,19 +608,19 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
 {
     TSQLStatements aSql;
     TSQLStatements aKeyConditions;
-    ::std::map< ::rtl::OUString,bool > aResultSetChanged;
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    ::std::map< OUString,bool > aResultSetChanged;
+    OUString aQuote  = getIdentifierQuoteString();
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aColIter = m_pColumnNames->begin();
     SelectColumnsMetaData::const_iterator aColEnd = m_pColumnNames->end();
     for(;aColIter != aColEnd;++aColIter)
     {
-        const ::rtl::OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aColIter->second.sRealName);
+        const OUString sQuotedColumnName = ::dbtools::quoteName( aQuote,aColIter->second.sRealName);
         if ( m_aJoinedKeyColumns.find(aColIter->second.nPosition) != m_aJoinedKeyColumns.end() )
         {
             lcl_fillKeyCondition(aColIter->second.sTableName,sQuotedColumnName,io_aRow[aColIter->second.nPosition],aKeyConditions);
         }
-        ::rtl::OUStringBuffer& rPart = aSql[aColIter->second.sTableName];
+        OUStringBuffer& rPart = aSql[aColIter->second.sTableName];
         if ( !rPart.isEmpty() )
             rPart.append(", ");
         rPart.append(sQuotedColumnName);
@@ -632,13 +632,13 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
     {
         if ( aSqlIter->second.getLength() )
         {
-            ::rtl::OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
+            OUStringBuffer& rCondition = aKeyConditions[aSqlIter->first];
             if ( !rCondition.isEmpty() )
             {
-                ::rtl::OUString sCatalog,sSchema,sTable;
+                OUString sCatalog,sSchema,sTable;
                 ::dbtools::qualifiedNameComponents(xMetaData,aSqlIter->first,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
-                ::rtl::OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
-                ::rtl::OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName + " WHERE " +
+                OUString sComposedTableName = ::dbtools::composeTableNameForSelect( m_xConnection, sCatalog, sSchema, sTable );
+                OUString sQuery("SELECT " + aSqlIter->second.toString() + " FROM " + sComposedTableName + " WHERE " +
                                        rCondition.makeStringAndClear());
 
                 try

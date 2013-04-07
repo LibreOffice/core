@@ -47,10 +47,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::reflection;
 using namespace codemaker;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 namespace unodevtools {
 
@@ -224,7 +220,7 @@ void writeAttributeMethodData(
     if (seqExcp.getLength() > 0) {
         rWriter.setMethodData(methodindex, OUString(), methodmode,
                               xAttr->getMemberName(),
-                              rtl::OUString("void"),
+                              OUString("void"),
                               0, (sal_uInt16)seqExcp.getLength());
 
         for (sal_Int32 i=0; i < seqExcp.getLength(); i++) {

@@ -73,7 +73,7 @@ class FakedUpdateableResultSet :
         public com::sun::star::sdbc::XResultSetUpdate,
         public com::sun::star::sdbc::XRowUpdate
 {
-    ::rtl::OUString m_aReason;
+    OUString m_aReason;
 
 public:
     FakedUpdateableResultSet(
@@ -81,9 +81,9 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
-        const rtl::OUString &schema,
-        const rtl::OUString &table,
-        const rtl::OUString &aReason );
+        const OUString &schema,
+        const OUString &table,
+        const OUString &aReason );
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() { ResultSet::acquire(); }
@@ -115,7 +115,7 @@ public: // XRowUpdate
     virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

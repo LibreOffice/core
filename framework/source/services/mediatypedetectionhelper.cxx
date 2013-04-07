@@ -70,7 +70,7 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
         OUString& rUrl = rSeq[i];
         INetContentType eType = INetContentTypes::GetContentTypeFromURL( rUrl );
 
-        rtl::OUString aType( INetContentTypes::GetContentType( eType ) );
+        OUString aType( INetContentTypes::GetContentType( eType ) );
         if (!aType.isEmpty())
         {
             rUrl = aType;

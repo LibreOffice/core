@@ -87,7 +87,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        rtl::OUString sTemp(SVLIBRARY("?"));
+        OUString sTemp(SVLIBRARY("?"));
         sal_Int32 nIndex = sTemp.indexOf(static_cast<sal_Unicode>('?'));
         sFilterName = sTemp.replaceAt(nIndex, 1, sFilterName);
     }
@@ -194,7 +194,7 @@ void FilterConfigCache::ImplInit()
             else if (lFlags[0].equalsIgnoreAsciiCase("export"))
                 aEntry.nFlags = 2;
 
-            ::rtl::OUString sFormatName;
+            OUString sFormatName;
             xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
             aEntry.CreateFilterName( sFormatName );
 
@@ -286,7 +286,7 @@ void FilterConfigCache::ImplInitSmart()
         aEntry.sType = sExtension;
         aEntry.sUIName = sExtension;
 
-        rtl::OString sFlags( *pPtr++ );
+        OString sFlags( *pPtr++ );
         aEntry.nFlags = sFlags.toInt32();
 
         OUString    sUserData( OUString::createFromAscii( *pPtr ) );
@@ -427,7 +427,7 @@ String FilterConfigCache::GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 {
     String aWildcard( GetImportFormatExtension( nFormat, nEntry ) );
     if ( aWildcard.Len() )
-        aWildcard.Insert( rtl::OUString("*."), 0 );
+        aWildcard.Insert( OUString("*."), 0 );
     return aWildcard;
 }
 
@@ -541,7 +541,7 @@ String FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntr
 {
     String aWildcard( GetExportFormatExtension( nFormat, nEntry ) );
     if ( aWildcard.Len() )
-        aWildcard.Insert( rtl::OUString("*."), 0 );
+        aWildcard.Insert( OUString("*."), 0 );
     return aWildcard;
 }
 

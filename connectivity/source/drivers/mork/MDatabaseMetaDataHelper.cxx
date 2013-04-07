@@ -48,7 +48,7 @@ MDatabaseMetaDataHelper::~MDatabaseMetaDataHelper()
 }
 
 sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                      _pCon,
-                                                   ::std::vector< ::rtl::OUString >& _rStrings)
+                                                   ::std::vector< OUString >& _rStrings)
 {
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
 
@@ -70,7 +70,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
 }
 
 sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
-                                             const ::rtl::OUString& tableNamePattern,
+                                             const OUString& tableNamePattern,
                                              ODatabaseMetaDataResultSet::ORows& _rRows)
 {
 
@@ -85,7 +85,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
 
-    ::std::vector< ::rtl::OUString > tables;
+    ::std::vector< OUString > tables;
 
     if ( !getTableStrings( _pCon, tables ) )
         return sal_False;
@@ -93,7 +93,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     for ( size_t i = 0; i < tables.size(); i++ ) {
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
-        ::rtl::OUString aTableName  = tables[i];
+        OUString aTableName  = tables[i];
         SAL_INFO("connectivity.mork", "TableName: " << aTableName );
 
 

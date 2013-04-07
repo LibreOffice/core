@@ -94,9 +94,6 @@ using namespace psp;
 #include <algorithm>
 
 using namespace osl;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 namespace
 {
@@ -124,8 +121,8 @@ public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
 //to-do, make private and add some cleanish accessor methods
-    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aFontNameToLocalized;
-    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aLocalizedToCanonical;
+    boost::unordered_map< OString, OString, OStringHash > m_aFontNameToLocalized;
+    boost::unordered_map< OString, OString, OStringHash > m_aLocalizedToCanonical;
 private:
     void cacheLocalizedFontNames(const FcChar8 *origfontname, const FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 
@@ -297,10 +294,10 @@ namespace
         /* FIXME-BCP47: once fontconfig supports language tags this
          * language-territory stuff needs to be changed! */
         SAL_INFO_IF( !rLangTag.isIsoLocale(), "i18n", "localizedsorter::bestname - not an ISO locale");
-        rtl::OString sLangMatch(rtl::OUStringToOString(rLangTag.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
-        rtl::OString sFullMatch = sLangMatch;
+        OString sLangMatch(OUStringToOString(rLangTag.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
+        OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
-        sFullMatch += rtl::OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
+        sFullMatch += OUStringToOString(rLangTag.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
         std::vector<lang_and_element>::const_iterator aEnd = elements.end();
         bool alreadyclosematch = false;
@@ -504,7 +501,7 @@ static void lcl_FcFontSetRemove(FcFontSet* pFSet, int i)
     memmove(pFSet->fonts + i, pFSet->fonts + i + 1, nTail*sizeof(FcPattern*));
 }
 
-void PrintFontManager::countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths )
+void PrintFontManager::countFontconfigFonts( boost::unordered_map<OString, int, OStringHash>& o_rVisitedPaths )
 {
 #if OSL_DEBUG_LEVEL > 1
     int nFonts = 0;
@@ -696,7 +693,7 @@ void PrintFontManager::deinitFontconfig()
     FontCfgWrapper::release();
 }
 
-bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
+bool PrintFontManager::addFontconfigDir( const OString& rDirName )
 {
     // workaround for a stability problems in older FC versions
     // when handling application specifc fonts
@@ -714,7 +711,7 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
         return false;
 
     // load dir-specific fc-config file too if available
-    const rtl::OString aConfFileName = rDirName + "/fc_local.conf";
+    const OString aConfFileName = rDirName + "/fc_local.conf";
     FILE* pCfgFile = fopen( aConfFileName.getStr(), "rb" );
     if( pCfgFile )
     {
@@ -921,7 +918,7 @@ IMPL_LINK_NOARG(PrintFontManager, autoInstallFontLangSupport)
     return 0;
 }
 
-bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& rMissingCodes )
+bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
 {
     bool bRet = false;
 
@@ -933,7 +930,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
     // Prefer scalable fonts
     FcPatternAddBool(pPattern, FC_SCALABLE, FcTrue);
 
-    const rtl::OString aTargetName = rtl::OUStringToOString( rPattern.maTargetName, RTL_TEXTENCODING_UTF8 );
+    const OString aTargetName = OUStringToOString( rPattern.maTargetName, RTL_TEXTENCODING_UTF8 );
     const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
@@ -1021,11 +1018,11 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, rtl::OUString& r
                 if( eFamilyRes == FcResultMatch )
                 {
                     OString sFamily((sal_Char*)family);
-                    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI =
+                    boost::unordered_map< OString, OString, OStringHash >::const_iterator aI =
                         rWrapper.m_aFontNameToLocalized.find(sFamily);
                     if (aI != rWrapper.m_aFontNameToLocalized.end())
                         sFamily = aI->second;
-                    rPattern.maSearchName = rtl::OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
+                    rPattern.maSearchName = OStringToOUString( sFamily, RTL_TEXTENCODING_UTF8 );
                     bRet = true;
                 }
             }
@@ -1150,7 +1147,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
 
     OString sFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
 
-    boost::unordered_map< rtl::OString, rtl::OString, rtl::OStringHash >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
+    boost::unordered_map< OString, OString, OStringHash >::const_iterator aI = rWrapper.m_aLocalizedToCanonical.find(sFamily);
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
         sFamily = aI->second;
     if( !sFamily.isEmpty() )
@@ -1220,7 +1217,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
 
     // populate pattern with font characteristics
     const LanguageTag aLangTag(rLocale);
-    const rtl::OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
+    const OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
     if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
 

@@ -34,8 +34,8 @@ namespace svt
     class SVL_DLLPUBLIC OFileNotation
     {
     protected:
-        ::rtl::OUString     m_sSystem;
-        ::rtl::OUString     m_sFileURL;
+        OUString     m_sSystem;
+        OUString     m_sFileURL;
 
     public:
         enum NOTATION
@@ -44,15 +44,15 @@ namespace svt
             N_URL
         };
 
-        OFileNotation( const ::rtl::OUString& _rUrlOrPath );
-        OFileNotation( const ::rtl::OUString& _rUrlOrPath, NOTATION _eInputNotation );
+        OFileNotation( const OUString& _rUrlOrPath );
+        OFileNotation( const OUString& _rUrlOrPath, NOTATION _eInputNotation );
 
-        ::rtl::OUString get(NOTATION _eOutputNotation);
+        OUString get(NOTATION _eOutputNotation);
 
     private:
-        SVL_DLLPRIVATE void construct( const ::rtl::OUString& _rUrlOrPath );
-        SVL_DLLPRIVATE bool    implInitWithSystemNotation( const ::rtl::OUString& _rSystemPath );
-        SVL_DLLPRIVATE bool    implInitWithURLNotation( const ::rtl::OUString& _rURL );
+        SVL_DLLPRIVATE void construct( const OUString& _rUrlOrPath );
+        SVL_DLLPRIVATE bool    implInitWithSystemNotation( const OUString& _rSystemPath );
+        SVL_DLLPRIVATE bool    implInitWithURLNotation( const OUString& _rURL );
     };
 
 //.........................................................................

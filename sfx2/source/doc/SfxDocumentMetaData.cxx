@@ -357,9 +357,9 @@ typedef ::cppu::ImplInheritanceHelper1< SfxDocumentMetaData, css::document::XCom
 
 class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
 {
-    rtl::OUString msManager;
-    rtl::OUString msCategory;
-    rtl::OUString msCompany;
+    OUString msManager;
+    OUString msCategory;
+    OUString msCompany;
 protected:
     virtual SfxDocumentMetaData* createMe( css::uno::Reference< css::uno::XComponentContext > const & context ) { return new CompatWriterDocPropsImpl( context ); };
 public:
@@ -380,10 +380,10 @@ public:
 
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
     {
-        css::uno::Sequence< rtl::OUString > sServiceNames= getSupportedServiceNames();
+        css::uno::Sequence< OUString > sServiceNames= getSupportedServiceNames();
         sal_Int32 nLen = sServiceNames.getLength();
-        rtl::OUString* pIt = sServiceNames.getArray();
-        rtl::OUString* pEnd = ( pIt + nLen );
+        OUString* pIt = sServiceNames.getArray();
+        OUString* pEnd = ( pIt + nLen );
         sal_Bool bRes = sal_False;
         for ( ; pIt != pEnd; ++pIt )
         {
@@ -2337,8 +2337,8 @@ namespace comp_CompatWriterDocProps {
 
     css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
     {
-        css::uno::Sequence< rtl::OUString > aServiceNames(1);
-        aServiceNames[ 0 ] = rtl::OUString( "com.sun.star.writer.DocumentProperties"  );
+        css::uno::Sequence< OUString > aServiceNames(1);
+        aServiceNames[ 0 ] = OUString( "com.sun.star.writer.DocumentProperties"  );
         return aServiceNames;
     }
 

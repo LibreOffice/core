@@ -72,7 +72,7 @@ extern "C" bool SAL_CALL WNT_hasInternetConnection();
 //------------------------------------------------------------------------------
 
 // Returns the URL of the release note for the given position
-rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)
+OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)
 {
     std::vector< ReleaseNote >::const_iterator iter = rInfo.ReleaseNotes.begin();
     while( iter != rInfo.ReleaseNotes.end() )
@@ -88,7 +88,7 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
         ++iter;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
 namespace
 {
 
-static inline rtl::OUString getBuildId()
+static inline OUString getBuildId()
 {
     OUString aPathVal("${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aPathVal);
@@ -104,16 +104,16 @@ static inline rtl::OUString getBuildId()
 }
 
 //------------------------------------------------------------------------------
-static inline rtl::OUString getBaseInstallation()
+static inline OUString getBaseInstallation()
 {
-    rtl::OUString aPathVal("$BRAND_BASE_DIR");
+    OUString aPathVal("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aPathVal);
     return aPathVal;
 }
 
 //------------------------------------------------------------------------------
 
-inline bool isObsoleteUpdateInfo(const rtl::OUString& rBuildId)
+inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
 {
     return sal_True != rBuildId.equals(getBuildId()) && !rBuildId.isEmpty();
 }
@@ -121,10 +121,10 @@ inline bool isObsoleteUpdateInfo(const rtl::OUString& rBuildId)
 
 //------------------------------------------------------------------------------
 
-rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
+OUString getImageFromFileName(const OUString& aFile)
 {
 #ifndef WNT
-    rtl::OUString aUnpackPath;
+    OUString aUnpackPath;
     if( osl_getExecutableFile(&aUnpackPath.pData) == osl_Process_E_None )
     {
         sal_uInt32 lastIndex = aUnpackPath.lastIndexOf('/');
@@ -137,7 +137,7 @@ rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
         oslFileHandle hOut = NULL;
         oslProcess hProcess = NULL;
 
-        rtl::OUString aSystemPath;
+        OUString aSystemPath;
         osl::File::getSystemPathFromFileURL(aFile, aSystemPath);
 
         oslProcessError rc = osl_executeProcess_WithRedirectedIO(
@@ -164,7 +164,7 @@ rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
                     sal_uInt64 nBytesRead = 0;
                     const sal_uInt64 nBytesToRead = sizeof(szBuffer) - 1;
 
-                    rtl::OUString aImageName;
+                    OUString aImageName;
                     while( osl_File_E_None == osl_readFile(hOut, szBuffer, nBytesToRead, &nBytesRead) )
                     {
                         sal_Char *pc = szBuffer + nBytesRead;
@@ -174,7 +174,7 @@ rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
                         }
                         while( ('\n' == *pc) || ('\r' == *pc) );
 
-                        aImageName += rtl::OUString(szBuffer, pc - szBuffer + 1, osl_getThreadTextEncoding());
+                        aImageName += OUString(szBuffer, pc - szBuffer + 1, osl_getThreadTextEncoding());
 
                         if( nBytesRead < nBytesToRead )
                             break;
@@ -316,7 +316,7 @@ public:
         osl::Condition& rCondition,
         const uno::Reference<uno::XComponentContext>& xContext,
         const rtl::Reference< DownloadInteractionHandler >& rHandler,
-        const rtl::OUString& rURL );
+        const OUString& rURL );
 
     virtual void SAL_CALL run();
     virtual void SAL_CALL cancel();
@@ -329,7 +329,7 @@ protected:
 private:
     osl::Condition& m_aCondition;
     const uno::Reference<uno::XComponentContext> m_xContext;
-    const rtl::OUString m_aURL;
+    const OUString m_aURL;
     Download m_aDownload;
 };
 
@@ -553,7 +553,7 @@ UpdateCheckThread::run()
     catch(const uno::Exception& e) {
         // Silently catch all errors
         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
     }
 }
 
@@ -571,7 +571,7 @@ ManualUpdateCheckThread::run()
     catch(const uno::Exception& e) {
         // Silently catch all errors
         OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
     }
 }
 
@@ -601,7 +601,7 @@ MenuBarButtonJob::execute(const uno::Sequence<beans::NamedValue>& )
 DownloadThread::DownloadThread(osl::Condition& rCondition,
                                const uno::Reference<uno::XComponentContext>& xContext,
                                const rtl::Reference< DownloadInteractionHandler >& rHandler,
-                               const rtl::OUString& rURL) :
+                               const OUString& rURL) :
     m_aCondition(rCondition),
     m_xContext(xContext),
     m_aURL(rURL),
@@ -630,8 +630,8 @@ DownloadThread::run()
     {
         rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
 
-        rtl::OUString aLocalFile = rModel->getLocalFileName();
-        rtl::OUString aDownloadDest = rModel->getDownloadDestination();
+        OUString aLocalFile = rModel->getLocalFileName();
+        OUString aDownloadDest = rModel->getDownloadDestination();
 
         // release config class for now
         rModel.clear();
@@ -756,7 +756,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
         UpdateCheckROModel aModel( aNameAccess );
         m_xContext = xContext;
 
-        rtl::OUString aUpdateEntryVersion = aModel.getUpdateEntryVersion();
+        OUString aUpdateEntryVersion = aModel.getUpdateEntryVersion();
 
         aModel.getUpdateEntry(m_aUpdateInfo);
 
@@ -767,7 +767,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
         m_bHasExtensionUpdate = checkForPendingUpdates( xContext );
         m_bShowExtUpdDlg = false;
 
-        rtl::OUString aLocalFileName = aModel.getLocalFileName();
+        OUString aLocalFileName = aModel.getLocalFileName();
 
         if( !aLocalFileName.isEmpty() )
         {
@@ -815,7 +815,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
             if( obsoleteUpdateInfo )
             {
                 // Bring-up release note for position 5 ..
-                const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 5));
+                const OUString aURL(getReleaseNote(m_aUpdateInfo, 5));
                 if( !aURL.isEmpty() )
                     showReleaseNote(aURL);
 
@@ -827,8 +827,8 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
 
                 m_aUpdateInfo = UpdateInfo();
                 // Remove outdated release notes
-                storeReleaseNote( 1, rtl::OUString() );
-                storeReleaseNote( 2, rtl::OUString() );
+                storeReleaseNote( 1, OUString() );
+                storeReleaseNote( 2, OUString() );
             }
             else
             {
@@ -902,16 +902,16 @@ UpdateCheck::install()
         // Construct install command ??
 
         // Store release note for position 3 and 4
-        rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 3));
+        OUString aURL(getReleaseNote(m_aUpdateInfo, 3));
         storeReleaseNote(1, aURL);
 
         aURL = getReleaseNote(m_aUpdateInfo, 4);
         storeReleaseNote(2, aURL);
 
-        rtl::OUString aInstallImage(m_aImageName);
+        OUString aInstallImage(m_aImageName);
         osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
 
-        rtl::OUString aParameter;
+        OUString aParameter;
         sal_Int32 nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
 #if ( defined LINUX || defined SOLARIS )
         nFlags = 42;
@@ -1047,7 +1047,7 @@ UpdateCheck::enableDownload(bool enable, bool paused)
 //------------------------------------------------------------------------------
 
 bool
-UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
+UpdateCheck::downloadTargetExists(const OUString& rFileName)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -1089,7 +1089,7 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
 }
 
 //------------------------------------------------------------------------------
-bool UpdateCheck::checkDownloadDestination( const rtl::OUString& rFileName )
+bool UpdateCheck::checkDownloadDestination( const OUString& rFileName )
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -1108,7 +1108,7 @@ bool UpdateCheck::checkDownloadDestination( const rtl::OUString& rFileName )
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::downloadStalled(const rtl::OUString& rErrorMessage)
+UpdateCheck::downloadStalled(const OUString& rErrorMessage)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
@@ -1134,7 +1134,7 @@ UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
+UpdateCheck::downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     if ( nFileSize > 0 )
     {
@@ -1144,7 +1144,7 @@ UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFil
         aModel->storeLocalFileName(rLocalFileName, nFileSize);
 
         // Bring-up release note for position 1 ..
-        const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
+        const OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
         if( !aURL.isEmpty() )
             showReleaseNote(aURL);
     }
@@ -1153,7 +1153,7 @@ UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFil
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
+UpdateCheck::downloadFinished(const OUString& rLocalFileName)
 {
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
@@ -1168,7 +1168,7 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
 
     // Bring-up release note for position 2 ..
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
-    const rtl::OUString aURL(getReleaseNote(aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
+    const OUString aURL(getReleaseNote(aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
     if( !aURL.isEmpty() )
         showReleaseNote(aURL);
 }
@@ -1185,7 +1185,7 @@ UpdateCheck::cancelDownload()
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
 
-    rtl::OUString aLocalFile(rModel->getLocalFileName());
+    OUString aLocalFile(rModel->getLocalFileName());
     rModel->clearLocalFileName();
     rModel->storeDownloadPaused(false);
 
@@ -1303,7 +1303,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && !iter2->URL2.isEmpty())
         {
             iter2->URL = iter2->URL2;
-            iter2->URL2 = rtl::OUString();
+            iter2->URL2 = OUString();
             iter2->Pos = iter2->Pos2;
             iter2->Pos2 = 0;
         }
@@ -1411,7 +1411,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     OSL_ASSERT( aUpdateHandler.is() );
 
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
-    rtl::OUString aImageName(m_aImageName);
+    OUString aImageName(m_aImageName);
 
     aGuard.clear();
 
@@ -1423,7 +1423,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
     {
         uno::Reference< uno::XComponentContext > xContext(m_xContext);
 
-        rtl::OUString aDownloadDestination =
+        OUString aDownloadDestination =
             UpdateCheckConfig::get(xContext, this)->getDownloadDestination();
 
         osl_getSystemPathFromFileURL(aDownloadDestination.pData, &aDownloadDestination.pData);
@@ -1461,13 +1461,13 @@ UpdateCheck::getUIState(const UpdateInfo& rInfo)
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
+UpdateCheck::showReleaseNote(const OUString& rURL) const
 {
     const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
         c3s::SystemShellExecute::create( m_xContext ) );
 
     try {
-        xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::URIS_ONLY);
+        xShellExecute->execute(rURL, OUString(), c3s::SystemShellExecuteFlags::URIS_ONLY);
     } catch(const c3s::SystemShellExecuteException&) {
     }
 }
@@ -1475,18 +1475,18 @@ UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
 //------------------------------------------------------------------------------
 
 bool
-UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
+UpdateCheck::storeReleaseNote(sal_Int8 nNum, const OUString &rURL)
 {
     osl::FileBase::RC rc;
-    rtl::OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + "/sun" );
+    OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + "/sun" );
 
     rc = osl::Directory::createPath( aTargetDir );
 
-    rtl::OUString aFileName = "releasenote" +
-                              rtl::OUString::valueOf( (sal_Int32) nNum ) +
+    OUString aFileName = "releasenote" +
+                              OUString::valueOf( (sal_Int32) nNum ) +
                               ".url";
 
-    rtl::OUString aFilePath;
+    OUString aFilePath;
     rc = osl::FileBase::getAbsoluteFileURL( aTargetDir, aFileName, aFilePath );
     if ( rc != osl::FileBase::E_None ) return false;
 
@@ -1501,16 +1501,16 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 
     if ( rc != osl::FileBase::E_None ) return false;
 
-    rtl::OString aLineBuf("[InternetShortcut]\r\n");
+    OString aLineBuf("[InternetShortcut]\r\n");
     sal_uInt64 nWritten = 0;
 
-    rtl::OUString aURL( rURL );
+    OUString aURL( rURL );
 #ifdef WNT
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
     if ( rc != osl::FileBase::E_None ) return false;
     aURL = "URL=" + rURL;
 #endif
-    aLineBuf = rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 );
+    aLineBuf = OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 );
     rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
     if ( rc != osl::FileBase::E_None ) return false;
 
@@ -1521,8 +1521,8 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 //------------------------------------------------------------------------------
 void UpdateCheck::showExtensionDialog()
 {
-    rtl::OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
-    rtl::OUString sArguments = "SHOW_UPDATE_DIALOG";
+    OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
+    OUString sArguments = "SHOW_UPDATE_DIALOG";
     uno::Reference< uno::XInterface > xService;
 
     if( ! m_xContext.is() )
@@ -1571,7 +1571,7 @@ UpdateCheck::getInteractionHandler() const
 //------------------------------------------------------------------------------
 
 uno::Reference< uno::XInterface >
-UpdateCheck::createService(const rtl::OUString& rServiceName,
+UpdateCheck::createService(const OUString& rServiceName,
                            const uno::Reference<uno::XComponentContext>& xContext)
 {
     if( !xContext.is() )

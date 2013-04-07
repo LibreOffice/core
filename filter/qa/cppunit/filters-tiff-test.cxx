@@ -54,8 +54,8 @@ class TiffFilterTest
 public:
     TiffFilterTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    virtual bool load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int);
 
     /**
@@ -68,8 +68,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool TiffFilterTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &,
+bool TiffFilterTest::load(const OUString &,
+    const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
@@ -79,9 +79,9 @@ bool TiffFilterTest::load(const rtl::OUString &,
 
 void TiffFilterTest::testCVEs()
 {
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/filter/qa/cppunit/data/tiff/"),
-        rtl::OUString());
+        OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TiffFilterTest);

@@ -122,7 +122,7 @@ namespace drawinglayer
             static bool bDoSaveForVisualControl(false);
             if(bDoSaveForVisualControl)
             {
-                SvFileStream aNew(rtl::OUString("c:\\test.png"), STREAM_WRITE|STREAM_TRUNC);
+                SvFileStream aNew(OUString("c:\\test.png"), STREAM_WRITE|STREAM_TRUNC);
                 aNew << aRetval;
             }
 #endif

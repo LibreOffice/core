@@ -47,7 +47,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::unopkg;
-using ::rtl::OUString;
 
 
 namespace {
@@ -130,7 +129,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
     }
     catch (const RuntimeException & exc) {
         (void) exc;
-        OSL_FAIL( ::rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         exc.Message, osl_getThreadTextEncoding() ).getStr() );
     }
 }
@@ -348,7 +347,7 @@ void CommandEnvironmentImpl::update_( Any const & Status )
             return;
     }
     else {
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii( "WARNING: " );
         deployment::DeploymentException dp_exc;
         if (Status >>= dp_exc) {

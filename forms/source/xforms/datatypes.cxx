@@ -60,7 +60,7 @@ namespace xforms
     //= OXSDDataType
     //====================================================================
     //--------------------------------------------------------------------
-    OXSDDataType::OXSDDataType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    OXSDDataType::OXSDDataType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType_PBase( m_aBHelper )
         ,m_bIsBasic( sal_True )
         ,m_nTypeClass( _nTypeClass )
@@ -96,7 +96,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    OXSDDataType* OXSDDataType::clone( const ::rtl::OUString& _rNewName ) const
+    OXSDDataType* OXSDDataType::clone( const OUString& _rNewName ) const
     {
         OXSDDataType* pClone = createClone( _rNewName );
         pClone->initializeClone( *this );
@@ -114,26 +114,26 @@ namespace xforms
     OSL_POSTCOND( member == value, "OXSDDataType::setFoo: inconsistency!" );
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException)
+    OUString SAL_CALL OXSDDataType::getName(  ) throw (RuntimeException)
     {
         return m_sName;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::setName( const ::rtl::OUString& aName ) throw (RuntimeException, VetoException)
+    void SAL_CALL OXSDDataType::setName( const OUString& aName ) throw (RuntimeException, VetoException)
     {
         // TODO: check the name for conflicts in the repository
         SET_PROPERTY( NAME, aName, m_sName );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OXSDDataType::getPattern() throw (RuntimeException)
+    OUString SAL_CALL OXSDDataType::getPattern() throw (RuntimeException)
     {
         return m_sPattern;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::setPattern( const ::rtl::OUString& _pattern ) throw (RuntimeException)
+    void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern ) throw (RuntimeException)
     {
         SET_PROPERTY( XSD_PATTERN, _pattern, m_sPattern );
     }
@@ -164,40 +164,40 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_Bool OXSDDataType::validate( const ::rtl::OUString& sValue ) throw( RuntimeException )
+    sal_Bool OXSDDataType::validate( const OUString& sValue ) throw( RuntimeException )
     {
         return ( _validate( sValue ) == 0 );
     }
 
     //--------------------------------------------------------------------
-  ::rtl::OUString OXSDDataType::explainInvalid( const ::rtl::OUString& sValue ) throw( RuntimeException )
+  OUString OXSDDataType::explainInvalid( const OUString& sValue ) throw( RuntimeException )
     {
         // get reason
         sal_uInt16 nReason = _validate( sValue );
 
         // get resource and return localized string
         return ( nReason == 0 )
-            ? ::rtl::OUString()
+            ? OUString()
             : getResource( nReason, sValue,
                                    _explainInvalid( nReason ) );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OXSDDataType::_explainInvalid( sal_uInt16 nReason )
+    OUString OXSDDataType::_explainInvalid( sal_uInt16 nReason )
     {
         if ( RID_STR_XFORMS_PATTERN_DOESNT_MATCH == nReason )
         {
             OSL_ENSURE( !m_sPattern.isEmpty(), "OXSDDataType::_explainInvalid: how can this error occur without a regular expression?" );
             return m_sPattern;
         }
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------
     namespace
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const ::rtl::OUString& _rPattern )
+        static void lcl_initializePatternMatcher( ::std::auto_ptr< RegexMatcher >& _rpMatcher, const OUString& _rPattern )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
             UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(_rPattern.getStr()), _rPattern.getLength() );    // UChar != sal_Unicode in MinGW
@@ -207,7 +207,7 @@ namespace xforms
         }
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
-        static bool lcl_matchString( RegexMatcher& _rMatcher, const ::rtl::OUString& _rText )
+        static bool lcl_matchString( RegexMatcher& _rMatcher, const OUString& _rText )
         {
             UErrorCode nMatchStatus = U_ZERO_ERROR;
             UnicodeString aInput( reinterpret_cast<const UChar *>(_rText.getStr()), _rText.getLength() );   // UChar != sal_Unicode in MinGW
@@ -225,7 +225,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_uInt16 OXSDDataType::_validate( const ::rtl::OUString& _rValue )
+    sal_uInt16 OXSDDataType::_validate( const OUString& _rValue )
     {
         // care for the regular expression
         if ( !m_sPattern.isEmpty() )
@@ -253,7 +253,7 @@ namespace xforms
             return sal_False;
 
         // sanity checks
-        ::rtl::OUString sErrorMessage;
+        OUString sErrorMessage;
         if ( !checkPropertySanity( _nHandle, _rConvertedValue, sErrorMessage ) )
         {
             IllegalArgumentException aException;
@@ -274,11 +274,11 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::rtl::OUString& _rErrorMessage )
+    bool OXSDDataType::checkPropertySanity( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, OUString& _rErrorMessage )
     {
         if ( _nHandle == PROPERTY_ID_XSD_PATTERN )
         {
-            ::rtl::OUString sPattern;
+            OUString sPattern;
             OSL_VERIFY( _rNewValue >>= sPattern );
 
             UnicodeString aIcuPattern( reinterpret_cast<const UChar *>(sPattern.getStr()), sPattern.getLength() );  // UChar != sal_Unicode in MinGW
@@ -286,7 +286,7 @@ namespace xforms
             RegexMatcher aMatcher( aIcuPattern, 0, nMatchStatus );
             if ( U_FAILURE( nMatchStatus ) )
             {
-                _rErrorMessage = ::rtl::OUString( "This is no valid pattern." );
+                _rErrorMessage = OUString( "This is no valid pattern." );
                 return false;
             }
         }
@@ -294,37 +294,37 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::setPropertyValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::setPropertyValue( aPropertyName, aValue );
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL OXSDDataType::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OXSDDataType::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         return OXSDDataType_PBase::getPropertyValue( PropertyName );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::addPropertyChangeListener( aPropertyName, xListener );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::removePropertyChangeListener( aPropertyName, aListener );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::addVetoableChangeListener( PropertyName, aListener );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OXSDDataType::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OXSDDataType::removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         OXSDDataType_PBase::removeVetoableChangeListener( PropertyName, aListener );
     }
@@ -332,7 +332,7 @@ namespace xforms
     //====================================================================
     //= OValueLimitedType_Base
     //====================================================================
-    OValueLimitedType_Base::OValueLimitedType_Base( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    OValueLimitedType_Base::OValueLimitedType_Base( const OUString& _rName, sal_Int16 _nTypeClass )
         :OXSDDataType( _rName, _nTypeClass )
         ,m_fCachedMaxInclusive( 0 )
         ,m_fCachedMaxExclusive( 0 )
@@ -415,7 +415,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    bool OValueLimitedType_Base::_getValue( const ::rtl::OUString& rValue, double& fValue )
+    bool OValueLimitedType_Base::_getValue( const OUString& rValue, double& fValue )
     {
         // convert to double
         rtl_math_ConversionStatus eStatus;
@@ -435,7 +435,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_uInt16 OValueLimitedType_Base::_validate( const ::rtl::OUString& rValue )
+    sal_uInt16 OValueLimitedType_Base::_validate( const OUString& rValue )
     {
         sal_uInt16 nReason = OXSDDataType::_validate( rValue );
         if( nReason == 0 )
@@ -460,9 +460,9 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OValueLimitedType_Base::_explainInvalid( sal_uInt16 nReason )
+    OUString OValueLimitedType_Base::_explainInvalid( sal_uInt16 nReason )
     {
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         switch( nReason )
         {
         case 0:
@@ -501,7 +501,7 @@ namespace xforms
     //= OStringType
     //====================================================================
      //--------------------------------------------------------------------
-    OStringType::OStringType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    OStringType::OStringType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OStringType_Base( _rName, _nTypeClass )
     {
     }
@@ -528,13 +528,13 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    bool OStringType::checkPropertySanity( sal_Int32 _nHandle, const Any& _rNewValue, ::rtl::OUString& _rErrorMessage )
+    bool OStringType::checkPropertySanity( sal_Int32 _nHandle, const Any& _rNewValue, OUString& _rErrorMessage )
     {
         // let the base class do the conversion
         if ( !OStringType_Base::checkPropertySanity( _nHandle, _rNewValue, _rErrorMessage ) )
             return false;
 
-        _rErrorMessage = ::rtl::OUString();
+        _rErrorMessage = OUString();
         switch ( _nHandle )
         {
             case PROPERTY_ID_XSD_LENGTH:
@@ -544,7 +544,7 @@ namespace xforms
                 sal_Int32 nValue( 0 );
                 OSL_VERIFY( _rNewValue >>= nValue );
                 if ( nValue <= 0 )
-                    _rErrorMessage = ::rtl::OUString( "Length limits must denote positive integer values." );
+                    _rErrorMessage = OUString( "Length limits must denote positive integer values." );
                         // TODO/eforms: localize the error message
             }
             break;
@@ -554,7 +554,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_uInt16 OStringType::_validate( const ::rtl::OUString& rValue )
+    sal_uInt16 OStringType::_validate( const OUString& rValue )
     {
         // check regexp, whitespace etc. in parent class
         sal_uInt16 nReason = OStringType_Base::_validate( rValue );
@@ -581,10 +581,10 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OStringType::_explainInvalid( sal_uInt16 nReason )
+    OUString OStringType::_explainInvalid( sal_uInt16 nReason )
     {
         sal_Int32 nValue = 0;
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         switch( nReason )
         {
         case 0:
@@ -617,7 +617,7 @@ namespace xforms
     //= OBooleanType
     //====================================================================
     //--------------------------------------------------------------------
-    OBooleanType::OBooleanType( const ::rtl::OUString& _rName )
+    OBooleanType::OBooleanType( const OUString& _rName )
         :OBooleanType_Base( _rName, DataTypeClass::BOOLEAN )
     {
     }
@@ -631,7 +631,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_uInt16 OBooleanType::_validate( const ::rtl::OUString& sValue )
+    sal_uInt16 OBooleanType::_validate( const OUString& sValue )
     {
         sal_uInt16 nInvalidityReason = OBooleanType_Base::_validate( sValue );
         if ( nInvalidityReason )
@@ -642,16 +642,16 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OBooleanType::_explainInvalid( sal_uInt16 nReason )
+    OUString OBooleanType::_explainInvalid( sal_uInt16 nReason )
     {
-        return ( nReason == 0 ) ? ::rtl::OUString() : getName();
+        return ( nReason == 0 ) ? OUString() : getName();
     }
 
     //====================================================================
     //= ODecimalType
     //====================================================================
     //--------------------------------------------------------------------
-    ODecimalType::ODecimalType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    ODecimalType::ODecimalType( const OUString& _rName, sal_Int16 _nTypeClass )
         :ODecimalType_Base( _rName, _nTypeClass )
     {
     }
@@ -679,7 +679,7 @@ namespace xforms
 
     // validate decimals and return code for which facets failed
     // to be used by: ODecimalType::validate and ODecimalType::explainInvalid
-    sal_uInt16 ODecimalType::_validate( const ::rtl::OUString& rValue )
+    sal_uInt16 ODecimalType::_validate( const OUString& rValue )
     {
         sal_Int16 nReason = ODecimalType_Base::_validate( rValue );
 
@@ -713,10 +713,10 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODecimalType::_explainInvalid( sal_uInt16 nReason )
+    OUString ODecimalType::_explainInvalid( sal_uInt16 nReason )
     {
         sal_Int32 nValue = 0;
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         switch( nReason )
         {
         case RID_STR_XFORMS_VALUE_TOTAL_DIGITS:
@@ -737,11 +737,11 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODecimalType::typedValueAsHumanReadableString( const Any& _rValue ) const
+    OUString ODecimalType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         double fValue( 0 );
         normalizeValue( _rValue, fValue );
-        return ::rtl::OUString::valueOf( fValue );
+        return OUString::valueOf( fValue );
     }
 
     //--------------------------------------------------------------------
@@ -754,7 +754,7 @@ namespace xforms
     //=
     //====================================================================
 #define DEFAULT_IMPLEMNENT_SUBTYPE( classname, typeclass )      \
-    classname::classname( const ::rtl::OUString& _rName )       \
+    classname::classname( const OUString& _rName )       \
         :classname##_Base( _rName, DataTypeClass::typeclass )   \
     {                                                           \
     }                                                           \
@@ -773,13 +773,13 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateType, DATE )
 
     //--------------------------------------------------------------------
-    sal_uInt16 ODateType::_validate( const ::rtl::OUString& _rValue )
+    sal_uInt16 ODateType::_validate( const OUString& _rValue )
     {
         return ODateType_Base::_validate( _rValue );
     }
 
     //--------------------------------------------------------------------
-    bool ODateType::_getValue( const ::rtl::OUString& value, double& fValue )
+    bool ODateType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypeValue = Convert::get().toAny( value, getCppuType() );
 
@@ -793,7 +793,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODateType::typedValueAsHumanReadableString( const Any& _rValue ) const
+    OUString ODateType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "ODateType::typedValueAsHumanReadableString: unexpected type" );
         return Convert::get().toXSD( _rValue );
@@ -815,13 +815,13 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( OTimeType, TIME )
 
     //--------------------------------------------------------------------
-    sal_uInt16 OTimeType::_validate( const ::rtl::OUString& _rValue )
+    sal_uInt16 OTimeType::_validate( const OUString& _rValue )
     {
         return OTimeType_Base::_validate( _rValue );
     }
 
     //--------------------------------------------------------------------
-    bool OTimeType::_getValue( const ::rtl::OUString& value, double& fValue )
+    bool OTimeType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
 
@@ -835,7 +835,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
+    OUString OTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
         return Convert::get().toXSD( _rValue );
@@ -857,7 +857,7 @@ namespace xforms
     DEFAULT_IMPLEMNENT_SUBTYPE( ODateTimeType, DATETIME )
 
     //--------------------------------------------------------------------
-    sal_uInt16 ODateTimeType::_validate( const ::rtl::OUString& _rValue )
+    sal_uInt16 ODateTimeType::_validate( const OUString& _rValue )
     {
         return ODateTimeType_Base::_validate( _rValue );
     }
@@ -882,7 +882,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    bool ODateTimeType::_getValue( const ::rtl::OUString& value, double& fValue )
+    bool ODateTimeType::_getValue( const OUString& value, double& fValue )
     {
         Any aTypedValue = Convert::get().toAny( value, getCppuType() );
 
@@ -895,10 +895,10 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODateTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
+    OUString ODateTimeType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         OSL_PRECOND( _rValue.getValueType().equals( getCppuType() ), "OTimeType::typedValueAsHumanReadableString: unexpected type" );
-        ::rtl::OUString sString = Convert::get().toXSD( _rValue );
+        OUString sString = Convert::get().toXSD( _rValue );
 
         // ISO 8601 notation has a "T" to separate between date and time. Our only concession
         // to the "human readable" in the method name is to replace this T with a whitespace.
@@ -918,7 +918,7 @@ namespace xforms
     //= OShortIntegerType
     //====================================================================
     //--------------------------------------------------------------------
-    OShortIntegerType::OShortIntegerType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+    OShortIntegerType::OShortIntegerType( const OUString& _rName, sal_Int16 _nTypeClass )
         :OShortIntegerType_Base( _rName, _nTypeClass )
     {
     }
@@ -932,7 +932,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    bool OShortIntegerType::_getValue( const ::rtl::OUString& value, double& fValue )
+    bool OShortIntegerType::_getValue( const OUString& value, double& fValue )
     {
         fValue = (double)(sal_Int16)value.toInt32();
         // TODO/eforms
@@ -948,11 +948,11 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OShortIntegerType::typedValueAsHumanReadableString( const Any& _rValue ) const
+    OUString OShortIntegerType::typedValueAsHumanReadableString( const Any& _rValue ) const
     {
         sal_Int16 nValue( 0 );
         OSL_VERIFY( _rValue >>= nValue );
-        return ::rtl::OUString::valueOf( (sal_Int32)nValue );
+        return OUString::valueOf( (sal_Int32)nValue );
     }
 
     //--------------------------------------------------------------------

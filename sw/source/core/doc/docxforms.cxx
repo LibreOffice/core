@@ -41,7 +41,6 @@ using container::XNameContainer;
 using xforms::XModel2;
 using frame::XModule;
 using xforms::XFormsUIHelper1;
-using ::rtl::OUString;
 
 
 Reference<XNameContainer> SwDoc::getXForms() const

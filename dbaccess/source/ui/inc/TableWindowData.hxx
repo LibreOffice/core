@@ -41,9 +41,9 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>    m_xKeys;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
 
-        ::rtl::OUString m_aTableName;
-        ::rtl::OUString m_aWinName;
-        ::rtl::OUString m_sComposedName;
+        OUString m_aTableName;
+        OUString m_aWinName;
+        OUString m_sComposedName;
         Point           m_aPosition;
         Size            m_aSize;
         sal_Bool        m_bShowAll;
@@ -52,9 +52,9 @@ namespace dbaui
 
     public:
         explicit OTableWindowData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
-                                   ,const ::rtl::OUString& _rComposedName
-                                   ,const ::rtl::OUString& strTableName
-                                   ,const ::rtl::OUString& rWinName = ::rtl::OUString() );
+                                   ,const OUString& _rComposedName
+                                   ,const OUString& strTableName
+                                   ,const OUString& rWinName = OUString() );
         virtual ~OTableWindowData();
 
         /** late constructor
@@ -66,9 +66,9 @@ namespace dbaui
         bool init(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection  >& _xConnection
                  ,bool _bAllowQueries);
 
-        inline ::rtl::OUString GetComposedName()    const { return m_sComposedName; }
-        inline ::rtl::OUString GetTableName()       const { return m_aTableName; }
-        inline ::rtl::OUString GetWinName()         const { return m_aWinName; }
+        inline OUString GetComposedName()    const { return m_sComposedName; }
+        inline OUString GetTableName()       const { return m_aTableName; }
+        inline OUString GetWinName()         const { return m_aWinName; }
         inline Point GetPosition()                  const { return m_aPosition; }
         inline Size GetSize()                       const { return m_aSize; }
         inline sal_Bool IsShowAll()                     const { return m_bShowAll; }
@@ -77,7 +77,7 @@ namespace dbaui
         sal_Bool HasPosition()  const;
         sal_Bool HasSize()      const;
 
-        inline void SetWinName( const ::rtl::OUString& rWinName )       { m_aWinName = rWinName; }
+        inline void SetWinName( const OUString& rWinName )       { m_aWinName = rWinName; }
         inline void SetPosition( const Point& rPos )                    { m_aPosition=rPos; }
         inline void SetSize( const Size& rSize )                        { m_aSize = rSize; }
         inline void ShowAll( sal_Bool bAll )                                { m_bShowAll = bAll; }

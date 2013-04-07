@@ -353,7 +353,7 @@ XBitmapListRef DrawModelWrapper::GetBitmapList() const
     return this->SdrModel::GetBitmapList();
 }
 
-SdrObject* DrawModelWrapper::getNamedSdrObject( const rtl::OUString& rName )
+SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rName )
 {
     if( rName.isEmpty() )
         return 0;

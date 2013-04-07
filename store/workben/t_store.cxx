@@ -37,7 +37,6 @@ extern "C"
 }
 #endif /* PROFILE */
 
-using rtl::OUString;
 
 /*========================================================================
  *
@@ -180,7 +179,7 @@ sal_Bool DirectoryTraveller::visit (const iter& it)
     m_nCount++;
     if (m_nOptions & OPTION_DUMP)
     {
-        rtl::OString aName (it.m_pszName, it.m_nLength, RTL_TEXTENCODING_UTF8);
+        OString aName (it.m_pszName, it.m_nLength, RTL_TEXTENCODING_UTF8);
         printf ("Visit(%u,%u): %s [0x%08x] %d [Bytes]\n",
                 m_nLevel, m_nCount,
                 aName.pData->buffer, (unsigned int)(it.m_nAttrib), (unsigned int)(it.m_nSize));

@@ -123,7 +123,7 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWea
     ,m_rMutex(_rMutex)
 {
     DBG_CTOR(OQueryDescriptor_Base,NULL);
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
 }
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf)
@@ -131,7 +131,7 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSour
     ,m_rMutex(_rSource.m_rMutex)
 {
     DBG_CTOR(OQueryDescriptor_Base,NULL);
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, sal_True,::std::vector< OUString>(), this,this);
 
     m_sCommand = _rSource.m_sCommand;
     m_bEscapeProcessing = _rSource.m_bEscapeProcessing;
@@ -170,7 +170,7 @@ void OQueryDescriptor_Base::setColumnsOutOfDate( sal_Bool _bOutOfDate )
         m_pColumns->setInitialized();
 }
 
-void OQueryDescriptor_Base::implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn )
+void OQueryDescriptor_Base::implAppendColumn( const OUString& _rName, OColumn* _pColumn )
 {
     m_pColumns->append( _rName, _pColumn );
 }
@@ -212,19 +212,19 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
     return m_pColumns;
 }
 
-::rtl::OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.sdb.OQueryDescriptor");
+    return OUString("com.sun.star.sdb.OQueryDescriptor");
 }
 
-sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(2);
+    Sequence< OUString > aSupported(2);
     aSupported.getArray()[0] = SERVICE_SDB_DATASETTINGS;
     aSupported.getArray()[1] = SERVICE_SDB_QUERYDESCRIPTOR;
     return aSupported;
@@ -240,7 +240,7 @@ void OQueryDescriptor_Base::columnAppended( const Reference< XPropertySet >& /*_
     // not interested in
 }
 
-void OQueryDescriptor_Base::columnDropped(const ::rtl::OUString& /*_sName*/)
+void OQueryDescriptor_Base::columnDropped(const OUString& /*_sName*/)
 {
     // not interested in
 }
@@ -264,7 +264,7 @@ void OQueryDescriptor_Base::refreshColumns()
     rebuildColumns();
 }
 
-OColumn* OQueryDescriptor_Base::createColumn( const ::rtl::OUString& /*_rName*/ ) const
+OColumn* OQueryDescriptor_Base::createColumn( const OUString& /*_rName*/ ) const
 {
     // creating a column/descriptor for a query/descriptor does not make sense at all
     return NULL;

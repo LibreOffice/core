@@ -71,7 +71,7 @@ public:
     // XContentProviderFactory
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
-    createContentProvider( const ::rtl::OUString& Service )
+    createContentProvider( const OUString& Service )
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
@@ -90,9 +90,9 @@ class UcbContentProviderProxy :
                 public com::sun::star::ucb::XParameterizedContentProvider
 {
     ::osl::Mutex    m_aMutex;
-    ::rtl::OUString m_aService;
-    ::rtl::OUString m_aTemplate;
-    ::rtl::OUString m_aArguments;
+    OUString m_aService;
+    OUString m_aTemplate;
+    OUString m_aArguments;
     sal_Bool        m_bReplace;
     sal_Bool        m_bRegister;
 
@@ -107,7 +107,7 @@ public:
     UcbContentProviderProxy(
             const com::sun::star::uno::Reference<
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-            const ::rtl::OUString& Service );
+            const OUString& Service );
     virtual ~UcbContentProviderProxy();
 
     // XInterface
@@ -142,15 +142,15 @@ public:
     // XParameterizedContentProvider
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
-    registerInstance( const ::rtl::OUString& Template,
-                      const ::rtl::OUString& Arguments,
+    registerInstance( const OUString& Template,
+                      const OUString& Arguments,
                       sal_Bool ReplaceExisting )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProvider > SAL_CALL
-    deregisterInstance( const ::rtl::OUString& Template,
-                        const ::rtl::OUString& Arguments )
+    deregisterInstance( const OUString& Template,
+                        const OUString& Arguments )
         throw( ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException );
 };

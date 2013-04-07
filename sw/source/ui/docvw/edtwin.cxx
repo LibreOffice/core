@@ -873,8 +873,8 @@ void SwEditWin::FlushInBuffer()
                 sal_Int16 nCheckMode = rCTLOptions.IsCTLSequenceCheckingRestricted() ?
                         i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
-                rtl::OUString aOldText( aLeftText );
-                rtl::OUString aNewText( aOldText );
+                OUString aOldText( aLeftText );
+                OUString aNewText( aOldText );
                 if (rCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
                     for (xub_StrLen k = 0;  k < m_aInBuffer.Len();  ++k)
@@ -916,7 +916,7 @@ void SwEditWin::FlushInBuffer()
                         if (xISC->checkInputSequence( aNewText, nTmpPos - 1, cChar, nCheckMode ))
                         {
                             // character can be inserted:
-                            aNewText += rtl::OUString( (sal_Unicode) cChar );
+                            aNewText += OUString( (sal_Unicode) cChar );
                             ++nTmpPos;
                         }
                     }
@@ -2343,7 +2343,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             else if(!rSh.HasReadonlySel())
             {
                 sal_Bool bIsNormalChar = GetAppCharClass().isLetterNumeric(
-                                                            rtl::OUString( aCh ), 0 );
+                                                            OUString( aCh ), 0 );
                 if( bAppendSpace && bIsNormalChar &&
                     (m_aInBuffer.Len() || !rSh.IsSttPara() || !rSh.IsEndPara() ))
                 {
@@ -2380,7 +2380,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    rtl::OUStringBuffer aBuf(m_aInBuffer);
+                    OUStringBuffer aBuf(m_aInBuffer);
                     comphelper::string::padToLength(aBuf,
                         m_aInBuffer.Len() + aKeyEvent.GetRepeat() + 1, aCh);
                     m_aInBuffer = aBuf.makeStringAndClear();
@@ -5017,7 +5017,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aEvent.ExecutePosition.X = aPixPos.X();
                         aEvent.ExecutePosition.Y = aPixPos.Y();
                         Menu* pMenu = 0;
-                        ::rtl::OUString sMenuName("private:resource/ReadonlyContextMenu");
+                        OUString sMenuName("private:resource/ReadonlyContextMenu");
                         if( GetView().TryContextMenuInterception( *pROPopup, sMenuName, pMenu, aEvent ) )
                         {
                             if ( pMenu )
@@ -5922,7 +5922,7 @@ void SwEditWin::SetUseInputLanguage( sal_Bool bNew )
     m_bUseInputLanguage = bNew;
 }
 
-rtl::OUString SwEditWin::GetSurroundingText() const
+OUString SwEditWin::GetSurroundingText() const
 {
     String sReturn;
     SwWrtShell& rSh = m_rView.GetWrtShell();

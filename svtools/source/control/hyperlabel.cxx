@@ -203,7 +203,7 @@ namespace svt
         m_pImpl->Index = _Index;
     }
 
-    void HyperLabel::SetLabel( const ::rtl::OUString& _rText )
+    void HyperLabel::SetLabel( const OUString& _rText )
     {
         SetText(_rText);
     }

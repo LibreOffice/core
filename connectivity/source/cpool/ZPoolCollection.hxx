@@ -81,21 +81,21 @@ namespace connectivity
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
         // some configuration helper methods
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const ::rtl::OUString& _rPath) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const OUString& _rPath) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getConfigPoolRoot();
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
-                                                                                                    const ::rtl::OUString& _rPath) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const ::rtl::OUString& _rPath,
+                                                                                                    const OUString& _rPath) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const OUString& _rPath,
                                                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) const throw();
         sal_Bool isPoolingEnabled();
-        sal_Bool isDriverPoolingEnabled(const ::rtl::OUString& _sDriverImplName,
+        sal_Bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
-        sal_Bool isPoolingEnabledByUrl( const ::rtl::OUString& _sUrl,
+        sal_Bool isPoolingEnabledByUrl( const OUString& _sUrl,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
-                                        ::rtl::OUString& _rsImplName,
+                                        OUString& _rsImplName,
                                         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
 
-        OConnectionPool* getConnectionPool( const ::rtl::OUString& _sImplName,
+        OConnectionPool* getConnectionPool( const OUString& _sImplName,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
         void clearConnectionPools(sal_Bool _bDispose);
@@ -104,26 +104,26 @@ namespace connectivity
         virtual ~OPoolCollection();
     public:
 
-        static ::com::sun::star::uno::Any getNodeValue( const ::rtl::OUString& _rPath,
+        static ::com::sun::star::uno::Any getNodeValue( const OUString& _rPath,
                                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xTreeNode)throw();
 
     // XDriverManager
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const ::rtl::OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::uno::RuntimeException);
 
     //XDriverAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > SAL_CALL getDriverByURL( const ::rtl::OUString& url ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw (::com::sun::star::uno::RuntimeException);
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static methods
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL CreateInstance(const::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        static ::rtl::OUString SAL_CALL getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);

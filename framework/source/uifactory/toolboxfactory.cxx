@@ -65,7 +65,7 @@ ToolBoxFactory::ToolBoxFactory( const ::com::sun::star::uno::Reference< ::com::s
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL ToolBoxFactory::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+    const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {

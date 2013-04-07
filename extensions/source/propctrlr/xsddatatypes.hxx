@@ -71,16 +71,16 @@ namespace pcr
         sal_Int16 classify() const SAL_THROW(());
 
         // attribute access
-        ::rtl::OUString     getName() const SAL_THROW(());
+        OUString     getName() const SAL_THROW(());
         bool                isBasicType() const SAL_THROW(());
 
         /// determines whether a given facet exists at the type
-        bool                hasFacet( const ::rtl::OUString& _rFacetName ) const SAL_THROW(());
+        bool                hasFacet( const OUString& _rFacetName ) const SAL_THROW(());
         /// retrieves a facet value
         ::com::sun::star::uno::Any
-                            getFacet( const ::rtl::OUString& _rFacetName ) SAL_THROW(());
+                            getFacet( const OUString& _rFacetName ) SAL_THROW(());
         /// sets a facet value
-        void                setFacet( const ::rtl::OUString& _rFacetName, const ::com::sun::star::uno::Any& _rFacetValue ) SAL_THROW(());
+        void                setFacet( const OUString& _rFacetName, const ::com::sun::star::uno::Any& _rFacetValue ) SAL_THROW(());
 
        /** copies as much facets (values, respectively) from a give data type instance
        */

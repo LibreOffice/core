@@ -111,7 +111,7 @@ static const sal_Int32 INFO = 3;
 static const sal_Int32 DATA = 4;
 }
 bool isLog( ConnectionSettings *settings, int loglevel );
-void log( ConnectionSettings *settings, sal_Int32 level, const rtl::OUString &logString );
+void log( ConnectionSettings *settings, sal_Int32 level, const OUString &logString );
 void log( ConnectionSettings *settings, sal_Int32 level, const char *str );
 //--------------------------------------------------
 
@@ -138,8 +138,8 @@ struct ConnectionSettings
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > views;
     Tables *pTablesImpl;  // needed to implement renaming of tables / views
     Views *pViewsImpl;   // needed to implement renaming of tables / views
-    ::rtl::OUString user;
-    ::rtl::OUString catalog;
+    OUString user;
+    OUString catalog;
     sal_Bool showSystemColumns;
     FILE *logFile;
     sal_Int32 loglevel;
@@ -170,17 +170,17 @@ typedef ::boost::unordered_map<
     ::std::equal_to< ::rtl::ByteSequence >,
     Allocator< std::pair< const ::rtl::ByteSequence,::com::sun::star::uno::WeakReference< com::sun::star::sdbc::XCloseable > > >
 > WeakHashMap;
-typedef ::std::vector< rtl::OString, Allocator< ::rtl::OString > > OStringVector;
+typedef ::std::vector< OString, Allocator< OString > > OStringVector;
 
 
 
 typedef ::boost::unordered_map
 <
     const sal_Int32,
-    rtl::OUString,
+    OUString,
     ::boost::hash< sal_Int32 >,
     ::std::equal_to< sal_Int32 >,
-    Allocator< ::std::pair< sal_Int32, ::rtl::OUString > >
+    Allocator< ::std::pair< sal_Int32, OUString > >
 > Int2StringMap;
 
 class Connection : public ConnectionBase
@@ -212,12 +212,12 @@ public: // XConnection
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement(
-        const ::rtl::OUString& sql )
+        const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall(
-        const ::rtl::OUString& sql )
+        const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql )
+    virtual OUString SAL_CALL nativeSQL( const OUString& sql )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -235,9 +235,9 @@ public: // XConnection
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isReadOnly(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog )
+    virtual void SAL_CALL setCatalog( const OUString& catalog )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCatalog(  )
+    virtual OUString SAL_CALL getCatalog(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTransactionIsolation( sal_Int32 level )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

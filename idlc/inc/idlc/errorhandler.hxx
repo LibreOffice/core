@@ -112,21 +112,21 @@ public:
     void    coercionError(AstExpression *pExpr, ExprType et);
 
     // Report a failed name lookup attempt
-    void    lookupError(const ::rtl::OString& n);
+    void    lookupError(const OString& n);
     // Report a failed name lookup attempt
-    void    lookupError(ErrorCode e, const ::rtl::OString& n, AstDeclaration* pScope);
+    void    lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope);
 
 
     // Report a type error
     void    noTypeError(AstDeclaration const * pDecl);
 
-    void    inheritanceError(NodeType nodeType, const ::rtl::OString* name, AstDeclaration* pDecl);
+    void    inheritanceError(NodeType nodeType, const OString* name, AstDeclaration* pDecl);
 
     void    flagError(ErrorCode e, sal_uInt32 flag);
 
-    void    forwardLookupError(AstDeclaration* pForward, const ::rtl::OString& name);
+    void    forwardLookupError(AstDeclaration* pForward, const OString& name);
 
-    void    constantExpected(AstDeclaration* pDecl, const ::rtl::OString& name);
+    void    constantExpected(AstDeclaration* pDecl, const OString& name);
 
     void    evalError(AstExpression* pExpr);
 
@@ -137,7 +137,7 @@ public:
     void    enumValExpected(AstUnion* pUnion);
 
     // Report a failed enumerator lookup in an enum
-    void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name);
+    void    enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const OString& name);
 
     bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
 };

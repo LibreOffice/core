@@ -130,28 +130,28 @@ public:
 
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
-    getByHierarchicalName( const rtl::OUString & aName )
+    getByHierarchicalName( const OUString & aName )
         throw ( container::NoSuchElementException, uno::RuntimeException );
     virtual sal_Bool SAL_CALL
-    hasByHierarchicalName( const rtl::OUString & aName )
+    hasByHierarchicalName( const OUString & aName )
         throw ( uno::RuntimeException );
 
     // XNameContainer
     virtual void SAL_CALL
-    insertByName( const rtl::OUString & aName, const uno::Any & aElement )
+    insertByName( const OUString & aName, const uno::Any & aElement )
         throw ( lang::IllegalArgumentException,
                 container::ElementExistException,
                 lang::WrappedTargetException,
                 uno::RuntimeException );
     virtual void SAL_CALL
-    removeByName( const rtl::OUString & Name )
+    removeByName( const OUString & Name )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
                 uno::RuntimeException );
 
     // XNameReplace ( base of XNameContainer )
     virtual void SAL_CALL
-    replaceByName( const rtl::OUString & aName, const uno::Any & aElement )
+    replaceByName( const OUString & aName, const uno::Any & aElement )
         throw ( lang::IllegalArgumentException,
                 container::NoSuchElementException,
                 lang::WrappedTargetException,
@@ -159,15 +159,15 @@ public:
 
     // XNameAccess ( base of XNameReplace )
     virtual uno::Any SAL_CALL
-    getByName( const rtl::OUString & aName )
+    getByName( const OUString & aName )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
                 uno::RuntimeException );
-    virtual uno::Sequence< rtl::OUString > SAL_CALL
+    virtual uno::Sequence< OUString > SAL_CALL
     getElementNames()
         throw ( uno::RuntimeException );
     virtual sal_Bool SAL_CALL
-    hasByName( const rtl::OUString & aName )
+    hasByName( const OUString & aName )
         throw ( uno::RuntimeException );
 
     // XElementAccess ( base of XNameAccess )
@@ -257,11 +257,11 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 //=========================================================================
 
 XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
-                     rtl::OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
+                     OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 {
-    uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString( "com.sun.star.ucb.DefaultHierarchyDataSource" );
-    aSNS[ 1 ] = rtl::OUString( "com.sun.star.ucb.HierarchyDataSource" );
+    uno::Sequence< OUString > aSNS( 2 );
+    aSNS[ 0 ] = OUString( "com.sun.star.ucb.DefaultHierarchyDataSource" );
+    aSNS[ 1 ] = OUString( "com.sun.star.ucb.HierarchyDataSource" );
     return aSNS;
 }
 
@@ -322,14 +322,14 @@ void SAL_CALL HierarchyDataSource::removeEventListener(
 
 // virtual
 uno::Reference< uno::XInterface > SAL_CALL
-HierarchyDataSource::createInstance( const rtl::OUString & aServiceSpecifier )
+HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
     throw ( uno::Exception, uno::RuntimeException )
 {
     // Create view to root node.
 
     beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString( CFGPROPERTY_NODEPATH  );
-    aProp.Value <<= rtl::OUString( CONFIG_DATA_ROOT_KEY  );
+    aProp.Name = OUString( CFGPROPERTY_NODEPATH  );
+    aProp.Value <<= OUString( CONFIG_DATA_ROOT_KEY  );
 
     uno::Sequence< uno::Any > aArguments( 1 );
     aArguments[ 0 ] <<= aProp;
@@ -341,7 +341,7 @@ HierarchyDataSource::createInstance( const rtl::OUString & aServiceSpecifier )
 // virtual
 uno::Reference< uno::XInterface > SAL_CALL
 HierarchyDataSource::createInstanceWithArguments(
-                                const rtl::OUString & ServiceSpecifier,
+                                const OUString & ServiceSpecifier,
                                 const uno::Sequence< uno::Any > & Arguments )
     throw ( uno::Exception, uno::RuntimeException )
 {
@@ -350,13 +350,13 @@ HierarchyDataSource::createInstanceWithArguments(
 
 //=========================================================================
 // virtual
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 HierarchyDataSource::getAvailableServiceNames()
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aNames( 2 );
-    aNames[ 0 ] = rtl::OUString( READ_SERVICE_NAME  );
-    aNames[ 1 ] = rtl::OUString( READWRITE_SERVICE_NAME  );
+    uno::Sequence< OUString > aNames( 2 );
+    aNames[ 0 ] = OUString( READ_SERVICE_NAME  );
+    aNames[ 1 ] = OUString( READWRITE_SERVICE_NAME  );
     return aNames;
 }
 
@@ -368,7 +368,7 @@ HierarchyDataSource::getAvailableServiceNames()
 
 uno::Reference< uno::XInterface > SAL_CALL
 HierarchyDataSource::createInstanceWithArguments(
-                                const rtl::OUString & ServiceSpecifier,
+                                const OUString & ServiceSpecifier,
                                 const uno::Sequence< uno::Any > & Arguments,
                                 bool bCheckArgs )
     throw ( uno::Exception, uno::RuntimeException )
@@ -402,13 +402,13 @@ HierarchyDataSource::createInstanceWithArguments(
             {
                 if ( aProp.Name == CFGPROPERTY_NODEPATH )
                 {
-                    rtl::OUString aPath;
+                    OUString aPath;
                     if ( aProp.Value >>= aPath )
                     {
                         bHasNodePath = true;
 
                         // Create path to data inside the configuration.
-                        rtl::OUString aConfigPath;
+                        OUString aConfigPath;
                         if ( !createConfigPath( aPath, aConfigPath ) )
                         {
                             OSL_FAIL( "HierarchyDataSource::"
@@ -471,7 +471,7 @@ HierarchyDataSource::createInstanceWithArguments(
         {
             // Create configuration read-only access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                rtl::OUString( CONFIG_READ_SERVICE_NAME  ),
+                                OUString( CONFIG_READ_SERVICE_NAME  ),
                                 aNewArgs );
         }
         else
@@ -483,14 +483,14 @@ HierarchyDataSource::createInstanceWithArguments(
                 aNewArgs.realloc( nLen + 1 );
 
                 beans::PropertyValue aProp;
-                aProp.Name = rtl::OUString( CFGPROPERTY_LAZYWRITE  );
+                aProp.Name = OUString( CFGPROPERTY_LAZYWRITE  );
                 aProp.Value <<= sal_True;
                 aNewArgs[ nLen ] <<= aProp;
             }
 
             // Create configuration read-write access object.
             xConfigAccess = xProv->createInstanceWithArguments(
-                                rtl::OUString( CONFIG_READWRITE_SERVICE_NAME  ),
+                                OUString( CONFIG_READWRITE_SERVICE_NAME  ),
                                 aNewArgs );
         }
     }
@@ -539,7 +539,7 @@ HierarchyDataSource::getConfigProvider()
 
 //=========================================================================
 bool HierarchyDataSource::createConfigPath(
-                const rtl::OUString & rInPath, rtl::OUString & rOutPath )
+                const OUString & rInPath, OUString & rOutPath )
 {
     if ( !rInPath.isEmpty() )
     {
@@ -557,14 +557,14 @@ bool HierarchyDataSource::createConfigPath(
             return false;
         }
 
-        rtl::OUString aOutPath(
+        OUString aOutPath(
                  CONFIG_DATA_ROOT_KEY "/"  );
         aOutPath += rInPath;
         rOutPath = aOutPath;
     }
     else
     {
-        rOutPath = rtl::OUString( CONFIG_DATA_ROOT_KEY  );
+        rOutPath = OUString( CONFIG_DATA_ROOT_KEY  );
     }
 
     return true;
@@ -726,11 +726,11 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 
 XSERVICEINFO_NOFACTORY_IMPL_0(
         HierarchyDataAccess,
-        rtl::OUString( "com.sun.star.comp.ucb.HierarchyDataAccess"  ) )
+        OUString( "com.sun.star.comp.ucb.HierarchyDataAccess"  ) )
 {
-    uno::Sequence< rtl::OUString > aSNS( 2 );
-    aSNS[ 0 ] = rtl::OUString( READ_SERVICE_NAME  );
-    aSNS[ 1 ] = rtl::OUString( READWRITE_SERVICE_NAME  );
+    uno::Sequence< OUString > aSNS( 2 );
+    aSNS[ 0 ] = OUString( READ_SERVICE_NAME  );
+    aSNS[ 1 ] = OUString( READWRITE_SERVICE_NAME  );
     return aSNS;
 }
 
@@ -788,7 +788,7 @@ void SAL_CALL HierarchyDataAccess::removeEventListener(
 
 // virtual
 uno::Any SAL_CALL HierarchyDataAccess::getByHierarchicalName(
-                                                const rtl::OUString & aName )
+                                                const OUString & aName )
     throw ( container::NoSuchElementException, uno::RuntimeException )
 {
     uno::Reference< container::XHierarchicalNameAccess > xOrig
@@ -803,7 +803,7 @@ uno::Any SAL_CALL HierarchyDataAccess::getByHierarchicalName(
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL HierarchyDataAccess::hasByHierarchicalName(
-                                                const rtl::OUString & aName )
+                                                const OUString & aName )
     throw ( uno::RuntimeException )
 {
     uno::Reference< container::XHierarchicalNameAccess > xOrig
@@ -822,7 +822,7 @@ sal_Bool SAL_CALL HierarchyDataAccess::hasByHierarchicalName(
 //=========================================================================
 
 // virtual
-uno::Any SAL_CALL HierarchyDataAccess::getByName( const rtl::OUString & aName )
+uno::Any SAL_CALL HierarchyDataAccess::getByName( const OUString & aName )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
             uno::RuntimeException )
@@ -837,7 +837,7 @@ uno::Any SAL_CALL HierarchyDataAccess::getByName( const rtl::OUString & aName )
 
 //=========================================================================
 // virtual
-uno::Sequence< rtl::OUString > SAL_CALL HierarchyDataAccess::getElementNames()
+uno::Sequence< OUString > SAL_CALL HierarchyDataAccess::getElementNames()
     throw ( uno::RuntimeException )
 {
     uno::Reference< container::XNameAccess > xOrig
@@ -850,7 +850,7 @@ uno::Sequence< rtl::OUString > SAL_CALL HierarchyDataAccess::getElementNames()
 
 //=========================================================================
 // virtual
-sal_Bool SAL_CALL HierarchyDataAccess::hasByName( const rtl::OUString & aName )
+sal_Bool SAL_CALL HierarchyDataAccess::hasByName( const OUString & aName )
     throw ( uno::RuntimeException )
 {
     uno::Reference< container::XNameAccess > xOrig
@@ -966,7 +966,7 @@ HierarchyDataAccess::createInstanceWithArguments(
 
 // virtual
 void SAL_CALL
-HierarchyDataAccess::insertByName( const rtl::OUString & aName,
+HierarchyDataAccess::insertByName( const OUString & aName,
                                    const uno::Any & aElement )
     throw ( lang::IllegalArgumentException,
             container::ElementExistException,
@@ -984,7 +984,7 @@ HierarchyDataAccess::insertByName( const rtl::OUString & aName,
 //=========================================================================
 // virtual
 void SAL_CALL
-HierarchyDataAccess::removeByName( const rtl::OUString & Name )
+HierarchyDataAccess::removeByName( const OUString & Name )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
             uno::RuntimeException )
@@ -1004,7 +1004,7 @@ HierarchyDataAccess::removeByName( const rtl::OUString & Name )
 //=========================================================================
 
 // virtual
-void SAL_CALL HierarchyDataAccess::replaceByName( const rtl::OUString & aName,
+void SAL_CALL HierarchyDataAccess::replaceByName( const OUString & aName,
                                                   const uno::Any & aElement )
     throw ( lang::IllegalArgumentException,
             container::NoSuchElementException,

@@ -41,7 +41,7 @@ sal_uInt32 OReportExchange::getDescriptorFormatId()
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
     if ((sal_uInt32)-1 == s_nFormat)
     {
-        s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"report.ReportObjectsTransfer\""));
+        s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"report.ReportObjectsTransfer\""));
         OSL_ENSURE((sal_uInt32)-1 != s_nFormat, "OReportExchange::getDescriptorFormatId: bad exchange id!");
     }
     return s_nFormat;

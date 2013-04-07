@@ -39,11 +39,11 @@ namespace sd
 
     struct ClientInfo
     {
-        rtl::OUString mName;
-        rtl::OUString mAddress;
+        OUString mName;
+        OUString mAddress;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
-        ClientInfo( const rtl::OUString rName, const rtl::OUString rAddress ) :
+        ClientInfo( const OUString rName, const OUString rAddress ) :
             mName( rName ),
             mAddress( rAddress ) {}
     };
@@ -64,7 +64,7 @@ namespace sd
             // For the control dialog
             SD_DLLPUBLIC static std::vector<ClientInfo*> getClients();
             SD_DLLPUBLIC static sal_Bool connectClient( ClientInfo *pClient,
-                                                        rtl::OUString aPin );
+                                                        OUString aPin );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();

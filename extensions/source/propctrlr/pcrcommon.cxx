@@ -36,20 +36,20 @@ namespace pcr
     //= HelpIdUrl
     //========================================================================
     //------------------------------------------------------------------------
-    rtl::OString HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
+    OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
-              return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+              return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
         else
-            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+            return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
+    OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
-        ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp( rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
+        OUStringBuffer aBuffer;
+        OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );

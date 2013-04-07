@@ -37,7 +37,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::std::vector;
 
 // -----------------------------------------------------------------------
@@ -82,7 +81,7 @@ long ScSheetDPData::GetColumnCount()
     return aCacheTable.getColSize();
 }
 
-rtl::OUString ScSheetDPData::getDimensionName(long nColumn)
+OUString ScSheetDPData::getDimensionName(long nColumn)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
@@ -94,7 +93,7 @@ rtl::OUString ScSheetDPData::getDimensionName(long nColumn)
     else if (nColumn >= aCacheTable.getColSize())
     {
         OSL_FAIL("getDimensionName: invalid dimension");
-        return rtl::OUString();
+        return OUString();
     }
     else
     {

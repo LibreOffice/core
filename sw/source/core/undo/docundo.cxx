@@ -279,7 +279,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
 bool
 UndoManager::GetLastUndoInfo(
-        ::rtl::OUString *const o_pStr, SwUndoId *const o_pId) const
+        OUString *const o_pStr, SwUndoId *const o_pId) const
 {
     // this is actually expected to work on the current level,
     // but that was really not obvious from the previous implementation...
@@ -311,7 +311,7 @@ SwUndoComments_t UndoManager::GetUndoComments() const
     sal_uInt16 const nUndoCount(SfxUndoManager::GetUndoActionCount(TopLevel));
     for (sal_uInt16 n = 0; n < nUndoCount; ++n)
     {
-        ::rtl::OUString const comment(
+        OUString const comment(
                 SfxUndoManager::GetUndoActionComment(n, TopLevel));
         ret.push_back(comment);
     }
@@ -321,7 +321,7 @@ SwUndoComments_t UndoManager::GetUndoComments() const
 
 
 /**************** REDO ******************/
-bool UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+bool UndoManager::GetFirstRedoInfo(OUString *const o_pStr) const
 {
     if (!SfxUndoManager::GetRedoActionCount(CurrentLevel))
     {
@@ -346,7 +346,7 @@ SwUndoComments_t UndoManager::GetRedoComments() const
     sal_uInt16 const nRedoCount(SfxUndoManager::GetRedoActionCount(TopLevel));
     for (sal_uInt16 n = 0; n < nRedoCount; ++n)
     {
-        ::rtl::OUString const comment(
+        OUString const comment(
                 SfxUndoManager::GetRedoActionComment(n, TopLevel));
         ret.push_back(comment);
     }
@@ -356,7 +356,7 @@ SwUndoComments_t UndoManager::GetRedoComments() const
 
 /**************** REPEAT ******************/
 
-SwUndoId UndoManager::GetRepeatInfo(::rtl::OUString *const o_pStr) const
+SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
 {
     SwUndoId nRepeatId(UNDO_EMPTY);
     GetLastUndoInfo(o_pStr, & nRepeatId);
@@ -535,8 +535,8 @@ UndoManager::Repeat(::sw::RepeatContext & rContext,
         return false;
     }
 
-    ::rtl::OUString const comment(pRepeatAction->GetComment());
-    ::rtl::OUString const rcomment(pRepeatAction->GetRepeatComment(rContext));
+    OUString const comment(pRepeatAction->GetComment());
+    OUString const rcomment(pRepeatAction->GetRepeatComment(rContext));
     sal_uInt16 const nId(pRepeatAction->GetId());
     if (DoesUndo())
     {

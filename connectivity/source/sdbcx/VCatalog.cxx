@@ -185,19 +185,19 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
     return const_cast<OCatalog*>(this)->m_pGroups;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCatalog::buildName(const Reference< XRow >& _xRow)
+OUString OCatalog::buildName(const Reference< XRow >& _xRow)
 {
-    ::rtl::OUString sCatalog = _xRow->getString(1);
+    OUString sCatalog = _xRow->getString(1);
     if ( _xRow->wasNull() )
-        sCatalog = ::rtl::OUString();
-    ::rtl::OUString sSchema  = _xRow->getString(2);
+        sCatalog = OUString();
+    OUString sSchema  = _xRow->getString(2);
     if ( _xRow->wasNull() )
-        sSchema = ::rtl::OUString();
-    ::rtl::OUString sTable   = _xRow->getString(3);
+        sSchema = OUString();
+    OUString sTable   = _xRow->getString(3);
     if ( _xRow->wasNull() )
-        sTable = ::rtl::OUString();
+        sTable = OUString();
 
-    ::rtl::OUString sComposedName(
+    OUString sComposedName(
         ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation ) );
     return sComposedName;
 }
@@ -220,7 +220,7 @@ void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rName
 void ODescriptor::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : ::com::sun::star::beans::PropertyAttribute::READONLY;
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME), PROPERTY_ID_NAME ,nAttrib,&m_Name,::getCppuType(static_cast< OUString*>(0)));
 }
 // -------------------------------------------------------------------------
 ODescriptor::~ODescriptor()

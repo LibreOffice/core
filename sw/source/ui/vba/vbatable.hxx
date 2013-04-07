@@ -38,14 +38,14 @@ public:
     virtual void SAL_CALL Select(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL ConvertToText( const css::uno::Any& Separator, const css::uno::Any& NestedTables ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getName( ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName( ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif
 

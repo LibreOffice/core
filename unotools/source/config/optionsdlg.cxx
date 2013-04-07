@@ -33,7 +33,6 @@ using namespace utl;
 using namespace com::sun::star::beans ;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 #define CFG_FILENAME            OUString( "Office.OptionsDialog" )
 #define ROOT_NODE               OUString( "OptionsDialogGroups" )
@@ -49,7 +48,7 @@ class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 private:
     struct OUStringHashCode
     {
-        size_t operator()( const ::rtl::OUString& sString ) const
+        size_t operator()( const OUString& sString ) const
         {
             return sString.hashCode();
         }
@@ -67,7 +66,7 @@ private:
 public:
                     SvtOptionsDlgOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void    Commit();
 
     static ::osl::Mutex & getInitMutex();
@@ -119,7 +118,7 @@ void SvtOptionsDlgOptions_Impl::Commit()
 
 // -----------------------------------------------------------------------
 
-void SvtOptionsDlgOptions_Impl::Notify( const Sequence< rtl::OUString >& )
+void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
 {
     // nothing to notify
 }
@@ -257,18 +256,18 @@ SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
     }
 }
 
-sal_Bool SvtOptionsDialogOptions::IsGroupHidden( const rtl::OUString& _rGroup ) const
+sal_Bool SvtOptionsDialogOptions::IsGroupHidden( const OUString& _rGroup ) const
 {
     return m_pImp->IsGroupHidden( _rGroup );
 }
 
-sal_Bool SvtOptionsDialogOptions::IsPageHidden( const rtl::OUString& _rPage, const rtl::OUString& _rGroup ) const
+sal_Bool SvtOptionsDialogOptions::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
 {
     return m_pImp->IsPageHidden( _rPage, _rGroup );
 }
 
 sal_Bool SvtOptionsDialogOptions::IsOptionHidden(
-    const rtl::OUString& _rOption, const rtl::OUString& _rPage, const rtl::OUString& _rGroup ) const
+    const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
 {
     return m_pImp->IsOptionHidden( _rOption, _rPage, _rGroup );
 }

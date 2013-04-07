@@ -36,7 +36,7 @@ namespace xmloff
     {
     public:
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                      const ::rtl::OUString& i_rValue ) = 0;
+                                      const OUString& i_rValue ) = 0;
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
                                       enum ::xmloff::token::XMLTokenEnum i_eValue ) = 0;
 
@@ -44,7 +44,7 @@ namespace xmloff
                                       const sal_Bool i_bIgnoreWhitespace ) = 0;
         virtual void    EndElement(   const sal_Bool i_bIgnoreWhitespace ) = 0;
 
-        virtual void    Characters( const ::rtl::OUString& i_rCharacters ) = 0;
+        virtual void    Characters( const OUString& i_rCharacters ) = 0;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         GetComponentContext() const = 0;

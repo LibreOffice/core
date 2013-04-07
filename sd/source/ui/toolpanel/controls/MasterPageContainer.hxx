@@ -163,7 +163,7 @@ private:
 
     /** Retrieve the preview of the document specified by the given URL.
     */
-    static BitmapEx LoadPreviewFromURL (const ::rtl::OUString& aURL);
+    static BitmapEx LoadPreviewFromURL (const OUString& aURL);
 };
 
 

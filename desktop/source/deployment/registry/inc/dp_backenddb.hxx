@@ -52,7 +52,7 @@ private:
 
 protected:
     const css::uno::Reference<css::uno::XComponentContext> m_xContext;
-    ::rtl::OUString m_urlDb;
+    OUString m_urlDb;
 
 protected:
 
@@ -64,88 +64,88 @@ protected:
      */
     css::uno::Reference<css::xml::xpath::XXPathAPI> getXPathAPI();
     void save();
-    void removeElement(::rtl::OUString const & sXPathExpression);
+    void removeElement(OUString const & sXPathExpression);
 
     css::uno::Reference<css::xml::dom::XNode> getKeyElement(
-        ::rtl::OUString const & url);
+        OUString const & url);
 
     void writeSimpleList(
-        ::std::list< ::rtl::OUString> const & list,
-        ::rtl::OUString const & sListTagName,
-        ::rtl::OUString const & sMemberTagName,
+        ::std::list< OUString> const & list,
+        OUString const & sListTagName,
+        OUString const & sMemberTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeVectorOfPair(
-        ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > const & vecPairs,
-        ::rtl::OUString const & sVectorTagName,
-        ::rtl::OUString const & sPairTagName,
-        ::rtl::OUString const & sFirstTagName,
-        ::rtl::OUString const & sSecondTagName,
+        ::std::vector< ::std::pair< OUString, OUString > > const & vecPairs,
+        OUString const & sVectorTagName,
+        OUString const & sPairTagName,
+        OUString const & sFirstTagName,
+        OUString const & sSecondTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeSimpleElement(
-        ::rtl::OUString const & sElementName, ::rtl::OUString const & value,
+        OUString const & sElementName, OUString const & value,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     css::uno::Reference<css::xml::dom::XNode> writeKeyElement(
-        ::rtl::OUString const & url);
+        OUString const & url);
 
-    ::rtl::OUString readSimpleElement(
-        ::rtl::OUString const & sElementName,
+    OUString readSimpleElement(
+        OUString const & sElementName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
-    ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > >
+    ::std::vector< ::std::pair< OUString, OUString > >
     readVectorOfPair(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
-        ::rtl::OUString const & sListTagName,
-        ::rtl::OUString const & sPairTagName,
-        ::rtl::OUString const & sFirstTagName,
-        ::rtl::OUString const & sSecondTagName);
+        OUString const & sListTagName,
+        OUString const & sPairTagName,
+        OUString const & sFirstTagName,
+        OUString const & sSecondTagName);
 
-    ::std::list< ::rtl::OUString> readList(
+    ::std::list< OUString> readList(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
-        ::rtl::OUString const & sListTagName,
-        ::rtl::OUString const & sMemberTagName);
+        OUString const & sListTagName,
+        OUString const & sMemberTagName);
 
     /* returns the values of one particulary child element of all key elements.
      */
-    ::std::list< ::rtl::OUString> getOneChildFromAllEntries(
-        ::rtl::OUString const & sElementName);
+    ::std::list< OUString> getOneChildFromAllEntries(
+        OUString const & sElementName);
 
 
     /*  returns the namespace which is to be written as xmlns attribute
         into the root element.
      */
-    virtual ::rtl::OUString getDbNSName()=0;
+    virtual OUString getDbNSName()=0;
     /* return the namespace prefix which is to be registered with the XPath API.
 
        The prefix can then be used in XPath expressions.
     */
-    virtual ::rtl::OUString getNSPrefix()=0;
+    virtual OUString getNSPrefix()=0;
     /* returns the name of the root element without any namespace prefix.
      */
-    virtual ::rtl::OUString getRootElementName()=0;
+    virtual OUString getRootElementName()=0;
     /* returns the name of xml element for each entry
      */
-    virtual ::rtl::OUString getKeyElementName()=0;
+    virtual OUString getKeyElementName()=0;
 
 public:
     BackendDb(css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-              ::rtl::OUString const & url);
+              OUString const & url);
     virtual ~BackendDb() {};
 
-    void removeEntry(::rtl::OUString const & url);
+    void removeEntry(OUString const & url);
 
     /* This is called to write the "revoked" attribute to the entry.
        This is done when XPackage::revokePackage is called.
     */
-    void revokeEntry(::rtl::OUString const & url);
+    void revokeEntry(OUString const & url);
 
     /* returns false if the entry does not exist yet.
      */
-    bool activateEntry(::rtl::OUString const & url);
+    bool activateEntry(OUString const & url);
 
-    bool hasActiveEntry(::rtl::OUString const & url);
+    bool hasActiveEntry(OUString const & url);
 
 };
 
@@ -154,12 +154,12 @@ class RegisteredDb: public BackendDb
 
 public:
     RegisteredDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                  ::rtl::OUString const & url);
+                  OUString const & url);
     virtual ~RegisteredDb() {};
 
 
-    virtual void addEntry(::rtl::OUString const & url);
-    virtual bool getEntry(::rtl::OUString const & url);
+    virtual void addEntry(OUString const & url);
+    virtual bool getEntry(OUString const & url);
 
 };
 

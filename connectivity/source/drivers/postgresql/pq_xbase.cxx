@@ -78,8 +78,8 @@ namespace pq_sdbc_driver
 {
 
 ReflectionBase::ReflectionBase(
-    const ::rtl::OUString &implName,
-    const ::com::sun::star::uno::Sequence< rtl::OUString > &supportedServices,
+    const OUString &implName,
+    const ::com::sun::star::uno::Sequence< OUString > &supportedServices,
     const ::rtl::Reference< RefCountedMutex > refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
     ConnectionSettings *pSettings,
@@ -115,12 +115,12 @@ sal_Bool ReflectionBase::convertFastPropertyValue(
 }
 
 void ReflectionBase::setPropertyValue_NoBroadcast_public(
-    const rtl::OUString & name, const com::sun::star::uno::Any & value )
+    const OUString & name, const com::sun::star::uno::Any & value )
 {
     sal_Int32 nHandle = m_propsDesc.getHandleByName( name );
     if( -1 == nHandle  )
     {
-        rtl::OUStringBuffer buf(128);
+        OUStringBuffer buf(128);
         buf.appendAscii( "Unknown property '" );
         buf.append( name );
         buf.appendAscii( "' in " );
@@ -135,10 +135,10 @@ void ReflectionBase::setFastPropertyValue_NoBroadcast(
     const ::com::sun::star::uno::Any& rValue )
     throw (::com::sun::star::uno::Exception)
 {
-//     rtl::OUString s;
+//     OUString s;
 //     rValue >>= s;
 //     printf( "setting value (handle %d):%s\n" ,
-//             nHandle, rtl::OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
+//             nHandle, OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
     m_values[nHandle] = rValue;
 }
 
@@ -147,10 +147,10 @@ void ReflectionBase::getFastPropertyValue(
     sal_Int32 nHandle ) const
 {
     rValue = m_values[nHandle];
-//     rtl::OUString s;
+//     OUString s;
 //     rValue >>= s;
 //     printf( "getting value (handle %d):%s\n" ,
-//             nHandle, rtl::OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
+//             nHandle, OUStringToOString(s, RTL_TEXTENCODING_ASCII_US).getStr() );
 
 }
 
@@ -160,13 +160,13 @@ Reference < ::com::sun::star::beans::XPropertySetInfo >  ReflectionBase::getProp
     return OPropertySetHelper::createPropertySetInfo( m_propsDesc );
 }
 
-rtl::OUString ReflectionBase::getImplementationName()
+OUString ReflectionBase::getImplementationName()
         throw(::com::sun::star::uno::RuntimeException)
 {
     return m_implName;
 }
 
-sal_Bool ReflectionBase::supportsService(const rtl::OUString& ServiceName)
+sal_Bool ReflectionBase::supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException)
 {
     for( int i = 0 ; i < m_supportedServices.getLength() ; i ++ )
@@ -175,7 +175,7 @@ sal_Bool ReflectionBase::supportsService(const rtl::OUString& ServiceName)
     return sal_False;
 }
 
-Sequence< rtl::OUString > ReflectionBase::getSupportedServiceNames(void)
+Sequence< OUString > ReflectionBase::getSupportedServiceNames(void)
         throw(::com::sun::star::uno::RuntimeException)
 {
     return m_supportedServices;
@@ -249,7 +249,7 @@ void ReflectionBase::copyValuesFrom( const Reference< XPropertySet > & set )
     }
 }
 
-::rtl::OUString ReflectionBase::getName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString ReflectionBase::getName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     Statics & st = getStatics();
     if( getInfoHelper().hasPropertyByName( st.SCHEMA_NAME ) )
@@ -261,11 +261,11 @@ void ReflectionBase::copyValuesFrom( const Reference< XPropertySet > & set )
 }
 
 
-void ReflectionBase::setName( const ::rtl::OUString& /* aName */ )
+void ReflectionBase::setName( const OUString& /* aName */ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw RuntimeException(
-        rtl::OUString( "pq_sdbc::ReflectionBase::setName not implemented" ),
+        OUString( "pq_sdbc::ReflectionBase::setName not implemented" ),
         *this );
     //setPropertyValue( getStatics().NAME , makeAny( aName ) );
 }

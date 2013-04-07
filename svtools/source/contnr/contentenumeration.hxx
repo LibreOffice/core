@@ -41,16 +41,16 @@ namespace svt
     struct SortingData_Impl
     {
     private:
-        ::rtl::OUString maFilename;     // only filename in upper case - for compare purposes
-        ::rtl::OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
-        ::rtl::OUString maLowerTitle;
+        OUString maFilename;     // only filename in upper case - for compare purposes
+        OUString maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
+        OUString maLowerTitle;
 
 
     public:
-        ::rtl::OUString maType;
-        ::rtl::OUString maTargetURL;
-        ::rtl::OUString maImageURL;
-        ::rtl::OUString maDisplayText;
+        OUString maType;
+        OUString maTargetURL;
+        OUString maImageURL;
+        OUString maDisplayText;
         DateTime        maModDate;
         Image           maImage;
         sal_Int64       maSize;
@@ -62,14 +62,14 @@ namespace svt
         sal_Bool        mbIsCompactDisc;
 
         inline                          SortingData_Impl();
-        inline const ::rtl::OUString&   GetTitle() const;
-        inline const ::rtl::OUString&   GetLowerTitle() const;
-        inline const ::rtl::OUString&   GetFileName() const;
-        inline void                     SetNewTitle( const ::rtl::OUString& rNewTitle );        // new maTitle is set -> maFilename is set to same!
-        inline void                     ChangeTitle( const ::rtl::OUString& rChangedTitle );    // maTitle is changed, maFilename is unchanged!
+        inline const OUString&   GetTitle() const;
+        inline const OUString&   GetLowerTitle() const;
+        inline const OUString&   GetFileName() const;
+        inline void                     SetNewTitle( const OUString& rNewTitle );        // new maTitle is set -> maFilename is set to same!
+        inline void                     ChangeTitle( const OUString& rChangedTitle );    // maTitle is changed, maFilename is unchanged!
 
     private:
-        inline void                     SetTitles( const ::rtl::OUString& rNewTitle );
+        inline void                     SetTitles( const OUString& rNewTitle );
     };
 
     inline SortingData_Impl::SortingData_Impl() :
@@ -84,33 +84,33 @@ namespace svt
     {
     }
 
-    inline const ::rtl::OUString& SortingData_Impl::GetTitle() const
+    inline const OUString& SortingData_Impl::GetTitle() const
     {
         return maTitle;
     }
 
-    inline const ::rtl::OUString& SortingData_Impl::GetLowerTitle() const
+    inline const OUString& SortingData_Impl::GetLowerTitle() const
     {
         return maLowerTitle;
     }
 
-    inline const ::rtl::OUString& SortingData_Impl::GetFileName() const
+    inline const OUString& SortingData_Impl::GetFileName() const
     {
         return maFilename;
     }
 
-    inline void SortingData_Impl::SetNewTitle( const ::rtl::OUString& rNewTitle )
+    inline void SortingData_Impl::SetNewTitle( const OUString& rNewTitle )
     {
         SetTitles( rNewTitle );
         maFilename = rNewTitle.toAsciiUpperCase();
     }
 
-    inline void SortingData_Impl::ChangeTitle( const ::rtl::OUString& rChangedTitle )
+    inline void SortingData_Impl::ChangeTitle( const OUString& rChangedTitle )
     {
         SetTitles( rChangedTitle );
     }
 
-    inline void SortingData_Impl::SetTitles( const ::rtl::OUString& rNewTitle )
+    inline void SortingData_Impl::SetTitles( const OUString& rNewTitle )
     {
         maTitle = rNewTitle;
         maLowerTitle = rNewTitle.toAsciiLowerCase();
@@ -122,7 +122,7 @@ namespace svt
     class IContentTitleTranslation
     {
     public:
-        virtual sal_Bool    GetTranslation( const ::rtl::OUString& _rOriginalName, ::rtl::OUString& _rTranslatedName ) const = 0;
+        virtual sal_Bool    GetTranslation( const OUString& _rOriginalName, OUString& _rTranslatedName ) const = 0;
 
     protected:
         ~IContentTitleTranslation() {}
@@ -202,9 +202,9 @@ namespace svt
             ::com::sun::star::document::XDocumentProperties>
                                         m_xDocProps;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > m_rBlackList;
+        ::com::sun::star::uno::Sequence< OUString > m_rBlackList;
 
-        sal_Bool URLOnBlackList ( const ::rtl::OUString& sRealURL );
+        sal_Bool URLOnBlackList ( const OUString& sRealURL );
 
     public:
         /** constructs an enumerator instance
@@ -243,7 +243,7 @@ namespace svt
         EnumerationResult   enumerateFolderContentSync(
                     const FolderDescriptor& _rFolder,
                     const IUrlFilter* _pFilter,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >()
+                    const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >()
                 );
 
         /** cancels the running operation.
@@ -263,7 +263,7 @@ namespace svt
         virtual void execute();
 
     private:
-        sal_Bool implGetDocTitle( const ::rtl::OUString& _rTargetURL, ::rtl::OUString& _rRet ) const;
+        sal_Bool implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const;
     };
 
 //........................................................................

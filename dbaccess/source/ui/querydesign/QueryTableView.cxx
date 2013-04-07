@@ -63,7 +63,7 @@ using namespace ::com::sun::star::accessibility;
 namespace
 {
     // -----------------------------------------------------------------------------
-    sal_Bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const ::rtl::OUString& _rColumnName,sal_Int32 _nKeyType)
+    sal_Bool isColumnInKeyType(const Reference<XIndexAccess>& _rxKeys,const OUString& _rColumnName,sal_Int32 _nKeyType)
     {
         sal_Bool bReturn = sal_False;
         if(_rxKeys.is())
@@ -176,12 +176,12 @@ namespace
         TTableConnectionData::value_type aNewConnData(pNewConnData);
 
         Reference<XIndexAccess> xReferencedKeys( _rDest.GetData()->getKeys());
-        ::rtl::OUString sRelatedColumn;
+        OUString sRelatedColumn;
 
         // iterate through all foreignkey columns to create the connections
-        Sequence< ::rtl::OUString> aElements(_rxSourceForeignKeyColumns->getElementNames());
-        const ::rtl::OUString* pIter = aElements.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aElements.getLength();
+        Sequence< OUString> aElements(_rxSourceForeignKeyColumns->getElementNames());
+        const OUString* pIter = aElements.getConstArray();
+        const OUString* pEnd   = pIter + aElements.getLength();
         for(sal_Int32 i=0;pIter != pEnd;++pIter,++i)
         {
             Reference<XPropertySet> xColumn;
@@ -389,14 +389,14 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     }
 }
 // -----------------------------------------------------------------------------
-OTableWindowData* OQueryTableView::CreateImpl(const ::rtl::OUString& _rComposedName
-                                             ,const ::rtl::OUString& _sTableName
-                                             ,const ::rtl::OUString& _rWinName)
+OTableWindowData* OQueryTableView::CreateImpl(const OUString& _rComposedName
+                                             ,const OUString& _sTableName
+                                             ,const OUString& _rWinName)
 {
     return new OQueryTableWindowData( _rComposedName, _sTableName,_rWinName );
 }
 //------------------------------------------------------------------------------
-void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     // this method has been inherited from the base class, linking back to the parent and which constructs
@@ -410,16 +410,16 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
     try
     {
         Reference< XDatabaseMetaData > xMetaData = xConnection->getMetaData();
-        ::rtl::OUString sCatalog, sSchema, sTable;
+        OUString sCatalog, sSchema, sTable;
         ::dbtools::qualifiedNameComponents(xMetaData,
                                     _rTableName,
                                     sCatalog,
                                     sSchema,
                                     sTable,
                                     ::dbtools::eInDataManipulation);
-        ::rtl::OUString sRealName(sSchema);
+        OUString sRealName(sSchema);
         if (!sRealName.isEmpty())
-            sRealName+= ::rtl::OUString('.');
+            sRealName+= OUString('.');
         sRealName += sTable;
 
         AddTabWin(_rTableName, sRealName, _rAliasName, bNewTable);
@@ -431,7 +431,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
 }
 // -----------------------------------------------------------------------------
 // find the table which has a foreign key with this referencedTable name
-Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKeys,const ::rtl::OUString& _rReferencedTable)
+Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKeys,const OUString& _rReferencedTable)
 {
     if(!_rxKeys.is())
         return Reference<XPropertySet>();
@@ -449,7 +449,7 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
             xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::FOREIGN == nKeyType)
             {
-                ::rtl::OUString sReferencedTable;
+                OUString sReferencedTable;
                 xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                 // TODO check case
                 if(sReferencedTable == _rReferencedTable)
@@ -460,7 +460,7 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
     return Reference<XPropertySet>();
 }
 //------------------------------------------------------------------------------
-void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& _rTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable)
+void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& _rTableName, const OUString& strAlias, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     OSL_ENSURE(!_rTableName.isEmpty() || !strAlias.isEmpty(), "OQueryTableView::AddTabWin : no tables or aliases !");
@@ -528,7 +528,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
                 break;
 
             Reference<XNameAccess> xFKeyColumns;
-            ::rtl::OUString aReferencedTable;
+            OUString aReferencedTable;
             Reference<XColumnsSupplier> xColumnsSupplier;
 
             const sal_Int32 nKeyCount = xKeyIndex->getCount();
@@ -926,7 +926,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
                 SetDefaultTabWinPosSize(pTabWin);
 
             // Show the window and add to the list
-            ::rtl::OUString sName = static_cast< OQueryTableWindowData*>(pData.get())->GetAliasName();
+            OUString sName = static_cast< OQueryTableWindowData*>(pData.get())->GetAliasName();
             OSL_ENSURE(GetTabWinMap()->find(sName) == GetTabWinMap()->end(),"Alias name already in list!");
             GetTabWinMap()->insert(OTableWindowMap::value_type(sName,pTabWin));
 

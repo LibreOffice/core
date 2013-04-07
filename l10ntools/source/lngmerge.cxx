@@ -29,7 +29,7 @@
 
 namespace {
 
-rtl::OString getBracketedContent(rtl::OString text) {
+OString getBracketedContent(OString text) {
     return text.getToken(1, '[').getToken(0, ']');
 }
 
@@ -47,7 +47,7 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 //
 // class LngParser
 //
-LngParser::LngParser(const rtl::OString &rLngFile,
+LngParser::LngParser(const OString &rLngFile,
     sal_Bool bULFFormat)
     : nError( LNG_OK )
     , pLines( NULL )
@@ -63,7 +63,7 @@ LngParser::LngParser(const rtl::OString &rLngFile,
         std::getline(aStream, s);
         while (!aStream.eof())
         {
-            rtl::OString sLine(s.data(), s.length());
+            OString sLine(s.data(), s.length());
 
             if( bFirstLine )
             {
@@ -72,10 +72,10 @@ LngParser::LngParser(const rtl::OString &rLngFile,
                 bFirstLine = false;
             }
 
-            pLines->push_back( new rtl::OString(sLine) );
+            pLines->push_back( new OString(sLine) );
             std::getline(aStream, s);
         }
-        pLines->push_back( new rtl::OString() );
+        pLines->push_back( new OString() );
     }
     else
         nError = LNG_COULD_NOT_OPEN;
@@ -101,9 +101,9 @@ sal_Bool LngParser::CreatePO(
 
     size_t nPos  = 0;
     sal_Bool bStart = true;
-    rtl::OString sGroup, sLine;
+    OString sGroup, sLine;
     OStringHashMap Text;
-    rtl::OString sID;
+    OString sID;
 
     while( nPos < pLines->size() ) {
         sLine = *(*pLines)[ nPos++ ];
@@ -125,18 +125,18 @@ sal_Bool LngParser::CreatePO(
 }
 
 void LngParser::WritePO(PoOfstream &aPOStream,
-    OStringHashMap &rText_inout, const rtl::OString &rActFileName,
-    const rtl::OString &rID)
+    OStringHashMap &rText_inout, const OString &rActFileName,
+    const OString &rID)
 {
 
    sal_Bool bExport = true;
    if ( bExport ) {
-       rtl::OString sCur;
+       OString sCur;
        for( unsigned int n = 0; n < aLanguages.size(); n++ ){
            sCur = aLanguages[ n ];
-           rtl::OString sAct = rText_inout[ sCur ];
+           OString sAct = rText_inout[ sCur ];
            if ( sAct.isEmpty() && !sCur.isEmpty() )
-               sAct = rText_inout[ rtl::OString("en-US") ];
+               sAct = rText_inout[ OString("en-US") ];
 
            common::writePoEntry(
                 "Ulfex", aPOStream, rActFileName, "LngText",
@@ -145,7 +145,7 @@ void LngParser::WritePO(PoOfstream &aPOStream,
    }
 }
 
-bool LngParser::isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_in)
+bool LngParser::isNextGroup(OString &sGroup_out, const OString &sLine_in)
 {
     const OString sLineTrim = sLine_in.trim();
     if ((sLineTrim[0] == '[') && (sLineTrim[sLineTrim.getLength() - 1] == ']'))
@@ -156,14 +156,14 @@ bool LngParser::isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_
     return false;
 }
 
-void LngParser::ReadLine(const rtl::OString &rLine_in,
+void LngParser::ReadLine(const OString &rLine_in,
         OStringHashMap &rText_inout)
 {
     if (!rLine_in.match(" *") && !rLine_in.match("/*"))
     {
-        rtl::OString sLang(rLine_in.getToken(0, '=').trim());
+        OString sLang(rLine_in.getToken(0, '=').trim());
         if (!sLang.isEmpty()) {
-            rtl::OString sText(rLine_in.getToken(1, '"'));
+            OString sText(rLine_in.getToken(1, '"'));
             rText_inout[sLang] = sText;
         }
     }
@@ -187,12 +187,12 @@ sal_Bool LngParser::Merge(
 
     size_t nPos = 0;
     sal_Bool bGroup = sal_False;
-    rtl::OString sGroup;
+    OString sGroup;
 
     // seek to next group
     while ( nPos < pLines->size() && !bGroup )
     {
-        rtl::OString sLine( *(*pLines)[ nPos ] );
+        OString sLine( *(*pLines)[ nPos ] );
         sLine = sLine.trim();
         if (!sLine.isEmpty() &&
             ( sLine[0] == '[' ) &&
@@ -206,7 +206,7 @@ sal_Bool LngParser::Merge(
 
     while ( nPos < pLines->size()) {
         OStringHashMap Text;
-        rtl::OString sID( sGroup );
+        OString sID( sGroup );
         std::size_t nLastLangPos = 0;
 
         ResData  *pResData = new ResData( "", sID , sSource );
@@ -215,11 +215,11 @@ sal_Bool LngParser::Merge(
         // read languages
         bGroup = sal_False;
 
-        rtl::OString sLanguagesDone;
+        OString sLanguagesDone;
 
         while ( nPos < pLines->size() && !bGroup )
         {
-            rtl::OString sLine( *(*pLines)[ nPos ] );
+            OString sLine( *(*pLines)[ nPos ] );
             sLine = sLine.trim();
             if (!sLine.isEmpty() &&
                 ( sLine[0] == '[' ) &&
@@ -233,7 +233,7 @@ sal_Bool LngParser::Merge(
             else
             {
                 sal_Int32 n = 0;
-                rtl::OString sLang(sLine.getToken(0, '=', n));
+                OString sLang(sLine.getToken(0, '=', n));
                 if (n == -1 || static_cast<bool>(sLine.match("/*")))
                 {
                     ++nPos;
@@ -242,7 +242,7 @@ sal_Bool LngParser::Merge(
                 {
                     sLang = sLang.trim();
 
-                    rtl::OString sSearch( ";" );
+                    OString sSearch( ";" );
                     sSearch += sLang;
                     sSearch += ";";
 
@@ -255,15 +255,15 @@ sal_Bool LngParser::Merge(
                     {
                         if( !sLang.isEmpty() )
                         {
-                            rtl::OString sNewText;
+                            OString sNewText;
                             pEntrys->GetText( sNewText, STRING_TYP_TEXT, sLang, sal_True );
                             if( sLang == "qtz" )
                                 sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
 
                             if ( !sNewText.isEmpty()) {
-                                rtl::OString *pLine = (*pLines)[ nPos ];
+                                OString *pLine = (*pLines)[ nPos ];
 
-                                rtl::OString sText1( sLang );
+                                OString sText1( sLang );
                                 sText1 += " = \"";
                                 // escape quotes, unescape double escaped quotes fdo#56648
                                 sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
@@ -284,7 +284,7 @@ sal_Bool LngParser::Merge(
                 }
             }
         }
-        rtl::OString sCur;
+        OString sCur;
         if ( nLastLangPos )
         {
             for(size_t n = 0; n < aLanguages.size(); ++n)
@@ -293,14 +293,14 @@ sal_Bool LngParser::Merge(
                 if( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) && Text[sCur].isEmpty() && pEntrys )
                 {
 
-                    rtl::OString sNewText;
+                    OString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, sal_True );
                     if( sCur == "qtz" )
                         sNewText = sNewText.copy(sNewText.indexOf("|") + 2);
                     if (( !sNewText.isEmpty()) &&
                         !(( sCur.equalsL(RTL_CONSTASCII_STRINGPARAM("x-comment"))) && ( sNewText == "-" )))
                     {
-                        rtl::OString sLine;
+                        OString sLine;
                         sLine += sCur;
                         sLine += " = \"";
                         // escape quotes, unescape double escaped quotes fdo#56648
@@ -313,9 +313,9 @@ sal_Bool LngParser::Merge(
                         if ( nLastLangPos < pLines->size() ) {
                             LngLineList::iterator it = pLines->begin();
                             std::advance( it, nLastLangPos );
-                            pLines->insert( it, new rtl::OString(sLine) );
+                            pLines->insert( it, new OString(sLine) );
                         } else {
-                            pLines->push_back( new rtl::OString(sLine) );
+                            pLines->push_back( new OString(sLine) );
                         }
                     }
                 }

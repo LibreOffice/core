@@ -68,9 +68,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 
 #define OUtoCStr( x ) (OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US ).getStr())
 #define PRINTSTR(x) printf("%s",x);
@@ -178,11 +175,11 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
 
 
-    ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufServices.appendAscii("services.rdb");
     OUString services = bufServices.makeStringAndClear();
 
-    ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
+    OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
     bufTypes.appendAscii("types.rdb");
     OUString types = bufTypes.makeStringAndClear();
 
@@ -302,7 +299,7 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                                 makeAny(OUString("")), // Catalog
                                 OUString("%"),          // Schema
                                 OUString("%"),          // TabName
-                                Sequence<rtl::OUString>()
+                                Sequence<OUString>()
                                 );
                         printXResultSets( xRes );
                     }
@@ -390,10 +387,10 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString("HostName");
-            aValue[0].Value <<= rtl::OUString::createFromAscii(hostname);
-            aValue[1].Name = ::rtl::OUString("BaseDN");
-            aValue[1].Value <<= rtl::OUString::createFromAscii(basedn);
+            aValue[0].Name = OUString("HostName");
+            aValue[0].Value <<= OUString::createFromAscii(hostname);
+            aValue[1].Name = OUString("BaseDN");
+            aValue[1].Value <<= OUString::createFromAscii(basedn);
             break;
         case 3:
         case 4:
@@ -402,10 +399,10 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             //Default LDAP AB
             url=OUString("sdbc:address:ldap://");
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString("HostName");
-            aValue[0].Value <<= rtl::OUString("sun-ds");
-            aValue[1].Name = ::rtl::OUString("BaseDN");
-            aValue[1].Value <<= rtl::OUString("dc=sun,dc=com");
+            aValue[0].Name = OUString("HostName");
+            aValue[0].Value <<= OUString("sun-ds");
+            aValue[1].Name = OUString("BaseDN");
+            aValue[1].Value <<= OUString("dc=sun,dc=com");
             break;
         default:
             return pConnection;

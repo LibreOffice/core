@@ -318,8 +318,8 @@ public:
 
     long GetMeasureCount() const { return maMeasureFuncs.size(); }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    rtl::OUString       GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
-    rtl::OUString       GetMeasureDimensionName(long nMeasure) const;
+    OUString       GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    OUString       GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
     sal_uInt16              GetMeasureRefOrient(long nMeasure) const;
 
@@ -511,7 +511,7 @@ private:
     const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
-    rtl::OUString           aDimensionName;     //! or ptr to IntDimension?
+    OUString           aDimensionName;     //! or ptr to IntDimension?
     long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
     bool                    bIsDataLayout:1;      //! or ptr to IntDimension?

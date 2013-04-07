@@ -32,7 +32,7 @@
 
 namespace xmlreader {
 
-rtl::OUString Span::convertFromUtf8() const {
+OUString Span::convertFromUtf8() const {
     assert(is());
     rtl_uString * s = 0;
     if (!rtl_convertStringToUString(
@@ -42,10 +42,10 @@ rtl::OUString Span::convertFromUtf8() const {
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString("cannot convert from UTF-8"),
+            OUString("cannot convert from UTF-8"),
             css::uno::Reference< css::uno::XInterface >());
     }
-    return rtl::OUString(s, SAL_NO_ACQUIRE);
+    return OUString(s, SAL_NO_ACQUIRE);
 }
 
 }

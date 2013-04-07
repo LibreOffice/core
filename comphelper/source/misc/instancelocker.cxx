@@ -190,17 +190,17 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 
 // XServiceInfo
 // --------------------------------------------------------
-::rtl::OUString SAL_CALL OInstanceLocker::getImplementationName(  )
+OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return getImplementationName_static();
 }
 
 // --------------------------------------------------------
-::sal_Bool SAL_CALL OInstanceLocker::supportsService( const ::rtl::OUString& ServiceName )
+::sal_Bool SAL_CALL OInstanceLocker::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq = getSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = getSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName == aSeq[nInd] )
@@ -210,7 +210,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 }
 
 // --------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();

@@ -77,7 +77,7 @@ public:
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const;
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
     void set_mnemonic_widget(Window *pWindow);
     Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
@@ -200,7 +200,7 @@ public:
 
     sal_Bool        SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const;
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 #endif  // _SV_FIXED_HXX

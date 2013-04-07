@@ -60,7 +60,7 @@ hyper_link_get_uri( AtkHyperlink *pLink,
 {
     try {
         uno::Any aAny = getHyperlink( pLink )->getAccessibleActionObject( i );
-        rtl::OUString aUri = aAny.get< rtl::OUString > ();
+        OUString aUri = aAny.get< OUString > ();
         return OUStringToGChar(aUri);
     }
     catch(const uno::Exception& e) {

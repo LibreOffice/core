@@ -115,7 +115,7 @@ namespace param
     IMPLEMENT_GET_IMPLEMENTATION_ID( ParameterWrapper )
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
+    OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
     {
         Reference< XPropertySetInfo >  xInfo = const_cast<ParameterWrapper*>( this )->getPropertySetInfo();
         Sequence< Property > aProperties = xInfo->getProperties();
@@ -127,7 +127,7 @@ namespace param
         }
 
         OSL_FAIL( "ParameterWrapper::impl_getPseudoAggregatePropertyName: invalid argument!" );
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------
@@ -148,7 +148,7 @@ namespace param
                 sal_Int32 nProperties( aProperties.getLength() );
                 aProperties.realloc( nProperties + 1 );
                 aProperties[ nProperties ] = Property(
-                    ::rtl::OUString( "Value" ),
+                    OUString( "Value" ),
                     PROPERTY_ID_VALUE,
                     ::cppu::UnoType< Any >::get(),
                     PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID
@@ -185,11 +185,11 @@ namespace param
             {
                 // TODO : aParamType & nScale can be obtained within the constructor ....
                 sal_Int32 nParamType = DataType::VARCHAR;
-                OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nParamType );
+                OSL_VERIFY( m_xDelegator->getPropertyValue( OUString( "Type" ) ) >>= nParamType );
 
                 sal_Int32 nScale = 0;
-                if ( m_xDelegatorPSI->hasPropertyByName( ::rtl::OUString( "Scale" ) ) )
-                    OSL_VERIFY( m_xDelegator->getPropertyValue( ::rtl::OUString( "Scale" ) ) >>= nScale );
+                if ( m_xDelegatorPSI->hasPropertyByName( OUString( "Scale" ) ) )
+                    OSL_VERIFY( m_xDelegator->getPropertyValue( OUString( "Scale" ) ) >>= nScale );
 
                 if ( m_xValueDestination.is() )
                 {
@@ -213,7 +213,7 @@ namespace param
         }
         else
         {
-            ::rtl::OUString aName = impl_getPseudoAggregatePropertyName( nHandle );
+            OUString aName = impl_getPseudoAggregatePropertyName( nHandle );
             m_xDelegator->setPropertyValue( aName, rValue );
         }
     }
@@ -227,7 +227,7 @@ namespace param
         }
         else
         {
-            ::rtl::OUString aName = impl_getPseudoAggregatePropertyName( nHandle );
+            OUString aName = impl_getPseudoAggregatePropertyName( nHandle );
             rValue = m_xDelegator->getPropertyValue( aName );
         }
     }
@@ -323,7 +323,7 @@ namespace param
     void ParameterWrapperContainer::impl_checkDisposed_throw()
     {
         if ( rBHelper.bDisposed )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
     }
 
     //--------------------------------------------------------------------

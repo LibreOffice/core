@@ -69,7 +69,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
 #ifdef WNT
-using ::rtl::OUString;
 #else
 using namespace ::rtl;
 #endif
@@ -280,7 +279,7 @@ ShutdownIcon::~ShutdownIcon()
 
 // ---------------------------------------------------------------------------
 
-void ShutdownIcon::OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& rTarget, const Sequence< PropertyValue >& aArgs )
+void ShutdownIcon::OpenURL( const OUString& aURL, const OUString& rTarget, const Sequence< PropertyValue >& aArgs )
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
@@ -344,16 +343,16 @@ void ShutdownIcon::FromTemplate()
         if ( xProv.is() )
         {
             if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                xDisp = xProv->queryDispatch( aTargetURL, OUString(), 0 );
             else
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString("_blank"), 0 );
+                xDisp = xProv->queryDispatch( aTargetURL, OUString("_blank"), 0 );
         }
         if ( xDisp.is() )
         {
             Sequence<PropertyValue> aArgs(1);
             PropertyValue* pArg = aArgs.getArray();
-            pArg[0].Name = rtl::OUString("Referer");
-            pArg[0].Value <<= ::rtl::OUString("private:user");
+            pArg[0].Name = OUString("Referer");
+            pArg[0].Value <<= OUString("private:user");
             Reference< ::com::sun::star::frame::XNotifyingDispatch > xNotifyer( xDisp, UNO_QUERY );
             if ( xNotifyer.is() )
             {
@@ -800,7 +799,7 @@ static OUString getAutostartDir( bool bCreate = false )
 }
 #endif
 
-rtl::OUString ShutdownIcon::getShortcutName()
+OUString ShutdownIcon::getShortcutName()
 {
 #ifndef ENABLE_QUICKSTART_APPLET
     return OUString();

@@ -40,7 +40,7 @@ class SbiStream
 {
     SvStream* pStrm;
     sal_uIntPtr  nExpandOnWriteTo;  // during writing access expand the stream to this size
-    rtl::OString aLine;
+    OString aLine;
     sal_uIntPtr  nLine;
     short  nLen;                    // buffer length
     short  nMode;
@@ -51,11 +51,11 @@ class SbiStream
 public:
     SbiStream();
    ~SbiStream();
-    SbError Open( short, const rtl::OString&, short, short, short );
+    SbError Open( short, const OString&, short, short, short );
     SbError Close();
-    SbError Read(rtl::OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
+    SbError Read(OString&, sal_uInt16 = 0, bool bForceReadingPerByte=false);
     SbError Read( char& );
-    SbError Write( const rtl::OString&, sal_uInt16 = 0 );
+    SbError Write( const OString&, sal_uInt16 = 0 );
 
     bool IsText() const     { return (nMode & SBSTRM_BINARY) == 0; }
     bool IsRandom() const   { return (nMode & SBSTRM_RANDOM) != 0; }
@@ -73,27 +73,27 @@ public:
 class SbiIoSystem
 {
     SbiStream* pChan[ CHANNELS ];
-    rtl::OString aPrompt;
-    rtl::OString aIn;
-    rtl::OString aOut;
+    OString aPrompt;
+    OString aIn;
+    OString aOut;
     short     nChan;
     SbError   nError;
-    void      ReadCon(rtl::OString&);
-    void      WriteCon(const rtl::OString&);
+    void      ReadCon(OString&);
+    void      WriteCon(const OString&);
 public:
     SbiIoSystem();
    ~SbiIoSystem();
     SbError GetError();
     void  Shutdown();
-    void  SetPrompt(const rtl::OString& r) { aPrompt = r; }
+    void  SetPrompt(const OString& r) { aPrompt = r; }
     void  SetChannel( short n  )       { nChan = n;   }
     short GetChannel() const           { return nChan;}
     void  ResetChannel()               { nChan = 0;   }
-    void  Open( short, const rtl::OString&, short, short, short );
+    void  Open( short, const OString&, short, short, short );
     void  Close();
-    void  Read(rtl::OString&, short = 0);
+    void  Read(OString&, short = 0);
     char  Read();
-    void  Write(const rtl::OString&, short = 0);
+    void  Write(const OString&, short = 0);
     // 0 == bad channel or no SvStream (nChannel=0..CHANNELS-1)
     SbiStream* GetStream( short nChannel ) const;
     void  CloseAll(); // JSM

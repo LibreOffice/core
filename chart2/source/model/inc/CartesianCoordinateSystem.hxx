@@ -37,9 +37,9 @@ public:
     virtual ~CartesianCoordinateSystem();
 
     // ____ XCoordinateSystem ____
-    virtual ::rtl::OUString SAL_CALL getCoordinateSystemType()
+    virtual OUString SAL_CALL getCoordinateSystemType()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getViewServiceName()
+    virtual OUString SAL_CALL getViewServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____

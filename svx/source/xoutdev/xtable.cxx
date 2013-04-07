@@ -231,7 +231,7 @@ bool XPropertyList::Load()
 }
 
 bool XPropertyList::LoadFrom( const uno::Reference < embed::XStorage > &xStorage,
-                                  const rtl::OUString &rURL )
+                                  const OUString &rURL )
 {
     if( !bListDirty )
         return false;
@@ -260,7 +260,7 @@ bool XPropertyList::Save()
 }
 
 bool XPropertyList::SaveTo( const uno::Reference< embed::XStorage > &xStorage,
-                            const rtl::OUString &rURL, rtl::OUString *pOptName )
+                            const OUString &rURL, OUString *pOptName )
 {
     return SvxXMLXTableExportComponent::save( rURL, createInstance(), xStorage, pOptName );
 }
@@ -292,7 +292,7 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType t,
 
 XPropertyListRef
 XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
-                                          const rtl::OUString & rURLStr,
+                                          const OUString & rURLStr,
                                           XOutdevItemPool* pXPool )
 {
     INetURLObject aURL( rURLStr );
@@ -332,19 +332,19 @@ static struct {
     { XBITMAP_LIST,   "sob" }
 };
 
-rtl::OUString XPropertyList::GetDefaultExt( XPropertyListType t )
+OUString XPropertyList::GetDefaultExt( XPropertyListType t )
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS (pExtnMap); i++)
     {
         if( pExtnMap[i].t == t )
-            return rtl::OUString::createFromAscii( pExtnMap[ i ].pExt );
+            return OUString::createFromAscii( pExtnMap[ i ].pExt );
     }
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString XPropertyList::GetDefaultExtFilter( XPropertyListType t )
+OUString XPropertyList::GetDefaultExtFilter( XPropertyListType t )
 {
-    rtl::OUString aFilter( "*." );
+    OUString aFilter( "*." );
     return aFilter + GetDefaultExt( t );
 }
 

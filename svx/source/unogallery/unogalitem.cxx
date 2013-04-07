@@ -125,27 +125,27 @@ void SAL_CALL GalleryItem::release()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GalleryItem::getImplementationName_Static()
+OUString GalleryItem::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.gallery.GalleryItem" );
+    return OUString( "com.sun.star.comp.gallery.GalleryItem" );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GalleryItem::getSupportedServiceNames_Static()
+uno::Sequence< OUString > GalleryItem::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.gallery.GalleryItem" );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.gallery.GalleryItem" );
 
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GalleryItem::getImplementationName()
+OUString SAL_CALL GalleryItem::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -153,11 +153,11 @@ uno::Sequence< ::rtl::OUString > GalleryItem::getSupportedServiceNames_Static()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GalleryItem::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL GalleryItem::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+    const OUString*              pArray = aSNL.getConstArray();
 
     for( int i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL GalleryItem::supportsService( const ::rtl::OUString& ServiceNa
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL GalleryItem::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -245,10 +245,10 @@ sal_Int8 SAL_CALL GalleryItem::getType()
         { MAP_CHAR_LEN( "GalleryItemType" ), UNOGALLERY_GALLERYITEMTYPE, &::getCppuType( (const sal_Int8*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { MAP_CHAR_LEN( "URL" ), UNOGALLERY_URL, &::getCppuType( (const ::rtl::OUString*)(0)),
+        { MAP_CHAR_LEN( "URL" ), UNOGALLERY_URL, &::getCppuType( (const OUString*)(0)),
           beans::PropertyAttribute::READONLY, 0 },
 
-        { MAP_CHAR_LEN( "Title" ), UNOGALLERY_TITLE, &::getCppuType( (const ::rtl::OUString*)(0)),
+        { MAP_CHAR_LEN( "Title" ), UNOGALLERY_TITLE, &::getCppuType( (const OUString*)(0)),
           0, 0 },
 
         { MAP_CHAR_LEN( "Thumbnail" ), UNOGALLERY_THUMBNAIL, &::getCppuType( (const uno::Reference< graphic::XGraphic >*)(0)),
@@ -283,7 +283,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
     {
         if( UNOGALLERY_TITLE == (*ppEntries)->mnHandle )
         {
-            ::rtl::OUString aNewTitle;
+            OUString aNewTitle;
 
             if( *pValues >>= aNewTitle )
             {
@@ -295,7 +295,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     if( pObj )
                     {
-                        if( ::rtl::OUString( pObj->GetTitle() ) != aNewTitle )
+                        if( OUString( pObj->GetTitle() ) != aNewTitle )
                         {
                             pObj->SetTitle( aNewTitle );
                             pGalTheme->InsertObject( *pObj );
@@ -339,7 +339,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : NULL );
 
                 if( pGalTheme )
-                    *pValue <<= ::rtl::OUString( implGetObject()->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+                    *pValue <<= OUString( implGetObject()->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             }
             break;
 
@@ -353,7 +353,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     if( pObj )
                     {
-                        *pValue <<= ::rtl::OUString( pObj->GetTitle() );
+                        *pValue <<= OUString( pObj->GetTitle() );
                         pGalTheme->ReleaseObject( pObj );
                     }
                 }

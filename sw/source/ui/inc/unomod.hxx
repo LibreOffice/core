@@ -63,11 +63,11 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
@@ -107,11 +107,11 @@ public:
 
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
@@ -151,9 +151,9 @@ public:
 
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
     sal_Bool    IsValid() const {return bObjectValid;}
     void    Invalidate() {bObjectValid = sal_False;}

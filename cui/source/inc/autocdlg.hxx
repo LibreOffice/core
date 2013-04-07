@@ -248,7 +248,7 @@ private:
         String          sModify;
         String          sNew;
 
-        std::set<rtl::OUString> aFormatText;
+        std::set<OUString> aFormatText;
         DoubleStringTable       aDoubleStringTable;
         CollatorWrapper*        pCompareClass;
         CharClass*              pCharClass;
@@ -287,8 +287,8 @@ public:
 
 struct StringsArrays
 {
-    std::vector<rtl::OUString> aAbbrevStrings;
-    std::vector<rtl::OUString> aDoubleCapsStrings;
+    std::vector<OUString> aAbbrevStrings;
+    std::vector<OUString> aDoubleCapsStrings;
 
     StringsArrays() { }
 };

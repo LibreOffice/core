@@ -41,7 +41,6 @@
 
 #include <map>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -95,7 +94,7 @@ public:
     virtual void    RequestingChildren( SvTreeListEntry* pParent );
 
     virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     DECL_LINK(OnSelectionChangeHdl, void *);
     DECL_LINK(OnExpandingHdl, void *);
@@ -707,7 +706,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultExpandedGraphicURL() throw (::com::
 
 // --------------------------------------------------------------------
 
-void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const ::rtl::OUString& sDefaultExpandedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDefaultExpandedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     if( msDefaultExpandedGraphicURL != sDefaultExpandedGraphicURL )
@@ -745,7 +744,7 @@ OUString SAL_CALL TreeControlPeer::getDefaultCollapsedGraphicURL() throw (::com:
 
 // --------------------------------------------------------------------
 
-void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const ::rtl::OUString& sDefaultCollapsedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sDefaultCollapsedGraphicURL ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     if( msDefaultCollapsedGraphicURL != sDefaultCollapsedGraphicURL )
@@ -980,7 +979,7 @@ bool TreeControlPeer::onEditingEntry( UnoTreeListEntry* pEntry )
     return true;
 }
 
-bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const rtl::OUString& rNewText )
+bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const OUString& rNewText )
 {
     if( mpTreeImpl && pEntry && pEntry->mxNode.is() ) try
     {
@@ -1282,7 +1281,7 @@ void TreeControlPeer::onChangeDataModel( UnoTreeListBoxImpl& rTree, const Refere
 // ::com::sun::star::awt::XVclWindowPeer
 // --------------------------------------------------------------------
 
-void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
+void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1385,7 +1384,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
     }
 }
 
-Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1454,7 +1453,7 @@ void TreeControlPeer::onChangeRootDisplayed( sal_Bool bIsRootDisplayed )
     }
 }
 
-bool TreeControlPeer::loadImage( const ::rtl::OUString& rURL, Image& rImage )
+bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 {
     if( !mxGraphicProvider.is() )
     {
@@ -1571,7 +1570,7 @@ sal_Bool UnoTreeListBoxImpl::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 
 // --------------------------------------------------------------------
 
-sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
 }
@@ -1581,7 +1580,7 @@ sal_Bool UnoTreeListBoxImpl::EditedEntry( SvTreeListEntry* pEntry, const rtl::OU
 // ====================================================================
 
 UnoTreeListItem::UnoTreeListItem( SvTreeListEntry* pEntry )
-: SvLBoxString(pEntry, 0, rtl::OUString())
+: SvLBoxString(pEntry, 0, OUString())
 {
 }
 

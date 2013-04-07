@@ -73,12 +73,12 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
 
-        ::rtl::OUString m_sName;
+        OUString m_sName;
 
         //for transfor the tablename
-        ::rtl::OUString m_sDefaultTableName;
+        OUString m_sDefaultTableName;
 
-        ::rtl::OUString m_sDataSourceName;
+        OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
         bool            m_bNeedToReInitialize;
 
@@ -112,7 +112,7 @@ namespace dbaui
         void setStream(SvStream* _pStream){  m_pStream = _pStream; }
 
         //for set the tablename
-        void setSTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
+        void setSTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName; }
 
         virtual sal_Bool Write(); // Export
         virtual sal_Bool Read(); // Import
@@ -135,7 +135,7 @@ namespace dbaui
 
     class ORTFImportExport : public ODatabaseImportExport
     {
-        void appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
+        void appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk);
     public:
         // export data
         ORTFImportExport(   const ::svx::ODataAccessDescriptor& _aDataDescriptor,

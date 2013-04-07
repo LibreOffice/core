@@ -50,12 +50,12 @@ namespace package_ucp
 
 struct ResultListEntry
 {
-    rtl::OUString                             aURL;
+    OUString                             aURL;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
 
-    ResultListEntry( const rtl::OUString& rURL ) : aURL( rURL ) {}
+    ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
 
 //=========================================================================
@@ -134,13 +134,13 @@ DataSupplier::~DataSupplier()
 
 //=========================================================================
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aURL;
+        OUString aId = m_pImpl->m_aResults[ nIndex ]->aURL;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -153,7 +153,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         // Note: getResult fills m_pImpl->m_aResults[ nIndex ]->aURL.
         return m_pImpl->m_aResults[ nIndex ]->aURL;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //=========================================================================
@@ -174,7 +174,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -258,7 +258,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
                 break;
             }
 
-            rtl::OUString aName = xNamed->getName();
+            OUString aName = xNamed->getName();
 
             if ( aName.isEmpty() )
             {
@@ -267,7 +267,7 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL = assembleChildURL( aName );
+            OUString aURL = assembleChildURL( aName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
 
@@ -336,7 +336,7 @@ sal_uInt32 DataSupplier::totalCount()
                 break;
             }
 
-            rtl::OUString aName = xNamed->getName();
+            OUString aName = xNamed->getName();
 
             if ( aName.isEmpty() )
             {
@@ -345,7 +345,7 @@ sal_uInt32 DataSupplier::totalCount()
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL = assembleChildURL( aName );
+            OUString aURL = assembleChildURL( aName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
         }
@@ -451,10 +451,10 @@ void DataSupplier::validate()
 }
 
 //=========================================================================
-::rtl::OUString DataSupplier::assembleChildURL( const ::rtl::OUString& aName )
+OUString DataSupplier::assembleChildURL( const OUString& aName )
 {
-    rtl::OUString aURL;
-    rtl::OUString aContURL
+    OUString aURL;
+    OUString aContURL
         = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
     sal_Int32 nParam = aContURL.indexOf( '?' );
     if ( nParam >= 0 )
@@ -463,7 +463,7 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString("/");
+            aURL += OUString("/");
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
         aURL += aContURL.copy( nParam );
@@ -474,7 +474,7 @@ void DataSupplier::validate()
 
         sal_Int32 nPackageUrlEnd = aURL.lastIndexOf( '/' );
         if ( nPackageUrlEnd != aURL.getLength() - 1 )
-            aURL += rtl::OUString("/");
+            aURL += OUString("/");
 
         aURL += ::ucb_impl::urihelper::encodeSegment( aName );
     }

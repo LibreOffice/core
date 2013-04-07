@@ -41,25 +41,25 @@ namespace comphelper
         virtual ~NameContainer();
 
         // XNameContainer
-        virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+        virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
             throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
             ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+        virtual void SAL_CALL removeByName( const OUString& Name )
             throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+        virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
             throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
             throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw(::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
@@ -92,7 +92,7 @@ NameContainer::~NameContainer()
 }
 
 // XNameContainer
-void SAL_CALL NameContainer::insertByName( const rtl::OUString& aName, const Any& aElement )
+void SAL_CALL NameContainer::insertByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, ElementExistException,
         WrappedTargetException, RuntimeException)
 {
@@ -107,7 +107,7 @@ void SAL_CALL NameContainer::insertByName( const rtl::OUString& aName, const Any
     maProperties.insert( SvGenericNameContainerMapImpl::value_type(aName,aElement));
 }
 
-void SAL_CALL NameContainer::removeByName( const ::rtl::OUString& Name )
+void SAL_CALL NameContainer::removeByName( const OUString& Name )
     throw(NoSuchElementException, WrappedTargetException,
         RuntimeException)
 {
@@ -122,7 +122,7 @@ void SAL_CALL NameContainer::removeByName( const ::rtl::OUString& Name )
 
 // XNameReplace
 
-void SAL_CALL NameContainer::replaceByName( const ::rtl::OUString& aName, const Any& aElement )
+void SAL_CALL NameContainer::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException,
         WrappedTargetException, RuntimeException)
 {
@@ -140,7 +140,7 @@ void SAL_CALL NameContainer::replaceByName( const ::rtl::OUString& aName, const 
 
 // XNameAccess
 
-Any SAL_CALL NameContainer::getByName( const ::rtl::OUString& aName )
+Any SAL_CALL NameContainer::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException,
         RuntimeException)
 {
@@ -153,7 +153,7 @@ Any SAL_CALL NameContainer::getByName( const ::rtl::OUString& aName )
     return (*aIter).second;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL NameContainer::getElementNames(  )
+Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
     throw(RuntimeException)
 {
     MutexGuard aGuard( maMutex );
@@ -161,8 +161,8 @@ Sequence< ::rtl::OUString > SAL_CALL NameContainer::getElementNames(  )
     SvGenericNameContainerMapImpl::iterator aIter = maProperties.begin();
     const SvGenericNameContainerMapImpl::iterator aEnd = maProperties.end();
 
-    Sequence< rtl::OUString > aNames( maProperties.size() );
-    rtl::OUString* pNames = aNames.getArray();
+    Sequence< OUString > aNames( maProperties.size() );
+    OUString* pNames = aNames.getArray();
 
     while( aIter != aEnd )
     {
@@ -172,7 +172,7 @@ Sequence< ::rtl::OUString > SAL_CALL NameContainer::getElementNames(  )
     return aNames;
 }
 
-sal_Bool SAL_CALL NameContainer::hasByName( const ::rtl::OUString& aName )
+sal_Bool SAL_CALL NameContainer::hasByName( const OUString& aName )
     throw(RuntimeException)
 {
     MutexGuard aGuard( maMutex );

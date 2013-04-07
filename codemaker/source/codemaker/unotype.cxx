@@ -26,7 +26,7 @@
 
 #include <vector>
 
-codemaker::UnoType::Sort codemaker::UnoType::getSort(rtl::OString const & type)
+codemaker::UnoType::Sort codemaker::UnoType::getSort(OString const & type)
 {
     return type == "void" ? SORT_VOID
         : type == "boolean" ? SORT_BOOLEAN
@@ -46,13 +46,13 @@ codemaker::UnoType::Sort codemaker::UnoType::getSort(rtl::OString const & type)
         : SORT_COMPLEX;
 }
 
-bool codemaker::UnoType::isSequenceType(rtl::OString const & type) {
+bool codemaker::UnoType::isSequenceType(OString const & type) {
     return !type.isEmpty() && type[0] == '[';
 }
 
-rtl::OString codemaker::UnoType::decompose(
-    rtl::OString const & type, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments)
+OString codemaker::UnoType::decompose(
+    OString const & type, sal_Int32 * rank,
+    std::vector< OString > * arguments)
 {
     sal_Int32 len = type.getLength();
     sal_Int32 i = 0;

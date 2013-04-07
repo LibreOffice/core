@@ -30,7 +30,6 @@ using namespace ::std;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Exception;
-using ::rtl::OUString;
 
 namespace chart
 {

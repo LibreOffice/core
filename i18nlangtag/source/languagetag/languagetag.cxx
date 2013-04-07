@@ -28,9 +28,6 @@
 #include "simple-langtag.cxx"
 #endif
 
-using rtl::OUString;
-using rtl::OString;
-using rtl::OUStringBuffer;
 using namespace com::sun::star;
 
 // The actual pointer type of mpImplLangtag that is declared void* to not
@@ -80,7 +77,7 @@ public:
             teardown();
     }
 private:
-    rtl::OString maDataPath;   // path to liblangtag data, "|" if system
+    OString maDataPath;   // path to liblangtag data, "|" if system
     sal_uInt32   mnRef;
 
     void setupDataPath();

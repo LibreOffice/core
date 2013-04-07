@@ -108,15 +108,15 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 #ifdef WNT
     if ( pGDIMeta )
     {
-        String aStr = ::rtl::OUString(".emf");
-        ::utl::TempFile aTempFile( ::rtl::OUString(),
+        String aStr = OUString(".emf");
+        ::utl::TempFile aTempFile( OUString(),
                                    &aStr,
                                    NULL,
                                    sal_False );
 
-        ::rtl::OUString aMetaFile = aTempFile.GetFileName();
-        ::rtl::OUString aMetaURL = aTempFile.GetURL();
-        ::rtl::OString aWinFile = ::rtl::OUStringToOString( aMetaFile, osl_getThreadTextEncoding() );
+        OUString aMetaFile = aTempFile.GetFileName();
+        OUString aMetaURL = aTempFile.GetURL();
+        OString aWinFile = OUStringToOString( aMetaFile, osl_getThreadTextEncoding() );
 
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aMetaURL, STREAM_STD_READWRITE );
         if ( pStream )
@@ -450,8 +450,8 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
         try
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(graphic::GraphicProvider::create(xContext));
-            ::rtl::OUString aURL("private:resource/sfx/bitmapex/");
-            aURL += ::rtl::OUString::valueOf( nResID );
+            OUString aURL("private:resource/sfx/bitmapex/");
+            aURL += OUString::valueOf( nResID );
 
             uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
             aMediaProps[0].Name = "URL";
@@ -464,7 +464,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
                 aStoreProps[0].Name = "OutputStream";
                 aStoreProps[0].Value <<= xStream;
                 aStoreProps[1].Name = "MimeType";
-                aStoreProps[1].Value <<= ::rtl::OUString("image/png");
+                aStoreProps[1].Value <<= OUString("image/png");
 
                 xGraphProvider->storeGraphic( xGraphic, aStoreProps );
                 bResult = sal_True;
@@ -480,7 +480,7 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
 
 //---------------------------------------------------------------
 // static
-sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const ::rtl::OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
+sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
 {
     sal_uInt16 nResult = 0;
 

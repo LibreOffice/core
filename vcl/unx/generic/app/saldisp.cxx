@@ -78,7 +78,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 
 using namespace vcl_sal;
 
-using ::rtl::OUString;
 
 #define SALCOLOR_WHITE      MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF )
 #define SALCOLOR_BLACK      MAKE_SALCOLOR( 0x00, 0x00, 0x00 )
@@ -494,7 +493,7 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
                          1
                          );
 
-        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
+        OString aExec(OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
         const char* argv[2];
         argv[0] = "/bin/sh";
         argv[1] = aExec.getStr();
@@ -587,7 +586,7 @@ void SalDisplay::Init()
     const char* pValStr = XGetDefault( pDisp_, "Xft", "dpi" );
     if( pValStr != NULL )
     {
-        const rtl::OString aValStr( pValStr );
+        const OString aValStr( pValStr );
         const long nDPI = (long) aValStr.toDouble();
         // guard against insane resolution
         if( (nDPI >= 50) && (nDPI <= 500) )
@@ -723,10 +722,10 @@ sal_uInt16 SalDisplay::GetIndicatorState() const
     return nState;
 }
 
-rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
+OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 {
-    rtl::OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    rtl::OUString aRet;
+    OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
+    OUString aRet;
 
     // return an empty string for keysyms that are not bound to
     // any key code
@@ -734,7 +733,7 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
         if( !nKeySym )
-            aRet = rtl::OUString( "???" );
+            aRet = OUString( "???" );
         else
         {
             aRet = ::vcl_sal::getKeysymReplacementName( aLang, nKeySym );
@@ -743,9 +742,9 @@ rtl::OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
                 const char *pString = XKeysymToString( nKeySym );
                 int n = strlen( pString );
                 if( n > 2 && pString[n-2] == '_' )
-                    aRet = rtl::OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                    aRet = OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
                 else
-                    aRet = rtl::OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+                    aRet = OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
             }
         }
     }
@@ -789,7 +788,7 @@ void SalDisplay::ModifierMapping()
     XFreeModifiermap( pXModMap );
 }
 
-rtl::OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
+OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
 {
     String aStrMap;
     String aCustomKeyName;

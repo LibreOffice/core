@@ -84,7 +84,7 @@ public:
     void setChartDispatch(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XDispatch > xChartDispatch,
-        const ::std::set< ::rtl::OUString > & rChartCommands );
+        const ::std::set< OUString > & rChartCommands );
 
     /** Returns the dispatch that is able to do the command given in rURL, if
         implemented here.  If the URL is not implemented here, it should be
@@ -117,7 +117,7 @@ public:
 
 private:
     typedef
-        ::std::map< ::rtl::OUString,
+        ::std::map< OUString,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XDispatch > >
         tDispatchMap;
@@ -132,9 +132,9 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >         m_xModel;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xChartDispatcher;
-    ::std::set< ::rtl::OUString >                                          m_aChartCommands;
+    ::std::set< OUString >                                          m_aChartCommands;
 
-    ::std::set< ::rtl::OUString >                                          m_aContainerDocumentCommands;
+    ::std::set< OUString >                                          m_aContainerDocumentCommands;
 
     ChartController* m_pChartController;
     DrawCommandDispatch* m_pDrawCommandDispatch;

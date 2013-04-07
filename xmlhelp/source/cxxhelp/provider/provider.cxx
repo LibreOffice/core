@@ -104,23 +104,23 @@ XTYPEPROVIDER_IMPL_5( ContentProvider,
 //
 //=========================================================================
 
-rtl::OUString SAL_CALL ContentProvider::getImplementationName()
+OUString SAL_CALL ContentProvider::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-rtl::OUString ContentProvider::getImplementationName_Static()
+OUString ContentProvider::getImplementationName_Static()
 {
-    return rtl::OUString("CHelpContentProvider" );
+    return OUString("CHelpContentProvider" );
 }
 
 sal_Bool SAL_CALL
-ContentProvider::supportsService(const rtl::OUString& ServiceName )
+ContentProvider::supportsService(const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString* pArray = aSNL.getArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if( pArray[ i ] == ServiceName )
@@ -130,7 +130,7 @@ ContentProvider::supportsService(const rtl::OUString& ServiceName )
     return sal_False;
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 ContentProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
@@ -147,15 +147,15 @@ ContentProvider_CreateInstance(
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ContentProvider::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 2 );
+    uno::Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[ 0 ] =
-        rtl::OUString(
+        OUString(
             MYUCP_CONTENT_PROVIDER_SERVICE_NAME1 );
     aSNS.getArray()[ 1 ] =
-        rtl::OUString(
+        OUString(
             MYUCP_CONTENT_PROVIDER_SERVICE_NAME2 );
 
     return aSNS;
@@ -233,12 +233,12 @@ ContentProvider::elementReplaced(const container::ContainerEvent& Event)
     if(!m_pDatabases)
         return;
 
-    rtl::OUString accessor;
+    OUString accessor;
     Event.Accessor >>= accessor;
     if(accessor.compareToAscii("HelpStyleSheet"))
         return;
 
-    rtl::OUString replacedElement,element;
+    OUString replacedElement,element;
     Event.ReplacedElement >>= replacedElement;
     Event.Element >>= element;
 
@@ -259,14 +259,14 @@ void ContentProvider::init()
         getHierAccess( sProvider,
                        "org.openoffice.Office.Common" ) );
 
-    rtl::OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
+    OUString instPath( getKey( xHierAccess,"Path/Current/Help" ) );
     if( instPath.isEmpty() )
         // try to determine path from default
-        instPath = rtl::OUString( "$(instpath)/help" );
+        instPath = OUString( "$(instpath)/help" );
     // replace anything like $(instpath);
     subst( instPath );
 
-    rtl::OUString stylesheet( getKey( xHierAccess,"Help/HelpStyleSheet" ) );
+    OUString stylesheet( getKey( xHierAccess,"Help/HelpStyleSheet" ) );
     try
     {
         // now adding as configuration change listener for the stylesheet
@@ -275,7 +275,7 @@ void ContentProvider::init()
         if( xAccess.is() )
         {
             uno::Any aAny =
-                xAccess->getByName( rtl::OUString( "Help" ) );
+                xAccess->getByName( OUString( "Help" ) );
             aAny >>= m_xContainer;
             if( m_xContainer.is() )
                 m_xContainer->addContainerListener( this );
@@ -287,9 +287,9 @@ void ContentProvider::init()
 
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
 
-    rtl::OUString setupversion(
+    OUString setupversion(
         getKey( xHierAccess,"Product/ooSetupVersion" ) );
-    rtl::OUString setupextension;
+    OUString setupextension;
 
     try
     {
@@ -298,17 +298,17 @@ void ContentProvider::init()
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
-        aParam.Name    = ::rtl::OUString("nodepath");
-        aParam.Value <<= ::rtl::OUString("/org.openoffice.Setup/Product");
+        aParam.Name    = OUString("nodepath");
+        aParam.Value <<= OUString("/org.openoffice.Setup/Product");
         lParams[0] = uno::makeAny(aParam);
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess"),
+                    OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );
 
         uno::Reference< container::XNameAccess > xDirectAccess(xCFG, uno::UNO_QUERY);
-        uno::Any aRet = xDirectAccess->getByName(::rtl::OUString("ooSetupExtension"));
+        uno::Any aRet = xDirectAccess->getByName(OUString("ooSetupExtension"));
 
         aRet >>= setupextension;
     }
@@ -316,19 +316,19 @@ void ContentProvider::init()
     {
     }
 
-    rtl::OUString productversion(
+    OUString productversion(
         setupversion +
-        rtl::OUString( " " ) +
+        OUString( " " ) +
         setupextension );
 
-    uno::Sequence< rtl::OUString > aImagesZipPaths( 2 );
+    uno::Sequence< OUString > aImagesZipPaths( 2 );
     xHierAccess = getHierAccess( sProvider,  "org.openoffice.Office.Common" );
 
-    rtl::OUString aPath( getKey( xHierAccess, "Path/Current/UserConfig" ) );
+    OUString aPath( getKey( xHierAccess, "Path/Current/UserConfig" ) );
     subst( aPath );
     aImagesZipPaths[ 0 ] = aPath;
 
-    aPath = rtl::OUString("$BRAND_BASE_DIR/share/config");
+    aPath = OUString("$BRAND_BASE_DIR/share/config");
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
@@ -371,11 +371,11 @@ ContentProvider::getHierAccess(
     if( sProvider.is() )
     {
         uno::Sequence< uno::Any > seq( 1 );
-        rtl::OUString sReaderService(
-            rtl::OUString(
+        OUString sReaderService(
+            OUString(
                 "com.sun.star.configuration.ConfigurationAccess" ) );
 
-        seq[ 0 ] <<= rtl::OUString::createFromAscii( file );
+        seq[ 0 ] <<= OUString::createFromAscii( file );
 
         try
         {
@@ -394,12 +394,12 @@ ContentProvider::getHierAccess(
 
 
 
-rtl::OUString
+OUString
 ContentProvider::getKey(
     const uno::Reference< container::XHierarchicalNameAccess >& xHierAccess,
     const char* key ) const
 {
-    rtl::OUString instPath;
+    OUString instPath;
     if( xHierAccess.is() )
     {
         uno::Any aAny;
@@ -407,7 +407,7 @@ ContentProvider::getKey(
         {
             aAny =
                 xHierAccess->getByHierarchicalName(
-                    rtl::OUString::createFromAscii( key ) );
+                    OUString::createFromAscii( key ) );
         }
         catch( const container::NoSuchElementException& )
         {
@@ -430,7 +430,7 @@ ContentProvider::getBooleanKey(
       {
           aAny =
             xHierAccess->getByHierarchicalName(
-                rtl::OUString::createFromAscii( key ) );
+                OUString::createFromAscii( key ) );
       }
       catch( const container::NoSuchElementException& )
       {
@@ -440,7 +440,7 @@ ContentProvider::getBooleanKey(
   return ret;
 }
 
-void ContentProvider::subst( rtl::OUString& instpath ) const
+void ContentProvider::subst( OUString& instpath ) const
 {
     uno::Reference< frame::XConfigManager > xCfgMgr;
     if( m_xContext.is() )

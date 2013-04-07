@@ -149,7 +149,7 @@ sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Run
 }
 // -------------------------------------------------------------------------
 // XRename
-void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OAdoTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -166,7 +166,7 @@ Reference< XDatabaseMetaData> OAdoTable::getMetaData() const
 }
 // -------------------------------------------------------------------------
 // XAlterTable
-void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -215,7 +215,7 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
 
             case PROPERTY_ID_DESCRIPTION:
                 OTools::putValue(   m_aTable.get_Properties(),
-                                ::rtl::OUString("Description"),
+                                OUString("Description"),
                                 getString(rValue));
                 break;
 
@@ -239,7 +239,7 @@ void SAL_CALL OAdoTable::release() throw()
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OAdoTable::getName() throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OAdoTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
       return m_aTable.get_Name();
 }

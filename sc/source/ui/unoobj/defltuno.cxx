@@ -50,15 +50,15 @@ static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),    0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),    0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),    0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),    0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),    0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),    0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),     0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
@@ -123,7 +123,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySe
 }
 
 void SAL_CALL ScDocDefaultsObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -216,7 +216,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -276,7 +276,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocDefaultsObj )
 
 // XPropertyState
 
-beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUString& aPropertyName )
+beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -311,13 +311,13 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
 }
 
 uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates(
-                            const uno::Sequence<rtl::OUString>& aPropertyNames )
+                            const uno::Sequence<OUString>& aPropertyNames )
                     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     //  the simple way: call getPropertyState
 
     SolarMutexGuard aGuard;
-    const rtl::OUString* pNames = aPropertyNames.getConstArray();
+    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
@@ -325,7 +325,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates
     return aRet;
 }
 
-void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const rtl::OUString& aPropertyName )
+void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -346,7 +346,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const rtl::OUString& aProp
     }
 }
 
-uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                     uno::RuntimeException)
 {

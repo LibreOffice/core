@@ -41,7 +41,6 @@
 #include <svx/fontworkbar.hxx>
 #include "svx/fontworkgallery.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::svx;
 using namespace ::cppu;
@@ -135,26 +134,26 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
-    rtl::OUString aFontWorkShapeType;
+    OUString aFontWorkShapeType;
 
     for( i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
         if( pObj->ISA( SdrObjCustomShape ) )
         {
-            const rtl::OUString sType( "Type" );
+            const OUString sType( "Type" );
             SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
             Any* pAny = aGeometryItem.GetPropertyValueByName( sType );
             if( pAny )
             {
-                rtl::OUString aType;
+                OUString aType;
                 if ( *pAny >>= aType )
                 {
                     if ( !aFontWorkShapeType.isEmpty() )
                     {
                         if ( !aFontWorkShapeType.equals( aType ) )  // different FontWorkShapeTypes selected ?
                         {
-                            aFontWorkShapeType = rtl::OUString();
+                            aFontWorkShapeType = OUString();
                             break;
                         }
                     }
@@ -240,7 +239,7 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
     if ( nCheckStatus & 2 )
         return ( nCheckStatus & 1 ) != 0;
 
-    static const rtl::OUString  sTextPath( "TextPath" );
+    static const OUString  sTextPath( "TextPath" );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
@@ -265,8 +264,8 @@ bool checkForSelectedFontWork( SdrView* pSdrView, sal_uInt32& nCheckStatus )
 
 static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static const rtl::OUString  sTextPath( "TextPath" );
-    static const rtl::OUString  sSameLetterHeights( "SameLetterHeights" );
+    static const OUString  sTextPath( "TextPath" );
+    static const OUString  sSameLetterHeights( "SameLetterHeights" );
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -339,21 +338,21 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 #include <svx/fmpage.hxx>
 #include <svl/itempool.hxx>
 
-void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const rtl::OUString rCustomShape )
+void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString rCustomShape )
 {
-    const rtl::OUString sType( "Type" );
+    const OUString sType( "Type" );
 
     com::sun::star::beans::PropertyValue aPropVal;
     aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
 
-    const rtl::OUString sAdjustmentValues( "AdjustmentValues" );
-    const rtl::OUString sCoordinateOrigin( "CoordinateOrigin" );
-    const rtl::OUString sCoordinateSize( "CoordinateSize" );
-    const rtl::OUString sEquations( "Equations" );
-    const rtl::OUString sHandles( "Handles" );
-    const rtl::OUString sPath( "Path" );
+    const OUString sAdjustmentValues( "AdjustmentValues" );
+    const OUString sCoordinateOrigin( "CoordinateOrigin" );
+    const OUString sCoordinateSize( "CoordinateSize" );
+    const OUString sEquations( "Equations" );
+    const OUString sHandles( "Handles" );
+    const OUString sPath( "Path" );
     rGeometryItem.ClearPropertyValue( sAdjustmentValues );
     rGeometryItem.ClearPropertyValue( sCoordinateOrigin );
     rGeometryItem.ClearPropertyValue( sCoordinateSize );
@@ -366,7 +365,7 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
-        std::vector< rtl::OUString > aObjList;
+        std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
             sal_uInt16 i;
@@ -458,7 +457,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
 
         case SID_FONTWORK_SHAPE_TYPE:
         {
-            rtl::OUString aCustomShape;
+            OUString aCustomShape;
             const SfxItemSet* pArgs = rReq.GetArgs();
             if ( pArgs )
             {

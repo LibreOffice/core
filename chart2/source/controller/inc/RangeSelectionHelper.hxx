@@ -48,11 +48,11 @@ public:
             ::com::sun::star::sheet::XRangeSelection > getRangeSelection();
     void raiseRangeSelectionDocument();
     bool chooseRange(
-        const ::rtl::OUString & aCurrentRange,
-        const ::rtl::OUString & aUIString,
+        const OUString & aCurrentRange,
+        const OUString & aUIString,
         RangeSelectionListenerParent & rListenerParent );
     void stopRangeListening( bool bRemoveListener = true );
-    bool verifyCellRange( const ::rtl::OUString & rRangeStr );
+    bool verifyCellRange( const OUString & rRangeStr );
     bool verifyArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArguments );
 
 private:

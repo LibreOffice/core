@@ -40,10 +40,10 @@ namespace utl
     private:
         ResMgr*         m_pResources;
         bool            m_bInitialized;
-        ::rtl::OString  m_sResFilePrefix;
+        OString  m_sResFilePrefix;
 
     public:
-        OComponentResModuleImpl( const ::rtl::OString& _rResFilePrefix )
+        OComponentResModuleImpl( const OString& _rResFilePrefix )
             :m_pResources( NULL )
             ,m_bInitialized( false )
             ,m_sResFilePrefix( _rResFilePrefix )
@@ -82,11 +82,11 @@ namespace utl
         if ( !m_pResources && !m_bInitialized )
         {
             // create a manager with a fixed prefix
-            rtl::OString aMgrName = m_sResFilePrefix;
+            OString aMgrName = m_sResFilePrefix;
 
             m_pResources = ResMgr::CreateResMgr( aMgrName.getStr() );
             OSL_ENSURE( m_pResources,
-                    rtl::OStringBuffer( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
+                    OStringBuffer( "OModuleImpl::getResManager: could not create the resource manager (file name: " )
                 .append(aMgrName)
                 .append(")!").getStr() );
 
@@ -99,7 +99,7 @@ namespace utl
     //= OComponentResourceModule
     //====================================================================
     //--------------------------------------------------------------------
-    OComponentResourceModule::OComponentResourceModule( const ::rtl::OString& _rResFilePrefix )
+    OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()
         ,m_pImpl( new OComponentResModuleImpl( _rResFilePrefix ) )
     {

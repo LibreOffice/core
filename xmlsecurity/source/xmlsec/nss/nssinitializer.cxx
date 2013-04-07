@@ -70,8 +70,6 @@ namespace cssl = css::lang;
 
 using namespace xmlsecurity;
 using namespace com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OString;
 
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.NSSInitializer_NssImpl"
 
@@ -162,7 +160,7 @@ void deleteRootsModule()
     }
 }
 
-::rtl::OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
+OString getMozillaCurrentProfile( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
     // first, try to get the profile from "MOZILLA_CERTIFICATE_FOLDER"
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
@@ -171,14 +169,14 @@ void deleteRootsModule()
         SAL_INFO(
             "xmlsecurity.xmlsec",
             "Using Mozilla profile from MOZILLA_CERTIFICATE_FOLDER=" << pEnv);
-        return rtl::OString(pEnv);
+        return OString(pEnv);
     }
 
     // second, try to get saved user-preference
     try
     {
-        rtl::OUString sUserSetCertPath =
-            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(rtl::OUString());
+        OUString sUserSetCertPath =
+            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString());
 
         if (!sUserSetCertPath.isEmpty())
         {
@@ -186,7 +184,7 @@ void deleteRootsModule()
                 "xmlsecurity.xmlsec",
                 "Using Mozilla profile from /org.openoffice.Office.Common/"
                     "Security/Scripting/CertDir: " << sUserSetCertPath);
-            return rtl::OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
+            return OUStringToOString(sUserSetCertPath, osl_getThreadTextEncoding());
         }
     }
     catch (const uno::Exception &e)
@@ -214,21 +212,21 @@ void deleteRootsModule()
     {
         for (int i=0; i<nProduct; ++i)
         {
-            rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
             if (!profile.isEmpty())
             {
-                rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
+                OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
                 SAL_INFO(
                     "xmlsecurity.xmlsec",
                     "Using Mozilla profile " << sProfilePath);
-                return rtl::OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
+                return OUStringToOString(sProfilePath, osl_getThreadTextEncoding());
             }
         }
     }
 
     SAL_INFO("xmlsecurity.xmlsec", "No Mozilla profile found");
-    return rtl::OString();
+    return OString();
 }
 
 //Older versions of Firefox (FF), for example FF2, and Thunderbird (TB) 2 write
@@ -257,7 +255,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
     bool return_value = true;
 
     // this method must be called only once, no need for additional lock
-    rtl::OString sCertDir;
+    OString sCertDir;
 
 #ifdef XMLSEC_CRYPTO_NSS
     sCertDir = getMozillaCurrentProfile(rxContext);
@@ -321,8 +319,8 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
         OUString rootModulePath;
         if (::osl::File::E_None == ::osl::File::getSystemPathFromFileURL(rootModule, rootModulePath))
         {
-            ::rtl::OString ospath = ::rtl::OUStringToOString(rootModulePath, osl_getThreadTextEncoding());
-            ::rtl::OStringBuffer pkcs11moduleSpec;
+            OString ospath = OUStringToOString(rootModulePath, osl_getThreadTextEncoding());
+            OStringBuffer pkcs11moduleSpec;
             pkcs11moduleSpec.append("name=\"");
             pkcs11moduleSpec.append(ROOT_CERTS);
             pkcs11moduleSpec.append("\" library=\"");
@@ -437,10 +435,10 @@ css::uno::Reference< css::xml::crypto::XDigestContext > SAL_CALL ONSSInitializer
         b1KData = ( nDigestID == css::xml::crypto::DigestID::SHA1_1K );
     }
     else
-        throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected digest requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException( OUString( "Unexpected digest requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
 
     if ( aParams.getLength() )
-        throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected arguments provided for digest creation." ), css::uno::Reference< css::uno::XInterface >(), 2 );
+        throw css::lang::IllegalArgumentException( OUString( "Unexpected arguments provided for digest creation." ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
     css::uno::Reference< css::xml::crypto::XDigestContext > xResult;
     if( initNSS( m_xContext ) )
@@ -464,19 +462,19 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
         bW3CPadding = true;
 
         if ( aKey.getLength() != 16 && aKey.getLength() != 24 && aKey.getLength() != 32 )
-            throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected key length." ), css::uno::Reference< css::uno::XInterface >(), 2 );
+            throw css::lang::IllegalArgumentException( OUString( "Unexpected key length." ), css::uno::Reference< css::uno::XInterface >(), 2 );
 
         if ( aParams.getLength() )
-            throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected arguments provided for cipher creation." ), css::uno::Reference< css::uno::XInterface >(), 5 );
+            throw css::lang::IllegalArgumentException( OUString( "Unexpected arguments provided for cipher creation." ), css::uno::Reference< css::uno::XInterface >(), 5 );
     }
     else
-        throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected cipher requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
+        throw css::lang::IllegalArgumentException( OUString( "Unexpected cipher requested." ), css::uno::Reference< css::uno::XInterface >(), 1 );
 
     css::uno::Reference< css::xml::crypto::XCipherContext > xResult;
     if( initNSS( m_xContext ) )
     {
         if ( aInitializationVector.getLength() != PK11_GetIVLength( nNSSCipherID ) )
-            throw css::lang::IllegalArgumentException( ::rtl::OUString( "Unexpected length of initialization vector." ), css::uno::Reference< css::uno::XInterface >(), 3 );
+            throw css::lang::IllegalArgumentException( OUString( "Unexpected length of initialization vector." ), css::uno::Reference< css::uno::XInterface >(), 3 );
 
         xResult = OCipherContext::Create( nNSSCipherID, aKey, aInitializationVector, bEncryption, bW3CPadding );
     }
@@ -484,25 +482,25 @@ css::uno::Reference< css::xml::crypto::XCipherContext > SAL_CALL ONSSInitializer
     return xResult;
 }
 
-rtl::OUString ONSSInitializer_getImplementationName ()
+OUString ONSSInitializer_getImplementationName ()
     throw (cssu::RuntimeException)
 {
 
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL ONSSInitializer_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ONSSInitializer_supportsService( const OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName == NSS_SERVICE_NAME;
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL ONSSInitializer_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
+    cssu::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
     return aRet;
 }
 
@@ -513,17 +511,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL ONSSInitializer_createInstance( con
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL ONSSInitializer::getImplementationName()
+OUString SAL_CALL ONSSInitializer::getImplementationName()
     throw (cssu::RuntimeException)
 {
     return ONSSInitializer_getImplementationName();
 }
-sal_Bool SAL_CALL ONSSInitializer::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ONSSInitializer::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return ONSSInitializer_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL ONSSInitializer::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return ONSSInitializer_getSupportedServiceNames();

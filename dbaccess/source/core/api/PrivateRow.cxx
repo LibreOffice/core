@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
     {
         return m_aRow[m_nPos].isNull();
     }
-    ::rtl::OUString SAL_CALL OPrivateRow::getString( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException)
+    OUString SAL_CALL OPrivateRow::getString( ::sal_Int32 columnIndex ) throw (SQLException, RuntimeException)
     {
         m_nPos = columnIndex;
         return m_aRow[m_nPos];

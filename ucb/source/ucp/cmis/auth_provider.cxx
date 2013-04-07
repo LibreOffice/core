@@ -26,8 +26,8 @@
  * instead of those above.
  */
 
-#define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
-#define STD_TO_OUSTR( str ) rtl::OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
+#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
@@ -51,10 +51,10 @@ namespace cmis
             {
                 rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                     = new ucbhelper::SimpleAuthenticationRequest(
-                        m_sUrl, m_sBindingUrl, ::rtl::OUString(),
+                        m_sUrl, m_sBindingUrl, OUString(),
                         STD_TO_OUSTR( username ),
                         STD_TO_OUSTR( password ),
-                        ::rtl::OUString(), true, false );
+                        OUString(), true, false );
                 xIH->handle( xRequest.get() );
 
                 rtl::Reference< ucbhelper::InteractionContinuation > xSelection

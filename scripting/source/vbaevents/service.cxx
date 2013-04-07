@@ -39,9 +39,9 @@ namespace evtlstner
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString SAL_CALL getImplementationName();
+    OUString SAL_CALL getImplementationName();
 
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    Sequence< OUString > SAL_CALL getSupportedServiceNames();
 
     Reference<XInterface> SAL_CALL create(
         Sequence<Any> const &, Reference<XComponentContext> const & );
@@ -59,9 +59,9 @@ namespace ooevtdescgen
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString SAL_CALL getImplementationName();
+    OUString SAL_CALL getImplementationName();
 
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    Sequence< OUString > SAL_CALL getSupportedServiceNames();
 
     Reference<XInterface> SAL_CALL create(
         Sequence<Any> const &, Reference<XComponentContext> const & );

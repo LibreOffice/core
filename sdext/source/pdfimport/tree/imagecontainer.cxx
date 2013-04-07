@@ -49,9 +49,9 @@ static const sal_Char aBase64EncodeTable[] =
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
 
-rtl::OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLength )
+OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLength )
 {
-    rtl::OUStringBuffer aBuf( (i_nBufferLength+1) * 4 / 3 );
+    OUStringBuffer aBuf( (i_nBufferLength+1) * 4 / 3 );
     const sal_Int32 nRemain(i_nBufferLength%3);
     const sal_Int32 nFullTripleLength( i_nBufferLength - (i_nBufferLength%3));
     sal_Int32 nBufPos( 0 );
@@ -129,7 +129,7 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
         std::find_if(pAry,pAry+nLen,
                      boost::bind(comphelper::TPropertyValueEqualFunctor(),
                                  _1,
-                                 rtl::OUString("InputSequence"))));
+                                 OUString("InputSequence"))));
     OSL_ENSURE( pValue != pAry+nLen,
                 "InputSequence not found" );
 

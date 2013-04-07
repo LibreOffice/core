@@ -539,11 +539,11 @@ void ScUndoWrapper::ForgetWrappedUndo()
     pWrappedUndo = NULL;    // don't delete in dtor - pointer must be stored outside
 }
 
-rtl::OUString ScUndoWrapper::GetComment() const
+OUString ScUndoWrapper::GetComment() const
 {
     if (pWrappedUndo)
         return pWrappedUndo->GetComment();
-    return rtl::OUString();
+    return OUString();
 }
 
 OUString ScUndoWrapper::GetRepeatComment(SfxRepeatTarget& rTarget) const

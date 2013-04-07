@@ -117,7 +117,7 @@ namespace dbaccess
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
         {
-            ::rtl::OUString sEventName = ::rtl::OUString::createFromAscii( pEventData->pAsciiEventName );
+            OUString sEventName = OUString::createFromAscii( pEventData->pAsciiEventName );
             DocumentEventsData::iterator existingPos = m_pData->rEventsData.find( sEventName );
             if ( existingPos == m_pData->rEventsData.end() )
                 m_pData->rEventsData[ sEventName ] = Sequence< PropertyValue >();
@@ -139,7 +139,7 @@ namespace dbaccess
         m_pData->rParent.release();
     }
 
-    bool DocumentEvents::needsSynchronousNotification( const ::rtl::OUString& _rEventName )
+    bool DocumentEvents::needsSynchronousNotification( const OUString& _rEventName )
     {
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
@@ -153,7 +153,7 @@ namespace dbaccess
         return false;
     }
 
-    void SAL_CALL DocumentEvents::replaceByName( const ::rtl::OUString& _Name, const Any& _Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL DocumentEvents::replaceByName( const OUString& _Name, const Any& _Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -170,14 +170,14 @@ namespace dbaccess
         ::comphelper::NamedValueCollection aCheck( aEventDescriptor );
         if ( aCheck.has( "EventType" ) )
         {
-            ::rtl::OUString sEventType = aCheck.getOrDefault( "EventType", ::rtl::OUString() );
+            OUString sEventType = aCheck.getOrDefault( "EventType", OUString() );
             OSL_ENSURE( !sEventType.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty EventType is weird!" );
             if ( sEventType.isEmpty() )
                 aEventDescriptor.realloc( 0 );
         }
         if ( aCheck.has( "Script" ) )
         {
-            ::rtl::OUString sScript = aCheck.getOrDefault( "Script", ::rtl::OUString() );
+            OUString sScript = aCheck.getOrDefault( "Script", OUString() );
             OSL_ENSURE( !sScript.isEmpty(), "DocumentEvents::replaceByName: doing a reset via an empty Script is weird!" );
             if ( sScript.isEmpty() )
                 aEventDescriptor.realloc( 0 );
@@ -186,7 +186,7 @@ namespace dbaccess
         elementPos->second = aEventDescriptor;
     }
 
-    Any SAL_CALL DocumentEvents::getByName( const ::rtl::OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL DocumentEvents::getByName( const OUString& _Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -201,11 +201,11 @@ namespace dbaccess
         return aReturn;
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
-        Sequence< ::rtl::OUString > aNames( m_pData->rEventsData.size() );
+        Sequence< OUString > aNames( m_pData->rEventsData.size() );
         ::std::transform(
             m_pData->rEventsData.begin(),
             m_pData->rEventsData.end(),
@@ -215,7 +215,7 @@ namespace dbaccess
         return aNames;
     }
 
-    ::sal_Bool SAL_CALL DocumentEvents::hasByName( const ::rtl::OUString& _Name ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& _Name ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 

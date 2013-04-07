@@ -366,9 +366,9 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaDoubleToken( nValue );
         case svString :
             if (eOp == ocPush)
-                return new FormulaStringToken( rtl::OUString( cStr ) );
+                return new FormulaStringToken( OUString( cStr ) );
             else
-                return new FormulaStringOpToken( eOp, rtl::OUString( cStr ) );
+                return new FormulaStringOpToken( eOp, OUString( cStr ) );
         case svSingleRef :
             if (eOp == ocPush)
                 return new ScSingleRefToken( aRef.Ref1 );
@@ -386,23 +386,23 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaIndexToken( eOp, name.nIndex, name.bGlobal);
         case svExternalSingleRef:
             {
-                rtl::OUString aTabName(extref.cTabName);
+                OUString aTabName(extref.cTabName);
                 return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
             }
         case svExternalDoubleRef:
             {
-                rtl::OUString aTabName(extref.cTabName);
+                OUString aTabName(extref.cTabName);
                 return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
             }
         case svExternalName:
             {
-                rtl::OUString aName(extname.cName);
+                OUString aName(extname.cName);
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
         case svJump :
             return new FormulaJumpToken( eOp, (short*) nJump );
         case svExternal :
-            return new FormulaExternalToken( eOp, sbyte.cByte, rtl::OUString( cStr+1 ) );
+            return new FormulaExternalToken( eOp, sbyte.cByte, OUString( cStr+1 ) );
         case svFAP :
             return new FormulaFAPToken( eOp, sbyte.cByte, NULL );
         case svMissing :
@@ -1172,7 +1172,7 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
                             sal_uInt16 nFileId = static_cast< sal_uInt16 >( aApiExtRef.Index );
                             sheet::SingleReference aApiSRef;
                             sheet::ComplexReference aApiCRef;
-                            ::rtl::OUString aName;
+                            OUString aName;
                             if( aApiExtRef.Reference >>= aApiSRef )
                             {
                                 // try to resolve cache index to sheet name
@@ -1995,9 +1995,9 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
 
 namespace {
 
-void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, rtl::OUString& rTabName, sal_uInt16& rFileId)
+void GetExternalTableData(const ScDocument* pOldDoc, const ScDocument* pNewDoc, const SCTAB nTab, OUString& rTabName, sal_uInt16& rFileId)
 {
-    rtl::OUString aFileName = pOldDoc->GetFileURL();;
+    OUString aFileName = pOldDoc->GetFileURL();;
     rFileId = pNewDoc->GetExternalRefManager()->getExternalFileId(aFileName);
     rTabName = pOldDoc->GetCopyTabName(nTab);
     if (rTabName.isEmpty())
@@ -2081,7 +2081,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
 
                 if ( (rRef2.IsFlag3D() && !rRef2.IsTabRel()) || (rRef1.IsFlag3D() && !rRef1.IsTabRel()) )
                 {
-                    rtl::OUString aTabName;
+                    OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef1.nTab, aTabName, nFileId);
                     pCode[j]->DecRef();
@@ -2100,7 +2100,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, cons
 
                 if ( rRef.IsFlag3D() && !rRef.IsTabRel() )
                 {
-                    rtl::OUString aTabName;
+                    OUString aTabName;
                     sal_uInt16 nFileId;
                     GetExternalTableData(pOldDoc, pNewDoc, rRef.nTab, aTabName, nFileId);
                     //replace with ScExternalSingleRefToken and adjust references

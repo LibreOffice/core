@@ -67,7 +67,7 @@ StatusBarFactory::StatusBarFactory( const ::com::sun::star::uno::Reference< ::co
 
 // XUIElementFactory
 Reference< XUIElement > SAL_CALL StatusBarFactory::createUIElement(
-    const ::rtl::OUString& ResourceURL,
+    const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {

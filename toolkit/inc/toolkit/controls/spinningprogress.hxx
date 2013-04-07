@@ -43,11 +43,11 @@ namespace toolkit
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XPersistObject
-        ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     protected:
                                     ~SpinningProgressControlModel();

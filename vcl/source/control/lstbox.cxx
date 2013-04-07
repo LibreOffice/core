@@ -121,7 +121,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
                 Rectangle aBoundingRgn( aCtrlRegion );
                 Rectangle aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                            CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                            CTRL_STATE_ENABLED, aControlValue, OUString(),
                                             aBoundingRgn, aContentRgn ) )
                 {
                     sal_Int32 nHeight = aBoundingRgn.GetHeight();
@@ -630,7 +630,7 @@ void ListBox::Resize()
         Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion( CTRL_LISTBOX, PART_BUTTON_DOWN,
-                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                    aArea, 0, aControlValue, OUString(), aBound, aContent) )
         {
             long nTop = 0;
             // Convert back from border space to local coordinates
@@ -643,7 +643,7 @@ void ListBox::Resize()
 
             // Adjust the size of the edit field
             if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
-                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                        aArea, 0, aControlValue, OUString(), aBound, aContent) )
             {
                 // Convert back from border space to local coordinates
                 aContent.Move( -aPoint.X(), -aPoint.Y() );
@@ -1243,7 +1243,7 @@ Size ListBox::CalcMinimumSize() const
         Size aTestSize( 100, 20 );
         Rectangle aArea( aPoint, aTestSize );
         if( const_cast<ListBox*>(this)->GetNativeControlRegion(
-                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, OUString(), aBound, aContent) )
         {
             // use the themes drop down size
             aSz.Width() += aTestSize.Width() - aContent.GetWidth();
@@ -1260,7 +1260,7 @@ Size ListBox::CalcMinimumSize() const
         Rectangle aRect( Point( 0, 0 ), aSz );
         Rectangle aContent, aBound;
         if( const_cast<ListBox*>(this)->GetNativeControlRegion(
-                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, OUString(), aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )
                 aSz.Height() = aBound.GetHeight();
@@ -1352,7 +1352,7 @@ Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     // Width
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth( rtl::OUString('X') );
+        aSz.Width() = nColumns * GetTextWidth( OUString('X') );
     else
         aSz.Width() = aMinSz.Width();
 
@@ -1374,7 +1374,7 @@ Size ListBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth( rtl::OUString(static_cast<sal_Unicode>('x')) );
+    long nCharWidth = GetTextWidth( OUString(static_cast<sal_Unicode>('x')) );
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
@@ -1487,7 +1487,7 @@ void ListBox::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool ListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool ListBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "active")
         SelectEntryPos(rValue.toInt32());

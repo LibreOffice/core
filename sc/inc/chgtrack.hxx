@@ -216,8 +216,8 @@ protected:
 
     ScBigRange          aBigRange;          // Ins/Del/MoveTo/ContentPos
     DateTime            aDateTime;          //! UTC
-    rtl::OUString       aUser;              // who?
-    rtl::OUString       aComment;           // user comment
+    OUString       aUser;              // who?
+    OUString       aComment;           // user comment
     ScChangeAction*     pNext;              // next in linked list
     ScChangeAction*     pPrev;              // previous in linked list
     ScChangeActionLinkEntry*    pLinkAny;   // arbitrary links
@@ -239,20 +239,20 @@ protected:
                     const sal_uLong nRejectAction,
                     const ScChangeActionState eState,
                     const DateTime& aDateTime,
-                    const rtl::OUString& aUser,
-                    const rtl::OUString& aComment );
+                    const OUString& aUser,
+                    const OUString& aComment );
 
     // only to be used in the XML import
     ScChangeAction( ScChangeActionType, const ScBigRange&, const sal_uLong nAction);
 
     virtual ~ScChangeAction();
 
-    rtl::OUString GetRefString(
+    OUString GetRefString(
         const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D = false) const;
 
     void SetActionNumber( sal_uLong n ) { nAction = n; }
     void SetRejectAction( sal_uLong n ) { nRejectAction = n; }
-    void SetUser( const rtl::OUString& r );
+    void SetUser( const OUString& r );
     void SetType( ScChangeActionType e ) { eType = e; }
     void SetState( ScChangeActionState e ) { eState = e; }
     void SetRejected();
@@ -376,22 +376,22 @@ public:
                                 // with bSplitRange only one column/row will be considered for delete
                                 // (for a listing of entries)
     virtual void GetDescription(
-        rtl::OUString& rStr, ScDocument* pDoc,
+        OUString& rStr, ScDocument* pDoc,
         bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void GetRefString(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
+        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
                         // for DocumentMerge set old date of the other
                         // action, fetched by GetDateTimeUTC
     void                SetDateTimeUTC( const DateTime& rDT )
                             { aDateTime = rDT; }
 
-    SC_DLLPUBLIC const rtl::OUString& GetUser() const;
-    const rtl::OUString& GetComment() const;
+    SC_DLLPUBLIC const OUString& GetUser() const;
+    const OUString& GetComment() const;
 
     // set user comment
-    void SetComment( const rtl::OUString& rStr );
+    void SetComment( const OUString& rStr );
 
                         // only to be used in the XML import
     void                SetDeletedInThis( sal_uLong nActionNumber,
@@ -423,13 +423,13 @@ public:
             const ScChangeActionState eState,
             const sal_uLong nRejectingNumber,
             const ScBigRange& aBigRange,
-            const rtl::OUString& aUser,
+            const OUString& aUser,
             const DateTime& aDateTime,
-            const rtl::OUString &sComment,
+            const OUString &sComment,
             const ScChangeActionType eType); // only to use in the XML import
 
     virtual void GetDescription(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true) const;
 };
 
 
@@ -520,8 +520,8 @@ public:
     ScChangeActionDel(
         const sal_uLong nActionNumber, const ScChangeActionState eState,
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
-        const rtl::OUString& aUser, const DateTime& aDateTime,
-        const rtl::OUString &sComment, const ScChangeActionType eType,
+        const OUString& aUser, const DateTime& aDateTime,
+        const OUString &sComment, const ScChangeActionType eType,
         const SCsCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
                                             // which of nDx and nDy is set is dependend on the type
 
@@ -549,7 +549,7 @@ public:
     short               GetCutOffCount() const { return nCutOff; }
 
     virtual void GetDescription(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
 
     void                SetCutOffInsert( ScChangeActionIns* p, short n )
                             { pCutOff = p; nCutOff = n; }   // only to use in the XML import
@@ -612,9 +612,9 @@ public:
                     const ScChangeActionState eState,
                     const sal_uLong nRejectingNumber,
                     const ScBigRange& aToBigRange,
-                    const rtl::OUString& aUser,
+                    const OUString& aUser,
                     const DateTime& aDateTime,
-                    const rtl::OUString &sComment,
+                    const OUString &sComment,
                     const ScBigRange& aFromBigRange,
                     ScChangeTrack* pTrack); // only to use in the XML import
 
@@ -625,11 +625,11 @@ public:
     SC_DLLPUBLIC        void                GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const;
 
     virtual void GetDescription(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false,
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false,
         bool bWarning = true ) const;
 
     virtual void GetRefString(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
+        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 };
 
 
@@ -704,7 +704,7 @@ class ScChangeActionContent : public ScChangeAction
 
     void GetValueString( OUString& rStr, const OUString& rValue, const ScCellValue& rCell ) const;
 
-    void GetFormulaString( rtl::OUString& rStr, const ScFormulaCell* pCell ) const;
+    void GetFormulaString( OUString& rStr, const ScFormulaCell* pCell ) const;
 
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
@@ -788,15 +788,15 @@ public:
     // assigns string / creates forumula cell
     void SetOldValue( const OUString& rOld, ScDocument* pDoc );
 
-    void GetOldString( rtl::OUString& rStr ) const;
-    void GetNewString( rtl::OUString& rStr ) const;
+    void GetOldString( OUString& rStr ) const;
+    void GetNewString( OUString& rStr ) const;
     SC_DLLPUBLIC const ScCellValue& GetOldCell() const;
     SC_DLLPUBLIC const ScCellValue& GetNewCell() const;
     virtual void GetDescription(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
+        OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const;
 
     virtual void GetRefString(
-        rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
+        OUString& rStr, ScDocument* pDoc, bool bFlag3D = false ) const;
 
     static ScChangeActionContentCellType GetContentCellType( const ScCellValue& rCell );
     static ScChangeActionContentCellType GetContentCellType( const ScRefCellValue& rIter );
@@ -834,9 +834,9 @@ public:
                     const ScChangeActionState eState,
                     const sal_uLong nRejectingNumber,
                     const ScBigRange& aBigRange,
-                    const rtl::OUString& aUser,
+                    const OUString& aUser,
                     const DateTime& aDateTime,
-                    const rtl::OUString &sComment); // only to use in the XML import
+                    const OUString &sComment); // only to use in the XML import
 };
 
 
@@ -896,8 +896,8 @@ class ScChangeTrack : public utl::ConfigurationListener
     ScChangeTrackMsgQueue   aMsgQueue;
     ScChangeTrackMsgStack   aMsgStackTmp;
     ScChangeTrackMsgStack   aMsgStackFinal;
-    std::set<rtl::OUString> maUserCollection;
-    rtl::OUString maUser;
+    std::set<OUString> maUserCollection;
+    OUString maUser;
     Link                aModifiedLink;
     ScRange             aInDeleteRange;
     DateTime            aFixDateTime;
@@ -1017,7 +1017,7 @@ public:
                                     }
 
     SC_DLLPUBLIC ScChangeTrack( ScDocument* );
-    ScChangeTrack(ScDocument* pDocP, const std::set<rtl::OUString>& aTempUserCollection); // only to use in the XML import
+    ScChangeTrack(ScDocument* pDocP, const std::set<OUString>& aTempUserCollection); // only to use in the XML import
     SC_DLLPUBLIC virtual ~ScChangeTrack();
     void Clear();
 
@@ -1070,9 +1070,9 @@ public:
     bool IsInDeleteTop() const { return bInDeleteTop; }
     bool IsInDeleteUndo() const { return bInDeleteUndo; }
     bool IsInPasteCut() const { return bInPasteCut; }
-    SC_DLLPUBLIC void SetUser( const rtl::OUString& rUser );
-    SC_DLLPUBLIC const rtl::OUString& GetUser() const;
-    SC_DLLPUBLIC const std::set<rtl::OUString>& GetUserCollection() const;
+    SC_DLLPUBLIC void SetUser( const OUString& rUser );
+    SC_DLLPUBLIC const OUString& GetUser() const;
+    SC_DLLPUBLIC const std::set<OUString>& GetUserCollection() const;
     ScDocument*         GetDocument() const { return pDoc; }
                         // for import filter
     const DateTime&     GetFixDateTime() const { return aFixDateTime; }
@@ -1222,7 +1222,7 @@ public:
                             sal_uLong nStartAction, sal_uLong nEndAction );
 
     sal_uLong AddLoadedGenerated(
-        const ScCellValue& rNewCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue ); // only to use in the XML import
+        const ScCellValue& rNewCell, const ScBigRange& aBigRange, const OUString& sNewValue ); // only to use in the XML import
     void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import

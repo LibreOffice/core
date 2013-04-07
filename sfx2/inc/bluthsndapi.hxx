@@ -45,7 +45,7 @@ class SFX2_DLLPUBLIC SfxBluetoothModel:public SfxMailModel
 {
 public:
     SendMailResult      SaveAndSend( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                                     const rtl::OUString& rType );
+                                     const OUString& rType );
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 };
 

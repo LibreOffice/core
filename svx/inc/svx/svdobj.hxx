@@ -219,7 +219,7 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
-    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
 //************************************************************
@@ -284,9 +284,9 @@ class SdrObjPlusData
 
     // #i68101#
     // object name, title and description
-    rtl::OUString aObjName;
-    rtl::OUString aObjTitle;
-    rtl::OUString aObjDescription;
+    OUString aObjName;
+    OUString aObjTitle;
+    OUString aObjDescription;
 
 public:
     TYPEINFO();
@@ -461,12 +461,12 @@ protected:
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // Fuer GetDragComment
-    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rStr, sal_uInt16 nVal=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0) const;
 
     void ImpForcePlusData();
 
-    rtl::OUString GetWinkStr(long nWink, bool bNoDegChar = false) const;
-    rtl::OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
+    OUString GetWinkStr(long nWink, bool bNoDegChar = false) const;
+    OUString GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, bool bNoUnitChars = false) const;
 
     // bNotMyself=true bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
     // Wird z.B. benoetigt fuer NbcMove, denn da movt man SnapRect und aOutRect
@@ -547,12 +547,12 @@ public:
     // An object may have a user-set Name (Get/SetName()), e.g SdrGrafObj, SdrObjGroup
     // or SdrOle2Obj.
     // It may also have a Title and a Description for accessibility purposes.
-    void SetName(const rtl::OUString& rStr);
-    rtl::OUString GetName() const;
-    void SetTitle(const rtl::OUString& rStr);
-    rtl::OUString GetTitle() const;
-    void SetDescription(const rtl::OUString& rStr);
-    rtl::OUString GetDescription() const;
+    void SetName(const OUString& rStr);
+    OUString GetName() const;
+    void SetTitle(const OUString& rStr);
+    OUString GetTitle() const;
+    void SetDescription(const OUString& rStr);
+    OUString GetDescription() const;
 
     // Fuer Gruppenobjekte
     bool IsGroupObject() const;
@@ -838,7 +838,7 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
-    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;
 
     // Konnektoren. (siehe auch Dokumentation in SvdoEdge.HXX, SdrEdgeObj

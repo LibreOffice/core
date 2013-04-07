@@ -20,7 +20,6 @@
 #include <rtl/ustring.hxx>
 #include "xmlitmap.hxx"
 
-using rtl::OUString;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TOKEN_INVALID;
 

@@ -83,7 +83,7 @@ namespace dbaccess
         ::std::vector<OPrivateColumns*>         m_aColumnsCollection;   // used for columns and parameters of old queries
         ::std::vector<OPrivateTables*>          m_aTablesCollection;
 
-        ::std::vector< ::rtl::OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
+        ::std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xMetaData;
@@ -97,15 +97,15 @@ namespace dbaccess
         ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
         OPrivateTables*                         m_pTables;      // currently used tables
 
-        ::rtl::OUString                         m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
-        ::rtl::OUString                         m_sDecimalSep;
-        ::rtl::OUString                         m_sCommand;
+        OUString                         m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
+        OUString                         m_sDecimalSep;
+        OUString                         m_sCommand;
         ::com::sun::star::lang::Locale          m_aLocale;
         sal_Int32                               m_nBoolCompareMode; // how to compare bool values
         sal_Int32                               m_nCommandType;
 
         // <properties>
-        ::rtl::OUString                         m_sOrignal;
+        OUString                         m_sOrignal;
         // </properties>
 
 
@@ -116,8 +116,8 @@ namespace dbaccess
         sal_Bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
             ::std::vector < ::com::sun::star::beans::PropertyValue > & rFilters, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const;
 
-        ::rtl::OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator) const;
-        ::rtl::OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
+        OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator) const;
+        OUString getTableAlias(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) const;
         sal_Int32 getPredicateType(::connectivity::OSQLParseNode * _pPredicate) const;
         // clears all Columns,Parameters and tables and insert it to their vectors
         void clearCurrentCollections();
@@ -128,12 +128,12 @@ namespace dbaccess
             @param _rIterator
                 the iterator to use.
         */
-        ::rtl::OUString getStatementPart( TGetParseNode& _aGetFunctor, ::connectivity::OSQLParseTreeIterator& _rIterator );
-        void setQuery_Impl( const ::rtl::OUString& command );
+        OUString getStatementPart( TGetParseNode& _aGetFunctor, ::connectivity::OSQLParseTreeIterator& _rIterator );
+        void setQuery_Impl( const OUString& command );
 
         void setConditionByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column
                                 , sal_Bool andCriteria
-                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,::rtl::OUString>& _aSetFunctor
+                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,OUString>& _aSetFunctor
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
@@ -150,8 +150,8 @@ namespace dbaccess
                     setCurrentColumns( EColumnType _eType, const ::rtl::Reference< ::connectivity::OSQLColumns >& _rCols );
 
         //helper methods for mem_fun_t
-        inline bool implSetFilter(::rtl::OUString _sFilter) { setFilter(_sFilter); return true;}
-        inline bool implSetHavingClause(::rtl::OUString _sFilter) { setHavingClause(_sFilter); return true;}
+        inline bool implSetFilter(OUString _sFilter) { setFilter(_sFilter); return true;}
+        inline bool implSetHavingClause(OUString _sFilter) { setHavingClause(_sFilter); return true;}
 
         /** returns the part of the seelect statement
             @param  _ePart
@@ -164,23 +164,23 @@ namespace dbaccess
             @return
                 The part of the select statement.
         */
-        ::rtl::OUString getSQLPart( SQLPart _ePart, ::connectivity::OSQLParseTreeIterator& _rIterator, sal_Bool _bWithKeyword );
+        OUString getSQLPart( SQLPart _ePart, ::connectivity::OSQLParseTreeIterator& _rIterator, sal_Bool _bWithKeyword );
 
         /** retrieves the keyword for the given SQLPart
         */
-        ::rtl::OUString getKeyword( SQLPart _ePart ) const;
+        OUString getKeyword( SQLPart _ePart ) const;
 
         /** sets a single "additive" clause, means a filter/groupby/having/order clause
         */
-        void setSingleAdditiveClause( SQLPart _ePart, const ::rtl::OUString& _rClause );
+        void setSingleAdditiveClause( SQLPart _ePart, const OUString& _rClause );
 
         /** composes a statement from m_aPureSelectSQL and the 4 usual clauses
         */
-        ::rtl::OUString composeStatementFromParts( const ::std::vector< ::rtl::OUString >& _rParts );
+        OUString composeStatementFromParts( const ::std::vector< OUString >& _rParts );
 
         /** return the name of the column.
         */
-        ::rtl::OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column);
+        OUString impl_getColumnName_throw(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column);
 
     protected:
         virtual ~OSingleSelectQueryComposer();
@@ -206,32 +206,32 @@ namespace dbaccess
         DECLARE_PROPERTYCONTAINER_DEFAULTS();
 
         // ::com::sun::star::sdb::XSingleSelectQueryComposer
-        virtual ::rtl::OUString SAL_CALL getElementaryQuery() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setElementaryQuery( const ::rtl::OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setFilter( const ::rtl::OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getElementaryQuery() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setElementaryQuery( const OUString& _rElementary ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setFilter( const OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setStructuredFilter( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendFilterByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendGroupByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setGroup( const ::rtl::OUString& group ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setHavingClause( const ::rtl::OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setGroup( const OUString& group ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setHavingClause( const OUString& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setStructuredHavingClause( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& filter ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendHavingClauseByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendOrderByColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& column, sal_Bool ascending ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setOrder( const ::rtl::OUString& order ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setOrder( const OUString& order ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XSingleSelectQueryAnalyzer
-        virtual ::rtl::OUString SAL_CALL getQuery(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setQuery( const ::rtl::OUString& command ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setCommand( const ::rtl::OUString& command,sal_Int32 CommandType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getFilter(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getQuery(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setQuery( const OUString& command ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setCommand( const OUString& command,sal_Int32 CommandType ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getFilter(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getStructuredFilter(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getGroup(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getGroup(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getGroupColumns(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getHavingClause(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getHavingClause(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getStructuredHavingClause(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getOrder(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getOrder(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getOrderColumns(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getQueryWithSubstitution(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getQueryWithSubstitution(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XColumnsSupplier
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);

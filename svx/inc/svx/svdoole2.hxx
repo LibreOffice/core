@@ -173,9 +173,9 @@ public:
     void CheckFileLink_Impl();
 
     // allows to transfer the graphics to the object helper
-    void SetGraphicToObj( const Graphic& aGraphic, const ::rtl::OUString& aMediaType );
+    void SetGraphicToObj( const Graphic& aGraphic, const OUString& aMediaType );
     void SetGraphicToObj( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xGrStream,
-                          const ::rtl::OUString& aMediaType );
+                          const OUString& aMediaType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
     sal_Bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );

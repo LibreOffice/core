@@ -305,7 +305,7 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
             break;
         case uno::TypeClass_STRING:
             {
-                String aStrVal( _aToken.Data.get<rtl::OUString>() );
+                String aStrVal( _aToken.Data.get<OUString>() );
                 if ( eOpCode == ocPush )
                     AddString( aStrVal );
                 else if ( eOpCode == ocBad )
@@ -754,7 +754,7 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 
 FormulaToken* FormulaTokenArray::AddString( const sal_Unicode* pStr )
 {
-    return AddString( rtl::OUString( pStr ) );
+    return AddString( OUString( pStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddString( const String& rStr )
@@ -769,7 +769,7 @@ FormulaToken* FormulaTokenArray::AddDouble( double fVal )
 
 FormulaToken* FormulaTokenArray::AddExternal( const sal_Unicode* pStr )
 {
-    return AddExternal( rtl::OUString( pStr ) );
+    return AddExternal( OUString( pStr ) );
 }
 
 FormulaToken* FormulaTokenArray::AddExternal( const String& rStr,

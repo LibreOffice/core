@@ -67,8 +67,6 @@
 #include "animations.hxx"
 #include <xmloff/animationexport.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;
@@ -1053,7 +1051,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
                 if( 0 == ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
                 {
                     // issue 146582
-                    ::rtl::OUStringBuffer buf;
+                    OUStringBuffer buf;
                     ::sax::Converter::convertDuration(buf, fTemp / (24*60*60));
                     mrExport.AddAttribute( XML_NAMESPACE_ANIMATION,
                             XML_ITERATE_INTERVAL, buf.makeStringAndClear());

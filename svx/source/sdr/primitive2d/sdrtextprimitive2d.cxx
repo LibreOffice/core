@@ -49,7 +49,7 @@ namespace
         {
             try
             {
-                const uno::Any aNumber(xSet->getPropertyValue(::rtl::OUString("Number")));
+                const uno::Any aNumber(xSet->getPropertyValue(OUString("Number")));
                 aNumber >>= nRetval;
             }
             catch(const uno::Exception&)

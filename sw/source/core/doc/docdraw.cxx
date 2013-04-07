@@ -252,7 +252,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
         }
 
-        pFmt = MakeDrawFrmFmt( rtl::OUString("DrawObject"),
+        pFmt = MakeDrawFrmFmt( OUString("DrawObject"),
                                 GetDfltFrmFmt() );
         pFmt->SetFmtAttr( aAnch );
         // #i36010# - set layout direction of the position
@@ -317,7 +317,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
-            rtl::OUString sDrwFmtNm("DrawObject");
+            OUString sDrwFmtNm("DrawObject");
             for ( sal_uInt16 i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -913,7 +913,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         else
         {
             OSL_FAIL("unknown field command");
-            pInfo->SetRepresentation( rtl::OUString( '?' ) );
+            pInfo->SetRepresentation( OUString( '?' ) );
         }
     }
 

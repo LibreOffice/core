@@ -72,10 +72,10 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     return sRet;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString >
+::com::sun::star::uno::Sequence< OUString >
 IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const
 {
-    uno::Sequence< ::rtl::OUString > sRet;
+    uno::Sequence< OUString > sRet;
 
     try {
         sRet = xIES->getAlgorithmList( rLcl );

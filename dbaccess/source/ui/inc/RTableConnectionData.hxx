@@ -59,7 +59,7 @@ namespace dbaui
         ORelationTableConnectionData( const ORelationTableConnectionData& rConnData );
         ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
                                       const TTableWindowData::value_type& _pReferencedTable,
-                                      const ::rtl::OUString& rConnName = ::rtl::OUString() );
+                                      const OUString& rConnName = OUString() );
         virtual ~ORelationTableConnectionData();
 
         virtual void CopyFrom(const OTableConnectionData& rSource);

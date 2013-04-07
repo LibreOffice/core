@@ -26,7 +26,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaVariable::SwVbaVariable( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const uno::Reference< beans::XPropertyAccess >& rUserDefined, const rtl::OUString& rName ) throw ( uno::RuntimeException ) :
+    const uno::Reference< beans::XPropertyAccess >& rUserDefined, const OUString& rName ) throw ( uno::RuntimeException ) :
     SwVbaVariable_BASE( rParent, rContext ), mxUserDefined( rUserDefined ), maName( rName )
 {
 }
@@ -35,16 +35,16 @@ SwVbaVariable::~SwVbaVariable()
 {
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaVariable::getName() throw ( css::uno::RuntimeException )
 {
     return maName;
 }
 
 void SAL_CALL
-SwVbaVariable::setName( const rtl::OUString& ) throw ( css::uno::RuntimeException )
+SwVbaVariable::setName( const OUString& ) throw ( css::uno::RuntimeException )
 {
-    throw uno::RuntimeException( rtl::OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
 }
 
 uno::Any SAL_CALL
@@ -75,20 +75,20 @@ SwVbaVariable::getIndex() throw ( css::uno::RuntimeException )
     return 0;
 }
 
-rtl::OUString
+OUString
 SwVbaVariable::getServiceImplName()
 {
-    return rtl::OUString("SwVbaVariable");
+    return OUString("SwVbaVariable");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaVariable::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Variable" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Variable" );
     }
     return aServiceNames;
 }

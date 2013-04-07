@@ -61,7 +61,7 @@ class XMLPropertyBackpatcher
 {
 
     /// name of property that gets set or backpatched
-     ::rtl::OUString sPropertyName;
+     OUString sPropertyName;
 
     /// should a default value be set for unresolved properties
     sal_Bool bDefaultHandling;
@@ -70,7 +70,7 @@ class XMLPropertyBackpatcher
     sal_Bool bPreserveProperty;
 
     /// name of the property to preserve
-    ::rtl::OUString sPreservePropertyName;
+    OUString sPreservePropertyName;
 
     /// default value for unresolved properties (if bDefaultHandling)
     A aDefault;
@@ -85,23 +85,23 @@ class XMLPropertyBackpatcher
        >1200 chars. */
 
     /// backpatch list for unresolved IDs
-    //::std::map<const ::rtl::OUString, BackpatchListType*> aBackpatchListMap;
-    ::std::map<const ::rtl::OUString, void*, ::comphelper::UStringLess> aBackpatchListMap;
+    //::std::map<const OUString, BackpatchListType*> aBackpatchListMap;
+    ::std::map<const OUString, void*, ::comphelper::UStringLess> aBackpatchListMap;
 
     /// mapping of names -> IDs
-    ::std::map<const ::rtl::OUString, A, ::comphelper::UStringLess> aIDMap;
+    ::std::map<const OUString, A, ::comphelper::UStringLess> aIDMap;
 
 public:
 
     XMLPropertyBackpatcher(
-        const ::rtl::OUString& sPropertyName);
+        const OUString& sPropertyName);
 
     ~XMLPropertyBackpatcher();
 
     /// resolve a known ID.
     /// Call this as soon as the value for a particular name is known.
     void ResolveId(
-        const ::rtl::OUString& sName,
+        const OUString& sName,
         A aValue);
 
     /// Set property with the proper value for this name. If the value
@@ -111,13 +111,13 @@ public:
     void SetProperty(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> & xPropSet,
-        const ::rtl::OUString& sName);
+        const OUString& sName);
 
     /// non-const version of SetProperty
     void SetProperty(
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet> & xPropSet,
-        const ::rtl::OUString& sName);
+        const OUString& sName);
 
     /// set default (if bDefaultHandling) for unresolved names
     /// called by destructor

@@ -28,7 +28,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-OEvoabResultSetMetaData::OEvoabResultSetMetaData(const ::rtl::OUString& _aTableName)
+OEvoabResultSetMetaData::OEvoabResultSetMetaData(const OUString& _aTableName)
     : m_aTableName(_aTableName),
       m_aEvoabFields()
 {
@@ -42,18 +42,18 @@ OEvoabResultSetMetaData::~OEvoabResultSetMetaData()
 void OEvoabResultSetMetaData::setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
         OSQLColumns::Vector::const_iterator aIter;
-        static const ::rtl::OUString aName("Name");
+        static const OUString aName("Name");
 
         for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
         {
-                ::rtl::OUString aFieldName;
+                OUString aFieldName;
 
                 (*aIter)->getPropertyValue(aName) >>= aFieldName;
                 guint nFieldNumber = findEvoabField(aFieldName);
                 if (nFieldNumber == (guint)-1)
                 {
                     connectivity::SharedResources aResource;
-                    const ::rtl::OUString sError( aResource.getResourceStringWithSubstitution(
+                    const OUString sError( aResource.getResourceStringWithSubstitution(
                             STR_INVALID_COLUMNNAME,
                             "$columnname$", aFieldName
                          ) );
@@ -85,49 +85,49 @@ sal_Bool SAL_CALL OEvoabResultSetMetaData::isCaseSensitive( sal_Int32 /*nColumnN
     return sal_True;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getSchemaName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getColumnName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldName( nField );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getColumnTypeName( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     return evoab::getFieldTypeName( nField );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getColumnLabel( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nField = m_aEvoabFields[nColumnNum - 1];
     const ColumnProperty *pSpecs = getField(nField);
     GParamSpec *pSpec = pSpecs->pField;
-    rtl::OUString aLabel;
+    OUString aLabel;
 
     if( pSpec )
-            aLabel = rtl::OStringToOUString( g_param_spec_get_nick( (GParamSpec *) pSpec ),
+            aLabel = OStringToOUString( g_param_spec_get_nick( (GParamSpec *) pSpec ),
                                              RTL_TEXTENCODING_UTF8 );
     return aLabel;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getColumnServiceName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getTableName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return m_aTableName;//::rtl::OUString("TABLE");
+    return m_aTableName;//OUString("TABLE");
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSetMetaData::getCatalogName( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 

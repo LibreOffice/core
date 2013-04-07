@@ -190,7 +190,7 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 inline void PushButton::Check( sal_Bool bCheck )
@@ -399,7 +399,7 @@ public:
     */
     std::vector<RadioButton*> GetRadioButtonGroup(bool bIncludeThis = true) const;
 
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 
     /*
      * Group this RadioButton with another
@@ -500,7 +500,7 @@ public:
     bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 inline void CheckBox::Check( sal_Bool bCheck )

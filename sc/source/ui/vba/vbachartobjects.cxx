@@ -58,15 +58,15 @@ ScVbaChartObjects::ScVbaChartObjects( const css::uno::Reference< ov::XHelperInte
 }
 
 void
-ScVbaChartObjects::removeByName(const rtl::OUString& _sChartName)
+ScVbaChartObjects::removeByName(const OUString& _sChartName)
 {
     xTableCharts->removeByName( _sChartName );
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException )
 {
-    uno::Sequence< rtl::OUString > sChartNames;
+    uno::Sequence< OUString > sChartNames;
     try
     {
         // c++ hackery
@@ -74,34 +74,34 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
         ScCellRangesBase* pUno= dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = NULL;
         if ( !pUno )
-            throw uno::RuntimeException( rtl::OUString("Failed to obtain the impl class from the drawpage"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString("Failed to obtain the impl class from the drawpage"), uno::Reference< uno::XInterface >() );
         pDocShell = pUno->GetDocShell();
         if ( !pDocShell )
-            throw uno::RuntimeException( rtl::OUString("Failed to obtain the docshell implclass"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString("Failed to obtain the docshell implclass"), uno::Reference< uno::XInterface >() );
 
         uno::Reference< sheet::XSpreadsheetDocument > xSpreadsheetDocument( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSpreadsheetDocument->getSheets();
-        std::vector< rtl::OUString > aChartNamesVector;
+        std::vector< OUString > aChartNamesVector;
 
-        uno::Sequence< rtl::OUString > sSheetNames = xSpreadsheets->getElementNames();
+        uno::Sequence< OUString > sSheetNames = xSpreadsheets->getElementNames();
         sal_Int32 nItems = sSheetNames.getLength();
         for (sal_Int32 i = 0; i < nItems; i++)
         {
             uno::Reference< table::XTableChartsSupplier > xLocTableChartsSupplier( xSpreadsheets->getByName(sSheetNames[i]), uno::UNO_QUERY_THROW );
-            uno::Sequence< rtl::OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
+            uno::Sequence< OUString > scurchartnames = xLocTableChartsSupplier->getCharts()->getElementNames();
             sal_Int32 nChartNames = scurchartnames.getLength();
             for (sal_Int32 n = 0; n < nChartNames; n++ )
                 aChartNamesVector.push_back(scurchartnames[n]);
         }
         sChartNames.realloc( aChartNamesVector.size() );
-        std::vector< rtl::OUString > ::const_iterator it = aChartNamesVector.begin();
-        std::vector< rtl::OUString > ::const_iterator it_end = aChartNamesVector.end();
+        std::vector< OUString > ::const_iterator it = aChartNamesVector.begin();
+        std::vector< OUString > ::const_iterator it_end = aChartNamesVector.end();
         for ( sal_Int32 index = 0 ; it != it_end; ++it, ++index )
             sChartNames[index] = *it;
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
     }
     return sChartNames;
 }
@@ -119,7 +119,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         aRectangle.Width = Millimeter::getInHundredthsOfOneMillimeter(_nWidth);
         aRectangle.Height = Millimeter::getInHundredthsOfOneMillimeter(_nHeight);
         // Note the space at the end of the stem ("Chart "). In ChartSheets only "Chart" is the stem
-        rtl::OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), rtl::OUString( "Chart " ) , rtl::OUString(), 1);
+        OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), OUString( "Chart " ) , OUString(), 1);
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
         uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
@@ -127,13 +127,13 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     catch (const uno::Exception& ex)
     {
-        OSL_TRACE("AddItem caught exception ->%s", rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("AddItem caught exception ->%s", OUStringToOString( ex.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     return aNULL();
 }
 void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException)
 {
-    uno::Sequence< rtl::OUString > sChartNames = xTableCharts->getElementNames();
+    uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
     sal_Int32 ncount = sChartNames.getLength();
     for (sal_Int32 i = 0; i < ncount ; i++)
         removeByName(sChartNames[i]);
@@ -165,20 +165,20 @@ ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 
-rtl::OUString
+OUString
 ScVbaChartObjects::getServiceImplName()
 {
-    return rtl::OUString("ScVbaChartObjects");
+    return OUString("ScVbaChartObjects");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaChartObjects::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.excel.ChartObjects");
+        sNames[0] = OUString("ooo.vba.excel.ChartObjects");
     }
     return sNames;
 }

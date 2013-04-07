@@ -295,7 +295,7 @@ void ImpVclMEdit::ImpInitScrollBars()
     {
         ImpSetScrollBarRanges();
         Size aCharBox;
-        aCharBox.Width() = mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) );
+        aCharBox.Width() = mpTextWindow->GetTextWidth( OUString(sampleChar) );
         aCharBox.Height() = mpTextWindow->GetTextHeight();
         Size aOutSz = mpTextWindow->GetOutputSizePixel();
         if ( mpHScrollBar )
@@ -653,7 +653,7 @@ Size ImpVclMEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     Size aSz;
     Size aCharSz;
-    aCharSz.Width() = mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) );
+    aCharSz.Width() = mpTextWindow->GetTextWidth( OUString(sampleChar) );
     aCharSz.Height() = mpTextWindow->GetTextHeight();
 
     if ( nLines )
@@ -678,7 +678,7 @@ void ImpVclMEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLi
 {
     static const sal_Unicode sampleChar = { 'x' };
     Size aOutSz = mpTextWindow->GetOutputSizePixel();
-    Size aCharSz( mpTextWindow->GetTextWidth( rtl::OUString(sampleChar) ), mpTextWindow->GetTextHeight() );
+    Size aCharSz( mpTextWindow->GetTextWidth( OUString(sampleChar) ), mpTextWindow->GetTextHeight() );
     rnCols = (sal_uInt16) (aOutSz.Width()/aCharSz.Width());
     rnLines = (sal_uInt16) (aOutSz.Height()/aCharSz.Height());
 }
@@ -779,7 +779,7 @@ void TextWindow::KeyInput( const KeyEvent& rKEvent )
         {
             // Damit die Selektion erhalten bleibt
             mbActivePopup = sal_True;
-            rtl::OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
             if (!aChars.isEmpty())
             {
                 mpExtTextView->InsertText( aChars );
@@ -880,7 +880,7 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                                             break;
             case SV_MENU_EDIT_INSERTSYMBOL:
                 {
-                    rtl::OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+                    OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
                     if (!aChars.isEmpty())
                     {
                         mpExtTextView->InsertText( aChars );
@@ -1370,7 +1370,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
         }
     }
 
-    rtl::OUString aText = GetText();
+    OUString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
     sal_uLong nLines = (sal_uLong) (aSize.Height() / aTextSz.Height());
     if ( !nLines )
@@ -1565,7 +1565,7 @@ void VclMultiLineEdit::EnableCursor( sal_Bool bEnable )
     GetTextView()->EnableCursor( bEnable );
 }
 
-bool VclMultiLineEdit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclMultiLineEdit::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "cursor-visible")
         EnableCursor(toBool(rValue));

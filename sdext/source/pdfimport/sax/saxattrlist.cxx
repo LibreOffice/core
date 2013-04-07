@@ -23,12 +23,12 @@
 namespace pdfi
 {
 
-SaxAttrList::SaxAttrList( const boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& rMap )
+SaxAttrList::SaxAttrList( const boost::unordered_map< OUString, OUString, OUStringHash >& rMap )
 {
     m_aAttributes.reserve(rMap.size());
-    for( boost::unordered_map< rtl::OUString,
-                        rtl::OUString,
-                        rtl::OUStringHash >::const_iterator it = rMap.begin();
+    for( boost::unordered_map< OUString,
+                        OUString,
+                        OUStringHash >::const_iterator it = rMap.begin();
          it != rMap.end(); ++it )
     {
         m_aIndexMap[ it->first ] = m_aAttributes.size();
@@ -48,9 +48,9 @@ SaxAttrList::~SaxAttrList()
 }
 
 namespace {
-    static const rtl::OUString& getCDATAString()
+    static const OUString& getCDATAString()
     {
-        static rtl::OUString aStr( "CDATA" );
+        static OUString aStr( "CDATA" );
         return aStr;
     }
 }
@@ -59,30 +59,30 @@ sal_Int16 SAL_CALL SaxAttrList::getLength() throw()
 {
     return sal_Int16(m_aAttributes.size());
 }
-rtl::OUString SAL_CALL SaxAttrList::getNameByIndex( sal_Int16 i_nIndex ) throw()
+OUString SAL_CALL SaxAttrList::getNameByIndex( sal_Int16 i_nIndex ) throw()
 {
-    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aName : rtl::OUString();
+    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aName : OUString();
 }
 
-rtl::OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex) throw()
+OUString SAL_CALL SaxAttrList::getTypeByIndex( sal_Int16 i_nIndex) throw()
 {
-    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? getCDATAString() : rtl::OUString();
+    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? getCDATAString() : OUString();
 }
 
-rtl::OUString SAL_CALL SaxAttrList::getTypeByName( const ::rtl::OUString& i_rName ) throw()
+OUString SAL_CALL SaxAttrList::getTypeByName( const OUString& i_rName ) throw()
 {
-    return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? getCDATAString() : rtl::OUString();
+    return (m_aIndexMap.find( i_rName ) != m_aIndexMap.end()) ? getCDATAString() : OUString();
 }
 
-rtl::OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw()
+OUString SAL_CALL SaxAttrList::getValueByIndex( sal_Int16 i_nIndex ) throw()
 {
-    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aValue : rtl::OUString();
+    return (i_nIndex < sal_Int16(m_aAttributes.size())) ? m_aAttributes[i_nIndex].m_aValue : OUString();
 }
 
-rtl::OUString SAL_CALL SaxAttrList::getValueByName(const ::rtl::OUString& i_rName) throw()
+OUString SAL_CALL SaxAttrList::getValueByName(const OUString& i_rName) throw()
 {
-    boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
-    return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : rtl::OUString();
+    boost::unordered_map< OUString, size_t, OUStringHash >::const_iterator it = m_aIndexMap.find( i_rName );
+    return (it != m_aIndexMap.end()) ? m_aAttributes[it->second].m_aValue : OUString();
 }
 
 com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL SaxAttrList::createClone() throw()

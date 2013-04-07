@@ -38,8 +38,8 @@ namespace migration
 {
 //.........................................................................
 
-    ::rtl::OUString SAL_CALL WordbookMigration_getImplementationName();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL WordbookMigration_getSupportedServiceNames();
+    OUString SAL_CALL WordbookMigration_getImplementationName();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL WordbookMigration_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL WordbookMigration_create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
         SAL_THROW( (::com::sun::star::uno::Exception) );
@@ -58,9 +58,9 @@ namespace migration
     {
     private:
         ::osl::Mutex            m_aMutex;
-        ::rtl::OUString         m_sSourceDir;
+        OUString         m_sSourceDir;
 
-        TStringVectorPtr        getFiles( const ::rtl::OUString& rBaseURL ) const;
+        TStringVectorPtr        getFiles( const OUString& rBaseURL ) const;
         ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
         void                    copyFiles();
 
@@ -69,11 +69,11 @@ namespace migration
         virtual ~WordbookMigration();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization

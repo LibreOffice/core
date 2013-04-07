@@ -60,14 +60,14 @@ public:
     CheckBox	    maCBNeedsXSLT2;
 
 private:
-    void SetURL( SvtURLBox& rURLBox, const rtl::OUString& rURL );
-    rtl::OUString GetURL( SvtURLBox& rURLBox );
+    void SetURL( SvtURLBox& rURLBox, const OUString& rURL );
+    OUString GetURL( SvtURLBox& rURLBox );
 
-    ::rtl::OUString sHTTPSchema;
-    ::rtl::OUString sSHTTPSchema;
-    ::rtl::OUString sFILESchema;
-    ::rtl::OUString sFTPSchema;
-    ::rtl::OUString sInstPath;
+    OUString sHTTPSchema;
+    OUString sSHTTPSchema;
+    OUString sFILESchema;
+    OUString sFTPSchema;
+    OUString sInstPath;
 };
 
 #endif

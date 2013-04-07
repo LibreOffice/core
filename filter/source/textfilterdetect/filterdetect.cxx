@@ -62,7 +62,7 @@ PlainTextFilterDetect::PlainTextFilterDetect(const uno::Reference<uno::XComponen
 
 PlainTextFilterDetect::~PlainTextFilterDetect() {}
 
-rtl::OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException)
+OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyValue>& lDescriptor) throw (uno::RuntimeException)
 {
     OUString aType;
     OUString aDocService;
@@ -126,21 +126,21 @@ void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /
 {
 }
 
-rtl::OUString PlainTextFilterDetect_getImplementationName()
+OUString PlainTextFilterDetect_getImplementationName()
 {
-    return rtl::OUString("com.sun.star.comp.filters.PlainTextFilterDetect");
+    return OUString("com.sun.star.comp.filters.PlainTextFilterDetect");
 }
 
-sal_Bool PlainTextFilterDetect_supportsService(const rtl::OUString& ServiceName)
+sal_Bool PlainTextFilterDetect_supportsService(const OUString& ServiceName)
 {
     return ServiceName == "com.sun.star.document.ExtendedTypeDetection" ||
         ServiceName == "com.sun.star.comp.filters.PlainTextFilterDetect";
 }
 
-uno::Sequence<rtl::OUString> PlainTextFilterDetect_getSupportedServiceNames()
+uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.document.ExtendedTypeDetection";
     pArray[1] = "com.sun.star.comp.filters.PlainTextFilterDetect";
     return aRet;
@@ -153,19 +153,19 @@ uno::Reference<uno::XInterface> PlainTextFilterDetect_createInstance(
 }
 
 // XServiceInfo
-rtl::OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
+OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
     throw (uno::RuntimeException)
 {
     return PlainTextFilterDetect_getImplementationName();
 }
 
-sal_Bool SAL_CALL PlainTextFilterDetect::supportsService(const rtl::OUString& rServiceName)
+sal_Bool SAL_CALL PlainTextFilterDetect::supportsService(const OUString& rServiceName)
     throw (uno::RuntimeException)
 {
     return PlainTextFilterDetect_supportsService(rServiceName);
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     return PlainTextFilterDetect_getSupportedServiceNames();

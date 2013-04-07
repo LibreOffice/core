@@ -25,8 +25,6 @@
 #include <algorithm>
 #include <functional>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ================================================================================
 
@@ -39,7 +37,7 @@ namespace
 class lcl_Escape : public ::std::unary_function< sal_Unicode, void >
 {
 public:
-    lcl_Escape( ::rtl::OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
+    lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
         static const sal_Unicode m_aQuote( '\'' );
@@ -52,7 +50,7 @@ public:
     }
 
 private:
-    ::rtl::OUStringBuffer & m_aResultBuffer;
+    OUStringBuffer & m_aResultBuffer;
 };
 
 // ----------------------------------------
@@ -64,7 +62,7 @@ private:
 class lcl_UnEscape : public ::std::unary_function< sal_Unicode, void >
 {
 public:
-    lcl_UnEscape( ::rtl::OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
+    lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
     void operator() ( sal_Unicode aChar )
     {
         static const sal_Unicode m_aBackslash( '\\' );
@@ -74,12 +72,12 @@ public:
     }
 
 private:
-    ::rtl::OUStringBuffer & m_aResultBuffer;
+    OUStringBuffer & m_aResultBuffer;
 };
 
 // ----------------------------------------
 
-void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, rtl::OUStringBuffer * output )
+void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, OUStringBuffer * output )
 {
     OSL_ASSERT(output != 0);
 
@@ -113,7 +111,7 @@ void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, rtl::
 }
 
 void lcl_getSingleCellAddressFromXMLString(
-    const ::rtl::OUString& rXMLString,
+    const OUString& rXMLString,
     sal_Int32 nStartPos, sal_Int32 nEndPos,
     ::chart::XMLRangeHelper::Cell & rOutCell )
 {
@@ -121,7 +119,7 @@ void lcl_getSingleCellAddressFromXMLString(
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aLetterA( 'A' );
 
-    ::rtl::OUString aCellStr = rXMLString.copy( nStartPos, nEndPos - nStartPos + 1 ).toAsciiUpperCase();
+    OUString aCellStr = rXMLString.copy( nStartPos, nEndPos - nStartPos + 1 ).toAsciiUpperCase();
     const sal_Unicode* pStrArray = aCellStr.getStr();
     sal_Int32 nLength = aCellStr.getLength();
     sal_Int32 i = nLength - 1, nColumn = 0;
@@ -157,10 +155,10 @@ void lcl_getSingleCellAddressFromXMLString(
 }
 
 bool lcl_getCellAddressFromXMLString(
-    const ::rtl::OUString& rXMLString,
+    const OUString& rXMLString,
     sal_Int32 nStartPos, sal_Int32 nEndPos,
     ::chart::XMLRangeHelper::Cell & rOutCell,
-    ::rtl::OUString& rOutTableName )
+    OUString& rOutTableName )
 {
     static const sal_Unicode aDot( '.' );
     static const sal_Unicode aQuote( '\'' );
@@ -191,7 +189,7 @@ bool lcl_getCellAddressFromXMLString(
     {
         // there is a table name before the address
 
-        ::rtl::OUStringBuffer aTableNameBuffer;
+        OUStringBuffer aTableNameBuffer;
         const sal_Unicode * pTableName = rXMLString.getStr();
 
         // remove escapes from table name
@@ -204,7 +202,7 @@ bool lcl_getCellAddressFromXMLString(
         if( pBuf[ 0 ] == aQuote &&
             pBuf[ aTableNameBuffer.getLength() - 1 ] == aQuote )
         {
-            ::rtl::OUString aName = aTableNameBuffer.makeStringAndClear();
+            OUString aName = aTableNameBuffer.makeStringAndClear();
             rOutTableName = aName.copy( 1, aName.getLength() - 2 );
         }
         else
@@ -232,7 +230,7 @@ bool lcl_getCellAddressFromXMLString(
 }
 
 bool lcl_getCellRangeAddressFromXMLString(
-    const ::rtl::OUString& rXMLString,
+    const OUString& rXMLString,
     sal_Int32 nStartPos, sal_Int32 nEndPos,
     ::chart::XMLRangeHelper::CellRange & rOutRange )
 {
@@ -275,7 +273,7 @@ bool lcl_getCellRangeAddressFromXMLString(
         if( rOutRange.aTableName.isEmpty() )
             bResult = false;
 
-        ::rtl::OUString sTableSecondName;
+        OUString sTableSecondName;
         if( bResult )
         {
             bResult = lcl_getCellAddressFromXMLString( rXMLString, nDelimiterPos + 1, nEndPos,
@@ -359,7 +357,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
     static const sal_Unicode aSpace( ' ' );
     static const sal_Unicode aQuote( '\'' );
 
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
 
     if( !(rRange.aTableName).isEmpty())
     {

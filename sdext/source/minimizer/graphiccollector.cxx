@@ -62,8 +62,8 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
 
 void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
-    const rtl::OUString aGraphicURL( rUser.maGraphicURL );
-    const rtl::OUString sPackageURL( "vnd.sun.star.GraphicObject:" );
+    const OUString aGraphicURL( rUser.maGraphicURL );
+    const OUString sPackageURL( "vnd.sun.star.GraphicObject:" );
 
     if ( rGraphicSettings.mbEmbedLinkedGraphics || (aGraphicURL.isEmpty() || aGraphicURL.match( sPackageURL, 0 ) ) )
     {

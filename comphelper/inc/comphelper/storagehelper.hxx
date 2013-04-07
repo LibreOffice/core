@@ -27,13 +27,13 @@
 #include "comphelper/comphelperdllapi.h"
 
 
-#define PACKAGE_STORAGE_FORMAT_STRING   ::rtl::OUString( "PackageFormat" )
-#define ZIP_STORAGE_FORMAT_STRING       ::rtl::OUString( "ZipFormat" )
-#define OFOPXML_STORAGE_FORMAT_STRING   ::rtl::OUString( "OFOPXMLFormat" )
+#define PACKAGE_STORAGE_FORMAT_STRING   OUString( "PackageFormat" )
+#define ZIP_STORAGE_FORMAT_STRING       OUString( "ZipFormat" )
+#define OFOPXML_STORAGE_FORMAT_STRING   OUString( "OFOPXMLFormat" )
 
-#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 ::rtl::OUString( "PackageSHA256UTF8EncryptionKey" )
-#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   ::rtl::OUString( "PackageSHA1UTF8EncryptionKey" )
-#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 ::rtl::OUString( "PackageSHA1MS1252EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA256UTF8 OUString( "PackageSHA256UTF8EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA1UTF8   OUString( "PackageSHA1UTF8EncryptionKey" )
+#define PACKAGE_ENCRYPTIONDATA_SHA1MS1252 OUString( "PackageSHA1MS1252EncryptionKey" )
 
 namespace com { namespace sun { namespace star {
     namespace beans { struct NamedValue; }
@@ -89,7 +89,7 @@ public:
     /// this one will only return Storage
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageFromURL(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
@@ -98,7 +98,7 @@ public:
     /// this one will return either Storage or FileSystemStorage
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageFromURL2(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >() )
@@ -127,7 +127,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         GetInputStreamFromURL(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& context )
         throw ( ::com::sun::star::uno::Exception );
 
@@ -143,8 +143,8 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageOfFormatFromURL(
-            const ::rtl::OUString& aFormat,
-            const ::rtl::OUString& aURL,
+            const OUString& aFormat,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
@@ -153,7 +153,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageOfFormatFromInputStream(
-            const ::rtl::OUString& aFormat,
+            const OUString& aFormat,
             const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                             = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >(),
@@ -162,7 +162,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageOfFormatFromStream(
-            const ::rtl::OUString& aFormat,
+            const OUString& aFormat,
             const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream,
             sal_Int32 nStorageMode = ::com::sun::star::embed::ElementModes::READWRITE,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
@@ -172,24 +172,24 @@ public:
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
         CreatePackageEncryptionData(
-            const ::rtl::OUString& aPassword );
+            const OUString& aPassword );
 
-    static sal_Bool IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed );
+    static sal_Bool IsValidZipEntryFileName( const OUString& aName, sal_Bool bSlashAllowed );
     static sal_Bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
 
-    static sal_Bool PathHasSegment( const ::rtl::OUString& aPath, const ::rtl::OUString& aSegment );
+    static sal_Bool PathHasSegment( const OUString& aPath, const OUString& aSegment );
 
     // Methods to allow easy use of hierachical names inside storages
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorageAtPath(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
-        const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
+        const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPath(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
-        const ::rtl::OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
+        const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy &rNastiness );
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStreamAtPackageURL(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,
-        const ::rtl::OUString& rURL, sal_uInt32 const nOpenMode,
+        const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy & rNastiness );
 };
 

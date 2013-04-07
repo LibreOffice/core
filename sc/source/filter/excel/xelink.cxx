@@ -34,7 +34,6 @@
 using ::std::auto_ptr;
 using ::std::find_if;
 using ::std::vector;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 
 // ============================================================================
@@ -772,10 +771,10 @@ bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
     return GetFlag( nScTab, EXC_TABBUF_MIRRORED );
 }
 
-rtl::OUString XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
+OUString XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
 {
     OSL_ENSURE( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
-    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : rtl::OUString();
+    return (nScTab < mnScCnt) ? maTabInfoVec[ nScTab ].maScName : OUString();
 }
 
 sal_uInt16 XclExpTabInfo::GetXclTab( SCTAB nScTab ) const
@@ -834,7 +833,7 @@ void XclExpTabInfo::CalcXclIndexes()
     // result: first occur all exported sheets, followed by all external sheets
 }
 
-typedef ::std::pair< rtl::OUString, SCTAB > XclExpTabName;
+typedef ::std::pair< OUString, SCTAB > XclExpTabName;
 typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 
 inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
@@ -1325,14 +1324,14 @@ void XclExpExternSheetBase::WriteExtNameBuffer( XclExpStream& rStrm )
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, sal_Unicode cCode ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
-    Init( rtl::OUString(cCode) );
+    Init( OUString(cCode) );
 }
 
 XclExpExternSheet::XclExpExternSheet( const XclExpRoot& rRoot, const String& rTabName ) :
     XclExpExternSheetBase( rRoot, EXC_ID_EXTERNSHEET )
 {
     // reference to own sheet: \03<sheetname>
-    Init(rtl::OUString(EXC_EXTSH_TABNAME) + rTabName);
+    Init(OUString(EXC_EXTSH_TABNAME) + rTabName);
 }
 
 void XclExpExternSheet::Save( XclExpStream& rStrm )

@@ -47,7 +47,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-using rtl::OUString;
 
 namespace SwMailMergeHelper
 {
@@ -55,7 +54,7 @@ namespace SwMailMergeHelper
 String  CallSaveAsDialog(String& rFilter)
 {
     ErrCode nRet;
-    String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
+    String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                 0,
                 sFactory );
@@ -76,7 +75,7 @@ String  CallSaveAsDialog(String& rFilter)
                             for at least one '.' after the '@'
                             and for at least to characters before and after the dot
 */
-bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
+bool CheckMailAddress( const OUString& rMailAddress )
 {
     String sAddress(rMailAddress);
     if (!(comphelper::string::getTokenCount(sAddress, '@') == 2))
@@ -131,7 +130,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetInServerName(),
                         rConfigItem.GetInServerPort(),
-                        ::rtl::OUString("Insecure"));
+                        OUString("Insecure"));
             xInMailService->connect(xConnectionContext, xAuthenticator);
             rxInMailService = xInMailService;
         }
@@ -186,7 +185,7 @@ SwBoldFixedInfo::~SwBoldFixedInfo()
 
 struct  SwAddressPreview_Impl
 {
-    ::std::vector< ::rtl::OUString >    aAdresses;
+    ::std::vector< OUString >    aAdresses;
     sal_uInt16                          nRows;
     sal_uInt16                          nColumns;
     sal_uInt16                          nSelectedAddress;
@@ -226,13 +225,13 @@ IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl)
     return 0;
 }
 
-void SwAddressPreview::AddAddress(const ::rtl::OUString& rAddress)
+void SwAddressPreview::AddAddress(const OUString& rAddress)
 {
     pImpl->aAdresses.push_back(rAddress);
     UpdateScrollBar();
 }
 
-void SwAddressPreview::SetAddress(const ::rtl::OUString& rAddress)
+void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
     pImpl->aAdresses.clear();
     pImpl->aAdresses.push_back(rAddress);
@@ -264,7 +263,7 @@ void SwAddressPreview::Clear()
     UpdateScrollBar();
 }
 
-void SwAddressPreview::ReplaceSelectedAddress(const ::rtl::OUString& rNew)
+void SwAddressPreview::ReplaceSelectedAddress(const OUString& rNew)
 {
     pImpl->aAdresses[pImpl->nSelectedAddress] = rNew;
     Invalidate();
@@ -341,7 +340,7 @@ void SwAddressPreview::Paint(const Rectangle&)
             bool bIsSelected = nAddress == pImpl->nSelectedAddress;
             if((pImpl->nColumns * pImpl->nRows) == 1)
                 bIsSelected = false;
-            ::rtl::OUString adr(pImpl->aAdresses[nAddress]);
+            OUString adr(pImpl->aAdresses[nAddress]);
             DrawText_Impl(adr,aPos,aPartSize,bIsSelected);
             ++nAddress;
         }
@@ -424,7 +423,7 @@ void SwAddressPreview::StateChanged( StateChangedType nStateChange )
 }
 
 void SwAddressPreview::DrawText_Impl(
-        const ::rtl::OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
+        const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
     SetClipRegion( Region( Rectangle(rTopLeft, rSize)) );
     if(bIsSelected)
@@ -447,20 +446,20 @@ void SwAddressPreview::DrawText_Impl(
 }
 
 String SwAddressPreview::FillData(
-        const ::rtl::OUString& rAddress,
+        const OUString& rAddress,
         SwMailMergeConfigItem& rConfigItem,
-        const Sequence< ::rtl::OUString>* pAssignments)
+        const Sequence< OUString>* pAssignments)
 {
     //find the column names in the address string (with name assignment!) and
     //exchange the placeholder (like <Firstname>) with the database content
     //unassigned columns are expanded to <not assigned>
     Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
     Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
-    Sequence< ::rtl::OUString> aAssignment = pAssignments ?
+    Sequence< OUString> aAssignment = pAssignments ?
                     *pAssignments :
                     rConfigItem.GetColumnAssignment(
                                                 rConfigItem.GetCurrentDBData() );
-    const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+    const OUString* pAssignment = aAssignment.getConstArray();
     const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
     String sAddress(rAddress);
     String sNotAssigned(SW_RES(STR_NOTASSIGNED));
@@ -468,13 +467,13 @@ String SwAddressPreview::FillData(
     sNotAssigned += '>';
 
     sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
-    const ::rtl::OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+    const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
     bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
     String sCountryColumn;
     if( bSpecialReplacementForCountry )
     {
         sCountryColumn = rDefHeaders.GetString(MM_PART_COUNTRY);
-        Sequence< ::rtl::OUString> aSpecialAssignment =
+        Sequence< OUString> aSpecialAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
         if(aSpecialAssignment.getLength() > MM_PART_COUNTRY && aSpecialAssignment[MM_PART_COUNTRY].getLength())
             sCountryColumn = aSpecialAssignment[MM_PART_COUNTRY];
@@ -514,7 +513,7 @@ String SwAddressPreview::FillData(
                 {
                     try
                     {
-                        ::rtl::OUString sReplace = xColumn->getString();
+                        OUString sReplace = xColumn->getString();
 
                         if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
                         {
@@ -619,8 +618,8 @@ OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
 }
 
 SwConnectionContext::SwConnectionContext(
-        const ::rtl::OUString& rMailServer, sal_Int16 nPort,
-        const ::rtl::OUString& rConnectionType) :
+        const OUString& rMailServer, sal_Int16 nPort,
+        const OUString& rConnectionType) :
     m_sMailServer(rMailServer),
     m_nPort(nPort),
     m_sConnectionType(rConnectionType)
@@ -631,7 +630,7 @@ SwConnectionContext::~SwConnectionContext()
 {
 }
 
-uno::Any SwConnectionContext::getValueByName( const ::rtl::OUString& rName )
+uno::Any SwConnectionContext::getValueByName( const OUString& rName )
                                                 throw (uno::RuntimeException)
 {
     uno::Any aRet;
@@ -663,7 +662,7 @@ void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)
 {
 }
 
-SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType) :
+SwMailTransferable::SwMailTransferable(const OUString& rBody, const OUString& rMimeType) :
     cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_sBody( rBody ),
@@ -671,8 +670,8 @@ SwMailTransferable::SwMailTransferable(const rtl::OUString& rBody, const rtl::OU
 {
 }
 
-SwMailTransferable::SwMailTransferable(const rtl::OUString& rURL,
-                const rtl::OUString& rName, const rtl::OUString& rMimeType) :
+SwMailTransferable::SwMailTransferable(const OUString& rURL,
+                const OUString& rName, const OUString& rMimeType) :
     cppu::WeakComponentImplHelper2< datatransfer::XTransferable, beans::XPropertySet >(m_aMutex),
     m_aMimeType( rMimeType ),
     m_aURL(rURL),
@@ -691,7 +690,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
 {
     uno::Any aRet;
     if( m_bIsBody )
-        aRet <<= ::rtl::OUString(m_sBody);
+        aRet <<= OUString(m_sBody);
     else
     {
         Sequence<sal_Int8> aData;
@@ -717,7 +716,7 @@ uno::Sequence< datatransfer::DataFlavor > SwMailTransferable::getTransferDataFla
     aRet[0].MimeType = m_aMimeType;
     if( m_bIsBody )
     {
-        aRet[0].DataType = getCppuType((::rtl::OUString*)0);
+        aRet[0].DataType = getCppuType((OUString*)0);
     }
     else
     {
@@ -731,7 +730,7 @@ sal_Bool SwMailTransferable::isDataFlavorSupported(
             const datatransfer::DataFlavor& aFlavor )
                             throw (uno::RuntimeException)
 {
-    return (aFlavor.MimeType == ::rtl::OUString(m_aMimeType));
+    return (aFlavor.MimeType == OUString(m_aMimeType));
 }
 
 uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo(  ) throw(uno::RuntimeException)
@@ -739,13 +738,13 @@ uno::Reference< beans::XPropertySetInfo > SwMailTransferable::getPropertySetInfo
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SwMailTransferable::setPropertyValue( const ::rtl::OUString& , const uno::Any& )
+void SwMailTransferable::setPropertyValue( const OUString& , const uno::Any& )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
-uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyName )
+uno::Any SwMailTransferable::getPropertyValue( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
@@ -755,27 +754,27 @@ uno::Any SwMailTransferable::getPropertyValue( const ::rtl::OUString& rPropertyN
 }
 
 void SwMailTransferable::addPropertyChangeListener(
-    const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >&  )
+    const OUString&, const uno::Reference< beans::XPropertyChangeListener >&  )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
 void SwMailTransferable::removePropertyChangeListener(
-    const ::rtl::OUString&,
+    const OUString&,
     const uno::Reference< beans::XPropertyChangeListener >& )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
 void SwMailTransferable::addVetoableChangeListener(
-    const ::rtl::OUString&,
+    const OUString&,
     const uno::Reference< beans::XVetoableChangeListener >& )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
 void SwMailTransferable::removeVetoableChangeListener(
-    const ::rtl::OUString& ,
+    const OUString& ,
     const uno::Reference< beans::XVetoableChangeListener >&  )
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -790,32 +789,32 @@ SwMailMessage::~SwMailMessage()
 {
 }
 
-::rtl::OUString SwMailMessage::getSenderName() throw (uno::RuntimeException)
+OUString SwMailMessage::getSenderName() throw (uno::RuntimeException)
 {
     return m_sSenderName;
 }
 
-::rtl::OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException)
+OUString SwMailMessage::getSenderAddress() throw (uno::RuntimeException)
 {
     return m_sSenderAddress;
 }
 
-::rtl::OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException)
+OUString SwMailMessage::getReplyToAddress() throw (uno::RuntimeException)
 {
     return m_sReplyToAddress;
 }
 
-void SwMailMessage::setReplyToAddress( const ::rtl::OUString& _replytoaddress ) throw (uno::RuntimeException)
+void SwMailMessage::setReplyToAddress( const OUString& _replytoaddress ) throw (uno::RuntimeException)
 {
     m_sReplyToAddress = _replytoaddress;
 }
 
-::rtl::OUString SwMailMessage::getSubject() throw (uno::RuntimeException)
+OUString SwMailMessage::getSubject() throw (uno::RuntimeException)
 {
     return m_sSubject;
 }
 
-void SwMailMessage::setSubject( const ::rtl::OUString& _subject ) throw (uno::RuntimeException)
+void SwMailMessage::setSubject( const OUString& _subject ) throw (uno::RuntimeException)
 {
     m_sSubject = _subject;
 }
@@ -832,14 +831,14 @@ void SwMailMessage::setBody(
     m_xBody = rBody;
 }
 
-void  SwMailMessage::addRecipient( const ::rtl::OUString& rRecipientAddress )
+void  SwMailMessage::addRecipient( const OUString& rRecipientAddress )
         throw (uno::RuntimeException)
 {
     m_aRecipients.realloc(m_aRecipients.getLength() + 1);
     m_aRecipients[m_aRecipients.getLength() - 1] = rRecipientAddress;
 }
 
-void  SwMailMessage::addCcRecipient( const ::rtl::OUString& rRecipientAddress )
+void  SwMailMessage::addCcRecipient( const OUString& rRecipientAddress )
         throw (uno::RuntimeException)
 {
     m_aCcRecipients.realloc(m_aCcRecipients.getLength() + 1);
@@ -847,23 +846,23 @@ void  SwMailMessage::addCcRecipient( const ::rtl::OUString& rRecipientAddress )
 
 }
 
-void  SwMailMessage::addBccRecipient( const ::rtl::OUString& rRecipientAddress ) throw (uno::RuntimeException)
+void  SwMailMessage::addBccRecipient( const OUString& rRecipientAddress ) throw (uno::RuntimeException)
 {
     m_aBccRecipients.realloc(m_aBccRecipients.getLength() + 1);
     m_aBccRecipients[m_aBccRecipients.getLength() - 1] = rRecipientAddress;
 }
 
-uno::Sequence< ::rtl::OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aRecipients;
 }
 
-uno::Sequence< ::rtl::OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getCcRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aCcRecipients;
 }
 
-uno::Sequence< ::rtl::OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SwMailMessage::getBccRecipients(  ) throw (uno::RuntimeException)
 {
     return m_aBccRecipients;
 }

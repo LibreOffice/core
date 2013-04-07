@@ -26,7 +26,7 @@
 
 #include "svtools/filechangedchecker.hxx"
 
-FileChangedChecker::FileChangedChecker(const rtl::OUString& rFilename, const ::boost::function0<void>& rCallback) :
+FileChangedChecker::FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback) :
     mTimer(),
     mFileName(rFilename),
     mLastModTime(),

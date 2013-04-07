@@ -34,9 +34,9 @@ namespace dbaui
 {
 //.........................................................................
 
-    DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
+    DECLARE_STL_STDKEY_SET( OUString, StringBag );
     DECLARE_STL_VECTOR( sal_Int8, ByteVector );
-    DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
+    DECLARE_STL_VECTOR( OUString, StringArray );
 
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 

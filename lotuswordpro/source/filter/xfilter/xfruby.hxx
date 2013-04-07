@@ -71,10 +71,10 @@ public:
 class XFRubyEnd : public XFContent
 {
 public:
-    void SetText(rtl::OUString sText);
+    void SetText(OUString sText);
     virtual void    ToXml(IXFStream *pStrm);
 private:
-    rtl::OUString m_strText;
+    OUString m_strText;
 };
 
 void XFRubyStart::ToXml(IXFStream *pStrm)
@@ -88,7 +88,7 @@ void XFRubyStart::ToXml(IXFStream *pStrm)
     pStrm->StartElement( A2OUSTR("text:ruby-base") );
 }
 
-void XFRubyEnd::SetText(rtl::OUString sText)
+void XFRubyEnd::SetText(OUString sText)
 {
     m_strText = sText;
 }

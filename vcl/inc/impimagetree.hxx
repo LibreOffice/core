@@ -45,14 +45,14 @@ public:
     ~ImplImageTree();
 
     // check whether the icon style is installed
-    bool checkStyle(rtl::OUString const & style);
+    bool checkStyle(OUString const & style);
 
     bool loadImage(
-        rtl::OUString const & name, rtl::OUString const & style,
+        OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
 
     bool loadDefaultImage(
-        rtl::OUString const & style,
+        OUString const & style,
         BitmapEx& bitmap);
 
     void shutDown();
@@ -62,34 +62,34 @@ public:
 
 private:
     bool doLoadImage(
-        rtl::OUString const & name, rtl::OUString const & style,
+        OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized);
 
     typedef std::list<
         std::pair<
-            rtl::OUString,
+            OUString,
             com::sun::star::uno::Reference<
                 com::sun::star::container::XNameAccess > > > Paths;
 
     typedef boost::unordered_map<
-        rtl::OUString, bool, rtl::OUStringHash > CheckStyleCache;
+        OUString, bool, OUStringHash > CheckStyleCache;
     typedef boost::unordered_map<
-        rtl::OUString, std::pair< bool, BitmapEx >, rtl::OUStringHash > IconCache;
+        OUString, std::pair< bool, BitmapEx >, OUStringHash > IconCache;
 
-    rtl::OUString m_style;
+    OUString m_style;
     Paths m_paths;
     CheckStyleCache m_checkStyleCache;
     IconCache m_iconCache;
     bool m_cacheIcons;
 
-    void setStyle(rtl::OUString const & style );
+    void setStyle(OUString const & style );
 
     void resetPaths();
 
-    bool checkStyleCacheLookup( rtl::OUString const & style, bool &exists );
-    bool iconCacheLookup( rtl::OUString const & name, bool localized, BitmapEx & bitmap );
+    bool checkStyleCacheLookup( OUString const & style, bool &exists );
+    bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
 
-    bool find(std::vector< rtl::OUString > const & paths, BitmapEx & bitmap );
+    bool find(std::vector< OUString > const & paths, BitmapEx & bitmap );
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;

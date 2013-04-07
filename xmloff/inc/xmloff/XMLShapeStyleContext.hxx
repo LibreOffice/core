@@ -33,21 +33,21 @@ class SvXMLImport;
 class XMLOFF_DLLPUBLIC XMLShapeStyleContext: public XMLPropStyleContext
 {
 protected:
-    ::rtl::OUString     m_sControlDataStyleName;
-    ::rtl::OUString     m_sListStyleName;
+    OUString     m_sControlDataStyleName;
+    OUString     m_sListStyleName;
     sal_Bool            m_bIsNumRuleAlreadyConverted;
 
 protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 public:
     TYPEINFO();
 
     XMLShapeStyleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_GRAPHICS_ID);
@@ -55,7 +55,7 @@ public:
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void Finish( sal_Bool bOverwrite );

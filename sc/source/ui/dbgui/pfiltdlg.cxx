@@ -153,7 +153,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if ( pViewData && pDoc )
     {
-        rtl::OUString          theAreaStr;
+        OUString          theAreaStr;
         ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
                                                 theQueryData.nRow1,
                                                 nSrcTab ),
@@ -161,7 +161,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                                                 theQueryData.nRow2,
                                                 nSrcTab ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        ::rtl::OUString theDbName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUString theDbName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
 
         /*
          * Ueberpruefen, ob es sich bei dem uebergebenen
@@ -181,7 +181,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
                 theDbName = pDBData->GetName();
         }
 
-        ::rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.appendAscii(" (");
         aBuf.append(theDbName);
         aBuf.append(sal_Unicode(')'));
@@ -202,7 +202,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         {
             const ScQueryEntry& rEntry = theQueryData.GetEntry(i);
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            rtl::OUString aValStr = rItem.maString;
+            OUString aValStr = rItem.maString;
             if (rEntry.IsQueryByEmpty())
                 aValStr = aStrEmpty;
             else if (rEntry.IsQueryByNonEmpty())
@@ -281,7 +281,7 @@ void ScPivotFilterDlg::FillFieldLists()
 
     if ( pDoc )
     {
-        rtl::OUString  aFieldName;
+        OUString  aFieldName;
         SCTAB   nTab        = nSrcTab;
         SCCOL   nFirstCol   = theQueryData.nCol1;
         SCROW   nFirstRow   = theQueryData.nRow1;
@@ -294,7 +294,7 @@ void ScPivotFilterDlg::FillFieldLists()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if ( aFieldName.isEmpty() )
             {
-               rtl::OUStringBuffer aBuf;
+               OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
                 aFieldName = aBuf.makeStringAndClear().replaceAll("%1", ScColToAlpha( col ));
             }
@@ -316,7 +316,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
         ComboBox*   pValList        = aValueEdArr[nList-1];
         sal_uInt16      nFieldSelPos    = aFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_uInt16      nListPos        = 0;
-        rtl::OUString     aCurValue       = pValList->GetText();
+        OUString     aCurValue       = pValList->GetText();
 
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
@@ -398,7 +398,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             ScQueryEntry& rEntry = theParam.GetEntry(i);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
-            rtl::OUString aStrVal = aValueEdArr[i]->GetText();
+            OUString aStrVal = aValueEdArr[i]->GetText();
 
             /*
              * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
@@ -556,9 +556,9 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
 
-        rtl::OUString aCurVal1 = aEdVal1.GetText();
-        rtl::OUString aCurVal2 = aEdVal2.GetText();
-        rtl::OUString aCurVal3 = aEdVal3.GetText();
+        OUString aCurVal1 = aEdVal1.GetText();
+        OUString aCurVal2 = aEdVal2.GetText();
+        OUString aCurVal3 = aEdVal3.GetText();
         UpdateValueList( 1 );
         UpdateValueList( 2 );
         UpdateValueList( 3 );
@@ -576,7 +576,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
     if ( pEd )
     {
-        rtl::OUString aStrVal = pEd->GetText();
+        OUString aStrVal = pEd->GetText();
         ListBox* pLb    = &aLbCond1;
 
              if ( pEd == &aEdVal2 ) pLb = &aLbCond2;
@@ -587,7 +587,7 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
-            pLb->SelectEntry(rtl::OUString('='));
+            pLb->SelectEntry(OUString('='));
             pLb->Disable();
         }
         else

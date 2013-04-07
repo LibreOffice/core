@@ -243,7 +243,7 @@ void ScDbNameDlg::Init()
                     && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
-                    rtl::OUString aDBName = pDBData->GetName();
+                    OUString aDBName = pDBData->GetName();
                     if ( aDBName != STR_DB_LOCAL_NONAME )
                         aEdName.SetText(aDBName);
 
@@ -267,7 +267,7 @@ void ScDbNameDlg::Init()
 
 void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 {
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(aStrSource);
     if (pDBData)
     {
@@ -382,7 +382,7 @@ void ScDbNameDlg::UpdateDBData( const String& rStrName )
         pData->GetArea( nTab, nColStart, nRowStart, nColEnd, nRowEnd );
         theCurArea = ScRange( ScAddress( nColStart, nRowStart, nTab ),
                               ScAddress( nColEnd,   nRowEnd,   nTab ) );
-        ::rtl::OUString theArea;
+        OUString theArea;
         theCurArea.Format( theArea, ABS_DREF3D, pDoc, aAddrDetails );
         aEdAssign.SetText( theArea );
         aBtnAdd.SetText( aStrModify );
@@ -527,9 +527,9 @@ namespace {
 
 class FindByName : public ::std::unary_function<ScDBData, bool>
 {
-    const ::rtl::OUString& mrName;
+    const OUString& mrName;
 public:
-    FindByName(const ::rtl::OUString& rName) : mrName(rName) {}
+    FindByName(const OUString& rName) : mrName(rName) {}
     bool operator() (const ScDBData& r) const
     {
         return r.GetName().equals(mrName);
@@ -540,7 +540,7 @@ public:
 
 IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 {
-    ::rtl::OUString aStrEntry = aEdName.GetText();
+    OUString aStrEntry = aEdName.GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
     ScDBCollection::NamedDBs::iterator itr =
         ::std::find_if(rDBs.begin(), rDBs.end(), FindByName(aStrEntry));
@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
     {
         String aStrDelMsg = ScGlobal::GetRscString( STR_QUERY_DELENTRY );
 
-        ::rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(aStrDelMsg.GetToken(0, '#'));
         aBuf.append(aStrEntry);
         aBuf.append(aStrDelMsg.GetToken(1, '#'));

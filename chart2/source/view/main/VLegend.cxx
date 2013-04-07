@@ -47,8 +47,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 //.............................................................................
 namespace chart
@@ -300,7 +298,7 @@ awt::Size lcl_placeLegendEntries(
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
     sal_Int32 nMaxTextWidth = rAvailableSpace.Width - (2 * nXPadding) - nSymbolPlusDistanceWidth;
-    rtl::OUString aPropNameTextMaximumFrameWidth( "TextMaximumFrameWidth" );
+    OUString aPropNameTextMaximumFrameWidth( "TextMaximumFrameWidth" );
     uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, aPropNameTextMaximumFrameWidth);
     if(pFrameWidthAny)
     {

@@ -45,7 +45,7 @@ public:
     /** Sets dialog title, fixed text for listbox and help IDs. */
     void    SetDescription(
                 const String& rTitle, const String& rFixedText,
-                const ::rtl::OString& nDlgHelpId, const rtl::OString& nLbHelpId );
+                const OString& nDlgHelpId, const OString& nLbHelpId );
 
     /** Inserts a string into the ListBox. */
     void    Insert( const String& rString, sal_Bool bSelected );

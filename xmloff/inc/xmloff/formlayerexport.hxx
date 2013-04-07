@@ -88,7 +88,7 @@ namespace xmloff
             @see seekPage
 
         */
-        ::rtl::OUString getControlId(
+        OUString getControlId(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
         /** retrieves the style name for the control's number style.
@@ -102,7 +102,7 @@ namespace xmloff
             @see examineForms
             @see seekPage
         */
-        ::rtl::OUString getControlNumberStyle(
+        OUString getControlNumberStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         /** examines the forms collection given.

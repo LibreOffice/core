@@ -75,13 +75,13 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
         DECLARE_XSERVICEINFO
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
@@ -90,15 +90,15 @@ class WindowStateConfiguration :  private ThreadHelpBase                        
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
-                                 ::rtl::OUString,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateFileMap;
+        typedef ::boost::unordered_map< OUString,
+                                 OUString,
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > ModuleToWindowStateFileMap;
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > ModuleToWindowStateConfigHashMap;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > ModuleToWindowStateConfigHashMap;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xContext;

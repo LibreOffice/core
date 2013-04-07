@@ -26,7 +26,7 @@ struct SwDBData;
 
 class SW_DLLPUBLIC SwDBConfig : public utl::ConfigItem
 {
-    SW_DLLPRIVATE const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    SW_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
     SwDBData*       pAdrImpl;
     SwDBData*       pBibImpl;
@@ -39,7 +39,7 @@ public:
     const SwDBData&         GetAddressSource();
     const SwDBData&         GetBibliographySource();
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

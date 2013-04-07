@@ -39,7 +39,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase
     SvXMLImport& mrImport;
 
     sal_uInt16       mnPrefix;
-    ::rtl::OUString maLocalName;
+    OUString maLocalName;
 
     SvXMLNamespaceMap   *mpRewindMap;
 
@@ -56,14 +56,14 @@ public:
     TYPEINFO();
 
     sal_uInt16 GetPrefix() const { return mnPrefix; }
-    const ::rtl::OUString& GetLocalName() const { return maLocalName; }
+    const OUString& GetLocalName() const { return maLocalName; }
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     SvXMLImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName );
+                        const OUString& rLName );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.
@@ -74,7 +74,7 @@ public:
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // StartElement is called after a context has been constructed and
@@ -89,7 +89,7 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element. The default is to ignore them.
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 SV_DECL_REF( SvXMLImportContext )

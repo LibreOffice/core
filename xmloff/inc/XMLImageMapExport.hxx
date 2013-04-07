@@ -35,17 +35,17 @@ class SvXMLExport;
  */
 class XMLImageMapExport
 {
-    const ::rtl::OUString msBoundary;
-    const ::rtl::OUString msCenter;
-    const ::rtl::OUString msDescription;
-    const ::rtl::OUString msImageMap;
-    const ::rtl::OUString msIsActive;
-    const ::rtl::OUString msName;
-    const ::rtl::OUString msPolygon;
-    const ::rtl::OUString msRadius;
-    const ::rtl::OUString msTarget;
-    const ::rtl::OUString msURL;
-    const ::rtl::OUString msTitle;
+    const OUString msBoundary;
+    const OUString msCenter;
+    const OUString msDescription;
+    const OUString msImageMap;
+    const OUString msIsActive;
+    const OUString msName;
+    const OUString msPolygon;
+    const OUString msRadius;
+    const OUString msTarget;
+    const OUString msURL;
+    const OUString msTitle;
 
     SvXMLExport& mrExport;
 

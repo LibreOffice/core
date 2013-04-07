@@ -55,7 +55,7 @@ namespace tdoc_ucp {
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-        createStorage( const rtl::OUString & rUri, StorageAccessMode eMode )
+        createStorage( const OUString & rUri, StorageAccessMode eMode )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
@@ -63,8 +63,8 @@ namespace tdoc_ucp {
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-        createInputStream( const rtl::OUString & rUri,
-                           const rtl::OUString & rPassword )
+        createInputStream( const OUString & rUri,
+                           const OUString & rPassword )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
@@ -73,8 +73,8 @@ namespace tdoc_ucp {
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
-        createOutputStream( const rtl::OUString & rUri,
-                            const rtl::OUString & rPassword,
+        createOutputStream( const OUString & rUri,
+                            const OUString & rPassword,
                             bool bTruncate )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
@@ -84,8 +84,8 @@ namespace tdoc_ucp {
                     com::sun::star::uno::RuntimeException );
 
         com::sun::star::uno::Reference< com::sun::star::io::XStream >
-        createStream( const rtl::OUString & rUri,
-                      const rtl::OUString & rPassword,
+        createStream( const OUString & rUri,
+                      const OUString & rPassword,
                       bool bTruncate )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
@@ -100,7 +100,7 @@ namespace tdoc_ucp {
         void releaseElement( Storage * pElement ) SAL_THROW(());
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-        queryParentStorage( const rtl::OUString & rUri,
+        queryParentStorage( const OUString & rUri,
                             StorageAccessMode eMode )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
@@ -111,7 +111,7 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
         queryStorage( const com::sun::star::uno::Reference<
                         com::sun::star::embed::XStorage > & xParentStorage,
-                      const rtl::OUString & rUri,
+                      const OUString & rUri,
                       StorageAccessMode eMode )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
@@ -122,8 +122,8 @@ namespace tdoc_ucp {
         com::sun::star::uno::Reference< com::sun::star::io::XStream >
         queryStream( const com::sun::star::uno::Reference<
                         com::sun::star::embed::XStorage > & xParentStorage,
-                     const rtl::OUString & rPassword,
-                     const rtl::OUString & rUri,
+                     const OUString & rPassword,
+                     const OUString & rUri,
                      StorageAccessMode eMode,
                      bool bTruncate /* ignored for read-only streams */ )
             throw ( com::sun::star::embed::InvalidStorageException,
@@ -136,8 +136,8 @@ namespace tdoc_ucp {
         struct ltstrbool
         {
             bool operator()(
-                const std::pair< rtl::OUString, bool > & s1,
-                const std::pair< rtl::OUString, bool > & s2 ) const
+                const std::pair< OUString, bool > & s1,
+                const std::pair< OUString, bool > & s2 ) const
             {
                 if ( s1.first < s2.first )
                     return true;
@@ -150,7 +150,7 @@ namespace tdoc_ucp {
 
         // key: pair< storageuri, iswritable >
         typedef std::map<
-            std::pair< rtl::OUString, bool >, Storage *, ltstrbool > StorageMap;
+            std::pair< OUString, bool >, Storage *, ltstrbool > StorageMap;
 
         StorageMap m_aMap;
         osl::Mutex m_aMutex;

@@ -32,12 +32,12 @@ class FileOpenDialog
     // a list of filters that are provided within the SaveDialog
     struct FilterEntry
     {
-        rtl::OUString maName;
-        rtl::OUString maType;
-        rtl::OUString maUIName;
-        rtl::OUString maFilter;
+        OUString maName;
+        OUString maType;
+        OUString maUIName;
+        OUString maFilter;
         sal_Int32 maFlags;
-        com::sun::star::uno::Sequence< rtl::OUString > maExtensions;
+        com::sun::star::uno::Sequence< OUString > maExtensions;
 
         FilterEntry() :
             maFlags( 0 ) {}
@@ -52,11 +52,11 @@ public :
 
         sal_Int16 execute();
 
-        void setDefaultName( const rtl::OUString& );
-//      void setDefaultDirectory( const rtl::OUString& );
+        void setDefaultName( const OUString& );
+//      void setDefaultDirectory( const OUString& );
 
-        ::rtl::OUString getURL() const;
-        ::rtl::OUString getFilterName() const;
+        OUString getURL() const;
+        OUString getFilterName() const;
 };
 
 #endif  // _FILEOPEN_DIALOG_HXX_

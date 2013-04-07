@@ -36,13 +36,13 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
                  , m_pTable(_pTable)
 {
     construct();
-    ::std::vector< ::rtl::OUString> aVector;
+    ::std::vector< OUString> aVector;
     m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 OIndexHelper::OIndexHelper( OTableHelper* _pTable,
-                const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Catalog,
+                const OUString& _Name,
+                const OUString& _Catalog,
                 sal_Bool _isUnique,
                 sal_Bool _isPrimaryKeyIndex,
                 sal_Bool _isClustered
@@ -63,11 +63,11 @@ void OIndexHelper::refreshColumns()
     if ( !m_pTable )
         return;
 
-    ::std::vector< ::rtl::OUString> aVector;
+    ::std::vector< OUString> aVector;
     if ( !isNew() )
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        ::rtl::OUString aSchema,aTable;
+        OUString aSchema,aTable;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
@@ -78,7 +78,7 @@ void OIndexHelper::refreshColumns()
         if ( xResult.is() )
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aColName;
+            OUString aColName;
             while( xResult->next() )
             {
                 if ( xRow->getString(6) == m_Name )

@@ -60,25 +60,25 @@ class SjJSbxObject;
 
 class SVL_DLLPUBLIC SvxMacro
 {
-    ::rtl::OUString aMacName;
-    ::rtl::OUString aLibName;
+    OUString aMacName;
+    OUString aLibName;
     // Fuer JavaScript muss ein Function-Objekt gehalten werden
     SjJSbxObjectBase* pFunctionObject;
     ScriptType eType;
 
 public:
 
-    SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLanguage);
+    SvxMacro( const OUString &rMacName, const OUString &rLanguage);
 
-    SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLibName,
+    SvxMacro( const OUString &rMacName, const OUString &rLibName,
                 ScriptType eType); //  = STARBASIC entfernt
 
-    SvxMacro( SjJSbxObjectBase* _pFunctionObject, const ::rtl::OUString &rSource );
+    SvxMacro( SjJSbxObjectBase* _pFunctionObject, const OUString &rSource );
     ~SvxMacro();    // noetig fuer pFunctionObject
 
-    const ::rtl::OUString &GetLibName() const        { return aLibName; }
-    const ::rtl::OUString &GetMacName() const        { return aMacName; }
-    ::rtl::OUString GetLanguage()const;
+    const OUString &GetLibName() const        { return aLibName; }
+    const OUString &GetMacName() const        { return aMacName; }
+    OUString GetLanguage()const;
 
     ScriptType GetScriptType() const        { return eType; }
 
@@ -93,12 +93,12 @@ public:
     SvxMacro& operator=( const SvxMacro& rBase );
 };
 
-inline SvxMacro::SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLibName,
+inline SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLibName,
                             ScriptType eTyp )
     : aMacName( rMacName ), aLibName( rLibName ), pFunctionObject(NULL), eType( eTyp )
 {}
 
-inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const ::rtl::OUString &rSource )
+inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const OUString &rSource )
     : aMacName( rSource ), pFunctionObject( _pFunctionObject ), eType( JAVASCRIPT )
 {}
 

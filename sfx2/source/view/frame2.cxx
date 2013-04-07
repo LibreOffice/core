@@ -117,7 +117,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
         // TODO/LATER: do we still need this code?
         Window* pWindow = rNEvt.GetWindow();
-        rtl::OString sHelpId;
+        OString sHelpId;
         while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
@@ -268,11 +268,11 @@ SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nV
         aLoadArgs = aArgs.getPropertyValues();
 
         // load the doc into that frame
-        ::rtl::OUString sLoaderURL( "private:object" );
+        OUString sLoaderURL( "private:object" );
         Reference< XComponentLoader > xLoader( xFrame, UNO_QUERY_THROW );
         xLoader->loadComponentFromURL(
             sLoaderURL,
-            ::rtl::OUString( "_self" ),
+            OUString( "_self" ),
             0,
             aLoadArgs
         );
@@ -339,7 +339,7 @@ void SfxFrame::SetPresentationMode( sal_Bool bSet )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
         aValue >>= xLayoutManager;
     }
 
@@ -391,13 +391,13 @@ void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
         aValue >>= xLayoutManager;
     }
 
     if ( xLayoutManager.is() )
     {
-        rtl::OUString aMenuBarURL( "private:resource/menubar/menubar" );
+        OUString aMenuBarURL( "private:resource/menubar/menubar" );
 
         if ( bOn )
             xLayoutManager->showElement( aMenuBarURL );

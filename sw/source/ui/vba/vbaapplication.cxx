@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::UNO_QUERY;
-using ::rtl::OUString;
 
 SwVbaApplication::SwVbaApplication( uno::Reference<uno::XComponentContext >& xContext ): SwVbaApplication_BASE( xContext )
 {
@@ -57,10 +56,10 @@ SfxObjectShell* SwVbaApplication::GetDocShell( const uno::Reference< frame::XMod
     return static_cast< SfxObjectShell* >( word::getDocShell( xModel ) );
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaApplication::getName() throw (uno::RuntimeException)
 {
-    static rtl::OUString appName("Microsoft Word" );
+    static OUString appName("Microsoft Word" );
     return appName;
 }
 
@@ -172,20 +171,20 @@ SwVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
     return getCurrentWordDoc( mxContext );
 }
 
-rtl::OUString
+OUString
 SwVbaApplication::getServiceImplName()
 {
-    return rtl::OUString("SwVbaApplication");
+    return OUString("SwVbaApplication");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaApplication::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Application" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Application" );
     }
     return aServiceNames;
 }

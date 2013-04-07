@@ -34,10 +34,10 @@ namespace svt
     class SVT_DLLPUBLIC OStringTransferable : public TransferableHelper
     {
     protected:
-        ::rtl::OUString     m_sContent;
+        OUString     m_sContent;
 
     public:
-        OStringTransferable(const ::rtl::OUString& _rContent);
+        OStringTransferable(const OUString& _rContent);
 
     protected:
         // TransferableHelper overridables
@@ -55,16 +55,16 @@ namespace svt
             <p>Beware: In opposite to the old DragServer::CopyString, this method does not <em>add</em> the string
             to the clipboard, instead the old clipboard content is <em>replaced</em>!</p>
         */
-        SVT_DLLPUBLIC static void           CopyString( const ::rtl::OUString& _rContent, Window* _pWindow = NULL );
+        SVT_DLLPUBLIC static void           CopyString( const OUString& _rContent, Window* _pWindow = NULL );
 
         /** extracts a string from the system clipboard given
             @return <TRUE/> if the extraction was successfull, i.e. if the clipboard contained a string content
         */
-        SVT_DLLPUBLIC static sal_Bool       PasteString( ::rtl::OUString& _rContent, Window* _pWindow = NULL );
+        SVT_DLLPUBLIC static sal_Bool       PasteString( OUString& _rContent, Window* _pWindow = NULL );
 
         /** starts dragging a simple string
         */
-        SVT_DLLPUBLIC static void           StartStringDrag( const ::rtl::OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions );
+        SVT_DLLPUBLIC static void           StartStringDrag( const OUString& _rContent, Window* _pWindow, sal_Int8 _nDragSourceActions );
     };
 
 //........................................................................

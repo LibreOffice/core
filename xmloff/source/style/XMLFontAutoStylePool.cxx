@@ -32,8 +32,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -51,16 +49,16 @@ class XMLFontAutoStylePoolEntry_Impl
 public:
 
     inline XMLFontAutoStylePoolEntry_Impl(
-            const ::rtl::OUString& rName,
-            const ::rtl::OUString& rFamilyName,
-            const ::rtl::OUString& rStyleName,
+            const OUString& rName,
+            const OUString& rFamilyName,
+            const OUString& rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
     inline XMLFontAutoStylePoolEntry_Impl(
-            const ::rtl::OUString& rFamilyName,
-            const ::rtl::OUString& rStyleName,
+            const OUString& rFamilyName,
+            const OUString& rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc );
@@ -75,9 +73,9 @@ public:
 
 
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
-        const ::rtl::OUString& rName,
-        const ::rtl::OUString& rFamilyName,
-        const ::rtl::OUString& rStyleName,
+        const OUString& rName,
+        const OUString& rFamilyName,
+        const OUString& rStyleName,
         FontFamily nFam,
         FontPitch nP,
         rtl_TextEncoding eE ) :
@@ -91,8 +89,8 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 }
 
 inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
-        const ::rtl::OUString& rFamilyName,
-        const ::rtl::OUString& rStyleName,
+        const OUString& rFamilyName,
+        const OUString& rStyleName,
         FontFamily nFam,
         FontPitch nP,
         rtl_TextEncoding eE ) :
@@ -200,7 +198,7 @@ OUString XMLFontAutoStylePool::Add(
     return sPoolName;
 }
 
-::rtl::OUString XMLFontAutoStylePool::Find(
+OUString XMLFontAutoStylePool::Find(
             const OUString& rFamilyName,
             const OUString& rStyleName,
             FontFamily nFamily,

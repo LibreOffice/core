@@ -91,7 +91,6 @@ using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::XDimensionsSupplier;
 using ::com::sun::star::beans::XPropertySet;
-using ::rtl::OUString;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
 

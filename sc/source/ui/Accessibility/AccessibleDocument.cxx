@@ -88,8 +88,8 @@ ScAccessibleShapeData::~ScAccessibleShapeData()
 
 struct ScShapeDataLess
 {
-    rtl::OUString msLayerId;
-    rtl::OUString msZOrder;
+    OUString msLayerId;
+    OUString msZOrder;
     ScShapeDataLess()
         : msLayerId(RTL_CONSTASCII_USTRINGPARAM( "LayerID" )),
         msZOrder(RTL_CONSTASCII_USTRINGPARAM( "ZOrder" ))
@@ -1040,7 +1040,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         uno::Reference< beans::XPropertySet > xShapeProp(xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            uno::Any aPropAny = xShapeProp->getPropertyValue(rtl::OUString(  "LayerID" ));
+            uno::Any aPropAny = xShapeProp->getPropertyValue(OUString(  "LayerID" ));
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
@@ -1361,7 +1361,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             {
                 mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
                     mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                    rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::CellInEditMode);
+                    OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::CellInEditMode);
                 uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
                 AddChild(xAcc, sal_True);
@@ -1783,23 +1783,23 @@ void SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleDocument::getImplementationName(void)
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString("ScAccessibleDocument");
+    return OUString("ScAccessibleDocument");
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
     ScAccessibleDocument::getSupportedServiceNames(void)
         throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.AccessibleSpreadsheetDocumentView");
+    pNames[nOldSize] = OUString("com.sun.star.AccessibleSpreadsheetDocumentView");
 
     return aSequence;
 }
@@ -1916,23 +1916,23 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
     return pRelationSet;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleDocument::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sDescription = String(ScResId(STR_ACC_DOC_DESCR));
+    OUString sDescription = String(ScResId(STR_ACC_DOC_DESCR));
     return sDescription;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleDocument::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    rtl::OUString sName = String(ScResId(STR_ACC_DOC_NAME));
+    OUString sName = String(ScResId(STR_ACC_DOC_NAME));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
-    sName += rtl::OUString::valueOf(nNumber);
+    sName += OUString::valueOf(nNumber);
     return sName;
 }
 
@@ -2057,7 +2057,7 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
     }
 }
 
-rtl::OUString ScAccessibleDocument::GetCurrentCellName() const
+OUString ScAccessibleDocument::GetCurrentCellName() const
 {
     String sName( ScResId(STR_ACC_CELL_NAME) );
     if (mpViewShell)
@@ -2067,12 +2067,12 @@ rtl::OUString ScAccessibleDocument::GetCurrentCellName() const
         mpViewShell->GetViewData()->GetCurPos().Format( sAddress, SCA_VALID, NULL );
         sName.SearchAndReplaceAscii("%1", sAddress);
     }
-    return rtl::OUString(sName);
+    return OUString(sName);
 }
 
-rtl::OUString ScAccessibleDocument::GetCurrentCellDescription() const
+OUString ScAccessibleDocument::GetCurrentCellDescription() const
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

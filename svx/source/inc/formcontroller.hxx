@@ -89,7 +89,7 @@ struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::u
     }
 };
 
-typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::rtl::OUString, FmXTextComponentLess> FmFilterRow;
+typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, OUString, FmXTextComponentLess> FmFilterRow;
 typedef ::std::vector< FmFilterRow > FmFilterRows;
 typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > > FmFormControllers;
 
@@ -177,7 +177,7 @@ namespace svxform
         DispatcherContainer         m_aFeatureDispatchers;
         ::std::set< sal_Int16 >     m_aInvalidFeatures;     // for asynchronous feature invalidation
 
-        ::rtl::OUString             m_aMode;
+        OUString             m_aMode;
 
         ::svxform::DelayedEvent     m_aLoadEvent;
         ::svxform::DelayedEvent     m_aToggleEvent;
@@ -258,9 +258,9 @@ namespace svxform
         virtual ::sal_Int32 SAL_CALL getDisjunctiveTerms() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addFilterControllerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterControllerListener >& _Listener ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL removeFilterControllerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFilterControllerListener >& _Listener ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const ::rtl::OUString& _PredicateExpression ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const OUString& _PredicateExpression ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > SAL_CALL getFilterComponent( ::sal_Int32 _Component ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL getPredicateExpressions() throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL getPredicateExpressions() throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendEmptyDisjunctiveTerm() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int32 SAL_CALL getActiveTerm() throw (::com::sun::star::uno::RuntimeException);
@@ -286,10 +286,10 @@ namespace svxform
         virtual void SAL_CALL reloaded(const ::com::sun::star::lang::EventObject& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
     // XModeSelector
-        virtual void SAL_CALL setMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getMode(void) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(void) throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsMode(const ::rtl::OUString& Mode) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL setMode(const OUString& Mode) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getMode(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsMode(const OUString& Mode) throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -397,9 +397,9 @@ namespace svxform
         virtual sal_Bool SAL_CALL confirmDelete(const  ::com::sun::star::sdb::RowChangeEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(::com::sun::star::uno::RuntimeException);
 
     // XResetListener
         virtual sal_Bool SAL_CALL approveReset(const ::com::sun::star::lang::EventObject& rEvent) throw( ::com::sun::star::uno::RuntimeException );
@@ -410,7 +410,7 @@ namespace svxform
         virtual void SAL_CALL invalidateAllFeatures(  ) throw (::com::sun::star::uno::RuntimeException);
 
 // method for registration
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static(void);
+        static  ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static(void);
 
         // comphelper::OPropertyArrayUsageHelper
         virtual void fillProperties(
@@ -423,7 +423,7 @@ namespace svxform
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch>
             interceptedQueryDispatch(
                     const ::com::sun::star::util::URL& aURL,
-                    const ::rtl::OUString& aTargetFrameName,
+                    const OUString& aTargetFrameName,
                     sal_Int32 nSearchFlags
                 )   throw( ::com::sun::star::uno::RuntimeException );
 
@@ -551,7 +551,7 @@ namespace svxform
                 <TRUE/> if and only if all controls belonging to our form are valid
         */
         bool    checkFormComponentValidity(
-                    ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation,
+                    OUString& /* [out] */ _rFirstInvalidityExplanation,
                     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& /* [out] */ _rxFirstInvalidModel
                 ) SAL_THROW(());
 

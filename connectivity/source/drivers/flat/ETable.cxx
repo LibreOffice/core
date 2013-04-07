@@ -164,7 +164,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,m_aTypeNames[i],::rtl::OUString(),::rtl::OUString(),
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,m_aTypeNames[i],OUString(),OUString(),
                                                 ColumnValue::NULLABLE,
                                                 m_aPrecisions[i],
                                                 m_aScales[i],
@@ -315,13 +315,13 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                 if(io_nPrecisions)
                 {
                     io_nType = DataType::DECIMAL;
-                    static const ::rtl::OUString s_sDECIMAL("DECIMAL");
+                    static const OUString s_sDECIMAL("DECIMAL");
                     o_sTypeName = s_sDECIMAL;
                 }
                 else
                 {
                     io_nType = DataType::DOUBLE;
-                    static const ::rtl::OUString s_sDOUBLE("DOUBLE");
+                    static const OUString s_sDOUBLE("DOUBLE");
                     o_sTypeName = s_sDOUBLE;
                 }
             }
@@ -340,21 +340,21 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                 case NUMBERFORMAT_DATE:
                     io_nType = DataType::DATE;
                     {
-                        static const ::rtl::OUString s_sDATE("DATE");
+                        static const OUString s_sDATE("DATE");
                         o_sTypeName = s_sDATE;
                     }
                     break;
                 case NUMBERFORMAT_DATETIME:
                     io_nType = DataType::TIMESTAMP;
                     {
-                        static const ::rtl::OUString s_sTIMESTAMP("TIMESTAMP");
+                        static const OUString s_sTIMESTAMP("TIMESTAMP");
                         o_sTypeName = s_sTIMESTAMP;
                     }
                     break;
                 case NUMBERFORMAT_TIME:
                     io_nType = DataType::TIME;
                     {
-                        static const ::rtl::OUString s_sTIME("TIME");
+                        static const OUString s_sTIME("TIME");
                         o_sTypeName = s_sTIME;
                     }
                     break;
@@ -363,7 +363,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     io_nPrecisions = 0; // nyi: Data can be longer!
                     io_nScales = 0;
                     {
-                        static const ::rtl::OUString s_sVARCHAR("VARCHAR");
+                        static const OUString s_sVARCHAR("VARCHAR");
                         o_sTypeName = s_sVARCHAR;
                     }
             };
@@ -390,11 +390,11 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
 }
 // -------------------------------------------------------------------------
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description ,
+                    const OUString& _SchemaName,
+                    const OUString& _CatalogName
                 ) : OFlatTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
@@ -423,12 +423,12 @@ void OFlatTable::construct()
           UNO_QUERY_THROW);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
     Reference<XPropertySet> xProp(xSupplier->getNumberFormatSettings(),UNO_QUERY);
-    xProp->getPropertyValue(::rtl::OUString("NullDate")) >>= m_aNullDate;
+    xProp->getPropertyValue(OUString("NullDate")) >>= m_aNullDate;
 
     INetURLObject aURL;
     aURL.SetURL(getEntry());
 
-    if(aURL.getExtension() != rtl::OUString(m_pConnection->getExtension()))
+    if(aURL.getExtension() != OUString(m_pConnection->getExtension()))
         aURL.setExtension(m_pConnection->getExtension());
 
     String aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
@@ -458,17 +458,17 @@ void OFlatTable::construct()
 String OFlatTable::getEntry()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::getEntry" );
-    ::rtl::OUString sURL;
+    OUString sURL;
     try
     {
         Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
         Reference< XRow> xRow(xDir,UNO_QUERY);
-        ::rtl::OUString sName;
-        ::rtl::OUString sExt;
+        OUString sName;
+        OUString sExt;
 
         INetURLObject aURL;
         xDir->beforeFirst();
-        static const ::rtl::OUString s_sSeparator("/");
+        static const OUString s_sSeparator("/");
         while(xDir->next())
         {
             sName = xRow->getString(1);
@@ -483,7 +483,7 @@ String OFlatTable::getEntry()
             if ( m_pConnection->matchesExtension( sExt ) )
             {
                 if ( !sExt.isEmpty() )
-                    sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                    sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,OUString());
                 if ( sName == m_Name )
                 {
                     Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );

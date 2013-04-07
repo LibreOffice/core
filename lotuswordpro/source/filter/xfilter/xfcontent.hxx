@@ -78,19 +78,19 @@ public:
     /**
      * @short:  All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(rtl::OUString style){m_strStyleName = style;}
+    virtual void    SetStyleName(OUString style){m_strStyleName = style;}
 
     /**
      * @short:  return the style name.
      */
-    virtual rtl::OUString   GetStyleName(){return m_strStyleName;}
+    virtual OUString   GetStyleName(){return m_strStyleName;}
 
     /**
      */
     virtual IXFContent*     Clone(){return NULL;}
 
 protected:
-    rtl::OUString   m_strStyleName;
+    OUString   m_strStyleName;
 };
 
 #endif

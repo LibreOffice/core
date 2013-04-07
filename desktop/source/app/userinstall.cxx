@@ -47,8 +47,6 @@
 
 #include "app.hxx"
 
-using rtl::OString;
-using rtl::OUString;
 using namespace osl;
 using namespace utl;
 using namespace com::sun::star::container;
@@ -119,7 +117,7 @@ namespace desktop {
     }
 
 #if HAVE_FEATURE_DESKTOP
-    static osl::FileBase::RC copy_recursive( const rtl::OUString& srcUnqPath, const rtl::OUString& dstUnqPath)
+    static osl::FileBase::RC copy_recursive( const OUString& srcUnqPath, const OUString& dstUnqPath)
     {
         FileBase::RC err;
         DirectoryItem aDirItem;
@@ -145,12 +143,12 @@ namespace desktop {
                 {
                     aDirItem.getFileStatus(aFileStatus);
                     // generate new src/dst pair and make recursive call
-                    rtl::OUString newSrcUnqPath = aFileStatus.getFileURL();
-                    rtl::OUString newDstUnqPath = dstUnqPath;
-                    rtl::OUString itemname = aFileStatus.getFileName();
+                    OUString newSrcUnqPath = aFileStatus.getFileURL();
+                    OUString newDstUnqPath = dstUnqPath;
+                    OUString itemname = aFileStatus.getFileName();
                     // append trailing '/' if needed
                     if (newDstUnqPath.lastIndexOf(sal_Unicode('/')) != newDstUnqPath.getLength()-1)
-                        newDstUnqPath += rtl::OUString("/");
+                        newDstUnqPath += OUString("/");
                     newDstUnqPath += itemname;
                     // recursion
                     err = copy_recursive(newSrcUnqPath, newDstUnqPath);
@@ -193,8 +191,8 @@ namespace desktop {
 
         // Copy data from shared data directory of base installation:
         rc = copy_recursive(
-            aBasePath + rtl::OUString("/presets"),
-            aUserPath + rtl::OUString("/user"));
+            aBasePath + OUString("/presets"),
+            aUserPath + OUString("/user"));
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST))
         {
             if ( rc == FileBase::E_NOSPC )

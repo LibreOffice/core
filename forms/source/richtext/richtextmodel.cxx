@@ -64,7 +64,7 @@ namespace frm
     DBG_NAME( ORichTextModel )
     //--------------------------------------------------------------------
     ORichTextModel::ORichTextModel( const Reference< XMultiServiceFactory >& _rxFactory )
-        :OControlModel       ( _rxFactory, ::rtl::OUString() )
+        :OControlModel       ( _rxFactory, OUString() )
         ,FontControlModel    ( true                          )
         ,m_pEngine           ( RichTextEngine::Create()      )
         ,m_bSettingEngineText( false                         )
@@ -244,13 +244,13 @@ namespace frm
     //--------------------------------------------------------------------
     IMPLEMENT_SERVICE_REGISTRATION_8( ORichTextModel, OControlModel,
         FRM_SUN_COMPONENT_RICHTEXTCONTROL,
-        ::rtl::OUString( "com.sun.star.text.TextRange" ),
-        ::rtl::OUString( "com.sun.star.style.CharacterProperties" ),
-        ::rtl::OUString( "com.sun.star.style.ParagraphProperties" ),
-        ::rtl::OUString( "com.sun.star.style.CharacterPropertiesAsian" ),
-        ::rtl::OUString( "com.sun.star.style.CharacterPropertiesComplex" ),
-        ::rtl::OUString( "com.sun.star.style.ParagraphPropertiesAsian" ),
-        ::rtl::OUString( "com.sun.star.style.ParagraphPropertiesComplex" )
+        OUString( "com.sun.star.text.TextRange" ),
+        OUString( "com.sun.star.style.CharacterProperties" ),
+        OUString( "com.sun.star.style.ParagraphProperties" ),
+        OUString( "com.sun.star.style.CharacterPropertiesAsian" ),
+        OUString( "com.sun.star.style.CharacterPropertiesComplex" ),
+        OUString( "com.sun.star.style.ParagraphPropertiesAsian" ),
+        OUString( "com.sun.star.style.ParagraphPropertiesComplex" )
     )
 
     //------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ namespace frm
     //------------------------------------------------------------------------------
     namespace
     {
-        void lcl_removeProperty( Sequence< Property >& _rSeq, const ::rtl::OUString& _rPropertyName )
+        void lcl_removeProperty( Sequence< Property >& _rSeq, const OUString& _rPropertyName )
         {
             Property* pLoop = _rSeq.getArray();
             Property* pEnd = _rSeq.getArray() + _rSeq.getLength();
@@ -409,7 +409,7 @@ namespace frm
                 // forward to our aggregate, so the EditEngine knows about it
                 if ( m_xAggregateSet.is() )
                     m_xAggregateSet->setPropertyValue(
-                        ::rtl::OUString( "WritingMode" ), _rValue );
+                        OUString( "WritingMode" ), _rValue );
             }
             break;
 
@@ -466,13 +466,13 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aDefault <<= (::rtl::OUString)FRM_SUN_CONTROL_RICHTEXTCONTROL;
+            aDefault <<= (OUString)FRM_SUN_CONTROL_RICHTEXTCONTROL;
             break;
 
         case PROPERTY_ID_HELPTEXT:
         case PROPERTY_ID_HELPURL:
         case PROPERTY_ID_TEXT:
-            aDefault <<= ::rtl::OUString();
+            aDefault <<= OUString();
             break;
 
         case PROPERTY_ID_BORDER:
@@ -490,7 +490,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void ORichTextModel::impl_smlock_setEngineText( const ::rtl::OUString& _rText )
+    void ORichTextModel::impl_smlock_setEngineText( const OUString& _rText )
     {
         if ( m_pEngine.get() )
         {
@@ -502,7 +502,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ORichTextModel::getServiceName() throw ( RuntimeException)
+    OUString SAL_CALL ORichTextModel::getServiceName() throw ( RuntimeException)
     {
         return FRM_SUN_COMPONENT_RICHTEXTCONTROL;
     }
@@ -606,7 +606,7 @@ namespace frm
     //--------------------------------------------------------------------
     void ORichTextModel::potentialTextChange( )
     {
-        ::rtl::OUString sCurrentEngineText;
+        OUString sCurrentEngineText;
         if ( m_pEngine.get() )
             sCurrentEngineText = m_pEngine->GetText();
 

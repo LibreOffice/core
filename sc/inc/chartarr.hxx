@@ -38,8 +38,8 @@ class ScMemChart
     short           nRowCnt;
     short           nColCnt;
     double*         pData;
-    ::rtl::OUString* pColText;
-    ::rtl::OUString* pRowText;
+    OUString* pColText;
+    OUString* pRowText;
 
     ScMemChart(const ScMemChart& rMemChart);      // not implemented
 
@@ -49,17 +49,17 @@ public:
 
     short GetColCount() const { return nColCnt; }
     short GetRowCount() const { return nRowCnt; }
-    const ::rtl::OUString& GetColText(short nCol) const { return pColText[nCol]; }
-    const ::rtl::OUString& GetRowText(short nRow) const { return pRowText[nRow]; }
+    const OUString& GetColText(short nCol) const { return pColText[nCol]; }
+    const OUString& GetRowText(short nRow) const { return pRowText[nRow]; }
     double GetData(short nCol, short nRow) const { return pData[nCol * nRowCnt + nRow]; }
     void SetData(short nCol, short nRow, const double& rVal) { pData[nCol * nRowCnt + nRow] = rVal; }
-    void SetColText(short nCol, const ::rtl::OUString& rText) { pColText[nCol] = rText; }
-    void SetRowText(short nRow, const ::rtl::OUString& rText) { pRowText[nRow] = rText; }
+    void SetColText(short nCol, const OUString& rText) { pColText[nCol] = rText; }
+    void SetRowText(short nRow, const OUString& rText) { pRowText[nRow] = rText; }
 };
 
 class SC_DLLPUBLIC ScChartArray             // only parameter-struct
 {
-    ::rtl::OUString aName;
+    OUString aName;
     ScDocument* pDocument;
     ScChartPositioner aPositioner;
     bool        bValid;             // for creation out of SchMemChart
@@ -71,9 +71,9 @@ public:
     ScChartArray( ScDocument* pDoc, SCTAB nTab,
                   SCCOL nStartColP, SCROW nStartRowP,
                   SCCOL nEndColP, SCROW nEndRowP,
-                  const ::rtl::OUString& rChartName );
+                  const OUString& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
-                  const ::rtl::OUString& rChartName );
+                  const OUString& rChartName );
     ScChartArray( const ScChartArray& rArr );
     ~ScChartArray();
 
@@ -86,8 +86,8 @@ public:
     bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
     bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
     bool IsValid() const { return bValid; }
-    void SetName(const ::rtl::OUString& rNew) { aName = rNew; }
-    const ::rtl::OUString& GetName() const { return aName; }
+    void SetName(const OUString& rNew) { aName = rNew; }
+    const OUString& GetName() const { return aName; }
 
     bool operator==(const ScChartArray& rCmp) const;
 

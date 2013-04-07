@@ -59,7 +59,7 @@ public:
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
@@ -110,9 +110,9 @@ private:
     void                importSharedFmla( SequenceInputStream& rStrm );
 
 private:
-    ::rtl::OUString     maCellValue;        /// Cell value string (OOXML only).
+    OUString     maCellValue;        /// Cell value string (OOXML only).
     RichStringRef       mxInlineStr;        /// Inline rich string (OOXML only).
-    ::rtl::OUString     maFormulaStr;
+    OUString     maFormulaStr;
     DataTableModel      maTableData;        /// Settings for table operations.
     BinAddress          maCurrPos;          /// Current cell position (BIFF12 only).
     bool                mbHasFormula;       /// True = current cell has formula data (OOXML only).

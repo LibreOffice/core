@@ -36,11 +36,11 @@ public:
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 };

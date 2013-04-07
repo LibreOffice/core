@@ -49,7 +49,7 @@ namespace pcr
 
         ImageList       m_aModelImages;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xControlModel;
-        ::rtl::OUString m_sRequiredService;
+        OUString m_sRequiredService;
         Image           m_aRequiredControlImage;
         SvTreeListEntry*    m_pInitialSelection;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xInitialLabelControl;

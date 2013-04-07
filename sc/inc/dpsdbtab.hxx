@@ -34,8 +34,8 @@ class ScDPDimensionSaveData;
 
 struct ScImportSourceDesc
 {
-    ::rtl::OUString aDBName;
-    ::rtl::OUString aObject;
+    OUString aDBName;
+    OUString aObject;
     sal_uInt16  nType;          // enum DataImportMode
     bool    bNative;
     ScDocument* mpDoc;
@@ -65,7 +65,7 @@ public:
     virtual ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();
-    virtual rtl::OUString           getDimensionName(long nColumn);
+    virtual OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual void                    DisposeData();

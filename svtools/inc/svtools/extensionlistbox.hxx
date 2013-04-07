@@ -51,27 +51,27 @@ public:
     /** @return  The item name of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemName( sal_Int32 index ) const = 0;
+    virtual OUString getItemName( sal_Int32 index ) const = 0;
 
     /** @return  The version string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemVersion( sal_Int32 index ) const = 0;
+    virtual OUString getItemVersion( sal_Int32 index ) const = 0;
 
     /** @return  The description string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemDescription( sal_Int32 index ) const = 0;
+    virtual OUString getItemDescription( sal_Int32 index ) const = 0;
 
     /** @return  The publisher string of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemPublisher( sal_Int32 index ) const = 0;
+    virtual OUString getItemPublisher( sal_Int32 index ) const = 0;
 
     /** @return  The link behind the publisher text of the entry with the given index
         The index starts with 0.
         Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
-    virtual ::rtl::OUString getItemPublisherLink( sal_Int32 index ) const = 0;
+    virtual OUString getItemPublisherLink( sal_Int32 index ) const = 0;
 
     /** The entry at the given position will be selected
         Index starts with 0.
@@ -85,7 +85,7 @@ public:
             1. the name is not unique
             2. one extension can be installed as user and shared extension.
     */
-    virtual void select( const ::rtl::OUString & sName ) = 0;
+    virtual void select( const OUString & sName ) = 0;
 };
 // ============================================================================
 

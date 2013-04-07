@@ -72,7 +72,7 @@ public:
     void                SetAnchor( const XclObjAnchor& rAnchor );
     /** Sets shape data from DFF stream. */
     void                SetDffData(
-        const DffObjData& rDffObjData, const rtl::OUString& rObjName, const rtl::OUString& rHyperlink,
+        const DffObjData& rDffObjData, const OUString& rObjName, const OUString& rHyperlink,
         bool bVisible, bool bAutoMargin );
 
     /** If set to false, the SdrObject will not be created, processed, or inserted into the draw page. */
@@ -87,9 +87,9 @@ public:
     /** Returns the Excel object type from OBJ record. */
     inline sal_uInt16   GetObjType() const { return mnObjType; }
     /** Returns the name of this object, may generate a default name. */
-    virtual rtl::OUString GetObjName() const;
+    virtual OUString GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
-    inline const rtl::OUString& GetMacroName() const { return maMacroName; }
+    inline const OUString& GetMacroName() const { return maMacroName; }
 
     /** Returns the shape identifier used in the DFF stream. */
     inline sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
@@ -185,9 +185,9 @@ private:
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
-    rtl::OUString       maObjName;      /// Name of the object.
-    rtl::OUString       maMacroName;    /// Name of an attached macro.
-    rtl::OUString       maHyperlink;    /// On-click hyperlink URL.
+    OUString       maObjName;      /// Name of the object.
+    OUString       maMacroName;    /// Name of an attached macro.
+    OUString       maHyperlink;    /// On-click hyperlink URL.
     bool                mbHasAnchor;    /// true = maAnchor is initialized.
     bool                mbHidden;       /// true = Object is hidden.
     bool                mbVisible;      /// true = Object is visible.
@@ -526,7 +526,7 @@ public:
     void                SetDffProperties( const DffPropSet& rDffPropSet );
 
     /** Returns the service name of the control component to be created. */
-    inline ::rtl::OUString GetServiceName() const { return DoGetServiceName(); }
+    inline OUString GetServiceName() const { return DoGetServiceName(); }
     /** Fills the passed macro event descriptor. */
     bool                FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rDescriptor ) const;
@@ -543,7 +543,7 @@ protected:
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
 
     /** Derived classes return the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const = 0;
+    virtual OUString DoGetServiceName() const = 0;
     /** Derived classes return the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const = 0;
 };
@@ -560,7 +560,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 };
@@ -581,7 +581,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -606,7 +606,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -628,7 +628,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 };
@@ -649,7 +649,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -669,7 +669,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 };
@@ -693,7 +693,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -744,7 +744,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 };
@@ -763,7 +763,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 };
@@ -809,7 +809,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -839,7 +839,7 @@ protected:
     /** Sets additional properties for the current form control. */
     virtual void        DoProcessControl( ScfPropertySet& rPropSet ) const;
     /** Returns the service name of the control component to be created. */
-    virtual ::rtl::OUString DoGetServiceName() const;
+    virtual OUString DoGetServiceName() const;
     /** Returns the type of the macro event to be created. */
     virtual XclTbxEventType DoGetEventType() const;
 
@@ -861,7 +861,7 @@ class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
 public:
     explicit            XclImpPictureObj( const XclImpRoot& rRoot );
     /** Returns the ObjectName - can use non-obvious lookup for override in the associated vba document module stream**/
-    virtual rtl::OUString GetObjName() const;
+    virtual OUString GetObjName() const;
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
 
@@ -1085,7 +1085,7 @@ private:
     typedef boost::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
     typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
-    const ::rtl::OUString maStdFormName;    /// Standard name of control forms.
+    const OUString maStdFormName;    /// Standard name of control forms.
     SotStorageStreamRef mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
     ScfProgressBarRef   mxProgress;         /// The progress bar used in ProcessObj().
     XclImpDffConvDataStack maDataStack;     /// Stack for registered drawing managers.
@@ -1216,7 +1216,7 @@ public:
     void                ConvertObjects();
 
     /** Returns the default name for the passed object. */
-    rtl::OUString       GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
+    OUString       GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
     /** Sets the container to receive overridden shape/ctrl names from

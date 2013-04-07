@@ -68,12 +68,12 @@ public:
     // XDispatchProvider
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException ) ;
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(  const   css::util::URL &            aURL            ,
-                                                            const   ::rtl::OUString &   sTargetFrameName,
+                                                            const   OUString &   sTargetFrameName,
                                                                     sal_Int32   eSearchFlags    ) throw( css::uno::RuntimeException ) ;
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException);
 };
 
 #endif

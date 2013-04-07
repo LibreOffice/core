@@ -51,10 +51,6 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relation;
 using ::oox::core::Relations;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
-using ::rtl::OUString;
 
 // ============================================================================
 

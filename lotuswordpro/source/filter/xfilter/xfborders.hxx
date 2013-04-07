@@ -107,9 +107,9 @@ private:
     /**
      * @descr   Forst line width to OOo border width format.
      */
-    rtl::OUString   GetLineWidth();
+    OUString   GetLineWidth();
 
-    rtl::OUString   ToString();
+    OUString   ToString();
 
     friend bool operator==(XFBorder& b1, XFBorder& b2);
     friend bool operator!=(XFBorder& b1, XFBorder& b2);

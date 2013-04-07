@@ -70,7 +70,7 @@ DEFINE_XTYPEPROVIDER_4(StartModuleDispatcher                   ,
 //-----------------------------------------------
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                                              const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                                             const ::rtl::OUString&                                        sTarget)
+                                             const OUString&                                        sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex() )
     , ::cppu::OWeakObject(                              )
     , m_xContext         (rxContext                         )

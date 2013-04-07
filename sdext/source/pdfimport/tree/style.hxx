@@ -38,14 +38,14 @@ namespace pdfi
     public:
         struct Style
         {
-            rtl::OString             Name;
+            OString             Name;
             PropertyMap              Properties;
-            rtl::OUString            Contents;
+            OUString            Contents;
             Element*                 ContainedElement;
             std::vector< Style* >    SubStyles;
 
             Style() : ContainedElement( NULL )  {}
-            Style( const rtl::OString& rName, const PropertyMap& rProps ) :
+            Style( const OString& rName, const PropertyMap& rProps ) :
                 Name( rName ),
                 Properties( rProps ),
                 ContainedElement( NULL )
@@ -55,9 +55,9 @@ namespace pdfi
     private:
         struct HashedStyle
         {
-            rtl::OString            Name;
+            OString            Name;
             PropertyMap             Properties;
-            rtl::OUString           Contents;
+            OUString           Contents;
             Element*                ContainedElement;
             std::vector<sal_Int32>  SubStyles;
 
@@ -161,12 +161,12 @@ namespace pdfi
         sal_Int32 impl_getStyleId( const Style& rStyle, bool bSubStyle );
         sal_Int32 getStyleId( const Style& rStyle )
         { return impl_getStyleId( rStyle, false ); }
-        sal_Int32 getStandardStyleId( const rtl::OString& rFamily );
+        sal_Int32 getStandardStyleId( const OString& rFamily );
 
         // returns NULL for an invalid style id
         const PropertyMap* getProperties( sal_Int32 nStyleId ) const;
         sal_Int32 setProperties( sal_Int32 nStyleId, const PropertyMap &rNewProps );
-        rtl::OUString getStyleName( sal_Int32 nStyle ) const;
+        OUString getStyleName( sal_Int32 nStyle ) const;
     };
 }
 

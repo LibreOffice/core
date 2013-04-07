@@ -75,9 +75,9 @@ class TitleBarUpdate : // interfaces
         struct TModuleInfo
         {
             /// internal id of this module
-            ::rtl::OUString sID;
+            OUString sID;
             /// localized name for this module
-            ::rtl::OUString sUIName;
+            OUString sUIName;
             /// configured icon for this module
             ::sal_Int32 nIcon;
         };

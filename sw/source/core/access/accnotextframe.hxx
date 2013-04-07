@@ -28,8 +28,8 @@ class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public ::com::sun::star::accessibility::XAccessibleImage
 {
     SwDepend        aDepend;
-    ::rtl::OUString msTitle; // #i73249#
-    ::rtl::OUString msDesc;
+    OUString msTitle; // #i73249#
+    OUString msDesc;
 
 protected:
 
@@ -48,12 +48,12 @@ public:
     // XAccessibleContext
 
     // #i73249# - Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
@@ -75,7 +75,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XAccessibleImage
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleImageDescription(  )
         throw ( ::com::sun::star::uno::RuntimeException );
 

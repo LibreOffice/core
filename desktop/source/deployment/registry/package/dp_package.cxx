@@ -71,7 +71,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 namespace dp_registry {
 namespace backend {
@@ -609,7 +608,7 @@ bool BackendImpl::PackageImpl::checkPlatform(
     else
     {
         ret = false;
-        rtl::OUString msg(
+        OUString msg(
             "unsupported platform");
         Any e(
             css::deployment::PlatformException(
@@ -636,7 +635,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     if (unsatisfied.getLength() == 0) {
         return true;
     } else {
-        rtl::OUString msg(
+        OUString msg(
             "unsatisfied dependencies");
         Any e(
             css::deployment::DependencyException(
@@ -897,7 +896,7 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (const Exception &)
                         {
-                            OSL_FAIL( ::rtl::OUStringToOString(
+                            OSL_FAIL( OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -989,7 +988,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( const css::deployment::DeploymentException& )
         {
-            OSL_FAIL( ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_FAIL( OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
@@ -1067,7 +1066,7 @@ void BackendImpl::PackageImpl::exportTo(
     }
     erase_path( destURL, xCmdEnv );
 
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii( "vnd.sun.star.zip://" );
     buf.append( ::rtl::Uri::encode( destURL,
                                     rtl_UriCharClassRegName,
@@ -1119,14 +1118,14 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (const deployment::DeploymentException &) {
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             ::comphelper::anyToString(
                                 ::cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (const lang::IllegalArgumentException & exc) {
             (void) exc;
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
 
@@ -1528,7 +1527,7 @@ void BackendImpl::PackageImpl::scanBundle(
         {
             // patch description:
             ::rtl::ByteSequence bytes( readFile( descrFileContent ) );
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             if ( bytes.getLength() )
             {
                 buf.append( OUString( reinterpret_cast<sal_Char const *>(

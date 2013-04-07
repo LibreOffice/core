@@ -82,17 +82,17 @@ uno::Any SAL_CALL UNOMainThreadExecutor::execute( const uno::Sequence< beans::Na
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
+    uno::Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.comp.thread.MainThreadExecutor";
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
+OUString SAL_CALL UNOMainThreadExecutor::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.thread.MainThreadExecutor");
+    return OUString("com.sun.star.comp.thread.MainThreadExecutor");
 }
 
 //-------------------------------------------------------------------------
@@ -103,17 +103,17 @@ uno::Reference< uno::XInterface > SAL_CALL UNOMainThreadExecutor::impl_staticCre
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UNOMainThreadExecutor::getImplementationName()
+OUString SAL_CALL UNOMainThreadExecutor::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL UNOMainThreadExecutor::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL UNOMainThreadExecutor::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName == aSeq[nInd] )
@@ -123,7 +123,7 @@ sal_Bool SAL_CALL UNOMainThreadExecutor::supportsService( const ::rtl::OUString&
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL UNOMainThreadExecutor::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

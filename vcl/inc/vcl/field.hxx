@@ -518,7 +518,7 @@ public:
     virtual void            Down();
     virtual void            First();
     virtual void            Last();
-    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool            set_property(const OString &rKey, const OString &rValue);
 };
 
 
@@ -589,7 +589,7 @@ public:
                                                 MapUnit eInUnit, FieldUnit eOutUnit )
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
-    virtual bool            set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool            set_property(const OString &rKey, const OString &rValue);
 };
 
 

@@ -29,7 +29,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
@@ -43,19 +42,19 @@ Reference<XInterface> SAL_CALL TaskPanelFactory_createInstance (
 
 
 
-::rtl::OUString TaskPanelFactory_getImplementationName (void) throw(RuntimeException)
+OUString TaskPanelFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.TaskPanelFactory");
+    return OUString("com.sun.star.comp.Draw.framework.TaskPanelFactory");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     const OUString sServiceName("com.sun.star.drawing.framework.TaskPanelFactory");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -173,13 +172,13 @@ void SAL_CALL TaskPanelFactory::initialize(
 
 namespace
 {
-    void lcl_collectResourceURLs( const Reference< XResourceId >& i_rResourceId, ::std::vector< ::rtl::OUString >& o_rResourceURLs )
+    void lcl_collectResourceURLs( const Reference< XResourceId >& i_rResourceId, ::std::vector< OUString >& o_rResourceURLs )
     {
         ENSURE_OR_RETURN_VOID( i_rResourceId.is(), "illegal resource ID" );
         o_rResourceURLs.resize(0);
 
         Reference< XResourceId > xResourceId( i_rResourceId );
-        ::rtl::OUString sResourceURL = xResourceId->getResourceURL();
+        OUString sResourceURL = xResourceId->getResourceURL();
         while ( !sResourceURL.isEmpty() )
         {
             o_rResourceURLs.push_back( sResourceURL );
@@ -209,10 +208,10 @@ Reference<XResource> SAL_CALL TaskPanelFactory::createResource (
             ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );
 
             // assume that the top-level anchor is the URL of the pane
-            ::std::vector< ::rtl::OUString > aResourceURLs;
+            ::std::vector< OUString > aResourceURLs;
             lcl_collectResourceURLs( rxResourceId, aResourceURLs );
 
-            const ::rtl::OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
+            const OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
             const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
 
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
@@ -237,18 +236,18 @@ void SAL_CALL TaskPanelFactory::releaseResource (
     const Reference< XResourceId > xResourceId( rxResource->getResourceId(), UNO_SET_THROW );
 
     // assume that the top-level anchor is the URL of the pane
-    ::std::vector< ::rtl::OUString > aResourceURLs;
+    ::std::vector< OUString > aResourceURLs;
     lcl_collectResourceURLs( xResourceId, aResourceURLs );
 
     OSL_ENSURE( !aResourceURLs.empty(), "TaskPanelFactory::releaseResource: illegal resource/URL!" );
     if ( !aResourceURLs.empty() )
     {
-        const ::rtl::OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
+        const OUString sPaneURL = aResourceURLs[ aResourceURLs.size() - 1 ];
         ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( *mpViewShellBase ) );
         const ::boost::shared_ptr< ViewShell > pPaneViewShell( pFrameworkHelper->GetViewShell( sPaneURL ) );
         if ( pPaneViewShell != NULL )
         {
-            const ::rtl::OUString sPanelResourceURL( xResourceId->getResourceURL() );
+            const OUString sPanelResourceURL( xResourceId->getResourceURL() );
             const toolpanel::PanelId ePanelId( toolpanel::GetStandardPanelId( sPanelResourceURL ) );
             toolpanel::ToolPanelViewShell* pToolPanel = dynamic_cast< toolpanel::ToolPanelViewShell* >( pPaneViewShell.get() );
 

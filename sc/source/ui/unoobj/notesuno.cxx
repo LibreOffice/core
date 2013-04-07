@@ -138,20 +138,20 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
-rtl::OUString SAL_CALL ScAnnotationObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScAnnotationObj::getString() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return GetUnoText().getString();
 }
 
-void SAL_CALL ScAnnotationObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScAnnotationObj::setString( const OUString& aText ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     GetUnoText().setString(aText);
 }
 
 void SAL_CALL ScAnnotationObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                            const rtl::OUString& aString, sal_Bool bAbsorb )
+                                            const OUString& aString, sal_Bool bAbsorb )
                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -196,18 +196,18 @@ table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeExc
     return aAdr;
 }
 
-rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
+OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetAuthor() : rtl::OUString();
+    return pNote ? pNote->GetAuthor() : OUString();
 }
 
-rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
+OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetDate() : rtl::OUString();
+    return pNote ? pNote->GetDate() : OUString();
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)

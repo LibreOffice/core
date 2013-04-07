@@ -49,36 +49,36 @@ public:
     virtual ~OfficeInstallationDirectories();
 
     // XOfficeInstallationDirectories
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getOfficeInstallationDirectoryURL()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getOfficeUserDataDirectoryURL()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL
-    makeRelocatableURL( const ::rtl::OUString& URL )
+    virtual OUString SAL_CALL
+    makeRelocatableURL( const OUString& URL )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL
-    makeAbsoluteURL( const ::rtl::OUString& URL )
+    virtual OUString SAL_CALL
+    makeAbsoluteURL( const OUString& URL )
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL
-    supportsService( const ::rtl::OUString& ServiceName )
+    supportsService( const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static versions (used for component registration)
-    static ::rtl::OUString SAL_CALL
+    static OUString SAL_CALL
         getImplementationName_static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames_static();
-    static ::rtl::OUString SAL_CALL
+    static OUString SAL_CALL
         getSingletonName_static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
@@ -86,13 +86,13 @@ public:
 private:
     void initDirs();
 
-    rtl::OUString                                   m_aOfficeBrandDirMacro;
-    rtl::OUString                                   m_aOfficeBaseDirMacro;
-    rtl::OUString                                   m_aUserDirMacro;
+    OUString                                   m_aOfficeBrandDirMacro;
+    OUString                                   m_aOfficeBaseDirMacro;
+    OUString                                   m_aUserDirMacro;
     com::sun::star::uno::Reference<
         com::sun::star::uno::XComponentContext >    m_xCtx;
-    rtl::OUString *                                 m_pOfficeBrandDir;
-    rtl::OUString *                                 m_pUserDir;
+    OUString *                                 m_pOfficeBrandDir;
+    OUString *                                 m_pUserDir;
 };
 
 } // namespace comphelper

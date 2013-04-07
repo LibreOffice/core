@@ -30,7 +30,6 @@
 #include <unomid.h>
 
 using namespace utl;
-using rtl::OUString;
 using namespace com::sun::star::uno;
 
 static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
@@ -317,6 +316,6 @@ sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType
     return nRet;
 }
 
-void SwStdFontConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwStdFontConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

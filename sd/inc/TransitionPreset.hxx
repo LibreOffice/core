@@ -41,7 +41,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< OUString, OUString, OUStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {
@@ -56,8 +56,8 @@ public:
     sal_Bool getDirection() const { return mbDirection; }
     sal_Int32 getFadeColor() const { return mnFadeColor; }
 
-    const rtl::OUString& getUIName() const { return maUIName; }
-    const rtl::OUString& getPresetId() const { return maPresetId; }
+    const OUString& getUIName() const { return maUIName; }
+    const OUString& getPresetId() const { return maPresetId; }
 
 private:
     TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
@@ -66,8 +66,8 @@ private:
     sal_Int16 mnSubtype;
     sal_Bool mbDirection;
     sal_Int32 mnFadeColor;
-    rtl::OUString maPresetId;
-    rtl::OUString maUIName;
+    OUString maPresetId;
+    OUString maUIName;
 
     static bool importTransitionsFile( TransitionPresetList& rList,
                                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,

@@ -120,14 +120,14 @@ public:
     void * getFactory( sal_Char const* pImplName ) const;
 
     /// @return supported service names
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>
+    ::com::sun::star::uno::Sequence< OUString>
     getSupportedServiceNames() const;
 
     /// @return whether name is in set of supported service names
-    bool supportsService( ::rtl::OUString const& name ) const;
+    bool supportsService( OUString const& name ) const;
 
     /// @return implementation name
-    ::rtl::OUString getImplementationName() const;
+    OUString getImplementationName() const;
 
 private:
     class Factory;
@@ -165,15 +165,15 @@ public:
         : BaseT(xContext), m_rServiceDecl(rServiceDecl) {}
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException) {
         return m_rServiceDecl.getImplementationName();
     }
-    virtual sal_Bool SAL_CALL supportsService( ::rtl::OUString const& name )
+    virtual sal_Bool SAL_CALL supportsService( OUString const& name )
         throw (css::uno::RuntimeException) {
         return m_rServiceDecl.supportsService(name);
     }
-    virtual css::uno::Sequence< ::rtl::OUString>
+    virtual css::uno::Sequence< OUString>
     SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) {
         return m_rServiceDecl.getSupportedServiceNames();
     }

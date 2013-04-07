@@ -995,7 +995,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
             ::comphelper::getProcessComponentContext() );
 
         // Create a new model.
-        ::rtl::OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");
+        OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");
         mxModel = uno::Reference<frame::XModel>(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 sModelServiceName),

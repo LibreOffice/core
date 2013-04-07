@@ -23,7 +23,6 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 
 XMLErrorBarStylePropertyHdl::XMLErrorBarStylePropertyHdl(  const SvXMLEnumMapEntry* pEnumMap, const ::com::sun::star::uno::Type & rType )

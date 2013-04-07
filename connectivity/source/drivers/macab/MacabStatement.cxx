@@ -32,7 +32,7 @@
 #include "resource/macab_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -54,7 +54,7 @@ namespace connectivity
     void impl_throwError(sal_uInt16 _nErrorId)
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(_nErrorId) );
+        const OUString sError( aResources.getResourceString(_nErrorId) );
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
     }
@@ -88,7 +88,7 @@ void MacabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc:
     impl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
-void MacabCommonStatement::getNextParameter(::rtl::OUString &) const throw(::com::sun::star::sdbc::SQLException)
+void MacabCommonStatement::getNextParameter(OUString &) const throw(::com::sun::star::sdbc::SQLException)
 {
     impl_throwError(STR_PARA_ONLY_PREPARED);
 }
@@ -127,14 +127,14 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
             }
             else if (SQL_ISRULE(pLeft, column_ref))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
 
                 if (pRight->isToken() || SQL_ISRULE(pRight, parameter))
                 {
-                    ::rtl::OUString sMatchString;
+                    OUString sMatchString;
 
                     if (pRight->isToken())                      // WHERE Name = 'Doe'
                         sMatchString = pRight->getTokenValue();
@@ -192,7 +192,7 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
                             SQL_ISTOKEN(pMiddleLeft, IS) &&
                             SQL_ISTOKEN(pRight, NULL))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
@@ -213,14 +213,14 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
         {
             if (SQL_ISRULE(pLeft, column_ref))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
 
                 if (pMiddleRight->isToken() || SQL_ISRULE(pMiddleRight, parameter))
                 {
-                    ::rtl::OUString sMatchString;
+                    OUString sMatchString;
 
                     if (pMiddleRight->isToken())                    // WHERE Name LIKE 'Sm%'
                         sMatchString = pMiddleRight->getTokenValue();
@@ -268,7 +268,7 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
 
                 if (pColumnRef->count() == 1)
                 {
-                    ::rtl::OUString sColumnName =
+                    OUString sColumnName =
                         pColumnRef->getChild(0)->getTokenValue();
                     sal_Bool bAscending =
                         SQL_ISTOKEN(pAscendingDescending, DESC)?
@@ -286,16 +286,16 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
     return 0;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString MacabCommonStatement::getTableName() const
+OUString MacabCommonStatement::getTableName() const
 {
     const OSQLTables& xTabs = m_aSQLIterator.getTables();
 
     if( xTabs.empty() )
-        return ::rtl::OUString();
+        return OUString();
 
     // can only deal with one table at a time
     if(xTabs.size() > 1 || m_aSQLIterator.hasErrors() )
-        return ::rtl::OUString();
+        return OUString();
 
     return xTabs.begin()->first;
 }
@@ -309,7 +309,7 @@ void MacabCommonStatement::setMacabFields(MacabResultSet *pResult) const throw(S
     if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(
+        const OUString sError( aResources.getResourceString(
                 STR_INVALID_COLUMN_SELECTION
              ) );
         ::dbtools::throwGenericSQLException(sError,NULL);
@@ -398,7 +398,7 @@ void SAL_CALL MacabCommonStatement::close(  ) throw(SQLException, RuntimeExcepti
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL MacabCommonStatement::execute(
-        const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+        const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -409,7 +409,7 @@ sal_Bool SAL_CALL MacabCommonStatement::execute(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL MacabCommonStatement::executeQuery(
-        const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+        const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -418,7 +418,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
 
     MacabResultSet* pResult = new MacabResultSet(this);
     Reference< XResultSet > xRS = pResult;
-    ::rtl::OUString aErr;
+    OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr, sql);
     if (m_pParseTree == NULL)
@@ -430,7 +430,7 @@ OSL_TRACE("Mac OS Address book - SQL Request: %s", OUtoCStr(sql));
     {
         case SQL_STATEMENT_SELECT:
             {
-            ::rtl::OUString sTableName = getTableName(); // FROM which table ?
+            OUString sTableName = getTableName(); // FROM which table ?
             if (sTableName.getLength() != 0) // a match
             {
                 MacabRecords *aRecords;
@@ -477,7 +477,7 @@ Reference< XConnection > SAL_CALL MacabCommonStatement::getConnection(  ) throw(
     return (Reference< XConnection >) m_pConnection;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabCommonStatement::executeUpdate( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -509,7 +509,7 @@ void SAL_CALL MacabCommonStatement::clearWarnings(  ) throw(SQLException, Runtim
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);

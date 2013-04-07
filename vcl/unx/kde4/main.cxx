@@ -60,7 +60,7 @@ extern "C" {
 
 #if QT_VERSION < 0x050000
         // Qt 4.x support needs >= 4.1.0
-        rtl::OString aVersion( qVersion() );
+        OString aVersion( qVersion() );
         SAL_INFO( "vcl.kde4", "qt version string is " << aVersion );
 
         sal_Int32 nIndex = 0, nMajor = 0, nMinor = 0;

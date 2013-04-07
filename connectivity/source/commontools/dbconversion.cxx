@@ -53,7 +53,7 @@ namespace dbtools
         return STANDARD_DB_DATE;
     }
     //------------------------------------------------------------------------------
-    ::rtl::OUString DBTypeConversion::toDateString(const Date& rDate)
+    OUString DBTypeConversion::toDateString(const Date& rDate)
     {
         sal_Char s[11];
         snprintf(s,
@@ -63,10 +63,10 @@ namespace dbtools
                 (int)rDate.Month,
                 (int)rDate.Day);
         s[10] = 0;
-        return ::rtl::OUString::createFromAscii(s);
+        return OUString::createFromAscii(s);
     }
     //------------------------------------------------------------------
-    ::rtl::OUString DBTypeConversion::toTimeString(const Time& rTime)
+    OUString DBTypeConversion::toTimeString(const Time& rTime)
     {
         sal_Char s[9];
         snprintf(s,
@@ -76,14 +76,14 @@ namespace dbtools
                 (int)rTime.Minutes,
                 (int)rTime.Seconds);
         s[8] = 0;
-        return ::rtl::OUString::createFromAscii(s);
+        return OUString::createFromAscii(s);
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString DBTypeConversion::toDateTimeString(const DateTime& _rDateTime)
+    OUString DBTypeConversion::toDateTimeString(const DateTime& _rDateTime)
     {
         Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
-        ::rtl::OUStringBuffer aTemp(toDateString(aDate));
+        OUStringBuffer aTemp(toDateString(aDate));
         aTemp.appendAscii(" ");
         Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
         aTemp.append( toTimeString(aTime) );
@@ -381,7 +381,7 @@ namespace dbtools
         return xRet;
     }
     //------------------------------------------------------------------------------
-    Date DBTypeConversion::toDate(const ::rtl::OUString& _sSQLString)
+    Date DBTypeConversion::toDate(const OUString& _sSQLString)
     {
         // get the token out of a string
         static sal_Unicode sDateSep = '-';
@@ -402,7 +402,7 @@ namespace dbtools
     }
 
     //-----------------------------------------------------------------------------
-    DateTime DBTypeConversion::toDateTime(const ::rtl::OUString& _sSQLString)
+    DateTime DBTypeConversion::toDateTime(const OUString& _sSQLString)
     {
         //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Timestamp.html#valueOf(java.lang.String)
         //@see http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Date.html#valueOf(java.lang.String)
@@ -419,7 +419,7 @@ namespace dbtools
     }
 
     //-----------------------------------------------------------------------------
-    Time DBTypeConversion::toTime(const ::rtl::OUString& _sSQLString)
+    Time DBTypeConversion::toTime(const OUString& _sSQLString)
     {
         static sal_Unicode sTimeSep = ':';
 
@@ -436,12 +436,12 @@ namespace dbtools
             {
                 nSecond = (sal_uInt16)_sSQLString.getToken(0,sTimeSep,nIndex).toInt32();
                 nIndex = 0;
-                ::rtl::OUString sNano(_sSQLString.getToken(1,'.',nIndex));
+                OUString sNano(_sSQLString.getToken(1,'.',nIndex));
                 if ( !sNano.isEmpty() )
                 {
                     // our time struct only supports hundredth seconds
                     sNano = sNano.copy(0,::std::min<sal_Int32>(sNano.getLength(),2));
-                    const static ::rtl::OUString s_Zeros("00");
+                    const static OUString s_Zeros("00");
                     sNano += s_Zeros.copy(0,s_Zeros.getLength() - sNano.getLength());
                     nHundredthSeconds = static_cast<sal_uInt16>(sNano.toInt32());
                 }

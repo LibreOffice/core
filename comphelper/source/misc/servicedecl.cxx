@@ -42,11 +42,11 @@ public:
         : m_rServiceDecl(rServiceDecl) {}
 
     // XServiceInfo:
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( rtl::OUString const& name )
+    virtual sal_Bool SAL_CALL supportsService( OUString const& name )
         throw (uno::RuntimeException);
-    virtual uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames()
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
     // XSingleComponentFactory:
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
@@ -69,19 +69,19 @@ ServiceDecl::Factory::~Factory()
 }
 
 // XServiceInfo:
-rtl::OUString ServiceDecl::Factory::getImplementationName()
+OUString ServiceDecl::Factory::getImplementationName()
     throw (uno::RuntimeException)
 {
     return m_rServiceDecl.getImplementationName();
 }
 
-sal_Bool ServiceDecl::Factory::supportsService( rtl::OUString const& name )
+sal_Bool ServiceDecl::Factory::supportsService( OUString const& name )
     throw (uno::RuntimeException)
 {
     return m_rServiceDecl.supportsService(name);
 }
 
-uno::Sequence<rtl::OUString> ServiceDecl::Factory::getSupportedServiceNames()
+uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
     return m_rServiceDecl.getSupportedServiceNames();
@@ -116,15 +116,15 @@ void * ServiceDecl::getFactory( sal_Char const* pImplName ) const
     return 0;
 }
 
-uno::Sequence<rtl::OUString> ServiceDecl::getSupportedServiceNames() const
+uno::Sequence<OUString> ServiceDecl::getSupportedServiceNames() const
 {
-    std::vector<rtl::OUString> vec;
+    std::vector<OUString> vec;
 
-    rtl::OString const str(m_pServiceNames);
+    OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        rtl::OString const token( str.getToken( 0, m_cDelim, nIndex ) );
-        vec.push_back( rtl::OUString( token.getStr(), token.getLength(),
+        OString const token( str.getToken( 0, m_cDelim, nIndex ) );
+        vec.push_back( OUString( token.getStr(), token.getLength(),
                                       RTL_TEXTENCODING_ASCII_US ) );
     }
     while (nIndex >= 0);
@@ -132,12 +132,12 @@ uno::Sequence<rtl::OUString> ServiceDecl::getSupportedServiceNames() const
     return comphelper::containerToSequence(vec);
 }
 
-bool ServiceDecl::supportsService( ::rtl::OUString const& name ) const
+bool ServiceDecl::supportsService( OUString const& name ) const
 {
-    rtl::OString const str(m_pServiceNames);
+    OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        rtl::OString const token( str.getToken( 0, m_cDelim, nIndex ) );
+        OString const token( str.getToken( 0, m_cDelim, nIndex ) );
         if (name.equalsAsciiL( token.getStr(), token.getLength() ))
             return true;
     }
@@ -145,9 +145,9 @@ bool ServiceDecl::supportsService( ::rtl::OUString const& name ) const
     return false;
 }
 
-rtl::OUString ServiceDecl::getImplementationName() const
+OUString ServiceDecl::getImplementationName() const
 {
-    return rtl::OUString::createFromAscii(m_pImplName);
+    return OUString::createFromAscii(m_pImplName);
 }
 
 } // namespace service_decl

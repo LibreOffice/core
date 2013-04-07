@@ -59,12 +59,12 @@ namespace {
 
 struct ClassMapEntry {
     ClassMapEntry(
-        rtl::OUString const & theClassPath, rtl::OUString const & theClassName):
+        OUString const & theClassPath, OUString const & theClassName):
         classPath(theClassPath), className(theClassName), classLoader(NULL),
         classObject(NULL) {}
 
-    rtl::OUString classPath;
-    rtl::OUString className;
+    OUString classPath;
+    OUString className;
     jweak classLoader;
     jweak classObject;
 };
@@ -125,7 +125,7 @@ bool getLocalFromWeakRef( jweak& _weak, LocalRef< T >& _inout_local )
 // If false is returned, a (still pending) JNI exception occurred.
 bool loadClass(
     Reference< XComponentContext > const & context, JNIEnv& environment,
-    rtl::OUString const & classPath, rtl::OUString const & name,
+    OUString const & classPath, OUString const & name,
     LocalRef< jobject > * classLoaderPtr, LocalRef< jclass > * classPtr)
 {
     OSL_ASSERT(classLoaderPtr != NULL);
@@ -321,7 +321,7 @@ jclass java_sql_Connection::getMyClass() const
 }
 
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -379,7 +379,7 @@ sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, Runtim
     return callBooleanMethod( "isReadOnly", mID );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL java_sql_Connection::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     callVoidMethodWithStringArg("setCatalog",mID,catalog);
@@ -463,16 +463,16 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     return xStmt;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString java_sql_Connection::transFormPreparedStatement(const ::rtl::OUString& _sSQL)
+OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
 {
-    ::rtl::OUString sSqlStatement = _sSQL;
+    OUString sSqlStatement = _sSQL;
     if ( m_bParameterSubstitution )
     {
         try
         {
             OSQLParser aParser( m_pDriver->getContext() );
-            ::rtl::OUString sErrorMessage;
-            ::rtl::OUString sNewSql;
+            OUString sErrorMessage;
+            OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
             if(pNode)
             {   // special handling for parameters
@@ -489,14 +489,14 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     return sSqlStatement;
 }
 // -------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_STATEMENT, sql );
 
     SDBThreadAttach t;
-    ::rtl::OUString sSqlStatement = sql;
+    OUString sSqlStatement = sql;
     sSqlStatement = transFormPreparedStatement( sSqlStatement );
 
     java_sql_PreparedStatement* pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sSqlStatement );
@@ -507,14 +507,14 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     return xReturn;
 }
 // -------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
     m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_CALL, sql );
 
     SDBThreadAttach t;
-    ::rtl::OUString sSqlStatement = sql;
+    OUString sSqlStatement = sql;
     sSqlStatement = transFormPreparedStatement( sSqlStatement );
 
     java_sql_CallableStatement* pStatement = new java_sql_CallableStatement( t.pEnv, *this, sSqlStatement );
@@ -525,12 +525,12 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     return xStmt;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_Connection::nativeSQL( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString aStr;
+    OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
@@ -590,15 +590,15 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
 // -----------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getDriverLoadErrorMessage( const ::connectivity::SharedResources& _aResource,const ::rtl::OUString& _rDriverClass, const ::rtl::OUString& _rDriverClassPath )
+    OUString lcl_getDriverLoadErrorMessage( const ::connectivity::SharedResources& _aResource,const OUString& _rDriverClass, const OUString& _rDriverClassPath )
     {
-        ::rtl::OUString sError1( _aResource.getResourceStringWithSubstitution(
+        OUString sError1( _aResource.getResourceStringWithSubstitution(
                 STR_NO_CLASSNAME,
                 "$classname$", _rDriverClass
              ) );
         if ( !_rDriverClassPath.isEmpty() )
         {
-            const ::rtl::OUString sError2( _aResource.getResourceStringWithSubstitution(
+            const OUString sError2( _aResource.getResourceStringWithSubstitution(
                 STR_NO_CLASSNAME_PATH,
                 "$classpath$", _rDriverClassPath
              ) );
@@ -636,7 +636,7 @@ namespace
                 ++pSystemProp
             )
         {
-            ::rtl::OUString sValue;
+            OUString sValue;
             OSL_VERIFY( pSystemProp->Value >>= sValue );
 
             _rLogger.log( LogLevel::FINER, STR_LOG_SETTING_SYSTEM_PROPERTY, pSystemProp->Name, sValue );
@@ -655,11 +655,11 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDriverClass, const ::rtl::OUString& _sDriverClassPath,
+void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClass, const OUString& _sDriverClassPath,
     const Sequence< NamedValue >& _rSystemProperties )
 {
     // contains the statement which should be used when query for automatically generated values
-    ::rtl::OUString     sGeneratedValueStatement;
+    OUString     sGeneratedValueStatement;
     // set to <TRUE/> when we should allow to query for generated values
     sal_Bool            bAutoRetrievingEnabled = sal_False;
 
@@ -738,7 +738,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
         throw SQLException(
             lcl_getDriverLoadErrorMessage( getResources(),_sDriverClass, _sDriverClassPath ),
             *this,
-            ::rtl::OUString(),
+            OUString(),
             1000,
             makeAny(e)
         );
@@ -755,12 +755,12 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const ::rtl::OUString& _sDriverClass)
+OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString& _sDriverClass)
 {
-    static const ::rtl::OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
+    static const OUString s_sNodeName("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths");
     ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_pDriver->getContext(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-    ::rtl::OUString sURL;
+    OUString sURL;
     if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
     {
         ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( _sDriverClass );
@@ -769,7 +769,7 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     return sURL;
 }
 // -----------------------------------------------------------------------------
-sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
+sal_Bool java_sql_Connection::construct(const OUString& url,
                                     const Sequence< PropertyValue >& info)
 {
     { // initialize the java vm
@@ -782,9 +782,9 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     if ( !t.pEnv )
         throwGenericSQLException(STR_NO_JAVA,*this);
 
-    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+    OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
     sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
-    ::rtl::OUString sDriverClassPath,sDriverClass;
+    OUString sDriverClassPath,sDriverClass;
     Sequence< NamedValue > aSystemProperties;
 
     ::comphelper::NamedValueCollection aSettings( info );

@@ -167,7 +167,7 @@ SetSystemLocale( const char* p_inlocale )
 
 #ifdef SOLARIS
 static void
-SetSystemEnvironment( const rtl::OUString& rLocale )
+SetSystemEnvironment( const OUString& rLocale )
 {
     OUString LC_ALL_Var("LC_ALL");
     osl_setEnvironment(LC_ALL_Var.pData, rLocale.pData);

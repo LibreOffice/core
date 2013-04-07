@@ -98,7 +98,7 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const String& rNm, sal_uInt16 nPoolId )
         return 1 | HTML_DLCOLL_DT;
     }
 
-    String sDTDD( rtl::OUString(OOO_STRING_SVTOOLS_HTML_dt) );
+    String sDTDD( OUString(OOO_STRING_SVTOOLS_HTML_dt) );
     sDTDD += ' ';
     if( COMPARE_EQUAL == sDTDD.CompareTo( rNm, sDTDD.Len() ) )
         // DefinitionList - term
@@ -199,7 +199,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 
 struct SwHTMLTxtCollOutputInfo
 {
-    rtl::OString aToken;        // auszugendens End-Token
+    OString aToken;        // auszugendens End-Token
     SfxItemSet *pItemSet;       // harte Attributierung
 
     sal_Bool bInNumBulList;         // in einer Aufzaehlungs-Liste;
@@ -647,7 +647,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     {
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
-        rInfo.aToken = rtl::OString();   // kein End-Tag ausgeben
+        rInfo.aToken = OString();   // kein End-Tag ausgeben
         rWrt.Strm() << SwHTMLWriter::sNewLine;
 
         return;
@@ -801,7 +801,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ggf ein List-Item aufmachen
     if( rInfo.bInNumBulList && bNumbered )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_li);
         if( USHRT_MAX != nNumStart )
         {
@@ -824,7 +824,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // The align=... attribute does behave strange in netscape
         // if there are controls in a paragraph, because the control and
         // all text behind the control does not recognize this attribute.
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
@@ -844,7 +844,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // ausgegeben, wenn,
     // - keine Styles geschrieben werden, und
     // - ein untere Abstand oder eine Absatz-Ausrichtung existiert
-    rtl::OString aToken = rInfo.aToken;
+    OString aToken = rInfo.aToken;
     if( !rHWrt.bCfgOutStyles && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
     {
@@ -903,7 +903,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.bTxtAttr = sal_False;
         rHWrt.bOutOpts = sal_True;
 
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(aToken);
 
         if( eLang != LANGUAGE_DONTKNOW && eLang != rHWrt.eLang )
@@ -969,7 +969,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         // wenn kein End-Tag geschrieben werden soll, es loeschen
         if( bNoEndTag )
-            rInfo.aToken = rtl::OString();
+            rInfo.aToken = OString();
     }
 
     if( nBulletGrfLvl != 255 )
@@ -2058,7 +2058,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         rHTMLWrt.bLFPossible = sal_True;
 
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_horzrule);
 
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
@@ -2592,7 +2592,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         else
             pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
 
-        rtl::OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_linebreak));
+        OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_linebreak));
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').append(pStr);
         HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), sOut.getStr() );
 
@@ -2667,7 +2667,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
 
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_color).append('=');
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -2711,7 +2711,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
         String aNames;
         SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), aNames, 0,
                            rHTMLWrt.IsHTMLMode(HTMLMODE_FONT_GENERIC) );
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font).append(' ')
             .append(OOO_STRING_SVTOOLS_HTML_O_face).append("=\"");
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -2732,7 +2732,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_font);
 
         sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
@@ -2770,7 +2770,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_span);
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
         rHTMLWrt.OutLanguage( ((const SvxLanguageItem &)rHt).GetLanguage() );
@@ -2935,7 +2935,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
         return rWrt;
     }
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor);
 
     bool bScriptDependent = false;
@@ -3020,7 +3020,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     }
 
     if( sRel.Len() )
-        sOut.append(rtl::OUStringToOString(sRel, RTL_TEXTENCODING_ASCII_US));
+        sOut.append(OUStringToOString(sRel, RTL_TEXTENCODING_ASCII_US));
 
     if( sOut.getLength() )
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -3110,7 +3110,7 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<');
         if( !pFmtInfo->aToken.isEmpty() )
             sOut.append(pFmtInfo->aToken);
@@ -3177,7 +3177,7 @@ static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
     }
     if( pStr )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
             .append(pStr);
         rWrt.Strm() << sOut.makeStringAndClear().getStr();

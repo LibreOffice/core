@@ -45,11 +45,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
-void lcl_addRanges( ::std::vector< ::rtl::OUString > & rOutResult,
+void lcl_addRanges( ::std::vector< OUString > & rOutResult,
                     const uno::Reference< data::XLabeledDataSequence > & xLabeledSeq )
 {
     if( ! xLabeledSeq.is())
@@ -63,7 +62,7 @@ void lcl_addRanges( ::std::vector< ::rtl::OUString > & rOutResult,
 }
 
 void lcl_addDataSourceRanges(
-    ::std::vector< ::rtl::OUString > & rOutResult,
+    ::std::vector< OUString > & rOutResult,
     const uno::Reference< data::XDataSource > & xDataSource )
 {
     if( xDataSource.is() )
@@ -75,7 +74,7 @@ void lcl_addDataSourceRanges(
 }
 
 void lcl_addErrorBarRanges(
-    ::std::vector< ::rtl::OUString > & rOutResult,
+    ::std::vector< OUString > & rOutResult,
     const uno::Reference< XDataSeries > & xDataSeries )
 {
     uno::Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
@@ -129,7 +128,7 @@ Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSeque
     return new ::chart::CachedDataSequence();
 }
 
-Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence( const ::rtl::OUString& rSingleText )
+Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence( const OUString& rSingleText )
 {
     return new ::chart::CachedDataSequence( rSingleText );
 }
@@ -175,7 +174,7 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
 }
 
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
-                                            const ::rtl::OUString & rRangeRepresentation,
+                                            const OUString & rRangeRepresentation,
                                             const uno::Sequence< sal_Int32 >& rSequenceMapping,
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
 {
@@ -197,7 +196,7 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
 }
 
 void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue >& rArguments
-                                     , ::rtl::OUString & rRangeRepresentation, uno::Sequence< sal_Int32 >& rSequenceMapping
+                                     , OUString & rRangeRepresentation, uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories )
 {
     const beans::PropertyValue* pArguments = rArguments.getConstArray();
@@ -269,10 +268,10 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     return new DataSource( aResultSequence );
 }
 
-uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges(
+uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
     const uno::Reference< chart2::XDiagram > & xDiagram )
 {
-    ::std::vector< ::rtl::OUString > aResult;
+    ::std::vector< OUString > aResult;
 
     if( xDiagram.is())
     {
@@ -293,7 +292,7 @@ uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges(
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges( const uno::Reference< frame::XModel > & xChartModel )
+uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const uno::Reference< frame::XModel > & xChartModel )
 {
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     return getUsedDataRanges( xDiagram );
@@ -334,7 +333,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 bool DataSourceHelper::detectRangeSegmentation(
     const uno::Reference<
         frame::XModel >& xChartModel
-    , ::rtl::OUString& rOutRangeString
+    , OUString& rOutRangeString
     , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
     , bool& rOutFirstCellAsLabel
@@ -400,7 +399,7 @@ bool DataSourceHelper::allArgumentsForRectRangeDetected(
             }
             else if ( aProperty.Name == "CellRangeRepresentation" )
             {
-                ::rtl::OUString aRange;
+                OUString aRange;
                 bHasCellRangeRepresentation =
                     (aProperty.Value.hasValue() && (aProperty.Value >>= aRange) && !aRange.isEmpty());
             }
@@ -435,7 +434,7 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xTemplateFactory.is() )
         return;
 
-    ::rtl::OUString aRangeString;
+    OUString aRangeString;
     bool bDummy;
     uno::Sequence< sal_Int32 > aDummy;
     readArguments( xDataProvider->detectArguments( pressUsedDataIntoRectangularFormat( xChartDocument )),

@@ -74,17 +74,17 @@ public:
 
 private:
     void                updateBuffer() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    ::rtl::OString      readToElementBegin() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    ::rtl::OString      readToElementEnd() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    OString      readToElementBegin() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    OString      readToElementEnd() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >
                         mxTextStrm;
     ::com::sun::star::uno::Sequence< sal_Unicode > maOpeningBracket;
     ::com::sun::star::uno::Sequence< sal_Unicode > maClosingBracket;
-    const ::rtl::OString maOpeningCData;
-    const ::rtl::OString maClosingCData;
-    ::rtl::OString      maBuffer;
+    const OString maOpeningCData;
+    const OString maClosingCData;
+    OString      maBuffer;
     sal_Int32           mnBufferPos;
 };
 

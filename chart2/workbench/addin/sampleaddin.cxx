@@ -29,7 +29,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 // code for creating instances of SampleAddIn
 
@@ -163,7 +162,7 @@ OUString SampleAddIn::getImplementationName_Static()
     return "SampleAddIn";
 }
 
-uno::Sequence< ::rtl::OUString > SampleAddIn::getSupportedServiceNames_Static()
+uno::Sequence< OUString > SampleAddIn::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSeq( 4 );
 
@@ -476,7 +475,7 @@ void SAL_CALL SampleAddIn::setPosition( const awt::Point& aPos )
 }
 
 // XShapeDescriptor ( ::XShape ::XDiagram )
-rtl::OUString SAL_CALL SampleAddIn::getShapeType() throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL SampleAddIn::getShapeType() throw( com::sun::star::uno::RuntimeException )
 {
     return "com.sun.star.chart.SampleAddinShape";
 }

@@ -68,7 +68,7 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_DATEFIELD;
     return aSupported;
 }
@@ -143,7 +143,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -160,7 +160,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ODateModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_DATEFIELD; // old (non-sun) name for compatibility !
 }

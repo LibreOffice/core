@@ -47,14 +47,14 @@ public:
     HierarchyEntryData() : m_aType( NONE ) {}
     HierarchyEntryData( const Type & rType ) : m_aType( rType ) {}
 
-    const rtl::OUString & getName() const { return m_aName; }
-    void setName( const rtl::OUString & rName ) { m_aName = rName; }
+    const OUString & getName() const { return m_aName; }
+    void setName( const OUString & rName ) { m_aName = rName; }
 
-    const rtl::OUString & getTitle() const { return m_aTitle; }
-    void setTitle( const rtl::OUString & rTitle ) { m_aTitle = rTitle; }
+    const OUString & getTitle() const { return m_aTitle; }
+    void setTitle( const OUString & rTitle ) { m_aTitle = rTitle; }
 
-    const rtl::OUString & getTargetURL() const { return m_aTargetURL; }
-    void setTargetURL( const rtl::OUString & rURL ) { m_aTargetURL = rURL; }
+    const OUString & getTargetURL() const { return m_aTargetURL; }
+    void setTargetURL( const OUString & rURL ) { m_aTargetURL = rURL; }
 
     Type getType() const
     { return ( m_aType != NONE ) ? m_aType
@@ -64,9 +64,9 @@ public:
     void setType( const Type & rType ) { m_aType = rType; }
 
 private:
-    rtl::OUString m_aName;      // Name (language independent)
-    rtl::OUString m_aTitle;     // Title (language dependent)
-    rtl::OUString m_aTargetURL; // Target URL ( links only )
+    OUString m_aName;      // Name (language independent)
+    OUString m_aTitle;     // Title (language dependent)
+    OUString m_aTargetURL; // Target URL ( links only )
     Type          m_aType;      // Type
 };
 
@@ -77,9 +77,9 @@ class HierarchyUri;
 
 class HierarchyEntry
 {
-    ::rtl::OUString m_aServiceSpecifier;
-    ::rtl::OUString m_aName;
-    ::rtl::OUString m_aPath;
+    OUString m_aServiceSpecifier;
+    OUString m_aName;
+    OUString m_aPath;
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext >     m_xContext;
@@ -94,7 +94,7 @@ class HierarchyEntry
     sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
-    ::rtl::OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
+    OUString createPathFromHierarchyURL( const HierarchyUri & rURI );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
     getRootReadAccess();
@@ -103,7 +103,7 @@ public:
     HierarchyEntry( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::uno::XComponentContext >& rxContext,
                     HierarchyContentProvider* pProvider,
-                    const ::rtl::OUString& rURL );
+                    const OUString& rURL );
 
     sal_Bool hasData();
 
@@ -111,7 +111,7 @@ public:
 
     sal_Bool setData( const HierarchyEntryData& rData, sal_Bool bCreate );
 
-    sal_Bool move( const ::rtl::OUString& rNewURL,
+    sal_Bool move( const OUString& rNewURL,
                    const HierarchyEntryData& rData );
 
     sal_Bool remove();

@@ -405,15 +405,15 @@ void SalXLib::Init()
     // is there a -display command line parameter?
 
     sal_uInt32 nParams = osl_getCommandArgCount();
-    rtl::OUString aParam;
-    rtl::OString aDisplay;
+    OUString aParam;
+    OString aDisplay;
     for (sal_uInt16 i=0; i<nParams; i++)
     {
         osl_getCommandArg(i, &aParam.pData);
         if ( aParam == "-display" )
         {
             osl_getCommandArg(i+1, &aParam.pData);
-            aDisplay = rtl::OUStringToOString(
+            aDisplay = OUStringToOString(
                    aParam, osl_getThreadTextEncoding());
 
             if ((pDisp = XOpenDisplay(aDisplay.getStr()))!=NULL)
@@ -436,17 +436,17 @@ void SalXLib::Init()
         // Open $DISPLAY or default...
         char *pDisplay = getenv("DISPLAY");
         if (pDisplay != NULL)
-            aDisplay = rtl::OString(pDisplay);
+            aDisplay = OString(pDisplay);
         pDisp  = XOpenDisplay(pDisplay);
     }
 
     if ( !pDisp )
     {
-        rtl::OUString aProgramFileURL;
+        OUString aProgramFileURL;
         osl_getExecutableFile( &aProgramFileURL.pData );
-        rtl::OUString aProgramSystemPath;
+        OUString aProgramSystemPath;
         osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
-        rtl::OString  aProgramName = rtl::OUStringToOString(
+        OString  aProgramName = OUStringToOString(
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
         std::fprintf( stderr, "%s X11 error: Can't open display: %s\n",

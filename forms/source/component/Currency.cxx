@@ -66,7 +66,7 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_CURRENCYFIELD;
     return aSupported;
 }
@@ -97,7 +97,7 @@ void OCurrencyModel::implConstruct()
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 
-            ::rtl::OUString sCurrencySymbol;
+            OUString sCurrencySymbol;
             sal_Bool bPrependCurrencySymbol;
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
@@ -110,11 +110,11 @@ void OCurrencyModel::implConstruct()
                     bPrependCurrencySymbol = sal_False;
                     break;
                 case 2: // $ 1
-                    sCurrencySymbol = ::rtl::OUString(String(aLocaleInfo.getCurrSymbol())) + ::rtl::OUString(" ");
+                    sCurrencySymbol = OUString(String(aLocaleInfo.getCurrSymbol())) + OUString(" ");
                     bPrependCurrencySymbol = sal_True;
                     break;
                 case 3: // 1 $
-                    sCurrencySymbol = ::rtl::OUString(" ") + ::rtl::OUString(String(aLocaleInfo.getCurrSymbol()));
+                    sCurrencySymbol = OUString(" ") + OUString(String(aLocaleInfo.getCurrSymbol()));
                     bPrependCurrencySymbol = sal_False;
                     break;
             }
@@ -172,7 +172,7 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 4 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
     *pStoreTo++ = VALIDATABLE_CONTROL_MODEL;
@@ -196,7 +196,7 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
 }

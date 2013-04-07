@@ -178,9 +178,9 @@ extern "C" int LockSequence_chardata_callback(
         case STATE_OWNER:
         {
             // collect raw XML data... (owner contains ANY)
-            rtl::OUString aValue;
+            OUString aValue;
             pCtx->pLock->Owner >>= aValue;
-            aValue += rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+            aValue += OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             pCtx->pLock->Owner <<= aValue;
             break;
         }
@@ -207,7 +207,7 @@ extern "C" int LockSequence_chardata_callback(
                                             buf, len, "Second-", 7, 7 ) == 0 )
             {
                 pCtx->pLock->Timeout
-                    = rtl::OString( buf + 7, len - 7 ).toInt64();
+                    = OString( buf + 7, len - 7 ).toInt64();
                 pCtx->hasTimeout = true;
             }
 //          else if ( rtl_str_shortenedCompareIgnoreCase_WithLength(
@@ -229,7 +229,7 @@ extern "C" int LockSequence_chardata_callback(
             sal_Int32 nPos = pCtx->pLock->LockTokens.getLength();
             pCtx->pLock->LockTokens.realloc( nPos + 1 );
             pCtx->pLock->LockTokens[ nPos ]
-                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+                = OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             pCtx->hasHREF = true;
             break;
         }
@@ -310,7 +310,7 @@ extern "C" int LockSequence_endelement_callback(
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool LockSequence::createFromXML( const rtl::OString & rInData,
+bool LockSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Lock > & rOutData )
 {
     const sal_Int32 TOKEN_LENGTH = 13; // </activelock>

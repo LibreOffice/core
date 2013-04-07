@@ -92,7 +92,7 @@ SVL_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uri::XUriReference
 normalizedMakeRelative(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
     const & context,
-    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
+    OUString const & baseUriReference, OUString const & uriReference);
 
 /**
    A variant of normalizedMakeRelative with a simplified interface.

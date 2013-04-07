@@ -60,7 +60,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OAttribListMerger::seekToName(const ::rtl::OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
+    sal_Bool OAttribListMerger::seekToName(const OUString& _rName, Reference< xml::sax::XAttributeList >& _rSubList, sal_Int16& _rLocalIndex)
     {
         for (   ConstAttributeListArrayIterator aLookupSublist = m_aLists.begin();
                 aLookupSublist != m_aLists.end();
@@ -91,37 +91,37 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAttribListMerger::getNameByIndex( sal_Int16 i ) throw(RuntimeException)
+    OUString SAL_CALL OAttribListMerger::getNameByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
         sal_Int16 nLocalIndex;
 
         if (!seekToIndex(i, xSubList, nLocalIndex))
-            return ::rtl::OUString();
+            return OUString();
 
         return xSubList->getNameByIndex(nLocalIndex);
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAttribListMerger::getTypeByIndex( sal_Int16 i ) throw(RuntimeException)
+    OUString SAL_CALL OAttribListMerger::getTypeByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
         sal_Int16 nLocalIndex;
 
         if (!seekToIndex(i, xSubList, nLocalIndex))
-            return ::rtl::OUString();
+            return OUString();
 
         return xSubList->getTypeByIndex(nLocalIndex);
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAttribListMerger::getTypeByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+    OUString SAL_CALL OAttribListMerger::getTypeByName( const OUString& _rName ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
         sal_Int16 nLocalIndex;
 
         if (!seekToName(_rName, xSubList, nLocalIndex))
-            return ::rtl::OUString();
+            return OUString();
 
         // though we're in getTypeByName here, we reroute this to the getTypeByIndex of the sub list,
         // assuming that this is faster
@@ -129,25 +129,25 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAttribListMerger::getValueByIndex( sal_Int16 i ) throw(RuntimeException)
+    OUString SAL_CALL OAttribListMerger::getValueByIndex( sal_Int16 i ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
         sal_Int16 nLocalIndex;
 
         if (!seekToIndex(i, xSubList, nLocalIndex))
-            return ::rtl::OUString();
+            return OUString();
 
         return xSubList->getValueByIndex(nLocalIndex);
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAttribListMerger::getValueByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+    OUString SAL_CALL OAttribListMerger::getValueByName( const OUString& _rName ) throw(RuntimeException)
     {
         Reference< xml::sax::XAttributeList > xSubList;
         sal_Int16 nLocalIndex;
 
         if (!seekToName(_rName, xSubList, nLocalIndex))
-            return ::rtl::OUString();
+            return OUString();
 
         // though we're in getValueByName here, we reroute this to the getValueByIndex of the sub list,
         // assuming that this is faster

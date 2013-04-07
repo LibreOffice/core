@@ -27,7 +27,7 @@
 
 namespace {
 
-::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
+OUString getElement(OUString const & version, ::sal_Int32 * index)
 {
     while (*index < version.getLength() && version[*index] == '0') {
         ++*index;
@@ -40,11 +40,11 @@ namespace {
 namespace dp_misc {
 
 ::dp_misc::Order compareVersions(
-    ::rtl::OUString const & version1, ::rtl::OUString const & version2)
+    OUString const & version1, OUString const & version2)
 {
     for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        ::rtl::OUString e1(getElement(version1, &i1));
-        ::rtl::OUString e2(getElement(version2, &i2));
+        OUString e1(getElement(version1, &i1));
+        OUString e2(getElement(version2, &i2));
         if (e1.getLength() < e2.getLength()) {
             return ::dp_misc::LESS;
         } else if (e1.getLength() > e2.getLength()) {

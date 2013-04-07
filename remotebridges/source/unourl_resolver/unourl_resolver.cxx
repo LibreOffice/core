@@ -41,7 +41,6 @@ using namespace com::sun::star::connection;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
 
 #define SERVICENAME     "com.sun.star.bridge.UnoUrlResolver"
 #define IMPLNAME        "com.sun.star.comp.bridge.UnoUrlResolver"

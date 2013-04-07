@@ -602,9 +602,9 @@ void OGenericUnoController::InvalidateFeature_Impl()
 #if OSL_DEBUG_LEVEL > 0
             if ( m_aSupportedFeatures.end() == aFeaturePos )
             {
-                ::rtl::OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
-                sMessage += ::rtl::OString::valueOf( aNextFeature.nId );
-                sMessage += ::rtl::OString( " has been invalidated, but is not supported!" );
+                OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
+                sMessage += OString::valueOf( aNextFeature.nId );
+                sMessage += OString( " has been invalidated, but is not supported!" );
                 OSL_FAIL( sMessage.getStr() );
             }
 #endif
@@ -774,9 +774,9 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     // #i52602#
 
 #ifdef TIMELOG
-    ::rtl::OString sLog( "OGenericUnoController::dispatch( '" );
-    sLog += ::rtl::OString( _aURL.Main.getStr(), _aURL.Main.getLength(), osl_getThreadTextEncoding() );
-    sLog += ::rtl::OString( "' )" );
+    OString sLog( "OGenericUnoController::dispatch( '" );
+    sLog += OString( _aURL.Main.getStr(), _aURL.Main.getLength(), osl_getThreadTextEncoding() );
+    sLog += OString( "' )" );
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", sLog.getStr() );
 #endif
 
@@ -1325,7 +1325,7 @@ void OGenericUnoController::openHelpAgent(OUString const& _suHelpStringURL )
     openHelpAgent( aURL );
 }
 
-void OGenericUnoController::openHelpAgent(const rtl::OString& _sHelpId)
+void OGenericUnoController::openHelpAgent(const OString& _sHelpId)
 {
     openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _sHelpId ) );
 }

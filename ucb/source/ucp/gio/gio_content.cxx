@@ -88,7 +88,7 @@ Content::Content(
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(false)
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "New Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "New Content ('%s')\n", OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 }
 
@@ -102,7 +102,7 @@ Content::Content(
       m_pProvider( pProvider ), mpFile (NULL), mpInfo( NULL ), mbTransient(true)
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Create Content ('%s')\n", rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "Create Content ('%s')\n", OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
     mpInfo = g_file_info_new();
     g_file_info_set_file_type(mpInfo, bIsFolder ? G_FILE_TYPE_DIRECTORY : G_FILE_TYPE_REGULAR);
@@ -114,14 +114,14 @@ Content::~Content()
     if (mpFile) g_object_unref(mpFile);
 }
 
-rtl::OUString Content::getParentURL()
+OUString Content::getParentURL()
 {
-    rtl::OUString sURL;
+    OUString sURL;
     if (GFile* pFile = g_file_get_parent(getGFile()))
     {
         char* pPath = g_file_get_uri(pFile);
         g_object_unref(pFile);
-        sURL = rtl::OUString::createFromAscii(pPath);
+        sURL = OUString::createFromAscii(pPath);
         g_free(pPath);
     }
     return sURL;
@@ -135,11 +135,11 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     //it throughout the g_file_* calls
 }
 
-rtl::OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
+OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
 {
     return isFolder(uno::Reference< ucb::XCommandEnvironment >())
-        ? rtl::OUString( GIO_FOLDER_TYPE )
-        : rtl::OUString( GIO_FILE_TYPE );
+        ? OUString( GIO_FOLDER_TYPE )
+        : OUString( GIO_FILE_TYPE );
 }
 
 #define EXCEPT(aExcept) \
@@ -153,11 +153,11 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
     uno::Any aRet;
 
     gint eCode = pError->code;
-    rtl::OUString sMessage(pError->message, strlen(pError->message), RTL_TEXTENCODING_UTF8);
+    OUString sMessage(pError->message, strlen(pError->message), RTL_TEXTENCODING_UTF8);
     g_error_free(pError);
 
-    rtl::OUString sName;
-    rtl::OUString sHost;
+    OUString sName;
+    OUString sHost;
 
     uno::Sequence< uno::Any > aArgs( 1 );
     aArgs[ 0 ] <<= sName;
@@ -293,7 +293,7 @@ uno::Any Content::mapGIOError( GError *pError )
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException(
-        rtl::OUString("Wrong argument type!"),
+        OUString("Wrong argument type!"),
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
 
@@ -362,7 +362,7 @@ GFileInfo* Content::getGFileInfo(const uno::Reference< ucb::XCommandEnvironment 
 GFile* Content::getGFile()
 {
     if (!mpFile)
-        mpFile = g_file_new_for_uri(rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
+        mpFile = g_file_new_for_uri(OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
     return mpFile;
 }
 
@@ -423,7 +423,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
             if (pInfo != 0 && g_file_info_has_attribute(pInfo, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME))
             {
                 const char *pName = g_file_info_get_display_name(pInfo);
-                xRow->appendString( rProp, rtl::OUString(pName, strlen(pName), RTL_TEXTENCODING_UTF8) );
+                xRow->appendString( rProp, OUString(pName, strlen(pName), RTL_TEXTENCODING_UTF8) );
             }
             else
                 xRow->appendVoid(rProp);
@@ -512,7 +512,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 static lang::IllegalAccessException
 getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
 {
-    return lang::IllegalAccessException ( rtl::OUString("Property is read-only!"), rContext );
+    return lang::IllegalAccessException ( OUString("Property is read-only!"), rContext );
 }
 
 void Content::queryChildren( ContentRefList& rChildren )
@@ -524,11 +524,11 @@ void Content::queryChildren( ContentRefList& rChildren )
     ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
-    rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
+    OUString aURL = m_xIdentifier->getContentIdentifier();
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += rtl::OUString("/");
+        aURL += OUString("/");
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -538,7 +538,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     while ( it != end )
     {
         ucbhelper::ContentImplHelperRef xChild = (*it);
-        rtl::OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
+        OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) && ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
@@ -569,7 +569,7 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
         return sal_False;
     }
 
-    rtl::OUString aOldURL = m_xIdentifier->getContentIdentifier();
+    OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
     // Exchange own identitity.
     if ( exchange( xNewId ) )
@@ -587,8 +587,8 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
 
             // Create new content identifier for the child...
             uno::Reference< ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
-            rtl::OUString aOldChildURL = xOldChildId->getContentIdentifier();
-            rtl::OUString aNewChildURL = aOldChildURL.replaceAt(
+            OUString aOldChildURL = xOldChildId->getContentIdentifier();
+            OUString aNewChildURL = aOldChildURL.replaceAt(
                 0, aOldURL.getLength(), xNewId->getContentIdentifier() );
 
             uno::Reference< ucb::XContentIdentifier > xNewChildId
@@ -643,7 +643,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         const beans::PropertyValue& rValue = pValues[ n ];
 #if OSL_DEBUG_LEVEL > 1
-        g_warning("Set prop '%s'", rtl::OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+        g_warning("Set prop '%s'", OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
         if ( rValue.Name == "ContentType" ||
              rValue.Name == "MediaType" ||
@@ -656,11 +656,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "Title" )
         {
-            rtl::OUString aNewTitle;
+            OUString aNewTitle;
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( rtl::OUString("Property value has wrong type!"),
+                    ( OUString("Property value has wrong type!"),
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
@@ -668,13 +668,13 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( aNewTitle.getLength() <= 0 )
             {
                 aRet[ n ] <<= lang::IllegalArgumentException
-                    ( rtl::OUString("Empty title not allowed!"),
+                    ( OUString("Empty title not allowed!"),
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
 
             }
 
-            rtl::OString sNewTitle = OUStringToOString(aNewTitle, RTL_TEXTENCODING_UTF8);
+            OString sNewTitle = OUStringToOString(aNewTitle, RTL_TEXTENCODING_UTF8);
             newName = sNewTitle.getStr();
             const char *oldName = g_file_info_get_name( pInfo);
 
@@ -684,9 +684,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 g_warning ("Set new name to '%s'", newName);
 #endif
 
-                aEvent.PropertyName = rtl::OUString("Title");
+                aEvent.PropertyName = OUString("Title");
                 if (oldName)
-                    aEvent.OldValue = uno::makeAny(rtl::OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
+                    aEvent.OldValue = uno::makeAny(OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
                 aEvent.NewValue = uno::makeAny(aNewTitle);
                 aChanges.getArray()[ nChanged ] = aEvent;
                 nTitlePos = nChanged++;
@@ -697,7 +697,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         else
         {
 #ifdef DEBUG
-            fprintf(stderr, "Unknown property %s\n", rtl::OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+            fprintf(stderr, "Unknown property %s\n", OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
             //TODO
@@ -720,15 +720,15 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             if (nTitlePos > -1)
             {
-                rtl::OUString aNewURL = getParentURL();
-                aNewURL += rtl::OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
+                OUString aNewURL = getParentURL();
+                aNewURL += OUString( newName, strlen(newName), RTL_TEXTENCODING_UTF8 );
                 uno::Reference< ucb::XContentIdentifier > xNewId
                     = new ::ucbhelper::ContentIdentifier( aNewURL );
 
                 if (!exchangeIdentity( xNewId ) )
                 {
                     aRet[ nTitlePos ] <<= uno::Exception
-                        ( rtl::OUString("Exchange failed!"),
+                        ( OUString("Exchange failed!"),
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -828,7 +828,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
         uno::Any aErr = uno::makeAny(
-            ucb::InteractiveAugmentedIOException(rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+            ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
                 bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
         );
@@ -859,7 +859,7 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny ( ucb::UnsupportedOpenModeException
-                    ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                    ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                       sal_Int16( rOpenCommand.Mode ) ) ),
                     xEnv );
         }
@@ -871,12 +871,12 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
             //       sink is optional...
 #ifdef DEBUG
             g_warning ("Failed to load data from '%s'",
-                rtl::OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 
             ucbhelper::cancelCommandExecution(
                 uno::makeAny (ucb::UnsupportedDataSinkException
-                    ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                    ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                       rOpenCommand.Sink ) ),
                     xEnv );
         }
@@ -895,7 +895,7 @@ uno::Any SAL_CALL Content::execute(
            uno::RuntimeException )
 {
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "Content::execute %s\n", rtl::OUStringToOString(aCommand.Name, RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "Content::execute %s\n", OUStringToOString(aCommand.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
     uno::Any aRet;
 
@@ -974,7 +974,7 @@ uno::Any SAL_CALL Content::execute(
 
         ucbhelper::cancelCommandExecution
             ( uno::makeAny( ucb::UnsupportedCommandException
-              ( rtl::OUString(),
+              ( OUString(),
                 static_cast< cppu::OWeakObject * >( this ) ) ),
               xEnv );
     }
@@ -1025,7 +1025,7 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     {
         ucbhelper::cancelCommandExecution( uno::makeAny
             ( ucb::MissingInputStreamException
-              ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
+              ( OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
     }
 
@@ -1057,17 +1057,17 @@ const GFileCopyFlags DEFAULT_COPYDATA_FLAGS =
 void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    rtl::OUString sDest = m_xIdentifier->getContentIdentifier();
+    OUString sDest = m_xIdentifier->getContentIdentifier();
     if (!sDest.endsWith("/")) {
         sDest += "/";
     }
     if (aTransferInfo.NewTitle.getLength())
         sDest += aTransferInfo.NewTitle;
     else
-        sDest += rtl::OUString::createFromAscii(g_file_get_basename(getGFile()));
+        sDest += OUString::createFromAscii(g_file_get_basename(getGFile()));
 
-    GFile *pDest = g_file_new_for_uri(rtl::OUStringToOString(sDest, RTL_TEXTENCODING_UTF8).getStr());
-    GFile *pSource = g_file_new_for_uri(rtl::OUStringToOString(aTransferInfo.SourceURL, RTL_TEXTENCODING_UTF8).getStr());
+    GFile *pDest = g_file_new_for_uri(OUStringToOString(sDest, RTL_TEXTENCODING_UTF8).getStr());
+    GFile *pSource = g_file_new_for_uri(OUStringToOString(aTransferInfo.SourceURL, RTL_TEXTENCODING_UTF8).getStr());
 
     gboolean bSuccess = false;
     GError *pError = NULL;
@@ -1092,19 +1092,19 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            rtl::OUString("Title"),
+            OUString("Title"),
             -1,
-            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+            getCppuType( static_cast< OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = rtl::OUString( GIO_FILE_TYPE );
+        seq[0].Type       = OUString( GIO_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = rtl::OUString( GIO_FOLDER_TYPE );
+        seq[1].Type       = OUString( GIO_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
@@ -1136,7 +1136,7 @@ uno::Reference< ucb::XContent >
     else
     {
 #ifdef DEBUG
-        g_warning( "Failed to create new content '%s'", rtl::OUStringToOString(Info.Type,
+        g_warning( "Failed to create new content '%s'", OUStringToOString(Info.Type,
             RTL_TEXTENCODING_UTF8).getStr() );
 #endif
         return uno::Reference< ucb::XContent >();
@@ -1146,13 +1146,13 @@ uno::Reference< ucb::XContent >
     g_warning( "createNewContent (%d)", (int) create_document );
 #endif
 
-    rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
+    OUString aURL = m_xIdentifier->getContentIdentifier();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-            aURL += rtl::OUString("/");
+            aURL += OUString("/");
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
-    aURL += rtl::OUString::createFromAscii( name );
+    aURL += OUString::createFromAscii( name );
 
     uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(aURL));
 
@@ -1207,40 +1207,40 @@ uno::Sequence< beans::Property > Content::getProperties(
 {
     static const beans::Property aGenericProperties[] =
     {
-        beans::Property( rtl::OUString(  "IsDocument"  ),
+        beans::Property( OUString(  "IsDocument"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "IsFolder"  ),
+        beans::Property( OUString(  "IsFolder"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "Title"  ),
-            -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+        beans::Property( OUString(  "Title"  ),
+            -1, getCppuType( static_cast< const OUString * >( 0 ) ),
             beans::PropertyAttribute::BOUND ),
-        beans::Property( rtl::OUString(  "IsReadOnly"  ),
+        beans::Property( OUString(  "IsReadOnly"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "DateCreated"  ),
+        beans::Property( OUString(  "DateCreated"  ),
             -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "DateModified"  ),
+        beans::Property( OUString(  "DateModified"  ),
             -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "Size"  ),
+        beans::Property( OUString(  "Size"  ),
             -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "IsVolume"  ),
+        beans::Property( OUString(  "IsVolume"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "IsCompactDisc"  ),
+        beans::Property( OUString(  "IsCompactDisc"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "IsRemoveable"  ),
+        beans::Property( OUString(  "IsRemoveable"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "IsHidden"  ),
+        beans::Property( OUString(  "IsHidden"  ),
             -1, getCppuBooleanType(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( rtl::OUString(  "CreatableContentsInfo"  ),
+        beans::Property( OUString(  "CreatableContentsInfo"  ),
             -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
@@ -1255,35 +1255,35 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
     {
         // Required commands
         ucb::CommandInfo
-        ( rtl::OUString(  "getCommandInfo"  ),
+        ( OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "getPropertySetInfo"  ),
+        ( OUString(  "getPropertySetInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "getPropertyValues"  ),
+        ( OUString(  "getPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "setPropertyValues"  ),
+        ( OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
         // Optional standard commands
         ucb::CommandInfo
-        ( rtl::OUString(  "delete"  ),
+        ( OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "insert"  ),
+        ( OUString(  "insert"  ),
           -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "open"  ),
+        ( OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
-        ( rtl::OUString(  "transfer"  ),
+        ( OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "createNewContent"  ),
+        ( OUString(  "createNewContent"  ),
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
@@ -1309,16 +1309,16 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
 }
 
-rtl::OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
 {
-       return rtl::OUString("com.sun.star.comp.GIOContent");
+       return OUString("com.sun.star.comp.GIOContent");
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
        throw( uno::RuntimeException )
 {
-       uno::Sequence< rtl::OUString > aSNS( 1 );
-       aSNS.getArray()[ 0 ] = rtl::OUString("com.sun.star.ucb.GIOContent");
+       uno::Sequence< OUString > aSNS( 1 );
+       aSNS.getArray()[ 0 ] = OUString("com.sun.star.ucb.GIOContent");
        return aSNS;
 }
 

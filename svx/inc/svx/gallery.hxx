@@ -78,10 +78,10 @@ public:
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
     static sal_Bool                 FillObjList( const String& rThemeName, std::vector<String> &rObjList );
     static sal_Bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<String> &rObjList );
-    static bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<rtl::OUString> &rObjList );
+    static bool                 FillObjList( const sal_uInt32 nThemeId, std::vector<OUString> &rObjList );
 
                                 // FillObjTitleList is filling the rList with the title for each gallery object
-    static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList );
+    static sal_Bool             FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList );
 
     static sal_Bool                 InsertURL( const String& rThemeName, const String& rURL );
     static sal_Bool                 InsertURL( sal_uIntPtr nThemeId, const String& rURL );

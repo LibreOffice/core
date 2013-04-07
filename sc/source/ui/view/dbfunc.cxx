@@ -52,7 +52,7 @@ ScDBFunc::~ScDBFunc()
 //      auxiliary functions
 //
 
-void ScDBFunc::GotoDBArea( const ::rtl::OUString& rDBName )
+void ScDBFunc::GotoDBArea( const OUString& rDBName )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDBCollection* pDBCol = pDoc->GetDBCollection();

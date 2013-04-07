@@ -361,7 +361,7 @@ void OApplicationView::paste()
         pTest->paste();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
+OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getQualifiedName( _pEntry );
@@ -427,7 +427,7 @@ sal_Int32 OApplicationView::getElementCount()
     return getDetailView()->getElementCount();
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const
+void OApplicationView::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->getSelectionElementNames( _rNames );
@@ -445,27 +445,27 @@ void OApplicationView::describeCurrentSelectionForType( const ElementType _eType
     getDetailView()->describeCurrentSelectionForType( _eType, _out_rSelectedObjects );
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
+void OApplicationView::selectElements(const Sequence< OUString>& _aNames)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->selectElements( _aNames );
 }
 // -----------------------------------------------------------------------------
-SvTreeListEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry* OApplicationView::elementAdded(ElementType eType,const OUString& _rName, const Any& _rObject )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->elementAdded(eType,_rName,_rObject);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::elementRemoved(ElementType eType,const ::rtl::OUString& _rName )
+void OApplicationView::elementRemoved(ElementType eType,const OUString& _rName )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->elementRemoved(eType,_rName);
 }
 // -----------------------------------------------------------------------------
 void OApplicationView::elementReplaced(ElementType _eType
-                                                    ,const ::rtl::OUString& _rOldName
-                                                    ,const ::rtl::OUString& _rNewName )
+                                                    ,const OUString& _rOldName
+                                                    ,const OUString& _rNewName )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->elementReplaced(_eType, _rOldName, _rNewName );
@@ -517,9 +517,9 @@ void OApplicationView::showPreview(const Reference< XContent >& _xContent)
     getDetailView()->showPreview(_xContent);
 }
 // -----------------------------------------------------------------------------
-void OApplicationView::showPreview( const ::rtl::OUString& _sDataSourceName,
+void OApplicationView::showPreview( const OUString& _sDataSourceName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                    const ::rtl::OUString& _sName,
+                                    const OUString& _sName,
                                     sal_Bool _bTable)
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");

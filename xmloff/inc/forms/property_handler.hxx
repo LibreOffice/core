@@ -44,18 +44,18 @@ namespace xmloff
     public:
         /** retrieves the XML attribute value for the given property values
         */
-        virtual ::rtl::OUString
+        virtual OUString
             getAttributeValue( const PropertyValues& i_propertyValues ) const = 0;
 
         /** is a convenience method for XML attributes whose value comprises of only one UNO API property
         */
-        virtual ::rtl::OUString
+        virtual OUString
             getAttributeValue( const ::com::sun::star::uno::Any& i_propertyValue ) const = 0;
 
         /** retrieves the values of the properties controlled by an XML attributed, described by a given attribute value
         */
         virtual bool
-            getPropertyValues( const ::rtl::OUString i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
+            getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const = 0;
 
         virtual ~IPropertyHandler() { }
     };

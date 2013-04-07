@@ -256,7 +256,7 @@ public:
 
     static INetContentType GetContentType(OUString const & rTypeName);
 
-    static rtl::OUString GetContentType(INetContentType eTypeID);
+    static OUString GetContentType(INetContentType eTypeID);
 
     static OUString GetPresentation(INetContentType eTypeID,
                                     const LanguageTag& aLocale);

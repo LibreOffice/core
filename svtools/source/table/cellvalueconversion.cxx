@@ -98,7 +98,7 @@ namespace svt
     };
 
     typedef ::boost::shared_ptr< IValueNormalization > PValueNormalization;
-    typedef ::boost::unordered_map< ::rtl::OUString, PValueNormalization, ::rtl::OUStringHash >    NormalizerCache;
+    typedef ::boost::unordered_map< OUString, PValueNormalization, OUStringHash >    NormalizerCache;
 
     //==================================================================================================================
     //= CellValueConversion_Data
@@ -334,7 +334,7 @@ namespace svt
                 // ensure a NullDate we will assume later on
                 UnoDate const aNullDate( 1, 1, 1900 );
                 Reference< XPropertySet > const xFormatSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                xFormatSettings->setPropertyValue( ::rtl::OUString::createFromAscii( "NullDate" ), makeAny( aNullDate ) );
+                xFormatSettings->setPropertyValue( OUString::createFromAscii( "NullDate" ), makeAny( aNullDate ) );
 
                 // knit
                 xFormatter->attachNumberFormatsSupplier( xSupplier );
@@ -360,7 +360,7 @@ namespace svt
                 // never encountered this type before
                 o_formatter.reset();
 
-                ::rtl::OUString const sTypeName( i_valueType.getTypeName() );
+                OUString const sTypeName( i_valueType.getTypeName() );
                 TypeClass const eTypeClass = i_valueType.getTypeClass();
 
                 if ( sTypeName.equals( ::cppu::UnoType< DateTime >::get().getTypeName() ) )
@@ -423,9 +423,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString CellValueConversion::convertToString( const Any& i_value )
+    OUString CellValueConversion::convertToString( const Any& i_value )
     {
-        ::rtl::OUString sStringValue;
+        OUString sStringValue;
         if ( !i_value.hasValue() )
             return sStringValue;
 

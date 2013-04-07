@@ -58,7 +58,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
         /** Returns a boolean property by its real identifier. */
         bool        GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
         /** Returns a string property. */
-        ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
+        OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
         sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
         void        InitializePropSet( sal_uInt16 nPropSetType ) const;
 

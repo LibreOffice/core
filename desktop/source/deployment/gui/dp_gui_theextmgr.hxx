@@ -58,7 +58,7 @@ private:
     UpdateRequiredDialog    *m_pUpdReqDialog;
     ExtensionCmdQueue       *m_pExecuteCmdQueue;
 
-    ::rtl::OUString          m_sGetExtensionsURL;
+    OUString          m_sGetExtensionsURL;
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
@@ -74,7 +74,7 @@ public:
     DialogHelper* getDialogHelper() { return m_pExtMgrDialog ? (DialogHelper*) m_pExtMgrDialog : (DialogHelper*) m_pUpdReqDialog; }
     ExtensionCmdQueue* getCmdQueue() const { return m_pExecuteCmdQueue; }
 
-    void SetText( const ::rtl::OUString &rTitle );
+    void SetText( const OUString &rTitle );
     void Show();
     void ToTop( sal_uInt16 nFlags );
     bool Close();
@@ -82,7 +82,7 @@ public:
 
     //-----------------
     bool checkUpdates( bool showUpdateOnly, bool parentVisible );
-    bool installPackage( const ::rtl::OUString &rPackageURL, bool bWarnUser = false );
+    bool installPackage( const OUString &rPackageURL, bool bWarnUser = false );
     void createPackageList();
 
     bool queryTermination();
@@ -99,7 +99,7 @@ public:
     static ::rtl::Reference<TheExtensionManager> get(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,
-        ::rtl::OUString const & view = ::rtl::OUString() );
+        OUString const & view = OUString() );
 
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )

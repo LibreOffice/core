@@ -57,8 +57,6 @@ using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ================================================================================
 
@@ -73,7 +71,7 @@ private:
 public:
     SchXMLDomain2Context( SvXMLImport& rImport,
                           sal_uInt16 nPrefix,
-                          const rtl::OUString& rLocalName,
+                          const OUString& rLocalName,
                           ::std::vector< OUString > & rAddresses );
     virtual ~SchXMLDomain2Context();
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& xAttrList );
@@ -82,8 +80,8 @@ public:
 SchXMLDomain2Context::SchXMLDomain2Context(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
-    ::std::vector< ::rtl::OUString > & rAddresses ) :
+    const OUString& rLocalName,
+    ::std::vector< OUString > & rAddresses ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrAddresses( rAddresses )
 {
@@ -99,8 +97,8 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
@@ -145,7 +143,7 @@ void lcl_setAutomaticSymbolSize( const uno::Reference< beans::XPropertySet >& xS
             aSymbolSize.Width = aSymbolSize.Height;
         }
     }
-    xSeriesOrPointProp->setPropertyValue(::rtl::OUString("SymbolSize"),uno::makeAny( aSymbolSize ));
+    xSeriesOrPointProp->setPropertyValue(OUString("SymbolSize"),uno::makeAny( aSymbolSize ));
 }
 
 void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp, const SvXMLImport& rImport )
@@ -154,14 +152,14 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
         return;
 
     sal_Int32 nSymbolType = chart::ChartSymbolType::NONE;
-    if( xSeriesOrPointProp.is() && ( xSeriesOrPointProp->getPropertyValue(::rtl::OUString("SymbolType")) >>= nSymbolType) )
+    if( xSeriesOrPointProp.is() && ( xSeriesOrPointProp->getPropertyValue(OUString("SymbolType")) >>= nSymbolType) )
     {
         if(chart::ChartSymbolType::NONE!=nSymbolType)
         {
             if( chart::ChartSymbolType::BITMAPURL==nSymbolType )
             {
                 //set special size for graphics to indicate to use the bitmap size itself
-                xSeriesOrPointProp->setPropertyValue(::rtl::OUString("SymbolSize"),uno::makeAny( awt::Size(-1,-1) ));
+                xSeriesOrPointProp->setPropertyValue(OUString("SymbolSize"),uno::makeAny( awt::Size(-1,-1) ));
             }
             else
             {
@@ -174,7 +172,7 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
 void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XPropertySet >& xPointProp, const SvXMLImport& rImport
     , const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
-    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( ::rtl::OUString("SymbolSize"), pPropStyleContext, pStylesCtxt ) );
+    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( OUString("SymbolSize"), pPropStyleContext, pStylesCtxt ) );
     if( !aASymbolSize.hasValue() )
         lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
 }
@@ -187,8 +185,8 @@ void lcl_insertErrorBarLSequencesToMap(
     Reference< chart2::data::XDataSource > xErrorBarSource;
     const OUString aPropName(
         bYError
-        ? ::rtl::OUString(  "ErrorBarY" )
-        : ::rtl::OUString(  "ErrorBarX" ));
+        ? OUString(  "ErrorBarY" )
+        : OUString(  "ErrorBarX" ));
     if( ( xSeriesProp->getPropertyValue( aPropName ) >>= xErrorBarSource ) &&
         xErrorBarSource.is() )
     {
@@ -204,8 +202,8 @@ void lcl_insertErrorBarLSequencesToMap(
     }
 }
 
-Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSeries( const rtl::OUString& rRole
-        , const rtl::OUString& rRange
+Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSeries( const OUString& rRole
+        , const OUString& rRange
         , const Reference< chart2::XChartDocument >& xChartDoc
         , const Reference< chart2::XDataSeries >& xSeries )
 {
@@ -245,7 +243,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
 
 SchXMLSeries2Context::SchXMLSeries2Context(
     SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const rtl::OUString& rLocalName,
+    SvXMLImport& rImport, const OUString& rLocalName,
     const Reference< chart2::XChartDocument > & xNewDoc,
     std::vector< SchXMLAxis >& rAxes,
     ::std::list< DataRowPointStyle >& rStyleList,
@@ -299,9 +297,9 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
@@ -392,7 +390,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             // set default color for range-line to black (before applying styles)
             Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
             if( xSeriesProp.is())
-                xSeriesProp->setPropertyValue( ::rtl::OUString("Color"),
+                xSeriesProp->setPropertyValue( OUString("Color"),
                                                uno::makeAny( sal_Int32( 0x000000 ))); // black
         }
         else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
@@ -400,7 +398,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             //@todo: this property should be saved
             Reference< beans::XPropertySet > xSeriesProp( m_xSeries, uno::UNO_QUERY );
             if( xSeriesProp.is())
-                xSeriesProp->setPropertyValue( ::rtl::OUString("VaryColorsByPoint"),
+                xSeriesProp->setPropertyValue( OUString("VaryColorsByPoint"),
                                                uno::makeAny( true ));
         }
 
@@ -448,10 +446,10 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( ::rtl::OUStringToOString(
-                        ::rtl::OUString(  "Exception caught. Type: " ) +
-                        ::rtl::OUString::createFromAscii( typeid( ex ).name()) +
-                        ::rtl::OUString(  ", Message: " ) +
+        OSL_FAIL( OUStringToOString(
+                        OUString(  "Exception caught. Type: " ) +
+                        OUString::createFromAscii( typeid( ex ).name()) +
+                        OUString(  ", Message: " ) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 
@@ -468,7 +466,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
                 const XMLPropStyleContext* pPropStyleContext = dynamic_cast< const XMLPropStyleContext * >( pStyle );
 
-                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( ::rtl::OUString("SymbolSize")
+                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( OUString("SymbolSize")
                     , pPropStyleContext, pStylesCtxt ) );
                 mbSymbolSizeIsMissingInFile = !aASymbolSize.hasValue();
             }
@@ -481,12 +479,12 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
 struct DomainInfo
 {
-    DomainInfo( const rtl::OUString& rRole, const rtl::OUString& rRange, sal_Int32 nIndex )
+    DomainInfo( const OUString& rRole, const OUString& rRange, sal_Int32 nIndex )
         : aRole(rRole), aRange(rRange), nIndexForLocalData(nIndex)
     {}
 
-    rtl::OUString aRole;
-    rtl::OUString aRange;
+    OUString aRole;
+    OUString aRange;
     sal_Int32 nIndexForLocalData;
 };
 
@@ -623,7 +621,7 @@ void SchXMLSeries2Context::EndElement()
 
 SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&  )
 {
     SvXMLImportContext* pContext = 0;
@@ -728,27 +726,27 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
                 continue;
 
             if( rSeriesDefaultsAndStyles.maSymbolTypeDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("SymbolType"),rSeriesDefaultsAndStyles.maSymbolTypeDefault);
+                xSeries->setPropertyValue(OUString("SymbolType"),rSeriesDefaultsAndStyles.maSymbolTypeDefault);
             if( rSeriesDefaultsAndStyles.maDataCaptionDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("DataCaption"),rSeriesDefaultsAndStyles.maDataCaptionDefault);
+                xSeries->setPropertyValue(OUString("DataCaption"),rSeriesDefaultsAndStyles.maDataCaptionDefault);
 
             if( rSeriesDefaultsAndStyles.maErrorIndicatorDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("ErrorIndicator"),rSeriesDefaultsAndStyles.maErrorIndicatorDefault);
+                xSeries->setPropertyValue(OUString("ErrorIndicator"),rSeriesDefaultsAndStyles.maErrorIndicatorDefault);
             if( rSeriesDefaultsAndStyles.maErrorCategoryDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("ErrorCategory"),rSeriesDefaultsAndStyles.maErrorCategoryDefault);
+                xSeries->setPropertyValue(OUString("ErrorCategory"),rSeriesDefaultsAndStyles.maErrorCategoryDefault);
             if( rSeriesDefaultsAndStyles.maConstantErrorLowDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("ConstantErrorLow"),rSeriesDefaultsAndStyles.maConstantErrorLowDefault);
+                xSeries->setPropertyValue(OUString("ConstantErrorLow"),rSeriesDefaultsAndStyles.maConstantErrorLowDefault);
             if( rSeriesDefaultsAndStyles.maConstantErrorHighDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("ConstantErrorHigh"),rSeriesDefaultsAndStyles.maConstantErrorHighDefault);
+                xSeries->setPropertyValue(OUString("ConstantErrorHigh"),rSeriesDefaultsAndStyles.maConstantErrorHighDefault);
             if( rSeriesDefaultsAndStyles.maPercentageErrorDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("PercentageError"),rSeriesDefaultsAndStyles.maPercentageErrorDefault);
+                xSeries->setPropertyValue(OUString("PercentageError"),rSeriesDefaultsAndStyles.maPercentageErrorDefault);
             if( rSeriesDefaultsAndStyles.maErrorMarginDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("ErrorMargin"),rSeriesDefaultsAndStyles.maErrorMarginDefault);
+                xSeries->setPropertyValue(OUString("ErrorMargin"),rSeriesDefaultsAndStyles.maErrorMarginDefault);
 
             if( rSeriesDefaultsAndStyles.maMeanValueDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("MeanValue"),rSeriesDefaultsAndStyles.maMeanValueDefault);
+                xSeries->setPropertyValue(OUString("MeanValue"),rSeriesDefaultsAndStyles.maMeanValueDefault);
             if( rSeriesDefaultsAndStyles.maRegressionCurvesDefault.hasValue() )
-                xSeries->setPropertyValue(::rtl::OUString("RegressionCurves"),rSeriesDefaultsAndStyles.maRegressionCurvesDefault);
+                xSeries->setPropertyValue(OUString("RegressionCurves"),rSeriesDefaultsAndStyles.maRegressionCurvesDefault);
         }
         catch( uno::Exception &  )
         {
@@ -761,7 +759,7 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
 void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , ::rtl::OUString& rCurrStyleName
+        , OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart
@@ -782,7 +780,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
 
                 if( iStyle->mnAttachedAxis != 1 )
                 {
-                    xSeriesProp->setPropertyValue( rtl::OUString(  "Axis" )
+                    xSeriesProp->setPropertyValue( OUString(  "Axis" )
                         , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
                 }
 
@@ -807,7 +805,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                         // this property)
                         bool bHasErrorBarRangesFromData = false;
                         {
-                            const ::rtl::OUString aErrorBarStylePropName( "ErrorBarStyle");
+                            const OUString aErrorBarStylePropName( "ErrorBarStyle");
                             uno::Any aErrorBarStyle(
                                 SchXMLTools::getPropertyFromContext( aErrorBarStylePropName, pPropStyleContext, pStylesCtxt ));
                             if( aErrorBarStyle.hasValue())
@@ -854,7 +852,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
 void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , ::rtl::OUString& rCurrStyleName )
+        , OUString& rCurrStyleName )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
 
@@ -946,7 +944,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
 void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , ::rtl::OUString& rCurrStyleName
+        , OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
@@ -1006,7 +1004,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 {
                     //need to set this explicitly here for old files as the new api does not support this property fully anymore
                     if( bSwitchOffLinesForScatter )
-                        xPointProp->setPropertyValue(::rtl::OUString("Lines"),uno::makeAny(sal_False));
+                        xPointProp->setPropertyValue(OUString("Lines"),uno::makeAny(sal_False));
                 }
                 catch( const uno::Exception & )
                 {
@@ -1057,7 +1055,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
             if( !xSeries.is() )
                 continue;
 
-            xSeries->setPropertyValue(::rtl::OUString("Lines"),uno::makeAny(sal_False));
+            xSeries->setPropertyValue(OUString("Lines"),uno::makeAny(sal_False));
         }
         catch( uno::Exception &  )
         {

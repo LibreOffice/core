@@ -144,10 +144,10 @@ namespace dbaccess
     namespace
     {
         // --------------------------------------------------------------------
-        ::rtl::OUString lcl_determineContentType_nothrow( const Reference< XStorage >& _rxContainerStorage,
-            const ::rtl::OUString& _rEntityName )
+        OUString lcl_determineContentType_nothrow( const Reference< XStorage >& _rxContainerStorage,
+            const OUString& _rEntityName )
         {
-            ::rtl::OUString sContentType;
+            OUString sContentType;
             try
             {
                 Reference< XStorage > xContainerStorage( _rxContainerStorage, UNO_QUERY_THROW );
@@ -352,27 +352,27 @@ namespace dbaccess
     //==================================================================
     class ODocumentSaveContinuation : public OInteraction< XInteractionDocumentSave >
     {
-        ::rtl::OUString     m_sName;
+        OUString     m_sName;
         Reference<XContent> m_xParentContainer;
 
     public:
         ODocumentSaveContinuation() { }
 
         inline Reference<XContent>  getContent() const { return m_xParentContainer; }
-        inline ::rtl::OUString      getName() const { return m_sName; }
+        inline OUString      getName() const { return m_sName; }
 
         // XInteractionDocumentSave
-        virtual void SAL_CALL setName( const ::rtl::OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException);
+        virtual void SAL_CALL setName( const OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException);
     };
 
-    void SAL_CALL ODocumentSaveContinuation::setName( const ::rtl::OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException)
+    void SAL_CALL ODocumentSaveContinuation::setName( const OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException)
     {
         m_sName = _sName;
         m_xParentContainer = _xParent;
     }
 
-::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& _rxContainerStorage,
-    const ::rtl::OUString& _rEntityName, const Reference< XComponentContext >& _rContext,
+OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& _rxContainerStorage,
+    const OUString& _rEntityName, const Reference< XComponentContext >& _rContext,
     Sequence< sal_Int8 >& _rClassId )
 {
     return GetDocumentServiceFromMediaType(
@@ -380,10 +380,10 @@ namespace dbaccess
         _rContext, _rClassId );
 }
 
-::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const ::rtl::OUString& _rMediaType,
+OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _rMediaType,
     const Reference< XComponentContext >& _rContext, Sequence< sal_Int8 >& _rClassId )
 {
-    ::rtl::OUString sResult;
+    OUString sResult;
     try
     {
         ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext );
@@ -394,11 +394,11 @@ namespace dbaccess
             Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
             if ( xObjConfig.is() )
             {
-                Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
+                Sequence< OUString > aClassIDs = xObjConfig->getElementNames();
                 for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
                 {
                     Reference< XNameAccess > xObjectProps;
-                    ::rtl::OUString aEntryDocName;
+                    OUString aEntryDocName;
 
                     if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
                          && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
@@ -414,7 +414,7 @@ namespace dbaccess
         // alternative, shorter approach
         const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByMediaType( _rMediaType ) );
         const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
-        const ::rtl::OUString sAlternativeResult = aMediaTypeProps.getOrDefault( "ObjectDocumentServiceName", ::rtl::OUString() );
+        const OUString sAlternativeResult = aMediaTypeProps.getOrDefault( "ObjectDocumentServiceName", OUString() );
         OSL_ENSURE( sAlternativeResult == sResult, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (1)!" );
         const Sequence< sal_Int8 > aAlternativeClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
         OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
@@ -534,10 +534,10 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
 {
     if ( i_nHandle == PROPERTY_ID_PERSISTENT_PATH )
     {
-        ::rtl::OUString sPersistentPath;
+        OUString sPersistentPath;
         if ( !m_pImpl->m_aProps.sPersistentName.isEmpty() )
         {
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
             aBuffer.append( sal_Unicode( '/' ) );
             aBuffer.append( m_pImpl->m_aProps.sPersistentName );
@@ -571,7 +571,7 @@ IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
     Sequence< Property > aManualProps( 1 );
     aManualProps[0].Name = PROPERTY_PERSISTENT_PATH;
     aManualProps[0].Handle = PROPERTY_ID_PERSISTENT_PATH;
-    aManualProps[0].Type = ::getCppuType( static_cast< const ::rtl::OUString* >( NULL ) );
+    aManualProps[0].Type = ::getCppuType( static_cast< const OUString* >( NULL ) );
     aManualProps[0].Attributes = PropertyAttribute::READONLY;
 
     return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );
@@ -780,7 +780,7 @@ void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
     {
     default:
     case EmbedStates::LOADED:
-        throw embed::WrongStateException( ::rtl::OUString(), *this );
+        throw embed::WrongStateException( OUString(), *this );
 
     case EmbedStates::RUNNING:
         if ( !i_bShow )
@@ -919,7 +919,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         // not supported
         ucbhelper::cancelCommandExecution(
                 makeAny( UnsupportedOpenModeException(
-                                rtl::OUString(),
+                                OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 sal_Int16( nOpenMode ) ) ),
                 _rxEnvironment );
@@ -1054,14 +1054,14 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
             // Unreachable
         }
         Reference< XStorage> xDest(aIni[0],UNO_QUERY);
-        ::rtl::OUString sPersistentName;
+        OUString sPersistentName;
         aIni[1] >>= sPersistentName;
         Reference< XStorage> xStorage = getContainerStorage();
 
@@ -1080,13 +1080,13 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             OSL_FAIL( "Wrong argument count!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
             // Unreachable
         }
-        ::rtl::OUString sURL;
+        OUString sURL;
         aIni[0] >>= sURL;
         onCommandInsert( sURL, Environment );
     }
@@ -1152,7 +1152,7 @@ namespace
             try
             {
                 Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
-                xFormProps->setPropertyValue( PROPERTY_DATASOURCENAME, makeAny( ::rtl::OUString() ) );
+                xFormProps->setPropertyValue( PROPERTY_DATASOURCENAME, makeAny( OUString() ) );
             }
             catch( const Exception& )
             {
@@ -1188,7 +1188,7 @@ namespace
     }
 }
 
-void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const Reference< XCommandEnvironment >& Environment )
+void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Reference< XCommandEnvironment >& Environment )
     throw( Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1198,11 +1198,11 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
     {
         OSL_FAIL( "Content::onCommandInsert - property value missing!" );
 
-        Sequence< rtl::OUString > aProps( 1 );
+        Sequence< OUString > aProps( 1 );
         aProps[ 0 ] = PROPERTY_URL;
         ucbhelper::cancelCommandExecution(
             makeAny( MissingPropertiesException(
-                                rtl::OUString(),
+                                OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 aProps ) ),
             Environment );
@@ -1388,13 +1388,13 @@ sal_Bool ODocumentDefinition::saveAs()
                         try
                         {
                             Reference< XStorage> xStorage = getContainerStorage();
-                            const static ::rtl::OUString sBaseName("Obj");
+                            const static OUString sBaseName("Obj");
 
                             Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
-                            ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
+                            OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
                             xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
 
-                            ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
+                            OUString sOldName = m_pImpl->m_aProps.aTitle;
                             rename(pDocuSave->getName());
                             updateDocumentTitle();
 
@@ -1498,7 +1498,7 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
     return bAllowDocumentMacros;
 }
 
-::rtl::OUString ODocumentDefinition::determineContentType() const
+OUString ODocumentDefinition::determineContentType() const
 {
     return lcl_determineContentType_nothrow( getContainerStorage(), m_pImpl->m_aProps.sPersistentName );
 }
@@ -1614,7 +1614,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         if ( xStorage.is() )
         {
             Reference< XEmbeddedObjectCreator> xEmbedFactory = OOoEmbeddedObjectFactory::create(m_aContext);
-            ::rtl::OUString sDocumentService;
+            OUString sDocumentService;
             sal_Bool bSetSize = sal_False;
             sal_Int32 nEntryConnectionMode = EntryInitModes::DEFAULT_INIT;
             Sequence< sal_Int8 > aClassID = _aClassID;
@@ -1632,7 +1632,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 {
                     // we seem to be a "new style" report, check if report extension is present.
                     Reference< XContentEnumerationAccess > xEnumAccess( m_aContext->getServiceManager(), UNO_QUERY );
-                    const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext);
+                    const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext);
                     Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                     if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
@@ -1879,7 +1879,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     Reference< XComponent > xComponent;
     try
     {
-        ::rtl::OUString sName( impl_getHierarchicalName( false ) );
+        OUString sName( impl_getHierarchicalName( false ) );
         sal_Int32 nObjectType = m_bForm ? DatabaseObject::FORM : DatabaseObject::REPORT;
         aGuard.clear();
 
@@ -1891,7 +1891,7 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, ::cppu::getCaughtException() );
     }
     return xComponent;
 }
@@ -1938,7 +1938,7 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, ::cppu::getCaughtException() );
     }
 }
 
@@ -1955,27 +1955,27 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, ::cppu::getCaughtException() );
     }
     return bSuccess;
 }
 
-::rtl::OUString SAL_CALL ODocumentDefinition::getHierarchicalName() throw (RuntimeException)
+OUString SAL_CALL ODocumentDefinition::getHierarchicalName() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return impl_getHierarchicalName( false );
 }
 
-::rtl::OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
     aBuffer.append( sal_Unicode( '/' ) );
     aBuffer.append( i_rRelativeName );
     return aBuffer.makeStringAndClear();
 }
 
-void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     try
     {
@@ -2104,7 +2104,7 @@ void ODocumentDefinition::fillReportData( const Reference< XComponentContext >& 
 
 void ODocumentDefinition::updateDocumentTitle()
 {
-    ::rtl::OUString sName = m_pImpl->m_aProps.aTitle;
+    OUString sName = m_pImpl->m_aProps.aTitle;
     if ( m_pImpl->m_pDataSource )
     {
         if ( sName.isEmpty() )
@@ -2115,7 +2115,7 @@ void ODocumentDefinition::updateDocumentTitle()
                 sName = DBACORE_RESSTRING( RID_STR_REPORT );
             Reference< XUntitledNumbers > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate(), UNO_QUERY      );
             if ( xUntitledProvider.is() )
-                sName += ::rtl::OUString::valueOf( xUntitledProvider->leaseNumber(getComponent()) );
+                sName += OUString::valueOf( xUntitledProvider->leaseNumber(getComponent()) );
         }
 
         Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);
@@ -2159,7 +2159,7 @@ void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_
 // =============================================================================
 // NameChangeNotifier
 // =============================================================================
-NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefinition, const ::rtl::OUString& i_rNewName,
+NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefinition, const OUString& i_rNewName,
                                   ::osl::ResettableMutexGuard& i_rClearForNotify )
     :m_rDocumentDefinition( i_rDocumentDefinition )
     ,m_aOldValue( makeAny( i_rDocumentDefinition.getCurrentName() ) )

@@ -42,12 +42,12 @@ public:
 
     ~ObjectContainer2() SAL_THROW(());
 
-    rtl::Reference< Object2 > get(rtl::OUString const & rKey);
+    rtl::Reference< Object2 > get(OUString const & rKey);
 
 private:
-    typedef boost::unordered_map< rtl::OUString,
+    typedef boost::unordered_map< OUString,
                            com::sun::star::uno::WeakReference< Object2 >,
-                           rtl::OUStringHash >
+                           OUStringHash >
     Map;
 
     ObjectContainer2(ObjectContainer2 &); // not implemented

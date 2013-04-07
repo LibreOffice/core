@@ -293,7 +293,7 @@ void SwXTextPortion::GetPropertyValue(
 
                 OUString sRet;
                 if( pRet )
-                    sRet = rtl::OUString::createFromAscii( pRet );
+                    sRet = OUString::createFromAscii( pRet );
                 rVal <<= sRet;
             }
             break;
@@ -440,7 +440,7 @@ uno::Any SwXTextPortion::getPropertyValue(
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< ::rtl::OUString > aPropertyNames(1);
+    uno::Sequence< OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
     return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }

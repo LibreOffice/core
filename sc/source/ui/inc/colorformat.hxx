@@ -63,7 +63,7 @@ private:
     Edit maEdMin;
     Edit maEdMax;
 
-    rtl::OUString maStrWarnSameValue;
+    OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
     ScDocument* mpDoc;

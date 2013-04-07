@@ -94,17 +94,17 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     if( ! elem.Text.getLength() )
         return;
 
-    rtl::OUString strSpace(32);
-    rtl::OUString strNbSpace(160);
-    rtl::OUString tabSpace(0x09);
+    OUString strSpace(32);
+    OUString strNbSpace(160);
+    OUString tabSpace(0x09);
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ rtl::OUString( "text:style-name"  ) ] =
+        aProps[ OUString( "text:style-name"  ) ] =
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
-    rtl::OUString str(elem.Text.getStr());
+    OUString str(elem.Text.getStr());
 
     // Check for RTL
     bool isRTL = false;
@@ -130,7 +130,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
 
     for(int i=0; i< elem.Text.getLength(); i++)
     {
-        rtl::OUString strToken=  str.copy(i,1) ;
+        OUString strToken=  str.copy(i,1) ;
         if( strSpace.equals(strToken) || strNbSpace.equals(strToken))
         {
             aProps[ "text:c" ] = "1";
@@ -191,7 +191,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
-    rProps[ "draw:z-index" ] = rtl::OUString::valueOf( rElem.ZOrder );
+    rProps[ "draw:z-index" ] = OUString::valueOf( rElem.ZOrder );
     rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
     rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
     rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
@@ -210,7 +210,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
         rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
 
-        rtl::OUStringBuffer aBuf( 256 );
+        OUStringBuffer aBuf( 256 );
 
         // TODO(F2): general transformation case missing; if implemented, note
         // that ODF rotation is oriented the other way
@@ -329,7 +329,7 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     // so we need to tell fillFrameProps here that the transformation for
     // a PolyPolyElement was already applied (aside form translation)
     fillFrameProps( elem, aProps, m_rEmitContext, true );
-    rtl::OUStringBuffer aBuf( 64 );
+    OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
     aBuf.append( sal_Unicode(' ') );
@@ -696,7 +696,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
         {
             TextElement* pNext = dynamic_cast<TextElement*>(*next);
             bool isComplex = false;
-            rtl::OUString str(pCur->Text.getStr());
+            OUString str(pCur->Text.getStr());
             for(int i=0; i< str.getLength(); i++)
             {
                 sal_Int16 nType = GetBreakIterator()->getScriptType( str, i );
@@ -791,7 +791,7 @@ void DrawXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >
             aVec.setX ( convPx2mmPrec2( aVec.getX() )*100.0 );
             aVec.setY ( convPx2mmPrec2( aVec.getY() )*100.0 );
 
-            aGCProps[ "svg:stroke-width" ] = rtl::OUString::valueOf( aVec.getLength() );
+            aGCProps[ "svg:stroke-width" ] = OUString::valueOf( aVec.getLength() );
         }
     }
     else
@@ -860,10 +860,10 @@ void DrawXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::co
         aFontProps[ "style:text-outline" ]  = "true";
     }
     // size
-    rtl::OUStringBuffer aBuf( 32 );
+    OUStringBuffer aBuf( 32 );
     aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
     aBuf.appendAscii( "pt" );
-    rtl::OUString aFSize = aBuf.makeStringAndClear();
+    OUString aFSize = aBuf.makeStringAndClear();
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;
@@ -1028,7 +1028,7 @@ void DrawXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::co
     sal_Int32 nPageStyle = m_rStyleContainer.impl_getStyleId( aStyle, false );
 
     // create master page
-    rtl::OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
+    OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
     aPageProps[ "style:page-layout-name" ] = aMasterPageLayoutName;
 
     StyleContainer::Style aMPStyle( "style:master-page", aPageProps);

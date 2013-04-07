@@ -37,7 +37,7 @@ class ChartSpaceFragment : public FragmentBase< ChartSpaceModel >
 public:
     explicit            ChartSpaceFragment(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             ChartSpaceModel& rModel );
     virtual             ~ChartSpaceFragment();
 

@@ -73,7 +73,7 @@
         #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
                     if ( ( BCONDITION ) == sal_True )                                                           \
                     {                                                                                           \
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        OStringBuffer _sAssertBuffer( 256 );                                             \
                         _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
                         _sAssertBuffer.append( SMETHOD          );                                              \
                         _sAssertBuffer.append( "\n\t\""         );                                              \
@@ -104,7 +104,7 @@
         #define LOG_ASSERT2( BCONDITION, SMETHODE, STEXT )                                                      \
                     if ( ( BCONDITION ) == sal_True )                                                           \
                     {                                                                                           \
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        OStringBuffer _sAssertBuffer( 256 );                                             \
                         _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
                         _sAssertBuffer.append( SMETHOD          );                                              \
                         _sAssertBuffer.append( "\n\t\""         );                                              \
@@ -131,7 +131,7 @@
 
         #define LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                                                       \
                     {                                                                                           \
-                        ::rtl::OStringBuffer _sAssertBuffer( 256 );                                             \
+                        OStringBuffer _sAssertBuffer( 256 );                                             \
                         _sAssertBuffer.append( "ASSERT:\n\t"    );                                              \
                         _sAssertBuffer.append( SMETHOD          );                                              \
                         _sAssertBuffer.append( "\n\t\""         );                                              \
@@ -183,7 +183,7 @@
 
     #define LOG_EXCEPTION( SMETHOD, SOWNMESSAGE, SEXCEPTIONMESSAGE )                                            \
                 {                                                                                               \
-                    ::rtl::OStringBuffer _sAssertBuffer2( 256 );                                                \
+                    OStringBuffer _sAssertBuffer2( 256 );                                                \
                     _sAssertBuffer2.append( SOWNMESSAGE             );                                          \
                     _sAssertBuffer2.append( "\n"                    );                                          \
                     _sAssertBuffer2.append( U2B(SEXCEPTIONMESSAGE)  );                                          \

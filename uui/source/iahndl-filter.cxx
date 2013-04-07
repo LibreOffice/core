@@ -47,9 +47,9 @@ namespace {
 void
 executeFilterDialog(
     Window                    * pParent ,
-    rtl::OUString       const & rURL    ,
+    OUString       const & rURL    ,
     uui::FilterNameList const & rFilters,
-    rtl::OUString             & rFilter )
+    OUString             & rFilter )
        SAL_THROW((uno::RuntimeException))
 {
     try
@@ -73,7 +73,7 @@ executeFilterDialog(
     catch (std::bad_alloc const &)
     {
         throw uno::RuntimeException(
-            rtl::OUString("out of memory"),
+            OUString("out of memory"),
             uno::Reference< uno::XInterface >());
     }
 }
@@ -106,7 +106,7 @@ handleNoSuchFilterRequest_(
     try
     {
         xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
-                                  ::rtl::OUString( "com.sun.star.document.FilterFactory"), xContext ),
+                                  OUString( "com.sun.star.document.FilterFactory"), xContext ),
                               uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -136,7 +136,7 @@ handleNoSuchFilterRequest_(
     //            out by using DocumentService property later!
     uno::Reference< container::XEnumeration > xFilters
         = xFilterContainer->createSubSetEnumerationByQuery(
-            ::rtl::OUString( "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
+            OUString( "_query_all:sort_prop=uiname:iflags=1:eflags=143360"));
     while (xFilters->hasMoreElements())
     {
         try
@@ -145,9 +145,9 @@ handleNoSuchFilterRequest_(
             uui::FilterNamePair             aPair;
 
             aPair.sInternal = lProps.getUnpackedValueOrDefault(
-                rtl::OUString("Name"), ::rtl::OUString());
+                OUString("Name"), OUString());
             aPair.sUI       = lProps.getUnpackedValueOrDefault(
-                 rtl::OUString("UIName"), ::rtl::OUString());
+                 OUString("UIName"), OUString());
             if ( (!aPair.sInternal.Len()) || (!aPair.sUI.Len() ) )
             {
                continue;
@@ -173,7 +173,7 @@ handleNoSuchFilterRequest_(
     }
 
     // let the user select the right filter
-    rtl::OUString sSelectedFilter;
+    OUString sSelectedFilter;
     executeFilterDialog( pParent,
                          rRequest.URL,
                          lNames,
@@ -212,7 +212,7 @@ handleAmbigousFilterRequest_(
     try
     {
         xFilterContainer.set( xContext->getServiceManager()->createInstanceWithContext(
-            ::rtl::OUString( "com.sun.star.document.FilterFactory"), xContext ),
+            OUString( "com.sun.star.document.FilterFactory"), xContext ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception & )
@@ -239,7 +239,7 @@ handleAmbigousFilterRequest_(
         {
             if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
             {
-                ::rtl::OUString sTemp;
+                OUString sTemp;
                 lProps[nStep].Value >>= sTemp;
                 aPair.sUI       = sTemp;
                 aPair.sInternal = rRequest.SelectedFilter;
@@ -261,7 +261,7 @@ handleAmbigousFilterRequest_(
         {
             if( lProps[nStep].Name.compareToAscii("UIName") == 0 )
             {
-                ::rtl::OUString sTemp;
+                OUString sTemp;
                 lProps[nStep].Value >>= sTemp;
                 aPair.sUI       = sTemp;
                 aPair.sInternal = rRequest.DetectedFilter;
@@ -279,7 +279,7 @@ handleAmbigousFilterRequest_(
         }
         else
         {
-            rtl::OUString sFilter;
+            OUString sFilter;
             executeFilterDialog( pParent,
                                  rRequest.URL,
                                  lNames,
@@ -312,7 +312,7 @@ handleFilterOptionsRequest_(
     try
     {
         xFilterCFG.set( xContext->getServiceManager()->createInstanceWithContext(
-                            ::rtl::OUString( "com.sun.star.document.FilterFactory" ), xContext ),
+                            OUString( "com.sun.star.document.FilterFactory" ), xContext ),
                         uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -323,12 +323,12 @@ handleFilterOptionsRequest_(
     {
         try
         {
-            ::rtl::OUString aFilterName;
+            OUString aFilterName;
             sal_Int32 nPropCount = rRequest.rProperties.getLength();
             for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
             {
                 if( rRequest.rProperties[ind].Name.equals(
-                        ::rtl::OUString("FilterName")) )
+                        OUString("FilterName")) )
                 {
                     rRequest.rProperties[ind].Value >>= aFilterName;
                     break;
@@ -343,9 +343,9 @@ handleFilterOptionsRequest_(
                      nProperty < nPropertyCount;
                      ++nProperty )
                     if( aProps[nProperty].Name.equals(
-                            ::rtl::OUString("UIComponent")) )
+                            OUString("UIComponent")) )
                     {
-                        ::rtl::OUString aServiceName;
+                        OUString aServiceName;
                         aProps[nProperty].Value >>= aServiceName;
                         if( !aServiceName.isEmpty() )
                         {

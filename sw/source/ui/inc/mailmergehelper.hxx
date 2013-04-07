@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star { namespace mail {
 namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC String  CallSaveAsDialog(String& rFilter);
-    SW_DLLPUBLIC bool    CheckMailAddress( const ::rtl::OUString& rMailAddress );
+    SW_DLLPUBLIC bool    CheckMailAddress( const OUString& rMailAddress );
     SW_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService >
                          ConnectToSmtpServer( SwMailMergeConfigItem& rConfigItem,
                             com::sun::star::uno::Reference< com::sun::star::mail::XMailService >&  xInMailService,
@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     SwAddressPreview_Impl*  pImpl;
     Link                    m_aSelectHdl;
 
-    void DrawText_Impl( const ::rtl::OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected);
+    void DrawText_Impl( const OUString& rAddress, const Point& rTopLeft, const Size& rSize, bool bIsSelected);
 
     virtual void        Paint(const Rectangle&);
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -92,16 +92,16 @@ public:
      AddAddress appends the new address to the already added ones.
      Initially the first added address will be selected
     */
-    void                    AddAddress(const ::rtl::OUString& rAddress);
+    void                    AddAddress(const OUString& rAddress);
     //  for preview mode - replaces the currently used address by the given one
-    void                    SetAddress(const ::rtl::OUString& rAddress);
+    void                    SetAddress(const OUString& rAddress);
     // removes all addresses
     void                    Clear();
 
     // returns the selected address
     sal_uInt16              GetSelectedAddress() const;
     void                    SelectAddress(sal_uInt16 nSelect);
-    void                    ReplaceSelectedAddress(const ::rtl::OUString&);
+    void                    ReplaceSelectedAddress(const OUString&);
     void                    RemoveSelectedAddress();
 
     // set the number of rows and columns of addresses
@@ -110,9 +110,9 @@ public:
 
     // fill the actual data into a string (address block or greeting)
     static String FillData(
-            const ::rtl::OUString& rAddress,
+            const OUString& rAddress,
             SwMailMergeConfigItem& rConfigItem,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString>* pAssignments = 0);
+            const ::com::sun::star::uno::Sequence< OUString>* pAssignments = 0);
 
     void    SetSelectHdl (const Link& rLink) {m_aSelectHdl = rLink;}
 };
@@ -146,35 +146,35 @@ public:
 class SW_DLLPUBLIC SwAuthenticator :
     public cppu::WeakImplHelper1< ::com::sun::star::mail::XAuthenticator>
 {
-    ::rtl::OUString m_aUserName;
-    ::rtl::OUString m_aPassword;
+    OUString m_aUserName;
+    OUString m_aPassword;
     Window*         m_pParentWindow;
 public:
     SwAuthenticator() : m_pParentWindow(0) {}
-    SwAuthenticator(const ::rtl::OUString& username, const ::rtl::OUString& password, Window* pParent) :
+    SwAuthenticator(const OUString& username, const OUString& password, Window* pParent) :
         m_aUserName(username),
         m_aPassword(password),
         m_pParentWindow( pParent )
     {}
     ~SwAuthenticator();
 
-    virtual ::rtl::OUString SAL_CALL getUserName( ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getUserName( ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 
 class SW_DLLPUBLIC SwConnectionContext :
     public cppu::WeakImplHelper1< ::com::sun::star::uno::XCurrentContext >
 {
-    ::rtl::OUString     m_sMailServer;
+    OUString     m_sMailServer;
     sal_Int16           m_nPort;
-    ::rtl::OUString     m_sConnectionType;
+    OUString     m_sConnectionType;
 
 public:
-    SwConnectionContext(const ::rtl::OUString& rMailServer, sal_Int16 nPort, const ::rtl::OUString& rConnectionType);
+    SwConnectionContext(const OUString& rMailServer, sal_Int16 nPort, const OUString& rConnectionType);
     ~SwConnectionContext();
 
-    virtual ::com::sun::star::uno::Any SAL_CALL     getValueByName( const ::rtl::OUString& Name )
+    virtual ::com::sun::star::uno::Any SAL_CALL     getValueByName( const OUString& Name )
                                                             throw (::com::sun::star::uno::RuntimeException);
 };
 
@@ -214,15 +214,15 @@ class SwMailTransferable :
             ::com::sun::star::beans::XPropertySet
         >
 {
-    rtl::OUString  m_aMimeType;
-    rtl::OUString  m_sBody;
-    rtl::OUString  m_aURL;
-    rtl::OUString  m_aName;
+    OUString  m_aMimeType;
+    OUString  m_sBody;
+    OUString  m_aURL;
+    OUString  m_aName;
     bool           m_bIsBody;
 
     public:
-    SwMailTransferable(const rtl::OUString& rURL, const rtl::OUString& rName, const rtl::OUString& rMimeType);
-    SwMailTransferable(const rtl::OUString& rBody, const rtl::OUString& rMimeType);
+    SwMailTransferable(const OUString& rURL, const OUString& rName, const OUString& rMimeType);
+    SwMailTransferable(const OUString& rBody, const OUString& rMimeType);
     ~SwMailTransferable();
     virtual ::com::sun::star::uno::Any SAL_CALL
                         getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
@@ -236,12 +236,12 @@ class SwMailTransferable :
 
     //XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 };
 
@@ -249,17 +249,17 @@ class SwMailMessage :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XMailMessage >
 {
-    ::rtl::OUString                                                                         m_sSenderName;
-    ::rtl::OUString                                                                         m_sSenderAddress;
-    ::rtl::OUString                                                                         m_sReplyToAddress;
-    ::rtl::OUString                                                                         m_sSubject;
+    OUString                                                                         m_sSenderName;
+    OUString                                                                         m_sSenderAddress;
+    OUString                                                                         m_sReplyToAddress;
+    OUString                                                                         m_sSubject;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable>        m_xBody;
 //    ::com::sun::star::mail::MailMessageBody                                                 m_aBody;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_aRecipients;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_aCcRecipients;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                      m_aBccRecipients;
+    ::com::sun::star::uno::Sequence< OUString >                                      m_aRecipients;
+    ::com::sun::star::uno::Sequence< OUString >                                      m_aCcRecipients;
+    ::com::sun::star::uno::Sequence< OUString >                                      m_aBccRecipients;
 //    ::com::sun::star::uno::Sequence< ::com::sun::star::mail::MailAttachmentDescriptor >     m_aAttachments;
     ::com::sun::star::uno::Sequence<  ::com::sun::star::mail::MailAttachment >              m_aAttachments;
 public:
@@ -267,12 +267,12 @@ public:
     ~SwMailMessage();
 
     // attributes
-    virtual ::rtl::OUString SAL_CALL    getSenderName() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    getSenderAddress() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    getReplyToAddress() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               setReplyToAddress( const ::rtl::OUString& _replytoaddress ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL    getSubject() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               setSubject( const ::rtl::OUString& _subject ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getSenderName() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getSenderAddress() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getReplyToAddress() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               setReplyToAddress( const OUString& _replytoaddress ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getSubject() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               setSubject( const OUString& _subject ) throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL
                                         getBody()
@@ -281,22 +281,22 @@ public:
                                                 throw (::com::sun::star::uno::RuntimeException);
 
     // methods
-    virtual void SAL_CALL               addRecipient( const ::rtl::OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               addCcRecipient( const ::rtl::OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL               addBccRecipient( const ::rtl::OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual void SAL_CALL               addRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               addCcRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL               addBccRecipient( const OUString& sRecipientAddress ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                         getRecipients(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                         getCcRecipients(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                         getBccRecipients(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL               addAttachment( const ::com::sun::star::mail::MailAttachment& aMailAttachment )
                                             throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::mail::MailAttachment > SAL_CALL
                                         getAttachments(  ) throw (::com::sun::star::uno::RuntimeException);
-    void                                SetSenderName(const ::rtl::OUString& rSenderName)
+    void                                SetSenderName(const OUString& rSenderName)
                                                 {m_sSenderName = rSenderName;}
-    void                                SetSenderAddress(const ::rtl::OUString& rSenderAddress)
+    void                                SetSenderAddress(const OUString& rSenderAddress)
                                                 {m_sSenderAddress = rSenderAddress;}
 };
 

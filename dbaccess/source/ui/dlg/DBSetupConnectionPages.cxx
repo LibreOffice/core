@@ -192,7 +192,7 @@ DBG_NAME(OTextConnectionPageSetup)
                 pCollection = pCollectionItem->getCollection();
             OSL_ENSURE(pCollection, "OLDAPConnectionPageSetup::FillItemSet : really need a DSN type collection !");
 
-            OUString sUrl = pCollection->getPrefix( ::rtl::OUString("sdbc:address:ldap:"));
+            OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
             sUrl += m_aETHostServer.GetText();
             _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
             bChangedSomething = sal_True;

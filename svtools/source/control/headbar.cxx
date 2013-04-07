@@ -36,7 +36,7 @@ public:
     sal_uInt16              mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;
-    rtl::OString        maHelpId;
+    OString        maHelpId;
     Image               maImage;
     XubString           maOutText;
     XubString           maText;
@@ -347,7 +347,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         aCtrlRegion=aRect;
         pWin->DrawNativeControl( CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL,
                                  aCtrlRegion, nState, aControlValue,
-                                 rtl::OUString() );
+                                 OUString() );
 
     }
     else
@@ -381,7 +381,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             nState|=CTRL_STATE_PRESSED;
         pWin->DrawNativeControl( CTRL_LISTHEADER, PART_BUTTON,
                                  aCtrlRegion, nState, aControlValue,
-                                 rtl::OUString() );
+                                 OUString() );
     }
     else
     {
@@ -605,7 +605,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                     nState|=CTRL_STATE_PRESSED;
                 pWin->DrawNativeControl( CTRL_LISTHEADER, PART_ARROW,
                                          aCtrlRegion, nState, aControlValue,
-                                         rtl::OUString() );
+                                         OUString() );
             }
             else
             {
@@ -1153,7 +1153,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
@@ -1482,7 +1482,7 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;
@@ -1493,10 +1493,10 @@ XubString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 
 // -----------------------------------------------------------------------
 
-rtl::OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
+OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
-    rtl::OString aRet;
+    OString aRet;
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
         return (*mpItemList)[ nPos ]->maHelpId;
     return aRet;

@@ -288,7 +288,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 #if defined(UNX)
                 rBuf += '\012';
 #else
-                rBuf += rtl::OUString("\015\012");
+                rBuf += OUString("\015\012");
 #endif
         }
     }
@@ -301,7 +301,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
         WriterRef xWrt;
-        SwReaderWriter::GetWriter( rtl::OUString(FILTER_TEXT), String(), xWrt );
+        SwReaderWriter::GetWriter( OUString(FILTER_TEXT), String(), xWrt );
         if( xWrt.Is() )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben
@@ -336,7 +336,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 
                 const sal_Unicode *p = (sal_Unicode*)aStream.GetBuffer();
                 if( p )
-                    rBuf = rtl::OUString(p);
+                    rBuf = OUString(p);
                 else
                 {
                     rtl_uString *pStr = rtl_uString_alloc(lLen / sizeof( sal_Unicode ));
@@ -344,7 +344,7 @@ sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                     aStream.ResetError();
                     //endian specific?, yipes!
                     aStream.Read(pStr->buffer, lLen);
-                    rBuf = rtl::OUString(pStr, SAL_NO_ACQUIRE);
+                    rBuf = OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }
         }

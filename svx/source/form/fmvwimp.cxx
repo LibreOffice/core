@@ -723,7 +723,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
                     continue;
                 }
 
-                const ::rtl::OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
+                const OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
                 if ( !aSource.isEmpty() )
                 {
                     FmXFormShell* pShImpl =  m_pView->GetFormShell()->GetImpl();
@@ -1078,7 +1078,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 
         if ( !xWizard.is() )
         {
-            ShowServiceNotAvailableError( NULL, rtl::OUString::createFromAscii(pWizardAsciiName), sal_True );
+            ShowServiceNotAvailableError( NULL, OUString::createFromAscii(pWizardAsciiName), sal_True );
         }
         else
         {
@@ -1102,8 +1102,8 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
 namespace
 {
     void lcl_insertIntoFormComponentHierarchy_throw( const FmFormView& _rView, const SdrUnoObj& _rSdrObj,
-        const Reference< XDataSource >& _rxDataSource = NULL, const ::rtl::OUString& _rDataSourceName = ::rtl::OUString(),
-        const ::rtl::OUString& _rCommand = ::rtl::OUString(), const sal_Int32 _nCommandType = -1 )
+        const Reference< XDataSource >& _rxDataSource = NULL, const OUString& _rDataSourceName = OUString(),
+        const OUString& _rCommand = OUString(), const sal_Int32 _nCommandType = -1 )
     {
         FmFormPage& rPage = static_cast< FmFormPage& >( *_rView.GetSdrPageView()->GetPage() );
 
@@ -1126,11 +1126,11 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     if ( !m_pView->IsDesignMode() )
         return NULL;
 
-    ::rtl::OUString sCommand, sFieldName;
+    OUString sCommand, sFieldName;
     sal_Int32 nCommandType = CommandType::COMMAND;
     SharedConnection xConnection;
 
-    ::rtl::OUString sDataSource = _rColumnDescriptor.getDataSource();
+    OUString sDataSource = _rColumnDescriptor.getDataSource();
     _rColumnDescriptor[ daCommand ]     >>= sCommand;
     _rColumnDescriptor[ daColumnName ]  >>= sFieldName;
     _rColumnDescriptor[ daCommandType ] >>= nCommandType;
@@ -1169,8 +1169,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if ( !xConnection.is() )
             xConnection.reset( OStaticDataAccessTools().getConnection_withFeedback(
                 sDataSource,
-                ::rtl::OUString(),
-                ::rtl::OUString(),
+                OUString(),
+                OUString(),
                 m_aContext.getUNOContext()
             ) );
     }
@@ -1214,7 +1214,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         Reference< XNumberFormatsSupplier > xSupplier( aDBATools.getNumberFormats( xConnection, sal_False ), UNO_SET_THROW );
         Reference< XNumberFormats >  xNumberFormats( xSupplier->getNumberFormats(), UNO_SET_THROW );
 
-        ::rtl::OUString sLabelPostfix;
+        OUString sLabelPostfix;
 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
@@ -1367,7 +1367,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     {
         // determine the table/query field which we should create a control for
         Reference< XNumberFormats > xNumberFormats;
-        ::rtl::OUString sLabelPostfix = _rDesc.szName;
+        OUString sLabelPostfix = _rDesc.szName;
 
         ////////////////////////////////////////////////////////////////
         // nur fuer Textgroesse
@@ -1401,11 +1401,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         //////////////////////////////////////////////////////////////////////
         // The service name decides which control should be created
         sal_uInt16 nOBJID = OBJ_FM_EDIT;
-        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_SUN_COMPONENT_NUMERICFIELD))
+        if(OUString(_rDesc.szServiceName).equals((OUString)FM_SUN_COMPONENT_NUMERICFIELD))
             nOBJID = OBJ_FM_NUMERICFIELD;
-        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_SUN_COMPONENT_CHECKBOX))
+        if(OUString(_rDesc.szServiceName).equals((OUString)FM_SUN_COMPONENT_CHECKBOX))
             nOBJID = OBJ_FM_CHECKBOX;
-        if(::rtl::OUString(_rDesc.szServiceName).equals((::rtl::OUString)FM_COMPONENT_COMMANDBUTTON))
+        if(OUString(_rDesc.szServiceName).equals((OUString)FM_COMPONENT_COMMANDBUTTON))
             nOBJID = OBJ_FM_BUTTON;
 
         typedef ::com::sun::star::form::submission::XSubmission XSubmission_t;
@@ -1462,7 +1462,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 
             // set the button label
             Reference< XPropertySet > xControlSet(pControl->GetUnoControlModel(), UNO_QUERY);
-            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(::rtl::OUString(_rDesc.szName)));
+            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(OUString(_rDesc.szName)));
 
             // connect the submission with the submission supplier (aka the button)
             xControlSet->setPropertyValue( FM_PROP_BUTTON_TYPE,
@@ -1486,10 +1486,10 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 //------------------------------------------------------------------------
 bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-        sal_uInt16 _nControlObjectID, const ::rtl::OUString& _rFieldPostfix,
+        sal_uInt16 _nControlObjectID, const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl,
-        const Reference< XDataSource >& _rxDataSource, const ::rtl::OUString& _rDataSourceName,
-        const ::rtl::OUString& _rCommand, const sal_Int32 _nCommandType )
+        const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
+        const OUString& _rCommand, const sal_Int32 _nCommandType )
 {
     if  (   !createControlLabelPair( m_aContext, _rOutDev, _nXOffsetMM, _nYOffsetMM,
                 _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
@@ -1515,11 +1515,11 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& _rContext,
     OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM, const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
-    const ::rtl::OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
+    const OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
-    ::rtl::OUString sFieldName;
+    OUString sFieldName;
     Any aFieldName;
     if ( _rxField.is() )
     {
@@ -1567,7 +1567,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
         if ( xLabelModel.is() )
         {
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             if ( _rxField.is() && _rxField->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
                 _rxField->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
             if ( sLabel.isEmpty() )
@@ -1576,7 +1576,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
             xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );
             String sObjectLabel( SVX_RES( RID_STR_OBJECT_LABEL ) );
             sObjectLabel.SearchAndReplaceAllAscii( "#object#", sFieldName );
-            xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( ::rtl::OUString( sObjectLabel ) ) );
+            xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( OUString( sObjectLabel ) ) );
         }
 
         pLabel->SetLogicRect( ::Rectangle(

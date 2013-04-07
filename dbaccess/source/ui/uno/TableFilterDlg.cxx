@@ -60,15 +60,15 @@ Reference< XInterface > SAL_CALL OTableFilterDialog::Create(const Reference< XMu
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OTableFilterDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OTableFilterDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeException)
+OUString OTableFilterDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.OTableFilterDialog");
+    return OUString("org.openoffice.comp.dbu.OTableFilterDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Reference< XInterface > SAL_CALL OTableFilterDialog::Create(const Reference< XMu
 ::comphelper::StringSequence OTableFilterDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.TableFilterDialog");
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.TableFilterDialog");
     return aSupported;
 }
 

@@ -71,7 +71,7 @@
 class XFPageNumber : public XFContent
 {
 public:
-    void    SetNumFmt(rtl::OUString fmt);
+    void    SetNumFmt(OUString fmt);
 
     virtual void    ToXml(IXFStream *pStrm);
 
@@ -79,7 +79,7 @@ private:
     XFNumFmt    m_aNumFmt;
 };
 
-inline void XFPageNumber::SetNumFmt(rtl::OUString fmt)
+inline void XFPageNumber::SetNumFmt(OUString fmt)
 {
     m_aNumFmt.SetFormat(fmt);
 }

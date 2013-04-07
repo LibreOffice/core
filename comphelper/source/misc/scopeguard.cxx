@@ -36,7 +36,7 @@ ScopeGuard::~ScopeGuard()
             catch (com::sun::star::uno::Exception & exc) {
                 (void) exc; // avoid warning about unused variable
                 OSL_FAIL(
-                    rtl::OUStringToOString( "UNO exception occurred: " +
+                    OUStringToOString( "UNO exception occurred: " +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (...) {

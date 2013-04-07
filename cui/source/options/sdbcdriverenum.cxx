@@ -40,12 +40,12 @@ namespace offapp
     class ODriverEnumerationImpl
     {
     protected:
-        ::std::vector< ::rtl::OUString >    m_aImplNames;
+        ::std::vector< OUString >    m_aImplNames;
 
     public:
         ODriverEnumerationImpl();
 
-        const ::std::vector< ::rtl::OUString >& getDriverImplNames() const { return m_aImplNames; }
+        const ::std::vector< OUString >& getDriverImplNames() const { return m_aImplNames; }
     };
 
     //--------------------------------------------------------------------

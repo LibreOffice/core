@@ -21,8 +21,8 @@
 #include <tools/debug.hxx>
 #include "xmloff/i18nmap.hxx"
 
-bool SvI18NMap::Add( sal_uInt16 nKind, const rtl::OUString& rName,
-                     const rtl::OUString& rNewName )
+bool SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
+                     const OUString& rNewName )
 {
     SvI18NMapEntry_Key aKey(nKind, rName);
     bool bIsNewInsertion = m_aMap.insert(SvI18NMap_Impl::value_type(aKey, rNewName)).second;
@@ -30,7 +30,7 @@ bool SvI18NMap::Add( sal_uInt16 nKind, const rtl::OUString& rName,
     return bIsNewInsertion;
 }
 
-const rtl::OUString& SvI18NMap::Get( sal_uInt16 nKind, const rtl::OUString& rName ) const
+const OUString& SvI18NMap::Get( sal_uInt16 nKind, const OUString& rName ) const
 {
     SvI18NMapEntry_Key aKey(nKind, rName);
     SvI18NMap_Impl::const_iterator aI = m_aMap.find(aKey);

@@ -114,19 +114,19 @@ LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
 
 // some stuff for easier changes for SvtViewOptions
 static const sal_Char*      pViewOptDataName = "page data";
-#define VIEWOPT_DATANAME    rtl::OUString::createFromAscii( pViewOptDataName )
+#define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
 static XOutdevItemPool* mpStaticXOutdevItemPool = 0L;
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( rtl::OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
 }
 
 static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
-    rtl::OUString aUserData;
+    OUString aUserData;
     aAny >>= aUserData;
 
     return String( aUserData );
@@ -159,13 +159,13 @@ static ModuleToGroupNameMap_Impl ModuleMap[] =
     { NULL, String::EmptyString(), 0xFFFF }
 };
 
-static void setGroupName( const rtl::OUString& rModule, const String& rGroupName )
+static void setGroupName( const OUString& rModule, const String& rGroupName )
 {
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
-        rtl::OUString sTemp =
-            rtl::OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
+        OUString sTemp =
+            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
         if ( sTemp == rModule )
         {
             ModuleMap[ nIndex ].m_sGroupName = rGroupName;
@@ -175,14 +175,14 @@ static void setGroupName( const rtl::OUString& rModule, const String& rGroupName
     }
 }
 
-static String getGroupName( const rtl::OUString& rModule, bool bForced )
+static String getGroupName( const OUString& rModule, bool bForced )
 {
     String sGroupName;
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
-        rtl::OUString sTemp =
-            rtl::OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
+        OUString sTemp =
+            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
         if ( sTemp == rModule )
         {
             sGroupName = ModuleMap[ nIndex ].m_sGroupName;
@@ -221,13 +221,13 @@ static void deleteGroupNames()
         ModuleMap[ nIndex++ ].m_sGroupName = String::EmptyString();
 }
 
-static sal_uInt16 getGroupNodeId( const rtl::OUString& rModule )
+static sal_uInt16 getGroupNodeId( const OUString& rModule )
 {
     sal_uInt16 nNodeId = 0xFFFF, nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
-        rtl::OUString sTemp =
-            rtl::OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
+        OUString sTemp =
+            OUString::createFromAscii( ModuleMap[ nIndex ].m_pModule );
         if ( sTemp == rModule )
         {
             nNodeId = ModuleMap[ nIndex ].m_nNodeId;
@@ -250,7 +250,7 @@ public:
     virtual ~MailMergeCfg_Impl();
 
     virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 
     sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
 
@@ -260,7 +260,7 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem("Office.Writer/MailMergeWizard"),
     bIsEmailSupported(sal_False)
 {
-    Sequence<rtl::OUString> aNames(1);
+    Sequence<OUString> aNames(1);
     aNames.getArray()[0] = "EMailSupported";
     const Sequence< Any > aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
@@ -276,7 +276,7 @@ void MailMergeCfg_Impl::Commit()
 {
 }
 
-void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 
@@ -455,8 +455,8 @@ struct OptionsPageInfo
 {
     SfxTabPage*         m_pPage;
     sal_uInt16          m_nPageId;
-    rtl::OUString       m_sPageURL;
-    rtl::OUString       m_sEventHdl;
+    OUString       m_sPageURL;
+    OUString       m_sEventHdl;
     ExtensionsTabPage*  m_pExtPage;
 
     OptionsPageInfo( sal_uInt16 nId ) : m_pPage( NULL ), m_nPageId( nId ), m_pExtPage( NULL ) {}
@@ -470,13 +470,13 @@ struct OptionsGroupInfo
     SfxModule*          m_pModule;      // used to create the ItemSet
     sal_uInt16          m_nDialogId;    // Id of the former dialog
     sal_Bool            m_bLoadError;   // load fails?
-    rtl::OUString       m_sPageURL;
+    OUString       m_sPageURL;
     ExtensionsTabPage*  m_pExtPage;
 
     OptionsGroupInfo( SfxShell* pSh, SfxModule* pMod, sal_uInt16 nId ) :
         m_pInItemSet( NULL ), m_pOutItemSet( NULL ), m_pShell( pSh ),
         m_pModule( pMod ), m_nDialogId( nId ), m_bLoadError( sal_False ),
-        m_sPageURL( rtl::OUString() ), m_pExtPage( NULL ) {}
+        m_sPageURL( OUString() ), m_pExtPage( NULL ) {}
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
@@ -512,7 +512,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
 
     InitTreeAndHandler();
     Initialize( _xFrame );
-    LoadExtensionOptions( rtl::OUString() );
+    LoadExtensionOptions( OUString() );
     ResizeTreeLB();
     if (bActivateLastSelection)
         ActivateLastSelection();
@@ -522,7 +522,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
 
 // Ctor() with ExtensionId -----------------------------------------------
 
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId ) :
+OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId ) :
 
     SfxModalDialog( pParent, CUI_RES( RID_OFADLG_OPTIONS_TREE ) ),
     INI_LIST()
@@ -846,7 +846,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                     && sExpand.Match( sPageURL ) == STRING_MATCH )
                 {
                     // cut protocol
-                    ::rtl::OUString sTemp( sPageURL.Copy( sizeof( EXPAND_PROTOCOL ) -1 ) );
+                    OUString sTemp( sPageURL.Copy( sizeof( EXPAND_PROTOCOL ) -1 ) );
                     // decode uri class chars
                     sTemp = ::rtl::Uri::decode(
                         sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
@@ -1146,7 +1146,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
 
     {
-        ::rtl::OUStringBuffer sTitleBuf(sTitle);
+        OUStringBuffer sTitleBuf(sTitle);
         sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
         sTitleBuf.append(aTreeLB.GetEntryText(pParent));
         sTitleBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
@@ -1265,9 +1265,9 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         nMinTrail = 2;
             if (xProp.is())
             {
-                xProp->getPropertyValue( rtl::OUString(
+                xProp->getPropertyValue( OUString(
                         UPN_HYPH_MIN_LEADING) ) >>= nMinLead;
-                xProp->getPropertyValue( rtl::OUString(
+                xProp->getPropertyValue( OUString(
                         UPN_HYPH_MIN_TRAILING) ) >>= nMinTrail;
             }
             aHyphen.GetMinLead()  = (sal_uInt8)nMinLead;
@@ -1298,7 +1298,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                         sal_Bool bVal = sal_False;
                         if (xProp.is())
                         {
-                            xProp->getPropertyValue( rtl::OUString( UPN_IS_SPELL_AUTO) ) >>= bVal;
+                            xProp->getPropertyValue( OUString( UPN_IS_SPELL_AUTO) ) >>= bVal;
                         }
 
                         pRet->Put(SfxBoolItem(SID_AUTOSPELL_CHECK, bVal));
@@ -1438,7 +1438,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
     Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XPropertySet >  xProp(
-            xMgr->createInstance( ::rtl::OUString( "com.sun.star.linguistic2.LinguProperties" ) ),
+            xMgr->createInstance( OUString( "com.sun.star.linguistic2.LinguProperties" ) ),
             UNO_QUERY );
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
     {
@@ -1447,10 +1447,10 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         if (xProp.is())
         {
             xProp->setPropertyValue(
-                    rtl::OUString(UPN_HYPH_MIN_LEADING),
+                    OUString(UPN_HYPH_MIN_LEADING),
                     makeAny((sal_Int16) pHyphenItem->GetMinLead()) );
             xProp->setPropertyValue(
-                    rtl::OUString(UPN_HYPH_MIN_TRAILING),
+                    OUString(UPN_HYPH_MIN_TRAILING),
                     makeAny((sal_Int16) pHyphenItem->GetMinTrail()) );
         }
         bSaveSpellCheck = sal_True;
@@ -1486,7 +1486,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
             if (xProp.is())
             {
                 xProp->setPropertyValue(
-                        rtl::OUString(UPN_IS_SPELL_AUTO),
+                        OUString(UPN_IS_SPELL_AUTO),
                         makeAny(bOnlineSpelling) );
             }
         }
@@ -1510,9 +1510,9 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-rtl::OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
+OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
-    rtl::OUString sIdentifier;
+    OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
     Reference < XModuleManager2 > xModuleManager = ModuleManager::create(::comphelper::getProcessComponentContext());
     if ( !xCurrentFrame.is() )
@@ -1566,7 +1566,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
             {
-                const ::rtl::OUString sService = "com.sun.star.setup.UpdateCheck";
+                const OUString sService = "com.sun.star.setup.UpdateCheck";
 
                 try
                 {
@@ -1619,8 +1619,8 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 
 
-    rtl::OUString aFactory = getCurrentFactory_Impl( _xFrame );
-    rtl::OUString sTemp = GetModuleIdentifier( _xFrame );
+    OUString aFactory = getCurrentFactory_Impl( _xFrame );
+    OUString sTemp = GetModuleIdentifier( _xFrame );
     DBG_ASSERT( sTemp == aFactory, "S H I T!!!" );
 
     // Writer and Writer/Web options
@@ -1652,7 +1652,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rTextArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, rtl::OUString("Internal Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, OUString("Internal Test"), nGroup );
 #endif
             }
 
@@ -1668,7 +1668,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                         AddTabPage( nPageId, rHTMLArray.GetString(i), nGroup );
                 }
 #ifdef DBG_UTIL
-                AddTabPage( RID_SW_TP_OPTTEST_PAGE, rtl::OUString("Internal Test"), nGroup );
+                AddTabPage( RID_SW_TP_OPTTEST_PAGE, OUString("Internal Test"), nGroup );
 #endif
             }
         }
@@ -1941,7 +1941,7 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
     return false;
 }
 
-void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtensionId )
+void OfaTreeOptionsDialog::LoadExtensionOptions( const OUString& rExtensionId )
 {
     Module* pModule = NULL;
 
@@ -1957,9 +1957,9 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const rtl::OUString& rExtension
     delete pModule;
 }
 
-rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& rFrame )
+OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& rFrame )
 {
-    rtl::OUString sModule;
+    OUString sModule;
     Reference < XFrame > xCurrentFrame( rFrame );
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
@@ -1989,16 +1989,16 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame
 }
 
 Module* OfaTreeOptionsDialog::LoadModule(
-    const rtl::OUString& rModuleIdentifier )
+    const OUString& rModuleIdentifier )
 {
     Module* pModule = NULL;
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Modules::get());
 
-    Sequence< rtl::OUString > seqNames = xSet->getElementNames();
+    Sequence< OUString > seqNames = xSet->getElementNames();
     for ( int i = 0; i < seqNames.getLength(); ++i )
     {
-        rtl::OUString sModule( seqNames[i] );
+        OUString sModule( seqNames[i] );
         if ( rModuleIdentifier == sModule )
         {
             // current active module found
@@ -2014,7 +2014,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                 xModAccess->getByName( "Nodes" ) >>= xNodeAccess;
                 if ( xNodeAccess.is() )
                 {
-                    Sequence< rtl::OUString > xTemp = xNodeAccess->getElementNames();
+                    Sequence< OUString > xTemp = xNodeAccess->getElementNames();
                     Reference< XNameAccess > xAccess;
                     sal_Int32 nIndex = -1;
                     for ( int x = 0; x < xTemp.getLength(); ++x )
@@ -2052,14 +2052,14 @@ Module* OfaTreeOptionsDialog::LoadModule(
 }
 
 VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
-    Module* pModule, const rtl::OUString& rExtensionId)
+    Module* pModule, const OUString& rExtensionId)
 {
     VectorOfNodes aOutNodeList;
 
     Reference< XNameAccess > xSet(
         officecfg::Office::OptionsDialog::Nodes::get());
     VectorOfNodes aNodeList;
-    Sequence< rtl::OUString > seqNames = xSet->getElementNames();
+    Sequence< OUString > seqNames = xSet->getElementNames();
 
     for ( int i = 0; i < seqNames.getLength(); ++i )
     {
@@ -2069,7 +2069,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
         if ( xNodeAccess.is() )
         {
-            rtl::OUString sNodeId, sLabel, sPageURL, sGroupId;
+            OUString sNodeId, sLabel, sPageURL, sGroupId;
             bool bAllModules = false;
             sal_Int32 nGroupIndex = 0;
 
@@ -2098,7 +2098,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             xNodeAccess->getByName( "Leaves" ) >>= xLeavesSet;
             if ( xLeavesSet.is() )
             {
-                Sequence< rtl::OUString > seqLeaves = xLeavesSet->getElementNames();
+                Sequence< OUString > seqLeaves = xLeavesSet->getElementNames();
                 for ( int j = 0; j < seqLeaves.getLength(); ++j )
                 {
                     Reference< XNameAccess > xLeaveAccess;
@@ -2106,7 +2106,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
 
                     if ( xLeaveAccess.is() )
                     {
-                        rtl::OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
+                        OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
                         sal_Int32 nLeafGrpIdx = 0;
 
                         xLeaveAccess->getByName( "Id" ) >>= sId;
@@ -2174,7 +2174,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
         sal_uInt32 i = 0, j = 0;
         for ( ; i < pModule->m_aNodeList.size(); ++i )
         {
-            rtl::OUString sNodeId = pModule->m_aNodeList[i]->m_sId;
+            OUString sNodeId = pModule->m_aNodeList[i]->m_sId;
             for ( j = 0; j < aNodeList.size(); ++j )
             {
                 OptionsNode* pNode = aNodeList[j];
@@ -2193,7 +2193,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     return aOutNodeList;
 }
 
-static sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
+static sal_uInt16 lcl_getGroupId( const OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
     String sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
@@ -2290,8 +2290,8 @@ short OfaTreeOptionsDialog::Execute()
 // class ExtensionsTabPage -----------------------------------------------
 
 ExtensionsTabPage::ExtensionsTabPage(
-    Window* pParent, WinBits nStyle, const rtl::OUString& rPageURL,
-    const rtl::OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
+    Window* pParent, WinBits nStyle, const OUString& rPageURL,
+    const OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
 
     TabPage( pParent, nStyle ),
 
@@ -2331,7 +2331,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
             Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), UNO_QUERY );
             m_xPage = Reference < awt::XWindow >(
                 m_xWinProvider->createContainerWindow(
-                    m_sPageURL, rtl::OUString(), xParent, m_xEventHdl ), UNO_QUERY );
+                    m_sPageURL, OUString(), xParent, m_xEventHdl ), UNO_QUERY );
 
             Reference< awt::XControl > xPageControl( m_xPage, UNO_QUERY );
             if ( xPageControl.is() )
@@ -2358,7 +2358,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
 
 // -----------------------------------------------------------------------
 
-sal_Bool ExtensionsTabPage::DispatchAction( const rtl::OUString& rAction )
+sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
 {
     sal_Bool bRet = sal_False;
     if ( m_xEventHdl.is() )

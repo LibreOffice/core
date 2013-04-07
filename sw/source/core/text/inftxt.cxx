@@ -1095,7 +1095,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                 OSL_TRACE("Found Fieldmark");
 #if OSL_DEBUG_LEVEL > 1
                 OUString str = pFieldmark->ToString( );
-                fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+                fprintf( stderr, "%s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #endif
             }
             if(bIsStartMark) OSL_TRACE("Found StartMark");

@@ -48,7 +48,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
-using ::rtl::OUString;
 using ::std::for_each;
 using ::std::vector;
 

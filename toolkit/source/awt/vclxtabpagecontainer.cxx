@@ -28,7 +28,6 @@
 #include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -84,7 +83,7 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(Run
     return aInfo;
 }
 
-void SAL_CALL VCLXTabPageContainer::setProperty(const ::rtl::OUString& PropertyName,   const Any& Value ) throw(RuntimeException)
+void SAL_CALL VCLXTabPageContainer::setProperty(const OUString& PropertyName,   const Any& Value ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 

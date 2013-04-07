@@ -82,7 +82,7 @@ sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr );
 // '~'  -> '&'
 // '~~' -> '~'
 // '&'  -> '&&'
-rtl::OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel );
+OUString SOfficeToWindowsLabel( const OUString& aSOLabel );
 
 // converts a windows label to a soffice label
 // the following rules for character replacements
@@ -90,7 +90,7 @@ rtl::OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel );
 // '&'  -> '~'
 // '&&' -> '&'
 // '~'  -> '~~'
-rtl::OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel );
+OUString WindowsToSOfficeLabel( const OUString& aWinLabel );
 
 #endif
 

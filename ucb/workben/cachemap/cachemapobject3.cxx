@@ -63,7 +63,7 @@ ObjectContainer3::ObjectContainer3()
 ObjectContainer3::~ObjectContainer3() SAL_THROW(())
 {}
 
-rtl::Reference< Object3 > ObjectContainer3::get(rtl::OUString const & rKey)
+rtl::Reference< Object3 > ObjectContainer3::get(OUString const & rKey)
 {
     osl::MutexGuard aGuard(m_aMutex);
     Map::iterator aIt(m_aMap.find(rKey));

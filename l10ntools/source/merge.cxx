@@ -29,7 +29,7 @@
 
 namespace
 {
-    static ::rtl::OString lcl_NormalizeFilename(const ::rtl::OString& rFilename)
+    static OString lcl_NormalizeFilename(const OString& rFilename)
     {
         return rFilename.copy(
             std::max(
@@ -63,7 +63,7 @@ namespace
 //  class ResData
 //
 
-ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId)
+ResData::ResData(const OString &rPF, const OString &rGId)
     :
     nWidth( 0 ),
     nChildIndex( 0 ),
@@ -89,11 +89,11 @@ ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId)
     pPairedList( NULL ),
     sPForm( rPF )
 {
-    sGId = sGId.replaceAll("\r", rtl::OString());
-    sPForm = sPForm.replaceAll("\r", rtl::OString());
+    sGId = sGId.replaceAll("\r", OString());
+    sPForm = sPForm.replaceAll("\r", OString());
 }
 
-ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename)
+ResData::ResData(const OString &rPF, const OString &rGId , const OString &rFilename)
     :
     nWidth( 0 ),
     nChildIndex( 0 ),
@@ -120,8 +120,8 @@ ResData::ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::
     pPairedList( NULL ),
     sPForm( rPF )
 {
-    sGId = sGId.replaceAll("\r", rtl::OString());
-    sPForm = sPForm.replaceAll("\r", rtl::OString());
+    sGId = sGId.replaceAll("\r", OString());
+    sPForm = sPForm.replaceAll("\r", OString());
 }
 
 
@@ -165,22 +165,22 @@ ResData::~ResData()
 // class PFormEntrys
 //
 
-sal_Bool PFormEntrys::GetTransex3Text( rtl::OString &rReturn,
-    sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel )
+sal_Bool PFormEntrys::GetTransex3Text( OString &rReturn,
+    sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
 {
     sal_Bool rc = GetText( rReturn , nTyp , nLangIndex , bDel );
     for( sal_Int32 idx = 0; idx < rReturn.getLength(); idx++ )
     {
         if( rReturn[idx] == '\"' && ( idx >= 1 )  &&  rReturn[idx-1] == '\\' )
         {
-            rReturn = rReturn.replaceAt( idx-1, 1, rtl::OString() );
+            rReturn = rReturn.replaceAt( idx-1, 1, OString() );
         }
     }
     return rc;
 }
 /*****************************************************************************/
-sal_Bool PFormEntrys::GetText( rtl::OString &rReturn,
-    sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel )
+sal_Bool PFormEntrys::GetText( OString &rReturn,
+    sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel )
 {
 
     sal_Bool bReturn=sal_True;
@@ -224,19 +224,19 @@ MergeData::~MergeData()
 
 PFormEntrys* MergeData::GetPFormEntries()
 {
-    if( aMap.find( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
-        return aMap[rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK"))];
+    if( aMap.find( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
+        return aMap[OString(RTL_CONSTASCII_STRINGPARAM("HACK"))];
     return NULL;
 }
 
 void MergeData::Insert(PFormEntrys* pfEntrys )
 {
-    aMap.insert( PFormEntrysHashMap::value_type( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) , pfEntrys ) );
+    aMap.insert( PFormEntrysHashMap::value_type( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) , pfEntrys ) );
 }
 
-PFormEntrys* MergeData::GetPFObject( const rtl::OString& rPFO )
+PFormEntrys* MergeData::GetPFObject( const OString& rPFO )
 {
-    if( aMap.find( rtl::OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
+    if( aMap.find( OString(RTL_CONSTASCII_STRINGPARAM("HACK")) ) != aMap.end() )
         return aMap[ rPFO ];
     return NULL;
 }
@@ -252,7 +252,7 @@ sal_Bool MergeData::operator==( ResData *pData )
 //
 
 MergeDataFile::MergeDataFile(
-    const rtl::OString &rFileName, const rtl::OString &rFile,
+    const OString &rFileName, const OString &rFile,
     bool bCaseSensitive, bool bWithQtz )
 {
     std::ifstream aInputStream( rFileName.getStr() );
@@ -373,17 +373,17 @@ MergeDataFile::~MergeDataFile()
         delete aI->second;
 }
 
-std::vector<rtl::OString> MergeDataFile::GetLanguages() const
+std::vector<OString> MergeDataFile::GetLanguages() const
 {
-    return std::vector<rtl::OString>(aLanguageSet.begin(),aLanguageSet.end());
+    return std::vector<OString>(aLanguageSet.begin(),aLanguageSet.end());
 }
 
 MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive )
 {
-    rtl::OString sOldG = pResData->sGId;
-    rtl::OString sOldL = pResData->sId;
-    rtl::OString sGID = pResData->sGId;
-    rtl::OString sLID;
+    OString sOldG = pResData->sGId;
+    OString sOldL = pResData->sId;
+    OString sGID = pResData->sGId;
+    OString sLID;
     if (sGID.isEmpty())
         sGID = pResData->sId;
     else
@@ -391,7 +391,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
     pResData->sGId = sGID;
     pResData->sId = sLID;
 
-    rtl::OString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
+    OString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
     if(aMap.find( sKey ) != aMap.end())
     {
@@ -424,17 +424,17 @@ PFormEntrys *MergeDataFile::GetPFormEntrysCaseSensitive( ResData *pResData )
 }
 
 void MergeDataFile::InsertEntry(
-    const rtl::OString &rTYP, const rtl::OString &rGID,
-    const rtl::OString &rLID, const rtl::OString &rPFO,
-    const rtl::OString &nLANG, const rtl::OString &rTEXT,
-    const rtl::OString &rQHTEXT, const rtl::OString &rTITLE ,
-    const rtl::OString &rInFilename , bool bCaseSensitive
+    const OString &rTYP, const OString &rGID,
+    const OString &rLID, const OString &rPFO,
+    const OString &nLANG, const OString &rTEXT,
+    const OString &rQHTEXT, const OString &rTITLE ,
+    const OString &rInFilename , bool bCaseSensitive
     )
 {
     MergeData *pData;
 
     // search for MergeData
-    rtl::OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
+    OString sKey = CreateKey(rTYP , rGID , rLID , rInFilename , bCaseSensitive);
     MergeDataHashMap::const_iterator mit;
     mit = aMap.find( sKey );
     if( mit != aMap.end() )
@@ -462,11 +462,11 @@ void MergeDataFile::InsertEntry(
     pFEntrys->InsertEntry( nLANG , rTEXT, rQHTEXT, rTITLE );
 }
 
-rtl::OString MergeDataFile::CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
-    const rtl::OString& rLID, const rtl::OString& rFilename, bool bCaseSensitive)
+OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
+    const OString& rLID, const OString& rFilename, bool bCaseSensitive)
 {
-    static const ::rtl::OString sStroke('-');
-    ::rtl::OString sKey( rTYP );
+    static const OString sStroke('-');
+    OString sKey( rTYP );
     sKey += sStroke;
     sKey += rGID;
     sKey += sStroke;

@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 
 
-uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
+uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 
 
@@ -38,8 +38,8 @@ uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
 struct equalOUString
 {
     bool operator()(
-        const rtl::OUString& rKey1,
-        const rtl::OUString& rKey2 ) const
+        const OUString& rKey1,
+        const OUString& rKey2 ) const
     {
         return !!( rKey1 == rKey2 );
     }
@@ -48,7 +48,7 @@ struct equalOUString
 
 struct hashOUString
 {
-    size_t operator()( const rtl::OUString& rName ) const
+    size_t operator()( const OUString& rName ) const
     {
         return rName.hashCode();
     }
@@ -58,12 +58,12 @@ struct hashOUString
 
 class StatusChangeListenerContainer
     : public ::cppu::OMultiTypeInterfaceContainerHelperVar<
-rtl::OUString,hashOUString,equalOUString>
+OUString,hashOUString,equalOUString>
 {
 public:
     StatusChangeListenerContainer( ::osl::Mutex& aMutex )
         :  cppu::OMultiTypeInterfaceContainerHelperVar<
-    rtl::OUString,hashOUString,equalOUString>(aMutex)
+    OUString,hashOUString,equalOUString>(aMutex)
     {
     }
 };
@@ -127,12 +127,12 @@ Interceptor::Interceptor(
       m_pDisposeEventListeners(0),
       m_bLink( bLink )
 {
-    m_aInterceptedURL[0] = rtl::OUString(".uno:Save");
-    m_aInterceptedURL[1] = rtl::OUString(".uno:SaveAll");
-    m_aInterceptedURL[2] = rtl::OUString(".uno:CloseDoc");
-    m_aInterceptedURL[3] = rtl::OUString(".uno:CloseWin");
-    m_aInterceptedURL[4] = rtl::OUString(".uno:CloseFrame");
-    m_aInterceptedURL[5] = rtl::OUString(".uno:SaveAs");
+    m_aInterceptedURL[0] = OUString(".uno:Save");
+    m_aInterceptedURL[1] = OUString(".uno:SaveAll");
+    m_aInterceptedURL[2] = OUString(".uno:CloseDoc");
+    m_aInterceptedURL[3] = OUString(".uno:CloseWin");
+    m_aInterceptedURL[4] = OUString(".uno:CloseFrame");
+    m_aInterceptedURL[5] = OUString(".uno:SaveAs");
 }
 
 
@@ -209,12 +209,12 @@ Interceptor::dispatch(
                 if ( nInd == aNewArgs.getLength() )
                 {
                     aNewArgs.realloc( nInd + 1 );
-                    aNewArgs[nInd].Name = ::rtl::OUString( "SaveTo" );
+                    aNewArgs[nInd].Name = OUString( "SaveTo" );
                     aNewArgs[nInd].Value <<= sal_True;
                 }
 
                 uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                    URL, ::rtl::OUString( "_self" ), 0 );
+                    URL, OUString( "_self" ), 0 );
                 if ( xDispatch.is() )
                     xDispatch->dispatch( URL, aNewArgs );
             }
@@ -236,7 +236,7 @@ void Interceptor::generateFeatureStateEvent()
                 pTmpDocH = m_pDocH;
         }
 
-        ::rtl::OUString aTitle;
+        OUString aTitle;
         if ( pTmpDocH )
             aTitle = pTmpDocH->getTitle();
 
@@ -260,8 +260,8 @@ void Interceptor::generateFeatureStateEvent()
             {
 
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-                aStateEvent.FeatureDescriptor = rtl::OUString("Update");
-                aStateEvent.State <<= (rtl::OUString(
+                aStateEvent.FeatureDescriptor = OUString("Update");
+                aStateEvent.State <<= (OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
                                        aTitle);
 
@@ -269,15 +269,15 @@ void Interceptor::generateFeatureStateEvent()
             else if ( i == 5 )
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-                aStateEvent.FeatureDescriptor = rtl::OUString("SaveCopyTo");
-                aStateEvent.State <<= (rtl::OUString(
+                aStateEvent.FeatureDescriptor = OUString("SaveCopyTo");
+                aStateEvent.State <<= (OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($3)")));
             }
             else
             {
                 aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-                aStateEvent.FeatureDescriptor = rtl::OUString("Close and Return");
-                aStateEvent.State <<= (rtl::OUString(
+                aStateEvent.FeatureDescriptor = OUString("Close and Return");
+                aStateEvent.State <<= (OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
                                        aTitle);
 
@@ -319,16 +319,16 @@ Interceptor::addStatusListener(
                 pTmpDocH = m_pDocH;
         }
 
-        ::rtl::OUString aTitle;
+        OUString aTitle;
         if ( pTmpDocH )
             aTitle = pTmpDocH->getTitle();
 
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
-        aStateEvent.FeatureDescriptor = rtl::OUString("Update");
+        aStateEvent.FeatureDescriptor = OUString("Update");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (rtl::OUString(
+        aStateEvent.State <<= (OUString(
             RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
                                aTitle );
         Control->statusChanged(aStateEvent);
@@ -359,16 +359,16 @@ Interceptor::addStatusListener(
                 pTmpDocH = m_pDocH;
         }
 
-        ::rtl::OUString aTitle;
+        OUString aTitle;
         if ( pTmpDocH )
             aTitle = pTmpDocH->getTitle();
 
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
-        aStateEvent.FeatureDescriptor = rtl::OUString("Close and Return");
+        aStateEvent.FeatureDescriptor = OUString("Close and Return");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (rtl::OUString(
+        aStateEvent.State <<= (OUString(
             RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
                                aTitle );
         Control->statusChanged(aStateEvent);
@@ -389,10 +389,10 @@ Interceptor::addStatusListener(
     {   // SaveAs
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
-        aStateEvent.FeatureDescriptor = rtl::OUString("SaveCopyTo");
+        aStateEvent.FeatureDescriptor = OUString("SaveCopyTo");
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+        aStateEvent.State <<= (OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
         Control->statusChanged(aStateEvent);
 
         {
@@ -428,7 +428,7 @@ Interceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-uno::Sequence< ::rtl::OUString >
+uno::Sequence< OUString >
 SAL_CALL
 Interceptor::getInterceptedURLs(  )
     throw (
@@ -438,7 +438,7 @@ Interceptor::getInterceptedURLs(  )
     // now implemented as update
     if ( m_bLink )
     {
-        uno::Sequence< ::rtl::OUString > aResult( 2 );
+        uno::Sequence< OUString > aResult( 2 );
         aResult[0] = m_aInterceptedURL[1];
         aResult[1] = m_aInterceptedURL[5];
 
@@ -454,7 +454,7 @@ Interceptor::getInterceptedURLs(  )
 uno::Reference< frame::XDispatch > SAL_CALL
 Interceptor::queryDispatch(
     const util::URL& URL,
-    const ::rtl::OUString& TargetFrameName,
+    const OUString& TargetFrameName,
     sal_Int32 SearchFlags )
     throw (
         uno::RuntimeException

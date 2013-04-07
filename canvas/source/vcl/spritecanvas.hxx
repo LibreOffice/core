@@ -132,7 +132,7 @@ namespace vclcanvas
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,

@@ -125,35 +125,35 @@ namespace sfx2
     typedef ::std::list< FilterGroup >          GroupedFilterList;  // a list of all filters, already grouped
 
     /// the logical name of a filter
-    typedef ::rtl::OUString                     FilterName;
+    typedef OUString                     FilterName;
 
     // a struct which holds references from a logical filter name to a filter group entry
     // used for quick lookup of classes (means class entries - entries representing a class)
     // which a given filter may belong to
-    typedef ::std::map< ::rtl::OUString, FilterGroup::iterator >    FilterGroupEntryReferrer;
+    typedef ::std::map< OUString, FilterGroup::iterator >    FilterGroupEntryReferrer;
 
     /// a descriptor for a filter class (which in the final dialog is represented by one filter entry)
     typedef struct _tagFilterClass
     {
-        ::rtl::OUString             sDisplayName;       // the display name
+        OUString             sDisplayName;       // the display name
         Sequence< FilterName >      aSubFilters;        // the (logical) names of the filter which belong to the class
     } FilterClass;
 
     typedef ::std::list< FilterClass >                                  FilterClassList;
-    typedef ::std::map< ::rtl::OUString, FilterClassList::iterator >    FilterClassReferrer;
+    typedef ::std::map< OUString, FilterClassList::iterator >    FilterClassReferrer;
 
-    typedef ::std::vector< ::rtl::OUString >                            StringArray;
+    typedef ::std::vector< OUString >                            StringArray;
 
 // =======================================================================
 // = reading of configuration data
 // =======================================================================
 
     //--------------------------------------------------------------------
-    void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const ::rtl::OUString& _rLogicalClassName,
+    void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
-        static const ::rtl::OUString sDisplaNameNodeName( "DisplayName"  );
-        static const ::rtl::OUString sSubFiltersNodeName( "Filters"  );
+        static const OUString sDisplaNameNodeName( "DisplayName"  );
+        static const OUString sSubFiltersNodeName( "Filters"  );
 
             // the description node for the current class
         OConfigurationNode aClassDesc = _rClassesNode.openNode( _rLogicalClassName );
@@ -231,11 +231,11 @@ namespace sfx2
 
         //================================================================
         // get the list describing the order of all global classes
-        Sequence< ::rtl::OUString > aGlobalClasses;
+        Sequence< OUString > aGlobalClasses;
         _rFilterClassification.getNodeValue( "GlobalFilters/Order" ) >>= aGlobalClasses;
 
-        const ::rtl::OUString* pNames = aGlobalClasses.getConstArray();
-        const ::rtl::OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
+        const OUString* pNames = aGlobalClasses.getConstArray();
+        const OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
 
         // copy the logical names
         _rGlobalClassNames.resize( aGlobalClasses.getLength() );
@@ -259,7 +259,7 @@ namespace sfx2
         // go for all the single class entries
         OConfigurationNode aFilterClassesNode =
             _rFilterClassification.openNode( "GlobalFilters/Classes" );
-        Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
+        Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
         ::std::for_each(
             aFilterClasses.getConstArray(),
             aFilterClasses.getConstArray() + aFilterClasses.getLength(),
@@ -301,7 +301,7 @@ namespace sfx2
         // the node for the local classes
         OConfigurationNode aFilterClassesNode =
             _rFilterClassification.openNode( "LocalFilters/Classes" );
-        Sequence< ::rtl::OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
+        Sequence< OUString > aFilterClasses = aFilterClassesNode.getNodeNames();
 
         ::std::for_each(
             aFilterClasses.getConstArray(),
@@ -404,20 +404,20 @@ namespace sfx2
     static const sal_Unicode s_cWildcardSeparator( ';' );
 
     //====================================================================
-    const ::rtl::OUString& getSeparatorString()
+    const OUString& getSeparatorString()
     {
-        static ::rtl::OUString s_sSeparatorString( &s_cWildcardSeparator, 1 );
+        static OUString s_sSeparatorString( &s_cWildcardSeparator, 1 );
         return s_sSeparatorString;
     }
 
     //====================================================================
-    struct CheckAppendSingleWildcard : public ::std::unary_function< ::rtl::OUString, void >
+    struct CheckAppendSingleWildcard : public ::std::unary_function< OUString, void >
     {
-        ::rtl::OUString& _rToBeExtended;
+        OUString& _rToBeExtended;
 
-        CheckAppendSingleWildcard( ::rtl::OUString& _rBase ) : _rToBeExtended( _rBase ) { }
+        CheckAppendSingleWildcard( OUString& _rBase ) : _rToBeExtended( _rBase ) { }
 
-        void operator() ( const ::rtl::OUString& _rWC )
+        void operator() ( const OUString& _rWC )
         {
             // check for double wildcards
             sal_Int32 nExistentPos = _rToBeExtended.indexOf( _rWC );
@@ -451,7 +451,7 @@ namespace sfx2
     struct AppendWildcardToDescriptor : public ::std::unary_function< FilterGroupEntryReferrer::value_type, void >
     {
     protected:
-        ::std::vector< ::rtl::OUString > aWildCards;
+        ::std::vector< OUString > aWildCards;
 
     public:
         AppendWildcardToDescriptor( const String& _rWildCard );
@@ -485,7 +485,7 @@ namespace sfx2
         {
             if ( ( s_cWildcardSeparator == *pTokenLoop ) && ( pTokenLoop > pTokenStart ) )
             {   // found a new token separator (and a non-empty token)
-                aWildCards.push_back( ::rtl::OUString( pTokenStart, pTokenLoop - pTokenStart ) );
+                aWildCards.push_back( OUString( pTokenStart, pTokenLoop - pTokenStart ) );
 
                 // search the start of the next token
                 while ( ( pTokenStart != pTokenLoopEnd ) && ( *pTokenStart != s_cWildcardSeparator ) )
@@ -501,7 +501,7 @@ namespace sfx2
         }
         if ( pTokenLoop > pTokenStart )
             // the last one ....
-            aWildCards.push_back( ::rtl::OUString( pTokenStart, pTokenLoop - pTokenStart ) );
+            aWildCards.push_back( OUString( pTokenStart, pTokenLoop - pTokenStart ) );
     }
 
     //--------------------------------------------------------------------
@@ -613,7 +613,7 @@ namespace sfx2
         String aCurrentServiceName;
 
         String sFilterWildcard;
-        ::rtl::OUString sFilterName;
+        OUString sFilterName;
         // loop through all the filters
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
@@ -629,7 +629,7 @@ namespace sfx2
             if ( aServiceName != aCurrentServiceName )
             {   // we reached a new group
 
-                ::rtl::OUString sDocServName = aServiceName;
+                OUString sDocServName = aServiceName;
 
                 // look for the place in _rAllFilters where this ne group belongs - this is determined
                 // by the order of classes in aGlobalClassNames
@@ -838,7 +838,7 @@ namespace sfx2
                             for ( ; pFilters != pEnd; ++pFilters )
                                 pFilters->First = addExtension( pFilters->First, pFilters->Second, sal_True, *m_pFileDlgImpl );
                         }
-                        m_xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                        m_xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
                     }
                 }
                 else
@@ -873,9 +873,9 @@ namespace sfx2
         while(xFilterList->hasMoreElements())
         {
             ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
-            ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
-                                                             ::rtl::OUString("Name"),
-                                                             ::rtl::OUString());
+            OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
+                                                             OUString("Name"),
+                                                             OUString());
             if (!sFilterName.isEmpty())
                 m_lFilters.push_back(sFilterName);
         }
@@ -900,7 +900,7 @@ namespace sfx2
     {
         if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
             return 0;
-        const ::rtl::OUString& sFilterName = m_lFilters[nIndex];
+        const OUString& sFilterName = m_lFilters[nIndex];
         if (sFilterName.isEmpty())
             return 0;
         return SfxFilter::GetFilterByName(String(sFilterName));
@@ -909,15 +909,15 @@ namespace sfx2
     //--------------------------------------------------------------------
     void appendFiltersForSave( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
-                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
-                               const ::rtl::OUString& _rFactory )
+                               OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
+                               const OUString& _rFactory )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForSave: invalid manager!" );
         if ( !_rxFilterManager.is() )
             return;
 
-        ::rtl::OUString sUIName;
-        ::rtl::OUString sExtension;
+        OUString sUIName;
+        OUString sExtension;
 
         // retrieve the default filter for this application module.
         // It must be set as first of the generated filter list.
@@ -962,17 +962,17 @@ namespace sfx2
 
     struct ExportFilter
     {
-        ExportFilter( const rtl::OUString& _aUIName, const rtl::OUString& _aWildcard ) :
+        ExportFilter( const OUString& _aUIName, const OUString& _aWildcard ) :
             aUIName( _aUIName ), aWildcard( _aWildcard ) {}
 
-        rtl::OUString aUIName;
-        rtl::OUString aWildcard;
+        OUString aUIName;
+        OUString aWildcard;
     };
 
     //--------------------------------------------------------------------
     void appendExportFilters( TSortedFilterList& _rFilterMatcher,
                               const Reference< XFilterManager >& _rxFilterManager,
-                              ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
+                              OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendExportFilters: invalid manager!" );
         if ( !_rxFilterManager.is() )
@@ -982,17 +982,17 @@ namespace sfx2
         sal_Int32                           nXHTMLIndex  = -1;
         sal_Int32                           nPDFIndex   = -1;
         sal_Int32                           nFlashIndex = -1;
-        ::rtl::OUString                     sUIName;
-        ::rtl::OUString                     sExtensions;
+        OUString                     sUIName;
+        OUString                     sExtensions;
         std::vector< ExportFilter >         aImportantFilterGroup;
         std::vector< ExportFilter >         aFilterGroup;
         Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
-        ::rtl::OUString                     sTypeName;
-        const ::rtl::OUString               sWriterHTMLType( "generic_HTML" );
-        const ::rtl::OUString               sGraphicHTMLType( "graphic_HTML" );
-        const ::rtl::OUString               sXHTMLType( "XHTML_File" );
-        const ::rtl::OUString               sPDFType( "pdf_Portable_Document_Format" );
-        const ::rtl::OUString               sFlashType( "graphic_SWF" );
+        OUString                     sTypeName;
+        const OUString               sWriterHTMLType( "generic_HTML" );
+        const OUString               sGraphicHTMLType( "graphic_HTML" );
+        const OUString               sXHTMLType( "XHTML_File" );
+        const OUString               sPDFType( "pdf_Portable_Document_Format" );
+        const OUString               sFlashType( "graphic_SWF" );
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
@@ -1058,7 +1058,7 @@ namespace sfx2
 
                 try
                 {
-                    xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                    xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
                 }
                 catch( const IllegalArgumentException& )
                 {
@@ -1078,7 +1078,7 @@ namespace sfx2
 
                 try
                 {
-                    xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                    xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
                 }
                 catch( const IllegalArgumentException& )
                 {
@@ -1094,7 +1094,7 @@ namespace sfx2
             {
                 try
                 {
-                    rtl::OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName,
+                    OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName,
                                                           aImportantFilterGroup[n].aWildcard,
                                                           sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aImportantFilterGroup[n].aWildcard  );
@@ -1112,7 +1112,7 @@ namespace sfx2
             {
                 try
                 {
-                    rtl::OUString aUIName = addExtension( aFilterGroup[n].aUIName,
+                    OUString aUIName = addExtension( aFilterGroup[n].aUIName,
                                                           aFilterGroup[n].aWildcard,
                                                           sal_False, _rFileDlgImpl );
                     _rxFilterManager->appendFilter( aUIName, aFilterGroup[n].aWildcard );
@@ -1131,7 +1131,7 @@ namespace sfx2
     //--------------------------------------------------------------------
     void appendFiltersForOpen( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
-                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
+                               OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForOpen: invalid manager!" );
         if ( !_rxFilterManager.is() )
@@ -1171,14 +1171,14 @@ namespace sfx2
         }
     }
 
-    ::rtl::OUString addExtension( const ::rtl::OUString& _rDisplayText,
-                                  const ::rtl::OUString& _rExtension,
+    OUString addExtension( const OUString& _rDisplayText,
+                                  const OUString& _rExtension,
                                   sal_Bool _bForOpen, FileDialogHelper_Impl& _rFileDlgImpl )
     {
-        static ::rtl::OUString sAllFilter( "(*.*)" );
-        static ::rtl::OUString sOpenBracket( " ("  );
-        static ::rtl::OUString sCloseBracket( ")" );
-        ::rtl::OUString sRet = _rDisplayText;
+        static OUString sAllFilter( "(*.*)" );
+        static OUString sOpenBracket( " ("  );
+        static OUString sCloseBracket( ")" );
+        OUString sRet = _rDisplayText;
 
         if ( sRet.indexOf( sAllFilter ) == -1 )
         {

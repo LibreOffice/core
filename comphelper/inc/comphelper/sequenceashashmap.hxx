@@ -43,10 +43,10 @@ namespace comphelper{
  */
 
 struct SequenceAsHashMapBase : public ::boost::unordered_map<
-    ::rtl::OUString                    ,
+    OUString                    ,
     ::com::sun::star::uno::Any         ,
-    ::rtl::OUStringHash                ,
-    ::std::equal_to< ::rtl::OUString > >
+    OUStringHash                ,
+    ::std::equal_to< OUString > >
 {
 };
 
@@ -226,7 +226,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @attention  "unpacked" means the Any content of every iterator->second!
          */
         template< class TValueType >
-        TValueType getUnpackedValueOrDefault(const ::rtl::OUString& sKey    ,
+        TValueType getUnpackedValueOrDefault(const OUString& sKey    ,
                                              const TValueType&      aDefault) const
         {
             const_iterator pIt = find(sKey);
@@ -262,7 +262,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     FALSE if it already exists.
          */
         template< class TValueType >
-        sal_Bool createItemIfMissing(const ::rtl::OUString& sKey  ,
+        sal_Bool createItemIfMissing(const OUString& sKey  ,
                                      const TValueType&      aValue)
         {
             if (find(sKey) == end())

@@ -28,9 +28,9 @@ namespace abp
 {
 //.........................................................................
 
-    DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringBag );
+    DECLARE_STL_STDKEY_SET( OUString, StringBag );
 
-    DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, MapString2String );
+    DECLARE_STL_USTRINGACCESS_MAP( OUString, MapString2String );
 
 //.........................................................................
 }   // namespace abp

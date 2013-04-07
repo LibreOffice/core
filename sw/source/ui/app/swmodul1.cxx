@@ -61,7 +61,6 @@
 #include <tools/color.hxx>
 #include "PostItMgr.hxx"
 
-using ::rtl::OUString;
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -36,12 +36,12 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 // static ServiceInfo
 
-rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.sdbc.calc.ODriver");
+    return OUString("com.sun.star.comp.sdbc.calc.ODriver");
 }
 
-::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
@@ -57,7 +57,7 @@ rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
     return *(new ODriver(_rxFactory));
 }
 
-Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url,
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url,
     const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -75,18 +75,18 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url,
     return xCon;
 }
 
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:calc:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !acceptsURL(url) )
     {
         SharedResources aResources;
-        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     }
     return Sequence< DriverPropertyInfo >();

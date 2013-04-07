@@ -289,8 +289,8 @@ public:
     void                SetHelpCommand( sal_uInt16 nItemId, const XubString& rString );
     const XubString&    GetHelpCommand( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
+    OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     void                SetActivateHdl( const Link& rLink )     { aActivateHdl = rLink; }
     const Link&         GetActivateHdl() const                  { return aActivateHdl; }

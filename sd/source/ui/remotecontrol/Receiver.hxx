@@ -29,13 +29,13 @@ namespace sd
 // Timer is protected by the solar mutex => so are we.
 class Receiver : Timer
 {
-    std::deque< std::vector< rtl::OString > > maExecQueue;
+    std::deque< std::vector< OString > > maExecQueue;
 public:
     Receiver( Transmitter *aTransmitter );
     ~Receiver();
     virtual void Timeout();
-    void pushCommand( const std::vector<rtl::OString> &rCommand );
-    void executeCommand( const std::vector<rtl::OString> &aCommand );
+    void pushCommand( const std::vector<OString> &rCommand );
+    void executeCommand( const std::vector<OString> &aCommand );
 
 private:
     Transmitter *pTransmitter;

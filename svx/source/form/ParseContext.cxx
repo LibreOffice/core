@@ -59,7 +59,7 @@ OSystemParseContext::~OSystemParseContext()
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
+OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     String aMsg;
     SolarMutexGuard aGuard;
@@ -83,7 +83,7 @@ OSystemParseContext::~OSystemParseContext()
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
+OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
     size_t nIndex = 0;
     switch ( _eKey )
@@ -119,14 +119,14 @@ OSystemParseContext::~OSystemParseContext()
 
     OSL_ENSURE( nIndex < m_aLocalizedKeywords.size(), "OSystemParseContext::getIntlKeywordAscii: invalid index!" );
 
-    rtl::OString sKeyword;
+    OString sKeyword;
     if ( nIndex < m_aLocalizedKeywords.size() )
-        sKeyword = rtl::OUStringToOString(m_aLocalizedKeywords[nIndex], RTL_TEXTENCODING_UTF8);
+        sKeyword = OUStringToOString(m_aLocalizedKeywords[nIndex], RTL_TEXTENCODING_UTF8);
     return sKeyword;
 }
 
 // -----------------------------------------------------------------------------
-IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const ::rtl::OString& rToken) const
+IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OString& rToken) const
 {
     static IParseContext::InternationalKeyCode Intl_TokenID[] =
     {
@@ -142,7 +142,7 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const ::
     sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
-        ::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
+        OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
         if (rToken.equalsIgnoreAsciiCase(aKey))
             return Intl_TokenID[i];
     }

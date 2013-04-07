@@ -60,7 +60,6 @@
 #include "pq_sequenceresultsetmetadata.hxx"
 
 
-using rtl::OUString;
 
 using com::sun::star::sdbc::XResultSetMetaData;
 
@@ -131,7 +130,7 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
 
 
 sal_Int32 SAL_CALL SequenceResultSet::findColumn(
-    const ::rtl::OUString& columnName )
+    const OUString& columnName )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     // no need to guard, as all members are readonly !

@@ -28,10 +28,10 @@ public:
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& aName ) throw( com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException );
 
     // XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
+    virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& lDescriptor )
         throw (com::sun::star::uno::RuntimeException);
 
     static com::sun::star::uno::Sequence<OUString> impl_getStaticSupportedServiceNames();

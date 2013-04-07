@@ -119,7 +119,7 @@ namespace SwUnoCursorHelper
     bool    DocInsertStringSplitCR(  SwDoc &rDoc,
                     const SwPaM &rNewCursor, const String &rText,
                     const bool bForceExpandHints );
-    void    makeRedline( SwPaM& rPaM, const ::rtl::OUString& RedlineType,
+    void    makeRedline( SwPaM& rPaM, const OUString& RedlineType,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& RedlineProperties )
                 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
@@ -131,11 +131,11 @@ namespace SwUnoCursorHelper
     void GetCrsrAttr(SwPaM & rPam, SfxItemSet & rSet,
                      const bool bOnlyTxtAttr = false,
                      const bool bGetFromChrFmt = true);
-    void GetTextFromPam(SwPaM & rPam, ::rtl::OUString & rBuffer);
+    void GetTextFromPam(SwPaM & rPam, OUString & rBuffer);
     SwFmtColl * GetCurTxtFmtColl(SwPaM & rPam, const bool bConditional);
 
     void SelectPam(SwPaM & rPam, const bool bExpand);
-    void SetString(SwCursor & rCursor, const ::rtl::OUString & rString);
+    void SetString(SwCursor & rCursor, const OUString & rString);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
            CreateSortDescriptor(const bool bFromTable);
@@ -148,7 +148,7 @@ namespace SwUnoCursorHelper
     void SetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::rtl::OUString & rPropertyName,
+            const OUString & rPropertyName,
             const ::com::sun::star::uno::Any & rValue,
             const SetAttrMode nAttrMode = nsSetAttrMode::SETATTR_DEFAULT,
             const bool bTableMode = false)
@@ -173,7 +173,7 @@ namespace SwUnoCursorHelper
     ::com::sun::star::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::rtl::OUString & rPropertyName)
+            const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
@@ -181,7 +181,7 @@ namespace SwUnoCursorHelper
                 ::com::sun::star::beans::PropertyState > GetPropertyStates(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
+            const ::com::sun::star::uno::Sequence< OUString >&
                 rPropertyNames,
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT)
@@ -190,19 +190,19 @@ namespace SwUnoCursorHelper
     ::com::sun::star::beans::PropertyState GetPropertyState(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::rtl::OUString & rPropertyName)
+            const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::uno::RuntimeException);
     void SetPropertyToDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::rtl::OUString & rPropertyName)
+            const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any  GetPropertyDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
-            const ::rtl::OUString & rPropertyName)
+            const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);

@@ -190,7 +190,7 @@ private:
         FixedText *m_pText;
     public:
         Chapter(FixedText *pText, bool bShow);
-        Chapter(Window *pGrid, unsigned nYPos, const rtl::OUString& sDisplayName);
+        Chapter(Window *pGrid, unsigned nYPos, const OUString& sDisplayName);
         ~Chapter();
     public:
         void SetBackground(const Wallpaper& W) { m_pText->SetBackground(W); }
@@ -569,7 +569,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         size_t nLineNum = vChapters.size() + vEntries.size() + 1;
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
-            rtl::OUString const sComponentName = aExtConfig.GetComponentName(j);
+            OUString const sComponentName = aExtConfig.GetComponentName(j);
             vChapters.push_back(boost::shared_ptr<Chapter>(new Chapter(
                 m_pGrid, nLineNum,
                 aExtConfig.GetComponentDisplayName(sComponentName)
@@ -698,7 +698,7 @@ void ColorConfigWindow_Impl::Update (
     unsigned const nExtCount = pExtConfig->GetComponentCount();
     for (unsigned j = 0; j != nExtCount; ++j)
     {
-        rtl::OUString sComponentName = pExtConfig->GetComponentName(j);
+        OUString sComponentName = pExtConfig->GetComponentName(j);
         unsigned const nColorCount = pExtConfig->GetComponentColorCount(sComponentName);
         for (unsigned k = 0; i != vEntries.size() && k != nColorCount; ++i, ++k)
             vEntries[i]->Update(
@@ -757,7 +757,7 @@ void ColorConfigWindow_Impl::ColorHdl (
     unsigned const nExtCount = pExtConfig->GetComponentCount();
     for (unsigned j = 0; j != nExtCount; ++j)
     {
-        rtl::OUString sComponentName = pExtConfig->GetComponentName(j);
+        OUString sComponentName = pExtConfig->GetComponentName(j);
         unsigned const nColorCount = pExtConfig->GetComponentColorCount(sComponentName);
         unsigned const nCount = vEntries.size();
         for (unsigned k = 0; i != nCount && k != nColorCount; ++i, ++k)
@@ -1056,7 +1056,7 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     //changes need to be undone
     if(!bFillItemSetCalled && m_pColorSchemeLB->GetSavedValue() != m_pColorSchemeLB->GetSelectEntryPos())
     {
-        rtl::OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
+        OUString sOldScheme =  m_pColorSchemeLB->GetEntry(m_pColorSchemeLB->GetSavedValue());
         if(!sOldScheme.isEmpty())
         {
             pColorConfig->SetCurrentSchemeName(sOldScheme);
@@ -1115,8 +1115,8 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
     //has to be called always to speed up accessibility tools
     m_pColorConfigCT->SetScrollPosition(sUser.ToInt32());
     m_pColorSchemeLB->Clear();
-    uno::Sequence< ::rtl::OUString >  aSchemes = pColorConfig->GetSchemeNames();
-    const rtl::OUString* pSchemes = aSchemes.getConstArray();
+    uno::Sequence< OUString >  aSchemes = pColorConfig->GetSchemeNames();
+    const OUString* pSchemes = aSchemes.getConstArray();
     for(sal_Int32 i = 0; i < aSchemes.getLength(); i++)
         m_pColorSchemeLB->InsertEntry(pSchemes[i]);
     m_pColorSchemeLB->SelectEntry(pColorConfig->GetCurrentSchemeName());
@@ -1179,7 +1179,7 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
         aQuery.SetText(String(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE)));
         if(RET_YES == aQuery.Execute())
         {
-            rtl::OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
+            OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());
             m_pColorSchemeLB->SelectEntryPos(0);
             m_pColorSchemeLB->GetSelectHdl().Call(m_pColorSchemeLB);

@@ -28,7 +28,6 @@ namespace core {
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-using ::rtl::OUString;
 
 
 using ::com::sun::star::uno::Sequence;
@@ -86,9 +85,9 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 if( !str.isEmpty() )
                 {
                     Sequence< ::com::sun::star::xml::FastAttribute > attrs = rAttribs.getFastAttributeList()->getFastAttributes();
-                    // printf("MCE: %s\n", ::rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    // printf("MCE: %s\n", OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
                     // TODO: Check & Get the namespaces in "Ignorable"
-                    // printf("NS: %d : %s\n", attrs.getLength(), ::rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    // printf("NS: %d : %s\n", attrs.getLength(), OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
             }
             return false;

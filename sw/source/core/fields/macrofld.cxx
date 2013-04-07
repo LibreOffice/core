@@ -29,7 +29,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
     Beschreibung: MacroFeldtypen
@@ -137,13 +136,13 @@ SvxMacro SwMacroField::GetSvxMacro() const
     Beschreibung: LibName und MacroName
  --------------------------------------------------------------------*/
 
-void SwMacroField::SetPar1(const rtl::OUString& rStr)
+void SwMacroField::SetPar1(const OUString& rStr)
 {
     aMacro = rStr;
     bIsScriptURL = isScriptURL(aMacro);
 }
 
-const rtl::OUString& SwMacroField::GetPar1() const
+const OUString& SwMacroField::GetPar1() const
 {
     return aMacro;
 }
@@ -152,12 +151,12 @@ const rtl::OUString& SwMacroField::GetPar1() const
     Beschreibung: Macrotext
  --------------------------------------------------------------------*/
 
-void SwMacroField::SetPar2(const rtl::OUString& rStr)
+void SwMacroField::SetPar2(const OUString& rStr)
 {
     aText = rStr;
 }
 
-rtl::OUString SwMacroField::GetPar2() const
+OUString SwMacroField::GetPar2() const
 {
     return aText;
 }
@@ -186,7 +185,7 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    rtl::OUString sTmp;
+    OUString sTmp;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
@@ -213,14 +212,14 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 // create an internally used macro name from the library and macro name parts
 void SwMacroField::CreateMacroString(
-    rtl::OUString& rMacro,
+    OUString& rMacro,
     const String& rMacroName,
     const String& rLibraryName )
 {
     // concatenate library and name; use dot only if both strings have content
     rMacro = rLibraryName;
     if ( rLibraryName.Len() > 0 && rMacroName.Len() > 0 )
-        rMacro += rtl::OUString('.');
+        rMacro += OUString('.');
     rMacro += rMacroName;
 }
 

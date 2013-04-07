@@ -60,14 +60,14 @@ enum XMLStyleStylesElemTokens
 
 class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 {
-    ::rtl::OUString     maName;
-    ::rtl::OUString     maDisplayName;
-    ::rtl::OUString     maAutoName;
-    ::rtl::OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
-    ::rtl::OUString     maFollow;   // Will be moved to XMLPropStyle soon!!!!
+    OUString     maName;
+    OUString     maDisplayName;
+    OUString     maAutoName;
+    OUString     maParentName;// Will be moved to XMLPropStyle soon!!!!
+    OUString     maFollow;   // Will be moved to XMLPropStyle soon!!!!
     sal_Bool            mbHidden;
 
-    ::rtl::OUString     maHelpFile; // Will be removed very soon!!!!
+    OUString     maHelpFile; // Will be removed very soon!!!!
 
     sal_uInt32          mnHelpId;   // Will be removed very soon!!!!
     sal_uInt16          mnFamily;
@@ -82,18 +82,18 @@ class XMLOFF_DLLPUBLIC SvXMLStyleContext : public SvXMLImportContext
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 
     void SetFamily( sal_uInt16 nSet ) { mnFamily = nSet; }
-    void SetAutoName( const ::rtl::OUString& rName ) { maAutoName = rName; }
+    void SetAutoName( const OUString& rName ) { maAutoName = rName; }
 
 public:
 
     TYPEINFO();
 
     SvXMLStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
     sal_uInt16 nFamily=0, sal_Bool bDefaultStyle = sal_False );
@@ -101,7 +101,7 @@ public:
     virtual ~SvXMLStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -109,13 +109,13 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    const ::rtl::OUString&  GetName() const { return maName; }
-    const ::rtl::OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
-    const ::rtl::OUString&  GetAutoName() const { return maAutoName; }
-    const ::rtl::OUString&  GetParentName() const { return maParentName; }
-    const ::rtl::OUString&  GetFollow() const { return maFollow; }
+    const OUString&  GetName() const { return maName; }
+    const OUString&  GetDisplayName() const { return maDisplayName.getLength() ? maDisplayName : maName; }
+    const OUString&  GetAutoName() const { return maAutoName; }
+    const OUString&  GetParentName() const { return maParentName; }
+    const OUString&  GetFollow() const { return maFollow; }
 
-    const ::rtl::OUString&  GetHelpFile() const { return maHelpFile; }
+    const OUString&  GetHelpFile() const { return maHelpFile; }
     sal_uInt32  GetHelpId() const { return mnHelpId; }
 
     sal_uInt16 GetFamily() const { return mnFamily; }
@@ -158,8 +158,8 @@ public:
 
 class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 {
-    const ::rtl::OUString msParaStyleServiceName;
-    const ::rtl::OUString msTextStyleServiceName;
+    const OUString msParaStyleServiceName;
+    const OUString msTextStyleServiceName;
 
     SvXMLStylesContext_Impl *mpImpl;
     SvXMLTokenMap           *mpStyleStylesElemTokenMap;
@@ -195,18 +195,18 @@ protected:
     const SvXMLStyleContext *GetStyle( sal_uInt32 i ) const;
 
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
-        sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -216,7 +216,7 @@ public:
     TYPEINFO();
 
     SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         sal_Bool bAutomatic = sal_False );
@@ -225,7 +225,7 @@ public:
 
     // Create child element.
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -237,16 +237,16 @@ public:
 
     const SvXMLStyleContext *FindStyleChildContext(
                                       sal_uInt16 nFamily,
-                                      const ::rtl::OUString& rName,
+                                      const OUString& rName,
                                       sal_Bool bCreateIndex=sal_False ) const;
-    virtual sal_uInt16 GetFamily( const ::rtl::OUString& rFamily ) const;
+    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         sal_uInt16 nFamily ) const;
 
     virtual ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
-    virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
 
        virtual ::com::sun::star::uno::Reference < ::com::sun::star::style::XAutoStyleFamily >
         GetAutoStyles( sal_uInt16 nFamily ) const;

@@ -326,7 +326,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             aCurrentMasterPages.insert (pMasterPage->GetName());
         OSL_TRACE("currently used master page %d is %s",
             nIndex,
-            ::rtl::OUStringToOString(pMasterPage->GetName(),
+            OUStringToOString(pMasterPage->GetName(),
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -346,7 +346,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
              ++J)
             OSL_TRACE("old used master page %d is %s",
             i++,
-            ::rtl::OUStringToOString(*J,
+            OUStringToOString(*J,
                 RTL_TEXTENCODING_UTF8).getStr());
 
         // Send events about the newly used master pages.
@@ -359,7 +359,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         for (I=aNewMasterPages.begin(); I!=aNewMasterPages.end(); ++I)
         {
             OSL_TRACE("    added master page %s",
-                ::rtl::OUStringToOString(*I,
+                OUStringToOString(*I,
                     RTL_TEXTENCODING_UTF8).getStr());
 
             MasterPageObserverEvent aEvent (
@@ -379,7 +379,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
         for (I=aRemovedMasterPages.begin(); I!=aRemovedMasterPages.end(); ++I)
         {
             OSL_TRACE("    removed master page %s",
-                ::rtl::OUStringToOString(*I,
+                OUStringToOString(*I,
                     RTL_TEXTENCODING_UTF8).getStr());
 
             MasterPageObserverEvent aEvent (

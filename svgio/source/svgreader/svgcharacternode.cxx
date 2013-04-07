@@ -43,7 +43,7 @@ namespace svgio
         {
         }
 
-        void SvgTextPositions::parseTextPositionAttributes(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgTextPositions::parseTextPositionAttributes(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
         {
             // parse own
             switch(aSVGToken)
@@ -130,8 +130,8 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrSpacing(rtl::OUString::createFromAscii("spacing"));
-                        static rtl::OUString aStrSpacingAndGlyphs(rtl::OUString::createFromAscii("spacingAndGlyphs"));
+                        static OUString aStrSpacing(OUString::createFromAscii("spacing"));
+                        static OUString aStrSpacingAndGlyphs(OUString::createFromAscii("spacingAndGlyphs"));
 
                         if(aContent.match(aStrSpacing))
                         {
@@ -208,7 +208,7 @@ namespace svgio
         SvgCharacterNode::SvgCharacterNode(
             SvgDocument& rDocument,
             SvgNode* pParent,
-            const rtl::OUString& rText)
+            const OUString& rText)
         :   SvgNode(SVGTokenCharacter, rDocument, pParent),
             maText(rText)
         {
@@ -243,8 +243,8 @@ namespace svgio
             if(nLength)
             {
                 // prepare FontAttribute
-                const rtl::OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
-                    rtl::OUString(rtl::OUString::createFromAscii("Times New Roman")) :
+                const OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
+                    OUString(OUString::createFromAscii("Times New Roman")) :
                     rSvgStyleAttributes.getFontFamily()[0];
                 const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
                 bool bSymbol(false);
@@ -257,7 +257,7 @@ namespace svgio
 
                 const drawinglayer::attribute::FontAttribute aFontAttribute(
                     aFontFamily,
-                    rtl::OUString(),
+                    OUString(),
                     nFontWeight,
                     bSymbol,
                     bVertical,
@@ -520,10 +520,10 @@ namespace svgio
 
         void SvgCharacterNode::addGap()
         {
-            maText += rtl::OUString(sal_Unicode(' '));
+            maText += OUString(sal_Unicode(' '));
         }
 
-        void SvgCharacterNode::concatenate(const rtl::OUString& rText)
+        void SvgCharacterNode::concatenate(const OUString& rText)
         {
             maText += rText;
         }

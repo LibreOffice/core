@@ -48,7 +48,7 @@ ORowSetValue OOp_Ascii::operate(const ORowSetValue& lhs) const
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOp_Ascii::operate" );
     if ( lhs.isNull() )
         return lhs;
-    ::rtl::OString sStr(::rtl::OUStringToOString(lhs,RTL_TEXTENCODING_ASCII_US));
+    OString sStr(OUStringToOString(lhs,RTL_TEXTENCODING_ASCII_US));
     sal_Int32 nAscii = sStr.toChar();
     return nAscii;
 }
@@ -68,7 +68,7 @@ ORowSetValue OOp_Char::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.empty() )
         return ORowSetValue();
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     ::std::vector<ORowSetValue>::const_reverse_iterator aIter = lhs.rbegin();
     ::std::vector<ORowSetValue>::const_reverse_iterator aEnd = lhs.rend();
     for (; aIter != aEnd; ++aIter)
@@ -77,7 +77,7 @@ ORowSetValue OOp_Char::operate(const ::std::vector<ORowSetValue>& lhs) const
         {
             sal_Char c = static_cast<sal_Char>(static_cast<sal_Int32>(*aIter));
 
-            sRet += ::rtl::OUString(&c,1,RTL_TEXTENCODING_ASCII_US);
+            sRet += OUString(&c,1,RTL_TEXTENCODING_ASCII_US);
         }
     }
 
@@ -90,7 +90,7 @@ ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.empty() )
         return ORowSetValue();
 
-    ::rtl::OUStringBuffer sRet;
+    OUStringBuffer sRet;
     ::std::vector<ORowSetValue>::const_reverse_iterator aIter = lhs.rbegin();
     ::std::vector<ORowSetValue>::const_reverse_iterator aEnd = lhs.rend();
     for (; aIter != aEnd; ++aIter)
@@ -98,7 +98,7 @@ ORowSetValue OOp_Concat::operate(const ::std::vector<ORowSetValue>& lhs) const
         if ( aIter->isNull() )
             return ORowSetValue();
 
-        sRet.append(aIter->operator ::rtl::OUString());
+        sRet.append(aIter->operator OUString());
     }
 
     return sRet.makeStringAndClear();
@@ -115,7 +115,7 @@ ORowSetValue OOp_Locate::operate(const ::std::vector<ORowSetValue>& lhs) const
             return ORowSetValue();
     }
     if ( lhs.size() == 2 )
-        return ::rtl::OUString::valueOf(lhs[0].getString().indexOf(lhs[1].getString())+1);
+        return OUString::valueOf(lhs[0].getString().indexOf(lhs[1].getString())+1);
 
     else if ( lhs.size() != 3 )
         return ORowSetValue();
@@ -148,8 +148,8 @@ ORowSetValue OOp_LTrim::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet = lhs;
-    ::rtl::OUString sNew = sRet.trim();
+    OUString sRet = lhs;
+    OUString sNew = sRet.trim();
     return sRet.copy(sRet.indexOf(sNew));
 }
 //------------------------------------------------------------------
@@ -159,8 +159,8 @@ ORowSetValue OOp_RTrim::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet = lhs;
-    ::rtl::OUString sNew = sRet.trim();
+    OUString sRet = lhs;
+    OUString sNew = sRet.trim();
     return sRet.copy(0,sRet.lastIndexOf(sNew.getStr()[sNew.getLength()-1])+1);
 }
 //------------------------------------------------------------------
@@ -171,7 +171,7 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
         return lhs;
 
     const sal_Char c = ' ';
-    ::rtl::OUStringBuffer sRet;
+    OUStringBuffer sRet;
     sal_Int32 nCount = lhs;
     for (sal_Int32 i=0; i < nCount; ++i)
     {
@@ -186,9 +186,9 @@ ORowSetValue OOp_Replace::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.size() != 3 )
         return ORowSetValue();
 
-    ::rtl::OUString sStr  = lhs[2];
-    ::rtl::OUString sFrom = lhs[1];
-    ::rtl::OUString sTo   = lhs[0];
+    OUString sStr  = lhs[2];
+    OUString sFrom = lhs[1];
+    OUString sTo   = lhs[0];
     sal_Int32 nIndexOf = sStr.indexOf(sFrom);
     while( nIndexOf != -1 )
     {
@@ -205,7 +205,7 @@ ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs,const ORowSetValue& rhs
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     sal_Int32 nCount = rhs;
     for (sal_Int32 i=0; i < nCount; ++i)
     {
@@ -220,7 +220,7 @@ ORowSetValue OOp_Insert::operate(const ::std::vector<ORowSetValue>& lhs) const
     if ( lhs.size() != 4 )
         return ORowSetValue();
 
-    ::rtl::OUString sStr = lhs[3];
+    OUString sStr = lhs[3];
 
     sal_Int32 nStart = static_cast<sal_Int32>(lhs[2]);
     if ( nStart < 1 )
@@ -234,7 +234,7 @@ ORowSetValue OOp_Left::operate(const ORowSetValue& lhs,const ORowSetValue& rhs) 
     if ( lhs.isNull() || rhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet = lhs;
+    OUString sRet = lhs;
     sal_Int32 nCount = rhs;
     if ( nCount < 0 )
         return ORowSetValue();
@@ -248,7 +248,7 @@ ORowSetValue OOp_Right::operate(const ORowSetValue& lhs,const ORowSetValue& rhs)
         return lhs;
 
     sal_Int32 nCount = rhs;
-    ::rtl::OUString sRet = lhs;
+    OUString sRet = lhs;
     if ( nCount < 0 || nCount >= sRet.getLength() )
         return ORowSetValue();
 

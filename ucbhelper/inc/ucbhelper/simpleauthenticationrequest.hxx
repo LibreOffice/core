@@ -90,12 +90,12 @@ public:
       * @param bAllowUseSystemCredntials specifies if requesting client is
       *        able to obtain and use system credentials for authentication
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rURL,
-                                 const rtl::OUString & rServerName,
-                                 const rtl::OUString & rRealm,
-                                 const rtl::OUString & rUserName,
-                                 const rtl::OUString & rPassword,
-                                 const rtl::OUString & rAccount,
+    SimpleAuthenticationRequest( const OUString & rURL,
+                                 const OUString & rServerName,
+                                 const OUString & rRealm,
+                                 const OUString & rUserName,
+                                 const OUString & rPassword,
+                                 const OUString & rAccount,
                                  sal_Bool bAllowPersistentStoring,
                                  sal_Bool bAllowUseSystemCredentials );
 
@@ -119,17 +119,17 @@ public:
                modifiable.
       * @param rAccount contains an account, if applicable.
       */
-    SimpleAuthenticationRequest( const rtl::OUString & rURL,
-                                 const rtl::OUString & rServerName,
+    SimpleAuthenticationRequest( const OUString & rURL,
+                                 const OUString & rServerName,
                                  EntityType eRealmType,
-                                 const rtl::OUString & rRealm,
+                                 const OUString & rRealm,
                                  EntityType eUserNameType,
-                                 const rtl::OUString & rUserName,
+                                 const OUString & rUserName,
                                  EntityType ePasswordType,
-                                 const rtl::OUString & rPassword,
+                                 const OUString & rPassword,
                                  EntityType eAccountType = ENTITY_NA,
-                                 const rtl::OUString & rAccount
-                                    = rtl::OUString() );
+                                 const OUString & rAccount
+                                    = OUString() );
 
     /**
       * This method returns the supplier for the missing authentication data,

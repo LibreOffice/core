@@ -163,7 +163,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    OBrowserPage* OPropertyEditor::getPage( const ::rtl::OUString& _rPropertyName )
+    OBrowserPage* OPropertyEditor::getPage( const OUString& _rPropertyName )
     {
         OBrowserPage* pPage = NULL;
         MapStringToPageId::const_iterator aPropertyPageIdPos = m_aPropertyPageIds.find( _rPropertyName );
@@ -173,7 +173,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    const OBrowserPage* OPropertyEditor::getPage( const ::rtl::OUString& _rPropertyName ) const
+    const OBrowserPage* OPropertyEditor::getPage( const OUString& _rPropertyName ) const
     {
         return const_cast< OPropertyEditor* >( this )->getPage( _rPropertyName );
     }
@@ -206,7 +206,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const rtl::OString& _rHelpId )
+    sal_uInt16 OPropertyEditor::AppendPage( const String & _rText, const OString& _rHelpId )
     {
         // obtain a new id
         sal_uInt16 nId = m_nNextId++;
@@ -232,7 +232,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetHelpId( const rtl::OString& rHelpId )
+    void OPropertyEditor::SetHelpId( const OString& rHelpId )
     {
         Control::SetHelpId("");
         m_aTabControl.SetHelpId(rHelpId);
@@ -343,7 +343,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetHelpText( const ::rtl::OUString& _rHelpText )
+    void OPropertyEditor::SetHelpText( const OUString& _rHelpText )
     {
         forEachPage( &OPropertyEditor::setHelpSectionText, &_rHelpText );
     }
@@ -369,7 +369,7 @@ namespace pcr
         if ( !_pPointerToOUString )
             return;
 
-        const ::rtl::OUString& rText( *(const ::rtl::OUString*)_pPointerToOUString );
+        const OUString& rText( *(const OUString*)_pPointerToOUString );
         _rPage.getListBox().SetHelpText( rText );
     }
 
@@ -398,7 +398,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::RemoveEntry( const ::rtl::OUString& _rName )
+    void OPropertyEditor::RemoveEntry( const OUString& _rName )
     {
         OBrowserPage* pPage = getPage( _rName );
         if ( pPage )
@@ -420,7 +420,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetPropertyValue( const ::rtl::OUString& rEntryName, const Any& _rValue, bool _bUnknownValue )
+    void OPropertyEditor::SetPropertyValue( const OUString& rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
@@ -428,7 +428,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_uInt16 OPropertyEditor::GetPropertyPos( const ::rtl::OUString& rEntryName ) const
+    sal_uInt16 OPropertyEditor::GetPropertyPos( const OUString& rEntryName ) const
     {
         sal_uInt16 nVal=LISTBOX_ENTRY_NOTFOUND;
         const OBrowserPage* pPage = getPage( rEntryName );
@@ -465,7 +465,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
+    void OPropertyEditor::EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
         for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
@@ -476,7 +476,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
+    void OPropertyEditor::EnablePropertyLine( const OUString& _rEntryName, bool _bEnable )
     {
         for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
@@ -487,7 +487,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    Reference< XPropertyControl > OPropertyEditor::GetPropertyControl(const ::rtl::OUString& rEntryName)
+    Reference< XPropertyControl > OPropertyEditor::GetPropertyControl(const OUString& rEntryName)
     {
         Reference< XPropertyControl > xControl;
         // let the current page handle this

@@ -52,7 +52,7 @@ namespace formula
         virtual sal_uInt32 getCount() const = 0;
         virtual const IFunctionCategory* getCategory(sal_uInt32 nPos) const = 0;
         virtual void fillLastRecentlyUsedFunctions(::std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
-        virtual const IFunctionDescription* getFunctionByName(const ::rtl::OUString& _sFunctionName) const = 0;
+        virtual const IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const = 0;
 
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
 
@@ -68,7 +68,7 @@ namespace formula
         virtual sal_uInt32                  getCount() const = 0;
         virtual const IFunctionDescription* getFunction(sal_uInt32 _nPos) const = 0;
         virtual sal_uInt32                  getNumber() const = 0;
-        virtual ::rtl::OUString             getName() const = 0;
+        virtual OUString             getName() const = 0;
 
     protected:
         ~IFunctionCategory() {}
@@ -78,23 +78,23 @@ namespace formula
     {
     public:
         IFunctionDescription(){}
-        virtual ::rtl::OUString getFunctionName() const = 0;
+        virtual OUString getFunctionName() const = 0;
         virtual const IFunctionCategory* getCategory() const = 0;
-        virtual ::rtl::OUString getDescription() const = 0;
+        virtual OUString getDescription() const = 0;
         // GetSuppressedArgCount
         virtual xub_StrLen getSuppressedArgumentCount() const = 0;
         // GetFormulaString
-        virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const = 0;
+        virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const = 0;
         // GetVisibleArgMapping
         virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const = 0;
         virtual void initArgumentInfo() const = 0;
-        virtual ::rtl::OUString getSignature() const = 0;
-        virtual rtl::OString getHelpId() const = 0;
+        virtual OUString getSignature() const = 0;
+        virtual OString getHelpId() const = 0;
 
         // parameter
         virtual sal_uInt32 getParameterCount() const = 0;
-        virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const = 0;
-        virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const = 0;
+        virtual OUString getParameterName(sal_uInt32 _nPos) const = 0;
+        virtual OUString getParameterDescription(sal_uInt32 _nPos) const = 0;
         virtual bool isParameterOptional(sal_uInt32 _nPos) const = 0;
 
     protected:

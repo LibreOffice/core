@@ -37,7 +37,6 @@
 #include <svl/itemset.hxx>
 #include "miscuno.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -110,7 +109,7 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
 
-    ::rtl::OUString aPassword;
+    OUString aPassword;
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, false);
     if ( pPasswordItem )
         aPassword = pPasswordItem->GetValue();
@@ -190,7 +189,7 @@ bool ScfPropertySet::GetAnyProperty( Any& rValue, const OUString& rPropName ) co
     return bHasValue;
 }
 
-bool ScfPropertySet::GetBoolProperty( const ::rtl::OUString& rPropName ) const
+bool ScfPropertySet::GetBoolProperty( const OUString& rPropName ) const
 {
     Any aAny;
     return GetAnyProperty( aAny, rPropName ) && ScUnoHelpFunctions::GetBoolFromAny( aAny );
@@ -203,7 +202,7 @@ OUString ScfPropertySet::GetStringProperty( const OUString& rPropName ) const
     return aOUString;
 }
 
-bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const
+bool ScfPropertySet::GetColorProperty( Color& rColor, const OUString& rPropName ) const
 {
     sal_Int32 nApiColor = 0;
     bool bRet = GetProperty( nApiColor, rPropName );
@@ -247,9 +246,9 @@ void ScfPropertySet::SetAnyProperty( const OUString& rPropName, const Any& rValu
     }
     catch (const Exception&)
     {
-        OSL_FAIL(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+        OSL_FAIL(OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
                 "ScfPropertySet::SetAnyProperty - cannot set property \""))
-                .append(rtl::OUStringToOString(rPropName,
+                .append(OUStringToOString(rPropName,
                     RTL_TEXTENCODING_ASCII_US))
                 .append('"').getStr());
     }

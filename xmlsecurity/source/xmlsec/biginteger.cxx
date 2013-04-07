@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star::uno ;
-using ::rtl::OUString ;
 
 Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
 {
@@ -35,7 +34,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
         xmlSecSize length ;
         xmlSecBn bn ;
 
-        rtl::OString onumeral = rtl::OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
+        OString onumeral = OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
 
         chNumeral = xmlStrndup( ( const xmlChar* )onumeral.getStr(), ( int )onumeral.getLength() ) ;
 

@@ -202,7 +202,7 @@ sal_Bool    XFCellStyle::Equal(IXFStyle *pStyle)
 void XFCellStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
 
     pAttrList->Clear();
     if( !style.isEmpty() )

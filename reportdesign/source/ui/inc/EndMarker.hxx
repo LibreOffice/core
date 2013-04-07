@@ -33,7 +33,7 @@ namespace rptui
     protected:
         virtual void ImplInitSettings();
     public:
-        OEndMarker(Window* _pParent,const ::rtl::OUString& _sColorEntry);
+        OEndMarker(Window* _pParent,const OUString& _sColorEntry);
         virtual ~OEndMarker();
 
         // windows

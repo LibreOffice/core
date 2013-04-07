@@ -222,7 +222,7 @@ sal_Bool OTableGrantControl::SaveModified()
     if(nRow == -1 || nRow >= m_aTableNames.getLength())
         return sal_False;
 
-    ::rtl::OUString sTableName = m_aTableNames[nRow];
+    OUString sTableName = m_aTableNames[nRow];
     sal_Bool bErg = sal_True;
     try
     {
@@ -365,7 +365,7 @@ sal_Bool OTableGrantControl::isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivile
     return bAllowed;
 }
 // -----------------------------------------------------------------------------
-void OTableGrantControl::setUserName(const ::rtl::OUString _sUserName)
+void OTableGrantControl::setUserName(const OUString _sUserName)
 {
     m_sUserName = _sUserName;
     m_aPrivMap = TTablePrivilegeMap();

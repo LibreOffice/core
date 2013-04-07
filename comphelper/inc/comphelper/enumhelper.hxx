@@ -58,7 +58,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
                                                            starlang::XEventListener    >
 {
-    staruno::Sequence< ::rtl::OUString >                m_aNames;
+    staruno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
     staruno::Reference< starcontainer::XNameAccess >    m_xAccess;
     sal_Bool                                            m_bListening;
@@ -66,7 +66,7 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
 public:
     OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess);
     OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess,
-                       const staruno::Sequence< ::rtl::OUString >&             _aNames  );
+                       const staruno::Sequence< OUString >&             _aNames  );
     virtual ~OEnumerationByName();
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException);

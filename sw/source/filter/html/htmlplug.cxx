@@ -409,7 +409,7 @@ void SwHTMLParser::InsertEmbed()
 
     // das Plugin anlegen
     comphelper::EmbeddedObjectContainer aCnt;
-    ::rtl::OUString aObjName;
+    OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aObjName );
     if ( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
     {
@@ -417,15 +417,15 @@ void SwHTMLParser::InsertEmbed()
         if ( xSet.is() )
         {
             if( bHasURL )
-                xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
-                    uno::makeAny( ::rtl::OUString( aURL ) ) );
+                xSet->setPropertyValue( OUString("PluginURL"),
+                    uno::makeAny( OUString( aURL ) ) );
             if( bHasType )
-                xSet->setPropertyValue( ::rtl::OUString("PluginMimeType"),
-                    uno::makeAny( ::rtl::OUString( aType ) ) );
+                xSet->setPropertyValue( OUString("PluginMimeType"),
+                    uno::makeAny( OUString( aType ) ) );
 
             uno::Sequence < beans::PropertyValue > aProps;
             aCmdLst.FillSequence( aProps );
-            xSet->setPropertyValue( ::rtl::OUString("PluginCommands"), uno::makeAny( aProps ) );
+            xSet->setPropertyValue( OUString("PluginCommands"), uno::makeAny( aProps ) );
 
         }
     }
@@ -871,7 +871,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // den Floating-Frame anlegen
     comphelper::EmbeddedObjectContainer aCnt;
-    ::rtl::OUString aObjName;
+    OUString aObjName;
     uno::Reference < embed::XEmbeddedObject > xObj = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aObjName );
 
     try
@@ -882,28 +882,28 @@ void SwHTMLParser::InsertFloatingFrame()
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                ::rtl::OUString aName = aFrameDesc.GetName();
+                OUString aName = aFrameDesc.GetName();
                 ScrollingMode eScroll = aFrameDesc.GetScrollingMode();
                 sal_Bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameURL"), uno::makeAny( ::rtl::OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
-                xSet->setPropertyValue( ::rtl::OUString("FrameName"), uno::makeAny( aName ) );
+                xSet->setPropertyValue( OUString("FrameURL"), uno::makeAny( OUString( aFrameDesc.GetURL().GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                xSet->setPropertyValue( OUString("FrameName"), uno::makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( OUString("FrameIsAutoScroll"),
                         uno::makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( OUString("FrameIsScrollingMode"),
                         uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameIsBorder"),
+                xSet->setPropertyValue( OUString("FrameIsBorder"),
                         uno::makeAny( bHasBorder ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameMarginWidth"),
+                xSet->setPropertyValue( OUString("FrameMarginWidth"),
                     uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameMarginHeight"),
+                xSet->setPropertyValue( OUString("FrameMarginHeight"),
                     uno::makeAny( sal_Int32( aMargin.Height() ) ) );
             }
         }
@@ -1014,16 +1014,16 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                   pMarkToOLE );
     uno::Any aAny;
     SvGlobalName aGlobName( xObj->getClassID() );
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<');
     if( aGlobName == SvGlobalName( SO3_PLUGIN_CLASSID ) )
     {
         // erstmal das Plug-spezifische
         sOut.append(OOO_STRING_SVTOOLS_HTML_embed);
 
-        ::rtl::OUString aStr;
+        OUString aStr;
         String aURL;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("PluginURL") );
+        aAny = xSet->getPropertyValue( OUString("PluginURL") );
         if( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
@@ -1039,8 +1039,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sOut.append('\"');
         }
 
-        ::rtl::OUString aType;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("PluginMimeType") );
+        OUString aType;
+        aAny = xSet->getPropertyValue( OUString("PluginMimeType") );
         if( (aAny >>= aType) && !aType.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type)
@@ -1071,8 +1071,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         sOut.append(OOO_STRING_SVTOOLS_HTML_applet);
 
         // CODEBASE
-        ::rtl::OUString aCd;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("AppletCodeBase") );
+        OUString aCd;
+        aAny = xSet->getPropertyValue( OUString("AppletCodeBase") );
         if( (aAny >>= aCd) && !aCd.isEmpty() )
         {
             String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
@@ -1087,8 +1087,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         // CODE
-        ::rtl::OUString aClass;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("AppletCode") );
+        OUString aClass;
+        aAny = xSet->getPropertyValue( OUString("AppletCode") );
         aAny >>= aClass;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_code)
             .append("=\"");
@@ -1097,8 +1097,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         sOut.append('\"');
 
         // NAME
-        ::rtl::OUString aAppletName;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("AppletName") );
+        OUString aAppletName;
+        aAny = xSet->getPropertyValue( OUString("AppletName") );
         aAny >>= aAppletName;
         if( !aAppletName.isEmpty() )
         {
@@ -1110,7 +1110,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         }
 
         sal_Bool bScript = sal_False;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("AppletIsScript") );
+        aAny = xSet->getPropertyValue( OUString("AppletIsScript") );
         aAny >>= bScript;
         if( bScript )
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_mayscript);
@@ -1139,7 +1139,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     // ALT, WIDTH, HEIGHT, HSPACE, VSPACE, ALIGN
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         nFrmOpts |= HTML_FRMOPTS_OLE_CSS1;
-    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(), nFrmOpts );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, pOLENd->GetTitle(), nFrmOpts );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bHiddenEmbed )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
@@ -1149,7 +1149,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // und ein </APPLET> schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("AppletCommands") );
+        aAny = xSet->getPropertyValue( OUString("AppletCommands") );
         aAny >>= aProps;
 
         SvCommandList aCommands;
@@ -1186,7 +1186,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             const String& rName = rCommand.GetCommand();
             const String& rValue = rCommand.GetArgument();
             rHTMLWrt.OutNewLine();
-            rtl::OStringBuffer sBuf;
+            OStringBuffer sBuf;
             sBuf.append('<').append(OOO_STRING_SVTOOLS_HTML_param)
                 .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
                 .append("=\"");
@@ -1208,7 +1208,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // fuer Plugins die Parameter als Optionen schreiben
 
         uno::Sequence < beans::PropertyValue > aProps;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("PluginCommands") );
+        aAny = xSet->getPropertyValue( OUString("PluginCommands") );
         aAny >>= aProps;
 
         SvCommandList aCommands;
@@ -1265,7 +1265,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             aGrfNm = *pTempFileName;
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                    rtl::OUString("JPG"),
+                                    OUString("JPG"),
                                     (XOUTBMP_USE_GIF_IF_POSSIBLE |
                                      XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben

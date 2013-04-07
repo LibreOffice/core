@@ -32,12 +32,12 @@ namespace chart
 class ObjectPropertiesDialogParameter
 {
 public:
-    ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID );
+    ObjectPropertiesDialogParameter( const OUString& rObjectCID );
     virtual ~ObjectPropertiesDialogParameter();
 
     void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ObjectType      getObjectType() const;
-    rtl::OUString   getLocalizedName() const;
+    OUString   getLocalizedName() const;
 
     bool HasGeometryProperties() const;
     bool HasStatisticProperties() const;
@@ -55,7 +55,7 @@ public:
     bool IsSupportingAxisPositioning() const;
     bool ShowAxisOrigin() const;
     bool IsCrossingAxisIsCategoryAxis() const;
-    const ::com::sun::star::uno::Sequence< rtl::OUString >& GetCategories() const;
+    const ::com::sun::star::uno::Sequence< OUString >& GetCategories() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
@@ -63,11 +63,11 @@ public:
     bool IsComplexCategoriesAxis() const;
 
 private:
-    rtl::OUString   m_aObjectCID;
+    OUString   m_aObjectCID;
     ObjectType      m_eObjectType;
     bool m_bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
 
-    rtl::OUString   m_aLocalizedName;
+    OUString   m_aLocalizedName;
 
     bool m_bHasGeometryProperties;
     bool m_bHasStatisticProperties;
@@ -86,7 +86,7 @@ private:
     bool m_bSupportingAxisPositioning;
     bool m_bShowAxisOrigin;
     bool m_bIsCrossingAxisIsCategoryAxis;
-    ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;
+    ::com::sun::star::uno::Sequence< OUString > m_aCategories;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
 

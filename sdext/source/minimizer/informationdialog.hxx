@@ -47,7 +47,7 @@ class InformationDialog : public UnoDialog, public ConfigurationAccess
 public :
 
     InformationDialog( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxMSF,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const rtl::OUString& rSaveAsURL,
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
                 sal_Bool& bOpenNewDocument, const sal_Int64& nSourceSize, const sal_Int64& nDestSize, const sal_Int64& nApproxDest );
     ~InformationDialog();
 
@@ -61,14 +61,14 @@ private :
 
     com::sun::star::uno::Reference< com::sun::star::awt::XActionListener >  mxActionListener;
 
-    rtl::OUString ImpGetStandardImage( const rtl::OUString& rPrivateURL );
+    OUString ImpGetStandardImage( const OUString& rPrivateURL );
     void InitDialog();
 
     sal_Int64 mnSourceSize;
     sal_Int64 mnDestSize;
     sal_Int64 mnApproxSize;
     sal_Bool& mrbOpenNewDocument;
-    const rtl::OUString& maSaveAsURL;
+    const OUString& maSaveAsURL;
 
 public :
 

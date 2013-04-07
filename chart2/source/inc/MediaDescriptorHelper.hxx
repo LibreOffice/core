@@ -80,34 +80,34 @@ public:
     //@todo define this for debug only, except URL
     sal_Bool            AsTemplate; //document is a template.
     sal_Bool            ISSET_AsTemplate;
-    ::rtl::OUString     Author;
+    OUString     Author;
     sal_Bool            ISSET_Author;
-    ::rtl::OUString     CharacterSet; //identifier of used character set.
+    OUString     CharacterSet; //identifier of used character set.
     sal_Bool            ISSET_CharacterSet;
-    ::rtl::OUString     Comment;
+    OUString     Comment;
     sal_Bool            ISSET_Comment;
 
     ::com::sun::star::uno::Any
                         ComponentData;
     sal_Bool            ISSET_ComponentData;
-    ::rtl::OUString     FileName; //deprecated, same as url
+    OUString     FileName; //deprecated, same as url
     sal_Bool            ISSET_FileName;
     ::com::sun::star::uno::Any
                         FilterData;
     sal_Bool            ISSET_FilterData;
-    ::rtl::OUString     FilterName; //internal filter name.
+    OUString     FilterName; //internal filter name.
     sal_Bool            ISSET_FilterName;
-    ::rtl::OUString     FilterFlags;//deprecated,
+    OUString     FilterFlags;//deprecated,
     sal_Bool            ISSET_FilterFlags;
-    ::rtl::OUString     FilterOptions;
+    OUString     FilterOptions;
     sal_Bool            ISSET_FilterOptions;
             //not documented ... @todo remove?
-    ::rtl::OUString     FrameName; //name of target frame.
+    OUString     FrameName; //name of target frame.
     sal_Bool            ISSET_FrameName;
     sal_Bool            Hidden; //load document, invisible.
     sal_Bool            ISSET_Hidden;
 
-    ::rtl::OUString     HierarchicalDocumentName;
+    OUString     HierarchicalDocumentName;
     sal_Bool            ISSET_HierarchicalDocumentName;
 
 
@@ -121,17 +121,17 @@ public:
                         InteractionHandler; //::com::sun::star::task::XInteractionHandler
     sal_Bool            ISSET_InteractionHandler;
 
-    ::rtl::OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
+    OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
     sal_Bool            ISSET_JumpMark;
-    ::rtl::OUString     MediaType; //mime type.
+    OUString     MediaType; //mime type.
     sal_Bool            ISSET_MediaType;
-    ::rtl::OUString     OpenFlags; //deprecated
+    OUString     OpenFlags; //deprecated
     sal_Bool            ISSET_OpenFlags;
     sal_Bool            OpenNewView; //opens a new view for an already loaded document.
     sal_Bool            ISSET_OpenNewView;
     sal_Bool            Overwrite; //opens a new view for an already loaded document.
     sal_Bool            ISSET_Overwrite;
-    ::rtl::OUString     Password;
+    OUString     Password;
     sal_Bool            ISSET_Password;
 
         //not documented ... @todo remove?
@@ -142,13 +142,13 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int8 >
                         PostData; //contains the data for HTTP post method as a sequence of bytes.
     sal_Bool            ISSET_PostData;
-    ::rtl::OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
+    OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
     sal_Bool            ISSET_PostString;
     sal_Bool            Preview; //show preview.
     sal_Bool            ISSET_Preview;
     sal_Bool            ReadOnly; //open document readonly.
     sal_Bool            ISSET_ReadOnly;
-    ::rtl::OUString     Referer; //name of document referrer.
+    OUString     Referer; //name of document referrer.
     sal_Bool            ISSET_Referer;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -157,13 +157,13 @@ public:
         //not documented ... @todo remove?
     sal_Bool            Silent; //prevents dialogs to query for more information.
     sal_Bool            ISSET_Silent;
-    ::rtl::OUString     TemplateName; //deprecated, name of the template instead of the URL.
+    OUString     TemplateName; //deprecated, name of the template instead of the URL.
     sal_Bool            ISSET_TemplateName;
-    ::rtl::OUString     TemplateRegionName; //deprecated, name of the region of the template.
+    OUString     TemplateRegionName; //deprecated, name of the region of the template.
     sal_Bool            ISSET_TemplateRegionName;
     sal_Bool            Unpacked;
     sal_Bool            ISSET_Unpacked;
-    ::rtl::OUString     URL;// FileName, URL of the document.
+    OUString     URL;// FileName, URL of the document.
     sal_Bool            ISSET_URL;
     sal_Int16           Version; //storage version.
     sal_Bool            ISSET_Version;

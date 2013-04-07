@@ -58,7 +58,7 @@ public:
 
     sal_Bool            isPassword() const;
 
-    ::rtl::OUString     getPassword() const;
+    OUString     getPassword() const;
 
 private:
     // XInteractionRequest
@@ -85,7 +85,7 @@ public:
     explicit            DocPasswordRequest(
                             DocPasswordRequestType eType,
                             ::com::sun::star::task::PasswordRequestMode eMode,
-                            const ::rtl::OUString& rDocumentName,
+                            const OUString& rDocumentName,
                             sal_Bool bPasswordToModify = sal_False );
     virtual             ~DocPasswordRequest();
 
@@ -96,9 +96,9 @@ public:
 
     sal_Bool            isPassword() const;
 
-    ::rtl::OUString     getPassword() const;
+    OUString     getPassword() const;
 
-    ::rtl::OUString     getPasswordToModify() const;
+    OUString     getPasswordToModify() const;
     sal_Bool            getRecommendReadOnly() const;
 
 private:

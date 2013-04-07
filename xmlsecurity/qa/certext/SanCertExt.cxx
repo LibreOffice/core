@@ -56,7 +56,7 @@ namespace {
 
         uno::Reference< xml::crypto::XSecurityEnvironment > initUno();
         void init();
-        rtl::OString getB64CertFromFile(const char filename[]);
+        OString getB64CertFromFile(const char filename[]);
         test::OfficeConnection connection_;
 
     public:
@@ -130,7 +130,7 @@ namespace {
         uno::Reference< lang::XMultiServiceFactory > factory(context->getServiceManager(), uno::UNO_QUERY_THROW);
         uno::Reference< xml::crypto::XSEInitializer > xSEInitializer = xml::crypto::SEInitializer::create(context);
         uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
-            xSEInitializer->createSecurityContext(rtl::OUString()));
+            xSEInitializer->createSecurityContext(OUString()));
         return xSecurityContext->getSecurityEnvironment();
     }
 
@@ -138,14 +138,14 @@ namespace {
     void Test::init()
     {
         uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv = initUno();
-        rtl::OString b64Cert(getB64CertFromFile("User_35_Root_11.crt"));
+        OString b64Cert(getB64CertFromFile("User_35_Root_11.crt"));
         uno::Reference< security::XCertificate > xCert = xSecurityEnv->createCertificateFromAscii(
-            rtl::OStringToOUString( b64Cert, RTL_TEXTENCODING_ASCII_US ) );
+            OStringToOUString( b64Cert, RTL_TEXTENCODING_ASCII_US ) );
         uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xCert->getExtensions();
         for (sal_Int32 i = 0 ; i < extensions.getLength(); i++)
         {
             uno::Reference< security::XCertificateExtension >element = extensions[i];
-            rtl::OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
+            OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
             if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
             {
                 uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
@@ -155,11 +155,11 @@ namespace {
         }
     }
 
-    rtl::OString Test::getB64CertFromFile(const char filename[])
+    OString Test::getB64CertFromFile(const char filename[])
     {
         ne_ssl_certificate* cert = ne_ssl_cert_read(filename);
         char* certExportB64 = ne_ssl_cert_export(cert);
-        rtl::OString certB64( certExportB64 );
+        OString certB64( certExportB64 );
         return certB64;
     }
 
@@ -179,7 +179,7 @@ namespace {
                 ::com::sun::star::beans::NamedValue otherNameProp;
                 if (altNames[n].Value >>= otherNameProp)
                 {
-                    CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii("1.2.3.4"), otherNameProp.Name);
+                    CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("1.2.3.4"), otherNameProp.Name);
                     uno::Sequence< sal_Int8 > ipAddress;
                     otherNameProp.Value >>= ipAddress;
                     CPPUNIT_ASSERT_ASSERTION_PASS( CPPUNIT_ASSERT( ipAddress.getLength() > 0 ) );
@@ -194,9 +194,9 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_RFC822_NAME)
             {
-                rtl::OUString value;
+                OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii("my@other.address"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("my@other.address"), value);
             }
         }
     }
@@ -207,9 +207,9 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
             {
-                rtl::OUString value;
+                OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii("alt.openoffice.org"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("alt.openoffice.org"), value);
             }
         }
     }
@@ -224,9 +224,9 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_URL)
             {
-                rtl::OUString value;
+                OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii("http://my.url.here/"), value);
+                CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii("http://my.url.here/"), value);
             }
         }
     }
@@ -251,9 +251,9 @@ namespace {
         {
             if (altNames[n].Type ==  security::ExtAltNameType_REGISTERED_ID)
             {
-                rtl::OUString value;
+                OUString value;
                 altNames[n].Value >>= value;
-                CPPUNIT_ASSERT( rtl::OUString::createFromAscii("1.2.3.4").equals(value));
+                CPPUNIT_ASSERT( OUString::createFromAscii("1.2.3.4").equals(value));
             }
         }
     }

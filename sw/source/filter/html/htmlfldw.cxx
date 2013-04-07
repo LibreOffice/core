@@ -258,7 +258,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     // <SDFIELD>-Tag ausgeben
     if( pTypeStr )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<');
         sOut.append(OOO_STRING_SVTOOLS_HTML_sdfield).append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
@@ -448,7 +448,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             rWrt.Strm() << '/';
         // TODO: HTML-Tags are written without entitities, that for, characters
         // not contained in the destination encoding are lost!
-        rtl::OString sTmp(rtl::OUStringToOString(rTxt,
+        OString sTmp(OUStringToOString(rTxt,
             ((SwHTMLWriter&)rWrt).eDestEnc));
         rWrt.Strm() << sTmp.getStr() << '>';
     }
@@ -470,7 +470,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             // TODO: HTML-Tags are written without entitities, that for,
             // characters not contained in the destination encoding are lost!
-            rtl::OString sTmp(rtl::OUStringToOString(sComment,
+            OString sTmp(OUStringToOString(sComment,
                 ((SwHTMLWriter&)rWrt).eDestEnc));
             rWrt.Strm() << sTmp.getStr();
             bWritten = sal_True;
@@ -486,7 +486,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                 // TODO: HTML-Tags are written without entitities, that for,
                 // characters not contained in the destination encoding are
                 // lost!
-                rtl::OString sTmp(rtl::OUStringToOString(sComment,
+                OString sTmp(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc));
                 rWrt.Strm() << sTmp.getStr();
                 bWritten = sal_True;
@@ -497,10 +497,10 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         if( !bWritten )
         {
             String sComment(convertLineEnd(rComment, GetSystemLineEnd()));
-            rtl::OStringBuffer sOut;
+            OStringBuffer sOut;
             // TODO: ???
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
-                .append(' ').append(rtl::OUStringToOString(sComment,
+                .append(' ').append(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc)).append(" -->");
             rWrt.Strm() << sOut.getStr();
         }

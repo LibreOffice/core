@@ -41,7 +41,7 @@ public:
     virtual bool handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
+            const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const;
 

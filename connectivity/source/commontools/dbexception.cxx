@@ -70,7 +70,7 @@ SQLExceptionInfo::SQLExceptionInfo(const ::com::sun::star::sdb::SQLContext& _rEr
 }
 
 //------------------------------------------------------------------------------
-SQLExceptionInfo::SQLExceptionInfo( const ::rtl::OUString& _rSimpleErrorMessage )
+SQLExceptionInfo::SQLExceptionInfo( const OUString& _rSimpleErrorMessage )
 {
     SQLException aError;
     aError.Message = _rSimpleErrorMessage;
@@ -198,12 +198,12 @@ SQLExceptionInfo::operator const ::com::sun::star::sdb::SQLContext*() const
 }
 
 //------------------------------------------------------------------------------
-void SQLExceptionInfo::prepend( const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
+void SQLExceptionInfo::prepend( const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
 {
     SQLException aException;
     aException.Message = _rErrorMessage;
     aException.ErrorCode = _nErrorCode;
-    aException.SQLState = _pAsciiSQLState ? ::rtl::OUString::createFromAscii( _pAsciiSQLState ) : ::rtl::OUString("S1000" );
+    aException.SQLState = _pAsciiSQLState ? OUString::createFromAscii( _pAsciiSQLState ) : OUString("S1000" );
     aException.NextException = m_aContent;
     m_aContent <<= aException;
 
@@ -211,7 +211,7 @@ void SQLExceptionInfo::prepend( const ::rtl::OUString& _rErrorMessage, const sal
 }
 
 //------------------------------------------------------------------------------
-void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
+void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, const sal_Char* _pAsciiSQLState, const sal_Int32 _nErrorCode )
 {
     // create the to-be-appended exception
     Any aAppend;
@@ -227,7 +227,7 @@ void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessag
 
     SQLException* pAppendException( static_cast< SQLException* >( const_cast< void* >( aAppend.getValue() ) ) );
     pAppendException->Message = _rErrorMessage;
-    pAppendException->SQLState = ::rtl::OUString::createFromAscii( _pAsciiSQLState );
+    pAppendException->SQLState = OUString::createFromAscii( _pAsciiSQLState );
     pAppendException->ErrorCode = _nErrorCode;
 
     // find the end of the current chain
@@ -386,7 +386,7 @@ void throwInvalidIndexException(const ::com::sun::star::uno::Reference< ::com::s
     );
 }
 // -----------------------------------------------------------------------------
-void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
+void throwFunctionNotSupportedException(const OUString& _rMsg,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _Context,
         const ::com::sun::star::uno::Any& _Next)  throw ( ::com::sun::star::sdbc::SQLException )
 {
@@ -403,9 +403,9 @@ void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, co
         const ::com::sun::star::uno::Any* _pNextException ) throw ( ::com::sun::star::sdbc::SQLException )
 {
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_UNSUPPORTED_FUNCTION,
-            "$functionname$", ::rtl::OUString::createFromAscii( _pAsciiFunctionName )
+            "$functionname$", OUString::createFromAscii( _pAsciiFunctionName )
          ) );
     throwFunctionNotSupportedException(
         sError,
@@ -414,14 +414,14 @@ void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, co
     );
 }
 // -----------------------------------------------------------------------------
-void throwGenericSQLException(const ::rtl::OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
+void throwGenericSQLException(const OUString& _rMsg, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxSource)
     throw (::com::sun::star::sdbc::SQLException)
 {
     throwGenericSQLException(_rMsg, _rxSource, Any());
 }
 
 // -----------------------------------------------------------------------------
-void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
+void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
     throw (SQLException)
 {
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( SQL_GENERAL_ERROR ), 0, _rNextException);
@@ -432,9 +432,9 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
     throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_UNSUPPORTED_FEATURE,
-            "$featurename$", ::rtl::OUString::createFromAscii( _pAsciiFeatureName )
+            "$featurename$", OUString::createFromAscii( _pAsciiFeatureName )
          ) );
 
     throw SQLException(
@@ -451,9 +451,9 @@ void throwSQLException( const sal_Char* _pAsciiMessage, const sal_Char* _pAsciiS
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)
 {
     throw SQLException(
-        ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+        OUString::createFromAscii( _pAsciiMessage ),
         _rxContext,
-        ::rtl::OUString::createFromAscii( _pAsciiState ),
+        OUString::createFromAscii( _pAsciiState ),
         _nErrorCode,
         _pNextException ? *_pNextException : Any()
     );
@@ -468,7 +468,7 @@ void throwSQLException( const sal_Char* _pAsciiMessage, StandardSQLState _eSQLSt
 }
 
 // -----------------------------------------------------------------------------
-void throwSQLException( const ::rtl::OUString& _rMessage, StandardSQLState _eSQLState,
+void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
         const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode,
         const Any* _pNextException ) throw (SQLException)
 {
@@ -518,9 +518,9 @@ const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString getStandardSQLState( StandardSQLState _eState )
+OUString getStandardSQLState( StandardSQLState _eState )
 {
-    return ::rtl::OUString::createFromAscii( getStandardSQLStateAscii( _eState ) );
+    return OUString::createFromAscii( getStandardSQLStateAscii( _eState ) );
 }
 
 // -----------------------------------------------------------------------------

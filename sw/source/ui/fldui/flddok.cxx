@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
         if (nTypeId != USHRT_MAX)
         {
-            std::vector<rtl::OUString> aLst;
+            std::vector<OUString> aLst;
             GetFldMgr().GetSubTypes(nTypeId, aLst);
 
             if (nTypeId != TYP_AUTHORFLD)
@@ -641,7 +641,7 @@ sal_uInt16 SwFldDokPage::GetGroup()
 
 void    SwFldDokPage::FillUserData()
 {
-    String sData(rtl::OUString(USER_DATA_VERSION));
+    String sData(OUString(USER_DATA_VERSION));
     sData += ';';
     sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )

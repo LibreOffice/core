@@ -35,8 +35,8 @@ using namespace beans;
 
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
@@ -63,7 +63,7 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
 {
     if ( aArguments.getLength() == 1 )
     {
-        ::rtl::OUString sURL;
+        OUString sURL;
         if ( !( aArguments[ 0 ] >>= sURL ))
             throw css::lang::IllegalArgumentException();
          // Try any other URL with SimpleFileAccess
@@ -102,34 +102,34 @@ uno::Type SAL_CALL DialogModelProvider::getElementType() throw (css::uno::Runtim
 }
 
 // container::XNameAccess:
-uno::Any SAL_CALL DialogModelProvider::getByName(const ::rtl::OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
+uno::Any SAL_CALL DialogModelProvider::getByName(const OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
 {
     return m_xDialogModel->getByName(aName);
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL DialogModelProvider::getElementNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames() throw (css::uno::RuntimeException)
 {
     return m_xDialogModel->getElementNames();
 }
 
-::sal_Bool SAL_CALL DialogModelProvider::hasByName(const ::rtl::OUString & aName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL DialogModelProvider::hasByName(const OUString & aName) throw (css::uno::RuntimeException)
 {
     return m_xDialogModel->hasByName(aName);
 }
 
 // container::XNameReplace:
-void SAL_CALL DialogModelProvider::replaceByName(const ::rtl::OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
+void SAL_CALL DialogModelProvider::replaceByName(const OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
 {
     m_xDialogModel->replaceByName(aName,aElement);
 }
 
 // container::XNameContainer:
-void SAL_CALL DialogModelProvider::insertByName(const ::rtl::OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException)
+void SAL_CALL DialogModelProvider::insertByName(const OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException)
 {
     m_xDialogModel->insertByName(aName,aElement);
 }
 
-void SAL_CALL DialogModelProvider::removeByName(const ::rtl::OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
+void SAL_CALL DialogModelProvider::removeByName(const OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
 {
     m_xDialogModel->removeByName(aName);
 }
@@ -137,35 +137,35 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL DialogModelProvider::getPrope
 {
     return m_xDialogModelProp->getPropertySetInfo();
 }
-void SAL_CALL DialogModelProvider::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL DialogModelProvider::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-uno::Any SAL_CALL DialogModelProvider::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL DialogModelProvider::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return m_xDialogModelProp->getPropertyValue(PropertyName);
 }
-void SAL_CALL DialogModelProvider::addPropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL DialogModelProvider::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-void SAL_CALL DialogModelProvider::removePropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL DialogModelProvider::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-void SAL_CALL DialogModelProvider::addVetoableChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL DialogModelProvider::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const ::rtl::OUString& ,const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const OUString& ,const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL DialogModelProvider::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL DialogModelProvider::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_DialogModelProvider::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL DialogModelProvider::supportsService(::rtl::OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL DialogModelProvider::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > serviceNames = comp_DialogModelProvider::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > serviceNames = comp_DialogModelProvider::_getSupportedServiceNames();
     for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
         if (serviceNames[i] == serviceName)
             return sal_True;
@@ -173,7 +173,7 @@ void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const ::rtl::OU
     return sal_False;
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     return comp_DialogModelProvider::_getSupportedServiceNames();
 }

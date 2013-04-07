@@ -62,7 +62,7 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::OResultSet" );
     DBG_CTOR(OResultSet, NULL);
 
-    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< OUString>(), NULL,NULL);
 
     try
     {
@@ -185,22 +185,22 @@ void OResultSet::close(void) throw( SQLException, RuntimeException )
 }
 
 // XServiceInfo
-rtl::OUString OResultSet::getImplementationName(  ) throw(RuntimeException)
+OUString OResultSet::getImplementationName(  ) throw(RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::getImplementationName" );
-    return rtl::OUString("com.sun.star.sdb.OResultSet");
+    return OUString("com.sun.star.sdb.OResultSet");
 }
 
-sal_Bool OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OResultSet::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::supportsService" );
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OResultSet::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::getSupportedServiceNames" );
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBC_RESULTSET;
     aSNS[1] = SERVICE_SDB_RESULTSET;
     return aSNS;
@@ -218,7 +218,7 @@ Reference< XPropertySetInfo > OResultSet::getPropertySetInfo() throw (RuntimeExc
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(6)
-        DECL_PROP1(CURSORNAME,              ::rtl::OUString,    READONLY);
+        DECL_PROP1(CURSORNAME,              OUString,    READONLY);
         DECL_PROP0(FETCHDIRECTION,          sal_Int32);
         DECL_PROP0(FETCHSIZE,               sal_Int32);
         DECL_PROP1_BOOL(ISBOOKMARKABLE,         READONLY);
@@ -274,7 +274,7 @@ void OResultSet::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
         default:
         {
             // get the property name
-            ::rtl::OUString aPropName;
+            OUString aPropName;
             sal_Int16 nAttributes;
             const_cast<OResultSet*>(this)->getInfoHelper().
                 fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
@@ -314,7 +314,7 @@ Reference< XResultSetMetaData > OResultSet::getMetaData(void) throw( SQLExceptio
 }
 
 // ::com::sun::star::sdbc::XColumnLocate
-sal_Int32 OResultSet::findColumn(const rtl::OUString& columnName) throw( SQLException, RuntimeException )
+sal_Int32 OResultSet::findColumn(const OUString& columnName) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::findColumn" );
     MutexGuard aGuard(m_aMutex);
@@ -371,7 +371,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
             for ( sal_Int32 i = 0; i < nColCount; ++i)
             {
                 // retrieve the name of the column
-                rtl::OUString sName = xMetaData->getColumnName(i + 1);
+                OUString sName = xMetaData->getColumnName(i + 1);
                 ODataColumn* pColumn = new ODataColumn(xMetaData, m_xDelegatorRow, m_xDelegatorRowUpdate, i + 1, xDBMetaData);
 
                 // don't silently assume that the name is unique - result set implementations
@@ -395,16 +395,16 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
         try
         {
             const Reference< XNameAccess > xColNames( static_cast< XNameAccess* >( m_pColumns ), UNO_SET_THROW );
-            const Sequence< ::rtl::OUString > aNames( xColNames->getElementNames() );
+            const Sequence< OUString > aNames( xColNames->getElementNames() );
             OSL_POSTCOND( aNames.getLength() == nColCount,
                 "OResultSet::getColumns: invalid column count!" );
-            for (   const ::rtl::OUString* pName = aNames.getConstArray();
+            for (   const OUString* pName = aNames.getConstArray();
                     pName != aNames.getConstArray() + aNames.getLength();
                     ++pName
                 )
             {
                 Reference< XPropertySet > xColProps( xColNames->getByName( *pName ), UNO_QUERY_THROW );
-                ::rtl::OUString sName;
+                OUString sName;
                 OSL_VERIFY( xColProps->getPropertyValue( PROPERTY_NAME ) >>= sName );
                 OSL_POSTCOND( sName == *pName, "OResultSet::getColumns: invalid column name!" );
             }
@@ -429,7 +429,7 @@ sal_Bool OResultSet::wasNull(void) throw( SQLException, RuntimeException )
     return m_xDelegatorRow->wasNull();
 }
 
-rtl::OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
+OUString OResultSet::getString(sal_Int32 columnIndex) throw( SQLException, RuntimeException )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::getString" );
     MutexGuard aGuard(m_aMutex);
@@ -689,7 +689,7 @@ void OResultSet::updateDouble(sal_Int32 columnIndex, double x) throw( SQLExcepti
     m_xDelegatorRowUpdate->updateDouble(columnIndex, x);
 }
 
-void OResultSet::updateString(sal_Int32 columnIndex, const rtl::OUString& x) throw( SQLException, RuntimeException )
+void OResultSet::updateString(sal_Int32 columnIndex, const OUString& x) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OResultSet::updateString" );
     MutexGuard aGuard(m_aMutex);

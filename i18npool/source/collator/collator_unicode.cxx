@@ -244,7 +244,7 @@ Collator_Unicode::getImplementationName() throw( RuntimeException )
 }
 
 sal_Bool SAL_CALL
-Collator_Unicode::supportsService(const rtl::OUString& rServiceName) throw( RuntimeException )
+Collator_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return !rServiceName.compareToAscii(implementationName);
 }

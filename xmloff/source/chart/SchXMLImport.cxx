@@ -53,9 +53,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
@@ -682,7 +679,7 @@ void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComp
     catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
         OSL_TRACE("SchXMLChartContext::StartElement(): Exception caught: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build

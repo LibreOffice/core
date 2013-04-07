@@ -68,7 +68,7 @@ void XSheetAnnotations::testInsertNew()
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
-    rtl::OUString aString = aTextSheetAnnotation->getString();
+    OUString aString = aTextSheetAnnotation->getString();
 
     CPPUNIT_ASSERT_MESSAGE("Insert Annotation - Wrong string", aString == "an inserted annotation");
 
@@ -107,7 +107,7 @@ void XSheetAnnotations::testRemoveByIndex()
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aLastTextSheetAnnotation(aLastSheetAnnotation, UNO_QUERY_THROW);
-    rtl::OUString aLastString = aLastTextSheetAnnotation->getString();
+    OUString aLastString = aLastTextSheetAnnotation->getString();
 
     CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong string", aLastString == "an inserted annotation 3");
 
@@ -121,7 +121,7 @@ void XSheetAnnotations::testRemoveByIndex()
 
     // is the string ok ?
     uno::Reference< text::XTextRange > aPreviousTextSheetAnnotation(aPreviousSheetAnnotation, UNO_QUERY_THROW);
-    rtl::OUString aPreviousString = aPreviousTextSheetAnnotation->getString();
+    OUString aPreviousString = aPreviousTextSheetAnnotation->getString();
 
     CPPUNIT_ASSERT_MESSAGE("Remove Annotation - Wrong string", aPreviousString == "an inserted annotation 1");
 

@@ -109,13 +109,12 @@
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 namespace sw {
 
 sal_Bool SupportsServiceImpl(
         size_t const nServices, char const*const pServices[],
-        ::rtl::OUString const & rServiceName)
+        OUString const & rServiceName)
 {
     for (size_t i = 0; i < nServices; ++i)
     {
@@ -127,14 +126,14 @@ sal_Bool SupportsServiceImpl(
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString >
+uno::Sequence< OUString >
 GetSupportedServiceNamesImpl(
         size_t const nServices, char const*const pServices[])
 {
-    uno::Sequence< ::rtl::OUString > ret(nServices);
+    uno::Sequence< OUString > ret(nServices);
     for (size_t i = 0; i < nServices; ++i)
     {
-        ret[i] = rtl::OUString::createFromAscii(pServices[i]);
+        ret[i] = OUString::createFromAscii(pServices[i]);
     }
     return ret;
 }
@@ -847,13 +846,13 @@ void SwXTextRange::SetPositions(const SwPaM& rPam)
 {
     m_pImpl->Invalidate();
     IDocumentMarkAccess* const pMA = m_pImpl->m_rDoc.getIDocumentMarkAccess();
-    m_pImpl->m_pMark = pMA->makeMark(rPam, ::rtl::OUString(),
+    m_pImpl->m_pMark = pMA->makeMark(rPam, OUString(),
                 IDocumentMarkAccess::UNO_BOOKMARK);
     m_pImpl->m_pMark->Add(m_pImpl.get());
 }
 
 void SwXTextRange::DeleteAndInsert(
-        const ::rtl::OUString& rText, const bool bForceExpandHints)
+        const OUString& rText, const bool bForceExpandHints)
 throw (uno::RuntimeException)
 {
     if (RANGE_IS_TABLE == m_pImpl->m_eRangePosition)
@@ -1418,7 +1417,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextRange::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1428,7 +1427,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextRange::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1438,7 +1437,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextRange::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1448,7 +1447,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextRange::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1522,7 +1521,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextRange::makeRedline(
-    const ::rtl::OUString& rRedlineType,
+    const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {

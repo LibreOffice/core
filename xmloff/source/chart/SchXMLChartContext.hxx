@@ -79,7 +79,7 @@ class SchXMLChartContext : public SvXMLImportContext
 {
 public:
     SchXMLChartContext( SchXMLImportHelper& rImpHelper,
-                        SvXMLImport& rImport, const rtl::OUString& rLocalName );
+                        SvXMLImport& rImport, const OUString& rLocalName );
     virtual ~SchXMLChartContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference<
@@ -87,7 +87,7 @@ public:
     virtual void EndElement();
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -95,9 +95,9 @@ private:
     SchXMLTable maTable;
     SchXMLImportHelper& mrImportHelper;
 
-    ::rtl::OUString maMainTitle, maSubTitle;
+    OUString maMainTitle, maSubTitle;
     com::sun::star::awt::Point maMainTitlePos, maSubTitlePos, maLegendPos;
-    ::rtl::OUString m_aXLinkHRefAttributeToIndicateDataProvider;
+    OUString m_aXLinkHRefAttributeToIndicateDataProvider;
     bool m_bHasRangeAtPlotArea;
     bool m_bHasTableElement;
     sal_Bool mbAllRangeAddressesAvailable;
@@ -107,16 +107,16 @@ private:
     bool mbIsStockChart;
 
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress > maSeriesAddresses;
-    ::rtl::OUString msCategoriesAddress;
-    ::rtl::OUString msChartAddress;
+    OUString msCategoriesAddress;
+    OUString msChartAddress;
 
     SeriesDefaultsAndStyles maSeriesDefaultsAndStyles;
     tSchXMLLSequencesPerIndex maLSequencesPerIndex;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxDrawPage;
-    ::rtl::OUString msColTrans;
-    ::rtl::OUString msRowTrans;
-    ::rtl::OUString maChartTypeServiceName;
+    OUString msColTrans;
+    OUString msRowTrans;
+    OUString maChartTypeServiceName;
 
     ::com::sun::star::awt::Size maChartSize;
 
@@ -126,7 +126,7 @@ private:
         @param  bSetWitchData   Indicates whether the data set takes it's data series from
             rows or from columns.
     */
-    void    InitChart   (const ::rtl::OUString & rChartTypeServiceName,
+    void    InitChart   (const OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 
     void MergeSeriesForStockChart();
@@ -138,14 +138,14 @@ class SchXMLTitleContext : public SvXMLImportContext
 {
 private:
     SchXMLImportHelper& mrImportHelper;
-    rtl::OUString& mrTitle;
+    OUString& mrTitle;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTitleShape;
-    rtl::OUString msAutoStyleName;
+    OUString msAutoStyleName;
 
 public:
     SchXMLTitleContext( SchXMLImportHelper& rImpHelper,
-                        SvXMLImport& rImport, const rtl::OUString& rLocalName,
-                        rtl::OUString& rTitle,
+                        SvXMLImport& rImport, const OUString& rLocalName,
+                        OUString& rTitle,
                         com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTitleShape );
     virtual ~SchXMLTitleContext();
 
@@ -153,7 +153,7 @@ public:
                                com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 

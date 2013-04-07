@@ -110,23 +110,23 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>         m_xCatalog;
             // Start of Additions from the land of mozilla
             OColumnAlias    m_aColumnAlias;
-            rtl::OUString   m_sMozillaURI;
-            rtl::OUString   m_sMozillaProfile;
+            OUString   m_sMozillaURI;
+            OUString   m_sMozillaProfile;
             sal_Int32       m_nMaxResultRecords;
             MNameMapper*    m_aNameMapper;
             //LDAP only
-            rtl::OUString   m_sHostName;
+            OUString   m_sHostName;
             sal_Bool        m_bUseSSL;
-            rtl::OUString   m_sBindDN;
-            rtl::OUString   m_sUser;        // the user name
-            rtl::OUString   m_sPassword;
+            OUString   m_sBindDN;
+            OUString   m_sUser;        // the user name
+            OUString   m_sPassword;
 
             SDBCAddress::sdbc_address_type  m_eSDBCAddressType;
 
             sal_Bool        m_bForceLoadTable;
 
         public:
-            virtual void construct( const ::rtl::OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
+            virtual void construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
             OConnection(MozabDriver*    _pDriver);
             virtual ~OConnection();
 
@@ -141,9 +141,9 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // XConnection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL nativeSQL( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getAutoCommit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL commit(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -152,8 +152,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL isReadOnly(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getCatalog(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setCatalog( const OUString& catalog ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getCatalog(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -172,9 +172,9 @@ namespace connectivity
 
 
             // Additions from the land of mozilla
-            rtl::OUString getMozURI() const     { return m_sMozillaURI; }
-            rtl::OUString getMozProfile() const     { return m_sMozillaProfile; }
-            void setMozProfile(rtl::OUString &aNewProfile)      { m_sMozillaProfile = aNewProfile; }
+            OUString getMozURI() const     { return m_sMozillaURI; }
+            OUString getMozProfile() const     { return m_sMozillaProfile; }
+            void setMozProfile(OUString &aNewProfile)      { m_sMozillaProfile = aNewProfile; }
 
             ::com::sun::star::mozilla::MozillaProductType getProduct()
             {
@@ -184,11 +184,11 @@ namespace connectivity
             }
 
             // Get Ldap BindDN (user name)
-            rtl::OUString getBindDN() const { return m_sBindDN; }
+            OUString getBindDN() const { return m_sBindDN; }
             // Get Ldap Password
-            rtl::OUString getPassword() const { return m_sPassword; }
+            OUString getPassword() const { return m_sPassword; }
             // Get Ldap Host name
-            rtl::OUString getHost() const { return m_sHostName; }
+            OUString getHost() const { return m_sHostName; }
             // Get whether use ssl to connect to ldap
             sal_Bool getUseSSL() const {return m_bUseSSL;}
 
@@ -203,7 +203,7 @@ namespace connectivity
 
             const OColumnAlias & getColumnAlias() const   { return (m_aColumnAlias); }
 
-            static ::rtl::OUString    getDriverImplementationName();
+            static OUString    getDriverImplementationName();
 
             MNameMapper* getNameMapper();
             void setForceLoadTables(sal_Bool aForce){ m_bForceLoadTable = aForce;}

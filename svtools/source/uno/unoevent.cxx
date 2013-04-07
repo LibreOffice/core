@@ -35,8 +35,6 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::PropertyValue;
 using ::cppu::WeakImplHelper2;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 
 const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";

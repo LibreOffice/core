@@ -94,7 +94,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-using ::rtl::OUString;
 using ::com::sun::star::util::SearchOptions;
 
 
@@ -162,7 +161,7 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt1
     {
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
-        String aPageStr( rtl::OUString(" [") );
+        String aPageStr( OUString(" [") );
         aPageStr += String( SW_RES( STR_PAGE ) );
         aPageStr += ' ';
         aPageStr += OUString::number( nCurPage );
@@ -204,7 +203,7 @@ static void lcl_ConvertTabsToSpaces( String& rLine )
             if ( rLine.GetChar(nPos) == '\t' )
             {
                 // Nicht 4 Blanks, sondern an 4er TabPos:
-                rtl::OUStringBuffer aBlanker;
+                OUStringBuffer aBlanker;
                 comphelper::string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
                 rLine.Erase( nPos, 1 );
                 rLine.Insert(aBlanker.makeStringAndClear(), nPos);
@@ -236,7 +235,7 @@ SwSrcView::~SwSrcView()
         pDocShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps
         = xDPS->getDocumentProperties();
-    ::rtl::OUString url = xDocProps->getAutoloadURL();
+    OUString url = xDocProps->getAutoloadURL();
     sal_Int32 delay = xDocProps->getAutoloadSecs();
     pDocShell->SetAutoLoad(INetURLObject(url), delay,
                             (delay != 0) || !url.isEmpty());
@@ -254,7 +253,7 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 void SwSrcView::Init()
 {
     SetHelpId(SW_SRC_VIEWSHELL);
-    SetName(rtl::OUString("Source"));
+    SetName(OUString("Source"));
     SetWindow( &aEditWin );
     SwDocShell* pDocShell = GetDocShell();
     // wird das Doc noch geladen, dann muss die DocShell das Load
@@ -304,7 +303,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
             // search for an html filter for export
             SfxFilterContainer* pFilterCont = GetObjectShell()->GetFactory().GetFilterContainer();
             const SfxFilter* pFilter =
-                pFilterCont->GetFilter4Extension( rtl::OUString("html"), SFX_FILTER_EXPORT );
+                pFilterCont->GetFilter4Extension( OUString("html"), SFX_FILTER_EXPORT );
             if ( pFilter )
             {
                 // filter found -> use its uiname and wildcard
@@ -316,8 +315,8 @@ void SwSrcView::Execute(SfxRequest& rReq)
             else
             {
                 // filter not found
-                rtl::OUString sHtml("HTML");
-                xFltMgr->appendFilter( sHtml, rtl::OUString("*.html;*.htm") );
+                OUString sHtml("HTML");
+                xFltMgr->appendFilter( sHtml, OUString("*.html;*.htm") );
                 xFltMgr->setCurrentFilter( sHtml ) ;
             }
 
@@ -446,7 +445,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 String aPos( SW_RES(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
                 aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
-                aPos += rtl::OUString(" : ");
+                aPos += OUString(" : ");
                 aPos += String(SW_RES(STR_SRCVIEW_COL));
                 aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
@@ -704,7 +703,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     // nLinepPage stimmt nicht, wenn Zeilen umgebrochen werden muessen...
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height() / nLineHeight);
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth(rtl::OUString('X')));
+    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width()  / pOutDev->GetTextWidth(OUString('X')));
     sal_uInt16 nParas = static_cast< sal_uInt16 >( pTextEngine->GetParagraphCount() );
 
     sal_uInt16 nPages = (sal_uInt16) (nParas / nLinespPage + 1 );

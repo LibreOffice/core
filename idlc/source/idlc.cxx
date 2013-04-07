@@ -289,7 +289,7 @@ OUString Idlc::processDocumentation()
 }
 
 static void lcl_writeString(::osl::File & rFile, ::osl::FileBase::RC & o_rRC,
-        ::rtl::OString const& rString)
+        OString const& rString)
 {
     sal_uInt64 nWritten(0);
     if (::osl::FileBase::E_None == o_rRC) {
@@ -306,7 +306,7 @@ struct WriteDep
     ::osl::FileBase::RC & m_rRC;
     explicit WriteDep(::osl::File & rFile, ::osl::FileBase::RC & rRC)
         : m_rFile(rFile), m_rRC(rRC) { }
-    void operator() (::rtl::OString const& rEntry)
+    void operator() (OString const& rEntry)
     {
         lcl_writeString(m_rFile, m_rRC, " \\\n ");
         lcl_writeString(m_rFile, m_rRC, rEntry);
@@ -321,7 +321,7 @@ struct WriteDummy
     ::osl::FileBase::RC & m_rRC;
     explicit WriteDummy(::osl::File & rFile, ::osl::FileBase::RC & rRC)
         : m_rFile(rFile), m_rRC(rRC) { }
-    void operator() (::rtl::OString const& rEntry)
+    void operator() (OString const& rEntry)
     {
         lcl_writeString(m_rFile, m_rRC, rEntry);
         lcl_writeString(m_rFile, m_rRC, ":\n\n");
@@ -329,10 +329,10 @@ struct WriteDummy
 };
 
 bool
-Idlc::dumpDeps(::rtl::OString const& rDepFile, ::rtl::OString const& rTarget)
+Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
 {
     ::osl::File depFile(
-            ::rtl::OStringToOUString(rDepFile, osl_getThreadTextEncoding()));
+            OStringToOUString(rDepFile, osl_getThreadTextEncoding()));
     ::osl::FileBase::RC rc =
         depFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
     if (::osl::FileBase::E_None != rc) {

@@ -33,8 +33,6 @@
 
 
 using namespace ::std;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -47,7 +45,7 @@ namespace
     {
         DBG_ASSERT( _rxMapper.is(), "xmloff::lcl_exportDataStyle: invalid property mapper!" );
         // obtain the data style name
-        ::rtl::OUString sDataStyleName;
+        OUString sDataStyleName;
         _rProperty.maValue >>= sDataStyleName;
         DBG_ASSERT( !sDataStyleName.isEmpty(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
 

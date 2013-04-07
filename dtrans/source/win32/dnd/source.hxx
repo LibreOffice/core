@@ -39,9 +39,6 @@ using namespace osl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-using ::rtl::OUString;
-
-
 class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supportet currently.
 // ALT modifier is considered to effect a user selection of effects

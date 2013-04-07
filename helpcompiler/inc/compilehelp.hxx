@@ -42,8 +42,8 @@ enum HelpProcessingErrorClass
 struct HelpProcessingErrorInfo
 {
     HelpProcessingErrorClass        m_eErrorClass;
-    rtl::OUString                   m_aErrorMsg;
-    rtl::OUString                   m_aXMLParsingFile;
+    OUString                   m_aErrorMsg;
+    OUString                   m_aXMLParsingFile;
     sal_Int32                       m_nXMLParsingLine;
 
     HelpProcessingErrorInfo( void )
@@ -58,11 +58,11 @@ struct HelpProcessingErrorInfo
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
-     const rtl::OUString& aOfficeHelpPath,
-    const rtl::OUString& aExtensionName,
-    const rtl::OUString& aExtensionLanguageRoot,
-    sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
-    const rtl::OUString& aDestination,
+     const OUString& aOfficeHelpPath,
+    const OUString& aExtensionName,
+    const OUString& aExtensionLanguageRoot,
+    sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
+    const OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 );
 

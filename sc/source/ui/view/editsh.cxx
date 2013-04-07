@@ -95,7 +95,7 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
-    SetName(rtl::OUString("EditCell"));
+    SetName(OUString("EditCell"));
 }
 
 ScEditShell::~ScEditShell()
@@ -145,7 +145,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
 
 void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
 {
-    rtl::OUString aString( cChar );
+    OUString aString( cChar );
     if( pTableView )
         pTableView->InsertText( aString );
     if( pTopView )
@@ -413,11 +413,11 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 if ( nRet == BTN_PASTE_NAME )
                 {
-                    std::vector<rtl::OUString> aNames = pDlg->GetSelectedNames();
+                    std::vector<OUString> aNames = pDlg->GetSelectedNames();
                     if (!aNames.empty())
                     {
-                        rtl::OUStringBuffer aBuffer;
-                        for (std::vector<rtl::OUString>::const_iterator itr = aNames.begin();
+                        OUStringBuffer aBuffer;
+                        for (std::vector<OUString>::const_iterator itr = aNames.begin();
                                 itr != aNames.end(); ++itr)
                         {
                             aBuffer.append(*itr).append(' ');
@@ -1087,7 +1087,7 @@ String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
             ESelection  aSel = pEditView->GetSelection();
             String      aStrCurrentDelimiters = pEngine->GetWordDelimiters();
 
-            pEngine->SetWordDelimiters(rtl::OUString(" .,;\"'"));
+            pEngine->SetWordDelimiters(OUString(" .,;\"'"));
             aStrSelection = pEngine->GetWord( aSel.nEndPara, aSel.nEndPos );
             pEngine->SetWordDelimiters( aStrCurrentDelimiters );
         }

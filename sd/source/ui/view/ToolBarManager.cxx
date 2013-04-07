@@ -67,7 +67,7 @@ private:
 };
 
 
-typedef ::std::vector<rtl::OUString> NameList;
+typedef ::std::vector<OUString> NameList;
 
 /** Store a list of tool bars for each of the tool bar groups.  From
     this the list of requested tool bars is built.
@@ -78,14 +78,14 @@ public:
     ToolBarList (void);
 
     void ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup);
-    void AddToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const ::rtl::OUString& rsName);
-    bool RemoveToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const ::rtl::OUString& rsName);
+    void AddToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const OUString& rsName);
+    bool RemoveToolBar (sd::ToolBarManager::ToolBarGroup eGroup, const OUString& rsName);
 
     void GetToolBarsToActivate (NameList& rToolBars) const;
     void GetToolBarsToDeactivate (NameList& rToolBars) const;
 
-    void MarkToolBarAsActive (const ::rtl::OUString& rsName);
-    void MarkToolBarAsNotActive (const ::rtl::OUString& rsName);
+    void MarkToolBarAsActive (const OUString& rsName);
+    void MarkToolBarAsNotActive (const OUString& rsName);
     void MarkAllToolBarsAsNotActive (void);
 
 private:
@@ -263,9 +263,9 @@ public:
 
     void ResetToolBars (ToolBarGroup eGroup);
     void ResetAllToolBars (void);
-    void AddToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
+    void AddToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
     void AddToolBarShell (ToolBarGroup eGroup, ShellId nToolBarId);
-    void RemoveToolBar (ToolBarGroup eGroup, const ::rtl::OUString& rsToolBarName);
+    void RemoveToolBar (ToolBarGroup eGroup, const OUString& rsToolBarName);
 
     /** Release all tool bar shells and the associated framework tool bars.
         Typically called when the main view shell is being replaced by
@@ -309,7 +309,7 @@ public:
     ToolBarRules& GetToolBarRules (void);
 
 private:
-    const static ::rtl::OUString msToolBarResourcePrefix;
+    const static OUString msToolBarResourcePrefix;
 
     mutable ::osl::Mutex maMutex;
     ViewShellBase& mrBase;
@@ -335,8 +335,8 @@ private:
     sal_uLong mnPendingSetValidCall;
     ToolBarRules maToolBarRules;
 
-    ::rtl::OUString GetToolBarResourceName (const ::rtl::OUString& rsBaseName) const;
-    bool CheckPlugInMode (const ::rtl::OUString& rsName) const;
+    OUString GetToolBarResourceName (const OUString& rsBaseName) const;
+    bool CheckPlugInMode (const OUString& rsName) const;
 
     DECL_LINK(UpdateCallback, void *);
     DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent*);
@@ -347,21 +347,21 @@ private:
 
 //===== ToolBarManager ========================================================
 
-const ::rtl::OUString ToolBarManager::msToolBar("toolbar");
-const ::rtl::OUString ToolBarManager::msOptionsToolBar("optionsbar");
-const ::rtl::OUString ToolBarManager::msCommonTaskToolBar("commontaskbar");
-const ::rtl::OUString ToolBarManager::msViewerToolBar("viewerbar");
-const ::rtl::OUString ToolBarManager::msSlideSorterToolBar("slideviewtoolbar");
-const ::rtl::OUString ToolBarManager::msSlideSorterObjectBar("slideviewobjectbar");
-const ::rtl::OUString ToolBarManager::msOutlineToolBar("outlinetoolbar");
-const ::rtl::OUString ToolBarManager::msMasterViewToolBar("masterviewtoolbar");
-const ::rtl::OUString ToolBarManager::msDrawingObjectToolBar("drawingobjectbar");
-const ::rtl::OUString ToolBarManager::msGluePointsToolBar("gluepointsobjectbar");
-const ::rtl::OUString ToolBarManager::msTextObjectBar("textobjectbar");
-const ::rtl::OUString ToolBarManager::msBezierObjectBar("bezierobjectbar");
-const ::rtl::OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
-const ::rtl::OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
-const ::rtl::OUString ToolBarManager::msTableObjectBar("tableobjectbar");
+const OUString ToolBarManager::msToolBar("toolbar");
+const OUString ToolBarManager::msOptionsToolBar("optionsbar");
+const OUString ToolBarManager::msCommonTaskToolBar("commontaskbar");
+const OUString ToolBarManager::msViewerToolBar("viewerbar");
+const OUString ToolBarManager::msSlideSorterToolBar("slideviewtoolbar");
+const OUString ToolBarManager::msSlideSorterObjectBar("slideviewobjectbar");
+const OUString ToolBarManager::msOutlineToolBar("outlinetoolbar");
+const OUString ToolBarManager::msMasterViewToolBar("masterviewtoolbar");
+const OUString ToolBarManager::msDrawingObjectToolBar("drawingobjectbar");
+const OUString ToolBarManager::msGluePointsToolBar("gluepointsobjectbar");
+const OUString ToolBarManager::msTextObjectBar("textobjectbar");
+const OUString ToolBarManager::msBezierObjectBar("bezierobjectbar");
+const OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
+const OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
+const OUString ToolBarManager::msTableObjectBar("tableobjectbar");
 
 
 ::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
@@ -428,7 +428,7 @@ void ToolBarManager::ResetAllToolBars (void)
 
 void ToolBarManager::AddToolBar (
     ToolBarGroup eGroup,
-    const ::rtl::OUString& rsToolBarName)
+    const OUString& rsToolBarName)
 {
     if (mpImpl.get() != NULL)
     {
@@ -456,7 +456,7 @@ void ToolBarManager::AddToolBarShell (
 
 void ToolBarManager::RemoveToolBar (
     ToolBarGroup eGroup,
-    const ::rtl::OUString& rsToolBarName)
+    const OUString& rsToolBarName)
 {
     if (mpImpl.get() != NULL)
     {
@@ -470,7 +470,7 @@ void ToolBarManager::RemoveToolBar (
 
 void ToolBarManager::SetToolBar (
     ToolBarGroup eGroup,
-    const ::rtl::OUString& rsToolBarName)
+    const OUString& rsToolBarName)
 {
     if (mpImpl.get() != NULL)
     {
@@ -585,7 +585,7 @@ void ToolBarManager::ToolBarsDestroyed(void)
 
 //===== ToolBarManager::Implementation =======================================
 
-const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix("private:resource/toolbar/");
+const OUString ToolBarManager::Implementation::msToolBarResourcePrefix("private:resource/toolbar/");
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
@@ -705,7 +705,7 @@ void ToolBarManager::Implementation::ResetAllToolBars (void)
 
 void ToolBarManager::Implementation::AddToolBar (
     ToolBarGroup eGroup,
-    const ::rtl::OUString& rsToolBarName)
+    const OUString& rsToolBarName)
 {
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -724,7 +724,7 @@ void ToolBarManager::Implementation::AddToolBar (
 
 void ToolBarManager::Implementation::RemoveToolBar (
     ToolBarGroup eGroup,
-    const ::rtl::OUString& rsToolBarName)
+    const OUString& rsToolBarName)
 {
     ::osl::MutexGuard aGuard(maMutex);
 
@@ -796,9 +796,9 @@ void ToolBarManager::Implementation::PreUpdate (void)
         NameList::const_iterator iToolBar;
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
-            ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
+            OUString sFullName (GetToolBarResourceName(*iToolBar));
             SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning off tool bar " <<
-                ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
             mxLayouter->destroyElement(sFullName);
             maToolBarList.MarkToolBarAsNotActive(*iToolBar);
         }
@@ -830,9 +830,9 @@ void ToolBarManager::Implementation::PostUpdate (void)
         NameList::const_iterator iToolBar;
         for (iToolBar=aToolBars.begin(); iToolBar!=aToolBars.end(); ++iToolBar)
         {
-            ::rtl::OUString sFullName (GetToolBarResourceName(*iToolBar));
+            OUString sFullName (GetToolBarResourceName(*iToolBar));
             SAL_INFO("sd.view", OSL_THIS_FUNC << ":    turning on tool bar " <<
-                ::rtl::OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(sFullName, RTL_TEXTENCODING_UTF8).getStr());
             mxLayouter->requestElement(sFullName);
             maToolBarList.MarkToolBarAsActive(*iToolBar);
         }
@@ -1029,10 +1029,10 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
 
 
 
-::rtl::OUString ToolBarManager::Implementation::GetToolBarResourceName (
-    const ::rtl::OUString& rsBaseName) const
+OUString ToolBarManager::Implementation::GetToolBarResourceName (
+    const OUString& rsBaseName) const
 {
-    ::rtl::OUString sToolBarName (msToolBarResourcePrefix);
+    OUString sToolBarName (msToolBarResourcePrefix);
     sToolBarName += rsBaseName;
     return sToolBarName;
 }
@@ -1040,7 +1040,7 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
 
 
 
-bool ToolBarManager::Implementation::CheckPlugInMode (const ::rtl::OUString& rsName) const
+bool ToolBarManager::Implementation::CheckPlugInMode (const OUString& rsName) const
 {
     bool bValid (false);
 
@@ -1400,7 +1400,7 @@ void ToolBarList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
 
 void ToolBarList::AddToolBar (
     sd::ToolBarManager::ToolBarGroup eGroup,
-    const ::rtl::OUString& rsName)
+    const OUString& rsName)
 {
     Groups::iterator iGroup (maGroups.find(eGroup));
     if (iGroup == maGroups.end())
@@ -1422,7 +1422,7 @@ void ToolBarList::AddToolBar (
 
 bool ToolBarList::RemoveToolBar (
     sd::ToolBarManager::ToolBarGroup eGroup,
-    const ::rtl::OUString& rsName)
+    const OUString& rsName)
 {
     Groups::iterator iGroup (maGroups.find(eGroup));
     if (iGroup != maGroups.end())
@@ -1496,7 +1496,7 @@ void ToolBarList::GetToolBarsToDeactivate (NameList& rToolBars) const
 
 
 
-void ToolBarList::MarkToolBarAsActive (const ::rtl::OUString& rsName)
+void ToolBarList::MarkToolBarAsActive (const OUString& rsName)
 {
     maActiveToolBars.push_back(rsName);
 }
@@ -1504,7 +1504,7 @@ void ToolBarList::MarkToolBarAsActive (const ::rtl::OUString& rsName)
 
 
 
-void ToolBarList::MarkToolBarAsNotActive (const ::rtl::OUString& rsName)
+void ToolBarList::MarkToolBarAsNotActive (const OUString& rsName)
 {
     maActiveToolBars.erase(
         ::std::find(maActiveToolBars.begin(),maActiveToolBars.end(), rsName));

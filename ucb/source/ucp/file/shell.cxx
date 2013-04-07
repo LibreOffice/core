@@ -113,7 +113,7 @@ shell::UnqPathData::~UnqPathData()
 
 
 
-shell::MyProperty::MyProperty( const rtl::OUString&                         __PropertyName )
+shell::MyProperty::MyProperty( const OUString&                         __PropertyName )
     : PropertyName( __PropertyName )
 {
     // empty
@@ -121,7 +121,7 @@ shell::MyProperty::MyProperty( const rtl::OUString&                         __Pr
 
 
 shell::MyProperty::MyProperty( const sal_Bool&                              __isNative,
-                               const rtl::OUString&                         __PropertyName,
+                               const OUString&                         __PropertyName,
                                const sal_Int32&                             __Handle,
                                const com::sun::star::uno::Type&              __Typ,
                                const com::sun::star::uno::Any&              __Value,
@@ -176,7 +176,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     m_aDefaultProperties.insert( MyProperty( true,
                                              Title,
                                              -1 ,
-                                             getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                                             getCppuType( static_cast< OUString* >( 0 ) ),
                                              uno::Any(),
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -187,7 +187,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
         MyProperty( true,
                     CasePreservingURL,
                     -1 ,
-                    getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                    getCppuType( static_cast< OUString* >( 0 ) ),
                     uno::Any(),
                     beans::PropertyState_DEFAULT_VALUE,
                     beans::PropertyAttribute::MAYBEVOID
@@ -294,11 +294,11 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
 
     // ContentType
     uno::Any aAny;
-    aAny <<= rtl::OUString();
+    aAny <<= OUString();
     m_aDefaultProperties.insert( MyProperty( false,
                                              ContentType,
                                              -1 ,
-                                             getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                                             getCppuType( static_cast< OUString* >( 0 ) ),
                                              aAny,
                                              beans::PropertyState_DEFAULT_VALUE,
                                              beans::PropertyAttribute::MAYBEVOID
@@ -349,39 +349,39 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
                                              | beans::PropertyAttribute::READONLY ) );
 
     // Commands
-    m_sCommandInfo[0].Name = rtl::OUString("getCommandInfo");
+    m_sCommandInfo[0].Name = OUString("getCommandInfo");
     m_sCommandInfo[0].Handle = -1;
     m_sCommandInfo[0].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[1].Name = rtl::OUString("getPropertySetInfo");
+    m_sCommandInfo[1].Name = OUString("getPropertySetInfo");
     m_sCommandInfo[1].Handle = -1;
     m_sCommandInfo[1].ArgType = getCppuVoidType();
 
-    m_sCommandInfo[2].Name = rtl::OUString("getPropertyValues");
+    m_sCommandInfo[2].Name = OUString("getPropertyValues");
     m_sCommandInfo[2].Handle = -1;
     m_sCommandInfo[2].ArgType = getCppuType( static_cast< uno::Sequence< beans::Property >* >( 0 ) );
 
-    m_sCommandInfo[3].Name = rtl::OUString("setPropertyValues");
+    m_sCommandInfo[3].Name = OUString("setPropertyValues");
     m_sCommandInfo[3].Handle = -1;
     m_sCommandInfo[3].ArgType = getCppuType( static_cast< uno::Sequence< beans::PropertyValue >* >( 0 ) );
 
-    m_sCommandInfo[4].Name = rtl::OUString("open");
+    m_sCommandInfo[4].Name = OUString("open");
     m_sCommandInfo[4].Handle = -1;
     m_sCommandInfo[4].ArgType = getCppuType( static_cast< OpenCommandArgument* >( 0 ) );
 
-    m_sCommandInfo[5].Name = rtl::OUString("transfer");
+    m_sCommandInfo[5].Name = OUString("transfer");
     m_sCommandInfo[5].Handle = -1;
     m_sCommandInfo[5].ArgType = getCppuType( static_cast< TransferInfo* >( 0 ) );
 
-    m_sCommandInfo[6].Name = rtl::OUString("delete");
+    m_sCommandInfo[6].Name = OUString("delete");
     m_sCommandInfo[6].Handle = -1;
     m_sCommandInfo[6].ArgType = getCppuType( static_cast< sal_Bool* >( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString("insert");
+    m_sCommandInfo[7].Name = OUString("insert");
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
-    m_sCommandInfo[7].Name = rtl::OUString("createNewContent");
+    m_sCommandInfo[7].Name = OUString("createNewContent");
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
@@ -389,7 +389,7 @@ shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
     {
         uno::Reference< XPropertySetRegistryFactory > xRegFac = ucb::Store::create( m_xContext );
         // Open/create a registry
-        m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
+        m_xFileRegistry = xRegFac->createPropertySetRegistry( OUString() );
     }
 }
 
@@ -411,7 +411,7 @@ shell::~shell()
 //
 
 void SAL_CALL
-shell::registerNotifier( const rtl::OUString& aUnqPath, Notifier* pNotifier )
+shell::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -435,7 +435,7 @@ shell::registerNotifier( const rtl::OUString& aUnqPath, Notifier* pNotifier )
 
 
 void SAL_CALL
-shell::deregisterNotifier( const rtl::OUString& aUnqPath,Notifier* pNotifier )
+shell::deregisterNotifier( const OUString& aUnqPath,Notifier* pNotifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -463,8 +463,8 @@ shell::deregisterNotifier( const rtl::OUString& aUnqPath,Notifier* pNotifier )
 //
 
 void SAL_CALL
-shell::associate( const rtl::OUString& aUnqPath,
-                  const rtl::OUString& PropertyName,
+shell::associate( const OUString& aUnqPath,
+                  const OUString& PropertyName,
                   const uno::Any& DefaultValue,
                   const sal_Int16 Attributes )
     throw( beans::PropertyExistException,
@@ -481,7 +481,7 @@ shell::associate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( newProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::PropertyExistException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::PropertyExistException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -494,7 +494,7 @@ shell::associate( const rtl::OUString& aUnqPath,
         PropertySet& properties = *(it->second.properties);
         it1 = properties.find( newProperty );
         if( it1 != properties.end() )
-            throw beans::PropertyExistException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            throw beans::PropertyExistException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
         // Property does not exist
         properties.insert( newProperty );
@@ -507,8 +507,8 @@ shell::associate( const rtl::OUString& aUnqPath,
 
 
 void SAL_CALL
-shell::deassociate( const rtl::OUString& aUnqPath,
-            const rtl::OUString& PropertyName )
+shell::deassociate( const OUString& aUnqPath,
+            const OUString& PropertyName )
   throw( beans::UnknownPropertyException,
      beans::NotRemoveableException,
      uno::RuntimeException )
@@ -517,7 +517,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     shell::PropertySet::iterator it1 = m_aDefaultProperties.find( oldProperty );
     if( it1 != m_aDefaultProperties.end() )
-        throw beans::NotRemoveableException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::NotRemoveableException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -529,7 +529,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
     it1 = properties.find( oldProperty );
     if( it1 == properties.end() )
-        throw beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     properties.erase( it1 );
 
@@ -567,7 +567,7 @@ shell::deassociate( const rtl::OUString& aUnqPath,
 
 
 void SAL_CALL shell::page( sal_Int32 CommandId,
-                           const rtl::OUString& aUnqPath,
+                           const OUString& aUnqPath,
                            const uno::Reference< io::XOutputStream >& xOutputStream )
     throw()
 {
@@ -658,7 +658,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 
 uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
-             const rtl::OUString& aUnqPath,
+             const OUString& aUnqPath,
              sal_Bool bLock )
     throw()
 {
@@ -695,7 +695,7 @@ shell::open( sal_Int32 CommandId,
 
 uno::Reference< io::XStream > SAL_CALL
 shell::open_rw( sal_Int32 CommandId,
-                const rtl::OUString& aUnqPath,
+                const OUString& aUnqPath,
                 sal_Bool bLock )
     throw()
 {
@@ -730,7 +730,7 @@ shell::open_rw( sal_Int32 CommandId,
 
 uno::Reference< XDynamicResultSet > SAL_CALL
 shell::ls( sal_Int32 CommandId,
-           const rtl::OUString& aUnqPath,
+           const OUString& aUnqPath,
            const sal_Int32 OpenMode,
            const uno::Sequence< beans::Property >& seq,
            const uno::Sequence< NumberedSortingInfo >& seqSort )
@@ -782,7 +782,7 @@ shell::info_c()
 // Info for the properties
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-shell::info_p( const rtl::OUString& aUnqPath )
+shell::info_p( const OUString& aUnqPath )
     throw()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -804,7 +804,7 @@ shell::info_p( const rtl::OUString& aUnqPath )
 
 
 uno::Sequence< uno::Any > SAL_CALL
-shell::setv( const rtl::OUString& aUnqPath,
+shell::setv( const OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
     throw()
 {
@@ -825,7 +825,7 @@ shell::setv( const rtl::OUString& aUnqPath,
         it1 = properties.find( toset );
         if( it1 == properties.end() )
         {
-            ret[i] <<= beans::UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= beans::UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -835,7 +835,7 @@ shell::setv( const rtl::OUString& aUnqPath,
 
         if( it1->getAttributes() & beans::PropertyAttribute::READONLY )
         {
-            ret[i] <<= lang::IllegalAccessException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            ret[i] <<= lang::IllegalAccessException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             continue;
         }
 
@@ -893,12 +893,12 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         ret[0] <<= beans::PropertyValue(
-                            rtl::OUString("Uri"), -1,
+                            OUString("Uri"), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
                         ret[i] <<= InteractiveAugmentedIOException(
-                            rtl::OUString(),
+                            OUString(),
                             0,
                             task::InteractionClassification_ERROR,
                             ioError,
@@ -906,7 +906,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             }
             else if(values[i].Name == IsReadOnly ||
                     values[i].Name == IsHidden)
@@ -957,7 +957,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         names[0] <<= beans::PropertyValue(
-                            rtl::OUString("Uri"), -1,
+                            OUString("Uri"), -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
@@ -1006,7 +1006,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                             break;
                         }
                         ret[i] <<= InteractiveAugmentedIOException(
-                            rtl::OUString(),
+                            OUString(),
                             0,
                             task::InteractionClassification_ERROR,
                             ioError,
@@ -1014,7 +1014,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                     }
                 }
                 else
-                    ret[i] <<= beans::IllegalTypeException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+                    ret[i] <<= beans::IllegalTypeException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             }
         }
     }   // end for
@@ -1041,7 +1041,7 @@ shell::setv( const rtl::OUString& aUnqPath,
 
 uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv( sal_Int32 CommandId,
-             const rtl::OUString& aUnqPath,
+             const OUString& aUnqPath,
              const uno::Sequence< beans::Property >& properties )
     throw()
 {
@@ -1108,8 +1108,8 @@ shell::getv( sal_Int32 CommandId,
 
 void SAL_CALL
 shell::move( sal_Int32 CommandId,
-             const rtl::OUString srcUnqPath,
-             const rtl::OUString dstUnqPathIn,
+             const OUString srcUnqPath,
+             const OUString dstUnqPathIn,
              const sal_Int32 NameClash )
     throw()
 {
@@ -1119,7 +1119,7 @@ shell::move( sal_Int32 CommandId,
         return;
     //
     osl::FileBase::RC nError;
-    rtl::OUString dstUnqPath( dstUnqPathIn );
+    OUString dstUnqPath( dstUnqPathIn );
 
     switch( NameClash )
     {
@@ -1138,7 +1138,7 @@ shell::move( sal_Int32 CommandId,
     case NameClash::OVERWRITE:
         {
             // stat to determine whether we have a symlink
-            rtl::OUString targetPath(dstUnqPath);
+            OUString targetPath(dstUnqPath);
 
             osl::FileStatus aStatus(osl_FileStatus_Mask_Type|osl_FileStatus_Mask_LinkTargetURL);
             osl::DirectoryItem aItem;
@@ -1165,7 +1165,7 @@ shell::move( sal_Int32 CommandId,
         }
     case NameClash::RENAME:
         {
-            rtl::OUString newDstUnqPath;
+            OUString newDstUnqPath;
             nError = osl_File_move( srcUnqPath,dstUnqPath,true );
             if( nError == osl::FileBase::E_EXIST )
             {
@@ -1186,8 +1186,8 @@ shell::move( sal_Int32 CommandId,
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( "_" );
-                    aPostFix += rtl::OUString::valueOf( ++nTry );
+                    OUString aPostFix( "_" );
+                    aPostFix += OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
@@ -1271,8 +1271,8 @@ shell::move( sal_Int32 CommandId,
 
     copyPersistentSet( srcUnqPath,dstUnqPath,!isDocument );
 
-    rtl::OUString aDstParent = getParentName( dstUnqPath );
-    rtl::OUString aSrcParent = getParentName( srcUnqPath );
+    OUString aDstParent = getParentName( dstUnqPath );
+    OUString aSrcParent = getParentName( srcUnqPath );
 
     notifyInsert( getContentEventListeners( aDstParent ),dstUnqPath );
     if(  aDstParent != aSrcParent )
@@ -1296,7 +1296,7 @@ shell::move( sal_Int32 CommandId,
 namespace {
 
 bool getType(
-    TaskManager & task, sal_Int32 id, rtl::OUString const & fileUrl,
+    TaskManager & task, sal_Int32 id, OUString const & fileUrl,
     osl::DirectoryItem * item, osl::FileStatus::Type * type)
 {
     OSL_ASSERT(item != 0 && type != 0);
@@ -1320,13 +1320,13 @@ bool getType(
 void SAL_CALL
 shell::copy(
     sal_Int32 CommandId,
-    const rtl::OUString srcUnqPath,
-    const rtl::OUString dstUnqPathIn,
+    const OUString srcUnqPath,
+    const OUString dstUnqPathIn,
     sal_Int32 NameClash )
     throw()
 {
     osl::FileBase::RC nError;
-    rtl::OUString dstUnqPath( dstUnqPathIn );
+    OUString dstUnqPath( dstUnqPathIn );
 
     // Resolve symbolic links within the source path.  If srcUnqPath denotes a
     // symbolic link (targeting either a file or a folder), the contents of the
@@ -1338,7 +1338,7 @@ shell::copy(
     if (!getType(*this, CommandId, srcUnqPath, &item, &type)) {
         return;
     }
-    rtl::OUString rslvdSrcUnqPath;
+    OUString rslvdSrcUnqPath;
     if (type == osl::FileStatus::Link) {
         osl::FileStatus stat(osl_FileStatus_Mask_LinkTargetURL);
         nError = item.getFileStatus(stat);
@@ -1391,7 +1391,7 @@ shell::copy(
         }
         case NameClash::RENAME:
         {
-            rtl::OUString newDstUnqPath;
+            OUString newDstUnqPath;
             nError = copy_recursive( rslvdSrcUnqPath,dstUnqPath,IsWhat,true );
 
             if( nError == osl::FileBase::E_EXIST )
@@ -1413,8 +1413,8 @@ shell::copy(
                 {
                     newDstUnqPath = dstUnqPath;
 
-                    rtl::OUString aPostFix( "_" );
-                    aPostFix += rtl::OUString::valueOf( ++nTry );
+                    OUString aPostFix( "_" );
+                    aPostFix += OUString::valueOf( ++nTry );
 
                     newDstUnqPath = newDstUnqPath.replaceAt( nPos, 0, aPostFix );
 
@@ -1495,7 +1495,7 @@ shell::copy(
 
 sal_Bool SAL_CALL
 shell::remove( sal_Int32 CommandId,
-               const rtl::OUString& aUnqPath,
+               const OUString& aUnqPath,
                sal_Int32 IsWhat,
                sal_Bool  MustExist )
     throw()
@@ -1575,7 +1575,7 @@ shell::remove( sal_Int32 CommandId,
 
         sal_Bool whileSuccess = sal_True;
         sal_Int32 recurse = 0;
-        rtl::OUString name;
+        OUString name;
 
         nError = aDirectory.getNextItem( aItem );
         while( nError == osl::FileBase::E_None )
@@ -1659,11 +1659,11 @@ shell::remove( sal_Int32 CommandId,
 
 sal_Bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
-              const rtl::OUString& rUnqPath,
+              const OUString& rUnqPath,
               sal_Bool OverWrite )
     throw()
 {
-    rtl::OUString aUnqPath;
+    OUString aUnqPath;
 
     // remove trailing slash
     if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
@@ -1694,7 +1694,7 @@ shell::mkdir( sal_Int32 CommandId,
         }
         case osl::FileBase::E_None:
         {
-            rtl::OUString aPrtPath = getParentName( aUnqPath );
+            OUString aPrtPath = getParentName( aUnqPath );
             notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
             return sal_True;
         }
@@ -1720,7 +1720,7 @@ shell::mkdir( sal_Int32 CommandId,
 
 sal_Bool SAL_CALL
 shell::mkfil( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath,
+              const OUString& aUnqPath,
               sal_Bool Overwrite,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
@@ -1732,7 +1732,7 @@ shell::mkfil( sal_Int32 CommandId,
                                aInputStream );
     if ( bSuccess )
     {
-        rtl::OUString aPrtPath = getParentName( aUnqPath );
+        OUString aPrtPath = getParentName( aUnqPath );
         notifyInsert( getContentEventListeners( aPrtPath ),aUnqPath );
     }
     return bSuccess;
@@ -1752,7 +1752,7 @@ shell::mkfil( sal_Int32 CommandId,
 
 sal_Bool SAL_CALL
 shell::write( sal_Int32 CommandId,
-              const rtl::OUString& aUnqPath,
+              const OUString& aUnqPath,
               sal_Bool OverWrite,
               const uno::Reference< io::XInputStream >& aInputStream )
     throw()
@@ -1912,7 +1912,7 @@ shell::write( sal_Int32 CommandId,
 /*********************************************************************************/
 
 
-void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
+void SAL_CALL shell::insertDefaultProperties( const OUString& aUnqPath )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1950,11 +1950,11 @@ void SAL_CALL shell::insertDefaultProperties( const rtl::OUString& aUnqPath )
 /******************************************************************************/
 
 
-sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& Unq )
+sal_Bool SAL_CALL shell::getUnqFromUrl( const OUString& Url,OUString& Unq )
 {
     if ( Url == "file:///" || Url == "file://localhost/" || Url == "file://127.0.0.1/" )
     {
-        Unq = rtl::OUString("file:///");
+        Unq = OUString("file:///");
         return false;
     }
 
@@ -1972,7 +1972,7 @@ sal_Bool SAL_CALL shell::getUnqFromUrl( const rtl::OUString& Url,rtl::OUString& 
 
 
 
-sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& Url )
+sal_Bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 {
     sal_Bool err = osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( Unq,Url );
 
@@ -1986,8 +1986,8 @@ sal_Bool SAL_CALL shell::getUrlFromUnq( const rtl::OUString& Unq,rtl::OUString& 
 // Helper function for public copy
 
 osl::FileBase::RC SAL_CALL
-shell::copy_recursive( const rtl::OUString& srcUnqPath,
-                       const rtl::OUString& dstUnqPath,
+shell::copy_recursive( const OUString& srcUnqPath,
+                       const OUString& dstUnqPath,
                        sal_Int32 TypeToCopy,
                        sal_Bool testExistBeforeCopy )
     throw()
@@ -2022,12 +2022,12 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                 // Getting the information for the next recursive copy
                 sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
 
-                rtl::OUString newSrcUnqPath;
+                OUString newSrcUnqPath;
                 if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
                     newSrcUnqPath = aFileStatus.getFileURL();
 
-                rtl::OUString newDstUnqPath = dstUnqPath;
-                rtl::OUString tit;
+                OUString newDstUnqPath = dstUnqPath;
+                OUString tit;
                 if( aFileStatus.isValid( osl_FileStatus_Mask_FileName ) )
                     tit = rtl::Uri::encode( aFileStatus.getFileName(),
                                           rtl_UriCharClassPchar,
@@ -2035,7 +2035,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                                           RTL_TEXTENCODING_UTF8 );
 
                 if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
-                    newDstUnqPath += rtl::OUString("/");
+                    newDstUnqPath += OUString("/");
 
                 newDstUnqPath += tit;
 
@@ -2060,11 +2060,11 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 
 
 sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
-                                    const rtl::OUString& rUnqPath,
+                                    const OUString& rUnqPath,
                                     sal_Int32 errorCode )
     throw()
 {
-    rtl::OUString aPath;
+    OUString aPath;
 
     if ( rUnqPath.isEmpty() )
         return sal_False;
@@ -2093,7 +2093,7 @@ sal_Bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
 
     if( ! bSuccess )
     {
-        rtl::OUString aParentDir = getParentName( aPath );
+        OUString aParentDir = getParentName( aPath );
 
         if ( aParentDir != aPath )
         {   // Create first the parent directory
@@ -2247,7 +2247,7 @@ shell::commit( const shell::ContentMap::iterator& it,
 
     if( it->second.properties == 0 )
     {
-        rtl::OUString aPath = it->first;
+        OUString aPath = it->first;
         insertDefaultProperties( aPath );
     }
 
@@ -2460,7 +2460,7 @@ shell::getv(
     Notifier* pNotifier,
     const uno::Sequence< beans::Property >& properties,
     osl::DirectoryItem& aDirItem,
-    rtl::OUString& aUnqPath,
+    OUString& aUnqPath,
     sal_Bool& aIsRegular )
 {
     uno::Sequence< uno::Any > seq( properties.getLength() );
@@ -2537,7 +2537,7 @@ shell::getv(
 
 
 std::list< ContentEventNotifier* >* SAL_CALL
-shell::getContentEventListeners( const rtl::OUString& aName )
+shell::getContentEventListeners( const OUString& aName )
 {
     std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
     std::list< ContentEventNotifier* >& listeners = *p;
@@ -2564,7 +2564,7 @@ shell::getContentEventListeners( const rtl::OUString& aName )
 
 
 std::list< ContentEventNotifier* >* SAL_CALL
-shell::getContentDeletedEventListeners( const rtl::OUString& aName )
+shell::getContentDeletedEventListeners( const OUString& aName )
 {
     std::list< ContentEventNotifier* >* p = new std::list< ContentEventNotifier* >;
     std::list< ContentEventNotifier* >& listeners = *p;
@@ -2590,7 +2590,7 @@ shell::getContentDeletedEventListeners( const rtl::OUString& aName )
 
 
 void SAL_CALL
-shell::notifyInsert( std::list< ContentEventNotifier* >* listeners,const rtl::OUString& aChildName )
+shell::notifyInsert( std::list< ContentEventNotifier* >* listeners,const OUString& aChildName )
 {
     std::list< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
@@ -2619,7 +2619,7 @@ shell::notifyContentDeleted( std::list< ContentEventNotifier* >* listeners )
 
 void SAL_CALL
 shell::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
-                             const rtl::OUString& aChildName )
+                             const OUString& aChildName )
 {
     std::list< ContentEventNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
@@ -2635,7 +2635,7 @@ shell::notifyContentRemoved( std::list< ContentEventNotifier* >* listeners,
 
 
 std::list< PropertySetInfoChangeNotifier* >* SAL_CALL
-shell::getPropertySetListeners( const rtl::OUString& aName )
+shell::getPropertySetListeners( const OUString& aName )
 {
     std::list< PropertySetInfoChangeNotifier* >* p = new std::list< PropertySetInfoChangeNotifier* >;
     std::list< PropertySetInfoChangeNotifier* >& listeners = *p;
@@ -2662,7 +2662,7 @@ shell::getPropertySetListeners( const rtl::OUString& aName )
 
 void SAL_CALL
 shell::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* listeners,
-                            const rtl::OUString& aPropertyName )
+                            const OUString& aPropertyName )
 {
     std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
@@ -2677,7 +2677,7 @@ shell::notifyPropertyAdded( std::list< PropertySetInfoChangeNotifier* >* listene
 
 void SAL_CALL
 shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* listeners,
-                              const rtl::OUString& aPropertyName )
+                              const OUString& aPropertyName )
 {
     std::list< PropertySetInfoChangeNotifier* >::iterator it = listeners->begin();
     while( it != listeners->end() )
@@ -2692,8 +2692,8 @@ shell::notifyPropertyRemoved( std::list< PropertySetInfoChangeNotifier* >* liste
 
 
 std::vector< std::list< ContentEventNotifier* >* >* SAL_CALL
-shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
-                                          const rtl::OUString aNewPrefix,
+shell::getContentExchangedEventListeners( const OUString aOldPrefix,
+                                          const OUString aNewPrefix,
                                           sal_Bool withChildren )
 {
 
@@ -2702,9 +2702,9 @@ shell::getContentExchangedEventListeners( const rtl::OUString aOldPrefix,
     std::vector< std::list< ContentEventNotifier* >* >&  aVector = *aVectorOnHeap;
 
     sal_Int32 count;
-    rtl::OUString aOldName;
-    rtl::OUString aNewName;
-    std::vector< rtl::OUString > oldChildList;
+    OUString aOldName;
+    OUString aNewName;
+    std::vector< OUString > oldChildList;
 
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -2817,7 +2817,7 @@ shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* 
 
 
 std::list< PropertyChangeNotifier* >* SAL_CALL
-shell::getPropertyChangeNotifier( const rtl::OUString& aName )
+shell::getPropertyChangeNotifier( const OUString& aName )
 {
     std::list< PropertyChangeNotifier* >* p = new std::list< PropertyChangeNotifier* >;
     std::list< PropertyChangeNotifier* >& listeners = *p;
@@ -2863,7 +2863,7 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 /********************************************************************************/
 
 void SAL_CALL
-shell::erasePersistentSet( const rtl::OUString& aUnqPath,
+shell::erasePersistentSet( const OUString& aUnqPath,
                            sal_Bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
@@ -2872,7 +2872,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
         return;
     }
 
-    uno::Sequence< rtl::OUString > seqNames;
+    uno::Sequence< OUString > seqNames;
 
     if( withChildren )
     {
@@ -2882,7 +2882,7 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 
     sal_Int32 count = withChildren ? seqNames.getLength() : 1;
 
-    rtl::OUString
+    OUString
         old_Name = aUnqPath;
 
     for( sal_Int32 j = 0; j < count; ++j )
@@ -2925,8 +2925,8 @@ shell::erasePersistentSet( const rtl::OUString& aUnqPath,
 
 
 void SAL_CALL
-shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
-                          const rtl::OUString& dstUnqPath,
+shell::copyPersistentSet( const OUString& srcUnqPath,
+                          const OUString& dstUnqPath,
                           sal_Bool withChildren )
 {
     if( ! m_xFileRegistry.is() )
@@ -2935,7 +2935,7 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
         return;
     }
 
-    uno::Sequence< rtl::OUString > seqNames;
+    uno::Sequence< OUString > seqNames;
 
     if( withChildren )
     {
@@ -2945,7 +2945,7 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
 
     sal_Int32 count = withChildren ? seqNames.getLength() : 1;
 
-    rtl::OUString
+    OUString
         old_Name = srcUnqPath,
         new_Name = dstUnqPath;
 
@@ -3002,9 +3002,9 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-        rtl::OUString("Title"),
+        OUString("Title"),
         -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+        getCppuType( static_cast< OUString* >( 0 ) ),
         beans::PropertyAttribute::MAYBEVOID
         | beans::PropertyAttribute::BOUND );
     seq[0].Properties = props;
@@ -3023,23 +3023,23 @@ uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
 /*******************************************************************************/
 
 void SAL_CALL
-shell::getScheme( rtl::OUString& Scheme )
+shell::getScheme( OUString& Scheme )
 {
-  Scheme = rtl::OUString("file");
+  Scheme = OUString("file");
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 shell::getImplementationName_static( void )
 {
-  return rtl::OUString("com.sun.star.comp.ucb.FileProvider");
+  return OUString("com.sun.star.comp.ucb.FileProvider");
 }
 
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 shell::getSupportedServiceNames_static( void )
 {
-  rtl::OUString Supported("com.sun.star.ucb.FileContentProvider");
-  com::sun::star::uno::Sequence< rtl::OUString > Seq( &Supported,1 );
+  OUString Supported("com.sun.star.ucb.FileContentProvider");
+  com::sun::star::uno::Sequence< OUString > Seq( &Supported,1 );
   return Seq;
 }
 

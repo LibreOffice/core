@@ -44,18 +44,18 @@ UniString::UniString( const char* pByteStr, xub_StrLen nLen,
                         eTextEncoding, nCvtFlags );
 }
 
-UniString::UniString( const rtl::OUString& rStr )
+UniString::UniString( const OUString& rStr )
     : mpData(NULL)
 {
     DBG_CTOR( UniString, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing OUString -> UniString cut to zero length");
 
 
     if (rStr.pData->length < STRING_MAXLEN)
     {
-        mpData = reinterpret_cast< UniStringData * >(const_cast< rtl::OUString & >(rStr).pData);
+        mpData = reinterpret_cast< UniStringData * >(const_cast< OUString & >(rStr).pData);
         STRING_ACQUIRE((STRING_TYPE *)mpData);
     }
     else
@@ -64,18 +64,18 @@ UniString::UniString( const rtl::OUString& rStr )
     }
 }
 
-UniString& UniString::Assign( const rtl::OUString& rStr )
+UniString& UniString::Assign( const OUString& rStr )
 {
     DBG_CHKTHIS( UniString, DbgCheckUniString );
 
     OSL_ENSURE(rStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing OUString -> UniString cut to zero length");
 
     if (rStr.pData->length < STRING_MAXLEN)
     {
         if( mpData != NULL )
             STRING_RELEASE((STRING_TYPE *)mpData);
-        mpData = reinterpret_cast< UniStringData * >(const_cast< rtl::OUString & >(rStr).pData);
+        mpData = reinterpret_cast< UniStringData * >(const_cast< OUString & >(rStr).pData);
         STRING_ACQUIRE((STRING_TYPE *)mpData);
     }
     else
@@ -93,12 +93,12 @@ UniString& UniString::Assign( const rtl::OUString& rStr )
 UniString::UniString( const ResId& rResId )
     : mpData(NULL)
 {
-    rtl::OUString sStr(rResId.toString());
+    OUString sStr(rResId.toString());
 
     DBG_CTOR( UniString, DbgCheckUniString );
 
     OSL_ENSURE(sStr.pData->length < STRING_MAXLEN,
-               "Overflowing rtl::OUString -> UniString cut to zero length");
+               "Overflowing OUString -> UniString cut to zero length");
 
     if (sStr.pData->length < STRING_MAXLEN)
     {
@@ -111,17 +111,17 @@ UniString::UniString( const ResId& rResId )
     }
 }
 
-rtl::OUString ResId::toString() const
+OUString ResId::toString() const
 {
     SetRT( RSC_STRING );
     ResMgr* pResMgr = GetResMgr();
 
     if ( !pResMgr || !pResMgr->GetResource( *this ) )
     {
-        rtl::OUString sRet;
+        OUString sRet;
 
 #if OSL_DEBUG_LEVEL > 0
-        sRet = rtl::OUStringBuffer().
+        sRet = OUStringBuffer().
             append("<resource id ").
             append(static_cast<sal_Int32>(GetId())).
             append(" not found>").
@@ -138,7 +138,7 @@ rtl::OUString ResId::toString() const
     RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
 
     sal_Int32 nStringLen = rtl_str_getLength( (char*)(pResHdr+1) );
-    rtl::OUString sRet((const char*)(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
+    OUString sRet((const char*)(pResHdr+1), nStringLen, RTL_TEXTENCODING_UTF8);
 
     sal_uInt32 nSize = sizeof( RSHEADER_TYPE )
         + sal::static_int_cast< sal_uInt32 >(nStringLen) + 1;

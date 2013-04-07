@@ -35,7 +35,7 @@ protected:
 
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
-                                      const ::rtl::OUString& rQName,
+                                      const OUString& rQName,
                                          sal_Bool bPersistent=sal_False );
 
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
@@ -47,14 +47,14 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName,
+    virtual OUString GetEventName( const OUString& rName,
                                              sal_Bool bForm );
 };
 

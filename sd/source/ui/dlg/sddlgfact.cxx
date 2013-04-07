@@ -269,7 +269,7 @@ void AbstractSdInsertLayerDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
     pDlg->GetAttr( rOutAttrs );
 }
-void AbstractSdInsertLayerDlg_Impl::SetHelpId( const rtl::OString& rHelpId )
+void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
 {
     pDlg->SetHelpId( rHelpId );
 }
@@ -288,7 +288,7 @@ sal_Bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
     return (::Window*)pDlg;
 }
 
-std::vector<rtl::OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
+std::vector<OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
 {
     return pDlg->GetList(nType);
 }

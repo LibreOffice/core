@@ -390,7 +390,7 @@ namespace svt { namespace table
         _rDevice.DrawLine( _rArea.BottomLeft(), _rArea.BottomRight() );
 
         Any const rowHeading( m_pImpl->rModel.getRowHeading( m_pImpl->nCurrentRow ) );
-        ::rtl::OUString const rowTitle( m_pImpl->aStringConverter.convertToString( rowHeading ) );
+        OUString const rowTitle( m_pImpl->aStringConverter.convertToString( rowHeading ) );
         if ( !rowTitle.isEmpty() )
         {
             ::Color const textColor = lcl_getEffectiveColor( m_pImpl->rModel.getHeaderTextColor(), _rStyle, &StyleSettings::GetFieldTextColor );
@@ -526,12 +526,12 @@ namespace svt { namespace table
             return;
         }
 
-        const ::rtl::OUString sText( m_pImpl->aStringConverter.convertToString( aCellContent ) );
+        const OUString sText( m_pImpl->aStringConverter.convertToString( aCellContent ) );
         impl_paintCellText( i_context, sText );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, ::rtl::OUString const & i_text )
+    void GridTableRenderer::impl_paintCellText( CellRenderContext const & i_context, OUString const & i_text )
     {
         if ( i_context.bSelected )
         {
@@ -586,7 +586,7 @@ namespace svt { namespace table
             return true;
         }
 
-        ::rtl::OUString const sText( m_pImpl->aStringConverter.convertToString( i_cellContent ) );
+        OUString const sText( m_pImpl->aStringConverter.convertToString( i_cellContent ) );
         if ( sText.isEmpty() )
             return true;
 
@@ -608,7 +608,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, ::rtl::OUString & o_cellString ) const
+    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, OUString & o_cellString ) const
     {
         o_cellString = m_pImpl->aStringConverter.convertToString( i_cellValue );
 

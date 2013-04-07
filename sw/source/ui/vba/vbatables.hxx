@@ -40,8 +40,8 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif

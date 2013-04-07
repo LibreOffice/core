@@ -34,12 +34,12 @@ namespace svx
     {
     private:
         bool                                                    m_bDocking;
-        ::rtl::OUString                                         m_sToolboxResName;
+        OUString                                         m_sToolboxResName;
         ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XLayoutManager >   m_xLayouter;
 
     public:
-        ToolboxAccess( const ::rtl::OUString& rToolboxName );
+        ToolboxAccess( const OUString& rToolboxName );
 
     public:
         /** toggles the toolbox

@@ -28,12 +28,9 @@
 #include "rtl/byteseq.hxx"
 #include "jvmfwk/framework.h"
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 static sal_Bool hasOption(char const * szOption, int argc, char** argv);
-static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
+static OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 static bool findAndSelect(JavaInfo**);
 
 #define HELP_TEXT    \
@@ -98,7 +95,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
     }
 
-    rtl::OUString aVendor( pInfo->sVendor );
+    OUString aVendor( pInfo->sVendor );
     // Only do something if the sunjavaplugin created this JavaInfo
     if ( aVendor != "Sun Microsystems Inc." &&
          aVendor != "Oracle Corporation" &&
@@ -114,24 +111,24 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 0;
     }
 
-    rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
+    OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
     jfw_freeJavaInfo(pInfo);
 
     return 0;
 }
 
-rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
+OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
 {
     const sal_Unicode* chars = (sal_Unicode*) vendorData.getConstArray();
     sal_Int32 len = vendorData.getLength();
-    rtl::OUString sData(chars, len / 2);
+    OUString sData(chars, len / 2);
     //the runtime lib is on the first line
     sal_Int32 index = 0;
-    rtl::OUString aToken = sData.getToken( 1, '\n', index);
+    OUString aToken = sData.getToken( 1, '\n', index);
 
-    rtl::OString paths =
-        rtl::OUStringToOString(aToken, osl_getThreadTextEncoding());
+    OString paths =
+        OUStringToOString(aToken, osl_getThreadTextEncoding());
     return paths;
 }
 

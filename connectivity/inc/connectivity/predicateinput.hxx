@@ -69,9 +69,9 @@ namespace dbtools
             points to.
         */
         sal_Bool        normalizePredicateString(
-            ::rtl::OUString& _rPredicateValue,
+            OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
-            ::rtl::OUString* _pErrorMessage = NULL
+            OUString* _pErrorMessage = NULL
         ) const;
 
         /** get's a value of the predicate which can be used in a WHERE clause.
@@ -87,23 +87,23 @@ namespace dbtools
             points to.
         @see normalizePredicateString
         */
-        ::rtl::OUString getPredicateValue(
-            const ::rtl::OUString& _rPredicateValue,
+        OUString getPredicateValue(
+            const OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField,
             sal_Bool _bForStatementUse,
-            ::rtl::OUString* _pErrorMessage = NULL
+            OUString* _pErrorMessage = NULL
         ) const;
 
-        ::rtl::OUString getPredicateValue(
-            const ::rtl::OUString& _sField
-            , const ::rtl::OUString& _rPredicateValue
+        OUString getPredicateValue(
+            const OUString& _sField
+            , const OUString& _rPredicateValue
             , sal_Bool _bForStatementUse
-            , ::rtl::OUString* _pErrorMessage = NULL) const;
+            , OUString* _pErrorMessage = NULL) const;
 
     private:
         ::connectivity::OSQLParseNode* implPredicateTree(
-            ::rtl::OUString& _rErrorMessage,
-            const ::rtl::OUString& _rStatement,
+            OUString& _rErrorMessage,
+            const OUString& _rStatement,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField
         ) const;
 
@@ -113,7 +113,7 @@ namespace dbtools
             sal_Unicode& _rThdSep
         ) const;
 
-        ::rtl::OUString implParseNode(::connectivity::OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const;
+        OUString implParseNode(::connectivity::OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const;
     };
 
 //.........................................................................

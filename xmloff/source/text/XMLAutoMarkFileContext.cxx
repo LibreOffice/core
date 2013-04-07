@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;

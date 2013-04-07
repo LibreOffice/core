@@ -132,7 +132,7 @@ class ScDBQueryDataIterator
 public:
     struct Value
     {
-        ::rtl::OUString maString;
+        OUString maString;
         double          mfValue;
         sal_uInt16      mnError;
         bool            mbIsNumber;

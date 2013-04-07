@@ -68,7 +68,7 @@ void SwCache::Check()
 
 SwCache::SwCache( const sal_uInt16 nInitSize
 #ifdef DBG_UTIL
-    , const rtl::OString &rNm
+    , const OString &rNm
 #endif
     ) :
     m_aCacheObjects(),

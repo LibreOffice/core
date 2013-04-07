@@ -28,7 +28,7 @@ public:
     TYPEINFO();
 
     XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName    );
+                           const OUString& rQName    );
     virtual ~XMLChartOOoTransformerContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );

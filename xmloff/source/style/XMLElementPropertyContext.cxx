@@ -19,7 +19,6 @@
 
 #include "XMLElementPropertyContext.hxx"
 
-using ::rtl::OUString;
 
 TYPEINIT1( XMLElementPropertyContext , SvXMLImportContext );
 

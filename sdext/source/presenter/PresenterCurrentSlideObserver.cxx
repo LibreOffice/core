@@ -21,7 +21,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -106,7 +105,7 @@ void SAL_CALL PresenterCurrentSlideObserver::slideEnded (sal_Bool bReverse)
                 mpPresenterController->UpdateCurrentSlide(+1);
 }
 
-void SAL_CALL PresenterCurrentSlideObserver::hyperLinkClicked (const rtl::OUString &)
+void SAL_CALL PresenterCurrentSlideObserver::hyperLinkClicked (const OUString &)
     throw (css::uno::RuntimeException)
 {
 }

@@ -64,7 +64,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 #define STR_NONNEGATIVE   "NonNegative"
 #define STR_INTEGER       "Integer"

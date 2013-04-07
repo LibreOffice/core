@@ -35,7 +35,7 @@ class EditHTMLParser : public HTMLParser
 {
     using HTMLParser::CallParser;
 private:
-    ::rtl::OUStringBuffer maStyleSource;
+    OUStringBuffer maStyleSource;
     EditSelection           aCurSel;
     String                  aBaseURL;
     EditEngine* mpEditEngine;

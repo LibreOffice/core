@@ -53,8 +53,8 @@ namespace svt {
 sal_Bool DocumentLockFile::m_bAllowInteraction = sal_True;
 
 // ----------------------------------------------------------------------
-DocumentLockFile::DocumentLockFile( const ::rtl::OUString& aOrigURL )
-: LockFileCommon( aOrigURL, ::rtl::OUString( ".~lock."  ) )
+DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
+: LockFileCommon( aOrigURL, OUString( ".~lock."  ) )
 {
 }
 
@@ -64,11 +64,11 @@ DocumentLockFile::~DocumentLockFile()
 }
 
 // ----------------------------------------------------------------------
-void DocumentLockFile::WriteEntryToStream( uno::Sequence< ::rtl::OUString > aEntry, uno::Reference< io::XOutputStream > xOutput )
+void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno::Reference< io::XOutputStream > xOutput )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
 
     for ( sal_Int32 nEntryInd = 0; nEntryInd < aEntry.getLength(); nEntryInd++ )
     {
@@ -79,7 +79,7 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< ::rtl::OUString > aEnt
             aBuffer.append( (sal_Unicode)';' );
     }
 
-    ::rtl::OString aStringData( ::rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
     uno::Sequence< sal_Int8 > aData( (sal_Int8*)aStringData.getStr(), aStringData.getLength() );
     xOutput->writeBytes( aData );
 }
@@ -102,7 +102,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
         if ( !xInput.is() || !xOutput.is() )
             throw uno::RuntimeException();
 
-        uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
+        uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
         WriteEntryToStream( aNewEntry, xOutput );
         xOutput->closeOutput();
 
@@ -116,11 +116,11 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
         aInsertArg.ReplaceExisting = sal_False;
         uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;
-        aTargetContent.executeCommand( ::rtl::OUString( "insert"  ), aCmdArg );
+        aTargetContent.executeCommand( OUString( "insert"  ), aCmdArg );
 
         // try to let the file be hidden if possible
         try {
-            aTargetContent.setPropertyValue( ::rtl::OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
+            aTargetContent.setPropertyValue( OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
         } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
@@ -132,7 +132,7 @@ sal_Bool DocumentLockFile::CreateOwnLockFile()
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > DocumentLockFile::GetLockData()
+uno::Sequence< OUString > DocumentLockFile::GetLockData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -176,7 +176,7 @@ sal_Bool DocumentLockFile::OverwriteOwnLockFile()
         uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
         ::ucbhelper::Content aTargetContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
-        uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
+        uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
 
         uno::Reference< io::XStream > xStream = aTargetContent.openWriteableStreamNoLock();
         uno::Reference< io::XOutputStream > xOutput = xStream->getOutputStream();
@@ -200,8 +200,8 @@ void DocumentLockFile::RemoveFile()
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
-    uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
-    uno::Sequence< ::rtl::OUString > aFileData = GetLockData();
+    uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
+    uno::Sequence< OUString > aFileData = GetLockData();
 
     if ( aFileData.getLength() < LOCKFILE_ENTRYSIZE )
         throw io::WrongFormatException();
@@ -213,7 +213,7 @@ void DocumentLockFile::RemoveFile()
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
-    aCnt.executeCommand(rtl::OUString("delete"),
+    aCnt.executeCommand(OUString("delete"),
         uno::makeAny(sal_Bool(sal_True)));
 }
 

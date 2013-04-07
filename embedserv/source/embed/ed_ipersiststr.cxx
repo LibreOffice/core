@@ -54,14 +54,14 @@ const sal_Int32 nConstBufferSize = 32000;
 
 using namespace ::com::sun::star;
 
-extern ::rtl::OUString  getStorageTypeFromGUID_Impl( GUID* guid );
-extern ::rtl::OUString  getServiceNameFromGUID_Impl( GUID* );
-extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+extern OUString  getStorageTypeFromGUID_Impl( GUID* guid );
+extern OUString  getServiceNameFromGUID_Impl( GUID* );
+extern OUString  getFilterNameFromGUID_Impl( GUID* );
 // extern CLIPFORMAT        getClipFormatFromGUID_Impl( GUID* );
-::rtl::OUString getTestFileURLFromGUID_Impl( GUID* guid );
+OUString getTestFileURLFromGUID_Impl( GUID* guid );
 
-const ::rtl::OUString aOfficeEmbedStreamName( "package_stream" );
-const ::rtl::OUString aExtentStreamName( "properties_stream" );
+const OUString aOfficeEmbedStreamName( "package_stream" );
+const OUString aExtentStreamName( "properties_stream" );
 
 uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                                         uno::Reference< lang::XMultiServiceFactory > xFactory,
@@ -206,29 +206,29 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
 
     sal_Int32 nInd = 0; // must not be bigger than the preset size
-    aArgs[nInd].Name = ::rtl::OUString( "FilterName" );
+    aArgs[nInd].Name = OUString( "FilterName" );
     aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[nInd].Name = ::rtl::OUString( "InputStream" );
+        aArgs[nInd].Name = OUString( "InputStream" );
         aArgs[nInd++].Value <<= xStream;
-        aArgs[nInd].Name = ::rtl::OUString( "URL" );
-        aArgs[nInd++].Value <<= ::rtl::OUString( "private:stream" );
+        aArgs[nInd].Name = OUString( "URL" );
+        aArgs[nInd++].Value <<= OUString( "private:stream" );
     }
     else
     {
-        aArgs[nInd].Name = ::rtl::OUString( "URL" );
+        aArgs[nInd].Name = OUString( "URL" );
 
-        rtl::OUString sDocUrl;
+        OUString sDocUrl;
         if ( pFilePath )
         {
             uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
             util::URL aURL;
 
-            aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
+            aURL.Complete = OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
 
-            if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) )
+            if ( aTransformer->parseSmart( aURL, OUString() ) )
                 sDocUrl = aURL.Complete;
         }
 
@@ -237,7 +237,7 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 
     aArgs.realloc( nInd );
 
-    // aArgs[].Name = ::rtl::OUString( "ReadOnly" );
+    // aArgs[].Name = OUString( "ReadOnly" );
     // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     return aArgs;
@@ -247,12 +247,12 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Imp
 {
     uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
 
-    aArgs[0].Name = ::rtl::OUString( "FilterName" );
+    aArgs[0].Name = OUString( "FilterName" );
     aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
 
     if ( xStream.is() )
     {
-        aArgs[1].Name = ::rtl::OUString( "OutputStream" );
+        aArgs[1].Name = OUString( "OutputStream" );
         aArgs[1].Value <<= xStream;
     }
 
@@ -427,7 +427,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                 if ( hr == S_OK )
                 {
-                    ::rtl::OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
+                    OUString aCurType = getStorageTypeFromGUID_Impl( &m_guid ); // ???
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
@@ -631,7 +631,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
     {
         try
         {
-            xStorable->storeToURL( ::rtl::OUString( "private:stream" ),
+            xStorable->storeToURL( OUString( "private:stream" ),
                                         fillArgsForStoring_Impl( xTempOut ) );
             hr = copyXTempOutToIStream( xTempOut, pTargetStream );
             if ( SUCCEEDED( hr ) )
@@ -759,7 +759,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
     if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
 
-    ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
@@ -801,7 +801,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
                                                             pszFileName ) );
                 hr = S_OK;
 
-                m_aFileName = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
+                m_aFileName = OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
             }
             catch( const uno::Exception& )
             {
@@ -810,7 +810,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
 
         if ( hr == S_OK )
         {
-            ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+            OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
             CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
@@ -877,11 +877,11 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
         else
         {
             util::URL aURL;
-            aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
+            aURL.Complete = OUString( reinterpret_cast<const sal_Unicode*>( pszFileName ) );
 
             uno::Reference< util::XURLTransformer > aTransformer( util::URLTransformer::create(comphelper::getComponentContext(m_xFactory)) );
 
-            if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) && aURL.Complete.getLength() )
+            if ( aTransformer->parseSmart( aURL, OUString() ) && aURL.Complete.getLength() )
             {
                 if ( fRemember )
                 {
@@ -905,7 +905,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     // the different file name would mean error here
-    m_aFileName = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
+    m_aFileName = OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
     return S_OK;
 }
 

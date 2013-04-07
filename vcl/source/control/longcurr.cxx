@@ -123,7 +123,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
 {
     XubString aStr = rStr;
     XubString aStr1;
-    rtl::OUStringBuffer aStr2;
+    OUStringBuffer aStr2;
     sal_uInt16 nDecPos;
     sal_Bool bNegative = sal_False;
 

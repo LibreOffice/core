@@ -89,7 +89,7 @@ public:
     wasNull()
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
@@ -176,7 +176,7 @@ public:
 
     // XColumnLocate
     virtual sal_Int32 SAL_CALL
-    findColumn( const ::rtl::OUString& columnName )
+    findColumn( const OUString& columnName )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
 
@@ -184,60 +184,60 @@ public:
     // Non-interface methods
     //////////////////////////////////////////////////////////////////////
 
-    void appendString( const ::rtl::OUString& rPropName, const ::rtl::OUString& rValue );
-    void appendString( const sal_Char* pAsciiPropName, const ::rtl::OUString& rValue )
+    void appendString( const OUString& rPropName, const OUString& rValue );
+    void appendString( const sal_Char* pAsciiPropName, const OUString& rValue )
     {
-        appendString( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+        appendString( OUString::createFromAscii( pAsciiPropName ), rValue );
     }
-    void appendString( const ::com::sun::star::beans::Property& rProp, const ::rtl::OUString& rValue )
+    void appendString( const ::com::sun::star::beans::Property& rProp, const OUString& rValue )
     {
         appendString( rProp.Name, rValue );
     }
 
-    void appendBoolean( const ::rtl::OUString& rPropName, sal_Bool bValue );
+    void appendBoolean( const OUString& rPropName, sal_Bool bValue );
     void appendBoolean( const sal_Char* pAsciiPropName, sal_Bool bValue )
     {
-        appendBoolean( ::rtl::OUString::createFromAscii( pAsciiPropName ), bValue );
+        appendBoolean( OUString::createFromAscii( pAsciiPropName ), bValue );
     }
     void appendBoolean( const ::com::sun::star::beans::Property& rProp, sal_Bool bValue )
     {
         appendBoolean( rProp.Name, bValue );
     }
 
-    void appendLong( const ::rtl::OUString& rPropName, sal_Int64 nValue );
+    void appendLong( const OUString& rPropName, sal_Int64 nValue );
     void appendLong( const sal_Char* pAsciiPropName, sal_Int64 nValue )
     {
-        appendLong( ::rtl::OUString::createFromAscii( pAsciiPropName ), nValue );
+        appendLong( OUString::createFromAscii( pAsciiPropName ), nValue );
     }
     void appendLong( const ::com::sun::star::beans::Property& rProp, sal_Int64 nValue )
     {
         appendLong( rProp.Name, nValue );
     }
 
-    void appendTimestamp( const ::rtl::OUString& rPropName, const ::com::sun::star::util::DateTime& rValue );
+    void appendTimestamp( const OUString& rPropName, const ::com::sun::star::util::DateTime& rValue );
     void appendTimestamp( const sal_Char* pAsciiPropName, const ::com::sun::star::util::DateTime& rValue )
     {
-        appendTimestamp( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+        appendTimestamp( OUString::createFromAscii( pAsciiPropName ), rValue );
     }
     void appendTimestamp( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::DateTime& rValue )
     {
         appendTimestamp( rProp.Name, rValue );
     }
 
-    void appendObject( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
+    void appendObject( const OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
     void appendObject( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Any& rValue )
     {
-        appendObject( ::rtl::OUString::createFromAscii( pAsciiPropName ), rValue );
+        appendObject( OUString::createFromAscii( pAsciiPropName ), rValue );
     }
     void appendObject( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Any& rValue )
     {
         appendObject( rProp.Name, rValue );
     }
 
-    void appendVoid( const ::rtl::OUString& rPropName );
+    void appendVoid( const OUString& rPropName );
     void appendVoid( const sal_Char* pAsciiPropName)
     {
-        appendVoid( ::rtl::OUString::createFromAscii( pAsciiPropName ) );
+        appendVoid( OUString::createFromAscii( pAsciiPropName ) );
     }
     void appendVoid( const ::com::sun::star::beans::Property& rProp )
     {

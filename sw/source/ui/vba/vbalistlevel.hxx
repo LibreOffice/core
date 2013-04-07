@@ -44,10 +44,10 @@ public:
     virtual css::uno::Reference< ::ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setFont( const css::uno::Reference< ::ooo::vba::word::XFont >& _font ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getIndex() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLinkedStyle() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLinkedStyle( const ::rtl::OUString& _linkedstyle ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNumberFormat() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setNumberFormat( const ::rtl::OUString& _numberformat ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLinkedStyle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLinkedStyle( const OUString& _linkedstyle ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getNumberFormat() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setNumberFormat( const OUString& _numberformat ) throw (css::uno::RuntimeException);
     virtual float SAL_CALL getNumberPosition() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setNumberPosition( float _numberposition ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getNumberStyle() throw (css::uno::RuntimeException);
@@ -64,8 +64,8 @@ public:
     virtual void SAL_CALL setTrailingCharacter( ::sal_Int32 _trailingcharacter ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_LISTLEVEL_HXX */
 

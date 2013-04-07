@@ -85,7 +85,7 @@ void displayException(const ::com::sun::star::uno::Any&, Window* _pParent = NULL
 
 sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& xCont, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElement);
 
-SVX_DLLPUBLIC ::rtl::OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
+SVX_DLLPUBLIC OUString getLabelName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xControlModel);
 
 // ===================================================================================================
 // = class CursorWrapper - a helper class which works in common with a ::com::sun::star::uno::Reference<XDatabaseUpdateCursor>,

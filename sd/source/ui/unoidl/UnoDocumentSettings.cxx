@@ -53,7 +53,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,19 +82,19 @@ namespace sd
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // XMultiPropertySet
-        virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
@@ -115,7 +114,7 @@ namespace sd
         virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException );
 
     private:
-        bool LoadList( XPropertyListType t, const rtl::OUString &rPath,
+        bool LoadList( XPropertyListType t, const OUString &rPath,
                        const uno::Reference< embed::XStorage > &xStorage );
         void AssignURL( XPropertyListType t, const Any* pValue, bool *pOk, bool *pChanged );
         void ExtractURL( XPropertyListType t, Any* pValue );
@@ -226,13 +225,13 @@ DocumentSettings::~DocumentSettings() throw()
 {
 }
 
-bool DocumentSettings::LoadList( XPropertyListType t, const rtl::OUString &rInPath,
+bool DocumentSettings::LoadList( XPropertyListType t, const OUString &rInPath,
                                  const uno::Reference< embed::XStorage > &xStorage )
 {
     SdDrawDocument* pDoc = mpModel->GetDoc();
 
     sal_Int32 nSlash = rInPath.lastIndexOf('/');
-    rtl::OUString aPath, aName;
+    OUString aPath, aName;
     if (nSlash < -1)
         aName = rInPath;
     else {
@@ -276,7 +275,7 @@ static struct {
     { "BitmapTableURL", XBITMAP_LIST }
 };
 
-static XPropertyListType getTypeOfName( const rtl::OUString &aName )
+static XPropertyListType getTypeOfName( const OUString &aName )
 {
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
         if( aName.equalsAscii( aURLPropertyNames[i].pName ) )
@@ -285,15 +284,15 @@ static XPropertyListType getTypeOfName( const rtl::OUString &aName )
     return (XPropertyListType) -1;
 }
 
-static rtl::OUString getNameOfType( XPropertyListType t )
+static OUString getNameOfType( XPropertyListType t )
 {
     for( size_t i = 0; i < SAL_N_ELEMENTS( aURLPropertyNames ); i++ ) {
         if( t == aURLPropertyNames[i].t )
-            return rtl::OUString( aURLPropertyNames[i].pName,
+            return OUString( aURLPropertyNames[i].pName,
                                   strlen( aURLPropertyNames[i].pName ) - 3,
                                   RTL_TEXTENCODING_UTF8 );
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 uno::Sequence<beans::PropertyValue>
@@ -310,7 +309,7 @@ uno::Sequence<beans::PropertyValue>
             aRet[nRet++] = aConfigProps[i];
         else
         {
-            rtl::OUString aURL;
+            OUString aURL;
             aConfigProps[i].Value >>= aURL;
             LoadList( t, aURL, xStorage );
         }
@@ -357,14 +356,14 @@ uno::Sequence<beans::PropertyValue>
                 else
                 {
                     // Such specific path construction is grim.
-                    rtl::OUString aValue;
+                    OUString aValue;
                     aRet[i].Value >>= aValue;
 
-                    rtl::OUStringBuffer aName( getNameOfType( t ) );
-                    rtl::OUString aResult;
+                    OUStringBuffer aName( getNameOfType( t ) );
+                    OUString aResult;
                     if( pList->SaveTo( xSubStorage, aName.makeStringAndClear(), &aResult ) )
                     {
-                        rtl::OUString aRealPath( "Settings/" );
+                        OUString aRealPath( "Settings/" );
                         aRealPath += aResult;
                         aRet[i].Value <<= aRealPath;
                     }
@@ -382,7 +381,7 @@ uno::Sequence<beans::PropertyValue>
     } catch (const uno::Exception &e) {
         (void)e;
 //        fprintf (stderr, "saving etc. exception '%s'\n",
-//                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+//                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return aRet;

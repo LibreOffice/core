@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 #define ID_TOOLBAR                          1
 #define ID_GRIDWIN                          2
@@ -145,7 +144,7 @@ namespace bib
                 if ( xPropSet.is() && m_xGridModel.is() )
                 {
                     uno::Any aAny = xPropSet->getPropertyValue( "DefaultControl" );
-                    rtl::OUString aControlName;
+                    OUString aControlName;
                     aAny >>= aControlName;
 
                     m_xControl = Reference< awt::XControl > ( xContext->getServiceManager()->createInstanceWithContext(aControlName, xContext), UNO_QUERY_THROW );

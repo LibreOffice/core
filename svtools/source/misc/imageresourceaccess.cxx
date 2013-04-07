@@ -124,7 +124,7 @@ namespace svt
     //= GraphicAccess
     //====================================================================
     //--------------------------------------------------------------------
-    bool GraphicAccess::isSupportedURL( const ::rtl::OUString& _rURL )
+    bool GraphicAccess::isSupportedURL( const OUString& _rURL )
     {
         if  (   ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/" ) ) == 0 )
             ||  ( _rURL.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:graphicrepository/" ) ) == 0 )
@@ -137,7 +137,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rImageResourceURL )
+    SvStream* GraphicAccess::getImageStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
         SvStream* pReturn = NULL;
 
@@ -148,7 +148,7 @@ namespace svt
 
             // let it create a graphic from the given URL
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
+            aMediaProperties[0].Name = OUString( "URL" );
             aMediaProperties[0].Value <<= _rImageResourceURL;
             Reference< XGraphic > xGraphic( xProvider->queryGraphic( aMediaProperties ) );
             OSL_ENSURE( xGraphic.is(), "GraphicAccess::getImageStream: the provider did not give us a graphic object!" );
@@ -163,10 +163,10 @@ namespace svt
             );
 
             aMediaProperties.realloc( 2 );
-            aMediaProperties[0].Name = ::rtl::OUString( "OutputStream" );
+            aMediaProperties[0].Name = OUString( "OutputStream" );
             aMediaProperties[0].Value <<= xBufferAccess;
-            aMediaProperties[1].Name = ::rtl::OUString( "MimeType" );
-            aMediaProperties[1].Value <<= ::rtl::OUString( "image/png" );
+            aMediaProperties[1].Name = OUString( "MimeType" );
+            aMediaProperties[1].Value <<= OUString( "image/png" );
             xProvider->storeGraphic( xGraphic, aMediaProperties );
 
             pMemBuffer->Seek( 0 );
@@ -181,7 +181,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rImageResourceURL )
+    Reference< XInputStream > GraphicAccess::getImageXStream( const Reference< XComponentContext >& _rxContext, const OUString& _rImageResourceURL )
     {
         return new OSeekableInputStreamWrapper( getImageStream( _rxContext, _rImageResourceURL ), sal_True );   // take ownership
     }

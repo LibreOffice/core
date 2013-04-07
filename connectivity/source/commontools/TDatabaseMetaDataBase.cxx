@@ -39,8 +39,8 @@ using namespace connectivity;
 ODatabaseMetaDataBase::ODatabaseMetaDataBase(const Reference< XConnection >& _rxConnection,const Sequence< PropertyValue >& _rInfo)
     : m_aConnectionInfo(_rInfo)
     ,m_isCatalogAtStart(false,sal_False)
-    ,m_sCatalogSeparator(false,::rtl::OUString())
-    ,m_sIdentifierQuoteString(false,::rtl::OUString())
+    ,m_sCatalogSeparator(false,OUString())
+    ,m_sIdentifierQuoteString(false,OUString())
     ,m_supportsCatalogsInTableDefinitions(false,sal_False)
     ,m_supportsSchemasInTableDefinitions(false,sal_False)
     ,m_supportsCatalogsInDataManipulation(false,sal_False)
@@ -90,7 +90,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
         Reference< XRow > xRow(xRet,UNO_QUERY);
         ::comphelper::SequenceAsHashMap aMap(m_aConnectionInfo);
         Sequence< Any > aTypeInfoSettings;
-        aTypeInfoSettings = aMap.getUnpackedValueOrDefault(::rtl::OUString("TypeInfoSettings"),aTypeInfoSettings);
+        aTypeInfoSettings = aMap.getUnpackedValueOrDefault(OUString("TypeInfoSettings"),aTypeInfoSettings);
 
         if ( xRow.is() )
         {
@@ -127,7 +127,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 catch(ParseError&)
                 {
                     ::connectivity::SharedResources aResources;
-                    const ::rtl::OUString sError( aResources.getResourceString(STR_FORMULA_WRONG));
+                    const OUString sError( aResources.getResourceString(STR_FORMULA_WRONG));
                     ::dbtools::throwGenericSQLException(sError,*this);
                 }
             }
@@ -169,41 +169,41 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getExportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getImportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getPrimaryKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getIndexInfo(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/,
         sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getBestRowIdentifier(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/, sal_Int32 /*scope*/,
         sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getCrossReference(
-        const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
-        const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
+        const Any& /*primaryCatalog*/, const OUString& /*primarySchema*/,
+        const OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
+        const OUString& /*foreignSchema*/, const OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
 }
@@ -214,21 +214,21 @@ Reference< XConnection > SAL_CALL ODatabaseMetaDataBase::getConnection(  ) throw
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getProcedureColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& /*procedureNamePattern*/, const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schemaPattern*/,
+        const OUString& /*procedureNamePattern*/, const OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getProcedures(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& /*procedureNamePattern*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schemaPattern*/,
+        const OUString& /*procedureNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getVersionColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
 }
@@ -239,14 +239,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getSchemas(  ) throw(SQL
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getColumnPrivileges(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/,
+        const OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTablePrivileges(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/) throw(SQLException, RuntimeException)
+        const Any& /*catalog*/, const OUString& /*schema*/, const OUString& /*table*/) throw(SQLException, RuntimeException)
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
 }
@@ -256,9 +256,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getCatalogs(  ) throw(SQ
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataBase::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataBase::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
-    return callImplMethod(m_sIdentifierQuoteString,::std::mem_fun_t< ::rtl::OUString ,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_getIdentifierQuoteString_throw));
+    return callImplMethod(m_sIdentifierQuoteString,::std::mem_fun_t< OUString ,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_getIdentifierQuoteString_throw));
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
@@ -266,9 +266,9 @@ sal_Bool SAL_CALL ODatabaseMetaDataBase::isCatalogAtStart(  ) throw(SQLException
     return callImplMethod(m_isCatalogAtStart,::std::mem_fun_t< sal_Bool,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_isCatalogAtStart_throw));
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataBase::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
-    return callImplMethod(m_sCatalogSeparator,::std::mem_fun_t< ::rtl::OUString,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_getCatalogSeparator_throw));
+    return callImplMethod(m_sCatalogSeparator,::std::mem_fun_t< OUString,ODatabaseMetaDataBase>(&ODatabaseMetaDataBase::impl_getCatalogSeparator_throw));
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataBase::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)

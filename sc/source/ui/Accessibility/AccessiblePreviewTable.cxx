@@ -159,7 +159,7 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (u
     return nRet;
 }
 
-rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sal_Int32 nRow )
+OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sal_Int32 nRow )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -167,10 +167,10 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
     if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
         throw lang::IndexOutOfBoundsException();
 
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -178,7 +178,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
     if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
         throw lang::IndexOutOfBoundsException();
 
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
@@ -566,20 +566,20 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePreviewTable::getAcce
 
 //=====  XServiceInfo  ====================================================
 
-rtl::OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewTable::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessiblePreviewTable");
+    return OUString("ScAccessiblePreviewTable");
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewTable::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.table.AccessibleTableView");
+    pNames[nOldSize] = OUString("com.sun.star.table.AccessibleTableView");
 
     return aSequence;
 }
@@ -605,14 +605,14 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
 //====  internal  =========================================================
 
-::rtl::OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-    return rtl::OUString(sDesc);
+    return OUString(sDesc);
 }
 
-::rtl::OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
+OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
     String sName(ScResId(STR_ACC_TABLE_NAME));
@@ -623,13 +623,13 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
 
         if ( mpTableInfo )
         {
-            rtl::OUString sCoreName;
+            OUString sCoreName;
             if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
                 sName.SearchAndReplaceAscii("%1", sCoreName);
         }
     }
 
-    return rtl::OUString(sName);
+    return OUString(sName);
 }
 
 Rectangle ScAccessiblePreviewTable::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

@@ -87,7 +87,7 @@ private :
     com::sun::star::uno::Reference< com::sun::star::awt::XSpinListener >    mxSpinListenerFormattedField0Pg1;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >      mxStatusDispatcher;
 
-    std::vector< std::vector< rtl::OUString > > maControlPages;
+    std::vector< std::vector< OUString > > maControlPages;
 
     void InitDialog();
     void InitRoadmap();
@@ -105,7 +105,7 @@ private :
 
     void ActivatePage( sal_Int16 nStep );
     void DeactivatePage( sal_Int16 nStep );
-    void InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const rtl::OUString& rLabel, const sal_Int32 nItemID );
+    void InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID );
 
 public :
 
@@ -122,7 +122,7 @@ public :
     void SwitchPage( sal_Int16 nNewStep );
     void UpdateControlStates( sal_Int16 nStep = -1 );
 
-    rtl::OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
+    OUString GetSelectedString( PPPOptimizerTokenEnum eListBox );
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >& GetStatusDispatcher() { return mxStatusDispatcher; };
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame>& GetFrame() { return mxFrame; };
     const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& GetComponentContext() { return mxMSF; };

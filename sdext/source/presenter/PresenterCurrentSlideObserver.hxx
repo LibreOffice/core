@@ -63,7 +63,7 @@ public:
     virtual void SAL_CALL slideTransitionEnded(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL hyperLinkClicked( const ::rtl::OUString& hyperLink ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAnimationListener
     virtual void SAL_CALL beginEvent( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& Node ) throw (::com::sun::star::uno::RuntimeException);

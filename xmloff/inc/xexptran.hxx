@@ -56,7 +56,7 @@ typedef ::std::vector< ImpSdXMLExpTransObj3DBase* > ImpSdXMLExpTransObj3DBaseLis
 class SdXMLImExTransform2D
 {
     ImpSdXMLExpTransObj2DBaseList   maList;
-    rtl::OUString                   msString;
+    OUString                   msString;
 
     void EmptyList();
 
@@ -70,8 +70,8 @@ public:
 
     bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans);
-    const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
-    void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    const OUString& GetExportString(const SvXMLUnitConverter& rConv);
+    void SetString(const OUString& rNew, const SvXMLUnitConverter& rConv);
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -79,13 +79,13 @@ public:
 class SdXMLImExTransform3D
 {
     ImpSdXMLExpTransObj3DBaseList   maList;
-    rtl::OUString                   msString;
+    OUString                   msString;
 
     void EmptyList();
 
 public:
     SdXMLImExTransform3D() {}
-    SdXMLImExTransform3D(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnitConverter& rConv);
     ~SdXMLImExTransform3D() { EmptyList(); }
 
     void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
@@ -94,15 +94,15 @@ public:
     bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B3DHomMatrix& rFullTrans);
     bool GetFullHomogenTransform(com::sun::star::drawing::HomogenMatrix& xHomMat);
-    const rtl::OUString& GetExportString(const SvXMLUnitConverter& rConv);
-    void SetString(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    const OUString& GetExportString(const SvXMLUnitConverter& rConv);
+    void SetString(const OUString& rNew, const SvXMLUnitConverter& rConv);
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExViewBox
 {
-    rtl::OUString               msString;
+    OUString               msString;
     sal_Int32                   mnX;
     sal_Int32                   mnY;
     sal_Int32                   mnW;
@@ -110,20 +110,20 @@ class SdXMLImExViewBox
 
 public:
     SdXMLImExViewBox(sal_Int32 nX = 0L, sal_Int32 nY = 0L, sal_Int32 nW = 1000L, sal_Int32 nH = 1000L);
-    SdXMLImExViewBox(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
+    SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverter& rConv);
 
     sal_Int32 GetX() const { return mnX; }
     sal_Int32 GetY() const { return mnY; }
     sal_Int32 GetWidth() const { return mnW; }
     sal_Int32 GetHeight() const { return mnH; }
-    const rtl::OUString& GetExportString();
+    const OUString& GetExportString();
 };
 
 //////////////////////////////////////////////////////////////////////////////
 
 class SdXMLImExPointsElement
 {
-    rtl::OUString               msString;
+    OUString               msString;
     com::sun::star::drawing::PointSequenceSequence  maPoly;
 
 public:
@@ -133,13 +133,13 @@ public:
         const com::sun::star::awt::Size& rObjectSize,
         // #96328#
         const bool bClosed = true);
-    SdXMLImExPointsElement(const rtl::OUString& rNew,
+    SdXMLImExPointsElement(const OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
         const SvXMLUnitConverter& rConv);
 
-    const rtl::OUString& GetExportString() const { return msString; }
+    const OUString& GetExportString() const { return msString; }
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly; }
 };
 
@@ -147,7 +147,7 @@ public:
 
 class SdXMLImExSvgDElement
 {
-    rtl::OUString                   msString;
+    OUString                   msString;
     const SdXMLImExViewBox&         mrViewBox;
     bool                            mbIsClosed;
     bool                            mbIsCurve;
@@ -159,7 +159,7 @@ class SdXMLImExSvgDElement
 
 public:
     SdXMLImExSvgDElement(const SdXMLImExViewBox& rViewBox, const SvXMLExport& rExport);
-    SdXMLImExSvgDElement(const rtl::OUString& rNew,
+    SdXMLImExSvgDElement(const OUString& rNew,
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
@@ -172,7 +172,7 @@ public:
         const com::sun::star::awt::Size& rObjectSize,
         bool bClosed = false);
 
-    const rtl::OUString& GetExportString() const { return msString; }
+    const OUString& GetExportString() const { return msString; }
     bool IsClosed() const { return mbIsClosed; }
     bool IsCurve() const { return mbIsCurve; }
     const com::sun::star::drawing::PointSequenceSequence& GetPointSequenceSequence() const { return maPoly.Coordinates; }

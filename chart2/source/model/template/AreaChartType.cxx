@@ -46,15 +46,15 @@ uno::Reference< util::XCloneable > SAL_CALL AreaChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL AreaChartType::getChartType()
+OUString SAL_CALL AreaChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_AREA;
 }
 
-uno::Sequence< ::rtl::OUString > AreaChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > AreaChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_AREA;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     return aServices;

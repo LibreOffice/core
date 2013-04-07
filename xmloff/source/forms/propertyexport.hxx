@@ -58,7 +58,7 @@ namespace xmloff
     class OPropertyExport
     {
     private:
-        DECLARE_STL_STDKEY_SET(::rtl::OUString, StringSet);
+        DECLARE_STL_STDKEY_SET(OUString, StringSet);
         StringSet       m_aRemainingProps;
             // see examinePersistence
 
@@ -75,8 +75,8 @@ namespace xmloff
                                 m_xPropertyState;
 
         // caching
-        ::rtl::OUString     m_sValueTrue;
-        ::rtl::OUString     m_sValueFalse;
+        OUString     m_sValueTrue;
+        OUString     m_sValueFalse;
 
     public:
         /** constructs an object capable of handling attributes for export
@@ -113,7 +113,7 @@ namespace xmloff
             <p>In this case you should call exportedProperty for every property you export yourself, so the property
             will be flagged as <em>already handled</em></p>
         */
-        void exportedProperty(const ::rtl::OUString& _rPropertyName)
+        void exportedProperty(const OUString& _rPropertyName)
             { m_aRemainingProps.erase(_rPropertyName); }
 
         /** add an attribute which is represented by a string property to the export context
@@ -129,7 +129,7 @@ namespace xmloff
         void exportStringPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const ::rtl::OUString& _rPropertyName
+            const OUString& _rPropertyName
         );
 
         /** add an attribute which is represented by a boolean property to the export context
@@ -147,7 +147,7 @@ namespace xmloff
         void exportBooleanPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const sal_Int8 _nBooleanAttributeFlags);
 
         /** add an attribute which is represented by a sal_Int16 property to the export context
@@ -166,7 +166,7 @@ namespace xmloff
         void exportInt16PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const sal_Int16 _nDefault);
 
         /** add an attribute which is represented by a sal_Int32 property to the export context
@@ -185,7 +185,7 @@ namespace xmloff
         void exportInt32PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const sal_Int32 _nDefault);
 
         /** add an attribute which is represented by a enum property to the export context
@@ -206,7 +206,7 @@ namespace xmloff
         void exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const SvXMLEnumMapEntry* _pValueMap,
             const sal_Int32 _nDefault,
             const sal_Bool _bVoidDefault = sal_False);
@@ -301,7 +301,7 @@ namespace xmloff
         void exportStringSequenceAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const sal_Char* _pAttributeName,
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const sal_Unicode _aQuoteCharacter = '"',
             const sal_Unicode _aListSeparator = ',');
 
@@ -311,7 +311,7 @@ namespace xmloff
             or whether the property is a dynamic property (i.e. added via an <code>XPropertyContainer</code>).
             So, take care when using the method - the heuristics is not applicable for all properties.</p>
         */
-        bool shouldExportProperty( const ::rtl::OUString& i_propertyName ) const;
+        bool shouldExportProperty( const OUString& i_propertyName ) const;
 
         /** tries to convert an arbitrary <type scope="com.sun:star.uno">Any</type> into an string
 
@@ -321,7 +321,7 @@ namespace xmloff
             @param  _rValue
                 the value to convert
         */
-        ::rtl::OUString implConvertAny(
+        OUString implConvertAny(
             const ::com::sun::star::uno::Any& _rValue);
 
         /**
@@ -341,20 +341,20 @@ namespace xmloff
         ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
 
 #ifdef DBG_UTIL
-                void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue);
-                void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue );
+                void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue);
+                void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue );
                 void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName, const sal_Char *pValue );
-                void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue);
+                void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue);
                 void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
-        inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
+        inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
-        inline void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue )
+        inline void AddAttribute( sal_uInt16 _nPrefix, const OUString& _rName, const OUString& _rValue )
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
         inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
             { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
-        inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue)
+        inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue); }
         inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _eValue); }
@@ -373,14 +373,14 @@ namespace xmloff
             @return sal_True, if the property exists and is of the correct type
         */
         void dbg_implCheckProperty(
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const ::com::sun::star::uno::Type* _pType);
 
 //      void dbg_implCheckProperty(
 //          const sal_Char* _rPropertyName,
 //          const ::com::sun::star::uno::Type* _pType)
 //      {
-//          dbg_implCheckProperty(::rtl::OUString::createFromAscii(_rPropertyName), _pType);
+//          dbg_implCheckProperty(OUString::createFromAscii(_rPropertyName), _pType);
 //      }
 #endif
     };
@@ -396,7 +396,7 @@ namespace xmloff
         dbg_implCheckProperty(name, NULL)
 
     #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name ) \
-        dbg_implCheckProperty( ::rtl::OUString::createFromAscii( name ), NULL )
+        dbg_implCheckProperty( OUString::createFromAscii( name ), NULL )
 #else
     #define DBG_CHECK_PROPERTY(name, type)
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)

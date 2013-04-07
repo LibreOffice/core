@@ -40,7 +40,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 
 #if (defined UNX)
@@ -76,7 +75,7 @@ void _cdecl main( int argc, char * argv[] )
                     Reference<XResultSet> xRes = xStmt->executeQuery(OUString("SELECT * FROM Tele"));
                     if(xRes.is())
                     {
-                        ::rtl::OUString aPat( "%s\t" );
+                        OUString aPat( "%s\t" );
                         Reference<XRow> xRow(xRes,UNO_QUERY);
                         Reference<XResultSetMetaData> xMeta = Reference<XResultSetMetaDataSupplier>(xRes,UNO_QUERY)->getMetaData();
                         for(sal_Int32 i=1;i<xMeta->getColumnCount();++i)

@@ -30,7 +30,7 @@ namespace fileaccess {
 
     struct equalOUString
     {
-        bool operator()( const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+        bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
         {
             return !!( rKey1 == rKey2 );
         }
@@ -39,7 +39,7 @@ namespace fileaccess {
 
     struct hashOUString
     {
-        size_t operator()( const rtl::OUString& rName ) const
+        size_t operator()( const OUString& rName ) const
         {
             return rName.hashCode();
         }
@@ -55,22 +55,22 @@ namespace fileaccess {
 
     // Returns true if dstUnqPath is a child from srcUnqPath or both are equal
 
-    extern sal_Bool isChild( const rtl::OUString& srcUnqPath,
-                                      const rtl::OUString& dstUnqPath );
+    extern sal_Bool isChild( const OUString& srcUnqPath,
+                                      const OUString& dstUnqPath );
 
 
     // Changes the prefix in name
-    extern rtl::OUString newName( const rtl::OUString& aNewPrefix,
-                                           const rtl::OUString& aOldPrefix,
-                                           const rtl::OUString& old_Name );
+    extern OUString newName( const OUString& aNewPrefix,
+                                           const OUString& aOldPrefix,
+                                           const OUString& old_Name );
 
     // returns the last part of the given url as title
-    extern rtl::OUString getTitle( const rtl::OUString& aPath );
+    extern OUString getTitle( const OUString& aPath );
 
     // returns the url without last part as parentname
     // In case aFileName is root ( file:/// ) root is returned
 
-    extern rtl::OUString getParentName( const rtl::OUString& aFileName );
+    extern OUString getParentName( const OUString& aFileName );
 
     /**
      *  special copy:
@@ -79,8 +79,8 @@ namespace fileaccess {
      *  osl::File::copy copies unchecked.
      */
 
-    extern osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
-                                            const rtl::OUString& strDestPath,
+    extern osl::FileBase::RC osl_File_copy( const OUString& strPath,
+                                            const OUString& strDestPath,
                                             sal_Bool test = false );
 
     /**
@@ -90,8 +90,8 @@ namespace fileaccess {
      *  osl::File::move moves unchecked
      */
 
-    extern osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
-                                            const rtl::OUString& strDestPath,
+    extern osl::FileBase::RC osl_File_move( const OUString& strPath,
+                                            const OUString& strDestPath,
                                             sal_Bool test = false );
 
     // This function implements the global exception handler of the file_ucp;
@@ -101,7 +101,7 @@ namespace fileaccess {
                                sal_Int32 minorCode,
                                const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                               const rtl::OUString& aUncPath,
+                               const OUString& aUncPath,
                                BaseContent* pContent,
                                bool isHandled = false);
                                    // the physical URL of the object

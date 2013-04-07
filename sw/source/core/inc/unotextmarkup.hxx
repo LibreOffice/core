@@ -52,7 +52,7 @@ public:
 
     // ::com::sun::star::text::XTextMarkup:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const ::rtl::OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > & xMarkupInfoContainer) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > & xMarkupInfoContainer) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::text::XMultiTextMarkup:
     virtual void SAL_CALL commitMultiTextMarkup( const ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextMarkupDescriptor >& aMarkups ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -80,11 +80,11 @@ public:
     SwXStringKeyMap();
 
     // ::com::sun::star::container::XStringKeyMap:
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue(const ::rtl::OUString & aKey) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::container::NoSuchElementException);
-    virtual ::sal_Bool SAL_CALL hasValue(const ::rtl::OUString & aKey) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertValue(const ::rtl::OUString & aKey, const ::com::sun::star::uno::Any & aValue) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getValue(const OUString & aKey) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::container::NoSuchElementException);
+    virtual ::sal_Bool SAL_CALL hasValue(const OUString & aKey) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertValue(const OUString & aKey, const ::com::sun::star::uno::Any & aValue) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException);
     virtual ::sal_Int32 SAL_CALL getCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
+    virtual OUString SAL_CALL getKeyByIndex(::sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
     virtual ::com::sun::star::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
 
 private:
@@ -93,7 +93,7 @@ private:
 
     virtual ~SwXStringKeyMap() {}
 
-    std::map< rtl::OUString, ::com::sun::star::uno::Any > maMap;
+    std::map< OUString, ::com::sun::star::uno::Any > maMap;
 };
 
 #endif

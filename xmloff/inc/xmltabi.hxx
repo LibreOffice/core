@@ -39,14 +39,14 @@ public:
     TYPEINFO();
 
     SvxXMLTabStopImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                const ::rtl::OUString& rLName,
+                                const OUString& rLName,
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~SvxXMLTabStopImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();

@@ -96,13 +96,13 @@ sal_Bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, STREAM_STD_READ );
             pStorage = xDualStorage;
         }
-        SvStream* pDocStream = pStorage->OpenSotStream( rtl::OUString("PowerPoint Document") , STREAM_STD_READ );
+        SvStream* pDocStream = pStorage->OpenSotStream( OUString("PowerPoint Document") , STREAM_STD_READ );
         if( pDocStream )
         {
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( rtl::OUString("EncryptedSummary" ) ) )
+            if ( pStorage->IsStream( OUString("EncryptedSummary" ) ) )
                 mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, OSL_LOG_PREFIX );
             else
             {
@@ -173,7 +173,7 @@ sal_Bool SdPPTFilter::Export()
                 if( mbShowProgress )
                     CreateStatusIndicator();
 
-                //rtl::OUString sBaseURI( "BaseURI");
+                //OUString sBaseURI( "BaseURI");
                 std::vector< PropertyValue > aProperties;
                 PropertyValue aProperty;
                 aProperty.Name = "BaseURI";

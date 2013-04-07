@@ -133,7 +133,6 @@
 #include <layouter.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /* IInterface */
 sal_Int32 SwDoc::acquire()

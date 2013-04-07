@@ -394,7 +394,7 @@ void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection&
 {
     sal_Int32 nX = -1, nY = -1, nHeight = -1, nWidth = -1;
 
-    ::rtl::OUString sComposedName,sTableName,sWindowName;
+    OUString sComposedName,sTableName,sWindowName;
     sal_Bool bShowAll = false;
 
     sComposedName = i_rTableWindowSettings.getOrDefault( "ComposedName", sComposedName );
@@ -440,7 +440,7 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
             aWindowData.put( "WindowHeight", static_cast<sal_Int32>((*aIter)->GetSize().Height()) );
             aWindowData.put( "ShowAll", (*aIter)->IsShowAll() );
 
-            const ::rtl::OUString sTableName( ::rtl::OUString( "Table" ) + ::rtl::OUString::valueOf( i ) );
+            const OUString sTableName( OUString( "Table" ) + OUString::valueOf( i ) );
             aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
         }
 
@@ -448,7 +448,7 @@ void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rV
     }
 }
 // -----------------------------------------------------------------------------
-TTableWindowData::value_type OJoinController::createTableWindowData(const ::rtl::OUString& _sComposedName,const ::rtl::OUString& _sTableName,const ::rtl::OUString& _sWindowName)
+TTableWindowData::value_type OJoinController::createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName)
 {
     OJoinDesignView* pView = getJoinView();
     if( pView )

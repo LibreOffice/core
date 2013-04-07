@@ -39,45 +39,45 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
 
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeException)
+OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeException)
 {
-    return rtl::OUString(MORK_DRIVER_IMPL_NAME);
+    return OUString(MORK_DRIVER_IMPL_NAME);
 }
 
 //------------------------------------------------------------------------------
-css::uno::Sequence< ::rtl::OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > aSNS(1);
-    aSNS[0] = ::rtl::OUString( "com.sun.star.sdbc.Driver");
+    css::uno::Sequence< OUString > aSNS(1);
+    aSNS[0] = OUString( "com.sun.star.sdbc.Driver");
     return aSNS;
 }
 
-rtl::OUString SAL_CALL MorkDriver::getImplementationName()
+OUString SAL_CALL MorkDriver::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL MorkDriver::supportsService(const rtl::OUString& serviceName)
+sal_Bool SAL_CALL MorkDriver::supportsService(const OUString& serviceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    css::uno::Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(serviceName); ++pSupported)
         ;
 
     return pSupported != pEnd;
 }
 
-css::uno::Sequence< rtl::OUString > MorkDriver::getSupportedServiceNames()
+css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
-    rtl::OUString const & url,
+    OUString const & url,
     css::uno::Sequence< css::beans::PropertyValue > const & info)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
@@ -91,7 +91,7 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     return xCon;
 }
 
-sal_Bool MorkDriver::acceptsURL(rtl::OUString const & url)
+sal_Bool MorkDriver::acceptsURL(OUString const & url)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::acceptsURL()" );
@@ -134,7 +134,7 @@ sal_Bool MorkDriver::acceptsURL(rtl::OUString const & url)
 }
 
 css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(
-    rtl::OUString const & url,
+    OUString const & url,
     css::uno::Sequence< css::beans::PropertyValue > const & info)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {

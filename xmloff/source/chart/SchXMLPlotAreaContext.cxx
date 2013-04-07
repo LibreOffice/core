@@ -64,7 +64,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using com::sun::star::uno::Reference;
 
 namespace
@@ -78,7 +77,7 @@ struct lcl_AxisHasCategories : public ::std::unary_function< SchXMLAxis, bool >
     }
 };
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const uno::Reference< chart2::XChartDocument > & xDoc )
+OUString lcl_ConvertRange( const OUString & rRange, const uno::Reference< chart2::XChartDocument > & xDoc )
 {
     OUString aResult = rRange;
     if(!xDoc.is())
@@ -108,7 +107,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
         if( xProp.is() )
         {
             drawing::CameraGeometry aCamGeo;
-            xProp->getPropertyValue( ::rtl::OUString( "D3DCameraGeometry" )) >>= aCamGeo;
+            xProp->getPropertyValue( OUString( "D3DCameraGeometry" )) >>= aCamGeo;
             maVRP.setX( aCamGeo.vrp.PositionX );
             maVRP.setY( aCamGeo.vrp.PositionY );
             maVRP.setZ( aCamGeo.vrp.PositionZ );
@@ -123,7 +122,7 @@ void SchXML3DSceneAttributesHelper::getCameraDefaultFromDiagram( const uno::Refe
     catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
         OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build
@@ -137,17 +136,17 @@ SchXML3DSceneAttributesHelper::~SchXML3DSceneAttributesHelper()
 
 SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     SchXMLImportHelper& rImpHelper,
-    SvXMLImport& rImport, const rtl::OUString& rLocalName,
-    const rtl::OUString& rXLinkHRefAttributeToIndicateDataProvider,
-    ::rtl::OUString& rCategoriesAddress,
-    ::rtl::OUString& rChartAddress,
+    SvXMLImport& rImport, const OUString& rLocalName,
+    const OUString& rXLinkHRefAttributeToIndicateDataProvider,
+    OUString& rCategoriesAddress,
+    OUString& rChartAddress,
     bool& rbHasRangeAtPlotArea,
     sal_Bool & rAllRangeAddressesAvailable,
     sal_Bool & rColHasLabels,
     sal_Bool & rRowHasLabels,
     chart::ChartDataRowSource & rDataRowSource,
     SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
-    const ::rtl::OUString& aChartTypeServiceName,
+    const OUString& aChartTypeServiceName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
@@ -199,36 +198,36 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         try
         {
             xProp->setPropertyValue(
-                    rtl::OUString( "HasXAxis" ), aFalseBool );
+                    OUString( "HasXAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasXAxisGrid" ), aFalseBool );
+                    OUString( "HasXAxisGrid" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasXAxisDescription" ), aFalseBool );
+                    OUString( "HasXAxisDescription" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasSecondaryXAxis" ), aFalseBool );
+                    OUString( "HasSecondaryXAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasSecondaryXAxisDescription" ), aFalseBool );
+                    OUString( "HasSecondaryXAxisDescription" ), aFalseBool );
 
             xProp->setPropertyValue(
-                    rtl::OUString( "HasYAxis" ), aFalseBool );
+                    OUString( "HasYAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasYAxisGrid" ), aFalseBool );
+                    OUString( "HasYAxisGrid" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasYAxisDescription" ), aFalseBool );
+                    OUString( "HasYAxisDescription" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasSecondaryYAxis" ), aFalseBool );
+                    OUString( "HasSecondaryYAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasSecondaryYAxisDescription" ), aFalseBool );
+                    OUString( "HasSecondaryYAxisDescription" ), aFalseBool );
 
             xProp->setPropertyValue(
-                    rtl::OUString( "HasZAxis" ), aFalseBool );
+                    OUString( "HasZAxis" ), aFalseBool );
             xProp->setPropertyValue(
-                    rtl::OUString( "HasZAxisDescription" ), aFalseBool );
+                    OUString( "HasZAxisDescription" ), aFalseBool );
 
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;
-            xProp->setPropertyValue( rtl::OUString( "DataRowSource" ), aAny );
+            xProp->setPropertyValue( OUString( "DataRowSource" ), aAny );
         }
         catch( const beans::UnknownPropertyException & )
         {
@@ -249,9 +248,9 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
@@ -306,12 +305,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 uno::Any aAny;
                 aAny <<= (sal_Bool)(mrColHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString( "DataSourceLabelsInFirstColumn" ),
+                    OUString( "DataSourceLabelsInFirstColumn" ),
                     aAny );
 
                 aAny <<= (sal_Bool)(mrRowHasLabels);
                 xDocProp->setPropertyValue(
-                    ::rtl::OUString( "DataSourceLabelsInFirstRow" ),
+                    OUString( "DataSourceLabelsInFirstRow" ),
                     aAny );
             }
             catch( const beans::UnknownPropertyException & )
@@ -341,13 +340,13 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     pPropStyleContext->FillPropertySet( xProp );
 
                     // get the data row source that was set without having data
-                    xProp->getPropertyValue( ::rtl::OUString( "DataRowSource" ))
+                    xProp->getPropertyValue( OUString( "DataRowSource" ))
                         >>= mrDataRowSource;
 
                     //lines on/off
                     //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
                     mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
-                        ::rtl::OUString("Lines"), pPropStyleContext, pStylesCtxt );
+                        OUString("Lines"), pPropStyleContext, pStylesCtxt );
 
                     //handle automatic position and size
                     m_aOuterPositioning.readAutomaticPositioningProperties( pPropStyleContext, pStylesCtxt );
@@ -356,12 +355,12 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                     if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan3_0( GetImport().GetModel() ) )
                     {
                         bool bIs3d = false;
-                        if( xProp.is() && ( xProp->getPropertyValue(::rtl::OUString("Dim3D")) >>= bIs3d ) &&
+                        if( xProp.is() && ( xProp->getPropertyValue(OUString("Dim3D")) >>= bIs3d ) &&
                             bIs3d )
                         {
                             if( maChartTypeServiceName == "com.sun.star.chart2.PieChartType" || maChartTypeServiceName == "com.sun.star.chart2.DonutChartType" )
                             {
-                                ::rtl::OUString aPropName( ::rtl::OUString("StartingAngle") );
+                                OUString aPropName( OUString("StartingAngle") );
                                 uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
                                 if( !aAStartingAngle.hasValue() )
                                     xProp->setPropertyValue( aPropName, uno::makeAny(sal_Int32(0)) ) ;
@@ -378,28 +377,28 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
     {
     try
     {
-        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(::rtl::OUString("SymbolType"));
-        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(::rtl::OUString("DataCaption"));
+        mrSeriesDefaultsAndStyles.maSymbolTypeDefault = xProp->getPropertyValue(OUString("SymbolType"));
+        mrSeriesDefaultsAndStyles.maDataCaptionDefault = xProp->getPropertyValue(OUString("DataCaption"));
 
-        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(::rtl::OUString("MeanValue"));
-        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(::rtl::OUString("RegressionCurves"));
+        mrSeriesDefaultsAndStyles.maMeanValueDefault = xProp->getPropertyValue(OUString("MeanValue"));
+        mrSeriesDefaultsAndStyles.maRegressionCurvesDefault = xProp->getPropertyValue(OUString("RegressionCurves"));
 
         bool bStacked = false;
-        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(::rtl::OUString("Stacked"));
+        mrSeriesDefaultsAndStyles.maStackedDefault = xProp->getPropertyValue(OUString("Stacked"));
         mrSeriesDefaultsAndStyles.maStackedDefault >>= bStacked;
-        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(::rtl::OUString("Percent"));
+        mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(OUString("Percent"));
         mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
-        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(::rtl::OUString("StackedBarsConnected"));
+        mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(OUString("StackedBarsConnected"));
 
         // deep
-        uno::Any aDeepProperty( xProp->getPropertyValue(::rtl::OUString("Deep")));
+        uno::Any aDeepProperty( xProp->getPropertyValue(OUString("Deep")));
         // #124488# old versions store a 3d area and 3D line deep chart with Deep==false => workaround for this
         if( ! (bStacked || mbPercentStacked ))
         {
             if( SchXMLTools::isDocumentGeneratedWithOpenOfficeOlderThan2_3( GetImport().GetModel() ) )
             {
                 bool bIs3d = false;
-                if( ( xProp->getPropertyValue(::rtl::OUString("Dim3D")) >>= bIs3d ) &&
+                if( ( xProp->getPropertyValue(OUString("Dim3D")) >>= bIs3d ) &&
                     bIs3d )
                 {
                     if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
@@ -411,13 +410,13 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         }
         mrSeriesDefaultsAndStyles.maDeepDefault = aDeepProperty;
 
-        xProp->getPropertyValue(::rtl::OUString("NumberOfLines")) >>= mnNumOfLinesProp;
-        xProp->getPropertyValue(::rtl::OUString("Volume")) >>= mbStockHasVolume;
+        xProp->getPropertyValue(OUString("NumberOfLines")) >>= mnNumOfLinesProp;
+        xProp->getPropertyValue(OUString("Volume")) >>= mbStockHasVolume;
     }
     catch( const uno::Exception & rEx )
     {
 #ifdef DBG_UTIL
-        rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
         OSL_TRACE("PlotAreaContext:EndElement(): Exception caught: %s", aBStr.getStr());
 #else
         (void)rEx; // avoid warning for pro build
@@ -442,13 +441,13 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue( rtl::OUString( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
+            xProp->setPropertyValue( OUString( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
     }
 }
 
 SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
@@ -570,7 +569,7 @@ void SchXMLPlotAreaContext::EndElement()
     if( xDiaProp.is())
     {
         sal_Bool bIsThreeDim = sal_False;
-        uno::Any aAny = xDiaProp->getPropertyValue( ::rtl::OUString( "Dim3D" ));
+        uno::Any aAny = xDiaProp->getPropertyValue( OUString( "Dim3D" ));
         aAny >>= bIsThreeDim;
 
         // set 3d scene attributes
@@ -585,13 +584,13 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( ::rtl::OUString(  "NumberOfLines" ),
+                xDiaProp->setPropertyValue( OUString(  "NumberOfLines" ),
                                             uno::makeAny( mnNumOfLinesProp ));
             }
             catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
                 OSL_TRACE( "Exception caught for property NumberOfLines: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning for pro build
@@ -605,13 +604,13 @@ void SchXMLPlotAreaContext::EndElement()
         {
             try
             {
-                xDiaProp->setPropertyValue( ::rtl::OUString(  "Volume" ),
+                xDiaProp->setPropertyValue( OUString(  "Volume" ),
                                             uno::makeAny( true ));
             }
             catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
                 OSL_TRACE("Exception caught for property Volume: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning for pro build
@@ -644,7 +643,7 @@ void SchXMLPlotAreaContext::EndElement()
 
 // ========================================
 
-SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const rtl::OUString& rLocalName,
+SchXMLDataPointContext::SchXMLDataPointContext(  SvXMLImport& rImport, const OUString& rLocalName,
                                                  ::std::list< DataRowPointStyle >& rStyleList,
                                                  const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::chart2::XDataSeries >& xSeries,
@@ -665,13 +664,13 @@ SchXMLDataPointContext::~SchXMLDataPointContext()
 void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    ::rtl::OUString sAutoStyleName;
+    OUString sAutoStyleName;
     sal_Int32 nRepeat = 1;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
@@ -734,7 +733,7 @@ awt::Rectangle SchXMLPositonAttributesHelper::getRectangle() const
     return awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );
 }
 
-bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {
     //returns true if the attribute was proccessed
     bool bReturn = true;
@@ -781,9 +780,9 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
     {
         //handle automatic position and size
         SchXMLTools::getPropertyFromContext(
-            ::rtl::OUString("AutomaticSize"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
+            OUString("AutomaticSize"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoSize;
         SchXMLTools::getPropertyFromContext(
-            ::rtl::OUString("AutomaticPosition"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
+            OUString("AutomaticPosition"), pPropStyleContext, pStylesCtxt ) >>= m_bAutoPosition;
     }
 }
 
@@ -792,7 +791,7 @@ void SchXMLPositonAttributesHelper::readAutomaticPositioningProperties( XMLPropS
 SchXMLCoordinateRegionContext::SchXMLCoordinateRegionContext(
           SvXMLImport& rImport
         , sal_uInt16 nPrefix
-        , const rtl::OUString& rLocalName
+        , const OUString& rLocalName
         , SchXMLPositonAttributesHelper& rPositioning )
         : SvXMLImportContext( rImport, nPrefix, rLocalName )
         , m_rPositioning( rPositioning )
@@ -810,9 +809,9 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
     }
@@ -824,7 +823,7 @@ SchXMLWallFloorContext::SchXMLWallFloorContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     uno::Reference< chart::XDiagram >& xDiagram,
     ContextType eContextType ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
@@ -843,12 +842,12 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
     if( mxWallFloorSupplier.is())
     {
         sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-        rtl::OUString sAutoStyleName;
+        OUString sAutoStyleName;
 
         for( sal_Int16 i = 0; i < nAttrCount; i++ )
         {
-            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-            rtl::OUString aLocalName;
+            OUString sAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
@@ -887,7 +886,7 @@ SchXMLStockContext::SchXMLStockContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     uno::Reference< chart::XDiagram >& xDiagram,
     ContextType eContextType ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
@@ -906,12 +905,12 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
     if( mxStockPropProvider.is())
     {
         sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-        rtl::OUString sAutoStyleName;
+        OUString sAutoStyleName;
 
         for( sal_Int16 i = 0; i < nAttrCount; i++ )
         {
-            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-            rtl::OUString aLocalName;
+            OUString sAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
@@ -957,7 +956,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
 static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
                                const uno::Reference< beans::XPropertySet > &xBarProp,
-                               const rtl::OUString &aXMLRange,
+                               const OUString &aXMLRange,
                                bool bPositiveValue, bool bYError,
                                tSchXMLLSequencesPerIndex& rSequences)
 {
@@ -967,7 +966,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     assert( xDataSink.is() && xDataSource.is() && xDataProvider.is() );
 
-    rtl::OUString aRange(lcl_ConvertRange(aXMLRange,xDoc));
+    OUString aRange(lcl_ConvertRange(aXMLRange,xDoc));
 
     uno::Reference< chart2::data::XDataSequence > xNewSequence(
         xDataProvider->createDataSequenceByRangeRepresentation( aRange ));
@@ -976,7 +975,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
     {
         SchXMLTools::setXMLRangePropertyAtDataSequence(xNewSequence,aXMLRange);
 
-        rtl::OUStringBuffer aRoleBuffer("error-bars-");
+        OUStringBuffer aRoleBuffer("error-bars-");
         if( bYError )
             aRoleBuffer.append( sal_Unicode( 'y' ));
         else
@@ -989,7 +988,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         else
             aRoleBuffer = aRoleBuffer.appendAscii( "negative" );
 
-        rtl::OUString aRole = aRoleBuffer.makeStringAndClear();
+        OUString aRole = aRoleBuffer.makeStringAndClear();
 
         Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
 
@@ -1019,8 +1018,8 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
-    const rtl::OUString &rSeriesStyleName,
+    const OUString& rLocalName,
+    const OUString &rSeriesStyleName,
     ::std::list< DataRowPointStyle >& rStyleList,
     const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
@@ -1159,15 +1158,15 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
 void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    ::rtl::OUString sAutoStyleName;
-    rtl::OUString aPosRange;
-    rtl::OUString aNegRange;
+    OUString sAutoStyleName;
+    OUString aPosRange;
+    OUString aNegRange;
     bool bYError = true;    /// Default errorbar, to be backward compatible with older files!
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
@@ -1246,7 +1245,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 
 SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
@@ -1271,7 +1270,7 @@ SchXMLEquationContext::SchXMLEquationContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::chart2::XDataSeries >& xSeries,
     const awt::Size & rChartSize,
@@ -1302,9 +1301,9 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
         sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
@@ -1337,7 +1336,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFact.is())
             xEqProp.set( xFact->createInstance(
-                             ::rtl::OUString(  "com.sun.star.chart2.RegressionEquation" )), uno::UNO_QUERY );
+                             OUString(  "com.sun.star.chart2.RegressionEquation" )), uno::UNO_QUERY );
         if( xEqProp.is())
         {
             if( !sAutoStyleName.isEmpty() )

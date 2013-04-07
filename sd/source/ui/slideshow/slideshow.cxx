@@ -57,7 +57,6 @@
 using ::com::sun::star::presentation::XSlideShowController;
 using ::com::sun::star::container::XIndexAccess;
 using ::sd::framework::FrameworkHelper;
-using ::rtl::OUString;
 using ::com::sun::star::awt::XWindow;
 using namespace ::sd;
 using namespace ::cppu;
@@ -69,7 +68,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::drawing::framework;
 
-extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
+extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 
 namespace {
@@ -831,7 +830,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
 
                         uno::Reference< frame::XDispatch > xDispatch(
                             xProvider->queryDispatch(
-                                aURL, ::rtl::OUString(), 0));
+                                aURL, OUString(), 0));
                         if( xDispatch.is() )
                         {
                             xDispatch->dispatch(aURL,

@@ -52,7 +52,7 @@ class OSQLMessageBox : public ButtonDialog
     FixedImage      m_aInfoImage;
     FixedText       m_aTitle;
     FixedText       m_aMessage;
-    ::rtl::OUString m_sHelpURL;
+    OUString m_sHelpURL;
 
     ::std::auto_ptr< SQLMessageBox_Impl >   m_pImpl;
 
@@ -77,7 +77,7 @@ public:
         Window* _pParent,
         const dbtools::SQLExceptionInfo& _rException,
         WinBits _nStyle = WB_OK | WB_DEF_OK,
-        const ::rtl::OUString& _rHelpURL = ::rtl::OUString()
+        const OUString& _rHelpURL = OUString()
     );
 
     /** display a database related error message

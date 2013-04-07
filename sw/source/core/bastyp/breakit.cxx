@@ -95,7 +95,7 @@ void SwBreakIt::_GetForbidden( const LanguageType aLang )
     m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
 }
 
-sal_uInt16 SwBreakIt::GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 nPos ) const
+sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rTxt, sal_Int32 nPos ) const
 {
     createBreakIterator();
     sal_uInt16 nScript = i18n::ScriptType::WEAK;
@@ -137,7 +137,7 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 
     return nScript;
 }
 
-sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
+sal_uInt16 SwBreakIt::GetAllScriptsOfText( const OUString& rTxt ) const
 {
     const sal_uInt16 coAllScripts = ( SCRIPTTYPE_LATIN |
                                       SCRIPTTYPE_ASIAN |
@@ -170,7 +170,7 @@ sal_uInt16 SwBreakIt::GetAllScriptsOfText( const rtl::OUString& rTxt ) const
     return nRet;
 }
 
-sal_Int32 SwBreakIt::getGraphemeCount(const rtl::OUString& rText,
+sal_Int32 SwBreakIt::getGraphemeCount(const OUString& rText,
                                       sal_Int32 nStart, sal_Int32 nEnd) const
 {
     sal_Int32 nGraphemeCount = 0;

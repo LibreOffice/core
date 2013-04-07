@@ -463,7 +463,7 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        const ::rtl::OUString eType = m_pImpl->getDatasourceType(*_pItems);
+        const OUString eType = m_pImpl->getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
         const FeatureSet& rFeatures( aMeta.getFeatureSet() );
@@ -489,7 +489,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------
-    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const ::rtl::OUString& _sURL )
+    bool AdvancedSettingsDialog::doesHaveAnyAdvancedSettings( const OUString& _sURL )
     {
         DataSourceMetaData aMeta( _sURL );
         const FeatureSet& rFeatures( aMeta.getFeatureSet() );
@@ -556,7 +556,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
+    OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
@@ -568,7 +568,7 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    void AdvancedSettingsDialog::setTitle(const ::rtl::OUString& _sTitle)
+    void AdvancedSettingsDialog::setTitle(const OUString& _sTitle)
     {
         SetText(_sTitle);
     }

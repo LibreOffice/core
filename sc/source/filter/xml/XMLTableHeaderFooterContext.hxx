@@ -40,12 +40,12 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::sheet::XHeaderFooterContent > xHeaderFooterContent;
 
-    const ::rtl::OUString   sOn;
-    const ::rtl::OUString   sShareContent;
-    const ::rtl::OUString   sContent;
-    const ::rtl::OUString   sContentLeft;
-    const ::rtl::OUString   sEmpty;
-    rtl::OUString           sCont;
+    const OUString   sOn;
+    const OUString   sShareContent;
+    const OUString   sContent;
+    const OUString   sContentLeft;
+    const OUString   sEmpty;
+    OUString           sCont;
 
     bool    bDisplay;
     bool    bLeft;
@@ -57,7 +57,7 @@ public:
     TYPEINFO();
 
     XMLTableHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const ::com::sun::star::uno::Reference <
@@ -68,7 +68,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();
@@ -86,7 +86,7 @@ public:
     TYPEINFO();
 
     XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             com::sun::star::uno::Reference< com::sun::star::text::XTextCursor >& xCursor );
@@ -95,7 +95,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();

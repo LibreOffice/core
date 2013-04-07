@@ -76,18 +76,18 @@ public:
     /**
      * @descr   Set svg path command,L for line,M for move,...
      */
-    void    SetCommand(rtl::OUString cmd);
+    void    SetCommand(OUString cmd);
 
     /**
      * @descr   Set svg path point.
      */
     void    AddPoint(XFPoint pt);
 
-    rtl::OUString ToString();
+    OUString ToString();
 
     friend class XFDrawPath;
 private:
-    rtl::OUString   m_strCommand;
+    OUString   m_strCommand;
     std::vector<XFPoint>    m_aPoints;
 };
 
@@ -127,7 +127,7 @@ private:
     std::vector<XFSvgPathEntry> m_aPaths;
 };
 
-inline void XFSvgPathEntry::SetCommand(rtl::OUString cmd)
+inline void XFSvgPathEntry::SetCommand(OUString cmd)
 {
     m_strCommand = cmd;
 }

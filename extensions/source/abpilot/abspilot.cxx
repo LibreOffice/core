@@ -317,7 +317,7 @@ namespace abp
                 OSL_FAIL( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
                 return;
         }
-        const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
+        const OUString sGuess = OUString::createFromAscii( pGuess );
         if ( rTableNames.end() != rTableNames.find( sGuess ) )
             getSettings().sSelectedTable = sGuess;
     }

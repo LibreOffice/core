@@ -122,7 +122,7 @@ void SfxViewFrame::UpdateTitle()
     DBG_CHKTHIS(SfxViewFrame, 0);
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
-    pImp->aFactoryName = rtl::OUString::createFromAscii(rFact.GetShortName());
+    pImp->aFactoryName = OUString::createFromAscii(rFact.GetShortName());
 
     SfxObjectShell *pObjSh = GetObjectShell();
     if ( !pObjSh )
@@ -221,11 +221,11 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             }
 
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, GetPool() );
-            String aFact = rtl::OUString("private:factory/");
+            String aFact = OUString("private:factory/");
             aFact += aFactName;
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFact ) );
             aReq.AppendItem( SfxFrameItem( SID_DOCFRAME, &GetFrame() ) );
-            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString( "_blank" ) ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString( "_blank" ) ) );
             SFX_APP()->ExecuteSlot( aReq );
             const SfxViewFrameItem* pItem = PTR_CAST( SfxViewFrameItem, aReq.GetReturnValue() );
             if ( pItem )
@@ -298,7 +298,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
                 if ( pImp->aFactoryName.Len() )
                 {
-                    String aFact = rtl::OUString("private:factory/");
+                    String aFact = OUString("private:factory/");
                     aFact += pImp->aFactoryName;
                     rSet.Put( SfxStringItem( nWhich, aFact ) );
                 }

@@ -224,11 +224,11 @@ public:
 // *** byte string import operations *** --------------------------------------
 
     /** Reads and returns a zero terminated byte string and decreases a stream counter. */
-    static rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
+    static OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft);
     /** Reads and returns a zero terminated byte string and decreases a stream counter. */
-    inline static rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
+    inline static OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, sal_Int32& rnBytesLeft, rtl_TextEncoding eTextEnc)
     {
-        return rtl::OStringToOUString(read_zeroTerminated_uInt8s_ToOString(rStrm, rnBytesLeft), eTextEnc);
+        return OStringToOUString(read_zeroTerminated_uInt8s_ToOString(rStrm, rnBytesLeft), eTextEnc);
     }
 
     /** Appends a zero terminated byte string. */
@@ -273,7 +273,7 @@ typedef ::std::vector< sal_Int16 >                  ScfInt16Vec;
 typedef ::std::vector< sal_uInt16 >                 ScfUInt16Vec;
 typedef ::std::vector< sal_Int32 >                  ScfInt32Vec;
 typedef ::std::vector< sal_uInt32 >                 ScfUInt32Vec;
-typedef ::std::vector< ::rtl::OUString >            ScfStringVec;
+typedef ::std::vector< OUString >            ScfStringVec;
 
 // ----------------------------------------------------------------------------
 

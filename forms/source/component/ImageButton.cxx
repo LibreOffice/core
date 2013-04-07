@@ -84,7 +84,7 @@ StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_IMAGEBUTTON;
     return aSupported;
 }
@@ -95,14 +95,14 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
         DECL_PROP1(BUTTONTYPE,          FormButtonType,     BOUND);
         DECL_PROP1(DISPATCHURLINTERNAL, sal_Bool,           BOUND);
-        DECL_PROP1(TARGET_URL,          ::rtl::OUString,    BOUND);
-        DECL_PROP1(TARGET_FRAME,        ::rtl::OUString,    BOUND);
+        DECL_PROP1(TARGET_URL,          OUString,    BOUND);
+        DECL_PROP1(TARGET_FRAME,        OUString,    BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_IMAGEBUTTON;   // old (non-sun) name for compatibility !
 }
@@ -116,7 +116,7 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     _rxOutStream->writeShort(0x0003);
     _rxOutStream->writeShort((sal_uInt16)m_eButtonType);
 
-    ::rtl::OUString sTmp(INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS));
+    OUString sTmp(INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS));
     _rxOutStream << sTmp;
     _rxOutStream << m_sTargetFrame;
     writeHelpTextCompatibly(_rxOutStream);
@@ -156,8 +156,8 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         default :
             OSL_FAIL("OImageButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
-            m_sTargetURL = ::rtl::OUString();
-            m_sTargetFrame = ::rtl::OUString();
+            m_sTargetURL = OUString();
+            m_sTargetFrame = OUString();
             break;
     }
 }
@@ -186,7 +186,7 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_IMAGEBUTTON;
     return aSupported;
 }

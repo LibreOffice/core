@@ -40,7 +40,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -159,7 +158,7 @@ namespace chart
 PieChartTypeTemplate::PieChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
+    const OUString & rServiceName,
     chart2::PieChartOffsetMode eMode,
     bool bRings            /* = false */,
     sal_Int32 nDim         /* = 2 */    ) :
@@ -620,9 +619,9 @@ void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram 
 
 // ----------------------------------------
 
-uno::Sequence< ::rtl::OUString > PieChartTypeTemplate::getSupportedServiceNames_Static()
+uno::Sequence< OUString > PieChartTypeTemplate::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;

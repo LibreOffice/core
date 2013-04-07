@@ -82,7 +82,7 @@ public:
     /** This method is part of the object construction.  It HAS to be called
         after the constructor has created a new object.
     */
-    virtual void LateInit (const ::rtl::OUString& rsDefaultView);
+    virtual void LateInit (const OUString& rsDefaultView);
 
     ::boost::shared_ptr<ViewShellManager> GetViewShellManager (void) const;
 
@@ -226,7 +226,7 @@ public:
 
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
-    ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const;
+    OUString RetrieveLabelFromCommand( const OUString& aCmdURL ) const;
 
 protected:
     osl::Mutex maMutex;
@@ -247,7 +247,7 @@ private:
         we check that the right type is active and change again if that is
         not the case because something went wrong.
     */
-    ::rtl::OUString GetInitialViewShellType (void);
+    OUString GetInitialViewShellType (void);
 };
 
 } // end of namespace sd

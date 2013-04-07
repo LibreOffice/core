@@ -32,11 +32,6 @@
 #include "rtl/bootstrap.hxx"
 
 using ::rtl::Bootstrap;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 namespace psp {
 
@@ -166,7 +161,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     #ifdef SYSTEM_PPD_DIR
     if( pSubDir && rtl_str_compare( pSubDir, PRINTER_PPDDIR ) == 0 )
     {
-        rPathList.push_back( rtl::OStringToOUString( rtl::OString( SYSTEM_PPD_DIR ), RTL_TEXTENCODING_UTF8 ) );
+        rPathList.push_back( OStringToOUString( OString( SYSTEM_PPD_DIR ), RTL_TEXTENCODING_UTF8 ) );
     }
     #endif
 
@@ -360,7 +355,7 @@ void psp::normPath( OString& rPath )
     // double slashes and slash at end are probably
     // removed by realpath anyway, but since this runs
     // on many different platforms let's play it safe
-    rtl::OString aPath = rPath.replaceAll("//", "/");
+    OString aPath = rPath.replaceAll("//", "/");
 
     if( !aPath.isEmpty() && aPath[aPath.getLength()-1] == '/' )
         aPath = aPath.copy(0, aPath.getLength()-1);

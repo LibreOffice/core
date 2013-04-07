@@ -33,7 +33,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const ::rtl::OUString& rLocalName,
+                  const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
@@ -57,11 +57,11 @@ private:
 public:
     SvXMLWordListContext ( SvXMLAutoCorrectImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLWordListContext ( void );
@@ -74,7 +74,7 @@ private:
 public:
     SvXMLWordContext ( SvXMLAutoCorrectImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLWordContext ( void );
@@ -88,7 +88,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const ::rtl::OUString& rLocalName,
+                  const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
@@ -108,11 +108,11 @@ private:
 public:
     SvXMLExceptionListContext ( SvXMLExceptionListImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLExceptionListContext ( void );
@@ -125,7 +125,7 @@ private:
 public:
     SvXMLExceptionContext ( SvXMLExceptionListImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SvXMLExceptionContext ( void );

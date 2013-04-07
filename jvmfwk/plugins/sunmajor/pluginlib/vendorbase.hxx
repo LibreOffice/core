@@ -121,7 +121,7 @@ public:
        it will be discarded by the caller.
     */
     virtual bool initialize(
-        std::vector<std::pair<rtl::OUString, rtl::OUString> > props);
+        std::vector<std::pair<OUString, OUString> > props);
 
     /* returns relative file URLs to the runtime library.
        For example         "/bin/client/jvm.dll"
@@ -130,11 +130,11 @@ public:
 
     virtual char const* const* getLibraryPaths(int* size);
 
-    virtual const rtl::OUString & getVendor() const;
-    virtual const rtl::OUString & getVersion() const;
-    virtual const rtl::OUString & getHome() const;
-    virtual const rtl::OUString & getRuntimeLibrary() const;
-    virtual const rtl::OUString & getLibraryPaths() const;
+    virtual const OUString & getVendor() const;
+    virtual const OUString & getVersion() const;
+    virtual const OUString & getHome() const;
+    virtual const OUString & getRuntimeLibrary() const;
+    virtual const OUString & getLibraryPaths() const;
     virtual bool supportsAccessibility() const;
     /* determines if prior to running java something has to be done,
        like setting the LD_LIBRARY_PATH. This implementation checks
@@ -156,22 +156,22 @@ public:
       @throw
       MalformedVersionException if the version string was not recognized.
      */
-    virtual int compareVersions(const rtl::OUString& sSecond) const;
+    virtual int compareVersions(const OUString& sSecond) const;
 
 protected:
 
-    rtl::OUString m_sVendor;
-    rtl::OUString m_sVersion;
-    rtl::OUString m_sHome;
-    rtl::OUString m_sRuntimeLibrary;
-    rtl::OUString m_sLD_LIBRARY_PATH;
+    OUString m_sVendor;
+    OUString m_sVersion;
+    OUString m_sHome;
+    OUString m_sRuntimeLibrary;
+    OUString m_sLD_LIBRARY_PATH;
     bool m_bAccessibility;
 
 
     typedef rtl::Reference<VendorBase> (* createInstance_func) ();
     friend rtl::Reference<VendorBase> createInstance(
         createInstance_func pFunc,
-        std::vector<std::pair<rtl::OUString, rtl::OUString> > properties);
+        std::vector<std::pair<OUString, OUString> > properties);
 };
 
 }

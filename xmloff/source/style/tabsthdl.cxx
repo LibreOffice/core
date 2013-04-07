@@ -70,12 +70,12 @@ bool XMLTabStopPropHdl::equals( const uno::Any& r1, const uno::Any& r2 ) const
     return bEqual;
 }
 
-sal_Bool XMLTabStopPropHdl::importXML( const ::rtl::OUString&, ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
+sal_Bool XMLTabStopPropHdl::importXML( const OUString&, ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
 {
     return sal_False;
 }
 
-sal_Bool XMLTabStopPropHdl::exportXML( ::rtl::OUString&, const ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
+sal_Bool XMLTabStopPropHdl::exportXML( OUString&, const ::com::sun::star::uno::Any&, const SvXMLUnitConverter& ) const
 {
     return sal_False;
 }

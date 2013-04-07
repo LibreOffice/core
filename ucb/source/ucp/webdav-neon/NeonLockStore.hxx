@@ -78,7 +78,7 @@ public:
 
     void registerSession( HttpSession * pHttpSession );
 
-    NeonLock * findByUri( rtl::OUString const & rUri );
+    NeonLock * findByUri( OUString const & rUri );
 
     void addLock( NeonLock * pLock,
                   rtl::Reference< NeonSession > const & xSession,

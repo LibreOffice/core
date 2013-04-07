@@ -72,7 +72,7 @@ namespace dbaccess
                 ->onDocumentInitialized has been called
         */
         void    notifyDocumentEvent(
-                    const ::rtl::OUString& _EventName,
+                    const OUString& _EventName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _rxViewController = NULL,
                     const ::com::sun::star::uno::Any& _Supplement = ::com::sun::star::uno::Any()
                 );
@@ -85,7 +85,7 @@ namespace dbaccess
                 the mutex is locked
         */
         void    notifyDocumentEventAsync(
-                    const ::rtl::OUString& _EventName,
+                    const OUString& _EventName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController = NULL,
                     const ::com::sun::star::uno::Any& _Supplement = ::com::sun::star::uno::Any()
                 );
@@ -103,7 +103,7 @@ namespace dbaccess
                     const ::com::sun::star::uno::Any& _rSupplement = ::com::sun::star::uno::Any()
                 )
         {
-            notifyDocumentEvent( ::rtl::OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
+            notifyDocumentEvent( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
         }
 
         /** notifies a document event to all registered listeners, asynchronously
@@ -119,7 +119,7 @@ namespace dbaccess
                     const ::com::sun::star::uno::Any& _rSupplement = ::com::sun::star::uno::Any()
                 )
         {
-            notifyDocumentEventAsync( ::rtl::OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
+            notifyDocumentEventAsync( OUString::createFromAscii( _pAsciiEventName ), _rxViewController, _rSupplement );
         }
 
     private:

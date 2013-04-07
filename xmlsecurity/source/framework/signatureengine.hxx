@@ -82,7 +82,7 @@ protected:
      * the m_vUris is used to hold the Uri strings, and the m_vXInputStreams is used
      * to hold corresponding binded XInputStream interface.
      */
-    std::vector< rtl::OUString > m_vUris;
+    std::vector< OUString > m_vUris;
     std::vector< com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream > > m_vXInputStreams;
 
@@ -115,12 +115,12 @@ public:
 
     /* XUriBinding */
     virtual void SAL_CALL setUriBinding(
-        const rtl::OUString& uri,
+        const OUString& uri,
         const com::sun::star::uno::Reference<
             com::sun::star::io::XInputStream >& aInputStream )
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-        SAL_CALL getUriBinding( const rtl::OUString& uri )
+        SAL_CALL getUriBinding( const OUString& uri )
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 };
 

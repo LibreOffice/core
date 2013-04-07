@@ -142,7 +142,7 @@ namespace sdr
             // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
             // and/or BoundRect
             const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
-            const rtl::OUString& rURL(GetSdrMediaObj().getURL());
+            const OUString& rURL(GetSdrMediaObj().getURL());
             const sal_uInt32 nPixelBorder(4L);
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
                 new drawinglayer::primitive2d::MediaPrimitive2D(

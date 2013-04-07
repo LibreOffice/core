@@ -42,8 +42,8 @@ using namespace ::com::sun::star::accessibility;
 
 ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
-        EditView* pEditView, Window* pWin, const rtl::OUString& rName,
-        const rtl::OUString& rDescription, EditObjectType eObjectType)
+        EditView* pEditView, Window* pWin, const OUString& rName,
+        const OUString& rDescription, EditObjectType eObjectType)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TEXT_FRAME),
     mpTextHelper(NULL),
@@ -228,20 +228,20 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleEditObject::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
 //    OSL_FAIL("Should never be called, because is set in the constructor.")
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleEditObject::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
     OSL_FAIL("Should never be called, because is set in the constructor.");
-    return rtl::OUString();
+    return OUString();
 }
 
     ///=====  XAccessibleEventBroadcaster  =====================================
@@ -272,10 +272,10 @@ void SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
+OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleEditObject");
+    return OUString("ScAccessibleEditObject");
 }
 
 //=====  XTypeProvider  =======================================================

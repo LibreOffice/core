@@ -40,7 +40,6 @@
 //  Defines
 //_________________________________________________________________________________________________________________
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 
 namespace framework

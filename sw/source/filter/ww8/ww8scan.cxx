@@ -1903,7 +1903,7 @@ Err:
 
 String read_uInt8_BeltAndBracesString(SvStream& rStrm, rtl_TextEncoding eEnc)
 {
-    rtl::OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
+    OUString aRet = read_lenPrefixed_uInt8s_ToOUString<sal_uInt8>(rStrm, eEnc);
     rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
     return aRet;
 }
@@ -3847,8 +3847,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     rArray.push_back(read_uInt16_PascalString(rStrm));
                 else
                 {
-                    rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
-                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
+                    OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
+                    rArray.push_back(OStringToOUString(aTmp, eCS));
                 }
 
                 // Skip the extra data
@@ -3878,8 +3878,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                         pValueArray->push_back(read_uInt16_PascalString(rStrm));
                     else
                     {
-                        rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
-                        pValueArray->push_back(rtl::OStringToOUString(aTmp, eCS));
+                        OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(rStrm);
+                        pValueArray->push_back(OStringToOUString(aTmp, eCS));
                     }
                 }
             }
@@ -3904,9 +3904,9 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 ++nRead;
                 if (nBChar)
                 {
-                    rtl::OString aTmp = read_uInt8s_ToOString(rStrm, nBChar);
+                    OString aTmp = read_uInt8s_ToOString(rStrm, nBChar);
                     nRead += aTmp.getLength();
-                    rArray.push_back(rtl::OStringToOUString(aTmp, eCS));
+                    rArray.push_back(OStringToOUString(aTmp, eCS));
                 }
                 else
                     rArray.push_back(aEmptyStr);
@@ -4146,9 +4146,9 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     return bFound ? aBookNames[i] : aEmptyStr;
 }
 
-rtl::OUString WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggestedName)
+OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
 {
-    rtl::OUString aRet(rSuggestedName.isEmpty() ? rtl::OUString("Unnamed") : rSuggestedName);
+    OUString aRet(rSuggestedName.isEmpty() ? OUString("Unnamed") : rSuggestedName);
     size_t i = 0;
     while (i < aBookNames.size())
     {
@@ -4158,7 +4158,7 @@ rtl::OUString WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggest
             sal_Int32 p = len - 1;
             while (p > 0 && aRet[p] >= '0' && aRet[p] <= '9')
                 --p;
-            aRet = aRet.copy(0, p+1) + rtl::OUString::valueOf(nBookmarkId++);
+            aRet = aRet.copy(0, p+1) + OUString::valueOf(nBookmarkId++);
             i = 0; // start search from beginning
         }
         else

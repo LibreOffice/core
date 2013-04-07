@@ -48,7 +48,7 @@ using namespace ::rtl;
 class SfxModelessDialog_Impl : public SfxListener
 {
 public:
-    rtl::OString aWinState;
+    OString aWinState;
     SfxChildWindow* pMgr;
     sal_Bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -72,7 +72,7 @@ void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 class SfxFloatingWindow_Impl : public SfxListener
 {
 public:
-    rtl::OString aWinState;
+    OString aWinState;
     SfxChildWindow* pMgr;
     sal_Bool            bConstructed;
     Timer           aMoveTimer;
@@ -120,7 +120,7 @@ void SfxModalDialog::GetDialogData_Impl()
     if ( aDlgOpt.Exists() )
     {
         // load settings
-        SetWindowState( rtl::OUStringToOString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState( OUStringToOString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
         Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )
@@ -153,7 +153,7 @@ SfxModalDialog::SfxModalDialog(Window* pParent, const ResId &rResId )
     init();
 }
 
-SfxModalDialog::SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+SfxModalDialog::SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
     nUniqId(0), //todo
     pInputSet(0),
@@ -332,8 +332,8 @@ SfxModelessDialog::SfxModelessDialog(SfxBindings *pBindinx,
 }
 
 SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
-    SfxChildWindow *pCW, Window *pParent, const rtl::OString& rID,
-    const rtl::OUString& rUIXMLDescription)
+    SfxChildWindow *pCW, Window *pParent, const OString& rID,
+    const OUString& rUIXMLDescription)
     : ModelessDialog(pParent, rID, rUIXMLDescription)
 {
     Init(pBindinx, pCW);
@@ -368,7 +368,7 @@ long SfxModelessDialog::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        rtl::OString sHelpId;
+        OString sHelpId;
         while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();
@@ -466,7 +466,7 @@ long SfxFloatingWindow::Notify( NotifyEvent& rEvt )
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
         Window* pWindow = rEvt.GetWindow();
-        rtl::OString sHelpId;
+        OString sHelpId;
         while ( sHelpId.isEmpty() && pWindow )
         {
             sHelpId = pWindow->GetHelpId();

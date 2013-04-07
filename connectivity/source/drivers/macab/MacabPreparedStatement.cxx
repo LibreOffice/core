@@ -54,7 +54,7 @@ void MacabPreparedStatement::setMacabFields() const throw(SQLException)
     if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(
+        const OUString sError( aResources.getResourceString(
                 STR_INVALID_COLUMN_SELECTION
              ) );
         ::dbtools::throwGenericSQLException(sError,NULL);
@@ -67,12 +67,12 @@ void MacabPreparedStatement::resetParameters() const throw(SQLException)
     m_nParameterIndex = 0;
 }
 // -------------------------------------------------------------------------
-void MacabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const throw(SQLException)
+void MacabPreparedStatement::getNextParameter(OUString &rParameter) const throw(SQLException)
 {
     if (m_nParameterIndex >= (sal_Int32) (m_aParameterRow->get()).size())
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(
+        const OUString sError( aResources.getResourceString(
                 STR_INVALID_PARA_COUNT
              ) );
         ::dbtools::throwGenericSQLException(sError,*(MacabPreparedStatement *) this);
@@ -85,7 +85,7 @@ void MacabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const
 // -------------------------------------------------------------------------
 MacabPreparedStatement::MacabPreparedStatement(
     MacabConnection* _pConnection,
-    const ::rtl::OUString& sql)
+    const OUString& sql)
     : MacabPreparedStatement_BASE(_pConnection),
       m_sSqlStatement(sql),
       m_bPrepared(sal_False),
@@ -118,7 +118,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabPreparedStatement::getMetaData() t
     if (!m_xMetaData.is())
     {
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
-        ::rtl::OUString sTableName = MacabAddressBook::getDefaultTableName();
+        OUString sTableName = MacabAddressBook::getDefaultTableName();
 
         if(! xTabs.empty() )
         {
@@ -200,7 +200,7 @@ void SAL_CALL MacabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int3
     (m_aParameterRow->get())[parameterIndex - 1].setNull();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const OUString&) throw(SQLException, RuntimeException)
 {
 
 
@@ -264,7 +264,7 @@ void SAL_CALL MacabPreparedStatement::setDouble(sal_Int32, double) throw(SQLExce
 ::dbtools::throwFunctionNotSupportedException("setDouble", NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const ::rtl::OUString &x) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
@@ -326,9 +326,9 @@ void SAL_CALL MacabPreparedStatement::setObject(sal_Int32 parameterIndex, const 
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                "$position$", OUString::valueOf(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

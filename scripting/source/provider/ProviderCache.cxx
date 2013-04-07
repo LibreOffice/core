@@ -46,7 +46,7 @@ ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, co
 }
 
 
-ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< ::rtl::OUString >& blackList )
+ProviderCache::ProviderCache( const Reference< XComponentContext >& xContext, const Sequence< Any >& scriptContext, const Sequence< OUString >& blackList )
     throw ( RuntimeException ) : m_sBlackList( blackList ), m_Sctx( scriptContext ), m_xContext( xContext )
 
 {
@@ -63,7 +63,7 @@ ProviderCache::~ProviderCache()
 }
 
 Reference< provider::XScriptProvider >
-ProviderCache::getProvider( const ::rtl::OUString& providerName )
+ProviderCache::getProvider( const OUString& providerName )
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     Reference< provider::XScriptProvider > provider;
@@ -137,11 +137,11 @@ void
 ProviderCache::populateCache() throw ( RuntimeException )
 {
     // wrong name in services.rdb
-    ::rtl::OUString serviceName;
+    OUString serviceName;
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     try
     {
-        ::rtl::OUString languageProviderName( "com.sun.star.script.provider.LanguageScriptProvider"  );
+        OUString languageProviderName( "com.sun.star.script.provider.LanguageScriptProvider"  );
 
         Reference< container::XContentEnumerationAccess > xEnumAccess = Reference< container::XContentEnumerationAccess >( m_xMgr, UNO_QUERY_THROW );
         Reference< container::XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -152,11 +152,11 @@ ProviderCache::populateCache() throw ( RuntimeException )
             Reference< lang::XSingleComponentFactory > factory( xEnum->nextElement(), UNO_QUERY_THROW );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
 
-            Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
+            Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
             if ( serviceNames.getLength() > 0 )
             {
-                ::rtl::OUString searchString( "com.sun.star.script.provider.ScriptProviderFor"  );
+                OUString searchString( "com.sun.star.script.provider.ScriptProviderFor"  );
 
                 for ( sal_Int32 index = 0; index < serviceNames.getLength(); index++ )
                 {
@@ -191,7 +191,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( const Exception& e )
     {
-        ::rtl::OUString temp("ProviderCache::createProvider() Error creating provider from factory!!!\n");
+        OUString temp("ProviderCache::createProvider() Error creating provider from factory!!!\n");
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 

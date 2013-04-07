@@ -121,7 +121,7 @@ void    XFListLevelBullet::ToXml(IXFStream *pStrm)
     //text:style-name,ignore now.
     m_aNumFmt.ToXml(pStrm);
     //bullet-char
-    rtl::OUString   bullet(m_chBullet);
+    OUString   bullet(m_chBullet);
     pAttrList->AddAttribute( A2OUSTR("text:bullet-char"), bullet );
 
     pStrm->StartElement( A2OUSTR("text:list-level-style-bullet") );
@@ -274,9 +274,9 @@ void    XFListStyle::SetListPosition(sal_Int32 level,
 
 void    XFListStyle::SetListBullet(sal_Int32 level,
                                    UChar32 bullet,
-                                   rtl::OUString fontname,
-                                   rtl::OUString prefix,
-                                   rtl::OUString suffix
+                                   OUString fontname,
+                                   OUString prefix,
+                                   OUString suffix
                                    )
 {
     assert(level>=1&&level<=10);

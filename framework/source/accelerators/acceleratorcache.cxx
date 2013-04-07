@@ -84,7 +84,7 @@ sal_Bool AcceleratorCache::hasKey(const css::awt::KeyEvent& aKey) const
 }
 
 //-----------------------------------------------
-sal_Bool AcceleratorCache::hasCommand(const ::rtl::OUString& sCommand) const
+sal_Bool AcceleratorCache::hasCommand(const OUString& sCommand) const
 {
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -119,7 +119,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getAllKeys() const
 
 //-----------------------------------------------
 void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
-                                         const ::rtl::OUString&    sCommand)
+                                         const OUString&    sCommand)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -136,7 +136,7 @@ void AcceleratorCache::setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
 }
 
 //-----------------------------------------------
-AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const ::rtl::OUString& sCommand) const
+AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const OUString& sCommand) const
 {
     TKeyList lKeys;
 
@@ -146,7 +146,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const ::rtl::OUStr
     TCommand2Keys::const_iterator pCommand = m_lCommand2Keys.find(sCommand);
     if (pCommand == m_lCommand2Keys.end())
         throw css::container::NoSuchElementException(
-                ::rtl::OUString(), css::uno::Reference< css::uno::XInterface >());
+                OUString(), css::uno::Reference< css::uno::XInterface >());
     lKeys = pCommand->second;
 
     aReadLock.unlock();
@@ -156,9 +156,9 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const ::rtl::OUStr
 }
 
 //-----------------------------------------------
-::rtl::OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
+OUString AcceleratorCache::getCommandByKey(const css::awt::KeyEvent& aKey) const
 {
-    ::rtl::OUString sCommand;
+    OUString sCommand;
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -166,7 +166,7 @@ AcceleratorCache::TKeyList AcceleratorCache::getKeysByCommand(const ::rtl::OUStr
     TKey2Commands::const_iterator pKey = m_lKey2Commands.find(aKey);
     if (pKey == m_lKey2Commands.end())
         throw css::container::NoSuchElementException(
-                ::rtl::OUString(), css::uno::Reference< css::uno::XInterface >());
+                OUString(), css::uno::Reference< css::uno::XInterface >());
     sCommand = pKey->second;
 
     aReadLock.unlock();
@@ -189,7 +189,7 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
     // get its registered command
     // Because we must know its place inside the optimized
     // structure, which bind keys to commands, too!
-    ::rtl::OUString sCommand = pKey->second;
+    OUString sCommand = pKey->second;
     pKey = m_lKey2Commands.end(); // nobody should use an undefined value .-)
 
     // remove key from primary list
@@ -203,7 +203,7 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 }
 
 //-----------------------------------------------
-void AcceleratorCache::removeCommand(const ::rtl::OUString& sCommand)
+void AcceleratorCache::removeCommand(const OUString& sCommand)
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);

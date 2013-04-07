@@ -55,7 +55,7 @@ namespace dbaui
     class ODatabaseExport
     {
     public:
-        DECLARE_STL_MAP(::rtl::OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
+        DECLARE_STL_MAP(OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
         typedef ::std::vector<TColumns::const_iterator>             TColumnVector;
         typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
 
@@ -82,7 +82,7 @@ namespace dbaui
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;
         /// for saving the selected tablename
-        ::rtl::OUString     m_sDefaultTableName;
+        OUString     m_sDefaultTableName;
 
         String              m_sTextToken;   ///< cell content
         String              m_sNumToken;    ///< SDNUM value
@@ -108,7 +108,7 @@ namespace dbaui
         virtual TypeSelectionPageFactory
                             getTypeSelectionPageFactory()   = 0;
 
-        void                CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
+        void                CreateDefaultColumn(const OUString& _rColumnName);
         sal_Int16           CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
         void                adjustFormat();
         void                eraseTokens();
@@ -125,7 +125,7 @@ namespace dbaui
 
             @return true when an error occurs
         */
-        sal_Bool            executeWizard( const ::rtl::OUString& _sTableName,
+        sal_Bool            executeWizard( const OUString& _sTableName,
                                            const ::com::sun::star::uno::Any& _aTextColor,
                                            const ::com::sun::star::awt::FontDescriptor& _rFont);
 
@@ -155,7 +155,7 @@ namespace dbaui
 
         void SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
-        inline void SetTableName(const ::rtl::OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
+        inline void SetTableName(const OUString &_sTableName){ m_sDefaultTableName = _sTableName ; }
 
         virtual void release() = 0;
 

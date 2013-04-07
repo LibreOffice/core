@@ -39,8 +39,6 @@
 #include <xmloff/PropertySetInfoHash.hxx>
 #include <comphelper/stl_types.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -155,13 +153,13 @@ void XMLPropertyStates_Impl::FillPropertyStateVector(
 
 class FilterPropertyInfo_Impl
 {
-    const rtl::OUString     sApiName;
+    const OUString     sApiName;
     std::list<sal_uInt32>   aIndexes;
     sal_uInt32              nCount;
 
 public:
 
-    FilterPropertyInfo_Impl( const rtl::OUString& rApiName,
+    FilterPropertyInfo_Impl( const OUString& rApiName,
                              const sal_uInt32 nIndex);
 
     const OUString& GetApiName() const { return sApiName; }
@@ -181,7 +179,7 @@ public:
 };
 
 FilterPropertyInfo_Impl::FilterPropertyInfo_Impl(
-        const rtl::OUString& rApiName,
+        const OUString& rApiName,
         const sal_uInt32 nIndex ) :
     sApiName( rApiName ),
     aIndexes(),
@@ -206,7 +204,7 @@ public:
     FilterPropertiesInfo_Impl();
     ~FilterPropertiesInfo_Impl();
 
-    void AddProperty(const rtl::OUString& rApiName, const sal_uInt32 nIndex);
+    void AddProperty(const OUString& rApiName, const sal_uInt32 nIndex);
     const uno::Sequence<OUString>& GetApiNames();
     void FillPropertyStateArray(
             vector< XMLPropertyState >& rPropStates,
@@ -261,7 +259,7 @@ FilterPropertiesInfo_Impl::~FilterPropertiesInfo_Impl()
 }
 
 void FilterPropertiesInfo_Impl::AddProperty(
-        const rtl::OUString& rApiName, const sal_uInt32 nIndex)
+        const OUString& rApiName, const sal_uInt32 nIndex)
 {
     aPropInfos.push_back(FilterPropertyInfo_Impl(rApiName, nIndex));
     nCount++;

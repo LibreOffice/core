@@ -332,7 +332,7 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 }
 
 // #111827#
-rtl::OUString SwUndoInsLayFmt::GetComment() const
+OUString SwUndoInsLayFmt::GetComment() const
 {
     String aResult;
 

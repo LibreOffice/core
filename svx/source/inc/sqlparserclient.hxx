@@ -49,8 +49,8 @@ namespace svxform
 
     protected:
         inline ::rtl::Reference< ::connectivity::simple::ISQLParseNode > predicateTree(
-                ::rtl::OUString& _rErrorMessage,
-                const ::rtl::OUString& _rStatement,
+                OUString& _rErrorMessage,
+                const OUString& _rStatement,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField
             ) const

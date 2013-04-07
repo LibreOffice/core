@@ -32,7 +32,7 @@ namespace slideshow
     {
         typedef ::canvas::tools::ValueMap< AttributeType > AnimateAttributeMap;
 
-        AttributeType mapAttributeName( const ::rtl::OUString& rAttrName )
+        AttributeType mapAttributeName( const OUString& rAttrName )
         {
             /** Maps attribute name to AttributeType enum.
 
@@ -80,7 +80,7 @@ namespace slideshow
                               eAttributeType ) )
             {
                 OSL_TRACE( "mapAttributeName(): attribute name %s not found in map.",
-                           ::rtl::OUStringToOString( rAttrName,
+                           OUStringToOString( rAttrName,
                                                      RTL_TEXTENCODING_ASCII_US ).getStr() );
                 return ATTRIBUTE_INVALID;
             }

@@ -186,7 +186,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     for (i = 0; i < n; i++)
     {
         PropertyChangeEvent evt (rEvent[i]);
-        if (evt.PropertyName == ::rtl::OUString("DocumentHeader"))
+        if (evt.PropertyName == OUString("DocumentHeader"))
         {
             Sequence<DocumentHeaderField> aHead;
             if (evt.NewValue >>= aHead)
@@ -211,12 +211,12 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
             m_xLockBytes->SetStreamValid_Impl();
         }
-        else if (evt.PropertyName == rtl::OUString("PresentationURL"))
+        else if (evt.PropertyName == OUString("PresentationURL"))
         {
-            ::rtl::OUString aUrl;
+            OUString aUrl;
             if (evt.NewValue >>= aUrl)
             {
-                ::rtl::OUString aBad ("private:");
+                OUString aBad ("private:");
                 if (!aUrl.startsWith(aBad))
                 {
                     // URL changed (Redirection).
@@ -224,9 +224,9 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 }
             }
         }
-        else if (evt.PropertyName == ::rtl::OUString("MediaType"))
+        else if (evt.PropertyName == OUString("MediaType"))
         {
-            ::rtl::OUString aContentType;
+            OUString aContentType;
             if (evt.NewValue >>= aContentType)
                 m_xLockBytes->SetContentType_Impl( aContentType );
         }
@@ -905,7 +905,7 @@ static sal_Bool UCBOpenContentSync(
     Reference<XContentIdentifier> xContId(
         xContent.is() ? xContent->getIdentifier() : 0 );
 
-    rtl::OUString aScheme;
+    OUString aScheme;
     if(xContId.is())
         aScheme = xContId->getContentProviderScheme();
 
@@ -927,7 +927,7 @@ static sal_Bool UCBOpenContentSync(
         xListener =
             new UcbPropertiesChangeListener_Impl(xLockBytes);
         xProps->addPropertiesChangeListener(
-            Sequence< ::rtl::OUString >(),
+            Sequence< OUString >(),
             xListener);
     }
 
@@ -1012,11 +1012,11 @@ static sal_Bool UCBOpenContentSync(
                     INetURLObject aURL(
                         xContId.is() ?
                         xContId->getContentIdentifier() :
-                        rtl::OUString() );
+                        OUString() );
                     aExcep.Server = aURL.GetHost();
                     aExcep.Classification = InteractionClassification_ERROR;
                     aExcep.Message =
-                        rtl::OUString( "server not responding after five seconds");
+                        OUString( "server not responding after five seconds");
                     Any request;
                     request <<= aExcep;
                     ucbhelper::InteractionRequest *ir =
@@ -1128,7 +1128,7 @@ static sal_Bool UCBOpenContentSync(
 
     if ( xProps.is() )
         xProps->removePropertiesChangeListener(
-            Sequence< ::rtl::OUString >(),
+            Sequence< OUString >(),
             xListener );
 
     return ( bAborted || bException );
@@ -1150,7 +1150,7 @@ static sal_Bool _UCBOpenContentSync(
         xContent, new UcbTaskEnvironment( xInteract, xProgress ),
         comphelper::getProcessComponentContext() );
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
-    ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
+    OUString aScheme = xIdent->getContentProviderScheme();
 
     // http protocol must be handled in a special way: during the opening process the input stream may change
     // only the last inputstream after notifying the document headers is valid
@@ -1160,7 +1160,7 @@ static sal_Bool _UCBOpenContentSync(
     Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );
     Reference< XPropertiesChangeNotifier > xProps ( xContent, UNO_QUERY );
     if ( xProps.is() )
-        xProps->addPropertiesChangeListener( Sequence< ::rtl::OUString >(), xListener );
+        xProps->addPropertiesChangeListener( Sequence< OUString >(), xListener );
 
     Any aResult;
     bool bException = false;
@@ -1223,7 +1223,7 @@ static sal_Bool _UCBOpenContentSync(
 
 
     if ( xProps.is() )
-        xProps->removePropertiesChangeListener( Sequence< ::rtl::OUString >(), xListener );
+        xProps->removePropertiesChangeListener( Sequence< OUString >(), xListener );
 
     return ( bAborted || bException );
 }
@@ -1621,7 +1621,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;
-        aCommand.Name     = ::rtl::OUString("setPropertyValues");
+        aCommand.Name     = OUString("setPropertyValues");
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument <<= rProps;
         xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
@@ -1632,7 +1632,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aArgument.Mode = OpenMode::DOCUMENT;
 
     Command aCommand;
-    aCommand.Name = ::rtl::OUString( "open" );
+    aCommand.Name = OUString( "open" );
     aCommand.Argument <<= aArgument;
 
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );

@@ -25,7 +25,6 @@
 #endif
 
 using namespace ::com::sun::star::uno ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificateExtension ;
 

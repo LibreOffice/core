@@ -57,7 +57,7 @@ uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfo
 
 void SAL_CALL SwXTextMarkup::commitTextMarkup(
     ::sal_Int32 nType,
-    const ::rtl::OUString & rIdentifier,
+    const OUString & rIdentifier,
     ::sal_Int32 nStart,
     ::sal_Int32 nLength,
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
@@ -226,7 +226,7 @@ static void lcl_commitGrammarMarkUp(
     const ModelToViewHelper& rConversionMap,
     SwGrammarMarkUp* pWList,
     ::sal_Int32 nType,
-    const ::rtl::OUString & rIdentifier,
+    const OUString & rIdentifier,
     ::sal_Int32 nStart,
     ::sal_Int32 nLength,
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
@@ -430,23 +430,23 @@ SwXStringKeyMap::SwXStringKeyMap()
 {
 }
 
-uno::Any SAL_CALL SwXStringKeyMap::getValue(const ::rtl::OUString & aKey) throw (uno::RuntimeException, container::NoSuchElementException)
+uno::Any SAL_CALL SwXStringKeyMap::getValue(const OUString & aKey) throw (uno::RuntimeException, container::NoSuchElementException)
 {
-    std::map< rtl::OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
+    std::map< OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
     if ( aIter == maMap.end() )
         throw container::NoSuchElementException();
 
     return (*aIter).second;
 }
 
-::sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const ::rtl::OUString & aKey) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL SwXStringKeyMap::hasValue(const OUString & aKey) throw (uno::RuntimeException)
 {
     return maMap.find( aKey ) != maMap.end();
 }
 
-void SAL_CALL SwXStringKeyMap::insertValue(const ::rtl::OUString & aKey, const uno::Any & aValue) throw (uno::RuntimeException, lang::IllegalArgumentException, container::ElementExistException)
+void SAL_CALL SwXStringKeyMap::insertValue(const OUString & aKey, const uno::Any & aValue) throw (uno::RuntimeException, lang::IllegalArgumentException, container::ElementExistException)
 {
-    std::map< rtl::OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
+    std::map< OUString, uno::Any >::const_iterator aIter = maMap.find( aKey );
     if ( aIter != maMap.end() )
         throw container::ElementExistException();
 
@@ -458,12 +458,12 @@ void SAL_CALL SwXStringKeyMap::insertValue(const ::rtl::OUString & aKey, const u
     return maMap.size();
 }
 
-::rtl::OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+OUString SAL_CALL SwXStringKeyMap::getKeyByIndex(::sal_Int32 nIndex) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     if ( (sal_uInt32)nIndex >= maMap.size() )
         throw lang::IndexOutOfBoundsException();
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 uno::Any SAL_CALL SwXStringKeyMap::getValueByIndex(::sal_Int32 nIndex) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)

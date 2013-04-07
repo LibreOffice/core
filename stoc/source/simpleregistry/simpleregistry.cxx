@@ -68,10 +68,10 @@ public:
     osl::Mutex mutex_;
 
 private:
-    virtual rtl::OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL open(
-        rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
+        OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -92,20 +92,20 @@ private:
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
     virtual void SAL_CALL mergeKey(
-        rtl::OUString const & aKeyName, rtl::OUString const & aUrl)
+        OUString const & aKeyName, OUString const & aUrl)
         throw (
             css::registry::InvalidRegistryException,
             css::registry::MergeConflictException, css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return stoc_bootstrap::simreg_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return stoc_bootstrap::simreg_getSupportedServiceNames(); }
 
@@ -120,7 +120,7 @@ public:
         registry_(registry), key_(key) {}
 
 private:
-    virtual rtl::OUString SAL_CALL getKeyName()
+    virtual OUString SAL_CALL getKeyName()
         throw (css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL isReadOnly() throw (
@@ -129,7 +129,7 @@ private:
     virtual sal_Bool SAL_CALL isValid() throw(css::uno::RuntimeException);
 
     virtual css::registry::RegistryKeyType SAL_CALL getKeyType(
-        rtl::OUString const & rKeyName)
+        OUString const & rKeyName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -154,38 +154,38 @@ private:
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getAsciiValue() throw (
+    virtual OUString SAL_CALL getAsciiValue() throw (
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setAsciiValue(rtl::OUString const & value) throw (
+    virtual void SAL_CALL setAsciiValue(OUString const & value) throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getAsciiListValue()
+    virtual css::uno::Sequence< OUString > SAL_CALL getAsciiListValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
     virtual void SAL_CALL setAsciiListValue(
-        css::uno::Sequence< rtl::OUString > const & seqValue)
+        css::uno::Sequence< OUString > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getStringValue() throw(
+    virtual OUString SAL_CALL getStringValue() throw(
         css::registry::InvalidRegistryException,
         css::registry::InvalidValueException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL setStringValue(rtl::OUString const & value) throw (
+    virtual void SAL_CALL setStringValue(OUString const & value) throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getStringListValue()
+    virtual css::uno::Sequence< OUString > SAL_CALL getStringListValue()
         throw (
             css::registry::InvalidRegistryException,
             css::registry::InvalidValueException, css::uno::RuntimeException);
 
     virtual void SAL_CALL setStringListValue(
-        css::uno::Sequence< rtl::OUString > const & seqValue)
+        css::uno::Sequence< OUString > const & seqValue)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -201,19 +201,19 @@ private:
             css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL openKey(
-        rtl::OUString const & aKeyName)
+        OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::registry::XRegistryKey > SAL_CALL
-    createKey(rtl::OUString const & aKeyName) throw (
+    createKey(OUString const & aKeyName) throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
     virtual void SAL_CALL closeKey() throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
-    virtual void SAL_CALL deleteKey(rtl::OUString const & rKeyName) throw (
+    virtual void SAL_CALL deleteKey(OUString const & rKeyName) throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
     virtual
@@ -221,26 +221,26 @@ private:
     SAL_CALL openKeys() throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getKeyNames() throw (
+    virtual css::uno::Sequence< OUString > SAL_CALL getKeyNames() throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL createLink(
-        rtl::OUString const & aLinkName, rtl::OUString const & aLinkTarget)
+        OUString const & aLinkName, OUString const & aLinkTarget)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual void SAL_CALL deleteLink(rtl::OUString const & rLinkName) throw (
+    virtual void SAL_CALL deleteLink(OUString const & rLinkName) throw (
         css::registry::InvalidRegistryException, css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getLinkTarget(
-        rtl::OUString const & rLinkName)
+    virtual OUString SAL_CALL getLinkTarget(
+        OUString const & rLinkName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getResolvedName(
-        rtl::OUString const & aKeyName)
+    virtual OUString SAL_CALL getResolvedName(
+        OUString const & aKeyName)
         throw (
             css::registry::InvalidRegistryException,
             css::uno::RuntimeException);
@@ -249,7 +249,7 @@ private:
     RegistryKey key_;
 };
 
-rtl::OUString Key::getKeyName() throw (css::uno::RuntimeException) {
+OUString Key::getKeyName() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(registry_->mutex_);
     return key_.getName();
 }
@@ -266,7 +266,7 @@ sal_Bool Key::isValid() throw (css::uno::RuntimeException) {
     return key_.isValid();
 }
 
-css::registry::RegistryKeyType Key::getKeyType(rtl::OUString const & rKeyName)
+css::registry::RegistryKeyType Key::getKeyType(OUString const & rKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
@@ -274,7 +274,7 @@ css::registry::RegistryKeyType Key::getKeyType(rtl::OUString const & rKeyName)
     RegError err = key_.getKeyType(rKeyName, &type);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyType:"
                     " underlying RegistryKey::getKeyType() = ")) +
@@ -298,7 +298,7 @@ css::registry::RegistryValueType Key::getValueType()
     osl::MutexGuard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
-    RegError err = key_.getValueInfo(rtl::OUString(), &type, &size);
+    RegError err = key_.getValueInfo(OUString(), &type, &size);
     switch (err) {
     case REG_NO_ERROR:
         break;
@@ -307,7 +307,7 @@ css::registry::RegistryValueType Key::getValueType()
         break;
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getValueType:"
                     " underlying RegistryKey::getValueInfo() = ")) +
@@ -343,20 +343,20 @@ sal_Int32 Key::getLongValue() throw (
 {
     osl::MutexGuard guard(registry_->mutex_);
     sal_Int32 value;
-    RegError err = key_.getValue(rtl::OUString(), &value);
+    RegError err = key_.getValue(OUString(), &value);
     switch (err) {
     case REG_NO_ERROR:
         break;
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongValue:"
                     " underlying RegistryKey::getValue() = REG_INVALID_VALUE")),
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongValue:"
                     " underlying RegistryKey::getValue() = ")) +
@@ -371,10 +371,10 @@ void Key::setLongValue(sal_Int32 value)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        rtl::OUString(), RG_VALUETYPE_LONG, &value, sizeof (sal_Int32));
+        OUString(), RG_VALUETYPE_LONG, &value, sizeof (sal_Int32));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongValue:"
                     " underlying RegistryKey::setValue() = ")) +
@@ -389,7 +389,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegistryValueList< sal_Int32 > list;
-    RegError err = key_.getLongListValue(rtl::OUString(), list);
+    RegError err = key_.getLongListValue(OUString(), list);
     switch (err) {
     case REG_NO_ERROR:
         break;
@@ -397,7 +397,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
         return css::uno::Sequence< sal_Int32 >();
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
                     " underlying RegistryKey::getLongListValue() ="
@@ -405,7 +405,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
                     " underlying RegistryKey::getLongListValue() = ")) +
@@ -415,7 +415,7 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue() throw (
     sal_uInt32 n = list.getLength();
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLongListValue:"
                     " underlying RegistryKey::getLongListValue() too large")),
@@ -437,11 +437,11 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
         list.push_back(seqValue[i]);
     }
     RegError err = key_.setLongListValue(
-        rtl::OUString(), list.empty() ? 0 : &list[0],
+        OUString(), list.empty() ? 0 : &list[0],
         static_cast< sal_uInt32 >(list.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setLongListValue:"
                     " underlying RegistryKey::setLongListValue() = ")) +
@@ -450,17 +450,17 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
     }
 }
 
-rtl::OUString Key::getAsciiValue() throw (
+OUString Key::getAsciiValue() throw (
     css::registry::InvalidRegistryException,
     css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
-    RegError err = key_.getValueInfo(rtl::OUString(), &type, &size);
+    RegError err = key_.getValueInfo(OUString(), &type, &size);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
@@ -469,7 +469,7 @@ rtl::OUString Key::getAsciiValue() throw (
     }
     if (type != RG_VALUETYPE_STRING) {
         throw css::registry::InvalidValueException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey type = ")) +
@@ -479,7 +479,7 @@ rtl::OUString Key::getAsciiValue() throw (
     // size contains terminating null (error in underlying registry.cxx):
     if (size == 0) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey size 0 cannot happen due to"
@@ -488,17 +488,17 @@ rtl::OUString Key::getAsciiValue() throw (
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey size too large")),
             static_cast< OWeakObject * >(this));
     }
     std::vector< char > list(size);
-    err = key_.getValue(rtl::OUString(), &list[0]);
+    err = key_.getValue(OUString(), &list[0]);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey::getValue() = ")) +
@@ -507,14 +507,14 @@ rtl::OUString Key::getAsciiValue() throw (
     }
     if (list[size - 1] != '\0') {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey value must be null-terminated due"
                     " to design error")),
             static_cast< OWeakObject * >(this));
     }
-    rtl::OUString value;
+    OUString value;
     if (!rtl_convertStringToUString(
             &value.pData, &list[0],
             static_cast< sal_Int32 >(size - 1), RTL_TEXTENCODING_UTF8,
@@ -523,7 +523,7 @@ rtl::OUString Key::getAsciiValue() throw (
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
     {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getAsciiValue:"
                     " underlying RegistryKey not UTF-8")),
@@ -532,30 +532,30 @@ rtl::OUString Key::getAsciiValue() throw (
     return value;
 }
 
-void Key::setAsciiValue(rtl::OUString const & value)
+void Key::setAsciiValue(OUString const & value)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
-    rtl::OString utf8;
+    OString utf8;
     if (!value.convertToString(
             &utf8, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
         throw css::uno::RuntimeException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setAsciiValue:"
                     " value not UTF-16")),
             static_cast< OWeakObject * >(this));
     }
     RegError err = key_.setValue(
-        rtl::OUString(), RG_VALUETYPE_STRING,
+        OUString(), RG_VALUETYPE_STRING,
         const_cast< char * >(utf8.getStr()), utf8.getLength() + 1);
         // +1 for terminating null (error in underlying registry.cxx)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setAsciiValue:"
                     " underlying RegistryKey::setValue() = ")) +
@@ -564,21 +564,21 @@ void Key::setAsciiValue(rtl::OUString const & value)
     }
 }
 
-css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
+css::uno::Sequence< OUString > Key::getAsciiListValue() throw (
     css::registry::InvalidRegistryException,
     css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegistryValueList< char * > list;
-    RegError err = key_.getStringListValue(rtl::OUString(), list);
+    RegError err = key_.getStringListValue(OUString(), list);
     switch (err) {
     case REG_NO_ERROR:
         break;
     case REG_VALUE_NOT_EXISTS:
-        return css::uno::Sequence< rtl::OUString >();
+        return css::uno::Sequence< OUString >();
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
@@ -586,7 +586,7 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
@@ -597,14 +597,14 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
     sal_uInt32 n = list.getLength();
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getAsciiListValue: underlying"
                     " RegistryKey::getStringListValue() too large")),
             static_cast< OWeakObject * >(this));
     }
-    css::uno::Sequence< rtl::OUString > value(static_cast< sal_Int32 >(n));
+    css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
     for (sal_uInt32 i = 0; i < n; ++i) {
         char * el = list.getElement(i);
         sal_Int32 size = rtl_str_getLength(el);
@@ -616,7 +616,7 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
                  RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
         {
             throw css::registry::InvalidValueException(
-                rtl::OUString(
+                OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.registry.SimpleRegistry key"
                         " getAsciiListValue: underlying RegistryKey not"
@@ -628,20 +628,20 @@ css::uno::Sequence< rtl::OUString > Key::getAsciiListValue() throw (
 }
 
 void Key::setAsciiListValue(
-    css::uno::Sequence< rtl::OUString > const & seqValue)
+    css::uno::Sequence< OUString > const & seqValue)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
-    std::vector< rtl::OString > list;
+    std::vector< OString > list;
     for (sal_Int32 i = 0; i < seqValue.getLength(); ++i) {
-        rtl::OString utf8;
+        OString utf8;
         if (!seqValue[i].convertToString(
                 &utf8, RTL_TEXTENCODING_UTF8,
                 (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                  RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
         {
             throw css::uno::RuntimeException(
-                rtl::OUString(
+                OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.registry.SimpleRegistry key"
                         " setAsciiListValue: value not UTF-16")),
@@ -650,17 +650,17 @@ void Key::setAsciiListValue(
         list.push_back(utf8);
     }
     std::vector< char * > list2;
-    for (std::vector< rtl::OString >::iterator i(list.begin()); i != list.end();
+    for (std::vector< OString >::iterator i(list.begin()); i != list.end();
          ++i)
     {
         list2.push_back(const_cast< char * >(i->getStr()));
     }
     RegError err = key_.setStringListValue(
-        rtl::OUString(), list2.empty() ? 0 : &list2[0],
+        OUString(), list2.empty() ? 0 : &list2[0],
         static_cast< sal_uInt32 >(list2.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setAsciiListValue: underlying"
@@ -670,17 +670,17 @@ void Key::setAsciiListValue(
     }
 }
 
-rtl::OUString Key::getStringValue() throw (
+OUString Key::getStringValue() throw (
     css::registry::InvalidRegistryException,
     css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
-    RegError err = key_.getValueInfo(rtl::OUString(), &type, &size);
+    RegError err = key_.getValueInfo(OUString(), &type, &size);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
@@ -689,7 +689,7 @@ rtl::OUString Key::getStringValue() throw (
     }
     if (type != RG_VALUETYPE_UNICODE) {
         throw css::registry::InvalidValueException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey type = ")) +
@@ -700,7 +700,7 @@ rtl::OUString Key::getStringValue() throw (
     // registry.cxx):
     if (size == 0 || (size & 1) == 1) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey size 0 or odd cannot happen due to"
@@ -709,17 +709,17 @@ rtl::OUString Key::getStringValue() throw (
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey size too large")),
             static_cast< OWeakObject * >(this));
     }
     std::vector< sal_Unicode > list(size);
-    err = key_.getValue(rtl::OUString(), &list[0]);
+    err = key_.getValue(OUString(), &list[0]);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey::getValue() = ")) +
@@ -728,28 +728,28 @@ rtl::OUString Key::getStringValue() throw (
     }
     if (list[size/2 - 1] != 0) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getStringValue:"
                     " underlying RegistryKey value must be null-terminated due"
                     " to design error")),
             static_cast< OWeakObject * >(this));
     }
-    return rtl::OUString(&list[0], static_cast< sal_Int32 >(size/2 - 1));
+    return OUString(&list[0], static_cast< sal_Int32 >(size/2 - 1));
 }
 
-void Key::setStringValue(rtl::OUString const & value)
+void Key::setStringValue(OUString const & value)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        rtl::OUString(), RG_VALUETYPE_UNICODE,
+        OUString(), RG_VALUETYPE_UNICODE,
         const_cast< sal_Unicode * >(value.getStr()),
         (value.getLength() + 1) * sizeof (sal_Unicode));
         // +1 for terminating null (error in underlying registry.cxx)
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setStringValue:"
                     " underlying RegistryKey::setValue() = ")) +
@@ -758,21 +758,21 @@ void Key::setStringValue(rtl::OUString const & value)
     }
 }
 
-css::uno::Sequence< rtl::OUString > Key::getStringListValue() throw (
+css::uno::Sequence< OUString > Key::getStringListValue() throw (
     css::registry::InvalidRegistryException,
     css::registry::InvalidValueException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegistryValueList< sal_Unicode * > list;
-    RegError err = key_.getUnicodeListValue(rtl::OUString(), list);
+    RegError err = key_.getUnicodeListValue(OUString(), list);
     switch (err) {
     case REG_NO_ERROR:
         break;
     case REG_VALUE_NOT_EXISTS:
-        return css::uno::Sequence< rtl::OUString >();
+        return css::uno::Sequence< OUString >();
     case REG_INVALID_VALUE:
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
@@ -780,7 +780,7 @@ css::uno::Sequence< rtl::OUString > Key::getStringListValue() throw (
             static_cast< OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
@@ -791,14 +791,14 @@ css::uno::Sequence< rtl::OUString > Key::getStringListValue() throw (
     sal_uInt32 n = list.getLength();
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " getStringListValue: underlying"
                     " RegistryKey::getUnicodeListValue() too large")),
             static_cast< OWeakObject * >(this));
     }
-    css::uno::Sequence< rtl::OUString > value(static_cast< sal_Int32 >(n));
+    css::uno::Sequence< OUString > value(static_cast< sal_Int32 >(n));
     for (sal_uInt32 i = 0; i < n; ++i) {
         value[static_cast< sal_Int32 >(i)] = list.getElement(i);
     }
@@ -806,7 +806,7 @@ css::uno::Sequence< rtl::OUString > Key::getStringListValue() throw (
 }
 
 void Key::setStringListValue(
-    css::uno::Sequence< rtl::OUString > const & seqValue)
+    css::uno::Sequence< OUString > const & seqValue)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
@@ -815,11 +815,11 @@ void Key::setStringListValue(
         list.push_back(const_cast< sal_Unicode * >(seqValue[i].getStr()));
     }
     RegError err = key_.setUnicodeListValue(
-        rtl::OUString(), list.empty() ? 0 : &list[0],
+        OUString(), list.empty() ? 0 : &list[0],
         static_cast< sal_uInt32 >(list.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key"
                     " setStringListValue: underlying"
@@ -837,10 +837,10 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     osl::MutexGuard guard(registry_->mutex_);
     RegValueType type;
     sal_uInt32 size;
-    RegError err = key_.getValueInfo(rtl::OUString(), &type, &size);
+    RegError err = key_.getValueInfo(OUString(), &type, &size);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey::getValueInfo() = ")) +
@@ -849,7 +849,7 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     }
     if (type != RG_VALUETYPE_BINARY) {
         throw css::registry::InvalidValueException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey type = ")) +
@@ -858,17 +858,17 @@ css::uno::Sequence< sal_Int8 > Key::getBinaryValue()
     }
     if (size > SAL_MAX_INT32) {
         throw css::registry::InvalidValueException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey size too large")),
             static_cast< OWeakObject * >(this));
     }
     css::uno::Sequence< sal_Int8 > value(static_cast< sal_Int32 >(size));
-    err = key_.getValue(rtl::OUString(), value.getArray());
+    err = key_.getValue(OUString(), value.getArray());
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getBinaryValue:"
                     " underlying RegistryKey::getValue() = ")) +
@@ -883,12 +883,12 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.setValue(
-        rtl::OUString(), RG_VALUETYPE_BINARY,
+        OUString(), RG_VALUETYPE_BINARY,
         const_cast< sal_Int8 * >(value.getConstArray()),
         static_cast< sal_uInt32 >(value.getLength()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key setBinaryValue:"
                     " underlying RegistryKey::setValue() = ")) +
@@ -898,7 +898,7 @@ void Key::setBinaryValue(css::uno::Sequence< sal_Int8 > const & value)
 }
 
 css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
-    rtl::OUString const & aKeyName)
+    OUString const & aKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
@@ -911,7 +911,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
         return css::uno::Reference< css::registry::XRegistryKey >();
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKey:"
                     " underlying RegistryKey::openKey() = ")) +
@@ -921,7 +921,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::openKey(
 }
 
 css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
-    rtl::OUString const & aKeyName)
+    OUString const & aKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
@@ -934,7 +934,7 @@ css::uno::Reference< css::registry::XRegistryKey > Key::createKey(
         return css::uno::Reference< css::registry::XRegistryKey >();
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createKey:"
                     " underlying RegistryKey::createKey() = ")) +
@@ -950,7 +950,7 @@ void Key::closeKey()
     RegError err = key_.closeKey();
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key closeKey:"
                     " underlying RegistryKey::closeKey() = ")) +
@@ -959,14 +959,14 @@ void Key::closeKey()
     }
 }
 
-void Key::deleteKey(rtl::OUString const & rKeyName)
+void Key::deleteKey(OUString const & rKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.deleteKey(rKeyName);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteKey:"
                     " underlying RegistryKey::deleteKey() = ")) +
@@ -981,10 +981,10 @@ Key::openKeys()
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegistryKeyArray list;
-    RegError err = key_.openSubKeys(rtl::OUString(), list);
+    RegError err = key_.openSubKeys(OUString(), list);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key openKeys:"
                     " underlying RegistryKey::openSubKeys() = ")) +
@@ -994,7 +994,7 @@ Key::openKeys()
     sal_uInt32 n = list.getLength();
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidRegistryException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
                     " underlying RegistryKey::getKeyNames() too large")),
@@ -1009,15 +1009,15 @@ Key::openKeys()
     return keys;
 }
 
-css::uno::Sequence< rtl::OUString > Key::getKeyNames()
+css::uno::Sequence< OUString > Key::getKeyNames()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegistryKeyNames list;
-    RegError err = key_.getKeyNames(rtl::OUString(), list);
+    RegError err = key_.getKeyNames(OUString(), list);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
                     " underlying RegistryKey::getKeyNames() = ")) +
@@ -1027,13 +1027,13 @@ css::uno::Sequence< rtl::OUString > Key::getKeyNames()
     sal_uInt32 n = list.getLength();
     if (n > SAL_MAX_INT32) {
         throw css::registry::InvalidRegistryException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getKeyNames:"
                     " underlying RegistryKey::getKeyNames() too large")),
             static_cast< OWeakObject * >(this));
     }
-    css::uno::Sequence< rtl::OUString > names(static_cast< sal_Int32 >(n));
+    css::uno::Sequence< OUString > names(static_cast< sal_Int32 >(n));
     for (sal_uInt32 i = 0; i < n; ++i) {
         names[static_cast< sal_Int32 >(i)] = list.getElement(i);
     }
@@ -1041,7 +1041,7 @@ css::uno::Sequence< rtl::OUString > Key::getKeyNames()
 }
 
 sal_Bool Key::createLink(
-    rtl::OUString const & aLinkName, rtl::OUString const & aLinkTarget)
+    OUString const & aLinkName, OUString const & aLinkTarget)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
@@ -1052,7 +1052,7 @@ sal_Bool Key::createLink(
     case REG_INVALID_KEY:
     case REG_DETECT_RECURSION:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key createLink:"
                     " underlying RegistryKey::createLink() = ")) +
@@ -1063,14 +1063,14 @@ sal_Bool Key::createLink(
     }
 }
 
-void Key::deleteLink(rtl::OUString const & rLinkName)
+void Key::deleteLink(OUString const & rLinkName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
     RegError err = key_.deleteLink(rLinkName);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key deleteLink:"
                     " underlying RegistryKey::deleteLink() = ")) +
@@ -1079,15 +1079,15 @@ void Key::deleteLink(rtl::OUString const & rLinkName)
     }
 }
 
-rtl::OUString Key::getLinkTarget(rtl::OUString const & rLinkName)
+OUString Key::getLinkTarget(OUString const & rLinkName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
-    rtl::OUString target;
+    OUString target;
     RegError err = key_.getLinkTarget(rLinkName, target);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getLinkTarget:"
                     " underlying RegistryKey::getLinkTarget() = ")) +
@@ -1097,15 +1097,15 @@ rtl::OUString Key::getLinkTarget(rtl::OUString const & rLinkName)
     return target;
 }
 
-rtl::OUString Key::getResolvedName(rtl::OUString const & aKeyName)
+OUString Key::getResolvedName(OUString const & aKeyName)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(registry_->mutex_);
-    rtl::OUString resolved;
+    OUString resolved;
     RegError err = key_.getResolvedKeyName(aKeyName, true, resolved);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry key getResolvedName:"
                     " underlying RegistryKey::getResolvedName() = ")) +
@@ -1115,13 +1115,13 @@ rtl::OUString Key::getResolvedName(rtl::OUString const & aKeyName)
     return resolved;
 }
 
-rtl::OUString SimpleRegistry::getURL() throw (css::uno::RuntimeException) {
+OUString SimpleRegistry::getURL() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(mutex_);
     return registry_.getName();
 }
 
 void SimpleRegistry::open(
-    rtl::OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
+    OUString const & rURL, sal_Bool bReadOnly, sal_Bool bCreate)
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
@@ -1133,10 +1133,10 @@ void SimpleRegistry::open(
     }
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                     "com.sun.star.registry.SimpleRegistry.open(") +
              rURL +
-             rtl::OUString(
+             OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "): underlying Registry::open/create() = ")) +
              OUString::number(err)),
@@ -1156,7 +1156,7 @@ void SimpleRegistry::close()
     RegError err = registry_.close();
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.close:"
                     " underlying Registry::close() = ")) +
@@ -1169,10 +1169,10 @@ void SimpleRegistry::destroy()
     throw (css::registry::InvalidRegistryException, css::uno::RuntimeException)
 {
     osl::MutexGuard guard(mutex_);
-    RegError err = registry_.destroy(rtl::OUString());
+    RegError err = registry_.destroy(OUString());
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.destroy:"
                     " underlying Registry::destroy() = ")) +
@@ -1189,7 +1189,7 @@ css::uno::Reference< css::registry::XRegistryKey > SimpleRegistry::getRootKey()
     RegError err = registry_.openRootKey(root);
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.getRootKey:"
                     " underlying Registry::getRootKey() = ")) +
@@ -1207,7 +1207,7 @@ sal_Bool SimpleRegistry::isReadOnly()
 }
 
 void SimpleRegistry::mergeKey(
-    rtl::OUString const & aKeyName, rtl::OUString const & aUrl)
+    OUString const & aKeyName, OUString const & aUrl)
     throw (
         css::registry::InvalidRegistryException,
         css::registry::MergeConflictException, css::uno::RuntimeException)
@@ -1224,14 +1224,14 @@ void SimpleRegistry::mergeKey(
         break;
     case REG_MERGE_ERROR:
         throw css::registry::MergeConflictException(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.mergeKey:"
                     " underlying Registry::mergeKey() = REG_MERGE_ERROR")),
             static_cast< cppu::OWeakObject * >(this));
     default:
         throw css::registry::InvalidRegistryException(
-            (rtl::OUString(
+            (OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.registry.SimpleRegistry.mergeKey:"
                     " underlying Registry::getRootKey/mergeKey() = ")) +
@@ -1251,14 +1251,14 @@ css::uno::Reference< css::uno::XInterface > SimpleRegistry_CreateInstance(
     return static_cast< cppu::OWeakObject * >(new SimpleRegistry);
 }
 
-css::uno::Sequence< rtl::OUString > simreg_getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = rtl::OUString("com.sun.star.registry.SimpleRegistry");
+css::uno::Sequence< OUString > simreg_getSupportedServiceNames() {
+    css::uno::Sequence< OUString > names(1);
+    names[0] = OUString("com.sun.star.registry.SimpleRegistry");
     return names;
 }
 
-rtl::OUString simreg_getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.stoc.SimpleRegistry");
+OUString simreg_getImplementationName() {
+    return OUString("com.sun.star.comp.stoc.SimpleRegistry");
 }
 
 }

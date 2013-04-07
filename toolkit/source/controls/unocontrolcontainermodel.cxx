@@ -40,9 +40,9 @@ UnoControlContainerModel::UnoControlContainerModel( const ::com::sun::star::uno:
     ImplRegisterProperty( BASEPROPERTY_TEXT );
 }
 
-::rtl::OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlContainerModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainerModel );
+    return OUString::createFromAscii( szServiceName_UnoControlContainerModel );
 }
 
 ::com::sun::star::uno::Any UnoControlContainerModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const

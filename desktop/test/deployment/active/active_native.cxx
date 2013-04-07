@@ -106,7 +106,7 @@ private:
 };
 
 OUString Provider::static_getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.test.deployment.active_native");
+    return OUString("com.sun.star.comp.test.deployment.active_native");
 }
 
 css::uno::Sequence< OUString > Provider::static_getSupportedServiceNames()
@@ -207,7 +207,7 @@ private:
 };
 
 OUString Dispatch::static_getImplementationName() {
-    return rtl::OUString(
+    return OUString(
         "com.sun.star.comp.test.deployment.active_native_singleton");
 }
 

@@ -36,18 +36,18 @@ namespace sax_fastparser
 
 struct UnknownAttribute
 {
-    ::rtl::OUString maNamespaceURL;
-    ::rtl::OString maName;
-    ::rtl::OString maValue;
+    OUString maNamespaceURL;
+    OString maName;
+    OString maValue;
 
-    UnknownAttribute( const ::rtl::OUString& rNamespaceURL, const ::rtl::OString& rName, const ::rtl::OString& rValue );
+    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& rValue );
 
-    UnknownAttribute( const ::rtl::OString& rName, const ::rtl::OString& rValue );
+    UnknownAttribute( const OString& rName, const OString& rValue );
 
     void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
 };
 
-typedef std::map< sal_Int32, ::rtl::OString > FastAttributeMap;
+typedef std::map< sal_Int32, OString > FastAttributeMap;
 typedef std::vector< UnknownAttribute > UnknownAttributeList;
 
 class SAX_DLLPUBLIC FastAttributeList : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastAttributeList >
@@ -57,16 +57,16 @@ public:
     virtual ~FastAttributeList();
 
     void clear();
-    void add( sal_Int32 nToken, const ::rtl::OString& rValue );
-    void addUnknown( const ::rtl::OUString& rNamespaceURL, const ::rtl::OString& rName, const ::rtl::OString& rValue );
-    void addUnknown( const ::rtl::OString& rName, const ::rtl::OString& rValue );
+    void add( sal_Int32 nToken, const OString& rValue );
+    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& rValue );
+    void addUnknown( const OString& rName, const OString& rValue );
 
     // XFastAttributeList
     virtual ::sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::xml::FastAttribute > SAL_CALL getFastAttributes() throw (::com::sun::star::uno::RuntimeException);
 

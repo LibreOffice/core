@@ -48,7 +48,7 @@
 
     #define LOG_FRAMEACTIONEVENT( SFRAMETYPE, SFRAMENAME, AFRAMEACTION )                                                                \
                 {                                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                                 \
+                    OStringBuffer sBuffer(1024);                                                                                 \
                     sBuffer.append( "[ "                );                                                                              \
                     sBuffer.append( SFRAMETYPE          );                                                                              \
                     sBuffer.append( " ] \""             );                                                                              \
@@ -90,7 +90,7 @@
 
     #define LOG_DISPOSEEVENT( SFRAMETYPE, SFRAMENAME )                                                                                  \
                 {                                                                                                                       \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                                                 \
+                    OStringBuffer sBuffer(1024);                                                                                 \
                     sBuffer.append( "[ "                                    );                                                          \
                     sBuffer.append( SFRAMETYPE                              );                                                          \
                     sBuffer.append( " ] \""                                 );                                                          \

@@ -223,8 +223,8 @@ static void lcl_ReadIniFile( const char* pIniFileName )
 
 struct TraceTextData
 {
-    rtl::OString m_aTraceStr_STMNT;
-    rtl::OString m_aTraceStr_PCode;
+    OString m_aTraceStr_STMNT;
+    OString m_aTraceStr_PCode;
 };
 typedef std::hash_map< sal_Int32, TraceTextData > PCToTextDataMap;
 typedef std::hash_map< OUString, PCToTextDataMap*, OUStringHash, ::std::equal_to< OUString > > ModuleTraceMap;
@@ -257,11 +257,11 @@ const char* lcl_getSpaces( int nSpaceCount )
     return pSpacesEnd - nSpaceCount;
 }
 
-static rtl::OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
+static OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
 {
     static sal_Char Buffer[1000];
 
-    rtl::OString aOStr = OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
+    OString aOStr = OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
     const sal_Char* pStr = aOStr.getStr();
 
     // Skip whitespace
@@ -276,7 +276,7 @@ static rtl::OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
     strncpy( Buffer, pStr, nLen );
     Buffer[nLen] = 0;
 
-    rtl::OString aORetStr( Buffer );
+    OString aORetStr( Buffer );
     return aORetStr;
 }
 
@@ -591,7 +591,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     int nIndent = nCallLvl * GnIndentPerCallLevel;
 
     const TraceTextData& rTraceTextData = itInner->second;
-    const rtl::OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
+    const OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
     bool bSTMT = false;
     if( rStr_STMNT.getLength() )
     {
@@ -626,7 +626,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     }
 
     nIndent += GnIndentForPCode;
-    const rtl::OString& rStr_PCode = rTraceTextData.m_aTraceStr_PCode;
+    const OString& rStr_PCode = rTraceTextData.m_aTraceStr_PCode;
     if( rStr_PCode.getLength() )
     {
         lcl_lineOut( rStr_PCode.getStr(), lcl_getSpaces( nIndent ),
@@ -837,7 +837,7 @@ void dbg_traceNotifyError( SbError nTraceErr, const OUString& aTraceErrMsg,
 #endif
     GnLastCallLvl = nCallLvl;
 
-    rtl::OString aOTraceErrMsg = OUStringToOString( OUString( aTraceErrMsg ), RTL_TEXTENCODING_ASCII_US );
+    OString aOTraceErrMsg = OUStringToOString( OUString( aTraceErrMsg ), RTL_TEXTENCODING_ASCII_US );
 
     char Buffer[200];
     const char* pHandledStr = bTraceErrHandled ? " / HANDLED" : "";
@@ -864,10 +864,10 @@ void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
 
     TraceTextData aData;
 
-    rtl::OString aOTraceStr_STMNT = lcl_toOStringSkipLeadingWhites( aTraceStr_STMNT );
+    OString aOTraceStr_STMNT = lcl_toOStringSkipLeadingWhites( aTraceStr_STMNT );
     aData.m_aTraceStr_STMNT = aOTraceStr_STMNT;
 
-    rtl::OString aOTraceStr_PCode = lcl_toOStringSkipLeadingWhites( aTraceStr_PCode );
+    OString aOTraceStr_PCode = lcl_toOStringSkipLeadingWhites( aTraceStr_PCode );
     aData.m_aTraceStr_PCode = aOTraceStr_PCode;
 
     (*pInnerMap)[nPC] = aData;

@@ -75,7 +75,7 @@ public:
     /** creates a sequence and initializes it with the given string.  This is
         especially useful for labels, which only have one element.
      */
-    explicit CachedDataSequence( const ::rtl::OUString & rSingleText );
+    explicit CachedDataSequence( const OUString & rSingleText );
 
     /// Copy CTOR
     explicit CachedDataSequence( const CachedDataSequence & rSource );
@@ -105,9 +105,9 @@ protected:
     // ____ XDataSequence ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSourceRangeRepresentation()
+    virtual OUString SAL_CALL getSourceRangeRepresentation()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL generateLabel(
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL generateLabel(
         ::com::sun::star::chart2::data::LabelOrigin nLabelOrigin )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
@@ -120,7 +120,7 @@ protected:
 
     // ____ XTextualDataSequence ____
     /// @see ::com::sun::star::chart::data::XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
@@ -140,7 +140,7 @@ protected:
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
-    ::rtl::OUString                                 m_sRole;
+    OUString                                 m_sRole;
     // </properties>
 
     enum DataType
@@ -161,7 +161,7 @@ private:
     ::com::sun::star::uno::Sequence< double > Impl_getNumericalData() const;
     /** is used by interface method getTextualData().
      */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > Impl_getTextualData() const;
+    ::com::sun::star::uno::Sequence< OUString > Impl_getTextualData() const;
     /** is used by interface method getData().
      */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Impl_getMixedData() const;
@@ -170,7 +170,7 @@ private:
     enum DataType                                       m_eCurrentDataType;
 
     ::com::sun::star::uno::Sequence< double >           m_aNumericalSequence;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTextualSequence;
+    ::com::sun::star::uno::Sequence< OUString >  m_aTextualSequence;
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Any >                    m_aMixedSequence;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >

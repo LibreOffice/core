@@ -67,7 +67,7 @@ class KDESalGraphics : public X11SalGraphics
         virtual sal_Bool drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
-                                        const rtl::OUString& aCaption );
+                                        const OUString& aCaption );
 
         /** Check if the bounding regions match.
 
@@ -89,7 +89,7 @@ class KDESalGraphics : public X11SalGraphics
         virtual sal_Bool getNativeControlRegion( ControlType type, ControlPart part,
                                             const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
-                                            const rtl::OUString& aCaption,
+                                            const OUString& aCaption,
                                             Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 };
 

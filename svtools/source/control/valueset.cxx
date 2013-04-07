@@ -106,7 +106,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValueSet(Window *pParent, V
 {
     WinBits nWinBits = WB_TABSTOP;
 
-    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString("border"));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("border"));
     if (aFind != rMap.end())
     {
         if (toBool(aFind->second))
@@ -2162,7 +2162,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
 
     // Remember old and new name for accessibility event.
     ::com::sun::star::uno::Any aOldName, aNewName;
-    ::rtl::OUString sString (pItem->maText);
+    OUString sString (pItem->maText);
     aOldName <<= sString;
     sString = rText;
     aNewName <<= sString;

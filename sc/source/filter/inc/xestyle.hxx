@@ -268,9 +268,9 @@ struct XclExpNumFmt
 {
     sal_uLong           mnScNumFmt;     /// Core index of the number format.
     sal_uInt16          mnXclNumFmt;    /// Resulting Excel format index.
-    rtl::OUString       maNumFmtString; /// format string
+    OUString       maNumFmtString; /// format string
 
-    inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt, const rtl::OUString& rFrmt ) :
+    inline explicit     XclExpNumFmt( sal_uLong nScNumFmt, sal_uInt16 nXclNumFmt, const OUString& rFrmt ) :
                             mnScNumFmt( nScNumFmt ), mnXclNumFmt( nXclNumFmt ), maNumFmtString( rFrmt ) {}
 
     void SaveXml( XclExpXmlStream& rStrm );
@@ -753,12 +753,12 @@ public:
     XclExpDxfs( const XclExpRoot& rRoot );
     virtual ~XclExpDxfs() {}
 
-    sal_Int32 GetDxfId(const rtl::OUString& rName);
+    sal_Int32 GetDxfId(const OUString& rName);
 
     virtual void SaveXml( XclExpXmlStream& rStrm);
 private:
     typedef boost::ptr_vector<XclExpDxf> DxfContainer;
-    std::map<rtl::OUString, sal_Int32> maStyleNameToDxfId;
+    std::map<OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.

@@ -38,7 +38,7 @@ namespace xls {
 struct NumFmtModel
 {
     ::com::sun::star::lang::Locale maLocale;
-    ::rtl::OUString     maFmtCode;
+    OUString     maFmtCode;
     sal_Int16           mnPredefId;
 
     explicit            NumFmtModel();
@@ -63,7 +63,7 @@ public:
     explicit            NumberFormat( const WorkbookHelper& rHelper );
 
     /** Sets the passed format code. */
-    void                setFormatCode( const ::rtl::OUString& rFmtCode );
+    void                setFormatCode( const OUString& rFmtCode );
     /** Sets the passed format code, encoded in UTF-8. */
     void                setFormatCode(
                             const ::com::sun::star::lang::Locale& rLocale,
@@ -96,7 +96,7 @@ public:
     explicit            NumberFormatsBuffer( const WorkbookHelper& rHelper );
 
     /** Inserts a new number format. */
-    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const ::rtl::OUString& rFmtCode );
+    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode );
 
     /** Inserts a new number format code. */
     NumberFormatRef     importNumFmt( const AttributeList& rAttribs );
@@ -119,7 +119,7 @@ private:
     typedef RefMap< sal_Int32, NumberFormat > NumberFormatMap;
 
     NumberFormatMap     maNumFmts;          /// List of number formats.
-    ::rtl::OUString     maLocaleStr;        /// Current office locale.
+    OUString     maLocaleStr;        /// Current office locale.
     sal_Int32           mnHighestId;
 };
 

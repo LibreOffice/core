@@ -45,13 +45,13 @@ public:
         Header   = 4
     };
 
-    ScTypedStrData( const rtl::OUString& rStr, double nVal = 0.0,
+    ScTypedStrData( const OUString& rStr, double nVal = 0.0,
                     StringType eType = Standard );
 
     ScTypedStrData( const ScTypedStrData& rCpy );
 
     bool IsStrData() const;
-    SC_DLLPUBLIC const rtl::OUString& GetString() const;
+    SC_DLLPUBLIC const OUString& GetString() const;
     StringType GetStringType() const;
 
     struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>
@@ -78,7 +78,7 @@ public:
     bool operator< (const ScTypedStrData& r) const;
 
 private:
-    rtl::OUString maStrValue;
+    OUString maStrValue;
     double mfValue;
     StringType meStrType;
 };

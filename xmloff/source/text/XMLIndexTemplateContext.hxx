@@ -69,7 +69,7 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     // pick up PropertyValues to be turned into a sequence.
     ::std::vector< ::com::sun::star::beans::PropertyValues > aValueVector;
 
-    ::rtl::OUString sStyleName;
+    OUString sStyleName;
 
     const SvXMLEnumMapEntry* pOutlineLevelNameMap;
     enum ::xmloff::token::XMLTokenEnum eOutlineLevelAttrName;
@@ -89,28 +89,28 @@ public:
 
     // constants made available to other contexts (template entry
     // contexts, in particular)
-    const ::rtl::OUString sTokenEntryNumber;
-    const ::rtl::OUString sTokenEntryText;
-    const ::rtl::OUString sTokenTabStop;
-    const ::rtl::OUString sTokenText;
-    const ::rtl::OUString sTokenPageNumber;
-    const ::rtl::OUString sTokenChapterInfo;
-    const ::rtl::OUString sTokenHyperlinkStart;
-    const ::rtl::OUString sTokenHyperlinkEnd;
-    const ::rtl::OUString sTokenBibliographyDataField;
+    const OUString sTokenEntryNumber;
+    const OUString sTokenEntryText;
+    const OUString sTokenTabStop;
+    const OUString sTokenText;
+    const OUString sTokenPageNumber;
+    const OUString sTokenChapterInfo;
+    const OUString sTokenHyperlinkStart;
+    const OUString sTokenHyperlinkEnd;
+    const OUString sTokenBibliographyDataField;
 
-    const ::rtl::OUString sCharacterStyleName;
-    const ::rtl::OUString sTokenType;
-    const ::rtl::OUString sText;
-    const ::rtl::OUString sTabStopRightAligned;
-    const ::rtl::OUString sTabStopPosition;
-    const ::rtl::OUString sTabStopFillCharacter;
-    const ::rtl::OUString sBibliographyDataField;
-    const ::rtl::OUString sChapterFormat;
-    const ::rtl::OUString sChapterLevel;//i53420
+    const OUString sCharacterStyleName;
+    const OUString sTokenType;
+    const OUString sText;
+    const OUString sTabStopRightAligned;
+    const OUString sTabStopPosition;
+    const OUString sTabStopFillCharacter;
+    const OUString sBibliographyDataField;
+    const OUString sChapterFormat;
+    const OUString sChapterLevel;//i53420
 
-    const ::rtl::OUString sLevelFormat;
-    const ::rtl::OUString sParaStyleLevel;
+    const OUString sLevelFormat;
+    const OUString sParaStyleLevel;
 
 
     TYPEINFO();
@@ -120,7 +120,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const SvXMLEnumMapEntry* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const sal_Char** aLevelStylePropNameMap,
@@ -143,7 +143,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

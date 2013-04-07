@@ -158,8 +158,8 @@ private:
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const sal_Int32 * pDXAry);
 
     void TrueExtTextOut(const Point & rPoint, const String & rString,
-        const rtl::OString& rByteString, const sal_Int32 * pDXAry);
-    void TrueTextOut(const Point & rPoint, const rtl::OString& rString);
+        const OString& rByteString, const sal_Int32 * pDXAry);
+    void TrueTextOut(const Point & rPoint, const OString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);

@@ -189,9 +189,9 @@ namespace svx{
             {
                 fprintf( fp, "[Options]\n" );
                 fprintf( fp, "UseProxy=%s\n", 2 == maParams.miHTTPConnectionType ? "true" : "false" );
-                fprintf( fp, "ProxyServer=%s\n", rtl::OUStringToOString( maParams.maHTTPProxyServer, RTL_TEXTENCODING_UTF8 ).getStr() );
-                fprintf( fp, "ProxyPort=%s\n", rtl::OUStringToOString( maParams.maHTTPProxyPort, RTL_TEXTENCODING_UTF8 ).getStr() );
-                fprintf( fp, "ReturnAddress=%s\n", rtl::OUStringToOString( GetEMailAddress(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                fprintf( fp, "ProxyServer=%s\n", OUStringToOString( maParams.maHTTPProxyServer, RTL_TEXTENCODING_UTF8 ).getStr() );
+                fprintf( fp, "ProxyPort=%s\n", OUStringToOString( maParams.maHTTPProxyPort, RTL_TEXTENCODING_UTF8 ).getStr() );
+                fprintf( fp, "ReturnAddress=%s\n", OUStringToOString( GetEMailAddress(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 fprintf( fp, "AllowContact=%s\n", IsContactAllowed() ? "true" : "false" );
                 fclose( fp );
             }
@@ -201,8 +201,8 @@ namespace svx{
 
         bool ErrorRepSendDialog::SendReport()
         {
-            rtl::OUString sSubEnvVar("ERRORREPORT_SUBJECT");
-            rtl::OUString strSubject(GetDocType());
+            OUString sSubEnvVar("ERRORREPORT_SUBJECT");
+            OUString strSubject(GetDocType());
             osl_setEnvironment(sSubEnvVar.pData, strSubject.pData);
 
             char szBodyFile[L_tmpnam] = "";
@@ -210,22 +210,22 @@ namespace svx{
 
             if ( fp )
             {
-                rtl::OString strUTF8(rtl::OUStringToOString(GetUsing(), RTL_TEXTENCODING_UTF8));
+                OString strUTF8(OUStringToOString(GetUsing(), RTL_TEXTENCODING_UTF8));
 
                 size_t nWritten = fwrite(strUTF8.getStr(), 1, strUTF8.getLength(), fp);
                 OSL_VERIFY(nWritten == static_cast<size_t>(strUTF8.getLength()));
                 fclose( fp );
 
-                rtl::OUString sBodyEnvVar("ERRORREPORT_BODYFILE");
-                rtl::OUString strBodyFile(rtl::OStringToOUString(rtl::OString(szBodyFile),
+                OUString sBodyEnvVar("ERRORREPORT_BODYFILE");
+                OUString strBodyFile(OStringToOUString(OString(szBodyFile),
                     osl_getThreadTextEncoding()));
                 osl_setEnvironment(sBodyEnvVar.pData, strBodyFile.pData);
             }
 
             int ret = -1;
-            rtl::OUString path1("$BRAND_BASE_DIR/program/crashrep");
+            OUString path1("$BRAND_BASE_DIR/program/crashrep");
             rtl::Bootstrap::expandMacros(path1);
-            rtl::OString path2;
+            OString path2;
             if ((osl::FileBase::getSystemPathFromFileURL(path1, path1) ==
                  osl::FileBase::E_None) &&
                 path1.convertToString(
@@ -233,7 +233,7 @@ namespace svx{
                     (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
                      RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
             {
-                rtl::OStringBuffer cmd;
+                OStringBuffer cmd;
                 tools::appendUnixShellWord(&cmd, path2);
                 cmd.append(" -debug -load -send -noui");
                 ret = system(cmd.getStr());

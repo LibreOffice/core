@@ -75,7 +75,7 @@ public:
     /**
      * @descr:  Add a attribute to the attribute list.
      */
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value) = 0;
+    virtual void    AddAttribute(const OUString& name, const OUString& value) = 0;
 
     /**
      * @descr:  Clear all the attributes in the attribute list.

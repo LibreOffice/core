@@ -59,9 +59,6 @@ typedef boost::unordered_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 #include <config_mingw.h>
 
@@ -2752,14 +2749,14 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
     mpFont = gr_make_font_with_advance_fn(static_cast<float>(-aLogFont.lfHeight),
         hDC, gr_fontAdvance, rWFD.GraphiteFace());
     maImpl.SetFont(mpFont);
-    const rtl::OString aLang = OUStringToOString( LanguageTag( rWFE.maFontSelData.meLanguage ).getBcp47(),
+    const OString aLang = OUStringToOString( LanguageTag( rWFE.maFontSelData.meLanguage ).getBcp47(),
             RTL_TEXTENCODING_ASCII_US);
-    rtl::OString name = rtl::OUStringToOString(
+    OString name = OUStringToOString(
         rWFE.maFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
-        rtl::OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
+        OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
         mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aFeat.getStr(), aLang.getStr());
     }
     else

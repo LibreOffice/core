@@ -36,7 +36,6 @@ namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 namespace dp_manager {
 

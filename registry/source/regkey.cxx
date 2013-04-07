@@ -25,7 +25,6 @@
 #include "regimpl.hxx"
 #include "keyimpl.hxx"
 
-using rtl::OUString;
 
 //*********************************************************************
 //  acquireKey

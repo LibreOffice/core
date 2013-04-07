@@ -58,16 +58,16 @@ namespace
 
   void LngMiscTest::testRemoveHyphens()
   {
-    ::rtl::OUString str1("");
-    ::rtl::OUString str2("a-b--c---");
+    OUString str1("");
+    OUString str2("a-b--c---");
 
-    ::rtl::OUStringBuffer str3Buf;
+    OUStringBuffer str3Buf;
     str3Buf.append(SVT_SOFT_HYPHEN);
     str3Buf.append(SVT_HARD_HYPHEN);
     str3Buf.append(SVT_HARD_HYPHEN);
-    ::rtl::OUString str3(str3Buf.makeStringAndClear());
+    OUString str3(str3Buf.makeStringAndClear());
 
-    ::rtl::OUString str4("asdf");
+    OUString str4("asdf");
 
     bool bModified = linguistic::RemoveHyphens(str1);
     CPPUNIT_ASSERT(!bModified);
@@ -89,17 +89,17 @@ namespace
 
   void LngMiscTest::testRemoveControlChars()
   {
-    ::rtl::OUString str1("");
-    ::rtl::OUString str2("asdf");
-    ::rtl::OUString str3("asdf\nasdf");
+    OUString str1("");
+    OUString str2("asdf");
+    OUString str3("asdf\nasdf");
 
-    ::rtl::OUStringBuffer str4Buf(33);
+    OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
     for(int i = 0; i < 33; i++)
       str4Buf[i] = static_cast<sal_Unicode>(i);
     //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
     //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
-    ::rtl::OUString str4(str4Buf.makeStringAndClear());
+    OUString str4(str4Buf.makeStringAndClear());
 
     bool bModified = linguistic::RemoveControlChars(str1);
     CPPUNIT_ASSERT(!bModified);
@@ -120,17 +120,17 @@ namespace
 
   void LngMiscTest::testReplaceControlChars()
   {
-    ::rtl::OUString str1("");
-    ::rtl::OUString str2("asdf");
-    ::rtl::OUString str3("asdf\nasdf");
+    OUString str1("");
+    OUString str2("asdf");
+    OUString str3("asdf\nasdf");
 
-    ::rtl::OUStringBuffer str4Buf(33);
+    OUStringBuffer str4Buf(33);
     str4Buf.setLength(33);
     for(int i = 0; i < 33; i++)
       str4Buf[i] = static_cast<sal_Unicode>(i);
     //    TODO: is this a bug? shouldn't RemoveControlChars remove this?
     //    str4Buf[33] = static_cast<sal_Unicode>(0x7F);
-    ::rtl::OUString str4(str4Buf.makeStringAndClear());
+    OUString str4(str4Buf.makeStringAndClear());
 
     bool bModified = linguistic::ReplaceControlChars(str1);
     CPPUNIT_ASSERT(!bModified);
@@ -153,16 +153,16 @@ namespace
 
   void LngMiscTest::testGetThesaurusReplaceText()
   {
-    const ::rtl::OUString str1("");
-    const ::rtl::OUString str2("asdf");
-    const ::rtl::OUString str3("asdf (abc)");
-    const ::rtl::OUString str4("asdf*");
-    const ::rtl::OUString str5("asdf * ");
-    const ::rtl::OUString str6("asdf (abc) *");
-    const ::rtl::OUString str7("asdf asdf * (abc)");
-    const ::rtl::OUString str8(" * (abc) asdf *");
+    const OUString str1("");
+    const OUString str2("asdf");
+    const OUString str3("asdf (abc)");
+    const OUString str4("asdf*");
+    const OUString str5("asdf * ");
+    const OUString str6("asdf (abc) *");
+    const OUString str7("asdf asdf * (abc)");
+    const OUString str8(" * (abc) asdf *");
 
-    ::rtl::OUString r = linguistic::GetThesaurusReplaceText(str1);
+    OUString r = linguistic::GetThesaurusReplaceText(str1);
     CPPUNIT_ASSERT(r.isEmpty());
 
     r = linguistic::GetThesaurusReplaceText(str2);

@@ -57,7 +57,7 @@ public:
         throw (css::uno::RuntimeException);
 
 private:
-    ::rtl::OUString msEventType;
+    OUString msEventType;
     css::uno::Reference<css::drawing::framework::XConfigurationController> mxConfigurationController;
     Predicate maPredicate;
     Action maAction;
@@ -75,7 +75,7 @@ private:
     */
     PresenterFrameworkObserver (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-        const ::rtl::OUString& rsEventName,
+        const OUString& rsEventName,
         const Predicate& rPredicate,
         const Action& rAction);
     virtual ~PresenterFrameworkObserver (void);

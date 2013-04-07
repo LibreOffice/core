@@ -68,7 +68,6 @@
 #include <vcl/graphicfilter.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using namespace ::sfx2;
 
 #define SwFPos SvxSwFramePosString

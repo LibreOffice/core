@@ -42,10 +42,10 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoSimpleAnimationControlModel::getServiceName()
+    OUString UnoSimpleAnimationControlModel::getServiceName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
+        return OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
     }
 
     //--------------------------------------------------------------------
@@ -54,7 +54,7 @@ namespace toolkit
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl ) );
+            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl ) );
 
         case BASEPROPERTY_STEP_TIME:
             return uno::makeAny( (sal_Int32) 100 );
@@ -88,22 +88,22 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSimpleAnimationControlModel::getImplementationName()
+    OUString SAL_CALL UnoSimpleAnimationControlModel::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel" );
+        return OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControlModel" );
     }
 
     //--------------------------------------------------------------------
-    uno::Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControlModel::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL UnoSimpleAnimationControlModel::getSupportedServiceNames()
         throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 2 );
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 2]
-            = ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
+            = OUString::createFromAscii( szServiceName_UnoSimpleAnimationControlModel );
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 1]
-            = ::rtl::OUString::createFromAscii( szServiceName2_UnoSimpleAnimationControlModel );
+            = OUString::createFromAscii( szServiceName2_UnoSimpleAnimationControlModel );
         return aServices;
     }
 
@@ -117,25 +117,25 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoSimpleAnimationControl::GetComponentServiceName()
+    OUString UnoSimpleAnimationControl::GetComponentServiceName()
     {
-        return ::rtl::OUString("SimpleAnimation");
+        return OUString("SimpleAnimation");
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSimpleAnimationControl::getImplementationName()
+    OUString SAL_CALL UnoSimpleAnimationControl::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControl" );
+        return OUString( "com.sun.star.comp.toolkit.UnoSimpleAnimationControl" );
     }
 
     //--------------------------------------------------------------------
-    uno::Sequence< ::rtl::OUString > SAL_CALL UnoSimpleAnimationControl::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL UnoSimpleAnimationControl::getSupportedServiceNames()
         throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aServices( UnoSimpleAnimationControl_Base::getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( UnoSimpleAnimationControl_Base::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl );
+        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_UnoSimpleAnimationControl );
         return aServices;
     }
 

@@ -204,11 +204,11 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
 }
 
 //------------------------------------------------------------------
-::rtl::OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
+OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "fmtools::getLabelName" );
     if (!xControlModel.is())
-        return ::rtl::OUString();
+        return OUString();
 
     if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
     {
@@ -371,7 +371,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     if (!xPersistence.is())
         return OBJ_FM_CONTROL;
 
-    ::rtl::OUString sPersistentServiceName = xPersistence->getServiceName();
+    OUString sPersistentServiceName = xPersistence->getServiceName();
     if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))   // 5.0-Name
     {
         // may be a simple edit field or a formatted field, dependent of the supported services

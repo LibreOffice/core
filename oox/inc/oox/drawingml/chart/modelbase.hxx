@@ -96,7 +96,7 @@ private:
 
 struct NumberFormat
 {
-    ::rtl::OUString     maFormatCode;       /// Number format code.
+    OUString     maFormatCode;       /// Number format code.
     bool                mbSourceLinked;     /// True = number format linked to source data.
 
     explicit            NumberFormat();

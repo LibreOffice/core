@@ -814,8 +814,8 @@ void FmSearchDialog::LoadParams()
 {
     FmSearchParams aParams(m_pConfig->getParams());
 
-    const ::rtl::OUString* pHistory     =                   aParams.aHistory.getConstArray();
-    const ::rtl::OUString* pHistoryEnd  =   pHistory    +   aParams.aHistory.getLength();
+    const OUString* pHistory     =                   aParams.aHistory.getConstArray();
+    const OUString* pHistoryEnd  =   pHistory    +   aParams.aHistory.getLength();
     for (; pHistory != pHistoryEnd; ++pHistory)
         m_cmbSearchText.InsertEntry( *pHistory );
 
@@ -910,7 +910,7 @@ void FmSearchDialog::SaveParams() const
     FmSearchParams aCurrentSettings;
 
     aCurrentSettings.aHistory.realloc( m_cmbSearchText.GetEntryCount() );
-    ::rtl::OUString* pHistory = aCurrentSettings.aHistory.getArray();
+    OUString* pHistory = aCurrentSettings.aHistory.getArray();
     for (sal_uInt16 i=0; i<m_cmbSearchText.GetEntryCount(); ++i, ++pHistory)
         *pHistory = m_cmbSearchText.GetEntry(i);
 

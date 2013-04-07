@@ -37,8 +37,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( sal_uInt16 id );
 
 template <typename Unique, sal_uInt16 id>
 struct StaticResourceString :
-        public ::rtl::StaticWithInit< ::rtl::OUString, Unique > {
-    const ::rtl::OUString operator () () { return getResourceString(id); }
+        public ::rtl::StaticWithInit< OUString, Unique > {
+    const OUString operator () () { return getResourceString(id); }
 };
 
 //==============================================================================

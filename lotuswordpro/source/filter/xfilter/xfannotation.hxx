@@ -67,23 +67,23 @@
 class XFAnnotation : public XFContentContainer
 {
 public:
-    void    SetDate(rtl::OUString date);
+    void    SetDate(OUString date);
 
-    void SetAuthor(rtl::OUString author);
+    void SetAuthor(OUString author);
 
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strDate;
-    rtl::OUString   m_strAuthor;
+    OUString   m_strDate;
+    OUString   m_strAuthor;
 };
 
-inline void XFAnnotation::SetDate(rtl::OUString date)
+inline void XFAnnotation::SetDate(OUString date)
 {
     m_strDate = date;
 }
 
-inline void XFAnnotation::SetAuthor(rtl::OUString author)
+inline void XFAnnotation::SetAuthor(OUString author)
 {
     m_strAuthor = author;
 }

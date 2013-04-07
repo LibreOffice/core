@@ -40,7 +40,7 @@ using ::com::sun::star::util::SearchOptions;
 
 namespace {
 
-bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, rtl::OUString& rVal )
+bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, OUString& rVal )
 {
     //  true = more than 1 paragraph
 
@@ -54,13 +54,13 @@ bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, rtl::OUSt
 }
 
 bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
-                         const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+                         const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool    bFound = false;
     bool    bDoSearch = true;
     bool    bDoBack = rSearchItem.GetBackward();
 
-    rtl::OUString  aString;
+    OUString  aString;
     ScBaseCell* pCell;
     if (rSearchItem.GetSelection())
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
@@ -157,14 +157,14 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 if (rSearchItem.GetRegExp())
                 {
                     pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
-                    rtl::OUStringBuffer aStrBuffer(aString);
+                    OUStringBuffer aStrBuffer(aString);
                     aStrBuffer.remove(nStart, nEnd-nStart+1);
                     aStrBuffer.insert(nStart, sReplStr);
                     aString = aStrBuffer.makeStringAndClear();
                 }
                 else
                 {
-                    rtl::OUStringBuffer aStrBuffer(aString);
+                    OUStringBuffer aStrBuffer(aString);
                     aStrBuffer.remove(nStart, nEnd-nStart+1);
                     aStrBuffer.insert(nStart, rSearchItem.GetReplaceString());
                     aString = aStrBuffer.makeStringAndClear();
@@ -273,7 +273,7 @@ void ScTable::SkipFilteredRows(SCROW& rRow, SCROW& rLastNonFilteredRow, bool bFo
 }
 
 bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                     const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+                     const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     bool bAll =  (rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL)
@@ -421,7 +421,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
 }
 
 bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMark,
-                        ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+                        ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = true;
     SCCOL nCol = 0;
@@ -443,7 +443,7 @@ bool ScTable::SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMar
 }
 
 bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                      const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+                      const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     SCCOL nCol = rCol;
@@ -473,7 +473,7 @@ bool ScTable::Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow
 
 bool ScTable::ReplaceAll(
     const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-    rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+    OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     SCCOL nCol = 0;
     SCROW nRow = -1;
@@ -664,7 +664,7 @@ bool ScTable::ReplaceAllStyle(
 
 bool ScTable::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
-    ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+    ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     sal_uInt16 nCommand = rSearchItem.GetCommand();
     bool bFound = false;
@@ -728,7 +728,7 @@ bool ScTable::SearchAndReplace(
 
 bool ScTable::SearchAndReplaceEmptyCells(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
-    ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+    ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     SCCOL nColStart, nColEnd;
     SCROW nRowStart, nRowEnd;
@@ -808,7 +808,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
 namespace {
 
 bool lcl_maybeReplaceCellString(
-    ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, rtl::OUString& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
+    ScColumn& rColObj, SCCOL& rCol, SCROW& rRow, OUString& rUndoStr, SCCOL nCol, SCROW nRow, const SvxSearchItem& rSearchItem)
 {
     ScBaseCell* pCell = rColObj.GetCell(nRow);
     if (!pCell || pCell->GetCellType() == CELLTYPE_NOTE)
@@ -820,7 +820,7 @@ bool lcl_maybeReplaceCellString(
             rSearchItem.GetReplaceString().Len())
         {
             rColObj.Insert(nRow, new ScStringCell(rSearchItem.GetReplaceString()));
-            rUndoStr = rtl::OUString();
+            rUndoStr = OUString();
         }
         return true;
     }
@@ -831,7 +831,7 @@ bool lcl_maybeReplaceCellString(
 
 bool ScTable::SearchRangeForEmptyCell(
     const ScRange& rRange, const SvxSearchItem& rSearchItem,
-    SCCOL& rCol, SCROW& rRow, rtl::OUString& rUndoStr)
+    SCCOL& rCol, SCROW& rRow, OUString& rUndoStr)
 {
     sal_uInt16 nCmd = rSearchItem.GetCommand();
     bool bSkipFiltered = rSearchItem.IsSearchFiltered();
@@ -941,7 +941,7 @@ bool ScTable::SearchRangeForEmptyCell(
 
 bool ScTable::SearchRangeForAllEmptyCells(
     const ScRange& rRange, const SvxSearchItem& rSearchItem,
-    ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
+    ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
     bool bReplace = (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) &&

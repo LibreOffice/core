@@ -21,7 +21,7 @@
 namespace dbaui
 {
     //------------------------------------------------------------------
-    sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars)
+    sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars)
     {
         return  (
                  (_cChar >= 'A' && _cChar <= 'Z') ||
@@ -32,8 +32,8 @@ namespace dbaui
                 );
     }
     //------------------------------------------------------------------
-    sal_Bool OSQLNameChecker::checkString(const ::rtl::OUString& _sToCheck,
-                                        ::rtl::OUString& _rsCorrected)
+    sal_Bool OSQLNameChecker::checkString(const OUString& _sToCheck,
+                                        OUString& _rsCorrected)
     {
         sal_Bool bCorrected = sal_False;
         if ( m_bCheck )
@@ -56,7 +56,7 @@ namespace dbaui
     //------------------------------------------------------------------
     void OSQLNameEdit::Modify()
     {
-        ::rtl::OUString sCorrected;
+        OUString sCorrected;
         if ( checkString( GetText(),sCorrected ) )
         {
             Selection aSel = GetSelection();
@@ -70,7 +70,7 @@ namespace dbaui
     //------------------------------------------------------------------
     void OSQLNameComboBox::Modify()
     {
-        ::rtl::OUString sCorrected;
+        OUString sCorrected;
         if ( checkString( GetText(),sCorrected ) )
         {
             Selection aSel = GetSelection();

@@ -67,10 +67,10 @@ public:
 
     virtual sal_Int32 SAL_CALL getAccessibleRowCount() throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
+    virtual OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
+    virtual OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
                                 throw (::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
@@ -134,9 +134,9 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
@@ -152,8 +152,8 @@ public:
     void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
 
 protected:
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
 
     virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
     virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);

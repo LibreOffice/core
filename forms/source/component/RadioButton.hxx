@@ -43,7 +43,7 @@ public:
                 throw (::com::sun::star::uno::Exception);
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -66,7 +66,7 @@ protected:
                             translateExternalValueToControlValue( const ::com::sun::star::uno::Any& _rExternalValue ) const;
 
 protected:
-    void SetSiblingPropsTo(const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
+    void SetSiblingPropsTo(const OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
 
     DECLARE_XCLONEABLE( );
 

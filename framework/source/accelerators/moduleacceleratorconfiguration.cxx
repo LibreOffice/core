@@ -94,12 +94,12 @@ void SAL_CALL ModuleAcceleratorConfiguration::initialize(const css::uno::Sequenc
     WriteGuard aWriteLock(m_aLock);
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
-    m_sModule = lArgs.getUnpackedValueOrDefault(::rtl::OUString("ModuleIdentifier"), ::rtl::OUString());
-    m_sLocale = lArgs.getUnpackedValueOrDefault(::rtl::OUString("Locale")          , ::rtl::OUString("x-default"));
+    m_sModule = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
+    m_sLocale = lArgs.getUnpackedValueOrDefault(OUString("Locale")          , OUString("x-default"));
 
     if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
+                OUString("The module dependend accelerator configuration service was initialized with an empty module identifier!"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     aWriteLock.unlock();

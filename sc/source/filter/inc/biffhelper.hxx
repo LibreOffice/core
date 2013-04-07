@@ -605,7 +605,7 @@ public:
     // BIFF12 import ----------------------------------------------------------
 
     /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */
-    static ::rtl::OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true, bool bAllowNulChars = false );
+    static OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true, bool bAllowNulChars = false );
 
     // BIFF2-BIFF8 import -----------------------------------------------------
 
@@ -635,8 +635,8 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** BIFF12 stream operator for an ::rtl::OUString, reads 32-bit string length and Unicode array. */
-inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, ::rtl::OUString& orString )
+/** BIFF12 stream operator for an OUString, reads 32-bit string length and Unicode array. */
+inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, OUString& orString )
 {
     orString = BiffHelper::readString( rStrm );
     return rStrm;

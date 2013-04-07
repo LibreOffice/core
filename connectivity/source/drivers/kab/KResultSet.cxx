@@ -148,7 +148,7 @@ Sequence<  Type > SAL_CALL KabResultSet::getTypes() throw(RuntimeException)
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabResultSet::findColumn(const ::rtl::OUString& columnName) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL KabResultSet::findColumn(const OUString& columnName) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
@@ -164,7 +164,7 @@ sal_Int32 SAL_CALL KabResultSet::findColumn(const ::rtl::OUString& columnName) t
                 return i;
 
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_INVALID_COLUMNNAME,
             "$columnname$",columnName
          ) );
@@ -175,12 +175,12 @@ sal_Int32 SAL_CALL KabResultSet::findColumn(const ::rtl::OUString& columnName) t
     return 0;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString aRet;
+    OUString aRet;
     sal_Int32 nAddressees = m_aKabAddressees.size();
     ::KABC::Field::List aFields = ::KABC::Field::allFields();
 
@@ -203,7 +203,7 @@ return aRet;
         if (!aQtName.isNull())
         {
             m_bWasNull = false;
-            aRet = ::rtl::OUString((const sal_Unicode *) aQtName.ucs2());
+            aRet = OUString((const sal_Unicode *) aQtName.ucs2());
             return aRet;
         }
     }
@@ -732,7 +732,7 @@ void SAL_CALL KabResultSet::updateDouble(sal_Int32, double) throw(SQLException, 
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabResultSet::updateString(sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL KabResultSet::updateString(sal_Int32, const OUString&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
@@ -803,7 +803,7 @@ Any SAL_CALL KabResultSet::getBookmark() throw( SQLException,  RuntimeException)
         if (m_nRowPos != -1 && m_nRowPos != nAddressees)
         {
                 QString aQtName = m_aKabAddressees[m_nRowPos].uid();
-               ::rtl::OUString sUniqueIdentifier = ::rtl::OUString((const sal_Unicode *) aQtName.ucs2());
+               OUString sUniqueIdentifier = OUString((const sal_Unicode *) aQtName.ucs2());
         return makeAny(sUniqueIdentifier);
     }
     return Any();
@@ -814,13 +814,13 @@ sal_Bool SAL_CALL KabResultSet::moveToBookmark(const  Any& bookmark) throw( SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sBookmark = comphelper::getString(bookmark);
+    OUString sBookmark = comphelper::getString(bookmark);
         sal_Int32 nAddressees = m_aKabAddressees.size();
 
     for (sal_Int32 nRow = 0; nRow < nAddressees; nRow++)
     {
                 QString aQtName = m_aKabAddressees[nRow].uid();
-               ::rtl::OUString sUniqueIdentifier = ::rtl::OUString((const sal_Unicode *) aQtName.ucs2());
+               OUString sUniqueIdentifier = OUString((const sal_Unicode *) aQtName.ucs2());
 
         if (sUniqueIdentifier == sBookmark)
         {
@@ -857,8 +857,8 @@ sal_Int32 SAL_CALL KabResultSet::compareBookmarks(const  Any& firstItem, const  
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sFirst = comphelper::getString(firstItem);
-    ::rtl::OUString sSecond = comphelper::getString(secondItem);
+    OUString sFirst = comphelper::getString(firstItem);
+    OUString sSecond = comphelper::getString(secondItem);
 
     if (sFirst < sSecond)
         return CompareBookmark::LESS;
@@ -877,7 +877,7 @@ sal_Int32 SAL_CALL KabResultSet::hashBookmark(const  Any& bookmark) throw( SQLEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sBookmark = comphelper::getString(bookmark);
+    OUString sBookmark = comphelper::getString(bookmark);
 
     return sBookmark.hashCode();
 }
@@ -896,7 +896,7 @@ IPropertyArrayHelper* KabResultSet::createArrayHelper() const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);

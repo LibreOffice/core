@@ -171,7 +171,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     sal_uInt16 nLoButtons   = ReadShortRes();
     sal_uInt16 nHiDefButton = ReadShortRes();
     sal_uInt16 nLoDefButton = ReadShortRes();
-    rtl::OString aHelpId( ReadByteStringRes() );
+    OString aHelpId( ReadByteStringRes() );
     /* sal_uInt16 bSysModal = */ ReadShortRes();
     SetHelpId( aHelpId );
     WinBits nBits = (((sal_uLong)nHiButtons << 16) + nLoButtons) |
@@ -252,10 +252,10 @@ void MessBox::ImplPosControls()
 
 
     // Message-Text um Tabs bereinigen
-    rtl::OUString   aTabStr("    ");
+    OUString   aTabStr("    ");
     sal_uInt16      nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
-        nIndex = aMessText.SearchAndReplace( rtl::OUString('\t'), aTabStr, nIndex );
+        nIndex = aMessText.SearchAndReplace( OUString('\t'), aTabStr, nIndex );
 
     // Wenn Fenster zu schmall, machen wir Dialog auch breiter
     if ( mpWindowImpl->mbFrame )

@@ -39,7 +39,7 @@ namespace apitest
 void XTextField::testGetPresentation()
 {
     uno::Reference< text::XTextField > xTextField(init(), UNO_QUERY_THROW);
-    rtl::OUString aString = xTextField->getPresentation(true);
+    OUString aString = xTextField->getPresentation(true);
     CPPUNIT_ASSERT(!aString.isEmpty());
     aString = xTextField->getPresentation(false);
     CPPUNIT_ASSERT(!aString.isEmpty());

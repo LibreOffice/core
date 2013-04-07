@@ -461,7 +461,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
                     const Rectangle& rControlRegion,
                     ControlState nState,
                     const ImplControlValue& aValue,
-                    const rtl::OUString& )
+                    const OUString& )
 {
     sal_Bool bOK = sal_False;
 
@@ -1168,7 +1168,7 @@ sal_Bool AquaSalGraphics::drawNativeControl(ControlType nType,
  *  aCaption:       A caption or title string (like button text etc)
  */
 sal_Bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState /*nState*/,
-                                               const ImplControlValue& aValue, const rtl::OUString&,
+                                               const ImplControlValue& aValue, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {

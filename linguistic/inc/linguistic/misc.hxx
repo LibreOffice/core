@@ -91,7 +91,7 @@ LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
-sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
+sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 );
 
 /** Convert Locale to LanguageType for legacy handling.
     Linguistic specific handling of an empty locale denoting LANGUAGE_NONE.
@@ -123,18 +123,18 @@ sal_Bool    IsReadOnly( const String &rURL, sal_Bool *pbExist = 0 );
 sal_Bool    FileExists( const String &rURL );
 
 
-::rtl::OUString     GetDictionaryWriteablePath();
-::com::sun::star::uno::Sequence< ::rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
+OUString     GetDictionaryWriteablePath();
+::com::sun::star::uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
 LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
 
-LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
+LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos );
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenatedWord >
-            RebuildHyphensAndControlChars( const rtl::OUString &rOrigWord,
+            RebuildHyphensAndControlChars( const OUString &rOrigWord,
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XHyphenatedWord > &rxHyphWord );
 
@@ -145,7 +145,7 @@ inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     {
 LNG_DLLPUBLIC CapType SAL_CALL capitalType(const OUString&, CharClass *);
 
 String      ToLower( const String &rText, sal_Int16 nLanguage );
-LNG_DLLPUBLIC sal_Bool      HasDigits( const ::rtl::OUString &rText );
+LNG_DLLPUBLIC sal_Bool      HasDigits( const OUString &rText );
 LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 
 
@@ -167,13 +167,13 @@ sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rP
     ::com::sun::star::linguistic2::XDictionaryEntry >
         SearchDicList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList >& rDicList,
-            const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+            const OUString& rWord, sal_Int16 nLanguage,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry );
 
 LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,
-    const ::rtl::OUString &rWord, sal_Bool bIsNeg,
-    const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
+    const OUString &rWord, sal_Bool bIsNeg,
+    const OUString &rRplcTxt, sal_Int16 nRplcLang,
     sal_Bool bStripDot = sal_True );
 
 LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > &xDicList );

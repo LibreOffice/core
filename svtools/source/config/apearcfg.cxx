@@ -138,7 +138,7 @@ void  SvtTabAppearanceCfg::Commit()
     PutProperties(rNames, aValues);
 }
 
-void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 

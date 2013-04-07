@@ -742,7 +742,7 @@ OUString SAL_CALL SdUnoSearchReplaceDescriptor::getReplaceString()
     return maReplaceStr;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const ::rtl::OUString& aReplaceString )
+void SAL_CALL SdUnoSearchReplaceDescriptor::setReplaceString( const OUString& aReplaceString )
     throw(::com::sun::star::uno::RuntimeException)
 {
     maReplaceStr = aReplaceString;
@@ -756,7 +756,7 @@ uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdUnoSearch
     return mpPropSet->getPropertySetInfo();
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -784,7 +784,7 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUStr
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::OUString& PropertyName )
+uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const OUString& PropertyName )
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -811,10 +811,10 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::O
     return aAny;
 }
 
-void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
-void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const ::rtl::OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addPropertyChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removePropertyChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::addVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL SdUnoSearchReplaceDescriptor::removeVetoableChangeListener( const OUString& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >&  ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) {}
 
 
 /* ================================================================= */

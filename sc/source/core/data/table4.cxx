@@ -83,7 +83,7 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
     xub_StrLen nNum = 0;
     if ( p[nNum] == '-' )
         nNum = nNeg = 1;
-    while ( p[nNum] && CharClass::isAsciiNumeric( rtl::OUString(p[nNum]) ) )
+    while ( p[nNum] && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
         nNum++;
 
     sal_Unicode cNext = p[nNum];            // 0 if at the end
@@ -92,7 +92,7 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
     // #i5550# If there are numbers at the beginning and the end,
     // prefer the one at the beginning only if it's followed by a space.
     // Otherwise, use the number at the end, to enable things like IP addresses.
-    if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(rtl::OUString(cLast)) ) )
+    if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
     {   // number at the beginning
         nVal = aValue.Copy( 0, nNum ).ToInt32();
         //  any number with a leading zero sets the minimum number of digits
@@ -105,7 +105,7 @@ static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16*
     {
         nNeg = 0;
         xub_StrLen nEnd = nNum = aValue.Len() - 1;
-        while ( nNum && CharClass::isAsciiNumeric( rtl::OUString(p[nNum]) ) )
+        while ( nNum && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
             nNum--;
         if ( p[nNum] == '-' )
         {
@@ -326,14 +326,14 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     }
     else if (eCellType == CELLTYPE_STRING || eCellType == CELLTYPE_EDIT)
     {
-        rtl::OUString aStr;
+        OUString aStr;
         GetString(nCol, nRow, aStr);
 
         // fdo#39500 don't deduce increment from multiple equal list entries
         bool bAllSame = true;
         for (sal_uInt16 i = 0; i < nCount; ++i)
         {
-            rtl::OUString aTestStr;
+            OUString aTestStr;
             GetString(static_cast<SCCOL>(nCol + i* nAddX), static_cast<SCROW>(nRow + i * nAddY), aTestStr);
             if(aStr != aTestStr)
             {

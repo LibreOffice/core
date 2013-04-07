@@ -115,7 +115,6 @@
 extern sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::container::XNameAccess;
@@ -1189,7 +1188,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 else if( sTmp.EqualsAscii( sGraphicObjectProtocol,
                                            0, sizeof(sGraphicObjectProtocol)-1 ) )
                 {
-                    rtl::OString sId(rtl::OUStringToOString(
+                    OString sId(OUStringToOString(
                         sTmp.Copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
@@ -1256,10 +1255,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
                 // the package URL based graphics are handled in different way currently
                 // TODO/LATER: actually this is the correct place to handle them
-                ::rtl::OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
+                OUString aGraphicProtocol( RTL_CONSTASCII_USTRINGPARAM( sGraphicObjectProtocol ) );
                 if( aGrfUrl.startsWith( aGraphicProtocol ) )
                 {
-                    rtl::OString sId(rtl::OUStringToOString(
+                    OString sId(OUStringToOString(
                         aGrfUrl.copy(sizeof(sGraphicObjectProtocol)-1),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
@@ -1289,7 +1288,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     {
                         svt::EmbeddedObjectRef &rObj = pOleNode->GetOLEObj().GetObject();
 
-                        ::rtl::OUString aMediaType;
+                        OUString aMediaType;
                         rObj.SetGraphic( aGraphic, aMediaType );
                     }
                 }
@@ -1565,8 +1564,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 else
                 {
-                    rtl::OUString sPrefix( RTL_CONSTASCII_USTRINGPARAM(sGraphicObjectProtocol) );
-                    rtl::OUString sId(rtl::OStringToOUString(
+                    OUString sPrefix( RTL_CONSTASCII_USTRINGPARAM(sGraphicObjectProtocol) );
+                    OUString sId(OStringToOUString(
                         pGrfNode->GetGrfObj().GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US));
                     sGrfName = sPrefix + sId;
@@ -1740,7 +1739,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 aAny <<= aHexCLSID;
             else if(FN_UNO_STREAM_NAME == pEntry->nWID)
             {
-                aAny <<= ::rtl::OUString(pOleNode->GetOLEObj().GetCurrentPersistName());
+                aAny <<= OUString(pOleNode->GetOLEObj().GetCurrentPersistName());
             }
             else if(FN_EMBEDDED_OBJECT == pEntry->nWID)
             {
@@ -2247,7 +2246,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 else if( sGraphicURL.EqualsAscii( sGraphicObjectProtocol,
                                        0, sizeof(sGraphicObjectProtocol)-1 ) )
                 {
-                    rtl::OString sId(rtl::OUStringToOString(
+                    OString sId(OUStringToOString(
                         sGraphicURL.Copy( sizeof(sGraphicObjectProtocol)-1 ),
                         RTL_TEXTENCODING_ASCII_US));
                     pGrfObj = new GraphicObject( sId );
@@ -2290,19 +2289,19 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
             const ::uno::Any* pSurroundContour;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUR, pSurroundContour))
-                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
+                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SURROUND_CONTOUR)), *pSurroundContour);
             const ::uno::Any* pContourOutside;
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
-                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
+                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_OUTSIDE)), *pContourOutside);
             const ::uno::Any* pContourPoly;
             if(pProps->GetProperty(FN_PARAM_COUNTOUR_PP, 0, pContourPoly))
-                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
+                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_CONTOUR_POLY_POLYGON)), *pContourPoly);
             const ::uno::Any* pPixelContour;
             if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))
-                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
+                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_PIXEL_CONTOUR)), *pPixelContour);
             const ::uno::Any* pAutoContour;
             if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
-                setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
+                setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
         }
         else
         {
@@ -2329,7 +2328,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     }
 
                     pCnt.reset( new comphelper::EmbeddedObjectContainer );
-                    ::rtl::OUString aName;
+                    OUString aName;
                     xIPObj = pCnt->CreateEmbeddedObject( aClassName.GetByteSequence(), aName );
                 }
                 if ( xIPObj.is() )
@@ -2394,7 +2393,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
             else if( pStreamName )
             {
-                ::rtl::OUString sStreamName;
+                OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
                 pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
@@ -2421,7 +2420,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
                 if ( xChild.is() )
                     xChild->setParent( mrPers.GetModel() );
-                ::rtl::OUString rName;
+                OUString rName;
                 mrPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
                 SwFlyFrmFmt* pFrmFmt = 0;
@@ -2436,21 +2435,21 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             GetOrCreateSdrObject( pFmt );
         const ::uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
-            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
+            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_Z_ORDER)), *pOrder);
         const ::uno::Any* pReplacement;
         if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
-            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
+            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
         // new attribute Title
         const ::uno::Any* pTitle;
         if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
         {
-            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
+            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
         }
         // new attribute Description
         const ::uno::Any* pDescription;
         if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
         {
-            setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
+            setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
         }
     }
     else

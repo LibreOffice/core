@@ -54,7 +54,7 @@ namespace svxform
         /** retrieves the URI for the toolbox associated with the given slot, depending
             on the type of our document
         */
-        SVX_DLLPUBLIC ::rtl::OUString
+        SVX_DLLPUBLIC OUString
                 getToolboxResourceName( sal_uInt16 _nSlotId ) const;
 
         /** toggles the toolbox associated with the given slot

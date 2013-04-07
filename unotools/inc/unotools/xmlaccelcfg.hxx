@@ -60,23 +60,23 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
         virtual void SAL_CALL endDocument(void)
             throw ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL startElement(
-            const ::rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs )
             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL endElement(const ::rtl::OUString& aName) throw
+        virtual void SAL_CALL endElement(const OUString& aName) throw
             ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL characters(const ::rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData )
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > &xLocator)
             throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     private:
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
         int                     m_nElementDepth;
         sal_Bool                m_bAcceleratorMode;
@@ -101,7 +101,7 @@ class OWriteAccelatorDocumentHandler
 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > m_xEmptyList;
-        ::rtl::OUString                                         m_aAttributeType;
+        OUString                                         m_aAttributeType;
         const SvtAcceleratorItemList&                           m_aWriteAcceleratorList;
 };
 

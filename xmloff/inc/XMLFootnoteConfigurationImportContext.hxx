@@ -33,29 +33,29 @@ class SvXMLImport;
 /// import footnote and endnote configuration elements
 class XMLFootnoteConfigurationImportContext : public SvXMLStyleContext
 {
-    const ::rtl::OUString sPropertyAnchorCharStyleName;
-    const ::rtl::OUString sPropertyCharStyleName;
-    const ::rtl::OUString sPropertyNumberingType;
-    const ::rtl::OUString sPropertyPageStyleName;
-    const ::rtl::OUString sPropertyParagraphStyleName;
-    const ::rtl::OUString sPropertyPrefix;
-    const ::rtl::OUString sPropertyStartAt;
-    const ::rtl::OUString sPropertySuffix;
-    const ::rtl::OUString sPropertyPositionEndOfDoc;
-    const ::rtl::OUString sPropertyFootnoteCounting;
-    const ::rtl::OUString sPropertyEndNotice;
-    const ::rtl::OUString sPropertyBeginNotice;
+    const OUString sPropertyAnchorCharStyleName;
+    const OUString sPropertyCharStyleName;
+    const OUString sPropertyNumberingType;
+    const OUString sPropertyPageStyleName;
+    const OUString sPropertyParagraphStyleName;
+    const OUString sPropertyPrefix;
+    const OUString sPropertyStartAt;
+    const OUString sPropertySuffix;
+    const OUString sPropertyPositionEndOfDoc;
+    const OUString sPropertyFootnoteCounting;
+    const OUString sPropertyEndNotice;
+    const OUString sPropertyBeginNotice;
 
-    ::rtl::OUString sCitationStyle;
-    ::rtl::OUString sAnchorStyle;
-    ::rtl::OUString sDefaultStyle;
-    ::rtl::OUString sPageStyle;
-    ::rtl::OUString sPrefix;
-    ::rtl::OUString sSuffix;
-    ::rtl::OUString sNumFormat;
-    ::rtl::OUString sNumSync;
-    ::rtl::OUString sBeginNotice;
-    ::rtl::OUString sEndNotice;
+    OUString sCitationStyle;
+    OUString sAnchorStyle;
+    OUString sDefaultStyle;
+    OUString sPageStyle;
+    OUString sPrefix;
+    OUString sSuffix;
+    OUString sNumFormat;
+    OUString sNumSync;
+    OUString sBeginNotice;
+    OUString sEndNotice;
 
     SvXMLTokenMap* pAttrTokenMap;
 
@@ -71,7 +71,7 @@ public:
     XMLFootnoteConfigurationImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
@@ -85,7 +85,7 @@ public:
     /// for footnotes, also parse begin and end notices
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 
@@ -104,10 +104,10 @@ public:
             ::com::sun::star::beans::XPropertySet> & rConfig);
 
     /// for helper class: set begin notice
-    void SetBeginNotice( ::rtl::OUString sText);
+    void SetBeginNotice( OUString sText);
 
     /// for helper class: set end notice
-    void SetEndNotice( ::rtl::OUString sText);
+    void SetEndNotice( OUString sText);
 };
 
 #endif

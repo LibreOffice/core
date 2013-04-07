@@ -163,9 +163,9 @@ namespace toolkit
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
+    OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
+        return OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
     }
 
     // -------------------------------------------------------------------
@@ -203,7 +203,7 @@ namespace toolkit
             Any aEffectiveValue;
             getFastPropertyValue( aEffectiveValue, BASEPROPERTY_EFFECTIVE_VALUE );
 
-            ::rtl::OUString sStringValue;
+            OUString sStringValue;
             if ( !( aEffectiveValue >>= sStringValue ) )
             {
                 double nDoubleValue(0);
@@ -302,11 +302,11 @@ namespace toolkit
     }
 
     // -------------------------------------------------------------------
-    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         bool bSettingValue = false;
         bool bSettingText = false;
-        for (   const ::rtl::OUString* pPropertyNames = _rPropertyNames.getConstArray();
+        for (   const OUString* pPropertyNames = _rPropertyNames.getConstArray();
                 pPropertyNames != _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
                 ++pPropertyNames
             )
@@ -331,7 +331,7 @@ namespace toolkit
         if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId && rValue.hasValue() )
         {
             double dVal = 0;
-            ::rtl::OUString sVal;
+            OUString sVal;
             sal_Bool bStreamed = (rValue >>= dVal);
             if ( bStreamed )
             {
@@ -378,7 +378,7 @@ namespace toolkit
         Any aReturn;
         switch (nPropId)
         {
-            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
+            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= OUString( OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
 
             case BASEPROPERTY_TREATASNUMBER: aReturn <<= (sal_Bool)sal_True; break;
 
@@ -438,7 +438,7 @@ namespace toolkit
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
         OSL_ENSURE(xPeer.is(), "UnoFormattedFieldControl::textChanged : what kind of peer do I have ?");
 
-        Sequence< ::rtl::OUString > aNames( 2 );
+        Sequence< OUString > aNames( 2 );
         aNames[0] = GetPropertyName( BASEPROPERTY_EFFECTIVE_VALUE );
         aNames[1] = GetPropertyName( BASEPROPERTY_TEXT );
 

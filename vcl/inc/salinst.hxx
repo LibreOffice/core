@@ -154,7 +154,7 @@ public:
     // this is a vehicle for PrintFontManager to bridge the gap between vcl and libvclplug_*
     // this is only necessary because PrintFontManager is an exported vcl API and therefore
     // needs to be in libvcl while libvclplug_* do not contain exported C++ API
-    virtual void            FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+    virtual void            FillFontPathList( std::list< OString >& o_rFontPaths );
 
     // dtrans implementation
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

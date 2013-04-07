@@ -63,14 +63,14 @@ typedef boost::ptr_vector<Mapping> MappingArray;
 //-----------------------------------------------------------------------------
 struct StringPair
 {
-    rtl::OUString   sRealColumnName;
-    rtl::OUString   sLogicalColumnName;
+    OUString   sRealColumnName;
+    OUString   sLogicalColumnName;
 };
 //-----------------------------------------------------------------------------
 struct Mapping
 {
-    rtl::OUString       sTableName;
-    rtl::OUString       sURL;
+    OUString       sTableName;
+    OUString       sURL;
     sal_Int16           nCommandType;
     StringPair          aColumnPairs[COLUMN_COUNT];
 
@@ -80,34 +80,34 @@ struct Mapping
 //-----------------------------------------------------------------------------
 struct BibDBDescriptor
 {
-    rtl::OUString   sDataSource;
-    rtl::OUString   sTableOrQuery;
+    OUString   sDataSource;
+    OUString   sTableOrQuery;
     sal_Int32       nCommandType;
 };
 //-----------------------------------------------------------------------------
 
 class BibConfig : public utl::ConfigItem
 {
-    rtl::OUString   sDataSource;
-    rtl::OUString   sTableOrQuery;
+    OUString   sDataSource;
+    OUString   sTableOrQuery;
     sal_Int32       nTblOrQuery;
 
-    rtl::OUString   sQueryField;
-    rtl::OUString   sQueryText;
+    OUString   sQueryField;
+    OUString   sQueryText;
     MappingArray*               pMappingsArr;
     long            nBeamerSize;
     long            nViewSize;
     sal_Bool        bShowColumnAssignmentWarning;
 
-    rtl::OUString               aColumnDefaults[COLUMN_COUNT];
+    OUString               aColumnDefaults[COLUMN_COUNT];
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     BibConfig();
     ~BibConfig();
 
     virtual void    Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 
     BibDBDescriptor         GetBibliographyURL();
     void                    SetBibliographyURL(const BibDBDescriptor& rDesc);
@@ -115,7 +115,7 @@ public:
     const Mapping*          GetMapping(const BibDBDescriptor& rDesc) const;
     void                    SetMapping(const BibDBDescriptor& rDesc, const Mapping* pMapping);
 
-    const rtl::OUString&    GetDefColumnName(sal_uInt16 nIndex) const
+    const OUString&    GetDefColumnName(sal_uInt16 nIndex) const
                                             {return aColumnDefaults[nIndex];}
 
 
@@ -124,11 +124,11 @@ public:
     void                    setViewSize(long nSize) {SetModified(); nViewSize = nSize;}
     long                    getViewSize() {return nViewSize;}
 
-    const rtl::OUString&    getQueryField() const {return sQueryField;}
-    void                    setQueryField(const rtl::OUString& rSet) {SetModified(); sQueryField = rSet;}
+    const OUString&    getQueryField() const {return sQueryField;}
+    void                    setQueryField(const OUString& rSet) {SetModified(); sQueryField = rSet;}
 
-    const rtl::OUString&    getQueryText() const {return sQueryText;}
-    void                    setQueryText(const rtl::OUString& rSet) {SetModified(); sQueryText = rSet;}
+    const OUString&    getQueryText() const {return sQueryText;}
+    void                    setQueryText(const OUString& rSet) {SetModified(); sQueryText = rSet;}
 
     sal_Bool                IsShowColumnAssignmentWarning() const
                                 { return bShowColumnAssignmentWarning;}
@@ -138,12 +138,12 @@ public:
 
 class DBChangeDialogConfig_Impl
 {
-    com::sun::star::uno::Sequence<rtl::OUString> aSourceNames;
+    com::sun::star::uno::Sequence<OUString> aSourceNames;
 public:
     DBChangeDialogConfig_Impl();
     ~DBChangeDialogConfig_Impl();
 
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetDataSourceNames();
+    const com::sun::star::uno::Sequence<OUString>& GetDataSourceNames();
 
 };
 #endif

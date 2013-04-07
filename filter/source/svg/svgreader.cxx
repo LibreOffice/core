@@ -136,7 +136,7 @@ double colorDiffSquared(const ARGBColor& rCol1, const ARGBColor& rCol2)
         + square(rCol1.b-rCol2.b);
 }
 
-typedef std::map<rtl::OUString,sal_Size> ElementRefMapType;
+typedef std::map<OUString,sal_Size> ElementRefMapType;
 
 struct AnnotatingVisitor
 {
@@ -187,7 +187,7 @@ struct AnnotatingVisitor
                 uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
-                    const rtl::OUString sValue(xNode->getNodeValue());
+                    const OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
                     if ( sValue.copy(0,1) == "#" )
                         aFound = maGradientIdMap.find(sValue.copy(1));
@@ -224,7 +224,7 @@ struct AnnotatingVisitor
                 uno::Reference<xml::dom::XNode> xNode(xAttributes->getNamedItem("href"));
                 if(xNode.is())
                 {
-                    const rtl::OUString sValue(xNode->getNodeValue());
+                    const OUString sValue(xNode->getNodeValue());
                     ElementRefMapType::iterator aFound=maGradientIdMap.end();
                     if ( sValue.copy(0,1) == "#" )
                         aFound = maGradientIdMap.find(sValue.copy(1));
@@ -272,7 +272,7 @@ struct AnnotatingVisitor
 
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
                     sAttributeValue = xAttributes->item(i)->getNodeValue();
@@ -315,9 +315,9 @@ struct AnnotatingVisitor
         }
     }
 
-    rtl::OUString getStyleName( const char* sPrefix, sal_Int32 nId )
+    OUString getStyleName( const char* sPrefix, sal_Int32 nId )
     {
-        return rtl::OUString::createFromAscii(sPrefix)+rtl::OUString::valueOf(nId);
+        return OUString::createFromAscii(sPrefix)+OUString::valueOf(nId);
     }
 
     bool hasGradientOpacity( const Gradient& rGradient )
@@ -411,10 +411,10 @@ struct AnnotatingVisitor
             basegfx::fround(val*255.0));
     }
 
-    rtl::OUString getOdfColor( const ARGBColor& rColor )
+    OUString getOdfColor( const ARGBColor& rColor )
     {
         // TODO(Q3): duplicated from pdfimport
-        rtl::OUStringBuffer aBuf( 7 );
+        OUStringBuffer aBuf( 7 );
         const sal_uInt8 nRed  ( toByteColor(rColor.r)   );
         const sal_uInt8 nGreen( toByteColor(rColor.g) );
         const sal_uInt8 nBlue ( toByteColor(rColor.b)  );
@@ -435,12 +435,12 @@ struct AnnotatingVisitor
         return aBuf.makeStringAndClear();
     }
 
-    rtl::OUString getOdfAlign( TextAlign eAlign )
+    OUString getOdfAlign( TextAlign eAlign )
     {
-        static ::rtl::OUString aStart("start");
-        static ::rtl::OUString aEnd("end");
-        // static ::rtl::OUString aJustify("justify");
-        static ::rtl::OUString aCenter("center");
+        static OUString aStart("start");
+        static OUString aEnd("end");
+        // static OUString aJustify("justify");
+        static OUString aCenter("center");
         switch(eAlign)
         {
             default:
@@ -518,7 +518,7 @@ struct AnnotatingVisitor
             double rRotate, rShearX;
             if( rState.maFillGradient.maTransform.decompose(rScale, rTranslate, rRotate, rShearX) )
                 xAttrs->AddAttribute( "draw:angle",
-                                      rtl::OUString::valueOf(rRotate*1800.0/M_PI ) );
+                                      OUString::valueOf(rRotate*1800.0/M_PI ) );
             xAttrs->AddAttribute( "draw:start-color",
                                   getOdfColor(
                                       maGradientStopVector[
@@ -549,12 +549,12 @@ struct AnnotatingVisitor
 
                 // modulate gradient opacity with overall fill opacity
                 xAttrs->AddAttribute( "draw:end",
-                                      rtl::OUString::valueOf(
+                                      OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[0]].maStopColor.a*
                                           maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
                 xAttrs->AddAttribute( "draw:start",
-                                      rtl::OUString::valueOf(
+                                      OUString::valueOf(
                                           maGradientStopVector[
                                               rState.maFillGradient.maStops[1]].maStopColor.a*
                                           maCurrState.mnFillOpacity*maCurrState.mnOpacity*100.0)+"%" );
@@ -590,11 +590,11 @@ struct AnnotatingVisitor
             xAttrs->Clear();
             xAttrs->AddAttribute( "fo:font-family", rState.maFontFamily);
             xAttrs->AddAttribute( "fo:font-size",
-                                  rtl::OUString::valueOf(pt2mm(rState.mnFontSize))+"mm");
+                                  OUString::valueOf(pt2mm(rState.mnFontSize))+"mm");
             xAttrs->AddAttribute( "fo:font-style", rState.maFontStyle);
             xAttrs->AddAttribute( "fo:font-variant", rState.maFontVariant);
             xAttrs->AddAttribute( "fo:font-weight",
-                                  rtl::OUString::valueOf(rState.mnFontWeight));
+                                  OUString::valueOf(rState.mnFontWeight));
             xAttrs->AddAttribute( "fo:color", getOdfColor(rState.maFillColor));
 
             mxDocumentHandler->startElement( "style:text-properties", xUnoAttrs );
@@ -645,7 +645,7 @@ struct AnnotatingVisitor
                     }
                     else if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( "draw:opacity",
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
+                                              OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
                 else
                 {
@@ -653,7 +653,7 @@ struct AnnotatingVisitor
                     xAttrs->AddAttribute( "draw:fill-color", getOdfColor(rState.maFillColor));
                     if( maCurrState.mnFillOpacity*maCurrState.mnOpacity != 1.0 )
                         xAttrs->AddAttribute( "draw:opacity",
-                                              rtl::OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
+                                              OUString::valueOf(100.0*maCurrState.mnFillOpacity*maCurrState.mnOpacity)+"%" );
                 }
             }
             else
@@ -667,7 +667,7 @@ struct AnnotatingVisitor
             else if( rState.meStrokeType == DASH )
             {
                 xAttrs->AddAttribute( "draw:stroke", "dash");
-                xAttrs->AddAttribute( "draw:stroke-dash", "dash"+rtl::OUString::valueOf(mnCurrStateId));
+                xAttrs->AddAttribute( "draw:stroke-dash", "dash"+OUString::valueOf(mnCurrStateId));
                 xAttrs->AddAttribute( "svg:stroke-color", getOdfColor(rState.maStrokeColor));
             }
             else
@@ -677,7 +677,7 @@ struct AnnotatingVisitor
             {
                 ::basegfx::B2DVector aVec(maCurrState.mnStrokeWidth,0);
                 aVec *= maCurrState.maCTM;
-                xAttrs->AddAttribute( "svg:stroke-width", rtl::OUString::valueOf( pt2mm(aVec.getLength()) )+"mm");
+                xAttrs->AddAttribute( "svg:stroke-width", OUString::valueOf( pt2mm(aVec.getLength()) )+"mm");
             }
             if( maCurrState.meLineJoin == basegfx::B2DLINEJOIN_MITER )
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "miter");
@@ -687,7 +687,7 @@ struct AnnotatingVisitor
                 xAttrs->AddAttribute( "draw:stroke-linejoin", "bevel");
             if( maCurrState.mnStrokeOpacity*maCurrState.mnOpacity != 1.0 )
                 xAttrs->AddAttribute( "svg:stroke-opacity",
-                                      rtl::OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+"%");
+                                      OUString::valueOf(100.0*maCurrState.mnStrokeOpacity*maCurrState.mnOpacity)+"%");
         }
 
         mxDocumentHandler->startElement( "style:graphic-properties", xUnoAttrs );
@@ -708,7 +708,7 @@ struct AnnotatingVisitor
             nStyleId = mrStates.find(maCurrState)->mnStyleId;
 
         xElem->setAttribute("internal-style-ref",
-                            rtl::OUString::valueOf(
+                            OUString::valueOf(
                                 nStyleId)
                             +"$0");
     }
@@ -726,13 +726,13 @@ struct AnnotatingVisitor
     void parseLinearGradientData( Gradient& io_rCurrGradient,
                                   const sal_Int32 nGradientNumber,
                                   const sal_Int32 nTokenId,
-                                  const rtl::OUString& sValue )
+                                  const OUString& sValue )
     {
         switch(nTokenId)
         {
             case XML_GRADIENTTRANSFORM:
             {
-                rtl::OString aValueUtf8( sValue.getStr(),
+                OString aValueUtf8( sValue.getStr(),
                                          sValue.getLength(),
                                          RTL_TEXTENCODING_UTF8 );
                 parseTransform(aValueUtf8.getStr(),io_rCurrGradient.maTransform);
@@ -767,13 +767,13 @@ struct AnnotatingVisitor
     void parseRadialGradientData( Gradient& io_rCurrGradient,
                                   const sal_Int32 nGradientNumber,
                                   const sal_Int32 nTokenId,
-                                  const rtl::OUString& sValue )
+                                  const OUString& sValue )
     {
         switch(nTokenId)
         {
             case XML_GRADIENTTRANSFORM:
             {
-                rtl::OString aValueUtf8( sValue.getStr(),
+                OString aValueUtf8( sValue.getStr(),
                                          sValue.getLength(),
                                          RTL_TEXTENCODING_UTF8 );
                 parseTransform(aValueUtf8.getStr(),io_rCurrGradient.maTransform);
@@ -811,7 +811,7 @@ struct AnnotatingVisitor
     void parseGradientStop( GradientStop& io_rGradientStop,
                             const sal_Int32 nStopNumber,
                             const sal_Int32 nTokenId,
-                            const rtl::OUString& sValue )
+                            const OUString& sValue )
     {
         switch(nTokenId)
         {
@@ -842,9 +842,9 @@ struct AnnotatingVisitor
     }
 
     void parseAttribute( const sal_Int32      nTokenId,
-                         const rtl::OUString& sValue )
+                         const OUString& sValue )
     {
-        rtl::OString aValueUtf8( sValue.getStr(),
+        OString aValueUtf8( sValue.getStr(),
                                  sValue.getLength(),
                                  RTL_TEXTENCODING_UTF8 );
         switch(nTokenId)
@@ -1052,11 +1052,11 @@ struct AnnotatingVisitor
         }
     }
 
-    void parseStyle( const rtl::OUString& sValue )
+    void parseStyle( const OUString& sValue )
     {
         // split individual style attributes
         sal_Int32 nIndex=0, nDummyIndex=0;
-        rtl::OUString aCurrToken;
+        OUString aCurrToken;
         do
         {
             aCurrToken=sValue.getToken(0,';',nIndex);
@@ -1065,11 +1065,11 @@ struct AnnotatingVisitor
             {
                 // split attrib & value
                 nDummyIndex=0;
-                rtl::OUString aCurrAttrib(
+                OUString aCurrAttrib(
                     aCurrToken.getToken(0,':',nDummyIndex).trim());
                 OSL_ASSERT(nDummyIndex!=-1);
                 nDummyIndex=0;
-                rtl::OUString aCurrValue(
+                OUString aCurrValue(
                     aCurrToken.getToken(1,':',nDummyIndex).trim());
                 OSL_ASSERT(nDummyIndex==-1);
 
@@ -1082,7 +1082,7 @@ struct AnnotatingVisitor
     }
 
     void parseFontStyle( State&               io_rInitialState,
-                         const rtl::OUString& rValue,
+                         const OUString& rValue,
                          const char*          sValue )
     {
         if( strcmp(sValue,"inherit") != 0 )
@@ -1090,7 +1090,7 @@ struct AnnotatingVisitor
     }
 
     void parseFontVariant( State&               io_rInitialState,
-                           const rtl::OUString& rValue,
+                           const OUString& rValue,
                            const char*          sValue )
     {
         if( strcmp(sValue,"inherit") != 0 )
@@ -1109,7 +1109,7 @@ struct AnnotatingVisitor
         // keep current val for sValue == "inherit"
     }
 
-    void parsePaint( const rtl::OUString& rValue,
+    void parsePaint( const OUString& rValue,
                      const char*      sValue,
                      PaintType&       rType,
                      ARGBColor&       rColor,
@@ -1212,7 +1212,7 @@ struct ShapeWritingVisitor
         uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
         sal_Int32 nDummyIndex(0);
-        rtl::OUString sStyleId(
+        OUString sStyleId(
             xElem->getAttribute("internal-style-ref").getToken(
                     0,'$',nDummyIndex));
         StateMap::iterator pOrigState=mrStateMap.find(
@@ -1230,7 +1230,7 @@ struct ShapeWritingVisitor
             {
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 double x1=0.0,y1=0.0,x2=0.0,y2=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -1258,9 +1258,9 @@ struct ShapeWritingVisitor
                 }
 
                 if ( x1 != x2 || y1 != y2 ) {
-                    rtl::OUString sLinePath = "M"+rtl::OUString::valueOf(x1)+","
-                        +rtl::OUString::valueOf(y1)+"L"+rtl::OUString::valueOf(x2)+","
-                        +rtl::OUString::valueOf(y2);
+                    OUString sLinePath = "M"+OUString::valueOf(x1)+","
+                        +OUString::valueOf(y1)+"L"+OUString::valueOf(x2)+","
+                        +OUString::valueOf(y2);
                     basegfx::B2DPolyPolygon aPoly;
                     basegfx::tools::importFromSvgD(aPoly, sLinePath);
 
@@ -1276,7 +1276,7 @@ struct ShapeWritingVisitor
             case XML_POLYGON:
             case XML_POLYLINE:
             {
-                rtl::OUString sPoints = xElem->hasAttribute("points") ? xElem->getAttribute("points") : "";
+                OUString sPoints = xElem->hasAttribute("points") ? xElem->getAttribute("points") : "";
                 basegfx::B2DPolygon aPoly;
                 basegfx::tools::importFromSvgPoints(aPoly, sPoints);
                 if( nTokenId == XML_POLYGON || maCurrState.meFillType != NONE )
@@ -1293,7 +1293,7 @@ struct ShapeWritingVisitor
             {
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 bool bRxSeen=false, bRySeen=false;
                 double x=0.0,y=0.0,width=0.0,height=0.0,rx=0.0,ry=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
@@ -1350,7 +1350,7 @@ struct ShapeWritingVisitor
             }
             case XML_PATH:
             {
-                rtl::OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
+                OUString sPath = xElem->hasAttribute("d") ? xElem->getAttribute("d") : "";
                 basegfx::B2DPolyPolygon aPoly;
                 basegfx::tools::importFromSvgD(aPoly, sPath);
 
@@ -1365,7 +1365,7 @@ struct ShapeWritingVisitor
             {
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 double cx=0.0,cy=0.0,r=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -1400,7 +1400,7 @@ struct ShapeWritingVisitor
             {
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 double cx=0.0,cy=0.0,rx=0.0, ry=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -1438,7 +1438,7 @@ struct ShapeWritingVisitor
             {
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 double x=0.0,y=0.0,width=0.0,height=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -1465,8 +1465,8 @@ struct ShapeWritingVisitor
                     }
                 }
 
-                rtl::OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
-                rtl::OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
+                OUString sValue = xElem->hasAttribute("href") ? xElem->getAttribute("href") : "";
+                OString aValueUtf8( sValue.getStr(), sValue.getLength(), RTL_TEXTENCODING_UTF8 );
                 std::string sLinkValue;
                 parseXlinkHref(aValueUtf8.getStr(), sLinkValue);
 
@@ -1477,9 +1477,9 @@ struct ShapeWritingVisitor
             case XML_TEXT:
             {
                 // collect text from all TEXT_NODE children into sText
-                rtl::OUStringBuffer sText;
+                OUStringBuffer sText;
                 visitChildren(boost::bind(
-                                  (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString& str))&rtl::OUStringBuffer::append,
+                                  (OUStringBuffer& (OUStringBuffer::*)(const OUString& str))&OUStringBuffer::append,
                                   boost::ref(sText),
                                   boost::bind(&xml::dom::XNode::getNodeValue,
                                               _1)),
@@ -1488,7 +1488,7 @@ struct ShapeWritingVisitor
 
                 // collect attributes
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
-                rtl::OUString sAttributeValue;
+                OUString sAttributeValue;
                 double x=0.0,y=0.0;
                 for( sal_Int32 i=0; i<nNumAttrs; ++i )
                 {
@@ -1533,8 +1533,8 @@ struct ShapeWritingVisitor
                     y -= 2.0*maCurrState.mnFontSize/3.0;
                 }
 
-                xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(x))+"mm");
-                xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(y))+"mm");
+                xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(x))+"mm");
+                xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(y))+"mm");
                 xAttrs->AddAttribute( "draw:style-name", "svggraphicstyle"+sStyleId );
 
                 mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
@@ -1572,10 +1572,10 @@ struct ShapeWritingVisitor
                         const std::string&                              data)
     {
         xAttrs->Clear();
-        xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
-        xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
-        xAttrs->AddAttribute( "svg:width", rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
-        xAttrs->AddAttribute( "svg:height", rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
+        xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
+        xAttrs->AddAttribute( "svg:width", OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
 
         mxDocumentHandler->startElement("draw:frame", xUnoAttrs);
 
@@ -1584,7 +1584,7 @@ struct ShapeWritingVisitor
 
         mxDocumentHandler->startElement("office:binary-data", xUnoAttrs);
 
-        mxDocumentHandler->characters(rtl::OUString::createFromAscii(data.c_str()));
+        mxDocumentHandler->characters(OUString::createFromAscii(data.c_str()));
 
         mxDocumentHandler->endElement("office:binary-data");
 
@@ -1598,20 +1598,20 @@ struct ShapeWritingVisitor
     {
         basegfx::B2DTuple rScale, rTranslate;
         double rRotate, rShearX;
-        ::rtl::OUString sTransformValue;
+        OUString sTransformValue;
         if (!rMatrix.decompose(rScale, rTranslate, rRotate, rShearX))
             return;
         if (rScale.getX() != 1.0 || rScale.getY() != 1.0)
-            sTransformValue += "scale("+::rtl::OUString::valueOf(rScale.getX())+" "
-                 +::rtl::OUString::valueOf(rScale.getY())+") ";
+            sTransformValue += "scale("+OUString::valueOf(rScale.getX())+" "
+                 +OUString::valueOf(rScale.getY())+") ";
         if (rTranslate.getX() != 0.0f || rTranslate.getY() != 0.0f)
-            sTransformValue += "translate("+::rtl::OUString::valueOf(rTranslate.getX()/100.0f)+"mm "
-                 +::rtl::OUString::valueOf(rTranslate.getY()/100.0f)+"mm) ";
+            sTransformValue += "translate("+OUString::valueOf(rTranslate.getX()/100.0f)+"mm "
+                 +OUString::valueOf(rTranslate.getY()/100.0f)+"mm) ";
         if (rRotate != 0.0f)
-            sTransformValue += "rotate("+::rtl::OUString::valueOf(rRotate)+") ";
+            sTransformValue += "rotate("+OUString::valueOf(rRotate)+") ";
 
         if (rShearX != 0.0f)
-            sTransformValue += "skewX("+::rtl::OUString::valueOf(rShearX)+") ";
+            sTransformValue += "skewX("+OUString::valueOf(rShearX)+") ";
         if (sTransformValue.isEmpty())
             return;
         xAttrs->AddAttribute( "draw:transform", sTransformValue);
@@ -1620,7 +1620,7 @@ struct ShapeWritingVisitor
     void writeEllipseShape( rtl::Reference<SvXMLAttributeList>&          xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
-                         const rtl::OUString&                            rStyleId,
+                         const OUString&                            rStyleId,
                          const basegfx::B2DEllipse&                      rEllipse)
     {
         State aState = maCurrState;
@@ -1636,14 +1636,14 @@ struct ShapeWritingVisitor
     void writePathShape( rtl::Reference<SvXMLAttributeList>&             xAttrs,
                          const uno::Reference<xml::sax::XAttributeList>& xUnoAttrs,
                          const uno::Reference<xml::dom::XElement>&       xElem,
-                         const rtl::OUString&                            rStyleId,
+                         const OUString&                            rStyleId,
                          const basegfx::B2DPolyPolygon&                  rPoly )
     {
         // we might need to split up polypolygon into multiple path
         // shapes (e.g. when emulating line stroking)
         std::vector<basegfx::B2DPolyPolygon> aPolys(1,rPoly);
         State aState = maCurrState;
-        rtl::OUString aStyleId(rStyleId);
+        OUString aStyleId(rStyleId);
 
         xAttrs->Clear();
 
@@ -1695,27 +1695,27 @@ struct ShapeWritingVisitor
     void fillShapeProperties( rtl::Reference<SvXMLAttributeList>&       xAttrs,
                               const uno::Reference<xml::dom::XElement>& /* xElem */,
                               const basegfx::B2DRange&                  rShapeBounds,
-                              const rtl::OUString&                      rStyleName )
+                              const OUString&                      rStyleName )
     {
-        xAttrs->AddAttribute( "draw:z-index", rtl::OUString::valueOf( mnShapeNum++ ));
+        xAttrs->AddAttribute( "draw:z-index", OUString::valueOf( mnShapeNum++ ));
         xAttrs->AddAttribute( "draw:style-name", rStyleName);
-        xAttrs->AddAttribute( "svg:width", rtl::OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
-        xAttrs->AddAttribute( "svg:height", rtl::OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
+        xAttrs->AddAttribute( "svg:width", OUString::valueOf(pt2mm(rShapeBounds.getWidth()))+"mm");
+        xAttrs->AddAttribute( "svg:height", OUString::valueOf(pt2mm(rShapeBounds.getHeight()))+"mm");
 
         // OOo expects the viewbox to be in 100th of mm
         xAttrs->AddAttribute( "svg:viewBox",
             "0 0 "
-            + rtl::OUString::valueOf(
+            + OUString::valueOf(
                 basegfx::fround(pt100thmm(rShapeBounds.getWidth())) )
             + " "
-            + rtl::OUString::valueOf(
+            + OUString::valueOf(
                 basegfx::fround(pt100thmm(rShapeBounds.getHeight())) ));
 
         // TODO(F1): decompose transformation in calling code, and use
         // transform attribute here
         // writeTranslate(maCurrState.maCTM, xAttrs);
-        xAttrs->AddAttribute( "svg:x", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
-        xAttrs->AddAttribute( "svg:y", rtl::OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
+        xAttrs->AddAttribute( "svg:x", OUString::valueOf(pt2mm(rShapeBounds.getMinX()))+"mm");
+        xAttrs->AddAttribute( "svg:y", OUString::valueOf(pt2mm(rShapeBounds.getMinY()))+"mm");
     }
 
     State                                      maCurrState;
@@ -1753,7 +1753,7 @@ struct OfficeStylesWritingVisitor
         uno::Reference<xml::sax::XAttributeList> xUnoAttrs( xAttrs.get() );
 
         sal_Int32 nDummyIndex(0);
-        rtl::OUString sStyleId(
+        OUString sStyleId(
             xElem->getAttribute("internal-style-ref").getToken(
                     0,'$',nDummyIndex));
         StateMap::iterator pOrigState=mrStateMap.find(
@@ -1775,13 +1775,13 @@ struct OfficeStylesWritingVisitor
             xAttrs->AddAttribute( "draw:display-name", "dash"+sStyleId );
             xAttrs->AddAttribute( "draw:style", "rect" );
             if ( dots1>0 ) {
-                xAttrs->AddAttribute( "draw:dots1", rtl::OUString::valueOf(dots1) );
-                xAttrs->AddAttribute( "draw:dots1-length", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dots1_length), maCurrState, 'h' )))+"mm" );
+                xAttrs->AddAttribute( "draw:dots1", OUString::valueOf(dots1) );
+                xAttrs->AddAttribute( "draw:dots1-length", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dots1_length), maCurrState, 'h' )))+"mm" );
             }
-            xAttrs->AddAttribute( "draw:distance", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dash_distance), maCurrState, 'h' )))+"mm" );
+            xAttrs->AddAttribute( "draw:distance", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dash_distance), maCurrState, 'h' )))+"mm" );
             if ( dots2>0 ) {
-                xAttrs->AddAttribute( "draw:dots2", rtl::OUString::valueOf(dots2) );
-                xAttrs->AddAttribute( "draw:dots2-length", rtl::OUString::valueOf(pt2mm(convLength( rtl::OUString::valueOf(dots2_length), maCurrState, 'h' )))+"mm" );
+                xAttrs->AddAttribute( "draw:dots2", OUString::valueOf(dots2) );
+                xAttrs->AddAttribute( "draw:dots2-length", OUString::valueOf(pt2mm(convLength( OUString::valueOf(dots2_length), maCurrState, 'h' )))+"mm" );
             }
 
             mxDocumentHandler->startElement( "draw:stroke-dash", xUnoAttrs);
@@ -1856,7 +1856,7 @@ struct DumpingVisitor
     void operator()( const uno::Reference<xml::dom::XElement>& xElem )
     {
         OSL_TRACE("name: %s",
-                  rtl::OUStringToOString(
+                  OUStringToOString(
                       xElem->getTagName(),
                       RTL_TEXTENCODING_UTF8 ).getStr());
     }
@@ -1865,17 +1865,17 @@ struct DumpingVisitor
                      const uno::Reference<xml::dom::XNamedNodeMap>& xAttributes )
     {
         OSL_TRACE("name: %s",
-                  rtl::OUStringToOString(
+                  OUStringToOString(
                       xElem->getTagName(),
                       RTL_TEXTENCODING_UTF8 ).getStr());
         const sal_Int32 nNumAttrs( xAttributes->getLength() );
         for( sal_Int32 i=0; i<nNumAttrs; ++i )
         {
             OSL_TRACE(" %s=%s",
-                      rtl::OUStringToOString(
+                      OUStringToOString(
                           xAttributes->item(i)->getNodeName(),
                           RTL_TEXTENCODING_UTF8 ).getStr(),
-                      rtl::OUStringToOString(
+                      OUStringToOString(
                           xAttributes->item(i)->getNodeValue(),
                           RTL_TEXTENCODING_UTF8 ).getStr());
         }
@@ -1995,7 +1995,7 @@ sal_Bool SVGReader::parseAndConvert()
     m_xDocumentHandler->startElement( "config:config-item" , xUnoAttrs);
 
     sal_Int64 iWidth = sal_Int64(fViewPortWidth);
-    m_xDocumentHandler->characters( ::rtl::OUString::valueOf(iWidth) );
+    m_xDocumentHandler->characters( OUString::valueOf(iWidth) );
 
     m_xDocumentHandler->endElement( "config:config-item" );
 
@@ -2006,7 +2006,7 @@ sal_Bool SVGReader::parseAndConvert()
     m_xDocumentHandler->startElement( "config:config-item", xUnoAttrs);
 
     sal_Int64 iHeight = sal_Int64(fViewPortHeight);
-    m_xDocumentHandler->characters( ::rtl::OUString::valueOf(iHeight) );
+    m_xDocumentHandler->characters( OUString::valueOf(iHeight) );
 
     m_xDocumentHandler->endElement( "config:config-item" );
 
@@ -2030,8 +2030,8 @@ sal_Bool SVGReader::parseAndConvert()
     xAttrs->AddAttribute( "fo:margin-bottom", "0mm");
     xAttrs->AddAttribute( "fo:margin-left", "0mm");
     xAttrs->AddAttribute( "fo:margin-right", "0mm");
-    xAttrs->AddAttribute( "fo:page-width", rtl::OUString::valueOf(fViewPortWidth)+"mm");
-    xAttrs->AddAttribute( "fo:page-height", rtl::OUString::valueOf(fViewPortHeight)+"mm");
+    xAttrs->AddAttribute( "fo:page-width", OUString::valueOf(fViewPortWidth)+"mm");
+    xAttrs->AddAttribute( "fo:page-height", OUString::valueOf(fViewPortHeight)+"mm");
     xAttrs->AddAttribute( "style:print-orientation",
         fViewPortWidth > fViewPortHeight ? OUString("landscape") : OUString("portrait") );
     m_xDocumentHandler->startElement( "style:page-layout-properties", xUnoAttrs );

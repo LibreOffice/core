@@ -25,7 +25,7 @@ class AstServiceMember : public AstDeclaration
 {
 public:
     AstServiceMember(const sal_uInt32 flags, AstService* pRealService,
-                     const ::rtl::OString& name, AstScope* pScope)
+                     const OString& name, AstScope* pScope)
         : AstDeclaration(NT_service_member, name, pScope)
         , m_flags(flags)
         , m_pRealService(pRealService)

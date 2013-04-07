@@ -39,8 +39,8 @@ private:
     FixedText*          m_pDestPath;
     PushButton*         m_pChangePathButton;
     FixedText*          m_pLastChecked;
-    rtl::OUString       m_aNeverChecked;
-    rtl::OUString       m_aLastCheckedTemplate;
+    OUString       m_aNeverChecked;
+    OUString       m_aLastCheckedTemplate;
 
     DECL_LINK(FileDialogHdl_Impl, void *) ;
     DECL_LINK(CheckNowHdl_Impl, void *) ;

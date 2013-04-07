@@ -141,7 +141,7 @@ void SwFldInputDlg::StateChanged( StateChangedType nType )
 
 void SwFldInputDlg::Apply()
 {
-    rtl::OUString aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
+    OUString aTmp(comphelper::string::remove(aEditED.GetText(), '\r'));
 
     rSh.StartAllAction();
     bool bModified = false;

@@ -77,10 +77,10 @@ namespace pq_sdbc_driver
 struct ColumnMetaData
 {
     ColumnMetaData(
-        const rtl::OUString &_columnName,
-        const rtl::OUString &_tableName,
-        const rtl::OUString &_schemaTableName,
-        const rtl::OUString &_typeName,
+        const OUString &_columnName,
+        const OUString &_tableName,
+        const OUString &_schemaTableName,
+        const OUString &_typeName,
         sal_Int32 _type,
         sal_Int32 _precision,
         sal_Int32 _scale,
@@ -103,10 +103,10 @@ struct ColumnMetaData
         isSigned( _isSigned )
     {}
 
-    rtl::OUString columnName;
-    rtl::OUString tableName;
-    rtl::OUString schemaTableName;
-    rtl::OUString typeName;
+    OUString columnName;
+    OUString tableName;
+    OUString schemaTableName;
+    OUString typeName;
     sal_Int32 type;
     sal_Int32 precision;
     sal_Int32 scale;
@@ -130,11 +130,11 @@ struct TypeDetails
 
 typedef ::boost::unordered_map
 <
-   rtl::OUString,
+   OUString,
    sal_Int32,
-   rtl::OUStringHash,
-   ::std::equal_to< rtl::OUString >,
-   Allocator< ::std::pair< const ::rtl::OUString , sal_Int32 > >
+   OUStringHash,
+   ::std::equal_to< OUString >,
+   Allocator< ::std::pair< const OUString , sal_Int32 > >
 > BaseTypeMap;
 
 
@@ -147,8 +147,8 @@ struct ImplementationStatics
         rtl_createUuid( (sal_uInt8*)implementationId.getArray(), 0 , sal_False );
     }
 
-    rtl::OUString implName;
-    com::sun::star::uno::Sequence< ::rtl::OUString > serviceNames;
+    OUString implName;
+    com::sun::star::uno::Sequence< OUString > serviceNames;
     com::sun::star::uno::Sequence< sal_Int8 > implementationId;
     cppu::IPropertyArrayHelper *pProps;
     com::sun::star::uno::Sequence< com::sun::star::uno::Type > types;
@@ -185,98 +185,98 @@ static const sal_Int32 TABLE_INDEX_REMARKS = 4;
 
 struct Statics
 {
-    ::rtl::OUString SYSTEM_TABLE;
-    ::rtl::OUString TABLE;
-    ::rtl::OUString VIEW;
-    ::rtl::OUString UNKNOWN;
-    ::rtl::OUString YES;
-    ::rtl::OUString NO;
-    ::rtl::OUString NO_NULLS;
-    ::rtl::OUString NULABLE;
-    ::rtl::OUString NULLABLE_UNKNOWN;
-    ::rtl::OUString SELECT;
-    ::rtl::OUString UPDATE;
-    ::rtl::OUString INSERT;
-    ::rtl::OUString DELETE;
-    ::rtl::OUString RULE;
-    ::rtl::OUString REFERENCES;
-    ::rtl::OUString TRIGGER;
-    ::rtl::OUString EXECUTE;
-    ::rtl::OUString USAGE;
-    ::rtl::OUString CREATE;
-    ::rtl::OUString TEMPORARY;
-    ::rtl::OUString INDEX;
-    ::rtl::OUString INDEX_COLUMN;
+    OUString SYSTEM_TABLE;
+    OUString TABLE;
+    OUString VIEW;
+    OUString UNKNOWN;
+    OUString YES;
+    OUString NO;
+    OUString NO_NULLS;
+    OUString NULABLE;
+    OUString NULLABLE_UNKNOWN;
+    OUString SELECT;
+    OUString UPDATE;
+    OUString INSERT;
+    OUString DELETE;
+    OUString RULE;
+    OUString REFERENCES;
+    OUString TRIGGER;
+    OUString EXECUTE;
+    OUString USAGE;
+    OUString CREATE;
+    OUString TEMPORARY;
+    OUString INDEX;
+    OUString INDEX_COLUMN;
 
-    ::rtl::OUString NAME;
-    ::rtl::OUString SCHEMA_NAME;
-    ::rtl::OUString CATALOG_NAME;
-    ::rtl::OUString DESCRIPTION;
-    ::rtl::OUString TYPE;
-    ::rtl::OUString TYPE_NAME;
-    ::rtl::OUString PRIVILEGES;
+    OUString NAME;
+    OUString SCHEMA_NAME;
+    OUString CATALOG_NAME;
+    OUString DESCRIPTION;
+    OUString TYPE;
+    OUString TYPE_NAME;
+    OUString PRIVILEGES;
 
-    ::rtl::OUString DEFAULT_VALUE;
-    ::rtl::OUString IS_AUTO_INCREMENT;
-    ::rtl::OUString IS_CURRENCY;
-    ::rtl::OUString IS_NULLABLE;
-    ::rtl::OUString IS_ROW_VERSISON;
-    ::rtl::OUString PRECISION;
-    ::rtl::OUString SCALE;
+    OUString DEFAULT_VALUE;
+    OUString IS_AUTO_INCREMENT;
+    OUString IS_CURRENCY;
+    OUString IS_NULLABLE;
+    OUString IS_ROW_VERSISON;
+    OUString PRECISION;
+    OUString SCALE;
 
-    ::rtl::OUString cPERCENT;
+    OUString cPERCENT;
 
-    ::rtl::OUString BEGIN;
-    ::rtl::OUString ROLLBACK;
-    ::rtl::OUString COMMIT;
+    OUString BEGIN;
+    OUString ROLLBACK;
+    OUString COMMIT;
 
-    ::rtl::OUString KEY;
-    ::rtl::OUString REFERENCED_TABLE;
-    ::rtl::OUString UPDATE_RULE;
-    ::rtl::OUString DELETE_RULE;
-    ::rtl::OUString PRIVATE_COLUMNS;
-    ::rtl::OUString PRIVATE_FOREIGN_COLUMNS;
+    OUString KEY;
+    OUString REFERENCED_TABLE;
+    OUString UPDATE_RULE;
+    OUString DELETE_RULE;
+    OUString PRIVATE_COLUMNS;
+    OUString PRIVATE_FOREIGN_COLUMNS;
 
-    ::rtl::OUString KEY_COLUMN;
-    ::rtl::OUString RELATED_COLUMN;
+    OUString KEY_COLUMN;
+    OUString RELATED_COLUMN;
 
-    ::rtl::OUString PASSWORD;
-    ::rtl::OUString USER;
+    OUString PASSWORD;
+    OUString USER;
 
-    ::rtl::OUString CURSOR_NAME;
-    ::rtl::OUString ESCAPE_PROCESSING;
-    ::rtl::OUString FETCH_DIRECTION;
-    ::rtl::OUString FETCH_SIZE;
-    ::rtl::OUString IS_BOOKMARKABLE;
-    ::rtl::OUString RESULT_SET_CONCURRENCY;
-    ::rtl::OUString RESULT_SET_TYPE;
+    OUString CURSOR_NAME;
+    OUString ESCAPE_PROCESSING;
+    OUString FETCH_DIRECTION;
+    OUString FETCH_SIZE;
+    OUString IS_BOOKMARKABLE;
+    OUString RESULT_SET_CONCURRENCY;
+    OUString RESULT_SET_TYPE;
 
-    ::rtl::OUString COMMAND;
-    ::rtl::OUString CHECK_OPTION;
+    OUString COMMAND;
+    OUString CHECK_OPTION;
 
-    ::rtl::OUString TRUE;
-    ::rtl::OUString FALSE;
+    OUString TRUE;
+    OUString FALSE;
 
-    ::rtl::OUString IS_PRIMARY_KEY_INDEX;
-    ::rtl::OUString IS_CLUSTERED;
-    ::rtl::OUString IS_UNIQUE;
-    ::rtl::OUString PRIVATE_COLUMN_INDEXES;
-    ::rtl::OUString HELP_TEXT;
+    OUString IS_PRIMARY_KEY_INDEX;
+    OUString IS_CLUSTERED;
+    OUString IS_UNIQUE;
+    OUString PRIVATE_COLUMN_INDEXES;
+    OUString HELP_TEXT;
 
-    ::rtl::OUString CATALOG;
-    ::rtl::OUString IS_ASCENDING;
+    OUString CATALOG;
+    OUString IS_ASCENDING;
     ReflectionImplementations refl;
 
-    com::sun::star::uno::Sequence< ::rtl::OUString > tablesRowNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > columnRowNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > primaryKeyNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > tablePrivilegesNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > schemaNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > tableTypeNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > typeinfoColumnNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > indexinfoColumnNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > importedKeysColumnNames;
-    com::sun::star::uno::Sequence< ::rtl::OUString > resultSetArrayColumnNames;
+    com::sun::star::uno::Sequence< OUString > tablesRowNames;
+    com::sun::star::uno::Sequence< OUString > columnRowNames;
+    com::sun::star::uno::Sequence< OUString > primaryKeyNames;
+    com::sun::star::uno::Sequence< OUString > tablePrivilegesNames;
+    com::sun::star::uno::Sequence< OUString > schemaNames;
+    com::sun::star::uno::Sequence< OUString > tableTypeNames;
+    com::sun::star::uno::Sequence< OUString > typeinfoColumnNames;
+    com::sun::star::uno::Sequence< OUString > indexinfoColumnNames;
+    com::sun::star::uno::Sequence< OUString > importedKeysColumnNames;
+    com::sun::star::uno::Sequence< OUString > resultSetArrayColumnNames;
     com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > tableTypeData;
 
     ColumnMetaDataVector typeInfoMetaData;

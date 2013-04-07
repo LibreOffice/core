@@ -30,7 +30,7 @@ class ScXMLChangeTrackingImportHelper;
 
 class ScXMLBodyContext : public SvXMLImportContext
 {
-    rtl::OUString   sPassword;
+    OUString   sPassword;
     ScPasswordHash  meHash1;
     ScPasswordHash  meHash2;
     bool            bProtected;
@@ -41,16 +41,16 @@ class ScXMLBodyContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLBodyContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual ~ScXMLBodyContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 #endif

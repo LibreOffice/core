@@ -43,8 +43,8 @@ sal_Int32   appendStr     (const sal_Char* pSrc, sal_Char* pDst);
 
 sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString);
 sal_Bool    WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength);
-sal_Bool    WritePS (osl::File* pFile, const rtl::OString &rString);
-sal_Bool    WritePS (osl::File* pFile, const rtl::OUString &rString);
+sal_Bool    WritePS (osl::File* pFile, const OString &rString);
+sal_Bool    WritePS (osl::File* pFile, const OUString &rString);
 
 class ConverterFactory
 {

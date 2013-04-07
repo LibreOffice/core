@@ -56,7 +56,7 @@ namespace dbaui
 
     namespace
     {
-        void lcl_copy(Menu* _pMenu,sal_uInt16 _nMenuId,sal_uInt16 _nMenuPos,ToolBox* _pToolBox,sal_uInt16 _nToolId,const ::rtl::OUString& _sCommand)
+        void lcl_copy(Menu* _pMenu,sal_uInt16 _nMenuId,sal_uInt16 _nMenuPos,ToolBox* _pToolBox,sal_uInt16 _nToolId,const OUString& _sCommand)
         {
             if ( _pMenu->GetItemType(_nMenuPos) != MENUITEM_STRING )
                 _pToolBox->SetItemImage(_nToolId, _pMenu->GetItemImage(_nMenuId));
@@ -106,19 +106,19 @@ namespace dbaui
 
         if ( m_aCommandURL == ".uno:DBNewForm" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewForm")           ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewView")           ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewViewSQL")        ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewQuery")          ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewQuerySql")       ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewReport")         ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewReportAutoPilot"),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBNewTable")          ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewForm")           ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewView")           ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewViewSQL")        ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuery")          ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewQuerySql")       ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReport")         ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewReportAutoPilot"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBNewTable")          ,sal_True));
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:Refresh")         ,sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:DBRebuildData")   ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:Refresh")         ,sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:DBRebuildData")   ,sal_True));
         }
 
         TCommandState::iterator aIter = m_aStates.begin();
@@ -187,13 +187,13 @@ namespace dbaui
             try
             {
                 Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ModuleUIConfigurationManagerSupplier::create(comphelper::getComponentContext(getServiceManager())));
-                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(::rtl::OUString("com.sun.star.sdb.OfficeDatabaseDocument"));
+                Reference<XUIConfigurationManager> xUIConfigMgr = xModuleCfgMgrSupplier->getUIConfigurationManager(OUString("com.sun.star.sdb.OfficeDatabaseDocument"));
                 Reference<XImageManager> xImageMgr(xUIConfigMgr->getImageManager(),UNO_QUERY);
 
 
                 short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
 
-                Sequence< ::rtl::OUString> aSeq(1);
+                Sequence< OUString> aSeq(1);
                 sal_uInt16 nCount = pMenu->GetItemCount();
                 for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
                 {

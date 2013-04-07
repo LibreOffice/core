@@ -32,7 +32,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 SwVbaBookmark::SwVbaBookmark( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const css::uno::Reference< frame::XModel >& rModel, const rtl::OUString& rName ) throw ( css::uno::RuntimeException ) :
+    const css::uno::Reference< frame::XModel >& rModel, const OUString& rName ) throw ( css::uno::RuntimeException ) :
     SwVbaBookmark_BASE( rParent, rContext ), mxModel( rModel ), maName( rName ), mbValid( true )
 {
     uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( mxModel, uno::UNO_QUERY_THROW );
@@ -46,7 +46,7 @@ SwVbaBookmark::~SwVbaBookmark()
 void SwVbaBookmark::checkVality() throw ( uno::RuntimeException )
 {
     if( !mbValid )
-        throw uno::RuntimeException( rtl::OUString("The bookmark is not valid" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("The bookmark is not valid" ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL SwVbaBookmark::Delete() throw ( uno::RuntimeException )
@@ -64,12 +64,12 @@ void SAL_CALL SwVbaBookmark::Select() throw ( uno::RuntimeException )
     xSelectSupp->select( uno::makeAny( mxBookmark ) );
 }
 
-rtl::OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException )
+OUString SAL_CALL SwVbaBookmark::getName() throw ( uno::RuntimeException )
 {
     return maName;
 }
 
-void SAL_CALL SwVbaBookmark::setName( const rtl::OUString& _name ) throw ( uno::RuntimeException )
+void SAL_CALL SwVbaBookmark::setName( const OUString& _name ) throw ( uno::RuntimeException )
 {
     uno::Reference< container::XNamed > xNamed( mxBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( _name );
@@ -83,20 +83,20 @@ uno::Any SAL_CALL SwVbaBookmark::Range() throw ( uno::RuntimeException )
     return uno::makeAny( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaBookmark::getServiceImplName()
 {
-    return rtl::OUString("SwVbaBookmark");
+    return OUString("SwVbaBookmark");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaBookmark::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Bookmark" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Bookmark" );
     }
     return aServiceNames;
 }

@@ -57,7 +57,6 @@
 #include "swabstdlg.hxx"
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 // Context menu for GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
@@ -714,7 +713,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
         Application::SetDefDialogParent( this );
         delete pDocInserter;
         pDocInserter = new ::sfx2::DocumentInserter(
-                rtl::OUString("swriter"), true );
+                OUString("swriter"), true );
         pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( pFileName->Len() )
@@ -1180,7 +1179,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         SfxStringItem aURL(SID_FILE_NAME,
             sFileName);
         SfxBoolItem aReadOnly(SID_DOC_READONLY, sal_False);
-        SfxStringItem aTargetFrameName( SID_TARGETNAME, rtl::OUString("_blank") );
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,

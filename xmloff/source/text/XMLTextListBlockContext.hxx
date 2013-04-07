@@ -33,8 +33,8 @@ class XMLTextListBlockContext : public SvXMLImportContext
                 ::com::sun::star::container::XIndexReplace > mxNumRules;
 
     // text:style-name property of <list> element
-    ::rtl::OUString         msListStyleName;
-    ::rtl::OUString         sXmlId;
+    OUString         msListStyleName;
+    OUString         sXmlId;
 
     SvXMLImportContextRef   mxParentListBlock;
 
@@ -43,9 +43,9 @@ class XMLTextListBlockContext : public SvXMLImportContext
     sal_Bool                mbSetDefaults;
 
     // text:id property of <list> element, only valid for root <list> element
-    ::rtl::OUString msListId;
+    OUString msListId;
     // text:continue-list property of <list> element, only valid for root <list> element
-    ::rtl::OUString msContinueListId;
+    OUString msContinueListId;
 
 public:
 
@@ -56,7 +56,7 @@ public:
                 SvXMLImport& rImport,
                 XMLTextImportHelper& rTxtImp,
                 sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
+                const OUString& rLName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 const sal_Bool bRestartNumberingAtSubList = sal_False );
@@ -65,11 +65,11 @@ public:
     virtual void EndElement();
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    const ::rtl::OUString& GetListStyleName() const { return msListStyleName; }
+    const OUString& GetListStyleName() const { return msListStyleName; }
     sal_Int16 GetLevel() const { return mnLevel; }
     sal_Bool IsRestartNumbering() const { return mbRestartNumbering; }
     void ResetRestartNumbering() { mbRestartNumbering = sal_False; }
@@ -78,8 +78,8 @@ public:
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return mxNumRules; }
 
-    const ::rtl::OUString& GetListId() const;
-    const ::rtl::OUString& GetContinueListId() const;
+    const OUString& GetListId() const;
+    const OUString& GetContinueListId() const;
 };
 
 

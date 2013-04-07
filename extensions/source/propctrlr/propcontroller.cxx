@@ -217,11 +217,11 @@ namespace pcr
                 // dynamically - fine with us
                 return;
 
-            void (SAL_CALL XPropertySet::*pListenerOperation)( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
+            void (SAL_CALL XPropertySet::*pListenerOperation)( const OUString&, const Reference< XPropertyChangeListener >& )
                 = _bDoListen ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
             (xModelProperties.get()->*pListenerOperation)(
-                ::rtl::OUString(  "IsReadOnly"  ),
+                OUString(  "IsReadOnly"  ),
                 const_cast< OPropertyBrowserController* >( this )
             );
         }
@@ -287,7 +287,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const ::rtl::OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL OPropertyBrowserController::queryDispatch( const URL& /*URL*/, const OUString& /*TargetFrameName*/, ::sal_Int32 /*SearchFlags*/ ) throw (RuntimeException)
     {
         // we don't have any dispatches at all, right now
         return Reference< XDispatch >();
@@ -327,12 +327,12 @@ namespace pcr
         if ( arguments.size() == 1 )
         {   // constructor: "createWithModel( XObjectInspectorModel )"
             if ( !( arguments[0] >>= xModel ) )
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+                throw IllegalArgumentException( OUString(), *this, 0 );
             createWithModel( xModel );
             return;
         }
 
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
     //------------------------------------------------------------------------
@@ -360,7 +360,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if (_rxFrame.is() && haveView())
-            throw RuntimeException(::rtl::OUString("Unable to attach to a second frame."),*this);
+            throw RuntimeException(OUString("Unable to attach to a second frame."),*this);
 
         // revoke as focus listener from the old container window
         stopContainerWindowListening();
@@ -376,7 +376,7 @@ namespace pcr
         VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
         Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
         if (!pParentWin)
-            throw RuntimeException(::rtl::OUString("The frame is invalid. Unable to extract the container window."),*this);
+            throw RuntimeException(OUString("The frame is invalid. Unable to extract the container window."),*this);
 
         if ( Construct( pParentWin ) )
         {
@@ -497,7 +497,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void SAL_CALL OPropertyBrowserController::restoreViewData( const Any& Data ) throw(RuntimeException)
     {
-        ::rtl::OUString sPageSelection;
+        OUString sPageSelection;
         if ( ( Data >>= sPageSelection ) && !sPageSelection.isEmpty() )
         {
             m_sPageSelection = sPageSelection;
@@ -557,16 +557,16 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OPropertyBrowserController::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL OPropertyBrowserController::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //------------------------------------------------------------------------
-    sal_Bool SAL_CALL OPropertyBrowserController::supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException)
+    sal_Bool SAL_CALL OPropertyBrowserController::supportsService( const OUString& ServiceName ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-        const ::rtl::OUString* pArray = aSupported.getConstArray();
+        Sequence< OUString > aSupported(getSupportedServiceNames());
+        const OUString* pArray = aSupported.getConstArray();
         for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
             if (pArray->equals(ServiceName))
                 return sal_True;
@@ -574,22 +574,22 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OPropertyBrowserController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
+    OUString OPropertyBrowserController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.extensions.ObjectInspector");
+        return OUString("org.openoffice.comp.extensions.ObjectInspector");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > OPropertyBrowserController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.inspection.ObjectInspector");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.inspection.ObjectInspector");
         return aSupported;
     }
 
@@ -655,8 +655,8 @@ namespace pcr
         if (!haveView())
             return;
 
-        ::rtl::OUString sOldSelection = m_sPageSelection;
-        m_sPageSelection = ::rtl::OUString();
+        OUString sOldSelection = m_sPageSelection;
+        m_sPageSelection = OUString();
 
         const sal_uInt16 nCurrentPage = m_pView->getActivaPage();
         if ( (sal_uInt16)-1 != nCurrentPage )
@@ -681,7 +681,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_uInt16 OPropertyBrowserController::impl_getPageIdForCategory_nothrow( const ::rtl::OUString& _rCategoryName ) const
+    sal_uInt16 OPropertyBrowserController::impl_getPageIdForCategory_nothrow( const OUString& _rCategoryName ) const
     {
         sal_uInt16 nPageId = (sal_uInt16)-1;
         HashString2Int16::const_iterator pagePos = m_aPageIds.find( _rCategoryName );
@@ -832,7 +832,7 @@ namespace pcr
                 break;
 
             default:
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+                throw IllegalArgumentException( OUString(), *this, 1 );
         }
 
         return xControl;
@@ -935,14 +935,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool OPropertyBrowserController::impl_hasPropertyHandlerFor_nothrow( const ::rtl::OUString& _rPropertyName ) const
+    bool OPropertyBrowserController::impl_hasPropertyHandlerFor_nothrow( const OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
         return ( handlerPos != m_aPropertyHandlers.end() );
     }
 
     //------------------------------------------------------------------------
-    OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const ::rtl::OUString& _rPropertyName ) const
+    OPropertyBrowserController::PropertyHandlerRef OPropertyBrowserController::impl_getHandlerForProperty_throw( const OUString& _rPropertyName ) const
     {
         PropertyHandlerRepository::const_iterator handlerPos = m_aPropertyHandlers.find( _rPropertyName );
         if ( handlerPos == m_aPropertyHandlers.end() )
@@ -951,7 +951,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Any OPropertyBrowserController::impl_getPropertyValue_throw( const ::rtl::OUString& _rPropertyName )
+    Any OPropertyBrowserController::impl_getPropertyValue_throw( const OUString& _rPropertyName )
     {
         PropertyHandlerRef handler = impl_getHandlerForProperty_throw( _rPropertyName );
         return handler->getPropertyValue( _rPropertyName );
@@ -1038,8 +1038,8 @@ namespace pcr
                 }
 
                 // determine the superseded properties
-                StlSyntaxSequence< ::rtl::OUString > aSupersededByThisHandler = (*aHandler)->getSupersededProperties();
-                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator superseded = aSupersededByThisHandler.begin();
+                StlSyntaxSequence< OUString > aSupersededByThisHandler = (*aHandler)->getSupersededProperties();
+                for (   StlSyntaxSequence< OUString >::const_iterator superseded = aSupersededByThisHandler.begin();
                         superseded != aSupersededByThisHandler.end();
                         ++superseded
                     )
@@ -1071,8 +1071,8 @@ namespace pcr
                 }
 
                 // see if the handler expresses interest in any actuating properties
-                StlSyntaxSequence< ::rtl::OUString > aInterestingActuations = (*aHandler)->getActuatingProperties();
-                for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator aLoop = aInterestingActuations.begin();
+                StlSyntaxSequence< OUString > aInterestingActuations = (*aHandler)->getActuatingProperties();
+                for (   StlSyntaxSequence< OUString >::const_iterator aLoop = aInterestingActuations.begin();
                         aLoop != aInterestingActuations.end();
                         ++aLoop
                     )
@@ -1156,9 +1156,9 @@ namespace pcr
             if ( _rDescriptor.DisplayName.isEmpty() )
             {
             #ifdef DBG_UTIL
-                ::rtl::OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
-                sMessage += ::rtl::OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sMessage += ::rtl::OString( "'!" );
+                OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
+                sMessage += OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
+                sMessage += OString( "'!" );
                 DBG_ASSERT( !_rDescriptor.DisplayName.isEmpty(), sMessage.getStr() );
             #endif
                 _rDescriptor.DisplayName = _rProperty.Name;
@@ -1221,7 +1221,7 @@ namespace pcr
 
             // when building the UI below, remember which properties are actuating,
             // to allow for a initial actuatinPropertyChanged call
-            ::std::vector< ::rtl::OUString > aActuatingProperties;
+            ::std::vector< OUString > aActuatingProperties;
             ::std::vector< Any > aActuatingPropertyValues;
 
             // ask the handlers to describe the property UI, and insert the resulting
@@ -1237,8 +1237,8 @@ namespace pcr
             #if OSL_DEBUG_LEVEL > 0
                 if ( aDescriptor.Category.isEmpty() )
                 {
-                    ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
-                    sMessage += ::rtl::OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
+                    OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
+                    sMessage += OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'!";
                     OSL_FAIL( sMessage.getStr() );
                 }
@@ -1250,7 +1250,7 @@ namespace pcr
                     // this category does not yet exist. This is allowed, as an inspector model might be lazy, and not provide
                     // any category information of its own. In this case, we have a fallback ...
                     m_aPageIds[ aDescriptor.Category ] =
-                        getPropertyBox().AppendPage( aDescriptor.Category, rtl::OString() );
+                        getPropertyBox().AppendPage( aDescriptor.Category, OString() );
                     nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 }
 
@@ -1267,7 +1267,7 @@ namespace pcr
 
             // update any dependencies for the actuating properties which we encountered
             {
-                ::std::vector< ::rtl::OUString >::const_iterator aProperty = aActuatingProperties.begin();
+                ::std::vector< OUString >::const_iterator aProperty = aActuatingProperties.begin();
                 ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
                 for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
                     impl_broadcastPropertyChange_nothrow( *aProperty, *aPropertyValue, *aPropertyValue, true );
@@ -1316,7 +1316,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Clicked( const ::rtl::OUString& _rName, sal_Bool _bPrimary )
+    void OPropertyBrowserController::Clicked( const OUString& _rName, sal_Bool _bPrimary )
     {
         try
         {
@@ -1360,7 +1360,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const ::rtl::OUString& _rName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
     {
         for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
                 search != m_aProperties.end();
@@ -1372,18 +1372,18 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::Commit( const ::rtl::OUString& rName, const Any& _rValue )
+    void OPropertyBrowserController::Commit( const OUString& rName, const Any& _rValue )
     {
         try
         {
-            rtl::OUString sPlcHolder = String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) );
+            OUString sPlcHolder = String( PcrRes( RID_EMBED_IMAGE_PLACEHOLDER ) );
             bool bIsPlaceHolderValue = false;
 
             if ( rName.equals( PROPERTY_IMAGE_URL ) )
             {
                 // if the prop value is the PlaceHolder
                 // can ignore it
-                rtl::OUString sVal;
+                OUString sVal;
                 _rValue >>= sVal;
                 if ( sVal.equals( sPlcHolder ) )
                     bIsPlaceHolderValue = true;
@@ -1427,7 +1427,7 @@ namespace pcr
             OSL_FAIL("OPropertyBrowserController::Commit : caught an exception !");
         }
 
-        m_sCommittingProperty = ::rtl::OUString();
+        m_sCommittingProperty = OUString();
     }
 
     //--------------------------------------------------------------------
@@ -1454,7 +1454,7 @@ namespace pcr
         {
             Reference< XPropertyHandler > xHandler;
 
-            ::rtl::OUString sServiceName;
+            OUString sServiceName;
             Reference< XSingleServiceFactory > xServiceFac;
             Reference< XSingleComponentFactory > xComponentFac;
 
@@ -1486,7 +1486,7 @@ namespace pcr
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString(  "DialogParentWindow"  ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
+                ::cppu::ContextEntry_Init( OUString(  "DialogParentWindow"  ), makeAny( VCLUnoHelper::GetInterface( m_pView ) ) )
             };
             xHandlerContext = ::cppu::createComponentContext(
                 aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
@@ -1544,7 +1544,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool OPropertyBrowserController::impl_findObjectProperty_nothrow( const ::rtl::OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty )
+    bool OPropertyBrowserController::impl_findObjectProperty_nothrow( const OUString& _rName, OrderedPropertyMap::const_iterator* _pProperty )
     {
         OrderedPropertyMap::const_iterator search = m_aProperties.begin();
         for ( ; search != m_aProperties.end(); ++search )
@@ -1556,7 +1556,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::rebuildPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void OPropertyBrowserController::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1580,7 +1580,7 @@ namespace pcr
    }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::enablePropertyUI( const ::rtl::OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
+    void OPropertyBrowserController::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1593,7 +1593,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::enablePropertyUIElements( const ::rtl::OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
+    void OPropertyBrowserController::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1606,7 +1606,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::showPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void OPropertyBrowserController::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1656,7 +1656,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void OPropertyBrowserController::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1669,7 +1669,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::showCategory( const ::rtl::OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
+    void OPropertyBrowserController::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1682,7 +1682,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    Reference< XPropertyControl > SAL_CALL OPropertyBrowserController::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !haveView() )
@@ -1705,7 +1705,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::setHelpSectionText( const ::rtl::OUString& _rHelpText ) throw (NoSupportException, RuntimeException)
+    void SAL_CALL OPropertyBrowserController::setHelpSectionText( const OUString& _rHelpText ) throw (NoSupportException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1720,7 +1720,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::impl_broadcastPropertyChange_nothrow( const ::rtl::OUString& _rPropertyName, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit ) const
+    void OPropertyBrowserController::impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit ) const
     {
         // are there one or more handlers which are interested in the actuation?
         ::std::pair< PropertyHandlerMultiRepository::const_iterator, PropertyHandlerMultiRepository::const_iterator > aInterestedHandlers =

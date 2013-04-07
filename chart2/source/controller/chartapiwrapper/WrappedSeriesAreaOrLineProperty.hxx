@@ -31,17 +31,17 @@ class DataSeriesPointWrapper;
 class WrappedSeriesAreaOrLineProperty : public WrappedProperty
 {
 public:
-    WrappedSeriesAreaOrLineProperty( const ::rtl::OUString& rOuterName
-        , const ::rtl::OUString& rInnerAreaTypeName, const ::rtl::OUString& rInnerLineTypeName
+    WrappedSeriesAreaOrLineProperty( const OUString& rOuterName
+        , const OUString& rInnerAreaTypeName, const OUString& rInnerLineTypeName
         , DataSeriesPointWrapper* pDataSeriesPointWrapper );
     virtual ~WrappedSeriesAreaOrLineProperty();
 
-    virtual ::rtl::OUString getInnerName() const;
+    virtual OUString getInnerName() const;
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
-    ::rtl::OUString m_aInnerAreaTypeName;
-    ::rtl::OUString m_aInnerLineTypeName;
+    OUString m_aInnerAreaTypeName;
+    OUString m_aInnerLineTypeName;
 };
 
 } //namespace wrapper

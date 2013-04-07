@@ -172,7 +172,7 @@ public:
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only
         SetHybridFormula() for formula string to be compiled later. */
-    SC_DLLPUBLIC void SetHybridString( const rtl::OUString & rStr );
+    SC_DLLPUBLIC void SetHybridString( const OUString & rStr );
 
     /** Should only be used by import filters, best in the order
         SetHybridDouble(), SetHybridString()/SetHybridFormula(), or only

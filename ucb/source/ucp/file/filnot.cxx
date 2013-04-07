@@ -59,7 +59,7 @@ ContentEventNotifier::ContentEventNotifier( shell* pMyShell,
 
 
 
-void ContentEventNotifier::notifyChildInserted( const rtl::OUString& aChildName )
+void ContentEventNotifier::notifyChildInserted( const OUString& aChildName )
 {
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
@@ -98,7 +98,7 @@ void ContentEventNotifier::notifyDeleted( void )
 
 
 
-void ContentEventNotifier::notifyRemoved( const rtl::OUString& aChildName )
+void ContentEventNotifier::notifyRemoved( const OUString& aChildName )
 {
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,aChildName );
     uno::Reference< XContentIdentifier > xChildId( p );
@@ -160,7 +160,7 @@ PropertySetInfoChangeNotifier::PropertySetInfoChangeNotifier(
 
 
 void SAL_CALL
-PropertySetInfoChangeNotifier::notifyPropertyAdded( const rtl::OUString & aPropertyName )
+PropertySetInfoChangeNotifier::notifyPropertyAdded( const OUString & aPropertyName )
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
@@ -177,7 +177,7 @@ PropertySetInfoChangeNotifier::notifyPropertyAdded( const rtl::OUString & aPrope
 
 
 void SAL_CALL
-PropertySetInfoChangeNotifier::notifyPropertyRemoved( const rtl::OUString & aPropertyName )
+PropertySetInfoChangeNotifier::notifyPropertyRemoved( const OUString & aPropertyName )
 {
     beans::PropertySetInfoChangeEvent aEvt( m_xCreatorContent,
                                             aPropertyName,
@@ -227,7 +227,7 @@ void PropertyChangeNotifier::notifyPropertyChanged(
 
     // notify listeners for all Events
 
-    uno::Sequence< uno::Reference< uno::XInterface > > seqList = (*m_pListeners)[ rtl::OUString() ];
+    uno::Sequence< uno::Reference< uno::XInterface > > seqList = (*m_pListeners)[ OUString() ];
     for( j = 0; j < seqList.getLength(); ++j )
     {
         uno::Reference< beans::XPropertiesChangeListener > aListener( seqList[j],uno::UNO_QUERY );

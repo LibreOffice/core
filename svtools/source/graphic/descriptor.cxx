@@ -78,7 +78,7 @@ void GraphicDescriptor::init( const ::Graphic& rGraphic )
 
 // ------------------------------------------------------------------------------
 
-void GraphicDescriptor::init( const ::rtl::OUString& rURL )
+void GraphicDescriptor::init( const OUString& rURL )
     throw()
 {
     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL, STREAM_READ );
@@ -92,7 +92,7 @@ void GraphicDescriptor::init( const ::rtl::OUString& rURL )
 
 // ------------------------------------------------------------------------------
 
-void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const ::rtl::OUString& rURL )
+void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const OUString& rURL )
     throw()
 {
     SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rxIStm );
@@ -106,7 +106,7 @@ void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, 
 
 // ------------------------------------------------------------------------------
 
-void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL )
+void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 {
     String aURL;
     if( pURL )
@@ -114,7 +114,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL
     ::GraphicDescriptor aDescriptor( rIStm, &aURL );
 
     mpGraphic = NULL;
-    maMimeType = ::rtl::OUString();
+    maMimeType = OUString();
     meType = GRAPHIC_NONE;
     mnBitsPerPixel = 0;
     mbTransparent = false;
@@ -172,20 +172,20 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const ::rtl::OUString* pURL
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GraphicDescriptor::getImplementationName_Static()
+OUString GraphicDescriptor::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
+    return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GraphicDescriptor::getSupportedServiceNames_Static()
+uno::Sequence< OUString > GraphicDescriptor::getSupportedServiceNames_Static()
     throw(  )
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicDescriptor"  );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicDescriptor"  );
 
     return aSeq;
 }
@@ -239,7 +239,7 @@ void SAL_CALL GraphicDescriptor::release()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GraphicDescriptor::getImplementationName()
+OUString SAL_CALL GraphicDescriptor::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -247,11 +247,11 @@ void SAL_CALL GraphicDescriptor::release()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GraphicDescriptor::supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+    const OUString*              pArray = aSNL.getConstArray();
 
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -262,7 +262,7 @@ sal_Bool SAL_CALL GraphicDescriptor::supportsService( const rtl::OUString& Servi
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -307,7 +307,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
     static ::comphelper::PropertyMapEntry aEntries[] =
     {
         { MAP_CHAR_LEN( "GraphicType" ), UNOGRAPHIC_GRAPHICTYPE, &::getCppuType( (const sal_Int8*)(0)), beans::PropertyAttribute::READONLY, 0 },
-        { MAP_CHAR_LEN( "MimeType" ), UNOGRAPHIC_MIMETYPE, &::getCppuType( (const ::rtl::OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
+        { MAP_CHAR_LEN( "MimeType" ), UNOGRAPHIC_MIMETYPE, &::getCppuType( (const OUString*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "SizePixel" ), UNOGRAPHIC_SIZEPIXEL, &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "Size100thMM" ), UNOGRAPHIC_SIZE100THMM,    &::getCppuType( (const awt::Size*)(0)), beans::PropertyAttribute::READONLY, 0 },
         { MAP_CHAR_LEN( "BitsPerPixel" ), UNOGRAPHIC_BITSPERPIXEL, &::getCppuType( (const sal_uInt8*)(0)), beans::PropertyAttribute::READONLY, 0 },
@@ -358,7 +358,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
             case( UNOGRAPHIC_MIMETYPE ):
             {
-                ::rtl::OUString aMimeType;
+                OUString aMimeType;
 
                 if( mpGraphic )
                 {
@@ -384,11 +384,11 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                         }
 
                         if( pMimeType )
-                            aMimeType = ::rtl::OUString::createFromAscii( pMimeType );
+                            aMimeType = OUString::createFromAscii( pMimeType );
                     }
 
                     if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
-                        aMimeType = ::rtl::OUString(MIMETYPE_VCLGRAPHIC );
+                        aMimeType = OUString(MIMETYPE_VCLGRAPHIC );
                 }
                 else
                     aMimeType = maMimeType;

@@ -93,7 +93,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS ObjectIdentifier
 
 public:
     ObjectIdentifier();
-    ObjectIdentifier( const ::rtl::OUString& rObjectCID );
+    ObjectIdentifier( const OUString& rObjectCID );
     ObjectIdentifier( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
     ObjectIdentifier( const ::com::sun::star::uno::Any& rAny );
     virtual ~ObjectIdentifier();
@@ -104,152 +104,152 @@ public:
     bool operator!=( const ObjectIdentifier& rOID ) const;
     bool operator<( const ObjectIdentifier& rOID ) const;
 
-    static rtl::OUString createClassifiedIdentifierForObject(
+    static OUString createClassifiedIdentifierForObject(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::uno::XInterface >& xObject
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
-    static rtl::OUString createClassifiedIdentifierForParticle(
-        const rtl::OUString& rParticle );
+    static OUString createClassifiedIdentifierForParticle(
+        const OUString& rParticle );
 
-    static rtl::OUString createClassifiedIdentifierForParticles(
-            const rtl::OUString& rParentParticle
-          , const rtl::OUString& rChildParticle
-          , const rtl::OUString& rDragMethodServiceName = rtl::OUString()
-          , const rtl::OUString& rDragParameterString = rtl::OUString() );
+    static OUString createClassifiedIdentifierForParticles(
+            const OUString& rParentParticle
+          , const OUString& rChildParticle
+          , const OUString& rDragMethodServiceName = OUString()
+          , const OUString& rDragParameterString = OUString() );
 
-    static rtl::OUString createClassifiedIdentifierForGrid(
+    static OUString createClassifiedIdentifierForGrid(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis >& xAxis
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nSubIndex = -1 );//-1: main grid, 0: first subgrid etc
 
-    SAL_DLLPRIVATE static rtl::OUString createParticleForDiagram(
+    SAL_DLLPRIVATE static OUString createParticleForDiagram(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XDiagram >& xDiagram
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
 
-    static rtl::OUString createParticleForCoordinateSystem(
+    static OUString createParticleForCoordinateSystem(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
-    static rtl::OUString createParticleForAxis(
+    static OUString createParticleForAxis(
                       sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    static rtl::OUString createParticleForGrid(
+    static OUString createParticleForGrid(
                       sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    static rtl::OUString createParticleForSeries( sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
+    static OUString createParticleForSeries( sal_Int32 nDiagramIndex, sal_Int32 nCooSysIndex
             , sal_Int32 nChartTypeIndex, sal_Int32 nSeriesIndex );
 
-    static rtl::OUString createParticleForLegend(
+    static OUString createParticleForLegend(
           const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XLegend >& xLegend
         , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
-    static rtl::OUString addChildParticle( const rtl::OUString& rParticle, const rtl::OUString& rChildParticle );
-    static rtl::OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
-    static sal_Int32 getIndexFromParticleOrCID( const rtl::OUString& rParticleOrCID );
+    static OUString addChildParticle( const OUString& rParticle, const OUString& rChildParticle );
+    static OUString createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex );
+    static sal_Int32 getIndexFromParticleOrCID( const OUString& rParticleOrCID );
 
-    static rtl::OUString createClassifiedIdentifier(
+    static OUString createClassifiedIdentifier(
         enum ObjectType eObjectType //e.g. OBJECTTYPE_DATA_SERIES
-        , const rtl::OUString& rParticleID );//e.g. SeriesID
+        , const OUString& rParticleID );//e.g. SeriesID
 
-    static rtl::OUString createClassifiedIdentifierWithParent(
+    static OUString createClassifiedIdentifierWithParent(
         enum ObjectType //e.g. OBJECTTYPE_DATA_POINT or OBJECTTYPE_GRID
-        , const rtl::OUString& rParticleID //for points or subgrids this is an Index or otherwise an identifier from the model object
-        , const rtl::OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
-        , const rtl::OUString& rDragMethodServiceName = rtl::OUString()
-        , const rtl::OUString& rDragParameterString = rtl::OUString()
+        , const OUString& rParticleID //for points or subgrids this is an Index or otherwise an identifier from the model object
+        , const OUString& rParentPartical //e.g. "Series=SeriesID" or "Grid=GridId"
+        , const OUString& rDragMethodServiceName = OUString()
+        , const OUString& rDragParameterString = OUString()
         );
 
-    static bool isCID( const rtl::OUString& rName );
-    static rtl::OUString getDragMethodServiceName( const rtl::OUString& rClassifiedIdentifier );
-    static rtl::OUString getDragParameterString( const rtl::OUString& rCID );
-    static bool isDragableObject( const rtl::OUString& rClassifiedIdentifier );
+    static bool isCID( const OUString& rName );
+    static OUString getDragMethodServiceName( const OUString& rClassifiedIdentifier );
+    static OUString getDragParameterString( const OUString& rCID );
+    static bool isDragableObject( const OUString& rClassifiedIdentifier );
     bool isDragableObject();
-    static bool isRotateableObject( const rtl::OUString& rClassifiedIdentifier );
-    static bool isMultiClickObject( const rtl::OUString& rClassifiedIdentifier );
-    static bool areSiblings( const rtl::OUString& rCID1, const rtl::OUString& rCID2 );//identical object is no sibling
-    static bool areIdenticalObjects( const ::rtl::OUString& rCID1, const ::rtl::OUString& rCID2 );
+    static bool isRotateableObject( const OUString& rClassifiedIdentifier );
+    static bool isMultiClickObject( const OUString& rClassifiedIdentifier );
+    static bool areSiblings( const OUString& rCID1, const OUString& rCID2 );//identical object is no sibling
+    static bool areIdenticalObjects( const OUString& rCID1, const OUString& rCID2 );
 
-    static rtl::OUString getStringForType( ObjectType eObjectType );
-    static ObjectType    getObjectType( const rtl::OUString& rCID );
+    static OUString getStringForType( ObjectType eObjectType );
+    static ObjectType    getObjectType( const OUString& rCID );
     ObjectType getObjectType();
 
-    static rtl::OUString createSeriesSubObjectStub( ObjectType eSubObjectType
-                    , const rtl::OUString& rSeriesParticle
-                    , const rtl::OUString& rDragMethodServiceName = rtl::OUString()
-                    , const rtl::OUString& rDragParameterString = rtl::OUString() );
-    static rtl::OUString createPointCID( const rtl::OUString& rPointCID_Stub, sal_Int32 nIndex  );
+    static OUString createSeriesSubObjectStub( ObjectType eSubObjectType
+                    , const OUString& rSeriesParticle
+                    , const OUString& rDragMethodServiceName = OUString()
+                    , const OUString& rDragParameterString = OUString() );
+    static OUString createPointCID( const OUString& rPointCID_Stub, sal_Int32 nIndex  );
 
-    static rtl::OUString createDataCurveCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
-    static rtl::OUString createDataCurveEquationCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex );
+    static OUString createDataCurveCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
+    static OUString createDataCurveEquationCID( const OUString& rSeriesParticle, sal_Int32 nCurveIndex );
 
-    SAL_DLLPRIVATE static rtl::OUString getObjectID( const rtl::OUString& rCID );
-    static rtl::OUString getParticleID( const rtl::OUString& rCID );
-    static rtl::OUString getFullParentParticle( const rtl::OUString& rCID );
+    SAL_DLLPRIVATE static OUString getObjectID( const OUString& rCID );
+    static OUString getParticleID( const OUString& rCID );
+    static OUString getFullParentParticle( const OUString& rCID );
 
     //returns the series particle of a CID when the CID is a child of the series
-    static rtl::OUString getSeriesParticleFromCID( const rtl::OUString& rCID );
+    static OUString getSeriesParticleFromCID( const OUString& rCID );
 
     //return the model object that is indicated by rObjectCID
     static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
             getObjectPropertySet(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
     static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
             getObjectPropertySet(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 
     //return the axis object that belongs to rObjectCID if any
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >
             getAxisForCID(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
     //return the series object that belongs to rObjectCID if any
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
             getDataSeriesForCID(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >
             getDiagramForCID(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const ::com::sun::star::uno::Reference<
                     ::com::sun::star::frame::XModel >& xChartModel );
 
-    static const ::rtl::OUString& getPieSegmentDragMethodServiceName();
-    static ::rtl::OUString createPieSegmentDragParameterString(
+    static const OUString& getPieSegmentDragMethodServiceName();
+    static OUString createPieSegmentDragParameterString(
           sal_Int32 nOffsetPercent
         , const ::com::sun::star::awt::Point& rMinimumPosition
         , const ::com::sun::star::awt::Point& rMaximumPosition );
-    static bool parsePieSegmentDragParameterString( const rtl::OUString& rDragParameterString
+    static bool parsePieSegmentDragParameterString( const OUString& rDragParameterString
         , sal_Int32& rOffsetPercent
         , ::com::sun::star::awt::Point& rMinimumPosition
         , ::com::sun::star::awt::Point& rMaximumPosition );
 
-    static TitleHelper::eTitleType getTitleTypeForCID( const ::rtl::OUString& rCID );
+    static TitleHelper::eTitleType getTitleTypeForCID( const OUString& rCID );
 
-    static ::rtl::OUString getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward );
+    static OUString getMovedSeriesCID( const OUString& rObjectCID, sal_Bool bForward );
 
     bool isValid() const;
     bool isAutoGeneratedObject() const;
     bool isAdditionalShape() const;
-    ::rtl::OUString getObjectCID() const;
+    OUString getObjectCID() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getAdditionalShape() const;
     ::com::sun::star::uno::Any getAny() const;
 
@@ -259,7 +259,7 @@ private:
     // for all other objects m_xAdditionalShape is set.
     // Note, that if m_aObjectCID is set, m_xAdditionalShape must be empty
     // and vice versa.
-    ::rtl::OUString m_aObjectCID;
+    OUString m_aObjectCID;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xAdditionalShape;
 };
 

@@ -43,10 +43,10 @@ namespace bundle {
 class ExtensionBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual ::rtl::OUString getDbNSName();
-    virtual ::rtl::OUString getNSPrefix();
-    virtual ::rtl::OUString getRootElementName();
-    virtual ::rtl::OUString getKeyElementName();
+    virtual OUString getDbNSName();
+    virtual OUString getNSPrefix();
+    virtual OUString getRootElementName();
+    virtual OUString getKeyElementName();
 
 public:
     struct Data
@@ -54,18 +54,18 @@ public:
          /* every element consists of a pair of the url to the item (jar,rdb, etc)
            and the media type
          */
-        ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString> > items;
+        ::std::vector< ::std::pair< OUString, OUString> > items;
         typedef ::std::vector<
-            ::std::pair< ::rtl::OUString, ::rtl::OUString> >::const_iterator ITC_ITEMS;
+            ::std::pair< OUString, OUString> >::const_iterator ITC_ITEMS;
     };
 
 public:
     ExtensionBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        ::rtl::OUString const & url);
+                        OUString const & url);
 
-    void addEntry(::rtl::OUString const & url, Data const & data);
+    void addEntry(OUString const & url, Data const & data);
 
-    Data getEntry(::rtl::OUString const & url);
+    Data getEntry(OUString const & url);
 
 };
 

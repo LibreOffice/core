@@ -140,16 +140,16 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.forms.FormOperations" );
+        return OUString( "com.sun.star.comp.forms.FormOperations" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString( "com.sun.star.form.runtime.FormOperations" );
+        Sequence< OUString > aNames(1);
+        aNames[0] = OUString( "com.sun.star.form.runtime.FormOperations" );
         return aNames;
     }
 
@@ -174,30 +174,30 @@ namespace frm
             else if ( _arguments[0] >>= xForm )
                 createWithForm( xForm );
             else
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+                throw IllegalArgumentException( OUString(), *this, 1 );
             return;
         }
 
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL FormOperations::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL FormOperations::supportsService( const ::rtl::OUString& _ServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL FormOperations::supportsService( const OUString& _ServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupportedServiceNames( getSupportedServiceNames() );
-        const ::rtl::OUString* pBegin = aSupportedServiceNames.getConstArray();
-        const ::rtl::OUString* pEnd = aSupportedServiceNames.getConstArray() + aSupportedServiceNames.getLength();
+        Sequence< OUString > aSupportedServiceNames( getSupportedServiceNames() );
+        const OUString* pBegin = aSupportedServiceNames.getConstArray();
+        const OUString* pEnd = aSupportedServiceNames.getConstArray() + aSupportedServiceNames.getLength();
         return ::std::find( pBegin, pEnd, _ServiceName ) != pEnd;
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL FormOperations::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
@@ -296,7 +296,7 @@ namespace frm
                 aState.Enabled = ::dbtools::getConnection( xCursorRowSet ).is();
 
                 // and an active command
-                ::rtl::OUString sActiveCommand;
+                OUString sActiveCommand;
                 m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand;
                 aState.Enabled &= !sActiveCommand.isEmpty();
             }
@@ -343,7 +343,7 @@ namespace frm
 
             case FormFeature::ToggleApplyFilter:
             {
-                ::rtl::OUString sFilter;
+                OUString sFilter;
                 m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sFilter;
                 if ( !sFilter.isEmpty() )
                 {
@@ -398,9 +398,9 @@ namespace frm
                 if ( bIsNew )
                     ++nCount;
 
-                ::rtl::OUString sValue = ::rtl::OUString::valueOf( sal_Int32( nCount ) );
+                OUString sValue = OUString::valueOf( sal_Int32( nCount ) );
                 if ( !bFinalCount )
-                    sValue += ::rtl::OUString(" *");
+                    sValue += OUString(" *");
 
                 aState.State <<= sValue;
                 aState.Enabled = sal_True;
@@ -647,13 +647,13 @@ namespace frm
                 OSL_ENSURE( xProperties.is(), "FormOperations::execute: no multi property access!" );
                 if ( xProperties.is() )
                 {
-                    Sequence< ::rtl::OUString > aNames( 2 );
+                    Sequence< OUString > aNames( 2 );
                     aNames[0] = PROPERTY_FILTER;
                     aNames[1] = PROPERTY_SORT;
 
                     Sequence< Any> aValues( 2 );
-                    aValues[0] <<= ::rtl::OUString();
-                    aValues[1] <<= ::rtl::OUString();
+                    aValues[0] <<= OUString();
+                    aValues[1] <<= OUString();
 
                     WaitObject aWO( NULL );
                     xProperties->setPropertyValues( aNames, aValues );
@@ -713,7 +713,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
 
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
@@ -767,7 +767,7 @@ namespace frm
             catch( const SQLException& ) { throw; }
             catch( const Exception& )
             {
-                throw WrappedTargetException( ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+                throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
             }
         }
         break;
@@ -871,7 +871,7 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
         }
         return bIs;
     }
@@ -887,7 +887,7 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
         }
         return bIs;
     }
@@ -948,7 +948,7 @@ namespace frm
         {
             try
             {
-                ::rtl::OUString sNewValue;
+                OUString sNewValue;
                 _rEvent.NewValue >>= sNewValue;
                 if ( _rEvent.PropertyName == PROPERTY_ACTIVECOMMAND )
                 {
@@ -1022,7 +1022,7 @@ namespace frm
     void FormOperations::impl_checkDisposed_throw() const
     {
         if ( impl_isDisposed_nothrow() )
-            throw DisposedException( ::rtl::OUString(), *const_cast< FormOperations* >( this ) );
+            throw DisposedException( OUString(), *const_cast< FormOperations* >( this ) );
     }
 
     //--------------------------------------------------------------------
@@ -1031,7 +1031,7 @@ namespace frm
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_initFromController_throw: invalid controller!" );
         m_xCursor = m_xCursor.query( m_xController->getModel() );
         if ( !m_xCursor.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw IllegalArgumentException( OUString(), *this, 0 );
 
         impl_initFromForm_throw();
 
@@ -1049,7 +1049,7 @@ namespace frm
         m_xLoadableForm     = m_xLoadableForm.query     ( m_xCursor );
 
         if ( !m_xCursor.is() || !m_xCursorProperties.is() || !m_xLoadableForm.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw IllegalArgumentException( OUString(), *this, 0 );
 
         m_xCursor->addRowSetListener( this );
         m_xCursorProperties->addPropertyChangeListener( PROPERTY_ISMODIFIED,this );
@@ -1061,7 +1061,7 @@ namespace frm
     {
         m_xController = _rxController;
         if ( !m_xController.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw IllegalArgumentException( OUString(), *this, 0 );
 
         impl_initFromController_throw();
 
@@ -1073,7 +1073,7 @@ namespace frm
     {
         m_xCursor = m_xCursor.query( _rxForm );
         if ( !m_xCursor.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw IllegalArgumentException( OUString(), *this, 0 );
 
         impl_initFromForm_throw();
 
@@ -1135,7 +1135,7 @@ namespace frm
                 Reference< XMultiServiceFactory > xFactory( ::dbtools::getConnection( m_xCursor ), UNO_QUERY );
                 if ( xFactory.is() )
                 {
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
                     OSL_ENSURE( m_xParser.is(), "FormOperations::impl_ensureInitializedParser_nothrow: factory did not create a parser for us!" );
                 }
             }
@@ -1144,9 +1144,9 @@ namespace frm
             {
                 if ( m_xLoadableForm.is() && m_xLoadableForm->isLoaded() )
                 {
-                    ::rtl::OUString sStatement;
-                    ::rtl::OUString sFilter;
-                    ::rtl::OUString sSort;
+                    OUString sStatement;
+                    OUString sFilter;
+                    OUString sSort;
 
                     m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND   ) >>= sStatement;
                     m_xCursorProperties->getPropertyValue( PROPERTY_FILTER          ) >>= sFilter;
@@ -1233,7 +1233,7 @@ namespace frm
     namespace
     {
         template < typename TYPE >
-        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const ::rtl::OUString& _rPropertyName, TYPE _Default )
+        TYPE lcl_safeGetPropertyValue_throw( const Reference< XPropertySet >& _rxProperties, const OUString& _rPropertyName, TYPE _Default )
         {
             TYPE value( _Default );
             OSL_PRECOND( _rxProperties.is(), "FormOperations::<foo>: no cursor (already disposed?)!" );
@@ -1480,11 +1480,11 @@ namespace frm
             if ( !xBoundField.is() )
                 return;
 
-            ::rtl::OUString sOriginalSort;
+            OUString sOriginalSort;
             m_xCursorProperties->getPropertyValue( PROPERTY_SORT ) >>= sOriginalSort;
 
             // automatic sort by field is expected to always resets the previous sort order
-            m_xParser->setOrder( ::rtl::OUString() );
+            m_xParser->setOrder( OUString() );
 
             impl_appendOrderByColumn_throw aAction(this, xBoundField, _bUp);
             impl_doActionInSQLContext_throw(aAction, RID_STR_COULD_NOT_SET_ORDER );
@@ -1520,7 +1520,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }
 
@@ -1543,14 +1543,14 @@ namespace frm
             if ( !xBoundField.is() )
                 return;
 
-            ::rtl::OUString sOriginalFilter;
+            OUString sOriginalFilter;
             m_xCursorProperties->getPropertyValue( PROPERTY_FILTER ) >>= sOriginalFilter;
             sal_Bool bApplied = sal_True;
             m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
 
             // if we have a filter, but it's not applied, then we have to overwrite it, else append one
             if ( !bApplied )
-                m_xParser->setFilter( ::rtl::OUString() );
+                m_xParser->setFilter( OUString() );
 
             impl_appendFilterByColumn_throw aAction(this, xBoundField);
             impl_doActionInSQLContext_throw( aAction, RID_STR_COULD_NOT_SET_FILTER );
@@ -1589,7 +1589,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }
 
@@ -1633,7 +1633,7 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }
 
@@ -1653,14 +1653,14 @@ namespace frm
                 throw;
 
             SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
-            ::rtl::OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
+            OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
             aInfo.prepend( sAdditionalError );
             aInfo.doThrow();
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            ::rtl::OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
+            OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
             throw WrappedTargetException( sAdditionalError, *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
         }
     }

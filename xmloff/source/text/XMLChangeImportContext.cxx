@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::xml::sax::XAttributeList;

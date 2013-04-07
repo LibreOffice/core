@@ -43,7 +43,6 @@
 #include <systools/win32/comtools.hxx>
 
 using namespace com::sun::star::uno;
-using rtl::OString;
 
 #pragma pack(2)
 struct METAFILEHEADER

@@ -35,11 +35,11 @@
 
 class Xst : public TBBase
 {
-    rtl::OUString sString;
+    OUString sString;
 public:
     Xst(){}
     bool Read(SvStream &rS);
-    rtl::OUString getString() { return sString; }
+    OUString getString() { return sString; }
     void Print( FILE* fp );
 };
 
@@ -55,7 +55,7 @@ public:
     bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
-    rtl::OUString GetCustomText();
+    OUString GetCustomText();
 };
 
 class SwCTB : public TBBase
@@ -80,7 +80,7 @@ public:
     bool IsMenuToolbar();
     bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
-    rtl::OUString GetName() { return tb.getName().getString(); }
+    OUString GetName() { return tb.getName().getString(); }
 };
 
 class TBDelta : public TBBase
@@ -174,7 +174,7 @@ public:
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 
     Customization* GetCustomizaton( sal_Int16 index );
-    SwCTB* GetCustomizationData( const rtl::OUString& name );
+    SwCTB* GetCustomizationData( const OUString& name );
     void Print( FILE* );
 };
 
@@ -272,7 +272,7 @@ class TcgSttbfCore : public TBBase
 struct SBBItem
 {
     sal_uInt16 cchData;
-    rtl::OUString data;
+    OUString data;
     sal_uInt16 extraData;
     SBBItem() : cchData(0), extraData(0){}
 };

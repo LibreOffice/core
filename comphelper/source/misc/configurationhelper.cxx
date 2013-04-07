@@ -76,8 +76,8 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
 
 //-----------------------------------------------
 css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
-                                                   const ::rtl::OUString&                            sRelPath,
-                                                   const ::rtl::OUString&                            sKey    )
+                                                   const OUString&                            sRelPath,
+                                                   const OUString&                            sKey    )
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xCFG, css::uno::UNO_QUERY_THROW);
 
@@ -85,7 +85,7 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
     if (!xProps.is())
     {
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("The requested path \"");
         sMsg.append     (sRelPath               );
         sMsg.appendAscii("\" does not exists."  );
@@ -99,8 +99,8 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
 
 //-----------------------------------------------
 void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
-                                           const ::rtl::OUString&                            sRelPath,
-                                           const ::rtl::OUString&                            sKey    ,
+                                           const OUString&                            sRelPath,
+                                           const OUString&                            sKey    ,
                                            const css::uno::Any&                              aValue  )
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xCFG, css::uno::UNO_QUERY_THROW);
@@ -109,7 +109,7 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
     if (!xProps.is())
     {
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("The requested path \"");
         sMsg.append     (sRelPath               );
         sMsg.appendAscii("\" does not exists."  );
@@ -123,15 +123,15 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
 
 //-----------------------------------------------
 css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
-                                                                                       const ::rtl::OUString&                            sRelPathToSet,
-                                                                                       const ::rtl::OUString&                            sSetNode     )
+                                                                                       const OUString&                            sRelPathToSet,
+                                                                                       const OUString&                            sSetNode     )
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > xAccess(xCFG, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameAccess > xSet;
     xAccess->getByHierarchicalName(sRelPathToSet) >>= xSet;
     if (!xSet.is())
     {
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("The requested path \"");
         sMsg.append     (sRelPathToSet          );
         sMsg.appendAscii("\" does not exists."  );
@@ -157,9 +157,9 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
 
 //-----------------------------------------------
 css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
-                                                 const ::rtl::OUString&                                       sPackage,
-                                                 const ::rtl::OUString&                                       sRelPath,
-                                                 const ::rtl::OUString&                                       sKey    ,
+                                                 const OUString&                                       sPackage,
+                                                 const OUString&                                       sRelPath,
+                                                 const OUString&                                       sKey    ,
                                                        sal_Int32                                              eMode   )
 {
     css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
@@ -168,9 +168,9 @@ css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css:
 
 //-----------------------------------------------
 void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
-                                         const ::rtl::OUString&                                       sPackage,
-                                         const ::rtl::OUString&                                       sRelPath,
-                                         const ::rtl::OUString&                                       sKey    ,
+                                         const OUString&                                       sPackage,
+                                         const OUString&                                       sRelPath,
+                                         const OUString&                                       sKey    ,
                                          const css::uno::Any&                                         aValue  ,
                                                sal_Int32                                              eMode   )
 {

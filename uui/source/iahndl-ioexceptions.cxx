@@ -31,8 +31,8 @@ namespace {
 
 bool
 getStringRequestArgument(uno::Sequence< uno::Any > const & rArguments,
-                         rtl::OUString const & rKey,
-                         rtl::OUString * pValue)
+                         OUString const & rKey,
+                         OUString * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
@@ -40,7 +40,7 @@ getStringRequestArgument(uno::Sequence< uno::Any > const & rArguments,
         beans::PropertyValue aProperty;
         if ((rArguments[i] >>= aProperty) && aProperty.Name == rKey)
         {
-            rtl::OUString aValue;
+            OUString aValue;
             if (aProperty.Value >>= aValue)
             {
                 if (pValue)
@@ -54,7 +54,7 @@ getStringRequestArgument(uno::Sequence< uno::Any > const & rArguments,
 
 bool
 getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
-                       rtl::OUString const & rKey,
+                       OUString const & rKey,
                        bool * pValue)
     SAL_THROW(())
 {
@@ -77,7 +77,7 @@ getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
 
 bool
 getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
-                               rtl::OUString * pValue)
+                               OUString * pValue)
     SAL_THROW(())
 {
     if (!getStringRequestArgument(rArguments, "Uri",  pValue))
@@ -97,7 +97,7 @@ UUIInteractionHelper::handleInteractiveIOException(
         uno::Reference< task::XInteractionRequest > const & rRequest,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
     SAL_THROW((uno::RuntimeException))
 {
     uno::Any aAnyRequest(rRequest->getRequest());
@@ -112,7 +112,7 @@ UUIInteractionHelper::handleInteractiveIOException(
             aRequestArguments = aAugmentedIoException.Arguments;
 
         ErrCode nErrorCode;
-        std::vector< rtl::OUString > aArguments;
+        std::vector< OUString > aArguments;
         static ErrCode const
             aErrorCode[ucb::IOErrorCode_WRONG_VERSION + 1][2]
             = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
@@ -212,7 +212,7 @@ UUIInteractionHelper::handleInteractiveIOException(
 
         case ucb::IOErrorCode_DEVICE_NOT_READY:
             {
-                rtl::OUString aArgUri;
+                OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
                                                    &aArgUri))
                 {
@@ -236,8 +236,8 @@ UUIInteractionHelper::handleInteractiveIOException(
 
         case ucb::IOErrorCode_DIFFERENT_DEVICES:
             {
-                rtl::OUString aArgVolume;
-                rtl::OUString aArgOtherVolume;
+                OUString aArgVolume;
+                OUString aArgOtherVolume;
                 if (getStringRequestArgument(aRequestArguments, "Volume", &aArgVolume)
                     && getStringRequestArgument(aRequestArguments, "OtherVolume",
                         &aArgOtherVolume))
@@ -254,11 +254,11 @@ UUIInteractionHelper::handleInteractiveIOException(
 
         case ucb::IOErrorCode_NOT_EXISTING:
             {
-                rtl::OUString aArgUri;
+                OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
                            &aArgUri))
                 {
-                    rtl::OUString aResourceType;
+                    OUString aResourceType;
                     getStringRequestArgument(aRequestArguments, "ResourceType",
                                             &aResourceType);
                     nErrorCode = aResourceType == "volume"
@@ -275,7 +275,7 @@ UUIInteractionHelper::handleInteractiveIOException(
 
         default:
             {
-                rtl::OUString aArgUri;
+                OUString aArgUri;
                 if (getResourceNameRequestArgument(aRequestArguments,
                                                    &aArgUri))
                 {

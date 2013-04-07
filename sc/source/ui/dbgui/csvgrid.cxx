@@ -109,7 +109,7 @@ void ScCsvGrid::UpdateLayoutData()
 {
     DisableRepaint();
     SetFont( maMonoFont );
-    Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( rtl::OUString( 'X' ) ) );
+    Execute( CSVCMD_SETCHARWIDTH, GetTextWidth( OUString( 'X' ) ) );
     Execute( CSVCMD_SETLINEHEIGHT, GetTextHeight() + 1 );
     SetFont( maHeaderFont );
     Execute( CSVCMD_SETHDRHEIGHT, GetTextHeight() + 1 );
@@ -123,7 +123,7 @@ void ScCsvGrid::UpdateOffsetX()
     sal_Int32 nDigits = 2;
     while( nLastLine /= 10 ) ++nDigits;
     nDigits = Max( nDigits, sal_Int32( 3 ) );
-    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( rtl::OUString( '0' ) ) * nDigits );
+    Execute( CSVCMD_SETHDRWIDTH, GetTextWidth( OUString( '0' ) ) * nDigits );
 }
 
 void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
@@ -717,7 +717,7 @@ void ScCsvGrid::DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier )
 // cell contents --------------------------------------------------------------
 
 void ScCsvGrid::ImplSetTextLineSep(
-        sal_Int32 nLine, const rtl::OUString& rTextLine,
+        sal_Int32 nLine, const OUString& rTextLine,
         const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep )
 {
     if( nLine < GetFirstVisLine() ) return;
@@ -777,7 +777,7 @@ void ScCsvGrid::ImplSetTextLineSep(
     InvalidateGfx();
 }
 
-void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const rtl::OUString& rTextLine )
+void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const OUString& rTextLine )
 {
     if( nLine < GetFirstVisLine() ) return;
 

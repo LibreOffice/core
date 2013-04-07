@@ -28,8 +28,6 @@
 #include <xmloff/xmlictxt.hxx>
 #include <tools/debug.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 

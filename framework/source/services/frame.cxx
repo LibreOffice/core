@@ -302,8 +302,8 @@ Frame::~Frame()
     @onerror    We return a null reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromURL( const ::rtl::OUString&                                 sURL            ,
-                                                                                   const ::rtl::OUString&                                 sTargetFrameName,
+css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromURL( const OUString&                                 sURL            ,
+                                                                                   const OUString&                                 sTargetFrameName,
                                                                                          sal_Int32                                        nSearchFlags    ,
                                                                                    const css::uno::Sequence< css::beans::PropertyValue >& lArguments      ) throw( css::io::IOException                ,
                                                                                                                                                                    css::lang::IllegalArgumentException ,
@@ -524,7 +524,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
         throw css::uno::RuntimeException(
-                    ::rtl::OUString("Frame::initialize() called without a valid container window reference."),
+                    OUString("Frame::initialize() called without a valid container window reference."),
                     static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -532,7 +532,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Frame::initialized() is called more then once, which isnt useful nor allowed."),
+                OUString("Frame::initialized() is called more then once, which isnt useful nor allowed."),
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -679,7 +679,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
 
     @onerror    An empty string is returned.
 *//*-*****************************************************************************************************/
-::rtl::OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException )
+OUString SAL_CALL Frame::getName() throw( css::uno::RuntimeException )
 {
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -701,7 +701,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Frame::getCreator() 
 
     @onerror    We do nothing.
 *//*-*****************************************************************************************************/
-void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException )
+void SAL_CALL Frame::setName( const OUString& sName ) throw( css::uno::RuntimeException )
 {
     /* SAFE { */
     WriteGuard aWriteLock( m_aLock );
@@ -738,7 +738,7 @@ void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::Ru
     @return     A reference to found or may be new created frame.
     @threadsafe yes
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl::OUString&  sTargetFrameName,
+css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUString&  sTargetFrameName,
                                                                            sal_Int32         nSearchFlags    ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XFrame > xTarget;
@@ -858,7 +858,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         // get threadsafe some necessary member which are neccessary for following functionality
         /* SAFE { */
         aReadLock.lock();
-        ::rtl::OUString sOwnName = m_sName;
+        OUString sOwnName = m_sName;
         aReadLock.unlock();
         /* } SAFE */
 
@@ -1676,7 +1676,7 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SAL_CALL Frame::getTitle()
+OUString SAL_CALL Frame::getTitle()
     throw (css::uno::RuntimeException)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1691,7 +1691,7 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::setTitle( const ::rtl::OUString& sTitle )
+void SAL_CALL Frame::setTitle( const OUString& sTitle )
     throw (css::uno::RuntimeException)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1903,7 +1903,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // If may be later somewhere change the disposed-behaviour of this implementation
     // and doesn't throw any DisposedExceptions we must guarantee best matching default values ...
     m_eActiveState       = E_INACTIVE;
-    m_sName              = ::rtl::OUString();
+    m_sName              = OUString();
     m_bIsFrameTop        = sal_False;
     m_bConnected         = sal_False;
     m_nExternalLockCount = 0;
@@ -2017,7 +2017,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     @onerror    A null reference is returned.
 *//*-*****************************************************************************************************/
 css::uno::Reference< css::frame::XDispatch > SAL_CALL Frame::queryDispatch( const css::util::URL&   aURL            ,
-                                                                            const ::rtl::OUString&  sTargetFrameName,
+                                                                            const OUString&  sTargetFrameName,
                                                                                   sal_Int32         nSearchFlags    ) throw( css::uno::RuntimeException )
 {
     const char UNO_PROTOCOL[] = ".uno:";
@@ -2544,12 +2544,12 @@ void Frame::impl_initializePropInfo()
         css::beans::Property(
             FRAME_PROPNAME_TITLE,
             FRAME_PROPHANDLE_TITLE,
-            ::getCppuType((const ::rtl::OUString*)NULL),
+            ::getCppuType((const OUString*)NULL),
             css::beans::PropertyAttribute::TRANSIENT));
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
+void SAL_CALL Frame::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                  sal_Int32        nHandle  ,
                                            const css::uno::Any&   aValue   )
 
@@ -2567,7 +2567,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
     {
         case FRAME_PROPHANDLE_TITLE :
                 {
-                    ::rtl::OUString sExternalTitle;
+                    OUString sExternalTitle;
                     aValue >>= sExternalTitle;
                     setTitle (sExternalTitle);
                 }
@@ -2611,7 +2611,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
 }
 
 //*****************************************************************************************************************
-css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const ::rtl::OUString& /*sProperty*/,
+css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*/,
                                                           sal_Int32        nHandle  )
 {
     /* There is no need to lock any mutex here. Because we share the

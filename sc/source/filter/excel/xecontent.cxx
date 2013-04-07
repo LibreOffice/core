@@ -58,9 +58,6 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::table::CellRangeAddress;
 using ::com::sun::star::sheet::XAreaLinks;
 using ::com::sun::star::sheet::XAreaLink;
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // Shared string table ========================================================
 
@@ -367,7 +364,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         {
             // #n382718# (and #n261623#) Convert smb notation to '\\'
             aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
-            aFileName = rtl::OUString( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName = OUString( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
             aFileName.SearchAndReplaceAll( '/', '\\' );
         }
 
@@ -375,7 +372,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
             mnFlags |= EXC_HLINK_ABS;
         mnFlags |= EXC_HLINK_BODY;
 
-        rtl::OString aAsciiLink(rtl::OUStringToOString(aFileName,
+        OString aAsciiLink(OUStringToOString(aFileName,
             rRoot.GetTextEncoding()));
         XclExpString aLink( aFileName, EXC_STR_FORCEUNICODE, 255 );
         aXclStrm    << XclTools::maGuidFileMoniker
@@ -903,14 +900,14 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         || eOperation == SC_COND_BOTTOM_PERCENT;
     sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
         eOperation == SC_COND_BOTTOM_PERCENT;
-    rtl::OString aRank("0");
+    OString aRank("0");
     if(IsTopBottomRule(eOperation))
     {
         // position and formula grammar are not important
         // we only store a number there
         aRank = XclXmlUtils::ToOString(mrFormatEntry.GetExpression(ScAddress(0,0,0), 0));
     }
-    rtl::OString aText;
+    OString aText;
     if(IsTextRule(eOperation))
     {
         // we need to write the text without quotes
@@ -1049,7 +1046,7 @@ XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry,
 
 namespace {
 
-rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry, bool bFirst )
+OString getColorScaleType( const ScColorScaleEntry& rEntry, bool bFirst )
 {
     switch(rEntry.GetType())
     {
@@ -1081,12 +1078,12 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
 
-    rtl::OString aValue;
+    OString aValue;
     if(mrEntry.GetType() == COLORSCALE_FORMULA)
     {
-        rtl::OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos,
+        OUString aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), maSrcPos,
                 mrEntry.GetFormula()->Clone(), GetRoot().GetOpCodeMap() );
-        aValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
+        aValue = OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else
     {
@@ -1238,17 +1235,17 @@ void XclExpColorScale::SaveXml( XclExpXmlStream& rStrm )
 
 namespace {
 
-rtl::OString createHexStringFromDigit(sal_uInt8 nDigit)
+OString createHexStringFromDigit(sal_uInt8 nDigit)
 {
-    rtl::OString aString = rtl::OString::valueOf( static_cast<sal_Int32>(nDigit), 16 );
+    OString aString = OString::valueOf( static_cast<sal_Int32>(nDigit), 16 );
     if(aString.getLength() == 1)
         aString = aString + OString::number(0);
     return aString;
 }
 
-rtl::OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+OString createGuidStringFromInt(sal_uInt8 nGuid[16])
 {
-    rtl::OStringBuffer aBuffer;
+    OStringBuffer aBuffer;
     aBuffer.append('{');
     for(size_t i = 0; i < 16; ++i)
     {
@@ -1257,7 +1254,7 @@ rtl::OString createGuidStringFromInt(sal_uInt8 nGuid[16])
             aBuffer.append('-');
     }
     aBuffer.append('}');
-    rtl::OString aString = aBuffer.makeStringAndClear();
+    OString aString = aBuffer.makeStringAndClear();
     return aString.toAsciiUpperCase();
 }
 
@@ -1570,7 +1567,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         String aToken( aString.GetToken( 0, '\n', nStringIx ) );
                         if( nToken > 0 )
                         {
-                            mxString1->Append(rtl::OUString(static_cast<sal_Unicode>('\0')));
+                            mxString1->Append(OUString(static_cast<sal_Unicode>('\0')));
                             sFormulaBuf.append( (sal_Unicode) ',' );
                         }
                         mxString1->Append( aToken );

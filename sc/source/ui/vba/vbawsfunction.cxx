@@ -78,7 +78,7 @@ ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     // create copy of parameters, replace Excel range objects with UNO range objects
     uno::Sequence< uno::Any > aParamTemp( Params );
@@ -122,9 +122,9 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
                         (*pArray) >>= aTmp[ 0 ];
                         (*pArray) <<= aTmp;
                     }
-                    else if ( aType.equals( getCppuType( (uno::Sequence<rtl::OUString>*)0 ) ) )
+                    else if ( aType.equals( getCppuType( (uno::Sequence<OUString>*)0 ) ) )
                     {
-                        uno::Sequence< uno::Sequence< rtl::OUString > > aTmp(1);
+                        uno::Sequence< uno::Sequence< OUString > > aTmp(1);
                         (*pArray) >>= aTmp[ 0 ];
                         (*pArray) <<= aTmp;
                     }
@@ -139,7 +139,7 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
                 default:
                     break;
             }
-            OSL_TRACE("Param[%d] is %s", (int)(pArray - aParamTemp.getConstArray()), rtl::OUStringToOString( comphelper::anyToString( *pArray ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("Param[%d] is %s", (int)(pArray - aParamTemp.getConstArray()), OUStringToOString( comphelper::anyToString( *pArray ), RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
@@ -179,10 +179,10 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
     {
         uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XFunctionAccess > xFunctionAccess( xSMgr->createInstanceWithContext(
-            ::rtl::OUString( "com.sun.star.sheet.FunctionAccess" ), mxContext ),
+            OUString( "com.sun.star.sheet.FunctionAccess" ), mxContext ),
             uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xPropSet( xFunctionAccess, uno::UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( ::rtl::OUString( "IsArrayFunction" ), uno::Any( bAsArray ) );
+        xPropSet->setPropertyValue( OUString( "IsArrayFunction" ), uno::Any( bAsArray ) );
         aRet = xFunctionAccess->callFunction( FunctionName, aParamTemp );
     }
 
@@ -245,19 +245,19 @@ ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< 
 }
 
 void SAL_CALL
-ScVbaWSFunction::setValue(const rtl::OUString& /*PropertyName*/, const uno::Any& /*Value*/) throw(beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWSFunction::setValue(const OUString& /*PropertyName*/, const uno::Any& /*Value*/) throw(beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 
 uno::Any SAL_CALL
-ScVbaWSFunction::getValue(const rtl::OUString& /*PropertyName*/) throw(beans::UnknownPropertyException, uno::RuntimeException)
+ScVbaWSFunction::getValue(const OUString& /*PropertyName*/) throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 
 sal_Bool SAL_CALL
-ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeException)
+ScVbaWSFunction::hasMethod(const OUString& Name)  throw(uno::RuntimeException)
 {
     sal_Bool bIsFound = false;
     try
@@ -277,34 +277,34 @@ ScVbaWSFunction::hasMethod(const rtl::OUString& Name)  throw(uno::RuntimeExcepti
 }
 
 sal_Bool SAL_CALL
-ScVbaWSFunction::hasProperty(const rtl::OUString& /*Name*/)  throw(uno::RuntimeException)
+ScVbaWSFunction::hasProperty(const OUString& /*Name*/)  throw(uno::RuntimeException)
 {
      return false;
 }
 
-::rtl::OUString SAL_CALL
-ScVbaWSFunction::getExactName( const ::rtl::OUString& aApproximateName ) throw (css::uno::RuntimeException)
+OUString SAL_CALL
+ScVbaWSFunction::getExactName( const OUString& aApproximateName ) throw (css::uno::RuntimeException)
 {
-    rtl::OUString sName = aApproximateName.toAsciiUpperCase();
+    OUString sName = aApproximateName.toAsciiUpperCase();
     if ( !hasMethod( sName ) )
-        return rtl::OUString();
+        return OUString();
     return sName;
 }
 
-rtl::OUString
+OUString
 ScVbaWSFunction::getServiceImplName()
 {
-    return rtl::OUString("ScVbaWSFunction");
+    return OUString("ScVbaWSFunction");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaWSFunction::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.WorksheetFunction" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.WorksheetFunction" );
     }
     return aServiceNames;
 }

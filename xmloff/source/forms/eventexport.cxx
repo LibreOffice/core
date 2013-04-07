@@ -43,8 +43,8 @@ namespace xmloff
 
         // translate the events
         const ScriptEventDescriptor* pEvents = _rEvents.getConstArray();
-        ::rtl::OUString sName;
-        ::rtl::OUString sLibrary, sLocalMacroName;
+        OUString sName;
+        OUString sLibrary, sLocalMacroName;
         for (sal_Int32 i=0; i<nEvents; ++i, ++pEvents)
         {
             // the name of the event is build from listener interface and listener method name
@@ -93,29 +93,29 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OEventDescriptorMapper::replaceByName( const ::rtl::OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         throw IllegalArgumentException(
-            ::rtl::OUString("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
+            OUString("replacing is not implemented for this wrapper class."), static_cast< ::cppu::OWeakObject* >(this), 1);
     }
 
     //---------------------------------------------------------------------
-    Any SAL_CALL OEventDescriptorMapper::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
             throw NoSuchElementException(
-                ::rtl::OUString("There is no element named ") += _rName,
+                OUString("There is no element named ") += _rName,
                 static_cast< ::cppu::OWeakObject* >(this));
 
         return makeAny(aPos->second);
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aReturn(m_aMappedEvents.size());
-        ::rtl::OUString* pReturn = aReturn.getArray();
+        Sequence< OUString > aReturn(m_aMappedEvents.size());
+        OUString* pReturn = aReturn.getArray();
         for (   ConstMapString2PropertyValueSequenceIterator aCollect = m_aMappedEvents.begin();
                 aCollect != m_aMappedEvents.end();
                 ++aCollect, ++pReturn
@@ -126,7 +126,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException)
     {
         ConstMapString2PropertyValueSequenceIterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;

@@ -65,7 +65,6 @@
 
 #define PIMPEE pImpEditView->pEditEngine->pImpEditEngine
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
@@ -870,7 +869,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     Image aRes;
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
-//    ::rtl::OString aPath = OString( aTmp.getStr(), aTmp.getLength(), osl_getThreadTextEncoding() );
+//    OString aPath = OString( aTmp.getStr(), aTmp.getLength(), osl_getThreadTextEncoding() );
 #if defined(WNT)
 //    aTmp = lcl_Win_GetShortPathName( aTmp );
 #endif

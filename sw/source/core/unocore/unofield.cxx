@@ -88,7 +88,6 @@
 #include <vector>
 #include <xmloff/odffields.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
@@ -447,7 +446,7 @@ sal_Bool SwXFieldMaster::supportsService(const OUString& rServiceName) throw( un
         }
         if( pEntry )
         {
-            rtl::OString aTmp = rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+            OString aTmp = OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
                 "com.sun.star.text.fieldmaster.")).append(pEntry).
                 makeStringAndClear();
             bRet = rServiceName.equalsAsciiL(aTmp.getStr(), aTmp.getLength());
@@ -613,7 +612,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                 {
                     SwSetExpFieldType aType(m_pDoc, sTypeName);
                     if(sParam1.Len())
-                        aType.SetDelimiter(rtl::OUString(sParam1.GetChar(0)));
+                        aType.SetDelimiter(OUString(sParam1.GetChar(0)));
                     if(nParam1 > -1 && nParam1 < MAXLEVEL)
                         aType.SetOutlineLvl(nParam1);
                     pType2 = m_pDoc->InsertFldType(aType);
@@ -1218,7 +1217,7 @@ OUString SwXTextField::getPresentation(sal_Bool bShowCommand) throw( uno::Runtim
     {
         throw uno::RuntimeException();
     }
-    ::rtl::OUString const ret( (bShowCommand)
+    OUString const ret( (bShowCommand)
             ? pField->GetFieldName()
             : pField->ExpandField(true) );
     return ret;
@@ -1665,7 +1664,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_MACRO:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_MACROFLD);
-                rtl::OUString aName;
+                OUString aName;
 
                 // support for Scripting Framework macros
                 if (m_pProps->sPar4.Len() != 0)

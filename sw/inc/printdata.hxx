@@ -69,7 +69,7 @@ public:
              bModified;
 
     sal_Int16           nPrintPostIts;
-    rtl::OUString       sFaxName;
+    OUString       sFaxName;
 
     SwPrintData()
     {
@@ -147,7 +147,7 @@ public:
     sal_Bool IsPrintBlackFont() const           { return bPrintBlackFont; }
     sal_Bool IsPrintSingleJobs() const          { return bPrintSingleJobs; }
     sal_Int16 GetPrintPostIts() const           { return nPrintPostIts; }
-    const rtl::OUString GetFaxName() const      { return sFaxName; }
+    const OUString GetFaxName() const      { return sFaxName; }
     sal_Bool IsPrintHiddenText() const          { return bPrintHiddenText; }
     sal_Bool IsPrintTextPlaceholder() const     { return bPrintTextPlaceholder; }
 
@@ -166,7 +166,7 @@ public:
     void SetPrintPageBackground( sal_Bool b )       { doSetModified(); bPrintPageBackground = b; }
     void SetPrintBlackFont( sal_Bool b )            { doSetModified(); bPrintBlackFont = b; }
     void SetPrintSingleJobs( sal_Bool b )           { doSetModified(); bPrintSingleJobs = b; }
-    void SetFaxName( const rtl::OUString& rSet )    { sFaxName = rSet; }
+    void SetFaxName( const OUString& rSet )    { sFaxName = rSet; }
     void SetPrintHiddenText( sal_Bool b )           { doSetModified(); bPrintHiddenText = b; }
     void SetPrintTextPlaceholder( sal_Bool b )      { doSetModified(); bPrintTextPlaceholder = b; }
 
@@ -231,7 +231,7 @@ class SwRenderData
        -1 indicates a half page to be left empty. */
     std::vector< std::pair< sal_Int32, sal_Int32 > >    m_aPagePairs;
 
-    rtl::OUString               m_aPageRange;
+    OUString               m_aPageRange;
 
     /** temp print document -- must live longer than m_pViewOptionAdjust!
        also this is a Lock and not a Ref because Ref does not delete the doc */
@@ -295,8 +295,8 @@ public:
     PagePairsVec_t &                    GetPagePairsForProspectPrinting()           { return m_aPagePairs; }
     const PagePairsVec_t &              GetPagePairsForProspectPrinting() const     { return m_aPagePairs; }
 
-    rtl::OUString   GetPageRange() const                            { return m_aPageRange; }
-    void            SetPageRange( const rtl::OUString &rRange )     { m_aPageRange = rRange; }
+    OUString   GetPageRange() const                            { return m_aPageRange; }
+    void            SetPageRange( const OUString &rRange )     { m_aPageRange = rRange; }
 };
 
 

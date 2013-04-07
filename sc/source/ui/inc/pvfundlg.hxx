@@ -60,7 +60,7 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
-    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::boost::unordered_map< OUString, OUString, OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
@@ -71,8 +71,8 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    const ::rtl::OUString& GetBaseFieldName(const ::rtl::OUString& rLayoutName) const;
-    const ::rtl::OUString& GetBaseItemName(const ::rtl::OUString& rLayoutName) const;
+    const OUString& GetBaseFieldName(const OUString& rLayoutName) const;
+    const OUString& GetBaseItemName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
     sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
@@ -162,7 +162,7 @@ private:
     void                Init( const ScDPNameVec& rDataFields, bool bEnableLayout );
     void                InitHideListBox();
 
-    const ::rtl::OUString& GetFieldName(const ::rtl::OUString& rLayoutName) const;
+    const OUString& GetFieldName(const OUString& rLayoutName) const;
 
     /** Searches for a listbox entry, starts search at specified position. */
     sal_uInt16 FindListBoxEntry( const ListBox& rLBox, const String& rEntry, sal_uInt16 nStartPos ) const;
@@ -203,7 +203,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::boost::unordered_map< OUString, OUString, OUStringHash > NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
@@ -221,7 +221,7 @@ public:
      *         be different from the name displayed in the dialog if the field
      *         has a layout name.
      */
-    ::rtl::OUString GetDimensionName() const;
+    OUString GetDimensionName() const;
 
 private:
     DECL_LINK( DblClickHdl, ListBox* );

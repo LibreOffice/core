@@ -43,14 +43,14 @@ namespace core {
 struct FragmentBaseData
 {
     XmlFilterBase&      mrFilter;
-    const ::rtl::OUString maFragmentPath;
+    const OUString maFragmentPath;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >
                         mxLocator;
     RelationsRef        mxRelations;
 
     explicit            FragmentBaseData(
                             XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             RelationsRef xRelations );
 };
 
@@ -79,7 +79,7 @@ typedef ::cppu::ImplInheritanceHelper1< ContextHandler, ::com::sun::star::xml::s
 class OOX_DLLPUBLIC FragmentHandler : public FragmentHandler_BASE
 {
 public:
-    explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath );
+    explicit            FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath );
     virtual             ~FragmentHandler();
 
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
@@ -95,14 +95,14 @@ public:
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
     virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
     // XML stream handling ----------------------------------------------------
 
@@ -116,7 +116,7 @@ public:
     virtual const RecordInfo* getRecordInfos() const;
 
 protected:
-    explicit            FragmentHandler( XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, RelationsRef xRelations );
+    explicit            FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations );
 };
 
 typedef ::rtl::Reference< FragmentHandler > FragmentHandlerRef;

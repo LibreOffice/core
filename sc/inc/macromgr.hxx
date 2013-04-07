@@ -30,15 +30,15 @@ public:
     ~ScMacroManager();
 
     SC_DLLPUBLIC void InitUserFuncData();
-    SC_DLLPUBLIC void SetUserFuncVolatile( const rtl::OUString& sName, bool isVolatile );
-    SC_DLLPUBLIC bool GetUserFuncVolatile( const rtl::OUString& sName );
+    SC_DLLPUBLIC void SetUserFuncVolatile( const OUString& sName, bool isVolatile );
+    SC_DLLPUBLIC bool GetUserFuncVolatile( const OUString& sName );
 
-    void AddDependentCell(const ::rtl::OUString& aModuleName, ScFormulaCell* pCell);
+    void AddDependentCell(const OUString& aModuleName, ScFormulaCell* pCell);
     void RemoveDependentCell(ScFormulaCell* pCell);
-    void BroadcastModuleUpdate(const ::rtl::OUString& aModuleName);
+    void BroadcastModuleUpdate(const OUString& aModuleName);
 
 private:
-    typedef boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameBoolMap;
+    typedef boost::unordered_map< OUString, bool, OUStringHash, ::std::equal_to< OUString > > NameBoolMap;
     NameBoolMap mhFuncToVolatile;
     com::sun::star::uno::Reference< com::sun::star::container::XContainerListener > mxContainerListener;
 

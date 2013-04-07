@@ -1333,11 +1333,11 @@ sal_Bool GtkSalFrame::PostEvent( void* pData )
     return sal_True;
 }
 
-void GtkSalFrame::SetTitle( const rtl::OUString& rTitle )
+void GtkSalFrame::SetTitle( const OUString& rTitle )
 {
     m_aTitle = rTitle;
     if( m_pWindow && ! isChild() )
-        gtk_window_set_title( GTK_WINDOW(m_pWindow), rtl::OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
+        gtk_window_set_title( GTK_WINDOW(m_pWindow), OUStringToOString( rTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 static inline sal_uInt8 *
@@ -1552,7 +1552,7 @@ static void initClientId()
     if (!bOnce)
     {
         bOnce = true;
-        const rtl::OString& rID = SessionManagerClient::getSessionID();
+        const OString& rID = SessionManagerClient::getSessionID();
         if (!rID.isEmpty())
             gdk_set_sm_client_id(rID.getStr());
     }
@@ -2133,7 +2133,7 @@ void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 
 void GtkSalFrame::updateWMClass()
 {
-    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                                                     SalGenericSystem::getFrameClassName();
     Display *display;
@@ -2150,7 +2150,7 @@ void GtkSalFrame::updateWMClass()
     if( IS_WIDGET_REALIZED( m_pWindow ) )
     {
         XClassHint* pClass = XAllocClassHint();
-        rtl::OString aResName = SalGenericSystem::getFrameResName( m_nExtStyle );
+        OString aResName = SalGenericSystem::getFrameResName( m_nExtStyle );
         pClass->res_name  = const_cast<char*>(aResName.getStr());
         pClass->res_class = const_cast<char*>(pResClass);
         XSetClassHint( display,
@@ -2160,7 +2160,7 @@ void GtkSalFrame::updateWMClass()
     }
 }
 
-void GtkSalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+void GtkSalFrame::SetApplicationID( const OUString &rWMClass )
 {
     if( rWMClass != m_sWMClass && ! isChild() )
     {
@@ -2548,14 +2548,14 @@ void GtkSalFrame::Sync()
     gdk_display_sync( getGdkDisplay() );
 }
 
-rtl::OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+OUString GtkSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
     return getDisplay()->GetKeyName( nKeyCode );
 #else
   (void)nKeyCode;
 # warning FIXME - key names
-  return rtl::OUString();
+  return OUString();
 #endif
 }
 
@@ -4200,13 +4200,13 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
-        rtl::OUString sAllText = xText->getText();
+        OUString sAllText = xText->getText();
         if (sAllText.isEmpty())
             return sal_False;
-    rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
-    rtl::OUString sCursorText(sAllText.copy(0, nPosition));
+    OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
+    OUString sCursorText(sAllText.copy(0, nPosition));
     gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
-        rtl::OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
+        OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
     return sal_True;
     }
 

@@ -45,18 +45,18 @@ namespace dbaui
 
     public:
         ODataClipboard(
-            const ::rtl::OUString&  _rDatasource,
+            const OUString&  _rDatasource,
             const sal_Int32         _nCommandType,
-            const ::rtl::OUString&  _rCommand,
+            const OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 
         ODataClipboard(
-            const ::rtl::OUString&  _rDatasource,
+            const OUString&  _rDatasource,
             const sal_Int32         _nCommandType,
-            const ::rtl::OUString&  _rCommand,
+            const OUString&  _rCommand,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );

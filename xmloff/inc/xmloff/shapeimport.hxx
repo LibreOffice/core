@@ -188,7 +188,7 @@ public:
     SdXML3DLightContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXML3DLightContext();
 
@@ -234,10 +234,10 @@ public:
     ~SdXML3DSceneAttributesHelper();
 
     /** creates a 3d ligth context and adds it to the internal list for later processing */
-    SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const rtl::OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+    SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
     /** this should be called for each scene attribute */
-    void processSceneAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
+    void processSceneAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 
     /** this sets the scene attributes at this propertyset */
     void setSceneAttributes( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet );
@@ -250,17 +250,17 @@ class SvXMLShapeContext : public SvXMLImportContext
 protected:
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >   mxShape;
     sal_Bool                                                            mbTemporaryShape;
-    rtl::OUString                                                       msHyperlink;
+    OUString                                                       msHyperlink;
 
 public:
     SvXMLShapeContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
+        const OUString& rLName, sal_Bool bTemporaryShape ) : SvXMLImportContext( rImp, nPrfx, rLName ), mbTemporaryShape(bTemporaryShape) {}
 
     TYPEINFO();
 
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getShape() const { return mxShape; }
 
-    void setHyperlink( const ::rtl::OUString& rHyperlink );
+    void setHyperlink( const OUString& rHyperlink );
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -299,10 +299,10 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public UniRefBase
     SvXMLTokenMap*              mpPathShapeAttrTokenMap;
     SvXMLTokenMap*              mpPolygonShapeAttrTokenMap;
 
-    const ::rtl::OUString       msStartShape;
-    const ::rtl::OUString       msEndShape;
-    const ::rtl::OUString       msStartGluePointIndex;
-    const ::rtl::OUString       msEndGluePointIndex;
+    const OUString       msStartShape;
+    const OUString       msEndShape;
+    const OUString       msStartGluePointIndex;
+    const OUString       msEndGluePointIndex;
 
     rtl::Reference< XMLTableImport > mxShapeTableImport;
 
@@ -317,22 +317,22 @@ public:
     ~XMLShapeImportHelper();
 
     SvXMLShapeContext* CreateGroupChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape = sal_False);
 
     SvXMLShapeContext* CreateFrameChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xFrameAttrList);
     SvXMLImportContext* CreateFrameChildContext(
-        SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     SvXMLShapeContext* Create3DSceneChildContext(
-        SvXMLImport& rImport, sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
 
@@ -379,7 +379,7 @@ public:
 
     void addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
                              sal_Bool bStart,
-                             const rtl::OUString& rDestShapeId,
+                             const OUString& rDestShapeId,
                              sal_Int32 nDestGlueId );
 
     /** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting

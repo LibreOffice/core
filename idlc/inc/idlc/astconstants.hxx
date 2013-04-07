@@ -24,7 +24,7 @@
 class AstConstants : public AstModule
 {
 public:
-    AstConstants(const ::rtl::OString& name, AstScope* pScope)
+    AstConstants(const OString& name, AstScope* pScope)
         : AstModule(NT_constants, name, pScope)
     {}
     virtual ~AstConstants() {}

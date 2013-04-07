@@ -126,7 +126,7 @@ class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::ut
         *//*-*****************************************************************************************************/
 
         virtual sal_Bool SAL_CALL parseSmart(           css::util::URL&     aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
+                                                const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -154,7 +154,7 @@ class URLTransformer    :   public ::cppu::WeakImplHelper2< ::com::sun::star::ut
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ::rtl::OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
+        virtual OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
                                                                     sal_Bool            bWithPassword   ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------

@@ -126,15 +126,15 @@ void Test::tearDown()
 void Test::editMarker()
 {
     {
-        rtl::OUString sMarkedText("<?> under <?> under <?>");
+        OUString sMarkedText("<?> under <?> under <?>");
         m_pEditWindow->SetText(sMarkedText);
         m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
+        OUString sFinalText = m_pEditWindow->GetText();
         CPPUNIT_ASSERT_MESSAGE("Should be equal text", sFinalText == sMarkedText);
     }
 
     {
-        rtl::OUString sTargetText("a under b under c");
+        OUString sTargetText("a under b under c");
 
         m_pEditWindow->SelNextMark();
         m_pEditWindow->Delete();
@@ -150,12 +150,12 @@ void Test::editMarker()
         m_pEditWindow->InsertText("b");
 
         m_pEditWindow->Flush();
-        rtl::OUString sFinalText = m_pEditWindow->GetText();
+        OUString sFinalText = m_pEditWindow->GetText();
         CPPUNIT_ASSERT_MESSAGE("Should be a under b under c", sFinalText == sTargetText);
     }
 
     {
-        m_pEditWindow->SetText(rtl::OUString());
+        m_pEditWindow->SetText(OUString());
         m_pEditWindow->Flush();
     }
 }
@@ -189,19 +189,19 @@ void Test::editUndoRedo()
 {
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    rtl::OUString sStringOne("a under b");
+    OUString sStringOne("a under b");
     {
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne == sFinalText);
     }
 
-    rtl::OUString sStringTwo("a over b");
+    OUString sStringTwo("a over b");
     {
         rEditEngine.SetText(0, sStringTwo);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringTwo == sFinalText);
     }
 
@@ -210,14 +210,14 @@ void Test::editUndoRedo()
     {
         m_xDocShRef->Execute(aUndo);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
     }
 
     {
         m_xDocShRef->Execute(aUndo);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Must now be empty", !sFinalText.getLength());
     }
 
@@ -225,15 +225,15 @@ void Test::editUndoRedo()
     {
         m_xDocShRef->Execute(aRedo);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings much match", sStringOne == sFinalText);
     }
 
     {
-        rEditEngine.SetText(0, rtl::OUString());
+        rEditEngine.SetText(0, OUString());
         m_xDocShRef->UpdateText();
         rEditEngine.ClearModifyFlag();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Must be empty", !sFinalText.getLength());
     }
 
@@ -245,11 +245,11 @@ void Test::viewZoom()
 
     EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
 
-    rtl::OUString sStringOne("a under b");
+    OUString sStringOne("a under b");
     {
         rEditEngine.SetText(0, sStringOne);
         m_xDocShRef->UpdateText();
-        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        OUString sFinalText = m_xDocShRef->GetText();
         CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne == sFinalText);
     }
 

@@ -270,7 +270,7 @@ sal_Bool CharClass::isLetterNumeric( const String& rStr ) const
     }
 }
 
-rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount) const
+OUString CharClass::titlecase(const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount) const
 {
     try
     {
@@ -286,7 +286,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     }
 }
 
-::rtl::OUString CharClass::uppercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+OUString CharClass::uppercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {
@@ -302,7 +302,7 @@ rtl::OUString CharClass::titlecase(const rtl::OUString& rStr, sal_Int32 nPos, sa
     }
 }
 
-::rtl::OUString CharClass::lowercase( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
+OUString CharClass::lowercase( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const
 {
     try
     {

@@ -48,11 +48,11 @@ SvxStringArray::~SvxStringArray()
 
 //------------------------------------------------------------------------
 
-const rtl::OUString SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
+const OUString SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
 {
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
-    return rtl::OUString();
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

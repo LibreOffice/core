@@ -77,7 +77,7 @@ namespace dbtools
         /** find the given IANA name in the map.
             @return the <em>end</em> iterator if the IANA name could not be found.
         */
-        CharsetIterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
+        CharsetIterator find(const OUString& _rIanaName, const IANA&) const;
 
         std::size_t   size() const { ensureConstructed( ); return m_aEncodings.size(); }
 
@@ -102,16 +102,16 @@ namespace dbtools
         friend class OCharsetMap::CharsetIterator;
 
         rtl_TextEncoding    m_eEncoding;
-        ::rtl::OUString     m_aIanaName;
+        OUString     m_aIanaName;
 
     public:
         CharsetIteratorDerefHelper(const CharsetIteratorDerefHelper& _rSource);
 
         rtl_TextEncoding    getEncoding() const { return m_eEncoding; }
-        ::rtl::OUString     getIanaName() const { return m_aIanaName; }
+        OUString     getIanaName() const { return m_aIanaName; }
 
     protected:
-        CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName );
+        CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const OUString& _rIanaName );
 
     };
 

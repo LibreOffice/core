@@ -40,7 +40,6 @@ using namespace ::xmloff::token;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::text::XLineNumberingProperties;
-using ::rtl::OUString;
 
 TYPEINIT1( XMLLineNumberingImportContext, SvXMLStyleContext );
 

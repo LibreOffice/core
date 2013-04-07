@@ -57,7 +57,7 @@ uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::A
     if( ( Index1 >>= nIndex ) == sal_False )
         throw uno::RuntimeException();
     if( nIndex <=0 || nIndex > getCount() )
-        throw  uno::RuntimeException( ::rtl::OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
+        throw  uno::RuntimeException( OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
 
     return uno::makeAny( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
 }
@@ -81,20 +81,20 @@ SwVbaListTemplates::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaListTemplates::getServiceImplName()
 {
-    return rtl::OUString("SwVbaListTemplates");
+    return OUString("SwVbaListTemplates");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaListTemplates::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.ListTemplates");
+        sNames[0] = OUString("ooo.vba.word.ListTemplates");
     }
     return sNames;
 }

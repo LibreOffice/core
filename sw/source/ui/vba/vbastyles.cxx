@@ -171,23 +171,23 @@ public:
         // we only concern about the Paragraph styles
         uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( _xModel, uno::UNO_QUERY_THROW);
         uno::Reference< container::XNameAccess > xStyleFamilies = xStyleSupplier->getStyleFamilies();
-        mxParaStyles.set( xStyleFamilies->getByName( rtl::OUString("ParagraphStyles") ), uno::UNO_QUERY_THROW  );
+        mxParaStyles.set( xStyleFamilies->getByName( OUString("ParagraphStyles") ), uno::UNO_QUERY_THROW  );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  style::XStyle::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0; }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return cachePos;
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
         return mxParaStyles->getElementNames();
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         // search in the MSOStyleName table first
         for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != NULL; pTable++ )
@@ -195,7 +195,7 @@ public:
             if( aName.equalsIgnoreAsciiCaseAscii( pTable->pMSOStyleName ) )
             {
                 //Found it
-                rtl::OUString sStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
+                OUString sStyleName = OUString::createFromAscii( pTable->pOOoStyleName );
                 if( mxParaStyles->hasByName( sStyleName ) )
                 {
                     cachePos = mxParaStyles->getByName( sStyleName );
@@ -212,10 +212,10 @@ public:
         }
         else
         {
-            uno::Sequence< rtl::OUString > sElementNames = mxParaStyles->getElementNames();
+            uno::Sequence< OUString > sElementNames = mxParaStyles->getElementNames();
             for( sal_Int32 j = 0; j < sElementNames.getLength(); j++ )
             {
-                rtl::OUString aStyleName = sElementNames[j];
+                OUString aStyleName = sElementNames[j];
                 if( aStyleName.equalsIgnoreAsciiCase( aName ) )
                 {
                     cachePos = mxParaStyles->getByName( aStyleName );
@@ -243,7 +243,7 @@ public:
     // XEnumerationAccess
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 };
 
@@ -301,31 +301,31 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
         {
             if( nIndex == pTable->wdBuiltinStyle )
             {
-                rtl::OUString aStyleName = rtl::OUString::createFromAscii( pTable->pOOoStyleName );
+                OUString aStyleName = OUString::createFromAscii( pTable->pOOoStyleName );
                 if( !aStyleName.isEmpty() )
                 {
-                    rtl::OUString aStyleType;
+                    OUString aStyleType;
                     switch( pTable->wdStyleType )
                     {
                         case word::WdStyleType::wdStyleTypeParagraph:
                         case word::WdStyleType::wdStyleTypeTable:
                         {
-                            aStyleType = rtl::OUString("ParagraphStyles");
+                            aStyleType = OUString("ParagraphStyles");
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeCharacter:
                         {
-                            aStyleType = rtl::OUString("CharacterStyles");
+                            aStyleType = OUString("CharacterStyles");
                             break;
                         }
                         case word::WdStyleType::wdStyleTypeList:
                         {
                             // should use Paragraph style and set the property "NumberingStyleName"
-                            aStyleType = rtl::OUString("ParagraphStyles");
+                            aStyleType = OUString("ParagraphStyles");
                             break;
                         }
                         default:
-                            DebugHelper::exception( SbERR_INTERNAL_ERROR, rtl::OUString() );
+                            DebugHelper::exception( SbERR_INTERNAL_ERROR, OUString() );
                     }
                     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxModel, uno::UNO_QUERY_THROW);
                     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName( aStyleType ), uno::UNO_QUERY_THROW );
@@ -333,14 +333,14 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
-                        xStyleProps->setPropertyValue( rtl::OUString("NumberingStyleName"), uno::makeAny( aStyleName ) );
+                        xStyleProps->setPropertyValue( OUString("NumberingStyleName"), uno::makeAny( aStyleName ) );
                     }
                     return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {
                     OSL_TRACE("SwVbaStyles::Item: the builtin style type is not implemented");
-                    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
                 }
             }
         }
@@ -348,20 +348,20 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
     return SwVbaStyles_BASE::Item( Index1, Index2 );
 }
 
-rtl::OUString
+OUString
 SwVbaStyles::getServiceImplName()
 {
-    return rtl::OUString("SwVbaStyles");
+    return OUString("SwVbaStyles");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaStyles::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.XStyles" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.XStyles" );
     }
     return aServiceNames;
 }

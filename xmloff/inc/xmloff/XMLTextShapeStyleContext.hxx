@@ -25,7 +25,7 @@
 
 class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext
 {
-    const ::rtl::OUString       sIsAutoUpdate;
+    const OUString       sIsAutoUpdate;
 
     sal_Bool    bAutoUpdate : 1;
 
@@ -34,15 +34,15 @@ class XMLOFF_DLLPUBLIC XMLTextShapeStyleContext : public XMLShapeStyleContext
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 
 public:
 
     TYPEINFO();
 
     XMLTextShapeStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
@@ -51,7 +51,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     sal_Bool IsAutoUpdate() const { return bAutoUpdate; }

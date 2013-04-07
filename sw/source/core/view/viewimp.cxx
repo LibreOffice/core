@@ -241,7 +241,7 @@ void SwViewImp::MakeDrawView()
             pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(), pOutDevForDrawView);
         }
 
-        GetDrawView()->SetActiveLayer(rtl::OUString("Heaven"));
+        GetDrawView()->SetActiveLayer(OUString("Heaven"));
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         Init(pSwViewOption);
 

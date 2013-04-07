@@ -104,21 +104,21 @@ OConnectionWrapper::~OConnectionWrapper()
 
 // XServiceInfo
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
+    return OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
 }
 
 // --------------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     // first collect the services which are supported by our aggregate
-    Sequence< ::rtl::OUString > aSupported;
+    Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
         aSupported = m_xServiceInfo->getSupportedServiceNames();
 
     // append our own service, if necessary
-    ::rtl::OUString sConnectionService( "com.sun.star.sdbc.Connection" );
+    OUString sConnectionService( "com.sun.star.sdbc.Connection" );
     if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, sal_True ).getLength() )
     {
         sal_Int32 nLen = aSupported.getLength();
@@ -131,7 +131,7 @@ OConnectionWrapper::~OConnectionWrapper()
 }
 
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OConnectionWrapper::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::comphelper::findValue( getSupportedServiceNames(), _rServiceName, sal_True ).getLength() != 0;
 }
@@ -195,11 +195,11 @@ namespace
 
 // -----------------------------------------------------------------------------
 // creates a unique id out of the url and sequence of properties
-void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
+void OConnectionWrapper::createUniqueId( const OUString& _rURL
                     ,Sequence< PropertyValue >& _rInfo
                     ,sal_uInt8* _pBuffer
-                    ,const ::rtl::OUString& _rUserName
-                    ,const ::rtl::OUString& _rPassword)
+                    ,const OUString& _rUserName
+                    ,const OUString& _rPassword)
 {
     // first we create the digest we want to have
     rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
@@ -218,21 +218,21 @@ void OConnectionWrapper::createUniqueId( const ::rtl::OUString& _rURL
     for (; pBegin != pEnd; ++pBegin)
     {
         // we only include strings an integer values
-        ::rtl::OUString sValue;
+        OUString sValue;
         if ( pBegin->Value >>= sValue )
             ;
         else
         {
             sal_Int32 nValue = 0;
             if ( pBegin->Value >>= nValue )
-                sValue = ::rtl::OUString::valueOf(nValue);
+                sValue = OUString::valueOf(nValue);
             else
             {
-                Sequence< ::rtl::OUString> aSeq;
+                Sequence< OUString> aSeq;
                 if ( pBegin->Value >>= aSeq )
                 {
-                    const ::rtl::OUString* pSBegin = aSeq.getConstArray();
-                    const ::rtl::OUString* pSEnd   = pSBegin + aSeq.getLength();
+                    const OUString* pSBegin = aSeq.getConstArray();
+                    const OUString* pSEnd   = pSBegin + aSeq.getLength();
                     for(;pSBegin != pSEnd;++pSBegin)
                         rtl_digest_update(aDigest,pSBegin->getStr(),pSBegin->getLength()*sizeof(sal_Unicode));
                 }

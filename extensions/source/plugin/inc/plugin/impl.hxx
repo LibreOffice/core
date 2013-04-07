@@ -134,7 +134,7 @@ private:
     const char**                m_pArgv;
     const char**                m_pArgn;
     int                         m_nArgs;
-    rtl::OString                m_aLastGetUrl;
+    OString                m_aLastGetUrl;
 
     Reference< com::sun::star::awt::XControlModel >             m_xModel;
 
@@ -148,7 +148,7 @@ private:
     ::std::list<PluginInputStream*>     m_aInputStreams;
     ::std::list<PluginOutputStream*>    m_aOutputStreams;
     ::std::list<PluginEventListener*>   m_aPEventListeners;
-    ::rtl::OUString                     m_aURL;
+    OUString                     m_aURL;
 
     sal_Bool                        m_bIsDisposed;
 
@@ -157,8 +157,8 @@ private:
 #endif
 
     void prependArg( const char* pName, const char* pValue ); // arguments will be strdup'ed
-    void initArgs( const Sequence< rtl::OUString >& argn,
-                   const Sequence< rtl::OUString >& argv,
+    void initArgs( const Sequence< OUString >& argn,
+                   const Sequence< OUString >& argv,
                    sal_Int16 mode );
     void freeArgs();
     void handleSpecialArgs();
@@ -175,9 +175,9 @@ public:
 
     void destroyStreams();
 
-    void setLastGetUrl( const rtl::OString& rUrl ) { m_aLastGetUrl = rUrl; }
+    void setLastGetUrl( const OString& rUrl ) { m_aLastGetUrl = rUrl; }
 
-    com::sun::star::plugin::PluginDescription fitDescription( const rtl::OUString& rURL );
+    com::sun::star::plugin::PluginDescription fitDescription( const OUString& rURL );
 
     ::std::list<PluginInputStream*>& getInputStreams() { return m_aInputStreams; }
     ::std::list<PluginOutputStream*>& getOutputStreams() { return m_aOutputStreams; }
@@ -208,17 +208,17 @@ public:
 
     void            initInstance(
         const com::sun::star::plugin::PluginDescription& rDescription,
-        const Sequence< rtl::OUString >& argn,
-        const Sequence< rtl::OUString >& argv,
+        const Sequence< OUString >& argn,
+        const Sequence< OUString >& argv,
         sal_Int16 mode );
     void            initInstance(
-        const rtl::OUString& rURL,
-        const Sequence< rtl::OUString >& argn,
-        const Sequence< rtl::OUString >& argv,
+        const OUString& rURL,
+        const Sequence< OUString >& argn,
+        const Sequence< OUString >& argv,
         sal_Int16 mode );
 
-    const rtl::OUString&    getRefererURL() { return m_aURL; }
-    ::rtl::OUString getCreationURL();
+    const OUString&    getRefererURL() { return m_aURL; }
+    OUString getCreationURL();
 
     PluginStream* getStreamFromNPStream( NPStream* );
 
@@ -255,7 +255,7 @@ public:
     virtual void SAL_CALL setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, sal_Int32 nHeight_, sal_Int16 nFlags ) throw( RuntimeException );
 
     // com::sun::star::plugin::XPlugin
-    virtual sal_Bool SAL_CALL provideNewStream(const rtl::OUString& mimetype, const Reference< com::sun::star::io::XActiveDataSource > & stream, const rtl::OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw();
+    virtual sal_Bool SAL_CALL provideNewStream(const OUString& mimetype, const Reference< com::sun::star::io::XActiveDataSource > & stream, const OUString& url, sal_Int32 length, sal_Int32 lastmodified, sal_Bool isfile) throw();
 
     // com::sun::star::beans::XPropertyChangeListener
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& rSource ) throw();
@@ -277,7 +277,7 @@ public:
 
     static PluginManager& get();
     static void setServiceFactory( const Reference< com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    static const Sequence< rtl::OUString >& getAdditionalSearchPaths();
+    static const Sequence< OUString >& getAdditionalSearchPaths();
 
     ::std::list<PluginComm*>& getPluginComms() { return m_aPluginComms; }
     ::std::list<XPlugin_Impl*>& getPlugins() { return m_aAllPlugins; }
@@ -303,19 +303,19 @@ public:
     // checks whether plugins are disabled
     virtual Sequence< com::sun::star::plugin::PluginDescription > SAL_CALL getPluginDescriptions(void) throw();
 
-    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< rtl::OUString >& argn, const Sequence< rtl::OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPlugin( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const com::sun::star::plugin::PluginDescription& plugintype) throw( RuntimeException,::com::sun::star::plugin::PluginException );
 
-    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< rtl::OUString >& argn, const Sequence< rtl::OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const rtl::OUString& url ) throw();
+    virtual Reference< com::sun::star::plugin::XPlugin > SAL_CALL createPluginFromURL( const Reference< com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< com::sun::star::awt::XToolkit > & toolkit, const Reference< com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw();
 
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw();
-    virtual rtl::OUString SAL_CALL getImplementationName() throw();
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw();
+    virtual OUString SAL_CALL getImplementationName() throw();
 
-    Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
-    static Sequence< rtl::OUString > getSupportedServiceNames_Static(void) throw(  );
-    static rtl::OUString                getImplementationName_Static() throw(  )
+    Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
+    static Sequence< OUString > getSupportedServiceNames_Static(void) throw(  );
+    static OUString                getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return rtl::OUString( "com.sun.star.extensions.PluginManager" );
+        return OUString( "com.sun.star.extensions.PluginManager" );
     }
 };
 Reference< XInterface >  SAL_CALL PluginManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );

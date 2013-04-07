@@ -53,8 +53,8 @@ protected:
 
     // OGenericUnoDialog
     virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
     virtual Dialog* createDialog( Window* pParent );
     virtual void executedDialog( sal_Int16 nExecutionResult );
     virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
@@ -78,17 +78,17 @@ public:
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SVGDialog_getImplementationName ()
+OUString SVGDialog_getImplementationName ()
     throw ( ::com::sun::star::uno::RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL SVGDialog_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SVGDialog_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 // -----------------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SVGDialog_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 // -----------------------------------------------------------------------------

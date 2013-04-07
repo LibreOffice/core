@@ -32,7 +32,7 @@ namespace framework
 
 struct FWE_DLLPUBLIC EventsConfig
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >              aEventNames;
+    ::com::sun::star::uno::Sequence< OUString >              aEventNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aEventsProperties;
 };
 

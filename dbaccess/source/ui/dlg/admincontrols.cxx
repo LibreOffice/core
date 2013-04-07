@@ -168,7 +168,7 @@ namespace dbaui
         m_aControlDependencies.enableOnRadioCheck( m_aNamedPipeRadio, m_aNamedPipe );
 
         m_aControlDependencies.addController( ::svt::PDialogController(
-            new TextResetOperatorController( m_aHostName, rtl::OUString("localhost") )
+            new TextResetOperatorController( m_aHostName, OUString("localhost") )
         ) );
 
         // sockets are available on Unix systems only, named pipes only on Windows

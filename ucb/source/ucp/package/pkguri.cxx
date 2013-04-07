@@ -34,7 +34,6 @@
 
 using namespace package_ucp;
 
-using ::rtl::OUString;
 
 //=========================================================================
 //=========================================================================
@@ -77,7 +76,7 @@ void PackageUri::init() const
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString( "/" );
+            m_aPath = OUString( "/" );
             return;
         }
 
@@ -92,11 +91,11 @@ void PackageUri::init() const
                 != sal_Unicode( '/' ) ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString( "/" );
+            m_aPath = OUString( "/" );
             return;
         }
 
-        rtl::OUString aPureUri;
+        OUString aPureUri;
         sal_Int32 nParam = m_aUri.indexOf( '?' );
         if( nParam >= 0 )
         {
@@ -116,8 +115,8 @@ void PackageUri::init() const
             {
                 m_aParam +=
                     ( !m_aParam.isEmpty()
-                      ? ::rtl::OUString( "&purezip" )
-                      : ::rtl::OUString( "?purezip" ) );
+                      ? OUString( "&purezip" )
+                      : OUString( "?purezip" ) );
             }
 
             aPureUri = aPureUri.replaceAt( 0,
@@ -131,7 +130,7 @@ void PackageUri::init() const
                 // Only <scheme>:/// - Empty authority
 
                 // error, but remember that we did a init().
-                m_aPath = rtl::OUString( "/" );
+                m_aPath = OUString( "/" );
                 return;
             }
             else if ( nEnd == ( aPureUri.getLength() - 1 ) )
@@ -142,7 +141,7 @@ void PackageUri::init() const
                     // Only <scheme>://// or <scheme>://<something>//
 
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString( "/" );
+                    m_aPath = OUString( "/" );
                     return;
                 }
 
@@ -163,7 +162,7 @@ void PackageUri::init() const
                     nStart, aPureUri.getLength() - nStart, aNormPackage );
                 m_aPackage
                     = ::ucb_impl::urihelper::decodeSegment( aNormPackage );
-                m_aPath = rtl::OUString( "/" );
+                m_aPath = OUString( "/" );
                 m_aUri = m_aUri.replaceAt( 0,
                                            ( nParam >= 0 )
                                            ? nParam
@@ -189,11 +188,11 @@ void PackageUri::init() const
                 if ( m_aPath.indexOf( "//" ) != -1
                   || m_aPath.indexOf( "%2F" ) != -1
                   || m_aPath.indexOf( "%2f" ) != -1
-                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( ".." ) )
-                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ::rtl::OUString( "." ) ) )
+                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, OUString( ".." ) )
+                  || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, OUString( "." ) ) )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString( "/" );
+                    m_aPath = OUString( "/" );
                     return;
                 }
 
@@ -230,7 +229,7 @@ void PackageUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString( "/" );
+            m_aPath = OUString( "/" );
         }
     }
 }

@@ -197,7 +197,7 @@ class SmParser
                     m_bExportSymNames;
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
-    std::set< rtl::OUString >   m_aUsedSymbols;
+    std::set< OUString >   m_aUsedSymbols;
 
     //! locale where '.' is decimal seperator!
     ::com::sun::star::lang::Locale m_aDotLoc;
@@ -281,7 +281,7 @@ public:
     const SmErrorDesc*  GetError(size_t i = size_t(-1) );
     static const SmTokenTableEntry* GetTokenTableEntry( const String &rName );
     bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
-    std::set< rtl::OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
+    std::set< OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
 

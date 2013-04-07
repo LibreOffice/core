@@ -23,7 +23,6 @@
 #include <tools/resid.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 /*--------------------------------------------------------------------
     Beschreibung: ScriptField
  --------------------------------------------------------------------*/
@@ -68,12 +67,12 @@ SwField* SwScriptField::Copy() const
     Beschreibung: Type setzen
  --------------------------------------------------------------------*/
 
-void SwScriptField::SetPar1( const rtl::OUString& rStr )
+void SwScriptField::SetPar1( const OUString& rStr )
 {
     sType = rStr;
 }
 
-const rtl::OUString& SwScriptField::GetPar1() const
+const OUString& SwScriptField::GetPar1() const
 {
     return sType;
 }
@@ -82,13 +81,13 @@ const rtl::OUString& SwScriptField::GetPar1() const
     Beschreibung: Code setzen
  --------------------------------------------------------------------*/
 
-void SwScriptField::SetPar2( const rtl::OUString& rStr )
+void SwScriptField::SetPar2( const OUString& rStr )
 {
     sCode = rStr;
 }
 
 
-rtl::OUString SwScriptField::GetPar2() const
+OUString SwScriptField::GetPar2() const
 {
     return sCode;
 }

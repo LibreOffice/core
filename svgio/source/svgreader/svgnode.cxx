@@ -83,13 +83,13 @@ namespace svgio
 
             for(sal_uInt32 a(0); a < nAttributes; a++)
             {
-                const ::rtl::OUString aTokenName(xAttribs->getNameByIndex(a));
+                const OUString aTokenName(xAttribs->getNameByIndex(a));
 
                 parseAttribute(aTokenName, StrToSVGToken(aTokenName), xAttribs->getValueByIndex(a));
             }
         }
 
-        void SvgNode::parseAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
         {
             switch(aSVGToken)
             {
@@ -113,8 +113,8 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrDefault(rtl::OUString::createFromAscii("default"));
-                        static rtl::OUString aStrPreserve(rtl::OUString::createFromAscii("preserve"));
+                        static OUString aStrDefault(OUString::createFromAscii("default"));
+                        static OUString aStrPreserve(OUString::createFromAscii("preserve"));
 
                         if(aContent.match(aStrDefault))
                         {
@@ -193,13 +193,13 @@ namespace svgio
                     if(pStyles)
                     {
                         // check if we have Title or Desc
-                        const rtl::OUString& rTitle = pStyles->getTitle();
-                        const rtl::OUString& rDesc = pStyles->getDesc();
+                        const OUString& rTitle = pStyles->getTitle();
+                        const OUString& rDesc = pStyles->getDesc();
 
                         if(rTitle.getLength() || rDesc.getLength())
                         {
                             // default object name is empty
-                            rtl::OUString aObjectName;
+                            OUString aObjectName;
 
                             // use path as object name when outmost element
                             if(SVGTokenSvg == getType())
@@ -277,7 +277,7 @@ namespace svgio
             }
         }
 
-        void SvgNode::setId(const rtl::OUString* pfId)
+        void SvgNode::setId(const OUString* pfId)
         {
             if(mpId)
             {
@@ -288,12 +288,12 @@ namespace svgio
 
             if(pfId)
             {
-                mpId = new rtl::OUString(*pfId);
+                mpId = new OUString(*pfId);
                 mrDocument.addSvgNodeToMapper(*mpId, *this);
             }
         }
 
-        void SvgNode::setClass(const rtl::OUString* pfClass)
+        void SvgNode::setClass(const OUString* pfClass)
         {
             if(mpClass)
             {
@@ -304,7 +304,7 @@ namespace svgio
 
             if(pfClass)
             {
-                mpClass = new rtl::OUString(*pfClass);
+                mpClass = new OUString(*pfClass);
                 mrDocument.addSvgNodeToMapper(*mpClass, *this);
             }
         }

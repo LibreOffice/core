@@ -127,7 +127,7 @@ namespace desktop
         "      Store soffice.bin pid to file.\n"\
         "\nRemaining arguments will be treated as filenames or URLs of documents to open.\n\n";
 
-    rtl::OUString ReplaceStringHookProc(const rtl::OUString& rStr);
+    OUString ReplaceStringHookProc(const OUString& rStr);
 
     void displayCmdlineHelp(OUString const & unknown)
     {
@@ -148,13 +148,13 @@ namespace desktop
 #ifdef UNX
         // on unix use console for output
         fprintf(stdout, "%s%s",
-                rtl::OUStringToOString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).getStr(),
-                rtl::OUStringToOString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).getStr());
+                OUStringToOString(aHelpMessage_version, RTL_TEXTENCODING_ASCII_US).getStr(),
+                OUStringToOString(aHelpMessage_head, RTL_TEXTENCODING_ASCII_US).getStr());
         // merge left and right column
         sal_Int32 n = comphelper::string::getTokenCount(aHelpMessage_left, '\n');
-        rtl::OString bsLeft(rtl::OUStringToOString(aHelpMessage_left,
+        OString bsLeft(OUStringToOString(aHelpMessage_left,
             RTL_TEXTENCODING_ASCII_US));
-        rtl::OString bsRight(rtl::OUStringToOString(aHelpMessage_right,
+        OString bsRight(OUStringToOString(aHelpMessage_right,
             RTL_TEXTENCODING_ASCII_US));
         for ( sal_Int32 i = 0; i < n; ++i )
         {
@@ -162,7 +162,7 @@ namespace desktop
             fprintf(stdout, "%s", getToken(bsLeft, i, '\n').getStr());
             fprintf(stdout, "%s\n", getToken(bsRight, i, '\n').getStr());
         }
-        fprintf(stdout, "%s", rtl::OUStringToOString(aHelpMessage_bottom,
+        fprintf(stdout, "%s", OUStringToOString(aHelpMessage_bottom,
                     RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // rest gets a dialog box
@@ -179,10 +179,10 @@ namespace desktop
 
     void displayVersion()
     {
-        rtl::OUString aVersionMsg(aCmdLineHelp_version);
+        OUString aVersionMsg(aCmdLineHelp_version);
         aVersionMsg = ReplaceStringHookProc(aVersionMsg);
 #ifdef UNX
-        fprintf(stdout, "%s", rtl::OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+        fprintf(stdout, "%s", OUStringToOString(aVersionMsg, RTL_TEXTENCODING_ASCII_US).getStr());
 #else
         // Just re-use the help dialog for now.
         CmdlineHelpDialog aDlg;

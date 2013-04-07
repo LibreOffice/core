@@ -75,7 +75,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                        rtl::OUString("_beamer"),
+                                        OUString("_beamer"),
                                         frame::FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
     {
@@ -211,7 +211,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             bDispose = sal_True;
             xRowSet = uno::Reference<sdbc::XRowSet>(
                     comphelper::getProcessServiceFactory()->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
                     uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
             OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
@@ -228,15 +228,15 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
                 aAny <<= rParam.aDBName;
                 xRowProp->setPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
 
                 aAny <<= rParam.aStatement;
                 xRowProp->setPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
                 aAny <<= nType;
                 xRowProp->setPropertyValue(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
                 uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
                 if ( xExecute.is() )

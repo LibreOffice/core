@@ -29,7 +29,7 @@
 
 #include <svtools/svtdllapi.h>
 
-namespace rtl { class OUString; }
+#include <rtl/ustring.hxx>
 
 /** Localize a URI to one of the foundation's webservices
 
@@ -37,7 +37,7 @@ namespace rtl { class OUString; }
     URI to localize - depending on your UI locale, a country local
     part is appended to the URI (like "en", or "fr", or "es")
  */
-SVT_DLLPUBLIC void localizeWebserviceURI( ::rtl::OUString& io_rURI );
+SVT_DLLPUBLIC void localizeWebserviceURI( OUString& io_rURI );
 
 #endif
 

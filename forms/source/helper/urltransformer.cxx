@@ -60,7 +60,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    URL UrlTransformer::getStrictURL( const ::rtl::OUString& _rURL ) const
+    URL UrlTransformer::getStrictURL( const OUString& _rURL ) const
     {
         URL aReturn;
         aReturn.Complete = _rURL;
@@ -72,14 +72,14 @@ namespace frm
     //--------------------------------------------------------------------
     URL UrlTransformer::getStrictURLFromAscii( const sal_Char* _pAsciiURL ) const
     {
-        return getStrictURL( ::rtl::OUString::createFromAscii( _pAsciiURL ) );
+        return getStrictURL( OUString::createFromAscii( _pAsciiURL ) );
     }
 
     //--------------------------------------------------------------------
     void UrlTransformer::parseSmartWithAsciiProtocol( ::com::sun::star::util::URL& _rURL, const sal_Char* _pAsciiURL ) const
     {
         if ( implEnsureTransformer() )
-            m_xTransformer->parseSmart( _rURL, ::rtl::OUString::createFromAscii( _pAsciiURL ) );
+            m_xTransformer->parseSmart( _rURL, OUString::createFromAscii( _pAsciiURL ) );
     }
 
 //........................................................................

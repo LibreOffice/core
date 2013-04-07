@@ -42,7 +42,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         inline XFormsEventConcrete( void ) : m_canceled(sal_False) {}
         virtual ~XFormsEventConcrete( void ) {}
 
-        virtual rtl::OUString SAL_CALL getType() throw (RuntimeException_t);
+        virtual OUString SAL_CALL getType() throw (RuntimeException_t);
         virtual XEventTarget_t SAL_CALL getTarget() throw (RuntimeException_t);
         virtual XEventTarget_t SAL_CALL getCurrentTarget() throw (RuntimeException_t);
         virtual PhaseType_t SAL_CALL getEventPhase() throw (RuntimeException_t);
@@ -53,13 +53,13 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         virtual void SAL_CALL preventDefault() throw (RuntimeException_t);
 
         virtual void SAL_CALL initXFormsEvent(
-                            const rtl::OUString& typeArg,
+                            const OUString& typeArg,
                             sal_Bool canBubbleArg,
                             sal_Bool cancelableArg )
                             throw (RuntimeException_t);
 
         virtual void SAL_CALL initEvent(
-            const rtl::OUString& eventTypeArg,
+            const OUString& eventTypeArg,
             sal_Bool canBubbleArg,
             sal_Bool cancelableArg)
             throw (RuntimeException_t);
@@ -70,7 +70,7 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
 
     protected:
 
-        rtl::OUString m_eventType;
+        OUString m_eventType;
         XEventTarget_t m_target;
         XEventTarget_t m_currentTarget;
         PhaseType_t m_phase;

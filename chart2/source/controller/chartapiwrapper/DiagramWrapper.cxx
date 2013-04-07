@@ -74,7 +74,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::chart::XAxis;
 using ::osl::MutexGuard;
-using ::rtl::OUString;
 
 namespace
 {

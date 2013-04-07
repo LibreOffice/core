@@ -40,7 +40,6 @@ namespace connectivity
 {
     namespace mysqlc
     {
-        using ::rtl::OUString;
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
         using ::com::sun::star::uno::Exception;

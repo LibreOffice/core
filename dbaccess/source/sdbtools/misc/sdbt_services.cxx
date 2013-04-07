@@ -52,7 +52,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdbt_component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::sdbtools::SdbtModule::getInstance().getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName));
+            OUString::createFromAscii(pImplementationName));
     }
 
     if (xRet.is())

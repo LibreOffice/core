@@ -78,9 +78,9 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 
         uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
                 comphelper::getProcessComponentContext() );
-        uno::Sequence<rtl::OUString> aNames = xContext->getElementNames();
+        uno::Sequence<OUString> aNames = xContext->getElementNames();
         long nCount = aNames.getLength();
-        const rtl::OUString* pArray = aNames.getConstArray();
+        const OUString* pArray = aNames.getConstArray();
         for (long nPos = 0; nPos < nCount; nPos++)
         {
             String aName = pArray[nPos];
@@ -160,7 +160,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
 
-        uno::Sequence<rtl::OUString> aNames;
+        uno::Sequence<OUString> aNames;
         if ( nSelect == DP_TYPELIST_TABLE )
         {
             //  get all tables
@@ -189,7 +189,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         //  fill list
 
         long nCount = aNames.getLength();
-        const rtl::OUString* pArray = aNames.getConstArray();
+        const OUString* pArray = aNames.getConstArray();
         for( long nPos=0; nPos<nCount; nPos++ )
         {
             String aName = pArray[nPos];

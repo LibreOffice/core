@@ -49,7 +49,7 @@ public:
         {}
 
     virtual bool implies( Permission const & perm ) const SAL_THROW(()) = 0;
-    virtual ::rtl::OUString toString() const SAL_THROW(()) = 0;
+    virtual OUString toString() const SAL_THROW(()) = 0;
 };
 //==================================================================================================
 class AllPermission : public Permission
@@ -62,7 +62,7 @@ public:
         {}
 
     virtual bool implies( Permission const & ) const SAL_THROW(());
-    virtual ::rtl::OUString toString() const SAL_THROW(());
+    virtual OUString toString() const SAL_THROW(());
 };
 
 //==================================================================================================
@@ -83,7 +83,7 @@ public:
         PermissionCollection const & addition = PermissionCollection() )
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );
 #ifdef __DIAGNOSE
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > toStrings() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< OUString > toStrings() const SAL_THROW(());
 #endif
     void checkPermission( ::com::sun::star::uno::Any const & perm ) const
         SAL_THROW( (::com::sun::star::uno::RuntimeException) );

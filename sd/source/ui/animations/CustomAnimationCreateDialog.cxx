@@ -47,7 +47,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
@@ -490,7 +489,7 @@ bool CustomAnimationCreateTabPage::select( const OUString& rsPresetId )
 
 // --------------------------------------------------------------------
 
-CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const ::rtl::OUString& rsPresetId, double fDuration  )
+CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText, const OUString& rsPresetId, double fDuration  )
 :   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) )
 ,   mpPane( pPane )
 ,   mrTargets( rTargets )
@@ -651,7 +650,7 @@ void CustomAnimationCreateDialog::setPosition()
         E_TABDIALOG, OUString::number(DLG_CUSTOMANIMATION_CREATE));
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState( rtl::OUStringToOString(aDlgOpt.GetWindowState(),
+        SetWindowState( OUStringToOString(aDlgOpt.GetWindowState(),
             RTL_TEXTENCODING_ASCII_US) );
     }
     else

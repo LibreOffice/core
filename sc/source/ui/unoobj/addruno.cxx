@@ -102,11 +102,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
         static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellRangeAddress*)0), 0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
@@ -117,11 +117,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
         static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellAddress*)0), 0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
@@ -129,7 +129,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     }
 }
 
-void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPropertyName, const uno::Any& aValue )
+void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -174,7 +174,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
     else if ( aNameStr.EqualsAscii( SC_UNONAME_UIREPR ) )
     {
         //  parse the UI representation string
-        rtl::OUString sRepresentation;
+        OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
             String aUIString = sRepresentation;
@@ -187,7 +187,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  parse the file format string
-        rtl::OUString sRepresentation;
+        OUString sRepresentation;
         if (aValue >>= sRepresentation)
         {
             String aUIString(sRepresentation);
@@ -199,7 +199,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
             if ( bIsRange )
             {
                 //  range: also strip a "." after the last colon
-                sal_Int32 nColon = rtl::OUString(aUIString).lastIndexOf( (sal_Unicode) ':' );
+                sal_Int32 nColon = OUString(aUIString).lastIndexOf( (sal_Unicode) ':' );
                 if ( nColon >= 0 && nColon < aUIString.Len() - 1 &&
                      aUIString.GetChar((xub_StrLen)nColon+1) == (sal_Unicode) '.' )
                     aUIString.Erase( (xub_StrLen)nColon+1, 1 );
@@ -216,7 +216,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
         throw lang::IllegalArgumentException();
 }
 
-uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -257,7 +257,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             aRange.Format( aFormatStr, nFlags, pDoc );
         else
             aRange.aStart.Format( aFormatStr, nFlags, pDoc );
-        aRet <<= rtl::OUString( aFormatStr );
+        aRet <<= OUString( aFormatStr );
     }
     else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
@@ -278,7 +278,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             aRange.aEnd.Format( aSecond, nFlags, pDoc, eConv );
             aFormatStr.Append( aSecond );
         }
-        aRet <<= rtl::OUString( aFormatStr );
+        aRet <<= OUString( aFormatStr );
     }
     else
         throw beans::UnknownPropertyException();
@@ -290,12 +290,12 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 // lang::XServiceInfo
 
-rtl::OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScAddressConversionObj" );
+    return OUString("ScAddressConversionObj" );
 }
 
-sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -303,13 +303,13 @@ sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const rtl::OUString& 
                                              : SC_SERVICENAME_CELLADDRESS );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = bIsRange ? rtl::OUString(SC_SERVICENAME_RANGEADDRESS)
-                         : rtl::OUString(SC_SERVICENAME_CELLADDRESS);
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = bIsRange ? OUString(SC_SERVICENAME_RANGEADDRESS)
+                         : OUString(SC_SERVICENAME_CELLADDRESS);
     return aRet;
 }
 

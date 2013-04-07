@@ -36,7 +36,7 @@ namespace connectivity
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_Class( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
-        static java_lang_Class * forName( const ::rtl::OUString &_par0 );
+        static java_lang_Class * forName( const OUString &_par0 );
         // return the jre object
         jobject newInstanceObject();
 

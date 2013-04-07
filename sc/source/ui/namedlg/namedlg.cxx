@@ -50,7 +50,7 @@
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData*       ptrViewData,
-        const ScAddress&  aCursorPos, boost::ptr_map<rtl::OUString, ScRangeName>* pRangeMap  )
+        const ScAddress&  aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap  )
 
 :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_NAMES ),
     //
@@ -94,12 +94,12 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 {
     if (!pRangeMap)
     {
-        std::map<rtl::OUString, ScRangeName*> aRangeMap;
+        std::map<OUString, ScRangeName*> aRangeMap;
         mpDoc->GetRangeNameMap(aRangeMap);
-        std::map<rtl::OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
+        std::map<OUString, ScRangeName*>::iterator itr = aRangeMap.begin(), itrEnd = aRangeMap.end();
         for (; itr != itrEnd; ++itr)
         {
-            rtl::OUString aTemp(itr->first);
+            OUString aTemp(itr->first);
             maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
         }
     }
@@ -154,7 +154,7 @@ void ScNameDlg::Init()
     SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
-        rtl::OUString aTabName;
+        OUString aTabName;
         mpDoc->GetName(i, aTabName);
         maLbScope.InsertEntry(aTabName);
     }
@@ -271,8 +271,8 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
 
 bool ScNameDlg::IsNameValid()
 {
-    rtl::OUString aScope = maLbScope.GetSelectEntry();
-    rtl::OUString aName = maEdName.GetText();
+    OUString aScope = maLbScope.GetSelectEntry();
+    OUString aName = maEdName.GetText();
     aName = aName.trim();
 
     if (aName.isEmpty())
@@ -314,10 +314,10 @@ bool ScNameDlg::IsFormulaValid()
     }
 }
 
-ScRangeName* ScNameDlg::GetRangeName(const rtl::OUString& rScope)
+ScRangeName* ScNameDlg::GetRangeName(const OUString& rScope)
 {
     if (rScope == maGlobalNameStr)
-        return maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        return maRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
     else
         return maRangeMap.find(rScope)->second;
 }
@@ -341,7 +341,7 @@ bool ScNameDlg::AddPushed()
     return false;
 }
 
-void ScNameDlg::SetEntry(const rtl::OUString& rName, const rtl::OUString& rScope)
+void ScNameDlg::SetEntry(const OUString& rName, const OUString& rScope)
 {
     if (!rName.isEmpty())
     {
@@ -375,8 +375,8 @@ void ScNameDlg::NameModified()
 {
     ScRangeNameLine aLine;
     mpRangeManagerTable->GetCurrentLine(aLine);
-    rtl::OUString aOldName = aLine.aName;
-    rtl::OUString aNewName = maEdName.GetText();
+    OUString aOldName = aLine.aName;
+    OUString aNewName = maEdName.GetText();
     aNewName = aNewName.trim();
     maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if (aNewName != aOldName)
@@ -395,12 +395,12 @@ void ScNameDlg::NameModified()
         return;
     }
 
-    rtl::OUString aOldScope = aLine.aScope;
+    OUString aOldScope = aLine.aScope;
     //empty table
     if (aOldScope.isEmpty())
         return;
-    rtl::OUString aExpr = maEdAssign.GetText();
-    rtl::OUString aNewScope = maLbScope.GetSelectEntry();
+    OUString aExpr = maEdAssign.GetText();
+    OUString aNewScope = maLbScope.GetSelectEntry();
 
     ScRangeName* pOldRangeName = GetRangeName( aOldScope );
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
@@ -521,7 +521,7 @@ void ScNameDlg::MorePushed()
     MoveWindow(maFlDiv, nPixel);
 }
 
-void ScNameDlg::GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap)
+void ScNameDlg::GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap)
 {
     maRangeMap.swap(rRangeMap);
 }

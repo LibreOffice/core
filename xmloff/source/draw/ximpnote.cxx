@@ -20,8 +20,6 @@
 #include "ximpnote.hxx"
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 

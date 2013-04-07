@@ -79,7 +79,7 @@ template < typename ImplObject >
         if ( xTunnel.is() )
             pObj = reinterpret_cast<ImplObject*>( xTunnel->getSomething(ImplObject::getUnoTunnelId()));
         if ( bThrow && !pObj )
-            throw css::uno::RuntimeException( rtl::OUString( "Internal error, can't exctract implementation object" ), rxWrapperIf );
+            throw css::uno::RuntimeException( OUString( "Internal error, can't exctract implementation object" ), rxWrapperIf );
         return pObj;
     }
 // ============================================================================

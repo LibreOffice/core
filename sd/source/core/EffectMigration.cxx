@@ -37,7 +37,6 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::drawing::XShape;
-using ::rtl::OUString;
 
 struct deprecated_FadeEffect_conversion_table_entry
 {

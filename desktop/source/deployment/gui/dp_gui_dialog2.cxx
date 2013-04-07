@@ -76,7 +76,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::system;
 
-using ::rtl::OUString;
 
 
 namespace dp_gui {
@@ -494,7 +493,7 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
         if ( pFact )
         {
             OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, rtl::OUString() );
+            VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, OUString() );
 
             pDlg->Execute();
 
@@ -749,7 +748,7 @@ ExtMgrDialog::~ExtMgrDialog()
 }
 
 //------------------------------------------------------------------------------
-void ExtMgrDialog::setGetExtensionsURL( const ::rtl::OUString &rURL )
+void ExtMgrDialog::setGetExtensionsURL( const OUString &rURL )
 {
     m_pGetExtensions->SetURL( rURL );
 }
@@ -914,7 +913,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
                 title2filter.insert( t_string2string::value_type( title, filter ) ) );
             if ( ! insertion.second )
             { // already existing, append extensions:
-                ::rtl::OUStringBuffer buf;
+                OUStringBuffer buf;
                 buf.append( insertion.first->second );
                 buf.append( static_cast<sal_Unicode>(';') );
                 buf.append( filter );
@@ -935,7 +934,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilePicker->appendFilter( iPos->first, iPos->second );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             (void) exc;
         }
@@ -1550,7 +1549,7 @@ void UpdateRequiredDialog::Resize()
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                 CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                                 CTRL_STATE_ENABLED, aValue, OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) != sal_False )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
@@ -1636,7 +1635,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     catch ( const uno::RuntimeException & ) { throw; }
     catch (const uno::Exception & exc) {
         (void) exc;
-        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         bRegistered = false;
     }
 

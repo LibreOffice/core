@@ -227,7 +227,7 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_MSACCESS:
             {
-                const ::rtl::OUString sExt("*.mdb");
+                const OUString sExt("*.mdb");
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -239,7 +239,7 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_MSACCESS_2007:
             {
-                const ::rtl::OUString sAccdb("*.accdb");
+                const OUString sAccdb("*.accdb");
                 String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
@@ -253,8 +253,8 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_ODBC:
             {
                 // collect all ODBC data source names
-                ::rtl::OUString sCurrDatasource = getURLNoPrefix();
-                ::rtl::OUString sDataSource;
+                OUString sCurrDatasource = getURLNoPrefix();
+                OUString sDataSource;
                 if ( getSelectedDataSource(sDataSource,sCurrDatasource) && !sDataSource.isEmpty() )
                 {
                     setURLNoPrefix(sDataSource);
@@ -268,8 +268,8 @@ DBG_NAME(OConnectionHelper)
 #ifdef _ADO_DATALINK_BROWSE_
             case  ::dbaccess::DST_ADO:
             {
-                ::rtl::OUString sOldDataSource=getURLNoPrefix();
-                ::rtl::OUString sNewDataSource;
+                OUString sOldDataSource=getURLNoPrefix();
+                OUString sNewDataSource;
                 HWND hWnd = GetParent()->GetSystemData()->hWnd;
                 sNewDataSource = getAdoDatalink((long)hWnd,sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
@@ -294,10 +294,10 @@ DBG_NAME(OConnectionHelper)
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
                 // collect all Mozilla Profiles
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
+                ::com::sun::star::uno::Sequence< OUString > list;
 
                 xMozillaBootstrap->getProfileList( profileType, list );
-                const ::rtl::OUString * pArray = list.getConstArray();
+                const OUString * pArray = list.getConstArray();
 
                 sal_Int32 count = list.getLength();
 
@@ -308,7 +308,7 @@ DBG_NAME(OConnectionHelper)
 
                 // execute the select dialog
                 ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
-                ::rtl::OUString sOldProfile=getURLNoPrefix();
+                OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
                     aSelector.Select(sOldProfile);
@@ -504,7 +504,7 @@ DBG_NAME(OConnectionHelper)
     }
 
     // -----------------------------------------------------------------------------
-    IS_PATH_EXIST OConnectionHelper::pathExists(const ::rtl::OUString& _rURL, sal_Bool bIsFile) const
+    IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, sal_Bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
         sal_Bool bExists = sal_False;
@@ -564,7 +564,7 @@ DBG_NAME(OConnectionHelper)
 
         INetProtocol eProtocol = aParser.GetProtocol();
 
-        ::std::vector< ::rtl::OUString > aToBeCreated;  // the to-be-created levels
+        ::std::vector< OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
@@ -585,27 +585,27 @@ DBG_NAME(OConnectionHelper)
             Reference< XCommandEnvironment > xEmptyEnv;
             ::ucbhelper::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv, comphelper::getProcessComponentContext());
 
-            ::rtl::OUString sContentType;
+            OUString sContentType;
             if ( INET_PROT_FILE == eProtocol )
             {
-                sContentType = ::rtl::OUString("application/vnd.sun.staroffice.fsys-folder");
+                sContentType = OUString("application/vnd.sun.staroffice.fsys-folder");
                 // the file UCP currently does not support the ContentType property
             }
             else
             {
-                Any aContentType = aParent.getPropertyValue( ::rtl::OUString("ContentType") );
+                Any aContentType = aParent.getPropertyValue( OUString("ContentType") );
                 aContentType >>= sContentType;
             }
 
             // the properties which need to be set on the new content
-            Sequence< ::rtl::OUString > aNewDirectoryProperties(1);
-            aNewDirectoryProperties[0] = ::rtl::OUString("Title");
+            Sequence< OUString > aNewDirectoryProperties(1);
+            aNewDirectoryProperties[0] = OUString("Title");
 
             // the values to be set
             Sequence< Any > aNewDirectoryAttributes(1);
 
             // loop
-            for (   ::std::vector< ::rtl::OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
+            for (   ::std::vector< OUString >::reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )

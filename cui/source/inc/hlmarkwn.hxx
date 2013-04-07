@@ -71,7 +71,7 @@ private:
     sal_uInt16          mnError;
 
 protected:
-    sal_Bool RefreshFromDoc( ::rtl::OUString aURL );
+    sal_Bool RefreshFromDoc( OUString aURL );
 
     SvTreeListEntry* FindEntry ( String aStrName );
     void ClearTree();

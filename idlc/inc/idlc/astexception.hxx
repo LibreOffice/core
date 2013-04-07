@@ -24,7 +24,7 @@
 class AstException : public AstStruct
 {
 public:
-    AstException(const ::rtl::OString& name, AstException* pBaseType, AstScope* pScope)
+    AstException(const OString& name, AstException* pBaseType, AstScope* pScope)
         : AstStruct(NT_exception, name, pBaseType, pScope)
         {}
 

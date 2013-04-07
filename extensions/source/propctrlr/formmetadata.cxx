@@ -42,21 +42,21 @@ namespace pcr
     {
         String          sName;
         String          sTranslation;
-        rtl::OString    sHelpId;
+        OString    sHelpId;
         sal_Int32       nId;
         sal_uInt32      nUIFlags;
 
         OPropertyInfoImpl(
-                        const ::rtl::OUString&      rName,
+                        const OUString&      rName,
                         sal_Int32                   _nId,
                         const String&               aTranslation,
-                        const rtl::OString&,
+                        const OString&,
                         sal_uInt32                  _nUIFlags);
     };
 
     //------------------------------------------------------------------------
-    OPropertyInfoImpl::OPropertyInfoImpl(const ::rtl::OUString& _rName, sal_Int32 _nId,
-                                   const String& aString, const rtl::OString& sHid, sal_uInt32 _nUIFlags)
+    OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
+                                   const String& aString, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
@@ -381,10 +381,10 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    rtl::OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->sHelpId : rtl::OString();
+        return (pInfo) ? pInfo->sHelpId : OString();
     }
 
     //------------------------------------------------------------------------
@@ -402,7 +402,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
+    ::std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
@@ -506,7 +506,7 @@ namespace pcr
                 break;
         }
 
-        ::std::vector< ::rtl::OUString > aReturn;
+        ::std::vector< OUString > aReturn;
 
         if ( nStringItemsResId )
         {
@@ -526,7 +526,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Bool OPropertyInfoService::isComposeable( const ::rtl::OUString& _rPropertyName ) const
+    sal_Bool OPropertyInfoService::isComposeable( const OUString& _rPropertyName ) const
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
         if ( nId == -1 )
@@ -593,17 +593,17 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
+    ::std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const ::rtl::OUString& _rDescription, Any& _out_rValue ) const
+    void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
         sal_uInt32  nPropertyUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
-        ::std::vector< ::rtl::OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
-        ::std::vector< ::rtl::OUString >::const_iterator pos = ::std::find( aEnumStrings.begin(), aEnumStrings.end(), _rDescription );
+        ::std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
+        ::std::vector< OUString >::const_iterator pos = ::std::find( aEnumStrings.begin(), aEnumStrings.end(), _rDescription );
         if ( pos != aEnumStrings.end() )
         {
             sal_Int32 nPos = pos - aEnumStrings.begin();
@@ -642,9 +642,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
+    OUString SAL_CALL DefaultEnumRepresentation::getDescriptionForValue( const Any& _rEnumValue ) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         sal_Int32 nIntValue = -1;
         OSL_VERIFY( ::cppu::enum2int( nIntValue, _rEnumValue ) );
 
@@ -653,7 +653,7 @@ namespace pcr
             // enum value starting with 1
             --nIntValue;
 
-        ::std::vector< ::rtl::OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
+        ::std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
         if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
         {
             sReturn = aEnumStrings[ nIntValue ];

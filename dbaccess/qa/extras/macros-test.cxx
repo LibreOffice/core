@@ -52,7 +52,7 @@ class DBAccessTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     DBAccessTest();
 
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -66,14 +66,14 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    rtl::OUString m_aBaseString;
+    OUString m_aBaseString;
 };
 
 
-void DBAccessTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void DBAccessTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    rtl::OUString aSep("/");
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
+    OUString aSep("/");
+    OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
@@ -86,9 +86,9 @@ DBAccessTest::DBAccessTest()
 
 void DBAccessTest::test()
 {
-    const rtl::OUString aFileNameBase("testdb.");
-    const rtl::OUString aFileExtension("odb");
-    rtl::OUString aFileName;
+    const OUString aFileNameBase("testdb.");
+    const OUString aFileExtension("odb");
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
     CPPUNIT_ASSERT(xComponent.is());

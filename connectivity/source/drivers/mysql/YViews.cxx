@@ -48,9 +48,9 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OViews::createObject(const OUString& _rName)
 {
-    ::rtl::OUString sCatalog,sSchema,sTable;
+    OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,
                                         _rName,
                                         sCatalog,
@@ -61,7 +61,7 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
                             sTable,
                             m_xMetaData,
                             0,
-                            ::rtl::OUString(),
+                            OUString(),
                             sSchema,
                             sCatalog
                             );
@@ -86,14 +86,14 @@ Reference< XPropertySet > OViews::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
+void OViews::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     if ( m_bInDrop )
         return;
@@ -102,7 +102,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
     if (!bIsNew)
     {
-        ::rtl::OUString aSql(  "DROP VIEW" );
+        OUString aSql(  "DROP VIEW" );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         aSql += ::dbtools::composeTableName( m_xMetaData, xProp, ::dbtools::eInTableDefinitions, false, false, true );
@@ -114,7 +114,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     }
 }
 // -----------------------------------------------------------------------------
-void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
+void OViews::dropByNameImpl(const OUString& elementName)
 {
     m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
@@ -125,12 +125,12 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
-    ::rtl::OUString aSql(  "CREATE VIEW " );
-    ::rtl::OUString sCommand;
+    OUString aSql(  "CREATE VIEW " );
+    OUString sCommand;
 
     aSql += ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
 
-    aSql += ::rtl::OUString(" AS ");
+    aSql += OUString(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 
@@ -145,7 +145,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     OTables* pTables = static_cast<OTables*>(static_cast<OMySQLCatalog&>(m_rParent).getPrivateTables());
     if ( pTables )
     {
-        ::rtl::OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
+        OUString sName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInDataManipulation, false, false, false );
         pTables->appendNew(sName);
     }
 }

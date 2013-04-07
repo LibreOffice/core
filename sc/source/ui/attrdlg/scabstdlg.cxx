@@ -23,7 +23,6 @@
 #include <osl/module.hxx>
 #include <rtl/ustrbuf.hxx>
 
-using ::rtl::OUStringBuffer;
 
 typedef ScAbstractDialogFactory* (SAL_CALL *ScFuncPtrCreateDialogFactory)();
 
@@ -49,7 +48,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( ScAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
     if ( fp )
         return fp();
     return 0;

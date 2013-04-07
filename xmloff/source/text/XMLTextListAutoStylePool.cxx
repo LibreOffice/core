@@ -27,8 +27,6 @@
 #include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexp.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -217,7 +215,7 @@ OUString XMLTextListAutoStylePool::Add(
     return sName;
 }
 
-::rtl::OUString XMLTextListAutoStylePool::Find(
+OUString XMLTextListAutoStylePool::Find(
             const Reference < XIndexReplace > & rNumRules ) const
 {
     OUString sName;
@@ -230,7 +228,7 @@ OUString XMLTextListAutoStylePool::Add(
     return sName;
 }
 
-::rtl::OUString XMLTextListAutoStylePool::Find(
+OUString XMLTextListAutoStylePool::Find(
             const OUString& rInternalName ) const
 {
     OUString sName;

@@ -38,14 +38,14 @@ namespace dbaui
     {
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString OJoinDesignViewAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OJoinDesignViewAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
+        return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
     }
     // -----------------------------------------------------------------------------
     void OJoinDesignViewAccess::clearTableView()

@@ -150,15 +150,15 @@ public:
     {
         m_chBullet = ch;
     }
-    void    SetPrefix(rtl::OUString prefix)
+    void    SetPrefix(OUString prefix)
     {
         m_aNumFmt.SetPrefix(prefix);
     }
-    void    SetSuffix(rtl::OUString suffix)
+    void    SetSuffix(OUString suffix)
     {
         m_aNumFmt.SetSuffix(suffix);
     }
-    void    SetFontName(rtl::OUString name)
+    void    SetFontName(OUString name)
     {
         m_strFontName = name;
     }
@@ -167,7 +167,7 @@ public:
 private:
     XFNumFmt    m_aNumFmt;
     int32_t     m_chBullet;
-    rtl::OUString m_strFontName;
+    OUString m_strFontName;
 };
 
 //not complete.
@@ -178,7 +178,7 @@ public:
 private:
     sal_Int16       m_nWidth;
     sal_Int16       m_nHeight;
-    rtl::OUString   m_strBinaryData;
+    OUString   m_strBinaryData;
 };
 
 
@@ -205,9 +205,9 @@ public:
 
     void    SetListBullet(sal_Int32 level,
                             UChar32 bullet_char,
-                            rtl::OUString fontname = A2OUSTR(""),
-                            rtl::OUString prefix = A2OUSTR(""),
-                            rtl::OUString suffix = A2OUSTR("")
+                            OUString fontname = A2OUSTR(""),
+                            OUString prefix = A2OUSTR(""),
+                            OUString suffix = A2OUSTR("")
                             );
 
     void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt,   sal_Int16 nStartValue = 1 );

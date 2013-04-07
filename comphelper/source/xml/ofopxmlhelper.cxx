@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 namespace comphelper {
 
 // -----------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     OUString aStringID = OUString( "_rels/" );
@@ -126,14 +126,14 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 
     xWriter->setOutputStream( xOutStream );
 
-    ::rtl::OUString aTypesElement( "Types" );
-    ::rtl::OUString aDefaultElement( "Default" );
-    ::rtl::OUString aOverrideElement( "Override" );
-    ::rtl::OUString aExtensionAttr( "Extension" );
-    ::rtl::OUString aPartNameAttr( "PartName" );
-    ::rtl::OUString aContentTypeAttr( "ContentType" );
-    ::rtl::OUString aCDATAString( "CDATA" );
-    ::rtl::OUString aWhiteSpace( " " );
+    OUString aTypesElement( "Types" );
+    OUString aDefaultElement( "Default" );
+    OUString aOverrideElement( "Override" );
+    OUString aExtensionAttr( "Extension" );
+    OUString aPartNameAttr( "PartName" );
+    OUString aContentTypeAttr( "ContentType" );
+    OUString aCDATAString( "CDATA" );
+    OUString aWhiteSpace( " " );
 
     // write the namespace
     AttributeList* pRootAttrList = new AttributeList;
@@ -179,7 +179,7 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 // ==================================================================================
 
 // -----------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
@@ -246,7 +246,7 @@ void SAL_CALL OFOPXMLHelper::endDocument()
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT )
@@ -277,13 +277,13 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
             sal_Int32 nAttrNum = 0;
             m_aResultSeq[nNewEntryNum-1].realloc( 4 ); // the maximal expected number of arguments is 4
 
-            ::rtl::OUString aIDValue = xAttribs->getValueByName( m_aIDAttr );
+            OUString aIDValue = xAttribs->getValueByName( m_aIDAttr );
             if ( aIDValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ID value must present
 
-            ::rtl::OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
-            ::rtl::OUString aTargetValue = xAttribs->getValueByName( m_aTargetAttr );
-            ::rtl::OUString aTargetModeValue = xAttribs->getValueByName( m_aTargetModeAttr );
+            OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
+            OUString aTargetValue = xAttribs->getValueByName( m_aTargetAttr );
+            OUString aTargetModeValue = xAttribs->getValueByName( m_aTargetModeAttr );
 
             m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aIDAttr;
             m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aIDValue;
@@ -343,11 +343,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
             if ( m_aResultSeq.getLength() != 2 )
                 throw uno::RuntimeException();
 
-            ::rtl::OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
+            OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
             if ( aExtensionValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the Extension value must present
 
-            ::rtl::OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
+            OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ContentType value must present
 
@@ -372,11 +372,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
             if ( m_aResultSeq.getLength() != 2 )
                 throw uno::RuntimeException();
 
-            ::rtl::OUString aPartNameValue = xAttribs->getValueByName( m_aPartNameAttr );
+            OUString aPartNameValue = xAttribs->getValueByName( m_aPartNameAttr );
             if ( aPartNameValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the PartName value must present
 
-            ::rtl::OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
+            OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
                 throw xml::sax::SAXException(); // TODO: the ContentType value must present
 
@@ -394,7 +394,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::endElement( const ::rtl::OUString& aName )
+void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
     if ( m_nFormat == RELATIONINFO_FORMAT || m_nFormat == CONTENTTYPE_FORMAT )
@@ -411,19 +411,19 @@ void SAL_CALL OFOPXMLHelper::endElement( const ::rtl::OUString& aName )
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::characters( const ::rtl::OUString& /*aChars*/ )
+void SAL_CALL OFOPXMLHelper::characters( const OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ )
+void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+void SAL_CALL OFOPXMLHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }

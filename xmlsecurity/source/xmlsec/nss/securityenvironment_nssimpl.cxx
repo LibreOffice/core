@@ -53,7 +53,6 @@ using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;
 using ::com::sun::star::lang::XMultiServiceFactory ;
 using ::com::sun::star::lang::XSingleServiceFactory ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
@@ -100,14 +99,14 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 
     task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
     ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-        ::comphelper::DocPasswordRequestType_STANDARD, eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
+        ::comphelper::DocPasswordRequestType_STANDARD, eMode, OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
 
     uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
     xInteractionHandler->handle( xRequest );
 
     if ( pPasswordRequest->isPassword() )
     {
-        rtl::OString aPassword(rtl::OUStringToOString(
+        OString aPassword(OUStringToOString(
             pPasswordRequest->getPassword(),
             osl_getThreadTextEncoding()));
         sal_Int32 nLen = aPassword.getLength();
@@ -224,12 +223,12 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
     return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
-::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
+OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::rtl::OUStringBuffer buff;
+    OUStringBuffer buff;
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
     {
-        buff.append(rtl::OUString::createFromAscii(PK11_GetTokenName(*is)));
+        buff.append(OUString::createFromAscii(PK11_GetTokenName(*is)));
         buff.appendAscii("\n");
     }
     return buff.makeStringAndClear();
@@ -560,7 +559,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
             throw RuntimeException() ;
 
         // Create cert info from issue and serial
-        rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
+        OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
@@ -686,7 +685,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAs
     xmlChar* chCert ;
     xmlSecSize certSize ;
 
-    rtl::OString oscert = rtl::OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
+    OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
 
     chCert = xmlStrndup( ( const xmlChar* )oscert.getStr(), ( int )oscert.getLength() ) ;
 

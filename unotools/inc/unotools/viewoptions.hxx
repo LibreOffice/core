@@ -131,7 +131,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         *//*-*****************************************************************************************************/
 
          SvtViewOptions(       EViewType        eType     ,
-                         const ::rtl::OUString& sViewName );
+                         const OUString& sViewName );
         virtual ~SvtViewOptions();
 
         /*-****************************************************************************************************//**
@@ -194,8 +194,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        ::rtl::OUString GetWindowState(                               ) const;
-        void            SetWindowState( const ::rtl::OUString& sState );
+        OUString GetWindowState(                               ) const;
+        void            SetWindowState( const OUString& sState );
 
         /*-****************************************************************************************************//**
             @short      use it to set/get the page number which was the last active one
@@ -254,8 +254,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Any GetUserItem( const ::rtl::OUString&            sName  ) const;
-        void                       SetUserItem( const ::rtl::OUString&            sName  ,
+        ::com::sun::star::uno::Any GetUserItem( const OUString&            sName  ) const;
+        void                       SetUserItem( const OUString&            sName  ,
                                                 const ::com::sun::star::uno::Any& aValue );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         /// specify which list of views in configuration is used! This can't be a static value!!!
         /// ... because we need this value to work with right static data container.
         EViewType           m_eViewType     ;
-        ::rtl::OUString     m_sViewName     ;
+        OUString     m_sViewName     ;
 
         /// - impl. data container as dynamic pointer for smaller memory requirements!
         /// - internal ref count mechanism

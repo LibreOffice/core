@@ -27,7 +27,6 @@
 #include <iterator>
 
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::std;

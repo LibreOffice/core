@@ -54,30 +54,30 @@ namespace dbaui
     struct OIndex
     {
     protected:
-        ::rtl::OUString     sOriginalName;
+        OUString     sOriginalName;
         sal_Bool            bModified;
 
     public:
-        ::rtl::OUString     sName;
-        ::rtl::OUString     sDescription;
+        OUString     sName;
+        OUString     sDescription;
         sal_Bool            bPrimaryKey;
         sal_Bool            bUnique;
         IndexFields         aFields;
 
     public:
-        OIndex(const ::rtl::OUString& _rOriginalName)
+        OIndex(const OUString& _rOriginalName)
             : sOriginalName(_rOriginalName), bModified(sal_False), sName(_rOriginalName), bPrimaryKey(sal_False), bUnique(sal_False)
         {
         }
 
-        const ::rtl::OUString& getOriginalName() const { return sOriginalName; }
+        const OUString& getOriginalName() const { return sOriginalName; }
 
         sal_Bool    isModified() const { return bModified; }
         void        setModified(sal_Bool _bModified) { bModified = _bModified; }
         void        clearModified() { setModified(sal_False); }
 
         sal_Bool    isNew() const { return getOriginalName().isEmpty(); }
-        void        flagAsNew(const GrantIndexAccess&) { sOriginalName = ::rtl::OUString(); }
+        void        flagAsNew(const GrantIndexAccess&) { sOriginalName = OUString(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
 
 

@@ -47,7 +47,7 @@ public:
                     const ::com::sun::star::uno::Any *pFilter,
                     const ::com::sun::star::uno::Any *pTransparency,
                     sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName );
+                    const OUString& rLocalName );
 };
 
 

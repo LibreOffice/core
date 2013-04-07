@@ -44,7 +44,6 @@ using std::endl;
 #endif
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
-using ::rtl::OUString;
 using ::std::vector;
 
 namespace {

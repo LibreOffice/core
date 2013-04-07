@@ -64,7 +64,7 @@ namespace Dependencies {
        the name of the dependency; will never be empty, as a localized
        &ldquo;unknown&rdquo; is substituted for an empty/missing name
     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC rtl::OUString getErrorText(
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getErrorText(
         com::sun::star::uno::Reference< com::sun::star::xml::dom::XElement >
             const & dependency);
 }

@@ -80,12 +80,12 @@ public:
 
     void    SetLongFmt(sal_Bool bLongFmt);
 
-    void    SetText(rtl::OUString& text);
+    void    SetText(OUString& text);
 
 protected:
     enumXFDatePart  m_ePart;
     sal_Bool        m_bLongFmt;
-    rtl::OUString   m_strText;
+    OUString   m_strText;
 };
 
 class XFTimePart : public XFDateTimePart
@@ -120,7 +120,7 @@ public:
 
     void    SetAmPm(sal_Bool bAmPm);
 
-    void    AddText( rtl::OUString part );
+    void    AddText( OUString part );
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -146,7 +146,7 @@ inline void XFDateTimePart::SetLongFmt(sal_Bool bLongFmt)
     m_bLongFmt = bLongFmt;
 }
 
-inline void XFDateTimePart::SetText(rtl::OUString& text)
+inline void XFDateTimePart::SetText(OUString& text)
 {
     m_strText = text;
 }
@@ -186,7 +186,7 @@ inline void XFTimeStyle::SetAmPm(sal_Bool bAmPm)
     m_bAmPm = bAmPm;
 }
 
-inline void XFTimeStyle::AddText( rtl::OUString text )
+inline void XFTimeStyle::AddText( OUString text )
 {
     XFTimePart  part;
     part.SetPartType(enumXFDateText);

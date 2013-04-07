@@ -79,7 +79,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
@@ -87,25 +86,24 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-using rtl::OUString;
 
 #ifndef DISABLE_SCRIPTING
 
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
 {
     SwDocShell* mpDocShell;
-    rtl::OUString msThisDocumentCodeName;
+    OUString msThisDocumentCodeName;
 public:
     SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
         // XCodeNameQuery
 
-    rtl::OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException )
+    OUString SAL_CALL getCodeNameForContainer( const uno::Reference< uno::XInterface >& /*xIf*/ ) throw( uno::RuntimeException )
     {
         // not implemented...
-        return rtl::OUString();
+        return OUString();
     }
 
-    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         // Initialise the code name
         if ( msThisDocumentCodeName.isEmpty() )
@@ -113,14 +111,14 @@ public:
             try
             {
                 uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
-                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString("BasicLibraries") ), uno::UNO_QUERY_THROW );
-                rtl::OUString sProjectName( "Standard");
+                uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( OUString("BasicLibraries") ), uno::UNO_QUERY_THROW );
+                OUString sProjectName( "Standard");
                 if ( !mpDocShell->GetBasicManager()->GetName().isEmpty() )
                 {
                     sProjectName =  mpDocShell->GetBasicManager()->GetName();
                 }
                 uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
-                uno::Sequence< rtl::OUString > sModuleNames = xLib->getElementNames();
+                uno::Sequence< OUString > sModuleNames = xLib->getElementNames();
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
 
                 for ( sal_Int32 i=0; i < sModuleNames.getLength(); ++i )
@@ -138,7 +136,7 @@ public:
             {
             }
         }
-        rtl::OUString sCodeName;
+        OUString sCodeName;
         if ( mpDocShell )
         {
             OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
@@ -173,7 +171,7 @@ public:
     }
 };
 
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
+typedef boost::unordered_map< OUString, OUString, OUStringHash > StringHashMap;
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
     StringHashMap mTemplateToProject;
@@ -181,19 +179,19 @@ public:
     SwVbaProjectNameProvider()
     {
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
         return ( mTemplateToProject.find( aName ) != mTemplateToProject.end() );
     }
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         return uno::makeAny( mTemplateToProject.find( aName )->second );
     }
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aElements( mTemplateToProject.size() );
+        uno::Sequence< OUString > aElements( mTemplateToProject.size() );
         StringHashMap::iterator it_end = mTemplateToProject.end();
         sal_Int32 index = 0;
         for ( StringHashMap::iterator it = mTemplateToProject.begin(); it != it_end; ++it, ++index )
@@ -201,24 +199,24 @@ public:
         return aElements;
     }
 
-    virtual void SAL_CALL insertByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException )
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException )
     {
 
-        rtl::OUString sProjectName;
+        OUString sProjectName;
         aElement >>= sProjectName;
         OSL_TRACE("** Template cache inserting template name %s with project %s"
-            , rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr()
-            , rtl::OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            , OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr()
+            , OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr() );
         mTemplateToProject[ aName ] = sProjectName;
     }
 
-    virtual void SAL_CALL removeByName( const rtl::OUString& Name ) throw ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
     {
         if ( !hasByName( Name ) )
             throw container::NoSuchElementException();
         mTemplateToProject.erase( Name );
     }
-    virtual void SAL_CALL replaceByName( const rtl::OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw ( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException )
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -227,7 +225,7 @@ public:
     // XElemenAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        return ::getCppuType((const rtl::OUString*)0);
+        return ::getCppuType((const OUString*)0);
     }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException )
     {
@@ -246,7 +244,7 @@ public:
         // #FIXME #TODO is the code name for ThisDocument read anywhere?
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
         // #FIXME #TODO we really need to be checking against the codename for
         // ThisDocument
@@ -255,7 +253,7 @@ public:
         return sal_False;
     }
 
-    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
@@ -266,9 +264,9 @@ public:
         OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%x", xDocObj.get() );
         return  uno::makeAny( xDocObj );
     }
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aNames;
+        uno::Sequence< OUString > aNames;
         return aNames;
     }
     // XElemenAccess
@@ -484,7 +482,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
     OUString sRet;
     sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     if(nObjectType < nEntries)
-        sRet = rtl::OUString::createFromAscii(aProvNamesId[nObjectType].pName);
+        sRet = OUString::createFromAscii(aProvNamesId[nObjectType].pName);
     return sRet;
 }
 
@@ -496,7 +494,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
     sal_uInt16 n = 0;
     for(sal_uInt16 i = 0; i < nEntries; i++)
     {
-        String sProv(rtl::OUString::createFromAscii(aProvNamesId[i].pName));
+        String sProv(OUString::createFromAscii(aProvNamesId[i].pName));
         if(sProv.Len())
         {
             pArray[n] = sProv;
@@ -612,7 +610,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
-                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString("ooo.vba.word.Globals"), aArgs );
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( OUString("ooo.vba.word.Globals"), aArgs );
                     pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
                 }
                 aGlobs >>= xRet;
@@ -1683,7 +1681,7 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
     throw IndexOutOfBoundsException();
 }
 
-uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
+uno::Any SwXBookmarks::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -1709,7 +1707,7 @@ uno::Sequence< OUString > SwXBookmarks::getElementNames(void)
     if(!IsValid())
         throw uno::RuntimeException();
 
-    ::comphelper::SequenceAsVector< ::rtl::OUString > ret;
+    ::comphelper::SequenceAsVector< OUString > ret;
     IDocumentMarkAccess* const pMarkAccess = GetDoc()->getIDocumentMarkAccess();
     for (IDocumentMarkAccess::const_iterator_t ppMark =
             pMarkAccess->getBookmarksBegin();
@@ -1997,7 +1995,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
-        std::vector<rtl::OUString> aStrings;
+        std::vector<OUString> aStrings;
         sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
         aRet.realloc(nCount);
         OUString* pNames = aRet.getArray();

@@ -42,20 +42,20 @@ namespace dbaccess
         StorageXMLOutputStream(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
-            const ::rtl::OUString& i_rStreamName
+            const OUString& i_rStreamName
         );
         ~StorageXMLOutputStream();
 
         // StorageOutputStream overridables
         virtual void close();
 
-        void    addAttribute( const ::rtl::OUString& i_rName, const ::rtl::OUString& i_rValue ) const;
+        void    addAttribute( const OUString& i_rName, const OUString& i_rValue ) const;
 
-        void    startElement( const ::rtl::OUString& i_rElementName ) const;
+        void    startElement( const OUString& i_rElementName ) const;
         void    endElement() const;
 
-        void    ignorableWhitespace( const ::rtl::OUString& i_rWhitespace ) const;
-        void    characters( const ::rtl::OUString& i_rCharacters ) const;
+        void    ignorableWhitespace( const OUString& i_rWhitespace ) const;
+        void    characters( const OUString& i_rCharacters ) const;
 
     private:
         StorageXMLOutputStream();                                           // never implemented
@@ -76,7 +76,7 @@ namespace dbaccess
         StorageXMLInputStream(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
-            const ::rtl::OUString& i_rStreamName
+            const OUString& i_rStreamName
         );
         ~StorageXMLInputStream();
 

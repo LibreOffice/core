@@ -31,20 +31,20 @@ using namespace ::com::sun::star;
 //============================================================
 // com.sun.star.comp.Writer.TextDocument
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw()
 {
     // return only top level services here! All others must be
     // resolved by rtti!
-    uno::Sequence< ::rtl::OUString > aRet ( 1 );
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( "com.sun.star.text.TextDocument" );
+    uno::Sequence< OUString > aRet ( 1 );
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( "com.sun.star.text.TextDocument" );
 
     return aRet;
 }
 
-::rtl::OUString SAL_CALL SwTextDocument_getImplementationName() throw()
+OUString SAL_CALL SwTextDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.Writer.TextDocument" );
+    return OUString( "com.sun.star.comp.Writer.TextDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
@@ -60,20 +60,20 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
 //============================================================
 // com.sun.star.comp.Writer.WebDocument
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw()
 {
     // return only top level services here! All others must be
     // resolved by rtti!
-    uno::Sequence< ::rtl::OUString > aRet ( 1 );
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( "com.sun.star.text.WebDocument" );
+    uno::Sequence< OUString > aRet ( 1 );
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( "com.sun.star.text.WebDocument" );
 
     return aRet;
 }
 
-::rtl::OUString SAL_CALL SwWebDocument_getImplementationName() throw()
+OUString SAL_CALL SwWebDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.Writer.WebDocument" );
+    return OUString( "com.sun.star.comp.Writer.WebDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
@@ -89,18 +89,18 @@ uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
 //============================================================
 // com.sun.star.comp.Writer.GlobalDocument
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw()
 {
-    uno::Sequence< ::rtl::OUString > aRet ( 1 );
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString( "com.sun.star.text.GlobalDocument" );
+    uno::Sequence< OUString > aRet ( 1 );
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString( "com.sun.star.text.GlobalDocument" );
 
     return aRet;
 }
 
-::rtl::OUString SAL_CALL SwGlobalDocument_getImplementationName() throw()
+OUString SAL_CALL SwGlobalDocument_getImplementationName() throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.Writer.GlobalDocument" );
+    return OUString( "com.sun.star.comp.Writer.GlobalDocument" );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(

@@ -34,13 +34,13 @@ using namespace ::com::sun::star::lang;
 
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.sdbc.dbase.ODriver");
+    return OUString("com.sun.star.comp.sdbc.dbase.ODriver");
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
@@ -51,7 +51,7 @@ rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
     return *(new ODriver(_rxFactory));
 }
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -68,47 +68,47 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:dbase:");
 }
 // -----------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
-        Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString("0");
-        aBoolean[1] = ::rtl::OUString("1");
+        Sequence< OUString > aBoolean(2);
+        aBoolean[0] = OUString("0");
+        aBoolean[1] = OUString("1");
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("CharSet")
-                ,::rtl::OUString("CharSet of the database.")
+                OUString("CharSet")
+                ,OUString("CharSet of the database.")
                 ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
+                ,OUString()
+                ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("ShowDeleted")
-                ,::rtl::OUString("Display inactive records.")
+                OUString("ShowDeleted")
+                ,OUString("Display inactive records.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("EnableSQL92Check")
-                ,::rtl::OUString("Use SQL92 naming constraints.")
+                OUString("EnableSQL92Check")
+                ,OUString("Use SQL92 naming constraints.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     }
 
     SharedResources aResources;
-    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }

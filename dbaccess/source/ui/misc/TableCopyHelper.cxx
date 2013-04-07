@@ -81,10 +81,10 @@ OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)
 }
 
 // -----------------------------------------------------------------------------
-void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
-        const ::rtl::OUString& i_rCommand, const sal_Int32 i_nCommandType,
+void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const Reference<XConnection>& i_rSourceConnection,
+        const OUString& i_rCommand, const sal_Int32 i_nCommandType,
         const Reference< XResultSet >& i_rSourceRows, const Sequence< Any >& i_rSelection, const sal_Bool i_bBookmarkSelection,
-        const ::rtl::OUString& i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
+        const OUString& i_rDestDataSource, const Reference<XConnection>& i_rDestConnection)
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
@@ -121,7 +121,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 
         Reference< XCopyTableWizard > xWizard( CopyTableWizard::create( aContext, xSource, xDest ), UNO_SET_THROW );
 
-        ::rtl::OUString sTableNameForAppend( GetTableNameForAppend() );
+        OUString sTableNameForAppend( GetTableNameForAppend() );
         xWizard->setDestinationTableName( GetTableNameForAppend() );
 
         bool bAppendToExisting = !sTableNameForAppend.isEmpty();
@@ -140,12 +140,12 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 }
 
 // -----------------------------------------------------------------------------
-void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const ::rtl::OUString& i_rDestDataSourceName,
+void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteData, const OUString& i_rDestDataSourceName,
                                   const SharedConnection& i_rDestConnection )
 {
-    ::rtl::OUString sSrcDataSourceName = _rPasteData.getDataSource();
+    OUString sSrcDataSourceName = _rPasteData.getDataSource();
 
-    ::rtl::OUString sCommand;
+    OUString sCommand;
     _rPasteData[ daCommand ] >>= sCommand;
 
     Reference<XConnection> xSrcConnection;
@@ -187,7 +187,7 @@ void OTableCopyHelper::pasteTable( const ::svx::ODataAccessDescriptor& _rPasteDa
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
                                   ,const TransferableDataHelper& _rTransData
-                                  ,const ::rtl::OUString& i_rDestDataSource
+                                  ,const OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
     if ( _nFormatId == SOT_FORMATSTR_ID_DBACCESS_TABLE || _nFormatId == SOT_FORMATSTR_ID_DBACCESS_QUERY )
@@ -212,7 +212,7 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
             aTrans.bHtml            = SOT_FORMATSTR_ID_HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !copyTagTable(aTrans,sal_False,_xConnection) )
-                m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString("S1000"),0,Any()));
+                m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,OUString("S1000"),0,Any()));
         }
         catch(const SQLException&)
         {
@@ -224,12 +224,12 @@ void OTableCopyHelper::pasteTable( SotFormatStringId _nFormatId
         }
     }
     else
-        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString("S1000"),0,Any()));
+        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,OUString("S1000"),0,Any()));
 }
 
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
-                                  ,const ::rtl::OUString& i_rDestDataSource
+                                  ,const OUString& i_rDestDataSource
                                   ,const SharedConnection& _xConnection)
 {
     if ( _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE) || _rTransData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
@@ -308,7 +308,7 @@ sal_Bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedD
 }
 // -----------------------------------------------------------------------------
 void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
-                                ,const ::rtl::OUString& i_rDestDataSource
+                                ,const OUString& i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
 {
     if ( _rDesc.aHtmlRtfStorage.Is() )
@@ -323,7 +323,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else if ( !_rDesc.bError )
         pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);
     else
-        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,::rtl::OUString("S1000"),0,Any()));
+        m_pController->showError(SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*m_pController,OUString("S1000"),0,Any()));
 }
 // -----------------------------------------------------------------------------
 //........................................................................

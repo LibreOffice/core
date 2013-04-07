@@ -60,8 +60,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 PADialog* PADialog::Create( Window* pParent, sal_Bool bAdmin )
 {
@@ -435,7 +433,7 @@ void SpaPrinterController::printPage( int ) const
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(aResIds); i++ )
     {
         if( aResIds[i].pDirect )
-            aToken = rtl::OUString::createFromAscii(aResIds[i].pDirect);
+            aToken = OUString::createFromAscii(aResIds[i].pDirect);
         else
             aToken = String( PaResId( aResIds[i].nResId ) );
         nMaxWidth = ( nWidth = pPrinter->GetTextWidth( aToken ) ) > nMaxWidth ? nWidth : nMaxWidth;
@@ -564,7 +562,7 @@ void SpaPrinterController::jobFinished( com::sun::star::view::PrintableState )
 
 void PADialog::PrintTestPage()
 {
-    const rtl::OUString sPrinter( getSelectedDevice() );
+    const OUString sPrinter( getSelectedDevice() );
 
     boost::shared_ptr<Printer> pPrinter( new Printer( sPrinter ) );
 

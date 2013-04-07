@@ -53,12 +53,12 @@ class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::st
 
     // uno interface
     public:
-        virtual void            SAL_CALL setFilter( const ::rtl::OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void            SAL_CALL setFilter( const OUString& sFilter ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getFilter(                                ) throw( ::com::sun::star::uno::RuntimeException );
 
     // member
     private:
-        ::rtl::OUString m_sFilter;
+        OUString m_sFilter;
 
 };  // class ContinuationFilterSelect
 
@@ -67,14 +67,14 @@ class ContinuationFilterSelect : public comphelper::OInteraction< ::com::sun::st
 // initialize continuation with right start values
 //---------------------------------------------------------------------------------------------------------
 ContinuationFilterSelect::ContinuationFilterSelect()
-    : m_sFilter( ::rtl::OUString() )
+    : m_sFilter( OUString() )
 {
 }
 
 //---------------------------------------------------------------------------------------------------------
 // handler should use it after selection to set user specified filter for transport
 //---------------------------------------------------------------------------------------------------------
-void SAL_CALL ContinuationFilterSelect::setFilter( const ::rtl::OUString& sFilter ) throw( css::uno::RuntimeException )
+void SAL_CALL ContinuationFilterSelect::setFilter( const OUString& sFilter ) throw( css::uno::RuntimeException )
 {
     m_sFilter = sFilter;
 }
@@ -82,7 +82,7 @@ void SAL_CALL ContinuationFilterSelect::setFilter( const ::rtl::OUString& sFilte
 //---------------------------------------------------------------------------------------------------------
 // read access to transported filter
 //---------------------------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::RuntimeException )
+OUString SAL_CALL ContinuationFilterSelect::getFilter() throw( css::uno::RuntimeException )
 {
     return m_sFilter;
 }
@@ -90,9 +90,9 @@ void SAL_CALL ContinuationFilterSelect::setFilter( const ::rtl::OUString& sFilte
 class RequestFilterSelect_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
 public:
-    RequestFilterSelect_Impl( const ::rtl::OUString& sURL );
+    RequestFilterSelect_Impl( const OUString& sURL );
     sal_Bool        isAbort  () const;
-    ::rtl::OUString getFilter() const;
+    OUString getFilter() const;
 
 public:
     virtual ::com::sun::star::uno::Any SAL_CALL getRequest() throw( ::com::sun::star::uno::RuntimeException );
@@ -109,9 +109,9 @@ private:
 // initialize instance with all necessary informations
 // We use it without any further checks on our member then ...!
 //---------------------------------------------------------------------------------------------------------
-RequestFilterSelect_Impl::RequestFilterSelect_Impl( const ::rtl::OUString& sURL )
+RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 {
-    ::rtl::OUString temp;
+    OUString temp;
     css::uno::Reference< css::uno::XInterface > temp2;
     css::document::NoSuchFilterRequest aFilterRequest( temp                             ,
                                                        temp2                            ,
@@ -139,7 +139,7 @@ sal_Bool RequestFilterSelect_Impl::isAbort() const
 // return user selected filter
 // Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
 //---------------------------------------------------------------------------------------------------------
-::rtl::OUString RequestFilterSelect_Impl::getFilter() const
+OUString RequestFilterSelect_Impl::getFilter() const
 {
     return m_pFilter->getFilter();
 }
@@ -165,7 +165,7 @@ css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
 }
 
 
-RequestFilterSelect::RequestFilterSelect( const ::rtl::OUString& sURL )
+RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
 {
     pImp = new RequestFilterSelect_Impl( sURL );
     pImp->acquire();
@@ -190,7 +190,7 @@ sal_Bool RequestFilterSelect::isAbort() const
 // return user selected filter
 // Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
 //---------------------------------------------------------------------------------------------------------
-::rtl::OUString RequestFilterSelect::getFilter() const
+OUString RequestFilterSelect::getFilter() const
 {
     return pImp->getFilter();
 }

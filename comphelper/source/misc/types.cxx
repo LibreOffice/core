@@ -111,9 +111,9 @@ float getFloat(const Any& _rAny)
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString getString(const Any& _rAny)
+OUString getString(const Any& _rAny)
 {
-    ::rtl::OUString nReturn;
+    OUString nReturn;
     OSL_VERIFY( _rAny >>= nReturn );
     return nReturn;
 }
@@ -229,7 +229,7 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
             }
             case TypeClass_STRING:
             {
-                ::rtl::OUString aDummy;
+                OUString aDummy;
                 bConversionSuccess = tryCompare(pData, _rValue, bRes, aDummy);
                 break;
             }
@@ -393,20 +393,20 @@ sal_Bool compare_impl(const Type& _rType, const void* pData, const Any& _rValue)
                             memcmp(rLeftSeq.getConstArray(), rRightSeq.getConstArray(), rLeftSeq.getLength()*sizeof(sal_uInt32)) == 0;
                     }
                 }
-                else if (isA(_rType, static_cast< Sequence< ::rtl::OUString >* >(NULL)))
+                else if (isA(_rType, static_cast< Sequence< OUString >* >(NULL)))
                 {
-                    Sequence< ::rtl::OUString > aTemp;
+                    Sequence< OUString > aTemp;
                     bConversionSuccess = _rValue >>= aTemp;
                     if (bConversionSuccess)
                     {
-                        const Sequence< ::rtl::OUString >& rLeftSeq = *reinterpret_cast<const Sequence< ::rtl::OUString>*>(pData);
-                        const Sequence< ::rtl::OUString >& rRightSeq = aTemp;
+                        const Sequence< OUString >& rLeftSeq = *reinterpret_cast<const Sequence< OUString>*>(pData);
+                        const Sequence< OUString >& rRightSeq = aTemp;
                         sal_Int32 nSeqLen = rLeftSeq.getLength();
                         bRes = ( nSeqLen == rRightSeq.getLength() );
                         for ( sal_Int32 n = 0; bRes && ( n < nSeqLen ); n++ )
                         {
-                            const ::rtl::OUString& rS1 = rLeftSeq.getConstArray()[n];
-                            const ::rtl::OUString& rS2 = rRightSeq.getConstArray()[n];
+                            const OUString& rS1 = rLeftSeq.getConstArray()[n];
+                            const OUString& rS2 = rRightSeq.getConstArray()[n];
                             bRes = ( rS1 == rS2 );
                         }
                     }

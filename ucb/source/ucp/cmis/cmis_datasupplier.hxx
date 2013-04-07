@@ -51,7 +51,7 @@ namespace cmis
 
             virtual ~DataSupplier();
 
-            virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
+            virtual OUString queryContentIdentifierString( sal_uInt32 nIndex );
             virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
                 queryContentIdentifier( sal_uInt32 nIndex );
             virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >

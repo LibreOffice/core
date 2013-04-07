@@ -104,7 +104,7 @@ namespace frm
         try
         {
             Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rContext.getUNOContext()) );
-            ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
+            OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XModuleUIConfigurationManagerSupplier > xSuppUIConfig(
                 ModuleUIConfigurationManagerSupplier::create(_rContext.getUNOContext()) );

@@ -75,7 +75,7 @@ public:
     /**
      * @descr   Use file link as image source.
      */
-    void    SetFileLink(rtl::OUString fileName);
+    void    SetFileLink(OUString fileName);
 
     /**
      * @descr   Use base64 stream as image source.
@@ -108,8 +108,8 @@ public:
     friend bool operator==(XFBGImage& img1, XFBGImage& img2);
     friend bool operator!=(XFBGImage& img1, XFBGImage& img2);
 private:
-    rtl::OUString   m_strFileName;
-    rtl::OUString   m_strData;
+    OUString   m_strFileName;
+    OUString   m_strData;
     sal_Bool    m_bUserFileLink;
     sal_Bool    m_bRepeate;
     sal_Bool    m_bStretch;
@@ -118,7 +118,7 @@ private:
     enumXFAlignType m_eVertAlign;
 };
 
-inline void XFBGImage::SetFileLink(rtl::OUString fileName)
+inline void XFBGImage::SetFileLink(OUString fileName)
 {
     m_strFileName = fileName;
     m_bUserFileLink = sal_True;

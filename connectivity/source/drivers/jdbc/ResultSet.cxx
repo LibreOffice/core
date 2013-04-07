@@ -135,7 +135,7 @@ m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::findColumn" );
     static jmethodID mID(NULL);
@@ -340,7 +340,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             if ( t.pEnv->IsInstanceOf(out,java_lang_String::st_getMyClass()) )
             {
                 java_lang_String aVal(t.pEnv,out);
-                aRet <<= (::rtl::OUString)aVal;
+                aRet <<= (OUString)aVal;
             }
             else if ( t.pEnv->IsInstanceOf(out,java_lang_Boolean::st_getMyClass()) )
             {
@@ -381,7 +381,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 // -------------------------------------------------------------------------
 
 
-::rtl::OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getString" );
     static jmethodID mID(NULL);
@@ -687,7 +687,7 @@ void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateString" );
     SDBThreadAttach t;
@@ -841,9 +841,9 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+        const OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_UNKNOWN_COLUMN_TYPE,
-                "$position$", ::rtl::OUString::valueOf(columnIndex)
+                "$position$", OUString::valueOf(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -921,7 +921,7 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
     return callIntMethod("getFetchSize",mID,true);
 }
 //------------------------------------------------------------------------------
-::rtl::OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getCursorName" );
     static jmethodID mID(NULL);
@@ -956,7 +956,7 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,      sal_Int32);
     DECL_PROP0(FETCHSIZE,           sal_Int32);
     DECL_PROP1IMPL(RESULTSETCONCURRENCY,sal_Int32) PropertyAttribute::READONLY);

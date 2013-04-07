@@ -31,7 +31,6 @@
 #include "event.hxx"
 
 
-using ::rtl::OUString;
 using namespace com::sun::star::xml::dom::views;
 
 namespace DOM { namespace events {

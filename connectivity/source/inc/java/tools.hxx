@@ -37,8 +37,8 @@
 namespace connectivity
 {
 
-    jstring convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _Temp);
-    ::rtl::OUString JavaString2String(JNIEnv *pEnv,jstring _Str);
+    jstring convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _Temp);
+    OUString JavaString2String(JNIEnv *pEnv,jstring _Str);
     class java_util_Properties;
 
     java_util_Properties* createStringPropertyArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

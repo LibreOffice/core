@@ -46,10 +46,10 @@ class ScChangeTrackingExportHelper
     ScChangeTrack*  pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
     ScChangeActionMap* pDependings;
-    rtl::OUString   sChangeIDPrefix;
+    OUString   sChangeIDPrefix;
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
 
-    rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
+    OUString GetChangeID(const sal_uInt32 nActionNumber);
     void GetAcceptanceState(const ScChangeAction* pAction);
 
     void WriteBigRange(const ScBigRange& rBigRange, xmloff::token::XMLTokenEnum aName);

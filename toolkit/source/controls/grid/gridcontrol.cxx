@@ -35,7 +35,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/color.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -219,7 +218,7 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_GridControl ) );
+            return uno::makeAny( OUString::createFromAscii( szServiceName_GridControl ) );
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
@@ -319,7 +318,7 @@ namespace
         try
         {
             Reference< XContainer > const xColModel(
-                xModelProps->getPropertyValue( ::rtl::OUString( "ColumnModel" ) ),
+                xModelProps->getPropertyValue( OUString( "ColumnModel" ) ),
                 UNO_QUERY_THROW );
             if ( i_add )
                 xColModel->addContainerListener( i_listener.get() );
@@ -327,7 +326,7 @@ namespace
                 xColModel->removeContainerListener( i_listener.get() );
 
             Reference< XGridDataModel > const xDataModel(
-                xModelProps->getPropertyValue( ::rtl::OUString( "GridDataModel" ) ),
+                xModelProps->getPropertyValue( OUString( "GridDataModel" ) ),
                 UNO_QUERY_THROW
             );
             Reference< XMutableGridDataModel > const xMutableDataModel( xDataModel, UNO_QUERY );

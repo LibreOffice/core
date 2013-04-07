@@ -109,7 +109,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     sal_uInt16          nModifyCount;
     bool                bIsFormulaArranged;
     SmCursor           *pCursor;
-    std::set< rtl::OUString >    aUsedSymbols;   // to export used symbols only when saving
+    std::set< OUString >    aUsedSymbols;   // to export used symbols only when saving
 
 
 
@@ -195,7 +195,7 @@ public:
     const SmNode *  GetFormulaTree() const  { return pTree; }
     void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
 
-    const std::set< rtl::OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
+    const std::set< OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
 
     OUString        GetAccessibleText();
 

@@ -30,9 +30,9 @@ namespace drawinglayer
     {
         ObjectInfoPrimitive2D::ObjectInfoPrimitive2D(
             const Primitive2DSequence& rChildren,
-            const rtl::OUString& rName,
-            const rtl::OUString& rTitle,
-            const rtl::OUString& rDesc)
+            const OUString& rName,
+            const OUString& rTitle,
+            const OUString& rDesc)
         :   GroupPrimitive2D(rChildren),
             maName(rName),
             maTitle(rTitle),

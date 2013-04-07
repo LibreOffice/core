@@ -30,7 +30,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedDirectStateProperty :
 {
 public:
     explicit WrappedDirectStateProperty(
-        const ::rtl::OUString& rOuterName, const ::rtl::OUString& rInnerName );
+        const OUString& rOuterName, const OUString& rInnerName );
     virtual ~WrappedDirectStateProperty();
 
     virtual ::com::sun::star::beans::PropertyState getPropertyState(

@@ -53,8 +53,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_DATA;
 using ::com::sun::star::sheet::DataPilotFieldSortInfo;
@@ -97,7 +95,7 @@ void lclSetValue( const XclImpRoot& rRoot, const ScAddress& rScPos, double fValu
 void XclImpPCItem::WriteToSource( const XclImpRoot& rRoot, const ScAddress& rScPos ) const
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    if( const rtl::OUString* pText = GetText() )
+    if( const OUString* pText = GetText() )
         rDoc.SetString( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pText );
     else if( const double* pfValue = GetDouble() )
         rDoc.SetValue( rScPos.Col(), rScPos.Row(), rScPos.Tab(), *pfValue );
@@ -190,11 +188,11 @@ XclImpPCField::~XclImpPCField()
 
 // general field/item access --------------------------------------------------
 
-const rtl::OUString& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
+const OUString& XclImpPCField::GetFieldName( const ScfStringVec& rVisNames ) const
 {
     if( IsGroupChildField() && (mnFieldIdx < rVisNames.size()) )
     {
-        const rtl::OUString& rVisName = rVisNames[ mnFieldIdx ];
+        const OUString& rVisName = rVisNames[ mnFieldIdx ];
         if (!rVisName.isEmpty())
             return rVisName;
     }
@@ -705,10 +703,10 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
         nScTab = rDoc.GetTableCount();
         rDoc.MakeTable( nScTab );
-        rtl::OUStringBuffer aDummyName(rtl::OUString("DPCache"));
+        OUStringBuffer aDummyName(OUString("DPCache"));
         if( maTabName.Len() > 0 )
             aDummyName.append( '_' ).append( maTabName );
-        rtl::OUString aName = aDummyName.makeStringAndClear();
+        OUString aName = aDummyName.makeStringAndClear();
         rDoc.CreateValidTabName( aName );
         rDoc.RenameTab( nScTab, aName );
         // set sheet index to source range
@@ -889,7 +887,7 @@ XclImpPTItem::XclImpPTItem( const XclImpPCField* pCacheField ) :
 {
 }
 
-const rtl::OUString* XclImpPTItem::GetItemName() const
+const OUString* XclImpPTItem::GetItemName() const
 {
     if( mpCacheField )
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
@@ -905,7 +903,7 @@ void XclImpPTItem::ReadSxvi( XclImpStream& rStrm )
 
 void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
 {
-    if (const rtl::OUString* pItemName = GetItemName())
+    if (const OUString* pItemName = GetItemName())
     {
         ScDPSaveMember& rMember = *rSaveDim.GetMemberByName( *pItemName );
         rMember.SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
@@ -931,16 +929,16 @@ const XclImpPCField* XclImpPTField::GetCacheField() const
     return xPCache ? xPCache->GetField( maFieldInfo.mnCacheIdx ) : 0;
 }
 
-rtl::OUString XclImpPTField::GetFieldName() const
+OUString XclImpPTField::GetFieldName() const
 {
     const XclImpPCField* pField = GetCacheField();
-    return pField ? pField->GetFieldName( mrPTable.GetVisFieldNames() ) : rtl::OUString();
+    return pField ? pField->GetFieldName( mrPTable.GetVisFieldNames() ) : OUString();
 }
 
-rtl::OUString XclImpPTField::GetVisFieldName() const
+OUString XclImpPTField::GetVisFieldName() const
 {
-    const rtl::OUString* pVisName = maFieldInfo.GetVisName();
-    return pVisName ? *pVisName : rtl::OUString();
+    const OUString* pVisName = maFieldInfo.GetVisName();
+    return pVisName ? *pVisName : OUString();
 }
 
 const XclImpPTItem* XclImpPTField::GetItem( sal_uInt16 nItemIdx ) const
@@ -948,7 +946,7 @@ const XclImpPTItem* XclImpPTField::GetItem( sal_uInt16 nItemIdx ) const
     return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
 }
 
-const rtl::OUString* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
+const OUString* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
 {
     const XclImpPTItem* pItem = GetItem( nItemIdx );
     return pItem ? pItem->GetItemName() : 0;
@@ -997,7 +995,7 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
     {
-        const rtl::OUString* pName = GetItemName( maPageInfo.mnSelItem );
+        const OUString* pName = GetItemName( maPageInfo.mnSelItem );
         if (pName)
             pSaveDim->SetCurrentPage(pName);
     }
@@ -1031,7 +1029,7 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
     if (maDataInfoList.empty())
         return;
 
-    rtl::OUString aFieldName = GetFieldName();
+    OUString aFieldName = GetFieldName();
     if (aFieldName.isEmpty())
         return;
 
@@ -1095,7 +1093,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ConvertFieldInfo( rSaveDim );
 
     // visible name
-    if (const rtl::OUString* pVisName = maFieldInfo.GetVisName())
+    if (const OUString* pVisName = maFieldInfo.GetVisName())
         if (!pVisName->isEmpty())
             rSaveDim.SetLayoutName( *pVisName );
 
@@ -1158,7 +1156,7 @@ void XclImpPTField::ConvertDataField( ScDPSaveDimension& rSaveDim, const XclPTDa
 void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const XclPTDataFieldInfo& rDataInfo ) const
 {
     // visible name
-    const rtl::OUString* pVisName = rDataInfo.GetVisName();
+    const OUString* pVisName = rDataInfo.GetVisName();
     if (pVisName && !pVisName->isEmpty())
         rSaveDim.SetLayoutName(*pVisName);
 
@@ -1176,7 +1174,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
         aFieldRef.ReferenceItemType = rDataInfo.GetApiRefItemType();
         if (aFieldRef.ReferenceItemType == sheet::DataPilotFieldReferenceItemType::NAMED)
         {
-            const rtl::OUString* pRefItemName = pRefField->GetItemName(rDataInfo.mnRefItem);
+            const OUString* pRefItemName = pRefField->GetItemName(rDataInfo.mnRefItem);
             if (pRefItemName)
                 aFieldRef.ReferenceItemName = *pRefItemName;
         }
@@ -1230,11 +1228,11 @@ const XclImpPTField* XclImpPivotTable::GetDataField( sal_uInt16 nDataFieldIdx ) 
     return 0;
 }
 
-rtl::OUString XclImpPivotTable::GetDataFieldName( sal_uInt16 nDataFieldIdx ) const
+OUString XclImpPivotTable::GetDataFieldName( sal_uInt16 nDataFieldIdx ) const
 {
     if( const XclImpPTField* pField = GetDataField( nDataFieldIdx ) )
         return pField->GetFieldName();
-    return rtl::OUString();
+    return OUString();
 }
 
 // records --------------------------------------------------------------------
@@ -1479,7 +1477,7 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
 
         sal_uInt16 nMFlag = SC_MF_BUTTON_POPUP;
-        rtl::OUString aName = rDoc.GetString(itr->Col(), itr->Row(), itr->Tab());
+        OUString aName = rDoc.GetString(itr->Col(), itr->Row(), itr->Tab());
         if (rSaveData.HasInvisibleMember(aName))
             nMFlag |= SC_MF_HIDDEN_MEMBER;
 

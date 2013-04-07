@@ -85,7 +85,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
                                 oslGenericFunction *pDeInit );
         static void EnterModalMode();
         static void LeaveModalMode();
-        static rtl::OUString getShortcutName();
+        static OUString getShortcutName();
 
         friend class SfxNotificationListener_Impl;
 
@@ -103,7 +103,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static void addTerminateListener();
 
         static void FileOpen();
-        static void OpenURL( const ::rtl::OUString& aURL, const ::rtl::OUString& rTarget, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& =
+        static void OpenURL( const OUString& aURL, const OUString& rTarget, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& =
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >( 0 ) );
         static void FromTemplate();
 
@@ -115,10 +115,10 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
                     GetWrapperFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSMgr );
-        static ::rtl::OUString  GetImplementationName_static();
+        static OUString  GetImplementationName_static();
 
-        ::rtl::OUString GetResString( int id );
-        ::rtl::OUString GetUrlDescription( const ::rtl::OUString& aUrl );
+        OUString GetResString( int id );
+        OUString GetUrlDescription( const OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
         bool GetVeto()              { return m_bVeto; }
@@ -162,8 +162,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 > m_xDesktop;
 
 #ifdef WNT
-        static void EnableAutostartW32( const rtl::OUString &aShortcutName );
-        static rtl::OUString GetAutostartFolderNameW32();
+        static void EnableAutostartW32( const OUString &aShortcutName );
+        static OUString GetAutostartFolderNameW32();
 #endif
 };
 

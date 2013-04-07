@@ -187,7 +187,7 @@ private:
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
     void                    SVT_DLLPRIVATE ImplSetGraphicManager(
                                 const GraphicManager* pMgr,
-                                const rtl::OString* pID = NULL,
+                                const OString* pID = NULL,
                                 const GraphicObject* pCopyObj = NULL
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
@@ -315,7 +315,7 @@ public:
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );
-                            explicit GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr = NULL );
+                            explicit GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr = NULL );
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
@@ -390,7 +390,7 @@ public:
     void                    SetUserData( const String& rUserData );
     String                  GetUserData() const;
 
-    rtl::OString            GetUniqueID() const;
+    OString            GetUniqueID() const;
 
     GraphicType             GetType() const { return meType; }
     const Size&             GetPrefSize() const { return maPrefSize; }
@@ -487,12 +487,12 @@ public:
     friend SvStream&        operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj );
     friend SvStream&        operator>>( SvStream& rIStm, GraphicObject& rGraphicObj );
 
-    static GraphicObject    CreateGraphicObjectFromURL( const ::rtl::OUString &rURL );
+    static GraphicObject    CreateGraphicObjectFromURL( const OUString &rURL );
     // will inspect an object ( e.g. a control ) for any 'ImageURL'
     // properties and return these in a vector. Note: this implementation
     // will cater for XNameContainer objects and deepinspect any containees
     // if they exist
-    static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< rtl::OUString >& rvEmbedImgUrls );
+    static void InspectForGraphicObjectImageURL( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIf, std::vector< OUString >& rvEmbedImgUrls );
 };
 
 typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
@@ -568,7 +568,7 @@ private:
     void SVT_DLLPRIVATE ImplRegisterObj(
                             const GraphicObject& rObj,
                             Graphic& rSubstitute,
-                            const rtl::OString* pID = NULL,
+                            const OString* pID = NULL,
                             const GraphicObject* pCopyObj = NULL
                         );
     void SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
@@ -582,7 +582,7 @@ private:
                         );
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
-    rtl::OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
+    OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
 
 public:
 

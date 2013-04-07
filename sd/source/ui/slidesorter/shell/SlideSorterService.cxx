@@ -37,7 +37,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 using ::sd::slidesorter::view::Layouter;
 
 namespace sd { namespace slidesorter {
@@ -68,7 +67,7 @@ Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
 
 
 
-::rtl::OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
+OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.SlideSorter");
 }
@@ -76,11 +75,11 @@ Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
 
 
 
-Sequence<rtl::OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.SlideSorter");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.SlideSorter");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

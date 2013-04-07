@@ -38,7 +38,7 @@ class SwLabDlg : public SfxTabDialog
     SwLabPrtPage*   pPrtPage;
 
     std::vector<sal_uInt16> aTypeIds;
-    std::vector<rtl::OUString> aMakes;
+    std::vector<OUString> aMakes;
 
     SwLabRecs*      pRecs;
     String          aLstGroup;
@@ -64,8 +64,8 @@ public:
           std::vector<sal_uInt16> &TypeIds()       { return aTypeIds; }
     const std::vector<sal_uInt16> &TypeIds() const { return aTypeIds; }
 
-    std::vector<rtl::OUString> &Makes() { return aMakes; }
-    const std::vector<rtl::OUString> &Makes() const { return aMakes; }
+    std::vector<OUString> &Makes() { return aMakes; }
+    const std::vector<OUString> &Makes() const { return aMakes; }
 
     Printer *GetPrt();
     inline void ReplaceGroup( const String &rMake );

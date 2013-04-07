@@ -28,7 +28,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -216,13 +215,13 @@ uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL CandleStickChartType::getChartType()
+OUString SAL_CALL CandleStickChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
+uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
     bool bShowFirst = true;
@@ -328,9 +327,9 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
     ::property::OPropertySet::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 }
 
-uno::Sequence< ::rtl::OUString > CandleStickChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > CandleStickChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    uno::Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";

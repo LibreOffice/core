@@ -68,7 +68,7 @@ private:
     int m_nX;
     int m_nY;
     sal_Int16 m_nFlag;            // Set to 12 during initialization
-    ::rtl::OUString m_sURL; // URL of the document to be loaded
+    OUString m_sURL; // URL of the document to be loaded
     sal_Bool m_bInit;       // If the Plugin instance is initilaized.
     NSP_HWND m_hParent;       // Windows handle of parent window
     long m_pParent;       // ID of this instance - get from NPP

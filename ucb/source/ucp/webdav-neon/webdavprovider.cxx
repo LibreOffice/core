@@ -94,8 +94,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString( "com.sun.star.comp.WebDAVContentProvider" ),
-                     rtl::OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     OUString( "com.sun.star.comp.WebDAVContentProvider" ),
+                     OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -121,14 +121,14 @@ ContentProvider::queryContent(
 {
     // Check URL scheme...
 
-    const rtl::OUString aScheme
+    const OUString aScheme
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
     if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME && aScheme != WEBDAV_URL_SCHEME
       && aScheme != DAV_URL_SCHEME && aScheme != DAVS_URL_SCHEME && aScheme != FTP_URL_SCHEME )
         throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
-    rtl::OUString aURL = Identifier->getContentIdentifier();
+    OUString aURL = Identifier->getContentIdentifier();
 
     // At least: <scheme> + "://"
     if ( aURL.getLength() < ( aScheme.getLength() + 3 ) )
@@ -146,21 +146,21 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
-                               rtl::OUString( HTTP_URL_SCHEME ) );
+                               OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAV_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
-                               rtl::OUString( HTTP_URL_SCHEME ) );
+                               OUString( HTTP_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAVS_URL_SCHEME )
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
-                               rtl::OUString( HTTPS_URL_SCHEME ) );
+                               OUString( HTTPS_URL_SCHEME ) );
         bNewId = true;
     }
 
@@ -175,7 +175,7 @@ ContentProvider::queryContent(
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += rtl::OUString("/");
+            aURL += OUString("/");
             bNewId = true;
         }
     }

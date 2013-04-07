@@ -49,7 +49,7 @@ SwOleShell::SwOleShell(SwView &_rView) :
     SwFrameShell(_rView)
 
 {
-    SetName(rtl::OUString("Object"));
+    SetName(OUString("Object"));
     SetHelpId(SW_OLESHELL);
 }
 

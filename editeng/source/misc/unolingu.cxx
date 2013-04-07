@@ -103,7 +103,7 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
-        queryMeanings( const ::rtl::OUString& rTerm,
+        queryMeanings( const OUString& rTerm,
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
@@ -190,7 +190,7 @@ sal_Bool SAL_CALL
 
 uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
         ThesDummy_Impl::queryMeanings(
-                const rtl::OUString& rTerm,
+                const OUString& rTerm,
                 const lang::Locale& rLocale,
                 const beans::PropertyValues& rProperties )
             throw(lang::IllegalArgumentException,
@@ -227,13 +227,13 @@ public:
 
     // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
     virtual sal_Bool SAL_CALL
-        isValid( const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+        isValid( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XSpellAlternatives > SAL_CALL
-        spell( const ::rtl::OUString& rWord, sal_Int16 nLanguage,
+        spell( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
                   ::com::sun::star::uno::RuntimeException);
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL
 
 
 sal_Bool SAL_CALL
-    SpellDummy_Impl::isValid( const rtl::OUString& rWord, sal_Int16 nLanguage,
+    SpellDummy_Impl::isValid( const OUString& rWord, sal_Int16 nLanguage,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
               uno::RuntimeException)
@@ -289,7 +289,7 @@ sal_Bool SAL_CALL
 
 
 uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
-    SpellDummy_Impl::spell( const rtl::OUString& rWord, sal_Int16 nLanguage,
+    SpellDummy_Impl::spell( const OUString& rWord, sal_Int16 nLanguage,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,
               uno::RuntimeException)
@@ -326,7 +326,7 @@ public:
     // XHyphenator
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-        hyphenate( const ::rtl::OUString& rWord,
+        hyphenate( const OUString& rWord,
                 const ::com::sun::star::lang::Locale& rLocale,
                 sal_Int16 nMaxLeading,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
@@ -334,7 +334,7 @@ public:
                   ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
-        queryAlternativeSpelling( const ::rtl::OUString& rWord,
+        queryAlternativeSpelling( const OUString& rWord,
                 const ::com::sun::star::lang::Locale& rLocale,
                 sal_Int16 nIndex,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
@@ -343,7 +343,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XPossibleHyphens > SAL_CALL
         createPossibleHyphens(
-                const ::rtl::OUString& rWord,
+                const OUString& rWord,
                 const ::com::sun::star::lang::Locale& rLocale,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
@@ -387,7 +387,7 @@ sal_Bool SAL_CALL
 
 uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
     HyphDummy_Impl::hyphenate(
-            const rtl::OUString& rWord,
+            const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nMaxLeading,
             const beans::PropertyValues& rProperties )
@@ -404,7 +404,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
 
 uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
     HyphDummy_Impl::queryAlternativeSpelling(
-            const rtl::OUString& rWord,
+            const OUString& rWord,
             const lang::Locale& rLocale,
             sal_Int16 nIndex,
             const PropertyValues& rProperties )
@@ -421,7 +421,7 @@ uno::Reference< linguistic2::XHyphenatedWord > SAL_CALL
 
 uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
     HyphDummy_Impl::createPossibleHyphens(
-            const rtl::OUString& rWord,
+            const OUString& rWord,
             const lang::Locale& rLocale,
             const beans::PropertyValues& rProperties )
         throw(lang::IllegalArgumentException,

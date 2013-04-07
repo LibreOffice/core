@@ -81,7 +81,7 @@ struct SAL_DLLPRIVATE GlobalSyncData
     std::deque< Rectangle >                     mParaRects;
     std::deque< sal_Int32 >                     mParaInts;
     std::deque< sal_uInt32 >                    mParauInts;
-    std::deque< rtl::OUString >                 mParaOUStrings;
+    std::deque< OUString >                 mParaOUStrings;
     std::deque< PDFWriter::DestAreaType >       mParaDestAreaTypes;
     std::deque< PDFNote >                       mParaPDFNotes;
     std::deque< PDFWriter::PageTransition >     mParaPageTransitions;
@@ -290,7 +290,7 @@ struct SAL_DLLPRIVATE PageSyncData
     std::deque< PDFExtOutDevDataSync >              mActions;
     std::deque< Rectangle >                         mParaRects;
     std::deque< sal_Int32 >                         mParaInts;
-    std::deque< rtl::OUString >                     mParaOUStrings;
+    std::deque< OUString >                     mParaOUStrings;
     std::deque< PDFWriter::StructElement >          mParaStructElements;
     std::deque< PDFWriter::StructAttribute >        mParaStructAttributes;
     std::deque< PDFWriter::StructAttributeValue >   mParaStructAttributeValues;
@@ -691,14 +691,14 @@ sal_Int32 PDFExtOutDevData::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
     mpGlobalSyncData->mParaInts.push_back( nDestId );
     return 0;
 }
-sal_Int32 PDFExtOutDevData::SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL )
+sal_Int32 PDFExtOutDevData::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::SetLinkURL );
     mpGlobalSyncData->mParaInts.push_back( nLinkId );
     mpGlobalSyncData->mParaOUStrings.push_back( rURL );
     return 0;
 }
-sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const rtl::OUString& rText, sal_Int32 nDestID )
+sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateOutlineItem );
     mpGlobalSyncData->mParaInts.push_back( nParent );
@@ -724,7 +724,7 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
 
 /* local (page), actions have to be played synchroniously to the actions of
    of the recorded metafile (created by each xRenderable->render()) */
-   sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
+   sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
     mpPageSyncData->mParaStructElements.push_back( eType );

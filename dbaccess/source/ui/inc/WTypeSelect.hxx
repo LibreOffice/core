@@ -49,7 +49,7 @@ namespace dbaui
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap* getTypeInfo() const;
         virtual sal_Bool            isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString     getAutoIncrementValue() const;
+        virtual OUString     getAutoIncrementValue() const;
 
     public:
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL);
@@ -102,7 +102,7 @@ namespace dbaui
 
         Image                   m_imgPKey;
         SvStream*               m_pParserStream; // stream to read the tokens from or NULL
-        ::rtl::OUString         m_sAutoIncrementValue;
+        OUString         m_sAutoIncrementValue;
         sal_Int32               m_nDisplayRow;
         sal_Bool                m_bAutoIncrementEnabled;
         sal_Bool                m_bDuplicateName;

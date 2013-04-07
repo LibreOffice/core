@@ -52,8 +52,8 @@ protected:
     sal_uInt8 GetMixedColorComp( sal_uInt8 nFore, sal_uInt8 nBack, sal_uInt8 nTrans ) const;
     css::uno::Any GetIndexColor( const sal_Int32& nColorIndex );
     sal_Int32 GetColorIndex( const sal_Int32 nColor );
-    css::uno::Any GetUserDefinedAttributes( const rtl::OUString& sName );
-    void SetUserDefinedAttributes( const rtl::OUString& sName, const css::uno::Any& aValue );
+    css::uno::Any GetUserDefinedAttributes( const OUString& sName );
+    void SetUserDefinedAttributes( const OUString& sName, const css::uno::Any& aValue );
     void SetMixedColor();
 public:
         ScVbaInterior( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -73,8 +73,8 @@ public:
     virtual css::uno::Any SAL_CALL getPatternColorIndex() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif
 

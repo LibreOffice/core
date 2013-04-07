@@ -50,7 +50,7 @@ public:
     virtual ~SchXMLExportHelper();
 
     /// returns the string corresponding to the current FileFormat CLSID for Chart
-    const rtl::OUString& getChartCLSID();
+    const OUString& getChartCLSID();
 
 private:
     SchXMLExportHelper(); // not defined

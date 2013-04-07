@@ -48,7 +48,7 @@ namespace {
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
-rtl::OUString getTwoDigitString(sal_Int32 nValue)
+OUString getTwoDigitString(sal_Int32 nValue)
 {
     OUString aRet = OUString::number( nValue );
     if ( aRet.getLength() < 2 )
@@ -56,17 +56,17 @@ rtl::OUString getTwoDigitString(sal_Int32 nValue)
     return aRet;
 }
 
-void appendDateStr(rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter)
+void appendDateStr(OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter)
 {
     sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-    rtl::OUString aString;
+    OUString aString;
     pFormatter->GetInputLineString(fValue, nFormat, aString);
     rBuffer.append(aString);
 }
 
-rtl::OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pFormatter)
+OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pFormatter)
 {
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.append(sal_Unicode(bFirst ? '<' : '>'));
     appendDateStr(aBuffer, fValue, pFormatter);
     return aBuffer.makeStringAndClear();
@@ -74,7 +74,7 @@ rtl::OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* 
 
 }
 
-bool ScDPUtil::isDuplicateDimension(const rtl::OUString& rName)
+bool ScDPUtil::isDuplicateDimension(const OUString& rName)
 {
     if (rName.isEmpty())
         return false;
@@ -83,24 +83,24 @@ bool ScDPUtil::isDuplicateDimension(const rtl::OUString& rName)
     return cLast == sal_Unicode('*');
 }
 
-rtl::OUString ScDPUtil::getSourceDimensionName(const rtl::OUString& rName)
+OUString ScDPUtil::getSourceDimensionName(const OUString& rName)
 {
     return comphelper::string::stripEnd(rName, '*');
 }
 
-rtl::OUString ScDPUtil::createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount)
+OUString ScDPUtil::createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount)
 {
     if (!nDupCount)
         return rOriginal;
 
-    rtl::OUStringBuffer aBuf(rOriginal);
+    OUStringBuffer aBuf(rOriginal);
     for (size_t i = 0; i < nDupCount; ++i)
         aBuf.append(sal_Unicode('*'));
 
     return aBuf.makeStringAndClear();
 }
 
-rtl::OUString ScDPUtil::getDateGroupName(
+OUString ScDPUtil::getDateGroupName(
         sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
         double fStart, double fEnd)
 {
@@ -112,7 +112,7 @@ rtl::OUString ScDPUtil::getDateGroupName(
     switch ( nDatePart )
     {
         case sheet::DataPilotFieldGroupBy::YEARS:
-            return rtl::OUString::valueOf(nValue);
+            return OUString::valueOf(nValue);
         case sheet::DataPilotFieldGroupBy::QUARTERS:
             return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
         case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
@@ -140,7 +140,7 @@ rtl::OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::MINUTES:
         case sheet::DataPilotFieldGroupBy::SECONDS:
         {
-            rtl::OUStringBuffer aBuf(ScGlobal::pLocaleData->getTimeSep());
+            OUStringBuffer aBuf(ScGlobal::pLocaleData->getTimeSep());
             aBuf.append(getTwoDigitString(nValue));
             return aBuf.makeStringAndClear();
         }
@@ -149,7 +149,7 @@ rtl::OUString ScDPUtil::getDateGroupName(
             OSL_FAIL("invalid date part");
     }
 
-    return rtl::OUString::createFromAscii("FIXME: unhandled value");
+    return OUString::createFromAscii("FIXME: unhandled value");
 }
 
 double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo)
@@ -195,20 +195,20 @@ double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rI
 
 namespace {
 
-void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
+void lcl_AppendDateStr( OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
 {
     sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-    rtl::OUString aString;
+    OUString aString;
     pFormatter->GetInputLineString( fValue, nFormat, aString );
     rBuffer.append( aString );
 }
 
-rtl::OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
+OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
     bool bDateValues, SvNumberFormatter* pFormatter )
 {
     OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
 
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
     if ( bDateValues )
         lcl_AppendDateStr( aBuffer, fValue, pFormatter );
@@ -218,7 +218,7 @@ rtl::OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicod
     return aBuffer.makeStringAndClear();
 }
 
-rtl::OUString lcl_GetNumGroupName(
+OUString lcl_GetNumGroupName(
     double fStartValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep,
     SvNumberFormatter* pFormatter)
 {
@@ -244,7 +244,7 @@ rtl::OUString lcl_GetNumGroupName(
         fEndValue = rInfo.mfEnd;
     }
 
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     if ( rInfo.mbDateValues )
     {
         lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
@@ -265,7 +265,7 @@ rtl::OUString lcl_GetNumGroupName(
 
 }
 
-rtl::OUString ScDPUtil::getNumGroupName(
+OUString ScDPUtil::getNumGroupName(
     double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep, SvNumberFormatter* pFormatter)
 {
     if ( fValue < rInfo.mfStart && !rtl::math::approxEqual( fValue, rInfo.mfStart ) )

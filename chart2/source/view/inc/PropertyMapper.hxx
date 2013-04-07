@@ -32,14 +32,14 @@ namespace chart
 /**
 */
 
-typedef ::std::map< ::rtl::OUString, ::rtl::OUString >            tPropertyNameMap;
-typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakePropertyNameMap;
+typedef ::std::map< OUString, OUString >            tPropertyNameMap;
+typedef ::comphelper::MakeMap< OUString, OUString > tMakePropertyNameMap;
 
-typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any >            tPropertyNameValueMap;
-typedef ::comphelper::MakeMap< ::rtl::OUString, ::com::sun::star::uno::Any > tMakePropertyNameValueMap;
+typedef ::std::map< OUString, ::com::sun::star::uno::Any >            tPropertyNameValueMap;
+typedef ::comphelper::MakeMap< OUString, ::com::sun::star::uno::Any > tMakePropertyNameValueMap;
 
-typedef ::com::sun::star::uno::Sequence< rtl::OUString > tNameSequence;
-typedef ::comphelper::MakeSequence< rtl::OUString >      tMakeNameSequence;
+typedef ::com::sun::star::uno::Sequence< OUString > tNameSequence;
+typedef ::comphelper::MakeSequence< OUString >      tMakeNameSequence;
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > tAnySequence;
 typedef ::comphelper::MakeSequence< ::com::sun::star::uno::Any >      tMakeAnySequence;
@@ -78,7 +78,7 @@ public:
     static ::com::sun::star::uno::Any*
                 getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
-                         , const rtl::OUString& rPropName );
+                         , const OUString& rPropName );
 
     static ::com::sun::star::uno::Any*
                 getValuePointerForLimitedSpace( tAnySequence& rPropValues

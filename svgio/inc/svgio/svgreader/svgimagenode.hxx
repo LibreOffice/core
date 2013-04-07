@@ -43,11 +43,11 @@ namespace svgio
             SvgNumber               maWidth;
             SvgNumber               maHeight;
 
-            rtl::OUString           maXLink;        // internal link
-            rtl::OUString           maUrl;          // external link
+            OUString           maXLink;        // internal link
+            OUString           maUrl;          // external link
 
-            rtl::OUString           maMimeType;     // mimetype and
-            rtl::OUString           maData;         // base64 data
+            OUString           maMimeType;     // mimetype and
+            OUString           maData;         // base64 data
 
         public:
             SvgImageNode(
@@ -56,7 +56,7 @@ namespace svgio
             virtual ~SvgImageNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
             /// SvgAspectRatio content
@@ -84,7 +84,7 @@ namespace svgio
             void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
 
             /// XLink access
-            const rtl::OUString& getXLink() const { return maXLink; }
+            const OUString& getXLink() const { return maXLink; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

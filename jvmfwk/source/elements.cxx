@@ -38,7 +38,7 @@ using namespace osl;
 namespace jfw
 {
 
-rtl::OString getElement(::rtl::OString const & docPath,
+OString getElement(OString const & docPath,
                         xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
     //Prepare the xml document and context
@@ -47,7 +47,7 @@ rtl::OString getElement(::rtl::OString const & docPath,
     if (doc == NULL)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElement "
+            OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
 
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
@@ -55,18 +55,18 @@ rtl::OString getElement(::rtl::OString const & docPath,
         (xmlChar*) NS_JAVA_FRAMEWORK) == -1)
         throw FrameworkException(
             JFW_E_ERROR,
-            rtl::OString("[Java framework] Error in function getElement "
+            OString("[Java framework] Error in function getElement "
                          "(elements.cxx)"));
 
     CXPathObjectPtr pathObj;
     pathObj = xmlXPathEvalExpression(pathExpression, context);
-    rtl::OString sValue;
+    OString sValue;
     if (xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
     {
         if (bThrowIfEmpty)
             throw FrameworkException(
                 JFW_E_ERROR,
-                rtl::OString("[Java framework] Error in function getElement "
+                OString("[Java framework] Error in function getElement "
                              "(elements.cxx)"));
     }
     else
@@ -76,7 +76,7 @@ rtl::OString getElement(::rtl::OString const & docPath,
     return sValue;
 }
 
-rtl::OString getElementUpdated()
+OString getElementUpdated()
 {
     return getElement(jfw::getVendorSettingsPath(),
                       (xmlChar*)"/jf:javaSelection/jf:updated/text()", true);
@@ -84,7 +84,7 @@ rtl::OString getElementUpdated()
 
 void createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 {
-    rtl::OString sExcMsg("[Java framework] Error in function createSettingsStructure "
+    OString sExcMsg("[Java framework] Error in function createSettingsStructure "
                          "(elements.cxx).");
     xmlNode * root = xmlDocGetRootElement(document);
     if (root == NULL)
@@ -174,7 +174,7 @@ VersionInfo::~VersionInfo()
     delete [] arVersions;
 }
 
-void VersionInfo::addExcludeVersion(const rtl::OUString& sVersion)
+void VersionInfo::addExcludeVersion(const OUString& sVersion)
 {
     vecExcludeVersions.push_back(sVersion);
 }
@@ -187,7 +187,7 @@ rtl_uString** VersionInfo::getExcludeVersions()
 
     arVersions = new rtl_uString*[vecExcludeVersions.size()];
     int j=0;
-    typedef std::vector<rtl::OUString>::const_iterator it;
+    typedef std::vector<OUString>::const_iterator it;
     for (it i = vecExcludeVersions.begin(); i != vecExcludeVersions.end();
          ++i, ++j)
     {
@@ -216,7 +216,7 @@ NodeJava::NodeJava(Layer layer):
 
 void NodeJava::load()
 {
-    const rtl::OString sExcMsg("[Java framework] Error in function NodeJava::load"
+    const OString sExcMsg("[Java framework] Error in function NodeJava::load"
                              "(elements.cxx).");
     if (SHARED == m_layer)
     {
@@ -249,7 +249,7 @@ void NodeJava::load()
 
 
     //Read the user elements
-    rtl::OString sSettingsPath = getSettingsPath();
+    OString sSettingsPath = getSettingsPath();
     //There must not be a share settings file
     CXmlDocPtr docUser(xmlParseFile(sSettingsPath.getStr()));
     if (docUser == NULL)
@@ -290,7 +290,7 @@ void NodeJava::load()
             {
                 CXmlCharPtr sUser(xmlNodeListGetString(
                     docUser, cur->children, 1));
-                m_userClassPath = boost::optional<rtl::OUString>(rtl::OUString(sUser));
+                m_userClassPath = boost::optional<OUString>(OUString(sUser));
             }
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "javaInfo") == 0)
@@ -316,8 +316,8 @@ void NodeJava::load()
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 if ( ! m_vmParameters)
-                    m_vmParameters = boost::optional<std::vector<rtl::OUString> >(
-                        std::vector<rtl::OUString> ());
+                    m_vmParameters = boost::optional<std::vector<OUString> >(
+                        std::vector<OUString> ());
 
                 xmlNode * pOpt = cur->children;
                 while (pOpt != NULL)
@@ -342,8 +342,8 @@ void NodeJava::load()
             if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
             {
                 if (! m_JRELocations)
-                    m_JRELocations = boost::optional<std::vector<rtl::OUString> >(
-                        std::vector<rtl::OUString>());
+                    m_JRELocations = boost::optional<std::vector<OUString> >(
+                        std::vector<OUString>());
 
                 xmlNode * pLoc = cur->children;
                 while (pLoc != NULL)
@@ -363,9 +363,9 @@ void NodeJava::load()
     }
 }
 
-::rtl::OString NodeJava::getSettingsPath() const
+OString NodeJava::getSettingsPath() const
 {
-    ::rtl::OString ret;
+    OString ret;
     switch (m_layer)
     {
     case USER: ret = getUserSettingsPath(); break;
@@ -376,9 +376,9 @@ void NodeJava::load()
     return ret;
 }
 
-::rtl::OUString NodeJava::getSettingsURL() const
+OUString NodeJava::getSettingsURL() const
 {
-    ::rtl::OUString ret;
+    OUString ret;
     switch (m_layer)
     {
     case USER: ret = BootParams::getUserData(); break;
@@ -391,14 +391,14 @@ void NodeJava::load()
 
 bool NodeJava::prepareSettingsDocument() const
 {
-    rtl::OString sExcMsg(
+    OString sExcMsg(
         "[Java framework] Error in function prepareSettingsDocument"
         " (elements.cxx).");
     if (!createSettingsDocument())
     {
         return false;
     }
-    rtl::OString sSettings = getSettingsPath();
+    OString sSettings = getSettingsPath();
     CXmlDocPtr doc(xmlParseFile(sSettings.getStr()));
     if (!doc)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -416,7 +416,7 @@ bool NodeJava::prepareSettingsDocument() const
 
 void NodeJava::write() const
 {
-    rtl::OString sExcMsg("[Java framework] Error in function NodeJava::writeSettings "
+    OString sExcMsg("[Java framework] Error in function NodeJava::writeSettings "
                          "(elements.cxx).");
     CXmlDocPtr docUser;
     CXPathContextPtr contextUser;
@@ -429,7 +429,7 @@ void NodeJava::write() const
     }
 
     //Read the user elements
-    rtl::OString sSettingsPath = getSettingsPath();
+    OString sSettingsPath = getSettingsPath();
     docUser = xmlParseFile(sSettingsPath.getStr());
     if (docUser == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
@@ -448,7 +448,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_enabled)
     {
-        rtl::OString sExpression= rtl::OString(
+        OString sExpression= OString(
             "/jf:java/jf:enabled");
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
@@ -471,7 +471,7 @@ void NodeJava::write() const
     //The element must exist
     if (m_userClassPath)
     {
-        rtl::OString sExpression= rtl::OString(
+        OString sExpression= OString(
             "/jf:java/jf:userClassPath");
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
@@ -486,7 +486,7 @@ void NodeJava::write() const
     //set <javaInfo> element
     if (m_javaInfo)
     {
-        rtl::OString sExpression= rtl::OString(
+        OString sExpression= OString(
             "/jf:java/jf:javaInfo");
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                                 contextUser);
@@ -499,7 +499,7 @@ void NodeJava::write() const
     //set <vmParameters> element
     if (m_vmParameters)
     {
-        rtl::OString sExpression= rtl::OString(
+        OString sExpression= OString(
             "/jf:java/jf:vmParameters");
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
@@ -526,7 +526,7 @@ void NodeJava::write() const
             xmlAddChild(vmParameters, nodeCrLf);
         }
 
-        typedef std::vector<rtl::OUString>::const_iterator cit;
+        typedef std::vector<OUString>::const_iterator cit;
         for (cit i = m_vmParameters->begin(); i != m_vmParameters->end(); ++i)
         {
             xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
@@ -540,7 +540,7 @@ void NodeJava::write() const
     //set <jreLocations> element
     if (m_JRELocations)
     {
-        rtl::OString sExpression= rtl::OString(
+        OString sExpression= OString(
             "/jf:java/jf:jreLocations");
         pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                          contextUser);
@@ -567,7 +567,7 @@ void NodeJava::write() const
             xmlAddChild(jreLocationsNode, nodeCrLf);
         }
 
-        typedef std::vector<rtl::OUString>::const_iterator cit;
+        typedef std::vector<OUString>::const_iterator cit;
         for (cit i = m_JRELocations->begin(); i != m_JRELocations->end(); ++i)
         {
             xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
@@ -588,9 +588,9 @@ void NodeJava::setEnabled(sal_Bool bEnabled)
 }
 
 
-void NodeJava::setUserClassPath(const rtl::OUString & sClassPath)
+void NodeJava::setUserClassPath(const OUString & sClassPath)
 {
-    m_userClassPath = boost::optional<rtl::OUString>(sClassPath);
+    m_userClassPath = boost::optional<OUString>(sClassPath);
 }
 
 void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
@@ -613,7 +613,7 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
     else
     {
         m_javaInfo->m_bEmptyNode = true;
-        rtl::OUString sEmpty;
+        OUString sEmpty;
         m_javaInfo->sVendor = sEmpty;
         m_javaInfo->sLocation = sEmpty;
         m_javaInfo->sVersion = sEmpty;
@@ -627,14 +627,14 @@ void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
 {
     OSL_ASSERT( !(arOptions == 0 && size != 0));
     if ( ! m_vmParameters)
-        m_vmParameters = boost::optional<std::vector<rtl::OUString> >(
-            std::vector<rtl::OUString>());
+        m_vmParameters = boost::optional<std::vector<OUString> >(
+            std::vector<OUString>());
     m_vmParameters->clear();
     if (arOptions != NULL)
     {
         for (int i  = 0; i < size; i++)
         {
-            const rtl::OUString sOption(static_cast<rtl_uString*>(arOptions[i]));
+            const OUString sOption(static_cast<rtl_uString*>(arOptions[i]));
             m_vmParameters->push_back(sOption);
         }
     }
@@ -644,17 +644,17 @@ void NodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
 {
     OSL_ASSERT( !(arLocations == 0 && size != 0));
     if (! m_JRELocations)
-        m_JRELocations = boost::optional<std::vector<rtl::OUString> > (
-            std::vector<rtl::OUString>());
+        m_JRELocations = boost::optional<std::vector<OUString> > (
+            std::vector<OUString>());
     m_JRELocations->clear();
     if (arLocations != NULL)
     {
         for (int i  = 0; i < size; i++)
         {
-            const rtl::OUString & sLocation = static_cast<rtl_uString*>(arLocations[i]);
+            const OUString & sLocation = static_cast<rtl_uString*>(arLocations[i]);
 
             //only add the path if not already present
-            std::vector<rtl::OUString>::const_iterator it =
+            std::vector<OUString>::const_iterator it =
                 std::find(m_JRELocations->begin(), m_JRELocations->end(),
                           sLocation);
             if (it == m_JRELocations->end())
@@ -667,14 +667,14 @@ void NodeJava::addJRELocation(rtl_uString * sLocation)
 {
     OSL_ASSERT( sLocation);
     if (!m_JRELocations)
-        m_JRELocations = boost::optional<std::vector<rtl::OUString> >(
-            std::vector<rtl::OUString> ());
+        m_JRELocations = boost::optional<std::vector<OUString> >(
+            std::vector<OUString> ());
      //only add the path if not already present
-    std::vector<rtl::OUString>::const_iterator it =
+    std::vector<OUString>::const_iterator it =
         std::find(m_JRELocations->begin(), m_JRELocations->end(),
-                  rtl::OUString(sLocation));
+                  OUString(sLocation));
     if (it == m_JRELocations->end())
-        m_JRELocations->push_back(rtl::OUString(sLocation));
+        m_JRELocations->push_back(OUString(sLocation));
 }
 
 const boost::optional<sal_Bool> & NodeJava::getEnabled() const
@@ -682,18 +682,18 @@ const boost::optional<sal_Bool> & NodeJava::getEnabled() const
     return m_enabled;
 }
 
-const boost::optional<std::vector<rtl::OUString> >&
+const boost::optional<std::vector<OUString> >&
 NodeJava::getJRELocations() const
 {
     return m_JRELocations;
 }
 
-const boost::optional<rtl::OUString> & NodeJava::getUserClassPath() const
+const boost::optional<OUString> & NodeJava::getUserClassPath() const
 {
     return m_userClassPath;
 }
 
-const boost::optional<std::vector<rtl::OUString> > & NodeJava::getVmParameters() const
+const boost::optional<std::vector<OUString> > & NodeJava::getVmParameters() const
 {
     return m_vmParameters;
 }
@@ -740,13 +740,13 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
 
 bool NodeJava::createSettingsDocument() const
 {
-    const rtl::OUString sURL = getSettingsURL();
+    const OUString sURL = getSettingsURL();
     if (sURL.isEmpty())
     {
         return false;
     }
     //make sure there is a user directory
-    rtl::OString sExcMsg("[Java framework] Error in function createSettingsDocument "
+    OString sExcMsg("[Java framework] Error in function createSettingsDocument "
                          "(elements.cxx).");
     // check if javasettings.xml already exist
     if (FILE_OK == checkSettingsFileStatus(sURL))
@@ -787,7 +787,7 @@ bool NodeJava::createSettingsDocument() const
     if (xmlAddPrevSibling(root, com) == NULL)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    const rtl::OString path = getSettingsPath();
+    const OString path = getSettingsPath();
     if (xmlSaveFormatFileEnc(path.getStr(), doc,"UTF-8", 1) == -1)
          throw FrameworkException(JFW_E_ERROR, sExcMsg);
     return true;
@@ -806,7 +806,7 @@ CNodeJavaInfo::~CNodeJavaInfo()
 
 void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
 {
-    rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
+    OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
                          "(elements.cxx).");
 
     OSL_ASSERT(pJavaInfo && pDoc);
@@ -874,7 +874,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             CXmlCharPtr xmlFeatures;
             xmlFeatures = xmlNodeListGetString(
                     pDoc, cur->children, 1);
-            rtl::OUString sFeatures = xmlFeatures;
+            OUString sFeatures = xmlFeatures;
             nFeatures = sFeatures.toInt64(16);
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "requirements") == 0)
@@ -882,7 +882,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
             CXmlCharPtr xmlRequire;
             xmlRequire = xmlNodeListGetString(
                 pDoc, cur->children, 1);
-            rtl::OUString sRequire = xmlRequire;
+            OUString sRequire = xmlRequire;
             nRequirements = sRequire.toInt64(16);
 #ifdef MACOSX
             //javaldx is not used anymore in the mac build. In case the Java
@@ -931,7 +931,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
     //javaInfo@vendorUpdate
     //creates the attribute if necessary
-    rtl::OString sUpdated = getElementUpdated();
+    OString sUpdated = getElementUpdated();
 
     xmlSetProp(pJavaInfoNode, (xmlChar*)"vendorUpdate",
                (xmlChar*) sUpdated.getStr());
@@ -992,7 +992,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
     xmlAddChild(pJavaInfoNode, nodeCrLf);
 
     //Create the features element
-    rtl::OUString sFeatures = rtl::OUString::valueOf(
+    OUString sFeatures = OUString::valueOf(
         (sal_Int64)nFeatures, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "features",
                     CXmlCharPtr(sFeatures));
@@ -1002,7 +1002,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 
     //Create the requirements element
-    rtl::OUString sRequirements = rtl::OUString::valueOf(
+    OUString sRequirements = OUString::valueOf(
         (sal_Int64) nRequirements, 16);
     xmlNewTextChild(pJavaInfoNode, NULL, (xmlChar*) "requirements",
                     CXmlCharPtr(sRequirements));
@@ -1097,23 +1097,23 @@ bool MergedSettings::getEnabled() const
 {
     return m_bEnabled;
 }
-const rtl::OUString&  MergedSettings::getUserClassPath() const
+const OUString&  MergedSettings::getUserClassPath() const
 {
     return m_sClassPath;
 }
 
-::std::vector< ::rtl::OString> MergedSettings::getVmParametersUtf8() const
+::std::vector< OString> MergedSettings::getVmParametersUtf8() const
 {
-    ::std::vector< ::rtl::OString> ret;
-    typedef ::std::vector< ::rtl::OUString>::const_iterator cit;
+    ::std::vector< OString> ret;
+    typedef ::std::vector< OUString>::const_iterator cit;
     for (cit i = m_vmParams.begin(); i != m_vmParams.end(); ++i)
     {
-        ret.push_back( ::rtl::OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
+        ret.push_back( OUStringToOString(*i, RTL_TEXTENCODING_UTF8));
     }
     return ret;
 }
 
-const ::rtl::OString  & MergedSettings::getJavaInfoAttrVendorUpdate() const
+const OString  & MergedSettings::getJavaInfoAttrVendorUpdate() const
 {
     return m_javaInfo.sAttrVendorUpdate;
 }
@@ -1141,7 +1141,7 @@ void MergedSettings::getVmParametersArray(
         return;
 
     int j=0;
-    typedef std::vector<rtl::OUString>::const_iterator it;
+    typedef std::vector<OUString>::const_iterator it;
     for (it i = m_vmParams.begin(); i != m_vmParams.end();
          ++i, ++j)
     {
@@ -1163,7 +1163,7 @@ void MergedSettings::getJRELocations(
         return;
 
     int j=0;
-    typedef std::vector<rtl::OUString>::const_iterator it;
+    typedef std::vector<OUString>::const_iterator it;
     for (it i = m_JRELocations.begin(); i != m_JRELocations.end();
          ++i, ++j)
     {
@@ -1172,7 +1172,7 @@ void MergedSettings::getJRELocations(
     }
     *size = m_JRELocations.size();
 }
-const std::vector<rtl::OUString> & MergedSettings::getJRELocations() const
+const std::vector<OUString> & MergedSettings::getJRELocations() const
 {
     return m_JRELocations;
 }

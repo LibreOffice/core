@@ -103,15 +103,15 @@ public:
 
 public: // XDriver
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect(
-        const ::rtl::OUString& url,
+        const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL acceptsURL( const ::rtl::OUString& url )
+    virtual sal_Bool SAL_CALL acceptsURL( const OUString& url )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(
-        const ::rtl::OUString& url,
+        const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -120,12 +120,12 @@ public: // XDriver
 
 public: // XServiceInfo
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
         throw(::com::sun::star::uno::RuntimeException);
 
 public: // XDataDefinitionSupplier
@@ -135,7 +135,7 @@ public: // XDataDefinitionSupplier
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByURL(
-        const ::rtl::OUString& url,
+        const OUString& url,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 

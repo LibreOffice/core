@@ -121,7 +121,7 @@ namespace sfx2
 
         //................................................................
         sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& rxHandler,
-            const ::rtl::OUString& rDocumentLocation )
+            const OUString& rDocumentLocation )
         {
             DocumentMacroConfirmationRequest aRequest;
             aRequest.DocumentURL = rDocumentLocation;
@@ -217,14 +217,14 @@ namespace sfx2
 
         try
         {
-            ::rtl::OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
+            OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
 
             // get document location from medium name and check whether it is a trusted one
             // the service is created ohne document version, since it is not of interest here
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
             INetURLObject aURLReferer( sReferrer );
 
-            ::rtl::OUString aLocation;
+            OUString aLocation;
             if ( aURLReferer.removeSegment() )
                 aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -295,9 +295,9 @@ namespace sfx2
 
         if ( eAutoConfirm == eNoAutoConfirm )
         {
-            ::rtl::OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
+            OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
 
-            ::rtl::OUString aSystemFileURL;
+            OUString aSystemFileURL;
             if ( osl::FileBase::getSystemPathFromFileURL( sReferrer, aSystemFileURL ) == osl::FileBase::E_None )
                 sReferrer = aSystemFileURL;
 
@@ -331,8 +331,8 @@ namespace sfx2
                     bHasMacroLib = sal_False;
                 else
                 {
-                    ::rtl::OUString aStdLibName( "Standard" );
-                    Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
+                    OUString aStdLibName( "Standard" );
+                    Sequence< OUString > aElements = xContainer->getElementNames();
                     if ( aElements.getLength() )
                     {
                         if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
@@ -393,8 +393,8 @@ namespace sfx2
         {
             try
             {
-                const ::rtl::OUString s_sBasicStorageName( ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ) );
-                const ::rtl::OUString s_sScriptsStorageName( ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Scripts" ) ) );
+                const OUString s_sBasicStorageName( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Basic" ) ) );
+                const OUString s_sScriptsStorageName( OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "Scripts" ) ) );
 
                 bHasMacros =(   (   rxStorage->hasByName( s_sBasicStorageName )
                                 &&  rxStorage->isStorageElement( s_sBasicStorageName )

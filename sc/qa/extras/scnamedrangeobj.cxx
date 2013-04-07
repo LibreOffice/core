@@ -49,7 +49,7 @@ public:
     virtual void tearDown();
 
     virtual uno::Reference< uno::XInterface > init();
-    virtual uno::Reference< sheet::XNamedRange > getNamedRange(const rtl::OUString& rRangeName);
+    virtual uno::Reference< sheet::XNamedRange > getNamedRange(const OUString& rRangeName);
 
     CPPUNIT_TEST_SUITE(ScNamedRangeObj);
     CPPUNIT_TEST(testGetContent);
@@ -74,28 +74,28 @@ uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
         UnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XNamed(rtl::OUString("NamedRange")),
+        apitest::XNamed(OUString("NamedRange")),
         apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
 }
 
 uno::Reference< sheet::XNamedRanges > ScNamedRangeObj::init_impl()
 {
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString("ScNamedRangeObj.ods"), aFileURL);
+    OUString aFileURL;
+    createFileURL(OUString("ScNamedRangeObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Reference< beans::XPropertySet > xPropSet (mxComponent, UNO_QUERY_THROW);
-    rtl::OUString aNamedRangesPropertyString("NamedRanges");
+    OUString aNamedRangesPropertyString("NamedRanges");
     uno::Reference< sheet::XNamedRanges > xNamedRanges(xPropSet->getPropertyValue(aNamedRangesPropertyString), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xNamedRanges.is());
 
     return xNamedRanges;
 }
 
-uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const rtl::OUString& rRangeName)
+uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const OUString& rRangeName)
 {
     uno::Reference< container::XNameAccess > xNamedAccess(init_impl(), UNO_QUERY_THROW);
     uno::Reference< sheet::XNamedRange > xNamedRange(xNamedAccess->getByName(rRangeName), UNO_QUERY_THROW);
@@ -106,7 +106,7 @@ uno::Reference< sheet::XNamedRange> ScNamedRangeObj::getNamedRange(const rtl::OU
 
 uno::Reference< uno::XInterface > ScNamedRangeObj::init()
 {
-    return getNamedRange(rtl::OUString("NamedRange"));
+    return getNamedRange(OUString("NamedRange"));
 }
 
 void ScNamedRangeObj::setUp()

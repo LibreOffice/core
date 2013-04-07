@@ -92,10 +92,10 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
             uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-            rtl::OUString sPropButtonType( "ButtonType" );
-            rtl::OUString sPropTargetURL( "TargetURL" );
-            rtl::OUString sPropTargetFrame( "TargetFrame" );
-            rtl::OUString sPropLabel( "Label" );
+            OUString sPropButtonType( "ButtonType" );
+            OUString sPropTargetURL( "TargetURL" );
+            OUString sPropTargetFrame( "TargetFrame" );
+            OUString sPropLabel( "Label" );
 
             if(xInfo->hasPropertyByName( sPropButtonType ))
             {
@@ -103,7 +103,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                 form::FormButtonType eTmp;
                 if ( (aAny >>= eTmp) && eTmp == form::FormButtonType_URL )
                 {
-                    rtl::OUString sTmp;
+                    OUString sTmp;
                     // Label
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
@@ -179,31 +179,31 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                 uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                                 uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                                rtl::OUString sPropTargetURL( "TargetURL" );
+                                OUString sPropTargetURL( "TargetURL" );
 
                                 // Darf man eine URL an dem Objekt setzen?
                                 if (xInfo->hasPropertyByName( sPropTargetURL ))
                                 {
                                     // Ja!
 
-                                    rtl::OUString sPropButtonType( "ButtonType");
-                                    rtl::OUString sPropTargetFrame( "TargetFrame" );
-                                    rtl::OUString sPropLabel( "Label" );
+                                    OUString sPropButtonType( "ButtonType");
+                                    OUString sPropTargetFrame( "TargetFrame" );
+                                    OUString sPropLabel( "Label" );
 
                                     uno::Any aAny;
                                     if ( xInfo->hasPropertyByName( sPropLabel ) )
                                     {
-                                        aAny <<= rtl::OUString(rName);
+                                        aAny <<= OUString(rName);
                                         xPropSet->setPropertyValue( sPropLabel, aAny );
                                     }
 
-                                    ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
+                                    OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
                                     aAny <<= aTmp;
                                     xPropSet->setPropertyValue( sPropTargetURL, aAny );
 
                                     if( rTarget.Len() && xInfo->hasPropertyByName( sPropTargetFrame ) )
                                     {
-                                        aAny <<= rtl::OUString(rTarget);
+                                        aAny <<= OUString(rTarget);
                                         xPropSet->setPropertyValue( sPropTargetFrame, aAny );
                                     }
 
@@ -486,7 +486,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
                     if(SC_LAYER_INTERN != pSelected->GetLayer())
                     {
-                        rtl::OUString aName = pSelected->GetName();
+                        OUString aName = pSelected->GetName();
 
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");

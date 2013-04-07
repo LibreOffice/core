@@ -71,7 +71,7 @@ OUString getDefaultLocale(
 }
 
 OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
-    rtl::OUStringBuffer buf(path);
+    OUStringBuffer buf(path);
     buf.append("/['*");
     SAL_WARN_IF(
         locale.match("*"), "comphelper",
@@ -108,20 +108,20 @@ comphelper::ConfigurationChanges::ConfigurationChanges(
 {}
 
 void comphelper::ConfigurationChanges::setPropertyValue(
-    rtl::OUString const & path, css::uno::Any const & value) const
+    OUString const & path, css::uno::Any const & value) const
 {
     access_->replaceByHierarchicalName(path, value);
 }
 
 css::uno::Reference< css::container::XHierarchicalNameReplace >
-comphelper::ConfigurationChanges::getGroup(rtl::OUString const & path) const
+comphelper::ConfigurationChanges::getGroup(OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameReplace >(
         access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
 }
 
 css::uno::Reference< css::container::XNameContainer >
-comphelper::ConfigurationChanges::getSet(rtl::OUString const & path) const
+comphelper::ConfigurationChanges::getSet(OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameContainer >(
         access_->getByHierarchicalName(path), css::uno::UNO_QUERY_THROW);
@@ -143,14 +143,14 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
 
 css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     return access_->getByHierarchicalName(path);
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
     boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path, com::sun::star::uno::Any const & value) const
+    OUString const & path, com::sun::star::uno::Any const & value) const
 {
     assert(batch.get() != 0);
     batch->setPropertyValue(path, value);
@@ -158,7 +158,7 @@ void comphelper::detail::ConfigurationWrapper::setPropertyValue(
 
 css::uno::Any
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     return access_->getByHierarchicalName(
         extendLocalizedPath(path, getDefaultLocale(context_)));
@@ -166,7 +166,7 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
 
 void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
     boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path, com::sun::star::uno::Any const & value) const
+    OUString const & path, com::sun::star::uno::Any const & value) const
 {
     assert(batch.get() != 0);
     batch->setPropertyValue(path, value);
@@ -174,7 +174,7 @@ void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
 
 css::uno::Reference< css::container::XHierarchicalNameAccess >
 comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         (css::configuration::ReadOnlyAccess::create(
@@ -186,7 +186,7 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
 css::uno::Reference< css::container::XHierarchicalNameReplace >
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
     boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     assert(batch.get() != 0);
     return batch->getGroup(path);
@@ -194,7 +194,7 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
 
 css::uno::Reference< css::container::XNameAccess >
 comphelper::detail::ConfigurationWrapper::getSetReadOnly(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     return css::uno::Reference< css::container::XNameAccess >(
         (css::configuration::ReadOnlyAccess::create(
@@ -206,7 +206,7 @@ comphelper::detail::ConfigurationWrapper::getSetReadOnly(
 css::uno::Reference< css::container::XNameContainer >
 comphelper::detail::ConfigurationWrapper::getSetReadWrite(
     boost::shared_ptr< ConfigurationChanges > const & batch,
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     assert(batch.get() != 0);
     return batch->getSet(path);

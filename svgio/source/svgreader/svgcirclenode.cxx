@@ -46,13 +46,13 @@ namespace svgio
 
         const SvgStyleAttributes* SvgCircleNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("circle"));
+            static OUString aClassStr(OUString::createFromAscii("circle"));
             maSvgStyleAttributes.checkForCssStyle(aClassStr);
 
             return &maSvgStyleAttributes;
         }
 
-        void SvgCircleNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgCircleNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);

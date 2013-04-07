@@ -443,8 +443,8 @@ struct ScImportParam
     SCCOL           nCol2;
     SCROW           nRow2;
     bool            bImport;
-    ::rtl::OUString aDBName;                    // alias of data base
-    ::rtl::OUString aStatement;
+    OUString aDBName;                    // alias of data base
+    OUString aStatement;
     bool            bNative;
     bool            bSql;                       // statement or name?
     sal_uInt8       nType;                      // enum DBObject
@@ -513,7 +513,7 @@ class ScGlobal
     static OUString**       ppRscString;
     static String*          pStrScDoc;
     static String*          pEmptyString;
-    static ::rtl::OUString* pEmptyOUString;
+    static OUString* pEmptyOUString;
     static String*          pStrClipDocName;
     static SvxBrushItem*    pEmptyBrushItem;
     static SvxBrushItem*    pButtonBrushItem;
@@ -603,7 +603,7 @@ public:
     static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const String&    GetEmptyString();
-    SC_DLLPUBLIC    static const ::rtl::OUString&    GetEmptyOUString();
+    SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
     static const String&    GetScDocString();
 
     /** Returns the specified image list with outline symbols. */

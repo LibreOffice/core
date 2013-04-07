@@ -154,7 +154,7 @@ public:
     DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox * );
 
     uno::Sequence< uno::Reference< linguistic2::XMeaning > >
-            queryMeanings_Impl( ::rtl::OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
+            queryMeanings_Impl( OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
 
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const String &rText );

@@ -31,9 +31,9 @@
 
 namespace sd {
 
-typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, rtl::OUStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash, comphelper::UStringEqual > UStringMap;
-typedef std::vector< rtl::OUString > UStringList;
+typedef boost::unordered_map< OUString, CustomAnimationEffectPtr, OUStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef boost::unordered_map< OUString, OUString, OUStringHash, comphelper::UStringEqual > UStringMap;
+typedef std::vector< OUString > UStringList;
 
 class CustomAnimationPreset
 {
@@ -44,26 +44,26 @@ public:
 
     void add( CustomAnimationEffectPtr pEffect );
 
-    SD_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const rtl::OUString& rstrSubType );
+    SD_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const OUString& rstrSubType );
 
-    const rtl::OUString& getPresetId() const { return maPresetId; }
-    const rtl::OUString& getProperty() const { return maProperty; }
-    const rtl::OUString& getLabel() const { return maLabel; }
+    const OUString& getPresetId() const { return maPresetId; }
+    const OUString& getProperty() const { return maProperty; }
+    const OUString& getLabel() const { return maLabel; }
     sal_Int16 getPresetClass() const { return mnPresetClass; }
     double getDuration() const { return mfDuration; }
 
     UStringList getSubTypes();
     UStringList getProperties() const;
 
-    bool hasProperty( const rtl::OUString& rProperty ) const;
+    bool hasProperty( const OUString& rProperty ) const;
     bool isTextOnly() const { return mbIsTextOnly; }
 
 private:
-    rtl::OUString maPresetId;
-    rtl::OUString maProperty;
+    OUString maPresetId;
+    OUString maProperty;
     sal_Int16 mnPresetClass;
-    rtl::OUString maLabel;
-    rtl::OUString maDefaultSubTyp;
+    OUString maLabel;
+    OUString maDefaultSubTyp;
     double mfDuration;
     bool mbIsTextOnly;
 
@@ -71,15 +71,15 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, rtl::OUStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef boost::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash, comphelper::UStringEqual> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory
 {
-    rtl::OUString maLabel;
+    OUString maLabel;
     EffectDescriptorList maEffects;
 
-    PresetCategory( const rtl::OUString& rLabel, const EffectDescriptorList& rEffects )
+    PresetCategory( const OUString& rLabel, const EffectDescriptorList& rEffects )
         : maLabel( rLabel ), maEffects( rEffects ) {}
 };
 typedef boost::shared_ptr< PresetCategory > PresetCategoryPtr;
@@ -97,10 +97,10 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
-    SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const rtl::OUString& rPresetId ) const;
+    SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const OUString& rPresetId ) const;
 
-    const rtl::OUString& getUINameForPresetId( const rtl::OUString& rPresetId ) const;
-    const rtl::OUString& getUINameForProperty( const rtl::OUString& rProperty ) const;
+    const OUString& getUINameForPresetId( const OUString& rPresetId ) const;
+    const OUString& getUINameForProperty( const OUString& rProperty ) const;
 
     const PresetCategoryList& getEntrancePresets() const { return maEntrancePresets; }
     const PresetCategoryList& getEmphasisPresets() const { return maEmphasisPresets; }
@@ -108,15 +108,15 @@ public:
     const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
     const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
 
-    void changePresetSubType( CustomAnimationEffectPtr pEffect, const rtl::OUString& rPresetSubType ) const;
+    void changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const;
 
 private:
     void importEffects();
     void importResources();
 
-    void importPresets( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xConfigProvider, const rtl::OUString& rNodePath, PresetCategoryList& rPresetMap  );
+    void importPresets( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
 
-    const rtl::OUString& translateName( const rtl::OUString& rId, const UStringMap& rNameMap ) const;
+    const OUString& translateName( const OUString& rId, const UStringMap& rNameMap ) const;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxRootNode;

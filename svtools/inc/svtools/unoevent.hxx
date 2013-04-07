@@ -60,20 +60,20 @@ class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    const ::rtl::OUString sEventType;
-    const ::rtl::OUString sMacroName;
-    const ::rtl::OUString sLibrary;
-    const ::rtl::OUString sStarBasic;
-    const ::rtl::OUString sJavaScript;
-    const ::rtl::OUString sScript;
-    const ::rtl::OUString sNone;
+    const OUString sEventType;
+    const OUString sMacroName;
+    const OUString sLibrary;
+    const OUString sStarBasic;
+    const OUString sJavaScript;
+    const OUString sScript;
+    const OUString sNone;
 
 
     /// name of own service
-    const ::rtl::OUString sServiceName;
+    const OUString sServiceName;
 
 protected:
-    const ::rtl::OUString sEmpty;
+    const OUString sEmpty;
 
     /// last element is 0, 0
     const SvEventDescription* mpSupportedMacroItems;
@@ -89,7 +89,7 @@ public:
     // XNameReplace
     /// calls replaceByName(const sal_uInt16, const SvxMacro&)
     virtual void SAL_CALL replaceByName(
-        const ::rtl::OUString& rName,                /// API name of event
+        const OUString& rName,                /// API name of event
         const ::com::sun::star::uno::Any& rElement ) /// event (PropertyValues)
             throw(
                 ::com::sun::star::lang::IllegalArgumentException,
@@ -100,20 +100,20 @@ public:
     // XNameAccess (via XNameReplace)
     /// calls getByName(sal_uInt16)
     virtual ::com::sun::star::uno::Any SAL_CALL getByName(
-        const ::rtl::OUString& rName )  /// API name of event
+        const OUString& rName )  /// API name of event
             throw(
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
     // XNameAxcess (via XNameReplace)
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                                         getElementNames()
         throw(::com::sun::star::uno::RuntimeException);
 
     // XNameAccess (via XNameReplace)
     virtual sal_Bool SAL_CALL hasByName(
-        const ::rtl::OUString& rName )
+        const OUString& rName )
             throw(::com::sun::star::uno::RuntimeException);
 
     // XElementAccess (via XNameReplace)
@@ -126,15 +126,15 @@ public:
 
     // XServiceInfo
     /// must be implemented in subclass
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(void)
             throw( ::com::sun::star::uno::RuntimeException );
 
@@ -160,10 +160,10 @@ protected:
                 ::com::sun::star::uno::RuntimeException) = 0;
 
     /// convert an API event name to the event ID as used by SvxMacroItem
-    sal_uInt16 mapNameToEventID(const ::rtl::OUString& rName) const;
+    sal_uInt16 mapNameToEventID(const OUString& rName) const;
 
     /// get the event ID for the name; return 0 if not supported
-    sal_uInt16 getMacroID(const ::rtl::OUString& rName) const;
+    sal_uInt16 getMacroID(const OUString& rName) const;
 
     /// create PropertyValues and Any from macro
     void getAnyFromMacro(
@@ -254,7 +254,7 @@ class SVT_DLLPUBLIC SvDetachedEventDescriptor : public SvBaseEventDescriptor
     // the macros; aMacros[i] is the value for aSupportedMacroItemIDs[i]
     SvxMacro** aMacros;
 
-    const ::rtl::OUString sImplName;
+    const OUString sImplName;
 
 public:
 
@@ -263,7 +263,7 @@ public:
     virtual ~SvDetachedEventDescriptor();
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:

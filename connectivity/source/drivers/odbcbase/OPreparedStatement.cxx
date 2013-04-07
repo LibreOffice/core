@@ -63,7 +63,7 @@ namespace
     const bool useWChar = false;
 }
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
     :OStatement_BASE2(_pConnection)
     ,numParams(0)
     ,boundParams(NULL)
@@ -75,8 +75,8 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
         if(_pConnection->isParameterSubstitutionEnabled())
         {
             OSQLParser aParser( comphelper::getComponentContext(_pConnection->getDriver()->getORB()) );
-            ::rtl::OUString sErrorMessage;
-            ::rtl::OUString sNewSql;
+            OUString sErrorMessage;
+            OUString sNewSql;
             ::std::auto_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
             if ( pNode.get() )
             {   // special handling for parameters
@@ -241,7 +241,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     setParameter(parameterIndex, DataType::CHAR, invalid_scale, x);
 }
@@ -306,7 +306,7 @@ template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int3
 }
 // -------------------------------------------------------------------------
 
-void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const sal_Int16 _nScale, const ::rtl::OUString &_sData)
+void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const sal_Int16 _nScale, const OUString &_sData)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     setParameterPre(parameterIndex);
@@ -342,7 +342,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     }
     else
     {
-        ::rtl::OString sOData( ::rtl::OUStringToOString(_sData, getOwnConnection()->getTextEncoding()) );
+        OString sOData( OUStringToOString(_sData, getOwnConnection()->getTextEncoding()) );
         nCharLen = sOData.getLength();
         nByteLen = nCharLen;
         pData = allocBindBuf(parameterIndex, nByteLen);
@@ -553,7 +553,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
         case DataType::LONGVARCHAR:
             if(x.hasValue())
             {
-                ::rtl::OUString sStr;
+                OUString sStr;
                 x >>= sStr;
                 setParameter(parameterIndex, sqlType, scale, sStr);
             }
@@ -578,7 +578,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     setNull(parameterIndex,sqlType);
 }
@@ -747,8 +747,8 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
     if ( !inputStream.is() )
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(STR_NO_INPUTSTREAM));
-        throw SQLException (sError, *this,::rtl::OUString(),0,Any());
+        const OUString sError( aResources.getResourceString(STR_NO_INPUTSTREAM));
+        throw SQLException (sError, *this,OUString(),0,Any());
     }
 
     sal_Int32 maxBytesLeft = boundParams[index - 1].getInputStreamLen ();
@@ -786,7 +786,7 @@ void OPreparedStatement::putParamData (sal_Int32 index) throw(SQLException)
         // If an I/O exception was generated, turn
         // it into a SQLException
 
-        throw SQLException(ex.Message,*this,::rtl::OUString(),0,Any());
+        throw SQLException(ex.Message,*this,OUString(),0,Any());
     }
 }
 // -------------------------------------------------------------------------
@@ -891,7 +891,7 @@ void OPreparedStatement::prepareStatement()
     if(!isPrepared())
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-        ::rtl::OString aSql(::rtl::OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
+        OString aSql(OUStringToOString(m_sSqlStatement,getOwnConnection()->getTextEncoding()));
         SQLRETURN nReturn = N3SQLPrepare(m_aStatementHandle,(SDB_ODBC_CHAR *) aSql.getStr(),aSql.getLength());
         OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
         m_bPrepared = sal_True;
@@ -906,11 +906,11 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
         _parameterIndex > std::numeric_limits<SQLUSMALLINT>::max() )
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,
-            "$pos$", ::rtl::OUString::valueOf(_parameterIndex),
-            "$count$", ::rtl::OUString::valueOf((sal_Int32)numParams)
+        const OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,
+            "$pos$", OUString::valueOf(_parameterIndex),
+            "$count$", OUString::valueOf((sal_Int32)numParams)
             ));
-        SQLException aNext(sError,*this, ::rtl::OUString(),0,Any());
+        SQLException aNext(sError,*this, OUString(),0,Any());
 
         ::dbtools::throwInvalidIndexException(*this,makeAny(aNext));
     }

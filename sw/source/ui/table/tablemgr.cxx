@@ -200,7 +200,7 @@ void SwTableFUNC::UpdateChart()
 uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< chart2::data::XDataProvider > &rxDataProvider,
         sal_Bool bFillWithData,
-        const rtl::OUString &rCellRange,
+        const OUString &rCellRange,
         SwFlyFrmFmt** ppFlyFrmFmt )
 {
     uno::Reference< frame::XModel > xChartModel;
@@ -223,7 +223,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     }
 
     // insert chart
-    ::rtl::OUString aObjName;
+    OUString aObjName;
     comphelper::EmbeddedObjectContainer aCnt;
     uno::Reference < embed::XEmbeddedObject > xObj =
         aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
@@ -303,16 +303,16 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString("CellRangeRepresentation"), -1,
+            OUString("CellRangeRepresentation"), -1,
             uno::makeAny( rCellRange ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString("HasCategories"), -1,
+            OUString("HasCategories"), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString("FirstCellAsLabel"), -1,
+            OUString("FirstCellAsLabel"), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString("DataRowSource"), -1,
+            OUString("DataRowSource"), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xDataReceiver->setArguments( aArgs );
     }

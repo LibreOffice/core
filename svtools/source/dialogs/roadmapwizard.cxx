@@ -217,7 +217,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::SetRoadmapHelpId( const rtl::OString& _rId )
+    void RoadmapWizard::SetRoadmapHelpId( const OString& _rId )
     {
         m_pImpl->pRoadmap->SetHelpId( _rId );
     }

@@ -69,8 +69,8 @@ public:
 
     /**
     */
-    void addExtension( const ::rtl::OUString &rExtensionURL,
-                       const ::rtl::OUString &rRepository,
+    void addExtension( const OUString &rExtensionURL,
+                       const OUString &rRepository,
                        const bool bWarnUser );
     void removeExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
     void enableExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage,

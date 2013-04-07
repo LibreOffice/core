@@ -56,7 +56,6 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 
-using ::rtl::OUString;
 using ::sdr::PolyPolygonEditor;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -377,7 +376,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     }
 
     XDash aDash( XDASH_RECT, 1, 80, 1, 80, 80);
-    rtl::OUString aEmpty( "?" );
+    OUString aEmpty( "?" );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
     mpPathObj->SetMergedItem( XLineStyleItem( XLINE_DASH ) );
     mpPathObj->SetMergedItem( XLineColorItem(aEmpty, ::Color(COL_GRAY)) );
@@ -420,7 +419,7 @@ MotionPathTag::~MotionPathTag()
 
 void MotionPathTag::updatePathAttributes()
 {
-    rtl::OUString aEmpty( "?" );
+    OUString aEmpty( "?" );
 
     ::basegfx::B2DPolygon aCandidate;
     if( mxPolyPoly.count() )

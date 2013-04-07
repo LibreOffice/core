@@ -64,8 +64,6 @@ using namespace com::sun::star::connection;
 using namespace cppu;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
 char SoPluginInstance::sSO_Dir[] = {0};
 Reference< XMultiServiceFactory > SoPluginInstance::mxRemoteMSF = Reference< XMultiServiceFactory >(NULL);
@@ -103,8 +101,8 @@ sal_Bool SoPluginInstance::SetURL(char* aURL)
     osl_getProcessLocale(&pLocale);
     sal_uInt16 encoding = osl_getTextEncodingFromLocale(pLocale);
 
-    m_sURL = ::rtl::OUString(aURL, strlen(aURL), encoding);
-    debug_fprintf(NSP_LOG_APPEND, "SetURL %s\nencoding is: %d\n", ::rtl::OUStringToOString(m_sURL,
+    m_sURL = OUString(aURL, strlen(aURL), encoding);
+    debug_fprintf(NSP_LOG_APPEND, "SetURL %s\nencoding is: %d\n", OUStringToOString(m_sURL,
         RTL_TEXTENCODING_GB_18030).getStr(), m_sURL.getLength(), encoding);
     return sal_True;
 }
@@ -175,7 +173,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         // create frame
         m_xFrame = Reference< frame::XFrame >(
-            mxRemoteMSF->createInstance( ::rtl::OUString("com.sun.star.frame.Frame")),
+            mxRemoteMSF->createInstance( OUString("com.sun.star.frame.Frame")),
             uno::UNO_QUERY );
         if (!m_xFrame.is())
         {
@@ -191,9 +189,9 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             // currently ignore errors in this code
             uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLMProps;
-            xFrameProps->getPropertyValue( ::rtl::OUString("LayoutManager") ) >>= xLMProps;
+            xFrameProps->getPropertyValue( OUString("LayoutManager") ) >>= xLMProps;
             if ( xLMProps.is() )
-                xLMProps->setPropertyValue( ::rtl::OUString("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
+                xLMProps->setPropertyValue( OUString("AutomaticToolbars"), uno::makeAny( (sal_Bool)sal_False ) );
         }
         catch( const uno::Exception& )
         {}
@@ -244,7 +242,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         setPropValues[ 3 ].Value =  "Flat XML File";*/
 
         debug_fprintf(NSP_LOG_APPEND, "try to load copy of URL from local file %s:%d\n",
-            ::rtl::OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ),
+            OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ),
             m_sURL.getLength() );
 
         // load document
@@ -293,7 +291,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         propertyValue[0].Name = OUString("FunctionBarVisible");
         propertyValue[0].Value <<= sal_True;
         m_xDispatcher->executeDispatch(m_xDispatchProvider,
-                ::rtl::OUString(".uno:FunctionBarVisible"),
+                OUString(".uno:FunctionBarVisible"),
                 m_xFrame->getName(), 0,
                 propertyValue );
 
@@ -309,7 +307,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
             uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
             uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue( ::rtl::OUString( "IsFullScreen" ), uno::makeAny( sal_False ) );
+            xProps->setPropertyValue( OUString( "IsFullScreen" ), uno::makeAny( sal_False ) );
             xPres->start();
         }
         catch( const uno::Exception& )
@@ -341,7 +339,7 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
         m_hParent = hParent;
 
         debug_fprintf(NSP_LOG_APPEND, "SoPluginInstance::SetWindow %s : %d\n",
-            ::rtl::OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(),
+            OUStringToOString(m_sURL, RTL_TEXTENCODING_ASCII_US).getStr(),
             m_sURL.getLength() );
         m_nWidth = w;
         m_nHeight =h;
@@ -400,7 +398,7 @@ sal_Bool SoPluginInstance::Destroy(void)
         aArgs[0] <<= m_xFrame;
         uno::Reference< lang::XComponent > xDocumentCloser(
             mxRemoteMSF->createInstanceWithArguments(
-                ::rtl::OUString( "com.sun.star.embed.DocumentCloser" ),
+                OUString( "com.sun.star.embed.DocumentCloser" ),
                 aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -441,7 +439,7 @@ sal_Bool SoPluginInstance::Print(void)
 
     Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
     m_xDispatcher->executeDispatch(m_xDispatchProvider,
-        ::rtl::OUString(".uno:PrintDefault"),
+        OUString(".uno:PrintDefault"),
         m_xFrame->getName(), 0,
         propertyValue );
     return sal_True;

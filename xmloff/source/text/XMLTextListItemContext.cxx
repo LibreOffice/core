@@ -30,8 +30,6 @@
 #include <xmloff/xmlnumi.hxx>
 #include "XMLTextListItemContext.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -52,7 +50,7 @@ XMLTextListItemContext::XMLTextListItemContext(
       mnSubListCount( 0 ),
       mxNumRulesOverride()
 {
-    static ::rtl::OUString s_NumberingRules("NumberingRules");
+    static OUString s_NumberingRules("NumberingRules");
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -73,7 +71,7 @@ XMLTextListItemContext::XMLTextListItemContext(
         else if ( nPrefix == XML_NAMESPACE_TEXT &&
                   IsXMLToken( aLocalName, XML_STYLE_OVERRIDE ) )
         {
-            const ::rtl::OUString sListStyleOverrideName = rValue;
+            const OUString sListStyleOverrideName = rValue;
             if ( !sListStyleOverrideName.isEmpty() )
             {
                 OUString sDisplayStyleName(

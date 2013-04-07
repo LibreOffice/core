@@ -54,6 +54,9 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+
+using rtl::OUString;
+
 #include "unoidl/unoidl.hxx"
 #include "unoidl/unoidlprovider.hxx"
 

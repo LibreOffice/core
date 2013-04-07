@@ -45,7 +45,7 @@ namespace rptui
 FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
                              , const ::boost::shared_ptr< IFunctionManager >&  _pFunctionMgr
-                             , const ::rtl::OUString& _sFormula
+                             , const OUString& _sFormula
                              , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet)
     : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
@@ -53,7 +53,7 @@ FormulaDialog::FormulaDialog(Window* pParent
     ,m_pAddField(NULL)
     ,m_xRowSet(_xRowSet)
     ,m_pEdit(NULL)
-    ,m_sFormula(::rtl::OUString("="))
+    ,m_sFormula(OUString("="))
     ,m_nStart(0)
     ,m_nEnd(1)
 {
@@ -64,7 +64,7 @@ FormulaDialog::FormulaDialog(Window* pParent
         else
             m_sFormula = _sFormula;
     }
-    m_xParser.set(_xServiceFactory->createInstance(::rtl::OUString("org.libreoffice.report.pentaho.SOFormulaParser")),uno::UNO_QUERY);
+    m_xParser.set(_xServiceFactory->createInstance(OUString("org.libreoffice.report.pentaho.SOFormulaParser")),uno::UNO_QUERY);
     if ( m_xParser.is() )
         m_xOpCodeMapper = m_xParser->getFormulaOpCodeMapper();
     fill();
@@ -86,8 +86,8 @@ FormulaDialog::~FormulaDialog()
 {
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( HID_RPT_FIELD_SEL_WIN ) );
-        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
+        aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
 
         boost::scoped_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
@@ -198,10 +198,10 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     {
         m_pAddField = new OAddFieldWindow(this,m_xRowSet);
         m_pAddField->SetCreateHdl(LINK( this, FormulaDialog, OnClickHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, rtl::OUString( HID_RPT_FIELD_SEL_WIN ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
         if ( aDlgOpt.Exists() )
         {
-            m_pAddField->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
+            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
         }
 
@@ -221,11 +221,11 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
         uno::Sequence< beans::PropertyValue > aValue;
         aArgs[0].Value >>= aValue;
         ::svx::ODataAccessDescriptor aDescriptor(aValue);
-        ::rtl::OUString sName;
+        OUString sName;
         aDescriptor[ ::svx::daColumnName ] >>= sName;
         if ( !sName.isEmpty() )
         {
-            sName = ::rtl::OUString("[") + sName + ::rtl::OUString("]");
+            sName = OUString("[") + sName + OUString("]");
             m_pEdit->SetText(sName);
         }
     }

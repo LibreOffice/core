@@ -29,7 +29,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/extension-registry/2010"
 #define NS_PREFIX "ext"
@@ -42,7 +41,7 @@ namespace bundle {
 
 ExtensionBackendDb::ExtensionBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):BackendDb(xContext, url)
+    OUString const & url):BackendDb(xContext, url)
 {
 
 }
@@ -67,7 +66,7 @@ OUString ExtensionBackendDb::getKeyElementName()
     return OUString(KEY_ELEMENT_NAME);
 }
 
-void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void ExtensionBackendDb::addEntry(OUString const & url, Data const & data)
 {
     try{
         //reactive revoked entry if possible.
@@ -88,7 +87,7 @@ void ExtensionBackendDb::addEntry(::rtl::OUString const & url, Data const & data
     }
 }
 
-ExtensionBackendDb::Data ExtensionBackendDb::getEntry(::rtl::OUString const & url)
+ExtensionBackendDb::Data ExtensionBackendDb::getEntry(OUString const & url)
 {
     try
     {

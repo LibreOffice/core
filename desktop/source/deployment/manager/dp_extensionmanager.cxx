@@ -68,7 +68,6 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 namespace {
 
@@ -110,7 +109,7 @@ void writeLastModified(OUString & url, Reference<ucb::XCommandEnvironment> const
         ::rtl::Bootstrap::expandMacros(url);
         ::ucbhelper::Content ucbStamp(url, xCmdEnv, xContext);
         dp_misc::erase_path( url, xCmdEnv );
-        ::rtl::OString stamp("1" );
+        OString stamp("1" );
         Reference<css::io::XInputStream> xData(
             ::xmlscript::createInputStream(
                 ::rtl::ByteSequence(
@@ -151,7 +150,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
         OSL_ASSERT(!(m_extension.is() && !m_xPackageManager.is()));
         if (m_xPackageManager.is() && m_extension.is())
             m_xPackageManager->removePackage(
-                dp_misc::getIdentifier(m_extension), ::rtl::OUString(),
+                dp_misc::getIdentifier(m_extension), OUString(),
                 css::uno::Reference<css::task::XAbortChannel>(),
                 css::uno::Reference<css::ucb::XCommandEnvironment>());
     } catch (...) {
@@ -212,7 +211,7 @@ Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
 }
 
 css::uno::Reference<css::deployment::XPackageManager>
-ExtensionManager::getPackageManager(::rtl::OUString const & repository)
+ExtensionManager::getPackageManager(OUString const & repository)
     throw (css::lang::IllegalArgumentException)
 {
     Reference<deploy::XPackageManager> xPackageManager;
@@ -1445,7 +1444,7 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
     return xPackageManager->getExtensionsWithUnacceptedLicenses(xCmdEnv);
 }
 
-sal_Bool ExtensionManager::isReadOnlyRepository(::rtl::OUString const & repository)
+sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
         throw (uno::RuntimeException)
 {
     return getPackageManager(repository)->isReadOnly();

@@ -44,7 +44,7 @@ struct VCL_DLLPUBLIC JobData
     int                     m_nColorDevice; // 0: no override, -1 grey scale, +1 color
     int                     m_nPDFDevice;   // 0: no override, -1 PostScript, +1: Automatically PDF, +2: Explicitly PDF
     orientation::type       m_eOrientation;
-    ::rtl::OUString         m_aPrinterName;
+    OUString         m_aPrinterName;
     const PPDParser*        m_pParser;
     PPDContext              m_aContext;
 

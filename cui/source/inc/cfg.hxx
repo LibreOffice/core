@@ -100,7 +100,7 @@ public:
             ::com::sun::star::ui::XUIConfigurationManager >& xCfgMgr,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >& xParentCfgMgr,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig );
 
     ~SaveInData() {}
@@ -137,9 +137,9 @@ public:
     com::sun::star::uno::Sequence
         < com::sun::star::beans::PropertyValue > m_aSeparatorSeq;
 
-    Image GetImage( const rtl::OUString& rCommandURL );
+    Image GetImage( const OUString& rCommandURL );
 
-    virtual bool HasURL( const rtl::OUString& aURL ) = 0;
+    virtual bool HasURL( const OUString& aURL ) = 0;
     virtual bool HasSettings() = 0;
     virtual SvxEntries* GetEntries() = 0;
     virtual void SetEntries( SvxEntries* ) = 0;
@@ -151,8 +151,8 @@ class MenuSaveInData : public SaveInData
 {
 private:
 
-    rtl::OUString               m_aMenuResourceURL;
-    rtl::OUString               m_aDescriptorContainer;
+    OUString               m_aMenuResourceURL;
+    OUString               m_aDescriptorContainer;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XIndexAccess > m_xMenuSettings;
@@ -185,7 +185,7 @@ private:
     bool        LoadSubMenus(
         const ::com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess >& xMenuBarSettings,
-        const rtl::OUString& rBaseTitle, SvxConfigEntry* pParentData );
+        const OUString& rBaseTitle, SvxConfigEntry* pParentData );
 
 public:
 
@@ -194,7 +194,7 @@ public:
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig );
 
     ~MenuSaveInData();
@@ -202,7 +202,7 @@ public:
     /// methods inherited from SaveInData
     SvxEntries*         GetEntries();
     void                SetEntries( SvxEntries* );
-    bool                HasURL( const rtl::OUString& URL ) { (void)URL; return sal_False; }
+    bool                HasURL( const OUString& URL ) { (void)URL; return sal_False; }
     bool                HasSettings() { return m_xMenuSettings.is(); }
     void                Reset();
     bool                Apply();
@@ -214,10 +214,10 @@ private:
 
     /// common properties
     sal_uInt16                      nId;
-    ::rtl::OUString             aHelpText;
-    ::rtl::OUString             aLabel;
-    ::rtl::OUString             aCommand;
-    ::rtl::OUString             aHelpURL;
+    OUString             aHelpText;
+    OUString             aLabel;
+    OUString             aCommand;
+    OUString             aHelpURL;
 
     bool                        bPopUp;
     bool                        bStrEdited;
@@ -236,8 +236,8 @@ private:
 
 public:
 
-    SvxConfigEntry( const ::rtl::OUString& rDisplayName,
-                    const ::rtl::OUString& rCommandURL,
+    SvxConfigEntry( const OUString& rDisplayName,
+                    const OUString& rCommandURL,
                     bool bPopup = sal_False,
                     bool bParentData = sal_False );
 
@@ -256,17 +256,17 @@ public:
 
     ~SvxConfigEntry();
 
-    const ::rtl::OUString&      GetCommand() const { return aCommand; }
+    const OUString&      GetCommand() const { return aCommand; }
     void    SetCommand( const String& rCmd ) { aCommand = rCmd; }
 
-    const ::rtl::OUString&      GetName() const { return aLabel; }
+    const OUString&      GetName() const { return aLabel; }
     void    SetName( const String& rStr ) { aLabel = rStr; bStrEdited = sal_True; }
     bool    HasChangedName() const { return bStrEdited; }
 
-    const ::rtl::OUString&      GetHelpText() ;
+    const OUString&      GetHelpText() ;
     void    SetHelpText( const String& rStr ) { aHelpText = rStr; }
 
-    const ::rtl::OUString&      GetHelpURL() const { return aHelpURL; }
+    const OUString&      GetHelpURL() const { return aHelpURL; }
     void    SetHelpURL( const String& rStr ) { aHelpURL = rStr; }
 
     void    SetPopup( bool bOn = sal_True ) { bPopUp = bOn; }
@@ -398,7 +398,7 @@ protected:
     SvxScriptSelectorDialog*            pSelectorDlg;
 
     /// the ResourceURL to select when opening the dialog
-    rtl::OUString                       m_aURLToSelect;
+    OUString                       m_aURLToSelect;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
@@ -413,7 +413,7 @@ protected:
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig ) = 0;
 
     virtual void            Init() = 0;
@@ -439,7 +439,7 @@ protected:
 
 public:
 
-    static bool     CanConfig( const ::rtl::OUString& rModuleId );
+    static bool     CanConfig( const OUString& rModuleId );
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
@@ -474,7 +474,7 @@ public:
         If the given frame is not <NULL/>, or an default frame could be successfully determined, then
         the ModuleManager is asked for the module ID of the component in the frame.
     */
-    static ::rtl::OUString
+    static OUString
         GetFrameWithDefaultAndIdentify( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _inout_rxFrame );
 };
 
@@ -505,7 +505,7 @@ public:
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig );
 };
 
@@ -618,7 +618,7 @@ public:
             ::com::sun::star::ui::XUIConfigurationManager >&,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig );
 };
 
@@ -627,7 +627,7 @@ class ToolbarSaveInData : public SaveInData
 private:
 
     SvxConfigEntry*                                pRootEntry;
-    rtl::OUString                                  m_aDescriptorContainer;
+    OUString                                  m_aDescriptorContainer;
 
     ::com::sun::star::uno::Reference
         < com::sun::star::container::XNameAccess > m_xPersistentWindowState;
@@ -651,7 +651,7 @@ public:
             ::com::sun::star::ui::XUIConfigurationManager >&,
             const ::com::sun::star::uno::Reference <
             ::com::sun::star::ui::XUIConfigurationManager >&,
-        const rtl::OUString& aModuleId,
+        const OUString& aModuleId,
         bool docConfig );
 
     ~ToolbarSaveInData();
@@ -661,22 +661,22 @@ public:
     void            RemoveToolbar( SvxConfigEntry* pToolbar );
     void            ApplyToolbar( SvxConfigEntry* pToolbar );
 
-    rtl::OUString   GetSystemUIName( const rtl::OUString& rResourceURL );
+    OUString   GetSystemUIName( const OUString& rResourceURL );
 
-    sal_Int32       GetSystemStyle( const rtl::OUString& rResourceURL );
+    sal_Int32       GetSystemStyle( const OUString& rResourceURL );
 
     void            SetSystemStyle(
-        const rtl::OUString& rResourceURL, sal_Int32 nStyle );
+        const OUString& rResourceURL, sal_Int32 nStyle );
 
     void            SetSystemStyle(
         ::com::sun::star::uno::Reference
             < ::com::sun::star::frame::XFrame > xFrame,
-        const rtl::OUString& rResourceURL, sal_Int32 nStyle );
+        const OUString& rResourceURL, sal_Int32 nStyle );
 
     SvxEntries*     GetEntries();
     void            SetEntries( SvxEntries* );
     bool            HasSettings();
-    bool            HasURL( const rtl::OUString& rURL );
+    bool            HasURL( const OUString& rURL );
     void            Reset();
     bool            Apply();
 };
@@ -708,7 +708,7 @@ public:
             m_pBtnOK->Enable( rLink.Call( this ) > 0 );
     }
 
-    void SetEditHelpId( const rtl::OString& aHelpId)
+    void SetEditHelpId( const OString& aHelpId)
     {
         m_pEdtName->SetHelpId(aHelpId);
     }
@@ -742,12 +742,12 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::graphic::XGraphicProvider > m_xGraphProvider;
 
-    bool ReplaceGraphicItem( const ::rtl::OUString& aURL );
+    bool ReplaceGraphicItem( const OUString& aURL );
 
-    bool ImportGraphic( const ::rtl::OUString& aURL );
+    bool ImportGraphic( const OUString& aURL );
 
     void ImportGraphics(
-        const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
+        const com::sun::star::uno::Sequence< OUString >& aURLs );
 
 public:
 
@@ -774,14 +774,14 @@ class SvxIconReplacementDialog : public MessBox
 public:
     SvxIconReplacementDialog(
         Window *pWindow,
-        const rtl::OUString& aMessage,
+        const OUString& aMessage,
         bool aYestoAll);
 
     SvxIconReplacementDialog(
         Window *pWindow,
-        const rtl::OUString& aMessage );
+        const OUString& aMessage );
 
-    rtl::OUString ReplaceIconName( const rtl::OUString& );
+    OUString ReplaceIconName( const OUString& );
     sal_uInt16 ShowDialog();
 };
 //added for issue83555
@@ -793,7 +793,7 @@ private:
     FixedText         aDescriptionLabel;
     SvxDescriptionEdit aLineEditDescription;
 public:
-    SvxIconChangeDialog(Window *pWindow, const rtl::OUString& aMessage);
+    SvxIconChangeDialog(Window *pWindow, const OUString& aMessage);
 };
 #endif // _SVXCFG_HXX
 

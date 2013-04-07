@@ -46,7 +46,7 @@ namespace sd { namespace toolpanel
         PID_UNKNOWN             = 5
     };
 
-    PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL );
+    PanelId GetStandardPanelId( const OUString& i_rTaskPanelResourceURL );
 
 //......................................................................................................................
 } } // namespace sd::toolpanel

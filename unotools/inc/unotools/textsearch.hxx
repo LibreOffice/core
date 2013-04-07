@@ -71,7 +71,7 @@ private:
     long nTransliterationFlags;
 
 public:
-    SearchParam( const rtl::OUString &rText,
+    SearchParam( const OUString &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
                     sal_Bool bCaseSensitive = sal_True,
                     sal_Bool bWordOnly = sal_False,
@@ -162,7 +162,7 @@ public:
     int SearchFrwrd( const String &rStr,
                     xub_StrLen* pStart, xub_StrLen* pEnde,
                     ::com::sun::star::util::SearchResult* pSrchResult = 0 );
-    sal_Bool SearchForward( const ::rtl::OUString &rStr,
+    sal_Bool SearchForward( const OUString &rStr,
                     sal_Int32* pStart, sal_Int32* pEnd,
                     ::com::sun::star::util::SearchResult* pRes = 0 );
     int SearchBkwrd( const String &rStr,

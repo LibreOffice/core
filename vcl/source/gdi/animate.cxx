@@ -732,7 +732,7 @@ SvStream& operator<<( SvStream& rOStm, const Animation& rAnimation )
             rOStm << nDummy32; // Unused
             rOStm << nDummy32; // Unused
             rOStm << nDummy32; // Unused
-            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, rtl::OString()); // dummy
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStm, OString()); // dummy
             rOStm << nRest; // Count of remaining structures
         }
     }

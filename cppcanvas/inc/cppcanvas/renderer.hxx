@@ -110,7 +110,7 @@ namespace cppcanvas
             ::boost::optional< Color::IntSRGBA >        maTextColor;
 
             /// Optionally forces the given fontname for all text actions
-            ::boost::optional< ::rtl::OUString >        maFontName;
+            ::boost::optional< OUString >        maFontName;
 
             /** Optionally transforms all text output actions with the
                 given matrix (in addition to the overall canvas

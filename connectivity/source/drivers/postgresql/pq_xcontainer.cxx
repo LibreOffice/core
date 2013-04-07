@@ -69,9 +69,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -110,9 +107,9 @@ class ReplacedBroadcaster : public EventBroadcastHelper
 public:
     ReplacedBroadcaster(
         const Reference< XInterface > & source,
-        const rtl::OUString & name,
+        const OUString & name,
         const Any & newElement,
-        const rtl::OUString & oldElement ) :
+        const OUString & oldElement ) :
         m_event( source, makeAny( name ), newElement, makeAny(oldElement) )
     {}
 
@@ -132,7 +129,7 @@ public:
     ContainerEvent m_event;
     InsertedBroadcaster(
         const Reference< XInterface > & source,
-        const rtl::OUString & name,
+        const OUString & name,
         const Any & newElement ) :
         m_event( source, makeAny( name ), newElement, Any() )
     {}
@@ -154,7 +151,7 @@ public:
     ContainerEvent m_event;
     RemovedBroadcaster(
         const Reference< XInterface > & source,
-        const rtl::OUString & name) :
+        const OUString & name) :
         m_event( source, makeAny( name ), Any(), Any() )
     {}
 
@@ -173,7 +170,7 @@ Container::Container(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const ::rtl::OUString &type)
+    const OUString &type)
     : ContainerBase( refMutex->mutex ),
       m_refMutex( refMutex ),
       m_pSettings( pSettings ),
@@ -182,7 +179,7 @@ Container::Container(
 {
 }
 
-Any Container::getByName( const ::rtl::OUString& aName )
+Any Container::getByName( const OUString& aName )
     throw (NoSuchElementException,WrappedTargetException,RuntimeException)
 {
     String2IntMap::const_iterator ii = m_name2index.find( aName );
@@ -215,7 +212,7 @@ Sequence< OUString > Container::getElementNames(  )
     return ret;
 }
 
-sal_Bool Container::hasByName( const ::rtl::OUString& aName )
+sal_Bool Container::hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException)
 {
     return m_name2index.find( aName ) != m_name2index.end();
@@ -325,7 +322,7 @@ void Container::disposing()
     m_origin.clear();
 }
 
-void Container::rename( const rtl::OUString &oldName, const rtl::OUString &newName )
+void Container::rename( const OUString &oldName, const OUString &newName )
 {
     Any newValue;
     {
@@ -343,7 +340,7 @@ void Container::rename( const rtl::OUString &oldName, const rtl::OUString &newNa
     fire( RefreshedBroadcaster( *this ) );
 }
 
-void Container::dropByName( const ::rtl::OUString& elementName )
+void Container::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)
@@ -423,7 +420,7 @@ void Container::dropByIndex( sal_Int32 index )
 }
 
 void Container::append(
-    const rtl::OUString & name,
+    const OUString & name,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
     throw ( ::com::sun::star::container::ElementExistException )
 

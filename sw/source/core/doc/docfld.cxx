@@ -2285,11 +2285,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
     }
 
-    rtl::OUString sTrue("TRUE"), sFalse("FALSE");
+    OUString sTrue("TRUE"), sFalse("FALSE");
 
     bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;
-    const rtl::OUString* pFormel = 0;
+    const OUString* pFormel = 0;
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( n = 0; n < nMaxItems; ++n )

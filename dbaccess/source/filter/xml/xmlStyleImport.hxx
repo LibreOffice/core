@@ -38,9 +38,9 @@ namespace dbaxml
 
     class OTableStyleContext : public XMLPropStyleContext
     {
-        ::rtl::OUString             m_sDataStyleName;
-        ::rtl::OUString             sPageStyle;
-        const rtl::OUString         sNumberFormat;
+        OUString             m_sDataStyleName;
+        OUString             sPageStyle;
+        const OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
         com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
@@ -50,15 +50,15 @@ namespace dbaxml
     protected:
 
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                                const ::rtl::OUString& rLocalName,
-                                const ::rtl::OUString& rValue );
+                                const OUString& rLocalName,
+                                const OUString& rValue );
 
     public:
 
         TYPEINFO();
 
         OTableStyleContext( ODBFilter& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
+                const OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
 
@@ -77,9 +77,9 @@ namespace dbaxml
 
     class OTableStylesContext : public SvXMLStylesContext
     {
-        const ::rtl::OUString sTableStyleServiceName;
-        const ::rtl::OUString sColumnStyleServiceName;
-        const ::rtl::OUString sCellStyleServiceName;
+        const OUString sTableStyleServiceName;
+        const OUString sColumnStyleServiceName;
+        const OUString sCellStyleServiceName;
         sal_Int32 m_nNumberFormatIndex;
         sal_Int32 nMasterPageNameIndex;
         sal_Bool bAutoStyles : 1;
@@ -96,7 +96,7 @@ namespace dbaxml
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 sal_uInt16 nFamily,
                 sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     public:
@@ -104,7 +104,7 @@ namespace dbaxml
         TYPEINFO();
 
         OTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
-                const ::rtl::OUString& rLName ,
+                const OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 const sal_Bool bAutoStyles );
         virtual ~OTableStylesContext();
@@ -116,7 +116,7 @@ namespace dbaxml
         virtual ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XNameContainer >
             GetStylesContainer( sal_uInt16 nFamily ) const;
-        virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
+        virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };

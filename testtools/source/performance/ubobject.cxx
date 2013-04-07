@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::test::performance;
 
-using ::rtl::OUString;
 
 #define SERVICENAME     "com.sun.star.test.performance.PerformanceTestObject"
 #define IMPLNAME        "com.sun.star.comp.performance.PerformanceTestObject"
@@ -123,7 +122,7 @@ public:
         {}
     virtual OUString SAL_CALL getString_attr() throw(::com::sun::star::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString_attr( const ::rtl::OUString& _attributestring ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString_attr( const OUString& _attributestring ) throw(::com::sun::star::uno::RuntimeException)
         {}
     virtual Reference< XInterface > SAL_CALL getInterface_attr() throw(::com::sun::star::uno::RuntimeException)
         { return Reference< XInterface >(); }
@@ -161,7 +160,7 @@ public:
         {}
     virtual OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException)
         { return _aDummyString; }
-    virtual void SAL_CALL setString( const ::rtl::OUString& _string ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString( const OUString& _string ) throw(::com::sun::star::uno::RuntimeException)
         {}
     virtual Reference< XInterface > SAL_CALL getInterface() throw(::com::sun::star::uno::RuntimeException)
         { return Reference< XInterface >(); }

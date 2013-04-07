@@ -60,7 +60,7 @@
 #include "xftextcontent.hxx"
 #include "ixfstream.hxx"
 
-XFTextContent::XFTextContent(rtl::OUString text):m_strText(text)
+XFTextContent::XFTextContent(OUString text):m_strText(text)
 {
 }
 
@@ -73,7 +73,7 @@ enumXFContent XFTextContent::GetContentType()
     return enumXFContentText;
 }
 
-void    XFTextContent::SetText(const rtl::OUString& text)
+void    XFTextContent::SetText(const OUString& text)
 {
     m_strText = text;
 }
@@ -81,9 +81,9 @@ void    XFTextContent::SetText(const rtl::OUString& text)
 void    XFTextContent::ToXml(IXFStream *pStrm)
 {
 //  pStrm->Characters(m_strText);
-    rtl::OUString sSpaceToken(" ");
-    sSpaceToken += rtl::OUString(" ");
-    rtl::OUString sSubString;
+    OUString sSpaceToken(" ");
+    sSpaceToken += OUString(" ");
+    OUString sSubString;
     sal_Int32 nIndex = 0;
     sal_Int32 nSize = m_strText.getLength();
     sal_Int32 i,j;
@@ -107,7 +107,7 @@ void    XFTextContent::ToXml(IXFStream *pStrm)
             }
             IXFAttrList *pAttrList = pStrm->GetAttrList();
             pAttrList->Clear();
-            pAttrList->AddAttribute( A2OUSTR("text:c"), rtl::OUString::valueOf(j-nIndex) );
+            pAttrList->AddAttribute( A2OUSTR("text:c"), OUString::valueOf(j-nIndex) );
             pStrm->StartElement( A2OUSTR("text:s") );
             pStrm->EndElement( A2OUSTR("text:s") );
 

@@ -30,7 +30,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 struct SwNumberingTypeListBox_Impl
 {
@@ -59,7 +58,7 @@ SwNumberingTypeListBox::SwNumberingTypeListBox( Window* pWin, WinBits nStyle ) :
     pImpl->xInfo = uno::Reference<text::XNumberingTypeInfo>(xDefNum, uno::UNO_QUERY);
 }
 
-bool SwNumberingTypeListBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool SwNumberingTypeListBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("type")))
         Reload(rValue.toInt32());

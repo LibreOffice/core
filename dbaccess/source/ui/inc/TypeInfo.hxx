@@ -32,7 +32,7 @@
 namespace dbaui
 {
 //========================================================================
-// Based on these ids the language dependent ::rtl::OUString are fetched from the resource
+// Based on these ids the language dependent OUString are fetched from the resource
 const sal_uInt16 TYPE_UNKNOWN   = 0;
 const sal_uInt16 TYPE_TEXT      = 1;
 const sal_uInt16 TYPE_NUMERIC   = 2;
@@ -69,12 +69,12 @@ const sal_uInt16 TYPE_BIT       = 31;
     class OTypeInfo
     {
     public:
-        ::rtl::OUString aUIName;        // the name which is the user see (a combination of resource text and aTypeName)
-        ::rtl::OUString aTypeName;      // name of type in database
-        ::rtl::OUString aLiteralPrefix; // prefix for quoting
-        ::rtl::OUString aLiteralSuffix; // suffix for quoting
-        ::rtl::OUString aCreateParams;  // parameter for creation
-        ::rtl::OUString aLocalTypeName;
+        OUString aUIName;        // the name which is the user see (a combination of resource text and aTypeName)
+        OUString aTypeName;      // name of type in database
+        OUString aLiteralPrefix; // prefix for quoting
+        OUString aLiteralSuffix; // suffix for quoting
+        OUString aCreateParams;  // parameter for creation
+        OUString aLocalTypeName;
 
         sal_Int32       nPrecision;     // length of type
         sal_Int32       nType;          // database type
@@ -105,7 +105,7 @@ const sal_uInt16 TYPE_BIT       = 31;
         {}
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
-        inline ::rtl::OUString  getDBName() const { return aTypeName; }
+        inline OUString  getDBName() const { return aTypeName; }
 
     };
 
@@ -123,8 +123,8 @@ const sal_uInt16 TYPE_BIT       = 31;
     */
     TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
-                               const ::rtl::OUString& _sTypeName,
-                               const ::rtl::OUString& _sCreateParams,
+                               const OUString& _sTypeName,
+                               const OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
                                sal_Bool _bAutoIncrement,

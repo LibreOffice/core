@@ -104,7 +104,7 @@ namespace comphelper
 
     void OCommonAccessibleText::implGetGlyphBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( implIsValidIndex( nIndex, sText.getLength() ) )
         {
@@ -136,7 +136,7 @@ namespace comphelper
     sal_Bool OCommonAccessibleText::implGetWordBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         sal_Bool bWord = sal_False;
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( implIsValidIndex( nIndex, sText.getLength() ) )
         {
@@ -168,7 +168,7 @@ namespace comphelper
 
     void OCommonAccessibleText::implGetSentenceBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( implIsValidIndex( nIndex, sText.getLength() ) )
         {
@@ -191,7 +191,7 @@ namespace comphelper
 
     void OCommonAccessibleText::implGetParagraphBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( implIsValidIndex( nIndex, sText.getLength() ) )
         {
@@ -217,7 +217,7 @@ namespace comphelper
 
     void OCommonAccessibleText::implGetLineBoundary( i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
 
         if ( implIsValidIndex( nIndex, nLength ) || nIndex == nLength )
@@ -236,7 +236,7 @@ namespace comphelper
 
     sal_Unicode OCommonAccessibleText::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( !implIsValidIndex( nIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
@@ -253,9 +253,9 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getSelectedText() throw (RuntimeException)
+    OUString OCommonAccessibleText::getSelectedText() throw (RuntimeException)
     {
-        ::rtl::OUString sText;
+        OUString sText;
         sal_Int32 nStartIndex;
         sal_Int32 nEndIndex;
 
@@ -298,16 +298,16 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getText() throw (RuntimeException)
+    OUString OCommonAccessibleText::getText() throw (RuntimeException)
     {
         return implGetText();
     }
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OCommonAccessibleText::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString OCommonAccessibleText::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
 
         if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
@@ -322,7 +322,7 @@ namespace comphelper
 
     TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
@@ -427,7 +427,7 @@ namespace comphelper
 
     TextSegment OCommonAccessibleText::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
@@ -552,7 +552,7 @@ namespace comphelper
 
     TextSegment OCommonAccessibleText::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException)
     {
-        ::rtl::OUString sText( implGetText() );
+        OUString sText( implGetText() );
         sal_Int32 nLength = sText.getLength();
 
         if ( !implIsValidIndex( nIndex, nLength ) && nIndex != nLength )
@@ -679,8 +679,8 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
     bool OCommonAccessibleText::implInitTextChangedEvent(
-        const rtl::OUString& rOldString,
-        const rtl::OUString& rNewString,
+        const OUString& rOldString,
+        const OUString& rNewString,
         ::com::sun::star::uno::Any& rDeleted,
         ::com::sun::star::uno::Any& rInserted) // throw()
     {
@@ -811,7 +811,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getSelectedText() throw (RuntimeException)
+    OUString OAccessibleTextHelper::getSelectedText() throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -838,7 +838,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getText() throw (RuntimeException)
+    OUString OAccessibleTextHelper::getText() throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 
@@ -847,7 +847,7 @@ namespace comphelper
 
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString OAccessibleTextHelper::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         OExternalLockGuard aGuard( this );
 

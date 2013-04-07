@@ -1045,7 +1045,7 @@ void SvImpLBox::DrawNet()
         Rectangle aCtrlRegion( aTemp, Size( 0, 0 ) );
         ControlState        nState = CTRL_STATE_ENABLED;
         if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
-                                      aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
+                                      aCtrlRegion, nState, aControlValue, OUString() ) )
         {
             return;
         }

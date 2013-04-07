@@ -41,11 +41,11 @@ class XMLTextListAutoStylePool;
 class SvxXMLNumRuleExport
 {
     SvXMLExport& rExport;
-    const ::rtl::OUString sCDATA;
-    const ::rtl::OUString sWS;
-    const ::rtl::OUString sNumberingRules;
-    const ::rtl::OUString sIsPhysical;
-    const ::rtl::OUString sIsContinuousNumbering;
+    const OUString sCDATA;
+    const OUString sWS;
+    const OUString sNumberingRules;
+    const OUString sIsPhysical;
+    const OUString sIsContinuousNumbering;
     // Boolean indicating, if properties for position-and-space-mode LABEL_ALIGNEMNT
     // are exported or not. (#i89178#)
     // These properties have been introduced in ODF 1.2. Thus, its export have
@@ -84,7 +84,7 @@ public:
                        XMLTextListAutoStylePool *pPool,
                        sal_Bool bExportChapterNumbering = sal_True );
     void exportNumberingRule(
-            const ::rtl::OUString& rName, sal_Bool bIsHidden,
+            const OUString& rName, sal_Bool bIsHidden,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::container::XIndexReplace > & xNumRule );
 };

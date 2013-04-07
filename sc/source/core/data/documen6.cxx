@@ -53,7 +53,7 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
     return pScriptTypeData->xBreakIter;
 }
 
-bool ScDocument::HasStringWeakCharacters( const rtl::OUString& rString )
+bool ScDocument::HasStringWeakCharacters( const OUString& rString )
 {
     if (!rString.isEmpty())
     {
@@ -78,7 +78,7 @@ bool ScDocument::HasStringWeakCharacters( const rtl::OUString& rString )
     return false;       // none found
 }
 
-sal_uInt8 ScDocument::GetStringScriptType( const rtl::OUString& rString )
+sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
 {
 
     sal_uInt8 nRet = 0;

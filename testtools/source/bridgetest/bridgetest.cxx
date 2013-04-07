@@ -59,9 +59,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::bridge;
 using namespace test::testtools::bridgetest;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 #define SERVICENAME     "com.sun.star.test.bridge.BridgeTest"
 #define IMPLNAME        "com.sun.star.comp.bridge.BridgeTest"
@@ -89,12 +86,12 @@ static bool check( bool b , char const * message )
 
 namespace {
 
-bool checkEmpty(rtl::OUString const & string, char const * message) {
+bool checkEmpty(OUString const & string, char const * message) {
     bool ok = string.isEmpty();
     if (!ok) {
         fprintf(
             stderr, "%s failed: %s\n", message,
-            rtl::OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(string, RTL_TEXTENCODING_UTF8).getStr());
     }
     return ok;
 }
@@ -190,7 +187,7 @@ static void assign( TestElement & rData,
                     sal_Int32 nLong, sal_uInt32 nULong,
                     sal_Int64 nHyper, sal_uInt64 nUHyper,
                     float fFloat, double fDouble,
-                    TestEnum eEnum, const ::rtl::OUString& rStr,
+                    TestEnum eEnum, const OUString& rStr,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                     const ::com::sun::star::uno::Any& rAny )
 {
@@ -570,7 +567,7 @@ static sal_Bool performTest(
                 bRet &= check(tps1.member == 12345, "transportPolyHyper");
                 Sequence< Any > seq(2);
                 seq[0] <<= static_cast< sal_uInt32 >(33);
-                seq[1] <<= rtl::OUString("ABC");
+                seq[1] <<= OUString("ABC");
                 TestPolyStruct< Sequence< Any > > tps2(seq);
                 TestPolyStruct< Sequence< Any > > tps3;
                 xLBT->transportPolySequence(tps2, tps3);
@@ -580,7 +577,7 @@ static sal_Bool performTest(
                 sal_uInt32 v0 = sal_uInt32();
                 tps3.member[0] >>= v0;
                 bRet &= check(v0 == 33, "transportPolySequence, element 0");
-                rtl::OUString v1;
+                OUString v1;
                 tps3.member[1] >>= v1;
                 bRet &= check( v1 == "ABC", "transportPolySequence, element 1" );
                 bRet &= check(
@@ -594,7 +591,7 @@ static sal_Bool performTest(
                 Any nullAny(xLBT->getNullPolyAny().member);
                 bRet &= check(
                     (((nullAny.getValueTypeName() ==
-                       rtl::OUString(
+                       OUString(
                                "com.sun.star.uno.XInterface")) &&
                       !static_cast< Reference< XInterface > const * >(
                           nullAny.getValue())->is())

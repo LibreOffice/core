@@ -26,8 +26,8 @@ namespace connectivity { namespace hsqldb
     //= HTools
     //====================================================================
     //--------------------------------------------------------------------
-    void HTools::appendTableFilterCrit( ::rtl::OUStringBuffer& _inout_rBuffer, const ::rtl::OUString& _rCatalog,
-        const ::rtl::OUString _rSchema, const ::rtl::OUString _rName, bool _bShortForm )
+    void HTools::appendTableFilterCrit( OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
+        const OUString _rSchema, const OUString _rName, bool _bShortForm )
     {
         _inout_rBuffer.appendAscii( " WHERE " );
         if ( !_rCatalog.isEmpty() )

@@ -46,7 +46,7 @@ static String lcl_CheckGroupName( const String& rGroupName )
 }
 
 
-SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& rFullUrl )
+SwVbaTemplate::SwVbaTemplate( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rFullUrl )
     : SwVbaTemplate_BASE( rParent, rContext ), mxModel( rModel ), msFullUrl( rFullUrl )
 {
 }
@@ -56,10 +56,10 @@ SwVbaTemplate::~SwVbaTemplate()
 {
 }
 
-rtl::OUString
+OUString
 SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
 {
-    rtl::OUString sName;
+    OUString sName;
     if( !msFullUrl.isEmpty() )
     {
         INetURLObject aURL( msFullUrl );
@@ -68,14 +68,14 @@ SwVbaTemplate::getName() throw ( css::uno::RuntimeException )
     return sName;
 }
 
-rtl::OUString
+OUString
 SwVbaTemplate::getPath() throw ( css::uno::RuntimeException )
 {
-    rtl::OUString sPath;
+    OUString sPath;
     if( !msFullUrl.isEmpty() )
     {
         INetURLObject aURL( msFullUrl );
-        rtl::OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
+        OUString sURL( aURL.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
         sURL = sURL.copy( 0, sURL.getLength() - aURL.GetLastName().getLength() - 1 );
         ::osl::File::getSystemPathFromFileURL( sURL, sPath );
     }
@@ -89,8 +89,8 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.
-    rtl::OUString sGroup("Normal");
-    rtl::OUString sName = getName();
+    OUString sGroup("Normal");
+    OUString sName = getName();
     sal_Int32 nIndex = sName.lastIndexOf( sal_Unicode('.') );
     if( nIndex > 0 )
     {
@@ -105,7 +105,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString("Auto Text Entry doesn't exist"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Auto Text Entry doesn't exist"), uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< XCollection > xCol( new SwVbaAutoTextEntries( this, mxContext, xGroup ) );
@@ -114,20 +114,20 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     return uno::makeAny( xCol );
 }
 
-rtl::OUString
+OUString
 SwVbaTemplate::getServiceImplName()
 {
-    return rtl::OUString("SwVbaTemplate");
+    return OUString("SwVbaTemplate");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaTemplate::getServiceNames()
 {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Template" );
+                aServiceNames[ 0 ] = OUString("ooo.vba.word.Template" );
         }
         return aServiceNames;
 }

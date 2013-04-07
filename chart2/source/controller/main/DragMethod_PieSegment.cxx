@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Reference;
 using ::basegfx::B2DVector;
 
 DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
-                                             , const rtl::OUString& rObjectCID
+                                             , const OUString& rObjectCID
                                              , const Reference< frame::XModel >& xChartModel )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel )
     , m_aStartVector(100.0,100.0)
@@ -48,7 +48,7 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
     , m_aDragDirection(1000.0,1000.0)
     , m_fDragRange( 1.0 )
 {
-    rtl::OUString aParameter( ObjectIdentifier::getDragParameterString( m_aObjectCID ) );
+    OUString aParameter( ObjectIdentifier::getDragParameterString( m_aObjectCID ) );
 
     sal_Int32 nOffsetPercent(0);
     awt::Point aMinimumPosition(0,0);
@@ -75,7 +75,7 @@ DragMethod_PieSegment::~DragMethod_PieSegment()
 void DragMethod_PieSegment::TakeSdrDragComment(String& rStr) const
 {
     rStr = SCH_RESSTR(STR_STATUS_PIE_SEGMENT_EXPLODED);
-    rStr.SearchAndReplaceAscii( "%PERCENTVALUE", rtl::OUString::valueOf( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
+    rStr.SearchAndReplaceAscii( "%PERCENTVALUE", OUString::valueOf( static_cast<sal_Int32>((m_fAdditionalOffset+m_fInitialOffset)*100.0) ));
 }
 bool DragMethod_PieSegment::BeginSdrDrag()
 {

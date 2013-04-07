@@ -232,9 +232,9 @@ void StockBar::fireModifyEvent()
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > StockBar::getSupportedServiceNames_Static()
+uno::Sequence< OUString > StockBar::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = "com.sun.star.chart2.StockBar";
     aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;

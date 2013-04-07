@@ -39,7 +39,7 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const staruno::Sequence< sal_Int8
     rStream.write(aData.getConstArray(),aData.getLength(),nWritten);
     if (nWritten != (sal_uInt64)aData.getLength())
     {
-        throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(),static_cast<staruno::XWeak*>(this));
     }
 }
 

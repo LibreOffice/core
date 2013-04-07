@@ -268,7 +268,7 @@ XclImpTabViewSettings& XclImpRoot::GetTabViewSettings() const
 
 String XclImpRoot::GetScAddInName( const String& rXclName ) const
 {
-    ::rtl::OUString aScName;
+    OUString aScName;
     if( ScGlobal::GetAddInCollection()->GetCalcName( rXclName, aScName ) )
         return aScName;
     return rXclName;

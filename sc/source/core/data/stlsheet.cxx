@@ -325,7 +325,7 @@ const String& ScStyleSheet::GetFollow() const
 
 bool ScStyleSheet::SetName( const String& rNew )
 {
-    String aFileStdName = rtl::OUString(STRING_STANDARD);
+    String aFileStdName = OUString(STRING_STANDARD);
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return false;
     else

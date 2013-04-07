@@ -32,7 +32,7 @@ public:
     ~BreakIterator_th();
 
 protected:
-    void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
+    void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }

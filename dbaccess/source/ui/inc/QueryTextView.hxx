@@ -48,8 +48,8 @@ namespace dbaui
         // check if the statement is correct when not returning false
         virtual sal_Bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const ::rtl::OUString& _rsStatement);
-        virtual ::rtl::OUString getStatement();
+        virtual void setStatement(const OUString& _rsStatement);
+        virtual OUString getStatement();
         // allow access to our edit
         OSqlEdit* getSqlEdit() const { return m_pEdit; }
 

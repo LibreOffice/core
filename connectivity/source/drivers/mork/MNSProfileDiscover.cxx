@@ -27,15 +27,15 @@ namespace connectivity
 {
     namespace mork
     {
-        ProfileStruct::ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,
-            const ::rtl::OUString& aProfilePath
+        ProfileStruct::ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+            const OUString& aProfilePath
           )
         {
             product=aProduct;
             profileName = aProfileName;
             profilePath = aProfilePath;
         }
-        ::rtl::OUString ProfileStruct::getProfilePath()
+        OUString ProfileStruct::getProfilePath()
         {
             return profilePath;
         }
@@ -67,9 +67,9 @@ namespace connectivity
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
 
-            ::rtl::OUString regDir = getRegistryDir(product);
-            ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString("profiles.ini");
+            OUString regDir = getRegistryDir(product);
+            OUString profilesIni( regDir );
+            profilesIni += OUString("profiles.ini");
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
@@ -78,10 +78,10 @@ namespace connectivity
             for(;iBegin != iEnd;++iBegin)
             {
                 ini_Section *aSection = &(*iBegin).second;
-                ::rtl::OUString profileName;
-                ::rtl::OUString profilePath;
-                ::rtl::OUString sIsRelative;
-                ::rtl::OUString sIsDefault;
+                OUString profileName;
+                OUString profilePath;
+                OUString sIsRelative;
+                OUString sIsDefault;
 
                 for(NameValueList::iterator itor=aSection->lList.begin();
                     itor != aSection->lList.end();
@@ -113,7 +113,7 @@ namespace connectivity
                         isRelative = sIsRelative.toInt32();
                     }
 
-                    rtl::OUString fullProfilePath;
+                    OUString fullProfilePath;
                     if(isRelative)
                     {
                         fullProfilePath = regDir + profilePath;
@@ -142,20 +142,20 @@ namespace connectivity
             return static_cast< ::sal_Int32 >(m_Product.mProfileList.size());
         }
 
-        ::rtl::OUString ProfileAccess::getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+        OUString ProfileAccess::getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
                 //Profile not found
-                return ::rtl::OUString();
+                return OUString();
             }
             else
                 return m_Product.mProfileList[profileName]->getProfilePath();
         }
 
-        ::rtl::OUString ProfileAccess::getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException)
+        OUString ProfileAccess::getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException)
         {
             sal_Int32 index=product;
             ProductStruct &m_Product = m_ProductProfileList[index];
@@ -167,7 +167,7 @@ namespace connectivity
             if (m_Product.mProfileList.empty())
             {
                 //there are not any profiles
-                return ::rtl::OUString();
+                return OUString();
             }
             ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;
             return aProfile->getProfileName();

@@ -31,7 +31,7 @@
 class SVX_DLLPUBLIC SvxTbxCtlDraw : public SfxToolBoxControl
 {
 private:
-    ::rtl::OUString     m_sToolboxName;
+    OUString     m_sToolboxName;
 
     void                toggleToolbox();
 

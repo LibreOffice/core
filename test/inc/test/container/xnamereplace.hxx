@@ -38,7 +38,7 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XNameReplace
 {
 public:
-    XNameReplace(const rtl::OUString& rName): maName(rName) {}
+    XNameReplace(const OUString& rName): maName(rName) {}
 
     virtual uno::Reference< uno::XInterface > init() = 0;
 
@@ -49,7 +49,7 @@ public:
     virtual ~XNameReplace() {}
 
 private:
-    rtl::OUString maName;
+    OUString maName;
 
 };
 

@@ -44,7 +44,7 @@ private:
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection ) throw ( css::uno::RuntimeException );
     css::uno::Reference< css::text::XTextRange > GetSelectedRange() throw ( css::uno::RuntimeException );
-    void GetSelectedCellRange( rtl::OUString& sTLName, rtl::OUString& sBRName ) throw ( css::uno::RuntimeException );
+    void GetSelectedCellRange( OUString& sTLName, OUString& sBRName ) throw ( css::uno::RuntimeException );
     css::uno::Reference< css::text::XTextTable > GetXTextTable() throw ( css::uno::RuntimeException );
     bool IsInTable() throw ( css::uno::RuntimeException );
     bool HasSelection() throw ( css::uno::RuntimeException );
@@ -54,12 +54,12 @@ public:
     virtual ~SwVbaSelection();
 
     // Attribute
-    virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setText( const OUString& rText ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException);
     virtual void SAL_CALL HomeKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL EndKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL TypeText( const rtl::OUString& rText ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL TypeText( const OUString& rText ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Delete( const css::uno::Any& _unit, const css::uno::Any& _count ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL MoveRight( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL MoveLeft( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::uno::RuntimeException);
@@ -104,8 +104,8 @@ public:
     virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_SELECTION_HXX */
 

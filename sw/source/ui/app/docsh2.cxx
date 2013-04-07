@@ -119,7 +119,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using namespace ::sfx2;
 extern bool FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
@@ -777,7 +776,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                         SfxObjectFactory &rFact = GetFactory();
-                        SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(rFact.GetShortName()) );
+                        SfxFilterMatcher aMatcher( OUString::createFromAscii(rFact.GetShortName()) );
                         SfxFilterMatcherIter aIter( aMatcher );
                         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
                         const SfxFilter* pFlt = aIter.First();
@@ -796,7 +795,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bool bWeb = 0 != dynamic_cast< SwWebDocShell *>( this );
                         const SfxFilter *pOwnFlt =
                                 SwDocShell::Factory().GetFilterContainer()->
-                                GetFilter4FilterName(rtl::OUString("writer8"));
+                                GetFilter4FilterName(OUString("writer8"));
 
                         // make sure the default file format is also available
                         if(bWeb)
@@ -843,7 +842,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bMerge = 0 != (nFlags&SFX_MERGE_STYLES);
                     aOpt.SetMerge( !bMerge );
 
-                    SetError( LoadStylesFromFile( aFileName, aOpt, sal_False ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
+                    SetError( LoadStylesFromFile( aFileName, aOpt, sal_False ), OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
                     if ( !GetError() )
                         rReq.Done();
                 }
@@ -864,7 +863,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     // 3 - file saved in non-HTML -> QueryBox to save as HTML
                     const SfxFilter* pHtmlFlt =
                                     SwIoSystem::GetFilterOfFormat(
-                                        rtl::OUString("HTML"),
+                                        OUString("HTML"),
                                         SwWebDocShell::Factory().GetFilterContainer() );
                     sal_Bool bLocalHasName = HasName();
                     if(bLocalHasName)
@@ -986,7 +985,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        ::rtl::OUString aCmd("SendOutlineToImpress");
+                        OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         *pStrm << '\0';
@@ -1003,9 +1002,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                             uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = ::rtl::OUString("RtfOutline");
+                            aArgs[0].Name = OUString("RtfOutline");
                             aArgs[0].Value <<= aSeq;
-                            xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
+                            xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
                         }
                     }
                     else
@@ -1037,7 +1036,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 EnableSetModified( sal_False );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
-                ::GetRTFWriter( rtl::OUString('O'), rtl::OUString(), xWrt );
+                ::GetRTFWriter( OUString('O'), OUString(), xWrt );
                 SvMemoryStream *pStrm = new SvMemoryStream();
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );
@@ -1053,7 +1052,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-                        ::rtl::OUString aCmd("SendOutlineToImpress");
+                        OUString aCmd("SendOutlineToImpress");
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
                         pStrm->Seek( STREAM_SEEK_TO_END );
                         *pStrm << '\0';
@@ -1070,9 +1069,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             aLockBytes.ReadAt( 0, aSeq.getArray(), nLen, &nRead );
 
                             uno::Sequence< beans::PropertyValue > aArgs(1);
-                            aArgs[0].Name = ::rtl::OUString("RtfOutline");
+                            aArgs[0].Name = OUString("RtfOutline");
                             aArgs[0].Value <<= aSeq;
-                            xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aArgs );
+                            xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aArgs );
                         }
                     }
                     else
@@ -1189,7 +1188,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
-                                rtl::OUString("HTML"),
+                                OUString("HTML"),
                                 SwWebDocShell::Factory().GetFilterContainer() );
                         nStrId = STR_LOAD_HTML_DOC;
                     }
@@ -1197,7 +1196,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
-                                    GetFilter4Extension( rtl::OUString("odm")  );
+                                    GetFilter4Extension( OUString("odm")  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
                     }
 
@@ -1401,8 +1400,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // Ok.  I did my best.
                 break;
 
-            SfxStringItem aApp(SID_DOC_SERVICE, rtl::OUString("com.sun.star.text.TextDocument"));
-            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+            SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.text.TextDocument"));
+            SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
             pViewShell->GetDispatcher()->Execute(
                 SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
         }
@@ -1672,7 +1671,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     INetURLObject aURLObj( rURL );
 
     // Set filter:
-    String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
+    String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
     // search for filter in WebDocShell, too
@@ -1681,7 +1680,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
     aMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     if(!pFlt)
     {
-        String sWebFactory(rtl::OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
+        String sWebFactory(OUString::createFromAscii(SwWebDocShell::Factory().GetShortName()));
         SfxFilterMatcher aWebMatcher( sWebFactory );
         aWebMatcher.DetectFilter( aMed, &pFlt, sal_False, sal_False );
     }
@@ -1702,7 +1701,7 @@ sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
                 try
                 {
                     uno::Reference< beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY_THROW );
-                    const ::rtl::OUString aMediaTypePropName( "MediaType" );
+                    const OUString aMediaTypePropName( "MediaType" );
                     xProps->getPropertyValue( aMediaTypePropName );
                     bImport = true;
                 }

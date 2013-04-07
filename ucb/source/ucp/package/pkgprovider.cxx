@@ -50,12 +50,12 @@ class Package : public cppu::OWeakObject,
 {
     friend class ContentProvider;
 
-    rtl::OUString                                        m_aName;
+    OUString                                        m_aName;
     uno::Reference< container::XHierarchicalNameAccess > m_xNA;
     ContentProvider*                                     m_pOwner;
 
 public:
-    Package( const rtl::OUString& rName,
+    Package( const OUString& rName,
              const uno::Reference< container::XHierarchicalNameAccess > & xNA,
              ContentProvider* pOwner )
     : m_aName( rName ), m_xNA( xNA ), m_pOwner( pOwner ) {}
@@ -75,11 +75,11 @@ public:
 
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
-    getByHierarchicalName( const rtl::OUString& aName )
+    getByHierarchicalName( const OUString& aName )
         throw( container::NoSuchElementException, uno::RuntimeException )
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual sal_Bool SAL_CALL
-    hasByHierarchicalName( const rtl::OUString& aName )
+    hasByHierarchicalName( const OUString& aName )
         throw( uno::RuntimeException )
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
@@ -93,7 +93,7 @@ public:
 struct equalString
 {
     bool operator()(
-        const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+        const OUString& rKey1, const OUString& rKey2 ) const
     {
         return !!( rKey1 == rKey2 );
     }
@@ -101,7 +101,7 @@ struct equalString
 
 struct hashString
 {
-    size_t operator()( const rtl::OUString & rName ) const
+    size_t operator()( const OUString & rName ) const
     {
         return rName.hashCode();
     }
@@ -109,7 +109,7 @@ struct hashString
 
 typedef boost::unordered_map
 <
-    rtl::OUString,
+    OUString,
     Package*,
     hashString,
     equalString
@@ -173,8 +173,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
-                     rtl::OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
+                     OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -232,7 +232,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 //=========================================================================
 
 uno::Reference< container::XHierarchicalNameAccess >
-ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString & rParam )
+ContentProvider::createPackage( const OUString & rName, const OUString & rParam )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -242,7 +242,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
         return uno::Reference< container::XHierarchicalNameAccess >();
     }
 
-    rtl::OUString rURL = rName + rParam;
+    OUString rURL = rName + rParam;
 
     if ( m_pPackages )
     {
@@ -297,7 +297,7 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 }
 
 //=========================================================================
-sal_Bool ContentProvider::removePackage( const rtl::OUString & rName )
+sal_Bool ContentProvider::removePackage( const OUString & rName )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

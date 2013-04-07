@@ -34,7 +34,6 @@
 #include <switerator.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 SwXRedlines::SwXRedlines(SwDoc* _pDoc) :
     SwUnoCollection(_pDoc)
@@ -100,7 +99,7 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return OUString("SwXRedlines");
 }
 
-sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+sal_Bool SwXRedlines::supportsService(const OUString& /*ServiceName*/)
     throw( uno::RuntimeException )
 {
     OSL_FAIL("not implemented");
@@ -162,12 +161,12 @@ uno::Any SwXRedlineEnumeration::nextElement(void)
     return aRet;
 }
 
-rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXRedlineEnumeration");
 }
 
-sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+sal_Bool SwXRedlineEnumeration::supportsService(const OUString& /*ServiceName*/) throw( uno::RuntimeException )
 {
     return sal_False;
 }

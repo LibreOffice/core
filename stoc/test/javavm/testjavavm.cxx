@@ -42,9 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 
 sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )

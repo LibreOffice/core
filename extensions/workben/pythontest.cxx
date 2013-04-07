@@ -34,7 +34,6 @@
 
 using namespace usr;
 
-using ::rtl::OUStringToString;
 using ::rtl::StringToOUString;
 
 

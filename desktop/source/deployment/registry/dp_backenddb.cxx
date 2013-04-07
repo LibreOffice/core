@@ -36,7 +36,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 
 namespace dp_registry {
@@ -44,7 +43,7 @@ namespace backend {
 
 BackendDb::BackendDb(
     Reference<css::uno::XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):
+    OUString const & url):
     m_xContext(xContext)
 {
     m_urlDb = dp_misc::expandUnoRcUrl(url);
@@ -119,7 +118,7 @@ Reference<css::xml::xpath::XXPathAPI> BackendDb::getXPathAPI()
     return m_xpathApi;
 }
 
-void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
+void BackendDb::removeElement(OUString const & sXPathExpression)
 {
     try
     {
@@ -152,11 +151,11 @@ void BackendDb::removeElement(::rtl::OUString const & sXPathExpression)
     }
 }
 
-void BackendDb::removeEntry(::rtl::OUString const & url)
+void BackendDb::removeEntry(OUString const & url)
 {
     const OUString sKeyElement = getKeyElementName();
     const OUString sPrefix = getNSPrefix();
-    ::rtl::OUStringBuffer sExpression(500);
+    OUStringBuffer sExpression(500);
     sExpression.append(sPrefix);
     sExpression.appendAscii(":");
     sExpression.append(sKeyElement);
@@ -167,7 +166,7 @@ void BackendDb::removeEntry(::rtl::OUString const & url)
     removeElement(sExpression.makeStringAndClear());
 }
 
-void BackendDb::revokeEntry(::rtl::OUString const & url)
+void BackendDb::revokeEntry(OUString const & url)
 {
     try
     {
@@ -187,7 +186,7 @@ void BackendDb::revokeEntry(::rtl::OUString const & url)
     }
 }
 
-bool BackendDb::activateEntry(::rtl::OUString const & url)
+bool BackendDb::activateEntry(OUString const & url)
 {
     try
     {
@@ -211,7 +210,7 @@ bool BackendDb::activateEntry(::rtl::OUString const & url)
     }
 }
 
-bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
+bool BackendDb::hasActiveEntry(OUString const & url)
 {
     try
     {
@@ -236,13 +235,13 @@ bool BackendDb::hasActiveEntry(::rtl::OUString const & url)
 }
 
 Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
-    ::rtl::OUString const & url)
+    OUString const & url)
 {
     try
     {
         const OUString sPrefix = getNSPrefix();
         const OUString sKeyElement = getKeyElementName();
-        ::rtl::OUStringBuffer sExpression(500);
+        OUStringBuffer sExpression(500);
         sExpression.append(sPrefix);
         sExpression.appendAscii(":");
         sExpression.append(sKeyElement);
@@ -266,7 +265,7 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
 
 //Only writes the data if there is at least one entry
 void BackendDb::writeVectorOfPair(
-    ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > const & vecPairs,
+    ::std::vector< ::std::pair< OUString, OUString > > const & vecPairs,
     OUString const & sVectorTagName,
     OUString const & sPairTagName,
     OUString const & sFirstTagName,
@@ -384,7 +383,7 @@ BackendDb::readVectorOfPair(
 
 //Only writes the data if there is at least one entry
 void BackendDb::writeSimpleList(
-    ::std::list< ::rtl::OUString> const & list,
+    ::std::list< OUString> const & list,
     OUString const & sListTagName,
     OUString const & sMemberTagName,
     Reference<css::xml::dom::XNode> const & xParent)
@@ -463,7 +462,7 @@ void BackendDb::writeSimpleElement(
     element.
 */
 Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
-    ::rtl::OUString const & url)
+    OUString const & url)
 {
     try
     {
@@ -579,7 +578,7 @@ OUString BackendDb::readSimpleElement(
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sPrefix = getNSPrefix();
         const OUString sKeyElement = getKeyElementName();
-        ::rtl::OUStringBuffer buf(512);
+        OUStringBuffer buf(512);
         buf.append(sPrefix);
         buf.appendAscii(":");
         buf.append(sKeyElement);
@@ -615,11 +614,11 @@ OUString BackendDb::readSimpleElement(
 
 RegisteredDb::RegisteredDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):BackendDb(xContext, url)
+    OUString const & url):BackendDb(xContext, url)
 {
 }
 
-void RegisteredDb::addEntry(::rtl::OUString const & url)
+void RegisteredDb::addEntry(OUString const & url)
 {
     try{
         if (!activateEntry(url))
@@ -660,7 +659,7 @@ void RegisteredDb::addEntry(::rtl::OUString const & url)
     }
 }
 
-bool RegisteredDb::getEntry(::rtl::OUString const & url)
+bool RegisteredDb::getEntry(OUString const & url)
 {
     try
     {

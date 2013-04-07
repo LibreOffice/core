@@ -37,7 +37,7 @@ class XMLIndexTemplateContext;
  */
 class XMLIndexTabStopEntryContext : public XMLIndexSimpleEntryContext
 {
-    ::rtl::OUString sLeaderChar;    /// fill ("leader") character
+    OUString sLeaderChar;    /// fill ("leader") character
     sal_Int32 nTabPosition;         /// tab position
     sal_Bool bTabPositionOK;        /// is tab right aligned?
     sal_Bool bTabRightAligned;      /// is nTabPosition valid?
@@ -52,7 +52,7 @@ public:
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLIndexTabStopEntryContext();
 

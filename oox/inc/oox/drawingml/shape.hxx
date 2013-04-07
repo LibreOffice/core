@@ -44,7 +44,7 @@ namespace oox { namespace drawingml {
 class CustomShapeProperties;
 typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
-typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
+typedef ::std::map< OUString, ShapePtr > ShapeIdMap;
 
 struct ShapeStyleRef
 {
@@ -59,7 +59,7 @@ typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
 {
-    ::rtl::OUString     maFragmentPath;     ///< Path to related XML stream, e.g. for charts.
+    OUString     maFragmentPath;     ///< Path to related XML stream, e.g. for charts.
     bool                mbEmbedShapes;      ///< True = load chart shapes into chart, false = load into parent drawpage.
 
     inline explicit     ChartShapeInfo( bool bEmbedShapes ) : mbEmbedShapes( bEmbedShapes ) {}
@@ -76,7 +76,7 @@ public:
     explicit Shape( const ShapePtr& pSourceShape );
     virtual ~Shape();
 
-    rtl::OUString&                  getServiceName(){ return msServiceName; }
+    OUString&                  getServiceName(){ return msServiceName; }
     void                            setServiceName( const sal_Char* pServiceName );
 
     PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
@@ -114,10 +114,10 @@ public:
     void                            addChild( const ShapePtr pChildPtr ) { maChildren.push_back( pChildPtr ); }
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
-    void                            setName( const rtl::OUString& rName ) { msName = rName; }
-    ::rtl::OUString                 getName( ) { return msName; }
-    void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    ::rtl::OUString                 getId() { return msId; }
+    void                            setName( const OUString& rName ) { msName = rName; }
+    OUString                 getName( ) { return msName; }
+    void                            setId( const OUString& rId ) { msId = rId; }
+    OUString                 getId() { return msId; }
     void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
     sal_Bool                        getHidden() const { return mbHidden; };
     void                            setHiddenMasterShape( sal_Bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
@@ -169,16 +169,16 @@ public:
                         getXShape() const { return mxShape; }
 
     virtual void        applyShapeReference( const Shape& rReferencedShape, bool bUseText = true );
-    const ::std::vector<rtl::OUString>&
+    const ::std::vector<OUString>&
                         getExtDrawings() { return maExtDrawings; }
-    void                addExtDrawingRelId( const ::rtl::OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
+    void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
 
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsert(
                             ::oox::core::XmlFilterBase& rFilterBase,
-                            const ::rtl::OUString& rServiceName,
+                            const OUString& rServiceName,
                             const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
@@ -197,9 +197,9 @@ protected:
                             ShapeIdMap* pShapeMap,
                             basegfx::B2DHomMatrix& aTransformation );
 
-    virtual ::rtl::OUString finalizeServiceName(
+    virtual OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rServiceName,
+                            const OUString& rServiceName,
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
 
     virtual void        finalizeXShape(
@@ -226,9 +226,9 @@ protected:
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
-    rtl::OUString       msServiceName;
-    rtl::OUString       msName;
-    rtl::OUString       msId;
+    OUString       msServiceName;
+    OUString       msName;
+    OUString       msId;
     sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
     OptValue< sal_Int32 >   moSubTypeIndex;
 
@@ -236,7 +236,7 @@ protected:
 
     com::sun::star::awt::Size       maSize;
     com::sun::star::awt::Point      maPosition;
-    ::std::vector<rtl::OUString>    maExtDrawings;
+    ::std::vector<OUString>    maExtDrawings;
 
 private:
     enum FrameType

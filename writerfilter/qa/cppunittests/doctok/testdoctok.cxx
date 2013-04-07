@@ -81,8 +81,8 @@ namespace testdoctok
             OSL_ASSERT(xFactory.is());
 
             uno::Sequence<uno::Any> aUcbInitSequence(2);
-            aUcbInitSequence[0] <<= rtl::OUString("Local");
-            aUcbInitSequence[1] <<= rtl::OUString("Office");
+            aUcbInitSequence[0] <<= OUString("Local");
+            aUcbInitSequence[1] <<= OUString("Office");
 
             uno::Reference<lang::XMultiServiceFactory>
                 xServiceFactory(xFactory, uno::UNO_QUERY);
@@ -99,7 +99,7 @@ namespace testdoctok
                 {
                     uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
                         xNameContainer(xFactory->createInstanceWithContext
-                                       (::rtl::OUString::createFromAscii
+                                       (OUString::createFromAscii
                                         ("com.sun.star.ucb.SimpleFileAccess" ),
                                         xComponentContext), uno::UNO_QUERY );
 
@@ -130,7 +130,7 @@ namespace testdoctok
                 rtl_uString *absfile=NULL;
                 rtl_uString_newConcat(&absfile, dir, fname);
 
-                rtl::OUString sInputFileURL( absfile );
+                OUString sInputFileURL( absfile );
 
                 for (sal_uInt32 n = 0; n < sInputFileURL.getLength(); ++n)
                 {

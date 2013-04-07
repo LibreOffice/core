@@ -59,7 +59,6 @@ using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
 
 namespace comphelper
 {

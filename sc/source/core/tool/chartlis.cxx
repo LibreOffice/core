@@ -107,7 +107,7 @@ boost::unordered_set<sal_uInt16>& ScChartListener::ExternalRefListener::getAllFi
 
 // ----------------------------------------------------------------------------
 
-ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
+ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
     mpExtRefListener(NULL),
@@ -122,7 +122,7 @@ ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP,
     ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const rtl::OUString& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
+ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
     SvtListener(),
     mpExtRefListener(NULL),
     mpTokens(pTokens),
@@ -183,7 +183,7 @@ ScChartListener::~ScChartListener()
     }
 }
 
-const rtl::OUString& ScChartListener::GetName() const
+const OUString& ScChartListener::GetName() const
 {
     return maName;
 }
@@ -465,17 +465,17 @@ void ScChartListenerCollection::StartAllListeners()
 
 void ScChartListenerCollection::insert(ScChartListener* pListener)
 {
-    rtl::OUString aName = pListener->GetName();
+    OUString aName = pListener->GetName();
     maListeners.insert(aName, pListener);
 }
 
-ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName)
+ScChartListener* ScChartListenerCollection::findByName(const OUString& rName)
 {
     ListenersType::iterator it = maListeners.find(rName);
     return it == maListeners.end() ? NULL : it->second;
 }
 
-const ScChartListener* ScChartListenerCollection::findByName(const rtl::OUString& rName) const
+const ScChartListener* ScChartListenerCollection::findByName(const OUString& rName) const
 {
     ListenersType::const_iterator it = maListeners.find(rName);
     return it == maListeners.end() ? NULL : it->second;
@@ -501,17 +501,17 @@ ScChartListenerCollection::StringSetType& ScChartListenerCollection::getNonOleOb
     return maNonOleObjectNames;
 }
 
-rtl::OUString ScChartListenerCollection::getUniqueName(const rtl::OUString& rPrefix) const
+OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
 {
     for (sal_Int32 nNum = 1; nNum < 10000; ++nNum) // arbitrary limit to prevent infinite loop.
     {
-        rtl::OUStringBuffer aBuf(rPrefix);
+        OUStringBuffer aBuf(rPrefix);
         aBuf.append(nNum);
-        rtl::OUString aTestName = aBuf.makeStringAndClear();
+        OUString aTestName = aBuf.makeStringAndClear();
         if (maListeners.find(aTestName) == maListeners.end())
             return aTestName;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 void ScChartListenerCollection::ChangeListening( const String& rName,
@@ -544,7 +544,7 @@ public:
 
     void operator() (ScChartListener* p)
     {
-        rtl::OUString aName = p->GetName();
+        OUString aName = p->GetName();
         mrListeners.insert(aName, p);
     }
 };

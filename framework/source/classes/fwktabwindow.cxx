@@ -70,7 +70,7 @@ void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 // class FwkTabPage ------------------------------------------------
 
 FwkTabPage::FwkTabPage(
-               Window* pParent, const rtl::OUString& rPageURL,
+               Window* pParent, const OUString& rPageURL,
                const css::uno::Reference< css::awt::XContainerWindowEventHandler >& rEventHdl,
                const css::uno::Reference< css::awt::XContainerWindowProvider >& rProvider ) :
 
@@ -104,7 +104,7 @@ void FwkTabPage::CreateDialog()
         uno::Reference< awt::XWindowPeer > xParent( VCLUnoHelper::GetInterface( this ), uno::UNO_QUERY );
         m_xPage = uno::Reference < awt::XWindow >(
             m_xWinProvider->createContainerWindow(
-                m_sPageURL, rtl::OUString(), xParent, xHandler ), uno::UNO_QUERY );
+                m_sPageURL, OUString(), xParent, xHandler ), uno::UNO_QUERY );
 
         uno::Reference< awt::XControl > xPageControl( m_xPage, uno::UNO_QUERY );
         if ( xPageControl.is() )
@@ -118,7 +118,7 @@ void FwkTabPage::CreateDialog()
             }
         }
 
-        CallMethod( rtl::OUString(INITIALIZE_METHOD) );
+        CallMethod( OUString(INITIALIZE_METHOD) );
     }
     catch ( const lang::IllegalArgumentException& )
     {
@@ -132,14 +132,14 @@ void FwkTabPage::CreateDialog()
 
 // -----------------------------------------------------------------------
 
-sal_Bool FwkTabPage::CallMethod( const rtl::OUString& rMethod )
+sal_Bool FwkTabPage::CallMethod( const OUString& rMethod )
 {
     sal_Bool bRet = sal_False;
     if ( m_xEventHdl.is() )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), rtl::OUString(EXTERNAL_EVENT) );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, uno::makeAny( rMethod ), OUString(EXTERNAL_EVENT) );
         }
         catch ( const uno::Exception& )
         {
@@ -317,7 +317,7 @@ void FwkTabWindow::RemoveEventListener( const Link& rEventListener )
 
 FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< beans::NamedValue >& rProperties )
 {
-    ::rtl::OUString sTitle, sToolTip, sPageURL;
+    OUString sTitle, sToolTip, sPageURL;
     uno::Reference< css::awt::XContainerWindowEventHandler > xEventHdl;
     uno::Reference< graphic::XGraphic > xImage;
     bool bDisabled = false;
@@ -326,7 +326,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
     for ( i = 0; i < nLen; ++i )
     {
         beans::NamedValue aValue = rProperties[i];
-        ::rtl::OUString sName = aValue.Name;
+        OUString sName = aValue.Name;
 
         if ( sName == "Title" )
             aValue.Value >>= sTitle;

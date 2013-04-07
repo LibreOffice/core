@@ -52,7 +52,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
                     sal_Int32 nNumberFormat = 0;
                     if ( i->maValue >>= nNumberFormat )
                     {
-                        rtl::OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
+                        OUString sAttrValue = rODBExport.getDataStyleName(nNumberFormat);
                         if ( !sAttrValue.isEmpty() )
                         {
                             GetExport().AddAttribute(

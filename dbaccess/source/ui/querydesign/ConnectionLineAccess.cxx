@@ -60,16 +60,16 @@ namespace dbaui
         return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OConnectionLineAccess_BASE::getTypes());
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OConnectionLineAccess::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OConnectionLineAccess::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
     // -----------------------------------------------------------------------------
-    ::rtl::OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OConnectionLineAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString("org.openoffice.comp.dbu.ConnectionLineAccessibility");
+        return OUString("org.openoffice.comp.dbu.ConnectionLineAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext
@@ -106,9 +106,9 @@ namespace dbaui
         return AccessibleRole::UNKNOWN; // ? or may be an AccessibleRole::WINDOW
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OConnectionLineAccess::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL OConnectionLineAccess::getAccessibleDescription(  ) throw (RuntimeException)
     {
-        static ::rtl::OUString sDescription("Relation");
+        static OUString sDescription("Relation");
         return sDescription;
     }
     // -----------------------------------------------------------------------------

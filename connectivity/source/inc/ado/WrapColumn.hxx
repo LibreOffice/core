@@ -40,10 +40,10 @@ namespace connectivity
             inline WpADOColumn& operator=(const WpADOColumn& rhs)
                 {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
 
-            ::rtl::OUString get_Name() const;
-            ::rtl::OUString get_RelatedColumn() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            void put_RelatedColumn(const ::rtl::OUString& _rName);
+            OUString get_Name() const;
+            OUString get_RelatedColumn() const;
+            void put_Name(const OUString& _rName);
+            void put_RelatedColumn(const OUString& _rName);
             DataTypeEnum get_Type() const;
             void put_Type(const DataTypeEnum& _eNum) ;
             sal_Int32 get_Precision() const;

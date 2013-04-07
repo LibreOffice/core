@@ -37,10 +37,9 @@ using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
-using ::rtl::OUString;
 
 
-CSubmissionPost::CSubmissionPost(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionPost::CSubmissionPost(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }

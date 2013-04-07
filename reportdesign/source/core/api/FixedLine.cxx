@@ -38,9 +38,9 @@ namespace reportdesign
 // =============================================================================
     using namespace com::sun::star;
     using namespace comphelper;
-uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
+uno::Sequence< OUString > lcl_getLineOptionals()
 {
-    ::rtl::OUString pProps[] = {
+    OUString pProps[] = {
              PROPERTY_DATAFIELD
             ,PROPERTY_DEFAULTCONTROL
             ,PROPERTY_CONTROLBORDER
@@ -124,7 +124,7 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
 
 
     };
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 DBG_NAME(rpt_OFixedLine)
 // -----------------------------------------------------------------------------
@@ -207,20 +207,20 @@ void SAL_CALL OFixedLine::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OFixedLine::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OFixedLine::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OFixedLine");
+    return OUString("com.sun.star.comp.report.OFixedLine");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OFixedLine::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OFixedLine::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FIXEDLINE;
 
     return aServices;
@@ -232,12 +232,12 @@ uno::Reference< uno::XInterface > OFixedLine::create(uno::Reference< uno::XCompo
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFixedLine::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -271,43 +271,43 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OFixedLine::getPropertySetInf
     return FixedLinePropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedLinePropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OFixedLine::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFixedLine::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return FixedLinePropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedLinePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedLinePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedLinePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFixedLine::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FixedLinePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 // XReportControlModel
-::rtl::OUString SAL_CALL OFixedLine::getDataField() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getDataField() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setDataField( const ::rtl::OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setDataField( const OUString& /*_datafield*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
@@ -342,12 +342,12 @@ void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool /*_printwhengroupc
     throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedLine::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setConditionalPrintExpression( const ::rtl::OUString& /*_conditionalprintexpression*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setConditionalPrintExpression( const OUString& /*_conditionalprintexpression*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     throw beans::UnknownPropertyException();
 }
@@ -515,7 +515,7 @@ awt::Size SAL_CALL OFixedLine::getSize(  ) throw (uno::RuntimeException)
 void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
 {
     const char hundredthmmC[] = "0\xe2\x80\x89\xC2\xB5""m"; // in UTF-8: 0, thin space, µ (micro), m (meter)
-    const rtl::OUString hundredthmm(hundredthmmC, sizeof(hundredthmmC)-1, RTL_TEXTENCODING_UTF8);
+    const OUString hundredthmm(hundredthmmC, sizeof(hundredthmmC)-1, RTL_TEXTENCODING_UTF8);
     if ( aSize.Width < MIN_WIDTH && m_nOrientation == 1 )
         throw beans::PropertyVetoException("Too small width for FixedLine; minimum is "  + OUString::number(MIN_WIDTH)  + hundredthmm, static_cast<cppu::OWeakObject*>(this));
     else if ( aSize.Height < MIN_HEIGHT && m_nOrientation == 0 )
@@ -524,32 +524,32 @@ void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::Proper
 }
 // -----------------------------------------------------------------------------
 // XShapeDescriptor
-::rtl::OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException)
+OUString SAL_CALL OFixedLine::getShapeType(  ) throw (uno::RuntimeException)
 {
-   return ::rtl::OUString("com.sun.star.drawing.ControlShape");
+   return OUString("com.sun.star.drawing.ControlShape");
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFixedLine::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkURL(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkURL(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }
-::rtl::OUString SAL_CALL OFixedLine::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkTarget(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkTarget(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }
-::rtl::OUString SAL_CALL OFixedLine::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
+OUString SAL_CALL OFixedLine::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }
-void SAL_CALL OFixedLine::setHyperLinkName(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
+void SAL_CALL OFixedLine::setHyperLinkName(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     throw beans::UnknownPropertyException();
 }

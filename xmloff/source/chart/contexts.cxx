@@ -42,17 +42,17 @@ public:
 
     SchXMLBodyContext_Impl( SchXMLImportHelper& rImpHelper,
                 SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName );
+                const OUString& rLName );
     virtual ~SchXMLBodyContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 };
 
 SchXMLBodyContext_Impl::SchXMLBodyContext_Impl(
         SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
-        sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
+        sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrImportHelper( rImpHelper )
 {
@@ -64,7 +64,7 @@ SchXMLBodyContext_Impl::~SchXMLBodyContext_Impl()
 
 SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & )
 {
     return new SchXMLBodyContext( mrImportHelper, GetImport(), nPrefix,
@@ -76,7 +76,7 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLName ) :
+                                    const OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
 {
@@ -95,7 +95,7 @@ TYPEINIT1( SchXMLDocContext, SvXMLImportContext );
 
 SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;
@@ -140,7 +140,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
     SchXMLDocContext(i_rImpHelper, i_rImport, i_nPrefix, i_rLName),
@@ -153,7 +153,7 @@ SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
 
 
 SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
-    sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -173,7 +173,7 @@ SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
 SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport,
                                       sal_uInt16 nPrefix,
-                                      const rtl::OUString& rLName ) :
+                                      const OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
 {
@@ -191,7 +191,7 @@ void SchXMLBodyContext::EndElement()
 
 SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = 0;

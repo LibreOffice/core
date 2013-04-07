@@ -66,7 +66,7 @@ public:
 
     sal_Bool            ImportData( const ScImportParam& rParam, sal_Bool bRecord = sal_True );
 
-    void GotoDBArea( const ::rtl::OUString& rDBName );
+    void GotoDBArea( const OUString& rDBName );
 
                     // DB range from Cursor
     ScDBData*       GetDBData( bool bMarkArea = true, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP);
@@ -88,13 +88,13 @@ public:
     void            DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nParts );
     void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
     void            UngroupDataPilot();
-    void DataPilotInput( const ScAddress& rPos, const rtl::OUString& rString );
+    void DataPilotInput( const ScAddress& rPos, const OUString& rString );
 
     bool            DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId = NULL );
     sal_Bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     bool HasSelectionForDrillDown( sal_uInt16& rOrientation );
-    void SetDataPilotDetails(bool bShow, const rtl::OUString* pNewDimensionName = NULL);
+    void SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName = NULL);
 
     void            ShowDataPilotSourceData( ScDPObject& rDPObj,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );

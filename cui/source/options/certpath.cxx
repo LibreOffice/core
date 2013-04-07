@@ -66,10 +66,10 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
     m_aCertPathList.SvxSimpleTable::SetTabs( aStaticTabs );
 
-    rtl::OUString sProfile(CUI_RESSTR(STR_PROFILE));
-    rtl::OUString sDirectory(CUI_RESSTR(STR_DIRECTORY));
+    OUString sProfile(CUI_RESSTR(STR_PROFILE));
+    OUString sDirectory(CUI_RESSTR(STR_DIRECTORY));
 
-    rtl::OUStringBuffer sHeader;
+    OUStringBuffer sHeader;
     sHeader.append('\t').append(sProfile).append('\t').append(sDirectory);
     m_aCertPathList.InsertHeaderEntry( sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT );
     m_aCertPathList.SetCheckButtonHdl( LINK( this, CertPathDialog, CheckHdl_Impl ) );
@@ -98,15 +98,15 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
         for (sal_Int32 i = 0; i < nProduct; ++i)
         {
-            ::rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
+            OUString profile = xMozillaBootstrap->getDefaultProfile(productTypes[i]);
 
             if (!profile.isEmpty())
             {
-                ::rtl::OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
-                rtl::OUStringBuffer sEntry;
+                OUString sProfilePath = xMozillaBootstrap->getProfilePath( productTypes[i], profile );
+                OUStringBuffer sEntry;
                 sEntry.append('\t').appendAscii(productNames[i]).append(':').append(profile).append('\t').append(sProfilePath);
                 SvTreeListEntry *pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
-                rtl::OUString* pCertPath = new rtl::OUString(sProfilePath);
+                OUString* pCertPath = new OUString(sProfilePath);
                 pEntry->SetUserData(pCertPath);
             }
         }
@@ -124,8 +124,8 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
     try
     {
-        rtl::OUString sUserSetCertPath =
-            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(rtl::OUString());
+        OUString sUserSetCertPath =
+            officecfg::Office::Common::Security::Scripting::CertDir::get().get_value_or(OUString());
 
         if (!sUserSetCertPath.isEmpty())
             AddCertPath(m_sManual, sUserSetCertPath);
@@ -137,12 +137,12 @@ CertPathDialog::CertPathDialog( Window* pParent ) :
 
     const char* pEnv = getenv("MOZILLA_CERTIFICATE_FOLDER");
     if (pEnv)
-        AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", rtl::OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
+        AddCertPath("$MOZILLA_CERTIFICATE_FOLDER", OUString(pEnv, strlen(pEnv), osl_getThreadTextEncoding()));
 }
 
 IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
 {
-    fprintf(stderr, "dir is %s\n", rtl::OUStringToOString(getDirectory(), RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "dir is %s\n", OUStringToOString(getDirectory(), RTL_TEXTENCODING_UTF8).getStr());
 
     try
     {
@@ -162,11 +162,11 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
     return 0;
 }
 
-rtl::OUString CertPathDialog::getDirectory() const
+OUString CertPathDialog::getDirectory() const
 {
     SvTreeListEntry* pEntry = m_aCertPathList.FirstSelected();
     void* pCertPath = pEntry ? pEntry->GetUserData() : NULL;
-    return pCertPath ? *static_cast<rtl::OUString*>(pCertPath) : rtl::OUString();
+    return pCertPath ? *static_cast<OUString*>(pCertPath) : OUString();
 }
 
 CertPathDialog::~CertPathDialog()
@@ -174,7 +174,7 @@ CertPathDialog::~CertPathDialog()
     SvTreeListEntry* pEntry = m_aCertPathList.First();
     while (pEntry)
     {
-        rtl::OUString* pCertPath = static_cast<rtl::OUString*>(pEntry->GetUserData());
+        OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
         delete pCertPath;
         pEntry = m_aCertPathList.Next( pEntry );
     }
@@ -209,12 +209,12 @@ void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )
         m_aCertPathList.SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
 }
 
-void CertPathDialog::AddCertPath(const rtl::OUString &rProfile, const rtl::OUString &rPath)
+void CertPathDialog::AddCertPath(const OUString &rProfile, const OUString &rPath)
 {
     SvTreeListEntry* pEntry = m_aCertPathList.First();
     while (pEntry)
     {
-        rtl::OUString* pCertPath = static_cast<rtl::OUString*>(pEntry->GetUserData());
+        OUString* pCertPath = static_cast<OUString*>(pEntry->GetUserData());
         //already exists, just select the original one
         if (pCertPath->equals(rPath))
         {
@@ -225,10 +225,10 @@ void CertPathDialog::AddCertPath(const rtl::OUString &rProfile, const rtl::OUStr
         pEntry = m_aCertPathList.Next(pEntry);
     }
 
-    rtl::OUStringBuffer sEntry;
+    OUStringBuffer sEntry;
     sEntry.append('\t').append(rProfile).append('\t').append(rPath);
     pEntry = m_aCertPathList.InsertEntry(sEntry.makeStringAndClear());
-    rtl::OUString* pCertPath = new rtl::OUString(rPath);
+    OUString* pCertPath = new OUString(rPath);
     pEntry->SetUserData(pCertPath);
     m_aCertPathList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
     HandleCheckEntry(pEntry);
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
     {
         uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
-        rtl::OUString sURL;
+        OUString sURL;
         osl::Security().getHomeDir(sURL);
         xFolderPicker->setDisplayDirectory(sURL);
         xFolderPicker->setDescription(m_sAddDialogText);
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
         if (xFolderPicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
         {
             sURL = xFolderPicker->getDirectory();
-            rtl::OUString aPath;
+            OUString aPath;
             if (osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sURL, aPath))
                 AddCertPath(m_sManual, aPath);
         }

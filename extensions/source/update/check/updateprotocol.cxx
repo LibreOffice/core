@@ -46,9 +46,9 @@ namespace xml = css::xml ;
 
 static bool
 getBootstrapData(
-    uno::Sequence< ::rtl::OUString > & rRepositoryList,
-    ::rtl::OUString & rGitID,
-    ::rtl::OUString & rInstallSetID)
+    uno::Sequence< OUString > & rRepositoryList,
+    OUString & rGitID,
+    OUString & rInstallSetID)
 {
     rGitID = "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}";
     rtl::Bootstrap::expandMacros( rGitID );
@@ -84,15 +84,15 @@ checkForUpdates(
 {
     OSL_TRACE("checking for updates ..");
 
-    ::rtl::OUString myArch;
-    ::rtl::OUString myOS;
+    OUString myArch;
+    OUString myOS;
 
     rtl::Bootstrap::get("_OS", myOS);
     rtl::Bootstrap::get("_ARCH", myArch);
 
-    uno::Sequence< ::rtl::OUString > aRepositoryList;
-    ::rtl::OUString aGitID;
-    ::rtl::OUString aInstallSetID;
+    uno::Sequence< OUString > aRepositoryList;
+    OUString aGitID;
+    OUString aInstallSetID;
 
     if( ! ( getBootstrapData(aRepositoryList, aGitID, aInstallSetID) && (aRepositoryList.getLength() > 0) ) )
         return false;
@@ -108,11 +108,11 @@ checkForUpdates(
     const uno::Reference< uno::XComponentContext > & rxContext,
     const uno::Reference< task::XInteractionHandler > & rxInteractionHandler,
     const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
-    const rtl::OUString &rOS,
-    const rtl::OUString &rArch,
-    const uno::Sequence< rtl::OUString > &rRepositoryList,
-    const rtl::OUString &rGitID,
-    const rtl::OUString &rInstallSetID )
+    const OUString &rOS,
+    const OUString &rArch,
+    const uno::Sequence< OUString > &rRepositoryList,
+    const OUString &rGitID,
+    const OUString &rInstallSetID )
 {
     if( !rxContext.is() )
         throw uno::RuntimeException(
@@ -136,7 +136,7 @@ checkForUpdates(
         if ( !aUpdateInfoEnumeration.is() )
             return false; // something went wrong ..
 
-        rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         aBuffer.appendAscii("/child::inst:description[inst:os=\'");
         aBuffer.append( rOS );
         aBuffer.appendAscii("\' and inst:arch=\'");
@@ -145,7 +145,7 @@ checkForUpdates(
         aBuffer.append( rGitID );
         aBuffer.appendAscii("\']");
 
-        rtl::OUString aXPathExpression = aBuffer.makeStringAndClear();
+        OUString aXPathExpression = aBuffer.makeStringAndClear();
 
         while( aUpdateInfoEnumeration->hasMoreElements() )
         {
@@ -170,7 +170,7 @@ checkForUpdates(
                     if( xNode2.is() )
                     {
                         uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
-                        rtl::OUString aType = xParent->getAttribute("type");
+                        OUString aType = xParent->getAttribute("type");
                         bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text/html")) );
 
                         o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
@@ -243,7 +243,7 @@ checkForUpdates(
 
 //------------------------------------------------------------------------------
 bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > & rxContext,
-                                const uno::Sequence< uno::Sequence< rtl::OUString > > &rUpdateInfos )
+                                const uno::Sequence< uno::Sequence< OUString > > &rUpdateInfos )
 {
     bool bNotify = false;
 
@@ -264,7 +264,7 @@ bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > &
 
 bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & rxContext )
 {
-    uno::Sequence< uno::Sequence< rtl::OUString > > aUpdateList;
+    uno::Sequence< uno::Sequence< OUString > > aUpdateList;
 
     uno::Reference< deployment::XPackageInformationProvider > xInfoProvider;
     try
@@ -280,7 +280,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
 
     if ( !xInfoProvider.is() ) return false;
 
-    aUpdateList = xInfoProvider->isUpdateAvailable( ::rtl::OUString() );
+    aUpdateList = xInfoProvider->isUpdateAvailable( OUString() );
     bool bNotify = storeExtensionUpdateInfos( rxContext, aUpdateList );
 
     return bNotify;
@@ -291,7 +291,7 @@ bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & 
 
 bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rxContext )
 {
-    uno::Sequence< uno::Sequence< rtl::OUString > > aExtensionList;
+    uno::Sequence< uno::Sequence< OUString > > aExtensionList;
     uno::Reference< deployment::XPackageInformationProvider > xInfoProvider;
     try
     {

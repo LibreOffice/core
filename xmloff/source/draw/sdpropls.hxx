@@ -254,9 +254,9 @@ private:
     SvxXMLNumRuleExport maNumRuleExp;
     sal_Bool mbIsInAutoStyles;
 
-    const rtl::OUString msCDATA;
-    const rtl::OUString msTrue;
-    const rtl::OUString msFalse;
+    const OUString msCDATA;
+    const OUString msTrue;
+    const OUString msFalse;
 
 protected:
     virtual void ContextFilter(
@@ -291,9 +291,9 @@ class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
 private:
     SvXMLExport& mrExport;
 
-    const rtl::OUString msCDATA;
-    const rtl::OUString msTrue;
-    const rtl::OUString msFalse;
+    const OUString msCDATA;
+    const OUString msTrue;
+    const OUString msFalse;
 
 protected:
     virtual void ContextFilter(

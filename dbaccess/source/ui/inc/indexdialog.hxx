@@ -72,7 +72,7 @@ namespace dbaui
         }
 
     protected:
-        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     private:
         using SvTreeListBox::Select;
@@ -110,7 +110,7 @@ namespace dbaui
     public:
         DbaIndexDialog(
             Window* _pParent,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rFieldNames,
+            const ::com::sun::star::uno::Sequence< OUString >& _rFieldNames,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,

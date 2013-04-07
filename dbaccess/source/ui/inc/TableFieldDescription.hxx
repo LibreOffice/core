@@ -40,14 +40,14 @@ namespace dbaui
     class OTableFieldDesc : public ::salhelper::SimpleReferenceObject
     {
     private:
-       ::std::vector< ::rtl::OUString >
+       ::std::vector< OUString >
                                     m_aCriteria;
 
-        ::rtl::OUString             m_aTableName;
-        ::rtl::OUString             m_aAliasName;   ///< table range
-        ::rtl::OUString             m_aFieldName;   ///< column
-        ::rtl::OUString             m_aFieldAlias;  ///< column alias
-        ::rtl::OUString             m_aFunctionName;///< contains the function name (only if m_eFunctionType != FKT_NONE)
+        OUString             m_aTableName;
+        OUString             m_aAliasName;   ///< table range
+        OUString             m_aFieldName;   ///< column
+        OUString             m_aFieldAlias;  ///< column alias
+        OUString             m_aFunctionName;///< contains the function name (only if m_eFunctionType != FKT_NONE)
 
         Window*                     m_pTabWindow;
 
@@ -65,7 +65,7 @@ namespace dbaui
 
     public:
         OTableFieldDesc();
-        OTableFieldDesc(const ::rtl::OUString& rTable, const ::rtl::OUString& rField );
+        OTableFieldDesc(const OUString& rTable, const OUString& rField );
         OTableFieldDesc(const OTableFieldDesc& rRS);
         ~OTableFieldDesc();
 
@@ -80,29 +80,29 @@ namespace dbaui
         void SetVisible( sal_Bool bVis=sal_True ) { m_bVisible = bVis; }
         void SetGroupBy( sal_Bool bGb=sal_False ) { m_bGroupBy = bGb; }
         void SetTabWindow( Window* pWin ){ m_pTabWindow = pWin; }
-        void SetField( const ::rtl::OUString& rF ) { m_aFieldName = rF; }
-        void SetFieldAlias( const ::rtl::OUString& rF ) { m_aFieldAlias = rF; }
-        void SetTable( const ::rtl::OUString& rT ) { m_aTableName = rT; }
-        void SetAlias( const ::rtl::OUString& rT ) { m_aAliasName = rT; }
-        void SetFunction( const ::rtl::OUString& rT ) { m_aFunctionName = rT; }
+        void SetField( const OUString& rF ) { m_aFieldName = rF; }
+        void SetFieldAlias( const OUString& rF ) { m_aFieldAlias = rF; }
+        void SetTable( const OUString& rT ) { m_aTableName = rT; }
+        void SetAlias( const OUString& rT ) { m_aAliasName = rT; }
+        void SetFunction( const OUString& rT ) { m_aFunctionName = rT; }
         void SetOrderDir( EOrderDir eDir ) { m_eOrderDir = eDir; }
         void SetDataType( sal_Int32 eTyp ) { m_eDataType = eTyp; }
         void SetFieldType( ETableFieldType eTyp ) { m_eFieldType = eTyp; }
-        void SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit );
+        void SetCriteria( sal_uInt16 nIdx, const OUString& rCrit );
         void SetColWidth( sal_Int32 nWidth ) { m_nColWidth = nWidth; }
         void SetFieldIndex( sal_Int32 nFieldIndex ) { m_nIndex = nFieldIndex; }
         void SetFunctionType( sal_Int32 eTyp ) { m_eFunctionType = eTyp; }
         void SetColumnId(sal_uInt16 _nColumnId) { m_nColumnId = _nColumnId; }
 
-        ::rtl::OUString GetField() const { return m_aFieldName;}
-        ::rtl::OUString GetFieldAlias() const { return m_aFieldAlias;}
-        ::rtl::OUString GetTable() const { return m_aTableName;}
-        ::rtl::OUString GetAlias() const { return m_aAliasName;}
-        ::rtl::OUString GetFunction() const { return m_aFunctionName;}
+        OUString GetField() const { return m_aFieldName;}
+        OUString GetFieldAlias() const { return m_aFieldAlias;}
+        OUString GetTable() const { return m_aTableName;}
+        OUString GetAlias() const { return m_aAliasName;}
+        OUString GetFunction() const { return m_aFunctionName;}
         sal_Int32 GetDataType() const { return m_eDataType; }
         ETableFieldType GetFieldType() const { return m_eFieldType; }
         EOrderDir GetOrderDir() const { return m_eOrderDir; }
-        ::rtl::OUString GetCriteria( sal_uInt16 nIdx ) const;
+        OUString GetCriteria( sal_uInt16 nIdx ) const;
         sal_Int32 GetColWidth() const { return m_nColWidth; }
         sal_Int32 GetFieldIndex() const { return m_nIndex; }
         Window* GetTabWindow() const { return m_pTabWindow;}
@@ -118,15 +118,15 @@ namespace dbaui
 
         sal_Bool HasCriteria() const
         {
-            ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aCriteria.begin();
-            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_aCriteria.end();
+            ::std::vector< OUString>::const_iterator aIter = m_aCriteria.begin();
+            ::std::vector< OUString>::const_iterator aEnd = m_aCriteria.end();
             for(;aIter != aEnd;++aIter)
                 if(!aIter->isEmpty())
                     break;
             return aIter != aEnd;
         }
 
-        const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_aCriteria; }
+        const ::std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }
 
         void Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
         void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );

@@ -235,7 +235,7 @@ OUString LwpTools::convertToFileUrl(const OString &fileName)
 
 OUString LwpTools::DateTimeToOUString(LtTm & dt)
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append(dt.tm_year);
     buf.append( A2OUSTR("-") );
     buf.append(dt.tm_mon);
@@ -262,10 +262,10 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
     else
         style = icu::DateFormat::SHORT;//system short date format
 /*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
-    rtl::OUString strLang = aLocale.Language;
-    rtl::OUString strCountry = aLocale.Country;
+    OUString strLang = aLocale.Language;
+    OUString strCountry = aLocale.Country;
     strLang = strLang + A2OUSTR("_");
-    rtl::OUString strLocale = strLang + strCountry;
+    OUString strLocale = strLang + strCountry;
 
     int32_t nLength = 0;
     int32_t nLengthNeed;
@@ -287,8 +287,8 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
     /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
     ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
-    rtl::OUString strLang = aLocale.Language;
-    rtl::OUString strCountry = aLocale.Country;
+    OUString strLang = aLocale.Language;
+    OUString strCountry = aLocale.Country;
     icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),
         (char*)(OUStringToOString(strCountry,RTL_TEXTENCODING_MS_1252).getStr()));
     //2 get icu format pattern by locale
@@ -676,10 +676,10 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
 XFTimeStyle* LwpTools::GetSystemTimeStyle()
 {
 /*  ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLocale();
-    rtl::OUString strLang = aLocale.Language;
-    rtl::OUString strCountry = aLocale.Country;
+    OUString strLang = aLocale.Language;
+    OUString strCountry = aLocale.Country;
     strLang = strLang + A2OUSTR("_");
-    rtl::OUString strLocale = strLang + strCountry;
+    OUString strLocale = strLang + strCountry;
 
     int32_t nLength = 0;
     int32_t nLengthNeed;
@@ -701,8 +701,8 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
     /* FIXME-BCP47: handle language tags! */
     //1 get locale for system
     ::com::sun::star::lang::Locale aLocale=Application::GetSettings().GetLanguageTag().getLocale();
-    rtl::OUString strLang = aLocale.Language;
-    rtl::OUString strCountry = aLocale.Country;
+    OUString strLang = aLocale.Language;
+    OUString strCountry = aLocale.Country;
     icu::Locale bLocale((char*)(OUStringToOString(strLang,RTL_TEXTENCODING_MS_1252).getStr()),
         (char*)(OUStringToOString(strCountry,RTL_TEXTENCODING_MS_1252).getStr()));
 

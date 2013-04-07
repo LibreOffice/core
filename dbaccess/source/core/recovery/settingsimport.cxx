@@ -82,14 +82,14 @@ namespace dbaccess
     {
     }
 
-    void SettingsImport::characters( const ::rtl::OUString& i_rCharacters )
+    void SettingsImport::characters( const OUString& i_rCharacters )
     {
         m_aCharacters.append( i_rCharacters );
     }
 
-    void SettingsImport::split( const ::rtl::OUString& i_rElementName, ::rtl::OUString& o_rNamespace, ::rtl::OUString& o_rLocalName )
+    void SettingsImport::split( const OUString& i_rElementName, OUString& o_rNamespace, OUString& o_rLocalName )
     {
-        o_rNamespace = ::rtl::OUString();
+        o_rNamespace = OUString();
         o_rLocalName = i_rElementName;
         const sal_Int32 nSeparatorPos = i_rElementName.indexOf( ':' );
         if ( nSeparatorPos > -1 )
@@ -107,7 +107,7 @@ namespace dbaccess
     //= IgnoringSettingsImport
     //====================================================================
     //--------------------------------------------------------------------
-    ::rtl::Reference< SettingsImport > IgnoringSettingsImport::nextState( const ::rtl::OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > IgnoringSettingsImport::nextState( const OUString& i_rElementName )
     {
         (void)i_rElementName;
         return this;
@@ -128,19 +128,19 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    ::rtl::Reference< SettingsImport > OfficeSettingsImport::nextState( const ::rtl::OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > OfficeSettingsImport::nextState( const OUString& i_rElementName )
     {
         // separate the namespace part from the element name
-        ::rtl::OUString sNamespace;
-        ::rtl::OUString sLocalName;
+        OUString sNamespace;
+        OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
         if ( sLocalName == "config-item-set" )
             return new ConfigItemSetImport( m_rSettings );
 
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "unknown (or unsupported at this place) element name '" );
-        sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
+        OString sMessage( "unknown (or unsupported at this place) element name '" );
+        sMessage += OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
         OSL_FAIL( sMessage.getStr() );
 #endif
@@ -162,7 +162,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const ::rtl::OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > ConfigItemImport::nextState( const OUString& i_rElementName )
     {
         OSL_FAIL( "ConfigItemImport::nextState: unexpected: this class is responsible for child-less items only!" );
         (void)i_rElementName;
@@ -174,7 +174,7 @@ namespace dbaccess
     {
         SettingsImport::endElement();
 
-        const ::rtl::OUString sItemName( getItemName() );
+        const OUString sItemName( getItemName() );
         ENSURE_OR_RETURN_VOID( !sItemName.isEmpty(), "no item name -> no item value" );
         Any aValue;
         getItemValue( aValue );
@@ -187,10 +187,10 @@ namespace dbaccess
         o_rValue.clear();
 
         // the characters building up th evalue
-        ::rtl::OUStringBuffer aCharacters( getAccumulatedCharacters() );
-        const ::rtl::OUString sValue = aCharacters.makeStringAndClear();
+        OUStringBuffer aCharacters( getAccumulatedCharacters() );
+        const OUString sValue = aCharacters.makeStringAndClear();
 
-        const ::rtl::OUString& rItemType( getItemType() );
+        const OUString& rItemType( getItemType() );
         ENSURE_OR_RETURN_VOID( !rItemType.isEmpty(), "no item type -> no item value" );
 
         if ( ::xmloff::token::IsXMLToken( rItemType, ::xmloff::token::XML_INT ) )
@@ -224,8 +224,8 @@ namespace dbaccess
 #if OSL_DEBUG_LEVEL > 0
         else
         {
-            ::rtl::OString sMessage( "ConfigItemImport::getItemValue: unsupported item type '" );
-            sMessage += ::rtl::OUStringToOString( rItemType, RTL_TEXTENCODING_UTF8 );
+            OString sMessage( "ConfigItemImport::getItemValue: unsupported item type '" );
+            sMessage += OUStringToOString( rItemType, RTL_TEXTENCODING_UTF8 );
             sMessage += "', ignoring";
             OSL_FAIL( sMessage.getStr() );
         }
@@ -247,11 +247,11 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    ::rtl::Reference< SettingsImport > ConfigItemSetImport::nextState( const ::rtl::OUString& i_rElementName )
+    ::rtl::Reference< SettingsImport > ConfigItemSetImport::nextState( const OUString& i_rElementName )
     {
         // separate the namespace part from the element name
-        ::rtl::OUString sNamespace;
-        ::rtl::OUString sLocalName;
+        OUString sNamespace;
+        OUString sLocalName;
         split( i_rElementName, sNamespace, sLocalName );
 
         if ( sLocalName == "config-item-set" )
@@ -260,8 +260,8 @@ namespace dbaccess
             return new ConfigItemImport( m_aChildSettings );
 
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "unknown element name '" );
-        sMessage += ::rtl::OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
+        OString sMessage( "unknown element name '" );
+        sMessage += OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
         sMessage += "', ignoring";
         OSL_FAIL( sMessage.getStr() );
 #endif

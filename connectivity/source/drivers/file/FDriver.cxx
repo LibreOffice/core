@@ -62,31 +62,31 @@ void OFileDriver::disposing()
 
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString OFileDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdbc.driver.file.Driver");
+    return OUString("com.sun.star.sdbc.driver.file.Driver");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > OFileDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString("com.sun.star.sdbcx.Driver");
+    Sequence< OUString > aSNS( 2 );
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
     return aSNS;
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFileDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OFileDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------
-sal_Bool SAL_CALL OFileDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OFileDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -94,13 +94,13 @@ sal_Bool SAL_CALL OFileDriver::supportsService( const ::rtl::OUString& _rService
 }
 
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OFileDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OFileDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::connect" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -114,71 +114,71 @@ Reference< XConnection > SAL_CALL OFileDriver::connect( const ::rtl::OUString& u
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFileDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL OFileDriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::acceptsURL" );
     return url.startsWith("sdbc:file:");
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getPropertyInfo" );
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
-        Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString("0");
-        aBoolean[1] = ::rtl::OUString("1");
+        Sequence< OUString > aBoolean(2);
+        aBoolean[0] = OUString("0");
+        aBoolean[1] = OUString("1");
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("CharSet")
-                ,::rtl::OUString("CharSet of the database.")
+                OUString("CharSet")
+                ,OUString("CharSet of the database.")
                 ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
+                ,OUString()
+                ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("Extension")
-                ,::rtl::OUString("Extension of the file format.")
+                OUString("Extension")
+                ,OUString("Extension of the file format.")
                 ,sal_False
-                ,::rtl::OUString(".*")
-                ,Sequence< ::rtl::OUString >())
+                ,OUString(".*")
+                ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("ShowDeleted")
-                ,::rtl::OUString("Display inactive records.")
+                OUString("ShowDeleted")
+                ,OUString("Display inactive records.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("EnableSQL92Check")
-                ,::rtl::OUString("Use SQL92 naming constraints.")
+                OUString("EnableSQL92Check")
+                ,OUString("Use SQL92 naming constraints.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("UseRelativePath")
-                ,::rtl::OUString("Handle the connection url as relative path.")
+                OUString("UseRelativePath")
+                ,OUString("Handle the connection url as relative path.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("URL")
-                ,::rtl::OUString("The URL of the database document which is used to create an absolute path.")
+                OUString("URL")
+                ,OUString("The URL of the database document which is used to create an absolute path.")
                 ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
+                ,OUString()
+                ,Sequence< OUString >())
                 );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());
     } // if ( acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     } // if ( ! acceptsURL(url) )
     return Sequence< DriverPropertyInfo >();
@@ -226,13 +226,13 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 }
 
 // --------------------------------------------------------------------------------
-Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileDriver::getDataDefinitionByURL" );
     if ( ! acceptsURL(url) )
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     }
     return getDataDefinitionByConnection(connect(url,info));

@@ -34,10 +34,10 @@ namespace chart
 
 struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
 {
-    rtl::OUString Text;
+    OUString Text;
     sal_Int32 Count;
 
-    ComplexCategory( const rtl::OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
+    ComplexCategory( const OUString& rText, sal_Int32 nCount ) : Text( rText ), Count (nCount)
     {}
 };
 
@@ -47,7 +47,7 @@ public:
     virtual ~SplitCategoriesProvider();
 
     virtual sal_Int32 getLevelCount() const = 0;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
+    virtual ::com::sun::star::uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const = 0;
 };
 
 struct DatePlusIndex
@@ -83,20 +83,20 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > getOriginalCategories();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getSimpleCategories();
+    ::com::sun::star::uno::Sequence< OUString > getSimpleCategories();
     const std::vector<ComplexCategory>* getCategoriesByLevel( sal_Int32 nLevel );
 
-    static ::rtl::OUString getCategoryByIndex(
+    static OUString getCategoryByIndex(
           const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel >& xChartModel
         , sal_Int32 nIndex );
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getExplicitSimpleCategories(
+    static ::com::sun::star::uno::Sequence< OUString > getExplicitSimpleCategories(
             const SplitCategoriesProvider& rSplitCategoriesProvider );
 
-    static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< rtl::OUString >& rOutTexts
+    static void convertCategoryAnysToText( ::com::sun::star::uno::Sequence< OUString >& rOutTexts
         , const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rInAnys
         , ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xChartModel );
 
@@ -119,7 +119,7 @@ private: //member
         ::com::sun::star::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
 
     bool m_bIsExplicitCategoriesInited;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aExplicitCategories;
+    ::com::sun::star::uno::Sequence< OUString >  m_aExplicitCategories;
     ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;

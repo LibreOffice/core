@@ -61,7 +61,7 @@ private:
 
     Window* getParent() { return m_pParent; };
 
-    void setDescription1Text( const rtl::OUString &aText ) { m_aLabel1.SetText( aText ); };
+    void setDescription1Text( const OUString &aText ) { m_aLabel1.SetText( aText ); };
 };
 
 #endif // UUI_SSLWARN_HXX

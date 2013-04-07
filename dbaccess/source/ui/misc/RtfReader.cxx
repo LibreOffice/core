@@ -265,7 +265,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     DBG_CHKTHIS(ORTFReader,NULL);
     String aTableName(ModuleRes(STR_TBL_TITLE));
     aTableName = aTableName.GetToken(0,' ');
-    aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
+    aTableName = String(::dbtools::createUniqueName(m_xTables,OUString(aTableName)));
 
     int nTmpToken2 = nToken;
     String aColumnName;

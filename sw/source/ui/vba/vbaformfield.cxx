@@ -37,10 +37,10 @@ SwVbaFormField::~SwVbaFormField()
 {
 }
 
-rtl::OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException )
+OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException )
 {
-    rtl::OUString sResult;
-    rtl::OUString sType = mxFormField->getFieldType();
+    OUString sResult;
+    OUString sType = mxFormField->getFieldType();
     if( sType.equalsIgnoreAsciiCaseAscii( ECMA_FORMTEXT ) )
     {
         uno::Reference< text::XTextContent > xTextContent( mxFormField, uno::UNO_QUERY_THROW );
@@ -63,18 +63,18 @@ rtl::OUString SAL_CALL SwVbaFormField::getResult() throw ( uno::RuntimeException
             }
 
         }
-        sResult = rtl::OUString::valueOf( nValue );
+        sResult = OUString::valueOf( nValue );
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
     return sResult;
 }
 
-void SAL_CALL SwVbaFormField::setResult( const rtl::OUString& result ) throw ( uno::RuntimeException )
+void SAL_CALL SwVbaFormField::setResult( const OUString& result ) throw ( uno::RuntimeException )
 {
-    rtl::OUString sType = mxFormField->getFieldType();
+    OUString sType = mxFormField->getFieldType();
     if( sType.equalsIgnoreAsciiCaseAscii( ECMA_FORMTEXT ) )
     {
         uno::Reference< text::XTextContent > xTextContent( mxFormField, uno::UNO_QUERY_THROW );
@@ -87,7 +87,7 @@ void SAL_CALL SwVbaFormField::setResult( const rtl::OUString& result ) throw ( u
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -107,20 +107,20 @@ uno::Any SAL_CALL SwVbaFormField::CheckBox() throw ( uno::RuntimeException )
     return uno::makeAny( uno::Reference< word::XCheckBox >( new SwVbaCheckBox( this, mxContext, mxModel, mxFormField ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaFormField::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFormField");
+    return OUString("SwVbaFormField");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaFormField::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.FormField" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.FormField" );
     }
     return aServiceNames;
 }

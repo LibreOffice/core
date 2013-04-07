@@ -58,7 +58,7 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
     m_aUpPB.SetClickHdl(aUpDownLk);
     m_aDownPB.SetClickHdl(aUpDownLk);
 
-    ::std::vector< ::rtl::OUString >::iterator aHeaderIter;
+    ::std::vector< OUString >::iterator aHeaderIter;
 
     for(aHeaderIter = m_pNewData->aDBColumnHeaders.begin();
                 aHeaderIter != m_pNewData->aDBColumnHeaders.end(); ++aHeaderIter)
@@ -108,7 +108,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
             m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sNew);
             //add a new entry into all data arrays
             String sTemp;
-            ::std::vector< ::std::vector< ::rtl::OUString > >::iterator aDataIter;
+            ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
             for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
                 aDataIter->insert(aDataIter->begin() + nPos, sTemp);
 
@@ -131,7 +131,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressListDialog, DeleteHdl_Impl)
     //remove the column
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nPos);
     //remove the data
-    ::std::vector< ::std::vector< ::rtl::OUString > >::iterator aDataIter;
+    ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
     for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
         aDataIter->erase(aDataIter->begin() + nPos);
 
@@ -152,13 +152,13 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, PushButton*, pButton)
     m_aFieldsLB.InsertEntry(aTemp, nPos);
     m_aFieldsLB.SelectEntryPos(nPos);
     //align m_pNewData
-    ::rtl::OUString sHeader = m_pNewData->aDBColumnHeaders[nOldPos];
+    OUString sHeader = m_pNewData->aDBColumnHeaders[nOldPos];
     m_pNewData->aDBColumnHeaders.erase(m_pNewData->aDBColumnHeaders.begin() + nOldPos);
     m_pNewData->aDBColumnHeaders.insert(m_pNewData->aDBColumnHeaders.begin() + nPos, sHeader);
-    ::std::vector< ::std::vector< ::rtl::OUString > >::iterator aDataIter;
+    ::std::vector< ::std::vector< OUString > >::iterator aDataIter;
     for( aDataIter = m_pNewData->aDBData.begin(); aDataIter != m_pNewData->aDBData.end(); ++aDataIter)
     {
-        ::rtl::OUString sData = (*aDataIter)[nOldPos];
+        OUString sData = (*aDataIter)[nOldPos];
         aDataIter->erase(aDataIter->begin() + nOldPos);
         aDataIter->insert(aDataIter->begin() + nPos, sData);
     }
@@ -183,7 +183,7 @@ SwCSVData*    SwCustomizeAddressListDialog::GetNewData()
 }
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
-        Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& rCSVHeader) :
+        Window* pParent, bool bRename, const ::std::vector< OUString >& rCSVHeader) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADD_RENAME_ENTRY)),
 #ifdef _MSC_VER
 #pragma warning (disable : 4355)
@@ -213,12 +213,12 @@ SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
 
 IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit*, pEdit)
 {
-    ::rtl::OUString sEntry = pEdit->GetText();
+    OUString sEntry = pEdit->GetText();
     sal_Bool bFound = sEntry.isEmpty();
 
     if(!bFound)
     {
-        ::std::vector< ::rtl::OUString >::const_iterator aHeaderIter;
+        ::std::vector< OUString >::const_iterator aHeaderIter;
         for(aHeaderIter = m_rCSVHeader.begin();
                     aHeaderIter != m_rCSVHeader.end();
                     ++aHeaderIter)

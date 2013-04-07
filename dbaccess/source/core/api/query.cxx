@@ -101,7 +101,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
             OSL_FAIL("OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
         }
 
-        m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
+        m_xCommandDefinition->addPropertyChangeListener(OUString(), this);
         //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
@@ -160,7 +160,7 @@ void OQuery::rebuildColumns()
             Reference< XResultSetMetaData > xResultSetMeta( xResMetaDataSup->getMetaData() );
             if ( !xResultSetMeta.is() )
             {
-                ::rtl::OUString sError( DBA_RES( RID_STR_STATEMENT_WITHOUT_RESULT_SET ) );
+                OUString sError( DBA_RES( RID_STR_STATEMENT_WITHOUT_RESULT_SET ) );
                 ::dbtools::throwSQLException( sError, SQL_GENERAL_ERROR, *this );
             }
 
@@ -173,13 +173,13 @@ void OQuery::rebuildColumns()
                 throw RuntimeException();
         }
 
-        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd  = pIter + aNames.getLength();
+        Sequence< OUString> aNames = xColumns->getElementNames();
+        const OUString* pIter = aNames.getConstArray();
+        const OUString* pEnd  = pIter + aNames.getLength();
         for ( sal_Int32 i = 0;pIter != pEnd; ++pIter,++i)
         {
             Reference<XPropertySet> xSource(xColumns->getByName( *pIter ),UNO_QUERY);
-            ::rtl::OUString sLabel = *pIter;
+            OUString sLabel = *pIter;
             if ( xColumnDefinitions.is() && xColumnDefinitions->hasByName(*pIter) )
             {
                 Reference<XPropertySet> xCommandColumn(xColumnDefinitions->getByName( *pIter ),UNO_QUERY);
@@ -260,7 +260,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
     OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 
-    m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
+    m_xCommandDefinition->removePropertyChangeListener(OUString(), this);
     m_xCommandDefinition = NULL;
 }
 
@@ -276,7 +276,7 @@ void SAL_CALL OQuery::disposing()
     MutexGuard aGuard(m_aMutex);
     if (m_xCommandDefinition.is())
     {
-        m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
+        m_xCommandDefinition->removePropertyChangeListener(OUString(), this);
         m_xCommandDefinition = NULL;
     }
     disposeColumns();
@@ -287,7 +287,7 @@ void SAL_CALL OQuery::disposing()
 void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
-    ::rtl::OUString sAggPropName;
+    OUString sAggPropName;
     sal_Int16 nAttr = 0;
     if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
         m_xCommandPropInfo.is() &&
@@ -322,12 +322,12 @@ Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(Runt
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-OColumn* OQuery::createColumn(const ::rtl::OUString& /*_rName*/) const
+OColumn* OQuery::createColumn(const OUString& /*_rName*/) const
 {
     return NULL;
 }
 
-void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OQuery::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XRename> xRename(m_xCommandDefinition,UNO_QUERY);

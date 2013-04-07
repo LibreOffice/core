@@ -43,7 +43,6 @@ using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Exception;
-using ::rtl::OUString;
 
 namespace
 {
@@ -87,7 +86,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
 
 Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
     const Reference< XComponentContext > & xContext,
-    ::rtl::OUString aServiceName )
+    OUString aServiceName )
 {
     Reference< XRegressionCurve > xResult;
 
@@ -115,7 +114,7 @@ Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServ
 // ------------------------------------------------------------
 
 Reference< XRegressionCurveCalculator > RegressionCurveHelper::createRegressionCurveCalculatorByServiceName(
-    ::rtl::OUString aServiceName )
+    OUString aServiceName )
 {
     Reference< XRegressionCurveCalculator > xResult;
 
@@ -166,7 +165,7 @@ void RegressionCurveHelper::initializeCurveCalculator(
         {
             Reference< data::XDataSequence > xSeq( aDataSeqs[i]->getValues());
             Reference< XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-            ::rtl::OUString aRole;
+            OUString aRole;
             if( xProp->getPropertyValue( "Role" ) >>= aRole )
             {
                 if( bUseXValuesIfAvailable && !bXValuesFound && aRole == "values-x" )
@@ -349,7 +348,7 @@ void RegressionCurveHelper::addRegressionCurve(
     }
 
     uno::Reference< chart2::XRegressionCurve > xCurve;
-    ::rtl::OUString aServiceName( lcl_getServiceNameForType( eType ));
+    OUString aServiceName( lcl_getServiceNameForType( eType ));
 
     if( !aServiceName.isEmpty())
     {
@@ -508,7 +507,7 @@ RegressionCurveHelper::tRegressionType RegressionCurveHelper::getRegressionType(
         Reference< lang::XServiceName > xServName( xCurve, uno::UNO_QUERY );
         if( xServName.is())
         {
-            ::rtl::OUString aServiceName( xServName->getServiceName() );
+            OUString aServiceName( xServName->getServiceName() );
 
             if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
             {

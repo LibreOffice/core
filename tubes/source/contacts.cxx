@@ -114,7 +114,7 @@ class TubeContacts : public ModelessDialog
             TpAccount* pAccount = maACs[i].first;
             SAL_INFO( "tubes", "picked " << tp_account_get_display_name( pAccount ) );
             TeleConference* pConference = TeleManager::startGroupSession( pAccount,
-                    rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
+                    OUString("liboroom"), OUString("conference.jabber.org") );
             if (!pConference)
                 SAL_WARN( "tubes", "Could not start group session." );
             else
@@ -145,9 +145,9 @@ public:
     {
     }
 
-    static rtl::OUString fromUTF8( const char *pStr )
+    static OUString fromUTF8( const char *pStr )
     {
-        return rtl::OStringToOUString( rtl::OString( pStr, strlen( pStr ) ),
+        return OStringToOUString( OString( pStr, strlen( pStr ) ),
                                        RTL_TEXTENCODING_UTF8 );
     }
 
@@ -168,9 +168,9 @@ public:
             GFile *pAvatarFile = tp_contact_get_avatar_file( it->second );
             if( pAvatarFile )
             {
-                const rtl::OUString sAvatarFileUrl = fromUTF8( g_file_get_path ( pAvatarFile ) );
+                const OUString sAvatarFileUrl = fromUTF8( g_file_get_path ( pAvatarFile ) );
                 Graphic aGraphic;
-                if( GRFILTER_OK == GraphicFilter::LoadGraphic( sAvatarFileUrl, rtl::OUString(""), aGraphic ) )
+                if( GRFILTER_OK == GraphicFilter::LoadGraphic( sAvatarFileUrl, OUString(""), aGraphic ) )
                 {
                     BitmapEx aBitmap = aGraphic.GetBitmapEx();
                     double fScale = 30.0 / aBitmap.GetSizePixel().Height();
@@ -178,7 +178,7 @@ public:
                     aImage = Image( aBitmap );
                 }
             }
-            rtl::OUStringBuffer aEntry( 128 );
+            OUStringBuffer aEntry( 128 );
             aEntry.append( "    " );
             aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
             aEntry.append( "    -    " );

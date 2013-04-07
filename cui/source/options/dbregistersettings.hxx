@@ -30,7 +30,7 @@ namespace svx
 
     struct DatabaseRegistration
     {
-        ::rtl::OUString sLocation;
+        OUString sLocation;
         bool            bReadOnly;
 
         DatabaseRegistration()
@@ -39,7 +39,7 @@ namespace svx
         {
         }
 
-        DatabaseRegistration( const ::rtl::OUString& _rLocation, const sal_Bool _bReadOnly )
+        DatabaseRegistration( const OUString& _rLocation, const sal_Bool _bReadOnly )
             :sLocation( _rLocation )
             ,bReadOnly( _bReadOnly )
         {
@@ -58,7 +58,7 @@ namespace svx
         }
     };
 
-    typedef ::std::map< ::rtl::OUString, DatabaseRegistration, ::comphelper::UStringLess >   DatabaseRegistrations;
+    typedef ::std::map< OUString, DatabaseRegistration, ::comphelper::UStringLess >   DatabaseRegistrations;
 
     //====================================================================
     //= DatabaseMapItem

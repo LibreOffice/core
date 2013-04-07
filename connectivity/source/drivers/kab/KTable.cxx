@@ -36,11 +36,11 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 KabTable::KabTable( sdbcx::OCollection* _pTables,
                 KabConnection* _pConnection,
-                const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Type,
-                const ::rtl::OUString& _Description ,
-                const ::rtl::OUString& _SchemaName,
-                const ::rtl::OUString& _CatalogName
+                const OUString& _Name,
+                const OUString& _Type,
+                const OUString& _Description ,
+                const OUString& _SchemaName,
+                const OUString& _CatalogName
                 ) : KabTable_TYPEDEF(_pTables,sal_True,
                                   _Name,
                                   _Type,
@@ -62,7 +62,7 @@ void KabTable::refreshColumns()
                 Any(),
                 m_SchemaName,
                 m_Name,
-                ::rtl::OUString("%"));
+                OUString("%"));
 
         if (xResult.is())
         {

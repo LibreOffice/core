@@ -43,12 +43,12 @@ public:
                 UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs );
 
     // ::cppu::IPropertyArrayHelper
-    sal_Bool SAL_CALL fillPropertyMembersByHandle( ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle );
+    sal_Bool SAL_CALL fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle );
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties();
-    ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const ::rtl::OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException);
-    sal_Bool SAL_CALL hasPropertyByName(const ::rtl::OUString& rPropertyName);
-    sal_Int32 SAL_CALL getHandleByName( const ::rtl::OUString & rPropertyName );
-    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames );
+    ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException);
+    sal_Bool SAL_CALL hasPropertyByName(const OUString& rPropertyName);
+    sal_Int32 SAL_CALL getHandleByName( const OUString & rPropertyName );
+    sal_Int32 SAL_CALL fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< OUString > & rPropNames );
 };
 
 

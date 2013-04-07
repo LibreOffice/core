@@ -27,7 +27,7 @@ namespace registry
 namespace tools
 {
 
-rtl::OUString convertToFileUrl(char const * filename, size_t length);
+OUString convertToFileUrl(char const * filename, size_t length);
 
 } // namespace tools
 } // namespace registry

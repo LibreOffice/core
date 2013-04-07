@@ -633,7 +633,7 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, bool bDire
 // Open a stream
 
 BaseStorageStream* Storage::OpenStream( const String& rName, StreamMode m, sal_Bool,
-const rtl::OString*
+const OString*
 #ifdef DBG_UTIL
 pB
 #endif

@@ -31,7 +31,7 @@ public:
     ScAccessibleFilterTopWindow(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-            ScCheckListMenuWindow* pWin, const ::rtl::OUString& rName);
+            ScCheckListMenuWindow* pWin, const OUString& rName);
     virtual ~ScAccessibleFilterTopWindow();
 
     // XAccessibleContext
@@ -43,7 +43,7 @@ public:
         getAccessibleChild(sal_Int32 nIndex)
             throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // Non-UNO Methods

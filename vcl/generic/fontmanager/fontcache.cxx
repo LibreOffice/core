@@ -45,9 +45,6 @@ using namespace std;
 using namespace psp;
 using namespace utl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 /*
  *  FontCache constructor
@@ -103,7 +100,7 @@ void FontCache::flush()
     if( ! (aStream.IsOpen() && aStream.IsWritable()) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
+        fprintf( stderr, "FontCache::flush: opening cache file %s failed\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
 #endif
         return;
     }
@@ -118,8 +115,8 @@ void FontCache::flush()
     {
         const FontDirMap& rDir( dir_it->second.m_aEntries );
 
-        rtl::OString aDirectory(rManager.getDirectory(dir_it->first));
-        rtl::OStringBuffer aLine("FontCacheDirectory:");
+        OString aDirectory(rManager.getDirectory(dir_it->first));
+        OStringBuffer aLine("FontCacheDirectory:");
         aLine.append(dir_it->second.m_nTimestamp);
         aLine.append(':');
         aLine.append(aDirectory);
@@ -226,7 +223,7 @@ void FontCache::flush()
                 }
                 aStream.WriteLine(aLine.makeStringAndClear());
             }
-            aStream.WriteLine(rtl::OString());
+            aStream.WriteLine(OString());
         }
     }
     m_bDoFlush = false;
@@ -245,7 +242,7 @@ void FontCache::read()
     if( ! aStream.IsOpen() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
+        fprintf( stderr, "FontCache::read: opening cache file %s failed\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
 #endif
         return;
     }
@@ -256,7 +253,7 @@ void FontCache::read()
     if ( !(aLine == CACHE_MAGIC) )
     {
         #if OSL_DEBUG_LEVEL >1
-        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", rtl::OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
+        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", OUStringToOString(m_aCacheFile, osl_getThreadTextEncoding()).getStr() );
         #endif
         return;
     }
@@ -278,7 +275,7 @@ void FontCache::read()
             sal_Int32 nTEnd = aLine.indexOf( ':', nSearchIndex );
             if( nTEnd != -1 )
             {
-                rtl::OString aTimeStamp = aLine.copy( nSearchIndex, nTEnd - nSearchIndex );
+                OString aTimeStamp = aLine.copy( nSearchIndex, nTEnd - nSearchIndex );
                 nTimestamp = aTimeStamp.toInt64();
                 aDir = aLine.copy( nTEnd+1 );
             }
@@ -452,7 +449,7 @@ void FontCache::read()
                 {
                     if( pFont->m_bUserOverride )
                     {
-                        rtl::OStringBuffer aFilePath(rManager.getDirectory(nDir));
+                        OStringBuffer aFilePath(rManager.getDirectory(nDir));
                         aFilePath.append('/').append(aFile);
                         struct stat aStat;
                         if( stat( aFilePath.getStr(), &aStat )   ||

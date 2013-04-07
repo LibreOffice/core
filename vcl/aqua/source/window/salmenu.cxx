@@ -62,11 +62,11 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
     }
     else
     {
-        rtl::OUString aDialog;
+        OUString aDialog;
         if( nDialog == SHOWDIALOG_ID_ABOUT )
-            aDialog = rtl::OUString("ABOUT");
+            aDialog = OUString("ABOUT");
         else if( nDialog == SHOWDIALOG_ID_PREFERENCES )
-            aDialog = rtl::OUString("PREFERENCES");
+            aDialog = OUString("PREFERENCES");
         const ApplicationEvent* pAppEvent = new ApplicationEvent(
             ApplicationEvent::TYPE_SHOWDIALOG, aDialog);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
@@ -668,7 +668,7 @@ void AquaSalMenu::SetItemImage( unsigned /*nPos*/, SalMenuItem* pSMI, const Imag
         [pImage release];
 }
 
-void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem, const rtl::OUString& i_rText )
+void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem, const OUString& i_rText )
 {
     if (!i_pSalMenuItem)
         return;
@@ -703,7 +703,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     }
 }
 
-void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& /*rKeyName*/ )
+void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& /*rKeyName*/ )
 {
     sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;
@@ -779,7 +779,7 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
         nItemModifier |= NSControlKeyMask;
 
     AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) pSalMenuItem;
-    NSString* pString = CreateNSString( rtl::OUString( &nCommandKey, 1 ) );
+    NSString* pString = CreateNSString( OUString( &nCommandKey, 1 ) );
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalent: pString];
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalentModifierMask: nItemModifier];
     if (pString)

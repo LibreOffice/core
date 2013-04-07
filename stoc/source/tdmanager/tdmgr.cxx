@@ -59,8 +59,6 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 static const sal_Int32 CACHE_SIZE = 512;
 
@@ -179,7 +177,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::reflection::XTypeDescriptionEnumeration > SAL_CALL
     createTypeDescriptionEnumeration(
-        const ::rtl::OUString& moduleName,
+        const OUString& moduleName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass >& types,
         ::com::sun::star::reflection::TypeDescriptionSearchDepth depth )
@@ -1000,7 +998,7 @@ Reference< XTypeDescription > ManagerImpl::getInstantiatedStruct(
             && name[i] == '>' && !args.empty();
     }
     // args.size() cannot exceed SAL_MAX_INT32, as each argument consumes at
-    // least one position within an rtl::OUString (which is no longer than
+    // least one position within an OUString (which is no longer than
     // SAL_MAX_INT32):
     if (!good
         || (args.size()

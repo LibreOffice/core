@@ -57,7 +57,6 @@
 #include <osl/mutex.hxx>
 #include "ndtxt.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -67,7 +66,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 using ::boost::unordered_map;
-using rtl::OUString;
 
 enum SwXMLTableElemTokens
 {
@@ -1175,7 +1173,7 @@ static String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 
     if (sPrefixStr.Len() == 0)
     {
-        sPrefixStr = rtl::OUString('_');
+        sPrefixStr = OUString('_');
     }
 
     // increase count until we find a name that is not yet taken

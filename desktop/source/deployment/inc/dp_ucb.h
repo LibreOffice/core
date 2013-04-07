@@ -37,16 +37,16 @@ namespace dp_misc {
 
 struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 {
-    static css::uno::Sequence< rtl::OUString > getTitleSequence()
+    static css::uno::Sequence< OUString > getTitleSequence()
     {
-        css::uno::Sequence< rtl::OUString > aSeq( 1 );
+        css::uno::Sequence< OUString > aSeq( 1 );
         aSeq[ 0 ] = "Title";
         return aSeq;
     }
-    static rtl::OUString getTitle( ::ucbhelper::Content &rContent )
+    static OUString getTitle( ::ucbhelper::Content &rContent )
     {
-        return rtl::OUString( rContent.getPropertyValue(
-                rtl::OUString::createFromAscii( "Title" ) ).get<rtl::OUString>() );
+        return OUString( rContent.getPropertyValue(
+                OUString::createFromAscii( "Title" ) ).get<OUString>() );
     }
     // just return titles - the ucbhelper should have a simpler API for this [!]
     static css::uno::Reference< css::sdbc::XResultSet >
@@ -61,7 +61,7 @@ struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
     ::ucbhelper::Content * ucb_content,
-    ::rtl::OUString const & url,
+    OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
@@ -70,13 +70,13 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_ucb_content(
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool create_folder(
     ::ucbhelper::Content * ucb_content,
-    ::rtl::OUString const & url,
+    OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool erase_path(
-    ::rtl::OUString const & url,
+    OUString const & url,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
     bool throw_exc = true );
 
@@ -86,11 +86,11 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool readLine( ::rtl::OUString * res, ::rtl::OUString const & startingWith,
+bool readLine( OUString * res, OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString> > & out_result,
+bool readProperties( ::std::list< ::std::pair< OUString, OUString> > & out_result,
                 ::ucbhelper::Content & ucb_content);
 
 

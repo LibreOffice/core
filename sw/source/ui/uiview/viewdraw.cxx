@@ -220,8 +220,8 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if( pFuncPtr && pFuncPtr->GetSlotId() == SID_DRAW_CS_ID )
         {
             ConstCustomShape* pConstCustomShape = (ConstCustomShape*)(pFuncPtr);
-            rtl::OUString aNew = ConstCustomShape::GetShapeTypeFromRequest( rReq );
-            rtl::OUString aOld = pConstCustomShape->GetShapeType();
+            OUString aNew = ConstCustomShape::GetShapeTypeFromRequest( rReq );
+            OUString aOld = pConstCustomShape->GetShapeType();
             if( aNew == aOld )
             {
                 bDeselect = true;

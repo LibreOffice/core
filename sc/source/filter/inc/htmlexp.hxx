@@ -123,7 +123,7 @@ class ScHTMLExport : public ScExportBase
     void                WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void                WriteGraphEntry( ScHTMLGraphEntry* );
     void                WriteImage( String& rLinkName,
-                                    const Graphic&, const rtl::OString& rImgOptions,
+                                    const Graphic&, const OString& rImgOptions,
                                     sal_uLong nXOutFlags = 0 );
                             // nXOutFlags fuer XOutBitmap::WriteGraphic
 
@@ -143,7 +143,7 @@ class ScHTMLExport : public ScExportBase
                                         SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow );
 
-    rtl::OString BorderToStyle(const char* pBorderName,
+    OString BorderToStyle(const char* pBorderName,
         const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon);
 
     sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );

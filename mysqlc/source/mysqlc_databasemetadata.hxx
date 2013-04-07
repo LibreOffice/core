@@ -35,7 +35,6 @@ namespace connectivity
         typedef ::com::sun::star::uno::RuntimeException my_RuntimeException;
         typedef ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > my_XResultSetRef;
         using ::com::sun::star::uno::Any;
-        using ::rtl::OUString;
 
         //**************************************************************
         //************ Class: ODatabaseMetaData

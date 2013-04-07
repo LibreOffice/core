@@ -47,11 +47,11 @@ const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all
 struct ScMatrixValue
 {
     double fVal;
-    rtl::OUString aStr;
+    OUString aStr;
     ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    const ::rtl::OUString& GetString() const { return aStr; }
+    const OUString& GetString() const { return aStr; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     sal_uInt16 GetError() const         { return GetDoubleErrorValue( fVal); }
@@ -254,9 +254,9 @@ public:
     void PutDouble( double fVal, SCSIZE nIndex);
     void PutDouble(const double* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
-    void PutString( const ::rtl::OUString& rStr, SCSIZE nC, SCSIZE nR);
-    void PutString( const ::rtl::OUString& rStr, SCSIZE nIndex);
-    void PutString(const rtl::OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
+    void PutString( const OUString& rStr, SCSIZE nC, SCSIZE nR);
+    void PutString( const OUString& rStr, SCSIZE nIndex);
+    void PutString(const OUString* pArray, size_t nLen, SCSIZE nC, SCSIZE nR);
 
     void PutEmpty( SCSIZE nC, SCSIZE nR);
 
@@ -286,15 +286,15 @@ public:
     double GetDouble( SCSIZE nIndex) const;
 
     /// @return empty string if empty or empty path, else string content.
-    rtl::OUString GetString( SCSIZE nC, SCSIZE nR) const;
+    OUString GetString( SCSIZE nC, SCSIZE nR) const;
     /// @return empty string if empty or empty path, else string content.
-    rtl::OUString GetString( SCSIZE nIndex) const;
+    OUString GetString( SCSIZE nIndex) const;
 
     /** @returns the matrix element's string if one is present, otherwise the
         numerical value formatted as string, or in case of an error the error
         string is returned; an empty string for empty, a "FALSE" string for
         empty path. */
-    ::rtl::OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
+    OUString GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR) const;
 
     /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!

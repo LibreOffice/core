@@ -44,7 +44,7 @@ namespace svgio
             }
         }
 
-        void SvgStyleNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
@@ -56,7 +56,7 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrTextCss(rtl::OUString::createFromAscii("text/css"));
+                        static OUString aStrTextCss(OUString::createFromAscii("text/css"));
 
                         if(aContent.match(aStrTextCss))
                         {
@@ -72,28 +72,28 @@ namespace svgio
             }
         }
 
-        void SvgStyleNode::addCssStyleSheet(const rtl::OUString& aContent)
+        void SvgStyleNode::addCssStyleSheet(const OUString& aContent)
         {
             const sal_Int32 nLen(aContent.getLength());
 
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                rtl::OUStringBuffer aTokenValue;
+                OUStringBuffer aTokenValue;
 
                 while(nPos < nLen)
                 {
                     const sal_Int32 nInitPos(nPos);
                     skip_char(aContent, sal_Unicode(' '), sal_Unicode('#'), nPos, nLen);
                     copyToLimiter(aContent, sal_Unicode('{'), nPos, aTokenValue, nLen);
-                    const rtl::OUString aStyleName = aTokenValue.makeStringAndClear().trim();
+                    const OUString aStyleName = aTokenValue.makeStringAndClear().trim();
 
                     if(aStyleName.getLength() && nPos < nLen)
                     {
                         skip_char(aContent, sal_Unicode(' '), sal_Unicode('{'), nPos, nLen);
                         copyToLimiter(aContent, sal_Unicode('}'), nPos, aTokenValue, nLen);
                         skip_char(aContent, sal_Unicode(' '), sal_Unicode('}'), nPos, nLen);
-                        const rtl::OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
+                        const OUString aStyleContent = aTokenValue.makeStringAndClear().trim();
 
                         if(aStyleContent.getLength())
                         {

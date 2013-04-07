@@ -1040,16 +1040,16 @@ void Window::DropScroll(const Point& rMousePos)
     }
 }
 
-rtl::OUString Window::GetSurroundingText() const
+OUString Window::GetSurroundingText() const
 {
     if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
-        return rtl::OUString();
+        return OUString();
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
         OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
         return pOLV->GetEditView().GetSurroundingText();
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 Selection Window::GetSurroundingTextSelection() const

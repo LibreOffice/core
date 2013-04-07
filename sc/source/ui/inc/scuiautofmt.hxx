@@ -30,7 +30,7 @@ public:
             ~ScAutoFormatDlg();
 
     sal_uInt16 GetIndex() const { return nIndex; }
-    rtl::OUString GetCurrFormatName();
+    OUString GetCurrFormatName();
 
 private:
     FixedLine       aFlFormat;

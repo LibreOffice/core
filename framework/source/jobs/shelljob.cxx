@@ -47,19 +47,19 @@ namespace framework{
 
 
 /** address job configuration inside argument set provided on method execute(). */
-static const ::rtl::OUString PROP_JOBCONFIG("JobConfig");
+static const OUString PROP_JOBCONFIG("JobConfig");
 
 /** address job configuration property "Command". */
-static const ::rtl::OUString PROP_COMMAND("Command");
+static const OUString PROP_COMMAND("Command");
 
 /** address job configuration property "Arguments". */
-static const ::rtl::OUString PROP_ARGUMENTS("Arguments");
+static const OUString PROP_ARGUMENTS("Arguments");
 
 /** address job configuration property "DeactivateJobIfDone". */
-static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
+static const OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
 
 /** address job configuration property "CheckExitCode". */
-static const ::rtl::OUString PROP_CHECKEXITCODE("CheckExitCode");
+static const OUString PROP_CHECKEXITCODE("CheckExitCode");
 
 //-----------------------------------------------
 
@@ -99,13 +99,13 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     ::comphelper::SequenceAsHashMap lOwnCfg(lArgs.getUnpackedValueOrDefault(PROP_JOBCONFIG, css::uno::Sequence< css::beans::NamedValue >()));
 
-    const ::rtl::OUString                       sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , ::rtl::OUString());
-    const css::uno::Sequence< ::rtl::OUString > lCommandArguments          = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , css::uno::Sequence< ::rtl::OUString >());
+    const OUString                       sCommand                   = lOwnCfg.getUnpackedValueOrDefault(PROP_COMMAND                  , OUString());
+    const css::uno::Sequence< OUString > lCommandArguments          = lOwnCfg.getUnpackedValueOrDefault(PROP_ARGUMENTS                , css::uno::Sequence< OUString >());
     const ::sal_Bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
     const ::sal_Bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , sal_True         );
 
     // replace all might existing place holder.
-    ::rtl::OUString sRealCommand = impl_substituteCommandVariables(sCommand);
+    OUString sRealCommand = impl_substituteCommandVariables(sCommand);
 
     // Command is required as minimum.
     // If it does not exists ... we cant do our job.
@@ -139,7 +139,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 }
 
 //-----------------------------------------------
-::rtl::OUString ShellJob::impl_substituteCommandVariables(const ::rtl::OUString& sCommand)
+OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
     // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
@@ -152,19 +152,19 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
         css::uno::Reference< css::uno::XComponentContext >    xContext( comphelper::getComponentContext(xSMGR) );
         css::uno::Reference< css::util::XStringSubstitution > xSubst(  css::util::PathSubstitution::create(xContext) );
         const ::sal_Bool                                      bSubstRequired   = sal_True;
-        const ::rtl::OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
+        const OUString                                 sCompleteCommand = xSubst->substituteVariables(sCommand, bSubstRequired);
 
         return sCompleteCommand;
     }
     catch(const css::uno::Exception&)
     {}
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
-::sal_Bool ShellJob::impl_execute(const ::rtl::OUString&                       sCommand      ,
-                                  const css::uno::Sequence< ::rtl::OUString >& lArguments    ,
+::sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
+                                  const css::uno::Sequence< OUString >& lArguments    ,
                                         ::sal_Bool                             bCheckExitCode)
 {
           ::rtl_uString**  pArgs    = NULL;
@@ -173,7 +173,7 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
           oslProcess       hProcess(0);
 
     if (nArgs > 0)
-        pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< ::rtl::OUString* >(lArguments.getConstArray()));
+        pArgs = reinterpret_cast< ::rtl_uString** >(const_cast< OUString* >(lArguments.getConstArray()));
 
     oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
 

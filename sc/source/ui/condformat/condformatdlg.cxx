@@ -383,9 +383,9 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     mpDoc(pDoc),
     mpLastEdit(NULL)
 {
-    rtl::OUStringBuffer aTitle( GetText() );
-    aTitle.append(rtl::OUString(" "));
-    rtl::OUString aRangeString;
+    OUStringBuffer aTitle( GetText() );
+    aTitle.append(OUString(" "));
+    OUString aRangeString;
     rRange.Format(aRangeString, SCA_VALID, pDoc, pDoc->GetAddressConvention());
     aTitle.append(aRangeString);
     SetText(aTitle.makeStringAndClear());
@@ -451,7 +451,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
         if(rRef.aStart != rRef.aEnd)
             RefInputStart(pEdit);
 
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         sal_uInt16 n = 0;
         if(mpLastEdit && mpLastEdit != &maEdRange)
             n = ABS_DREF3D;
@@ -465,7 +465,7 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
-    rtl::OUString aRangeStr = maEdRange.GetText();
+    OUString aRangeStr = maEdRange.GetText();
     if(aRangeStr.isEmpty())
         return NULL;
 
@@ -491,7 +491,7 @@ void ScCondFormatDlg::InvalidateRefData()
 
 IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 {
-    rtl::OUString aRangeStr = pEdit->GetText();
+    OUString aRangeStr = pEdit->GetText();
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
     if(nFlags & SCA_VALID)

@@ -36,7 +36,7 @@
 #include <unomid.h>
 
 #ifdef WNT
-#define NEXTLINE  rtl::OUString("\r\n")
+#define NEXTLINE  OUString("\r\n")
 #else
 #define NEXTLINE  '\n'
 #endif
@@ -44,7 +44,6 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 
 TYPEINIT1_AUTOFACTORY( SwEnvItem, SfxPoolItem );
@@ -269,9 +268,9 @@ void    SwEnvCfgItem::Commit()
     PutProperties(aNames, aValues);
 }
 
-void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwEnvCfgItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-Sequence<rtl::OUString> SwEnvCfgItem::GetPropertyNames()
+Sequence<OUString> SwEnvCfgItem::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {

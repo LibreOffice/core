@@ -38,10 +38,10 @@ DBG_NAME(OXMLDocuments)
 
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const ::rtl::OUString& rLName
+                , const OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
-                ,const ::rtl::OUString& _sCollectionServiceName
-                ,const ::rtl::OUString& _sComponentServiceName) :
+                ,const OUString& _sCollectionServiceName
+                ,const OUString& _sComponentServiceName) :
     SvXMLImportContext( rImport, nPrfx, rLName )
         ,m_xContainer(_xContainer)
         ,m_sCollectionServiceName(_sCollectionServiceName)
@@ -53,9 +53,9 @@ OXMLDocuments::OXMLDocuments( ODBFilter& rImport
 // -----------------------------------------------------------------------------
 OXMLDocuments::OXMLDocuments( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const ::rtl::OUString& rLName
+                , const OUString& rLName
                 ,const Reference< XNameAccess >& _xContainer
-                ,const ::rtl::OUString& _sCollectionServiceName
+                ,const OUString& _sCollectionServiceName
                 ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
         ,m_xContainer(_xContainer)
@@ -74,7 +74,7 @@ OXMLDocuments::~OXMLDocuments()
 
 SvXMLImportContext* OXMLDocuments::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

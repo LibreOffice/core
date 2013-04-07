@@ -28,7 +28,6 @@
 #include "rtl/string.hxx"
 #include "tools/rc.h"
 
-using ::rtl::OUString;
 
 
 /*  #i77549#
@@ -319,9 +318,9 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
         if ( GetStyle() & WB_HORZ )
         {
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_LEFT,
-                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_RIGHT,
-                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -336,7 +335,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_HORZ_AREA,
-                     aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
@@ -360,9 +359,9 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
         else
         {
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_UP,
-                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_DOWN,
-                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -377,7 +376,7 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_VERT_AREA,
-                     aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, 0, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
@@ -548,7 +547,7 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             aCtrlRegion.Union( maPage2Rect );
             aCtrlRegion.Union( maThumbRect );
             bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT),
-                            aCtrlRegion, nState, scrValue, rtl::OUString() );
+                            aCtrlRegion, nState, scrValue, OUString() );
         }
         else
       {
@@ -578,11 +577,11 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 
             if ( nDrawFlags & SCRBAR_DRAW_PAGE1 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part1, aCtrlRegion1, nState1,
-                                scrValue, rtl::OUString() );
+                                scrValue, OUString() );
 
             if ( nDrawFlags & SCRBAR_DRAW_PAGE2 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part2, aCtrlRegion2, nState2,
-                                scrValue, rtl::OUString() );
+                                scrValue, OUString() );
         }
         if ( (nDrawFlags & SCRBAR_DRAW_BTN1) || (nDrawFlags & SCRBAR_DRAW_BTN2) )
         {
@@ -620,11 +619,11 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 
             if ( nDrawFlags & SCRBAR_DRAW_BTN1 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part1, aCtrlRegion1, nState1,
-                                scrValue, rtl::OUString() );
+                                scrValue, OUString() );
 
             if ( nDrawFlags & SCRBAR_DRAW_BTN2 )
                 bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, part2, aCtrlRegion2, nState2,
-                                scrValue, rtl::OUString() );
+                                scrValue, OUString() );
         }
         if ( (nDrawFlags & SCRBAR_DRAW_THUMB) && !maThumbRect.IsEmpty() )
         {
@@ -648,7 +647,7 @@ sal_Bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
             }
 
             bNativeOK = DrawNativeControl( CTRL_SCROLLBAR, (bHorz ? PART_THUMB_HORZ : PART_THUMB_VERT),
-                    aCtrlRegion, nState, scrValue, rtl::OUString() );
+                    aCtrlRegion, nState, scrValue, OUString() );
         }
       }
     }

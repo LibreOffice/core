@@ -121,9 +121,9 @@ ObjectCopySource::ObjectCopySource( const Reference< XConnection >& _rxConnectio
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString ObjectCopySource::getQualifiedObjectName() const
+OUString ObjectCopySource::getQualifiedObjectName() const
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     if ( !m_xObjectPSI->hasPropertyByName( PROPERTY_COMMAND ) )
         sName = ::dbtools::composeTableName( m_xMetaData, m_xObject, ::dbtools::eInDataManipulation, false, false, false );
@@ -140,7 +140,7 @@ bool ObjectCopySource::isView() const
     {
         if ( m_xObjectPSI->hasPropertyByName( PROPERTY_TYPE ) )
         {
-            ::rtl::OUString sObjectType;
+            OUString sObjectType;
             OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_TYPE ) >>= sObjectType );
             bIsView = sObjectType == "VIEW";
         }
@@ -155,7 +155,7 @@ bool ObjectCopySource::isView() const
 //------------------------------------------------------------------------
 void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObject ) const
 {
-    const ::rtl::OUString aCopyProperties[] = {
+    const OUString aCopyProperties[] = {
         PROPERTY_FONT, PROPERTY_ROW_HEIGHT, PROPERTY_TEXTCOLOR,PROPERTY_TEXTLINECOLOR,PROPERTY_TEXTEMPHASIS,PROPERTY_TEXTRELIEF
     };
     for ( size_t i=0; i < sizeof( aCopyProperties ) / sizeof( aCopyProperties[0] ); ++i )
@@ -167,29 +167,29 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
 //------------------------------------------------------------------------
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
-    ::std::pair< ::rtl::OUString, ::rtl::OUString > aProperties[] = {
-                 ::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_FILTER,::rtl::OUString(" AND "))
-                ,::std::pair< ::rtl::OUString, ::rtl::OUString >(PROPERTY_ORDER,::rtl::OUString(" ORDER BY "))
+    ::std::pair< OUString, OUString > aProperties[] = {
+                 ::std::pair< OUString, OUString >(PROPERTY_FILTER,OUString(" AND "))
+                ,::std::pair< OUString, OUString >(PROPERTY_ORDER,OUString(" ORDER BY "))
     };
 
     size_t i = 0;
 
     try
     {
-        const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + ::rtl::OUString("."));
-        const ::rtl::OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
-        const String sTargetNameTemp = (sTargetName + ::rtl::OUString("."));
+        const String sSourceName = (::dbtools::composeTableNameForSelect(m_xConnection,m_xObject) + OUString("."));
+        const OUString sTargetName = ::dbtools::composeTableNameForSelect(_xConnection,_rxObject);
+        const String sTargetNameTemp = (sTargetName + OUString("."));
 
-        ::rtl::OUString sStatement("SELECT * FROM ");
+        OUString sStatement("SELECT * FROM ");
         sStatement += sTargetName;
-        sStatement += ::rtl::OUString(" WHERE 0=1");
+        sStatement += OUString(" WHERE 0=1");
 
 
         for ( i=0; i < sizeof( aProperties ) / sizeof( aProperties[0] ); ++i )
         {
             if ( m_xObjectPSI->hasPropertyByName( aProperties[i].first ) )
             {
-                ::rtl::OUString sFilter;
+                OUString sFilter;
                 m_xObject->getPropertyValue( aProperties[i].first ) >>= sFilter;
                 if ( !sFilter.isEmpty() )
                 {
@@ -213,47 +213,47 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
     }
 }
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ObjectCopySource::getColumnNames() const
+Sequence< OUString > ObjectCopySource::getColumnNames() const
 {
     return m_xObjectColumns->getElementNames();
 }
 
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
+Sequence< OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
 {
     const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(m_xObject);
-    Sequence< ::rtl::OUString > aKeyColNames;
+    Sequence< OUString > aKeyColNames;
     if ( xPrimaryKeyColumns.is() )
         aKeyColNames = xPrimaryKeyColumns->getElementNames();
     return aKeyColNames;
 }
 
 //------------------------------------------------------------------------
-OFieldDescription* ObjectCopySource::createFieldDescription( const ::rtl::OUString& _rColumnName ) const
+OFieldDescription* ObjectCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
     Reference< XPropertySet > xColumn( m_xObjectColumns->getByName( _rColumnName ), UNO_QUERY_THROW );
     return new OFieldDescription( xColumn );
 }
 //------------------------------------------------------------------------
-::rtl::OUString ObjectCopySource::getSelectStatement() const
+OUString ObjectCopySource::getSelectStatement() const
 {
-    ::rtl::OUString sSelectStatement;
+    OUString sSelectStatement;
     if ( m_xObjectPSI->hasPropertyByName( PROPERTY_COMMAND ) )
     {   // query
         OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_COMMAND ) >>= sSelectStatement );
     }
     else
     {   // table
-        ::rtl::OUStringBuffer aSQL;
+        OUStringBuffer aSQL;
         aSQL.appendAscii( "SELECT " );
 
         // we need to create the sql stmt with column names
         // otherwise it is possible that names don't match
-        const ::rtl::OUString sQuote = m_xMetaData->getIdentifierQuoteString();
+        const OUString sQuote = m_xMetaData->getIdentifierQuoteString();
 
-        Sequence< ::rtl::OUString > aColumnNames = getColumnNames();
-        const ::rtl::OUString* pColumnName = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd = pColumnName + aColumnNames.getLength();
+        Sequence< OUString > aColumnNames = getColumnNames();
+        const OUString* pColumnName = aColumnNames.getConstArray();
+        const OUString* pEnd = pColumnName + aColumnNames.getLength();
         for ( ; pColumnName != pEnd; )
         {
             aSQL.append( ::dbtools::quoteName( sQuote, *pColumnName++ ) );
@@ -287,7 +287,7 @@ OFieldDescription* ObjectCopySource::createFieldDescription( const ::rtl::OUStri
 //= NamedTableCopySource
 //========================================================================
 //------------------------------------------------------------------------
-NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxConnection, const ::rtl::OUString& _rTableName )
+NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxConnection, const OUString& _rTableName )
     :m_xConnection( _rxConnection, UNO_SET_THROW )
     ,m_xMetaData( _rxConnection->getMetaData(), UNO_SET_THROW )
     ,m_sTableName( _rTableName )
@@ -298,7 +298,7 @@ NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxC
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString NamedTableCopySource::getQualifiedObjectName() const
+OUString NamedTableCopySource::getQualifiedObjectName() const
 {
     return m_sTableName;
 }
@@ -306,11 +306,11 @@ NamedTableCopySource::NamedTableCopySource( const Reference< XConnection >& _rxC
 //------------------------------------------------------------------------
 bool NamedTableCopySource::isView() const
 {
-    ::rtl::OUString sTableType;
+    OUString sTableType;
     try
     {
         Reference< XResultSet > xTableDesc( m_xMetaData->getTables( makeAny( m_sTableCatalog ), m_sTableSchema, m_sTableBareName,
-            Sequence< ::rtl::OUString >() ) );
+            Sequence< OUString >() ) );
         Reference< XRow > xTableDescRow( xTableDesc, UNO_QUERY_THROW );
         OSL_VERIFY( xTableDesc->next() );
         sTableType = xTableDescRow->getString( 4 );
@@ -369,9 +369,9 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
 }
 
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > NamedTableCopySource::getColumnNames() const
+Sequence< OUString > NamedTableCopySource::getColumnNames() const
 {
-    Sequence< ::rtl::OUString > aNames( m_aColumnInfo.size() );
+    Sequence< OUString > aNames( m_aColumnInfo.size() );
     for (   ::std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
             col != m_aColumnInfo.end();
             ++col
@@ -382,9 +382,9 @@ Sequence< ::rtl::OUString > NamedTableCopySource::getColumnNames() const
 }
 
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
+Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
 {
-    Sequence< ::rtl::OUString > aPKColNames;
+    Sequence< OUString > aPKColNames;
 
     try
     {
@@ -406,7 +406,7 @@ Sequence< ::rtl::OUString > NamedTableCopySource::getPrimaryKeyColumnNames() con
 }
 
 //------------------------------------------------------------------------
-OFieldDescription* NamedTableCopySource::createFieldDescription( const ::rtl::OUString& _rColumnName ) const
+OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
     for (   ::std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
             col != m_aColumnInfo.end();
@@ -418,9 +418,9 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const ::rtl::OU
     return NULL;
 }
 //------------------------------------------------------------------------
-::rtl::OUString NamedTableCopySource::getSelectStatement() const
+OUString NamedTableCopySource::getSelectStatement() const
 {
-    ::rtl::OUStringBuffer aSQL;
+    OUStringBuffer aSQL;
     aSQL.appendAscii( "SELECT * FROM " );
 
     aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName ) );
@@ -445,16 +445,16 @@ public:
     static const DummyCopySource& Instance();
 
     // ICopyTableSourceObject overridables
-    virtual ::rtl::OUString     getQualifiedObjectName() const;
+    virtual OUString     getQualifiedObjectName() const;
     virtual bool                isView() const;
     virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
     virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    virtual ::com::sun::star::uno::Sequence< OUString >
                                 getColumnNames() const;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    virtual ::com::sun::star::uno::Sequence< OUString >
                                 getPrimaryKeyColumnNames() const;
-    virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const;
-    virtual ::rtl::OUString     getSelectStatement() const;
+    virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
+    virtual OUString     getSelectStatement() const;
     virtual ::utl::SharedUNOComponent< XPreparedStatement >
                                 getPreparedSelectStatement() const;
 };
@@ -467,10 +467,10 @@ const DummyCopySource& DummyCopySource::Instance()
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString DummyCopySource::getQualifiedObjectName() const
+OUString DummyCopySource::getQualifiedObjectName() const
 {
     OSL_FAIL( "DummyCopySource::getQualifiedObjectName: not to be called!" );
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -490,29 +490,29 @@ void DummyCopySource::copyFilterAndSortingTo( const Reference< XConnection >& ,c
 {
 }
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > DummyCopySource::getColumnNames() const
+Sequence< OUString > DummyCopySource::getColumnNames() const
 {
-    return Sequence< ::rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > DummyCopySource::getPrimaryKeyColumnNames() const
+Sequence< OUString > DummyCopySource::getPrimaryKeyColumnNames() const
 {
     OSL_FAIL( "DummyCopySource::getPrimaryKeyColumnNames: not to be called!" );
-    return Sequence< ::rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 //------------------------------------------------------------------------
-OFieldDescription* DummyCopySource::createFieldDescription( const ::rtl::OUString& /*_rColumnName*/ ) const
+OFieldDescription* DummyCopySource::createFieldDescription( const OUString& /*_rColumnName*/ ) const
 {
     OSL_FAIL( "DummyCopySource::createFieldDescription: not to be called!" );
     return NULL;
 }
 //------------------------------------------------------------------------
-::rtl::OUString DummyCopySource::getSelectStatement() const
+OUString DummyCopySource::getSelectStatement() const
 {
     OSL_FAIL( "DummyCopySource::getSelectStatement: not to be called!" );
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
@@ -546,7 +546,7 @@ namespace
 //= OCopyTableWizard
 //========================================================================
 //------------------------------------------------------------------------
-OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard( Window * pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
         const Reference< XConnection >& _xConnection, const Reference< XComponentContext >& _rxContext,
         const Reference< XInteractionHandler>&   _xInteractionHandler)
@@ -576,7 +576,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     construct();
 
     // extract table name
-    ::rtl::OUString sInitialTableName( _rDefaultName );
+    OUString sInitialTableName( _rDefaultName );
     try
     {
         m_sSourceName = m_rSourceObject.getQualifiedObjectName();
@@ -619,9 +619,9 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     if ( m_bInterConnectionCopy )
     {
         Reference< XDatabaseMetaData > xSrcMeta = _xSourceConnection->getMetaData();
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sSchema;
-        ::rtl::OUString sTable;
+        OUString sCatalog;
+        OUString sSchema;
+        OUString sTable;
         ::dbtools::qualifiedNameComponents( xSrcMeta,
                                             m_sName,
                                             sCatalog,
@@ -646,7 +646,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
 }
 
 // -----------------------------------------------------------------------------
-OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
+OCopyTableWizard::OCopyTableWizard( Window* pParent, const OUString& _rDefaultName, sal_Int16 _nOperation,
         const ODatabaseExport::TColumns& _rSourceColumns, const ODatabaseExport::TColumnVector& _rSourceColVec,
         const Reference< XConnection >& _xConnection, const Reference< XNumberFormatter >&  _xFormatter,
         TypeSelectionPageFactory _pTypeSelectionPageFactory, SvStream& _rTypeSelectionPageArg, const Reference< XComponentContext >& _rxContext )
@@ -856,7 +856,7 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         else
         {
             Reference< XDatabaseMetaData > xMetaData( m_xDestConnection->getMetaData() );
-            ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
+            OUString sExtraChars = xMetaData->getExtraNameCharacters();
             sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
@@ -942,7 +942,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                                 m_bCreatePrimaryKeyColumn = sal_True;
                                 m_aKeyName = pPage->GetKeyName();
                                 if ( m_aKeyName.isEmpty() )
-                                    m_aKeyName = ::rtl::OUString( "ID" );
+                                    m_aKeyName = OUString( "ID" );
                                 m_aKeyName = createUniqueName( m_aKeyName );
                                 sal_Int32 nBreakPos2 = 0;
                                 CheckColumns(nBreakPos2);
@@ -978,7 +978,7 @@ sal_Bool OCopyTableWizard::shouldCreatePrimaryKey() const
 }
 
 // -----------------------------------------------------------------------
-void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName )
+void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::setCreatePrimaryKey" );
     m_bCreatePrimaryKeyColumn = _bDoCreate;
@@ -1081,7 +1081,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
     }
 }
 // -----------------------------------------------------------------------------
-void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName)
+void OCopyTableWizard::replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const OUString& _sOldName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::replaceColumn" );
     OSL_ENSURE(_pField,"FieldDescrioption is null!");
@@ -1113,15 +1113,15 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     _rColumns.clear();
 
     OFieldDescription* pActFieldDescr = NULL;
-    ::rtl::OUString sCreateParam("x");
+    OUString sCreateParam("x");
     //////////////////////////////////////////////////////////////////////
     // ReadOnly-Flag
     // On drop no line must be editable.
     // On add only empty lines must be editable.
     // On Add and Drop all lines can be edited.
-    Sequence< ::rtl::OUString > aColumns( _rSourceObject.getColumnNames() );
-    const ::rtl::OUString* pColumn      = aColumns.getConstArray();
-    const ::rtl::OUString* pColumnEnd   = pColumn + aColumns.getLength();
+    Sequence< OUString > aColumns( _rSourceObject.getColumnNames() );
+    const OUString* pColumn      = aColumns.getConstArray();
+    const OUString* pColumnEnd   = pColumn + aColumns.getLength();
 
     for ( ; pColumn != pColumnEnd; ++pColumn )
     {
@@ -1135,7 +1135,7 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
         sal_Int32 nScale          = pActFieldDescr->GetScale();
         sal_Int32 nPrecision      = pActFieldDescr->GetPrecision();
         sal_Bool bAutoIncrement   = pActFieldDescr->IsAutoIncrement();
-        ::rtl::OUString sTypeName = pActFieldDescr->GetTypeName();
+        OUString sTypeName = pActFieldDescr->GetTypeName();
 
         // search for type
         sal_Bool bForce;
@@ -1148,9 +1148,9 @@ void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, 
     }
 
     // determine which coumns belong to the primary key
-    Sequence< ::rtl::OUString > aPrimaryKeyColumns( _rSourceObject.getPrimaryKeyColumnNames() );
-    const ::rtl::OUString* pKeyColName  = aPrimaryKeyColumns.getConstArray();
-    const ::rtl::OUString* pKeyColEnd   = pKeyColName + aPrimaryKeyColumns.getLength();
+    Sequence< OUString > aPrimaryKeyColumns( _rSourceObject.getPrimaryKeyColumnNames() );
+    const OUString* pKeyColName  = aPrimaryKeyColumns.getConstArray();
+    const OUString* pKeyColEnd   = pKeyColName + aPrimaryKeyColumns.getLength();
 
     for( ; pKeyColName != pKeyColEnd; ++pKeyColName )
     {
@@ -1254,7 +1254,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier>& _rxSup, const ODatab
 Reference< XPropertySet > OCopyTableWizard::createView() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createView" );
-    ::rtl::OUString sCommand( m_rSourceObject.getSelectStatement() );
+    OUString sCommand( m_rSourceObject.getSelectStatement() );
     OSL_ENSURE( !sCommand.isEmpty(), "OCopyTableWizard::createView: no statement in the source object!" );
         // there are legitimate cases in which getSelectStatement does not provide a statement,
         // but in all those cases, this method here should never be called.
@@ -1282,7 +1282,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         if(!xTable.is())
             return NULL;
 
-        ::rtl::OUString sCatalog,sSchema,sTable;
+        OUString sCatalog,sSchema,sTable;
         Reference< XDatabaseMetaData> xMetaData = m_xDestConnection->getMetaData();
         ::dbtools::qualifiedNameComponents(xMetaData,
                                             m_sName,
@@ -1323,7 +1323,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             xTables->getByName(m_sName) >>= xTable;
         else
         {
-            ::rtl::OUString sComposedName(
+            OUString sComposedName(
                 ::dbtools::composeTableName( m_xDestConnection->getMetaData(), xTable, ::dbtools::eInDataManipulation, false, false, false ) );
             if(xTables->hasByName(sComposedName))
             {
@@ -1345,9 +1345,9 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             m_rSourceObject.copyFilterAndSortingTo(m_xDestConnection,xTable);
             // set column mappings
             Reference<XNameAccess> xNameAccess = xSuppDestinationColumns->getColumns();
-            Sequence< ::rtl::OUString> aSeq = xNameAccess->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            Sequence< OUString> aSeq = xNameAccess->getElementNames();
+            const OUString* pIter = aSeq.getConstArray();
+            const OUString* pEnd   = pIter + aSeq.getLength();
 
             for(sal_Int32 nNewPos=1;pIter != pEnd;++pIter,++nNewPos)
             {
@@ -1416,7 +1416,7 @@ bool OCopyTableWizard::supportsViews( const Reference< XConnection >& _rxConnect
                 Reference< XRow > xRow( xRs, UNO_QUERY_THROW );
                 while ( xRs->next() )
                 {
-                    ::rtl::OUString sValue = xRow->getString( 1 );
+                    OUString sValue = xRow->getString( 1 );
                     if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCase("View") )
                     {
                         bSupportsViews = true;
@@ -1469,13 +1469,13 @@ sal_Int16 OCopyTableWizard::getOperation() const
     return m_nOperation;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
-                                                    const ::rtl::OUString&  _sColumnName,
-                                                    const ::rtl::OUString&  _sExtraChars,
+OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
+                                                    const OUString&  _sColumnName,
+                                                    const OUString&  _sExtraChars,
                                                     sal_Int32               _nMaxNameLen)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::convertColumnName" );
-    ::rtl::OUString sAlias = _sColumnName;
+    OUString sAlias = _sColumnName;
     if ( isSQL92CheckEnabled( m_xDestConnection ) )
         sAlias = ::dbtools::convertName2SQLName(_sColumnName,_sExtraChars);
     if((_nMaxNameLen && sAlias.getLength() > _nMaxNameLen) || _rCmpFunctor(sAlias))
@@ -1487,14 +1487,14 @@ sal_Int16 OCopyTableWizard::getOperation() const
             if(_nMaxNameLen && sAlias.getLength() >= _nMaxNameLen)
                 sAlias = sAlias.copy(0,sAlias.getLength() - (sAlias.getLength()-_nMaxNameLen+nDiff));
 
-            ::rtl::OUString sName(sAlias);
+            OUString sName(sAlias);
             sal_Int32 nPos = 1;
-            sName += ::rtl::OUString::valueOf(nPos);
+            sName += OUString::valueOf(nPos);
 
             while(_rCmpFunctor(sName))
             {
                 sName = sAlias;
-                sName += ::rtl::OUString::valueOf(++nPos);
+                sName += OUString::valueOf(++nPos);
             }
             sAlias = sName;
             // we have to check again, it could happen that the name is already to long
@@ -1507,7 +1507,7 @@ sal_Int16 OCopyTableWizard::getOperation() const
 }
 
 // -----------------------------------------------------------------------------
-void OCopyTableWizard::removeColumnNameFromNameMap(const ::rtl::OUString& _sName)
+void OCopyTableWizard::removeColumnNameFromNameMap(const OUString& _sName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::removeColumnNameFromNameMap" );
     m_mNameMapping.erase(_sName);
@@ -1612,7 +1612,7 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
         if ( !pType.get() )
         {
             _bNotConvert = sal_False;
-            ::rtl::OUString sCreate("x");
+            OUString sCreate("x");
             pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,sCreate,50,0,sal_False,bForce);
             if ( !pType.get() )
                 pType = m_pTypeInfo;
@@ -1623,11 +1623,11 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
     return pType;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCopyTableWizard::createUniqueName(const ::rtl::OUString& _sName)
+OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::createUniqueName" );
-    ::rtl::OUString sName = _sName;
-    Sequence< ::rtl::OUString > aColumnNames( m_rSourceObject.getColumnNames() );
+    OUString sName = _sName;
+    Sequence< OUString > aColumnNames( m_rSourceObject.getColumnNames() );
     if ( aColumnNames.getLength() )
         sName = ::dbtools::createUniqueName( aColumnNames, sName, sal_False );
     else
@@ -1638,14 +1638,14 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
             while(m_vSourceColumns.find(sName) != m_vSourceColumns.end())
             {
                 sName = _sName;
-                sName += ::rtl::OUString::valueOf(++nPos);
+                sName += OUString::valueOf(++nPos);
             }
         }
     }
     return sName;
 }
 // -----------------------------------------------------------------------------
-void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName)
+void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::showColumnTypeNotSupported" );
     String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
@@ -1653,7 +1653,7 @@ void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColum
     showError(sMessage);
 }
 //-------------------------------------------------------------------------------
-void OCopyTableWizard::showError(const ::rtl::OUString& _sErrorMesage)
+void OCopyTableWizard::showError(const OUString& _sErrorMesage)
 {
     SQLExceptionInfo aInfo(_sErrorMesage);
     showError(aInfo.get());

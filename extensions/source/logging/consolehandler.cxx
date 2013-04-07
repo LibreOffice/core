@@ -86,8 +86,8 @@ namespace logging
         virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException);
 
         // XLogHandler
-        virtual ::rtl::OUString SAL_CALL getEncoding() throw (RuntimeException);
-        virtual void SAL_CALL setEncoding( const ::rtl::OUString& _encoding ) throw (RuntimeException);
+        virtual OUString SAL_CALL getEncoding() throw (RuntimeException);
+        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException);
         virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException);
         virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException);
         virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException);
@@ -99,17 +99,17 @@ namespace logging
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
 
     public:
         // XServiceInfo - static version
-        static ::rtl::OUString SAL_CALL getImplementationName_static();
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+        static OUString SAL_CALL getImplementationName_static();
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
     public:
@@ -173,16 +173,16 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ConsoleHandler::getEncoding() throw (RuntimeException)
+    OUString SAL_CALL ConsoleHandler::getEncoding() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
-        ::rtl::OUString sEncoding;
+        OUString sEncoding;
         OSL_VERIFY( m_aHandlerHelper.getEncoding( sEncoding ) );
         return sEncoding;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ConsoleHandler::setEncoding( const ::rtl::OUString& _rEncoding ) throw (RuntimeException)
+    void SAL_CALL ConsoleHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
@@ -229,7 +229,7 @@ namespace logging
     {
         MethodGuard aGuard( *this );
 
-        ::rtl::OString sEntry;
+        OString sEntry;
         if ( !m_aHandlerHelper.formatForPublishing( _rRecord, sEntry ) )
             return sal_False;
 
@@ -256,11 +256,11 @@ namespace logging
         }
 
         if ( _rArguments.getLength() != 1 )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         Sequence< NamedValue > aSettings;
         if ( !( _rArguments[0] >>= aSettings ) )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         // createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
         ::comphelper::NamedValueCollection aTypedSettings( aSettings );
@@ -272,16 +272,16 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const ::rtl::OUString* pServiceNames = aServiceNames.getConstArray();
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
+        for (   const OUString* pServiceNames = aServiceNames.getConstArray();
                 pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
                 ++pServiceNames
             )
@@ -291,22 +291,22 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ConsoleHandler::getImplementationName_static()
+    OUString SAL_CALL ConsoleHandler::getImplementationName_static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.ConsoleHandler" );
+        return OUString( "com.sun.star.comp.extensions.ConsoleHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
+    Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.ConsoleHandler" );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString( "com.sun.star.logging.ConsoleHandler" );
         return aServiceNames;
     }
 

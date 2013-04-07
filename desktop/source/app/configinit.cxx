@@ -33,7 +33,6 @@
 
 namespace uno           = ::com::sun::star::uno;
 namespace lang          = ::com::sun::star::lang;
-using rtl::OUString;
 using uno::UNO_QUERY;
 
 // ----------------------------------------------------------------------------

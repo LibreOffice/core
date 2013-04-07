@@ -62,7 +62,6 @@
 
 #include <string.h>
 
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Type;
@@ -110,7 +109,7 @@ struct PropertyDef
 {
     PropertyDef( const OUString &str, const Type &t )
         : name( str ) , type( t ) {}
-    ::rtl::OUString name;
+    OUString name;
     com::sun::star::uno::Type type;
 };
 
@@ -219,10 +218,10 @@ Statics & getStatics()
 
             statics.CATALOG = "Catalog";
 
-            Type tString = getCppuType( (rtl::OUString *) 0 );
+            Type tString = getCppuType( (OUString *) 0 );
             Type tInt = getCppuType( (sal_Int32 * ) 0 );
             Type tBool = getBooleanCppuType();
-            Type tStringSequence = getCppuType( (com::sun::star::uno::Sequence< ::rtl::OUString > *) 0);
+            Type tStringSequence = getCppuType( (com::sun::star::uno::Sequence< OUString > *) 0);
 
             // Table props set
             ImplementationStatics &ist = statics.refl.table;
@@ -728,10 +727,10 @@ Statics & getStatics()
             {
                 statics.typeInfoMetaData.push_back(
                     ColumnMetaData(
-                        rtl::OUString::createFromAscii( defTypeInfoMetaData[i].columnName ),
-                        rtl::OUString::createFromAscii( defTypeInfoMetaData[i].tableName ),
-                        rtl::OUString::createFromAscii( defTypeInfoMetaData[i].schemaTableName ),
-                        rtl::OUString::createFromAscii( defTypeInfoMetaData[i].typeName ),
+                        OUString::createFromAscii( defTypeInfoMetaData[i].columnName ),
+                        OUString::createFromAscii( defTypeInfoMetaData[i].tableName ),
+                        OUString::createFromAscii( defTypeInfoMetaData[i].schemaTableName ),
+                        OUString::createFromAscii( defTypeInfoMetaData[i].typeName ),
                         defTypeInfoMetaData[i].type,
                         defTypeInfoMetaData[i].precision,
                         defTypeInfoMetaData[i].scale,

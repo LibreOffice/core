@@ -35,10 +35,10 @@ const sal_Char nHoriVerti = nHorizontal | nVertical;
 
 struct ScHTMLImage
 {
-    rtl::OUString       aURL;
+    OUString       aURL;
     Size                aSize;
     Point               aSpace;
-    rtl::OUString       aFilterName;
+    OUString       aFilterName;
     Graphic*            pGraphic;       // wird von WriteToDocument uebernommen
     sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
@@ -54,10 +54,10 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    rtl::OUString*      pValStr;        // HTML evtl. SDVAL String
-    rtl::OUString*      pNumStr;        // HTML evtl. SDNUM String
-    rtl::OUString*      pName;          // HTML evtl. Anchor/RangeName
-    rtl::OUString       aAltText;       // HTML IMG ALT Text
+    OUString*      pValStr;        // HTML evtl. SDVAL String
+    OUString*      pNumStr;        // HTML evtl. SDNUM String
+    OUString*      pName;          // HTML evtl. Anchor/RangeName
+    OUString       aAltText;       // HTML IMG ALT Text
     boost::ptr_vector< ScHTMLImage > maImageList;       // Grafiken in dieser Zelle
     SCCOL               nCol;           // relativ zum Beginn des Parse
     SCROW               nRow;

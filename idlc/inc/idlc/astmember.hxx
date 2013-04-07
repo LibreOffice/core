@@ -29,7 +29,7 @@ class AstType;
 class AstMember: public AstDeclaration {
 public:
     AstMember(
-        AstType const * pType, rtl::OString const & name, AstScope * pScope):
+        AstType const * pType, OString const & name, AstScope * pScope):
         AstDeclaration(NT_member, name, pScope), m_pType(pType) {}
 
     virtual ~AstMember() {}
@@ -38,7 +38,7 @@ public:
 
 protected:
     AstMember(
-        NodeType type, AstType const * pType, rtl::OString const & name,
+        NodeType type, AstType const * pType, OString const & name,
         AstScope * pScope):
         AstDeclaration(type, name, pScope), m_pType(pType) {}
 

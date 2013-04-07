@@ -28,7 +28,7 @@ class AstParameter: public AstMember {
 public:
     AstParameter(
         Direction direction, bool rest, AstType const * type,
-        rtl::OString const & name, AstScope * scope):
+        OString const & name, AstScope * scope):
         AstMember(NT_parameter, type, name, scope), m_direction(direction),
         m_rest(rest) {}
 

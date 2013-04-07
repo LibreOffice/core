@@ -42,14 +42,14 @@ jclass java_lang_Throwable::st_getMyClass()
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString java_lang_Throwable::getMessage() const
+OUString java_lang_Throwable::getMessage() const
 {
     static jmethodID mID(NULL);
     return callStringMethod("getMessage",mID);
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString java_lang_Throwable::getLocalizedMessage() const
+OUString java_lang_Throwable::getLocalizedMessage() const
 {
     static jmethodID mID(NULL);
     return callStringMethod("getLocalizedMessage",mID);

@@ -80,7 +80,7 @@ namespace comphelper
                 <TRUE/> if and only if the component could be successfully created
         */
         template < typename INTERFACE >
-        bool createComponent( const ::rtl::OUString& _rServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
+        bool createComponent( const OUString& _rServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
             _out_rxComponent.clear();
             _out_rxComponent = _out_rxComponent.query(
@@ -97,7 +97,7 @@ namespace comphelper
         template < typename INTERFACE >
         bool createComponent( const sal_Char* _pAsciiServiceName, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
-            return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ), _out_rxComponent );
+            return createComponent( OUString::createFromAscii( _pAsciiServiceName ), _out_rxComponent );
         }
 
         /** creates a component using our component factory/context, passing creation arguments
@@ -106,7 +106,7 @@ namespace comphelper
                 <TRUE/> if and only if the component could be successfully created
         */
         template < typename INTERFACE >
-        bool createComponentWithArguments( const ::rtl::OUString& _rServiceName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
+        bool createComponentWithArguments( const OUString& _rServiceName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
             _out_rxComponent.clear();
             _out_rxComponent = _out_rxComponent.query(
@@ -123,7 +123,7 @@ namespace comphelper
         template < typename INTERFACE >
         bool createComponentWithArguments( const sal_Char* _pAsciiServiceName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments, ::com::sun::star::uno::Reference< INTERFACE >& _out_rxComponent ) const
         {
-            return createComponentWithArguments( ::rtl::OUString::createFromAscii( _pAsciiServiceName ), _rArguments, _out_rxComponent );
+            return createComponentWithArguments( OUString::createFromAscii( _pAsciiServiceName ), _rArguments, _out_rxComponent );
         }
 
         /** creates a component using our component factory/context
@@ -135,7 +135,7 @@ namespace comphelper
             @return
                 the newly created component. Is never <NULL/>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const ::rtl::OUString& _rServiceName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const OUString& _rServiceName ) const;
 
         /** creates a component using our component factory/context
 
@@ -148,7 +148,7 @@ namespace comphelper
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const sal_Char* _pAsciiServiceName ) const
         {
-            return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
+            return createComponent( OUString::createFromAscii( _pAsciiServiceName ) );
         }
 
         /** creates a component using our component factory/context, passing creation arguments
@@ -161,7 +161,7 @@ namespace comphelper
                 the newly created component. Is never <NULL/>.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponentWithArguments(
-            const ::rtl::OUString& _rServiceName,
+            const OUString& _rServiceName,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments
         ) const;
 
@@ -179,7 +179,7 @@ namespace comphelper
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments
             ) const
         {
-            return createComponentWithArguments( ::rtl::OUString::createFromAscii( _pAsciiServiceName ), _rArguments );
+            return createComponentWithArguments( OUString::createFromAscii( _pAsciiServiceName ), _rArguments );
         }
 
         /** retrieves a singleton instance from the context
@@ -187,7 +187,7 @@ namespace comphelper
             Singletons are collected below the <code>/singletons</code> key in a component context,
             so accessing them means retrieving the value under <code>/singletons/&lt;instance_name&gt;</code>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const ::rtl::OUString& _rInstanceName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const OUString& _rInstanceName ) const;
 
         /** retrieves a singleton instance from the context
 
@@ -196,7 +196,7 @@ namespace comphelper
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const sal_Char* _pAsciiInstanceName ) const
         {
-            return getSingleton( ::rtl::OUString::createFromAscii( _pAsciiInstanceName ) );
+            return getSingleton( OUString::createFromAscii( _pAsciiInstanceName ) );
         }
 
         /** returns the ->XMultiServiceFactory interface of ->m_xORB, for passing to
@@ -216,7 +216,7 @@ namespace comphelper
             @seealso getContextValueByAsciiName
         */
         ::com::sun::star::uno::Any
-                getContextValueByName( const ::rtl::OUString& _rName ) const;
+                getContextValueByName( const OUString& _rName ) const;
 
         /** retrieves a value from our component context, specified by 8-bit ASCII string
             @param _rName
@@ -229,7 +229,7 @@ namespace comphelper
         inline ::com::sun::star::uno::Any
                 getContextValueByAsciiName( const sal_Char* _pAsciiName ) const
         {
-            return getContextValueByName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+            return getContextValueByName( OUString::createFromAscii( _pAsciiName ) );
         }
 
     };

@@ -110,7 +110,7 @@ namespace frm
     namespace
     {
         //..............................................................
-        static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const ::rtl::OUString& _rPropertyName,
+        static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nPositiveFlag, WinBits nNegativeFlag )
         {
             sal_Bool bFlagValue = sal_False;
@@ -134,7 +134,7 @@ namespace frm
         }
 
         //..............................................................
-        static void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const ::rtl::OUString& _rPropertyName,
+        static void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             implAdjustTwoStateFlag( _rxProps->getPropertyValue( _rPropertyName ), _rAllBits, _nFlag, _bInvert );
@@ -252,29 +252,29 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
+    OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException )
+    Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ORichTextControl::getImplementationName_Static()
+    OUString SAL_CALL ORichTextControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.form.ORichTextControl" );
+        return OUString( "com.sun.star.comp.form.ORichTextControl" );
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
+    Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
-        Sequence< ::rtl::OUString > aServices( 3 );
-        aServices[ 0 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
-        aServices[ 1 ] = ::rtl::OUString( "com.sun.star.awt.UnoControlEdit" );
+        Sequence< OUString > aServices( 3 );
+        aServices[ 0 ] = OUString( "com.sun.star.awt.UnoControl" );
+        aServices[ 1 ] = OUString( "com.sun.star.awt.UnoControlEdit" );
         aServices[ 2 ] = FRM_SUN_CONTROL_RICHTEXTCONTROL;
         return aServices;
     }
@@ -286,7 +286,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
@@ -298,7 +298,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool ORichTextControl::requiresNewPeer( const ::rtl::OUString& _rPropertyName ) const
+    sal_Bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
     }
@@ -398,7 +398,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ORichTextPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (RuntimeException)
+    void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw (RuntimeException)
     {
         if ( !GetWindow() )
         {
@@ -604,8 +604,8 @@ namespace frm
                 if ( bNeedParametrizedDispatcher )
                 {
                 #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
-                    sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *parametrized* dispatcher for " );
+                    sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
                     OSL_TRACE( "%s", sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OParametrizedAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
@@ -613,8 +613,8 @@ namespace frm
                 else
                 {
                 #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
-                    sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    OString sTrace( "ORichTextPeer::implCreateDispatcher: creating *normal* dispatcher for " );
+                    sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
                     OSL_TRACE( "%s", sTrace.getStr() );
                 #endif
                     pAttributeDispatcher = new OAttributeDispatcher( pRichTextControl->getView(), _nSlotId, _rURL, pRichTextControl );
@@ -623,8 +623,8 @@ namespace frm
         #if OSL_DEBUG_LEVEL > 0
             else
             {
-                ::rtl::OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
-                sTrace += ::rtl::OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
+                OString sTrace( "ORichTextPeer::implCreateDispatcher: not creating dispatcher (unsupported slot) for " );
+                sTrace += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
                 OSL_TRACE( "%s", sTrace.getStr() );
             }
         #endif
@@ -645,7 +645,7 @@ namespace frm
     //--------------------------------------------------------------------
     namespace
     {
-        SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool& _rSlotPool, const ::rtl::OUString& _rUnoSlotName )
+        SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool& _rSlotPool, const OUString& _rUnoSlotName )
         {
             const SfxSlot* pSlot = _rSlotPool.GetUnoSlot( _rUnoSlotName );
             if ( pSlot )
@@ -669,7 +669,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
+    Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
         if ( !GetWindow() )
@@ -679,10 +679,10 @@ namespace frm
         }
 
         // is it an UNO slot?
-        ::rtl::OUString sUnoProtocolPrefix( ".uno:" );
+        OUString sUnoProtocolPrefix( ".uno:" );
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {
-            ::rtl::OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
+            OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
             SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool( NULL ), sUnoSlotName );
             if ( nSlotId > 0 )
             {

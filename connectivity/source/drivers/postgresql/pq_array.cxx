@@ -65,7 +65,6 @@
 #include "pq_statics.hxx"
 #include "pq_sequenceresultset.hxx"
 
-using rtl::OUString;
 
 using com::sun::star::sdbc::SQLException;
 using com::sun::star::uno::Any;
@@ -75,7 +74,7 @@ namespace pq_sdbc_driver
 {
 
 
-::rtl::OUString Array::getBaseTypeName(  )
+OUString Array::getBaseTypeName(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return OUString( "varchar" );
@@ -137,7 +136,7 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
 {
     if( index >= 1 && index -1 + count <= m_data.getLength() )
         return;
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Array::getArrayAtIndex(): allowed range for index + count " ) );
     buf.append( m_data.getLength() );
     buf.appendAscii( ", got " );
@@ -145,7 +144,7 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
     buf.appendAscii( " + " );
     buf.append( count );
 
-    throw SQLException( buf.makeStringAndClear() , *this, rtl::OUString(), 1, Any());
+    throw SQLException( buf.makeStringAndClear() , *this, OUString(), 1, Any());
 
 }
 

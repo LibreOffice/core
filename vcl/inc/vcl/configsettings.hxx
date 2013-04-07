@@ -31,7 +31,7 @@ namespace vcl
 {
 //........................................................................
 
-    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
+    typedef boost::unordered_map< OUString, OUString, OUStringHash > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
     //====================================================================
@@ -40,9 +40,9 @@ namespace vcl
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
 
-        boost::unordered_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
+        boost::unordered_map< OUString, SmallOUStrMap, OUStringHash > m_aSettings;
 
-        virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+        virtual void Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
 
         void getValues();
         SettingsConfigItem();
@@ -51,8 +51,8 @@ namespace vcl
 
         static SettingsConfigItem* get();
 
-        const rtl::OUString& getValue( const rtl::OUString& rGroup, const rtl::OUString& rKey ) const;
-        void setValue( const rtl::OUString& rGroup, const rtl::OUString& rKey, const rtl::OUString& rValue );
+        const OUString& getValue( const OUString& rGroup, const OUString& rKey ) const;
+        void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
 
         virtual void Commit();
     };

@@ -34,17 +34,17 @@ namespace ppt
 class ExSoundEntry
 {
         sal_uInt32              nFileSize;
-        rtl::OUString           aSoundURL;
+        OUString           aSoundURL;
 
-        rtl::OUString           ImplGetName() const;
-        rtl::OUString           ImplGetExtension() const;
+        OUString           ImplGetName() const;
+        OUString           ImplGetExtension() const;
 
     public :
 
-        sal_Bool                IsSameURL(const rtl::OUString& rURL) const;
+        sal_Bool                IsSameURL(const OUString& rURL) const;
         sal_uInt32              GetFileSize( ) const { return nFileSize; };
 
-                                ExSoundEntry(const rtl::OUString& rSoundURL);
+                                ExSoundEntry(const OUString& rSoundURL);
 
         /// @return size of a complete SoundContainer.
         sal_uInt32              GetSize( sal_uInt32 nId ) const;
@@ -55,7 +55,7 @@ class ExSoundCollection
 {
     public:
 
-        sal_uInt32              GetId(const rtl::OUString&);
+        sal_uInt32              GetId(const OUString&);
 
         /// @return size of a complete SoundCollectionContainer.
         sal_uInt32              GetSize() const;

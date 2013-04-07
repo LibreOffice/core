@@ -60,8 +60,8 @@ public:
 
 public:
 
-        void                        setURL( const ::rtl::OUString& rURL );
-        const ::rtl::OUString&      getURL() const;
+        void                        setURL( const OUString& rURL );
+        const OUString&      getURL() const;
 
         void                        setMediaProperties( const ::avmedia::MediaItem& rState );
         const ::avmedia::MediaItem& getMediaProperties() const;

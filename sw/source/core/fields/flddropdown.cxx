@@ -28,7 +28,6 @@
 
 using namespace com::sun::star;
 
-using rtl::OUString;
 using std::vector;
 
 static String aEmptyString;
@@ -68,7 +67,7 @@ String SwDropDownField::Expand() const
     String sSelect = GetSelectedItem();
     if(!sSelect.Len())
     {
-        vector<rtl::OUString>::const_iterator aIt = aValues.begin();
+        vector<OUString>::const_iterator aIt = aValues.begin();
         if ( aIt != aValues.end())
             sSelect = *aIt;
     }
@@ -83,27 +82,27 @@ SwField * SwDropDownField::Copy() const
     return new SwDropDownField(*this);
 }
 
-const rtl::OUString & SwDropDownField::GetPar1() const
+const OUString & SwDropDownField::GetPar1() const
 {
     return GetSelectedItem();
 }
 
-rtl::OUString SwDropDownField::GetPar2() const
+OUString SwDropDownField::GetPar2() const
 {
     return GetName();
 }
 
-void SwDropDownField::SetPar1(const rtl::OUString & rStr)
+void SwDropDownField::SetPar1(const OUString & rStr)
 {
     SetSelectedItem(rStr);
 }
 
-void SwDropDownField::SetPar2(const rtl::OUString & rName)
+void SwDropDownField::SetPar2(const OUString & rName)
 {
     SetName(rName);
 }
 
-void SwDropDownField::SetItems(const vector<rtl::OUString> & rItems)
+void SwDropDownField::SetItems(const vector<OUString> & rItems)
 {
     aValues = rItems;
     aSelectedItem = aEmptyString;
@@ -125,7 +124,7 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     uno::Sequence<OUString> aSeq( aValues.size() );
     OUString* pSeq = aSeq.getArray();
     int i = 0;
-    vector<rtl::OUString>::const_iterator aIt;
+    vector<OUString>::const_iterator aIt;
 
     for (aIt = aValues.begin(); aIt != aValues.end(); ++aIt)
     {
@@ -136,50 +135,50 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     return aSeq;
 }
 
-const rtl::OUString & SwDropDownField::GetSelectedItem() const
+const OUString & SwDropDownField::GetSelectedItem() const
 {
     return aSelectedItem;
 }
 
-const rtl::OUString & SwDropDownField::GetName() const
+const OUString & SwDropDownField::GetName() const
 {
     return aName;
 }
 
-const rtl::OUString & SwDropDownField::GetHelp() const
+const OUString & SwDropDownField::GetHelp() const
 {
     return aHelp;
 }
 
-const rtl::OUString & SwDropDownField::GetToolTip() const
+const OUString & SwDropDownField::GetToolTip() const
 {
     return aToolTip;
 }
 
-sal_Bool SwDropDownField::SetSelectedItem(const rtl::OUString & rItem)
+sal_Bool SwDropDownField::SetSelectedItem(const OUString & rItem)
 {
-    vector<rtl::OUString>::const_iterator aIt =
+    vector<OUString>::const_iterator aIt =
         std::find(aValues.begin(), aValues.end(), rItem);
 
     if (aIt != aValues.end())
         aSelectedItem = *aIt;
     else
-        aSelectedItem = rtl::OUString();
+        aSelectedItem = OUString();
 
     return (aIt != aValues.end());
 }
 
-void SwDropDownField::SetName(const rtl::OUString & rName)
+void SwDropDownField::SetName(const OUString & rName)
 {
     aName = rName;
 }
 
-void SwDropDownField::SetHelp(const rtl::OUString & rHelp)
+void SwDropDownField::SetHelp(const OUString & rHelp)
 {
     aHelp = rHelp;
 }
 
-void SwDropDownField::SetToolTip(const rtl::OUString & rToolTip)
+void SwDropDownField::SetToolTip(const OUString & rToolTip)
 {
     aToolTip = rToolTip;
 }
@@ -219,7 +218,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
     {
     case FIELD_PROP_PAR1:
         {
-            rtl::OUString aTmpStr;
+            OUString aTmpStr;
             rVal >>= aTmpStr;
 
             SetSelectedItem(aTmpStr);
@@ -228,7 +227,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
 
     case FIELD_PROP_PAR2:
         {
-            rtl::OUString aTmpStr;
+            OUString aTmpStr;
             rVal >>= aTmpStr;
 
             SetName(aTmpStr);
@@ -237,7 +236,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
 
     case FIELD_PROP_PAR3:
         {
-            rtl::OUString aTmpStr;
+            OUString aTmpStr;
             rVal >>= aTmpStr;
 
             SetHelp(aTmpStr);
@@ -246,7 +245,7 @@ bool SwDropDownField::PutValue(const uno::Any &rVal,
 
     case FIELD_PROP_PAR4:
         {
-            rtl::OUString aTmpStr;
+            OUString aTmpStr;
             rVal >>= aTmpStr;
 
             SetToolTip(aTmpStr);

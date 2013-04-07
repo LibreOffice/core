@@ -33,29 +33,29 @@ class SC_DLLPUBLIC ScUserListData
 public:
     struct SubStr
     {
-        ::rtl::OUString maReal;
-        ::rtl::OUString maUpper;
-        SubStr(const ::rtl::OUString& rReal, const ::rtl::OUString& rUpper);
+        OUString maReal;
+        OUString maUpper;
+        SubStr(const OUString& rReal, const OUString& rUpper);
     };
 private:
     typedef ::boost::ptr_vector<SubStr> SubStringsType;
     SubStringsType maSubStrings;
-    ::rtl::OUString aStr;
+    OUString aStr;
 
     SC_DLLPRIVATE void  InitTokens();
 
 public:
-    ScUserListData(const ::rtl::OUString& rStr);
+    ScUserListData(const OUString& rStr);
     ScUserListData(const ScUserListData& rData);
     ~ScUserListData();
 
-    const ::rtl::OUString& GetString() const { return aStr; }
-    void SetString(const ::rtl::OUString& rStr);
+    const OUString& GetString() const { return aStr; }
+    void SetString(const OUString& rStr);
     size_t GetSubCount() const;
-    bool GetSubIndex(const ::rtl::OUString& rSubStr, sal_uInt16& rIndex) const;
-    ::rtl::OUString GetSubStr(sal_uInt16 nIndex) const;
-    StringCompare Compare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
-    StringCompare ICompare(const ::rtl::OUString& rSubStr1, const ::rtl::OUString& rSubStr2) const;
+    bool GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex) const;
+    OUString GetSubStr(sal_uInt16 nIndex) const;
+    StringCompare Compare(const OUString& rSubStr1, const OUString& rSubStr2) const;
+    StringCompare ICompare(const OUString& rSubStr1, const OUString& rSubStr2) const;
 };
 
 /**
@@ -72,9 +72,9 @@ public:
     ScUserList();
     ScUserList(const ScUserList& r);
 
-    const ScUserListData* GetData( const ::rtl::OUString& rSubStr ) const;
+    const ScUserListData* GetData( const OUString& rSubStr ) const;
     /// If the list in rStr is already inserted
-    bool HasEntry( const ::rtl::OUString& rStr ) const;
+    bool HasEntry( const OUString& rStr ) const;
 
     const ScUserListData*  operator[](size_t nIndex) const;
     ScUserListData*  operator[](size_t nIndex);

@@ -40,8 +40,8 @@ namespace textconversiondlgs
 //.............................................................................
 using namespace ::com::sun::star;
 
-#define SERVICE_IMPLEMENTATION_NAME ::rtl::OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
-#define SERVICE_NAME ::rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
+#define SERVICE_IMPLEMENTATION_NAME OUString("com.sun.star.comp.linguistic2.ChineseTranslationDialog")
+#define SERVICE_NAME OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
 
 ChineseTranslation_UnoDialog::ChineseTranslation_UnoDialog( const uno::Reference< uno::XComponentContext >& xContext )
                     : m_xCC( xContext )
@@ -73,20 +73,20 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
 //-------------------------------------------------------------------------
 // lang::XServiceInfo
 
-::rtl::OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName() throw( uno::RuntimeException )
+OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-::rtl::OUString ChineseTranslation_UnoDialog::getImplementationName_Static()
+OUString ChineseTranslation_UnoDialog::getImplementationName_Static()
 {
     return SERVICE_IMPLEMENTATION_NAME;
 }
 
-sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString* pArray = aSNL.getArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if( pArray[ i ] == ServiceName )
@@ -95,14 +95,14 @@ sal_Bool SAL_CALL ChineseTranslation_UnoDialog::supportsService( const ::rtl::OU
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL ChineseTranslation_UnoDialog::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< rtl::OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = SERVICE_NAME;
     return aSNS;
 }
@@ -110,7 +110,7 @@ uno::Sequence< rtl::OUString > ChineseTranslation_UnoDialog::getSupportedService
 //-------------------------------------------------------------------------
 // ui::dialogs::XExecutableDialog
 
-void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const ::rtl::OUString& ) throw(uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const OUString& ) throw(uno::RuntimeException)
 {
     //not implemented - fell free to do so, if you do need this
 }
@@ -211,12 +211,12 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog:
 {
     return 0;
 }
-void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only read only properties
     throw beans::PropertyVetoException();
 }
-uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::OUString& rPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString& rPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
 
@@ -250,19 +250,19 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const ::rtl::O
     return aRet;
 
 }
-void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }
-void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const ::rtl::OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //only not bound properties -> ignore listener
 }

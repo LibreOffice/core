@@ -41,9 +41,9 @@ namespace dbaui
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly) = 0;
         // set the statement for representation
-        virtual void setStatement(const ::rtl::OUString& _rsStatement) = 0;
+        virtual void setStatement(const OUString& _rsStatement) = 0;
         // returns the current sql statement
-        virtual ::rtl::OUString getStatement() = 0;
+        virtual OUString getStatement() = 0;
     };
 }
 #endif // DBAUI_QUERYVIEW_HXX

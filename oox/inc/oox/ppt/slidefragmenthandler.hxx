@@ -34,23 +34,23 @@ namespace oox { namespace ppt {
 class SlideFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw();
+    SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation ) throw();
     virtual ~SlideFragmentHandler() throw();
 
     virtual void finalizeImport();
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
-    virtual void onCharacters( const ::rtl::OUString& rChars );
+    virtual void onCharacters( const OUString& rChars );
 
-    const ::std::vector< rtl::OUString>& getCharVector() { return maCharVector; }
+    const ::std::vector< OUString>& getCharVector() { return maCharVector; }
 
 protected:
     SlidePersistPtr     mpSlidePersistPtr;
     ShapeLocation       meShapeLocation;
 
 private:
-    ::rtl::OUString     maSlideName;
+    OUString     maSlideName;
     PropertyMap         maSlideProperties;
-    ::std::vector< rtl::OUString> maCharVector; // handle char in OnCharacters
+    ::std::vector< OUString> maCharVector; // handle char in OnCharacters
 };
 
 } }

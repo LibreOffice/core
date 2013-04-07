@@ -50,7 +50,7 @@ class AddonsToolBarManager : public ToolBarManager
     public:
         AddonsToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
                               const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                              const rtl::OUString& rResourceName,
+                              const OUString& rResourceName,
                               ToolBar* pToolBar );
         virtual ~AddonsToolBarManager();
 

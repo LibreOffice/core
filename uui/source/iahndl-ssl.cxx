@@ -61,7 +61,7 @@ getContentPart( const String& _rRawString )
     int i = 0;
     while ( aIDs[i] )
     {
-        String sPartId = rtl::OUString::createFromAscii( aIDs[i++] );
+        String sPartId = OUString::createFromAscii( aIDs[i++] );
         xub_StrLen nContStart = _rRawString.Search( sPartId );
         if ( nContStart != STRING_NOTFOUND )
         {
@@ -77,10 +77,10 @@ getContentPart( const String& _rRawString )
 
 bool
 isDomainMatch(
-              rtl::OUString hostName, uno::Sequence< ::rtl::OUString > certHostNames)
+              OUString hostName, uno::Sequence< OUString > certHostNames)
 {
     for ( int i = 0; i < certHostNames.getLength(); i++){
-        ::rtl::OUString element = certHostNames[i];
+        OUString element = certHostNames[i];
 
        if (element.isEmpty())
            continue;
@@ -91,7 +91,7 @@ isDomainMatch(
        if ( 0 == element.indexOf( '*' ) &&
                  hostName.getLength() >= element.getLength()  )
        {
-           rtl::OUString cmpStr = element.copy( 1 );
+           OUString cmpStr = element.copy( 1 );
            if ( hostName.matchIgnoreAsciiCase(
                     cmpStr, hostName.getLength() - cmpStr.getLength()) )
                return true;
@@ -101,12 +101,12 @@ isDomainMatch(
     return false;
 }
 
-rtl::OUString
+OUString
 getLocalizedDatTimeStr(
     uno::Reference< uno::XComponentContext> const & xContext,
     util::DateTime const & rDateTime )
 {
-    rtl::OUString aDateTimeStr;
+    OUString aDateTimeStr;
     Date  aDate( Date::EMPTY );
     Time  aTime( Time::EMPTY );
 
@@ -123,7 +123,7 @@ getLocalizedDatTimeStr(
 
     pNumberFormatter->GetOutputString(
         aDate - *pNullDate, nFormat, aTmpStr, &pColor );
-    aDateTimeStr = aTmpStr + rtl::OUString(" ");
+    aDateTimeStr = aTmpStr + OUString(" ");
 
     nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
     pNumberFormatter->GetOutputString(
@@ -152,9 +152,9 @@ executeUnknownAuthDialog(
                                    xManager.get()));
 
         // Get correct resource string
-        rtl::OUString aMessage;
+        OUString aMessage;
 
-        std::vector< rtl::OUString > aArguments;
+        std::vector< OUString > aArguments;
         aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
         if (xManager.get())
@@ -174,7 +174,7 @@ executeUnknownAuthDialog(
     catch (std::bad_alloc const &)
     {
         throw uno::RuntimeException(
-                  rtl::OUString("out of memory"),
+                  OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -185,7 +185,7 @@ executeSSLWarnDialog(
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
     sal_Int32 const & failure,
-    const rtl::OUString & hostName )
+    const OUString & hostName )
     SAL_THROW((uno::RuntimeException))
 {
     try
@@ -200,8 +200,8 @@ executeSSLWarnDialog(
                               xManager.get()));
 
         // Get correct resource string
-        rtl::OUString aMessage_1;
-        std::vector< rtl::OUString > aArguments_1;
+        OUString aMessage_1;
+        std::vector< OUString > aArguments_1;
 
         switch( failure )
         {
@@ -237,7 +237,7 @@ executeSSLWarnDialog(
                 xDialog->setDescription1Text( aMessage_1 );
             }
 
-            rtl::OUString aTitle;
+            OUString aTitle;
             ErrorResource(aResId).getString(
                 ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle);
             xDialog->SetText( aTitle );
@@ -248,7 +248,7 @@ executeSSLWarnDialog(
     catch (std::bad_alloc const &)
     {
         throw uno::RuntimeException(
-                  rtl::OUString("out of memory"),
+                  OUString("out of memory"),
                   uno::Reference< uno::XInterface >());
     }
 }
@@ -286,7 +286,7 @@ handleCertificateValidationRequest_(
     for (sal_Int32 i = 0 ; i < extensions.getLength(); i++){
         uno::Reference< security::XCertificateExtension >element = extensions[i];
 
-        rtl::OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
+        OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
         if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
         {
            uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
@@ -295,8 +295,8 @@ handleCertificateValidationRequest_(
         }
     }
 
-    ::rtl::OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
-    uno::Sequence< ::rtl::OUString > certHostNames(altNames.getLength() + 1);
+    OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
+    uno::Sequence< OUString > certHostNames(altNames.getLength() + 1);
 
     certHostNames[0] = certHostName;
 

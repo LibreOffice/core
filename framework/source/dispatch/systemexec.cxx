@@ -90,7 +90,7 @@ SystemExec::~SystemExec()
 //_________________________________________________________________________________________________________________
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                 const ::rtl::OUString&,
+                                                                                 const OUString&,
                                                                                        sal_Int32 ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -136,7 +136,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::FAILURE);
         return;
     }
-    ::rtl::OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
+    OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
 
     // SAFE ->
     ReadGuard aReadLock(m_aLock);
@@ -150,11 +150,11 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
     {
         css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(xContext) );
 
-        ::rtl::OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
+        OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
 
         css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( xContext );
 
-        xShell->execute(sSystemURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
+        xShell->execute(sSystemURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);
     }
     catch(const css::uno::Exception&)

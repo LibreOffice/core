@@ -158,7 +158,7 @@ sal_Bool OColumnControlWindow::isAutoIncrementValueEnabled() const
     return m_bAutoIncrementEnabled;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OColumnControlWindow::getAutoIncrementValue() const
+OUString OColumnControlWindow::getAutoIncrementValue() const
 {
     return m_sAutoIncrementValue;
 }

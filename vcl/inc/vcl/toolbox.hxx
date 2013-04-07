@@ -225,7 +225,7 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( sal_Bool bNewCalc = sal_False, sal_Bool bFullPaint = sal_False );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE const rtl::OUString ImplConvertMenuString( const XubString& rStr );
+    SAL_DLLPRIVATE const OUString ImplConvertMenuString( const XubString& rStr );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseMove( const MouseEvent& rMEvt, sal_Bool bRepeat = sal_False );
     SAL_DLLPRIVATE sal_Bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, sal_Bool bCancel = sal_False );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, sal_Bool bNoGrabFocus = sal_False );
@@ -442,8 +442,8 @@ public:
     void                SetHelpText( sal_uInt16 nItemId, const XubString& rText );
     const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
+    OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     //  window size according to current alignment, floating state and number of lines
     Size                CalcWindowSizePixel() const;
@@ -490,9 +490,9 @@ public:
     const XubString&    GetHelpText() const
                             { return DockingWindow::GetHelpText(); }
 
-    void                SetHelpId( const rtl::OString& rId )
+    void                SetHelpId( const OString& rId )
                             { DockingWindow::SetHelpId( rId ); }
-    const rtl::OString& GetHelpId() const
+    const OString& GetHelpId() const
                             { return DockingWindow::GetHelpId(); }
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }

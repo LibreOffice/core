@@ -103,8 +103,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     if(xTSupplier.is())
     {
         Reference<XNameAccess> xTbls = xTSupplier->getTables();
-        Sequence<rtl::OUString> aTbls = xTbls->getElementNames();
-        const rtl::OUString* pTbls = aTbls.getConstArray();
+        Sequence<OUString> aTbls = xTbls->getElementNames();
+        const OUString* pTbls = aTbls.getConstArray();
         for(long i = 0; i < aTbls.getLength(); i++)
         {
             String sEntry = pTbls[i];
@@ -118,8 +118,8 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     if(xQSupplier.is())
     {
         Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-        Sequence<rtl::OUString> aQueries = xQueries->getElementNames();
-        const rtl::OUString* pQueries = aQueries.getConstArray();
+        Sequence<OUString> aQueries = xQueries->getElementNames();
+        const OUString* pQueries = aQueries.getConstArray();
         for(long i = 0; i < aQueries.getLength(); i++)
         {
             String sEntry = pQueries[i];
@@ -140,10 +140,10 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
     SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     if(pEntry)
     {
-        ::rtl::OUString sTableOrQuery = m_aTableLB.GetEntryText(pEntry, 0);
+        OUString sTableOrQuery = m_aTableLB.GetEntryText(pEntry, 0);
         sal_Int32 nCommandType = 0 == pEntry->GetUserData() ? 0 : 1;
 
-        ::rtl::OUString sDataSourceName;
+        OUString sDataSourceName;
         Reference<XChild> xChild(m_xConnection, UNO_QUERY);
         if(xChild.is())
         {

@@ -63,7 +63,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::container;
 using namespace cppu;
 using namespace osl;
-using ::rtl::OUString;
 
 namespace stoc_inv
 {

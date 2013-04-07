@@ -79,7 +79,7 @@ namespace calc
         // register our property at the base class
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString( "CellRange" ),
+            OUString( "CellRange" ),
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -174,17 +174,17 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.sheet.OCellListSource" );
+        return OUString( "com.sun.star.comp.sheet.OCellListSource" );
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OCellListSource::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupportedServices( getSupportedServiceNames() );
-        const ::rtl::OUString* pLookup = aSupportedServices.getConstArray();
-        const ::rtl::OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
+        Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
+        const OUString* pLookup = aSupportedServices.getConstArray();
+        const OUString* pLookupEnd = aSupportedServices.getConstArray() + aSupportedServices.getLength();
         while ( pLookup != pLookupEnd )
             if ( *pLookup++ == _rServiceName )
                 return sal_True;
@@ -193,11 +193,11 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( 2 );
-        aServices[ 0 ] =  ::rtl::OUString( "com.sun.star.table.CellRangeListSource" );
-        aServices[ 1 ] =  ::rtl::OUString( "com.sun.star.form.binding.ListEntrySource" );
+        Sequence< OUString > aServices( 2 );
+        aServices[ 0 ] =  OUString( "com.sun.star.table.CellRangeListSource" );
+        aServices[ 1 ] =  OUString( "com.sun.star.form.binding.ListEntrySource" );
         return aServices;
     }
 
@@ -214,14 +214,14 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeColumn, sal_Int32 _nRangeRelativeRow )
+    OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeColumn, sal_Int32 _nRangeRelativeRow )
     {
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
         Reference< XTextRange > xCellText;
         if ( m_xRange.is() )
             xCellText.set(xCellText.query( m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ) ));
 
-        ::rtl::OUString sText;
+        OUString sText;
         if ( xCellText.is() )
             sText = xCellText->getString();
         return sText;
@@ -240,7 +240,7 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
+    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
@@ -254,15 +254,15 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         checkDisposed();
         checkInitialized();
 
-        Sequence< ::rtl::OUString > aAllEntries( getListEntryCount() );
-        ::rtl::OUString* pAllEntries = aAllEntries.getArray();
+        Sequence< OUString > aAllEntries( getListEntryCount() );
+        OUString* pAllEntries = aAllEntries.getArray();
         for ( sal_Int32 i = 0; i < aAllEntries.getLength(); ++i )
         {
             *pAllEntries++ = getCellTextContent_noCheck( 0, i );

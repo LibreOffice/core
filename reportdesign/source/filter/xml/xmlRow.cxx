@@ -42,7 +42,7 @@ DBG_NAME( rpt_OXMLRow )
 
 OXMLRow::OXMLRow( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,OXMLTable* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
@@ -58,10 +58,10 @@ OXMLRow::OXMLRow( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-     ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+     OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -86,7 +86,7 @@ OXMLRow::~OXMLRow()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLRow::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

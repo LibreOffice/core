@@ -65,14 +65,14 @@ namespace sd { namespace colortoolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const ::rtl::OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
+    Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/org.openoffice.example.colorpanel/" ) ) )
             throw NoSuchElementException( i_rResourceURL, *this );
 
-        const ::rtl::OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );
+        const OUString sColor( i_rResourceURL.copy( i_rResourceURL.lastIndexOf( '/' ) + 1 ) );
         const sal_Int32 nPanelColor = sColor.toInt32( 16 );
 
         // retrieve the parent window
@@ -91,7 +91,7 @@ namespace sd { namespace colortoolpanel
         {
             OSL_FAIL( "ToolPanelFactory::createUIElement: no parent window in the args!" );
             throw IllegalArgumentException(
-                ::rtl::OUString( "No parent window provided in the creation arguments. Cannot create tool panel." ),
+                OUString( "No parent window provided in the creation arguments. Cannot create tool panel." ),
                 *this,
                 2
             );
@@ -103,22 +103,22 @@ namespace sd { namespace colortoolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL ToolPanelFactory::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.example.custompanel.ToolPanelFactory" );
+        return OUString( "org.openoffice.comp.example.custompanel.ToolPanelFactory" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const ::rtl::OUString& i_rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const ::rtl::OUString* serviceName = aServiceNames.getConstArray();
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
+        for (   const OUString* serviceName = aServiceNames.getConstArray();
                 serviceName != aServiceNames.getConstArray() + aServiceNames.getLength();
                 ++serviceName
             )
@@ -130,16 +130,16 @@ namespace sd { namespace colortoolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames() throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames_static() throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames_static() throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( "org.openoffice.example.colorpanel.ToolPanelFactory" );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString( "org.openoffice.example.colorpanel.ToolPanelFactory" );
         return aServiceNames;
     }
 

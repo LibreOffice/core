@@ -280,7 +280,7 @@ namespace pcr
     //------------------------------------------------------------------
     void SAL_CALL OFileUrlControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        ::rtl::OUString sURL;
+        OUString sURL;
         if ( ( _rValue >>= sURL ) )
         {
             if ( sURL.indexOf( "vnd.sun.star.GraphicObject:" ) == 0 )
@@ -297,14 +297,14 @@ namespace pcr
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
-                aPropValue <<= (::rtl::OUString)getTypedControlWindow()->GetURL();
+                aPropValue <<= (OUString)getTypedControlWindow()->GetURL();
         return aPropValue;
     }
 
     //------------------------------------------------------------------
     Type SAL_CALL OFileUrlControl::getValueType() throw (RuntimeException)
     {
-        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
     //========================================================================
@@ -315,7 +315,7 @@ namespace pcr
         :ONumericControl( pParent, nWinStyle )
     {
         getTypedControlWindow()->SetUnit( FUNIT_CUSTOM );
-        getTypedControlWindow()->SetCustomUnitText(rtl::OUString(" ms"));
+        getTypedControlWindow()->SetCustomUnitText(OUString(" ms"));
         getTypedControlWindow()->SetCustomConvertHdl( LINK( this, OTimeDurationControl, OnCustomConvert ) );
     }
 

@@ -210,7 +210,7 @@ namespace svt { namespace table
 
         /** retrieves the content of the given cell, converted to a string
         */
-        ::rtl::OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
+        OUString getCellContentAsString( RowPos const i_row, ColPos const i_col );
 
         /** returns the position of the current row in the selection vector */
         int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);

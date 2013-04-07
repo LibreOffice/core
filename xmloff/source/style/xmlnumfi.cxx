@@ -46,8 +46,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -56,11 +54,11 @@ using namespace ::xmloff::token;
 
 struct SvXMLNumFmtEntry
 {
-    rtl::OUString   aName;
+    OUString   aName;
     sal_uInt32      nKey;
     sal_Bool        bRemoveAfterUse;
 
-    SvXMLNumFmtEntry( const rtl::OUString& rN, sal_uInt32 nK, sal_Bool bR ) :
+    SvXMLNumFmtEntry( const OUString& rN, sal_uInt32 nK, sal_Bool bR ) :
         aName(rN), nKey(nK), bRemoveAfterUse(bR) {}
 };
 
@@ -69,9 +67,9 @@ typedef ::boost::ptr_vector<SvXMLNumFmtEntry> SvXMLNumFmtEntryArr;
 struct SvXMLEmbeddedElement
 {
     sal_Int32       nFormatPos;
-    rtl::OUString   aText;
+    OUString   aText;
 
-    SvXMLEmbeddedElement( sal_Int32 nFP, const rtl::OUString& rT ) :
+    SvXMLEmbeddedElement( sal_Int32 nFP, const OUString& rT ) :
         nFormatPos(nFP), aText(rT) {}
 
     //  comparison operators for PTRARR sorting - sorted by position
@@ -107,8 +105,8 @@ public:
     const SvXMLTokenMap&    GetStyleAttrTokenMap();
     const SvXMLTokenMap&    GetStyleElemAttrTokenMap();
     const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
-    sal_uInt32              GetKeyForName( const rtl::OUString& rName );
-    void                    AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_Bool bRemoveAfterUse );
+    sal_uInt32              GetKeyForName( const OUString& rName );
+    void                    AddKey( sal_uInt32 nKey, const OUString& rName, sal_Bool bRemoveAfterUse );
     void                    SetUsed( sal_uInt32 nKey );
     void                    RemoveVolatileFormats();
 };
@@ -140,51 +138,51 @@ class SvXMLNumFmtElementContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
     sal_uInt16              nType;
-    rtl::OUStringBuffer     aContent;
+    OUStringBuffer     aContent;
     SvXMLNumberInfo         aNumInfo;
     LanguageType            nElementLang;
     sal_Bool                bLong;
     sal_Bool                bTextual;
-    rtl::OUString           sCalendar;
+    OUString           sCalendar;
 
 public:
                 SvXMLNumFmtElementContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtElementContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void Characters( const rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 
-    void    AddEmbeddedElement( sal_Int32 nFormatPos, const rtl::OUString& rContent );
+    void    AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent );
 };
 
 
 class SvXMLNumFmtEmbeddedTextContext : public SvXMLImportContext
 {
     SvXMLNumFmtElementContext&  rParent;
-    rtl::OUStringBuffer         aContent;
+    OUStringBuffer         aContent;
     sal_Int32                   nTextPosition;
 
 public:
                 SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtEmbeddedTextContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void Characters( const rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 };
 
@@ -192,22 +190,22 @@ public:
 class SvXMLNumFmtMapContext : public SvXMLImportContext
 {
     SvXMLNumFormatContext&  rParent;
-    rtl::OUString           sCondition;
-    rtl::OUString           sName;
+    OUString           sCondition;
+    OUString           sName;
 
 public:
                 SvXMLNumFmtMapContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtMapContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void Characters( const rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 };
 
@@ -220,17 +218,17 @@ class SvXMLNumFmtPropContext : public SvXMLImportContext
 
 public:
                 SvXMLNumFmtPropContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtPropContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-    virtual void Characters( const rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
     virtual void EndElement();
 };
 
@@ -402,7 +400,7 @@ SvXMLNumImpData::~SvXMLNumImpData()
     delete pLocaleData;
 }
 
-sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
+sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
 {
     sal_uInt16 nCount = aNameEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -414,7 +412,7 @@ sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
     return NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
 
-void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const rtl::OUString& rName, sal_Bool bRemoveAfterUse )
+void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, sal_Bool bRemoveAfterUse )
 {
     if ( bRemoveAfterUse )
     {
@@ -613,7 +611,7 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 //
 
 SvXMLNumFmtMapContext::SvXMLNumFmtMapContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -641,14 +639,14 @@ SvXMLNumFmtMapContext::~SvXMLNumFmtMapContext()
 }
 
 SvXMLImportContext* SvXMLNumFmtMapContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtMapContext::Characters( const rtl::OUString& )
+void SvXMLNumFmtMapContext::Characters( const OUString& )
 {
 }
 
@@ -664,7 +662,7 @@ void SvXMLNumFmtMapContext::EndElement()
 //
 
 SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -690,14 +688,14 @@ SvXMLNumFmtPropContext::~SvXMLNumFmtPropContext()
 }
 
 SvXMLImportContext* SvXMLNumFmtPropContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtPropContext::Characters( const rtl::OUString& )
+void SvXMLNumFmtPropContext::Characters( const OUString& )
 {
 }
 
@@ -714,7 +712,7 @@ void SvXMLNumFmtPropContext::EndElement()
 //
 
 SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumFmtElementContext& rParentContext,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -743,14 +741,14 @@ SvXMLNumFmtEmbeddedTextContext::~SvXMLNumFmtEmbeddedTextContext()
 }
 
 SvXMLImportContext* SvXMLNumFmtEmbeddedTextContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& )
 {
     // no elements supported - use default context
     return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtEmbeddedTextContext::Characters( const rtl::OUString& rChars )
+void SvXMLNumFmtEmbeddedTextContext::Characters( const OUString& rChars )
 {
     aContent.append( rChars );
 }
@@ -808,7 +806,7 @@ static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& r
     return sal_False;
 }
 
-static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
+static void lcl_EnquoteIfNecessary( OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
 {
     sal_Bool bQuote = sal_True;
     sal_Int32 nLength = rContent.getLength();
@@ -828,7 +826,7 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
         //  the percent character in percentage styles must be left out of quoting
         //  (one occurrence is enough even if there are several percent characters in the string)
 
-        rtl::OUString aString( rContent.getStr() );
+        OUString aString( rContent.getStr() );
         sal_Int32 nPos = aString.indexOf( (sal_Unicode) '%' );
         if ( nPos >= 0 )
         {
@@ -917,7 +915,7 @@ static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNu
 const sal_Int32 MAX_SECOND_DIGITS = 20; // fdo#58539 & gnome#627420: limit number of digits during import
 
 SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumFormatContext& rParentContext, sal_uInt16 nNewType,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1017,7 +1015,7 @@ SvXMLNumFmtElementContext::~SvXMLNumFmtElementContext()
 }
 
 SvXMLImportContext* SvXMLNumFmtElementContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     //  only number:number supports number:embedded-text child element
@@ -1031,12 +1029,12 @@ SvXMLImportContext* SvXMLNumFmtElementContext::CreateChildContext(
         return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
-void SvXMLNumFmtElementContext::Characters( const rtl::OUString& rChars )
+void SvXMLNumFmtElementContext::Characters( const OUString& rChars )
 {
     aContent.append( rChars );
 }
 
-void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const rtl::OUString& rContent )
+void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const OUString& rContent )
 {
     if ( !rContent.isEmpty() )
     {
@@ -1277,7 +1275,7 @@ sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes
 //
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles ) :
@@ -1391,7 +1389,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             {
                 aFormatCode.append( "][$-" );
                 // language code in upper hex:
-                aFormatCode.append(rtl::OUString::valueOf(sal_Int32(eLang), 16).toAsciiUpperCase());
+                aFormatCode.append(OUString::valueOf(sal_Int32(eLang), 16).toAsciiUpperCase());
             }
             aFormatCode.append( sal_Unicode(']') );
         }
@@ -1399,7 +1397,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nTempKey,
                                     SvXMLStylesContext& rStyles ) :
@@ -1437,7 +1435,7 @@ SvXMLNumFormatContext::~SvXMLNumFormatContext()
 }
 
 SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
-                                    sal_uInt16 nPrfx, const rtl::OUString& rLName,
+                                    sal_uInt16 nPrfx, const OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;
@@ -1719,7 +1717,7 @@ void SvXMLNumFormatContext::AddToCode( sal_Unicode c )
     bHasExtraText = sal_True;
 }
 
-void SvXMLNumFormatContext::AddToCode( const rtl::OUString& rString )
+void SvXMLNumFormatContext::AddToCode( const OUString& rString )
 {
     aFormatCode.append( rString );
     bHasExtraText = sal_True;
@@ -1863,7 +1861,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     }
 }
 
-void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, LanguageType nLang )
+void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType nLang )
 {
     sal_Bool bAutomatic = sal_False;
     OUString aSymbol = rContent;
@@ -1904,7 +1902,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
             if ( nFirst >= 0 )
             {
                 //  remove both quotes from aFormatCode
-                rtl::OUString aOld = aFormatCode.makeStringAndClear();
+                OUString aOld = aFormatCode.makeStringAndClear();
                 if ( nFirst > 0 )
                     aFormatCode.append( aOld.copy( 0, nFirst ) );
                 if ( nLength > nFirst + 2 )
@@ -1924,7 +1922,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
         {
             //  '-' sign and language code in hex:
             aFormatCode.append( (sal_Unicode) '-' );
-            aFormatCode.append(rtl::OUString::valueOf(sal_Int32(nLang), 16).toAsciiUpperCase());
+            aFormatCode.append(OUString::valueOf(sal_Int32(nLang), 16).toAsciiUpperCase());
         }
 
         aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbol
@@ -1996,7 +1994,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 }
 
-static sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const OUString& rToken )
+static sal_Bool lcl_IsAtEnd( OUStringBuffer& rBuffer, const OUString& rToken )
 {
     sal_Int32 nBufLen = rBuffer.getLength();
     sal_Int32 nTokLen = rToken.getLength();
@@ -2091,7 +2089,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     }
 }
 
-void SvXMLNumFormatContext::AddCondition( const rtl::OUString& rCondition, const rtl::OUString& rApplyName )
+void SvXMLNumFormatContext::AddCondition( const OUString& rCondition, const OUString& rApplyName )
 {
     MyCondition aCondition;
     aCondition.sCondition = rCondition;
@@ -2121,7 +2119,7 @@ void SvXMLNumFormatContext::AddColor( sal_uInt32 const nColor )
     }
 }
 
-void SvXMLNumFormatContext::UpdateCalendar( const rtl::OUString& rNewCalendar )
+void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
 {
     if ( rNewCalendar != sCalendar )
     {

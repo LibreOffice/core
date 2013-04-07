@@ -86,7 +86,6 @@ using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
-using rtl::OUString;
 using namespace ::sfx2;
 
 
@@ -295,15 +294,15 @@ sal_Bool SdGRFFilter::Export()
                     beans::PropertyValues aArgs;
                     TransformItems( SID_SAVEASDOC, *pSet, aArgs );
 
-                    rtl::OUString sInteractionHandler( "InteractionHandler" );
-                    rtl::OUString sFilterName( "FilterName" );
-                    rtl::OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
+                    OUString sInteractionHandler( "InteractionHandler" );
+                    OUString sFilterName( "FilterName" );
+                    OUString sShortName( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
                     sal_Bool    bFilterNameFound = sal_False;
                     sal_Int32   i, nCount;
                     for ( i = 0, nCount = aArgs.getLength(); i < nCount; i++ )
                     {
-                        rtl::OUString& rStr = aArgs[ i ].Name;
+                        OUString& rStr = aArgs[ i ].Name;
                         if ( rStr == sFilterName )
                         {
                             bFilterNameFound = sal_True;

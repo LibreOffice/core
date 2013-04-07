@@ -47,7 +47,7 @@ namespace basprov
 {
 //.........................................................................
 #define BASSCRIPT_PROPERTY_ID_CALLER         1
-#define BASSCRIPT_PROPERTY_CALLER            ::rtl::OUString( "Caller" )
+#define BASSCRIPT_PROPERTY_CALLER            OUString( "Caller" )
 
 #define BASSCRIPT_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -59,7 +59,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod )
+    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xMethod( xMethod )
@@ -72,7 +72,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    BasicScriptImpl::BasicScriptImpl( const ::rtl::OUString& funcName, SbMethodRef xMethod,
+    BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod,
         BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xMethod( xMethod )
@@ -191,11 +191,11 @@ namespace basprov
                 if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
                     throw provider::ScriptFrameworkErrorException(
-                        ::rtl::OUString(
+                        OUString(
                                 "wrong number of parameters!" ),
                          Reference< XInterface >(),
                          m_funcName,
-                         ::rtl::OUString( "Basic" ),
+                         OUString( "Basic" ),
                         provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }

@@ -80,16 +80,16 @@ private:
             const & context);
 
     SAL_DLLPRIVATE void setPropertyValue(
-        rtl::OUString const & path, com::sun::star::uno::Any const & value)
+        OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
     SAL_DLLPRIVATE com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
-    getGroup(rtl::OUString const & path) const;
+    getGroup(OUString const & path) const;
 
     SAL_DLLPRIVATE
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
-    getSet(rtl::OUString const & path) const;
+    getSet(OUString const & path) const;
 
     com::sun::star::uno::Reference<
         com::sun::star::configuration::XReadWriteAccess > access_;
@@ -112,38 +112,38 @@ public:
 
     SAL_DLLPRIVATE ~ConfigurationWrapper();
 
-    com::sun::star::uno::Any getPropertyValue(rtl::OUString const & path) const;
+    com::sun::star::uno::Any getPropertyValue(OUString const & path) const;
 
     void setPropertyValue(
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path, com::sun::star::uno::Any const & value)
+        OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
     com::sun::star::uno::Any getLocalizedPropertyValue(
-        rtl::OUString const & path) const;
+        OUString const & path) const;
 
     void setLocalizedPropertyValue(
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path, com::sun::star::uno::Any const & value)
+        OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
-    getGroupReadOnly(rtl::OUString const & path) const;
+    getGroupReadOnly(OUString const & path) const;
 
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
     getGroupReadWrite(
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path) const;
+        OUString const & path) const;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
-    getSetReadOnly(rtl::OUString const & path) const;
+    getSetReadOnly(OUString const & path) const;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
     getSetReadWrite(
         boost::shared_ptr< ConfigurationChanges > const & batch,
-        rtl::OUString const & path) const;
+        OUString const & path) const;
 
     boost::shared_ptr< ConfigurationChanges > createChanges() const;
 

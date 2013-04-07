@@ -40,23 +40,23 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
     css::uno::Reference< css::drawing::XShape > xShape;
     css::uno::Reference< css::container::XNamed > xNamed;
-    rtl::OUString sPersistName;
+    OUString sPersistName;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     css::uno::Reference< css::container::XNamed > xNamedShape;
-    rtl::OUString getPersistName();
+    OUString getPersistName();
     css::uno::Reference< css::drawing::XShape > setShape() throw ( css::script::BasicErrorException );
 public:
     ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& sName ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );
     virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif //SC_VBA_WINDOW_HXX

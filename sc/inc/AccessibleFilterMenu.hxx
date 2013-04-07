@@ -49,7 +49,7 @@ public:
     explicit ScAccessibleFilterMenu(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::accessibility::XAccessible>& rxParent,
-            ScMenuFloatingWindow* pWin, const ::rtl::OUString& rName, size_t nMenuPos);
+            ScMenuFloatingWindow* pWin, const OUString& rName, size_t nMenuPos);
     virtual ~ScAccessibleFilterMenu();
 
     // XAccessibleComponent
@@ -72,7 +72,7 @@ public:
 
     // XAccessibleContext
 
-    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+    virtual OUString SAL_CALL getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
@@ -87,7 +87,7 @@ public:
         getAccessibleStateSet()
             throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleEventBroadcaster
@@ -144,7 +144,7 @@ public:
 
     // non-UNO methods
 
-    void appendMenuItem(const ::rtl::OUString& rName, bool bEnabled, size_t nMenuPos);
+    void appendMenuItem(const OUString& rName, bool bEnabled, size_t nMenuPos);
     void setMenuPos(size_t nMenuPos);
     void setEnabled(bool bEnabled);
 

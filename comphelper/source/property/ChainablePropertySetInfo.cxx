@@ -20,7 +20,6 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <comphelper/TypeGeneration.hxx>
 
-using ::rtl::OUString;
 using ::comphelper::PropertyInfo;
 using ::comphelper::GenerateCppuType;
 using ::comphelper::ChainablePropertySetInfo;
@@ -67,7 +66,7 @@ void ChainablePropertySetInfo::add( PropertyInfo* pMap, sal_Int32 nCount )
     }
 }
 
-void ChainablePropertySetInfo::remove( const rtl::OUString& aName )
+void ChainablePropertySetInfo::remove( const OUString& aName )
     throw()
 {
     maMap.erase ( aName );
@@ -99,7 +98,7 @@ Sequence< ::Property > SAL_CALL ChainablePropertySetInfo::getProperties()
     return maProperties;
 }
 
-Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUString& rName )
+Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& rName )
     throw(::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     PropertyInfoHash::iterator aIter = maMap.find( rName );
@@ -118,7 +117,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const ::rtl::OUSt
     return aProperty;
 }
 
-sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const ::rtl::OUString& rName )
+sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return static_cast < sal_Bool > ( maMap.find ( rName ) != maMap.end() );

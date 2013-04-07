@@ -45,22 +45,22 @@ namespace reportdesign
 DBG_NAME( rpt_OSection )
 
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> lcl_getGroupAbsent()
+uno::Sequence< OUString> lcl_getGroupAbsent()
 {
-    ::rtl::OUString pProps[] = {
+    OUString pProps[] = {
                 PROPERTY_CANGROW
                 ,PROPERTY_CANSHRINK
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
+uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
 {
     if ( _bPageSection )
     {
-        ::rtl::OUString pProps[] = {
+        OUString pProps[] = {
                 PROPERTY_FORCENEWPAGE
                 ,PROPERTY_NEWROWORCOL
                 ,PROPERTY_KEEPTOGETHER
@@ -68,16 +68,16 @@ uno::Sequence< ::rtl::OUString> lcl_getAbsent(bool _bPageSection)
                 ,PROPERTY_CANSHRINK
                 ,PROPERTY_REPEATSECTION
         };
-        return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+        return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
     }
 
-    ::rtl::OUString pProps[] = {
+    OUString pProps[] = {
                 PROPERTY_CANGROW
                 ,PROPERTY_CANSHRINK
                 ,PROPERTY_REPEATSECTION
         };
 
-    return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
+    return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
 uno::Reference<report::XSection> OSection::createOSection(
@@ -106,7 +106,7 @@ uno::Reference<report::XSection> OSection::createOSection(
 OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
                    ,const uno::Reference< report::XGroup >& xParentGroup
                    ,const uno::Reference< uno::XComponentContext >& context
-                   ,uno::Sequence< ::rtl::OUString> const& rStrings)
+                   ,uno::Sequence< OUString> const& rStrings)
 :SectionBase(m_aMutex)
 ,SectionPropertySet(context,SectionPropertySet::IMPLEMENTS_PROPERTY_SET,rStrings)
 ,m_aContainerListeners(m_aMutex)
@@ -175,24 +175,24 @@ void SAL_CALL OSection::disposing()
     m_xContext.clear();
 }
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.Section");
+    return OUString("com.sun.star.comp.report.Section");
 }
 //------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
+uno::Sequence< OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString> aSupported(1);
+    uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_SECTION;
     return aSupported;
 }
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> SAL_CALL OSection::getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence< OUString> SAL_CALL OSection::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OSection::supportsService( const ::rtl::OUString& _rServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL OSection::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
     return ::comphelper::existsValue(_rServiceName,getSupportedServiceNames_Static());
 }
@@ -233,13 +233,13 @@ void SAL_CALL OSection::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeExc
     set(PROPERTY_VISIBLE,_visible,m_bVisible);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OSection::getName() throw (uno::RuntimeException)
+OUString SAL_CALL OSection::getName() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sName;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException)
+void SAL_CALL OSection::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     set(PROPERTY_NAME,_name,m_sName);
 }
@@ -282,13 +282,13 @@ void SAL_CALL OSection::setBackTransparent( ::sal_Bool _backtransparent ) throw 
         set(PROPERTY_BACKCOLOR,static_cast<sal_Int32>(COL_TRANSPARENT),m_nBackgroundColor);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OSection::getConditionalPrintExpression() throw (uno::RuntimeException)
+OUString SAL_CALL OSection::getConditionalPrintExpression() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sConditionalPrintExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (uno::RuntimeException)
+void SAL_CALL OSection::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_sConditionalPrintExpression);
 }
@@ -317,7 +317,7 @@ void OSection::checkNotPageHeaderFooter()
 void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::ForceNewPage")
+        throwIllegallArgumentException(OUString("com::sun::star::report::ForceNewPage")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -335,7 +335,7 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
 void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
-        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::ForceNewPage")
+        throwIllegallArgumentException(OUString("com::sun::star::report::ForceNewPage")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -422,26 +422,26 @@ uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefiniti
     return xRet;
 }
 // -----------------------------------------------------------------------------
-const ::std::vector< ::rtl::OUString >& lcl_getControlModelMap()
+const ::std::vector< OUString >& lcl_getControlModelMap()
 {
-    static ::std::vector< ::rtl::OUString > s_sControlModels;
+    static ::std::vector< OUString > s_sControlModels;
     if ( s_sControlModels.empty() )
     {
-        s_sControlModels.push_back( ::rtl::OUString("FixedText") );
-        s_sControlModels.push_back( ::rtl::OUString("FixedLine") );
-        s_sControlModels.push_back( ::rtl::OUString("ImageControl") );
-        s_sControlModels.push_back( ::rtl::OUString("FormattedField") );
-        s_sControlModels.push_back( ::rtl::OUString("Shape") );
+        s_sControlModels.push_back( OUString("FixedText") );
+        s_sControlModels.push_back( OUString("FixedLine") );
+        s_sControlModels.push_back( OUString("ImageControl") );
+        s_sControlModels.push_back( OUString("FormattedField") );
+        s_sControlModels.push_back( OUString("Shape") );
     }
     return s_sControlModels;
 
 }
 // -----------------------------------------------------------------------------
-uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportComponent( const ::rtl::OUString& _sReportComponentSpecifier ) throw (uno::Exception, lang::IllegalArgumentException,uno::RuntimeException)
+uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportComponent( const OUString& _sReportComponentSpecifier ) throw (uno::Exception, lang::IllegalArgumentException,uno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
-    const ::std::vector< ::rtl::OUString >& aRet = lcl_getControlModelMap();
-    ::std::vector< ::rtl::OUString >::const_iterator aFind = ::std::find(aRet.begin(),aRet.end(),_sReportComponentSpecifier);
+    const ::std::vector< OUString >& aRet = lcl_getControlModelMap();
+    ::std::vector< OUString >::const_iterator aFind = ::std::find(aRet.begin(),aRet.end(),_sReportComponentSpecifier);
     if ( aFind == aRet.end() )
         throw lang::IllegalArgumentException();
 
@@ -450,19 +450,19 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
     switch( aFind - aRet.begin()  )
     {
         case 0:
-            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.FixedText")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.FixedText")),uno::UNO_QUERY);
             break;
         case 1:
-            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.awt.UnoControlFixedLineModel")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(OUString("com.sun.star.awt.UnoControlFixedLineModel")),uno::UNO_QUERY);
             break;
         case 2:
-            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.DatabaseImageControl")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.DatabaseImageControl")),uno::UNO_QUERY);
             break;
         case 3:
-            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.form.component.FormattedField")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(OUString("com.sun.star.form.component.FormattedField")),uno::UNO_QUERY);
             break;
         case 4:
-            xRet.set(xFac->createInstance(::rtl::OUString("com.sun.star.drawing.ControlShape")),uno::UNO_QUERY);
+            xRet.set(xFac->createInstance(OUString("com.sun.star.drawing.ControlShape")),uno::UNO_QUERY);
             break;
         default:
             break;
@@ -470,13 +470,13 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
     return xRet;
 }
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OSection::getAvailableReportComponentNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OSection::getAvailableReportComponentNames(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    const ::std::vector< ::rtl::OUString >& aRet = lcl_getControlModelMap();
-    const ::rtl::OUString* pRet = aRet.empty() ? 0 : &aRet[0];
-    return uno::Sequence< ::rtl::OUString >(pRet, aRet.size());
+    const ::std::vector< OUString >& aRet = lcl_getControlModelMap();
+    const OUString* pRet = aRet.empty() ? 0 : &aRet[0];
+    return uno::Sequence< OUString >(pRet, aRet.size());
 }
 // -----------------------------------------------------------------------------
 // XChild
@@ -545,32 +545,32 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OSection::getPropertySetInfo(
     return SectionPropertySet::getPropertySetInfo();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OSection::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OSection::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OSection::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OSection::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return SectionPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OSection::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OSection::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OSection::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OSection::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OSection::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }

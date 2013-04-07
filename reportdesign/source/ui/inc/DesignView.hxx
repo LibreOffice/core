@@ -114,9 +114,9 @@ namespace rptui
         inline OReportController&   getController() const { return m_rReportController; }
 
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
         sal_uInt16          GetInsertObj() const;
-        rtl::OUString   GetInsertObjString() const;
+        OUString   GetInsertObjString() const;
         DlgEdMode       GetMode() const { return m_eMode; }
 
         /** cuts the current selection in this section
@@ -168,7 +168,7 @@ namespace rptui
             If the position is grater than the current elements, the section will be appended.
         */
         void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                                    ,const ::rtl::OUString& _sColorEntry
+                                    ,const OUString& _sColorEntry
                                     ,sal_uInt16 _nPosition = USHRT_MAX);
 
         inline Size     getGridSizeCoarse() const { return m_aGridSizeCoarse; }
@@ -231,8 +231,8 @@ namespace rptui
         */
         void collapseSections(const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aCollpasedSections);
 
-        ::rtl::OUString  getCurrentPage() const;
-        void             setCurrentPage(const ::rtl::OUString& _sLastActivePage);
+        OUString  getCurrentPage() const;
+        void             setCurrentPage(const OUString& _sLastActivePage);
 
         /** checks if the keycode is known by the child windows
             @param  _rCode  the keycode

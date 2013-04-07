@@ -49,13 +49,13 @@ namespace svgio
 
         const SvgStyleAttributes* SvgTextNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("text"));
+            static OUString aClassStr(OUString::createFromAscii("text"));
             maSvgStyleAttributes.checkForCssStyle(aClassStr);
 
             return &maSvgStyleAttributes;
         }
 
-        void SvgTextNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgTextNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);

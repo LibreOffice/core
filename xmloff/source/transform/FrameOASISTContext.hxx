@@ -27,12 +27,12 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
 
     bool m_bIgnoreElement;
 
     sal_Bool IsLinkedEmbeddedObject(
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
 
@@ -40,20 +40,20 @@ public:
     TYPEINFO();
 
     XMLFrameOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLFrameOASISTransformerContext();
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 #endif  //  _XMLOFF_FRAMEOASISTCONTEXT_HXX

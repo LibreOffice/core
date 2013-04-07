@@ -91,7 +91,7 @@ Sequence< OUString > SAL_CALL PPPOptimizer::getSupportedServiceNames()
 // -----------------------------------------------------------------------------
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizer::queryDispatch(
-    const URL& aURL, const ::rtl::OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
+    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.PPPOptimizer:" ) == 0 )
@@ -162,7 +162,7 @@ void SAL_CALL PPPOptimizer::removeStatusListener( const Reference< XStatusListen
 
 // -----------------------------------------------------------------------------
 // returning filesize, on error zero is returned
-sal_Int64 PPPOptimizer::GetFileSize( const rtl::OUString& rURL )
+sal_Int64 PPPOptimizer::GetFileSize( const OUString& rURL )
 {
     sal_Int64 nFileSize = 0;
     osl::DirectoryItem aItem;

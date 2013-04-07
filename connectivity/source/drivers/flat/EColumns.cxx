@@ -30,7 +30,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-sdbcx::ObjectType OFlatColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OFlatColumns::createObject(const OUString& _rName)
 {
 
     OFlatTable* pTable = (OFlatTable*)m_pTable;

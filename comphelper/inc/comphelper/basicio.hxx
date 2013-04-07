@@ -37,9 +37,9 @@ namespace starawt   = ::com::sun::star::awt;
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Bool& _rVal);
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Bool _bVal);
 
-// ::rtl::OUString
-COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, ::rtl::OUString& _rStr);
-COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, const ::rtl::OUString& _rStr);
+// OUString
+COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, OUString& _rStr);
+COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, const OUString& _rStr);
 
 // sal_Int16
 COMPHELPER_DLLPUBLIC const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int16& _rValue);

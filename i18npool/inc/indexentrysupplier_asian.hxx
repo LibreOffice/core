@@ -34,19 +34,19 @@ public:
     IndexEntrySupplier_asian( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     ~IndexEntrySupplier_asian();
 
-    rtl::OUString SAL_CALL getIndexCharacter( const rtl::OUString& rIndexEntry,
-            const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rAlgorithm )
+    OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
+            const com::sun::star::lang::Locale& rLocale, const OUString& rAlgorithm )
             throw (com::sun::star::uno::RuntimeException);
-    rtl::OUString SAL_CALL getIndexKey( const rtl::OUString& rIndexEntry,
-            const rtl::OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
+    OUString SAL_CALL getIndexKey( const OUString& rIndexEntry,
+            const OUString& rPhoneticEntry, const com::sun::star::lang::Locale& rLocale)
             throw (com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL compareIndexEntry(
-            const rtl::OUString& rIndexEntry1, const rtl::OUString& rPhoneticEntry1,
+            const OUString& rIndexEntry1, const OUString& rPhoneticEntry1,
             const com::sun::star::lang::Locale& rLocale1,
-            const rtl::OUString& rIndexEntry2, const rtl::OUString& rPhoneticEntry2,
+            const OUString& rIndexEntry2, const OUString& rPhoneticEntry2,
             const com::sun::star::lang::Locale& rLocale2 )
             throw (com::sun::star::uno::RuntimeException);
-    rtl::OUString SAL_CALL getPhoneticCandidate( const rtl::OUString& rIndexEntry,
+    OUString SAL_CALL getPhoneticCandidate( const OUString& rIndexEntry,
             const com::sun::star::lang::Locale& rLocale )
             throw (com::sun::star::uno::RuntimeException);
 #ifndef DISABLE_DYNLOADING

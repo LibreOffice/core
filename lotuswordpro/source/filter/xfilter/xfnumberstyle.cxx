@@ -228,8 +228,8 @@ void XFNumberStyle::ToXml_Negative(IXFStream *pStrm)
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     pAttrList->Clear();
 
-    rtl::OUString strStyleName = GetStyleName();
-    rtl::OUString strGEStyle = strStyleName + A2OUSTR("PO");
+    OUString strStyleName = GetStyleName();
+    OUString strGEStyle = strStyleName + A2OUSTR("PO");
 
     SetStyleName(strGEStyle);
     ToXml_Normal(pStrm);

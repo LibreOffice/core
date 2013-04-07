@@ -53,21 +53,21 @@ namespace dbaui
 
         void clearListBox(MultiListBox& _rListBox);
         void fillColumns(       ListBox* pRight,
-                                ::std::vector< ::rtl::OUString> &_rRightColumns);
+                                ::std::vector< OUString> &_rRightColumns);
 
         void createNewColumn(   ListBox* _pListbox,
                                 OFieldDescription* _pSrcField,
-                                ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                const ::rtl::OUString&  _sColumnName,
-                                const ::rtl::OUString&  _sExtraChars,
+                                ::std::vector< OUString>& _rRightColumns,
+                                const OUString&  _sColumnName,
+                                const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
                                 const ::comphelper::TStringMixEqualFunctor& _aCase);
 
         void moveColumn(        ListBox* _pRight,
                                 ListBox* _pLeft,
-                                ::std::vector< ::rtl::OUString>& _rRightColumns,
-                                const ::rtl::OUString&  _sColumnName,
-                                const ::rtl::OUString&  _sExtraChars,
+                                ::std::vector< OUString>& _rRightColumns,
+                                const OUString&  _sColumnName,
+                                const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
                                 const ::comphelper::TStringMixEqualFunctor& _aCase);
 
@@ -75,7 +75,7 @@ namespace dbaui
 
 
         sal_uInt16 adjustColumnPosition(ListBox* _pLeft,
-                                    const ::rtl::OUString&  _sColumnName,
+                                    const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase);
 

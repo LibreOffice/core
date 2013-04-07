@@ -817,7 +817,7 @@ void SvxPathTabPage::SetPathList(
             pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
 
             // then the writable path
-            aValue = makeAny( ::rtl::OUString( _rWritablePath ) );
+            aValue = makeAny( OUString( _rWritablePath ) );
             sProp = sCfgName;
             sProp += POSTFIX_WRITABLE;
             pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );

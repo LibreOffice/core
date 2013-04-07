@@ -899,7 +899,7 @@ public:
 
     // text conversion functions
     void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
-    void                ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
+    void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
                                     sal_Bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );

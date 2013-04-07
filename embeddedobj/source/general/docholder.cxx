@@ -102,12 +102,12 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
                             sal_Int32 nTargetIndex,
                             const uno::Reference< container::XIndexAccess >& xSourceMenu,
                             sal_Int32 nSourceIndex,
-                            const ::rtl::OUString aContModuleName,
+                            const OUString aContModuleName,
                             const uno::Reference< frame::XDispatchProvider >& xSourceDisp )
 {
     sal_Int32 nInd = 0;
-    ::rtl::OUString aModuleIdentPropName( "ModuleIdentifier" );
-    ::rtl::OUString aDispProvPropName( "DispatchProvider" );
+    OUString aModuleIdentPropName( "ModuleIdentifier" );
+    OUString aDispProvPropName( "DispatchProvider" );
     sal_Bool bModuleNameSet = sal_False;
     sal_Bool bDispProvSet = sal_False;
 
@@ -164,11 +164,11 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     m_aOutplaceFrameProps.realloc( 3 );
     beans::NamedValue aArg;
 
-    aArg.Name = ::rtl::OUString("TopWindow");
+    aArg.Name = OUString("TopWindow");
     aArg.Value <<= sal_True;
     m_aOutplaceFrameProps[0] <<= aArg;
 
-    aArg.Name = ::rtl::OUString("MakeVisible");
+    aArg.Name = OUString("MakeVisible");
     aArg.Value <<= sal_False;
     m_aOutplaceFrameProps[1] <<= aArg;
 
@@ -183,7 +183,7 @@ DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& 
     }
     m_refCount--;
 
-    aArg.Name = ::rtl::OUString("ParentFrame");
+    aArg.Name = OUString("ParentFrame");
     aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
     m_aOutplaceFrameProps[2] <<= aArg;
 }
@@ -366,7 +366,7 @@ sal_Bool DocumentHolder::SetFrameLMVisibility( const uno::Reference< frame::XFra
     {
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
         uno::Reference< beans::XPropertySet > xPropSet( xFrame, uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xLayoutManager;
+        xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
             xLayoutManager->setVisible( bVisible );
@@ -434,7 +434,7 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         }
 
         awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_TOP,
-                                                ::rtl::OUString("dockingwindow"),
+                                                OUString("dockingwindow"),
                                                 xMyParent,
                                                 0,
                                                 awt::Rectangle(),//aOwnRectangle,
@@ -453,14 +453,14 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
         uno::Sequence< uno::Any > aArgs( 2 );
         beans::NamedValue aArg;
 
-        aArg.Name    = ::rtl::OUString("ContainerWindow");
+        aArg.Name    = OUString("ContainerWindow");
         aArg.Value <<= xOwnWindow;
         aArgs[0] <<= aArg;
 
         uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
         if ( xContFrame.is() )
         {
-            aArg.Name    = ::rtl::OUString("ParentFrame");
+            aArg.Name    = OUString("ParentFrame");
             aArg.Value <<= xContFrame;
             aArgs[1] <<= aArg;
         }
@@ -535,7 +535,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
         if( xUIConfigManager.is())
         {
             xResult = xUIConfigManager->getSettings(
-                ::rtl::OUString( "private:resource/menubar/menubar" ),
+                OUString( "private:resource/menubar/menubar" ),
                 sal_False );
         }
     }
@@ -546,7 +546,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
     {
         // no internal document configuration, use the one from the module
         uno::Reference< frame::XModuleManager2 > xModuleMan = frame::ModuleManager::create(m_xContext);
-        ::rtl::OUString aModuleIdent =
+        OUString aModuleIdent =
             xModuleMan->identify( uno::Reference< uno::XInterface >( m_xComponent, uno::UNO_QUERY ) );
 
         if ( !aModuleIdent.isEmpty() )
@@ -557,7 +557,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
                     xModConfSupplier->getUIConfigurationManager( aModuleIdent ),
                     uno::UNO_QUERY_THROW );
             xResult = xModUIConfMan->getSettings(
-                    ::rtl::OUString( "private:resource/menubar/menubar" ),
+                    OUString( "private:resource/menubar/menubar" ),
                     sal_False );
         }
     }
@@ -580,7 +580,7 @@ void DocumentHolder::FindConnectPoints(
     {
         uno::Sequence< beans::PropertyValue > aProps;
         xMenu->getByIndex( nInd ) >>= aProps;
-        rtl::OUString aCommand;
+        OUString aCommand;
         for ( sal_Int32 nSeqInd = 0; nSeqInd < aProps.getLength(); nSeqInd++ )
             if ( aProps[nSeqInd].Name == "CommandURL" )
             {
@@ -602,7 +602,7 @@ void DocumentHolder::FindConnectPoints(
 uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
         const uno::Reference< frame::XDispatchProvider >& xContDisp,
-        const ::rtl::OUString& aContModuleName,
+        const OUString& aContModuleName,
         const uno::Reference< container::XIndexAccess >& xOwnMenu,
         const uno::Reference< frame::XDispatchProvider >& xOwnDisp )
     throw ( uno::Exception )
@@ -639,7 +639,7 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
             }
         }
         else
-            InsertMenu_Impl( xMergedMenu, nInd, xOwnMenu, nInd, ::rtl::OUString(), xOwnDisp );
+            InsertMenu_Impl( xMergedMenu, nInd, xOwnMenu, nInd, OUString(), xOwnDisp );
     }
 
     return uno::Reference< container::XIndexAccess >( xMergedMenu, uno::UNO_QUERY_THROW );
@@ -649,14 +649,14 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenusForInplace(
 sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                                                const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                                             const uno::Reference< frame::XDispatchProvider >& xContDisp,
-                                            const ::rtl::OUString& aContModuleName )
+                                            const OUString& aContModuleName )
 {
     sal_Bool bMenuMerged = sal_False;
     try
     {
         uno::Reference< ::com::sun::star::ui::XUIElementSettings > xUISettings(
             xContLM->getElement(
-                ::rtl::OUString( "private:resource/menubar/menubar" ) ),
+                OUString( "private:resource/menubar/menubar" ) ),
             uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xContMenu = xUISettings->getSettings( sal_True );
         if ( !xContMenu.is() )
@@ -678,7 +678,7 @@ sal_Bool DocumentHolder::MergeMenus_Impl( const uno::Reference< ::com::sun::star
 
 sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
                                  const uno::Reference< frame::XDispatchProvider >& xContainerDP,
-                                 const ::rtl::OUString& aContModuleName )
+                                 const OUString& aContModuleName )
 {
     sal_Bool bResult = sal_False;
     if ( xContainerLM.is() )
@@ -690,7 +690,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
         try
         {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
             xDocAreaAcc = xContainerLM->getDockingAreaAcceptor();
         }
         catch( const uno::Exception& ){}
@@ -783,7 +783,7 @@ sal_Bool DocumentHolder::HideUI( const uno::Reference< ::com::sun::star::frame::
 
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -860,7 +860,7 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
         uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
         try {
             uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" )) >>= xOwnLM;
+            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xOwnLM;
         } catch( const uno::Exception& )
         {}
 
@@ -969,21 +969,21 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
             aArgs.put( "ReadOnly", m_bReadOnly );
             if ( bInPlace )
                 aArgs.put( "PluginMode", sal_Int16(1) );
-            ::rtl::OUString sUrl;
+            OUString sUrl;
             uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
             if (    xServiceInfo.is()
-                &&  xServiceInfo->supportsService(::rtl::OUString("com.sun.star.report.ReportDefinition")) )
+                &&  xServiceInfo->supportsService(OUString("com.sun.star.report.ReportDefinition")) )
             {
-                sUrl = ::rtl::OUString(".component:DB/ReportDesign");
+                sUrl = OUString(".component:DB/ReportDesign");
             }
             else if( xServiceInfo.is()
-                &&   xServiceInfo->supportsService( ::rtl::OUString("com.sun.star.chart2.ChartDocument") ))
-                sUrl = ::rtl::OUString("private:factory/schart");
+                &&   xServiceInfo->supportsService( OUString("com.sun.star.chart2.ChartDocument") ))
+                sUrl = OUString("private:factory/schart");
             else
-                sUrl = ::rtl::OUString("private:object");
+                sUrl = OUString("private:object");
 
             xComponentLoader->loadComponentFromURL( sUrl,
-                                                        rtl::OUString( "_self" ),
+                                                        OUString( "_self" ),
                                                         0,
                                                         aArgs.getPropertyValues() );
 
@@ -1173,7 +1173,7 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     // if the component does not support document::XEventBroadcaster
     // the modify notifications are used as workaround, but only for running state
     if( aEvent.Source == m_xComponent && m_pEmbedObj && m_pEmbedObj->getCurrentState() == embed::EmbedStates::RUNNING )
-        m_pEmbedObj->PostEvent_Impl( ::rtl::OUString( "OnVisAreaChanged" ) );
+        m_pEmbedObj->PostEvent_Impl( OUString( "OnVisAreaChanged" ) );
 }
 
 //---------------------------------------------------------------------------

@@ -92,7 +92,7 @@ public:
             bitmap sets.
     */
     PresenterBitmapContainer (
-        const ::rtl::OUString& rsConfigurationBase,
+        const OUString& rsConfigurationBase,
         const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -110,18 +110,18 @@ public:
 
     /** Return the bitmap set that is associated with the given name.
     */
-    ::boost::shared_ptr<BitmapDescriptor> GetBitmap (const ::rtl::OUString& rsName) const;
+    ::boost::shared_ptr<BitmapDescriptor> GetBitmap (const OUString& rsName) const;
 
     static ::boost::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const ::rtl::OUString& rsPathToBitmapNode,
+        const OUString& rsPathToBitmapNode,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const ::boost::shared_ptr<BitmapDescriptor>& rpDefaultBitmap);
 
 private:
     ::boost::shared_ptr<PresenterBitmapContainer> mpParentContainer;
-    typedef ::std::map<rtl::OUString, ::boost::shared_ptr<BitmapDescriptor> > BitmapContainer;
+    typedef ::std::map<OUString, ::boost::shared_ptr<BitmapDescriptor> > BitmapContainer;
     BitmapContainer maIconContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
@@ -129,7 +129,7 @@ private:
     void LoadBitmaps (
         const css::uno::Reference<css::container::XNameAccess>& rsRootNode);
     void ProcessBitmap (
-        const ::rtl::OUString& rsKey,
+        const OUString& rsKey,
         const css::uno::Reference<css::beans::XPropertySet>& rProperties);
     static ::boost::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::beans::XPropertySet>& rxProperties,
@@ -137,7 +137,7 @@ private:
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const ::boost::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault);
     static BitmapDescriptor::TexturingMode
-        StringToTexturingMode (const ::rtl::OUString& rsTexturingMode);
+        StringToTexturingMode (const OUString& rsTexturingMode);
 };
 
 typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;

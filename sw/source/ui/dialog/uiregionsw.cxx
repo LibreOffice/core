@@ -1081,7 +1081,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter =
-        new ::sfx2::DocumentInserter( rtl::OUString("swriter") );
+        new ::sfx2::DocumentInserter( OUString("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwEditRegionDlg, DlgClosedHdl ) );
     return 0;
 }
@@ -1422,7 +1422,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
     {
         //if necessary fill the names bookmarks/sections/tables now
 
-        rtl::OUString sFileName = aFileNameED.GetText();
+        OUString sFileName = aFileNameED.GetText();
         if(!sFileName.isEmpty())
         {
             SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
@@ -1831,7 +1831,7 @@ IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter(
-            rtl::OUString("swriter") );
+            OUString("swriter") );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
     return 0;
 }

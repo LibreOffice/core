@@ -65,7 +65,7 @@ void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::
 
 
 void SAL_CALL VCLXTabPageModel::setProperty(
-    const ::rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const ::com::sun::star::uno::Any& /*Value*/ )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -92,35 +92,35 @@ void SAL_CALL VCLXTabPageModel::setEnabled( ::sal_Bool _enabled ) throw (::com::
     //if ( pTabControl )
     //  pTabControl->EnablePage(0, true);
 }
-::rtl::OUString SAL_CALL VCLXTabPageModel::getTitle() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXTabPageModel::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
     //TabControl* pTabControl = (TabControl*)GetWindow();
     //if ( pTabControl )
     //  return pTabControl->GetPageText(0);
     //else
-        return ::rtl::OUString();
+        return OUString();
 }
-void SAL_CALL VCLXTabPageModel::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabPageModel::setTitle( const OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
     //TabControl* pTabControl = (TabControl*)GetWindow();
     //if ( pTabControl )
     //  pTabControl->SetPageText(0, _title);
 
 }
-::rtl::OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
-void SAL_CALL VCLXTabPageModel::setImageURL( const ::rtl::OUString& /*_imageurl*/ ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabPageModel::setImageURL( const OUString& /*_imageurl*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     //m_sImageURL = _imageurl;
 }
-::rtl::OUString SAL_CALL VCLXTabPageModel::getToolTip() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXTabPageModel::getToolTip() throw (::com::sun::star::uno::RuntimeException)
 {
     //return m_sTooltip;
-    return ::rtl::OUString();
+    return OUString();
 }
-void SAL_CALL VCLXTabPageModel::setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXTabPageModel::setToolTip( const OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {
     (void)_tooltip;
 }

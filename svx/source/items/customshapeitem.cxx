@@ -31,7 +31,7 @@ SdrCustomShapeDataItem::SdrCustomShapeDataItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_DATA, String() )
 {}
 
-bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const rtl::OUString& r1, const rtl::OUString& r2 ) const
+bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const OUString& r1, const OUString& r2 ) const
 {
     return r1.equals( r2 );
 }
@@ -70,7 +70,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     }
 }
 
-com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const rtl::OUString& rPropName )
+com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rPropName )
 {
     com::sun::star::uno::Any* pRet = NULL;
     PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
@@ -79,7 +79,7 @@ com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( co
     return pRet;
 }
 
-com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const rtl::OUString& rSequenceName, const rtl::OUString& rPropName )
+com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( const OUString& rSequenceName, const OUString& rPropName )
 {
     com::sun::star::uno::Any* pRet = NULL;
     com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
@@ -138,7 +138,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
     }
 }
 
-void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal )
+void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
     if ( pAny ) // just replacing
@@ -190,7 +190,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenc
     }
 }
 
-void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropName )
+void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
 {
     if ( aPropSeq.getLength() )
     {

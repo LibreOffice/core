@@ -156,11 +156,11 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleOutlineView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessibleOutlineView");
+    return OUString("AccessibleOutlineView");
 }
 
 
@@ -239,7 +239,7 @@ void SAL_CALL
 
 
 /// Create a name for this view.
-::rtl::OUString
+OUString
     AccessibleOutlineView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -252,7 +252,7 @@ void SAL_CALL
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.
 */
-::rtl::OUString
+OUString
     AccessibleOutlineView::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

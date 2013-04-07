@@ -38,8 +38,8 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::std::map< ::rtl::OUString, XMLEventExportHandler* > HandlerMap;
-typedef ::std::map< ::rtl::OUString, XMLEventName > NameMap;
+typedef ::std::map< OUString, XMLEventExportHandler* > HandlerMap;
+typedef ::std::map< OUString, XMLEventName > NameMap;
 
 /**
  * Export instances of EventsSupplier services. To use this class you
@@ -58,7 +58,7 @@ typedef ::std::map< ::rtl::OUString, XMLEventName > NameMap;
  */
 class XMLOFF_DLLPUBLIC XMLEventExport
 {
-    const ::rtl::OUString sEventType;
+    const OUString sEventType;
 
     SvXMLExport& rExport;
 
@@ -77,7 +77,7 @@ public:
     /// The handlers will be deleted when the object is destroyed, hence
     /// no pointers to a handler registered with AddHandler() should be
     /// held by anyone.
-    void AddHandler( const ::rtl::OUString& rName,
+    void AddHandler( const OUString& rName,
                      XMLEventExportHandler* rHandler );
 
     /// register additional event names
@@ -108,7 +108,7 @@ public:
     void ExportSingleEvent(
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue>& rEventValues,
-        const ::rtl::OUString& rApiEventName,
+        const OUString& rApiEventName,
         sal_Bool bUseWhitespace = sal_True );
 
 private:

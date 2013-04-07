@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::office;
 
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const Reference< XInterface >& xSource );
+extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
 
 /*************************************************************************
 |*
@@ -633,7 +633,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
     {
         pModel->SetChanged();
         Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
-        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( "OnAnnotationRemoved" ), xSource );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), OUString( "OnAnnotationRemoved" ), xSource );
     }
 }
 

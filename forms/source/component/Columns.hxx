@@ -61,14 +61,14 @@ protected:
 // [properties]
 
     ::comphelper::ComponentContext  m_aContext;
-    ::rtl::OUString                 m_aModelName;
+    OUString                 m_aModelName;
 
 // [properties]
-    ::rtl::OUString             m_aLabel;                   // Column name
+    OUString             m_aLabel;                   // Column name
 // [properties]
 
 public:
-    OGridColumn(const ::comphelper::ComponentContext& _rContext, const ::rtl::OUString& _sModelName = ::rtl::OUString());
+    OGridColumn(const ::comphelper::ComponentContext& _rContext, const OUString& _sModelName = OUString());
     OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
@@ -110,7 +110,7 @@ public:
     // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    const ::rtl::OUString& getModelName() const { return m_aModelName; }
+    const OUString& getModelName() const { return m_aModelName; }
 
 protected:
     static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
@@ -189,7 +189,7 @@ OGridColumn* ClassName::createCloneColumn() const \
 
 // List of all known columns
 const StringSequence& getColumnTypes();
-sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName);
+sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 // Columns
 DECL_COLUMN(TextFieldColumn)

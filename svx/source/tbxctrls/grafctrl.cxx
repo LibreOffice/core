@@ -52,7 +52,6 @@
 #include "svx/grafctrl.hxx"
 #include "svx/tbxcolor.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -63,7 +62,7 @@ using namespace ::com::sun::star::lang;
 
 #define SYMBOL_TO_FIELD_OFFSET      4
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
-#define TOOLBOX_NAME                ::rtl::OUString( "colorbar" )
+#define TOOLBOX_NAME                OUString( "colorbar" )
 
 TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
@@ -100,19 +99,19 @@ protected:
 
 public:
 
-                    ImplGrafMetricField( Window* pParent, const rtl::OUString& aCmd, const Reference< XFrame >& rFrame );
+                    ImplGrafMetricField( Window* pParent, const OUString& aCmd, const Reference< XFrame >& rFrame );
                     ~ImplGrafMetricField();
 
     void            Update( const SfxPoolItem* pItem );
     const OUString& GetCommand() const { return maCommand; }
 };
 
-ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
+ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame ) :
     MetricField( pParent, WB_BORDER | WB_SPIN | WB_REPEAT | WB_3DLOOK ),
     maCommand( rCmd ),
     mxFrame( rFrame )
 {
-    Size aSize( GetTextWidth( rtl::OUString("-100 %") ), GetTextHeight() );
+    Size aSize( GetTextWidth( OUString("-100 %") ), GetTextHeight() );
 
     aSize.Width() += 20, aSize.Height() += 6;
     SetSizePixel( aSize );
@@ -132,7 +131,7 @@ ImplGrafMetricField::ImplGrafMetricField( Window* pParent, const rtl::OUString& 
         const long nMinVal = ( maCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ".uno:GrafTransparence" ) )) ? 0 : -100;
 
         SetUnit( FUNIT_CUSTOM );
-        SetCustomUnitText( rtl::OUString(" %") );
+        SetCustomUnitText( OUString(" %") );
         SetDecimalDigits( 0 );
 
         SetMin( nMinVal );
@@ -255,7 +254,7 @@ protected:
 
 public:
 
-                            ImplGrafControl( Window* pParent, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame );
+                            ImplGrafControl( Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
                             ~ImplGrafControl();
 
     void                    Update( const SfxPoolItem* pItem ) { maField.Update( pItem ); }
@@ -264,7 +263,7 @@ public:
 
 ImplGrafControl::ImplGrafControl(
     Window* pParent,
-    const rtl::OUString& rCmd,
+    const OUString& rCmd,
     const Reference< XFrame >& rFrame
 )   : Control( pParent, WB_TABSTOP )
     , maImage( this )
@@ -298,7 +297,7 @@ ImplGrafControl::ImplGrafControl(
 
     maImage.Show();
 
-    maField.SetHelpId( rtl::OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
+    maField.SetHelpId( OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
     maField.Show();
 }
 
@@ -355,7 +354,7 @@ void ImplGrafModeControl::Select()
     if ( !IsTravelSelect() )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( "GrafMode" );
+        aArgs[0].Name = OUString( "GrafMode" );
         aArgs[0].Value = makeAny( sal_Int16( GetSelectEntryPos() ));
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -454,7 +453,7 @@ SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
-    rtl::OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
+    OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
     createAndPositionSubToolBar( aSubTbxResName );
 
     return NULL;

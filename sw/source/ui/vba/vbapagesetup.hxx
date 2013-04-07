@@ -31,7 +31,7 @@ typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ooo::vba::word::XPageSet
 class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 {
 private:
-    rtl::OUString getStyleOfFirstPage() throw (css::uno::RuntimeException);
+    OUString getStyleOfFirstPage() throw (css::uno::RuntimeException);
 
 public:
     SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
@@ -53,8 +53,8 @@ public:
     virtual void SAL_CALL setSectionStart( ::sal_Int32 _sectionstart ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif
 

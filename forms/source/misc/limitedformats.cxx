@@ -54,9 +54,9 @@ namespace frm
     //---------------------------------------------------------------------
     static const Locale& getLocale(LocaleType _eType)
     {
-        static const Locale s_aEnglishUS( ::rtl::OUString("en"), ::rtl::OUString("us"), ::rtl::OUString() );
-        static const Locale s_aGerman( ::rtl::OUString("de"), ::rtl::OUString("DE"), ::rtl::OUString() );
-        static const ::rtl::OUString s_sEmptyString;
+        static const Locale s_aEnglishUS( OUString("en"), OUString("us"), OUString() );
+        static const Locale s_aGerman( OUString("de"), OUString("DE"), OUString() );
+        static const OUString s_sEmptyString;
         static const Locale s_aSystem( s_sEmptyString, s_sEmptyString, s_sEmptyString );
 
         switch (_eType)
@@ -171,7 +171,7 @@ namespace frm
                     {
                         // get the key for the description
                         pLoopFormats->nKey = xStandardFormats->queryKey(
-                            ::rtl::OUString::createFromAscii(pLoopFormats->pDescription),
+                            OUString::createFromAscii(pLoopFormats->pDescription),
                             getLocale(pLoopFormats->eLocale),
                             sal_False
                         );
@@ -179,7 +179,7 @@ namespace frm
                         if (-1 == pLoopFormats->nKey)
                         {
                             pLoopFormats->nKey = xStandardFormats->addNew(
-                                ::rtl::OUString::createFromAscii(pLoopFormats->pDescription),
+                                OUString::createFromAscii(pLoopFormats->pDescription),
                                 getLocale(pLoopFormats->eLocale)
                             );
 #ifdef DBG_UTIL
@@ -332,7 +332,7 @@ namespace frm
 
             if (!bFoundIt)
             {   // somebody gave us an format which we can't translate
-                ::rtl::OUString sMessage ("This control supports only a very limited number of formats.");
+                OUString sMessage ("This control supports only a very limited number of formats.");
                 throw IllegalArgumentException(sMessage, NULL, 2);
             }
 

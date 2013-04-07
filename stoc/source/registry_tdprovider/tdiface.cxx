@@ -357,7 +357,7 @@ private:
 
     void calculate(Reference< XInterfaceTypeDescription2 > const & desc);
 
-    std::set< rtl::OUString > set;
+    std::set< OUString > set;
     sal_Int32 offset;
 };
 
@@ -462,8 +462,8 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
         _members.realloc(count);
         sal_Int32 index = 0;
         for (sal_uInt16 i = 0; i < fieldCount; ++i) {
-            rtl::OUString name(reader.getFieldName(i));
-            rtl::OUStringBuffer typeName(getName());
+            OUString name(reader.getFieldName(i));
+            OUStringBuffer typeName(getName());
             typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
             typeName.append(name);
             RTFieldAccess flags = reader.getFieldFlags(i);
@@ -509,8 +509,8 @@ Sequence< Reference< XInterfaceMemberTypeDescription > > InterfaceTypeDescriptio
             if (flags != RT_MODE_ATTRIBUTE_GET
                 && flags != RT_MODE_ATTRIBUTE_SET)
             {
-                rtl::OUString name(reader.getMethodName(i));
-                rtl::OUStringBuffer typeName(getName());
+                OUString name(reader.getMethodName(i));
+                OUStringBuffer typeName(getName());
                 typeName.appendAscii(RTL_CONSTASCII_STRINGPARAM("::"));
                 typeName.append(name);
                 _members[index] = new InterfaceMethodImpl(

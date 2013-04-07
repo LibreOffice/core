@@ -308,21 +308,21 @@ public:
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
-        const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
+    virtual void SAL_CALL createLibrary( const OUString& LibName, const OUString& Password,
+        const OUString& ExternalSourceURL, const OUString& LinkTargetURL )
             throw(css::container::ElementExistException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
-        const ::rtl::OUString& Language, const ::rtl::OUString& Source )
+    virtual void SAL_CALL addModule( const OUString& LibraryName, const OUString& ModuleName,
+        const OUString& Language, const OUString& Source )
             throw( css::container::NoSuchElementException, css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @seealso    XStarBasicAccess
     */
-    virtual void SAL_CALL addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
+    virtual void SAL_CALL addDialog( const OUString& LibraryName, const OUString& DialogName,
         const css::uno::Sequence< sal_Int8 >& Data )
             throw(css::container::NoSuchElementException, css::uno::RuntimeException);
 
@@ -452,7 +452,7 @@ public:
         @onerror    -
     */
 
-    virtual sal_Bool SAL_CALL attachResource(const ::rtl::OUString& sURL,
+    virtual sal_Bool SAL_CALL attachResource(const OUString& sURL,
                                              const css::uno::Sequence< css::beans::PropertyValue >& aArgs)
         throw (css::uno::RuntimeException);
 
@@ -469,7 +469,7 @@ public:
         @onerror    -
     */
 
-    virtual ::rtl::OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getURL() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -613,7 +613,7 @@ public:
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL getControllers()
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames()
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames()
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& Frame )
@@ -621,7 +621,7 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::Exception                );
 
-    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController(const ::rtl::OUString&                                 ViewName       ,
+    virtual css::uno::Reference< css::frame::XController2 > SAL_CALL createViewController(const OUString&                                 ViewName       ,
                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& Arguments      ,
                                                                                           const css::uno::Reference< css::frame::XFrame >&       Frame          )
         throw (css::uno::RuntimeException         ,
@@ -806,7 +806,7 @@ public:
         @onerror    -
     */
 
-    virtual ::rtl::OUString SAL_CALL getLocation() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLocation() throw (css::uno::RuntimeException);
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -851,7 +851,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL storeAsURL(   const   ::rtl::OUString& sURL,
+    virtual void SAL_CALL storeAsURL(   const   OUString& sURL,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (css::io::IOException, css::uno::RuntimeException) ;
 
@@ -868,7 +868,7 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL storeToURL(   const   ::rtl::OUString& sURL,
+    virtual void SAL_CALL storeToURL(   const   OUString& sURL,
                                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (css::io::IOException, css::uno::RuntimeException);
 
@@ -920,10 +920,10 @@ public:
     //  XDocumentSubStorageSupplier
     //____________________________________________________________________________________________________
 
-    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode )
         throw ( css::uno::RuntimeException );
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames()
+    virtual css::uno::Sequence< OUString > SAL_CALL getDocumentSubStoragesNames()
         throw ( css::io::IOException, css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
@@ -1131,7 +1131,7 @@ public:
 
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
     //  XUnoTunnel
@@ -1140,19 +1140,19 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
 
     // css.frame.XModule
-    virtual void SAL_CALL setIdentifier(const ::rtl::OUString& sIdentifier)
+    virtual void SAL_CALL setIdentifier(const OUString& sIdentifier)
         throw (css::uno::RuntimeException);
 
     // css.frame.XModule
-    virtual ::rtl::OUString SAL_CALL getIdentifier()
+    virtual OUString SAL_CALL getIdentifier()
         throw (css::uno::RuntimeException);
 
     // css.frame.XTitle
-    virtual ::rtl::OUString SAL_CALL getTitle()
+    virtual OUString SAL_CALL getTitle()
         throw (css::uno::RuntimeException);
 
     // css.frame.XTitle
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle )
+    virtual void SAL_CALL setTitle( const OUString& sTitle )
         throw (css::uno::RuntimeException);
 
     // css.frame.XTitleChangeBroadcaster
@@ -1179,17 +1179,17 @@ public:
                css::uno::RuntimeException         );
 
     // css.frame.XUntitledNumbers
-    virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
+    virtual OUString SAL_CALL getUntitledPrefix()
         throw (css::uno::RuntimeException);
 
     // css.document.XDocumentRecovery
     virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave()
         throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
+    virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
         throw ( css::uno::RuntimeException,
                 css::io::IOException,
                 css::lang::WrappedTargetException );
-    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
+    virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const css::uno::Sequence< css::beans::PropertyValue >& i_MediaDescriptor )
         throw ( css::uno::RuntimeException,
                 css::io::IOException,
                 css::lang::WrappedTargetException );
@@ -1200,13 +1200,13 @@ public:
     //____________________________________________________________________________________________________
 
     // css::rdf::XNode:
-    virtual ::rtl::OUString SAL_CALL getStringValue()
+    virtual OUString SAL_CALL getStringValue()
         throw (css::uno::RuntimeException);
 
     // css::rdf::XURI:
-    virtual ::rtl::OUString SAL_CALL getNamespace()
+    virtual OUString SAL_CALL getNamespace()
         throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLocalName()
+    virtual OUString SAL_CALL getLocalName()
         throw (css::uno::RuntimeException);
 
     // css::rdf::XRepositorySupplier:
@@ -1234,7 +1234,7 @@ public:
             css::lang::IllegalArgumentException);
     virtual css::uno::Reference<
                 css::rdf::XURI> SAL_CALL
-        addMetadataFile(const ::rtl::OUString & i_rFileName,
+        addMetadataFile(const OUString & i_rFileName,
             const css::uno::Sequence<
                 css::uno::Reference< css::rdf::XURI >
                 > & i_rTypes)
@@ -1246,7 +1246,7 @@ public:
         importMetadataFile(::sal_Int16 i_Format,
             const css::uno::Reference<
                 css::io::XInputStream > & i_xInStream,
-            const ::rtl::OUString & i_rFileName,
+            const OUString & i_rFileName,
             const css::uno::Reference<
                 css::rdf::XURI > & i_xBaseURI,
             const css::uno::Sequence<
@@ -1265,12 +1265,12 @@ public:
             css::lang::IllegalArgumentException,
             css::container::NoSuchElementException);
     virtual void SAL_CALL addContentOrStylesFile(
-            const ::rtl::OUString & i_rFileName)
+            const OUString & i_rFileName)
         throw (css::uno::RuntimeException,
             css::lang::IllegalArgumentException,
             css::container::ElementExistException);
     virtual void SAL_CALL removeContentOrStylesFile(
-            const ::rtl::OUString & i_rFileName)
+            const OUString & i_rFileName)
         throw (css::uno::RuntimeException,
             css::lang::IllegalArgumentException,
             css::container::NoSuchElementException);
@@ -1323,7 +1323,7 @@ public:
 
     virtual void SAL_CALL checkOut(  ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL cancelCheckOut(  ) throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const rtl::OUString & rMessage  )
+    virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const OUString & rMessage  )
         throw ( css::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL isVersionable( ) throw ( css::uno::RuntimeException );
@@ -1331,7 +1331,7 @@ public:
     virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL canCheckIn( ) throw ( css::uno::RuntimeException );
 
-    sal_Bool getBoolPropertyValue( const rtl::OUString& rName ) throw ( css::uno::RuntimeException );
+    sal_Bool getBoolPropertyValue( const OUString& rName ) throw ( css::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  SfxListener
@@ -1406,7 +1406,7 @@ protected:
 
     /* returns a unique id for the model that is valid as long as the document
        is loaded. The id is not saved across document close/reload. */
-    rtl::OUString getRuntimeUID() const;
+    OUString getRuntimeUID() const;
 
     /* returns true if the document signatures are valid, otherwise false */
     sal_Bool hasValidSignatures() const;
@@ -1433,13 +1433,13 @@ private:
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( css::uno::RuntimeException );
     bool impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );
-    SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
+    SAL_DLLPRIVATE OUString GetMediumFilterName_Impl();
 
-    SAL_DLLPRIVATE void impl_store( const ::rtl::OUString& sURL,
+    SAL_DLLPRIVATE void impl_store( const OUString& sURL,
                         const   css::uno::Sequence< css::beans::PropertyValue >&   seqArguments    ,
                                 sal_Bool                    bSaveTo         ) ;
 
-    SAL_DLLPRIVATE void postEvent_Impl( const ::rtl::OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
+    SAL_DLLPRIVATE void postEvent_Impl( const OUString& aName, const css::uno::Reference< css::frame::XController2 >& xController = css::uno::Reference< css::frame::XController2 >() );
 
     SAL_DLLPRIVATE String getEventName_Impl( long nID );
        SAL_DLLPRIVATE bool QuerySaveSizeExceededModules( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler );

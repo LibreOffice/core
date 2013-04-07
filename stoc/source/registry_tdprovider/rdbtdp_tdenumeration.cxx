@@ -45,7 +45,7 @@ class IndividualConstantTypeDescriptionImpl:
 {
 public:
     IndividualConstantTypeDescriptionImpl(
-        rtl::OUString const & name, com::sun::star::uno::Any const & value,
+        OUString const & name, com::sun::star::uno::Any const & value,
         bool published):
         cppu::ImplInheritanceHelper1<
             stoc_rdbtdp::ConstantTypeDescriptionImpl,
@@ -77,7 +77,7 @@ namespace stoc_rdbtdp
 rtl::Reference< TypeDescriptionEnumerationImpl >
 TypeDescriptionEnumerationImpl::createInstance(
         const uno::Reference< container::XHierarchicalNameAccess > & xTDMgr,
-        const rtl::OUString & rModuleName,
+        const OUString & rModuleName,
         const uno::Sequence< uno::TypeClass > & rTypes,
         reflection::TypeDescriptionSearchDepth eDepth,
         const RegistryKeyList & rBaseKeys )
@@ -95,7 +95,7 @@ TypeDescriptionEnumerationImpl::createInstance(
 
     RegistryKeyList aModuleKeys;
 
-    rtl::OUString aKey( rModuleName.replace( '.', '/' ) );
+    OUString aKey( rModuleName.replace( '.', '/' ) );
 
     bool bOpenKeySucceeded = false;
 
@@ -272,7 +272,7 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xTD;
 
     throw container::NoSuchElementException(
-        rtl::OUString("No further elements in enumeration!"),
+        OUString("No further elements in enumeration!"),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -488,7 +488,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                         sal_uInt16 nFields = aReader.getFieldCount();
                         while ( nFields-- )
                         {
-                            rtl::OUStringBuffer aName(
+                            OUStringBuffer aName(
                                 aReader.getTypeName().replace( '/', '.' ) );
                             aName.appendAscii( "." );
                             aName.append( aReader.getFieldName( nFields ) );

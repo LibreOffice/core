@@ -27,7 +27,6 @@
 using namespace std;
 using namespace osl;
 
-using ::rtl::OUString;
 
 namespace jfw_plugin
 {
@@ -238,7 +237,7 @@ bool VendorBase::needsRestart() const
     return false;
 }
 
-int VendorBase::compareVersions(const rtl::OUString& /*sSecond*/) const
+int VendorBase::compareVersions(const OUString& /*sSecond*/) const
 {
     OSL_FAIL("[Java framework] VendorBase::compareVersions must be "
                "overridden in derived class.");

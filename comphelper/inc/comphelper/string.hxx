@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 
-// rtl::OUString helper functions that are not widespread or mature enough to
+// OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:
 namespace comphelper { namespace string {
 
@@ -44,7 +44,7 @@ namespace comphelper { namespace string {
 
     @return         true if rIn has one char and its equal to c
  */
-inline bool equals(const rtl::OString& rIn, sal_Char c)
+inline bool equals(const OString& rIn, sal_Char c)
 { return rIn.getLength() == 1 && rIn[0] == c; }
 
 /** Compare an OUString to a single char
@@ -54,12 +54,12 @@ inline bool equals(const rtl::OString& rIn, sal_Char c)
 
     @return         true if rIn has one char and its equal to c
  */
-inline bool equals(const rtl::OUString& rIn, sal_Unicode c)
+inline bool equals(const OUString& rIn, sal_Unicode c)
 { return rIn.getLength() == 1 && rIn[0] == c; }
 
 /** Removes all occurrences of a character from within the source string
 
-    @deprecated  Use rtl::OString::replaceAll(rtl::OString(c), rtl::OString())
+    @deprecated  Use OString::replaceAll(OString(c), OString())
     instead.
 
     @param rIn      The input OString
@@ -67,23 +67,23 @@ inline bool equals(const rtl::OUString& rIn, sal_Unicode c)
 
     @return         The resulting OString
  */
-inline rtl::OString remove(const rtl::OString &rIn,
+inline OString remove(const OString &rIn,
     sal_Char c)
-{ return rIn.replaceAll(rtl::OString(c), rtl::OString()); }
+{ return rIn.replaceAll(OString(c), OString()); }
 
 /** Removes all occurrences of a character from within the source string
 
     @deprecated  Use
-    rtl::OUString::replaceAll(rtl::OUString(c), rtl::OUString()) instead.
+    OUString::replaceAll(OUString(c), OUString()) instead.
 
     @param rIn      The input OUString
     @param c        The character to be removed
 
     @return         The resulting OUString
  */
-inline rtl::OUString remove(const rtl::OUString &rIn,
+inline OUString remove(const OUString &rIn,
     sal_Unicode c)
-{ return rIn.replaceAll(rtl::OUString(c), rtl::OUString()); }
+{ return rIn.replaceAll(OUString(c), OUString()); }
 
 /** Strips occurrences of a character from the start of the source string
 
@@ -92,7 +92,7 @@ inline rtl::OUString remove(const rtl::OUString &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC rtl::OString stripStart(const rtl::OString &rIn,
+COMPHELPER_DLLPUBLIC OString stripStart(const OString &rIn,
     sal_Char c);
 
 /** Strips occurrences of a character from the start of the source string
@@ -102,7 +102,7 @@ COMPHELPER_DLLPUBLIC rtl::OString stripStart(const rtl::OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC rtl::OUString stripStart(const rtl::OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString stripStart(const OUString &rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -112,7 +112,7 @@ COMPHELPER_DLLPUBLIC rtl::OUString stripStart(const rtl::OUString &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC rtl::OString stripEnd(const rtl::OString &rIn,
+COMPHELPER_DLLPUBLIC OString stripEnd(const OString &rIn,
     sal_Char c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -122,7 +122,7 @@ COMPHELPER_DLLPUBLIC rtl::OString stripEnd(const rtl::OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC rtl::OUString stripEnd(const rtl::OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString stripEnd(const OUString &rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -132,7 +132,7 @@ COMPHELPER_DLLPUBLIC rtl::OUString stripEnd(const rtl::OUString &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC rtl::OString strip(const rtl::OString &rIn,
+COMPHELPER_DLLPUBLIC OString strip(const OString &rIn,
     sal_Char c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -142,12 +142,12 @@ COMPHELPER_DLLPUBLIC rtl::OString strip(const rtl::OString &rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC rtl::OUString strip(const rtl::OUString &rIn,
+COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
     sal_Unicode c);
 
 /** Returns a token in an OString
 
-    @deprecated  Use rtl::OString::getToken(nToken, cTok) instead.
+    @deprecated  Use OString::getToken(nToken, cTok) instead.
 
   @param    rIn         the input OString
   @param    nToken      the number of the token to return
@@ -155,7 +155,7 @@ COMPHELPER_DLLPUBLIC rtl::OUString strip(const rtl::OUString &rIn,
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
-inline rtl::OString getToken(const rtl::OString &rIn,
+inline OString getToken(const OString &rIn,
     sal_Int32 nToken, sal_Char cTok) SAL_THROW(())
 {
     return rIn.getToken(nToken, cTok);
@@ -163,7 +163,7 @@ inline rtl::OString getToken(const rtl::OString &rIn,
 
 /** Returns a token in an OUString
 
-    @deprecated  Use rtl::OUString::getToken(nToken, cTok) instead.
+    @deprecated  Use OUString::getToken(nToken, cTok) instead.
 
   @param    rIn         the input OUString
   @param    nToken      the number of the token to return
@@ -171,7 +171,7 @@ inline rtl::OString getToken(const rtl::OString &rIn,
   @return   the token   if token is negative or doesn't exist an empty token
                         is returned
 */
-inline rtl::OUString getToken(const rtl::OUString &rIn,
+inline OUString getToken(const OUString &rIn,
     sal_Int32 nToken, sal_Unicode cTok) SAL_THROW(())
 {
     return rIn.getToken(nToken, cTok);
@@ -183,7 +183,7 @@ inline rtl::OUString getToken(const rtl::OUString &rIn,
   @param    cTok    the character which seperate the tokens.
   @return   the number of tokens
 */
-COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char cTok);
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok);
 
 /** Returns number of tokens in an OUString
 
@@ -191,21 +191,21 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char c
   @param    cTok    the character which seperate the tokens.
   @return   the number of tokens
 */
-COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok);
+COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok);
 
 /** Reverse an OUString
 
   @param    rIn     the input OUString
   @return   the reversed input
 */
-COMPHELPER_DLLPUBLIC rtl::OUString reverseString(const rtl::OUString &rStr);
+COMPHELPER_DLLPUBLIC OUString reverseString(const OUString &rStr);
 
 /** Reverse an OString
 
   @param    rIn     the input OString
   @return   the reversed input
 */
-COMPHELPER_DLLPUBLIC rtl::OString reverseString(const rtl::OString &rStr);
+COMPHELPER_DLLPUBLIC OString reverseString(const OString &rStr);
 
 
 namespace detail
@@ -230,14 +230,14 @@ namespace detail
 
     @return         rBuf;
  */
-COMPHELPER_DLLPUBLIC inline rtl::OStringBuffer& truncateToLength(
-    rtl::OStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+COMPHELPER_DLLPUBLIC inline OStringBuffer& truncateToLength(
+    OStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
 {
     return detail::truncateToLength(rBuffer, nLength);
 }
 
-COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& truncateToLength(
-    rtl::OUStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+COMPHELPER_DLLPUBLIC inline OUStringBuffer& truncateToLength(
+    OUStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
 {
     return detail::truncateToLength(rBuffer, nLength);
 }
@@ -271,15 +271,15 @@ namespace detail
 
     @return         rBuf;
  */
-COMPHELPER_DLLPUBLIC inline rtl::OStringBuffer& padToLength(
-    rtl::OStringBuffer& rBuffer, sal_Int32 nLength,
+COMPHELPER_DLLPUBLIC inline OStringBuffer& padToLength(
+    OStringBuffer& rBuffer, sal_Int32 nLength,
     sal_Char cFill = '\0') SAL_THROW(())
 {
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
-COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& padToLength(
-    rtl::OUStringBuffer& rBuffer, sal_Int32 nLength,
+COMPHELPER_DLLPUBLIC inline OUStringBuffer& padToLength(
+    OUStringBuffer& rBuffer, sal_Int32 nLength,
     sal_Unicode cFill = '\0') SAL_THROW(())
 {
     return detail::padToLength(rBuffer, nLength, cFill);
@@ -293,7 +293,7 @@ COMPHELPER_DLLPUBLIC inline rtl::OUStringBuffer& padToLength(
     @return position of first occurrence of any of the elements of pChars
             or -1 if none of the code units occur in the string
  */
-COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(rtl::OUString const& rIn,
+COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(OUString const& rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos = 0);
 
 /** Convert a sequence of strings to a single comma separated string.
@@ -305,8 +305,8 @@ COMPHELPER_DLLPUBLIC sal_Int32 indexOfAny(rtl::OUString const& rIn,
     @return         A single string containing the concatenation of the given
                     list, interspersed with the string ", ".
  */
-COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & i_rSeq);
+COMPHELPER_DLLPUBLIC OUString convertCommaSeparated(
+    ::com::sun::star::uno::Sequence< OUString > const & i_rSeq);
 
 /** Convert a decimal string to a number.
 
@@ -319,7 +319,7 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
     gives unspecified results
 
     If your string is guaranteed to contain only ASCII digit
-    use rtl::OUString::toInt32 instead.
+    use OUString::toInt32 instead.
 
     @param str  The string to convert containing only decimal
                 digit codepoints.
@@ -327,7 +327,7 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
     @return     The value of the string as an int32.
  */
 COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
-    ::rtl::OUString const & str );
+    OUString const & str );
 
 /** Convert a single comma separated string to a sequence of strings.
 
@@ -338,8 +338,8 @@ COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
     @return         A sequence of strings resulting from splitting the given
                     string at ',' tokens and stripping whitespace.
  */
-COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
-    convertCommaSeparated( ::rtl::OUString const & i_rString );
+COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString >
+    convertCommaSeparated( OUString const & i_rString );
 
 /**
   Compares two strings using natural order.
@@ -357,7 +357,7 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
             < 0 - if this string is less than the string argument
             > 0 - if this string is greater than the string argument
 */
-COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const ::rtl::OUString &rLHS, const ::rtl::OUString &rRHS,
+COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const OUString &rLHS, const OUString &rRHS,
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > &rCollator,
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > &rBI,
     const ::com::sun::star::lang::Locale &rLocale );
@@ -372,7 +372,7 @@ public:
     NaturalStringSorter(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext,
         const ::com::sun::star::lang::Locale &rLocale);
-    sal_Int32 compare(const rtl::OUString &rLHS, const rtl::OUString &rRHS) const
+    sal_Int32 compare(const OUString &rLHS, const OUString &rRHS) const
     {
         return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);
     }
@@ -387,7 +387,7 @@ public:
                     the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
 
 /** Determine if an OUString contains solely ASCII numeric digits
 
@@ -397,7 +397,7 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OString &rString);
                     the ASCII '0'-'9' range
                     true otherwise, including for empty string
  */
-COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const rtl::OUString &rString);
+COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
 
 COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
 {
@@ -437,9 +437,9 @@ struct COMPHELPER_DLLPUBLIC ConstAsciiString
     const sal_Char* ascii;
     sal_Int32       length;
 
-    operator rtl::OUString() const
+    operator OUString() const
     {
-        return rtl::OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
+        return OUString(ascii, length, RTL_TEXTENCODING_ASCII_US);
     }
 };
 

@@ -28,8 +28,6 @@
 
 using namespace pdfi;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 StyleContainer::StyleContainer() :
     m_nNextId( 1 )
@@ -75,10 +73,10 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     return nRet;
 }
 
-sal_Int32 StyleContainer::getStandardStyleId( const rtl::OString& rName )
+sal_Int32 StyleContainer::getStandardStyleId( const OString& rName )
 {
     PropertyMap aProps;
-    aProps[ "style:family" ] = rtl::OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
+    aProps[ "style:family" ] = OStringToOUString( rName, RTL_TEXTENCODING_UTF8 );
     aProps[ "style:name" ] = "standard";
 
     Style aStyle( "style:style", aProps );

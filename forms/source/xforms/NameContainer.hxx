@@ -40,7 +40,7 @@ template<class T>
 class NameContainer : public NameContainer_t
 {
 protected:
-    typedef std::map<rtl::OUString,T> map_t;
+    typedef std::map<OUString,T> map_t;
     map_t maItems;
 
 
@@ -49,38 +49,38 @@ protected:
         return ! maItems.empty();
     }
 
-    typename map_t::const_iterator findItem( const rtl::OUString& rName )
+    typename map_t::const_iterator findItem( const OUString& rName )
     {
         return maItems.find( rName );
     }
 
-    bool hasItem( const rtl::OUString& rName )
+    bool hasItem( const OUString& rName )
     {
         return findItem( rName ) != maItems.end();
     }
 
-    T getItem( const rtl::OUString& rName )
+    T getItem( const OUString& rName )
     {
         OSL_ENSURE( hasItem( rName ), "can't get non-existant item" );
         return maItems[ rName ];
     }
 
 
-    void replace( const rtl::OUString& rName,
+    void replace( const OUString& rName,
                   const T& aElement )
     {
         OSL_ENSURE( hasItem( rName ), "unknown item" );
         maItems[ rName ] = aElement;
     }
 
-    void insert( const rtl::OUString& rName,
+    void insert( const OUString& rName,
                  const T& aElement )
     {
         OSL_ENSURE( ! hasItem( rName ), "item already in set" );
         maItems[ rName ] = aElement;
     }
 
-    void remove( const rtl::OUString& rName )
+    void remove( const OUString& rName )
     {
         OSL_ENSURE( hasItem( rName ), "item not in set" );
         maItems.erase( rName );
@@ -114,7 +114,7 @@ public:
     //
 
     virtual com::sun::star::uno::Any SAL_CALL getByName(
-        const rtl::OUString& rName )
+        const OUString& rName )
         throw( com::sun::star::container::NoSuchElementException,
                com::sun::star::lang::WrappedTargetException,
                com::sun::star::uno::RuntimeException )
@@ -126,12 +126,12 @@ public:
             return com::sun::star::uno::makeAny( aIter->second );
     }
 
-    virtual com::sun::star::uno::Sequence<rtl::OUString> SAL_CALL getElementNames()
+    virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getElementNames()
         throw( com::sun::star::uno::RuntimeException )
     {
-        com::sun::star::uno::Sequence<rtl::OUString> aSequence( maItems.size() );
+        com::sun::star::uno::Sequence<OUString> aSequence( maItems.size() );
         typename map_t::const_iterator aIter = maItems.begin();
-        rtl::OUString* pStrings = aSequence.getArray();
+        OUString* pStrings = aSequence.getArray();
         while( aIter != maItems.end() )
         {
             *pStrings = aIter->first;
@@ -144,7 +144,7 @@ public:
     }
 
     virtual sal_Bool SAL_CALL hasByName(
-        const rtl::OUString& rName )
+        const OUString& rName )
         throw( com::sun::star::uno::RuntimeException )
     {
         return hasItem( rName );
@@ -156,7 +156,7 @@ public:
     //
 
     virtual void SAL_CALL replaceByName(
-        const rtl::OUString& rName,
+        const OUString& rName,
         const com::sun::star::uno::Any& aElement )
         throw( com::sun::star::lang::IllegalArgumentException,
                com::sun::star::container::NoSuchElementException,
@@ -179,7 +179,7 @@ public:
     //
 
     virtual void SAL_CALL insertByName(
-        const rtl::OUString& rName,
+        const OUString& rName,
         const com::sun::star::uno::Any& aElement )
         throw( com::sun::star::lang::IllegalArgumentException,
                com::sun::star::container::ElementExistException,
@@ -197,7 +197,7 @@ public:
     }
 
     virtual void SAL_CALL removeByName(
-        const rtl::OUString& rName )
+        const OUString& rName )
         throw( com::sun::star::container::NoSuchElementException,
                com::sun::star::lang::WrappedTargetException,
                com::sun::star::uno::RuntimeException)

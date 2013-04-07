@@ -29,33 +29,33 @@
 
 namespace test {
 
-rtl::OUString toAbsoluteFileUrl(rtl::OUString const & relativePathname) {
-    rtl::OUString cwd;
+OUString toAbsoluteFileUrl(OUString const & relativePathname) {
+    OUString cwd;
     oslProcessError e1 = osl_getProcessWorkingDir(&cwd.pData);
     if (e1 != osl_Process_E_None) {
         throw css::uno::RuntimeException(
-            (rtl::OUString("osl_getProcessWorkingDir failed with ") +
+            (OUString("osl_getProcessWorkingDir failed with ") +
              OUString::number(e1)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString url;
+    OUString url;
     osl::FileBase::RC e2 = osl::FileBase::getFileURLFromSystemPath(
         relativePathname, url);
     if (e2 != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            (rtl::OUString("osl::FileBase::getFileURLFromSystemPath(") +
+            (OUString("osl::FileBase::getFileURLFromSystemPath(") +
              relativePathname +
-             rtl::OUString(") failed with ") +
+             OUString(") failed with ") +
              OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::OUString absUrl;
+    OUString absUrl;
     e2 = osl::FileBase::getAbsoluteFileURL(cwd, url, absUrl);
     if (e2 != osl::FileBase::E_None) {
         throw css::uno::RuntimeException(
-            (rtl::OUString("osl::FileBase::getAbsoluteFileURL(") +
-             cwd + rtl::OUString(", ") + url +
-             rtl::OUString(") failed with ") +
+            (OUString("osl::FileBase::getAbsoluteFileURL(") +
+             cwd + OUString(", ") + url +
+             OUString(") failed with ") +
              OUString::number(e2)),
             css::uno::Reference< css::uno::XInterface >());
     }

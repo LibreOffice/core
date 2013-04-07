@@ -27,8 +27,8 @@
 struct SvSlotElement
 {
     SvMetaSlotRef   xSlot;
-    rtl::OString aPrefix;
-    SvSlotElement( SvMetaSlot * pS, const rtl::OString& rPrefix )
+    OString aPrefix;
+    SvSlotElement( SvMetaSlot * pS, const OString& rPrefix )
     : xSlot( pS )
     , aPrefix( rPrefix )
     {
@@ -43,15 +43,15 @@ SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
     SvBOOL                      aAutomation;
-    rtl::OString                aPrefix;
+    OString                aPrefix;
     SvMetaClassRef              xClass;
 public:
             SV_DECL_PERSIST1( SvClassElement, SvPersistBase, 1 )
             SvClassElement();
 
-    void            SetPrefix( const rtl::OString& rPrefix )
+    void            SetPrefix( const OString& rPrefix )
                     { aPrefix = rPrefix; }
-    const rtl::OString&  GetPrefix() const
+    const OString&  GetPrefix() const
                     { return aPrefix; }
 
     void            SetAutomation( sal_Bool rAutomation )
@@ -81,21 +81,21 @@ class SvMetaClass : public SvMetaType
 
     sal_Bool                TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                      SvMetaAttribute & rAttr ) const;
-    void                WriteSlotStubs( const rtl::OString& rShellName,
+    void                WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
                                         ByteStringList & rList,
                                         SvStream & rOutStm );
     sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
                                             SvStream & rOutStm );
-    sal_uInt16              WriteSlots( const rtl::OString& rShellName, sal_uInt16 nCount,
+    sal_uInt16              WriteSlots( const OString& rShellName, sal_uInt16 nCount,
                                     SvSlotElementList & rSlotList,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
 
     void                InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                                     SvMetaClassList & rClassList,
-                                    const rtl::OString& rPrefix, SvIdlDataBase& rBase );
+                                    const OString& rPrefix, SvIdlDataBase& rBase );
 
 protected:
     virtual void    ReadAttributesSvIdl( SvIdlDataBase & rBase,

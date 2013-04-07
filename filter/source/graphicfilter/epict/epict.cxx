@@ -310,7 +310,7 @@ void PictWriter::WriteRGBColor(const Color & rColor)
 
 void PictWriter::WriteString( const String & rString )
 {
-    rtl::OString aString(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
+    OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));
     sal_Int32 nLen = aString.getLength();
     if ( nLen > 255 )
         nLen = 255;
@@ -695,7 +695,7 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
 
     if (bDstFontNameValid==sal_False || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
     {
-        rtl::OString aString(rtl::OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
+        OString aString(OUStringToOString(rFont.GetName(), osl_getThreadTextEncoding()));
         sal_uInt16 nFontNameLen = aString.getLength();
         if ( nFontNameLen )
         {
@@ -1337,7 +1337,7 @@ void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const sal
                 if ( i > 0 )
                     aPt.X() += pDXAry[ i - 1 ];
 
-                WriteOpcode_Text( aPt, rtl::OUString( c ), bDelta );
+                WriteOpcode_Text( aPt, OUString( c ), bDelta );
                 bDelta = sal_True;
             }
         }
@@ -2205,7 +2205,7 @@ sal_Bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStrea
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }

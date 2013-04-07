@@ -76,16 +76,16 @@ namespace stringresource
 // =============================================================================
 
 // component operations
-static Sequence< ::rtl::OUString > getSupportedServiceNames_StringResourceImpl()
+static Sequence< OUString > getSupportedServiceNames_StringResourceImpl()
 {
-    Sequence< ::rtl::OUString > names(1);
-    names[0] = ::rtl::OUString( "com.sun.star.resource.StringResource" );
+    Sequence< OUString > names(1);
+    names[0] = OUString( "com.sun.star.resource.StringResource" );
     return names;
 }
 
-static ::rtl::OUString getImplementationName_StringResourceImpl()
+static OUString getImplementationName_StringResourceImpl()
 {
-    return ::rtl::OUString( "com.sun.star.comp.scripting.StringResource" );
+    return OUString( "com.sun.star.comp.scripting.StringResource" );
 }
 
 static Reference< XInterface > SAL_CALL create_StringResourceImpl(
@@ -131,23 +131,23 @@ StringResourceImpl::~StringResourceImpl()
 // =============================================================================
 // XServiceInfo
 
-::rtl::OUString StringResourceImpl::getImplementationName(  ) throw (RuntimeException)
+OUString StringResourceImpl::getImplementationName(  ) throw (RuntimeException)
 {
     return getImplementationName_StringResourceImpl();
 }
 
-sal_Bool StringResourceImpl::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool StringResourceImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
     return pNames != pEnd;
 }
 
-Sequence< ::rtl::OUString > StringResourceImpl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > StringResourceImpl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return getSupportedServiceNames_StringResourceImpl();
 }
@@ -182,11 +182,11 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
 // =============================================================================
 // XStringResourceResolver
 
-::rtl::OUString StringResourceImpl::implResolveString
-    ( const ::rtl::OUString& ResourceID, LocaleItem* pLocaleItem )
+OUString StringResourceImpl::implResolveString
+    ( const OUString& ResourceID, LocaleItem* pLocaleItem )
         throw (::com::sun::star::resource::MissingResourceException)
 {
-    ::rtl::OUString aRetStr;
+    OUString aRetStr;
     bool bSuccess = false;
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
     {
@@ -199,21 +199,21 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     }
     if( !bSuccess )
     {
-        ::rtl::OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
+        OUString errorMsg("StringResourceImpl: No entry for ResourceID: ");
         errorMsg = errorMsg.concat( ResourceID );
         throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
     }
     return aRetStr;
 }
 
-::rtl::OUString StringResourceImpl::resolveString( const ::rtl::OUString& ResourceID )
+OUString StringResourceImpl::resolveString( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return implResolveString( ResourceID, m_pCurrentLocaleItem );
 }
 
-::rtl::OUString StringResourceImpl::resolveStringForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+OUString StringResourceImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
     throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -221,7 +221,7 @@ void StringResourceImpl::removeModifyListener( const Reference< XModifyListener 
     return implResolveString( ResourceID, pLocaleItem );
 }
 
-sal_Bool StringResourceImpl::implHasEntryForId( const ::rtl::OUString& ResourceID, LocaleItem* pLocaleItem )
+sal_Bool StringResourceImpl::implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem )
 {
     bool bSuccess = false;
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
@@ -233,14 +233,14 @@ sal_Bool StringResourceImpl::implHasEntryForId( const ::rtl::OUString& ResourceI
     return bSuccess;
 }
 
-sal_Bool StringResourceImpl::hasEntryForId( const ::rtl::OUString& ResourceID )
+sal_Bool StringResourceImpl::hasEntryForId( const OUString& ResourceID )
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return implHasEntryForId( ResourceID, m_pCurrentLocaleItem );
 }
 
-sal_Bool StringResourceImpl::hasEntryForIdAndLocale( const ::rtl::OUString& ResourceID,
+sal_Bool StringResourceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
         throw (RuntimeException)
 {
@@ -249,21 +249,21 @@ sal_Bool StringResourceImpl::hasEntryForIdAndLocale( const ::rtl::OUString& Reso
     return implHasEntryForId( ResourceID, pLocaleItem );
 }
 
-Sequence< ::rtl::OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* pLocaleItem )
+Sequence< OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* pLocaleItem )
 {
-    Sequence< ::rtl::OUString > aIDSeq( 0 );
+    Sequence< OUString > aIDSeq( 0 );
     if( pLocaleItem && loadLocale( pLocaleItem ) )
     {
         const IdToStringMap& rHashMap = pLocaleItem->m_aIdToStringMap;
         sal_Int32 nResourceIDCount = rHashMap.size();
         aIDSeq.realloc( nResourceIDCount );
-        ::rtl::OUString* pStrings = aIDSeq.getArray();
+        OUString* pStrings = aIDSeq.getArray();
 
         IdToStringMap::const_iterator it;
         int iTarget = 0;
         for( it = rHashMap.begin(); it != rHashMap.end(); ++it )
         {
-            ::rtl::OUString aStr = (*it).first;
+            OUString aStr = (*it).first;
             pStrings[iTarget] = aStr;
             iTarget++;
         }
@@ -271,7 +271,7 @@ Sequence< ::rtl::OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* 
     return aIDSeq;
 }
 
-Sequence< ::rtl::OUString > StringResourceImpl::getResourceIDsForLocale
+Sequence< OUString > StringResourceImpl::getResourceIDsForLocale
     ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -279,7 +279,7 @@ Sequence< ::rtl::OUString > StringResourceImpl::getResourceIDsForLocale
     return implGetResourceIDs( pLocaleItem );
 }
 
-Sequence< ::rtl::OUString > StringResourceImpl::getResourceIDs(  )
+Sequence< OUString > StringResourceImpl::getResourceIDs(  )
     throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -335,7 +335,7 @@ void StringResourceImpl::implCheckReadOnly( const sal_Char* pExceptionMsg )
 {
     if( m_bReadOnly )
     {
-        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( pExceptionMsg );
+        OUString errorMsg = OUString::createFromAscii( pExceptionMsg );
         throw NoSupportException( errorMsg, Reference< XInterface >() );
     }
 }
@@ -399,8 +399,8 @@ void StringResourceImpl::setDefaultLocale( const Locale& locale )
     }
 }
 
-void StringResourceImpl::implSetString( const ::rtl::OUString& ResourceID,
-    const ::rtl::OUString& Str, LocaleItem* pLocaleItem )
+void StringResourceImpl::implSetString( const OUString& ResourceID,
+    const OUString& Str, LocaleItem* pLocaleItem )
 {
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
     {
@@ -420,7 +420,7 @@ void StringResourceImpl::implSetString( const ::rtl::OUString& ResourceID,
     }
 }
 
-void StringResourceImpl::setString( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str )
+void StringResourceImpl::setString( const OUString& ResourceID, const OUString& Str )
     throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -429,7 +429,7 @@ void StringResourceImpl::setString( const ::rtl::OUString& ResourceID, const ::r
 }
 
 void StringResourceImpl::setStringForLocale
-    ( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str, const Locale& locale )
+    ( const OUString& ResourceID, const OUString& Str, const Locale& locale )
         throw (NoSupportException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -438,7 +438,7 @@ void StringResourceImpl::setStringForLocale
     implSetString( ResourceID, Str, pLocaleItem );
 }
 
-void StringResourceImpl::implRemoveId( const ::rtl::OUString& ResourceID, LocaleItem* pLocaleItem )
+void StringResourceImpl::implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem )
     throw (::com::sun::star::resource::MissingResourceException)
 {
     if( pLocaleItem != NULL && loadLocale( pLocaleItem ) )
@@ -447,7 +447,7 @@ void StringResourceImpl::implRemoveId( const ::rtl::OUString& ResourceID, Locale
         IdToStringMap::iterator it = rHashMap.find( ResourceID );
         if( it == rHashMap.end() )
         {
-            ::rtl::OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
+            OUString errorMsg("StringResourceImpl: No entries for ResourceID: ");
             errorMsg = errorMsg.concat( ResourceID );
             throw ::com::sun::star::resource::MissingResourceException( errorMsg, Reference< XInterface >() );
         }
@@ -457,7 +457,7 @@ void StringResourceImpl::implRemoveId( const ::rtl::OUString& ResourceID, Locale
     }
 }
 
-void StringResourceImpl::removeId( const ::rtl::OUString& ResourceID )
+void StringResourceImpl::removeId( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -465,7 +465,7 @@ void StringResourceImpl::removeId( const ::rtl::OUString& ResourceID )
     implRemoveId( ResourceID, m_pCurrentLocaleItem );
 }
 
-void StringResourceImpl::removeIdForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+void StringResourceImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -482,7 +482,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
 
     if( getItemForLocale( locale, false ) != NULL )
     {
-        ::rtl::OUString errorMsg("StringResourceImpl: locale already exists");
+        OUString errorMsg("StringResourceImpl: locale already exists");
         throw ElementExistException( errorMsg, Reference< XInterface >() );
     }
 
@@ -505,8 +505,8 @@ void StringResourceImpl::newLocale( const Locale& locale )
             IdToStringMap::const_iterator it;
             for( it = rSourceMap.begin(); it != rSourceMap.end(); ++it )
             {
-                ::rtl::OUString aId  = (*it).first;
-                ::rtl::OUString aStr = (*it).second;
+                OUString aId  = (*it).first;
+                OUString aStr = (*it).second;
                 rTargetMap[ aId ] = aStr;
             }
 
@@ -515,7 +515,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
             IdToIndexMap::const_iterator it_index;
             for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); ++it_index )
             {
-                ::rtl::OUString aId  = (*it_index).first;
+                OUString aId  = (*it_index).first;
                 sal_Int32 nIndex = (*it_index).second;
                 rTargetIndexMap[ aId ] = nIndex;
             }
@@ -535,7 +535,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
     }
     else
     {
-        ::rtl::OUString errorMsg("StringResourceImpl: Invalid locale");
+        OUString errorMsg("StringResourceImpl: Invalid locale");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 }
@@ -607,7 +607,7 @@ void StringResourceImpl::removeLocale( const Locale& locale )
     }
 }
 
-void StringResourceImpl::implScanIdForNumber( const ::rtl::OUString& ResourceID )
+void StringResourceImpl::implScanIdForNumber( const OUString& ResourceID )
 {
     const sal_Unicode* pSrc = ResourceID.getStr();
     sal_Int32 nLen = ResourceID.getLength();
@@ -640,7 +640,7 @@ sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 
     if( m_nNextUniqueNumericId < UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
-        ::rtl::OUString errorMsg("getUniqueNumericId: Extended sal_Int32 range");
+        OUString errorMsg("getUniqueNumericId: Extended sal_Int32 range");
         throw NoSupportException( errorMsg, Reference< XInterface >() );
     }
     return m_nNextUniqueNumericId;
@@ -675,7 +675,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 
     if( pRetItem == NULL && bException )
     {
-        ::rtl::OUString errorMsg("StringResourceImpl: Invalid locale");
+        OUString errorMsg("StringResourceImpl: Invalid locale");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
     return pRetItem;
@@ -766,7 +766,7 @@ Reference< XMultiComponentFactory > StringResourceImpl::getMultiComponentFactory
         if( !xSMgr.is() )
         {
             throw RuntimeException(
-                ::rtl::OUString( "StringResourceImpl::getMultiComponentFactory: Couldn't instantiate MultiComponentFactory"  ),
+                OUString( "StringResourceImpl::getMultiComponentFactory: Couldn't instantiate MultiComponentFactory"  ),
                     Reference< XInterface >() );
         }
         m_xMCF = xSMgr;
@@ -794,15 +794,15 @@ StringResourcePersistenceImpl::~StringResourcePersistenceImpl()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString StringResourcePersistenceImpl::getImplementationName(  )
+OUString StringResourcePersistenceImpl::getImplementationName(  )
     throw (RuntimeException)
 {
-    return ::rtl::OUString( "com.sun.star.comp.scripting.StringResourceWithLocation");
+    return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation");
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool StringResourcePersistenceImpl::supportsService( const ::rtl::OUString& rServiceName )
+sal_Bool StringResourcePersistenceImpl::supportsService( const OUString& rServiceName )
     throw (RuntimeException)
 {
     return StringResourceImpl::supportsService( rServiceName );
@@ -810,7 +810,7 @@ sal_Bool StringResourcePersistenceImpl::supportsService( const ::rtl::OUString& 
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
+Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
     throw (RuntimeException)
 {
     return StringResourceImpl::getSupportedServiceNames();
@@ -820,7 +820,7 @@ Sequence< ::rtl::OUString > StringResourcePersistenceImpl::getSupportedServiceNa
 // XInitialization base functionality for derived classes
 // -----------------------------------------------------------------------------
 
-static ::rtl::OUString aNameBaseDefaultStr("strings");
+static OUString aNameBaseDefaultStr("strings");
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
     ( const Sequence< Any >& aArguments )
@@ -829,7 +829,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bReadOnlyOk = (aArguments[1] >>= m_bReadOnly);
     if( !bReadOnlyOk )
     {
-        ::rtl::OUString errorMsg("XInitialization::initialize: Expected ReadOnly flag");
+        OUString errorMsg("XInitialization::initialize: Expected ReadOnly flag");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 1 );
     }
 
@@ -837,14 +837,14 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bLocaleOk = (aArguments[2] >>= aCurrentLocale);
     if( !bLocaleOk )
     {
-        ::rtl::OUString errorMsg("XInitialization::initialize: Expected Locale");
+        OUString errorMsg("XInitialization::initialize: Expected Locale");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 2 );
     }
 
     bool bNameBaseOk = (aArguments[3] >>= m_aNameBase);
     if( !bNameBaseOk )
     {
-        ::rtl::OUString errorMsg("XInitialization::initialize: Expected NameBase string");
+        OUString errorMsg("XInitialization::initialize: Expected NameBase string");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 3 );
     }
     if( m_aNameBase.isEmpty() )
@@ -853,7 +853,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
     bool bCommentOk = (aArguments[4] >>= m_aComment);
     if( !bCommentOk )
     {
-        ::rtl::OUString errorMsg("XInitialization::initialize: Expected Comment string");
+        OUString errorMsg("XInitialization::initialize: Expected Comment string");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 4 );
     }
 
@@ -880,22 +880,22 @@ void StringResourcePersistenceImpl::removeModifyListener( const Reference< XModi
 }
 
 // XStringResourceResolver
-::rtl::OUString StringResourcePersistenceImpl::resolveString( const ::rtl::OUString& ResourceID )
+OUString StringResourcePersistenceImpl::resolveString( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
-::rtl::OUString StringResourcePersistenceImpl::resolveStringForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+OUString StringResourcePersistenceImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
     throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourcePersistenceImpl::hasEntryForId( const ::rtl::OUString& ResourceID )
+sal_Bool StringResourcePersistenceImpl::hasEntryForId( const OUString& ResourceID )
     throw (RuntimeException)
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourcePersistenceImpl::hasEntryForIdAndLocale( const ::rtl::OUString& ResourceID,
+sal_Bool StringResourcePersistenceImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
         throw (RuntimeException)
 {
@@ -933,33 +933,33 @@ void StringResourcePersistenceImpl::setDefaultLocale( const Locale& locale )
 {
     StringResourceImpl::setDefaultLocale( locale );
 }
-Sequence< ::rtl::OUString > StringResourcePersistenceImpl::getResourceIDs(  )
+Sequence< OUString > StringResourcePersistenceImpl::getResourceIDs(  )
     throw (RuntimeException)
 {
     return StringResourceImpl::getResourceIDs();
 }
-void StringResourcePersistenceImpl::setString( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str )
+void StringResourcePersistenceImpl::setString( const OUString& ResourceID, const OUString& Str )
     throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setString( ResourceID, Str );
 }
 void StringResourcePersistenceImpl::setStringForLocale
-    ( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str, const Locale& locale )
+    ( const OUString& ResourceID, const OUString& Str, const Locale& locale )
         throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
-Sequence< ::rtl::OUString > StringResourcePersistenceImpl::getResourceIDsForLocale
+Sequence< OUString > StringResourcePersistenceImpl::getResourceIDsForLocale
     ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
 }
-void StringResourcePersistenceImpl::removeId( const ::rtl::OUString& ResourceID )
+void StringResourcePersistenceImpl::removeId( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeId( ResourceID );
 }
-void StringResourcePersistenceImpl::removeIdForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+void StringResourcePersistenceImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
@@ -996,14 +996,14 @@ sal_Bool StringResourcePersistenceImpl::isModified(  )
     return m_bModified;
 }
 
-void StringResourcePersistenceImpl::setComment( const ::rtl::OUString& Comment )
+void StringResourcePersistenceImpl::setComment( const OUString& Comment )
     throw (::com::sun::star::uno::RuntimeException)
 {
     m_aComment = Comment;
 }
 
 void StringResourcePersistenceImpl::storeToStorage( const Reference< XStorage >& Storage,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment )
+    const OUString& NameBase, const OUString& Comment )
         throw (Exception, RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1015,8 +1015,8 @@ void StringResourcePersistenceImpl::storeToStorage( const Reference< XStorage >&
 
 void StringResourcePersistenceImpl::implStoreAtStorage
 (
-    const ::rtl::OUString& aNameBase,
-    const ::rtl::OUString& aComment,
+    const OUString& aNameBase,
+    const OUString& aComment,
     const Reference< ::com::sun::star::embed::XStorage >& Storage,
     bool bUsedForStore,
     bool bStoreAll
@@ -1032,8 +1032,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem != NULL )
             {
-                ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += ::rtl::OUString(".properties");
+                OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
+                aStreamName += OUString(".properties");
 
                 try
                 {
@@ -1054,14 +1054,14 @@ void StringResourcePersistenceImpl::implStoreAtStorage
         if( pLocaleItem != NULL && (bStoreAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem ) )
         {
-            ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
-            aStreamName += ::rtl::OUString(".properties");
+            OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
+            aStreamName += OUString(".properties");
 
             Reference< io::XStream > xElementStream =
                     Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
 
-            ::rtl::OUString aPropName("MediaType");
-            ::rtl::OUString aMime("text/plain");
+            OUString aPropName("MediaType");
+            OUString aMime("text/plain");
 
             uno::Reference< beans::XPropertySet > xProps( xElementStream, uno::UNO_QUERY );
             OSL_ENSURE( xProps.is(), "The StorageStream must implement XPropertySet interface!\n" );
@@ -1069,7 +1069,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             {
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
-                aPropName = ::rtl::OUString("UseCommonStoragePasswordEncryption");
+                aPropName = OUString("UseCommonStoragePasswordEncryption");
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
             }
 
@@ -1092,8 +1092,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             LocaleItem* pLocaleItem = *it;
             if( pLocaleItem != NULL )
             {
-                ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-                aStreamName += ::rtl::OUString(".default");
+                OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
+                aStreamName += OUString(".default");
 
                 try
                 {
@@ -1111,8 +1111,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     // Default locale
     if( m_pDefaultLocaleItem != NULL && (bStoreAll || m_bDefaultModified) )
     {
-        ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
-        aStreamName += ::rtl::OUString(".default");
+        OUString aStreamName = implGetFileNameForLocaleItem( m_pDefaultLocaleItem, aNameBase );
+        aStreamName += OUString(".default");
 
         Reference< io::XStream > xElementStream =
                 Storage->openStreamElement( aStreamName, ElementModes::READWRITE );
@@ -1126,8 +1126,8 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     }
 }
 
-void StringResourcePersistenceImpl::storeToURL( const ::rtl::OUString& URL,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment,
+void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
+    const OUString& NameBase, const OUString& Comment,
     const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException)
 {
@@ -1145,8 +1145,8 @@ void StringResourcePersistenceImpl::storeToURL( const ::rtl::OUString& URL,
 
 void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
-    const ::rtl::OUString& Location,
-    const ::rtl::OUString& aNameBase,
+    const OUString& Location,
+    const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException)
@@ -1158,7 +1158,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )
         {
-            ::rtl::OUString aCompleteFileName =
+            OUString aCompleteFileName =
                 implGetPathForLocaleItem( pLocaleItem, aNameBase, Location );
             if( xFileAccess->exists( aCompleteFileName ) )
                 xFileAccess->kill( aCompleteFileName );
@@ -1171,8 +1171,8 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 
 void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
-    const ::rtl::OUString& Location,
-    const ::rtl::OUString& aNameBase,
+    const OUString& Location,
+    const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException)
@@ -1184,7 +1184,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
         LocaleItem* pLocaleItem = *it;
         if( pLocaleItem != NULL )
         {
-            ::rtl::OUString aCompleteFileName =
+            OUString aCompleteFileName =
                 implGetPathForLocaleItem( pLocaleItem, aNameBase, Location, true );
             if( xFileAccess->exists( aCompleteFileName ) )
                 xFileAccess->kill( aCompleteFileName );
@@ -1197,9 +1197,9 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 
 void StringResourcePersistenceImpl::implStoreAtLocation
 (
-    const ::rtl::OUString& Location,
-    const ::rtl::OUString& aNameBase,
-    const ::rtl::OUString& aComment,
+    const OUString& Location,
+    const OUString& aNameBase,
+    const OUString& aComment,
     const Reference< ucb::XSimpleFileAccess3 >& xFileAccess,
     bool bUsedForStore,
     bool bStoreAll,
@@ -1217,7 +1217,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
         if( pLocaleItem != NULL && (bStoreAll || bKillAll || pLocaleItem->m_bModified) &&
             loadLocale( pLocaleItem ) )
         {
-            ::rtl::OUString aCompleteFileName =
+            OUString aCompleteFileName =
                 implGetPathForLocaleItem( pLocaleItem, aNameBase, Location );
             if( xFileAccess->exists( aCompleteFileName ) )
                 xFileAccess->kill( aCompleteFileName );
@@ -1244,7 +1244,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     // Default locale
     if( m_pDefaultLocaleItem != NULL && (bStoreAll || bKillAll || m_bDefaultModified) )
     {
-        ::rtl::OUString aCompleteFileName =
+        OUString aCompleteFileName =
             implGetPathForLocaleItem( m_pDefaultLocaleItem, aNameBase, Location, true );
         if( xFileAccess->exists( aCompleteFileName ) )
             xFileAccess->kill( aCompleteFileName );
@@ -1290,7 +1290,7 @@ public:
     void writeUnicodeChar( sal_Unicode n )
         { write16BitInt( n ); }
     void writeInt32( sal_Int32 n );
-    void writeString( const ::rtl::OUString& aStr );
+    void writeString( const OUString& aStr );
 };
 
 BinaryOutput::BinaryOutput( Reference< XMultiComponentFactory > xMCF,
@@ -1335,7 +1335,7 @@ void BinaryOutput::writeInt32( sal_Int32 n )
     m_xOutputStream->writeBytes( aSeq );
 }
 
-void BinaryOutput::writeString( const ::rtl::OUString& aStr )
+void BinaryOutput::writeString( const OUString& aStr )
 {
     sal_Int32 nLen = aStr.getLength();
     const sal_Unicode* pStr = aStr.getStr();
@@ -1505,7 +1505,7 @@ public:
     sal_Int16 readInt16( void );
     sal_Int32 readInt32( void );
     sal_Unicode readUnicodeChar( void );
-    ::rtl::OUString readString( void );
+    OUString readString( void );
 };
 
 BinaryInput::BinaryInput( Sequence< ::sal_Int8 > aData, Reference< XMultiComponentFactory > xMCF,
@@ -1596,9 +1596,9 @@ sal_Unicode BinaryInput::readUnicodeChar( void )
     return cRet;
 }
 
-::rtl::OUString BinaryInput::readString( void )
+OUString BinaryInput::readString( void )
 {
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     sal_Unicode c;
     do
     {
@@ -1608,7 +1608,7 @@ sal_Unicode BinaryInput::readUnicodeChar( void )
     }
     while( c != 0 );
 
-    ::rtl::OUString aRetStr = aBuf.makeStringAndClear();
+    OUString aRetStr = aBuf.makeStringAndClear();
     return aRetStr;
 }
 
@@ -1678,7 +1678,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 // =============================================================================
 // Private helper methods
 
-bool checkNamingSceme( const ::rtl::OUString& aName, const ::rtl::OUString& aNameBase,
+bool checkNamingSceme( const OUString& aName, const OUString& aNameBase,
                        Locale& aLocale )
 {
     bool bSuccess = false;
@@ -1726,18 +1726,18 @@ void StringResourcePersistenceImpl::implLoadAllLocales( void )
 }
 
 // Scan locale properties files helper
-void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::OUString >& aContentSeq )
+void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUString >& aContentSeq )
 {
     Locale aDefaultLocale;
     bool bDefaultFound = false;
 
     sal_Int32 nCount = aContentSeq.getLength();
-    const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
+    const OUString* pFiles = aContentSeq.getConstArray();
     for( int i = 0 ; i < nCount ; i++ )
     {
-        ::rtl::OUString aCompleteName = pFiles[i];
-        rtl::OUString aPureName;
-        rtl::OUString aExtension;
+        OUString aCompleteName = pFiles[i];
+        OUString aPureName;
+        OUString aExtension;
         sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );
         sal_Int32 iSlash = aCompleteName.lastIndexOf( '/' );
         if( iDot != -1 )
@@ -1749,7 +1749,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
 
         if ( aExtension == "properties" )
         {
-            //rtl::OUString aName = aInetObj.getBase();
+            //OUString aName = aInetObj.getBase();
             Locale aLocale;
 
             if( checkNamingSceme( aPureName, m_aNameBase, aLocale ) )
@@ -1769,7 +1769,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< ::rtl::
         }
         else if( !bDefaultFound && aExtension == "default" )
         {
-            //rtl::OUString aName = aInetObj.getBase();
+            //OUString aName = aInetObj.getBase();
             Locale aLocale;
 
             if( checkNamingSceme( aPureName, m_aNameBase, aDefaultLocale ) )
@@ -1821,25 +1821,25 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
     return false;
 }
 
-::rtl::OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
+OUString implGetNameScemeForLocaleItem( const LocaleItem* pLocaleItem )
 {
-    static ::rtl::OUString aUnder("_");
+    static OUString aUnder("_");
 
     OSL_ENSURE( pLocaleItem,
         "StringResourcePersistenceImpl::implGetNameScemeForLocaleItem(): pLocaleItem == NULL" );
     Locale aLocale = pLocaleItem->m_locale;
 
-    ::rtl::OUString aRetStr = aUnder;
+    OUString aRetStr = aUnder;
     aRetStr += aLocale.Language;
 
-    ::rtl::OUString aCountry  = aLocale.Country;
+    OUString aCountry  = aLocale.Country;
     if( !aCountry.isEmpty() )
     {
         aRetStr += aUnder;
         aRetStr += aCountry;
     }
 
-    ::rtl::OUString aVariant  = aLocale.Variant;
+    OUString aVariant  = aLocale.Variant;
     if( !aVariant.isEmpty() )
     {
         aRetStr += aUnder;
@@ -1848,10 +1848,10 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
     return aRetStr;
 }
 
-::rtl::OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
-    ( LocaleItem* pLocaleItem, const ::rtl::OUString& aNameBase )
+OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
+    ( LocaleItem* pLocaleItem, const OUString& aNameBase )
 {
-    ::rtl::OUString aFileName = aNameBase;
+    OUString aFileName = aNameBase;
     if( aFileName.isEmpty() )
         aFileName = aNameBaseDefaultStr;
 
@@ -1859,18 +1859,18 @@ bool StringResourcePersistenceImpl::implLoadLocale( LocaleItem* )
     return aFileName;
 }
 
-::rtl::OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
-    ( LocaleItem* pLocaleItem, const ::rtl::OUString& aNameBase,
-      const ::rtl::OUString& aLocation, bool bDefaultFile )
+OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
+    ( LocaleItem* pLocaleItem, const OUString& aNameBase,
+      const OUString& aLocation, bool bDefaultFile )
 {
-    ::rtl::OUString aFileName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
+    OUString aFileName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
     INetURLObject aInetObj( aLocation );
     aInetObj.insertName( aFileName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
     if( bDefaultFile )
-        aInetObj.setExtension( ::rtl::OUString( "default" ) );
+        aInetObj.setExtension( OUString( "default" ) );
     else
-        aInetObj.setExtension( ::rtl::OUString( "properties" ) );
-    ::rtl::OUString aCompleteFileName = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
+        aInetObj.setExtension( OUString( "properties" ) );
+    OUString aCompleteFileName = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
     return aCompleteFileName;
 }
 
@@ -1966,7 +1966,7 @@ sal_Unicode getEscapeChar( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& r
 }
 
 void CheckContinueInNextLine( Reference< io::XTextInputStream2 > xTextInputStream,
-    ::rtl::OUString& aLine, bool& bEscapePending, const sal_Unicode*& pBuf,
+    OUString& aLine, bool& bEscapePending, const sal_Unicode*& pBuf,
     sal_Int32& nLen, sal_Int32& i )
 {
     if( i == nLen && bEscapePending )
@@ -1998,11 +1998,11 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
 
     xTextInputStream->setInputStream( xInputStream );
 
-    ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
+    OUString aEncodingStr = OUString::createFromAscii
         ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
     xTextInputStream->setEncoding( aEncodingStr );
 
-    ::rtl::OUString aLine;
+    OUString aLine;
     while( !xTextInputStream->isEOF() )
     {
         aLine = xTextInputStream->readLine();
@@ -2011,7 +2011,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
         if( 0 == nLen )
             continue;
         const sal_Unicode* pBuf = aLine.getStr();
-        ::rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         sal_Unicode c = 0;
         sal_Int32 i = 0;
 
@@ -2025,7 +2025,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
             continue;
 
         // Scan key
-        ::rtl::OUString aResourceID;
+        OUString aResourceID;
         bool bEscapePending = false;
         bool bStrComplete = false;
         while( i < nLen && !bStrComplete )
@@ -2067,7 +2067,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
         // Scan value
         skipWhites( pBuf, nLen, i );
 
-        ::rtl::OUString aValueStr;
+        OUString aValueStr;
         bEscapePending = false;
         bStrComplete = false;
         while( i < nLen && !bStrComplete )
@@ -2116,7 +2116,7 @@ inline sal_Unicode getHexCharForDigit( sal_uInt16 nDigitVal )
     return cRet;
 }
 
-void implWriteCharToBuffer( ::rtl::OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
+void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
 {
     if( cu == '\\' )
     {
@@ -2170,7 +2170,7 @@ void implWriteCharToBuffer( ::rtl::OUStringBuffer& aBuf, sal_Unicode cu, bool bK
     }
 }
 
-void implWriteStringWithEncoding( const ::rtl::OUString& aStr,
+void implWriteStringWithEncoding( const OUString& aStr,
     Reference< io::XTextOutputStream2 > xTextOutputStream, bool bKey )
 {
     static sal_Unicode cLineFeed = 0xa;
@@ -2178,7 +2178,7 @@ void implWriteStringWithEncoding( const ::rtl::OUString& aStr,
     (void)aStr;
     (void)xTextOutputStream;
 
-    ::rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     sal_Int32 nLen = aStr.getLength();
     const sal_Unicode* pSrc = aStr.getStr();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
@@ -2190,15 +2190,15 @@ void implWriteStringWithEncoding( const ::rtl::OUString& aStr,
     if( !bKey )
         aBuf.append( cLineFeed );
 
-    ::rtl::OUString aWriteStr = aBuf.makeStringAndClear();
+    OUString aWriteStr = aBuf.makeStringAndClear();
     xTextOutputStream->writeString( aWriteStr );
 }
 
 bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocaleItem,
-    const Reference< io::XOutputStream >& xOutputStream, const ::rtl::OUString& aComment )
+    const Reference< io::XOutputStream >& xOutputStream, const OUString& aComment )
 {
-    static ::rtl::OUString aAssignmentStr("=");
-    static ::rtl::OUString aLineFeedStr("\n");
+    static OUString aAssignmentStr("=");
+    static OUString aLineFeedStr("\n");
 
     if( !xOutputStream.is() || pLocaleItem == NULL )
         return false;
@@ -2208,7 +2208,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 
     xTextOutputStream->setOutputStream( xOutputStream );
 
-    ::rtl::OUString aEncodingStr = ::rtl::OUString::createFromAscii
+    OUString aEncodingStr = OUString::createFromAscii
         ( rtl_getMimeCharsetFromTextEncoding( RTL_TEXTENCODING_ISO_8859_1 ) );
     xTextOutputStream->setEncoding( aEncodingStr );
 
@@ -2236,7 +2236,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         sal_Int32 nTabSize = nMaxIndex - nMinIndex + 1;
 
         // Create sorted array of pointers to the id strings
-        const ::rtl::OUString** pIdPtrs = new const ::rtl::OUString*[nTabSize];
+        const OUString** pIdPtrs = new const OUString*[nTabSize];
         for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
             pIdPtrs[i] = NULL;
         for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
@@ -2248,16 +2248,16 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         // Write lines in correct order
         for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
         {
-            const ::rtl::OUString* pStr = pIdPtrs[i];
+            const OUString* pStr = pIdPtrs[i];
             if( pStr != NULL )
             {
-                ::rtl::OUString aResourceID = *pStr;
+                OUString aResourceID = *pStr;
                 IdToStringMap::const_iterator it = rHashMap.find( aResourceID );
                 if( !( it == rHashMap.end() ) )
                 {
                     implWriteStringWithEncoding( aResourceID, xTextOutputStream, true );
                     xTextOutputStream->writeString( aAssignmentStr );
-                    ::rtl::OUString aValStr = (*it).second;
+                    OUString aValStr = (*it).second;
                     implWriteStringWithEncoding( aValStr, xTextOutputStream, false );
                 }
             }
@@ -2277,16 +2277,16 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
 // =============================================================================
 
 // component operations
-static Sequence< ::rtl::OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
+static Sequence< OUString > getSupportedServiceNames_StringResourceWithStorageImpl()
 {
-    Sequence< ::rtl::OUString > names(1);
-    names[0] = ::rtl::OUString( "com.sun.star.resource.StringResourceWithStorage" );
+    Sequence< OUString > names(1);
+    names[0] = OUString( "com.sun.star.resource.StringResourceWithStorage" );
     return names;
 }
 
-static ::rtl::OUString getImplementationName_StringResourceWithStorageImpl()
+static OUString getImplementationName_StringResourceWithStorageImpl()
 {
-    return ::rtl::OUString( "com.sun.star.comp.scripting.StringResourceWithStorage" );
+    return OUString( "com.sun.star.comp.scripting.StringResourceWithStorage" );
 }
 
 static Reference< XInterface > SAL_CALL create_StringResourceWithStorageImpl(
@@ -2314,18 +2314,18 @@ StringResourceWithStorageImpl::~StringResourceWithStorageImpl()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString StringResourceWithStorageImpl::getImplementationName(  ) throw (RuntimeException)
+OUString StringResourceWithStorageImpl::getImplementationName(  ) throw (RuntimeException)
 {
     return getImplementationName_StringResourceWithStorageImpl();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool StringResourceWithStorageImpl::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool StringResourceWithStorageImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
@@ -2334,7 +2334,7 @@ sal_Bool StringResourceWithStorageImpl::supportsService( const ::rtl::OUString& 
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > StringResourceWithStorageImpl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return getSupportedServiceNames_StringResourceWithStorageImpl();
 }
@@ -2351,7 +2351,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
     if ( aArguments.getLength() != 5 )
     {
         throw RuntimeException(
-            ::rtl::OUString( "StringResourceWithStorageImpl::initialize: invalid number of arguments!"  ),
+            OUString( "StringResourceWithStorageImpl::initialize: invalid number of arguments!"  ),
             Reference< XInterface >() );
     }
 
@@ -2361,7 +2361,7 @@ void StringResourceWithStorageImpl::initialize( const Sequence< Any >& aArgument
 
     if( !bOk )
     {
-        ::rtl::OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid storage");
+        OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid storage");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2384,33 +2384,33 @@ void StringResourceWithStorageImpl::removeModifyListener( const Reference< XModi
 }
 
 // XStringResourceResolver
-::rtl::OUString StringResourceWithStorageImpl::resolveString( const ::rtl::OUString& ResourceID )
+OUString StringResourceWithStorageImpl::resolveString( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
-::rtl::OUString StringResourceWithStorageImpl::resolveStringForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+OUString StringResourceWithStorageImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
     throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourceWithStorageImpl::hasEntryForId( const ::rtl::OUString& ResourceID )
+sal_Bool StringResourceWithStorageImpl::hasEntryForId( const OUString& ResourceID )
     throw (RuntimeException)
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourceWithStorageImpl::hasEntryForIdAndLocale( const ::rtl::OUString& ResourceID,
+sal_Bool StringResourceWithStorageImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
         throw (RuntimeException)
 {
     return StringResourceImpl::hasEntryForIdAndLocale( ResourceID, locale );
 }
-Sequence< ::rtl::OUString > StringResourceWithStorageImpl::getResourceIDs(  )
+Sequence< OUString > StringResourceWithStorageImpl::getResourceIDs(  )
     throw (RuntimeException)
 {
     return StringResourceImpl::getResourceIDs();
 }
-Sequence< ::rtl::OUString > StringResourceWithStorageImpl::getResourceIDsForLocale
+Sequence< OUString > StringResourceWithStorageImpl::getResourceIDsForLocale
     ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
@@ -2447,23 +2447,23 @@ void StringResourceWithStorageImpl::setDefaultLocale( const Locale& locale )
 {
     StringResourceImpl::setDefaultLocale( locale );
 }
-void StringResourceWithStorageImpl::setString( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str )
+void StringResourceWithStorageImpl::setString( const OUString& ResourceID, const OUString& Str )
     throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setString( ResourceID, Str );
 }
 void StringResourceWithStorageImpl::setStringForLocale
-    ( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str, const Locale& locale )
+    ( const OUString& ResourceID, const OUString& Str, const Locale& locale )
         throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
-void StringResourceWithStorageImpl::removeId( const ::rtl::OUString& ResourceID )
+void StringResourceWithStorageImpl::removeId( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeId( ResourceID );
 }
-void StringResourceWithStorageImpl::removeIdForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+void StringResourceWithStorageImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
@@ -2506,19 +2506,19 @@ sal_Bool StringResourceWithStorageImpl::isModified(  )
 {
     return StringResourcePersistenceImpl::isModified();
 }
-void StringResourceWithStorageImpl::setComment( const ::rtl::OUString& Comment )
+void StringResourceWithStorageImpl::setComment( const OUString& Comment )
     throw (::com::sun::star::uno::RuntimeException)
 {
     StringResourcePersistenceImpl::setComment( Comment );
 }
 void StringResourceWithStorageImpl::storeToStorage( const Reference< XStorage >& Storage,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment )
+    const OUString& NameBase, const OUString& Comment )
         throw (Exception, RuntimeException)
 {
     StringResourcePersistenceImpl::storeToStorage( Storage, NameBase, Comment );
 }
-void StringResourceWithStorageImpl::storeToURL( const ::rtl::OUString& URL,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment,
+void StringResourceWithStorageImpl::storeToURL( const OUString& URL,
+    const OUString& NameBase, const OUString& Comment,
     const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException)
 {
@@ -2552,7 +2552,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
     if( !Storage.is() )
     {
-        ::rtl::OUString errorMsg( "StringResourceWithStorageImpl::setStorage: invalid storage" );
+        OUString errorMsg( "StringResourceWithStorageImpl::setStorage: invalid storage" );
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2573,7 +2573,7 @@ void StringResourceWithStorageImpl::implScanLocales( void )
     Reference< container::XNameAccess > xNameAccess( m_xStorage, UNO_QUERY );
     if( xNameAccess.is() )
     {
-        Sequence< ::rtl::OUString > aContentSeq = xNameAccess->getElementNames();
+        Sequence< OUString > aContentSeq = xNameAccess->getElementNames();
         implScanLocaleNames( aContentSeq );
     }
 
@@ -2586,8 +2586,8 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
     bool bSuccess = false;
     try
     {
-        ::rtl::OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
-        aStreamName += ::rtl::OUString( ".properties" );
+        OUString aStreamName = implGetFileNameForLocaleItem( pLocaleItem, m_aNameBase );
+        aStreamName += OUString( ".properties" );
 
         Reference< io::XStream > xElementStream =
             m_xStorage->openStreamElement( aStreamName, ElementModes::READ );
@@ -2614,16 +2614,16 @@ bool StringResourceWithStorageImpl::implLoadLocale( LocaleItem* pLocaleItem )
 // =============================================================================
 
 // component operations
-static Sequence< ::rtl::OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
+static Sequence< OUString > getSupportedServiceNames_StringResourceWithLocationImpl()
 {
-    Sequence< ::rtl::OUString > names(1);
-    names[0] = ::rtl::OUString( "com.sun.star.resource.StringResourceWithLocation" );
+    Sequence< OUString > names(1);
+    names[0] = OUString( "com.sun.star.resource.StringResourceWithLocation" );
     return names;
 }
 
-static ::rtl::OUString getImplementationName_StringResourceWithLocationImpl()
+static OUString getImplementationName_StringResourceWithLocationImpl()
 {
-    return ::rtl::OUString( "com.sun.star.comp.scripting.StringResourceWithLocation" );
+    return OUString( "com.sun.star.comp.scripting.StringResourceWithLocation" );
 }
 
 static Reference< XInterface > SAL_CALL create_StringResourceWithLocationImpl(
@@ -2651,18 +2651,18 @@ StringResourceWithLocationImpl::~StringResourceWithLocationImpl()
 // XServiceInfo
 // -----------------------------------------------------------------------------
 
-::rtl::OUString StringResourceWithLocationImpl::getImplementationName(  ) throw (RuntimeException)
+OUString StringResourceWithLocationImpl::getImplementationName(  ) throw (RuntimeException)
 {
     return getImplementationName_StringResourceWithLocationImpl();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool StringResourceWithLocationImpl::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+sal_Bool StringResourceWithLocationImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
@@ -2671,7 +2671,7 @@ sal_Bool StringResourceWithLocationImpl::supportsService( const ::rtl::OUString&
 
 // -----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > StringResourceWithLocationImpl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return getSupportedServiceNames_StringResourceWithLocationImpl();
 }
@@ -2688,7 +2688,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     if ( aArguments.getLength() != 6 )
     {
         throw RuntimeException(
-            ::rtl::OUString( "XInitialization::initialize: invalid number of arguments!" ),
+            OUString( "XInitialization::initialize: invalid number of arguments!" ),
             Reference< XInterface >() );
     }
 
@@ -2701,12 +2701,12 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     else
     {
         if( m_aLocation.getStr()[nLen - 1] != '/' )
-            m_aLocation += ::rtl::OUString("/");
+            m_aLocation += OUString("/");
     }
 
     if( !bOk )
     {
-        ::rtl::OUString errorMsg("XInitialization::initialize: invalid URL");
+        OUString errorMsg("XInitialization::initialize: invalid URL");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2714,7 +2714,7 @@ void StringResourceWithLocationImpl::initialize( const Sequence< Any >& aArgumen
     bOk = (aArguments[5] >>= m_xInteractionHandler);
     if( !bOk )
     {
-        ::rtl::OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid type");
+        OUString errorMsg("StringResourceWithStorageImpl::initialize: invalid type");
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 5 );
     }
 
@@ -2737,33 +2737,33 @@ void StringResourceWithLocationImpl::removeModifyListener( const Reference< XMod
 }
 
 // XStringResourceResolver
-::rtl::OUString StringResourceWithLocationImpl::resolveString( const ::rtl::OUString& ResourceID )
+OUString StringResourceWithLocationImpl::resolveString( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveString( ResourceID ) ;
 }
-::rtl::OUString StringResourceWithLocationImpl::resolveStringForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+OUString StringResourceWithLocationImpl::resolveStringForLocale( const OUString& ResourceID, const Locale& locale )
     throw ( ::com::sun::star::resource::MissingResourceException, RuntimeException)
 {
     return StringResourceImpl::resolveStringForLocale( ResourceID, locale );
 }
-sal_Bool StringResourceWithLocationImpl::hasEntryForId( const ::rtl::OUString& ResourceID )
+sal_Bool StringResourceWithLocationImpl::hasEntryForId( const OUString& ResourceID )
     throw (RuntimeException)
 {
     return StringResourceImpl::hasEntryForId( ResourceID ) ;
 }
-sal_Bool StringResourceWithLocationImpl::hasEntryForIdAndLocale( const ::rtl::OUString& ResourceID,
+sal_Bool StringResourceWithLocationImpl::hasEntryForIdAndLocale( const OUString& ResourceID,
     const Locale& locale )
         throw (RuntimeException)
 {
     return StringResourceImpl::hasEntryForIdAndLocale( ResourceID, locale );
 }
-Sequence< ::rtl::OUString > StringResourceWithLocationImpl::getResourceIDs(  )
+Sequence< OUString > StringResourceWithLocationImpl::getResourceIDs(  )
     throw (RuntimeException)
 {
     return StringResourceImpl::getResourceIDs();
 }
-Sequence< ::rtl::OUString > StringResourceWithLocationImpl::getResourceIDsForLocale
+Sequence< OUString > StringResourceWithLocationImpl::getResourceIDsForLocale
     ( const Locale& locale ) throw (::com::sun::star::uno::RuntimeException)
 {
     return StringResourceImpl::getResourceIDsForLocale( locale );
@@ -2800,23 +2800,23 @@ void StringResourceWithLocationImpl::setDefaultLocale( const Locale& locale )
 {
     StringResourceImpl::setDefaultLocale( locale );
 }
-void StringResourceWithLocationImpl::setString( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str )
+void StringResourceWithLocationImpl::setString( const OUString& ResourceID, const OUString& Str )
     throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setString( ResourceID, Str );
 }
 void StringResourceWithLocationImpl::setStringForLocale
-    ( const ::rtl::OUString& ResourceID, const ::rtl::OUString& Str, const Locale& locale )
+    ( const OUString& ResourceID, const OUString& Str, const Locale& locale )
         throw (NoSupportException, RuntimeException)
 {
     StringResourceImpl::setStringForLocale( ResourceID, Str, locale );
 }
-void StringResourceWithLocationImpl::removeId( const ::rtl::OUString& ResourceID )
+void StringResourceWithLocationImpl::removeId( const OUString& ResourceID )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeId( ResourceID );
 }
-void StringResourceWithLocationImpl::removeIdForLocale( const ::rtl::OUString& ResourceID, const Locale& locale )
+void StringResourceWithLocationImpl::removeIdForLocale( const OUString& ResourceID, const Locale& locale )
     throw (::com::sun::star::resource::MissingResourceException, RuntimeException, NoSupportException)
 {
     StringResourceImpl::removeIdForLocale( ResourceID, locale );
@@ -2861,19 +2861,19 @@ sal_Bool StringResourceWithLocationImpl::isModified(  )
 {
     return StringResourcePersistenceImpl::isModified();
 }
-void StringResourceWithLocationImpl::setComment( const ::rtl::OUString& Comment )
+void StringResourceWithLocationImpl::setComment( const OUString& Comment )
     throw (::com::sun::star::uno::RuntimeException)
 {
     StringResourcePersistenceImpl::setComment( Comment );
 }
 void StringResourceWithLocationImpl::storeToStorage( const Reference< XStorage >& Storage,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment )
+    const OUString& NameBase, const OUString& Comment )
         throw (Exception, RuntimeException)
 {
     StringResourcePersistenceImpl::storeToStorage( Storage, NameBase, Comment );
 }
-void StringResourceWithLocationImpl::storeToURL( const ::rtl::OUString& URL,
-    const ::rtl::OUString& NameBase, const ::rtl::OUString& Comment,
+void StringResourceWithLocationImpl::storeToURL( const OUString& URL,
+    const OUString& NameBase, const OUString& Comment,
     const Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
         throw (Exception, RuntimeException)
 {
@@ -2894,14 +2894,14 @@ void StringResourceWithLocationImpl::importBinary( const Sequence< ::sal_Int8 >&
 // XStringResourceWithLocation
 
 // XStringResourceWithLocation
-void StringResourceWithLocationImpl::storeAsURL( const ::rtl::OUString& URL )
+void StringResourceWithLocationImpl::storeAsURL( const OUString& URL )
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     setURL( URL );
     store();
 }
 
-void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
+void StringResourceWithLocationImpl::setURL( const OUString& URL )
     throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2910,7 +2910,7 @@ void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
     sal_Int32 nLen = URL.getLength();
     if( nLen == 0 )
     {
-        ::rtl::OUString errorMsg( "StringResourceWithLocationImpl::setURL: invalid URL" );
+        OUString errorMsg( "StringResourceWithLocationImpl::setURL: invalid URL" );
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
 
@@ -2938,7 +2938,7 @@ void StringResourceWithLocationImpl::implScanLocales( void )
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     if( xFileAccess.is() && xFileAccess->isFolder( m_aLocation ) )
     {
-        Sequence< ::rtl::OUString > aContentSeq = xFileAccess->getFolderContents( m_aLocation, false );
+        Sequence< OUString > aContentSeq = xFileAccess->getFolderContents( m_aLocation, false );
         implScanLocaleNames( aContentSeq );
     }
 }
@@ -2951,7 +2951,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     if( xFileAccess.is() )
     {
-        ::rtl::OUString aCompleteFileName =
+        OUString aCompleteFileName =
             implGetPathForLocaleItem( pLocaleItem, m_aNameBase, m_aLocation );
 
         Reference< io::XInputStream > xInputStream;

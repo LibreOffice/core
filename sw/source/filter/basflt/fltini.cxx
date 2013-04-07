@@ -59,7 +59,6 @@
 #include <rtl/uri.hxx>
 
 using namespace utl;
-using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
@@ -158,7 +157,7 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
         SAL_WARN_IF(!ok, "sw", "failed to load msword library");
     }
     if (msword_.is())
-        return msword_.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
+        return msword_.getFunctionSymbol( OUString::createFromAscii( pSymbol ) );
     return NULL;
 }
 
@@ -262,7 +261,7 @@ sal_Bool SwReader::CheckPasswd( const String& /*rPasswd*/, const Reader& /*rOpti
 </FilterFlags>
 */
 
-#define FILTER_OPTION_ROOT      rtl::OUString("Office.Writer/FilterFlags")
+#define FILTER_OPTION_ROOT      OUString("Office.Writer/FilterFlags")
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                 sal_uInt32* pValues )
@@ -296,7 +295,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
 }
 
 void SwFilterOptions::Commit() {}
-void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 
 
@@ -385,7 +384,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                                         // if the first node dont contained any content, then
                                         // insert one char in it calc again and delete once again
                                         SwIndex aNdIdx( pFirstTxtNd );
-                                        pFirstTxtNd->InsertText(rtl::OUString("MM"), aNdIdx);
+                                        pFirstTxtNd->InsertText(OUString("MM"), aNdIdx);
                                         sal_uLong nAbsMinCnts;
                                         pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
                                                                                         nMinFrm, nMaxFrm, nAbsMinCnts );
@@ -587,7 +586,7 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
 
     OSL_ENSURE(pRet != pStart->pName, "TXT: That was an unknown language!");
 
-    return rtl::OUString::createFromAscii(pRet);
+    return OUString::createFromAscii(pRet);
 }
 
 // for the automatic conversion (mail/news/...)
@@ -661,7 +660,7 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         // 4. Language
         if (nLanguage)
         {
-        rtl::OUString sTmp = LanguageTag( nLanguage ).getBcp47();
+        OUString sTmp = LanguageTag( nLanguage ).getBcp47();
         rStr += (String)sTmp;
         }
         rStr += ',';

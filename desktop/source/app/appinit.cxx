@@ -63,7 +63,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ucb;
 
-using ::rtl::OUString;
 
 namespace desktop
 {
@@ -104,7 +103,7 @@ void Desktop::InitApplicationServiceManager()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createApplicationServiceManager" );
     Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
-    rtl::OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
+    OUString aUnoRc( OUString( "file:///assets/program/unorc"  ) );
     sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
@@ -137,8 +136,8 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
             createAcceptor(conDcpCfg);
         }
 
-        std::vector< ::rtl::OUString > const & conDcp = rCmdLine.GetAccept();
-        for (std::vector< ::rtl::OUString >::const_iterator i(conDcp.begin());
+        std::vector< OUString > const & conDcp = rCmdLine.GetAccept();
+        for (std::vector< OUString >::const_iterator i(conDcp.begin());
              i != conDcp.end(); ++i)
         {
             createAcceptor(*i);
@@ -255,7 +254,7 @@ void Desktop::CreateTemporaryDirectory()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::createTemporaryDirectory" );
 
-    ::rtl::OUString aTempBaseURL;
+    OUString aTempBaseURL;
     try
     {
         SvtPathOptions aOpt;
@@ -281,8 +280,8 @@ void Desktop::CreateTemporaryDirectory()
     if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
         aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
 
-    ::rtl::OUString aRet;
-    ::rtl::OUString aTempPath( aTempBaseURL );
+    OUString aRet;
+    OUString aTempPath( aTempBaseURL );
 
     // create new current temporary directory
     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTempBaseURL, aRet );

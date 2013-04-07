@@ -75,7 +75,7 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL createCanvas (
         const css::uno::Reference<css::awt::XWindow>& rxWindow,
         sal_Int16 nRequestedCanvasFeatures,
-        const ::rtl::OUString& rsOptionalCanvasServiceName)
+        const OUString& rsOptionalCanvasServiceName)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL toTop (
@@ -83,7 +83,7 @@ public:
         throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::rendering::XBitmap> SAL_CALL loadBitmap (
-        const ::rtl::OUString& rsURL,
+        const OUString& rsURL,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
         throw (css::uno::RuntimeException);
 

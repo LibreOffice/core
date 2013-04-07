@@ -46,16 +46,16 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace dbtools;
 
-sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
-    ::rtl::OUString sCatalog,sSchema,sTable;
+    OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,_rName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-    static const ::rtl::OUString s_sTableTypeView("VIEW");
-    static const ::rtl::OUString s_sTableTypeTable("TABLE");
-    static const ::rtl::OUString s_sAll("%");
+    static const OUString s_sTableTypeView("VIEW");
+    static const OUString s_sTableTypeTable("TABLE");
+    static const OUString s_sAll("%");
 
-    Sequence< ::rtl::OUString > sTableTypes(3);
+    Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
     sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
@@ -114,14 +114,14 @@ Reference< XPropertySet > OTables::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createTable(descriptor);
     return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XInterface > xObject( getObject( _nPos ) );
     sal_Bool bIsNew = connectivity::sdbcx::ODescriptor::isNew( xObject );
@@ -130,19 +130,19 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
 
 
-        ::rtl::OUString sCatalog,sSchema,sTable;
+        OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql(  "DROP " );
+        OUString aSql(  "DROP " );
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString("VIEW");
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == OUString("VIEW");
         if(bIsView) // here we have a view
-            aSql += ::rtl::OUString("VIEW ");
+            aSql += OUString("VIEW ");
         else
-            aSql += ::rtl::OUString("TABLE ");
+            aSql += OUString("TABLE ");
 
-        ::rtl::OUString sComposedName(
+        OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );
         aSql += sComposedName;
         Reference< XStatement > xStmt = xConnection->createStatement(  );
@@ -161,16 +161,16 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     }
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OTables::adjustSQL(const ::rtl::OUString& _sSql)
+OUString OTables::adjustSQL(const OUString& _sSql)
 {
-    ::rtl::OUString sSQL = _sSql;
-    static const ::rtl::OUString s_sUNSIGNED("UNSIGNED");
+    OUString sSQL = _sSql;
+    static const OUString s_sUNSIGNED("UNSIGNED");
     sal_Int32 nIndex = sSQL.indexOf(s_sUNSIGNED);
     while(nIndex != -1 )
     {
         sal_Int32 nParen = sSQL.indexOf(')',nIndex);
         sal_Int32 nPos = nIndex + s_sUNSIGNED.getLength();
-        ::rtl::OUString sNewUnsigned( sSQL.copy(nPos,nParen - nPos + 1));
+        OUString sNewUnsigned( sSQL.copy(nPos,nParen - nPos + 1));
         sSQL = sSQL.replaceAt(nIndex,s_sUNSIGNED.getLength()+sNewUnsigned.getLength(),sNewUnsigned + s_sUNSIGNED);
         nIndex = sSQL.indexOf(s_sUNSIGNED,nIndex + s_sUNSIGNED.getLength()+sNewUnsigned.getLength());
     }
@@ -180,8 +180,8 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
-    static const ::rtl::OUString s_sCreatePattern("(M,D)");
-    const ::rtl::OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
+    static const OUString s_sCreatePattern("(M,D)");
+    const OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
     {
@@ -190,7 +190,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     }
 }
 // -----------------------------------------------------------------------------
-void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
+void OTables::appendNew(const OUString& _rsNewTable)
 {
     insertElement(_rsNewTable,NULL);
 
@@ -201,15 +201,15 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
+OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
 {
     OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
     return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
 }
 // -----------------------------------------------------------------------------
-void OTables::addComment(const Reference< XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut)
+void OTables::addComment(const Reference< XPropertySet >& descriptor,OUStringBuffer& _rOut)
 {
-    ::rtl::OUString sDesc;
+    OUString sDesc;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))     >>= sDesc;
     if ( !sDesc.isEmpty() )
     {

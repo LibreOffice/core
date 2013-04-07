@@ -36,7 +36,7 @@ public:
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
 
 private:
     RichStringRef       mxString;       /// Processed string.

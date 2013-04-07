@@ -66,9 +66,9 @@ void TkResMgr::ensureImplExists()
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString TkResMgr::loadString( sal_uInt16 nResId )
+OUString TkResMgr::loadString( sal_uInt16 nResId )
 {
-    ::rtl::OUString sReturn;
+    OUString sReturn;
 
     ensureImplExists();
     if ( m_pSimpleResMgr )
@@ -90,7 +90,7 @@ Image TkResMgr::loadImage( sal_uInt16 nResId )
 }
 
 // -----------------------------------------------------------------------------
-Image TkResMgr::getImageFromURL( const ::rtl::OUString& i_rImageURL )
+Image TkResMgr::getImageFromURL( const OUString& i_rImageURL )
 {
     if ( i_rImageURL.isEmpty() )
         return Image();

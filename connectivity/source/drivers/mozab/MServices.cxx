@@ -26,7 +26,6 @@
 #include <tools/solar.h>
 
 using namespace connectivity::mozab;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::XSingleServiceFactory;
@@ -84,7 +83,7 @@ struct ProviderRequest
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
-        const ::rtl::OUString sModuleName(SVLIBRARY( "mozabdrv" ));
+        const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
 
         // load the dbtools library
         oslModule s_hModule = osl_loadModuleRelative(
@@ -95,7 +94,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         {
 
             // get the symbol for the method creating the factory
-            const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString( "OMozillaBootstrap_CreateInstance");
+            const OUString sFactoryCreationFunc = OUString( "OMozillaBootstrap_CreateInstance");
             // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
             OMozillaBootstrap_CreateInstanceFunction s_pCreationFunc = (OMozillaBootstrap_CreateInstanceFunction)osl_getFunctionSymbol(s_hModule, sFactoryCreationFunc.pData);
 
@@ -130,8 +129,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozab_component_getFactory(
         }
         else if ( aImplName == "com.sun.star.comp.mozilla.MozillaBootstrap" )
         {
-            Sequence< ::rtl::OUString > aSNS( 1 );
-            aSNS[0] = ::rtl::OUString( "com.sun.star.mozilla.MozillaBootstrap");
+            Sequence< OUString > aSNS( 1 );
+            aSNS[0] = OUString( "com.sun.star.mozilla.MozillaBootstrap");
             aReq.CREATE_PROVIDER(
                 aImplName,
                 aSNS,

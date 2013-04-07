@@ -91,8 +91,6 @@ using namespace ::com::sun::star::uno;
 using ::com::sun::star::drawing::TextHorizontalAdjust;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
-using ::rtl::OString;
-using ::rtl::OUString;
 
 // ============================================================================
 

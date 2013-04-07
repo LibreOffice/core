@@ -73,7 +73,7 @@ public:
               occurred while password verification. The password request loop
               will be aborted.
      */
-    virtual DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
+    virtual DocPasswordVerifierResult verifyPassword( const OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData ) = 0;
 
     /** Will be called everytime an encryption data needs to be verified.
 
@@ -115,7 +115,7 @@ public:
       */
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-        GenerateNewModifyPasswordInfo( const ::rtl::OUString& aPassword );
+        GenerateNewModifyPasswordInfo( const OUString& aPassword );
 
     // ------------------------------------------------------------------------
 
@@ -134,7 +134,7 @@ public:
       */
 
     static sal_Bool IsModifyPasswordCorrect(
-                const ::rtl::OUString& aPassword,
+                const OUString& aPassword,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
 
@@ -151,7 +151,7 @@ public:
       */
 
     static sal_uInt32 GetWordHashAsUINT32(
-                const ::rtl::OUString& aString );
+                const OUString& aString );
 
     // ------------------------------------------------------------------------
 
@@ -171,7 +171,7 @@ public:
       */
 
     static sal_uInt16 GetXLHashAsUINT16(
-                const ::rtl::OUString& aString,
+                const OUString& aString,
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
 
     // ------------------------------------------------------------------------
@@ -192,7 +192,7 @@ public:
       */
 
     static ::com::sun::star::uno::Sequence< sal_Int8 > GetXLHashAsSequence(
-                const ::rtl::OUString& aString,
+                const OUString& aString,
                 rtl_TextEncoding nEnc = RTL_TEXTENCODING_UTF8 );
 
     // ------------------------------------------------------------------------
@@ -211,7 +211,7 @@ public:
       */
 
     static ::com::sun::star::uno::Sequence< sal_Int8 > GenerateStd97Key(
-                const ::rtl::OUString& aPassword,
+                const OUString& aPassword,
                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aDocId );
 
     // ------------------------------------------------------------------------
@@ -282,12 +282,12 @@ public:
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestAndVerifyDocPassword(
                             IDocPasswordVerifier& rVerifier,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rMediaEncData,
-                            const ::rtl::OUString& rMediaPassword,
+                            const OUString& rMediaPassword,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::task::XInteractionHandler >& rxInteractHandler,
-                            const ::rtl::OUString& rDocumentName,
+                            const OUString& rDocumentName,
                             DocPasswordRequestType eRequestType,
-                            const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0,
+                            const ::std::vector< OUString >* pDefaultPasswords = 0,
                             bool* pbIsDefaultPassword = 0 );
 
     // ------------------------------------------------------------------------
@@ -336,7 +336,7 @@ public:
                             IDocPasswordVerifier& rVerifier,
                             MediaDescriptor& rMediaDesc,
                             DocPasswordRequestType eRequestType,
-                            const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0 );
+                            const ::std::vector< OUString >* pDefaultPasswords = 0 );
 
     // ------------------------------------------------------------------------
 

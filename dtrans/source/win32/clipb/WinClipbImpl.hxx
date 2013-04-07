@@ -50,7 +50,7 @@ public:
     ~CWinClipbImpl( );
 
 protected:
-    CWinClipbImpl( const ::rtl::OUString& aClipboardName, CWinClipboard* theWinClipboard );
+    CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
         throw( ::com::sun::star::uno::RuntimeException );
@@ -60,7 +60,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw( ::com::sun::star::uno::RuntimeException );
 
-    ::rtl::OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
 
     //------------------------------------------------
     // XClipboardEx
@@ -93,7 +93,7 @@ private:
     void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );
 
 private:
-    ::rtl::OUString         m_itsName;
+    OUString         m_itsName;
     CMtaOleClipboard        m_MtaOleClipboard;
     CWinClipboard*          m_pWinClipboard;
     CXNotifyingDataObject*  m_pCurrentClipContent;

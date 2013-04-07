@@ -74,7 +74,7 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
-    rtl::OUString aValue = readUnicodeString(rStream, nItemVersion >= 1);
+    OUString aValue = readUnicodeString(rStream, nItemVersion >= 1);
     sal_uInt32 nMagic = 0;
     rStream >> nMagic;
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)
@@ -199,7 +199,7 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 // virtual
 bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
-    rVal <<= rtl::OUString(GetValue());
+    rVal <<= OUString(GetValue());
     return true;
 }
 
@@ -207,7 +207,7 @@ bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) 
 // virtual
 bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
-    rtl::OUString aValue;
+    OUString aValue;
     if ( rVal >>= aValue )
     {
         // SetValue with an empty string resets the item; so call that

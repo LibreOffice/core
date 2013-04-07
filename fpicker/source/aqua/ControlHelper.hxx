@@ -35,8 +35,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-
 class ControlHelper {
 
 public:

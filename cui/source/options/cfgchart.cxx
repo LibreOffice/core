@@ -173,11 +173,11 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 // ====================
 
 SvxChartOptions::SvxChartOptions() :
-    ::utl::ConfigItem( rtl::OUString("Office.Chart") ),
+    ::utl::ConfigItem( OUString("Office.Chart") ),
     mbIsInitialized( sal_False )
 {
     maPropertyNames.realloc( 1 );
-    maPropertyNames[ 0 ] = ::rtl::OUString("DefaultColor/Series");
+    maPropertyNames[ 0 ] = OUString("DefaultColor/Series");
 }
 
 SvxChartOptions::~SvxChartOptions()
@@ -201,7 +201,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
 {
     // get sequence containing all properties
 
-    uno::Sequence< ::rtl::OUString > aNames = GetPropertyNames();
+    uno::Sequence< OUString > aNames = GetPropertyNames();
     uno::Sequence< uno::Any > aProperties( aNames.getLength());
     aProperties = GetProperties( aNames );
 
@@ -244,7 +244,7 @@ sal_Bool SvxChartOptions::RetrieveOptions()
 
 void SvxChartOptions::Commit()
 {
-    uno::Sequence< ::rtl::OUString > aNames = GetPropertyNames();
+    uno::Sequence< OUString > aNames = GetPropertyNames();
     uno::Sequence< uno::Any > aValues( aNames.getLength());
 
     if( aValues.getLength() >= 1 )
@@ -265,7 +265,7 @@ void SvxChartOptions::Commit()
     PutProperties( aNames, aValues );
 }
 
-void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 

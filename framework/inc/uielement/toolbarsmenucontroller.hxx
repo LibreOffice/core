@@ -85,21 +85,21 @@ namespace framework
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > getLayoutManagerToolbars( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager );
-            rtl::OUString getUINameFromCommand( const rtl::OUString& rCommandURL );
-            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const rtl::OUString& rCommandURL );
-            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, const rtl::OUString& aLabel );
+            OUString getUINameFromCommand( const OUString& rCommandURL );
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
+            void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
             sal_Bool isContextSensitiveToolbarNonVisible();
 
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xUICommandDescription;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xDocCfgMgr;
-            rtl::OUString                                                                               m_aModuleIdentifier;
-            rtl::OUString                                                                               m_aPropUIName;
-            rtl::OUString                                                                               m_aPropResourceURL;
+            OUString                                                                               m_aModuleIdentifier;
+            OUString                                                                               m_aPropUIName;
+            OUString                                                                               m_aPropResourceURL;
             sal_Bool                                                                                    m_bModuleIdentified;
             sal_Bool                                                                                    m_bResetActive;
-            std::vector< rtl::OUString >                                                                m_aCommandVector;
+            std::vector< OUString >                                                                m_aCommandVector;
             IntlWrapper                                                                                 m_aIntlWrapper;
     };
 }

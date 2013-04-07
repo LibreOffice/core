@@ -68,8 +68,8 @@ void ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
         {
             nLastSlotId = pItem->GetValue();
             sal_uInt16 nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
-            rtl::OUString aSlotURL( "slot:" );
-            aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
+            OUString aSlotURL( "slot:" );
+            aSlotURL += OUString::valueOf( sal_Int32( nImageId ));
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
                                      hasBigImages()
@@ -84,17 +84,17 @@ SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
     sal_uInt16 nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
-        rtl::OUString aInsertBarResStr( "private:resource/toolbar/insertbar" );
+        OUString aInsertBarResStr( "private:resource/toolbar/insertbar" );
         createAndPositionSubToolBar( aInsertBarResStr );
     }
     else if (nSlotId == SID_TBXCTL_INSCELLS)
     {
-        rtl::OUString aInsertCellsBarResStr( "private:resource/toolbar/insertcellsbar" );
+        OUString aInsertCellsBarResStr( "private:resource/toolbar/insertcellsbar" );
         createAndPositionSubToolBar( aInsertCellsBarResStr );
     }
     else
     {
-        rtl::OUString aInsertObjectBarResStr( "private:resource/toolbar/insertobjectbar" );
+        OUString aInsertObjectBarResStr( "private:resource/toolbar/insertobjectbar" );
         createAndPositionSubToolBar( aInsertObjectBarResStr );
     }
     return NULL;

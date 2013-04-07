@@ -24,7 +24,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sd { namespace tools {
 
@@ -60,7 +59,7 @@ Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo (voi
 
 
 void SAL_CALL PropertySet::setPropertyValue (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Any& rsPropertyValue)
     throw(css::beans::UnknownPropertyException,
         css::beans::PropertyVetoException,
@@ -104,7 +103,7 @@ Any SAL_CALL PropertySet::getPropertyValue (const OUString& rsPropertyName)
 
 
 void SAL_CALL PropertySet::addPropertyChangeListener (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
@@ -126,7 +125,7 @@ void SAL_CALL PropertySet::addPropertyChangeListener (
 
 
 void SAL_CALL PropertySet::removePropertyChangeListener (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
     throw(beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
@@ -157,7 +156,7 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
 
 
 void SAL_CALL PropertySet::addVetoableChangeListener (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
@@ -173,7 +172,7 @@ void SAL_CALL PropertySet::addVetoableChangeListener (
 
 
 void SAL_CALL PropertySet::removeVetoableChangeListener (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
@@ -191,7 +190,7 @@ void SAL_CALL PropertySet::removeVetoableChangeListener (
 //-----------------------------------------------------------------------------
 
 void PropertySet::CallListeners (
-    const rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const beans::PropertyChangeEvent& rEvent)
 {
     ::std::pair<ChangeListenerContainer::iterator,ChangeListenerContainer::iterator>

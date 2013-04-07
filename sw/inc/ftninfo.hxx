@@ -33,8 +33,8 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     SwDepend    aPageDescDep;
     SwDepend    aCharFmtDep, aAnchorCharFmtDep;
-    rtl::OUString sPrefix;
-    rtl::OUString sSuffix;
+    OUString sPrefix;
+    OUString sSuffix;
 protected:
     bool        m_bEndNote;
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
@@ -65,11 +65,11 @@ public:
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
 
-    const rtl::OUString& GetPrefix() const  { return sPrefix; }
-    const rtl::OUString& GetSuffix() const  { return sSuffix; }
+    const OUString& GetPrefix() const  { return sPrefix; }
+    const OUString& GetSuffix() const  { return sSuffix; }
 
-    void SetPrefix(const rtl::OUString& rSet) { sPrefix = rSet; }
-    void SetSuffix(const rtl::OUString& rSet) { sSuffix = rSet; }
+    void SetPrefix(const OUString& rSet) { sPrefix = rSet; }
+    void SetSuffix(const OUString& rSet) { sSuffix = rSet; }
     void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 

@@ -59,29 +59,29 @@ private:
 void TestCharacterClassification::testTitleCase()
 {
     lang::Locale aLocale;
-    aLocale.Language = ::rtl::OUString("en");
-    aLocale.Country = ::rtl::OUString("US");
+    aLocale.Language = OUString("en");
+    aLocale.Country = OUString("US");
 
     {
         //basic example
-        ::rtl::OUString sTest("Some text");
-        ::rtl::OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), aLocale);
+        OUString sTest("Some text");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase == "Some Text");
-        ::rtl::OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), aLocale);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be upper", sUpperCase == "SOME TEXT");
-        ::rtl::OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), aLocale);
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be lower ", sLowerCase == "some text");
     }
 
     {
         //tricky one
         const sal_Unicode LATINSMALLLETTERDZ[] = { 0x01F3 };
-        ::rtl::OUString aTest(LATINSMALLLETTERDZ, SAL_N_ELEMENTS(LATINSMALLLETTERDZ));
-        ::rtl::OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
+        OUString aTest(LATINSMALLLETTERDZ, SAL_N_ELEMENTS(LATINSMALLLETTERDZ));
+        OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be title", sTitleCase.getLength() == 1 && sTitleCase[0] == 0x01F2);
-        ::rtl::OUString sUpperCase = m_xCC->toUpper(aTest, 0, aTest.getLength(), aLocale);
+        OUString sUpperCase = m_xCC->toUpper(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be upper", sUpperCase.getLength() == 1 && sUpperCase[0] == 0x01F1);
-        ::rtl::OUString sLowerCase = m_xCC->toLower(aTest, 0, aTest.getLength(), aLocale);
+        OUString sLowerCase = m_xCC->toLower(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_MESSAGE("Should be lower ", sLowerCase.getLength() == 1 && sLowerCase[0] == 0x01F3);
     }
 }

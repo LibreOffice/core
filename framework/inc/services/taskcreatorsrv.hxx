@@ -134,14 +134,14 @@ class TaskCreatorService : public  css::lang::XTypeProvider
 
         css::uno::Reference< css::frame::XFrame > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
                                                                       const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
-                                                                      const ::rtl::OUString&                           sName            );
+                                                                      const OUString&                           sName            );
 
         void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
         void implts_establishTitleBarUpdate( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         void implts_establishDocModifyListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
-        ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
+        OUString impl_filterNames( const OUString& sName );
 };
 
 } // namespace framework

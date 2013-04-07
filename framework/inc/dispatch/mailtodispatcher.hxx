@@ -83,7 +83,7 @@ class MailToDispatcher : // interfaces
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
-                                                                                                             const ::rtl::OUString&                                      sTarget     ,
+                                                                                                             const OUString&                                      sTarget     ,
                                                                                                                    sal_Int32                                             nFlags      ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException );
 

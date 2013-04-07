@@ -33,15 +33,15 @@ namespace stoc_tdmgr
 
 struct IncompatibleTypeException
 {
-    ::rtl::OUString m_cause;
-    IncompatibleTypeException( ::rtl::OUString const & cause )
+    OUString m_cause;
+    IncompatibleTypeException( OUString const & cause )
         : m_cause( cause ) {}
 };
 
 void check(
     css::uno::Reference<css::reflection::XTypeDescription> const & xNewTD,
     css::uno::Reference<css::reflection::XTypeDescription> const & xExistingTD,
-    ::rtl::OUString const & context = ::rtl::OUString() );
+    OUString const & context = OUString() );
 /* throw (css::uno::RuntimeException, IncompatibleTypeException) */
 
 } // namespace stoc_tdmgr

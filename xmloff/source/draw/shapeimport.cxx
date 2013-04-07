@@ -43,8 +43,6 @@
 #include <map>
 #include <vector>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -993,7 +991,7 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
 
 void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rConnectorShape,
                          sal_Bool bStart,
-                         const rtl::OUString& rDestShapeId,
+                         const OUString& rDestShapeId,
                          sal_Int32 nDestGlueId )
 {
     ConnectionHint aHint;

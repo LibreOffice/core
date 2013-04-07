@@ -61,15 +61,15 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
         xMCF->createInstanceWithContext(
-            rtl::OUString( SIGNATUREVERIFIER_COMPONENT ), mxCtx),
+            OUString( SIGNATUREVERIFIER_COMPONENT ), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
 
     cssu::Sequence<cssu::Any> args(5);
-    args[0] = cssu::makeAny(rtl::OUString::valueOf(nSecurityId));
+    args[0] = cssu::makeAny(OUString::valueOf(nSecurityId));
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
-    args[2] = cssu::makeAny(rtl::OUString::valueOf(nIdOfSignatureElementCollector));
+    args[2] = cssu::makeAny(OUString::valueOf(nIdOfSignatureElementCollector));
     args[3] = cssu::makeAny(m_xSecurityContext);
     args[4] = cssu::makeAny(m_xXMLSignature);
     xInitialization->initialize(args);
@@ -111,7 +111,7 @@ void XSecController::addSignature()
     m_vInternalSignatureInformations.push_back( isi );
 }
 
-void XSecController::addReference( const rtl::OUString& ouUri)
+void XSecController::addReference( const OUString& ouUri)
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -123,7 +123,7 @@ void XSecController::addReference( const rtl::OUString& ouUri)
 }
 
 void XSecController::addStreamReference(
-    const rtl::OUString& ouUri,
+    const OUString& ouUri,
     bool isBinary )
 {
         sal_Int32 type = (isBinary?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
@@ -188,7 +188,7 @@ void XSecController::setReferenceCount() const
     }
 }
 
-void XSecController::setX509IssuerName( rtl::OUString& ouX509IssuerName )
+void XSecController::setX509IssuerName( OUString& ouX509IssuerName )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -199,7 +199,7 @@ void XSecController::setX509IssuerName( rtl::OUString& ouX509IssuerName )
     isi.signatureInfor.ouX509IssuerName = ouX509IssuerName;
 }
 
-void XSecController::setX509SerialNumber( rtl::OUString& ouX509SerialNumber )
+void XSecController::setX509SerialNumber( OUString& ouX509SerialNumber )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -210,7 +210,7 @@ void XSecController::setX509SerialNumber( rtl::OUString& ouX509SerialNumber )
     isi.signatureInfor.ouX509SerialNumber = ouX509SerialNumber;
 }
 
-void XSecController::setX509Certificate( rtl::OUString& ouX509Certificate )
+void XSecController::setX509Certificate( OUString& ouX509Certificate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -221,7 +221,7 @@ void XSecController::setX509Certificate( rtl::OUString& ouX509Certificate )
     isi.signatureInfor.ouX509Certificate = ouX509Certificate;
 }
 
-void XSecController::setSignatureValue( rtl::OUString& ouSignatureValue )
+void XSecController::setSignatureValue( OUString& ouSignatureValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -232,7 +232,7 @@ void XSecController::setSignatureValue( rtl::OUString& ouSignatureValue )
     isi.signatureInfor.ouSignatureValue = ouSignatureValue;
 }
 
-void XSecController::setDigestValue( rtl::OUString& ouDigestValue )
+void XSecController::setDigestValue( OUString& ouDigestValue )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -250,7 +250,7 @@ void XSecController::setDigestValue( rtl::OUString& ouDigestValue )
     reference.ouDigestValue = ouDigestValue;
 }
 
-void XSecController::setDate( rtl::OUString& ouDate )
+void XSecController::setDate( OUString& ouDate )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -262,7 +262,7 @@ void XSecController::setDate( rtl::OUString& ouDate )
     isi.signatureInfor.ouDateTime = ouDate;
 }
 
-void XSecController::setId( rtl::OUString& ouId )
+void XSecController::setId( OUString& ouId )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -273,7 +273,7 @@ void XSecController::setId( rtl::OUString& ouId )
     isi.signatureInfor.ouSignatureId = ouId;
 }
 
-void XSecController::setPropertyId( rtl::OUString& ouPropertyId )
+void XSecController::setPropertyId( OUString& ouPropertyId )
 {
     if (m_vInternalSignatureInformations.empty())
     {
@@ -285,7 +285,7 @@ void XSecController::setPropertyId( rtl::OUString& ouPropertyId )
 }
 
 /* public: for signature verify */
-void XSecController::collectToVerify( const rtl::OUString& referenceId )
+void XSecController::collectToVerify( const OUString& referenceId )
 {
     /* DBG_ASSERT( m_xSAXEventKeeper.is(), "the SAXEventKeeper is NULL" ); */
 

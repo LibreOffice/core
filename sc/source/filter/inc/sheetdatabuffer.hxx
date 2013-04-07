@@ -69,8 +69,8 @@ struct CellFormulaModel
 /** Stores data about table operations. */
 struct DataTableModel
 {
-    ::rtl::OUString     maRef1;             /// First reference cell for table operations.
-    ::rtl::OUString     maRef2;             /// Second reference cell for table operations.
+    OUString     maRef1;             /// First reference cell for table operations.
+    OUString     maRef2;             /// Second reference cell for table operations.
     bool                mb2dTable;          /// True = 2-dimensional data table.
     bool                mbRowTable;         /// True = row oriented data table.
     bool                mbRef1Deleted;      /// True = first reference cell deleted.
@@ -118,7 +118,7 @@ public:
     /** Inserts a value cell into the sheet. */
     void                setValueCell( const CellModel& rModel, double fValue );
     /** Inserts a simple string cell into the sheet. */
-    void                setStringCell( const CellModel& rModel, const ::rtl::OUString& rText );
+    void                setStringCell( const CellModel& rModel, const OUString& rText );
     /** Inserts a rich-string cell into the sheet. */
     void                setStringCell( const CellModel& rModel, const RichStringRef& rxString );
     /** Inserts a shared string cell into the sheet. */
@@ -128,7 +128,7 @@ public:
     /** Inserts a boolean cell into the sheet and adjusts number format. */
     void                setBooleanCell( const CellModel& rModel, bool bValue );
     /** Inserts an error cell from the passed error code into the sheet. */
-    void                setErrorCell( const CellModel& rModel, const ::rtl::OUString& rErrorCode );
+    void                setErrorCell( const CellModel& rModel, const OUString& rErrorCode );
     /** Inserts an error cell from the passed BIFF error code into the sheet. */
     void                setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode );
     /** Inserts a formula cell into the sheet. */

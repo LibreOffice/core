@@ -109,17 +109,17 @@ public:
     /**
      * @descr   Start output element.
      */
-    virtual void            StartElement(const rtl::OUString& oustr);
+    virtual void            StartElement(const OUString& oustr);
 
     /**
      * @descr   End output element.
      */
-    virtual void            EndElement(const rtl::OUString& oustr);
+    virtual void            EndElement(const OUString& oustr);
 
     /**
      * @descr   Output Character section.
      */
-    virtual void            Characters(const rtl::OUString& oustr);
+    virtual void            Characters(const OUString& oustr);
 
     /**
      * @descr   Get the attribute list interface.

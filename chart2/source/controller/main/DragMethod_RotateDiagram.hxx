@@ -39,7 +39,7 @@ public:
     };
 
     DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
-        , const rtl::OUString& rObjectCID
+        , const OUString& rObjectCID
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
         , RotationDirection eRotationDirection
         );

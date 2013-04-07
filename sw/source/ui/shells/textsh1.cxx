@@ -318,11 +318,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // setting the new language...
                 if (aNewLangTxt.Len() > 0)
                 {
-                    const rtl::OUString aSelectionLangPrefix("Current_");
-                    const rtl::OUString aParagraphLangPrefix("Paragraph_");
-                    const rtl::OUString aDocumentLangPrefix("Default_");
-                    const String aStrNone( rtl::OUString("LANGUAGE_NONE") );
-                    const String aStrResetLangs( rtl::OUString("RESET_LANGUAGES") );
+                    const OUString aSelectionLangPrefix("Current_");
+                    const OUString aParagraphLangPrefix("Paragraph_");
+                    const OUString aDocumentLangPrefix("Default_");
+                    const String aStrNone( OUString("LANGUAGE_NONE") );
+                    const String aStrResetLangs( OUString("RESET_LANGUAGES") );
 
                     SfxItemSet aCoreSet( GetPool(),
                             RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -564,7 +564,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                ::rtl::OUString sName = ((SfxStringItem*)pItem)->GetValue();
+                OUString sName = ((SfxStringItem*)pItem)->GetValue();
                 rWrtSh.SetBookmark( KeyCode(), sName, aEmptyStr );
             }
             else
@@ -1321,13 +1321,13 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     aKeyboardLang = aLangTable.GetString( nLang );
 
                 // get the language that is in use
-                String aCurrentLang = rtl::OUString("*");
+                String aCurrentLang = OUString("*");
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                     aCurrentLang = aLangTable.GetString( nLang );
 
                 // build sequence for status value
-                uno::Sequence< ::rtl::OUString > aSeq( 4 );
+                uno::Sequence< OUString > aSeq( 4 );
                 aSeq[0] = aCurrentLang;
                 aSeq[1] = aScriptTypesInUse;
                 aSeq[2] = aKeyboardLang;
@@ -1573,7 +1573,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             break;
             case  SID_OPEN_SMARTTAGMENU:
             {
-                 uno::Sequence< rtl::OUString > aSmartTagTypes;
+                 uno::Sequence< OUString > aSmartTagTypes;
                  uno::Sequence< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
                  uno::Reference<text::XTextRange> xRange;
 
@@ -1591,8 +1591,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
                      uno::Reference <frame::XController> xController = GetView().GetController();
                      const lang::Locale aLocale( SW_BREAKITER()->GetLocale( GetAppLanguageTag() ) );
-                     const rtl::OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
-                     const rtl::OUString aRangeText = xRange->getString();
+                     const OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
+                     const OUString aRangeText = xRange->getString();
 
                      const SvxSmartTagItem aItem( nWhich,
                                                   aActionComponentsSequence,

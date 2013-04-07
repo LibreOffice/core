@@ -68,7 +68,7 @@ namespace dbaui
     {
         //................................................................
         static void lcl_getConnectionProvidedTableIcon_nothrow(  const ImageProvider_Data& _rData,
-            const ::rtl::OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
+            const OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
         {
             try
             {
@@ -82,7 +82,7 @@ namespace dbaui
         }
 
         //................................................................
-        static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const ::rtl::OUString& _rName,
+        static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const OUString& _rName,
             sal_uInt16& _out_rResourceID)
         {
             _out_rResourceID = 0;

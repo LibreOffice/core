@@ -36,7 +36,6 @@ using namespace osl;
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 // define ----------------------------------------------------------------
 
@@ -95,7 +94,7 @@ public:
 
     String          GetDefaultPath( sal_uInt16 nId ) const;
     virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 };
 
 // global ----------------------------------------------------------------
@@ -174,7 +173,7 @@ Sequence< OUString > GetDefaultPropertyNames()
     return aNames;
 }
 
-void SvtDefaultOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
+void SvtDefaultOptions_Impl::Notify( const Sequence< OUString >&  )
 {
     // no notification, will never be changed
 }
@@ -188,7 +187,7 @@ void SvtDefaultOptions_Impl::Commit()
 
 String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
-    rtl::OUString aRet;
+    OUString aRet;
     sal_uInt16 nIdx = 0;
 
     while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_WORK )
@@ -202,7 +201,7 @@ String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
                  nId == SvtPathOptions::PATH_MODULE ||
                  nId == SvtPathOptions::PATH_PLUGIN )
             {
-                rtl::OUString aTmp;
+                OUString aTmp;
                 ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aRet, aTmp );
                 aRet = aTmp;
             }

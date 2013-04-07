@@ -51,7 +51,7 @@ struct TickInfo
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape > xTextShape;
 
-    rtl::OUString aText;//used only for complex categories so far
+    OUString aText;//used only for complex categories so far
     sal_Int32 nFactorForLimitedTextWidth;//categories in higher levels of complex categories can have more place than a single simple category
 
 //methods:

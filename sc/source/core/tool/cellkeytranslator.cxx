@@ -30,7 +30,6 @@ using ::com::sun::star::lang::Locale;
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
 using ::boost::unordered_map;
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 
@@ -84,7 +83,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
     {
         // Since no locale nor opcode matching is needed, simply return
         // the first item on the list.
-        rName = rtl::OUString::createFromAscii( itr->second.front().mpName );
+        rName = OUString::createFromAscii( itr->second.front().mpName );
         return;
     }
 
@@ -104,7 +103,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
                 if ( eLevel == LOCALE_MATCH_ALL )
                 {
                     // Name with matching opcode and locale found.
-                    rName = rtl::OUString::createFromAscii( itrList->mpName );
+                    rName = OUString::createFromAscii( itrList->mpName );
                     return;
                 }
                 else if ( eLevel > eLocaleMatchLevel )
@@ -125,7 +124,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
             if ( itrList->meOpCode == eOpCode )
             {
                 // Name with a matching opcode preferred.
-                rName = rtl::OUString::createFromAscii( itrList->mpName );
+                rName = OUString::createFromAscii( itrList->mpName );
                 return;
             }
         }
@@ -135,7 +134,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
             if ( eLevel == LOCALE_MATCH_ALL )
             {
                 // Name with matching locale preferred.
-                rName = rtl::OUString::createFromAscii( itrList->mpName );
+                rName = OUString::createFromAscii( itrList->mpName );
                 return;
             }
             else if ( eLevel > eLocaleMatchLevel )
@@ -148,7 +147,7 @@ static void lclMatchKeyword(String& rName, const ScCellKeywordHashMap& aMap,
     }
 
     // No preferred strings found.  Return the best matching name.
-    rName = rtl::OUString::createFromAscii(aBestMatchName);
+    rName = OUString::createFromAscii(aBestMatchName);
 }
 
 void ScCellKeywordTranslator::transKeyword(String& rName, const Locale* pLocale, OpCode eOpCode)
@@ -162,7 +161,7 @@ void ScCellKeywordTranslator::transKeyword(String& rName, const Locale* pLocale,
     lclMatchKeyword(rName, spInstance->maStringNameMap, eOpCode, pLocale);
 }
 
-void ScCellKeywordTranslator::transKeyword(rtl::OUString& rName, const Locale* pLocale, OpCode eOpCode)
+void ScCellKeywordTranslator::transKeyword(OUString& rName, const Locale* pLocale, OpCode eOpCode)
 {
     String aName = rName;
     transKeyword(aName, pLocale, eOpCode);
@@ -225,7 +224,7 @@ void ScCellKeywordTranslator::addToMap(const String& rKey, const sal_Char* pName
 void ScCellKeywordTranslator::addToMap(const TransItem* pItems, const Locale& rLocale)
 {
     for (sal_uInt16 i = 0; pItems[i].from != NULL; ++i)
-        addToMap(rtl::OUString(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);
+        addToMap(OUString(pItems[i].from), pItems[i].to, rLocale, pItems[i].func);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

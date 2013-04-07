@@ -38,17 +38,17 @@ UUIInteractionHandler::~UUIInteractionHandler()
     delete m_pImpl;
 }
 
-rtl::OUString SAL_CALL UUIInteractionHandler::getImplementationName()
+OUString SAL_CALL UUIInteractionHandler::getImplementationName()
     throw (uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii(m_aImplementationName);
+    return OUString::createFromAscii(m_aImplementationName);
 }
 
 sal_Bool SAL_CALL
-UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
+UUIInteractionHandler::supportsService(OUString const & rServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString >
+    uno::Sequence< OUString >
     aNames(getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         if (aNames[i] == rServiceName)
@@ -56,7 +56,7 @@ UUIInteractionHandler::supportsService(rtl::OUString const & rServiceName)
     return false;
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UUIInteractionHandler::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
@@ -76,7 +76,7 @@ UUIInteractionHandler::initialize(
     // in Parent and Context values; for backwards compatibility, keep support
     // for a PropertyValue sequence, too:
     uno::Reference< awt::XWindow > xWindow;
-    rtl::OUString aContext;
+    OUString aContext;
     if (!((rArguments.getLength() == 1 && (rArguments[0] >>= xWindow)) ||
           (rArguments.getLength() == 2 && (rArguments[0] >>= xWindow) &&
            (rArguments[1] >>= aContext))))

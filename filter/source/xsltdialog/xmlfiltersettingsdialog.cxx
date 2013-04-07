@@ -1657,7 +1657,7 @@ OUString string_decode( const OUString & rText )
 
 // -----------------------------------------------------------------------
 
-bool isFileURL( const ::rtl::OUString & rURL )
+bool isFileURL( const OUString & rURL )
 {
     return rURL.startsWith("file:");
 }

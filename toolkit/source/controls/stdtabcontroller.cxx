@@ -110,7 +110,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
             if ( pTabs )
             {
                 // opt: Constant String for TabStop name
-                static const ::rtl::OUString aTabStopName( "Tabstop" );
+                static const OUString aTabStopName( "Tabstop" );
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
                 Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
@@ -325,7 +325,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 
     xVclContainerPeer->setTabOrder( aCompSeq, aTabSeq, mxModel->getGroupControl() );
 
-    ::rtl::OUString aName;
+    OUString aName;
     Sequence< Reference< XControlModel > >  aThisGroupModels;
     Sequence< Reference< XWindow > >        aControlComponents;
 

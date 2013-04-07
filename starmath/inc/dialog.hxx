@@ -196,8 +196,8 @@ public:
 
 class SmCategoryDesc : public Resource
 {
-    rtl::OUString   Name;
-    rtl::OUString  *Strings[4];
+    OUString   Name;
+    OUString  *Strings[4];
     Bitmap         *Graphics[4];    /* regular bitmaps */
     sal_uInt16          Minimum[4];
     sal_uInt16          Maximum[4];
@@ -207,8 +207,8 @@ public:
     SmCategoryDesc(const ResId &rResId, sal_uInt16 nCategoryIdx);
     ~SmCategoryDesc();
 
-    const rtl::OUString& GetName() const                 { return Name; }
-    const rtl::OUString* GetString(sal_uInt16 Index) const   { return Strings[Index];  }
+    const OUString& GetName() const                 { return Name; }
+    const OUString* GetString(sal_uInt16 Index) const   { return Strings[Index];  }
     sal_uInt16          GetMinimum(sal_uInt16 Index)        { return Minimum[Index]; }
     sal_uInt16          GetMaximum(sal_uInt16 Index)        { return Maximum[Index]; }
     sal_uInt16          GetValue(sal_uInt16 Index) const    { return Value[Index]; }
@@ -251,7 +251,7 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
     using   Window::SetHelpId;
-    void    SetHelpId(MetricField &rField, const rtl::OString& sHelpId);
+    void    SetHelpId(MetricField &rField, const OString& sHelpId);
     void    SetCategory(sal_uInt16 Category);
 
 public:
@@ -357,7 +357,7 @@ class SmSymbolDialog : public ModalDialog
     SmViewShell        &rViewSh;
     SmSymbolManager    &rSymbolMgr;
 
-    rtl::OUString       aSymbolSetName;
+    OUString       aSymbolSetName;
     SymbolPtrVec_t      aSymbolSet;
 
     OutputDevice       *pFontListDev;

@@ -28,13 +28,13 @@ using namespace ::com::sun::star;
 static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
 {
     uno::Sequence< style::TabStop > aSeq;
-    xParaProps->getPropertyValue( rtl::OUString("ParaTabStops") ) >>= aSeq;
+    xParaProps->getPropertyValue( OUString("ParaTabStops") ) >>= aSeq;
     return aSeq;
 }
 
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
 {
-    xParaProps->setPropertyValue( rtl::OUString("ParaTabStops"), uno::makeAny( aSeq ) );
+    xParaProps->setPropertyValue( OUString("ParaTabStops"), uno::makeAny( aSeq ) );
 }
 
 typedef ::cppu::WeakImplHelper2< container::XIndexAccess, container::XEnumerationAccess > TabStopCollectionHelper_Base;
@@ -144,7 +144,7 @@ uno::Reference< word::XTabStop > SAL_CALL SwVbaTabStops::Add( float Position, co
             case word::WdTabAlignment::wdAlignTabBar:
             case word::WdTabAlignment::wdAlignTabList:
             {
-                DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() );
+                DebugHelper::exception( SbERR_NOT_IMPLEMENTED, OUString() );
                 break;
             }
             default:
@@ -249,20 +249,20 @@ SwVbaTabStops::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaTabStops::getServiceImplName()
 {
-    return rtl::OUString("SwVbaTabStops");
+    return OUString("SwVbaTabStops");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaTabStops::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.TabStops");
+        sNames[0] = OUString("ooo.vba.word.TabStops");
     }
     return sNames;
 }

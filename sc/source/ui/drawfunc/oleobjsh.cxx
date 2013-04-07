@@ -53,7 +53,7 @@ ScOleObjectShell::ScOleObjectShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId(HID_SCSHELL_OLEOBEJCTSH);
-    SetName(rtl::OUString("OleObject"));
+    SetName(OUString("OleObject"));
 }
 
 ScOleObjectShell::~ScOleObjectShell()

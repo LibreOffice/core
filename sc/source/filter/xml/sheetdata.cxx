@@ -29,7 +29,7 @@
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),
     mnStartOffset( -1 ),
-    maPreviousNote( rtl::OUString(), rtl::OUString(), ScAddress(ScAddress::INITIALIZE_INVALID) ),
+    maPreviousNote( OUString(), OUString(), ScAddress(ScAddress::INITIALIZE_INVALID) ),
     mbInSupportedSave( false )
 {
 }
@@ -38,27 +38,27 @@ ScSheetSaveData::~ScSheetSaveData()
 {
 }
 
-void ScSheetSaveData::AddCellStyle( const rtl::OUString& rName, const ScAddress& rCellPos )
+void ScSheetSaveData::AddCellStyle( const OUString& rName, const ScAddress& rCellPos )
 {
     maCellStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
 }
 
-void ScSheetSaveData::AddColumnStyle( const rtl::OUString& rName, const ScAddress& rCellPos )
+void ScSheetSaveData::AddColumnStyle( const OUString& rName, const ScAddress& rCellPos )
 {
     maColumnStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
 }
 
-void ScSheetSaveData::AddRowStyle( const rtl::OUString& rName, const ScAddress& rCellPos )
+void ScSheetSaveData::AddRowStyle( const OUString& rName, const ScAddress& rCellPos )
 {
     maRowStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
 }
 
-void ScSheetSaveData::AddTableStyle( const rtl::OUString& rName, const ScAddress& rCellPos )
+void ScSheetSaveData::AddTableStyle( const OUString& rName, const ScAddress& rCellPos )
 {
     maTableStyles.push_back( ScCellStyleEntry( rName, rCellPos ) );
 }
 
-void ScSheetSaveData::HandleNoteStyles( const rtl::OUString& rStyleName, const rtl::OUString& rTextName, const ScAddress& rCellPos )
+void ScSheetSaveData::HandleNoteStyles( const OUString& rStyleName, const OUString& rTextName, const ScAddress& rCellPos )
 {
     // only consecutive duplicates (most common case) are filtered out here,
     // the others are found when the styles are created
@@ -76,7 +76,7 @@ void ScSheetSaveData::HandleNoteStyles( const rtl::OUString& rStyleName, const r
     maNoteStyles.push_back( aNewEntry );
 }
 
-void ScSheetSaveData::AddNoteContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
+void ScSheetSaveData::AddNoteContentStyle( sal_uInt16 nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
 {
     if ( nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH )
         maNoteParaStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
@@ -84,7 +84,7 @@ void ScSheetSaveData::AddNoteContentStyle( sal_uInt16 nFamily, const rtl::OUStri
         maNoteTextStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
 }
 
-void ScSheetSaveData::AddTextStyle( const rtl::OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
+void ScSheetSaveData::AddTextStyle( const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection )
 {
     maTextStyles.push_back( ScTextStyleEntry( rName, rCellPos, rSelection ) );
 }
@@ -201,7 +201,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
     }
 }
 
-static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const rtl::OUString& rName )
+static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const OUString& rName )
 {
     NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
     while (aIter != aEnd)

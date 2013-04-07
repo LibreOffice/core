@@ -43,8 +43,8 @@ using namespace ::sf_misc;
 #define BASPROV_PROPERTY_ID_URI         1
 #define BASPROV_PROPERTY_ID_EDITABLE    2
 
-#define BASPROV_PROPERTY_URI            ::rtl::OUString( "URI"  )
-#define BASPROV_PROPERTY_EDITABLE       ::rtl::OUString( "Editable"  )
+#define BASPROV_PROPERTY_URI            OUString( "URI"  )
+#define BASPROV_PROPERTY_EDITABLE       OUString( "Editable"  )
 
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 
@@ -59,7 +59,7 @@ namespace basprov
     // =============================================================================
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
-        const ::rtl::OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
+        const OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
         ,OPropertyContainer( GetBroadcastHelper() )
         ,m_xContext( rxContext )
@@ -76,17 +76,17 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString("vnd.sun.star.script:");
+                    m_sURI = OUString("vnd.sun.star.script:");
                     m_sURI += pBasic->GetName();
-                    m_sURI += ::rtl::OUString(".");
+                    m_sURI += OUString(".");
                     m_sURI += pModule->GetName();
-                    m_sURI += ::rtl::OUString(".");
+                    m_sURI += OUString(".");
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += ::rtl::OUString("?language=Basic&location=");
+                    m_sURI += OUString("?language=Basic&location=");
                     if ( m_bIsAppScript )
-                        m_sURI += ::rtl::OUString("application");
+                        m_sURI += OUString("application");
                     else
-                        m_sURI += ::rtl::OUString("document");
+                        m_sURI += OUString("document");
                 }
             }
         }
@@ -117,11 +117,11 @@ namespace basprov
     // XBrowseNode
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
+    OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
 
-        ::rtl::OUString sMethodName;
+        OUString sMethodName;
         if ( m_pMethod )
             sMethodName = m_pMethod->GetName();
 
@@ -196,7 +196,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    Any BasicMethodNodeImpl::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams,
+    Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams,
         Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
         throw (IllegalArgumentException, script::CannotConvertException,
                reflection::InvocationTargetException, RuntimeException)
@@ -207,7 +207,7 @@ namespace basprov
 
         if ( aFunctionName == BASPROV_PROPERTY_EDITABLE )
         {
-            ::rtl::OUString sDocURL, sLibName, sModName;
+            OUString sDocURL, sLibName, sModName;
             sal_uInt16 nLine1 = 0, nLine2;
 
             if ( !m_bIsAppScript )
@@ -259,24 +259,24 @@ namespace basprov
                     Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create( m_xContext ) );
 
                     Sequence < PropertyValue > aArgs(7);
-                    aArgs[0].Name = ::rtl::OUString("Document");
+                    aArgs[0].Name = OUString("Document");
                     aArgs[0].Value <<= sDocURL;
-                    aArgs[1].Name = ::rtl::OUString("LibName");
+                    aArgs[1].Name = OUString("LibName");
                     aArgs[1].Value <<= sLibName;
-                    aArgs[2].Name = ::rtl::OUString("Name");
+                    aArgs[2].Name = OUString("Name");
                     aArgs[2].Value <<= sModName;
-                    aArgs[3].Name = ::rtl::OUString("Type");
-                    aArgs[3].Value <<= ::rtl::OUString("Module");
-                    aArgs[4].Name = ::rtl::OUString("Line");
+                    aArgs[3].Name = OUString("Type");
+                    aArgs[3].Value <<= OUString("Module");
+                    aArgs[4].Name = OUString("Line");
                     aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                    xHelper->executeDispatch( xProv, ::rtl::OUString(".uno:BasicIDEAppear"), ::rtl::OUString(), 0, aArgs );
+                    xHelper->executeDispatch( xProv, OUString(".uno:BasicIDEAppear"), OUString(), 0, aArgs );
                 }
             }
         }
         else
         {
             throw IllegalArgumentException(
-                ::rtl::OUString( "BasicMethodNodeImpl::invoke: function name not supported!"  ),
+                OUString( "BasicMethodNodeImpl::invoke: function name not supported!"  ),
                 Reference< XInterface >(), 1 );
         }
 
@@ -285,7 +285,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    void BasicMethodNodeImpl::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue )
+    void BasicMethodNodeImpl::setValue( const OUString& aPropertyName, const Any& aValue )
         throw (UnknownPropertyException, script::CannotConvertException,
                reflection::InvocationTargetException, RuntimeException)
     {
@@ -293,24 +293,24 @@ namespace basprov
         (void)aValue;
 
         throw UnknownPropertyException(
-            ::rtl::OUString( "BasicMethodNodeImpl::setValue: property name is unknown!"  ),
+            OUString( "BasicMethodNodeImpl::setValue: property name is unknown!"  ),
             Reference< XInterface >() );
     }
 
     // -----------------------------------------------------------------------------
 
-    Any BasicMethodNodeImpl::getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         (void)aPropertyName;
 
         throw UnknownPropertyException(
-            ::rtl::OUString( "BasicMethodNodeImpl::getValue: property name is unknown!"  ),
+            OUString( "BasicMethodNodeImpl::getValue: property name is unknown!"  ),
             Reference< XInterface >() );
     }
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool BasicMethodNodeImpl::hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException)
+    sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException)
     {
         sal_Bool bReturn = sal_False;
         if ( aName == BASPROV_PROPERTY_EDITABLE )
@@ -321,7 +321,7 @@ namespace basprov
 
     // -----------------------------------------------------------------------------
 
-    sal_Bool BasicMethodNodeImpl::hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException)
+    sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName ) throw (RuntimeException)
     {
         (void)aName;
 

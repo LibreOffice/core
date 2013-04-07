@@ -235,7 +235,7 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     if ( m_aLinkFilterName.getLength() )
     {
         ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
-        ::rtl::OUString aExportFilterName = aHelper.GetExportFilterFromImportFilter( m_aLinkFilterName );
+        OUString aExportFilterName = aHelper.GetExportFilterFromImportFilter( m_aLinkFilterName );
         m_bReadOnly = !( aExportFilterName.equals( m_aLinkFilterName ) );
     }
 
@@ -318,7 +318,7 @@ void OCommonEmbeddedObject::requestPositioning( const awt::Rectangle& aRect )
 }
 
 //------------------------------------------------------
-void OCommonEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
+void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
     {
@@ -472,7 +472,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
 }
 
 //------------------------------------------------------
-::rtl::OUString SAL_CALL OCommonEmbeddedObject::getClassName()
+OUString SAL_CALL OCommonEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
     if ( m_bDisposed )
@@ -483,7 +483,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
 
 //------------------------------------------------------
 void SAL_CALL OCommonEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& /*aClassID*/, const ::rtl::OUString& /*aClassName*/ )
+                const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
@@ -503,7 +503,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
     if ( m_nObjectState == -1 )
     {
         // the object is still not loaded
-        throw uno::RuntimeException( ::rtl::OUString( "Can't store object without persistence!\n" ),
+        throw uno::RuntimeException( OUString( "Can't store object without persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 

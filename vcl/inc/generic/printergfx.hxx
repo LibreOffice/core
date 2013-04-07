@@ -160,7 +160,7 @@ typedef enum {
 
 struct GraphicsStatus
 {
-    rtl::OString        maFont;
+    OString        maFont;
     rtl_TextEncoding    maEncoding;
     bool                mbArtItalic;
     bool                mbArtBold;
@@ -264,7 +264,7 @@ public:
     { maVirtualStatus.maColor = rColor; }
 
     void            PSUploadPS1Font (sal_Int32 nFontID);
-    void            PSSetFont (const rtl::OString& rName,
+    void            PSSetFont (const OString& rName,
                                rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW)
     { maVirtualStatus.maFont = rName; maVirtualStatus.maEncoding = nEncoding; }
 
@@ -302,7 +302,7 @@ public:
 
     void            OnEndPage ();
     void            OnEndJob ();
-    void            writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppliedFonts, std::list< rtl::OString >& rNeededFonts );
+    void            writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts, std::list< OString >& rNeededFonts );
     PrintFontManager& GetFontMgr () { return mrFontMgr; }
 
     void            drawVerticalizedText (const Point& rPoint,

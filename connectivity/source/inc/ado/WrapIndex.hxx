@@ -36,8 +36,8 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const;
-            void            put_Name(const ::rtl::OUString& _rName);
+            OUString get_Name() const;
+            void            put_Name(const OUString& _rName);
             sal_Bool        get_Clustered() const;
             void            put_Clustered(sal_Bool _b);
             sal_Bool        get_Unique() const;

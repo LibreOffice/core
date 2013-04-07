@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using ::rtl::OUString;
 using namespace ::comphelper;
 
 #define SW_PROP_NMID(id)    ((const char*)id), 0

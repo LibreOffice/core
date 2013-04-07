@@ -88,20 +88,20 @@ ScVbaComments::getElementType() throw (uno::RuntimeException)
     return excel::XComment::static_type(0);
 }
 
-rtl::OUString
+OUString
 ScVbaComments::getServiceImplName()
 {
-    return rtl::OUString("ScVbaComments");
+    return OUString("ScVbaComments");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaComments::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.excel.Comments");
+        sNames[0] = OUString("ooo.vba.excel.Comments");
     }
     return sNames;
 }

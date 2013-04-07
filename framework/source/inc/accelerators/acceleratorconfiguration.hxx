@@ -124,12 +124,12 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents()
             throw(css::uno::RuntimeException);
 
-        virtual ::rtl::OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+        virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
             throw(css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
         virtual void SAL_CALL setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
-            const ::rtl::OUString&    sCommand )
+            const OUString&    sCommand )
             throw(css::lang::IllegalArgumentException,
             css::uno::RuntimeException         );
 
@@ -137,16 +137,16 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const ::rtl::OUString& sCommand)
+        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand)
             throw(css::lang::IllegalArgumentException   ,
             css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< ::rtl::OUString >& lCommandList)
+        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
             throw(css::lang::IllegalArgumentException   ,
             css::uno::RuntimeException            );
 
-        virtual void SAL_CALL removeCommandFromAllKeyEvents(const ::rtl::OUString& sCommand)
+        virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand)
             throw(css::lang::IllegalArgumentException   ,
             css::container::NoSuchElementException,
             css::uno::RuntimeException            );
@@ -196,7 +196,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::uno::RuntimeException);
 
         // IStorageListener
-        virtual void changesOccurred(const ::rtl::OUString& sPath);
+        virtual void changesOccurred(const OUString& sPath);
 
         //______________________________________
         // helper for derived classes
@@ -260,7 +260,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
         Depends from the parameter bWriteable!
         */
         css::uno::Reference< css::uno::XInterface > impl_ts_openSubStorage(const css::uno::Reference< css::embed::XStorage >& xRootStorage,
-            const ::rtl::OUString&                             sSubStorage ,
+            const OUString&                             sSubStorage ,
             sal_Bool                                     bOutStream  );
 
         //---------------------------------------
@@ -311,8 +311,8 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         AcceleratorCache* m_pPrimaryWriteCache;
         AcceleratorCache* m_pSecondaryWriteCache;
 
-        ::rtl::OUString m_sGlobalOrModules;
-        ::rtl::OUString m_sModuleCFG;
+        OUString m_sGlobalOrModules;
+        OUString m_sModuleCFG;
 
         ::salhelper::SingletonRef< KeyMapping > m_rKeyMapping;
 
@@ -337,12 +337,12 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getAllKeyEvents()
             throw(css::uno::RuntimeException);
 
-        virtual ::rtl::OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
+        virtual OUString SAL_CALL getCommandByKeyEvent(const css::awt::KeyEvent& aKeyEvent)
             throw(css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
         virtual void SAL_CALL setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
-            const ::rtl::OUString&    sCommand )
+            const OUString&    sCommand )
             throw(css::lang::IllegalArgumentException,
             css::uno::RuntimeException         );
 
@@ -350,16 +350,16 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const ::rtl::OUString& sCommand)
+        virtual css::uno::Sequence< css::awt::KeyEvent > SAL_CALL getKeyEventsByCommand(const OUString& sCommand)
             throw(css::lang::IllegalArgumentException   ,
             css::container::NoSuchElementException,
             css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< ::rtl::OUString >& lCommandList)
+        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
             throw(css::lang::IllegalArgumentException   ,
             css::uno::RuntimeException            );
 
-        virtual void SAL_CALL removeCommandFromAllKeyEvents(const ::rtl::OUString& sCommand)
+        virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand)
             throw(css::lang::IllegalArgumentException   ,
             css::container::NoSuchElementException,
             css::uno::RuntimeException            );
@@ -440,10 +440,10 @@ class XCUBasedAcceleratorConfiguration : protected ThreadHelpBase               
         void impl_ts_load(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
         void impl_ts_save(sal_Bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg);
 
-        void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const ::rtl::OUString& sCommand, const sal_Bool bPreferred);
+        void insertKeyToConfiguration(const css::awt::KeyEvent& aKeyEvent, const OUString& sCommand, const sal_Bool bPreferred);
         void removeKeyFromConfiguration(const css::awt::KeyEvent& aKeyEvent, const sal_Bool bPreferred);
 
-        void reloadChanged(const ::rtl::OUString& sPrimarySecondary, const ::rtl::OUString& sGlobalModules, const ::rtl::OUString& sModule, const ::rtl::OUString& sKey);
+        void reloadChanged(const OUString& sPrimarySecondary, const OUString& sGlobalModules, const OUString& sModule, const OUString& sKey);
         AcceleratorCache& impl_getCFG(sal_Bool bPreferred, sal_Bool bWriteAccessRequested = sal_False);
 
 };

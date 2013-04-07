@@ -44,6 +44,8 @@
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
 
+using rtl::OUString;
+
 #include "macro_expander.hxx"
 #include "paths.hxx"
 #include "servicemanager.hxx"

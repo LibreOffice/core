@@ -47,8 +47,8 @@ class SVX_DLLPUBLIC SvxSmartTagItem : public SfxPoolItem
     const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mxRange;
     const com::sun::star::uno::Reference<com::sun::star::frame::XController> mxController;
     const com::sun::star::lang::Locale maLocale;
-    const rtl::OUString maApplicationName;
-    const rtl::OUString maRangeText;
+    const OUString maApplicationName;
+    const OUString maRangeText;
 
 public:
     TYPEINFO();
@@ -60,8 +60,8 @@ public:
                      const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> rRange,
                      const com::sun::star::uno::Reference<com::sun::star::frame::XController> rController,
                      const com::sun::star::lang::Locale rLocale,
-                     const rtl::OUString& rApplicationName,
-                     const rtl::OUString& rRangeText );
+                     const OUString& rApplicationName,
+                     const OUString& rRangeText );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
@@ -77,8 +77,8 @@ public:
     const com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& GetTextRange() const { return mxRange; }
     const com::sun::star::uno::Reference<com::sun::star::frame::XController>& GetController() const { return mxController; }
     const com::sun::star::lang::Locale& GetLocale() const { return maLocale; }
-    const rtl::OUString GetApplicationName() const { return maApplicationName; }
-    const rtl::OUString GetRangeText() const { return maRangeText; }
+    const OUString GetApplicationName() const { return maApplicationName; }
+    const OUString GetRangeText() const { return maRangeText; }
 };
 
 #endif // #ifndef _SVX_SMARTTAGITEM_HXX

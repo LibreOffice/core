@@ -26,7 +26,7 @@
 
 namespace test {
 
-rtl::OUString uniquePipeName(rtl::OUString const & name) {
+OUString uniquePipeName(OUString const & name) {
     oslProcessInfo info;
     info.Size = sizeof info;
     CPPUNIT_ASSERT_EQUAL(

@@ -142,7 +142,7 @@ public:
         @param o_pId        if not 0, receives Id of last Undo action.
         @return     true if there is a Undo action, false if none
     */
-    virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
+    virtual bool GetLastUndoInfo(OUString *const o_pStr,
                 SwUndoId *const o_pId) const = 0;
 
     /** Get comments of Undo actions.
@@ -160,7 +160,7 @@ public:
         @param o_pStr       if not 0, receives comment of first Redo action.
         @return     true if there is a Redo action, false if none
     */
-    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const = 0;
+    virtual bool GetFirstRedoInfo(OUString *const o_pStr) const = 0;
 
     /** Get comments of Redo actions.
         @return     comments of all top-level Redo actions.
@@ -179,7 +179,7 @@ public:
         @return     Id of last Undo action if it is Repeat capable,
                     or UNDO_EMPTY if there is none or it is not Repeat capable.
     */
-    virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const = 0;
+    virtual SwUndoId GetRepeatInfo(OUString *const o_pStr) const = 0;
 
     /** Add new Undo action.
         Takes over ownership of pUndo.

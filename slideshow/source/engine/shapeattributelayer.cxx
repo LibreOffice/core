@@ -727,7 +727,7 @@ namespace slideshow
             return mbFontFamilyValid ? true : haveChild() ? mpChild->isFontFamilyValid() : false;
         }
 
-        ::rtl::OUString ShapeAttributeLayer::getFontFamily() const
+        OUString ShapeAttributeLayer::getFontFamily() const
         {
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
@@ -736,10 +736,10 @@ namespace slideshow
             else if( haveChild() )
                 return mpChild->getFontFamily();
             else
-                return ::rtl::OUString();
+                return OUString();
         }
 
-        void ShapeAttributeLayer::setFontFamily( const ::rtl::OUString& rName )
+        void ShapeAttributeLayer::setFontFamily( const OUString& rName )
         {
             maFontFamily = rName;
             mbFontFamilyValid = true;

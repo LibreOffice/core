@@ -30,8 +30,6 @@
 #include "document.hxx"
 #include "ftools.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -336,7 +334,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const bool bIsFormula)
 
 //_____________________________________________________________________
 
-void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUStringBuffer& sDate)
+void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, OUStringBuffer& sDate)
 {
     util::DateTime aAPIDateTime;
     ConvertCoreToAPIDateTime(aDateTime, aAPIDateTime);

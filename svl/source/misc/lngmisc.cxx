@@ -26,7 +26,7 @@
 
 namespace linguistic
 {
-    sal_Int32 GetNumControlChars(const rtl::OUString &rTxt)
+    sal_Int32 GetNumControlChars(const OUString &rTxt)
     {
         sal_Int32 nCnt = 0;
         for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
@@ -35,7 +35,7 @@ namespace linguistic
         return nCnt;
     }
 
-    bool RemoveHyphens(rtl::OUString &rTxt)
+    bool RemoveHyphens(OUString &rTxt)
     {
         sal_Int32 n = rTxt.getLength();
         rTxt = comphelper::string::remove(rTxt, SVT_SOFT_HYPHEN);
@@ -43,13 +43,13 @@ namespace linguistic
         return n != rTxt.getLength();
     }
 
-    bool RemoveControlChars(rtl::OUString &rTxt)
+    bool RemoveControlChars(OUString &rTxt)
     {
         sal_Int32 nSize = rTxt.getLength() - GetNumControlChars(rTxt);
         if(nSize == rTxt.getLength())
             return false;
 
-        rtl::OUStringBuffer aBuf(nSize);
+        OUStringBuffer aBuf(nSize);
         aBuf.setLength(nSize);
         for (sal_Int32 i = 0, j = 0; i < rTxt.getLength() && j < nSize; ++i)
             if (!IsControlChar(rTxt[i]))
@@ -61,7 +61,7 @@ namespace linguistic
         return true;
     }
 
-    bool ReplaceControlChars(rtl::OUString &rTxt)
+    bool ReplaceControlChars(OUString &rTxt)
     {
         // non breaking field character
         static const sal_Char CH_TXTATR_INWORD = static_cast<sal_Char>(0x02);
@@ -75,7 +75,7 @@ namespace linguistic
 
         sal_Int32 n = rTxt.getLength();
 
-        rtl::OUStringBuffer aBuf(n);
+        OUStringBuffer aBuf(n);
         aBuf.setLength(n);
 
         sal_Int32 j = 0;
@@ -93,14 +93,14 @@ namespace linguistic
         return true;
     }
 
-    ::rtl::OUString GetThesaurusReplaceText(const ::rtl::OUString &rText)
+    OUString GetThesaurusReplaceText(const OUString &rText)
     {
         // The strings for synonyms returned by the thesaurus sometimes have some
         // explanation text put in between '(' and ')' or a trailing '*'.
         // These parts should not be put in the ReplaceEdit Text that may get
         // inserted into the document. Thus we strip them from the text.
 
-        ::rtl::OUString aText(rText);
+        OUString aText(rText);
 
         sal_Int32 nPos = aText.indexOf('(');
         while (nPos >= 0)
@@ -108,7 +108,7 @@ namespace linguistic
             sal_Int32 nEnd = aText.indexOf(')', nPos);
             if (nEnd >= 0)
             {
-                ::rtl::OUStringBuffer aTextBuf(aText);
+                OUStringBuffer aTextBuf(aText);
                 aTextBuf.remove(nPos, nEnd - nPos + 1);
                 aText = aTextBuf.makeStringAndClear();
             }
@@ -119,7 +119,7 @@ namespace linguistic
 
         nPos = aText.indexOf('*');
         if(nPos == 0)
-            return ::rtl::OUString();
+            return OUString();
         else if(nPos > 0)
             aText = aText.copy(0, nPos);
 

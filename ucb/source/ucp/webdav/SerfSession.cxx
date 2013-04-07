@@ -59,7 +59,7 @@ using namespace http_dav_ucp;
 // -------------------------------------------------------------------
 SerfSession::SerfSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
-        const rtl::OUString& inUri,
+        const OUString& inUri,
         const ucbhelper::InternetProxyDecider & rProxyDecider )
     throw ( DAVException )
     : DAVSession( rSessionFactory )
@@ -159,7 +159,7 @@ void SerfSession::Init()
         {
             apr_sockaddr_t *proxy_address = NULL;
             const apr_status_t status = apr_sockaddr_info_get( &proxy_address,
-                                                               rtl::OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ),
+                                                               OUStringToOString( m_aProxyName, RTL_TEXTENCODING_UTF8 ),
                                                                APR_UNSPEC,
                                                                static_cast<apr_port_t>(m_nProxyPort),
                                                                0, getAprPool() );
@@ -207,7 +207,7 @@ bool SerfSession::isHeadRequestInProgress()
 
 bool SerfSession::isSSLNeeded()
 {
-    return m_aUri.GetScheme().equalsIgnoreAsciiCase( rtl::OUString( "https" ) );
+    return m_aUri.GetScheme().equalsIgnoreAsciiCase( OUString( "https" ) );
 }
 
 char* SerfSession::getHostinfo()
@@ -218,7 +218,7 @@ char* SerfSession::getHostinfo()
 
 // -------------------------------------------------------------------
 // virtual
-sal_Bool SerfSession::CanUse( const rtl::OUString & inUri )
+sal_Bool SerfSession::CanUse( const OUString & inUri )
 {
     try
     {
@@ -296,12 +296,12 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
         return SERF_ERROR_AUTHN_FAILED;
     }
 
-    rtl::OUString theUserName;
-    rtl::OUString thePassWord;
+    OUString theUserName;
+    OUString thePassWord;
     try
     {
         SerfUri uri( getRequestEnvironment().m_aRequestURI );
-        rtl::OUString aUserInfo( uri.GetUserInfo() );
+        OUString aUserInfo( uri.GetUserInfo() );
         if ( aUserInfo.getLength() )
         {
             sal_Int32 nPos = aUserInfo.indexOf( '@' );
@@ -325,7 +325,7 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
     const bool bCanUseSystemCreds = ( ( strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
                                       ( strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
 
-    int theRetVal = pListener->authenticate( rtl::OUString::createFromAscii( inRealm ),
+    int theRetVal = pListener->authenticate( OUString::createFromAscii( inRealm ),
                                              getHostName(),
                                              theUserName,
                                              thePassWord,
@@ -334,8 +334,8 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
 
     if ( theRetVal == 0 )
     {
-        *outUsername = apr_pstrdup( inAprPool, rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
-        *outPassword = apr_pstrdup( inAprPool, rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
+        *outUsername = apr_pstrdup( inAprPool, OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
+        *outPassword = apr_pstrdup( inAprPool, OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
     }
 
     return theRetVal != 0 ? SERF_ERROR_AUTHN_FAILED : APR_SUCCESS;
@@ -344,10 +344,10 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
 namespace {
     // -------------------------------------------------------------------
     // Helper function
-    ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
+    OUString GetHostnamePart( const OUString& _rRawString )
     {
-        ::rtl::OUString sPart;
-        ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
+        OUString sPart;
+        OUString sPartId = OUString::createFromAscii( "CN=" );
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
@@ -387,10 +387,10 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             getMSF()->createInstance(
-                rtl::OUString::createFromAscii( "com.sun.star.xml.crypto.SEInitializer" ) ),
+                OUString::createFromAscii( "com.sun.star.xml.crypto.SEInitializer" ) ),
             uno::UNO_QUERY_THROW);
 
-        xSecurityContext = xSEInitializer->createSecurityContext( rtl::OUString() );
+        xSecurityContext = xSEInitializer->createSecurityContext( OUString() );
         if (xSecurityContext.is())
             xSecurityEnv = xSecurityContext->getSecurityEnvironment();
 
@@ -408,16 +408,16 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     // Decode the server certificate.
     uno::Reference< security::XCertificate > xServerCertificate(
         xSecurityEnv->createCertificateFromAscii(
-            rtl::OUString::createFromAscii(pCertificateChainBase64Encoded[0])));
+            OUString::createFromAscii(pCertificateChainBase64Encoded[0])));
     if ( ! xServerCertificate.is())
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
 
     // Get the subject from the server certificate.
-    ::rtl::OUString sServerCertificateSubject (xServerCertificate->getSubjectName());
+    OUString sServerCertificateSubject (xServerCertificate->getSubjectName());
     sal_Int32 nIndex = 0;
     while (nIndex >= 0)
     {
-        const ::rtl::OUString sToken (sServerCertificateSubject.getToken(0, ',', nIndex));
+        const OUString sToken (sServerCertificateSubject.getToken(0, ',', nIndex));
         if (sToken.startsWith("CN="))
         {
             sServerCertificateSubject = sToken.copy(3);
@@ -451,7 +451,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     {
         uno::Reference< security::XCertificate > xCertificate(
             xSecurityEnv->createCertificateFromAscii(
-                rtl::OUString::createFromAscii(pCertificateChainBase64Encoded[nIndex])));
+                OUString::createFromAscii(pCertificateChainBase64Encoded[nIndex])));
         if ( ! xCertificate.is())
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         aChain.push_back(xCertificate);
@@ -559,7 +559,7 @@ serf_bucket_t* SerfSession::acceptSerfResponse( serf_request_t * inSerfRequest,
     return responseBkt;
 }
 
-SerfRequestProcessor* SerfSession::createReqProc( const rtl::OUString & inPath )
+SerfRequestProcessor* SerfSession::createReqProc( const OUString & inPath )
 {
     return new SerfRequestProcessor( *this,
                                      inPath,
@@ -569,9 +569,9 @@ SerfRequestProcessor* SerfSession::createReqProc( const rtl::OUString & inPath )
 // -------------------------------------------------------------------
 // PROPFIND - allprop & named
 // -------------------------------------------------------------------
-void SerfSession::PROPFIND( const rtl::OUString & inPath,
+void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
-                            const std::vector< rtl::OUString > & inPropNames,
+                            const std::vector< OUString > & inPropNames,
                             std::vector< DAVResource > & ioResources,
                             const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -600,7 +600,7 @@ void SerfSession::PROPFIND( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // PROPFIND - propnames
 // -------------------------------------------------------------------
-void SerfSession::PROPFIND( const rtl::OUString & inPath,
+void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
                             const DAVRequestEnvironment & rEnv )
@@ -629,7 +629,7 @@ void SerfSession::PROPFIND( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // PROPPATCH
 // -------------------------------------------------------------------
-void SerfSession::PROPPATCH( const rtl::OUString & inPath,
+void SerfSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
     throw( DAVException )
@@ -649,8 +649,8 @@ void SerfSession::PROPPATCH( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // HEAD
 // -------------------------------------------------------------------
-void SerfSession::HEAD( const ::rtl::OUString & inPath,
-                        const std::vector< ::rtl::OUString > & inHeaderNames,
+void SerfSession::HEAD( const OUString & inPath,
+                        const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
                         const DAVRequestEnvironment & rEnv )
     throw( DAVException )
@@ -678,7 +678,7 @@ void SerfSession::HEAD( const ::rtl::OUString & inPath,
 // GET
 // -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
-SerfSession::GET( const rtl::OUString & inPath,
+SerfSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
@@ -700,7 +700,7 @@ SerfSession::GET( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // GET
 // -------------------------------------------------------------------
-void SerfSession::GET( const rtl::OUString & inPath,
+void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -721,8 +721,8 @@ void SerfSession::GET( const rtl::OUString & inPath,
 // GET
 // -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
-SerfSession::GET( const rtl::OUString & inPath,
-                  const std::vector< ::rtl::OUString > & inHeaderNames,
+SerfSession::GET( const OUString & inPath,
+                  const std::vector< OUString > & inHeaderNames,
                   DAVResource & ioResource,
                   const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -750,9 +750,9 @@ SerfSession::GET( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // GET
 // -------------------------------------------------------------------
-void SerfSession::GET( const rtl::OUString & inPath,
+void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
-                       const std::vector< ::rtl::OUString > & inHeaderNames,
+                       const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -776,7 +776,7 @@ void SerfSession::GET( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // PUT
 // -------------------------------------------------------------------
-void SerfSession::PUT( const rtl::OUString & inPath,
+void SerfSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -801,9 +801,9 @@ void SerfSession::PUT( const rtl::OUString & inPath,
 // POST
 // -------------------------------------------------------------------
 uno::Reference< io::XInputStream >
-SerfSession::POST( const rtl::OUString & inPath,
-                   const rtl::OUString & rContentType,
-                   const rtl::OUString & rReferer,
+SerfSession::POST( const OUString & inPath,
+                   const OUString & rContentType,
+                   const OUString & rReferer,
                    const uno::Reference< io::XInputStream > & inInputStream,
                    const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -835,9 +835,9 @@ SerfSession::POST( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // POST
 // -------------------------------------------------------------------
-void SerfSession::POST( const rtl::OUString & inPath,
-                        const rtl::OUString & rContentType,
-                        const rtl::OUString & rReferer,
+void SerfSession::POST( const OUString & inPath,
+                        const OUString & rContentType,
+                        const OUString & rReferer,
                         const uno::Reference< io::XInputStream > & inInputStream,
                         uno::Reference< io::XOutputStream > & oOutputStream,
                         const DAVRequestEnvironment & rEnv )
@@ -868,7 +868,7 @@ void SerfSession::POST( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // MKCOL
 // -------------------------------------------------------------------
-void SerfSession::MKCOL( const rtl::OUString & inPath,
+void SerfSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
@@ -886,8 +886,8 @@ void SerfSession::MKCOL( const rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // COPY
 // -------------------------------------------------------------------
-void SerfSession::COPY( const rtl::OUString & inSourceURL,
-                        const rtl::OUString & inDestinationURL,
+void SerfSession::COPY( const OUString & inSourceURL,
+                        const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         sal_Bool inOverWrite )
     throw ( DAVException )
@@ -909,8 +909,8 @@ void SerfSession::COPY( const rtl::OUString & inSourceURL,
 // -------------------------------------------------------------------
 // MOVE
 // -------------------------------------------------------------------
-void SerfSession::MOVE( const rtl::OUString & inSourceURL,
-                        const rtl::OUString & inDestinationURL,
+void SerfSession::MOVE( const OUString & inSourceURL,
+                        const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         sal_Bool inOverWrite )
     throw ( DAVException )
@@ -932,7 +932,7 @@ void SerfSession::MOVE( const rtl::OUString & inSourceURL,
 // -------------------------------------------------------------------
 // DESTROY
 // -------------------------------------------------------------------
-void SerfSession::DESTROY( const rtl::OUString & inPath,
+void SerfSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
@@ -981,7 +981,7 @@ namespace
 // -------------------------------------------------------------------
 // LOCK (set new lock)
 // -------------------------------------------------------------------
-void SerfSession::LOCK( const ::rtl::OUString & inPath,
+void SerfSession::LOCK( const OUString & inPath,
                         ucb::Lock & /*rLock*/,
                         const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -1000,7 +1000,7 @@ void SerfSession::LOCK( const ::rtl::OUString & inPath,
 
     // Set the lock uri
     ne_uri aUri;
-    ne_uri_parse( rtl::OUStringToOString( makeAbsoluteURL( inPath ),
+    ne_uri_parse( OUStringToOString( makeAbsoluteURL( inPath ),
                                           RTL_TEXTENCODING_UTF8 ).getStr(),
                   &aUri );
     theLock->uri = aUri;
@@ -1038,10 +1038,10 @@ void SerfSession::LOCK( const ::rtl::OUString & inPath,
     theLock->timeout = (long)rLock.Timeout;
 
     // Set the lock owner
-    rtl::OUString aValue;
+    OUString aValue;
     rLock.Owner >>= aValue;
     theLock->owner =
-        ne_strdup( rtl::OUStringToOString( aValue,
+        ne_strdup( OUStringToOString( aValue,
                                            RTL_TEXTENCODING_UTF8 ).getStr() );
     TimeValue startCall;
     osl_getSystemTime( &startCall );
@@ -1055,12 +1055,12 @@ void SerfSession::LOCK( const ::rtl::OUString & inPath,
                                   lastChanceToSendRefreshRequest(
                                       startCall, theLock->timeout ) );
 
-        uno::Sequence< rtl::OUString > aTokens( 1 );
-        aTokens[ 0 ] = rtl::OUString::createFromAscii( theLock->token );
+        uno::Sequence< OUString > aTokens( 1 );
+        aTokens[ 0 ] = OUString::createFromAscii( theLock->token );
         rLock.LockTokens = aTokens;
 
         OSL_TRACE( "SerfSession::LOCK: created lock for %s. token: %s",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
+                   OUStringToOString( makeAbsoluteURL( inPath ),
                                            RTL_TEXTENCODING_UTF8 ).getStr(),
                    theLock->token );
     }
@@ -1069,7 +1069,7 @@ void SerfSession::LOCK( const ::rtl::OUString & inPath,
         ne_lock_destroy( theLock );
 
         OSL_TRACE( "SerfSession::LOCK: obtaining lock for %s failed!",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
+                   OUStringToOString( makeAbsoluteURL( inPath ),
                                            RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
@@ -1080,7 +1080,7 @@ void SerfSession::LOCK( const ::rtl::OUString & inPath,
 // -------------------------------------------------------------------
 // LOCK (refresh existing lock)
 // -------------------------------------------------------------------
-sal_Int64 SerfSession::LOCK( const ::rtl::OUString & /*inPath*/,
+sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & /*rEnv*/ )
     throw ( DAVException )
@@ -1152,7 +1152,7 @@ bool SerfSession::LOCK( SerfLock * /*pLock*/,
 // -------------------------------------------------------------------
 // UNLOCK
 // -------------------------------------------------------------------
-void SerfSession::UNLOCK( const ::rtl::OUString & /*inPath*/,
+void SerfSession::UNLOCK( const OUString & /*inPath*/,
                           const DAVRequestEnvironment & /*rEnv*/ )
     throw ( DAVException )
 {
@@ -1177,7 +1177,7 @@ void SerfSession::UNLOCK( const ::rtl::OUString & /*inPath*/,
     else
     {
         OSL_TRACE( "SerfSession::UNLOCK: unlocking of %s failed.",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
+                   OUStringToOString( makeAbsoluteURL( inPath ),
                                            RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
@@ -1232,7 +1232,7 @@ const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
     {
         // TODO: figure out, if this case can occur
         return m_rProxyDecider.getProxy( m_aUri.GetScheme(),
-                                         rtl::OUString() /* not used */,
+                                         OUString() /* not used */,
                                          -1 /* not used */ );
     }
 }
@@ -1246,7 +1246,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 {
     for ( sal_Int32 n = 0; n < rLocks.getLength(); ++n )
     {
-        const uno::Sequence< rtl::OUString > & rTokens
+        const uno::Sequence< OUString > & rTokens
             = rLocks[ n ].LockTokens;
         for ( sal_Int32 m = 0; m < rTokens.getLength(); ++m )
         {
@@ -1261,7 +1261,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 */
 
 // -------------------------------------------------------------------
-bool SerfSession::removeExpiredLocktoken( const rtl::OUString & /*inURL*/,
+bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
                                           const DAVRequestEnvironment & /*rEnv*/ )
 {
     return true;
@@ -1276,7 +1276,7 @@ bool SerfSession::removeExpiredLocktoken( const rtl::OUString & /*inURL*/,
         // @@@ Alternative: use ne_lock_discover() => less overhead
 
         std::vector< DAVResource > aResources;
-        std::vector< rtl::OUString > aPropNames;
+        std::vector< OUString > aPropNames;
         aPropNames.push_back( DAVProperties::LOCKDISCOVERY );
 
         PROPFIND( rEnv.m_aRequestURI, DAVZERO, aPropNames, aResources, rEnv );
@@ -1313,7 +1313,7 @@ bool SerfSession::removeExpiredLocktoken( const rtl::OUString & /*inURL*/,
         // in propfind result -> not locked
         OSL_TRACE( "SerfSession::removeExpiredLocktoken: Removing "
                    " expired lock token for %s. token: %s",
-                   rtl::OUStringToOString( inURL,
+                   OUStringToOString( inURL,
                                            RTL_TEXTENCODING_UTF8 ).getStr(),
                    theLock->token );
 
@@ -1364,7 +1364,7 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
 
         case NE_ERROR:        // Generic error
         {
-            rtl::OUString aText = rtl::OUString::createFromAscii(
+            OUString aText = OUString::createFromAscii(
                 ne_get_error( m_pHttpSession ) );
 
             sal_uInt16 code = makeStatusCode( aText );
@@ -1441,7 +1441,7 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
         {
             OSL_TRACE( "SerfSession::HandleError : Unknown Serf error code!" );
             throw DAVException( DAVException::DAV_HTTP_ERROR,
-                                rtl::OUString::createFromAscii(
+                                OUString::createFromAscii(
                                     ne_get_error( m_pHttpSession ) ) );
         }
     }
@@ -1540,17 +1540,17 @@ SerfSession::getDataFromInputStream(
 
 // ---------------------------------------------------------------------
 sal_Bool
-SerfSession::isDomainMatch( rtl::OUString certHostName )
+SerfSession::isDomainMatch( OUString certHostName )
 {
-    rtl::OUString hostName = getHostName();
+    OUString hostName = getHostName();
 
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+    if ( 0 == certHostName.indexOf( OUString::createFromAscii( "*" ) ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
-        rtl::OUString cmpStr = certHostName.copy( 1 );
+        OUString cmpStr = certHostName.copy( 1 );
 
         if ( hostName.matchIgnoreAsciiCase(
                 cmpStr, hostName.getLength() -  cmpStr.getLength() ) )
@@ -1561,7 +1561,7 @@ SerfSession::isDomainMatch( rtl::OUString certHostName )
 
 /*
 // ---------------------------------------------------------------------
-rtl::OUString SerfSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
+OUString SerfSession::makeAbsoluteURL( OUString const & rURL ) const
 {
     try
     {
@@ -1569,7 +1569,7 @@ rtl::OUString SerfSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
         if ( rURL[ 0 ] != sal_Unicode( '/' ) )
         {
             // absolute.
-            return rtl::OUString( rURL );
+            return OUString( rURL );
         }
         else
         {
@@ -1578,7 +1578,7 @@ rtl::OUString SerfSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
 
             ne_fill_server_uri( m_pHttpSession, &aUri );
             aUri.path
-                = ne_strdup( rtl::OUStringToOString(
+                = ne_strdup( OUStringToOString(
                     rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
             SerfUri aSerfUri( &aUri );
             ne_uri_free( &aUri );
@@ -1589,7 +1589,7 @@ rtl::OUString SerfSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
     {
     }
     // error.
-    return rtl::OUString();
+    return OUString();
 }
 */
 

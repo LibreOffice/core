@@ -333,7 +333,7 @@ void ScEditWindow::LoseFocus()
         break;
     }
     pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
-        rtl::OUString(sName), rtl::OUString(sDescription), ScAccessibleEditObject::EditControl);
+        OUString(sName), OUString(sDescription), ScAccessibleEditObject::EditControl);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;

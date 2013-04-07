@@ -79,7 +79,7 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    Reference< XConnection > SAL_CALL ODriverWrapper::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    Reference< XConnection > SAL_CALL ODriverWrapper::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Reference< XConnection > xConnection;
         if (m_pConnectionPool)
@@ -92,13 +92,13 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL ODriverWrapper::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
+    sal_Bool SAL_CALL ODriverWrapper::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException)
     {
         return m_xDriver.is() && m_xDriver->acceptsURL(url);
     }
 
     //--------------------------------------------------------------------
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverWrapper::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverWrapper::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Sequence< DriverPropertyInfo > aInfo;
         if (m_xDriver.is())

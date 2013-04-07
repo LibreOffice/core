@@ -57,7 +57,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
-using ::rtl::OUString;
 
 namespace xmlscript
 {
@@ -876,7 +875,7 @@ bool ImportContext::importImageURLProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    rtl::OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
+    OUString sURL = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, rAttrName );
     if ( !sURL.isEmpty() )
     {
         Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
@@ -919,7 +918,7 @@ bool ImportContext::importImageURLProperty(
 }
 //__________________________________________________________________________________________________
  bool ImportContext::importDataAwareProperty(
-        ::rtl::OUString const & rPropName,
+        OUString const & rPropName,
         Reference<xml::input::XAttributes> const & xAttributes )
 {
     OUString sLinkedCell;
@@ -1681,7 +1680,7 @@ ElementBase::~ElementBase()
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    ::rtl::OString aStr( ::rtl::OUStringToOString(
+    OString aStr( OUStringToOString(
                              _aLocalName, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "ElementBase::~ElementBase(): %s", aStr.getStr() );
 #endif
@@ -1795,7 +1794,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     SAL_THROW( (Exception) )
 {
     // single set of styles and stylenames apply to all containees
-    :: boost::shared_ptr< ::std::vector< ::rtl::OUString > > pStyleNames( new ::std::vector< ::rtl::OUString > );
+    :: boost::shared_ptr< ::std::vector< OUString > > pStyleNames( new ::std::vector< OUString > );
     :: boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new ::std::vector< css::uno::Reference< css::xml::input::XElement > > );
      return ::xmlscript::createDocumentHandler(
          static_cast< xml::input::XRoot * >(

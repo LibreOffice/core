@@ -297,7 +297,7 @@ sal_Bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         }
         if( bOk )
         {
-            rBase.Write(rtl::OString('.'));
+            rBase.Write(OString('.'));
             bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
         }
         if( bOk )
@@ -329,7 +329,7 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
+                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute's "));
                 aStr.append(pS->GetName().getString());
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(" with different id's"));
                 rBase.SetError(aStr.makeStringAndClear(), rInStm.GetToken());
@@ -344,12 +344,12 @@ sal_Bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInS
             if( nId1 == nId2 && nId1 != 0 )
             {
                 OSL_FAIL( "Gleiche Id in MetaClass : " );
-                OSL_FAIL(rtl::OString::valueOf(static_cast<sal_Int32>(
+                OSL_FAIL(OString::valueOf(static_cast<sal_Int32>(
                     pS->GetSlotId().GetValue())).getStr());
                 OSL_FAIL( pS->GetSlotId().getString().getStr() );
                 OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
 
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
+                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Attribute "));
                 aStr.append(pS->GetName().getString());
                 aStr.append(RTL_CONSTASCII_STRINGPARAM(" and Attribute "));
                 aStr.append(rAttr.GetName().getString());
@@ -442,7 +442,7 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     return nCount;
 }
 
-sal_uInt16 SvMetaClass::WriteSlots( const rtl::OString& rShellName,
+sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
                                 sal_uInt16 nCount, SvSlotElementList & rSlotList,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
@@ -462,7 +462,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const rtl::OString& rShellName,
 
 void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>& rSuperList,
                             SvMetaClassList &rClassList,
-                            const rtl::OString& rPrefix, SvIdlDataBase& rBase)
+                            const OString& rPrefix, SvIdlDataBase& rBase)
 {
     // was this class already written?
     for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
@@ -504,7 +504,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     {
         SvClassElement * pEle = aClassList[n];
         SvMetaClass * pCl = pEle->GetClass();
-        rtl::OStringBuffer rPre(rPrefix);
+        OStringBuffer rPre(rPrefix);
         if( rPre.getLength() && pEle->GetPrefix().getLength() )
             rPre.append('.');
         rPre.append(pEle->GetPrefix());
@@ -544,7 +544,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
 }
 
 
-void SvMetaClass::WriteSlotStubs( const rtl::OString& rShellName,
+void SvMetaClass::WriteSlotStubs( const OString& rShellName,
                                 SvSlotElementList & rSlotList,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
@@ -580,7 +580,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     std::vector<sal_uLong> aSuperList;
     SvMetaClassList classList;
     SvSlotElementList aSlotList;
-    InsertSlots(aSlotList, aSuperList, classList, rtl::OString(), rBase);
+    InsertSlots(aSlotList, aSuperList, classList, OString(), rBase);
     for ( size_t i = 0, n = aSlotList.size(); i < n; ++i )
     {
         SvSlotElement *pEle = aSlotList[ i ];

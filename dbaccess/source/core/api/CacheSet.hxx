@@ -52,7 +52,7 @@ namespace dbaccess
         ::com::sun::star::uno::Sequence<sal_Bool>   m_aSignedFlags;
         ::com::sun::star::uno::Sequence<sal_Int32>  m_aColumnTypes;
         ORowSetRow                                  m_aInsertRow;
-        ::rtl::OUString                             m_aComposedTableName;
+        OUString                             m_aComposedTableName;
         sal_Int32                                   m_nMaxRows;
         sal_Bool                                    m_bInserted;
         sal_Bool                                    m_bUpdated;
@@ -69,21 +69,21 @@ namespace dbaccess
                             ) const;
         void fillParameters( const ORowSetRow& _rRow
                             ,const connectivity::OSQLTable& _xTable
-                            ,::rtl::OUStringBuffer& _sCondition
-                            ,::rtl::OUStringBuffer& _sParameter
+                            ,OUStringBuffer& _sCondition
+                            ,OUStringBuffer& _sParameter
                             ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
-        ::rtl::OUString getIdentifierQuoteString() const;
+        OUString getIdentifierQuoteString() const;
     public:
 
         // late constructor
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const OUString& i_sRowSetFilter);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
 
         // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

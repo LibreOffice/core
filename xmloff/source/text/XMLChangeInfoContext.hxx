@@ -41,11 +41,11 @@ class XMLChangedRegionImportContext;
  */
 class XMLChangeInfoContext : public SvXMLImportContext
 {
-    const ::rtl::OUString& rType;
+    const OUString& rType;
 
-    ::rtl::OUStringBuffer sAuthorBuffer;
-    ::rtl::OUStringBuffer sDateTimeBuffer;
-    ::rtl::OUStringBuffer sCommentBuffer;
+    OUStringBuffer sAuthorBuffer;
+    OUStringBuffer sDateTimeBuffer;
+    OUStringBuffer sCommentBuffer;
 
     XMLChangedRegionImportContext& rChangedRegion;
 
@@ -56,9 +56,9 @@ public:
     XMLChangeInfoContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         XMLChangedRegionImportContext& rChangedRegion,
-        const ::rtl::OUString& rChangeType);
+        const OUString& rChangeType);
 
     ~XMLChangeInfoContext();
 
@@ -68,7 +68,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

@@ -39,7 +39,7 @@
   */
 class SwHeaderFooterWin : public MenuButton, public SwFrameControl
 {
-    rtl::OUString         m_sLabel;
+    OUString         m_sLabel;
     bool                  m_bIsHeader;
     PopupMenu*            m_pPopupMenu;
     Window*               m_pLine;

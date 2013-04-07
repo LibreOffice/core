@@ -96,7 +96,7 @@ XTYPEPROVIDER_IMPL_3( TVFactory,
 
 // XServiceInfo methods.
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 TVFactory::getImplementationName()
     throw( RuntimeException )
 {
@@ -106,7 +106,7 @@ TVFactory::getImplementationName()
 
 sal_Bool SAL_CALL
 TVFactory::supportsService(
-    const rtl::OUString& ServiceName )
+    const OUString& ServiceName )
     throw( RuntimeException )
 {
     return
@@ -115,7 +115,7 @@ TVFactory::supportsService(
 }
 
 
-Sequence< rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames( void )
     throw( RuntimeException )
 {
@@ -128,15 +128,15 @@ TVFactory::getSupportedServiceNames( void )
 
 Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
-    const rtl::OUString& aServiceSpecifier )
+    const OUString& aServiceSpecifier )
     throw( Exception,
            RuntimeException )
 {
     Any aAny;
-    aAny <<= rtl::OUString();
+    aAny <<= OUString();
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
-        rtl::OUString( "nodepath" ),
+        OUString( "nodepath" ),
         -1,
         aAny,
         PropertyState_DIRECT_VALUE );
@@ -148,7 +148,7 @@ TVFactory::createInstance(
 
 Reference< XInterface > SAL_CALL
 TVFactory::createInstanceWithArguments(
-    const rtl::OUString& ServiceSpecifier,
+    const OUString& ServiceSpecifier,
     const Sequence< Any >& Arguments )
     throw( Exception,
            RuntimeException )
@@ -163,7 +163,7 @@ TVFactory::createInstanceWithArguments(
 
     Reference< XInterface > ret = m_xHDS;
 
-    rtl::OUString hierview;
+    OUString hierview;
     for( int i = 0; i < Arguments.getLength(); ++i )
     {
         PropertyValue pV;
@@ -192,12 +192,12 @@ TVFactory::createInstanceWithArguments(
 }
 
 
-Sequence< rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
     throw( RuntimeException )
 {
-    Sequence< rtl::OUString > seq( 1 );
-    seq[0] = rtl::OUString( "com.sun.star.ucb.HierarchyDataReadAccess" );
+    Sequence< OUString > seq( 1 );
+    seq[0] = OUString( "com.sun.star.ucb.HierarchyDataReadAccess" );
     return seq;
 }
 
@@ -206,19 +206,19 @@ TVFactory::getAvailableServiceNames( )
 // static
 
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 TVFactory::getImplementationName_static()
 {
-    return rtl::OUString( "com.sun.star.help.TreeViewImpl" );
+    return OUString( "com.sun.star.help.TreeViewImpl" );
 }
 
 
-Sequence< rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames_static()
 {
-    Sequence< rtl::OUString > seq( 2 );
-    seq[0] = rtl::OUString( "com.sun.star.help.TreeView" );
-    seq[1] = rtl::OUString( "com.sun.star.ucb.HiearchyDataSource" );
+    Sequence< OUString > seq( 2 );
+    seq[0] = OUString( "com.sun.star.help.TreeView" );
+    seq[1] = OUString( "com.sun.star.ucb.HiearchyDataSource" );
     return seq;
 }
 

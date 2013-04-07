@@ -50,15 +50,15 @@ OCatalog::OCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
 void OCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("%");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("%");
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString("%"),::rtl::OUString("%"),aTypes);
+        OUString("%"),OUString("%"),aTypes);
 
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName;
+        OUString aName;
         while(xResult->next())
         {
             aName = xRow->getString(3);

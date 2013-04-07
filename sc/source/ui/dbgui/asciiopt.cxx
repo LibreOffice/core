@@ -38,7 +38,7 @@ static const sal_Char pStrMrg[] = "MRG";
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
-    aFieldSeps      ( rtl::OUString(';') ),
+    aFieldSeps      ( OUString(';') ),
     bMergeFieldSeps ( false ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),

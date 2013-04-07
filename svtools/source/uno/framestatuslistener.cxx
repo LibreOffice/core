@@ -155,7 +155,7 @@ throw ( RuntimeException )
         bindListener();
 }
 
-void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
+void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -186,7 +186,7 @@ void FrameStatusListener::addStatusListener( const rtl::OUString& aCommandURL )
                 Reference< XURLTransformer > xURLTransformer( com::sun::star::util::URLTransformer::create( m_xContext ) );
                 aTargetURL.Complete = aCommandURL;
                 xURLTransformer->parseStrict( aTargetURL );
-                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
@@ -263,7 +263,7 @@ void FrameStatusListener::bindListener()
                 // Query for dispatch object. Old dispatch will be released with this, too.
                 try
                 {
-                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
                 catch (const Exception&)
                 {

@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-void java_util_Properties::setProperty(const ::rtl::OUString key, const ::rtl::OUString& value)
+void java_util_Properties::setProperty(const OUString key, const OUString& value)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     jobject out(0);
@@ -92,7 +92,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
 }
 
 // --------------------------------------------------------------------------------
-jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUString& _rTemp)
+jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _rTemp)
 {
     OSL_ENSURE(pEnv,"Environment is NULL!");
     jstring pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
@@ -145,7 +145,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             &&  pBegin->Name.compareToAscii( "RespectDriverResultSetType" )
             )
         {
-            ::rtl::OUString aStr;
+            OUString aStr;
             OSL_VERIFY( pBegin->Value >>= aStr );
             pProps->setProperty(pBegin->Name,aStr);
         }
@@ -153,15 +153,15 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     return pProps;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
+OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
 {
-    ::rtl::OUString aStr;
+    OUString aStr;
     if(_Str)
     {
         jboolean bCopy(sal_True);
         const jchar* pChar = pEnv->GetStringChars(_Str,&bCopy);
         jsize len = pEnv->GetStringLength(_Str);
-        aStr = ::rtl::OUString(pChar,len);
+        aStr = OUString(pChar,len);
 
         if(bCopy)
             pEnv->ReleaseStringChars(_Str,pChar);
@@ -174,7 +174,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
 {
     if ( _rMap.is() )
     {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = _rMap->getElementNames();
+        ::com::sun::star::uno::Sequence< OUString > aNames = _rMap->getElementNames();
         if ( aNames.getLength() > 0 )
             ::dbtools::throwFeatureNotImplementedException( "Type maps", NULL );
     }
@@ -197,7 +197,7 @@ sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
         {
 
             java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,pThrowable);
-            ::rtl::OUString sError = pException->getMessage();
+            OUString sError = pException->getMessage();
             delete pException;
         }
 #else

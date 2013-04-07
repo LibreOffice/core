@@ -58,8 +58,6 @@
 class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
 // OD 2004-04-21 #i26791#
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -153,7 +151,7 @@ void XMLCharContext::InsertControlCharacter(sal_Int16   _nControl)
 {
     GetImport().GetTextImport()->InsertControlCharacter( _nControl );
 }
-void XMLCharContext::InsertString(const ::rtl::OUString& _sString)
+void XMLCharContext::InsertString(const OUString& _sString)
 {
     GetImport().GetTextImport()->InsertString( _sString );
 }
@@ -827,10 +825,10 @@ class XMLMetaImportContext : public XMLMetaImportContextBase
 {
     // RDFa
     bool m_bHaveAbout;
-    ::rtl::OUString m_sAbout;
-    ::rtl::OUString m_sProperty;
-    ::rtl::OUString m_sContent;
-    ::rtl::OUString m_sDatatype;
+    OUString m_sAbout;
+    OUString m_sProperty;
+    OUString m_sContent;
+    OUString m_sDatatype;
 
 public:
     TYPEINFO();
@@ -1000,8 +998,8 @@ void XMLMetaFieldImportContext::InsertMeta(
 
             if (-1 != nKey)
             {
-                static ::rtl::OUString sPropertyIsFixedLanguage(
-                    ::rtl::OUString("IsFixedLanguage") );
+                static OUString sPropertyIsFixedLanguage(
+                    OUString("IsFixedLanguage") );
                 Any any;
                 any <<= nKey;
                 xPropertySet->setPropertyValue(
@@ -2315,7 +2313,7 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     m_ListId(),
     m_xNumRules()
 {
-    ::rtl::OUString StyleName;
+    OUString StyleName;
 
     const SvXMLTokenMap& rTokenMap(
         i_rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
@@ -2324,10 +2322,10 @@ XMLNumberedParaContext::XMLNumberedParaContext(
         i_xAttrList->getLength() : 0 );
     for ( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const ::rtl::OUString& rAttrName( i_xAttrList->getNameByIndex( i )  );
-        const ::rtl::OUString& rValue   ( i_xAttrList->getValueByIndex( i ) );
+        const OUString& rAttrName( i_xAttrList->getNameByIndex( i )  );
+        const OUString& rValue   ( i_xAttrList->getValueByIndex( i ) );
 
-        ::rtl::OUString aLocalName;
+        OUString aLocalName;
         const sal_uInt16 nPrefix(
             GetImport().GetNamespaceMap().GetKeyByAttrName(
                 rAttrName, &aLocalName ) );

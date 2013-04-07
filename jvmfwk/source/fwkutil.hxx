@@ -37,7 +37,7 @@ namespace jfw
 /** Returns the file URL of the directory where the framework library
     (this library) resides.
 */
-rtl::OUString getLibraryLocation();
+OUString getLibraryLocation();
 
 /** provides a bootstrap class which already knows the values from the
     jvmfkwrc file.
@@ -45,13 +45,13 @@ rtl::OUString getLibraryLocation();
 struct Bootstrap :
     public ::rtl::StaticWithInit< const rtl::Bootstrap *, Bootstrap > {
         const rtl::Bootstrap * operator () () {
-            ::rtl::OUStringBuffer buf(256);
+            OUStringBuffer buf(256);
             buf.append(getLibraryLocation());
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
-            ::rtl::OUString sIni = buf.makeStringAndClear();
+            OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
 #if OSL_DEBUG_LEVEL >=2
-        rtl::OString o = rtl::OUStringToOString( sIni , osl_getThreadTextEncoding() );
+        OString o = OUStringToOString( sIni , osl_getThreadTextEncoding() );
         fprintf(stderr, "[Java framework] Using configuration file %s\n" , o.getStr() );
 #endif
         return bootstrap;
@@ -63,14 +63,14 @@ struct FwkMutex: public ::rtl::Static<osl::Mutex, FwkMutex> {};
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
-rtl::OUString getPlatform();
+OUString getPlatform();
 
 
-rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
+OUString getDirFromFile(const OUString& usFilePath);
 
 /** Returns the file URL of the folder where the executable resides.
  */
-rtl::OUString getExecutableDirectory();
+OUString getExecutableDirectory();
 /** Locates the plugin library and returns the file URL.
 
     First tries to locate plugin relative to baseUrl (if relative);
@@ -85,8 +85,8 @@ rtl::OUString getExecutableDirectory();
     @param plugin
     The argument is an absolute or relative URL or just the name of the plugin.
  */
-rtl::OUString findPlugin(
-    const rtl::OUString & baseUrl, const rtl::OUString & plugin);
+OUString findPlugin(
+    const OUString & baseUrl, const OUString & plugin);
 
 
 enum FileStatus
@@ -110,13 +110,13 @@ enum FileStatus
     @exception
     Errors occurred during determining if the file exists
  */
-FileStatus checkFileURL(const rtl::OUString & path);
+FileStatus checkFileURL(const OUString & path);
 
 bool isAccessibilitySupportDesired();
 
-rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
+OUString buildClassPathFromDirectory(const OUString & relPath);
 
-rtl::OUString retrieveClassPath( ::rtl::OUString const & macro );
+OUString retrieveClassPath( OUString const & macro );
 }
 #endif
 

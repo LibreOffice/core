@@ -90,7 +90,6 @@ using ::std::max;
 #include <sehandler.hxx>
 #endif
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1096,7 +1095,7 @@ sal_Bool WinSalFrame::PostEvent( void* pData )
 
 // -----------------------------------------------------------------------
 
-void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
+void WinSalFrame::SetTitle( const OUString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( sal_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
@@ -1897,7 +1896,7 @@ void WinSalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
-void WinSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+void WinSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 {
 }
 
@@ -2385,8 +2384,8 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        rtl::OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
-        rtl::OUString aRet;
+        OUString aLang = Application::GetSettings().GetUILanguageTag().getLanguage();
+        OUString aRet;
 
         aRet = ::vcl_sal::getKeysReplacementName( aLang, lParam );
         if( aRet.isEmpty() )
@@ -2446,7 +2445,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
 // -----------------------------------------------------------------------
 
-rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     static const UINT nMaxKeyLen = 350;
     sal_Unicode aKeyBuf[ nMaxKeyLen ];
@@ -2641,9 +2640,9 @@ rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
     }
 
     if( !nKeyBufLen )
-        return rtl::OUString();
+        return OUString();
 
-    return rtl::OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
+    return OUString( aKeyBuf, sal::static_int_cast< sal_uInt16 >(nKeyBufLen) );
 }
 
 // -----------------------------------------------------------------------
@@ -5166,7 +5165,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = rtl::OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
+            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
         }
 
@@ -5192,7 +5191,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = rtl::OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
+            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
 
             BYTE*   pAttrBuf = NULL;
@@ -5450,7 +5449,7 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     LRESULT nRet = 0;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = rtl::OUString();
+    aEvt.maText = OUString();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_SETCOMPSTR );
@@ -5504,7 +5503,7 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = rtl::OUString();
+    aEvt.maText = OUString();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );

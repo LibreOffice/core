@@ -93,7 +93,7 @@ namespace comphelper
     public:
         virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
         {
-            ::rtl::OUString lhs, rhs;
+            OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )
@@ -115,7 +115,7 @@ namespace comphelper
 
         virtual bool isLess( ::com::sun::star::uno::Any const & _lhs, ::com::sun::star::uno::Any const & _rhs ) const
         {
-            ::rtl::OUString lhs, rhs;
+            OUString lhs, rhs;
             if  (   !( _lhs >>= lhs )
                 ||  !( _rhs >>= rhs )
                 )

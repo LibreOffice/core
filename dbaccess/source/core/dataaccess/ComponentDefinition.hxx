@@ -47,7 +47,7 @@ namespace dbaccess
                                      ,public ODataSettings_Base
     {
     public:
-        typedef ::std::map  <   ::rtl::OUString
+        typedef ::std::map  <   OUString
                             ,   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                             >   Columns;
     typedef Columns::iterator           iterator;
@@ -57,8 +57,8 @@ namespace dbaccess
         Columns             m_aColumns;
 
     public:
-        ::rtl::OUString     m_sSchemaName;
-        ::rtl::OUString     m_sCatalogName;
+        OUString     m_sSchemaName;
+        OUString     m_sCatalogName;
 
     public:
         OComponentDefinition_Impl();
@@ -69,11 +69,11 @@ namespace dbaccess
         inline const_iterator begin() const   { return m_aColumns.begin(); }
         inline const_iterator end() const     { return m_aColumns.end(); }
 
-        inline const_iterator find( const ::rtl::OUString& _rName ) const { return m_aColumns.find( _rName ); }
+        inline const_iterator find( const OUString& _rName ) const { return m_aColumns.find( _rName ); }
 
-        inline void erase( const ::rtl::OUString& _rName ) { m_aColumns.erase( _rName ); }
+        inline void erase( const OUString& _rName ) { m_aColumns.erase( _rName ); }
 
-        inline void insert( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
+        inline void insert( const OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn )
         {
             OSL_PRECOND( m_aColumns.find( _rName ) == m_aColumns.end(), "OComponentDefinition_Impl::insert: there's already an element with this name!" );
             m_aColumns.insert( Columns::value_type( _rName, _rxColumn ) );
@@ -114,7 +114,7 @@ public:
 
     OComponentDefinition(
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
-            ,const ::rtl::OUString& _rElementName
+            ,const OUString& _rElementName
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
             ,const TContentPtr& _pImpl
             ,sal_Bool _bTable = sal_True
@@ -127,11 +127,11 @@ public:
     DECLARE_XINTERFACE( )
 
     // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
@@ -148,10 +148,10 @@ public:
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
     // IColumnFactory
-    virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+    virtual OColumn*    createColumn(const OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
     virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
-    virtual void columnDropped(const ::rtl::OUString& _sName);
+    virtual void columnDropped(const OUString& _sName);
     virtual void notifyDataSourceModified() { OContentHelper::notifyDataSourceModified(); }
 
 protected:
@@ -163,7 +163,7 @@ protected:
                                     const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
 
     // OContentHelper overridables
-    virtual ::rtl::OUString determineContentType() const;
+    virtual OUString determineContentType() const;
 
 private:
     void registerProperties();

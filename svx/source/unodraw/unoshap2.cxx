@@ -60,7 +60,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <vcl/wmf.hxx>
 
-using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -895,7 +894,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyValue( const OUString& aPropertyNa
 }
 
 // XPropertyState
-beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
@@ -920,7 +919,7 @@ beans::PropertyState SAL_CALL SvxShapeControl::getPropertyState( const ::rtl::OU
     }
 }
 
-void SAL_CALL SvxShapeControl::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
+void SAL_CALL SvxShapeControl::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     OUString aFormsName;
     if ( lcl_convertPropertyName( PropertyName, aFormsName ) )
@@ -943,7 +942,7 @@ void SAL_CALL SvxShapeControl::setPropertyToDefault( const ::rtl::OUString& Prop
     }
 }
 
-uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aPropertyName )
+uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     OUString aFormsName;
@@ -1076,7 +1075,7 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
 
 //----------------------------------------------------------------------
 
-bool SvxShapePolyPolygon::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1186,7 +1185,7 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
 
 //----------------------------------------------------------------------
 
-bool SvxShapePolyPolygon::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1311,7 +1310,7 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1354,7 +1353,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const ::rtl::OUString& rNa
 
 //----------------------------------------------------------------------
 
-bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1453,7 +1452,7 @@ SvxGraphicObject::~SvxGraphicObject() throw()
 
 //----------------------------------------------------------------------
 
-bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     bool bOk = false;
     switch( pProperty->nWID )
@@ -1510,7 +1509,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
                 // graphic manager url
                 aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
                 String aTmpStr(aURL);
-                rtl::OString aUniqueID(rtl::OUStringToOString(aTmpStr, RTL_TEXTENCODING_UTF8));
+                OString aUniqueID(OUStringToOString(aTmpStr, RTL_TEXTENCODING_UTF8));
                 GraphicObject aGrafObj(aUniqueID);
 
                 // #101808# since loading a graphic can cause a reschedule of the office
@@ -1537,7 +1536,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
                     if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
                     {
-                        rtl::OUString aValidURL;
+                        OUString aValidURL;
 
                         if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aURL, aValidURL ) )
                             aURLObj = INetURLObject( aValidURL );
@@ -1608,7 +1607,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
 //----------------------------------------------------------------------
 
-bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1957,7 +1956,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     }
 }
 
-bool SvxCustomShape::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxCustomShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -1974,7 +1973,7 @@ bool SvxCustomShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 }
 //----------------------------------------------------------------------
 
-void SvxCustomShape::createCustomShapeDefaults( const rtl::OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException)
+void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType ) throw (::com::sun::star::uno::RuntimeException)
 {
     ((SdrObjCustomShape*)mpObj.get())->MergeDefaultAttributes( &rValueType );
 }

@@ -56,7 +56,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -750,7 +749,7 @@ uno::Reference< XInterface > GetOneInstanceService( const char *pServiceName )
         comphelper::getProcessServiceFactory() );
     try
     {
-        xRef = xMgr->createInstance( ::rtl::OUString::createFromAscii( pServiceName ) );
+        xRef = xMgr->createInstance( OUString::createFromAscii( pServiceName ) );
     }
     catch (const uno::Exception &)
     {

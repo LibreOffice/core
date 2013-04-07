@@ -189,7 +189,7 @@ sal_Bool SvLBoxButtonData::IsRadio() {
 
 DBG_NAME(SvLBoxString);
 
-SvLBoxString::SvLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const rtl::OUString& rStr)
+SvLBoxString::SvLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rStr)
     : SvLBoxItem(pEntry, nFlags)
 {
     DBG_CTOR(SvLBoxString,0);
@@ -390,7 +390,7 @@ void SvLBoxButton::Paint(
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
         bNativeOK = rDev.DrawNativeControl( eCtrlType, PART_ENTIRE_CONTROL,
-                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                                aCtrlRegion, nState, aControlValue, OUString() );
     }
 
     if( !bNativeOK)
@@ -425,7 +425,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
                                                             aCtrlRegion,
                                                             nState,
                                                             aControlValue,
-                                                            rtl::OUString(),
+                                                            OUString(),
                                                             aNativeBounds,
                                                             aNativeContent );
         if( bNativeOK )

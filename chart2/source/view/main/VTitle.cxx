@@ -58,7 +58,7 @@ VTitle::~VTitle()
 void VTitle::init(
               const uno::Reference< drawing::XShapes >& xTargetPage
             , const uno::Reference< lang::XMultiServiceFactory >& xFactory
-            , const rtl::OUString& rCID )
+            , const OUString& rCID )
 {
     m_xTarget = xTargetPage;
     m_xShapeFactory = xFactory;
@@ -159,7 +159,7 @@ void VTitle::createShapes(
 
             //set name/classified ObjectID (CID)
             if( !m_aCID.isEmpty() )
-                aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( m_aCID ) ) ); //CID rtl::OUString
+                aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( m_aCID ) ) ); //CID OUString
         }
 
         //set global title properties
@@ -184,7 +184,7 @@ void VTitle::createShapes(
             //if the characters should be stacked we use only the first character properties for code simplicity
             if( aStringList.getLength()>0 )
             {
-                rtl::OUString aLabel;
+                OUString aLabel;
                 for( sal_Int32 nN=0; nN<aStringList.getLength();nN++ )
                     aLabel += aStringList[nN]->getString();
                 aLabel = ShapeFactory::getStackedString( aLabel, bStackCharacters );

@@ -44,7 +44,6 @@ using ::com::sun::star::presentation::XShapeEventListener;
 using ::com::sun::star::presentation::XSlideShowListener;
 using ::comphelper::ImplementationReference;
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 namespace sd

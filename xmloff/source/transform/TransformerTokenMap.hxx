@@ -29,8 +29,8 @@
 
 
 class XMLTransformerTokenMap :
-    public ::boost::unordered_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
-                            ::rtl::OUStringHash, ::comphelper::UStringEqual >
+    public ::boost::unordered_map< OUString, ::xmloff::token::XMLTokenEnum,
+                            OUStringHash, ::comphelper::UStringEqual >
 {
 public:
     XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );

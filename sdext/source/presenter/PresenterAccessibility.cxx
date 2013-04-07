@@ -46,7 +46,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 //===== PresenterAccessibleObject =============================================
 
@@ -70,7 +69,7 @@ public:
     AccessibleObject (
         const css::lang::Locale aLocale,
         const sal_Int16 nRole,
-        const ::rtl::OUString& rsName);
+        const OUString& rsName);
     void LateInitialization (void);
 
     virtual ~AccessibleObject (void);
@@ -88,7 +87,7 @@ public:
     void RemoveChild (const ::rtl::Reference<AccessibleObject>& rpChild);
 
     void SetIsFocused (const bool bIsFocused);
-    void SetAccessibleName (const ::rtl::OUString& rsName);
+    void SetAccessibleName (const OUString& rsName);
 
     void FireAccessibleEvent (
         const sal_Int16 nEventId,
@@ -130,10 +129,10 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole (void)
         throw (cssu::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription (void)
+    virtual OUString SAL_CALL getAccessibleDescription (void)
         throw (cssu::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getAccessibleName (void)
+    virtual OUString SAL_CALL getAccessibleName (void)
         throw (cssu::RuntimeException);
 
     virtual cssu::Reference<cssa::XAccessibleRelationSet> SAL_CALL
@@ -210,7 +209,7 @@ public:
         throw (cssu::RuntimeException);
 
 protected:
-    ::rtl::OUString msName;
+    OUString msName;
     cssu::Reference<css::awt::XWindow2> mxContentWindow;
     cssu::Reference<css::awt::XWindow2> mxBorderWindow;
     const css::lang::Locale maLocale;
@@ -328,7 +327,7 @@ public:
     AccessibleParagraph (
         const css::lang::Locale aLocale,
         const sal_Int16 nRole,
-        const ::rtl::OUString& rsName,
+        const OUString& rsName,
         const SharedPresenterTextParagraph& rpParagraph,
         const sal_Int32 nParagraphIndex);
 
@@ -354,7 +353,7 @@ public:
     virtual cssu::Sequence<css::beans::PropertyValue> SAL_CALL
         getCharacterAttributes (
             ::sal_Int32 nIndex,
-            const cssu::Sequence<rtl::OUString>& rRequestedAttributes)
+            const cssu::Sequence<OUString>& rRequestedAttributes)
         throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException);
 
     virtual css::awt::Rectangle SAL_CALL getCharacterBounds (sal_Int32 nIndex)
@@ -366,7 +365,7 @@ public:
     virtual sal_Int32 SAL_CALL getIndexAtPoint (const css::awt::Point& rPoint)
         throw (cssu::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getSelectedText (void)
+    virtual OUString SAL_CALL getSelectedText (void)
         throw (cssu::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getSelectionStart (void)
@@ -378,10 +377,10 @@ public:
     virtual sal_Bool SAL_CALL setSelection (sal_Int32 nStartIndex, sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getText (void)
+    virtual OUString SAL_CALL getText (void)
         throw (cssu::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getTextRange (
+    virtual OUString SAL_CALL getTextRange (
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex)
         throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException);
@@ -490,7 +489,7 @@ public:
     AccessibleNotes (
         const css::lang::Locale aLocale,
         const sal_Int16 nRole,
-        const ::rtl::OUString& rsName);
+        const OUString& rsName);
 
     static rtl::Reference<PresenterAccessible::AccessibleObject> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -642,7 +641,7 @@ void PresenterAccessible::UpdateAccessibilityHierarchy (void)
 void PresenterAccessible::UpdateAccessibilityHierarchy (
     const Reference<awt::XWindow>& rxPreviewContentWindow,
     const Reference<awt::XWindow>& rxPreviewBorderWindow,
-    const ::rtl::OUString& rsTitle,
+    const OUString& rsTitle,
     const Reference<awt::XWindow>& rxNotesContentWindow,
     const Reference<awt::XWindow>& rxNotesBorderWindow,
     const ::boost::shared_ptr<PresenterTextView>& rpNotesTextView)
@@ -710,7 +709,7 @@ void PresenterAccessible::NotifyCurrentSlideChange (
         mpAccessiblePreview->SetAccessibleName(
             (pPreviewPane&&pPreviewPane->mxPane.is()
                 ? pPreviewPane->mxPane->GetTitle()
-                : rtl::OUString()));
+                : OUString()));
     }
 
     // Play some focus ping-pong to trigger AT tools.
@@ -1270,7 +1269,7 @@ void PresenterAccessible::AccessibleObject::SetIsFocused (const bool bIsFocused)
     }
 }
 
-void PresenterAccessible::AccessibleObject::SetAccessibleName (const ::rtl::OUString& rsName)
+void PresenterAccessible::AccessibleObject::SetAccessibleName (const OUString& rsName)
 {
     if (msName != rsName)
     {
@@ -1601,7 +1600,7 @@ sal_Unicode SAL_CALL PresenterAccessible::AccessibleParagraph::getCharacter (sal
 Sequence<css::beans::PropertyValue> SAL_CALL
     PresenterAccessible::AccessibleParagraph::getCharacterAttributes (
         ::sal_Int32 nIndex,
-        const cssu::Sequence<rtl::OUString>& rRequestedAttributes)
+        const cssu::Sequence<OUString>& rRequestedAttributes)
     throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException)
 {
     ThrowIfDisposed();
@@ -1678,7 +1677,7 @@ sal_Int32 SAL_CALL PresenterAccessible::AccessibleParagraph::getIndexAtPoint (
     return nIndex;
 }
 
-::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectedText (void)
+OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getSelectedText (void)
     throw (cssu::RuntimeException)
 {
     ThrowIfDisposed();
@@ -1713,26 +1712,26 @@ sal_Bool SAL_CALL PresenterAccessible::AccessibleParagraph::setSelection (
     return setCaretPosition(nStartIndex);
 }
 
-::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getText (void)
+OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getText (void)
     throw (cssu::RuntimeException)
 {
     ThrowIfDisposed();
 
-    ::rtl::OUString sText;
+    OUString sText;
     if (mpParagraph)
         sText = mpParagraph->GetText();
 
     return sText;
 }
 
-::rtl::OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getTextRange (
+OUString SAL_CALL PresenterAccessible::AccessibleParagraph::getTextRange (
     sal_Int32 nLocalStartIndex,
     sal_Int32 nLocalEndIndex)
     throw (css::lang::IndexOutOfBoundsException, cssu::RuntimeException)
 {
     ThrowIfDisposed();
 
-    ::rtl::OUString sText;
+    OUString sText;
     if (mpParagraph)
     {
         const TextSegment aSegment (
@@ -1867,7 +1866,7 @@ bool PresenterAccessible::AccessibleParagraph::GetWindowState (const sal_Int16 n
 AccessibleNotes::AccessibleNotes (
     const css::lang::Locale aLocale,
     const sal_Int16 nRole,
-    const ::rtl::OUString& rsName)
+    const OUString& rsName)
     : AccessibleObject(aLocale,nRole,rsName),
       mpTextView()
 {

@@ -90,19 +90,19 @@ using namespace com::sun::star;
 
 
 static char *
-OUStringToGnome( const rtl::OUString &str )
+OUStringToGnome( const OUString &str )
 {
-    rtl::OString aTempStr = rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 );
+    OString aTempStr = OUStringToOString( str, RTL_TEXTENCODING_UTF8 );
     return g_strdup( aTempStr.getStr() );
 }
 
-static rtl::OUString
+static OUString
 GnomeToOUString( const char *utf8_str)
 {
     if (!utf8_str)
-        return rtl::OUString();
+        return OUString();
     else
-        return rtl::OUString( utf8_str, strlen( utf8_str ), RTL_TEXTENCODING_UTF8 );
+        return OUString( utf8_str, strlen( utf8_str ), RTL_TEXTENCODING_UTF8 );
 }
 
 
@@ -235,17 +235,17 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 // XServiceInfo methods.
 //
 
-rtl::OUString SAL_CALL Content::getImplementationName()
+OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString("com.sun.star.comp.GnomeVFSContent");
+    return OUString("com.sun.star.comp.GnomeVFSContent");
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[ 0 ] = rtl::OUString( "com.sun.star.ucb.GnomeVFSContent" );
+    uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[ 0 ] = OUString( "com.sun.star.ucb.GnomeVFSContent" );
     return aSNS;
 }
 
@@ -253,13 +253,13 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
 // XContent methods.
 //
 
-rtl::OUString SAL_CALL Content::getContentType()
+OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
-        return rtl::OUString( GVFS_FOLDER_TYPE );
+        return OUString( GVFS_FOLDER_TYPE );
     else
-        return rtl::OUString( GVFS_FILE_TYPE );
+        return OUString( GVFS_FILE_TYPE );
 }
 
 //
@@ -269,7 +269,7 @@ rtl::OUString SAL_CALL Content::getContentType()
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException
-                 ( rtl::OUString("Wrong argument type!"),
+                 ( OUString("Wrong argument type!"),
                    static_cast< cppu::OWeakObject * >( this ),
                    -1 ) );
 }
@@ -346,7 +346,7 @@ uno::Any SAL_CALL Content::execute(
                    == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) ) {
                 ucbhelper::cancelCommandExecution
                     ( uno::makeAny ( ucb::UnsupportedOpenModeException
-                             ( rtl::OUString(),
+                             ( OUString(),
                                static_cast< cppu::OWeakObject * >( this ),
                                sal_Int16( aOpenCommand.Mode ) ) ),
                       xEnv );
@@ -360,7 +360,7 @@ uno::Any SAL_CALL Content::execute(
 #endif
                 ucbhelper::cancelCommandExecution
                     ( uno::makeAny (ucb::UnsupportedDataSinkException
-                            ( rtl::OUString(),
+                            ( OUString(),
                               static_cast< cppu::OWeakObject * >( this ),
                               aOpenCommand.Sink ) ),
                       xEnv );
@@ -390,7 +390,7 @@ uno::Any SAL_CALL Content::execute(
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
 
-        ::rtl::OString aURI = getOURI();
+        OString aURI = getOURI();
         GnomeVFSResult result = gnome_vfs_unlink (aURI.getStr());
 
         if (result != GNOME_VFS_OK)
@@ -413,7 +413,7 @@ uno::Any SAL_CALL Content::execute(
 #endif
         ucbhelper::cancelCommandExecution
             ( uno::makeAny( ucb::UnsupportedCommandException
-                    ( rtl::OUString(),
+                    ( OUString(),
                       static_cast< cppu::OWeakObject * >( this ) ) ),
               xEnv );
     }
@@ -443,19 +443,19 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            rtl::OUString("Title"),
+            OUString("Title"),
             -1,
-            getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+            getCppuType( static_cast< OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
         // file
-        seq[0].Type       = rtl::OUString( GVFS_FILE_TYPE );
+        seq[0].Type       = OUString( GVFS_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
         // folder
-        seq[1].Type       = rtl::OUString( GVFS_FOLDER_TYPE );
+        seq[1].Type       = OUString( GVFS_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
 
@@ -496,14 +496,14 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     g_warning( "createNewContent (%d)", (int) create_document );
 #endif
 
-    rtl::OUString aURL = getOUURI();
+    OUString aURL = getOUURI();
 
     if ( ( aURL.lastIndexOf( '/' ) + 1 ) != aURL.getLength() )
-        aURL += rtl::OUString("/");
+        aURL += OUString("/");
 
     name = create_document ? "[New_Content]" : "[New_Collection]";
     // This looks problematic to me cf. webdav
-    aURL += rtl::OUString::createFromAscii( name );
+    aURL += OUString::createFromAscii( name );
 
     uno::Reference< ucb::XContentIdentifier > xId
         ( new ::ucbhelper::ContentIdentifier( aURL ) );
@@ -515,9 +515,9 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
 }
 
-rtl::OUString Content::getParentURL()
+OUString Content::getParentURL()
 {
-    rtl::OUString aParentURL;
+    OUString aParentURL;
     // <scheme>://              -> ""
     // <scheme>://foo           -> ""
     // <scheme>://foo/          -> ""
@@ -525,7 +525,7 @@ rtl::OUString Content::getParentURL()
     // <scheme>://foo/bar/      -> <scheme>://foo/
     // <scheme>://foo/bar/abc   -> <scheme>://foo/bar/
 
-    rtl::OUString aURL = getOUURI();
+    OUString aURL = getOUURI();
 
     sal_Int32 nPos = aURL.lastIndexOf( '/' );
     if ( nPos == ( aURL.getLength() - 1 ) ) {
@@ -538,11 +538,11 @@ rtl::OUString Content::getParentURL()
         nPos1 = aURL.lastIndexOf( '/', nPos1 );
 
     if ( nPos1 != -1 )
-        aParentURL = rtl::OUString( aURL.copy( 0, nPos + 1 ) );
+        aParentURL = OUString( aURL.copy( 0, nPos + 1 ) );
 
 #if OSL_DEBUG_LEVEL > 1
     g_warning ("getParentURL '%s' -> '%s'",
-           getURI(), rtl::OUStringToOString
+           getURI(), OUStringToOString
                ( aParentURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
@@ -621,7 +621,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
             GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
 
-            ::rtl::OString aURI = getOURI();
+            OString aURI = getOURI();
             gnome_vfs_get_file_info
                 ( aURI.getStr(), fileInfo,
                         GNOME_VFS_FILE_INFO_GET_ACCESS_RIGHTS );
@@ -691,16 +691,16 @@ static lang::IllegalAccessException
 getReadOnlyException( Content *ctnt )
 {
     return lang::IllegalAccessException
-        ( rtl::OUString("Property is read-only!"),
+        ( OUString("Property is read-only!"),
           static_cast< cppu::OWeakObject * >( ctnt ) );
 }
 
-rtl::OUString
+OUString
 Content::makeNewURL( const char */*newName*/ )
 {
-    rtl::OUString aNewURL = getParentURL();
+    OUString aNewURL = getParentURL();
     if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
-        aNewURL += rtl::OUString("/");
+        aNewURL += OUString("/");
 
     char *name = gnome_vfs_escape_string( m_info.name );
     aNewURL += GnomeToOUString( name );
@@ -719,7 +719,7 @@ Content::doSetFileInfo( const GnomeVFSFileInfo *newInfo,
 
     g_assert (!m_bTransient);
 
-    ::rtl::OString aURI = getOURI();
+    OString aURI = getOURI();
 
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -750,7 +750,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    rtl::OUString    aNewTitle;
+    OUString    aNewTitle;
     GnomeVFSFileInfo newInfo;
     int              setMask = GNOME_VFS_SET_FILE_INFO_NONE;
 
@@ -795,7 +795,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( rValue.Value >>= aNewTitle ) {
                 if ( aNewTitle.isEmpty() )
                     aRet[ n ] <<= lang::IllegalArgumentException
-                        ( rtl::OUString("Empty title not allowed!"),
+                        ( OUString("Empty title not allowed!"),
                           static_cast< cppu::OWeakObject * >( this ), -1 );
                 else {
                     char *newName = OUStringToGnome( aNewTitle );
@@ -805,7 +805,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         g_warning ("Set new name to '%s'", newName);
 #endif
 
-                        aEvent.PropertyName = rtl::OUString("Title");
+                        aEvent.PropertyName = OUString("Title");
                         aEvent.OldValue     = uno::makeAny( GnomeToOUString( newInfo.name ) );
                         aEvent.NewValue     = uno::makeAny( aNewTitle );
                         aChanges.getArray()[ nChanged ] = aEvent;
@@ -818,7 +818,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
             } else
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( rtl::OUString("Property value has wrong type!"),
+                    ( OUString("Property value has wrong type!"),
                       static_cast< cppu::OWeakObject * >( this ) );
 
         } else if ( rValue.Name == "DateCreated" || rValue.Name == "DateModified" ) {
@@ -853,7 +853,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aGuard.clear();
             if (!exchangeIdentity( xNewId ) )
                 aRet[ nTitlePos ] <<= uno::Exception
-                    ( rtl::OUString("Exchange failed!"),
+                    ( OUString("Exchange failed!"),
                       static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -878,11 +878,11 @@ void Content::queryChildren( ContentRefList& rChildren )
     ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
 
-    rtl::OUString aURL = getOUURI();
+    OUString aURL = getOUURI();
     sal_Int32 nURLPos = aURL.lastIndexOf( '/' );
 
     if ( nURLPos != ( aURL.getLength() - 1 ) )
-        aURL += rtl::OUString("/");
+        aURL += OUString("/");
 
     sal_Int32 nLen = aURL.getLength();
 
@@ -891,7 +891,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     while ( it != end ) {
         ::ucbhelper::ContentImplHelperRef xChild = (*it);
-        rtl::OUString aChildURL
+        OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
@@ -937,7 +937,7 @@ void Content::insert(
 
     if ( m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE &&
          m_info.type == GNOME_VFS_FILE_TYPE_DIRECTORY ) {
-        ::rtl::OString aURI = getOURI();
+        OString aURI = getOURI();
         int perm;
 
         perm = ( GNOME_VFS_PERM_USER_ALL |
@@ -960,13 +960,13 @@ void Content::insert(
         ucbhelper::cancelCommandExecution
             ( uno::makeAny
               ( ucb::MissingInputStreamException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ) ) ),
               xEnv );
     }
 
     GnomeVFSHandle *handle = NULL;
-    ::rtl::OString aURI = getOURI();
+    OString aURI = getOURI();
 
     result = GNOME_VFS_ERROR_GENERIC;
     if ( bReplaceExisting ) {
@@ -1016,7 +1016,7 @@ void Content::transfer(const ucb::TransferInfo & /*rArgs*/,
     ucbhelper::cancelCommandExecution
         ( uno::makeAny
             ( ucb::InteractiveBadTransferURLException
-                ( rtl::OUString("Unsupported URL scheme!"),
+                ( OUString("Unsupported URL scheme!"),
                   static_cast< cppu::OWeakObject * >( this ) ) ),
           xEnv );
 }
@@ -1067,7 +1067,7 @@ sal_Bool Content::exchangeIdentity(
         return sal_False;
     }
 
-    rtl::OUString aOldURL = getOUURI();
+    OUString aOldURL = getOUURI();
 
     // Exchange own identitity.
     if ( exchange( xNewId ) ) {
@@ -1085,9 +1085,9 @@ sal_Bool Content::exchangeIdentity(
             // Create new content identifier for the child...
             uno::Reference< ucb::XContentIdentifier >
                 xOldChildId = xChild->getIdentifier();
-            rtl::OUString aOldChildURL
+            OUString aOldChildURL
                 = xOldChildId->getContentIdentifier();
-            rtl::OUString aNewChildURL
+            OUString aNewChildURL
                 = aOldChildURL.replaceAt(
                              0,
                              aOldURL.getLength(),
@@ -1117,7 +1117,7 @@ Content::getInfo( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
         result = GNOME_VFS_OK;
 
     else if ( !m_info.valid_fields ) {
-        ::rtl::OString aURI = getOURI();
+        OString aURI = getOURI();
         Authentication aAuth( xEnv );
         result = gnome_vfs_get_file_info
             ( aURI.getStr(), &m_info, GNOME_VFS_FILE_INFO_DEFAULT );
@@ -1146,7 +1146,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
 {
     uno::Any aException;
     const char *gvfs_message;
-    rtl::OUString message;
+    OUString message;
     uno::Sequence< uno::Any > aArgs( 1 );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1168,7 +1168,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
         aException <<=
             ucb::InteractiveAugmentedIOException
-            ( rtl::OUString("Not found!"),
+            ( OUString("Not found!"),
               static_cast< cppu::OWeakObject * >( this ),
               task::InteractionClassification_ERROR,
               ucb::IOErrorCode_NOT_EXISTING,
@@ -1177,7 +1177,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
     case GNOME_VFS_ERROR_BAD_PARAMETERS:
         aException <<=
             lang::IllegalArgumentException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ),
                   -1 );
         break;
@@ -1193,14 +1193,14 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
         if ( bWrite )
             aException <<=
                 ucb::InteractiveNetworkWriteException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ),
                   task::InteractionClassification_ERROR,
                   message );
         else
             aException <<=
                 ucb::InteractiveNetworkReadException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ),
                   task::InteractionClassification_ERROR,
                   message );
@@ -1209,7 +1209,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
     case GNOME_VFS_ERROR_INVALID_HOST_NAME:
         aException <<=
             ucb::InteractiveNetworkResolveNameException
-            ( rtl::OUString(),
+            ( OUString(),
               static_cast< cppu::OWeakObject * >( this ),
               task::InteractionClassification_ERROR,
               message );
@@ -1220,7 +1220,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
     case GNOME_VFS_ERROR_NO_MASTER_BROWSER:
         aException <<=
             ucb::InteractiveNetworkConnectException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ),
                   task::InteractionClassification_ERROR,
                   message );
@@ -1228,7 +1228,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
 
     case GNOME_VFS_ERROR_FILE_EXISTS:
         aException <<= ucb::NameClashException
-                ( rtl::OUString(),
+                ( OUString(),
                   static_cast< cppu::OWeakObject * >( this ),
                   task::InteractionClassification_ERROR,
                   message );
@@ -1270,7 +1270,7 @@ uno::Any Content::mapVFSException( const GnomeVFSResult result, sal_Bool bWrite 
 #endif
     default:
         aException <<= ucb::InteractiveNetworkGeneralException
-            ( rtl::OUString(),
+            ( OUString(),
               static_cast< cppu::OWeakObject * >( this ),
               task::InteractionClassification_ERROR );
         break;
@@ -1293,45 +1293,45 @@ uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     static const beans::Property aGenericProperties[] = {
-                beans::Property( rtl::OUString(  "ContentType"  ),
-                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::Property( OUString(  "ContentType"  ),
+                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsDocument"  ),
+                beans::Property( OUString(  "IsDocument"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsFolder"  ),
+                beans::Property( OUString(  "IsFolder"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "Title"  ),
-                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::Property( OUString(  "Title"  ),
+                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                  beans::PropertyAttribute::BOUND ),
         // Optional ...
-        beans::Property( rtl::OUString(  "DateCreated"  ),
+        beans::Property( OUString(  "DateCreated"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "DateModified"  ),
+                beans::Property( OUString(  "DateModified"  ),
                  -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
 // FIXME: Too expensive for now (?)
-//                beans::Property( rtl::OUString(  "MediaType"  ),
-//                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+//                beans::Property( OUString(  "MediaType"  ),
+//                 -1, getCppuType( static_cast< const OUString * >( 0 ) ),
 //                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "Size"  ),
+                beans::Property( OUString(  "Size"  ),
                  -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsReadOnly"  ),
+                beans::Property( OUString(  "IsReadOnly"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsVolume"  ),
+                beans::Property( OUString(  "IsVolume"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsCompactDisk"  ),
+                beans::Property( OUString(  "IsCompactDisk"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "IsHidden"  ),
+                beans::Property( OUString(  "IsHidden"  ),
                  -1, getCppuBooleanType(),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-                beans::Property( rtl::OUString(  "CreatableContentsInfo"  ),
+                beans::Property( OUString(  "CreatableContentsInfo"  ),
                  -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                  beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
@@ -1348,35 +1348,35 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     static ucb::CommandInfo aCommandInfoTable[] = {
         // Required commands
         ucb::CommandInfo
-        ( rtl::OUString(  "getCommandInfo"  ),
+        ( OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "getPropertySetInfo"  ),
+        ( OUString(  "getPropertySetInfo"  ),
           -1, getCppuVoidType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "getPropertyValues"  ),
+        ( OUString(  "getPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "setPropertyValues"  ),
+        ( OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
         // Optional standard commands
         ucb::CommandInfo
-        ( rtl::OUString(  "delete"  ),
+        ( OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
         ucb::CommandInfo
-        ( rtl::OUString(  "insert"  ),
+        ( OUString(  "insert"  ),
           -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "open"  ),
+        ( OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
-        ( rtl::OUString(  "transfer"  ),
+        ( OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
         ucb::CommandInfo
-        ( rtl::OUString(  "createNewContent"  ),
+        ( OUString(  "createNewContent"  ),
           -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
     };
 
@@ -1386,17 +1386,17 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         aCommandInfoTable, isFolder( xEnv ) ? nProps : nProps - 2 );
 }
 
-rtl::OUString
+OUString
 Content::getOUURI ()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     return m_xIdentifier->getContentIdentifier();
 }
 
-rtl::OString
+OString
 Content::getOURI ()
 {
-    return rtl::OUStringToOString( getOUURI(), RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( getOUURI(), RTL_TEXTENCODING_UTF8 );
 }
 
 char *
@@ -1427,7 +1427,7 @@ Content::createTempStream(
 {
     GnomeVFSResult result;
     GnomeVFSHandle *handle = NULL;
-    ::rtl::OString aURI = getOURI();
+    OString aURI = getOURI();
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     // Something badly wrong happened - can't seek => stream to a temporary file
@@ -1462,7 +1462,7 @@ Content::createInputStream(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     getInfo( xEnv );
-    ::rtl::OString aURI = getOURI();
+    OString aURI = getOURI();
 
     if ( !(m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_SIZE) )
         return createTempStream( xEnv );
@@ -1567,7 +1567,7 @@ extern "C" {
 
         ucbhelper::SimpleAuthenticationRequest::EntityType
                                    eDomain, eUserName, ePassword;
-        ::rtl::OUString aHostName, aDomain, aUserName, aPassword;
+        OUString aHostName, aDomain, aUserName, aPassword;
 
         aHostName = GnomeToOUString( in->server );
 
@@ -1599,7 +1599,7 @@ extern "C" {
         // the same user/password as was entered last time if
         // we failed to authenticate - infinite looping / flickering
         // madness etc. [ nice infrastructure ! ]
-        static rtl::OUString aLastUserName, aLastPassword;
+        static OUString aLastUserName, aLastPassword;
         if (in->flags & GNOME_VFS_MODULE_CALLBACK_FULL_AUTHENTICATION_PREVIOUS_ATTEMPT_FAILED)
         {
             osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
@@ -1626,7 +1626,7 @@ extern "C" {
                     ucbhelper::InteractionSupplyAuthentication > & xSupp
                     = xRequest->getAuthenticationSupplier();
 
-                ::rtl::OUString aNewDomain, aNewUserName, aNewPassword;
+                OUString aNewDomain, aNewUserName, aNewPassword;
 
                 aNewUserName = xSupp->getUserName();
                 if ( !aNewUserName.isEmpty() )

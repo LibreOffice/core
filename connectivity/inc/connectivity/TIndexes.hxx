@@ -31,15 +31,15 @@ namespace connectivity
     {
         OTableHelper*   m_pTable;
     protected:
-        virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+        virtual sdbcx::ObjectType createObject(const OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
-        virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+        virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
     public:
         OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
-                 const ::std::vector< ::rtl::OUString> &_rVector
+                 const ::std::vector< OUString> &_rVector
                  );
 
     };

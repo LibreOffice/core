@@ -67,13 +67,13 @@ namespace connectivity
         // --------------------------------------------------------------------
         /** convenience wrapper around boost::optional, allowing implicit construction
         */
-        class ParamValue : public ::boost::optional< ::rtl::OUString >
+        class ParamValue : public ::boost::optional< OUString >
         {
-            typedef ::boost::optional< ::rtl::OUString >  base_type;
+            typedef ::boost::optional< OUString >  base_type;
 
         public:
             ParamValue( ) : base_type( ) { }
-            ParamValue( ::rtl::OUString const& val ) : base_type( val ) { }
+            ParamValue( OUString const& val ) : base_type( val ) { }
             ParamValue( ParamValue const& rhs ) : base_type( (base_type const&)rhs ) { }
 
             bool    is() const { return !base_type::operator!(); }
@@ -118,7 +118,7 @@ namespace connectivity
 
             @see ::com::sun::star::sdb::ErrorCondition
         */
-        ::rtl::OUString getErrorMessage(
+        OUString getErrorMessage(
                             const ErrorCondition _eCondition,
                             const ParamValue& _rParamValue1 = ParamValue(),
                             const ParamValue& _rParamValue2 = ParamValue(),
@@ -143,7 +143,7 @@ namespace connectivity
             prefix before presenting the message to the user, or use it to determine
             whether a concrete error has been raised by a OpenOffice.org core component.
         */
-        static const ::rtl::OUString&
+        static const OUString&
                         getMessagePrefix();
 
 

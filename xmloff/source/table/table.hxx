@@ -27,7 +27,7 @@ struct XMLPropertyMapEntry;
 struct TableStyleElement
 {
     ::xmloff::token::XMLTokenEnum meElement;
-    ::rtl::OUString msStyleName;
+    OUString msStyleName;
 };
 
 extern const TableStyleElement* getTableStyleMap();

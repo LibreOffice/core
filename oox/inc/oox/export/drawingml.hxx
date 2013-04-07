@@ -82,7 +82,7 @@ protected:
                   String aName, ::com::sun::star::beans::PropertyState& eState );
     const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, sal_Bool& bIsField );
 
-    rtl::OUString WriteImage( const rtl::OUString& rURL );
+    OUString WriteImage( const OUString& rURL );
 
     const char* GetComponentDir();
     const char* GetRelationCompPrefix();
@@ -94,7 +94,7 @@ public:
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
     DocumentType GetDocumentType() { return meDocumentType; }
 
-    rtl::OUString WriteImage( const Graphic &rGraphic );
+    OUString WriteImage( const Graphic &rGraphic );
 
     void WriteColor( sal_uInt32 nColor );
     void WriteGradientStop( sal_uInt16 nStop, sal_uInt32 nColor );
@@ -111,7 +111,7 @@ public:
     void WriteStretch();
     void WriteLinespacing( ::com::sun::star::style::LineSpacing& rLineSpacing );
 
-    ::rtl::OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, ::rtl::OUString& rURL, const Graphic *pGraphic=NULL );
+    OUString WriteBlip( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet, OUString& rURL, const Graphic *pGraphic=NULL );
     void WriteBlipMode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet );
 
     void WriteShapeTransformation( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > rXShape,
@@ -134,7 +134,7 @@ public:
 
     static void ResetCounters();
 
-    void GetUUID( ::rtl::OStringBuffer& rBuffer );
+    void GetUUID( OStringBuffer& rBuffer );
 
     static sal_Unicode SubstituteBullet( sal_Unicode cBulletId, ::com::sun::star::awt::FontDescriptor& rFontDesc );
 
@@ -143,12 +143,12 @@ public:
     static const char* GetAlignment( sal_Int32 nAlignment );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
-                                        const ::rtl::OUString& sFullStream,
-                                        const ::rtl::OUString& sRelativeStream,
+                                        const OUString& sFullStream,
+                                        const OUString& sRelativeStream,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
-                                        ::rtl::OUString* pRelationshipId = NULL );
+                                        OUString* pRelationshipId = NULL );
 
 };
 

@@ -741,14 +741,14 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
     bool bChangeDefaultsForChart = false;
-    rtl::OUString aName;
+    OUString aName;
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
     {
         // provide OLE object to empty OLE object
         aName = pObj->GetProgName();
-        ::rtl::OUString aObjName;
+        OUString aObjName;
         SvGlobalName aClass;
 
         if( aName == "StarChart"  || aName == "StarOrg" )
@@ -995,8 +995,8 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell().get() != NULL)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
-    rSequence[nIndex].Name = rtl::OUString( sUNO_View_ViewId );
-    rtl::OUStringBuffer sBuffer( "view" );
+    rSequence[nIndex].Name = OUString( sUNO_View_ViewId );
+    OUStringBuffer sBuffer( "view" );
     sBuffer.append( static_cast<sal_Int32>(nViewID));
     rSequence[nIndex].Value <<= sBuffer.makeStringAndClear();
 

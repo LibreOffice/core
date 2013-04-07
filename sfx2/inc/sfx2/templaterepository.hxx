@@ -20,9 +20,9 @@ public:
 
     virtual ~TemplateRepository () { };
 
-    void setURL (const rtl::OUString &rURL) { maUrl = rURL; }
+    void setURL (const OUString &rURL) { maUrl = rURL; }
 
-    const rtl::OUString& getURL () const { return maUrl; }
+    const OUString& getURL () const { return maUrl; }
 
     void insertTemplate (const TemplateItemProperties &prop) { maTemplates.push_back(prop); }
 
@@ -33,11 +33,11 @@ public:
 public:
 
     sal_uInt16 mnId;
-    rtl::OUString maTitle;
+    OUString maTitle;
 
 private:
 
-    rtl::OUString maUrl;
+    OUString maUrl;
     std::vector<TemplateItemProperties> maTemplates;
 };
 

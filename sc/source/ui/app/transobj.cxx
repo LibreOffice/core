@@ -322,9 +322,9 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             //  DataType depends on format type:
 
-            if ( rFlavor.DataType.equals( ::getCppuType( (const ::rtl::OUString*) 0 ) ) )
+            if ( rFlavor.DataType.equals( ::getCppuType( (const OUString*) 0 ) ) )
             {
-                rtl::OUString aString;
+                OUString aString;
                 if ( aObj.ExportString( aString, nFormat ) )
                     bOK = SetString( aString, rFlavor );
             }
@@ -598,7 +598,7 @@ void ScTransferObj::InitDocShell()
 
         pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
-        rtl::OUString aTabName;
+        OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
         pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
 

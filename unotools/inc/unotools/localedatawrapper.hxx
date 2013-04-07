@@ -62,14 +62,14 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
     LanguageTag                                                                         maLanguageTag;
     ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
     ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aReservedWordSeq;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  aDateAcceptancePatterns;
+    ::com::sun::star::uno::Sequence< OUString >                                  aReservedWordSeq;
+    ::com::sun::star::uno::Sequence< OUString >                                  aDateAcceptancePatterns;
     ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
     // cached items
-    rtl::OUString               aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
-    rtl::OUString               aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
-    rtl::OUString               aCurrSymbol;
-    rtl::OUString               aCurrBankSymbol;
+    OUString               aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
+    OUString               aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
+    OUString               aCurrSymbol;
+    OUString               aCurrBankSymbol;
     int                         nDateFormat;
     int                         nLongDateFormat;
     sal_uInt16                      nCurrPositiveFormat;
@@ -86,21 +86,21 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
     void                invalidateData();
 
     void                getOneLocaleItemImpl( sal_Int16 nItem );
-    const rtl::OUString& getOneLocaleItem( sal_Int16 nItem ) const;
+    const OUString& getOneLocaleItem( sal_Int16 nItem ) const;
 
     void                getOneReservedWordImpl( sal_Int16 nWord );
-    const rtl::OUString& getOneReservedWord( sal_Int16 nWord ) const;
+    const OUString& getOneReservedWord( sal_Int16 nWord ) const;
 
     void                getCurrSymbolsImpl();
     void                getCurrFormatsImpl();
 
-    void                scanCurrFormatImpl( const rtl::OUString& rCode,
+    void                scanCurrFormatImpl( const OUString& rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym );
 
     void                getDateFormatsImpl();
-    DateFormat          scanDateFormatImpl( const rtl::OUString& rCode );
+    DateFormat          scanDateFormatImpl( const OUString& rCode );
 
     void                getDefaultCalendarImpl();
 
@@ -149,14 +149,14 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 > getAllCurrencies() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::FormatElement > getAllFormats() const;
     ::com::sun::star::i18n::ForbiddenCharacters getForbiddenCharacters() const;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getReservedWord() const;
+    ::com::sun::star::uno::Sequence< OUString > getReservedWord() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getAllInstalledLocaleNames() const;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getDateAcceptancePatterns() const;
+    ::com::sun::star::uno::Sequence< OUString > getDateAcceptancePatterns() const;
 
     /** Override locale's date acceptance patterns.
         An empty sequence resets the patterns to the locale's pattern sequence.
      */
-    void setDateAcceptancePatterns( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPatterns );
+    void setDateAcceptancePatterns( const ::com::sun::star::uno::Sequence< OUString > & rPatterns );
 
     /// same as the wrapper implementation but static
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > getInstalledLocaleNames();
@@ -171,7 +171,7 @@ public:
     static ::com::sun::star::uno::Sequence< sal_uInt16 > getInstalledLanguageTypes();
 
     /// maps the LocaleData string to the International enum
-    MeasurementSystem   mapMeasurementStringToEnum( const rtl::OUString& rMS ) const;
+    MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
     const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
@@ -196,46 +196,46 @@ public:
 
     // Functionality of class International methods, LocaleItem
 
-    const rtl::OUString&       getDateSep() const
+    const OUString&       getDateSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DATE_SEPARATOR ); }
-    const rtl::OUString&       getNumThousandSep() const
+    const OUString&       getNumThousandSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::THOUSAND_SEPARATOR ); }
-    const rtl::OUString&       getNumDecimalSep() const
+    const OUString&       getNumDecimalSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DECIMAL_SEPARATOR ); }
-    const rtl::OUString&       getTimeSep() const
+    const OUString&       getTimeSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_SEPARATOR ); }
-    const rtl::OUString&       getTime100SecSep() const
+    const OUString&       getTime100SecSep() const
                                     { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_100SEC_SEPARATOR ); }
-    const rtl::OUString&       getListSep() const
+    const OUString&       getListSep() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LIST_SEPARATOR ); }
-    const rtl::OUString&       getQuotationMarkStart() const
+    const OUString&       getQuotationMarkStart() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_START ); }
-    const rtl::OUString&       getQuotationMarkEnd() const
+    const OUString&       getQuotationMarkEnd() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::SINGLE_QUOTATION_END ); }
-    const rtl::OUString&       getDoubleQuotationMarkStart() const
+    const OUString&       getDoubleQuotationMarkStart() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
-    const rtl::OUString&       getDoubleQuotationMarkEnd() const
+    const OUString&       getDoubleQuotationMarkEnd() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
-    const rtl::OUString&       getMeasurementSystem() const
+    const OUString&       getMeasurementSystem() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ); }
     MeasurementSystem   getMeasurementSystemEnum() const
                             { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
-    const rtl::OUString&       getTimeAM() const
+    const OUString&       getTimeAM() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
-    const rtl::OUString&       getTimePM() const
+    const OUString&       getTimePM() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_PM ); }
-    const rtl::OUString&       getLongDateDayOfWeekSep() const
+    const OUString&       getLongDateDayOfWeekSep() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_OF_WEEK_SEPARATOR ); }
-    const rtl::OUString&       getLongDateDaySep() const
+    const OUString&       getLongDateDaySep() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_DAY_SEPARATOR ); }
-    const rtl::OUString&       getLongDateMonthSep() const
+    const OUString&       getLongDateMonthSep() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_MONTH_SEPARATOR ); }
-    const rtl::OUString&       getLongDateYearSep() const
+    const OUString&       getLongDateYearSep() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::LONG_DATE_YEAR_SEPARATOR ); }
 
     // currency
-    const rtl::OUString&    getCurrSymbol() const;
-    const rtl::OUString&    getCurrBankSymbol() const;
+    const OUString&    getCurrSymbol() const;
+    const OUString&    getCurrBankSymbol() const;
     sal_uInt16              getCurrPositiveFormat() const;
     sal_uInt16              getCurrNegativeFormat() const;
     sal_uInt16              getCurrDigits() const;
@@ -244,10 +244,10 @@ public:
     DateFormat          getDateFormat() const;
     DateFormat          getLongDateFormat() const;
     /// only numerical values of Gregorian calendar
-    rtl::OUString       getDate( const Date& rDate ) const;
-    rtl::OUString       getTime( const Time& rTime, sal_Bool bSec = sal_True,
+    OUString       getDate( const Date& rDate ) const;
+    OUString       getTime( const Time& rTime, sal_Bool bSec = sal_True,
                             sal_Bool b100Sec = sal_False ) const;
-    rtl::OUString       getDuration( const Time& rTime,
+    OUString       getDuration( const Time& rTime,
                             sal_Bool bSec = sal_True, sal_Bool b100Sec = sal_False ) const;
 
                         /** The CalendarWrapper already <b>MUST</b>
@@ -265,7 +265,7 @@ public:
                                 <FALSE/> := full year
                                 <TRUE/>  := year % 100
                          */
-    rtl::OUString       getLongDate( const Date& rDate,
+    OUString       getLongDate( const Date& rDate,
                             CalendarWrapper& rCal,
                             sal_Int16 nDisplayDayOfWeek = 1,
                             sal_Bool bDayOfMonthWithLeadingZero = sal_False,
@@ -282,18 +282,18 @@ public:
                             </sal_False> := trailing zeros are only displayed
                                 if the value is not an integer value.
                          */
-    rtl::OUString       getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
+    OUString       getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
                             sal_Bool bUseThousandSep = sal_True,
                             sal_Bool bTrailingZeros = sal_True ) const;
 
                         /// "Secure" currency formatted string.
-    rtl::OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                            const rtl::OUString& rCurrencySymbol,
+    OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
+                            const OUString& rCurrencySymbol,
                             sal_Bool bUseThousandSep = sal_True ) const;
                         /** Default currency formatted string, use with
                             care as default currency may change in any
                             locale, for example, DEM -> EUR */
-    rtl::OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
+    OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                                 sal_Bool bUseThousandSep = sal_True ) const
                             { return getCurr( nNumber, nDecimals,
                                 getCurrSymbol(), bUseThousandSep ); }
@@ -312,19 +312,19 @@ public:
 
     // reserved words
 
-    const rtl::OUString&        getTrueWord() const
+    const OUString&        getTrueWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
-    const rtl::OUString&        getFalseWord() const
+    const OUString&        getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
     /// return a quarter string matching nQuarter (0..3) => "1st quarter" .. "4th quarter"
-    const rtl::OUString&        getQuarterWord( sal_Int16 nQuarter ) const
+    const OUString&        getQuarterWord( sal_Int16 nQuarter ) const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_WORD + nQuarter ); }
-    const rtl::OUString&        getAboveWord() const
+    const OUString&        getAboveWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
-    const rtl::OUString&        getBelowWord() const
+    const OUString&        getBelowWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::BELOW_WORD ); }
     /// return a quarter abbreviation string matching nQuarter (0..3) => "Q1" .. "Q2"
-    const rtl::OUString&        getQuarterAbbreviation( sal_Int16 nQuarter ) const
+    const OUString&        getQuarterAbbreviation( sal_Int16 nQuarter ) const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_ABBREVIATION + nQuarter ); }
 
     /** Return whether locale data checks are enabled.
@@ -341,12 +341,12 @@ public:
 
     /** Append locale info to string, used with locale data checking.
         A string similar to "de_DE requested\n en_US loaded" is appended. */
-    rtl::OUString appendLocaleInfo(const rtl::OUString& rDebugMsg) const;
+    OUString appendLocaleInfo(const OUString& rDebugMsg) const;
 
     /** Ouput a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled
         also raised as an assertion message box. */
-    static  void                outputCheckMessage( const rtl::OUString& rMsg );
+    static  void                outputCheckMessage( const OUString& rMsg );
     static  void                outputCheckMessage( const char* pStr);
 
 private:

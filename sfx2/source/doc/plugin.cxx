@@ -63,8 +63,8 @@ const SfxItemPropertyMapEntry* lcl_GetPluginPropertyMap_Impl()
     static SfxItemPropertyMapEntry aPluginPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("PluginCommands"), WID_COMMANDS, &::getCppuType((::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >*)0), PROPERTY_UNBOUND, 0},
-        { MAP_CHAR_LEN("PluginMimeType"), WID_MIMETYPE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-        { MAP_CHAR_LEN("PluginURL"),      WID_URL     , &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("PluginMimeType"), WID_MIMETYPE, &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
+        { MAP_CHAR_LEN("PluginURL"),      WID_URL     , &::getCppuType((const OUString*)0), PROPERTY_UNBOUND, 0 },
         {0,0,0,0,0,0}
     };
     return aPluginPropertyMap_Impl;
@@ -105,8 +105,8 @@ throw( uno::RuntimeException )
         pWin->Show();
 
         size_t nCount = maCmdList.size();
-        uno::Sequence < ::rtl::OUString > aCmds( nCount ), aArgs( nCount );
-        ::rtl::OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
+        uno::Sequence < OUString > aCmds( nCount ), aArgs( nCount );
+        OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
         for( size_t i = 0; i < nCount; i++ )
         {
             pCmds[i] = maCmdList[ i ].GetCommand();
@@ -136,9 +136,9 @@ throw( uno::RuntimeException )
                     uno::Reference< beans::XPropertySet > xProp( xModel, ::uno::UNO_QUERY );
                     if( xProp.is() )
                     {
-                        uno::Any aValue = xProp->getPropertyValue( ::rtl::OUString( "URL"  ) );
+                        uno::Any aValue = xProp->getPropertyValue( OUString( "URL"  ) );
                         aValue >>= maURL;
-                        aValue = xProp->getPropertyValue( ::rtl::OUString( "TYPE"  ) );
+                        aValue = xProp->getPropertyValue( OUString( "TYPE"  ) );
                         aValue >>= maMimeType;
                     }
                 }
@@ -190,7 +190,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PluginObject::getPropertySetI
     return xInfo;
 }
 
-void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const uno::Any& aAny)
+void SAL_CALL PluginObject::setPropertyValue(const OUString& aPropertyName, const uno::Any& aAny)
     throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if ( aPropertyName == "PluginURL" )
@@ -212,7 +212,7 @@ void SAL_CALL PluginObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
          throw beans::UnknownPropertyException();
 }
 
-uno::Any SAL_CALL PluginObject::getPropertyValue(const ::rtl::OUString& aPropertyName)
+uno::Any SAL_CALL PluginObject::getPropertyValue(const OUString& aPropertyName)
         throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
@@ -235,19 +235,19 @@ uno::Any SAL_CALL PluginObject::getPropertyValue(const ::rtl::OUString& aPropert
     return aAny;
 }
 
-void SAL_CALL PluginObject::addPropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL PluginObject::addPropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL PluginObject::removePropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL PluginObject::removePropertyChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL PluginObject::addVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL PluginObject::addVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 
-void SAL_CALL PluginObject::removeVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL PluginObject::removeVetoableChangeListener(const OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
 {
 }
 

@@ -72,7 +72,7 @@ ConstantsTypeDescriptionImpl::getConstants()
 
         while ( nFields-- )
         {
-            rtl::OUStringBuffer aName( _aName );
+            OUStringBuffer aName( _aName );
             aName.appendAscii( "." );
             aName.append( aReader.getFieldName( nFields ) );
 

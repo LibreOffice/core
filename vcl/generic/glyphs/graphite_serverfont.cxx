@@ -63,13 +63,13 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
         rServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont);
     }
     maImpl.SetFont(pFont);
-    rtl::OString aLang("");
+    OString aLang("");
     if (rServerFont.GetFontSelData().meLanguage != LANGUAGE_DONTKNOW)
     {
-        aLang = rtl::OUStringToOString( LanguageTag( rServerFont.GetFontSelData().meLanguage ).getBcp47(),
+        aLang = OUStringToOString( LanguageTag( rServerFont.GetFontSelData().meLanguage ).getBcp47(),
                 RTL_TEXTENCODING_UTF8 );
     }
-    rtl::OString name = rtl::OUStringToOString(
+    OString name = OUStringToOString(
         rServerFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
 #ifdef DEBUG
     printf("GraphiteServerFontLayout %lx %s size %d %f\n", (long unsigned int)this, name.getStr(),
@@ -79,17 +79,17 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
-        rtl::OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
+        OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
         mpFeatures = new grutils::GrFeatureParser(
             rServerFont.GetGraphiteFace()->face(), aFeat, aLang);
 #ifdef DEBUG
         if (mpFeatures)
             printf("GraphiteServerFontLayout %s/%s/%s %x language %d features %d errors\n",
-                rtl::OUStringToOString( rServerFont.GetFontSelData().GetFamilyName(),
+                OUStringToOString( rServerFont.GetFontSelData().GetFamilyName(),
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( rServerFont.GetFontSelData().maTargetName,
+                OUStringToOString( rServerFont.GetFontSelData().maTargetName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( rServerFont.GetFontSelData().maSearchName,
+                OUStringToOString( rServerFont.GetFontSelData().maSearchName,
                 RTL_TEXTENCODING_UTF8 ).getStr(),
                 rServerFont.GetFontSelData().meLanguage,
                 (int)mpFeatures->numFeatures(), mpFeatures->parseErrors());

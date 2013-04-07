@@ -20,12 +20,12 @@
 #define INCLUDED_REPORTHELPERDEFINES_HXX
 
 #define REPORTCONTROLMODEL_HEADER()  \
-    virtual ::rtl::OUString SAL_CALL getDataField() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
-    virtual void SAL_CALL setDataField(const ::rtl::OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException); \
+    virtual OUString SAL_CALL getDataField() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
+    virtual void SAL_CALL setDataField(const OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual ::sal_Bool SAL_CALL getPrintWhenGroupChange() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual void SAL_CALL setPrintWhenGroupChange(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
-    virtual ::rtl::OUString SAL_CALL getConditionalPrintExpression() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
-    virtual void SAL_CALL setConditionalPrintExpression(const ::rtl::OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
+    virtual OUString SAL_CALL getConditionalPrintExpression() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
+    virtual void SAL_CALL setConditionalPrintExpression(const OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition > SAL_CALL createFormatCondition() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::uno::Exception);
 
 #define SHAPE_HEADER()  \
@@ -35,8 +35,8 @@
     virtual void SAL_CALL setSize(const ::com::sun::star::awt::Size & aSize) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException);
 
 #define REPORTCOMPONENT_HEADER()  \
-    virtual ::rtl::OUString SAL_CALL getName() throw (::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL setName(const ::rtl::OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
+    virtual OUString SAL_CALL getName() throw (::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setName(const OUString & the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
     virtual ::sal_Int32 SAL_CALL getHeight() throw (::com::sun::star::uno::RuntimeException); \
     virtual void SAL_CALL setHeight(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::PropertyVetoException); \
     virtual ::sal_Int32 SAL_CALL getPositionX() throw (::com::sun::star::uno::RuntimeException); \
@@ -51,10 +51,10 @@
     virtual void SAL_CALL setControlBorderColor(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual ::sal_Bool SAL_CALL getPrintRepeatedValues() throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
     virtual void SAL_CALL setPrintRepeatedValues(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException); \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
-    virtual void SAL_CALL setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setMasterFields( const ::com::sun::star::uno::Sequence< OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
+    virtual void SAL_CALL setDetailFields( const ::com::sun::star::uno::Sequence< OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException); \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > SAL_CALL getSection() throw (::com::sun::star::uno::RuntimeException);
 
 #define REPORTCONTROLFORMAT_HEADER()  \
@@ -76,10 +76,10 @@
     virtual void SAL_CALL setCharEmphasis( ::sal_Int16 _charemphasis ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Bool SAL_CALL getCharCombineIsOn() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharCombineIsOn( ::sal_Bool _charcombineison ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharCombinePrefix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharCombinePrefix( const ::rtl::OUString& _charcombineprefix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharCombineSuffix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharCombineSuffix( const ::rtl::OUString& _charcombinesuffix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharCombinePrefix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharCombinePrefix( const OUString& _charcombineprefix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharCombineSuffix() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharCombineSuffix( const OUString& _charcombinesuffix ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Bool SAL_CALL getCharHidden() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharHidden( ::sal_Bool _charhidden ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Bool SAL_CALL getCharShadowed() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
@@ -102,10 +102,10 @@
     virtual void SAL_CALL setCharFlash( ::sal_Bool _charflash ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharRelief() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharRelief( ::sal_Int16 _charrelief ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontName( const ::rtl::OUString& _charfontname ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontStyleName( const ::rtl::OUString& _charfontstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontName( const OUString& _charfontname ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontStyleName( const OUString& _charfontstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontFamily() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharFontFamily( ::sal_Int16 _charfontfamily ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontCharSet() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
@@ -134,24 +134,24 @@
     virtual void SAL_CALL setCharScaleWidth( ::sal_Int16 _charscalewidth ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::com::sun::star::style::VerticalAlignment SAL_CALL getVerticalAlign() throw (::com::sun::star::beans::UnknownPropertyException,::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setVerticalAlign( ::com::sun::star::style::VerticalAlignment _paravertalignment ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getHyperLinkURL() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setHyperLinkURL( const ::rtl::OUString& _hyperlinkurl ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getHyperLinkTarget() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setHyperLinkTarget( const ::rtl::OUString& _hyperlinktarget ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getHyperLinkName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setHyperLinkName( const ::rtl::OUString& _hyperlinkname ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getVisitedCharStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setVisitedCharStyleName( const ::rtl::OUString& _visitedcharstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getUnvisitedCharStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setUnvisitedCharStyleName( const ::rtl::OUString& _unvisitedcharstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getHyperLinkURL() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setHyperLinkURL( const OUString& _hyperlinkurl ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getHyperLinkTarget() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setHyperLinkTarget( const OUString& _hyperlinktarget ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getHyperLinkName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setHyperLinkName( const OUString& _hyperlinkname ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getVisitedCharStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setVisitedCharStyleName( const OUString& _visitedcharstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getUnvisitedCharStyleName() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setUnvisitedCharStyleName( const OUString& _unvisitedcharstylename ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual float SAL_CALL getCharHeightAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharHeightAsian( float _charheightasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual float SAL_CALL getCharWeightAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharWeightAsian( float _charweightasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontNameAsian( const ::rtl::OUString& _charfontnameasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontStyleNameAsian( const ::rtl::OUString& _charfontstylenameasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontNameAsian( const OUString& _charfontnameasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontStyleNameAsian( const OUString& _charfontstylenameasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontFamilyAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharFontFamilyAsian( ::sal_Int16 _charfontfamilyasian ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontCharSetAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
@@ -166,10 +166,10 @@
     virtual void SAL_CALL setCharHeightComplex( float _charheightcomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual float SAL_CALL getCharWeightComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharWeightComplex( float _charweightcomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontNameComplex( const ::rtl::OUString& _charfontnamecomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual ::rtl::OUString SAL_CALL getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
-    virtual void SAL_CALL setCharFontStyleNameComplex( const ::rtl::OUString& _charfontstylenamecomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontNameComplex( const OUString& _charfontnamecomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual OUString SAL_CALL getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
+    virtual void SAL_CALL setCharFontStyleNameComplex( const OUString& _charfontstylenamecomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontFamilyComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual void SAL_CALL setCharFontFamilyComplex( ::sal_Int16 _charfontfamilycomplex ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\
     virtual ::sal_Int16 SAL_CALL getCharFontCharSetComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);\

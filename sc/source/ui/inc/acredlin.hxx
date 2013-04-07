@@ -109,23 +109,23 @@ private:
     SvxRedlinTable*         pTheView; // #i48648 now SvHeaderTabListBox
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
-    rtl::OUString           aStrInsertCols;
-    rtl::OUString           aStrInsertRows;
-    rtl::OUString           aStrInsertTabs;
-    rtl::OUString           aStrDeleteCols;
-    rtl::OUString           aStrDeleteRows;
-    rtl::OUString           aStrDeleteTabs;
-    rtl::OUString           aStrMove;
-    rtl::OUString           aStrContent;
-    rtl::OUString           aStrReject;
-    rtl::OUString           aStrAllAccepted;
-    rtl::OUString           aStrAllRejected;
-    rtl::OUString           aStrNoEntry;
-    rtl::OUString           aStrContentWithChild;
-    rtl::OUString           aStrChildContent;
-    rtl::OUString           aStrChildOrgContent;
-    rtl::OUString           aStrEmpty;
-    rtl::OUString           aUnknown;
+    OUString           aStrInsertCols;
+    OUString           aStrInsertRows;
+    OUString           aStrInsertTabs;
+    OUString           aStrDeleteCols;
+    OUString           aStrDeleteRows;
+    OUString           aStrDeleteTabs;
+    OUString           aStrMove;
+    OUString           aStrContent;
+    OUString           aStrReject;
+    OUString           aStrAllAccepted;
+    OUString           aStrAllRejected;
+    OUString           aStrNoEntry;
+    OUString           aStrContentWithChild;
+    OUString           aStrChildContent;
+    OUString           aStrChildOrgContent;
+    OUString           aStrEmpty;
+    OUString           aUnknown;
     sal_uLong                   nAcceptCount;
     sal_uLong                   nRejectCount;
     bool                    bAcceptEnableFlag:1;
@@ -165,7 +165,7 @@ protected:
 
     bool            IsValidAction(const ScChangeAction* pScChangeAction);
 
-    rtl::OUString* MakeTypeString(ScChangeActionType eType);
+    OUString* MakeTypeString(ScChangeActionType eType);
 
     SvTreeListEntry* InsertChangeAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,

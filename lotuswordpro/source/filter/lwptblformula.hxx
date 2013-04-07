@@ -110,7 +110,7 @@ class LwpFormulaArg
 {
 public:
     virtual ~LwpFormulaArg() = 0;
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap)=0;
+    virtual OUString ToString(LwpTableLayout* pCellsMap)=0;
     virtual String ToArgString(LwpTableLayout* pCellsMap){ return ToString(pCellsMap);}
 };
 
@@ -125,7 +125,7 @@ class LwpFormulaConst:public LwpFormulaArg
 {
 public:
     LwpFormulaConst( double dVal);
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
 private:
     double m_dVal;
 };
@@ -134,7 +134,7 @@ class LwpFormulaText:public LwpFormulaArg
 {
 public:
     LwpFormulaText( String aText);
-    virtual rtl::OUString ToString(LwpTableLayout* /*pCellsMap*/){return m_aText;}
+    virtual OUString ToString(LwpTableLayout* /*pCellsMap*/){return m_aText;}
 private:
     String m_aText;
 };
@@ -147,7 +147,7 @@ public:
     sal_Int16 GetCol(){return m_aCol;}
     sal_Int16 GetRow(){return m_aRow;}
 
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
 private:
     sal_Int16 m_aCol;
     sal_Int16 m_aRow;
@@ -158,7 +158,7 @@ class LwpFormulaCellRangeAddr:public LwpFormulaArg
 public:
     LwpFormulaCellRangeAddr(sal_Int16 aStartCol, sal_Int16 aStartRow, sal_Int16 aEndCol, sal_Int16 aEndRow);
 
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
 private:
     sal_Int16 m_aStartCol;
     sal_Int16 m_aStartRow;
@@ -174,7 +174,7 @@ public:
 
     void AddArg(LwpFormulaArg* pArg);
 
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
     String ToArgString(LwpTableLayout* pCellsMap);
 
 protected:
@@ -186,14 +186,14 @@ class LwpFormulaOp : public LwpFormulaFunc
 {
 public:
     LwpFormulaOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
 };
 
 class LwpFormulaUnaryOp : public LwpFormulaFunc
 {
 public:
     LwpFormulaUnaryOp(sal_uInt16 nTokenType):LwpFormulaFunc(nTokenType){;}
-    virtual rtl::OUString ToString(LwpTableLayout* pCellsMap);
+    virtual OUString ToString(LwpTableLayout* pCellsMap);
 };
 
 

@@ -292,7 +292,7 @@ void SvxCharacterMap::init()
         m_pDeleteBtn->Hide();
     }
 
-    rtl::OUString aDefStr( aFont.GetName() );
+    OUString aDefStr( aFont.GetName() );
     String aLastName;
     int nCount = GetDevFontCount();
     for ( int i = 0; i < nCount; i++ )
@@ -314,7 +314,7 @@ void SvxCharacterMap::init()
         sal_Int32 nIndex = 0;
         do
         {
-            rtl::OUString aToken = aDefStr.getToken(0, ';', nIndex);
+            OUString aToken = aDefStr.getToken(0, ';', nIndex);
             if ( m_pFontLB->GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
             {
                 aDefStr = aToken;
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, OKHdl)
     {
         sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
         // using the new UCS4 constructor
-    rtl::OUString aOUStr( &cChar, 1 );
+    OUString aOUStr( &cChar, 1 );
         m_pShowText->SetText( aOUStr );
     }
     EndDialog( sal_True );
@@ -484,7 +484,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
         {
             sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
             // using the new UCS4 constructor
-            rtl::OUString aOUStr( &cChar, 1 );
+            OUString aOUStr( &cChar, 1 );
             m_pShowText->SetText( aText + aOUStr );
         }
 
@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
     if ( bSelect )
     {
         // using the new UCS4 constructor
-        aText = rtl::OUString( &cChar, 1 );
+        aText = OUString( &cChar, 1 );
 
         const Subset* pSubset = NULL;
         if( pSubsetMap )
@@ -525,7 +525,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
         snprintf( aBuf, sizeof(aBuf), "U+%04X", static_cast<unsigned>(cChar) );
         if( cChar < 0x0100 )
             snprintf( aBuf+6, sizeof(aBuf)-6, " (%u)", static_cast<unsigned>(cChar) );
-        aText = rtl::OUString::createFromAscii(aBuf);
+        aText = OUString::createFromAscii(aBuf);
     }
     m_pCharCodeText->SetText( aText );
 

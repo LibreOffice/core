@@ -239,12 +239,12 @@ void AbstractSwInsertDBColAutoPilot_Impl::DataToDoc( const uno::Sequence< uno::A
     pDlg->DataToDoc(rSelection, rxSource, xConnection, xResultSet);
 }
 
-rtl::OString AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
+OString AbstractDropDownFieldDialog_Impl::GetWindowState( sal_uLong nMask  ) const
 {
     return pDlg->GetWindowState(nMask);
 }
 
-void AbstractDropDownFieldDialog_Impl::SetWindowState( const rtl::OString& rStr )
+void AbstractDropDownFieldDialog_Impl::SetWindowState( const OString& rStr )
 {
     pDlg->SetWindowState(rStr);
 }
@@ -405,12 +405,12 @@ String AbstractGlossaryDlg_Impl::GetCurrShortName() const
     return pDlg->GetCurrShortName();
 }
 
-void AbstractFldInputDlg_Impl::SetWindowState( const rtl::OString& rStr )
+void AbstractFldInputDlg_Impl::SetWindowState( const OString& rStr )
 {
     pDlg->SetWindowState( rStr );
 }
 
-rtl::OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
+OString AbstractFldInputDlg_Impl::GetWindowState( sal_uLong nMask ) const
 {
     return pDlg->GetWindowState( nMask );
 }
@@ -428,7 +428,7 @@ String AbstractInsFootNoteDlg_Impl::GetStr()
 {
     return pDlg->GetStr();
 }
-void AbstractInsFootNoteDlg_Impl::SetHelpId( const rtl::OString& sHelpId )
+void AbstractInsFootNoteDlg_Impl::SetHelpId( const OString& sHelpId )
 {
     pDlg->SetHelpId( sHelpId );
 }
@@ -472,7 +472,7 @@ sal_uInt16 AbstractMailMergeDlg_Impl::GetMergeType()
     return pDlg->GetMergeType();
 }
 
-const ::rtl::OUString& AbstractMailMergeDlg_Impl::GetSaveFilter() const
+const OUString& AbstractMailMergeDlg_Impl::GetSaveFilter() const
 {
     return pDlg->GetSaveFilter();
 }

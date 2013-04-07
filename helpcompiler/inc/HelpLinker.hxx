@@ -52,7 +52,7 @@ public:
     void main(std::vector<std::string> &args,
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
-              const rtl::OUString* pOfficeHelpPath = NULL )
+              const OUString* pOfficeHelpPath = NULL )
 
             throw( HelpProcessingException );
 

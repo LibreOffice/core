@@ -85,13 +85,6 @@
 
 using namespace vcl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-using ::rtl::OStringHash;
-using ::rtl::OUStringHash;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringBuffer;
 
 #if (OSL_DEBUG_LEVEL < 3)
 #define COMPRESS_PAGES
@@ -129,9 +122,9 @@ void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun:
 void doTestCode()
 {
     static const char* pHome = getenv( "HOME"  );
-    rtl::OUString aTestFile( "file://"  );
-    aTestFile += rtl::OUString( pHome, strlen( pHome ), RTL_TEXTENCODING_MS_1252 );
-    aTestFile += rtl::OUString( "/pdf_export_test.pdf"  );
+    OUString aTestFile( "file://"  );
+    aTestFile += OUString( pHome, strlen( pHome ), RTL_TEXTENCODING_MS_1252 );
+    aTestFile += OUString( "/pdf_export_test.pdf"  );
 
     PDFWriter::PDFWriterContext aContext;
     aContext.URL            = aTestFile;
@@ -620,7 +613,7 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
  * Fhurter limitation: it is advisable to use standard ASCII characters for
  * OOo bookmarks.
 */
-static void appendDestinationName( const rtl::OUString& rString, OStringBuffer& rBuffer )
+static void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
 {
     const sal_Unicode* pStr = rString.getStr();
     sal_Int32 nLen = rString.getLength();
@@ -645,7 +638,7 @@ static void appendDestinationName( const rtl::OUString& rString, OStringBuffer& 
 }
 //<--- i56629
 
-static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer& rBuffer )
+static void appendUnicodeTextString( const OUString& rString, OStringBuffer& rBuffer )
 {
     rBuffer.append( "FEFF" );
     const sal_Unicode* pStr = rString.getStr();
@@ -700,7 +693,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
             // find or create a hierarchical field
             // first find the fully qualified name up to this field
             aDomain = aFullName.copy( 0, nTokenIndex-1 );
-            boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            boost::unordered_map< OString, sal_Int32, OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
             if( it == m_aFieldNameMap.end() )
             {
                  // create new hierarchy field
@@ -761,7 +754,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     // insert widget into its hierarchy field
     if( !aDomain.isEmpty() )
     {
-        boost::unordered_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        boost::unordered_map< OString, sal_Int32, OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
         {
             OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
@@ -1874,14 +1867,14 @@ void PDFWriterImpl::setupDocInfo()
 
 void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIdentifier,
                                                const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
-                                               rtl::OString& o_rCString1,
-                                               rtl::OString& o_rCString2
+                                               OString& o_rCString1,
+                                               OString& o_rCString2
                                                )
 {
     o_rIdentifier.clear();
 
     //build the document id
-    rtl::OString aInfoValuesOut;
+    OString aInfoValuesOut;
     OStringBuffer aID( 1024 );
     if( i_rDocInfo.Title.Len() )
         appendUnicodeTextString( i_rDocInfo.Title, aID );
@@ -1901,7 +1894,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
     osl_getSystemTime( &aGMT );
     osl_getLocalTimeFromSystemTime( &aGMT, &aTVal );
     osl_getDateTimeFromTimeValue( &aTVal, &aDT );
-    rtl::OStringBuffer aCreationDateString(64), aCreationMetaDateString(64);
+    OStringBuffer aCreationDateString(64), aCreationMetaDateString(64);
     aCreationDateString.append( "D:" );
     aCreationDateString.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
     aCreationDateString.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
@@ -2006,7 +1999,7 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
 check if the Unicode string must be encrypted or not, perform the requested task,
 append the string as unicode hex, encrypted if needed
  */
-inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "<" );
     if( m_aContext.Encryption.Encrypt() )
@@ -2041,7 +2034,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const rtl::OUString& 
     rOutBuffer.append( ">" );
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.getLength();
@@ -2058,17 +2051,17 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( rtl::OStringBuffer& rInSt
     rOutBuffer.append( ")" );
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer )
+inline void PDFWriterImpl::appendLiteralStringEncrypt( const OString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
-    rtl::OStringBuffer aBufferString( rInString );
+    OStringBuffer aBufferString( rInString );
     appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
-void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
+void PDFWriterImpl::appendLiteralStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
 {
-    rtl::OString aBufferString( rtl::OUStringToOString( rInString, nEnc ) );
+    OString aBufferString( OUStringToOString( rInString, nEnc ) );
     sal_Int32 nLen = aBufferString.getLength();
-    rtl::OStringBuffer aBuf( nLen );
+    OStringBuffer aBuf( nLen );
     const sal_Char* pT = aBufferString.getStr();
 
     for( sal_Int32 i = 0; i < nLen; i++, pT++ )
@@ -2247,8 +2240,8 @@ inline const ImplPdfBuiltinFontData* GetPdfFontData( const PhysicalFontFace* pFo
 static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
 {
     ImplDevFontAttributes aDFA;
-    aDFA.SetFamilyName( rtl::OUString::createFromAscii( rBuiltin.m_pName ) );
-    aDFA.SetStyleName( rtl::OUString::createFromAscii( rBuiltin.m_pStyleName ) );
+    aDFA.SetFamilyName( OUString::createFromAscii( rBuiltin.m_pName ) );
+    aDFA.SetStyleName( OUString::createFromAscii( rBuiltin.m_pStyleName ) );
     aDFA.SetFamilyType( rBuiltin.m_eFamily );
     aDFA.SetSymbolFlag( rBuiltin.m_eCharSet != RTL_TEXTENCODING_MS_1252 );
     aDFA.SetPitch( rBuiltin.m_ePitch );
@@ -2336,7 +2329,7 @@ public:
                                   const PDFWriterImpl::BuiltinFont&,
                                   long nPixelPerEM, int nOrientation );
 
-    void            SetText( const rtl::OUString& rText )  { maOrigText = rText; }
+    void            SetText( const OUString& rText )  { maOrigText = rText; }
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    InitFont() const;
     virtual void    DrawText( SalGraphics& ) const;
@@ -2361,7 +2354,7 @@ PDFSalLayout::PDFSalLayout( PDFWriterImpl& rPDFWriterImpl,
 
 bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
-    const rtl::OUString aText(rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos);
+    const OUString aText(rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos);
     SetText( aText );
     SetUnitsPerPixel( 1000 );
 
@@ -3106,7 +3099,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     }
 
     sal_Int32 nFontDescriptor = 0;
-    rtl::OString aSubType( "/Type1" );
+    OString aSubType( "/Type1" );
     FontSubsetInfo aInfo;
     // fill in dummy values
     aInfo.m_nAscent = 1000;
@@ -3136,7 +3129,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     }
     else if( pFont->mbSubsettable )
     {
-        aSubType = rtl::OString( "/TrueType" );
+        aSubType = OString( "/TrueType" );
         Int32Vector aGlyphWidths;
         Ucs2UIntMap aUnicodeMap;
         m_pReferenceDevice->mpGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
@@ -3645,7 +3638,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
         }
         else
         {
-            rtl::OStringBuffer aErrorComment( 256 );
+            OStringBuffer aErrorComment( 256 );
             aErrorComment.append( "GetEmbedFontData failed for font \"" );
             aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
             aErrorComment.append( '\"' );
@@ -3732,7 +3725,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
                 aUnicodes.clear();
                 for( std::vector< EmbedCode >::iterator str_it = enc_it->m_aEncVector.begin(); str_it != enc_it->m_aEncVector.end(); ++str_it )
                 {
-                    rtl::OUString aStr( str_it->m_aUnicode );
+                    OUString aStr( str_it->m_aUnicode );
                     aEncWidths[nEncoded] = pRef->GetTextWidth( aStr );
                     nEncodedCodes[nEncoded] = str_it->m_aUnicode;
                     nEncoding[nEncoded] = sal::static_int_cast<sal_uInt8>(nEncoded);
@@ -4234,7 +4227,7 @@ bool PDFWriterImpl::emitFonts()
             else
             {
                 const PhysicalFontFace* pFont = it->first;
-                rtl::OStringBuffer aErrorComment( 256 );
+                OStringBuffer aErrorComment( 256 );
                 aErrorComment.append( "CreateFontSubset failed for font \"" );
                 aErrorComment.append( OUStringToOString( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ) );
                 aErrorComment.append( '\"' );
@@ -4617,7 +4610,7 @@ we check in the following sequence:
                 }
             }
 
-            rtl::OUString aFileExtension = aTargetURL.GetFileExtension();
+            OUString aFileExtension = aTargetURL.GetFileExtension();
 
 // Check if the URL ends in '/': if yes it's a directory,
 // it will be forced to a URI link.
@@ -4631,21 +4624,21 @@ we check in the following sequence:
                 {
                     sal_Int32 bChangeFileExtensionToPDF = false;
                     //examine the file type (.odm .odt. .odp, odg, ods)
-                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odm"  ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odm"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odt"  ) ) )
+                    if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odt"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odp"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odp"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "odg"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "odg"  ) ) )
                         bChangeFileExtensionToPDF = true;
-                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( "ods"  ) ) )
+                    else if( aFileExtension.equalsIgnoreAsciiCase(OUString( "ods"  ) ) )
                         bChangeFileExtensionToPDF = true;
                     if( bChangeFileExtensionToPDF )
-                        aTargetURL.setExtension(rtl::OUString( "pdf"  ) );
+                        aTargetURL.setExtension(OUString( "pdf"  ) );
                 }
 //check if extension is pdf, see if GoToR should be forced
-                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(rtl::OUString( "pdf"  ) );
+                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(OUString( "pdf"  ) );
                 if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
                     nSetGoToRMode++;
             }
@@ -4668,7 +4661,7 @@ we check in the following sequence:
                 if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
                     bSetRelative = true;
 
-                rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+                OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
                 if( nSetGoToRMode == 0 )
                 {
                     switch( m_aContext.DefaultLinkAction )
@@ -4703,7 +4696,7 @@ we check in the following sequence:
                 if( nSetGoToRMode )
                 {
                     //add the fragment
-                    rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
+                    OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");
                     bFileSpec = true;
@@ -4729,7 +4722,7 @@ we check in the following sequence:
 //substitute the fragment
                         aTargetURL.SetMark( aLineLoc.getStr() );
                     }
-                    rtl::OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
+                    OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
                     appendLiteralStringEncrypt(bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
                                                                                         INetURLObject::WAS_ENCODED,
                                                                                             bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
@@ -5329,7 +5322,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
 {
 
     // TODO: check and insert default streams
-    rtl::OString aStandardAppearance;
+    OString aStandardAppearance;
     switch( rWidget.m_eType )
     {
         case PDFWriter::CheckBox:
@@ -5502,7 +5495,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
                     }
                     else
-                        appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
+                        appendUnicodeTextStringEncrypt( OUString(), rWidget.m_nObject, aValue );
                     aLine.append( "Ch" );
                     break;
                 case PDFWriter::ComboBox:
@@ -6416,7 +6409,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
                 OUString( "http://ahost.ax"  ) ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
 
-            const rtl::OUString aName   = aLocalURL.GetMark( INetURLObject::NO_DECODE ); //same coding as
+            const OUString aName   = aLocalURL.GetMark( INetURLObject::NO_DECODE ); //same coding as
             // in link creation ( see PDFWriterImpl::emitLinkAnnotations )
             const PDFPage& rDestPage    = m_aPages[ rDest.m_nPage ];
 
@@ -6554,7 +6547,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
     aLine.append( " 0 obj\n"
                   "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
 
-    rtl::OUString aComment( "sRGB IEC61966-2.1"  );
+    OUString aComment( "sRGB IEC61966-2.1"  );
     appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
     aLine.append("/DestOutputProfile ");
     aLine.append( nICCObject );
@@ -6565,7 +6558,7 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
 }
 
 // formats the string for the XML stream
-static void escapeStringXML( const rtl::OUString& rStr, rtl::OUString &rValue)
+static void escapeStringXML( const OUString& rStr, OUString &rValue)
 {
     const sal_Unicode* pUni = rStr.getStr();
     int nLen = rStr.getLength();
@@ -6574,22 +6567,22 @@ static void escapeStringXML( const rtl::OUString& rStr, rtl::OUString &rValue)
         switch( *pUni )
         {
         case sal_Unicode('&'):
-            rValue += rtl::OUString( "&amp;"  );
+            rValue += OUString( "&amp;"  );
         break;
         case sal_Unicode('<'):
-            rValue += rtl::OUString( "&lt;"  );
+            rValue += OUString( "&lt;"  );
         break;
         case sal_Unicode('>'):
-            rValue += rtl::OUString( "&gt;"  );
+            rValue += OUString( "&gt;"  );
         break;
         case sal_Unicode('\''):
-            rValue += rtl::OUString( "&apos;"  );
+            rValue += OUString( "&apos;"  );
         break;
         case sal_Unicode('"'):
-            rValue += rtl::OUString( "&quot;"  );
+            rValue += OUString( "&quot;"  );
         break;
         default:
-            rValue += rtl::OUString( *pUni );
+            rValue += OUString( *pUni );
             break;
         }
     }
@@ -6636,7 +6629,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:title>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                rtl::OUString aTitle;
+                OUString aTitle;
                 escapeStringXML( m_aContext.DocumentInfo.Title, aTitle );
                 aMetadataStream.append( OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
@@ -6648,7 +6641,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:creator>\n" );
                 aMetadataStream.append( "    <rdf:Seq>\n" );
                 aMetadataStream.append( "     <rdf:li>" );
-                rtl::OUString aAuthor;
+                OUString aAuthor;
                 escapeStringXML( m_aContext.DocumentInfo.Author, aAuthor );
                 aMetadataStream.append( OUStringToOString( aAuthor , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
@@ -6661,7 +6654,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
                 aMetadataStream.append( "   <dc:description>\n" );
                 aMetadataStream.append( "    <rdf:Alt>\n" );
                 aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
-                rtl::OUString aSubject;
+                OUString aSubject;
                 escapeStringXML( m_aContext.DocumentInfo.Subject, aSubject );
                 aMetadataStream.append( OUStringToOString( aSubject , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</rdf:li>\n" );
@@ -6680,7 +6673,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             if( m_aContext.DocumentInfo.Producer.Len() )
             {
                 aMetadataStream.append( "   <pdf:Producer>" );
-                rtl::OUString aProducer;
+                OUString aProducer;
                 escapeStringXML( m_aContext.DocumentInfo.Producer, aProducer );
                 aMetadataStream.append( OUStringToOString( aProducer , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</pdf:Producer>\n" );
@@ -6688,7 +6681,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             if( m_aContext.DocumentInfo.Keywords.Len() )
             {
                 aMetadataStream.append( "   <pdf:Keywords>" );
-                rtl::OUString aKeywords;
+                OUString aKeywords;
                 escapeStringXML( m_aContext.DocumentInfo.Keywords, aKeywords );
                 aMetadataStream.append( OUStringToOString( aKeywords , RTL_TEXTENCODING_UTF8 )  );
                 aMetadataStream.append( "</pdf:Keywords>\n" );
@@ -6701,7 +6694,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         if( m_aContext.DocumentInfo.Creator.Len() )
         {
             aMetadataStream.append( "   <xmp:CreatorTool>" );
-            rtl::OUString aCreator;
+            OUString aCreator;
             escapeStringXML( m_aContext.DocumentInfo.Creator, aCreator );
             aMetadataStream.append( OUStringToOString( aCreator , RTL_TEXTENCODING_UTF8 )  );
             aMetadataStream.append( "</xmp:CreatorTool>\n" );
@@ -7328,7 +7321,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                         cChar -= 0xf000;
                     else
                     {
-                        rtl::OString aChar(&cChar, 1, RTL_TEXTENCODING_MS_1252);
+                        OString aChar(&cChar, 1, RTL_TEXTENCODING_MS_1252);
                         cChar = ((sal_Ucs)aChar[0]) & 0x00ff;
                     }
                 }
@@ -8116,7 +8109,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sa
     // multiline text
     if ( nStyle & TEXT_DRAW_MULTILINE )
     {
-        rtl::OUString           aLastLine;
+        OUString           aLastLine;
         ImplMultiTextLineInfo   aMultiLineInfo;
         ImplTextLineInfo*       pLineInfo;
         xub_StrLen              i;
@@ -8580,7 +8573,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     //See qadevOOo/testdocs/StrikeThrough.odt for examples if you need
     //to tweak this
 
-    rtl::OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? rtl::OUString("/") : rtl::OUString("X");
+    OUString aStrikeoutChar = eStrikeout == STRIKEOUT_SLASH ? OUString("/") : OUString("X");
     String aStrikeout = aStrikeoutChar;
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) < nWidth )
         aStrikeout.Append( aStrikeout );
@@ -10869,7 +10862,7 @@ sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )
 }
 
 //--->i56629
-sal_Int32 PDFWriterImpl::createNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
@@ -11155,7 +11148,7 @@ bool PDFWriterImpl::checkEmitStructure()
     return bEmit;
 }
 
-sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
+sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
     if( m_nCurrentPage < 0 )
         return -1;

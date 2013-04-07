@@ -34,7 +34,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 class SvtSaveOptions_Impl;
 class SvtLoadOptions_Impl;
@@ -95,7 +94,7 @@ public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void            Commit();
 
     sal_Int32               GetAutoSaveTime() const             { return nAutoSaveTime; }
@@ -570,23 +569,23 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     {
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::comphelper::getProcessComponentContext(),
-        ::rtl::OUString("org.openoffice.Office.Recovery"),
+        OUString("org.openoffice.Office.Recovery"),
         ::comphelper::ConfigurationHelper::E_READONLY);
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("Enabled")) >>= bAutoSave;
+        OUString("AutoSave"),
+        OUString("Enabled")) >>= bAutoSave;
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("TimeIntervall")) >>= nAutoSaveTime;
+        OUString("AutoSave"),
+        OUString("TimeIntervall")) >>= nAutoSaveTime;
 
     ::comphelper::ConfigurationHelper::readRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("UserAutoSaveEnabled")) >>= bUserAutoSave;
+        OUString("AutoSave"),
+        OUString("UserAutoSaveEnabled")) >>= bUserAutoSave;
     }
     catch(const css::uno::Exception&)
         { OSL_FAIL("Could not find needed information for AutoSave feature."); }
@@ -762,25 +761,25 @@ void SvtSaveOptions_Impl::Commit()
 
     css::uno::Reference< css::uno::XInterface > xCFG = ::comphelper::ConfigurationHelper::openConfig(
         ::comphelper::getProcessComponentContext(),
-        ::rtl::OUString("org.openoffice.Office.Recovery"),
+        OUString("org.openoffice.Office.Recovery"),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("TimeIntervall"),
+        OUString("AutoSave"),
+        OUString("TimeIntervall"),
         css::uno::makeAny(nAutoSaveTime));
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("Enabled"),
+        OUString("AutoSave"),
+        OUString("Enabled"),
         css::uno::makeAny(bAutoSave));
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(
         xCFG,
-        ::rtl::OUString("AutoSave"),
-        ::rtl::OUString("UserAutoSaveEnabled"),
+        OUString("AutoSave"),
+        OUString("UserAutoSaveEnabled"),
         css::uno::makeAny(bUserAutoSave));
 
     ::comphelper::ConfigurationHelper::flush(xCFG);
@@ -788,7 +787,7 @@ void SvtSaveOptions_Impl::Commit()
 
 // -----------------------------------------------------------------------
 
-void SvtSaveOptions_Impl::Notify( const Sequence<rtl::OUString>& )
+void SvtSaveOptions_Impl::Notify( const Sequence<OUString>& )
 {
 }
 
@@ -802,7 +801,7 @@ public:
                             SvtLoadOptions_Impl();
                             ~SvtLoadOptions_Impl();
 
-    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
     virtual void            Commit();
 
     void                    SetLoadUserSettings(sal_Bool b){bLoadUserDefinedSettings = b; SetModified();}
@@ -838,7 +837,7 @@ void SvtLoadOptions_Impl::Commit()
     PutProperties( aNames, aValues );
 }
 // -----------------------------------------------------------------------
-void SvtLoadOptions_Impl::Notify( const Sequence<rtl::OUString>& )
+void SvtLoadOptions_Impl::Notify( const Sequence<OUString>& )
 {
     SAL_WARN( "unotools.config", "properties have been changed" );
 }

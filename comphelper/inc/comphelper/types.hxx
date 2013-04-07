@@ -44,7 +44,7 @@ namespace comphelper
     namespace starlang      = ::com::sun::star::lang;
 
     typedef staruno::Reference< staruno::XInterface >           InterfaceRef;
-    typedef staruno::Sequence< ::rtl::OUString >                StringSequence;
+    typedef staruno::Sequence< OUString >                StringSequence;
 
     //-------------------------------------------------------------------------
     /** compare the two given Anys
@@ -152,7 +152,7 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC double         getDouble(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC float          getFloat(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC ::rtl::OUString    getString(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC OUString    getString(const staruno::Any& _rAny);
     COMPHELPER_DLLPUBLIC sal_Bool       getBOOL(const staruno::Any& _rAny);
 
     COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);

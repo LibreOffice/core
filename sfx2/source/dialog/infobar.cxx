@@ -94,8 +94,8 @@ namespace
     }
 }
 
-SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const rtl::OUString& sId,
-       const rtl::OUString& sMessage, vector< PushButton* > aButtons ) :
+SfxInfoBarWindow::SfxInfoBarWindow( Window* pParent, const OUString& sId,
+       const OUString& sMessage, vector< PushButton* > aButtons ) :
     Window( pParent, 0 ),
     m_sId( sId ),
     m_pMessage( NULL ),
@@ -244,7 +244,7 @@ SfxInfoBarContainerWindow::~SfxInfoBarContainerWindow( )
     m_pInfoBars.clear( );
 }
 
-void SfxInfoBarContainerWindow::appendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, vector< PushButton* > aButtons )
+void SfxInfoBarContainerWindow::appendInfoBar( const OUString& sId, const OUString& sMessage, vector< PushButton* > aButtons )
 {
     Size aSize = GetSizePixel( );
 
@@ -257,7 +257,7 @@ void SfxInfoBarContainerWindow::appendInfoBar( const rtl::OUString& sId, const r
     SetSizePixel( aSize );
 }
 
-SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar( const rtl::OUString& sId )
+SfxInfoBarWindow* SfxInfoBarContainerWindow::getInfoBar( const OUString& sId )
 {
     SfxInfoBarWindow* pRet = NULL;
     for ( vector< SfxInfoBarWindow* >::iterator it = m_pInfoBars.begin( );

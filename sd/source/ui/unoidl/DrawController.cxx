@@ -49,7 +49,6 @@
 #include <boost/shared_ptr.hpp>
 
 using namespace ::std;
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -516,7 +515,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
         {
             OSL_FAIL(
                 OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught: " +
-                    ::rtl::OUStringToOString(
+                    OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 )).getStr() );
         }

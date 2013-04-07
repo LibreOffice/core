@@ -41,7 +41,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -576,7 +575,7 @@ namespace
     /** structure to cache the last transliteration body used. */
     struct TransBody
     {
-        ::rtl::OUString Name;
+        OUString Name;
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration > Body;
     };
     class theTransBodyMutex : public rtl::Static<osl::Mutex, theTransBodyMutex> {};

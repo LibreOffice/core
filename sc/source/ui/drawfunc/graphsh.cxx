@@ -78,7 +78,7 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
     SetHelpId(HID_SCSHELL_GRAPHIC);
-    SetName(rtl::OUString("GraphicObject"));
+    SetName(OUString("GraphicObject"));
 }
 
 ScGraphicShell::~ScGraphicShell()

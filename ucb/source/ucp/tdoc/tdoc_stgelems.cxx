@@ -46,7 +46,7 @@ using namespace tdoc_ucp;
 
 ParentStorageHolder::ParentStorageHolder(
             const uno::Reference< embed::XStorage > & xParentStorage,
-            const rtl::OUString & rUri )
+            const OUString & rUri )
 : m_xParentStorage( xParentStorage ),
   m_bParentIsRootStorage( false )
 {
@@ -65,7 +65,7 @@ ParentStorageHolder::ParentStorageHolder(
 
 Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
                   const rtl::Reference< StorageElementFactory > & xFactory,
-                  const rtl::OUString & rUri,
+                  const OUString & rUri,
                   const uno::Reference< embed::XStorage > & xParentStorage,
                   const uno::Reference< embed::XStorage > & xStorageToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
@@ -264,7 +264,7 @@ uno::Type SAL_CALL Storage::getElementType()
 //=========================================================================
 
 // virtual
-uno::Any SAL_CALL Storage::getByName( const ::rtl::OUString& aName )
+uno::Any SAL_CALL Storage::getByName( const OUString& aName )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
             uno::RuntimeException )
@@ -274,7 +274,7 @@ uno::Any SAL_CALL Storage::getByName( const ::rtl::OUString& aName )
 
 //=========================================================================
 // virtual
-uno::Sequence< ::rtl::OUString > SAL_CALL Storage::getElementNames()
+uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->getElementNames();
@@ -282,7 +282,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Storage::getElementNames()
 
 //=========================================================================
 // virtual
-::sal_Bool SAL_CALL Storage::hasByName( const ::rtl::OUString& aName )
+::sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->hasByName( aName );
@@ -309,7 +309,7 @@ void SAL_CALL Storage::copyToStorage(
 //=========================================================================
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
-        const ::rtl::OUString& aStreamName, sal_Int32 nOpenMode )
+        const OUString& aStreamName, sal_Int32 nOpenMode )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             packages::WrongPasswordException,
@@ -323,9 +323,9 @@ uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
 //=========================================================================
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
-        const ::rtl::OUString& aStreamName,
+        const OUString& aStreamName,
         sal_Int32 nOpenMode,
-        const ::rtl::OUString& aPassword )
+        const OUString& aPassword )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             packages::NoEncryptionException,
@@ -341,7 +341,7 @@ uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
 //=========================================================================
 // virtual
 uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
-        const ::rtl::OUString& aStorName, sal_Int32 nOpenMode )
+        const OUString& aStorName, sal_Int32 nOpenMode )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             io::IOException,
@@ -354,7 +354,7 @@ uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
 //=========================================================================
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
-        const ::rtl::OUString& aStreamName )
+        const OUString& aStreamName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             packages::WrongPasswordException,
@@ -368,8 +368,8 @@ uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
 //=========================================================================
 // virtual
 uno::Reference< io::XStream > SAL_CALL Storage::cloneEncryptedStreamElement(
-        const ::rtl::OUString& aStreamName,
-        const ::rtl::OUString& aPassword )
+        const OUString& aStreamName,
+        const OUString& aPassword )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             packages::NoEncryptionException,
@@ -398,7 +398,7 @@ void SAL_CALL Storage::copyLastCommitTo(
 //=========================================================================
 // virtual
 void SAL_CALL Storage::copyStorageElementLastCommitTo(
-        const ::rtl::OUString& aStorName,
+        const OUString& aStorName,
         const uno::Reference< embed::XStorage >& xTargetStorage )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
@@ -412,7 +412,7 @@ void SAL_CALL Storage::copyStorageElementLastCommitTo(
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL Storage::isStreamElement(
-        const ::rtl::OUString& aElementName )
+        const OUString& aElementName )
     throw ( container::NoSuchElementException,
             lang::IllegalArgumentException,
             embed::InvalidStorageException,
@@ -424,7 +424,7 @@ sal_Bool SAL_CALL Storage::isStreamElement(
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL Storage::isStorageElement(
-        const ::rtl::OUString& aElementName )
+        const OUString& aElementName )
     throw ( container::NoSuchElementException,
             lang::IllegalArgumentException,
             embed::InvalidStorageException,
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL Storage::isStorageElement(
 
 //=========================================================================
 // virtual
-void SAL_CALL Storage::removeElement( const ::rtl::OUString& aElementName )
+void SAL_CALL Storage::removeElement( const OUString& aElementName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -448,8 +448,8 @@ void SAL_CALL Storage::removeElement( const ::rtl::OUString& aElementName )
 
 //=========================================================================
 // virtual
-void SAL_CALL Storage::renameElement( const ::rtl::OUString& aEleName,
-                                      const ::rtl::OUString& aNewName )
+void SAL_CALL Storage::renameElement( const OUString& aEleName,
+                                      const OUString& aNewName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -464,9 +464,9 @@ void SAL_CALL Storage::renameElement( const ::rtl::OUString& aEleName,
 //=========================================================================
 // virtual
 void SAL_CALL Storage::copyElementTo(
-        const ::rtl::OUString& aElementName,
+        const OUString& aElementName,
         const uno::Reference< embed::XStorage >& xDest,
-        const ::rtl::OUString& aNewName )
+        const OUString& aNewName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -481,9 +481,9 @@ void SAL_CALL Storage::copyElementTo(
 //=========================================================================
 // virtual
 void SAL_CALL Storage::moveElementTo(
-        const ::rtl::OUString& aElementName,
+        const OUString& aElementName,
         const uno::Reference< embed::XStorage >& xDest,
-        const ::rtl::OUString& rNewName )
+        const OUString& rNewName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
             container::NoSuchElementException,
@@ -571,7 +571,7 @@ void SAL_CALL Storage::revert()
 
 OutputStream::OutputStream(
             const uno::Reference< uno::XComponentContext > & rxContext,
-            const rtl::OUString & rUri,
+            const OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,
             const uno::Reference< io::XOutputStream > & xStreamToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
@@ -763,7 +763,7 @@ OutputStream::removeEventListener(
 
 Stream::Stream(
             const uno::Reference< uno::XComponentContext > & rxContext,
-            const rtl::OUString & rUri,
+            const OUString & rUri,
             const uno::Reference< embed::XStorage >  & xParentStorage,
             const uno::Reference< io::XStream > & xStreamToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),

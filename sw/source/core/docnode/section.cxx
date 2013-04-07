@@ -1140,7 +1140,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwBaseLink* pBLink;
     String sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
     uno::Any aValue;
-    aValue <<= ::rtl::OUString( sName ); // Arbitrary name
+    aValue <<= OUString( sName ); // Arbitrary name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
@@ -1243,7 +1243,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     const SfxFilter* pSfxFlt = 0;
     if( !pMed->GetError() )
     {
-        String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
+        String sFactory(OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
         SfxFilterMatcher aMatcher( sFactory );
 
         // No Filter, so search for it. Else test if the one passed is a valid one
@@ -1344,7 +1344,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     SwSection& rSection = pSectNd->GetSection();
     rSection.SetConnectFlag(false);
 
-    ::rtl::OUString sNewFileName;
+    OUString sNewFileName;
     Reader* pRead = 0;
     switch( nDataFormat )
     {

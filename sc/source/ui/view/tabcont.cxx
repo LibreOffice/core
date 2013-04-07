@@ -51,7 +51,7 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
-    rtl::OUString aString;
+    OUString aString;
     Color aTabBgColor;
     SCTAB nCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nCount; i++)
@@ -170,7 +170,7 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
         ScModule* pScMod = SC_MOD();
         if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
             return;
-        rtl::OUString aName;
+        OUString aName;
         pDoc->CreateValidTabName(aName);
         SCTAB nTabCount = pDoc->GetTableCount();
         pViewData->GetViewShell()->InsertTable(aName, nTabCount);
@@ -299,7 +299,7 @@ void ScTabControl::UpdateStatus()
 
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
-    rtl::OUString aString;
+    OUString aString;
     SCTAB nMaxCnt = Max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
@@ -313,7 +313,7 @@ void ScTabControl::UpdateStatus()
         }
         else
         {
-            aString = rtl::OUString();
+            aString = OUString();
         }
 
         if ( !aString.equals(GetPageText(static_cast<sal_uInt16>(i)+1)) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )

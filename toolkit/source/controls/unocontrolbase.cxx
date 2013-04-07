@@ -32,11 +32,11 @@
 
 sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {
-    ::rtl::OUString aPropName( GetPropertyName( nPropId ) );
+    OUString aPropName( GetPropertyName( nPropId ) );
     return ImplHasProperty( aPropName );
 }
 
-sal_Bool UnoControlBase::ImplHasProperty( const ::rtl::OUString& aPropertyName )
+sal_Bool UnoControlBase::ImplHasProperty( const OUString& aPropertyName )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
     if ( !xPSet.is() )
@@ -48,7 +48,7 @@ sal_Bool UnoControlBase::ImplHasProperty( const ::rtl::OUString& aPropertyName )
     return xInfo->hasPropertyByName( aPropertyName );
 }
 
-void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > xMPS( mxModel, ::com::sun::star::uno::UNO_QUERY );
     if ( !mxModel.is() )
@@ -79,7 +79,7 @@ void UnoControlBase::ImplSetPropertyValues( const ::com::sun::star::uno::Sequenc
     }
 }
 
-void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
+void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis )
 {
     // Model might be logged off already but an event still fires
     if ( mxModel.is() )
@@ -103,7 +103,7 @@ void UnoControlBase::ImplSetPropertyValue( const ::rtl::OUString& aPropertyName,
     }
 }
 
-::com::sun::star::uno::Any UnoControlBase::ImplGetPropertyValue( const ::rtl::OUString& aPropertyName )
+::com::sun::star::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet( mxModel, ::com::sun::star::uno::UNO_QUERY );
     if ( xPSet.is() )
@@ -156,9 +156,9 @@ double UnoControlBase::ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp )
     return n;
 }
 
-::rtl::OUString UnoControlBase::ImplGetPropertyValue_UString( sal_uInt16 nProp )
+OUString UnoControlBase::ImplGetPropertyValue_UString( sal_uInt16 nProp )
 {
-    ::rtl::OUString aStr;
+    OUString aStr;
     if ( mxModel.is() )
     {
         ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );

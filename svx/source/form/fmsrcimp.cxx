@@ -169,7 +169,7 @@ SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTe
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString SimpleTextWrapper::getCurrentText() const
+OUString SimpleTextWrapper::getCurrentText() const
 {
     return m_xText->getText();
 }
@@ -183,7 +183,7 @@ ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox 
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString ListBoxWrapper::getCurrentText() const
+OUString ListBoxWrapper::getCurrentText() const
 {
     return m_xBox->getSelectedItem();
 }
@@ -197,15 +197,15 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString CheckBoxWrapper::getCurrentText() const
+OUString CheckBoxWrapper::getCurrentText() const
 {
     switch ((TriState)m_xBox->getState())
     {
-        case STATE_NOCHECK: return rtl::OUString("0");
-        case STATE_CHECK: return rtl::OUString("1");
+        case STATE_NOCHECK: return OUString("0");
+        case STATE_CHECK: return OUString("1");
         default: break;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //========================================================================
@@ -239,9 +239,9 @@ sal_Bool FmSearchEngine::MoveCursor()
     catch(::com::sun::star::sdbc::SQLException const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
             "FmSearchEngine::MoveCursor : catched a DatabaseException ("));
-        sDebugMessage.append(rtl::OUStringToOString(e.SQLState, RTL_TEXTENCODING_ASCII_US));
+        sDebugMessage.append(OUStringToOString(e.SQLState, RTL_TEXTENCODING_ASCII_US));
         sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
         OSL_FAIL(sDebugMessage.getStr());
 #else
@@ -252,9 +252,9 @@ sal_Bool FmSearchEngine::MoveCursor()
     catch(Exception const& e)
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer sDebugMessage(RTL_CONSTASCII_STRINGPARAM(
             "FmSearchEngine::MoveCursor : catched an Exception ("));
-        sDebugMessage.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
+        sDebugMessage.append(OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US));
         sDebugMessage.append(RTL_CONSTASCII_STRINGPARAM(") !"));
         OSL_FAIL(sDebugMessage.getStr());
 #else
@@ -331,15 +331,15 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
 
 }
 //------------------------------------------------------------------------
-::rtl::OUString FmSearchEngine::FormatField(const FieldInfo& rField)
+OUString FmSearchEngine::FormatField(const FieldInfo& rField)
 {
     DBG_ASSERT(!m_bUsingTextComponents, "FmSearchEngine::FormatField : im UsingTextComponents-Mode bitte FormatField(sal_Int32) benutzen !");
 
     if (!m_xFormatter.is())
-        return ::rtl::OUString();
+        return OUString();
     // sonst werden Datumsflder zum Beispiel zu irgendeinem Default-Wert formatiert
 
-    ::rtl::OUString sReturn;
+    OUString sReturn;
     try
     {
         if (rField.bDoubleHandling)
@@ -350,7 +350,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
         }
         else
         {
-            ::rtl::OUString sValue = rField.xContents->getString();
+            OUString sValue = rField.xContents->getString();
             if (!rField.xContents->wasNull())
                 sReturn = m_xFormatter->formatString(rField.nFormatKey, sValue);
         }
@@ -364,7 +364,7 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
+OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
     if (m_bUsingTextComponents)
     {
@@ -465,7 +465,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos,
+FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
 {
     // die Startposition merken
@@ -493,7 +493,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
         }
 
         // der aktuell zu vergleichende Inhalt
-        ::rtl::OUString sCurrentCheck;
+        OUString sCurrentCheck;
         if (m_bFormatter)
             sCurrentCheck = FormatField(nFieldPos);
         else
@@ -543,7 +543,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const ::rtl::OUStri
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::OUString& strExpression, sal_Int32& nFieldPos,
+FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollectionIterator& iterFieldLoop, const FieldCollectionIterator& iterBegin, const FieldCollectionIterator& iterEnd)
 {
     DBG_ASSERT(m_bLevenshtein || m_bRegular,
@@ -595,7 +595,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
         }
 
         // der aktuell zu vergleichende Inhalt
-        ::rtl::OUString sCurrentCheck;
+        OUString sCurrentCheck;
         if (m_bFormatter)
             sCurrentCheck = FormatField(nFieldPos);
         else
@@ -671,7 +671,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const ::rtl::O
 DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
-            const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+            const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
             const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
 
     :m_xSearchCursor(xCursor)
@@ -710,7 +710,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
 
 //------------------------------------------------------------------------
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
-        const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+        const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
@@ -826,7 +826,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 }
 
 //------------------------------------------------------------------------
-void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
+void FmSearchEngine::Init(const OUString& sVisibleFields)
 {
     // analyze the fields
     // additionally, create the mapping: because the list of used columns can be shorter than the list
@@ -871,12 +871,12 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
         Reference< ::com::sun::star::container::XNameAccess >       xAllFieldNames = xSupplyCols->getColumns();
-        Sequence< ::rtl::OUString > seqFieldNames = xAllFieldNames->getElementNames();
-        ::rtl::OUString*            pFieldNames = seqFieldNames.getArray();
+        Sequence< OUString > seqFieldNames = xAllFieldNames->getElementNames();
+        OUString*            pFieldNames = seqFieldNames.getArray();
 
 
-        ::rtl::OUString sCurrentField;
-        ::rtl::OUString sVis(sVisibleFields.getStr());
+        OUString sCurrentField;
+        OUString sVis(sVisibleFields.getStr());
         sal_Int32 nIndex = 0;
         do
         {
@@ -978,13 +978,13 @@ void FmSearchEngine::SearchNextImpl()
     DBG_ASSERT(m_xSearchCursor.is(), "FmSearchEngine::SearchNextImpl : habe ungueltigen Iterator !");
 
     // die Parameter der Suche
-    ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
+    OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!GetCaseSensitive())
         // norm the string
         strSearchExpression = m_aCharacterClassficator.lowercase(strSearchExpression);
 
     if (!m_bRegular && !m_bLevenshtein)
-    {   // 'normale' Suche fuehre ich auf jeden Fall ueber WildCards durch, muss aber vorher je nach Modus den ::rtl::OUString anpassen
+    {   // 'normale' Suche fuehre ich auf jeden Fall ueber WildCards durch, muss aber vorher je nach Modus den OUString anpassen
 
         if (!m_bWildcard)
         {   // da natuerlich in allen anderen Faellen auch * und ? im Suchstring erlaubt sind, aber nicht als WildCards zaehlen
@@ -1144,7 +1144,7 @@ void FmSearchEngine::CancelSearch()
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields, const InterfaceArray& arrFields,
+sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
     DBG_ASSERT(!m_bSearchingCurrently, "FmSearchEngine::SwitchToContext : please do not call while I'm searching !");
@@ -1188,7 +1188,7 @@ void FmSearchEngine::ImplStartNextSearch()
 }
 
 //------------------------------------------------------------------------
-void FmSearchEngine::SearchNext(const ::rtl::OUString& strExpression)
+void FmSearchEngine::SearchNext(const OUString& strExpression)
 {
     m_strSearchExpression = strExpression;
     m_eSearchForType = SEARCHFOR_STRING;
@@ -1203,7 +1203,7 @@ void FmSearchEngine::SearchNextSpecial(sal_Bool _bSearchForNull)
 }
 
 //------------------------------------------------------------------------
-void FmSearchEngine::StartOver(const ::rtl::OUString& strExpression)
+void FmSearchEngine::StartOver(const OUString& strExpression)
 {
     try
     {

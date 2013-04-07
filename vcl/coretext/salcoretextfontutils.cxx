@@ -155,7 +155,7 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     }
 
     CFStringRef string_ref = (CFStringRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontStyleNameAttribute);
-    rtl::OUString style(GetOUString(string_ref).toAsciiLowerCase());
+    OUString style(GetOUString(string_ref).toAsciiLowerCase());
     CFRelease(string_ref);
 
     // heuristics to adjust font slant

@@ -47,7 +47,7 @@ SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 /* XSEInitializer */
 cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_MSCryptImpl::createSecurityContext(
-    const rtl::OUString& sCertDB )
+    const OUString& sCertDB )
     throw (cssu::RuntimeException)
 {
     const char* n_pCertStore ;
@@ -56,7 +56,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     //Initialize the crypto engine
     if( sCertDB.getLength() > 0 )
     {
-        rtl::OString sCertDir(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
+        OString sCertDir(sCertDB.getStr(), sCertDB.getLength(), RTL_TEXTENCODING_ASCII_US);
         n_pCertStore = sCertDir.getStr();
         n_hStoreHandle = CertOpenSystemStore( NULL, n_pCertStore ) ;
         if( n_hStoreHandle == NULL )
@@ -74,7 +74,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 
     try {
         /* Build Security Environment */
-        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+        const OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
         cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv( mxMSF->createInstance ( sSecyrutyEnvironment ), cssu::UNO_QUERY );
         if( !xSecEnv.is() )
         {
@@ -123,7 +123,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         }
 
         /* Build XML Security Context */
-        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
+        const OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
         cssu::Reference< cssxc::XXMLSecurityContext > xSecCtx( mxMSF->createInstance ( sSecyrutyContext ), cssu::UNO_QUERY );
         if( !xSecCtx.is() )
         {
@@ -181,24 +181,24 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Refere
     xmlSecMSCryptoAppShutdown() ;
 }
 
-rtl::OUString SEInitializer_MSCryptImpl_getImplementationName ()
+OUString SEInitializer_MSCryptImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName == SERVICE_NAME;
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    cssu::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
@@ -210,17 +210,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_MSCryptImpl_createIns
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName(  )
+OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getImplementationName();
 }
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getSupportedServiceNames();

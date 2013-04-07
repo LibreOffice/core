@@ -29,7 +29,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
 {
     ImplFreePrnDlgListBox( pBox );
 
-    const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+    const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
     if ( nCount )
     {

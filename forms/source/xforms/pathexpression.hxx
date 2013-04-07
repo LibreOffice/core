@@ -51,7 +51,7 @@ private:
 
 protected:
     /// get expression for evaluation
-    const rtl::OUString _getExpressionForEvaluation() const;
+    const OUString _getExpressionForEvaluation() const;
 
 
 public:
@@ -61,7 +61,7 @@ public:
     /// set the expression string
     /// (overridden to do remove old listeners)
     /// (also defines simple expressions)
-    void setExpression( const rtl::OUString& rExpression );
+    void setExpression( const OUString& rExpression );
 
 
     /// evaluate the expression relative to the content node.

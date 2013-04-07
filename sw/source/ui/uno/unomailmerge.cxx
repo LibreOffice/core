@@ -80,7 +80,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
-using ::rtl::OUString;
 using namespace SWUnoHelper;
 
 ////////////////////////////////////////////////////////////
@@ -728,7 +727,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aURLObj.SetSmartURL( aCurOutputURL );
         String aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 
-        String aDelim = rtl::OUString(INET_PATH_TOKEN);
+        String aDelim = OUString(INET_PATH_TOKEN);
         if (aPath.Len() >= aDelim.Len() &&
             aPath.Copy( aPath.Len()-aDelim.Len() ).CompareTo( aDelim ) != COMPARE_EQUAL)
             aPath += aDelim;
@@ -776,7 +775,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     // save document with temporary filename
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            rtl::OUString( FILTER_XML ),
+            OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
     String aExtension(comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(), '*'));
     TempFile aTempFile( OUString("SwMM"), &aExtension );

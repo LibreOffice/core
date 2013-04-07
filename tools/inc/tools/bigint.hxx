@@ -66,7 +66,7 @@ public:
                     BigInt( sal_uInt16 nVal );
                     BigInt( sal_uInt32 nVal );
                     BigInt( const BigInt& rBigInt );
-                    BigInt( const rtl::OUString& rString );
+                    BigInt( const OUString& rString );
 #ifdef _TLBIGINT_INT64
                     BigInt( const SbxINT64  &r );
                     BigInt( const SbxUINT64 &r );
@@ -80,7 +80,7 @@ public:
     operator        sal_uIntPtr() const;
 
     void            Set( sal_Bool bSet ) { bIsSet = bSet; }
-    rtl::OUString   GetString() const;
+    OUString   GetString() const;
 
     sal_Bool        IsSet() const { return bIsSet; }
     sal_Bool        IsNeg() const;

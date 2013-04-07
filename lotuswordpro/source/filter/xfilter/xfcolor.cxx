@@ -61,7 +61,7 @@
 #include <stdio.h>
 #include "xfcolor.hxx"
 
-rtl::OUString XFColor::ToString() const
+OUString XFColor::ToString() const
 {
     char    buf[8];
 
@@ -72,7 +72,7 @@ rtl::OUString XFColor::ToString() const
         if( buf[i] == ' ' )
             buf[i] = '0';
     }
-    return rtl::OUString::createFromAscii(buf);
+    return OUString::createFromAscii(buf);
 }
 
 bool operator==(XFColor& c1, XFColor& c2)

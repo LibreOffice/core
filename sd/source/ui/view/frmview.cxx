@@ -47,7 +47,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::std;
-using ::rtl::OUString;
 
 namespace sd {
 
@@ -94,7 +93,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 {
                     nSdViewShellCount++;
 
-                    ::rtl::OUString sViewURL;
+                    OUString sViewURL;
                     Reference<drawing::framework::XView> xView (
                         framework::FrameworkHelper::Instance(*pBase)->GetView(
                             drawing::framework::ResourceId::create(
@@ -390,7 +389,7 @@ EditMode FrameView::GetViewShEditModeOnLoad (void) const
 
 static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
-    ::rtl::OUStringBuffer aLines;
+    OUStringBuffer aLines;
 
     const sal_uInt16 nCount = rHelpLines.GetCount();
     for( sal_uInt16 nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
@@ -510,11 +509,11 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
 }
 #undef addValue
 
-static void createHelpLinesFromString( const rtl::OUString& rLines, SdrHelpLineList& rHelpLines )
+static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& rHelpLines )
 {
     const sal_Unicode * pStr = rLines.getStr();
     SdrHelpLine aNewHelpLine;
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
 
     while( *pStr )
     {
@@ -583,7 +582,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         sal_Bool bBool = sal_False;
         sal_Int32 nInt32 = 0;
         sal_Int16 nInt16 = 0;
-        rtl::OUString aString;
+        OUString aString;
 
         sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().GetNumerator();
         sal_Int32 aSnapGridWidthXDom = GetSnapGridWidthX().GetDenominator();

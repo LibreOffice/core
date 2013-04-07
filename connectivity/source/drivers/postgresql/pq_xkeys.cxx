@@ -70,9 +70,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -103,8 +100,8 @@ Keys::Keys(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName)
+        const OUString &schemaName,
+        const OUString &tableName)
     : Container( refMutex, origin, pSettings,  getStatics().KEY ),
       m_schemaName( schemaName ),
       m_tableName( tableName )
@@ -113,7 +110,7 @@ Keys::Keys(
 Keys::~Keys()
 {}
 
-static sal_Int32 string2keytype( const rtl::OUString &type )
+static sal_Int32 string2keytype( const OUString &type )
 {
     sal_Int32 ret = com::sun::star::sdbcx::KeyType::UNIQUE;
     if ( type == "p" )
@@ -123,7 +120,7 @@ static sal_Int32 string2keytype( const rtl::OUString &type )
     return ret;
 }
 
-static sal_Int32 string2keyrule( const rtl::OUString & rule )
+static sal_Int32 string2keyrule( const OUString & rule )
 {
     sal_Int32 ret = com::sun::star::sdbc::KeyRule::NO_ACTION;
     if( rule == "r" )
@@ -300,8 +297,8 @@ Reference< com::sun::star::container::XIndexAccess > Keys::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const rtl::OUString & schemaName,
-    const rtl::OUString & tableName)
+    const OUString & schemaName,
+    const OUString & tableName)
 {
     Keys *pKeys = new Keys( refMutex, origin, pSettings, schemaName, tableName );
     Reference< com::sun::star::container::XIndexAccess > ret = pKeys;

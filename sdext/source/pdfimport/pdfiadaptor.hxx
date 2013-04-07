@@ -85,10 +85,10 @@ namespace pdfi
 
         bool parse( const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>&       xInput,
                     const com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler>& xIHdl,
-                    const rtl::OUString&                                                          rPwd,
+                    const OUString&                                                          rPwd,
                     const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& xStatus,
                     const XmlEmitterSharedPtr&                                                    rEmitter,
-                    const rtl::OUString&                                                          rURL );
+                    const OUString&                                                          rURL );
 
     public:
         explicit PDFIRawAdaptor( const ::com::sun::star::uno::Reference<
@@ -112,14 +112,14 @@ namespace pdfi
             @param xStatus
             Optional status indicator
          */
-        bool odfConvert( const rtl::OUString&                                                          rURL,
+        bool odfConvert( const OUString&                                                          rURL,
                          const com::sun::star::uno::Reference<com::sun::star::io::XOutputStream>&      xOutput,
                          const com::sun::star::uno::Reference<com::sun::star::task::XStatusIndicator>& xStatus );
 
         // XImportFilter
         virtual sal_Bool SAL_CALL importer( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rSourceData,
                                             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHdl,
-                                            const com::sun::star::uno::Sequence< rtl::OUString >& rUserData ) throw( com::sun::star::uno::RuntimeException );
+                                            const com::sun::star::uno::Sequence< OUString >& rUserData ) throw( com::sun::star::uno::RuntimeException );
 
         // XImporter
         virtual void SAL_CALL setTargetDocument( const com::sun::star::uno::Reference< com::sun::star::lang::XComponent >& xDocument )

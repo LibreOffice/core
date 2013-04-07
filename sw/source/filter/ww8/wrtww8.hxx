@@ -294,7 +294,7 @@ public:
     bool Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;
     void WriteRtf( const RtfAttributeOutput* rAttrOutput ) const;
-    rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
+    OUString GetFamilyName() const { return OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
 };
 
@@ -593,10 +593,10 @@ public:
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
 
     /// Find the reference.
-    bool HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
+    bool HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find the bookmark name.
-    String GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
+    String GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Add a bookmark converted to a Word name.
     void AppendWordBookmark( const String& rName );
@@ -645,7 +645,7 @@ public:
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen ) = 0;
 
-    virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false ) = 0;
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false ) = 0;
     //For i120928,add this interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTxtNode& rNd) = 0;
 
@@ -730,11 +730,11 @@ public:
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
     virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
 
-    virtual void DoComboBox(const rtl::OUString &rName,
-                    const rtl::OUString &rHelp,
-                    const rtl::OUString &ToolTip,
-                    const rtl::OUString &rSelected,
-                    com::sun::star::uno::Sequence<rtl::OUString> &rListItems) = 0;
+    virtual void DoComboBox(const OUString &rName,
+                    const OUString &rHelp,
+                    const OUString &ToolTip,
+                    const OUString &rSelected,
+                    com::sun::star::uno::Sequence<OUString> &rListItems) = 0;
 
     virtual void DoFormText(const SwInputField * pFld) = 0;
 
@@ -798,7 +798,7 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& ) = 0;
 
-    virtual void OutputLinkedOLE( const rtl::OUString& ) = 0;
+    virtual void OutputLinkedOLE( const OUString& ) = 0;
 
 
     /// Output SwSectionNode
@@ -1009,14 +1009,14 @@ public:
         SvStorageRef xObjStg, String &rStorageName, SwOLENode *pOLENd);
 
     virtual void AppendBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos, xub_StrLen nLen );
-    virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
     void OutGrfBullets(const sw::Frame &rFrame);
 
     void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
 
-    void WriteAsStringTable(const ::std::vector<rtl::OUString>&, sal_Int32& rfcSttbf,
+    void WriteAsStringTable(const ::std::vector<OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
@@ -1089,11 +1089,11 @@ public:
             bool bIsWW8 );
     virtual ~WW8Export();
 
-    virtual void DoComboBox(const rtl::OUString &rName,
-                    const rtl::OUString &rHelp,
-                    const rtl::OUString &ToolTip,
-                    const rtl::OUString &rSelected,
-                    com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
+    virtual void DoComboBox(const OUString &rName,
+                    const OUString &rHelp,
+                    const OUString &ToolTip,
+                    const OUString &rSelected,
+                    com::sun::star::uno::Sequence<OUString> &rListItems);
 
     virtual void DoFormText(const SwInputField * pFld);
 
@@ -1127,7 +1127,7 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
-    virtual void OutputLinkedOLE( const rtl::OUString& );
+    virtual void OutputLinkedOLE( const OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 

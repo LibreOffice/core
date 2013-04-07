@@ -66,11 +66,11 @@ public:
         throw ( css::uno::Exception, css::uno::RuntimeException );
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& rServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
         throw ( css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw ( css::uno::RuntimeException );
 
     // XCustomShapeEngine
@@ -84,11 +84,11 @@ public:
         throw ( css::uno::RuntimeException );
 };
 
-rtl::OUString EnhancedCustomShapeEngine_getImplementationName()
+OUString EnhancedCustomShapeEngine_getImplementationName()
     throw ( css::uno::RuntimeException );
-sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL EnhancedCustomShapeEngine_supportsService( const OUString& rServiceName )
     throw( css::uno::RuntimeException );
-css::uno::Sequence< rtl::OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine_getSupportedServiceNames()
     throw( css::uno::RuntimeException );
 
 #endif

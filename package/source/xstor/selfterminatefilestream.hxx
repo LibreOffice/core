@@ -33,13 +33,13 @@ class OSelfTerminateFileStream : public cppu::WeakImplHelper2< ::com::sun::star:
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > m_xFileAccess;
 
-    ::rtl::OUString m_aURL;
+    OUString m_aURL;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xInputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > m_xSeekable;
 
 public:
-    OSelfTerminateFileStream( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext, const ::rtl::OUString& aURL );
+    OSelfTerminateFileStream( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext, const OUString& aURL );
 
     virtual ~OSelfTerminateFileStream();
 

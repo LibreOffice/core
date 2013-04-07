@@ -48,9 +48,9 @@ const CLSID CLSID_DataLinks = { 0x2206CDB2, 0x19C1, 0x11D1, { 0x89, 0xE0, 0x00, 
 BSTR PromptEdit(long hWnd,BSTR connstr);
 BSTR PromptNew(long hWnd);
 
-::rtl::OUString getAdoDatalink(long hWnd,::rtl::OUString& oldLink)
+OUString getAdoDatalink(long hWnd,OUString& oldLink)
 {
-    ::rtl::OUString dataLink;
+    OUString dataLink;
     if (!oldLink.isEmpty())
     {
         dataLink=reinterpret_cast<sal_Unicode *>(PromptEdit(hWnd,(BSTR)oldLink.getStr()));

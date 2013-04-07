@@ -56,10 +56,10 @@ struct OUStringHashCode
     }
 };
 
-class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
+class ExtensionHashMap : public ::boost::unordered_map< OUString,
                                                  sal_Int32,
                                                  OUStringHashCode,
-                                                 ::std::equal_to< ::rtl::OUString > >
+                                                 ::std::equal_to< OUString > >
 {
     public:
         inline void free()

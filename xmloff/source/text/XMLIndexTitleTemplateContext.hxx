@@ -38,15 +38,15 @@ namespace com { namespace sun { namespace star {
 class XMLIndexTitleTemplateContext : public SvXMLImportContext
 {
 
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sParaStyleHeading;
+    const OUString sTitle;
+    const OUString sParaStyleHeading;
 
     // paragraph style
-    ::rtl::OUString sStyleName;
+    OUString sStyleName;
     sal_Bool bStyleNameOK;
 
     // content
-    ::rtl::OUStringBuffer sContent;
+    OUStringBuffer sContent;
 
     // TOC property set
     ::com::sun::star::uno::Reference<
@@ -61,7 +61,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName);
+        const OUString& rLocalName);
 
     ~XMLIndexTitleTemplateContext();
 
@@ -76,7 +76,7 @@ protected:
     virtual void EndElement();
 
     /** pick up title characters */
-    virtual void Characters(const ::rtl::OUString& sString);
+    virtual void Characters(const OUString& sString);
 };
 
 #endif

@@ -101,7 +101,7 @@ public:
                             // pDocShell is not needed for all Services
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
-    static ::com::sun::star::uno::Sequence<rtl::OUString> GetAllServiceNames();
+    static ::com::sun::star::uno::Sequence<OUString> GetAllServiceNames();
     static sal_uInt16       GetProviderType(const String& rServiceName);
 };
 

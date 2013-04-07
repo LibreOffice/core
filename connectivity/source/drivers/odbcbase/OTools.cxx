@@ -195,9 +195,9 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_CHAR:
                 case SQL_VARCHAR:
                 {
-                    ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
+                    OString aString(OUStringToOString(*(OUString*)_pValue,_nTextEncoding));
                     *pLen = SQL_NTS;
-                    *((::rtl::OString*)_pData) = aString;
+                    *((OString*)_pData) = aString;
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
 
                     // Pointer on Char*
@@ -210,12 +210,12 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
                 {
-                    ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
+                    OString aString = OString::valueOf(*(double*)_pValue);
                     _nMaxLen = (SQLSMALLINT)aString.getLength();
                     *pLen = _nMaxLen;
-                    *((::rtl::OString*)_pData) = aString;
+                    *((OString*)_pData) = aString;
                     // Pointer on Char*
-                    _pData = (void*)((::rtl::OString*)_pData)->getStr();
+                    _pData = (void*)((OString*)_pData)->getStr();
                 }   break;
                 case SQL_BIT:
                 case SQL_TINYINT:
@@ -258,7 +258,7 @@ void OTools::bindValue( OConnection* _pConnection,
                 {
                     _pData = (void*)(sal_IntPtr)(columnIndex);
                     sal_Int32 nLen = 0;
-                    nLen = ((::rtl::OUString*)_pValue)->getLength();
+                    nLen = ((OUString*)_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }   break;
                 case SQL_DATE:
@@ -342,9 +342,9 @@ void OTools::ThrowException(const OConnection* _pConnection,
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 
     // For the Return Code of SQLError see ODBC 2.0 Programmer's Reference Page 287ff
-    throw SQLException( ::rtl::OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
+    throw SQLException( OUString((char *)szErrorMessage,pcbErrorMsg,_nTextEncoding),
                                     _xInterface,
-                                    ::rtl::OUString((char *)szSqlState,5,_nTextEncoding),
+                                    OUString((char *)szSqlState,5,_nTextEncoding),
                                     pfNativeError,
                                     Any()
                                 );
@@ -404,7 +404,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     return aData;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OTools::getStringValue(OConnection* _pConnection,
+OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
                                        SQLSMALLINT _fSqlType,
@@ -413,7 +413,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                        rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::getStringValue" );
-    ::rtl::OUStringBuffer aData;
+    OUStringBuffer aData;
     switch(_fSqlType)
     {
     case SQL_WVARCHAR:
@@ -441,7 +441,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
-                return ::rtl::OUString();
+                return OUString();
 
             SQLLEN nReadChars;
             OSL_ENSURE( (pcbValue < 0) || (pcbValue % 2 == 0),
@@ -486,7 +486,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                    _aStatementHandle,SQL_HANDLE_STMT,_xInterface);
             _bWasNull = pcbValue == SQL_NULL_DATA;
             if(_bWasNull)
-                return ::rtl::OUString();
+                return OUString();
 
             SQLLEN nReadChars;
             if ( (pcbValue == SQL_NO_TOTAL) || (pcbValue >= nMaxLen) )
@@ -504,7 +504,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                 nReadChars = pcbValue;
             }
 
-            aData.append(::rtl::OUString(aCharArray, nReadChars, _nTextEncoding));
+            aData.append(OUString(aCharArray, nReadChars, _nTextEncoding));
 
         }
         break;
@@ -517,7 +517,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
 void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
-                     ::rtl::OUString &_rValue,
+                     OUString &_rValue,
                      const Reference< XInterface >& _xInterface,
                      rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
@@ -527,7 +527,7 @@ void OTools::GetInfo(OConnection* _pConnection,
         (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,aValue,(sizeof aValue)-1,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 
-    _rValue = ::rtl::OUString(aValue,nValueLen,_nTextEncoding);
+    _rValue = OUString(aValue,nValueLen,_nTextEncoding);
 }
 // -------------------------------------------------------------------------
 void OTools::GetInfo(OConnection* _pConnection,

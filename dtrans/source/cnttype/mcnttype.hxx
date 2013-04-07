@@ -33,48 +33,48 @@ class CMimeContentType : public
     cppu::WeakImplHelper1< com::sun::star::datatransfer::XMimeContentType >
 {
 public:
-    CMimeContentType( const rtl::OUString& aCntType );
+    CMimeContentType( const OUString& aCntType );
 
     //-------------------------------------------
     // XMimeContentType
     //-------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getParameters(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getParameters(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL hasParameter( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasParameter( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getParameterValue( const ::rtl::OUString& aName )
+    virtual OUString SAL_CALL getParameterValue( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
 private:
-    void SAL_CALL init( const rtl::OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );
+    void SAL_CALL init( const OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );
     void SAL_CALL getSym( void );
-    void SAL_CALL acceptSym( const rtl::OUString& pSymTlb );
+    void SAL_CALL acceptSym( const OUString& pSymTlb );
     void SAL_CALL skipSpaces( void );
     void SAL_CALL type( void );
     void SAL_CALL subtype( void );
     void SAL_CALL trailer( void );
-    rtl::OUString SAL_CALL pName( );
-    rtl::OUString SAL_CALL pValue( );
-    rtl::OUString SAL_CALL quotedPValue( );
-    rtl::OUString SAL_CALL nonquotedPValue( );
+    OUString SAL_CALL pName( );
+    OUString SAL_CALL pValue( );
+    OUString SAL_CALL quotedPValue( );
+    OUString SAL_CALL nonquotedPValue( );
     void SAL_CALL comment( void );
-    sal_Bool SAL_CALL isInRange( const rtl::OUString& aChr, const rtl::OUString& aRange );
+    sal_Bool SAL_CALL isInRange( const OUString& aChr, const OUString& aRange );
 
 private:
     ::osl::Mutex                             m_aMutex;
-    rtl::OUString                            m_MediaType;
-    rtl::OUString                            m_MediaSubtype;
-    rtl::OUString                            m_ContentType;
-    std::map< rtl::OUString, rtl::OUString > m_ParameterMap;
+    OUString                            m_MediaType;
+    OUString                            m_MediaSubtype;
+    OUString                            m_ContentType;
+    std::map< OUString, OUString > m_ParameterMap;
     sal_Int32                                m_nPos;
-    rtl::OUString                            m_nxtSym;
+    OUString                            m_nxtSym;
 };
 
 #endif

@@ -220,7 +220,7 @@ bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
 
 // -----------------------------------------------------------------------
 
-ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,
+ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                     bool bColInfo, bool bRowInfo ) :
     aName( rNewName ),
     aCodeName( rNewName ),
@@ -339,20 +339,20 @@ ScTable::~ScTable()
     DestroySortCollator();
 }
 
-void ScTable::GetName( rtl::OUString& rName ) const
+void ScTable::GetName( OUString& rName ) const
 {
     rName = aName;
 }
 
-void ScTable::SetName( const rtl::OUString& rNewName )
+void ScTable::SetName( const OUString& rNewName )
 {
     aName = rNewName;
-    aUpperName = rtl::OUString(); // invalidated if the name is changed
+    aUpperName = OUString(); // invalidated if the name is changed
 
     // SetStreamValid is handled in ScDocument::RenameTab
 }
 
-const rtl::OUString& ScTable::GetUpperName() const
+const OUString& ScTable::GetUpperName() const
 {
     if (aUpperName.isEmpty() && !aName.isEmpty())
         aUpperName = ScGlobal::pCharClass->uppercase(aName);

@@ -132,7 +132,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
                                     aEmptyStr );
 
         // insert given text
-        rtl::OUString aStr( cMark );
+        OUString aStr( cMark );
         pOV->InsertText( aStr, sal_True);
 
         ESelection aSel = pOV->GetSelection();

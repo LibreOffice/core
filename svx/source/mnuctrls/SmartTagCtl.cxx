@@ -68,8 +68,8 @@ void SvxSmartTagsControl::FillMenu()
     const Sequence < Sequence< sal_Int32 > >& rActionIndicesSequence = mpSmartTagItem->GetActionIndicesSequence();
     const Sequence< Reference< container::XStringKeyMap > >& rStringKeyMaps = mpSmartTagItem->GetStringKeyMaps();
     const lang::Locale& rLocale = mpSmartTagItem->GetLocale();
-    const rtl::OUString aApplicationName = mpSmartTagItem->GetApplicationName();
-    const rtl::OUString aRangeText = mpSmartTagItem->GetRangeText();
+    const OUString aApplicationName = mpSmartTagItem->GetApplicationName();
+    const OUString aRangeText = mpSmartTagItem->GetRangeText();
     const Reference<text::XTextRange>& xTextRange = mpSmartTagItem->GetTextRange();
     const Reference<frame::XController>& xController = mpSmartTagItem->GetController();
 
@@ -91,8 +91,8 @@ void SvxSmartTagsControl::FillMenu()
             continue;
 
         const sal_Int32 nSmartTagIndex = rActionIndices[0];
-        const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
-        const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale );
+        const OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
+        const OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, rLocale );
 
         // no sub-menus if there's only one smart tag type listed:
         PopupMenu* pSbMenu = mpMenu;
@@ -105,7 +105,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + OUString(": ") + aRangeText;
+        const OUString aSmartTagCaption2 = aSmartTagCaption + OUString(": ") + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
@@ -118,12 +118,12 @@ void SvxSmartTagsControl::FillMenu()
             for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController ); ++k )
             {
                 const sal_uInt32 nActionID = xAction->getActionID( aSmartTagType, k, xController );
-                rtl::OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
+                OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
                                                                                 aApplicationName,
                                                                                 rLocale,
                                                                                 xSmartTagProperties,
                                                                                 aRangeText,
-                                                                                rtl::OUString(),
+                                                                                OUString(),
                                                                                 xController,
                                                                                 xTextRange );
 
@@ -178,7 +178,7 @@ IMPL_LINK_INLINE_START( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
                                        mpSmartTagItem->GetTextRange(),
                                        maInvokeActions[ nMyId ].mxSmartTagProperties,
                                        mpSmartTagItem->GetRangeText(),
-                                       rtl::OUString(),
+                                       OUString(),
                                        mpSmartTagItem->GetLocale() );
     }
 

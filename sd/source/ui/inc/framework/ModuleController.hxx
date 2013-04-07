@@ -79,7 +79,7 @@ public:
 
     // XModuleController
 
-    virtual void SAL_CALL requestResource(const ::rtl::OUString& rsResourceURL)
+    virtual void SAL_CALL requestResource(const OUString& rsResourceURL)
         throw (css::uno::RuntimeException);
 
 

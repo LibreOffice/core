@@ -91,8 +91,8 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
-                     rtl::OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     rtl::OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
+                     OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -162,7 +162,7 @@ void SAL_CALL HierarchyContentProvider::initialize(
 
 uno::Reference< lang::XMultiServiceFactory >
 HierarchyContentProvider::getConfigProvider(
-                                const rtl::OUString & rServiceSpecifier )
+                                const OUString & rServiceSpecifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
     ConfigProviderMap::iterator it = m_aConfigProviderMap.find(
@@ -201,7 +201,7 @@ HierarchyContentProvider::getConfigProvider(
 //=========================================================================
 uno::Reference< container::XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess(
-                                const rtl::OUString & rServiceSpecifier )
+                                const OUString & rServiceSpecifier )
 {
     osl::MutexGuard aGuard( m_aMutex );
     ConfigProviderMap::iterator it = m_aConfigProviderMap.find(
@@ -226,8 +226,8 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                 {
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
-                    aProperty.Name = rtl::OUString( "nodepath"  );
-                    aProperty.Value <<= rtl::OUString(); // root path
+                    aProperty.Name = OUString( "nodepath"  );
+                    aProperty.Value <<= OUString(); // root path
                     aArguments[ 0 ] <<= aProperty;
 
                     (*it).second.bTriedToGetRootReadAccess = true;
@@ -235,7 +235,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                     (*it).second.xRootReadAccess
                         = uno::Reference< container::XHierarchicalNameAccess >(
                             xConfigProv->createInstanceWithArguments(
-                                rtl::OUString( "com.sun.star.ucb.HierarchyDataReadAccess"  ),
+                                OUString( "com.sun.star.ucb.HierarchyDataReadAccess"  ),
                                 aArguments ),
                             uno::UNO_QUERY );
                 }

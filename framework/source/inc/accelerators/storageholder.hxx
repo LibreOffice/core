@@ -60,10 +60,10 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         };
 
         /** @short  TODO */
-        typedef ::boost::unordered_map< ::rtl::OUString                    ,
+        typedef ::boost::unordered_map< OUString                    ,
                                  TStorageInfo                       ,
-                                 ::rtl::OUStringHash                ,
-                                 ::std::equal_to< ::rtl::OUString > > TPath2StorageInfo;
+                                 OUStringHash                ,
+                                 ::std::equal_to< OUString > > TPath2StorageInfo;
 
     //-------------------------------------------
     // member
@@ -108,45 +108,45 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         /** @short  TODO
                     open or get!
          */
-        virtual css::uno::Reference< css::embed::XStorage > openPath(const ::rtl::OUString& sPath    ,
+        virtual css::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
                                                                            sal_Int32        nOpenMode);
 
         //---------------------------------------
         /** @short  TODO
          */
-        virtual StorageHolder::TStorageList getAllPathStorages(const ::rtl::OUString& sPath);
+        virtual StorageHolder::TStorageList getAllPathStorages(const OUString& sPath);
 
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void commitPath(const ::rtl::OUString& sPath);
+        virtual void commitPath(const OUString& sPath);
 
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void closePath(const ::rtl::OUString& sPath);
+        virtual void closePath(const OUString& sPath);
 
         //---------------------------------------
         /** @short  TODO
          */
-        virtual void notifyPath(const ::rtl::OUString& sPath);
+        virtual void notifyPath(const OUString& sPath);
 
         //---------------------------------------
         /** @short  TODO
          */
         virtual void addStorageListener(      IStorageListener* pListener,
-                                        const ::rtl::OUString&  sPath    );
+                                        const OUString&  sPath    );
 
         //---------------------------------------
         /** @short  TODO
          */
         virtual void removeStorageListener(      IStorageListener* pListener,
-                                           const ::rtl::OUString&  sPath    );
+                                           const OUString&  sPath    );
 
         //---------------------------------------
         /** @short  TODO
          */
-        virtual ::rtl::OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
+        virtual OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
 
         //---------------------------------------
         /** @short  TODO
@@ -156,7 +156,7 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
         //---------------------------------------
         /** @short  TODO
          */
-        virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const ::rtl::OUString& sChildPath);
+        virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
 
         //---------------------------------------
         /** @short  TODO
@@ -188,12 +188,12 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
                     again.
          */
         static css::uno::Reference< css::embed::XStorage > openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
-                                                                                      const ::rtl::OUString&                             sSubStorage   ,
+                                                                                      const OUString&                             sSubStorage   ,
                                                                                             sal_Int32                                    eOpenMode     ,
                                                                                             sal_Bool                                     bAllowFallback);
 
         static css::uno::Reference< css::io::XStream > openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
-                                                                                 const ::rtl::OUString&                             sSubStream    ,
+                                                                                 const OUString&                             sSubStream    ,
                                                                                        sal_Int32                                    eOpenMode     ,
                                                                                        sal_Bool                                     bAllowFallback);
 
@@ -204,12 +204,12 @@ class StorageHolder : private ThreadHelpBase // attention! Must be the first bas
             //-----------------------------------
             /** @short  TODO
              */
-            static ::rtl::OUString impl_st_normPath(const ::rtl::OUString& sPath);
+            static OUString impl_st_normPath(const OUString& sPath);
 
             //-----------------------------------
             /** @short  TODO
              */
-            static OUStringList impl_st_parsePath(const ::rtl::OUString& sPath);
+            static OUStringList impl_st_parsePath(const OUString& sPath);
 };
 
 } // namespace framework

@@ -45,10 +45,10 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 // -----------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
+OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
 {
-    ::rtl::OUStringBuffer aRet;
+    OUStringBuffer aRet;
     if (_rVal.hasValue())
     {
         try
@@ -69,7 +69,7 @@ using namespace ::com::sun::star::uno;
                     }
                     else
                     {
-                        ::rtl::OUString sTemp;
+                        OUString sTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= sTemp;
                         aRet.append(sTemp);
                     }
@@ -80,11 +80,11 @@ using namespace ::com::sun::star::uno;
                     if (bQuote)
                         aRet.appendAscii("'");
                     {
-                        ::rtl::OUString aTemp;
+                        OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
                         sal_Int32 nIndex = (sal_Int32)-1;
-                        const ::rtl::OUString sQuot("\'");
-                        const ::rtl::OUString sQuotToReplace("\'\'");
+                        const OUString sQuot("\'");
+                        const OUString sQuotToReplace("\'\'");
                         do
                         {
                             nIndex += 2;
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::uno;
                 case DataType::BIGINT:
                 default:
                     {
-                        ::rtl::OUString sTemp;
+                        OUString sTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= sTemp;
                         aRet.append(sTemp);
                     }
@@ -123,7 +123,7 @@ using namespace ::com::sun::star::uno;
                     }
                     else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
                     {
-                        ::rtl::OUString sValue;
+                        OUString sValue;
                        _rVal >>= sValue;
                        aDateTime = DBTypeConversion::toDateTime(sValue);
                        bOk = true;
@@ -157,7 +157,7 @@ using namespace ::com::sun::star::uno;
                     }
                     else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
                     {
-                        ::rtl::OUString sValue;
+                        OUString sValue;
                        _rVal >>= sValue;
                        aDate = DBTypeConversion::toDate(sValue);
                        bOk = true;
@@ -184,7 +184,7 @@ using namespace ::com::sun::star::uno;
                     }
                     else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
                     {
-                        ::rtl::OUString sValue;
+                        OUString sValue;
                        _rVal >>= sValue;
                        aTime = DBTypeConversion::toTime(sValue);
                        bOk = true;
@@ -219,7 +219,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString("NullDate")) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(OUString("NullDate")) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -233,7 +233,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Reference<XNumberFormatter>& xFormatter,
                                 const Date& rNullDate,
-                                const ::rtl::OUString& rString,
+                                const OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
@@ -257,8 +257,8 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             // and again a special treatment, this time for percent formats
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
             {   // formatting should be "percent", but the String provides just a simple number -> adjust
-                ::rtl::OUString sExpanded(rString);
-                static ::rtl::OUString s_sPercentSymbol( "%" );
+                OUString sExpanded(rString);
+                static OUString s_sPercentSymbol( "%" );
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
@@ -397,14 +397,14 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
     }
 }
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
+OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
                                            const ::com::sun::star::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
 {
     OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getFormattedValue: invalid arg !");
     if (!_xColumn.is() || !_xFormatter.is())
-        return ::rtl::OUString();
+        return OUString();
 
     sal_Int32 nKey(0);
     try
@@ -433,13 +433,13 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
+OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                                    const Reference<XNumberFormatter>& xFormatter,
                                    const Date& rNullDate,
                                    sal_Int32 nKey,
                                    sal_Int16 nKeyType)
 {
-    ::rtl::OUString aString;
+    OUString aString;
     if (xVariant.is())
     {
         try
@@ -459,7 +459,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
                          {
                              Reference< XNumberFormatsSupplier > xSupplier( xFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
                              Reference< XPropertySet > xFormatterSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
-                             OSL_VERIFY( xFormatterSettings->getPropertyValue( ::rtl::OUString( "NullDate" ) ) >>= aFormatterNullDate );
+                             OSL_VERIFY( xFormatterSettings->getPropertyValue( OUString( "NullDate" ) ) >>= aFormatterNullDate );
                          }
                          catch( const Exception& )
                          {

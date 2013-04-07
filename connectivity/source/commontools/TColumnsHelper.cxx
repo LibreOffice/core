@@ -76,7 +76,7 @@ OColumnsHelper::~OColumnsHelper()
 }
 // -----------------------------------------------------------------------------
 
-sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 {
     OSL_ENSURE(m_pTable,"NO Table set. Error!");
     Reference<XConnection> xConnection = m_pTable->getConnection();
@@ -92,8 +92,8 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
-        ::rtl::OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
-        collectColumnInformation(xConnection,sComposedName,::rtl::OUString("*") ,m_pImpl->m_aColumnInfo);
+        OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
+        collectColumnInformation(xConnection,sComposedName,OUString("*") ,m_pImpl->m_aColumnInfo);
         aFind = m_pImpl->m_aColumnInfo.find(_rName);
     }
     if ( aFind != m_pImpl->m_aColumnInfo.end() )
@@ -116,7 +116,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
             nField11 = ColumnValue::NO_NULLS;
         } // if ( xKeys.is() )
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        ::rtl::OUString aCatalog, aSchema, aTable;
+        OUString aCatalog, aSchema, aTable;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
@@ -169,7 +169,7 @@ Reference< XPropertySet > OColumnsHelper::createDescriptor()
 }
 // -----------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(m_pTable,"OColumnsHelper::appendByDescriptor: Table is null!");
@@ -177,10 +177,10 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
         return cloneDescriptor( descriptor );
 
     Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-    ::rtl::OUString aSql( "ALTER TABLE " );
+    OUString aSql( "ALTER TABLE " );
 
     aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-    aSql += ::rtl::OUString(" ADD ");
+    aSql += OUString(" ADD ");
     aSql += ::dbtools::createStandardColumnPart(descriptor,m_pTable->getConnection(),NULL,m_pTable->getTypeCreatePattern());
 
     Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
@@ -193,17 +193,17 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const ::rtl::OUString& _rForName
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
     if ( m_pTable && !m_pTable->isNew() )
     {
-        ::rtl::OUString aSql( "ALTER TABLE " );
+        OUString aSql( "ALTER TABLE " );
         Reference<XDatabaseMetaData> xMetaData = m_pTable->getConnection()->getMetaData();
-        ::rtl::OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
+        OUString aQuote  = xMetaData->getIdentifierQuoteString(  );
 
         aSql += ::dbtools::composeTableName( xMetaData, m_pTable, ::dbtools::eInTableDefinitions, false, false, true );
-        aSql += ::rtl::OUString(" DROP ");
+        aSql += OUString(" DROP ");
         aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

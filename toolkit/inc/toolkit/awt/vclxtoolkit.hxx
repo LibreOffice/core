@@ -126,18 +126,18 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > SAL_CALL createSystemChild( const ::com::sun::star::uno::Any& Parent, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XMessageBoxFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL createMessageBox( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent, const ::com::sun::star::awt::Rectangle& aPosSize, const ::rtl::OUString& aType, ::sal_Int32 aButtons, const ::rtl::OUString& aTitle, const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMessageBox > SAL_CALL createMessageBox( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& aParent, const ::com::sun::star::awt::Rectangle& aPosSize, const OUString& aType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDataTransfer
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > SAL_CALL getDragSource( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > SAL_CALL getDropTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const ::rtl::OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& clipboardName ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XExtendedToolkit:
 

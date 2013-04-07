@@ -146,13 +146,13 @@ public:
     virtual ~MetadatableMixin() {}
 
     // ::com::sun::star::rdf::XNode:
-    virtual ::rtl::OUString SAL_CALL getStringValue()
+    virtual OUString SAL_CALL getStringValue()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::rdf::XURI:
-    virtual ::rtl::OUString SAL_CALL getLocalName()
+    virtual OUString SAL_CALL getLocalName()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNamespace()
+    virtual OUString SAL_CALL getNamespace()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::rdf::XMetadatable:

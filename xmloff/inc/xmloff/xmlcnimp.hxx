@@ -39,33 +39,33 @@ public:
 
     int  operator ==( const SvXMLAttrContainerData& rCmp ) const;
 
-    sal_Bool AddAttr( const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool AddAttr( const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
-                    const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool AddAttr( const ::rtl::OUString& rPrefix,
-                  const ::rtl::OUString& rLName,
-                  const ::rtl::OUString& rValue );
+    sal_Bool AddAttr( const OUString& rLName, const OUString& rValue );
+    sal_Bool AddAttr( const OUString& rPrefix, const OUString& rNamespace,
+                    const OUString& rLName, const OUString& rValue );
+    sal_Bool AddAttr( const OUString& rPrefix,
+                  const OUString& rLName,
+                  const OUString& rValue );
 
     size_t GetAttrCount() const;
-    const rtl::OUString GetAttrNamespace( size_t i ) const;
-    const rtl::OUString GetAttrPrefix( size_t i ) const;
-    const rtl::OUString& GetAttrLName( size_t i ) const;
-    const rtl::OUString& GetAttrValue( size_t i ) const;
+    const OUString GetAttrNamespace( size_t i ) const;
+    const OUString GetAttrPrefix( size_t i ) const;
+    const OUString& GetAttrLName( size_t i ) const;
+    const OUString& GetAttrValue( size_t i ) const;
 
     sal_uInt16 GetFirstNamespaceIndex() const;
     sal_uInt16 GetNextNamespaceIndex( sal_uInt16 nIdx ) const;
-    const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
+    const OUString& GetNamespace( sal_uInt16 i ) const;
+    const OUString& GetPrefix( sal_uInt16 i ) const;
 
     sal_Bool SetAt( size_t i,
-                const ::rtl::OUString& rLName, const rtl::OUString& rValue );
+                const OUString& rLName, const OUString& rValue );
     sal_Bool SetAt( size_t i,
-                const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
-                const ::rtl::OUString& rLName, const rtl::OUString& rValue );
+                const OUString& rPrefix, const OUString& rNamespace,
+                const OUString& rLName, const OUString& rValue );
     sal_Bool SetAt( size_t i,
-                const ::rtl::OUString& rPrefix,
-                const ::rtl::OUString& rLName,
-                const ::rtl::OUString& rValue );
+                const OUString& rPrefix,
+                const OUString& rLName,
+                const OUString& rValue );
 
     void Remove( size_t i );
 };

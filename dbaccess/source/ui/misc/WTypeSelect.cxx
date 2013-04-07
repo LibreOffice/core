@@ -102,8 +102,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
         return;
     setCurrentFieldDescData( pCurFieldDescr );
 
-    ::rtl::OUString sName = pCurFieldDescr->GetName();
-    ::rtl::OUString sNewName;
+    OUString sName = pCurFieldDescr->GetName();
+    OUString sNewName;
     const OPropColumnEditCtrl* pColumnName = getColumnCtrl();
     if ( pColumnName )
         sNewName = pColumnName->GetText();
@@ -122,7 +122,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     sal_uInt16 nCount = aListBox.GetEntryCount();
                     for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
-                        ::rtl::OUString sEntry(aListBox.GetEntry(i));
+                        OUString sEntry(aListBox.GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
                     }
                     if ( !bDoubleName && pWiz->shouldCreatePrimaryKey() )
@@ -145,7 +145,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                     return;
                 }
 
-                ::rtl::OUString sOldName = pCurFieldDescr->GetName();
+                OUString sOldName = pCurFieldDescr->GetName();
                 pCurFieldDescr->SetName(sNewName);
                 static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_False);
 
@@ -209,7 +209,7 @@ sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
     return ((OWizTypeSelect*)GetParent())->m_bAutoIncrementEnabled;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OWizTypeSelectControl::getAutoIncrementValue() const
+OUString OWizTypeSelectControl::getAutoIncrementValue() const
 {
     return ((OWizTypeSelect*)GetParent())->m_sAutoIncrementValue;
 }
@@ -242,7 +242,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
 
     m_aTypeControl.Show();
     m_aTypeControl.Init();
-    m_etAuto.SetText(rtl::OUString("10"));
+    m_etAuto.SetText(OUString("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
     m_lbColumnNames.EnableMultiSelection(sal_True);

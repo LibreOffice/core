@@ -33,16 +33,16 @@
 
 #include "LuceneHelper.hxx"
 
-HelpSearch::HelpSearch(rtl::OUString const &lang, rtl::OUString const &indexDir)
+HelpSearch::HelpSearch(OUString const &lang, OUString const &indexDir)
     : d_lang(lang)
 {
-    rtl::OUString ustrSystemPath;
+    OUString ustrSystemPath;
     osl::File::getSystemPathFromFileURL(indexDir, ustrSystemPath);
-    d_indexDir = rtl::OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
+    d_indexDir = OUStringToOString(ustrSystemPath, osl_getThreadTextEncoding());
 }
 
-bool HelpSearch::query(rtl::OUString const &queryStr, bool captionOnly,
-        std::vector<rtl::OUString> &rDocuments, std::vector<float> &rScores) {
+bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
+        std::vector<OUString> &rDocuments, std::vector<float> &rScores) {
 
     lucene::index::IndexReader *reader = lucene::index::IndexReader::open(d_indexDir.getStr());
     lucene::search::IndexSearcher searcher(reader);

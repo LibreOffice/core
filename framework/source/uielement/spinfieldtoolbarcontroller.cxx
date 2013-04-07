@@ -530,15 +530,15 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
         // is 32 bit on Unix platform!
         char aBuffer[128];
 
-        ::rtl::OString aFormat = OUStringToOString( m_aOutFormat, osl_getThreadTextEncoding() );
+        OString aFormat = OUStringToOString( m_aOutFormat, osl_getThreadTextEncoding() );
         if ( m_bFloat )
             snprintf( aBuffer, 128, aFormat.getStr(), fValue );
         else
             snprintf( aBuffer, 128, aFormat.getStr(), static_cast<long>( fValue ));
 
         sal_Int32 nSize = strlen( aBuffer );
-        rtl::OString aTmp( aBuffer, nSize );
-        return rtl::OStringToOUString( aTmp, osl_getThreadTextEncoding() );
+        OString aTmp( aBuffer, nSize );
+        return OStringToOUString( aTmp, osl_getThreadTextEncoding() );
 #endif
     }
 }

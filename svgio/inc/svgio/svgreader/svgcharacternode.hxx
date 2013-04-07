@@ -49,7 +49,7 @@ namespace svgio
         public:
             SvgTextPositions();
 
-            void parseTextPositionAttributes(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            void parseTextPositionAttributes(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// X content
             const SvgNumberVector& getX() const { return maX; }
@@ -144,7 +144,7 @@ namespace svgio
         {
         private:
             /// the string data
-            rtl::OUString           maText;
+            OUString           maText;
 
             /// local helpers
             drawinglayer::primitive2d::TextSimplePortionPrimitive2D* createSimpleTextPrimitive(
@@ -159,17 +159,17 @@ namespace svgio
             SvgCharacterNode(
                 SvgDocument& rDocument,
                 SvgNode* pParent,
-                const rtl::OUString& rText);
+                const OUString& rText);
             virtual ~SvgCharacterNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
             virtual void decomposeText(drawinglayer::primitive2d::Primitive2DSequence& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
             void addGap();
-            void concatenate(const rtl::OUString& rText);
+            void concatenate(const OUString& rText);
 
             /// Text content
-            const rtl::OUString& getText() const { return maText; }
+            const OUString& getText() const { return maText; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

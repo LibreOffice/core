@@ -23,12 +23,12 @@
 
 #include <rtl/ustring.hxx>
 
-const rtl::OUString TEXTPLAIN_PARAM_CHARSET("charset");
+const OUString TEXTPLAIN_PARAM_CHARSET("charset");
 
-const rtl::OUString PRE_WINDOWS_CODEPAGE ("windows");
-const rtl::OUString PRE_OEM_CODEPAGE     ("cp");
-const rtl::OUString CHARSET_UTF16        ("utf-16");
-const rtl::OUString CHARSET_UNICODE      ("unicode");
+const OUString PRE_WINDOWS_CODEPAGE ("windows");
+const OUString PRE_OEM_CODEPAGE     ("cp");
+const OUString CHARSET_UTF16        ("utf-16");
+const OUString CHARSET_UNICODE      ("unicode");
 
 
 #endif

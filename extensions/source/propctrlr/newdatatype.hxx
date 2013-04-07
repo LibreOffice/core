@@ -44,11 +44,11 @@ namespace pcr
         OKButton        m_aOK;
         CancelButton    m_aCancel;
 
-        ::std::set< ::rtl::OUString >
+        ::std::set< OUString >
                         m_aProhibitedNames;
 
     public:
-        NewDataTypeDialog( Window* _pParent, const ::rtl::OUString& _rNameBase, const ::std::vector< ::rtl::OUString >& _rProhibitedNames );
+        NewDataTypeDialog( Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames );
 
         inline String   GetName() const { return m_aName.GetText(); }
 

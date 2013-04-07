@@ -38,7 +38,7 @@ static DWORD WINAPI GetUserDomainW_NT( LPWSTR lpBuffer, DWORD nSize )
     return GetEnvironmentVariable( TEXT("USERDOMAIN"), lpBuffer, nSize );
 }
 
-static rtl::OUString GetUserDomain()
+static OUString GetUserDomain()
 {
     sal_Unicode aBuffer[256];
     DWORD   nResult;
@@ -46,9 +46,9 @@ static rtl::OUString GetUserDomain()
     nResult = GetUserDomainW_NT( reinterpret_cast<LPWSTR>(aBuffer), sizeof( aBuffer ) );
 
     if ( nResult > 0 )
-        return rtl::OUString( aBuffer );
+        return OUString( aBuffer );
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 //_________________________________________________________________________________________________________________
@@ -58,12 +58,12 @@ static rtl::OUString GetUserDomain()
 namespace framework
 {
 
-rtl::OUString NetworkDomain::GetYPDomainName()
+OUString NetworkDomain::GetYPDomainName()
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString NetworkDomain::GetNTDomainName()
+OUString NetworkDomain::GetNTDomainName()
 {
     return GetUserDomain();
 }
@@ -188,18 +188,18 @@ static rtl_uString *getDomainName()
 namespace framework
 {
 
-rtl::OUString NetworkDomain::GetYPDomainName()
+OUString NetworkDomain::GetYPDomainName()
 {
     rtl_uString* pResult = getDomainName();
     if ( pResult )
-        return rtl::OUString( pResult );
+        return OUString( pResult );
     else
-        return rtl::OUString();
+        return OUString();
 }
 
-rtl::OUString NetworkDomain::GetNTDomainName()
+OUString NetworkDomain::GetNTDomainName()
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 }
@@ -213,14 +213,14 @@ rtl::OUString NetworkDomain::GetNTDomainName()
 namespace framework
 {
 
-rtl::OUString NetworkDomain::GetYPDomainName()
+OUString NetworkDomain::GetYPDomainName()
 {
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString NetworkDomain::GetNTDomainName()
+OUString NetworkDomain::GetNTDomainName()
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 }

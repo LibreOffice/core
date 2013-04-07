@@ -55,7 +55,7 @@ namespace svx
         Sequence< PropertyValue >   m_aAsSequence;
         Reference< XPropertySet >   m_xAsSet;
 
-        typedef ::std::map< ::rtl::OUString, PropertyMapEntry* >    MapString2PropertyEntry;
+        typedef ::std::map< OUString, PropertyMapEntry* >    MapString2PropertyEntry;
 
     public:
         ODADescriptorImpl();
@@ -193,16 +193,16 @@ namespace svx
                 { CONST_CHAR("ActiveConnection"),   daConnection,           &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,    &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("Column"),             daColumnObject,         &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("ColumnName"),         daColumnName,           &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Command"),            daCommand,              &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("CommandType"),        daCommandType,          &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("Component"),          daComponent,            &::getCppuType( static_cast< Reference< XContent >* >(NULL) ),      PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("ConnectionResource"), daConnectionResource,   &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("Cursor"),             daCursor,               &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("DataSourceName"),     daDataSource,           &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("DatabaseLocation"),   daDatabaseLocation,     &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing,     &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
-                { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+                { CONST_CHAR("Filter"),             daFilter,               &::getCppuType( static_cast< OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
                 { CONST_CHAR("Selection"),          daSelection,            &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
                 { NULL, 0, 0, NULL, 0, 0 }
             };
@@ -210,7 +210,7 @@ namespace svx
             PropertyMapEntry* pEntry = s_aDesriptorProperties;
             while ( pEntry->mpName )
             {
-                s_aProperties[ ::rtl::OUString::createFromAscii( pEntry->mpName ) ] = pEntry;
+                s_aProperties[ OUString::createFromAscii( pEntry->mpName ) ] = pEntry;
                 ++pEntry;
             }
         }
@@ -244,7 +244,7 @@ namespace svx
 
         // build the property value
         PropertyValue aReturn;
-        aReturn.Name    = ::rtl::OUString( pProperty->mpName, pProperty->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        aReturn.Name    = OUString( pProperty->mpName, pProperty->mnNameLen, RTL_TEXTENCODING_ASCII_US );
         aReturn.Handle  = pProperty->mnHandle;
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
@@ -387,9 +387,9 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ODataAccessDescriptor::getDataSource() const
+    OUString ODataAccessDescriptor::getDataSource() const
     {
-        ::rtl::OUString sDataSourceName;
+        OUString sDataSourceName;
         if ( has(daDataSource) )
             (*this)[daDataSource] >>= sDataSourceName;
         else if ( has(daDatabaseLocation) )
@@ -397,7 +397,7 @@ namespace svx
         return sDataSourceName;
     }
     //--------------------------------------------------------------------
-    void ODataAccessDescriptor::setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation)
+    void ODataAccessDescriptor::setDataSource(const OUString& _sDataSourceNameOrLocation)
     {
         if ( !_sDataSourceNameOrLocation.isEmpty() )
         {
@@ -405,7 +405,7 @@ namespace svx
             (*this)[ (( aURL.GetProtocol() == INET_PROT_FILE ) ? daDatabaseLocation : daDataSource)] <<= _sDataSourceNameOrLocation;
         }
         else
-            (*this)[ daDataSource ] <<= ::rtl::OUString();
+            (*this)[ daDataSource ] <<= OUString();
     }
 
 //........................................................................

@@ -132,7 +132,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 
 uno::Reference< XTitle > TitleHelper::createTitle(
       TitleHelper::eTitleType eTitleType
-    , const rtl::OUString& rTitleText
+    , const OUString& rTitleText
     , const uno::Reference< frame::XModel >& xModel
     , const uno::Reference< uno::XComponentContext > & xContext
     , ReferenceSizeProvider * pRefSizeProvider )
@@ -239,9 +239,9 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
 }
 
-rtl::OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
+OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xTitle )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     if(!xTitle.is())
         return aRet;
     uno::Sequence< uno::Reference< XFormattedString > > aStringList = xTitle->getText();
@@ -250,7 +250,7 @@ rtl::OUString TitleHelper::getCompleteString( const uno::Reference< XTitle >& xT
     return aRet;
 }
 
-void TitleHelper::setCompleteString( const rtl::OUString& rNewText
+void TitleHelper::setCompleteString( const OUString& rNewText
                     , const uno::Reference< XTitle >& xTitle
                     , const uno::Reference< uno::XComponentContext > & xContext
                     , float * pDefaultCharHeight /* = 0 */ )
@@ -259,7 +259,7 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     if(!xTitle.is())
         return;
 
-    rtl::OUString aNewText = rNewText;
+    OUString aNewText = rNewText;
 
     bool bStacked = false;
     uno::Reference< beans::XPropertySet > xTitleProperties( xTitle, uno::UNO_QUERY );
@@ -269,8 +269,8 @@ void TitleHelper::setCompleteString( const rtl::OUString& rNewText
     if( bStacked )
     {
         //#i99841# remove linebreaks that were added for vertical stacking
-        rtl::OUStringBuffer aUnstackedStr;
-        rtl::OUStringBuffer aSource(rNewText);
+        OUStringBuffer aUnstackedStr;
+        OUStringBuffer aSource(rNewText);
 
         bool bBreakIgnored = false;
         sal_Int32 nLen = rNewText.getLength();

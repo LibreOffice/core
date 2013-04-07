@@ -53,12 +53,6 @@ using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OStringBuffer;
 
 // Forward declaration
 void Main();
@@ -112,8 +106,8 @@ public:
 
     sal_Bool        Close();
 
-    void parseList( const rtl::OString& rList );
-    rtl::OString processCommand( const rtl::OString& rCommand );
+    void parseList( const OString& rList );
+    OString processCommand( const OString& rCommand );
 
     DECL_LINK( ListHdl, Button* );
     DECL_LINK( SelectHdl, ListBox* );
@@ -123,7 +117,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_STDWORK );
-    aMainWin.SetText( rtl::OUString( "SvpClient" ) );
+    aMainWin.SetText( OUString( "SvpClient" ) );
     aMainWin.Show();
 
     Application::Execute();
@@ -163,34 +157,34 @@ sal_Bool MyWin::Close()
     return bRet;
 }
 
-void MyWin::parseList( const rtl::OString& rList )
+void MyWin::parseList( const OString& rList )
 {
     sal_Int32 nTokenPos = 0;
-    rtl::OUString aElementType;
+    OUString aElementType;
     m_aSvpBitmaps.Clear();
     while( nTokenPos >= 0 )
     {
-        rtl::OString aLine = rList.getToken( 0, '\n', nTokenPos );
+        OString aLine = rList.getToken( 0, '\n', nTokenPos );
         if( ! aLine.getLength() || *aLine.getStr() == '#' )
             continue;
 
         if( aLine.startsWith( "ElementType: " ) )
-            aElementType = rtl::OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
+            aElementType = OStringToOUString( aLine.copy( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
         {
-            rtl::OUStringBuffer aNewElement( 64 );
+            OUStringBuffer aNewElement( 64 );
             aNewElement.append( aElementType );
             aNewElement.appendAscii( ": " );
-            aNewElement.append( rtl::OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US ) );
+            aNewElement.append( OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US ) );
             m_aSvpBitmaps.InsertEntry( aNewElement.makeStringAndClear() );
         }
     }
 }
 
-rtl::OString MyWin::processCommand( const rtl::OString& rCommand )
+OString MyWin::processCommand( const OString& rCommand )
 {
     static const char* pEnv = getenv("SVP_LISTENER_PORT");
-    rtl::OStringBuffer aAnswer;
+    OStringBuffer aAnswer;
     int nPort = (pEnv && *pEnv) ? atoi(pEnv) : 8000;
     int nSocket = socket( PF_INET, SOCK_STREAM, 0 );
     if( nSocket >= 0)
@@ -243,7 +237,7 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
     {
         OStringBuffer aCommand( 64 );
         aCommand.append( "get " );
-        aCommand.append( rtl::OUStringToOString( aEntry.Copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
+        aCommand.append( OUStringToOString( aEntry.Copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
         OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
         SvMemoryStream aStream( aAnswer.getLength() );
         aStream.Write( aAnswer.getStr(), aAnswer.getLength() );

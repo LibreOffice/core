@@ -63,7 +63,7 @@ namespace svt
         void                SetIndex( sal_Int32 _Index );
         sal_Int32           GetIndex() const;
 
-        void                SetLabel( const ::rtl::OUString& _rText );
+        void                SetLabel( const OUString& _rText );
 
         void                ToggleBackgroundColor( const Color& _rGBColor );
         void                SetInteractive( sal_Bool _bInteractive );

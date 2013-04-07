@@ -32,7 +32,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::embed;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::osl::Mutex;
 
@@ -142,7 +141,7 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 }
 
 sal_Bool
-SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
+SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >& sModules )
 {
 #ifdef DISABLE_SCRIPTING
     (void) sModules;

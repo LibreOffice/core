@@ -45,7 +45,7 @@ public:
     bool is() const;
     void apply( const BulletList& );
     void pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& xPropMap ) const;
-    void setBulletChar( const ::rtl::OUString & sChar );
+    void setBulletChar( const OUString & sChar );
     void setStartAt( sal_Int32 nStartAt ){ mnStartAt <<= static_cast< sal_Int16 >( nStartAt ); }
     void setType( sal_Int32 nType );
     void setNone( );
@@ -56,7 +56,7 @@ public:
     void setSuffixMinusRight();
     void setBulletSize(sal_Int16 nSize);
     void setFontSize(sal_Int16 nSize);
-    void setStyleName( const rtl::OUString& rStyleName ) { maStyleName <<= rStyleName; }
+    void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
     void setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic );
 
     ::oox::drawingml::ColorPtr  maBulletColorPtr;

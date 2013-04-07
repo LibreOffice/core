@@ -71,20 +71,20 @@ namespace logging
     namespace
     {
         //----------------------------------------------------------------
-        typedef void (*SettingTranslation)( const Reference< XLogger >&, const ::rtl::OUString&, Any& );
+        typedef void (*SettingTranslation)( const Reference< XLogger >&, const OUString&, Any& );
 
         //----------------------------------------------------------------
-        void    lcl_substituteFileHandlerURLVariables_nothrow( const Reference< XLogger >& _rxLogger, ::rtl::OUString& _inout_rFileURL )
+        void    lcl_substituteFileHandlerURLVariables_nothrow( const Reference< XLogger >& _rxLogger, OUString& _inout_rFileURL )
         {
             struct Variable
             {
                 const sal_Char*         pVariablePattern;
                 const sal_Int32         nPatternLength;
                 rtl_TextEncoding        eEncoding;
-                const ::rtl::OUString   sVariableValue;
+                const OUString   sVariableValue;
 
                 Variable( const sal_Char* _pVariablePattern,  const sal_Int32 _nPatternLength, rtl_TextEncoding _eEncoding,
-                        const ::rtl::OUString& _rVariableValue )
+                        const OUString& _rVariableValue )
                     :pVariablePattern( _pVariablePattern )
                     ,nPatternLength( _nPatternLength )
                     ,eEncoding( _eEncoding )
@@ -93,7 +93,7 @@ namespace logging
                 }
             };
 
-            ::rtl::OUString sLoggerName;
+            OUString sLoggerName;
             try { sLoggerName = _rxLogger->getName(); }
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
@@ -104,7 +104,7 @@ namespace logging
 
             for ( size_t i = 0; i < SAL_N_ELEMENTS( aVariables ); ++i )
             {
-                ::rtl::OUString sPattern( aVariables[i].pVariablePattern, aVariables[i].nPatternLength, aVariables[i].eEncoding );
+                OUString sPattern( aVariables[i].pVariablePattern, aVariables[i].nPatternLength, aVariables[i].eEncoding );
                 sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( sPattern );
                 if  (   ( nVariableIndex == 0 )
                     ||  (   ( nVariableIndex > 0 )
@@ -119,13 +119,13 @@ namespace logging
         }
 
         //----------------------------------------------------------------
-        void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const ::rtl::OUString& _rSettingName, Any& _inout_rSettingValue )
+        void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const OUString& _rSettingName, Any& _inout_rSettingValue )
         {
             if ( _rSettingName != "FileURL" )
                 // not interested in this setting
                 return;
 
-            ::rtl::OUString sURL;
+            OUString sURL;
             OSL_VERIFY( _inout_rSettingValue >>= sURL );
             lcl_substituteFileHandlerURLVariables_nothrow( _rxLogger, sURL );
             _inout_rSettingValue <<= sURL;
@@ -145,15 +145,15 @@ namespace logging
 
             // read the settings for the to-be-created service
             Reference< XNameAccess > xServiceSettingsNode( _rxLoggerSettings->getByName(
-                ::rtl::OUString::createFromAscii( _pServiceSettingsAsciiNodeName ) ), UNO_QUERY_THROW );
+                OUString::createFromAscii( _pServiceSettingsAsciiNodeName ) ), UNO_QUERY_THROW );
 
-            Sequence< ::rtl::OUString > aSettingNames( xServiceSettingsNode->getElementNames() );
+            Sequence< OUString > aSettingNames( xServiceSettingsNode->getElementNames() );
             size_t nServiceSettingCount( aSettingNames.getLength() );
             Sequence< NamedValue > aSettings( nServiceSettingCount );
             if ( nServiceSettingCount )
             {
-                const ::rtl::OUString* pSettingNames = aSettingNames.getConstArray();
-                const ::rtl::OUString* pSettingNamesEnd = aSettingNames.getConstArray() + aSettingNames.getLength();
+                const OUString* pSettingNames = aSettingNames.getConstArray();
+                const OUString* pSettingNamesEnd = aSettingNames.getConstArray() + aSettingNames.getLength();
                 NamedValue* pSetting = aSettings.getArray();
 
                 for (   ;
@@ -169,8 +169,8 @@ namespace logging
                 }
             }
 
-            ::rtl::OUString sServiceName;
-            _rxLoggerSettings->getByName( ::rtl::OUString::createFromAscii( _pServiceNameAsciiNodeName ) ) >>= sServiceName;
+            OUString sServiceName;
+            _rxLoggerSettings->getByName( OUString::createFromAscii( _pServiceNameAsciiNodeName ) ) >>= sServiceName;
             if ( !sServiceName.isEmpty() )
             {
                 bool bSuccess = false;
@@ -208,15 +208,15 @@ namespace logging
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence< Any > aArguments(1);
             aArguments[0] <<= NamedValue(
-                ::rtl::OUString( "nodepath" ),
-                makeAny( ::rtl::OUString( "/org.openoffice.Office.Logging/Settings" ) )
+                OUString( "nodepath" ),
+                makeAny( OUString( "/org.openoffice.Office.Logging/Settings" ) )
             );
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(
-                ::rtl::OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                OUString( "com.sun.star.configuration.ConfigurationUpdateAccess" ),
                 aArguments
             ), UNO_QUERY_THROW );
 
-            ::rtl::OUString sLoggerName( _rxLogger->getName() );
+            OUString sLoggerName( _rxLogger->getName() );
             if ( !xAllSettings->hasByName( sLoggerName ) )
             {
                 // no node yet for this logger. Create default settings.
@@ -232,7 +232,7 @@ namespace logging
 
             // the log level
             sal_Int32 nLogLevel( LogLevel::OFF );
-            OSL_VERIFY( xLoggerSettings->getByName( ::rtl::OUString( "LogLevel" ) ) >>= nLogLevel );
+            OSL_VERIFY( xLoggerSettings->getByName( OUString( "LogLevel" ) ) >>= nLogLevel );
             _rxLogger->setLevel( nLogLevel );
 
             // the default handler, if any

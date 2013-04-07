@@ -39,8 +39,6 @@
 #include <functional>
 
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::xml::dom::XNode;
@@ -89,7 +87,7 @@ void PathExpression::setExpression( const OUString& rExpression )
     maNodes.clear();
 }
 
-const rtl::OUString PathExpression::_getExpressionForEvaluation() const
+const OUString PathExpression::_getExpressionForEvaluation() const
 {
     OUString sExpr = ComputedExpression::_getExpressionForEvaluation();
     if( sExpr.isEmpty())

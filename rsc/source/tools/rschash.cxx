@@ -19,8 +19,6 @@
 
 #include <rschash.hxx>
 
-using ::rtl::OString;
-using ::rtl::OStringHash;
 
 AtomContainer::AtomContainer()
 {

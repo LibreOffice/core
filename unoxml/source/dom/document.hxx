@@ -50,7 +50,6 @@
 
 
 using namespace std;
-using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
@@ -382,7 +381,7 @@ namespace DOM
         virtual void SAL_CALL fastSerialize( const Reference< XFastDocumentHandler >& handler,
                                              const Reference< XFastTokenHandler >& tokenHandler,
                                              const Sequence< beans::StringPair >& i_rNamespaces,
-                                             const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& namespaces )
+                                             const Sequence< beans::Pair< OUString, sal_Int32 > >& namespaces )
             throw (SAXException, RuntimeException);
     };
 }

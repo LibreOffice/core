@@ -43,8 +43,8 @@
 
     #define WRITE_LOGFILE( SFILENAME, STEXT )                                                                   \
                 {                                                                                               \
-                    ::rtl::OString  _swriteLogfileFileName  ( SFILENAME );                                      \
-                    ::rtl::OString  _swriteLogfileText      ( STEXT     );                                      \
+                    OString  _swriteLogfileFileName  ( SFILENAME );                                      \
+                    OString  _swriteLogfileText      ( STEXT     );                                      \
                     FILE* pFile = fopen( _swriteLogfileFileName.getStr(), "a" );                                \
                     fprintf( pFile, "%s", _swriteLogfileText.getStr() );                                        \
                     fclose ( pFile                                    );                                        \

@@ -931,7 +931,7 @@ void SdrEditView::CopyMarkedObj()
     if(0L != nCloneErrCnt)
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "SdrEditView::CopyMarkedObj(): Error when cloning "));
 
         if(nCloneErrCnt == 1)

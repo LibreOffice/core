@@ -35,8 +35,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/maptype.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -178,7 +176,7 @@ void XMLFontStyleContextFontFace::FillProperties(
 
 SvXMLImportContext * XMLFontStyleContextFontFace::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
 {
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_SRC ))
@@ -206,7 +204,7 @@ XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rIm
 
 SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
 {
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_URI ))
@@ -265,7 +263,7 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url )
 
 SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
 {

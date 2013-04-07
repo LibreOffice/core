@@ -88,7 +88,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          E.g. css::uno::Exception if the configuration could not be opened.
      */
     static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                  const ::rtl::OUString&                                    sPackage,
+                                                                  const OUString&                                    sPackage,
                                                                         sal_Int32                                           eMode   );
 
     //-----------------------------------------------
@@ -117,8 +117,8 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          key does not exists.
      */
     static css::uno::Any readRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
-                                         const ::rtl::OUString&                            sRelPath,
-                                         const ::rtl::OUString&                            sKey    );
+                                         const OUString&                            sRelPath,
+                                         const OUString&                            sKey    );
 
     //-----------------------------------------------
     /** writes a new value for an existing(!) configuration key,
@@ -147,8 +147,8 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          access does not allow writing for this key.
      */
     static void writeRelativeKey(const css::uno::Reference< css::uno::XInterface > xCFG    ,
-                                 const ::rtl::OUString&                            sRelPath,
-                                 const ::rtl::OUString&                            sKey    ,
+                                 const OUString&                            sRelPath,
+                                 const OUString&                            sKey    ,
                                  const css::uno::Any&                              aValue  );
 
     //-----------------------------------------------
@@ -181,8 +181,8 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *          access does not allow writing for this set.
      */
     static css::uno::Reference< css::uno::XInterface > makeSureSetNodeExists(const css::uno::Reference< css::uno::XInterface > xCFG         ,
-                                                                             const ::rtl::OUString&                            sRelPathToSet,
-                                                                             const ::rtl::OUString&                            sSetNode     );
+                                                                             const OUString&                            sRelPathToSet,
+                                                                             const OUString&                            sSetNode     );
 
     //-----------------------------------------------
     /** commit all changes made on the specified configuration access.
@@ -210,9 +210,9 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static css::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
-                                       const ::rtl::OUString&                                       sPackage,
-                                       const ::rtl::OUString&                                       sRelPath,
-                                       const ::rtl::OUString&                                       sKey    ,
+                                       const OUString&                                       sPackage,
+                                       const OUString&                                       sRelPath,
+                                       const OUString&                                       sKey    ,
                                              sal_Int32                                              eMode   );
 
     //-----------------------------------------------
@@ -226,9 +226,9 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * (Excepting these keys exists inside different configuration packages ...))
      */
     static void writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
-                               const ::rtl::OUString&                                       sPackage,
-                               const ::rtl::OUString&                                       sRelPath,
-                               const ::rtl::OUString&                                       sKey    ,
+                               const OUString&                                       sPackage,
+                               const OUString&                                       sRelPath,
+                               const OUString&                                       sKey    ,
                                const css::uno::Any&                                         aValue  ,
                                      sal_Int32                                              eMode   );
 };

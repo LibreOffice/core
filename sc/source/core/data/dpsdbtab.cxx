@@ -86,7 +86,7 @@ long ScDatabaseDPData::GetColumnCount()
 }
 
 
-rtl::OUString ScDatabaseDPData::getDimensionName(long nColumn)
+OUString ScDatabaseDPData::getDimensionName(long nColumn)
 {
     if (getIsDataLayoutDimension(nColumn))
     {

@@ -40,20 +40,20 @@ ScVbaTextFrame::Characters() throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< ov::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, sal_True ) ) );
 }
 
-rtl::OUString
+OUString
 ScVbaTextFrame::getServiceImplName()
 {
-    return rtl::OUString("ScVbaTextFrame");
+    return OUString("ScVbaTextFrame");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaTextFrame::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.TextFrame" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.TextFrame" );
     }
     return aServiceNames;
 }

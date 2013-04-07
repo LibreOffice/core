@@ -60,10 +60,10 @@ void RscTypCont::SETCONST( RscConst * pClass, Atom nName, sal_uInt32 nVal )
 }
 
 
-typedef boost::unordered_map< rtl::OString, sal_uInt32, rtl::OStringHash > langmap;
+typedef boost::unordered_map< OString, sal_uInt32, OStringHash > langmap;
 static langmap ULong_Iso_map;
 
-sal_uInt32 GetLangId(const rtl::OString &rLang)
+sal_uInt32 GetLangId(const OString &rLang)
 {
     langmap::iterator pIter = ULong_Iso_map.find( rLang );
     if ( pIter != ULong_Iso_map.end())
@@ -114,10 +114,10 @@ void RscLangEnum::Init( RscNameTable& rNames )
     SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
     mnLangId++;
 
-    rtl::OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
+    OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
     if ( !aEnvIsoTokens.isEmpty() )
     {
-        rtl::OString aIsoToken;
+        OString aIsoToken;
         sal_uInt16 nTokenCounter = 0;
         sal_Bool bOneMore = 1;
         while ( bOneMore )
@@ -151,7 +151,7 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
     {
         SetConstant( nResult = rNames.Put( pLang, CONSTNAME, mnLangId ), mnLangId );
         // insert new lang to ULong_Iso_map
-        rtl::OString aLang( pLang );
+        OString aLang( pLang );
         bAdd = (GetLangId( aLang ) == 0);
         if ( bAdd )
             ULong_Iso_map[ aLang ] = mnLangId;

@@ -70,9 +70,9 @@ public:
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
     Writer(
-        typereg_Version version, rtl::OUString const & documentation,
-        rtl::OUString const & fileName, RTTypeClass typeClass, bool published,
-        rtl::OUString const & typeName, sal_uInt16 superTypeCount,
+        typereg_Version version, OUString const & documentation,
+        OUString const & fileName, RTTypeClass typeClass, bool published,
+        OUString const & typeName, sal_uInt16 superTypeCount,
         sal_uInt16 fieldCount, sal_uInt16 methodCount,
         sal_uInt16 referenceCount):
         m_handle(
@@ -103,7 +103,7 @@ public:
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
-    void setSuperTypeName(sal_uInt16 index, rtl::OUString const & typeName) {
+    void setSuperTypeName(sal_uInt16 index, OUString const & typeName) {
         if (!typereg_writer_setSuperTypeName(m_handle, index, typeName.pData)) {
             throw std::bad_alloc();
         }
@@ -129,9 +129,9 @@ public:
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
     void setFieldData(
-        sal_uInt16 index, rtl::OUString const & documentation,
-        rtl::OUString const & fileName, RTFieldAccess flags, rtl::OUString const & name,
-        rtl::OUString const & typeName, RTConstValue const & value)
+        sal_uInt16 index, OUString const & documentation,
+        OUString const & fileName, RTFieldAccess flags, OUString const & name,
+        OUString const & typeName, RTConstValue const & value)
     {
         if (!typereg_writer_setFieldData(
                 m_handle, index, documentation.pData, fileName.pData, flags,
@@ -161,9 +161,9 @@ public:
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
     void setMethodData(
-        sal_uInt16 index, rtl::OUString const & documentation,
-        RTMethodMode flags, rtl::OUString const & name,
-        rtl::OUString const & returnTypeName, sal_uInt16 parameterCount,
+        sal_uInt16 index, OUString const & documentation,
+        RTMethodMode flags, OUString const & name,
+        OUString const & returnTypeName, sal_uInt16 parameterCount,
         sal_uInt16 exceptionCount)
     {
         if (!typereg_writer_setMethodData(
@@ -193,8 +193,8 @@ public:
      */
     void setMethodParameterData(
         sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
-        RTParamMode flags, rtl::OUString const & name,
-        rtl::OUString const & typeName)
+        RTParamMode flags, OUString const & name,
+        OUString const & typeName)
     {
         if (!typereg_writer_setMethodParameterData(
                 m_handle, methodIndex, parameterIndex, flags, name.pData,
@@ -219,7 +219,7 @@ public:
      */
     void setMethodExceptionTypeName(
         sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
-        rtl::OUString const & typeName)
+        OUString const & typeName)
     {
         if (!typereg_writer_setMethodExceptionTypeName(
                 m_handle, methodIndex, exceptionIndex, typeName.pData))
@@ -245,9 +245,9 @@ public:
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
      */
     void setReferenceData(
-        sal_uInt16 index, rtl::OUString const & documentation,
+        sal_uInt16 index, OUString const & documentation,
         RTReferenceType sort, RTFieldAccess flags,
-        rtl::OUString const & typeName)
+        OUString const & typeName)
     {
         if (!typereg_writer_setReferenceData(
                 m_handle, index, documentation.pData, sort, flags,

@@ -55,11 +55,11 @@ UnxPluginComm::UnxPluginComm(
                              int nDescriptor1,
                              int nDescriptor2
                              ) :
-        PluginComm( ::rtl::OUStringToOString( library, osl_getThreadTextEncoding() ), false ),
+        PluginComm( OUStringToOString( library, osl_getThreadTextEncoding() ), false ),
         PluginConnector( nDescriptor2 ),
         m_nCommPID( 0 )
 {
-    rtl::OString path;
+    OString path;
     if (!getPluginappPath(&path))
     {
         SAL_WARN("extensions.plugin", "cannot construct path to pluginapp.bin");
@@ -70,7 +70,7 @@ UnxPluginComm::UnxPluginComm(
     char pWindow[32];
     sprintf( pWindow, "%d", (int)aParent );
     sprintf( pDesc, "%d", nDescriptor1 );
-    rtl::OString aLib(rtl::OUStringToOString(library, osl_getThreadTextEncoding()));
+    OString aLib(OUStringToOString(library, osl_getThreadTextEncoding()));
 
     char const* pArgs[5];
     pArgs[0] = path.getStr();
@@ -134,9 +134,9 @@ UnxPluginComm::~UnxPluginComm()
     }
 }
 
-bool UnxPluginComm::getPluginappPath(rtl::OString * path) {
+bool UnxPluginComm::getPluginappPath(OString * path) {
     OSL_ASSERT(path != NULL);
-    rtl::OUString p("$BRAND_BASE_DIR/program/pluginapp.bin");
+    OUString p("$BRAND_BASE_DIR/program/pluginapp.bin");
     rtl::Bootstrap::expandMacros(p);
     return
         (osl::FileBase::getSystemPathFromFileURL(p, p) ==

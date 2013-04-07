@@ -53,8 +53,8 @@ public:
     virtual ~ScVbaComment() {}
 
     // Attributes
-    virtual rtl::OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setAuthor( const rtl::OUString& _author ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setAuthor( const OUString& _author ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
@@ -63,10 +63,10 @@ public:
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_COMMENT_HXX */

@@ -101,8 +101,8 @@ void SwChangeDBDlg::FillDBPopup()
 
     std::vector<String> aAllDBNames;
 
-    Sequence< ::rtl::OUString > aDBNames = xDBContext->getElementNames();
-    const ::rtl::OUString* pDBNames = aDBNames.getConstArray();
+    Sequence< OUString > aDBNames = xDBContext->getElementNames();
+    const OUString* pDBNames = aDBNames.getConstArray();
     sal_Int32 nDBCount = aDBNames.getLength();
     for(sal_Int32 i = 0; i < nDBCount; i++)
     {

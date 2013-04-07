@@ -57,14 +57,14 @@ namespace dbaui
     class DataSourceMetaData
     {
     public:
-        DataSourceMetaData( const ::rtl::OUString& _sURL );
+        DataSourceMetaData( const OUString& _sURL );
         ~DataSourceMetaData();
 
         /// returns a struct describing this data source type's support for our known advanced settings
         const FeatureSet&   getFeatureSet() const;
 
         /// determines whether or not the data source requires authentication
-        static  AuthenticationMode  getAuthentication( const ::rtl::OUString& _sURL );
+        static  AuthenticationMode  getAuthentication( const OUString& _sURL );
 
     private:
         ::boost::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;

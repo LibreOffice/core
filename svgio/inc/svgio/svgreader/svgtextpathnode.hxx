@@ -38,7 +38,7 @@ namespace svgio
 
             /// link to path content. If maXLink
             /// is set, the node can be fetched on demand
-            rtl::OUString           maXLink;
+            OUString           maXLink;
 
             /// variable scan values, dependent of given XAttributeList
             SvgNumber               maStartOffset;
@@ -54,7 +54,7 @@ namespace svgio
             virtual ~SvgTextPathNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             void decomposePathNode(
                 const drawinglayer::primitive2d::Primitive2DSequence& rPathContent,
                 drawinglayer::primitive2d::Primitive2DSequence& rTarget,

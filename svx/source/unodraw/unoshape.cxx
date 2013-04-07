@@ -94,7 +94,6 @@
 #include <boost/bind.hpp>
 #include <vcl/wmf.hxx>
 
-using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -1305,7 +1304,7 @@ OUString SAL_CALL SvxShape::getName(  ) throw(::com::sun::star::uno::RuntimeExce
 
 //----------------------------------------------------------------------
 
-void SAL_CALL SvxShape::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxShape::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::SolarMutexGuard aGuard;
     if( mpObj.is() )
@@ -1478,7 +1477,7 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
 //----------------------------------------------------------------------
 
-sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const ::rtl::OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
+sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
 {
     // check if an item with the given name and which id is inside the models
     // pool or the stylesheet pool, if found its puttet in the itemse
@@ -1689,7 +1688,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
         if( (pMap->nFlags & beans::PropertyAttribute::READONLY ) != 0 )
             throw beans::PropertyVetoException(
-                ( rtl::OUString(
+                ( OUString(
                         "Readonly property can't be set: " )
                   + rPropertyName ),
                 uno::Reference< drawing::XShape >( this ) );
@@ -1864,7 +1863,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
 //----------------------------------------------------------------------
 
 // XMultiPropertySet
-void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     ::SolarMutexGuard aSolarGuard;
 
@@ -1937,7 +1936,7 @@ void SvxShape::endSetPropertyValues()
 
 //----------------------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL SvxShape::getPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL SvxShape::getPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) throw (::com::sun::star::uno::RuntimeException)
 {
     const sal_Int32 nCount = aPropertyNames.getLength();
     const OUString* pNames = aPropertyNames.getConstArray();
@@ -1980,7 +1979,7 @@ void SvxShape::endSetPropertyValues()
     return aRet;
 }
 
-void SAL_CALL SvxShape::addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >&  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxShape::addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >&  ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -1988,7 +1987,7 @@ void SAL_CALL SvxShape::removePropertiesChangeListener( const ::com::sun::star::
 {
 }
 
-void SAL_CALL SvxShape::firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >&  ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxShape::firePropertiesChangeEvent( const ::com::sun::star::uno::Sequence< OUString >& , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >&  ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -2159,7 +2158,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
 
 //----------------------------------------------------------------------
 
-bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -2585,7 +2584,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
 
 //----------------------------------------------------------------------
 
-bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     switch( pProperty->nWID )
     {
@@ -3808,7 +3807,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 sal_Bool SAL_CALL SvxShape::supportsService( const OUString& ServiceName ) throw ( uno::RuntimeException )
 {
     Sequence< OUString > SupportedServices( getSupportedServiceNames() );
-    const ::rtl::OUString * pArray = SupportedServices.getConstArray();
+    const OUString * pArray = SupportedServices.getConstArray();
     const sal_Int32 nCount = SupportedServices.getLength();
     sal_Int32 i;
     for( i = 0; i < nCount; i++ )
@@ -4176,7 +4175,7 @@ void SAL_CALL SvxShapeText::setString( const OUString& aString ) throw(uno::Runt
 }
 
 // overide these for special property handling in subcasses. Return true if property is handled
-bool SvxShapeText::setPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     // HACK-fix #99090#
     // since SdrTextObj::SetVerticalWriting exchanges
@@ -4199,7 +4198,7 @@ bool SvxShapeText::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
     return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
 }
 
-bool SvxShapeText::getPropertyValueImpl( const ::rtl::OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
     {

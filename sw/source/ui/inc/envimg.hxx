@@ -42,9 +42,9 @@ class SW_DLLPUBLIC SwEnvItem : public SfxPoolItem
 {
 public:
 
-    rtl::OUString   aAddrText;       // text for reciever
+    OUString   aAddrText;       // text for reciever
     sal_Bool        bSend;           // sender?
-    rtl::OUString   aSendText;       // text for sender
+    OUString   aSendText;       // text for sender
     sal_Int32       lAddrFromLeft;   // left gap for reciever (twips)
     sal_Int32       lAddrFromTop;    // upper gap for reciever (twips)
     sal_Int32       lSendFromLeft;   // left gap for sender (twips)
@@ -75,7 +75,7 @@ class SwEnvCfgItem : public utl::ConfigItem
 {
     SwEnvItem aEnvItem;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     SwEnvCfgItem();
     ~SwEnvCfgItem();
@@ -83,7 +83,7 @@ public:
     SwEnvItem& GetItem() {return aEnvItem;}
 
     virtual void            Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

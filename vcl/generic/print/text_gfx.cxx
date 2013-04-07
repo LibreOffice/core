@@ -118,7 +118,7 @@ PrinterGfx::SetFont(
     // font and encoding will be set by drawText again immediately
     // before PSShowText
     mnFontID                          = nFontID;
-    maVirtualStatus.maFont            = rtl::OString();
+    maVirtualStatus.maFont            = OString();
     maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
     maVirtualStatus.mnTextHeight      = nHeight;
     maVirtualStatus.mnTextWidth       = nWidth;
@@ -531,13 +531,13 @@ PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
     // they are installed on displays and printers, but get not embedded in
     // print files or documents because they are not licensed for use outside
     // the company.
-    rtl::OString aMessage( "The font " );
-    aMessage += rtl::OUStringToOString( mrFontMgr.getPSName(mnFontID),
+    OString aMessage( "The font " );
+    aMessage += OUStringToOString( mrFontMgr.getPSName(mnFontID),
             RTL_TEXTENCODING_ASCII_US );
     aMessage += " could not be downloaded\nbecause its license does not allow for that";
     PSComment( aMessage.getStr() );
 
-    rtl::OString aFontName = rtl::OUStringToOString(
+    OString aFontName = OUStringToOString(
             mrFontMgr.getPSName(mnFontID),
             RTL_TEXTENCODING_ASCII_US);
     PSSetFont (aFontName, RTL_TEXTENCODING_ISO_8859_1);
@@ -706,21 +706,21 @@ PrinterGfx::OnEndJob ()
 }
 
 void
-PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppliedFonts, std::list< rtl::OString >& rNeededFonts )
+PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts, std::list< OString >& rNeededFonts )
 {
     // write all type 1 fonts
     std::list< sal_Int32 >::iterator aFont;
     // already in the document header ?
     for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont)
     {
-        const rtl::OString& rSysPath (mrFontMgr.getFontFileSysPath(*aFont) );
-        rtl::OUString aUNCPath;
+        const OString& rSysPath (mrFontMgr.getFontFileSysPath(*aFont) );
+        OUString aUNCPath;
         osl::File::getFileURLFromSystemPath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
         osl::File aFontFile (aUNCPath);
 
         // provide the pfb or pfa font as a (pfa-)font resource
-        rtl::OString aPostScriptName =
-            rtl::OUStringToOString ( mrFontMgr.getPSName(*aFont),
+        OString aPostScriptName =
+            OUStringToOString ( mrFontMgr.getPSName(*aFont),
                                      RTL_TEXTENCODING_ASCII_US );
 
         WritePS (pFile, "%%BeginResource: font ");
@@ -763,7 +763,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
             aIter->PSUploadEncoding (pFile, *this);
             if( aIter->GetFontType() == fonttype::Builtin )
                 rNeededFonts.push_back(
-                      rtl::OUStringToOString(
+                      OUStringToOString(
                            mrFontMgr.getPSName( aIter->GetFontID() ),
                            RTL_TEXTENCODING_ASCII_US ) );
         }

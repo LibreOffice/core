@@ -24,8 +24,6 @@
 #include "eventimp.hxx"
 #include "descriptionimp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

@@ -121,7 +121,7 @@ void ClassFile::Code::instrAconstNull() {
     appendU1(m_code, 0x01);
 }
 
-void ClassFile::Code::instrAnewarray(rtl::OString const & type) {
+void ClassFile::Code::instrAnewarray(OString const & type) {
     // anewarray <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xBD);
     appendU2(m_code, m_classFile.addClassInfo(type));
@@ -137,7 +137,7 @@ void ClassFile::Code::instrAthrow() {
     appendU1(m_code, 0xBF);
 }
 
-void ClassFile::Code::instrCheckcast(rtl::OString const & type) {
+void ClassFile::Code::instrCheckcast(OString const & type) {
     // checkcast <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xC0);
     appendU2(m_code, m_classFile.addClassInfo(type));
@@ -149,8 +149,8 @@ void ClassFile::Code::instrDup() {
 }
 
 void ClassFile::Code::instrGetstatic(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // getstatic <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB2);
@@ -181,15 +181,15 @@ ClassFile::Code::Branch ClassFile::Code::instrIfnull() {
     return branch;
 }
 
-void ClassFile::Code::instrInstanceof(rtl::OString const & type) {
+void ClassFile::Code::instrInstanceof(OString const & type) {
     // instanceof <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xC1);
     appendU2(m_code, m_classFile.addClassInfo(type));
 }
 
 void ClassFile::Code::instrInvokeinterface(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor, sal_uInt8 args)
+    OString const & type, OString const & name,
+    OString const & descriptor, sal_uInt8 args)
 {
     // invokeinterface <indexbyte1> <indexbyte2> <nargs> 0:
     appendU1(m_code, 0xB9);
@@ -200,8 +200,8 @@ void ClassFile::Code::instrInvokeinterface(
 }
 
 void ClassFile::Code::instrInvokespecial(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // invokespecial <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB7);
@@ -209,8 +209,8 @@ void ClassFile::Code::instrInvokespecial(
 }
 
 void ClassFile::Code::instrInvokestatic(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // invokestatic <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB8);
@@ -218,8 +218,8 @@ void ClassFile::Code::instrInvokestatic(
 }
 
 void ClassFile::Code::instrInvokevirtual(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // invokevirtual <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB6);
@@ -265,7 +265,7 @@ void ClassFile::Code::instrLookupswitch(
     }
 }
 
-void ClassFile::Code::instrNew(rtl::OString const & type) {
+void ClassFile::Code::instrNew(OString const & type) {
     // new <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xBB);
     appendU2(m_code, m_classFile.addClassInfo(type));
@@ -288,8 +288,8 @@ void ClassFile::Code::instrPop() {
 }
 
 void ClassFile::Code::instrPutfield(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // putfield <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB5);
@@ -297,8 +297,8 @@ void ClassFile::Code::instrPutfield(
 }
 
 void ClassFile::Code::instrPutstatic(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     // putstatic <indexbyte1> <indexbyte2>:
     appendU1(m_code, 0xB3);
@@ -374,7 +374,7 @@ void ClassFile::Code::loadIntegerConstant(sal_Int32 value) {
     }
 }
 
-void ClassFile::Code::loadStringConstant(rtl::OString const & value) {
+void ClassFile::Code::loadStringConstant(OString const & value) {
     ldc(m_classFile.addStringInfo(value));
 }
 
@@ -411,7 +411,7 @@ void ClassFile::Code::branchHere(Branch branch) {
 }
 
 void ClassFile::Code::addException(
-    Position start, Position end, Position handler, rtl::OString const & type)
+    Position start, Position end, Position handler, OString const & type)
 {
     OSL_ASSERT(start < end && end <= m_code.size() && handler <= m_code.size());
     if (m_exceptionTableLength == SAL_MAX_UINT16) {
@@ -466,8 +466,8 @@ void ClassFile::Code::accessLocal(
 }
 
 ClassFile::ClassFile(
-    AccessFlags accessFlags, rtl::OString const & thisClass,
-    rtl::OString const & superClass, rtl::OString const & signature):
+    AccessFlags accessFlags, OString const & thisClass,
+    OString const & superClass, OString const & signature):
     m_constantPoolCount(1), m_accessFlags(accessFlags), m_interfacesCount(0),
     m_fieldsCount(0), m_methodsCount(0), m_attributesCount(0)
 {
@@ -555,7 +555,7 @@ sal_uInt16 ClassFile::addDoubleInfo(double value) {
     return index;
 }
 
-void ClassFile::addInterface(rtl::OString const & interface) {
+void ClassFile::addInterface(OString const & interface) {
     if (m_interfacesCount == SAL_MAX_UINT16) {
         throw CannotDumpException("Too many interfaces for Java class file format");
     }
@@ -564,9 +564,9 @@ void ClassFile::addInterface(rtl::OString const & interface) {
 }
 
 void ClassFile::addField(
-    AccessFlags accessFlags, rtl::OString const & name,
-    rtl::OString const & descriptor, sal_uInt16 constantValueIndex,
-    rtl::OString const & signature)
+    AccessFlags accessFlags, OString const & name,
+    OString const & descriptor, sal_uInt16 constantValueIndex,
+    OString const & signature)
 {
     if (m_fieldsCount == SAL_MAX_UINT16) {
         throw CannotDumpException("Too many fields for Java class file format");
@@ -588,10 +588,10 @@ void ClassFile::addField(
 }
 
 void ClassFile::addMethod(
-    AccessFlags accessFlags, rtl::OString const & name,
-    rtl::OString const & descriptor, Code const * code,
-    std::vector< rtl::OString > const & exceptions,
-    rtl::OString const & signature)
+    AccessFlags accessFlags, OString const & name,
+    OString const & descriptor, Code const * code,
+    std::vector< OString > const & exceptions,
+    OString const & signature)
 {
     if (m_methodsCount == SAL_MAX_UINT16) {
         throw CannotDumpException("Too many methods for Java class file format");
@@ -600,7 +600,7 @@ void ClassFile::addMethod(
     appendU2(m_methods, static_cast< sal_uInt16 >(accessFlags));
     appendU2(m_methods, addUtf8Info(name));
     appendU2(m_methods, addUtf8Info(descriptor));
-    std::vector< rtl::OString >::size_type excs = exceptions.size();
+    std::vector< OString >::size_type excs = exceptions.size();
     if (excs > SAL_MAX_UINT16) {
         throw CannotDumpException("Too many exception specifications for Java class file format");
     }
@@ -638,7 +638,7 @@ void ClassFile::addMethod(
             m_methods,
             static_cast< sal_uInt32 >(2 + 2 * static_cast< sal_uInt32 >(excs)));
         appendU2(m_methods, static_cast< sal_uInt16 >(excs));
-        for (std::vector< rtl::OString >::const_iterator i(exceptions.begin());
+        for (std::vector< OString >::const_iterator i(exceptions.begin());
              i != exceptions.end(); ++i)
         {
             appendU2(m_methods, addClassInfo(*i));
@@ -676,8 +676,8 @@ sal_uInt16 ClassFile::nextConstantPoolIndex(sal_uInt16 width) {
     return index;
 }
 
-sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
-    std::map< rtl::OString, sal_uInt16 >::iterator i(m_utf8Infos.find(value));
+sal_uInt16 ClassFile::addUtf8Info(OString const & value) {
+    std::map< OString, sal_uInt16 >::iterator i(m_utf8Infos.find(value));
     if (i != m_utf8Infos.end()) {
         return i->second;
     }
@@ -691,7 +691,7 @@ sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
         appendU1(m_constantPool, static_cast< sal_uInt8 >(value[j]));
     }
     if (!m_utf8Infos.insert(
-            std::map< rtl::OString, sal_uInt16 >::value_type(value, index)).
+            std::map< OString, sal_uInt16 >::value_type(value, index)).
         second)
     {
         OSL_ASSERT(false);
@@ -699,7 +699,7 @@ sal_uInt16 ClassFile::addUtf8Info(rtl::OString const & value) {
     return index;
 }
 
-sal_uInt16 ClassFile::addClassInfo(rtl::OString const & type) {
+sal_uInt16 ClassFile::addClassInfo(OString const & type) {
     sal_uInt16 nameIndex = addUtf8Info(type);
     std::map< sal_uInt16, sal_uInt16 >::iterator i(
         m_classInfos.find(nameIndex));
@@ -718,7 +718,7 @@ sal_uInt16 ClassFile::addClassInfo(rtl::OString const & type) {
     return index;
 }
 
-sal_uInt16 ClassFile::addStringInfo(rtl::OString const & value) {
+sal_uInt16 ClassFile::addStringInfo(OString const & value) {
     sal_uInt16 stringIndex = addUtf8Info(value);
     std::map< sal_uInt16, sal_uInt16 >::iterator i(
         m_stringInfos.find(stringIndex));
@@ -738,8 +738,8 @@ sal_uInt16 ClassFile::addStringInfo(rtl::OString const & value) {
 }
 
 sal_uInt16 ClassFile::addFieldrefInfo(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     sal_uInt16 classIndex = addClassInfo(type);
     sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
@@ -762,8 +762,8 @@ sal_uInt16 ClassFile::addFieldrefInfo(
 }
 
 sal_uInt16 ClassFile::addMethodrefInfo(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     sal_uInt16 classIndex = addClassInfo(type);
     sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
@@ -786,8 +786,8 @@ sal_uInt16 ClassFile::addMethodrefInfo(
 }
 
 sal_uInt16 ClassFile::addInterfaceMethodrefInfo(
-    rtl::OString const & type, rtl::OString const & name,
-    rtl::OString const & descriptor)
+    OString const & type, OString const & name,
+    OString const & descriptor)
 {
     sal_uInt16 classIndex = addClassInfo(type);
     sal_uInt16 nameAndTypeIndex = addNameAndTypeInfo(name, descriptor);
@@ -811,7 +811,7 @@ sal_uInt16 ClassFile::addInterfaceMethodrefInfo(
 }
 
 sal_uInt16 ClassFile::addNameAndTypeInfo(
-    rtl::OString const & name, rtl::OString const & descriptor)
+    OString const & name, OString const & descriptor)
 {
     sal_uInt16 nameIndex = addUtf8Info(name);
     sal_uInt16 descriptorIndex = addUtf8Info(descriptor);
@@ -835,7 +835,7 @@ sal_uInt16 ClassFile::addNameAndTypeInfo(
 }
 
 void ClassFile::appendSignatureAttribute(
-    std::vector< unsigned char > & stream, rtl::OString const & signature)
+    std::vector< unsigned char > & stream, OString const & signature)
 {
     if (!signature.isEmpty()) {
         appendU2(stream, addUtf8Info("Signature"));

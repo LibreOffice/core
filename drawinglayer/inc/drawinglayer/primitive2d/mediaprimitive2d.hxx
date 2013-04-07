@@ -49,7 +49,7 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                       maTransform;
 
             /// the content definition
-            rtl::OUString                               maURL;
+            OUString                               maURL;
 
             /// style: background color
             basegfx::BColor                             maBackgroundColor;
@@ -67,14 +67,14 @@ namespace drawinglayer
             /// constructor
             MediaPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransform,
-                const rtl::OUString& rURL,
+                const OUString& rURL,
                 const basegfx::BColor& rBackgroundColor,
                 sal_uInt32 nDiscreteBorder,
                 const Graphic &rSnapshot);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
-            const rtl::OUString& getURL() const { return maURL; }
+            const OUString& getURL() const { return maURL; }
             const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
             sal_uInt32 getDiscreteBorder() const { return mnDiscreteBorder; }
 

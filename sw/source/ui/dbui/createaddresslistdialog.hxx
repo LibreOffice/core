@@ -33,8 +33,8 @@ class SwMailMergeConfigItem;
 // container of the created database
 struct SwCSVData
 {
-    ::std::vector< ::rtl::OUString >                    aDBColumnHeaders;
-    ::std::vector< ::std::vector< ::rtl::OUString> >     aDBData;
+    ::std::vector< OUString >                    aDBColumnHeaders;
+    ::std::vector< ::std::vector< OUString> >     aDBData;
 };
 
 class SwFindEntryDialog;

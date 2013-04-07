@@ -76,15 +76,15 @@ namespace connectivity
 
         class MQueryExpressionString : public MQueryExpressionBase {
         protected:
-            ::rtl::OUString     m_aName;         // LHS
+            OUString     m_aName;         // LHS
             MQueryOp::cond_type m_aBooleanCondition;
-            ::rtl::OUString     m_aValue;        // RHS
+            OUString     m_aValue;        // RHS
 
         public:
 
-            MQueryExpressionString( ::rtl::OUString&    lhs,
+            MQueryExpressionString( OUString&    lhs,
                                     MQueryOp::cond_type cond,
-                                    ::rtl::OUString     rhs )
+                                    OUString     rhs )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )
                 , m_aBooleanCondition( cond )
@@ -92,18 +92,18 @@ namespace connectivity
             {
             }
 
-            MQueryExpressionString( ::rtl::OUString&    lhs,
+            MQueryExpressionString( OUString&    lhs,
                                     MQueryOp::cond_type cond )
                 : MQueryExpressionBase( MQueryExpressionBase::StringExpr )
                 , m_aName( lhs )
                 , m_aBooleanCondition( cond )
-                , m_aValue( ::rtl::OUString() )
+                , m_aValue( OUString() )
             {
             }
 
-            const ::rtl::OUString&    getName() const { return m_aName; }
+            const OUString&    getName() const { return m_aName; }
             MQueryOp::cond_type getCond() const { return m_aBooleanCondition; }
-            const ::rtl::OUString&    getValue() const { return m_aValue; }
+            const OUString&    getValue() const { return m_aValue; }
         };
 
         class MQueryExpression : public MQueryExpressionBase
@@ -146,7 +146,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef ::boost::unordered_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
+            typedef ::boost::unordered_map< OString, OUString, OStringHash >  FieldMap;
 
             mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;
@@ -155,8 +155,8 @@ namespace connectivity
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
-            rtl::OUString   getValue( const rtl::OString &key ) const;
-            void            setValue( const rtl::OString &key, const rtl::OUString & rValue);
+            OUString   getValue( const OString &key ) const;
+            void            setValue( const OString &key, const OUString & rValue);
         };
 
         class MQueryHelper
@@ -174,7 +174,7 @@ namespace connectivity
             void            clear_results();
             OColumnAlias        m_rColumnAlias;
             ErrorDescriptor     m_aError;
-            ::rtl::OUString     m_aAddressbook;
+            OUString     m_aAddressbook;
             MQueryExpression    m_aExpr;
 
 /*
@@ -185,7 +185,7 @@ namespace connectivity
 */
 
             sal_Int32 doQueryDefaultTable(OConnection* xConnection);
-            sal_Int32 doQueryListTable(OConnection* xConnection, rtl::OString& ouStringTable);
+            sal_Int32 doQueryListTable(OConnection* xConnection, OString& ouStringTable);
 
         public:
                                        MQueryHelper(const OColumnAlias& _ca);
@@ -197,13 +197,13 @@ namespace connectivity
             sal_Bool                   queryComplete() const;
             sal_Int32                  getResultCount() const;
             sal_Bool                   checkRowAvailable( sal_Int32 nDBRow );
-            sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType );
+            sal_Bool getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType );
             sal_Int32 executeQuery(OConnection* xConnection);
             const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
             bool                            hadError() const { return m_aError.is(); }
             inline ErrorDescriptor& getError() { return m_aError; }
 
-            void                            setAddressbook( ::rtl::OUString&);
+            void                            setAddressbook( OUString&);
             void                            setExpression( MQueryExpression &_expr );
 
         };

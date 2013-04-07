@@ -32,7 +32,7 @@
 
 struct EqualString
 {
-    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
+    sal_Bool operator()(const OString& str1, const OString& str2) const
     {
         return (str1 == str2);
     }
@@ -40,7 +40,7 @@ struct EqualString
 
 struct HashString
 {
-    sal_Int32 operator()(const ::rtl::OString& str) const
+    sal_Int32 operator()(const OString& str) const
     {
         return str.hashCode();
     }
@@ -48,15 +48,15 @@ struct HashString
 
 struct LessString
 {
-    sal_Bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
+    sal_Bool operator()(const OString& str1, const OString& str2) const
     {
         return (str1 < str2);
     }
 };
 
-typedef ::std::list< ::rtl::OString >               StringList;
-typedef ::std::vector< ::rtl::OString >             StringVector;
-typedef ::std::set< ::rtl::OString, LessString >    StringSet;
+typedef ::std::list< OString >               StringList;
+typedef ::std::vector< OString >             StringVector;
+typedef ::std::set< OString, LessString >    StringSet;
 
 class AstExpression;
 typedef ::std::list< AstExpression* >   ExprList;
@@ -66,7 +66,7 @@ typedef ::std::list< AstUnionLabel* >   LabelList;
 
 class AstDeclaration;
 
-typedef ::boost::unordered_map< ::rtl::OString, AstDeclaration*, HashString, EqualString > DeclMap;
+typedef ::boost::unordered_map< OString, AstDeclaration*, HashString, EqualString > DeclMap;
 typedef ::std::list< AstDeclaration* > DeclList;
 
 class AstScope;

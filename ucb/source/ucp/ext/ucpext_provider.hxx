@@ -38,20 +38,20 @@ namespace ucb { namespace ucp { namespace ext
         virtual ~ContentProvider();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo - static versions
-        static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static() throw (::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw (::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext );
 
         // XContentProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > SAL_CALL queryContent( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier >& Identifier ) throw (::com::sun::star::ucb::IllegalIdentifierException, ::com::sun::star::uno::RuntimeException);
 
     public:
-        static ::rtl::OUString getRootURL();
-        static ::rtl::OUString getArtificialNodeContentType();
+        static OUString getRootURL();
+        static OUString getArtificialNodeContentType();
     };
 
 //......................................................................................................................

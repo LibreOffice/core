@@ -25,7 +25,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-using ::rtl::OUString;
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
@@ -53,8 +52,8 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
 
         for( sal_Int16 i = 0; i < nAttrCount; i++ )
         {
-            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-            rtl::OUString aLocalName;
+            OUString sAttrName = xAttrList->getNameByIndex( i );
+            OUString aLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if (IsXMLToken(aLocalName, XML_ID))

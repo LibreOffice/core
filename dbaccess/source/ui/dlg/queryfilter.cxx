@@ -107,9 +107,9 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     try
     {
         // ... also write it into the remaining fields
-        Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        Sequence< OUString> aNames = m_xColumns->getElementNames();
+        const OUString* pIter = aNames.getConstArray();
+        const OUString* pEnd   = pIter + aNames.getLength();
         Reference<XPropertySet> xColumn;
         for(;pIter != pEnd;++pIter)
         {
@@ -306,7 +306,7 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
     sal_Bool bHaving = sal_False;
     try
     {
-        ::rtl::OUString sTableName;
+        OUString sTableName;
         sal_Bool bFunction = sal_False;
         _rFilter.Name = _rField.GetSelectEntry();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
@@ -322,26 +322,26 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
                     {
                         // properly quote all parts of the table name, so
                         // e.g. <schema>.<table> becomes "<schema>"."<table>"
-                        ::rtl::OUString aCatlog,aSchema,aTable;
+                        OUString aCatlog,aSchema,aTable;
                         ::dbtools::qualifiedNameComponents( m_xMetaData, sTableName, aCatlog, aSchema, aTable, ::dbtools::eInDataManipulation );
                         sTableName = ::dbtools::composeTableName( m_xMetaData, aCatlog, aSchema, aTable, sal_True, ::dbtools::eInDataManipulation );
                     }
                 }
                 xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
-                static ::rtl::OUString sAgg("AggregateFunction");
+                static OUString sAgg("AggregateFunction");
                 if ( xInfo->hasPropertyByName(sAgg) )
                     xColumn->getPropertyValue(sAgg) >>= bHaving;
-                static ::rtl::OUString sFunction("Function");
+                static OUString sFunction("Function");
                 if ( xInfo->hasPropertyByName(sFunction) )
                     xColumn->getPropertyValue(sFunction) >>= bFunction;
             }
             if ( !bFunction )
             {
-                const ::rtl::OUString aQuote    = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
+                const OUString aQuote    = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : OUString();
                 _rFilter.Name = ::dbtools::quoteName(aQuote,_rFilter.Name);
                 if ( !sTableName.isEmpty() )
                 {
-                    static ::rtl::OUString sSep(".");
+                    static OUString sSep(".");
                     sTableName += sSep;
                     sTableName += _rFilter.Name;
                     _rFilter.Name = sTableName;
@@ -360,12 +360,12 @@ sal_Bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rCom
         if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
              _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
             ::Replace_OS_PlaceHolder( sPredicateValue );
-        _rFilter.Value <<= ::rtl::OUString(sPredicateValue);
+        _rFilter.Value <<= OUString(sPredicateValue);
     }
     return bHaving;
 }
 
-Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFieldName ) const
+Reference< XPropertySet > DlgFilterCrit::getColumn( const OUString& _rFieldName ) const
 {
     Reference< XPropertySet > xColumn;
     try
@@ -376,15 +376,15 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
         Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
         if ( xColumns.is() && !xColumn.is() )
         {
-            Sequence< ::rtl::OUString> aSeq = xColumns->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            Sequence< OUString> aSeq = xColumns->getElementNames();
+            const OUString* pIter = aSeq.getConstArray();
+            const OUString* pEnd   = pIter + aSeq.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 Reference<XPropertySet> xProp(xColumns->getByName(*pIter),UNO_QUERY);
                 if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
                 {
-                    ::rtl::OUString sRealName;
+                    OUString sRealName;
                     xProp->getPropertyValue(PROPERTY_REALNAME)  >>= sRealName;
                     if ( sRealName == _rFieldName )
                     {
@@ -404,7 +404,7 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
     return xColumn;
 }
 
-Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& _rFieldName ) const
+Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const OUString& _rFieldName ) const
 {
     Reference< XPropertySet > xColumn;
     try
@@ -424,7 +424,7 @@ Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& 
 Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueInput ) const
 {
     // the name
-    ::rtl::OUString sField;
+    OUString sField;
     if ( &_rValueInput == &aET_WHEREVALUE1 )
     {
         sField = aLB_WHEREFIELD1.GetSelectEntry();
@@ -455,7 +455,7 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
         // and normalize it's content
         if ( xColumn.is() )
         {
-            ::rtl::OUString sText( _pField->GetText() );
+            OUString sText( _pField->GetText() );
             m_aPredicateInput.normalizePredicateString( sText, xColumn );
             _pField->SetText( sText );
         }
@@ -467,7 +467,7 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Bool _bOr  )
 {
     DBG_CHKTHIS(DlgFilterCrit,NULL);
-    ::rtl::OUString aCondition;
+    OUString aCondition;
     _rItem.Value >>= aCondition;
     String aStr = aCondition;
     if ( _rItem.Handle == SQLFilterOperator::LIKE ||
@@ -542,7 +542,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
 
     if ( pColumnListControl && pPredicateListControl && pPredicateValueControl )
     {
-        ::rtl::OUString sName;
+        OUString sName;
         if ( xColumn.is() )
             xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
         else
@@ -555,7 +555,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
         pPredicateListControl->SelectEntryPos( GetSelectionPos( (sal_Int32)_rItem.Handle, *pPredicateListControl ) );
 
         // initially normalize this value
-        ::rtl::OUString aString( aStr );
+        OUString aString( aStr );
         m_aPredicateInput.normalizePredicateString( aString, xColumn );
         pPredicateValueControl->SetText( aString );
     }

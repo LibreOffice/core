@@ -29,16 +29,16 @@ class DateTime;
 
 struct ScMyActionInfo
 {
-    rtl::OUString sUser;
-    rtl::OUString sComment;
+    OUString sUser;
+    OUString sComment;
     com::sun::star::util::DateTime aDateTime;
 };
 
 struct ScMyCellInfo
 {
     ScCellValue maCell;
-    rtl::OUString      sFormulaAddress;
-    rtl::OUString      sFormula;
+    OUString      sFormulaAddress;
+    OUString      sFormula;
     String             sInputString;
     double             fValue;
     sal_Int32          nMatrixCols;
@@ -172,13 +172,13 @@ typedef std::list<ScMyBaseAction*> ScMyActions;
 
 class ScXMLChangeTrackingImportHelper
 {
-    std::set<rtl::OUString> aUsers;
+    std::set<OUString> aUsers;
     ScMyActions         aActions;
     com::sun::star::uno::Sequence<sal_Int8> aProtect;
     ScDocument*         pDoc;
     ScChangeTrack*      pTrack;
     ScMyBaseAction*     pCurrentAction;
-    rtl::OUString       sIDPrefix;
+    OUString       sIDPrefix;
     sal_uInt32          nPrefixLength;
     sal_Int16           nMultiSpanned;
     sal_Int16           nMultiSpannedSlaveCount;
@@ -202,7 +202,7 @@ public:
     void SetProtection(const com::sun::star::uno::Sequence<sal_Int8>& rProtect) { aProtect = rProtect; }
     void StartChangeAction(const ScChangeActionType nActionType);
 
-    sal_uInt32 GetIDFromString(const rtl::OUString& sID);
+    sal_uInt32 GetIDFromString(const OUString& sID);
 
     void SetActionNumber(const sal_uInt32 nActionNumber) { pCurrentAction->nActionNumber = nActionNumber; }
     void SetActionState(const ScChangeActionState nActionState) { pCurrentAction->nActionState = nActionState; }

@@ -242,11 +242,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.FreezeIdRanges();                         // the pool is also used directly
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
-    rAdmin.NewLayer(rtl::OUString("vorne"),    SC_LAYER_FRONT);
-    rAdmin.NewLayer(rtl::OUString("hinten"),   SC_LAYER_BACK);
-    rAdmin.NewLayer(rtl::OUString("intern"),   SC_LAYER_INTERN);
-    rAdmin.NewLayer(rtl::OUString("Controls"), SC_LAYER_CONTROLS);
-    rAdmin.NewLayer(rtl::OUString("hidden"),   SC_LAYER_HIDDEN);
+    rAdmin.NewLayer(OUString("vorne"),    SC_LAYER_FRONT);
+    rAdmin.NewLayer(OUString("hinten"),   SC_LAYER_BACK);
+    rAdmin.NewLayer(OUString("intern"),   SC_LAYER_INTERN);
+    rAdmin.NewLayer(OUString("Controls"), SC_LAYER_CONTROLS);
+    rAdmin.NewLayer(OUString("hidden"),   SC_LAYER_HIDDEN);
     // "Controls" is new - must also be created when loading
 
     //  Link fuer URL-Fields setzen
@@ -1407,13 +1407,13 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
 
     //#i110034# charts need correct sheet names for xml range conversion during load
     //so the target sheet name is temporarily renamed (if we have any SdrObjects)
-    rtl::OUString aDestTabName;
+    OUString aDestTabName;
     sal_Bool bRestoreDestTabName = false;
     if( pOldObject && !bSameDoc && !bDestClip )
     {
         if( pDoc && pClipDoc )
         {
-            rtl::OUString aSourceTabName;
+            OUString aSourceTabName;
             if( pClipDoc->GetName( nSourceTab, aSourceTabName )
                 && pDoc->GetName( nDestTab, aDestTabName ) )
             {

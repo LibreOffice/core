@@ -29,7 +29,6 @@
 
 // Accessibility ==============================================================
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;

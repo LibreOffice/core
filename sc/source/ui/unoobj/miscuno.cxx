@@ -24,7 +24,6 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
@@ -42,7 +41,7 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
 }
 
 sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const rtl::OUString& rName, sal_Bool bDefault )
+                                            const OUString& rName, sal_Bool bDefault )
 {
     sal_Bool bRet = bDefault;
     if ( xProp.is() )
@@ -67,7 +66,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
 }
 
 sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const rtl::OUString& rName, long nDefault )
+                                            const OUString& rName, long nDefault )
 {
     sal_Int32 nRet = nDefault;
     if ( xProp.is() )
@@ -86,7 +85,7 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
 }
 
 sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XPropertySet>& xProp,
-                                            const rtl::OUString& rName, long nDefault )
+                                            const OUString& rName, long nDefault )
 {
     sal_Int32 nRet = nDefault;
     if ( xProp.is() )
@@ -187,7 +186,7 @@ void ScUnoHelpFunctions::SetOptionalPropertyValue(
 //------------------------------------------------------------------------
 
 ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd,
-                                       const rtl::OUString& rServiceName) :
+                                       const OUString& rServiceName) :
     xIndex( rInd ),
     sServiceName(rServiceName),
     nPos( 0 )
@@ -222,24 +221,24 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
     return aReturn;
 }
 
-::rtl::OUString SAL_CALL ScIndexEnumeration::getImplementationName()
+OUString SAL_CALL ScIndexEnumeration::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("ScIndexEnumeration");
+    return OUString("ScIndexEnumeration");
 }
 
-sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
     return sServiceName == ServiceName;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString >
+::com::sun::star::uno::Sequence< OUString >
     SAL_CALL ScIndexEnumeration::getSupportedServiceNames(void)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
-    ::rtl::OUString* pArray = aRet.getArray();
+    ::com::sun::star::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
     pArray[0] = sServiceName;
     return aRet;
 }

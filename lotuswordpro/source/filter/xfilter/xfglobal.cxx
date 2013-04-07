@@ -75,39 +75,39 @@ int XFGlobal::s_nObjID = 1;
 
 int XFGlobal::s_nImageID = 1;
 
-rtl::OUString XFGlobal::GenSectionName()
+OUString XFGlobal::GenSectionName()
 {
     //give it a initial name:
     return A2OUSTR("sect") + Int32ToOUString(s_nSectionID++);
 }
 
-rtl::OUString XFGlobal::GenFrameName()
+OUString XFGlobal::GenFrameName()
 {
     //give it a initial name:
     return A2OUSTR("frame") + Int32ToOUString(s_nFrameID++);
 }
 
-rtl::OUString XFGlobal::GenTableName()
+OUString XFGlobal::GenTableName()
 {
     return A2OUSTR("table") + Int32ToOUString(s_nFrameID++);
 }
 
-rtl::OUString XFGlobal::GenNoteName()
+OUString XFGlobal::GenNoteName()
 {
     return A2OUSTR("ftn") + Int32ToOUString(s_nNoteID++);
 }
 
-rtl::OUString XFGlobal::GenStrokeDashName()
+OUString XFGlobal::GenStrokeDashName()
 {
     return A2OUSTR("stroke dash ") + Int32ToOUString(s_nStrokeDashID++);
 }
 
-rtl::OUString XFGlobal::GenAreaName()
+OUString XFGlobal::GenAreaName()
 {
     return A2OUSTR("draw area") + Int32ToOUString(s_nAreaID++);
 }
 
-rtl::OUString XFGlobal::GenImageName()
+OUString XFGlobal::GenImageName()
 {
     return A2OUSTR("Graphic") + Int32ToOUString(s_nImageID++);
 }

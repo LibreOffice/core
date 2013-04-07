@@ -72,11 +72,11 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 recoverFromStorage(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
-                    const ::rtl::OUString& i_rComponentName,
+                    const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
 
-        static const ::rtl::OUString getComponentsStorageName( const SubComponentType i_eType );
+        static const OUString getComponentsStorageName( const SubComponentType i_eType );
 
     private:
         void    impl_saveSubDocument_throw(
@@ -90,14 +90,14 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 impl_recoverSubDocument_throw(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
-                    const ::rtl::OUString& i_rComponentName,
+                    const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                 impl_recoverQueryDesign_throw(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
-                    const ::rtl::OUString& i_rComponentName,
+                    const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
 

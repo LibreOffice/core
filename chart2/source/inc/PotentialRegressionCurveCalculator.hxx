@@ -34,7 +34,7 @@ public:
     virtual ~PotentialRegressionCurveCalculator();
 
 protected:
-    virtual ::rtl::OUString ImplGetRepresentation(
+    virtual OUString ImplGetRepresentation(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
         ::sal_Int32 nNumberFormatKey ) const;
 

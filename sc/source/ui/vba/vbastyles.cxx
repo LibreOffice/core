@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static rtl::OUString SDEFAULTCELLSTYLENAME("Default");
+static OUString SDEFAULTCELLSTYLENAME("Default");
 static css::uno::Any
 lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
 {
@@ -42,11 +42,11 @@ ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent, con
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaStyles::getStyleNames() throw ( uno::RuntimeException )
 {
     return mxNameContainerCellStyles->getElementNames();
@@ -94,12 +94,12 @@ ScVbaStyles::createEnumeration() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XStyle > SAL_CALL
-ScVbaStyles::Add( const ::rtl::OUString& _sName, const uno::Any& _aBasedOn ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< excel::XStyle > aRet;
     try
     {
-        rtl::OUString sParentCellStyleName("Default");
+        OUString sParentCellStyleName("Default");
         if ( _aBasedOn.hasValue() )
         {
             uno::Reference< excel::XRange > oRange;
@@ -112,16 +112,16 @@ ScVbaStyles::Add( const ::rtl::OUString& _sName, const uno::Any& _aBasedOn ) thr
                 }
                 else
                 {
-                    DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString() );
+                    DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString() );
                 }
             }
             else
             {
-                DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
+                DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
             }
         }
 
-        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance( rtl::OUString("com.sun.star.style.CellStyle")), uno::UNO_QUERY_THROW );
+        uno::Reference< style::XStyle > xStyle( mxMSF->createInstance( OUString("com.sun.star.style.CellStyle")), uno::UNO_QUERY_THROW );
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {
@@ -135,13 +135,13 @@ ScVbaStyles::Add( const ::rtl::OUString& _sName, const uno::Any& _aBasedOn ) thr
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
     return aRet;
 }
 
 void
-ScVbaStyles::Delete(const rtl::OUString _sStyleName) throw ( script::BasicErrorException )
+ScVbaStyles::Delete(const OUString _sStyleName) throw ( script::BasicErrorException )
 {
     try
     {
@@ -150,24 +150,24 @@ ScVbaStyles::Delete(const rtl::OUString _sStyleName) throw ( script::BasicErrorE
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
-rtl::OUString
+OUString
 ScVbaStyles::getServiceImplName()
 {
-    return rtl::OUString("ScVbaStyles");
+    return OUString("ScVbaStyles");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaStyles::getServiceNames()
 {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.XStyles" );
+                aServiceNames[ 0 ] = OUString("ooo.vba.excel.XStyles" );
         }
         return aServiceNames;
 }

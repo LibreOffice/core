@@ -152,7 +152,7 @@ IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/)
 {
     fprintf(stderr,"(%d:%d)\n",
             StarBASIC::GetLine(), StarBASIC::GetCol1());
-    fprintf(stderr,"Basic error: %s\n", rtl::OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    fprintf(stderr,"Basic error: %s\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
     mbError = true;
     return 0;
 }

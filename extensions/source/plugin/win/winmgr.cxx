@@ -60,10 +60,6 @@ using namespace osl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 

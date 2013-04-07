@@ -129,9 +129,9 @@ public:
     void            SetStreamPath( const String& rPath ) { aStreamPath = rPath; }
     const String&   GetStreamPath() const { return aStreamPath; }
 
-    bool ImportString( const ::rtl::OUString&, sal_uLong=FORMAT_STRING );
-    bool ExportString( ::rtl::OUString&, sal_uLong=FORMAT_STRING );
-    bool ExportByteString( ::rtl::OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
+    bool ImportString( const OUString&, sal_uLong=FORMAT_STRING );
+    bool ExportString( OUString&, sal_uLong=FORMAT_STRING );
+    bool ExportByteString( OString&, rtl_TextEncoding, sal_uLong=FORMAT_STRING );
 
     bool ImportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
     bool ExportStream( SvStream&, const String& rBaseURL, sal_uLong=FORMAT_STRING );
@@ -179,7 +179,7 @@ inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 class ScImportStringStream : public SvMemoryStream
 {
 public:
-    ScImportStringStream( const ::rtl::OUString rStr )
+    ScImportStringStream( const OUString rStr )
         : SvMemoryStream( (void*)rStr.getStr(),
                 rStr.getLength() * sizeof(sal_Unicode), STREAM_READ)
     {
@@ -233,7 +233,7 @@ public:
     may start under false preconditions.
 
   */
-SC_DLLPUBLIC rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
+SC_DLLPUBLIC OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote );
 
 #endif

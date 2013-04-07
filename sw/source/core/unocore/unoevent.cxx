@@ -42,8 +42,6 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::lang::XServiceInfo;
 using ::com::sun::star::beans::PropertyValue;
 using ::cppu::WeakImplHelper2;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 //
 // tables of allowed events for specific objects

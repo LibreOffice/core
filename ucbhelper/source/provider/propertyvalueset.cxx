@@ -45,7 +45,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using ::rtl::OUString;
 
 namespace ucbhelper_impl
 {
@@ -79,7 +78,7 @@ const sal_uInt32 OBJECT_VALUE_SET           = 0x00040000;
 
 struct PropertyValue
 {
-    ::rtl::OUString
+    OUString
                 sPropertyName;
 
     sal_uInt32  nPropsSet;
@@ -636,42 +635,42 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 }
 
 //=========================================================================
-void PropertyValueSet::appendString( const ::rtl::OUString& rPropName,
+void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
 {
     SETVALUE_IMPL( rPropName, STRING_VALUE_SET, aString, rValue );
 }
 
 //=========================================================================
-void PropertyValueSet::appendBoolean( const ::rtl::OUString& rPropName,
+void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       sal_Bool bValue )
 {
     SETVALUE_IMPL( rPropName, BOOLEAN_VALUE_SET, bBoolean, bValue );
 }
 
 //=========================================================================
-void PropertyValueSet::appendLong( const ::rtl::OUString& rPropName,
+void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )
 {
     SETVALUE_IMPL( rPropName, LONG_VALUE_SET, nLong, nValue );
 }
 
 //=========================================================================
-void PropertyValueSet::appendTimestamp( const ::rtl::OUString& rPropName,
+void PropertyValueSet::appendTimestamp( const OUString& rPropName,
                                         const DateTime& rValue )
 {
     SETVALUE_IMPL( rPropName, TIMESTAMP_VALUE_SET, aTimestamp, rValue );
 }
 
 //=========================================================================
-void PropertyValueSet::appendObject( const ::rtl::OUString& rPropName,
+void PropertyValueSet::appendObject( const OUString& rPropName,
                                      const Any& rValue )
 {
     SETVALUE_IMPL( rPropName, OBJECT_VALUE_SET, aObject, rValue );
 }
 
 //=========================================================================
-void PropertyValueSet::appendVoid( const ::rtl::OUString& rPropName )
+void PropertyValueSet::appendVoid( const OUString& rPropName )
 {
     SETVALUE_IMPL( rPropName, NO_VALUE_SET, aObject, Any() );
 }

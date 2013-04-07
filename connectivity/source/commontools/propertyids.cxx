@@ -101,9 +101,9 @@ namespace dbtools
                     rtl_uString_release(aIter->second);
         }
         // ------------------------------------------------------------------------------
-        ::rtl::OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
+        OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
-            ::rtl::OUString sRet;
+            OUString sRet;
             ::std::map<sal_Int32 , rtl_uString*>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
             if(aIter == m_aPropertyMap.end())
                 sRet = const_cast<OPropertyMap*>(this)->fillValue(_nIndex);
@@ -112,7 +112,7 @@ namespace dbtools
             return sRet;
         }
         // ------------------------------------------------------------------------------
-        ::rtl::OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
+        OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
         {
             rtl_uString* pStr = NULL;
             switch(_nIndex)

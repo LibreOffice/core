@@ -88,8 +88,8 @@ sal_uInt16 WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 
 sal_Bool WildCard::Matches( const String& rString ) const
 {
-    rtl::OString aTmpWild = aWildString;
-    rtl::OString aString(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
+    OString aTmpWild = aWildString;
+    OString aString(OUStringToOString(rString, osl_getThreadTextEncoding()));
 
     sal_Int32 nSepPos;
 

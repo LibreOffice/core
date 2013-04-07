@@ -31,10 +31,10 @@
 
 namespace tools {
 
-bool getProcessWorkingDir(rtl::OUString &rUrl)
+bool getProcessWorkingDir(OUString &rUrl)
 {
-    rUrl = rtl::OUString();
-    rtl::OUString s("$OOO_CWD");
+    rUrl = OUString();
+    OUString s("$OOO_CWD");
     rtl::Bootstrap::expandMacros(s);
     if (s.isEmpty())
     {

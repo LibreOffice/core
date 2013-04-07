@@ -71,7 +71,7 @@ const sal_uInt8 OLE_STDFONT_STRIKE      = 0x08;
 /** Stores data about a StdFont font structure. */
 struct StdFontInfo
 {
-    ::rtl::OUString     maName;         ///< Font name.
+    OUString     maName;         ///< Font name.
     sal_uInt32          mnHeight;       ///< Font height (1/10,000 points).
     sal_uInt16          mnWeight;       ///< Font weight (normal/bold).
     sal_uInt16          mnCharSet;      ///< Font charset.
@@ -79,7 +79,7 @@ struct StdFontInfo
 
     explicit            StdFontInfo();
     explicit            StdFontInfo(
-                            const ::rtl::OUString& rName,
+                            const OUString& rName,
                             sal_uInt32 nHeight,
                             sal_uInt16 nWeight = OLE_STDFONT_NORMAL,
                             sal_uInt16 nCharSet = WINDOWS_CHARSET_ANSI,
@@ -91,10 +91,10 @@ struct StdFontInfo
 /** Stores data about a StdHlink hyperlink. */
 struct StdHlinkInfo
 {
-    ::rtl::OUString     maTarget;
-    ::rtl::OUString     maLocation;
-    ::rtl::OUString     maDisplay;
-    ::rtl::OUString     maFrame;
+    OUString     maTarget;
+    OUString     maLocation;
+    OUString     maDisplay;
+    OUString     maFrame;
 };
 
 // ============================================================================
@@ -121,7 +121,7 @@ public:
     /** Imports a GUID from the passed binary stream and returns its string
         representation (in uppercase characters).
      */
-    static ::rtl::OUString importGuid( BinaryInputStream& rInStrm );
+    static OUString importGuid( BinaryInputStream& rInStrm );
 
     /** Imports an OLE StdFont font structure from the current position of the
         passed binary stream.
@@ -163,10 +163,10 @@ protected:
 
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
-                                  const ::rtl::OUString& rGuidString );
+                                  const OUString& rGuidString );
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
-                                  const ::rtl::OUString& rGuidString,
+                                  const OUString& rGuidString,
                                   sal_Int32 nSize );
 public:
     MSConvertOCXControls( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
@@ -174,7 +174,7 @@ public:
     sal_Bool ReadOCXStorage( SotStorageRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp );
     sal_Bool ReadOCXCtlsStream(SotStorageStreamRef& rSrc1, ::com::sun::star::uno::Reference< com::sun::star::form::XFormComponent > & rxFormComp,
                                    sal_Int32 nPos, sal_Int32 nSize );
-    static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,rtl::OUString &rName);
+    static sal_Bool WriteOCXStream( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel, SotStorageRef &rSrc1, const com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > &rControlModel, const com::sun::star::awt::Size& rSize,OUString &rName);
 
 #ifdef SvxMSConvertOCXControlsRemoved
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > & GetShapes();

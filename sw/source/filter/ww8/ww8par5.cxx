@@ -349,7 +349,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         // needed if the filterflags say we will convert bookmarks
         // to SetExpFields! And this the exception!
 
-        rtl::OUString sHex("\\x");
+        OUString sHex("\\x");
         bool bSetAsHex;
         bool bAllowCr = SwFltGetFlag(nFieldFlags,
             SwFltControlStack::ALLOW_FLD_CR) ? true : false;
@@ -421,8 +421,8 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
 void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
 {
     rName = rOrg;
-    rName.SearchAndReplaceAllAscii( "\\\\", rtl::OUString( '\\' ));
-    rName.SearchAndReplaceAllAscii( "%20", rtl::OUString( ' ' ));
+    rName.SearchAndReplaceAllAscii( "\\\\", OUString( '\\' ));
+    rName.SearchAndReplaceAllAscii( "%20", OUString( ' ' ));
 
     // ggfs. anhaengende Anfuehrungszeichen entfernen
     if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))
@@ -575,10 +575,10 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 nL
     // #i36594#
     // Fix provided by mloiseleur@openoffice.org.
     // A default date can have already 4 year digits, in some case
-    const xub_StrLen pos = sParams.Search(rtl::OUString("YYYY"));
+    const xub_StrLen pos = sParams.Search(OUString("YYYY"));
     if ( pos == STRING_NOTFOUND )
     {
-        sParams.SearchAndReplace(rtl::OUString("YY"), rtl::OUString("YYYY"));
+        sParams.SearchAndReplace(OUString("YY"), OUString("YYYY"));
     }
     return sParams;
 }
@@ -622,7 +622,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
         }
 
         if (bHijri)
-            sParams.Insert(rtl::OUString("[~hijri]"), 0);
+            sParams.Insert(OUString("[~hijri]"), 0);
 
         sal_Int32 nCheckPos = 0;
         short nType = NUMBERFORMAT_DEFINED;
@@ -721,7 +721,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 *pPaM->GetPoint() = maFieldStack.back().maStartPos;
                 break;
             default:
-                rtl::OUString aCode = maFieldStack.back().GetBookmarkCode();
+                OUString aCode = maFieldStack.back().GetBookmarkCode();
                 if ( !aCode.isEmpty() )
                 {
                     // Unhandled field with stored code
@@ -740,23 +740,23 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     {
                         const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
                         pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
-                        rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
+                        OUString sFieldId = OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
                         pFieldmark->GetParameters()->insert(
-                                std::pair< rtl::OUString, uno::Any > (
+                                std::pair< OUString, uno::Any > (
                                     ODF_ID_PARAM,
                                     uno::makeAny( sFieldId ) ) );
                         pFieldmark->GetParameters()->insert(
-                                std::pair< rtl::OUString, uno::Any > (
+                                std::pair< OUString, uno::Any > (
                                     ODF_CODE_PARAM,
                                     uno::makeAny( aCode ) ) );
 
                         if ( maFieldStack.back().mnObjLocFc > 0 )
                         {
                             // Store the OLE object as an internal link
-                            String sOleId = rtl::OUString('_');
+                            String sOleId = OUString('_');
                             sOleId += OUString::number( maFieldStack.back().mnObjLocFc );
 
-                            SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
+                            SvStorageRef xSrc0 = pStg->OpenSotStorage(OUString(SL::aObjectPool));
                             SvStorageRef xSrc1 = xSrc0->OpenSotStorage( sOleId, STREAM_READ );
 
                             // Store it now!
@@ -782,8 +782,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
-                                    std::pair< rtl::OUString, uno::Any >(
-                                        ODF_OLE_PARAM, uno::makeAny( rtl::OUString( sOleId ) ) ) );
+                                    std::pair< OUString, uno::Any >(
+                                        ODF_OLE_PARAM, uno::makeAny( OUString( sOleId ) ) ) );
                         }
 
                     }
@@ -840,27 +840,27 @@ WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) throw()
     return *this;
 }
 
-::rtl::OUString WW8FieldEntry::GetBookmarkName()
+OUString WW8FieldEntry::GetBookmarkName()
 {
     return msBookmarkName;
 }
 
-::rtl::OUString WW8FieldEntry::GetBookmarkCode()
+OUString WW8FieldEntry::GetBookmarkCode()
 {
     return msMarkCode;
 }
 
-void WW8FieldEntry::SetBookmarkName(::rtl::OUString bookmarkName)
+void WW8FieldEntry::SetBookmarkName(OUString bookmarkName)
 {
     msBookmarkName=bookmarkName;
 }
 
-void WW8FieldEntry::SetBookmarkType(::rtl::OUString bookmarkType)
+void WW8FieldEntry::SetBookmarkType(OUString bookmarkType)
 {
     msMarkType=bookmarkType;
 }
 
-void WW8FieldEntry::SetBookmarkCode(::rtl::OUString bookmarkCode)
+void WW8FieldEntry::SetBookmarkCode(OUString bookmarkCode)
 {
     msMarkCode = bookmarkCode;
 }
@@ -1144,7 +1144,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 // Wenn keins dieser Sonderzeichen enthalten ist, wird 0 zurueckgeliefert.
 void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 {
-    rtl::OUString sHex("\\x");
+    OUString sHex("\\x");
     bool bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT )
                 || SwFltGetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
     sal_Unicode cChar;
@@ -1212,7 +1212,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
 
 void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const String& rTagText )
 {
-    String aName(rtl::OUString("WwFieldTag"));
+    String aName(OUString("WwFieldTag"));
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
         aName += OUString::number( nId );                    // ausgeben ?
 
@@ -1385,7 +1385,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     }
     else
     {
-        sName = rtl::OUString("WWSetBkmk");
+        sName = OUString("WWSetBkmk");
         nNo = pReffingStck->aFieldVarNames.size()+1;
         sName += OUString::number(nNo);
         nNo += pPlcxMan->GetBook()->GetIMax();
@@ -1506,7 +1506,7 @@ eF_ResT SwWW8ImplReader::Read_F_InputVar( WW8FieldDesc* pF, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, String& rStr )
 {
     if( !pNumFldType ){     // 1. Mal
-        SwSetExpFieldType aT( &rDoc, rtl::OUString("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
+        SwSetExpFieldType aT( &rDoc, OUString("AutoNr"), nsSwGetSetExpType::GSE_SEQ );
         pNumFldType = rDoc.InsertFldType( aT );
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pNumFldType, aEmptyStr,
@@ -1999,7 +1999,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
             NewAttr(aSz);
         }
 
-        rDoc.InsertString(*pPaM, rtl::OUString(cChar));
+        rDoc.InsertString(*pPaM, OUString(cChar));
 
         if (nSize > 0)
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_CHRATR_FONTSIZE);
@@ -2008,7 +2008,7 @@ eF_ResT SwWW8ImplReader::Read_F_Symbol( WW8FieldDesc*, String& rStr )
     }
     else
     {
-        rDoc.InsertString(*pPaM, rtl::OUString("###"));
+        rDoc.InsertString(*pPaM, OUString("###"));
     }
 
     return FLD_OK;
@@ -2217,10 +2217,10 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName("_REF");
+    OUString aBookmarkName("_REF");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(ODF_PAGEREF);
-    maFieldStack.back().AddParam(rtl::OUString(), sName);
+    maFieldStack.back().AddParam(OUString(), sName);
     return FLD_TEXT;
     }
 #endif
@@ -2262,7 +2262,7 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
                 aVText += aReadParam.GetResult();
                 if (bNewVText)
                 {
-                    bBracket = aVText.EqualsIgnoreCaseAscii(rtl::OUString('['), 1, 0)
+                    bBracket = aVText.EqualsIgnoreCaseAscii(OUString('['), 1, 0)
                         ? true : false;
                     bNewVText = false;
                 }
@@ -2313,7 +2313,7 @@ bool CanUseRemoteLink(const String &rGrfName)
         ::ucbhelper::Content aCnt(rGrfName,
             uno::Reference< ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
-        rtl::OUString   aTitle;
+        OUString   aTitle;
 
         aCnt.getPropertyValue("Title") >>= aTitle;
         bUseRemote = !aTitle.isEmpty();
@@ -2539,7 +2539,7 @@ void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
 {
     String sCombinedCharacters;
     if ((-2 == rReadParam.SkipToNextToken()) &&
-            rReadParam.GetResult().EqualsIgnoreCaseAscii(rtl::OUString('('), 1, 0))
+            rReadParam.GetResult().EqualsIgnoreCaseAscii(OUString('('), 1, 0))
     {
         for (int i=0;i<2;i++)
         {
@@ -2549,8 +2549,8 @@ void SwWW8ImplReader::Read_SubF_Combined( WW8ReadFieldParams& rReadParam)
                 if (-2 != rReadParam.SkipToNextToken())
                     break;
                 String sF = rReadParam.GetResult();
-                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii(rtl::OUString('p'), 1, 0))
-                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii(rtl::OUString('o'), 1, 0)))
+                if ((('u' == cChar) && sF.EqualsIgnoreCaseAscii(OUString('p'), 1, 0))
+                || (('d' == cChar) && sF.EqualsIgnoreCaseAscii(OUString('o'), 1, 0)))
                 {
                     if (-2 == rReadParam.SkipToNextToken())
                     {
@@ -2620,7 +2620,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
                 if ('u' == nRet)
                 {
                     if (-2 == rReadParam.SkipToNextToken() &&
-                      (rReadParam.GetResult().EqualsIgnoreCaseAscii(rtl::OUString('p'), 1, 0)))
+                      (rReadParam.GetResult().EqualsIgnoreCaseAscii(OUString('p'), 1, 0)))
                     {
                         if (-2 == rReadParam.SkipToNextToken())
                         {
@@ -2924,7 +2924,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName("_TOC");
+    OUString aBookmarkName("_TOC");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(ODF_TOC);
     return FLD_TEXT;
@@ -3297,7 +3297,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                                         if ( aIt != aPattern.end() )
                                         {
                                             SwFormToken aNumberEntrySeparator( TOKEN_TEXT );
-                                            aNumberEntrySeparator.sText = rtl::OUString(" ");
+                                            aNumberEntrySeparator.sText = OUString(" ");
                                             aPattern.insert( ++aIt, aNumberEntrySeparator );
                                             pForm->SetPattern( nStyleLevel, aPattern );
                                         }
@@ -3447,7 +3447,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
 {
 #if defined(WW_NATIVE_TOC)
     if (1) {
-    ::rtl::OUString aBookmarkName("_HYPERLINK");
+    OUString aBookmarkName("_HYPERLINK");
     maFieldStack.back().SetBookmarkName(aBookmarkName);
     maFieldStack.back().SetBookmarkType(ODF_HYPERLINK);
     return FLD_TEXT;

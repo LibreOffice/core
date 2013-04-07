@@ -56,7 +56,7 @@ class SwLayoutTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwLayoutTest();
 
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -71,13 +71,13 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
-    ::rtl::OUString m_aBaseString;
+    OUString m_aBaseString;
 };
 
-void SwLayoutTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void SwLayoutTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    rtl::OUString aSep("/");
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
+    OUString aSep("/");
+    OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
@@ -85,9 +85,9 @@ void SwLayoutTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
 
 void SwLayoutTest::test()
 {
-    rtl::OUString aFilePath;
-    rtl::OUString aFileBase("test.");
-    rtl::OUString aExtension("odt");
+    OUString aFilePath;
+    OUString aFileBase("test.");
+    OUString aExtension("odt");
     createFileURL(aFileBase, aExtension, aFilePath);
     uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFilePath, "com.sun.star.text.TextDocument");
     CPPUNIT_ASSERT(xComponent.is());
@@ -106,7 +106,7 @@ void SwLayoutTest::setUp()
     // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xWriterComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
+        getMultiServiceFactory()->createInstance(OUString(
         "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );

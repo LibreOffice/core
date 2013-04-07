@@ -106,7 +106,7 @@ IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)
 void SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxFloatingWindow::FillInfo(rInfo);
-    rInfo.aWinState = rtl::OString();
+    rInfo.aWinState = OString();
     rInfo.bVisible = sal_False;
 }
 
@@ -170,7 +170,7 @@ public:
     virtual void mailDelivered(::rtl::Reference<MailDispatcher> xMailDispatcher,
                 uno::Reference< mail::XMailMessage> xMailMessage);
     virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher,
-                uno::Reference< mail::XMailMessage> xMailMessage, const rtl::OUString& sErrorMessage);
+                uno::Reference< mail::XMailMessage> xMailMessage, const OUString& sErrorMessage);
 
     static void DeleteAttachments( uno::Reference< mail::XMailMessage >& xMessage );
 };
@@ -211,7 +211,7 @@ void SwMailDispatcherListener_Impl::mailDelivered(
 void SwMailDispatcherListener_Impl::mailDeliveryError(
                 ::rtl::Reference<MailDispatcher> /*xMailDispatcher*/,
                 uno::Reference< mail::XMailMessage> xMailMessage,
-                const rtl::OUString& sErrorMessage)
+                const OUString& sErrorMessage)
 {
     SolarMutexGuard aGuard;
     m_pSendMailDialog->DocumentSent( xMailMessage, false, &sErrorMessage );
@@ -229,8 +229,8 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
             uno::Reference< beans::XPropertySet > xTransferableProperties( aAttachments[nFile].Data, uno::UNO_QUERY_THROW);
             if( xTransferableProperties.is() )
             {
-                ::rtl::OUString sURL;
-                xTransferableProperties->getPropertyValue( ::rtl::OUString("URL") ) >>= sURL;
+                OUString sURL;
+                xTransferableProperties->getPropertyValue( OUString("URL") ) >>= sURL;
                 if(!sURL.isEmpty())
                     SWUnoHelper::UCB_DeleteFile( sURL );
             }
@@ -635,7 +635,7 @@ void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
 
 void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessage,
                                         bool bResult,
-                                        const ::rtl::OUString* pError )
+                                        const OUString* pError )
 {
     //sending should stop on send errors
     if(pError &&

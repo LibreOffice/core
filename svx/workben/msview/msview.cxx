@@ -63,7 +63,6 @@
 
 #include "xmlconfig.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 
@@ -649,7 +648,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* p
 
         char buffer[1024];
 
-        rtl::OUString aText;
+        OUString aText;
         AtomConfig* pAtomConfig = dynamic_cast< AtomConfig*>( gAtomConfigMap[rHeader.nRecType].get() );
 
         if( pAtomConfig )
@@ -658,11 +657,11 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* p
         if( !aText.getLength() )
         {
             sprintf( buffer, "unknown_0x%04x", rHeader.nRecType );
-            aText += rtl::OUString::createFromAscii( buffer );
+            aText += OUString::createFromAscii( buffer );
         }
 
         sprintf( buffer, " (I: %lu L: %lu)", (UINT32)rHeader.nRecVer, (UINT32)rHeader.nRecLen );
-        aText += String( rtl::OUString::createFromAscii( buffer ) );
+        aText += String( OUString::createFromAscii( buffer ) );
 
         SvTreeListEntry* pEntry = 0;
         if( pAtom->isContainer() && pAtom->findFirstChildAtom() )
@@ -713,13 +712,13 @@ extern void load_config( const OUString& rPath );
 class PPTDocument
 {
 public:
-    PPTDocument( const rtl::OUString& rFilePath );
+    PPTDocument( const OUString& rFilePath );
     ~PPTDocument();
 
     Atom* getRootAtom() const;
 
 private:
-    void Load( const rtl::OUString& rFilePath );
+    void Load( const OUString& rFilePath );
 
     Atom* mpAtom;
     SvStream* mpDocStream;
@@ -728,7 +727,7 @@ private:
 
 typedef boost::shared_ptr< PPTDocument > PPTDocumentPtr;
 
-PPTDocument::PPTDocument(const rtl::OUString& rFilePath)
+PPTDocument::PPTDocument(const OUString& rFilePath)
 : mpAtom(0), mpDocStream(0)
 {
     Load( rFilePath );
@@ -740,7 +739,7 @@ PPTDocument::~PPTDocument()
     delete mpDocStream;
 }
 
-void PPTDocument::Load( const rtl::OUString& rFilePath )
+void PPTDocument::Load( const OUString& rFilePath )
 {
     maStorage = new SotStorage( rFilePath, STREAM_STD_READ );
     if( !maStorage->GetError() )
@@ -924,7 +923,7 @@ static String GetAtomText( const Atom* pAtom )
         (UINT32)rHeader.nRecInstance,
         (UINT32)rHeader.nImpVerInst,
         (UINT32)rHeader.nRecLen );
-        aText = rtl::OUString::createFromAscii( buffer );
+        aText = OUString::createFromAscii( buffer );
         if( pAtom->isContainer() )
         {
 
@@ -1130,12 +1129,12 @@ void MSViewerWorkWindow::Resize()
 
         if( argc >= 2 )
         {
-            const rtl::OUString aFile1( rtl::OUString::createFromAscii(argv[1]) );
+            const OUString aFile1( OUString::createFromAscii(argv[1]) );
             PPTDocumentPtr pDocument1( new PPTDocument(  aFile1 ) );
 
             if( argc == 3 )
             {
-                const rtl::OUString aFile2( rtl::OUString::createFromAscii(argv[2]) );
+                const OUString aFile2( OUString::createFromAscii(argv[2]) );
 
                 PPTDocumentPtr pDocument2;
                 pDocument2.reset( new PPTDocument( aFile2 ) );

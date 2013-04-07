@@ -49,7 +49,7 @@ using namespace com::sun::star::task;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const rtl::OString& rFrame )
+DetailsContainer::DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame )
 {
     pBuilder->get( m_pFrame, rFrame );
 }
@@ -87,7 +87,7 @@ IMPL_LINK( DetailsContainer, ValueChangeHdl, void *, EMPTYARG )
     return 0;
 }
 
-HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, rtl::OUString sScheme ) :
+HostDetailsContainer::HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, OUString sScheme ) :
     DetailsContainer( pBuilder, "HostDetails" ),
     m_nDefaultPort( nPort ),
     m_sScheme( sScheme )
@@ -113,16 +113,16 @@ void HostDetailsContainer::show( bool bShow )
 
 INetURLObject HostDetailsContainer::getUrl( )
 {
-    rtl::OUString sHost = rtl::OUString( m_pEDHost->GetText() ).trim( );
+    OUString sHost = OUString( m_pEDHost->GetText() ).trim( );
     sal_Int64 nPort = m_pEDPort->GetValue();
-    rtl::OUString sPath = rtl::OUString( m_pEDPath->GetText() ).trim( );
+    OUString sPath = OUString( m_pEDPath->GetText() ).trim( );
 
-    rtl::OUString sUrl;
+    OUString sUrl;
     if ( !sHost.isEmpty( ) )
     {
         sUrl = m_sScheme + "://" + sHost;
         if ( nPort != m_nDefaultPort )
-            sUrl += ":" + rtl::OUString::valueOf( nPort );
+            sUrl += ":" + OUString::valueOf( nPort );
         if ( !sPath.isEmpty( ) )
             if ( sPath.indexOf( '/' ) != 0 )
                 sUrl += "/";
@@ -146,7 +146,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
-bool HostDetailsContainer::verifyScheme( const rtl::OUString& sScheme )
+bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
 {
     return sScheme.equals( m_sScheme + "://" );
 }
@@ -170,7 +170,7 @@ void DavDetailsContainer::show( bool bShow )
         m_pCBDavs->Check( false );
 }
 
-bool DavDetailsContainer::verifyScheme( const rtl::OUString& rScheme )
+bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
 {
     bool bValid = false;
     if ( rScheme.equals( "http://" ) )
@@ -195,7 +195,7 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
     else if ( m_pEDPort->GetValue() == 443 && bCheckedDavs == sal_False )
         m_pEDPort->SetValue( 80 );
 
-    rtl::OUString sScheme( "http" );
+    OUString sScheme( "http" );
     if ( bCheckedDavs )
         sScheme = "https";
     setScheme( sScheme );
@@ -222,11 +222,11 @@ SmbDetailsContainer::SmbDetailsContainer( VclBuilderContainer* pBuilder ) :
 
 INetURLObject SmbDetailsContainer::getUrl( )
 {
-    rtl::OUString sHost = rtl::OUString( m_pEDHost->GetText() ).trim( );
-    rtl::OUString sShare = rtl::OUString( m_pEDShare->GetText() ).trim( );
-    rtl::OUString sPath = rtl::OUString(  m_pEDPath->GetText() ).trim( );
+    OUString sHost = OUString( m_pEDHost->GetText() ).trim( );
+    OUString sShare = OUString( m_pEDShare->GetText() ).trim( );
+    OUString sPath = OUString(  m_pEDPath->GetText() ).trim( );
 
-    rtl::OUString sUrl;
+    OUString sUrl;
     if ( !sHost.isEmpty( ) )
     {
         sUrl = "smb://" + sHost + "/";
@@ -247,9 +247,9 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        rtl::OUString sShare = rUrl.getName( 0 );
-        rtl::OUString sFullPath = rUrl.GetURLPath( );
-        rtl::OUString sPath;
+        OUString sShare = rUrl.getName( 0 );
+        OUString sFullPath = rUrl.GetURLPath( );
+        OUString sPath;
         if ( sFullPath.getLength( ) > sShare.getLength( ) )
         {
             sal_Int32 nPos = sShare.getLength( );
@@ -297,8 +297,8 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     show( false );
 
     // Load the ServerType entries
-    Sequence< ::rtl::OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
-    Sequence< ::rtl::OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
+    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
+    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
         m_pLBServerType->InsertEntry( aTypesNamesList[i] );
@@ -308,13 +308,13 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
 
 INetURLObject CmisDetailsContainer::getUrl( )
 {
-    rtl::OUString sBindingUrl = rtl::OUString( m_pEDBinding->GetText() ).trim( );
-    rtl::OUString sPath = rtl::OUString( m_pEDPath->GetText() ).trim( );
+    OUString sBindingUrl = OUString( m_pEDBinding->GetText() ).trim( );
+    OUString sPath = OUString( m_pEDPath->GetText() ).trim( );
 
-    rtl::OUString sUrl;
+    OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) && !m_sRepoId.isEmpty() )
     {
-        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+        OUString sEncodedBinding = rtl::Uri::encode(
                 sBindingUrl + "#" + m_sRepoId,
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
@@ -332,10 +332,10 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 
     if ( bSuccess )
     {
-        rtl::OUString sBindingUrl;
-        rtl::OUString sRepositoryId;
+        OUString sBindingUrl;
+        OUString sRepositoryId;
 
-        rtl::OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sDecodedHost = rUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
         INetURLObject aHostUrl( sDecodedHost );
         sBindingUrl = aHostUrl.GetURLNoMark( );
         sRepositoryId = aHostUrl.GetMark( );
@@ -346,9 +346,9 @@ bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
-void CmisDetailsContainer::setUsername( const rtl::OUString& rUsername )
+void CmisDetailsContainer::setUsername( const OUString& rUsername )
 {
-    m_sUsername = rtl::OUString( rUsername );
+    m_sUsername = OUString( rUsername );
 }
 
 void CmisDetailsContainer::selectRepository( )
@@ -370,17 +370,17 @@ IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
 
 IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 {
-    rtl::OUString sBindingUrl = rtl::OUString( m_pEDBinding->GetText() ).trim( );
+    OUString sBindingUrl = OUString( m_pEDBinding->GetText() ).trim( );
 
     // Clean the listbox
     m_pLBRepository->Clear( );
     m_aRepoIds.clear( );
 
     // Compute the URL
-    rtl::OUString sUrl;
+    OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) )
     {
-        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+        OUString sEncodedBinding = rtl::Uri::encode(
                 sBindingUrl,
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
@@ -390,8 +390,8 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 
     // Get the Content
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
-    Sequence< rtl::OUString > aProps( 1 );
-    aProps[0] = rtl::OUString( "Title" );
+    Sequence< OUString > aProps( 1 );
+    aProps[0] = OUString( "Title" );
 
     try
     {
@@ -399,14 +399,14 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
         Reference< XContentAccess > xAccess( xResultSet, UNO_QUERY_THROW );
         while ( xResultSet->next() )
         {
-            rtl::OUString sURL = xAccess->queryContentIdentifierString( );
+            OUString sURL = xAccess->queryContentIdentifierString( );
             INetURLObject aURL( sURL );
-            rtl::OUString sId = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+            OUString sId = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
             sId = sId.copy( 1 );
             m_aRepoIds.push_back( sId );
 
             Reference< XRow > xRow( xResultSet, UNO_QUERY );
-            rtl::OUString sName = xRow->getString( 1 );
+            OUString sName = xRow->getString( 1 );
             m_pLBRepository->InsertEntry( sName );
         }
     }

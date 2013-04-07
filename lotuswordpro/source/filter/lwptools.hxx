@@ -106,7 +106,7 @@ public:
 
     static sal_Bool isFileUrl(const OString& fileName);
     static OUString convertToFileUrl(const OString& fileName);
-    static rtl::OUString    DateTimeToOUString(LtTm& dt);
+    static OUString    DateTimeToOUString(LtTm& dt);
 
     static XFDateStyle* GetSystemDateStyle(sal_Bool bLongFormat);
     static XFTimeStyle* GetSystemTimeStyle();

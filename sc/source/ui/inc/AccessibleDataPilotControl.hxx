@@ -92,7 +92,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -106,12 +106,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 

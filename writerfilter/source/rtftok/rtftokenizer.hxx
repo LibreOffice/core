@@ -54,7 +54,7 @@ namespace writerfilter {
             private:
                 SvStream& Strm();
                 int resolveKeyword();
-                int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+                int dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
 
                 RTFDocumentImpl& m_rImport;
                 SvStream* m_pInStream;

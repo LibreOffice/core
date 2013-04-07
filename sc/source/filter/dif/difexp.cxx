@@ -60,8 +60,8 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         rOut.SetStreamCharSet( eCharSet );
 
     sal_Unicode cStrDelim('"');
-    rtl::OString aStrDelimEncoded;    // only used if not Unicode
-    rtl::OUString aStrDelimDecoded;     // only used if context encoding
+    OString aStrDelimEncoded;    // only used if not Unicode
+    OUString aStrDelimDecoded;     // only used if context encoding
     bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
@@ -70,7 +70,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     }
     else
     {
-        aStrDelimEncoded = rtl::OString(&cStrDelim, 1, eCharSet);
+        aStrDelimEncoded = OString(&cStrDelim, 1, eCharSet);
         rtl_TextEncodingInfo aInfo;
         aInfo.StructSize = sizeof(aInfo);
         if ( rtl_getTextEncodingInfo( eCharSet, &aInfo ) )
@@ -79,7 +79,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 (((aInfo.Flags & RTL_TEXTENCODING_INFO_CONTEXT) != 0) ||
                  ((aInfo.Flags & RTL_TEXTENCODING_INFO_ASCII) == 0));
             if ( bContextOrNotAsciiEncoding )
-                aStrDelimDecoded = rtl::OStringToOUString(aStrDelimEncoded, eCharSet);
+                aStrDelimDecoded = OStringToOUString(aStrDelimEncoded, eCharSet);
         }
         else
             bContextOrNotAsciiEncoding = false;
@@ -93,8 +93,8 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
 
     FltError            eRet = eERR_OK;
-    rtl::OUStringBuffer aOS;
-    rtl::OUString       aString;
+    OUStringBuffer aOS;
+    OUString       aString;
     SCCOL               nEndCol = rRange.aEnd.Col();
     SCROW               nEndRow = rRange.aEnd.Row();
     SCCOL               nNumCols = nEndCol - rRange.aStart.Col() + 1;
@@ -243,14 +243,14 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 else if ( bContextOrNotAsciiEncoding )
                 {
                     // to byte encoding
-                    rtl::OString aStrEnc = rtl::OUStringToOString(aTmpStr, eCharSet);
+                    OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
                     // back to Unicode
-                    rtl::OUString aStrDec = rtl::OStringToOUString(aStrEnc, eCharSet);
+                    OUString aStrDec = OStringToOUString(aStrEnc, eCharSet);
                     // search on re-decoded string
                     sal_Int32 nPos = aStrDec.indexOf(aStrDelimDecoded);
                     while (nPos >= 0)
                     {
-                        rtl::OUStringBuffer aBuf(aStrDec);
+                        OUStringBuffer aBuf(aStrDec);
                         aBuf.insert(nPos, aStrDelimDecoded);
                         aStrDec = aBuf.makeStringAndClear();
                         nPos = aStrDec.indexOf(
@@ -263,12 +263,12 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 }
                 else
                 {
-                    rtl::OString aStrEnc = rtl::OUStringToOString(aTmpStr, eCharSet);
+                    OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
                     // search on encoded string
                     sal_Int32 nPos = aStrEnc.indexOf(aStrDelimEncoded);
                     while (nPos >= 0)
                     {
-                        rtl::OStringBuffer aBuf(aStrEnc);
+                        OStringBuffer aBuf(aStrEnc);
                         aBuf.insert(nPos, aStrDelimEncoded);
                         aStrEnc = aBuf.makeStringAndClear();
                         nPos = aStrEnc.indexOf(

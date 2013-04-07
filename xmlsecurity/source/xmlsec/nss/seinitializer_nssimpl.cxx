@@ -57,8 +57,6 @@ namespace cssl = css::lang;
 namespace cssxc = css::xml::crypto;
 
 using namespace com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OString;
 
 #define SE_SERVICE_NAME "com.sun.star.xml.crypto.SEInitializer"
 #define IMPLEMENTATION_NAME "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl"
@@ -76,7 +74,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 
 /* XSEInitializer */
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
-    SEInitializer_NssImpl::createSecurityContext( const ::rtl::OUString& )
+    SEInitializer_NssImpl::createSecurityContext( const OUString& )
     throw (uno::RuntimeException)
 {
     CERTCertDBHandle    *pCertHandle = NULL ;
@@ -89,12 +87,12 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     try
     {
         /* Build XML Security Context */
-        const rtl::OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
+        const OUString sSecyrutyContext ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_CONTEXT ) );
         uno::Reference< cssxc::XXMLSecurityContext > xSecCtx( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyContext, m_xContext), uno::UNO_QUERY );
         if( !xSecCtx.is() )
             return NULL;
 
-        const rtl::OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
+        const OUString sSecyrutyEnvironment ( RTL_CONSTASCII_USTRINGPARAM( SECURITY_ENVIRONMENT ) );
         uno::Reference< cssxc::XSecurityEnvironment > xSecEnv( m_xContext->getServiceManager()->createInstanceWithContext(sSecyrutyEnvironment, m_xContext), uno::UNO_QUERY );
         uno::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , uno::UNO_QUERY ) ;
         if( !xEnvTunnel.is() )
@@ -129,26 +127,26 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
     //NSS_Shutdown();
 }
 
-rtl::OUString SEInitializer_NssImpl_getImplementationName ()
+OUString SEInitializer_NssImpl_getImplementationName ()
     throw (uno::RuntimeException)
 {
 
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SEInitializer_NssImpl_supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
 {
     return ( ServiceName == SE_SERVICE_NAME || ServiceName == NSS_SERVICE_NAME );
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
-    uno::Sequence < rtl::OUString > aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SE_SERVICE_NAME ) );
-    pArray[1] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
+    uno::Sequence < OUString > aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SE_SERVICE_NAME ) );
+    pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( NSS_SERVICE_NAME ) );
     return aRet;
 }
 
@@ -159,17 +157,17 @@ uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance(
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
+OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
     throw (uno::RuntimeException)
 {
     return SEInitializer_NssImpl_getImplementationName();
 }
-sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
     return SEInitializer_NssImpl_supportsService( rServiceName );
 }
-uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
     throw (uno::RuntimeException)
 {
     return SEInitializer_NssImpl_getSupportedServiceNames();

@@ -41,7 +41,7 @@ class Selection
 public: //methods
     bool hasSelection();
 
-    rtl::OUString getSelectedCID();
+    OUString getSelectedCID();
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape > getSelectedAdditionalShape();
     ObjectIdentifier getSelectedOID() const;
@@ -54,7 +54,7 @@ public: //methods
     bool isAdditionalShapeSelected() const;
 
     //returns true if selection has changed
-    bool setSelection( const ::rtl::OUString& rCID );
+    bool setSelection( const OUString& rCID );
     bool setSelection( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape );
 
@@ -87,7 +87,7 @@ class SelectionHelper : public MarkHandleProvider
 {
 public:
     static bool             findNamedParent( SdrObject*& pInOutObject
-                                , rtl::OUString& rOutName
+                                , OUString& rOutName
                                 , bool bGivenObjectMayBeResult );
     static bool             findNamedParent( SdrObject*& pInOutObject
                                 , ObjectIdentifier& rOutObject
@@ -95,15 +95,15 @@ public:
     static SdrObject*       getMarkHandlesObject( SdrObject* pObj );
     static E3dScene*        getSceneToRotate( SdrObject* pObj );
     static bool             isDragableObjectHitTwice( const Point& rMPos
-                                , const rtl::OUString& rNameOfSelectedObject
+                                , const OUString& rNameOfSelectedObject
                                 , const DrawViewWrapper& rDrawViewWrapper );
 
-    static ::rtl::OUString getHitObjectCID(
+    static OUString getHitObjectCID(
         const Point& rMPos,
         DrawViewWrapper& rDrawViewWrapper,
         bool bGetDiagramInsteadOf_Wall=false );
 
-    static bool isRotateableObject( const ::rtl::OUString& rCID
+    static bool isRotateableObject( const OUString& rCID
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::frame::XModel >& xChartModel );
 

@@ -88,8 +88,6 @@ protected:
 };
 #endif
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 #if (defined UNX)
 int main( int argc, char * argv[] )

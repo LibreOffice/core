@@ -74,8 +74,8 @@ namespace frm
         inline ::comphelper::OPropertyArrayAggregationHelper& getInfoHelper() const;
 
         // XPropertyContainer equivalent
-        void addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const ::com::sun::star::uno::Any& _rInitialValue );
-        void removeProperty( const ::rtl::OUString& _rName );
+        void addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const ::com::sun::star::uno::Any& _rInitialValue );
+        void removeProperty( const OUString& _rName );
 
         // XPropertyAccess equivalent
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues();
@@ -86,7 +86,7 @@ namespace frm
         inline bool convertDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::com::sun::star::uno::Any& _out_rConvertedValue, ::com::sun::star::uno::Any& _out_rCurrentValue ) const;
         inline void setDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue );
         inline void getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const;
-        inline bool hasDynamicPropertyByName( const ::rtl::OUString& _rName ) const;
+        inline bool hasDynamicPropertyByName( const OUString& _rName ) const;
         inline bool hasDynamicPropertyByHandle( sal_Int32 _nHandle ) const;
 
     private:
@@ -106,7 +106,7 @@ namespace frm
                 the name of the property to find a handle for. If possible, the handle as determined by
                 our ConcreteInfoService instance will be used
         */
-        sal_Int32   impl_findFreeHandle( const ::rtl::OUString& _rPropertyName );
+        sal_Int32   impl_findFreeHandle( const OUString& _rPropertyName );
     };
 
     //--------------------------------------------------------------------
@@ -140,7 +140,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    inline bool PropertyBagHelper::hasDynamicPropertyByName( const ::rtl::OUString& _rName ) const
+    inline bool PropertyBagHelper::hasDynamicPropertyByName( const OUString& _rName ) const
     {
         return m_aDynamicProperties.hasPropertyByName( _rName );
     }

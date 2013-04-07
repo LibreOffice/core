@@ -749,9 +749,9 @@ namespace cppcanvas
                     EMFP_DEBUG(
                         mfStream.Seek(0);
                         static int emfp_debug_stream_number = 0;
-                        rtl::OUString emfp_debug_filename("/tmp/emf-embedded-stream");
-                        emfp_debug_filename += rtl::OUString::valueOf(emfp_debug_stream_number++);
-                        emfp_debug_filename += rtl::OUString(".emf");
+                        OUString emfp_debug_filename("/tmp/emf-embedded-stream");
+                        emfp_debug_filename += OUString::valueOf(emfp_debug_stream_number++);
+                        emfp_debug_filename += OUString(".emf");
 
                         SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
 
@@ -769,7 +769,7 @@ namespace cppcanvas
             float emSize;
             sal_uInt32 sizeUnit;
             sal_Int32 fontFlags;
-            rtl::OUString family;
+            OUString family;
 
             void Read (SvMemoryStream &s)
             {
@@ -790,8 +790,8 @@ namespace cppcanvas
                     for( sal_uInt32 i = 0; i < length; i++ )
                         s >> chars[ i ];
 
-                    family = ::rtl::OUString( chars, length );
-                    EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
+                    family = OUString( chars, length );
+                    EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
                 }
             }
         };
@@ -965,7 +965,7 @@ namespace cppcanvas
                     aTexture.Alpha = 1.0;
 
                     basegfx::ODFGradientInfo aGradInfo;
-                    rtl::OUString aGradientService;
+                    OUString aGradientService;
 
                     const uno::Sequence< double > aStartColor(
                             ::vcl::unotools::colorToDoubleSequence( brush->solidColor,
@@ -1632,7 +1632,7 @@ namespace cppcanvas
 
                                 EMFP_DEBUG (printf ("EMF+ DrawString layoutRect: %f,%f - %fx%f\n", lx, ly, lw, lh));
 
-                                rtl::OUString text = read_uInt16s_ToOUString(rMF, stringLength);
+                                OUString text = read_uInt16s_ToOUString(rMF, stringLength);
 
                                 double cellSize = setFont (flags & 0xff, rFactoryParms, rState);
                                 SET_TEXT_COLOR( brushId );
@@ -1858,7 +1858,7 @@ namespace cppcanvas
                             float *charsPosX = new float[glyphsCount];
                             float *charsPosY = new float[glyphsCount];
 
-                            rtl::OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
+                            OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
                             for( sal_uInt32 i=0; i<glyphsCount; i++) {
                                 rMF >> charsPosX[i] >> charsPosY[i];

@@ -38,10 +38,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringHash;
-using ::rtl::OStringBuffer;
 
 
 namespace pdfparse
@@ -350,7 +346,7 @@ PDFNumber::~PDFNumber()
 
 bool PDFNumber::emit( EmitContext& rWriteContext ) const
 {
-    rtl::OStringBuffer aBuf( 32 );
+    OStringBuffer aBuf( 32 );
     aBuf.append( ' ' );
 
     double fValue = m_fValue;
@@ -998,7 +994,7 @@ bool PDFTrailer::emit( EmitContext& rWriteContext ) const
         return false;
     if( ! rWriteContext.write( "startxref\n", 10 ) )
         return false;
-    rtl::OString aOffset( rtl::OString::valueOf( sal_Int32(nXRefPos) ) );
+    OString aOffset( OString::valueOf( sal_Int32(nXRefPos) ) );
     if( ! rWriteContext.write( aOffset.getStr(), aOffset.getLength() ) )
         return false;
     return rWriteContext.write( "\n%%EOF\n", 7 );
@@ -1277,9 +1273,9 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
     return bValid;
 }
 
-rtl::OUString PDFFile::getDecryptionKey() const
+OUString PDFFile::getDecryptionKey() const
 {
-    rtl::OUStringBuffer aBuf( ENCRYPTION_KEY_LEN * 2 );
+    OUStringBuffer aBuf( ENCRYPTION_KEY_LEN * 2 );
     if( impl_getData()->m_bIsEncrypted )
     {
         for( sal_uInt32 i = 0; i < m_pData->m_nKeyLength; i++ )

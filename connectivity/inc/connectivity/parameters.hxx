@@ -95,7 +95,7 @@ namespace dbtools
             }
         };
 
-        typedef ::std::map< ::rtl::OUString, ParameterMetaData >    ParameterInformation;
+        typedef ::std::map< OUString, ParameterMetaData >    ParameterInformation;
 
     private:
         ::osl::Mutex&                       m_rMutex;
@@ -122,11 +122,11 @@ namespace dbtools
 
         ParameterInformation                m_aParameterInformation;
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aMasterFields;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aDetailFields;
+        ::com::sun::star::uno::Sequence< OUString >  m_aMasterFields;
+        ::com::sun::star::uno::Sequence< OUString >  m_aDetailFields;
 
-        ::rtl::OUString                     m_sIdentifierQuoteString;
-        ::rtl::OUString                     m_sSpecialCharacters;
+        OUString                     m_sIdentifierQuoteString;
+        OUString                     m_sSpecialCharacters;
 
         ::std::vector< bool >               m_aParametersVisited;
 
@@ -220,7 +220,7 @@ namespace dbtools
 
         // XParameters equivalents
         void setNull            ( sal_Int32 _nIndex, sal_Int32 sqlType);
-        void setObjectNull      ( sal_Int32 _nIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName);
+        void setObjectNull      ( sal_Int32 _nIndex, sal_Int32 sqlType, const OUString& typeName);
         void setBoolean         ( sal_Int32 _nIndex, sal_Bool x);
         void setByte            ( sal_Int32 _nIndex, sal_Int8 x);
         void setShort           ( sal_Int32 _nIndex, sal_Int16 x);
@@ -228,7 +228,7 @@ namespace dbtools
         void setLong            ( sal_Int32 _nIndex, sal_Int64 x);
         void setFloat           ( sal_Int32 _nIndex, float x);
         void setDouble          ( sal_Int32 _nIndex, double x);
-        void setString          ( sal_Int32 _nIndex, const ::rtl::OUString& x);
+        void setString          ( sal_Int32 _nIndex, const OUString& x);
         void setBytes           ( sal_Int32 _nIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x);
         void setDate            ( sal_Int32 _nIndex, const ::com::sun::star::util::Date& x);
         void setTime            ( sal_Int32 _nIndex, const ::com::sun::star::util::Time& x);
@@ -249,11 +249,11 @@ namespace dbtools
 
         /** creates a filter expression from a master-detail link where the detail denotes a column name
         */
-        ::rtl::OUString
+        OUString
                 createFilterConditionFromColumnLink(
-                    const ::rtl::OUString& /* [in]  */ _rMasterColumn,
-                    const ::rtl::OUString& /* [in]  */ _rDetailColumn,
-                          ::rtl::OUString& /* [out] */ _rNewParamName
+                    const OUString& /* [in]  */ _rMasterColumn,
+                    const OUString& /* [in]  */ _rDetailColumn,
+                          OUString& /* [out] */ _rNewParamName
                 );
 
         /** initializes our query composer, and the collection of inner parameter columns
@@ -315,7 +315,7 @@ namespace dbtools
         void    classifyLinks(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentColumns,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
-                    ::std::vector< ::rtl::OUString >& _out_rAdditionalFilterComponents
+                    ::std::vector< OUString >& _out_rAdditionalFilterComponents
                 )   SAL_THROW(( ::com::sun::star::uno::Exception ));
 
         /** finalizes our <member>m_pOuterParameters</member> so that it can be used for

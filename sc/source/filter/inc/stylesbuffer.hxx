@@ -152,7 +152,7 @@ private:
 /** Contains all XML font attributes, e.g. from a font or rPr element. */
 struct FontModel
 {
-    ::rtl::OUString     maName;             /// Font name.
+    OUString     maName;             /// Font name.
     Color               maColor;            /// Font color.
     sal_Int32           mnScheme;           /// Major/minor scheme font.
     sal_Int32           mnFamily;           /// Font family.
@@ -209,7 +209,7 @@ struct ApiFontUsedFlags
 /** Contains API font name, family, and charset for a script type. */
 struct ApiScriptFontName
 {
-    ::rtl::OUString     maName;             /// Font name.
+    OUString     maName;             /// Font name.
     sal_Int16           mnFamily;           /// Font family.
     sal_Int16           mnTextEnc;          /// Font text encoding.
 
@@ -786,7 +786,7 @@ typedef ::boost::shared_ptr< Dxf > DxfRef;
 /** Contains attributes of a cell style, e.g. from the cellStyle element. */
 struct CellStyleModel
 {
-    ::rtl::OUString     maName;             /// Cell style name.
+    OUString     maName;             /// Cell style name.
     sal_Int32           mnXfId;             /// Formatting for this cell style.
     sal_Int32           mnBuiltinId;        /// Identifier for builtin styles.
     sal_Int32           mnLevel;            /// Level for builtin column/row styles.
@@ -818,16 +818,16 @@ public:
     void                createCellStyle();
     /** Stores tha passed final style name and creates the cell style, if it is
         user-defined or modified built-in. */
-    void                finalizeImport( const ::rtl::OUString& rFinalName );
+    void                finalizeImport( const OUString& rFinalName );
 
     /** Returns the cell style model structure. */
     inline const CellStyleModel& getModel() const { return maModel; }
     /** Returns the final style name used in the document. */
-    inline const ::rtl::OUString& getFinalStyleName() const { return maFinalName; }
+    inline const OUString& getFinalStyleName() const { return maFinalName; }
     inline ::ScStyleSheet* getStyleSheet() { return mpStyleSheet; }
 private:
     CellStyleModel      maModel;
-    ::rtl::OUString     maFinalName;        /// Final style name used in API.
+    OUString     maFinalName;        /// Final style name used in API.
     bool                mbCreated;          /// True = style sheet created.
     ::ScStyleSheet*     mpStyleSheet;       /// Calc cell style sheet.
 
@@ -853,16 +853,16 @@ public:
     /** Returns the XF identifier associated to the default cell style. */
     sal_Int32           getDefaultXfId() const;
     /** Returns the default style sheet for unused cells. */
-    ::rtl::OUString     getDefaultStyleName() const;
+    OUString     getDefaultStyleName() const;
     /** Creates the style sheet described by the style XF with the passed identifier. */
-    ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+    OUString     createCellStyle( sal_Int32 nXfId ) const;
     ::ScStyleSheet*     getCellStyleSheet( sal_Int32 nXfId ) const;
 
 private:
     /** Inserts the passed cell style object into the internal maps. */
     void                insertCellStyle( CellStyleRef xCellStyle );
     /** Creates the style sheet described by the passed cell style object. */
-    ::rtl::OUString     createCellStyle( const CellStyleRef& rxCellStyle ) const;
+    OUString     createCellStyle( const CellStyleRef& rxCellStyle ) const;
     ::ScStyleSheet*     getCellStyleSheet( const CellStyleRef& rxCellStyle ) const;
 
 private:
@@ -901,7 +901,7 @@ public:
         @param opnFontId  (out-param) The identifier of the new font object. */
     FontRef             createFont( sal_Int32* opnFontId = 0 );
     /** Creates a number format. */
-    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const ::rtl::OUString& rFmtCode );
+    NumberFormatRef     createNumFmt( sal_Int32 nNumFmtId, const OUString& rFmtCode );
     sal_Int32           nextFreeNumFmtId();
     /** Creates a new empty border object.
         @param opnBorderId  (out-param) The identifier of the new border object. */
@@ -960,12 +960,12 @@ public:
     bool                equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const;
 
     /** Returns the default style sheet for unused cells. */
-    ::rtl::OUString     getDefaultStyleName() const;
+    OUString     getDefaultStyleName() const;
     /** Creates the style sheet described by the style XF with the passed identifier. */
-    ::rtl::OUString     createCellStyle( sal_Int32 nXfId ) const;
+    OUString     createCellStyle( sal_Int32 nXfId ) const;
     ::ScStyleSheet*     getCellStyleSheet( sal_Int32 nXfId ) const;
     /** Creates the style sheet described by the DXF with the passed identifier. */
-    ::rtl::OUString     createDxfStyle( sal_Int32 nDxfId ) const;
+    OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs = false ) const;
     /** Writes the font attributes of the specified font data to the passed property map. */
@@ -993,7 +993,7 @@ private:
     typedef RefVector< Fill >                           FillVector;
     typedef RefVector< Xf >                             XfVector;
     typedef RefVector< Dxf >                            DxfVector;
-    typedef ::std::map< sal_Int32, ::rtl::OUString >    DxfStyleMap;
+    typedef ::std::map< sal_Int32, OUString >    DxfStyleMap;
 
     ColorPalette        maPalette;          /// Color palette.
     FontVector          maFonts;            /// List of font objects.

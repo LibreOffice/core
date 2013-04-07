@@ -53,7 +53,7 @@ InterceptionHelper::~InterceptionHelper()
 }
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryDispatch(const css::util::URL&  aURL            ,
-                                                                                        const ::rtl::OUString& sTargetFrameName,
+                                                                                        const OUString& sTargetFrameName,
                                                                                               sal_Int32        nSearchFlags    )
     throw(css::uno::RuntimeException)
 {
@@ -127,7 +127,7 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
     else
     {
         aInfo.lURLPattern.realloc(1);
-        aInfo.lURLPattern[0] = ::rtl::OUString("*");
+        aInfo.lURLPattern[0] = OUString("*");
     }
 
     // SAFE {

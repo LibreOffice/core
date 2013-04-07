@@ -182,7 +182,7 @@ sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
             if ( m_pParent->GetMode() != RPTUI_READONLY )
             {
                 uno::Sequence<beans::PropertyValue> aArgs(1);
-                aArgs[0].Name = ::rtl::OUString("ShowProperties");
+                aArgs[0].Name = OUString("ShowProperties");
                 aArgs[0].Value <<= sal_True;
                 m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
                 m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);

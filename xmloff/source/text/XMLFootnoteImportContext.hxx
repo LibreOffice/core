@@ -41,7 +41,7 @@ class XMLTextImportHelper;
 /// import footnote elements (<text:footnote>)
 class XMLFootnoteImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sPropertyReferenceId;
+    const OUString sPropertyReferenceId;
 
     /// old document cursor
     ::com::sun::star::uno::Reference<
@@ -65,7 +65,7 @@ public:
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
 protected:
 
@@ -74,13 +74,13 @@ protected:
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
     virtual void Characters(
-        const ::rtl::OUString& rChars);
+        const OUString& rChars);
 
     virtual void EndElement();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 

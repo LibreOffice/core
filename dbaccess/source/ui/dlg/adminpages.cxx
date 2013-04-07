@@ -78,7 +78,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const rtl::OString& _rId, const rtl::OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
+    OGenericAdministrationPage::OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet)
         :SfxTabPage(_pParent, _rId, _rUIXMLDescription, _rAttrSet)
         ,m_abEnableRoadmap(sal_False)
         ,m_pAdminDialog(NULL)
@@ -147,7 +147,7 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn,OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;

@@ -304,14 +304,14 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aP
     {
         if (bNegtive)
         {
-            aPrefix = rtl::OUString("(");
+            aPrefix = OUString("(");
         }
         if (!bPost)
         {
             aPrefix += aSymbol;
             if (bShowSpace)
             {
-                aPrefix += rtl::OUString(" ");
+                aPrefix += OUString(" ");
             }
         }
     }
@@ -322,14 +322,14 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, String& aP
             aSuffix = aSymbol;
             if (bShowSpace)
             {
-                aSuffix.Insert(rtl::OUString(" "),0);
+                aSuffix.Insert(OUString(" "),0);
             }
 
         }
 
         if (bNegtive)
         {
-            aSuffix += rtl::OUString(")");
+            aSuffix += OUString(")");
         }
     }
 }
@@ -421,11 +421,11 @@ XFStyle* LwpNumericFormat::Convert()
         {
             if (cNegative.IsDefaultPrefix() && aNegPrefix.Len() == 0)
             {
-                aNegPrefix = rtl::OUString("(");
+                aNegPrefix = OUString("(");
             }
             if (cNegative.IsDefaultSuffix() && aNegSuffix.Len() == 0)
             {
-                aNegSuffix = rtl::OUString(")");
+                aNegSuffix = OUString(")");
             }
         }
 

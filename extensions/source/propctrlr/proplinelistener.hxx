@@ -31,8 +31,8 @@ namespace pcr
     class IPropertyLineListener
     {
     public:
-        virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary ) = 0;
-        virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
+        virtual void    Clicked(    const OUString& _rName, sal_Bool _bPrimary ) = 0;
+        virtual void    Commit(     const OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
 
     protected:
         ~IPropertyLineListener() {}

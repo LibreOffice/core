@@ -34,41 +34,41 @@ namespace ucbhelper { class Content; }
 
 namespace utl { namespace UCBContentHelper {
 
-UNOTOOLS_DLLPUBLIC bool IsDocument(rtl::OUString const & url);
+UNOTOOLS_DLLPUBLIC bool IsDocument(OUString const & url);
 
-UNOTOOLS_DLLPUBLIC bool IsFolder(rtl::OUString const & url);
+UNOTOOLS_DLLPUBLIC bool IsFolder(OUString const & url);
 
 /// @param title must not be null
 /// @return true iff title has been set (i.e., if obtaining the "Title" property
 ///     of the given content yields a non-void value without raising a
 ///     non-RuntimeException; RuntimeExceptions are passed through)
 UNOTOOLS_DLLPUBLIC bool GetTitle(
-    rtl::OUString const & url, rtl::OUString * title);
+    OUString const & url, OUString * title);
 
-UNOTOOLS_DLLPUBLIC bool Kill(rtl::OUString const & url);
+UNOTOOLS_DLLPUBLIC bool Kill(OUString const & url);
 
 UNOTOOLS_DLLPUBLIC com::sun::star::uno::Any GetProperty(
-    rtl::OUString const & url, rtl::OUString const & property);
+    OUString const & url, OUString const & property);
 
 UNOTOOLS_DLLPUBLIC bool MakeFolder(
-    ucbhelper::Content & parent, rtl::OUString const & title,
+    ucbhelper::Content & parent, OUString const & title,
     ucbhelper::Content & result, bool exclusive = false);
 
 /// @return the value of the "Size" property of the given content, or zero if
 ///     obtaining the property yields a void value or raises a
 ///     non-RuntimeException (RuntimeExceptions are passed through)
-UNOTOOLS_DLLPUBLIC sal_Int64 GetSize(rtl::OUString const & url);
+UNOTOOLS_DLLPUBLIC sal_Int64 GetSize(OUString const & url);
 
 UNOTOOLS_DLLPUBLIC bool IsYounger(
-    rtl::OUString const & younger, rtl::OUString const & older);
+    OUString const & younger, OUString const & older);
 
-UNOTOOLS_DLLPUBLIC bool Exists(rtl::OUString const & url);
+UNOTOOLS_DLLPUBLIC bool Exists(OUString const & url);
 
 UNOTOOLS_DLLPUBLIC bool IsSubPath(
-    rtl::OUString const & parent, rtl::OUString const & child);
+    OUString const & parent, OUString const & child);
 
 UNOTOOLS_DLLPUBLIC bool EqualURLs(
-    rtl::OUString const & url1, rtl::OUString const & url2);
+    OUString const & url1, OUString const & url2);
 
 } }
 

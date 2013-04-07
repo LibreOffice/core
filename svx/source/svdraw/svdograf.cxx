@@ -91,7 +91,7 @@ const Graphic ImpLoadLinkedGraphic( const String aFileName, const String aFilter
         // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
         // But this link is required by some filters to access the native graphic (PDF export/MS export),
         // there we should create a new service to provide this data if needed
-        aFilterData[ 0 ].Name = rtl::OUString( "CreateNativeLink" );
+        aFilterData[ 0 ].Name = OUString( "CreateNativeLink" );
         aFilterData[ 0 ].Value = Any( true );
         rGF.ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
     }
@@ -620,7 +620,7 @@ void SdrGrafObj::ImpLinkAbmeldung()
     }
 }
 
-void SdrGrafObj::SetGraphicLink(const rtl::OUString& rFileName, const String& rFilterName)
+void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const String& rFilterName)
 {
     ImpLinkAbmeldung();
     aFileName = rFileName;
@@ -635,8 +635,8 @@ void SdrGrafObj::SetGraphicLink(const rtl::OUString& rFileName, const String& rF
 void SdrGrafObj::ReleaseGraphicLink()
 {
     ImpLinkAbmeldung();
-    aFileName = rtl::OUString();
-    aFilterName = rtl::OUString();
+    aFileName = OUString();
+    aFilterName = OUString();
 }
 
 bool SdrGrafObj::IsLinkedGraphic() const
@@ -644,12 +644,12 @@ bool SdrGrafObj::IsLinkedGraphic() const
     return !aFileName.isEmpty();
 }
 
-const rtl::OUString& SdrGrafObj::GetFileName() const
+const OUString& SdrGrafObj::GetFileName() const
 {
     return aFileName;
 }
 
-const rtl::OUString& SdrGrafObj::GetFilterName() const
+const OUString& SdrGrafObj::GetFilterName() const
 {
     return aFilterName;
 }

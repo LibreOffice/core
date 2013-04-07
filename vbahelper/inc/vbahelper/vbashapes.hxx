@@ -39,21 +39,21 @@ private:
     void initBaseCollection();
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     virtual css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
-    css::uno::Reference< css::drawing::XShape > createShape( rtl::OUString service ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::drawing::XShape > createShape( OUString service ) throw (css::uno::RuntimeException);
     css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, css::uno::Any aRange ) throw (css::uno::RuntimeException);
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, css::uno::Any aRange ) throw (css::uno::RuntimeException);
     css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
-    rtl::OUString createName( rtl::OUString sName );
+    OUString createName( OUString sName );
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
 
 public:
     ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess > xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
     static void setDefaultShapeProperties( css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);
-    static void setShape_NameProperty( css::uno::Reference< css::drawing::XShape > xShape, rtl::OUString sName );
+    static void setShape_NameProperty( css::uno::Reference< css::drawing::XShape > xShape, OUString sName );
     //XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);

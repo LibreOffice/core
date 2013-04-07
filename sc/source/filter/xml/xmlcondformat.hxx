@@ -43,12 +43,12 @@ class ScXMLConditionalFormatsContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName );
+                        const OUString& rLName );
 
     virtual ~ScXMLConditionalFormatsContext() {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -61,14 +61,14 @@ class ScXMLConditionalFormatContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLConditionalFormatContext() {}
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -87,13 +87,13 @@ private:
 
 public:
     ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, ScConditionalFormat* pFormat);
+                        const OUString& rLName, ScConditionalFormat* pFormat);
 
     virtual ~ScXMLColorScaleFormatContext() {}
 
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 private:
@@ -107,7 +107,7 @@ class ScXMLDataBarFormatContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
@@ -116,7 +116,7 @@ public:
 
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 private:
@@ -135,7 +135,7 @@ class ScXMLIconSetFormatContext : public SvXMLImportContext
 public:
 
     ScXMLIconSetFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
@@ -144,7 +144,7 @@ public:
 
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
@@ -155,7 +155,7 @@ class ScXMLColorScaleFormatEntryContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat);
@@ -172,7 +172,7 @@ class ScXMLFormattingEntryContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pData);
@@ -186,7 +186,7 @@ class ScXMLCondContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);
@@ -200,7 +200,7 @@ class ScXMLDateContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat);

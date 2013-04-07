@@ -69,9 +69,9 @@ namespace sfx2
     public:
         SfxModelFactory(
             const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const ::rtl::OUString& _rImplementationName,
+            const OUString& _rImplementationName,
             const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< ::rtl::OUString >& _rServiceNames
+            const Sequence< OUString >& _rServiceNames
         );
 
         // XSingleServiceFactory
@@ -79,9 +79,9 @@ namespace sfx2
         virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     protected:
         virtual ~SfxModelFactory();
@@ -91,8 +91,8 @@ namespace sfx2
 
     private:
         const Reference< XMultiServiceFactory >     m_xServiceFactory;
-        const ::rtl::OUString                       m_sImplementationName;
-        const Sequence< ::rtl::OUString >           m_aServiceNames;
+        const OUString                       m_sImplementationName;
+        const Sequence< OUString >           m_aServiceNames;
         const SfxModelFactoryFunc                   m_pComponentFactoryFunc;
     };
 
@@ -101,8 +101,8 @@ namespace sfx2
     //====================================================================
     //--------------------------------------------------------------------
     SfxModelFactory::SfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const ::rtl::OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< ::rtl::OUString >& _rServiceNames )
+            const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
+            const Sequence< OUString >& _rServiceNames )
         :m_xServiceFactory( _rxServiceFactory )
         ,m_sImplementationName( _rImplementationName )
         ,m_aServiceNames( _rServiceNames )
@@ -132,7 +132,7 @@ namespace sfx2
     {
         struct IsSpecialArgument : public ::std::unary_function< Any, bool >
         {
-            static bool isSpecialArgumentName( const ::rtl::OUString& _rValueName )
+            static bool isSpecialArgumentName( const OUString& _rValueName )
             {
                 return  _rValueName == "EmbeddedObject" || _rValueName == "EmbeddedScriptSupport" || _rValueName == "DocumentRecoverySupport";
             }
@@ -189,13 +189,13 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL SfxModelFactory::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL SfxModelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return m_sImplementationName;
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL SfxModelFactory::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL SfxModelFactory::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
         return ::std::find(
             m_aServiceNames.getConstArray(),
@@ -205,15 +205,15 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL SfxModelFactory::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL SfxModelFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return m_aServiceNames;
     }
 
     //--------------------------------------------------------------------
     Reference< XSingleServiceFactory > createSfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
-            const ::rtl::OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const Sequence< ::rtl::OUString >& _rServiceNames )
+            const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
+            const Sequence< OUString >& _rServiceNames )
     {
         return new SfxModelFactory( _rxServiceFactory, _rImplementationName, _pComponentFactoryFunc, _rServiceNames );
     }

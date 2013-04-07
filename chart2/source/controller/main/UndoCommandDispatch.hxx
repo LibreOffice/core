@@ -59,7 +59,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void fireStatusEvent(
-        const ::rtl::OUString & rURL,
+        const OUString & rURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
 
 private:

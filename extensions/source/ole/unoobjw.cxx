@@ -65,7 +65,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-using ::rtl::OUString;
 
 #ifndef _MSC_VER
 extern "C" const GUID IID_IDispatchEx;

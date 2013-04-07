@@ -76,7 +76,7 @@ private:
 
 class ScPrintCfg : public ScPrintOptions, public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
             ScPrintCfg();
@@ -84,7 +84,7 @@ public:
     void            SetOptions( const ScPrintOptions& rNew );
 
     virtual void    Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

@@ -53,7 +53,7 @@ public:
                 ::com::sun::star::drawing::XShapes >& xFinalTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-        , const rtl::OUString& rCID
+        , const OUString& rCID
                 ) throw (::com::sun::star::uno::RuntimeException );
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
@@ -72,7 +72,7 @@ protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroupShape( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , ::rtl::OUString rName=::rtl::OUString() );
+                , OUString rName=OUString() );
 
 protected: //member
     ::com::sun::star::uno::Reference<
@@ -82,7 +82,7 @@ protected: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
     ShapeFactory*                                                       m_pShapeFactory;
-    rtl::OUString   m_aCID;
+    OUString   m_aCID;
 
     sal_Int32                                           m_nDimension;
     // needs to be created and deleted by the derived class

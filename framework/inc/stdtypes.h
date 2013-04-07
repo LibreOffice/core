@@ -86,23 +86,23 @@ struct KeyEventEqualsFunc
     It implements some additional funtionality which can be useful but
     is missing at the normal vector implementation.
 */
-class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
+class OUStringList : public ::comphelper::SequenceAsVector< OUString >
 {
     public:
 
         // insert given element as the first one into the vector
-        void push_front( const ::rtl::OUString& sElement )
+        void push_front( const OUString& sElement )
         {
             insert( begin(), sElement );
         }
 
         // search for given element
-        iterator find( const ::rtl::OUString& sElement )
+        iterator find( const OUString& sElement )
         {
             return ::std::find(begin(), end(), sElement);
         }
 
-        const_iterator findConst( const ::rtl::OUString& sElement ) const
+        const_iterator findConst( const OUString& sElement ) const
         {
             return ::std::find(begin(), end(), sElement);
         }
@@ -121,7 +121,7 @@ class OUStringList : public ::comphelper::SequenceAsVector< ::rtl::OUString >
     It implements some additional funtionality which can be useful but
     is missing at the normal std implementation.
 */
-typedef ::std::queue< ::rtl::OUString > OUStringQueue;
+typedef ::std::queue< OUString > OUStringQueue;
 
 //_________________________________________________________________________________________________________________
 
@@ -131,10 +131,10 @@ typedef ::std::queue< ::rtl::OUString > OUStringQueue;
     is missing at the normal hash implementation.
 */
 template< class TType >
-class BaseHash : public ::boost::unordered_map< ::rtl::OUString                    ,
+class BaseHash : public ::boost::unordered_map< OUString                    ,
                                          TType                              ,
-                                         rtl::OUStringHash                  ,
-                                         ::std::equal_to< ::rtl::OUString > >
+                                         OUStringHash                  ,
+                                         ::std::equal_to< OUString > >
 {
     public:
 
@@ -151,7 +151,7 @@ class BaseHash : public ::boost::unordered_map< ::rtl::OUString                 
     Basic OUString hash.
     Key and values are OUStrings.
 */
-typedef BaseHash< ::rtl::OUString > OUStringHashMap;
+typedef BaseHash< OUString > OUStringHashMap;
 
 //_________________________________________________________________________________________________________________
 
@@ -169,9 +169,9 @@ typedef BaseHash< sal_Int32 > NameToHandleHash;
     and we need it at different positions ...
     So it's better to declare it one times only!
 */
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString                    ,
-                                                        rtl::OUStringHash,
-                                                        ::std::equal_to< ::rtl::OUString > >    ListenerHash;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString                    ,
+                                                        OUStringHash,
+                                                        ::std::equal_to< OUString > >    ListenerHash;
 
 }       // namespace framework
 

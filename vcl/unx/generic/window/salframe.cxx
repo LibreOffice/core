@@ -1951,7 +1951,7 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
     }
 }
 
-void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
+void X11SalFrame::SetApplicationID( const OUString &rWMClass )
 {
     if( rWMClass != m_sWMClass && ! IsChildWindow() )
     {
@@ -1966,10 +1966,10 @@ void X11SalFrame::SetApplicationID( const rtl::OUString &rWMClass )
 void X11SalFrame::updateWMClass()
 {
     XClassHint* pClass = XAllocClassHint();
-    rtl::OString aResName = SalGenericSystem::getFrameResName( mnExtStyle );
+    OString aResName = SalGenericSystem::getFrameResName( mnExtStyle );
     pClass->res_name  = const_cast<char*>(aResName.getStr());
 
-    rtl::OString aResClass = rtl::OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
+    OString aResClass = OUStringToOString(m_sWMClass, RTL_TEXTENCODING_ASCII_US);
     const char *pResClass = !aResClass.isEmpty() ? aResClass.getStr() :
                             SalGenericSystem::getFrameClassName();
 
@@ -2305,7 +2305,7 @@ sal_Bool X11SalFrame::PostEvent( void *pData )
 
 // Title
 
-void X11SalFrame::SetTitle( const rtl::OUString& rTitle )
+void X11SalFrame::SetTitle( const OUString& rTitle )
 {
     if( ! ( IsChildWindow() || (nStyle_ & SAL_FRAME_STYLE_FLOAT ) ) )
     {
@@ -2377,7 +2377,7 @@ void X11SalFrame::EndExtTextInput( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
+OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
     return GetDisplay()->GetKeyName( nKeyCode );
 }
@@ -2882,13 +2882,13 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 
 void X11SalFrame::beginUnicodeSequence()
 {
-    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
+    OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     DeletionListener aDeleteWatch( this );
 
     if( !rSeq.isEmpty() )
         endUnicodeSequence();
 
-    rSeq = rtl::OUString( "u" );
+    rSeq = OUString( "u" );
 
     if( ! aDeleteWatch.isDeleted() )
     {
@@ -2909,7 +2909,7 @@ void X11SalFrame::beginUnicodeSequence()
 bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 {
     bool bRet = false;
-    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
+    OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
     if( !rSeq.isEmpty() )
     {
         // range check
@@ -2917,7 +2917,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             (c >= sal_Unicode('a') && c <= sal_Unicode('f')) ||
             (c >= sal_Unicode('A') && c <= sal_Unicode('F')) )
         {
-            rtl::OUStringBuffer aBuf( rSeq.getLength() + 1 );
+            OUStringBuffer aBuf( rSeq.getLength() + 1 );
             aBuf.append( rSeq );
             aBuf.append( c );
             rSeq = aBuf.makeStringAndClear();
@@ -2945,20 +2945,20 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
 
 bool X11SalFrame::endUnicodeSequence()
 {
-    rtl::OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
+    OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
 
     DeletionListener aDeleteWatch( this );
     if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )
     {
         // cut the "u"
-        rtl::OUString aNumbers( rSeq.copy( 1 ) );
+        OUString aNumbers( rSeq.copy( 1 ) );
         sal_Int32 nValue = aNumbers.toInt32( 16 );
         if( nValue >= 32 )
         {
             sal_uInt16 nTextAttr = EXTTEXTINPUT_ATTR_UNDERLINE;
             SalExtTextInputEvent aEv;
             aEv.mnTime          = 0;
-            aEv.maText          = rtl::OUString( sal_Unicode(nValue) );
+            aEv.maText          = OUString( sal_Unicode(nValue) );
             aEv.mpTextAttr      = &nTextAttr;
             aEv.mnCursorPos     = 0;
             aEv.mnDeltaStart    = 0;
@@ -2968,7 +2968,7 @@ bool X11SalFrame::endUnicodeSequence()
         }
     }
     bool bWasInput = !rSeq.isEmpty();
-    rSeq = rtl::OUString();
+    rSeq = OUString();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
         CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);
     return bWasInput;

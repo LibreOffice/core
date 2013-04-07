@@ -510,7 +510,7 @@ void ScInputWindow::Select()
             if ( pScMod->IsEditMode() )         // nicht, wenn z.B. geschuetzt
             {
                 aTextWindow.StartEditEngine();
-                aTextWindow.SetTextString(rtl::OUString('='));
+                aTextWindow.SetTextString(OUString('='));
 
                 EditView* pView = aTextWindow.GetEditView();
                 if (pView)
@@ -1088,7 +1088,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xPropSet.is() )
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
             aValue >>= xLayoutManager;
         }
 
@@ -1998,8 +1998,8 @@ void ScTextWnd::ImplInitSettings()
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
-        rtl::OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
-        rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::EditLine);
+        OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
+        OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), ScAccessibleEditObject::EditLine);
 }
 
 void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
@@ -2047,7 +2047,7 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
     nTipVisible ( 0 ),
     bFormulaMode( false )
 {
-    Size aSize( GetTextWidth( rtl::OUString("GW99999:GW99999") ),
+    Size aSize( GetTextWidth( OUString("GW99999:GW99999") ),
                 GetTextHeight() );
     aSize.Width() += 25;    // ??
     aSize.Height() = CalcWindowSizePixel(11);       // Funktionen: 10 MRU + "andere..."
@@ -2093,12 +2093,12 @@ void ScPosWnd::SetPos( const String& rPosStr )
 
 namespace {
 
-rtl::OUString createLocalRangeName(const rtl::OUString& rName, const rtl::OUString& rTableName)
+OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
 {
-    rtl::OUStringBuffer aString (rName);
-    aString.append(rtl::OUString(" ("));
+    OUStringBuffer aString (rName);
+    aString.append(OUString(" ("));
     aString.append(rTableName);
-    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aString.append(OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
     return aString.makeStringAndClear();
 }
 
@@ -2117,7 +2117,7 @@ void ScPosWnd::FillRangeNames()
         SetSeparatorPos(0);
 
         ScRange aDummy;
-        std::set<rtl::OUString> aSet;
+        std::set<OUString> aSet;
         ScRangeName* pRangeNames = pDoc->GetRangeName();
         if (!pRangeNames->empty())
         {
@@ -2133,7 +2133,7 @@ void ScPosWnd::FillRangeNames()
             ScRangeName* pLocalRangeName = pDoc->GetRangeName(i);
             if (pLocalRangeName && !pLocalRangeName->empty())
             {
-                rtl::OUString aTableName;
+                OUString aTableName;
                 pDoc->GetName(i, aTableName);
                 for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
                 {
@@ -2145,7 +2145,7 @@ void ScPosWnd::FillRangeNames()
 
         if (!aSet.empty())
         {
-            for (std::set<rtl::OUString>::iterator itr = aSet.begin();
+            for (std::set<OUString>::iterator itr = aSet.begin();
                     itr != aSet.end(); ++itr)
             {
                 InsertEntry(*itr);

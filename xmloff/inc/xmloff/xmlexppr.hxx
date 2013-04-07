@@ -49,7 +49,7 @@ class XMLOFF_DLLPUBLIC SvXMLExportPropertyMapper : public UniRefBase
 protected:
     UniReference< XMLPropertySetMapper > maPropMapper;
 
-    rtl::OUString maStyleName;
+    OUString maStyleName;
 
     /** Filter all properties we don't want to export:
         Take all properties of the XPropertySet which are also found in the
@@ -181,7 +181,7 @@ public:
     inline const UniReference< XMLPropertySetMapper >&
         getPropertySetMapper() const { return maPropMapper; }
 
-    void SetStyleName( const rtl::OUString& rStyleName ) { maStyleName = rStyleName; }
+    void SetStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
 };
 
 #endif  //  _XMLOFF_XMLEXPPR_HXX

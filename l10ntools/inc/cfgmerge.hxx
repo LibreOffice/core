@@ -28,7 +28,7 @@
 #include "boost/unordered_map.hpp"
 #include "po.hxx"
 
-typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash> OStringHashMap;
+typedef boost::unordered_map<OString, OString, OStringHash> OStringHashMap;
 
 
 //
@@ -41,22 +41,22 @@ friend class CfgParser;
 friend class CfgExport;
 friend class CfgMerge;
 private:
-    rtl::OString sTagType;
-    rtl::OString sIdentifier;
+    OString sTagType;
+    OString sIdentifier;
 
-    rtl::OString sResTyp;
+    OString sResTyp;
 
-    rtl::OString sTextTag;
-    rtl::OString sEndTextTag;
+    OString sTextTag;
+    OString sEndTextTag;
 
     OStringHashMap sText;
 public:
-    CfgStackData(const rtl::OString &rTag, const rtl::OString &rId)
+    CfgStackData(const OString &rTag, const OString &rId)
         : sTagType( rTag ), sIdentifier( rId )
     {}
 
-    const rtl::OString &GetTagType() { return sTagType; }
-    const rtl::OString &GetIdentifier() { return sIdentifier; }
+    const OString &GetTagType() { return sTagType; }
+    const OString &GetIdentifier() { return sIdentifier; }
 
 };
 
@@ -75,7 +75,7 @@ public:
     CfgStack() {}
     ~CfgStack();
 
-    CfgStackData *Push(const rtl::OString &rTag, const rtl::OString &rId);
+    CfgStackData *Push(const OString &rTag, const OString &rId);
     CfgStackData *Pop()
     {
         if (maList.empty())
@@ -87,7 +87,7 @@ public:
 
     CfgStackData *GetStackData();
 
-    rtl::OString GetAccessPath( size_t nPos );
+    OString GetAccessPath( size_t nPos );
 
     size_t size() const { return maList.size(); }
 };
@@ -99,11 +99,11 @@ public:
 class CfgParser
 {
 protected:
-    rtl::OString sCurrentResTyp;
-    rtl::OString sCurrentIsoLang;
-    rtl::OString sCurrentText;
+    OString sCurrentResTyp;
+    OString sCurrentIsoLang;
+    OString sCurrentText;
 
-    rtl::OString sLastWhitespace;
+    OString sLastWhitespace;
 
     CfgStack aStack;
     CfgStackData *pStackData;
@@ -111,24 +111,24 @@ protected:
     sal_Bool bLocalize;
 
     virtual void WorkOnText(
-        rtl::OString &rText,
-        const rtl::OString &rLangIndex )=0;
+        OString &rText,
+        const OString &rLangIndex )=0;
 
     virtual void WorkOnResourceEnd()=0;
 
-    virtual void Output(const rtl::OString & rOutput)=0;
+    virtual void Output(const OString & rOutput)=0;
 
-    void Error(const rtl::OString &rError);
+    void Error(const OString &rError);
 
 private:
     int ExecuteAnalyzedToken( int nToken, char *pToken );
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
     void AddText(
-        rtl::OString &rText,
-        const rtl::OString &rIsoLang,
-        const rtl::OString &rResTyp );
+        OString &rText,
+        const OString &rIsoLang,
+        const OString &rResTyp );
 
-    sal_Bool IsTokenClosed(const rtl::OString &rToken);
+    sal_Bool IsTokenClosed(const OString &rToken);
 
 public:
     CfgParser();
@@ -144,19 +144,19 @@ public:
 class CfgExport : public CfgParser
 {
 private:
-    rtl::OString sPath;
-    std::vector<rtl::OString> aLanguages;
+    OString sPath;
+    std::vector<OString> aLanguages;
 
     PoOfstream pOutputStream;
 
 protected:
     virtual void WorkOnText(
-        rtl::OString &rText,
-        const rtl::OString &rIsoLang
+        OString &rText,
+        const OString &rIsoLang
         );
 
     void WorkOnResourceEnd();
-    void Output(const rtl::OString& rOutput);
+    void Output(const OString& rOutput);
 public:
     CfgExport(
         const OString &rOutputFile,
@@ -174,20 +174,20 @@ class CfgMerge : public CfgParser
 {
 private:
     MergeDataFile *pMergeDataFile;
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
     ResData *pResData;
 
-    rtl::OString sFilename;
+    OString sFilename;
     sal_Bool bEnglish;
 
     std::ofstream pOutputStream;
 
 protected:
-    virtual void WorkOnText(rtl::OString &rText, const rtl::OString &rLangIndex);
+    virtual void WorkOnText(OString &rText, const OString &rLangIndex);
 
     void WorkOnResourceEnd();
 
-    void Output(const rtl::OString& rOutput);
+    void Output(const OString& rOutput);
 public:
     CfgMerge(
         const OString &rMergeSource, const OString &rOutputFile,

@@ -41,23 +41,23 @@ namespace comphelper
 
     namespace log { namespace convert
     {
-        inline const ::rtl::OUString& convertLogArgToString( const ::rtl::OUString& _rValue )
+        inline const OUString& convertLogArgToString( const OUString& _rValue )
         {
             return _rValue;
         }
 
-        inline ::rtl::OUString convertLogArgToString( const sal_Char* _pAsciiValue )
+        inline OUString convertLogArgToString( const sal_Char* _pAsciiValue )
         {
-            return ::rtl::OUString::createFromAscii( _pAsciiValue );
+            return OUString::createFromAscii( _pAsciiValue );
         }
 
-        inline ::rtl::OUString convertLogArgToString( double      _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
-        inline ::rtl::OUString convertLogArgToString( float       _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
-        inline ::rtl::OUString convertLogArgToString( sal_Int64   _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
-        inline ::rtl::OUString convertLogArgToString( sal_Int32   _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
-        inline ::rtl::OUString convertLogArgToString( sal_Int16   _nValue ) { return ::rtl::OUString::valueOf( (sal_Int32)_nValue ); }
-        inline ::rtl::OUString convertLogArgToString( sal_Unicode _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
-        inline ::rtl::OUString convertLogArgToString( sal_Bool    _nValue ) { return ::rtl::OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( double      _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( float       _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int64   _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int32   _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( sal_Int16   _nValue ) { return OUString::valueOf( (sal_Int32)_nValue ); }
+        inline OUString convertLogArgToString( sal_Unicode _nValue ) { return OUString::valueOf( _nValue ); }
+        inline OUString convertLogArgToString( sal_Bool    _nValue ) { return OUString::valueOf( _nValue ); }
 
     } } // namespace log::convert
 
@@ -65,7 +65,7 @@ namespace comphelper
     //= EventLogger
     //====================================================================
     class EventLogger_Impl;
-    typedef ::boost::optional< ::rtl::OUString >    OptionalString;
+    typedef ::boost::optional< OUString >    OptionalString;
 
     /** encapsulates an <type scope="com::sun::star::logging">XLogger</type>
 
@@ -120,7 +120,7 @@ namespace comphelper
         //- string messages
 
         /// logs a given message, without any arguments, or source class/method names
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage );
@@ -135,7 +135,7 @@ namespace comphelper
             is searched in the message string, and replaced with the argument string.
         */
         template< typename ARGTYPE1 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -145,7 +145,7 @@ namespace comphelper
 
         /// logs a given message, replacing 2 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -156,7 +156,7 @@ namespace comphelper
 
         /// logs a given message, replacing 3 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -168,7 +168,7 @@ namespace comphelper
 
         /// logs a given message, replacing 4 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -181,7 +181,7 @@ namespace comphelper
 
         /// logs a given message, replacing 5 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -195,7 +195,7 @@ namespace comphelper
 
         /// logs a given message, replacing 6 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5, typename ARGTYPE6 >
-        bool        log( const sal_Int32 _nLogLevel, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
+        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, NULL, NULL, _rMessage,
@@ -216,7 +216,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ) );
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ) );
             return false;
         }
 
@@ -231,7 +231,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ) );
             return false;
         }
@@ -241,7 +241,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ) );
             return false;
@@ -252,7 +252,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ) );
@@ -264,7 +264,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -277,7 +277,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -291,7 +291,7 @@ namespace comphelper
         bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, ::rtl::OUString::createFromAscii( _pMessage ),
+                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -306,7 +306,7 @@ namespace comphelper
         //- string messages
 
         /// logs a given message, without any arguments, or source class/method names
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage );
@@ -321,7 +321,7 @@ namespace comphelper
             is searched in the message string, and replaced with the argument string.
         */
         template< typename ARGTYPE1 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -331,7 +331,7 @@ namespace comphelper
 
         /// logs a given message, replacing 2 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -342,7 +342,7 @@ namespace comphelper
 
         /// logs a given message, replacing 3 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -354,7 +354,7 @@ namespace comphelper
 
         /// logs a given message, replacing 4 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -367,7 +367,7 @@ namespace comphelper
 
         /// logs a given message, replacing 5 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -381,7 +381,7 @@ namespace comphelper
 
         /// logs a given message, replacing 6 placeholders in the message with respective values
         template< typename ARGTYPE1, typename ARGTYPE2, typename ARGTYPE3, typename ARGTYPE4, typename ARGTYPE5, typename ARGTYPE6 >
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
+        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
                 return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage,
@@ -402,7 +402,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ) );
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ) );
             return false;
         }
 
@@ -417,7 +417,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ) );
             return false;
         }
@@ -427,7 +427,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ) );
             return false;
@@ -438,7 +438,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ) );
@@ -450,7 +450,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -463,7 +463,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -477,7 +477,7 @@ namespace comphelper
         bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage, ARGTYPE1 _argument1, ARGTYPE2 _argument2, ARGTYPE3 _argument3, ARGTYPE4 _argument4, ARGTYPE5 _argument5, ARGTYPE6 _argument6 ) const
         {
             if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, ::rtl::OUString::createFromAscii( _pAsciiMessage ),
+                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ),
                     OptionalString( log::convert::convertLogArgToString( _argument1 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument2 ) ),
                     OptionalString( log::convert::convertLogArgToString( _argument3 ) ),
@@ -492,7 +492,7 @@ namespace comphelper
                         const sal_Int32 _nLogLevel,
                         const sal_Char* _pSourceClass,
                         const sal_Char* _pSourceMethod,
-                        const ::rtl::OUString& _rMessage,
+                        const OUString& _rMessage,
                         const OptionalString& _rArgument1 = OptionalString(),
                         const OptionalString& _rArgument2 = OptionalString(),
                         const OptionalString& _rArgument3 = OptionalString(),
@@ -714,7 +714,7 @@ namespace comphelper
         }
 
     private:
-        ::rtl::OUString impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const;
+        OUString impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const;
     };
 
 //........................................................................

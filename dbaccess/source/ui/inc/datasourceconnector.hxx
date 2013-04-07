@@ -45,7 +45,7 @@ namespace dbaui
         Window*         m_pErrorMessageParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xContext;
-        ::rtl::OUString m_sContextInformation;
+        OUString m_sContextInformation;
 
     public:
         ODatasourceConnector(
@@ -55,7 +55,7 @@ namespace dbaui
         ODatasourceConnector(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             Window* _pMessageParent,
-            const ::rtl::OUString& _rContextInformation
+            const OUString& _rContextInformation
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
@@ -65,7 +65,7 @@ namespace dbaui
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     connect(
-                        const ::rtl::OUString& _rDataSourceName,
+                        const OUString& _rDataSourceName,
                         ::dbtools::SQLExceptionInfo* _pErrorInfo
                     ) const;
 

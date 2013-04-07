@@ -44,7 +44,7 @@ public:
                     ScDocument* pDoc = NULL);
     ~ScDPFieldButton();
 
-    void setText(const ::rtl::OUString& rText);
+    void setText(const OUString& rText);
     void setBoundingBox(const Point& rPos, const Size& rSize, bool bLayoutRTL);
     void setDrawBaseButton(bool b);
     void setDrawPopupButton(bool b);
@@ -61,7 +61,7 @@ private:
 private:
     Point                   maPos;
     Size                    maSize;
-    ::rtl::OUString         maText;
+    OUString         maText;
     Fraction                maZoomX;
     Fraction                maZoomY;
     ScDocument*             mpDoc;

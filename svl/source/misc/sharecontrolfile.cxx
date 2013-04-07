@@ -52,8 +52,8 @@ using namespace ::com::sun::star;
 namespace svt {
 
 // ----------------------------------------------------------------------
-ShareControlFile::ShareControlFile( const ::rtl::OUString& aOrigURL )
-: LockFileCommon( aOrigURL, ::rtl::OUString( ".~sharing."  ) )
+ShareControlFile::ShareControlFile( const OUString& aOrigURL )
+: LockFileCommon( aOrigURL, OUString( ".~sharing."  ) )
 {
     OpenStream();
 
@@ -106,11 +106,11 @@ void ShareControlFile::OpenStream()
                 ucb::InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
                 aInsertArg.ReplaceExisting = sal_False;
-                aContent.executeCommand( rtl::OUString("insert"), uno::makeAny( aInsertArg ) );
+                aContent.executeCommand( OUString("insert"), uno::makeAny( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
-                    aContent.setPropertyValue( ::rtl::OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
+                    aContent.setPropertyValue( OUString( "IsHidden"  ), uno::makeAny( sal_True ) );
                 } catch( uno::Exception& ) {}
 
                 // Try to open one more time
@@ -155,7 +155,7 @@ void ShareControlFile::Close()
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< uno::Sequence< ::rtl::OUString > > ShareControlFile::GetUsersData()
+uno::Sequence< uno::Sequence< OUString > > ShareControlFile::GetUsersData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -192,7 +192,7 @@ uno::Sequence< uno::Sequence< ::rtl::OUString > > ShareControlFile::GetUsersData
 }
 
 // ----------------------------------------------------------------------
-void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence< ::rtl::OUString > >& aUsersData )
+void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence< OUString > >& aUsersData )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -205,7 +205,7 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
     m_xTruncate->truncate();
     m_xSeekable->seek( 0 );
 
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     for ( sal_Int32 nInd = 0; nInd < aUsersData.getLength(); nInd++ )
     {
         if ( aUsersData[nInd].getLength() != SHARED_ENTRYSIZE )
@@ -221,14 +221,14 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
         }
     }
 
-    ::rtl::OString aStringData( ::rtl::OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
     uno::Sequence< sal_Int8 > aData( (sal_Int8*)aStringData.getStr(), aStringData.getLength() );
     m_xOutputStream->writeBytes( aData );
     m_aUsersData = aUsersData;
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > ShareControlFile::InsertOwnEntry()
+uno::Sequence< OUString > ShareControlFile::InsertOwnEntry()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -236,8 +236,8 @@ uno::Sequence< ::rtl::OUString > ShareControlFile::InsertOwnEntry()
         throw io::NotConnectedException();
 
     GetUsersData();
-    uno::Sequence< ::uno::Sequence< ::rtl::OUString > > aNewData( m_aUsersData.getLength() + 1 );
-    uno::Sequence< ::rtl::OUString > aNewEntry = GenerateOwnEntry();
+    uno::Sequence< ::uno::Sequence< OUString > > aNewData( m_aUsersData.getLength() + 1 );
+    uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
 
     sal_Bool bExists = sal_False;
     sal_Int32 nNewInd = 0;
@@ -284,7 +284,7 @@ bool ShareControlFile::HasOwnEntry()
     }
 
     GetUsersData();
-    uno::Sequence< ::rtl::OUString > aEntry = GenerateOwnEntry();
+    uno::Sequence< OUString > aEntry = GenerateOwnEntry();
 
     for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); ++nInd )
     {
@@ -301,7 +301,7 @@ bool ShareControlFile::HasOwnEntry()
 }
 
 // ----------------------------------------------------------------------
-void ShareControlFile::RemoveEntry( const uno::Sequence< ::rtl::OUString >& aArgEntry )
+void ShareControlFile::RemoveEntry( const uno::Sequence< OUString >& aArgEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -310,11 +310,11 @@ void ShareControlFile::RemoveEntry( const uno::Sequence< ::rtl::OUString >& aArg
 
     GetUsersData();
 
-    uno::Sequence< ::rtl::OUString > aEntry = aArgEntry;
+    uno::Sequence< OUString > aEntry = aArgEntry;
     if ( aEntry.getLength() != SHARED_ENTRYSIZE )
         aEntry = GenerateOwnEntry();
 
-    uno::Sequence< ::uno::Sequence< ::rtl::OUString > > aNewData( m_aUsersData.getLength() + 1 );
+    uno::Sequence< ::uno::Sequence< OUString > > aNewData( m_aUsersData.getLength() + 1 );
 
     sal_Int32 nNewInd = 0;
     for ( sal_Int32 nInd = 0; nInd < m_aUsersData.getLength(); nInd++ )

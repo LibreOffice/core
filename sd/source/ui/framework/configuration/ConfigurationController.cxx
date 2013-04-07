@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
@@ -63,11 +62,11 @@ OUString ConfigurationController_getImplementationName (void) throw(RuntimeExcep
 
 
 
-Sequence<rtl::OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const OUString sServiceName("com.sun.star.drawing.framework.ConfigurationController");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -219,7 +218,7 @@ void ConfigurationController::RequestSynchronousUpdate (void)
 
 void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener,
-    const ::rtl::OUString& rsEventType,
+    const OUString& rsEventType,
     const Any& rUserData)
     throw (RuntimeException)
 {

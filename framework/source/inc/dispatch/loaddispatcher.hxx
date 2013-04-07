@@ -51,7 +51,7 @@ class LoadDispatcher : private ThreadHelpBase
         css::uno::WeakReference< css::frame::XFrame > m_xOwnerFrame;
 
         /** @short  TODO document me */
-        ::rtl::OUString m_sTarget;
+        OUString m_sTarget;
 
         /** @short  TODO document me */
         sal_Int32 m_nSearchFlags;
@@ -85,7 +85,7 @@ class LoadDispatcher : private ThreadHelpBase
          */
         LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
                        const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
-                       const ::rtl::OUString                                         sTargetName ,
+                       const OUString                                         sTargetName ,
                              sal_Int32                                               nSearchFlags);
 
         //_______________________________________

@@ -38,15 +38,15 @@ XSecParser::XSecParser(
 {
 }
 
-rtl::OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& xAttribs )
+OUString XSecParser::getIdAttr(const cssu::Reference< cssxs::XAttributeList >& xAttribs )
 {
-    rtl::OUString ouIdAttr = xAttribs->getValueByName(
-        rtl::OUString(RTL_ASCII_USTRINGPARAM("id")));
+    OUString ouIdAttr = xAttribs->getValueByName(
+        OUString(RTL_ASCII_USTRINGPARAM("id")));
 
     if (ouIdAttr == NULL)
     {
         ouIdAttr = xAttribs->getValueByName(
-            rtl::OUString(RTL_ASCII_USTRINGPARAM("Id")));
+            OUString(RTL_ASCII_USTRINGPARAM("Id")));
     }
 
     return ouIdAttr;
@@ -81,19 +81,19 @@ void SAL_CALL XSecParser::endDocument(  )
 }
 
 void SAL_CALL XSecParser::startElement(
-    const rtl::OUString& aName,
+    const OUString& aName,
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     try
     {
-        rtl::OUString ouIdAttr = getIdAttr(xAttribs);
+        OUString ouIdAttr = getIdAttr(xAttribs);
         if (ouIdAttr != NULL)
         {
             m_pXSecController->collectToVerify( ouIdAttr );
         }
 
-        if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
+        if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATURE)) )
         {
             m_pXSecController->addSignature();
             if (ouIdAttr != NULL)
@@ -101,9 +101,9 @@ void SAL_CALL XSecParser::startElement(
                 m_pXSecController->setId( ouIdAttr );
             }
         }
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
+        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
         {
-            rtl::OUString ouUri = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
+            OUString ouUri = xAttribs->getValueByName(OUString(RTL_ASCII_USTRINGPARAM(ATTR_URI)));
             DBG_ASSERT( ouUri != NULL, "URI == NULL" );
 
             if (ouUri.startsWith(CHAR_FRAGMENT))
@@ -122,13 +122,13 @@ void SAL_CALL XSecParser::startElement(
                 m_bReferenceUnresolved = true;
             }
         }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_TRANSFORM)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_TRANSFORM)))
             {
             if ( m_bReferenceUnresolved )
             {
-                rtl::OUString ouAlgorithm = xAttribs->getValueByName(rtl::OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
+                OUString ouAlgorithm = xAttribs->getValueByName(OUString(RTL_ASCII_USTRINGPARAM(ATTR_ALGORITHM)));
 
-                if (ouAlgorithm != NULL && ouAlgorithm == rtl::OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
+                if (ouAlgorithm != NULL && ouAlgorithm == OUString(RTL_ASCII_USTRINGPARAM(ALGO_C14N)))
                 /*
                 * a xml stream
                 */
@@ -138,43 +138,43 @@ void SAL_CALL XSecParser::startElement(
                 }
             }
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
             {
-            m_ouX509IssuerName = rtl::OUString();
+            m_ouX509IssuerName = OUString();
             m_bInX509IssuerName = true;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
             {
-            m_ouX509SerialNumber = rtl::OUString();
+            m_ouX509SerialNumber = OUString();
             m_bInX509SerialNumber = true;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
             {
-            m_ouX509Certificate = rtl::OUString();
+            m_ouX509Certificate = OUString();
             m_bInX509Certificate = true;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)))
             {
-            m_ouSignatureValue = rtl::OUString();
+            m_ouSignatureValue = OUString();
                 m_bInSignatureValue = true;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
             {
-            m_ouDigestValue = rtl::OUString();
+            m_ouDigestValue = OUString();
                 m_bInDigestValue = true;
             }
-            else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
+            else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREPROPERTY)) )
         {
             if (ouIdAttr != NULL)
             {
                 m_pXSecController->setPropertyId( ouIdAttr );
             }
         }
-            else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +rtl::OUString(":")
-                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+            else if (aName == OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                        +OUString(":")
+                        +OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
             {
-            m_ouDate = rtl::OUString();
+            m_ouDate = OUString();
                 m_bInDate = true;
             }
 
@@ -187,28 +187,28 @@ void SAL_CALL XSecParser::startElement(
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            rtl::OUString(
+            OUString(
                               "xmlsecurity: Exception in XSecParser::startElement"),
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            rtl::OUString("xmlsecurity: unexpected exception in XSecParser::startElement"), 0,
+            OUString("xmlsecurity: unexpected exception in XSecParser::startElement"), 0,
             cssu::Any());
     }
 }
 
-void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
+void SAL_CALL XSecParser::endElement( const OUString& aName )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     try
     {
-        if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
+        if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_DIGESTVALUE)))
             {
                 m_bInDigestValue = false;
             }
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
+        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_REFERENCE)) )
         {
             if ( m_bReferenceUnresolved )
             /*
@@ -221,33 +221,33 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
 
             m_pXSecController->setDigestValue( m_ouDigestValue );
         }
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
+        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNEDINFO)) )
         {
             m_pXSecController->setReferenceCount();
         }
-        else if ( aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)) )
+        else if ( aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_SIGNATUREVALUE)) )
         {
             m_pXSecController->setSignatureValue( m_ouSignatureValue );
                 m_bInSignatureValue = false;
         }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509ISSUERNAME)))
             {
             m_pXSecController->setX509IssuerName( m_ouX509IssuerName );
             m_bInX509IssuerName = false;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509SERIALNUMBER)))
             {
             m_pXSecController->setX509SerialNumber( m_ouX509SerialNumber );
             m_bInX509SerialNumber = false;
             }
-            else if (aName == rtl::OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
+            else if (aName == OUString(RTL_ASCII_USTRINGPARAM(TAG_X509CERTIFICATE)))
             {
             m_pXSecController->setX509Certificate( m_ouX509Certificate );
             m_bInX509Certificate = false;
             }
-            else if (aName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
-                        +rtl::OUString(":")
-                        +rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
+            else if (aName == OUString(RTL_CONSTASCII_USTRINGPARAM(NSTAG_DC))
+                        +OUString(":")
+                        +OUString(RTL_CONSTASCII_USTRINGPARAM(TAG_DATE)))
         {
             m_pXSecController->setDate( m_ouDate );
                 m_bInDate = false;
@@ -262,19 +262,19 @@ void SAL_CALL XSecParser::endElement( const rtl::OUString& aName )
     {//getCaughtException MUST be the first line in the catch block
         cssu::Any exc =  cppu::getCaughtException();
         throw cssxs::SAXException(
-            rtl::OUString(
+            OUString(
                               "xmlsecurity: Exception in XSecParser::endElement"),
             0, exc);
     }
     catch (...)
     {
         throw cssxs::SAXException(
-            rtl::OUString("xmlsecurity: unexpected exception in XSecParser::endElement"), 0,
+            OUString("xmlsecurity: unexpected exception in XSecParser::endElement"), 0,
             cssu::Any());
     }
 }
 
-void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
+void SAL_CALL XSecParser::characters( const OUString& aChars )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     if (m_bInX509IssuerName)
@@ -308,7 +308,7 @@ void SAL_CALL XSecParser::characters( const rtl::OUString& aChars )
         }
 }
 
-void SAL_CALL XSecParser::ignorableWhitespace( const rtl::OUString& aWhitespaces )
+void SAL_CALL XSecParser::ignorableWhitespace( const OUString& aWhitespaces )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     if (m_xNextHandler.is())
@@ -317,7 +317,7 @@ void SAL_CALL XSecParser::ignorableWhitespace( const rtl::OUString& aWhitespaces
         }
 }
 
-void SAL_CALL XSecParser::processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
+void SAL_CALL XSecParser::processingInstruction( const OUString& aTarget, const OUString& aData )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     if (m_xNextHandler.is())

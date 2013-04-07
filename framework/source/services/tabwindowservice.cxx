@@ -286,14 +286,14 @@ void TabWindowService::impl_initializePropInfo()
 
     impl_addPropertyInfo(
         css::beans::Property(
-            rtl::OUString("Window"),
+            OUString("Window"),
             TABWINDOWSERVICE_PROPHANDLE_WINDOW,
             ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
             css::beans::PropertyAttribute::TRANSIENT));
 }
 
 //*****************************************************************************************************************
-void SAL_CALL TabWindowService::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
+void SAL_CALL TabWindowService::impl_setPropertyValue(const OUString& /*sProperty*/,
                                                               sal_Int32        /*nHandle  */,
                                                         const css::uno::Any&   /*aValue   */)
 
@@ -301,7 +301,7 @@ void SAL_CALL TabWindowService::impl_setPropertyValue(const ::rtl::OUString& /*s
 }
 
 //*****************************************************************************************************************
-css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const ::rtl::OUString& /*sProperty*/,
+css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /*sProperty*/,
                                                                        sal_Int32        nHandle      )
 {
     /* There is no need to lock any mutex here. Because we share the
@@ -404,7 +404,7 @@ void TabWindowService::impl_checkTabIndex (::sal_Int32 nID)
        )
     {
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString("Tab index out of bounds."),
+                OUString("Tab index out of bounds."),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     }
 }
@@ -418,7 +418,7 @@ TTabPageInfoHash::iterator TabWindowService::impl_getTabPageInfo(::sal_Int32 nID
     TTabPageInfoHash::iterator pIt = m_lTabPageInfos.find(nID);
     if (pIt == m_lTabPageInfos.end ())
         throw css::lang::IndexOutOfBoundsException(
-                ::rtl::OUString("Tab index out of bounds."),
+                OUString("Tab index out of bounds."),
                 css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY ));
     return pIt;
 }

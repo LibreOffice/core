@@ -56,7 +56,7 @@ protected:
         @param rTokenData  The string that has been found in an OPCODE_BAD
             token preceding the function parentheses.
      */
-    virtual const FunctionInfo* resolveBadFuncName( const ::rtl::OUString& rTokenData ) const;
+    virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const;
 
     /** Derived classed may try to find the name of a defined name with the
         passed index extracted from an OPCODE_NAME token.
@@ -64,7 +64,7 @@ protected:
         @param nTokenIndex  The index of the defined name that has been found
             in an OPCODE_NAME token preceding the function parentheses.
      */
-    virtual ::rtl::OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
+    virtual OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
 
 private:
     typedef ::std::vector< const ApiToken* > ParameterPosVector;
@@ -108,7 +108,7 @@ public:
     /** Converts an OOXML formula string. */
     ApiTokenSequence    importFormula(
                             const ::com::sun::star::table::CellAddress& rBaseAddr,
-                            const ::rtl::OUString& rFormulaString ) const;
+                            const OUString& rFormulaString ) const;
 
     /** Imports and converts a BIFF12 token array from the passed stream. */
     ApiTokenSequence    importFormula(
@@ -135,13 +135,13 @@ public:
     ApiTokenSequence    convertNameToFormula( sal_Int32 nTokenIndex ) const;
 
     /** Converts the passed XML formula to an OLE link target. */
-    ::rtl::OUString     importOleTargetLink( const ::rtl::OUString& rFormulaString );
+    OUString     importOleTargetLink( const OUString& rFormulaString );
 
     /** Imports and converts an OLE link target from the passed stream. */
-    ::rtl::OUString     importOleTargetLink( SequenceInputStream& rStrm );
+    OUString     importOleTargetLink( SequenceInputStream& rStrm );
 
     /** Converts the passed formula to a macro name for a drawing shape. */
-    ::rtl::OUString     importMacroName( const ::rtl::OUString& rFormulaString );
+    OUString     importMacroName( const OUString& rFormulaString );
 
 private:
     ::std::auto_ptr< FormulaParserImpl > mxImpl;

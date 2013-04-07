@@ -63,7 +63,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_RASTERSUBY),   0,  &getCppuType((sal_Int32*)0),        0, 0},
         {MAP_CHAR_LEN(SC_UNO_RASTERSYNC),   0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCALC),     0,  &getBooleanCppuType(),              0, 0},
-        {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((rtl::OUString*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_PRINTERNAME),  0,  &getCppuType((OUString*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_PRINTERSETUP), 0,  &getCppuType((uno::Sequence<sal_Int8>*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_APPLYDOCINF),  0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),    0,  &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY, 0},
@@ -120,7 +120,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocumentConfiguration::getPro
 }
 
 void SAL_CALL ScDocumentConfiguration::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -171,7 +171,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 pDoc->SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
             {
-                rtl::OUString sPrinterName;
+                OUString sPrinterName;
                 if ( aValue >>= sPrinterName )
                 {
                     // #i75610# if the name is empty, do nothing (don't create any printer)
@@ -272,13 +272,13 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( aValue >>= aInfo ) )
                     throw lang::IllegalArgumentException(
-                        ::rtl::OUString( "Value of type Sequence<PropertyValue> expected!" ),
+                        OUString( "Value of type Sequence<PropertyValue> expected!" ),
                         uno::Reference< uno::XInterface >(),
                         2 );
 
                 if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
                     throw beans::PropertyVetoException(
-                        ::rtl::OUString( "The hash is not allowed to be changed now!" ),
+                        OUString( "The hash is not allowed to be changed now!" ),
                         uno::Reference< uno::XInterface >() );
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_EMBED_FONTS ) == 0 )
@@ -330,7 +330,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         throw uno::RuntimeException();
 }
 
-uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -379,9 +379,9 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 // (as in SwXDocumentSettings)
                 SfxPrinter* pPrinter = pDoc->GetPrinter( false );
                 if (pPrinter)
-                    aRet <<= rtl::OUString ( pPrinter->GetName());
+                    aRet <<= OUString ( pPrinter->GetName());
                 else
-                    aRet <<= rtl::OUString();
+                    aRet <<= OUString();
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
             {
@@ -465,12 +465,12 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocumentConfiguration )
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScDocumentConfiguration::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScDocumentConfiguration" );
+    return OUString( "ScDocumentConfiguration" );
 }
 
-sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -478,13 +478,13 @@ sal_Bool SAL_CALL ScDocumentConfiguration::supportsService( const rtl::OUString&
            aServiceStr.EqualsAscii( SCDOCUMENTSETTINGS_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScDocumentConfiguration::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCOMPSCPREADSHEETSETTINGS_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCUMENTSETTINGS_SERVICE ));
     return aRet;
 }
 

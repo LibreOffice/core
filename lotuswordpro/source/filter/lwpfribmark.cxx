@@ -659,15 +659,15 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         else if (sFormula == A2OUSTR("%FLeeeeoa") || sFormula == A2OUSTR("%FLffffooaa") || sFormula == A2OUSTR("%FLEEEEOA"))
         {
             pDateStyle = new XFDateStyle;
-            rtl::OUString sText;
+            OUString sText;
             pDateStyle->AddYear();
-            sText = rtl::OUString(0x5e74);
+            sText = OUString(0x5e74);
             pDateStyle->AddText(sText);
             pDateStyle->AddMonth(sal_False);
-            sText = rtl::OUString(0x6708);
+            sText = OUString(0x6708);
             pDateStyle->AddText(sText);
             pDateStyle->AddMonthDay(sal_False);
-            sText = rtl::OUString(0x65e5);
+            sText = OUString(0x65e5);
             pDateStyle->AddText(sText);
         }
         else if (sFormula == A2OUSTR("%FLoa") || sFormula == A2OUSTR("%FLooaa") || sFormula == A2OUSTR("%FLOA") )
@@ -675,10 +675,10 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             pDateStyle = new XFDateStyle;
             OUString sText;
             pDateStyle->AddMonth(sal_False);
-            sText = rtl::OUString(0x6708);
+            sText = OUString(0x6708);
             pDateStyle->AddText(sText);
             pDateStyle->AddMonthDay(sal_False);
-            sText = rtl::OUString(0x65e5);
+            sText = OUString(0x65e5);
             pDateStyle->AddText(sText);
         }
         else if (sFormula == A2OUSTR("%FLYYYY/M/D") || sFormula == A2OUSTR("%FLGGGG/od/ad"))
@@ -967,11 +967,11 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         {
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->AddHour(sal_False);
-            rtl::OUString sText;
-            sText = rtl::OUString(0x70b9);
+            OUString sText;
+            sText = OUString(0x70b9);
             pTimeStyle->AddText(sText);
             pTimeStyle->AddMinute(sal_False);
-            sText = rtl::OUString(0x5206);
+            sText = OUString(0x5206);
             pTimeStyle->AddText(sText);
         }
         else if (sFormula == A2OUSTR("%FLjjjF") || sFormula == A2OUSTR("%FLJJJFF") )
@@ -979,11 +979,11 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
             pTimeStyle = new XFTimeStyle;
             pTimeStyle->SetAmPm(sal_True);
             pTimeStyle->AddHour(sal_False);
-            rtl::OUString sText;
-            sText = rtl::OUString(0x70b9);
+            OUString sText;
+            sText = OUString(0x70b9);
             pTimeStyle->AddText(sText);
             pTimeStyle->AddMinute(sal_False);
-            sText = rtl::OUString(0x5206);
+            sText = OUString(0x5206);
             pTimeStyle->AddText(sText);
         }
         //chinese version end

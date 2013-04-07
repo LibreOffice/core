@@ -210,7 +210,7 @@ void VCLXMultiLineEdit::removeTextListener( const ::com::sun::star::uno::Referen
     maTextListeners.removeInterface( l );
 }
 
-void VCLXMultiLineEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMultiLineEdit::setText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -227,7 +227,7 @@ void VCLXMultiLineEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun
     }
 }
 
-void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -239,22 +239,22 @@ void VCLXMultiLineEdit::insertText( const ::com::sun::star::awt::Selection& rSel
     }
 }
 
-::rtl::OUString VCLXMultiLineEdit::getText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMultiLineEdit::getText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
     if ( pEdit )
         aText = pEdit->GetText( meLineEndType );
     return aText;
 }
 
-::rtl::OUString VCLXMultiLineEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMultiLineEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
     if ( pMultiLineEdit)
         aText = pMultiLineEdit->GetSelected( meLineEndType );
@@ -321,11 +321,11 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(::com::sun::star::uno::Runtim
     return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
 }
 
-::rtl::OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     MultiLineEdit* pEdit = (MultiLineEdit*)GetWindow();
     if ( pEdit )
         aText = pEdit->GetTextLines( meLineEndType );
@@ -407,7 +407,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
     }
 }
 
-void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -463,7 +463,7 @@ void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const 
     }
 }
 
-::com::sun::star::uno::Any VCLXMultiLineEdit::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -562,7 +562,7 @@ IMPL_XTYPEPROVIDER_START( VCLXFileControl )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void SAL_CALL VCLXFileControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -612,7 +612,7 @@ void VCLXFileControl::removeTextListener( const ::com::sun::star::uno::Reference
     maTextListeners.removeInterface( l );
 }
 
-void VCLXFileControl::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFileControl::setText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -627,7 +627,7 @@ void VCLXFileControl::setText( const ::rtl::OUString& aText ) throw(::com::sun::
     }
 }
 
-void VCLXFileControl::insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFileControl::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -639,22 +639,22 @@ void VCLXFileControl::insertText( const ::com::sun::star::awt::Selection& rSel, 
     }
 }
 
-::rtl::OUString VCLXFileControl::getText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXFileControl::getText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
 }
 
-::rtl::OUString VCLXFileControl::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXFileControl::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     FileControl* pFileControl = (FileControl*) GetWindow();
     if ( pFileControl)
         aText = pFileControl->GetEdit().GetSelected();
@@ -831,7 +831,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
 }
 
 // --------------------------------------------------------------------------------------
-void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -956,7 +956,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
 }
 
 // --------------------------------------------------------------------------------------
-::com::sun::star::uno::Any SVTXFormattedField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1053,12 +1053,12 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                 rValue >>= d;
                 String sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);
-                aReturn <<= ::rtl::OUString( sConverted );
+                aReturn <<= OUString( sConverted );
             }
             break;
         case ::com::sun::star::uno::TypeClass_STRING:
         {
-            ::rtl::OUString aStr;
+            OUString aStr;
             rValue >>= aStr;
             String sValue = aStr;
             if (pField->TreatingAsNumber())
@@ -1186,7 +1186,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
         break;
         case ::com::sun::star::uno::TypeClass_STRING:
         {
-            ::rtl::OUString aStr;
+            OUString aStr;
             aConverted >>= aStr;
             pField->SetDefaultText( aStr );
         }
@@ -1209,7 +1209,7 @@ void SVTXFormattedField::SetDefaultValue(const ::com::sun::star::uno::Any& rValu
     if (pField->TreatingAsNumber())
         aReturn <<= pField->GetDefaultValue();
     else
-        aReturn <<= ::rtl::OUString( pField->GetDefaultText() );
+        aReturn <<= OUString( pField->GetDefaultText() );
     return aReturn;
 }
 
@@ -1241,7 +1241,7 @@ void SVTXFormattedField::SetTreatAsNumber(sal_Bool bSet)
     ::com::sun::star::uno::Any aReturn;
     if (!pField->TreatingAsNumber())
     {
-        ::rtl::OUString sText = pField->GetTextValue();
+        OUString sText = pField->GetTextValue();
         aReturn <<= sText;
     }
     else
@@ -1276,7 +1276,7 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
         {
             DBG_ASSERT(rValue.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING, "SVTXFormattedField::SetValue : invalid argument !");
 
-            ::rtl::OUString sText;
+            OUString sText;
             rValue >>= sText;
             String aStr( sText );
             if (!pField->TreatingAsNumber())
@@ -1449,12 +1449,12 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         xRoadmapItem = evt.Source;
         sal_Int32 nID = 0;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( "ID" ));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(OUString( "ID" ));
         aValue >>= nID;
 
         ::com::sun::star::uno::Any rVal = evt.NewValue;
         evt.NewValue >>= rVal;
-        ::rtl::OUString sPropertyName = evt.PropertyName;
+        OUString sPropertyName = evt.PropertyName;
         if ( sPropertyName == "Enabled" )
         {
             sal_Bool bEnable = false;
@@ -1463,7 +1463,7 @@ void SVTXRoadmap::propertyChange( const ::com::sun::star::beans::PropertyChangeE
         }
         else if ( sPropertyName == "Label" )
         {
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             evt.NewValue >>= sLabel;
             pField->ChangeRoadmapItemLabel( (RoadmapTypes::ItemId)nID , sLabel );
         }
@@ -1498,11 +1498,11 @@ RMItemData SVTXRoadmap::GetRMItemData( const ::com::sun::star::container::Contai
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropertySet( xRoadmapItem, ::com::sun::star::uno::UNO_QUERY );
     if ( xPropertySet.is() )
     {
-        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(::rtl::OUString( "Label" ));
+        ::com::sun::star::uno::Any aValue = xPropertySet->getPropertyValue(OUString( "Label" ));
         aValue >>= aCurRMItemData.Label;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString( "ID" ));
+        aValue = xPropertySet->getPropertyValue(OUString( "ID" ));
         aValue >>= aCurRMItemData.n_ID;
-        aValue = xPropertySet->getPropertyValue(::rtl::OUString( "Enabled" ));
+        aValue = xPropertySet->getPropertyValue(OUString( "Enabled" ));
         aValue >>= aCurRMItemData.b_Enabled;
     }
     return aCurRMItemData;
@@ -1549,7 +1549,7 @@ void SVTXRoadmap::elementReplaced( const ::com::sun::star::container::ContainerE
 
 
 // --------------------------------------------------------------------------------------
-void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void SVTXRoadmap::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1585,7 +1585,7 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
             case BASEPROPERTY_TEXT:
             {
-                   ::rtl::OUString aStr;
+                   OUString aStr;
                 Value >>= aStr;
                 pField->SetText( aStr );
                 pField->Invalidate();
@@ -1604,7 +1604,7 @@ void SVTXRoadmap::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 
 // --------------------------------------------------------------------------------------
-::com::sun::star::uno::Any SVTXRoadmap::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1980,7 +1980,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat() throw(::com::sun::star::uno::Runtim
     return pField ? pField->IsStrictFormat() : sal_False;
 }
 
-void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1994,7 +1994,7 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
         {
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                ::rtl::OUString aStr;
+                OUString aStr;
                 Value >>= aStr;
                 pField->setCurrencySymbol( aStr );
             }
@@ -2015,7 +2015,7 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
         SVTXFormattedField::setProperty(PropertyName, Value);
 }
 
-::com::sun::star::uno::Any SVTXCurrencyField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2029,7 +2029,7 @@ void SVTXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
         {
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aReturn <<= ::rtl::OUString( pField->getCurrencySymbol() );
+                aReturn <<= OUString( pField->getCurrencySymbol() );
             }
             break;
             case BASEPROPERTY_CURSYM_POSITION:
@@ -2198,7 +2198,7 @@ sal_Int32 VCLXProgressBar::getValue() throw(::com::sun::star::uno::RuntimeExcept
 }
 
 // ::com::sun::star::awt::VclWindowPeer
-void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXProgressBar::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2256,7 +2256,7 @@ void VCLXProgressBar::setProperty( const ::rtl::OUString& PropertyName, const ::
     }
 }
 
-::com::sun::star::uno::Any VCLXProgressBar::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2314,7 +2314,7 @@ SVTXDateField::~SVTXDateField()
 {
 }
 
-void SAL_CALL SVTXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
 {
     VCLXDateField::setProperty( PropertyName, Value );
 

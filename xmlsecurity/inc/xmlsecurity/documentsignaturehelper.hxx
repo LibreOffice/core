@@ -72,21 +72,21 @@ public:
     static SignatureStreamHelper OpenSignatureStream(
         const css::uno::Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode,
         DocumentSignatureMode eDocSigMode );
-    static std::vector< rtl::OUString > CreateElementList(
+    static std::vector< OUString > CreateElementList(
         const css::uno::Reference < css::embed::XStorage >& rxStore,
-        const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode,
+        const OUString rRootStorageName, DocumentSignatureMode eMode,
         const DocumentSignatureAlgorithm mode);
-    static bool isODFPre_1_2(const ::rtl::OUString & sODFVersion);
+    static bool isODFPre_1_2(const OUString & sODFVersion);
     static bool isOOo3_2_Signature(const SignatureInformation & sigInfo);
     static DocumentSignatureAlgorithm getDocumentAlgorithm(
-        const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo);
-    static bool checkIfAllFilesAreSigned( const ::std::vector< ::rtl::OUString > & sElementList,
+        const OUString & sODFVersion, const SignatureInformation & sigInfo);
+    static bool checkIfAllFilesAreSigned( const ::std::vector< OUString > & sElementList,
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
     static bool equalsReferenceUriManifestPath(
-        const ::rtl::OUString & rUri, const ::rtl::OUString & rPath);
-    static ::rtl::OUString GetDocumentContentSignatureDefaultStreamName();
-    static ::rtl::OUString GetScriptingContentSignatureDefaultStreamName();
-    static ::rtl::OUString GetPackageSignatureDefaultStreamName();
+        const OUString & rUri, const OUString & rPath);
+    static OUString GetDocumentContentSignatureDefaultStreamName();
+    static OUString GetScriptingContentSignatureDefaultStreamName();
+    static OUString GetPackageSignatureDefaultStreamName();
 
 };
 

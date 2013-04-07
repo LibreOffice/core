@@ -53,7 +53,6 @@
 #include <comphelper/makesequence.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
@@ -73,7 +72,7 @@ SwXMLWriter::~SwXMLWriter()
 
 
 sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
-                                const rtl::OUString& aDocHierarchicalName )
+                                const OUString& aDocHierarchicalName )
 {
     // Get service factory
     uno::Reference< uno::XComponentContext > xContext =
@@ -207,7 +206,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
     // Set base URI
     OUString sPropName("BaseURI");
-    xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( GetBaseURL() ) ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( OUString( GetBaseURL() ) ) );
 
     if( SFX_CREATE_MODE_EMBEDDED == pDoc->GetDocShell()->GetCreateMode() )
     {
@@ -215,7 +214,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         if ( !aDocHierarchicalName.isEmpty() )
             aName = aDocHierarchicalName;
         else
-            aName = ::rtl::OUString( "dummyObjectName" );
+            aName = OUString( "dummyObjectName" );
 
         sPropName = OUString("StreamRelPath");
         xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
@@ -298,10 +297,10 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
     {
         const uno::Reference<beans::XPropertySet> xPropSet(xStg,
             uno::UNO_QUERY_THROW);
-        const ::rtl::OUString VersionProp("Version");
+        const OUString VersionProp("Version");
         try
         {
-            ::rtl::OUString Version;
+            OUString Version;
             // ODF >= 1.2
             if ((xPropSet->getPropertyValue(VersionProp) >>= Version)
                 && !Version.equals(ODFVER_010_TEXT)
@@ -328,7 +327,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
             Reference< frame::XModule > xModule( xModelComp, UNO_QUERY );
             if ( xModule.is() )
             {
-                ::rtl::OUString aModuleID = xModule->getIdentifier();
+                OUString aModuleID = xModule->getIdentifier();
                 bStoreMeta = ( !aModuleID.isEmpty() && ( aModuleID == "com.sun.star.sdb.FormDesign" || aModuleID == "com.sun.star.sdb.TextReportDesign" ) );
             }
         }
@@ -410,7 +409,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
                 OUString aMime("application/binary");
                 uno::Any aAny2;
                 aAny2 <<= aMime;
-                xSet->setPropertyValue( rtl::OUString("MediaType"), aAny2 );
+                xSet->setPropertyValue( OUString("MediaType"), aAny2 );
                 pDoc->WriteLayoutCache( *pStream );
             }
 
@@ -465,13 +464,13 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
 
 sal_uLong SwXMLWriter::WriteStorage()
 {
-    return _Write( uno::Reference < task::XStatusIndicator >(), ::rtl::OUString() );
+    return _Write( uno::Reference < task::XStatusIndicator >(), OUString() );
 }
 
 sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     uno::Reference < task::XStatusIndicator > xStatusIndicator;
-    rtl::OUString aName;
+    OUString aName;
     const SfxUnoAnyItem* pStatusBarItem = static_cast<const SfxUnoAnyItem*>(
        aTargetMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL) );
     if ( pStatusBarItem )
@@ -524,7 +523,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OUString aMime("text/xml");
         uno::Any aAny;
         aAny <<= aMime;
-        xSet->setPropertyValue( rtl::OUString("MediaType"), aAny );
+        xSet->setPropertyValue( OUString("MediaType"), aAny );
 
         OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 

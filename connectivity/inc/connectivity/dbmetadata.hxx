@@ -95,10 +95,10 @@ namespace dbtools
         }
 
         /// wraps XDatabaseMetaData::getIdentifierQuoteString
-        const ::rtl::OUString&  getIdentifierQuoteString() const;
+        const OUString&  getIdentifierQuoteString() const;
 
         /// wraps XDatabaseMetaData::getCatalogSeparator
-        const ::rtl::OUString&  getCatalogSeparator() const;
+        const OUString&  getCatalogSeparator() const;
 
         /** determines whether the database supports sub queries in the FROM part
             of a SELECT clause are supported.

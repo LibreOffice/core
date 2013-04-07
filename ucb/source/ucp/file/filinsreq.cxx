@@ -117,7 +117,7 @@ XTYPEPROVIDER_IMPL_2( XInteractionAbortImpl,
 
 
 XInteractionRequestImpl::XInteractionRequestImpl(
-    const rtl::OUString& aClashingName,
+    const OUString& aClashingName,
     const Reference<XInterface>& xOrigin,
     shell *pShell,sal_Int32 CommandId)
     : p1( new XInteractionSupplyNameImpl ),
@@ -186,7 +186,7 @@ XInteractionRequestImpl::getRequest()
         excep.Name = m_aClashingName;
         excep.Classification = InteractionClassification_ERROR;
         excep.Context = m_xOrigin;
-        excep.Message = rtl::OUString( "folder exists and overwritte forbidden");
+        excep.Message = OUString( "folder exists and overwritte forbidden");
         aAny <<= excep;
     }
     else if(m_nErrorCode == TASKHANDLING_INVALID_NAME_MKDIR)
@@ -194,7 +194,7 @@ XInteractionRequestImpl::getRequest()
         InteractiveAugmentedIOException excep;
         excep.Code = IOErrorCode_INVALID_CHARACTER;
         PropertyValue prop;
-        prop.Name = rtl::OUString("ResourceName");
+        prop.Name = OUString("ResourceName");
         prop.Handle = -1;
         prop.Value <<= m_aClashingName;
         Sequence<Any> seq(1);
@@ -202,7 +202,7 @@ XInteractionRequestImpl::getRequest()
         excep.Arguments = seq;
         excep.Classification = InteractionClassification_ERROR;
         excep.Context = m_xOrigin;
-        excep.Message = rtl::OUString( "the name contained invalid characters");
+        excep.Message = OUString( "the name contained invalid characters");
         aAny <<= excep;
 
     }

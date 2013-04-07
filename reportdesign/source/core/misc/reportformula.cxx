@@ -31,18 +31,18 @@ namespace rptui
     namespace
     {
         //----------------------------------------------------------------
-        const ::rtl::OUString&  lcl_getExpressionPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
+        const OUString&  lcl_getExpressionPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
-            static ::rtl::OUString s_sPrefix( "rpt:" );
+            static OUString s_sPrefix( "rpt:" );
             if ( _pTakeLengthOrNull )
                 *_pTakeLengthOrNull = s_sPrefix.getLength();
             return s_sPrefix;
         }
 
         //----------------------------------------------------------------
-        const ::rtl::OUString&  lcl_getFieldPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
+        const OUString&  lcl_getFieldPrefix( sal_Int32* _pTakeLengthOrNull = NULL )
         {
-            static ::rtl::OUString s_sPrefix( "field:" );
+            static OUString s_sPrefix( "field:" );
             if ( _pTakeLengthOrNull )
                 *_pTakeLengthOrNull = s_sPrefix.getLength();
             return s_sPrefix;
@@ -53,14 +53,14 @@ namespace rptui
     //= ReportFormula
     //====================================================================
     //--------------------------------------------------------------------
-    ReportFormula::ReportFormula( const ::rtl::OUString& _rFormula )
+    ReportFormula::ReportFormula( const OUString& _rFormula )
         :m_eType( Invalid )
     {
         impl_construct( _rFormula );
     }
 
     //--------------------------------------------------------------------
-    ReportFormula::ReportFormula( const BindType _eType, const ::rtl::OUString& _rFieldOrExpression )
+    ReportFormula::ReportFormula( const BindType _eType, const OUString& _rFieldOrExpression )
         :m_eType( _eType )
     {
         switch ( m_eType )
@@ -76,7 +76,7 @@ namespace rptui
 
         case Field:
         {
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.append( lcl_getFieldPrefix() );
             aBuffer.appendAscii( "[" );
             aBuffer.append( _rFieldOrExpression );
@@ -96,7 +96,7 @@ namespace rptui
     {
     }
     //--------------------------------------------------------------------
-    void ReportFormula::impl_construct( const ::rtl::OUString& _rFormula )
+    void ReportFormula::impl_construct( const OUString& _rFormula )
     {
         m_sCompleteFormula = _rFormula;
 
@@ -127,10 +127,10 @@ namespace rptui
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ReportFormula::getBracketedFieldOrExpression() const
+    OUString ReportFormula::getBracketedFieldOrExpression() const
     {
         bool bIsField = ( getType() == Field );
-        ::rtl::OUStringBuffer aFieldContent;
+        OUStringBuffer aFieldContent;
         if ( bIsField )
             aFieldContent.appendAscii( "[" );
         aFieldContent.append( getUndecoratedContent() );
@@ -140,11 +140,11 @@ namespace rptui
         return aFieldContent.makeStringAndClear();
     }
     //--------------------------------------------------------------------
-    const ::rtl::OUString& ReportFormula::getUndecoratedContent() const
+    const OUString& ReportFormula::getUndecoratedContent() const
     {
         return m_sUndecoratedContent;
     }
-    const ::rtl::OUString&  ReportFormula::getCompleteFormula() const { return m_sCompleteFormula; }
+    const OUString&  ReportFormula::getCompleteFormula() const { return m_sCompleteFormula; }
     bool                    ReportFormula::isValid() const { return getType() != Invalid; }
     ReportFormula& ReportFormula::operator=(class ReportFormula const & _rHd)
     {
@@ -156,9 +156,9 @@ namespace rptui
         return *this;
     }
     //--------------------------------------------------------------------
-    ::rtl::OUString ReportFormula::getEqualUndecoratedContent() const
+    OUString ReportFormula::getEqualUndecoratedContent() const
     {
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         aBuffer.appendAscii( "=" );
         aBuffer.append( getUndecoratedContent() );
         return aBuffer.makeStringAndClear();

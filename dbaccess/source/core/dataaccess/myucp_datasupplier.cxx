@@ -50,7 +50,7 @@ namespace dbaccess
 
 struct ResultListEntry
 {
-    rtl::OUString                       aId;
+    OUString                       aId;
     Reference< XContentIdentifier >     xId;
     ::rtl::Reference< OContentHelper >  xContent;
     Reference< XRow >                   xRow;
@@ -125,13 +125,13 @@ DataSupplier::~DataSupplier()
     DBG_DTOR(DataSupplier,NULL);
 }
 
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( (size_t)nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -151,7 +151,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 Reference< XContentIdentifier >
@@ -169,7 +169,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() )
     {
         Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( aId );
@@ -200,7 +200,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
         try
         {
             Reference< XContent > xContent;
-            ::rtl::OUString sName = xId->getContentIdentifier();
+            OUString sName = xId->getContentIdentifier();
             sal_Int32 nIndex = sName.lastIndexOf('/') + 1;
             sName = sName.getToken(0,'/',nIndex);
 
@@ -239,11 +239,11 @@ sal_Bool DataSupplier::getResult( sal_uInt32 nIndex )
     sal_uInt32 nPos = nOldCount;
 
     // @@@ Obtain data and put it into result list...
-    Sequence< ::rtl::OUString> aSeq = m_pImpl->m_xContent->getElementNames();
+    Sequence< OUString> aSeq = m_pImpl->m_xContent->getElementNames();
     if ( nIndex < sal::static_int_cast< sal_uInt32 >( aSeq.getLength() ) )
     {
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
         for(pIter = pIter + nPos;pIter != pEnd;++pIter,++nPos)
         {
             m_pImpl->m_aResults.push_back(
@@ -288,9 +288,9 @@ sal_uInt32 DataSupplier::totalCount()
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
 
     // @@@ Obtain data and put it into result list...
-    Sequence< ::rtl::OUString> aSeq = m_pImpl->m_xContent->getElementNames();
-    const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    Sequence< OUString> aSeq = m_pImpl->m_xContent->getElementNames();
+    const OUString* pIter = aSeq.getConstArray();
+    const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd;++pIter)
         m_pImpl->m_aResults.push_back(
                         new ResultListEntry( m_pImpl->m_xContent->getContent(*pIter)->getContentProperties() ) );

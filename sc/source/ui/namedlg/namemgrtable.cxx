@@ -57,7 +57,7 @@ String createEntryString(const ScRangeNameLine& rLine)
     return aRet;
 }
 
-ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
+ScRangeManagerTable::ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& rRangeMap, const ScAddress& rPos ):
     SvxSimpleTable( rParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP ),
     maGlobalString( ScGlobal::GetRscString(STR_GLOBAL_SCOPE)),
     mrRangeMap( rRangeMap ),
@@ -142,7 +142,7 @@ void ScRangeManagerTable::Init()
 {
     SetUpdateMode(false);
     Clear();
-    for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
+    for (boost::ptr_map<OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
             itr != mrRangeMap.end(); ++itr)
     {
         const ScRangeName* pLocalRangeName = itr->second;
@@ -168,7 +168,7 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = mrRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        pRangeName = mrRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
     else
         pRangeName = mrRangeMap.find(rLine.aScope)->second;
 
@@ -187,7 +187,7 @@ void ScRangeManagerTable::CheckForFormulaString()
             ScRangeNameLine aLine;
             GetLine( aLine, pEntry);
             const ScRangeData* pData = findRangeData( aLine );
-            rtl::OUString aFormulaString;
+            OUString aFormulaString;
             pData->GetSymbol(aFormulaString, maPos);
             SetEntryText(aFormulaString, pEntry, 1);
             maCalculatedFormulaEntries.insert( std::pair<SvTreeListEntry*, bool>(pEntry, true) );
@@ -230,8 +230,8 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 {
     for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
     {
-        if (rLine.aName == rtl::OUString(GetEntryText(pEntry, 0))
-                && rLine.aScope == rtl::OUString(GetEntryText(pEntry, 2)))
+        if (rLine.aName == OUString(GetEntryText(pEntry, 0))
+                && rLine.aScope == OUString(GetEntryText(pEntry, 2)))
         {
             SetCurEntry(pEntry);
         }

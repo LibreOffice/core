@@ -113,9 +113,9 @@ void    XFBorder::SetWidthOutter(double outer)
     m_fWidthOutter = outer;
 }
 
-rtl::OUString   XFBorder::GetLineWidth()
+OUString   XFBorder::GetLineWidth()
 {
-    rtl::OUString   str;
+    OUString   str;
 
     if( m_bDouble )
     {
@@ -126,9 +126,9 @@ rtl::OUString   XFBorder::GetLineWidth()
     return str;
 }
 
-rtl::OUString   XFBorder::ToString()
+OUString   XFBorder::ToString()
 {
-    rtl::OUString str;
+    OUString str;
 
     if( m_bDouble )
     {

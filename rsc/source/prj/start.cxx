@@ -46,8 +46,8 @@ extern "C"
 }
 int rsc2_main(int, char**);
 
-static sal_Bool CallPrePro( const rtl::OString& rInput,
-    const rtl::OString& rOutput, RscPtrPtr * pCmdLine,
+static sal_Bool CallPrePro( const OString& rInput,
+    const OString& rOutput, RscPtrPtr * pCmdLine,
     sal_Bool bResponse )
 {
     RscPtrPtr       aNewCmdL;   // Kommandozeile
@@ -55,7 +55,7 @@ static sal_Bool CallPrePro( const rtl::OString& rInput,
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
     FILE*           fRspFile = NULL;
-    rtl::OString    aRspFileName;
+    OString    aRspFileName;
 
     if( bResponse )
     {
@@ -101,7 +101,7 @@ static sal_Bool CallPrePro( const rtl::OString& rInput,
     if( fRspFile )
     {
         aRespCmdL.Append( rsc_strdup( "rscpp" ) );
-        rtl::OStringBuffer aTmpStr;
+        OStringBuffer aTmpStr;
         aTmpStr.append('@').append(aRspFileName);
         aRespCmdL.Append( rsc_strdup( aTmpStr.getStr() ) );
         aRespCmdL.Append( (void *)0 );
@@ -143,10 +143,10 @@ static sal_Bool CallPrePro( const rtl::OString& rInput,
 
 
 static sal_Bool CallRsc2( RscStrList * pInputList,
-    const rtl::OString &rSrsName, RscPtrPtr * pCmdLine )
+    const OString &rSrsName, RscPtrPtr * pCmdLine )
 {
     int nRet;
-    rtl::OString*  pString;
+    OString*  pString;
     RscVerbosity eVerbosity = RscVerbosityNormal;
 
     RscPtrPtr aNewCmdL;
@@ -210,15 +210,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Bool        bHelp    = sal_False;
     sal_Bool        bError   = sal_False;
     sal_Bool        bResponse = sal_False;
-    rtl::OString    aSrsName;
-    rtl::OString    aResName;
+    OString    aSrsName;
+    OString    aResName;
     RscStrList      aInputList;
     RscStrList      aTmpList;
     char *          pStr;
     char **         ppStr;
     RscPtrPtr       aCmdLine;       // Kommandozeile
     sal_uInt32      i;
-    rtl::OString*   pString;
+    OString*   pString;
 
     pStr = ::ResponseFile( &aCmdLine, argv, argc );
     if( pStr )
@@ -261,7 +261,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             // Eingabedatei
-            aInputList.push_back( new rtl::OString(*ppStr) );
+            aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;
         i++;
@@ -274,7 +274,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
         {
-            aSrsName = rtl::OStringBuffer("-fp=").append(OutputFile(*aInputList[0], "srs")).
+            aSrsName = OStringBuffer("-fp=").append(OutputFile(*aInputList[0], "srs")).
                 makeStringAndClear();
         }
     };
@@ -283,7 +283,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         bPrePro = sal_False;
     if( bPrePro && !aInputList.empty() )
     {
-        rtl::OString aTmpName;
+        OString aTmpName;
 
         for ( size_t k = 0, n = aInputList.size(); k < n; ++k )
         {
@@ -295,7 +295,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 bError = sal_True;
                 break;
             }
-            aTmpList.push_back( new rtl::OString(aTmpName) );
+            aTmpList.push_back( new OString(aTmpName) );
         };
     };
 

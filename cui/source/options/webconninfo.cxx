@@ -188,9 +188,9 @@ void WebConnectionInfoDialog::FillPasswordList()
 
             for ( sal_Int32 nURLIdx = 0; nURLIdx < aUrls.getLength(); nURLIdx++ )
             {
-                ::rtl::OUString aUIEntry( aUrls[ nURLIdx ] );
-                aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
-                aUIEntry += ::rtl::OUString( "*" );
+                OUString aUIEntry( aUrls[ nURLIdx ] );
+                aUIEntry += OUString::valueOf( (sal_Unicode)'\t' );
+                aUIEntry += OUString( "*" );
                 SvTreeListEntry* pEntry = m_pPasswordsLB->InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
@@ -208,8 +208,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
         SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
+            OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
+            OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
 
             uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
                 task::PasswordContainer::create(comphelper::getProcessComponentContext()));
@@ -264,8 +264,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
         SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
         if ( pEntry )
         {
-            ::rtl::OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
-            ::rtl::OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
+            OUString aURL = m_pPasswordsLB->GetEntryText( pEntry, 0 );
+            OUString aUserName = m_pPasswordsLB->GetEntryText( pEntry, 1 );
 
             ::comphelper::SimplePasswordRequest* pPasswordRequest
                   = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );

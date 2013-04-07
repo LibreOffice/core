@@ -85,7 +85,6 @@ using namespace ::com::sun::star::frame;
 using ::com::sun::star::util::URL;
 using comphelper::HelperBaseNoState;
 
-using ::rtl::OUString;
 
 SwXTextView::SwXTextView(SwView* pSwView) :
     SfxBaseController(pSwView),
@@ -562,16 +561,16 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
         pRet[n].realloc(5);
         PropertyValue* pValues = pRet[n].getArray();
-        pValues[0].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_BASE_TEXT));
+        pValues[0].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_BASE_TEXT));
         pValues[0].Value <<= OUString(rEntryText);
-        pValues[1].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
+        pValues[1].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
         pValues[1].Value <<= OUString(rAttr.GetText());
-        pValues[2].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
+        pValues[2].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
         SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         pValues[2].Value <<= OUString( aString );
-        pValues[3].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
+        pValues[3].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
-        pValues[4].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
+        pValues[4].Name = OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_IS_ABOVE));
         sal_Bool bVal = !rAttr.GetPosition();
         pValues[4].Value.setValue(&bVal, ::getBooleanCppuType());
     }
@@ -716,7 +715,7 @@ namespace {
 void SwXTextView::NotifyDBChanged()
 {
     URL aURL;
-    aURL.Complete = rtl::OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
+    aURL.Complete = OUString::createFromAscii(SwXDispatch::GetDBChangeURL());
 
     m_SelChangedListeners.forEach<XDispatch>(
             DispatchListener(aURL, Sequence<PropertyValue>(0)));

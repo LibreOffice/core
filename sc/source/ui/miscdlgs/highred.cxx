@@ -96,8 +96,8 @@ void ScHighlightChgDlg::Init()
     {
         aChangeViewSet.SetTheAuthorToShow(pChanges->GetUser());
         aFilterCtr.ClearAuthors();
-        const std::set<rtl::OUString>& rUserColl = pChanges->GetUserCollection();
-        std::set<rtl::OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
+        const std::set<OUString>& rUserColl = pChanges->GetUserCollection();
+        std::set<OUString>::const_iterator it = rUserColl.begin(), itEnd = rUserColl.end();
         for (; it != itEnd; ++it)
             aFilterCtr.InsertAuthor(*it);
     }

@@ -52,7 +52,7 @@ namespace svgio
             /// link to another pattern used as style. If maXLink
             /// is set, the node can be fetched on demand by using
             // tryToFindLink (buffered)
-            rtl::OUString           maXLink;
+            OUString           maXLink;
             const SvgPatternNode*   mpXLink;
 
             /// link on demand
@@ -65,7 +65,7 @@ namespace svgio
             virtual ~SvgPatternNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// global helpers
             void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode& rUser) const;

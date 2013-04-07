@@ -27,7 +27,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -127,14 +126,14 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 }
 
 // ____ XFormattedString ____
-::rtl::OUString SAL_CALL FormattedString::getString()
+OUString SAL_CALL FormattedString::getString()
     throw (uno::RuntimeException)
 {
     MutexGuard aGuard( GetMutex());
     return m_aString;
 }
 
-void SAL_CALL FormattedString::setString( const ::rtl::OUString& String )
+void SAL_CALL FormattedString::setString( const OUString& String )
     throw (uno::RuntimeException)
 {
     {

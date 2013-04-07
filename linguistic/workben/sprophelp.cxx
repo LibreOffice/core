@@ -38,7 +38,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 
 
@@ -54,7 +53,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (sal_Int32 i = 0;  i < nPropCount;  ++i)
     {
-        pName[i] = ::rtl::OUString::createFromAscii( pPropNames[i] );
+        pName[i] = OUString::createFromAscii( pPropNames[i] );
     }
 }
 

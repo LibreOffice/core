@@ -52,8 +52,6 @@ using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace chart
 {
@@ -329,7 +327,7 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
 
             //data in columns?
             {
-                ::rtl::OUString aRangeString;
+                OUString aRangeString;
                 bool bFirstCellAsLabel = true;
                 bool bHasCategories = true;
                 uno::Sequence< sal_Int32 > aSequenceMapping;
@@ -1269,7 +1267,7 @@ public:
     {}
 
     virtual sal_Int32 getLevelCount() const;
-    virtual uno::Sequence< rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const;
+    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const;
 
 private:
     const ::std::vector< ::std::vector< uno::Any > >& m_rComplexDescriptions;
@@ -1279,9 +1277,9 @@ sal_Int32 SplitCategoriesProvider_ForComplexDescriptions::getLevelCount() const
 {
     return lcl_getInnerLevelCount( m_rComplexDescriptions );
 }
-uno::Sequence< rtl::OUString > SplitCategoriesProvider_ForComplexDescriptions::getStringsForLevel( sal_Int32 nLevel ) const
+uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStringsForLevel( sal_Int32 nLevel ) const
 {
-    uno::Sequence< rtl::OUString > aResult;
+    uno::Sequence< OUString > aResult;
     if( nLevel < lcl_getInnerLevelCount( m_rComplexDescriptions ) )
     {
         aResult.realloc( m_rComplexDescriptions.size() );
@@ -1354,15 +1352,15 @@ Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexRowDes
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexRowLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< ::rtl::OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& aRowDescriptions ) throw (uno::RuntimeException)
 {
     m_aInternalData.setComplexRowLabels( lcl_convertComplexStringSequenceToAnyVector(aRowDescriptions) );
 }
-Sequence< Sequence< ::rtl::OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
+Sequence< Sequence< OUString > > SAL_CALL InternalDataProvider::getComplexColumnDescriptions() throw (uno::RuntimeException)
 {
     return lcl_convertComplexAnyVectorToStringSequence( m_aInternalData.getComplexColumnLabels() );
 }
-void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< ::rtl::OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
+void SAL_CALL InternalDataProvider::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& aColumnDescriptions ) throw (uno::RuntimeException)
 {
     m_aInternalData.setComplexColumnLabels( lcl_convertComplexStringSequenceToAnyVector(aColumnDescriptions) );
 }

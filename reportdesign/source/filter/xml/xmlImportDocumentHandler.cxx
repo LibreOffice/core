@@ -45,7 +45,7 @@ namespace rptxml
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-::rtl::OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
+OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context)
     :m_bImportedChart( false )
@@ -64,37 +64,37 @@ ImportDocumentHandler::~ImportDocumentHandler()
 IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ImportDocumentHandler, ImportDocumentHandler_BASE )
 //------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------
-sal_Bool SAL_CALL ImportDocumentHandler::supportsService( const ::rtl::OUString& ServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ImportDocumentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_static());
 }
 
 //------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ImportDocumentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSupported;
+    uno::Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
         aSupported = m_xServiceInfo->getSupportedServiceNames();
     return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString ImportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString ImportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.ImportDocumentHandler");
+    return OUString("com.sun.star.comp.report.ImportDocumentHandler");
 }
 
 //------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > ImportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString("com.sun.star.report.ImportDocumentHandler");
+    uno::Sequence< OUString > aSupported(1);
+    aSupported[0] = OUString("com.sun.star.report.ImportDocumentHandler");
     return aSupported;
 }
 
@@ -117,7 +117,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
     {
         // this fills the chart again
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "CellRangeRepresentation", ::rtl::OUString("all") );
+        aArgs.put( "CellRangeRepresentation", OUString("all") );
         aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
@@ -125,7 +125,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
         if ( xDataProvider.is() )
         {
-            const uno::Sequence< ::rtl::OUString > aColumnNames = xDataProvider->getColumnDescriptions();
+            const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
             aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
         }
 
@@ -134,26 +134,26 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
     }
 }
 
-void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)
+void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     uno::Reference< xml::sax::XAttributeList > xNewAttribs = _xAttrList;
     bool bExport = true;
     if ( _sName == "office:report" )
     {
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-        static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+        static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
         try
         {
             for(sal_Int16 i = 0; i < nLength; ++i)
             {
-                ::rtl::OUString sLocalName;
-                const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+                OUString sLocalName;
+                const OUString sAttrName = _xAttrList->getNameByIndex( i );
                 const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
                 if( -1L == nColonPos )
                     sLocalName = sAttrName;
                 else
                     sLocalName = sAttrName.copy( nColonPos + 1L );
-                const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                const OUString sValue = _xAttrList->getValueByIndex( i );
 
                 switch( m_pReportElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
                 {
@@ -194,17 +194,17 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         SAL_WNODEPRECATED_DECLARATIONS_POP
         try
         {
-            ::rtl::OUString sMasterField,sDetailField;
+            OUString sMasterField,sDetailField;
             for(sal_Int16 i = 0; i < nLength; ++i)
             {
-                ::rtl::OUString sLocalName;
-                const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+                OUString sLocalName;
+                const OUString sAttrName = _xAttrList->getNameByIndex( i );
                 const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
                 if( -1L == nColonPos )
                     sLocalName = sAttrName;
                 else
                     sLocalName = sAttrName.copy( nColonPos + 1L );
-                const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                const OUString sValue = _xAttrList->getValueByIndex( i );
 
                 switch( pMasterElemTokenMap->Get( XML_NAMESPACE_REPORT, sLocalName ) )
                 {
@@ -242,8 +242,8 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         SAL_WNODEPRECATED_DECLARATIONS_POP
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
             if( -1L == nColonPos )
                 sLocalName = sAttrName;
@@ -251,7 +251,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                 sLocalName = sAttrName.copy( nColonPos + 1L );
             if ( sLocalName == "data-source-has-labels" )
             {
-                const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                const OUString sValue = _xAttrList->getValueByIndex( i );
                 bHasCategories = sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("both"));
                 break;
             }
@@ -270,7 +270,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
-        pList->AddAttribute(::rtl::OUString("table:cell-range-address"),::rtl::OUString("local-table.$A$1:.$Z$65536"));
+        pList->AddAttribute(OUString("table:cell-range-address"),OUString("local-table.$A$1:.$Z$65536"));
 
     }
 
@@ -278,10 +278,10 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         m_xDelegatee->startElement(_sName,xNewAttribs);
 }
 
-void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) throw (uno::RuntimeException, xml::sax::SAXException)
+void SAL_CALL ImportDocumentHandler::endElement(const OUString & _sName) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     bool bExport = true;
-    ::rtl::OUString sNewName = _sName;
+    OUString sNewName = _sName;
     if ( _sName == "office:report" )
     {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_CHART);
@@ -289,9 +289,9 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
     else if ( _sName == "rpt:master-detail-fields" )
     {
         if ( !m_aMasterFields.empty() )
-            m_xDatabaseDataProvider->setMasterFields(uno::Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+            m_xDatabaseDataProvider->setMasterFields(uno::Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
         if ( !m_aDetailFields.empty() )
-            m_xDatabaseDataProvider->setDetailFields(uno::Sequence< ::rtl::OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+            m_xDatabaseDataProvider->setDetailFields(uno::Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
         bExport = false;
     }
     else if ( _sName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("rpt:detail"))
@@ -305,17 +305,17 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
         m_xDelegatee->endElement(sNewName);
 }
 
-void SAL_CALL ImportDocumentHandler::characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException)
+void SAL_CALL ImportDocumentHandler::characters(const OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->characters(aChars);
 }
 
-void SAL_CALL ImportDocumentHandler::ignorableWhitespace(const ::rtl::OUString & aWhitespaces) throw (uno::RuntimeException, xml::sax::SAXException)
+void SAL_CALL ImportDocumentHandler::ignorableWhitespace(const OUString & aWhitespaces) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->ignorableWhitespace(aWhitespaces);
 }
 
-void SAL_CALL ImportDocumentHandler::processingInstruction(const ::rtl::OUString & aTarget, const ::rtl::OUString & aData) throw (uno::RuntimeException, xml::sax::SAXException)
+void SAL_CALL ImportDocumentHandler::processingInstruction(const OUString & aTarget, const OUString & aData) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->processingInstruction(aTarget,aData);
 }
@@ -328,8 +328,8 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault(::rtl::OUString("DocumentHandler"),m_xDelegatee);
-    m_xModel = aArgs.getUnpackedValueOrDefault(::rtl::OUString("Model"),m_xModel);
+    m_xDelegatee = aArgs.getUnpackedValueOrDefault(OUString("DocumentHandler"),m_xDelegatee);
+    m_xModel = aArgs.getUnpackedValueOrDefault(OUString("Model"),m_xModel);
 
     OSL_ENSURE(m_xDelegatee.is(),"No document handler avialable!");
     if ( !m_xDelegatee.is() || !m_xModel.is() )
@@ -338,7 +338,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )
     {
-        const static ::rtl::OUString s_sDatabaseDataProvider("com.sun.star.chart2.data.DatabaseDataProvider");
+        const static OUString s_sDatabaseDataProvider("com.sun.star.chart2.data.DatabaseDataProvider");
         m_xDatabaseDataProvider.set(m_xContext->getServiceManager()->createInstanceWithContext(s_sDatabaseDataProvider
             ,m_xContext),uno::UNO_QUERY);
         if ( !m_xDatabaseDataProvider.is() )

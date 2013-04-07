@@ -277,7 +277,7 @@ short SvInsertOleDlg::Execute()
                         // object couldn't be created from file
                         // global Resource from svtools (former so3 resource)
                         String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
-                        aErr.SearchAndReplace( rtl::OUString( '%' ), aFileName );
+                        aErr.SearchAndReplace( OUString( '%' ), aFileName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
                     else
@@ -285,7 +285,7 @@ short SvInsertOleDlg::Execute()
                         // object couldn't be created
                         // global Resource from svtools (former so3 resource)
                         String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
-                        aErr.SearchAndReplace( rtl::OUString( '%' ), aServerName );
+                        aErr.SearchAndReplace( OUString( '%' ), aServerName );
                         ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
                     }
                 }
@@ -326,7 +326,7 @@ short SvInsertOleDlg::Execute()
                 // object couldn't be created from file
                 // global Resource from svtools (former so3 resource)
                 String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
-                aErr.SearchAndReplace( rtl::OUString( '%' ), aFileName );
+                aErr.SearchAndReplace( OUString( '%' ), aFileName );
                 ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
             }
         }
@@ -477,7 +477,7 @@ short SvInsertPlugInDialog::Execute()
             // PlugIn couldn't be created
             // global Resource from svtools (former so3 resource)
             String aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
-            aErr.SearchAndReplace( rtl::OUString('%'), aURL );
+            aErr.SearchAndReplace( OUString('%'), aURL );
             ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
         }
     }

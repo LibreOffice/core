@@ -27,7 +27,7 @@
 
 #include <rtl/ustring.hxx>
 
-::rtl::OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
+OUString getRegistryDir(::com::sun::star::mozilla::MozillaProductType product);
 
 #endif
 

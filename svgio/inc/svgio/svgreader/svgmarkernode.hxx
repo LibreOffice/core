@@ -65,7 +65,7 @@ namespace svgio
             virtual ~SvgMarkerNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// get marker primitives buffered, uses decomposeSvgNode internally
             const drawinglayer::primitive2d::Primitive2DSequence& getMarkerPrimitives() const;

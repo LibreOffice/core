@@ -43,7 +43,7 @@ protected:
     explicit PieChartType( const PieChartType & rOther );
 
     // ____ XChartType ____
-    virtual ::rtl::OUString SAL_CALL getChartType()
+    virtual OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount )

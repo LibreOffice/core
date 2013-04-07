@@ -34,7 +34,6 @@
 #include <switerator.hxx>
 
 using namespace com::sun::star;
-using ::rtl::OUString;
 
 sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
 {

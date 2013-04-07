@@ -54,7 +54,7 @@ class PivotCacheDefinitionFragment : public WorkbookFragmentBase
 public:
     explicit            PivotCacheDefinitionFragment(
                             const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             PivotCache& rPivotCache );
 
 protected:
@@ -74,7 +74,7 @@ class PivotCacheRecordsFragment : public WorksheetFragmentBase
 public:
     explicit            PivotCacheRecordsFragment(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             const PivotCache& rPivotCache );
 
 protected:
@@ -102,7 +102,7 @@ class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
 public:
     explicit            BiffPivotCacheFragment(
                             const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rStrmName,
+                            const OUString& rStrmName,
                             PivotCache& rPivotCache );
 
     /** Imports the entire fragment, returns true, if EOF record has been reached. */

@@ -63,28 +63,28 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ContentProvider::getImplementationName_static() throw (RuntimeException)
+    OUString SAL_CALL ContentProvider::getImplementationName_static() throw (RuntimeException)
     {
-        return ::rtl::OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
+        return OUString(  "org.openoffice.comp.ucp.ext.ContentProvider"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ContentProvider::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL ContentProvider::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(2);
-        aServiceNames[0] = ::rtl::OUString(  "com.sun.star.ucb.ContentProvider"  );
-        aServiceNames[1] = ::rtl::OUString(  "com.sun.star.ucb.ExtensionContentProvider"  );
+        Sequence< OUString > aServiceNames(2);
+        aServiceNames[0] = OUString(  "com.sun.star.ucb.ContentProvider"  );
+        aServiceNames[1] = OUString(  "com.sun.star.ucb.ExtensionContentProvider"  );
         return aServiceNames;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ContentProvider::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
@@ -96,21 +96,21 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString ContentProvider::getRootURL()
+    OUString ContentProvider::getRootURL()
     {
-        return ::rtl::OUString(  "vnd.sun.star.extension://"  );
+        return OUString(  "vnd.sun.star.extension://"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString ContentProvider::getArtificialNodeContentType()
+    OUString ContentProvider::getArtificialNodeContentType()
     {
-        return ::rtl::OUString(  "application/vnd.sun.star.extension-content"  );
+        return OUString(  "application/vnd.sun.star.extension-content"  );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     namespace
     {
-        void lcl_ensureAndTransfer( ::rtl::OUString& io_rIdentifierFragment, ::rtl::OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
+        void lcl_ensureAndTransfer( OUString& io_rIdentifierFragment, OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
         {
             if ( ( io_rIdentifierFragment.isEmpty() ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
                 throw IllegalIdentifierException();
@@ -124,19 +124,19 @@ namespace ucb { namespace ucp { namespace ext
         throw( IllegalIdentifierException, RuntimeException )
     {
         // Check URL scheme...
-        const ::rtl::OUString sScheme( "vnd.sun.star.extension" );
+        const OUString sScheme( "vnd.sun.star.extension" );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 
         // normalize the identifier
-        const ::rtl::OUString sIdentifier( i_rIdentifier->getContentIdentifier() );
+        const OUString sIdentifier( i_rIdentifier->getContentIdentifier() );
 
         // the scheme needs to be lower-case
-        ::rtl::OUStringBuffer aComposer;
+        OUStringBuffer aComposer;
         aComposer.append( sIdentifier.copy( 0, sScheme.getLength() ).toAsciiLowerCase() );
 
         // one : is required after the scheme
-        ::rtl::OUString sRemaining( sIdentifier.copy( sScheme.getLength() ) );
+        OUString sRemaining( sIdentifier.copy( sScheme.getLength() ) );
         lcl_ensureAndTransfer( sRemaining, aComposer, ':' );
 
         // and at least one /

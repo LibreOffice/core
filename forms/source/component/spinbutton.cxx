@@ -47,7 +47,7 @@ namespace frm
     // implemented elsewhere
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
-        const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName );
+        const OUString& _rMinValueName, const OUString& _rMaxValueName );
     Any translateControlIntToExternalDoubleValue( const Any& _rControlIntValue );
 
     //====================================================================
@@ -102,7 +102,7 @@ namespace frm
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
             DECL_PROP1( DEFAULT_SPIN_VALUE,   sal_Int32,       BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
-            DECL_PROP2( CONTROLSOURCEPROPERTY,::rtl::OUString, READONLY, TRANSIENT );
+            DECL_PROP2( CONTROLSOURCEPROPERTY,OUString, READONLY, TRANSIENT );
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -194,7 +194,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException )
+    OUString SAL_CALL OSpinButtonModel::getServiceName() throw( RuntimeException )
     {
         return FRM_SUN_COMPONENT_SPINBUTTON;
     }
@@ -243,8 +243,8 @@ namespace frm
     Any OSpinButtonModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            ::rtl::OUString( "SpinValueMin" ),
-            ::rtl::OUString( "SpinValueMax" ) );
+            OUString( "SpinValueMin" ),
+            OUString( "SpinValueMax" ) );
     }
 
     //--------------------------------------------------------------------

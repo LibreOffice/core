@@ -28,8 +28,8 @@
 namespace comp_SfxDocumentMetaData {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
     css::uno::Reference< css::uno::XComponentContext > const & context );
 
@@ -38,8 +38,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
 namespace comp_CompatWriterDocProps {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
         css::uno::Reference< css::uno::XComponentContext > const & context );
 

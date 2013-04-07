@@ -31,7 +31,7 @@
 #include <vector>
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -72,8 +72,8 @@ ODatabaseMetaData::~ODatabaseMetaData()
 
 // -------------------------------------------------------------------------
 ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
-        const ::rtl::OUString& tableNamePattern,
-        const ::rtl::OUString& columnNamePattern ) throw(SQLException)
+        const OUString& tableNamePattern,
+        const OUString& columnNamePattern ) throw(SQLException)
 {
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
@@ -81,8 +81,8 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::std::vector< ::rtl::OUString > tables;
-    ::std::vector< ::rtl::OUString > types;
+    ::std::vector< OUString > tables;
+    ::std::vector< OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types) ) {
         getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
     }
@@ -92,13 +92,13 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // ****************************************************
 
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(::rtl::OUString(""));
+    aRow[1] = new ORowSetValueDecorator(OUString(""));
     // Schema
-    aRow[2] = new ORowSetValueDecorator(::rtl::OUString(""));
+    aRow[2] = new ORowSetValueDecorator(OUString(""));
     // DATA_TYPE
     aRow[5] = new ORowSetValueDecorator(static_cast<sal_Int16>(DataType::VARCHAR));
     // TYPE_NAME, not used
-    aRow[6] = new ORowSetValueDecorator(::rtl::OUString("VARCHAR"));
+    aRow[6] = new ORowSetValueDecorator(OUString("VARCHAR"));
     // COLUMN_SIZE
     aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
     // BUFFER_LENGTH, not used
@@ -120,7 +120,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // CHAR_OCTET_LENGTH, refer to [5]
     aRow[16] = new ORowSetValueDecorator(s_nCHAR_OCTET_LENGTH);
     // IS_NULLABLE
-    aRow[18] = new ORowSetValueDecorator(::rtl::OUString("YES"));
+    aRow[18] = new ORowSetValueDecorator(OUString("YES"));
 
     const OColumnAlias& colNames = m_pConnection->getColumnAlias();
 
@@ -153,9 +153,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     return( aRows );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
+OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -286,21 +286,21 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aVal;
+    OUString aVal;
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aVal;
+    OUString aVal;
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -638,52 +638,52 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pConnection->getURL();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)1);
+    OUString aValue = OUString::valueOf((sal_Int32)1);
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)0);
+    OUString aValue = OUString::valueOf((sal_Int32)0);
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -702,36 +702,36 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) throw(RuntimeExc
     return 0;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
@@ -851,23 +851,23 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
     // there exists no possibility to get table types so we have to check
-    static ::rtl::OUString sTableTypes[] =
+    static OUString sTableTypes[] =
     {
-        ::rtl::OUString("TABLE"),
-        ::rtl::OUString("VIEW")
+        OUString("TABLE"),
+        OUString("VIEW")
         // Currently we only support a 'TABLE' and 'VIEW' nothing more complex
         //
-        // ::rtl::OUString("SYSTEM TABLE"),
-        // ::rtl::OUString("GLOBAL TEMPORARY"),
-        // ::rtl::OUString("LOCAL TEMPORARY"),
-        // ::rtl::OUString("ALIAS"),
-        // ::rtl::OUString("SYNONYM")
+        // OUString("SYSTEM TABLE"),
+        // OUString("GLOBAL TEMPORARY"),
+        // OUString("LOCAL TEMPORARY"),
+        // OUString("ALIAS"),
+        // OUString("SYNONYM")
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    const sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
+    const sal_Int32  nSize = sizeof(sTableTypes) / sizeof(OUString);
     ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)
     {
@@ -895,7 +895,7 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -923,8 +923,8 @@ Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
-    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
+    const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
@@ -935,8 +935,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-    const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/,
+    const OUString& tableNamePattern, const Sequence< OUString >& types ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
@@ -956,14 +956,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
 
     Reference< XResultSet > xRef = pResult;
 
-    ::std::vector< ::rtl::OUString > tables;
-    ::std::vector< ::rtl::OUString > types;
+    ::std::vector< OUString > tables;
+    ::std::vector< OUString > types;
     if ( !m_pDbMetaDataHelper->getTableStrings( m_pConnection, tables, types ) )
         getOwnConnection()->throwSQLException( m_pDbMetaDataHelper->getError(), *this );
 
@@ -975,7 +975,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     aRow[3] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[4] = ::connectivity::ODatabaseMetaDataResultSet::getEmptyValue();
     aRow[5] = new ::connectivity::ORowSetValueDecorator(getUserName());
-    aRow[7] = new ::connectivity::ORowSetValueDecorator(::rtl::OUString("NO"));
+    aRow[7] = new ::connectivity::ORowSetValueDecorator(OUString("NO"));
 
 
     // Iterate over all tables
@@ -1010,7 +1010,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
     return NULL;
 }

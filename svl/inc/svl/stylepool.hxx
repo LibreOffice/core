@@ -73,7 +73,7 @@ public:
 
     virtual ~StylePool();
 
-    static ::rtl::OUString nameOf( SfxItemSet_Pointer_t pSet );
+    static OUString nameOf( SfxItemSet_Pointer_t pSet );
 };
 
 class SVL_DLLPUBLIC IStylePoolIteratorAccess
@@ -83,7 +83,7 @@ public:
         If there is no more SfxItemSet, the delivered share_pointer is empty.
     */
     virtual StylePool::SfxItemSet_Pointer_t getNext() = 0;
-    virtual ::rtl::OUString getName() = 0;
+    virtual OUString getName() = 0;
     virtual ~IStylePoolIteratorAccess() {};
 };
 #endif

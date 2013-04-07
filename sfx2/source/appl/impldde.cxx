@@ -186,7 +186,7 @@ sal_Bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
             pRequest->Execute();
         }
 
-        ::rtl::OUString aEmptyStr;
+        OUString aEmptyStr;
         rData <<= aEmptyStr;
     }
     return 0 == pConnection->GetError();
@@ -230,7 +230,7 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         {
             sal_Bool bSysTopic;
             {
-                DdeConnection aTmp(sServer, rtl::OUString("SYSTEM"));
+                DdeConnection aTmp(sServer, OUString("SYSTEM"));
                 bSysTopic = !aTmp.GetError();
             }
 
@@ -247,9 +247,9 @@ sal_Bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         // Server not up, try once more to start it.
         if( !bInWinExec )
         {
-            rtl::OStringBuffer aCmdLine(rtl::OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
+            OStringBuffer aCmdLine(OUStringToOString(sServer, RTL_TEXTENCODING_ASCII_US));
             aCmdLine.append(RTL_CONSTASCII_STRINGPARAM(".exe "));
-            aCmdLine.append(rtl::OUStringToOString(sTopic, RTL_TEXTENCODING_ASCII_US));
+            aCmdLine.append(OUStringToOString(sTopic, RTL_TEXTENCODING_ASCII_US));
 
             if( WinExec( aCmdLine.getStr(), SW_SHOWMINIMIZED ) < 32 )
                 nError = DDELINK_ERROR_APP;

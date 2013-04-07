@@ -61,12 +61,12 @@ namespace {
 class Service: public cppu::WeakImplHelper1< css::lang::XMain > {
 public:
     virtual sal_Int32 SAL_CALL
-    run(css::uno::Sequence< rtl::OUString > const & arguments)
+    run(css::uno::Sequence< OUString > const & arguments)
         throw (css::uno::RuntimeException);
 
-    static rtl::OUString getImplementationName();
+    static OUString getImplementationName();
 
-    static css::uno::Sequence< rtl::OUString > getSupportedServiceNames();
+    static css::uno::Sequence< OUString > getSupportedServiceNames();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         css::uno::Reference< css::uno::XComponentContext > const & context)
@@ -85,8 +85,8 @@ private:
 
 namespace {
 
-std::ostream & operator <<(std::ostream & out, rtl::OUString const & value) {
-    return out << rtl::OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr();
+std::ostream & operator <<(std::ostream & out, OUString const & value) {
+    return out << OUStringToOString(value, RTL_TEXTENCODING_UTF8).getStr();
 }
 
 void assertTrue(bool argument) {
@@ -116,7 +116,7 @@ template< typename T > void assertEqual(T const & value, T const & argument) {
 
 }
 
-sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
+sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
     throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > factory(
@@ -125,10 +125,10 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] = css::uno::Reference< css::beans::XPropertySet >(
         factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
-            rtl::OUString("Registry"));
+            OUString("Registry"));
     css::uno::Reference< css::container::XHierarchicalNameAccess > provider(
         factory->createInstanceWithArgumentsAndContext(
-            rtl::OUString( "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
+            OUString( "com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
             args, m_context),
         css::uno::UNO_QUERY_THROW);
 
@@ -141,65 +141,65 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual< bool >(
         false,
         provider->hasByHierarchicalName(
-            rtl::OUString( "[][]boolean")));
+            OUString( "[][]boolean")));
     assertEqual< bool >(
         false,
         provider->hasByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Struct3<boolean,boolean>")));
+            OUString( "test.registrytdprovider.Struct3<boolean,boolean>")));
     assertEqual< bool >(
         false,
         provider->hasByHierarchicalName(
-            rtl::OUString( "com.sun.star.uno.XComponentContext::getValueByName")));
+            OUString( "com.sun.star.uno.XComponentContext::getValueByName")));
 
     css::uno::Reference< css::reflection::XCompoundTypeDescription > exception;
     exception
         = css::uno::Reference< css::reflection::XCompoundTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "com.sun.star.uno.Exception")),
+                OUString( "com.sun.star.uno.Exception")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_EXCEPTION, exception->getTypeClass());
-    assertEqual( rtl::OUString( "com.sun.star.uno.Exception"),
+    assertEqual( OUString( "com.sun.star.uno.Exception"),
         exception->getName());
     assertFalse(exception->getBaseType().is());
     exception
         = css::uno::Reference< css::reflection::XCompoundTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "com.sun.star.uno.RuntimeException")),
+                OUString( "com.sun.star.uno.RuntimeException")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_EXCEPTION, exception->getTypeClass());
-    assertEqual( rtl::OUString( "com.sun.star.uno.RuntimeException"),
+    assertEqual( OUString( "com.sun.star.uno.RuntimeException"),
         exception->getName());
-    assertEqual( rtl::OUString( "com.sun.star.uno.Exception"),
+    assertEqual( OUString( "com.sun.star.uno.Exception"),
         exception->getBaseType()->getName());
 
     css::uno::Reference< css::reflection::XStructTypeDescription > structure;
 
     structure = css::uno::Reference< css::reflection::XStructTypeDescription >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Struct2")),
+            OUString( "test.registrytdprovider.Struct2")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_STRUCT, structure->getTypeClass());
-    assertEqual( rtl::OUString( "test.registrytdprovider.Struct2"),
+    assertEqual( OUString( "test.registrytdprovider.Struct2"),
         structure->getName());
     assertFalse(structure->getBaseType().is());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Struct1"),
+        OUString( "test.registrytdprovider.Struct1"),
         structure->getMemberTypes()[0]->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberNames().getLength());
     assertEqual(
-        rtl::OUString("s1"),
+        OUString("s1"),
         structure->getMemberNames()[0]);
     assertEqual< sal_Int32 >(0, structure->getTypeParameters().getLength());
     assertEqual< sal_Int32 >(0, structure->getTypeArguments().getLength());
 
     structure = css::uno::Reference< css::reflection::XStructTypeDescription >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Struct3")),
+            OUString( "test.registrytdprovider.Struct3")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_STRUCT, structure->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Struct3"),
+        OUString( "test.registrytdprovider.Struct3"),
         structure->getName());
     assertFalse(structure->getBaseType().is());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
@@ -207,41 +207,41 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
         css::uno::TypeClass_UNKNOWN,
         structure->getMemberTypes()[0]->getTypeClass());
     assertEqual(
-        rtl::OUString("U"),
+        OUString("U"),
         structure->getMemberTypes()[0]->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberNames().getLength());
     assertEqual(
-        rtl::OUString("s2"),
+        OUString("s2"),
         structure->getMemberNames()[0]);
     assertEqual< sal_Int32 >(2, structure->getTypeParameters().getLength());
     assertEqual(
-        rtl::OUString("T"),
+        OUString("T"),
         structure->getTypeParameters()[0]);
     assertEqual(
-        rtl::OUString("U"),
+        OUString("U"),
         structure->getTypeParameters()[1]);
     assertEqual< sal_Int32 >(0, structure->getTypeArguments().getLength());
 
     structure = css::uno::Reference< css::reflection::XStructTypeDescription >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Struct4")),
+            OUString( "test.registrytdprovider.Struct4")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_STRUCT, structure->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Struct4"),
+        OUString( "test.registrytdprovider.Struct4"),
         structure->getName());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Struct2"),
+        OUString( "test.registrytdprovider.Struct2"),
         structure->getBaseType()->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Struct3<"
+        OUString( "test.registrytdprovider.Struct3<"
                 "test.registrytdprovider.Struct2,"
                 "test.registrytdprovider.Struct3<boolean,any>>"),
         structure->getMemberTypes()[0]->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberNames().getLength());
     assertEqual(
-        rtl::OUString("s2"),
+        OUString("s2"),
         structure->getMemberNames()[0]);
     assertEqual< sal_Int32 >(0, structure->getTypeParameters().getLength());
     assertEqual< sal_Int32 >(0, structure->getTypeArguments().getLength());
@@ -252,25 +252,25 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     interface
         = css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.XTest1")),
+                OUString( "test.registrytdprovider.XTest1")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_INTERFACE, interface->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1"),
+        OUString( "test.registrytdprovider.XTest1"),
         interface->getName());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > > bases(
             interface->getBaseTypes());
     assertEqual< sal_Int32 >(1, bases.getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.uno.XInterface"),
+        OUString( "com.sun.star.uno.XInterface"),
         bases[0]->getName());
     css::uno::Sequence<
         css::uno::Reference< css::reflection::XTypeDescription > >
             optionalBases(interface->getOptionalBaseTypes());
     assertEqual< sal_Int32 >(1, optionalBases.getLength());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.XBase"),
         optionalBases[0]->getName());
     css::uno::Sequence<
@@ -296,15 +296,15 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual(
         css::uno::TypeClass_INTERFACE_ATTRIBUTE, attribute->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1::a1"),
+        OUString( "test.registrytdprovider.XTest1::a1"),
         attribute->getName());
     assertEqual(
-        rtl::OUString("a1"),
+        OUString("a1"),
         attribute->getMemberName());
     assertEqual< sal_Int32 >(3, attribute->getPosition());
     assertEqual< bool >(false, attribute->isReadOnly());
     assertEqual(
-        rtl::OUString("short"),
+        OUString("short"),
         attribute->getType()->getName());
     assertEqual< bool >(true, attribute->isBound());
     getExceptions = attribute->getGetExceptions();
@@ -318,32 +318,32 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual(
         css::uno::TypeClass_INTERFACE_ATTRIBUTE, attribute->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1::a2"),
+        OUString( "test.registrytdprovider.XTest1::a2"),
         attribute->getName());
     assertEqual(
-        rtl::OUString("a2"),
+        OUString("a2"),
         attribute->getMemberName());
     assertEqual< sal_Int32 >(4, attribute->getPosition());
     assertEqual< bool >(false, attribute->isReadOnly());
     assertEqual(
-        rtl::OUString("long"),
+        OUString("long"),
         attribute->getType()->getName());
     assertEqual< bool >(false, attribute->isBound());
     getExceptions = attribute->getGetExceptions();
     assertEqual< sal_Int32 >(2, getExceptions.getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.lang.WrappedTargetException"),
+        OUString( "com.sun.star.lang.WrappedTargetException"),
         getExceptions[0]->getName());
     assertEqual(
-        rtl::OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "com.sun.star.uno.RuntimeException"),
         getExceptions[1]->getName());
     setExceptions = attribute->getSetExceptions();
     assertEqual< sal_Int32 >(2, setExceptions.getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.uno.Exception"),
+        OUString( "com.sun.star.uno.Exception"),
         setExceptions[0]->getName());
     assertEqual(
-        rtl::OUString( "com.sun.star.lang.WrappedTargetException"),
+        OUString( "com.sun.star.lang.WrappedTargetException"),
         setExceptions[1]->getName());
 
     attribute = css::uno::Reference<
@@ -352,22 +352,22 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual(
         css::uno::TypeClass_INTERFACE_ATTRIBUTE, attribute->getTypeClass());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.XTest1::a3"),
         attribute->getName());
     assertEqual(
-        rtl::OUString("a3"),
+        OUString("a3"),
         attribute->getMemberName());
     assertEqual< sal_Int32 >(5, attribute->getPosition());
     assertEqual< bool >(true, attribute->isReadOnly());
     assertEqual(
-        rtl::OUString("hyper"),
+        OUString("hyper"),
         attribute->getType()->getName());
     assertEqual< bool >(true, attribute->isBound());
     getExceptions = attribute->getGetExceptions();
     assertEqual< sal_Int32 >(1, getExceptions.getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.lang.WrappedTargetException"),
+        OUString( "com.sun.star.lang.WrappedTargetException"),
         getExceptions[0]->getName());
     setExceptions = attribute->getSetExceptions();
     assertEqual< sal_Int32 >(0, setExceptions.getLength());
@@ -377,26 +377,26 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
             members[3], css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_INTERFACE_METHOD, method->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1::f1"),
+        OUString( "test.registrytdprovider.XTest1::f1"),
         method->getName());
     assertEqual(
-        rtl::OUString("f1"),
+        OUString("f1"),
         method->getMemberName());
     assertEqual< sal_Int32 >(6, method->getPosition());
     assertEqual< bool >(false, method->isOneway());
     assertEqual< sal_Int32 >(1, method->getParameters().getLength());
     assertEqual(
-        rtl::OUString("p"),
+        OUString("p"),
         method->getParameters()[0]->getName());
     assertEqual(
-        rtl::OUString("any"),
+        OUString("any"),
         method->getParameters()[0]->getType()->getName());
     assertEqual< bool >(false, method->getParameters()[0]->isIn());
     assertEqual< bool >(true, method->getParameters()[0]->isOut());
     assertEqual< sal_Int32 >(0, method->getParameters()[0]->getPosition());
     assertEqual< sal_Int32 >(1, method->getExceptions().getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "com.sun.star.uno.RuntimeException"),
         method->getExceptions()[0]->getName());
 
     method = css::uno::Reference<
@@ -404,10 +404,10 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
             members[4], css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_INTERFACE_METHOD, method->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1::f2"),
+        OUString( "test.registrytdprovider.XTest1::f2"),
         method->getName());
     assertEqual(
-        rtl::OUString("f2"),
+        OUString("f2"),
         method->getMemberName());
     assertEqual< sal_Int32 >(7, method->getPosition());
     assertEqual< bool >(true, method->isOneway());
@@ -417,15 +417,15 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     interface
         = css::uno::Reference< css::reflection::XInterfaceTypeDescription2 >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.XTest2")),
+                OUString( "test.registrytdprovider.XTest2")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_INTERFACE, interface->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest2"),
+        OUString( "test.registrytdprovider.XTest2"),
         interface->getName());
     assertEqual< sal_Int32 >(1, interface->getBaseTypes().getLength());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Typedef2"),
+        OUString( "test.registrytdprovider.Typedef2"),
         interface->getBaseTypes()[0]->getName());
     assertEqual< sal_Int32 >(0, interface->getOptionalBaseTypes().getLength());
     assertEqual< sal_Int32 >(0, interface->getMembers().getLength());
@@ -434,11 +434,11 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
 
     service = css::uno::Reference< css::reflection::XServiceTypeDescription2 >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Service1")),
+            OUString( "test.registrytdprovider.Service1")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SERVICE, service->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Service1"),
+        OUString( "test.registrytdprovider.Service1"),
         service->getName());
     assertEqual< sal_Int32 >(0, service->getMandatoryServices().getLength());
     assertEqual< sal_Int32 >(0, service->getOptionalServices().getLength());
@@ -446,27 +446,27 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual< sal_Int32 >(0, service->getOptionalInterfaces().getLength());
     assertEqual< bool >(true, service->isSingleInterfaceBased());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.XTest1"),
         service->getInterface()->getName());
     assertEqual< sal_Int32 >(2, service->getConstructors().getLength());
     assertEqual(
-        rtl::OUString("c1"),
+        OUString("c1"),
         service->getConstructors()[0]->getName());
     assertEqual< sal_Int32 >(
         0, service->getConstructors()[0]->getParameters().getLength());
     assertEqual< sal_Int32 >(
         0, service->getConstructors()[0]->getExceptions().getLength());
     assertEqual(
-        rtl::OUString("c2"),
+        OUString("c2"),
         service->getConstructors()[1]->getName());
     assertEqual< sal_Int32 >(
         1, service->getConstructors()[1]->getParameters().getLength());
     assertEqual(
-        rtl::OUString("p"),
+        OUString("p"),
         service->getConstructors()[1]->getParameters()[0]->getName());
     assertEqual(
-        rtl::OUString("any"),
+        OUString("any"),
         (service->getConstructors()[1]->getParameters()[0]->getType()->
          getName()));
     assertEqual< bool >(
@@ -481,26 +481,26 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual< sal_Int32 >(
         1, service->getConstructors()[1]->getExceptions().getLength());
     assertEqual(
-        rtl::OUString( "com.sun.star.uno.RuntimeException"),
+        OUString( "com.sun.star.uno.RuntimeException"),
         service->getConstructors()[1]->getExceptions()[0]->getName());
 
     service = css::uno::Reference< css::reflection::XServiceTypeDescription2 >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Service2")),
+            OUString( "test.registrytdprovider.Service2")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SERVICE, service->getTypeClass());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.Service2"),
+        OUString( "test.registrytdprovider.Service2"),
         service->getName());
     assertEqual< sal_Int32 >(0, service->getMandatoryServices().getLength());
     assertEqual< sal_Int32 >(0, service->getOptionalServices().getLength());
     assertEqual< sal_Int32 >(1, service->getMandatoryInterfaces().getLength());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XTest1"),
+        OUString( "test.registrytdprovider.XTest1"),
         service->getMandatoryInterfaces()[0]->getName());
     assertEqual< sal_Int32 >(1, service->getOptionalInterfaces().getLength());
     assertEqual(
-        rtl::OUString( "test.registrytdprovider.XBase"),
+        OUString( "test.registrytdprovider.XBase"),
         service->getOptionalInterfaces()[0]->getName());
     assertEqual< bool >(false, service->isSingleInterfaceBased());
     assertFalse(service->getInterface().is());
@@ -508,11 +508,11 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
 
     service = css::uno::Reference< css::reflection::XServiceTypeDescription2 >(
         provider->getByHierarchicalName(
-            rtl::OUString( "test.registrytdprovider.Service3")),
+            OUString( "test.registrytdprovider.Service3")),
         css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SERVICE, service->getTypeClass());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Service3"),
         service->getName());
     assertEqual< sal_Int32 >(0, service->getMandatoryServices().getLength());
@@ -521,7 +521,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     assertEqual< sal_Int32 >(0, service->getOptionalInterfaces().getLength());
     assertEqual< bool >(true, service->isSingleInterfaceBased());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Typedef2"),
         service->getInterface()->getName());
     assertEqual< sal_Int32 >(0, service->getConstructors().getLength());
@@ -532,32 +532,32 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     singleton = css::uno::Reference<
         css::reflection::XSingletonTypeDescription2 >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Singleton1")),
+                OUString( "test.registrytdprovider.Singleton1")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SINGLETON, singleton->getTypeClass());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Singleton1"),
         singleton->getName());
     assertFalse(singleton->getService().is());
     assertEqual< bool >(true, singleton->isInterfaceBased());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.XTest1"),
         singleton->getInterface()->getName());
 
     singleton = css::uno::Reference<
         css::reflection::XSingletonTypeDescription2 >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Singleton2")),
+                OUString( "test.registrytdprovider.Singleton2")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SINGLETON, singleton->getTypeClass());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Singleton2"),
         singleton->getName());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Service1"),
         singleton->getService()->getName());
     assertEqual< bool >(false, singleton->isInterfaceBased());
@@ -566,17 +566,17 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     singleton = css::uno::Reference<
         css::reflection::XSingletonTypeDescription2 >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Singleton3")),
+                OUString( "test.registrytdprovider.Singleton3")),
             css::uno::UNO_QUERY_THROW);
     assertEqual(css::uno::TypeClass_SINGLETON, singleton->getTypeClass());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Singleton3"),
         singleton->getName());
     assertFalse(singleton->getService().is());
     assertEqual< bool >(true, singleton->isInterfaceBased());
     assertEqual(
-        rtl::OUString(
+        OUString(
             "test.registrytdprovider.Typedef2"),
         singleton->getInterface()->getName());
 
@@ -584,7 +584,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Enum1")),
+                OUString( "test.registrytdprovider.Enum1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -592,7 +592,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Enum2")),
+                OUString( "test.registrytdprovider.Enum2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -600,7 +600,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Struct1")),
+                OUString( "test.registrytdprovider.Struct1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -608,7 +608,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Struct2")),
+                OUString( "test.registrytdprovider.Struct2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -616,7 +616,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Struct3")),
+                OUString( "test.registrytdprovider.Struct3")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -624,14 +624,14 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XStructTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Struct3")),
+                OUString( "test.registrytdprovider.Struct3")),
             css::uno::UNO_QUERY_THROW)->getMemberTypes()[0],
         css::uno::UNO_QUERY);
     assertFalse(published.is());
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Struct3a")),
+                OUString( "test.registrytdprovider.Struct3a")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -639,7 +639,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Exception1")),
+                OUString( "test.registrytdprovider.Exception1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -647,7 +647,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Exception2")),
+                OUString( "test.registrytdprovider.Exception2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -655,7 +655,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.XTest1")),
+                OUString( "test.registrytdprovider.XTest1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -663,7 +663,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.XTest2")),
+                OUString( "test.registrytdprovider.XTest2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -671,7 +671,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Typedef1")),
+                OUString( "test.registrytdprovider.Typedef1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -679,7 +679,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Typedef2")),
+                OUString( "test.registrytdprovider.Typedef2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -691,7 +691,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Consts1")),
+                OUString( "test.registrytdprovider.Consts1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -699,7 +699,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Consts2")),
+                OUString( "test.registrytdprovider.Consts2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -707,14 +707,14 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider")),
+                OUString( "test.registrytdprovider")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertFalse(published.is());
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Service1")),
+                OUString( "test.registrytdprovider.Service1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -722,7 +722,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Service2")),
+                OUString( "test.registrytdprovider.Service2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -730,7 +730,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Singleton2")),
+                OUString( "test.registrytdprovider.Singleton2")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -738,7 +738,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(
-                rtl::OUString( "test.registrytdprovider.Singleton1")),
+                OUString( "test.registrytdprovider.Singleton1")),
             css::uno::UNO_QUERY_THROW),
         css::uno::UNO_QUERY);
     assertTrue(published.is());
@@ -747,12 +747,12 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const &)
     return 0;
 }
 
-rtl::OUString Service::getImplementationName() {
-    return rtl::OUString("test.registrytdprovider.impl");
+OUString Service::getImplementationName() {
+    return OUString("test.registrytdprovider.impl");
 }
 
-css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames() {
-    return css::uno::Sequence< rtl::OUString >();
+css::uno::Sequence< OUString > Service::getSupportedServiceNames() {
+    return css::uno::Sequence< OUString >();
 }
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(
@@ -782,11 +782,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const 
 
 namespace {
 
-bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
-               css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName("/");
+bool writeInfo(void * registryKey, OUString const & implementationName,
+               css::uno::Sequence< OUString > const & serviceNames) {
+    OUString keyName("/");
     keyName += implementationName;
-    keyName += rtl::OUString("/UNO/SERVICES");
+    keyName += OUString("/UNO/SERVICES");
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

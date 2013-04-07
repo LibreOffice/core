@@ -24,22 +24,22 @@
 class XMLChartStyleContext : public XMLShapeStyleContext
 {
 private:
-    ::rtl::OUString msDataStyleName;
-    ::rtl::OUString msPercentageDataStyleName;
+    OUString msDataStyleName;
+    OUString msPercentageDataStyleName;
     SvXMLStylesContext& mrStyles;
 
 protected:
     /// is called when an attribute at the (auto)style element is found
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 
 public:
     TYPEINFO();
 
     XMLChartStyleContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily );
     virtual ~XMLChartStyleContext();
@@ -52,7 +52,7 @@ public:
     /// necessary for property context (element-property symbol-image)
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 };
 

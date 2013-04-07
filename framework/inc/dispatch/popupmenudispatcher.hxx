@@ -56,9 +56,9 @@ namespace framework{
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
 
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         ,
-                                                        rtl::OUStringHash,
-                                                        std::equal_to< ::rtl::OUString > > IMPL_ListenerHashContainer;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
+                                                        OUStringHash,
+                                                        std::equal_to< OUString > > IMPL_ListenerHashContainer;
 
 
 /*-************************************************************************************************************//**
@@ -107,7 +107,7 @@ class PopupMenuDispatcher :   // interfaces
         // XDispatchProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
             const ::com::sun::star::util::URL&  aURL        ,
-            const ::rtl::OUString& sTarget     ,
+            const OUString& sTarget     ,
             sal_Int32              nFlags      )
         throw( ::com::sun::star::uno::RuntimeException );
 

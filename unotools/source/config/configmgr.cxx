@@ -78,7 +78,7 @@ OUString getConfigurationString(OUString const & module, OUString const & path)
                 OUString("com.sun.star.configuration.ConfigurationAccess"),
                 args),
             css::uno::UNO_QUERY_THROW)->
-        getByHierarchicalName(path).get< rtl::OUString >();
+        getByHierarchicalName(path).get< OUString >();
 }
 
 struct theConfigManager:

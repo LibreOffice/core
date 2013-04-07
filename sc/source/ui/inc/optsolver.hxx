@@ -183,8 +183,8 @@ private:
     std::vector<ScOptConditionRow> maConditions;
     long            nScrollPos;
 
-    com::sun::star::uno::Sequence<rtl::OUString> maImplNames;
-    com::sun::star::uno::Sequence<rtl::OUString> maDescriptions;
+    com::sun::star::uno::Sequence<OUString> maImplNames;
+    com::sun::star::uno::Sequence<OUString> maDescriptions;
     String          maEngine;
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 

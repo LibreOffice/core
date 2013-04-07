@@ -38,7 +38,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /******************************************************************
  * SwXReferenceMark
@@ -55,7 +54,7 @@ public:
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
     const SwFmtRefMark *        m_pMarkFmt;
-    ::rtl::OUString             m_sMarkName;
+    OUString             m_sMarkName;
 
     Impl(   SwXReferenceMark & rThis,
             SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
@@ -268,7 +267,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
             "SwXReferenceMark::InsertRefMark(): cannot insert attribute")), 0);
     }
 
@@ -899,7 +898,7 @@ throw (uno::RuntimeException)
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwXMeta::getImplementationName() throw (uno::RuntimeException)
 {
     return OUString("SwXMeta");
@@ -915,14 +914,14 @@ static const size_t g_nServicesMeta(
     sizeof(g_ServicesMeta)/sizeof(g_ServicesMeta[0]));
 
 sal_Bool SAL_CALL
-SwXMeta::supportsService(const ::rtl::OUString& rServiceName)
+SwXMeta::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
             g_nServicesMeta, g_ServicesMeta, rServiceName);
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 SwXMeta::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
@@ -994,7 +993,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-            rtl::OUString("SwXMeta::attach(): already attached"),
+            OUString("SwXMeta::attach(): already attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1002,7 +1001,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!xRangeTunnel.is())
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString("SwXMeta::attach(): argument is no XUnoTunnel"),
+            OUString("SwXMeta::attach(): argument is no XUnoTunnel"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
     SwXTextRange *const pRange(
@@ -1012,7 +1011,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pRange && !pCursor)
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString("SwXMeta::attach(): argument not supported type"),
+            OUString("SwXMeta::attach(): argument not supported type"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
@@ -1021,7 +1020,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString("SwXMeta::attach(): argument has no SwDoc"),
+            OUString("SwXMeta::attach(): argument has no SwDoc"),
                 static_cast< ::cppu::OWeakObject* >(this), 0);
     }
 
@@ -1049,14 +1048,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
-            rtl::OUString("SwXMeta::attach(): cannot create meta: range invalid?"),
+            OUString("SwXMeta::attach(): cannot create meta: range invalid?"),
                 static_cast< ::cppu::OWeakObject* >(this), 1);
     }
     if (!pTxtAttr)
     {
         OSL_FAIL("meta inserted, but has no text attribute?");
         throw uno::RuntimeException(
-            rtl::OUString("SwXMeta::attach(): cannot create meta"),
+            OUString("SwXMeta::attach(): cannot create meta"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1088,7 +1087,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                rtl::OUString("SwXMeta::getAnchor(): not inserted"),
+                OUString("SwXMeta::getAnchor(): not inserted"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1100,7 +1099,7 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
     if (!bSuccess)
     {
         throw lang::DisposedException(
-                rtl::OUString("SwXMeta::getAnchor(): not attached"),
+                OUString("SwXMeta::getAnchor(): not attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1131,7 +1130,7 @@ SwXMeta::getEnd() throw (uno::RuntimeException)
     return m_pImpl->m_Text.getEnd();
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwXMeta::getString() throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
@@ -1139,7 +1138,7 @@ SwXMeta::getString() throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwXMeta::setString(const rtl::OUString& rString) throw (uno::RuntimeException)
+SwXMeta::setString(const OUString& rString) throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
     return m_pImpl->m_Text.setString(rString);
@@ -1164,7 +1163,7 @@ SwXMeta::createTextCursorByRange(
 
 void SAL_CALL
 SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
-        const rtl::OUString& rString, sal_Bool bAbsorb)
+        const OUString& rString, sal_Bool bAbsorb)
 throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
@@ -1224,7 +1223,7 @@ void SAL_CALL
 SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
     throw (uno::RuntimeException, lang::NoSupportException)
 {
-    throw lang::NoSupportException(rtl::OUString("setting parent not supported"), *this);
+    throw lang::NoSupportException(OUString("setting parent not supported"), *this);
 }
 
 // XElementAccess
@@ -1255,7 +1254,7 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
     if (m_pImpl->m_bIsDescriptor)
     {
         throw uno::RuntimeException(
-                rtl::OUString("createEnumeration(): not inserted"),
+                OUString("createEnumeration(): not inserted"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -1328,7 +1327,7 @@ SwXMetaField::~SwXMetaField()
 }
 
 // XServiceInfo
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwXMetaField::getImplementationName() throw (uno::RuntimeException)
 {
     return OUString("SwXMetaField");
@@ -1345,14 +1344,14 @@ static const size_t g_nServicesMetaField(
     sizeof(g_ServicesMetaField)/sizeof(g_ServicesMetaField[0]));
 
 sal_Bool SAL_CALL
-SwXMetaField::supportsService(const ::rtl::OUString& rServiceName)
+SwXMetaField::supportsService(const OUString& rServiceName)
 throw (uno::RuntimeException)
 {
     return ::sw::SupportsServiceImpl(
             g_nServicesMetaField, g_ServicesMetaField, rServiceName);
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 SwXMetaField::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return ::sw::GetSupportedServiceNamesImpl(
@@ -1410,7 +1409,7 @@ SwXMetaField::getPropertySetInfo() throw (uno::RuntimeException)
 
 void SAL_CALL
 SwXMetaField::setPropertyValue(
-        const ::rtl::OUString& rPropertyName, const uno::Any& rValue)
+        const OUString& rPropertyName, const uno::Any& rValue)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1445,7 +1444,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 }
 
 uno::Any SAL_CALL
-SwXMetaField::getPropertyValue(const ::rtl::OUString& rPropertyName)
+SwXMetaField::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
@@ -1459,7 +1458,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
     if ( rPropertyName == "NumberFormat" )
     {
-        const ::rtl::OUString text( getPresentation(sal_False) );
+        const OUString text( getPresentation(sal_False) );
         any <<= static_cast<sal_Int32>(pMeta->GetNumberFormat(text));
     }
     else if ( rPropertyName == "IsFixedLanguage" )
@@ -1476,7 +1475,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXMetaField::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1486,7 +1485,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXMetaField::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1496,7 +1495,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXMetaField::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1506,7 +1505,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXMetaField::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1536,7 +1535,7 @@ lcl_getURI(const bool bPrefix)
     return (bPrefix) ? xOdfPrefix : xOdfSuffix;
 }
 
-static ::rtl::OUString
+static OUString
 lcl_getPrefixOrSuffix(
     uno::Reference<rdf::XRepository> const & xRepository,
     uno::Reference<rdf::XResource> const & xMetaField,
@@ -1558,14 +1557,14 @@ lcl_getPrefixOrSuffix(
         }
         return xObject->getValue();
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 void
 getPrefixAndSuffix(
         const uno::Reference<frame::XModel>& xModel,
         const uno::Reference<rdf::XMetadatable>& xMetaField,
-        ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix)
+        OUString *const o_pPrefix, OUString *const o_pSuffix)
 {
     try {
         const uno::Reference<rdf::XRepositorySupplier> xRS(
@@ -1586,13 +1585,13 @@ getPrefixAndSuffix(
         throw;
     } catch (const uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString("getPrefixAndSuffix: exception"),
+            OUString("getPrefixAndSuffix: exception"),
             0, uno::makeAny(e));
     }
 }
 
 // XTextField
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwXMetaField::getPresentation(sal_Bool bShowCommand)
 throw (uno::RuntimeException)
 {
@@ -1601,14 +1600,14 @@ throw (uno::RuntimeException)
     if (bShowCommand)
     {
 //FIXME ?
-        return ::rtl::OUString();
+        return OUString();
     }
     else
     {
         // getString should check if this is invalid
-        const ::rtl::OUString content( this->getString() );
-        ::rtl::OUString prefix;
-        ::rtl::OUString suffix;
+        const OUString content( this->getString() );
+        OUString prefix;
+        OUString suffix;
         getPrefixAndSuffix(GetModel(), this, &prefix, &suffix);
         return prefix + content + suffix;
     }

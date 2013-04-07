@@ -112,7 +112,7 @@ void ScFuncDesc::Clear()
 
     nFIndex = 0;
     nCategory = 0;
-    sHelpId = rtl::OString();
+    sHelpId = OString();
     bIncomplete = false;
     bHasSuppressedArgs = false;
 }
@@ -367,7 +367,7 @@ void ScFuncDesc::initArgumentInfo()  const
     }
 }
 
-::rtl::OString ScFuncDesc::getHelpId() const
+OString ScFuncDesc::getHelpId() const
 {
     return sHelpId;
 }

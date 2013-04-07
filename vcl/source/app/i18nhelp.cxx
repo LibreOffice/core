@@ -100,7 +100,7 @@ inline bool is_formatting_mark( sal_Unicode c )
 String vcl::I18nHelper::filterFormattingChars( const String& rStr )
 {
     sal_Int32 nUnicodes = rStr.Len();
-    rtl::OUStringBuffer aBuf( nUnicodes );
+    OUStringBuffer aBuf( nUnicodes );
     const sal_Unicode* pStr = rStr.GetBuffer();
     while( nUnicodes-- )
     {
@@ -111,7 +111,7 @@ String vcl::I18nHelper::filterFormattingChars( const String& rStr )
     return aBuf.makeStringAndClear();
 }
 
-sal_Int32 vcl::I18nHelper::CompareString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const
+sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString& rStr2 ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
@@ -130,7 +130,7 @@ sal_Int32 vcl::I18nHelper::CompareString( const rtl::OUString& rStr1, const rtl:
     return ImplGetTransliterationWrapper().compareString( aStr1, aStr2 );
 }
 
-sal_Bool vcl::I18nHelper::MatchString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const
+sal_Bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
@@ -157,7 +157,7 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMne
     if ( n != STRING_NOTFOUND )
     {
         String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
-        bEqual = MatchString( rtl::OUString(cMnemonicChar), aMatchStr );
+        bEqual = MatchString( OUString(cMnemonicChar), aMatchStr );
     }
     return bEqual;
 }

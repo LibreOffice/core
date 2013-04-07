@@ -80,7 +80,6 @@
 #include "textapi.hxx"
 #include "optsitem.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -463,16 +462,16 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
         aStr.SearchAndReplaceAscii("%1", sAuthor);
 
-        aStr.Append( rtl::OUString(" (") );
-        aStr.Append( rtl::OUString( getAnnotationDateTimeString( xAnnotation ) ) );
-        aStr.Append( rtl::OUString("): \"") );
+        aStr.Append( OUString(" (") );
+        aStr.Append( OUString( getAnnotationDateTimeString( xAnnotation ) ) );
+        aStr.Append( OUString("): \"") );
 
         String sQuote( pTextApi->GetText() );
 
         if( sQuote.Len() == 0 )
-            sQuote = rtl::OUString( "..." );
+            sQuote = OUString( "..." );
         aStr.Append( sQuote );
-        aStr.Append( rtl::OUString("\"\n") );
+        aStr.Append( OUString("\"\n") );
 
         sal_uInt16 nParaCount = comphelper::string::getTokenCount(aStr, '\n');
         for( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
@@ -524,7 +523,7 @@ void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotati
     }
 }
 
-void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const rtl::OUString& sAuthor )
+void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
 {
     if( mpDoc->IsUndoEnabled() )
         mpDoc->BegUndo( String( SdResId( STR_ANNOTATION_UNDO_DELETE ) ) );

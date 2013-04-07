@@ -118,7 +118,7 @@ void DocumentDigitalSignatures::showDocumentContentSignatures(
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModeDocumentContent, true );
 }
 
-::rtl::OUString DocumentDigitalSignatures::getDocumentContentSignatureDefaultStreamName()
+OUString DocumentDigitalSignatures::getDocumentContentSignatureDefaultStreamName()
     throw (css::uno::RuntimeException)
 {
     return DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
@@ -150,7 +150,7 @@ void DocumentDigitalSignatures::showScriptingContentSignatures(
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModeMacros, true );
 }
 
-::rtl::OUString DocumentDigitalSignatures::getScriptingContentSignatureDefaultStreamName()
+OUString DocumentDigitalSignatures::getScriptingContentSignatureDefaultStreamName()
     throw (css::uno::RuntimeException)
 {
     return DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
@@ -182,7 +182,7 @@ void DocumentDigitalSignatures::showPackageSignatures(
     ImplViewSignatures( rxStorage, xSignInStream, SignatureModePackage, true );
 }
 
-::rtl::OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
+OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
     return DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
@@ -294,9 +294,9 @@ DocumentDigitalSignatures::ImplVerifySignatures(
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, aSignInfos[n]);
-            const std::vector< rtl::OUString > aElementsToBeVerified =
+            const std::vector< OUString > aElementsToBeVerified =
                 DocumentSignatureHelper::CreateElementList(
-                rxStorage, ::rtl::OUString(), eMode, mode);
+                rxStorage, OUString(), eMode, mode);
 
             const SignatureInformation& rInfo = aSignInfos[n];
             css::security::DocumentSignatureInformation& rSigInfo = arInfos[n];
@@ -398,7 +398,7 @@ void DocumentDigitalSignatures::showCertificate(
     Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
         ::com::sun::star::security::SerialNumberAdapter::create(mxCtx);
 
-    ::rtl::OUString sSerialNum = xSerialNumberAdapter->toString( Author->getSerialNumber() );
+    OUString sSerialNum = xSerialNumberAdapter->toString( Author->getSerialNumber() );
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
     const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
@@ -438,15 +438,15 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
 }
 
 
-::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const ::rtl::OUString& Location ) throw (RuntimeException)
+::sal_Bool DocumentDigitalSignatures::isLocationTrusted( const OUString& Location ) throw (RuntimeException)
 {
     sal_Bool bFound = sal_False;
     INetURLObject aLocObj( Location );
     INetURLObject aLocObjLowCase( Location.toAsciiLowerCase() ); // will be used for case insensitive comparing
 
-    Sequence< ::rtl::OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
-    const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
-    const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
+    Sequence< OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
+    const OUString* pSecURLs = aSecURLs.getConstArray();
+    const OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
     for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
         bFound = ::utl::UCBContentHelper::IsSubPath( *pSecURLs, Location );
 
@@ -465,7 +465,7 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     aNewCert[ 0 ] = Author->getIssuerName();
     aNewCert[ 1 ] = xSerialNumberAdapter->toString( Author->getSerialNumber() );
 
-    rtl::OUStringBuffer aStrBuffer;
+    OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer, Author->getEncoded());
     aNewCert[ 2 ] = aStrBuffer.makeStringAndClear();
 
@@ -478,11 +478,11 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
     aSecOpts.SetTrustedAuthors( aTrustedAuthors );
 }
 
-void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUString& Location ) throw (RuntimeException)
+void DocumentDigitalSignatures::addLocationToTrustedSources( const OUString& Location ) throw (RuntimeException)
 {
     SvtSecurityOptions aSecOpt;
 
-    Sequence< ::rtl::OUString > aSecURLs = aSecOpt.GetSecureURLs();
+    Sequence< OUString > aSecURLs = aSecOpt.GetSecureURLs();
     sal_Int32 nCnt = aSecURLs.getLength();
     aSecURLs.realloc( nCnt + 1 );
     aSecURLs[ nCnt ] = Location;
@@ -490,16 +490,16 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUStri
     aSecOpt.SetSecureURLs( aSecURLs );
 }
 
-rtl::OUString DocumentDigitalSignatures::GetImplementationName() throw (RuntimeException)
+OUString DocumentDigitalSignatures::GetImplementationName() throw (RuntimeException)
 {
-    return rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" );
+    return OUString( "com.sun.star.security.DocumentDigitalSignatures" );
 }
 
-Sequence< rtl::OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (css::uno::RuntimeException)
+Sequence< OUString > DocumentDigitalSignatures::GetSupportedServiceNames() throw (css::uno::RuntimeException)
 {
-    Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString( "com.sun.star.security.DocumentDigitalSignatures" );
+    Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString( "com.sun.star.security.DocumentDigitalSignatures" );
     return aRet;
 }
 

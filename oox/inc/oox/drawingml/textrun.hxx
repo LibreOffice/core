@@ -33,8 +33,8 @@ public:
     TextRun();
     virtual ~TextRun();
 
-    inline ::rtl::OUString&         getText() { return msText; }
-    inline const ::rtl::OUString&   getText() const { return msText; }
+    inline OUString&         getText() { return msText; }
+    inline const OUString&   getText() const { return msText; }
 
     inline TextCharacterProperties&         getTextCharacterProperties() { return maTextCharacterProperties; }
     inline const TextCharacterProperties&   getTextCharacterProperties() const { return maTextCharacterProperties; }
@@ -48,7 +48,7 @@ public:
                                     const TextCharacterProperties& rTextCharacterStyle ) const;
 
 private:
-    ::rtl::OUString             msText;
+    OUString             msText;
     TextCharacterProperties     maTextCharacterProperties;
     bool                        mbIsLineBreak;
 };

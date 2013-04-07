@@ -102,16 +102,16 @@ namespace comphelper
     // XServiceInfo
     //----------------------------------------------------------------------------------------------------
 
-    ::rtl::OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
+    OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
         throw ( uno::RuntimeException )
     {
         return impl_staticGetImplementationName();
     }
 
-    ::sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const ::rtl::OUString& ServiceName )
+    ::sal_Bool SAL_CALL OIHWrapNoFilterDialog::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+        uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
         for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
             if ( ServiceName == aSeq[nInd] )
@@ -120,7 +120,7 @@ namespace comphelper
         return sal_False;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL OIHWrapNoFilterDialog::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::getSupportedServiceNames()
         throw ( uno::RuntimeException )
     {
         return impl_staticGetSupportedServiceNames();

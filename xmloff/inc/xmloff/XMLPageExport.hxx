@@ -44,8 +44,8 @@ class SvXMLExportPropertyMapper;
 
 struct XMLPageExportNameEntry
 {
-    ::rtl::OUString         sPageMasterName;
-    ::rtl::OUString         sStyleName;
+    OUString         sPageMasterName;
+    OUString         sStyleName;
 };
 
 //______________________________________________________________________________
@@ -54,14 +54,14 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
 {
     SvXMLExport& rExport;
 
-    const ::rtl::OUString sIsPhysical;
-    const ::rtl::OUString sFollowStyle;
+    const OUString sIsPhysical;
+    const OUString sFollowStyle;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
-    SAL_DLLPRIVATE sal_Bool findPageMasterName( const ::rtl::OUString& rStyleName, ::rtl::OUString& rPMName ) const;
+    SAL_DLLPRIVATE sal_Bool findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const;
 
     UniReference < XMLPropertyHandlerFactory > xPageMasterPropHdlFactory;
     UniReference < XMLPropertySetMapper > xPageMasterPropSetMapper;
@@ -74,7 +74,7 @@ protected:
     virtual void collectPageMasterAutoStyle(
                 const ::com::sun::star::uno::Reference <
                     ::com::sun::star::beans::XPropertySet > & rPropSet,
-                ::rtl::OUString& rPageMasterName );
+                OUString& rPageMasterName );
 
     virtual void exportMasterPageContent(
                 const ::com::sun::star::uno::Reference <

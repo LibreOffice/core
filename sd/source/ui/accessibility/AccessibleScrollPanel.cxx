@@ -29,7 +29,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
@@ -39,8 +38,8 @@ namespace accessibility {
 
 AccessibleScrollPanel::AccessibleScrollPanel (
     ::sd::toolpanel::ScrollPanel& rScrollPanel,
-    const ::rtl::OUString& rsName,
-    const ::rtl::OUString& rsDescription)
+    const OUString& rsName,
+    const OUString& rsDescription)
     : AccessibleTreeNode(
         rScrollPanel,
         rsName,

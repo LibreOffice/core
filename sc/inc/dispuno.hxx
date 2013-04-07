@@ -71,7 +71,7 @@ public:
                             // XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
                             queryDispatch( const ::com::sun::star::util::URL& aURL,
-                                        const ::rtl::OUString& aTargetFrameName,
+                                        const OUString& aTargetFrameName,
                                         sal_Int32 nSearchFlags )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<

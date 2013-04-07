@@ -28,7 +28,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 SwAccessibleHyperlink::SwAccessibleHyperlink( sal_uInt16 nHPos,
     SwAccessibleParagraph *p, sal_Int32 nStt, sal_Int32 nEnd ) :

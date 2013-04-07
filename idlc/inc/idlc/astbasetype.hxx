@@ -26,7 +26,7 @@
 class AstBaseType : public AstType
 {
 public:
-    AstBaseType(const ExprType type, const ::rtl::OString& name, AstScope* pScope)
+    AstBaseType(const ExprType type, const OString& name, AstScope* pScope)
         : AstType(NT_predefined, name, pScope)
         , m_exprType(type)
         {}

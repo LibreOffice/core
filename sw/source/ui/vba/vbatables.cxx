@@ -53,7 +53,7 @@ static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTab
     uno::Reference< text::XTextContent > xTextContent( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();
     uno::Reference< lang::XServiceInfo > xServiceInfo( xText, uno::UNO_QUERY_THROW );
-    rtl::OUString aImplName = xServiceInfo->getImplementationName();
+    OUString aImplName = xServiceInfo->getImplementationName();
     if ( aImplName == "SwXHeadFootText" )
         return true;
     return false;
@@ -98,17 +98,17 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  text::XTextTable::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         uno::Reference< text::XTextTable > xTable( *cachePos, uno::UNO_QUERY_THROW );
         return uno::makeAny( xTable );
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > sNames( mxTables.size() );
-        rtl::OUString* pString = sNames.getArray();
+        uno::Sequence< OUString > sNames( mxTables.size() );
+        OUString* pString = sNames.getArray();
         XTextTableVec::iterator it = mxTables.begin();
         XTextTableVec::iterator it_end = mxTables.end();
         for ( ; it != it_end; ++it, ++pString )
@@ -118,7 +118,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         cachePos = mxTables.begin();
         XTextTableVec::iterator it_end = mxTables.end();
@@ -178,7 +178,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
 
     uno::Reference< text::XTextTable > xTable;
-    xTable.set( xMsf->createInstance( rtl::OUString("com.sun.star.text.TextTable") ), uno::UNO_QUERY_THROW );
+    xTable.set( xMsf->createInstance( OUString("com.sun.star.text.TextTable") ), uno::UNO_QUERY_THROW );
 
     xTable->initialize( nRows, nCols );
     uno::Reference< text::XText > xText = xTextRange->getText();
@@ -209,10 +209,10 @@ SwVbaTables::createCollectionObject( const uno::Any& aSource )
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaTables::getServiceImplName()
 {
-    return rtl::OUString("SwVbaTables");
+    return OUString("SwVbaTables");
 }
 
 // XEnumerationAccess
@@ -222,14 +222,14 @@ SwVbaTables::getElementType() throw (uno::RuntimeException)
     return  word::XTable::static_type(0);
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaTables::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Tables" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Tables" );
     }
     return aServiceNames;
 }

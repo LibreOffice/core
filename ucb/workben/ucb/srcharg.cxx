@@ -293,7 +293,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                         if (c == '"')
                         {
                             bHasOperand = true;
-                            aTheOperand <<= rtl::OUString(aString);
+                            aTheOperand <<= OUString(aString);
                             nOperatorID = pTheOperator->m_nText;
                             q = r;
                             break;

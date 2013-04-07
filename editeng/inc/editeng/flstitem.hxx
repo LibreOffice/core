@@ -39,7 +39,7 @@ class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem
 {
 private:
     const FontList*                                 pFontList;
-    com::sun::star::uno::Sequence< rtl::OUString >  aFontNameSeq;
+    com::sun::star::uno::Sequence< OUString >  aFontNameSeq;
 
 public:
     TYPEINFO();

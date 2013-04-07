@@ -113,7 +113,7 @@ public:
      */
     sal_Bool    IsValid() const{ return m_bValid;}
 
-    rtl::OUString   ToString ()const;
+    OUString   ToString ()const;
 
     friend bool operator==(XFColor& c1, XFColor& c2);
     friend bool operator!=(XFColor& c1, XFColor& c2);

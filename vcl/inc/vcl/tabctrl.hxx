@@ -167,9 +167,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Control::GetHelpText(); }
 
-    void                SetHelpId( const rtl::OString& rId )
+    void                SetHelpId( const OString& rId )
                             { Control::SetHelpId( rId ); }
-    const rtl::OString& GetHelpId() const
+    const OString& GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link& rLink ) { maActivateHdl = rLink; }

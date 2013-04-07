@@ -129,7 +129,7 @@ public:
                                         sal_Bool bLink = false, sal_Bool bAllowDialogs = false );
 
     sal_Bool            PasteFile( const Point&, const String&, sal_Bool bLink=false );
-    sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const ::rtl::OUString& = ::rtl::OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
+    sal_Bool            PasteObject( const Point&, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >&, const Size* = NULL, const Graphic* = NULL, const OUString& = OUString(), sal_Int64 nAspect = ::com::sun::star::embed::Aspects::MSOLE_CONTENT );
     sal_Bool            PasteBitmap( const Point&, const Bitmap& );
     sal_Bool            PasteMetaFile( const Point&, const GDIMetaFile& );
     sal_Bool            PasteGraphic( const Point& rPos, const Graphic& rGraphic,
@@ -248,7 +248,7 @@ public:
     void            TabOp( const ScTabOpParam& rParam,  sal_Bool bRecord = sal_True );
 
     sal_Bool            InsertTable( const String& rName, SCTAB nTabNr, sal_Bool bRecord = sal_True );
-    sal_Bool            InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
+    sal_Bool            InsertTables(std::vector<OUString>& aNames, SCTAB nTab, SCTAB nCount, sal_Bool bRecord = sal_True);
 
 
     sal_Bool            AppendTable( const String& rName, sal_Bool bRecord = sal_True );
@@ -258,7 +258,7 @@ public:
     bool                DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     sal_Bool            RenameTable( const String& rName, SCTAB nTabNr );
-    void MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const rtl::OUString* pNewTabName = NULL );
+    void MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = NULL );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     sal_Bool bLink,SCTAB nTab);
@@ -317,7 +317,7 @@ public:
     void            DetectiveMarkPred();
     void            DetectiveMarkSucc();
 
-    void            InsertCurrentTime(short nCellFmt, const ::rtl::OUString& rUndoStr);
+    void            InsertCurrentTime(short nCellFmt, const OUString& rUndoStr);
 
     void            ShowNote( bool bShow = true );
     inline void     HideNote() { ShowNote( false ); }

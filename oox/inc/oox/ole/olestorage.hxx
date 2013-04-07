@@ -52,12 +52,12 @@ private:
     explicit            OleStorage(
                             const OleStorage& rParentStorage,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxStorage,
-                            const ::rtl::OUString& rElementName,
+                            const OUString& rElementName,
                             bool bReadOnly );
     explicit            OleStorage(
                             const OleStorage& rParentStorage,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream,
-                            const ::rtl::OUString& rElementName );
+                            const OUString& rElementName );
 
     /** Initializes the API storage object for input. */
     void                initStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream );
@@ -76,18 +76,18 @@ private:
                         implGetXStorage() const;
 
     /** Returns the names of all elements of this storage. */
-    virtual void        implGetElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const;
+    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage. */
-    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreateMissing );
+    virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implOpenInputStream( const ::rtl::OUString& rElementName );
+                        implOpenInputStream( const OUString& rElementName );
 
     /** Opens and returns the specified output stream from the storage. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        implOpenOutputStream( const ::rtl::OUString& rElementName );
+                        implOpenOutputStream( const OUString& rElementName );
 
     /** Commits the current storage. */
     virtual void        implCommit() const;

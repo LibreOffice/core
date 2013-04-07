@@ -55,7 +55,7 @@ StatusIndicator::~StatusIndicator()
 }
 
 //***********************************************
-void SAL_CALL StatusIndicator::start(const ::rtl::OUString& sText ,
+void SAL_CALL StatusIndicator::start(const OUString& sText ,
                                            sal_Int32        nRange)
     throw(css::uno::RuntimeException)
 {
@@ -104,7 +104,7 @@ void SAL_CALL StatusIndicator::reset()
 }
 
 //***********************************************
-void SAL_CALL StatusIndicator::setText(const ::rtl::OUString& sText)
+void SAL_CALL StatusIndicator::setText(const OUString& sText)
     throw(css::uno::RuntimeException)
 {
     // SAFE ->

@@ -39,7 +39,7 @@ namespace xmlreader {
 
 class OOO_DLLPUBLIC_XMLREADER XmlReader: private boost::noncopyable {
 public:
-    explicit XmlReader(rtl::OUString const & fileUrl)
+    explicit XmlReader(OUString const & fileUrl)
         SAL_THROW((
             com::sun::star::container::NoSuchElementException,
             com::sun::star::uno::RuntimeException));
@@ -67,7 +67,7 @@ public:
 
     int getNamespaceId(Span const & prefix) const;
 
-    rtl::OUString getUrl() const;
+    OUString getUrl() const;
 
 private:
     typedef std::vector< Span > NamespaceIris;
@@ -170,7 +170,7 @@ private:
 
     SAL_DLLPRIVATE int toNamespaceId(NamespaceIris::size_type pos);
 
-    rtl::OUString fileUrl_;
+    OUString fileUrl_;
     oslFileHandle fileHandle_;
     sal_uInt64 fileSize_;
     void * fileAddress_;

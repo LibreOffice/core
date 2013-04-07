@@ -23,7 +23,7 @@
 to use these macros the supported services and the implementation name needs to be static
 especially you need to implement (declaration is contained in macro already):
 
-static com::sun::star::uno::Sequence< rtl::OUString >
+static com::sun::star::uno::Sequence< OUString >
     Class::getSupportedServiceNames_Static();
 */
 
@@ -36,18 +36,18 @@ namespace apphelper
 {
 
 #define APPHELPER_XSERVICEINFO_DECL()                                                   \
-    virtual ::rtl::OUString SAL_CALL                                        \
+    virtual OUString SAL_CALL                                        \
         getImplementationName()                                             \
             throw( ::com::sun::star::uno::RuntimeException );               \
     virtual sal_Bool SAL_CALL                                               \
-        supportsService( const ::rtl::OUString& ServiceName )               \
+        supportsService( const OUString& ServiceName )               \
             throw( ::com::sun::star::uno::RuntimeException );               \
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL     \
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL     \
         getSupportedServiceNames()                                          \
             throw( ::com::sun::star::uno::RuntimeException );               \
                                                                             \
-    static ::rtl::OUString getImplementationName_Static();                  \
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >               \
+    static OUString getImplementationName_Static();                  \
+    static ::com::sun::star::uno::Sequence< OUString >               \
         getSupportedServiceNames_Static();
 
 //=========================================================================
@@ -57,24 +57,24 @@ namespace apphelper
 //=========================================================================
 
 #define APPHELPER_XSERVICEINFO_IMPL( Class, ImplName )                              \
-::rtl::OUString SAL_CALL Class::getImplementationName()                     \
+OUString SAL_CALL Class::getImplementationName()                     \
     throw( ::com::sun::star::uno::RuntimeException )                        \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
                                                                             \
-::rtl::OUString Class::getImplementationName_Static()                       \
+OUString Class::getImplementationName_Static()                       \
 {                                                                           \
     return ImplName;                                                        \
 }                                                                           \
                                                                             \
 sal_Bool SAL_CALL                                                           \
-Class::supportsService( const ::rtl::OUString& ServiceName )                \
+Class::supportsService( const OUString& ServiceName )                \
     throw( ::com::sun::star::uno::RuntimeException )                        \
 {                                                                           \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL =               \
+    ::com::sun::star::uno::Sequence< OUString > aSNL =               \
                                         getSupportedServiceNames();         \
-    const ::rtl::OUString* pArray = aSNL.getArray();                        \
+    const OUString* pArray = aSNL.getArray();                        \
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
     {                                                                       \
         if( pArray[ i ] == ServiceName )                                    \
@@ -84,7 +84,7 @@ Class::supportsService( const ::rtl::OUString& ServiceName )                \
     return sal_False;                                                       \
 }                                                                           \
                                                                             \
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL                 \
+::com::sun::star::uno::Sequence< OUString > SAL_CALL                 \
 Class::getSupportedServiceNames()                                           \
     throw( ::com::sun::star::uno::RuntimeException )                        \
 {                                                                           \

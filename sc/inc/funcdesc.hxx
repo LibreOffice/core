@@ -78,28 +78,28 @@ public:
 
       @return    the description of the function, or an empty OUString if there is no description
     */
-    virtual ::rtl::OUString getDescription() const ;
+    virtual OUString getDescription() const ;
 
     /**
       Returns the function signature with parameters from the passed string array.
 
       @return    function signature with parameters
     */
-    virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const ;
+    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const ;
 
     /**
       Returns the name of the function
 
       @return    the name of the function, or an empty OUString if there is no name
     */
-    virtual ::rtl::OUString getFunctionName() const ;
+    virtual OUString getFunctionName() const ;
 
     /**
       Returns the help id of the function
 
       @return   help id of the function
     */
-    virtual ::rtl::OString getHelpId() const ;
+    virtual OString getHelpId() const ;
 
     /**
       Returns number of arguments
@@ -116,7 +116,7 @@ public:
 
       @return   OUString description of the parameter
     */
-    virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterDescription(sal_uInt32 _nPos) const ;
 
     /**
       Returns name of parameter at given position
@@ -126,21 +126,21 @@ public:
 
       @return   OUString name of the parameter
     */
-    virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterName(sal_uInt32 _nPos) const ;
 
     /**
       Returns list of all parameter names
 
       @return OUString containing separated list of all parameter names
     */
-    ::rtl::OUString GetParamList() const;
+    OUString GetParamList() const;
 
     /**
       Returns the full function signature
 
       @return   OUString of the form "FUNCTIONNAME( parameter list )"
     */
-    virtual ::rtl::OUString getSignature() const ;
+    virtual OUString getSignature() const ;
 
     /**
       Returns the number of non-suppressed arguments
@@ -198,15 +198,15 @@ public:
 
 
 
-    ::rtl::OUString      *pFuncName;              /**< Function name */
-    ::rtl::OUString      *pFuncDesc;              /**< Description of function */
-    ::rtl::OUString     **ppDefArgNames;          /**< Parameter name(s) */
-    ::rtl::OUString     **ppDefArgDescs;          /**< Description(s) of parameter(s) */
+    OUString      *pFuncName;              /**< Function name */
+    OUString      *pFuncDesc;              /**< Description of function */
+    OUString     **ppDefArgNames;          /**< Parameter name(s) */
+    OUString     **ppDefArgDescs;          /**< Description(s) of parameter(s) */
     ParameterFlags       *pDefArgFlags;           /**< Flags for each parameter */
     sal_uInt16            nFIndex;                /**< Unique function index */
     sal_uInt16            nCategory;              /**< Function category */
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
-    rtl::OString          sHelpId;                /**< HelpId of function */
+    OString          sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  bHasSuppressedArgs  :1; /**< Whether there is any suppressed parameter. */
 };
@@ -278,12 +278,12 @@ public:
       @return index number of this category.
     */
     virtual sal_uInt32 getNumber() const;
-    virtual ::rtl::OUString getName() const;
+    virtual OUString getName() const;
 
 private:
     ScFunctionMgr* m_pMgr; /**< function manager for this category */
     ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
-    mutable ::rtl::OUString m_sName; /**< name of this category */
+    mutable OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
 };
 
@@ -310,7 +310,7 @@ public:
 
       @return name of the category specified by _nCategoryNumber, empty string if _nCategoryNumber out of bounds
     */
-    static ::rtl::OUString GetCategoryName(sal_uInt32 _nCategoryNumber );
+    static OUString GetCategoryName(sal_uInt32 _nCategoryNumber );
 
     /**
       Returns function by name.
@@ -322,7 +322,7 @@ public:
 
       @return pointer to function with the name rFName, null if no such function was found.
     */
-    const ScFuncDesc* Get( const ::rtl::OUString& rFName ) const;
+    const ScFuncDesc* Get( const OUString& rFName ) const;
 
     /**
       Returns function by index.
@@ -383,9 +383,9 @@ public:
     virtual void fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
 
     /**
-      Implemented because of inheritance \see ScFunctionMgr::Get(const ::rtl::OUString&) const
+      Implemented because of inheritance \see ScFunctionMgr::Get(const OUString&) const
     */
-    virtual const formula::IFunctionDescription* getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
+    virtual const formula::IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const;
 
     /**
       Maps Etoken to character

@@ -36,7 +36,7 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
         return;
     jvalue args[1];
     // Convert parameters
-    ::rtl::OUString sDateStr;
+    OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
@@ -102,7 +102,7 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
         return;
     jvalue args[1];
     // Convert parameters
-    ::rtl::OUString sDateStr;
+    OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toTimeString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
@@ -155,7 +155,7 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
         return;
     jvalue args[1];
     // Convert parameters
-    ::rtl::OUString sDateStr;
+    OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
 
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);

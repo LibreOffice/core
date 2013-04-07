@@ -43,12 +43,12 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     void AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos = USHRT_MAX );
-    void AddClipbrdFormat( sal_uIntPtr nId, const rtl::OUString& rName,
+    void AddClipbrdFormat( sal_uIntPtr nId, const OUString& rName,
                             sal_uInt16 nPos = USHRT_MAX );
     sal_uInt16 Count() const;
 
     sal_uIntPtr GetClipbrdFormatId( sal_uInt16 nPos ) const;
-    const rtl::OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
+    const OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
 };
 
 

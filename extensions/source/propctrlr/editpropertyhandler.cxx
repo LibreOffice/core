@@ -64,21 +64,21 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
+        return OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.EditPropertyHandler" );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.form.inspection.EditPropertyHandler" );
         return aSupported;
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EditPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EditPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -134,7 +134,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EditPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL EditPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -229,38 +229,38 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< ::rtl::OUString > aSuperseded;
+        ::std::vector< OUString > aSuperseded;
         if ( implHaveBothScrollBarProperties() )
         {
-            aSuperseded.push_back( static_cast<const rtl::OUString&>(PROPERTY_HSCROLL) );
-            aSuperseded.push_back( static_cast<const rtl::OUString&>(PROPERTY_VSCROLL) );
+            aSuperseded.push_back( static_cast<const OUString&>(PROPERTY_HSCROLL) );
+            aSuperseded.push_back( static_cast<const OUString&>(PROPERTY_VSCROLL) );
         }
         if ( implHaveTextTypeProperty() )
         {
-            aSuperseded.push_back(  static_cast<const rtl::OUString&>(PROPERTY_RICHTEXT) );
-            aSuperseded.push_back(  static_cast<const rtl::OUString&>(PROPERTY_MULTILINE) );
+            aSuperseded.push_back(  static_cast<const OUString&>(PROPERTY_RICHTEXT) );
+            aSuperseded.push_back(  static_cast<const OUString&>(PROPERTY_MULTILINE) );
         }
         if ( aSuperseded.empty() )
-            return Sequence< ::rtl::OUString >();
-        return Sequence< ::rtl::OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
+            return Sequence< OUString >();
+        return Sequence< OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< ::rtl::OUString > aInterestingActuatingProps;
+        ::std::vector< OUString > aInterestingActuatingProps;
         if ( implHaveTextTypeProperty() )
-            aInterestingActuatingProps.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TEXTTYPE) );
-        aInterestingActuatingProps.push_back( static_cast<const rtl::OUString&>(PROPERTY_MULTILINE) );
-        return Sequence< ::rtl::OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
+            aInterestingActuatingProps.push_back(  static_cast<const OUString&>(PROPERTY_TEXTTYPE) );
+        aInterestingActuatingProps.push_back( static_cast<const OUString&>(PROPERTY_MULTILINE) );
+        return Sequence< OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -285,7 +285,7 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
             _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TEXTTYPE_SINGLELINE );
 
-            _rxInspectorUI->showCategory( ::rtl::OUString( "Data" ), nTextType != TEXTTYPE_RICHTEXT );
+            _rxInspectorUI->showCategory( OUString( "Data" ), nTextType != TEXTTYPE_RICHTEXT );
         }
         break;
 

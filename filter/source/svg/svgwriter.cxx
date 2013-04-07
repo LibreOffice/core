@@ -29,7 +29,6 @@
 
 #include <boost/shared_array.hpp>
 
-using ::rtl::OUString;
 
 static const char   aXMLElemG[] = "g";
 static const char   aXMLElemA[] = "a";
@@ -115,7 +114,7 @@ double SVGAttributeWriter::ImplRound( double fValue, sal_Int32 nDecs )
       return( floor( fValue * pow( 10.0, (int)nDecs ) + 0.5 ) / pow( 10.0, (int)nDecs ) );
 }
 
-void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, ::rtl::OUString& rColorStr )
+void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, OUString& rColorStr )
 {
     if( rColor.GetTransparency() == 255 )
         rColorStr = "none";
@@ -130,12 +129,12 @@ void SVGAttributeWriter::AddColorAttr( const char* pColorAttrName,
                                        const char* pColorOpacityAttrName,
                                        const Color& rColor )
 {
-    ::rtl::OUString aColor, aColorOpacity;
+    OUString aColor, aColorOpacity;
 
     ImplGetColorStr( rColor, aColor );
 
     if( rColor.GetTransparency() > 0 && rColor.GetTransparency() < 255 )
-        aColorOpacity = ::rtl::OUString::valueOf( ImplRound( ( 255.0 - rColor.GetTransparency() ) / 255.0 ) );
+        aColorOpacity = OUString::valueOf( ImplRound( ( 255.0 - rColor.GetTransparency() ) / 255.0 ) );
 
     mrExport.AddAttribute( XML_NAMESPACE_NONE, pColorAttrName, aColor );
 
@@ -149,7 +148,7 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
     // Fill
     if( pObjBoundRect && pFillGradient )
     {
-        ::rtl::OUString aGradientId;
+        OUString aGradientId;
 
         AddGradientDef( *pObjBoundRect, *pFillGradient, aGradientId );
 
@@ -166,7 +165,7 @@ void SVGAttributeWriter::AddPaintAttr( const Color& rLineColor, const Color& rFi
     AddColorAttr( aXMLAttrStroke, aXMLAttrStrokeOpacity, rLineColor );
 }
 
-void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradient& rGradient, ::rtl::OUString& rGradientId )
+void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradient& rGradient, OUString& rGradientId )
 {
     if( rObjRect.GetWidth() && rObjRect.GetHeight() &&
         ( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL ||
@@ -196,7 +195,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
         {
             ::std::auto_ptr< SvXMLElementExport >   apGradient;
-            ::rtl::OUString                         aColorStr;
+            OUString                         aColorStr;
 
             if( rGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
             {
@@ -208,10 +207,10 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                 aLinePoly.Rotate( aObjRectCenter, nAngle );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, "userSpaceOnUse" );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, ::rtl::OUString::valueOf( aLinePoly[ 0 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, ::rtl::OUString::valueOf( aLinePoly[ 0 ].Y() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, ::rtl::OUString::valueOf( aLinePoly[ 1 ].X() ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, ::rtl::OUString::valueOf( aLinePoly[ 1 ].Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::valueOf( aLinePoly[ 0 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::valueOf( aLinePoly[ 0 ].Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::valueOf( aLinePoly[ 1 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::valueOf( aLinePoly[ 1 ].Y() ) );
 
                 apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, sal_True, sal_True ) );
 
@@ -220,7 +219,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                                 ( ( rGradient.GetStyle() == GradientStyle_AXIAL ) ? 0.005 : 0.01 );
 
                 ImplGetColorStr( ( rGradient.GetStyle() == GradientStyle_AXIAL ) ? aEndColor : aStartColor, aColorStr );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, ::rtl::OUString::valueOf( fBorder ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::valueOf( fBorder ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
                 {
@@ -230,7 +229,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                 if( rGradient.GetStyle() == GradientStyle_AXIAL )
                 {
                     ImplGetColorStr( aStartColor, aColorStr );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, ::rtl::OUString::valueOf( 0.5 ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::valueOf( 0.5 ) );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
                     {
@@ -242,7 +241,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                     fBorder = 0.0;
 
                 ImplGetColorStr( aEndColor, aColorStr );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, ::rtl::OUString::valueOf( ImplRound( 1.0 - fBorder ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::valueOf( ImplRound( 1.0 - fBorder ) ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
                 {
@@ -257,15 +256,15 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
                                                 rObjRect.GetHeight() * rObjRect.GetHeight() ) * 0.5;
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, "userSpaceOnUse" );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, ::rtl::OUString::valueOf( ImplRound( fCenterX ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCY, ::rtl::OUString::valueOf( ImplRound( fCenterY ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrR, ::rtl::OUString::valueOf( ImplRound( fRadius ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, OUString::valueOf( ImplRound( fCenterX ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCY, OUString::valueOf( ImplRound( fCenterY ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrR, OUString::valueOf( ImplRound( fRadius ) ) );
 
                 apGradient.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemRadialGradient, sal_True, sal_True ) );
 
                 // write stop values
                 ImplGetColorStr( aEndColor, aColorStr );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, ::rtl::OUString::valueOf( 0.0 ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::valueOf( 0.0 ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
                 {
@@ -274,7 +273,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
 
                 ImplGetColorStr( aStartColor, aColorStr );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset,
-                                       ::rtl::OUString::valueOf( ImplRound( 1.0 - rGradient.GetBorder() * 0.01 ) ) );
+                                       OUString::valueOf( ImplRound( 1.0 - rGradient.GetBorder() * 0.01 ) ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStopColor, aColorStr );
 
                 {
@@ -284,14 +283,14 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         }
     }
     else
-        rGradientId = ::rtl::OUString();
+        rGradientId = OUString();
 }
 
 void SVGAttributeWriter::SetFontAttr( const Font& rFont )
 {
     if( rFont != maCurFont )
     {
-        ::rtl::OUString  aFontStyle, aTextDecoration;
+        OUString  aFontStyle, aTextDecoration;
         sal_Int32        nFontWeight;
 
         maCurFont = rFont;
@@ -332,7 +331,7 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
             default:                    nFontWeight = 400; break;
         }
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, ::rtl::OUString::valueOf( nFontWeight ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::valueOf( nFontWeight ) );
 
         if( mrExport.IsUseNativeTextDecoration() )
         {
@@ -385,8 +384,8 @@ void SVGAttributeWriter::setFontFamily()
     else
     {
         sal_Int32       nNextTokenPos( 0 );
-        const ::rtl::OUString& rsFontName = maCurFont.GetName();
-        ::rtl::OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
+        const OUString& rsFontName = maCurFont.GetName();
+        OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
         FontPitch ePitch = maCurFont.GetPitch();
         if( ePitch == PITCH_FIXED )
         {
@@ -448,7 +447,7 @@ void SVGTextWriter::implRegisterInterface( const Reference< XInterface >& rxIf )
         (mrExport.getInterfaceToIdentifierMapper()).registerReference( rxIf );
 }
 
-const ::rtl::OUString & SVGTextWriter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
+const OUString & SVGTextWriter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
    return (mrExport.getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }
@@ -593,7 +592,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
-                const ::rtl::OString& rsComment = pA->GetComment();
+                const OString& rsComment = pA->GetComment();
                 if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOL" ) ) )
                 {
                     bEOL = true;
@@ -602,7 +601,7 @@ sal_Int32 SVGTextWriter::setTextPosition( const GDIMetaFile& rMtf, sal_uLong& nC
                 {
                     bEOP = true;
 
-                    ::rtl::OUString sContent;
+                    OUString sContent;
                     while( nextTextPortion() )
                     {
                         sContent = mrCurrentTextPortion->getString();
@@ -710,7 +709,7 @@ void SVGTextWriter::setTextProperties( const GDIMetaFile& rMtf, sal_uLong nCurAc
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
-                const ::rtl::OString& rsComment = pA->GetComment();
+                const OString& rsComment = pA->GetComment();
                 if( rsComment.equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_EOP" ) ) )
                 {
                     bEOP = true;
@@ -755,7 +754,7 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
         // Font Style
         if( eCurFontItalic != eParFontItalic )
         {
-            ::rtl::OUString sFontStyle;
+            OUString sFontStyle;
             if( eCurFontItalic != ITALIC_NONE )
             {
                 if( eCurFontItalic == ITALIC_OBLIQUE )
@@ -788,7 +787,7 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
                 case WEIGHT_BLACK:          nFontWeight = 900; break;
                 default:                    nFontWeight = 400; break;
             }
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, ::rtl::OUString::valueOf( nFontWeight ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrFontWeight, OUString::valueOf( nFontWeight ) );
         }
 
         if( bIsTextContainer )
@@ -803,7 +802,7 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
         FontUnderline eParFontUnderline         = maParentFont.GetUnderline();
         FontStrikeout eParFontStrikeout         = maParentFont.GetStrikeout();
 
-        ::rtl::OUString sTextDecoration;
+        OUString sTextDecoration;
 
         if( eCurFontUnderline != eParFontUnderline )
         {
@@ -823,8 +822,8 @@ void SVGTextWriter::addFontAttributes( sal_Bool bIsTextContainer )
 void SVGTextWriter::implSetFontFamily()
 {
     sal_Int32       nNextTokenPos( 0 );
-    const ::rtl::OUString& rsFontName = maCurrentFont.GetName();
-    ::rtl::OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
+    const OUString& rsFontName = maCurrentFont.GetName();
+    OUString sFontFamily( rsFontName.getToken( 0, ';', nNextTokenPos ) );
     FontPitch ePitch = maCurrentFont.GetPitch();
     if( ePitch == PITCH_FIXED )
     {
@@ -1145,7 +1144,7 @@ sal_Bool SVGTextWriter::nextTextPortion()
         if( xPortionPropSet.is() && xPortionPropInfo.is()
                 && xPortionPropInfo->hasPropertyByName( "TextPortionType" ) )
         {
-            ::rtl::OUString sPortionType;
+            OUString sPortionType;
             if( xPortionPropSet->getPropertyValue( "TextPortionType" ) >>= sPortionType )
             {
                 sInfo = "type: " + sPortionType + "; ";
@@ -1162,8 +1161,8 @@ sal_Bool SVGTextWriter::nextTextPortion()
                     Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
                     if( xTextField.is() )
                     {
-                        const ::rtl::OUString sServicePrefix("com.sun.star.text.textfield.");
-                        const ::rtl::OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
+                        const OUString sServicePrefix("com.sun.star.text.textfield.");
+                        const OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
 
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();
@@ -1261,8 +1260,8 @@ sal_Bool SVGTextWriter::nextTextPortion()
                     Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
                     if( xTextField.is() )
                     {
-                        const ::rtl::OUString sServicePrefix("com.sun.star.text.textfield.");
-                        const ::rtl::OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
+                        const OUString sServicePrefix("com.sun.star.text.textfield.");
+                        const OUString sPresentationServicePrefix("com.sun.star.presentation.TextField.");
 
                         Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                         const Sequence< OUString > aServices = xService->getSupportedServiceNames();
@@ -1429,9 +1428,9 @@ void SVGTextWriter::startTextPosition( sal_Bool bExportX, sal_Bool bExportY )
     mnTextWidth = 0;
     mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextPosition" );
     if( bExportX )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( maTextPos.X() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( maTextPos.X() ) );
     if( bExportY )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( maTextPos.Y() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( maTextPos.Y() ) );
 
     // if text is rotated, set transform matrix at new tspan element
     const Font& rFont = mpVDev->GetFont();
@@ -1899,7 +1898,7 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
     return( rDstPolyPoly );
 }
 
-::rtl::OUString SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine )
+OUString SVGActionWriter::GetPathString( const PolyPolygon& rPolyPoly, sal_Bool bLine )
 {
     OUString         aPathData;
     const OUString   aBlank( " " );
@@ -1914,9 +1913,9 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
         if( nSize > 1 )
         {
             aPathData += "M ";
-            aPathData += ::rtl::OUString::valueOf( ( aPolyPoint = rPoly[ 0 ] ).X() );
+            aPathData += OUString::valueOf( ( aPolyPoint = rPoly[ 0 ] ).X() );
             aPathData += aComma;
-            aPathData += ::rtl::OUString::valueOf( aPolyPoint.Y() );
+            aPathData += OUString::valueOf( aPolyPoint.Y() );
 
             sal_Char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
@@ -1935,9 +1934,9 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
                     {
                         if ( j )
                             aPathData += aBlank;
-                        aPathData += ::rtl::OUString::valueOf( ( aPolyPoint = rPoly[ n++ ] ).X() );
+                        aPathData += OUString::valueOf( ( aPolyPoint = rPoly[ n++ ] ).X() );
                         aPathData += aComma;
-                        aPathData += ::rtl::OUString::valueOf( aPolyPoint.Y() );
+                        aPathData += OUString::valueOf( aPolyPoint.Y() );
                     }
                 }
                 else
@@ -1947,9 +1946,9 @@ PolyPolygon& SVGActionWriter::ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon
                         nCurrentMode = 'L';
                         aPathData += "L ";
                     }
-                    aPathData += ::rtl::OUString::valueOf( ( aPolyPoint = rPoly[ n++ ] ).X() );
+                    aPathData += OUString::valueOf( ( aPolyPoint = rPoly[ n++ ] ).X() );
                     aPathData += aComma;
-                    aPathData += ::rtl::OUString::valueOf( aPolyPoint.Y() );
+                    aPathData += OUString::valueOf( aPolyPoint.Y() );
                 }
             }
 
@@ -1989,10 +1988,10 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
         aPt2 = rPt2;
     }
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, ::rtl::OUString::valueOf( aPt1.X() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, ::rtl::OUString::valueOf( aPt1.Y() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, ::rtl::OUString::valueOf( aPt2.X() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, ::rtl::OUString::valueOf( aPt2.Y() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, OUString::valueOf( aPt1.X() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, OUString::valueOf( aPt1.Y() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, OUString::valueOf( aPt2.X() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::valueOf( aPt2.Y() ) );
 
     if( pLineColor )
     {
@@ -2015,16 +2014,16 @@ void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nR
     else
         aRect = rRect;
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aRect.Left() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aRect.Top() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, ::rtl::OUString::valueOf( aRect.GetWidth() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, ::rtl::OUString::valueOf( aRect.GetHeight() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aRect.Left() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aRect.Top() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::valueOf( aRect.GetWidth() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::valueOf( aRect.GetHeight() ) );
 
     if( nRadX )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, ::rtl::OUString::valueOf( bApplyMapping ? ImplMap( nRadX ) : nRadX ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, OUString::valueOf( bApplyMapping ? ImplMap( nRadX ) : nRadX ) );
 
     if( nRadY )
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, ::rtl::OUString::valueOf( bApplyMapping ? ImplMap( nRadY ) : nRadY ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::valueOf( bApplyMapping ? ImplMap( nRadY ) : nRadY ) );
 
     {
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, sal_True, sal_True );
@@ -2041,10 +2040,10 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long n
     else
         aCenter = rCenter;
 
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, ::rtl::OUString::valueOf( aCenter.X() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCY, ::rtl::OUString::valueOf( aCenter.Y() ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, ::rtl::OUString::valueOf( bApplyMapping ? ImplMap( nRadX ) : nRadX ) );
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, ::rtl::OUString::valueOf( bApplyMapping ? ImplMap( nRadY ) : nRadY ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, OUString::valueOf( aCenter.X() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCY, OUString::valueOf( aCenter.Y() ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRX, OUString::valueOf( bApplyMapping ? ImplMap( nRadX ) : nRadX ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrRY, OUString::valueOf( bApplyMapping ? ImplMap( nRadY ) : nRadY ) );
 
     {
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemEllipse, sal_True, sal_True );
@@ -2101,7 +2100,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
     if( rShape.mnStrokeWidth )
     {
         sal_Int32 nStrokeWidth = ( bApplyMapping ? ImplMap( rShape.mnStrokeWidth ) : rShape.mnStrokeWidth );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, ::rtl::OUString::valueOf( nStrokeWidth ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeWidth, OUString::valueOf( nStrokeWidth ) );
     }
 
     // support for LineJoin
@@ -2112,17 +2111,17 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         {
             // miter is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("miter"));
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("miter"));
             break;
         }
         case basegfx::B2DLINEJOIN_BEVEL:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("bevel"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("bevel"));
             break;
         }
         case basegfx::B2DLINEJOIN_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, ::rtl::OUString::createFromAscii("round"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinejoin, OUString::createFromAscii("round"));
             break;
         }
     }
@@ -2134,17 +2133,17 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
         {
             // butt is Svg default, so no need to write until the exporter might write styles.
             // If this happens, activate here
-            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("butt"));
+            // mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("butt"));
             break;
         }
         case com::sun::star::drawing::LineCap_ROUND:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("round"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("round"));
             break;
         }
         case com::sun::star::drawing::LineCap_SQUARE:
         {
-            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, ::rtl::OUString::createFromAscii("square"));
+            mrExport.AddAttribute(XML_NAMESPACE_NONE, aXMLAttrStrokeLinecap, OUString::createFromAscii("square"));
             break;
         }
     }
@@ -2163,7 +2162,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool
             if( k )
                 aDashArrayStr += aComma;
 
-            aDashArrayStr += ::rtl::OUString::valueOf( nDash );
+            aDashArrayStr += OUString::valueOf( nDash );
         }
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStrokeDashArray, aDashArrayStr );
@@ -2196,7 +2195,7 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, OUString::valueOf( aRect.GetWidth() ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, OUString::valueOf( aRect.GetHeight() ) );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, rtl::OUString( "userSpaceOnUse") );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, OUString( "userSpaceOnUse") );
 
             {
                 SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, sal_True, sal_True );
@@ -2287,7 +2286,7 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, OUString::valueOf( aPoly[ 1 ].Y() ) );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
-                                       rtl::OUString( "userSpaceOnUse" ) );
+                                       OUString( "userSpaceOnUse" ) );
             }
 
             {
@@ -2359,9 +2358,9 @@ void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
 
 void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset )
 {
-    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, rtl::OUString::valueOf( fOffset ) );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, OUString::valueOf( fOffset ) );
 
-    ::rtl::OUString aStyle, aColor;
+    OUString aStyle, aColor;
     aStyle += "stop-color:";
     SVGAttributeWriter::ImplGetColorStr ( rColor, aColor );
     aStyle += aColor;
@@ -2622,8 +2621,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 sCleanTextContent = sTextContent.copy( nFrom );
             }
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "PlaceholderText" );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPos.Y() ) );
             {
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
                 // At least for the single slide case we need really to  export placeholder text
@@ -2636,7 +2635,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
     {
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rtl::OUString(rText.GetChar(nLen - 1)) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText.GetChar(nLen - 1)) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -2667,10 +2666,10 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
                     if( nCount )
                     {
-                        const ::rtl::OUString aGlyph( rText.Copy( nLastPos, nCount ) );
+                        const OUString aGlyph( rText.Copy( nLastPos, nCount ) );
 
-                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( nX ) );
-                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( nX ) );
+                        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPos.Y() ) );
 
                         {
                             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
@@ -2688,8 +2687,8 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         }
         else
         {
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, ::rtl::OUString::valueOf( aPos.X() ) );
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, ::rtl::OUString::valueOf( aPos.Y() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::valueOf( aPos.X() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::valueOf( aPos.Y() ) );
 
             {
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_False );
@@ -2786,7 +2785,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
 void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                                         sal_uInt32 nWriteFlags,
-                                        const ::rtl::OUString* pElementId,
+                                        const OUString* pElementId,
                                         const Reference< XShape >* pxShape,
                                         const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {
@@ -2831,7 +2830,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     sType.append(": ");
                     const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
-                    rtl::OString sComment = pA->GetComment();
+                    OString sComment = pA->GetComment();
                     if (!sComment.isEmpty())
                     {
                         sType.append(OStringToOUString(
@@ -3692,7 +3691,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
                                      const Size& rSize100thmm,
                                      const GDIMetaFile& rMtf,
                                      sal_uInt32 nWriteFlags,
-                                     const ::rtl::OUString* pElementId,
+                                     const OUString* pElementId,
                                      const Reference< XShape >* pXShape,
                                      const GDIMetaFile* pTextEmbeddedBitmapMtf )
 {

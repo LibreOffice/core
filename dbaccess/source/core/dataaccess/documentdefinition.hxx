@@ -121,8 +121,8 @@ public:
     virtual ::sal_Bool SAL_CALL close(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XHierarchicalName
-    virtual ::rtl::OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL composeHierarchicalName( const ::rtl::OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -131,7 +131,7 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL execute( const ::com::sun::star::ucb::Command& aCommand, sal_Int32 CommandId, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw (::com::sun::star::uno::Exception, ::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::RuntimeException) ;
 
     // XRename
-    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
     // XCloseListener
     virtual void SAL_CALL queryClosing( const ::com::sun::star::lang::EventObject& Source, ::sal_Bool GetsOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
@@ -173,20 +173,20 @@ public:
 
     static ::com::sun::star::uno::Sequence< sal_Int8 > getDefaultDocumentTypeClassId();
 
-    static ::rtl::OUString GetDocumentServiceFromMediaType(
-        const ::rtl::OUString& _rMediaType,
+    static OUString GetDocumentServiceFromMediaType(
+        const OUString& _rMediaType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
-    static ::rtl::OUString GetDocumentServiceFromMediaType(
+    static OUString GetDocumentServiceFromMediaType(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
-        const ::rtl::OUString& _rEntityName,
+        const OUString& _rEntityName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rxContext,
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
 
     struct NotifierAccess { friend class NameChangeNotifier; private: NotifierAccess() { } };
-    const ::rtl::OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
+    const OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
     void firePropertyChange(
                   sal_Int32 i_nHandle,
             const ::com::sun::star::uno::Any& i_rNewValue,
@@ -251,7 +251,7 @@ private:
     virtual void SAL_CALL disposing();
 
     // OContentHelper overridables
-    virtual ::rtl::OUString determineContentType() const;
+    virtual OUString determineContentType() const;
 
     /** fills the load arguments
     */
@@ -339,7 +339,7 @@ private:
     //- commands
 
     void onCommandGetDocumentProperties( ::com::sun::star::uno::Any& _rProps );
-    void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
+    void onCommandInsert( const OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
     void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
     ::com::sun::star::uno::Any
         onCommandOpenSomething(
@@ -356,7 +356,7 @@ class NameChangeNotifier
 public:
     NameChangeNotifier(
         ODocumentDefinition& i_rDocumentDefinition,
-        const ::rtl::OUString& i_rNewName,
+        const OUString& i_rNewName,
         ::osl::ResettableMutexGuard& i_rClearForNotify
     );
     ~NameChangeNotifier();

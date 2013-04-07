@@ -44,8 +44,6 @@ using namespace ::com::sun::star::bridge;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::test::performance;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 #include "testcomp.h"
 

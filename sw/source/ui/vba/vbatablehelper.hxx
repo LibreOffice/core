@@ -42,15 +42,15 @@ public:
     ~SwVbaTableHelper() {}
     sal_Int32 getTabColumnsCount( sal_Int32 nRowIndex ) throw (css::uno::RuntimeException);
     sal_Int32 getTabColumnsMaxCount( ) throw (css::uno::RuntimeException);
-    sal_Int32 getTabRowIndex( const rtl::OUString& sCellName ) throw (css::uno::RuntimeException);
-    sal_Int32 getTabColIndex( const rtl::OUString& sCellName ) throw (css::uno::RuntimeException);
+    sal_Int32 getTabRowIndex( const OUString& sCellName ) throw (css::uno::RuntimeException);
+    sal_Int32 getTabColIndex( const OUString& sCellName ) throw (css::uno::RuntimeException);
     sal_Int32 getTableWidth( ) throw (css::uno::RuntimeException);
 
     sal_Int32 GetColWidth( sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false ) throw (css::uno::RuntimeException);
     void SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 nRow = 0, bool bCurRowOnly  = false ) throw (css::uno::RuntimeException);
 
     static SwTable* GetSwTable( const css::uno::Reference< css::text::XTextTable >& xTextTable ) throw (css::uno::RuntimeException);
-    static rtl::OUString getColumnStr( sal_Int32 nCol );
+    static OUString getColumnStr( sal_Int32 nCol );
 };
 
 #endif

@@ -45,8 +45,8 @@ namespace dbaui
     **/
     class OConnectionLineData : public ::salhelper::SimpleReferenceObject
     {
-        ::rtl::OUString m_aSourceFieldName;
-        ::rtl::OUString m_aDestFieldName;
+        OUString m_aSourceFieldName;
+        OUString m_aDestFieldName;
 
         friend bool operator==(const OConnectionLineData& lhs, const OConnectionLineData& rhs);
         friend bool operator!=(const OConnectionLineData& lhs, const OConnectionLineData& rhs) { return !(lhs == rhs); }
@@ -54,29 +54,29 @@ namespace dbaui
         virtual ~OConnectionLineData();
     public:
         OConnectionLineData();
-        OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
+        OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName );
         OConnectionLineData( const OConnectionLineData& rConnLineData );
         // provide a copy of own instance (this is somehow more acceptable for me compared to a virtual assignment operator
         void CopyFrom(const OConnectionLineData& rSource);
 
         // member access (write)
-        void SetFieldName(EConnectionSide nWhich, const ::rtl::OUString& strFieldName)
+        void SetFieldName(EConnectionSide nWhich, const OUString& strFieldName)
         {
             if (nWhich==JTCS_FROM)
                 m_aSourceFieldName = strFieldName;
             else
                 m_aDestFieldName = strFieldName;
         }
-        void SetSourceFieldName( const ::rtl::OUString& rSourceFieldName){ SetFieldName(JTCS_FROM, rSourceFieldName); }
-        void SetDestFieldName( const ::rtl::OUString& rDestFieldName ){ SetFieldName(JTCS_TO, rDestFieldName); }
+        void SetSourceFieldName( const OUString& rSourceFieldName){ SetFieldName(JTCS_FROM, rSourceFieldName); }
+        void SetDestFieldName( const OUString& rDestFieldName ){ SetFieldName(JTCS_TO, rDestFieldName); }
 
-        inline bool clearSourceFieldName() { SetSourceFieldName(::rtl::OUString()); return true;}
-        inline bool clearDestFieldName() { SetDestFieldName(::rtl::OUString());     return true;}
+        inline bool clearSourceFieldName() { SetSourceFieldName(OUString()); return true;}
+        inline bool clearDestFieldName() { SetDestFieldName(OUString());     return true;}
 
         // member access (read)
-        ::rtl::OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
-        ::rtl::OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
-        ::rtl::OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
+        OUString GetFieldName(EConnectionSide nWhich) const { return (nWhich == JTCS_FROM) ? m_aSourceFieldName : m_aDestFieldName; }
+        OUString GetSourceFieldName() const { return GetFieldName(JTCS_FROM); }
+        OUString GetDestFieldName() const { return GetFieldName(JTCS_TO); }
 
         bool Reset();
         OConnectionLineData& operator=( const OConnectionLineData& rConnLineData );

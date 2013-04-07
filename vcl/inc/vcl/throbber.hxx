@@ -66,7 +66,7 @@ public:
     void setImageList( ::std::vector< Image > const& i_images );
 
     // default images
-    static ::std::vector< ::rtl::OUString >
+    static ::std::vector< OUString >
         getDefaultImageURLs( const ImageSet i_imageSet );
 
 protected:

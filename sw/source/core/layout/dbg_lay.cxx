@@ -184,7 +184,7 @@ class SwImplProtocol
     SvFileStream *pStream;          // output stream
     std::set<sal_uInt16> *pFrmIds;  // which FrmIds shall be logged ( NULL == all)
     std::vector<long> aVars;        // variables
-    rtl::OStringBuffer aLayer;      // indentation of output ("  " per start/end)
+    OStringBuffer aLayer;      // indentation of output ("  " per start/end)
     sal_uInt16 nTypes;              // which types shall be logged
     sal_uInt16 nLineCount;          // printed lines
     sal_uInt16 nMaxLines;           // max lines to be printed
@@ -192,8 +192,8 @@ class SwImplProtocol
     sal_uInt8 nTestMode;            // special for test formating, logging may only be done in test formating.
     void _Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
-    void CheckLine( rtl::OString& rLine );
-    void SectFunc( rtl::OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
+    void CheckLine( OString& rLine );
+    void SectFunc( OStringBuffer& rOut, const SwFrm* pFrm, sal_uLong nAct, void* pParam );
 public:
     SwImplProtocol();
     ~SwImplProtocol();
@@ -292,7 +292,7 @@ void SwProtocol::Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong nAct,
 void SwProtocol::Init()
 {
     nRecord = 0;
-    rtl::OUString aName("dbg_lay.go");
+    OUString aName("dbg_lay.go");
     SvFileStream aStream( aName, STREAM_READ );
     if( aStream.IsOpen() )
     {
@@ -325,7 +325,7 @@ SwImplProtocol::SwImplProtocol()
 
 bool SwImplProtocol::NewStream()
 {
-    rtl::OUString aName("dbg_lay.out");
+    OUString aName("dbg_lay.out");
     nLineCount = 0;
     pStream = new SvFileStream( aName, STREAM_WRITE | STREAM_TRUNC );
     if( pStream->GetError() )
@@ -352,7 +352,7 @@ SwImplProtocol::~SwImplProtocol()
  * SwImplProtocol::CheckLine analyzes a line in the INI file
  * --------------------------------------------------*/
 
-void SwImplProtocol::CheckLine( rtl::OString& rLine )
+void SwImplProtocol::CheckLine( OString& rLine )
 {
     rLine = rLine.toAsciiLowerCase(); // upper/lower case is the same
     rLine = rLine.replace( '\t', ' ' );
@@ -360,7 +360,7 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
         return;
     if( '[' == rLine[0] )   // section: FrmIds, type or funciton
     {
-        rtl::OString aTmp = comphelper::string::getToken(rLine, 0, ']');
+        OString aTmp = comphelper::string::getToken(rLine, 0, ']');
         if (aTmp == "[frmid")      // section FrmIds
         {
             nInitFile = 1;
@@ -401,7 +401,7 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
     sal_Int32 nIndex = 0;
     do
     {
-        rtl::OString aTok = rLine.getToken( 0, ' ', nIndex );
+        OString aTok = rLine.getToken( 0, ' ', nIndex );
         bool bNo = false;
         if( '!' == aTok[0] )
         {
@@ -457,11 +457,11 @@ void SwImplProtocol::CheckLine( rtl::OString& rLine )
  * --------------------------------------------------*/
 void SwImplProtocol::FileInit()
 {
-    rtl::OUString aName("dbg_lay.ini");
+    OUString aName("dbg_lay.ini");
     SvFileStream aStream( aName, STREAM_READ );
     if( aStream.IsOpen() )
     {
-        rtl::OString aLine;
+        OString aLine;
         nInitFile = 0;
         while( aStream.good() )
         {
@@ -472,10 +472,10 @@ void SwImplProtocol::FileInit()
                 aLine = aLine.trim();
                 if( !aLine.isEmpty() )
                     CheckLine( aLine );     // evaluate line
-                aLine = rtl::OString();
+                aLine = OString();
             }
             else
-                aLine = rtl::OString(c);
+                aLine = OString(c);
         }
         if( !aLine.isEmpty() )
             CheckLine( aLine );     // evaluate last line
@@ -487,7 +487,7 @@ void SwImplProtocol::FileInit()
  * lcl_Start enables indentation by two spaces during ACT_START and disables
  * it again at ACT_END.
  * --------------------------------------------------*/
-static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAction)
+static void lcl_Start(OStringBuffer& rOut, OStringBuffer& rLay, sal_uLong nAction)
 {
     if( nAction == ACT_START )
     {
@@ -510,7 +510,7 @@ static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uL
  * of the frame; "+" stands for valid, "-" stands for invalid.
  * --------------------------------------------------*/
 
-static void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
+static void lcl_Flags(OStringBuffer& rOut, const SwFrm* pFrm)
 {
     rOut.append(" Sz");
     rOut.append(pFrm->GetValidSizeFlag() ? '+' : '-');
@@ -524,7 +524,7 @@ static void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
  * lcl_FrameType outputs the type of the frame as clear text.
  * --------------------------------------------------*/
 
-static void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
+static void lcl_FrameType( OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
         rOut.append("Txt ");
@@ -602,7 +602,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
     if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
         return; // we may only log inside a test formating
     sal_Bool bTmp = sal_False;
-    rtl::OStringBuffer aOut(aLayer);
+    OStringBuffer aOut(aLayer);
     aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(pFrm)));
     aOut.append(' ');
     lcl_FrameType( aOut, pFrm );    // then the frame type
@@ -739,7 +739,7 @@ void SwImplProtocol::_Record( const SwFrm* pFrm, sal_uLong nFunction, sal_uLong 
  * here we handle the output of the SectionFrms.
  * --------------------------------------------------*/
 
-void SwImplProtocol::SectFunc(rtl::OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
+void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrm* , sal_uLong nAct, void* pParam)
 {
     bool bTmp = false;
     switch( nAct )

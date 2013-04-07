@@ -40,8 +40,8 @@ private:
     utl::TextSearch*    pCommentSearcher;
     DateTime            aFirstDateTime;
     DateTime            aLastDateTime;
-    ::rtl::OUString     aAuthorToShow;
-    ::rtl::OUString     aComment;
+    OUString     aAuthorToShow;
+    OUString     aComment;
     ScRangeList         aRangeList;
     ScChgsDateMode      eDateMode;
     sal_Bool                bShowIt;
@@ -98,16 +98,16 @@ public:
     sal_Bool                HasAuthor() const {return bIsAuthor;}
     void                SetHasAuthor(sal_Bool nFlag=sal_True) {bIsAuthor=nFlag;}
 
-    ::rtl::OUString     GetTheAuthorToShow()const {return aAuthorToShow;}
-    void                SetTheAuthorToShow(const ::rtl::OUString& aString){aAuthorToShow=aString;}
+    OUString     GetTheAuthorToShow()const {return aAuthorToShow;}
+    void                SetTheAuthorToShow(const OUString& aString){aAuthorToShow=aString;}
 
     sal_Bool                HasComment() const {return bIsComment;}
     void                SetHasComment(sal_Bool nFlag=sal_True) {bIsComment=nFlag;}
 
-    ::rtl::OUString     GetTheComment()const {return aComment;}
-    void                SetTheComment(const ::rtl::OUString& aString);
+    OUString     GetTheComment()const {return aComment;}
+    void                SetTheComment(const OUString& aString);
 
-    sal_Bool            IsValidComment(const ::rtl::OUString* pCommentStr) const;
+    sal_Bool            IsValidComment(const OUString* pCommentStr) const;
 
     sal_Bool                IsEveryoneButMe() const {return bEveryoneButMe;}
     void                SetEveryoneButMe(sal_Bool nFlag=sal_True) {bEveryoneButMe=nFlag;}

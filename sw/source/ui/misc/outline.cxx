@@ -874,7 +874,7 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     aFont.SetSize(rSize);
     aFont.SetTransparent(sal_True);
     pVDev->SetFont( aFont );
-    rtl::OUString aText(rFmt.GetBulletChar());
+    OUString aText(rFmt.GetBulletChar());
     pVDev->DrawText( Point(nXStart, nYStart), aText );
     sal_uInt16 nRet = (sal_uInt16)pVDev->GetTextWidth(aText);
 
@@ -1033,7 +1033,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                      rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE )
                 {
                     pVDev->SetFont(aStdFont);
-                    rtl::OUString aText(' ');
+                    OUString aText(' ');
                     pVDev->DrawText( Point(nNumberXPos, nYStart), aText );
                     nBulletWidth = nBulletWidth + (sal_uInt16)pVDev->GetTextWidth(aText);
                 }
@@ -1140,7 +1140,7 @@ void    NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     Point(nXStart + nTextOffset, nYStart),
                     (pOutlineNames == 0
                      ? utl::ConfigManager::getProductName()
-                     : rtl::OUString(pOutlineNames[nLevel])));
+                     : OUString(pOutlineNames[nLevel])));
             }
         }
     }

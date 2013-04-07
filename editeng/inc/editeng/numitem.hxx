@@ -105,8 +105,8 @@ public:
     };
 
 private:
-    rtl::OUString       sPrefix;
-    rtl::OUString       sSuffix;
+    OUString       sPrefix;
+    OUString       sSuffix;
 
     SvxAdjust           eNumAdjust;
 
@@ -168,10 +168,10 @@ public:
 
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
-    void            SetPrefix(const rtl::OUString& rSet) { sPrefix = rSet;}
-    const rtl::OUString&   GetPrefix() const { return sPrefix;}
-    void            SetSuffix(const rtl::OUString& rSet) { sSuffix = rSet;}
-    const rtl::OUString&   GetSuffix() const { return sSuffix;}
+    void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
+    const OUString&   GetPrefix() const { return sPrefix;}
+    void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
+    const OUString&   GetSuffix() const { return sSuffix;}
 
     void                    SetCharFmtName(const String& rSet){ sCharStyleName = rSet; }
     virtual const String&   GetCharFmtName()const;

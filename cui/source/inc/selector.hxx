@@ -44,8 +44,8 @@ struct SvxGroupInfo_Impl
     sal_uInt16          nOrd;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                     xBrowseNode;
-    ::rtl::OUString sURL;
-    ::rtl::OUString sHelpText;
+    OUString sURL;
+    OUString sHelpText;
     sal_Bool            bWasOpened;
 
     SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr )
@@ -68,7 +68,7 @@ struct SvxGroupInfo_Impl
     {
     }
 
-    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const ::rtl::OUString& _rURL, const ::rtl::OUString& _rHelpText )
+    SvxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, const OUString& _rURL, const OUString& _rHelpText )
         :nKind( n )
         ,nOrd( nr )
         ,xBrowseNode()
@@ -86,7 +86,7 @@ class ImageProvider
 public:
     virtual ~ImageProvider() {}
 
-    virtual Image GetImage( const rtl::OUString& rCommandURL ) = 0;
+    virtual Image GetImage( const OUString& rCommandURL ) = 0;
 };
 
 class SvxConfigFunctionListBox : public SvTreeListBox
@@ -136,8 +136,8 @@ class SvxConfigGroupListBox : public SvTreeListBox
     Image m_libImage;
     Image m_macImage;
     Image m_docImage;
-    ::rtl::OUString m_sMyMacros;
-    ::rtl::OUString m_sProdMacros;
+    OUString m_sMyMacros;
+    OUString m_sProdMacros;
     Image GetImage(
         ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > node,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx,
@@ -146,7 +146,7 @@ class SvxConfigGroupListBox : public SvTreeListBox
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
-        ::rtl::OUString& docName
+        OUString& docName
     );
 
 private:

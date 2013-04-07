@@ -41,7 +41,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
 
 DragMethod_Base::DragMethod_Base( DrawViewWrapper& rDrawViewWrapper
-                                             , const rtl::OUString& rObjectCID
+                                             , const OUString& rObjectCID
                                              , const Reference< frame::XModel >& xChartModel
                                              , ActionDescriptionProvider::ActionType eActionType )
     : SdrDragMethod( rDrawViewWrapper )
@@ -61,7 +61,7 @@ Reference< frame::XModel > DragMethod_Base::getChartModel() const
     return Reference< frame::XModel >( m_xChartModel );
 }
 
-rtl::OUString DragMethod_Base::getUndoDescription() const
+OUString DragMethod_Base::getUndoDescription() const
 {
     return ActionDescriptionProvider::createDescription(
                 m_eActionType,

@@ -212,8 +212,8 @@ public:
 #define ANZ_DEFAULT_STYLES 16
 
 // Names of the storage streams
-#define sMainStream rtl::OUString("WordDocument")
-#define sCompObj rtl::OUString("\1CompObj")
+#define sMainStream OUString("WordDocument")
+#define sCompObj OUString("\1CompObj")
 
 static void WriteDop( WW8Export& rWrt )
 {
@@ -339,7 +339,7 @@ const sal_Unicode *WW8DopTypography::GetJapanNotEndLevel1()
     return &aJapanNotEndLevel1[0];
 }
 
-static int lcl_CmpBeginEndChars( const rtl::OUString& rSWStr,
+static int lcl_CmpBeginEndChars( const OUString& rSWStr,
     const sal_Unicode* pMSStr, int nMSStrByteLen )
 {
     nMSStrByteLen /= sizeof( sal_Unicode );
@@ -1275,7 +1275,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt )
         std::sort(aBookmarks.begin(), aBookmarks.end());
 
         // First write the Bookmark Name Stringtable
-        std::vector<rtl::OUString> aNames;
+        std::vector<OUString> aNames;
         aNames.reserve(aBookmarks.size());
         for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
             aNames.push_back(bIt->name);
@@ -1399,7 +1399,7 @@ void WW8Export::MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo)
     pBkmks->MoveFieldMarks(nFrom, nTo);
 }
 
-void WW8Export::AppendBookmark( const rtl::OUString& rName, bool bSkip )
+void WW8Export::AppendBookmark( const OUString& rName, bool bSkip )
 {
     sal_uLong nSttCP = Fc2Cp( Strm().Tell() ) + ( bSkip? 1: 0 );
     pBkmks->Append( nSttCP, rName );
@@ -1544,14 +1544,14 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
     if( !pRedlAuthors )
     {
         pRedlAuthors = new WW8_WrtRedlineAuthor;
-        pRedlAuthors->AddName(rtl::OUString("Unknown"));
+        pRedlAuthors->AddName(OUString("Unknown"));
     }
     return pRedlAuthors->AddName( SW_MOD()->GetRedlineAuthor( nId ) );
 }
 
 //--------------------------------------------------------------------------
 
-void WW8Export::WriteAsStringTable(const std::vector<rtl::OUString>& rStrings,
+void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen)
 {
     sal_uInt16 n, nCount = static_cast< sal_uInt16 >(rStrings.size());
@@ -1579,7 +1579,7 @@ void WW8Export::WriteAsStringTable(const std::vector<rtl::OUString>& rStrings,
             SwWW8Writer::WriteShort( rStrm, 0 );
             for( n = 0; n < nCount; ++n )
             {
-                const rtl::OUString &rString = rStrings[n];
+                const OUString &rString = rStrings[n];
                 const String aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
                 rStrm << (sal_uInt8)aNm.Len();
                 SwWW8Writer::WriteString8(rStrm, aNm, false,
@@ -1640,7 +1640,7 @@ void SwWW8Writer::InsAsString16(ww::bytes &rO, const String& rStr)
 void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
         rtl_TextEncoding eCodeSet)
 {
-    rtl::OString sTmp(rtl::OUStringToOString(rStr, eCodeSet));
+    OString sTmp(OUStringToOString(rStr, eCodeSet));
     const sal_Char *pStart = sTmp.getStr();
     const sal_Char *pEnd = pStart + sTmp.getLength();
     rO.reserve(rO.size() + sTmp.getLength());
@@ -2681,7 +2681,7 @@ void WW8Export::WriteFkpPlcUsw()
              some magic. cmc
             */
             /* Similiarly having msvbasic storage seems to also trigger creating this stream */
-            GetWriter().GetStorage().OpenSotStorage(rtl::OUString(SL::aObjectPool),
+            GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
 
@@ -2716,7 +2716,7 @@ void WW8Export::WriteFkpPlcUsw()
 
         if ( pSttbfAssoc )                      // #i106057#
         {
-        ::std::vector<rtl::OUString> aStrings;
+        ::std::vector<OUString> aStrings;
 
         ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
         ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
@@ -3017,9 +3017,9 @@ void WW8Export::ExportDocument_Impl()
     if( bWrtWW8 )
     {
         pFib->fWhichTblStm = 1;
-        xTableStrm = GetWriter().GetStorage().OpenSotStream(rtl::OUString(SL::a1Table),
+        xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
             STREAM_STD_WRITE );
-        xDataStrm = GetWriter().GetStorage().OpenSotStream(rtl::OUString(SL::aData),
+        xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
             STREAM_STD_WRITE );
 
         xDataStrm->SetBufferSize( 32768 );  // for graphics
@@ -3196,7 +3196,7 @@ void WW8Export::ExportDocument_Impl()
         {
             xDataStrm.Clear();
             pDataStrm = 0;
-            GetWriter().GetStorage().Remove(rtl::OUString(SL::aData));
+            GetWriter().GetStorage().Remove(OUString(SL::aData));
         }
     }
 }
@@ -3263,7 +3263,7 @@ void WW8Export::PrepareStorage()
 
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
-    GetWriter().GetStorage().SetClass( aGName, 0, rtl::OUString::createFromAscii( pName ));
+    GetWriter().GetStorage().SetClass( aGName, 0, OUString::createFromAscii( pName ));
     SvStorageStreamRef xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
 
@@ -3493,7 +3493,7 @@ void WW8Export::RestoreMacroCmds()
     try
     {
         uno::Reference < io::XStream > xSrcStream =
-                xSrcRoot->openStreamElement( rtl::OUString(SL::aMSMacroCmds), embed::ElementModes::READ );
+                xSrcRoot->openStreamElement( OUString(SL::aMSMacroCmds), embed::ElementModes::READ );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
         if ( pStream && SVSTREAM_OK == pStream->GetError())
@@ -3552,7 +3552,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         type=2;
 
     ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find("name");
-    ::rtl::OUString ffname;
+    OUString ffname;
     if(pNameParameter != rFieldmark.GetParameters()->end())
         pNameParameter->second >>= ffname;
 
@@ -3599,7 +3599,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     }
     aFldHeader.bits |= ( (ffres<<2) & 0x7C );
 
-    std::vector< ::rtl::OUString > aListItems;
+    std::vector< OUString > aListItems;
     if (type==2)
     {
         aFldHeader.bits |= 0x8000; // ffhaslistbox
@@ -3607,18 +3607,18 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if(pListEntries != pParameters->end())
         {
-            uno::Sequence< ::rtl::OUString > vListEntries;
+            uno::Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
             copy(::comphelper::stl_begin(vListEntries), ::comphelper::stl_end(vListEntries), back_inserter(aListItems));
         }
     }
 
-    const ::rtl::OUString ffdeftext;
-    const ::rtl::OUString ffformat;
-    const ::rtl::OUString ffhelptext;
-    const ::rtl::OUString ffstattext;
-    const ::rtl::OUString ffentrymcr;
-    const ::rtl::OUString ffexitmcr;
+    const OUString ffdeftext;
+    const OUString ffformat;
+    const OUString ffhelptext;
+    const OUString ffstattext;
+    const OUString ffentrymcr;
+    const OUString ffexitmcr;
 
 
     const sal_uInt8 aFldData[] =
@@ -3648,7 +3648,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         slen += 4; // for num of list items
         const int items = aListItems.size();
         for( int i = 0; i < items; i++ ) {
-            rtl::OUString item = aListItems[i];
+            OUString item = aListItems[i];
             slen += 2 * item.getLength() + 2;
         }
     }
@@ -3679,7 +3679,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         const int items=aListItems.size();
         *pDataStrm<<(sal_uInt32)items;
         for(int i=0;i<items;i++) {
-            rtl::OUString item=aListItems[i];
+            OUString item=aListItems[i];
             SwWW8Writer::WriteString_xstz( *pDataStrm, item, false );
         }
     }

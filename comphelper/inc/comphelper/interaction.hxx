@@ -113,17 +113,17 @@ namespace comphelper
         {
         }
 
-        OInteractionPassword( const ::rtl::OUString& _rInitialPassword )
+        OInteractionPassword( const OUString& _rInitialPassword )
             :m_sPassword( _rInitialPassword )
         {
         }
 
         // XInteractionPassword
-        virtual void SAL_CALL setPassword( const ::rtl::OUString& _Password ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setPassword( const OUString& _Password ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getPassword(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        ::rtl::OUString m_sPassword;
+        OUString m_sPassword;
     };
 
     //=========================================================================

@@ -47,7 +47,7 @@ Acceptor::Acceptor( const Reference< XMultiServiceFactory >& rFactory )
     // get component context
     m_rContext = comphelper::getComponentContext(m_rSMgr);
     m_rAcceptor = Reference< XAcceptor > (m_rSMgr->createInstance(
-        rtl::OUString("com.sun.star.connection.Acceptor" )),
+        OUString("com.sun.star.connection.Acceptor" )),
         UNO_QUERY );
     m_rBridgeFactory = BridgeFactory::create(m_rContext);
 }
@@ -114,7 +114,7 @@ void SAL_CALL Acceptor::run()
             // thus preventing the bridge from being disposed. When the remote end releases
             // the bridge, it will be destructed.
             Reference< XBridge > rBridge = m_rBridgeFactory->createBridge(
-                rtl::OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
+                OUString() ,m_aProtocol ,rConnection ,rInstanceProvider );
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
         } catch (const Exception& e) {

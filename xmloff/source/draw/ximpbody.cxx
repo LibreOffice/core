@@ -37,8 +37,6 @@
 #include "PropertySetMerger.hxx"
 #include "animationimport.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 

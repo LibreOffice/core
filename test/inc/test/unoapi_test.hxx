@@ -43,7 +43,7 @@ class OOO_DLLPUBLIC_TEST UnoApiTest : public test::BootstrapFixture, public unot
 public:
     UnoApiTest(const OUString& path);
 
-    void createFileURL(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
+    void createFileURL(const OUString& aFileBase, OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -54,7 +54,7 @@ protected:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+    OUString m_aBaseString;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

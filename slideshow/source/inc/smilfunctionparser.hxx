@@ -97,7 +97,7 @@ namespace slideshow
 
                 @return the generated function object.
              */
-            static ExpressionNodeSharedPtr parseSmilValue( const ::rtl::OUString&           rSmilValue,
+            static ExpressionNodeSharedPtr parseSmilValue( const OUString&           rSmilValue,
                                                            const ::basegfx::B2DRectangle&   rRelativeShapeBounds ); // throw ParseError
 
             /** Parse a string containing a SMIL function.
@@ -145,7 +145,7 @@ namespace slideshow
 
                 @return the generated function object.
              */
-            static ExpressionNodeSharedPtr parseSmilFunction( const ::rtl::OUString&            rSmilFunction,
+            static ExpressionNodeSharedPtr parseSmilFunction( const OUString&            rSmilFunction,
                                                               const ::basegfx::B2DRectangle&    rRelativeShapeBounds ); // throw ParseError
 
         private:

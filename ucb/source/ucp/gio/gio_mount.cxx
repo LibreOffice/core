@@ -75,7 +75,7 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
         return;
     }
 
-    ::rtl::OUString aHostName, aDomain, aUserName, aPassword;
+    OUString aHostName, aDomain, aUserName, aPassword;
 
     ucbhelper::SimpleAuthenticationRequest::EntityType eUserName =
         (flags & G_ASK_PASSWORD_NEED_USERNAME)
@@ -83,18 +83,18 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
     if (default_user)
-        aUserName = rtl::OUString(default_user, strlen(default_user), RTL_TEXTENCODING_UTF8);
+        aUserName = OUString(default_user, strlen(default_user), RTL_TEXTENCODING_UTF8);
 
     ucbhelper::SimpleAuthenticationRequest::EntityType ePassword =
         (flags & G_ASK_PASSWORD_NEED_PASSWORD)
           ? ucbhelper::SimpleAuthenticationRequest::ENTITY_MODIFY
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
-    rtl::OUString aPrevPassword, aPrevUsername;
+    OUString aPrevPassword, aPrevUsername;
     if (pThis->m_pPrevUsername)
-        aPrevUsername = rtl::OUString(pThis->m_pPrevUsername, strlen(pThis->m_pPrevUsername), RTL_TEXTENCODING_UTF8);
+        aPrevUsername = OUString(pThis->m_pPrevUsername, strlen(pThis->m_pPrevUsername), RTL_TEXTENCODING_UTF8);
     if (pThis->m_pPrevPassword)
-        aPrevPassword = rtl::OUString(pThis->m_pPrevPassword, strlen(pThis->m_pPrevPassword), RTL_TEXTENCODING_UTF8);
+        aPrevPassword = OUString(pThis->m_pPrevPassword, strlen(pThis->m_pPrevPassword), RTL_TEXTENCODING_UTF8);
 
     //The damn dialog is stupidly broken, so do like webdav, i.e. "#102871#"
     if ( aUserName.isEmpty() )
@@ -109,10 +109,10 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
           : ucbhelper::SimpleAuthenticationRequest::ENTITY_NA;
 
     if (default_domain)
-        aDomain = rtl::OUString(default_domain, strlen(default_domain), RTL_TEXTENCODING_UTF8);
+        aDomain = OUString(default_domain, strlen(default_domain), RTL_TEXTENCODING_UTF8);
 
     uno::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
-        = new ucbhelper::SimpleAuthenticationRequest (rtl::OUString() /* FIXME: provide URL here */, aHostName, eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
+        = new ucbhelper::SimpleAuthenticationRequest (OUString() /* FIXME: provide URL here */, aHostName, eDomain, aDomain, eUserName, aUserName, ePassword, aPassword);
 
     xIH->handle( xRequest.get() );
 
@@ -136,13 +136,13 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
     aPassword = xSupp->getPassword();
 
     if (flags & G_ASK_PASSWORD_NEED_USERNAME)
-        g_mount_operation_set_username(op, rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8).getStr());
+        g_mount_operation_set_username(op, OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8).getStr());
 
     if (flags & G_ASK_PASSWORD_NEED_PASSWORD)
-        g_mount_operation_set_password(op, rtl::OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8).getStr());
+        g_mount_operation_set_password(op, OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8).getStr());
 
     if (flags & G_ASK_PASSWORD_NEED_DOMAIN)
-        g_mount_operation_set_domain(op, rtl::OUStringToOString(xSupp->getRealm(), RTL_TEXTENCODING_UTF8).getStr());
+        g_mount_operation_set_domain(op, OUStringToOString(xSupp->getRealm(), RTL_TEXTENCODING_UTF8).getStr());
 
     switch (xSupp->getRememberPasswordMode())
     {
@@ -160,10 +160,10 @@ static void ooo_mount_operation_ask_password (GMountOperation *op,
 
     if (pThis->m_pPrevPassword)
         free(pThis->m_pPrevPassword);
-    pThis->m_pPrevPassword = strdup(rtl::OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8).getStr());
+    pThis->m_pPrevPassword = strdup(OUStringToOString(aPassword, RTL_TEXTENCODING_UTF8).getStr());
     if (pThis->m_pPrevUsername)
         free(pThis->m_pPrevUsername);
-    pThis->m_pPrevUsername = strdup(rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8).getStr());
+    pThis->m_pPrevUsername = strdup(OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8).getStr());
     g_mount_operation_reply (op, G_MOUNT_OPERATION_HANDLED);
 }
 

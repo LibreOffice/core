@@ -34,7 +34,6 @@
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
@@ -196,7 +195,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
+OUString SAL_CALL X509Certificate_MSCryptImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL ) {
         char* issuer ;
         DWORD cbIssuer ;
@@ -245,7 +244,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL X509Certificate_MSCryptImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
     {
@@ -378,7 +377,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             pExtn = &(m_pCertContext->pCertInfo->rgExtension[i]) ;
 
 
-            ::rtl::OUString objId = ::rtl::OUString::createFromAscii( pExtn->pszObjId );
+            OUString objId = OUString::createFromAscii( pExtn->pszObjId );
 
             if ( objId == "2.5.29.17" )
                 xExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
@@ -497,7 +496,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
         return NULL ;
 }
 
-::rtl::OUString findOIDDescription(char *oid)
+OUString findOIDDescription(char *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
     for (int i=0; i<nOID; i++)
@@ -538,7 +537,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     return Sequence< sal_Int8 >();
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
+OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
@@ -573,7 +572,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
+OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )

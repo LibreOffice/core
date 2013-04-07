@@ -202,7 +202,7 @@ public:
           nDepth == 0 -> pages
           nDepth == 1 -> objects  */
 
-    std::vector<rtl::OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
+    std::vector<OUString> GetSelectEntryList (const sal_uInt16 nDepth) const;
 
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
@@ -261,7 +261,7 @@ private:
     void AddShapeList (
         const SdrObjList& rList,
         SdrObject* pShape,
-        const ::rtl::OUString& rsName,
+        const OUString& rsName,
         const bool bIsExcluded,
         SvTreeListEntry* pParentEntry,
         const IconProvider& rIconProvider);

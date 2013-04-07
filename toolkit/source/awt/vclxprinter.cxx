@@ -49,8 +49,8 @@
         {
             static ::com::sun::star::beans::Property aPropTable[] =
             {
-                ::com::sun::star::beans::Property( ::rtl::OUString("Orientation"), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
-                ::com::sun::star::beans::Property( ::rtl::OUString("Horizontal"), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
+                ::com::sun::star::beans::Property( OUString("Orientation"), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( OUString("Horizontal"), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( ::com::sun::star::beans::Property );
@@ -242,7 +242,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     return aDescriptions;
 }
 
-void VCLXPrinterPropertySet::selectForm( const ::rtl::OUString& rFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( Mutex );
 
@@ -309,7 +309,7 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinter )
     VCLXPrinterPropertySet::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( Mutex );
 
@@ -420,26 +420,26 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinterServer )
 IMPL_XTYPEPROVIDER_END
 
 // ::com::sun::star::awt::XPrinterServer
-::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    const std::vector<rtl::OUString>& rQueues = Printer::GetPrinterQueues();
+    const std::vector<OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aNames( nPrinters );
+    ::com::sun::star::uno::Sequence< OUString >  aNames( nPrinters );
     for ( sal_uInt32 n = 0; n < nPrinters; n++ )
         aNames.getArray()[n] = rQueues[n];
 
     return aNames;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > VCLXPrinterServer::createPrinter( const ::rtl::OUString& rPrinterName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > VCLXPrinterServer::createPrinter( const OUString& rPrinterName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > xP;
     xP = new VCLXPrinter( rPrinterName );
     return xP;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrinter( const ::rtl::OUString& rPrinterName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > VCLXPrinterServer::createInfoPrinter( const OUString& rPrinterName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter > xP;
     xP = new VCLXInfoPrinter( rPrinterName );

@@ -58,7 +58,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
 ////HELPER
-::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
+OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 //  ----------------------------------------------------
 //  class UnoControlTabPageModel
@@ -74,9 +74,9 @@ UnoControlTabPageModel::UnoControlTabPageModel( Reference< XComponentContext > c
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
 }
 
-::rtl::OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
+OUString UnoControlTabPageModel::getServiceName( ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
+    return OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
 }
 
 Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -86,7 +86,7 @@ Any UnoControlTabPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPage );
+            aAny <<= OUString::createFromAscii( szServiceName_UnoControlTabPage );
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -127,15 +127,15 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         if ( !( rArguments[ 0 ] >>= nPageId ))
              throw lang::IllegalArgumentException();
         m_nTabPageId = nPageId;
-        ::rtl::OUString sURL;
+        OUString sURL;
         if ( !( rArguments[ 1 ] >>= sURL ))
             throw lang::IllegalArgumentException();
         Reference<container::XNameContainer > xDialogModel = awt::UnoControlDialogModelProvider::create( m_xContext, sURL );
         if ( xDialogModel.is() )
         {
-            Sequence< ::rtl::OUString> aNames = xDialogModel->getElementNames();
-            const ::rtl::OUString* pIter = aNames.getConstArray();
-            const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+            Sequence< OUString> aNames = xDialogModel->getElementNames();
+            const OUString* pIter = aNames.getConstArray();
+            const OUString* pEnd = pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 try
@@ -152,7 +152,7 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
             Reference<XPropertySet> xDialogProp(xDialogModel,UNO_QUERY);
             if ( xDialogProp.is() )
             {
-                static const ::rtl::OUString s_sResourceResolver("ResourceResolver");
+                static const OUString s_sResourceResolver("ResourceResolver");
                 Reference<XPropertySet> xThis(*this,UNO_QUERY);
                 xThis->setPropertyValue(s_sResourceResolver,xDialogProp->getPropertyValue(s_sResourceResolver));
                 xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),xDialogProp->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)));
@@ -167,16 +167,16 @@ void SAL_CALL UnoControlTabPageModel::initialize (const Sequence<Any>& rArgument
         m_nTabPageId = -1;
 }
 //===== Service ===============================================================
-::rtl::OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
+OUString UnoControlTabPageModel_getImplementationName (void) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
+    return OUString("com.sun.star.awt.tab.UnoControlTabPageModel");
 }
 
-Sequence<rtl::OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL UnoControlTabPageModel_getSupportedServiceNames (void)
      throw (RuntimeException)
 {
-     const ::rtl::OUString sServiceName("com.sun.star.awt.tab.UnoControlTabPageModel");
-     return Sequence<rtl::OUString>(&sServiceName, 1);
+     const OUString sServiceName("com.sun.star.awt.tab.UnoControlTabPageModel");
+     return Sequence<OUString>(&sServiceName, 1);
 }
 //=============================================================================
 // = class UnoControlTabPage
@@ -193,9 +193,9 @@ UnoControlTabPage::~UnoControlTabPage()
 {
 }
 
-::rtl::OUString UnoControlTabPage::GetComponentServiceName()
+OUString UnoControlTabPage::GetComponentServiceName()
 {
-    return ::rtl::OUString("TabPageModel");
+    return OUString("TabPageModel");
 }
 
 void UnoControlTabPage::dispose() throw(RuntimeException)
@@ -262,11 +262,11 @@ throw (::com::sun::star::uno::RuntimeException)
         // Remember that changes have been done by listener. No need to
         // update the position because of property change event.
         mbSizeModified = true;
-        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
         // Properties in a sequence must be sorted!
-        aProps[0] = rtl::OUString( "Height" );
-        aProps[1] = rtl::OUString( "Width"  );
+        aProps[0] = OUString( "Height" );
+        aProps[1] = OUString( "Width"  );
         aValues[0] <<= aAppFontSize.Height();
         aValues[1] <<= aAppFontSize.Width();
 
@@ -290,10 +290,10 @@ throw (::com::sun::star::uno::RuntimeException)
         // Remember that changes have been done by listener. No need to
         // update the position because of property change event.
         mbPosModified = true;
-        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = rtl::OUString( "PositionX"  );
-        aProps[1] = rtl::OUString( "PositionY" );
+        aProps[0] = OUString( "PositionX"  );
+        aProps[1] = OUString( "PositionY" );
         aValues[0] <<= aTmp.Width();
         aValues[1] <<= aTmp.Height();
 

@@ -69,10 +69,10 @@ struct ProtocolError {
 };
 
 class ScChangeOpReader {
-    std::vector< rtl::OUString > maArgs;
+    std::vector< OUString > maArgs;
 
 public:
-    ScChangeOpReader( const rtl::OUString &rString)
+    ScChangeOpReader( const OUString &rString)
     {
         // will need to handle escaping etc.
         // Surely someone else wrote this before ! [!?]
@@ -127,28 +127,28 @@ public:
     }
     ~ScChangeOpReader() {}
 
-    rtl::OUString getMethod()
+    OUString getMethod()
     {
         return maArgs[0];
     }
 
     size_t getArgCount() { return maArgs.size(); }
 
-    rtl::OUString getString( sal_Int32 n )
+    OUString getString( sal_Int32 n )
     {
         if (n > 0 && (size_t)n < getArgCount() )
         {
-            rtl::OUString aUStr( maArgs[ n ] );
+            OUString aUStr( maArgs[ n ] );
             ScGlobal::EraseQuotes( aUStr );
             return aUStr;
         } else
-            return rtl::OUString();
+            return OUString();
     }
 
     ScAddress getAddress( sal_Int32 n )
     {
         ScAddress aAddr;
-        rtl::OUString aToken( getString( n ) );
+        OUString aToken( getString( n ) );
         aAddr.Parse( aToken );
         return aAddr;
     }
@@ -186,7 +186,7 @@ public:
 // method name ';' then arguments ; separated
 class ScChangeOpWriter
 {
-    rtl::OUStringBuffer aMessage;
+    OUStringBuffer aMessage;
     void appendSeparator()
     {
         aMessage.append( sal_Unicode( ';' ) );
@@ -199,12 +199,12 @@ public:
         appendSeparator();
     }
 
-    void appendString( const rtl::OUString &rStr )
+    void appendString( const OUString &rStr )
     {
         if ( rStr.indexOf( sal_Unicode( '"' ) ) >= 0 ||
              rStr.indexOf( sal_Unicode( ';' ) ) >= 0 )
         {
-            rtl::OUString aQuoted( rStr );
+            OUString aQuoted( rStr );
             ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
             aMessage.append( aQuoted );
         }
@@ -215,7 +215,7 @@ public:
 
     void appendAddress( const ScAddress &rPos )
     {
-        rtl::OUString aStr;
+        OUString aStr;
         rPos.Format( aStr, SCA_VALID );
         aMessage.append( aStr );
         appendSeparator();
@@ -249,16 +249,16 @@ public:
         appendSeparator();
     }
 
-    rtl::OString toString()
+    OString toString()
     {
-        return rtl::OUStringToOString( aMessage.toString(), RTL_TEXTENCODING_UTF8 );
+        return OUStringToOString( aMessage.toString(), RTL_TEXTENCODING_UTF8 );
     }
 };
 
-void ScDocFuncSend::RecvMessage( const rtl::OString &rString )
+void ScDocFuncSend::RecvMessage( const OString &rString )
 {
     try {
-        ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
+        ScChangeOpReader aReader( OUString( rString.getStr(),
                                                  rString.getLength(),
                                                  RTL_TEXTENCODING_UTF8 ) );
         // FIXME: have some hash to enumeration mapping here
@@ -352,10 +352,10 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
 
     o_rbNumFmtSet = false;
 
-    if ( rtl::OUString( rText ) == "saveme" )
+    if ( OUString( rText ) == "saveme" )
         mpCollaboration->SaveAndSendFile( NULL );
 
-    if ( rtl::OUString( rText ) == "contacts" )
+    if ( OUString( rText ) == "contacts" )
         mpCollaboration->DisplayContacts();
 
     return true; // needs some code auditing action

@@ -169,17 +169,17 @@ static HMENU createSystrayMenu( )
 
 #if defined(USE_APP_SHORTCUTS)
     // collect the URLs of the entries in the File/New menu
-    ::std::set< ::rtl::OUString > aFileNewAppsAvailable;
+    ::std::set< OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
     Sequence < Sequence < PropertyValue > > aNewMenu = aOpt.GetMenu( E_NEWMENU );
-    const ::rtl::OUString sURLKey( "URL"  );
+    const OUString sURLKey( "URL"  );
 
     const Sequence< PropertyValue >* pNewMenu = aNewMenu.getConstArray();
     const Sequence< PropertyValue >* pNewMenuEnd = aNewMenu.getConstArray() + aNewMenu.getLength();
     for ( ; pNewMenu != pNewMenuEnd; ++pNewMenu )
     {
         ::comphelper::SequenceAsHashMap aEntryItems( *pNewMenu );
-        ::rtl::OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, ::rtl::OUString() ) );
+        OUString sURL( aEntryItems.getUnpackedValueOrDefault( sURLKey, OUString() ) );
         if ( sURL.getLength() )
             aFileNewAppsAvailable.insert( sURL );
     }
@@ -210,7 +210,7 @@ static HMENU createSystrayMenu( )
             // the complete application is not even installed
             continue;
 
-        ::rtl::OUString sURL( ::rtl::OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
+        OUString sURL( OUString::createFromAscii( aMenuItems[i].pAsciiURLDescription ) );
 
         if ( aFileNewAppsAvailable.find( sURL ) == aFileNewAppsAvailable.end() )
             // the application is installed, but the entry has been configured to *not* appear in the File/New
@@ -834,7 +834,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     return FileExistsW( reinterpret_cast<LPCWSTR>(quickstartExe.getStr()) );
 }
 
-void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
+void ShutdownIcon::EnableAutostartW32( const OUString &aShortcut )
 {
     wchar_t aPath[_MAX_PATH];
     GetModuleFileNameW( NULL, aPath, _MAX_PATH-1);

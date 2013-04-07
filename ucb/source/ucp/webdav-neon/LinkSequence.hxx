@@ -39,12 +39,12 @@ namespace webdav_ucp
 class LinkSequence
 {
 public:
-    static bool createFromXML( const rtl::OString & rInData,
+    static bool createFromXML( const OString & rInData,
                                com::sun::star::uno::Sequence<
                                    com::sun::star::ucb::Link > & rOutData );
     static bool toXML( const com::sun::star::uno::Sequence<
                                 com::sun::star::ucb::Link > & rInData,
-                       rtl::OUString & rOutData );
+                       OUString & rOutData );
 };
 
 }

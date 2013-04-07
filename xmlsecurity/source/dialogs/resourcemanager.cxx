@@ -84,7 +84,7 @@ namespace XmlSec
     pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
     {
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
-        ::rtl::OUStringBuffer s1, s2;
+        OUStringBuffer s1, s2;
         OUString sEqual(" = ");
         typedef vector< pair < OUString, OUString > >::const_iterator CIT;
         for (CIT i = vecAttrValueOfDN.begin(); i < vecAttrValueOfDN.end(); ++i)
@@ -117,7 +117,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         bool bInType = true;
         sal_Int32 nTypeNameStart = 0;
         OUString sType;
-        ::rtl::OUStringBuffer sbufValue;
+        OUStringBuffer sbufValue;
         sal_Int32 length = rRawString.getLength();
 
         for (sal_Int32 i = 0; i < length; i++)
@@ -203,7 +203,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         bool bInType = true;
         sal_Int32 nTypeNameStart = 0;
         OUString sType;
-        ::rtl::OUStringBuffer sbufValue;
+        OUStringBuffer sbufValue;
         sal_Int32 length = rRawString.getLength();
 
         for (sal_Int32 i = 0; i < length; i++)

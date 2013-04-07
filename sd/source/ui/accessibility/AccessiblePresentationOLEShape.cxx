@@ -45,19 +45,19 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessiblePresentationOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessiblePresentationOLEShape");
+    return OUString("AccessiblePresentationOLEShape");
 }
 
 /// Set this object's name if it is different to the current name.
-::rtl::OUString
+OUString
     AccessiblePresentationOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
@@ -81,7 +81,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
     return sName;
 }
 
-::rtl::OUString
+OUString
     AccessiblePresentationOLEShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

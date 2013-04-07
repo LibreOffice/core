@@ -23,7 +23,6 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 //.............................................................................
@@ -72,7 +71,7 @@ WrappedBaseDiagramProperty::~WrappedBaseDiagramProperty()
 void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    rtl::OUString aBaseDiagram;
+    OUString aBaseDiagram;
     if( ! (rOuterValue >>= aBaseDiagram) )
         throw lang::IllegalArgumentException( "BaseDiagram properties require type OUString", 0, 0 );
 

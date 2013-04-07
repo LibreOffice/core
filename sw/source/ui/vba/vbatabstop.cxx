@@ -31,20 +31,20 @@ SwVbaTabStop::~SwVbaTabStop()
 {
 }
 
-rtl::OUString
+OUString
 SwVbaTabStop::getServiceImplName()
 {
-    return rtl::OUString("SwVbaTabStop");
+    return OUString("SwVbaTabStop");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaTabStop::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.TabStop" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.TabStop" );
     }
     return aServiceNames;
 }

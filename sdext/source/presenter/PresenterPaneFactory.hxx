@@ -53,13 +53,13 @@ class PresenterPaneFactory
       public PresenterPaneFactoryInterfaceBase
 {
 public:
-    static const ::rtl::OUString msCurrentSlidePreviewPaneURL;
-    static const ::rtl::OUString msNextSlidePreviewPaneURL;
-    static const ::rtl::OUString msNotesPaneURL;
-    static const ::rtl::OUString msToolBarPaneURL;
-    static const ::rtl::OUString msSlideSorterPaneURL;
-    static const ::rtl::OUString msHelpPaneURL;
-    static const ::rtl::OUString msOverlayPaneURL;
+    static const OUString msCurrentSlidePreviewPaneURL;
+    static const OUString msNextSlidePreviewPaneURL;
+    static const OUString msNotesPaneURL;
+    static const OUString msToolBarPaneURL;
+    static const OUString msSlideSorterPaneURL;
+    static const OUString msHelpPaneURL;
+    static const OUString msOverlayPaneURL;
 
     /** Create a new instance of this class and register it as resource
         factory in the drawing framework of the given controller.
@@ -73,8 +73,8 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPaneFactory (void);
 
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static (void);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
@@ -101,7 +101,7 @@ private:
     css::uno::WeakReference<css::drawing::framework::XConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
-    typedef ::std::map<rtl::OUString, css::uno::Reference<css::drawing::framework::XResource> >
+    typedef ::std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >
         ResourceContainer;
     ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
 
@@ -113,10 +113,10 @@ private:
 
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::rtl::OUString& rsTitle);
+        const OUString& rsTitle);
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::rtl::OUString& rsTitle,
+        const OUString& rsTitle,
         const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
         const bool bIsSpritePane);
 

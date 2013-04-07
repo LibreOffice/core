@@ -52,11 +52,11 @@ namespace toolkit
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XPersistObject
-        ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
     //====================================================================
@@ -73,7 +73,7 @@ namespace toolkit
 
     public:
                                     UnoThrobberControl();
-        ::rtl::OUString             GetComponentServiceName();
+        OUString             GetComponentServiceName();
 
         DECLARE_UNO3_AGG_DEFAULTS( UnoThrobberControl, UnoControlBase );
         ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -90,8 +90,8 @@ namespace toolkit
         virtual void SAL_CALL stop() throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
     };
 
 //........................................................................

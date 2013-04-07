@@ -34,12 +34,12 @@ class XMLTextHeaderFooterContext: public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
 
-    const ::rtl::OUString sOn;
-    const ::rtl::OUString sShareContent;
-    const ::rtl::OUString sShareContentFirst;
-    const ::rtl::OUString sText;
-    const ::rtl::OUString sTextFirst;
-    const ::rtl::OUString sTextLeft;
+    const OUString sOn;
+    const OUString sShareContent;
+    const OUString sShareContentFirst;
+    const OUString sText;
+    const OUString sTextFirst;
+    const OUString sTextLeft;
 
     sal_Bool    bInsertContent : 1;
     sal_Bool    bLeft : 1;
@@ -49,7 +49,7 @@ public:
     TYPEINFO();
 
     XMLTextHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const ::com::sun::star::uno::Reference <
@@ -60,7 +60,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();

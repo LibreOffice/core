@@ -40,12 +40,12 @@ namespace connectivity
 
         struct OOO_DLLPUBLIC_DBTOOLS KeyProperties
         {
-            ::std::vector< ::rtl::OUString> m_aKeyColumnNames;
-            ::rtl::OUString m_ReferencedTable;
+            ::std::vector< OUString> m_aKeyColumnNames;
+            OUString m_ReferencedTable;
             sal_Int32       m_Type;
             sal_Int32       m_UpdateRule;
             sal_Int32       m_DeleteRule;
-            KeyProperties(const ::rtl::OUString& _ReferencedTable,
+            KeyProperties(const OUString& _ReferencedTable,
                           sal_Int32     _Type,
                           sal_Int32     _UpdateRule,
                           sal_Int32     _DeleteRule)
@@ -79,9 +79,9 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OKey(sal_Bool _bCase);
-            OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase);
-            /*OKey( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _ReferencedTable,
+            OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase);
+            /*OKey( const OUString& _Name,
+                    const OUString& _ReferencedTable,
                     sal_Int32       _Type,
                     sal_Int32       _UpdateRule,
                     sal_Int32       _DeleteRule,
@@ -107,8 +107,8 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XNamed
-            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
         };

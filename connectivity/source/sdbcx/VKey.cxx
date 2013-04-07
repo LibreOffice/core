@@ -35,29 +35,29 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OKey::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString("com.sun.star.sdbcx.VKeyDescription");
-    return ::rtl::OUString("com.sun.star.sdbcx.VKey");
+        return OUString("com.sun.star.sdbcx.VKeyDescription");
+    return OUString("com.sun.star.sdbcx.VKey");
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OKey::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OKey::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.KeyDescription");
+        aSupported[0] = OUString("com.sun.star.sdbcx.KeyDescription");
     else
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.Key");
+        aSupported[0] = OUString("com.sun.star.sdbcx.Key");
 
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OKey::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OKey::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -71,7 +71,7 @@ OKey::OKey(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 // -------------------------------------------------------------------------
-OKey::OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
+OKey::OKey(const OUString& _Name,const TKeyProperties& _rProps,sal_Bool _bCase)
 : ODescriptor_BASE(m_aMutex)
  ,ODescriptor(ODescriptor_BASE::rBHelper,_bCase)
  ,m_aProps(_rProps)
@@ -79,8 +79,8 @@ OKey::OKey(const ::rtl::OUString& _Name,const TKeyProperties& _rProps,sal_Bool _
 {
     m_Name = _Name;
 }
-//OKey::OKey(   const ::rtl::OUString& _Name,
-//          const ::rtl::OUString& _ReferencedTable,
+//OKey::OKey(   const OUString& _Name,
+//          const OUString& _ReferencedTable,
 //          sal_Int32       _Type,
 //          sal_Int32       _UpdateRule,
 //          sal_Int32       _DeleteRule,
@@ -128,7 +128,7 @@ void OKey::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE), PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_aProps->m_ReferencedTable,   ::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE), PROPERTY_ID_REFERENCEDTABLE,    nAttrib,&m_aProps->m_ReferencedTable,   ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),            PROPERTY_ID_TYPE,               nAttrib,&m_aProps->m_Type,          ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_UPDATERULE),      PROPERTY_ID_UPDATERULE,         nAttrib,&m_aProps->m_UpdateRule,        ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELETERULE),      PROPERTY_ID_DELETERULE,         nAttrib,&m_aProps->m_DeleteRule,        ::getCppuType(static_cast<sal_Int32*>(0)));
@@ -193,12 +193,12 @@ Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeE
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OKey::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OKey::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OKey::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OKey::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------

@@ -115,12 +115,12 @@ public:
     EditableColorConfig();
     ~EditableColorConfig();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetSchemeNames() const;
-    void                                                DeleteScheme(const ::rtl::OUString& rScheme );
-    void                                                AddScheme(const ::rtl::OUString& rScheme );
-    sal_Bool                                            LoadScheme(const ::rtl::OUString& rScheme );
-    const ::rtl::OUString&                              GetCurrentSchemeName()const;
-    void                        SetCurrentSchemeName(const ::rtl::OUString& rScheme);
+    ::com::sun::star::uno::Sequence< OUString >  GetSchemeNames() const;
+    void                                                DeleteScheme(const OUString& rScheme );
+    void                                                AddScheme(const OUString& rScheme );
+    sal_Bool                                            LoadScheme(const OUString& rScheme );
+    const OUString&                              GetCurrentSchemeName()const;
+    void                        SetCurrentSchemeName(const OUString& rScheme);
 
     const ColorConfigValue&     GetColorValue(ColorConfigEntry eEntry)const;
     void                        SetColorValue(ColorConfigEntry eEntry, const ColorConfigValue& rValue);

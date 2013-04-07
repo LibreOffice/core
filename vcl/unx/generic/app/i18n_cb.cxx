@@ -384,7 +384,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pPreeditData->aInputEv.mpTextAttr = Preedit_FeedbackToSAL(
             pPreeditData->aText.pCharStyle, pPreeditData->aText.nLength, pPreeditData->aInputFlags);
       pPreeditData->aInputEv.mnCursorPos = call_data->caret;
-      pPreeditData->aInputEv.maText = rtl::OUString(pPreeditData->aText.pUnicodeBuffer,
+      pPreeditData->aInputEv.maText = OUString(pPreeditData->aText.pUnicodeBuffer,
                                 pPreeditData->aText.nLength);
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
       pPreeditData->aInputEv.mnDeltaStart = 0; // call_data->chg_first;
@@ -546,7 +546,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
     else
     {
         fprintf( stderr, "XIMStatusDataType %s not supported\n",
-            call_data->type == XIMBitmapType ? "XIMBitmapType" : rtl::OString::valueOf(static_cast<sal_Int32>(call_data->type)).getStr() );
+            call_data->type == XIMBitmapType ? "XIMBitmapType" : OString::valueOf(static_cast<sal_Int32>(call_data->type)).getStr() );
     }
 #endif
     return;
@@ -556,7 +556,7 @@ void
 SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
     XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
-    ::vcl::I18NStatus::get().changeIM( rtl::OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
+    ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
 // ----------------------------------------------------------------------------------

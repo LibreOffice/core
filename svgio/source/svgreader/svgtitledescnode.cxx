@@ -37,7 +37,7 @@ namespace svgio
         {
         }
 
-        void SvgTitleDescNode::concatenate(const rtl::OUString& rChars)
+        void SvgTitleDescNode::concatenate(const OUString& rChars)
         {
             maText += rChars;
         }

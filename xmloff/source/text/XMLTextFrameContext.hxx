@@ -40,8 +40,8 @@ class XMLTextFrameContext : public SvXMLImportContext, public multiImageImportHe
 
     XMLTextFrameContextHyperlink_Impl   *m_pHyperlink;
     // Implement Title/Description Elements UI (#i73249#)
-    ::rtl::OUString m_sTitle;
-    ::rtl::OUString m_sDesc;
+    OUString m_sTitle;
+    OUString m_sDesc;
 
     ::com::sun::star::text::TextContentAnchorType   m_eDefaultAnchorType;
 
@@ -59,7 +59,7 @@ class XMLTextFrameContext : public SvXMLImportContext, public multiImageImportHe
 
 protected:
     /// helper to get the created xShape instance, needs to be overloaded
-    virtual rtl::OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
+    virtual OUString getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const;
     virtual void removeGraphicFromImportContext(const SvXMLImportContext& rContext) const;
 
 public:
@@ -68,7 +68,7 @@ public:
 
     XMLTextFrameContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             ::com::sun::star::text::TextContentAnchorType eDfltAnchorType );
@@ -77,13 +77,13 @@ public:
     virtual void EndElement();
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    void SetHyperlink( const ::rtl::OUString& rHRef,
-                       const ::rtl::OUString& rName,
-                       const ::rtl::OUString& rTargetFrameName,
+    void SetHyperlink( const OUString& rHRef,
+                       const OUString& rName,
+                       const OUString& rTargetFrameName,
                        sal_Bool bMap );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const;

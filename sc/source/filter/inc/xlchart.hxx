@@ -885,7 +885,7 @@ struct XclChObjectLink
 
 struct XclChFrLabelProps
 {
-    rtl::OUString       maSeparator;        /// Separator between label values.
+    OUString       maSeparator;        /// Separator between label values.
     sal_uInt16          mnFlags;            /// Flags indicating which values to be displayed.
 
     explicit            XclChFrLabelProps();
@@ -1155,7 +1155,7 @@ public:
     /** Returns true, if the passed marker type is filled. */
     static bool         HasMarkerFillColor( sal_uInt16 nMarkerType );
     /** Returns the role name for a manual data source for error bars. */
-    static ::rtl::OUString GetErrorBarValuesRole( sal_uInt8 nBarType );
+    static OUString GetErrorBarValuesRole( sal_uInt8 nBarType );
 };
 
 // Chart formatting info provider =============================================
@@ -1311,7 +1311,7 @@ public:
     /** Returns the first fitting chart type info for an Excel chart type record identifier. */
     const XclChTypeInfo& GetTypeInfoFromRecId( sal_uInt16 nRecId ) const;
     /** Returns the first fitting chart type info for the passed service name. */
-    const XclChTypeInfo& GetTypeInfoFromService( const ::rtl::OUString& rServiceName ) const;
+    const XclChTypeInfo& GetTypeInfoFromService( const OUString& rServiceName ) const;
 
 private:
     typedef ::std::map< XclChTypeId, const XclChTypeInfo* > XclChTypeInfoMap;
@@ -1352,18 +1352,18 @@ public:
 
 public:
     explicit            XclChObjectTable( XServiceFactoryRef xFactory,
-                            const ::rtl::OUString& rServiceName, const ::rtl::OUString& rObjNameBase );
+                            const OUString& rServiceName, const OUString& rObjNameBase );
 
     /** Returns a named formatting object from the chart document. */
-    ::com::sun::star::uno::Any GetObject( const ::rtl::OUString& rObjName );
+    ::com::sun::star::uno::Any GetObject( const OUString& rObjName );
     /** Insertes a named formatting object into the chart document. */
-    ::rtl::OUString     InsertObject( const ::com::sun::star::uno::Any& rObj );
+    OUString     InsertObject( const ::com::sun::star::uno::Any& rObj );
 
 private:
     XServiceFactoryRef  mxFactory;              /// Factory to create the container.
     XNameContainerRef   mxContainer;            /// Container for the objects.
-    ::rtl::OUString     maServiceName;          /// Service name to create the container.
-    ::rtl::OUString     maObjNameBase;          /// Base of names for inserted objects.
+    OUString     maServiceName;          /// Service name to create the container.
+    OUString     maObjNameBase;          /// Base of names for inserted objects.
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
 

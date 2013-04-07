@@ -57,7 +57,7 @@ class TaskCreator : private ThreadHelpBase
                  TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
         virtual ~TaskCreator(                                                                     );
 
-        css::uno::Reference< css::frame::XFrame > createTask( const ::rtl::OUString& sName    ,
+        css::uno::Reference< css::frame::XFrame > createTask( const OUString& sName    ,
                                                                     sal_Bool         bVisible );
 
     //_______________________

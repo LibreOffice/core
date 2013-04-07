@@ -31,8 +31,6 @@
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::vector;
 
 // ============================================================================

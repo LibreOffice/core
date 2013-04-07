@@ -90,7 +90,7 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual sal_Bool                PostEvent( void* pData );
-    virtual void                SetTitle( const rtl::OUString& rTitle );
+    virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                                SetMenu( SalMenu* pSalMenu );
     virtual void                                DrawMenuBar();
@@ -117,7 +117,7 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -129,7 +129,7 @@ public:
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetScreenNumber( unsigned int );
-    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
+    virtual void                SetApplicationID( const OUString &rApplicationID );
     virtual void                ResetClipRegion();
     virtual void                BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
@@ -140,8 +140,8 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect );
 
 // get foreign key names
 namespace vcl_sal {
-    rtl::OUString getKeysReplacementName(
-        rtl::OUString pLang,
+    OUString getKeysReplacementName(
+        OUString pLang,
         LONG nSymbol );
 }
 

@@ -175,7 +175,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 
 // -----------------------------------------------------------------------
 
-SvxCharBasePage::SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rID, rUIXMLDescription, rItemset )
     , m_pPreviewWin(NULL)
     , m_bPreviewBackgroundToCharacter( sal_False )
@@ -3370,7 +3370,7 @@ void SvxCharTwoLinesPage::SetBracket( sal_Unicode cBracket, sal_Bool bStart )
 
         if ( !bFound )
         {
-            nEntryPos = pBox->InsertEntry( rtl::OUString(cBracket) );
+            nEntryPos = pBox->InsertEntry( OUString(cBracket) );
             pBox->SelectEntryPos( nEntryPos );
         }
     }

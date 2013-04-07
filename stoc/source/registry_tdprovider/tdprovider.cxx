@@ -112,7 +112,7 @@ class ProviderImpl
         virtual uno::Reference<
             reflection::XTypeDescriptionEnumeration > SAL_CALL
         createTypeDescriptionEnumeration(
-            const ::rtl::OUString& moduleName,
+            const OUString& moduleName,
             const uno::Sequence< uno::TypeClass >& types,
             reflection::TypeDescriptionSearchDepth depth )
                 throw ( reflection::NoSuchTypeNameException,
@@ -152,7 +152,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::reflection::XTypeDescriptionEnumeration > SAL_CALL
     createTypeDescriptionEnumeration(
-        const ::rtl::OUString& moduleName,
+        const OUString& moduleName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass >& types,
         ::com::sun::star::reflection::TypeDescriptionSearchDepth depth )
@@ -202,7 +202,7 @@ sal_Bool ProviderImpl::TypeDescriptionManagerWrapper::hasByHierarchicalName(
 //______________________________________________________________________________
 uno::Reference< reflection::XTypeDescriptionEnumeration > SAL_CALL
 ProviderImpl::TypeDescriptionManagerWrapper::createTypeDescriptionEnumeration(
-        const ::rtl::OUString& moduleName,
+        const OUString& moduleName,
         const uno::Sequence< uno::TypeClass >& types,
         reflection::TypeDescriptionSearchDepth depth )
     throw ( reflection::NoSuchTypeNameException,
@@ -482,13 +482,13 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         case RT_TYPE_INTERFACE:
         {
             sal_uInt16 n = aReader.getSuperTypeCount();
-            com::sun::star::uno::Sequence< rtl::OUString > aBaseTypeNames(n);
+            com::sun::star::uno::Sequence< OUString > aBaseTypeNames(n);
             for (sal_uInt16 i = 0; i < n; ++i) {
                 aBaseTypeNames[i] = aReader.getSuperTypeName(i).replace(
                     '/', '.');
             }
             sal_uInt16 n2 = aReader.getReferenceCount();
-            com::sun::star::uno::Sequence< rtl::OUString >
+            com::sun::star::uno::Sequence< OUString >
                 aOptionalBaseTypeNames(n2);
             for (sal_uInt16 i = 0; i < n2; ++i) {
                 OSL_ASSERT(
@@ -520,7 +520,7 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
 
         case RT_TYPE_STRUCT:
             {
-                rtl::OUString superTypeName;
+                OUString superTypeName;
                 if (aReader.getSuperTypeCount() == 1) {
                     superTypeName = aReader.getSuperTypeName(0).replace(
                         '/', '.');
@@ -541,7 +541,7 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
 
         case RT_TYPE_EXCEPTION:
             {
-                rtl::OUString superTypeName;
+                OUString superTypeName;
                 if (aReader.getSuperTypeCount() == 1) {
                     superTypeName = aReader.getSuperTypeName(0).replace(
                         '/', '.');

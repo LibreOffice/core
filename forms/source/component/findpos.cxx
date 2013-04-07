@@ -32,11 +32,11 @@
 namespace detail {
 
 sal_Int32 findPos(
-    const ::rtl::OUString& aStr,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rList)
+    const OUString& aStr,
+    const ::com::sun::star::uno::Sequence< OUString >& rList)
 {
-    const ::rtl::OUString* pStrList = rList.getConstArray();
-    const ::rtl::OUString* pResult = ::std::lower_bound(
+    const OUString* pStrList = rList.getConstArray();
+    const OUString* pResult = ::std::lower_bound(
         pStrList, pStrList + rList.getLength(), aStr );
     if ( ( pResult != pStrList + rList.getLength() ) && ( *pResult == aStr ) )
         return ( pResult - pStrList );

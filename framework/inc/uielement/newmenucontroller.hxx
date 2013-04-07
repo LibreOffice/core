@@ -82,15 +82,15 @@ namespace framework
             virtual void impl_setPopupMenu();
             struct AddInfo
             {
-                rtl::OUString aTargetFrame;
-                rtl::OUString aImageId;
+                OUString aTargetFrame;
+                OUString aImageId;
             };
 
             typedef ::boost::unordered_map< int, AddInfo > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
-                                                     const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
+                                                     const ::com::sun::star::uno::Sequence< OUString >& rCommands,
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
@@ -103,9 +103,9 @@ namespace framework
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;
             AddInfoForId        m_aAddInfoForItem;
-            rtl::OUString       m_aTargetFrame;
-            rtl::OUString       m_aModuleIdentifier;
-            rtl::OUString       m_aEmptyDocURL;
+            OUString       m_aTargetFrame;
+            OUString       m_aModuleIdentifier;
+            OUString       m_aEmptyDocURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalAcceleratorManager;

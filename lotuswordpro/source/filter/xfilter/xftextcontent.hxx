@@ -74,7 +74,7 @@ class XFTextContent : public XFContent
 public:
     XFTextContent(){}
 
-    XFTextContent(rtl::OUString text);
+    XFTextContent(OUString text);
 
     virtual ~XFTextContent();
 
@@ -82,14 +82,14 @@ public:
     /**
      * @descr   Set the text.
      */
-    void                SetText(const rtl::OUString& text);
+    void                SetText(const OUString& text);
 
     virtual enumXFContent GetContentType();
 
     virtual void        ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString       m_strText;
+    OUString       m_strText;
 };
 
 #endif

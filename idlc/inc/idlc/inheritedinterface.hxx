@@ -31,7 +31,7 @@ class InheritedInterface {
 public:
     InheritedInterface(
         AstType const * theInterface, bool theOptional,
-        rtl::OUString const & theDocumentation):
+        OUString const & theDocumentation):
         interface(theInterface), optional(theOptional),
         documentation(theDocumentation) {}
 
@@ -42,12 +42,12 @@ public:
 
     bool isOptional() const { return optional; }
 
-    rtl::OUString getDocumentation() const { return documentation; }
+    OUString getDocumentation() const { return documentation; }
 
 private:
     AstType const * interface;
     bool optional;
-    rtl::OUString documentation;
+    OUString documentation;
 };
 
 #endif

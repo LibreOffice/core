@@ -47,14 +47,14 @@ namespace svgio
 
         const SvgStyleAttributes* SvgPolyNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStrA(rtl::OUString::createFromAscii("polygon"));
-            static rtl::OUString aClassStrB(rtl::OUString::createFromAscii("polyline"));
+            static OUString aClassStrA(OUString::createFromAscii("polygon"));
+            static OUString aClassStrB(OUString::createFromAscii("polyline"));
             maSvgStyleAttributes.checkForCssStyle(mbIsPolyline? aClassStrB : aClassStrA);
 
             return &maSvgStyleAttributes;
         }
 
-        void SvgPolyNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgPolyNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);

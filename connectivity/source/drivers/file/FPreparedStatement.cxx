@@ -95,7 +95,7 @@ void OPreparedStatement::disposing()
 
 }
 // -------------------------------------------------------------------------
-void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
+void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::construct" );
     OStatement_Base::construct(sql);
@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setString" );
     setParameter(parameterIndex,x);
@@ -337,7 +337,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setObjectNull" );
     setNull(parameterIndex,sqlType);
@@ -349,9 +349,9 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OPreparedStatement::setObject" );
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                "$position$", OUString::valueOf(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -477,7 +477,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
     OSL_UNUSED( pMark );
 #endif
 
-    ::rtl::OUString sParameterName;
+    OUString sParameterName;
     // set up Parameter-Column:
     sal_Int32 eType = DataType::VARCHAR;
     sal_uInt32 nPrecision = 255;
@@ -497,9 +497,9 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
     }
 
     Reference<XPropertySet> xParaColumn = new connectivity::parse::OParseColumn(sParameterName
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
+                                                    ,OUString()
+                                                    ,OUString()
+                                                    ,OUString()
                                                     ,nNullable
                                                     ,nPrecision
                                                     ,nScale
@@ -507,9 +507,9 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
                                                     ,sal_False
                                                     ,sal_False
                                                     ,m_aSQLIterator.isCaseSensitive()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString());
+                                                    ,OUString()
+                                                    ,OUString()
+                                                    ,OUString());
     m_xParamColumns->get().push_back(xParaColumn);
     return m_xParamColumns->get().size();
 }
@@ -520,7 +520,7 @@ void OPreparedStatement::describeColumn(OSQLParseNode* _pParameter,OSQLParseNode
     Reference<XPropertySet> xProp;
     if(SQL_ISRULE(_pNode,column_ref))
     {
-        ::rtl::OUString sColumnName,sTableRange;
+        OUString sColumnName,sTableRange;
         m_aSQLIterator.getColumnRange(_pNode,sColumnName,sTableRange);
         if ( !sColumnName.isEmpty() )
         {

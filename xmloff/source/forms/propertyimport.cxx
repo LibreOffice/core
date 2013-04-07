@@ -93,7 +93,7 @@ namespace
 
 //---------------------------------------------------------------------
 Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType,
-    const ::rtl::OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const sal_Bool _bInvertBoolean )
+    const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const sal_Bool _bInvertBoolean )
 {
     Any aReturn;
     sal_Bool bEnumAsInt = sal_False;
@@ -107,8 +107,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
             ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a boolean!").getStr());
             aReturn = ::cppu::bool2any(_bInvertBoolean ? !bValue : bValue);
         }
@@ -123,8 +123,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
                 ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
@@ -164,8 +164,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #endif
             ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a double!").getStr());
             aReturn <<= (double)nValue;
         }
@@ -192,8 +192,8 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
             #endif
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        ::rtl::OStringBuffer("PropertyConversion::convertString: could not convert \"").
-                    append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                        OStringBuffer("PropertyConversion::convertString: could not convert \"").
+                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into a double!").getStr());
 
                 // then convert it into the target type
@@ -243,7 +243,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
 }
 
 //---------------------------------------------------------------------
-Type PropertyConversion::xmlTypeToUnoType( const ::rtl::OUString& _rType )
+Type PropertyConversion::xmlTypeToUnoType( const OUString& _rType )
 {
     Type aUnoType( ::getVoidCppuType() );
 
@@ -252,7 +252,7 @@ Type PropertyConversion::xmlTypeToUnoType( const ::rtl::OUString& _rType )
     {
         s_aTypeNameMap[ token::GetXMLToken( token::XML_BOOLEAN ) ] = ::getBooleanCppuType();
         s_aTypeNameMap[ token::GetXMLToken( token::XML_FLOAT )   ] = ::getCppuType( static_cast< double* >(NULL) );
-        s_aTypeNameMap[ token::GetXMLToken( token::XML_STRING )  ] = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+        s_aTypeNameMap[ token::GetXMLToken( token::XML_STRING )  ] = ::getCppuType( static_cast< OUString* >(NULL) );
         s_aTypeNameMap[ token::GetXMLToken( token::XML_VOID )    ] = ::getVoidCppuType();
     }
 
@@ -268,7 +268,7 @@ Type PropertyConversion::xmlTypeToUnoType( const ::rtl::OUString& _rType )
 //= OPropertyImport
 //=====================================================================
 //---------------------------------------------------------------------
-OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName)
+OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName)
     :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
     ,m_rContext(_rImport)
     ,m_bTrackAttributes(sal_False)
@@ -276,7 +276,7 @@ OPropertyImport::OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 
 }
 
 //---------------------------------------------------------------------
-SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >& _rxAttrList)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTIES) )
@@ -286,8 +286,8 @@ SvXMLImportContext* OPropertyImport::CreateChildContext(sal_uInt16 _nPrefix, con
     }
     else
     {
-        OSL_FAIL(::rtl::OStringBuffer("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ").
-            append(rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+        OSL_FAIL(OStringBuffer("OPropertyImport::CreateChildContext: unknown sub element (only \"properties\" is recognized, but it is ").
+            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
             append(")!").getStr());
         return SvXMLImportContext::CreateChildContext(_nPrefix, _rLocalName, _rxAttrList);
     }
@@ -305,7 +305,7 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
 
     const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
     sal_uInt16 nNamespace;
-    ::rtl::OUString sLocalName;
+    OUString sLocalName;
     for (sal_Int16 i=0; i<nAttributeCount; ++i)
     {
         nNamespace = rMap.GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
@@ -321,14 +321,14 @@ void OPropertyImport::StartElement(const Reference< XAttributeList >& _rxAttrLis
 }
 
 //---------------------------------------------------------------------
-sal_Bool OPropertyImport::encounteredAttribute(const ::rtl::OUString& _rAttributeName) const
+sal_Bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) const
 {
     OSL_ENSURE(m_bTrackAttributes, "OPropertyImport::encounteredAttribute: attribute tracking not enabled!");
     return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
 }
 
 //---------------------------------------------------------------------
-void OPropertyImport::Characters(const ::rtl::OUString&
+void OPropertyImport::Characters(const OUString&
 #if OSL_DEBUG_LEVEL > 0
 _rChars
 #endif
@@ -339,7 +339,7 @@ _rChars
 }
 
 //---------------------------------------------------------------------
-bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUString& _rLocalName, const OUString& _rValue)
 {
     const OAttribute2Property::AttributeAssignment* pProperty = m_rContext.getAttributeMap().getAttributeTranslation(_rLocalName);
     if (pProperty)
@@ -356,11 +356,11 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
     if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
     {
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
-        sMessage += ::rtl::OString( "  Attribute name: " );
-        sMessage += ::rtl::OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
-        sMessage += ::rtl::OString( "\n  value: " );
-        sMessage += ::rtl::OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
+        OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
+        sMessage += OString( "  Attribute name: " );
+        sMessage += OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
+        sMessage += OString( "\n  value: " );
+        sMessage += OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
         OSL_FAIL( sMessage.getStr() );
 #endif
         return false;
@@ -372,7 +372,7 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const ::rtl
 //= OPropertyElementsContext
 //=====================================================================
 //---------------------------------------------------------------------
-OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
     ,m_xPropertyImporter(_rPropertyImporter)
@@ -380,7 +380,7 @@ OPropertyElementsContext::OPropertyElementsContext(SvXMLImport& _rImport, sal_uI
 }
 
 //---------------------------------------------------------------------
-SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
     const Reference< XAttributeList >&)
 {
     if( token::IsXMLToken( _rLocalName, token::XML_PROPERTY ) )
@@ -393,8 +393,8 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
     }
     else
     {
-        OSL_FAIL(::rtl::OStringBuffer("OPropertyElementsContext::CreateChildContext: unknown child element (\"").
-            append(::rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+        OSL_FAIL(OStringBuffer("OPropertyElementsContext::CreateChildContext: unknown child element (\"").
+            append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
             append("\")!").getStr());
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
     }
@@ -409,7 +409,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
     }
 
     //---------------------------------------------------------------------
-    void OPropertyElementsContext::Characters(const ::rtl::OUString& _rChars)
+    void OPropertyElementsContext::Characters(const OUString& _rChars)
     {
         OSL_ENSURE(0 == _rChars.trim(), "OPropertyElementsContext::Characters: non-whitespace characters detected!");
         SvXMLImportContext::Characters(_rChars);
@@ -421,7 +421,7 @@ SvXMLImportContext* OPropertyElementsContext::CreateChildContext(sal_uInt16 _nPr
 //= OSinglePropertyContext
 //=====================================================================
 //---------------------------------------------------------------------
-OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
         const OPropertyImportRef& _rPropertyImporter)
     :SvXMLImportContext(_rImport, _nPrefix, _rName)
     ,m_xPropertyImporter(_rPropertyImporter)
@@ -429,11 +429,11 @@ OSinglePropertyContext::OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16
 }
 
 //---------------------------------------------------------------------
-SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+SvXMLImportContext* OSinglePropertyContext::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >&)
 {
-    OSL_FAIL(::rtl::OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
-        append(::rtl::OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
+    OSL_FAIL(OStringBuffer("OSinglePropertyContext::CreateChildContext: unknown child element (\"").
+        append(OUStringToOString(_rLocalName, RTL_TEXTENCODING_ASCII_US)).
         append("\")!").getStr());
     return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName);
 }
@@ -444,14 +444,14 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
     ::com::sun::star::beans::PropertyValue aPropValue;      // the property the instance imports currently
     ::com::sun::star::uno::Type aPropType;          // the type of the property the instance imports currently
 
-    ::rtl::OUString sType, sValue;
+    OUString sType, sValue;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
     const sal_Int16 nAttrCount = _rxAttrList.is() ? _rxAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const ::rtl::OUString& rAttrName = _rxAttrList->getNameByIndex( i );
+        const OUString& rAttrName = _rxAttrList->getNameByIndex( i );
 
-        ::rtl::OUString aLocalName;
+        OUString aLocalName;
         sal_uInt16 nPrefix =
             rMap.GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
@@ -500,7 +500,7 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
 //= OListPropertyContext
 //=====================================================================
 //---------------------------------------------------------------------
-OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+OListPropertyContext::OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
     const OPropertyImportRef& _rPropertyImporter )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
     ,m_xPropertyImporter( _rPropertyImporter )
@@ -513,7 +513,7 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
     sal_Int32 nAttributeCount = _rxAttrList->getLength();
 
     sal_uInt16 nNamespace;
-    ::rtl::OUString sAttributeName;
+    OUString sAttributeName;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
     for ( sal_Int16 i = 0; i < nAttributeCount; ++i )
     {
@@ -532,8 +532,8 @@ void OListPropertyContext::StartElement( const Reference< XAttributeList >& _rxA
         }
         else
         {
-            OSL_FAIL( ::rtl::OStringBuffer( "OListPropertyContext::StartElement: unknown child element (\"").
-                append(rtl::OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
+            OSL_FAIL( OStringBuffer( "OListPropertyContext::StartElement: unknown child element (\"").
+                append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
                 append("\")!").getStr() );
         }
     }
@@ -551,7 +551,7 @@ void OListPropertyContext::EndElement()
     Sequence< Any > aListElements( m_aListValues.size() );
     Any* pListElement = aListElements.getArray();
     com::sun::star::uno::Type aType = PropertyConversion::xmlTypeToUnoType( m_sPropertyType );
-    for (   ::std::vector< ::rtl::OUString >::const_iterator values = m_aListValues.begin();
+    for (   ::std::vector< OUString >::const_iterator values = m_aListValues.begin();
             values != m_aListValues.end();
             ++values, ++pListElement
         )
@@ -567,7 +567,7 @@ void OListPropertyContext::EndElement()
 }
 
 //---------------------------------------------------------------------
-SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
+SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName, const Reference< XAttributeList >& /*_rxAttrList*/ )
 {
     if ( token::IsXMLToken( _rLocalName, token::XML_LIST_VALUE ) )
     {
@@ -576,8 +576,8 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
     else
     {
-        OSL_FAIL( ::rtl::OStringBuffer("OListPropertyContext::CreateChildContext: unknown child element (\"").
-            append(rtl::OUStringToOString(_rLocalName.getStr(), RTL_TEXTENCODING_ASCII_US)).
+        OSL_FAIL( OStringBuffer("OListPropertyContext::CreateChildContext: unknown child element (\"").
+            append(OUStringToOString(_rLocalName.getStr(), RTL_TEXTENCODING_ASCII_US)).
             append("\")!").getStr() );
         return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
     }
@@ -587,7 +587,7 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
 //= OListValueContext
 //=====================================================================
 //---------------------------------------------------------------------
-OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, ::rtl::OUString& _rListValueHolder )
+OListValueContext::OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName, OUString& _rListValueHolder )
     :SvXMLImportContext( _rImport, _nPrefix, _rName )
     ,m_rListValueHolder( _rListValueHolder )
 {
@@ -599,7 +599,7 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
     const sal_Int32 nAttributeCount = _rxAttrList->getLength();
 
     sal_uInt16 nNamespace;
-    ::rtl::OUString sAttributeName;
+    OUString sAttributeName;
     const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
     for ( sal_Int16 i = 0; i < nAttributeCount; ++i )
     {
@@ -616,8 +616,8 @@ void OListValueContext::StartElement( const Reference< XAttributeList >& _rxAttr
             }
         }
 
-        OSL_FAIL( ::rtl::OStringBuffer( "OListValueContext::StartElement: unknown child element (\"").
-            append(rtl::OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
+        OSL_FAIL( OStringBuffer( "OListValueContext::StartElement: unknown child element (\"").
+            append(OUStringToOString(sAttributeName, RTL_TEXTENCODING_ASCII_US)).
             append("\")!").getStr() );
     }
 }

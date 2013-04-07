@@ -55,13 +55,13 @@ class ScDPFieldControlBase : public Control
 protected:
     struct FieldName
     {
-        rtl::OUString maText;
+        OUString maText;
         bool mbFits;
         sal_uInt8 mnDupCount;
-        FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount = 0);
+        FieldName(const OUString& rText, bool bFits, sal_uInt8 nDupCount = 0);
         FieldName(const FieldName& r);
 
-        rtl::OUString getDisplayedText() const;
+        OUString getDisplayedText() const;
     };
     typedef ::std::vector<FieldName> FieldNames;
 
@@ -113,20 +113,20 @@ public:
     virtual void HandleWheelScroll(long nNotch) = 0;
 
     /** @return The name of the control without shortcut. */
-    ::rtl::OUString GetName() const;
-    void SetName(const ::rtl::OUString& rName);
+    OUString GetName() const;
+    void SetName(const OUString& rName);
 
     /** @return  TRUE, if the field with the given index exists. */
     bool            IsExistingIndex( size_t nIndex ) const;
 
-    void AppendField( const rtl::OUString& rText, const ScPivotFuncData& rFunc );
+    void AppendField( const OUString& rText, const ScPivotFuncData& rFunc );
 
     /**
      * Inserts a field using the specified pixel position.
      *
      * @param rPos  The coordinates to insert the field.
      */
-    size_t AddField(const rtl::OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc);
+    size_t AddField(const OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc);
 
     bool MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex);
 
@@ -141,9 +141,9 @@ public:
     /** Removes all fields. */
     void            ClearFields();
     /** Changes the text on an existing field. */
-    void SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount);
+    void SetFieldText(const OUString& rText, size_t nIndex, sal_uInt8 nDupCount);
     /** Returns the text of an existing field. */
-    rtl::OUString GetFieldText( size_t nIndex ) const;
+    OUString GetFieldText( size_t nIndex ) const;
 
     /** Calculates a field index at a specific pixel position. Returns in every
         case the index of an existing field.
@@ -233,7 +233,7 @@ private:
     /** Selects a field at a new position relative to the current. */
     void                    MoveSelection( SCsCOL nDX, SCsROW nDY );
 
-    sal_uInt8 GetNextDupCount(const rtl::OUString& rFieldText) const;
+    sal_uInt8 GetNextDupCount(const OUString& rFieldText) const;
 
 private:
     typedef ::std::vector<Window*> Paintables;
@@ -243,7 +243,7 @@ private:
     FieldNames maFieldNames;   /// String array of the field names and flags, if text fits into button.
     ScPivotLayoutDlg*  mpDlg;
     FixedText*      mpCaption;     /// FixedText containing the name of the control.
-    ::rtl::OUString maName;
+    OUString maName;
 
     size_t mnFieldSelected; /// Currently selected field.
 

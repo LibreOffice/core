@@ -52,8 +52,8 @@ class MSOCommandConvertor
 {
 public:
     virtual ~MSOCommandConvertor() {}
-    virtual rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) = 0;
-    virtual rtl::OUString MSOTCIDToOOCommand( sal_Int16 msoTCID ) = 0;
+    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd ) = 0;
+    virtual OUString MSOTCIDToOOCommand( sal_Int16 msoTCID ) = 0;
 };
 
 class SfxObjectShell;
@@ -62,7 +62,7 @@ class MSFILTER_DLLPUBLIC CustomToolBarImportHelper
 {
     struct iconcontrolitem
     {
-        rtl::OUString sCommand;
+        OUString sCommand;
         css::uno::Reference< css::graphic::XGraphic > image;
     };
     std::vector< iconcontrolitem > iconcommands;
@@ -79,14 +79,14 @@ public:
     css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager();
 
 
-    css::uno::Any createCommandFromMacro( const rtl::OUString& sCmd );
+    css::uno::Any createCommandFromMacro( const OUString& sCmd );
 
-    void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const rtl::OUString& sString );
+    void addIcon( const css::uno::Reference< css::graphic::XGraphic >& xImage, const OUString& sString );
     void applyIcons();
-    rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
-    rtl::OUString MSOTCIDToOOCommand( sal_Int16 msoTCID );
+    OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
+    OUString MSOTCIDToOOCommand( sal_Int16 msoTCID );
     SfxObjectShell& GetDocShell() { return mrDocSh; }
-    bool createMenu( const rtl::OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc, bool bPersist );
+    bool createMenu( const OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc, bool bPersist );
 };
 
 class MSFILTER_DLLPUBLIC TBBase
@@ -122,13 +122,13 @@ public:
 
 class MSFILTER_DLLPUBLIC WString : public TBBase
 {
-    rtl::OUString sString;
+    OUString sString;
 
 public:
     WString(){};
     ~WString(){};
     bool Read(SvStream &rS);
-    rtl::OUString getString(){ return sString; }
+    OUString getString(){ return sString; }
 };
 
 class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
@@ -148,7 +148,7 @@ public:
     ~TBCExtraInfo(){}
     bool Read(SvStream &rS);
     void Print( FILE* );
-    rtl::OUString getOnAction();
+    OUString getOnAction();
 };
 
 class MSFILTER_DLLPUBLIC TBCGeneralInfo  : public TBBase
@@ -165,9 +165,9 @@ public:
     bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportToolBarControlData( CustomToolBarImportHelper&, std::vector< css::beans::PropertyValue >& );
-    rtl::OUString CustomText() { return customText.getString(); }
-    rtl::OUString DescriptionText() { return descriptionText.getString(); }
-    rtl::OUString Tooltip() { return tooltip.getString(); }
+    OUString CustomText() { return customText.getString(); }
+    OUString DescriptionText() { return descriptionText.getString(); }
+    OUString Tooltip() { return tooltip.getString(); }
 };
 
 class MSFILTER_DLLPUBLIC TBCBitMap : public TBBase
@@ -192,7 +192,7 @@ public:
     ~TBCMenuSpecific(){}
     bool Read(SvStream &rS);
     void Print( FILE* );
-    rtl::OUString Name();
+    OUString Name();
 };
 
 class MSFILTER_DLLPUBLIC TBCCDData : public TBBase

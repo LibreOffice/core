@@ -36,7 +36,7 @@ namespace toolkit
 // Hashtable to optimize
 struct hashName_Impl
 {
-    size_t operator()(const ::rtl::OUString Str) const
+    size_t operator()(const OUString Str) const
     {
         return (size_t)Str.hashCode();
     }
@@ -44,7 +44,7 @@ struct hashName_Impl
 
 struct eqName_Impl
 {
-    sal_Bool operator()(const ::rtl::OUString Str1, const ::rtl::OUString Str2) const
+    sal_Bool operator()(const OUString Str1, const OUString Str2) const
     {
         return ( Str1 == Str2 );
     }
@@ -52,7 +52,7 @@ struct eqName_Impl
 
 typedef boost::unordered_map
 <
-    ::rtl::OUString,
+    OUString,
     sal_Int32,
     hashName_Impl,
     eqName_Impl
@@ -63,7 +63,7 @@ NameContainerNameMap;
 class NameContainer_Impl : public NameContainerHelper
 {
     NameContainerNameMap mHashMap;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
+    ::com::sun::star::uno::Sequence< OUString > mNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
     sal_Int32 mnElementCount;
     ::com::sun::star::uno::Type mType;
@@ -85,29 +85,29 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException,
               ::com::sun::star::container::ElementExistException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);

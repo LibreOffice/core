@@ -79,12 +79,12 @@ namespace sd { namespace toolpanel
         ToolPanelFactory( const Reference< XComponentContext >& i_rContext );
 
         // XUIElementFactory
-        virtual Reference< XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const Sequence< PropertyValue >& Args ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException);
+        virtual Reference< XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const Sequence< PropertyValue >& Args ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
@@ -104,17 +104,17 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString ToolPanelFactory_getImplementationName() throw(RuntimeException)
+    OUString ToolPanelFactory_getImplementationName() throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.drawing.ToolPanelFactory" ) ;
+        return OUString( "com.sun.star.comp.drawing.ToolPanelFactory" ) ;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory_getSupportedServiceNames (void)
+    Sequence< OUString > SAL_CALL ToolPanelFactory_getSupportedServiceNames (void)
         throw (RuntimeException)
     {
-        const ::rtl::OUString sServiceName( "com.sun.star.drawing.DefaultToolPanelFactory" );
-        return Sequence< ::rtl::OUString >( &sServiceName, 1 );
+        const OUString sServiceName( "com.sun.star.drawing.DefaultToolPanelFactory" );
+        return Sequence< OUString >( &sServiceName, 1 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const ::rtl::OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
+    Reference< XUIElement > SAL_CALL ToolPanelFactory::createUIElement( const OUString& i_rResourceURL, const Sequence< PropertyValue >& i_rArgs ) throw (NoSuchElementException, IllegalArgumentException, RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
 
@@ -206,16 +206,16 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL ToolPanelFactory::getImplementationName(  ) throw (RuntimeException)
     {
         return ToolPanelFactory_getImplementationName();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const ::rtl::OUString& i_rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ToolPanelFactory::supportsService( const OUString& i_rServiceName ) throw (RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        for (   const ::rtl::OUString* pSupported = aSupported.getConstArray();
+        const Sequence< OUString > aSupported( getSupportedServiceNames() );
+        for (   const OUString* pSupported = aSupported.getConstArray();
                 pSupported != aSupported.getConstArray() + aSupported.getLength();
                 ++pSupported
             )
@@ -226,7 +226,7 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ToolPanelFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return ToolPanelFactory_getSupportedServiceNames();
     }

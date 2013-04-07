@@ -67,8 +67,8 @@ createBaseURI(
         const & i_xContext,
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>
         const & i_xStorage,
-    ::rtl::OUString const & i_rPkgURI,
-    ::rtl::OUString const & i_rSubDocument = ::rtl::OUString());
+    OUString const & i_rPkgURI,
+    OUString const & i_rSubDocument = OUString());
 
 
 class IXmlIdRegistrySupplier;
@@ -84,7 +84,7 @@ public:
     explicit DocumentMetadataAccess(::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > const & i_xContext,
                 IXmlIdRegistrySupplier const & i_rRegistrySupplier,
-                ::rtl::OUString const & i_rBaseURI);
+                OUString const & i_rBaseURI);
     // N.B.: in contrast to previous, this constructor does _not_ initialize!
     //       caller must immediately call loadFromStorage/Medium!
     explicit DocumentMetadataAccess(::com::sun::star::uno::Reference<
@@ -93,13 +93,13 @@ public:
     virtual ~DocumentMetadataAccess();
 
     // ::com::sun::star::rdf::XNode:
-    virtual ::rtl::OUString SAL_CALL getStringValue()
+    virtual OUString SAL_CALL getStringValue()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::rdf::XURI:
-    virtual ::rtl::OUString SAL_CALL getNamespace()
+    virtual OUString SAL_CALL getNamespace()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLocalName()
+    virtual OUString SAL_CALL getLocalName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::rdf::XRepositorySupplier:
@@ -127,7 +127,7 @@ public:
             ::com::sun::star::lang::IllegalArgumentException);
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::rdf::XURI> SAL_CALL
-        addMetadataFile(const ::rtl::OUString & i_rFileName,
+        addMetadataFile(const OUString & i_rFileName,
             const ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XURI >
                 > & i_rTypes)
@@ -139,7 +139,7 @@ public:
         importMetadataFile(::sal_Int16 i_Format,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::io::XInputStream > & i_xInStream,
-            const ::rtl::OUString & i_rFileName,
+            const OUString & i_rFileName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::rdf::XURI > & i_xBaseURI,
             const ::com::sun::star::uno::Sequence<
@@ -158,12 +158,12 @@ public:
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::container::NoSuchElementException);
     virtual void SAL_CALL addContentOrStylesFile(
-            const ::rtl::OUString & i_rFileName)
+            const OUString & i_rFileName)
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::container::ElementExistException);
     virtual void SAL_CALL removeContentOrStylesFile(
-            const ::rtl::OUString & i_rFileName)
+            const OUString & i_rFileName)
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::container::NoSuchElementException);

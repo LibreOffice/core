@@ -42,7 +42,7 @@ ConfigFlush::~ConfigFlush()
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL ConfigFlush::getImplementationName()
+OUString SAL_CALL ConfigFlush::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return impl_getImplementationName();
@@ -50,12 +50,12 @@ ConfigFlush::~ConfigFlush()
 }
 
 //-----------------------------------------------
-sal_Bool SAL_CALL ConfigFlush::supportsService(const ::rtl::OUString& sServiceName)
+sal_Bool SAL_CALL ConfigFlush::supportsService(const OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
-          css::uno::Sequence< ::rtl::OUString > lServiceNames = impl_getSupportedServiceNames();
+          css::uno::Sequence< OUString > lServiceNames = impl_getSupportedServiceNames();
           sal_Int32                             c             = lServiceNames.getLength();
-    const ::rtl::OUString*                      pNames        = lServiceNames.getConstArray();
+    const OUString*                      pNames        = lServiceNames.getConstArray();
     for (sal_Int32 i=0; i<c; ++i)
     {
         if (pNames[i].equals(sServiceName))
@@ -65,7 +65,7 @@ sal_Bool SAL_CALL ConfigFlush::supportsService(const ::rtl::OUString& sServiceNa
 }
 
 //-----------------------------------------------
-css::uno::Sequence< ::rtl::OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL ConfigFlush::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return impl_getSupportedServiceNames();
@@ -125,15 +125,15 @@ void SAL_CALL ConfigFlush::removeRefreshListener(const css::uno::Reference< css:
 }
 
 //-----------------------------------------------
-::rtl::OUString ConfigFlush::impl_getImplementationName()
+OUString ConfigFlush::impl_getImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.filter.config.ConfigFlush");
+    return OUString("com.sun.star.comp.filter.config.ConfigFlush");
 }
 
 //-----------------------------------------------
-css::uno::Sequence< ::rtl::OUString > ConfigFlush::impl_getSupportedServiceNames()
+css::uno::Sequence< OUString > ConfigFlush::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
+    css::uno::Sequence< OUString > lServiceNames(1);
     lServiceNames[0] = "com.sun.star.document.FilterConfigRefresh";
     return lServiceNames;
 }

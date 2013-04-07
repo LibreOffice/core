@@ -419,16 +419,16 @@ void BarChart::createShapes()
     //to achieve this the regression curve target is created after the series target and before the text target
 
     uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xRegressionCurveTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
 
     //---------------------------------------------
     uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     double fLogicZ        = 1.0;//as defined

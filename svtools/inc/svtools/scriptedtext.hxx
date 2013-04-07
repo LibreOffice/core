@@ -76,7 +76,7 @@ public:
                                     @param  _xBreakIter
                                     The break iterator for iterating through the script portions. */
     void                        SetText(
-                                    const ::rtl::OUString& _rText,
+                                    const OUString& _rText,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >& _xBreakIter );
 
                                 /** Returns a size struct containing the width and height of the text in the current output device.

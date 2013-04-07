@@ -37,18 +37,18 @@
 using namespace ::com::sun::star;
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL FSStorageFactory::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString("com.sun.star.embed.FileSystemStorageFactory");
-    aRet[1] = ::rtl::OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = OUString("com.sun.star.embed.FileSystemStorageFactory");
+    aRet[1] = OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
+OUString SAL_CALL FSStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
+    return OUString("com.sun.star.comp.embed.FileSystemStorageFactory");
 }
 
 //-------------------------------------------------------------------------
@@ -63,7 +63,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     throw ( uno::Exception,
             uno::RuntimeException )
 {
-    ::rtl::OUString aTempURL;
+    OUString aTempURL;
 
     aTempURL = ::utl::TempFile( NULL, sal_True ).GetURL();
 
@@ -119,7 +119,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     }
 
     // retrieve storage source URL
-    ::rtl::OUString aURL;
+    OUString aURL;
 
     if ( !( aArguments[0] >>= aURL ) || aURL.isEmpty() )
     {
@@ -165,17 +165,17 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FSStorageFactory::getImplementationName()
+OUString SAL_CALL FSStorageFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL FSStorageFactory::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL FSStorageFactory::supportsService( const ::rtl::OUString& Serv
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

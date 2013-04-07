@@ -109,7 +109,7 @@ public:
     void invalidate() { m_bValid = false; }
 
     sal_uLong SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID = 0 );
-    sal_uLong SendMessage( const rtl::OString& rMessage, sal_uLong nMessageID = 0 )
+    sal_uLong SendMessage( const OString& rMessage, sal_uLong nMessageID = 0 )
     {
         return SendMessage( rMessage.getLength(), rMessage.getStr(), nMessageID );
     }

@@ -519,9 +519,9 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     if( nMemberId == MID_GRAFURL ||
         nMemberId == 0 )
     {
-        aURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        aURL = OUString(RTL_CONSTASCII_USTRINGPARAM(
             UNO_NAME_GRAPHOBJ_URLPREFIX));
-        aURL += ::rtl::OStringToOUString(
+        aURL += OStringToOUString(
             GetGraphicObject().GetUniqueID(),
             RTL_TEXTENCODING_ASCII_US);
     }
@@ -543,11 +543,11 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
         uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
-        aPropSeq[0].Name  = ::rtl::OUString( "Name" );
+        aPropSeq[0].Name  = OUString( "Name" );
         aPropSeq[0].Value = uno::makeAny( aInternalName );
-        aPropSeq[1].Name  = ::rtl::OUString( "FillBitmapURL" );
+        aPropSeq[1].Name  = OUString( "FillBitmapURL" );
         aPropSeq[1].Value = uno::makeAny( aURL );
-        aPropSeq[2].Name  = ::rtl::OUString( "Bitmap" );
+        aPropSeq[2].Name  = OUString( "Bitmap" );
         aPropSeq[2].Value = uno::makeAny( xBmp );
 
         rVal <<= aPropSeq;
@@ -562,8 +562,8 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
 {
     nMemberId &= ~CONVERT_TWIPS;
 
-    ::rtl::OUString aName;
-    ::rtl::OUString aURL;
+    OUString aName;
+    OUString aURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic;
 

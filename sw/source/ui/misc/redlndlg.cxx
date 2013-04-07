@@ -1058,7 +1058,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         const_cast<SwRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
                         */
 
-                        rtl::OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
+                        OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "Dialogdiet fail!");
                         ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
@@ -1154,7 +1154,7 @@ void SwRedlineAcceptDlg::Initialize(const String& rExtraData)
 {
     if (rExtraData.Len())
     {
-        sal_uInt16 nPos = rExtraData.Search(rtl::OUString("AcceptChgDat:"));
+        sal_uInt16 nPos = rExtraData.Search(OUString("AcceptChgDat:"));
 
         // try to read the alignment string "ALIGN:(...)"; if none existing,
         // it's an old version

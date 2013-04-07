@@ -29,12 +29,12 @@ public:
     TYPEINFO();
 
     explicit XMLChartPlotAreaOASISTContext(
-        XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName );
+        XMLTransformerBase & rTransformer, const OUString & rQName );
     virtual ~XMLChartPlotAreaOASISTContext();
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 

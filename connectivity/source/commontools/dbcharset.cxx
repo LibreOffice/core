@@ -99,7 +99,7 @@ namespace dbtools
     }
 
     //-------------------------------------------------------------------------
-    OCharsetMap::CharsetIterator    OCharsetMap::find(const ::rtl::OUString& _rIanaName, const IANA&) const
+    OCharsetMap::CharsetIterator    OCharsetMap::find(const OUString& _rIanaName, const IANA&) const
     {
         ensureConstructed( );
 
@@ -107,7 +107,7 @@ namespace dbtools
         if ( !_rIanaName.isEmpty() )
         {
             // byte string conversion
-            ::rtl::OString sMimeByteString( _rIanaName.getStr(), _rIanaName.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OString sMimeByteString( _rIanaName.getStr(), _rIanaName.getLength(), RTL_TEXTENCODING_ASCII_US );
             // look up
             eEncoding = rtl_getTextEncodingFromMimeCharset( sMimeByteString.getStr() );
 
@@ -139,7 +139,7 @@ namespace dbtools
     }
 
     //-------------------------------------------------------------------------
-    CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName )
+    CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const OUString& _rIanaName )
         :m_eEncoding( _eEncoding )
         ,m_aIanaName( _rIanaName )
     {
@@ -174,14 +174,14 @@ namespace dbtools
         OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.end(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
 
         rtl_TextEncoding eEncoding = *m_aPos;
-        ::rtl::OUString sIanaName;
+        OUString sIanaName;
 
         if ( RTL_TEXTENCODING_DONTKNOW != eEncoding )
         {   // it's not the virtual "system charset"
             const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( eEncoding );
             OSL_ENSURE( pIanaName, "OCharsetMap::CharsetIterator: invalid mime name!" );
             if ( pIanaName )
-                sIanaName = ::rtl::OUString::createFromAscii( pIanaName );
+                sIanaName = OUString::createFromAscii( pIanaName );
         }
         return CharsetIteratorDerefHelper( eEncoding, sIanaName );
     }

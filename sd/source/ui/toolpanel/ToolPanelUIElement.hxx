@@ -44,13 +44,13 @@ namespace sd { namespace toolpanel
     public:
         ToolPanelUIElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
-            const ::rtl::OUString& i_rResourceURL,
+            const OUString& i_rResourceURL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >& i_rToolPanel
         );
 
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -65,7 +65,7 @@ namespace sd { namespace toolpanel
 
     private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >   m_xFrame;
-        const ::rtl::OUString                                                       m_sResourceURL;
+        const OUString                                                       m_sResourceURL;
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >  m_xToolPanel;
     };
 

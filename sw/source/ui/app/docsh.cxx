@@ -110,7 +110,6 @@
 #include <sfx2/Metadatable.hxx>
 #include <switerator.hxx>
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -258,7 +257,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
     SW_MOD()->SetEmbeddedLoadSave( sal_False );
 
-    SetError( nErr, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
+    SetError( nErr, OUString(  OSL_LOG_PREFIX  ) );
     sal_Bool bOk = !IsError( nErr );
 
     if ( bOk && !pDoc->IsInLoadAsynchron() )
@@ -350,7 +349,7 @@ sal_Bool SwDocShell::Save()
         }
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
-    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
+    SetError( nErr ? nErr : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
 
     SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
     if( pFrm )
@@ -397,8 +396,8 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
                 GetModel(), uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-            xDocProps->setTemplateName(::rtl::OUString());
-            xDocProps->setTemplateURL(::rtl::OUString());
+            xDocProps->setTemplateName(OUString());
+            xDocProps->setTemplateURL(OUString());
             xDocProps->setTemplateDate(::util::DateTime());
         }
     }
@@ -483,7 +482,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Increase RSID
         pDoc->setRsid( pDoc->getRsid() );
     }
-    SetError( nErr ? nErr : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
+    SetError( nErr ? nErr : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
 
     return !IsError( nErr );
 }
@@ -538,7 +537,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, rtl::OUString("Macros") );
+                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, OUString("Macros") );
                 xStg->Commit();
                 pDoc->SetContainsMSVBasic( sal_True );
             }
@@ -557,18 +556,18 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             uno::Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
             uno::Reference< XNameAccess > xLib;
-            Sequence<rtl::OUString> aNames = xLibCont->getElementNames();
-            const rtl::OUString* pNames = aNames.getConstArray();
+            Sequence<OUString> aNames = xLibCont->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
             for(sal_Int32 nLib = 0; nLib < aNames.getLength(); nLib++)
             {
                 Any aLib = xLibCont->getByName(pNames[nLib]);
                 aLib >>= xLib;
                 if(xLib.is())
                 {
-                    Sequence<rtl::OUString> aModNames = xLib->getElementNames();
+                    Sequence<OUString> aModNames = xLib->getElementNames();
                     if(aModNames.getLength())
                     {
-                        SetError(WARN_SWG_HTML_NO_MACROS, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
+                        SetError(WARN_SWG_HTML_NO_MACROS, OUString(  OSL_LOG_PREFIX  ) );
                         break;
                     }
                 }
@@ -639,7 +638,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 // TODO/MBA: testing
                 uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
                 if ( xSet.is() )
-                    xSet->setPropertyValue( ::rtl::OUString("MediaType"), uno::makeAny( ::rtl::OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
+                    xSet->setPropertyValue( OUString("MediaType"), uno::makeAny( OUString( SotExchange::GetFormatMimeType( nSaveClipId ) ) ) );
             }
             catch (const uno::Exception&)
             {
@@ -723,7 +722,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     }
 
     SW_MOD()->SetEmbeddedLoadSave( sal_False );
-    SetError( nErrno ? nErrno : nVBWarning, ::rtl::OUString(  OSL_LOG_PREFIX  ) );
+    SetError( nErrno ? nErrno : nVBWarning, OUString(  OSL_LOG_PREFIX  ) );
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 
@@ -752,7 +751,7 @@ sal_Bool SwDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xS
         if( bResetModified )
             EnableSetModified( sal_False );
 
-        uno::Sequence < rtl::OUString > aNames = pOLEChildList->GetObjectNames();
+        uno::Sequence < OUString > aNames = pOLEChildList->GetObjectNames();
         for( sal_Int32 n = aNames.getLength(); n; n-- )
         {
             if ( !pOLEChildList->MoveEmbeddedObject( aNames[n-1], GetEmbeddedObjectContainer() ) )
@@ -1129,7 +1128,7 @@ void SwDocShell::RemoveOLEObjects()
             if( !pOLEChildList )
                 pOLEChildList = new comphelper::EmbeddedObjectContainer;
 
-            ::rtl::OUString aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
+            OUString aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
             GetEmbeddedObjectContainer().MoveEmbeddedObject( aObjName, *pOLEChildList );
         }
     }
@@ -1209,13 +1208,13 @@ Sequence< OUString >    SwDocShell::GetEventNames()
     return aRet;
 }
 
-rtl::OUString SwDocShell::GetEventName( sal_Int32 nIndex )
+OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 {
     if (nIndex < s_nEvents)
     {
-        return ::rtl::OUString::createFromAscii(s_EventNames[nIndex]);
+        return OUString::createFromAscii(s_EventNames[nIndex]);
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const

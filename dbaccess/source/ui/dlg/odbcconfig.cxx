@@ -122,7 +122,7 @@ OOdbcLibWrapper::OOdbcLibWrapper()
 //-------------------------------------------------------------------------
 sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
-    m_sLibPath = ::rtl::OUString::createFromAscii(_pLibPath);
+    m_sLibPath = OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
     // load the module
     m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
@@ -147,7 +147,7 @@ void OOdbcLibWrapper::unload()
 //-------------------------------------------------------------------------
 oslGenericFunction OOdbcLibWrapper::loadSymbol(const sal_Char* _pFunctionName)
 {
-    return osl_getFunctionSymbol(m_pOdbcLib, ::rtl::OUString::createFromAscii(_pFunctionName).pData);
+    return osl_getFunctionSymbol(m_pOdbcLib, OUString::createFromAscii(_pFunctionName).pData);
 }
 
 //-------------------------------------------------------------------------
@@ -281,7 +281,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
             break;
         else
         {
-            ::rtl::OUString aCurrentDsn(reinterpret_cast<const char*>(szDSN),pcbDSN, nTextEncoding);
+            OUString aCurrentDsn(reinterpret_cast<const char*>(szDSN),pcbDSN, nTextEncoding);
             _rNames.insert(aCurrentDsn);
         }
     }
@@ -343,7 +343,7 @@ bool OOdbcManagement::manageDataSources_async()
 
     // this is done in an external process, due to #i78733#
     // (and note this whole functionality is supported on Windows only, ATM)
-    ::rtl::OUString sExecutableName( "$BRAND_BASE_DIR/program/odbcconfig.exe" );
+    OUString sExecutableName( "$BRAND_BASE_DIR/program/odbcconfig.exe" );
     ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
     oslProcess hProcessHandle(0);
     oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );

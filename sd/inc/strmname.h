@@ -21,13 +21,13 @@
 #define _SD_STRMNAME_H
 
 // PowerPoint-Filter
-static const rtl::OUString pFilterPowerPoint97( "MS PowerPoint 97" );
-static const rtl::OUString pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
-static const rtl::OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" );
+static const OUString pFilterPowerPoint97( "MS PowerPoint 97" );
+static const OUString pFilterPowerPoint97Template( "MS PowerPoint 97 Vorlage" );
+static const OUString pFilterPowerPoint97AutoPlay( "MS PowerPoint 97 AutoPlay" );
 
 // XML content stream
-static const rtl::OUString pStarDrawXMLContent( "content.xml" );
-static const rtl::OUString pStarDrawOldXMLContent( "Content.xml" );
+static const OUString pStarDrawXMLContent( "content.xml" );
+static const OUString pStarDrawOldXMLContent( "Content.xml" );
 
 #endif  // _SD_STRMNAME_H
 

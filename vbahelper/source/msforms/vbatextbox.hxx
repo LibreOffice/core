@@ -33,8 +33,8 @@ public:
    // Attributes
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getMaxLength() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMaxLength( sal_Int32 _maxlength ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getMultiline() throw (css::uno::RuntimeException);
@@ -53,10 +53,10 @@ public:
     virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
 
     // XDefaultProperty
-    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
     //XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif //SC_VBA_TEXTBOX_HXX
 

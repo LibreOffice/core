@@ -316,40 +316,40 @@ uno::Reference< XAccessibleStateSet > SAL_CALL ScAccessiblePageHeader::getAccess
 
 //=====  XServiceInfo  ====================================================
 
-rtl::OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePageHeader::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessiblePageHeader");
+    return OUString("ScAccessiblePageHeader");
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.text.AccessibleHeaderFooterView");
+    pNames[nOldSize] = OUString("com.sun.star.text.AccessibleHeaderFooterView");
 
     return aSequence;
 }
 
 //====  internal  =========================================================
 
-::rtl::OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
     sDesc.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
-    return rtl::OUString( sDesc );
+    return OUString( sDesc );
 }
 
-::rtl::OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
+OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
     String sName(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
     sName.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
-    return rtl::OUString( sName );
+    return OUString( sName );
 }
 
 Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

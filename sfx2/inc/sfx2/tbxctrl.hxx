@@ -45,7 +45,7 @@ class SfxBindings;
 class SfxModule;
 class SfxUnoControllerItem;
 
-svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
+svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL );
 
 typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 
@@ -129,7 +129,7 @@ protected:
 
     void                    BindListener();
     void                    UnbindListener();
-    void                    AddStatusListener( const rtl::OUString& rCommandURL );
+    void                    AddStatusListener( const OUString& rCommandURL );
 
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;
@@ -237,8 +237,8 @@ protected:
 
     // XSubToolbarController
     virtual ::sal_Bool SAL_CALL opensSubToolbar(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateImage(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //  XDockableWindowListener
@@ -251,8 +251,8 @@ protected:
     virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     // helper methods
-    void    createAndPositionSubToolBar( const ::rtl::OUString& rSubToolBarResName );
-    ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const ::rtl::OUString& rSubToolBarResName );
+    void    createAndPositionSubToolBar( const OUString& rSubToolBarResName );
+    ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& rSubToolBarResName );
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
@@ -264,10 +264,10 @@ public:
     unsigned short             GetId() const;
     unsigned short             GetSlotId() const;
 
-    void                       Dispatch( const ::rtl::OUString& aCommand,
+    void                       Dispatch( const OUString& aCommand,
                                          ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
     static void                Dispatch( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
-                                         const rtl::OUString& rCommand,
+                                         const OUString& rCommand,
                                          ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );

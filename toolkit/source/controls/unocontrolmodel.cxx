@@ -294,7 +294,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_LITERALMASK:
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
-            case BASEPROPERTY_TEXT:                 aDefault <<= ::rtl::OUString(); break;
+            case BASEPROPERTY_TEXT:                 aDefault <<= OUString(); break;
 
             case BASEPROPERTY_WRITING_MODE:
             case BASEPROPERTY_CONTEXT_WRITING_MODE:
@@ -303,7 +303,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
 
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aStringSeq;
+                ::com::sun::star::uno::Sequence< OUString> aStringSeq;
                 aDefault <<= aStringSeq;
 
             }
@@ -316,12 +316,12 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                rtl::OUString sDefaultCurrency(
+                OUString sDefaultCurrency(
                     utl::ConfigManager::getDefaultCurrency() );
 
                 // extract the bank symbol
                 sal_Int32 nSepPos = sDefaultCurrency.indexOf( '-' );
-                ::rtl::OUString sBankSymbol;
+                OUString sBankSymbol;
                 if ( nSepPos >= 0 )
                 {
                     sBankSymbol = sDefaultCurrency.copy( 0, nSepPos );
@@ -339,7 +339,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 const Currency2* pAllCurrencies     =                       aAllCurrencies.getConstArray();
                 const Currency2* pAllCurrenciesEnd  =   pAllCurrencies  +   aAllCurrencies.getLength();
 
-                ::rtl::OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                 if ( sBankSymbol.isEmpty() )
                 {
                     DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: no currencies at all!" );
@@ -466,7 +466,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
 
 
 // ::com::sun::star::beans::XPropertyState
-::com::sun::star::beans::PropertyState UnoControlModel::getPropertyState( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -478,12 +478,12 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
     return CompareProperties( aValue, aDefault ) ? ::com::sun::star::beans::PropertyState_DEFAULT_VALUE : ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > UnoControlModel::getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > UnoControlModel::getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     sal_uInt32 nNames = PropertyNames.getLength();
-    const ::rtl::OUString* pNames = PropertyNames.getConstArray();
+    const OUString* pNames = PropertyNames.getConstArray();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > aStates( nNames );
     ::com::sun::star::beans::PropertyState* pStates = aStates.getArray();
@@ -494,7 +494,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
     return aStates;
 }
 
-void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     Any aDefaultValue;
     {
@@ -504,7 +504,7 @@ void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName 
     setPropertyValue( PropertyName, aDefaultValue );
 }
 
-::com::sun::star::uno::Any UnoControlModel::getPropertyDefault( const ::rtl::OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -513,12 +513,12 @@ void UnoControlModel::setPropertyToDefault( const ::rtl::OUString& PropertyName 
 
 
 // ::com::sun::star::io::XPersistObjec
-::rtl::OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     OSL_FAIL( "ServiceName von UnoControlModel ?!" );
-    return ::rtl::OUString();
+    return OUString();
 }
 
 void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -569,9 +569,9 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 rValue >>= b;
                 OutStream->writeBoolean( b );
             }
-            else if ( rType == ::getCppuType((const ::rtl::OUString*)0) )
+            else if ( rType == ::getCppuType((const OUString*)0) )
             {
-                ::rtl::OUString aUString;
+                OUString aUString;
                 rValue >>= aUString;
                 OutStream->writeUTF( aUString );
             }
@@ -627,9 +627,9 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 OutStream->writeBoolean( aFD.WordLineMode );
                 OutStream->writeShort( aFD.Type );
             }
-            else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence< ::rtl::OUString>*)0 ) )
+            else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
             {
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
+                ::com::sun::star::uno::Sequence< OUString> aSeq;
                 rValue >>= aSeq;
                 long nEntries = aSeq.getLength();
                 OutStream->writeLong( nEntries );
@@ -663,12 +663,12 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                ::rtl::OString sMessage( "UnoControlModel::write: don't know how to handle a property of type '" );
-                ::rtl::OUString sTypeName( rType.getTypeName() );
-                sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                OString sMessage( "UnoControlModel::write: don't know how to handle a property of type '" );
+                OUString sTypeName( rType.getTypeName() );
+                sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += "'.\n(Currently handling property '";
-                ::rtl::OUString sPropertyName( GetPropertyName( *it ) );
-                sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
+                OUString sPropertyName( GetPropertyName( *it ) );
+                sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
                 OSL_FAIL( sMessage.getStr() );
             }
@@ -748,7 +748,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 
     short nVersion = InStream->readShort();
     sal_uInt32 nProps = (sal_uInt32)InStream->readLong();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aProps( nProps );
+    ::com::sun::star::uno::Sequence< OUString> aProps( nProps );
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aValues( nProps );
     sal_Bool bInvalidEntries = sal_False;
 
@@ -778,9 +778,9 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     sal_Bool b = InStream->readBoolean();
                     aValue <<= b;
                 }
-                else if ( *pType == ::getCppuType((const ::rtl::OUString*)0) )
+                else if ( *pType == ::getCppuType((const OUString*)0) )
                 {
-                    ::rtl::OUString aUTF = InStream->readUTF();
+                    OUString aUTF = InStream->readUTF();
                     aValue <<= aUTF;
                 }
                 else if ( *pType == ::getCppuType((const sal_uInt16*)0) )
@@ -829,10 +829,10 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     aFD.Type = InStream->readShort();
                     aValue <<= aFD;
                 }
-                else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence< ::rtl::OUString>*)0 ) )
+                else if ( *pType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
                 {
                     long nEntries = InStream->readLong();
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq( nEntries );
+                    ::com::sun::star::uno::Sequence< OUString> aSeq( nEntries );
                     for ( long n = 0; n < nEntries; n++ )
                         aSeq.getArray()[n] = InStream->readUTF();
                     aValue <<= aSeq;
@@ -862,12 +862,12 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
                 else
                 {
-                    ::rtl::OString sMessage( "UnoControlModel::read: don't know how to handle a property of type '" );
-                    ::rtl::OUString sTypeName( pType->getTypeName() );
-                    sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    OString sMessage( "UnoControlModel::read: don't know how to handle a property of type '" );
+                    OUString sTypeName( pType->getTypeName() );
+                    sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
                     sMessage += "'.\n(Currently handling property '";
-                    ::rtl::OUString sPropertyName( GetPropertyName( nPropId ) );
-                    sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
+                    OUString sPropertyName( GetPropertyName( nPropId ) );
+                    sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                     sMessage += "'.)";
                     OSL_FAIL( sMessage.getStr() );
                 }
@@ -993,29 +993,29 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 
 
 // ::com::sun::star::lang::XServiceInfo
-::rtl::OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "This method should be overloaded!" );
-    return ::rtl::OUString();
+    return OUString();
 
 }
 
-sal_Bool UnoControlModel::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    ::com::sun::star::uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == rServiceName )
             return sal_True;
     return sal_False;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName( "com.sun.star.awt.UnoControlModel" );
-    return Sequence< ::rtl::OUString >( &sName, 1 );
+    OUString sName( "com.sun.star.awt.UnoControlModel" );
+    return Sequence< OUString >( &sName, 1 );
 }
 
 // ------------------------------------------------------------------
@@ -1134,7 +1134,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 if (!bConverted)
                 {
-                    ::rtl::OUStringBuffer aErrorMessage;
+                    OUStringBuffer aErrorMessage;
                     aErrorMessage.appendAscii( "Unable to convert the given value for the property " );
                     aErrorMessage.append     ( GetPropertyName( (sal_uInt16)nPropId ) );
                     aErrorMessage.appendAscii( ".\n" );
@@ -1227,7 +1227,7 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
 }
 
 // ::com::sun::star::beans::XPropertySet
-void UnoControlModel::setPropertyValue( const ::rtl::OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nPropId = 0;
     {
@@ -1283,7 +1283,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
     return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
 

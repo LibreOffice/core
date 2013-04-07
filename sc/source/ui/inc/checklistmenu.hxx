@@ -75,10 +75,10 @@ public:
     virtual void Paint(const Rectangle& rRect);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
-    void addMenuItem(const ::rtl::OUString& rText, bool bEnabled, Action* pAction);
+    void addMenuItem(const OUString& rText, bool bEnabled, Action* pAction);
     void addSeparator();
 
-    ScMenuFloatingWindow* addSubMenuItem(const ::rtl::OUString& rText, bool bEnabled);
+    ScMenuFloatingWindow* addSubMenuItem(const OUString& rText, bool bEnabled);
     void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu);
     void selectMenuItem(size_t nPos, bool bSelected, bool bSubMenuTimer);
     void clearSelectedMenuItem();
@@ -86,8 +86,8 @@ public:
     bool isMenuItemSelected(size_t nPos) const;
     size_t getSelectedMenuItem() const;
 
-    void setName(const ::rtl::OUString& rName);
-    const ::rtl::OUString& getName() const;
+    void setName(const OUString& rName);
+    const OUString& getName() const;
 
     void executeMenuItem(size_t nPos);
     void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
@@ -161,7 +161,7 @@ private:
 
     struct MenuItemData
     {
-        ::rtl::OUString maText;
+        OUString maText;
         bool            mbEnabled:1;
         bool            mbSeparator:1;
 
@@ -195,7 +195,7 @@ private:
     // Name of this menu window, taken from the menu item of the parent window
     // that launches it (if this is a sub menu).  If this is a top-level menu
     // window, then this name can be anything.
-    ::rtl::OUString maName;
+    OUString maName;
 
     size_t  mnSelectedMenu;
     size_t  mnClickedMenu;
@@ -212,7 +212,7 @@ private:
 class ScCheckListMenuWindow : public ScMenuFloatingWindow
 {
 public:
-    typedef boost::unordered_map<rtl::OUString, bool, rtl::OUStringHash> ResultType;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> ResultType;
 
     /**
      * Extended data that the client code may need to store.  Create a
@@ -244,7 +244,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void setMemberSize(size_t n);
-    void addMember(const ::rtl::OUString& rName, bool bVisible);
+    void addMember(const OUString& rName, bool bVisible);
     void initMembers();
     void setConfig(const Config& rConfig);
 
@@ -274,7 +274,7 @@ protected:
 private:
     struct Member
     {
-        ::rtl::OUString maName;
+        OUString maName;
         bool            mbVisible;
 
         Member();

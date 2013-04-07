@@ -57,7 +57,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         xBasicLibraries;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                         xDialogLibraries;
-    com::sun::star::uno::Sequence < rtl::OUString > xEventNames;
+    com::sun::star::uno::Sequence < OUString > xEventNames;
     ::sfx2::DocumentMacroMode
                         aMacroMode;
     SfxProgress*        pProgress;
@@ -130,7 +130,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     sal_Bool                m_bIsInit;
 
-    ::rtl::OUString         m_aSharedFileURL;
+    OUString         m_aSharedFileURL;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::logging::XSimpleLogRing > m_xLogRing;
 
@@ -147,7 +147,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const;
     virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 nMacroMode );
-    virtual ::rtl::OUString getDocumentLocation() const;
+    virtual OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
     virtual sal_Bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;

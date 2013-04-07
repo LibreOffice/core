@@ -96,8 +96,8 @@ inline OUString tempFileHelper(OUString const & fname)
     }
     else
     {
-        rtl::OStringBuffer aStr("invalid filename: ");
-        aStr.append(rtl::OUStringToOString(fname, RTL_TEXTENCODING_UTF8));
+        OStringBuffer aStr("invalid filename: ");
+        aStr.append(OUStringToOString(fname, RTL_TEXTENCODING_UTF8));
         fprintf(stderr, "%s\n", aStr.getStr());
     }
     return aTmpFile;
@@ -147,8 +147,8 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteDocumentation( aOutStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write documentation file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aDocuFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write documentation file: ");
+                aStr.append(OUStringToOString(aCommand.aDocuFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -159,8 +159,8 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSvIdl( aOutStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write list file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aListFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write list file: ");
+                aStr.append(OUStringToOString(aCommand.aListFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -171,8 +171,8 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSfx( aOutStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write slotmap file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write slotmap file: ");
+                aStr.append(OUStringToOString(aCommand.aSlotMapFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -183,8 +183,8 @@ int cdecl main ( int argc, char ** argv)
             if (!pDataBase->WriteHelpIds( aStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write help ID file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aHelpIdFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write help ID file: ");
+                aStr.append(OUStringToOString(aCommand.aHelpIdFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -195,8 +195,8 @@ int cdecl main ( int argc, char ** argv)
             if (!pDataBase->WriteCSV( aStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write CSV file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aCSVFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write CSV file: ");
+                aStr.append(OUStringToOString(aCommand.aCSVFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -207,8 +207,8 @@ int cdecl main ( int argc, char ** argv)
             if( !pDataBase->WriteSfxItem( aOutStm ) )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write item file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aSfxItemFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write item file: ");
+                aStr.append(OUStringToOString(aCommand.aSfxItemFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -220,8 +220,8 @@ int cdecl main ( int argc, char ** argv)
             if( aOutStm.GetError() != SVSTREAM_OK )
             {
                 nExit = -1;
-                rtl::OStringBuffer aStr("cannot write database file: ");
-                aStr.append(rtl::OUStringToOString(aCommand.aDataBaseFile, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr("cannot write database file: ");
+                aStr.append(OUStringToOString(aCommand.aDataBaseFile, RTL_TEXTENCODING_UTF8));
                 fprintf(stderr, "%s\n", aStr.getStr());
             }
         }
@@ -234,7 +234,7 @@ int cdecl main ( int argc, char ** argv)
             {
                 nExit = -1;
                 fprintf( stderr, "cannot write dependency file: %s\n",
-                        ::rtl::OUStringToOString( aCommand.m_DepFile,
+                        OUStringToOString( aCommand.m_DepFile,
                             RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }
@@ -315,11 +315,11 @@ int cdecl main ( int argc, char ** argv)
         if( bErr )
         {
             nExit = -1;
-            rtl::OStringBuffer aStr("cannot move file from: ");
-            aStr.append(rtl::OUStringToOString(aErrFile2,
+            OStringBuffer aStr("cannot move file from: ");
+            aStr.append(OUStringToOString(aErrFile2,
                 RTL_TEXTENCODING_UTF8));
             aStr.append("\n              to file: ");
-            aStr.append(rtl::OUStringToOString(aErrFile,
+            aStr.append(OUStringToOString(aErrFile,
                 RTL_TEXTENCODING_UTF8));
             fprintf( stderr, "%s\n", aStr.getStr() );
         }

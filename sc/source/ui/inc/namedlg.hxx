@@ -72,11 +72,11 @@ private:
     SvxSimpleTableContainer maNameMgrCtrl;
     ScRangeManagerTable* mpRangeManagerTable;
 
-    const rtl::OUString maGlobalNameStr;
-    const rtl::OUString maErrInvalidNameStr;
-    const rtl::OUString maErrNameInUse;
-    const rtl::OUString maStrInfoDefault;
-    const rtl::OUString maStrMultiSelect;
+    const OUString maGlobalNameStr;
+    const OUString maErrInvalidNameStr;
+    const OUString maErrNameInUse;
+    const OUString maStrInfoDefault;
+    const OUString maStrMultiSelect;
 
     ScViewData*     mpViewData;
     ScDocument*     mpDoc;
@@ -88,7 +88,7 @@ private:
     //ugly hack to call DefineNames from ManageNames
     bool mbCloseWithoutUndo;
 
-    typedef boost::ptr_map<rtl::OUString, ScRangeName> RangeNameContainer;
+    typedef boost::ptr_map<OUString, ScRangeName> RangeNameContainer;
 
     RangeNameContainer maRangeMap;
 
@@ -102,7 +102,7 @@ private:
     bool IsFormulaValid();
     void CheckForEmptyTable();
 
-    ScRangeName* GetRangeName(const rtl::OUString& rScope);
+    ScRangeName* GetRangeName(const OUString& rScope);
 
     bool AddPushed();
     void RemovePushed();
@@ -133,7 +133,7 @@ protected:
 public:
                     ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                ScViewData*      ptrViewData,
-                               const ScAddress& aCursorPos, boost::ptr_map<rtl::OUString, ScRangeName>* pRangeMap = NULL );
+                               const ScAddress& aCursorPos, boost::ptr_map<OUString, ScRangeName>* pRangeMap = NULL );
     virtual         ~ScNameDlg();
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
@@ -142,8 +142,8 @@ public:
     virtual void    SetActive();
     virtual sal_Bool    Close();
 
-    void GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap);
-    void SetEntry(const rtl::OUString& rName, const rtl::OUString& rScope);
+    void GetRangeNames(boost::ptr_map<OUString, ScRangeName>& rRangeMap);
+    void SetEntry(const OUString& rName, const OUString& rScope);
 
 };
 

@@ -68,10 +68,10 @@ Includes::Includes(
 Includes::~Includes()
 {}
 
-void Includes::add(rtl::OString const & registryType) {
+void Includes::add(OString const & registryType) {
     sal_Int32 rank;
-    std::vector< rtl::OString > args;
-    rtl::OString type(
+    std::vector< OString > args;
+    OString type(
         codemaker::UnoType::decompose(registryType, &rank, &args));
     if (rank > 0) {
         m_includeSequence = true;
@@ -119,7 +119,7 @@ void Includes::add(rtl::OString const & registryType) {
         m_map.insert(
             codemaker::Dependencies::Map::value_type(
                 type, codemaker::Dependencies::KIND_NO_BASE));
-        for (std::vector< rtl::OString >::iterator i(args.begin());
+        for (std::vector< OString >::iterator i(args.begin());
              i != args.end(); ++i)
         {
             add(*i);
@@ -144,7 +144,7 @@ void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
 
 }
 
-void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
+void Includes::dump(FileStream & out, OString const * companionHdl) {
     OSL_ASSERT(companionHdl == 0 || m_hpp);
     if (!m_includeReference) {
         for (codemaker::Dependencies::Map::iterator i(m_map.begin());
@@ -264,8 +264,8 @@ void Includes::dump(FileStream & out, rtl::OString const * companionHdl) {
 }
 
 void Includes::dumpInclude(
-    FileStream & out, rtl::OString const & registryType, bool hpp,
-    rtl::OString const & suffix)
+    FileStream & out, OString const & registryType, bool hpp,
+    OString const & suffix)
 {
     static char const * extension[2] = { "hdl", "hpp" };
     out << "#include \"" << registryType;
@@ -275,7 +275,7 @@ void Includes::dumpInclude(
     out << "." << extension[hpp] << "\"\n";
 }
 
-bool Includes::isInterfaceType(rtl::OString const & registryType) const {
+bool Includes::isInterfaceType(OString const & registryType) const {
     return m_manager->getTypeClass(registryType) == RT_TYPE_INTERFACE;
 }
 

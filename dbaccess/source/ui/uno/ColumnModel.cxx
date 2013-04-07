@@ -134,9 +134,9 @@ Any SAL_CALL OColumnControlModel::queryAggregation( const Type& rType ) throw(Ru
     return aRet;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OColumnControlModel::getServiceName() throw ( RuntimeException)
+OUString SAL_CALL OColumnControlModel::getServiceName() throw ( RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 //------------------------------------------------------------------------------
 void OColumnControlModel::write(const Reference<XObjectOutputStream>& /*_rxOutStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException)

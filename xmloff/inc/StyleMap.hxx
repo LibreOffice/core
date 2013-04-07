@@ -27,10 +27,10 @@
 struct StyleNameKey_Impl
 {
     sal_uInt16 m_nFamily;
-    ::rtl::OUString m_aName;
+    OUString m_aName;
 
     inline StyleNameKey_Impl( sal_uInt16 nFamily,
-                               const ::rtl::OUString& rName ) :
+                               const OUString& rName ) :
         m_nFamily( nFamily ),
         m_aName( rName )
     {
@@ -64,7 +64,7 @@ inline bool StyleNameHash_Impl::operator()(
 
 class StyleMap :
     public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XUnoTunnel>,
-    public ::boost::unordered_map< StyleNameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {
 

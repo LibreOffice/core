@@ -53,7 +53,7 @@ namespace dbaccess
                 into the container
         */
         virtual void SAL_CALL   approveElement(
-            const ::rtl::OUString& _rName,
+            const OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement
         ) = 0;
     };

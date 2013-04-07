@@ -105,7 +105,7 @@ public:
     /**
      * @descr   Set frame name.
      */
-    void    SetName(rtl::OUString name);
+    void    SetName(OUString name);
 
     /**
      * @descr   Set z-index of the frame.
@@ -154,7 +154,7 @@ public:
     /**
      * @descr:  Link the text content of the two frame.
      */
-    void    SetNextLink(rtl::OUString next);
+    void    SetNextLink(OUString next);
 
     /**
      * @descr   Get the frame type. image, drawing or text-box.
@@ -181,12 +181,12 @@ private:
 protected:
     enumXFAnchor    m_eAnchor;
     sal_Int32       m_nAnchorPage;
-    rtl::OUString   m_strName;
+    OUString   m_strName;
     sal_uInt32      m_nZIndex;
     XFRect          m_aRect;
     double          m_fMinHeight;
     double          m_fMaxHeight;
-    rtl::OUString   m_strNextLink;
+    OUString   m_strNextLink;
     enumXFFrameType m_eType;
     sal_uInt32      m_nFlag;
     sal_Bool            m_isTextBox;
@@ -197,7 +197,7 @@ inline void XFFrame::SetAnchorType(enumXFAnchor anchor)
     m_eAnchor = anchor;
 }
 
-inline void XFFrame::SetName(rtl::OUString name)
+inline void XFFrame::SetName(OUString name)
 {
     m_strName = name;
 }
@@ -250,7 +250,7 @@ inline void XFFrame::SetPosition(const XFRect& rect)
     m_aRect = rect;
 }
 
-inline void XFFrame::SetNextLink(rtl::OUString next)
+inline void XFFrame::SetNextLink(OUString next)
 {
     m_strNextLink = next;
 }

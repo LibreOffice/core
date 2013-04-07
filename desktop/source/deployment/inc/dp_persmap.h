@@ -28,7 +28,7 @@ namespace dp_misc
 {
 
 typedef ::boost::unordered_map<
-    ::rtl::OString, ::rtl::OString, ::rtl::OStringHash > t_string2string_map;
+    OString, OString, OStringHash > t_string2string_map;
 
 // Class to read obsolete registered extensions
 // should be removed for LibreOffice 4.0
@@ -43,25 +43,25 @@ class PersistentMap
 
 public:
     ~PersistentMap();
-    PersistentMap( ::rtl::OUString const & url, bool readOnly );
+    PersistentMap( OUString const & url, bool readOnly );
     /** in mem db */
     PersistentMap();
 
-    bool has( ::rtl::OString const & key ) const;
-    bool get( ::rtl::OString * value, ::rtl::OString const & key ) const;
+    bool has( OString const & key ) const;
+    bool get( OString * value, OString const & key ) const;
     t_string2string_map getEntries() const;
-    void put( ::rtl::OString const & key, ::rtl::OString const & value );
-    bool erase( ::rtl::OString const & key, bool flush_immediately = true );
+    void put( OString const & key, OString const & value );
+    bool erase( OString const & key, bool flush_immediately = true );
 
 protected:
     bool open();
     bool readAll();
-    void add( ::rtl::OString const & key, ::rtl::OString const & value );
+    void add( OString const & key, OString const & value );
     void flush();
 
 #ifndef DISABLE_BDB2PMAP
     bool importFromBDB( void);
-    ::rtl::OUString m_MapFileName;
+    OUString m_MapFileName;
 #endif
 };
 

@@ -32,10 +32,10 @@ namespace com { namespace sun { namespace star {
 class ScSolverUtil
 {
 public:
-    static void GetImplementations( com::sun::star::uno::Sequence<rtl::OUString>& rImplNames,
-                                    com::sun::star::uno::Sequence<rtl::OUString>& rDescriptions );
-    static com::sun::star::uno::Reference<com::sun::star::sheet::XSolver> GetSolver( const rtl::OUString& rImplName );
-    static com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> GetDefaults( const rtl::OUString& rImplName );
+    static void GetImplementations( com::sun::star::uno::Sequence<OUString>& rImplNames,
+                                    com::sun::star::uno::Sequence<OUString>& rDescriptions );
+    static com::sun::star::uno::Reference<com::sun::star::sheet::XSolver> GetSolver( const OUString& rImplName );
+    static com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> GetDefaults( const OUString& rImplName );
 };
 
 #endif

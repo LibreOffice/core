@@ -543,7 +543,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         {
                             SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
                             sal_Bool        bSkipSequence = sal_False;
-                            rtl::OString sSeqEnd;
+                            OString sSeqEnd;
 
                             if( pA->GetComment() == "XPATHSTROKE_SEQ_BEGIN" )
                             {
@@ -740,7 +740,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                     pAction = aMtf.GetAction( i );
                                     if ( pAction->GetType() == META_COMMENT_ACTION )
                                     {
-                                        rtl::OString sComment( ((MetaCommentAction*)pAction)->GetComment() );
+                                        OString sComment( ((MetaCommentAction*)pAction)->GetComment() );
                                         if (sComment == sSeqEnd)
                                             break;
                                     }
@@ -1185,8 +1185,8 @@ void PDFWriterImpl::enableStringEncryption( register sal_Int32 nObject )
 1. init the document id, used both for building the document id and for building the encryption key(s)
 2. build the encryption key following algorithms described in the PDF specification
  */
-uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const rtl::OUString& i_rOwnerPassword,
-                                                                        const rtl::OUString& i_rUserPassword,
+uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OUString& i_rOwnerPassword,
+                                                                        const OUString& i_rUserPassword,
                                                                         bool b128Bit
                                                                         )
 {
@@ -1279,10 +1279,10 @@ begin i12626 methods
 
 Implements Algorithm 3.2, step 1 only
 */
-void PDFWriterImpl::padPassword( const rtl::OUString& i_rPassword, sal_uInt8* o_pPaddedPW )
+void PDFWriterImpl::padPassword( const OUString& i_rPassword, sal_uInt8* o_pPaddedPW )
 {
     // get ansi-1252 version of the password string CHECKIT ! i12626
-    rtl::OString aString( rtl::OUStringToOString( i_rPassword, RTL_TEXTENCODING_MS_1252 ) );
+    OString aString( OUStringToOString( i_rPassword, RTL_TEXTENCODING_MS_1252 ) );
 
     //copy the string to the target
     sal_Int32 nToCopy = ( aString.getLength() < ENCRYPTED_PWD_SIZE ) ? aString.getLength() : ENCRYPTED_PWD_SIZE;

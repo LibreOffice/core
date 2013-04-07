@@ -143,7 +143,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
-    CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, ::rtl::OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
+    CloseDispatcher* pCloser = new CloseDispatcher(xSMGR, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);

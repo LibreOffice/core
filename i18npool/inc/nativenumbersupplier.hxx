@@ -40,7 +40,7 @@ public:
         NativeNumberSupplier(sal_Bool _useOffset = sal_False) : useOffset(_useOffset) {}
 
         // Methods
-        virtual ::rtl::OUString SAL_CALL getNativeNumberString( const ::rtl::OUString& aNumberString,
+        virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
                 throw (::com::sun::star::uno::RuntimeException);
 
@@ -57,15 +57,15 @@ public:
                 throw (::com::sun::star::uno::RuntimeException);
 
         //XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
                 throw( com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
                 throw( com::sun::star::uno::RuntimeException );
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                 throw( com::sun::star::uno::RuntimeException );
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
-        ::rtl::OUString SAL_CALL getNativeNumberString( const ::rtl::OUString& aNumberString,
+        OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
                 com::sun::star::uno::Sequence< sal_Int32 >& offset  )
                 throw (::com::sun::star::uno::RuntimeException);

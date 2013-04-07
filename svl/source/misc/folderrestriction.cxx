@@ -26,7 +26,7 @@
 //-----------------------------------------------------------------------------
 
 static void convertStringListToUrls (
-    const rtl::OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
+    const OUString& _rColonSeparatedList, ::std::vector< String >& _rTokens, bool _bFinalSlash )
 {
     const sal_Unicode cSeparator =
 #if defined(WNT)
@@ -40,12 +40,12 @@ static void convertStringListToUrls (
     do
     {
         // the current token in the list
-        rtl::OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
+        OUString sCurrentToken = _rColonSeparatedList.getToken( 0, cSeparator, nIndex );
         if (!sCurrentToken.isEmpty())
         {
             INetURLObject aCurrentURL;
 
-            rtl::OUString sURL;
+            OUString sURL;
             if ( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCurrentToken, sURL ) )
                 aCurrentURL = INetURLObject( sURL );
             else
@@ -67,10 +67,10 @@ static void convertStringListToUrls (
 /** retrieves the value of an environment variable
     @return <TRUE/> if and only if the retrieved string value is not empty
 */
-static bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString& _rValue )
+static bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, OUString& _rValue )
 {
-    _rValue = ::rtl::OUString();
-    ::rtl::OUString sEnvName = ::rtl::OUString::createFromAscii( _pAsciiEnvName );
+    _rValue = OUString();
+    OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );
     osl_getEnvironment( sEnvName.pData, &_rValue.pData );
     return !_rValue.isEmpty();
 }
@@ -83,7 +83,7 @@ namespace svt
     void getUnrestrictedFolders( ::std::vector< String >& _rFolders )
     {
         _rFolders.resize( 0 );
-        ::rtl::OUString sRestrictedPathList;
+        OUString sRestrictedPathList;
         if ( getEnvironmentValue( "RestrictedPath", sRestrictedPathList ) )
         {
             // append a final slash. This ensures that when we later on check

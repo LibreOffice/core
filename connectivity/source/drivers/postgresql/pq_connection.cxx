@@ -85,11 +85,6 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-using rtl::OUStringBuffer;
-using rtl::OUString;
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUStringToOString;
 using osl::MutexGuard;
 
 using com::sun::star::container::XNameAccess;
@@ -162,7 +157,7 @@ OUString    ConnectionGetImplementationName()
 {
     return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
 }
-com::sun::star::uno::Sequence<rtl::OUString> ConnectionGetSupportedServiceNames(void)
+com::sun::star::uno::Sequence<OUString> ConnectionGetSupportedServiceNames(void)
 {
     OUString serv( "com.sun.star.sdbc.Connection" );
     return Sequence< OUString> (&serv,1);
@@ -310,13 +305,13 @@ Reference< XStatement > Connection::createStatement() throw (SQLException, Runti
     return ret;
 }
 
-Reference< XPreparedStatement > Connection::prepareStatement( const ::rtl::OUString& sql )
+Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sql )
         throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
-    rtl::OString byteSql = OUStringToOString( sql, m_settings.encoding );
+    OString byteSql = OUStringToOString( sql, m_settings.encoding );
     PreparedStatement *stmt = new PreparedStatement( m_refMutex, this, &m_settings, byteSql );
     Reference< XPreparedStatement > ret = stmt;
 
@@ -327,7 +322,7 @@ Reference< XPreparedStatement > Connection::prepareStatement( const ::rtl::OUStr
     return ret;
 }
 
-Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& )
+Reference< XPreparedStatement > Connection::prepareCall( const OUString& )
         throw (SQLException, RuntimeException)
 {
     throw SQLException(
@@ -336,7 +331,7 @@ Reference< XPreparedStatement > Connection::prepareCall( const ::rtl::OUString& 
 }
 
 
-::rtl::OUString Connection::nativeSQL( const ::rtl::OUString& sql )
+OUString Connection::nativeSQL( const OUString& sql )
         throw (SQLException, RuntimeException)
 {
     return sql;
@@ -390,13 +385,13 @@ sal_Bool Connection::isReadOnly() throw (SQLException, RuntimeException)
     return sal_False;
 }
 
-void Connection::setCatalog( const ::rtl::OUString& )
+void Connection::setCatalog( const OUString& )
         throw (SQLException, RuntimeException)
 {
     // UNSUPPORTED
 }
 
-::rtl::OUString Connection::getCatalog() throw (SQLException, RuntimeException)
+OUString Connection::getCatalog() throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
     if( m_settings.pConnection == 0 )
@@ -523,13 +518,13 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
         {
             append = false;
             // ignore for now
-            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", ::rtl::OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("sdbc-postgresql: unknown argument '%s'", OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         if( append )
         {
             OUString value;
             tc->convertTo( args[i].Value, getCppuType( &value) ) >>= value;
-            char *v = strdup(rtl::OUStringToOString(value, enc).getStr());
+            char *v = strdup(OUStringToOString(value, enc).getStr());
             values.push_back ( v );
         }
     }

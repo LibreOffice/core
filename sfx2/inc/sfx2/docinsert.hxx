@@ -47,7 +47,7 @@ private:
 
     sfx2::FileDialogHelper* m_pFileDlg;
     SfxItemSet*             m_pItemSet;
-    std::vector<rtl::OUString> m_pURLList;
+    std::vector<OUString> m_pURLList;
 
     DECL_LINK(DialogClosedHdl, void *);
 

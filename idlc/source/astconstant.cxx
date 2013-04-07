@@ -27,7 +27,7 @@ using namespace ::rtl;
 AstConstant::AstConstant(const ExprType type,
                          const NodeType nodeType,
                          AstExpression* pExpr,
-                         const ::rtl::OString& name,
+                         const OString& name,
                          AstScope* pScope)
     : AstDeclaration(nodeType, name, pScope)
     , m_pConstValue(pExpr)
@@ -37,7 +37,7 @@ AstConstant::AstConstant(const ExprType type,
 
 AstConstant::AstConstant(const ExprType type,
                          AstExpression* pExpr,
-                         const ::rtl::OString& name,
+                         const OString& name,
                          AstScope* pScope)
     : AstDeclaration(NT_const, name, pScope)
     , m_pConstValue(pExpr)

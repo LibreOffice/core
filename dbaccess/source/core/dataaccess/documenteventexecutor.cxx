@@ -80,7 +80,7 @@ namespace dbaccess
     namespace
     {
         static void lcl_dispatchScriptURL_throw( DocumentEventExecutor_Data& _rDocExecData,
-            const ::rtl::OUString& _rScriptURL, const DocumentEvent& _rTrigger )
+            const OUString& _rScriptURL, const DocumentEvent& _rTrigger )
         {
             Reference< XModel > xDocument( _rDocExecData.xDocument.get(), UNO_QUERY_THROW );
 
@@ -104,7 +104,7 @@ namespace dbaccess
             // we lock the solar mutex here.
             SolarMutexGuard aSolarGuard;
 
-            Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, ::rtl::OUString(), 0 ) );
+            Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, OUString(), 0 ) );
             if ( !xDispatch.is() )
             {
                 OSL_FAIL( "lcl_dispatchScriptURL_throw: no dispatcher for the script URL!" );
@@ -171,10 +171,10 @@ namespace dbaccess
 
             const ::comphelper::NamedValueCollection aScriptDescriptor( xDocEvents->getByName( _Event.EventName ) );
 
-            ::rtl::OUString sEventType;
+            OUString sEventType;
             bool bScriptAssigned = aScriptDescriptor.get_ensureType( "EventType", sEventType );
 
-            ::rtl::OUString sScript;
+            OUString sScript;
             bScriptAssigned = bScriptAssigned && aScriptDescriptor.get_ensureType( "Script", sScript );
 
             if ( !bScriptAssigned )

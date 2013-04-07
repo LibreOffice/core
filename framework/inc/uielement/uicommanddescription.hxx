@@ -57,13 +57,13 @@ class UICommandDescription :  private ThreadHelpBase                        ,   
         DECLARE_XSERVICEINFO
 private:
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
@@ -73,22 +73,22 @@ private:
             throw (::com::sun::star::uno::RuntimeException);
 
 public:
-        typedef ::boost::unordered_map< ::rtl::OUString,
-                                 ::rtl::OUString,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > ModuleToCommandFileMap;
+        typedef ::boost::unordered_map< OUString,
+                                 OUString,
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > ModuleToCommandFileMap;
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > UICommandsHashMap;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > UICommandsHashMap;
 
     protected:
         UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, bool  );
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const ::rtl::OUString& _sName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const OUString& _sName);
         void impl_fillElements(const sal_Char* _pName);
         sal_Bool                                                                            m_bConfigRead;
-        rtl::OUString                                                                       m_aPrivateResourceURL;
+        OUString                                                                       m_aPrivateResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
         UICommandsHashMap                                                                   m_aUICommandsHashMap;

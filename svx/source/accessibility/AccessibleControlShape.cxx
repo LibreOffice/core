@@ -55,26 +55,26 @@ using namespace ::com::sun::star::container;
 namespace
 {
     //................................................................
-    const ::rtl::OUString& lcl_getNamePropertyName( )
+    const OUString& lcl_getNamePropertyName( )
     {
-        static ::rtl::OUString s_sNamePropertyName( "Name" );
+        static OUString s_sNamePropertyName( "Name" );
         return s_sNamePropertyName;
     }
     //................................................................
-    const ::rtl::OUString& lcl_getDescPropertyName( )
+    const OUString& lcl_getDescPropertyName( )
     {
-        static ::rtl::OUString s_sDescPropertyDesc( "HelpText" );
+        static OUString s_sDescPropertyDesc( "HelpText" );
         return s_sDescPropertyDesc;
     }
     //................................................................
-    const ::rtl::OUString& lcl_getLabelPropertyName( )
+    const OUString& lcl_getLabelPropertyName( )
     {
-        static ::rtl::OUString s_sLabelPropertyLabel( "Label" );
+        static OUString s_sLabelPropertyLabel( "Label" );
         return s_sLabelPropertyLabel;
     }
     //................................................................
     // return the property which should be used as AccessibleName
-    const ::rtl::OUString& lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
+    const OUString& lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
     {
         if ( _rxPSI.is() && _rxPSI->hasPropertyByName( lcl_getLabelPropertyName() ) )
             return lcl_getLabelPropertyName();
@@ -318,15 +318,15 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL AccessibleControlShape::getImplementationName(void) throw (RuntimeException)
+OUString SAL_CALL AccessibleControlShape::getImplementationName(void) throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.accessibility.AccessibleControlShape" );
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString AccessibleControlShape::CreateAccessibleBaseName(void) throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleBaseName(void) throw (RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
@@ -348,7 +348,7 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
 
 
 //--------------------------------------------------------------------
-::rtl::OUString
+OUString
     AccessibleControlShape::CreateAccessibleDescription (void)
     throw (RuntimeException)
 {
@@ -359,7 +359,7 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         case DRAWING_CONTROL:
         {
             // check if we can obtain the "Desc" property from the model
-            ::rtl::OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
+            OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
             if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
@@ -524,7 +524,7 @@ void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource) th
 //--------------------------------------------------------------------
 bool AccessibleControlShape::ensureListeningState(
         const bool _bCurrentlyListening, const bool _bNeedNewListening,
-        const ::rtl::OUString& _rPropertyName )
+        const OUString& _rPropertyName )
 {
     if ( ( _bCurrentlyListening == _bNeedNewListening ) || !ensureControlModelAccess() )
         //  nothing to do
@@ -622,14 +622,14 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
 }
 
 //--------------------------------------------------------------------
-::rtl::OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleName (void) throw (RuntimeException)
 {
     ensureControlModelAccess();
 
     // check if we can obtain the "Name" resp. "Label" property from the model
-    const ::rtl::OUString& rAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
+    const OUString& rAccNameProperty = lcl_getPreferredAccNameProperty( m_xModelPropsMeta );
 
-    ::rtl::OUString sName( getControlModelStringProperty( rAccNameProperty ) );
+    OUString sName( getControlModelStringProperty( rAccNameProperty ) );
     if ( sName.isEmpty() )
     {   // no -> use the default
         sName = AccessibleShape::CreateAccessibleName();
@@ -756,9 +756,9 @@ void AccessibleControlShape::stopStateMultiplexing()
 }
 
 //--------------------------------------------------------------------
-::rtl::OUString AccessibleControlShape::getControlModelStringProperty( const ::rtl::OUString& _rPropertyName ) const SAL_THROW(())
+OUString AccessibleControlShape::getControlModelStringProperty( const OUString& _rPropertyName ) const SAL_THROW(())
 {
-    ::rtl::OUString sReturn;
+    OUString sReturn;
     try
     {
         if ( const_cast< AccessibleControlShape* >( this )->ensureControlModelAccess() )

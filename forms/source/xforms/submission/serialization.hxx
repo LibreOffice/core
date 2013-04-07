@@ -37,7 +37,7 @@ namespace CSS = com::sun::star;
 Serialize an XObject
 */
 
-typedef std::map<rtl::OUString, rtl::OUString> PropMap;
+typedef std::map<OUString, OUString> PropMap;
 
 class CSerialization
 {
@@ -64,7 +64,7 @@ public:
     void setProperties(const CSS::uno::Sequence< CSS::beans::NamedValue >& props)
     {
         m_properties.clear();
-        rtl::OUString aValue;
+        OUString aValue;
         for (sal_Int32 i=0; i<props.getLength(); i++)
         {
             if (props[i].Value >>= aValue)

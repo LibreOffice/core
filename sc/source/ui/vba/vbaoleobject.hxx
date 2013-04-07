@@ -32,8 +32,8 @@ class ScVbaOLEObject : public OLEObjectImpl_BASE
 {
 protected:
     css::uno::Reference< css::drawing::XControlShape > m_xControlShape;
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     css::uno::Reference< ov::msforms::XControl> m_xControl;
 public:
     ScVbaOLEObject( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -54,8 +54,8 @@ public:
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getLinkedCell() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (::com::sun::star::uno::RuntimeException);
 };
 #endif //SC_VBA_OLEOBJECT_HXX
 

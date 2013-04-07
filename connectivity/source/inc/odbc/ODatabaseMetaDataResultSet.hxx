@@ -84,7 +84,7 @@ namespace connectivity
             sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             sal_Int32 mapColumn (sal_Int32  column);
@@ -158,7 +158,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XRow
             virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -187,7 +187,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XColumnLocate
-            virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             const ::connectivity::TIntVector& getColumnMapping() { return m_aColMapping; }
 
@@ -195,32 +195,32 @@ namespace connectivity
             void openTypeInfo() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openCatalogs() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void openSchemas() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openTables(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schemaPattern,
-                                            const ::rtl::OUString& tableNamePattern, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types )
+            void openTables(const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern,
+                                            const OUString& tableNamePattern, const ::com::sun::star::uno::Sequence< OUString >& types )
                                             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openColumnPrivileges(      const ::com::sun::star::uno::Any& catalog,    const ::rtl::OUString& schema,
-                                                                    const ::rtl::OUString& table,   const ::rtl::OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openColumns(       const ::com::sun::star::uno::Any& catalog,                            const ::rtl::OUString& schemaPattern,
-                                                    const ::rtl::OUString& tableNamePattern,        const ::rtl::OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openProcedureColumns(      const ::com::sun::star::uno::Any& catalog,            const ::rtl::OUString& schemaPattern,
-                                                            const ::rtl::OUString& procedureNamePattern,const ::rtl::OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openProcedures(    const ::com::sun::star::uno::Any& catalog,            const ::rtl::OUString& schemaPattern,
-                                                            const ::rtl::OUString& procedureNamePattern)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openVersionColumns(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
-                                                            const ::rtl::OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openBestRowIdentifier( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
-                                                                    const ::rtl::OUString& table,sal_Int32 scope,sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openForeignKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString* schema,const ::rtl::OUString* table,
-                                                              const ::com::sun::star::uno::Any& catalog2, const ::rtl::OUString* schema2,const ::rtl::OUString* table2)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openExportedKeys(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,const ::rtl::OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openImportedKeys(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,const ::rtl::OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openPrimaryKeys(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,const ::rtl::OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openTablePrivileges(const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schemaPattern,
-                                                              const ::rtl::OUString& tableNamePattern)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openSpecialColumns(sal_Bool _bRowVer,const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
-                                                                    const ::rtl::OUString& table,sal_Int32 scope,   sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void openIndexInfo( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema,
-                                                    const ::rtl::OUString& table,sal_Bool unique,sal_Bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openColumnPrivileges(      const ::com::sun::star::uno::Any& catalog,    const OUString& schema,
+                                                                    const OUString& table,   const OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openColumns(       const ::com::sun::star::uno::Any& catalog,                            const OUString& schemaPattern,
+                                                    const OUString& tableNamePattern,        const OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openProcedureColumns(      const ::com::sun::star::uno::Any& catalog,            const OUString& schemaPattern,
+                                                            const OUString& procedureNamePattern,const OUString& columnNamePattern )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openProcedures(    const ::com::sun::star::uno::Any& catalog,            const OUString& schemaPattern,
+                                                            const OUString& procedureNamePattern)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openVersionColumns(const ::com::sun::star::uno::Any& catalog, const OUString& schema,
+                                                            const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openBestRowIdentifier( const ::com::sun::star::uno::Any& catalog, const OUString& schema,
+                                                                    const OUString& table,sal_Int32 scope,sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openForeignKeys( const ::com::sun::star::uno::Any& catalog, const OUString* schema,const OUString* table,
+                                                              const ::com::sun::star::uno::Any& catalog2, const OUString* schema2,const OUString* table2)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openExportedKeys(const ::com::sun::star::uno::Any& catalog, const OUString& schema,const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openImportedKeys(const ::com::sun::star::uno::Any& catalog, const OUString& schema,const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openPrimaryKeys(const ::com::sun::star::uno::Any& catalog, const OUString& schema,const OUString& table)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openTablePrivileges(const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern,
+                                                              const OUString& tableNamePattern)throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openSpecialColumns(sal_Bool _bRowVer,const ::com::sun::star::uno::Any& catalog, const OUString& schema,
+                                                                    const OUString& table,sal_Int32 scope,   sal_Bool nullable )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void openIndexInfo( const ::com::sun::star::uno::Any& catalog, const OUString& schema,
+                                                    const OUString& table,sal_Bool unique,sal_Bool approximate )throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;

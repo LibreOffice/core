@@ -84,14 +84,14 @@ class VCL_DLLPUBLIC ImageList
 public:
                     ImageList( sal_uInt16 nInit = 8, sal_uInt16 nGrow = 4 );
                     ImageList( const ResId& rResId );
-                    ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
-                               const ::rtl::OUString& rPrefix,
+                    ImageList( const ::std::vector< OUString >& rNameVector,
+                               const OUString& rPrefix,
                                const Color* pMaskColor = NULL );
                     ImageList( const ImageList& rImageList );
                     ~ImageList();
 
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
-                                   const std::vector< rtl::OUString > &rNameVector );
+                                   const std::vector< OUString > &rNameVector );
     void                    InsertFromHorizontalBitmap( const ResId& rResId,
                                     sal_uInt16       nCount,
                                     const Color *pNonAlphaMaskColor,
@@ -102,23 +102,23 @@ public:
     sal_uInt16          GetImageCount() const;
     Size            GetImageSize() const;
 
-    void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
+    void            AddImage( const OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
+    void            ReplaceImage( const OUString& rImageName, const Image& rImage );
 
     void            RemoveImage( sal_uInt16 nId );
 
     Image           GetImage( sal_uInt16 nId ) const;
-    Image           GetImage( const ::rtl::OUString& rImageName ) const;
+    Image           GetImage( const OUString& rImageName ) const;
 
     sal_uInt16          GetImagePos( sal_uInt16 nId ) const;
     bool            HasImageAtPos( sal_uInt16 nId ) const;
-    sal_uInt16          GetImagePos( const ::rtl::OUString& rImageName ) const;
+    sal_uInt16          GetImagePos( const OUString& rImageName ) const;
 
     sal_uInt16          GetImageId( sal_uInt16 nPos ) const;
 
-    ::rtl::OUString GetImageName( sal_uInt16 nPos ) const;
-    void            GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const;
+    OUString GetImageName( sal_uInt16 nPos ) const;
+    void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
     ImageList&      operator=( const ImageList& rImageList );
     sal_Bool            operator==( const ImageList& rImageList ) const;
@@ -130,13 +130,13 @@ private:
     sal_uInt16          mnInitSize;
     sal_uInt16          mnGrowSize;
 
-    SAL_DLLPRIVATE void    ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
-                                             const ::std::vector< ::rtl::OUString >& rImageNames,
-                                             const ::rtl::OUString& rSymbolsStyle,
+    SAL_DLLPRIVATE void    ImplInitBitmapEx( const OUString& rUserImageName,
+                                             const ::std::vector< OUString >& rImageNames,
+                                             const OUString& rSymbolsStyle,
                                              BitmapEx& rBmpEx,
                                              const Color* pMaskColor ) const;
     SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
-    SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const ::rtl::OUString& rImageName ) const;
+    SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
 };
 
 #endif  // _SV_IMAGE_HXX

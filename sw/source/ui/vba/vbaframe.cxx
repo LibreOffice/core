@@ -43,20 +43,20 @@ void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException )
     xSelectSupp->select( uno::makeAny( mxTextFrame ) );
 }
 
-rtl::OUString
+OUString
 SwVbaFrame::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFrame");
+    return OUString("SwVbaFrame");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaFrame::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Frame" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Frame" );
     }
     return aServiceNames;
 }

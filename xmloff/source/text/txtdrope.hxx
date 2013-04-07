@@ -36,7 +36,7 @@ public:
 
     void exportXML( const ::com::sun::star::uno::Any& rAny,
                     sal_Bool bWholeWord,
-                    const ::rtl::OUString& rStyleName );
+                    const OUString& rStyleName );
 };
 
 

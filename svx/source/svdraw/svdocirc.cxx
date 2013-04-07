@@ -560,9 +560,9 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 
     if(bCreateComment)
     {
-        rtl::OUString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
-        rtl::OUStringBuffer aBuf(aStr);
+        OUStringBuffer aBuf(aStr);
         const sal_uInt32 nPntAnz(rDrag.GetPointAnz());
 
         if(OBJ_CIRC != meCircleKind && nPntAnz > 2)
@@ -595,9 +595,9 @@ String SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         {
             const sal_Int32 nWink(1 == rDrag.GetHdl()->GetPointNum() ? nStartWink : nEndWink);
 
-            rtl::OUString aStr;
+            OUString aStr;
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
-            rtl::OUStringBuffer aBuf(aStr);
+            OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
             aBuf.append(GetWinkStr(nWink,false));
             aBuf.append(sal_Unicode(')'));

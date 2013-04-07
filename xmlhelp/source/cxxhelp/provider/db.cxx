@@ -93,7 +93,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
             if( !implReadLenAndData( pData, iPos, aDBKey ) )
                 break;
 
-            rtl::OString aOKeyStr = aDBKey.getData();
+            OString aOKeyStr = aDBKey.getData();
 
             // Read val len
             const char* pStartPtr = pData + iPos;
@@ -107,7 +107,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
             if( bOptimizeForPerformance )
             {
                 const char* pValSrc = pData + iPos;
-                rtl::OString aValStr( pValSrc, nValLen );
+                OString aValStr( pValSrc, nValLen );
                 (*m_pStringToDataMap)[aOKeyStr] = aValStr;
             }
             else
@@ -137,7 +137,7 @@ void Hdf::releaseHashMap( void )
 }
 
 
-bool Hdf::getValueForKey( const rtl::OString& rKey, HDFData& rValue )
+bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
 {
     bool bSuccess = false;
     if( !m_xSFA.is() )
@@ -188,7 +188,7 @@ bool Hdf::getValueForKey( const rtl::OString& rKey, HDFData& rValue )
         StringToDataMap::const_iterator it = m_pStringToDataMap->find( rKey );
         if( it != m_pStringToDataMap->end() )
         {
-            const rtl::OString& rValueStr = it->second;
+            const OString& rValueStr = it->second;
             int nValueLen = rValueStr.getLength();
             const char* pData = rValueStr.getStr();
             rValue.copyToBuffer( pData, nValueLen );

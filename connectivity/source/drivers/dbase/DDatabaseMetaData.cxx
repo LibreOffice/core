@@ -70,19 +70,19 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
         aRow.reserve(18);
 
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)254));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("length")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("length")));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnValue::NULLABLE));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)ColumnSearch::FULL));
         aRow.push_back(ODatabaseMetaDataResultSet::get1Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("C")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("C")));
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::get0Value());
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
@@ -91,62 +91,62 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("LONGVARCHAR"));
+        aRow[1] = new ORowSetValueDecorator(OUString("LONGVARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::LONGVARCHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)2147483647);
         aRow[6] = new ORowSetValueDecorator();
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("M"));
+        aRow[13] = new ORowSetValueDecorator(OUString("M"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("DATE"));
+        aRow[1] = new ORowSetValueDecorator(OUString("DATE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DATE);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)10);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("D"));
+        aRow[13] = new ORowSetValueDecorator(OUString("D"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("BOOLEAN"));
+        aRow[1] = new ORowSetValueDecorator(OUString("BOOLEAN"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
         aRow[3] = ODatabaseMetaDataResultSet::get1Value();
         aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[6] = new ORowSetValueDecorator(::rtl::OUString());
+        aRow[6] = new ORowSetValueDecorator(OUString());
         aRow[9] = ODatabaseMetaDataResultSet::getBasicValue();
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("L"));
+        aRow[13] = new ORowSetValueDecorator(OUString("L"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("DOUBLE"));
+        aRow[1] = new ORowSetValueDecorator(OUString("DOUBLE"));
         aRow[2] = new ORowSetValueDecorator(DataType::DOUBLE);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)8);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("B"));
+        aRow[13] = new ORowSetValueDecorator(OUString("B"));
         aRows.push_back(aRow);
 
         aRow[11] = new ORowSetValueDecorator(sal_True);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("Y"));
+        aRow[13] = new ORowSetValueDecorator(OUString("Y"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("TIMESTAMP"));
+        aRow[1] = new ORowSetValueDecorator(OUString("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[11] = new ORowSetValueDecorator(sal_False);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("T"));
+        aRow[13] = new ORowSetValueDecorator(OUString("T"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("INTEGER"));
+        aRow[1] = new ORowSetValueDecorator(OUString("INTEGER"));
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)10);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("I"));
+        aRow[13] = new ORowSetValueDecorator(OUString("I"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("DECIMAL"));
+        aRow[1] = new ORowSetValueDecorator(OUString("DECIMAL"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)20);
-        aRow[6] = new ORowSetValueDecorator(::rtl::OUString("length,scale"));
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("F"));
+        aRow[6] = new ORowSetValueDecorator(OUString("length,scale"));
+        aRow[13] = new ORowSetValueDecorator(OUString("F"));
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("NUMERIC"));
+        aRow[1] = new ORowSetValueDecorator(OUString("NUMERIC"));
         aRow[2] = new ORowSetValueDecorator(DataType::DECIMAL);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)16);
-        aRow[13] = new ORowSetValueDecorator(::rtl::OUString("N"));
+        aRow[13] = new ORowSetValueDecorator(OUString("N"));
         aRow[15] = new ORowSetValueDecorator((sal_Int32)16);
         aRows.push_back(aRow);
     }
@@ -156,8 +156,8 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
-        const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
+        const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getColumns" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -175,9 +175,9 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     ODatabaseMetaDataResultSet::ORow aRow(19);
 
     aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
-    Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
-    const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
-    const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
+    Sequence< OUString> aTabNames(xNames->getElementNames());
+    const OUString* pTabBegin    = aTabNames.getConstArray();
+    const OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
     for(;pTabBegin != pTabEnd;++pTabBegin)
     {
         if(match(tableNamePattern,*pTabBegin,'\0'))
@@ -191,10 +191,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             if(!xColumns.is())
                 throw SQLException();
 
-            Sequence< ::rtl::OUString> aColNames(xColumns->getElementNames());
+            Sequence< OUString> aColNames(xColumns->getElementNames());
 
-            const ::rtl::OUString* pBegin = aColNames.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + aColNames.getLength();
+            const OUString* pBegin = aColNames.getConstArray();
+            const OUString* pEnd = pBegin + aColNames.getLength();
             Reference< XPropertySet> xColumn;
             for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
             {
@@ -226,13 +226,13 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
                     switch(sal_Int32(aRow[11]->getValue()))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18] = new ORowSetValueDecorator(::rtl::OUString("NO"));
+                        aRow[18] = new ORowSetValueDecorator(OUString("NO"));
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18] = new ORowSetValueDecorator(::rtl::OUString("YES"));
+                        aRow[18] = new ORowSetValueDecorator(OUString("YES"));
                         break;
                     default:
-                        aRow[18] = new ORowSetValueDecorator(::rtl::OUString());
+                        aRow[18] = new ORowSetValueDecorator(OUString());
                     }
                     aRows.push_back(aRow);
                 }
@@ -247,7 +247,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& table,
+    const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
         sal_Bool unique, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getIndexInfo" );
@@ -264,8 +264,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow aRow(14);
 
-    aRow[5]     = new ORowSetValueDecorator(::rtl::OUString());
-    aRow[10]    = new ORowSetValueDecorator(::rtl::OUString("A"));
+    aRow[5]     = new ORowSetValueDecorator(OUString());
+    aRow[10]    = new ORowSetValueDecorator(OUString("A"));
 
     Reference< XIndexesSupplier> xTable;
     ::cppu::extractInterface(xTable,xNames->getByName(table));
@@ -276,10 +276,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     if(!xIndexes.is())
         throw SQLException();
 
-    Sequence< ::rtl::OUString> aIdxNames(xIndexes->getElementNames());
+    Sequence< OUString> aIdxNames(xIndexes->getElementNames());
 
-    const ::rtl::OUString* pBegin = aIdxNames.getConstArray();
-    const ::rtl::OUString* pEnd = pBegin + aIdxNames.getLength();
+    const OUString* pBegin = aIdxNames.getConstArray();
+    const OUString* pEnd = pBegin + aIdxNames.getLength();
     Reference< XPropertySet> xIndex;
     for(;pBegin != pEnd;++pBegin)
     {
@@ -304,10 +304,10 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         Reference<XColumnsSupplier> xColumnsSup(xIndex,UNO_QUERY);
         Reference< XNameAccess> xColumns = xColumnsSup->getColumns();
-        Sequence< ::rtl::OUString> aColNames(xColumns->getElementNames());
+        Sequence< OUString> aColNames(xColumns->getElementNames());
 
-        const ::rtl::OUString* pColBegin = aColNames.getConstArray();
-        const ::rtl::OUString* pColEnd = pColBegin + aColNames.getLength();
+        const OUString* pColBegin = aColNames.getConstArray();
+        const OUString* pColEnd = pColBegin + aColNames.getLength();
         Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
@@ -323,11 +323,11 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     return xRef;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseDatabaseMetaData::getURL" );
     ::osl::MutexGuard aGuard( m_aMutex );
-    return ::rtl::OUString("sdbc:dbase:") + m_pConnection->getURL();
+    return OUString("sdbc:dbase:") + m_pConnection->getURL();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -378,7 +378,7 @@ sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, Run
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Bool bReadOnly = sal_False;
-    static ::rtl::OUString sReadOnly(  "IsReadOnly" );
+    static OUString sReadOnly(  "IsReadOnly" );
     ::ucbhelper::Content aFile(m_pConnection->getContent(),Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
     aFile.getPropertyValue(sReadOnly) >>= bReadOnly;
 

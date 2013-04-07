@@ -39,7 +39,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OGroups::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OGroups::createObject(const OUString& _rName)
 {
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
@@ -55,7 +55,7 @@ Reference< XPropertySet > OGroups::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OGroups::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoGroup* pGroup = NULL;
     if ( !getImplementation(pGroup,descriptor) || pGroup == NULL )
@@ -66,7 +66,7 @@ sdbcx::ObjectType OGroups::appendObject( const ::rtl::OUString& _rForName, const
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OGroups::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OGroups::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }

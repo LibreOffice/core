@@ -52,7 +52,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
     static SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),      0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),   0,  &getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ISSHAREDFMLA), 0,  &getBooleanCppuType(),                          0, 0 },
         {0,0,0,0,0,0}
@@ -139,7 +139,7 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
             return -2;
         ScDocument* pDoc = pDocShell->GetDocument();
         SCTAB nTab;
-        rtl::OUString sName = mxSheet->getName();
+        OUString sName = mxSheet->getName();
         pDoc->GetTable(sName, nTab);
         return nTab;
     }
@@ -212,13 +212,13 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* p
 }
 
 
-rtl::OUString SAL_CALL ScNamedRangeObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScNamedRangeObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aName;
 }
 
-void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
+void SAL_CALL ScNamedRangeObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -232,7 +232,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
         throw uno::RuntimeException();      // no other exceptions specified
 }
 
-rtl::OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException)
+OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
        String aContent;
@@ -243,7 +243,7 @@ rtl::OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException
     return aContent;
 }
 
-void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
+void SAL_CALL ScNamedRangeObj::setContent( const OUString& aContent )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -378,7 +378,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 }
 
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
-                        const rtl::OUString& rPropertyName, const uno::Any& aValue )
+                        const OUString& rPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -395,7 +395,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& rPropertyName )
+uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const OUString& rPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -407,7 +407,7 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& rPrope
         // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_RANGENAME );
     }
     else if ( rPropertyName == SC_UNO_LINKDISPNAME )
-        aRet <<= rtl::OUString( aName );
+        aRet <<= OUString( aName );
     else if ( rPropertyName == SC_UNONAME_TOKENINDEX )
     {
         // get index for use in formula tokens (read-only)
@@ -427,24 +427,24 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangeObj )
 
 // lang::XServiceInfo
 
-rtl::OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScNamedRangeObj" );
+    return OUString( "ScNamedRangeObj" );
 }
 
-sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) ) ||
            rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCLINKTARGET_SERVICE ) );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) );
-    aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ) );
+    uno::Sequence<OUString> aRet(2);
+    aRet[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) );
+    aRet[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ) );
     return aRet;
 }
 
@@ -506,8 +506,8 @@ bool ScNamedRangesObj::IsModifyAndBroadcast() const
 
 // sheet::XNamedRanges
 
-void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
-        const rtl::OUString& aContent, const table::CellAddress& aPosition,
+void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
+        const OUString& aContent, const table::CellAddress& aPosition,
         sal_Int32 nUnoType ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -571,7 +571,7 @@ void SAL_CALL ScNamedRangesObj::addNewFromTitles( const table::CellRangeAddress&
         pDocShell->GetDocFunc().CreateNames( aRange, nFlags, sal_True, GetTab_Impl() );
 }
 
-void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
+void SAL_CALL ScNamedRangesObj::removeByName( const OUString& aName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -611,7 +611,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.NamedRangesEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.NamedRangesEnumeration"));
 }
 
 // container::XIndexAccess
@@ -667,7 +667,7 @@ Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangesObj::getPropertySetInfo
 }
 
 void SAL_CALL ScNamedRangesObj::setPropertyValue(
-                        const rtl::OUString& rPropertyName, const uno::Any& aValue )
+                        const OUString& rPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -678,7 +678,7 @@ void SAL_CALL ScNamedRangesObj::setPropertyValue(
     }
 }
 
-Any SAL_CALL ScNamedRangesObj::getPropertyValue( const rtl::OUString& rPropertyName )
+Any SAL_CALL ScNamedRangesObj::getPropertyValue( const OUString& rPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -693,7 +693,7 @@ Any SAL_CALL ScNamedRangesObj::getPropertyValue( const rtl::OUString& rPropertyN
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScNamedRangesObj )
 
-uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -705,7 +705,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
         throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -715,8 +715,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
         if (pNames)
         {
             long nVisCount = getCount();            // Namen mit lcl_UserVisibleName
-            uno::Sequence<rtl::OUString> aSeq(nVisCount);
-            rtl::OUString* pAry = aSeq.getArray();
+            uno::Sequence<OUString> aSeq(nVisCount);
+            OUString* pAry = aSeq.getArray();
             sal_uInt16 nVisPos = 0;
             ScRangeName::const_iterator itr = pNames->begin(), itrEnd = pNames->end();
             for (; itr != itrEnd; ++itr)
@@ -727,10 +727,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
             return aSeq;
         }
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
-sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -864,7 +864,7 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
     return NULL;
 }
 
-ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const ::rtl::OUString& aName)
+ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
         return new ScNamedRangeObj(this, pDocShell, String(aName));
@@ -895,7 +895,7 @@ ScLocalNamedRangesObj::~ScLocalNamedRangesObj()
 
 }
 
-ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const ::rtl::OUString& aName)
+ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell && hasByName( aName ) )
         return new ScNamedRangeObj( this, pDocShell, String(aName), mxSheet);
@@ -908,7 +908,7 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
     if (!pDocShell)
         return NULL;
 
-    rtl::OUString aName = mxSheet->getName();
+    OUString aName = mxSheet->getName();
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab;
     pDoc->GetTable( aName, nTab );
@@ -1186,7 +1186,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScLabelRangesObj::createEnumera
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.LabelRangesEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.LabelRangesEnumeration"));
 }
 
 // container::XIndexAccess

@@ -69,9 +69,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -137,7 +134,7 @@ void Views::refresh()
 
         while( rs->next() )
         {
-            rtl::OUString table, schema, command;
+            OUString table, schema, command;
             schema = xRow->getString( 1 );
             table = xRow->getString( 2 );
             command = xRow->getString( 3 );
@@ -201,7 +198,7 @@ void Views::appendByDescriptor(
     }
 }
 
-void Views::dropByName( const ::rtl::OUString& elementName )
+void Views::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)

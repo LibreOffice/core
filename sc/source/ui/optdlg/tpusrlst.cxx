@@ -317,7 +317,7 @@ void ScTpUserLists::MakeListStr( String& rListStr )
 
     for(xub_StrLen i=0;i<nToken;i++)
     {
-        rtl::OUString aString = comphelper::string::strip(rListStr.GetToken(i, LF), ' ');
+        OUString aString = comphelper::string::strip(rListStr.GetToken(i, LF), ' ');
         aStr+=aString;
         aStr+=cDelimiter;
     }

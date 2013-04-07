@@ -41,8 +41,8 @@ public:
     static ::com::sun::star::presentation::AnimationSpeed ConvertDuration( double fDuration );
     static double ConvertAnimationSpeed( ::com::sun::star::presentation::AnimationSpeed eSpeed );
 
-    static bool ConvertPreset( const ::rtl::OUString& rPresetId, const ::rtl::OUString* pPresetSubType, ::com::sun::star::presentation::AnimationEffect& rEffect );
-    static bool ConvertAnimationEffect( const ::com::sun::star::presentation::AnimationEffect& rEffect, ::rtl::OUString& rPresetId, ::rtl::OUString& rPresetSubType );
+    static bool ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, ::com::sun::star::presentation::AnimationEffect& rEffect );
+    static bool ConvertAnimationEffect( const ::com::sun::star::presentation::AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType );
 
 public:
     void AddEffectFromAnimationInfo( SdrObject* pObject, SdAnimationInfo* pInfo );
@@ -67,7 +67,7 @@ public:
     static void SetPresentationOrder( SvxShape* pShape, sal_Int32 nNewPos );
     static sal_Int32 GetPresentationOrder( SvxShape* pShape );
     static void UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo* pInfo );
-    static ::rtl::OUString GetSoundFile( SvxShape* pShape );
+    static OUString GetSoundFile( SvxShape* pShape );
     static sal_Bool GetSoundOn( SvxShape* pShape );
 
     static void SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj );

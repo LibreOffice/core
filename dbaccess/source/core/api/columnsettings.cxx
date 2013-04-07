@@ -72,7 +72,7 @@ namespace dbaccess
         const sal_Int32 nMayBeVoidAttr = PropertyAttribute::MAYBEVOID | nBoundAttr;
 
         const Type& rSalInt32Type = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
-        const Type& rStringType = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        const Type& rStringType = ::getCppuType( static_cast< OUString* >( NULL ) );
 
         _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_ALIGN, PROPERTY_ID_ALIGN, nMayBeVoidAttr, &m_aAlignment, rSalInt32Type );
         _rPropertyContainer.registerMayBeVoidProperty( PROPERTY_NUMBERFORMAT, PROPERTY_ID_NUMBERFORMAT, nMayBeVoidAttr, &m_aFormatKey, rSalInt32Type );
@@ -131,7 +131,7 @@ namespace dbaccess
 
             struct PropertyDescriptor
             {
-                ::rtl::OUString sName;
+                OUString sName;
                 sal_Int32       nHandle;
             };
             PropertyDescriptor aProps[] =

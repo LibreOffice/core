@@ -67,8 +67,8 @@ XFTextSpan::XFTextSpan()
 
 }
 
-XFTextSpan::XFTextSpan(rtl::OUString& text,
-                       rtl::OUString& style
+XFTextSpan::XFTextSpan(OUString& text,
+                       OUString& style
                        )
 {
     Add(text);
@@ -99,7 +99,7 @@ void    XFTextSpan::Add(IXFContent *pContent)
     m_aContents.push_back(pContent);
 }
 
-void    XFTextSpan::Add(rtl::OUString& text)
+void    XFTextSpan::Add(OUString& text)
 {
     IXFContent *pText = new XFTextContent(text);
     Add(pText);
@@ -107,7 +107,7 @@ void    XFTextSpan::Add(rtl::OUString& text)
 
 void    XFTextSpan::ToXml(IXFStream *pStrm)
 {
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);
@@ -130,7 +130,7 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
 
 void    XFTextSpanStart::ToXml(IXFStream *pStrm)
 {
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
     IXFAttrList *pAttrList = pStrm->GetAttrList();
 
     assert(pAttrList);

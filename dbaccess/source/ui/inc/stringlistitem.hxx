@@ -37,17 +37,17 @@ namespace dbaui
 */
 class OStringListItem : public SfxPoolItem
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >      m_aList;
+    ::com::sun::star::uno::Sequence< OUString >      m_aList;
 
 public:
     TYPEINFO();
-    OStringListItem(sal_Int16 nWhich, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rList);
+    OStringListItem(sal_Int16 nWhich, const ::com::sun::star::uno::Sequence< OUString >& _rList);
     OStringListItem(const OStringListItem& _rSource);
 
     virtual int              operator==(const SfxPoolItem& _rItem) const;
     virtual SfxPoolItem*     Clone(SfxItemPool* _pPool = NULL) const;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  getList() const { return m_aList; }
+    ::com::sun::star::uno::Sequence< OUString >  getList() const { return m_aList; }
 };
 
 //.........................................................................

@@ -78,7 +78,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::ucbhelper;
-using ::rtl::OUString;
 using namespace ::sfx2;
 
 static String lcl_GetValidShortCut( const String& rName )
@@ -92,7 +91,7 @@ static String lcl_GetValidShortCut( const String& rName )
     while( rName.GetChar( nStart-1 ) == ' ' && nStart < nSz )
         nStart++;
 
-    String aBuf = rtl::OUString(rName.GetChar(nStart-1));
+    String aBuf = OUString(rName.GetChar(nStart-1));
 
     for( ; nStart < nSz; ++nStart )
     {
@@ -568,7 +567,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
 
         uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
-        SfxFilterMatcher aMatcher( rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
+        SfxFilterMatcher aMatcher( OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
         SfxFilterMatcherIter aIter( aMatcher );
         const SfxFilter* pFilter = aIter.First();
         while ( pFilter )

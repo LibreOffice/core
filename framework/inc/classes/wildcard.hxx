@@ -97,8 +97,8 @@ class Wildcard
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static sal_Bool match(  const   ::rtl::OUString&    sText       ,
-                                   const    ::rtl::OUString&    sPattern    );
+        static sal_Bool match(  const   OUString&    sText       ,
+                                   const    OUString&    sPattern    );
 
         //---------------------------------------------------------------------------------------------------------
         //  debug and test methods
@@ -121,8 +121,8 @@ class Wildcard
 
         #ifdef ENABLE_ASSERTIONS
 
-        static sal_Bool impldbg_checkParameter_match(   const   ::rtl::OUString&    sText       ,
-                                                           const    ::rtl::OUString&    sPattern    );
+        static sal_Bool impldbg_checkParameter_match(   const   OUString&    sText       ,
+                                                           const    OUString&    sPattern    );
 
         #endif  // #ifdef ENABLE_ASSERTIONS
 

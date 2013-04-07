@@ -59,7 +59,7 @@ TYPEINIT1_FACTORY(SvxSearchItem, SfxPoolItem, new SvxSearchItem(0));
 
 // -----------------------------------------------------------------------
 
-static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
+static Sequence< OUString > lcl_GetNotifyNames()
 {
     // names of transliteration relevant properties
     static const char* aTranslitNames[] =
@@ -86,10 +86,10 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
     };
 
     const int nCount = SAL_N_ELEMENTS( aTranslitNames );
-    Sequence< ::rtl::OUString > aNames( nCount );
-    ::rtl::OUString* pNames = aNames.getArray();
+    Sequence< OUString > aNames( nCount );
+    OUString* pNames = aNames.getArray();
     for (sal_Int32 i = 0;  i < nCount;  ++i)
-        pNames[i] = ::rtl::OUString::createFromAscii( aTranslitNames[i] );
+        pNames[i] = OUString::createFromAscii( aTranslitNames[i] );
 
     return aNames;
 }
@@ -98,12 +98,12 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( ::rtl::OUString(CFG_ROOT_NODE ) ),
+    ConfigItem( OUString(CFG_ROOT_NODE ) ),
 
     aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
-                        ::rtl::OUString(),
-                        ::rtl::OUString(),
+                        OUString(),
+                        OUString(),
                           Locale(),
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
@@ -186,7 +186,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
-    ConfigItem( ::rtl::OUString(CFG_ROOT_NODE ) ),
+    ConfigItem( OUString(CFG_ROOT_NODE ) ),
 
     aSearchOpt      ( rItem.aSearchOpt ),
     eFamily         ( rItem.eFamily ),
@@ -268,7 +268,7 @@ SfxItemPresentation SvxSearchItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-void SvxSearchItem::Notify( const Sequence< ::rtl::OUString > & )
+void SvxSearchItem::Notify( const Sequence< OUString > & )
 {
     // applies transliteration changes in the configuration database
     // to the current SvxSearchItem
@@ -361,29 +361,29 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
         case 0 :
         {
             Sequence< PropertyValue > aSeq( SRCH_PARAMS );
-            aSeq[0].Name = rtl::OUString( SRCH_PARA_OPTIONS  );
+            aSeq[0].Name = OUString( SRCH_PARA_OPTIONS  );
             aSeq[0].Value <<= aSearchOpt;
-            aSeq[1].Name = rtl::OUString( SRCH_PARA_FAMILY );
+            aSeq[1].Name = OUString( SRCH_PARA_FAMILY );
             aSeq[1].Value <<= sal_Int16( eFamily );
-            aSeq[2].Name = rtl::OUString( SRCH_PARA_COMMAND );
+            aSeq[2].Name = OUString( SRCH_PARA_COMMAND );
             aSeq[2].Value <<= nCommand;
-            aSeq[3].Name = rtl::OUString( SRCH_PARA_CELLTYPE );
+            aSeq[3].Name = OUString( SRCH_PARA_CELLTYPE );
             aSeq[3].Value <<= nCellType;
-            aSeq[4].Name = rtl::OUString( SRCH_PARA_APPFLAG );
+            aSeq[4].Name = OUString( SRCH_PARA_APPFLAG );
             aSeq[4].Value <<= nAppFlag;
-            aSeq[5].Name = rtl::OUString( SRCH_PARA_ROWDIR );
+            aSeq[5].Name = OUString( SRCH_PARA_ROWDIR );
             aSeq[5].Value <<= bRowDirection;
-            aSeq[6].Name = rtl::OUString( SRCH_PARA_ALLTABLES );
+            aSeq[6].Name = OUString( SRCH_PARA_ALLTABLES );
             aSeq[6].Value <<= bAllTables;
-            aSeq[6].Name = rtl::OUString( SRCH_PARA_SEARCHFILTERED );
+            aSeq[6].Name = OUString( SRCH_PARA_SEARCHFILTERED );
             aSeq[6].Value <<= bSearchFiltered;
-            aSeq[7].Name = rtl::OUString( SRCH_PARA_BACKWARD );
+            aSeq[7].Name = OUString( SRCH_PARA_BACKWARD );
             aSeq[7].Value <<= bBackward;
-            aSeq[8].Name = rtl::OUString( SRCH_PARA_PATTERN );
+            aSeq[8].Name = OUString( SRCH_PARA_PATTERN );
             aSeq[8].Value <<= bPattern;
-            aSeq[9].Name = rtl::OUString( SRCH_PARA_CONTENT );
+            aSeq[9].Name = OUString( SRCH_PARA_CONTENT );
             aSeq[9].Value <<= bContent;
-            aSeq[10].Name = rtl::OUString( SRCH_PARA_ASIANOPT );
+            aSeq[10].Name = OUString( SRCH_PARA_ASIANOPT );
             aSeq[10].Value <<= bAsianOptions;
             rVal <<= aSeq;
         }

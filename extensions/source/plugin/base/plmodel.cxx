@@ -53,10 +53,10 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 
 
 // XPluginManager_Impl
-Sequence< ::rtl::OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
+Sequence< OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.plugin.PluginModel");
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString("com.sun.star.plugin.PluginModel");
     return aSNS;
 }
 
@@ -69,14 +69,14 @@ static ::osl::Mutex aPropertyMutex;
 static ::com::sun::star::beans::Property aProps[] =
 {
     ::com::sun::star::beans::Property(
-        ::rtl::OUString::createFromAscii( aMime ),
+        OUString::createFromAscii( aMime ),
         1,
-        ::getCppuType((const ::rtl::OUString*)0),
+        ::getCppuType((const OUString*)0),
         ::com::sun::star::beans::PropertyAttribute::BOUND ),
     ::com::sun::star::beans::Property(
-        ::rtl::OUString::createFromAscii( aCreationURL ),
+        OUString::createFromAscii( aCreationURL ),
         2,
-        ::getCppuType((const ::rtl::OUString*)0),
+        ::getCppuType((const OUString*)0),
         ::com::sun::star::beans::PropertyAttribute::BOUND )
 };
 
@@ -87,7 +87,7 @@ PluginModel::PluginModel() :
 {
 }
 
-PluginModel::PluginModel(const ::rtl::OUString& rURL, const rtl::OUString& rMimeType ) :
+PluginModel::PluginModel(const OUString& rURL, const OUString& rMimeType ) :
         BroadcasterHelperHolder( aPropertyMutex ),
         OPropertySetHelper( m_aHelper ),
         OPropertyArrayHelper( aProps, 2 ),
@@ -186,9 +186,9 @@ void PluginModel::dispose(void) throw()
 
 
 // ::com::sun::star::io::XPersistObject
-::rtl::OUString PluginModel::getServiceName() throw()
+OUString PluginModel::getServiceName() throw()
 {
-    return ::rtl::OUString("com.sun.star.plugin.PluginModel");
+    return OUString("com.sun.star.plugin.PluginModel");
 }
 
 void PluginModel::write(const Reference< ::com::sun::star::io::XObjectOutputStream > & OutStream) throw()

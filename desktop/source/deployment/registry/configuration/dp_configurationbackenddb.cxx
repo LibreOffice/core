@@ -30,7 +30,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/configuration-registry/2010"
 #define NS_PREFIX "conf"
@@ -43,7 +42,7 @@ namespace configuration {
 
 ConfigurationBackendDb::ConfigurationBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):BackendDb(xContext, url)
+    OUString const & url):BackendDb(xContext, url)
 {
 
 }
@@ -69,7 +68,7 @@ OUString ConfigurationBackendDb::getKeyElementName()
 }
 
 
-void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void ConfigurationBackendDb::addEntry(OUString const & url, Data const & data)
 {
     try{
         if (!activateEntry(url))
@@ -97,7 +96,7 @@ void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & 
 
 
 ::boost::optional<ConfigurationBackendDb::Data>
-ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
+ConfigurationBackendDb::getEntry(OUString const & url)
 {
     try
     {

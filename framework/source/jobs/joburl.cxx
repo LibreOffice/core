@@ -38,7 +38,7 @@ namespace framework{
     @param      sURL
                     the job URL for parsing
 */
-JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
+JobURL::JobURL( /*IN*/ const OUString& sURL )
     : ThreadHelpBase( &Application::GetSolarMutex() )
 {
     #ifdef ENABLE_COMPONENT_SELF_CHECK
@@ -56,9 +56,9 @@ JobURL::JobURL( /*IN*/ const ::rtl::OUString& sURL )
         do
         {
             // seperate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
-            ::rtl::OUString sToken = sURL.getToken(0, JOBURL_PART_SEPERATOR, t);
-            ::rtl::OUString sPartValue    ;
-            ::rtl::OUString sPartArguments;
+            OUString sToken = sURL.getToken(0, JOBURL_PART_SEPERATOR, t);
+            OUString sPartValue    ;
+            OUString sPartArguments;
 
             // check for "event="
             if (
@@ -130,12 +130,12 @@ sal_Bool JobURL::isValid() const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getEvent( /*OUT*/ ::rtl::OUString& sEvent ) const
+sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sEvent = ::rtl::OUString();
+             sEvent = OUString();
     sal_Bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEvent = m_sEvent;
@@ -163,12 +163,12 @@ sal_Bool JobURL::getEvent( /*OUT*/ ::rtl::OUString& sEvent ) const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getAlias( /*OUT*/ ::rtl::OUString& sAlias ) const
+sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sAlias = ::rtl::OUString();
+             sAlias = OUString();
     sal_Bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAlias = m_sAlias;
@@ -196,12 +196,12 @@ sal_Bool JobURL::getAlias( /*OUT*/ ::rtl::OUString& sAlias ) const
 
     @attention  The out parameter will be reseted everytime. Don't use it if method returns <FALSE/>!
 */
-sal_Bool JobURL::getService( /*OUT*/ ::rtl::OUString& sService ) const
+sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sService = ::rtl::OUString();
+             sService = OUString();
     sal_Bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sService = m_sService;
@@ -238,11 +238,11 @@ sal_Bool JobURL::getService( /*OUT*/ ::rtl::OUString& sService ) const
     @return     <TRUE/> if the identifier could be found and the string was splitted.
                 <FALSE/> otherwise.
 */
-sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
+sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
                                /*IN*/  const sal_Char*        pPartIdentifier ,
                                /*IN*/        sal_Int32        nPartLength     ,
-                               /*OUT*/       ::rtl::OUString& rPartValue      ,
-                               /*OUT*/       ::rtl::OUString& rPartArguments  )
+                               /*OUT*/       OUString& rPartValue      ,
+                               /*OUT*/       OUString& rPartArguments  )
 {
     // first search for the given identifier
     sal_Bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
@@ -255,9 +255,9 @@ sal_Bool JobURL::implst_split( /*IN*/  const ::rtl::OUString& sPart           ,
         // Do so - we set the return value with the whole part string.
         // Arguments will be set to an empty string as default.
         // If we detect the right sign - we split the arguments and overwrite the default.
-        ::rtl::OUString sValueAndArguments = sPart.copy(nPartLength);
-        ::rtl::OUString sValue             = sValueAndArguments     ;
-        ::rtl::OUString sArguments;
+        OUString sValueAndArguments = sPart.copy(nPartLength);
+        OUString sValue             = sValueAndArguments     ;
+        OUString sArguments;
 
         sal_Int32 nArgStart = sValueAndArguments.indexOf('?',0);
         if (nArgStart!=-1)
@@ -365,13 +365,13 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
                                /*IN*/ const sal_Char*  pExpectedAliasArgs   ,
                                /*IN*/ const sal_Char*  pExpectedServiceArgs )
 {
-    ::rtl::OUString sEvent      ;
-    ::rtl::OUString sAlias      ;
-    ::rtl::OUString sService    ;
-    ::rtl::OUString sEventArgs  ;
-    ::rtl::OUString sAliasArgs  ;
-    ::rtl::OUString sServiceArgs;
-    ::rtl::OUString sURL    (::rtl::OUString::createFromAscii(pURL));
+    OUString sEvent      ;
+    OUString sAlias      ;
+    OUString sService    ;
+    OUString sEventArgs  ;
+    OUString sAliasArgs  ;
+    OUString sServiceArgs;
+    OUString sURL    (OUString::createFromAscii(pURL));
     sal_Bool        bOK     = sal_True;
 
     JobURL aURL(sURL);
@@ -488,7 +488,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
               );
     }
 
-    ::rtl::OUStringBuffer sMsg(256);
+    OUStringBuffer sMsg(256);
 
     sMsg.appendAscii("\"" );
     sMsg.append     (sURL );
@@ -538,12 +538,12 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 
     @returns    The formated string representation.
 */
-::rtl::OUString JobURL::impldbg_toString() const
+OUString JobURL::impldbg_toString() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    ::rtl::OUStringBuffer sBuffer(256);
+    OUStringBuffer sBuffer(256);
 
     if (m_eRequest==E_UNKNOWN)
         sBuffer.appendAscii("E_UNKNOWN");
@@ -569,12 +569,12 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 
 //________________________________
 
-sal_Bool JobURL::getServiceArgs( /*OUT*/ ::rtl::OUString& sServiceArgs ) const
+sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sServiceArgs = ::rtl::OUString();
+             sServiceArgs = OUString();
     sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sServiceArgs = m_sServiceArgs;
@@ -587,12 +587,12 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ ::rtl::OUString& sServiceArgs ) const
 
 //________________________________
 
-sal_Bool JobURL::getEventArgs( /*OUT*/ ::rtl::OUString& sEventArgs ) const
+sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sEventArgs = ::rtl::OUString();
+             sEventArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEventArgs = m_sEventArgs;
@@ -605,12 +605,12 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ ::rtl::OUString& sEventArgs ) const
 
 //________________________________
 
-sal_Bool JobURL::getAliasArgs( /*OUT*/ ::rtl::OUString& sAliasArgs ) const
+sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-             sAliasArgs = ::rtl::OUString();
+             sAliasArgs = OUString();
     sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAliasArgs = m_sAliasArgs;

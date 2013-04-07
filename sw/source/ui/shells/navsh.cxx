@@ -66,7 +66,7 @@ SwNavigationShell::SwNavigationShell(SwView &_rView):
   SwBaseShell( _rView )
 
 {
-  SetName(rtl::OUString("Navigation"));
+  SetName(OUString("Navigation"));
   SetHelpId(SW_NAVIGATIONSHELL);
 }
 

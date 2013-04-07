@@ -96,7 +96,7 @@ String ScTabViewShell::GetSelectionText( sal_Bool bWholeWord )
 
             ScImportExport aObj( pDoc, aRange );
             aObj.SetFormulas( GetViewData()->GetOptions().GetOption( VOPT_FORMULAS ) );
-            rtl::OUString aExportOUString;
+            OUString aExportOUString;
             aObj.ExportString( aExportOUString );
             aStrSelection = convertLineEnd(aExportOUString, LINEEND_CR);
 

@@ -72,7 +72,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     const uno::Reference< frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
-    const ::rtl::OUString& aCommandURL )
+    const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
 
@@ -118,7 +118,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
         sal_uInt16 nSlotId = pSlot->GetSlotId();
         if ( nSlotId > 0 )
         {
-            rtl::OString aCmd(".uno:");
+            OString aCmd(".uno:");
             aCmd += pSlot->GetUnoName();
             pStatusBar->SetHelpId( nSlotId, aCmd );
             return SfxStatusBarControl::CreateControl( nSlotId, nID, pStatusBar, pModule );
@@ -222,7 +222,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     uno::Reference < frame::XDispatchProvider > xProvider( xController, uno::UNO_QUERY );
     if ( xProvider.is() )
     {
-        uno::Reference < frame::XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, ::rtl::OUString(), 0 );
+        uno::Reference < frame::XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
             uno::Reference< lang::XUnoTunnel > xTunnel( xDisp, uno::UNO_QUERY );
@@ -280,9 +280,9 @@ throw ( ::com::sun::star::uno::RuntimeException )
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotID, nTemp );
                 }
-                else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+                else if ( pType == ::getCppuType((const OUString*)0) )
                 {
-                    ::rtl::OUString sTemp ;
+                    OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotID, sTemp );
                 }

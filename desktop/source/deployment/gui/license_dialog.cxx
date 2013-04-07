@@ -46,7 +46,6 @@ using namespace ::dp_misc;
 namespace cssu = ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace dp_gui {
 
@@ -106,8 +105,8 @@ struct LicenseDialogImpl : public ModalDialog
     LicenseDialogImpl(
         Window * pParent,
         css::uno::Reference< css::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & sExtensionName,
-        const ::rtl::OUString & sLicenseText);
+        const OUString & sExtensionName,
+        const OUString & sLicenseText);
 
     virtual void Activate();
 
@@ -184,8 +183,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 LicenseDialogImpl::LicenseDialogImpl(
     Window * pParent,
     cssu::Reference< cssu::XComponentContext > const & xContext,
-    const ::rtl::OUString & sExtensionName,
-    const ::rtl::OUString & sLicenseText):
+    const OUString & sExtensionName,
+    const OUString & sLicenseText):
         ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
         ,m_xComponentContext(xContext)
         ,m_ftHead(this, DpGuiResId(FT_LICENSE_HEADER))

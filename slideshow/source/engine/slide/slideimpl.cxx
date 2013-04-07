@@ -782,7 +782,7 @@ namespace
     public:
         MainSequenceSearcher()
         {
-            maSearchKey.Name = ::rtl::OUString( "node-type" );
+            maSearchKey.Name = OUString( "node-type" );
             maSearchKey.Value <<= presentation::EffectNodeType::MAIN_SEQUENCE;
         }
 
@@ -863,7 +863,7 @@ bool SlideImpl::implPrefetchShow()
     catch( uno::Exception& )
     {
         OSL_FAIL(
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8).getStr() );
         // TODO(E2): Error handling. For now, bail out
@@ -978,7 +978,7 @@ bool SlideImpl::applyInitialShapeAttributes(
 
         xPropsCreator.set(
             xFac->createInstanceWithContext(
-                ::rtl::OUString(
+                OUString(
                                      "com.sun.star.animations.TargetPropertiesCreator"),
                 maContext.mxComponentContext ),
             uno::UNO_QUERY_THROW );
@@ -990,7 +990,7 @@ bool SlideImpl::applyInitialShapeAttributes(
     catch( uno::Exception& )
     {
         OSL_FAIL(
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8).getStr() );
 
@@ -1170,7 +1170,7 @@ bool SlideImpl::loadShapes()
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1212,7 +1212,7 @@ bool SlideImpl::loadShapes()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -1231,8 +1231,8 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 
     sal_Int32 nDocWidth = 0;
     sal_Int32 nDocHeight = 0;
-    xPropSet->getPropertyValue( ::rtl::OUString("Width") ) >>= nDocWidth;
-    xPropSet->getPropertyValue( ::rtl::OUString("Height") ) >>= nDocHeight;
+    xPropSet->getPropertyValue( OUString("Width") ) >>= nDocWidth;
+    xPropSet->getPropertyValue( OUString("Height") ) >>= nDocHeight;
 
     return basegfx::B2ISize( nDocWidth, nDocHeight );
 }

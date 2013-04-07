@@ -47,7 +47,7 @@ class OOX_DLLPUBLIC VbaFilterConfig
 public:
     explicit            VbaFilterConfig(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                            const ::rtl::OUString& rConfigCompName );
+                            const OUString& rConfigCompName );
                         ~VbaFilterConfig();
 
     /** Returns true, if the VBA source code and forms should be imported. */
@@ -84,7 +84,7 @@ private:
 class OOX_DLLPUBLIC VbaMacroAttacherBase
 {
 public:
-    explicit            VbaMacroAttacherBase( const ::rtl::OUString& rMacroName );
+    explicit            VbaMacroAttacherBase( const OUString& rMacroName );
     virtual             ~VbaMacroAttacherBase();
 
     /** Resolves the internal macro name to the related macro URL, and attaches
@@ -95,10 +95,10 @@ public:
 private:
     /** Called after the VBA project has been imported. Derived classes will
         attach the passed script to the object represented by this instance. */
-    virtual void        attachMacro( const ::rtl::OUString& rScriptUrl ) = 0;
+    virtual void        attachMacro( const OUString& rScriptUrl ) = 0;
 
 private:
-    ::rtl::OUString     maMacroName;
+    OUString     maMacroName;
 };
 
 typedef ::boost::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;
@@ -111,7 +111,7 @@ public:
     explicit            VbaProject(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
-                            const ::rtl::OUString& rConfigCompName );
+                            const OUString& rConfigCompName );
     virtual             ~VbaProject();
 
     /** Imports the entire VBA project from the passed storage.
@@ -141,7 +141,7 @@ public:
 protected:
     /** Registers a dummy module that will be created when the VBA project is
         imported. */
-    void                addDummyModule( const ::rtl::OUString& rName, sal_Int32 nType );
+    void                addDummyModule( const OUString& rName, sal_Int32 nType );
 
     /** Called when the import process of the VBA project has been started. */
     virtual void        prepareImport();
@@ -179,7 +179,7 @@ private:
 
 private:
     typedef RefVector< VbaMacroAttacherBase >           MacroAttacherVector;
-    typedef ::std::map< ::rtl::OUString, sal_Int32 >    DummyModuleMap;
+    typedef ::std::map< OUString, sal_Int32 >    DummyModuleMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         mxContext;          ///< Component context with service manager.
@@ -191,7 +191,7 @@ private:
                         mxDialogLib;        ///< The dialog library of the document used for import.
     MacroAttacherVector maMacroAttachers;   ///< Objects that want to attach a VBA macro to an action.
     DummyModuleMap      maDummyModules;     ///< Additional empty modules created on import.
-    ::rtl::OUString     maPrjName;          ///< Name of the VBA project.
+    OUString     maPrjName;          ///< Name of the VBA project.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxOleOverridesSink;
 };

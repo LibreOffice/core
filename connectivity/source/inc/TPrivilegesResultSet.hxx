@@ -35,7 +35,7 @@ namespace connectivity
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
     public:
         OResultSetPrivileges(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
-            ,const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern);
+            ,const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern);
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);

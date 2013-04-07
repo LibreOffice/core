@@ -85,7 +85,7 @@ namespace dbaui
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
-                                    const ::rtl::OUString& _rsDataSourceName,
+                                    const OUString& _rsDataSourceName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
@@ -131,13 +131,13 @@ namespace dbaui
     void setColumnProperties(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
                                 const OFieldDescription* _pFieldDesc);
 
-    ::rtl::OUString createDefaultName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+    OUString createDefaultName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTables,
-                                        const ::rtl::OUString& _sName);
+                                        const OUString& _sName);
 
     /** checks if the given name exists in the database context
     */
-    sal_Bool checkDataSourceAvailable(  const ::rtl::OUString& _sDataSourceName,
+    sal_Bool checkDataSourceAvailable(  const OUString& _sDataSourceName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
 
     /** maps SvxCellHorJustify to com::sun::star::awt::TextAlign
@@ -164,7 +164,7 @@ namespace dbaui
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >
         getDataSourceByName(
-                const ::rtl::OUString& _rDataSourceName,
+                const OUString& _rDataSourceName,
                 Window* _pErrorMessageParent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > _rxContext,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo
@@ -214,7 +214,7 @@ namespace dbaui
         @return false when datsource is not available otherwise true
     */
     sal_Bool appendToFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                            const ::rtl::OUString& _sName,
+                            const OUString& _sName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                             Window* _pParent);
 
@@ -271,7 +271,7 @@ namespace dbaui
     */
     void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDatasource
                                 ,sal_Bool& _rAutoIncrementValueEnabled
-                                ,::rtl::OUString& _rsAutoIncrementValue);
+                                ,OUString& _rsAutoIncrementValue);
 
     /** fills the bool and string value with information out of the datasource info property
         @param  _xConnection
@@ -283,7 +283,7 @@ namespace dbaui
     */
     void fillAutoIncrementValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                 ,sal_Bool& _rAutoIncrementValueEnabled
-                                ,::rtl::OUString& _rsAutoIncrementValue);
+                                ,OUString& _rsAutoIncrementValue);
 
     /** creates the URL or the help agent
         @param  _sModuleName
@@ -291,7 +291,7 @@ namespace dbaui
         @return
             The URL for the help agent to dispatch.
     */
-    ::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const rtl::OString& _rHelpId);
+    ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName,const OString& _rHelpId);
 
     /** set the evaluation flag at the number formatter
         @param  _rxFormatter
@@ -336,7 +336,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName);
+    sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName);
 
     /** creates a new view from a query or table
         @param  _sName
@@ -348,16 +348,16 @@ namespace dbaui
         @return
             The created view.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView( const ::rtl::OUString& _sName
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView( const OUString& _sName
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSourceObject);
 
     /** creates a view with the given command
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView(
-        const ::rtl::OUString& _rName,
+        const OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-        const ::rtl::OUString& _rCommand
+        const OUString& _rCommand
     );
 
     /** returns the stripped database name.
@@ -368,8 +368,8 @@ namespace dbaui
         @return
             The stripped database name either the registered naem or if it is a file url the last segment.
     */
-    ::rtl::OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
-                                            ,::rtl::OUString& _rsDatabaseName);
+    OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
+                                            ,OUString& _rsDatabaseName);
 
     /** returns the standard database filter
         @retrun
@@ -418,7 +418,7 @@ namespace dbaui
 
     // this completes a help url with the system parameters "Language" and "System"
     // detect installed locale
-    void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark );
+    void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark );
 
 // .........................................................................
 }

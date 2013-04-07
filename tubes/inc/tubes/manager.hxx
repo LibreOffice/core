@@ -105,8 +105,8 @@ public:
             ignored, hopefully resulting in a local DBus tube.
      */
     static TeleConference*  startGroupSession( TpAccount *pAccount,
-                                                const rtl::OUString& rConferenceRoom,
-                                                const rtl::OUString& rConferenceServer );
+                                                const OUString& rConferenceRoom,
+                                                const OUString& rConferenceServer );
 
     /** Start a session with a buddy.
 
@@ -135,7 +135,7 @@ public:
 
     // Only for callbacks.
     static void             addConference( TeleConference* pConference );
-    static rtl::OString     createUuid();
+    static OString     createUuid();
     /** @param rUuid
             is stored so that accepted conference with this UUID could be
             then retrieved by getConference() when loading new document
@@ -143,13 +143,13 @@ public:
     static void             setCurrentUuid( const OString& rUuid );
 
     /// "LibreOfficeWhatEver"
-    static rtl::OString     getFullClientName();
+    static OString     getFullClientName();
 
     /// "org.libreoffice.calcWhatEver"
-    static rtl::OString     getFullServiceName();
+    static OString     getFullServiceName();
 
     /// "/org/libreoffice/calcWhatEver"
-    static rtl::OString     getFullObjectPath();
+    static OString     getFullObjectPath();
 
     /** Add a suffix to the client name and DBus tube names, e.g. "WhatEver"
 

@@ -40,14 +40,14 @@ namespace comphelper
     void ComponentBase::impl_checkDisposed_throw() const
     {
         if ( m_rBHelper.bDisposed )
-            throw DisposedException( ::rtl::OUString(), getComponent() );
+            throw DisposedException( OUString(), getComponent() );
     }
 
     //--------------------------------------------------------------------
     void ComponentBase::impl_checkInitialized_throw() const
     {
         if ( !m_bInitialized )
-            throw NotInitializedException( ::rtl::OUString(), getComponent() );
+            throw NotInitializedException( OUString(), getComponent() );
     }
 
     //--------------------------------------------------------------------

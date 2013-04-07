@@ -58,10 +58,10 @@ using namespace com::sun::star::ucb;
 namespace {
 
     Sequence< Any > generateErrorArguments(
-        rtl::OUString const & rPhysicalUrl)
+        OUString const & rPhysicalUrl)
     {
-        rtl::OUString aResourceName;
-        rtl::OUString aResourceType;
+        OUString aResourceName;
+        OUString aResourceType;
         sal_Bool      bRemovable;
         bool bResourceName = false;
         bool bResourceType = false;
@@ -85,13 +85,13 @@ namespace {
                 switch (aStatus.getFileType())
                 {
                     case osl::FileStatus::Directory:
-                        aResourceType = rtl::OUString( "folder");
+                        aResourceType = OUString( "folder");
                         bResourceType = true;
                         break;
 
                     case osl::FileStatus::Volume:
                     {
-                        aResourceType = rtl::OUString( "volume");
+                        aResourceType = OUString( "volume");
                         bResourceType = true;
                         osl::VolumeInfo aVolumeInfo(
                             osl_VolumeInfo_Mask_Attributes );
@@ -121,25 +121,25 @@ namespace {
                                     (bRemoveProperty ? 1 : 0) );
         sal_Int32 i = 0;
         aArguments[i++]
-            <<= PropertyValue(rtl::OUString( "Uri"),
+            <<= PropertyValue(OUString( "Uri"),
                               -1,
                               makeAny(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
             aArguments[i++]
-                <<= PropertyValue(rtl::OUString( "ResourceName"),
+                <<= PropertyValue(OUString( "ResourceName"),
                                   -1,
                                   makeAny(aResourceName),
                                   PropertyState_DIRECT_VALUE);
         if (bResourceType)
             aArguments[i++]
-                <<= PropertyValue(rtl::OUString( "ResourceType"),
+                <<= PropertyValue(OUString( "ResourceType"),
                                   -1,
                                   makeAny(aResourceType),
                                   PropertyState_DIRECT_VALUE);
         if (bRemoveProperty)
             aArguments[i++]
-                <<= PropertyValue(rtl::OUString( "Removable"),
+                <<= PropertyValue(OUString( "Removable"),
                                   -1,
                                   makeAny(bRemovable),
                                   PropertyState_DIRECT_VALUE);
@@ -153,8 +153,8 @@ namespace {
 namespace fileaccess {
 
 
-    sal_Bool isChild( const rtl::OUString& srcUnqPath,
-                      const rtl::OUString& dstUnqPath )
+    sal_Bool isChild( const OUString& srcUnqPath,
+                      const OUString& dstUnqPath )
     {
         static sal_Unicode slash = '/';
         // Simple lexical comparison
@@ -173,20 +173,20 @@ namespace fileaccess {
     }
 
 
-    rtl::OUString newName(
-        const rtl::OUString& aNewPrefix,
-        const rtl::OUString& aOldPrefix,
-        const rtl::OUString& old_Name )
+    OUString newName(
+        const OUString& aNewPrefix,
+        const OUString& aOldPrefix,
+        const OUString& old_Name )
     {
         sal_Int32 srcL = aOldPrefix.getLength();
 
-        rtl::OUString new_Name = old_Name.copy( srcL );
+        OUString new_Name = old_Name.copy( srcL );
         new_Name = ( aNewPrefix + new_Name );
         return new_Name;
     }
 
 
-    rtl::OUString getTitle( const rtl::OUString& aPath )
+    OUString getTitle( const OUString& aPath )
     {
         sal_Unicode slash = '/';
         sal_Int32 lastIndex = aPath.lastIndexOf( slash );
@@ -194,23 +194,23 @@ namespace fileaccess {
     }
 
 
-    rtl::OUString getParentName( const rtl::OUString& aFileName )
+    OUString getParentName( const OUString& aFileName )
     {
         sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
-        rtl::OUString aParent = aFileName.copy( 0,lastIndex );
+        OUString aParent = aFileName.copy( 0,lastIndex );
 
         if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
-            aParent += rtl::OUString("/");
+            aParent += OUString("/");
 
         if ( aParent == "file://" )
-            aParent = rtl::OUString("file:///");
+            aParent = OUString("file:///");
 
         return aParent;
     }
 
 
-    osl::FileBase::RC osl_File_copy( const rtl::OUString& strPath,
-                                     const rtl::OUString& strDestPath,
+    osl::FileBase::RC osl_File_copy( const OUString& strPath,
+                                     const OUString& strDestPath,
                                      sal_Bool test )
     {
         if( test )
@@ -224,8 +224,8 @@ namespace fileaccess {
     }
 
 
-    osl::FileBase::RC osl_File_move( const rtl::OUString& strPath,
-                                     const rtl::OUString& strDestPath,
+    osl::FileBase::RC osl_File_move( const OUString& strPath,
+                                     const OUString& strDestPath,
                                      sal_Bool test )
     {
         if( test )
@@ -242,7 +242,7 @@ namespace fileaccess {
         sal_Int32 errorCode,
         sal_Int32 minorCode,
         const Reference< XCommandEnvironment >& xEnv,
-        const rtl::OUString& aUncPath,
+        const OUString& aUncPath,
         BaseContent* pContent,
         bool isHandled )
     {
@@ -252,7 +252,7 @@ namespace fileaccess {
 
         if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
         {
-            aAny <<= UnsupportedCommandException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+            aAny <<= UnsupportedCommandException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||
@@ -368,7 +368,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "an error occurred during file opening"),
+                OUString( "an error occurred during file opening"),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_OPEN_FOR_DIRECTORYLISTING  ||
@@ -421,7 +421,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "an error occurred during opening a directory"),
+                OUString( "an error occurred during opening a directory"),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NOTCONNECTED_FOR_WRITE          ||
@@ -436,7 +436,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "an error occurred writing or reading from a file"),
+                OUString( "an error occurred writing or reading from a file"),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_NO_SPACE )
@@ -446,7 +446,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "device full"),
+                OUString( "device full"),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_FILEIOERROR_FOR_WRITE ||
@@ -498,20 +498,20 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "an error occurred during opening a file"),
+                OUString( "an error occurred during opening a file"),
                 xComProc);
         }
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
                  errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
         {
-            Sequence< ::rtl::OUString > aSeq( 1 );
+            Sequence< OUString > aSeq( 1 );
             aSeq[0] =
                 ( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND )  ?
-                rtl::OUString("Title")               :
-                rtl::OUString("ContentType");
+                OUString("Title")               :
+                OUString("ContentType");
 
             aAny <<= MissingPropertiesException(
-                rtl::OUString( "a property is missing necessary"
+                OUString( "a property is missing necessary"
                                "to create a content"),
                 xComProc,
                 aSeq);
@@ -536,7 +536,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "there were problems with the filesize"),
+                OUString( "there were problems with the filesize"),
                 xComProc);
         }
         else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
@@ -544,7 +544,7 @@ namespace fileaccess {
             Reference<XInterface> xContext(xComProc,UNO_QUERY);
             aAny <<=
                 MissingInputStreamException(
-                    rtl::OUString( "the inputstream is missing necessary"
+                    OUString( "the inputstream is missing necessary"
                                    "to create a content"),
                     xContext);
             cancelCommandExecution(aAny,xEnv);
@@ -557,7 +557,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             Reference<XInterface> xContext(xComProc,UNO_QUERY);
             excep.Context = xContext;
-            excep.Message = rtl::OUString( "file exists and overwrite forbidden");
+            excep.Message = OUString( "file exists and overwrite forbidden");
             aAny <<= excep;
             cancelCommandExecution( aAny,xEnv );
         }
@@ -566,9 +566,9 @@ namespace fileaccess {
             InteractiveAugmentedIOException excep;
             excep.Code = IOErrorCode_INVALID_CHARACTER;
             PropertyValue prop;
-            prop.Name = rtl::OUString("ResourceName");
+            prop.Name = OUString("ResourceName");
             prop.Handle = -1;
-            rtl::OUString m_aClashingName(
+            OUString m_aClashingName(
                 rtl::Uri::decode(
                     getTitle(aUncPath),
                     rtl_UriDecodeWithCharset,
@@ -580,7 +580,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             Reference<XInterface> xContext(xComProc,UNO_QUERY);
             excep.Context = xContext;
-            excep.Message = rtl::OUString( "the name contained invalid characters");
+            excep.Message = OUString( "the name contained invalid characters");
             if(isHandled)
                 throw excep;
             else {
@@ -592,7 +592,7 @@ namespace fileaccess {
 //                  ioErrorCode,
 //                  generateErrorArguments(aUncPath),
 //                  xEnv,
-//                  rtl::OUString( "the name contained invalid characters"),
+//                  OUString( "the name contained invalid characters"),
 //                  xComProc );
         }
         else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
@@ -602,7 +602,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             Reference<XInterface> xContext(xComProc,UNO_QUERY);
             excep.Context = xContext;
-            excep.Message = rtl::OUString( "folder exists and overwrite forbidden");
+            excep.Message = OUString( "folder exists and overwrite forbidden");
             if(isHandled)
                 throw excep;
             else {
@@ -614,7 +614,7 @@ namespace fileaccess {
 //                  ioErrorCode,
 //                  generateErrorArguments(aUncPath),
 //                  xEnv,
-//                  rtl::OUString( "the folder exists"),
+//                  OUString( "the folder exists"),
 //                  xComProc );
         }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
@@ -640,7 +640,7 @@ namespace fileaccess {
                 generateErrorArguments(getParentName(aUncPath)),
                 //TODO! ok to supply physical URL to getParentName()?
                 xEnv,
-                rtl::OUString( "a folder could not be created"),
+                OUString( "a folder could not be created"),
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE  ||
@@ -691,7 +691,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "a file status object could not be filled"),
+                OUString( "a file status object could not be filled"),
                 xComProc  );
         }
         else if( errorCode == TASKHANDLING_DELETEFILE_FOR_REMOVE  ||
@@ -738,7 +738,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "a file or directory could not be deleted"),
+                OUString( "a file or directory could not be deleted"),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
@@ -750,7 +750,7 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE   ||
                  errorCode == TASKHANDLING_TRANSFER_INVALIDURL )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             switch( minorCode )
             {
                 case FileBase::E_NOENT:         // No such file or directory
@@ -760,18 +760,18 @@ namespace fileaccess {
                          errorCode == TASKHANDLING_TRANSFER_BY_MOVE_SOURCESTAT )
                     {
                         ioErrorCode = IOErrorCode_NOT_EXISTING;
-                        aMsg = rtl::OUString( "source file/folder does not exist");
+                        aMsg = OUString( "source file/folder does not exist");
                         break;
                     }
                     else
                     {
                         ioErrorCode = IOErrorCode_GENERAL;
-                        aMsg = rtl::OUString( "a general error during transfer command");
+                        aMsg = OUString( "a general error during transfer command");
                     break;
                     }
                 default:
                     ioErrorCode = IOErrorCode_GENERAL;
-                    aMsg = rtl::OUString( "a general error during transfer command");
+                    aMsg = OUString( "a general error during transfer command");
                     break;
             }
             cancelCommandExecution(
@@ -788,7 +788,7 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                rtl::OUString( "accessing the root during transfer"),
+                OUString( "accessing the root during transfer"),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
@@ -797,7 +797,7 @@ namespace fileaccess {
 
             aAny <<=
                 InteractiveBadTransferURLException(
-                    rtl::OUString( "bad tranfer url"),
+                    OUString( "bad tranfer url"),
                     xContext);
             cancelCommandExecution( aAny,xEnv );
         }
@@ -812,7 +812,7 @@ namespace fileaccess {
                  errorCode == TASKHANDLING_RENAMEMOVE_FOR_MOVE     ||
                  errorCode == TASKHANDLING_RENAMEMOVE_FOR_COPY    )
         {
-            rtl::OUString aMsg(
+            OUString aMsg(
                         "general error during transfer");
 
             switch( minorCode )
@@ -837,7 +837,7 @@ namespace fileaccess {
                     break;
                 case FileBase::E_NOENT:         // No such file or directory
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
-                    aMsg = rtl::OUString( "file/folder does not exist");
+                    aMsg = OUString( "file/folder does not exist");
                     break;
                 case FileBase::E_ROFS:          // Read-only file system<p>
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
@@ -861,7 +861,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             Reference<XInterface> xContext(xComProc,UNO_QUERY);
             excep.Context = xContext;
-            excep.Message = rtl::OUString( "name clash during copy or move");
+            excep.Message = OUString( "name clash during copy or move");
             aAny <<= excep;
 
             cancelCommandExecution(aAny,xEnv);
@@ -874,7 +874,7 @@ namespace fileaccess {
             UnsupportedNameClashException excep;
             excep.NameClash = minorCode;
             excep.Context = xContext;
-            excep.Message = rtl::OUString( "name clash value not supported during copy or move");
+            excep.Message = OUString( "name clash value not supported during copy or move");
 
             aAny <<= excep;
             cancelCommandExecution(aAny,xEnv);

@@ -130,7 +130,7 @@ void ComboBox::ImplCalcEditHeight()
     if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
                                 aCtrlRegion,
                                 CTRL_STATE_ENABLED,
-                                aControlValue, rtl::OUString(),
+                                aControlValue, OUString(),
                                 aBoundRegion, aContentRegion ) )
     {
         const long nNCHeight = aBoundRegion.GetHeight();
@@ -1039,7 +1039,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
     Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
     if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
-        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        aArea, 0, aControlValue, OUString(), aBound, aContent) )
     {
         nButtonDownWidth = aContent.getWidth();
     }
@@ -1156,7 +1156,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('x')));
+    long nCharWidth = GetTextWidth(OUString(static_cast<sal_Unicode>('x')));
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();
@@ -1514,7 +1514,7 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
     Rectangle aArea( aPoint, rBorderOutSz );
 
     if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
-            aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            aArea, 0, aControlValue, OUString(), aBound, aContent) )
     {
         // convert back from border space to local coordinates
         aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
@@ -1525,7 +1525,7 @@ ComboBox::ComboBoxBounds ComboBox::calcComboBoxDropDownComponentBounds(const Siz
 
         // adjust the size of the edit field
         if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
-                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                    aArea, 0, aControlValue, OUString(), aBound, aContent) )
         {
             // convert back from border space to local coordinates
             aContent.Move(-aPoint.X(), -aPoint.Y());
@@ -1560,7 +1560,7 @@ void ComboBox::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
-bool ComboBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool ComboBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "max-width-chars")
         setMaxWidthChars(rValue.toInt32());

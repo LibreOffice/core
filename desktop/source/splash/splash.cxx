@@ -580,7 +580,7 @@ void SplashScreen::Paint( const Rectangle&)
         Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
-                                             CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                             CTRL_STATE_ENABLED, aValue, OUString(),
                                              aNativeControlRegion, aNativeContentRegion ) )
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();
@@ -633,13 +633,13 @@ css::uno::Reference< css::uno::XInterface > desktop::splash::create(
     return static_cast< cppu::OWeakObject * >(new SplashScreen);
 }
 
-rtl::OUString desktop::splash::getImplementationName() {
-    return rtl::OUString("com.sun.star.office.comp.SplashScreen");
+OUString desktop::splash::getImplementationName() {
+    return OUString("com.sun.star.office.comp.SplashScreen");
 }
 
-css::uno::Sequence< rtl::OUString > desktop::splash::getSupportedServiceNames() {
-    rtl::OUString name("com.sun.star.office.SplashScreen");
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+css::uno::Sequence< OUString > desktop::splash::getSupportedServiceNames() {
+    OUString name("com.sun.star.office.SplashScreen");
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,7 +30,7 @@ class AstOperation : public AstDeclaration
                    , public AstScope
 {
 public:
-    AstOperation(AstType* pReturnType, const ::rtl::OString& name, AstScope* pScope)
+    AstOperation(AstType* pReturnType, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_operation, name, pScope)
         , AstScope(NT_operation)
         , m_pReturnType(pReturnType)

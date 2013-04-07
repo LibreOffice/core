@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
-using ::rtl::OUString;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::i18n::LocaleDataItem;
 
@@ -92,7 +91,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     maEdSepArrayRow.SetGetFocusHdl(aLink);
 
     // Get the decimal separator for current locale.
-    rtl::OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
+    OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
 }
 
@@ -102,7 +101,7 @@ ScTpFormulaOptions::~ScTpFormulaOptions()
 
 void ScTpFormulaOptions::ResetSeparators()
 {
-    rtl::OUString aFuncArg, aArrayCol, aArrayRow;
+    OUString aFuncArg, aArrayCol, aArrayRow;
     ScFormulaOptions::GetDefaultFormulaSeparators(aFuncArg, aArrayCol, aArrayRow);
     maEdSepFuncArg.SetText(aFuncArg);
     maEdSepArrayCol.SetText(aArrayCol);

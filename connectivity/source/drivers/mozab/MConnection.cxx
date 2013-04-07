@@ -41,7 +41,7 @@
 #include <comphelper/processfactory.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -89,9 +89,9 @@ const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
     return NULL;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OConnection::getDriverImplementationName()
+OUString OConnection::getDriverImplementationName()
 {
-    return rtl::OUString(MOZAB_DRIVER_IMPL_NAME);
+    return OUString(MOZAB_DRIVER_IMPL_NAME);
 }
 
 // -----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ void SAL_CALL OConnection::release() throw()
 }
 // -----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     OSL_TRACE("IN OConnection::construct()" );
     //  open file
@@ -151,11 +151,11 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     nLen = url.indexOf(':',nLen+1);
     OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
-    ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
+    OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
     nLen = aAddrbookURI.indexOf(':');
-    ::rtl::OUString aAddrbookScheme;
-    ::rtl::OUString sAdditionalInfo;
+    OUString aAddrbookScheme;
+    OUString sAdditionalInfo;
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
@@ -192,12 +192,12 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     // * for windows system address book
     //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
     //
-        m_sBindDN   = rtl::OUString( "");
-        m_sPassword = rtl::OUString( "");
+        m_sBindDN   = OUString( "");
+        m_sPassword = OUString( "");
         m_bUseSSL   = sal_False;
 
     if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_MOZILLA ) ) == 0 ) {
-        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
+        m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::Mozilla;
         if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
@@ -205,16 +205,16 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     else
     if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_THUNDERBIRD ) ) == 0 ) {
         //Yes. I am sure it is SCHEME_MOZILLA
-        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
+        m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::ThunderBird;
         if(!sAdditionalInfo.isEmpty())
             m_sMozillaProfile = sAdditionalInfo;
     }
     else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_LDAP ) ) == 0 ) {
-        rtl::OUString sBaseDN;
+        OUString sBaseDN;
         sal_Int32     nPortNumber = -1;
 
-        m_sMozillaURI = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_LDAP ) );
+        m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_LDAP ) );
         m_eSDBCAddressType = SDBCAddress::LDAP;
 
         if ( m_sHostName.isEmpty() )
@@ -280,27 +280,27 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             throwSQLException( STR_NO_HOSTNAME, *this );
 
         if ( nPortNumber > 0 ) {
-            m_sMozillaURI += rtl::OUString( ":" );
-            m_sMozillaURI += rtl::OUString::valueOf( nPortNumber );
+            m_sMozillaURI += OUString( ":" );
+            m_sMozillaURI += OUString::valueOf( nPortNumber );
         }
 
         if ( !sBaseDN.isEmpty() ) {
-            m_sMozillaURI += rtl::OUString( "/" );
+            m_sMozillaURI += OUString( "/" );
             m_sMozillaURI += sBaseDN;
         }
         else
             throwSQLException( STR_NO_BASEDN, *this );
 
         // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
-        m_sMozillaURI += ::rtl::OUString( "?(or(DisplayName,=,DontDoThisAtHome)))");
+        m_sMozillaURI += OUString( "?(or(DisplayName,=,DontDoThisAtHome)))");
 
     }
     else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_MAPI ) ) == 0 ) {
-        m_sMozillaURI       = ::rtl::OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_MAPI ) );
+        m_sMozillaURI       = OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_MAPI ) );
         m_eSDBCAddressType = SDBCAddress::Outlook;
     }
     else if ( aAddrbookScheme.compareToAscii( getSdbcScheme( SDBC_OUTLOOK_EXPRESS ) ) == 0 ) {
-        m_sMozillaURI       = rtl::OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_EXPRESS ) );
+        m_sMozillaURI       = OUString::createFromAscii( getSchemeURI( SCHEME_OUTLOOK_EXPRESS ) );
         m_eSDBCAddressType = SDBCAddress::OutlookExp;
     }
     else
@@ -331,8 +331,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     }
 
     // Test connection by getting to get the Table Names
-    ::std::vector< ::rtl::OUString > tables;
-    ::std::vector< ::rtl::OUString > types;
+    ::std::vector< OUString > tables;
+    ::std::vector< OUString > types;
     if ( !_aDbHelper.getTableStrings( this, tables, types ) )
     {
         throwSQLException( _aDbHelper.getError(), *this );
@@ -356,7 +356,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -373,7 +373,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
@@ -381,7 +381,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
@@ -449,15 +449,15 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     // return your current catalog
-    return ::rtl::OUString();
+    return OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
@@ -555,10 +555,10 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
         OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
             "OConnection::throwSQLException: unsupported error code combination!" );
 
-        ::rtl::OUString sParameter( _rError.getParameter() );
+        OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
         {
-            const ::rtl::OUString sError( getResources().getResourceStringWithSubstitution(
+            const OUString sError( getResources().getResourceStringWithSubstitution(
                 _rError.getResId(),
                 "$1$", sParameter
              ) );
@@ -573,7 +573,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     if ( _rError.getErrorCondition() != 0 )
     {
         SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getMSFactory()) );
-        ::rtl::OUString sParameter( _rError.getParameter() );
+        OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else

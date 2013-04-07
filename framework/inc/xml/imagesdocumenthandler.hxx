@@ -79,25 +79,25 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
-                                                    const rtl::OUString& aData)
+        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                    const OUString& aData)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -107,12 +107,12 @@ class OReadImagesDocumentHandler : private ThreadHelpBase,  // Struct for right 
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
-        class ImageHashMap : public ::boost::unordered_map< ::rtl::OUString     ,
+        class ImageHashMap : public ::boost::unordered_map< OUString     ,
                                                      Image_XML_Entry        ,
-                                                     rtl::OUStringHash,
-                                                     ::std::equal_to< ::rtl::OUString > >
+                                                     OUStringHash,
+                                                     ::std::equal_to< OUString > >
         {
             public:
                 inline void free()
@@ -170,11 +170,11 @@ class OWriteImagesDocumentHandler : private ThreadHelpBase // Struct for right i
         const ImageListsDescriptor&                                                         m_aImageListsItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aXMLImageNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeXlinkType;
-        ::rtl::OUString                                                                     m_aAttributeValueSimple;
+        OUString                                                                     m_aXMLXlinkNS;
+        OUString                                                                     m_aXMLImageNS;
+        OUString                                                                     m_aAttributeType;
+        OUString                                                                     m_aAttributeXlinkType;
+        OUString                                                                     m_aAttributeValueSimple;
 };
 
 } // namespace framework

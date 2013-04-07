@@ -62,14 +62,14 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlTabPageContainerModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainerModel, UnoControlModel, szServiceName_UnoControlTabPageContainerModel )
 
     // XTabPageContainerModel
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageModel > SAL_CALL createTabPage( ::sal_Int16 TabPageID ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageModel > SAL_CALL loadTabPage( ::sal_Int16 TabPageID, const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageModel > SAL_CALL loadTabPage( ::sal_Int16 TabPageID, const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
 
     // XIndexContainer
     virtual void SAL_CALL insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
@@ -105,7 +105,7 @@ class UnoControlTabPageContainer : public UnoControlTabPageContainer_Base
 {
 public:
     UnoControlTabPageContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
-    ::rtl::OUString             GetComponentServiceName();
+    OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -123,7 +123,7 @@ public:
     virtual void SAL_CALL addTabPageContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTabPageContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tab::XTabPageContainerListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL addControl( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addControl( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& Control ) throw (::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainer, UnoControlBase, szServiceName_UnoControlTabPageContainer )
 

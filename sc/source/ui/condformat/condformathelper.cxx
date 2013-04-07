@@ -13,7 +13,7 @@
 
 namespace {
 
-rtl::OUString getTextForType(ScCondFormatEntryType eType)
+OUString getTextForType(ScCondFormatEntryType eType)
 {
     switch(eType)
     {
@@ -33,25 +33,25 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
             break;
     }
 
-    return rtl::OUString("");
+    return OUString("");
 }
 
-rtl::OUString getExpression(sal_Int32 nIndex)
+OUString getExpression(sal_Int32 nIndex)
 {
     switch(nIndex)
     {
         case 0:
-            return rtl::OUString("=");
+            return OUString("=");
         case 1:
-            return rtl::OUString("<");
+            return OUString("<");
         case 2:
-            return rtl::OUString(">");
+            return OUString(">");
         case 3:
-            return rtl::OUString("<=");
+            return OUString("<=");
         case 4:
-            return rtl::OUString(">=");
+            return OUString(">=");
         case 5:
-            return rtl::OUString("!=");
+            return OUString("!=");
         case 6:
             return ScGlobal::GetRscString(STR_COND_BETWEEN);
         case 7:
@@ -91,24 +91,24 @@ rtl::OUString getExpression(sal_Int32 nIndex)
         case 24:
             return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
     }
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString getDateString(sal_Int32 nIndex)
+OUString getDateString(sal_Int32 nIndex)
 {
     sal_Int32 nStringIndex = STR_COND_TODAY + nIndex;
     if(nStringIndex <= STR_COND_NEXTYEAR)
         return ScGlobal::GetRscString(nStringIndex);
 
     assert(false);
-    return rtl::OUString();
+    return OUString();
 }
 
 }
 
-rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos)
+OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos)
 {
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     if(!rFormat.IsEmpty())
     {
         switch(rFormat.GetEntry(0)->GetType())
@@ -126,13 +126,13 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                     else
                     {
                         aBuffer.append(getTextForType(CONDITION));
-                        aBuffer.append(rtl::OUString(" "));
+                        aBuffer.append(OUString(" "));
                         aBuffer.append(getExpression(static_cast<sal_Int32>(eMode)));
-                        aBuffer.append(rtl::OUString(" "));
+                        aBuffer.append(OUString(" "));
                         if(eMode == SC_COND_BETWEEN || eMode == SC_COND_NOTBETWEEN)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
-                            aBuffer.append(rtl::OUString(" and "));
+                            aBuffer.append(OUString(" and "));
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
                         else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
@@ -165,11 +165,11 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
     return aBuffer.makeStringAndClear();
 }
 
-rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
-        rtl::OUString aStr1, rtl::OUString aStr2 )
+OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
+        OUString aStr1, OUString aStr2 )
 {
-    rtl::OUStringBuffer aBuffer(getTextForType(eType));
-    aBuffer.append(rtl::OUString(" "));
+    OUStringBuffer aBuffer(getTextForType(eType));
+    aBuffer.append(OUString(" "));
     if(eType == CONDITION)
     {
         // workaround missing FORMULA option in the conditions case

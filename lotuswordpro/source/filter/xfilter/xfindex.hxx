@@ -85,25 +85,25 @@ public:
     /**
      * @descr   Set template level.
      */
-    void    SetLevel(rtl::OUString level);
+    void    SetLevel(OUString level);
     /**
      * @descr   Set style.
      */
-    void    SetStyleName(rtl::OUString style);
+    void    SetStyleName(OUString style);
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddEntry(enumXFIndexTemplate entry, rtl::OUString styleName = A2OUSTR(""));
+    void    AddEntry(enumXFIndexTemplate entry, OUString styleName = A2OUSTR(""));
 
     /**
      * @descr   Add a tab entry in the template.
      */
-    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', rtl::OUString styleName = A2OUSTR(""));
+    void    AddTabEntry(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.', OUString styleName = A2OUSTR(""));
 
     /**
      * @descr   Add a entry in the template.
      */
-    void    AddTextEntry(rtl::OUString sSpan, rtl::OUString styleName = A2OUSTR(""));
+    void    AddTextEntry(OUString sSpan, OUString styleName = A2OUSTR(""));
 
     /**
      * @descr   clear all index template parts.
@@ -115,22 +115,22 @@ private:
     /**
      * @descr   Helper function.
      */
-    void    SetTagName(rtl::OUString tag);
+    void    SetTagName(OUString tag);
 
     friend class XFIndex;
 private:
-    rtl::OUString   m_nLevel;
-    rtl::OUString   m_strStyle;
+    OUString   m_nLevel;
+    OUString   m_strStyle;
     enumXFTab   m_eTabType;
     double      m_fTabLength;
-    rtl::OUString   m_strTabDelimiter;
-    rtl::OUString   m_strTabLeader;
-    rtl::OUString   m_strTagName;
-    typedef std::pair<enumXFIndexTemplate, rtl::OUString> TOCTEMPLATE_ENTRY_TYPE;
+    OUString   m_strTabDelimiter;
+    OUString   m_strTabLeader;
+    OUString   m_strTagName;
+    typedef std::pair<enumXFIndexTemplate, OUString> TOCTEMPLATE_ENTRY_TYPE;
     std::vector<TOCTEMPLATE_ENTRY_TYPE> m_aEntries; // template entry + text style
-    std::map<sal_uInt16, rtl::OUString> m_aTextEntries;
+    std::map<sal_uInt16, OUString> m_aTextEntries;
 
-    rtl::OUString m_strChapterTextStyle;
+    OUString m_strChapterTextStyle;
 };
 
 /**
@@ -153,7 +153,7 @@ public:
     /**
      * @descr   Add index templaet entry.
      */
-    void    AddTemplate(rtl::OUString level, rtl::OUString style, XFIndexTemplate* templ);
+    void    AddTemplate(OUString level, OUString style, XFIndexTemplate* templ);
 
     /**
      * @descr   Set if protected index to prevent handly-revise.
@@ -167,12 +167,12 @@ public:
 
     virtual void    ToXml(IXFStream *pStrm);
 
-    void AddTocSource(sal_uInt16 nLevel, const rtl::OUString sStyleName);
+    void AddTocSource(sal_uInt16 nLevel, const OUString sStyleName);
 
 private:
     enumXFIndex     m_eType;
-    rtl::OUString       m_strTitle;
-    rtl::OUString       m_strSectStyle;
+    OUString       m_strTitle;
+    OUString       m_strSectStyle;
     bool                m_bProtect;
     bool            m_bSeparator;
     XFParagraph     *m_pTitle;
@@ -180,7 +180,7 @@ private:
     std::vector<XFIndexTemplate *>  m_aTemplates; // template entry + style
 
     #define MAX_TOC_LEVEL 10
-    std::vector<rtl::OUString> m_aTOCSource[MAX_TOC_LEVEL+1];
+    std::vector<OUString> m_aTOCSource[MAX_TOC_LEVEL+1];
 
     sal_uInt32      m_nMaxLevel;
 };
@@ -190,37 +190,37 @@ inline XFIndexTemplate::XFIndexTemplate()
     m_nLevel = Int32ToOUString(0);
 }
 
-inline void XFIndexTemplate::SetLevel(rtl::OUString level)
+inline void XFIndexTemplate::SetLevel(OUString level)
 {
     m_nLevel = level;
 }
-inline void XFIndexTemplate::SetStyleName(rtl::OUString style)
+inline void XFIndexTemplate::SetStyleName(OUString style)
 {
     m_strStyle = style;
 }
 
-inline void XFIndexTemplate::SetTagName(rtl::OUString tag)
+inline void XFIndexTemplate::SetTagName(OUString tag)
 {
     m_strTagName = tag;
 }
 
-inline void XFIndexTemplate::AddEntry(enumXFIndexTemplate entry, rtl::OUString styleName)
+inline void XFIndexTemplate::AddEntry(enumXFIndexTemplate entry, OUString styleName)
 {
-    std::pair<enumXFIndexTemplate, rtl::OUString> pair(entry, styleName);
+    std::pair<enumXFIndexTemplate, OUString> pair(entry, styleName);
     m_aEntries.push_back(pair);
 }
 
-inline void XFIndexTemplate::AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, rtl::OUString styleName)
+inline void XFIndexTemplate::AddTabEntry(enumXFTab type, double len, sal_Unicode leader, sal_Unicode delimiter, OUString styleName)
 {
     m_eTabType = type;
-    m_strTabLeader = rtl::OUString( leader );
-    m_strTabDelimiter = rtl::OUString( delimiter );
+    m_strTabLeader = OUString( leader );
+    m_strTabDelimiter = OUString( delimiter );
     m_fTabLength = len;
 
     AddEntry(enumXFIndexTemplateTab, styleName);
 }
 
-inline void XFIndexTemplate::AddTextEntry(rtl::OUString sText, rtl::OUString styleName)
+inline void XFIndexTemplate::AddTextEntry(OUString sText, OUString styleName)
 {
     sal_uInt16 nLen = m_aEntries.size();
     AddEntry(enumXFIndexTemplateSpan, styleName);

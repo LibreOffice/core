@@ -45,9 +45,9 @@ class RtfSdrExport : public EscherEx
     sal_uInt32 m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
-    rtl::OStringBuffer *m_pShapeStyle;
+    OStringBuffer *m_pShapeStyle;
 
-    std::map<rtl::OString,rtl::OString> m_aShapeProps;
+    std::map<OString,OString> m_aShapeProps;
 
     /// Remember which shape types we had already written.
     bool *m_pShapeTypeWritten;
@@ -91,7 +91,7 @@ private:
     void AddLineDimensions( const Rectangle& rRectangle );
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle );
+    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle );
 
     void WriteOutliner(const OutlinerParaObject& rParaObj);
 

@@ -37,7 +37,7 @@ namespace dbaccess
 {
 
 ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaData, const Reference < XRow >& _xRow, sal_Int32 _nPos,
-                const Reference< XDatabaseMetaData >& _rxDBMeta, const ::rtl::OUString& _rDescription, const ::rtl::OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
+                const Reference< XDatabaseMetaData >& _rxDBMeta, const OUString& _rDescription, const OUString& i_sLabel,ORowSetCacheIterator& _rColumnValue )
     :ORowSetDataColumn( _xMetaData, _xRow, NULL, _nPos, _rxDBMeta, _rDescription, i_sLabel,_rColumnValue )
 {
 }
@@ -46,7 +46,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
 {
     BEGIN_PROPERTY_SEQUENCE(21)
 
-    DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
+    DECL_PROP1( CATALOGNAME,                OUString,    READONLY );
     DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
     DECL_PROP1_BOOL( ISAUTOINCREMENT,                           READONLY );
     DECL_PROP1_BOOL( ISCASESENSITIVE,                           READONLY );
@@ -58,14 +58,14 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
     DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
     DECL_PROP1_BOOL( ISWRITABLE,                                READONLY );
-    DECL_PROP1( LABEL,                      ::rtl::OUString,    READONLY );
+    DECL_PROP1( LABEL,                      OUString,    READONLY );
     DECL_PROP1( PRECISION,                  sal_Int32,          READONLY );
     DECL_PROP1( SCALE,                      sal_Int32,          READONLY );
-    DECL_PROP1( SCHEMANAME,                 ::rtl::OUString,    READONLY );
-    DECL_PROP1( SERVICENAME,                ::rtl::OUString,    READONLY );
-    DECL_PROP1( TABLENAME,                  ::rtl::OUString,    READONLY );
+    DECL_PROP1( SCHEMANAME,                 OUString,    READONLY );
+    DECL_PROP1( SERVICENAME,                OUString,    READONLY );
+    DECL_PROP1( TABLENAME,                  OUString,    READONLY );
     DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
-    DECL_PROP1( TYPENAME,                   ::rtl::OUString,    READONLY );
+    DECL_PROP1( TYPENAME,                   OUString,    READONLY );
     DECL_PROP2( VALUE,                      Any,                READONLY, BOUND );
 
     END_PROPERTY_SEQUENCE()

@@ -91,7 +91,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbCheckWithCompilerForError;
     bool mbEditEngineHasText;
 
-    sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
+    sal_Int16 GetCellType(const OUString& sOUValue) const;
 
     void DoMerge(const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows);
 
@@ -106,10 +106,10 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     void SetFormulaCell             ( ScFormulaCell* pFCell ) const;
     void PutTextCell                ( const ScAddress& rScCurrentPos, const SCCOL nCurrentCol,
-                                      const ::boost::optional< rtl::OUString >& pOUText );
+                                      const ::boost::optional< OUString >& pOUText );
     void PutValueCell               ( const ScAddress& rScCurrentPos );
     void AddTextAndValueCell       ( const ScAddress& rScCellPos,
-                                      const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rScCurrentPos );
+                                      const ::boost::optional< OUString >& pOUText, ScAddress& rScCurrentPos );
     void AddNonFormulaCell         ( const ScAddress& rScCellPos );
     void PutFormulaCell             ( const ScAddress& rScCurrentPos );
     void AddFormulaCell             ( const ScAddress& rScCellPos );
@@ -123,7 +123,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 public:
 
     ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         const bool bIsCovered, const sal_Int32 nRepeatedRows );
@@ -131,7 +131,7 @@ public:
     virtual ~ScXMLTableRowCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

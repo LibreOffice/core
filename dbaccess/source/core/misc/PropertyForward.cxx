@@ -45,7 +45,7 @@ namespace dbaccess
 
     //------------------------------------------------------------------------
     OPropertyForward::OPropertyForward( const Reference< XPropertySet>& _xSource, const Reference< XNameAccess>& _xDestContainer,
-            const ::rtl::OUString& _sName, const ::std::vector< ::rtl::OUString>& _aPropertyList )
+            const OUString& _sName, const ::std::vector< OUString>& _aPropertyList )
         :m_xSource( _xSource, UNO_SET_THROW )
         ,m_xDestContainer( _xDestContainer, UNO_SET_THROW )
         ,m_sName( _sName )
@@ -57,11 +57,11 @@ namespace dbaccess
         try
         {
             if ( _aPropertyList.empty() )
-                _xSource->addPropertyChangeListener( ::rtl::OUString(), this );
+                _xSource->addPropertyChangeListener( OUString(), this );
             else
             {
-                ::std::vector< ::rtl::OUString >::const_iterator aIter = _aPropertyList.begin();
-                ::std::vector< ::rtl::OUString >::const_iterator aEnd = _aPropertyList.end();
+                ::std::vector< OUString >::const_iterator aIter = _aPropertyList.begin();
+                ::std::vector< OUString >::const_iterator aEnd = _aPropertyList.end();
                 for (; aIter != aEnd ; ++aIter )
                     _xSource->addPropertyChangeListener( *aIter, this );
             }
@@ -85,7 +85,7 @@ namespace dbaccess
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( !m_xDestContainer.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
 
         try
         {
@@ -128,9 +128,9 @@ namespace dbaccess
         ::osl::MutexGuard aGuard(m_aMutex);
 
         if ( !m_xSource.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
 
-        m_xSource->removePropertyChangeListener( ::rtl::OUString(), this );
+        m_xSource->removePropertyChangeListener( OUString(), this );
         m_xSource = NULL;
         m_xDestContainer = NULL;
         m_xDestInfo = NULL;

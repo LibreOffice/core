@@ -53,7 +53,7 @@ public:
             createCachedDataSequence();
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-            createCachedDataSequence( const ::rtl::OUString & rSingleText );
+            createCachedDataSequence( const OUString & rSingleText );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
             createLabeledDataSequence(
@@ -74,12 +74,12 @@ public:
 
         static ::com::sun::star::uno::Sequence<
                ::com::sun::star::beans::PropertyValue > createArguments(
-                   const ::rtl::OUString & rRangeRepresentation,
+                   const OUString & rRangeRepresentation,
                    const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping,
                    bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories );
 
         SAL_DLLPRIVATE static void readArguments( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArguments
-            , ::rtl::OUString & rRangeRepresentation, ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
+            , OUString & rRangeRepresentation, ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories );
 
         static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >
@@ -90,13 +90,13 @@ public:
         static void addRangeRepresentationsFromLabeledDataSequence(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence
-            ,  ::std::vector< ::rtl::OUString >& rOutRangeRepresentations );
+            ,  ::std::vector< OUString >& rOutRangeRepresentations );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< ::rtl::OUString > getUsedDataRanges(
+        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getUsedDataRanges(
+        static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel > & xChartModel );
 
@@ -113,7 +113,7 @@ public:
         static bool detectRangeSegmentation(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xChartModel
-            , ::rtl::OUString& rOutRangeString
+            , OUString& rOutRangeString
             , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& rOutUseColumns
             , bool& rOutFirstCellAsLabel
@@ -137,15 +137,15 @@ public:
         static bool allArgumentsForRectRangeDetected(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< ::rtl::OUString > getRangesFromLabeledDataSequence(
+        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getRangesFromLabeledDataSequence(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
 
-        SAL_DLLPRIVATE static ::rtl::OUString getRangeFromValues(
+        SAL_DLLPRIVATE static OUString getRangeFromValues(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XLabeledDataSequence > & xLSeq );
 
-        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< ::rtl::OUString > getRangesFromDataSource(
+        SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getRangesFromDataSource(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::data::XDataSource > & xSource );
 };

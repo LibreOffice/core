@@ -71,13 +71,13 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     uno::Reference< text::XText > xCurrentText = mxViewCursor->getText();
     uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xTextContent;
-    while( xCursorProps->getPropertyValue( rtl::OUString("TextTable") ) >>= xTextContent )
+    while( xCursorProps->getPropertyValue( OUString("TextTable") ) >>= xTextContent )
     {
         xCurrentText = xTextContent->getAnchor()->getText();
         xCursorProps.set( xCurrentText->createTextCursor(), uno::UNO_QUERY_THROW );
     }
     uno::Reference< lang::XServiceInfo > xServiceInfo( xCurrentText, uno::UNO_QUERY_THROW );
-    rtl::OUString aImplName = xServiceInfo->getImplementationName();
+    OUString aImplName = xServiceInfo->getImplementationName();
     if ( aImplName == "SwXBodyText" )
     {
         return word::WdSeekView::wdSeekMainDocument;
@@ -105,7 +105,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
     }
     else if ( aImplName == "SwXFootnote" )
     {
-        if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.Endnote") ) )
+        if( xServiceInfo->supportsService( OUString("com.sun.star.text.Endnote") ) )
             return word::WdSeekView::wdSeekEndnotes;
         else
             return word::WdSeekView::wdSeekFootnotes;
@@ -148,7 +148,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             }
             else
             {
-                DebugHelper::exception( SbERR_NO_ACTIVE_OBJECT, rtl::OUString() );
+                DebugHelper::exception( SbERR_NO_ACTIVE_OBJECT, OUString() );
             }
             break;
         }
@@ -163,7 +163,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
             }
             else
             {
-                DebugHelper::exception( SbERR_NO_ACTIVE_OBJECT, rtl::OUString() );
+                DebugHelper::exception( SbERR_NO_ACTIVE_OBJECT, OUString() );
             }
             break;
         }
@@ -193,14 +193,14 @@ SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::Run
 SwVbaView::getTableGridLines() throw (css::uno::RuntimeException)
 {
     sal_Bool bShowTableGridLine = sal_False;
-    mxViewSettings->getPropertyValue( rtl::OUString("ShowTableBoundaries")) >>= bShowTableGridLine;
+    mxViewSettings->getPropertyValue( OUString("ShowTableBoundaries")) >>= bShowTableGridLine;
     return bShowTableGridLine;
 }
 
 void SAL_CALL
 SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::RuntimeException)
 {
-    mxViewSettings->setPropertyValue( rtl::OUString("ShowTableBoundaries"), uno::makeAny( _tablegridlines ) );
+    mxViewSettings->setPropertyValue( OUString("ShowTableBoundaries"), uno::makeAny( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -208,7 +208,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException)
 {
     // FIXME: handle wdPrintPreview type
     sal_Bool bOnlineLayout = sal_False;
-    mxViewSettings->getPropertyValue( rtl::OUString("ShowOnlineLayout")) >>= bOnlineLayout;
+    mxViewSettings->getPropertyValue( OUString("ShowOnlineLayout")) >>= bOnlineLayout;
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
 }
 
@@ -221,12 +221,12 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue( rtl::OUString("ShowOnlineLayout"), uno::makeAny( sal_False ) );
+            mxViewSettings->setPropertyValue( OUString("ShowOnlineLayout"), uno::makeAny( sal_False ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue( rtl::OUString("ShowOnlineLayout"), uno::makeAny( sal_True ) );
+            mxViewSettings->setPropertyValue( OUString("ShowOnlineLayout"), uno::makeAny( sal_True ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
@@ -235,7 +235,7 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
             break;
         }
         default:
-            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, rtl::OUString() );
+            DebugHelper::exception( SbERR_NOT_IMPLEMENTED, OUString() );
 
     }
 }
@@ -244,10 +244,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
 {
     mxModel->lockControllers();
 
-    rtl::OUString aPropIsOn;
-    rtl::OUString aPropIsShared;
-    rtl::OUString aPropBodyDistance;
-    rtl::OUString aPropText;
+    OUString aPropIsOn;
+    OUString aPropIsShared;
+    OUString aPropBodyDistance;
+    OUString aPropText;
 
     switch( nType )
     {
@@ -256,10 +256,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         case word::WdSeekView::wdSeekPrimaryFooter:
         case word::WdSeekView::wdSeekEvenPagesFooter:
         {
-            aPropIsOn = rtl::OUString("FooterIsOn");
-            aPropIsShared = rtl::OUString("FooterIsShared");
-            aPropBodyDistance = rtl::OUString("FooterBodyDistance");
-            aPropText = rtl::OUString("FooterText");
+            aPropIsOn = OUString("FooterIsOn");
+            aPropIsShared = OUString("FooterIsShared");
+            aPropBodyDistance = OUString("FooterBodyDistance");
+            aPropText = OUString("FooterText");
             break;
         }
         case word::WdSeekView::wdSeekCurrentPageHeader:
@@ -267,10 +267,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         case word::WdSeekView::wdSeekPrimaryHeader:
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
-            aPropIsOn = rtl::OUString("HeaderIsOn");
-            aPropIsShared = rtl::OUString("HeaderIsShared");
-            aPropBodyDistance = rtl::OUString("HeaderBodyDistance");
-            aPropText = rtl::OUString("HeaderText");
+            aPropIsOn = OUString("HeaderIsOn");
+            aPropIsShared = OUString("HeaderIsShared");
+            aPropBodyDistance = OUString("HeaderBodyDistance");
+            aPropText = OUString("HeaderText");
             break;
         }
     }
@@ -302,8 +302,8 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
             // not shared and the current style is applied to a page with
             // an even page number
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
-            rtl::OUString aPageStyleName;
-            xCursorProps->getPropertyValue( rtl::OUString("PageStyleName")) >>= aPageStyleName;
+            OUString aPageStyleName;
+            xCursorProps->getPropertyValue( OUString("PageStyleName")) >>= aPageStyleName;
             if ( aPageStyleName == "First Page" )
             {
                 // go to the beginning of where the next style is used
@@ -316,7 +316,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
                 while( hasNextPage && ( xStyle == word::getCurrentPageStyle( mxModel ) ) );
 
                 if( !hasNextPage )
-                    DebugHelper::exception( SbERR_BAD_ACTION, rtl::OUString() );
+                    DebugHelper::exception( SbERR_BAD_ACTION, OUString() );
             }
             break;
         }
@@ -339,15 +339,15 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     }
     if( !isShared )
     {
-        rtl::OUString aTempPropText = aPropText;
+        OUString aTempPropText = aPropText;
         if( nType == word::WdSeekView::wdSeekEvenPagesFooter
             || nType == word::WdSeekView::wdSeekEvenPagesHeader )
         {
-            aTempPropText += rtl::OUString("Left");
+            aTempPropText += OUString("Left");
         }
         else
         {
-            aTempPropText += rtl::OUString("Right");
+            aTempPropText += OUString("Right");
         }
         xText.set( xPageProps->getPropertyValue( aTempPropText), uno::UNO_QUERY_THROW );
     }
@@ -356,7 +356,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         if( nType == word::WdSeekView::wdSeekEvenPagesFooter
             || nType == word::WdSeekView::wdSeekEvenPagesHeader )
         {
-            DebugHelper::exception( SbERR_BAD_ACTION, rtl::OUString() );
+            DebugHelper::exception( SbERR_BAD_ACTION, OUString() );
         }
         xText.set( xPageProps->getPropertyValue( aPropText ), uno::UNO_QUERY_THROW );
     }
@@ -364,26 +364,26 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     mxModel->unlockControllers();
     if( !xText.is() )
     {
-        DebugHelper::exception( SbERR_INTERNAL_ERROR, rtl::OUString() );
+        DebugHelper::exception( SbERR_INTERNAL_ERROR, OUString() );
     }
     uno::Reference< text::XTextRange > xTextRange = word::getFirstObjectPosition( xText );
     return xTextRange;
 }
 
-rtl::OUString
+OUString
 SwVbaView::getServiceImplName()
 {
-    return rtl::OUString("SwVbaView");
+    return OUString("SwVbaView");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaView::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.View" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.View" );
     }
     return aServiceNames;
 }

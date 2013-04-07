@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     checkConnected();
 
     if (nBytesToRead < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),static_cast<XWeak*>(this));
+        throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -168,7 +168,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
     checkError();
 
     if (nMaxBytesToRead < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),static_cast<XWeak*>(this));
+        throw BufferSizeExceededException(OUString(),static_cast<XWeak*>(this));
 
     if (m_pSvStream->IsEof())
     {
@@ -282,7 +282,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  ) throw (IOException, Run
 void FileStreamWrapper_Impl::checkConnected()
 {
     if ( !m_aURL.Len() )
-        throw NotConnectedException(::rtl::OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
+        throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
     if ( !m_pSvStream )
     {
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, STREAM_STD_READ );
@@ -299,7 +299,7 @@ void FileStreamWrapper_Impl::checkError()
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw NotConnectedException(::rtl::OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
+        throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
 }
 
 TYPEINIT1( UCBStorageStream, BaseStorageStream );
@@ -418,7 +418,7 @@ public:
     String                      m_aURL;         // the full path name to create the content
     String                      m_aContentType;
     String                      m_aOriginalContentType;
-    rtl::OString                m_aKey;
+    OString                m_aKey;
     ::ucbhelper::Content*       m_pContent;     // the content that provides the data
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
     SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
@@ -435,7 +435,7 @@ public:
                                                 // reference is destroyed
     sal_Bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, sal_Bool, const rtl::OString* pKey=0, sal_Bool bRepair = sal_False, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
+                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, sal_Bool, const OString* pKey=0, sal_Bool bRepair = sal_False, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
 
     void                        Free();
     sal_Bool                        Init();
@@ -504,7 +504,7 @@ public:
     sal_Bool                        Revert();
     sal_Bool                        Insert( ::ucbhelper::Content *pContent );
     UCBStorage_Impl*            OpenStorage( UCBStorageElement_Impl* pElement, StreamMode nMode, bool bDirect );
-    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const rtl::OString* pKey=0 );
+    UCBStorageStream_Impl*      OpenStream( UCBStorageElement_Impl*, StreamMode, sal_Bool, const OString* pKey=0 );
     void                        SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     void                        GetProps( sal_Int32&, Sequence < Sequence < PropertyValue > >& rSequence, const String& );
     sal_Int32                   GetObjectCount();
@@ -547,7 +547,7 @@ struct UCBStorageElement_Impl
     UCBStorage_ImplRef          m_xStorage;     // reference to the "real" storage
     UCBStorageStream_ImplRef    m_xStream;      // reference to the "real" stream
 
-                                UCBStorageElement_Impl( const ::rtl::OUString& rName,
+                                UCBStorageElement_Impl( const OUString& rName,
                                             sal_Bool bIsFolder = sal_False, sal_uLong nSize = 0 )
                                     : m_aName( rName )
                                     , m_aOriginalName( rName )
@@ -628,7 +628,7 @@ sal_Bool UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, sal_Bool bDirect, const rtl::OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress  )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, sal_Bool bDirect, const OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress  )
     : m_pAntiImpl( pStream )
     , m_aURL( rName )
     , m_pContent( NULL )
@@ -650,13 +650,13 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
         // create the content
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
 
-        ::rtl::OUString aTemp( rName );
+        OUString aTemp( rName );
 
         if ( bRepair )
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      xProgress );
-            aTemp += rtl::OUString("?repairpackage");
+            aTemp += OUString("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
@@ -674,7 +674,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
                 ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= aSequ;
-                m_pContent->setPropertyValue( ::rtl::OUString("EncryptionKey"), aAny );
+                m_pContent->setPropertyValue( OUString("EncryptionKey"), aAny );
             }
         }
     }
@@ -812,7 +812,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary()
         }
         catch (const Exception &e)
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             (void)e;
         }
     }
@@ -851,7 +851,7 @@ sal_uLong UCBStorageStream_Impl::ReadSourceWriteTemporary( sal_uLong aLength )
         }
         catch( const Exception & e )
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             (void)e;
         }
     }
@@ -905,7 +905,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         }
         catch (const Exception &e)
         {
-            OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             (void)e;
         }
 
@@ -1107,7 +1107,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 aArg.Data = xStream;
                 aArg.ReplaceExisting = sal_True;
                 aAny <<= aArg;
-                m_pContent->executeCommand( ::rtl::OUString("insert"), aAny );
+                m_pContent->executeCommand( OUString("insert"), aAny );
 
                 // wrapper now controls lifetime of temporary file
                 m_aTempURL.Erase();
@@ -1250,7 +1250,7 @@ void UCBStorageStream_Impl::PrepareCachedForReopen( StreamMode nMode )
     }
 }
 
-UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const OString* pKey, sal_Bool bRepair, Reference< XProgressHandler > xProgress )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
@@ -1423,7 +1423,7 @@ sal_Bool UCBStorageStream::SetProperty( const String& rName, const ::com::sun::s
 
     if ( rName.CompareToAscii("MediaType") == COMPARE_EQUAL )
     {
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         rValue >>= aTmp;
         pImp->m_aContentType = aTmp;
     }
@@ -1587,7 +1587,7 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     if ( m_bIsRoot )
     {
         // create the special package URL for the package content
-        String aTemp = rtl::OUString("vnd.sun.star.pkg://");
+        String aTemp = OUString("vnd.sun.star.pkg://");
         aTemp += String(INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
         m_aURL = aTemp;
 
@@ -1632,7 +1632,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, sal_B
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
     // the root storage opens the package; create the special package URL for the package content
-    String aTemp = rtl::OUString("vnd.sun.star.pkg://");
+    String aTemp = OUString("vnd.sun.star.pkg://");
     aTemp += String(INetURLObject::encode( m_pTempFile->GetURL(), INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL ));
     m_aURL = aTemp;
 
@@ -1671,7 +1671,7 @@ void UCBStorage_Impl::Init()
     {
         // Hack! Avoid access to the manifest file until mediatype is not available in the first segment of a
         // disk spanned file
-        m_aContentType = m_aOriginalContentType = ::rtl::OUString( "application/vnd.sun.xml.impress" );
+        m_aContentType = m_aOriginalContentType = OUString( "application/vnd.sun.xml.impress" );
     }
     else if ( m_pContent )
     {
@@ -1719,8 +1719,8 @@ void UCBStorage_Impl::Init()
         {
             // get the manifest information from the package
             try {
-                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString("MediaType") );
-                rtl::OUString aTmp;
+                Any aAny = m_pContent->getPropertyValue( OUString("MediaType") );
+                OUString aTmp;
                 if ( ( aAny >>= aTmp ) && !aTmp.isEmpty() )
                     m_aContentType = m_aOriginalContentType = aTmp;
             }
@@ -1758,13 +1758,13 @@ void UCBStorage_Impl::CreateContent()
         // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
         Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
 
-        ::rtl::OUString aTemp( m_aURL );
+        OUString aTemp( m_aURL );
 
         if ( m_bRepairPackage )
         {
             xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
                                                      m_xProgressHandler );
-            aTemp += rtl::OUString("?repairpackage");
+            aTemp += OUString("?repairpackage");
         }
 
         m_pContent = new ::ucbhelper::Content( aTemp, xComEnv, comphelper::getProcessComponentContext() );
@@ -1789,12 +1789,12 @@ void UCBStorage_Impl::ReadContent()
     m_bListCreated = sal_True;
 
     // create cursor for access to children
-    Sequence< ::rtl::OUString > aProps(4);
-    ::rtl::OUString* pProps = aProps.getArray();
-    pProps[0] = ::rtl::OUString("Title");
-    pProps[1] = ::rtl::OUString("IsFolder");
-    pProps[2] = ::rtl::OUString("MediaType");
-    pProps[3] = ::rtl::OUString("Size");
+    Sequence< OUString > aProps(4);
+    OUString* pProps = aProps.getArray();
+    pProps[0] = OUString("Title");
+    pProps[1] = OUString("IsFolder");
+    pProps[2] = OUString("MediaType");
+    pProps[3] = OUString("Size");
     ::ucbhelper::ResultSetInclude eInclude = ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
     try
@@ -1811,8 +1811,8 @@ void UCBStorage_Impl::ReadContent()
             while ( xResultSet->next() )
             {
                 // insert all into the children list
-                ::rtl::OUString aTitle( xRow->getString(1) );
-                ::rtl::OUString aContentType;
+                OUString aTitle( xRow->getString(1) );
+                OUString aContentType;
                 if ( m_bIsLinked )
                 {
                     // unpacked storages have to deal with the meta-inf folder by themselves
@@ -1854,8 +1854,8 @@ void UCBStorage_Impl::ReadContent()
 
                     ::ucbhelper::Content aContent( aName, xComEnv, comphelper::getProcessComponentContext() );
 
-                    ::rtl::OUString aMediaType;
-                    Any aAny = aContent.getPropertyValue( ::rtl::OUString("MediaType") );
+                    OUString aMediaType;
+                    Any aAny = aContent.getPropertyValue( OUString("MediaType") );
                     if ( ( aAny >>= aMediaType ) && ( aMediaType.compareToAscii("application/vnd.sun.star.oleobject") == 0 ) )
                         pElement->m_bIsStorage = sal_True;
                     else if ( aMediaType.isEmpty() )
@@ -1928,20 +1928,20 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
     return nCount;
 }
 
-::rtl::OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const ::rtl::OUString& rPath )
+OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
 {
     sal_Bool bFound = sal_False;
     for ( sal_Int32 nSeqs=0; nSeqs<rSequence.getLength(); nSeqs++ )
     {
         const Sequence < PropertyValue >& rMyProps = rSequence[nSeqs];
-        ::rtl::OUString aType;
+        OUString aType;
 
         for ( sal_Int32 nProps=0; nProps<rMyProps.getLength(); nProps++ )
         {
             const PropertyValue& rAny = rMyProps[nProps];
             if ( rAny.Name == "FullPath" )
             {
-                rtl::OUString aTmp;
+                OUString aTmp;
                 if ( ( rAny.Value >>= aTmp ) && aTmp == rPath )
                     bFound = sal_True;
                 if ( !aType.isEmpty() )
@@ -1958,7 +1958,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
             return aType;
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& rSequence, const String& rPath )
@@ -2015,10 +2015,10 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     if ( !m_bIsRoot )
         aPath += m_aName;
     aPath += '/';
-    aProps[0].Name = ::rtl::OUString("MediaType");
-    aProps[0].Value <<= (::rtl::OUString ) m_aContentType;
-    aProps[1].Name = ::rtl::OUString("FullPath");
-    aProps[1].Value <<= (::rtl::OUString ) aPath;
+    aProps[0].Name = OUString("MediaType");
+    aProps[0].Value <<= (OUString ) m_aContentType;
+    aProps[1].Name = OUString("FullPath");
+    aProps[1].Value <<= (OUString ) aPath;
     rSequence[ nProps++ ] = aProps;
 
     if ( m_bIsRoot )
@@ -2038,10 +2038,10 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
             // properties of streams
             String aElementPath( aPath );
             aElementPath += pElement->m_aName;
-            aProps[0].Name = ::rtl::OUString("MediaType");
-            aProps[0].Value <<= (::rtl::OUString ) pElement->GetContentType();
-            aProps[1].Name = ::rtl::OUString("FullPath");
-            aProps[1].Value <<= (::rtl::OUString ) aElementPath;
+            aProps[0].Name = OUString("MediaType");
+            aProps[0].Value <<= (OUString ) pElement->GetContentType();
+            aProps[1].Name = OUString("FullPath");
+            aProps[1].Value <<= (OUString ) aElementPath;
             rSequence[ nProps++ ] = aProps;
         }
     }
@@ -2085,12 +2085,12 @@ sal_Bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
                 if ( rProps[ 0 ].Name != "Title" )
                     continue;
 
-                Sequence < ::rtl::OUString > aNames(1);
-                ::rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = ::rtl::OUString(  "Title"  );
+                Sequence < OUString > aNames(1);
+                OUString* pNames = aNames.getArray();
+                pNames[0] = OUString(  "Title"  );
                 Sequence < Any > aValues(1);
                 Any* pValues = aValues.getArray();
-                pValues[0] = makeAny( ::rtl::OUString( m_aName ) );
+                pValues[0] = makeAny( OUString( m_aName ) );
 
                 Content aNewFolder;
                 if ( !pContent->insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )
@@ -2157,7 +2157,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if( !pElement->m_xStream.Is() || pElement->m_xStream->Clear() )
                         {
-                            pContent->executeCommand( ::rtl::OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
+                            pContent->executeCommand( OUString("delete"), makeAny( sal_Bool( sal_True ) ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else
@@ -2188,10 +2188,10 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
                             // OLE storage should be stored encrytped, if the storage uses encryption
-                            pElement->m_xStream->m_aContentType = rtl::OUString("application/vnd.sun.star.oleobject");
+                            pElement->m_xStream->m_aContentType = OUString("application/vnd.sun.star.oleobject");
                             Any aValue;
                             aValue <<= (sal_Bool) sal_True;
-                            pElement->m_xStream->m_pContent->setPropertyValue(rtl::OUString("Encrypted"), aValue );
+                            pElement->m_xStream->m_pContent->setPropertyValue(OUString("Encrypted"), aValue );
                         }
 
                         pContent = pElement->GetContent();
@@ -2202,8 +2202,8 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // name ( title ) of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
-                        aAny <<= (rtl::OUString) pElement->m_aName;
-                        pContent->setPropertyValue( ::rtl::OUString("Title"), aAny );
+                        aAny <<= (OUString) pElement->m_aName;
+                        pContent->setPropertyValue( OUString("Title"), aAny );
                     }
 
                     if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
@@ -2211,8 +2211,8 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // mediatype of the element was changed
                         nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
-                        aAny <<= (rtl::OUString) pElement->GetContentType();
-                        pContent->setPropertyValue( ::rtl::OUString("MediaType"), aAny );
+                        aAny <<= (OUString) pElement->GetContentType();
+                        pContent->setPropertyValue( OUString("MediaType"), aAny );
                     }
 
                     if ( nLocalRet != COMMIT_RESULT_NOTHING_TO_DO )
@@ -2262,15 +2262,15 @@ sal_Int16 UCBStorage_Impl::Commit()
                     // commit the media type to the JAR file
                     // clipboard format and ClassId will be retrieved from the media type when the file is loaded again
                     Any aType;
-                    aType <<= (rtl::OUString) m_aContentType;
-                    m_pContent->setPropertyValue( ::rtl::OUString("MediaType"), aType );
+                    aType <<= (OUString) m_aContentType;
+                    m_pContent->setPropertyValue( OUString("MediaType"), aType );
 
                     if (  m_bIsLinked )
                     {
                         // write a manifest file
                         // first create a subfolder "META-inf"
                         Content aNewSubFolder;
-                        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, rtl::OUString("META-INF"), aNewSubFolder );
+                        sal_Bool bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, OUString("META-INF"), aNewSubFolder );
                         if ( bRet )
                         {
                             // create a stream to write the manifest file - use a temp file
@@ -2297,7 +2297,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = NULL;
                             xOutputStream = NULL;
                             DELETEZ( pTempFile );
-                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, ::rtl::OUString("manifest.xml"), NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, OUString("manifest.xml"), NameClash::OVERWRITE );
                         }
                     }
                     else
@@ -2308,7 +2308,7 @@ sal_Int16 UCBStorage_Impl::Commit()
 #endif
                         // force writing
                         Any aAny;
-                        m_pContent->executeCommand( ::rtl::OUString("flush"), aAny );
+                        m_pContent->executeCommand( OUString("flush"), aAny );
                         if ( m_pSource != 0 )
                         {
                             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
@@ -2690,7 +2690,7 @@ sal_Bool UCBStorage::Revert()
     return pImp->Revert();
 }
 
-BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey )
+BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nMode, sal_Bool bDirect, const OString* pKey )
 {
     if( !rEleName.Len() )
         return NULL;
@@ -2736,7 +2736,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             {
                 // check if stream is opened with the same keyword as before
                 // if not, generate a new stream because it could be encrypted vs. decrypted!
-                rtl::OString aKey;
+                OString aKey;
                 if ( pKey )
                     aKey = *pKey;
                 if ( pElement->m_xStream->m_aKey == aKey )
@@ -2759,7 +2759,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
     return NULL;
 }
 
-UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey )
+UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pElement, StreamMode nMode, sal_Bool bDirect, const OString* pKey )
 {
     String aName( m_aURL );
     aName += '/';
@@ -3165,10 +3165,10 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
-        rtl::OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+        OString aTmp = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
         if (aTmp.match("ContentURL="))
         {
-            aString = rtl::OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
+            aString = OStringToOUString(aTmp.copy(11), RTL_TEXTENCODING_UTF8);
         }
     }
 
@@ -3194,7 +3194,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
     // assemble a new folder name in the destination folder
     INetURLObject aObj( rName );
     String aTmpName = aObj.GetName();
-    String aTitle = rtl::OUString( "content." );
+    String aTitle = OUString( "content." );
     aTitle += aTmpName;
 
     // create a folder and store its URL
@@ -3234,7 +3234,7 @@ String UCBStorage::CreateLinkFile( const String& rName )
         String aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
 
         // store it as key/value pair
-        String aLink = rtl::OUString("ContentURL=");
+        String aLink = OUString("ContentURL=");
         aLink += aURL;
         write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(*pStream, aLink, RTL_TEXTENCODING_UTF8);
         pStream->Flush();

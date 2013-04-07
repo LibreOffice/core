@@ -30,7 +30,7 @@ namespace pcr
 {
 //........................................................................
 
-    typedef ::boost::unordered_map< ::rtl::OUString, ::com::sun::star::beans::Property, ::rtl::OUStringHash >
+    typedef ::boost::unordered_map< OUString, ::com::sun::star::beans::Property, OUStringHash >
         PropertyMap;
 
 //........................................................................

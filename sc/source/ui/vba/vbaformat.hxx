@@ -49,7 +49,7 @@ protected:
     sal_Bool mbAddIndent;
     //NumberFormatter oNumberFormatter = null;
     css::uno::Reference< css::lang::XMultiServiceFactory > xMultiServiceFactory;
-    bool isAmbiguous(const rtl::OUString& _sPropertyName) throw ( css::script::BasicErrorException );
+    bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException );
     SfxItemSet*  getCurrentDataSet( ) throw ( css::uno::RuntimeException );
@@ -90,8 +90,8 @@ public:
     virtual void SAL_CALL setReadingOrder( const css::uno::Any& ReadingOrder ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getReadingOrder(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif

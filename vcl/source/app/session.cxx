@@ -40,7 +40,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 
-using ::rtl::OUString;
 
 SalSession::~SalSession()
 {
@@ -341,7 +340,7 @@ OUString SAL_CALL vcl_session_getImplementationName()
     return OUString( "com.sun.star.frame.VCLSessionManagerClient" );
 }
 
-Sequence< rtl::OUString > SAL_CALL vcl_session_getSupportedServiceNames()
+Sequence< OUString > SAL_CALL vcl_session_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
     aRet[0] = "com.sun.star.frame.SessionManagerClient";

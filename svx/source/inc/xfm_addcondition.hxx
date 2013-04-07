@@ -41,8 +41,8 @@ namespace svxform
         // <properties>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                 m_xBinding;
-        ::rtl::OUString         m_sFacetName;
-        ::rtl::OUString         m_sConditionValue;
+        OUString         m_sFacetName;
+        OUString         m_sConditionValue;
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XModel >
                                 m_xWorkModel;
         // </properties>
@@ -58,8 +58,8 @@ namespace svxform
         virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException);
 
         // XPropertySet
         virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);

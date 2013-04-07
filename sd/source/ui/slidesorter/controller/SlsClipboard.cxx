@@ -337,7 +337,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     sal_Int32 nInsertPageCount (0);
     if (pClipTransferable->HasPageBookmarks())
     {
-        const std::vector<rtl::OUString> &rBookmarkList = pClipTransferable->GetPageBookmarks();
+        const std::vector<OUString> &rBookmarkList = pClipTransferable->GetPageBookmarks();
         const SolarMutexGuard aGuard;
 
         nInsertPageCount = (sal_uInt16) rBookmarkList.size();
@@ -367,7 +367,7 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
             bMergeMasterPages = (pDataDoc != rModel.GetDocument());
             nInsertPageCount = pDataDoc->GetSdPageCount( PK_STANDARD );
             rModel.GetDocument()->InsertBookmarkAsPage(
-                std::vector<rtl::OUString>(),
+                std::vector<OUString>(),
                 NULL,
                 sal_False,
                 sal_False,
@@ -415,7 +415,7 @@ void Clipboard::CreateSlideTransferable (
     ::Window* pWindow,
     bool bDrag)
 {
-    std::vector<rtl::OUString> aBookmarkList;
+    std::vector<OUString> aBookmarkList;
 
     // Insert all selected pages into a bookmark list and remember them in
     // maPagesToRemove for possible later removal.
@@ -540,7 +540,7 @@ void Clipboard::CreateSlideTransferable (
         INetBookmark aINetBookmark;
         if ( ! aDataHelper.GetINetBookmark(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark))
             break;
-        const rtl::OUString sURL (aINetBookmark.GetURL());
+        const OUString sURL (aINetBookmark.GetURL());
         const sal_Int32 nIndex (sURL.indexOf((sal_Unicode)'#'));
         if (nIndex == -1)
             break;
@@ -584,7 +584,7 @@ void Clipboard::CreateSlideTransferable (
         //        pTransferable->SetView(&mrSlideSorter.GetView());
 
         // Set page bookmark list.
-        std::vector<rtl::OUString> aPageBookmarks;
+        std::vector<OUString> aPageBookmarks;
         aPageBookmarks.push_back(sBookmark);
         pTransferable->SetPageBookmarks(aPageBookmarks, false);
 

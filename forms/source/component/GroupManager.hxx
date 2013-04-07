@@ -96,7 +96,7 @@ namespace frm
 //========================================================================
 class OGroupComp
 {
-    ::rtl::OUString m_aName;
+    OUString m_aName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>     m_xControlModel;
     sal_Int32   m_nPos;
@@ -116,7 +116,7 @@ public:
 
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
-    ::rtl::OUString GetName() const { return m_aName; }
+    OUString GetName() const { return m_aName; }
 };
 
 DECLARE_STL_VECTOR(OGroupComp, OGroupCompArr);
@@ -148,13 +148,13 @@ class OGroup
     OGroupCompArr       m_aCompArray;
     OGroupCompAccArr    m_aCompAccArray;
 
-    ::rtl::OUString m_aGroupName;
+    OUString m_aGroupName;
     sal_uInt16  m_nInsertPos;               // Die Einfugeposition der GroupComps wird von der Gruppe bestimmt.
 
     friend class OGroupLess;
 
 public:
-    OGroup( const ::rtl::OUString& rGroupName );
+    OGroup( const OUString& rGroupName );
 #ifdef DBG_UTIL
     OGroup( const OGroup& _rSource );   // just to ensure the DBG_CTOR call
 #endif
@@ -162,7 +162,7 @@ public:
 
     sal_Bool operator==( const OGroup& rGroup ) const;
 
-    ::rtl::OUString GetGroupName() const { return m_aGroupName; }
+    OUString GetGroupName() const { return m_aGroupName; }
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>  > GetControlModels() const;
 
     void InsertComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
@@ -189,7 +189,7 @@ class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::X
     // Helper functions
     void InsertElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
     void RemoveElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
-    void removeFromGroupMap(const ::rtl::OUString& _sGroupName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSet);
+    void removeFromGroupMap(const OUString& _sGroupName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSet);
 
 public:
     OGroupManager(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _rxContainer);
@@ -208,11 +208,11 @@ public:
 
 // Other functions
     sal_Int32 getGroupCount();
-    void getGroup(sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup, ::rtl::OUString& Name);
-    void getGroupByName(const ::rtl::OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup);
+    void getGroup(sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup, OUString& Name);
+    void getGroupByName(const OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> > getControlModels();
 
-    static ::rtl::OUString GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent );
+    static OUString GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent );
 };
 
 

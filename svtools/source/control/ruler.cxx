@@ -277,7 +277,7 @@ void Ruler::ImplInit( WinBits nWinBits )
 
     // Setup the default size
     Rectangle aRect;
-    GetTextBoundRect( aRect, rtl::OUString( "0123456789" ) );
+    GetTextBoundRect( aRect, OUString( "0123456789" ) );
     long nDefHeight = aRect.GetHeight() + RULER_OFF*2 + RULER_TEXTOFF*2 + mnBorderWidth;
 
     Size aDefSize;

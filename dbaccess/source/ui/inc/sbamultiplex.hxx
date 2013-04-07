@@ -202,7 +202,7 @@ namespace dbaui
             ,public listenerclass                                                           \
     {                                                                                       \
         typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<                              \
-                ::rtl::OUString, ::rtl::OUStringHash, ::comphelper::UStringEqual >  ListenerContainerMap;   \
+                OUString, OUStringHash, ::comphelper::UStringEqual >  ListenerContainerMap;   \
         ListenerContainerMap    m_aListeners;                                               \
                                                                                             \
     public:                                                                                 \
@@ -217,14 +217,14 @@ namespace dbaui
         virtual void SAL_CALL methodname(const eventtype& e)  throw exceptions;             \
                                                                                             \
     public:                                                                                 \
-        void addInterface(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener);    \
-        void removeInterface(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener); \
+        void addInterface(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener);    \
+        void removeInterface(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rListener); \
                                                                                             \
         void disposeAndClear();                                                             \
                                                                                             \
         sal_Int32 getOverallLen() const;                                                    \
                                                                                             \
-        ::cppu::OInterfaceContainerHelper* getContainer(const ::rtl::OUString& rName)       \
+        ::cppu::OInterfaceContainerHelper* getContainer(const OUString& rName)       \
             { return m_aListeners.getContainer(rName); }                                    \
                                                                                             \
     protected:                                                                              \
@@ -267,18 +267,18 @@ namespace dbaui
             Notify(*pListeners, e);                                                         \
                                                                                             \
         /* do the notification for the unspecialized listeners, too */                      \
-        pListeners = m_aListeners.getContainer(::rtl::OUString());                          \
+        pListeners = m_aListeners.getContainer(OUString());                          \
         if (pListeners)                                                                     \
             Notify(*pListeners, e);                                                         \
     }                                                                                       \
                                                                                             \
-    void classname::addInterface(const ::rtl::OUString& rName,                              \
+    void classname::addInterface(const OUString& rName,                              \
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener)    \
     {                                                                                       \
         m_aListeners.addInterface(rName, rListener);                                        \
     }                                                                                       \
                                                                                             \
-    void classname::removeInterface(const ::rtl::OUString& rName,                           \
+    void classname::removeInterface(const OUString& rName,                           \
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rListener)    \
     {                                                                                       \
         m_aListeners.removeInterface(rName, rListener);                                     \
@@ -293,8 +293,8 @@ namespace dbaui
     sal_Int32 classname::getOverallLen() const                                              \
     {                                                                                       \
         sal_Int32 nLen = 0;                                                                 \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aContained = m_aListeners.getContainedTypes();   \
-        const ::rtl::OUString* pContained = aContained.getConstArray();                     \
+        ::com::sun::star::uno::Sequence< OUString > aContained = m_aListeners.getContainedTypes();   \
+        const OUString* pContained = aContained.getConstArray();                     \
         for (   sal_Int32 i=0; i<aContained.getLength(); ++i, ++pContained)                 \
             nLen += m_aListeners.getContainer(*pContained)->getLength();                    \
         return nLen;                                                                        \
@@ -313,24 +313,24 @@ namespace dbaui
     // helper for classes which do property event multiplexing
     #define IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(classname, listenerdesc, multiplexer, braodcasterclass, broadcaster) \
     /*................................................................*/                    \
-    void SAL_CALL classname::add##listenerdesc(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
+    void SAL_CALL classname::add##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         multiplexer.addInterface(rName, l);                                                 \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
             ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
-                xBroadcaster->add##listenerdesc(::rtl::OUString(), &multiplexer);                           \
+                xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                           \
         }                                                                                   \
     }                                                                                       \
     /*................................................................*/                    \
-    void SAL_CALL classname::remove##listenerdesc(const ::rtl::OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
+    void SAL_CALL classname::remove##listenerdesc(const OUString& rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::X##listenerdesc >& l ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)\
     {                                                                                       \
         if (multiplexer.getOverallLen() == 1)                                               \
         {                                                                                   \
             ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
             if (xBroadcaster.is())                                                          \
-                xBroadcaster->remove##listenerdesc(::rtl::OUString(), &multiplexer);                        \
+                xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                        \
         }                                                                                   \
         multiplexer.removeInterface(rName, l);                                              \
     }                                                                                       \
@@ -340,7 +340,7 @@ namespace dbaui
     {                                                                                       \
         ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
-            xBroadcaster->remove##listenerdesc(::rtl::OUString(), &multiplexer);                            \
+            xBroadcaster->remove##listenerdesc(OUString(), &multiplexer);                            \
     }                                                                                       \
 
     #define START_PROPERTY_MULTIPLEXER_LISTENING(listenerdesc, multiplexer, braodcasterclass, broadcaster) \
@@ -348,7 +348,7 @@ namespace dbaui
     {                                                                                       \
         ::com::sun::star::uno::Reference< braodcasterclass > xBroadcaster(broadcaster, ::com::sun::star::uno::UNO_QUERY);   \
         if (xBroadcaster.is())                                                              \
-            xBroadcaster->add##listenerdesc(::rtl::OUString(), &multiplexer);                               \
+            xBroadcaster->add##listenerdesc(OUString(), &multiplexer);                               \
     }                                                                                       \
 
 

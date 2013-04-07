@@ -86,7 +86,7 @@ public:
     /**
      * @descr   Set style name for drawing text.
      */
-    void    SetTextStyleName(rtl::OUString style);
+    void    SetTextStyleName(OUString style);
 
     /**
      * @descr   Set drawing obejct rotate.
@@ -114,7 +114,7 @@ public:
 
 protected:
     XFContentContainer  m_aContents;
-    rtl::OUString   m_strTextStyle;
+    OUString   m_strTextStyle;
     double  m_fRotate;
     XFPoint m_aRotatePoint;
     double  m_fScaleX;
@@ -125,7 +125,7 @@ protected:
     unsigned int    m_nFlag;
 };
 
-inline void XFDrawObject::SetTextStyleName(rtl::OUString style)
+inline void XFDrawObject::SetTextStyleName(OUString style)
 {
     m_strTextStyle = style;
 }

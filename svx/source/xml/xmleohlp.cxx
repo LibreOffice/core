@@ -126,7 +126,7 @@ void SAL_CALL OutputStorageWrapper_Impl::closeOutput()
 
 struct OUStringLess
 {
-    bool operator() ( const ::rtl::OUString& r1, const ::rtl::OUString& r2 ) const
+    bool operator() ( const OUString& r1, const OUString& r2 ) const
     {
         return (r1 < r2) != sal_False;
     }
@@ -181,16 +181,16 @@ void SAL_CALL SvXMLEmbeddedObjectHelper::disposing()
 }
 
 
-void SvXMLEmbeddedObjectHelper::splitObjectURL(::rtl::OUString aURLNoPar,
-    ::rtl::OUString& rContainerStorageName,
-    ::rtl::OUString& rObjectStorageName)
+void SvXMLEmbeddedObjectHelper::splitObjectURL(OUString aURLNoPar,
+    OUString& rContainerStorageName,
+    OUString& rObjectStorageName)
 {
     DBG_ASSERT( '#' != aURLNoPar[0], "invalid object URL" );
 
     sal_Int32 _nPos = aURLNoPar.lastIndexOf( '/' );
     if( -1 == _nPos )
     {
-        rContainerStorageName = ::rtl::OUString();
+        rContainerStorageName = OUString();
         rObjectStorageName = aURLNoPar;
     }
     else
@@ -223,9 +223,9 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(::rtl::OUString aURLNoPar,
 }
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
-        const ::rtl::OUString& rURLStr,
-        ::rtl::OUString& rContainerStorageName,
-        ::rtl::OUString& rObjectStorageName,
+        const OUString& rURLStr,
+        OUString& rContainerStorageName,
+        OUString& rObjectStorageName,
         sal_Bool bInternalToExternal,
         sal_Bool *pGraphicRepl,
         sal_Bool *pOasisFormat ) const
@@ -252,7 +252,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 
     // get rid of arguments
     sal_Int32 nPos = rURLStr.indexOf( '?' );
-    ::rtl::OUString aURLNoPar;
+    OUString aURLNoPar;
     if ( nPos == -1 )
         aURLNoPar = rURLStr;
     else
@@ -263,8 +263,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos++;
         while( nPos >= 0 && nPos < rURLStr.getLength() )
         {
-            ::rtl::OUString aToken = rURLStr.getToken( 0, ',', nPos );
-            if ( aToken.equalsIgnoreAsciiCase( ::rtl::OUString( "oasis=false" ) ) )
+            OUString aToken = rURLStr.getToken( 0, ',', nPos );
+            if ( aToken.equalsIgnoreAsciiCase( OUString( "oasis=false" ) ) )
             {
                 if ( pOasisFormat )
                     *pOasisFormat = sal_False;
@@ -292,7 +292,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = aURLNoPar.lastIndexOf( '/' );
         if( -1 == nPos )
         {
-            rContainerStorageName = ::rtl::OUString();
+            rContainerStorageName = OUString();
             rObjectStorageName = aURLNoPar.copy( nPathStart );
         }
         else if( nPos > nPathStart )
@@ -332,7 +332,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
 }
 
 uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
-        const ::rtl::OUString& rStorageName )
+        const OUString& rStorageName )
 {
     DBG_ASSERT( -1 == rStorageName.indexOf( '/' ) &&
                 -1 == rStorageName.indexOf( '\\' ),
@@ -368,8 +368,8 @@ uno::Reference < embed::XStorage > SvXMLEmbeddedObjectHelper::ImplGetContainerSt
 }
 
 sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
-        const ::rtl::OUString& rContainerStorageName,
-        ::rtl::OUString& rObjName,
+        const OUString& rContainerStorageName,
+        OUString& rObjName,
         const SvGlobalName *pClassId,
         SvStream* pTemp )
 {
@@ -413,8 +413,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 // This is an ole object
                 uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
-                    ::rtl::OUString( "MediaType" ),
-                    uno::makeAny( ::rtl::OUString( "application/vnd.sun.star.oleobject" ) ) );
+                    OUString( "MediaType" ),
+                    uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
 
                 xStm->getOutputStream()->closeOutput();
             }
@@ -438,7 +438,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 
     // make object known to the container
     // TODO/LATER: could be done a little bit more efficient!
-    ::rtl::OUString aName( rObjName );
+    OUString aName( rObjName );
 
     // TODO/LATER: The provided pClassId is ignored for now.
     //             The stream contains OLE storage internally and this storage already has a class id specifying the
@@ -450,12 +450,12 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     return sal_True;
 }
 
-::rtl::OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
-        const ::rtl::OUString& rURLStr )
+OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
+        const OUString& rURLStr )
 {
-    ::rtl::OUString sRetURL;
+    OUString sRetURL;
 
-    ::rtl::OUString aContainerStorageName, aObjectStorageName;
+    OUString aContainerStorageName, aObjectStorageName;
     if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                               aObjectStorageName,
                               EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode ) )
@@ -482,7 +482,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         }
 
         ImplReadObject( aContainerStorageName, aObjectStorageName, pClassId, pOut ? pOut->GetStream() : 0 );
-        sRetURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(XML_EMBEDDEDOBJECT_URL_BASE) );
+        sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM(XML_EMBEDDEDOBJECT_URL_BASE) );
         sRetURL += aObjectStorageName;
 
         if( pOut )
@@ -494,11 +494,11 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     else
     {
         // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
-        sRetURL = ::rtl::OUString("./");
+        sRetURL = OUString("./");
         if( !aContainerStorageName.isEmpty() )
         {
             sRetURL += aContainerStorageName;
-            sRetURL += ::rtl::OUString( '/' );
+            sRetURL += OUString( '/' );
         }
         sRetURL += aObjectStorageName;
     }
@@ -521,7 +521,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
             {
                 // means that the object is not active
                 // copy replacement image from old to new container
-                ::rtl::OUString aMediaType;
+                OUString aMediaType;
                 xStream = mpDocPersist->getEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
             }
 
@@ -532,7 +532,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
                 if ( nCurState == embed::EmbedStates::LOADED )
                     bSwitchBackToLoaded = sal_True;
 
-                ::rtl::OUString aMediaType;
+                OUString aMediaType;
                 xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
                                                     embed::Aspects::MSOLE_CONTENT,
                                                     xObj,
@@ -608,7 +608,7 @@ void SvXMLEmbeddedObjectHelper::Flush()
 }
 
 // XGraphicObjectResolver: alien objects!
-::rtl::OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const ::rtl::OUString& aURL )
+OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const OUString& aURL )
     throw(RuntimeException)
 {
     MutexGuard          aGuard( maMutex );
@@ -618,7 +618,7 @@ void SvXMLEmbeddedObjectHelper::Flush()
 
 // XNameAccess: alien objects!
 Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
-        const ::rtl::OUString& rURLStr )
+        const OUString& rURLStr )
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard          aGuard( maMutex );
@@ -650,7 +650,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
         sal_Bool bGraphicRepl = sal_False;
         sal_Bool bOasisFormat = sal_True;
         Reference < XInputStream > xStrm;
-        ::rtl::OUString aContainerStorageName, aObjectStorageName;
+        OUString aContainerStorageName, aObjectStorageName;
         if( ImplGetStorageNames( rURLStr, aContainerStorageName,
                                  aObjectStorageName,
                                  sal_True,
@@ -680,7 +680,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 mxTempStorage =
                                     comphelper::OStorageHelper::GetTemporaryStorage();
                             Sequence < beans::PropertyValue > aDummy( 0 ), aEmbDescr( 1 );
-                            aEmbDescr[0].Name = ::rtl::OUString( "StoreVisualReplacement" );
+                            aEmbDescr[0].Name = OUString( "StoreVisualReplacement" );
                                aEmbDescr[0].Value <<= (sal_Bool)(!bOasisFormat);
                             if ( !bOasisFormat )
                             {
@@ -688,7 +688,7 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
                                 if ( xGrInStream.is() )
                                 {
                                     aEmbDescr.realloc( 2 );
-                                    aEmbDescr[1].Name = ::rtl::OUString( "VisualReplacement" );
+                                    aEmbDescr[1].Name = OUString( "VisualReplacement" );
                                     aEmbDescr[1].Value <<= xGrInStream;
                                 }
                             }
@@ -716,14 +716,14 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     return aRet;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
+Sequence< OUString > SAL_CALL SvXMLEmbeddedObjectHelper::getElementNames()
     throw (RuntimeException)
 {
     MutexGuard          aGuard( maMutex );
-    return Sequence< ::rtl::OUString >(0);
+    return Sequence< OUString >(0);
 }
 
-sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const ::rtl::OUString& rURLStr )
+sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr )
     throw (RuntimeException)
 {
     MutexGuard          aGuard( maMutex );
@@ -733,7 +733,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const ::rtl::OUString& r
     }
     else
     {
-        ::rtl::OUString aContainerStorageName, aObjectStorageName;
+        OUString aContainerStorageName, aObjectStorageName;
         if( !ImplGetStorageNames( rURLStr, aContainerStorageName,
                                   aObjectStorageName,
                                   sal_True ) )

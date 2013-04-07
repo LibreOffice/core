@@ -168,8 +168,8 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
 
-        std::vector<rtl::OUString>      maSlideNameList;
-        rtl::OUString                   maBaseURI;
+        std::vector<OUString>      maSlideNameList;
+        OUString                   maBaseURI;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText >             mXText;             // TextRef of the global text
         ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >             mXCursor;

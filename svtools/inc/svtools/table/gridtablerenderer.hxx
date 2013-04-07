@@ -94,7 +94,7 @@ namespace svt { namespace table
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
                             ColPos const i_colPos, RowPos const i_rowPos,
-                            ::rtl::OUString & o_cellString
+                            OUString & o_cellString
                         ) const;
 
     private:
@@ -109,7 +109,7 @@ namespace svt { namespace table
                    );
         void    impl_paintCellText(
                         CellRenderContext const & i_context,
-                        ::rtl::OUString const & i_text
+                        OUString const & i_text
                    );
     };
 //........................................................................

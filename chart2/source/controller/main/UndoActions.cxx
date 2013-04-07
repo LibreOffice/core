@@ -37,7 +37,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 
 namespace chart
 {
@@ -87,7 +86,7 @@ void SAL_CALL UndoElement::disposing()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UndoElement::getTitle() throw (RuntimeException)
+OUString SAL_CALL UndoElement::getTitle() throw (RuntimeException)
 {
     return m_sActionString;
 }
@@ -133,10 +132,10 @@ ShapeUndoElement::~ShapeUndoElement()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ShapeUndoElement::getTitle() throw (RuntimeException)
+OUString SAL_CALL ShapeUndoElement::getTitle() throw (RuntimeException)
 {
     if ( !m_pAction )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
     return m_pAction->GetComment();
 }
 
@@ -144,7 +143,7 @@ ShapeUndoElement::~ShapeUndoElement()
 void SAL_CALL ShapeUndoElement::undo(  ) throw (UndoFailedException, RuntimeException)
 {
     if ( !m_pAction )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
     m_pAction->Undo();
 }
 
@@ -152,7 +151,7 @@ void SAL_CALL ShapeUndoElement::undo(  ) throw (UndoFailedException, RuntimeExce
 void SAL_CALL ShapeUndoElement::redo(  ) throw (UndoFailedException, RuntimeException)
 {
     if ( !m_pAction )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
     m_pAction->Redo();
 }
 

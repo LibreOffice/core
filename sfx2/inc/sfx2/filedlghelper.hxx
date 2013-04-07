@@ -122,14 +122,14 @@ public:
                                               SfxFilterFlags nMust,
                                               SfxFilterFlags nDont,
                                               const String& rStandardDir,
-                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList);
+                                              const ::com::sun::star::uno::Sequence< OUString >& rBlackList);
 
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
-                                              const ::rtl::OUString& aFilterUIName,
-                                              const ::rtl::OUString& aExtName,
-                                              const ::rtl::OUString& rStandardDir,
-                                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList,
+                                              const OUString& aFilterUIName,
+                                              const OUString& aExtName,
+                                              const OUString& rStandardDir,
+                                              const ::com::sun::star::uno::Sequence< OUString >& rBlackList,
                                               Window* _pPreferredParent = NULL );
 
 
@@ -150,10 +150,10 @@ public:
         to different folders. As this method always provides the root folder for all selected
         files this cannot work.
     */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetMPath() const;
+    ::com::sun::star::uno::Sequence< OUString > GetMPath() const;
 
     /** Provides the selected files with full path information */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetSelectedFiles() const;
+    ::com::sun::star::uno::Sequence< OUString > GetSelectedFiles() const;
 
     void                     AddFilter( const String& rFilterName, const String& rExtension );
     void                     SetCurrentFilter( const String& rFilter );
@@ -206,7 +206,7 @@ public:
     virtual void SAL_CALL   DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
     virtual void SAL_CALL   ControlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
     virtual void SAL_CALL   DialogSizeChanged();
-    virtual ::rtl::OUString SAL_CALL    HelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+    virtual OUString SAL_CALL    HelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
 
     // XDialogClosedListener methods
     virtual void SAL_CALL   DialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent );
@@ -230,7 +230,7 @@ public:
 
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
-   ErrCode                  Execute( std::vector<rtl::OUString>& rpURLList,
+   ErrCode                  Execute( std::vector<OUString>& rpURLList,
                                       SfxItemSet *&   rpSet,
                                       String&         rFilter,
                                       const String&   rDirPath );
@@ -245,16 +245,16 @@ public:
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,
                              const String& rFact,
-                             std::vector<rtl::OUString>& rpURLList,
+                             std::vector<OUString>& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
                              const String* pPath = NULL,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
-                             const String& rStandardDir = rtl::OUString(),
-                             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
+                             const String& rStandardDir = OUString(),
+                             const ::com::sun::star::uno::Sequence< OUString >& rBlackList = ::com::sun::star::uno::Sequence< OUString >());
 
 
-ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, SfxItemSet* pSet);
+ErrCode RequestPassword(const SfxFilter* pCurrentFilter, OUString& aURL, SfxItemSet* pSet);
 }
 
 #endif

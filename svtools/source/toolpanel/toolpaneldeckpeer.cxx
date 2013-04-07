@@ -65,7 +65,7 @@ namespace svt
     {
         SolarMutexGuard aSolarGuard;
         if ( m_pDeck == NULL )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
 
         Window* pAccessibleParent( m_pDeck->GetAccessibleParentWindow() );
         ENSURE_OR_RETURN( pAccessibleParent != NULL, "no accessible parent => no accessible context", NULL );

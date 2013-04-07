@@ -43,8 +43,6 @@
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::osl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -1150,13 +1148,13 @@ static XMLTokenEnum aTokenMap[] =
 
 class XMLTableTransformerContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
 
 public:
     TYPEINFO();
 
     XMLTableTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLTableTransformerContext_Impl();
 
@@ -1260,15 +1258,15 @@ public:
     TYPEINFO();
 
     XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLBodyOASISTransformerContext_Impl();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 };
@@ -1293,8 +1291,8 @@ void XMLBodyOASISTransformerContext_Impl::StartElement(
 }
 
 XMLTransformerContext* XMLBodyOASISTransformerContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     if (!m_bFirstChild)
@@ -1322,7 +1320,7 @@ public:
     TYPEINFO();
 
     XMLTabStopOASISTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLTabStopOASISTContext_Impl();
 
@@ -1449,7 +1447,7 @@ void XMLTabStopOASISTContext_Impl::StartElement(
 
 class XMLConfigItemTContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aContent;
+    OUString m_aContent;
     sal_Bool m_bIsRedlineProtectionKey;
     sal_Bool m_bIsCursorX;
     sal_Bool m_bIsCursorY;
@@ -1459,14 +1457,14 @@ public:
     TYPEINFO();
 
     XMLConfigItemTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLConfigItemTContext_Impl();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 TYPEINIT1( XMLConfigItemTContext_Impl, XMLTransformerContext );
@@ -1521,9 +1519,9 @@ void XMLConfigItemTContext_Impl::StartElement(
     XMLTransformerContext::StartElement( xAttrList );
 }
 
-void XMLConfigItemTContext_Impl::Characters( const ::rtl::OUString& rChars )
+void XMLConfigItemTContext_Impl::Characters( const OUString& rChars )
 {
-    rtl::OUString sChars(rChars);
+    OUString sChars(rChars);
     if (m_bIsRedlineProtectionKey)
         m_aContent += rChars;
     else if (m_bIsCursorX || m_bIsCursorY)
@@ -1534,7 +1532,7 @@ void XMLConfigItemTContext_Impl::Characters( const ::rtl::OUString& rChars )
         else if (m_bIsCursorY && nPos > 31999)
             nPos = 31999;
 
-        sChars = ::rtl::OUString::valueOf(nPos);
+        sChars = OUString::valueOf(nPos);
     }
 
     XMLTransformerContext::Characters( sChars );
@@ -1569,14 +1567,14 @@ void XMLConfigItemTContext_Impl::EndElement()
 
 class XMLTrackedChangesOASISTContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aAttrQName;
+    OUString m_aAttrQName;
 
 public:
 
     TYPEINFO();
 
     XMLTrackedChangesOASISTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 

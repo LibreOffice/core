@@ -978,9 +978,9 @@ namespace
                         aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += rtl::OUString(' ');
-                    aWorkStr += rtl::OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' );
-                    aWorkStr += rtl::OUString(',');
+                    aWorkStr += OUString(' ');
+                    aWorkStr += OUString( ";ASC;DESC" ).getToken( (sal_uInt16)eOrder, ';' );
+                    aWorkStr += OUString(',');
                 }
             }
 
@@ -1170,7 +1170,7 @@ namespace
         if(!xConnection.is())
             return OUString();
 
-        ::std::map< rtl::OUString,bool> aGroupByNames;
+        ::std::map< OUString,bool> aGroupByNames;
 
         OUString aGroupByStr;
         try
@@ -1216,7 +1216,7 @@ namespace
                     }
                     if ( aGroupByNames.find(sGroupByPart) == aGroupByNames.end() )
                     {
-                        aGroupByNames.insert(::std::map< rtl::OUString,bool>::value_type(sGroupByPart,true));
+                        aGroupByNames.insert(::std::map< OUString,bool>::value_type(sGroupByPart,true));
                         aGroupByStr += sGroupByPart;
                         aGroupByStr += OUString(',');
                     }
@@ -3502,7 +3502,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
 
                 OUString sFunctionName = pFunctionName->getTokenValue();
                 if ( sFunctionName.isEmpty() )
-                    sFunctionName = ::rtl::OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
+                    sFunctionName = OStringToOUString(OSQLParser::TokenIDToStr(pFunctionName->getTokenID()),RTL_TEXTENCODING_UTF8);
 
                 nDataType = OSQLParser::getFunctionReturnType(
                     sFunctionName

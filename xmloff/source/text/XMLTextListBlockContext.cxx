@@ -31,8 +31,6 @@
 #include "XMLTextListBlockContext.hxx"
 #include "txtlists.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -62,7 +60,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
 ,   msListId()
 ,   msContinueListId()
 {
-    static ::rtl::OUString s_PropNameDefaultListId("DefaultListId");
+    static OUString s_PropNameDefaultListId("DefaultListId");
     {
         // get the parent list block context (if any); this is a bit ugly...
         XMLTextListBlockContext * pLB(0);
@@ -139,7 +137,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
     {
         XMLTextListsHelper& rTextListsHelper( mrTxtImport.GetTextListHelper() );
         // Inconsistent behavior regarding lists (#i92811#)
-        ::rtl::OUString sListStyleDefaultListId;
+        OUString sListStyleDefaultListId;
         {
             uno::Reference< beans::XPropertySet > xNumRuleProps( mxNumRules, UNO_QUERY );
             if ( xNumRuleProps.is() )
@@ -190,7 +188,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         if ( bIsContinueNumberingAttributePresent && !mbRestartNumbering &&
              msContinueListId.isEmpty() )
         {
-            ::rtl::OUString Last( rTextListsHelper.GetLastProcessedListId() );
+            OUString Last( rTextListsHelper.GetLastProcessedListId() );
             if ( rTextListsHelper.GetListStyleOfLastProcessedList() == msListStyleName
                  && Last != msListId )
             {
@@ -208,7 +206,7 @@ XMLTextListBlockContext::XMLTextListBlockContext(
             {
                 // search continue list chain for master list and
                 // continue the master list.
-                ::rtl::OUString sTmpStr =
+                OUString sTmpStr =
                     rTextListsHelper.GetContinueListIdOfProcessedList( msContinueListId );
                 while ( !sTmpStr.isEmpty() )
                 {
@@ -283,12 +281,12 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
     return pContext;
 }
 
-const ::rtl::OUString& XMLTextListBlockContext::GetListId() const
+const OUString& XMLTextListBlockContext::GetListId() const
 {
     return msListId;
 }
 
-const ::rtl::OUString& XMLTextListBlockContext::GetContinueListId() const
+const OUString& XMLTextListBlockContext::GetContinueListId() const
 {
     return msContinueListId;
 }

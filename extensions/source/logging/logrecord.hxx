@@ -33,22 +33,22 @@ namespace logging
     //= helper
     //====================================================================
     ::com::sun::star::logging::LogRecord createLogRecord(
-        const ::rtl::OUString& _rLoggerName,
-        const ::rtl::OUString& _rClassName,
-        const ::rtl::OUString& _rMethodName,
-        const ::rtl::OUString& _rMessage,
+        const OUString& _rLoggerName,
+        const OUString& _rClassName,
+        const OUString& _rMethodName,
+        const OUString& _rMessage,
         sal_Int32 _nLogLevel,
         oslInterlockedCount _nEventNumber
     );
 
     inline ::com::sun::star::logging::LogRecord createLogRecord(
-        const ::rtl::OUString& _rLoggerName,
-        const ::rtl::OUString& _rMessage,
+        const OUString& _rLoggerName,
+        const OUString& _rMessage,
         sal_Int32 _nLogLevel,
         oslInterlockedCount _nEventNumber
     )
     {
-        return createLogRecord( _rLoggerName, ::rtl::OUString(), ::rtl::OUString(), _rMessage, _nLogLevel, _nEventNumber );
+        return createLogRecord( _rLoggerName, OUString(), OUString(), _rMessage, _nLogLevel, _nEventNumber );
     }
 
 //........................................................................

@@ -34,13 +34,13 @@ GraphicNameAccess::~GraphicNameAccess()
 {
 }
 
-void GraphicNameAccess::addElement( const rtl::OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
+void GraphicNameAccess::addElement( const OUString& rName, const uno::Reference< graphic::XGraphic >& rElement )
 {
     m_aNameToElementMap.insert( NameGraphicHashMap::value_type( rName, rElement ));
 }
 
 // XNameAccess
-uno::Any SAL_CALL GraphicNameAccess::getByName( const ::rtl::OUString& aName )
+uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
 throw( container::NoSuchElementException,
        lang::WrappedTargetException,
        uno::RuntimeException)
@@ -52,12 +52,12 @@ throw( container::NoSuchElementException,
         throw container::NoSuchElementException();
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL GraphicNameAccess::getElementNames()
+uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()
 throw(::com::sun::star::uno::RuntimeException)
 {
     if ( m_aSeq.getLength() == 0 )
     {
-        uno::Sequence< rtl::OUString > aSeq( m_aNameToElementMap.size() );
+        uno::Sequence< OUString > aSeq( m_aNameToElementMap.size() );
         NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.begin();
         sal_Int32 i( 0);
         while ( pIter != m_aNameToElementMap.end())
@@ -71,7 +71,7 @@ throw(::com::sun::star::uno::RuntimeException)
     return m_aSeq;
 }
 
-sal_Bool SAL_CALL GraphicNameAccess::hasByName( const ::rtl::OUString& aName )
+sal_Bool SAL_CALL GraphicNameAccess::hasByName( const OUString& aName )
 throw(::com::sun::star::uno::RuntimeException)
 {
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );

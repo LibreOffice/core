@@ -470,7 +470,7 @@ namespace svt
 
         sal_Bool    implReadFolder( const ::rtl::Reference< TemplateContent >& _rxRoot );
 
-        static  rtl::OUString getCacheFileName();
+        static  OUString getCacheFileName();
         static  sal_Int32   getMagicNumber();
         static  void        normalize( TemplateFolderContent& _rState );
 
@@ -513,9 +513,9 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    rtl::OUString TemplateFolderCacheImpl::getCacheFileName()
+    OUString TemplateFolderCacheImpl::getCacheFileName()
     {
-        return rtl::OUString(".templdir.cache");
+        return OUString(".templdir.cache");
     }
 
 
@@ -581,7 +581,7 @@ namespace svt
         aParser.SetURL( _rPath, INetURLObject::WAS_ENCODED );
         if ( INET_PROT_NOT_VALID == aParser.GetProtocol() )
         {
-            rtl::OUString sURL;
+            OUString sURL;
             LocalFileHelper::ConvertPhysicalNameToURL( _rPath, sURL );
             aParser.SetURL( sURL, INetURLObject::WAS_ENCODED );
         }
@@ -601,11 +601,11 @@ namespace svt
         {
             // create a content for the current folder root
             Reference< XResultSet > xResultSet;
-            Sequence< ::rtl::OUString > aContentProperties( 4);
-            aContentProperties[0] = ::rtl::OUString( "Title" );
-            aContentProperties[1] = ::rtl::OUString( "DateModified" );
-            aContentProperties[2] = ::rtl::OUString( "DateCreated" );
-            aContentProperties[3] = ::rtl::OUString( "IsFolder" );
+            Sequence< OUString > aContentProperties( 4);
+            aContentProperties[0] = OUString( "Title" );
+            aContentProperties[1] = OUString( "DateModified" );
+            aContentProperties[2] = OUString( "DateCreated" );
+            aContentProperties[3] = OUString( "IsFolder" );
 
             // get the set of sub contents in the folder
             try
@@ -675,7 +675,7 @@ namespace svt
 
         // the template directories from the config
         const SvtPathOptions aPathOptions;
-        rtl::OUString aDirs = aPathOptions.GetTemplatePath();
+        OUString aDirs = aPathOptions.GetTemplatePath();
 
         // loop through all the root-level template folders
         sal_Int32 nIndex = 0;

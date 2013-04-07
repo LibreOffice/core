@@ -229,7 +229,7 @@ namespace pcr
     void PropertyControlContext_Impl::impl_checkAlive_throw() const
     {
         if ( impl_isDisposed_nothrow() )
-            throw DisposedException( ::rtl::OUString(), *const_cast< PropertyControlContext_Impl* >( this ) );
+            throw DisposedException( OUString(), *const_cast< PropertyControlContext_Impl* >( this ) );
     }
 
     //--------------------------------------------------------------------
@@ -533,7 +533,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::SetHelpText( const ::rtl::OUString& _rHelpText )
+    void OBrowserListBox::SetHelpText( const OUString& _rHelpText )
     {
         OSL_ENSURE( HasHelpSection(), "OBrowserListBox::SetHelpText: help section not visible!" );
         m_pHelpWindow->SetText( _rHelpText );
@@ -654,7 +654,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::SetPropertyValue(const ::rtl::OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
+    void OBrowserListBox::SetPropertyValue(const OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         ListBoxLines::iterator line = m_aLines.begin();
         for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
@@ -675,7 +675,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_uInt16 OBrowserListBox::GetPropertyPos( const ::rtl::OUString& _rEntryName ) const
+    sal_uInt16 OBrowserListBox::GetPropertyPos( const OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
         for ( ListBoxLines::const_iterator linePos = m_aLines.begin();
@@ -694,7 +694,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool OBrowserListBox::impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const
+    bool OBrowserListBox::impl_getBrowserLineForName( const OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const
     {
         ListBoxLines::const_iterator line = m_aLines.begin();
         for ( ; line != m_aLines.end() && ( line->aName != _rEntryName ); ++line )
@@ -708,7 +708,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OBrowserListBox::EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
+    void OBrowserListBox::EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
         BrowserLinePointer pLine;
         if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
@@ -716,7 +716,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OBrowserListBox::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
+    void OBrowserListBox::EnablePropertyLine( const OUString& _rEntryName, bool _bEnable )
     {
         BrowserLinePointer pLine;
         if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
@@ -724,7 +724,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XPropertyControl > OBrowserListBox::GetPropertyControl( const ::rtl::OUString& _rEntryName )
+    Reference< XPropertyControl > OBrowserListBox::GetPropertyControl( const OUString& _rEntryName )
     {
         BrowserLinePointer pLine;
         if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
@@ -913,10 +913,10 @@ namespace pcr
     #ifdef DBG_UTIL
                 if ( !_rLine.xHandler.is() )
                 {
-                    ::rtl::OString sMessage( "OBrowserListBox::impl_setControlAsPropertyValue: no handler -> no conversion (property: '" );
-                    ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
-                    sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    sMessage += ::rtl::OString( "')!" );
+                    OString sMessage( "OBrowserListBox::impl_setControlAsPropertyValue: no handler -> no conversion (property: '" );
+                    OUString sPropertyName( _rLine.pLine->GetEntryName() );
+                    sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += OString( "')!" );
                     OSL_FAIL( sMessage.getStr() );
                 }
     #endif
@@ -944,10 +944,10 @@ namespace pcr
         #ifdef DBG_UTIL
             if ( !_rLine.xHandler.is() )
             {
-                ::rtl::OString sMessage( "OBrowserListBox::impl_getControlAsPropertyValue: no handler -> no conversion (property: '" );
-                ::rtl::OUString sPropertyName( _rLine.pLine->GetEntryName() );
-                sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sMessage += ::rtl::OString( "')!" );
+                OString sMessage( "OBrowserListBox::impl_getControlAsPropertyValue: no handler -> no conversion (property: '" );
+                OUString sPropertyName( _rLine.pLine->GetEntryName() );
+                sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                sMessage += OString( "')!" );
                 OSL_FAIL( sMessage.getStr() );
             }
         #endif
@@ -1070,7 +1070,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    sal_Bool OBrowserListBox::RemoveEntry( const ::rtl::OUString& _rName )
+    sal_Bool OBrowserListBox::RemoveEntry( const OUString& _rName )
     {
         sal_uInt16 nPos = 0;
         ListBoxLines::iterator it = m_aLines.begin();
@@ -1181,8 +1181,8 @@ namespace pcr
             m_aOutOfDateLines.insert( nPos );
             rLine.pLine->SetComponentHelpIds(
                 HelpIdUrl::getHelpId( _rPropertyData.HelpURL ),
-                rtl::OUStringToOString( _rPropertyData.PrimaryButtonId, RTL_TEXTENCODING_UTF8 ),
-                rtl::OUStringToOString( _rPropertyData.SecondaryButtonId, RTL_TEXTENCODING_UTF8 )
+                OUStringToOString( _rPropertyData.PrimaryButtonId, RTL_TEXTENCODING_UTF8 ),
+                OUStringToOString( _rPropertyData.SecondaryButtonId, RTL_TEXTENCODING_UTF8 )
             );
 
             if ( _rPropertyData.bReadOnly )

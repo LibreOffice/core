@@ -93,7 +93,7 @@ inline void Encode_(sal_uInt8 *src, sal_Char* dest)
 /**
  * @descr   Base64 encode.
  */
-rtl::OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
+OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
 {
     sal_Char    *buffer;
     sal_Int32   nNeeded;
@@ -126,7 +126,7 @@ rtl::OUString XFBase64::Encode(sal_uInt8 *buf, sal_Int32 len)
         Encode_(last,buffer+nNeeded+1-5);
     }
 
-    rtl::OUString str = rtl::OUString::createFromAscii(buffer);
+    OUString str = OUString::createFromAscii(buffer);
     delete[] buffer;
 
     return str;

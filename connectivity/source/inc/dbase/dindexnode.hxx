@@ -48,7 +48,7 @@ namespace connectivity
         public:
             ONDXKey(sal_uInt32 nRec=0);
             ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec);
-            ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec = 0);
+            ONDXKey(const OUString& aStr, sal_uInt32 nRec = 0);
             ONDXKey(double aVal, sal_uInt32 nRec = 0);
 
             inline ONDXKey(const ONDXKey& rKey);
@@ -255,7 +255,7 @@ namespace connectivity
 //      }
 
 
-//      inline ONDXKey::ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec)
+//      inline ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
 //                  : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
 //                   ,nRecord(nRec)
 //      {

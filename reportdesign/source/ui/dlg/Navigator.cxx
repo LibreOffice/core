@@ -79,17 +79,17 @@ sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xEle
     return nId;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
+OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
 {
     OSL_ENSURE(_xElement.is(),"Found report element which is NULL!");
-    ::rtl::OUString sTempName;
+    OUString sTempName;
     _xElement->getPropertyValue(PROPERTY_NAME) >>= sTempName;
-    ::rtl::OUStringBuffer sName = sTempName;
+    OUStringBuffer sName = sTempName;
     uno::Reference< report::XFixedText> xFixedText(_xElement,uno::UNO_QUERY);
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )
     {
-        sName.append(::rtl::OUString(" : "));
+        sName.append(OUString(" : "));
         sName.append(xFixedText->getLabel());
     }
     else if ( xReportModel.is() && _xElement->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
@@ -97,7 +97,7 @@ sal_uInt16 lcl_getImageId(const uno::Reference< report::XReportComponent>& _xEle
         ReportFormula aFormula( xReportModel->getDataField() );
         if ( aFormula.isValid() )
         {
-            sName.append(::rtl::OUString(" : "));
+            sName.append(OUString(" : "));
             sName.append( aFormula.getUndecoratedContent() );
         }
     }
@@ -151,7 +151,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
     unsigned short                                                              m_nTimerCounter;
 
-    SvTreeListEntry* insertEntry(const ::rtl::OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
+    SvTreeListEntry* insertEntry(const OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
     void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = LIST_APPEND);
     void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
 
@@ -500,7 +500,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
     m_pSelectionListener->unlock();
 }
 // -----------------------------------------------------------------------------
-SvTreeListEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
+SvTreeListEntry* NavigatorTree::insertEntry(const OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
 {
     SvTreeListEntry* pEntry = NULL;
     if ( _nImageId )
@@ -676,7 +676,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
 {
     SvTreeListEntry* pEntry = find(_rEvent.Source);
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY_THROW);
-    ::rtl::OUString sName;
+    OUString sName;
     uno::Reference< beans::XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
     if ( xInfo.is() )
     {
@@ -725,7 +725,7 @@ void NavigatorTree::_elementReplaced( const container::ContainerEvent& _rEvent )
         UserData* pData = static_cast<UserData*>(pEntry->GetUserData());
         xProp.set(_rEvent.Element,uno::UNO_QUERY);
         pData->setContent(xProp);
-        ::rtl::OUString sName;
+        OUString sName;
         xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
         SetEntryText(pEntry,sName);
     }
@@ -828,7 +828,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
         {
-            ::rtl::OUString sNewName;
+            OUString sNewName;
             _rEvent.NewValue >>= sNewName;
             m_pTree->SetEntryText(pEntry,sNewName);
         }

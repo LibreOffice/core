@@ -35,22 +35,22 @@ public:
 
     // element content persistence only
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     // element content persistence + attribute processing
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // element content persistence + renaming
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // element content persistence + renaming + attribute processing
     XMLPersElemContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );
@@ -58,8 +58,8 @@ public:
     virtual ~XMLPersElemContentTContext();
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     void AddContent( XMLTransformerContext *pContent );

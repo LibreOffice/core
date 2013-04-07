@@ -180,7 +180,7 @@ static const TokenTable pTokenTableArray[] =
     { "NotFound",                           EAS_NotFound }
 };
 
-EnhancedCustomShapeTokenEnum EASGet( const rtl::OUString& rShapeType )
+EnhancedCustomShapeTokenEnum EASGet( const OUString& rShapeType )
 {
     if ( !pHashMap )
     {   // init hash map
@@ -208,12 +208,12 @@ EnhancedCustomShapeTokenEnum EASGet( const rtl::OUString& rShapeType )
     return eRetValue;
 }
 
-rtl::OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
+OUString EASGet( const EnhancedCustomShapeTokenEnum eToken )
 {
     sal_uInt32 i = eToken >= EAS_Last
         ? (sal_uInt32)EAS_NotFound
         : (sal_uInt32)eToken;
-    return rtl::OUString::createFromAscii( pTokenTableArray[ i ].pS );
+    return OUString::createFromAscii( pTokenTableArray[ i ].pS );
 }
 
 }

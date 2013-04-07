@@ -117,7 +117,7 @@ TextObjectBar::TextObjectBar (
         }
     }
 
-    SetName( rtl::OUString( "TextObjectBar" ));
+    SetName( OUString( "TextObjectBar" ));
 
     // SetHelpId( SD_IF_SDDRAWTEXTOBJECTBAR );
 }

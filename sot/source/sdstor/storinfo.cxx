@@ -38,7 +38,7 @@ sal_uLong ReadClipboardFormat( SvStream & rStm )
         sal_Char * p = new( ::std::nothrow ) sal_Char[ nLen ];
         if( p && rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
-            nFormat = SotExchange::RegisterFormatName(rtl::OUString(p, nLen-1, RTL_TEXTENCODING_ASCII_US));
+            nFormat = SotExchange::RegisterFormatName(OUString(p, nLen-1, RTL_TEXTENCODING_ASCII_US));
         }
         else
             rStm.SetError( SVSTREAM_GENERALERROR );
@@ -71,7 +71,7 @@ void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
         aCbFmt = SotExchange::GetFormatName( nFormat );
     if( aCbFmt.Len() )
     {
-        rtl::OString aAsciiCbFmt(rtl::OUStringToOString(aCbFmt,
+        OString aAsciiCbFmt(OUStringToOString(aCbFmt,
             RTL_TEXTENCODING_ASCII_US));
         rStm << (sal_Int32) (aAsciiCbFmt.getLength() + 1);
         rStm << (const char *)aAsciiCbFmt.getStr();

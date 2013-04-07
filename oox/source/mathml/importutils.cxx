@@ -114,7 +114,7 @@ OUString& XmlStream::AttributeList::operator[] (int token)
     return attrs[token];
 }
 
-rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
+OUString XmlStream::AttributeList::attribute( int token, const OUString& def ) const
 {
     std::map< int, OUString >::const_iterator find = attrs.find( token );
     if( find != attrs.end())
@@ -158,7 +158,7 @@ sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) co
     return def;
 }
 
-XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a, const rtl::OUString& txt )
+XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a, const OUString& txt )
 : token( t )
 , attributes( AttributeListBuilder( a ))
 , text( txt )
@@ -353,7 +353,7 @@ void XmlStreamBuilder::appendClosingTag( int token )
     tags.push_back( Tag( CLOSING( token )));
 }
 
-void XmlStreamBuilder::appendCharacters( const rtl::OUString& chars )
+void XmlStreamBuilder::appendCharacters( const OUString& chars )
 {
     assert( !tags.empty());
     tags.back().text += chars;

@@ -47,11 +47,11 @@ public:
 
     /** Creates a data sequence object from the contained text data. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >
-                        createDataSequence( const ::rtl::OUString& rRole );
+                        createDataSequence( const OUString& rRole );
     /** Creates a sequence of formatted string objects. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString > >
                         createStringSequence(
-                            const ::rtl::OUString& rDefaultText,
+                            const OUString& rDefaultText,
                             const ModelRef< TextBody >& rxTextProp,
                             ObjectType eObjType );
 
@@ -59,7 +59,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString >
                         appendFormattedString(
                             ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString > >& orStringVec,
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             bool bAddNewLine ) const;
 };
 
@@ -76,7 +76,7 @@ public:
     /** Creates a title text object and attaches it at the passed interface. */
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitled >& rxTitled,
-                            const ::rtl::OUString& rAutoTitle, ObjectType eObjType,
+                            const OUString& rAutoTitle, ObjectType eObjType,
                             sal_Int32 nMainIdx = -1, sal_Int32 nSubIdx = -1 );
 };
 

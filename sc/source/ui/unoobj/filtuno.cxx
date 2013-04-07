@@ -45,7 +45,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUStringBuffer;
 using namespace rtl;
 using namespace com::sun::star::uno;
 
@@ -133,16 +132,16 @@ uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
     return (::cppu::OWeakObject*) new ScFilterOptionsObj;
 }
 
-rtl::OUString ScFilterOptionsObj::getImplementationName_Static()
+OUString ScFilterOptionsObj::getImplementationName_Static()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_IMPLNAME ));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_IMPLNAME ));
 }
 
-uno::Sequence<rtl::OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
+uno::Sequence<OUString> ScFilterOptionsObj::getSupportedServiceNames_Static()
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_SERVICE ));
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFILTEROPTIONSOBJ_SERVICE ));
     return aRet;
 }
 
@@ -153,7 +152,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValu
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTEROPTIONS ));
+    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FILTEROPTIONS ));
     pArray[0].Value <<= aFilterOptions;
 
     return aRet;
@@ -183,7 +182,7 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
 
 // XExecutableDialog
 
-void SAL_CALL ScFilterOptionsObj::setTitle( const ::rtl::OUString& /* aTitle */ ) throw(uno::RuntimeException)
+void SAL_CALL ScFilterOptionsObj::setTitle( const OUString& /* aTitle */ ) throw(uno::RuntimeException)
 {
     // not used
 }

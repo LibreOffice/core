@@ -24,7 +24,6 @@
 
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 
 class SvXMLTokenMapEntry_Impl
 {

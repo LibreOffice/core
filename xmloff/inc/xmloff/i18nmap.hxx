@@ -29,9 +29,9 @@
 class SvI18NMapEntry_Key
 {
     sal_uInt16      nKind;
-    rtl::OUString   aName;
+    OUString   aName;
 public:
-    SvI18NMapEntry_Key( sal_uInt16 nKnd, const rtl::OUString& rName ) :
+    SvI18NMapEntry_Key( sal_uInt16 nKnd, const OUString& rName ) :
         nKind( nKnd ),
         aName( rName )
     {
@@ -51,7 +51,7 @@ public:
     }
 };
 
-typedef std::map<SvI18NMapEntry_Key, rtl::OUString> SvI18NMap_Impl;
+typedef std::map<SvI18NMapEntry_Key, OUString> SvI18NMap_Impl;
 
 class XMLOFF_DLLPUBLIC SvI18NMap
 {
@@ -59,13 +59,13 @@ class XMLOFF_DLLPUBLIC SvI18NMap
 
 public:
     // Add a name mapping
-    bool Add( sal_uInt16 nKind, const rtl::OUString& rName,
-              const rtl::OUString& rNewName );
+    bool Add( sal_uInt16 nKind, const OUString& rName,
+              const OUString& rNewName );
 
     // Return a mapped name. If the name could not be found, return the
     // original name.
-    const rtl::OUString& Get( sal_uInt16 nKind,
-                                const rtl::OUString& rName ) const;
+    const OUString& Get( sal_uInt16 nKind,
+                                const OUString& rName ) const;
 };
 
 #endif  //  _XMLOFF_I18NMAP_HXX

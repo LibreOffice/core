@@ -46,8 +46,8 @@ struct ApiFilterSettings
     explicit            ApiFilterSettings();
 
     void appendField( bool bAnd, sal_Int32 nOperator, double fValue );
-    void appendField( bool bAnd, sal_Int32 nOperator, const ::rtl::OUString& rValue );
-    void appendField( bool bAnd, const std::vector<rtl::OUString>& rValues );
+    void appendField( bool bAnd, sal_Int32 nOperator, const OUString& rValue );
+    void appendField( bool bAnd, const std::vector<OUString>& rValues );
 };
 
 // ============================================================================
@@ -89,7 +89,7 @@ public:
     virtual ApiFilterSettings finalizeImport( sal_Int32 nMaxCount );
 
 private:
-    typedef ::std::vector< ::rtl::OUString > FilterValueVector;
+    typedef ::std::vector< OUString > FilterValueVector;
 
     FilterValueVector   maValues;
     sal_Int32           mnCalendarType;

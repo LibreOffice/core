@@ -54,7 +54,7 @@ void Uri::init() const
         }
 
         // Check for proper scheme. (Scheme is case insensitive.)
-        rtl::OUString aScheme
+        OUString aScheme
             = m_aUri.copy( 0, TDOC_URL_SCHEME_LENGTH ).toAsciiLowerCase();
         if ( aScheme != TDOC_URL_SCHEME )
         {
@@ -116,7 +116,7 @@ void Uri::init() const
             if ( nSlash != - 1 )
                 m_aInternalPath = m_aPath.copy( nSlash );
             else
-                m_aInternalPath = rtl::OUString("/");
+                m_aInternalPath = OUString("/");
         }
 
         m_eState = VALID;

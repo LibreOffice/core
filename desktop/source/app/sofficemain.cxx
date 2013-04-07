@@ -83,7 +83,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #if defined ANDROID
     } catch (const ::com::sun::star::uno::Exception &e) {
         LOGI("Unhandled UNO exception: '%s'",
-             rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+             OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         throw; // to get exception type printed
     }
 #endif

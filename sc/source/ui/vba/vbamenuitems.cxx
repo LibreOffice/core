@@ -117,14 +117,14 @@ ScVbaMenuItems::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) thro
     throw uno::RuntimeException();
 }
 
-uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const rtl::OUString& Caption, const css::uno::Any& OnAction, const css::uno::Any& /*ShortcutKey*/, const css::uno::Any& Before, const css::uno::Any& Restore, const css::uno::Any& /*StatusBar*/, const css::uno::Any& /*HelpFile*/, const css::uno::Any& /*HelpContextID*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString& Caption, const css::uno::Any& OnAction, const css::uno::Any& /*ShortcutKey*/, const css::uno::Any& Before, const css::uno::Any& Restore, const css::uno::Any& /*StatusBar*/, const css::uno::Any& /*HelpFile*/, const css::uno::Any& /*HelpContextID*/ ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     sal_Int32 nType = office::MsoControlType::msoControlButton;
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add( uno::makeAny( nType ), uno::Any(), uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     if( OnAction.hasValue() )
     {
-        rtl::OUString sAction;
+        OUString sAction;
         OnAction >>= sAction;
         xCommandBarControl->setOnAction( sAction );
     }
@@ -132,20 +132,20 @@ uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const rtl::OUSt
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 ScVbaMenuItems::getServiceImplName()
 {
-    return rtl::OUString("ScVbaMenuItems");
+    return OUString("ScVbaMenuItems");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaMenuItems::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuItems" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.MenuItems" );
     }
     return aServiceNames;
 }

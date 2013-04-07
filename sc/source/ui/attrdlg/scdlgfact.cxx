@@ -218,12 +218,12 @@ bool AbstractScDataPilotSourceTypeDlg_Impl::IsNamedRange() const
     return pDlg->IsNamedRange();
 }
 
-rtl::OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() const
+OUString AbstractScDataPilotSourceTypeDlg_Impl::GetSelectedNamedRange() const
 {
     return pDlg->GetSelectedNamedRange();
 }
 
-void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const ::rtl::OUString& rName)
+void AbstractScDataPilotSourceTypeDlg_Impl::AppendNamedRange(const OUString& rName)
 {
     pDlg->AppendNamedRange(rName);
 }
@@ -483,7 +483,7 @@ bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
 {
     return pDlg->GetRenameTable();
 }
-void AbstractScMoveTableDlg_Impl::GetTabNameString( rtl::OUString& rString ) const
+void AbstractScMoveTableDlg_Impl::GetTabNameString( OUString& rString ) const
 {
     pDlg->GetTabNameString( rString );
 }
@@ -510,7 +510,7 @@ sal_uInt16 AbstractScNameCreateDlg_Impl::GetFlags() const
 
 
 
-std::vector<rtl::OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
+std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 {
     return pDlg->GetSelectedNames();
 }
@@ -572,13 +572,13 @@ String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 }
 
 void AbstractScNewScenarioDlg_Impl::SetScenarioData(
-    const rtl::OUString& rName, const rtl::OUString& rComment, const Color& rColor, sal_uInt16 nFlags )
+    const OUString& rName, const OUString& rComment, const Color& rColor, sal_uInt16 nFlags )
 {
     pDlg->SetScenarioData(rName, rComment, rColor, nFlags);
 }
 
 void AbstractScNewScenarioDlg_Impl::GetScenarioData(
-    rtl::OUString& rName, rtl::OUString& rComment, Color& rColor, sal_uInt16& rFlags ) const
+    OUString& rName, OUString& rComment, Color& rColor, sal_uInt16& rFlags ) const
 {
     pDlg->GetScenarioData(rName, rComment, rColor, rFlags);
 }
@@ -594,7 +594,7 @@ sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
 }
 void    AbstractScShowTabDlg_Impl::SetDescription(
                 const String& rTitle, const String& rFixedText,
-                const rtl::OString& sDlgHelpId, const rtl::OString& sLbHelpId )
+                const OString& sDlgHelpId, const OString& sLbHelpId )
 {
     pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
@@ -609,7 +609,7 @@ String   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
 
 
 
-void AbstractScStringInputDlg_Impl::GetInputString( rtl::OUString& rString ) const
+void AbstractScStringInputDlg_Impl::GetInputString( OUString& rString ) const
 {
     pDlg->GetInputString( rString );
 }
@@ -811,7 +811,7 @@ AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilo
 
 
 AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotServiceDlg( Window* pParent,
-                                                                        const com::sun::star::uno::Sequence<rtl::OUString>& rServices,
+                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
                                                             int nId )
 {
     ScDataPilotServiceDlg * pDlg=NULL;
@@ -1268,7 +1268,7 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
+                                                                const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId )
 {
     ScStringInputDlg * pDlg=NULL;
@@ -1293,7 +1293,7 @@ AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
                                                             const String& rTitle,
                                                             const String& rTabBgColorNoColorText,
                                                             const Color& rDefaultColor,
-                                                            const rtl::OString& sHelpId ,
+                                                            const OString& sHelpId ,
                                                             int nId )
 {
 ScTabBgColorDlg * pDlg=NULL;

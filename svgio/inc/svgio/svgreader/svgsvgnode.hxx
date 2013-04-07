@@ -50,7 +50,7 @@ namespace svgio
             virtual ~SvgSvgNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
             /// InfoProvider support for % values

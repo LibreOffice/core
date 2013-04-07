@@ -78,7 +78,7 @@ namespace comphelper
                 if the name is empty
         */
         void    addProperty(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     const ::com::sun::star::uno::Any& _rInitialValue
@@ -106,7 +106,7 @@ namespace comphelper
                 if the name is empty
         */
         void    addVoidProperty(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     const ::com::sun::star::uno::Type& _rType,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes
@@ -123,7 +123,7 @@ namespace comphelper
                 call.
         */
         void    removeProperty(
-                    const ::rtl::OUString& _rName
+                    const OUString& _rName
                 );
 
         /** describes all properties in the bag
@@ -202,7 +202,7 @@ namespace comphelper
 
         /** determines whether a property with a given name is part of the bag
         */
-        inline  bool    hasPropertyByName( const ::rtl::OUString& _rName ) const
+        inline  bool    hasPropertyByName( const OUString& _rName ) const
         {
             return isRegisteredProperty( _rName );
         }

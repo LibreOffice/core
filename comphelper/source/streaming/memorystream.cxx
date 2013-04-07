@@ -29,7 +29,6 @@
 #include <string.h>
 #include <vector>
 
-using ::rtl::OUString;
 using ::cppu::OWeakObject;
 using ::cppu::WeakImplHelper4;
 using namespace ::com::sun::star::io;
@@ -71,8 +70,8 @@ public:
     virtual void SAL_CALL truncate() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo - static versions (used for component registration)
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
-    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static OUString SAL_CALL getImplementationName_static();
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static Reference< XInterface > SAL_CALL Create( const Reference< ::com::sun::star::uno::XComponentContext >& );
 
 private:
@@ -210,12 +209,12 @@ void SAL_CALL UNOMemoryStream::truncate() throw (IOException, RuntimeException)
     mnCursor = 0;
 }
 
-::rtl::OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
+OUString SAL_CALL UNOMemoryStream::getImplementationName_static()
 {
-    return ::rtl::OUString("com.sun.star.comp.MemoryStream");
+    return OUString("com.sun.star.comp.MemoryStream");
 }
 
-Sequence< ::rtl::OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
+Sequence< OUString > SAL_CALL UNOMemoryStream::getSupportedServiceNames_static()
 {
     Sequence< OUString > aSeq(1);
     aSeq[0] = getImplementationName_static();

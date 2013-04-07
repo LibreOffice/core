@@ -81,8 +81,8 @@ namespace dbtools
         Reference< XDatabaseMetaData >  xConnectionMetaData;
         ::connectivity::DriversConfig   aDriverConfig;
 
-        ::boost::optional< ::rtl::OUString >    sCachedIdentifierQuoteString;
-        ::boost::optional< ::rtl::OUString >    sCachedCatalogSeparator;
+        ::boost::optional< OUString >    sCachedIdentifierQuoteString;
+        ::boost::optional< OUString >    sCachedCatalogSeparator;
 
         DatabaseMetaData_Impl()
             :xConnection()
@@ -115,7 +115,7 @@ namespace dbtools
             if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
             {
                 ::connectivity::SharedResources aResources;
-                const ::rtl::OUString sError( aResources.getResourceString(STR_NO_CONNECTION_GIVEN));
+                const OUString sError( aResources.getResourceString(STR_NO_CONNECTION_GIVEN));
                 throwSQLException( sError, SQL_CONNECTION_DOES_NOT_EXIST, NULL );
             }
         }
@@ -141,10 +141,10 @@ namespace dbtools
                 {
                     Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY_THROW );
                     Reference< XPropertySet > xDataSourceSettings(
-                        xDataSource->getPropertyValue( ::rtl::OUString( "Settings" ) ),
+                        xDataSource->getPropertyValue( OUString( "Settings" ) ),
                         UNO_QUERY_THROW );
 
-                    _out_setting = xDataSourceSettings->getPropertyValue( ::rtl::OUString::createFromAscii( _asciiName ) );
+                    _out_setting = xDataSourceSettings->getPropertyValue( OUString::createFromAscii( _asciiName ) );
                 }
                 else
                 {
@@ -163,9 +163,9 @@ namespace dbtools
         }
 
         //................................................................
-        static const ::rtl::OUString& lcl_getConnectionStringSetting(
-            const DatabaseMetaData_Impl& _metaData, ::boost::optional< ::rtl::OUString >& _cachedSetting,
-            ::rtl::OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
+        static const OUString& lcl_getConnectionStringSetting(
+            const DatabaseMetaData_Impl& _metaData, ::boost::optional< OUString >& _cachedSetting,
+            OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
         {
             if ( !_cachedSetting )
             {
@@ -265,13 +265,13 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString&  DatabaseMetaData::getIdentifierQuoteString() const
+    const OUString&  DatabaseMetaData::getIdentifierQuoteString() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString&  DatabaseMetaData::getCatalogSeparator() const
+    const OUString&  DatabaseMetaData::getCatalogSeparator() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedCatalogSeparator, &XDatabaseMetaData::getCatalogSeparator );
     }
@@ -341,7 +341,7 @@ namespace dbtools
         {
             if ( !bSupport )
             {
-                const ::rtl::OUString url = m_pImpl->xConnectionMetaData->getURL();
+                const OUString url = m_pImpl->xConnectionMetaData->getURL();
                 char pMySQL[] = "sdbc:mysql";
                 bSupport = url.matchAsciiL(pMySQL,(sizeof(pMySQL)/sizeof(pMySQL[0]))-1);
             }
@@ -404,7 +404,7 @@ namespace dbtools
         try
         {
             Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
-            ::rtl::OUString sConnectionURL( xMeta->getURL() );
+            OUString sConnectionURL( xMeta->getURL() );
             doDisplay = sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
         }
         catch( const Exception& )
@@ -421,7 +421,7 @@ namespace dbtools
         try
         {
             Reference< XDatabaseMetaData > xMeta( m_pImpl->xConnectionMetaData, UNO_SET_THROW );
-            ::rtl::OUString sConnectionURL( xMeta->getURL() );
+            OUString sConnectionURL( xMeta->getURL() );
             bSupported = !sConnectionURL.startsWith( "sdbc:mysql:mysqlc" );
         }
         catch( const Exception& )

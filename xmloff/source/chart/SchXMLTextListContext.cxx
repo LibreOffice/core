@@ -26,7 +26,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using namespace com::sun::star;
@@ -43,11 +42,11 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:
-    ::rtl::OUString& m_rText;
+    OUString& m_rText;
 };
 
 SchXMLListItemContext::SchXMLListItemContext(

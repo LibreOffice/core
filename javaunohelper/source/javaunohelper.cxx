@@ -40,8 +40,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OString;
-using ::rtl::OUString;
 
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
@@ -64,7 +62,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, ::rtl::OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
 #else
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
@@ -148,7 +146,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     (void) jRegKey;
     (void) loader;
 
-    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, ::rtl::OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
 #endif
 
     OUString aLibName( pJLibName );

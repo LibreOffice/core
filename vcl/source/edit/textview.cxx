@@ -107,7 +107,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
-        aAny <<= (::rtl::OUString)GetText();
+        aAny <<= (OUString)GetText();
     }
     else if ( nT == SOT_FORMATSTR_ID_HTML )
     {
@@ -706,7 +706,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             {
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsShift() &&
                         !rKeyEvent.GetKeyCode().IsMod1() && !rKeyEvent.GetKeyCode().IsMod2() &&
-                        ImplCheckTextLen( rtl::OUString('x') ) )
+                        ImplCheckTextLen( OUString('x') ) )
                 {
                     aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, '\t', !IsInsertMode() );
                     bModified = sal_True;
@@ -720,7 +720,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 // Shift-RETURN darf nicht geschluckt werden, weil dann keine
                 // mehrzeilige Eingabe in Dialogen/Property-Editor moeglich.
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod1() &&
-                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( rtl::OUString('x') ) )
+                        !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( OUString('x') ) )
                 {
                     mpImpl->mpTextEngine->UndoActionStart();
                     aCurSel = mpImpl->mpTextEngine->ImpInsertParaBreak( aCurSel );
@@ -755,7 +755,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
-                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( rtl::OUString(nCharCode) ) )    // sonst trotzdem das Zeichen schlucken...
+                    if ( !mpImpl->mbReadOnly && ImplCheckTextLen( OUString(nCharCode) ) )    // sonst trotzdem das Zeichen schlucken...
                     {
                         aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), sal_True );
                         bModified = sal_True;
@@ -1176,7 +1176,7 @@ void TextView::Paste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
                 try
                 {
                     uno::Any aData = xDataObj->getTransferData( aFlavor );
-                    ::rtl::OUString aText;
+                    OUString aText;
                     aData >>= aText;
                     bool bWasTruncated = false;
                     if( mpImpl->mpTextEngine->GetMaxTextLen() != 0 )
@@ -1342,7 +1342,7 @@ void TextView::InsertText( const XubString& rStr, sal_Bool bSelect )
     InsertNewText( rStr, bSelect );
 }
 
-void TextView::InsertNewText( const rtl::OUString& rStr, sal_Bool bSelect )
+void TextView::InsertNewText( const OUString& rStr, sal_Bool bSelect )
 {
 //  HideSelection();
     mpImpl->mpTextEngine->UndoActionStart();
@@ -1957,7 +1957,7 @@ sal_Bool TextView::Read( SvStream& rInput )
     return bDone;
 }
 
-bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
+bool TextView::ImplTruncateNewText( OUString& rNewText ) const
 {
     bool bTruncated = false;
 
@@ -2095,7 +2095,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aOUString;
+                OUString aOUString;
                 aData >>= aOUString;
                 aText = convertLineEnd(aOUString, LINEEND_LF);
             }

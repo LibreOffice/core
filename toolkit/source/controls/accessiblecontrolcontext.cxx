@@ -147,14 +147,14 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "HelpText" );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  ) throw (RuntimeException)
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "Name" );
@@ -204,15 +204,15 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
+    OUString OAccessibleControlContext::getModelStringProperty( const sal_Char* _pPropertyName )
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         try
         {
             if ( !m_xModelPropsInfo.is() && m_xControlModel.is() )
                 m_xModelPropsInfo = m_xControlModel->getPropertySetInfo();
 
-            ::rtl::OUString sPropertyName( ::rtl::OUString::createFromAscii( _pPropertyName ) );
+            OUString sPropertyName( OUString::createFromAscii( _pPropertyName ) );
             if ( m_xModelPropsInfo.is() && m_xModelPropsInfo->hasPropertyByName( sPropertyName ) )
                 m_xControlModel->getPropertyValue( sPropertyName ) >>= sReturn;
         }

@@ -34,16 +34,16 @@ namespace stoc_services
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & )
     throw( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > tcv_getSupportedServiceNames();
-    ::rtl::OUString tcv_getImplementationName();
+    ::com::sun::star::uno::Sequence< OUString > tcv_getSupportedServiceNames();
+    OUString tcv_getImplementationName();
 
     namespace ExternalUriReferenceTranslator
     {
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)
         SAL_THROW((com::sun::star::uno::Exception));
-    rtl::OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
+    OUString SAL_CALL getImplementationName();
+    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriReferenceFactory
@@ -51,8 +51,8 @@ namespace stoc_services
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  const & context)
         SAL_THROW((com::sun::star::uno::Exception));
-    rtl::OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
+    OUString SAL_CALL getImplementationName();
+    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand
@@ -60,8 +60,8 @@ namespace stoc_services
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const &)
         SAL_THROW((::com::sun::star::uno::Exception));
-    ::rtl::OUString SAL_CALL getImplementationName();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
+    OUString SAL_CALL getImplementationName();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace UriSchemeParser_vndDOTsunDOTstarDOTscript
@@ -69,8 +69,8 @@ namespace stoc_services
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &)
         SAL_THROW((com::sun::star::uno::Exception));
-    rtl::OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
+    OUString SAL_CALL getImplementationName();
+    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 
     namespace VndSunStarPkgUrlReferenceFactory
@@ -78,8 +78,8 @@ namespace stoc_services
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context)
         SAL_THROW((com::sun::star::uno::Exception));
-    rtl::OUString SAL_CALL getImplementationName();
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames();
+    OUString SAL_CALL getImplementationName();
+    com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 } // namespace
 

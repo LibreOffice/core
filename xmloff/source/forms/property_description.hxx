@@ -70,7 +70,7 @@ namespace xmloff
     struct PropertyDescription
     {
         /// is the name of the property
-        const ::rtl::OUString               propertyName;
+        const OUString               propertyName;
         /** denotes the attribute which represents the property. Note that multiple properties might comprise a single
             attribute value.
         */
@@ -100,7 +100,7 @@ namespace xmloff
         }
 
         PropertyDescription(
-            const ::rtl::OUString&              i_propertyName,
+            const OUString&              i_propertyName,
             const sal_uInt16                    i_namespacePrefix,
             const ::xmloff::token::XMLTokenEnum i_attributeToken,
             const PropertyHandlerFactory        i_factory,

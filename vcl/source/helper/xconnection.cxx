@@ -29,7 +29,6 @@ using namespace vcl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
 
-using ::rtl::OUString;
 
 DisplayConnection::DisplayConnection()
 {

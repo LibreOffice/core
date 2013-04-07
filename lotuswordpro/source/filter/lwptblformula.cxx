@@ -128,9 +128,9 @@ sal_Bool LwpFormulaInfo::ReadText()
     m_pObjStrm->QuickRead( pBuf.get(), nStrLen );
     *(pBuf.get()+nStrLen)='\0';
     String aText;
-    aText += rtl::OUString("\"");
+    aText += OUString("\"");
     aText.Append(String(pBuf.get(),nStrLen,osl_getThreadTextEncoding()));
-    aText += rtl::OUString("\"");
+    aText += OUString("\"");
 
     m_aStack.push_back(new LwpFormulaText(aText));
     return sal_True;
@@ -446,9 +446,9 @@ LwpFormulaConst::LwpFormulaConst(double dVal)
     m_dVal = dVal;
 }
 
-rtl::OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
+OUString LwpFormulaConst::ToString(LwpTableLayout* /*pCellsMap*/)
 {
-    return rtl::OUString::valueOf(m_dVal);
+    return OUString::valueOf(m_dVal);
 }
 
 /**
@@ -483,7 +483,7 @@ LwpFormulaCellAddr::LwpFormulaCellAddr(sal_Int16 aCol, sal_Int16 aRow)
 *   @param
 *   @return String
 */
-rtl::OUString LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaCellAddr::ToString(LwpTableLayout* pCellsMap)
 {
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
@@ -519,7 +519,7 @@ LwpFormulaCellRangeAddr::LwpFormulaCellRangeAddr(sal_Int16 aStartCol,
 *   @param
 *   @return String.
 */
-rtl::OUString LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaCellRangeAddr::ToString(LwpTableLayout* pCellsMap)
 {
     String aCellAddr;
     aCellAddr.AppendAscii("<");//&lt;
@@ -587,7 +587,7 @@ void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
 */
 String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 {
-    rtl::OUStringBuffer aFormula;
+    OUStringBuffer aFormula;
     aFormula.append(static_cast<sal_Unicode>('('));
     aFormula.append(ToString(pCellsMap));
     aFormula.append(static_cast<sal_Unicode>(')'));
@@ -600,7 +600,7 @@ String LwpFormulaFunc::ToArgString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-rtl::OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
 
@@ -636,7 +636,7 @@ rtl::OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-rtl::OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
     if (2==m_aArgs.size())
@@ -669,7 +669,7 @@ rtl::OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 *   @param
 *   @return sal_Bool.
 */
-rtl::OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
+OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
 {
     String aFormula;
     if (1==m_aArgs.size())
@@ -699,64 +699,64 @@ String LwpFormulaTools::GetName(sal_uInt16 nTokenType)
     switch(nTokenType)
     {
     case TK_SUM:
-        aName = rtl::OUString("SUM");
+        aName = OUString("SUM");
         break;
     case TK_IF:
-        aName = rtl::OUString("IF");//Not supported by SODC
+        aName = OUString("IF");//Not supported by SODC
         break;
     case TK_COUNT:
-        aName = rtl::OUString("COUNT");//Not supported by SODC
+        aName = OUString("COUNT");//Not supported by SODC
         break;
     case TK_MINIMUM:
-        aName = rtl::OUString("MIN");
+        aName = OUString("MIN");
         break;
     case TK_MAXIMUM:
-        aName = rtl::OUString("MAX");
+        aName = OUString("MAX");
         break;
     case TK_AVERAGE:
-        aName = rtl::OUString("MEAN");
+        aName = OUString("MEAN");
         break;
     case TK_ADD:
-        aName = rtl::OUString("+");
+        aName = OUString("+");
         break;
     case TK_SUBTRACT:
-        aName = rtl::OUString("-");
+        aName = OUString("-");
         break;
     case TK_MULTIPLY:
-        aName = rtl::OUString("*");
+        aName = OUString("*");
         break;
     case TK_DIVIDE:
-        aName = rtl::OUString("/");
+        aName = OUString("/");
         break;
     case TK_UNARY_MINUS:
-        aName = rtl::OUString("-");
+        aName = OUString("-");
         break;
     case TK_LESS:
-        aName = rtl::OUString("L");
+        aName = OUString("L");
         break;
     case TK_LESS_OR_EQUAL:
-        aName = rtl::OUString("LEQ");
+        aName = OUString("LEQ");
         break;
     case TK_GREATER:
-        aName = rtl::OUString("G");
+        aName = OUString("G");
         break;
     case TK_GREATER_OR_EQUAL:
-        aName = rtl::OUString("GEQ");
+        aName = OUString("GEQ");
         break;
     case TK_EQUAL:
-        aName = rtl::OUString("EQ");
+        aName = OUString("EQ");
         break;
     case TK_NOT_EQUAL:
-        aName = rtl::OUString("NEQ");
+        aName = OUString("NEQ");
         break;
     case TK_NOT:
-        aName = rtl::OUString("NOT");
+        aName = OUString("NOT");
         break;
     case TK_AND:
-        aName = rtl::OUString("AND");
+        aName = OUString("AND");
         break;
     case TK_OR:
-        aName = rtl::OUString("OR");
+        aName = OUString("OR");
         break;
     default:
         assert(false);

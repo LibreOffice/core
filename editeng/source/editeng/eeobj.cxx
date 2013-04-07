@@ -54,7 +54,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
-        aAny <<= (::rtl::OUString)GetString();
+        aAny <<= (OUString)GetString();
     }
     else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
     {

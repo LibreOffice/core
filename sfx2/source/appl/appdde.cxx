@@ -67,7 +67,7 @@ public:
     ImplDdeService( const String& rNm )
         : DdeService( rNm )
     {}
-    virtual sal_Bool MakeTopic( const rtl::OUString& );
+    virtual sal_Bool MakeTopic( const OUString& );
 
     virtual String  Topics();
 
@@ -111,7 +111,7 @@ namespace
     }
 }
 
-sal_Bool ImplDdeService::MakeTopic( const rtl::OUString& rNm )
+sal_Bool ImplDdeService::MakeTopic( const OUString& rNm )
 {
     // Workaround for Event after Main() under OS/2
     // happens when exiting starts the App again
@@ -224,7 +224,7 @@ public:
     virtual sal_Bool Put( const DdeData* );
     virtual sal_Bool Execute( const String* );
     virtual sal_Bool StartAdviseLoop();
-    virtual sal_Bool MakeItem( const rtl::OUString& rItem );
+    virtual sal_Bool MakeItem( const OUString& rItem );
 };
 
 
@@ -254,7 +254,7 @@ sal_Bool SfxAppEvent_Impl( ApplicationEvent &rAppEvent,
     sEvent += "(";
     if (rCmd.startsWithIgnoreAsciiCase(sEvent))
     {
-        ::rtl::OUStringBuffer aData( rCmd );
+        OUStringBuffer aData( rCmd );
         aData.remove(0, sEvent.getLength());
         if ( aData.getLength() > 2 )
         {
@@ -665,7 +665,7 @@ sal_Bool SfxDdeDocTopic_Impl::Execute( const String* pStr )
     return 0 != nRet;
 }
 
-sal_Bool SfxDdeDocTopic_Impl::MakeItem( const rtl::OUString& rItem )
+sal_Bool SfxDdeDocTopic_Impl::MakeItem( const OUString& rItem )
 {
     AddItem( DdeItem( rItem ) );
     return sal_True;

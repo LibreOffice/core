@@ -50,7 +50,7 @@ class SwFldDokInfPage : public SwFldPage
 
     sal_uInt16              nOldSel;
     sal_uLong               nOldFormat;
-    ::rtl::OUString     m_sOldCustomFieldName;
+    OUString     m_sOldCustomFieldName;
 
     DECL_LINK(TypeHdl, void * = 0);
     DECL_LINK(SubTypeHdl, void * = 0);

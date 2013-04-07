@@ -22,7 +22,7 @@ class ScDocFuncSend : public ScDocFunc
     ScCollaboration*    mpCollaboration;
 
     friend class ScCollaboration;
-    void                RecvMessage( const rtl::OString &rString );
+    void                RecvMessage( const OString &rString );
     void                SendMessage( ScChangeOpWriter &rOp );
 public:
     // FIXME: really ScDocFunc should be an abstract base, so

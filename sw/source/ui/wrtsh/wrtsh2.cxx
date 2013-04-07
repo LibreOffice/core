@@ -114,7 +114,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
         pTmp->PushCrsr();
 
         sal_Bool bCancel = sal_False;
-        rtl::OString aDlgPos;
+        OString aDlgPos;
         for( sal_uInt16 i = 0; i < nCnt && !bCancel; ++i )
         {
             pTmp->GotoFieldPos( i );
@@ -137,7 +137,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst, sal_Bool bOnlyInSel )
 // Start input dialog for a specific field
 
 sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
-                                    Window* pParentWin, rtl::OString* pWindowState )
+                                    Window* pParentWin, OString* pWindowState )
 {
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -156,7 +156,7 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     return bRet;
 }
 
-sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, rtl::OString* pWindowState)
+sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, OString* pWindowState)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -358,8 +358,8 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
 }
 
 
-void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
-              const rtl::OUString& rTargetFrameName )
+void LoadURL( ViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
+              const OUString& rTargetFrameName )
 {
     OSL_ENSURE( !rURL.isEmpty(), "what should be loaded here?" );
     if( rURL.isEmpty() )
@@ -374,7 +374,7 @@ void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");
-    rtl::OUString sTargetFrame(rTargetFrameName);
+    OUString sTargetFrame(rTargetFrameName);
     if (sTargetFrame.isEmpty() && pDShell)
     {
         using namespace ::com::sun::star;
@@ -399,7 +399,7 @@ void LoadURL( ViewShell& rVSh, const rtl::OUString& rURL, sal_uInt16 nFilter,
     SfxBoolItem aBrowse( SID_BROWSE, sal_True );
 
     if( nFilter & URLLOAD_NEWVIEW )
-        aTargetFrameName.SetValue( rtl::OUString("_blank") );
+        aTargetFrameName.SetValue( OUString("_blank") );
 
     const SfxPoolItem* aArr[] = {
                 &aName,

@@ -35,10 +35,10 @@ public:
                             const String& rTitle,
                             const String& rEditTitle,
                             const String& rDefault,
-                            const rtl::OString& sHelpId, const rtl::OString& sEditHelpId );
+                            const OString& sHelpId, const OString& sEditHelpId );
             ~ScStringInputDlg();
 
-    void GetInputString( rtl::OUString& rString ) const;
+    void GetInputString( OUString& rString ) const;
 
 private:
     FixedText       aFtEditTitle;

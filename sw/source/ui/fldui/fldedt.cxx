@@ -201,7 +201,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
     SetTabPage(pTabPage);
 
     String sTitle(GetText());
-    sTitle.Insert(rtl::OUString(": "), 0);
+    sTitle.Insert(OUString(": "), 0);
     sTitle.Insert(SW_RESSTR(STR_FLD_EDIT_DLG), 0);
     SetText(sTitle);
 

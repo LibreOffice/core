@@ -109,10 +109,10 @@ OUString ScEditCell::GetString() const
         // Also Text from URL fields, Doc-Engine is a ScFieldEditEngine
         EditEngine& rEngine = mpDoc->GetEditEngine();
         rEngine.SetText(*mpData);
-        rtl::OUString sRet = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+        OUString sRet = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
         // cache short strings for formulas
         if ( sRet.getLength() < 256 )
-            mpString = new rtl::OUString(sRet);   //! non-const
+            mpString = new OUString(sRet);   //! non-const
         return sRet;
     }
 

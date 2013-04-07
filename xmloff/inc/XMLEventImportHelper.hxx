@@ -35,8 +35,8 @@ class XMLEventContextFactory;
 class XMLEventsImportContext;
 struct XMLEventNameTranslation;
 
-typedef ::std::map< ::rtl::OUString, XMLEventContextFactory* > FactoryMap;
-typedef ::std::map< XMLEventName, ::rtl::OUString > NameMap;
+typedef ::std::map< OUString, XMLEventContextFactory* > FactoryMap;
+typedef ::std::map< XMLEventName, OUString > NameMap;
 typedef ::std::list< NameMap* > NameMapList;
 
 
@@ -70,7 +70,7 @@ public:
     ~XMLEventImportHelper();
 
     /// register a handler for a particular language type
-    void RegisterFactory( const ::rtl::OUString& rLanguage,
+    void RegisterFactory( const OUString& rLanguage,
                           XMLEventContextFactory* aFactory );
 
     /// add event name translation to the internal table
@@ -86,12 +86,12 @@ public:
     SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         XMLEventsImportContext* rEvents,
-        const ::rtl::OUString& rXmlEventName,
-        const ::rtl::OUString& rLanguage);
+        const OUString& rXmlEventName,
+        const OUString& rLanguage);
 
 };
 

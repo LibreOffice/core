@@ -61,15 +61,14 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 struct SwTextSectionProperties_Impl
 {
     uno::Sequence<sal_Int8> m_Password;
-    ::rtl::OUString  m_sCondition;
-    ::rtl::OUString  m_sLinkFileName;
-    ::rtl::OUString  m_sSectionFilter;
-    ::rtl::OUString  m_sSectionRegion;
+    OUString  m_sCondition;
+    OUString  m_sLinkFileName;
+    OUString  m_sSectionFilter;
+    OUString  m_sSectionRegion;
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwFmtCol>               m_pColItem;
@@ -113,7 +112,7 @@ public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     const bool                  m_bIndexHeader;
     bool                        m_bIsDescriptor;
-    ::rtl::OUString             m_sName;
+    OUString             m_sName;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwTextSectionProperties_Impl> m_pProps;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -147,14 +146,14 @@ public:
     }
 
     void SAL_CALL SetPropertyValues_Impl(
-            const uno::Sequence< ::rtl::OUString >& rPropertyNames,
+            const uno::Sequence< OUString >& rPropertyNames,
             const uno::Sequence< uno::Any >& aValues)
         throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
                 uno::RuntimeException);
     uno::Sequence< uno::Any > SAL_CALL
         GetPropertyValues_Impl(
-            const uno::Sequence< ::rtl::OUString >& rPropertyNames)
+            const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
 protected:
@@ -337,7 +336,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     String tmp(m_pImpl->m_sName);
     SwSectionData aSect(eType, pDoc->GetUniqueSectionName(&tmp));
     aSect.SetCondition(m_pImpl->m_pProps->m_sCondition);
-    ::rtl::OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
+    OUStringBuffer sLinkNameBuf(m_pImpl->m_pProps->m_sLinkFileName);
     sLinkNameBuf.append(sfx2::cTokenSeperator);
     sLinkNameBuf.append(m_pImpl->m_pProps->m_sSectionFilter);
     sLinkNameBuf.append(sfx2::cTokenSeperator);
@@ -623,7 +622,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 {
                     if (!m_pProps->m_bDDE)
                     {
-                        ::rtl::OUStringBuffer buf;
+                        OUStringBuffer buf;
                         buf.append(sfx2::cTokenSeperator);
                         buf.append(sfx2::cTokenSeperator);
                         m_pProps->m_sLinkFileName = buf.makeStringAndClear();
@@ -687,7 +686,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     {
                         pSectionData->SetType(FILE_LINK_SECTION);
                     }
-                    ::rtl::OUStringBuffer sFileNameBuf;
+                    OUStringBuffer sFileNameBuf;
                     if (!aLink.FileURL.isEmpty())
                     {
                         sFileNameBuf.append( URIHelper::SmartRel2Abs(
@@ -701,7 +700,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     sFileNameBuf.append(
                         pSectionData->GetLinkFileName().GetToken(2,
                             sfx2::cTokenSeperator));
-                    const ::rtl::OUString sFileName(
+                    const OUString sFileName(
                             sFileNameBuf.makeStringAndClear());
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
@@ -926,7 +925,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
 void SAL_CALL
 SwXTextSection::setPropertyValues(
-    const uno::Sequence< ::rtl::OUString >& rPropertyNames,
+    const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues)
 throw (beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException, uno::RuntimeException)
@@ -956,7 +955,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< ::rtl::OUString > aPropertyNames(1);
+    uno::Sequence< OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
     uno::Sequence< uno::Any > aValues(1);
     aValues.getArray()[0] = rValue;
@@ -998,7 +997,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
                 OUString uTmp( (m_bIsDescriptor)
                     ? m_pProps->m_sCondition
-                    : ::rtl::OUString(pSect->GetCondition()));
+                    : OUString(pSect->GetCondition()));
                 pRet[nProperty] <<= uTmp;
             }
             break;
@@ -1006,7 +1005,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_SECT_DDE_FILE:
             case WID_SECT_DDE_ELEMENT:
             {
-                ::rtl::OUString sRet;
+                OUString sRet;
                 if (m_bIsDescriptor)
                 {
                     if (m_pProps->m_bDDE)
@@ -1048,7 +1047,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 else if (FILE_LINK_SECTION == pSect->GetType())
                 {
-                    ::rtl::OUString sRet( pSect->GetLinkFileName() );
+                    OUString sRet( pSect->GetLinkFileName() );
                     sal_Int32 nIndex(0);
                     aLink.FileURL =
                         sRet.getToken(0, sfx2::cTokenSeperator, nIndex);
@@ -1060,7 +1059,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_REGION :
             {
-                ::rtl::OUString sRet;
+                OUString sRet;
                 if (m_bIsDescriptor)
                 {
                     sRet = m_pProps->m_sSectionRegion;
@@ -1278,7 +1277,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 uno::Sequence< uno::Any > SAL_CALL
 SwXTextSection::getPropertyValues(
-    const uno::Sequence< ::rtl::OUString >& rPropertyNames)
+    const uno::Sequence< OUString >& rPropertyNames)
 throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1310,7 +1309,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 {
     SolarMutexGuard aGuard;
 
-    uno::Sequence< ::rtl::OUString > aPropertyNames(1);
+    uno::Sequence< OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
     return m_pImpl->GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
@@ -1340,7 +1339,7 @@ void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
 
 void SAL_CALL
 SwXTextSection::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1350,7 +1349,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextSection::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1360,7 +1359,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextSection::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1370,7 +1369,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXTextSection::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1530,9 +1529,9 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             if (m_pImpl->m_bIsDescriptor)
             {
                 m_pImpl->m_pProps->m_bDDE = false;
-                m_pImpl->m_pProps->m_sLinkFileName = ::rtl::OUString();
-                m_pImpl->m_pProps->m_sSectionRegion = ::rtl::OUString();
-                m_pImpl->m_pProps->m_sSectionFilter = ::rtl::OUString();
+                m_pImpl->m_pProps->m_sLinkFileName = OUString();
+                m_pImpl->m_pProps->m_sSectionRegion = OUString();
+                m_pImpl->m_pProps->m_sSectionFilter = OUString();
             }
             else
             {
@@ -1685,7 +1684,7 @@ OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     SwSectionFmt const*const pFmt = m_pImpl->GetSectionFmt();
     if(pFmt)
     {

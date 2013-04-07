@@ -70,11 +70,11 @@ using namespace ::com::sun::star;
 class InsertBookmarkAsPage_FindDuplicateLayouts
 {
 public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> &rLayoutsToTransfer )
+    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<OUString> &rLayoutsToTransfer )
         : mrLayoutsToTransfer(rLayoutsToTransfer) {}
     void operator()( SdDrawDocument&, SdPage* );
 private:
-    std::vector<rtl::OUString> &mrLayoutsToTransfer;
+    std::vector<OUString> &mrLayoutsToTransfer;
 };
 
 void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
@@ -85,9 +85,9 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     String aFullNameLayout( pBMMPage->GetLayoutName() );
     aFullNameLayout.Erase( aFullNameLayout.SearchAscii( SD_LT_SEPARATOR ));
 
-    rtl::OUString aLayout(aFullNameLayout);
+    OUString aLayout(aFullNameLayout);
 
-    std::vector<rtl::OUString>::const_iterator pIter =
+    std::vector<OUString>::const_iterator pIter =
             find(mrLayoutsToTransfer.begin(),mrLayoutsToTransfer.end(),aLayout);
 
     bool bFound = pIter != mrLayoutsToTransfer.end();
@@ -100,7 +100,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         String aFullTest(pTestPage->GetLayoutName());
         aFullTest.Erase( aFullTest.SearchAscii( SD_LT_SEPARATOR ));
 
-        rtl::OUString aTest(aFullTest);
+        OUString aTest(aFullTest);
 
         if (aTest == aLayout)
             bFound = true;
@@ -112,7 +112,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 
 // Inserts a bookmark as a page
 static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
-                               const std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
+                               const std::vector<OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
                                InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
 {
     //
@@ -260,8 +260,8 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const String& rBookmarkFile)
 
 // Inserts a bookmark (page or object)
 sal_Bool SdDrawDocument::InsertBookmark(
-    const std::vector<rtl::OUString> &rBookmarkList,    // List of names of the bookmarks to be inserted
-    std::vector<rtl::OUString> &rExchangeList,          // List of the names to be used
+    const std::vector<OUString> &rBookmarkList,    // List of names of the bookmarks to be inserted
+    std::vector<OUString> &rExchangeList,          // List of the names to be used
     sal_Bool bLink,                                     // Insert bookmarks as links?
     sal_Bool bReplace,                                  // Replace current default and notes pages?
     sal_uInt16 nInsertPos,                              // Insertion position of pages
@@ -296,7 +296,7 @@ sal_Bool SdDrawDocument::InsertBookmark(
         else
             bOK = sal_False;
 
-        std::vector<rtl::OUString>::const_iterator pIter;
+        std::vector<OUString>::const_iterator pIter;
         for ( pIter = rBookmarkList.begin(); bOK && pIter != rBookmarkList.end() && !bInsertPages; ++pIter )
         {
             // Is there a page name in the bookmark list?
@@ -351,8 +351,8 @@ lcl_removeUnusedStyles(SfxStyleSheetBasePool* const pStyleSheetPool, SdStyleShee
 }
 
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
-    const std::vector<rtl::OUString> &rBookmarkList,
-    std::vector<rtl::OUString> *pExchangeList,            // List of names to be used
+    const std::vector<OUString> &rBookmarkList,
+    std::vector<OUString> *pExchangeList,            // List of names to be used
     sal_Bool bLink,
     sal_Bool bReplace,
     sal_uInt16 nInsertPos,
@@ -465,7 +465,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     //
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
-    std::vector<rtl::OUString> aLayoutsToTransfer;
+    std::vector<OUString> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
     lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor );
 
@@ -478,7 +478,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     if( !aLayoutsToTransfer.empty() )
         bMergeMasterPages = sal_True;
 
-    std::vector<rtl::OUString>::const_iterator pIter;
+    std::vector<OUString>::const_iterator pIter;
     for ( pIter = aLayoutsToTransfer.begin(); pIter != aLayoutsToTransfer.end(); ++pIter )
     {
         SdStyleSheetVector aCreatedStyles;
@@ -527,7 +527,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
         sal_uInt16 nBMSdPage;
         std::set<sal_uInt16> aRenameSet;
-        std::map<sal_uInt16,rtl::OUString> aNameMap;
+        std::map<sal_uInt16,OUString> aNameMap;
 
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
@@ -795,7 +795,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             nSdPageEnd = nSdPageStart + nReplacedStandardPages - 1;
         }
 
-        std::vector<rtl::OUString>::iterator pExchangeIter;
+        std::vector<OUString>::iterator pExchangeIter;
 
         if (pExchangeList)
             pExchangeIter = pExchangeList->begin();
@@ -919,8 +919,8 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
 // Inserts a bookmark as an object
 sal_Bool SdDrawDocument::InsertBookmarkAsObject(
-    const std::vector<rtl::OUString> &rBookmarkList,
-    const std::vector<rtl::OUString> &rExchangeList,            // List of names to use
+    const std::vector<OUString> &rBookmarkList,
+    const std::vector<OUString> &rExchangeList,            // List of names to use
     sal_Bool /* bLink */,
     ::sd::DrawDocShell* pBookmarkDocSh,
     Point* pObjPos, bool bCalcObjCount)
@@ -962,7 +962,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
         SdrPage* pPage;
         SdrPageView* pPV;
 
-        std::vector<rtl::OUString>::const_iterator pIter;
+        std::vector<OUString>::const_iterator pIter;
         for ( pIter = rBookmarkList.begin(); pIter != rBookmarkList.end(); ++pIter )
         {
             // Get names of bookmarks from the list
@@ -1072,7 +1072,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
             // Get number of objects after inserting.
             sal_uLong nCount = pPage->GetObjCount();
 
-            std::vector<rtl::OUString>::const_iterator pIter = rExchangeList.begin();
+            std::vector<OUString>::const_iterator pIter = rExchangeList.begin();
             for (sal_uLong nObj = nCountBefore; nObj < nCount; nObj++)
             {
                 // Get the name to use from the Exchange list

@@ -38,17 +38,17 @@ class SdXMLGenericPageContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationAccess > mxAnnotationAccess;
 
 protected:
-    rtl::OUString               maPageLayoutName;
-    rtl::OUString               maUseHeaderDeclName;
-    rtl::OUString               maUseFooterDeclName;
-    rtl::OUString               maUseDateTimeDeclName;
-    rtl::OUString               msNavOrder;
+    OUString               maPageLayoutName;
+    OUString               maUseHeaderDeclName;
+    OUString               maUseFooterDeclName;
+    OUString               maUseDateTimeDeclName;
+    OUString               msNavOrder;
 
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
 
     /** sets the page style on this page */
-    void SetStyle( rtl::OUString& rStyleName );
+    void SetStyle( OUString& rStyleName );
 
     /** sets the presentation layout at this page. It is used for drawing pages and for the handout master */
     void SetLayout();
@@ -60,21 +60,21 @@ protected:
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
     /** sets the properties from a page master style with the given name on this contexts page */
-    void SetPageMaster( rtl::OUString& rsPageMasterName );
+    void SetPageMaster( OUString& rsPageMasterName );
 
     void SetNavigationOrder();
 
 public:
     TYPEINFO();
 
-    SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+    SdXMLGenericPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLGenericPageContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 

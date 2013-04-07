@@ -131,7 +131,7 @@ bool EApiInit()
 
     for( guint j = 0; j < G_N_ELEMENTS( eBookLibNames ); j++ )
     {
-        aModule = osl_loadModule( rtl::OUString::createFromAscii
+        aModule = osl_loadModule( OUString::createFromAscii
                                   ( eBookLibNames[ j ] ).pData,
                                   SAL_LOADMODULE_DEFAULT );
 

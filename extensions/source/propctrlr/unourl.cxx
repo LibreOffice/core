@@ -34,7 +34,7 @@ namespace pcr
     //====================================================================
     //= UnoURL
     //====================================================================
-    UnoURL::UnoURL( const ::rtl::OUString& _rCompleteURL, const Reference< XMultiServiceFactory >& _rxORB )
+    UnoURL::UnoURL( const OUString& _rCompleteURL, const Reference< XMultiServiceFactory >& _rxORB )
     {
         m_aURL.Complete = _rCompleteURL;
 

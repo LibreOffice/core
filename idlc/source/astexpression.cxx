@@ -110,7 +110,7 @@ AstExpression::AstExpression(double d)
     m_exprValue->u.dval = d;
 }
 
-AstExpression::AstExpression(::rtl::OString* scopedName)
+AstExpression::AstExpression(OString* scopedName)
     : m_combOperator(EC_symbol)
     , m_subExpr1(NULL)
     , m_subExpr2(NULL)

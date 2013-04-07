@@ -50,8 +50,8 @@ public:
     };
 
 public:
-    static ::rtl::OUString createDescription( ActionType eActionType
-                        , const ::rtl::OUString& rObjectName );
+    static OUString createDescription( ActionType eActionType
+                        , const OUString& rObjectName );
 };
 
 #endif

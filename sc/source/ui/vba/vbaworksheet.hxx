@@ -61,7 +61,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::container::XNameAccess > getFormControls();
-    css::uno::Any getControlShape( const rtl::OUString& sName );
+    css::uno::Any getControlShape( const OUString& sName );
 
 public:
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
@@ -77,12 +77,12 @@ public:
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( rtl::OUString);
+    css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( OUString);
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopy(css::uno::Reference< ov::excel::XWorksheet> xSheet, bool bAfter);
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString &rName ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Int32 nVisible ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getStandardWidth() throw (css::uno::RuntimeException);
@@ -123,7 +123,7 @@ public:
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Rows(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Columns(const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
 
-    virtual css::uno::Any SAL_CALL Evaluate( const ::rtl::OUString& Name ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Evaluate( const OUString& Name ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Comments( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Hyperlinks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
@@ -147,19 +147,19 @@ public:
     virtual void SAL_CALL ShowDataForm(  ) throw (css::uno::RuntimeException);
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL invoke( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMethod( const OUString& aName ) throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasProperty( const OUString& aName ) throw (css::uno::RuntimeException);
     // CodeName
-    virtual rtl::OUString SAL_CALL getCodeName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCodeName() throw (css::uno::RuntimeException);
     sal_Int16 getSheetID() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     // XUnoTunnel
     virtual ::sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8 >& rId ) throw(css::uno::RuntimeException);
 };

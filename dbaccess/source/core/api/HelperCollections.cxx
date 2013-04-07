@@ -41,7 +41,7 @@ namespace dbaccess
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector,
+                        const ::std::vector< OUString> &_rVector,
                         sal_Bool _bUseAsIndex
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector,_bUseAsIndex)
                         ,m_aColumns(_rColumns)
@@ -51,9 +51,9 @@ namespace dbaccess
     OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         sal_Bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
-        ::std::vector< ::rtl::OUString > aNames; aNames.reserve( _rColumns->get().size() );
+        ::std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
 
-        ::rtl::OUString sColumName;
+        OUString sColumName;
         for (   ::connectivity::OSQLColumns::Vector::const_iterator column = _rColumns->get().begin();
                 column != _rColumns->get().end();
                 ++column
@@ -75,7 +75,7 @@ namespace dbaccess
         OPrivateColumns_Base::disposing();
     }
 
-    connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const ::rtl::OUString& _rName)
+    connectivity::sdbcx::ObjectType OPrivateColumns::createObject(const OUString& _rName)
     {
         if ( m_aColumns.is() )
         {
@@ -91,7 +91,7 @@ namespace dbaccess
         return NULL;
     }
 
-    connectivity::sdbcx::ObjectType OPrivateTables::createObject(const ::rtl::OUString& _rName)
+    connectivity::sdbcx::ObjectType OPrivateTables::createObject(const OUString& _rName)
     {
         if ( !m_aTables.empty() )
         {

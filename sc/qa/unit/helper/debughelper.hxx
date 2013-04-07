@@ -52,8 +52,6 @@
 #include <iostream>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::cout;
 using ::std::cerr;
 using ::std::endl;

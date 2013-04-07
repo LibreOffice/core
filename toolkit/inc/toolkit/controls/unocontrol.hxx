@@ -116,14 +116,14 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     virtual void                                                                updateFromModel();
     void                                                                        peerCreated();
-    bool                                                                        ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable );
+    bool                                                                        ImplCheckLocalize( OUString& _rPossiblyLocalizable );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
-    virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    virtual void                                                                ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
     virtual void                                                                ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents );
 
-    void                                                                        ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock );
-    void                                                                        ImplLockPropertyChangeNotifications( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rPropertyNames, bool bLock );
+    void                                                                        ImplLockPropertyChangeNotification( const OUString& rPropertyName, bool bLock );
+    void                                                                        ImplLockPropertyChangeNotifications( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames, bool bLock );
 
     void                                                                        disposeAccessibleContext();
 
@@ -133,7 +133,7 @@ protected:
         mxVclWindowPeer = ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >(mxPeer,::com::sun::star::uno::UNO_QUERY); // just to avoid the query_interface thing
     }
 
-    virtual sal_Bool   requiresNewPeer( const ::rtl::OUString& _rPropertyName ) const;
+    virtual sal_Bool   requiresNewPeer( const OUString& _rPropertyName ) const;
 
 public:
                 UnoControl();
@@ -142,7 +142,7 @@ public:
                 UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }
 
 
-    virtual ::rtl::OUString GetComponentServiceName();
+    virtual OUString GetComponentServiceName();
 
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
@@ -202,9 +202,9 @@ public:
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);

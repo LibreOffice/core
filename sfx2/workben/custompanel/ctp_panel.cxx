@@ -84,7 +84,7 @@ namespace sd { namespace colortoolpanel
 
                 WindowDescriptor aWindow;
                 aWindow.Type = WindowClass_SIMPLE;
-                aWindow.WindowServiceName = ::rtl::OUString( "window" );
+                aWindow.WindowServiceName = OUString( "window" );
                 aWindow.Parent = i_rParentWindow;
                 aWindow.WindowAttributes = WindowAttribute::BORDER;
 
@@ -135,7 +135,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
         return m_xWindow;
     }
 
@@ -144,7 +144,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
 
         // TODO: the following is wrong, since it doesn't respect i_rParentAccessible. In a real extension, you should
         // implement this correctly :)
@@ -203,7 +203,7 @@ namespace sd { namespace colortoolpanel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     PanelUIElement::PanelUIElement( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow,
-        const ::rtl::OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )
+        const OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )
         :PanelUIElement_Base( m_aMutex )
         ,m_sResourceURL( i_rResourceURL )
         ,m_xToolPanel( new SingleColorPanel( i_rContext, i_rParentWindow, i_nPanelColor ) )
@@ -223,7 +223,7 @@ namespace sd { namespace colortoolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PanelUIElement::getResourceURL() throw (RuntimeException)
+    OUString SAL_CALL PanelUIElement::getResourceURL() throw (RuntimeException)
     {
         return m_sResourceURL;
     }

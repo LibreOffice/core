@@ -29,8 +29,8 @@ namespace framework
 class FWI_DLLPUBLIC NetworkDomain
 {
     public:
-        static rtl::OUString GetNTDomainName();
-        static rtl::OUString GetYPDomainName();
+        static OUString GetNTDomainName();
+        static OUString GetYPDomainName();
 };
 
 }

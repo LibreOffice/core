@@ -425,7 +425,7 @@ namespace
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
       throw RuntimeException(
-          rtl::OUString( "illegal vtable index!" ),
+          OUString( "illegal vtable index!" ),
           (XInterface *)pThis );
     }
 
@@ -538,7 +538,7 @@ namespace
     fprintf(stderr,"cpp_mediate6\n");
 #endif
           throw RuntimeException(
-              rtl::OUString( "no member description found!" ),
+              OUString( "no member description found!" ),
               (XInterface *)pThis );
         }
     }

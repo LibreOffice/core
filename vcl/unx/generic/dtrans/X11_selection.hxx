@@ -51,7 +51,7 @@ namespace x11 {
     class PixmapHolder; // in bmp.hxx
 
 // ------------------------------------------------------------------------
-    rtl_TextEncoding getTextPlainEncoding( const ::rtl::OUString& rMimeType );
+    rtl_TextEncoding getTextPlainEncoding( const OUString& rMimeType );
 
     class SelectionAdaptor
     {
@@ -106,9 +106,9 @@ namespace x11 {
         virtual void        SAL_CALL setDefaultActions( sal_Int8 actions ) throw();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
-        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw();
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual OUString SAL_CALL getImplementationName() throw();
+        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw();
+        virtual ::com::sun::star::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() throw();
     };
 
@@ -127,9 +127,9 @@ namespace x11 {
         virtual ~SelectionManagerHolder();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw();
-        virtual sal_Bool    SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw();
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual OUString SAL_CALL getImplementationName() throw();
+        virtual sal_Bool    SAL_CALL supportsService( const OUString& ServiceName ) throw();
+        virtual ::com::sun::star::uno::Sequence< OUString >
                             SAL_CALL getSupportedServiceNames() throw();
 
         // XInitialization
@@ -157,7 +157,7 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        static ::boost::unordered_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >& getInstances();
+        static ::boost::unordered_map< OUString, SelectionManager*, OUStringHash >& getInstances();
 
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot
@@ -361,9 +361,9 @@ namespace x11 {
         Atom                        m_nXdndActionPrivate;
 
         // caching for atoms
-        ::boost::unordered_map< Atom, ::rtl::OUString >
+        ::boost::unordered_map< Atom, OUString >
                                     m_aAtomToString;
-        ::boost::unordered_map< ::rtl::OUString, Atom, ::rtl::OUStringHash >
+        ::boost::unordered_map< OUString, Atom, OUStringHash >
                                     m_aStringToAtom;
 
         // the registered selections
@@ -426,13 +426,13 @@ namespace x11 {
         bool handleXEvent( XEvent& rEvent );
 
         // compound text conversion
-        ::rtl::OString convertToCompound( const ::rtl::OUString& rText );
-        ::rtl::OUString convertFromCompound( const char* pText, int nLen = -1 );
+        OString convertToCompound( const OUString& rText );
+        OUString convertFromCompound( const char* pText, int nLen = -1 );
 
         sal_Int8 getUserDragAction() const;
         sal_Int32 getSelectionTimeout();
     public:
-        static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
+        static SelectionManager& get( const OUString& rDisplayName = OUString() );
 
         Display * getDisplay() { return m_pDisplay; };
         XLIB_Window getWindow() { return m_aWindow; };
@@ -446,19 +446,19 @@ namespace x11 {
         osl::Mutex& getMutex() { return m_aMutex; }
 
 
-        Atom getAtom( const ::rtl::OUString& rString );
-        const ::rtl::OUString& getString( Atom nAtom );
+        Atom getAtom( const OUString& rString );
+        const OUString& getString( Atom nAtom );
 
         // type conversion
         // note: convertTypeToNative does NOT clear the list, so you can append
         // multiple types to the same list
-        void convertTypeToNative( const ::rtl::OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront = false );
-        ::rtl::OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
+        void convertTypeToNative( const OUString& rType, Atom selection, int& rFormat, ::std::list< Atom >& rConversions, bool bPushFront = false );
+        OUString convertTypeFromNative( Atom nType, Atom selection, int& rFormat );
         void getNativeTypeList( const Sequence< com::sun::star::datatransfer::DataFlavor >& rTypes, std::list< Atom >& rOutTypeList, Atom targetselection );
 
         // methods for transferable
         bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
-        bool getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData );
+        bool getPasteData( Atom selection, const OUString& rType, Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
         void registerDropTarget( XLIB_Window aXLIB_Window, DropTarget* pTarget );
@@ -511,11 +511,11 @@ namespace x11 {
 
 // ------------------------------------------------------------------------
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Xdnd_getSupportedServiceNames();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL Xdnd_dropTarget_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Xdnd_dropTarget_createInstance(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 

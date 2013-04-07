@@ -42,7 +42,7 @@ namespace rptui
     public:
         struct Field
         {
-            ::rtl::OUString sName;
+            OUString sName;
             sal_Int32       nDataType;
             sal_Int32       nScale;
             sal_Bool        bIsCurrency;
@@ -69,8 +69,8 @@ namespace rptui
     private:
         bool    impl_lateInit();
 
-        void    impl_onDefinitionPropertyChange( const ::rtl::OUString& _rChangedPropName );
-        void    impl_onFormattedProperttyChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormattedField >& _rxFormatted, const ::rtl::OUString& _rChangedPropName );
+        void    impl_onDefinitionPropertyChange( const OUString& _rChangedPropName );
+        void    impl_onFormattedProperttyChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormattedField >& _rxFormatted, const OUString& _rChangedPropName );
 
         bool    impl_ensureUpToDateFieldList_nothrow();
 

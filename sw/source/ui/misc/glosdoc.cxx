@@ -78,7 +78,7 @@ static String lcl_CheckFileName( const String& rNewFilePath,
     {
         String rSG = SwGlossaries::GetExtension();
         //generate generic name
-        utl::TempFile aTemp(rtl::OUString("group"),
+        utl::TempFile aTemp(OUString("group"),
             &rSG, &rNewFilePath );
         aTemp.EnableKillingFile();
 
@@ -93,7 +93,7 @@ static String lcl_CheckFileName( const String& rNewFilePath,
 ------------------------------------------------------------------------*/
 String  SwGlossaries::GetDefName()
 {
-    return rtl::OUString("standard");
+    return OUString("standard");
 
 }
 
@@ -475,7 +475,7 @@ void SwGlossaries::ShowError()
 
 String SwGlossaries::GetExtension()
 {
-    return rtl::OUString(".bau");
+    return OUString(".bau");
 }
 
 void SwGlossaries::RemoveFileFromList( const String& rGroup )
@@ -487,7 +487,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
         {
             if (*it == rGroup)
             {
-                rtl::OUString aUName = rGroup;
+                OUString aUName = rGroup;
                 {
                     // tell the UNO AutoTextGroup object that it's not valid anymore
                     for (   UnoAutoTextGroups::iterator aLoop = m_aGlossaryGroups.begin();
@@ -537,7 +537,7 @@ void SwGlossaries::RemoveFileFromList( const String& rGroup )
     }
 }
 
-String SwGlossaries::GetCompleteGroupName( const rtl::OUString& GroupName )
+String SwGlossaries::GetCompleteGroupName( const OUString& GroupName )
 {
     sal_uInt16 nCount = GetGroupCnt();
     // when the group name was created internally the path is here as well
@@ -590,7 +590,7 @@ void SwGlossaries::InvalidateUNOOjects()
     m_aGlossaryEntries.swap( aTmpe );
 }
 
-Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::OUString& _rGroupName, bool _bCreate )
+Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString& _rGroupName, bool _bCreate )
 {
     // first, find the name with path-extension
     String sCompleteGroupName = GetCompleteGroupName( _rGroupName );
@@ -644,7 +644,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::O
     return xGroup;
 }
 
-Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const ::rtl::OUString& _rGroupName, const ::rtl::OUString& _rEntryName,
+Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& _rCompleteGroupName, const OUString& _rGroupName, const OUString& _rEntryName,
     bool _bCreate )
 {
     //standard must be created

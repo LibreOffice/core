@@ -1952,9 +1952,9 @@ input for the following reasons:
             uno::Reference< i18n::XCalendar3 > xCal = i18n::LocaleCalendar::create(xContext);
             for ( const entry* p = cals; p->lan; ++p )
             {
-                aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );
-                aLocale.Country  = ::rtl::OUString::createFromAscii( p->cou );
-                xCal->loadCalendar( ::rtl::OUString::createFromAscii( p->cal ),
+                aLocale.Language = OUString::createFromAscii( p->lan );
+                aLocale.Country  = OUString::createFromAscii( p->cou );
+                xCal->loadCalendar( OUString::createFromAscii( p->cal ),
                                     aLocale );
                 double nDateTime = 0.0;     // 1-Jan-1970 00:00:00
                 nZO           = xCal->getValue( i18n::CalendarFieldIndex::ZONE_OFFSET );
@@ -3303,7 +3303,7 @@ void ImpSvNumberInputScan::InvalidateDateAcceptancePatterns()
 {
     if (sDateAcceptancePatterns.getLength())
     {
-        sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< ::rtl::OUString >();
+        sDateAcceptancePatterns = ::com::sun::star::uno::Sequence< OUString >();
     }
 }
 

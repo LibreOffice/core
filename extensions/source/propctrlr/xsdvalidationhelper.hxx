@@ -52,12 +52,12 @@ namespace pcr
 
         /** retrieves the names of all XForms models in the document the control lives in
         */
-        void    getAvailableDataTypeNames( ::std::vector< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(());
+        void    getAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(());
 
         /** retrieves a particular data type given by name
         */
         ::rtl::Reference< XSDDataType >
-                getDataTypeByName( const ::rtl::OUString& _rName ) const SAL_THROW(());
+                getDataTypeByName( const OUString& _rName ) const SAL_THROW(());
 
         /** retrieves the DataType instance which the control model is currently validated against
 
@@ -71,26 +71,26 @@ namespace pcr
 
             @seealso getValidatingDataType
         */
-        ::rtl::OUString
+        OUString
                 getValidatingDataTypeName( ) const SAL_THROW(());
 
         /** binds the validator to a new data type
 
             To be called with an active binding only.
         */
-        void    setValidatingDataTypeByName( const ::rtl::OUString& _rName ) const SAL_THROW(());
+        void    setValidatingDataTypeByName( const OUString& _rName ) const SAL_THROW(());
 
         /** removes the data type given by name from the data type repository
         */
-        bool    removeDataTypeFromRepository( const ::rtl::OUString& _rName ) const SAL_THROW(());
+        bool    removeDataTypeFromRepository( const OUString& _rName ) const SAL_THROW(());
 
         /** creates a new data type, which is a clone of an existing data type
         */
-        bool    cloneDataType( const ::rtl::Reference< XSDDataType >& _pDataType, const ::rtl::OUString& _rNewName ) const SAL_THROW(());
+        bool    cloneDataType( const ::rtl::Reference< XSDDataType >& _pDataType, const OUString& _rNewName ) const SAL_THROW(());
 
         /** retrieves the name of the basic data type which has the given class
         */
-        ::rtl::OUString
+        OUString
                 getBasicTypeNameForClass( sal_Int16 _eClass ) const SAL_THROW(());
 
         /** copy a data type from one model to another
@@ -98,8 +98,8 @@ namespace pcr
             If a data type with the given name already exists in the target model, then nothing
             happens. In particular, the facets of the data type are not copied.
         */
-        void    copyDataType( const ::rtl::OUString& _rFromModel, const ::rtl::OUString& _rToModel,
-                    const ::rtl::OUString& _rDataTypeName ) const SAL_THROW(());
+        void    copyDataType( const OUString& _rFromModel, const OUString& _rToModel,
+                    const OUString& _rDataTypeName ) const SAL_THROW(());
 
         /** finds (and sets) a default format for the formatted field we're inspecting,
             according to the current data type the control value is evaluated against
@@ -115,17 +115,17 @@ namespace pcr
         /** retrieves the data type repository associated with any model
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository >
-                getDataTypeRepository( const ::rtl::OUString& _rModelName ) const SAL_THROW((::com::sun::star::uno::Exception));
+                getDataTypeRepository( const OUString& _rModelName ) const SAL_THROW((::com::sun::star::uno::Exception));
 
         /** retrieves the data type object for the given name
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::xsd::XDataType >
-            getDataType( const ::rtl::OUString& _rName ) const
+            getDataType( const OUString& _rName ) const
                 SAL_THROW((::com::sun::star::uno::Exception));
 
         /** retrieves the name of the basic data type which has the given class, in the given repository
         */
-        ::rtl::OUString
+        OUString
                 getBasicTypeNameForClass(
                     sal_Int16 _nClass,
                     ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XDataTypeRepository > _rxRepository

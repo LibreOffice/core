@@ -38,8 +38,8 @@
 struct ImplKeyData
 {
     ImplKeyData*    mpNext;
-    rtl::OString maKey;
-    rtl::OString maValue;
+    OString maKey;
+    OString maValue;
     sal_Bool            mbIsComment;
 };
 
@@ -47,14 +47,14 @@ struct ImplGroupData
 {
     ImplGroupData*  mpNext;
     ImplKeyData*    mpFirstKey;
-    rtl::OString maGroupName;
+    OString maGroupName;
     sal_uInt16          mnEmptyLines;
 };
 
 struct ImplConfigData
 {
     ImplGroupData*  mpFirstGroup;
-    rtl::OUString   maFileName;
+    OUString   maFileName;
     sal_uIntPtr         mnDataUpdateId;
     sal_uIntPtr         mnTimeStamp;
     LineEnd         meLineEnd;
@@ -66,7 +66,7 @@ struct ImplConfigData
 
 static String toUncPath( const String& rPath )
 {
-    ::rtl::OUString aFileURL;
+    OUString aFileURL;
 
     // check if rFileName is already a URL; if not make it so
     if( rPath.CompareToAscii( "file://", 7 ) == COMPARE_EQUAL )
@@ -77,7 +77,7 @@ static String toUncPath( const String& rPath )
     return aFileURL;
 }
 
-static sal_uIntPtr ImplSysGetConfigTimeStamp( const rtl::OUString& rFileName )
+static sal_uIntPtr ImplSysGetConfigTimeStamp( const OUString& rFileName )
 {
     sal_uIntPtr nTimeStamp = 0;
     ::osl::DirectoryItem aItem;
@@ -92,7 +92,7 @@ static sal_uIntPtr ImplSysGetConfigTimeStamp( const rtl::OUString& rFileName )
     return nTimeStamp;
 }
 
-static sal_uInt8* ImplSysReadConfig( const rtl::OUString& rFileName,
+static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
                                 sal_uInt64& rRead, sal_Bool& rbRead, sal_Bool& rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
     sal_uInt8*          pBuf = NULL;
@@ -136,7 +136,7 @@ static sal_uInt8* ImplSysReadConfig( const rtl::OUString& rFileName,
     return pBuf;
 }
 
-static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
+static sal_Bool ImplSysWriteConfig( const OUString& rFileName,
                                 const sal_uInt8* pBuf, sal_uIntPtr nBufLen, sal_Bool rbIsUTF8BOM, sal_uIntPtr& rTimeStamp )
 {
     sal_Bool bSuccess = sal_False;
@@ -177,7 +177,7 @@ static sal_Bool ImplSysWriteConfig( const rtl::OUString& rFileName,
 }
 
 namespace {
-rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
+OString makeOString(const sal_uInt8* p, sal_uInt64 n)
 {
     if (n > SAL_MAX_INT32)
     {
@@ -187,7 +187,7 @@ rtl::OString makeOString(const sal_uInt8* p, sal_uInt64 n)
         ::std::abort(); //TODO: handle this gracefully
         #endif
     }
-    return rtl::OString(
+    return OString(
         reinterpret_cast< char const * >(p),
         sal::static_int_cast< sal_Int32 >(n));
 }
@@ -580,7 +580,7 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
     pData->mpFirstGroup = NULL;
 }
 
-static ImplConfigData* ImplGetConfigData( const rtl::OUString& rFileName )
+static ImplConfigData* ImplGetConfigData( const OUString& rFileName )
 {
     ImplConfigData* pData;
 
@@ -654,7 +654,7 @@ ImplGroupData* Config::ImplGetGroup() const
     return mpActGroup;
 }
 
-Config::Config( const rtl::OUString& rFileName )
+Config::Config( const OUString& rFileName )
 {
     // Initialize config data
     maFileName      = toUncPath( rFileName );
@@ -665,8 +665,8 @@ Config::Config( const rtl::OUString& rFileName )
     mbPersistence   = sal_True;
 
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::Config( ");
-    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OStringBuffer aTraceStr("Config::Config( ");
+    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     aTraceStr.append(" )");
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -682,7 +682,7 @@ Config::~Config()
     ImplFreeConfigData( mpData );
 }
 
-void Config::SetGroup(const rtl::OString& rGroup)
+void Config::SetGroup(const OString& rGroup)
 {
     // If group is to be reset, it needs to be updated on next call
     if ( maGroupName != rGroup )
@@ -692,7 +692,7 @@ void Config::SetGroup(const rtl::OString& rGroup)
     }
 }
 
-void Config::DeleteGroup(const rtl::OString& rGroup)
+void Config::DeleteGroup(const OString& rGroup)
 {
     // Update config data if necessary
     if ( !mnLockCount || !mpData->mbRead )
@@ -744,7 +744,7 @@ void Config::DeleteGroup(const rtl::OString& rGroup)
     }
 }
 
-rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
+OString Config::GetGroupName(sal_uInt16 nGroup) const
 {
     // Update config data if necessary
     if ( !mnLockCount )
@@ -752,7 +752,7 @@ rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
     sal_uInt16          nGroupCount = 0;
-    rtl::OString aGroupName;
+    OString aGroupName;
     while ( pGroup )
     {
         if ( nGroup == nGroupCount )
@@ -785,7 +785,7 @@ sal_uInt16 Config::GetGroupCount() const
     return nGroupCount;
 }
 
-sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
+sal_Bool Config::HasGroup(const OString& rGroup) const
 {
     // Update config data if necessary
     if ( !mnLockCount )
@@ -808,27 +808,27 @@ sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
     return bRet;
 }
 
-rtl::OString Config::ReadKey(const rtl::OString& rKey) const
+OString Config::ReadKey(const OString& rKey) const
 {
-    return ReadKey(rKey, rtl::OString());
+    return ReadKey(rKey, OString());
 }
 
-rtl::OUString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const
+OUString Config::ReadKey(const OString& rKey, rtl_TextEncoding eEncoding) const
 {
     if ( mpData->mbIsUTF8BOM )
         eEncoding = RTL_TEXTENCODING_UTF8;
-    return rtl::OStringToOUString(ReadKey(rKey), eEncoding);
+    return OStringToOUString(ReadKey(rKey), eEncoding);
 }
 
-rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const
+OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::ReadKey( ");
+    OStringBuffer aTraceStr("Config::ReadKey( ");
     aTraceStr.append(rKey);
     aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
     aTraceStr.append(" in ");
-    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -853,17 +853,17 @@ rtl::OString Config::ReadKey(const rtl::OString& rKey, const rtl::OString& rDefa
     return rDefault;
 }
 
-void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
+void Config::WriteKey(const OString& rKey, const OString& rStr)
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::WriteKey( ");
+    OStringBuffer aTraceStr("Config::WriteKey( ");
     aTraceStr.append(rKey);
     aTraceStr.append(", ");
     aTraceStr.append(rStr);
     aTraceStr.append(" ) to ");
     aTraceStr.append(GetGroup());
     aTraceStr.append(" in ");
-    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -919,7 +919,7 @@ void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
     }
 }
 
-void Config::DeleteKey(const rtl::OString& rKey)
+void Config::DeleteKey(const OString& rKey)
 {
     // Update config data if necessary
     if ( !mnLockCount || !mpData->mbRead )
@@ -966,11 +966,11 @@ void Config::DeleteKey(const rtl::OString& rKey)
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::GetKeyCount()");
+    OStringBuffer aTraceStr("Config::GetKeyCount()");
     aTraceStr.append(" from ");
     aTraceStr.append(GetGroup());
     aTraceStr.append(" in ");
-    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    aTraceStr.append(OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
@@ -996,15 +996,15 @@ sal_uInt16 Config::GetKeyCount() const
     return nCount;
 }
 
-rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
+OString Config::GetKeyName(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::GetKeyName( ");
+    OStringBuffer aTraceStr("Config::GetKeyName( ");
     aTraceStr.append(static_cast<sal_Int32>(nKey));
     aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
     aTraceStr.append(" in ");
-    aTraceStr.append(rtl::OUStringToOString(
+    aTraceStr.append(OUStringToOString(
         maFileName, RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -1027,18 +1027,18 @@ rtl::OString Config::GetKeyName(sal_uInt16 nKey) const
         }
     }
 
-    return rtl::OString();
+    return OString();
 }
 
-rtl::OString Config::ReadKey(sal_uInt16 nKey) const
+OString Config::ReadKey(sal_uInt16 nKey) const
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("Config::ReadKey( ");
+    OStringBuffer aTraceStr("Config::ReadKey( ");
     aTraceStr.append(static_cast<sal_Int32>(nKey));
     aTraceStr.append(" ) from ");
     aTraceStr.append(GetGroup());
     aTraceStr.append(" in ");
-    aTraceStr.append(rtl::OUStringToOString(maFileName,
+    aTraceStr.append(OUStringToOString(maFileName,
         RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -1061,7 +1061,7 @@ rtl::OString Config::ReadKey(sal_uInt16 nKey) const
         }
     }
 
-    return rtl::OString();
+    return OString();
 }
 
 void Config::Flush()

@@ -48,13 +48,13 @@ namespace comphelper
     {
     private:
         Reference< XComponentContext >  m_xContext;
-        ::rtl::OUString                 m_sBaseName;
+        OUString                 m_sBaseName;
         Reference< XResourceBundle >    m_xBundle;
         bool                            m_bAttemptedCreate;
         mutable ::osl::Mutex            m_aMutex;
 
     public:
-        ResourceBundle_Impl( const Reference< XComponentContext >& _context, const ::rtl::OUString& _baseName )
+        ResourceBundle_Impl( const Reference< XComponentContext >& _context, const OUString& _baseName )
             :m_xContext( _context )
             ,m_sBaseName( _baseName )
             ,m_bAttemptedCreate( false )
@@ -70,7 +70,7 @@ namespace comphelper
                 an empty string is returned. In a non-product version, an OSL_ENSURE will notify you of this
                 then.
         */
-        ::rtl::OUString loadString( sal_Int32 _resourceId ) const;
+        OUString loadString( sal_Int32 _resourceId ) const;
 
         /** determines whether the resource bundle has a string with the given id
             @param  _resourceId
@@ -94,25 +94,25 @@ namespace comphelper
 
         /** returns the resource bundle key for a string with a given resource id
         */
-        static ::rtl::OUString
+        static OUString
                 impl_getStringResourceKey( sal_Int32 _resourceId );
     };
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
+    OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
     {
-        ::rtl::OUStringBuffer key;
+        OUStringBuffer key;
         key.appendAscii( "string:" );
         key.append( _resourceId );
         return key.makeStringAndClear();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ResourceBundle_Impl::loadString( sal_Int32 _resourceId ) const
+    OUString ResourceBundle_Impl::loadString( sal_Int32 _resourceId ) const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::rtl::OUString sString;
+        OUString sString;
 
         if ( const_cast< ResourceBundle_Impl* >( this )->impl_loadBundle_nothrow() )
         {
@@ -189,7 +189,7 @@ namespace comphelper
     //====================================================================
     //--------------------------------------------------------------------
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
-        :m_pImpl( new ResourceBundle_Impl( _context, ::rtl::OUString::createFromAscii( _bundleBaseAsciiName ) ) )
+        :m_pImpl( new ResourceBundle_Impl( _context, OUString::createFromAscii( _bundleBaseAsciiName ) ) )
     {
         if ( !_context.is() )
             throw NullPointerException();
@@ -201,7 +201,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString OfficeResourceBundle::loadString( sal_Int32 _resourceId ) const
+    OUString OfficeResourceBundle::loadString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->loadString( _resourceId );
     }

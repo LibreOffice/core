@@ -31,10 +31,10 @@
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 /* #TODO see if this hash table is 'really' necessary
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::boost::unordered_map< OUString,
 css::uno::Reference< ov::excel::XChartObject >,
-    ::rtl::OUStringHash,
-    ::std::equal_to< ::rtl::OUString > > aHashTable;
+    OUStringHash,
+    ::std::equal_to< OUString > > aHashTable;
 */
 
 class ScVbaChartObjects : public ChartObjects_BASE
@@ -47,8 +47,8 @@ class ScVbaChartObjects : public ChartObjects_BASE
 public:
     ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const css::uno::Reference< css::drawing::XDrawPageSupplier >&  _xDrawPageSupplier );
 
-    css::uno::Sequence< rtl::OUString > getChartObjectNames() throw( css::script::BasicErrorException );
-    void removeByName(const rtl::OUString& _sChartName);
+    css::uno::Sequence< OUString > getChartObjectNames() throw( css::script::BasicErrorException );
+    void removeByName(const OUString& _sChartName);
 
     // XChartObjects
     virtual ::com::sun::star::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) throw (::com::sun::star::script::BasicErrorException);
@@ -60,8 +60,8 @@ public:
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
     // ChartObjects_BASE
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif //SC_VBA_WINDOW_HXX

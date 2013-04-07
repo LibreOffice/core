@@ -94,7 +94,7 @@ namespace comphelper
 {
     namespace xml
     {
-        rtl::OString makeXMLChaff()
+        OString makeXMLChaff()
         {
             rtlRandomPool pool = rtl_random_createPool();
 
@@ -110,7 +110,7 @@ namespace comphelper
 
             encodeChaff(aChaff);
 
-            return rtl::OString(reinterpret_cast<const sal_Char*>(&aChaff[0]), nLength);
+            return OString(reinterpret_cast<const sal_Char*>(&aChaff[0]), nLength);
         }
     }
 }

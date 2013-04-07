@@ -46,8 +46,6 @@
 
 #include <boost/unordered_map.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using namespace sax_fastparser;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
@@ -82,7 +80,7 @@ namespace DOM
         typedef std::vector< std::vector<Namespace> > NamespaceVectorType;
         typedef boost::unordered_map< OUString,
                                sal_Int32,
-                               rtl::OUStringHash > NamespaceMapType;
+                               OUStringHash > NamespaceMapType;
 
         /// outer vector: xml context; inner vector: current NS
         NamespaceVectorType                 maNamespaces;

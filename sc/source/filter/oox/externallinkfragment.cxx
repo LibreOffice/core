@@ -36,7 +36,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
-using ::rtl::OUString;
 
 // ============================================================================
 // ============================================================================

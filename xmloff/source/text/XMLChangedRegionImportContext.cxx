@@ -33,7 +33,6 @@
 
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::text::XTextCursor;
 using namespace ::com::sun::star;

@@ -79,7 +79,7 @@ sal_Bool PPMWriter::WritePPM( const Graphic& rGraphic, FilterConfigItem* pFilter
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }
@@ -212,7 +212,7 @@ void PPMWriter::ImplWriteBody()
 
 void PPMWriter::ImplWriteNumber(sal_Int32 nNumber)
 {
-    const rtl::OString aNum(rtl::OString::valueOf(nNumber));
+    const OString aNum(OString::valueOf(nNumber));
     m_rOStm << aNum.getStr();
 }
 

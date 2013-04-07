@@ -64,8 +64,8 @@ namespace svx
 
     typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
-    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   ::rtl::OUString
-                                                            ,   ::rtl::OUStringHash
+    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   OUString
+                                                            ,   OUStringHash
                                                             ,   ::comphelper::UStringEqual
                                                             >   PropertyChangeListenerContainer;
 
@@ -95,7 +95,7 @@ namespace svx
     //= PropertyValueProvider
     //====================================================================
     //--------------------------------------------------------------------
-    ::rtl::OUString PropertyValueProvider::getPropertyName() const
+    OUString PropertyValueProvider::getPropertyName() const
     {
         return m_sPropertyName;
     }
@@ -143,10 +143,10 @@ namespace svx
         if ( provPos == m_pData->m_aProviders.end() )
             return;
 
-        ::rtl::OUString sPropertyName( provPos->second->getPropertyName() );
+        OUString sPropertyName( provPos->second->getPropertyName() );
 
         ::cppu::OInterfaceContainerHelper* pPropListeners = m_pData->m_aPropertyChangeListeners.getContainer( sPropertyName );
-        ::cppu::OInterfaceContainerHelper* pAllListeners = m_pData->m_aPropertyChangeListeners.getContainer( ::rtl::OUString() );
+        ::cppu::OInterfaceContainerHelper* pAllListeners = m_pData->m_aPropertyChangeListeners.getContainer( OUString() );
         if ( !pPropListeners && !pAllListeners )
             return;
 
@@ -170,13 +170,13 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void PropertyChangeNotifier::addPropertyChangeListener( const ::rtl::OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyChangeNotifier::addPropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
         m_pData->m_aPropertyChangeListeners.addInterface( _rPropertyName, _rxListener );
     }
 
     //--------------------------------------------------------------------
-    void PropertyChangeNotifier::removePropertyChangeListener( const ::rtl::OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
+    void PropertyChangeNotifier::removePropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
         m_pData->m_aPropertyChangeListeners.removeInterface( _rPropertyName, _rxListener );
     }

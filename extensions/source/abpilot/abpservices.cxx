@@ -55,7 +55,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL abp_component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::abp::OModule::getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName),
+            OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }
 

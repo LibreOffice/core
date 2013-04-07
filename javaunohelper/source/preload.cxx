@@ -31,7 +31,6 @@
 #define SAL_DLLPREFIX ""
 #endif
 
-using ::rtl::OUString;
 
 extern "C"
 {

@@ -111,7 +111,7 @@ namespace param
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     private:
-        ::rtl::OUString impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const;
+        OUString impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const;
 
     private:
         ParameterWrapper(); // not implemented

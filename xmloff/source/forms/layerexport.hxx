@@ -44,7 +44,7 @@ namespace xmloff
 
     // maps objects (property sets) to strings, e.g. control ids.
     typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        ,   ::rtl::OUString
+                        ,   OUString
                         ,   OPropertySetCompare
                         >   MapPropertySet2String;
 
@@ -157,7 +157,7 @@ namespace xmloff
 
             <p>You must have sought to the page of the control before calling this.</p>
         */
-        ::rtl::OUString
+        OUString
                 getControlId(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl);
 
         /** retrieves the style name for the control's number style.
@@ -165,13 +165,13 @@ namespace xmloff
             <p>For performance reasons, this method is allowed to be called for any controls, even those which
             do not have a number style. In this case, an empty string is returned.</p>
         */
-        ::rtl::OUString
+        OUString
                 getControlNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl );
 
         // IFormsExportContext
         virtual void                                        exportCollectionElements(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection);
         virtual SvXMLExport&                                getGlobalContext();
-        virtual ::rtl::OUString                             getObjectStyleName(
+        virtual OUString                             getObjectStyleName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
         virtual ::rtl::Reference< SvXMLExportPropertyMapper >   getStylePropertyMapper();
 
@@ -283,12 +283,12 @@ namespace xmloff
 
         /** determines the number format style for the given object without remembering it
         */
-        ::rtl::OUString
+        OUString
                 getImmediateNumberStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
 
         /** returns the prefix to be used for control number styles
         */
-        static const ::rtl::OUString& getControlNumberStyleNamePrefix();
+        static const OUString& getControlNumberStyleNamePrefix();
 
         /** exclude the given control (model) from export.
 

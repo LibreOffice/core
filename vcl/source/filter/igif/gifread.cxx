@@ -45,7 +45,7 @@ GIFReader::GIFReader( SvStream& rStm ) :
             bGCTransparent  ( sal_False ),
             bImGraphicReady ( sal_False )
 {
-    maUpperName = rtl::OUString("SVIGIF");
+    maUpperName = OUString("SVIGIF");
     pSrcBuf = new sal_uInt8[ 256 ];
     ClearImageExtensions();
 }
@@ -249,8 +249,8 @@ sal_Bool GIFReader::ReadExtension()
                     // Appl.-Extension hat Laenge 11
                     if ( cSize == 0x0b )
                     {
-                        rtl::OString aAppId = read_uInt8s_ToOString(rIStm, 8);
-                        rtl::OString aAppCode = read_uInt8s_ToOString(rIStm, 3);
+                        OString aAppId = read_uInt8s_ToOString(rIStm, 8);
+                        OString aAppCode = read_uInt8s_ToOString(rIStm, 3);
                         rIStm >> cSize;
 
                         // NetScape-Extension

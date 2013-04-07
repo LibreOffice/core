@@ -25,7 +25,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 
 //.............................................................................
@@ -34,7 +33,7 @@ namespace chart
 //.............................................................................
 
 uno::Reference< container::XNameContainer > createNameContainer(
-        const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName )
+        const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
 {
     return new NameContainer( rType, rServicename, rImplementationName );
 }

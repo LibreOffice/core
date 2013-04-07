@@ -48,12 +48,12 @@ class WW8Struct : public ::sw::ExternalData
         sal_uInt32 getU32(sal_uInt32 nOffset)
         { return  getU16(nOffset) + (getU16(nOffset + 1) << 16); }
 
-        ::rtl::OUString getUString(sal_uInt32 nOffset, sal_uInt32 nCount);
+        OUString getUString(sal_uInt32 nOffset, sal_uInt32 nCount);
 
-        ::rtl::OUString getString(sal_uInt32 nOffset, sal_uInt32 nCount);
+        OUString getString(sal_uInt32 nOffset, sal_uInt32 nCount);
     };
 
-typedef ::std::vector<rtl::OUString> StringVector_t;
+typedef ::std::vector<OUString> StringVector_t;
     template <class T>
     class WW8Sttb : public WW8Struct
     {
@@ -68,7 +68,7 @@ typedef ::std::vector<rtl::OUString> StringVector_t;
         virtual ~WW8Sttb();
 
         sal_uInt32 getCount() const;
-        ::rtl::OUString getEntry(sal_uInt32 nEntry) const
+        OUString getEntry(sal_uInt32 nEntry) const
         {
             return m_Strings[nEntry];
         }

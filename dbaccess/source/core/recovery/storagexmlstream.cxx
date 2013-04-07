@@ -67,7 +67,7 @@ namespace dbaccess
     struct StorageXMLOutputStream_Data
     {
         Reference< XDocumentHandler >           xHandler;
-        ::std::stack< ::rtl::OUString >         aElements;
+        ::std::stack< OUString >         aElements;
         ::rtl::Reference< SvXMLAttributeList >  xAttributes;
     };
 
@@ -77,7 +77,7 @@ namespace dbaccess
     //------------------------------------------------------------------------------------------------------------------
     StorageXMLOutputStream::StorageXMLOutputStream( const Reference<XComponentContext>& i_rContext,
                                                     const Reference< XStorage >& i_rParentStorage,
-                                                    const ::rtl::OUString& i_rStreamName )
+                                                    const OUString& i_rStreamName )
         :StorageOutputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLOutputStream_Data )
     {
@@ -105,13 +105,13 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void StorageXMLOutputStream::addAttribute( const ::rtl::OUString& i_rName, const ::rtl::OUString& i_rValue ) const
+    void StorageXMLOutputStream::addAttribute( const OUString& i_rName, const OUString& i_rValue ) const
     {
         m_pData->xAttributes->AddAttribute( i_rName, i_rValue );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void StorageXMLOutputStream::startElement( const ::rtl::OUString& i_rElementName ) const
+    void StorageXMLOutputStream::startElement( const OUString& i_rElementName ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
@@ -126,13 +126,13 @@ namespace dbaccess
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
         ENSURE_OR_RETURN_VOID( !m_pData->aElements.empty(), "no element on the stack" );
 
-        const ::rtl::OUString sElementName( m_pData->aElements.top() );
+        const OUString sElementName( m_pData->aElements.top() );
         m_pData->xHandler->endElement( sElementName );
         m_pData->aElements.pop();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void StorageXMLOutputStream::ignorableWhitespace( const ::rtl::OUString& i_rWhitespace ) const
+    void StorageXMLOutputStream::ignorableWhitespace( const OUString& i_rWhitespace ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
@@ -140,7 +140,7 @@ namespace dbaccess
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void StorageXMLOutputStream::characters( const ::rtl::OUString& i_rCharacters ) const
+    void StorageXMLOutputStream::characters( const OUString& i_rCharacters ) const
     {
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
@@ -161,7 +161,7 @@ namespace dbaccess
     //------------------------------------------------------------------------------------------------------------------
     StorageXMLInputStream::StorageXMLInputStream( const Reference<XComponentContext>& i_rContext,
                                                   const Reference< XStorage >& i_rParentStorage,
-                                                  const ::rtl::OUString& i_rStreamName )
+                                                  const OUString& i_rStreamName )
         :StorageInputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLInputStream_Data )
     {

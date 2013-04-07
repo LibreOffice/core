@@ -38,7 +38,7 @@ namespace comphelper
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
-    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
+    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
 
     /** Checks if the name exists
      *
@@ -46,7 +46,7 @@ namespace comphelper
      * \param _aList  The list in which to search for the value.
      * \return <TRUE/> if the value can be found, otherwise <FALSE/>.
      */
-    COMPHELPER_DLLPUBLIC sal_Bool existsValue(const ::rtl::OUString& Value,const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _aList);
+    COMPHELPER_DLLPUBLIC sal_Bool existsValue(const OUString& Value,const ::com::sun::star::uno::Sequence< OUString >& _aList);
 
 
     //-------------------------------------------------------------------------

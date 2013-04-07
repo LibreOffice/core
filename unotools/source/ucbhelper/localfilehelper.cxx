@@ -73,15 +73,15 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUStrin
     return !rReturn.isEmpty();
 }
 
-bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::OUString& rReturn)
+bool LocalFileHelper::ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn)
 {
-    rReturn = ::rtl::OUString();
+    rReturn = OUString();
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );
     try
     {
-        rtl::OUString aBase( ::ucbhelper::getLocalFileURL() );
+        OUString aBase( ::ucbhelper::getLocalFileURL() );
         rReturn = ::ucbhelper::getFileURLFromSystemPath( pBroker, aBase, rName );
     }
     catch (const ::com::sun::star::uno::RuntimeException&)
@@ -91,7 +91,7 @@ bool LocalFileHelper::ConvertPhysicalNameToURL(const rtl::OUString& rName, rtl::
     return !rReturn.isEmpty();
 }
 
-bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::OUString& rReturn)
+bool LocalFileHelper::ConvertURLToPhysicalName(const OUString& rName, OUString& rReturn)
 {
     rReturn = "";
     Reference< XUniversalContentBroker > pBroker(
@@ -111,21 +111,21 @@ bool LocalFileHelper::ConvertURLToPhysicalName(const rtl::OUString& rName, rtl::
     return !rReturn.isEmpty();
 }
 
-sal_Bool LocalFileHelper::IsLocalFile(const rtl::OUString& rName)
+sal_Bool LocalFileHelper::IsLocalFile(const OUString& rName)
 {
-    rtl::OUString aTmp;
+    OUString aTmp;
     return ConvertURLToPhysicalName(rName, aTmp);
 }
 
-sal_Bool LocalFileHelper::IsFileContent(const rtl::OUString& rName)
+sal_Bool LocalFileHelper::IsFileContent(const OUString& rName)
 {
     OUString aTmp;
     return ConvertURLToSystemPath(rName, aTmp);
 }
 
-typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
+typedef ::std::vector< OUString* > StringList_Impl;
 
-::com::sun::star::uno::Sequence < ::rtl::OUString > LocalFileHelper::GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder )
+::com::sun::star::uno::Sequence < OUString > LocalFileHelper::GetFolderContents( const OUString& rFolder, sal_Bool bFolder )
 {
     StringList_Impl* pFiles = NULL;
     try
@@ -134,8 +134,8 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
             rFolder, Reference< XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aProps(1);
-        ::rtl::OUString* pProps = aProps.getArray();
+        ::com::sun::star::uno::Sequence< OUString > aProps(1);
+        OUString* pProps = aProps.getArray();
         pProps[0] = "Url";
 
         try
@@ -158,8 +158,8 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
             {
                 while ( xResultSet->next() )
                 {
-                    ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
-                    ::rtl::OUString* pFile = new ::rtl::OUString( aId );
+                    OUString aId = xContentAccess->queryContentIdentifierString();
+                    OUString* pFile = new OUString( aId );
                     pFiles->push_back( pFile );
                 }
             }
@@ -178,11 +178,11 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
     if ( pFiles )
     {
         size_t nCount = pFiles->size();
-        Sequence < ::rtl::OUString > aRet( nCount );
-        ::rtl::OUString* pRet = aRet.getArray();
+        Sequence < OUString > aRet( nCount );
+        OUString* pRet = aRet.getArray();
         for ( size_t i = 0; i < nCount; ++i )
         {
-            ::rtl::OUString* pFile = (*pFiles)[ i ];
+            OUString* pFile = (*pFiles)[ i ];
             pRet[i] = *( pFile );
             delete pFile;
         }
@@ -190,7 +190,7 @@ typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
         return aRet;
     }
     else
-        return Sequence < ::rtl::OUString > ();
+        return Sequence < OUString > ();
 }
 
 }

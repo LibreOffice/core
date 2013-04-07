@@ -297,7 +297,7 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.pFootEndNotes = new SwHTMLTxtFtns;
     rHTMLWrt.pFootEndNotes->insert( rHTMLWrt.pFootEndNotes->begin() + nPos, pTxtFtn );
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -357,7 +357,7 @@ void SwHTMLWriter::OutFootEndNotes()
 
         if( bLFPossible )
             OutNewLine();
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
             .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
@@ -465,7 +465,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
         }
     }
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_class).append("=\"");
     Strm() << sOut.makeStringAndClear().getStr();
@@ -495,7 +495,7 @@ static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
         const sal_Char *pStr = SwHTMLWriter::GetNumFormat( eFmt );
         if( pStr )
         {
-            pParts[0] = rtl::OUString::createFromAscii( pStr );
+            pParts[0] = OUString::createFromAscii( pStr );
             nParts = 1;
         }
     }
@@ -528,12 +528,12 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
     {
         xub_StrLen nPos = 0;
         String aTmp( pParts[i] );
-        rtl::OUString aRep("\\\\");
+        OUString aRep("\\\\");
         while( STRING_NOTFOUND != (nPos = aTmp.SearchAndReplaceAscii( "\\",
                                                      aRep, nPos ) ) )
             nPos += 2;
         nPos = 0;
-        aRep = rtl::OUString("\\;");
+        aRep = OUString("\\;");
         while( STRING_NOTFOUND != (nPos = aTmp.SearchAndReplaceAscii( ";",
                                                      aRep, nPos ) ) )
             nPos += 2;
@@ -543,7 +543,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
     }
 
     rHTMLWrt.OutNewLine();
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"").append(pName)
         .append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");

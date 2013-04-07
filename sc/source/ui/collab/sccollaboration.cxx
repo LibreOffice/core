@@ -47,12 +47,12 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
     OUString aTmpPath = utl::TempFile::CreateTempName();
     aTmpPath += ".ods";
 
-    rtl::OUString aFileURL;
+    OUString aFileURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
 
     ::comphelper::MediaDescriptor aDescriptor;
     // some issue with hyperlinks:
-    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
+    aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
     try {
         css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
                     mpScDocShell->GetBaseModel(), css::uno::UNO_QUERY_THROW);

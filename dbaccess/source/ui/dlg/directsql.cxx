@@ -38,7 +38,6 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    using ::rtl::OStringBuffer;
 
     //====================================================================
     //= LargeEntryListBox
@@ -226,7 +225,7 @@ DBG_NAME(DirectSQLDialog)
             OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
 
             // clear the output box
-            m_aOutput.SetText(rtl::OUString());
+            m_aOutput.SetText(OUString());
             if (xStatement.is())
             {
                 if (OUString(_rStatement).toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
@@ -239,7 +238,7 @@ DBG_NAME(DirectSQLDialog)
                     while (xResultSet->next())
                     {
                         // initialise the output line for each row
-                        String out = ::rtl::OUString("");
+                        String out = OUString("");
                         // work along the columns until that are none left
                         int i = 1;
                         try
@@ -247,7 +246,7 @@ DBG_NAME(DirectSQLDialog)
                             for (;;)
                             {
                                 // be dumb, treat everything as a string
-                                out += xRow->getString(i) + ::rtl::OUString(",");
+                                out += xRow->getString(i) + OUString(",");
                                 i++;
                             }
                         }
@@ -256,7 +255,7 @@ DBG_NAME(DirectSQLDialog)
                         {
                         }
                         // report the output
-                        addOutputText(::rtl::OUString(out));
+                        addOutputText(OUString(out));
                     }
                 } else {
                     // execute it
@@ -298,7 +297,7 @@ DBG_NAME(DirectSQLDialog)
     void DirectSQLDialog::addOutputText(const String& _rMessage)
     {
         String sAppendMessage = _rMessage;
-        sAppendMessage += rtl::OUString("\n");
+        sAppendMessage += OUString("\n");
 
         String sCompleteMessage = m_aOutput.GetText();
         sCompleteMessage += sAppendMessage;

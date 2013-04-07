@@ -663,7 +663,7 @@ bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
         && m_aName == rBkmk.GetName();
 }
 
-const ::rtl::OUString& SwHistoryBookmark::GetName() const
+const OUString& SwHistoryBookmark::GetName() const
 {
     return m_aName;
 }

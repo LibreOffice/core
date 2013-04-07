@@ -161,13 +161,13 @@ sal_Bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
 
     if ( rSettings.HasComment() )
     {
-        rtl::OUStringBuffer aBuf(rAction.GetComment());
+        OUStringBuffer aBuf(rAction.GetComment());
         aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        rtl::OUString aTmp;
+        OUString aTmp;
         rAction.GetDescription(aTmp, &rDocument);
         aBuf.append(aTmp);
         aBuf.append(sal_Unicode(')'));
-        rtl::OUString aComStr = aBuf.makeStringAndClear();
+        OUString aComStr = aBuf.makeStringAndClear();
 
         if(!rSettings.IsValidComment(&aComStr))
             return false;

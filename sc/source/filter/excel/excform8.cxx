@@ -33,8 +33,6 @@
 #include <vector>
 #include <cstring>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::vector;
 
 namespace {

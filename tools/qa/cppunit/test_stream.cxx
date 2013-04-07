@@ -154,18 +154,18 @@ namespace
         char foo[] = "foobar";
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
-        rtl::OString aOne = read_uInt8s_ToOString(aMemStream, 3);
+        OString aOne = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aOne == "foo");
 
-        rtl::OString aTwo = read_uInt8s_ToOString(aMemStream, 3);
+        OString aTwo = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aTwo == "bar");
 
-        rtl::OString aThree = read_uInt8s_ToOString(aMemStream, 3);
+        OString aThree = read_uInt8s_ToOString(aMemStream, 3);
         CPPUNIT_ASSERT(aThree.isEmpty());
 
         aMemStream.Seek(0);
 
-        rtl::OString aFour = read_uInt8s_ToOString(aMemStream, 100);
+        OString aFour = read_uInt8s_ToOString(aMemStream, 100);
         CPPUNIT_ASSERT(aFour == foo);
     }
 
@@ -174,7 +174,7 @@ namespace
         char foo[] = "foobar";
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
-        rtl::OString aOne = read_zeroTerminated_uInt8s_ToOString(aMemStream);
+        OString aOne = read_zeroTerminated_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aOne == "foobar");
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -182,7 +182,7 @@ namespace
 
         aMemStream.Seek(0);
         foo[3] = 0;
-        rtl::OString aTwo = read_zeroTerminated_uInt8s_ToOString(aMemStream);
+        OString aTwo = read_zeroTerminated_uInt8s_ToOString(aMemStream);
         CPPUNIT_ASSERT(aTwo == "foo");
         CPPUNIT_ASSERT(aMemStream.good());
     }
@@ -192,7 +192,7 @@ namespace
         char foo[] = "\3foobar";
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
-        rtl::OString aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
+        OString aFoo = read_lenPrefixed_uInt8s_ToOString<sal_uInt8>(aMemStream);
         CPPUNIT_ASSERT(aFoo == "foo");
         CPPUNIT_ASSERT(aMemStream.good());
         CPPUNIT_ASSERT(!aMemStream.bad());
@@ -234,7 +234,7 @@ namespace
         char foo[] = "foo\nbar\n\n";
         SvMemoryStream aMemStream(foo, SAL_N_ELEMENTS(foo)-1, STREAM_READ);
 
-        rtl::OString aFoo;
+        OString aFoo;
         sal_Bool bRet;
 
         bRet = aMemStream.ReadLine(aFoo);

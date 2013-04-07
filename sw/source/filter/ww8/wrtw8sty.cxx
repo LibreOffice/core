@@ -527,7 +527,7 @@ void MSWordStyles::OutputStyle( SwFmt* pFmt, sal_uInt16 nPos )
 
         String aName = pFmt->GetName();
         if ( aName.EqualsAscii( "Default" ) )
-            aName = rtl::OUString("Normal");
+            aName = OUString("Normal");
 
         m_rExport.AttrOutput().StartStyle( aName, bFmtColl,
                 nBase, nWwNext, GetWWId( *pFmt ), nPos,
@@ -766,13 +766,13 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
 {
     mbWrtWW8 = bWrtWW8;
 
-    GetId(wwFont(rtl::OUString("Times New Roman"), PITCH_VARIABLE,
+    GetId(wwFont(OUString("Times New Roman"), PITCH_VARIABLE,
         FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252,bWrtWW8));
 
-    GetId(wwFont(rtl::OUString("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
+    GetId(wwFont(OUString("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
         RTL_TEXTENCODING_SYMBOL,bWrtWW8));
 
-    GetId(wwFont(rtl::OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
+    GetId(wwFont(OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252,bWrtWW8));
 
     const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr(RES_CHRATR_FONT);
@@ -2049,7 +2049,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                                 // Additional paragraph containing a space to
                                 // assure that by WW created RTF from written WW8
                                 // does not crash WW.
-                                rWrt.WriteStringAsPara( rtl::OUString(" ") );
+                                rWrt.WriteStringAsPara( OUString(" ") );
                             }
                         }
                     }

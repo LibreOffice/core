@@ -71,10 +71,10 @@ namespace com { namespace sun { namespace star {
         sal_Int32       m_nPosY;
         sal_Int32       m_nWidth;
         sal_Int32       m_nHeight;
-        ::rtl::OUString m_aName;
+        OUString m_aName;
         sal_Int16       m_nTabIndex;
         sal_Int32       m_nStep;
-        ::rtl::OUString m_aTag;
+        OUString m_aTag;
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > m_xStrResolver;
         // </properties>
 
@@ -217,7 +217,7 @@ namespace com { namespace sun { namespace star {
         ,public ::comphelper::OIdPropertyArrayUsageHelper< OCommonGeometryControlModel >
     {
     private:
-        ::rtl::OUString m_sServiceSpecifier;        // the service specifier of our aggregate
+        OUString m_sServiceSpecifier;        // the service specifier of our aggregate
         sal_Int32       m_nPropertyMapId;           // our unique property info id, used to look up in s_aAggregateProperties
 
     public:
@@ -229,7 +229,7 @@ namespace com { namespace sun { namespace star {
         */
         OCommonGeometryControlModel(
                     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAgg,
-            const   ::rtl::OUString& _rxServiceSpecifier
+            const   OUString& _rxServiceSpecifier
         );
 
         // OIdPropertyArrayUsageHelper overridables

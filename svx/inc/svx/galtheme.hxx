@@ -63,8 +63,8 @@ struct GalDragParams
 {
     Region  aDragRegion;
     sal_uIntPtr nDragObjPos;
-    rtl::OUString aThemeName;
-    rtl::OUString aFileName;
+    OUString aThemeName;
+    OUString aFileName;
     SgaObjKind  eObjKind;
 };
 
@@ -137,8 +137,8 @@ public:
     SVX_DLLPUBLIC bool          RemoveObject( size_t nPos );
     bool                        ChangeObjectPos( size_t nOldPos, size_t nNewPos );
 
-    SVX_DLLPUBLIC const rtl::OUString& GetName() const;
-    const rtl::OUString&        GetRealName() const;
+    SVX_DLLPUBLIC const OUString& GetName() const;
+    const OUString&        GetRealName() const;
 
     const String&               GetDestDir() const { return m_aDestDir; }
     void                        SetDestDir(const String& rDestDir) { m_aDestDir = rDestDir; }

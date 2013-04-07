@@ -54,7 +54,7 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-static sal_Bool isEnumCommand( const rtl::OUString& rCommand )
+static sal_Bool isEnumCommand( const OUString& rCommand )
 {
     INetURLObject aURL( rCommand );
 
@@ -65,11 +65,11 @@ static sal_Bool isEnumCommand( const rtl::OUString& rCommand )
     return sal_False;
 }
 
-static rtl::OUString getEnumCommand( const rtl::OUString& rCommand )
+static OUString getEnumCommand( const OUString& rCommand )
 {
     INetURLObject aURL( rCommand );
 
-    rtl::OUString   aEnumCommand;
+    OUString   aEnumCommand;
     String          aURLPath = aURL.GetURLPath();
     xub_StrLen      nIndex   = aURLPath.Search( '.' );
     if (( nIndex > 0 ) && ( nIndex < aURLPath.Len() ))
@@ -78,9 +78,9 @@ static rtl::OUString getEnumCommand( const rtl::OUString& rCommand )
     return aEnumCommand;
 }
 
-static rtl::OUString getMasterCommand( const rtl::OUString& rCommand )
+static OUString getMasterCommand( const OUString& rCommand )
 {
-    rtl::OUString aMasterCommand( rCommand );
+    OUString aMasterCommand( rCommand );
     INetURLObject aURL( rCommand );
     if ( aURL.GetProtocol() == INET_PROT_UNO )
     {
@@ -105,7 +105,7 @@ GenericToolbarController::GenericToolbarController( const Reference< XMultiServi
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
                                                     sal_uInt16                                   nID,
-                                                    const ::rtl::OUString&                          aCommand ) :
+                                                    const OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
     ,   m_nID( nID )
@@ -137,7 +137,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    ::rtl::OUString                     aCommandURL;
+    OUString                     aCommandURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -165,7 +165,7 @@ throw ( RuntimeException )
         Sequence<PropertyValue>   aArgs( 1 );
 
         // Add key modifier to argument list
-        aArgs[0].Name  = rtl::OUString( "KeyModifier" );
+        aArgs[0].Name  = OUString( "KeyModifier" );
         aArgs[0].Value <<= KeyModifier;
 
         aTargetURL.Complete = aCommandURL;
@@ -197,7 +197,7 @@ throw ( RuntimeException )
         TriState eTri = STATE_NOCHECK;
 
         sal_Bool        bValue = sal_Bool();
-        rtl::OUString   aStrValue;
+        OUString   aStrValue;
         ItemStatus      aItemState;
         Visibility      aItemVisibility;
 
@@ -231,26 +231,26 @@ throw ( RuntimeException )
                 if ( aStrValue.matchAsciiL( "($1)", 4 ))
                 {
                     String aResStr = String( FwkResId( STR_UPDATEDOC ));
-                    rtl::OUString aTmp( aResStr );
-                    aTmp += rtl::OUString( " " );
+                    OUString aTmp( aResStr );
+                    aTmp += OUString( " " );
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.matchAsciiL( "($2)", 4 ))
                 {
                     String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
-                    rtl::OUString aTmp( aResStr );
+                    OUString aTmp( aResStr );
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.matchAsciiL( "($3)", 4 ))
                 {
                     String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
-                    rtl::OUString aTmp( aResStr );
+                    OUString aTmp( aResStr );
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
-                ::rtl::OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
+                OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
                 m_pToolbar->SetItemText( m_nID, aText );
                 m_pToolbar->SetQuickHelpText( m_nID, aText );
             }
@@ -297,7 +297,7 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, sal_uInt16   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
+MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, sal_uInt16   nID, const OUString& aCommand, const OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
 {
 }
 

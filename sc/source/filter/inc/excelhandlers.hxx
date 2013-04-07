@@ -66,7 +66,7 @@ class WorkbookFragmentBase : public ::oox::core::FragmentHandler2, public Workbo
 public:
     explicit            WorkbookFragmentBase(
                             const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 };
 
 // ============================================================================
@@ -80,7 +80,7 @@ class WorksheetFragmentBase : public ::oox::core::FragmentHandler2, public Works
 public:
     explicit            WorksheetFragmentBase(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 };
 
 // ============================================================================
@@ -135,7 +135,7 @@ public:
     /** Opens the stream with the passed full name. */
     explicit            BiffFragmentHandler(
                             const ::oox::core::FilterBase& rFilter,
-                            const ::rtl::OUString& rStrmName );
+                            const OUString& rStrmName );
 
     virtual             ~BiffFragmentHandler();
 
@@ -178,7 +178,7 @@ class BiffWorkbookFragmentBase : public BiffFragmentHandler, public WorkbookHelp
 protected:
     explicit            BiffWorkbookFragmentBase(
                             const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rStrmName,
+                            const OUString& rStrmName,
                             bool bCloneDecoder = false );
 };
 

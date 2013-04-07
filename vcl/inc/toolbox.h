@@ -60,7 +60,7 @@ struct ImplToolItem
     XubString           maQuickHelpText;
     XubString           maHelpText;
     String              maCommandStr;
-    rtl::OString        maHelpId;
+    OString        maHelpId;
     Rectangle           maRect;
     Rectangle           maCalcRect;
     // the overall horizontal item size, including one or more of [image size + textlength + dropdown arrow]

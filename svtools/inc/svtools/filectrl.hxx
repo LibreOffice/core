@@ -77,7 +77,7 @@ public:
 
     void            SetText( const OUString& rStr );
     OUString        GetText() const;
-    rtl::OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
+    OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
 
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
     Selection       GetSelection() const                        { return maEdit.GetSelection(); }

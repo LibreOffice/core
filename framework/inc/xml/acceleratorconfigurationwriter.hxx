@@ -92,7 +92,7 @@ class AcceleratorConfigurationWriter : private ThreadHelpBase
         //---------------------------------------
         /** @short  TODO */
         void impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
-                                         const ::rtl::OUString&                                        sCommand,
+                                         const OUString&                                        sCommand,
                                          const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig );
 };
 

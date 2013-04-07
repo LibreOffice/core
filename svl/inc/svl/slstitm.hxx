@@ -50,8 +50,8 @@ public:
     virtual void            SetString( const XubString& );
     virtual XubString       GetString();
 
-    void                    SetStringList( const com::sun::star::uno::Sequence< rtl::OUString >& rList );
-    void                    GetStringList( com::sun::star::uno::Sequence< rtl::OUString >& rList ) const;
+    void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
+    void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

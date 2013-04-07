@@ -32,9 +32,9 @@ namespace sw {
         public:
             CrossRefBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
-                const ::rtl::OUString& rName,
-                const ::rtl::OUString& rShortName,
-                const ::rtl::OUString& rPrefix);
+                const OUString& rName,
+                const OUString& rShortName,
+                const OUString& rPrefix);
 
             virtual SwPosition& GetOtherMarkPos() const;
             virtual SwPosition& GetMarkStart() const
@@ -65,10 +65,10 @@ namespace sw {
         public:
             CrossRefHeadingBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
-                const ::rtl::OUString& rName,
-                const ::rtl::OUString& rShortName);
-            static ::rtl::OUString GenerateNewName();
-            static bool IsLegalName(const ::rtl::OUString& rName);
+                const OUString& rName,
+                const OUString& rShortName);
+            static OUString GenerateNewName();
+            static bool IsLegalName(const OUString& rName);
         };
 
         class CrossRefNumItemBookmark
@@ -77,10 +77,10 @@ namespace sw {
         public:
             CrossRefNumItemBookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
-                const ::rtl::OUString& rName,
-                const ::rtl::OUString& rShortName);
-            static ::rtl::OUString GenerateNewName();
-            static bool IsLegalName(const ::rtl::OUString& rName);
+                const OUString& rName,
+                const OUString& rShortName);
+            static OUString GenerateNewName();
+            static bool IsLegalName(const OUString& rName);
         };
     }
 }

@@ -130,11 +130,11 @@ void SvxLineBox::Select()
 
                     Any a;
                     Sequence< PropertyValue > aArgs( 1 );
-                    aArgs[0].Name = ::rtl::OUString( "LineDash" );
+                    aArgs[0].Name = OUString( "LineDash" );
                     aLineDashItem.QueryValue ( a );
                     aArgs[0].Value = a;
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                                 ::rtl::OUString( ".uno:LineDash" ),
+                                                 OUString( ".uno:LineDash" ),
                                                  aArgs );
                 }
             }
@@ -144,11 +144,11 @@ void SvxLineBox::Select()
         XLineStyleItem aLineStyleItem( eXLS );
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString( "XLineStyle" );
+        aArgs[0].Name = OUString( "XLineStyle" );
         aLineStyleItem.QueryValue ( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                     ::rtl::OUString( ".uno:XLineStyle" ),
+                                     OUString( ".uno:XLineStyle" ),
                                      aArgs );
 
         nCurPos = GetSelectEntryPos();
@@ -264,7 +264,7 @@ void SvxLineBox::FillControl()
 
 SvxColorBox::SvxColorBox(
     Window* pParent,
-    const ::rtl::OUString& rCommand,
+    const OUString& rCommand,
     const Reference< XFrame >& rFrame,
     WinBits nBits ) :
     ColorLB( pParent, nBits ),
@@ -428,7 +428,7 @@ SvxMetricField::SvxMetricField(
     aCurTxt( String() ),
     mxFrame( rFrame )
 {
-    Size aSize = Size(GetTextWidth( rtl::OUString("99,99mm") ),GetTextHeight());
+    Size aSize = Size(GetTextWidth( OUString("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
     aSize.Height() += 6;
     SetSizePixel( aSize );
@@ -474,11 +474,11 @@ void SvxMetricField::Modify()
 
     Any a;
     Sequence< PropertyValue > aArgs( 1 );
-    aArgs[0].Name = ::rtl::OUString( "LineWidth" );
+    aArgs[0].Name = OUString( "LineWidth" );
     aLineWidthItem.QueryValue( a );
     aArgs[0].Value = a;
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 ::rtl::OUString( ".uno:LineWidth" ),
+                                 OUString( ".uno:LineWidth" ),
                                  aArgs );
 }
 

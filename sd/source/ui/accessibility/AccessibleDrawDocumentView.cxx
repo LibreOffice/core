@@ -52,7 +52,6 @@
 #include "sdresid.hxx"
 #include <osl/mutex.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -240,7 +239,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + rtl::OUString::valueOf(nIndex),
+            "no accessible child with index " + OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 }
 
@@ -333,17 +332,17 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessibleDrawDocumentView");
+    return OUString("AccessibleDrawDocumentView");
 }
 
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -365,16 +364,16 @@ void SAL_CALL
 
 
 /// Create a name for this view.
-::rtl::OUString
+OUString
     AccessibleDrawDocumentView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString sName;
+    OUString sName;
 
     uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
     if (xInfo.is())
     {
-        uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
         OUString sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {
@@ -421,16 +420,16 @@ void SAL_CALL
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.
 */
-::rtl::OUString
+OUString
     AccessibleDrawDocumentView::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString sDescription;
+    OUString sDescription;
 
     uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
     if (xInfo.is())
     {
-        uno::Sequence< ::rtl::OUString > aServices( xInfo->getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( xInfo->getSupportedServiceNames() );
         OUString sFirstService = aServices[0];
         if ( sFirstService == "com.sun.star.drawing.DrawingDocumentDrawView" )
         {

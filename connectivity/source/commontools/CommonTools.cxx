@@ -111,7 +111,7 @@ namespace connectivity
         return ( *pStr == 0 ) && ( *pWild == 0 );
     }
     //------------------------------------------------------------------
-    rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate)
+    OUString toDateString(const ::com::sun::star::util::Date& rDate)
     {
         sal_Char s[11];
         snprintf(s,
@@ -121,11 +121,11 @@ namespace connectivity
                 (int)rDate.Month,
                 (int)rDate.Day);
         s[10] = 0;
-        return rtl::OUString::createFromAscii(s);
+        return OUString::createFromAscii(s);
     }
 
     //------------------------------------------------------------------
-    rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime)
+    OUString toTimeString(const ::com::sun::star::util::Time& rTime)
     {
         sal_Char s[9];
         snprintf(s,
@@ -135,11 +135,11 @@ namespace connectivity
                 (int)rTime.Minutes,
                 (int)rTime.Seconds);
         s[8] = 0;
-        return rtl::OUString::createFromAscii(s);
+        return OUString::createFromAscii(s);
     }
 
     //------------------------------------------------------------------
-    rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime)
+    OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime)
     {
         sal_Char s[20];
         snprintf(s,
@@ -152,7 +152,7 @@ namespace connectivity
                 (int)rDateTime.Minutes,
                 (int)rDateTime.Seconds);
         s[19] = 0;
-        return rtl::OUString::createFromAscii(s);
+        return OUString::createFromAscii(s);
     }
 
 #ifdef SOLAR_JAVA
@@ -198,7 +198,7 @@ namespace connectivity
         return aRet;
     }
     //------------------------------------------------------------------------------
-    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName )
+    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
     {
         sal_Bool bRet = sal_False;
         if ( _pJVM.is() )
@@ -207,7 +207,7 @@ namespace connectivity
             JNIEnv* pEnv = aGuard.getEnvironment();
             if( pEnv )
             {
-                ::rtl::OString sClassName = ::rtl::OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
+                OString sClassName = OUStringToOString(_sClassName, RTL_TEXTENCODING_ASCII_US);
                 sClassName = sClassName.replace('.','/');
                 jobject out = pEnv->FindClass(sClassName.getStr());
                 bRet = out != NULL;
@@ -223,7 +223,7 @@ namespace connectivity
 namespace dbtools
 {
 //------------------------------------------------------------------
-sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
+sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 {
 
     return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
@@ -231,7 +231,7 @@ sal_Bool isCharOk(sal_Unicode c,const ::rtl::OUString& _rSpecials)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
+sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 {
     // Test for correct naming (in SQL sense)
     // This is important for table names for example
@@ -260,11 +260,11 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
 }
 //------------------------------------------------------------------
 // Creates a new name if necessary
-::rtl::OUString convertName2SQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSpecials)
+OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))
         return rName;
-    ::rtl::OUString aNewName(rName);
+    OUString aNewName(rName);
     const sal_Unicode* pStr = rName.getStr();
     sal_Int32 nLength = rName.getLength();
     sal_Bool bValid(*pStr < 128 && !isdigit(*pStr));
@@ -276,14 +276,14 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
         }
 
     if ( !bValid )
-        aNewName = ::rtl::OUString();
+        aNewName = OUString();
 
     return aNewName;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName)
+OUString quoteName(const OUString& _rQuote, const OUString& _rName)
 {
-    ::rtl::OUString sName = _rName;
+    OUString sName = _rName;
     if( !_rQuote.isEmpty() && _rQuote.toChar() != ' ')
         sName = _rQuote + _rName + _rQuote;
     return sName;

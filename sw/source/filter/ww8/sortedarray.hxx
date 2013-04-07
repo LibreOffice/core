@@ -62,7 +62,7 @@ namespace ww
             std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 #if OSL_DEBUG_LEVEL > 1
             bool bBroken=false;
-            rtl::OUString sError;
+            OUString sError;
             const C *pIter = mpWwSprmTab;
             const C *pBeforeEnd = mpWwSprmTab + mnNoElems - 1;
             while (pIter < pBeforeEnd)
@@ -85,11 +85,11 @@ namespace ww
                         reinterpret_cast<const sal_uInt8 *>(&(*pIter));
                     for (size_t i=0; i < nSize; ++i)
                     {
-                        sError += rtl::OUString::valueOf(
+                        sError += OUString::valueOf(
                             static_cast<sal_Int32>(pHack[i]), 16);
-                        sError += rtl::OUString::valueOf(sal_Unicode(' '));
+                        sError += OUString::valueOf(sal_Unicode(' '));
                     }
-                    sError += rtl::OUString::valueOf(sal_Unicode('\n'));
+                    sError += OUString::valueOf(sal_Unicode('\n'));
                     while (*pIter == *(pIter+1) && pIter < pBeforeEnd)
                         ++pIter;
                 }
@@ -98,7 +98,7 @@ namespace ww
             }
             if (bBroken)
             {
-               OSL_FAIL( rtl::OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
+               OSL_FAIL( OUStringToOString( sError, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
 #endif
         }

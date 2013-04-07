@@ -46,13 +46,13 @@ namespace dbaccess
 
 /** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
 */
-sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
+sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OFilteredContainer::createWildCardVector" );
     // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
     // for them
-    ::rtl::OUString* pTableFilters = _rTableFilter.getArray();
-    ::rtl::OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
+    OUString* pTableFilters = _rTableFilter.getArray();
+    OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
     sal_Int32 nShiftPos = 0;
     for (sal_Int32 i=0; pEnd != pTableFilters; ++pTableFilters,++i)
     {
@@ -74,14 +74,14 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
     return nShiftPos;
 }
 
-    bool lcl_isElementAllowed(  const ::rtl::OUString& _rName,
-                                const Sequence< ::rtl::OUString >& _rTableFilter,
+    bool lcl_isElementAllowed(  const OUString& _rName,
+                                const Sequence< OUString >& _rTableFilter,
                                 const ::std::vector< WildCard >& _rWCSearch )
     {
         sal_Int32 nTableFilterLen = _rTableFilter.getLength();
 
-        const ::rtl::OUString* tableFilter = _rTableFilter.getConstArray();
-        const ::rtl::OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
+        const OUString* tableFilter = _rTableFilter.getConstArray();
+        const OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
         bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
@@ -96,7 +96,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         return bFilterMatch;
     }
 
-    typedef ::boost::optional< ::rtl::OUString >    OptionalString;
+    typedef ::boost::optional< OUString >    OptionalString;
     struct TableInfo
     {
         OptionalString  sComposedName;
@@ -105,13 +105,13 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         OptionalString  sSchema;
         OptionalString  sName;
 
-        TableInfo( const ::rtl::OUString& _composedName )
+        TableInfo( const OUString& _composedName )
             :sComposedName( _composedName )
         {
         }
 
-        TableInfo( const ::rtl::OUString& _catalog, const ::rtl::OUString& _schema, const ::rtl::OUString& _name,
-            const ::rtl::OUString& _type )
+        TableInfo( const OUString& _catalog, const OUString& _schema, const OUString& _name,
+            const OUString& _type )
             :sComposedName()
             ,sType( _type )
             ,sCatalog( _catalog )
@@ -148,7 +148,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         if ( !_masterContainer.is() )
             throw RuntimeException();
 
-        ::rtl::OUString sTypeName;
+        OUString sTypeName;
         try
         {
             Reference< XPropertySet > xTable( _masterContainer->getByName( *_io_tableInfo.sComposedName ), UNO_QUERY_THROW );
@@ -162,7 +162,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
     }
 
     connectivity::TStringVector lcl_filter( const TableInfos& _unfilteredTables,
-        const Sequence< ::rtl::OUString >& _tableFilter, const Sequence< ::rtl::OUString >& _tableTypeFilter,
+        const Sequence< OUString >& _tableFilter, const Sequence< OUString >& _tableTypeFilter,
         const Reference< XDatabaseMetaData >& _metaData, const Reference< XNameAccess >& _masterContainer )
     {
         TableInfos aFilteredTables;
@@ -179,7 +179,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
             // for them
             ::std::vector< WildCard > aWildCardTableFilter;
-            Sequence< ::rtl::OUString > aNonWildCardTableFilter = _tableFilter;
+            Sequence< OUString > aNonWildCardTableFilter = _tableFilter;
             nTableFilterCount = createWildCardVector( aNonWildCardTableFilter, aWildCardTableFilter );
 
             TableInfos aUnfilteredTables( _unfilteredTables );
@@ -207,8 +207,8 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             TableInfos aUnfilteredTables;
             aUnfilteredTables.swap( aFilteredTables );
 
-            const ::rtl::OUString* pTableTypeFilterBegin = _tableTypeFilter.getConstArray();
-            const ::rtl::OUString* pTableTypeFilterEnd = pTableTypeFilterBegin + _tableTypeFilter.getLength();
+            const OUString* pTableTypeFilterBegin = _tableTypeFilter.getConstArray();
+            const OUString* pTableTypeFilterEnd = pTableTypeFilterBegin + _tableTypeFilter.getLength();
 
             for (   TableInfos::iterator table = aUnfilteredTables.begin();
                     table != aUnfilteredTables.end();
@@ -245,7 +245,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
                                  IRefreshListener*  _pRefreshListener,
                                  ::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
-        :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
+        :OCollection(_rParent,_bCase,_rMutex,::std::vector< OUString>())
         ,m_bConstructed(sal_False)
         ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
@@ -255,8 +255,8 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
     }
 
     void OFilteredContainer::construct(const Reference< XNameAccess >& _rxMasterContainer,
-                                    const Sequence< ::rtl::OUString >& _rTableFilter,
-                                    const Sequence< ::rtl::OUString >& _rTableTypeFilter)
+                                    const Sequence< OUString >& _rTableFilter,
+                                    const Sequence< OUString >& _rTableTypeFilter)
     {
         try
         {
@@ -277,9 +277,9 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
 
             TableInfos aUnfilteredTables;
 
-            Sequence< ::rtl::OUString > aNames = m_xMasterContainer->getElementNames();
-            const ::rtl::OUString*  name = aNames.getConstArray();
-            const ::rtl::OUString*  nameEnd = name + aNames.getLength();
+            Sequence< OUString > aNames = m_xMasterContainer->getElementNames();
+            const OUString*  name = aNames.getConstArray();
+            const OUString*  nameEnd = name + aNames.getLength();
             for ( ; name != nameEnd; ++name )
                 aUnfilteredTables.push_back( TableInfo( *name ) );
 
@@ -294,10 +294,10 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         }
     }
 
-    void OFilteredContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter, const Sequence< ::rtl::OUString >& _rTableTypeFilter)
+    void OFilteredContainer::construct(const Sequence< OUString >& _rTableFilter, const Sequence< OUString >& _rTableTypeFilter)
     {
         // build sorted versions of the filter sequences, so the visibility decision is faster
-        Sequence< ::rtl::OUString > aTableFilter(_rTableFilter);
+        Sequence< OUString > aTableFilter(_rTableFilter);
 
         // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
         // for them
@@ -312,14 +312,14 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             // create a table table filter suitable for the XDatabaseMetaData::getTables call,
             // taking into account both the externally-provided table type filter, and any
             // table type restriction which is inherent to the container
-            Sequence< ::rtl::OUString > aTableTypeFilter;
-            ::rtl::OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
+            Sequence< OUString > aTableTypeFilter;
+            OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
             {
                 if ( _rTableTypeFilter.getLength() != 0 )
                 {
-                    const ::rtl::OUString* tableType    = _rTableTypeFilter.getConstArray();
-                    const ::rtl::OUString* tableTypeEnd = tableType + _rTableTypeFilter.getLength();
+                    const OUString* tableType    = _rTableTypeFilter.getConstArray();
+                    const OUString* tableTypeEnd = tableType + _rTableTypeFilter.getLength();
                     for ( ; tableType != tableTypeEnd; ++tableType )
                     {
                         if ( *tableType == sInherentTableTypeRestriction )
@@ -348,13 +348,13 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
                 }
             }
 
-            static const ::rtl::OUString sAll("%");
+            static const OUString sAll("%");
             Reference< XResultSet > xTables = m_xMetaData->getTables( Any(), sAll, sAll, aTableTypeFilter );
             Reference< XRow > xCurrentRow( xTables, UNO_QUERY_THROW );
 
             TableInfos aUnfilteredTables;
 
-            ::rtl::OUString sCatalog, sSchema, sName, sType;
+            OUString sCatalog, sSchema, sName, sType;
             while ( xTables->next() )
             {
                 sCatalog    = xCurrentRow->getString(1);
@@ -407,7 +407,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
         }
     }
 
-    ::rtl::OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
+    OUString OFilteredContainer::getNameForObject(const ObjectType& _xObject)
     {
         OSL_ENSURE( _xObject.is(), "OFilteredContainer::getNameForObject: Object is NULL!" );
         return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
@@ -426,7 +426,7 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
     // drivers, even the ones which do not understand the standard
     #define FILTER_MODE_MIX_ALL  3
 
-    void OFilteredContainer::getAllTableTypeFilter( Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const
+    void OFilteredContainer::getAllTableTypeFilter( Sequence< OUString >& /* [out] */ _rFilter ) const
     {
         sal_Int32 nFilterMode = FILTER_MODE_MIX_ALL;
             // for compatibility reasons, this is the default: we used this way before we
@@ -439,9 +439,9 @@ sal_Int32 createWildCardVector(Sequence< ::rtl::OUString >& _rTableFilter, ::std
             OSL_VERIFY( aFilterModeSetting >>= nFilterMode );
         }
 
-        const ::rtl::OUString sAll( "%"  );
-        const ::rtl::OUString sView( "VIEW"  );
-        const ::rtl::OUString sTable( "TABLE"  );
+        const OUString sAll( "%"  );
+        const OUString sView( "VIEW"  );
+        const OUString sTable( "TABLE"  );
 
         switch ( nFilterMode )
         {

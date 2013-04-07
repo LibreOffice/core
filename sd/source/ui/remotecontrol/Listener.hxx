@@ -51,7 +51,7 @@ public:
     virtual void SAL_CALL slideTransitionEnded(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideAnimationsEnded(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL hyperLinkClicked( const ::rtl::OUString& hyperLink )
+    virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink )
         throw (css::uno::RuntimeException);
 
     // XEventListener

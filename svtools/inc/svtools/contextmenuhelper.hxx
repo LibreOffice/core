@@ -75,13 +75,13 @@ class SVT_DLLPUBLIC ContextMenuHelper
         void            completeMenuProperties( Menu* pMenu );
 
         // dispatch provided command
-        bool            dispatchCommand( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const ::rtl::OUString& aCommandURL );
+        bool            dispatchCommand( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& aCommandURL );
 
 
         // methods to retrieve a single command URL dependent value from a
         // ui configuratin manager
-        Image           getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) const;
-        rtl::OUString   getLabelFromCommandURL( const ::rtl::OUString& aCmdURL ) const;
+        Image           getImageFromCommandURL( const OUString& aCmdURL ) const;
+        OUString   getLabelFromCommandURL( const OUString& aCmdURL ) const;
 
         // creates an association between current module/controller bound to the
         // provided frame and their ui configuration managers.
@@ -98,8 +98,8 @@ class SVT_DLLPUBLIC ContextMenuHelper
         }
 
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame >         m_xWeakFrame;
-        ::rtl::OUString                                                                 m_aModuleIdentifier;
-        ::rtl::OUString                                                                 m_aSelf;
+        OUString                                                                 m_aModuleIdentifier;
+        OUString                                                                 m_aSelf;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >     m_xURLTransformer;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aDefaultArgs;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >         m_xDocImageMgr;

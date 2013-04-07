@@ -23,7 +23,7 @@
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
-PptEscherEx::PptEscherEx( SvStream& rOutStrm, const rtl::OUString& rBaseURI ) :
+PptEscherEx::PptEscherEx( SvStream& rOutStrm, const OUString& rBaseURI ) :
     EscherEx( EscherExGlobalRef( new EscherExGlobal ), &rOutStrm )
 {
     mxGlobal->SetBaseURI( rBaseURI );

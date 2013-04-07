@@ -81,7 +81,7 @@ namespace dbaui
         HelpButton      aBT_HELP;
         FixedLine       aFL_ORDER;
         String          aSTR_NOENTRY;
-        ::rtl::OUString m_sOrgOrder;
+        OUString m_sOrgOrder;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
@@ -103,8 +103,8 @@ namespace dbaui
                         ~DlgOrderCrit();
         void            BuildOrderPart();
 
-        ::rtl::OUString GetOrderList( ) const;
-        ::rtl::OUString GetOrignalOrder() const { return m_sOrgOrder; }
+        OUString GetOrderList( ) const;
+        OUString GetOrignalOrder() const { return m_sOrgOrder; }
 
     private:
         void            impl_initializeOrderList_nothrow();

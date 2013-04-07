@@ -58,12 +58,12 @@ private:
      * the following members are used to reserve the signature information,
      * including X509IssuerName, X509SerialNumber, and X509Certificate,etc.
      */
-    rtl::OUString m_ouX509IssuerName;
-    rtl::OUString m_ouX509SerialNumber;
-    rtl::OUString m_ouX509Certificate;
-    rtl::OUString m_ouDigestValue;
-    rtl::OUString m_ouSignatureValue;
-    rtl::OUString m_ouDate;
+    OUString m_ouX509IssuerName;
+    OUString m_ouX509SerialNumber;
+    OUString m_ouX509Certificate;
+    OUString m_ouDigestValue;
+    OUString m_ouSignatureValue;
+    OUString m_ouDate;
 
     /*
      * whether inside a particular element
@@ -93,11 +93,11 @@ private:
      * only after the Transforms element is read in, so we have to reserve the reference's
      * URI when the startElement event is met.
      */
-    rtl::OUString m_currentReferenceURI;
+    OUString m_currentReferenceURI;
     bool m_bReferenceUnresolved;
 
 private:
-    rtl::OUString getIdAttr(const com::sun::star::uno::Reference<
+    OUString getIdAttr(const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttribs );
 
 public:
@@ -116,23 +116,23 @@ public:
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL startElement(
-        const rtl::OUString& aName,
+        const OUString& aName,
         const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL endElement( const rtl::OUString& aName )
+    virtual void SAL_CALL endElement( const OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL characters( const rtl::OUString& aChars )
+    virtual void SAL_CALL characters( const OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL ignorableWhitespace( const rtl::OUString& aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL processingInstruction(
-        const rtl::OUString& aTarget,
-        const rtl::OUString& aData )
+        const OUString& aTarget,
+        const OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setDocumentLocator(

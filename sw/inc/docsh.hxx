@@ -142,7 +142,7 @@ public:
 
     static SfxInterface *_GetInterface() { return GetStaticInterface(); }
 
-    static rtl::OUString GetEventName( sal_Int32 nId );
+    static OUString GetEventName( sal_Int32 nId );
 
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
@@ -277,7 +277,7 @@ public:
     void InvalidateModel();
     void ReactivateModel();
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< OUString >  GetEventNames();
 
     /// #i20883# Digital Signatures and Encryption
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );

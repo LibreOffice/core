@@ -96,13 +96,13 @@ bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
         case 0 :
             {
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( ZOOMSLIDER_PARAMS );
-                aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_CURRENTZOOM ));
+                aSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_CURRENTZOOM ));
                 aSeq[0].Value <<= sal_Int32( GetValue() );
-                aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ));
+                aSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_SNAPPINGPOINTS ));
                 aSeq[1].Value <<= maValues;
-                aSeq[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MINZOOM ) );
+                aSeq[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MINZOOM ) );
                 aSeq[2].Value <<= mnMinZoom;
-                aSeq[3].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MAXZOOM ) );
+                aSeq[3].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( ZOOMSLIDER_PARAM_MAXZOOM ) );
                 aSeq[3].Value <<= mnMaxZoom;
                 rVal <<= aSeq;
             }

@@ -37,7 +37,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLFormattedField )
 
 OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName
+                sal_uInt16 nPrfx, const OUString& rLName
                 ,const uno::Reference< xml::sax::XAttributeList > & _xAttrList
                 ,const uno::Reference< XFormattedField > & _xComponent
                 ,OXMLTable* _pContainer
@@ -54,10 +54,10 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-         ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+         OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -66,7 +66,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
                     break;
                 case XML_TOK_SELECT_PAGE:
                     {
-                        static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("rpt:PageNumber()"));
+                        static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("rpt:PageNumber()"));
                         _xComponent->setDataField(s_sPageNumber);
                     }
                     break;
@@ -76,7 +76,7 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
         }
         if ( _bPageCount )
         {
-            static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("rpt:PageCount()"));
+            static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("rpt:PageCount()"));
             _xComponent->setDataField(s_sPageNumber);
         }
     }

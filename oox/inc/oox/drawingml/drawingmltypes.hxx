@@ -97,19 +97,19 @@ com::sun::star::geometry::IntegerRectangle2D GetRelativeRect( const ::com::sun::
 sal_Int32 GetCoordinate( sal_Int32 nValue );
 
 /** converts an emu string into 1/100th mmm */
-sal_Int32 GetCoordinate( const ::rtl::OUString& sValue );
+sal_Int32 GetCoordinate( const OUString& sValue );
 
 /** converts a ST_Percentage % string into 1/1000th of % */
-sal_Int32 GetPercent( const ::rtl::OUString& sValue );
+sal_Int32 GetPercent( const OUString& sValue );
 
 /** Converts a ST_PositiveFixedPercentage to a float. 1.0 == 100% */
-double GetPositiveFixedPercentage( const ::rtl::OUString& sValue );
+double GetPositiveFixedPercentage( const OUString& sValue );
 
 /** converts the ST_TextFontSize to point */
-float GetTextSize( const ::rtl::OUString& rValue );
+float GetTextSize( const OUString& rValue );
 
 /** converts the ST_TextSpacingPoint to 1/100mm */
-sal_Int32 GetTextSpacingPoint(  const ::rtl::OUString& sValue );
+sal_Int32 GetTextSpacingPoint(  const OUString& sValue );
 sal_Int32 GetTextSpacingPoint(  const sal_Int32 nValue );
 
 /** */

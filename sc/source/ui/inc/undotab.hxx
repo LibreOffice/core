@@ -60,7 +60,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     String          sNewName;
@@ -79,7 +79,7 @@ public:
                     ScUndoInsertTables(
                             ScDocShell* pNewDocShell,
                             SCTAB nTabNum,
-                            std::vector<rtl::OUString>& newNameList);
+                            std::vector<OUString>& newNameList);
     virtual         ~ScUndoInsertTables();
 
     virtual void    Undo();
@@ -87,12 +87,12 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
 
     SdrUndoAction*  pDrawUndo;
-    std::vector<rtl::OUString>      aNameList;
+    std::vector<OUString>      aNameList;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
     SCTAB           nTab;
@@ -117,7 +117,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     std::vector<SCTAB> theTabs;
@@ -144,7 +144,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB   nTab;
@@ -163,8 +163,8 @@ public:
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
                         ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< ::rtl::OUString>* pOldNames = NULL,
-                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
+                        ::std::vector< OUString>* pOldNames = NULL,
+                        ::std::vector< OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoMoveTab();
 
@@ -173,13 +173,13 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
     ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpOldNames;
-    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpOldNames;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpNewNames;
 
     void DoChange( sal_Bool bUndo ) const;
 };
@@ -193,7 +193,7 @@ public:
                         ScDocShell* pNewDocShell,
                         ::std::vector<SCTAB>* pOldTabs,
                         ::std::vector<SCTAB>* pNewTabs,
-                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
+                        ::std::vector< OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoCopyTab();
 
@@ -202,12 +202,12 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
     ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
 
     void DoChange() const;
@@ -232,7 +232,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     ScUndoTabColorInfo::List aTabColorList;
@@ -257,7 +257,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     boost::scoped_ptr<ScMarkData> mpMarkData;
@@ -285,7 +285,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB       nTab;
@@ -311,7 +311,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     String  aDocName;
@@ -342,7 +342,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     std::vector<SCTAB>  undoTabs;
@@ -368,7 +368,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -396,7 +396,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB   mnTab;
@@ -421,7 +421,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB               nTab;
@@ -450,7 +450,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB   nTab;
@@ -480,7 +480,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     String  aPersistName;       // to find object (works only for OLE objects)
@@ -503,7 +503,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     SCTAB   nTab;

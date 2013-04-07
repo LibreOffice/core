@@ -48,7 +48,7 @@ SfxPopupWindow* SvxSubToolBoxControl::CreatePopupWindow()
     }
 
     if( pResource )
-        createAndPositionSubToolBar( rtl::OUString::createFromAscii( pResource ) );
+        createAndPositionSubToolBar( OUString::createFromAscii( pResource ) );
     return NULL;
 }
 

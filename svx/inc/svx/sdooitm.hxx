@@ -37,7 +37,7 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=NULL) const;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
 
-    virtual rtl::OUString GetValueTextByVal(sal_Bool bVal) const;
+    virtual OUString GetValueTextByVal(sal_Bool bVal) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString& rText, const IntlWrapper * = 0) const;
 };

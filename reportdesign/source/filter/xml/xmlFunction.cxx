@@ -37,7 +37,7 @@ DBG_NAME( rpt_OXMLFunction )
 
 OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XFunctionsSupplier >& _xFunctions
                 ,bool _bAddToReport
@@ -57,13 +57,13 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
     const SvXMLTokenMap& rTokenMap = _rImport.GetFunctionElemTokenMap();
 
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-     ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+     OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
         try
         {
@@ -80,7 +80,7 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                     break;
                 case XML_TOK_INITIAL_FORMULA:
                     if ( !sValue.isEmpty() )
-                        m_xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,ORptFilter::convertFormula(sValue)));
+                        m_xFunction->setInitialFormula(beans::Optional< OUString>(sal_True,ORptFilter::convertFormula(sValue)));
                     break;
                 case XML_TOK_DEEP_TRAVERSING:
                     m_xFunction->setDeepTraversing(sValue == s_sTRUE);

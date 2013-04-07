@@ -60,11 +60,11 @@ namespace connectivity
             ::std::map<sal_Int32, TInt2IntMap > m_aValueRange;
             ::std::map<sal_Int32, TInt2IntMap >::iterator   m_aValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >              m_aStrValueRange;
-            ::std::map<sal_Int32, ::std::map< ::rtl::OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
+            ::std::map<sal_Int32, ::std::map< OUString,sal_Int32> >              m_aStrValueRange;
+            ::std::map<sal_Int32, ::std::map< OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >              m_aIntValueRange;
-            ::std::map<sal_Int32, ::std::map< sal_Int32,::rtl::OUString> >::iterator    m_aIntValueRangeIter;
+            ::std::map<sal_Int32, ::std::map< sal_Int32,OUString> >              m_aIntValueRange;
+            ::std::map<sal_Int32, ::std::map< sal_Int32,OUString> >::iterator    m_aIntValueRangeIter;
 
             ADORecordset*                   m_pRecordSet;
                         ::com::sun::star::uno::WeakReferenceHelper    m_aStatement;
@@ -79,7 +79,7 @@ namespace connectivity
             sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchDirection()       const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             sal_Int32 getFetchSize()            const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            OUString getCursorName()     const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             void setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             void setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -147,7 +147,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XRow
             virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -176,7 +176,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XColumnLocate
-            virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             const ::std::vector<sal_Int32>& getColumnMapping() { return m_aColMapping; }
 

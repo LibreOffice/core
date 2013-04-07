@@ -35,8 +35,8 @@ namespace dbp
     struct OGroupBoxSI
     {
     public:
-        ::rtl::OUString         getImplementationName() const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        OUString         getImplementationName() const;
+        ::com::sun::star::uno::Sequence< OUString >
                                 getServiceNames() const;
     };
 
@@ -47,8 +47,8 @@ namespace dbp
     struct OListComboSI
     {
     public:
-        ::rtl::OUString         getImplementationName() const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        OUString         getImplementationName() const;
+        ::com::sun::star::uno::Sequence< OUString >
                                 getServiceNames() const;
     };
 
@@ -59,8 +59,8 @@ namespace dbp
     struct OGridSI
     {
     public:
-        ::rtl::OUString         getImplementationName() const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        OUString         getImplementationName() const;
+        ::com::sun::star::uno::Sequence< OUString >
                                 getServiceNames() const;
     };
 

@@ -45,7 +45,7 @@ public:
 
     //=====  XAccessibleImage  ================================================
 
-    ::rtl::OUString SAL_CALL getAccessibleImageDescription (void)
+    OUString SAL_CALL getAccessibleImageDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     sal_Int32 SAL_CALL getAccessibleImageHeight (void)
@@ -72,11 +72,11 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -88,12 +88,12 @@ public:
 
 protected:
     /// Create a name string that contains the accessible name.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 

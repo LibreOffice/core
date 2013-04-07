@@ -243,7 +243,7 @@ void SbiCodeGen::Save()
                         aPropName = aPropName.copy( aIfaceName.getLength() + 1 );
                     }
                     OSL_TRACE("*** getProcedureProperty for thing %s",
-                              rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
+                              OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
                     rMod.GetProcedureProperty( aPropName, ePropType );
                 }
                 if( nPass == 1 )

@@ -47,15 +47,15 @@ uno::Reference< util::XCloneable > SAL_CALL BarChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL BarChartType::getChartType()
+OUString SAL_CALL BarChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_BAR;
 }
 
-uno::Sequence< ::rtl::OUString > BarChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > BarChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_BAR;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     return aServices;

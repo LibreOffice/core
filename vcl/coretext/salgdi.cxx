@@ -81,8 +81,8 @@ QuartzSalGraphics::~QuartzSalGraphics()
 #endif
 
 inline bool QuartzSalGraphics::AddTempDevFont( ImplDevFontList*,
-                                             const rtl::OUString& ,
-                                             const rtl::OUString& )
+                                             const OUString& ,
+                                             const OUString& )
 {
     OSL_ASSERT( FALSE );
     return false;

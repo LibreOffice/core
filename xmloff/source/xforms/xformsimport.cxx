@@ -54,12 +54,11 @@ using com::sun::star::form::binding::XListEntrySource;
 using com::sun::star::form::binding::XListEntrySink;
 using com::sun::star::form::submission::XSubmission;
 using com::sun::star::form::submission::XSubmissionSupplier;
-using rtl::OUString;
 
 SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName )
+    const OUString& rLocalName )
 {
     return new XFormsModelContext( rImport, nPrefix, rLocalName );
 }
@@ -153,8 +152,8 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
 
     try
     {
-        Sequence< ::rtl::OUString > aSettingsForModels( xModelSettings->getElementNames() );
-        for (   const ::rtl::OUString* pModelName = aSettingsForModels.getConstArray();
+        Sequence< OUString > aSettingsForModels( xModelSettings->getElementNames() );
+        for (   const OUString* pModelName = aSettingsForModels.getConstArray();
                 pModelName != aSettingsForModels.getConstArray() + aSettingsForModels.getLength();
                 ++pModelName
             )

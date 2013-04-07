@@ -42,7 +42,6 @@
 #include <stdio.h>
 
 #include "osl/thread.hxx"
-using ::rtl::OUString;
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"
@@ -119,7 +118,7 @@ public:
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL overrideNode(
-            const rtl::OUString& aName,
+            const OUString& aName,
             sal_Int16 aAttributes,
             sal_Bool bClear)
         throw(
@@ -127,14 +126,14 @@ public:
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL addOrReplaceNode(
-            const rtl::OUString& aName,
+            const OUString& aName,
             sal_Int16 aAttributes)
         throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL  addOrReplaceNodeFromTemplate(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::configuration::backend::TemplateIdentifier& aTemplate,
             sal_Int16 aAttributes )
         throw(
@@ -147,13 +146,13 @@ public:
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL  dropNode(
-            const rtl::OUString& aName )
+            const OUString& aName )
         throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL  overrideProperty(
-            const rtl::OUString& aName,
+            const OUString& aName,
             sal_Int16 aAttributes,
             const css::uno::Type& aType,
             sal_Bool bClear )
@@ -169,7 +168,7 @@ public:
 
     virtual void SAL_CALL setPropertyValueForLocale(
             const css::uno::Any& aValue,
-            const rtl::OUString& aLocale )
+            const OUString& aLocale )
         throw(
             ::com::sun::star::configuration::backend::MalformedDataException,
             ::com::sun::star::lang::WrappedTargetException );
@@ -180,7 +179,7 @@ public:
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL  addProperty(
-            const rtl::OUString& aName,
+            const OUString& aName,
             sal_Int16 aAttributes,
             const css::uno::Type& aType )
         throw(
@@ -188,7 +187,7 @@ public:
             ::com::sun::star::lang::WrappedTargetException );
 
     virtual void SAL_CALL  addPropertyWithValue(
-            const rtl::OUString& aName,
+            const OUString& aName,
             sal_Int16 aAttributes,
             const css::uno::Any& aValue )
         throw(
@@ -205,7 +204,7 @@ private:
     css::uno::Reference< css::configuration::backend::XLayer> m_xLayer;
 
     void migrateJavarc();
-    typedef ::std::pair< ::rtl::OUString,   sal_Int16>  TElementType;
+    typedef ::std::pair< OUString,   sal_Int16>  TElementType;
     typedef ::std::stack< TElementType > TElementStack;
     TElementStack m_aStack;
 
@@ -352,7 +351,7 @@ void SAL_CALL JavaMigration::endLayer()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL JavaMigration::overrideNode(
-        const ::rtl::OUString&,
+        const OUString&,
         sal_Int16,
         sal_Bool)
     throw(
@@ -365,7 +364,7 @@ void SAL_CALL JavaMigration::overrideNode(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL JavaMigration::addOrReplaceNode(
-        const ::rtl::OUString&,
+        const OUString&,
         sal_Int16)
     throw(
         MalformedDataException,
@@ -382,7 +381,7 @@ void SAL_CALL  JavaMigration::endNode()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::dropNode(
-        const ::rtl::OUString& )
+        const OUString& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -391,7 +390,7 @@ void SAL_CALL  JavaMigration::dropNode(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::overrideProperty(
-        const ::rtl::OUString& aName,
+        const OUString& aName,
         sal_Int16,
         const Type&,
         sal_Bool )
@@ -453,7 +452,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
 
 void SAL_CALL JavaMigration::setPropertyValueForLocale(
         const Any&,
-        const ::rtl::OUString& )
+        const OUString& )
     throw(
         MalformedDataException,
         WrappedTargetException )
@@ -472,7 +471,7 @@ void SAL_CALL  JavaMigration::endProperty()
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::addProperty(
-        const rtl::OUString&,
+        const OUString&,
         sal_Int16,
         const Type& )
     throw(
@@ -483,7 +482,7 @@ void SAL_CALL  JavaMigration::addProperty(
 // -----------------------------------------------------------------------------
 
 void SAL_CALL  JavaMigration::addPropertyWithValue(
-        const rtl::OUString&,
+        const OUString&,
         sal_Int16,
         const Any& )
     throw(
@@ -493,7 +492,7 @@ void SAL_CALL  JavaMigration::addPropertyWithValue(
 }
 
 void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
-        const rtl::OUString&,
+        const OUString&,
         const TemplateIdentifier&,
         sal_Int16 )
     throw(

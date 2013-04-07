@@ -81,13 +81,13 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         //---------------------------------------
         // css.lang.XServiceInfo
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw(css::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& sServiceName)
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
             throw(css::uno::RuntimeException);
 
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
@@ -112,8 +112,8 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
         //---------------------------------------
         // XServiceInfo helper
 
-        static ::rtl::OUString st_getImplementationName();
-        static css::uno::Sequence< ::rtl::OUString > st_getSupportedServiceNames();
+        static OUString st_getImplementationName();
+        static css::uno::Sequence< OUString > st_getSupportedServiceNames();
         static css::uno::Reference< css::uno::XInterface > SAL_CALL st_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
 
     //-------------------------------------------

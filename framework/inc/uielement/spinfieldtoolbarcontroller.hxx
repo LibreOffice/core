@@ -63,7 +63,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
                                     ToolBox*             pToolBar,
                                     sal_uInt16               nID,
                                     sal_Int32            nWidth,
-                                    const rtl::OUString& aCommand );
+                                    const OUString& aCommand );
         virtual ~SpinfieldToolbarController();
 
         // XComponent
@@ -88,7 +88,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
 
     private:
         bool impl_getValue( const ::com::sun::star::uno::Any& rAny, sal_Int32& nValue, double& fValue, bool& bFloat );
-        rtl::OUString impl_formatOutputString( double fValue );
+        OUString impl_formatOutputString( double fValue );
 
         bool              m_bFloat,
                           m_bMaxSet,
@@ -98,7 +98,7 @@ class SpinfieldToolbarController : public ISpinfieldListener,
         double            m_nValue;
         double            m_nStep;
         SpinfieldControl* m_pSpinfieldControl;
-        rtl::OUString     m_aOutFormat;
+        OUString     m_aOutFormat;
 };
 
 }

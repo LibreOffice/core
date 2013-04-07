@@ -66,7 +66,7 @@ namespace fileaccess {
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,

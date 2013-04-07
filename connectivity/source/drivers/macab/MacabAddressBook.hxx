@@ -46,16 +46,16 @@ namespace connectivity
             public:
                 MacabAddressBook();
                 ~MacabAddressBook();
-                static const ::rtl::OUString & getDefaultTableName();
+                static const OUString & getDefaultTableName();
 
                 MacabRecords *getMacabRecords();
                 ::std::vector<MacabGroup *> getMacabGroups();
 
-                MacabGroup *getMacabGroup(::rtl::OUString _groupName);
-                MacabRecords *getMacabRecords(const ::rtl::OUString _tableName);
+                MacabGroup *getMacabGroup(OUString _groupName);
+                MacabRecords *getMacabRecords(const OUString _tableName);
 
-                MacabGroup *getMacabGroupMatch(::rtl::OUString _groupName);
-                MacabRecords *getMacabRecordsMatch(const ::rtl::OUString _tableName);
+                MacabGroup *getMacabGroupMatch(OUString _groupName);
+                MacabRecords *getMacabRecordsMatch(const OUString _tableName);
         };
 
     }

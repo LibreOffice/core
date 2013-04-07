@@ -40,7 +40,7 @@ struct InternetProxyServer
     /**
       * The name of the proxy server.
       */
-    ::rtl::OUString aName;
+    OUString aName;
 
     /**
       * The port of the proxy server.
@@ -101,8 +101,8 @@ public:
       * @return true if a proxy server should be used, false otherwise.
       */
     bool
-    shouldUseProxy( const rtl::OUString & rProtocol,
-                    const rtl::OUString & rHost,
+    shouldUseProxy( const OUString & rProtocol,
+                    const OUString & rHost,
                     sal_Int32 nPort ) const;
 
     /**
@@ -123,8 +123,8 @@ public:
       *         InternetProxyServer is empty no proxy server is to be used.
       */
     const InternetProxyServer &
-    getProxy( const rtl::OUString & rProtocol,
-              const rtl::OUString & rHost,
+    getProxy( const OUString & rProtocol,
+              const OUString & rHost,
               sal_Int32 nPort ) const;
 
 private:

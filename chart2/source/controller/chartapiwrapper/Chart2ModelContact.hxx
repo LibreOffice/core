@@ -149,7 +149,7 @@ private: //member
     mutable ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XUnoTunnel >        m_xChartView;
 
-    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > > tTableMap;//GradientTable, HatchTable etc.
+    typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > > tTableMap;//GradientTable, HatchTable etc.
     tTableMap   m_aTableMap;
 };
 

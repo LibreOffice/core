@@ -40,7 +40,6 @@
 
 using namespace ::oox;
 
-using ::rtl::OString;
 using ::std::set;
 using ::std::numeric_limits;
 

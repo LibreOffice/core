@@ -72,11 +72,11 @@ enum ProppatchOperation { PROPSET = 0, PROPREMOVE = 1 };
 struct ProppatchValue
 {
     ProppatchOperation       operation;
-    rtl::OUString            name;
+    OUString            name;
     com::sun::star::uno::Any value;
 
     ProppatchValue( const ProppatchOperation o,
-                    const rtl::OUString & n,
+                    const OUString & n,
                     const com::sun::star::uno::Any & v )
     : operation( o ), name( n ), value( v ) {}
 };

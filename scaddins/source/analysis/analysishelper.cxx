@@ -1779,7 +1779,7 @@ OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalA
 {
     CHK_FINITE(r);
     CHK_FINITE(i);
-    rtl::OUStringBuffer aRet;
+    OUStringBuffer aRet;
 
     bool bHasImag = i != 0.0;
     bool bHasReal = !bHasImag || (r != 0.0);

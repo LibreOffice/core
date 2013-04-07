@@ -43,11 +43,6 @@
 #include "../dmapper/GraphicHelpers.hxx"
 #include <rtfsdrimport.hxx>
 
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 namespace writerfilter {
 namespace rtftok {
@@ -105,7 +100,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
     uno::Any aLineWidth = uno::makeAny(sal_Int32(26));
 
-    for (std::vector< std::pair<rtl::OUString, rtl::OUString> >::iterator i = rShape.aProperties.begin();
+    for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)
     {
         if ( i->first == "shapeType" )

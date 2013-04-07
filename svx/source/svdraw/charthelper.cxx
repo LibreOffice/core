@@ -63,7 +63,7 @@ drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContent
         try
         {
             const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
-            const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance(::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartView")), uno::UNO_QUERY_THROW);
+            const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance(OUString::createFromAscii("com.sun.star.chart2.ChartView")), uno::UNO_QUERY_THROW);
             const uno::Reference< util::XUpdatable > xUpdatable(xChartView, uno::UNO_QUERY_THROW);
 
             if(xUpdatable.is())

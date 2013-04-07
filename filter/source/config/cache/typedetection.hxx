@@ -126,11 +126,11 @@ private:
                     An empty value if detection failed. .... but see rLastChance
                     for additional returns!
      */
-    ::rtl::OUString impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
+    OUString impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
                                                const FlatDetection&                 lFlatTypes    ,
                                                      sal_Bool                       bAllowDeep    ,
                                                      OUStringList&                  rUsedDetectors,
-                                                     ::rtl::OUString&               rLastChance   );
+                                                     OUString&               rLastChance   );
 
     //---------------------------------------
 
@@ -165,7 +165,7 @@ private:
         @param      rDescriptor
                     a stl representation of the MediaDescriptor as in/out parameter.
      */
-    ::rtl::OUString impl_askDetectService(const ::rtl::OUString&               sDetectService,
+    OUString impl_askDetectService(const OUString&               sDetectService,
                                                 ::comphelper::MediaDescriptor& rDescriptor   );
 
     //---------------------------------------
@@ -183,7 +183,7 @@ private:
         @return     [string]
                     a valid type name or an empty string if user canceled interaction.
      */
-    ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor);
+    OUString impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor);
 
     //---------------------------------------
 
@@ -244,7 +244,7 @@ private:
                     could be set on the descriptor.
      */
     sal_Bool impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
-                                                 const ::rtl::OUString&               sType      );
+                                                 const OUString&               sType      );
 
     //---------------------------------------
 
@@ -266,7 +266,7 @@ private:
                     could be set on the descriptor.
      */
     sal_Bool impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
-                                                   const ::rtl::OUString&               sFilter    );
+                                                   const OUString&               sFilter    );
 
     //---------------------------------------
 
@@ -316,7 +316,7 @@ private:
                     (see code)
      */
     void impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
-                                           ::rtl::OUString&               sType      );
+                                           OUString&               sType      );
 
 //-------------------------------------------
 // uno interface
@@ -326,10 +326,10 @@ public:
     //---------------------------------------
     // XTypeDetection
 
-    virtual ::rtl::OUString SAL_CALL queryTypeByURL(const ::rtl::OUString& sURL)
+    virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL)
         throw (css::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
+    virtual OUString SAL_CALL queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                            sal_Bool                                         bAllowDeep )
         throw (css::uno::RuntimeException);
 
@@ -348,7 +348,7 @@ public:
 
         @return The fix uno implementation name of this class.
      */
-    static ::rtl::OUString impl_getImplementationName();
+    static OUString impl_getImplementationName();
 
     //---------------------------------------
 
@@ -360,7 +360,7 @@ public:
 
         @return The fix list of uno services supported by this class.
      */
-    static css::uno::Sequence< ::rtl::OUString > impl_getSupportedServiceNames();
+    static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
     //---------------------------------------
 

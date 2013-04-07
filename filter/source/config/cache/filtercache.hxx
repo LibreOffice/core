@@ -220,15 +220,15 @@ class FilterCache : public BaseLock
         //---------------------------------------
         /** @short  contains the current locale of the office and will be
                     used to work with localized configuration values. */
-        ::rtl::OUString m_sActLocale;
+        OUString m_sActLocale;
 
         //---------------------------------------
         /** TODO */
-        ::rtl::OUString m_sFormatName;
+        OUString m_sFormatName;
 
         //---------------------------------------
         /** TODO */
-        ::rtl::OUString m_sFormatVersion;
+        OUString m_sFormatVersion;
 
         //---------------------------------------
         /** @short  contains status, which cache items/properties
@@ -484,7 +484,7 @@ class FilterCache : public BaseLock
                         any longer, because any operation before damage it.
          */
         virtual sal_Bool hasItem(      EItemType        eType,
-                                 const ::rtl::OUString& sItem)
+                                 const OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -514,7 +514,7 @@ class FilterCache : public BaseLock
                         any longer, because any operation before damage it.
          */
         virtual CacheItem getItem(      EItemType        eType,
-                                  const ::rtl::OUString& sItem)
+                                  const OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -522,7 +522,7 @@ class FilterCache : public BaseLock
         /** TODO document me ...
          */
         virtual void removeItem(      EItemType        eType,
-                                const ::rtl::OUString& sItem)
+                                const OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -530,7 +530,7 @@ class FilterCache : public BaseLock
         /** TODO document me ...
          */
         virtual void setItem(      EItemType        eType ,
-                             const ::rtl::OUString& sItem ,
+                             const OUString& sItem ,
                              const CacheItem&       aValue)
             throw(css::uno::Exception);
 
@@ -539,7 +539,7 @@ class FilterCache : public BaseLock
         /** TODO document me ...
          */
         virtual void refreshItem(      EItemType        eType,
-                                 const ::rtl::OUString& sItem)
+                                 const OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -580,7 +580,7 @@ class FilterCache : public BaseLock
                         to such items ...
          */
         virtual void addStatePropsToItem(      EItemType        eType,
-                                         const ::rtl::OUString& sItem,
+                                         const OUString& sItem,
                                                CacheItem&       rItem)
             throw(css::uno::Exception);
 
@@ -703,7 +703,7 @@ class FilterCache : public BaseLock
                         and initialized within the requested modes successfully;
                         a NULL reference otherwise.
          */
-        css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const ::rtl::OUString& sRoot       ,
+        css::uno::Reference< css::uno::XInterface > impl_createConfigAccess(const OUString& sRoot       ,
                                                                                   sal_Bool         bReadOnly   ,
                                                                                   sal_Bool         bLocalesMode);
 
@@ -728,7 +728,7 @@ class FilterCache : public BaseLock
                         Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
-        css::uno::Any impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey);
+        css::uno::Any impl_getDirectCFGValue(const OUString& sDirectKey);
 
         //---------------------------------------
 
@@ -793,8 +793,8 @@ class FilterCache : public BaseLock
                         That does not include double registrations!
          */
         void impl_resolveItem4TypeRegistration(      CacheItemList*   pList,
-                                               const ::rtl::OUString& sItem,
-                                               const ::rtl::OUString& sType)
+                                               const OUString& sItem,
+                                               const OUString& sType)
             throw(css::uno::Exception);
 
     //-------------------------------------------
@@ -861,7 +861,7 @@ class FilterCache : public BaseLock
          */
         CacheItem impl_loadItem(const css::uno::Reference< css::container::XNameAccess >& xSet   ,
                                       EItemType                                           eType  ,
-                                const ::rtl::OUString&                                    sItem  ,
+                                const OUString&                                    sItem  ,
                                       EReadOption                                         eOption)
             throw(css::uno::Exception);
 
@@ -893,7 +893,7 @@ class FilterCache : public BaseLock
                     if an unrecoverable error occurs inside this operation.
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
-                                                      const ::rtl::OUString& sItem)
+                                                      const OUString& sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -908,7 +908,7 @@ class FilterCache : public BaseLock
 
         /** TODO */
         void impl_addItem2FlushList(      EItemType        eType,
-                                    const ::rtl::OUString& sItem)
+                                    const OUString& sItem)
             throw(css::uno::Exception);
 
 
@@ -952,7 +952,7 @@ class FilterCache : public BaseLock
          */
         EItemFlushState impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                                    const CacheItemList&                                      rList,
-                                                   const ::rtl::OUString&                                    sItem)
+                                                   const OUString&                                    sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
@@ -980,35 +980,35 @@ class FilterCache : public BaseLock
         /** TODO */
         CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                          EItemType                                           eType,
-                                   const ::rtl::OUString&                                    sItem)
+                                   const OUString&                                    sItem)
             throw(css::uno::Exception);
 
         //---------------------------------------
 
         /** TODO */
-        void impl_interpretDataVal4Type(const ::rtl::OUString& sValue,
+        void impl_interpretDataVal4Type(const OUString& sValue,
                                               sal_Int32        nProp ,
                                               CacheItem&       rItem );
 
         //---------------------------------------
 
         /** TODO */
-        void impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
+        void impl_interpretDataVal4Filter(const OUString& sValue,
                                                 sal_Int32        nProp ,
                                                 CacheItem&       rItem );
 
         //---------------------------------------
 
         /** TODO */
-        OUStringList impl_tokenizeString(const ::rtl::OUString& sData     ,
+        OUStringList impl_tokenizeString(const OUString& sData     ,
                                                sal_Unicode      cSeperator);
 
         //---------------------------------------
 
 #if OSL_DEBUG_LEVEL > 0
         /** TODO */
-        ::rtl::OUString impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const;
-        ::rtl::OUString impl_searchContentHandlerForType(const ::rtl::OUString& sType) const;
+        OUString impl_searchFrameLoaderForType(const OUString& sType) const;
+        OUString impl_searchContentHandlerForType(const OUString& sType) const;
 #endif
 
         //---------------------------------------
@@ -1019,7 +1019,7 @@ class FilterCache : public BaseLock
 
             @return sal_True if the requested module is installed; sal_False otherwise.
          */
-        sal_Bool impl_isModuleInstalled(const ::rtl::OUString& sModule);
+        sal_Bool impl_isModuleInstalled(const OUString& sModule);
 
         //---------------------------------------
 
@@ -1031,7 +1031,7 @@ class FilterCache : public BaseLock
             @return [sal_Int32]
                     the converted flag field.
          */
-        static sal_Int32 impl_convertFlagNames2FlagField(const css::uno::Sequence< ::rtl::OUString >& lNames);
+        static sal_Int32 impl_convertFlagNames2FlagField(const css::uno::Sequence< OUString >& lNames);
 
         //---------------------------------------
 
@@ -1043,7 +1043,7 @@ class FilterCache : public BaseLock
             @return [seq< string >]
                     the converted flag name list.
          */
-        static css::uno::Sequence< ::rtl::OUString > impl_convertFlagField2FlagNames(sal_Int32 nFlags);
+        static css::uno::Sequence< OUString > impl_convertFlagField2FlagNames(sal_Int32 nFlags);
 };
 
     } // namespace config

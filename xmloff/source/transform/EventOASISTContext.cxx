@@ -35,14 +35,13 @@
 
 #include <boost/unordered_map.hpp>
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOASISEventMap_Impl:
-    public ::boost::unordered_map< NameKey_Impl, ::rtl::OUString,
+    public ::boost::unordered_map< NameKey_Impl, OUString,
                             NameHash_Impl, NameHash_Impl >
 {
 public:

@@ -59,7 +59,7 @@ void ScModule::SetAutoSpellProperty( sal_Bool bSet )
 
     uno::Any aAny;
     aAny <<= bSet;
-    aConfig.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( LINGUPROP_AUTOSPELL )), aAny );
+    aConfig.SetProperty( OUString(RTL_CONSTASCII_USTRINGPARAM( LINGUPROP_AUTOSPELL )), aAny );
 }
 
 

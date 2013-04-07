@@ -79,7 +79,7 @@ Reference< drawing::XShape > createSingleLabel(
             const Reference< lang::XMultiServiceFactory>& xShapeFactory
           , const Reference< drawing::XShapes >& xTarget
           , const awt::Point& rAnchorScreenPosition2D
-          , const rtl::OUString& rLabel
+          , const OUString& rLabel
           , const AxisLabelProperties& rAxisLabelProperties
           , const AxisProperties& rAxisProperties
           , const tNameSequence& rPropNames
@@ -92,7 +92,7 @@ Reference< drawing::XShape > createSingleLabel(
     // #i78696# use mathematically correct rotation now
     const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
     uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
-    rtl::OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
+    OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
     Reference< drawing::XShape > xShape2DText = ShapeFactory(xShapeFactory)
                     .createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
@@ -447,11 +447,11 @@ bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties&
 
 struct ComplexCategoryPlacement
 {
-    rtl::OUString Text;
+    OUString Text;
     sal_Int32 Count;
     double TickValue;
 
-    ComplexCategoryPlacement( const rtl::OUString& rText, sal_Int32 nCount, double fTickValue )
+    ComplexCategoryPlacement( const OUString& rText, sal_Int32 nCount, double fTickValue )
         : Text(rText), Count(nCount), TickValue(fTickValue)
     {}
 };
@@ -629,7 +629,7 @@ bool VCartesianAxis::createTextShapes(
         }
     }
 
-    uno::Sequence< rtl::OUString >* pCategories = 0;
+    uno::Sequence< OUString >* pCategories = 0;
     if( m_bUseTextLabels && !m_aAxisProperties.m_bComplexCategories )
         pCategories = &m_aTextLabels;
 
@@ -712,7 +712,7 @@ bool VCartesianAxis::createTextShapes(
         bool bHasExtraColor=false;
         sal_Int32 nExtraColor=0;
 
-        rtl::OUString aLabel;
+        OUString aLabel;
         if(pCategories)
         {
             sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0

@@ -1294,8 +1294,8 @@ IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
     aPwdDialog.AllowAsciiOnly();
     if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
     {
-        rtl::OUString aUserPW( aPwdDialog.GetPassword() );
-        rtl::OUString aOwnerPW( aPwdDialog.GetPassword2() );
+        OUString aUserPW( aPwdDialog.GetPassword() );
+        OUString aOwnerPW( aPwdDialog.GetPassword2() );
 
         mbHaveUserPassword = !aUserPW.isEmpty();
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();

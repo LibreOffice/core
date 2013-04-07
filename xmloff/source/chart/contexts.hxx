@@ -48,14 +48,14 @@ public:
         SchXMLImportHelper& rImpHelper,
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLName );
+        const OUString& rLName );
     virtual ~SchXMLDocContext();
 
     TYPEINFO();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -69,13 +69,13 @@ public:
     SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties>& i_xDocProps);
 
     virtual ~SchXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& i_xAttrList);
 };
 
@@ -91,13 +91,13 @@ public:
         SchXMLImportHelper& rImpHelper,
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLName );
+        const OUString& rLName );
     virtual ~SchXMLBodyContext();
 
     virtual void EndElement();
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 

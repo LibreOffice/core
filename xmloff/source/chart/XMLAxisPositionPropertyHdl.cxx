@@ -31,8 +31,6 @@
 
 
 using namespace ::xmloff::token;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace com::sun::star;
 
@@ -87,7 +85,7 @@ sal_Bool XMLAxisPositionPropertyHdl::exportXML( OUString& rStrExpValue,
 {
     sal_Bool bResult = sal_False;
 
-    rtl::OUStringBuffer sValueBuffer;
+    OUStringBuffer sValueBuffer;
     if( m_bCrossingValue )
     {
         if(rStrExpValue.isEmpty())

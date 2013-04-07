@@ -80,7 +80,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
     public:
         ToolBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
                         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                        const rtl::OUString& rResourceName,
+                        const OUString& rResourceName,
                         ToolBar* pToolBar );
         virtual ~ToolBarManager();
 
@@ -112,7 +112,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void CheckAndUpdateImages();
         virtual void RefreshImages();
         void FillToolbar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolBarData );
-        void notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand );
+        void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();
 
         enum ExecuteCommand
@@ -126,7 +126,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         struct ExecuteInfo
         {
-            rtl::OUString   aToolbarResName;
+            OUString   aToolbarResName;
             ExecuteCommand  nCmd;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
@@ -159,9 +159,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
         void RemoveControllers();
-        rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
-        sal_Int32 RetrievePropertiesFromCommand( const rtl::OUString& aCmdURL );
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const ::rtl::OUString& rCmdURL );
+        OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
+        sal_Int32 RetrievePropertiesFromCommand( const OUString& aCmdURL );
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
         //for update controller via Support Visiable
@@ -175,13 +175,13 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
-        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages );
+        Image QueryAddonsImage( const OUString& aCommandURL, bool bBigImages );
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
 
-        static bool impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg, const rtl::OUString& rCommand, rtl::OUString& rShortCut );
-        bool RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut );
+        static bool impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg, const OUString& rCommand, OUString& rShortCut );
+        bool RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut );
 
     protected:
         typedef ::boost::unordered_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
@@ -200,8 +200,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                                                                                                m_bImageMirrored : 1;
         long                                                                                   m_lImageRotation;
         ToolBar*                                                                               m_pToolBar;
-        rtl::OUString                                                                          m_aModuleIdentifier;
-        rtl::OUString                                                                          m_aResourceName;
+        OUString                                                                          m_aModuleIdentifier;
+        OUString                                                                          m_aResourceName;
         com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >              m_xURLTransformer;
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;

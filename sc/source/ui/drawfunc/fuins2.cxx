@@ -86,12 +86,12 @@ extern SdrObject* pSkipPaintObj;            // output.cxx - dieses Objekt nicht 
 namespace {
 
 void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
-                    const rtl::OUString& rRangeParam )
+                    const OUString& rRangeParam )
 {
     ScDocShell* pDocShell = pViewData->GetDocShell();
     ScDocument* pScDoc = pDocShell->GetDocument();
 
-    rtl::OUString aRangeString( rRangeParam );
+    OUString aRangeString( rRangeParam );
     if ( aRangeString.isEmpty() )
     {
         SCCOL nCol1 = 0;
@@ -176,16 +176,16 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString("CellRangeRepresentation"), -1,
+                OUString("CellRangeRepresentation"), -1,
                 uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString("HasCategories"), -1,
+                OUString("HasCategories"), -1,
                 uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString("FirstCellAsLabel"), -1,
+                OUString("FirstCellAsLabel"), -1,
                 uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString("DataRowSource"), -1,
+                OUString("DataRowSource"), -1,
                 uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
             xReceiver->setArguments( aArgs );
 
@@ -208,10 +208,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     sal_Bool bIsFromFile = false;
-    ::rtl::OUString aName;
+    OUString aName;
 
     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-    ::rtl::OUString aIconMediaType;
+    OUString aIconMediaType;
     uno::Reference< io::XInputStream > xIconMetaFile;
 
 
@@ -280,7 +280,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
                     {
                         // create a plugin object
-                        ::rtl::OUString aObjName;
+                        OUString aObjName;
                         SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
                         comphelper::EmbeddedObjectContainer aCnt( xStorage );
                         xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aObjName );
@@ -290,8 +290,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xSet.is() )
                             {
-                                xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
-                                        uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                                xSet->setPropertyValue( OUString("PluginURL"),
+                                        uno::makeAny( OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                             }
                         }
                     }
@@ -359,7 +359,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
-                lcl_ChartInit( xObj, pViewSh->GetViewData(), rtl::OUString() );
+                lcl_ChartInit( xObj, pViewSh->GetViewData(), OUString() );
 
             ScViewData* pData = pViewSh->GetViewData();
 
@@ -451,13 +451,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // BM/IHA --
 
         // get range
-        ::rtl::OUString aRangeString;
+        OUString aRangeString;
         ScRange aPositionRange;             // cell range for chart positioning
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
             if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-                aRangeString = ::rtl::OUString( ((const SfxStringItem*)pItem)->GetValue());
+                aRangeString = OUString( ((const SfxStringItem*)pItem)->GetValue());
 
             aPositionRange = pViewSh->GetViewData()->GetCurPos();
         }
@@ -499,7 +499,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // adapted old code
         pView->UnmarkAll();
 
-        ::rtl::OUString aName;
+        OUString aName;
         const sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
         uno::Reference < embed::XEmbeddedObject > xObj =
@@ -582,7 +582,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             if ( nToTable == pScDoc->GetTableCount() )
             {
                 // dann los...
-                rtl::OUString      aTabName;
+                OUString      aTabName;
                 SCTAB       nNewTab = pScDoc->GetTableCount();
 
                 pScDoc->CreateValidTabName( aTabName );
@@ -667,7 +667,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 {
                     uno::Reference< ui::dialogs::XExecutableDialog > xDialog(
                         xMCF->createInstanceWithContext(
-                            rtl::OUString("com.sun.star.comp.chart2.WizardDialog")
+                            OUString("com.sun.star.comp.chart2.WizardDialog")
                             , xContext), uno::UNO_QUERY);
                     uno::Reference< lang::XInitialization > xInit( xDialog, uno::UNO_QUERY );
                     if( xChartModel.is() && xInit.is() )
@@ -677,10 +677,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         uno::Sequence<uno::Any> aSeq(2);
                         uno::Any* pArray = aSeq.getArray();
                         beans::PropertyValue aParam1;
-                        aParam1.Name = rtl::OUString("ParentWindow");
+                        aParam1.Name = OUString("ParentWindow");
                         aParam1.Value <<= uno::makeAny(xDialogParentWindow);
                         beans::PropertyValue aParam2;
-                        aParam2.Name = rtl::OUString("ChartModel");
+                        aParam2.Name = OUString("ChartModel");
                         aParam2.Value <<= uno::makeAny(xChartModel);
                         pArray[0] <<= uno::makeAny(aParam1);
                         pArray[1] <<= uno::makeAny(aParam2);
@@ -694,7 +694,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             {
                                 //get dialog size:
                                 awt::Size aDialogAWTSize;
-                                if( xDialogProps->getPropertyValue( ::rtl::OUString("Size") )
+                                if( xDialogProps->getPropertyValue( OUString("Size") )
                                     >>= aDialogAWTSize )
                                 {
                                     Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
@@ -702,12 +702,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                                     {
                                         //calculate and set new position
                                         Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
-                                        xDialogProps->setPropertyValue( ::rtl::OUString("Position"),
+                                        xDialogProps->setPropertyValue( OUString("Position"),
                                             uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                     }
                                 }
                                 //tell the dialog to unlock controller
-                                xDialogProps->setPropertyValue( ::rtl::OUString("UnlockControllersOnExecute"),
+                                xDialogProps->setPropertyValue( OUString("UnlockControllersOnExecute"),
                                             uno::makeAny( sal_True ) );
 
                             }

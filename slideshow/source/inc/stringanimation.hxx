@@ -39,7 +39,7 @@ namespace slideshow
         class StringAnimation : public Animation
         {
         public:
-            typedef ::rtl::OUString ValueType;
+            typedef OUString ValueType;
 
             /** Set the animation to value rStr
 

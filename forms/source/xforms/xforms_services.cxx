@@ -36,7 +36,6 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameContainer;
-using rtl::OUString;
 
 
 namespace frm

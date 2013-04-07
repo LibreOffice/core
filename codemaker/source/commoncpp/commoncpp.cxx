@@ -56,7 +56,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
         tmpBuf.append("::" + type.getToken(0, c, nPos));
     } while( nPos != -1 );
 
-    rtl::OString s(tmpBuf.makeStringAndClear());
+    OString s(tmpBuf.makeStringAndClear());
     if (ns_alias && s.indexOf("::com::sun::star::") == 0)
     {
         return s.replaceAt(0, 18, "css::"); // nicer shorthand
@@ -70,10 +70,10 @@ OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
     OString const & nucleus, bool shortname)
 {
-    rtl::OStringBuffer buf;
+    OStringBuffer buf;
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
         if (typeClass == RT_TYPE_INTERFACE
-            && nucleus == rtl::OString("com/sun/star/uno/XInterface"))
+            && nucleus == OString("com/sun/star/uno/XInterface"))
         {
             buf.append("::com::sun::star::uno::XInterface");
         } else {
@@ -84,13 +84,13 @@ OString translateUnoToCppType(
         static char const * const cppTypes[codemaker::UnoType::SORT_ANY + 1] = {
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
-            "float", "double", "::sal_Unicode", "::rtl::OUString",
+            "float", "double", "::sal_Unicode", "rtl::OUString",
             "::com::sun::star::uno::Type", "::com::sun::star::uno::Any" };
         buf.append(cppTypes[sort]);
     }
 
     if (shortname) {
-        rtl::OString s(buf.makeStringAndClear());
+        OString s(buf.makeStringAndClear());
         if (s.indexOf("::com::sun::star") == 0)
             return s.replaceAt(0, 16, "css");
         else
@@ -100,9 +100,9 @@ OString translateUnoToCppType(
     return buf.makeStringAndClear();
 }
 
-rtl::OString translateUnoToCppIdentifier(
-    rtl::OString const & unoIdentifier, rtl::OString const & prefix,
-    IdentifierTranslationMode transmode, rtl::OString const * forbidden)
+OString translateUnoToCppIdentifier(
+    OString const & unoIdentifier, OString const & prefix,
+    IdentifierTranslationMode transmode, OString const * forbidden)
 {
     if (// Keywords:
         unoIdentifier == "asm"

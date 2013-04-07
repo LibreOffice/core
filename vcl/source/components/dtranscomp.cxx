@@ -43,7 +43,6 @@
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
 
-using rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -80,12 +79,12 @@ public:
      * XServiceInfo
      */
 
-    virtual rtl::OUString SAL_CALL getImplementationName() throw( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( RuntimeException );
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException );
 
-    static rtl::OUString getImplementationName_static();
-    static Sequence< rtl::OUString > getSupportedServiceNames_static();
+    static OUString getImplementationName_static();
+    static Sequence< OUString > getSupportedServiceNames_static();
 
     /*
      * XClipboard
@@ -99,7 +98,7 @@ public:
         const Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw(RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw(RuntimeException);
 
     /*
@@ -125,29 +124,29 @@ GenericClipboard::~GenericClipboard()
 {
 }
 
-rtl::OUString GenericClipboard::getImplementationName_static()
+OUString GenericClipboard::getImplementationName_static()
 {
-    return rtl::OUString( "com.sun.star.datatransfer.VCLGenericClipboard"  );
+    return OUString( "com.sun.star.datatransfer.VCLGenericClipboard"  );
 }
 
-Sequence< rtl::OUString > GenericClipboard::getSupportedServiceNames_static()
+Sequence< OUString > GenericClipboard::getSupportedServiceNames_static()
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString("com.sun.star.datatransfer.clipboard.SystemClipboard");
     return aRet;
 }
 
-rtl::OUString GenericClipboard::getImplementationName() throw( RuntimeException )
+OUString GenericClipboard::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_static();
 }
 
-Sequence< rtl::OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > GenericClipboard::getSupportedServiceNames() throw( RuntimeException )
 {
     return getSupportedServiceNames_static();
 }
 
-sal_Bool GenericClipboard::supportsService( const ::rtl::OUString& ServiceName ) throw( RuntimeException )
+sal_Bool GenericClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException )
 {
     Sequence< OUString > aServices( getSupportedServiceNames() );
     sal_Int32 nServices = aServices.getLength();
@@ -190,9 +189,9 @@ void GenericClipboard::setContents(
     }
 }
 
-rtl::OUString GenericClipboard::getName() throw( RuntimeException )
+OUString GenericClipboard::getName() throw( RuntimeException )
 {
-    return rtl::OUString( "CLIPBOARD"  );
+    return OUString( "CLIPBOARD"  );
 }
 
 sal_Int8 GenericClipboard::getRenderingCapabilities() throw( RuntimeException )

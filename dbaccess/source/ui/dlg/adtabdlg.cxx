@@ -100,7 +100,7 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     if ( !pEntry )
         return String();
 
-    ::rtl::OUString aCatalog, aSchema, aTableName;
+    OUString aCatalog, aSchema, aTableName;
     SvTreeListEntry* pSchema = m_rTableList.GetParent(pEntry);
     if(pSchema && pSchema != m_rTableList.getAllObjectsEntry())
     {
@@ -111,7 +111,7 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
     }
     aTableName = m_rTableList.GetEntryText(pEntry);
 
-    ::rtl::OUString aComposedName;
+    OUString aComposedName;
     try
     {
         Reference< XDatabaseMetaData > xMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
@@ -121,7 +121,7 @@ String TableListFacade::getSelectedName( String& _out_rAliasName ) const
             && !xMeta->supportsSchemasInDataManipulation() )
         {
             aCatalog = aSchema;
-            aSchema = ::rtl::OUString();
+            aSchema = OUString();
         }
 
         aComposedName = ::dbtools::composeTableName(
@@ -160,7 +160,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
 
         Reference< XViewsSupplier > xViewSupp;
         Reference< XNameAccess > xTables, xViews;
-        Sequence< ::rtl::OUString > sTables, sViews;
+        Sequence< OUString > sTables, sViews;
 
         xTables = xTableSupp->getTables();
         if ( xTables.is() )
@@ -185,18 +185,18 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         // if no views are allowed remove the views also out the table name filter
         if ( !_bAllowViews )
         {
-            const ::rtl::OUString* pTableBegin  = sTables.getConstArray();
-            const ::rtl::OUString* pTableEnd    = pTableBegin + sTables.getLength();
-            ::std::vector< ::rtl::OUString > aTables(pTableBegin,pTableEnd);
+            const OUString* pTableBegin  = sTables.getConstArray();
+            const OUString* pTableEnd    = pTableBegin + sTables.getLength();
+            ::std::vector< OUString > aTables(pTableBegin,pTableEnd);
 
-            const ::rtl::OUString* pViewBegin = sViews.getConstArray();
-            const ::rtl::OUString* pViewEnd   = pViewBegin + sViews.getLength();
+            const OUString* pViewBegin = sViews.getConstArray();
+            const OUString* pViewEnd   = pViewBegin + sViews.getLength();
             ::comphelper::TStringMixEqualFunctor aEqualFunctor;
             for(;pViewBegin != pViewEnd;++pViewBegin)
                 aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
-            ::rtl::OUString* pTables = aTables.empty() ? 0 : &aTables[0];
-            sTables = Sequence< ::rtl::OUString>(pTables, aTables.size());
-            sViews = Sequence< ::rtl::OUString>();
+            OUString* pTables = aTables.empty() ? 0 : &aTables[0];
+            sTables = Sequence< OUString>(pTables, aTables.size());
+            sViews = Sequence< OUString>();
         }
 
         m_rTableList.UpdateTableList( m_xConnection, sTables, sViews );
@@ -258,7 +258,7 @@ QueryListFacade::~QueryListFacade()
 
 void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
     if ( _rEvent.Accessor >>= sName )
         m_rQueryList.InsertEntry( sName );
 }
@@ -290,10 +290,10 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
             Reference< XContainer> xContainer(xQueries,UNO_QUERY_THROW);
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
         }
-        Sequence< ::rtl::OUString > aQueryNames = xQueries->getElementNames();
+        Sequence< OUString > aQueryNames = xQueries->getElementNames();
 
-        const ::rtl::OUString* pQuery = aQueryNames.getConstArray();
-        const ::rtl::OUString* pQueryEnd = aQueryNames.getConstArray() + aQueryNames.getLength();
+        const OUString* pQuery = aQueryNames.getConstArray();
+        const OUString* pQueryEnd = aQueryNames.getConstArray() + aQueryNames.getLength();
         while ( pQuery != pQueryEnd )
             m_rQueryList.InsertEntry( *pQuery++ );
     }

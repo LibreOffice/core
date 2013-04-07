@@ -45,7 +45,7 @@ public:
     XMLTrackedChangesImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName);
+        const OUString& rLocalName);
 
     ~XMLTrackedChangesImportContext();
 
@@ -55,7 +55,7 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 };

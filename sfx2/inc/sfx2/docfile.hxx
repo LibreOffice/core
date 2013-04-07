@@ -118,14 +118,14 @@ public:
     void                SetFilter(const SfxFilter *pFlt, sal_Bool bResetOrig = sal_False);
     const SfxFilter* GetFilter() const;
     const SfxFilter *   GetOrigFilter( sal_Bool bNotCurrent = sal_False ) const;
-    const rtl::OUString& GetOrigURL() const;
+    const OUString& GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
     void                Close();
     void                CloseAndRelease();
     void                ReOpen();
     void                CompleteReOpen();
-    const rtl::OUString& GetName() const;
+    const OUString& GetName() const;
     const INetURLObject& GetURLObject() const;
 
     void                CheckFileDate( const css::util::DateTime& aInitDate );
@@ -133,7 +133,7 @@ public:
     css::util::DateTime GetInitFileDate( sal_Bool bIgnoreOldValue );
 
     css::uno::Reference< css::ucb::XContent > GetContent() const;
-    const rtl::OUString& GetPhysicalName() const;
+    const OUString& GetPhysicalName() const;
     sal_Bool            IsRemote();
     sal_Bool            IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                DownLoad( const Link& aLink = Link());
@@ -144,9 +144,9 @@ public:
                         { return ERRCODE_TOERROR(GetErrorCode()); }
     sal_uInt32          GetLastStorageCreationState();
 
-    void                SetError( sal_uInt32 nError, const ::rtl::OUString& aLogMessage );
+    void                SetError( sal_uInt32 nError, const OUString& aLogMessage );
 
-    void                AddLog( const ::rtl::OUString& aMessage );
+    void                AddLog( const OUString& aMessage );
 
     void                CloseInStream();
     sal_Bool            CloseOutStream();
@@ -162,7 +162,7 @@ public:
     sal_Bool            Commit();
     sal_Bool            IsStorage();
 
-    sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
+    sal_Int8            ShowLockedDocumentDialog( const css::uno::Sequence< OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
     bool                LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile( sal_Bool bReleaseLockStream );
 
@@ -189,17 +189,17 @@ public:
 
     void                CreateTempFile( sal_Bool bReplace = sal_True );
     void                CreateTempFileNoCopy();
-    ::rtl::OUString     SwitchDocumentToTempFile();
-    sal_Bool            SwitchDocumentToFile( const rtl::OUString& aURL );
+    OUString     SwitchDocumentToTempFile();
+    sal_Bool            SwitchDocumentToFile( const OUString& aURL );
 
-    ::rtl::OUString     GetBaseURL( bool bForSaving=false );
+    OUString     GetBaseURL( bool bForSaving=false );
     void                SetInCheckIn( bool bInCheckIn );
     bool                IsInCheckIn( );
 
     SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
-    SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();
+    SAL_DLLPRIVATE OUString GetBackup_Impl();
 
     SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > GetZipStorageToSign_Impl( sal_Bool bReadOnly = sal_True );
     SAL_DLLPRIVATE void CloseZipStorage_Impl();
@@ -212,7 +212,7 @@ public:
     SAL_DLLPRIVATE sal_uInt16 AddVersion_Impl( css::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE sal_Bool TransferVersionList_Impl( SfxMedium& rMedium );
     SAL_DLLPRIVATE sal_Bool SaveVersionList_Impl( sal_Bool bUseXML );
-    SAL_DLLPRIVATE sal_Bool RemoveVersion_Impl( const ::rtl::OUString& rVersion );
+    SAL_DLLPRIVATE sal_Bool RemoveVersion_Impl( const OUString& rVersion );
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
@@ -225,19 +225,19 @@ public:
 
     SAL_DLLPRIVATE void GetLockingStream_Impl();
     SAL_DLLPRIVATE void GetMedium_Impl();
-    SAL_DLLPRIVATE sal_Bool TryDirectTransfer( const ::rtl::OUString& aURL, SfxItemSet& aTargetSet );
+    SAL_DLLPRIVATE sal_Bool TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet );
     SAL_DLLPRIVATE void Transfer_Impl();
     SAL_DLLPRIVATE void CreateFileStream();
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-    SAL_DLLPRIVATE void SetLongName(const rtl::OUString &rName);
-    SAL_DLLPRIVATE const rtl::OUString & GetLongName() const;
+    SAL_DLLPRIVATE void SetLongName(const OUString &rName);
+    SAL_DLLPRIVATE const OUString & GetLongName() const;
     SAL_DLLPRIVATE ErrCode CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowRO = sal_True );
     SAL_DLLPRIVATE sal_Bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();
     SAL_DLLPRIVATE void Done_Impl( ErrCode );
-    SAL_DLLPRIVATE void SetPhysicalName_Impl(const rtl::OUString& rName);
+    SAL_DLLPRIVATE void SetPhysicalName_Impl(const OUString& rName);
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( sal_Bool bDisposeStorage );
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();
 
@@ -257,7 +257,7 @@ public:
                              const INetURLObject& aDest,
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
-    SAL_DLLPRIVATE sal_Bool SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::OUString& aODFVersion, sal_Bool bHasValidDocumentSignature );
+    SAL_DLLPRIVATE sal_Bool SignContents_Impl( sal_Bool bScriptingContent, const OUString& aODFVersion, sal_Bool bHasValidDocumentSignature );
 
     // the following two methods must be used and make sence only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
@@ -267,11 +267,11 @@ public:
 
     static css::uno::Sequence < css::util::RevisionTag > GetVersionList(
                     const css::uno::Reference< css::embed::XStorage >& xStorage );
-    static ::rtl::OUString CreateTempCopyWithExt( const ::rtl::OUString& aURL );
+    static OUString CreateTempCopyWithExt( const OUString& aURL );
     static sal_Bool CallApproveHandler( const css::uno::Reference< css::task::XInteractionHandler >& xHandler, css::uno::Any aRequest, sal_Bool bAllowAbort );
 
-    static sal_Bool     SetWritableForUserOnly( const ::rtl::OUString& aURL );
-    static sal_uInt32   CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bWriter );
+    static sal_Bool     SetWritableForUserOnly( const OUString& aURL );
+    static sal_uInt32   CreatePasswordToModifyHash( const OUString& aPasswd, sal_Bool bWriter );
 };
 
 SV_DECL_IMPL_REF( SfxMedium )

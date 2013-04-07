@@ -240,7 +240,7 @@ public:
 
     virtual void Resize();
 
-    virtual bool renameItem(ThumbnailViewItem* pItem, rtl::OUString sNewTitle);
+    virtual bool renameItem(ThumbnailViewItem* pItem, OUString sNewTitle);
 
 protected:
 

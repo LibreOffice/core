@@ -68,14 +68,14 @@ class ScRangeList;
 
 struct ScDPServiceDesc
 {
-    ::rtl::OUString aServiceName;
-    ::rtl::OUString aParSource;
-    ::rtl::OUString aParName;
-    ::rtl::OUString aParUser;
-    ::rtl::OUString aParPass;
+    OUString aServiceName;
+    OUString aParSource;
+    OUString aParName;
+    OUString aParUser;
+    OUString aParPass;
 
-    ScDPServiceDesc( const ::rtl::OUString& rServ, const ::rtl::OUString& rSrc, const ::rtl::OUString& rNam,
-                     const ::rtl::OUString& rUser, const ::rtl::OUString& rPass );
+    ScDPServiceDesc( const OUString& rServ, const OUString& rSrc, const OUString& rNam,
+                     const OUString& rUser, const OUString& rPass );
 
     bool operator== ( const ScDPServiceDesc& rOther ) const;
 };
@@ -87,8 +87,8 @@ private:
     ScDocument*             pDoc;
                                             // settings
     ScDPSaveData*           pSaveData;
-    ::rtl::OUString aTableName;
-    ::rtl::OUString aTableTag;
+    OUString aTableName;
+    OUString aTableTag;
     ScRange                 aOutRange;
     ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
     ScImportSourceDesc*     pImpDesc;       //  for database data
@@ -156,10 +156,10 @@ public:
     bool                IsImportData() const { return(pImpDesc != NULL); }
     bool                IsServiceData() const { return(pServDesc != NULL); }
 
-    void SetName(const ::rtl::OUString& rNew);
-    const ::rtl::OUString& GetName() const { return aTableName; }
-    void SetTag(const ::rtl::OUString& rNew);
-    const ::rtl::OUString& GetTag() const { return aTableTag; }
+    void SetName(const OUString& rNew);
+    const OUString& GetName() const { return aTableName; }
+    void SetTag(const OUString& rNew);
+    const OUString& GetTag() const { return aTableTag; }
 
     /**
      *  Data description cell displays the description of a data dimension if
@@ -168,8 +168,8 @@ public:
      */
     bool                IsDataDescriptionCell(const ScAddress& rPos);
 
-    bool                IsDimNameInUse(const ::rtl::OUString& rName) const;
-    ::rtl::OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = NULL );
+    bool                IsDimNameInUse(const OUString& rName) const;
+    OUString GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFlags = NULL );
     bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, ::com::sun::star::sheet::DataPilotTableHeaderData& rData);
@@ -183,7 +183,7 @@ public:
                                       const std::vector< ScDPGetPivotDataField >& rFilters );
     bool                ParseFilters( ScDPGetPivotDataField& rTarget,
                                       std::vector< ScDPGetPivotDataField >& rFilters,
-                                      const ::rtl::OUString& rFilterList );
+                                      const OUString& rFilterList );
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
@@ -194,14 +194,14 @@ public:
     bool                FillLabelData(ScPivotParam& rParam);
 
     bool                GetHierarchiesNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xHiers );
-    bool                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< rtl::OUString >& rHiers );
+    bool                GetHierarchies( sal_Int32 nDim, com::sun::star::uno::Sequence< OUString >& rHiers );
 
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
     bool                GetMembersNA( sal_Int32 nDim, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
     bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xMembers );
 
-    bool                GetMemberNames( sal_Int32 nDim, ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
+    bool                GetMemberNames( sal_Int32 nDim, ::com::sun::star::uno::Sequence< OUString >& rNames );
     bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -233,7 +233,7 @@ public:
     bool SyncAllDimensionMembers();
 
     static bool         HasRegisteredSources();
-    static com::sun::star::uno::Sequence<rtl::OUString> GetRegisteredSources();
+    static com::sun::star::uno::Sequence<OUString> GetRegisteredSources();
     static com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>
                         CreateSource( const ScDPServiceDesc& rDesc );
 
@@ -293,20 +293,20 @@ public:
     class NameCaches
     {
         friend class ScDPCollection;
-        typedef ::boost::ptr_map<rtl::OUString, ScDPCache> CachesType;
+        typedef ::boost::ptr_map<OUString, ScDPCache> CachesType;
         CachesType maCaches;
         ScDocument* mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
-        bool hasCache(const rtl::OUString& rName) const;
+        bool hasCache(const OUString& rName) const;
         const ScDPCache* getCache(
-            const ::rtl::OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
+            const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
     private:
-        ScDPCache* getExistingCache(const rtl::OUString& rName);
+        ScDPCache* getExistingCache(const OUString& rName);
 
         void updateCache(
-            const rtl::OUString& rName, const ScRange& rRange,
+            const OUString& rName, const ScRange& rRange,
             const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
@@ -318,9 +318,9 @@ public:
     struct DBType
     {
         sal_Int32 mnSdbType;
-        ::rtl::OUString maDBName;
-        ::rtl::OUString maCommand;
-        DBType(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        OUString maDBName;
+        OUString maCommand;
+        DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         struct less : public ::std::binary_function<DBType, DBType, bool>
         {
@@ -339,19 +339,19 @@ public:
         ScDocument* mpDoc;
     public:
         DBCaches(ScDocument* pDoc);
-        bool hasCache(sal_Int32 nSdbType, const rtl::OUString& rDBName, const rtl::OUString& rCommand) const;
+        bool hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const;
         const ScDPCache* getCache(
-            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
             const ScDPDimensionSaveData* pDimData);
 
     private:
         ScDPCache* getExistingCache(
-            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
-            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+            sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
-        void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+        void updateCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
                          const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
@@ -367,7 +367,7 @@ public:
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
 
-    const ScDPObject* GetByName(const ::rtl::OUString& rName) const;
+    const ScDPObject* GetByName(const OUString& rName) const;
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -385,7 +385,7 @@ public:
      *
      * @return new name for data pilot object.
      */
-    ::rtl::OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
+    OUString CreateNewName( sal_uInt16 nMin = 1 ) const;
 
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
@@ -404,9 +404,9 @@ private:
     void RemoveCache(const ScDPCache* pCache);
 
     void GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*>& rRefs) const;
-    void GetAllTables(const rtl::OUString& rSrcName, std::set<ScDPObject*>& rRefs) const;
+    void GetAllTables(const OUString& rSrcName, std::set<ScDPObject*>& rRefs) const;
     void GetAllTables(
-        sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+        sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
         std::set<ScDPObject*>& rRefs) const;
 
 private:

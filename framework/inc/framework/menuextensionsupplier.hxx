@@ -25,8 +25,8 @@
 
 struct FWE_DLLPUBLIC MenuExtensionItem
 {
-    rtl::OUString aLabel;
-    rtl::OUString aURL;
+    OUString aLabel;
+    OUString aURL;
 };
 
 typedef MenuExtensionItem ( *pfunc_setMenuExtensionSupplier)();

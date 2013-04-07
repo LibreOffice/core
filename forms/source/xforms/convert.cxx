@@ -35,8 +35,6 @@
 #include <com/sun/star/util/Time.hpp>
 
 using xforms::Convert;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::util::Time;
@@ -61,13 +59,13 @@ namespace
     struct StringToken
     {
     private:
-        ::rtl::OUString m_sString;
+        OUString m_sString;
         sal_Int32       m_nTokenStart;
         sal_Int32       m_nTokenEnd;
 
     public:
         StringToken() : m_sString(), m_nTokenStart( 0 ), m_nTokenEnd( 0 ) { }
-        StringToken( const ::rtl::OUString& _rString, sal_Int32 _nTokenStart, sal_Int32 _nTokenEnd );
+        StringToken( const OUString& _rString, sal_Int32 _nTokenStart, sal_Int32 _nTokenEnd );
         StringToken( const StringToken& );
         StringToken& operator=( const StringToken& );
 
@@ -80,7 +78,7 @@ namespace
     };
 
     // ------------------------------------------------------------------------
-    StringToken::StringToken( const ::rtl::OUString& _rString, sal_Int32 _nTokenStart, sal_Int32 _nTokenEnd )
+    StringToken::StringToken( const OUString& _rString, sal_Int32 _nTokenStart, sal_Int32 _nTokenEnd )
         :m_sString( _rString )
         ,m_nTokenStart( _nTokenStart )
         ,m_nTokenEnd( _nTokenEnd )
@@ -134,7 +132,7 @@ namespace
     class StringTokenizer
     {
     private:
-        ::rtl::OUString     m_sString;
+        OUString     m_sString;
         const sal_Unicode   m_nTokenSeparator;
         sal_Int32           m_nTokenStart;
 
@@ -146,7 +144,7 @@ namespace
                                         This may make sense if you want to apply <type>StringToken</type>
                                         methods to a whole string.
         */
-        StringTokenizer( const ::rtl::OUString& _rString, sal_Unicode _nTokenSeparator = ';' );
+        StringTokenizer( const OUString& _rString, sal_Unicode _nTokenSeparator = ';' );
 
         /// resets the tokenizer to the beginning of the string
         void    reset();
@@ -160,7 +158,7 @@ namespace
     };
 
     // ------------------------------------------------------------------------
-    StringTokenizer::StringTokenizer( const ::rtl::OUString& _rString, sal_Unicode _nTokenSeparator )
+    StringTokenizer::StringTokenizer( const OUString& _rString, sal_Unicode _nTokenSeparator )
         :m_sString( _rString )
         ,m_nTokenSeparator( _nTokenSeparator )
     {
@@ -241,7 +239,7 @@ namespace
     }
 
     // ------------------------------------------------------------------------
-    void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, ::rtl::OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
+    void lcl_appendInt32ToBuffer( const sal_Int32 _nValue, OUStringBuffer& _rBuffer, sal_Int16 _nMinDigits )
     {
         if ( ( _nMinDigits >= 4 ) && ( _nValue < 1000 ) )
             _rBuffer.append( (sal_Unicode)'0' );
@@ -256,7 +254,7 @@ namespace
     OUString lcl_toXSD_UNODate_typed( const UNODate& rDate )
     {
 
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         lcl_appendInt32ToBuffer( rDate.Year, sInfo, 4 );
         sInfo.appendAscii( "-" );
         lcl_appendInt32ToBuffer( rDate.Month, sInfo, 2 );
@@ -333,7 +331,7 @@ namespace
     OUString lcl_toXSD_UNOTime_typed( const UNOTime& rTime )
     {
 
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         lcl_appendInt32ToBuffer( rTime.Hours, sInfo, 2 );
         sInfo.appendAscii( ":" );
         lcl_appendInt32ToBuffer( rTime.Minutes, sInfo, 2 );
@@ -363,7 +361,7 @@ namespace
 
         UNOTime aTime( 0, 0, 0, 0 );
 
-        ::rtl::OUString sString( rString );
+        OUString sString( rString );
         // see if there's a decimal separator for the seconds,
         // and if so, handle it separately
         sal_Int32 nDecimalSepPos = rString.indexOf( '.' );
@@ -373,7 +371,7 @@ namespace
         if ( nDecimalSepPos != -1 )
         {
             // handle fractional seconds
-            ::rtl::OUString sFractional = sString.copy( nDecimalSepPos + 1 );
+            OUString sFractional = sString.copy( nDecimalSepPos + 1 );
             if ( sFractional.getLength() > 2 )
                 // our precision is HundrethSeconds - it's all a css.util.Time can hold
                 sFractional = sFractional.copy( 0, 2 );
@@ -458,12 +456,12 @@ namespace
         OSL_VERIFY( rAny >>= aDateTime );
 
         UNODate aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
-        ::rtl::OUString sDate = lcl_toXSD_UNODate_typed( aDate );
+        OUString sDate = lcl_toXSD_UNODate_typed( aDate );
 
         UNOTime aTime( aDateTime.HundredthSeconds, aDateTime.Seconds, aDateTime.Minutes, aDateTime.Hours );
-        ::rtl::OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
+        OUString sTime = lcl_toXSD_UNOTime_typed( aTime );
 
-        ::rtl::OUStringBuffer sInfo;
+        OUStringBuffer sInfo;
         sInfo.append( sDate );
         sInfo.append( (sal_Unicode) 'T' );
         sInfo.append( sTime );
@@ -534,13 +532,13 @@ Convert::Types_t Convert::getTypes()
     return aTypes;
 }
 
-rtl::OUString Convert::toXSD( const Any_t& rAny )
+OUString Convert::toXSD( const Any_t& rAny )
 {
     Map_t::iterator aIter = maMap.find( rAny.getValueType() );
     return aIter != maMap.end() ? aIter->second.first( rAny ) : OUString();
 }
 
-Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
+Convert::Any_t Convert::toAny( const OUString& rValue,
                                const Type_t& rType )
 {
     Map_t::iterator aIter = maMap.find( rType );
@@ -548,9 +546,9 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString Convert::convertWhitespace( const ::rtl::OUString& _rString, sal_Int16 _nWhitespaceTreatment )
+OUString Convert::convertWhitespace( const OUString& _rString, sal_Int16 _nWhitespaceTreatment )
 {
-    ::rtl::OUString sConverted;
+    OUString sConverted;
     switch( _nWhitespaceTreatment )
     {
     default:
@@ -570,7 +568,7 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString Convert::replaceWhitespace( const ::rtl::OUString& _rString )
+OUString Convert::replaceWhitespace( const OUString& _rString )
 {
     OUStringBuffer aBuffer( _rString );
     sal_Int32 nLength = aBuffer.getLength();
@@ -587,7 +585,7 @@ Convert::Any_t Convert::toAny( const rtl::OUString& rValue,
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString Convert::collapseWhitespace( const ::rtl::OUString& _rString )
+OUString Convert::collapseWhitespace( const OUString& _rString )
 {
     sal_Int32 nLength = _rString.getLength();
     OUStringBuffer aBuffer( nLength );

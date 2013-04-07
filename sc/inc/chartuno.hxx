@@ -54,7 +54,7 @@ private:
     SCTAB                   nTab;           // Charts are per sheet
 
     ScChartObj*             GetObjectByIndex_Impl(long nIndex) const;
-    ScChartObj*             GetObjectByName_Impl(const ::rtl::OUString& aName) const;
+    ScChartObj*             GetObjectByName_Impl(const OUString& aName) const;
 
 public:
                             ScChartsObj(ScDocShell* pDocSh, SCTAB nT);
@@ -63,23 +63,23 @@ public:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XTableCharts
-    virtual void SAL_CALL   addNewByName( const ::rtl::OUString& aName,
+    virtual void SAL_CALL   addNewByName( const OUString& aName,
                                     const ::com::sun::star::awt::Rectangle& aRect,
                                     const ::com::sun::star::uno::Sequence<
                                         ::com::sun::star::table::CellRangeAddress >& aRanges,
                                     sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
                                         throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   removeByName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL   removeByName( const OUString& aName )
                                         throw(::com::sun::star::uno::RuntimeException);
 
                             // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
                                 throw(::com::sun::star::container::NoSuchElementException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XIndexAccess
@@ -99,11 +99,11 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -175,16 +175,16 @@ public:
                             getEmbeddedObject() throw(::com::sun::star::uno::RuntimeException);
 
                             // XNamed
-    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setName( const OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
     // XPropertySet

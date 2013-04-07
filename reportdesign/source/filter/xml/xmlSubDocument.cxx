@@ -39,7 +39,7 @@ DBG_NAME( rpt_OXMLSubDocument )
 
 OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
                 sal_uInt16 nPrfx
-                ,const ::rtl::OUString& rLName
+                ,const OUString& rLName
                 ,const Reference< XReportComponent > & _xComponent
                 ,OXMLTable* _pContainer
                 ,OXMLCell* _pCellParent) :
@@ -62,7 +62,7 @@ OXMLSubDocument::~OXMLSubDocument()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
         sal_uInt16 _nPrefix,
-        const ::rtl::OUString& _rLocalName,
+        const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(_nPrefix,_rLocalName,xAttrList);
@@ -111,9 +111,9 @@ void OXMLSubDocument::EndElement()
         if ( m_xComponent.is() )
         {
             if ( !m_aMasterFields.empty() )
-                m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+                m_xComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
             if ( !m_aDetailFields.empty() )
-                m_xComponent->setDetailFields(Sequence< ::rtl::OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+                m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 
             m_xComponent->setName(m_xFake->getName());
             m_xComponent->setPrintRepeatedValues(m_xFake->getPrintRepeatedValues());
@@ -142,7 +142,7 @@ void OXMLSubDocument::EndElement()
     }
 }
 // -----------------------------------------------------------------------------
-void OXMLSubDocument::addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair)
+void OXMLSubDocument::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);

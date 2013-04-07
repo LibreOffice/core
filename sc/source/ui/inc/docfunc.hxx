@@ -192,7 +192,7 @@ public:
      * passed as arguments (it creates copies); the caller is responsible for
      * destroying them.
      */
-    virtual void            ModifyAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap );
+    virtual void            ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap );
 
     virtual sal_Bool        CreateNames( const ScRange& rRange, sal_uInt16 nFlags, sal_Bool bApi, SCTAB nTab = -1 ); // -1 for global range names
     virtual sal_Bool        InsertNameList( const ScAddress& rStartPos, sal_Bool bApi );

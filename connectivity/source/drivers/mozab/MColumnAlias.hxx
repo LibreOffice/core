@@ -36,7 +36,7 @@ namespace connectivity
         public:
             struct AliasEntry
             {
-                ::rtl::OString  programmaticAsciiName;
+                OString  programmaticAsciiName;
                 size_t columnPosition;
 
                 AliasEntry()
@@ -50,7 +50,7 @@ namespace connectivity
                 {
                 }
             };
-            typedef ::boost::unordered_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
+            typedef ::boost::unordered_map< OUString, AliasEntry, OUStringHash > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;
@@ -58,16 +58,16 @@ namespace connectivity
         public:
             OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
-            inline bool hasAlias( const ::rtl::OUString& _rAlias ) const
+            inline bool hasAlias( const OUString& _rAlias ) const
             {
                 return m_aAliasMap.find( _rAlias ) != m_aAliasMap.end();
             }
-            ::rtl::OString getProgrammaticNameOrFallbackToUTF8Alias( const ::rtl::OUString& _rAlias ) const;
+            OString getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const;
 
             inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
             inline AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
 
-            bool isColumnSearchable( const ::rtl::OUString _alias ) const;
+            bool isColumnSearchable( const OUString _alias ) const;
 
         private:
             void initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );

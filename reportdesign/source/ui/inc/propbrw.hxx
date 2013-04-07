@@ -58,7 +58,7 @@ private:
                         m_xBrowserComponentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
                         m_xLastSection; /// is the previously displayed section
-    ::rtl::OUString     m_sLastActivePage;
+    OUString     m_sLastActivePage;
     ODesignView*        m_pDesignView;
     OSectionView*       m_pView;
     sal_Bool            m_bInitialStateChange;
@@ -76,7 +76,7 @@ protected:
     void implSetNewObject(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >());
 
-    ::rtl::OUString GetHeadlineName(
+    OUString GetHeadlineName(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> >& _aObjects);
 
     void implDetachController();
@@ -97,8 +97,8 @@ public:
     void    Update( OSectionView* m_pView );
     void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
     inline OSectionView*    GetCurView() const { return m_pView; }
-    ::rtl::OUString         getCurrentPage() const;
-    void                    setCurrentPage(const ::rtl::OUString& _sLastActivePage);
+    OUString         getCurrentPage() const;
+    void                    setCurrentPage(const OUString& _sLastActivePage);
 
     ::Size getMinimumSize() const;
 private:

@@ -43,7 +43,6 @@
 
 using namespace utl;
 using namespace com::sun::star;
-using rtl::OUString;
 
 namespace
 {

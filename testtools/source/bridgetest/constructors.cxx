@@ -78,7 +78,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ::sal_uInt64 arg7 = sal_uInt64();
     float arg8 = float();
     double arg9 = double();
-    ::rtl::OUString arg11;
+    OUString arg11;
     css::uno::Type arg12;
     ::sal_Bool arg13 = sal_Bool();
     css::uno::Sequence< ::sal_Bool > arg14;
@@ -91,7 +91,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence< ::sal_uInt64 > arg21;
     css::uno::Sequence< float > arg22;
     css::uno::Sequence< double > arg23;
-    css::uno::Sequence< ::rtl::OUString > arg25;
+    css::uno::Sequence< OUString > arg25;
     css::uno::Sequence< css::uno::Type > arg26;
     css::uno::Sequence< css::uno::Any > arg27;
     ::sal_Bool arg27b = sal_Bool();
@@ -221,7 +221,7 @@ private:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL fn12( const ::rtl::OUString& arg )
+    virtual OUString SAL_CALL fn12( const OUString& arg )
         throw (::com::sun::star::uno::RuntimeException);
 
 
@@ -240,7 +240,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ttb::TestPolyStruct< ::sal_Int32 > arg5;
     ttb::TestPolyStruct< ::sal_Int64 > arg6;
     ttb::TestPolyStruct< ::sal_Unicode > arg7;
-    ttb::TestPolyStruct< ::rtl::OUString > arg8;
+    ttb::TestPolyStruct< OUString > arg8;
     ttb::TestPolyStruct< float > arg9;
     ttb::TestPolyStruct< double > arg10;
     ttb::TestPolyStruct<css::uno::Reference<css::uno::XInterface> > arg11;
@@ -250,8 +250,8 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
           ttb::TestPolyStruct2<sal_Unicode, css::uno::Any> > arg14;
     ttb::TestPolyStruct< ttb::TestPolyStruct2 <
         ttb::TestPolyStruct2< sal_Unicode, css::uno::Any >,
-        ::rtl::OUString > > arg15;
-    ttb::TestPolyStruct2< ::rtl::OUString,ttb::TestPolyStruct2 <
+        OUString > > arg15;
+    ttb::TestPolyStruct2< OUString,ttb::TestPolyStruct2 <
         ::sal_Unicode, ttb::TestPolyStruct < css::uno::Any > > > arg16;
     ttb::TestPolyStruct2< ttb::TestPolyStruct2<sal_Unicode, css::uno::Any >,
         ttb::TestPolyStruct<sal_Unicode> > arg17;
@@ -263,7 +263,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int32 > > arg23;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int64 > > arg24;
 //    ttb::TestPolyStruct<css::uno::Sequence<::sal_Unicode> > arg25;
-    ttb::TestPolyStruct<css::uno::Sequence< ::rtl::OUString > > arg26;
+    ttb::TestPolyStruct<css::uno::Sequence< OUString > > arg26;
     ttb::TestPolyStruct<css::uno::Sequence<float> > arg27;
     ttb::TestPolyStruct<css::uno::Sequence<double> > arg28;
     ttb::TestPolyStruct<css::uno::Sequence<css::uno::Reference<css::uno::XInterface> > > arg29;
@@ -278,17 +278,17 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     css::uno::Sequence<ttb::TestPolyStruct< ::sal_Int32> > arg35;
     css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > arg36;
     css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2<
-        ttb::TestPolyStruct2< ::sal_Unicode,css::uno::Any >, ::rtl::OUString> > > arg37;
-    css::uno::Sequence<ttb::TestPolyStruct2< ::rtl::OUString, ttb::TestPolyStruct2<
+        ttb::TestPolyStruct2< ::sal_Unicode,css::uno::Any >, OUString> > > arg37;
+    css::uno::Sequence<ttb::TestPolyStruct2< OUString, ttb::TestPolyStruct2<
         ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > arg38;
     css::uno::Sequence<ttb::TestPolyStruct2<ttb::TestPolyStruct2<
         ::sal_Unicode, css::uno::Any>, ttb::TestPolyStruct< ::sal_Unicode> > > arg39;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct< ::sal_Unicode> > > arg40;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any> > > >arg41;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct<
-        ttb::TestPolyStruct2<ttb::TestPolyStruct2<sal_Unicode, css::uno::Any>, ::rtl::OUString> > > > arg42;
+        ttb::TestPolyStruct2<ttb::TestPolyStruct2<sal_Unicode, css::uno::Any>, OUString> > > > arg42;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
-        ::rtl::OUString, ttb::TestPolyStruct2< ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > > arg43;
+        OUString, ttb::TestPolyStruct2< ::sal_Unicode, ttb::TestPolyStruct<css::uno::Any> > > > > arg43;
     css::uno::Sequence<css::uno::Sequence<ttb::TestPolyStruct2<
         ttb::TestPolyStruct2< ::sal_Unicode, css::uno::Any>, ttb::TestPolyStruct<
         ::sal_Unicode> > > > arg44;
@@ -431,10 +431,10 @@ void Impl2::setatt1( double _att1 )throw (::com::sun::star::uno::RuntimeExceptio
     return 11 * arg;
 }
 
-::rtl::OUString Impl2::fn12( const ::rtl::OUString& arg )
+OUString Impl2::fn12( const OUString& arg )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("12") + arg;
+    return OUString("12") + arg;
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
@@ -445,8 +445,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     return static_cast< ::cppu::OWeakObject * >(new Impl);
 }
 
-::rtl::OUString SAL_CALL getImplementationName() {
-    return ::rtl::OUString(
+OUString SAL_CALL getImplementationName() {
+    return OUString(
             "comp.test.testtools.bridgetest.Constructors");
 }
 
@@ -464,8 +464,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
     return static_cast< ::cppu::OWeakObject * >(new Impl2);
 }
 
-::rtl::OUString SAL_CALL getImplementationName2() {
-    return ::rtl::OUString(
+OUString SAL_CALL getImplementationName2() {
+    return OUString(
             "comp.test.testtools.bridgetest.Constructors2");
 }
 

@@ -84,7 +84,7 @@ namespace extensions { namespace resource
     {
         OSL_PRECOND( _resourceManager.IsAvailable( getResourceType(), _resourceId ), "StringResourceAccess::getResource: precondition not met!" );
         Any aResource;
-        aResource <<= ::rtl::OUString( _resourceManager.ReadString( _resourceId ) );
+        aResource <<= OUString( _resourceManager.ReadString( _resourceId ) );
         return aResource;
     }
 
@@ -94,7 +94,7 @@ namespace extensions { namespace resource
     {
     private:
         typedef ::boost::shared_ptr< IResourceType >            ResourceTypePtr;
-        typedef ::std::map< ::rtl::OUString, ResourceTypePtr >  ResourceTypes;
+        typedef ::std::map< OUString, ResourceTypePtr >  ResourceTypes;
 
         ::osl::Mutex                    m_aMutex;
         Reference< XResourceBundle >    m_xParent;
@@ -105,7 +105,7 @@ namespace extensions { namespace resource
     public:
         OpenOfficeResourceBundle(
             const Reference< XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rBaseName,
+            const OUString& _rBaseName,
             const Locale& _rLocale
         );
 
@@ -117,12 +117,12 @@ namespace extensions { namespace resource
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XResourceBundle > SAL_CALL getParent() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XResourceBundle >& _parent ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getDirectElement( const ::rtl::OUString& key ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getDirectElement( const OUString& key ) throw (::com::sun::star::uno::RuntimeException);
 
         // XNameAccess (base of XResourceBundle)
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess (base of XNameAccess)
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -140,7 +140,7 @@ namespace extensions { namespace resource
             @precond
                 our mutex is locked
         */
-        bool    impl_getDirectElement_nothrow( const ::rtl::OUString& _key, Any& _out_Element ) const;
+        bool    impl_getDirectElement_nothrow( const OUString& _key, Any& _out_Element ) const;
 
         /** retrieves the resource type and id from a given resource key, which assembles those two
             @param  _key
@@ -153,7 +153,7 @@ namespace extensions { namespace resource
                 <TRUE/> if and only if the given key specifies a known resource type, and contains a valid
                 resource id
         */
-        bool    impl_getResourceTypeAndId_nothrow( const ::rtl::OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const;
+        bool    impl_getResourceTypeAndId_nothrow( const OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const;
     };
 
     OpenOfficeResourceLoader::OpenOfficeResourceLoader( Reference< XComponentContext > const& _rxContext )
@@ -162,13 +162,13 @@ namespace extensions { namespace resource
     }
 
     //--------------------------------------------------------------------
-    Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle_Default( const ::rtl::OUString& _baseName ) throw (MissingResourceException, RuntimeException)
+    Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle_Default( const OUString& _baseName ) throw (MissingResourceException, RuntimeException)
     {
         return loadBundle( _baseName, Application::GetSettings().GetUILanguageTag().getLocale() );
     }
 
     //--------------------------------------------------------------------
-    Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle( const ::rtl::OUString& _baseName, const Locale& _locale ) throw (MissingResourceException, RuntimeException)
+    Reference< XResourceBundle > SAL_CALL OpenOfficeResourceLoader::loadBundle( const OUString& _baseName, const Locale& _locale ) throw (MissingResourceException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -188,12 +188,12 @@ namespace extensions { namespace resource
         return xBundle;
     }
 
-    OpenOfficeResourceBundle::OpenOfficeResourceBundle( const Reference< XComponentContext >& /*_rxContext*/, const ::rtl::OUString& _rBaseName, const Locale& _rLocale )
+    OpenOfficeResourceBundle::OpenOfficeResourceBundle( const Reference< XComponentContext >& /*_rxContext*/, const OUString& _rBaseName, const Locale& _rLocale )
         :m_aLocale( _rLocale )
         ,m_pResourceManager( NULL )
     {
-        ::rtl::OUString sBaseName( _rBaseName );
-        m_pResourceManager = new SimpleResMgr( rtl::OUStringToOString( sBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
+        OUString sBaseName( _rBaseName );
+        m_pResourceManager = new SimpleResMgr( OUStringToOString( sBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
                 LanguageTag( m_aLocale) );
 
         if ( !m_pResourceManager->IsValid() )
@@ -203,7 +203,7 @@ namespace extensions { namespace resource
         }
 
         // supported resource types so far: strings
-        m_aResourceTypes[ ::rtl::OUString( "string" ) ] =
+        m_aResourceTypes[ OUString( "string" ) ] =
             ResourceTypePtr( new StringResourceAccess );
     }
 
@@ -230,14 +230,14 @@ namespace extensions { namespace resource
         return m_aLocale;
     }
 
-    bool OpenOfficeResourceBundle::impl_getResourceTypeAndId_nothrow( const ::rtl::OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const
+    bool OpenOfficeResourceBundle::impl_getResourceTypeAndId_nothrow( const OUString& _key, ResourceTypePtr& _out_resourceType, sal_Int32& _out_resourceId ) const
     {
         sal_Int32 typeSeparatorPos = _key.indexOf( ':' );
         if ( typeSeparatorPos == -1 )
             // invalid key
             return false;
 
-        ::rtl::OUString resourceType = _key.copy( 0, typeSeparatorPos );
+        OUString resourceType = _key.copy( 0, typeSeparatorPos );
 
         ResourceTypes::const_iterator typePos = m_aResourceTypes.find( resourceType );
         if ( typePos == m_aResourceTypes.end() )
@@ -249,7 +249,7 @@ namespace extensions { namespace resource
         return true;
     }
 
-    bool OpenOfficeResourceBundle::impl_getDirectElement_nothrow( const ::rtl::OUString& _key, Any& _out_Element ) const
+    bool OpenOfficeResourceBundle::impl_getDirectElement_nothrow( const OUString& _key, Any& _out_Element ) const
     {
         ResourceTypePtr resourceType;
         sal_Int32 resourceId( 0 );
@@ -264,7 +264,7 @@ namespace extensions { namespace resource
         return _out_Element.hasValue();
     }
 
-    Any SAL_CALL OpenOfficeResourceBundle::getDirectElement( const ::rtl::OUString& _key ) throw (RuntimeException)
+    Any SAL_CALL OpenOfficeResourceBundle::getDirectElement( const OUString& _key ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -273,7 +273,7 @@ namespace extensions { namespace resource
         return aElement;
     }
 
-    Any SAL_CALL OpenOfficeResourceBundle::getByName( const ::rtl::OUString& _key ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OpenOfficeResourceBundle::getByName( const OUString& _key ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -285,20 +285,20 @@ namespace extensions { namespace resource
         }
 
         if ( !aElement.hasValue() )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         return aElement;
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OpenOfficeResourceBundle::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_FAIL( "OpenOfficeResourceBundle::getElementNames: not implemented!" );
             // the (Simple)ResManager does not provide an API to enumerate the resources
-        return Sequence< ::rtl::OUString >( );
+        return Sequence< OUString >( );
     }
 
-    ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const ::rtl::OUString& _key ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL OpenOfficeResourceBundle::hasByName( const OUString& _key ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

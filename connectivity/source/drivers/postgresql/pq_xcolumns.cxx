@@ -72,9 +72,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertyChangeListener;
@@ -104,19 +101,19 @@ using com::sun::star::sdbc::SQLException;
 namespace pq_sdbc_driver
 {
 
-static Any isCurrency( const rtl::OUString & typeName )
+static Any isCurrency( const OUString & typeName )
 {
     sal_Bool b = typeName.equalsIgnoreAsciiCase("money");
     return Any( &b, getBooleanCppuType() );
 }
 
-// static sal_Bool isAutoIncrement8( const rtl::OUString & typeName )
+// static sal_Bool isAutoIncrement8( const OUString & typeName )
 // {
 //     return typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("serial8")) ||
 //         typeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("bigserial"));
 // }
 
-static Any isAutoIncrement( const rtl::OUString & defaultValue )
+static Any isAutoIncrement( const OUString & defaultValue )
 {
     sal_Bool ret = defaultValue.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "nextval(" ) );
 //     printf( "%s %d\n",
@@ -139,8 +136,8 @@ Columns::Columns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName)
+        const OUString &schemaName,
+        const OUString &tableName)
     : Container( refMutex, origin, pSettings,  "COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName )
@@ -149,7 +146,7 @@ Columns::Columns(
 Columns::~Columns()
 {}
 
-rtl::OUString columnMetaData2SDBCX(
+OUString columnMetaData2SDBCX(
     ReflectionBase *pBase, const com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > &xRow )
 {
     Statics & st = getStatics();
@@ -261,18 +258,18 @@ rtl::OUString columnMetaData2SDBCX(
 //     ::rtl::Reference< RefCountedMutex > m_refMutex;
 //     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_connection;
 //     ConnectionSettings *m_pSettings;
-//     rtl::OUString m_schema;
-//     rtl::OUString m_table;
-//     rtl::OUString m_column;
+//     OUString m_schema;
+//     OUString m_table;
+//     OUString m_column;
 
 // public:
 //     CommentChanger(
 //         const ::rtl::Reference< RefCountedMutex > & refMutex,
 //         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
 //         ConnectionSettings *pSettings,
-//         const rtl::OUString & schema,
-//         const rtl::OUString & table,
-//         const rtl::OUString & column ) :
+//         const OUString & schema,
+//         const OUString & table,
+//         const OUString & column ) :
 //         m_refMutex( refMutex ),
 //         m_connection( connection ),
 //         m_pSettings( pSettings ),
@@ -315,7 +312,7 @@ void Columns::refresh()
     {
         if( isLog( m_pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append( "sdbcx.Columns get refreshed for table " );
             buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
             buf.append( "." );
@@ -511,7 +508,7 @@ void Columns::appendByDescriptor(
     refresh();
 }
 
-// void Columns::dropByName( const ::rtl::OUString& elementName )
+// void Columns::dropByName( const OUString& elementName )
 //     throw (::com::sun::star::sdbc::SQLException,
 //            ::com::sun::star::container::NoSuchElementException,
 //            ::com::sun::star::uno::RuntimeException)
@@ -580,8 +577,8 @@ Reference< com::sun::star::container::XNameAccess > Columns::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const rtl::OUString &schemaName,
-    const rtl::OUString &tableName,
+    const OUString &schemaName,
+    const OUString &tableName,
     Columns **ppColumns)
 {
     *ppColumns = new Columns(

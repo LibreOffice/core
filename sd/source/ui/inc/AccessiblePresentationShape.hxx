@@ -40,19 +40,19 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     //=====  internal  ========================================================
 
     /// Create a name string that contains the accessible name.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 

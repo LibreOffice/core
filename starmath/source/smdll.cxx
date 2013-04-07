@@ -56,7 +56,7 @@ namespace
         SmModule *pModule = new SmModule( &rFactory );
         *ppShlPtr = pModule;
 
-        rFactory.SetDocumentServiceName( rtl::OUString("com.sun.star.formula.FormulaProperties") );
+        rFactory.SetDocumentServiceName( OUString("com.sun.star.formula.FormulaProperties") );
 
         SmModule::RegisterInterface(pModule);
         SmDocShell::RegisterInterface(pModule);

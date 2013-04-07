@@ -70,22 +70,22 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
         //---------------------------------------
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const ::rtl::OUString& sFilter)
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sFilter)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException);
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const ::rtl::OUString&                     sFilter   ,
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                  const css::uno::Sequence< css::uno::Any >& lArguments)
             throw(css::uno::Exception       ,
                   css::uno::RuntimeException);
 
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames()
+        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
         // XContainerQuery
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
             throw (css::uno::RuntimeException);
 
     //-------------------------------------------
@@ -128,7 +128,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
         /** TODO document me
          */
-        OUStringList impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
+        OUStringList impl_getSortedFilterListForModule(const OUString& sModule,
                                                              sal_Int32        nIFlags,
                                                              sal_Int32        nEFlags) const;
 
@@ -143,7 +143,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
             @return A string list of internal filter names.
                     Can be empty.
          */
-        OUStringList impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const;
+        OUStringList impl_readSortedFilterListFromConfig(const OUString& sModule) const;
 
     //-------------------------------------------
     // static uno helper!
@@ -160,7 +160,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @return The fix uno implementation name of this class.
          */
-        static ::rtl::OUString impl_getImplementationName();
+        static OUString impl_getImplementationName();
 
         //---------------------------------------
 
@@ -172,7 +172,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper1< BaseContainer      
 
             @return The fix list of uno services supported by this class.
          */
-        static css::uno::Sequence< ::rtl::OUString > impl_getSupportedServiceNames();
+        static css::uno::Sequence< OUString > impl_getSupportedServiceNames();
 
         //---------------------------------------
 

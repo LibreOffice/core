@@ -1052,7 +1052,7 @@ public:
                     EscherBlibEntry(
                         sal_uInt32 nPictureOffset,
                         const GraphicObject& rObj,
-                        const rtl::OString& rId,
+                        const OString& rId,
                         const GraphicAttr* pAttr = NULL
                     );
 
@@ -1077,7 +1077,7 @@ class MSFILTER_DLLPUBLIC EscherGraphicProvider
     sal_uInt32              mnBlibBufSize;
     sal_uInt32              mnBlibEntrys;
 
-    rtl::OUString           maBaseURI;
+    OUString           maBaseURI;
 
 protected:
 
@@ -1091,7 +1091,7 @@ public:
     sal_Bool    bWritePictureOffset, sal_uInt32 nResize = 0);
     sal_uInt32  GetBlibID(
                     SvStream& rPicOutStream,
-                    const rtl::OString& rGraphicId,
+                    const OString& rGraphicId,
                     const Rectangle& rBoundRect,
                     const com::sun::star::awt::Rectangle* pVisArea = NULL,
                     const GraphicAttr* pGrafikAttr = NULL
@@ -1102,8 +1102,8 @@ public:
 
     sal_Bool    GetPrefSize( const sal_uInt32 nBlibId, Size& rSize, MapMode& rMapMode );
 
-    void        SetBaseURI( const rtl::OUString& rBaseURI ) { maBaseURI = rBaseURI; };
-    const rtl::OUString& GetBaseURI() { return maBaseURI; };
+    void        SetBaseURI( const OUString& rBaseURI ) { maBaseURI = rBaseURI; };
+    const OUString& GetBaseURI() { return maBaseURI; };
 
                 EscherGraphicProvider( sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
                 ~EscherGraphicProvider();
@@ -1186,7 +1186,7 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
                     sal_uInt32 nBlibId,
                     sal_Bool bCreateCroppingAttributes
                 );
-    sal_Bool    ImplCreateEmbeddedBmp( const rtl::OString& rUniqueId );
+    sal_Bool    ImplCreateEmbeddedBmp( const OString& rUniqueId );
     void        ImplInit();
 
 public:
@@ -1201,7 +1201,7 @@ public:
                                                     // GraphicObjects are saved to PowerPoint
     ~EscherPropertyContainer();
 
-    void        AddOpt( sal_uInt16 nPropertyID, const rtl::OUString& rString );
+    void        AddOpt( sal_uInt16 nPropertyID, const OUString& rString );
 
     void        AddOpt(
                     sal_uInt16 nPropertyID,
@@ -1234,7 +1234,7 @@ public:
 
     /** Creates a complex ESCHER_Prop_fillBlip containing the BLIP directly (for Excel charts). */
     sal_Bool    CreateEmbeddedBitmapProperties(
-                    const ::rtl::OUString& rBitmapUrl,
+                    const OUString& rBitmapUrl,
                     ::com::sun::star::drawing::BitmapMode eBitmapMode
                 );
     /** Creates a complex ESCHER_Prop_fillBlip containing a hatch style (for Excel charts). */
@@ -1317,7 +1317,7 @@ public:
     static MSO_SPT      GetCustomShapeType(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                             sal_uInt32& nMirrorFlags,
-                            rtl::OUString& rShapeType
+                            OUString& rShapeType
                         );
 
     // helper functions which are also used in ooxml export

@@ -67,7 +67,7 @@ private:
 
     void                UpdateSourceRanges();
     void                UpdateEnable();
-    void                LoadDocument( const rtl::OUString& rFile, const String& rFilter,
+    void                LoadDocument( const OUString& rFile, const String& rFilter,
                                         const String& rOptions );
 
 public:
@@ -80,10 +80,10 @@ public:
 
     virtual short   Execute();          // overwritten to set dialog parent
 
-    rtl::OUString       GetURL();
-    rtl::OUString       GetFilter();        // may be empty
-    rtl::OUString       GetOptions();       // filter options
-    rtl::OUString       GetSource();        // separated by ";"
+    OUString       GetURL();
+    OUString       GetFilter();        // may be empty
+    OUString       GetOptions();       // filter options
+    OUString       GetSource();        // separated by ";"
     sal_uLong           GetRefresh();       // 0 if disabled
 };
 

@@ -63,7 +63,7 @@ extern "C" {
     {
         void* pRet = 0;
 
-        ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplementationName ) );
+        OUString aImplName( OUString::createFromAscii( pImplementationName ) );
 
         if( pXUnoSMgr )
         {

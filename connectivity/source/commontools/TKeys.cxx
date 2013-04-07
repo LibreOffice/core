@@ -51,7 +51,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
 {
 }
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OKeysHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 {
     sdbcx::ObjectType xRet = NULL;
 
@@ -82,7 +82,7 @@ Reference< XPropertySet > OKeysHelper::createDescriptor()
 // -----------------------------------------------------------------------------
 /** returns the keyrule string for the primary key
 */
-::rtl::OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
+OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
 {
     const char* pKeyRule = NULL;
     switch ( _nKeyRule )
@@ -102,9 +102,9 @@ Reference< XPropertySet > OKeysHelper::createDescriptor()
         default:
             ;
     }
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( pKeyRule )
-        sRet = ::rtl::OUString::createFromAscii(pKeyRule);
+        sRet = OUString::createFromAscii(pKeyRule);
     return sRet;
 }
 // -------------------------------------------------------------------------
@@ -125,7 +125,7 @@ void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescr
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
@@ -140,7 +140,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     const ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)));
     sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
-    ::rtl::OUString sReferencedName;
+    OUString sReferencedName;
 
     if ( nKeyType == KeyType::FOREIGN )
     {
@@ -157,9 +157,9 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     {
         // if we're here, we belong to a table which is not new, i.e. already exists in the database.
         // In this case, really append the new index.
-        ::rtl::OUStringBuffer aSql;
+        OUStringBuffer aSql;
         aSql.appendAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
+        OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
 
         aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
         aSql.appendAscii(" ADD ");
@@ -211,10 +211,10 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
         xStmt->execute(aSql.makeStringAndClear());
     }
     // find the name which the database gave the new key
-    ::rtl::OUString sNewName( _rForName );
+    OUString sNewName( _rForName );
     try
     {
-        ::rtl::OUString aSchema,aTable;
+        OUString aSchema,aTable;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
         Reference< XResultSet > xResult;
@@ -235,7 +235,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
             Reference< XRow > xRow(xResult,UNO_QUERY);
             while( xResult->next() )
             {
-                ::rtl::OUString sName = xRow->getString(nColumn);
+                OUString sName = xRow->getString(nColumn);
                 if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
                 {
                     descriptor->setPropertyValue( rPropMap.getNameByIndex( PROPERTY_ID_NAME ), makeAny( sName ) );
@@ -255,13 +255,13 @@ sdbcx::ObjectType OKeysHelper::appendObject( const ::rtl::OUString& _rForName, c
     return createObject( sNewName );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OKeysHelper::getDropForeignKey() const
+OUString OKeysHelper::getDropForeignKey() const
 {
-    return ::rtl::OUString(" DROP CONSTRAINT ");
+    return OUString(" DROP CONSTRAINT ");
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( xConnection.is() && !m_pTable->isNew() )
@@ -273,7 +273,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
         }
         else
         {
-            ::rtl::OUStringBuffer aSql;
+            OUStringBuffer aSql;
             aSql.appendAscii("ALTER TABLE ");
 
             aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true ));
@@ -291,7 +291,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
             else
             {
                 aSql.append(getDropForeignKey());
-                const ::rtl::OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
+                const OUString aQuote    = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
                 aSql.append( ::dbtools::quoteName( aQuote,_sElementName) );
             }
 

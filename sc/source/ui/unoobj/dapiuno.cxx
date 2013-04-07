@@ -57,7 +57,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::sheet;
 
-using ::rtl::OUString;
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
@@ -98,14 +97,14 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotDescriptorBaseMap()
     {
         {MAP_CHAR_LEN(SC_UNO_DP_COLGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_DRILLDOWN),    0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_GRANDTOTAL_NAME),0,&getCppuType((rtl::OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_GRANDTOTAL_NAME),0,&getCppuType((OUString*)0), beans::PropertyAttribute::MAYBEVOID, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_IGNORE_EMPTYROWS),   0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_IMPORTDESC),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_REPEATEMPTY),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_ROWGRAND),     0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_SERVICEARG),   0,  &getCppuType((uno::Sequence<beans::PropertyValue>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DP_SHOWFILTER),     0,  &getBooleanCppuType(),  0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_DP_SOURCESERVICE),   0,  &getCppuType((rtl::OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DP_SOURCESERVICE),   0,  &getCppuType((OUString*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     return aDataPilotDescriptorBaseMap_Impl;
@@ -809,7 +808,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             }
             else if ( aNameString.EqualsAscii( SC_UNO_DP_GRANDTOTAL_NAME ) )
             {
-                rtl::OUString aStrVal;
+                OUString aStrVal;
                 if ( aValue >>= aStrVal )
                     aNewData.SetGrandTotalName(aStrVal);
             }
@@ -847,7 +846,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             }
             else if ( aNameString.EqualsAscii( SC_UNO_DP_SOURCESERVICE ) )
             {
-                rtl::OUString aStrVal;
+                OUString aStrVal;
                 if ( aValue >>= aStrVal )
                 {
                     String aEmpty;
@@ -874,7 +873,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     if (pOldDesc)
                         aServiceDesc = *pOldDesc;
 
-                    rtl::OUString aStrVal;
+                    OUString aStrVal;
                     sal_Int32 nArgs = aArgSeq.getLength();
                     for (sal_Int32 nArgPos=0; nArgPos<nArgs; ++nArgPos)
                     {
@@ -958,7 +957,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             }
             else if ( aNameString.EqualsAscii( SC_UNO_DP_GRANDTOTAL_NAME ) )
             {
-                const rtl::OUString* pGrandTotalName = aNewData.GetGrandTotalName();
+                const OUString* pGrandTotalName = aNewData.GetGrandTotalName();
                 if (pGrandTotalName)
                     aRet <<= *pGrandTotalName;      // same behavior as in ScDPSource
             }
@@ -989,7 +988,7 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
             }
             else if ( aNameString.EqualsAscii( SC_UNO_DP_SOURCESERVICE ) )
             {
-                rtl::OUString aServiceName;
+                OUString aServiceName;
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
                 if (pServiceDesc)
                     aServiceName = pServiceDesc->aServiceName;
@@ -1002,13 +1001,13 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 {
                     uno::Sequence<beans::PropertyValue> aSeq( 4 );
                     beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SOURCENAME ));
+                    pArray[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_SOURCENAME ));
                     pArray[0].Value <<= pServiceDesc->aParSource;
-                    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_OBJECTNAME ));
+                    pArray[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_OBJECTNAME ));
                     pArray[1].Value <<= pServiceDesc->aParName;
-                    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USERNAME ));
+                    pArray[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_USERNAME ));
                     pArray[2].Value <<= pServiceDesc->aParUser;
-                    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_PASSWORD ));
+                    pArray[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_DP_PASSWORD ));
                     pArray[3].Value <<= pServiceDesc->aParPass;
                     aRet <<= aSeq;
                 }
@@ -1857,7 +1856,7 @@ OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
             aName = OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) );
         else
         {
-            const rtl::OUString* pLayoutName = pDim->GetLayoutName();
+            const OUString* pLayoutName = pDim->GetLayoutName();
             if (pLayoutName)
                 aName = *pLayoutName;
             else
@@ -2263,7 +2262,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
         {
             /*  It is somehow useless to set the property "HasSelectedPage" to
                 true, because it is still needed to set an explicit page name. */
-            const ::rtl::OUString aPage;
+            const OUString aPage;
             pDim->SetCurrentPage( &aPage );
         }
         else
@@ -2408,7 +2407,7 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                             ScFieldGroup aGroup;
                             aGroup.maName = pGroup->GetGroupName();
                             for( sal_Int32 nMemIdx = 0, nMemCount = pGroup->GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
-                                if (const rtl::OUString* pMem = pGroup->GetElementByIndex(nMemIdx))
+                                if (const OUString* pMem = pGroup->GetElementByIndex(nMemIdx))
                                     aGroup.maMembers.push_back( *pMem );
                             aGroups.push_back( aGroup );
                         }
@@ -2555,13 +2554,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        rtl::OUString aDimName = pDim->GetName();
+        OUString aDimName = pDim->GetName();
 
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
         ScDPDimensionSaveData* pDimData = aSaveData.GetDimensionData();     // created if not there
 
         // find original base
-        rtl::OUString aBaseDimName( aDimName );
+        OUString aBaseDimName( aDimName );
         const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
         if ( pBaseGroupDim )
         {
@@ -2581,7 +2580,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         {
             for (nEntry=0; nEntry<nEntryCount; nEntry++)
             {
-                const rtl::OUString& aEntryName = rItems[nEntry];
+                const OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
                 {
                     // for each selected (intermediate) group, remove all its items
@@ -2630,10 +2629,10 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 }
             }
         }
-        rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
+        OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
         //! localized prefix string
-        rtl::OUString aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+        OUString aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
         ScDPSaveGroupItem aGroup( aGroupName );
         Reference< XNameAccess > xMembers = GetMembers();
         if (!xMembers.is())
@@ -2746,9 +2745,9 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
         ScDPDimensionSaveData& rDimData = *aSaveData.GetDimensionData();
 
         // find source dimension name
-        const rtl::OUString& rDimName = pDim->GetName();
+        const OUString& rDimName = pDim->GetName();
         const ScDPSaveGroupDimension* pGroupDim = rDimData.GetNamedGroupDim( rDimName );
-        rtl::OUString aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
+        OUString aSrcDimName = pGroupDim ? pGroupDim->GetSourceDimName() : rDimName;
 
         // find a group dimension for the base field, or get numeric grouping
         pGroupDim = rDimData.GetFirstNamedGroupDim( aSrcDimName );

@@ -58,8 +58,8 @@ namespace sw { namespace mark
                 { return m_eOrigBkmType; }
 
         private:
-            ::rtl::OUString m_aName;
-            ::rtl::OUString m_aShortName;
+            OUString m_aName;
+            OUString m_aShortName;
             KeyCode m_aCode;
             bool m_bSavePos;
             bool m_bSaveOtherPos;

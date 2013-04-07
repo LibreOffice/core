@@ -127,7 +127,7 @@ ScMergeAttr::~ScMergeAttr()
 
 String ScMergeAttr::GetValueText() const
 {
-    rtl::OUStringBuffer aString;
+    OUStringBuffer aString;
     aString.append('(');
     aString.append(static_cast<sal_Int32>(nColMerge));
     aString.append(',');
@@ -716,7 +716,7 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
 
 String ScPageHFItem::GetValueText() const
 {
-    return rtl::OUString("ScPageHFItem");
+    return OUString("ScPageHFItem");
 }
 
 //------------------------------------------------------------------------
@@ -1067,7 +1067,7 @@ ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
 
 String ScDoubleItem::GetValueText() const
 {
-    return rtl::OUString("ScDoubleItem");
+    return OUString("ScDoubleItem");
 }
 
 //------------------------------------------------------------------------

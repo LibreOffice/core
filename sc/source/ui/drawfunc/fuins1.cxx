@@ -151,7 +151,7 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
 
 //------------------------------------------------------------------------
 
-static void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
+static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
                       const Size& rPrefSize, bool const bLink )
 {
@@ -176,7 +176,7 @@ static void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();
 
-    ::rtl::OUString realURL;
+    OUString realURL;
     if (bLink)
     {
         realURL = rMediaURL;
@@ -314,7 +314,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                               SfxRequest&       rReq ) :
     FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    ::rtl::OUString     aURL;
+    OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     bool                bAPI = false;
 

@@ -143,7 +143,7 @@ ScInputHandler* ScTabViewShell::GetInputHandler() const
 
 String ScTabViewShell::GetDescription() const
 {
-    return rtl::OUString(" ** Test ** ");
+    return OUString(" ** Test ** ");
 }
 
 void ScTabViewShell::ExecImageMap( SfxRequest& rReq )

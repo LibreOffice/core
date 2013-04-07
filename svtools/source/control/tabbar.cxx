@@ -53,7 +53,7 @@ struct ImplTabBarItem
     OUString        maHelpText;
     Rectangle       maRect;
     long            mnWidth;
-    rtl::OString    maHelpId;
+    OString    maHelpId;
     sal_Bool            mbShort;
     sal_Bool            mbSelect;
     sal_Bool            mbEnable;
@@ -1323,7 +1323,7 @@ void TabBar::Paint( const Rectangle& rect )
 {
     if(IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
         DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,
-                CTRL_STATE_ENABLED,ImplControlValue(0),rtl::OUString());
+                CTRL_STATE_ENABLED,ImplControlValue(0),OUString());
 
     // Items berechnen und ausgeben
     sal_uInt16 nItemCount = (sal_uInt16)mpItemList->size();
@@ -1542,7 +1542,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
@@ -2489,7 +2489,7 @@ XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;
@@ -2499,10 +2499,10 @@ XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-rtl::OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
+OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 {
     sal_uInt16 nPos = GetPagePos( nPageId );
-    rtl::OString aRet;
+    OString aRet;
     if ( nPos != PAGE_NOT_FOUND )
         return (*mpItemList)[ nPos ]->maHelpId;
     return aRet;

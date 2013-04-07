@@ -49,8 +49,8 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
         if ( !pMenu )
             return NULL;
 
-        rtl::OUString aMenuCommand = pMenu->GetItemCommand( nId );
-        gchar* aCommandStr = g_strdup( rtl::OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUString aMenuCommand = pMenu->GetItemCommand( nId );
+        gchar* aCommandStr = g_strdup( OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
         aCommand = g_strdup( aCommandStr );
 
         // Some items could have duplicated commands. A new one should be generated.
@@ -551,12 +551,12 @@ void GtkSalMenu::NativeSetEnableItem( gchar* aCommand, gboolean bEnable )
         g_lo_action_group_set_action_enabled( pActionGroup, aCommand, bEnable );
 }
 
-void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText )
+void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText )
 {
     SolarMutexGuard aGuard;
     // Replace the '~' character with '_'.
-    rtl::OUString aText = rText.replace( '~', '_' );
-    rtl::OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
+    OUString aText = rText.replace( '~', '_' );
+    OString aConvertedText = OUStringToOString( aText, RTL_TEXTENCODING_UTF8 );
 
     // Update item text only when necessary.
     gchar* aLabel = g_lo_menu_get_label_from_item_in_section( G_LO_MENU( mpMenuModel ), nSection, nItemPos );
@@ -568,7 +568,7 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
         g_free( aLabel );
 }
 
-void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName )
+void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const OUString& rKeyName )
 {
     SolarMutexGuard aGuard;
 
@@ -662,7 +662,7 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
 
         String aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
-        gchar* aItemCommandStr = (gchar*) rtl::OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
+        gchar* aItemCommandStr = (gchar*) OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
         {
@@ -764,7 +764,7 @@ void GtkSalMenu::ShowItem( unsigned nPos, sal_Bool bShow )
 }
 
 
-void GtkSalMenu::SetItemText( unsigned, SalMenuItem*, const rtl::OUString& )
+void GtkSalMenu::SetItemText( unsigned, SalMenuItem*, const OUString& )
 {
 }
 
@@ -772,7 +772,7 @@ void GtkSalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )
 {
 }
 
-void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const rtl::OUString& )
+void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const OUString& )
 {
 }
 

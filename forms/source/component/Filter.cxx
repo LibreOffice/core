@@ -152,28 +152,28 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OFilterControl::GetComponentServiceName()
+    OUString OFilterControl::GetComponentServiceName()
     {
-        ::rtl::OUString aServiceName;
+        OUString aServiceName;
         switch (m_nControlClass)
         {
             case FormComponentType::RADIOBUTTON:
-                aServiceName = rtl::OUString("radiobutton");
+                aServiceName = OUString("radiobutton");
                 break;
             case FormComponentType::CHECKBOX:
-                aServiceName = rtl::OUString("checkbox");
+                aServiceName = OUString("checkbox");
                 break;
             case FormComponentType::COMBOBOX:
-                aServiceName = rtl::OUString("combobox");
+                aServiceName = OUString("combobox");
                 break;
             case FormComponentType::LISTBOX:
-                aServiceName = rtl::OUString("listbox");
+                aServiceName = OUString("listbox");
                 break;
             default:
                 if (m_bMultiLine)
-                    aServiceName = rtl::OUString("MultiLineEdit");
+                    aServiceName = OUString("MultiLineEdit");
                 else
-                    aServiceName = rtl::OUString("Edit");
+                    aServiceName = OUString("Edit");
         }
         return aServiceName;
     }
@@ -268,7 +268,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OFilterControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
+    void OFilterControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal )
     {
         // these properties are ignored
         if (rPropName == PROPERTY_TEXT ||
@@ -289,7 +289,7 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent ) throw(RuntimeException)
     {
-        ::rtl::OUStringBuffer aText;
+        OUStringBuffer aText;
         switch (m_nControlClass)
         {
             case FormComponentType::CHECKBOX:
@@ -300,7 +300,7 @@ namespace frm
 
                     bool bSelected = ( rEvent.Selected == STATE_CHECK );
 
-                    ::rtl::OUString sExpressionMarker( "$expression$" );
+                    OUString sExpressionMarker( "$expression$" );
                     ::dbtools::getBoleanComparisonPredicate(
                         sExpressionMarker,
                         bSelected,
@@ -308,7 +308,7 @@ namespace frm
                         aText
                     );
 
-                    ::rtl::OUString sText( aText.makeStringAndClear() );
+                    OUString sText( aText.makeStringAndClear() );
                     sal_Int32 nMarkerPos( sText.indexOf( sExpressionMarker ) );
                     OSL_ENSURE( nMarkerPos == 0, "OFilterControl::itemStateChanged: unsupported boolean comparison mode!" );
                     // If this assertion fails, then getBoleanComparisonPredicate created a predicate which
@@ -335,7 +335,7 @@ namespace frm
                 try
                 {
                     const Reference< XItemList > xItemList( getModel(), UNO_QUERY_THROW );
-                    ::rtl::OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
+                    OUString sItemText( xItemList->getItemText( rEvent.Selected ) );
 
                     const MapString2String::const_iterator itemPos = m_aDisplayItemToValueItem.find( sItemText );
                     if ( itemPos != m_aDisplayItemToValueItem.end() )
@@ -344,7 +344,7 @@ namespace frm
                         if ( !sItemText.isEmpty() )
                         {
                             ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
-                            ::rtl::OUString sErrorMessage;
+                            OUString sErrorMessage;
                             OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
                         }
                     }
@@ -365,7 +365,7 @@ namespace frm
             break;
         }
 
-        ::rtl::OUString sText( aText.makeStringAndClear() );
+        OUString sText( aText.makeStringAndClear() );
         if ( m_aText.compareTo( sText ) )
         {
             m_aText = sText;
@@ -395,7 +395,7 @@ namespace frm
             if ( !m_xField.is() )
                 return;
 
-            ::rtl::OUString sFieldName;
+            OUString sFieldName;
             m_xField->getPropertyValue( PROPERTY_NAME ) >>= sFieldName;
 
             // here we need a table to which the field belongs to
@@ -405,13 +405,13 @@ namespace frm
 
             // create a query composer
             Reference< XColumnsSupplier > xSuppColumns;
-            xFormProps->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSuppColumns;
+            xFormProps->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSuppColumns;
 
             const Reference< XConnection > xConnection( ::dbtools::getConnection( xForm ), UNO_SET_THROW );
             const Reference< XNameAccess > xFieldNames( xSuppColumns->getColumns(), UNO_SET_THROW );
             if ( !xFieldNames->hasByName( sFieldName ) )
                 return;
-            ::rtl::OUString sRealFieldName, sTableName;
+            OUString sRealFieldName, sTableName;
             const Reference< XPropertySet > xComposerFieldProps( xFieldNames->getByName( sFieldName ), UNO_QUERY_THROW );
             xComposerFieldProps->getPropertyValue( PROPERTY_REALNAME ) >>= sRealFieldName;
             xComposerFieldProps->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName;
@@ -423,10 +423,10 @@ namespace frm
             sTableName = xNamedTable->getName();
 
             // create a statement selecting all values for the given field
-            ::rtl::OUStringBuffer aStatement;
+            OUStringBuffer aStatement;
 
             const Reference< XDatabaseMetaData >  xMeta( xConnection->getMetaData(), UNO_SET_THROW );
-            const ::rtl::OUString sQuoteChar = xMeta->getIdentifierQuoteString();
+            const OUString sQuoteChar = xMeta->getIdentifierQuoteString();
 
             aStatement.appendAscii( "SELECT DISTINCT " );
             aStatement.append( sQuoteChar );
@@ -444,13 +444,13 @@ namespace frm
 
             aStatement.appendAscii( " FROM " );
 
-            ::rtl::OUString sCatalog, sSchema, sTable;
+            OUString sCatalog, sSchema, sTable;
             ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
             aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
 
             // execute the statement
             xStatement.reset( xConnection->createStatement() );
-            const ::rtl::OUString sSelectStatement( aStatement.makeStringAndClear( ) );
+            const OUString sSelectStatement( aStatement.makeStringAndClear( ) );
             xListCursor.reset( xStatement->executeQuery( sSelectStatement ) );
 
             // retrieve the one column which we take the values from
@@ -461,17 +461,17 @@ namespace frm
             // ensure the values will be  formatted according to the field format
             const ::dbtools::FormattedColumnValue aFormatter( m_xFormatter, xDataField );
 
-            ::std::vector< ::rtl::OUString > aProposals;
+            ::std::vector< OUString > aProposals;
             aProposals.reserve(16);
 
             while ( xListCursor->next() && ( aProposals.size() < size_t( SHRT_MAX ) ) )
             {
-                const ::rtl::OUString sCurrentValue = aFormatter.getFormattedValue();
+                const OUString sCurrentValue = aFormatter.getFormattedValue();
                 aProposals.push_back( sCurrentValue );
             }
 
             // fill the list items into our peer
-            Sequence< ::rtl::OUString> aStringSeq( aProposals.size() );
+            Sequence< OUString> aStringSeq( aProposals.size() );
             ::std::copy( aProposals.begin(), aProposals.end(), aStringSeq.getArray() );
 
             const Reference< XComboBox >  xComboBox( getPeer(), UNO_QUERY_THROW );
@@ -508,7 +508,7 @@ namespace frm
             // already asserted in ensureInitialized
             return sal_True;
 
-        ::rtl::OUString aText;
+        OUString aText;
         switch (m_nControlClass)
         {
             case FormComponentType::TEXTFIELD:
@@ -524,12 +524,12 @@ namespace frm
         if (m_aText.compareTo(aText))
         {
             // check the text with the SQL-Parser
-            ::rtl::OUString aNewText(aText);
+            OUString aNewText(aText);
             aNewText = aNewText.trim();
             if ( !aNewText.isEmpty() )
             {
                 ::dbtools::OPredicateInputController aPredicateInput( m_xContext, m_xConnection, getParseContext() );
-                ::rtl::OUString sErrorMessage;
+                OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
                     // display the error and outta here
@@ -565,7 +565,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OFilterControl::setText( const ::rtl::OUString& aText ) throw(RuntimeException)
+    void SAL_CALL OFilterControl::setText( const OUString& aText ) throw(RuntimeException)
     {
         if ( !ensureInitialized( ) )
             // already asserted in ensureInitialized
@@ -602,7 +602,7 @@ namespace frm
                 Reference< XVclWindowPeer >  xVclWindow( getPeer(), UNO_QUERY );
                 if (xVclWindow.is())
                 {
-                    ::rtl::OUString aRefText = ::comphelper::getString(com::sun::star::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
+                    OUString aRefText = ::comphelper::getString(com::sun::star::uno::Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
                     Any aValue;
                     if (aText == aRefText)
                         aValue <<= (sal_Int32)STATE_CHECK;
@@ -634,7 +634,7 @@ namespace frm
                     OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || m_aText.isEmpty(),
                         "OFilterControl::setText: this text is not in my display list!" );
                     if ( itemPos == m_aDisplayItemToValueItem.end() )
-                        m_aText = ::rtl::OUString();
+                        m_aText = OUString();
 
                     if ( m_aText.isEmpty() )
                     {
@@ -664,7 +664,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OFilterControl::insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OFilterControl::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
@@ -675,15 +675,15 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OFilterControl::getText() throw(RuntimeException)
+    OUString SAL_CALL OFilterControl::getText() throw(RuntimeException)
     {
         return m_aText;
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OFilterControl::getSelectedText( void ) throw(RuntimeException)
+    OUString SAL_CALL OFilterControl::getSelectedText( void ) throw(RuntimeException)
     {
-        ::rtl::OUString aSelected;
+        OUString aSelected;
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         if (xText.is())
             aSelected = xText->getSelectedText();
@@ -761,7 +761,7 @@ namespace frm
 
         PropertyValue aProp;
         NamedValue aValue;
-        const ::rtl::OUString* pName = NULL;
+        const OUString* pName = NULL;
         const Any* pValue = NULL;
         Reference< XPropertySet > xControlModel;
 
@@ -847,9 +847,9 @@ namespace frm
                     m_nControlClass = nClassId;
                     if ( FormComponentType::LISTBOX == nClassId )
                     {
-                        Sequence< ::rtl::OUString > aDisplayItems;
+                        Sequence< OUString > aDisplayItems;
                         OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aDisplayItems );
-                        Sequence< ::rtl::OUString > aValueItems;
+                        Sequence< OUString > aValueItems;
                         OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
                         OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
                         for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
@@ -874,16 +874,16 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OFilterControl::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL OFilterControl::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //---------------------------------------------------------------------
-    sal_Bool SAL_CALL OFilterControl::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL OFilterControl::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        const ::rtl::OUString* pArray = aSupported.getConstArray();
+        Sequence< OUString > aSupported( getSupportedServiceNames() );
+        const OUString* pArray = aSupported.getConstArray();
         for( sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray )
             if( pArray->equals( ServiceName ) )
                 return sal_True;
@@ -891,23 +891,23 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OFilterControl::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OFilterControl::getImplementationName_Static()
+    OUString SAL_CALL OFilterControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.forms.OFilterControl" );
+        return OUString( "com.sun.star.comp.forms.OFilterControl" );
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
+    Sequence< OUString > SAL_CALL OFilterControl::getSupportedServiceNames_Static()
     {
-        Sequence< ::rtl::OUString > aNames( 2 );
-        aNames[ 0 ] = ::rtl::OUString( "com.sun.star.form.control.FilterControl" );
-        aNames[ 1 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
+        Sequence< OUString > aNames( 2 );
+        aNames[ 0 ] = OUString( "com.sun.star.form.control.FilterControl" );
+        aNames[ 1 ] = OUString( "com.sun.star.awt.UnoControl" );
         return aNames;
     }
 

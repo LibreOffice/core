@@ -29,12 +29,12 @@ class XMLPersAttrListTContext : public XMLTransformerContext
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
     sal_uInt16 m_nActionMap;
 
 protected:
 
-    void SetExportQName( const ::rtl::OUString& r ) { m_aElemQName = r; }
+    void SetExportQName( const OUString& r ) { m_aElemQName = r; }
 
 public:
     TYPEINFO();
@@ -44,22 +44,22 @@ public:
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     // attr list persistence + attribute processing
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // attr list persistence + renaming
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // attr list persistence + renaming + attribute processing
     XMLPersAttrListTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );
@@ -73,8 +73,8 @@ public:
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // StartElement is called after a context has been constructed and
@@ -89,13 +89,13 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element.
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual sal_Bool IsPersistent() const;
     virtual void Export();
     virtual void ExportContent();
 
-    const ::rtl::OUString& GetExportQName() const { return m_aElemQName; }
+    const OUString& GetExportQName() const { return m_aElemQName; }
 
     void AddAttribute( sal_uInt16 nAPrefix,
         ::xmloff::token::XMLTokenEnum eAToken,
@@ -103,7 +103,7 @@ public:
 
     void AddAttribute( sal_uInt16 nAPrefix,
         ::xmloff::token::XMLTokenEnum eAToken,
-        const ::rtl::OUString & rValue );
+        const OUString & rValue );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList >

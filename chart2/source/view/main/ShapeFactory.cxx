@@ -67,7 +67,7 @@ namespace chart
 //-----------------------------------------------------------------------------
 
 void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
-                               , const rtl::OUString& rName )
+                               , const OUString& rName )
 {
     if(!xShape.is())
         return;
@@ -89,9 +89,9 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
 
 //-----------------------------------------------------------------------------
 
-rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
+OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     OSL_ENSURE(xProp.is(), "shape offers no XPropertySet");
@@ -540,7 +540,7 @@ uno::Reference<drawing::XShape>
     if( !xTarget.is() )
         return 0;
 
-    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, rtl::OUString() ) );
+    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, OUString() ) );
 
     sal_Bool bDoubleSided = false;
     short nRotatedTexture = 0;
@@ -1872,7 +1872,7 @@ uno::Reference< drawing::XShape >
 
 uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup2D( const uno::Reference< drawing::XShapes >& xTarget
-        , ::rtl::OUString aName )
+        , OUString aName )
 {
     if( !xTarget.is() )
         return 0;
@@ -1907,7 +1907,7 @@ uno::Reference< drawing::XShapes >
 
 uno::Reference< drawing::XShapes >
         ShapeFactory::createGroup3D( const uno::Reference< drawing::XShapes >& xTarget
-        , ::rtl::OUString aName )
+        , OUString aName )
 {
     if( !xTarget.is() )
         return 0;
@@ -2188,7 +2188,7 @@ uno::Reference< drawing::XShape > ShapeFactory::createInvisibleRectangle(
 
 uno::Reference< drawing::XShape >
         ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
-                    , const ::rtl::OUString& rText
+                    , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
                     , const uno::Any& rATransformation )
@@ -2230,13 +2230,13 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool bStacked )
+OUString ShapeFactory::getStackedString( const OUString& rString, bool bStacked )
 {
     sal_Int32 nLen = rString.getLength();
     if(!bStacked || !nLen)
         return rString;
 
-    rtl::OUStringBuffer aStackStr;
+    OUStringBuffer aStackStr;
 
     //add a newline after each letter
     //as we do not no letters here add a newline after each char

@@ -64,11 +64,11 @@ protected:
 
   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
 
-  ::rtl::OUString msFilterName;
+  OUString msFilterName;
 
-  ::com::sun::star::uno::Sequence< ::rtl::OUString > msUserData;
+  ::com::sun::star::uno::Sequence< OUString > msUserData;
 
-   ::rtl::OUString msTemplateName;
+   OUString msTemplateName;
 
     FilterType meType;
 
@@ -130,15 +130,15 @@ public:
 
     // XServiceInfo
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -146,19 +146,19 @@ public:
 
 
 
-::rtl::OUString XmlFilterAdaptor_getImplementationName()
+OUString XmlFilterAdaptor_getImplementationName()
 
     throw ( ::com::sun::star::uno::RuntimeException );
 
 
 
-sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL XmlFilterAdaptor_supportsService( const OUString& ServiceName )
 
     throw ( ::com::sun::star::uno::RuntimeException );
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
 
     throw ( ::com::sun::star::uno::RuntimeException );
 

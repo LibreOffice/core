@@ -46,7 +46,7 @@ int SAL_CALL main (int argc, char **argv)
 
     if (argc > 1)
     {
-        rtl::OUString aFilename (
+        OUString aFilename (
             argv[1], rtl_str_getLength(argv[1]),
             osl_getThreadTextEncoding());
 

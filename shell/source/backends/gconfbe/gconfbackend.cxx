@@ -54,15 +54,15 @@
 
 namespace {
 
-rtl::OUString SAL_CALL getServiceImplementationName() {
-    return rtl::OUString(
+OUString SAL_CALL getServiceImplementationName() {
+    return OUString(
             "com.sun.star.comp.configuration.backend.GconfBackend");
 }
 
-css::uno::Sequence< rtl::OUString > SAL_CALL getServiceSupportedServiceNames() {
-    rtl::OUString name(
+css::uno::Sequence< OUString > SAL_CALL getServiceSupportedServiceNames() {
+    OUString name(
             "com.sun.star.configuration.backend.GconfBackend");
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 class Service:
@@ -76,15 +76,15 @@ public:
 private:
     virtual ~Service() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return getServiceImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return getServiceSupportedServiceNames(); }
 
@@ -93,7 +93,7 @@ private:
     { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
     virtual void SAL_CALL setPropertyValue(
-        rtl::OUString const &, css::uno::Any const &)
+        OUString const &, css::uno::Any const &)
         throw (
             css::beans::UnknownPropertyException,
             css::beans::PropertyVetoException,
@@ -101,13 +101,13 @@ private:
             css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL getPropertyValue(
-        rtl::OUString const & PropertyName)
+        OUString const & PropertyName)
         throw (
             css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     virtual void SAL_CALL addPropertyChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -115,7 +115,7 @@ private:
     {}
 
     virtual void SAL_CALL removePropertyChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -123,7 +123,7 @@ private:
     {}
 
     virtual void SAL_CALL addVetoableChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -131,7 +131,7 @@ private:
     {}
 
     virtual void SAL_CALL removeVetoableChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -145,26 +145,26 @@ Service::Service(): enabled_(false) {
     css::uno::Reference< css::uno::XCurrentContext > context(
         css::uno::getCurrentContext());
     if (context.is()) {
-        rtl::OUString desktop;
+        OUString desktop;
         context->getValueByName(
-            rtl::OUString("system.desktop-environment")) >>=
+            OUString("system.desktop-environment")) >>=
             desktop;
         enabled_ = desktop == "GNOME";
     }
 }
 
-void Service::setPropertyValue(rtl::OUString const &, css::uno::Any const &)
+void Service::setPropertyValue(OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString("setPropertyValue not supported"),
+        OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
-css::uno::Any Service::getPropertyValue(rtl::OUString const & PropertyName)
+css::uno::Any Service::getPropertyValue(OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)

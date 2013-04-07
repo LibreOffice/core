@@ -125,9 +125,9 @@ String  SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
                     {
                         Sequence< PropertyValue > aProperties(2);
                         PropertyValue* pValues = aProperties.getArray();
-                        pValues[0].Name = rtl::OUString("NumberingType");
+                        pValues[0].Name = OUString("NumberingType");
                         pValues[0].Value <<= nNumType;
-                        pValues[1].Name = rtl::OUString("Value");
+                        pValues[1].Name = OUString("Value");
                         pValues[1].Value <<= (sal_Int32)nNo;
 
                         try

@@ -50,7 +50,6 @@
 
 using namespace com::sun::star;
 using namespace linguistic;
-using ::rtl::OUString;
 
 // forward declarations
 uno::Sequence< OUString > static GetLangSvcList( const uno::Any &rVal );
@@ -732,9 +731,9 @@ void LngSvcMgr::UpdateAll()
 
     for (int k = 0;  k < nNumServices;  ++k)
     {
-        OUString aService( ::rtl::OUString::createFromAscii( apServices[k] ) );
-        OUString aActiveList( ::rtl::OUString::createFromAscii( apCurLists[k] ) );
-        OUString aLastFoundList( ::rtl::OUString::createFromAscii( apLastFoundLists[k] ) );
+        OUString aService( OUString::createFromAscii( apServices[k] ) );
+        OUString aActiveList( OUString::createFromAscii( apCurLists[k] ) );
+        OUString aLastFoundList( OUString::createFromAscii( apLastFoundLists[k] ) );
         sal_Int32 i;
 
         //
@@ -792,7 +791,7 @@ void LngSvcMgr::UpdateAll()
         for (int i = 0;  i < 2;  ++i)
         {
             const sal_Char *pSubNodeName = (i == 0) ? apCurLists[k] : apLastFoundLists[k];
-            OUString aSubNodeName( ::rtl::OUString::createFromAscii(pSubNodeName) );
+            OUString aSubNodeName( OUString::createFromAscii(pSubNodeName) );
 
             list_entry_map_t &rCurMap = (i == 0) ? aCurSvcs[k] : aLastFoundSvcs[k];
             list_entry_map_t::const_iterator aIt( rCurMap.begin() );
@@ -1307,7 +1306,7 @@ void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Spell" );
 
-    rtl::OUString aNode("ServiceManager/SpellCheckerList");
+    OUString aNode("ServiceManager/SpellCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1345,7 +1344,7 @@ void LngSvcMgr::SetCfgServiceLists( GrammarCheckingIterator &rGrammarDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Grammar" );
 
-    rtl::OUString aNode("ServiceManager/GrammarCheckerList");
+    OUString aNode("ServiceManager/GrammarCheckerList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1387,7 +1386,7 @@ void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Hyph" );
 
-    rtl::OUString aNode("ServiceManager/HyphenatorList");
+    OUString aNode("ServiceManager/HyphenatorList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1429,7 +1428,7 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
     RTL_LOGFILE_CONTEXT( aLog, "linguistic: LngSvcMgr::SetCfgServiceLists - Thes" );
 
-    rtl::OUString aNode("ServiceManager/ThesaurusList");
+    OUString aNode("ServiceManager/ThesaurusList");
     uno::Sequence< OUString > aNames( /*aCfg.*/GetNodeNames( aNode ) );
     OUString *pNames = aNames.getArray();
     sal_Int32 nLen = aNames.getLength();
@@ -1699,7 +1698,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pSpellDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( rtl::OUString(SN_SPELLCHECKER) );
+                SaveCfgSvcs( OUString(SN_SPELLCHECKER) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1716,7 +1715,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pGrammarDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( rtl::OUString(SN_GRAMMARCHECKER) );
+                SaveCfgSvcs( OUString(SN_GRAMMARCHECKER) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1732,7 +1731,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pHyphDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( rtl::OUString(SN_HYPHENATOR) );
+                SaveCfgSvcs( OUString(SN_HYPHENATOR) );
 
                 if (pListenerHelper  &&  bChanged)
                     pListenerHelper->AddLngSvcEvt(
@@ -1748,7 +1747,7 @@ void SAL_CALL
             if (bChanged)
             {
                 pThesDsp->SetServiceList( rLocale, rServiceImplNames );
-                SaveCfgSvcs( rtl::OUString(SN_THESAURUS) );
+                SaveCfgSvcs( OUString(SN_THESAURUS) );
             }
         }
     }
@@ -1816,7 +1815,7 @@ sal_Bool LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
         {
             DBG_ASSERT( 0, "node name missing" );
         }
-        OUString aNodeName( ::rtl::OUString::createFromAscii(pNodeName) );
+        OUString aNodeName( OUString::createFromAscii(pNodeName) );
 
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {

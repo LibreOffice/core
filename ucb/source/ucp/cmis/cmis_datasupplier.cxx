@@ -42,7 +42,7 @@ namespace cmis
         for ( list< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
                 it != aChildren.end(); ++it )
         {
-            rtl::OUString sContentType = ( *it )->getContentType( );
+            OUString sContentType = ( *it )->getContentType( );
             bool bIsFolder = sContentType != CMIS_FILE_TYPE;
             if ( ( mnOpenMode == ucb::OpenMode::FOLDERS && bIsFolder ) ||
                  ( mnOpenMode == ucb::OpenMode::DOCUMENTS && !bIsFolder ) ||
@@ -66,7 +66,7 @@ namespace cmis
         }
     }
 
-    ::rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+    OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     {
         return queryContentIdentifier( nIndex )->getContentIdentifier( );
     }
@@ -134,7 +134,7 @@ namespace cmis
                         xContent, uno::UNO_QUERY_THROW );
                     sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
                     ucb::Command aCmd;
-                    aCmd.Name = rtl::OUString("getPropertyValues");
+                    aCmd.Name = OUString("getPropertyValues");
                     aCmd.Handle = -1;
                     aCmd.Argument <<= getResultSet()->getProperties();
                     uno::Any aResult( xCmdProc->execute(

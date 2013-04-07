@@ -53,8 +53,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::io::XInputStream;
 using com::sun::star::io::XActiveDataSink;
@@ -413,8 +411,8 @@ void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
     }
 }
 
-Model::XDocument_t Model::newInstance( const rtl::OUString& sName,
-                         const rtl::OUString& sURL,
+Model::XDocument_t Model::newInstance( const OUString& sName,
+                         const OUString& sURL,
                          sal_Bool bURLOnce )
     throw( RuntimeException )
 {
@@ -437,7 +435,7 @@ Model::XDocument_t Model::newInstance( const rtl::OUString& sName,
 
 static sal_Int32 lcl_findProp( const PropertyValue* pValues,
                         sal_Int32 nLength,
-                        const rtl::OUString& rName )
+                        const OUString& rName )
 {
     bool bFound = false;
     sal_Int32 n = 0;
@@ -449,7 +447,7 @@ static sal_Int32 lcl_findProp( const PropertyValue* pValues,
 }
 
 sal_Int32 xforms::lcl_findInstance( const InstanceCollection* pInstances,
-                                    const rtl::OUString& rName )
+                                    const OUString& rName )
 {
     sal_Int32 nLength = pInstances->countItems();
     sal_Int32 n = 0;
@@ -463,9 +461,9 @@ sal_Int32 xforms::lcl_findInstance( const InstanceCollection* pInstances,
     return bFound ? ( n - 1 ) : -1;
 }
 
-void Model::renameInstance( const rtl::OUString& sFrom,
-                            const rtl::OUString& sTo,
-                            const rtl::OUString& sURL,
+void Model::renameInstance( const OUString& sFrom,
+                            const OUString& sTo,
+                            const OUString& sURL,
                             sal_Bool bURLOnce )
     throw( RuntimeException )
 {
@@ -504,7 +502,7 @@ void Model::renameInstance( const rtl::OUString& sFrom,
     }
 }
 
-void Model::removeInstance( const rtl::OUString& sName )
+void Model::removeInstance( const OUString& sName )
     throw( RuntimeException )
 {
     sal_Int32 nPos = lcl_findInstance( mpInstances, sName );
@@ -616,7 +614,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
 }
 
 Model::XNode_t Model::renameNode( const XNode_t& xNode,
-                                  const rtl::OUString& sName )
+                                  const OUString& sName )
     throw( RuntimeException )
 {
     // early out if we don't have to change the name
@@ -764,14 +762,14 @@ void Model::removeBindingForNode( const XNode_t& )
 
 static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
 {
-    ::rtl::OUString sResult;
+    OUString sResult;
     OSL_ENSURE( _rxAttrNode.is(), "lcl_serializeForDisplay( attr ): invalid argument!" );
     if ( _rxAttrNode.is() )
     {
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         aBuffer.append( _rxAttrNode->getName() );
         aBuffer.appendAscii( "=" );
-        ::rtl::OUString sValue = _rxAttrNode->getValue();
+        OUString sValue = _rxAttrNode->getValue();
         sal_Unicode nQuote = '"';
         if ( sValue.indexOf( nQuote ) >= 0 )
             nQuote = '\'';
@@ -786,7 +784,7 @@ static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
 
 static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 {
-    ::rtl::OUString sResult;
+    OUString sResult;
 
     // create document fragment
     Reference<XDocument> xDocument( getDocumentBuilder()->newDocument() );
@@ -966,7 +964,7 @@ sal_Bool Model::isValidPrefixName( const OUString& sName )
 
 void Model::setNodeValue(
     const XNode_t& xNode,
-    const rtl::OUString& sValue )
+    const OUString& sValue )
     throw( RuntimeException )
 {
     setSimpleContent( xNode, sValue );

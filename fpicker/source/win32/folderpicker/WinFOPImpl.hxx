@@ -46,17 +46,17 @@ public:
     // XFolderPicker
     //-----------------------------------------------------
 
-    virtual void SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory )
+    virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
         throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory( )
+    virtual OUString SAL_CALL getDisplayDirectory( )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL getDirectory( )
+    virtual OUString SAL_CALL getDirectory( )
         throw( com::sun::star::uno::RuntimeException );
 
 protected:
-    virtual void SAL_CALL onSelChanged( const rtl::OUString& aNewPath );
+    virtual void SAL_CALL onSelChanged( const OUString& aNewPath );
 
 private:
     CFolderPicker*  m_pFolderPicker;

@@ -68,9 +68,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -172,7 +169,7 @@ void Users::appendByDescriptor(
     stmt->executeUpdate( update.makeStringAndClear() );
 }
 
-void Users::dropByName( const ::rtl::OUString& elementName )
+void Users::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)

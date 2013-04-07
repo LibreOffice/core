@@ -35,7 +35,6 @@ using namespace osl;
 
 using namespace x11;
 
-using ::rtl::OUString;
 
 
 X11Transferable::X11Transferable(

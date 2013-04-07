@@ -49,14 +49,14 @@ public:
         createGroup2D(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , ::rtl::OUString aName = ::rtl::OUString() );
+                , OUString aName = OUString() );
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup3D(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
-                , ::rtl::OUString aName = ::rtl::OUString() );
+                , OUString aName = OUString() );
 
     //------
 
@@ -163,7 +163,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D
-                    , const ::rtl::OUString& rText
+                    , const OUString& rText
                     , const tNameSequence& rPropNames
                     , const tAnySequence& rPropValues
                     , const ::com::sun::star::uno::Any& rATransformation
@@ -189,14 +189,14 @@ public:
 
      static void setShapeName( const ::com::sun::star::uno::Reference<
                                      ::com::sun::star::drawing::XShape >& xShape
-                             , const rtl::OUString& rName );
+                             , const OUString& rName );
 
-     static rtl::OUString getShapeName( const ::com::sun::star::uno::Reference<
+     static OUString getShapeName( const ::com::sun::star::uno::Reference<
                                      ::com::sun::star::drawing::XShape >& xShape );
 
      static ::com::sun::star::uno::Any makeTransformation( const ::com::sun::star::awt::Point& rScreenPosition2D, double fRotationAnglePi=0.0 );
 
-     static rtl::OUString getStackedString( const rtl::OUString& rString, bool bStacked=true );
+     static OUString getStackedString( const OUString& rString, bool bStacked=true );
 
      static bool hasPolygonAnyLines( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );
      static bool isPolygonEmptyOrSinglePoint( ::com::sun::star::drawing::PolyPolygonShape3D& rPoly );

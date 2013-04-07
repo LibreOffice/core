@@ -58,7 +58,7 @@ void XMLBasicExportFilter::endDocument()
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::startElement( const ::rtl::OUString& aName,
+void XMLBasicExportFilter::startElement( const OUString& aName,
         const Reference< xml::sax::XAttributeList >& xAttribs )
     throw (xml::sax::SAXException, RuntimeException)
 {
@@ -68,7 +68,7 @@ void XMLBasicExportFilter::startElement( const ::rtl::OUString& aName,
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::endElement( const ::rtl::OUString& aName )
+void XMLBasicExportFilter::endElement( const OUString& aName )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
@@ -77,7 +77,7 @@ void XMLBasicExportFilter::endElement( const ::rtl::OUString& aName )
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::characters( const ::rtl::OUString& aChars )
+void XMLBasicExportFilter::characters( const OUString& aChars )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
@@ -86,7 +86,7 @@ void XMLBasicExportFilter::characters( const ::rtl::OUString& aChars )
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+void XMLBasicExportFilter::ignorableWhitespace( const OUString& aWhitespaces )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )
@@ -95,8 +95,8 @@ void XMLBasicExportFilter::ignorableWhitespace( const ::rtl::OUString& aWhitespa
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicExportFilter::processingInstruction( const ::rtl::OUString& aTarget,
-        const ::rtl::OUString& aData )
+void XMLBasicExportFilter::processingInstruction( const OUString& aTarget,
+        const OUString& aData )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if ( m_xHandler.is() )

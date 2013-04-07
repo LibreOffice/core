@@ -75,9 +75,9 @@ class SdFiltersTest
 public:
     SdFiltersTest();
 
-    ::sd::DrawDocShellRef loadURL( const rtl::OUString &rURL );
-    virtual bool load( const rtl::OUString &rFilter,
-        const rtl::OUString &rURL, const rtl::OUString &rUserData,
+    ::sd::DrawDocShellRef loadURL( const OUString &rURL );
+    virtual bool load( const OUString &rFilter,
+        const OUString &rURL, const OUString &rUserData,
         unsigned int nFilterFlags, unsigned int nClipboardID,
         unsigned int nFilterVersion);
 
@@ -97,7 +97,7 @@ public:
 private:
     uno::Reference<document::XFilter> m_xFilter;
     uno::Reference<uno::XInterface> m_xDrawComponent;
-    void testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase);
+    void testStuff(::sd::DrawDocShellRef xDocShRef, const OString& fileNameBase);
 };
 
 #define PPTX_FORMAT_TYPE 268959811
@@ -114,7 +114,7 @@ FileFormat aFileFormats[] = {
     { 0, 0, 0, 0 }
 };
 
-::sd::DrawDocShellRef SdFiltersTest::loadURL( const rtl::OUString &rURL )
+::sd::DrawDocShellRef SdFiltersTest::loadURL( const OUString &rURL )
 {
     FileFormat *pFmt(0);
 
@@ -130,11 +130,11 @@ FileFormat aFileFormats[] = {
     if (pFmt->nFormatType)
         nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
     SfxFilter* aFilter = new SfxFilter(
-        rtl::OUString::createFromAscii( pFmt->pFilterName ),
-        rtl::OUString(), pFmt->nFormatType, nFormat,
-        rtl::OUString::createFromAscii( pFmt->pTypeName ),
-        0, rtl::OUString(), rtl::OUString(), /* userdata */
-        rtl::OUString("private:factory/simpress*") );
+        OUString::createFromAscii( pFmt->pFilterName ),
+        OUString(), pFmt->nFormatType, nFormat,
+        OUString::createFromAscii( pFmt->pTypeName ),
+        0, OUString(), OUString(), /* userdata */
+        OUString("private:factory/simpress*") );
     aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -154,7 +154,7 @@ void SdFiltersTest::test()
 {
     {
         ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/shapes-test.odp"));
-        testStuff(xDocShRef, rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/xml/shapes-test_page"), RTL_TEXTENCODING_UTF8));
+        testStuff(xDocShRef, OUStringToOString(getPathFromSrc("/sd/qa/unit/data/xml/shapes-test_page"), RTL_TEXTENCODING_UTF8));
     }
     /*
     {
@@ -206,10 +206,10 @@ void SdFiltersTest::testFdo47434()
     // The problem was the arrow that has cy < 180 and flipH = 0 is rendered incorrectly.
     // Its height should be 1, not negative.
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/fdo47434-all.pptx"));
-    testStuff(xDocShRef, rtl::OUStringToOString(getPathFromSrc("/sd/qa/unit/data/pptx/xml/fdo47434_page"), RTL_TEXTENCODING_UTF8));
+    testStuff(xDocShRef, OUStringToOString(getPathFromSrc("/sd/qa/unit/data/pptx/xml/fdo47434_page"), RTL_TEXTENCODING_UTF8));
 }
 
-void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OString& fileNameBase)
+void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const OString& fileNameBase)
 {
     CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
     CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
@@ -223,39 +223,39 @@ void SdFiltersTest::testStuff(::sd::DrawDocShellRef xDocShRef, const rtl::OStrin
 
     XShapeDumper xShapeDumper;
     sal_Int32 nLength = xDrawPages->getCount();
-    rtl::OString aFileNameExt(".xml");
+    OString aFileNameExt(".xml");
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         uno::Reference<drawing::XDrawPage> xDrawPage;
         uno::Any aAny = xDrawPages->getByIndex(i);
         aAny >>= xDrawPage;
         uno::Reference< drawing::XShapes > xShapes(xDrawPage, uno::UNO_QUERY_THROW);
-        rtl::OUString aString = xShapeDumper.dump(xShapes);
-        rtl::OStringBuffer aFileNameBuf(fileNameBase);
+        OUString aString = xShapeDumper.dump(xShapes);
+        OStringBuffer aFileNameBuf(fileNameBase);
         aFileNameBuf.append(i);
         aFileNameBuf.append(aFileNameExt);
 
-        rtl::OString aFileName = aFileNameBuf.makeStringAndClear();
+        OString aFileName = aFileNameBuf.makeStringAndClear();
 
         std::cout << aString << std::endl;
         doXMLDiff(aFileName.getStr(),
-            rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr(),
             static_cast<int>(aString.getLength()),
-            rtl::OUStringToOString(
+            OUStringToOString(
                 getPathFromSrc("/sd/qa/unit/data/tolerance.xml"),
                 RTL_TEXTENCODING_UTF8).getStr());
     }
     xDocShRef->DoClose();
 }
 
-bool SdFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
+bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags, unsigned int nClipboardID,
     unsigned int nFilterVersion)
 {
     SfxFilter aFilter(
         rFilter,
-        rtl::OUString(), nFilterFlags, nClipboardID, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
+        OUString(), nFilterFlags, nClipboardID, OUString(), 0, OUString(),
+        rUserData, OUString() );
     aFilter.SetVersion(nFilterVersion);
 
     ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
@@ -277,7 +277,7 @@ void SdFiltersTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xDrawComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.Draw.PresentationDocument"));
+        getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Draw.PresentationDocument"));
     CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());
 }
 

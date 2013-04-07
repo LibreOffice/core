@@ -61,7 +61,7 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
 }
 
 
-void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale )
+void CalendarWrapper::loadCalendar( const OUString& rUniqueID, const ::com::sun::star::lang::Locale& rLocale )
 {
     try
     {
@@ -76,7 +76,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
 }
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > CalendarWrapper::getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const
+::com::sun::star::uno::Sequence< OUString > CalendarWrapper::getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const
 {
     try
     {
@@ -88,11 +88,11 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
         SAL_WARN( "unotools.i18n", "getAllCalendars: Exception caught " << e.Message );
     }
 
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString > (0);
+    return ::com::sun::star::uno::Sequence< OUString > (0);
 }
 
 
-::rtl::OUString CalendarWrapper::getUniqueID() const
+OUString CalendarWrapper::getUniqueID() const
 {
     try
     {
@@ -103,7 +103,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     {
         SAL_WARN( "unotools.i18n", "getUniqueID: Exception caught " << e.Message );
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 

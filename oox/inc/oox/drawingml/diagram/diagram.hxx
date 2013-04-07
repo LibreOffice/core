@@ -36,10 +36,10 @@ namespace oox { namespace drawingml {
  */
 void loadDiagram( ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,
-                  const ::rtl::OUString& rDataModelPath,
-                  const ::rtl::OUString& rLayoutPath,
-                  const ::rtl::OUString& rQStylePath,
-                  const ::rtl::OUString& rColorStylePath );
+                  const OUString& rDataModelPath,
+                  const OUString& rLayoutPath,
+                  const OUString& rQStylePath,
+                  const OUString& rColorStylePath );
 
 void loadDiagram( const ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,

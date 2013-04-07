@@ -289,7 +289,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else if ( mpPorInfo )
             BeginInlineStructureElements();
         else
-            BeginTag( vcl::PDFWriter::NonStructElement, rtl::OUString() );
+            BeginTag( vcl::PDFWriter::NonStructElement, OUString() );
 
 #if OSL_DEBUG_LEVEL > 1
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
@@ -424,7 +424,7 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const String& rString )
 {
     // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rtl::OUString( rString ) );
+    const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, OUString( rString ) );
     ++nEndStructureElement;
 
 #if OSL_DEBUG_LEVEL > 1
@@ -982,12 +982,12 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     const bool bNewItemTag = bNewListTag || pTxtNd->IsCountedInList(); // If the text node is not counted, we do not start a new list item:
 
     if ( bNewListTag )
-        BeginTag( vcl::PDFWriter::List, rtl::OUString(aListString) );
+        BeginTag( vcl::PDFWriter::List, OUString(aListString) );
 
     if ( bNewItemTag )
     {
-        BeginTag( vcl::PDFWriter::ListItem, rtl::OUString(aListItemString) );
-        BeginTag( vcl::PDFWriter::LIBody, rtl::OUString(aListBodyString) );
+        BeginTag( vcl::PDFWriter::ListItem, OUString(aListItemString) );
+        BeginTag( vcl::PDFWriter::LIBody, OUString(aListBodyString) );
     }
 }
 
@@ -1023,7 +1023,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Document: Document
             //
             nPDFType = vcl::PDFWriter::Document;
-            aPDFType = rtl::OUString(aDocumentString);
+            aPDFType = OUString(aDocumentString);
             break;
 
         case FRM_HEADER :
@@ -1039,7 +1039,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Footnote container: Division
             //
             nPDFType = vcl::PDFWriter::Division;
-            aPDFType = rtl::OUString(aDivString);
+            aPDFType = OUString(aDivString);
             break;
 
         case FRM_FTN :
@@ -1049,7 +1049,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // Note: vcl::PDFWriter::Note is actually a ILSE. Nevertheless
             // we treat it like a grouping element!
             nPDFType = vcl::PDFWriter::Note;
-            aPDFType = rtl::OUString(aNoteString);
+            aPDFType = OUString(aNoteString);
             break;
 
         case FRM_SECTION :
@@ -1067,19 +1067,19 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( TOX_INDEX == pTOXBase->GetType() )
                         {
                             nPDFType = vcl::PDFWriter::Index;
-                            aPDFType = rtl::OUString(aIndexString);
+                            aPDFType = OUString(aIndexString);
                         }
                         else
                         {
                             nPDFType = vcl::PDFWriter::TOC;
-                            aPDFType = rtl::OUString(aTOCString);
+                            aPDFType = OUString(aTOCString);
                         }
                     }
                 }
                 else if ( CONTENT_SECTION == pSection->GetType() )
                 {
                     nPDFType = vcl::PDFWriter::Section;
-                    aPDFType = rtl::OUString(aSectString);
+                    aPDFType = OUString(aSectString);
                 }
             }
             break;
@@ -1116,7 +1116,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( sStyleName.EqualsAscii(aQuotations) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::BlockQuote);
-                    aPDFType = rtl::OUString(aBlockQuoteString);
+                    aPDFType = OUString(aBlockQuoteString);
                 }
 
                 //
@@ -1125,7 +1125,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if ( sStyleName.EqualsAscii(aCaption) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
-                    aPDFType = rtl::OUString(aCaptionString);
+                    aPDFType = OUString(aCaptionString);
                 }
 
                 //
@@ -1134,7 +1134,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if ( sParentStyleName.EqualsAscii(aCaption) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
-                    aPDFType = sStyleName.Append(rtl::OUString(aCaptionString));
+                    aPDFType = sStyleName.Append(OUString(aCaptionString));
                 }
 
                 //
@@ -1143,7 +1143,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 else if ( sStyleName.EqualsAscii(aHeading) )
                 {
                     nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Heading);
-                    aPDFType = rtl::OUString(aHString);
+                    aPDFType = OUString(aHString);
                 }
 
                 //
@@ -1159,22 +1159,22 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     switch(nRealLevel)
                     {
                         case 0 :
-                            aPDFType = rtl::OUString(aH1String);
+                            aPDFType = OUString(aH1String);
                             break;
                         case 1 :
-                            aPDFType = rtl::OUString(aH2String);
+                            aPDFType = OUString(aH2String);
                             break;
                         case 2 :
-                            aPDFType = rtl::OUString(aH3String);
+                            aPDFType = OUString(aH3String);
                             break;
                         case 3 :
-                            aPDFType = rtl::OUString(aH4String);
+                            aPDFType = OUString(aH4String);
                             break;
                         case 4 :
-                            aPDFType = rtl::OUString(aH5String);
+                            aPDFType = OUString(aH5String);
                             break;
                         default:
-                            aPDFType = rtl::OUString(aH6String);
+                            aPDFType = OUString(aH6String);
                             break;
                     }
                 }
@@ -1194,7 +1194,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTag( vcl::PDFWriter::TOCI, rtl::OUString(aTOCIString) );
+                            BeginTag( vcl::PDFWriter::TOCI, OUString(aTOCIString) );
                         }
                     }
                 }
@@ -1206,7 +1206,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             // TabFrm: Table
             //
             nPDFType = vcl::PDFWriter::Table;
-            aPDFType = rtl::OUString(aTableString);
+            aPDFType = OUString(aTableString);
 
             {
                 // set up table column data:
@@ -1260,7 +1260,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             if ( !static_cast<const SwRowFrm*>(pFrm)->IsRepeatedHeadline() )
             {
                 nPDFType = vcl::PDFWriter::TableRow;
-                aPDFType = rtl::OUString(aTRString);
+                aPDFType = OUString(aTRString);
             }
             else
             {
@@ -1277,12 +1277,12 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTable->IsInHeadline( *pFrm ) || lcl_IsHeadlineCell( *static_cast<const SwCellFrm*>(pFrm) ) )
                 {
                     nPDFType = vcl::PDFWriter::TableHeader;
-                    aPDFType = rtl::OUString(aTHString);
+                    aPDFType = OUString(aTHString);
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::TableData;
-                    aPDFType = rtl::OUString(aTDString);
+                    aPDFType = OUString(aTDString);
                 }
             }
             break;
@@ -1314,18 +1314,18 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     if ( bFormula )
                     {
                         nPDFType = vcl::PDFWriter::Formula;
-                        aPDFType = rtl::OUString(aFormulaString);
+                        aPDFType = OUString(aFormulaString);
                     }
                     else
                     {
                         nPDFType = vcl::PDFWriter::Figure;
-                        aPDFType = rtl::OUString(aFigureString);
+                        aPDFType = OUString(aFigureString);
                     }
                 }
                 else
                 {
                     nPDFType = vcl::PDFWriter::Division;
-                    aPDFType = rtl::OUString(aDivString);
+                    aPDFType = OUString(aDivString);
                 }
             }
             break;
@@ -1377,7 +1377,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case POR_HYPHSTR :
         case POR_SOFTHYPHSTR :
             nPDFType = vcl::PDFWriter::Span;
-            aPDFType = rtl::OUString(aSpanString);
+            aPDFType = OUString(aSpanString);
             break;
 
         case POR_LAY :
@@ -1404,18 +1404,18 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 if( pInetFmtAttr )
                 {
                     nPDFType = vcl::PDFWriter::Link;
-                    aPDFType = rtl::OUString(aLinkString);
+                    aPDFType = OUString(aLinkString);
                 }
                 // Check for Quote/Code character style:
                 else if ( sStyleName.EqualsAscii(aQuotation) )
                 {
                     nPDFType = vcl::PDFWriter::Quote;
-                    aPDFType = rtl::OUString(aQuoteString);
+                    aPDFType = OUString(aQuoteString);
                 }
                 else if ( sStyleName.EqualsAscii(aSourceText) )
                 {
                     nPDFType = vcl::PDFWriter::Code;
-                    aPDFType = rtl::OUString(aCodeString);
+                    aPDFType = OUString(aCodeString);
                 }
                 else
                 {
@@ -1436,7 +1436,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                         if ( sStyleName.Len() > 0 )
                             aPDFType = sStyleName;
                         else
-                            aPDFType = rtl::OUString(aSpanString);
+                            aPDFType = OUString(aSpanString);
                     }
                 }
             }
@@ -1444,7 +1444,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         case POR_FTN :
             nPDFType = vcl::PDFWriter::Link;
-            aPDFType = rtl::OUString(aLinkString);
+            aPDFType = OUString(aLinkString);
             break;
 
         case POR_FLD :
@@ -1461,12 +1461,12 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     if ( RES_GETREFFLD == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::Link;
-                        aPDFType = rtl::OUString(aLinkString);
+                        aPDFType = OUString(aLinkString);
                     }
                     else if ( RES_AUTHORITY == pFld->Which() )
                     {
                         nPDFType = vcl::PDFWriter::BibEntry;
-                        aPDFType = rtl::OUString(aBibEntryString);
+                        aPDFType = OUString(aBibEntryString);
                     }
                 }
             }
@@ -1500,7 +1500,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
  */
 SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
                                                       OutputDevice& rOut,
-                                                      const rtl::OUString& rPageRange,
+                                                      const OUString& rPageRange,
                                                       bool bSkipEmptyPages,
                                                       bool bEditEngineOnly )
     : mrSh( rSh ),
@@ -2060,7 +2060,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 //get the name
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 mrSh.SwCrsrShell::ClearMark();
-                rtl::OUString sBkName = pBkmk->GetName();
+                OUString sBkName = pBkmk->GetName();
 
                 //jump to it
                 JumpToSwMark( &mrSh, sBkName );

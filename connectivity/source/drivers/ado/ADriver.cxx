@@ -82,16 +82,16 @@ void ODriver::disposing()
 }
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.sdbc.ado.ODriver");
+    return OUString("com.sun.star.comp.sdbc.ado.ODriver");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
-    aSNS[1] = ::rtl::OUString("com.sun.star.sdbcx.Driver");
+    Sequence< OUString > aSNS( 2 );
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
+    aSNS[1] = OUString("com.sun.star.sdbcx.Driver");
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -101,17 +101,17 @@ Sequence< ::rtl::OUString > ODriver::getSupportedServiceNames_Static(  ) throw (
 }
 
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -119,13 +119,13 @@ sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName
 }
 
 // --------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
         return NULL;
@@ -138,53 +138,53 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:ado:");
 }
 // -----------------------------------------------------------------------------
-void ODriver::impl_checkURL_throw(const ::rtl::OUString& _sUrl)
+void ODriver::impl_checkURL_throw(const OUString& _sUrl)
 {
     if ( !acceptsURL(_sUrl) )
     {
         SharedResources aResources;
-        const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+        const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     } // if ( !acceptsURL(_sUrl) )
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     impl_checkURL_throw(url);
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
-        Sequence< ::rtl::OUString > aBooleanValues(2);
-        aBooleanValues[0] = ::rtl::OUString( "false" );
-        aBooleanValues[1] = ::rtl::OUString( "true" );
+        Sequence< OUString > aBooleanValues(2);
+        aBooleanValues[0] = OUString( "false" );
+        aBooleanValues[1] = OUString( "true" );
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("IgnoreDriverPrivileges")
-                ,::rtl::OUString("Ignore the privileges from the database driver.")
+                OUString("IgnoreDriverPrivileges")
+                ,OUString("Ignore the privileges from the database driver.")
                 ,sal_False
-                ,::rtl::OUString( "false" )
+                ,OUString( "false" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("EscapeDateTime")
-                ,::rtl::OUString("Escape date time format.")
+                OUString("EscapeDateTime")
+                ,OUString("Escape date time format.")
                 ,sal_False
-                ,::rtl::OUString( "true" )
+                ,OUString( "true" )
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("TypeInfoSettings")
-                ,::rtl::OUString("Defines how the type info of the database metadata should be manipulated.")
+                OUString("TypeInfoSettings")
+                ,OUString("Defines how the type info of the database metadata should be manipulated.")
                 ,sal_False
-                ,::rtl::OUString( )
-                ,Sequence< ::rtl::OUString > ())
+                ,OUString( )
+                ,Sequence< OUString > ())
         );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
@@ -242,7 +242,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     return xTab;
 }
 // --------------------------------------------------------------------------------
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     impl_checkURL_throw(url);
     return getDataDefinitionByConnection(connect(url,info));

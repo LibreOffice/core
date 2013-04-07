@@ -75,11 +75,11 @@ void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
     // nothing to do after any event
 }
 
-::rtl::OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /*rInfo*/,
+OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /*rInfo*/,
         const uno::Sequence< uno::Any >& /*rArgs*/ ) const throw (lang::IllegalArgumentException)
 {
     // TODO: get actual codename from document
-    return ::rtl::OUString( "ThisDocument" );
+    return OUString( "ThisDocument" );
 }
 
 // ============================================================================

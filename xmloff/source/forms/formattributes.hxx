@@ -237,10 +237,10 @@ namespace xmloff
         // store it's instances in a map, but in a vector for faster access.
         struct AttributeAssignment
         {
-            ::rtl::OUString                 sAttributeName;         // the attribute name
-            ::rtl::OUString                 sPropertyName;          // the property name
+            OUString                 sAttributeName;         // the attribute name
+            OUString                 sPropertyName;          // the property name
             ::com::sun::star::uno::Type     aPropertyType;          // the property type
-            ::rtl::OUString                 sAttributeDefault;      // the default if the attribute is not present
+            OUString                 sAttributeDefault;      // the default if the attribute is not present
 
             // entries which are special to some value types
             const SvXMLEnumMapEntry*        pEnumMap;               // the enum map, if appliable
@@ -266,7 +266,7 @@ namespace xmloff
                 does not represent a property.
         */
         const AttributeAssignment* getAttributeTranslation(
-            const ::rtl::OUString& _rAttribName);
+            const OUString& _rAttribName);
 
         /** add a attribute assignment referring to a string property to the map
             @param _pAttributeName
@@ -278,7 +278,7 @@ namespace xmloff
                 an empty string.
         */
         void    addStringProperty(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_Char* _pAttributeDefault = NULL);
 
         /** add a attribute assignment referring to a boolean property to the map
@@ -294,7 +294,7 @@ namespace xmloff
                 if <FALSE/>, the attribute value is used as property value directly
         */
         void    addBooleanProperty(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_Bool _bAttributeDefault, const sal_Bool _bInverseSemantics = sal_False);
 
         /** add a attribute assignment referring to an int16 property to the map
@@ -307,7 +307,7 @@ namespace xmloff
                 the default value for the attribute.
         */
         void    addInt16Property(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_Int16 _nAttributeDefault);
 
         /** add a attribute assignment referring to an int32 property to the map
@@ -320,7 +320,7 @@ namespace xmloff
                 the default value for the attribute.
         */
         void    addInt32Property(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_Int32 _nAttributeDefault );
 
         /** add a attribute assignment referring to an enum property to the map
@@ -337,15 +337,15 @@ namespace xmloff
                 the type of the property. May be NULL, in this case 32bit integer is assumed.
         */
         void    addEnumProperty(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
             const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry* _pValueMap,
             const ::com::sun::star::uno::Type* _pType = NULL);
 
     protected:
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
-            const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName,
-            const ::com::sun::star::uno::Type& _rType, const ::rtl::OUString& _rDefaultString);
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
+            const ::com::sun::star::uno::Type& _rType, const OUString& _rDefaultString);
     };
 //.........................................................................
 }   // namespace xmloff

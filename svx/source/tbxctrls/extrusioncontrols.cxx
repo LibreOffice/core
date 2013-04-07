@@ -51,7 +51,6 @@
 
 ////////////
 
-using ::rtl::OUString;
 //using ::svtools::ToolbarMenu;
 
 using namespace ::com::sun::star;
@@ -465,13 +464,13 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
             if ( IsInPopupMode() )
                 EndPopupMode();
 
-            const rtl::OUString aCommand( ".uno:ExtrusionDepthDialog" );
+            const OUString aCommand( ".uno:ExtrusionDepthDialog" );
 
             Any a;
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = rtl::OUString( "Depth" );
+            aArgs[0].Name = OUString( "Depth" );
             aArgs[0].Value <<= mfDepth;
-            aArgs[1].Name = rtl::OUString( "Metric" );
+            aArgs[1].Name = OUString( "Metric" );
             aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
 
             mrController.dispatchCommand( aCommand, aArgs );
@@ -1004,7 +1003,7 @@ SfxPopupWindowType ExtrusionColorControl::GetPopupWindowType() const
 SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin = new SvxColorWindow_Impl(
-        rtl::OUString( ".uno:Extrusion3DColor" ),
+        OUString( ".uno:Extrusion3DColor" ),
         SID_EXTRUSION_3D_COLOR,
         m_xFrame,
         SVX_RESSTR( RID_SVXSTR_EXTRUSION_COLOR ),

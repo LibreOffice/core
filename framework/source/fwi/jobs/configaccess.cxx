@@ -48,7 +48,7 @@ namespace framework{
                 force opening of the configuration access in readonly or in read/write mode
  */
 ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                            /*IN*/ const ::rtl::OUString&                                    sRoot )
+                            /*IN*/ const OUString&                                    sRoot )
     : ThreadHelpBase(          )
     , m_xContext    ( rxContext)
     , m_sRoot       ( sRoot    )

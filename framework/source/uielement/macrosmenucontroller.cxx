@@ -86,7 +86,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
         return;
 
     // insert basic
-    rtl::OUString aCommand(".uno:MacroDialog");
+    OUString aCommand(".uno:MacroDialog");
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
@@ -130,7 +130,7 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
     // need to requery, since we handle more than one type of Command
     // if we don't do this only .uno:ScriptOrganizer commands are executed
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     if( xDispatch.is() )
     {
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
@@ -165,10 +165,10 @@ String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
 
 void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
 {
-    const rtl::OUString aCmdBase(".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
-    const rtl::OUString ellipsis( "..." );
-    const rtl::OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
-    const rtl::OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
+    const OUString aCmdBase(".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
+    const OUString ellipsis( "..." );
+    const OUString providerKey("com.sun.star.script.provider.ScriptProviderFor");
+    const OUString languageProviderName("com.sun.star.script.provider.LanguageScriptProvider");
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
@@ -180,7 +180,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
         {
             break;
         }
-        Sequence< ::rtl::OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
+        Sequence< OUString > serviceNames = xServiceInfo->getSupportedServiceNames();
 
         if ( serviceNames.getLength() > 0 )
         {
@@ -188,10 +188,10 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 sta
             {
                 if ( serviceNames[ index ].indexOf( providerKey ) == 0 )
                 {
-                    ::rtl::OUString serviceName = serviceNames[ index ];
+                    OUString serviceName = serviceNames[ index ];
                     String aCommand =  aCmdBase;
                     String aDisplayName = String( serviceName.copy( providerKey.getLength() ) );
-                    if( aDisplayName.Equals( rtl::OUString("Java") ) || aDisplayName.Equals( rtl::OUString("Basic") ) )
+                    if( aDisplayName.Equals( OUString("Java") ) || aDisplayName.Equals( OUString("Basic") ) )
                     {
                         // no entries for Java & Basic added elsewhere
                         break;

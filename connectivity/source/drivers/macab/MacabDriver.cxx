@@ -64,12 +64,12 @@ namespace
         if ( _rModule )
         {
             //
-            const ::rtl::OUString sSymbolName = ::rtl::OUString::createFromAscii( _pAsciiSymbolName );
+            const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
             _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
             {   // did not find the symbol
-                OSL_FAIL( ::rtl::OString( ::rtl::OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + ::rtl::OString( _pAsciiSymbolName ) ).getStr() );
+                OSL_FAIL( OString( OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + OString( _pAsciiSymbolName ) ).getStr() );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
             }
@@ -89,7 +89,7 @@ bool MacabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc,
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName( SAL_MODULENAME( "macabdrv1" ) );
+    const OUString sModuleName( SAL_MODULENAME( "macabdrv1" ) );
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -129,18 +129,18 @@ void MacabImplModule::init()
 void MacabImplModule::impl_throwNoMacOSException()
 {
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceString(
+    const OUString sError( aResources.getResourceString(
             STR_NO_MAC_OS_FOUND
          ) );
     impl_throwGenericSQLException( sError );
 }
 
 // --------------------------------------------------------------------------------
-void MacabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMessage )
+void MacabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = ::rtl::OUString(  "S1000"  );
+    aError.SQLState = OUString(  "S1000"  );
     aError.ErrorCode = 0;
     throw aError;
 }
@@ -208,43 +208,43 @@ void MacabDriver::disposing()
 }
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii( impl_getAsciiImplementationName() );
+    return OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+    Sequence< OUString > aSNS( 1 );
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
 
     return aSNS;
 }
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 //------------------------------------------------------------------
-sal_Bool SAL_CALL MacabDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
 
     while (pSupported != pEnd && !pSupported->equals(_rServiceName))
         ++pSupported;
     return pSupported != pEnd;
 }
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL MacabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -267,7 +267,7 @@ Reference< XConnection > SAL_CALL MacabDriver::connect( const ::rtl::OUString& u
     return xConnection;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL MacabDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const ::rtl::OUString& url )
     return url.startsWith("sdbc:address:macab:");
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
@@ -317,9 +317,9 @@ const sal_Char* MacabDriver::impl_getAsciiImplementationName()
         // Please be careful when changing it.
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString MacabDriver::impl_getConfigurationSettingsPath()
+OUString MacabDriver::impl_getConfigurationSettingsPath()
 {
-    ::rtl::OUStringBuffer aPath;
+    OUStringBuffer aPath;
     aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
     aPath.appendAscii( "com.sun.star.comp.sdbc.macab.Driver" );
     return aPath.makeStringAndClear();

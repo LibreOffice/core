@@ -28,7 +28,7 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
 {
     ScVbaFormatConditions* pFormatConditions = static_cast< ScVbaFormatConditions* >( xFormatConditions.get() );
     if ( !pFormatConditions )
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     return pFormatConditions;
 }
 ScVbaFormatCondition::ScVbaFormatCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntry >& _xSheetConditionalEntry, const uno::Reference< excel::XStyle >& _xStyle, const uno::Reference< excel::XFormatConditions >& _xFormatConditions, const uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException ) : ScVbaFormatCondition_BASE( xParent, xContext, uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, css::uno::UNO_QUERY_THROW ) ), moFormatConditions( _xFormatConditions ), mxStyle( _xStyle ), mxParentRangePropertySet( _xPropertySet )
@@ -59,7 +59,7 @@ ScVbaFormatCondition::Modify( ::sal_Int32 _nType, const uno::Any& _aOperator, co
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
@@ -93,7 +93,7 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
                 aAPIType = sheet::ConditionOperator_NONE;
             break;
         default:
-            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+            DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     }
     return aAPIType;
 }
@@ -140,28 +140,28 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue( rtl::OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries) );
+        mxParentRangePropertySet->setPropertyValue( OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries) );
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     }
 }
 
-rtl::OUString
+OUString
 ScVbaFormatCondition::getServiceImplName()
 {
-    return rtl::OUString("ScVbaFormatCondition");
+    return OUString("ScVbaFormatCondition");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaFormatCondition::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.FormatCondition" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.FormatCondition" );
     }
     return aServiceNames;
 }

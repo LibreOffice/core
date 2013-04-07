@@ -271,7 +271,7 @@ XubString SfxStringListItem::GetString()
 
 //------------------------------------------------------------------------
 
-void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl::OUString >& rList )
+void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUString >& rList )
 {
     DBG_ASSERT(GetRefCount()==0,"SetString:RefCount!=0");
 
@@ -290,7 +290,7 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< rtl:
 }
 
 //----------------------------------------------------------------------------
-void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUString >& rList ) const
+void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const
 {
     long nCount = pImp->aList.size();
 
@@ -303,7 +303,7 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< rtl::OUStr
 // virtual
 bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
-    com::sun::star::uno::Sequence< rtl::OUString > aValue;
+    com::sun::star::uno::Sequence< OUString > aValue;
     if ( rVal >>= aValue )
     {
         SetStringList( aValue );
@@ -321,7 +321,7 @@ bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) 
     // GetString() is not const!!!
     SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );
 
-    com::sun::star::uno::Sequence< rtl::OUString > aStringList;
+    com::sun::star::uno::Sequence< OUString > aStringList;
     pThis->GetStringList( aStringList );
     rVal = ::com::sun::star::uno::makeAny( aStringList );
     return true;

@@ -38,7 +38,7 @@ namespace dbaui
             ,protected SvxTextEncodingTable
     {
     protected:
-        ::rtl::OUString m_aSystemDisplayName;
+        OUString m_aSystemDisplayName;
 
     public:
         class ExtendedCharsetIterator;
@@ -51,8 +51,8 @@ namespace dbaui
 
         // various find operations
         const_iterator findEncoding(const rtl_TextEncoding _eEncoding) const;
-        const_iterator findIanaName(const ::rtl::OUString& _rIanaName) const;
-        const_iterator findDisplayName(const ::rtl::OUString& _rDisplayName) const;
+        const_iterator findIanaName(const OUString& _rIanaName) const;
+        const_iterator findDisplayName(const OUString& _rDisplayName) const;
 
         /// get access to the first element of the charset collection
         const_iterator  begin() const;
@@ -76,17 +76,17 @@ namespace dbaui
     {
         friend class OCharsetDisplay::ExtendedCharsetIterator;
 
-        ::rtl::OUString                         m_sDisplayName;
+        OUString                         m_sDisplayName;
 
     public:
         CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource);
 
         rtl_TextEncoding    getEncoding() const         { return CharsetDisplayDerefHelper_Base::getEncoding(); }
-        ::rtl::OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
-        ::rtl::OUString     getDisplayName() const      { return m_sDisplayName; }
+        OUString     getIanaName() const         { return CharsetDisplayDerefHelper_Base::getIanaName(); }
+        OUString     getDisplayName() const      { return m_sDisplayName; }
 
     protected:
-        CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const ::rtl::OUString& _rDisplayName);
+        CharsetDisplayDerefHelper(const ::dbtools::CharsetIteratorDerefHelper& _rBase, const OUString& _rDisplayName);
     };
 
     //-------------------------------------------------------------------------

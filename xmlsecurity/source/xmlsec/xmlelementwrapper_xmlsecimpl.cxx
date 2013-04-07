@@ -70,24 +70,24 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Seque
 }
 
 
-rtl::OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
+OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl_supportsService( const OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName == SERVICE_NAME;
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    cssu::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
@@ -101,17 +101,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
+OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_getImplementationName();
 }
-sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();

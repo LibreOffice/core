@@ -95,17 +95,17 @@ namespace sfx2
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
-        ::utl::OConfigurationTreeRoot lcl_getModuleUIElementStatesConfig( const ::rtl::OUString& i_rModuleIdentifier,
-            const ::rtl::OUString& i_rResourceURL = ::rtl::OUString() )
+        ::utl::OConfigurationTreeRoot lcl_getModuleUIElementStatesConfig( const OUString& i_rModuleIdentifier,
+            const OUString& i_rResourceURL = OUString() )
         {
             const Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            ::rtl::OUStringBuffer aPathComposer;
+            OUStringBuffer aPathComposer;
             try
             {
                 const Reference< XModuleManager2 > xModuleAccess( ModuleManager::create(xContext) );
                 const ::comphelper::NamedValueCollection aModuleProps( xModuleAccess->getByName( i_rModuleIdentifier ) );
 
-                const ::rtl::OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", ::rtl::OUString() ) );
+                const OUString sWindowStateRef( aModuleProps.getOrDefault( "ooSetupFactoryWindowStateConfigRef", OUString() ) );
 
                 aPathComposer.appendAscii(RTL_CONSTASCII_STRINGPARAM(
                     "org.openoffice.Office.UI."));
@@ -124,9 +124,9 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        ::rtl::OUString lcl_identifyModule( const Reference< XFrame >& i_rDocumentFrame )
+        OUString lcl_identifyModule( const Reference< XFrame >& i_rDocumentFrame )
         {
-            ::rtl::OUString sModuleName;
+            OUString sModuleName;
             try
             {
                 const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -150,16 +150,16 @@ namespace sfx2
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        ::rtl::OUString lcl_getPanelHelpURL( const ::utl::OConfigurationNode& i_rPanelConfigNode )
+        OUString lcl_getPanelHelpURL( const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
-            const ::rtl::OUString sHelpURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "HelpURL" ) ) );
+            const OUString sHelpURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "HelpURL" ) ) );
             return sHelpURL;
         }
 
         //--------------------------------------------------------------------------------------------------------------
         Image lcl_getPanelImage( const Reference< XFrame >& i_rDocFrame, const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
-            const ::rtl::OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
+            const OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
             if ( !sImageURL.isEmpty() )
             {
                 try
@@ -172,10 +172,10 @@ namespace sfx2
                     const sal_Int32 nCommandImagePrefixLen = strlen( pCommandImagePrefix );
                     if ( sImageURL.startsWith( pCommandImagePrefix ) )
                     {
-                        ::rtl::OUStringBuffer aCommandName;
+                        OUStringBuffer aCommandName;
                         aCommandName.appendAscii(RTL_CONSTASCII_STRINGPARAM(".uno:"));
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
-                        const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
+                        const OUString sCommandName( aCommandName.makeStringAndClear() );
 
                         const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False ) );
                         return aPanelImage.GetXGraphic();
@@ -211,7 +211,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneDockingWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    void TaskPaneDockingWindow::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         m_aPaneController.ActivateToolPanel( i_rPanelURL );
     }
@@ -253,7 +253,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneWrapper::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    void TaskPaneWrapper::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         TaskPaneDockingWindow* pDockingWindow = dynamic_cast< TaskPaneDockingWindow* >( GetWindow() );
         ENSURE_OR_RETURN_VOID( pDockingWindow, "TaskPaneWrapper::ActivateToolPanel: invalid docking window implementation!" );
@@ -300,9 +300,9 @@ namespace sfx2
     public:
         CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame );
 
-        virtual ::rtl::OUString GetDisplayName() const;
+        virtual OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual rtl::OString GetHelpID() const;
+        virtual OString GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );
@@ -311,7 +311,7 @@ namespace sfx2
         virtual Reference< XAccessible >
                     CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible );
 
-        const ::rtl::OUString&
+        const OUString&
                     GetResourceURL() const { return m_sResourceURL; }
 
     protected:
@@ -322,11 +322,11 @@ namespace sfx2
         void    impl_updatePanelConfig( const bool i_bVisible ) const;
 
     private:
-        const ::rtl::OUString   m_sUIName;
+        const OUString   m_sUIName;
         const Image             m_aPanelImage;
-        const ::rtl::OUString   m_aPanelHelpURL;
-        const ::rtl::OUString   m_sResourceURL;
-        const ::rtl::OUString   m_sPanelConfigPath;
+        const OUString   m_aPanelHelpURL;
+        const OUString   m_sResourceURL;
+        const OUString   m_sPanelConfigPath;
         Reference< XFrame >     m_xFrame;
         CustomPanelUIElement    m_aCustomPanel;
         bool                    m_bAttemptedCreation;
@@ -388,7 +388,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString CustomToolPanel::GetDisplayName() const
+    OUString CustomToolPanel::GetDisplayName() const
     {
         return m_sUIName;
     }
@@ -399,17 +399,17 @@ namespace sfx2
         return m_aPanelImage;
     }
 
-    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
+    static OString lcl_getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
-            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+            return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
         else
-            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+            return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    rtl::OString CustomToolPanel::GetHelpID() const
+    OString CustomToolPanel::GetHelpID() const
     {
         return lcl_getHelpId( m_aPanelHelpURL );
     }
@@ -523,14 +523,14 @@ namespace sfx2
         void    OnResize();
         void    OnGetFocus();
 
-        static bool ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier );
+        static bool ModuleHasToolPanels( const OUString& i_rModuleIdentifier );
 
               ::svt::ToolPanelDeck& GetPanelDeck()          { return m_aPanelDeck; }
         const ::svt::ToolPanelDeck& GetPanelDeck() const    { return m_aPanelDeck; }
 
         ::boost::optional< size_t >
-                    GetPanelPos( const ::rtl::OUString& i_rResourceURL );
-        ::rtl::OUString
+                    GetPanelPos( const OUString& i_rResourceURL );
+        OUString
                     GetPanelResourceURL( const size_t i_nPanelPos ) const;
 
         void        SetDrawersLayout();
@@ -540,13 +540,13 @@ namespace sfx2
         void    impl_initFromConfiguration( const IToolPanelCompare* i_pPanelCompare );
 
         static bool
-                impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL );
+                impl_isToolPanelResource( const OUString& i_rResourceURL );
 
         DECL_LINK( OnActivatePanel, void* );
 
     private:
         ModuleTaskPane&             m_rAntiImpl;
-        const ::rtl::OUString       m_sModuleIdentifier;
+        const OUString       m_sModuleIdentifier;
         const Reference< XFrame >   m_xFrame;
         ::svt::ToolPanelDeck        m_aPanelDeck;
     };
@@ -571,7 +571,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool ModuleTaskPane_Impl::impl_isToolPanelResource( const ::rtl::OUString& i_rResourceURL )
+    bool ModuleTaskPane_Impl::impl_isToolPanelResource( const OUString& i_rResourceURL )
     {
         return i_rResourceURL.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "private:resource/toolpanel/" ) );
     }
@@ -583,11 +583,11 @@ namespace sfx2
         if ( !aWindowStateConfig.isValid() )
             return;
 
-        ::rtl::OUString sFirstVisiblePanelResource;
-        ::rtl::OUString sFirstPanelResource;
+        OUString sFirstVisiblePanelResource;
+        OUString sFirstPanelResource;
 
-        const Sequence< ::rtl::OUString > aUIElements( aWindowStateConfig.getNodeNames() );
-        for (   const ::rtl::OUString* resource = aUIElements.getConstArray();
+        const Sequence< OUString > aUIElements( aWindowStateConfig.getNodeNames() );
+        for (   const OUString* resource = aUIElements.getConstArray();
                 resource != aUIElements.getConstArray() + aUIElements.getLength();
                 ++resource
             )
@@ -636,14 +636,14 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool ModuleTaskPane_Impl::ModuleHasToolPanels( const ::rtl::OUString& i_rModuleIdentifier )
+    bool ModuleTaskPane_Impl::ModuleHasToolPanels( const OUString& i_rModuleIdentifier )
     {
         const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( i_rModuleIdentifier ) );
         if ( !aWindowStateConfig.isValid() )
             return false;
 
-        const Sequence< ::rtl::OUString > aUIElements( aWindowStateConfig.getNodeNames() );
-        for (   const ::rtl::OUString* resource = aUIElements.getConstArray();
+        const Sequence< OUString > aUIElements( aWindowStateConfig.getNodeNames() );
+        for (   const OUString* resource = aUIElements.getConstArray();
                 resource != aUIElements.getConstArray() + aUIElements.getLength();
                 ++resource
             )
@@ -655,7 +655,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::boost::optional< size_t > ModuleTaskPane_Impl::GetPanelPos( const ::rtl::OUString& i_rResourceURL )
+    ::boost::optional< size_t > ModuleTaskPane_Impl::GetPanelPos( const OUString& i_rResourceURL )
     {
         ::boost::optional< size_t > aPanelPos;
         for ( size_t i = 0; i < m_aPanelDeck.GetPanelCount(); ++i )
@@ -678,12 +678,12 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString ModuleTaskPane_Impl::GetPanelResourceURL( const size_t i_nPanelPos ) const
+    OUString ModuleTaskPane_Impl::GetPanelResourceURL( const size_t i_nPanelPos ) const
     {
-        ENSURE_OR_RETURN( i_nPanelPos < m_aPanelDeck.GetPanelCount(), "ModuleTaskPane_Impl::GetPanelResourceURL: illegal panel position!", ::rtl::OUString() );
+        ENSURE_OR_RETURN( i_nPanelPos < m_aPanelDeck.GetPanelCount(), "ModuleTaskPane_Impl::GetPanelResourceURL: illegal panel position!", OUString() );
         const ::svt::PToolPanel pPanel( m_aPanelDeck.GetPanel( i_nPanelPos ) );
         const CustomToolPanel* pCustomPanel = dynamic_cast< const CustomToolPanel* >( pPanel.get() );
-        ENSURE_OR_RETURN( pCustomPanel != NULL, "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!", ::rtl::OUString() );
+        ENSURE_OR_RETURN( pCustomPanel != NULL, "ModuleTaskPane_Impl::GetPanelPos: illegal panel implementation!", OUString() );
         return pCustomPanel->GetResourceURL();
     }
 
@@ -776,13 +776,13 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const ::rtl::OUString& i_rResourceURL )
+    ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const OUString& i_rResourceURL )
     {
         return m_pImpl->GetPanelPos( i_rResourceURL );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString ModuleTaskPane::GetPanelResourceURL( const size_t i_nPanelPos ) const
+    OUString ModuleTaskPane::GetPanelResourceURL( const size_t i_nPanelPos ) const
     {
         return m_pImpl->GetPanelResourceURL( i_nPanelPos );
     }
@@ -870,7 +870,7 @@ namespace sfx2
         virtual ~TaskPaneController_Impl();
 
         void    SetDefaultTitle( const String& i_rTitle );
-        void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+        void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     protected:
         // IToolPanelDeckListener overridables
@@ -918,7 +918,7 @@ namespace sfx2
         PanelSelectorLayout     m_eCurrentLayout;
         PanelDescriptors        m_aPanelRepository;
         bool                    m_bTogglingPanelVisibility;
-        ::rtl::OUString         m_sDefaultTitle;
+        OUString         m_sDefaultTitle;
     };
 
     //------------------------------------------------------------------------------------------------------------------
@@ -978,7 +978,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneController_Impl::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    void TaskPaneController_Impl::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         ::boost::optional< size_t > aPanelPos( m_rTaskPane.GetPanelPos( i_rPanelURL ) );
         ENSURE_OR_RETURN_VOID( !!aPanelPos, "TaskPaneController_Impl::ActivateToolPanel: no such panel!" );
@@ -1238,9 +1238,9 @@ namespace sfx2
         pMenu->InsertSeparator();
 
     #if OSL_DEBUG_LEVEL > 0
-        pMenu->InsertItem( MID_LAYOUT_TABS, rtl::OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
+        pMenu->InsertItem( MID_LAYOUT_TABS, OUString("Tab-Layout (exp.)"), MIB_CHECKABLE );
         pMenu->CheckItem( MID_LAYOUT_TABS, impl_getLayout() != LAYOUT_DRAWERS );
-        pMenu->InsertItem( MID_LAYOUT_DRAWERS, rtl::OUString("Drawer-Layout"), MIB_CHECKABLE );
+        pMenu->InsertItem( MID_LAYOUT_DRAWERS, OUString("Drawer-Layout"), MIB_CHECKABLE );
         pMenu->CheckItem( MID_LAYOUT_DRAWERS, impl_getLayout() == LAYOUT_DRAWERS );
 
         pMenu->InsertSeparator();
@@ -1279,7 +1279,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TaskPaneController::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+    void TaskPaneController::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         m_pImpl->ActivateToolPanel( i_rPanelURL );
     }

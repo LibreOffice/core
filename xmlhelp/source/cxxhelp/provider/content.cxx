@@ -152,20 +152,20 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL Content::getImplementationName()
+OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString( "CHelpContent" );
+    return OUString( "CHelpContent" );
 }
 
 //=========================================================================
 // virtual
-uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-            = rtl::OUString( MYUCP_CONTENT_SERVICE_NAME );
+            = OUString( MYUCP_CONTENT_SERVICE_NAME );
     return aSNS;
 }
 
@@ -176,10 +176,10 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL Content::getContentType()
+OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
-    return rtl::OUString( MYUCP_CONTENT_TYPE );
+    return OUString( MYUCP_CONTENT_TYPE );
 }
 
 //=========================================================================
@@ -450,7 +450,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if ( rProp.Name == "ContentType" )
             xRow->appendString(
                 rProp,
-                rtl::OUString(
+                OUString(
                     "application/vnd.sun.star.help" ) );
         else if ( rProp.Name == "Title" )
             xRow->appendString ( rProp,m_aURLParameter.get_title() );
@@ -470,18 +470,18 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             if( m_aURLParameter.isPicture() )
                 xRow->appendString(
                     rProp,
-                    rtl::OUString( "image/gif" ) );
+                    OUString( "image/gif" ) );
             else if( m_aURLParameter.isActive() )
                 xRow->appendString(
                     rProp,
-                    rtl::OUString( "text/plain" ) );
+                    OUString( "text/plain" ) );
             else if( m_aURLParameter.isFile() )
                 xRow->appendString(
-                    rProp,rtl::OUString( "text/html" ) );
+                    rProp,OUString( "text/html" ) );
             else if( m_aURLParameter.isRoot() )
                 xRow->appendString(
                     rProp,
-                    rtl::OUString( "text/css" ) );
+                    OUString( "text/css" ) );
             else
                 xRow->appendVoid( rProp );
         else if( m_aURLParameter.isModule() )
@@ -531,9 +531,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "SearchScopes" )
             {
-                uno::Sequence< rtl::OUString > seq( 2 );
-                seq[0] = rtl::OUString( "Heading" );
-                seq[1] = rtl::OUString( "FullText" );
+                uno::Sequence< OUString > seq( 2 );
+                seq[0] = OUString( "Heading" );
+                seq[1] = OUString( "FullText" );
                 uno::Any aAny;
                 aAny <<= seq;
                 xRow->appendObject( rProp,aAny );

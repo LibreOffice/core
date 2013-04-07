@@ -60,7 +60,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 // ============================================================================
 

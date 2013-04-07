@@ -134,12 +134,12 @@ public:
     {
         bool hasAttribute( int token ) const;
         OUString& operator[] (int token);
-        rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
+        OUString attribute( int token, const OUString& def = OUString()) const;
         bool attribute( int token, bool def ) const;
         sal_Unicode attribute( int token, sal_Unicode def ) const;
         // when adding more attribute() overloads, add also to XmlStream itself
     protected:
-        std::map< int, rtl::OUString > attrs;
+        std::map< int, OUString > attrs;
     };
     /**
      Structure representing a tag, including its attributes and content text immediatelly following it.
@@ -148,17 +148,17 @@ public:
     {
         Tag( int token = XML_TOKEN_INVALID,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >& attributes = com::sun::star::uno::Reference< com::sun::star::xml::sax::XFastAttributeList >(),
-            const rtl::OUString& text = rtl::OUString());
+            const OUString& text = OUString());
         Tag( int token,
             const AttributeList& attribs);
         int token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
-        rtl::OUString text;
+        OUString text;
         /**
          This function returns value of the given attribute, or the passed default value if not found.
          The type of the default value selects the return type (OUString here).
         */
-        rtl::OUString attribute( int token, const rtl::OUString& def = rtl::OUString()) const;
+        OUString attribute( int token, const OUString& def = OUString()) const;
         /**
          @overload
         */
@@ -244,11 +244,11 @@ public:
         const AttributeList& attribs );
     void appendClosingTag( int token );
     // appends the characters after the last appended token
-    void appendCharacters( const rtl::OUString& characters );
+    void appendCharacters( const OUString& characters );
 };
 
 inline
-rtl::OUString XmlStream::Tag::attribute( int t, const rtl::OUString& def ) const
+OUString XmlStream::Tag::attribute( int t, const OUString& def ) const
 {
     return attributes.attribute( t, def );
 }

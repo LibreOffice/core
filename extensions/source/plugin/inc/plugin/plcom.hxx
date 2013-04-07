@@ -37,18 +37,18 @@ class PluginComm
 {
 protected:
     int                         m_nRefCount;
-    ::rtl::OString              m_aLibName;
+    OString              m_aLibName;
     std::list< String >         m_aFilesToDelete;
 public:
-    PluginComm( const ::rtl::OString& rLibName, bool bReusable = true );
+    PluginComm( const OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();
 
     int getRefCount() { return m_nRefCount; }
     void addRef() { m_nRefCount++; }
     void decRef() { m_nRefCount--; if( ! m_nRefCount ) delete this; }
 
-    const ::rtl::OString& getLibName() { return m_aLibName; }
-    void setLibName( const ::rtl::OString& rName ) { m_aLibName = rName; }
+    const OString& getLibName() { return m_aLibName; }
+    void setLibName( const OString& rName ) { m_aLibName = rName; }
 
     void addFileToDelete( const String& filename )
         { m_aFilesToDelete.push_back( filename ); }

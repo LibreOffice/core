@@ -98,25 +98,25 @@ namespace pcr
         ,m_bIsReadOnly( sal_False )
     {
         registerProperty(
-            ::rtl::OUString( "HasHelpSection" ),
+            OUString( "HasHelpSection" ),
             MODEL_PROPERTY_ID_HAS_HELP_SECTION,
             PropertyAttribute::READONLY,
             &m_bHasHelpSection, ::getCppuType( &m_bHasHelpSection )
         );
         registerProperty(
-            ::rtl::OUString( "MinHelpTextLines" ),
+            OUString( "MinHelpTextLines" ),
             MODEL_PROPERTY_ID_MIN_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
             &m_nMinHelpTextLines, ::getCppuType( &m_nMinHelpTextLines )
         );
         registerProperty(
-            ::rtl::OUString( "MaxHelpTextLines" ),
+            OUString( "MaxHelpTextLines" ),
             MODEL_PROPERTY_ID_MAX_HELP_TEXT_LINES,
             PropertyAttribute::READONLY,
             &m_nMaxHelpTextLines, ::getCppuType( &m_nMaxHelpTextLines )
         );
         registerProperty(
-            ::rtl::OUString( "IsReadOnly" ),
+            OUString( "IsReadOnly" ),
             MODEL_PROPERTY_ID_IS_READ_ONLY,
             PropertyAttribute::BOUND,
             &m_bIsReadOnly, ::getCppuType( &m_bIsReadOnly )
@@ -235,10 +235,10 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL ImplInspectorModel::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-        for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator check = aSupported.begin();
+        StlSyntaxSequence< OUString > aSupported( getSupportedServiceNames() );
+        for (   StlSyntaxSequence< OUString >::const_iterator check = aSupported.begin();
                 check != aSupported.end();
                 ++check
             )

@@ -52,7 +52,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 TYPEINIT1_AUTOFACTORY(SwFmtINetFmt, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SwFmtAutoFmt, SfxPoolItem);
@@ -369,9 +368,9 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     else
     {
         // all string properties:
-        if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
+        if(rVal.getValueType() != ::getCppuType((OUString*)0))
             return false;
-        XubString sVal = *(rtl::OUString*)rVal.getValue();
+        XubString sVal = *(OUString*)rVal.getValue();
         switch(nMemberId)
         {
             case MID_URL_URL:
@@ -767,7 +766,7 @@ MetaField::MetaField(SwFmtMeta * const i_pFmt,
 }
 
 void MetaField::GetPrefixAndSuffix(
-        ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix)
+        OUString *const o_pPrefix, OUString *const o_pSuffix)
 {
     try
     {
@@ -789,7 +788,7 @@ void MetaField::GetPrefixAndSuffix(
     }
 }
 
-sal_uInt32 MetaField::GetNumberFormat(::rtl::OUString const & rContent) const
+sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
 {
     //TODO: this probably lacks treatment for some special cases
     sal_uInt32 nNumberFormat( m_nNumberFormat );

@@ -72,17 +72,17 @@ void OCommandDefinition::registerProperties()
                     &rCommandDefinition.m_aLayoutInformation, ::getCppuType(&rCommandDefinition.m_aLayoutInformation));
 }
 
-rtl::OUString OCommandDefinition::getName() throw( ::com::sun::star::uno::RuntimeException )
+OUString OCommandDefinition::getName() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getDefinition().m_aProps.aTitle;
 }
 
-rtl::OUString OCommandDefinition::getCommand() throw( ::com::sun::star::uno::RuntimeException )
+OUString OCommandDefinition::getCommand() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getCommandDefinition().m_sCommand;
 }
 
-void OCommandDefinition::setCommand(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+void OCommandDefinition::setCommand(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
 {
     setPropertyValue(PROPERTY_COMMAND, Any(p1) );
 }
@@ -97,32 +97,32 @@ void OCommandDefinition::setEscapeProcessing(sal_Bool p1) throw( ::com::sun::sta
     setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(p1) );
 }
 
-rtl::OUString OCommandDefinition::getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException )
+OUString OCommandDefinition::getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getCommandDefinition().m_sUpdateTableName;
 }
 
-void OCommandDefinition::setUpdateTableName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+void OCommandDefinition::setUpdateTableName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
 {
     setPropertyValue(PROPERTY_UPDATE_TABLENAME, Any(p1) );
 }
 
-rtl::OUString OCommandDefinition::getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException )
+OUString OCommandDefinition::getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getCommandDefinition().m_sUpdateCatalogName;
 }
 
-void OCommandDefinition::setUpdateCatalogName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+void OCommandDefinition::setUpdateCatalogName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
 {
     setPropertyValue(PROPERTY_UPDATE_CATALOGNAME, Any(p1) );
 }
 
-rtl::OUString OCommandDefinition::getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException )
+OUString OCommandDefinition::getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException )
 {
     return getCommandDefinition().m_sUpdateSchemaName;
 }
 
-void OCommandDefinition::setUpdateSchemaName(const rtl::OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
+void OCommandDefinition::setUpdateSchemaName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
 {
     setPropertyValue(PROPERTY_UPDATE_SCHEMANAME, Any(p1) );
 }
@@ -143,7 +143,7 @@ OCommandDefinition::~OCommandDefinition()
 }
 
 OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContainer
-                                       ,const ::rtl::OUString& _rElementName
+                                       ,const OUString& _rElementName
                                        ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl)
     :OComponentDefinition(_rxContainer,_rElementName,_xORB,_pImpl,sal_False)
@@ -162,7 +162,7 @@ OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeExcep
     return OUString("com.sun.star.comp.dba.OCommandDefinition");
 }
 
-::rtl::OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
@@ -176,7 +176,7 @@ Sequence< OUString > OCommandDefinition::getSupportedServiceNames_static(  ) thr
     return aServices;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
@@ -186,7 +186,7 @@ Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentCo
     return *(new OCommandDefinition( _rxContext, NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
-void SAL_CALL OCommandDefinition::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     try
     {

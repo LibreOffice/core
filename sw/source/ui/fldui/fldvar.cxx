@@ -588,7 +588,7 @@ void SwFldVarPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    std::vector<rtl::OUString> aList;
+    std::vector<OUString> aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
     size_t nCount = aList.size();
     size_t nPos;
@@ -1203,7 +1203,7 @@ sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
             else
             {
                 nSubType--;
-                OUString sSeparator = rtl::OUString(aSeparatorED.GetText()[0]);
+                OUString sSeparator = OUString(aSeparatorED.GetText()[0]);
                 cSeparator = !sSeparator.isEmpty() ? sSeparator[0] : ' ';
             }
             break;
@@ -1274,7 +1274,7 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 
 void SwFldVarPage::FillUserData()
 {
-    String sData(rtl::OUString(USER_DATA_VERSION));
+    String sData(OUString(USER_DATA_VERSION));
     sData += ';';
     sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )

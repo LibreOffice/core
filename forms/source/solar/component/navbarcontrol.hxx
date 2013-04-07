@@ -57,8 +57,8 @@ namespace frm
 
     public:
         // XServiceInfo - static version
-        static  ::rtl::OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  OUString SAL_CALL getImplementationName_Static();
+        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
         static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     protected:
@@ -70,8 +70,8 @@ namespace frm
         virtual void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rParent ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
@@ -126,8 +126,8 @@ namespace frm
         void SAL_CALL dispose(  ) throw( ::com::sun::star::uno::RuntimeException );
 
         // XVclWindowPeer
-        void SAL_CALL setProperty( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw( ::com::sun::star::uno::RuntimeException );
-        ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& _rPropertyName ) throw(::com::sun::star::uno::RuntimeException);
+        void SAL_CALL setProperty( const OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw( ::com::sun::star::uno::RuntimeException );
+        ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& _rPropertyName ) throw(::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);

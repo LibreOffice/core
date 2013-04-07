@@ -88,7 +88,7 @@ void workOnTokenSet(int nTyp, char * pTokenText) {
 // class CfgStackData
 //
 
-CfgStackData* CfgStack::Push(const rtl::OString &rTag, const rtl::OString &rId)
+CfgStackData* CfgStack::Push(const OString &rTag, const OString &rId)
 {
     CfgStackData *pD = new CfgStackData( rTag, rId );
     maList.push_back( pD );
@@ -108,9 +108,9 @@ CfgStack::~CfgStack()
     maList.clear();
 }
 
-rtl::OString CfgStack::GetAccessPath( size_t nPos )
+OString CfgStack::GetAccessPath( size_t nPos )
 {
-    rtl::OStringBuffer sReturn;
+    OStringBuffer sReturn;
     for (size_t i = 0; i <= nPos; ++i)
     {
         if (i)
@@ -147,22 +147,22 @@ CfgParser::~CfgParser()
 {
 }
 
-sal_Bool CfgParser::IsTokenClosed(const rtl::OString &rToken)
+sal_Bool CfgParser::IsTokenClosed(const OString &rToken)
 {
     return rToken[rToken.getLength() - 2] == '/';
 }
 
 /*****************************************************************************/
 void CfgParser::AddText(
-    rtl::OString &rText,
-    const rtl::OString &rIsoLang,
-    const rtl::OString &rResTyp
+    OString &rText,
+    const OString &rIsoLang,
+    const OString &rResTyp
 )
 /*****************************************************************************/
 {
-    rText = rText.replaceAll(rtl::OString('\n'), rtl::OString()).
-        replaceAll(rtl::OString('\r'), rtl::OString()).
-        replaceAll(rtl::OString('\t'), rtl::OString());
+    rText = rText.replaceAll(OString('\n'), OString()).
+        replaceAll(OString('\r'), OString()).
+        replaceAll(OString('\t'), OString());
     pStackData->sResTyp = rResTyp;
     WorkOnText( rText, rIsoLang );
     pStackData->sText[ rIsoLang ] = rText;
@@ -172,13 +172,13 @@ void CfgParser::AddText(
 int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 /*****************************************************************************/
 {
-    rtl::OString sToken( pToken );
+    OString sToken( pToken );
 
     if ( sToken == " " || sToken == "\t" )
         sLastWhitespace += sToken;
 
-    rtl::OString sTokenName;
-    rtl::OString sTokenId;
+    OString sTokenName;
+    OString sTokenId;
 
     sal_Bool bOutput = sal_True;
 
@@ -197,7 +197,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 getToken(0, ' ');
 
               if ( !IsTokenClosed( sToken )) {
-                rtl::OString sSearch;
+                OString sSearch;
                 switch ( nToken ) {
                     case CFG_TOKEN_PACKAGE:
                         sSearch = "package-id=";
@@ -221,15 +221,15 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnResourceEnd();
-                            rtl::OString sCur;
+                            OString sCur;
                             for( unsigned int i = 0; i < aLanguages.size(); ++i ){
                                 sCur = aLanguages[ i ];
-                                pStackData->sText[ sCur ] = rtl::OString();
+                                pStackData->sText[ sCur ] = OString();
                             }
                          }
                         sCurrentResTyp = sTokenName;
 
-                        rtl::OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
+                        OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
                         sCurrentIsoLang = sTemp.getToken(1, '"');
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
@@ -243,13 +243,13 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 }
                 if ( !sSearch.isEmpty())
                 {
-                    rtl::OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
+                    OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
                     sTokenId = sTemp.getToken(1, '"');
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
                 if ( sSearch == "cfg:name=" ) {
-                    rtl::OString sTemp( sToken.toAsciiUpperCase() );
+                    OString sTemp( sToken.toAsciiUpperCase() );
                     bLocalize = (( sTemp.indexOf( "CFG:TYPE=\"STRING\"" ) != -1 ) &&
                         ( sTemp.indexOf( "CFG:LOCALIZED=\"sal_True\"" ) != -1 ));
                 }
@@ -257,10 +257,10 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             else if ( sTokenName == "label" ) {
                 if ( sCurrentResTyp != sTokenName ) {
                     WorkOnResourceEnd();
-                    rtl::OString sCur;
+                    OString sCur;
                     for( unsigned int i = 0; i < aLanguages.size(); ++i ){
                         sCur = aLanguages[ i ];
-                        pStackData->sText[ sCur ] = rtl::OString();
+                        pStackData->sText[ sCur ] = OString();
                     }
                 }
                 sCurrentResTyp = sTokenName;
@@ -280,8 +280,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             }
             else
             {
-                rtl::OString sError( "Misplaced close tag: " );
-                rtl::OString sInFile(" in file ");
+                OString sError( "Misplaced close tag: " );
+                OString sInFile(" in file ");
                 sError += sToken;
                 sError += sInFile;
                 sError += global::inputPathname;
@@ -305,7 +305,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     {
         AddText( sCurrentText, sCurrentIsoLang, sCurrentResTyp );
         Output( sCurrentText );
-        sCurrentText = rtl::OString();
+        sCurrentText = OString();
         pStackData->sEndTextTag = sToken;
     }
 
@@ -318,7 +318,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     return 1;
 }
 
-void CfgExport::Output(const rtl::OString&)
+void CfgExport::Output(const OString&)
 {
 }
 
@@ -326,7 +326,7 @@ void CfgExport::Output(const rtl::OString&)
 int CfgParser::Execute( int nToken, char * pToken )
 /*****************************************************************************/
 {
-    rtl::OString sToken( pToken );
+    OString sToken( pToken );
 
     switch ( nToken ) {
         case CFG_TAG:
@@ -347,7 +347,7 @@ int CfgParser::Execute( int nToken, char * pToken )
     return ExecuteAnalyzedToken( nToken, pToken );
 }
 
-void CfgParser::Error(const rtl::OString& rError)
+void CfgParser::Error(const OString& rError)
 {
     yyerror(rError.getStr());
 }
@@ -386,12 +386,12 @@ void CfgExport::WorkOnResourceEnd()
 /*****************************************************************************/
 {
     if ( bLocalize ) {
-    if ( pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
+    if ( pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))].getLength() )
         {
-            rtl::OString sFallback = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
-            rtl::OString sXComment = pStackData->sText[rtl::OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
-            rtl::OString sLocalId = pStackData->sIdentifier;
-            rtl::OString sGroupId;
+            OString sFallback = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("en-US"))];
+            OString sXComment = pStackData->sText[OString(RTL_CONSTASCII_STRINGPARAM("x-comment"))];
+            OString sLocalId = pStackData->sIdentifier;
+            OString sGroupId;
             if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
@@ -402,9 +402,9 @@ void CfgExport::WorkOnResourceEnd()
 
             for (size_t n = 0; n < aLanguages.size(); n++)
             {
-                rtl::OString sCur = aLanguages[ n ];
+                OString sCur = aLanguages[ n ];
 
-                rtl::OString sText = pStackData->sText[ sCur ];
+                OString sText = pStackData->sText[ sCur ];
                 if ( sText.isEmpty())
                     sText = sFallback;
 
@@ -419,8 +419,8 @@ void CfgExport::WorkOnResourceEnd()
 }
 
 void CfgExport::WorkOnText(
-    rtl::OString &rText,
-    const rtl::OString &rIsoLang
+    OString &rText,
+    const OString &rIsoLang
 )
 {
     if( rIsoLang.getLength() ) rText = helper::UnQuotHTML( rText );
@@ -470,22 +470,22 @@ CfgMerge::~CfgMerge()
     delete pResData;
 }
 
-void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
+void CfgMerge::WorkOnText(OString &rText, const OString& rLangIndex)
 {
 
     if ( pMergeDataFile && bLocalize ) {
         if ( !pResData ) {
-            rtl::OString sLocalId = pStackData->sIdentifier;
-            rtl::OString sGroupId;
+            OString sLocalId = pStackData->sIdentifier;
+            OString sGroupId;
             if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
-                sLocalId = rtl::OString();
+                sLocalId = OString();
             }
             else {
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
-            rtl::OString sPlatform;
+            OString sPlatform;
 
             pResData = new ResData( sPlatform, sGroupId , sFilename );
             pResData->sId = sLocalId;
@@ -497,7 +497,7 @@ void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
-            rtl::OString sContent;
+            OString sContent;
             pEntrys->GetText( sContent, STRING_TYP_TEXT, rLangIndex );
 
             if ( !rLangIndex.equalsIgnoreAsciiCase("en-US") &&
@@ -509,7 +509,7 @@ void CfgMerge::WorkOnText(rtl::OString &rText, const rtl::OString& rLangIndex)
     }
 }
 
-void CfgMerge::Output(const rtl::OString& rOutput)
+void CfgMerge::Output(const OString& rOutput)
 {
     pOutputStream << rOutput.getStr();
 }
@@ -522,12 +522,12 @@ void CfgMerge::WorkOnResourceEnd()
     if ( pMergeDataFile && pResData && bLocalize && bEnglish ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
-            rtl::OString sCur;
+            OString sCur;
 
             for( unsigned int i = 0; i < aLanguages.size(); ++i ){
                 sCur = aLanguages[ i ];
 
-                rtl::OString sContent;
+                OString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , sal_True );
                 if (
                     ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) ) &&
@@ -535,20 +535,20 @@ void CfgMerge::WorkOnResourceEnd()
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
 
-                    rtl::OString sText = helper::QuotHTML( sContent);
+                    OString sText = helper::QuotHTML( sContent);
 
-                    rtl::OString sAdditionalLine( "\t" );
+                    OString sAdditionalLine( "\t" );
 
-                    rtl::OString sTextTag = pStackData->sTextTag;
-                    rtl::OString sTemp = sTextTag.copy( sTextTag.indexOf( "xml:lang=" ));
+                    OString sTextTag = pStackData->sTextTag;
+                    OString sTemp = sTextTag.copy( sTextTag.indexOf( "xml:lang=" ));
 
                     sal_Int32 n = 0;
-                    rtl::OString sSearch = sTemp.getToken(0, '"', n);
+                    OString sSearch = sTemp.getToken(0, '"', n);
                     sSearch += "\"";
                     sSearch += sTemp.getToken(0, '"', n);
                     sSearch += "\"";
 
-                    rtl::OString sReplace = sTemp.getToken(0, '"');
+                    OString sReplace = sTemp.getToken(0, '"');
                     sReplace += "\"";
                     sReplace += sCur;
                     sReplace += "\"";

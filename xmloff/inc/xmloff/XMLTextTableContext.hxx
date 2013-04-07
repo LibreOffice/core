@@ -41,7 +41,7 @@ public:
 
     XMLTextTableContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName );
+            const OUString& rLName );
     virtual ~XMLTextTableContext();
 
     virtual ::com::sun::star::uno::Reference <

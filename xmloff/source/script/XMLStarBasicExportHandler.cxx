@@ -29,8 +29,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::PropertyValue;
 
 

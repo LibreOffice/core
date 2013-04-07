@@ -97,11 +97,11 @@ public:
 
     IXFStyle*   AddStyle(IXFStyle *pStyle);
 
-    IXFStyle*   FindStyle(rtl::OUString name);
+    IXFStyle*   FindStyle(OUString name);
 
-    XFParaStyle*    FindParaStyle(rtl::OUString name);
+    XFParaStyle*    FindParaStyle(OUString name);
 
-    XFTextStyle*    FindTextStyle(rtl::OUString name);
+    XFTextStyle*    FindTextStyle(OUString name);
 
     void        SetLineNumberConfig(XFLineNumberConfig *pLNConfig);
 

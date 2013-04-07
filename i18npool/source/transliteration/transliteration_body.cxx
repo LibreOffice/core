@@ -262,7 +262,7 @@ Transliteration_titlecase::Transliteration_titlecase()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
 
-static rtl::OUString transliterate_titlecase_Impl(
+static OUString transliterate_titlecase_Impl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     const Locale &rLocale,
     Sequence< sal_Int32 >& offset )
@@ -317,7 +317,7 @@ static rtl::OUString transliterate_titlecase_Impl(
 
 // this function expects to be called on a word-by-word basis,
 // namely that startPos points to the first char of the word
-rtl::OUString SAL_CALL Transliteration_titlecase::transliterate(
+OUString SAL_CALL Transliteration_titlecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )
     throw(RuntimeException)
@@ -336,7 +336,7 @@ Transliteration_sentencecase::Transliteration_sentencecase()
 
 // this function expects to be called on a sentence-by-sentence basis,
 // namely that startPos points to the first word (NOT first char!) in the sentence
-rtl::OUString SAL_CALL Transliteration_sentencecase::transliterate(
+OUString SAL_CALL Transliteration_sentencecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )
     throw(RuntimeException)

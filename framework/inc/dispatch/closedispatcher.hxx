@@ -144,7 +144,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
          */
         CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                         const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                        const ::rtl::OUString&                                        sTarget);
+                        const OUString&                                        sTarget);
 
         //---------------------------------------
         /** @short  does nothing real. */
@@ -300,7 +300,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
         */
 
         static css::uno::Reference< css::frame::XFrame > static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
-                                                                                            const ::rtl::OUString&                           sTarget);
+                                                                                            const OUString&                           sTarget);
 
 }; // class CloseDispatcher
 

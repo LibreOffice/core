@@ -58,7 +58,7 @@ namespace rptui
         Reference< XReportControlModel > xRptControlModel( _rEvent.Source, UNO_QUERY );
         if ( xRptControlModel.is() && _rEvent.PropertyName == "DataField" )
         {
-            ::rtl::OUString sOldDataSource, sNewDataSource;
+            OUString sOldDataSource, sNewDataSource;
             OSL_VERIFY( _rEvent.OldValue >>= sOldDataSource );
             OSL_VERIFY( _rEvent.NewValue >>= sNewDataSource );
             impl_adjustFormatConditions_nothrow( xRptControlModel, sOldDataSource, sNewDataSource );
@@ -77,18 +77,18 @@ namespace rptui
 
     //--------------------------------------------------------------------
     void ConditionUpdater::impl_adjustFormatConditions_nothrow( const Reference< XReportControlModel >& _rxRptControlModel,
-        const ::rtl::OUString& _rOldDataSource, const ::rtl::OUString& _rNewDataSource )
+        const OUString& _rOldDataSource, const OUString& _rNewDataSource )
     {
         try
         {
             ReportFormula aOldContentFormula( _rOldDataSource );
-            ::rtl::OUString sOldUnprefixed( aOldContentFormula.getBracketedFieldOrExpression() );
+            OUString sOldUnprefixed( aOldContentFormula.getBracketedFieldOrExpression() );
             ReportFormula aNewContentFormula( _rNewDataSource );
-            ::rtl::OUString sNewUnprefixed( aNewContentFormula.getBracketedFieldOrExpression() );
+            OUString sNewUnprefixed( aNewContentFormula.getBracketedFieldOrExpression() );
 
             sal_Int32 nCount( _rxRptControlModel->getCount() );
             Reference< XFormatCondition > xFormatCondition;
-            ::rtl::OUString sFormulaExpression, sLHS, sRHS;
+            OUString sFormulaExpression, sLHS, sRHS;
             for ( sal_Int32 i=0; i<nCount; ++i )
             {
                 xFormatCondition.set( _rxRptControlModel->getByIndex( i ), UNO_QUERY_THROW );

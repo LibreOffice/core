@@ -1316,7 +1316,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                     try
                     {
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
-                        ::rtl::OUString aTmpText;
+                        OUString aTmpText;
                         aData >>= aTmpText;
                         String aText(convertLineEnd(aTmpText, LINEEND_LF));
                         aText.SearchAndReplaceAll( LINE_SEP, ' ' );

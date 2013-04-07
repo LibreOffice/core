@@ -164,7 +164,7 @@ void initMapiMessage(
          rtl_uString_newFromAscii(&subject, const_cast<char*>(gSubject.c_str()));
          rtl_uString *decoded_subject = NULL;
          rtl_uriDecode(subject, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8, &decoded_subject);
-         rtl::OUString ou_subject(decoded_subject);
+         OUString ou_subject(decoded_subject);
          pMapiMessage->lpszSubject = strdup(OUStringToOString(ou_subject, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK).getStr());
     }
     catch (...) {

@@ -55,12 +55,12 @@ struct CellRange
 {
     Cell aUpperLeft;
     Cell aLowerRight;
-    ::rtl::OUString aTableName;
+    OUString aTableName;
 };
 
-CellRange getCellRangeFromXMLString( const ::rtl::OUString & rXMLString );
+CellRange getCellRangeFromXMLString( const OUString & rXMLString );
 
-::rtl::OUString getXMLStringFromCellRange( const CellRange & rRange );
+OUString getXMLStringFromCellRange( const CellRange & rRange );
 
 
 } //  namespace XMLRangeHelper

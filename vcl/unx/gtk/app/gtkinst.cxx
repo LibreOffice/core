@@ -279,22 +279,22 @@ extern "C"
     typedef void(* addItemFnc)(void *, const char *);
 }
 
-void GtkInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType)
+void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType)
 {
-    rtl::OString sGtkURL;
+    OString sGtkURL;
     rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
     if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || !rFileUrl.startsWith( "file://" ))
-        sGtkURL = rtl::OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
+        sGtkURL = OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
     else
     {
         //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
         //Decode %XX components
-        rtl::OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+        OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
         //Convert back to system locale encoding
-        rtl::OString sSystemUrl = rtl::OUStringToOString(sDecodedUri, aSystemEnc);
+        OString sSystemUrl = OUStringToOString(sDecodedUri, aSystemEnc);
         //Encode to an escaped ASCII-encoded URI
         gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), NULL, NULL);
-        sGtkURL = rtl::OString(g_uri);
+        sGtkURL = OString(g_uri);
         g_free(g_uri);
     }
 #if GTK_CHECK_VERSION(2,10,0)

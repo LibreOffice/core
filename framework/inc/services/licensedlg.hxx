@@ -88,7 +88,7 @@ class LicenseDialog : public ModalDialog
     DECL_LINK(DeclineBtnHdl, void *);
 
     public:
-        LicenseDialog(const rtl::OUString& aLicense, ResMgr *pResMgr);
+        LicenseDialog(const OUString& aLicense, ResMgr *pResMgr);
         virtual ~LicenseDialog();
 
 };

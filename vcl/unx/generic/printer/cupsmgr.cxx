@@ -40,12 +40,6 @@
 using namespace psp;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringHash;
-using ::rtl::OString;
 
 struct GetPPDAttribs
 {
@@ -576,7 +570,7 @@ void CUPSManager::setupJobContextData( JobData& rData )
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     OSL_TRACE( "endSpool: %s, %s",
-               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+               OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
               bQuickCommand ? "true" : "false" );
 
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
@@ -635,7 +629,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
 
     if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
     {
-        rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
+        OString aVal( OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
         rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
     }
     if( ! bBanner )
@@ -647,8 +641,8 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
 int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner )
 {
     OSL_TRACE( "endSpool: %s, %s, copy count = %d",
-               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
+               OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+               OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr(),
                rDocumentJobData.m_nCopies
                );
 

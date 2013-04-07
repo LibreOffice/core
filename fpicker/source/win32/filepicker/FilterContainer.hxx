@@ -34,7 +34,7 @@ class CFilterContainer
 public:
     // defines a filter entry which is made of a name and a filter value
     // e.g. 'Text *.txt'
-    typedef std::pair< rtl::OUString, rtl::OUString > FILTER_ENTRY_T;
+    typedef std::pair< OUString, OUString > FILTER_ENTRY_T;
 
 public:
     explicit CFilterContainer( sal_Int32 initSize = 0 );
@@ -44,13 +44,13 @@ public:
     // returns false if duplicates are not allowed and
     // the filter is already in the container
     sal_Bool SAL_CALL addFilter(
-        const ::rtl::OUString& aName,
-        const ::rtl::OUString& aFilter,
+        const OUString& aName,
+        const OUString& aFilter,
         sal_Bool bAllowDuplicates = sal_False );
 
     // delete the specified filter returns true on
     // success and false if the filter was not found
-    sal_Bool SAL_CALL delFilter( const ::rtl::OUString& aName );
+    sal_Bool SAL_CALL delFilter( const OUString& aName );
 
     // the number of filter already added
     sal_Int32 SAL_CALL numFilter( );
@@ -61,12 +61,12 @@ public:
     // retrieve a filter from the container both methods
     // return true on success and false if the specified
     // filter was not found
-    sal_Bool SAL_CALL getFilter( const ::rtl::OUString& aName, ::rtl::OUString& theFilter ) const;
-    sal_Bool SAL_CALL getFilter( sal_Int32 aIndex, ::rtl::OUString& theFilter ) const;
+    sal_Bool SAL_CALL getFilter( const OUString& aName, OUString& theFilter ) const;
+    sal_Bool SAL_CALL getFilter( sal_Int32 aIndex, OUString& theFilter ) const;
 
     // returns the position of the specified filter or -1
     // if the filter was not found
-    sal_Int32 SAL_CALL getFilterPos( const ::rtl::OUString& aName ) const;
+    sal_Int32 SAL_CALL getFilterPos( const OUString& aName ) const;
 
     // starts enumerating the filter in the container
     void SAL_CALL beginEnumFilter( );
@@ -75,10 +75,10 @@ public:
     sal_Bool SAL_CALL getNextFilter( FILTER_ENTRY_T& nextFilterEntry );
 
     // cache current filter
-    void SAL_CALL setCurrentFilter( const ::rtl::OUString& aName );
+    void SAL_CALL setCurrentFilter( const OUString& aName );
 
     // returns cached current filter
-    ::rtl::OUString SAL_CALL getCurrentFilter() const;
+    OUString SAL_CALL getCurrentFilter() const;
 
 protected:
     typedef std::vector< FILTER_ENTRY_T > FILTER_VECTOR_T;
@@ -88,13 +88,13 @@ private:
     CFilterContainer( const CFilterContainer& );
     CFilterContainer& SAL_CALL operator=( const CFilterContainer& );
 
-    sal_Int32 SAL_CALL getFilterTagPos( const ::rtl::OUString& aName ) const;
+    sal_Int32 SAL_CALL getFilterTagPos( const OUString& aName ) const;
 
 private:
     FILTER_VECTOR_T                 m_vFilters;
     FILTER_VECTOR_T::const_iterator m_iter;
     sal_Bool                        m_bIterInitialized;
-    ::rtl::OUString                 m_sCurrentFilter;
+    OUString                 m_sCurrentFilter;
 };
 
 //----------------------------------------------------------------
@@ -102,7 +102,7 @@ private:
 // the Win32 API requires, e.g. "Text\0*.txt\0Doc\0*.doc;*xls\0\0"
 //----------------------------------------------------------------
 
-rtl::OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer );
+OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer );
 
 #endif
 

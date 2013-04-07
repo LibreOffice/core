@@ -497,7 +497,7 @@ namespace fs
     {
         HCDBG(
             std::cerr << "creating " <<
-            rtl::OUStringToOString(indexDirName.data, RTL_TEXTENCODING_UTF8).getStr()
+            OUStringToOString(indexDirName.data, RTL_TEXTENCODING_UTF8).getStr()
             << std::endl
            );
         osl::Directory::createPath(indexDirName.data);

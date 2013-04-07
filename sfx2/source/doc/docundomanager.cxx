@@ -117,7 +117,7 @@ namespace sfx2
             if ( pObjectShell != NULL )
                 pUndoManager = pObjectShell->GetUndoManager();
             if ( !pUndoManager )
-                throw NotInitializedException( ::rtl::OUString(), *&i_baseModel );
+                throw NotInitializedException( OUString(), *&i_baseModel );
             return pUndoManager;
         }
     };
@@ -265,7 +265,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DocumentUndoManager::enterUndoContext( const ::rtl::OUString& i_title ) throw (RuntimeException)
+    void SAL_CALL DocumentUndoManager::enterUndoContext( const OUString& i_title ) throw (RuntimeException)
     {
         // SYNCHRONIZED --->
         UndoManagerGuard aGuard( *this );
@@ -339,28 +339,28 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL DocumentUndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentUndoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DocumentUndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL DocumentUndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getCurrentRedoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DocumentUndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllUndoActionTitles();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DocumentUndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DocumentUndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerGuard aGuard( *this );
         return m_pImpl->aUndoHelper.getAllRedoActionTitles();
@@ -442,7 +442,7 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::setParent( const Reference< XInterface >& i_parent ) throw (NoSupportException, RuntimeException)
     {
         (void)i_parent;
-        throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
+        throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
 //......................................................................................................................

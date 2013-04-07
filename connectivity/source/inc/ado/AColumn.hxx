@@ -33,7 +33,7 @@ namespace connectivity
         {
             WpADOColumn     m_aColumn;
             OConnection*    m_pConnection;
-            ::rtl::OUString m_ReferencedColumn;
+            OUString m_ReferencedColumn;
             sal_Bool        m_IsAscending;
 
             void fillPropertyValues();

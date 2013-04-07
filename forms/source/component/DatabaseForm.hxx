@@ -94,11 +94,11 @@ const sal_uInt16 SUCCESSFUL_REPRESENT_FILE          = 0x0002;
 class HtmlSuccessfulObj
 {
 public:
-    ::rtl::OUString     aName;
-    ::rtl::OUString     aValue;
+    OUString     aName;
+    OUString     aValue;
     sal_uInt16          nRepresentation;
 
-    HtmlSuccessfulObj( const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue,
+    HtmlSuccessfulObj( const OUString& _rName, const OUString& _rValue,
         sal_uInt16 _nRepresent = SUCCESSFUL_REPRESENT_TEXT )
         :aName( _rName )
         ,aValue( _rValue )
@@ -169,8 +169,8 @@ class ODatabaseForm :public OFormComponents
     ::osl::Mutex                        m_aResetSafety;
     ::com::sun::star::uno::Any          m_aCycle;
     ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aMasterFields;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aDetailFields;
+    ::com::sun::star::uno::Sequence< OUString >                      m_aMasterFields;
+    ::com::sun::star::uno::Sequence< OUString >                      m_aDetailFields;
 
     // the object doin' most of the work - an SDB-rowset
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
@@ -187,7 +187,7 @@ class ODatabaseForm :public OFormComponents
     Timer*                      m_pLoadTimer;
 
     OFormSubmitResetThread*     m_pThread;
-    ::rtl::OUString             m_sCurrentErrorContext;
+    OUString             m_sCurrentErrorContext;
                 // will be used as additional context information
                 // when an exception is catched and forwarded to the listeners
 
@@ -202,9 +202,9 @@ class ODatabaseForm :public OFormComponents
     ::com::sun::star::uno::Any  m_aControlBorderColorMouse;
     ::com::sun::star::uno::Any  m_aControlBorderColorInvalid;
     ::com::sun::star::uno::Any  m_aDynamicControlBorder;
-    ::rtl::OUString             m_sName;
-    ::rtl::OUString             m_aTargetURL;
-    ::rtl::OUString             m_aTargetFrame;
+    OUString             m_sName;
+    OUString             m_aTargetURL;
+    OUString             m_aTargetFrame;
     ::com::sun::star::form::FormSubmitMethod    m_eSubmitMethod;
     ::com::sun::star::form::FormSubmitEncoding  m_eSubmitEncoding;
     ::com::sun::star::form::NavigationBarMode   m_eNavigation;
@@ -280,18 +280,18 @@ public:
     virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw ( :: com::sun::star::lang::NoSupportException , ::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::container::XNamed
-    virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName(const ::rtl::OUString& aName) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName(const OUString& aName) throw(::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::awt::XTabControllerModel
     virtual sal_Bool SAL_CALL getGroupControl() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setGroupControl(sal_Bool /*_bGroupControl*/) throw(::com::sun::star::uno::RuntimeException) { }
     virtual void SAL_CALL setControlModels(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rControls) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL getControlModels() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setGroup(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rGroup, const ::rtl::OUString& _rGroupName) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setGroup(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rGroup, const OUString& _rGroupName) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getGroupCount() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL getGroup(sal_Int32 _nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rxGroup, ::rtl::OUString& _rName) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL getGroupByName(const ::rtl::OUString& _rName, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rxGroup) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL getGroup(sal_Int32 _nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rxGroup, OUString& _rName) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL getGroupByName(const OUString& _rName, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& _rxGroup) throw(::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
@@ -376,19 +376,19 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL deleteRows(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& rows) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::lang::XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName)  throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)  throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::lang::XServiceInfo - static version
-    static  ::rtl::OUString SAL_CALL getImplementationName_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCurrentServiceNames_Static();
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCompatibleServiceNames_Static();
+    static  OUString SAL_CALL getImplementationName_Static();
+    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
+    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCurrentServiceNames_Static();
+    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCompatibleServiceNames_Static();
     static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     // com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
@@ -397,7 +397,7 @@ public:
 
     // com::sun::star::sdbc::XParameters
     virtual void SAL_CALL setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setByte(sal_Int32 parameterIndex, sal_Int8 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setShort(sal_Int32 parameterIndex, sal_Int16 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -405,7 +405,7 @@ public:
     virtual void SAL_CALL setLong(sal_Int32 parameterIndex, sal_Int64 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFloat(sal_Int32 parameterIndex, float x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDouble(sal_Int32 parameterIndex, double x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setString(sal_Int32 parameterIndex, const OUString& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setBytes(sal_Int32 parameterIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDate(sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTime(sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -424,8 +424,8 @@ public:
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertyContainer
-    virtual void SAL_CALL addProperty( const ::rtl::OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeProperty( const ::rtl::OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addProperty( const OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
 
     // XPropertyAccess
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -516,23 +516,23 @@ private:
 
     // error handling
     void    onError(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent);
-    void    onError(const ::com::sun::star::sdbc::SQLException&, const ::rtl::OUString& _rContextDescription);
+    void    onError(const ::com::sun::star::sdbc::SQLException&, const OUString& _rContextDescription);
 
     // html tools
-    ::rtl::OUString         GetDataEncoded(bool _bURLEncoded,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
-    ::rtl::OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
-    ::rtl::OUString         GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
+    OUString         GetDataEncoded(bool _bURLEncoded,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
+    OUString         GetDataURLEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
+    OUString         GetDataTextEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
     ::com::sun::star::uno::Sequence<sal_Int8>   GetDataMultiPartEncoded(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& SubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt,
-                                             ::rtl::OUString& rContentType);
+                                             OUString& rContentType);
 
-    void AppendComponent(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xComponentSet, const ::rtl::OUString& rNamePrefix,
+    void AppendComponent(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& xComponentSet, const OUString& rNamePrefix,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
 
     void FillSuccessfulList(HtmlSuccessfulObjList& rList, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& rxSubmitButton, const ::com::sun::star::awt::MouseEvent& MouseEvt);
 
-    void InsertTextPart(INetMIMEMessage& rParent, const ::rtl::OUString& rName, const ::rtl::OUString& rData);
-    sal_Bool InsertFilePart(INetMIMEMessage& rParent, const ::rtl::OUString& rName, const ::rtl::OUString& rFileName);
-    void Encode(::rtl::OUString& rString) const;
+    void InsertTextPart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rData);
+    sal_Bool InsertFilePart(INetMIMEMessage& rParent, const OUString& rName, const OUString& rFileName);
+    void Encode(OUString& rString) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection();
 

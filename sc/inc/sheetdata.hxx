@@ -51,10 +51,10 @@ struct ScStreamEntry
 
 struct ScCellStyleEntry
 {
-    rtl::OUString   maName;
+    OUString   maName;
     ScAddress       maCellPos;
 
-                ScCellStyleEntry( const rtl::OUString& rName, const ScAddress& rPos ) :
+                ScCellStyleEntry( const OUString& rName, const ScAddress& rPos ) :
                     maName(rName),
                     maCellPos(rPos)
                 {
@@ -63,11 +63,11 @@ struct ScCellStyleEntry
 
 struct ScNoteStyleEntry
 {
-    rtl::OUString   maStyleName;
-    rtl::OUString   maTextStyle;
+    OUString   maStyleName;
+    OUString   maTextStyle;
     ScAddress       maCellPos;
 
-                ScNoteStyleEntry( const rtl::OUString& rStyle, const rtl::OUString& rText, const ScAddress& rPos ) :
+                ScNoteStyleEntry( const OUString& rStyle, const OUString& rText, const ScAddress& rPos ) :
                     maStyleName(rStyle),
                     maTextStyle(rText),
                     maCellPos(rPos)
@@ -77,11 +77,11 @@ struct ScNoteStyleEntry
 
 struct ScTextStyleEntry
 {
-    rtl::OUString   maName;
+    OUString   maName;
     ScAddress       maCellPos;
     ESelection      maSelection;
 
-                ScTextStyleEntry( const rtl::OUString& rName, const ScAddress& rPos, const ESelection& rSel ) :
+                ScTextStyleEntry( const OUString& rName, const ScAddress& rPos, const ESelection& rSel ) :
                     maName(rName),
                     maCellPos(rPos),
                     maSelection(rSel)
@@ -91,11 +91,11 @@ struct ScTextStyleEntry
 
 struct ScLoadedNamespaceEntry
 {
-    rtl::OUString   maPrefix;
-    rtl::OUString   maName;
+    OUString   maPrefix;
+    OUString   maName;
     sal_uInt16      mnKey;
 
-                ScLoadedNamespaceEntry( const rtl::OUString& rPrefix, const rtl::OUString& rName, sal_uInt16 nKey ) :
+                ScLoadedNamespaceEntry( const OUString& rPrefix, const OUString& rName, sal_uInt16 nKey ) :
                     maPrefix(rPrefix),
                     maName(rName),
                     mnKey(nKey)
@@ -105,7 +105,7 @@ struct ScLoadedNamespaceEntry
 
 class ScSheetSaveData
 {
-    boost::unordered_set<rtl::OUString, rtl::OUStringHash>  maInitialPrefixes;
+    boost::unordered_set<OUString, OUStringHash>  maInitialPrefixes;
     std::vector<ScLoadedNamespaceEntry>              maLoadedNamespaces;
 
     std::vector<ScCellStyleEntry> maCellStyles;
@@ -130,15 +130,15 @@ public:
                 ScSheetSaveData();
                 ~ScSheetSaveData();
 
-    void        AddCellStyle( const rtl::OUString& rName, const ScAddress& rCellPos );
-    void        AddColumnStyle( const rtl::OUString& rName, const ScAddress& rCellPos );
-    void        AddRowStyle( const rtl::OUString& rName, const ScAddress& rCellPos );
-    void        AddTableStyle( const rtl::OUString& rName, const ScAddress& rCellPos );
+    void        AddCellStyle( const OUString& rName, const ScAddress& rCellPos );
+    void        AddColumnStyle( const OUString& rName, const ScAddress& rCellPos );
+    void        AddRowStyle( const OUString& rName, const ScAddress& rCellPos );
+    void        AddTableStyle( const OUString& rName, const ScAddress& rCellPos );
 
-    void        HandleNoteStyles( const rtl::OUString& rStyleName, const rtl::OUString& rTextName, const ScAddress& rCellPos );
-    void        AddNoteContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
+    void        HandleNoteStyles( const OUString& rStyleName, const OUString& rTextName, const ScAddress& rCellPos );
+    void        AddNoteContentStyle( sal_uInt16 nFamily, const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
 
-    void        AddTextStyle( const rtl::OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
+    void        AddTextStyle( const OUString& rName, const ScAddress& rCellPos, const ESelection& rSelection );
 
     void        BlockSheet( SCTAB nTab );
     bool        IsSheetBlocked( SCTAB nTab ) const;

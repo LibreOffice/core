@@ -21,9 +21,8 @@
 #define _XMLHELPER_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
-
-namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
     namespace uno { template<typename T> class Reference; }
     namespace container { class XNameContainer; }
@@ -31,10 +30,10 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-bool isValidQName( const rtl::OUString& sName,
+bool isValidQName( const OUString& sName,
                    const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces );
 
-bool isValidPrefixName( const rtl::OUString& sName,
+bool isValidPrefixName( const OUString& sName,
                         const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& xNamespaces );
 
 com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocumentBuilder> getDocumentBuilder();

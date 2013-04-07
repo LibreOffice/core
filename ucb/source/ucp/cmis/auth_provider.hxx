@@ -37,14 +37,14 @@ namespace cmis
     class AuthProvider : public libcmis::AuthProvider
     {
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment>& m_xEnv;
-        rtl::OUString m_sUrl;
-        rtl::OUString m_sBindingUrl;
+        OUString m_sUrl;
+        OUString m_sBindingUrl;
 
         public:
             AuthProvider ( const com::sun::star::uno::Reference<
                                    com::sun::star::ucb::XCommandEnvironment>& xEnv,
-                           rtl::OUString sUrl,
-                           rtl::OUString sBindingUrl ):
+                           OUString sUrl,
+                           OUString sBindingUrl ):
                 m_xEnv( xEnv ), m_sUrl( sUrl ), m_sBindingUrl( sBindingUrl ) { }
 
             bool authenticationQuery( std::string& username, std::string& password );

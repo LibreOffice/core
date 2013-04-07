@@ -38,20 +38,20 @@ namespace drawingml {
 
 struct Shape3DPropertyNames
 {
-    ::rtl::OUString     maFillStyle;
-    ::rtl::OUString     maFillColor;
-    ::rtl::OUString     maFillTransparence;
-    ::rtl::OUString     maFillGradient;
-    ::rtl::OUString     maFillBitmap;
-    ::rtl::OUString     maFillBitmapMode;
-    ::rtl::OUString     maFillBitmapTile;
-    ::rtl::OUString     maFillBitmapStretch;
-    ::rtl::OUString     maFillBitmapLogicalSize;
-    ::rtl::OUString     maFillBitmapSizeX;
-    ::rtl::OUString     maFillBitmapSizeY;
-    ::rtl::OUString     maFillBitmapOffsetX;
-    ::rtl::OUString     maFillBitmapOffsetY;
-    ::rtl::OUString     maFillBitmapRectanglePoint;
+    OUString     maFillStyle;
+    OUString     maFillColor;
+    OUString     maFillTransparence;
+    OUString     maFillGradient;
+    OUString     maFillBitmap;
+    OUString     maFillBitmapMode;
+    OUString     maFillBitmapTile;
+    OUString     maFillBitmapStretch;
+    OUString     maFillBitmapLogicalSize;
+    OUString     maFillBitmapSizeX;
+    OUString     maFillBitmapSizeY;
+    OUString     maFillBitmapOffsetX;
+    OUString     maFillBitmapOffsetY;
+    OUString     maFillBitmapRectanglePoint;
     bool                mbNamedFillGradient;
     bool                mbNamedFillBitmap;
     bool                mbTransformGraphic;

@@ -81,11 +81,11 @@ namespace dbp
     protected:
         void fillListBox(
             ListBox& _rList,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rItems,
+            const ::com::sun::star::uno::Sequence< OUString >& _rItems,
             sal_Bool _bClear = sal_True);
         void fillListBox(
             ComboBox& _rList,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rItems,
+            const ::com::sun::star::uno::Sequence< OUString >& _rItems,
             sal_Bool _bClear = sal_True);
 
     protected:

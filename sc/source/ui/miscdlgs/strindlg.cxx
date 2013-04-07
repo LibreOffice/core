@@ -34,7 +34,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
                                     const String&   rTitle,
                                     const String&   rEditTitle,
                                     const String&   rDefault,
-                                    const rtl::OString& sHelpId, const rtl::OString& sEditHelpId    ) :
+                                    const OString& sHelpId, const OString& sEditHelpId    ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_STRINPUT ) ),
     //
     aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
@@ -55,7 +55,7 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-void ScStringInputDlg::GetInputString( rtl::OUString& rString ) const
+void ScStringInputDlg::GetInputString( OUString& rString ) const
 {
     rString = aEdInput.GetText();
 }

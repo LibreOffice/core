@@ -411,7 +411,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, *pLastBox )) )
-            rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
+            rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
         else
             rNewStr += '0';
         rNewStr += ':';
@@ -419,7 +419,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     }
 
     if( 0 != ( pRelBox = lcl_RelToBox( rTbl, pBox, rFirstBox )) )
-        rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
+        rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pRelBox));
     else
         rNewStr += '0';
 
@@ -506,13 +506,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, String& rNewStr,
     if( pLastBox )
     {
         pBox = rTbl.GetTblBox( *pLastBox );
-        rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
+        rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
         rNewStr += ':';
         rFirstBox.Erase( 0, pLastBox->Len()+1 );
     }
 
     pBox = rTbl.GetTblBox( rFirstBox );
-    rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
+    rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pBox));
 
     // Kennung fuer Box erhalten
     rNewStr += rFirstBox.GetChar( rFirstBox.Len() - 1 );
@@ -827,7 +827,7 @@ static String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
         // in die Externe Darstellung umwandeln.
         SwTableBox* pBox = reinterpret_cast<SwTableBox*>(sal::static_int_cast<sal_IntPtr>(sTmp.ToInt64()));
         if( rTbl.GetTabSortBoxes().find( pBox ) == rTbl.GetTabSortBoxes().end() )
-            return rtl::OUString('?');
+            return OUString('?');
         sTmp = pBox->GetName();
     }
 
@@ -1175,8 +1175,8 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, String& rNewStr,
     }
 
     if( pLastBox )
-        ( rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pEndBox)) ) += ':';
-    ( rNewStr += rtl::OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pSttBox)) )
+        ( rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pEndBox)) ) += ':';
+    ( rNewStr += OUString::valueOf(static_cast<sal_Int64>((sal_PtrDiff)pSttBox)) )
               += rFirstBox.GetChar( rFirstBox.Len() - 1 );
 }
 

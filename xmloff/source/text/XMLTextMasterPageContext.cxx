@@ -30,8 +30,6 @@
 #include "PageMasterImportContext.hxx"
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -237,7 +235,7 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
             const sal_Bool bLeft,

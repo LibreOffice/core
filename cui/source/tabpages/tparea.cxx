@@ -2253,7 +2253,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
         if( aTsbStepCount.GetState() == STATE_NOCHECK )
         {
             if( aNumFldStepCount.GetText().isEmpty() )
-                aNumFldStepCount.SetText(rtl::OUString("64"));
+                aNumFldStepCount.SetText(OUString("64"));
 
             aNumFldStepCount.Enable();
         }

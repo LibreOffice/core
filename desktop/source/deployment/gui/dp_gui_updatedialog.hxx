@@ -94,7 +94,7 @@ public:
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > > &rItemList );
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > &rItemList );
 
 private:
     UpdateDialog(UpdateDialog &); // not defined
@@ -128,9 +128,9 @@ private:
 
         void handlePopupMenu( const Point &rPos );
 
-        rtl::OUString m_ignoreUpdate;
-        rtl::OUString m_ignoreAllUpdates;
-        rtl::OUString m_enableUpdate;
+        OUString m_ignoreUpdate;
+        OUString m_ignoreAllUpdates;
+        OUString m_enableUpdate;
         UpdateDialog & m_dialog;
     };
 
@@ -142,7 +142,7 @@ private:
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
     void setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll );
 
-    void addEnabledUpdate( rtl::OUString const & name, dp_gui::UpdateData & data );
+    void addEnabledUpdate( OUString const & name, dp_gui::UpdateData & data );
     void addDisabledUpdate( UpdateDialog::DisabledUpdate & data );
     void addSpecificError( UpdateDialog::SpecificError & data );
 
@@ -157,8 +157,8 @@ private:
     void clearDescription();
     bool showDescription(::com::sun::star::uno::Reference<
                          ::com::sun::star::deployment::XPackage > const & aExtension);
-    bool showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
-                         rtl::OUString const & sReleaseNotes);
+    bool showDescription(std::pair< OUString, OUString > const & pairPublisher,
+                         OUString const & sReleaseNotes);
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const String& rDescription, bool bWithPublisher );
@@ -187,18 +187,18 @@ private:
     HelpButton m_help;
     PushButton m_ok;
     PushButton m_close;
-    rtl::OUString m_error;
-    rtl::OUString m_none;
-    rtl::OUString m_noInstallable;
-    rtl::OUString m_failure;
-    rtl::OUString m_unknownError;
-    rtl::OUString m_noDescription;
-    rtl::OUString m_noInstall;
-    rtl::OUString m_noDependency;
-    rtl::OUString m_noDependencyCurVer;
-    rtl::OUString m_browserbased;
-    rtl::OUString m_version;
-    rtl::OUString m_ignoredUpdate;
+    OUString m_error;
+    OUString m_none;
+    OUString m_noInstallable;
+    OUString m_failure;
+    OUString m_unknownError;
+    OUString m_noDescription;
+    OUString m_noInstall;
+    OUString m_noDependency;
+    OUString m_noDependencyCurVer;
+    OUString m_browserbased;
+    OUString m_version;
+    OUString m_ignoredUpdate;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
     std::vector< UpdateDialog::SpecificError > m_specificErrors;

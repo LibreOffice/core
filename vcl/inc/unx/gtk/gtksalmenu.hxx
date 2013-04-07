@@ -68,9 +68,9 @@ public:
     virtual void                CheckItem( unsigned nPos, sal_Bool bCheck );
     virtual void                EnableItem( unsigned nPos, sal_Bool bEnable );
     virtual void                ShowItem( unsigned nPos, sal_Bool bShow );
-    virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
+    virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
     virtual void                SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
-    virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
+    virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
     virtual void                GetSystemMenuData( SystemMenuData* pData );
 
     virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
@@ -84,7 +84,7 @@ public:
     virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
     virtual sal_Bool            IsItemVisible( unsigned nPos );
 
-    void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const rtl::OUString& rText );
+    void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection,
                                                       unsigned nItemPos,
                                                       sal_uInt16 nId,
@@ -94,7 +94,7 @@ public:
                                                       gboolean bIsSubmenu );
     void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
-    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
+    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand );

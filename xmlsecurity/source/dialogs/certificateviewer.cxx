@@ -266,7 +266,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     OUString                aLBEntry;
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
-    aLBEntry = rtl::OUString( "V" );
+    aLBEntry = OUString( "V" );
     aLBEntry += OUString::valueOf( sal_Int32( xCert->getVersion() + 1 ) );
     InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
@@ -274,7 +274,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
     InsertElement( XMLSEC_RES( STR_SERIALNUM ), aLBEntry, aDetails, true );
 
-    std::pair< ::rtl::OUString, ::rtl::OUString> pairIssuer =
+    std::pair< OUString, OUString> pairIssuer =
         XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
@@ -283,16 +283,16 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += rtl::OUString( " " );
+    aLBEntry += OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
-    aLBEntry += rtl::OUString( " " );
+    aLBEntry += OUString( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
     InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );
 
-    std::pair< ::rtl::OUString, ::rtl::OUString > pairSubject =
+    std::pair< OUString, OUString > pairSubject =
         XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;

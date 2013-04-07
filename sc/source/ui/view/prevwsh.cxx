@@ -139,7 +139,7 @@ void ScPreviewShell::Construct( Window* pParent )
     pVerScroll->Show( false );
     pCorner->Show();
     SetHelpId( HID_SCSHELL_PREVWSH );
-    SetName(rtl::OUString("Preview"));
+    SetName(OUString("Preview"));
 }
 
 ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
@@ -208,7 +208,7 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
 
 String ScPreviewShell::GetDescription() const
 {
-    return rtl::OUString(" ** Test ** ");
+    return OUString(" ** Test ** ");
 }
 
 void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
@@ -896,7 +896,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
     SCTAB nTab = pPreview->GetTab();
-    rtl::OUString aTmp;
+    OUString aTmp;
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
@@ -951,14 +951,14 @@ void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue 
     if(pSeq)
     {
         sal_uInt16 nViewID(GetViewFrame()->GetCurViewId());
-        pSeq[0].Name = rtl::OUString(SC_VIEWID);
-        rtl::OUStringBuffer sBuffer(rtl::OUString(SC_VIEW));
+        pSeq[0].Name = OUString(SC_VIEWID);
+        OUStringBuffer sBuffer(OUString(SC_VIEW));
         ::sax::Converter::convertNumber(sBuffer,
                 static_cast<sal_Int32>(nViewID));
         pSeq[0].Value <<= sBuffer.makeStringAndClear();
-        pSeq[1].Name = rtl::OUString(SC_ZOOMVALUE);
+        pSeq[1].Name = OUString(SC_ZOOMVALUE);
         pSeq[1].Value <<= sal_Int32 (pPreview->GetZoom());
-        pSeq[2].Name = rtl::OUString("PageNumber");
+        pSeq[2].Name = OUString("PageNumber");
         pSeq[2].Value <<= pPreview->GetPageNo();
     }
 }
@@ -973,7 +973,7 @@ void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyV
         {
             for(sal_Int32 i = 0; i < nCount; i++, pSeq++)
             {
-                rtl::OUString sName(pSeq->Name);
+                OUString sName(pSeq->Name);
                 if(sName.compareToAscii(SC_ZOOMVALUE) == 0)
                 {
                     sal_Int32 nTemp = 0;

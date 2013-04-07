@@ -36,7 +36,7 @@ public:
     explicit BubbleChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & rServiceName );
+        const OUString & rServiceName );
     virtual ~BubbleChartTypeTemplate();
 
     /// XServiceInfo declarations

@@ -44,19 +44,19 @@ namespace rptui
 
     struct DefaultFunction
     {
-        com::sun::star::beans::Optional< ::rtl::OUString>   m_sInitialFormula;
-        ::rtl::OUString                                     m_sName;
-        ::rtl::OUString                                     m_sSearchString;
-        ::rtl::OUString                                     m_sFormula;
+        com::sun::star::beans::Optional< OUString>   m_sInitialFormula;
+        OUString                                     m_sName;
+        OUString                                     m_sSearchString;
+        OUString                                     m_sFormula;
         ::sal_Bool                                          m_bPreEvaluated;
         ::sal_Bool                                          m_bDeepTraversing;
 
-        inline ::rtl::OUString getName() const { return m_sName; }
+        inline OUString getName() const { return m_sName; }
     } ;
 
     class OPropertyInfoService;
     typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction>, ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> > TFunctionPair;
-    typedef ::std::multimap< ::rtl::OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
+    typedef ::std::multimap< OUString,TFunctionPair, ::comphelper::UStringMixLess > TFunctions;
     typedef ::comphelper::OSimpleListenerContainer  <   ::com::sun::star::beans::XPropertyChangeListener
                                                     ,   ::com::sun::star::beans::PropertyChangeEvent
                                                     >   PropertyChangeListeners;
@@ -81,17 +81,17 @@ namespace rptui
             @return
                 <TRUE/> if and only if the user successfully chose a clause
         */
-        bool impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
+        bool impl_dialogFilter_nothrow( OUString& _out_rSelectedClause, ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 
         /** returns the data field type depending on the data field of the report control
         *
         * \param _sDataField if the data field is not empty it will be used as data field, otherwise the data field will be used.
         * \return the data field type
         */
-        sal_uInt32 impl_getDataFieldType_throw(const ::rtl::OUString& _sDataField = ::rtl::OUString()) const;
+        sal_uInt32 impl_getDataFieldType_throw(const OUString& _sDataField = OUString()) const;
 
-        ::com::sun::star::uno::Any getConstantValue(sal_Bool bToControlValue,sal_uInt16 nResId,const ::com::sun::star::uno::Any& _aValue,const ::rtl::OUString& _sConstantName,const ::rtl::OUString & PropertyName );
-        ::com::sun::star::beans::Property getProperty(const ::rtl::OUString & PropertyName);
+        ::com::sun::star::uno::Any getConstantValue(sal_Bool bToControlValue,sal_uInt16 nResId,const ::com::sun::star::uno::Any& _aValue,const OUString& _sConstantName,const OUString & PropertyName );
+        ::com::sun::star::beans::Property getProperty(const OUString & PropertyName);
         void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
@@ -102,16 +102,16 @@ namespace rptui
         void implCreateListLikeControl(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory
                 ,::com::sun::star::inspection::LineDescriptor & out_Descriptor
-                ,const ::std::vector< ::rtl::OUString>& _aEntries
+                ,const ::std::vector< OUString>& _aEntries
                 ,sal_Bool _bReadOnlyControl
                 ,sal_Bool _bTrueIfListBoxFalseIfComboBox
             );
         void checkPosAndSize(   const ::com::sun::star::awt::Point& _aNewPos,
                                 const ::com::sun::star::awt::Size& _aSize);
 
-        ::rtl::OUString impl_convertToFormula( const ::com::sun::star::uno::Any& _rControlValue );
+        OUString impl_convertToFormula( const ::com::sun::star::uno::Any& _rControlValue );
 
-        void impl_initFieldList_nothrow( ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rFieldNames ) const;
+        void impl_initFieldList_nothrow( ::com::sun::star::uno::Sequence< OUString >& _rFieldNames ) const;
 
         /** Creates the function defined by the function template
         *
@@ -119,7 +119,7 @@ namespace rptui
         * \param _sDataField the data field
         * \param _aFunction the function template
         */
-        void impl_createFunction(const ::rtl::OUString& _sFunctionName,const ::rtl::OUString& _sDataField,const DefaultFunction& _aFunction);
+        void impl_createFunction(const OUString& _sFunctionName,const OUString& _sDataField,const DefaultFunction& _aFunction);
 
         /** check whether the given function name is a countr function.
         *
@@ -127,7 +127,7 @@ namespace rptui
         * \param _Out_sScope the scope of the function
         * \return When true it is a counter functions otherwise false.
         */
-        bool impl_isCounterFunction_throw(const ::rtl::OUString& _sQuotedFunctionName,::rtl::OUString& _Out_sScope) const;
+        bool impl_isCounterFunction_throw(const OUString& _sQuotedFunctionName,OUString& _Out_sScope) const;
 
         /** clear the own properties like function and scope and send a notification
         *
@@ -136,51 +136,51 @@ namespace rptui
         * \param _sOldScope
         * \param _nOldDataFieldType
         */
-       void resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,const ::rtl::OUString& _sOldFunctionName,const ::rtl::OUString& _sOldScope,const sal_uInt32 _nOldDataFieldType);
+       void resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,const OUString& _sOldFunctionName,const OUString& _sOldScope,const sal_uInt32 _nOldDataFieldType);
 
         /** checks whether the name is a field or a parameter
         *
         * \param _sName the name to check
         * \return true when it is a field or parameter otherwise false
         */
-        bool impl_isDataField(const ::rtl::OUString& _sName) const;
+        bool impl_isDataField(const OUString& _sName) const;
 
         /**return all formula in a semicolon separated list
         *
         * \param _rList the localized function names
         */
-        void impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
+        void impl_fillFormulaList_nothrow(::std::vector< OUString >& _out_rList) const;
 
         /** return all group names in a semicolon separated list starting with the group where this control is contained in.
         *
         * \param _rList fills the list with all scope names.
         */
-        void impl_fillScopeList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
+        void impl_fillScopeList_nothrow(::std::vector< OUString >& _out_rList) const;
 
         /** return all supported output formats of the report definition
         *
         * \param _rList fills the list with all mime types
         */
-        void impl_fillMimeTypes_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const;
+        void impl_fillMimeTypes_nothrow(::std::vector< OUString >& _out_rList) const;
 
         /** return the one supported output formats of the report definition
         *
         * \param _sMimetype the mimetype
         */
-        ::rtl::OUString impl_ConvertMimeTypeToUI_nothrow(const ::rtl::OUString& _sMimetype) const;
+        OUString impl_ConvertMimeTypeToUI_nothrow(const OUString& _sMimetype) const;
 
         /** return the MimeType for the given UI Name
         *
         * \param _sUIName the doc ui name
         */
-        ::rtl::OUString impl_ConvertUIToMimeType_nothrow(const ::rtl::OUString& _sUIName) const;
+        OUString impl_ConvertUIToMimeType_nothrow(const OUString& _sUIName) const;
 
         /** get the functions supplier for the set scope, default is the surrounding group.
         *
         * \param _rsNamePostFix the name post fix which canbe used when the scope as name part is needed
         * \return the function supplier
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> fillScope_throw(::rtl::OUString& _rsNamePostFix);
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier> fillScope_throw(OUString& _rsNamePostFix);
 
         /** checks if the given function is a default function we know.
         *
@@ -190,8 +190,8 @@ namespace rptui
         * \param _bSet If set to sal_True than the m_sDefaultFunction and m_sScope vars will be set if successful.
         * \return sal_True with known otherwise sal_False
         */
-        sal_Bool isDefaultFunction(const ::rtl::OUString& _sQuotedFunction
-                                    ,::rtl::OUString& _Out_rDataField
+        sal_Bool isDefaultFunction(const OUString& _sQuotedFunction
+                                    ,OUString& _Out_rDataField
                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier>& _xFunctionsSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier>()
                                     ,bool _bSet = false) const;
 
@@ -203,8 +203,8 @@ namespace rptui
         * \return
         */
         sal_Bool impl_isDefaultFunction_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction>& _xFunction
-                                            ,::rtl::OUString& _rDataField
-                                            ,::rtl::OUString& _rsDefaultFunctionName) const;
+                                            ,OUString& _rDataField
+                                            ,OUString& _rsDefaultFunctionName) const;
 
         /** fills the memeber m_aDefaultFunctions
         *
@@ -218,7 +218,7 @@ namespace rptui
         * \param _sFunction     The name of the function.
         * \param _sDataField    The name of the data field.
         */
-        void createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const ::rtl::OUString& _sFunction,const ::rtl::OUString& _sDataField);
+        void createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const OUString& _sFunction,const OUString& _sDataField);
 
         void removeFunction();
 
@@ -238,8 +238,8 @@ namespace rptui
 
     public:
         // XServiceInfo - static versions
-        static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                         create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
@@ -247,9 +247,9 @@ namespace rptui
         explicit GeometryHandler(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XComponent:
         virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & xListener)   throw (::com::sun::star::uno::RuntimeException);
@@ -257,20 +257,20 @@ namespace rptui
 
         // ::com::sun::star::inspection::XPropertyHandler:
         virtual void SAL_CALL inspect(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & Component) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
-        virtual void SAL_CALL setPropertyValue(const ::rtl::OUString & PropertyName, const ::com::sun::star::uno::Any & Value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException);
-        virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(const ::rtl::OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
-        virtual ::com::sun::star::inspection::LineDescriptor SAL_CALL describePropertyLine(const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& ControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL convertToPropertyValue(const ::rtl::OUString & PropertyName, const ::com::sun::star::uno::Any & ControlValue) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
-        virtual ::com::sun::star::uno::Any SAL_CALL convertToControlValue(const ::rtl::OUString & PropertyName, const ::com::sun::star::uno::Any & PropertyValue, const ::com::sun::star::uno::Type & ControlValueType) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
+        virtual void SAL_CALL setPropertyValue(const OUString & PropertyName, const ::com::sun::star::uno::Any & Value) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException);
+        virtual ::com::sun::star::beans::PropertyState SAL_CALL getPropertyState(const OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
+        virtual ::com::sun::star::inspection::LineDescriptor SAL_CALL describePropertyLine(const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& ControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL convertToPropertyValue(const OUString & PropertyName, const ::com::sun::star::uno::Any & ControlValue) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
+        virtual ::com::sun::star::uno::Any SAL_CALL convertToControlValue(const OUString & PropertyName, const ::com::sun::star::uno::Any & PropertyValue, const ::com::sun::star::uno::Type & ControlValueType) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
         virtual void SAL_CALL addPropertyChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & Listener) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
         virtual void SAL_CALL removePropertyChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & _rxListener) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getSupportedProperties() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isComposable(const ::rtl::OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
-        virtual ::com::sun::star::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection(const ::rtl::OUString & PropertyName, ::sal_Bool Primary, ::com::sun::star::uno::Any & out_Data, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > & InspectorUI) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException);
-        virtual void SAL_CALL actuatingPropertyChanged(const ::rtl::OUString & ActuatingPropertyName, const ::com::sun::star::uno::Any & NewValue, const ::com::sun::star::uno::Any & OldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > & InspectorUI, ::sal_Bool FirstTimeInit) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupersededProperties() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getActuatingProperties() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isComposable(const OUString & PropertyName) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException);
+        virtual ::com::sun::star::inspection::InteractiveSelectionResult SAL_CALL onInteractivePropertySelection(const OUString & PropertyName, ::sal_Bool Primary, ::com::sun::star::uno::Any & out_Data, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > & InspectorUI) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException);
+        virtual void SAL_CALL actuatingPropertyChanged(const OUString & ActuatingPropertyName, const ::com::sun::star::uno::Any & NewValue, const ::com::sun::star::uno::Any & OldValue, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI > & InspectorUI, ::sal_Bool FirstTimeInit) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::NullPointerException);
         virtual ::sal_Bool SAL_CALL suspend(::sal_Bool Suspend) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
@@ -286,8 +286,8 @@ namespace rptui
         virtual void SAL_CALL disposing();
 
         PropertyChangeListeners                                                             m_aPropertyListeners;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  m_aFieldNames;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  m_aParamNames;
+        ::com::sun::star::uno::Sequence< OUString >                                  m_aFieldNames;
+        ::com::sun::star::uno::Sequence< OUString >                                  m_aParamNames;
         TFunctions                                                                          m_aFunctionNames;
         ::std::vector< DefaultFunction >                                                    m_aDefaultFunctions;
         DefaultFunction                                                                     m_aCounterFunction;
@@ -302,8 +302,8 @@ namespace rptui
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< OPropertyInfoService >                                             m_pInfoService;
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        mutable ::rtl::OUString                                                             m_sDefaultFunction;
-        mutable ::rtl::OUString                                                             m_sScope;
+        mutable OUString                                                             m_sDefaultFunction;
+        mutable OUString                                                             m_sScope;
         sal_uInt32                                                                          m_nDataFieldType;
         mutable bool                                                                        m_bNewFunction;
         bool                                                                                m_bIn;

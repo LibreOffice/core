@@ -35,9 +35,9 @@ namespace cssxcsax = com::sun::star::xml::csax;
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_xmlstr( const rtl::OUString& oustr )
+xmlChar* ous_to_xmlstr( const OUString& oustr )
 {
-    rtl::OString ostr = rtl::OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
+    OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     return xmlStrndup( ( xmlChar* )ostr.getStr(), ( int )ostr.getLength() ) ;
 }
 
@@ -45,9 +45,9 @@ xmlChar* ous_to_xmlstr( const rtl::OUString& oustr )
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_nxmlstr( const rtl::OUString& oustr, int& length )
+xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
 {
-    rtl::OString ostr = rtl::OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
+    OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     length = ostr.getLength();
 
     return xmlStrndup( ( xmlChar* )ostr.getStr(), length ) ;
@@ -264,7 +264,7 @@ void SAXHelper::endDocument( void )
  * XDocumentHandler -- start an xml element
  */
 void SAXHelper::startElement(
-    const rtl::OUString& aName,
+    const OUString& aName,
     const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
@@ -301,7 +301,7 @@ void SAXHelper::startElement(
 /**
  * XDocumentHandler -- end an xml element
  */
-void SAXHelper::endElement( const rtl::OUString& aName )
+void SAXHelper::endElement( const OUString& aName )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     xmlChar* fullname = NULL ;
@@ -319,7 +319,7 @@ void SAXHelper::endElement( const rtl::OUString& aName )
 /**
  * XDocumentHandler -- an xml element or cdata characters
  */
-void SAXHelper::characters( const rtl::OUString& aChars )
+void SAXHelper::characters( const OUString& aChars )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     const xmlChar* chars = NULL ;
@@ -337,7 +337,7 @@ void SAXHelper::characters( const rtl::OUString& aChars )
 /**
  * XDocumentHandler -- ignorable xml white space
  */
-void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces )
+void SAXHelper::ignorableWhitespace( const OUString& aWhitespaces )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     const xmlChar* chars = NULL ;
@@ -356,8 +356,8 @@ void SAXHelper::ignorableWhitespace( const rtl::OUString& aWhitespaces )
  * XDocumentHandler -- preaorocessing instruction
  */
 void SAXHelper::processingInstruction(
-    const rtl::OUString& aTarget,
-    const rtl::OUString& aData )
+    const OUString& aTarget,
+    const OUString& aData )
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     xmlChar* target = NULL ;

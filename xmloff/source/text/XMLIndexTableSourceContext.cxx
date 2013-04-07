@@ -42,7 +42,6 @@
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

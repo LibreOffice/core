@@ -51,7 +51,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 
     Image maImgFileOpen;
 
-    rtl::OUString maSrcPath;
+    OUString maSrcPath;
 
     ScOrcusXMLTreeParam maXMLParam;
     std::set<const SvTreeListEntry*> maCellLinks;

@@ -131,7 +131,7 @@ namespace svxform
             const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
             while ( pModuleInfo->pAsciiModuleOrServiceName )
             {
-                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName ) ) )
+                if ( xSI->supportsService( OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName ) ) )
                     return pModuleInfo->eType;
                 ++pModuleInfo;
             }
@@ -168,7 +168,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const ::rtl::OUString& _rModuleIdentifier )
+    DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const OUString& _rModuleIdentifier )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
         while ( pModuleInfo->pAsciiModuleOrServiceName )
@@ -181,16 +181,16 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString DocumentClassification::getModuleIdentifierForDocumentType( DocumentType _eType )
+    OUString DocumentClassification::getModuleIdentifierForDocumentType( DocumentType _eType )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
         while ( pModuleInfo->pAsciiModuleOrServiceName )
         {
             if ( pModuleInfo->eType == _eType )
-                return ::rtl::OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName );
+                return OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName );
             ++pModuleInfo;
         }
-        return ::rtl::OUString();
+        return OUString();
     }
 
 //........................................................................

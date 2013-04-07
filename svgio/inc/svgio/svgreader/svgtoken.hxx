@@ -181,10 +181,10 @@ namespace svgio
             SVGTokenLast
         };
 
-        SVGToken StrToSVGToken(const rtl::OUString& rStr);
+        SVGToken StrToSVGToken(const OUString& rStr);
 
-        const rtl::OUString& getStrTitle();
-        const rtl::OUString& getStrDesc();
+        const OUString& getStrTitle();
+        const OUString& getStrDesc();
     } // end of namespace svgreader
 } // end of namespace svgio
 

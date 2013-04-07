@@ -77,7 +77,7 @@ void    XFSection::ToXml(IXFStream *pStrm)
     IXFAttrList     *pAttrList = pStrm->GetAttrList();
 
     pAttrList->Clear();
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
     if( !style.isEmpty() )
         pAttrList->AddAttribute( A2OUSTR("text:style-name"), style);
     //section name

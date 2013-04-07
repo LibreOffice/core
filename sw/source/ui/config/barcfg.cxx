@@ -26,7 +26,6 @@
 #include <unomid.h>
 
 using namespace utl;
-using rtl::OUString;
 using namespace com::sun::star::uno;
 
 #define SEL_TYPE_TABLE_TEXT     0
@@ -123,6 +122,6 @@ void SwToolbarConfigItem::Commit()
     PutProperties(aNames, aValues);
 }
 
-void SwToolbarConfigItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwToolbarConfigItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

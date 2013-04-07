@@ -135,7 +135,7 @@ public:
 
     virtual int          operator==( const SfxPoolItem& ) const;
 
-    const rtl::OUString &GetFax() const              { return sFaxName; }
+    const OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const String& rFax) { sFaxName = rFax; }
 
 

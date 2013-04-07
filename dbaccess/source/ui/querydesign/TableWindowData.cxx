@@ -41,9 +41,9 @@ using namespace ::com::sun::star::container;
 DBG_NAME(OTableWindowData)
 //------------------------------------------------------------------------------
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
-                                   ,const ::rtl::OUString& _rComposedName
-                                   ,const ::rtl::OUString& rTableName
-                                   ,const ::rtl::OUString& rWinName )
+                                   ,const OUString& _rComposedName
+                                   ,const OUString& rTableName
+                                   ,const OUString& rWinName )
     :m_xTable(_xTable)
     ,m_aTableName( rTableName )
     ,m_aWinName( rWinName )

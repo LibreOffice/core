@@ -31,7 +31,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -208,26 +207,26 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
     return xResult;
 }
 
-::rtl::OUString SAL_CALL ScatterChartType::getChartType()
+OUString SAL_CALL ScatterChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
+uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aMandRolesSeq(3);
+    uno::Sequence< OUString > aMandRolesSeq(3);
     aMandRolesSeq[0] = "label";
     aMandRolesSeq[1] = "values-x";
     aMandRolesSeq[2] = "values-y";
     return aMandRolesSeq;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
+uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
     throw (uno::RuntimeException)
 {
-    return uno::Sequence< ::rtl::OUString >();
+    return uno::Sequence< OUString >();
 }
 
 
@@ -255,9 +254,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getProperty
     return *StaticScatterChartTypeInfo::get();
 }
 
-uno::Sequence< ::rtl::OUString > ScatterChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ScatterChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    uno::Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_SCATTER;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";

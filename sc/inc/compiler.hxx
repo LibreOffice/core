@@ -235,7 +235,7 @@ public:
         Convention( formula::FormulaGrammar::AddressConvention eConvP );
         virtual ~Convention();
 
-        virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
+        virtual void MakeRefStr( OUStringBuffer&   rBuffer,
                                  const ScCompiler&      rCompiler,
                                  const ScComplexRefData&    rRef,
                                  bool bSingleRef ) const = 0;
@@ -257,11 +257,11 @@ public:
 
         virtual String makeExternalNameStr( const String& rFile, const String& rName ) const = 0;
 
-        virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                          sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
-        virtual void makeExternalRefStr( ::rtl::OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
+        virtual void makeExternalRefStr( OUStringBuffer& rBuffer, const ScCompiler& rCompiler,
                                          sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef,
                                          ScExternalRefManager* pRefMgr ) const = 0;
 
@@ -426,7 +426,7 @@ public:
         maExternalLinks = rLinks;
     }
 
-    void            CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp );
+    void            CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rFormulaNmsp );
 
     void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 
@@ -542,11 +542,11 @@ private:
     virtual bool HandleDbData();
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP);
-    virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
-    virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP);
+    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP);
+    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
 
     /// Access the CharTable flags

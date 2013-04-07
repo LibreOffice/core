@@ -46,17 +46,17 @@ ResultSetForRoot::ResultSetForRoot( const uno::Reference< uno::XComponentContext
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString( "getPropertyValues" );
+    aCommand.Name = OUString( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
     for( sal_uInt32 i = 0; i < m_aPath.size(); ++i )
     {
         m_aPath[i] =
-            rtl::OUString( "vnd.sun.star.help://" ) +
+            OUString( "vnd.sun.star.help://" ) +
             m_aPath[i]                              +
-            rtl::OUString( "?Language=" )           +
+            OUString( "?Language=" )           +
             m_aURLParameter.get_language()          +
-            rtl::OUString( "&System=" )             +
+            OUString( "&System=" )             +
             m_aURLParameter.get_system();
 
         m_nRow = sal_Int32( i );

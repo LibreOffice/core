@@ -33,10 +33,10 @@ class SwTxtNode;
 
 class SwScanner
 {
-    rtl::OUString aWord;
+    OUString aWord;
     const SwTxtNode& rNode;
-    const rtl::OUString aPreDashReplacementText;
-    rtl::OUString aText;
+    const OUString aPreDashReplacementText;
+    OUString aText;
     const LanguageType* pLanguage;
     const ModelToViewHelper rConversionMap;
     sal_Int32 nStartPos;
@@ -49,7 +49,7 @@ class SwScanner
     sal_Bool bClip;
 
 public:
-    SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
+    SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
                const LanguageType* pLang,
                const ModelToViewHelper& rConvMap,
                sal_uInt16 nWordType,
@@ -61,7 +61,7 @@ public:
     // ! bReverse
     sal_Bool NextWord();
 
-    const rtl::OUString& GetWord() const    { return aWord; }
+    const OUString& GetWord() const    { return aWord; }
 
     sal_Int32 GetBegin() const         { return nBegin; }
     sal_Int32 GetEnd() const           { return nBegin + nLen; }

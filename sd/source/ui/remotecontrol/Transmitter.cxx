@@ -8,7 +8,6 @@
  */
 #include "Transmitter.hxx"
 
-using rtl::OString;
 using namespace std;
 using namespace osl; // Sockets etc.
 using namespace sd;

@@ -31,7 +31,7 @@ ProgressHandlerWrap::ProgressHandlerWrap( ::com::sun::star::uno::Reference< ::co
 {
 }
 
-sal_Bool getStatusFromAny_Impl( const Any& aAny, ::rtl::OUString& aText, sal_Int32& nNum )
+sal_Bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& nNum )
 {
     sal_Bool bNumIsSet = sal_False;
 
@@ -54,7 +54,7 @@ void SAL_CALL ProgressHandlerWrap::push( const Any& Status )
     if( !m_xStatusIndicator.is() )
         return;
 
-    ::rtl::OUString aText;
+    OUString aText;
     sal_Int32 nRange;
 
     if( getStatusFromAny_Impl( Status, aText, nRange ) )
@@ -67,7 +67,7 @@ void SAL_CALL ProgressHandlerWrap::update( const Any& Status )
     if( !m_xStatusIndicator.is() )
         return;
 
-    ::rtl::OUString aText;
+    OUString aText;
     sal_Int32 nValue;
 
     if( getStatusFromAny_Impl( Status, aText, nValue ) )

@@ -162,7 +162,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, sal_Bool useOffset, Number* number ) throw(RuntimeException)
 {
-        rtl::OUString aRet;
+        OUString aRet;
 
         sal_Int32 strLen = inStr.getLength() - startPos;
         sal_Unicode *numberChar = NumberChar[number->number];

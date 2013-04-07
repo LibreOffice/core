@@ -85,8 +85,8 @@ namespace ftp {
 
     struct FTPDirentry
     {
-        rtl::OUString                       m_aURL;
-        rtl::OUString                       m_aName;
+        OUString                       m_aURL;
+        OUString                       m_aName;
         DateTime                            m_aDate;
         sal_uInt32                          m_nMode;
         sal_uInt32                          m_nSize;
@@ -97,7 +97,7 @@ namespace ftp {
               m_nSize((sal_uInt32)(-1)) { }
 
         void clear() {
-            m_aURL = m_aName = rtl::OUString();
+            m_aURL = m_aName = OUString();
             m_aDate = DateTime(0,0,0,0,0,0,0);
             m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
             m_nSize = sal_uInt32(-1);
@@ -169,7 +169,7 @@ namespace ftp {
             sal_uInt16  nYear);
 
         static sal_Bool setPath (
-            rtl::OUString& rPath,
+            OUString& rPath,
             const sal_Char *value,
             sal_Int32       length = -1);
     };

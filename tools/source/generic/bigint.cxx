@@ -483,7 +483,7 @@ BigInt::BigInt( const BigInt& rBigInt )
     }
 }
 
-BigInt::BigInt( const rtl::OUString& rString )
+BigInt::BigInt( const OUString& rString )
 {
     bIsSet = sal_True;
     bIsNeg = sal_False;
@@ -606,7 +606,7 @@ BigInt::operator double() const
     }
 }
 
-rtl::OUString BigInt::GetString() const
+OUString BigInt::GetString() const
 {
     String aString;
 

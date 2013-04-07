@@ -240,7 +240,7 @@ sal_Int32 compileFile(const OString * pathname)
     idlc()->setMainFileName(fileName);
     idlc()->setRealFileName(tmpFile);
 
-    ::std::vector< ::rtl::OUString> lCppArgs;
+    ::std::vector< OUString> lCppArgs;
     lCppArgs.push_back("-DIDL");
     lCppArgs.push_back("-C");
     lCppArgs.push_back("-zI");
@@ -259,7 +259,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             cppArgs.append("-I");
             cppArgs.append(filePath);
-            lCppArgs.push_back(rtl::OStringToOUString(
+            lCppArgs.push_back(OStringToOUString(
                 cppArgs.makeStringAndClear().replace('\\', '/'),
                 RTL_TEXTENCODING_UTF8));
         }
@@ -273,7 +273,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = dOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(rtl::OStringToOUString("-D" + token, RTL_TEXTENCODING_UTF8));
+                lCppArgs.push_back(OStringToOUString("-D" + token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
@@ -285,7 +285,7 @@ sal_Int32 compileFile(const OString * pathname)
         {
             token = incOpt.getToken( 0, ' ', nIndex );
             if (token.getLength())
-                lCppArgs.push_back(rtl::OStringToOUString("-I" + token, RTL_TEXTENCODING_UTF8));
+                lCppArgs.push_back(OStringToOUString("-I" + token, RTL_TEXTENCODING_UTF8));
         } while( nIndex != -1 );
     }
 
@@ -322,8 +322,8 @@ sal_Int32 compileFile(const OString * pathname)
     rtl_uString** pCmdArgs = 0;
     pCmdArgs = (rtl_uString**)rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*));
 
-    ::std::vector< ::rtl::OUString >::iterator iter = lCppArgs.begin();
-    ::std::vector< ::rtl::OUString >::iterator end = lCppArgs.end();
+    ::std::vector< OUString >::iterator iter = lCppArgs.begin();
+    ::std::vector< OUString >::iterator end = lCppArgs.end();
     int i = 0;
 	while ( iter != end ) {
         pCmdArgs[i++] = (*iter).pData;

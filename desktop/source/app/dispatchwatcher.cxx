@@ -55,7 +55,6 @@
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
 
-using ::rtl::OUString;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -70,7 +69,7 @@ namespace desktop
 {
 
 String GetURL_Impl(
-    const String& rName, boost::optional< rtl::OUString > const & cwdUrl );
+    const String& rName, boost::optional< OUString > const & cwdUrl );
 
 struct DispatchHolder
 {
@@ -78,7 +77,7 @@ struct DispatchHolder
         aURL( rURL ), xDispatch( rDispatch ) {}
 
     URL aURL;
-    rtl::OUString cwdUrl;
+    OUString cwdUrl;
     Reference< XDispatch > xDispatch;
 };
 
@@ -169,9 +168,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
     DispatchList::const_iterator    p;
     std::vector< DispatchHolder >   aDispatches;
-    ::rtl::OUString                 aAsTemplateArg( "AsTemplate" );
+    OUString                 aAsTemplateArg( "AsTemplate" );
     sal_Bool                        bSetInputFilter = sal_False;
-    ::rtl::OUString                 aForcedInputFilter;
+    OUString                 aForcedInputFilter;
 
     for ( p = aDispatchRequestsList.begin(); p != aDispatchRequestsList.end(); ++p )
     {
@@ -238,7 +237,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         }
 
         String aName( GetURL_Impl( aDispatchRequest.aURL, aDispatchRequest.aCwdUrl ) );
-        ::rtl::OUString aTarget("_default");
+        OUString aTarget("_default");
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
@@ -282,7 +281,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );
 
-            xDispatcher = xDesktop->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDispatcher = xDesktop->queryDispatch( aURL, OUString(), 0 );
 
             if( xDispatcher.is() == sal_True )
             {
@@ -310,7 +309,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             if( xParser.is() == sal_True )
                 xParser->parseStrict( aURL );
 
-            xDispatcher = xDesktop->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDispatcher = xDesktop->queryDispatch( aURL, OUString(), 0 );
 
             if( xDispatcher.is() == sal_True )
             {
@@ -415,14 +414,14 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ) {
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
-                            rtl::OUString aParam = aDispatchRequest.aPrinterName;
+                            OUString aParam = aDispatchRequest.aPrinterName;
                             sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
                             sal_Int32 nFilterIndex = aParam.indexOf( ':' );
                             if( nPathIndex < nFilterIndex )
                                 nFilterIndex = -1;
-                            rtl::OUString aFilterOut=aParam.copy( nPathIndex+1 );
-                            rtl::OUString aFilter;
-                            rtl::OUString aFilterExt;
+                            OUString aFilterOut=aParam.copy( nPathIndex+1 );
+                            OUString aFilter;
+                            OUString aFilterExt;
                             sal_Bool bGuess = sal_False;
 
                             if( nFilterIndex >= 0 )
@@ -439,7 +438,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             INetURLObject aOutFilename( aObj );
                             aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                            rtl::OUString aOutFile = aFilterOut+
+                            OUString aOutFile = aFilterOut+
                                                      "/" +
                                                      aOutFilename.getName();
 
@@ -455,15 +454,15 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             conversionProperties[1].Name = "FilterName";
                             conversionProperties[1].Value <<= aFilter;
 
-                            rtl::OUString aTempName;
+                            OUString aTempName;
                             FileBase::getSystemPathFromFileURL( aName, aTempName );
-                            rtl::OString aSource8 = ::rtl::OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
                             FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                            rtl::OString aTargetURL8 = ::rtl::OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                            OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
                             printf("convert %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
-                                   ::rtl::OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
+                                   OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr());
                             if( FStatHelper::IsDocument(aOutFile) )
-                                printf("Overwriting: %s\n",::rtl::OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                printf("Overwriting: %s\n",OUStringToOString( aTempName, RTL_TEXTENCODING_UTF8 ).getStr() );
                             try
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
@@ -474,11 +473,11 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             }
                         }
                     } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
-                        rtl::OUString aParam = aDispatchRequest.aPrinterName;
+                        OUString aParam = aDispatchRequest.aPrinterName;
                         sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
 
-                        rtl::OUString aFilterOut;
-                        rtl::OUString aPrinterName;
+                        OUString aFilterOut;
+                        OUString aPrinterName;
                         if( nPathIndex != -1 )
                             aFilterOut=aParam.copy( nPathIndex+1 );
                         if( nPathIndex != 0 )
@@ -487,18 +486,18 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                         INetURLObject aOutFilename( aObj );
                         aOutFilename.SetExtension( "ps" );
                         FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                        rtl::OUString aOutFile = aFilterOut+
+                        OUString aOutFile = aFilterOut+
                             "/" +
                             aOutFilename.getName();
 
-                        rtl::OUString aTempName;
+                        OUString aTempName;
                         FileBase::getSystemPathFromFileURL( aName, aTempName );
-                        rtl::OString aSource8 = ::rtl::OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
+                        OString aSource8 = OUStringToOString ( aTempName, RTL_TEXTENCODING_UTF8 );
                         FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                        rtl::OString aTargetURL8 = ::rtl::OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
+                        OString aTargetURL8 = OUStringToOString(aTempName, RTL_TEXTENCODING_UTF8 );
                         printf("print %s -> %s using %s\n", aSource8.getStr(), aTargetURL8.getStr(),
                                aPrinterName.isEmpty() ?
-                                                     "<default_printer>" : ::rtl::OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                                     "<default_printer>" : OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
                         // create the custom printer, if given
                         Sequence < PropertyValue > aPrinterArgs( 1 );
@@ -522,7 +521,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             // create the printer
                             Sequence < PropertyValue > aPrinterArgs( 1 );
                             aPrinterArgs[0].Name = "Name";
-                            aPrinterArgs[0].Value <<= ::rtl::OUString( aDispatchRequest.aPrinterName );
+                            aPrinterArgs[0].Value <<= OUString( aDispatchRequest.aPrinterName );
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
@@ -566,7 +565,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         // Execute all asynchronous dispatches now after we placed them into our request container!
         Sequence < PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Referer";
-        aArgs[0].Value <<= ::rtl::OUString("private:OpenEvent");
+        aArgs[0].Value <<= OUString("private:OpenEvent");
         aArgs[1].Name = "SynchronMode";
         aArgs[1].Value <<= sal_True;
 

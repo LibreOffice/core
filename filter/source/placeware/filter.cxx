@@ -29,7 +29,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-using ::rtl::OUString;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;

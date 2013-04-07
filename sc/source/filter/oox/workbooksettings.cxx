@@ -43,7 +43,6 @@ using namespace ::com::sun::star::util;
 
 using ::comphelper::MediaDescriptor;
 using ::oox::core::CodecHelper;
-using ::rtl::OUString;
 
 // ============================================================================
 

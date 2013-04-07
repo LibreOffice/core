@@ -38,7 +38,7 @@ namespace dbaxml
 DBG_NAME(OXMLConnectionData)
 
 OXMLConnectionData::OXMLConnectionData( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName) :
+                sal_uInt16 nPrfx, const OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_bFoundOne(false)
 {
@@ -56,7 +56,7 @@ OXMLConnectionData::~OXMLConnectionData()
 
 SvXMLImportContext* OXMLConnectionData::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

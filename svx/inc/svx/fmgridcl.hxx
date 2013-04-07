@@ -138,7 +138,7 @@ public:
         @return
             The name of the specified object.
     */
-    virtual ::rtl::OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
     /** return the description of the specified object.
         @param  eObjType
@@ -148,7 +148,7 @@ public:
         @return
             The description of the specified object.
     */
-    virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
+    virtual OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
 protected:
     virtual void Command(const CommandEvent& rEvt);

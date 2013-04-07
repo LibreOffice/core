@@ -39,7 +39,7 @@ class ReconnectingFile
 
 public:
 
-    ReconnectingFile( const ::rtl::OUString& aFileURL )
+    ReconnectingFile( const OUString& aFileURL )
         : m_aFile( aFileURL )
         , m_nFlags( 0 )
         , m_bFlagsSet( sal_False )

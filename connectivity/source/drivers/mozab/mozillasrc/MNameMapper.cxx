@@ -20,7 +20,7 @@
 #include <MNameMapper.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -29,7 +29,7 @@
 using namespace connectivity::mozab;
 
 bool
-MNameMapper::ltstr::operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const
+MNameMapper::ltstr::operator()( const OUString &s1, const OUString &s2) const
 {
     return s1.compareTo(s2) < 0;
 }
@@ -76,7 +76,7 @@ const char * getURI(const nsIAbDirectory*  directory)
 
 // May modify the name passed in so that it's unique
 nsresult
-MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
+MNameMapper::add( OUString& str, nsIAbDirectory* abook )
 {
     MNameMapper::dirMap::iterator   iter;
 
@@ -87,18 +87,18 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
         return NS_ERROR_NULL_POINTER;
     }
 
-    ::rtl::OUString ouUri=::rtl::OUString::createFromAscii(getURI(abook));
+    OUString ouUri=OUString::createFromAscii(getURI(abook));
     if ( mUriMap->find (ouUri) != mUriMap->end() ) //There's already an entry with same uri
     {
         return NS_ERROR_FILE_NOT_FOUND;
     }
     mUriMap->insert( MNameMapper::uriMap::value_type( ouUri, abook ) );
 
-    ::rtl::OUString tempStr=str;
+    OUString tempStr=str;
     long count =1;
     while ( mDirMap->find( tempStr ) != mDirMap->end() ) {
 
-        tempStr = str + ::rtl::OUString::valueOf(count);
+        tempStr = str + OUString::valueOf(count);
         count ++;
     }
     str = tempStr;
@@ -109,7 +109,7 @@ MNameMapper::add( ::rtl::OUString& str, nsIAbDirectory* abook )
 }
 
 bool
-MNameMapper::getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook )
+MNameMapper::getDir( const OUString& str, nsIAbDirectory* *abook )
 {
     MNameMapper::dirMap::iterator   iter;
 

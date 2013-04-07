@@ -27,7 +27,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 // --------------------------------------------------------------------
 

@@ -24,7 +24,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
 
 //-------------------------------
 //

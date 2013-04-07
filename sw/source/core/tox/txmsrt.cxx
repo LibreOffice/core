@@ -48,7 +48,6 @@ extern bool IsFrameBehind( const SwTxtNode& rMyNd, xub_StrLen nMySttPos,
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 /*--------------------------------------------------------------------
   Initialize strings
  --------------------------------------------------------------------*/

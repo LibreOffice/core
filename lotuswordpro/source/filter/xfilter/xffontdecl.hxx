@@ -71,24 +71,24 @@
 class   XFFontDecl
 {
 public:
-    XFFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed = false);
+    XFFontDecl(OUString name, OUString family, sal_Bool fixed = false);
 
 public:
     /**
      * @descr   Get font name.
      */
-    rtl::OUString   GetFontName();
+    OUString   GetFontName();
 
     /**
      * @descr   Get font family.
      */
-    rtl::OUString   GetFontFamily();
+    OUString   GetFontFamily();
 
     sal_Bool        GetFontPitchFixed();
 
 private:
-    rtl::OUString   m_strFontName;
-    rtl::OUString   m_strFontFamily;
+    OUString   m_strFontName;
+    OUString   m_strFontFamily;
     sal_Bool        m_bPitchFixed;
 };
 

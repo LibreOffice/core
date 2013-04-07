@@ -65,7 +65,7 @@ public:
             pBtnOK->Enable( rLink.Call( this ) > 0 );
     }
 
-    void    SetEditHelpId( const rtl::OString& aHelpId) {pEdtName->SetHelpId(aHelpId);}
+    void    SetEditHelpId( const OString& aHelpId) {pEdtName->SetHelpId(aHelpId);}
 };
 
 /** #i68101#

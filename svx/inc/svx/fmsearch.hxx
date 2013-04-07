@@ -42,7 +42,7 @@ namespace com { namespace sun { namespace star {
 // Hilfsmethoden
 
 SVX_DLLPUBLIC sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xControl,
-                                            ::rtl::OUString* pCurrentText = NULL);
+                                            OUString* pCurrentText = NULL);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
 

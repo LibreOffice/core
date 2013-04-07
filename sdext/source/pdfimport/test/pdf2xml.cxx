@@ -40,7 +40,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( argc != 5 )
         return 1;
 
-    ::rtl::OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
+    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
 
     TreeVisitorFactorySharedPtr pTreeFactory;
     if( rtl_str_compare(argv[1], "-writer") == 0 )
@@ -53,15 +53,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
 
     osl_getProcessWorkingDir(&aBaseURL.pData);
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[2]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
 
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[3]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
 
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[4]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[4]).pData,
                                 &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aIniUrl.pData);
 

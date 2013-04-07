@@ -33,7 +33,7 @@ namespace sfx2
     {
         private:
 
-            ::std::vector< ::rtl::OUString > m_lFilters;
+            ::std::vector< OUString > m_lFilters;
             sal_Int32 m_nIterator;
 
         public:
@@ -53,15 +53,15 @@ namespace sfx2
     void appendFiltersForSave(
         TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl,
-        const ::rtl::OUString& _rFactory
+        const OUString& _rFactory
     );
 
     void appendExportFilters(
         TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
         );
 
@@ -72,7 +72,7 @@ namespace sfx2
     void appendFiltersForOpen(
         TSortedFilterList& _rFilterMatcher,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
-        ::rtl::OUString& /* [out] */ _rFirstNonEmpty,
+        OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl
     );
 
@@ -80,9 +80,9 @@ namespace sfx2
     /** adds the given extension to the display text.
         <p>To be used when opening or save generic files.</p>
     */
-    ::rtl::OUString addExtension(
-        const ::rtl::OUString& _rDisplayText,
-        const ::rtl::OUString& _rExtension,
+    OUString addExtension(
+        const OUString& _rDisplayText,
+        const OUString& _rExtension,
         sal_Bool _bForOpen,
         FileDialogHelper_Impl& _rFileDlgImpl
     );

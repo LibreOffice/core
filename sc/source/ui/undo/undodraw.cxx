@@ -41,11 +41,11 @@ void ScUndoDraw::ForgetDrawUndo()
     pDrawUndo = NULL;   // do not delete (DrawUndo has to be remembered from outside)
 }
 
-rtl::OUString ScUndoDraw::GetComment() const
+OUString ScUndoDraw::GetComment() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetComment();
-    return rtl::OUString();
+    return OUString();
 }
 
 OUString ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const

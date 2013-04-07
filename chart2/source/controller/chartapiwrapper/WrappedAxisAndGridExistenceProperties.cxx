@@ -28,7 +28,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 //.............................................................................
 namespace chart
@@ -286,7 +285,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
 
     if( bNewValue )
     {
-        rtl::OUString aTitleText;
+        OUString aTitleText;
         TitleHelper::createTitle(  m_eTitleType, aTitleText
             , m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
     }

@@ -187,7 +187,7 @@ namespace
             if(ppCurrentMark->get() == rpMarkToFind.get())
             {
                 //OSL_TRACE("found mark named '%s'",
-                //    ::rtl::OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 return ppCurrentMark;
             }
             ++ppCurrentMark;
@@ -216,7 +216,7 @@ namespace
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
                 //OSL_TRACE("found mark named '%s'",
-                //    ::rtl::OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
                 return ppCurrentMark;
             }
         }
@@ -226,14 +226,14 @@ namespace
     };
 
     static IDocumentMarkAccess::const_iterator_t lcl_FindMarkByName(
-        const ::rtl::OUString& rName,
+        const OUString& rName,
         IDocumentMarkAccess::const_iterator_t ppMarksBegin,
         IDocumentMarkAccess::const_iterator_t ppMarksEnd)
     {
         return find_if(
             ppMarksBegin,
             ppMarksEnd,
-            boost::bind(&::rtl::OUString::equals, boost::bind(&IMark::GetName, _1), rName));
+            boost::bind(&OUString::equals, boost::bind(&IMark::GetName, _1), rName));
     }
 
 #if 0
@@ -245,7 +245,7 @@ namespace
             ppMark++)
         {
             IMark* pMark = ppMark->get();
-            ::rtl::OString sName = ::rtl::OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             OSL_TRACE("%s %s %d,%d %d,%d",
@@ -294,12 +294,12 @@ namespace sw { namespace mark
         : m_pDoc(&rDoc)
     { }
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
-        const ::rtl::OUString& rName,
+        const OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
     {
 #if 0
         {
-            ::rtl::OString sName = ::rtl::OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
+            OString sName = OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
             const SwPosition* const pPos1 = rPaM.GetPoint();
             const SwPosition* pPos2 = pPos1;
             if(rPaM.HasMark())
@@ -337,16 +337,16 @@ namespace sw { namespace mark
                 pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::DDE_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::UNO_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));
@@ -399,8 +399,8 @@ namespace sw { namespace mark
     }
 
     ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark( const SwPaM& rPaM,
-        const rtl::OUString& rName,
-        const rtl::OUString& rType )
+        const OUString& rName,
+        const OUString& rType )
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
                 IDocumentMarkAccess::TEXT_FIELDMARK );
@@ -411,8 +411,8 @@ namespace sw { namespace mark
     }
 
     ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark( const SwPaM& rPaM,
-        const rtl::OUString& rName,
-        const rtl::OUString& rType)
+        const OUString& rName,
+        const OUString& rType)
     {
         sw::mark::IMark* pMark = makeMark( rPaM, rName,
                 IDocumentMarkAccess::CHECKBOX_FIELDMARK );
@@ -431,7 +431,7 @@ namespace sw { namespace mark
         if(ppExistingMark != m_vBookmarks.end())
             return ppExistingMark->get();
         const SwPaM aPaM(aPos);
-        return makeMark(aPaM, ::rtl::OUString(), eType);
+        return makeMark(aPaM, OUString(), eType);
     }
 
     void MarkManager::repositionMark( ::sw::mark::IMark* const io_pMark,
@@ -453,7 +453,7 @@ namespace sw { namespace mark
         sortMarks();
     }
 
-    bool MarkManager::renameMark(::sw::mark::IMark* io_pMark, const ::rtl::OUString& rNewName)
+    bool MarkManager::renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName)
     {
         OSL_PRECOND(io_pMark->GetMarkPos().GetDoc() == m_pDoc,
             "<MarkManager::renameMark(..)>"
@@ -789,12 +789,12 @@ namespace sw { namespace mark
         m_vMarks.clear();
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findMark(const ::rtl::OUString& rName) const
+    IDocumentMarkAccess::const_iterator_t MarkManager::findMark(const OUString& rName) const
     {
         return lcl_FindMarkByName(rName, m_vMarks.begin(), m_vMarks.end());
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findBookmark(const ::rtl::OUString& rName) const
+    IDocumentMarkAccess::const_iterator_t MarkManager::findBookmark(const OUString& rName) const
     {
         return lcl_FindMarkByName(rName, m_vBookmarks.begin(), m_vBookmarks.end());
     }
@@ -834,14 +834,14 @@ namespace sw { namespace mark
         { return dynamic_cast<IFieldmark*>(lcl_getMarkBefore(m_vFieldmarks, rPos)); }
 
 
-    ::rtl::OUString MarkManager::getUniqueMarkName(const ::rtl::OUString& rName) const
+    OUString MarkManager::getUniqueMarkName(const OUString& rName) const
     {
         OSL_ENSURE(!rName.isEmpty(),
             "<MarkManager::getUniqueMarkName(..)>"
             " - a name should be proposed");
         if(!hasMark(rName)) return rName;
-        ::rtl::OUStringBuffer sBuf;
-        ::rtl::OUString sTmp;
+        OUStringBuffer sBuf;
+        OUString sTmp;
 
         // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
         // a unused name. Due to performance-reasons (especially in mailmerge-Szenarios) there
@@ -868,7 +868,7 @@ namespace sw { namespace mark
         sort(m_vFieldmarks.begin(), m_vFieldmarks.end(), &lcl_MarkOrderingByStart);
     }
 
-    bool MarkManager::hasMark(const ::rtl::OUString& rName) const
+    bool MarkManager::hasMark(const OUString& rName) const
     {
         return (m_aMarkNamesSet.find(rName) != m_aMarkNamesSet.end());
     }

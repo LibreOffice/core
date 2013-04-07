@@ -20,19 +20,18 @@
 #define _SVX_GRIDCOLS_HXX
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
-namespace rtl { class OUString; }
-
-#define FM_COL_TEXTFIELD      rtl::OUString( "TextField" )
-#define FM_COL_COMBOBOX       rtl::OUString( "ComboBox" )
-#define FM_COL_CHECKBOX       rtl::OUString( "CheckBox" )
-#define FM_COL_TIMEFIELD      rtl::OUString( "TimeField" )
-#define FM_COL_DATEFIELD      rtl::OUString( "DateField" )
-#define FM_COL_NUMERICFIELD   rtl::OUString( "NumericField" )
-#define FM_COL_CURRENCYFIELD  rtl::OUString( "CurrencyField" )
-#define FM_COL_PATTERNFIELD   rtl::OUString( "PatternField" )
-#define FM_COL_LISTBOX        rtl::OUString( "ListBox" )
-#define FM_COL_FORMATTEDFIELD rtl::OUString( "FormattedField" )
+#define FM_COL_TEXTFIELD      OUString( "TextField" )
+#define FM_COL_COMBOBOX       OUString( "ComboBox" )
+#define FM_COL_CHECKBOX       OUString( "CheckBox" )
+#define FM_COL_TIMEFIELD      OUString( "TimeField" )
+#define FM_COL_DATEFIELD      OUString( "DateField" )
+#define FM_COL_NUMERICFIELD   OUString( "NumericField" )
+#define FM_COL_CURRENCYFIELD  OUString( "CurrencyField" )
+#define FM_COL_PATTERNFIELD   OUString( "PatternField" )
+#define FM_COL_LISTBOX        OUString( "ListBox" )
+#define FM_COL_FORMATTEDFIELD OUString( "FormattedField" )
 
 // column type ids
 #define TYPE_CHECKBOX       0
@@ -47,7 +46,7 @@ namespace rtl { class OUString; }
 #define TYPE_TIMEFIELD      9
 
 //------------------------------------------------------------------------------
-sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName);
+sal_Int32 getColumnTypeByModelName(const OUString& aModelName);
 
 
 #endif // _SVX_GRIDCOLS_HXX

@@ -44,7 +44,7 @@ SequenceInputStream::SequenceInputStream(const ByteSequence& rData)
 inline sal_Int32 SequenceInputStream::avail()
 {
     if (m_nPos == -1)
-        throw NotConnectedException(::rtl::OUString(), *this);
+        throw NotConnectedException(OUString(), *this);
 
     return m_aData.getLength() - m_nPos;
 }
@@ -60,7 +60,7 @@ sal_Int32 SAL_CALL SequenceInputStream::readBytes( Sequence<sal_Int8>& aData, sa
     sal_Int32 nAvail = avail();
 
     if (nBytesToRead < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),*this);
+        throw BufferSizeExceededException(OUString(),*this);
 
     if (nAvail < nBytesToRead)
         nBytesToRead = nAvail;
@@ -91,7 +91,7 @@ void SAL_CALL SequenceInputStream::skipBytes( sal_Int32 nBytesToSkip )
     sal_Int32 nAvail = avail();
 
     if (nBytesToSkip < 0)
-        throw BufferSizeExceededException(::rtl::OUString(),*this);
+        throw BufferSizeExceededException(OUString(),*this);
 
     if (nAvail < nBytesToSkip)
         nBytesToSkip = nAvail;
@@ -113,7 +113,7 @@ void SAL_CALL SequenceInputStream::closeInput(  )
     throw(NotConnectedException, IOException, RuntimeException)
 {
     if (m_nPos == -1)
-        throw NotConnectedException(::rtl::OUString(), *this);
+        throw NotConnectedException(OUString(), *this);
 
     m_nPos = -1;
 }

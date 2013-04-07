@@ -106,7 +106,7 @@ void OAdoColumn::construct()
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),     PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
 }
 // -----------------------------------------------------------------------------
 void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
@@ -122,14 +122,14 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
             case PROPERTY_ID_RELATEDCOLUMN:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aColumn.put_RelatedColumn(aVal);
                 }
                 break;
             case PROPERTY_ID_NAME:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aColumn.put_Name(aVal);
                 }
@@ -171,7 +171,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString( "Autoincrement" ), getBOOL( rValue ) );
+                OTools::putValue( m_aColumn.get_Properties(), OUString( "Autoincrement" ), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_IM001:
@@ -185,7 +185,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
         }
 
         if ( pAdoPropertyName )
-            OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( pAdoPropertyName ), getString( rValue ) );
+            OTools::putValue( m_aColumn.get_Properties(), OUString::createFromAscii( pAdoPropertyName ), getString( rValue ) );
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
@@ -209,7 +209,7 @@ void OAdoColumn::fillPropertyValues()
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),eType,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
+        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),eType,OUString(),m_Precision,m_Scale,bForceTo);
         if ( pTypeInfo )
             m_TypeName = pTypeInfo->aSimpleType.aTypeName;
         else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
@@ -218,7 +218,7 @@ void OAdoColumn::fillPropertyValues()
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
                                                             ::o3tl::compose1(
-                                                            ::std::bind2nd(aCase, ::rtl::OUString("VarBinary")),
+                                                            ::std::bind2nd(aCase, OUString("VarBinary")),
                                                                 ::o3tl::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
                                                                     ::o3tl::select2nd<OTypeInfoMap::value_type>())
@@ -234,7 +234,7 @@ void OAdoColumn::fillPropertyValues()
 
             if ( !pTypeInfo )
             {
-                pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),adBinary,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
+                pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),adBinary,OUString(),m_Precision,m_Scale,bForceTo);
                 eType = adBinary;
             }
 
@@ -252,19 +252,19 @@ void OAdoColumn::fillPropertyValues()
 
             if ( aProps.IsValid() )
             {
-                m_IsAutoIncrement = OTools::getValue( aProps, ::rtl::OUString("Autoincrement") );
+                m_IsAutoIncrement = OTools::getValue( aProps, OUString("Autoincrement") );
 
-                m_Description = OTools::getValue( aProps, ::rtl::OUString("Description") );
+                m_Description = OTools::getValue( aProps, OUString("Description") );
 
-                m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString("Default") );
+                m_DefaultValue = OTools::getValue( aProps, OUString("Default") );
 
 #if OSL_DEBUG_LEVEL > 0
                 sal_Int32 nCount = aProps.GetItemCount();
                 for (sal_Int32 i = 0; i<nCount; ++i)
                 {
                     WpADOProperty aProp = aProps.GetItem(i);
-                    ::rtl::OUString sName = aProp.GetName();
-                    ::rtl::OUString sVal = aProp.GetValue();
+                    OUString sName = aProp.GetName();
+                    OUString sVal = aProp.GetValue();
                 }
 #endif
             }

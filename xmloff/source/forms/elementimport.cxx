@@ -88,13 +88,13 @@ namespace xmloff
     };
 
     //=====================================================================
-    struct PropertyValueCompare : public ::std::binary_function< PropertyValue, ::rtl::OUString, bool>
+    struct PropertyValueCompare : public ::std::binary_function< PropertyValue, OUString, bool>
     {
-        bool operator() (const PropertyValue& lhs, const ::rtl::OUString& rhs) const
+        bool operator() (const PropertyValue& lhs, const OUString& rhs) const
         {
             return lhs.Name == rhs;
         }
-        bool operator() (const ::rtl::OUString& lhs, const PropertyValue& rhs) const
+        bool operator() (const OUString& lhs, const PropertyValue& rhs) const
         {
             return lhs == rhs.Name;
         }
@@ -125,12 +125,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    OControlElement::ElementType OElementNameMap::getElementType(const ::rtl::OUString& _rName)
+    OControlElement::ElementType OElementNameMap::getElementType(const OUString& _rName)
     {
         if ( s_sElementTranslations.empty() )
         {   // initialize
             for (ElementType eType=(ElementType)0; eType<UNKNOWN; ++eType)
-                s_sElementTranslations[::rtl::OUString::createFromAscii(getElementName(eType))] = eType;
+                s_sElementTranslations[OUString::createFromAscii(getElementName(eType))] = eType;
         }
         ConstMapString2ElementIterator aPos = s_sElementTranslations.find(_rName);
         if (s_sElementTranslations.end() != aPos)
@@ -143,7 +143,7 @@ namespace xmloff
     //= OElementImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OElementImport::OElementImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OElementImport::OElementImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :OPropertyImport(_rImport, _nPrefix, _rName)
         ,m_rFormImport(_rImport)
@@ -161,9 +161,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OElementImport::determineDefaultServiceName() const
+    OUString OElementImport::determineDefaultServiceName() const
     {
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //---------------------------------------------------------------------
@@ -172,13 +172,13 @@ namespace xmloff
         ENTER_LOG_CONTEXT( "xmloff::OElementImport - importing one element" );
 
         const SvXMLNamespaceMap& rMap = m_rContext.getGlobalContext().GetNamespaceMap();
-        const ::rtl::OUString sImplNameAttribute = rMap.GetQNameByKey( XML_NAMESPACE_FORM, GetXMLToken( XML_CONTROL_IMPLEMENTATION ) );
-        const ::rtl::OUString sControlImplementation = _rxAttrList->getValueByName( sImplNameAttribute );
+        const OUString sImplNameAttribute = rMap.GetQNameByKey( XML_NAMESPACE_FORM, GetXMLToken( XML_CONTROL_IMPLEMENTATION ) );
+        const OUString sControlImplementation = _rxAttrList->getValueByName( sImplNameAttribute );
 
         // retrieve the service name
         if ( !sControlImplementation.isEmpty() )
         {
-            ::rtl::OUString sOOoImplementationName;
+            OUString sOOoImplementationName;
             const sal_uInt16 nImplPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sControlImplementation, &sOOoImplementationName );
             m_sServiceName = ( nImplPrefix == XML_NAMESPACE_OOO ) ? sOOoImplementationName : sControlImplementation;
         }
@@ -199,7 +199,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OElementImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OElementImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >& _rxAttrList)
     {
         if( token::IsXMLToken(_rLocalName, token::XML_EVENT_LISTENERS) && (XML_NAMESPACE_OFFICE == _nPrefix))
@@ -228,7 +228,7 @@ namespace xmloff
                 new OGridColumnPropertyTranslator( Reference< XMultiPropertySet >( m_xElement, UNO_QUERY ) );
             const_cast< XMLTextStyleContext* >( m_pStyleElement )->FillPropertySet( xPropTranslation );
 
-            const ::rtl::OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
+            const OUString sNumberStyleName = const_cast< XMLTextStyleContext* >( m_pStyleElement )->GetDataStyleName( );
             if ( !sNumberStyleName.isEmpty() )
                 // the style also has a number (sub) style
                 m_rContext.applyControlNumberStyle( m_xElement, sNumberStyleName );
@@ -266,8 +266,8 @@ namespace xmloff
                 )
             {
                 OSL_ENSURE(m_xInfo->hasPropertyByName(aCheck->Name),
-                        ::rtl::OStringBuffer("OElementImport::implApplySpecificProperties: read a property (").
-                    append(rtl::OUStringToOString(aCheck->Name, RTL_TEXTENCODING_ASCII_US)).
+                        OStringBuffer("OElementImport::implApplySpecificProperties: read a property (").
+                    append(OUStringToOString(aCheck->Name, RTL_TEXTENCODING_ASCII_US)).
                     append(") which does not exist on the element!").getStr());
             }
         }
@@ -284,8 +284,8 @@ namespace xmloff
             ::std::sort( m_aValues.begin(), m_aValues.end(), PropertyValueLess());
 
             // the names
-            Sequence< ::rtl::OUString > aNames(m_aValues.size());
-            ::rtl::OUString* pNames = aNames.getArray();
+            Sequence< OUString > aNames(m_aValues.size());
+            OUString* pNames = aNames.getArray();
             // the values
             Sequence< Any > aValues(m_aValues.size());
             Any* pValues = aValues.getArray();
@@ -328,8 +328,8 @@ namespace xmloff
                 }
                 catch(Exception&)
                 {
-                    OSL_FAIL(::rtl::OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
-                        append(rtl::OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                    OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
+                        append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
                         append("\"!").getStr());
                 }
             }
@@ -362,8 +362,8 @@ namespace xmloff
                     if ( !xDynamicProperties.is() )
                     {
                     #if OSL_DEBUG_LEVEL > 0
-                        ::rtl::OString aMessage( "OElementImport::implApplyGenericProperties: encountered an unknown property (" );
-                        aMessage += ::rtl::OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
+                        OString aMessage( "OElementImport::implApplyGenericProperties: encountered an unknown property (" );
+                        aMessage += OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
                         aMessage += "), but component is no PropertyBag!";
                         OSL_FAIL( aMessage.getStr() );
                     #endif
@@ -470,32 +470,32 @@ namespace xmloff
             }
             catch(Exception&)
             {
-                OSL_FAIL(::rtl::OStringBuffer("OElementImport::EndElement: could not set the property \"").
-                    append(::rtl::OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                OSL_FAIL(OStringBuffer("OElementImport::EndElement: could not set the property \"").
+                    append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
                     append("\"!").getStr());
             }
         }
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OElementImport::implGetDefaultName() const
+    OUString OElementImport::implGetDefaultName() const
     {
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
-        static const ::rtl::OUString sUnnamedName("unnamed");
+        static const OUString sUnnamedName("unnamed");
         OSL_ENSURE(m_xParentContainer.is(), "OElementImport::implGetDefaultName: no parent container!");
         if (!m_xParentContainer.is())
             return sUnnamedName;
-        Sequence< ::rtl::OUString > aNames = m_xParentContainer->getElementNames();
+        Sequence< OUString > aNames = m_xParentContainer->getElementNames();
 
-        ::rtl::OUString sReturn;
-        const ::rtl::OUString* pNames = NULL;
-        const ::rtl::OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
+        OUString sReturn;
+        const OUString* pNames = NULL;
+        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for (sal_Int32 i=0; i<32768; ++i)   // the limit is nearly arbitrary ...
         {
             // assemble the new name (suggestion)
             sReturn = sUnnamedName;
-            sReturn += ::rtl::OUString::valueOf(i);
+            sReturn += OUString::valueOf(i);
             // check the existence (this is the bad performance part ....)
             for (pNames = aNames.getConstArray(); pNames<pNamesEnd; ++pNames)
             {
@@ -547,7 +547,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OElementImport::tryGenericAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
+    bool OElementImport::tryGenericAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue )
     {
         // the generic approach (which I hope all props will be migrated to, on the medium term): property handlers
         const AttributeDescription attribute( metadata::getAttributeDescription( _nNamespaceKey, _rLocalName ) );
@@ -604,7 +604,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OElementImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         if ( token::IsXMLToken( _rLocalName, token::XML_CONTROL_IMPLEMENTATION ) )
             // ignore this, it has already been handled in OElementImport::StartElement
@@ -645,7 +645,7 @@ namespace xmloff
             Reference< XComponentContext > xContext = m_rFormImport.getGlobalContext().GetComponentContext();
             Reference< XInterface > xPure = xContext->getServiceManager()->createInstanceWithContext(m_sServiceName, xContext);
             OSL_ENSURE(xPure.is(),
-                        ::rtl::OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(rtl::OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
+                        OStringBuffer("OElementImport::createElement: service factory gave me no object (service name: ").append(OUStringToOString(m_sServiceName, RTL_TEXTENCODING_ASCII_US)).append(")!").getStr());
             xReturn = Reference< XPropertySet >(xPure, UNO_QUERY);
         }
         else
@@ -662,15 +662,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OElementImport::simulateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
+    void OElementImport::simulateDefaultedAttribute(const sal_Char* _pAttributeName, const OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
     {
         OSL_ENSURE( m_xInfo.is(), "OPropertyImport::simulateDefaultedAttribute: the component should be more gossipy about it's properties!" );
 
         if ( !m_xInfo.is() || m_xInfo->hasPropertyByName( _rPropertyName ) )
         {
-            ::rtl::OUString sLocalAttrName = ::rtl::OUString::createFromAscii(_pAttributeName);
+            OUString sLocalAttrName = OUString::createFromAscii(_pAttributeName);
             if ( !encounteredAttribute( sLocalAttrName ) )
-                OSL_VERIFY( handleAttribute( XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii( _pAttributeDefault ) ) );
+                OSL_VERIFY( handleAttribute( XML_NAMESPACE_FORM, sLocalAttrName, OUString::createFromAscii( _pAttributeDefault ) ) );
         }
     }
 
@@ -678,7 +678,7 @@ namespace xmloff
     //= OControlImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OControlImport::OControlImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OControlImport::OControlImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(OControlElement::UNKNOWN)
@@ -687,7 +687,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    OControlImport::OControlImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OControlImport::OControlImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
         :OElementImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
         ,m_eElementType(_eType)
@@ -696,7 +696,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OControlImport::determineDefaultServiceName() const
+    OUString OControlImport::determineDefaultServiceName() const
     {
         const sal_Char* pServiceName = NULL;
         switch ( m_eElementType )
@@ -722,8 +722,8 @@ namespace xmloff
         default:                                 break;
         }
         if ( pServiceName != NULL )
-            return ::rtl::OUString::createFromAscii( pServiceName );
-        return ::rtl::OUString();
+            return OUString::createFromAscii( pServiceName );
+        return OUString();
     }
 
     //---------------------------------------------------------------------
@@ -734,7 +734,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BA_LINKED_CELL);
 
@@ -915,9 +915,9 @@ namespace xmloff
 
                         // transfer the name
                         if (PROPID_VALUE == aValueProps->Handle)
-                            aValueProps->Name = ::rtl::OUString::createFromAscii(pValueProperty);
+                            aValueProps->Name = OUString::createFromAscii(pValueProperty);
                         else
-                            aValueProps->Name = ::rtl::OUString::createFromAscii(pCurrentValueProperty);
+                            aValueProps->Name = OUString::createFromAscii(pCurrentValueProperty);
                         bSuccess = true;
                     }
                     break;
@@ -943,9 +943,9 @@ namespace xmloff
 
                         // transfer the name
                         if (PROPID_MIN_VALUE == aValueProps->Handle)
-                            aValueProps->Name = ::rtl::OUString::createFromAscii(pMinValueProperty);
+                            aValueProps->Name = OUString::createFromAscii(pMinValueProperty);
                         else
-                            aValueProps->Name = ::rtl::OUString::createFromAscii(pMaxValueProperty);
+                            aValueProps->Name = OUString::createFromAscii(pMaxValueProperty);
                         bSuccess = true;
                     }
                     break;
@@ -972,7 +972,7 @@ namespace xmloff
         // retrieve the type of the property
         Property aProp = _rxPropInfo->getPropertyByName(_rPropValue.Name);
         // the untranslated string value as read in handleAttribute
-        ::rtl::OUString sValue;
+        OUString sValue;
     #if OSL_DEBUG_LEVEL > 0
         sal_Bool bSuccess =
     #endif
@@ -1063,7 +1063,7 @@ namespace xmloff
                 // found it -> need to remember (and restore) the "value property value", which is not set explicitly
                 try
                 {
-                    aValuePropertyValue = m_xElement->getPropertyValue( ::rtl::OUString::createFromAscii( pValueProperty ) );
+                    aValuePropertyValue = m_xElement->getPropertyValue( OUString::createFromAscii( pValueProperty ) );
                 }
                 catch( const Exception& )
                 {
@@ -1080,7 +1080,7 @@ namespace xmloff
         {
             try
             {
-                m_xElement->setPropertyValue( ::rtl::OUString::createFromAscii( pValueProperty ), aValuePropertyValue );
+                m_xElement->setPropertyValue( OUString::createFromAscii( pValueProperty ), aValuePropertyValue );
             }
             catch( const Exception& )
             {
@@ -1106,7 +1106,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress )
+    void OControlImport::doRegisterCellValueBinding( const OUString& _rBoundCellAddress )
     {
         OSL_PRECOND( m_xElement.is(), "OControlImport::doRegisterCellValueBinding: invalid element!" );
         OSL_PRECOND( !_rBoundCellAddress.isEmpty(),
@@ -1116,7 +1116,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::doRegisterXFormsValueBinding( const ::rtl::OUString& _rBindingID )
+    void OControlImport::doRegisterXFormsValueBinding( const OUString& _rBindingID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
         OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
@@ -1125,7 +1125,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::doRegisterXFormsListBinding( const ::rtl::OUString& _rBindingID )
+    void OControlImport::doRegisterXFormsListBinding( const OUString& _rBindingID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
         OSL_PRECOND( !_rBindingID.isEmpty(), "binding ID is not valid" );
@@ -1134,7 +1134,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlImport::doRegisterXFormsSubmission( const ::rtl::OUString& _rSubmissionID )
+    void OControlImport::doRegisterXFormsSubmission( const OUString& _rSubmissionID )
     {
         OSL_PRECOND( m_xElement.is(), "need element" );
         OSL_PRECOND( !_rSubmissionID.isEmpty(), "binding ID is not valid" );
@@ -1164,7 +1164,7 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OImagePositionImport::OImagePositionImport( OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager,
-        sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const Reference< XNameContainer >& _rxParentContainer,
+        sal_uInt16 _nPrefix, const OUString& _rName, const Reference< XNameContainer >& _rxParentContainer,
         OControlElement::ElementType _eType )
         :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
         ,m_nImagePosition( -1 )
@@ -1174,8 +1174,8 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
-        const ::rtl::OUString& _rValue )
+    bool OImagePositionImport::handleAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
+        const OUString& _rValue )
     {
         if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
         {
@@ -1226,7 +1226,7 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OReferredControlImport::OReferredControlImport(
-            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType )
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
@@ -1244,10 +1244,10 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName,
-        const ::rtl::OUString& _rValue)
+    bool OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
+        const OUString& _rValue)
     {
-        static const ::rtl::OUString s_sReferenceAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_FOR));
+        static const OUString s_sReferenceAttributeName = OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_FOR));
         if (_rLocalName == s_sReferenceAttributeName)
         {
             m_sReferringControls = _rValue;
@@ -1260,16 +1260,16 @@ namespace xmloff
     //= OPasswordImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OPasswordImport::OPasswordImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OPasswordImport::OPasswordImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     {
     }
 
     //---------------------------------------------------------------------
-    bool OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const ::rtl::OUString s_sEchoCharAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR));
+        static const OUString s_sEchoCharAttributeName = OUString::createFromAscii(OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR));
         if (_rLocalName == s_sEchoCharAttributeName)
         {
             // need a special handling for the EchoChar property
@@ -1291,14 +1291,14 @@ namespace xmloff
     //= ORadioImport
     //=====================================================================
     //---------------------------------------------------------------------
-    ORadioImport::ORadioImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    ORadioImport::ORadioImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType)
         :OImagePositionImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
     {
     }
 
     //---------------------------------------------------------------------
-    bool ORadioImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool ORadioImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
@@ -1329,7 +1329,7 @@ namespace xmloff
     //=====================================================================
     //= OURLReferenceImport
     //=====================================================================
-    OURLReferenceImport::OURLReferenceImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OURLReferenceImport::OURLReferenceImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OImagePositionImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
@@ -1337,7 +1337,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
         static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
@@ -1356,7 +1356,7 @@ namespace xmloff
         if ( bMakeAbsolute && !_rValue.isEmpty() )
         {
             // make a global URL out of the local one
-            ::rtl::OUString sAdjustedValue;
+            OUString sAdjustedValue;
             // only resolve image related url
             // we don't want say form url targets to be resolved
             // using ResolveGraphicObjectURL
@@ -1374,7 +1374,7 @@ namespace xmloff
     //= OButtonImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OButtonImport::OButtonImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OButtonImport::OButtonImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OURLReferenceImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
@@ -1395,7 +1395,7 @@ namespace xmloff
     //= OValueRangeImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OValueRangeImport::OValueRangeImport( OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OValueRangeImport::OValueRangeImport( OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer, OControlElement::ElementType _eType )
         :OControlImport( _rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType )
         ,m_nStepSizeValue( 1 )
@@ -1404,7 +1404,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    bool OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue )
+    bool OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue )
     {
         if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ) ) )
         {
@@ -1432,7 +1432,7 @@ namespace xmloff
     //= OTextLikeImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OTextLikeImport::OTextLikeImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OTextLikeImport::OTextLikeImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
@@ -1442,7 +1442,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OTextLikeImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >& _rxAttrList )
     {
         if ( ( XML_NAMESPACE_TEXT == _nPrefix ) && _rLocalName.equalsIgnoreAsciiCase("p") )
@@ -1553,8 +1553,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     struct EqualName : public ::std::unary_function< PropertyValue, bool >
     {
-        const ::rtl::OUString m_sName;
-        EqualName( const ::rtl::OUString& _rName ) : m_sName( _rName ) { }
+        const OUString m_sName;
+        EqualName( const OUString& _rName ) : m_sName( _rName ) { }
 
         inline bool operator()( const PropertyValue& _rProp )
         {
@@ -1571,11 +1571,11 @@ namespace xmloff
         PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
             m_aValues.begin(),
             m_aValues.end(),
-            EqualName( ::rtl::OUString( "DefaultControl"  ) )
+            EqualName( OUString( "DefaultControl"  ) )
         );
         if ( aDefaultControlPropertyPos != m_aValues.end() )
         {
-            ::rtl::OUString sDefaultControl;
+            OUString sDefaultControl;
             OSL_VERIFY( aDefaultControlPropertyPos->Value >>= sDefaultControl );
             if ( sDefaultControl == "stardiv.one.form.control.Edit" )
             {
@@ -1608,7 +1608,7 @@ namespace xmloff
             // TODO (fs): stole this code somewhere - why don't we fix the text import??
             m_xCursor->gotoEnd( sal_False );
             m_xCursor->goLeft( 1, sal_True );
-            m_xCursor->setString( ::rtl::OUString() );
+            m_xCursor->setString( OUString() );
 
             // reset cursor
             xTextImportHelper->ResetCursor();
@@ -1623,7 +1623,7 @@ namespace xmloff
     //= OListAndComboImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OListAndComboImport::OListAndComboImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OListAndComboImport::OListAndComboImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
@@ -1637,16 +1637,16 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OListAndComboImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OListAndComboImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const ::rtl::OUString s_sOptionElementName("option");
+        static const OUString s_sOptionElementName("option");
         if (s_sOptionElementName == _rLocalName)
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const ::rtl::OUString s_sItemElementName("item");
+        static const OUString s_sItemElementName("item");
         if (s_sItemElementName == _rLocalName)
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 
@@ -1718,23 +1718,23 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListAndComboImport::doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress )
+    void OListAndComboImport::doRegisterCellValueBinding( const OUString& _rBoundCellAddress )
     {
-        ::rtl::OUString sBoundCellAddress( _rBoundCellAddress );
+        OUString sBoundCellAddress( _rBoundCellAddress );
         if ( m_bLinkWithIndexes )
         {
             // This is a HACK. We register a string which is no valid address, but allows
             // (somewhere else) to determine that a non-standard binding should be created.
             // This hack is acceptable for OOo 1.1.1, since the file format for value
             // bindings of form controls is to be changed afterwards, anyway.
-            sBoundCellAddress += ::rtl::OUString( ":index"  );
+            sBoundCellAddress += OUString( ":index"  );
         }
 
         OControlImport::doRegisterCellValueBinding( sBoundCellAddress );
     }
 
     //---------------------------------------------------------------------
-    bool OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         static const sal_Char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE);
         if ( _rLocalName.equalsAscii(pListSourceAttributeName) )
@@ -1753,7 +1753,7 @@ namespace xmloff
                 // a listbox which has a list-source attribute must have a list-source-type of something
                 // not equal to ValueList.
                 // In this case, the list-source value is simply the one and only element of the ListSource property.
-                Sequence< ::rtl::OUString > aListSourcePropValue( 1 );
+                Sequence< OUString > aListSourcePropValue( 1 );
                 aListSourcePropValue[0] = _rValue;
                 aListSource.Value <<= aListSourcePropValue;
             }
@@ -1786,7 +1786,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListAndComboImport::implPushBackLabel(const ::rtl::OUString& _rLabel)
+    void OListAndComboImport::implPushBackLabel(const OUString& _rLabel)
     {
         OSL_ENSURE(!m_nEmptyListItems, "OListAndComboImport::implPushBackValue: label list is already done!");
         if (!m_nEmptyListItems)
@@ -1794,7 +1794,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OListAndComboImport::implPushBackValue(const ::rtl::OUString& _rValue)
+    void OListAndComboImport::implPushBackValue(const OUString& _rValue)
     {
         OSL_ENSURE(!m_nEmptyValueItems, "OListAndComboImport::implPushBackValue: value list is already done!");
         if (!m_nEmptyValueItems)
@@ -1845,7 +1845,7 @@ namespace xmloff
     //= OListOptionImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OListOptionImport::OListOptionImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OListOptionImport::OListOptionImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
             const OListAndComboImportRef& _rListBox)
         :SvXMLImportContext(_rImport, _nPrefix, _rName)
         ,m_xListBoxImport(_rListBox)
@@ -1857,14 +1857,14 @@ namespace xmloff
     {
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
-        const ::rtl::OUString sLabelAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString("label"));
-        const ::rtl::OUString sValueAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString("value"));
+        const OUString sLabelAttribute = rMap.GetQNameByKey(
+            GetPrefix(), OUString("label"));
+        const OUString sValueAttribute = rMap.GetQNameByKey(
+            GetPrefix(), OUString("value"));
 
         // -------------------
         // the label attribute
-        ::rtl::OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);
+        OUString sValue = _rxAttrList->getValueByName(sLabelAttribute);
         sal_Bool bNonexistentAttribute = sal_False;
         if (sValue.isEmpty())
             if (_rxAttrList->getTypeByName(sLabelAttribute).isEmpty())
@@ -1891,10 +1891,10 @@ namespace xmloff
             m_xListBoxImport->implPushBackValue( sValue );
 
         // the current-selected and selected
-        const ::rtl::OUString sSelectedAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
-        const ::rtl::OUString sDefaultSelectedAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
+        const OUString sSelectedAttribute = rMap.GetQNameByKey(
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
+        const OUString sDefaultSelectedAttribute = rMap.GetQNameByKey(
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
 
         // propagate the selected flag
         bool bSelected(false);
@@ -1917,7 +1917,7 @@ namespace xmloff
     //= OComboItemImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OComboItemImport::OComboItemImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OComboItemImport::OComboItemImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
             const OListAndComboImportRef& _rListBox)
         :SvXMLImportContext(_rImport, _nPrefix, _rName)
         ,m_xListBoxImport(_rListBox)
@@ -1927,8 +1927,8 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OComboItemImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
-        const ::rtl::OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL)));
+        const OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL)));
         m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
 
         SvXMLImportContext::StartElement(_rxAttrList);
@@ -1939,7 +1939,7 @@ namespace xmloff
     //= OColumnWrapperImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnWrapperImport::OColumnWrapperImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OColumnWrapperImport::OColumnWrapperImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :SvXMLImportContext(_rImport.getGlobalContext(), _nPrefix, _rName)
         ,m_xParentContainer(_rxParentContainer)
@@ -1948,7 +1948,7 @@ namespace xmloff
     {
     }
     //---------------------------------------------------------------------
-    SvXMLImportContext* OColumnWrapperImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OColumnWrapperImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >&)
     {
         OControlImport* pReturn = implCreateChildContext(_nPrefix, _rLocalName, OElementNameMap::getElementType(_rLocalName));
@@ -1974,7 +1974,7 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     OControlImport* OColumnWrapperImport::implCreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             OControlElement::ElementType _eType)
     {
         OSL_ENSURE( (OControlElement::TEXT == _eType)
@@ -2010,7 +2010,7 @@ namespace xmloff
     //= OGridImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OGridImport::OGridImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OGridImport::OGridImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer,
             OControlElement::ElementType _eType)
         :OGridImport_Base(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, "column")
@@ -2019,7 +2019,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OGridImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
+    SvXMLImportContext* OGridImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const OUString& _rLocalName)
     {
         return new OColumnWrapperImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
     }
@@ -2028,7 +2028,7 @@ namespace xmloff
     //= OFormImport
     //=====================================================================
     //---------------------------------------------------------------------
-    OFormImport::OFormImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+    OFormImport::OFormImport(OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
             const Reference< XNameContainer >& _rxParentContainer)
         :OFormImport_Base(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, "control")
     {
@@ -2036,7 +2036,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OFormImport::CreateChildContext(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormImport::CreateChildContext(sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< XAttributeList >& _rxAttrList)
     {
         if( token::IsXMLToken(_rLocalName, token::XML_FORM) )
@@ -2072,18 +2072,18 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName)
+    SvXMLImportContext* OFormImport::implCreateControlWrapper(sal_uInt16 _nPrefix, const OUString& _rLocalName)
     {
         OSL_ENSURE( !this, "illegal call to OFormImport::implCreateControlWrapper" );
         return new SvXMLImportContext(GetImport(), _nPrefix, _rLocalName );
     }
 
     //---------------------------------------------------------------------
-    bool OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const ::rtl::OUString& _rLocalName, const ::rtl::OUString& _rValue)
+    bool OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
-        static const ::rtl::OUString s_sMasterFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faMasterFields));
-        static const ::rtl::OUString s_sDetailFieldsAttributeName = ::rtl::OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faDetailFiels));
+        static const OUString s_sMasterFieldsAttributeName = OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faMasterFields));
+        static const OUString s_sDetailFieldsAttributeName = OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faDetailFiels));
 
         if ( s_sMasterFieldsAttributeName == _rLocalName )
         {
@@ -2101,19 +2101,19 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormImport::implTranslateStringListProperty(const ::rtl::OUString& _rPropertyName, const ::rtl::OUString& _rValue)
+    void OFormImport::implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue)
     {
         PropertyValue aProp;
         aProp.Name = _rPropertyName;
 
-        Sequence< ::rtl::OUString > aList;
+        Sequence< OUString > aList;
 
         // split up the value string
         if (!_rValue.isEmpty())
         {
             // For the moment, we build a vector instead of a Sequence. It's easier to handle because of it's
             // push_back method
-            ::std::vector< ::rtl::OUString > aElements;
+            ::std::vector< OUString > aElements;
             // estimate the number of tokens
             sal_Int32 nEstimate = 0, nLength = _rValue.getLength();
             const sal_Unicode* pChars = _rValue.getStr();
@@ -2127,7 +2127,7 @@ namespace xmloff
             sal_Int32 nElementStart = 0;
             sal_Int32 nNextSep = 0;
             sal_Int32 nElementLength;
-            ::rtl::OUString sElement;
+            OUString sElement;
             do
             {
                 // extract the current element
@@ -2152,8 +2152,8 @@ namespace xmloff
             }
             while (nElementStart < nLength);
 
-            ::rtl::OUString *pElements = aElements.empty() ? 0 : &aElements[0];
-            aList = Sequence< ::rtl::OUString >(pElements, aElements.size());
+            OUString *pElements = aElements.empty() ? 0 : &aElements[0];
+            aList = Sequence< OUString >(pElements, aElements.size());
         }
         else
         {
@@ -2171,7 +2171,7 @@ namespace xmloff
     OXMLDataSourceImport::OXMLDataSourceImport(
                     SvXMLImport& _rImport
                     ,sal_uInt16 nPrfx
-                    , const ::rtl::OUString& _sLocalName
+                    , const OUString& _sLocalName
                     ,const Reference< ::com::sun::star::xml::sax::XAttributeList > & _xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xElement) :
         SvXMLImportContext( _rImport, nPrfx, _sLocalName )
@@ -2182,15 +2182,15 @@ namespace xmloff
         sal_Int16 nLength = (_xElement.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            ::rtl::OUString sLocalName;
-            ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            OUString sAttrName = _xAttrList->getNameByIndex( i );
             sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName, &sLocalName );
 
             if  (   ( nPrefix == OAttributeMetaData::getCommonControlAttributeNamespace( CCA_TARGET_LOCATION ) )
                 &&  ( sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION ) ) )
                 )
             {
-                ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                OUString sValue = _xAttrList->getValueByIndex( i );
 
                 INetURLObject aURL(sValue);
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
@@ -2203,7 +2203,7 @@ namespace xmloff
     }
     //---------------------------------------------------------------------
     OControlImport* OFormImport::implCreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             OControlElement::ElementType _eType )
     {
         switch (_eType)

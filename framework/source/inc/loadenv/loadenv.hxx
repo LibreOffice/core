@@ -135,7 +135,7 @@ private:
     /** @short  contains the name of the target, in which the specified resource
                 of this instance must be loaded.
      */
-    ::rtl::OUString m_sTarget;
+    OUString m_sTarget;
 
     /** @short  if m_sTarget is not a special one, this flags regulate searching
                 of a suitable one.
@@ -218,8 +218,8 @@ public:
 
     static css::uno::Reference< css::lang::XComponent > loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                              const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                                                                             const ::rtl::OUString&                                        sURL   ,
-                                                                             const ::rtl::OUString&                                        sTarget,
+                                                                             const OUString&                                        sURL   ,
+                                                                             const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,
                                                                              const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
         throw(css::lang::IllegalArgumentException,
@@ -275,10 +275,10 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime cant be used any longer.
      */
-    void initializeLoading(const ::rtl::OUString&                                           sURL            ,
+    void initializeLoading(const OUString&                                           sURL            ,
                                    const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
                                    const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
-                                   const ::rtl::OUString&                                           sTarget         ,
+                                   const OUString&                                           sTarget         ,
                                          sal_Int32                                                  nSearchFlags    ,
                                          EFeature                                                   eFeature        = E_NO_FEATURE         ,
                                          EContentType                                               eContentType    = E_UNSUPPORTED_CONTENT);
@@ -364,7 +364,7 @@ public:
 
         @return     A suitable enum value, which classify the specified content.
      */
-    static EContentType classifyContent(const ::rtl::OUString&                                 sURL            ,
+    static EContentType classifyContent(const OUString&                                 sURL            ,
                                         const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
 
     /** TODO document me ... */
@@ -431,7 +431,7 @@ private:
 
         @attention  Internaly we update the member m_lMediaDescriptor!
      */
-    ::rtl::OUString impl_askUserForTypeAndFilterIfAllowed()
+    OUString impl_askUserForTypeAndFilterIfAllowed()
         throw(LoadEnvException, css::uno::RuntimeException);
 
     /** @short  tries to use ContentHandler objects for loading.

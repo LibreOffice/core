@@ -56,9 +56,9 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
+    uno::Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.embed.StorageFactory";
     aRet[1] = "com.sun.star.comp.embed.StorageFactory";
     return aRet;
@@ -134,7 +134,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
         throw lang::IllegalArgumentException(); // TODO:
 
     // retrieve storage source stream
-    ::rtl::OUString aURL;
+    OUString aURL;
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XInputStream > xInputStream;
 
@@ -198,7 +198,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
                 }
                 else if ( aDescr[nInd].Name == "StorageFormat" )
                 {
-                    ::rtl::OUString aFormatName;
+                    OUString aFormatName;
                     sal_Int32 nFormatID = 0;
                     if ( aDescr[nInd].Value >>= aFormatName )
                     {
@@ -281,17 +281,17 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OStorageFactory::getImplementationName()
+OUString SAL_CALL OStorageFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OStorageFactory::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL OStorageFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL OStorageFactory::supportsService( const ::rtl::OUString& Servi
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OStorageFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

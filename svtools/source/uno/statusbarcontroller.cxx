@@ -47,7 +47,7 @@ namespace svt
 StatusbarController::StatusbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
-    const ::rtl::OUString& aCommandURL,
+    const OUString& aCommandURL,
     unsigned short nID ) :
     OWeakObject()
     ,   m_bInitialized( sal_False )
@@ -274,7 +274,7 @@ throw ( RuntimeException )
     Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
     {
-        rtl::OUString aStrValue;
+        OUString aStrValue;
         StatusBar*    pStatusBar = (StatusBar *)pWindow;
 
         if ( Event.State >>= aStrValue )
@@ -340,7 +340,7 @@ void SAL_CALL StatusbarController::doubleClick() throw (::com::sun::star::uno::R
     execute( aArgs );
 }
 
-void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
+void StatusbarController::addStatusListener( const OUString& aCommandURL )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -371,7 +371,7 @@ void StatusbarController::addStatusListener( const rtl::OUString& aCommandURL )
                 Reference< XURLTransformer > xURLTransformer = getURLTransformer();
                 aTargetURL.Complete = aCommandURL;
                 xURLTransformer->parseStrict( aTargetURL );
-                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
@@ -450,7 +450,7 @@ void StatusbarController::bindListener()
                 // Query for dispatch object. Old dispatch will be released with this, too.
                 try
                 {
-                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
                 catch ( Exception& )
                 {
@@ -524,7 +524,7 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    rtl::OUString                aCommandURL;
+    OUString                aCommandURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -562,7 +562,7 @@ void StatusbarController::execute( const ::com::sun::star::uno::Sequence< ::com:
 }
 
 void StatusbarController::execute(
-    const rtl::OUString& aCommandURL,
+    const OUString& aCommandURL,
     const Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
 {
     Reference< XDispatch >      xDispatch;
@@ -591,7 +591,7 @@ void StatusbarController::execute(
                 Reference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider(
                     m_xFrame->getController(), UNO_QUERY );
                 if ( xDispatchProvider.is() )
-                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
             }
         }
     }

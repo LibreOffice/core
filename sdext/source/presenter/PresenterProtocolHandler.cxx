@@ -40,7 +40,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -241,8 +240,8 @@ OUString PresenterProtocolHandler::getImplementationName_static (void)
 
 Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static (void)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.frame.ProtocolHandler");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.frame.ProtocolHandler");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 Reference<XInterface> PresenterProtocolHandler::Create (
@@ -295,7 +294,7 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
 
 Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
     const css::util::URL& rURL,
-    const rtl::OUString& rsTargetFrameName,
+    const OUString& rsTargetFrameName,
     sal_Int32 nSearchFlags)
     throw(RuntimeException)
 {

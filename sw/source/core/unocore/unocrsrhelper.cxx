@@ -90,7 +90,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
@@ -678,7 +677,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     nPaMStart = nPaMEnd;
                     nPaMEnd = nTmp;
                 }
-                Sequence< ::rtl::OUString> aCharStyles;
+                Sequence< OUString> aCharStyles;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
                 for(sal_uInt16 nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
                 {
@@ -960,8 +959,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
     comphelper::MediaDescriptor aMediaDescriptor( rOptions );
-    ::rtl::OUString sFileName = rURL;
-    ::rtl::OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
+    OUString sFileName = rURL;
+    OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
     uno::Reference < io::XStream > xStream;
     uno::Reference < io::XInputStream > xInputStream;
 
@@ -1163,7 +1162,7 @@ bool DocInsertStringSplitCR(
 }
 
 void makeRedline( SwPaM& rPaM,
-    const ::rtl::OUString& rRedlineType,
+    const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -1182,15 +1181,15 @@ void makeRedline( SwPaM& rPaM,
     //todo: what about REDLINE_FMTCOLL?
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
-    aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString("RedlineAuthor"), aAuthorValue);
+    aAuthorValue = aPropMap.getUnpackedValueOrDefault( OUString("RedlineAuthor"), aAuthorValue);
     sal_uInt16 nAuthor = 0;
-    ::rtl::OUString sAuthor;
+    OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
 
-    ::rtl::OUString sComment;
+    OUString sComment;
     uno::Any aCommentValue;
-    aCommentValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString("RedlineComment"), aCommentValue);
+    aCommentValue = aPropMap.getUnpackedValueOrDefault( OUString("RedlineComment"), aCommentValue);
 
     SwRedlineData aRedlineData( eType, nAuthor );
     if( aCommentValue >>= sComment )
@@ -1198,7 +1197,7 @@ void makeRedline( SwPaM& rPaM,
 
     ::util::DateTime aStamp;
     uno::Any aDateTimeValue;
-    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString("RedlineDateTime"), aDateTimeValue);
+    aDateTimeValue = aPropMap.getUnpackedValueOrDefault( OUString("RedlineDateTime"), aDateTimeValue);
     if( aDateTimeValue >>= aStamp )
     {
        aRedlineData.SetTimeStamp(

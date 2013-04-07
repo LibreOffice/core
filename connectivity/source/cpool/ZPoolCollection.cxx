@@ -42,33 +42,33 @@ using namespace ::osl;
 using namespace connectivity;
 
 //--------------------------------------------------------------------
-static const ::rtl::OUString& getConnectionPoolNodeName()
+static const OUString& getConnectionPoolNodeName()
 {
-    static ::rtl::OUString s_sNodeName(  "org.openoffice.Office.DataAccess/ConnectionPool" );
+    static OUString s_sNodeName(  "org.openoffice.Office.DataAccess/ConnectionPool" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
-static const ::rtl::OUString& getEnablePoolingNodeName()
+static const OUString& getEnablePoolingNodeName()
 {
-    static ::rtl::OUString s_sNodeName(  "EnablePooling" );
+    static OUString s_sNodeName(  "EnablePooling" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------
-static const ::rtl::OUString& getDriverNameNodeName()
+static const OUString& getDriverNameNodeName()
 {
-    static ::rtl::OUString s_sNodeName(  "DriverName" );
+    static OUString s_sNodeName(  "DriverName" );
     return s_sNodeName;
 }
 // -----------------------------------------------------------------------------
-static const ::rtl::OUString& getDriverSettingsNodeName()
+static const OUString& getDriverSettingsNodeName()
 {
-    static ::rtl::OUString s_sNodeName(  "DriverSettings" );
+    static OUString s_sNodeName(  "DriverSettings" );
     return s_sNodeName;
 }
 //--------------------------------------------------------------------------
-static const ::rtl::OUString& getEnableNodeName()
+static const OUString& getEnableNodeName()
 {
-    static ::rtl::OUString s_sNodeName(  "Enable" );
+    static OUString s_sNodeName(  "Enable" );
     return s_sNodeName;
 }
 
@@ -100,18 +100,18 @@ OPoolCollection::~OPoolCollection()
     clearConnectionPools(sal_False);
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const ::rtl::OUString& _rURL ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const OUString& _rURL ) throw(SQLException, RuntimeException)
 {
     return getConnectionWithInfo(_rURL,Sequence< PropertyValue >());
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OPoolCollection::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XConnection > xConnection;
     Reference< XDriver > xDriver;
     Reference< XInterface > xDriverNode;
-    ::rtl::OUString sImplName;
+    OUString sImplName;
     if(isPoolingEnabledByUrl(_rURL,xDriver,sImplName,xDriverNode) && xDriver.is())
     {
         OConnectionPool* pConnectionPool = getConnectionPool(sImplName,xDriver,xDriverNode);
@@ -137,18 +137,18 @@ sal_Int32 SAL_CALL OPoolCollection::getLoginTimeout(  ) throw(RuntimeException)
     return m_xManager->getLoginTimeout();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OPoolCollection::getImplementationName(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     return getImplementationName_Static();
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OPoolCollection::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OPoolCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -156,7 +156,7 @@ sal_Bool SAL_CALL OPoolCollection::supportsService( const ::rtl::OUString& _rSer
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -168,27 +168,27 @@ Reference< XInterface > SAL_CALL OPoolCollection::CreateInstance(const Reference
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
+OUString SAL_CALL OPoolCollection::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.sdbc.OConnectionPool");
+    return OUString("com.sun.star.sdbc.OConnectionPool");
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OPoolCollection::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ConnectionPool");
+    Sequence< OUString > aSupported(1);
+    aSupported[0] = OUString("com.sun.star.sdbc.ConnectionPool");
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUString& _rURL ) throw(RuntimeException)
+Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _rURL ) throw(RuntimeException)
 {
     // returns the original driver when no connection pooling is enabled else it returns the proxy
     MutexGuard aGuard(m_aMutex);
 
     Reference< XDriver > xDriver;
     Reference< XInterface > xDriverNode;
-    ::rtl::OUString sImplName;
+    OUString sImplName;
     if(isPoolingEnabledByUrl(_rURL,xDriver,sImplName,xDriverNode))
     {
         Reference< XDriver > xExistentProxy;
@@ -223,7 +223,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const ::rtl::OUSt
     return xDriver;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OPoolCollection::isDriverPoolingEnabled(const ::rtl::OUString& _sDriverImplName,
+sal_Bool OPoolCollection::isDriverPoolingEnabled(const OUString& _sDriverImplName,
                                                  Reference< XInterface >& _rxDriverNode)
 {
     sal_Bool bEnabled = sal_False;
@@ -233,9 +233,9 @@ sal_Bool OPoolCollection::isDriverPoolingEnabled(const ::rtl::OUString& _sDriver
 
     if(xDirectAccess.is())
     {
-        Sequence< ::rtl::OUString > aDriverKeys = xDirectAccess->getElementNames();
-        const ::rtl::OUString* pDriverKeys = aDriverKeys.getConstArray();
-        const ::rtl::OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
+        Sequence< OUString > aDriverKeys = xDirectAccess->getElementNames();
+        const OUString* pDriverKeys = aDriverKeys.getConstArray();
+        const OUString* pDriverKeysEnd = pDriverKeys + aDriverKeys.getLength();
         for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
         {
             // the name of the driver in this round
@@ -270,9 +270,9 @@ Reference<XInterface> OPoolCollection::getConfigPoolRoot()
     return m_xConfigNode;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OPoolCollection::isPoolingEnabledByUrl(const ::rtl::OUString& _sUrl,
+sal_Bool OPoolCollection::isPoolingEnabledByUrl(const OUString& _sUrl,
                                                 Reference< XDriver >& _rxDriver,
-                                                ::rtl::OUString& _rsImplName,
+                                                OUString& _rsImplName,
                                                 Reference< XInterface >& _rxDriverNode)
 {
     sal_Bool bEnabled = sal_False;
@@ -299,13 +299,13 @@ void OPoolCollection::clearConnectionPools(sal_Bool _bDispose)
     {
         aIter->second->clear(_bDispose);
         aIter->second->release();
-        ::rtl::OUString sKeyValue = aIter->first;
+        OUString sKeyValue = aIter->first;
         ++aIter;
         m_aPools.erase(sKeyValue);
     }
 }
 // -----------------------------------------------------------------------------
-OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImplName,
+OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
                                                     const Reference< XDriver >& _xDriver,
                                                     const Reference< XInterface >& _xDriverNode)
 {
@@ -329,7 +329,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
     return pRet;
 }
 // -----------------------------------------------------------------------------
-Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::OUString& _rPath) const
+Reference< XInterface > OPoolCollection::createWithServiceFactory(const OUString& _rPath) const
 {
     return createWithProvider(
         com::sun::star::configuration::theDefaultProvider::get(m_xContext),
@@ -337,17 +337,17 @@ Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::O
 }
 //------------------------------------------------------------------------
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,
-                            const ::rtl::OUString& _rPath) const
+                            const OUString& _rPath) const
 {
     OSL_ASSERT(_rxConfProvider.is());
     Sequence< Any > args(1);
     args[0] = makeAny(
         NamedValue(
-            rtl::OUString("nodepath"),
+            OUString("nodepath"),
             makeAny(_rPath)));
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(
-            rtl::OUString( "com.sun.star.configuration.ConfigurationAccess"),
+            OUString( "com.sun.star.configuration.ConfigurationAccess"),
             args));
     OSL_ENSURE(
         xInterface.is(),
@@ -355,7 +355,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
     return xInterface;
 }
 // -----------------------------------------------------------------------------
-Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,const Reference<XInterface>& _xTreeNode) const throw()
+Reference<XInterface> OPoolCollection::openNode(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) const throw()
 {
     Reference< XHierarchicalNameAccess > xHierarchyAccess(_xTreeNode, UNO_QUERY);
     Reference< XNameAccess > xDirectAccess(_xTreeNode, UNO_QUERY);
@@ -387,7 +387,7 @@ Reference<XInterface> OPoolCollection::openNode(const ::rtl::OUString& _rPath,co
     return xNode;
 }
 // -----------------------------------------------------------------------------
-Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<XInterface>& _xTreeNode) throw()
+Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterface>& _xTreeNode) throw()
 {
     Reference< XHierarchicalNameAccess > xHierarchyAccess(_xTreeNode, UNO_QUERY);
     Reference< XNameAccess > xDirectAccess(_xTreeNode, UNO_QUERY);
@@ -476,7 +476,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
         evt.NewValue >>= bEnabled;
         if(!bEnabled)
         {
-            ::rtl::OUString sThisDriverName;
+            OUString sThisDriverName;
             getNodeValue(getDriverNameNodeName(),evt.Source) >>= sThisDriverName;
             // 1nd relase the driver
             // look if we already have a proxy for this driver

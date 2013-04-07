@@ -26,7 +26,6 @@
 #include "TransformerBase.hxx"
 #include "FormPropOASISTContext.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;

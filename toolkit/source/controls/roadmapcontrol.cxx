@@ -76,9 +76,9 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
     // -------------------------------------------------------------------
-    ::rtl::OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException)
+    OUString UnoControlRoadmapModel::getServiceName() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
+        return OUString::createFromAscii( szServiceName_UnoControlRoadmapModel );
     }
 
 
@@ -103,7 +103,7 @@ static void lcl_throwIndexOutOfBoundsException( )
                     aReturn <<= (sal_Int16) 2;              // No Border
                     break;
                 case BASEPROPERTY_DEFAULTCONTROL:
-                    aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlRoadmap ) );
+                    aReturn <<= OUString( OUString::createFromAscii( szServiceName_UnoControlRoadmap ) );
                     break;
             default : aReturn = UnoControlRoadmapModel_Base::ImplGetDefaultValue( nPropId ); break;
         }
@@ -187,7 +187,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( !xRoadmapItem.is() )
             lcl_throwIllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
-        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( ::rtl::OUString("com.sun.star.awt.RoadmapItem") );
+        sal_Bool bIsRoadmapItem = xServiceInfo->supportsService( OUString("com.sun.star.awt.RoadmapItem") );
         if ( !bIsRoadmapItem )
             lcl_throwIllegalArgumentException();
     }
@@ -201,12 +201,12 @@ static void lcl_throwIndexOutOfBoundsException( )
         if ( xProps.is() )
         {
             sal_Int32 LocID = 0;
-            Any aValue = xPropertySet->getPropertyValue( ::rtl::OUString("ID") );
+            Any aValue = xPropertySet->getPropertyValue( OUString("ID") );
             aValue >>= LocID;
             if (LocID < 0)              // index may not be smaller than zero
             {
                 aAny <<= GetUniqueID();
-                xPropertySet->setPropertyValue( ::rtl::OUString("ID"), aAny );
+                xPropertySet->setPropertyValue( OUString("ID"), aAny );
             }
         }
     }
@@ -229,7 +229,7 @@ static void lcl_throwIndexOutOfBoundsException( )
               {
                 CurRoadmapItem = *i;
                 Reference< XPropertySet > xPropertySet( CurRoadmapItem, UNO_QUERY );
-                aAny = xPropertySet->getPropertyValue( ::rtl::OUString("ID") );
+                aAny = xPropertySet->getPropertyValue( OUString("ID") );
                 aAny >>= n_CurItemID;
                 if (n_CurItemID == CurID)
                 {
@@ -387,9 +387,9 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
 
     // -------------------------------------------------------------------
-    ::rtl::OUString UnoRoadmapControl::GetComponentServiceName()
+    OUString UnoRoadmapControl::GetComponentServiceName()
     {
-        return ::rtl::OUString("Roadmap");
+        return OUString("Roadmap");
     }
 
 
@@ -410,7 +410,7 @@ void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(Run
     rEvent.Element >>= xRoadmapItem;
     Reference< XPropertySet > xRoadmapPropertySet( xRoadmapItem, UNO_QUERY );
     if ( xRoadmapPropertySet.is() )
-        xRoadmapPropertySet->addPropertyChangeListener( rtl::OUString(), this );
+        xRoadmapPropertySet->addPropertyChangeListener( OUString(), this );
 
     Reference< XContainerListener >  xPeer(getPeer(), UNO_QUERY);
     if ( xPeer.is() )
@@ -418,7 +418,7 @@ void UnoRoadmapControl::elementInserted( const ContainerEvent& rEvent )throw(Run
         xPeer->elementInserted( rEvent );
         Reference < XPropertySet > xPropertySet( xPeer, UNO_QUERY );
         if ( xPropertySet.is() )
-            xPropertySet->addPropertyChangeListener( rtl::OUString(), this );
+            xPropertySet->addPropertyChangeListener( OUString(), this );
     }
 }
 
@@ -432,7 +432,7 @@ void UnoRoadmapControl::elementRemoved( const ContainerEvent& rEvent )throw(Runt
     rEvent.Element >>= xRoadmapItem;
     Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
     if ( xPropertySet.is() )
-        xPropertySet->removePropertyChangeListener( rtl::OUString(), this );
+        xPropertySet->removePropertyChangeListener( OUString(), this );
 }
 
 

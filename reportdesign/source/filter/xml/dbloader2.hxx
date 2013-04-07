@@ -73,20 +73,20 @@ public:
     ORptTypeDetection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
     // XServiceInfo
-    ::rtl::OUString                                     SAL_CALL getImplementationName() throw(  );
-    sal_Bool                                            SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(  );
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  SAL_CALL getSupportedServiceNames(void) throw(  );
+    OUString                                     SAL_CALL getImplementationName() throw(  );
+    sal_Bool                                            SAL_CALL supportsService(const OUString& ServiceName) throw(  );
+    ::com::sun::star::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw(  );
 
     // static methods
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException )
+    static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException )
     {
-        return ::rtl::OUString("com.sun.star.comp.report.ORptTypeDetection");
+        return OUString("com.sun.star.comp.report.ORptTypeDetection");
     }
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
     create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
-    virtual ::rtl::OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
 };
 }
 #endif

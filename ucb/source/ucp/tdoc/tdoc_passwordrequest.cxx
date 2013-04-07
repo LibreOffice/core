@@ -61,14 +61,14 @@ namespace tdoc_ucp
             throw ( uno::RuntimeException );
 
         // XInteractionPassword
-        virtual void SAL_CALL setPassword( const rtl::OUString & aPasswd )
+        virtual void SAL_CALL setPassword( const OUString & aPasswd )
             throw ( uno::RuntimeException );
-        virtual rtl::OUString SAL_CALL getPassword()
+        virtual OUString SAL_CALL getPassword()
             throw ( uno::RuntimeException );
 
     private:
         osl::Mutex m_aMutex;
-        rtl::OUString m_aPassword;
+        OUString m_aPassword;
     };
 } // namespace tdoc_ucp
 
@@ -183,7 +183,7 @@ void SAL_CALL InteractionSupplyPassword::select()
 
 // virtual
 void SAL_CALL
-InteractionSupplyPassword::setPassword( const ::rtl::OUString& aPasswd )
+InteractionSupplyPassword::setPassword( const OUString& aPasswd )
     throw ( uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -191,7 +191,7 @@ InteractionSupplyPassword::setPassword( const ::rtl::OUString& aPasswd )
 }
 
 // virtual
-rtl::OUString SAL_CALL InteractionSupplyPassword::getPassword()
+OUString SAL_CALL InteractionSupplyPassword::getPassword()
     throw ( uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -208,7 +208,7 @@ rtl::OUString SAL_CALL InteractionSupplyPassword::getPassword()
 
 DocumentPasswordRequest::DocumentPasswordRequest(
     task::PasswordRequestMode eMode,
-    const rtl::OUString & rDocumentName )
+    const OUString & rDocumentName )
 {
     // Fill request...
     task::DocumentPasswordRequest aRequest;

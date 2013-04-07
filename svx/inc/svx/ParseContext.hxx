@@ -43,13 +43,13 @@ namespace svxform
 
         virtual ~OSystemParseContext();
         // retrieves language specific error messages
-        virtual ::rtl::OUString getErrorMessage(ErrorCode _eCodes) const;
+        virtual OUString getErrorMessage(ErrorCode _eCodes) const;
 
         // retrieves language specific keyword strings (only ASCII allowed)
-        virtual ::rtl::OString getIntlKeywordAscii(InternationalKeyCode _eKey) const;
+        virtual OString getIntlKeywordAscii(InternationalKeyCode _eKey) const;
 
         // finds out, if we have an international keyword (only ASCII allowed)
-        virtual InternationalKeyCode getIntlKeyCode(const ::rtl::OString& rToken) const;
+        virtual InternationalKeyCode getIntlKeyCode(const OString& rToken) const;
 
         /** get's a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>

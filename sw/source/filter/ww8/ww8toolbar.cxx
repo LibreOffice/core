@@ -51,7 +51,7 @@ using namespace com::sun::star;
 // no. of visual data elements in a SwCTB ( fixed )
 const short nVisualData = 5;
 
-typedef std::map< sal_Int16, rtl::OUString > IdToString;
+typedef std::map< sal_Int16, OUString > IdToString;
 
 class MSOWordCommandConvertor : public MSOCommandConvertor
 {
@@ -59,8 +59,8 @@ class MSOWordCommandConvertor : public MSOCommandConvertor
    IdToString tcidToOOcmd;
 public:
     MSOWordCommandConvertor();
-    virtual rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
-    virtual rtl::OUString MSOTCIDToOOCommand( sal_Int16 key );
+    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
+    virtual OUString MSOTCIDToOOCommand( sal_Int16 key );
 };
 
 MSOWordCommandConvertor::MSOWordCommandConvertor()
@@ -75,18 +75,18 @@ MSOWordCommandConvertor::MSOWordCommandConvertor()
    tcidToOOcmd[ 0x9d9 ] = ".uno:Print";
 }
 
-rtl::OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
+OUString MSOWordCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
 {
-    rtl::OUString sResult;
+    OUString sResult;
     IdToString::iterator it = msoToOOcmd.find( key );
     if ( it != msoToOOcmd.end() )
         sResult = it->second;
     return sResult;
 }
 
-rtl::OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
+OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 {
-    rtl::OUString sResult;
+    OUString sResult;
     IdToString::iterator it = tcidToOOcmd.find( key );
     if ( it != tcidToOOcmd.end() )
         sResult = it->second;
@@ -117,7 +117,7 @@ Customization* SwCTBWrapper::GetCustomizaton( sal_Int16 index )
     return &rCustomizations[ index ];
 }
 
-SwCTB* SwCTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
+SwCTB* SwCTBWrapper::GetCustomizationData( const OUString& sTBName )
 {
     SwCTB* pCTB = NULL;
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
@@ -345,14 +345,14 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                 if ( pCust )
                 {
                     // currently only support built-in menu
-                    rtl::OUString sMenuBar( "private:resource/menubar/" );
+                    OUString sMenuBar( "private:resource/menubar/" );
 
                     sMenuBar = sMenuBar.concat( "menubar" );
                     // Get menu name
                     SwTBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
                     if ( !pTBC )
                         return false;
-                    rtl::OUString sMenuName = pTBC->GetCustomText();
+                    OUString sMenuName = pTBC->GetCustomText();
                     sMenuName = sMenuName.replace('&','~');
 
                     // see if the document has already setting for the menubar
@@ -378,7 +378,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     // create the popup menu
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
                     aPopupMenu[0].Name = "CommandURL";
-                    aPopupMenu[0].Value = uno::makeAny( rtl::OUString( "vnd.openoffice.org:" ) + sMenuName );
+                    aPopupMenu[0].Value = uno::makeAny( OUString( "vnd.openoffice.org:" ) + sMenuName );
                     aPopupMenu[1].Name = "Label";
                     aPopupMenu[1].Value <<= sMenuName;
                     aPopupMenu[2].Name = "Type";
@@ -544,7 +544,7 @@ SwCTB::Print( FILE* fp )
 {
     Indent a;
     indent_printf(fp, "[ 0x%x ] SwCTB - dump\n", nOffSet );
-    indent_printf(fp, "  name %s\n", rtl::OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    indent_printf(fp, "  name %s\n", OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf(fp, "  cbTBData size, in bytes, of this structure excluding the name, cCtls, and rTBC fields.  %x\n", static_cast< unsigned int >( cbTBData ) );
 
     tb.Print(fp);
@@ -568,7 +568,7 @@ SwCTB::Print( FILE* fp )
 
 bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
-    static rtl::OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
+    static OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
     try
     {
@@ -582,7 +582,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
         // set UI name for toolbar
         xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
 
-        rtl::OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
+        OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
             // createToolBar item for control
@@ -709,7 +709,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
         std::vector< css::beans::PropertyValue > props;
         if ( bBuiltin )
         {
-            rtl::OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
+            OUString sCommand = helper.MSOCommandToOOCommand( cmdId );
             if ( !sCommand.isEmpty() )
             {
                 beans::PropertyValue aProp;
@@ -772,10 +772,10 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     return true;
 }
 
-rtl::OUString
+OUString
 SwTBC::GetCustomText()
 {
-    rtl::OUString sCustomText;
+    OUString sCustomText;
     if ( tbcd.get() )
         sCustomText = tbcd->getGeneralInfo().CustomText();
     return sCustomText;
@@ -797,7 +797,7 @@ Xst::Print( FILE* fp )
 {
     Indent a;
     indent_printf( fp, "[ 0x%x ] Xst -- dump\n", nOffSet );
-    indent_printf( fp, " %s",  rtl::OUStringToOString( sString, RTL_TEXTENCODING_UTF8 ).getStr() );
+    indent_printf( fp, " %s",  OUStringToOString( sString, RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 Tcg::Tcg() : nTcgVer( -1 )
@@ -1143,7 +1143,7 @@ void TcgSttbfCore::Print( FILE* fp )
     if ( cData )
     {
         for ( sal_Int32 index = 0; index < cData; ++index )
-            indent_printf(fp,"   string dataItem[ %d(0x%x) ] has name %s and if referenced %d times.\n", static_cast< int >( index ), static_cast< unsigned int >( index ), rtl::OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr(), dataItems[ index ].extraData );
+            indent_printf(fp,"   string dataItem[ %d(0x%x) ] has name %s and if referenced %d times.\n", static_cast< int >( index ), static_cast< unsigned int >( index ), OUStringToOString( dataItems[ index ].data, RTL_TEXTENCODING_UTF8 ).getStr(), dataItems[ index ].extraData );
     }
 
 }

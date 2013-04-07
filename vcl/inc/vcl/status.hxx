@@ -160,8 +160,8 @@ public:
     using Window::GetQuickHelpText;
     const XubString&    GetQuickHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const OString& rHelpId );
+    OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     void                StartProgressMode( const XubString& rText );
     void                SetProgressValue( sal_uInt16 nPercent );
@@ -175,9 +175,9 @@ public:
     const XubString&    GetHelpText() const
                             { return Window::GetHelpText(); }
 
-    void                SetHelpId( const rtl::OString& rId )
+    void                SetHelpId( const OString& rId )
                             { Window::SetHelpId( rId ); }
-    const rtl::OString& GetHelpId() const
+    const OString& GetHelpId() const
                             { return Window::GetHelpId(); }
 
     Size                CalcWindowSizePixel() const;

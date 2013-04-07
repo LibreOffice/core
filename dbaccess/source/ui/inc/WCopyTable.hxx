@@ -43,11 +43,11 @@
 namespace dbaui
 {
 
-    typedef ::std::unary_function< ::rtl::OUString,bool> TColumnFindFunctorType;
+    typedef ::std::unary_function< OUString,bool> TColumnFindFunctorType;
     class TColumnFindFunctor : public TColumnFindFunctorType
     {
     public:
-        virtual bool operator()(const ::rtl::OUString& _sColumnName) const = 0;
+        virtual bool operator()(const OUString& _sColumnName) const = 0;
 
     protected:
         ~TColumnFindFunctor() {}
@@ -64,7 +64,7 @@ namespace dbaui
 
         virtual ~TExportColumnFindFunctor() {}
 
-        inline bool operator()(const ::rtl::OUString& _sColumnName) const
+        inline bool operator()(const OUString& _sColumnName) const
         {
             return m_pColumns->find(_sColumnName) != m_pColumns->end();
         }
@@ -73,9 +73,9 @@ namespace dbaui
     class TMultiListBoxEntryFindFunctor : public TColumnFindFunctor
     {
         ::comphelper::TStringMixEqualFunctor m_aCase;
-        ::std::vector< ::rtl::OUString>* m_pVector;
+        ::std::vector< OUString>* m_pVector;
     public:
-        TMultiListBoxEntryFindFunctor(::std::vector< ::rtl::OUString>* _pVector,
+        TMultiListBoxEntryFindFunctor(::std::vector< OUString>* _pVector,
                                     const ::comphelper::TStringMixEqualFunctor& _aCase)
             :m_aCase(_aCase)
             ,m_pVector(_pVector)
@@ -84,7 +84,7 @@ namespace dbaui
 
         virtual ~TMultiListBoxEntryFindFunctor() {}
 
-        inline bool operator()(const ::rtl::OUString& _sColumnName) const
+        inline bool operator()(const OUString& _sColumnName) const
         {
             return ::std::find_if(m_pVector->begin(),m_pVector->end(),
                 ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
@@ -107,7 +107,7 @@ namespace dbaui
     {
     public:
         /// retrieves the fully qualified name of the object to copy
-        virtual ::rtl::OUString     getQualifiedObjectName() const = 0;
+        virtual OUString     getQualifiedObjectName() const = 0;
         /// determines whether the object is a view
         virtual bool                isView() const = 0;
         /** copies the UI settings of the object to the given target object. Might be
@@ -115,15 +115,15 @@ namespace dbaui
         */
         virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
         /// retrieves the column names of the to-be-copied object
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getColumnNames() const = 0;
         /// retrieves the names of the primary keys of the to-be-copied object
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const = 0;
         /// creates a OFieldDescription for the given column of the to-be-copied object
-        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const = 0;
+        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const = 0;
         /// returns the SELECT statement which can be used to retrieve the data of the to-be-copied object
-        virtual ::rtl::OUString     getSelectStatement() const = 0;
+        virtual OUString     getSelectStatement() const = 0;
 
         /** copies the filter and sorting
         *
@@ -161,16 +161,16 @@ namespace dbaui
         );
 
         // ICopyTableSourceObject overridables
-        virtual ::rtl::OUString     getQualifiedObjectName() const;
+        virtual OUString     getQualifiedObjectName() const;
         virtual bool                isView() const;
         virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
         virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getColumnNames() const;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const;
-        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const;
-        virtual ::rtl::OUString     getSelectStatement() const;
+        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
+        virtual OUString     getSelectStatement() const;
         virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
                                     getPreparedSelectStatement() const;
     };
@@ -183,30 +183,30 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
-        ::rtl::OUString                                                                 m_sTableName;
-        ::rtl::OUString                                                                 m_sTableCatalog;
-        ::rtl::OUString                                                                 m_sTableSchema;
-        ::rtl::OUString                                                                 m_sTableBareName;
+        OUString                                                                 m_sTableName;
+        OUString                                                                 m_sTableCatalog;
+        OUString                                                                 m_sTableSchema;
+        OUString                                                                 m_sTableBareName;
         ::std::vector< OFieldDescription >                                              m_aColumnInfo;
         ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >         m_xStatement;
 
     public:
         NamedTableCopySource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::rtl::OUString& _rTableName
+            const OUString& _rTableName
         );
 
         // ICopyTableSourceObject overridables
-        virtual ::rtl::OUString     getQualifiedObjectName() const;
+        virtual OUString     getQualifiedObjectName() const;
         virtual bool                isView() const;
         virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
         virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getColumnNames() const;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
                                     getPrimaryKeyColumnNames() const;
-        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const;
-        virtual ::rtl::OUString     getSelectStatement() const;
+        virtual OFieldDescription*  createFieldDescription( const OUString& _rColumnName ) const;
+        virtual OUString     getSelectStatement() const;
         virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
                                     getPreparedSelectStatement() const;
 
@@ -228,7 +228,7 @@ namespace dbaui
         friend class        OWizNameMatching;
 
     public:
-        DECLARE_STL_MAP(::rtl::OUString,::rtl::OUString,::comphelper::UStringMixLess,TNameMapping);
+        DECLARE_STL_MAP(OUString,OUString,::comphelper::UStringMixLess,TNameMapping);
 
         enum Wizard_Button_Style
         {
@@ -274,9 +274,9 @@ namespace dbaui
         bool                    m_bInterConnectionCopy;    // are we copying between different connections?
 
         ::com::sun::star::lang::Locale  m_aLocale;
-        ::rtl::OUString                 m_sName;    // for a table the name is composed
-        ::rtl::OUString                 m_sSourceName;
-        ::rtl::OUString                 m_aKeyName;
+        OUString                 m_sName;    // for a table the name is composed
+        OUString                 m_sSourceName;
+        OUString                 m_aKeyName;
         TOTypeInfoSP                    m_pTypeInfo; // default type
         sal_Bool                        m_bAddPKFirstTime;
         sal_Int16                       m_nOperation;
@@ -306,7 +306,7 @@ namespace dbaui
         // used for copy tables or queries
         OCopyTableWizard(
             Window * pParent,
-            const ::rtl::OUString& _rDefaultName,
+            const OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ICopyTableSourceObject&                                                           _rSourceObject,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
@@ -318,7 +318,7 @@ namespace dbaui
         // used for importing rtf/html sources
         OCopyTableWizard(
             Window* pParent,
-            const ::rtl::OUString& _rDefaultName,
+            const OUString& _rDefaultName,
             sal_Int16 _nOperation,
             const ODatabaseExport::TColumns& _rDestColumns,
             const ODatabaseExport::TColumnVector& _rSourceColVec,
@@ -356,12 +356,12 @@ namespace dbaui
             @param  _sOldName
                 The name of column to be replaced.
         */
-        void replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName);
+        void replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const OUString& _sOldName);
 
         /** returns whether a primary key should be created in the target database
         */
         sal_Bool        shouldCreatePrimaryKey() const;
-        void            setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );
+        void            setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
 
         static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
         bool            supportsPrimaryKey() const { return supportsPrimaryKey( m_xDestConnection ); }
@@ -373,7 +373,7 @@ namespace dbaui
             @return
                 The name of the primary key.
         */
-        ::rtl::OUString getPrimaryKeyName() const { return m_aKeyName; }
+        OUString getPrimaryKeyName() const { return m_aKeyName; }
 
         TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
@@ -389,7 +389,7 @@ namespace dbaui
         const ODatabaseExport::TColumnVector*   getSrcVector() const    { return &m_vSourceVec; }
         ODatabaseExport::TColumns*              getDestColumns()        { return &m_vDestColumns; }
         const ODatabaseExport::TColumnVector*   getDestVector() const   { return &m_aDestVec; }
-        ::rtl::OUString getName() const { return m_sName; }
+        OUString getName() const { return m_sName; }
 
         /** clears the dest vectors
         */
@@ -402,19 +402,19 @@ namespace dbaui
         void setOperation( const sal_Int16 _nOperation );
         sal_Int16 getOperation() const;
 
-        ::rtl::OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
-                                            const ::rtl::OUString&  _sColumnName,
-                                            const ::rtl::OUString&  _sExtraChars,
+        OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
+                                            const OUString&  _sColumnName,
+                                            const OUString&  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
         TOTypeInfoSP convertType(const TOTypeInfoSP&_pType,sal_Bool& _bNotConvert);
 
-        ::rtl::OUString createUniqueName(const ::rtl::OUString& _sName);
+        OUString createUniqueName(const OUString& _sName);
 
         // displays a error message that a column type is not supported
-        void showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName);
+        void showColumnTypeNotSupported(const OUString& _rColumnName);
 
-        void removeColumnNameFromNameMap(const ::rtl::OUString& _sName);
-        void showError(const ::rtl::OUString& _sErrorMesage);
+        void removeColumnNameFromNameMap(const OUString& _sName);
+        void showError(const OUString& _sErrorMesage);
         void showError(const ::com::sun::star::uno::Any& _aError);
     };
 }

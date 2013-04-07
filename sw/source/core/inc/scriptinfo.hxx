@@ -23,8 +23,7 @@
 #include <list>
 #include <deque>
 #include "swscanner.hxx"
-
-namespace rtl { class OUStringBuffer; }
+#include <rtl/ustrbuf.hxx>
 
 class SwTxtNode;
 class Point;
@@ -194,7 +193,7 @@ public:
                 If set, the hidden ranges will be deleted from the text node.
  */
     static sal_uInt16 MaskHiddenRanges(
-            const SwTxtNode& rNode, ::rtl::OUStringBuffer& rText,
+            const SwTxtNode& rNode, OUStringBuffer& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
                                     const sal_Unicode cChar );
 
@@ -288,7 +287,7 @@ public:
                  Start index of the text
      @return Returns if the language is an Arabic language
  */
-    static bool IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen );
+    static bool IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen );
 
 /** Performes a thai justification on the kerning array
 
@@ -308,7 +307,7 @@ public:
                 The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
-    static sal_Int32 ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKernArray,
+    static sal_Int32 ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray,
                                sal_Int32* pScrArray, sal_Int32 nIdx,
                                sal_Int32 nLen, sal_Int32 nNumberOfBlanks = 0,
                                long nSpaceAdd = 0 );

@@ -48,7 +48,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoTextStatusbarController         
 DEFINE_INIT_SERVICE                     (   LogoTextStatusbarController, {} )
 
 LogoTextStatusbarController::LogoTextStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
+    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), OUString(), 0 )
 {
     m_aLogoText = String( FwlResId( STR_STATUSBAR_LOGOTEXT ));
 }

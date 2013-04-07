@@ -32,7 +32,7 @@ namespace rtl { class OUString; }
 namespace kde4access {
 
 com::sun::star::beans::Optional< com::sun::star::uno::Any > getValue(
-    rtl::OUString const & id);
+    OUString const & id);
 
 }
 

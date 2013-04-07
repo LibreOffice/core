@@ -42,8 +42,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 /*
  *  PaResId
@@ -62,7 +60,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
                     OUString("org.openoffice.Setup/L10N") );
         if ( aNode.isValid() )
         {
-            rtl::OUString aLoc;
+            OUString aLoc;
             Any aValue = aNode.getNodeValue( OUString("ooLocale") );
             if( aValue >>= aLoc )
             {

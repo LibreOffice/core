@@ -779,7 +779,7 @@ bool ExecuteMenuCommand( PopupMenu& rMenu, SfxViewFrame& rViewFrame, sal_uInt16 
         aURL.Complete = sCommand;
         uno::Reference < util::XURLTransformer > xTrans( util::URLTransformer::create(::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aURL );
-        uno::Reference< frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+        uno::Reference< frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
         if( xDisp.is() )
         {
             uno::Sequence< beans::PropertyValue > aSeq;

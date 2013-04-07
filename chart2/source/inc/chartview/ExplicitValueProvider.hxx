@@ -58,12 +58,12 @@ public:
         if bSnapRect is set to true you get the resulting visible position (left-top) and size
     */
     virtual ::com::sun::star::awt::Rectangle
-        getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect=false )=0;
+        getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false )=0;
 
     virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        getShapeForCID( const rtl::OUString& rObjectCID )=0;
+        getShapeForCID( const OUString& rObjectCID )=0;
 
     virtual ::boost::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
 

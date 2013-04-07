@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
 XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName );
+    const OUString& rLocalName );
 
 /** perform the actual binding of an XForms-binding with the suitable control
  *  @param document which contains the XForms-model(s)
@@ -48,7 +48,7 @@ XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
  */
 void bindXFormsValueBinding(
     com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,rtl::OUString> );
+    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
 
 
 /** perform the actual binding of an XForms-binding as list source with a list control
@@ -57,7 +57,7 @@ void bindXFormsValueBinding(
  */
 void bindXFormsListBinding(
     com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,rtl::OUString> );
+    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
 
 /** perform the actual binding of an XForms submission with the suitable control
  *  @param document which contains the XForms-model(s)
@@ -65,7 +65,7 @@ void bindXFormsListBinding(
  */
 void bindXFormsSubmission(
     com::sun::star::uno::Reference<com::sun::star::frame::XModel>,
-    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,rtl::OUString> );
+    std::pair<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>,OUString> );
 
 /** applies the given settings to the given XForms container
 */

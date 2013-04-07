@@ -52,7 +52,6 @@ using namespace com::sun::star;
 using ::std::vector;
 using ::std::pair;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -810,7 +809,7 @@ sal_uInt16 ScDPResultData::GetMeasureRefOrient(long nMeasure) const
     return maMeasureRefOrients[nMeasure];
 }
 
-rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
+OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
     //  with bForce==true, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
@@ -835,7 +834,7 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
             if (pLayoutName)
                 return *pLayoutName;
         }
-        rtl::OUStringBuffer aRet;
+        OUStringBuffer aRet;
         ScSubTotalFunc eFunc = ( eForceFunc == SUBTOTAL_FUNC_NONE ) ?
                                     GetMeasureFunction(nMeasure) : eForceFunc;
         sal_uInt16 nId = nFuncStrIds[eFunc];
@@ -850,12 +849,12 @@ rtl::OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSub
     }
 }
 
-rtl::OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
+OUString ScDPResultData::GetMeasureDimensionName(long nMeasure) const
 {
     if ( nMeasure < 0 )
     {
         OSL_FAIL("GetMeasureDimensionName: negative");
-        return rtl::OUString::createFromAscii("***");
+        return OUString::createFromAscii("***");
     }
 
     return mrSource.GetDataDimName(nMeasure);
@@ -1742,7 +1741,7 @@ void ScDPResultMember::UpdateRunningTotals( const ScDPResultMember* pRefMember, 
 #if DEBUG_PIVOT_TABLE
 void ScDPResultMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( rtl::OUString("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
+    lcl_DumpRow( OUString("ScDPResultMember"), GetName(), NULL, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     if (pDataRoot)
@@ -2599,7 +2598,7 @@ void ScDPDataMember::UpdateRunningTotals(
 #if DEBUG_PIVOT_TABLE
 void ScDPDataMember::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    lcl_DumpRow( rtl::OUString("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
+    lcl_DumpRow( OUString("ScDPDataMember"), GetName(), &aAggregate, pDoc, rPos );
     SCROW nStartRow = rPos.Row();
 
     const ScDPDataDimension* pDataChild = GetChildDimension();
@@ -2964,9 +2963,9 @@ bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
     if ( NULL != pMember )
         return pMember->IsValidEntry( aMembers );
 #if OSL_DEBUG_LEVEL > 1
-    rtl::OStringBuffer strTemp(RTL_CONSTASCII_STRINGPARAM(
+    OStringBuffer strTemp(RTL_CONSTASCII_STRINGPARAM(
         "IsValidEntry: Member not found, DimName = "));
-    strTemp.append(rtl::OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8));
+    strTemp.append(OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8));
     OSL_TRACE("%s", strTemp.getStr());
 #endif
     return false;
@@ -3424,8 +3423,8 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 #if DEBUG_PIVOT_TABLE
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString(GetName());
-    lcl_DumpRow( rtl::OUString("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
+    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString(GetName());
+    lcl_DumpRow( OUString("ScDPResultDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 
@@ -3798,8 +3797,8 @@ void ScDPDataDimension::UpdateRunningTotals( const ScDPResultDimension* pRefDim,
 #if DEBUG_PIVOT_TABLE
 void ScDPDataDimension::DumpState( const ScDPResultDimension* pRefDim, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    rtl::OUString aDimName = bIsDataLayout ? rtl::OUString("(data layout)") : rtl::OUString("(unknown)");
-    lcl_DumpRow( rtl::OUString("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
+    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString("(unknown)");
+    lcl_DumpRow( OUString("ScDPDataDimension"), aDimName, NULL, pDoc, rPos );
 
     SCROW nStartRow = rPos.Row();
 

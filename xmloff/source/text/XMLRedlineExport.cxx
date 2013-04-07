@@ -55,8 +55,6 @@ using ::com::sun::star::text::XTextSection;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::list;
 
 

@@ -46,7 +46,7 @@ namespace ftp {
     {
     public:
 
-        FTPContentIdentifier(const rtl::OUString& ident);
+        FTPContentIdentifier(const OUString& ident);
 
         ~FTPContentIdentifier();
 
@@ -80,14 +80,14 @@ namespace ftp {
 
         // XContentIdentifier
 
-        virtual ::rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentIdentifier(
         )
             throw (
                 com::sun::star::uno::RuntimeException
             );
 
-        virtual ::rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentProviderScheme(
         )
             throw (
@@ -97,7 +97,7 @@ namespace ftp {
 
     private:
 
-        rtl::OUString m_ident;
+        OUString m_ident;
     };
 
 }

@@ -84,35 +84,35 @@ namespace frm
     namespace
     {
         //--------------------------------------------------------------------------
-        struct RowSetValueToString : public ::std::unary_function< ORowSetValue, ::rtl::OUString >
+        struct RowSetValueToString : public ::std::unary_function< ORowSetValue, OUString >
         {
-            ::rtl::OUString operator()( const ORowSetValue& _value ) const
+            OUString operator()( const ORowSetValue& _value ) const
             {
                 return _value.getString();
             }
         };
 
         //--------------------------------------------------------------------------
-        struct AppendRowSetValueString : public ::std::unary_function< ::rtl::OUString, void >
+        struct AppendRowSetValueString : public ::std::unary_function< OUString, void >
         {
-            AppendRowSetValueString( ::rtl::OUString& _string )
+            AppendRowSetValueString( OUString& _string )
                 :m_string( _string )
             {
             }
 
-            void operator()( const ::rtl::OUString _append )
+            void operator()( const OUString _append )
             {
                 m_string += _append;
             }
 
         private:
-            ::rtl::OUString&    m_string;
+            OUString&    m_string;
         };
 
         //--------------------------------------------------------------------------
-        Sequence< ::rtl::OUString > lcl_convertToStringSequence( const ValueList& _values )
+        Sequence< OUString > lcl_convertToStringSequence( const ValueList& _values )
         {
-            Sequence< ::rtl::OUString > aStrings( _values.size() );
+            Sequence< OUString > aStrings( _values.size() );
             ::std::transform(
                 _values.begin(),
                 _values.end(),
@@ -212,7 +212,7 @@ namespace frm
 
         sal_Int32 nOldLen = aSupported.getLength();
         aSupported.realloc( nOldLen + 8 );
-        ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+        OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
         *pStoreTo++ = BINDABLE_CONTROL_MODEL;
         *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -302,7 +302,7 @@ namespace frm
         case PROPERTY_ID_LISTSOURCE:
         {
             // extract
-            Sequence< ::rtl::OUString > aListSource;
+            Sequence< OUString > aListSource;
             OSL_VERIFY( _rValue >>= aListSource );
 
             // copy to member
@@ -398,21 +398,21 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         // if both SelectedItems and StringItemList are set, care for this
         // #i27024#
         const Any* pSelectSequenceValue = NULL;
 
-        const ::rtl::OUString* pStartPos = _rPropertyNames.getConstArray();
-        const ::rtl::OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
-        const ::rtl::OUString* pSelectedItemsPos = ::std::find_if(
+        const OUString* pStartPos = _rPropertyNames.getConstArray();
+        const OUString* pEndPos   = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
+        const OUString* pSelectedItemsPos = ::std::find_if(
             pStartPos, pEndPos,
-             ::std::bind2nd( ::std::equal_to< ::rtl::OUString >(), PROPERTY_SELECT_SEQ )
+             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_SELECT_SEQ )
         );
-        const ::rtl::OUString* pStringItemListPos = ::std::find_if(
+        const OUString* pStringItemListPos = ::std::find_if(
             pStartPos, pEndPos,
-             ::std::bind2nd( ::std::equal_to< ::rtl::OUString >(), PROPERTY_STRINGITEMLIST )
+             ::std::bind2nd( ::std::equal_to< OUString >(), PROPERTY_STRINGITEMLIST )
         );
         if ( ( pSelectedItemsPos != pEndPos ) && ( pStringItemListPos != pEndPos ) )
         {
@@ -443,7 +443,7 @@ namespace frm
             DECL_PROP1(LISTSOURCE,          StringSequence,                 BOUND);
             DECL_PROP3(VALUE_SEQ,           StringSequence,                 BOUND, READONLY, TRANSIENT);
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
-            DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,    BOUND);
+            DECL_PROP1(STRINGITEMLIST,      Sequence< OUString >,    BOUND);
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -473,7 +473,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OListBoxModel::getServiceName() throw(RuntimeException)
+    OUString SAL_CALL OListBoxModel::getServiceName() throw(RuntimeException)
     {
         return FRM_COMPONENT_LISTBOX;   // old (non-sun) name for compatibility !
     }
@@ -562,7 +562,7 @@ namespace frm
         if (nVersion == 0x0001)
         {
             // Create ListSourceSeq from String
-            ::rtl::OUString sListSource;
+            OUString sListSource;
             _rxInStream >> sListSource;
 
             sal_Int32 nTokens = 1;
@@ -652,7 +652,7 @@ namespace frm
             xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
 
         // PRE2: list source
-        ::rtl::OUString sListSource;
+        OUString sListSource;
         // if our list source type is no value list, we need to concatenate
         // the single list source elements
         ::std::for_each(
@@ -696,8 +696,8 @@ namespace frm
 
                     // do we have a bound column if yes we have to select it
                     // and the displayed column is the first column othwhise we act as a combobox
-                    ::rtl::OUString aFieldName;
-                    ::rtl::OUString aBoundFieldName;
+                    OUString aFieldName;
+                    OUString aBoundFieldName;
 
                     if ( !!aBoundColumn && ( *aBoundColumn >= 0 ) && xFieldsByIndex.is() )
                     {
@@ -719,7 +719,7 @@ namespace frm
                         {
                             // otherwise look for the alias
                             Reference< XColumnsSupplier > xSupplyFields;
-                            xFormProps->getPropertyValue(::rtl::OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
+                            xFormProps->getPropertyValue(OUString("SingleSelectQueryComposer")) >>= xSupplyFields;
 
                             // search the field
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
@@ -738,20 +738,20 @@ namespace frm
                         break;
 
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                    ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement("SELECT ");
+                    OUString aQuote = xMeta->getIdentifierQuoteString();
+                    OUString aStatement("SELECT ");
                     if (aBoundFieldName.isEmpty())   // act like a combobox
-                        aStatement += ::rtl::OUString("DISTINCT ");
+                        aStatement += OUString("DISTINCT ");
 
                     aStatement += quoteName(aQuote,aFieldName);
                     if (!aBoundFieldName.isEmpty())
                     {
-                        aStatement += ::rtl::OUString(", ");
+                        aStatement += OUString(", ");
                         aStatement += quoteName(aQuote, aBoundFieldName);
                     }
-                    aStatement += ::rtl::OUString(" FROM ");
+                    aStatement += OUString(" FROM ");
 
-                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
@@ -841,7 +841,7 @@ namespace frm
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( *aBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString("Type") ) >>= m_nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue( OUString("Type") ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {
@@ -852,7 +852,7 @@ namespace frm
                     //  If the LB is bound to a field and empty entries are valid, we remember the position
                     //  for an empty entry
                     RTL_LOGFILE_CONTEXT( aLogContext, "OListBoxModel::loadData: string collection" );
-                    ::rtl::OUString aStr;
+                    OUString aStr;
                     sal_Int16 entryPos = 0;
                     ORowSetValue aBoundValue;
                     Reference< XRow > xCursorRow( xListCursor, UNO_QUERY_THROW );
@@ -911,7 +911,7 @@ namespace frm
             if ( impl_hasBoundComponent() )
                 aValueList.insert( aValueList.begin(), ORowSetValue() );
 
-            aDisplayList.insert( aDisplayList.begin(), ORowSetValue( ::rtl::OUString() ) );
+            aDisplayList.insert( aDisplayList.begin(), ORowSetValue( OUString() ) );
             m_nNULLPos = 0;
         }
 
@@ -998,11 +998,11 @@ namespace frm
             return m_aConvertedBoundValues;
         }
 
-        Sequence< ::rtl::OUString > aStringItems( getStringItemList() );
+        Sequence< OUString > aStringItems( getStringItemList() );
         ValueList aValues( aStringItems.getLength() );
         ValueList::iterator dst = aValues.begin();
-        const ::rtl::OUString *src (aStringItems.getConstArray());
-        const ::rtl::OUString * const end = src + aStringItems.getLength();
+        const OUString *src (aStringItems.getConstArray());
+        const OUString * const end = src + aStringItems.getLength();
         for (; src < end; ++src, ++dst )
         {
             *dst = *src;
@@ -1222,14 +1222,14 @@ namespace frm
         case eEntryList:
         {
             // we can retrieve a string list from the binding for multiple selection
-            Sequence< ::rtl::OUString > aSelectEntries;
+            Sequence< OUString > aSelectEntries;
             OSL_VERIFY( _rExternalValue >>= aSelectEntries );
 
             ::std::set< sal_Int16 > aSelectionSet;
 
             // find the selection entries in our item list
-            const ::rtl::OUString* pSelectEntries = aSelectEntries.getArray();
-            const ::rtl::OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
+            const OUString* pSelectEntries = aSelectEntries.getArray();
+            const OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
             while ( pSelectEntries != pSelectEntriesEnd )
             {
                 // the indexes where the current string appears in our string items
@@ -1256,7 +1256,7 @@ namespace frm
 
         case eEntry:
         {
-            ::rtl::OUString sStringToSelect;
+            OUString sStringToSelect;
             OSL_VERIFY( _rExternalValue >>= sStringToSelect );
 
             aSelectIndexes = findValue( getStringItemList(), sStringToSelect, sal_False );
@@ -1271,25 +1271,25 @@ namespace frm
     namespace
     {
         //................................................................
-        struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, ::rtl::OUString >
+        struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
         {
         protected:
-            const Sequence< ::rtl::OUString >&  m_rList;
+            const Sequence< OUString >&  m_rList;
 
         public:
-            ExtractStringFromSequence_Safe( const Sequence< ::rtl::OUString >& _rList ) : m_rList( _rList ) { }
+            ExtractStringFromSequence_Safe( const Sequence< OUString >& _rList ) : m_rList( _rList ) { }
 
-            ::rtl::OUString operator ()( sal_Int16 _nIndex )
+            OUString operator ()( sal_Int16 _nIndex )
             {
                 OSL_ENSURE( _nIndex < m_rList.getLength(), "ExtractStringFromSequence_Safe: inconsistence!" );
                 if ( _nIndex < m_rList.getLength() )
                     return m_rList[ _nIndex ];
-                return ::rtl::OUString();
+                return OUString();
             }
         };
 
         //................................................................
-        Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< ::rtl::OUString >& _rStringList )
+        Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
             Any aReturn;
 
@@ -1297,7 +1297,7 @@ namespace frm
             // binding does not support string lists
             if ( _rSelectSequence.getLength() <= 1 )
             {
-                ::rtl::OUString sSelectedEntry;
+                OUString sSelectedEntry;
 
                 if ( _rSelectSequence.getLength() == 1 )
                     sSelectedEntry = ExtractStringFromSequence_Safe( _rStringList )( _rSelectSequence[0] );
@@ -1309,9 +1309,9 @@ namespace frm
         }
 
         //................................................................
-        Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< ::rtl::OUString >& _rStringList )
+        Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
-            Sequence< ::rtl::OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
+            Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
             ::std::transform(
                 _rSelectSequence.getConstArray(),
                 _rSelectSequence.getConstArray() + _rSelectSequence.getLength(),
@@ -1406,8 +1406,8 @@ namespace frm
         Sequence< Type > aTypes(4);
         aTypes[0] = ::getCppuType( static_cast< Sequence< sal_Int32 >* >( NULL ) );
         aTypes[1] = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
-        aTypes[2] = ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
-        aTypes[3] = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        aTypes[2] = ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
+        aTypes[3] = ::getCppuType( static_cast< OUString* >( NULL ) );
         return aTypes;
     }
 
@@ -1563,7 +1563,7 @@ namespace frm
         StringSequence aSupported = OBoundControl::getSupportedServiceNames();
         aSupported.realloc(aSupported.getLength() + 1);
 
-        ::rtl::OUString* pArray = aSupported.getArray();
+        OUString* pArray = aSupported.getArray();
         pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_LISTBOX;
         return aSupported;
     }
@@ -1757,14 +1757,14 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OListBoxControl::addItem( const ::rtl::OUString& aItem, ::sal_Int16 nPos ) throw (RuntimeException)
+    void SAL_CALL OListBoxControl::addItem( const OUString& aItem, ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItem( aItem, nPos );
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OListBoxControl::addItems( const Sequence< ::rtl::OUString >& aItems, ::sal_Int16 nPos ) throw (RuntimeException)
+    void SAL_CALL OListBoxControl::addItems( const Sequence< OUString >& aItems, ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItems( aItems, nPos );
@@ -1786,19 +1786,19 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OListBoxControl::getItem( ::sal_Int16 nPos ) throw (RuntimeException)
+    OUString SAL_CALL OListBoxControl::getItem( ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getItem( nPos );
-        return ::rtl::OUString( );
+        return OUString( );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OListBoxControl::getItems(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OListBoxControl::getItems(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getItems();
-        return Sequence< ::rtl::OUString >( );
+        return Sequence< OUString >( );
     }
 
     //--------------------------------------------------------------------
@@ -1818,19 +1818,19 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OListBoxControl::getSelectedItem(  ) throw (RuntimeException)
+    OUString SAL_CALL OListBoxControl::getSelectedItem(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItem();
-        return ::rtl::OUString( );
+        return OUString( );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OListBoxControl::getSelectedItems(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OListBoxControl::getSelectedItems(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             return m_xAggregateListBox->getSelectedItems();
-        return Sequence< ::rtl::OUString >( );
+        return Sequence< OUString >( );
     }
 
     //--------------------------------------------------------------------
@@ -1848,7 +1848,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OListBoxControl::selectItem( const ::rtl::OUString& aItem, ::sal_Bool bSelect ) throw (RuntimeException)
+    void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, ::sal_Bool bSelect ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItem( aItem, bSelect );

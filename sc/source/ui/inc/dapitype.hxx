@@ -49,8 +49,8 @@ public:
     bool IsDatabase() const;
     bool IsExternal() const;
     bool IsNamedRange() const;
-    rtl::OUString GetSelectedNamedRange() const;
-    void AppendNamedRange(const rtl::OUString& rNames);
+    OUString GetSelectedNamedRange() const;
+    void AppendNamedRange(const OUString& rNames);
 
 private:
     DECL_LINK( RadioClickHdl, RadioButton * );
@@ -77,7 +77,7 @@ private:
 
 public:
             ScDataPilotServiceDlg( Window* pParent,
-                    const com::sun::star::uno::Sequence<rtl::OUString>& rServices );
+                    const com::sun::star::uno::Sequence<OUString>& rServices );
             ~ScDataPilotServiceDlg();
 
     String  GetServiceName() const;

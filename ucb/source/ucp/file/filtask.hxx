@@ -185,7 +185,7 @@ namespace fileaccess
 
         void SAL_CALL endTask( sal_Int32 CommandId,
                                // the physical URL of the object
-                               const rtl::OUString& aUnqPath,
+                               const OUString& aUnqPath,
                                BaseContent* pContent);
 
 

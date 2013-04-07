@@ -33,7 +33,7 @@ namespace xls {
 struct ScenarioCellModel
 {
     ::com::sun::star::table::CellAddress maPos;
-    ::rtl::OUString     maValue;
+    OUString     maValue;
     sal_Int32           mnNumFmtId;
     bool                mbDeleted;
 
@@ -44,9 +44,9 @@ struct ScenarioCellModel
 
 struct ScenarioModel
 {
-    ::rtl::OUString     maName;             /// Name of the scenario.
-    ::rtl::OUString     maComment;          /// Comment.
-    ::rtl::OUString     maUser;             /// Name of user created the scenario.
+    OUString     maName;             /// Name of the scenario.
+    OUString     maComment;          /// Comment.
+    OUString     maUser;             /// Name of user created the scenario.
     bool                mbLocked;           /// True = input cell values locked.
     bool                mbHidden;           /// True = scenario is hidden.
 

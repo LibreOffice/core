@@ -140,10 +140,10 @@ public:
 
     /** Creates a labeled data sequence object from category data link. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
-                        createCategorySequence( const ::rtl::OUString& rRole );
+                        createCategorySequence( const OUString& rRole );
     /** Creates a labeled data sequence object from value data link. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
-                        createValueSequence( const ::rtl::OUString& rRole );
+                        createValueSequence( const OUString& rRole );
     /** Creates a data series object with initialized source links. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
                         createDataSeries( const TypeGroupConverter& rTypeGroup, bool bVaryColorsByPoint );
@@ -152,7 +152,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
                         createLabeledDataSequence(
                             SeriesModel::SourceType eSourceType,
-                            const ::rtl::OUString& rRole,
+                            const OUString& rRole,
                             bool bUseTextLabel );
 };
 

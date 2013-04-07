@@ -79,8 +79,8 @@ namespace svx
         const ::comphelper::ComponentContext    m_aContext;
         ::svt::OFileURLControl&                 m_rLocationInput;
         PushButton&                             m_rBrowseButton;
-        Sequence< ::rtl::OUString >             m_aFilterExtensions;
-        ::rtl::OUString                         m_sFilterUIName;
+        Sequence< OUString >             m_aFilterExtensions;
+        OUString                         m_sFilterUIName;
         bool                                    m_bNeedExistenceCheck;
     };
 
@@ -97,8 +97,8 @@ namespace svx
         impl_initFilterProperties_nothrow();
 
         // forward the allowed extensions to the input control
-        ::rtl::OUStringBuffer aExtensionList;
-        for (   const ::rtl::OUString* pExtension = m_aFilterExtensions.getConstArray();
+        OUStringBuffer aExtensionList;
+        for (   const OUString* pExtension = m_aFilterExtensions.getConstArray();
                 pExtension != m_aFilterExtensions.getConstArray() + m_aFilterExtensions.getLength();
                 ++pExtension
             )
@@ -122,7 +122,7 @@ namespace svx
     //--------------------------------------------------------------------
     bool DatabaseLocationInputController_Impl::prepareCommit()
     {
-        ::rtl::OUString sURL( impl_getCurrentURL() );
+        OUString sURL( impl_getCurrentURL() );
         if ( sURL.isEmpty() )
             return false;
 
@@ -162,9 +162,9 @@ namespace svx
             ::utl::OConfigurationTreeRoot aConfig(
                 ::utl::OConfigurationTreeRoot::createWithComponentContext(
                     m_aContext.getUNOContext(),
-                    ::rtl::OUString( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" )
+                    OUString( "/org.openoffice.Setup/Office/Factories/com.sun.star.sdb.OfficeDatabaseDocument" )
             ) );
-            ::rtl::OUString sDatabaseFilter;
+            OUString sDatabaseFilter;
             OSL_VERIFY( aConfig.getNodeValue( "ooSetupFactoryActualFilter" ) >>= sDatabaseFilter );
 
             // get the type this filter is responsible for
@@ -172,7 +172,7 @@ namespace svx
                 m_aContext.createComponent( "com.sun.star.document.FilterFactory" ),
                 UNO_QUERY_THROW );
             ::comphelper::NamedValueCollection aFilterProperties( xFilterFactory->getByName( sDatabaseFilter ) );
-            ::rtl::OUString sDocumentType = aFilterProperties.getOrDefault( "Type", ::rtl::OUString() );
+            OUString sDocumentType = aFilterProperties.getOrDefault( "Type", OUString() );
 
             // get the extension(s) for this type
             Reference< XNameAccess > xTypeDetection(
@@ -194,7 +194,7 @@ namespace svx
         if ( m_aFilterExtensions.getLength() == 0 )
         {
             m_aFilterExtensions.realloc(1);
-            m_aFilterExtensions[0] = ::rtl::OUString( "*.odb" );
+            m_aFilterExtensions[0] = OUString( "*.odb" );
         }
     }
 
@@ -240,7 +240,7 @@ namespace svx
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
 
-        aFileDlg.AddFilter( m_sFilterUIName, ::rtl::OUStringBuffer().appendAscii( "*." ).append( m_aFilterExtensions[0] ).makeStringAndClear() );
+        aFileDlg.AddFilter( m_sFilterUIName, OUStringBuffer().appendAscii( "*." ).append( m_aFilterExtensions[0] ).makeStringAndClear() );
         aFileDlg.SetCurrentFilter( m_sFilterUIName );
 
         if ( aFileDlg.Execute() == ERRCODE_NONE )

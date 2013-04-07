@@ -36,11 +36,11 @@ SinglePropertySetInfoMap_Impl;
 
 class SinglePropertySetInfoCache : private SinglePropertySetInfoMap_Impl
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
 public:
 
-    inline SinglePropertySetInfoCache( const ::rtl::OUString& rName );
+    inline SinglePropertySetInfoCache( const OUString& rName );
     ~SinglePropertySetInfoCache() {};
 
     sal_Bool hasProperty(
@@ -54,7 +54,7 @@ public:
 };
 
 inline SinglePropertySetInfoCache::SinglePropertySetInfoCache(
-        const ::rtl::OUString& rName ) :
+        const OUString& rName ) :
     sName( rName )
 {
 }

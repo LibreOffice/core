@@ -56,7 +56,6 @@ using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 using ::oox::ole::VbaProject;
-using ::rtl::OUString;
 
 // ============================================================================
 

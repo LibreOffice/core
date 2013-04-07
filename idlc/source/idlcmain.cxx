@@ -123,7 +123,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         OString const outputFileUrl = convertToFileUrl(outputFile);
 
-        ::rtl::OString depFileUrl;
+        OString depFileUrl;
         if (options.isValid("-M")) {
             depFileUrl = convertToFileUrl(options.getOption("-M"));
             if ('/' != depFileUrl.getStr()[depFileUrl.getLength()-1]) {

@@ -42,10 +42,10 @@ using namespace ::com::sun::star::mozilla;
 namespace
 {
     // -------------------------------------------------------------------
-    static ::rtl::OUString lcl_getUserDataDirectory()
+    static OUString lcl_getUserDataDirectory()
     {
         ::osl::Security   aSecurity;
-        ::rtl::OUString   aConfigPath;
+        OUString   aConfigPath;
 
     #if defined(XP_WIN) || defined(MACOSX)
         aSecurity.getConfigDir( aConfigPath );
@@ -56,7 +56,7 @@ namespace
         aSecurity.getHomeDir( aConfigPath );
     #endif
 
-        return aConfigPath + ::rtl::OUString("/");
+        return aConfigPath + OUString("/");
     }
 
     // -------------------------------------------------------------------
@@ -88,26 +88,26 @@ namespace
     };
 
     // -------------------------------------------------------------------
-    static ::rtl::OUString lcl_guessProfileRoot( MozillaProductType _product )
+    static OUString lcl_guessProfileRoot( MozillaProductType _product )
     {
         size_t productIndex = _product - 1;
 
-        static ::rtl::OUString s_productDirectories[NB_PRODUCTS];
+        static OUString s_productDirectories[NB_PRODUCTS];
 
         if ( s_productDirectories[ productIndex ].isEmpty() )
         {
-            ::rtl::OUString sProductPath;
+            OUString sProductPath;
 
             // check whether we have an anevironment variable which helps us
             const char* pProfileByEnv = getenv( ProductRootEnvironmentVariable[ productIndex ] );
             if ( pProfileByEnv )
             {
-                sProductPath = ::rtl::OUString( pProfileByEnv, rtl_str_getLength( pProfileByEnv ), osl_getThreadTextEncoding() );
+                sProductPath = OUString( pProfileByEnv, rtl_str_getLength( pProfileByEnv ), osl_getThreadTextEncoding() );
                 // asume that this is fine, no further checks
             }
             else
             {
-                ::rtl::OUString sProductDirCandidate;
+                OUString sProductDirCandidate;
                 const char* pProfileRegistry = "profiles.ini";
 
                 // check all possible candidates
@@ -117,11 +117,11 @@ namespace
                         break;
 
                     sProductDirCandidate = lcl_getUserDataDirectory() +
-                        ::rtl::OUString::createFromAscii( DefaultProductDir[ productIndex ][ i ] );
+                        OUString::createFromAscii( DefaultProductDir[ productIndex ][ i ] );
 
                     // check existence
                     ::osl::DirectoryItem aRegistryItem;
-                    ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + ::rtl::OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
+                    ::osl::FileBase::RC result = ::osl::DirectoryItem::get( sProductDirCandidate + OUString::createFromAscii( pProfileRegistry ), aRegistryItem );
                     if ( result == ::osl::FileBase::E_None  )
                     {
                         ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
@@ -145,10 +145,10 @@ namespace
 }
 
 // -----------------------------------------------------------------------
-::rtl::OUString getRegistryDir(MozillaProductType product)
+OUString getRegistryDir(MozillaProductType product)
 {
     if (product == MozillaProductType_Default)
-        return ::rtl::OUString();
+        return OUString();
 
     return lcl_guessProfileRoot( product );
 }

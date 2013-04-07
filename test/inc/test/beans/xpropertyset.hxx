@@ -57,19 +57,19 @@ public:
     void testRemoveVetoableChangeListener();
 
 protected:
-    virtual bool isPropertyValueChangeable(const rtl::OUString& rName);
+    virtual bool isPropertyValueChangeable(const OUString& rName);
 
 private:
     void fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>& xPropInfo);
     static bool getSinglePropertyValue(
-        const uno::Reference<beans::XPropertySet>& xPropSet, const rtl::OUString& rName);
+        const uno::Reference<beans::XPropertySet>& xPropSet, const OUString& rName);
 
     struct OOO_DLLPUBLIC_TEST PropsToTest
     {
-        std::vector<rtl::OUString> constrained;
-        std::vector<rtl::OUString> bound;
-        std::vector<rtl::OUString> normal;
-        std::vector<rtl::OUString> readonly;
+        std::vector<OUString> constrained;
+        std::vector<OUString> bound;
+        std::vector<OUString> normal;
+        std::vector<OUString> readonly;
 
         bool initialized;
 

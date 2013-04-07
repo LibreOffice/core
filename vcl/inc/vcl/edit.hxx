@@ -87,7 +87,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, void* );
 
-    SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( rtl::OUString&, sal_uInt32 nSelectionLen ) const;
+    SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_uInt32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE OUString    ImplGetText() const;
@@ -227,7 +227,7 @@ public:
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;
-    virtual Size        CalcMinimumSizeForText(const rtl::OUString &rString) const;
+    virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
     virtual Size        GetOptimalSize() const;
     virtual Size        CalcSize( sal_uInt16 nChars ) const;
     virtual xub_StrLen  GetMaxVisChars() const;
@@ -243,9 +243,9 @@ public:
     static PopupMenu*   CreatePopupMenu();
     static void         DeletePopupMenu( PopupMenu* pMenu );
 
-    virtual rtl::OUString GetSurroundingText() const;
+    virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

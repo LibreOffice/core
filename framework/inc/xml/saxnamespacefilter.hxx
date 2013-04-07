@@ -50,25 +50,25 @@ class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for ri
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
-                                                    const rtl::OUString& aData)
+        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                    const OUString& aData)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -80,15 +80,15 @@ class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for ri
     protected:
         typedef ::std::stack< XMLNamespaces > NamespaceStack;
 
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
         NamespaceStack  m_aNamespaceStack;
         sal_Int32       m_nDepth;
 
-        rtl::OUString m_aXMLAttributeNamespace;
-        rtl::OUString m_aXMLAttributeType;
+        OUString m_aXMLAttributeNamespace;
+        OUString m_aXMLAttributeType;
 
 };
 

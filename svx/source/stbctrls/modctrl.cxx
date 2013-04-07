@@ -31,7 +31,6 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
-using ::rtl::OUString;
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 

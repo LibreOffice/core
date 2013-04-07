@@ -27,19 +27,19 @@ namespace dbaxml
     class ODBFilter;
     class OXMLTableFilterList : public SvXMLImportContext
     {
-        ::std::vector< ::rtl::OUString> m_aPatterns;
-        ::std::vector< ::rtl::OUString> m_aTypes;
+        ::std::vector< OUString> m_aPatterns;
+        ::std::vector< OUString> m_aTypes;
 
         ODBFilter& GetOwnImport();
     public:
 
         OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName);
+                    const OUString& rLName);
 
         virtual ~OXMLTableFilterList();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual void EndElement();
@@ -48,7 +48,7 @@ namespace dbaxml
             @param  _sTableFilterPattern
                 The new filter pattern.
         */
-        inline void pushTableFilterPattern(const ::rtl::OUString& _sTableFilterPattern)
+        inline void pushTableFilterPattern(const OUString& _sTableFilterPattern)
         {
             m_aPatterns.push_back(_sTableFilterPattern);
         }
@@ -57,7 +57,7 @@ namespace dbaxml
             @param  _sTypeFilter
                 The new type filter.
         */
-        inline void pushTableTypeFilter(const ::rtl::OUString& _sTypeFilter)
+        inline void pushTableTypeFilter(const OUString& _sTypeFilter)
         {
             m_aTypes.push_back(_sTypeFilter);
         }

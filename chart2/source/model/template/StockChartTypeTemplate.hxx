@@ -52,7 +52,7 @@ public:
     explicit StockChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & rServiceName,
+        const OUString & rServiceName,
         StockVariant eVariant,
         bool bJapaneseStyle );
     virtual ~StockChartTypeTemplate();

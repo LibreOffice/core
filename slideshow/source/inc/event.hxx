@@ -32,7 +32,7 @@ namespace internal {
 class Event : public Disposable
 {
 public:
-    Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {}
+    Event (const OUString& rsDescription) : msDescription(rsDescription) {}
 
     /** Execute the event.
 
@@ -64,10 +64,10 @@ public:
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
 
-    const ::rtl::OUString& GetDescription (void) const { return msDescription; }
+    const OUString& GetDescription (void) const { return msDescription; }
 
 private:
-    const ::rtl::OUString msDescription;
+    const OUString msDescription;
 };
 
 typedef ::boost::shared_ptr< Event > EventSharedPtr;

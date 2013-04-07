@@ -62,9 +62,9 @@ namespace svt
             virtual ~PopupMenuControllerBase();
 
             // XServiceInfo
-            virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
-            virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+            virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
@@ -83,7 +83,7 @@ namespace svt
             virtual void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
             // XDispatchProvider
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTarget, sal_Int32 nFlags ) throw( ::com::sun::star::uno::RuntimeException );
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( ::com::sun::star::uno::RuntimeException );
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException );
 
             // XDispatch
@@ -94,13 +94,13 @@ namespace svt
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException );
 
-            void dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
+            void dispatchCommand( const OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
 
     protected:
             void throwIfDisposed() throw ( ::com::sun::star::uno::RuntimeException );
 
             /** helper method to cause statusChanged is called once for the given command url */
-            void SAL_CALL updateCommand( const rtl::OUString& rCommandURL );
+            void SAL_CALL updateCommand( const OUString& rCommandURL );
 
             /** this function is called upon disposing the component
             */
@@ -109,15 +109,15 @@ namespace svt
             virtual void resetPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             virtual void impl_setPopupMenu();
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
-            ::rtl::OUString determineBaseURL( const ::rtl::OUString& aURL );
+            OUString determineBaseURL( const OUString& aURL );
 
             DECL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo* );
 
 
             bool                                                                             m_bInitialized;
-            rtl::OUString                                                                    m_aCommandURL;
-            rtl::OUString                                                                    m_aBaseURL;
-            rtl::OUString                                                                    m_aModuleName;
+            OUString                                                                    m_aCommandURL;
+            OUString                                                                    m_aBaseURL;
+            OUString                                                                    m_aModuleName;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >           m_xDispatch;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;

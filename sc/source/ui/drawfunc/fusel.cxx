@@ -211,7 +211,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            {
                                try
                                {
-                                   aCaller = xProps->getPropertyValue( rtl::OUString("Name") );
+                                   aCaller = xProps->getPropertyValue( OUString("Name") );
                                }
                                catch( uno::Exception& ) {}
                            }
@@ -398,7 +398,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : NULL );
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : NULL );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : NULL );
-    ::std::vector< ::rtl::OUString > aExcludedChartNames;
+    ::std::vector< OUString > aExcludedChartNames;
     ScRangeListVector aProtectedChartRangesVector;
 
     if ( rMEvt.IsLeft() )

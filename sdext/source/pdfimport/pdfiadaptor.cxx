@@ -62,14 +62,14 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
     if( m_xModel.is() )
     {
         uno::Reference< io::XStream > xSubStream;
-        rtl::OUString aPwd;
+        OUString aPwd;
         const beans::PropertyValue* pAttribs = rFilterData.getConstArray();
         sal_Int32 nAttribs = rFilterData.getLength();
         sal_Int32 nPwPos = -1;
         for( sal_Int32 i = 0; i < nAttribs; i++ )
         {
             #if OSL_DEBUG_LEVEL > 1
-            rtl::OUString aVal( "<no string>" );
+            OUString aVal( "<no string>" );
             pAttribs[i].Value >>= aVal;
             SAL_INFO("sdext.pdfimport", "filter: Attrib: " << pAttribs[i].Name << " = " << aVal << "\n");
             #endif
@@ -101,7 +101,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     xSeek->seek( 0 );
                 oslFileHandle aFile = NULL;
                 sal_uInt64 nWritten = 0;
-                rtl::OUString aURL;
+                OUString aURL;
                 if( osl_createTempFile( NULL, &aFile, &aURL.pData ) == osl_File_E_None )
                 {
                     SAL_INFO("sdext.pdfimport", "created temp file " << aURL);
@@ -125,8 +125,8 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     osl_closeFile( aFile );
                     if( xInput.is() )
                     {
-                        rtl::OUString aEmbedMimetype;
-                        rtl::OUString aOrgPwd( aPwd );
+                        OUString aEmbedMimetype;
+                        OUString aOrgPwd( aPwd );
                         xSubStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, true );
                         if( aOrgPwd != aPwd )
                             bAddPwdProp = true;
@@ -148,7 +148,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             try {
                 xSubFilter = uno::Reference<document::XFilter>(
                     m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                        rtl::OUString( "com.sun.star.document.OwnSubFilter" ),
+                        OUString( "com.sun.star.document.OwnSubFilter" ),
                         aArgs,
                         m_xContext ),
                     uno::UNO_QUERY );
@@ -169,7 +169,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     {
                         nPwPos = aFilterData.getLength();
                         aFilterData.realloc( nPwPos+1 );
-                        aFilterData[nPwPos].Name = rtl::OUString( "Password" );
+                        aFilterData[nPwPos].Name = OUString( "Password" );
                     }
                     aFilterData[nPwPos].Value <<= aPwd;
                     bRet = xSubFilter->filter( aFilterData );
@@ -222,10 +222,10 @@ void PDFIRawAdaptor::setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rV
 
 bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput,
                             const uno::Reference<task::XInteractionHandler>& xIHdl,
-                            const rtl::OUString&                          rPwd,
+                            const OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
                             const XmlEmitterSharedPtr&                    rEmitter,
-                            const rtl::OUString&                          rURL )
+                            const OUString&                          rURL )
 {
     // container for metaformat
     boost::shared_ptr<PDFIProcessor> pSink(
@@ -248,14 +248,14 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
     return bSuccess;
 }
 
-bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          rURL,
+bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
                                  const uno::Reference<io::XOutputStream>&      xOutput,
                                  const uno::Reference<task::XStatusIndicator>& xStatus )
 {
     XmlEmitterSharedPtr pEmitter = createOdfEmitter(xOutput);
     const bool bSuccess = parse(uno::Reference<io::XInputStream>(),
                                 uno::Reference<task::XInteractionHandler>(),
-                                rtl::OUString(),
+                                OUString(),
                                 xStatus,pEmitter,rURL);
 
     // tell input stream that it is no longer needed
@@ -267,14 +267,14 @@ bool PDFIRawAdaptor::odfConvert( const rtl::OUString&                          r
 // XImportFilter
 sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::PropertyValue >&        rSourceData,
                                             const uno::Reference< xml::sax::XDocumentHandler >& rHdl,
-                                            const uno::Sequence< rtl::OUString >&               /*rUserData*/ ) throw( uno::RuntimeException )
+                                            const uno::Sequence< OUString >&               /*rUserData*/ ) throw( uno::RuntimeException )
 {
     // get the InputStream carrying the PDF content
     uno::Reference< io::XInputStream > xInput;
     uno::Reference< task::XStatusIndicator > xStatus;
     uno::Reference< task::XInteractionHandler > xInteractionHandler;
-    rtl::OUString aURL;
-    rtl::OUString aPwd;
+    OUString aURL;
+    OUString aPwd;
     const beans::PropertyValue* pAttribs = rSourceData.getConstArray();
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )

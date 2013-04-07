@@ -2154,7 +2154,7 @@ sal_Bool SvTreeListBox::EditingEntry( SvTreeListEntry*, Selection& )
     return sal_True;
 }
 
-sal_Bool SvTreeListBox::EditedEntry( SvTreeListEntry* /*pEntry*/,const rtl::OUString& /*rNewText*/)
+sal_Bool SvTreeListBox::EditedEntry( SvTreeListEntry* /*pEntry*/,const OUString& /*rNewText*/)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return sal_True;
@@ -2206,7 +2206,7 @@ void SvTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     if( !pParent->HasChildren() )
-        InsertEntry( rtl::OUString("<dummy>"), pParent, sal_False, LIST_APPEND );
+        InsertEntry( OUString("<dummy>"), pParent, sal_False, LIST_APPEND );
 }
 
 void SvTreeListBox::GetFocus()
@@ -2319,7 +2319,7 @@ short SvTreeListBox::GetHeightOffset(const Font& /* rFont */, Size& aSizeLogic )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     short nOffset = 0;
-    aSizeLogic = Size(GetTextWidth(rtl::OUString('X')), GetTextHeight());
+    aSizeLogic = Size(GetTextWidth(OUString('X')), GetTextHeight());
     if( GetEntryHeight() > aSizeLogic.Height() )
         nOffset = ( GetEntryHeight() - (short)aSizeLogic.Height()) / 2;
     return nOffset;
@@ -3190,7 +3190,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                     }
 
                     bNativeOK = DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL,
-                                            aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                                            aCtrlRegion, nState, aControlValue, OUString() );
                 }
 
                 if( !bNativeOK) {

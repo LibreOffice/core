@@ -36,12 +36,12 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
+            OUString get_Name() const;
+            void put_Name(const OUString& _rName);
             KeyTypeEnum get_Type() const;
             void put_Type(const KeyTypeEnum& _eNum) ;
-            ::rtl::OUString get_RelatedTable() const;
-            void put_RelatedTable(const ::rtl::OUString& _rName);
+            OUString get_RelatedTable() const;
+            void put_RelatedTable(const OUString& _rName);
             RuleEnum get_DeleteRule() const;
             void put_DeleteRule(const RuleEnum& _eNum) ;
             RuleEnum get_UpdateRule() const;

@@ -34,8 +34,8 @@ struct DataSequenceModel
     typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > AnyMap;
 
     AnyMap              maData;             /// Map of values, indexed by point identifier.
-    ::rtl::OUString     maFormula;          /// Formula reference, e.g. into a spreadsheet.
-    ::rtl::OUString     maFormatCode;       /// Number format for double values.
+    OUString     maFormula;          /// Formula reference, e.g. into a spreadsheet.
+    OUString     maFormatCode;       /// Number format for double values.
     sal_Int32           mnPointCount;       /// Number of points in this series source.
 
     explicit            DataSequenceModel();

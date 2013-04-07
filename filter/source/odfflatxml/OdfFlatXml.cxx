@@ -232,7 +232,7 @@ component_getFactory( const sal_Char* pImplementationName,
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xSMGR = reinterpret_cast< com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);
     com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory;
-    rtl::OUString sImplName = rtl::OUString::createFromAscii(pImplementationName);
+    OUString sImplName = OUString::createFromAscii(pImplementationName);
 
     if (OdfFlatXml::impl_getImplementationName() == sImplName)
         xFactory = cppu::createOneInstanceFactory( xSMGR,

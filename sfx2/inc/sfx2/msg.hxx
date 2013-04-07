@@ -272,8 +272,8 @@ public:
     sal_uInt16          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
     const char*     GetUnoName() const { return pUnoName; }
-    SFX2_DLLPUBLIC rtl::OString    GetCommand() const;
-    SFX2_DLLPUBLIC rtl::OUString    GetCommandString() const;
+    SFX2_DLLPUBLIC OString    GetCommand() const;
+    SFX2_DLLPUBLIC OUString    GetCommandString() const;
 
     sal_uInt16          GetFormalArgumentCount() const { return nArgDefCount; }
     const SfxFormalArgument& GetFormalArgument( sal_uInt16 nNo ) const

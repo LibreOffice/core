@@ -37,7 +37,7 @@ public:
 
     // Methods
     virtual void SAL_CALL Show() throw (css::uno::RuntimeException);
-    virtual rtl::OUString mapIndexToName( sal_Int32 nIndex ) = 0;
+    virtual OUString mapIndexToName( sal_Int32 nIndex ) = 0;
 };
 
 #endif /* VBA_DIALOG_BASE_HXX */

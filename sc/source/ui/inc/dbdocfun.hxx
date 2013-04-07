@@ -82,12 +82,12 @@ public:
                                     const ScSortParam* pForceNewSort,
                                     sal_Bool bRecord, sal_Bool bApi );
 
-    bool AddDBRange( const ::rtl::OUString& rName, const ScRange& rRange, sal_Bool bApi );
-    bool DeleteDBRange( const ::rtl::OUString& rName );
+    bool AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool bApi );
+    bool DeleteDBRange( const OUString& rName );
     bool RenameDBRange( const String& rOld, const String& rNew );
     bool ModifyDBData( const ScDBData& rNewData );  // Name unveraendert
 
-    bool RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
+    bool RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
     bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                           bool bRecord, bool bApi, bool bAllowMove = false );

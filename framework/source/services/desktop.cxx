@@ -155,8 +155,8 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
                                                 m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
-                                                ::rtl::OUStringBuffer sUntitledPrefix (256);
-                                                sUntitledPrefix.append      (::rtl::OUString( String( FwkResId( STR_UNTITLED_DOCUMENT ))));
+                                                OUStringBuffer sUntitledPrefix (256);
+                                                sUntitledPrefix.append      (OUString( String( FwkResId( STR_UNTITLED_DOCUMENT ))));
                                                 sUntitledPrefix.appendAscii (" ");
 
                                                 ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
@@ -431,7 +431,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
     if ( xInfo.is() )
     {
-        ::rtl::OUString sImplementationName = xInfo->getImplementationName();
+        OUString sImplementationName = xInfo->getImplementationName();
 
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
@@ -474,7 +474,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
     if ( xInfo.is() )
     {
-        ::rtl::OUString sImplementationName = xInfo->getImplementationName();
+        OUString sImplementationName = xInfo->getImplementationName();
 
         // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
@@ -630,8 +630,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     @onerror    We return a null reference.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const ::rtl::OUString&                                 sURL            ,
-                                                                                     const ::rtl::OUString&                                 sTargetFrameName,
+css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
+                                                                                     const OUString&                                 sTargetFrameName,
                                                                                            sal_Int32                                        nSearchFlags    ,
                                                                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments      ) throw(    css::io::IOException                ,
                                                                                                                                                                         css::lang::IllegalArgumentException ,
@@ -722,7 +722,7 @@ css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw
     @threadsafe yes
 *//*-*************************************************************************************************************/
 css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( const css::util::URL&  aURL             ,
-                                                                              const ::rtl::OUString& sTargetFrameName ,
+                                                                              const OUString& sTargetFrameName ,
                                                                                     sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
 {
     const char UNO_PROTOCOL[] = ".uno:";
@@ -899,7 +899,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator(
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
+OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
 {
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -908,7 +908,7 @@ css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator(
 }
 
 //*****************************************************************************************************************
-void SAL_CALL Desktop::setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException )
+void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::RuntimeException )
 {
     /* SAFE { */
     WriteGuard aWriteLock( m_aLock );
@@ -1008,7 +1008,7 @@ void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css
     @onerror    A null reference is returned.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::rtl::OUString& sTargetFrameName ,
+css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUString& sTargetFrameName ,
                                                                              sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XFrame > xTarget;
@@ -1089,7 +1089,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
         // get threadsafe some necessary member which are neccessary for following functionality
         /* SAFE { */
         aReadLock.lock();
-        ::rtl::OUString sOwnName = m_sName;
+        OUString sOwnName = m_sName;
         aReadLock.unlock();
         /* } SAFE */
 
@@ -1461,7 +1461,7 @@ void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css
 }
 
 //-----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL Desktop::getUntitledPrefix()
+OUString SAL_CALL Desktop::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1780,7 +1780,7 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
         css::beans::Property( DESKTOP_PROPNAME_DISPATCHRECORDERSUPPLIER , DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( DESKTOP_PROPNAME_ISPLUGGED                , DESKTOP_PROPHANDLE_ISPLUGGED               , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
         css::beans::Property( DESKTOP_PROPNAME_SUSPENDQUICKSTARTVETO    , DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO   , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
-        css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );

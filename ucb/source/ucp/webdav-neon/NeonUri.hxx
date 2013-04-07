@@ -43,18 +43,18 @@ namespace webdav_ucp
 class NeonUri
 {
     private:
-        ::rtl::OUString mURI;
-        ::rtl::OUString mScheme;
-        ::rtl::OUString mUserInfo;
-        ::rtl::OUString mHostName;
+        OUString mURI;
+        OUString mScheme;
+        OUString mUserInfo;
+        OUString mHostName;
         sal_Int32       mPort;
-        ::rtl::OUString mPath;
+        OUString mPath;
 
-        void init( const rtl::OString & rUri, const ne_uri * pUri );
+        void init( const OString & rUri, const ne_uri * pUri );
         void calculateURI ();
 
     public:
-        NeonUri( const ::rtl::OUString & inUri ) throw ( DAVException );
+        NeonUri( const OUString & inUri ) throw ( DAVException );
         NeonUri( const ne_uri * inUri ) throw ( DAVException );
         ~NeonUri( );
 
@@ -62,36 +62,36 @@ class NeonUri
         bool operator!= ( const NeonUri & rOther ) const
         { return !operator==( rOther ); }
 
-        const ::rtl::OUString & GetURI( void ) const
+        const OUString & GetURI( void ) const
                                             { return mURI; };
-        const ::rtl::OUString & GetScheme( void ) const
+        const OUString & GetScheme( void ) const
                                             { return mScheme; };
-        const ::rtl::OUString & GetUserInfo( void ) const
+        const OUString & GetUserInfo( void ) const
                                             { return mUserInfo; };
-        const ::rtl::OUString & GetHost( void ) const
+        const OUString & GetHost( void ) const
                                             { return mHostName; };
         sal_Int32       GetPort( void )     const
                                             { return mPort; };
-        const ::rtl::OUString &     GetPath( void ) const
+        const OUString &     GetPath( void ) const
                                             { return mPath; };
 
-        ::rtl::OUString GetPathBaseName ( void ) const;
+        OUString GetPathBaseName ( void ) const;
 
-        ::rtl::OUString GetPathBaseNameUnescaped ( void ) const;
+        OUString GetPathBaseNameUnescaped ( void ) const;
 
-        void SetScheme (const ::rtl::OUString& scheme)
+        void SetScheme (const OUString& scheme)
             { mScheme = scheme; calculateURI (); };
 
-        void AppendPath (const ::rtl::OUString& rPath);
+        void AppendPath (const OUString& rPath);
 
-        static ::rtl::OUString escapeSegment( const ::rtl::OUString& segment );
-        static ::rtl::OUString unescape( const ::rtl::OUString& string );
+        static OUString escapeSegment( const OUString& segment );
+        static OUString unescape( const OUString& string );
 
         // "host:port", omit ":port" for port 80 and 443
-        static rtl::OUString makeConnectionEndPointString(
-                                        const rtl::OUString & rHostName,
+        static OUString makeConnectionEndPointString(
+                                        const OUString & rHostName,
                                         int nPort );
-        rtl::OUString makeConnectionEndPointString() const
+        OUString makeConnectionEndPointString() const
         { return makeConnectionEndPointString( GetHost(), GetPort() ); }
 };
 

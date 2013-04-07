@@ -85,7 +85,7 @@ sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbutt
         {
             // only paint the embedded spin buttons, all buttons are painted at once
             bNativeOK = pWin->DrawNativeControl( CTRL_SPINBOX, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
-                        rSpinbuttonValue, rtl::OUString() );
+                        rSpinbuttonValue, OUString() );
         }
         else
         {
@@ -108,14 +108,14 @@ sal_Bool ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbutt
             Rectangle aNatRgn( aPt, aSize );
             if( ! ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
                 pBorder->GetNativeControlRegion( CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                                                 aNatRgn, 0, rSpinbuttonValue, rtl::OUString(), aBound, aContent) )
+                                                 aNatRgn, 0, rSpinbuttonValue, OUString(), aBound, aContent) )
             {
                 aSize = aContent.GetSize();
             }
 
             Rectangle aRgn( aPt, aSize );
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
-                        rSpinbuttonValue, rtl::OUString() );
+                        rSpinbuttonValue, OUString() );
 
             pBorder->SetClipRegion(Region(oldRgn));
         }
@@ -131,7 +131,7 @@ sal_Bool ImplDrawNativeSpinbuttons( Window *pWin, const SpinbuttonValue& rSpinbu
     {
         // only paint the standalone spin buttons, all buttons are painted at once
         bNativeOK = pWin->DrawNativeControl( CTRL_SPINBUTTONS, PART_ALL_BUTTONS, Rectangle(), CTRL_STATE_ENABLED,
-                    rSpinbuttonValue, rtl::OUString() );
+                    rSpinbuttonValue, OUString() );
     }
     return bNativeOK;
 }
@@ -709,9 +709,9 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
 
             bNativeRegionOK =
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_UP,
-                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContentUp) &&
+                    aArea, 0, aControlValue, OUString(), aBound, aContentUp) &&
                 pWin->GetNativeControlRegion(CTRL_SPINBOX, PART_BUTTON_DOWN,
-                    aArea, 0, aControlValue, rtl::OUString(), aBound, aContentDown);
+                    aArea, 0, aControlValue, OUString(), aBound, aContentDown);
 
             if( bNativeRegionOK )
             {
@@ -766,7 +766,7 @@ void SpinField::Resize()
 
             // adjust position and size of the edit field
             if ( GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
-                        aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                        aArea, 0, aControlValue, OUString(), aBound, aContent) )
             {
                 // convert back from border space to local coordinates
                 aPoint = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aPoint ) );
@@ -958,7 +958,7 @@ sal_Bool SpinField::ShowDropDown( sal_Bool )
     return sal_False;
 }
 
-Size SpinField::CalcMinimumSizeForText(const rtl::OUString &rString) const
+Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
 {
     Size aSz = Edit::CalcMinimumSizeForText(rString);
 
@@ -971,9 +971,9 @@ Size SpinField::CalcMinimumSizeForText(const rtl::OUString &rString) const
         Rectangle aEntireBound, aEntireContent, aEditBound, aEditContent;
         if (
                GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
-                   aArea, 0, aControlValue, rtl::OUString(), aEntireBound, aEntireContent) &&
+                   aArea, 0, aControlValue, OUString(), aEntireBound, aEntireContent) &&
                GetNativeControlRegion(CTRL_SPINBOX, PART_SUB_EDIT,
-                   aArea, 0, aControlValue, rtl::OUString(), aEditBound, aEditContent)
+                   aArea, 0, aControlValue, OUString(), aEditBound, aEditContent)
            )
         {
             aSz.Width() += (aEntireContent.GetWidth() - aEditContent.GetWidth());

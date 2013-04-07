@@ -120,7 +120,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     }
 
     SetHelpId( HID_SCSHELL_DRTXTOB );
-    SetName(rtl::OUString("DrawText"));
+    SetName(OUString("DrawText"));
 }
 
 ScDrawTextObjectBar::~ScDrawTextObjectBar()

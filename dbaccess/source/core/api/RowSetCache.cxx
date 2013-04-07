@@ -83,11 +83,11 @@ DBG_NAME(ORowSetCache)
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                            const Reference<XComponentContext>& _rContext,
-                           const ::rtl::OUString& _rUpdateTableName,
+                           const OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew,
                            const ORowSetValueVector& _aParameterValueForCache,
-                           const ::rtl::OUString& i_sRowSetFilter,
+                           const OUString& i_sRowSetFilter,
                            sal_Int32 i_nMaxRows)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
@@ -155,7 +155,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                             ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
     Reference< XIndexAccess> xUpdateTableKeys;
-    ::rtl::OUString aUpdateTableName = _rUpdateTableName;
+    OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
     // first we need a connection
     Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
@@ -174,7 +174,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             Reference<XTablesSupplier> xTabSup(_xAnalyzer,UNO_QUERY);
             OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
             Reference<XNameAccess> xTables = xTabSup->getTables();
-            Sequence< ::rtl::OUString> aTableNames = xTables->getElementNames();
+            Sequence< OUString> aTableNames = xTables->getElementNames();
             if ( aTableNames.getLength() > 1 && _rUpdateTableName.isEmpty() && bNeedKeySet )
             {// here we have a join or union and nobody told us which table to update, so we update them all
                 m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
@@ -298,9 +298,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             m_nPrivileges = Privilege::SELECT;
             sal_Bool bNoInsert = sal_False;
 
-            Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-            const ::rtl::OUString* pIter    = aNames.getConstArray();
-            const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
+            Sequence< OUString> aNames(xColumns->getElementNames());
+            const OUString* pIter    = aNames.getConstArray();
+            const OUString* pEnd     = pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
@@ -1534,7 +1534,7 @@ void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
         throwFunctionSequenceException(m_xSet.get());
 }
 
-sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sUpdateTableName)
+sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const OUString& _sUpdateTableName)
 {
     sal_Bool bOk = sal_False;
     if (pNode->count() == 3 &&  // Ausdruck is geklammert
@@ -1561,7 +1561,7 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
         {
             bOk = sal_False;
         }
-        ::rtl::OUString sColumnName,sTableRange;
+        OUString sColumnName,sTableRange;
         OSQLParseTreeIterator::getColumnRange( pNode->getChild(0), _xConnection, sColumnName, sTableRange );
         bOk = sTableRange == _sUpdateTableName;
         if ( !bOk )
@@ -1575,11 +1575,11 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
 
 sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                                  const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                                 const ::rtl::OUString& _sUpdateTableName )
+                                 const OUString& _sUpdateTableName )
 {
     sal_Bool bOk = sal_False;
-    ::rtl::OUString sSql = _xAnalyzer->getQuery();
-    ::rtl::OUString sErrorMsg;
+    OUString sSql = _xAnalyzer->getQuery();
+    OUString sErrorMsg;
     ::connectivity::OSQLParser aSqlParser( m_aContext );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
@@ -1618,7 +1618,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                         pTableRef = pJoin->getChild(3);
                     OSL_ENSURE(SQL_ISRULE(pTableRef,table_ref),"Must be a tableref here!");
 
-                    ::rtl::OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
+                    OUString sTableRange = OSQLParseNode::getTableRange(pTableRef);
                     if(sTableRange.isEmpty())
                         pTableRef->getChild(0)->parseNodeToStr( sTableRange, _xConnection, NULL, sal_False, sal_False );
                     bOk =  sTableRange == _sUpdateTableName;

@@ -82,7 +82,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
     };
 
     for ( size_t i = 0; i < sizeof( s_pProgrammaticNames ) / sizeof( s_pProgrammaticNames[0] ); ++i )
-        m_aAliasMap[ ::rtl::OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
+        m_aAliasMap[ OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
 
     initialize( _rxORB );
 }
@@ -126,13 +126,13 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
 }
 
 //------------------------------------------------------------------
-::rtl::OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const ::rtl::OUString& _rAlias ) const
+OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const
 {
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
     if ( pos == m_aAliasMap.end() )
     {
         OSL_FAIL( "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
-        return ::rtl::OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
+        return OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
     }
     return pos->second.programmaticAsciiName;
 }

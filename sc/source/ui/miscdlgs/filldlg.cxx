@@ -48,7 +48,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
                                   FillDir       eFillDir,
                                   FillCmd       eFillCmd,
                                   FillDateCmd   eFillDateCmd,
-                                  const rtl::OUString& aStartStr,
+                                  const OUString& aStartStr,
                                   double        fStep,
                                   double        fMax,
                                   sal_uInt16        nPossDir )
@@ -219,7 +219,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 bool ScFillSeriesDlg::CheckStartVal()
 {
     bool bValOk = false;
-    rtl::OUString aStr = aEdStartVal.GetText();
+    OUString aStr = aEdStartVal.GetText();
 
     if ( aStr.isEmpty() || aBtnAutoFill.IsChecked())
     {
@@ -240,7 +240,7 @@ bool ScFillSeriesDlg::CheckStartVal()
 bool ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
-    rtl::OUString aStr = aEdIncrement.GetText();
+    OUString aStr = aEdIncrement.GetText();
 
     return rDoc.GetFormatTable()->IsNumberFormat( aStr, nKey, fIncrement );
 }
@@ -251,7 +251,7 @@ bool ScFillSeriesDlg::CheckIncrementVal()
 bool ScFillSeriesDlg::CheckEndVal()
 {
     bool bValOk = false;
-    rtl::OUString aStr = aEdEndVal.GetText();
+    OUString aStr = aEdEndVal.GetText();
 
     if (aStr.isEmpty())
     {

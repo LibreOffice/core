@@ -42,7 +42,7 @@ class SC_DLLPUBLIC ScCellFormat
 public:
 
     static void GetString(
-        ScRefCellValue& rCell, sal_uLong nFormat, rtl::OUString& rString,
+        ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString,
         Color** ppColor, SvNumberFormatter& rFormatter, bool bNullVals = true,
         bool bFormula  = false, ScForceTextFmt eForceTextFmt = ftDontForce,
         bool bUseStarFormat = false );

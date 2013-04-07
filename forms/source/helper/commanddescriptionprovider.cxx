@@ -68,7 +68,7 @@ namespace frm
         }
 
         // ICommandDescriptionProvider
-        virtual ::rtl::OUString getCommandDescription( const ::rtl::OUString& _rCommandURL ) const;
+        virtual OUString getCommandDescription( const OUString& _rCommandURL ) const;
 
     private:
         void    impl_init_nothrow( const Reference<XComponentContext>& _rxContext, const Reference< XModel >& _rxDocument );
@@ -88,7 +88,7 @@ namespace frm
         try
         {
             Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rxContext) );
-            ::rtl::OUString sModuleID = xModuleManager->identify( _rxDocument );
+            OUString sModuleID = xModuleManager->identify( _rxDocument );
 
             Reference< XNameAccess > xUICommandDescriptions( UICommandDescription::create(_rxContext) );
             m_xCommandAccess.set( xUICommandDescriptions->getByName( sModuleID ), UNO_QUERY_THROW );
@@ -100,22 +100,22 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString DefaultCommandDescriptionProvider::getCommandDescription( const ::rtl::OUString& _rCommandURL ) const
+    OUString DefaultCommandDescriptionProvider::getCommandDescription( const OUString& _rCommandURL ) const
     {
         if ( !m_xCommandAccess.is() )
-            return ::rtl::OUString();
+            return OUString();
 
         try
         {
             ::comphelper::NamedValueCollection aCommandProperties( m_xCommandAccess->getByName( _rCommandURL ) );
-            return aCommandProperties.getOrDefault( "Name", ::rtl::OUString() );
+            return aCommandProperties.getOrDefault( "Name", OUString() );
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------

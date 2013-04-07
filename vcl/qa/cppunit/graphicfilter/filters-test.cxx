@@ -46,8 +46,8 @@ class VclFiltersTest
 public:
     VclFiltersTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    virtual bool load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int);
 
     /**
@@ -60,8 +60,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-bool VclFiltersTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &,
+bool VclFiltersTest::load(const OUString &,
+    const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
     GraphicFilter aGraphicFilter(false);
@@ -73,33 +73,33 @@ bool VclFiltersTest::load(const rtl::OUString &,
 void VclFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/wmf/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/emf/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/sgv/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/png/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/jpg/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/gif/"),
-        rtl::OUString());
+        OUString());
 
-    testDir(rtl::OUString(),
+    testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/bmp/"),
-        rtl::OUString());
+        OUString());
 #endif
 }
 

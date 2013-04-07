@@ -60,7 +60,7 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     SvtCommandOptions aCmdOpts;
     if ( aCmdOpts.Lookup(
              SvtCommandOptions::CMDOPTION_DISABLED,
-             rtl::OUString( "Print"  ) ) )
+             OUString( "Print"  ) ) )
     {
         aPrinterInfo.Hide();
         aPrtSetup.Hide();

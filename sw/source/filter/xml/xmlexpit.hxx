@@ -114,7 +114,7 @@ public:
     inline void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
 
     static bool QueryXMLValue( const SfxPoolItem& rItem,
-                                 ::rtl::OUString& rValue, sal_uInt16 nMemberId,
+                                 OUString& rValue, sal_uInt16 nMemberId,
                                  const SvXMLUnitConverter& rUnitConverter );
 };
 

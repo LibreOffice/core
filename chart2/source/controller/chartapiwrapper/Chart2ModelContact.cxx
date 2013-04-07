@@ -35,7 +35,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace chart
 {
@@ -233,7 +232,7 @@ awt::Size Chart2ModelContact::GetLegendSize() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( m_xChartModel ) );
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -246,7 +245,7 @@ awt::Point Chart2ModelContact::GetLegendPosition() const
     if( pProvider )
     {
         uno::Reference< chart2::XLegend > xLegend( LegendHelper::getLegend( m_xChartModel ) );
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xLegend, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;
@@ -259,7 +258,7 @@ awt::Size Chart2ModelContact::GetTitleSize( const uno::Reference<
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xTitle.is() )
     {
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -272,7 +271,7 @@ awt::Point Chart2ModelContact::GetTitlePosition( const uno::Reference<
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xTitle.is() )
     {
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;
@@ -285,7 +284,7 @@ awt::Size Chart2ModelContact::GetAxisSize( const uno::Reference<
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xAxis.is() )
     {
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel ) );
         aSize = ToSize( pProvider->getRectangleOfObject( aCID ) );
     }
     return aSize;
@@ -298,7 +297,7 @@ awt::Point Chart2ModelContact::GetAxisPosition( const uno::Reference<
     ExplicitValueProvider* pProvider( getExplicitValueProvider() );
     if( pProvider && xAxis.is() )
     {
-        rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel ) );
+        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, m_xChartModel ) );
         aPoint = ToPoint( pProvider->getRectangleOfObject( aCID ) );
     }
     return aPoint;

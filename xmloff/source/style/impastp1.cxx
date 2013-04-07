@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include "impastpl.hxx"
 
-using ::rtl::OUString;
 
 //#############################################################################
 //
@@ -34,7 +33,7 @@ using ::rtl::OUString;
 
 XMLFamilyData_Impl::XMLFamilyData_Impl(
         sal_Int32 nFamily,
-        const ::rtl::OUString& rStrName,
+        const OUString& rStrName,
         const UniReference < SvXMLExportPropertyMapper > &rMapper,
         const OUString& rStrPrefix,
         sal_Bool bAsFam )

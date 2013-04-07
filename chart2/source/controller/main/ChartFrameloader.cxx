@@ -62,10 +62,10 @@ ChartFrameLoader::~ChartFrameLoader()
 
 APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME)
 
-    uno::Sequence< rtl::OUString > ChartFrameLoader
+    uno::Sequence< OUString > ChartFrameLoader
 ::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_FRAMELOADER_SERVICE_NAME;
     return aSNS;
 }
@@ -146,7 +146,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             comphelper::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
             if( aIt != aMediaDescriptor.end())
             {
-                ::rtl::OUString aURL( (*aIt).second.get< ::rtl::OUString >());
+                OUString aURL( (*aIt).second.get< OUString >());
                 if( aURL.matchAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "private:factory/schart" )))
                 {

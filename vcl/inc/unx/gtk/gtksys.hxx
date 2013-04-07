@@ -50,12 +50,12 @@ public:
     virtual bool          IsUnifiedDisplay();
     virtual unsigned int  GetDisplayScreenCount();
     virtual unsigned int  GetDisplayBuiltInScreen();
-    virtual rtl::OUString GetDisplayScreenName                  (unsigned int nScreen);
+    virtual OUString GetDisplayScreenName                  (unsigned int nScreen);
     virtual Rectangle     GetDisplayScreenPosSizePixel   (unsigned int nScreen);
     virtual Rectangle     GetDisplayScreenWorkAreaPosSizePixel (unsigned int nScreen);
-    virtual int           ShowNativeDialog (const rtl::OUString&              rTitle,
-                                            const rtl::OUString&              rMessage,
-                                            const std::list< rtl::OUString >& rButtons,
+    virtual int           ShowNativeDialog (const OUString&              rTitle,
+                                            const OUString&              rMessage,
+                                            const std::list< OUString >& rButtons,
                                             int                        nDefButton);
     SalX11Screen      GetDisplayDefaultXScreen()
             { return getXScreenFromDisplayScreen( GetDisplayBuiltInScreen() ); }

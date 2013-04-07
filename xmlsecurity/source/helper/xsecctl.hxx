@@ -133,7 +133,7 @@ public:
         xReferenceResolvedListener = xListener;
     }
 
-    void addReference( sal_Int32 type, rtl::OUString uri, sal_Int32 keeperId )
+    void addReference( sal_Int32 type, OUString uri, sal_Int32 keeperId )
     {
         signatureInfor.vSignatureReferenceInfors.push_back(
                 SignatureReferenceInformation(type, uri));
@@ -345,9 +345,9 @@ private:
     /*
      * Common methods
      */
-    sal_Bool convertNumber( sal_Int32& rValue, const rtl::OUString& rString, sal_Int32 nMin, sal_Int32 nMax );
-    void convertDateTime( ::rtl::OUStringBuffer& rBuffer, const com::sun::star::util::DateTime& rDateTime );
-    sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime, const ::rtl::OUString& rString );
+    sal_Bool convertNumber( sal_Int32& rValue, const OUString& rString, sal_Int32 nMin, sal_Int32 nMax );
+    void convertDateTime( OUStringBuffer& rBuffer, const com::sun::star::util::DateTime& rDateTime );
+    sal_Bool convertDateTime( com::sun::star::util::DateTime& rDateTime, const OUString& rString );
 
     void createXSecComponent( );
     int findSignatureInfor( sal_Int32 nSecurityId ) const;
@@ -357,14 +357,14 @@ private:
     void initializeSAXChain();
 
     com::sun::star::uno::Reference<
-        com::sun::star::io::XInputStream > getObjectInputStream( const rtl::OUString& objectURL );
+        com::sun::star::io::XInputStream > getObjectInputStream( const OUString& objectURL );
 
         //sal_Int32 getFastPropertyIndex(sal_Int32 nHandle) const;
 
     /*
      * For signature generation
      */
-    rtl::OUString createId();
+    OUString createId();
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToWrite(
         InternalSignatureInformation& signatureInfo );
@@ -373,22 +373,22 @@ private:
      * For signature verification
      */
     void addSignature();
-    void addReference( const rtl::OUString& ouUri);
+    void addReference( const OUString& ouUri);
     void addStreamReference(
-        const rtl::OUString& ouUri,
+        const OUString& ouUri,
         bool isBinary );
     void setReferenceCount() const;
 
-    void setX509IssuerName( rtl::OUString& ouX509IssuerName );
-    void setX509SerialNumber( rtl::OUString& ouX509SerialNumber );
-    void setX509Certificate( rtl::OUString& ouX509Certificate );
-    void setSignatureValue( rtl::OUString& ouSignatureValue );
-    void setDigestValue( rtl::OUString& ouDigestValue );
+    void setX509IssuerName( OUString& ouX509IssuerName );
+    void setX509SerialNumber( OUString& ouX509SerialNumber );
+    void setX509Certificate( OUString& ouX509Certificate );
+    void setSignatureValue( OUString& ouSignatureValue );
+    void setDigestValue( OUString& ouDigestValue );
 
-    void setDate( rtl::OUString& ouDate );
+    void setDate( OUString& ouDate );
 
-    void setId( rtl::OUString& ouId );
-    void setPropertyId( rtl::OUString& ouPropertyId );
+    void setId( OUString& ouId );
+    void setPropertyId( OUString& ouPropertyId );
 
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::sax::XReferenceResolvedListener > prepareSignatureToRead(
@@ -428,7 +428,7 @@ public:
     /*
      * For signature generation
      */
-    void signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool isBinary);
+    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, sal_Bool isBinary);
 
 
     /** sets data that describes the certificate.
@@ -451,16 +451,16 @@ public:
      */
     void setX509Certificate(
         sal_Int32 nSecurityId,
-        const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber,
-        const rtl::OUString& ouX509Cert);
+        const OUString& ouX509IssuerName,
+        const OUString& ouX509SerialNumber,
+        const OUString& ouX509Cert);
     // see the other setX509Certifcate function
     void setX509Certificate(
         sal_Int32 nSecurityId,
         const sal_Int32 nSecurityEnvironmentIndex,
-        const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber,
-        const rtl::OUString& ouX509Cert);
+        const OUString& ouX509IssuerName,
+        const OUString& ouX509SerialNumber,
+        const OUString& ouX509Cert);
 
     void setDate(
         sal_Int32 nSecurityId,
@@ -474,7 +474,7 @@ public:
     /*
      * For signature verification
      */
-    void collectToVerify( const rtl::OUString& referenceId );
+    void collectToVerify( const OUString& referenceId );
     void addSignature( sal_Int32 nSignatureId );
     com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > createSignatureReader();
     void releaseSignatureReader();

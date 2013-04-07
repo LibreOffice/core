@@ -96,10 +96,10 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
  * @param   pBullOver pointer to the bulletoverride of current paragraph.
  * @param   pIndent pointer to the indentoverride of current paragraph.
  */
-rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
+OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
     LwpIndentOverride* pIndent)
 {
-    rtl::OUString aEmpty;
+    OUString aEmpty;
 
     if(!pPara || !pIndent || !pBullOver)
     {
@@ -148,7 +148,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
     }
 
     m_vIDsPairList.push_back(std::make_pair(pBulletOver, aIndentID));
-    rtl::OUString aStyleName;
+    OUString aStyleName;
 
     LwpFribPtr* pBulletParaFribs = pBulletPara->GetFribs();
     sal_Bool bIsNumbering = (sal_Bool)(pBulletParaFribs->HasFrib(FRIB_TAG_PARANUMBER) != 0);
@@ -194,17 +194,17 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
             {
                 if (pParaNumber->GetStyleID() != NUMCHAR_other)
                 {
-                    rtl::OUString aPrefix;
+                    OUString aPrefix;
                     XFNumFmt aFmt;
                     if (aParaNumbering.pPrefix)
                     {
                         aPrefix += aParaNumbering.pPrefix->GetText();
                     }
 
-                    rtl::OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
+                    OUString aNumber = LwpSilverBullet::GetNumCharByStyleID(pParaNumber);
                     if (pParaNumber->GetStyleID() == NUMCHAR_01 || pParaNumber->GetStyleID() == NUMCHAR_Chinese4)
                     {
-                        aPrefix += rtl::OUString("0");
+                        aPrefix += OUString("0");
                     }
                     aFmt.SetPrefix(aPrefix);
 
@@ -221,7 +221,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                 }
                 else
                 {
-                    rtl::OUString aPrefix, aSuffix;
+                    OUString aPrefix, aSuffix;
                     if (aParaNumbering.pPrefix)
                     {
                         aPrefix = aParaNumbering.pPrefix->GetText();
@@ -232,7 +232,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
                     }
 
                     pListStyle->SetListBullet(nPos, LwpSilverBullet::GetNumCharByStyleID(pParaNumber).toChar(),
-                        rtl::OUString("Times New Roman"), aPrefix, aSuffix);
+                        OUString("Times New Roman"), aPrefix, aSuffix);
                 }
 
                 pListStyle->SetListPosition(nPos, 0.0, 0.635, 0.0);
@@ -254,7 +254,7 @@ rtl::OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOv
 //Return the inner XFItem created.
 XFContentContainer* LwpBulletStyleMgr::AddBulletList(
         XFContentContainer* pCont, sal_Bool bIsOrdered,
-        const rtl::OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped)
+        const OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped)
 {
     assert(nLevel>0);
 

@@ -98,11 +98,11 @@ DataSupplier::~DataSupplier()
     }
 }
 
-::rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
-        ::rtl::OUString aId = maResults[ nIndex ]->aId;
+        OUString aId = maResults[ nIndex ]->aId;
         if ( aId.getLength() )
         {
             // Already cached.
@@ -114,16 +114,16 @@ DataSupplier::~DataSupplier()
     {
         GFile *pFile = mxContent->getGFile();
         char* parent = g_file_get_uri(pFile);
-        rtl::OUString aId = rtl::OUString::createFromAscii( parent );
+        OUString aId = OUString::createFromAscii( parent );
         g_free(parent);
 
         char *escaped_name =
             g_uri_escape_string( g_file_info_get_name(maResults[ nIndex ]->pInfo) , NULL, false);
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-                aId += rtl::OUString("/");
+                aId += OUString("/");
 
-        aId += rtl::OUString::createFromAscii( escaped_name );
+        aId += OUString::createFromAscii( escaped_name );
 
         g_free( escaped_name );
 
@@ -131,7 +131,7 @@ DataSupplier::~DataSupplier()
         return aId;
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
@@ -146,7 +146,7 @@ uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( 
         }
     }
 
-    ::rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( aId.getLength() )
     {
         uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aId );
@@ -235,7 +235,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
                     xContent, uno::UNO_QUERY_THROW );
                 sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
                 ucb::Command aCmd;
-                aCmd.Name = rtl::OUString("getPropertyValues");
+                aCmd.Name = OUString("getPropertyValues");
                 aCmd.Handle = -1;
                 aCmd.Argument <<= getResultSet()->getProperties();
                 uno::Any aResult( xCmdProc->execute(

@@ -57,7 +57,7 @@ class PresentationFactory
       public PresentationFactoryInterfaceBase
 {
 public:
-    static const ::rtl::OUString msPresentationViewURL;
+    static const OUString msPresentationViewURL;
 
     PresentationFactory (
         const css::uno::Reference<css::frame::XController>& rxController);

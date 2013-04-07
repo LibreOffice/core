@@ -78,7 +78,7 @@ public:
 
     void                AutoCorrectFontColor( void );
 
-    void                SetPreviewText( const ::rtl::OUString& rString );
+    void                SetPreviewText( const OUString& rString );
     void                SetFontNameAsPreviewText();
 
     void                SetFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont );

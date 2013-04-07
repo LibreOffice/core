@@ -53,7 +53,7 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
 //------------------------------------------------------------------------
 OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
                                                     ,const TTableWindowData::value_type& _pReferencedTable
-                                                    ,const ::rtl::OUString& rConnName)
+                                                    ,const OUString& rConnName)
     :OTableConnectionData( _pReferencingTable,_pReferencedTable, rConnName )
     ,m_nFromEntryIndex(0)
     ,m_nDestEntryIndex(0)
@@ -115,7 +115,7 @@ OQueryTableConnectionData& OQueryTableConnectionData::operator=(const OQueryTabl
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
+OUString OQueryTableConnectionData::GetAliasName(EConnectionSide nWhich) const
 {
     DBG_CHKTHIS(OQueryTableConnectionData,NULL);
     return nWhich == JTCS_FROM ? m_pReferencingTable->GetWinName() : m_pReferencedTable->GetWinName();
@@ -140,7 +140,7 @@ void OQueryTableConnectionData::InitFromDrag(const OTableFieldDescRef& rDragLeft
     SetFieldType(JTCS_FROM, rDragLeft->GetFieldType());
     SetFieldType(JTCS_TO, rDragRight->GetFieldType());
 
-    AppendConnLine((::rtl::OUString)rDragLeft->GetField(),(::rtl::OUString)rDragRight->GetField());
+    AppendConnLine((OUString)rDragLeft->GetField(),(OUString)rDragRight->GetField());
 }
 // -----------------------------------------------------------------------------
 OTableConnectionData* OQueryTableConnectionData::NewInstance() const

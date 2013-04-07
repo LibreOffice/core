@@ -62,28 +62,28 @@ public:
     HierarchyContentProperties( const HierarchyEntryData::Type & rType )
     : m_aData( rType ),
       m_aContentType( rType == HierarchyEntryData::FOLDER
-        ? rtl::OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : rtl::OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
+        : OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
 
     HierarchyContentProperties( const HierarchyEntryData & rData )
     : m_aData( rData ),
       m_aContentType( rData.getType() == HierarchyEntryData::FOLDER
-        ? rtl::OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : rtl::OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
+        : OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
 
-    const rtl::OUString & getName() const { return m_aData.getName(); }
-    void setName( const rtl::OUString & rName ) { m_aData.setName( rName ); };
+    const OUString & getName() const { return m_aData.getName(); }
+    void setName( const OUString & rName ) { m_aData.setName( rName ); };
 
-    const rtl::OUString & getTitle() const { return m_aData.getTitle(); }
-    void setTitle( const rtl::OUString & rTitle )
+    const OUString & getTitle() const { return m_aData.getTitle(); }
+    void setTitle( const OUString & rTitle )
     { m_aData.setTitle( rTitle ); };
 
-    const rtl::OUString & getTargetURL() const
+    const OUString & getTargetURL() const
     { return m_aData.getTargetURL(); }
-    void setTargetURL( const rtl::OUString & rURL )
+    void setTargetURL( const OUString & rURL )
     { m_aData.setTargetURL( rURL ); };
 
-    const rtl::OUString & getContentType() const { return m_aContentType; }
+    const OUString & getContentType() const { return m_aContentType; }
 
     sal_Bool getIsFolder() const
     { return m_aData.getType() == HierarchyEntryData::FOLDER; }
@@ -97,7 +97,7 @@ public:
 
 private:
     HierarchyEntryData m_aData;
-    rtl::OUString m_aContentType;
+    OUString m_aContentType;
 };
 
 //=========================================================================
@@ -143,7 +143,7 @@ private:
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     static sal_Bool hasData(
             const com::sun::star::uno::Reference<
@@ -178,7 +178,7 @@ private:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentIdentifier >
-    makeNewIdentifier( const rtl::OUString& rTitle );
+    makeNewIdentifier( const OUString& rTitle );
 
     typedef rtl::Reference< HierarchyContent > HierarchyContentRef;
     typedef std::list< HierarchyContentRef > HierarchyContentRefList;
@@ -241,15 +241,15 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XContent
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
@@ -295,7 +295,7 @@ public:
                             ::com::sun::star::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
                        HierarchyContentProvider* pProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 };
 
 } // namespace hierarchy_ucp

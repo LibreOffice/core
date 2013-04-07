@@ -76,7 +76,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     return starsdbc::SQLException();
 }
 
-::rtl::OUString java_sql_SQLException_BASE::getSQLState() const
+OUString java_sql_SQLException_BASE::getSQLState() const
 {
     static jmethodID mID(NULL);
     return callStringMethod("getSQLState",mID);

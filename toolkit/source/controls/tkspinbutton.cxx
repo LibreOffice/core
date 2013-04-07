@@ -65,9 +65,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoSpinButtonModel::getServiceName( ) throw (RuntimeException)
+    OUString UnoSpinButtonModel::getServiceName( ) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
+        return OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
     }
 
     //--------------------------------------------------------------------
@@ -76,7 +76,7 @@ namespace toolkit
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoSpinButtonControl ) );
+            return makeAny( OUString::createFromAscii( szServiceName_UnoSpinButtonControl ) );
 
         case BASEPROPERTY_BORDER:
             return makeAny( (sal_Int16) 0 );
@@ -109,17 +109,17 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL UnoSpinButtonModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSpinButtonModel" );
+        return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonModel" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL UnoSpinButtonModel::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
+        Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
+        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_UnoSpinButtonModel );
         return aServices;
     }
 
@@ -134,9 +134,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoSpinButtonControl::GetComponentServiceName()
+    OUString UnoSpinButtonControl::GetComponentServiceName()
     {
-        return ::rtl::OUString("SpinButton");
+        return OUString("SpinButton");
     }
 
     //--------------------------------------------------------------------
@@ -172,17 +172,17 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL UnoSpinButtonControl::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoSpinButtonControl" );
+        return OUString( "com.sun.star.comp.toolkit.UnoSpinButtonControl" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL UnoSpinButtonControl::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
+        Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_UnoSpinButtonControl );
+        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_UnoSpinButtonControl );
         return aServices;
     }
 

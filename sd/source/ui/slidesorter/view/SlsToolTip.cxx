@@ -27,7 +27,6 @@
 #include "glob.hrc"
 #include <vcl/help.hxx>
 
-using ::rtl::OUString;
 
 namespace sd { namespace slidesorter { namespace view {
 

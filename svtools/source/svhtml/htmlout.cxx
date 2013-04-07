@@ -391,11 +391,11 @@ static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     return pStr;
 }
 
-static rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
+static OString lcl_ConvertCharToHTML( sal_Unicode c,
                             HTMLOutContext& rContext,
                             String *pNonConvertableChars )
 {
-    rtl::OStringBuffer aDest;
+    OStringBuffer aDest;
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW != rContext.m_eDestEnc,
                     "wrong destination encoding" );
     const sal_Char *pStr = 0;
@@ -478,9 +478,9 @@ static rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
     return aDest.makeStringAndClear();
 }
 
-static rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
+static OString lcl_FlushToAscii( HTMLOutContext& rContext )
 {
-    rtl::OStringBuffer aDest;
+    OStringBuffer aDest;
 
     sal_Unicode c = 0;
     sal_Char cBuffer[TXTCONV_BUFFER_SIZE];
@@ -502,11 +502,11 @@ static rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
     return aDest.makeStringAndClear();
 }
 
-rtl::OString HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
+OString HTMLOutFuncs::ConvertStringToHTML( const String& rSrc,
     rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
 {
     HTMLOutContext aContext( eDestEnc );
-    rtl::OStringBuffer aDest;
+    OStringBuffer aDest;
     for( sal_uInt32 i=0UL, nLen = rSrc.Len(); i < nLen; i++ )
         aDest.append(lcl_ConvertCharToHTML(
             rSrc.GetChar( (xub_StrLen)i ), aContext, pNonConvertableChars));
@@ -527,7 +527,7 @@ SvStream& HTMLOutFuncs::Out_Char( SvStream& rStream, sal_Unicode c,
                                   HTMLOutContext& rContext,
                                   String *pNonConvertableChars )
 {
-    rtl::OString sOut = lcl_ConvertCharToHTML( c, rContext, pNonConvertableChars );
+    OString sOut = lcl_ConvertCharToHTML( c, rContext, pNonConvertableChars );
     rStream << sOut.getStr();
     return rStream;
 }
@@ -548,7 +548,7 @@ SvStream& HTMLOutFuncs::Out_String( SvStream& rStream, const String& rStr,
 SvStream& HTMLOutFuncs::FlushToAscii( SvStream& rStream,
                                        HTMLOutContext& rContext )
 {
-    rtl::OString sOut = lcl_FlushToAscii( rContext );
+    OString sOut = lcl_FlushToAscii( rContext );
 
     if (!sOut.isEmpty())
         rStream << sOut.getStr();
@@ -617,7 +617,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
     if( !rOutName.Len() )
         return rStream;
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<')
         .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_map))
         .append(' ')
@@ -635,7 +635,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         if( pObj )
         {
             const sal_Char *pShape = 0;
-            rtl::OString aCoords;
+            OString aCoords;
             switch( pObj->GetType() )
             {
             case( IMAP_OBJ_RECTANGLE ):
@@ -645,7 +645,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
                     Rectangle aRect( pRectObj->GetRectangle() );
 
-                    aCoords = rtl::OStringBuffer()
+                    aCoords = OStringBuffer()
                         .append(static_cast<sal_Int32>(aRect.Left()))
                         .append(',')
                         .append(static_cast<sal_Int32>(aRect.Top()))
@@ -664,7 +664,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     Point aCenter( pCirc->GetCenter() );
                     long nOff = pCirc->GetRadius();
 
-                    aCoords = rtl::OStringBuffer()
+                    aCoords = OStringBuffer()
                         .append(static_cast<sal_Int32>(aCenter.X()))
                         .append(',')
                         .append(static_cast<sal_Int32>(aCenter.Y()))
@@ -680,7 +680,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                     pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     Polygon aPoly( pPolyObj->GetPolygon() );
                     sal_uInt16 nCount = aPoly.GetSize();
-                    rtl::OStringBuffer aTmpBuf;
+                    OStringBuffer aTmpBuf;
                     if( nCount>0 )
                     {
                         const Point& rPoint = aPoly[0];
@@ -795,7 +795,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         eDestEnc = osl_getThreadTextEncoding();
 
     // Script wird komplett nicht eingerueckt!
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<')
         .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_script));
 
@@ -856,7 +856,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                 sOut.append(RTL_CONSTASCII_STRINGPARAM("' "))
                     .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_library))
                     .append(' ')
-                    .append(rtl::OUStringToOString(*pSBLibrary, eDestEnc));
+                    .append(OUStringToOString(*pSBLibrary, eDestEnc));
                 rStrm << sOut.makeStringAndClear().getStr() << sNewLine;
             }
 
@@ -865,7 +865,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                 sOut.append(RTL_CONSTASCII_STRINGPARAM("' "))
                     .append(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_module))
                     .append(' ')
-                    .append(rtl::OUStringToOString(*pSBModule, eDestEnc));
+                    .append(OUStringToOString(*pSBModule, eDestEnc));
                 rStrm << sOut.makeStringAndClear().getStr() << sNewLine;
             }
         }
@@ -874,7 +874,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         {
             // Wir schreiben das Modul mm ANSI-Zeichensatz, aber mit
             // System-Zeilenumbruechen raus.
-            const rtl::OString sSource(rtl::OUStringToOString(rSource, eDestEnc));
+            const OString sSource(OUStringToOString(rSource, eDestEnc));
             rStrm << sSource.getStr() << sNewLine;
         }
         rStrm << sNewLine;
@@ -917,7 +917,7 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
 
             if( pStr )
             {
-                rtl::OStringBuffer sOut;
+                OStringBuffer sOut;
                 sOut.append(' ').append(pStr).append("=\"");
                 rStrm << sOut.makeStringAndClear().getStr();
 
@@ -930,19 +930,19 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
     return rStrm;
 }
 
-rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
+OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             sal_Bool bValue,
             double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
             rtl_TextEncoding eDestEnc, String* pNonConvertableChars)
 {
-    rtl::OStringBuffer aStrTD;
+    OStringBuffer aStrTD;
 
     if ( bValue )
     {
         // printf / scanf ist zu ungenau
         String aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
-        rtl::OString sTmp(rtl::OUStringToOString(aValStr, eDestEnc));
+        OString sTmp(OUStringToOString(aValStr, eDestEnc));
         aStrTD.append(' ').
             append(OOO_STRING_SVTOOLS_HTML_O_SDval).
             append(RTL_CONSTASCII_STRINGPARAM("=\"")).
@@ -958,7 +958,7 @@ rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             append(';'); // Language fuer Format 0
         if ( nFormat )
         {
-            rtl::OString aNumStr;
+            OString aNumStr;
             LanguageType nLang;
             const SvNumberformat* pFormatEntry = rFormatter.GetEntry( nFormat );
             if ( pFormatEntry )

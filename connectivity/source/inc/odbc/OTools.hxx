@@ -109,7 +109,7 @@ namespace connectivity
             static void GetInfo(OConnection* _pConnection,
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
-                                ::rtl::OUString &_rValue,
+                                OUString &_rValue,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                                 rtl_TextEncoding _nTextEncoding)
                                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -183,7 +183,7 @@ namespace connectivity
                                      SQLSMALLINT& fCType,
                                      SQLSMALLINT& fSqlType);
 
-            static ::rtl::OUString getStringValue(  OConnection* _pConnection,
+            static OUString getStringValue(  OConnection* _pConnection,
                                                     SQLHANDLE _aStatementHandle,
                                                     sal_Int32 columnIndex,
                                                     SQLSMALLINT _fSqlType,

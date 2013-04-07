@@ -160,15 +160,15 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
 
             Sequence< Any > aArgs(1);
             PropertyValue aVal;
-            aVal.Name = rtl::OUString( "nodepath" );
+            aVal.Name = OUString( "nodepath" );
             if( i_bFile )
-                aVal.Value <<= rtl::OUString( "/org.openoffice.Office.Common/Print/Option/File" );
+                aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/File" );
             else
-                aVal.Value <<= rtl::OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
+                aVal.Value <<= OUString( "/org.openoffice.Office.Common/Print/Option/Printer" );
             aArgs.getArray()[0] <<= aVal;
             xConfigAccess = Reference< XNameAccess >(
                     xConfigProvider->createInstanceWithArguments(
-                        rtl::OUString( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
+                        OUString( "com.sun.star.configuration.ConfigurationAccess" ), aArgs ),
                         UNO_QUERY );
             if( xConfigAccess.is() )
             {
@@ -326,7 +326,7 @@ ImplPrnQueueList::~ImplPrnQueueList()
 
 void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 {
-    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >::iterator it =
+    boost::unordered_map< OUString, sal_Int32, OUStringHash >::iterator it =
         m_aNameToIndex.find( pData->maPrinterName );
     if( it == m_aNameToIndex.end() )
     {
@@ -348,10 +348,10 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
 
 // -----------------------------------------------------------------------
 
-ImplPrnQueueData* ImplPrnQueueList::Get( const rtl::OUString& rPrinter )
+ImplPrnQueueData* ImplPrnQueueList::Get( const OUString& rPrinter )
 {
     ImplPrnQueueData* pData = NULL;
-    boost::unordered_map<rtl::OUString,sal_Int32,rtl::OUStringHash>::iterator it =
+    boost::unordered_map<OUString,sal_Int32,OUStringHash>::iterator it =
         m_aNameToIndex.find( rPrinter );
     if( it != m_aNameToIndex.end() )
         pData = &m_aQueueInfos[it->second];
@@ -387,7 +387,7 @@ void ImplDeletePrnQueueList()
 
 // -----------------------------------------------------------------------
 
-const std::vector<rtl::OUString>& Printer::GetPrinterQueues()
+const std::vector<OUString>& Printer::GetPrinterQueues()
 {
     ImplSVData*         pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
@@ -396,7 +396,7 @@ const std::vector<rtl::OUString>& Printer::GetPrinterQueues()
 }
 
 // -----------------------------------------------------------------------
-const QueueInfo* Printer::GetQueueInfo( const rtl::OUString& rPrinterName, bool bStatusUpdate )
+const QueueInfo* Printer::GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -425,7 +425,7 @@ const QueueInfo* Printer::GetQueueInfo( const rtl::OUString& rPrinterName, bool 
 
 // -----------------------------------------------------------------------
 
-rtl::OUString Printer::GetDefaultPrinterName()
+OUString Printer::GetDefaultPrinterName()
 {
     static const char* pEnv = getenv( "SAL_DISABLE_DEFAULTPRINTER" );
     if( !pEnv || !*pEnv )
@@ -434,7 +434,7 @@ rtl::OUString Printer::GetDefaultPrinterName()
 
         return pSVData->mpDefInst->GetDefaultPrinter();
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 // =======================================================================
@@ -549,8 +549,8 @@ void Printer::ImplInitDisplay( const Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const rtl::OUString& rPrinterName,
-                                                const rtl::OUString* pDriver )
+SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
+                                                const OUString* pDriver )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
@@ -666,7 +666,7 @@ Printer::Printer( const QueueInfo& rQueueInfo )
 
 // -----------------------------------------------------------------------
 
-Printer::Printer( const rtl::OUString& rPrinterName )
+Printer::Printer( const OUString& rPrinterName )
 {
     ImplInitData();
     SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( rPrinterName, NULL );
@@ -934,7 +934,7 @@ sal_Bool Printer::SetPrinterProps( const Printer* pPrinter )
         }
 
         // Neuen Printer bauen
-        rtl::OUString aDriver = pPrinter->GetDriverName();
+        OUString aDriver = pPrinter->GetDriverName();
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
         {
@@ -1239,12 +1239,12 @@ int Printer::GetPaperInfoCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString Printer::GetPaperName( Paper ePaper )
+OUString Printer::GetPaperName( Paper ePaper )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpPaperNames )
     {
-        pSVData->mpPaperNames = new boost::unordered_map< int, rtl::OUString >();
+        pSVData->mpPaperNames = new boost::unordered_map< int, OUString >();
         if( ImplGetResMgr() )
         {
             ResStringArray aPaperStrings( VclResId( RID_STR_PAPERNAMES ) );
@@ -1265,19 +1265,19 @@ rtl::OUString Printer::GetPaperName( Paper ePaper )
         }
     }
 
-    boost::unordered_map<int,rtl::OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
-    return (it != pSVData->mpPaperNames->end()) ? it->second : rtl::OUString();
+    boost::unordered_map<int,OUString>::const_iterator it = pSVData->mpPaperNames->find( (int)ePaper );
+    return (it != pSVData->mpPaperNames->end()) ? it->second : OUString();
 }
 
 // -----------------------------------------------------------------------
 
-rtl::OUString Printer::GetPaperName( bool i_bPaperUser ) const
+OUString Printer::GetPaperName( bool i_bPaperUser ) const
 {
     Size  aPageSize = PixelToLogic( GetPaperSizePixel(), MAP_100TH_MM );
     Paper ePaper    = ImplGetPaperFormat( aPageSize.Width(), aPageSize.Height() );
     if( ePaper == PAPER_USER )
         ePaper = ImplGetPaperFormat( aPageSize.Height(), aPageSize.Width() );
-    return (ePaper != PAPER_USER || i_bPaperUser ) ? GetPaperName( ePaper ) : rtl::OUString();
+    return (ePaper != PAPER_USER || i_bPaperUser ) ? GetPaperName( ePaper ) : OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -1356,7 +1356,7 @@ sal_uInt16 Printer::GetPaperBinCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
+OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const
 {
     if ( IsDisplayPrinter() )
         return ImplGetSVEmptyStr();
@@ -1425,7 +1425,7 @@ sal_Bool Printer::EndJob()
 
         mbPrinting      = sal_False;
         mnCurPrintPage  = 0;
-        maJobName = rtl::OUString();
+        maJobName = OUString();
 
         mbDevOutput = sal_False;
         bRet = mpPrinter->EndJob();

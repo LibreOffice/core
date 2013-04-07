@@ -31,7 +31,7 @@ namespace dp_misc {
 enum Order { LESS, EQUAL, GREATER };
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Order compareVersions(
-    ::rtl::OUString const & version1, ::rtl::OUString const & version2);
+    OUString const & version1, OUString const & version2);
 }
 
 #endif

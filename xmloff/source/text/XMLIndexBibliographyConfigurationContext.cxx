@@ -35,7 +35,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::XPropertySet;
@@ -222,7 +221,7 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(sal_Bool)
     Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
     if( xFactory.is() )
     {
-        Sequence<rtl::OUString> aServices = xFactory->getAvailableServiceNames();
+        Sequence<OUString> aServices = xFactory->getAvailableServiceNames();
         sal_Bool bFound(sal_False);
         sal_Int32 i(0);
         sal_Int32 nServiceCount(aServices.getLength());

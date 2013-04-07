@@ -83,7 +83,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 
 
 static void lcl_EnsureValidPam( SwPaM& rPam )
@@ -172,7 +171,7 @@ sal_Int32 ReadThroughComponent(
 
 #ifdef TIMELOG
     // if we do profiling, we want to know the stream
-    rtl::OString aString(rtl::OUStringToOString(rStreamName,
+    OString aString(OUStringToOString(rStreamName,
         RTL_TEXTENCODING_ASCII_US));
     RTL_LOGFILE_TRACE_AUTHOR1( "sw", "mb93740",
         "ReadThroughComponent : parsing \"%s\"", aString.getStr() );
@@ -207,9 +206,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX parse exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -243,9 +242,9 @@ sal_Int32 ReadThroughComponent(
             return ERRCODE_SFX_WRONGPASSWORD;
 
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -256,9 +255,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "Zip exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -268,9 +267,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "IO exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -280,9 +279,9 @@ sal_Int32 ReadThroughComponent(
     {
         (void)r;
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "uno exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -698,7 +697,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
     beans::NamedValue aLateInitSettings(
-        ::rtl::OUString( "LateInitSettings" ),
+        OUString( "LateInitSettings" ),
         makeAny( xLateInitSettings )
     );
 
@@ -792,12 +791,12 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
     SfxMedium* pMedDescrMedium = pMedium ? pMedium : pDocSh->GetMedium();
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!\n" );
 
-    ::rtl::OUString aBaseURL( rBaseURL );
+    OUString aBaseURL( rBaseURL );
     OUString sPropName("BaseURI");
     xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
-    ::rtl::OUString StreamPath;
+    OUString StreamPath;
     if( SFX_CREATE_MODE_EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
     {
         if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
@@ -809,7 +808,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, con
         }
         else
         {
-            StreamPath = ::rtl::OUString("dummyObjectName");
+            StreamPath = OUString("dummyObjectName");
         }
 
         if( !StreamPath.isEmpty() )

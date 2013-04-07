@@ -27,7 +27,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;
 using ::com::sun::star::uno::Reference;

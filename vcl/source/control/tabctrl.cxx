@@ -299,7 +299,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     Rectangle aBoundingRgn, aContentRgn;
     const ImplControlValue aControlValue;
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                           CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                           CTRL_STATE_ENABLED, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
     {
         return aContentRgn.GetSize();
@@ -313,7 +313,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     // shorten Text if needed
     if ( aSize.Width()+4 >= nMaxWidth )
     {
-        rtl::OUString aAppendStr("...");
+        OUString aAppendStr("...");
         pItem->maFormatText += aAppendStr;
         do
         {
@@ -573,9 +573,9 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     if ( pOldPage )
     {
         if ( mbRestoreHelpId )
-            pCtrlParent->SetHelpId( rtl::OString() );
+            pCtrlParent->SetHelpId( OString() );
         if ( mbRestoreUnqId )
-            pCtrlParent->SetUniqueId( rtl::OString() );
+            pCtrlParent->SetUniqueId( OString() );
         pOldPage->DeactivatePage();
     }
 
@@ -830,7 +830,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
         bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                    tiValue, rtl::OUString() );
+                    tiValue, OUString() );
     }
 
     if( ! bLayout && !bNativeOK )
@@ -1096,7 +1096,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
 
         if( !aClipRgn.IsEmpty() )
             bNativeOK = DrawNativeControl( CTRL_TAB_PANE, part, aRect, nState,
-                aControlValue, rtl::OUString() );
+                aControlValue, OUString() );
     }
     else
     {
@@ -1360,7 +1360,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
-            rtl::OUString aHelpId( rtl::OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
+            OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
                 // call Help if existing
@@ -2039,7 +2039,7 @@ const XubString& TabControl::GetHelpText( sal_uInt16 nPageId ) const
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
         }
 
         return pItem->maHelpText;

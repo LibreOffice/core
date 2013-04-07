@@ -50,13 +50,13 @@ namespace svgio
 
         const SvgStyleAttributes* SvgMarkerNode::getSvgStyleAttributes() const
         {
-            static rtl::OUString aClassStr(rtl::OUString::createFromAscii("marker"));
+            static OUString aClassStr(OUString::createFromAscii("marker"));
             maSvgStyleAttributes.checkForCssStyle(aClassStr);
 
             return &maSvgStyleAttributes;
         }
 
-        void SvgMarkerNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgMarkerNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
@@ -111,7 +111,7 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrStrokeWidth(rtl::OUString::createFromAscii("strokeWidth"));
+                        static OUString aStrStrokeWidth(OUString::createFromAscii("strokeWidth"));
 
                         if(aContent.match(aStrStrokeWidth, 0))
                         {
@@ -156,7 +156,7 @@ namespace svgio
 
                     if(nLen)
                     {
-                        static rtl::OUString aStrAuto(rtl::OUString::createFromAscii("auto"));
+                        static OUString aStrAuto(OUString::createFromAscii("auto"));
 
                         if(aContent.match(aStrAuto, 0))
                         {

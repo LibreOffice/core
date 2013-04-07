@@ -169,19 +169,19 @@ namespace svgio
             TextAnchor                  maTextAnchor;
             SvgPaint                    maColor;
             SvgNumber                   maOpacity;
-            rtl::OUString               maTitle;
-            rtl::OUString               maDesc;
+            OUString               maTitle;
+            OUString               maDesc;
 
             /// link to content. If set, the node can be fetched on demand
-            rtl::OUString               maClipPathXLink;
-            rtl::OUString               maMaskXLink;
+            OUString               maClipPathXLink;
+            OUString               maMaskXLink;
 
             /// link to markers. If set, the node can be fetched on demand
-            rtl::OUString               maMarkerStartXLink;
+            OUString               maMarkerStartXLink;
             const SvgMarkerNode*        mpMarkerStartXLink;
-            rtl::OUString               maMarkerMidXLink;
+            OUString               maMarkerMidXLink;
             const SvgMarkerNode*        mpMarkerMidXLink;
-            rtl::OUString               maMarkerEndXLink;
+            OUString               maMarkerEndXLink;
             const SvgMarkerNode*        mpMarkerEndXLink;
 
             /// bitfield
@@ -239,7 +239,7 @@ namespace svgio
 
         public:
             /// local attribute scanner
-            void parseStyleAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            void parseStyleAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// helper which does the necessary with a given path
             void add_text(
@@ -254,10 +254,10 @@ namespace svgio
                 const basegfx::B2DHomMatrix* pTransform) const;
 
             /// helper to evtl. link to css style
-            void checkForCssStyle(const rtl::OUString& rClassStr) const;
+            void checkForCssStyle(const OUString& rClassStr) const;
 
             /// scan helpers
-            void readStyle(const rtl::OUString& rCandidate);
+            void readStyle(const OUString& rCandidate);
             const SvgStyleAttributes* getParentStyle() const;
 
             SvgStyleAttributes(SvgNode& rOwner);
@@ -376,35 +376,35 @@ namespace svgio
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
 
             // Title content
-            const rtl::OUString& getTitle() const { return maTitle; }
-            void setTitle(const rtl::OUString& rNew) { maTitle = rNew; }
+            const OUString& getTitle() const { return maTitle; }
+            void setTitle(const OUString& rNew) { maTitle = rNew; }
 
             // Desc content
-            const rtl::OUString& getDesc() const { return maDesc; }
-            void setDesc(const rtl::OUString& rNew) { maDesc = rNew; }
+            const OUString& getDesc() const { return maDesc; }
+            void setDesc(const OUString& rNew) { maDesc = rNew; }
 
             // ClipPathXLink content
-            const rtl::OUString getClipPathXLink() const { return maClipPathXLink; }
-            void setClipPathXLink(const rtl::OUString& rNew) { maClipPathXLink = rNew; }
+            const OUString getClipPathXLink() const { return maClipPathXLink; }
+            void setClipPathXLink(const OUString& rNew) { maClipPathXLink = rNew; }
 
             // MaskXLink content
-            const rtl::OUString getMaskXLink() const { return maMaskXLink; }
-            void setMaskXLink(const rtl::OUString& rNew) { maMaskXLink = rNew; }
+            const OUString getMaskXLink() const { return maMaskXLink; }
+            void setMaskXLink(const OUString& rNew) { maMaskXLink = rNew; }
 
             // MarkerStartXLink content
-            const rtl::OUString getMarkerStartXLink() const;
+            const OUString getMarkerStartXLink() const;
             const SvgMarkerNode* accessMarkerStartXLink() const;
-            void setMarkerStartXLink(const rtl::OUString& rNew) { maMarkerStartXLink = rNew; }
+            void setMarkerStartXLink(const OUString& rNew) { maMarkerStartXLink = rNew; }
 
             // MarkerMidXLink content
-            const rtl::OUString getMarkerMidXLink() const;
+            const OUString getMarkerMidXLink() const;
             const SvgMarkerNode* accessMarkerMidXLink() const;
-            void setMarkerMidXLink(const rtl::OUString& rNew) { maMarkerMidXLink = rNew; }
+            void setMarkerMidXLink(const OUString& rNew) { maMarkerMidXLink = rNew; }
 
             // MarkerEndXLink content
-            const rtl::OUString getMarkerEndXLink() const;
+            const OUString getMarkerEndXLink() const;
             const SvgMarkerNode* accessMarkerEndXLink() const;
-            void setMarkerEndXLink(const rtl::OUString& rNew) { maMarkerEndXLink = rNew; }
+            void setMarkerEndXLink(const OUString& rNew) { maMarkerEndXLink = rNew; }
 
         };
     } // end of namespace svgreader

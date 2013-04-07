@@ -67,7 +67,7 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId( HID_SCSHELL_PIVOTSH );
-    SetName(rtl::OUString("Pivot"));
+    SetName(OUString("Pivot"));
 }
 
 //------------------------------------------------------------------------

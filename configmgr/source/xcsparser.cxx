@@ -346,7 +346,7 @@ void XcsParser::characters(xmlreader::Span const & text) {
 
 void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
     //TODO: oor:version, xml:lang attributes
-    rtl::OStringBuffer buf;
+    OStringBuffer buf;
     buf.append('.');
     bool hasPackage = false;
     bool hasName = false;
@@ -531,7 +531,7 @@ void XcsParser::handlePropValue(
             }
         }
     }
-    valueParser_.separator_ = rtl::OString(
+    valueParser_.separator_ = OString(
         attrSeparator.begin, attrSeparator.length);
     valueParser_.start(property);
 }

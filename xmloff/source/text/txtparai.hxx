@@ -37,12 +37,12 @@ class XMLParaContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextRange > xStart;    // xub_StrLen nStart;
-    ::rtl::OUString             sStyleName;
-    ::rtl::OUString             m_sXmlId;
-    ::rtl::OUString             m_sAbout;
-    ::rtl::OUString             m_sProperty;
-    ::rtl::OUString             m_sContent;
-    ::rtl::OUString             m_sDatatype;
+    OUString             sStyleName;
+    OUString             m_sXmlId;
+    OUString             m_sAbout;
+    OUString             m_sProperty;
+    OUString             m_sContent;
+    OUString             m_sDatatype;
     bool                        m_bHaveAbout;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
@@ -61,7 +61,7 @@ public:
 
     XMLParaContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Bool bHeading );
@@ -69,11 +69,11 @@ public:
     virtual ~XMLParaContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
 };
 
@@ -84,9 +84,9 @@ class XMLNumberedParaContext : public SvXMLImportContext
     /// text:start-value
     sal_Int16 m_StartValue;
     /// xml:id
-    ::rtl::OUString m_XmlId;
+    OUString m_XmlId;
     /// text:list-id
-    ::rtl::OUString m_ListId;
+    OUString m_ListId;
     /// text:style-name
     ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace > m_xNumRules;
@@ -97,7 +97,7 @@ public:
 
     XMLNumberedParaContext( SvXMLImport& i_rImport,
             sal_uInt16 i_nPrefix,
-            const ::rtl::OUString& i_rLocalName,
+            const OUString& i_rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
 
@@ -106,7 +106,7 @@ public:
     virtual void EndElement();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,
-            const ::rtl::OUString& i_rLocalName,
+            const OUString& i_rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
 
@@ -114,7 +114,7 @@ public:
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return m_xNumRules; }
-    const ::rtl::OUString& GetListId() const { return m_ListId; }
+    const OUString& GetListId() const { return m_ListId; }
     sal_Int16 GetStartValue() const { return m_StartValue; }
 
 };

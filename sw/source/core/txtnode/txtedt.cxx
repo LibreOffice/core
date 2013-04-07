@@ -76,7 +76,6 @@
 #include <vector>
 #include <utility>
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::i18n;
@@ -643,7 +642,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
                        aBndry.endPos - aBndry.startPos);
 }
 
-SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
+SwScanner::SwScanner( const SwTxtNode& rNd, const OUString& rTxt,
     const LanguageType* pLang, const ModelToViewHelper& rConvMap,
     sal_uInt16 nType, sal_Int32 nStart, sal_Int32 nEnde, sal_Bool bClp )
     : rNode( rNd )
@@ -666,8 +665,8 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
     //additional ones can be added in under tools->options
     if (nWordType == i18n::WordType::WORD_COUNT)
     {
-        rtl::OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeperators::get();
-        rtl::OUStringBuffer aBuf(aPreDashReplacementText);
+        OUString sDashes = officecfg::Office::Writer::WordCount::AdditionalSeperators::get();
+        OUStringBuffer aBuf(aPreDashReplacementText);
         for (sal_Int32 i = nStartPos; i < nEndPos; ++i)
         {
             sal_Unicode cChar = aBuf[i];
@@ -699,7 +698,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const rtl::OUString& rTxt,
 namespace
 {
     //fdo#45271 for Asian words count characters instead of words
-    sal_Int32 forceEachAsianCodePointToWord(const rtl::OUString &rText, sal_Int32 nBegin, sal_Int32 nLen)
+    sal_Int32 forceEachAsianCodePointToWord(const OUString &rText, sal_Int32 nBegin, sal_Int32 nLen)
     {
         if (nLen > 1)
         {
@@ -760,7 +759,7 @@ sal_Bool SwScanner::NextWord()
                 if ( nWordType != i18n::WordType::WORD_COUNT )
                 {
                     rCC.setLanguageTag( LanguageTag( pBreakIt->GetLocale( aCurrLang )) );
-                    if ( rCC.isLetterNumeric(rtl::OUString(aText[nBegin])) )
+                    if ( rCC.isLetterNumeric(OUString(aText[nBegin])) )
                         break;
                 }
                 else
@@ -814,7 +813,7 @@ sal_Bool SwScanner::NextWord()
 
             // restrict boundaries to script boundaries and nEndPos
             const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, nBegin );
-            rtl::OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
+            OUString aTmpWord = aText.copy( nBegin, aBound.endPos - nBegin );
             const sal_Int32 nScriptEnd = nBegin +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
             const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
@@ -837,7 +836,7 @@ sal_Bool SwScanner::NextWord()
         else
         {
             const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( aText, aBound.startPos );
-            rtl::OUString aTmpWord = aText.copy( aBound.startPos,
+            OUString aTmpWord = aText.copy( aBound.startPos,
                                              aBound.endPos - aBound.startPos );
             const sal_Int32 nScriptEnd = aBound.startPos +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
@@ -1056,7 +1055,7 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
         ?  m_Text.getLength()
         :  ::std::min<xub_StrLen>(rArgs.pEndIdx->GetIndex(), m_Text.getLength());
 
-    rArgs.aConvText = rtl::OUString();
+    rArgs.aConvText = OUString();
 
     // modify string according to redline information and hidden text
     const OUString aOldTxt( m_Text );
@@ -1302,7 +1301,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                         }
                         if( pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
                             nBegin, nLen, nInsertPos, nActPos ) )
-                            pNode->GetWrong()->Insert( rtl::OUString(), 0, nBegin, nLen, nInsertPos++ );
+                            pNode->GetWrong()->Insert( OUString(), 0, nBegin, nLen, nInsertPos++ );
                         else
                         {
                             nInvStart = nBegin;
@@ -1375,7 +1374,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
 {
     SwRect aRet;
     SwTxtNode *pNode = GetTxtNode();
-    const rtl::OUString& rText = pNode->GetTxt();
+    const OUString& rText = pNode->GetTxt();
 
     // Iterate over language portions
     SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
@@ -1420,7 +1419,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
     {
         // Expand the string:
         const ModelToViewHelper aConversionMap(*pNode);
-        rtl::OUString aExpandText = aConversionMap.getViewText();
+        OUString aExpandText = aConversionMap.getViewText();
 
         // Ownership ov ConversionMap is passed to SwXTextMarkup object!
         com::sun::star::uno::Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
@@ -1918,7 +1917,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
     // count words in numbering string if started at beginning of para:
     bool bCountNumbering = nStt == 0;
     bool bHasBullet = false, bHasNumbering = false;
-    rtl::OUString sNumString;
+    OUString sNumString;
     if (bCountNumbering)
     {
         sNumString = GetNumString();
@@ -1949,7 +1948,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
 
     // ConversionMap to expand fields, remove invisible and redline deleted text for scanner
     const ModelToViewHelper aConversionMap(*this, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
-    rtl::OUString aExpandText = aConversionMap.getViewText();
+    OUString aExpandText = aConversionMap.getViewText();
 
     // map start and end points onto the ConversionMap
     const sal_uInt32 nExpandBegin = aConversionMap.ConvertToViewPosition( nStt );
@@ -1979,7 +1978,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
                                 nExpandBegin, nExpandEnd, true );
 
             // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
-            const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
+            const OUString aBreakWord( CH_TXTATR_BREAKWORD );
 
             while ( aScanner.NextWord() )
             {
@@ -1987,7 +1986,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
                 if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
                 {
                     ++nTmpWords;
-                    const rtl::OUString &rWord = aScanner.GetWord();
+                    const OUString &rWord = aScanner.GetWord();
                     if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
                         ++nTmpAsianWords;
                     nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);
@@ -2015,7 +2014,7 @@ bool SwTxtNode::CountWords( SwDocStat& rStat,
         while ( aScanner.NextWord() )
         {
             ++nTmpWords;
-            const rtl::OUString &rWord = aScanner.GetWord();
+            const OUString &rWord = aScanner.GetWord();
             if (pBreakIt->GetBreakIter()->getScriptType(rWord, 0) == i18n::ScriptType::ASIAN)
                 ++nTmpAsianWords;
             nTmpCharsExcludingSpaces += pBreakIt->getGraphemeCount(rWord);

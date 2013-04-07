@@ -29,8 +29,6 @@
 #include <sfx2/objsh.hxx>
 #include "document.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;

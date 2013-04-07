@@ -1069,7 +1069,7 @@ SwFltShell::~SwFltShell()
         SwDoc& rDoc = GetDoc();
                         // 1. SectionFmt und Section anlegen
         SwSectionFmt* pSFmt = rDoc.MakeSectionFmt( 0 );
-        SwSectionData aSectionData(CONTENT_SECTION, rtl::OUString("PMW-Protect"));
+        SwSectionData aSectionData(CONTENT_SECTION, OUString("PMW-Protect"));
         aSectionData.SetProtectFlag( true );
                         // 2. Start- und EndIdx suchen
         const SwNode* pEndNd = &rDoc.GetNodes().GetEndOfContent();
@@ -1143,13 +1143,13 @@ OUString SwFltShell::QuoteStr( const OUString& rIn )
 SwFltShell& SwFltShell::operator << ( const sal_Unicode c )
 {
     OSL_ENSURE( eSubMode != Style, "char insert while in style-mode");
-    GetDoc().InsertString( *pPaM, rtl::OUString(c) );
+    GetDoc().InsertString( *pPaM, OUString(c) );
     return *this;
 }
 
 SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
 {
-    String aName(rtl::OUString("ErrorTag"));
+    String aName(OUString("ErrorTag"));
     SwFieldType* pFT = GetDoc().GetFldType( RES_SETEXPFLD, aName, false );
     if( pFT == 0)
     {
@@ -1157,7 +1157,7 @@ SwFltShell& SwFltShell::AddError( const sal_Char* pErr )
         pFT = GetDoc().InsertFldType(aS);
     }
     SwSetExpField aFld( (SwSetExpFieldType*)pFT,
-                        rtl::OUString::createFromAscii( pErr ));
+                        OUString::createFromAscii( pErr ));
     //, VVF_INVISIBLE
     GetDoc().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
     return *this;

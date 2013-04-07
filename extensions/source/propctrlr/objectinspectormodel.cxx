@@ -64,18 +64,18 @@ namespace pcr
         // XObjectInspectorModel
         virtual Sequence< Any > SAL_CALL getHandlerFactories() throw (RuntimeException);
         virtual Sequence< PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (RuntimeException);
-        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const ::rtl::OUString& PropertyName ) throw (RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) throw (RuntimeException);
 
         // XInitialization
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
         // XServiceInfo - static versions
-        static ::rtl::OUString getImplementationName_static(  ) throw(RuntimeException);
-        static Sequence< ::rtl::OUString > getSupportedServiceNames_static(  ) throw(RuntimeException);
+        static OUString getImplementationName_static(  ) throw(RuntimeException);
+        static Sequence< OUString > getSupportedServiceNames_static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL
                         Create(const Reference< XComponentContext >&);
 
@@ -112,7 +112,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const ::rtl::OUString& /*PropertyName*/ ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL ObjectInspectorModel::getPropertyOrderIndex( const OUString& /*PropertyName*/ ) throw (RuntimeException)
     {
         // no ordering provided by this default implementation
         return 0;
@@ -154,28 +154,28 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ObjectInspectorModel::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL ObjectInspectorModel::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ObjectInspectorModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ObjectInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
+    OUString ObjectInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.extensions.ObjectInspectorModel" );
+        return OUString( "org.openoffice.comp.extensions.ObjectInspectorModel" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ObjectInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > ObjectInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        ::rtl::OUString sService( "com.sun.star.inspection.ObjectInspectorModel" );
-        return Sequence< ::rtl::OUString >( &sService, 1 );
+        OUString sService( "com.sun.star.inspection.ObjectInspectorModel" );
+        return Sequence< OUString >( &sService, 1 );
     }
 
     //--------------------------------------------------------------------
@@ -188,7 +188,7 @@ namespace pcr
     void ObjectInspectorModel::createDefault()
     {
         m_aFactories.realloc( 1 );
-        m_aFactories[0] <<= ::rtl::OUString( "com.sun.star.inspection.GenericPropertyHandler" );
+        m_aFactories[0] <<= OUString( "com.sun.star.inspection.GenericPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace pcr
     void ObjectInspectorModel::impl_verifyArgument_throw( bool _bCondition, sal_Int16 _nArgumentPosition )
     {
         if ( !_bCondition )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, _nArgumentPosition );
+            throw IllegalArgumentException( OUString(), *this, _nArgumentPosition );
     }
 
 //........................................................................

@@ -88,8 +88,8 @@ namespace rptui
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );
-        void                    SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
-        rtl::OUString           GetInsertObjString() const;
+        void                    SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
+        OUString           GetInsertObjString() const;
         void                    setGridSnap(sal_Bool bOn);
         void                    setDragStripes(sal_Bool bOn);
         /** copies the current selection in this section
@@ -130,7 +130,7 @@ namespace rptui
             If the position is grater than the current elements, the section will be appended.
         */
         void                    addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                                    ,const ::rtl::OUString& _sColorEntry
+                                    ,const OUString& _sColorEntry
                                     ,sal_uInt16 _nPosition = USHRT_MAX);
 
         sal_uInt16                  getSectionCount() const;

@@ -99,9 +99,9 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     try
     {
         // ... also the remaining fields
-        Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aNames.getLength();
+        Sequence< OUString> aNames = m_xColumns->getElementNames();
+        const OUString* pIter = aNames.getConstArray();
+        const OUString* pEnd   = pIter + aNames.getLength();
         Reference<XPropertySet> xColumn;
         for(;pIter != pEnd;++pIter)
         {
@@ -154,8 +154,8 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
 {
     try
     {
-        const ::rtl::OUString sNameProperty = ::rtl::OUString( "Name" );
-        const ::rtl::OUString sAscendingProperty = ::rtl::OUString( "IsAscending" );
+        const OUString sNameProperty = OUString( "Name" );
+        const OUString sAscendingProperty = OUString( "IsAscending" );
 
         Reference< XIndexAccess > xOrderColumns( m_xQueryComposer->getOrderColumns(), UNO_QUERY_THROW );
         sal_Int32 nColumns = xOrderColumns->getCount();
@@ -166,7 +166,7 @@ void DlgOrderCrit::impl_initializeOrderList_nothrow()
         {
             Reference< XPropertySet > xColumn( xOrderColumns->getByIndex( i ), UNO_QUERY_THROW );
 
-            ::rtl::OUString sColumnName;
+            OUString sColumnName;
             sal_Bool        bIsAscending( sal_True );
 
             xColumn->getPropertyValue( sNameProperty ) >>= sColumnName;
@@ -215,23 +215,23 @@ void DlgOrderCrit::EnableLines()
     }
 }
 
-::rtl::OUString DlgOrderCrit::GetOrderList( ) const
+OUString DlgOrderCrit::GetOrderList( ) const
 {
     DBG_CHKTHIS(DlgOrderCrit,NULL);
     Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-    ::rtl::OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-    static const ::rtl::OUString sDESC(" DESC ");
-    static const ::rtl::OUString sASC(" ASC ");
+    OUString sQuote  = xMetaData.is() ? xMetaData->getIdentifierQuoteString() : OUString();
+    static const OUString sDESC(" DESC ");
+    static const OUString sASC(" ASC ");
 
     Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
-    ::rtl::OUString sOrder;
+    OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
     {
         if(m_aColumnList[i]->GetSelectEntryPos() != 0)
         {
             if(!sOrder.isEmpty())
-                sOrder += ::rtl::OUString(",");
+                sOrder += OUString(",");
 
             String sName = m_aColumnList[i]->GetSelectEntry();
             try
@@ -242,10 +242,10 @@ void DlgOrderCrit::EnableLines()
                 {
                     if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
                     {
-                        ::rtl::OUString sRealName;
+                        OUString sRealName;
                         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
                         sName = sRealName;
-                        static ::rtl::OUString sFunction("Function");
+                        static OUString sFunction("Function");
                         if ( xColumn->getPropertySetInfo()->hasPropertyByName(sFunction) )
                             xColumn->getPropertyValue(sFunction) >>= bFunction;
                     }

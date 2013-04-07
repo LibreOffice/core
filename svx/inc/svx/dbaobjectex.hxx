@@ -46,7 +46,7 @@ namespace svx
         /** construct the transferable
         */
         OComponentTransferable(
-            const ::rtl::OUString&  _rDatasourceOrLocation
+            const OUString&  _rDatasourceOrLocation
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent
         );
 

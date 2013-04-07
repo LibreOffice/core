@@ -53,7 +53,7 @@ namespace pcr
         DBG_CTOR( ButtonNavigationHandler, NULL );
 
         m_aContext.createComponent(
-            ::rtl::OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ),
+            OUString( "com.sun.star.form.inspection.FormComponentPropertyHandler" ),
             m_xSlaveHandler );
         if ( !m_xSlaveHandler.is() )
             throw RuntimeException();
@@ -66,16 +66,16 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL ButtonNavigationHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
+        return OUString( "com.sun.star.comp.extensions.ButtonNavigationHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ButtonNavigationHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.ButtonNavigationHandler" );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.form.inspection.ButtonNavigationHandler" );
         return aSupported;
     }
 
@@ -87,7 +87,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -116,7 +116,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -147,7 +147,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ButtonNavigationHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL ButtonNavigationHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -201,16 +201,16 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ButtonNavigationHandler::getActuatingProperties( ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aActuating( 2 );
+        Sequence< OUString > aActuating( 2 );
         aActuating[0] = PROPERTY_BUTTONTYPE;
         aActuating[1] = PROPERTY_TARGET_URL;
         return aActuating;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -231,7 +231,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
@@ -257,7 +257,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );

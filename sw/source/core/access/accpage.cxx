@@ -34,7 +34,6 @@ using namespace ::com::sun::star::accessibility;
 using uno::Reference;
 using uno::RuntimeException;
 using uno::Sequence;
-using ::rtl::OUString;
 
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";

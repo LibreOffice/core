@@ -44,8 +44,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
 
 using ::std::vector;
 using ::boost::shared_ptr;
@@ -492,7 +490,7 @@ void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDi
     }
 }
 
-long ScDPGroupTableData::GetDimensionIndex( const rtl::OUString& rName )
+long ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
 {
     for (long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
         if (pSourceData->getDimensionName(i).equals(rName))        //! ignore case?
@@ -548,7 +546,7 @@ const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
     return pSourceData->GetMemberById( nDim, nId );
 }
 
-rtl::OUString ScDPGroupTableData::getDimensionName(long nColumn)
+OUString ScDPGroupTableData::getDimensionName(long nColumn)
 {
     if ( nColumn >= nSourceCount )
     {

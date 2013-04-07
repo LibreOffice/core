@@ -74,7 +74,7 @@ public:
     SfxObjectShellFlags GetFlags() { return nFlags; }
     const char*     GetShortName() const { return pShortName; }
     String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
-    String          GetFactoryName() const { return rtl::OUString::createFromAscii(pShortName); }
+    String          GetFactoryName() const { return OUString::createFromAscii(pShortName); }
     String          GetModuleName() const;
     SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
 
@@ -92,8 +92,8 @@ public:
     static void     SetStandardTemplate( const String& rServiceName, const String& rTemplateName );
     static void     SetSystemTemplate( const String& rServiceName, const String& rTemplateName );
 
-    void            SetDocumentServiceName( const rtl::OUString& rServiceName );
-    const rtl::OUString&    GetDocumentServiceName() const;
+    void            SetDocumentServiceName( const OUString& rServiceName );
+    const OUString&    GetDocumentServiceName() const;
 
     SfxModule*      GetModule() const;
 

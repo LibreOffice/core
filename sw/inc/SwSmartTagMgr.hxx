@@ -34,7 +34,7 @@ class SwSmartTagMgr : public SmartTagMgr
 private:
     static SwSmartTagMgr* mpTheSwSmartTagMgr;
 
-    SwSmartTagMgr( const rtl::OUString& rModuleName );
+    SwSmartTagMgr( const OUString& rModuleName );
     virtual ~SwSmartTagMgr();
 
 public:

@@ -72,13 +72,13 @@ class HelpOnStartup : private ThreadHelpBase
         /** @short  knows the current locale of this office session,
                     which is needed to build complete help URLs.
          */
-        ::rtl::OUString m_sLocale;
+        OUString m_sLocale;
 
         //.......................................
         /** @short  knows the current operating system of this office session,
                     which is needed to build complete help URLs.
          */
-        ::rtl::OUString m_sSystem;
+        OUString m_sSystem;
 
     //-------------------------------------------
     // native interface
@@ -138,7 +138,7 @@ class HelpOnStartup : private ThreadHelpBase
                     a module identifier ... or an empty value if no model could be located ...
                     or if it could not be classified successfully.
          */
-        ::rtl::OUString its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
+        OUString its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments);
 
         //---------------------------------------
         /** @short  tries to locate the open help module and return
@@ -150,7 +150,7 @@ class HelpOnStartup : private ThreadHelpBase
             @return The URL of the current shown help content;
                     or an empty value if the help isnt still open.
          */
-        ::rtl::OUString its_getCurrentHelpURL();
+        OUString its_getCurrentHelpURL();
 
         //---------------------------------------
         /** @short  checks if the given help url match to a default help url
@@ -163,7 +163,7 @@ class HelpOnStartup : private ThreadHelpBase
                     sal_True if the given URL is any default one ...
                     sal_False otherwise.
          */
-        ::sal_Bool its_isHelpUrlADefaultOne(const ::rtl::OUString& sHelpURL);
+        ::sal_Bool its_isHelpUrlADefaultOne(const OUString& sHelpURL);
 
         //---------------------------------------
         /** @short  checks, if the help module should be shown automaticly for the
@@ -180,7 +180,7 @@ class HelpOnStartup : private ThreadHelpBase
                     A valid help URL in case the help content should be shown;
                     an empty value if such automatism was disabled for the specified office module.
          */
-        ::rtl::OUString its_checkIfHelpEnabledAndGetURL(const ::rtl::OUString& sModule);
+        OUString its_checkIfHelpEnabledAndGetURL(const OUString& sModule);
 
         //---------------------------------------
         /** @short  create a help URL for the given parameters.
@@ -203,9 +203,9 @@ class HelpOnStartup : private ThreadHelpBase
                     e.g. "vnd.sun.star.help://swriter/?Language=en-US&System=WIN"
                     or   "vnd.sun.star.help://swriter/67351?Language=en-US&System=WIN"
          */
-        static ::rtl::OUString ist_createHelpURL(const ::rtl::OUString& sBaseURL,
-                                                 const ::rtl::OUString& sLocale ,
-                                                 const ::rtl::OUString& sSystem );
+        static OUString ist_createHelpURL(const OUString& sBaseURL,
+                                                 const OUString& sLocale ,
+                                                 const OUString& sSystem );
 };
 
 } // namespace framework

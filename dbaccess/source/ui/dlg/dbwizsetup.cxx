@@ -176,7 +176,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
     for(PathId i = 1;aIter != aEnd;++aIter,++i)
     {
-        const ::rtl::OUString sURLPrefix = aIter.getURLPrefix();
+        const OUString sURLPrefix = aIter.getURLPrefix();
         svt::RoadmapWizardTypes::WizardPath aPath;
         aPath.push_back(PAGE_DBSETUPWIZARD_INTRO);
         m_pCollection->fillPageIds(sURLPrefix,aPath);
@@ -199,7 +199,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     ActivatePage();
 }
 
-void ODbTypeWizDialogSetup::declareAuthDepPath( const ::rtl::OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)
+void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths)
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;
 
@@ -313,7 +313,7 @@ void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::co
     }
 }
 // -----------------------------------------------------------------------------
-void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const ::rtl::OUString& _sOldURLPrefix,const ::rtl::OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
+void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xContext, const ::dbaccess::ODsnTypeCollection* _pCollection,const OUString& _sOldURLPrefix,const OUString& _sNewURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDatasource)
 {
     if ( _pCollection->getPrefix(_sOldURLPrefix) == _pCollection->getPrefix(_sNewURLPrefix) )
         return ;
@@ -339,7 +339,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     {
         sal_Int32 nCreateNewDBIndex = m_pCollection->getIndexOf( m_pCollection->getEmbeddedDatabase() );
         if ( nCreateNewDBIndex == -1 )
-            nCreateNewDBIndex = m_pCollection->getIndexOf( ::rtl::OUString("sdbc:dbase:") );
+            nCreateNewDBIndex = m_pCollection->getIndexOf( OUString("sdbc:dbase:") );
         OSL_ENSURE( nCreateNewDBIndex != -1, "ODbTypeWizDialogSetup::activateDatabasePath: the GeneralPage should have prevented this!" );
         activatePath( static_cast< PathId >( nCreateNewDBIndex + 1 ), sal_True );
 
@@ -349,7 +349,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     break;
     case OGeneralPageWizard::eConnectExternal:
     {
-        ::rtl::OUString sOld = m_sURL;
+        OUString sOld = m_sURL;
         m_sURL = m_pGeneralPage->GetSelectedType();
         DataSourceInfoConverter::convert(getORB(), m_pCollection,sOld,m_sURL,m_pImpl->getCurrentDataSource());
         ::dbaccess::DATASOURCE_TYPE eType = VerifyDataSourceType(m_pCollection->determineType(m_sURL));
@@ -469,21 +469,21 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 
 
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
+OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
-    ::rtl::OUString sRet = m_pImpl->getDatasourceType(_rSet);
+    OUString sRet = m_pImpl->getDatasourceType(_rSet);
     if (m_pMySQLIntroPage != NULL && m_pMySQLIntroPage->IsVisible() )
     {
         switch( m_pMySQLIntroPage->getMySQLMode() )
         {
             case OMySQLIntroPageSetup::VIA_JDBC:
-                sRet = ::rtl::OUString("sdbc:mysql:jdbc:");
+                sRet = OUString("sdbc:mysql:jdbc:");
                 break;
             case OMySQLIntroPageSetup::VIA_NATIVE:
-                sRet = ::rtl::OUString("sdbc:mysql:mysqlc:");
+                sRet = OUString("sdbc:mysql:mysqlc:");
                 break;
             case OMySQLIntroPageSetup::VIA_ODBC:
-                sRet = ::rtl::OUString("sdbc:mysql:odbc:");
+                sRet = OUString("sdbc:mysql:odbc:");
                 break;
         }
     }
@@ -534,16 +534,16 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_ODBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:odbc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:odbc:"))));
             pPage = OConnectionTabPageSetup::CreateODBCTabPage( this, *m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_MYSQL_JDBC:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:jdbc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:jdbc:"))));
             pPage = OGeneralSpecialJDBCConnectionPageSetup::CreateMySQLJDBCTabPage( this, *m_pOutSet);
             break;
         case PAGE_DBSETUPWIZARD_MYSQL_NATIVE:
-            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(::rtl::OUString("sdbc:mysql:mysqlc:"))));
+            m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, m_pCollection->getPrefix(OUString("sdbc:mysql:mysqlc:"))));
             pPage = MySQLNativeSetupPage::Create( this, *m_pOutSet);
             break;
 
@@ -618,17 +618,17 @@ IMPL_LINK(ODbTypeWizDialogSetup, ImplModifiedHdl, OGenericAdministrationPage*, _
 // -----------------------------------------------------------------------------
 IMPL_LINK(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMySQLIntroPageSetup)
 {
-    ::rtl::OUString sURLPrefix;
+    OUString sURLPrefix;
     switch( _pMySQLIntroPageSetup->getMySQLMode() )
     {
         case  OMySQLIntroPageSetup::VIA_ODBC:
-            sURLPrefix = ::rtl::OUString("sdbc:mysql:odbc:");
+            sURLPrefix = OUString("sdbc:mysql:odbc:");
             break;
         case  OMySQLIntroPageSetup::VIA_JDBC:
-            sURLPrefix = ::rtl::OUString("sdbc:mysql:jdbc:");
+            sURLPrefix = OUString("sdbc:mysql:jdbc:");
             break;
         case  OMySQLIntroPageSetup::VIA_NATIVE:
-            sURLPrefix = ::rtl::OUString("sdbc:mysql:mysqlc:");
+            sURLPrefix = OUString("sdbc:mysql:mysqlc:");
             break;
     }
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), sal_True);
@@ -699,7 +699,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 }
 
 // -----------------------------------------------------------------------------
-void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
+void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
 {
     OSL_FAIL( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
@@ -746,7 +746,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             aArgs.put( "InteractionHandler", xHandler );
             aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
 
-            ::rtl::OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
+            OUString sPath = m_pImpl->getDocumentUrl( *m_pOutSet );
             xStore->storeAsURL( sPath, aArgs.getPropertyValues() );
 
             if ( !m_pFinalPage || m_pFinalPage->IsDatabaseDocumentToBeRegistered() )
@@ -802,18 +802,18 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString ODbTypeWizDialogSetup::getDefaultDatabaseType() const
+    OUString ODbTypeWizDialogSetup::getDefaultDatabaseType() const
     {
-        ::rtl::OUString sEmbeddedURL = m_pCollection->getEmbeddedDatabase();
+        OUString sEmbeddedURL = m_pCollection->getEmbeddedDatabase();
         ::connectivity::DriversConfig aDriverConfig(getORB());
         try
         {
         if ( aDriverConfig.getDriverFactoryName(sEmbeddedURL).isEmpty() || !m_pImpl->getDriver(sEmbeddedURL).is() )
-            sEmbeddedURL = ::rtl::OUString("sdbc:dbase:");
+            sEmbeddedURL = OUString("sdbc:dbase:");
         }
         catch(const Exception&)
         {
-            sEmbeddedURL = ::rtl::OUString("sdbc:dbase:");
+            sEmbeddedURL = OUString("sdbc:dbase:");
         }
 
         return sEmbeddedURL;
@@ -822,8 +822,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::CreateDatabase()
     {
-        ::rtl::OUString sUrl;
-        ::rtl::OUString eType = getDefaultDatabaseType();
+        OUString sUrl;
+        OUString eType = getDefaultDatabaseType();
         if ( m_pCollection->isEmbeddedDatabase(eType) )
         {
             sUrl = eType;
@@ -839,7 +839,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
-            ::rtl::OUString sPrefix = eType;
+            OUString sPrefix = eType;
             sUrl = aDBPathURL.GetMainURL( INetURLObject::NO_DECODE);
             xSimpleFileAccess->createFolder(sUrl);
              sUrl = sPrefix.concat(sUrl);
@@ -849,14 +849,14 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     //-------------------------------------------------------------------------
-    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
+    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );
         Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY_THROW );
         INetURLObject aURL( _sPath );
-        ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-        ::rtl::OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename,sal_False);
+        OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename,sal_False);
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
 
@@ -874,9 +874,9 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             INetURLObject aWorkURL( m_sWorkPath );
             aFileDlg.SetDisplayFolder( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
 
-            ::rtl::OUString sDefaultName = String( ModuleRes( STR_DATABASEDEFAULTNAME ) );
-            ::rtl::OUString sExtension = pFilter->GetDefaultExtension();
-            sDefaultName += sExtension.replaceAt( 0, 1, ::rtl::OUString() );
+            OUString sDefaultName = String( ModuleRes( STR_DATABASEDEFAULTNAME ) );
+            OUString sExtension = pFilter->GetDefaultExtension();
+            sDefaultName += sExtension.replaceAt( 0, 1, OUString() );
             aWorkURL.Append( sDefaultName );
             sDefaultName = createUniqueFileName( aWorkURL );
             aFileDlg.SetFileName( sDefaultName );
@@ -890,7 +890,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
             if( m_aDocURL.GetProtocol() != INET_PROT_NOT_VALID )
             {
-                ::rtl::OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
+                OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
                 if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
                     ::utl::UCBContentHelper::Kill(sFileName);
                 m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
@@ -904,7 +904,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
-        :: rtl::OUString sLastSegmentName = pURL->getName();
+        :: OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
         while (bFolderExists == sal_True)
@@ -913,7 +913,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             if (bFolderExists == sal_True)
             {
                 i++;
-                pURL->setName(sLastSegmentName.concat(::rtl::OUString::valueOf(i)));
+                pURL->setName(sLastSegmentName.concat(OUString::valueOf(i)));
             }
         }
     }
@@ -922,7 +922,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
         Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(getORB()));
-        ::rtl::OUString BaseName = _rURL.getBase();
+        OUString BaseName = _rURL.getBase();
 
         sal_Bool bElementExists = sal_True;
 
@@ -932,7 +932,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             bElementExists = xSimpleFileAccess->exists( aExistenceCheck.GetMainURL( INetURLObject::NO_DECODE ) );
             if ( bElementExists )
             {
-                aExistenceCheck.setBase( BaseName.concat( ::rtl::OUString::valueOf( i ) ) );
+                aExistenceCheck.setBase( BaseName.concat( OUString::valueOf( i ) ) );
                 ++i;
             }
         }
@@ -957,11 +957,11 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             Reference< XComponentLoader >       m_xFrameLoader;
             Reference< XDesktop2 >              m_xDesktop;
             Reference< XInteractionHandler2 >   m_xInteractionHandler;
-            ::rtl::OUString                     m_sURL;
+            OUString                     m_sURL;
             OAsyncronousLink                    m_aAsyncCaller;
 
         public:
-            AsyncLoader( const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _rURL );
+            AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL );
 
             void doLoadAsync();
 
@@ -976,7 +976,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         };
 
         // .............................................................................
-        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const ::rtl::OUString& _rURL )
+        AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL )
             :m_sURL( _rURL )
             ,m_aAsyncCaller( LINK( this, AsyncLoader, OnOpenDocument ) )
         {
@@ -1023,7 +1023,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     aLoadArgs >>= aLoadArgPV;
 
                     m_xFrameLoader->loadComponentFromURL( m_sURL,
-                        ::rtl::OUString( "_default" ),
+                        OUString( "_default" ),
                         FrameSearchFlag::ALL,
                         aLoadArgPV
                     );

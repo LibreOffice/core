@@ -29,7 +29,6 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDoc
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // SwAccessiblePreview
 

@@ -44,12 +44,12 @@ protected:
     virtual             ~RecordObjectBase();
 
     using               SequenceRecordObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const ::rtl::OUString& rSysFileName );
+    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
     void                construct( const RecordObjectBase& rParent );
 
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
 
-    ::rtl::OUString     getErrorName( sal_uInt8 nErrCode ) const;
+    OUString     getErrorName( sal_uInt8 nErrCode ) const;
 
     // ------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ protected:
 
     sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
     sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
-    ::rtl::OUString     dumpString( const String& rName = EMPTY_STRING, bool bRich = false, bool b32BitLen = true );
+    OUString     dumpString( const String& rName = EMPTY_STRING, bool bRich = false, bool b32BitLen = true );
     void                dumpColor( const String& rName = EMPTY_STRING );
     ::com::sun::star::util::DateTime dumpPivotDateTime( const String& rName = EMPTY_STRING );
 
@@ -103,9 +103,9 @@ public:
 protected:
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,
-                            const ::rtl::OUString& rStrgPath,
-                            const ::rtl::OUString& rStrmName,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rStrgPath,
+                            const OUString& rStrmName,
+                            const OUString& rSysFileName );
 };
 
 // ============================================================================
@@ -118,7 +118,7 @@ public:
     explicit            Dumper(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStrm,
-                            const ::rtl::OUString& rSysFileName );
+                            const OUString& rSysFileName );
 
 protected:
     virtual void        implDump();

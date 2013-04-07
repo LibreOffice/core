@@ -73,7 +73,7 @@ XFSaxAttrList::~XFSaxAttrList()
 //      delete m_pSvAttrList;
 }
 
-void    XFSaxAttrList::AddAttribute(const rtl::OUString& name, const rtl::OUString& value)
+void    XFSaxAttrList::AddAttribute(const OUString& name, const OUString& value)
 {
     m_pSvAttrList->AddAttribute(name,value);
 }

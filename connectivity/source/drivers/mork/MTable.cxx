@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
 OTable::OTable( sdbcx::OCollection* _pTables, OConnection* _pConnection,
-                const ::rtl::OUString& _Name, const ::rtl::OUString& _Type, const ::rtl::OUString& _Description )
+                const OUString& _Name, const OUString& _Type, const OUString& _Description )
     :OTable_Base(_pTables, _pConnection, sal_True, _Name, _Type, _Description )
     ,m_pConnection( _pConnection )
 {

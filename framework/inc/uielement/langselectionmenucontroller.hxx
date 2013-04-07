@@ -76,18 +76,18 @@ namespace framework
             };
 
             sal_Bool                                                               m_bShowMenu;
-            ::rtl::OUString                                                        m_aLangStatusCommandURL;
+            OUString                                                        m_aLangStatusCommandURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
-            ::rtl::OUString                                                        m_aMenuCommandURL_Lang;
+            OUString                                                        m_aMenuCommandURL_Lang;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Lang;
-            ::rtl::OUString                                                        m_aMenuCommandURL_Font;
+            OUString                                                        m_aMenuCommandURL_Font;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Font;
-            ::rtl::OUString                                                        m_aMenuCommandURL_CharDlgForParagraph;
+            OUString                                                        m_aMenuCommandURL_CharDlgForParagraph;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_CharDlgForParagraph;
-            ::rtl::OUString     m_aCurLang;
+            OUString     m_aCurLang;
             sal_Int16           m_nScriptType;
-            ::rtl::OUString     m_aKeyboardLang;
-            ::rtl::OUString     m_aGuessedTextLang;
+            OUString     m_aKeyboardLang;
+            OUString     m_aGuessedTextLang;
             LanguageGuessingHelper      m_aLangGuessHelper;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );

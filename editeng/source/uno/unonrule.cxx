@@ -35,7 +35,6 @@
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>
 
-using ::rtl::OUString;
 using ::com::sun::star::util::XCloneable;
 using ::com::sun::star::ucb::XAnyCompare;
 

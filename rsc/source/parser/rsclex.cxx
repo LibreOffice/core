@@ -39,9 +39,6 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringHash;
 
 const char* StringContainer::putString( const char* pString )
 {
@@ -368,7 +365,7 @@ void IncludeParser( RscFileInst * pFileInst )
                 }
                 else if( INCLUDE_STRING == nToken ){
                     lKey = pTypCon->aFileTab.NewIncFile( aYYSType.string,
-                                                         rtl::OString() );
+                                                         OString() );
                     pFName->InsertDependFile( lKey, ULONG_MAX );
                 };
             };

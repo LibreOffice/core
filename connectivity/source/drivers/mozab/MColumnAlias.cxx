@@ -82,7 +82,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
     };
 
     for ( size_t i = 0; i < sizeof( s_pProgrammaticNames ) / sizeof( s_pProgrammaticNames[0] ); ++i )
-        m_aAliasMap[ ::rtl::OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
+        m_aAliasMap[ OUString::createFromAscii( s_pProgrammaticNames[i] ) ] = AliasEntry( s_pProgrammaticNames[i], i );
 
     initialize( _rxORB );
 }
@@ -100,19 +100,19 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
         {
             //.............................................................
             Reference< XNameAccess > xAliasesNode;
-            xDriverNode->getPropertyValue( ::rtl::OUString("ColumnAliases") ) >>= xAliasesNode;
+            xDriverNode->getPropertyValue( OUString("ColumnAliases") ) >>= xAliasesNode;
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
 
             // this is a set of string nodes
-            Sequence< ::rtl::OUString > aProgrammaticNames;
+            Sequence< OUString > aProgrammaticNames;
             if ( xAliasesNode.is() )
                 aProgrammaticNames = xAliasesNode->getElementNames();
 
             //.............................................................
             // travel through all the set elements
-            const ::rtl::OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
-            const ::rtl::OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
-            ::rtl::OUString sAssignedAlias;
+            const OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
+            const OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
+            OUString sAssignedAlias;
 
             for ( ; pProgrammaticNames < pProgrammaticNamesEnd; ++pProgrammaticNames )
             {
@@ -123,7 +123,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
                 if ( sAssignedAlias.isEmpty() )
                       sAssignedAlias = *pProgrammaticNames;
 
-                ::rtl::OString sAsciiProgrammaticName( ::rtl::OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
+                OString sAsciiProgrammaticName( OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
                 //.............................................................
             #if OSL_DEBUG_LEVEL > 0
                 bool bFound = false;
@@ -158,21 +158,21 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
 }
 
 //------------------------------------------------------------------
-::rtl::OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const ::rtl::OUString& _rAlias ) const
+OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const
 {
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
     if ( pos == m_aAliasMap.end() )
     {
         OSL_FAIL( "OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias: no programmatic name for this alias!" );
-        return ::rtl::OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
+        return OUStringToOString( _rAlias, RTL_TEXTENCODING_UTF8 );
     }
     return pos->second.programmaticAsciiName;
 }
 
 //------------------------------------------------------------------
-bool OColumnAlias::isColumnSearchable( const ::rtl::OUString _alias ) const
+bool OColumnAlias::isColumnSearchable( const OUString _alias ) const
 {
-    ::rtl::OString sProgrammatic = getProgrammaticNameOrFallbackToUTF8Alias( _alias );
+    OString sProgrammatic = getProgrammaticNameOrFallbackToUTF8Alias( _alias );
 
     return  (   !sProgrammatic.equals( "HomeCountry" )
             &&  !sProgrammatic.equals( "WorkCountry" )

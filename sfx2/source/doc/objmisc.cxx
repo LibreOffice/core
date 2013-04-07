@@ -213,7 +213,7 @@ void SfxObjectShell::FlushDocInfo()
     SetModified(sal_True);
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
     DoFlushDocInfo(); // call template method
-    ::rtl::OUString url(xDocProps->getAutoloadURL());
+    OUString url(xDocProps->getAutoloadURL());
     sal_Int32 delay(xDocProps->getAutoloadSecs());
     SetAutoLoad( INetURLObject(url), delay * 1000,
                  (delay > 0) || !url.isEmpty() );
@@ -221,7 +221,7 @@ void SfxObjectShell::FlushDocInfo()
 
 //-------------------------------------------------------------------------
 
-void SfxObjectShell::SetError( sal_uInt32 lErr, const ::rtl::OUString& aLogMessage )
+void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
 {
     if(pImp->lErr==ERRCODE_NONE)
     {
@@ -254,7 +254,7 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 void SfxObjectShell::ResetError()
 {
     if( pImp->lErr != ERRCODE_NONE )
-        AddLog( ::rtl::OUString( OSL_LOG_PREFIX "Resetting Error."  ) );
+        AddLog( OUString( OSL_LOG_PREFIX "Resetting Error."  ) );
 
     pImp->lErr=0;
     SfxMedium * pMed = GetMedium();
@@ -302,7 +302,7 @@ sal_Bool SfxObjectShell::IsModified()
         return sal_False;
     }
 
-    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+    uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
     for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aNames[n] );
@@ -504,7 +504,7 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
 
     if ( bShared != IsDocShared() )
     {
-        ::rtl::OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        OUString aOrigURL = GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
 
         if ( aOrigURL.isEmpty() && bSave )
         {
@@ -567,9 +567,9 @@ sal_Bool SfxObjectShell::SwitchToShared( sal_Bool bShared, sal_Bool bSave )
             }
             else
             {
-                ::rtl::OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+                OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
                 GetMedium()->SwitchDocumentToFile( GetSharedFileURL() );
-                pImp->m_aSharedFileURL = ::rtl::OUString();
+                pImp->m_aSharedFileURL = OUString();
 
                 // now remove the temporary file the document was based on
                 ::utl::UCBContentHelper::Kill( aTempFileURL );
@@ -620,7 +620,7 @@ void SfxObjectShell::FreeSharedFile()
 }
 
 //--------------------------------------------------------------------
-void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
+void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
 {
     SetSharedXMLFlag( sal_False );
 
@@ -645,7 +645,7 @@ void SfxObjectShell::FreeSharedFile( const ::rtl::OUString& aTempFileURL )
         // now remove the temporary file the document is based currently on
         ::utl::UCBContentHelper::Kill( aTempFileURL );
 
-        pImp->m_aSharedFileURL = ::rtl::OUString();
+        pImp->m_aSharedFileURL = OUString();
     }
 }
 
@@ -676,7 +676,7 @@ sal_Bool SfxObjectShell::IsDocShared() const
 
 //--------------------------------------------------------------------
 
-::rtl::OUString SfxObjectShell::GetSharedFileURL() const
+OUString SfxObjectShell::GetSharedFileURL() const
 {
     return pImp->m_aSharedFileURL;
 }
@@ -868,18 +868,18 @@ String SfxObjectShell::GetTitle
             return X(pImp->aTitle);
 
         // must it be numbered?
-        rtl::OUString aNoName(SFX2_RESSTR(STR_NONAME));
+        OUString aNoName(SFX2_RESSTR(STR_NONAME));
         if (pImp->bIsNamedVisible)
         {
             // Append number
-            aNoName += rtl::OUString::valueOf(static_cast<sal_Int32>(pImp->nVisualDocumentNumber));
+            aNoName += OUString::valueOf(static_cast<sal_Int32>(pImp->nVisualDocumentNumber));
         }
 
         // Document called "noname" for the time being
         return X(aNoName);
     }
 
-    const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : ::rtl::OUString( GetMedium()->GetName() ) );
+    const INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
     if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
@@ -980,7 +980,7 @@ void SfxObjectShell::SetNoName()
 {
     bHasName = 0;
     bIsTmp = sal_True;
-    GetModel()->attachResource( ::rtl::OUString(), GetModel()->getArgs() );
+    GetModel()->attachResource( OUString(), GetModel()->getArgs() );
 }
 
 //--------------------------------------------------------------------
@@ -1102,16 +1102,16 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
 //-------------------------------------------------------------------------
 void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-    ::rtl::OUString aVersion;
+    OUString aVersion;
     sal_Bool bIsEncrypted = sal_False;
     sal_Bool bHasNonEncrypted = sal_False;
 
     try
     {
         uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
-        xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
-        xPropSet->getPropertyValue( ::rtl::OUString( "HasEncryptedEntries"  ) ) >>= bIsEncrypted;
-        xPropSet->getPropertyValue( ::rtl::OUString( "HasNonEncryptedEntries"  ) ) >>= bHasNonEncrypted;
+        xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
+        xPropSet->getPropertyValue( OUString( "HasEncryptedEntries"  ) ) >>= bIsEncrypted;
+        xPropSet->getPropertyValue( OUString( "HasNonEncryptedEntries"  ) ) >>= bHasNonEncrypted;
     }
     catch( uno::Exception& )
     {
@@ -1195,7 +1195,7 @@ void SfxObjectShell::InitOwnModel_Impl()
         uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
         if ( xModel.is() )
         {
-            ::rtl::OUString aURL = GetMedium()->GetOrigURL();
+            OUString aURL = GetMedium()->GetOrigURL();
             SfxItemSet *pSet = GetMedium()->GetItemSet();
             if ( !GetMedium()->IsReadOnly() )
                 pSet->ClearItem( SID_INPUTSTREAM );
@@ -1249,7 +1249,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         pImp->nFlagsInProgress |= SFX_LOADED_IMAGES;
         uno::Reference<document::XDocumentProperties> xDocProps(
             getDocProperties());
-        ::rtl::OUString url(xDocProps->getAutoloadURL());
+        OUString url(xDocProps->getAutoloadURL());
         sal_Int32 delay(xDocProps->getAutoloadSecs());
         SetAutoLoad( INetURLObject(url), delay * 1000,
                      (delay > 0) || !url.isEmpty() );
@@ -1356,7 +1356,7 @@ void SfxObjectShell::TemplateDisconnectionAfterLoad()
 
             ForgetMedium();
             if( !DoSaveCompleted( pTmpMedium ) )
-                SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( OSL_LOG_PREFIX  ) );
+                SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
             else
             {
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
@@ -1521,7 +1521,7 @@ namespace
     }
 }
 
-ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const ::rtl::OUString& _rScriptURL,
+ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const OUString& _rScriptURL,
     const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError, const ::com::sun::star::uno::Any* pCaller )
 {
     OSL_TRACE( "in CallXScript" );
@@ -1562,7 +1562,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             {
                 Sequence< uno::Any > aArgs( 1 );
                 aArgs[ 0 ] = *pCaller;
-                xProps->setPropertyValue( rtl::OUString("Caller"), uno::makeAny( aArgs ) );
+                xProps->setPropertyValue( OUString("Caller"), uno::makeAny( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -1733,7 +1733,7 @@ void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const
 
 String SfxObjectShell::GetAPIName() const
 {
-    INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : ::rtl::OUString( GetMedium()->GetName() ) );
+    INetURLObject aURL( IsDocShared() ? GetSharedFileURL() : OUString( GetMedium()->GetName() ) );
     String aName( aURL.GetBase() );
     if( !aName.Len() )
         aName = aURL.GetURLNoPass();
@@ -1900,9 +1900,9 @@ sal_Bool SfxObjectShell_Impl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
     return sal_False;
 }
 
-::rtl::OUString SfxObjectShell_Impl::getDocumentLocation() const
+OUString SfxObjectShell_Impl::getDocumentLocation() const
 {
-    ::rtl::OUString sLocation;
+    OUString sLocation;
 
     const SfxMedium* pMedium( rDocShell.GetMedium() );
     OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getDocumentLocation: no medium!" );
@@ -1959,11 +1959,11 @@ sal_Bool SfxObjectShell_Impl::hasTrustedScriptingSignature( sal_Bool bAllowUIToA
 
     try
     {
-        ::rtl::OUString aVersion;
+        OUString aVersion;
         try
         {
             uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue( ::rtl::OUString( "Version"  ) ) >>= aVersion;
+            xPropSet->getPropertyValue( OUString( "Version"  ) ) >>= aVersion;
         }
         catch( uno::Exception& )
         {
@@ -2026,7 +2026,7 @@ void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task
     }
 }
 
-void SfxObjectShell::AddLog( const ::rtl::OUString& aMessage )
+void SfxObjectShell::AddLog( const OUString& aMessage )
 {
     if ( !pImp->m_xLogRing.is() )
     {
@@ -2045,11 +2045,11 @@ void SfxObjectShell::AddLog( const ::rtl::OUString& aMessage )
 
 namespace {
 
-void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream, const ::rtl::OUString& aString )
+void WriteStringInStream( const uno::Reference< io::XOutputStream >& xOutStream, const OUString& aString )
 {
     if ( xOutStream.is() )
     {
-        ::rtl::OString aStrLog = ::rtl::OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
+        OString aStrLog = OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
         uno::Sequence< sal_Int8 > aLogData( (const sal_Int8*)aStrLog.getStr(), aStrLog.getLength() );
         xOutStream->writeBytes( aLogData );
 
@@ -2077,24 +2077,24 @@ void SfxObjectShell::StoreLog()
     if ( pImp->m_xLogRing.is() )
     {
 #ifdef WNT
-        ::rtl::OUString aFileURL = ::rtl::OUString( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"  );
+        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"  );
 #else
-        ::rtl::OUString aFileURL = ::rtl::OUString( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}"  );
+        OUString aFileURL = OUString( "${$BRAND_BASE_DIR/program/bootstraprc:UserInstallation}"  );
 #endif
 
         ::rtl::Bootstrap::expandMacros( aFileURL );
 
 #ifdef WNT
-        ::rtl::OUString aBuildID = ::rtl::OUString( "${$BRAND_BASE_DIR/program/setup.ini:buildid}"  );
+        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/setup.ini:buildid}"  );
 #else
-        ::rtl::OUString aBuildID = ::rtl::OUString( "${$BRAND_BASE_DIR/program/setuprc:buildid}"  );
+        OUString aBuildID = OUString( "${$BRAND_BASE_DIR/program/setuprc:buildid}"  );
 #endif
 
         ::rtl::Bootstrap::expandMacros( aBuildID );
 
         if ( !aFileURL.isEmpty() )
         {
-            aFileURL += ::rtl::OUString( "/user/temp/document_io_logring.txt"  );
+            aFileURL += OUString( "/user/temp/document_io_logring.txt"  );
             try
             {
                 uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
@@ -2107,7 +2107,7 @@ void SfxObjectShell::StoreLog()
                 if ( !aBuildID.isEmpty() )
                     WriteStringInStream( xOutStream, aBuildID );
 
-                uno::Sequence< ::rtl::OUString > aLogSeq = pImp->m_xLogRing->getCollectedLog();
+                uno::Sequence< OUString > aLogSeq = pImp->m_xLogRing->getCollectedLog();
                 for ( sal_Int32 nInd = 0; nInd < aLogSeq.getLength(); nInd++ )
                     WriteStringInStream( xOutStream, aLogSeq[nInd] );
             }

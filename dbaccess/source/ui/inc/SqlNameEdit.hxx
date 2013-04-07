@@ -26,11 +26,11 @@ namespace dbaui
 {
     class OSQLNameChecker
     {
-        ::rtl::OUString m_sAllowedChars;
+        OUString m_sAllowedChars;
         sal_Bool        m_bOnlyUpperCase;
         sal_Bool        m_bCheck;           // true when we should check for invalid chars
     public:
-        OSQLNameChecker(const ::rtl::OUString& _rAllowedChars)
+        OSQLNameChecker(const OUString& _rAllowedChars)
             :m_sAllowedChars(_rAllowedChars)
             ,m_bOnlyUpperCase(sal_False)
             ,m_bCheck(sal_True)
@@ -41,7 +41,7 @@ namespace dbaui
         {
             m_bOnlyUpperCase = _bUpper;
         }
-        void setAllowedChars(const ::rtl::OUString& _rAllowedChars)
+        void setAllowedChars(const OUString& _rAllowedChars)
         {
             m_sAllowedChars = _rAllowedChars;
         }
@@ -50,19 +50,19 @@ namespace dbaui
         {
             m_bCheck = _bCheck;
         }
-        sal_Bool checkString(const ::rtl::OUString& _sToCheck,::rtl::OUString& _rsCorrected);
+        sal_Bool checkString(const OUString& _sToCheck,OUString& _rsCorrected);
     };
     //==================================================================
     class OSQLNameEdit : public Edit
                         ,public OSQLNameChecker
     {
     public:
-        OSQLNameEdit(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+        OSQLNameEdit(Window* _pParent,const OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
             : Edit(_pParent,nStyle)
             ,OSQLNameChecker(_rAllowedChars)
         {
         }
-        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
+        OSQLNameEdit(Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
             : Edit(_pParent,_rRes)
             ,OSQLNameChecker(_rAllowedChars)
         {
@@ -78,12 +78,12 @@ namespace dbaui
                             ,public OSQLNameChecker
     {
     public:
-        OSQLNameComboBox(Window* _pParent,const ::rtl::OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
+        OSQLNameComboBox(Window* _pParent,const OUString& _rAllowedChars, WinBits nStyle = WB_BORDER)
             : ComboBox(_pParent,nStyle)
             ,OSQLNameChecker(_rAllowedChars)
         {
         }
-        OSQLNameComboBox(Window* _pParent,const ResId& _rRes,const ::rtl::OUString& _rAllowedChars = ::rtl::OUString())
+        OSQLNameComboBox(Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,_rRes)
             ,OSQLNameChecker(_rAllowedChars)
         {

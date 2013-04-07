@@ -266,20 +266,20 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewHeaderCell::getA
 
 //=====  XServiceInfo  ====================================================
 
-rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewHeaderCell::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessiblePreviewHeaderCell");
+    return OUString("ScAccessiblePreviewHeaderCell");
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewHeaderCell::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.table.AccessibleCellView");
+    pNames[nOldSize] = OUString("com.sun.star.table.AccessibleCellView");
 
     return aSequence;
 }
@@ -360,15 +360,15 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::Runt
     return Rectangle();
 }
 
-rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
 {
-    rtl::OUString sDescription = String(ScResId(STR_ACC_HEADERCELL_DESCR));
+    OUString sDescription = String(ScResId(STR_ACC_HEADERCELL_DESCR));
     return sDescription;
 }
 
-rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() throw(uno::RuntimeException)
 {
-    rtl::OUString sName = String(ScResId(STR_ACC_HEADERCELL_NAME));
+    OUString sName = String(ScResId(STR_ACC_HEADERCELL_NAME));
 
     if ( mbColumnHeader )
     {
@@ -376,7 +376,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
         {
             //! name for corner cell?
 
-//          sName = rtl::OUString("Column/Row Header");
+//          sName = OUString("Column/Row Header");
         }
         else
         {
@@ -387,7 +387,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
     else
     {
         // name of row header
-        sName += rtl::OUString::valueOf( (sal_Int32) ( maCellPos.Row() + 1 ) );
+        sName += OUString::valueOf( (sal_Int32) ( maCellPos.Row() + 1 ) );
     }
 
     return sName;

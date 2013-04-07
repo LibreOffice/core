@@ -142,27 +142,27 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return false.
         *//*-*****************************************************************************************************/
 
-        sal_Bool searchType                     (   const   ::rtl::OUString&            sURL                ,
-                                                    const   ::rtl::OUString&            sMediaType          ,
-                                                    const   ::rtl::OUString&            sClipboardFormat    ,
+        sal_Bool searchType                     (   const   OUString&            sURL                ,
+                                                    const   OUString&            sMediaType          ,
+                                                    const   OUString&            sClipboardFormat    ,
                                                             CheckedTypeIterator&        aStartEntry         ,
-                                                            ::rtl::OUString&            sResult             ) const;
+                                                            OUString&            sResult             ) const;
 
-        sal_Bool searchFilterForType            (   const   ::rtl::OUString&            sInternalTypeName   ,
+        sal_Bool searchFilterForType            (   const   OUString&            sInternalTypeName   ,
                                                             CheckedStringListIterator&  aStartEntry         ,
-                                                            ::rtl::OUString&            sResult             ) const;
+                                                            OUString&            sResult             ) const;
 
-        sal_Bool searchDetectorForType          (   const   ::rtl::OUString&            sInternalTypeName   ,
+        sal_Bool searchDetectorForType          (   const   OUString&            sInternalTypeName   ,
                                                             CheckedStringListIterator&  aStartEntry         ,
-                                                            ::rtl::OUString&            sResult             ) const;
+                                                            OUString&            sResult             ) const;
 
-        sal_Bool searchLoaderForType            (   const   ::rtl::OUString&            sInternalTypeName   ,
+        sal_Bool searchLoaderForType            (   const   OUString&            sInternalTypeName   ,
                                                             CheckedStringListIterator&  aStartEntry         ,
-                                                            ::rtl::OUString&            sResult             ) const;
+                                                            OUString&            sResult             ) const;
 
-        sal_Bool searchContentHandlerForType    (   const   ::rtl::OUString&            sInternalTypeName   ,
+        sal_Bool searchContentHandlerForType    (   const   OUString&            sInternalTypeName   ,
                                                             CheckedStringListIterator&  aStartEntry         ,
-                                                            ::rtl::OUString&            sResult             ) const;
+                                                            OUString&            sResult             ) const;
 
         /*-****************************************************************************************************//**
             @short      get all properties of a cache entry by given name
@@ -178,32 +178,32 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return an empty Any.
         *//*-*****************************************************************************************************/
 
-        css::uno::Sequence< ::rtl::OUString >               getAllTypeNames                 () const;
-        css::uno::Sequence< ::rtl::OUString >               getAllFilterNames               () const;
-        css::uno::Sequence< ::rtl::OUString >               getAllDetectorNames             () const;   // without default detector!
-        css::uno::Sequence< ::rtl::OUString >               getAllLoaderNames               () const;   // without default loader!
-        css::uno::Sequence< ::rtl::OUString >               getAllContentHandlerNames       () const;
-        css::uno::Sequence< ::rtl::OUString >               getAllDetectorNamesWithDefault  () const;   // default detector is last one!
-        css::uno::Sequence< ::rtl::OUString >               getAllLoaderNamesWithDefault    () const;   // default loader is last one!
-        ::rtl::OUString                                     getDefaultLoader                () const;
+        css::uno::Sequence< OUString >               getAllTypeNames                 () const;
+        css::uno::Sequence< OUString >               getAllFilterNames               () const;
+        css::uno::Sequence< OUString >               getAllDetectorNames             () const;   // without default detector!
+        css::uno::Sequence< OUString >               getAllLoaderNames               () const;   // without default loader!
+        css::uno::Sequence< OUString >               getAllContentHandlerNames       () const;
+        css::uno::Sequence< OUString >               getAllDetectorNamesWithDefault  () const;   // default detector is last one!
+        css::uno::Sequence< OUString >               getAllLoaderNamesWithDefault    () const;   // default loader is last one!
+        OUString                                     getDefaultLoader                () const;
 
-        css::uno::Sequence< css::beans::PropertyValue >     getTypeProperties               (   const   ::rtl::OUString&    sName   ) const;
-        css::uno::Sequence< css::beans::PropertyValue >     getFilterProperties             (   const   ::rtl::OUString&    sName   ) const;
-        css::uno::Sequence< css::beans::PropertyValue >     getDetectorProperties           (   const   ::rtl::OUString&    sName   ) const;
-        css::uno::Sequence< css::beans::PropertyValue >     getLoaderProperties             (   const   ::rtl::OUString&    sName   ) const;
-        css::uno::Sequence< css::beans::PropertyValue >     getContentHandlerProperties     (   const   ::rtl::OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getTypeProperties               (   const   OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getFilterProperties             (   const   OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getDetectorProperties           (   const   OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getLoaderProperties             (   const   OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getContentHandlerProperties     (   const   OUString&    sName   ) const;
 
-        FileType                                            getType                         (   const   ::rtl::OUString&    sName   ) const;
-        Filter                                              getFilter                       (   const   ::rtl::OUString&    sName   ) const;
-        Detector                                            getDetector                     (   const   ::rtl::OUString&    sName   ) const;
-        Loader                                              getLoader                       (   const   ::rtl::OUString&    sName   ) const;
-        ContentHandler                                      getContentHandler               (   const   ::rtl::OUString&    sName   ) const;
+        FileType                                            getType                         (   const   OUString&    sName   ) const;
+        Filter                                              getFilter                       (   const   OUString&    sName   ) const;
+        Detector                                            getDetector                     (   const   OUString&    sName   ) const;
+        Loader                                              getLoader                       (   const   OUString&    sName   ) const;
+        ContentHandler                                      getContentHandler               (   const   OUString&    sName   ) const;
 
-        sal_Bool                                            existsType                      (   const   ::rtl::OUString&    sName   ) const;
-        sal_Bool                                            existsFilter                    (   const   ::rtl::OUString&    sName   ) const;
-        sal_Bool                                            existsDetector                  (   const   ::rtl::OUString&    sName   ) const;
-        sal_Bool                                            existsLoader                    (   const   ::rtl::OUString&    sName   ) const;
-        sal_Bool                                            existsContentHandler            (   const   ::rtl::OUString&    sName   ) const;
+        sal_Bool                                            existsType                      (   const   OUString&    sName   ) const;
+        sal_Bool                                            existsFilter                    (   const   OUString&    sName   ) const;
+        sal_Bool                                            existsDetector                  (   const   OUString&    sName   ) const;
+        sal_Bool                                            existsLoader                    (   const   OUString&    sName   ) const;
+        sal_Bool                                            existsContentHandler            (   const   OUString&    sName   ) const;
 
         /*-****************************************************************************************************//**
             @short      support special query modes
@@ -221,7 +221,7 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return an empty result set.
         *//*-*****************************************************************************************************/
 
-        css::uno::Any queryFilters( const ::rtl::OUString& sQuery ) const;
+        css::uno::Any queryFilters( const OUString& sQuery ) const;
 
         /*-****************************************************************************************************//**
             @short      support registration of elements in current configuration
@@ -270,39 +270,39 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return false then.
         *//*-*****************************************************************************************************/
 
-        sal_Bool addFilter    ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool addFilter    ( const OUString&                                 sName       ,
                                 const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                       sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool replaceFilter( const ::rtl::OUString&                                 sName       ,
+        sal_Bool replaceFilter( const OUString&                                 sName       ,
                                 const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                       sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool removeFilter ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool removeFilter ( const OUString&                                 sName       ,
                                       sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
 
-        sal_Bool addType      ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool addType      ( const OUString&                                 sName       ,
                                 const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                       sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool replaceType  ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool replaceType  ( const OUString&                                 sName       ,
                                 const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                       sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
-        sal_Bool removeType   ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool removeType   ( const OUString&                                 sName       ,
                                       sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                            css::registry::InvalidRegistryException);
 
-        sal_Bool addDetector    ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool addDetector    ( const OUString&                                 sName       ,
                                   const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                         sal_Bool                                         bException  ) throw(css::container::ElementExistException  ,
                                                                                                              css::registry::InvalidRegistryException);
-        sal_Bool replaceDetector( const ::rtl::OUString&                                 sName       ,
+        sal_Bool replaceDetector( const OUString&                                 sName       ,
                                   const css::uno::Sequence< css::beans::PropertyValue >& lProperties ,
                                         sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                              css::registry::InvalidRegistryException);
-        sal_Bool removeDetector ( const ::rtl::OUString&                                 sName       ,
+        sal_Bool removeDetector ( const OUString&                                 sName       ,
                                         sal_Bool                                         bException  ) throw(css::container::NoSuchElementException  ,
                                                                                                              css::registry::InvalidRegistryException);
 
@@ -347,44 +347,44 @@ class FilterCache   :   private ThreadHelpBase
 
     private:
 
-        static sal_Bool implcp_searchType                           (   const   ::rtl::OUString&                                    sURL                ,
-                                                                        const   ::rtl::OUString*                                    pMediaType          ,
-                                                                        const   ::rtl::OUString*                                    pClipboardFormat    ,
+        static sal_Bool implcp_searchType                           (   const   OUString&                                    sURL                ,
+                                                                        const   OUString*                                    pMediaType          ,
+                                                                        const   OUString*                                    pClipboardFormat    ,
                                                                         const   CheckedTypeIterator&                                aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchFilterForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   OUString&                                    sResult             );
+        static sal_Bool implcp_searchFilterForType                  (   const   OUString&                                    sInternalTypeName   ,
                                                                         const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchDetectorForType                (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   OUString&                                    sResult             );
+        static sal_Bool implcp_searchDetectorForType                (   const   OUString&                                    sInternalTypeName   ,
                                                                         const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchLoaderForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   OUString&                                    sResult             );
+        static sal_Bool implcp_searchLoaderForType                  (   const   OUString&                                    sInternalTypeName   ,
                                                                         const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_searchContentHandlerForType          (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   OUString&                                    sResult             );
+        static sal_Bool implcp_searchContentHandlerForType          (   const   OUString&                                    sInternalTypeName   ,
                                                                         const   CheckedStringListIterator&                          aStartEntry         ,
-                                                                        const   ::rtl::OUString&                                    sResult             );
-        static sal_Bool implcp_getTypeProperties                    (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getFilterProperties                  (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getDetectorProperties                (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getLoaderProperties                  (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getContentHandlerProperties          (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getType                              (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getFilter                            (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getDetector                          (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getLoader                            (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_getContentHandler                    (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsType                           (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsFilter                         (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsDetector                       (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsLoader                         (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_existsContentHandler                 (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_addFilter                            (   const   ::rtl::OUString&                                    sName               ,
+                                                                        const   OUString&                                    sResult             );
+        static sal_Bool implcp_getTypeProperties                    (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getFilterProperties                  (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getDetectorProperties                (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getLoaderProperties                  (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getContentHandlerProperties          (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getType                              (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getFilter                            (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getDetector                          (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getLoader                            (   const   OUString&                                    sName               );
+        static sal_Bool implcp_getContentHandler                    (   const   OUString&                                    sName               );
+        static sal_Bool implcp_existsType                           (   const   OUString&                                    sName               );
+        static sal_Bool implcp_existsFilter                         (   const   OUString&                                    sName               );
+        static sal_Bool implcp_existsDetector                       (   const   OUString&                                    sName               );
+        static sal_Bool implcp_existsLoader                         (   const   OUString&                                    sName               );
+        static sal_Bool implcp_existsContentHandler                 (   const   OUString&                                    sName               );
+        static sal_Bool implcp_addFilter                            (   const   OUString&                                    sName               ,
                                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
-        static sal_Bool implcp_replaceFilter                        (   const   ::rtl::OUString&                                    sName               ,
+        static sal_Bool implcp_replaceFilter                        (   const   OUString&                                    sName               ,
                                                                         const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
-        static sal_Bool implcp_removeFilter                         (   const   ::rtl::OUString&                                    sName               );
-        static sal_Bool implcp_queryFilters                         (   const   ::rtl::OUString&                                    sQuery              );
+        static sal_Bool implcp_removeFilter                         (   const   OUString&                                    sName               );
+        static sal_Bool implcp_queryFilters                         (   const   OUString&                                    sQuery              );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 

@@ -136,8 +136,8 @@ static long PointToIndex( RECT_POINT ePoint, bool bAngleControl )
 SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     const Reference< XAccessible >&     rxParent,
     SvxRectCtl&                         rRepr,
-    const ::rtl::OUString*                      pName,
-    const ::rtl::OUString*                      pDesc ) :
+    const OUString*                      pName,
+    const OUString*                      pDesc ) :
 
     SvxRectCtlAccessibleContext_Base( m_aMutex ),
     mxParent( rxParent ),
@@ -289,8 +289,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if( !xChild.is() )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
-            ::rtl::OUString aName(SVX_RESSTR(p->nResIdName));
-            ::rtl::OUString aDescr(SVX_RESSTR(p->nResIdDescr));
+            OUString aName(SVX_RESSTR(p->nResIdName));
+            OUString aDescr(SVX_RESSTR(p->nResIdDescr));
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 
@@ -344,13 +344,13 @@ sal_Int16 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleRole( void ) throw(
     return AccessibleRole::PANEL;
 }
 
-::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msDescription;
 }
 
-::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     return msName;
@@ -501,19 +501,19 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException )
 {
-    return ::rtl::OUString( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" );
+    return OUString( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" );
 }
 
-sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    Sequence< ::rtl::OUString > aSupportedServices( getSupportedServiceNames() );
+    Sequence< OUString > aSupportedServices( getSupportedServiceNames() );
     int                     nLength = aSupportedServices.getLength();
-    const ::rtl::OUString*          pStr = aSupportedServices.getConstArray();
+    const OUString*          pStr = aSupportedServices.getConstArray();
 
     for( int i = nLength ; i ; --i, ++pStr )
     {
@@ -746,8 +746,8 @@ DBG_NAME( SvxRectCtlChildAccessibleContext )
 SvxRectCtlChildAccessibleContext::SvxRectCtlChildAccessibleContext(
     const Reference<XAccessible>&   rxParent,
     const Window&                       rParentWindow,
-    const ::rtl::OUString&              rName,
-    const ::rtl::OUString&              rDescription,
+    const OUString&              rName,
+    const OUString&              rDescription,
     const Rectangle&                    rBoundingBox,
     long                                nIndexInParent ) :
 
@@ -905,13 +905,13 @@ sal_Int16 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRole( void ) t
     return AccessibleRole::RADIO_BUTTON;
 }
 
-::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( maMutex );
     return msDescription;
 }
 
-::rtl::OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
+OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( maMutex );
     return msName;
@@ -1038,12 +1038,12 @@ OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void 
     return OUString( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" );
 }
 
-sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const ::rtl::OUString& sServiceName ) throw( RuntimeException )
+sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::supportsService( const OUString& sServiceName ) throw( RuntimeException )
 {
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
     ::osl::MutexGuard   aGuard( maMutex );
-    Sequence< ::rtl::OUString > aSupportedServices ( getSupportedServiceNames() );
+    Sequence< OUString > aSupportedServices ( getSupportedServiceNames() );
     int                     nLength = aSupportedServices.getLength();
     for( int i = 0 ; i < nLength; ++i )
     {

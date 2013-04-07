@@ -320,13 +320,13 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                 case '\'':
                     {
 
-                        rtl::OStringBuffer aByteString;
+                        OStringBuffer aByteString;
                         while (1)
                         {
                             char c = (char)GetHexValue();
                             /*
                              * Note: \'00 is a valid internal character in  a
-                             * string in RTF. rtl::OStringBuffer supports
+                             * string in RTF. OStringBuffer supports
                              * appending nulls fine
                              */
                             aByteString.append(c);
@@ -339,7 +339,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                                 if (__next>0xFF) // fix for #i43933# and #i35653#
                                 {
                                     if (aByteString.getLength())
-                                        aStrBuffer.Append(String(rtl::OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
+                                        aStrBuffer.Append(String(OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                                     aStrBuffer.Append((sal_Unicode)__next);
 
                                     continue;
@@ -374,7 +374,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                         bNextCh = false;
 
                         if (aByteString.getLength())
-                            aStrBuffer.Append(String(rtl::OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
+                            aStrBuffer.Append(String(OStringToOUString(aByteString.makeStringAndClear(), GetSrcEncoding())));
                     }
                     break;
                 case '\\':

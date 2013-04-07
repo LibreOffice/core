@@ -58,11 +58,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-using ::rtl::OUString;
 
 bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 {
-    ::rtl::OUString     aURL;
+    OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     Window*             pWindow = &GetView().GetViewFrame()->GetWindow();
     bool                bAPI = false, bRet = false;
@@ -123,7 +122,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
             else
                 aSize = Size( 2835, 2835 );
 
-            ::rtl::OUString realURL;
+            OUString realURL;
             if (bLink)
             {
                 realURL = aURL;

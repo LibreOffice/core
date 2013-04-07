@@ -38,24 +38,24 @@ class XMLTextListAutoStylePool;
 */
 class XMLTextNumRuleInfo
 {
-    const ::rtl::OUString msNumberingRules;
-    const ::rtl::OUString msNumberingLevel;
-    const ::rtl::OUString msNumberingStartValue;
-    const ::rtl::OUString msParaIsNumberingRestart;
-    const ::rtl::OUString msNumberingIsNumber;
-    const ::rtl::OUString msNumberingIsOutline;
-    const ::rtl::OUString msPropNameListId;
-    const ::rtl::OUString msPropNameStartWith;
-    const ::rtl::OUString msContinueingPreviousSubTree;
-    const ::rtl::OUString msListLabelStringProp;
+    const OUString msNumberingRules;
+    const OUString msNumberingLevel;
+    const OUString msNumberingStartValue;
+    const OUString msParaIsNumberingRestart;
+    const OUString msNumberingIsNumber;
+    const OUString msNumberingIsOutline;
+    const OUString msPropNameListId;
+    const OUString msPropNameStartWith;
+    const OUString msContinueingPreviousSubTree;
+    const OUString msListLabelStringProp;
 
     // numbering rules instance and its name
     ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XIndexReplace > mxNumRules;
-    ::rtl::OUString     msNumRulesName;
+    OUString     msNumRulesName;
 
     // paragraph's list attributes
-    ::rtl::OUString     msListId;
+    OUString     msListId;
     sal_Int16           mnListStartValue;
     sal_Int16           mnListLevel;
     sal_Bool            mbIsNumbered;
@@ -68,7 +68,7 @@ class XMLTextNumRuleInfo
     sal_Bool mbOutlineStyleAsNormalListStyle;
 
     sal_Bool mbContinueingPreviousSubTree;
-    ::rtl::OUString msListLabelString;
+    OUString msListLabelString;
 
 public:
 
@@ -83,7 +83,7 @@ public:
               const sal_Bool bExportTextNumberElement );
     inline void Reset();
 
-    inline const ::rtl::OUString& GetNumRulesName() const
+    inline const OUString& GetNumRulesName() const
     {
         return msNumRulesName;
     }
@@ -97,7 +97,7 @@ public:
         return mnListLevelStartValue;
     }
 
-    inline const ::rtl::OUString& GetListId() const
+    inline const OUString& GetListId() const
     {
         return msListId;
     }
@@ -136,7 +136,7 @@ public:
     {
         return mbContinueingPreviousSubTree;
     }
-    inline const ::rtl::OUString& ListLabelString() const
+    inline const OUString& ListLabelString() const
     {
         return msListLabelString;
     }

@@ -83,7 +83,6 @@
 using namespace ::oox;
 
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -
 const sal_uInt8     ExcDummy_00::pMyData[] = {
@@ -392,9 +391,9 @@ sal_uInt16 ExcBundlesheetBase::GetNum( void ) const
 ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB _nTab ) :
     ExcBundlesheetBase( rRootData, _nTab )
 {
-    rtl::OUString sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
+    OUString sTabName = rRootData.pER->GetTabInfo().GetScTabName( _nTab );
     OSL_ENSURE( sTabName.getLength() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
-    aName = rtl::OUStringToOString(sTabName, rRootData.pER->GetTextEncoding());
+    aName = OUStringToOString(sTabName, rRootData.pER->GetTextEncoding());
 }
 
 
@@ -678,7 +677,7 @@ bool XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     bool bConflict = false;
     String  sText;
     const ScQueryEntry::Item& rItem = rItems[0];
-    const rtl::OUString& rQueryStr = rItem.maString;
+    const OUString& rQueryStr = rItem.maString;
     if (!rQueryStr.isEmpty())
     {
         sText.Assign(rQueryStr);
@@ -841,10 +840,10 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
         case MultiValue:
         {
             rWorksheet->startElement(XML_filters, FSEND);
-            std::vector<rtl::OUString>::const_iterator itr = maMultiValues.begin(), itrEnd = maMultiValues.end();
+            std::vector<OUString>::const_iterator itr = maMultiValues.begin(), itrEnd = maMultiValues.end();
             for (; itr != itrEnd; ++itr)
             {
-                const char* pz = rtl::OUStringToOString(*itr, RTL_TEXTENCODING_UTF8).getStr();
+                const char* pz = OUStringToOString(*itr, RTL_TEXTENCODING_UTF8).getStr();
                 rWorksheet->singleElement(XML_filter, XML_val, pz, FSEND);
             }
             rWorksheet->endElement(XML_filters);

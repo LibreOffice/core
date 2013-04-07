@@ -33,25 +33,25 @@ namespace osl { class File; }
 namespace psp {
 typedef int fontID;
 
-void VCL_DLLPUBLIC getPrinterPathList( std::list< rtl::OUString >& rPathList, const char* pSubDir );
+void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
 
-// note: gcc 3.4.1 warns about visibility if we retunr a const rtl::OUString& here
+// note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-rtl::OUString VCL_DLLPUBLIC getFontPath();
+OUString VCL_DLLPUBLIC getFontPath();
 
 bool VCL_DLLPUBLIC convertPfbToPfa( osl::File& rInFile, osl::File& rOutFile );
 
 // normalized path (equivalent to realpath)
-void VCL_DLLPUBLIC normPath( rtl::OString& rPath );
+void VCL_DLLPUBLIC normPath( OString& rPath );
 
 // splits rOrgPath into dirname and basename
 // rOrgPath will be subject to normPath
-void VCL_DLLPUBLIC splitPath( rtl::OString& rOrgPath, rtl::OString& rDir, rtl::OString& rBase );
+void VCL_DLLPUBLIC splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
 
 enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
-// note: gcc 3.4.1 warns about visibility if we retunr a const rtl::OUString& here
+// note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-rtl::OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
+OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
 } // namespace
 
 #endif // _PSPRINT_HELPER_HXX_

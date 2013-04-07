@@ -51,7 +51,7 @@ inline void extract(
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! (seq[nArg] >>= v)) {
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.append( "Cannot extract ANY { " );
         buf.append( seq[nArg].getValueType().getTypeName() );
         buf.append( " } to " );

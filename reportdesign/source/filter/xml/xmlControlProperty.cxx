@@ -49,7 +49,7 @@ DBG_NAME( rpt_OXMLControlProperty )
 
 OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XPropertySet >& _xControl
                 ,OXMLControlProperty* _pContainer) :
@@ -71,10 +71,10 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-     ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+     OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -90,7 +90,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< OUString* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_DATE)]      = ::getCppuType( static_cast< com::sun::star::util::Date* >(NULL) );
@@ -122,7 +122,7 @@ OXMLControlProperty::~OXMLControlProperty()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLControlProperty::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -166,13 +166,13 @@ void OXMLControlProperty::EndElement()
     }
 }
 // -----------------------------------------------------------------------------
-void OXMLControlProperty::Characters( const ::rtl::OUString& rChars )
+void OXMLControlProperty::Characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);
 }
 // -----------------------------------------------------------------------------
-void OXMLControlProperty::addValue(const ::rtl::OUString& _sValue)
+void OXMLControlProperty::addValue(const OUString& _sValue)
 {
     Any aValue;
     if( TypeClass_VOID != m_aPropType.getTypeClass() )
@@ -193,7 +193,7 @@ ORptFilter& OXMLControlProperty::GetOwnImport()
     return static_cast<ORptFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
-Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters)
+Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
@@ -206,8 +206,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         #endif
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
-                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
+                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a boolean!").getStr());
             aReturn <<= bValue;
         }
@@ -221,8 +221,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         #endif
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
-                        ::rtl::OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
-                    append(rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                        OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
+                    append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                     append("\" into an integer!").getStr());
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
                     aReturn <<= (sal_Int16)nValue;
@@ -243,8 +243,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         #endif
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
-                    ::rtl::OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
-                append(::rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                    OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
+                append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                 append("\" into a double!").getStr());
             aReturn <<= (double)nValue;
         }
@@ -274,8 +274,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                 #endif
                     ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                     OSL_ENSURE(bSuccess,
-                            ::rtl::OStringBuffer("OPropertyImport::convertString: could not convert \"").
-                        append(rtl::OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
+                            OStringBuffer("OPropertyImport::convertString: could not convert \"").
+                        append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                         append("\" into a double!").getStr());
 
                     // then convert it into the target type

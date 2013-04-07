@@ -87,7 +87,7 @@ sal_Bool OQueryViewSwitch::checkStatement()
     return m_pDesignView->checkStatement();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OQueryViewSwitch::getStatement()
+OUString OQueryViewSwitch::getStatement()
 {
     if(m_pTextView->IsVisible())
         return m_pTextView->getStatement();
@@ -118,7 +118,7 @@ void OQueryViewSwitch::GrabFocus()
         m_pDesignView->GrabFocus();
 }
 // -----------------------------------------------------------------------------
-void OQueryViewSwitch::setStatement(const ::rtl::OUString& _rsStatement)
+void OQueryViewSwitch::setStatement(const OUString& _rsStatement)
 {
     if(m_pTextView->IsVisible())
         m_pTextView->setStatement(_rsStatement);

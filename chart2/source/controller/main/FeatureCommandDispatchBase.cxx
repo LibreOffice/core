@@ -44,7 +44,7 @@ void FeatureCommandDispatchBase::initialize()
     fillSupportedFeatures();
 }
 
-bool FeatureCommandDispatchBase::isFeatureSupported( const ::rtl::OUString& rCommandURL )
+bool FeatureCommandDispatchBase::isFeatureSupported( const OUString& rCommandURL )
 {
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( rCommandURL );
     if ( aIter != m_aSupportedFeatures.end() )
@@ -54,7 +54,7 @@ bool FeatureCommandDispatchBase::isFeatureSupported( const ::rtl::OUString& rCom
     return false;
 }
 
-void FeatureCommandDispatchBase::fireStatusEvent( const ::rtl::OUString& rURL,
+void FeatureCommandDispatchBase::fireStatusEvent( const OUString& rURL,
     const Reference< frame::XStatusListener >& xSingleListener /* = 0 */ )
 {
     if ( rURL.isEmpty() )
@@ -78,7 +78,7 @@ void FeatureCommandDispatchBase::dispatch( const util::URL& URL,
     const Sequence< beans::PropertyValue >& Arguments )
     throw (uno::RuntimeException)
 {
-    ::rtl::OUString aCommand( URL.Complete );
+    OUString aCommand( URL.Complete );
     if ( getState( aCommand ).bEnabled )
     {
         execute( aCommand, Arguments );
@@ -89,7 +89,7 @@ void FeatureCommandDispatchBase::implDescribeSupportedFeature( const sal_Char* p
     sal_uInt16 nId, sal_Int16 nGroup )
 {
     ControllerFeature aFeature;
-    aFeature.Command = ::rtl::OUString::createFromAscii( pAsciiCommandURL );
+    aFeature.Command = OUString::createFromAscii( pAsciiCommandURL );
     aFeature.nFeatureId = nId;
     aFeature.GroupId = nGroup;
 

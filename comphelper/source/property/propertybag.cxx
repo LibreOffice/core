@@ -77,7 +77,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     namespace
     {
-        void    lcl_checkForEmptyName( const bool _allowEmpty, const ::rtl::OUString& _name )
+        void    lcl_checkForEmptyName( const bool _allowEmpty, const OUString& _name )
         {
             if ( !_allowEmpty && _name.isEmpty() )
                 throw IllegalArgumentException(
@@ -88,7 +88,7 @@ namespace comphelper
                       );
         }
 
-        void    lcl_checkNameAndHandle( const ::rtl::OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
+        void    lcl_checkNameAndHandle( const OUString& _name, const sal_Int32 _handle, const PropertyBag& _container )
         {
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
@@ -100,7 +100,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void PropertyBag::addVoidProperty( const ::rtl::OUString& _rName, const Type& _rType, sal_Int32 _nHandle, sal_Int32 _nAttributes )
+    void PropertyBag::addVoidProperty( const OUString& _rName, const Type& _rType, sal_Int32 _nHandle, sal_Int32 _nAttributes )
     {
         if ( _rType.getTypeClass() == TypeClass_VOID )
             throw IllegalArgumentException(
@@ -123,7 +123,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void PropertyBag::addProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
+    void PropertyBag::addProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
         // check type sanity
         Type aPropertyType = _rInitialValue.getValueType();
@@ -146,12 +146,12 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void PropertyBag::removeProperty( const ::rtl::OUString& _rName )
+    void PropertyBag::removeProperty( const OUString& _rName )
     {
         const Property& rProp = getProperty( _rName );
             // will throw an UnknownPropertyException if necessary
         if ( ( rProp.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
-            throw NotRemoveableException( ::rtl::OUString(), NULL );
+            throw NotRemoveableException( OUString(), NULL );
         const sal_Int32 nHandle = rProp.Handle;
 
         revokeProperty( nHandle );

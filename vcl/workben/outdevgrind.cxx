@@ -68,7 +68,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString("OutDev grinding") );
+            SetText( OUString("OutDev grinding") );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -888,7 +888,7 @@ int GrindApp::Main()
 
     for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
-        ::rtl::OUString aParam = GetCommandLineParam( i );
+        OUString aParam = GetCommandLineParam( i );
 
         if( aParam == "--help" || aParam == "-h" )
                 bHelp = true;

@@ -44,7 +44,6 @@
 #include <osl/getglobalmutex.hxx>
 
 using namespace ::std;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -66,16 +65,16 @@ static const OUString& GetPathToSetNode (void)
 class Descriptor
 {
 public:
-    ::rtl::OUString msURL;
-    ::rtl::OUString msName;
+    OUString msURL;
+    OUString msName;
     ::sd::toolpanel::controls::MasterPageContainer::Token maToken;
-    Descriptor (const ::rtl::OUString& rsURL, const ::rtl::OUString& rsName)
+    Descriptor (const OUString& rsURL, const OUString& rsName)
         : msURL(rsURL),
           msName(rsName),
           maToken(::sd::toolpanel::controls::MasterPageContainer::NIL_TOKEN)
     {}
     Descriptor (::sd::toolpanel::controls::MasterPageContainer::Token aToken,
-        const ::rtl::OUString& rsURL, const ::rtl::OUString& rsName)
+        const OUString& rsURL, const OUString& rsName)
         : msURL(rsURL),
           msName(rsName),
           maToken(aToken)

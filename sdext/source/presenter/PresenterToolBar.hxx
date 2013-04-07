@@ -91,7 +91,7 @@ public:
     virtual ~PresenterToolBar (void);
 
     void Initialize (
-        const ::rtl::OUString& rsConfigurationPath);
+        const OUString& rsConfigurationPath);
 
     virtual void SAL_CALL disposing (void);
 
@@ -184,7 +184,7 @@ private:
     css::geometry::RealSize2D maMinimalSize;
 
     void CreateControls (
-        const ::rtl::OUString& rsConfigurationPath);
+        const OUString& rsConfigurationPath);
     void Layout (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
     css::geometry::RealSize2D CalculatePartSize (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,

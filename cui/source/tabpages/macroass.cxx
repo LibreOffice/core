@@ -341,13 +341,13 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         if( sScriptURI.CompareToAscii( "vnd.sun.star.script:", 20 ) == COMPARE_EQUAL )
         {
             pThis->aTbl.Insert(
-                nEvent, SvxMacro( sScriptURI, rtl::OUString( SVX_MACRO_LANGUAGE_SF ) ) );
+                nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_SF ) ) );
         }
         else
         {
             OSL_ENSURE( false, "_SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
             pThis->aTbl.Insert(
-                nEvent, SvxMacro( sScriptURI, rtl::OUString( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
+                nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
         }
     }
 
@@ -420,7 +420,7 @@ void _SfxMacroTabPage::FillMacroList()
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory >(),
         GetFrame(),
-        ::rtl::OUString() );
+        OUString() );
 }
 
 void _SfxMacroTabPage::FillEvents()

@@ -53,7 +53,6 @@
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 // class LookUpComboBox --------------------------------------------------
 
@@ -533,7 +532,7 @@ void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
     // adjust language
     String aStr( GetText() );
     aStr.Erase( aStr.Search( sal_Unicode( '(' ) ) - 1 );
-    aStr.Append( rtl::OUString(" (") );
+    aStr.Append( OUString(" (") );
     aStr += SvtLanguageTable().GetLanguageString( nLanguage );
     aStr.Append( sal_Unicode( ')' ) );
     SetText( aStr );    // set window title

@@ -69,8 +69,6 @@
 
 #include <vector>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -1498,7 +1496,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                                     sPropertyIsFixedLanguage,
                                     rPropSet, xPropSetInfo, sal_False ));
         uno::Any aAny = rPropSet->getPropertyValue( sPropertyName );
-        ::rtl::OUString sName;
+        OUString sName;
         aAny >>= sName;
         ProcessString(XML_NAME, sName);
         ProcessBoolean(XML_FIXED, GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
@@ -2481,8 +2479,8 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
-                                       const ::rtl::OUString& sValue,
-                                       const ::rtl::OUString& sDefault,
+                                       const OUString& sValue,
+                                       const OUString& sDefault,
                                        sal_uInt16 nPrefix)
 {
     if (sValue != sDefault)
@@ -2494,8 +2492,8 @@ void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
 /// export a string attribute
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,
                                        sal_uInt16 nValuePrefix,
-                                       const ::rtl::OUString& sValue,
-                                       const ::rtl::OUString& sDefault,
+                                       const OUString& sValue,
+                                       const OUString& sDefault,
                                        sal_uInt16 nPrefix)
 {
     if (sValue != sDefault)
@@ -2539,7 +2537,7 @@ void XMLTextFieldExport::ProcessString(
 
 /// export a string as a sequence of paragraphs
 void XMLTextFieldExport::ProcessParagraphSequence(
-    const ::rtl::OUString& sParagraphSequence)
+    const OUString& sParagraphSequence)
 {
     // iterate over all string-pieces separated by return (0x0a) and
     // put each inside a paragraph element.

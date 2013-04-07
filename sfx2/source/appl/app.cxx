@@ -198,7 +198,7 @@ SfxApplication::SfxApplication()
 #ifdef DBG_UTIL
     if( !bOk )
     {
-        rtl::OStringBuffer aStr(
+        OStringBuffer aStr(
             RTL_CONSTASCII_STRINGPARAM("No DDE-Service possible. Error: "));
         if( GetDdeService() )
             aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
@@ -503,14 +503,14 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( "basicide_handle_basic_error"  );
+    OUString aSymbol( "basicide_handle_basic_error"  );
     basicide_handle_basic_error pSymbol = (basicide_handle_basic_error) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_handle_basic_error in basctl
@@ -562,10 +562,10 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
     return result;
 }
 
-::rtl::OUString
+OUString
 SfxApplication::ChooseScript()
 {
-    ::rtl::OUString aScriptURL;
+    OUString aScriptURL;
 
 #ifndef DISABLE_SCRIPTING
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -605,14 +605,14 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
+    OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_macro_organizer in basctl

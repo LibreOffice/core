@@ -103,8 +103,8 @@ namespace svt
         AddressBookSourceDialog( Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxTransientDS,
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rTable,
+            const OUString& _rDataSourceName,
+            const OUString& _rTable,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::util::AliasProgrammaticPair >& _rMapping
         );
 

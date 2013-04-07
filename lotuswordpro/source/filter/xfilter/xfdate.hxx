@@ -76,9 +76,9 @@ public:
 public:
     void    SetDate(XFDateTime& dt);
 
-    void    SetDate(const rtl::OUString& date);
+    void    SetDate(const OUString& date);
 
-    void    SetText(rtl::OUString& text);
+    void    SetText(OUString& text);
 
     void    SetFixed(sal_Bool fixed = sal_True);
 
@@ -86,9 +86,9 @@ public:
 
 private:
     sal_Bool    m_bFixed;
-    rtl::OUString m_strText;
+    OUString m_strText;
     XFDateTime  m_aDateTime;
-    rtl::OUString   m_strDate;
+    OUString   m_strDate;
     sal_Bool    m_bValued;
 };
 
@@ -99,13 +99,13 @@ inline  void XFDate::SetDate(XFDateTime& dt)
     m_bValued = sal_True;
 }
 
-inline void XFDate::SetDate(const rtl::OUString& date)
+inline void XFDate::SetDate(const OUString& date)
 {
     m_strDate = date;
     m_bValued = sal_True;
 }
 
-inline  void XFDate::SetText(rtl::OUString& text)
+inline  void XFDate::SetText(OUString& text)
 {
     m_strText = text;
 }

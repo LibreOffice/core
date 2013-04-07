@@ -113,31 +113,31 @@ namespace pcr
     IMPLEMENT_GET_IMPLEMENTATION_ID( FormController )
 
     //------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL FormController::getImplementationName(  ) throw(RuntimeException)
     {
         return m_aServiceDescriptor.GetImplementationName();
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL FormController::getSupportedServiceNames(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
+        Sequence< OUString > aSupported( m_aServiceDescriptor.GetSupportedServiceNames() );
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString(  "com.sun.star.inspection.ObjectInspector"  );
+        aSupported[ aSupported.getLength() - 1 ] = OUString(  "com.sun.star.inspection.ObjectInspector"  );
         return aSupported;
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
+    OUString FormController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.extensions.FormController");
+        return OUString("org.openoffice.comp.extensions.FormController");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > FormController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.form.PropertyBrowserController");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.form.PropertyBrowserController");
         return aSupported;
     }
 
@@ -169,7 +169,7 @@ namespace pcr
         aProps[0] = Property(
             PROPERTY_CURRENTPAGE,
             OWN_PROPERTY_ID_CURRENTPAGE,
-            ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ),
+            ::getCppuType( static_cast< OUString* >( NULL ) ),
             PropertyAttribute::TRANSIENT
         );
         aProps[1] = Property(
@@ -256,16 +256,16 @@ namespace pcr
     //= DialogController
     //====================================================================
     //------------------------------------------------------------------------
-    ::rtl::OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
+    OUString DialogController::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.extensions.DialogController");
+        return OUString("org.openoffice.comp.extensions.DialogController");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > DialogController::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.awt.PropertyBrowserController");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.awt.PropertyBrowserController");
         return aSupported;
     }
 

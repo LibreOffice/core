@@ -188,11 +188,11 @@ inline t_val const * lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lookup(
             Entry * entry = iFind->second;
             toFront( entry );
 #ifdef __CACHE_DIAGNOSE
-            ::rtl::OUStringBuffer buf( 48 );
+            OUStringBuffer buf( 48 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> retrieved element \"") );
             buf.append( entry->m_key );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
-            ::rtl::OString str( ::rtl::OUStringToOString(
+            OString str( OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "%s", str.getStr() );
 #endif
@@ -217,11 +217,11 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
 #ifdef __CACHE_DIAGNOSE
             if (entry->m_key.getLength())
             {
-                ::rtl::OUStringBuffer buf( 48 );
+                OUStringBuffer buf( 48 );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> kicking element \"") );
                 buf.append( entry->m_key );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" from cache") );
-                ::rtl::OString str( ::rtl::OUStringToOString(
+                OString str( OUStringToOString(
                     buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
                 OSL_TRACE( "%s", str.getStr() );
             }
@@ -239,11 +239,11 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::set(
         {
             entry = iFind->second;
 #ifdef __CACHE_DIAGNOSE
-            ::rtl::OUStringBuffer buf( 48 );
+            OUStringBuffer buf( 48 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("> replacing element \"") );
             buf.append( entry->m_key );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" in cache") );
-            ::rtl::OString str( ::rtl::OUStringToOString(
+            OString str( OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "%s", str.getStr() );
 #endif

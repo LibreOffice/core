@@ -85,21 +85,21 @@ public:
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw (com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw (com::sun::star::uno::RuntimeException);
 };
 
-rtl::OUString DecryptorImpl_getImplementationName()
+OUString DecryptorImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL DecryptorImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL DecryptorImpl_supportsService( const OUString& ServiceName )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
+com::sun::star::uno::Sequence< OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

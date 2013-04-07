@@ -295,16 +295,16 @@ bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
-            rVal <<= ::rtl::OUString(sIntName.GetBuffer());
+            rVal <<= OUString(sIntName.GetBuffer());
         break;
         case MID_HLINK_TEXT   :
-            rVal <<= ::rtl::OUString(sName.GetBuffer());
+            rVal <<= OUString(sName.GetBuffer());
         break;
         case MID_HLINK_URL:
-            rVal <<= ::rtl::OUString(sURL.GetBuffer());
+            rVal <<= OUString(sURL.GetBuffer());
         break;
         case MID_HLINK_TARGET:
-            rVal <<= ::rtl::OUString(sTarget.GetBuffer());
+            rVal <<= OUString(sTarget.GetBuffer());
         break;
         case MID_HLINK_TYPE:
             rVal <<= (sal_Int32) eType;
@@ -320,7 +320,7 @@ bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    ::rtl::OUString aStr;
+    OUString aStr;
     sal_Int32 nVal = 0;
     switch(nMemberId)
     {

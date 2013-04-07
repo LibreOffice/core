@@ -267,7 +267,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     String UnoGridColumnFacade::getName() const
     {
-        ::rtl::OUString sName;
+        OUString sName;
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", sName );
         try
         {
@@ -297,7 +297,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     String UnoGridColumnFacade::getHelpText() const
     {
-        ::rtl::OUString sHelpText;
+        OUString sHelpText;
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", sHelpText );
         try
         {

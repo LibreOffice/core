@@ -74,8 +74,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 extern Reference< XMultiServiceFactory > InitializeFac( void );
 Reference< XMultiServiceFactory > mMgr;
@@ -196,7 +194,7 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     makeAny(OUString("")), // Catalog
                     OUString("%"),          // Schema
                     OUString("%"),          // TabName
-                    Sequence<rtl::OUString>() );
+                    Sequence<OUString>() );
             printXResultSets( xRes );
         }
         OSL_TRACE("Testing getTables() : END");
@@ -232,7 +230,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     makeAny(OUString("")), // Catalog
                     OUString("%"),          // Schema
                     OUString("%"),          // TabName
-                        Sequence<rtl::OUString>() );
+                        Sequence<OUString>() );
                 sal_Int32 nTables = 0;
                 while( xRes.is() && xRes->next())
                 {
@@ -286,10 +284,10 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     case testLDAP:
         url=OUString("sdbc:address:ldap://");
         aValue.realloc(2);
-        aValue[0].Name = ::rtl::OUString("HostName");
-        aValue[0].Value <<= rtl::OUString("sun-ds");
-        aValue[1].Name = ::rtl::OUString("BaseDN");
-        aValue[1].Value <<= rtl::OUString("dc=sun,dc=com");
+        aValue[0].Name = OUString("HostName");
+        aValue[0].Value <<= OUString("sun-ds");
+        aValue[1].Name = OUString("BaseDN");
+        aValue[1].Value <<= OUString("dc=sun,dc=com");
         break;
     case testMozilla:
         url=OUString("sdbc:address:mozilla://");

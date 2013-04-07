@@ -31,7 +31,7 @@ class Content;
 
 struct ResultListEntry
 {
-    ::rtl::OUString aId;
+    OUString aId;
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > xId;
     com::sun::star::uno::Reference< com::sun::star::ucb::XContent > xContent;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > xRow;
@@ -64,7 +64,7 @@ public:
         const com::sun::star::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
-    virtual rtl::OUString queryContentIdentifierString( sal_uInt32 nIndex );
+    virtual OUString queryContentIdentifierString( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >
         queryContentIdentifier( sal_uInt32 nIndex );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >

@@ -42,25 +42,25 @@ public:
 
     inline Kind getKind() const { return m_eKind; }
 
-    bool matches(rtl::OUString const & rString, rtl::OUString * pTranslation,
+    bool matches(OUString const & rString, OUString * pTranslation,
                  bool * pTranslated) const;
 
-    rtl::OUString getRegexp(bool bReverse) const;
+    OUString getRegexp(bool bReverse) const;
 
-    static Regexp parse(rtl::OUString const & rRegexp);
+    static Regexp parse(OUString const & rRegexp);
 
 private:
     Kind m_eKind;
-    rtl::OUString m_aPrefix;
-    rtl::OUString m_aInfix;
-    rtl::OUString m_aReversePrefix;
+    OUString m_aPrefix;
+    OUString m_aInfix;
+    OUString m_aReversePrefix;
     bool m_bEmptyDomain;
     bool m_bTranslation;
 
-    inline Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
-                  bool bTheEmptyDomain, rtl::OUString const & rTheInfix,
+    inline Regexp(Kind eTheKind, OUString const & rThePrefix,
+                  bool bTheEmptyDomain, OUString const & rTheInfix,
                   bool bTheTranslation,
-                  rtl::OUString const & rTheReversePrefix);
+                  OUString const & rTheReversePrefix);
 };
 
 inline bool Regexp::operator ==(Regexp const & rOther) const

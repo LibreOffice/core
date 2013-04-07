@@ -31,7 +31,7 @@ namespace xls {
 /** Sheet and outline settings. */
 struct SheetSettingsModel
 {
-    ::rtl::OUString     maCodeName;             /// VBA module codename.
+    OUString     maCodeName;             /// VBA module codename.
     Color               maTabColor;             /// Sheet tab color.
     bool                mbFilterMode;           /// True = sheet contains active filter.
     bool                mbApplyStyles;          /// True = automatic styles when creating outlines.

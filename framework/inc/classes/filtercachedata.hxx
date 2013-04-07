@@ -94,9 +94,9 @@ struct FileType
         inline void impl_clear()
         {
             bPreferred          = sal_False         ;
-            sName               = ::rtl::OUString() ;
-            sMediaType          = ::rtl::OUString() ;
-            sClipboardFormat    = ::rtl::OUString() ;
+            sName               = OUString() ;
+            sMediaType          = OUString() ;
+            sClipboardFormat    = OUString() ;
             nDocumentIconID     = 0                 ;
             lUINames.free   ();
             lURLPattern.free();
@@ -122,10 +122,10 @@ struct FileType
     public:
 
         sal_Bool            bPreferred          ;
-        ::rtl::OUString     sName               ;
+        OUString     sName               ;
         OUStringHashMap     lUINames            ;
-        ::rtl::OUString     sMediaType          ;
-        ::rtl::OUString     sClipboardFormat    ;
+        OUString     sMediaType          ;
+        OUString     sClipboardFormat    ;
         sal_Int32           nDocumentIconID     ;
         OUStringList        lURLPattern         ;
         OUStringList        lExtensions         ;
@@ -158,14 +158,14 @@ struct Filter
         inline void impl_clear()
         {
             nOrder              = 0                ;
-            sName               = ::rtl::OUString();
-            sType               = ::rtl::OUString();
-            sDocumentService    = ::rtl::OUString();
-            sFilterService      = ::rtl::OUString();
-            sUIComponent        = ::rtl::OUString();
+            sName               = OUString();
+            sType               = OUString();
+            sDocumentService    = OUString();
+            sFilterService      = OUString();
+            sUIComponent        = OUString();
             nFlags              = 0                ;
             nFileFormatVersion  = 0                ;
-            sTemplateName       = ::rtl::OUString();
+            sTemplateName       = OUString();
             lUINames.free   ();
             lUserData.free  ();
         }
@@ -192,16 +192,16 @@ struct Filter
     public:
 
         sal_Int32           nOrder              ;
-        ::rtl::OUString     sName               ;
-        ::rtl::OUString     sType               ;
+        OUString     sName               ;
+        OUString     sType               ;
         OUStringHashMap     lUINames            ;
-        ::rtl::OUString     sDocumentService    ;
-        ::rtl::OUString     sFilterService      ;
-        ::rtl::OUString     sUIComponent        ;
+        OUString     sDocumentService    ;
+        OUString     sFilterService      ;
+        OUString     sUIComponent        ;
         sal_Int32           nFlags              ;
         OUStringList        lUserData           ;
         sal_Int32           nFileFormatVersion  ;
-        ::rtl::OUString     sTemplateName       ;
+        OUString     sTemplateName       ;
 };
 
 //*****************************************************************************************************************
@@ -229,7 +229,7 @@ struct Detector
 
         inline void impl_clear()
         {
-            sName = ::rtl::OUString();
+            sName = OUString();
             lTypes.free();
         }
 
@@ -245,7 +245,7 @@ struct Detector
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString     sName       ;
+        OUString     sName       ;
         OUStringList        lTypes      ;
 };
 
@@ -274,7 +274,7 @@ struct Loader
 
         inline void impl_clear()
         {
-            sName = ::rtl::OUString();
+            sName = OUString();
             lUINames.free   ();
             lTypes.free     ();
         }
@@ -292,7 +292,7 @@ struct Loader
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString sName       ;
+        OUString sName       ;
         OUStringHashMap lUINames    ;
         OUStringList    lTypes      ;
 };
@@ -321,7 +321,7 @@ struct ContentHandler
 
         inline void impl_clear()
         {
-            sName = ::rtl::OUString();
+            sName = OUString();
             lTypes.free();
         }
 
@@ -337,7 +337,7 @@ struct ContentHandler
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        ::rtl::OUString     sName   ;
+        OUString     sName   ;
         OUStringList        lTypes  ;
 };
 
@@ -347,10 +347,10 @@ struct ContentHandler
 // and could be used in a generic way
 //*****************************************************************************************************************
 template< class HashType >
-class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString                    ,
+class SetNodeHash : public ::boost::unordered_map< OUString                    ,
                                             HashType                           ,
-                                            rtl::OUStringHash                  ,
-                                            ::std::equal_to< ::rtl::OUString > >
+                                            OUStringHash                  ,
+                                            ::std::equal_to< OUString > >
 {
     //-------------------------------------------------------------------------------------------------------------
     // interface
@@ -371,7 +371,7 @@ class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString              
         // Append changed, added or removed items to special lists
         // Necessary for saving changes
         //---------------------------------------------------------------------------------------------------------
-        void appendChange( const ::rtl::OUString& sName  ,
+        void appendChange( const OUString& sName  ,
                                  EModifyState     eState );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -388,10 +388,10 @@ class SetNodeHash : public ::boost::unordered_map< ::rtl::OUString              
 // It's an optimism to find registered services faster!
 // The preferred hash maps file extensions to preferred types to find these ones faster.
 //*****************************************************************************************************************
-class PerformanceHash   :   public  ::boost::unordered_map<    ::rtl::OUString                     ,
+class PerformanceHash   :   public  ::boost::unordered_map<    OUString                     ,
                                                         OUStringList                        ,
-                                                        rtl::OUStringHash                    ,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+                                                        OUStringHash                    ,
+                                                        ::std::equal_to< OUString >  >
 {
     public:
         //---------------------------------------------------------------------------------------------------------
@@ -409,7 +409,7 @@ class PerformanceHash   :   public  ::boost::unordered_map<    ::rtl::OUString  
         //  and could be used for further searches again, which should be started at next element!
         //  We stop search at the end of hash. You can start it again by setting it to the begin by himself.
         //---------------------------------------------------------------------------------------------------------
-        inline sal_Bool findPatternKey( const ::rtl::OUString& sSearchValue ,
+        inline sal_Bool findPatternKey( const OUString& sSearchValue ,
                                               const_iterator&  pStepper     )
         {
             sal_Bool bFound = sal_False;
@@ -502,11 +502,11 @@ class DataContainer : private ThreadHelpBase
         sal_Bool validateAndRepairLoader   ();
         sal_Bool validateAndRepairHandler  ();
 
-        sal_Bool existsType           ( const ::rtl::OUString& sName );
-        sal_Bool existsFilter         ( const ::rtl::OUString& sName );
-        sal_Bool existsDetector       ( const ::rtl::OUString& sName );
-        sal_Bool existsLoader         ( const ::rtl::OUString& sName );
-        sal_Bool existsContentHandler ( const ::rtl::OUString& sName );
+        sal_Bool existsType           ( const OUString& sName );
+        sal_Bool existsFilter         ( const OUString& sName );
+        sal_Bool existsDetector       ( const OUString& sName );
+        sal_Bool existsLoader         ( const OUString& sName );
+        sal_Bool existsContentHandler ( const OUString& sName );
 
         void addType              ( const FileType&        aType    , sal_Bool bSetModified );
         void addFilter            ( const Filter&          aFilter  , sal_Bool bSetModified );
@@ -520,51 +520,51 @@ class DataContainer : private ThreadHelpBase
         void replaceLoader        ( const Loader&          aLoader  , sal_Bool bSetModified );
         void replaceContentHandler( const ContentHandler&  aHandler , sal_Bool bSetModified );
 
-        void removeType           ( const ::rtl::OUString& sName    , sal_Bool bSetModified );
-        void removeFilter         ( const ::rtl::OUString& sName    , sal_Bool bSetModified );
-        void removeDetector       ( const ::rtl::OUString& sName    , sal_Bool bSetModified );
-        void removeLoader         ( const ::rtl::OUString& sName    , sal_Bool bSetModified );
-        void removeContentHandler ( const ::rtl::OUString& sName    , sal_Bool bSetModified );
+        void removeType           ( const OUString& sName    , sal_Bool bSetModified );
+        void removeFilter         ( const OUString& sName    , sal_Bool bSetModified );
+        void removeDetector       ( const OUString& sName    , sal_Bool bSetModified );
+        void removeLoader         ( const OUString& sName    , sal_Bool bSetModified );
+        void removeContentHandler ( const OUString& sName    , sal_Bool bSetModified );
 
         static void             convertFileTypeToPropertySequence          ( const FileType&                                           aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertFilterToPropertySequence            ( const Filter&                                             aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertDetectorToPropertySequence          ( const Detector&                                           aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void             convertLoaderToPropertySequence            ( const Loader&                                             aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertContentHandlerToPropertySequence    ( const ContentHandler&                                     aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
         static void             convertPropertySequenceToFilter            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    Filter&                                             aDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertPropertySequenceToFileType          ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    FileType&                                           aDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertPropertySequenceToDetector          ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    Detector&                                           aDestination    );
         static void             convertPropertySequenceToLoader            ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    Loader&                                             aDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
+                                                                             const OUString&                                    sCurrentLocale  );
         static void             convertPropertySequenceToContentHandler    ( const css::uno::Sequence< css::beans::PropertyValue >&    lSource         ,
                                                                                    ContentHandler&                                     aDestination    ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  );
-        static void             extractLocalizedStrings                    ( const ::rtl::OUString&                                    sCurrentLocale  ,
+                                                                             const OUString&                                    sCurrentLocale  );
+        static void             extractLocalizedStrings                    ( const OUString&                                    sCurrentLocale  ,
                                                                              const css::uno::Any&                                      aCFGValue       ,
                                                                                    OUStringHashMap&                                       lLocales        );
         static void             packLocalizedStrings                       (       sal_Int16                                           nMode           ,
-                                                                             const ::rtl::OUString&                                    sCurrentLocale  ,
+                                                                             const OUString&                                    sCurrentLocale  ,
                                                                                    css::uno::Any&                                      aCFGValue       ,
                                                                              const OUStringHashMap&                                       lLocales        );
-        static ::rtl::OUString  getLocalelizedString                       ( const OUStringHashMap&                                       lLocales        ,
-                                                                             const ::rtl::OUString&                                    sLocale         );
+        static OUString  getLocalelizedString                       ( const OUStringHashMap&                                       lLocales        ,
+                                                                             const OUString&                                    sLocale         );
         static void             setLocalelizedString                       (       OUStringHashMap&                                       lLocales        ,
-                                                                             const ::rtl::OUString&                                    sLocale         ,
-                                                                             const ::rtl::OUString&                                    sValue          );
+                                                                             const OUString&                                    sLocale         ,
+                                                                             const OUString&                                    sValue          );
         static void             correctExtensions                          (       OUStringList&                                       lExtensions     );
 
     public:
@@ -580,7 +580,7 @@ class DataContainer : private ThreadHelpBase
         PerformanceHash         m_aFastContentHandlerCache  ;     /// hold all registered content handler services for a special file type
         PreferredHash           m_aPreferredTypesCache      ;     /// assignment of extensions to preferred types for it
         Loader                  m_aGenericLoader            ;     /// information about our default frame loader
-        ::rtl::OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
+        OUString         m_sLocale                   ;     /// current set locale of configuration to handle right UIName from set of all UINames!
         sal_Bool                m_bTypesModified            ;
         sal_Bool                m_bFiltersModified          ;
         sal_Bool                m_bDetectorsModified        ;
@@ -608,7 +608,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  interface
     //-------------------------------------------------------------------------------------------------------------
     public:
-                                    FilterCFGAccess ( const ::rtl::OUString& sPath                                  ,
+                                    FilterCFGAccess ( const OUString& sPath                                  ,
                                                             sal_Int32        nVersion = DEFAULT_FILTERCACHE_VERSION ,
                                                             sal_Int16        nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
         virtual                     ~FilterCFGAccess(                                                               );
@@ -618,14 +618,14 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void                        write           (       DataContainer&   rData                                  ,
                                                             DataContainer::ECFGType         eType                   ); // write values from given struct to configuration
 
-        static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
-        static   void               decodeTypeData  ( const ::rtl::OUString& sData                                  ,
+        static   OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
+        static   void               decodeTypeData  ( const OUString& sData                                  ,
                                                             FileType&        aType                                  );
-        static   ::rtl::OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formated string of filter properties
-        static   void               decodeFilterData( const ::rtl::OUString& sData                                  ,
+        static   OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formated string of filter properties
+        static   void               decodeFilterData( const OUString& sData                                  ,
                                                             Filter&          aFilter                                );
-        static   ::rtl::OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formated string of OUStringList
-        static   OUStringList       decodeStringList( const ::rtl::OUString& sValue                                 );
+        static   OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formated string of OUStringList
+        static   OUStringList       decodeStringList( const OUString& sValue                                 );
 
         void             setProductName                             (       OUStringHashMap&                                       lUINames        );
         void             resetProductName                           (       OUStringHashMap&                                       lUINames        );
@@ -636,8 +636,8 @@ class FilterCFGAccess : public ::utl::ConfigItem
     private:
         void impl_initKeyCounts        (                                            );    // set right key counts, which are used at reading/writing of set node properties
         void impl_removeNodes          (       OUStringList&        rChangesList    ,     // helper to remove list of set nodes
-                                         const ::rtl::OUString&     sTemplateType   ,
-                                         const ::rtl::OUString&     sSetName        );
+                                         const OUString&     sTemplateType   ,
+                                         const OUString&     sSetName        );
 
         void impl_loadTypes            ( DataContainer&             rData           );    // helper to load configuration parts
         void impl_loadFilters          ( DataContainer&             rData           );
@@ -656,7 +656,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
     //  debug checks
     //-------------------------------------------------------------------------------------------------------------
     private:
-        static sal_Bool implcp_ctor ( const ::rtl::OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
+        static sal_Bool implcp_ctor ( const OUString& sPath    ,     // methods to check incoming parameter on our interface methods!
                                             sal_Int32        nVersion ,
                                             sal_Int16        nMode    );
         static sal_Bool implcp_read ( const DataContainer&   rData    );
@@ -673,8 +673,8 @@ class FilterCFGAccess : public ::utl::ConfigItem
         sal_Int32       m_nKeyCountDetectors           ;
         sal_Int32       m_nKeyCountLoaders             ;
         sal_Int32       m_nKeyCountContentHandlers     ;
-        ::rtl::OUString m_sProductName                 ;
-        ::rtl::OUString m_sFormatVersion               ;
+        OUString m_sProductName                 ;
+        OUString m_sFormatVersion               ;
 };
 
 }       //  namespace framework

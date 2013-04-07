@@ -45,25 +45,25 @@ class SwApplet_Impl
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xApplet;
     SvCommandList     aCommandList;
     SfxItemSet        aItemSet;
-    ::rtl::OUString   sAlt;
+    OUString   sAlt;
 
 public:
-    static sal_uInt16 GetOptionType( const ::rtl::OUString& rName, sal_Bool bApplet );
+    static sal_uInt16 GetOptionType( const OUString& rName, sal_Bool bApplet );
     SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
-    void CreateApplet( const ::rtl::OUString& rCode, const ::rtl::OUString& rName,
-                       sal_Bool bMayScript, const ::rtl::OUString& rCodeBase,
-                       const ::rtl::OUString& rBaseURL );
+    void CreateApplet( const OUString& rCode, const OUString& rName,
+                       sal_Bool bMayScript, const OUString& rCodeBase,
+                       const OUString& rBaseURL );
 #ifdef SOLAR_JAVA
-    sal_Bool CreateApplet( const ::rtl::OUString& rBaseURL );
-    void AppendParam( const ::rtl::OUString& rName, const ::rtl::OUString& rValue );
+    sal_Bool CreateApplet( const OUString& rBaseURL );
+    void AppendParam( const OUString& rName, const OUString& rValue );
 #endif
     void FinishApplet();
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetApplet() { return xApplet; }
     SfxItemSet& GetItemSet() { return aItemSet; }
-    const ::rtl::OUString& GetAltText() const { return sAlt; }
-    void SetAltText( const ::rtl::OUString& rAlt ) {sAlt = rAlt;}
+    const OUString& GetAltText() const { return sAlt; }
+    void SetAltText( const OUString& rAlt ) {sAlt = rAlt;}
 };
 #endif
 

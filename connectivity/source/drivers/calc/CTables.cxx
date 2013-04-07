@@ -36,11 +36,11 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-sdbcx::ObjectType OCalcTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OCalcTables::createObject(const OUString& _rName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTables::createObject" );
     OCalcTable* pTable = new OCalcTable(this,(OCalcConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString("TABLE"));
+                                        _rName,OUString("TABLE"));
     sdbcx::ObjectType xRet = pTable;
     pTable->construct();
     return xRet;

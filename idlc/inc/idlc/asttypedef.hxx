@@ -25,7 +25,7 @@ class AstTypeDef : public AstType
 {
 public:
     AstTypeDef(
-        AstType const * baseType, rtl::OString const & name, AstScope * scope):
+        AstType const * baseType, OString const & name, AstScope * scope):
         AstType(NT_typedef, name, scope), m_pBaseType(baseType) {}
 
     virtual ~AstTypeDef() {}

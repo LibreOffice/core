@@ -31,13 +31,13 @@ namespace dbaxml
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xParentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
-        ::rtl::OUString m_sFilterStatement;
-        ::rtl::OUString m_sOrderStatement;
-        ::rtl::OUString m_sName;
-        ::rtl::OUString m_sSchema;
-        ::rtl::OUString m_sCatalog;
-        ::rtl::OUString m_sStyleName;
-        ::rtl::OUString m_sServiceName;
+        OUString m_sFilterStatement;
+        OUString m_sOrderStatement;
+        OUString m_sName;
+        OUString m_sSchema;
+        OUString m_sCatalog;
+        OUString m_sStyleName;
+        OUString m_sServiceName;
         sal_Bool        m_bApplyFilter;
         sal_Bool        m_bApplyOrder;
 
@@ -45,12 +45,12 @@ namespace dbaxml
         ODBFilter& GetOwnImport();
 
         void fillAttributes(    sal_uInt16 nPrfx
-                                ,const ::rtl::OUString& _sLocalName
+                                ,const OUString& _sLocalName
                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
-                                , ::rtl::OUString& _rsCommand
-                                ,::rtl::OUString& _rsTableName
-                                ,::rtl::OUString& _rsTableSchema
-                                ,::rtl::OUString& _rsTableCatalog
+                                , OUString& _rsCommand
+                                ,OUString& _rsTableName
+                                ,OUString& _rsTableSchema
+                                ,OUString& _rsTableCatalog
                             );
 
         virtual void setProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xProp);
@@ -58,15 +58,15 @@ namespace dbaxml
 
         OXMLTable( ODBFilter& rImport
                     , sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
-                    ,const ::rtl::OUString& _sServiceName
+                    ,const OUString& _sServiceName
                     );
         virtual ~OXMLTable();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
         virtual void EndElement();
     };

@@ -245,7 +245,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         // debug code - write the stream to debug file /tmp/emf-stream.emf
         EMFP_DEBUG(int pos = pWMF->Tell();
         pWMF->Seek(0);
-        SvFileStream file( rtl::OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+        SvFileStream file( OUString( "/tmp/emf-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
 
         *pWMF >> file;
         file.Flush();
@@ -1083,7 +1083,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             *pWMF >> nChar;
                             lfFaceName[ i ] = nChar;
                         }
-                        aLogFont.alfFaceName = rtl::OUString( lfFaceName );
+                        aLogFont.alfFaceName = OUString( lfFaceName );
                         pOut->CreateObject( nIndex, GDI_FONT, new WinMtfFontStyle( aLogFont ) );
                     }
                 }
@@ -1144,7 +1144,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                     for ( i = 0, j = 0; i < aText.Len(); i++ )
                                     {
                                         sal_Unicode cUniChar = aText.GetChar(i);
-                                        rtl::OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
+                                        OString aCharacter(&cUniChar, 1, pOut->GetCharSet());
                                         pDX[ i ] = 0;
                                         for (sal_Int32 k = 0; ( k < aCharacter.getLength() ) && ( j < nLen ) && ( i < aText.Len() ); ++k)
                                             pDX[ i ] += pOldDx[ j++ ];
@@ -1168,7 +1168,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                                     *pTmp = nTmp;
                                 }
 #endif
-                                aText = rtl::OUString(pBuf, nLen);
+                                aText = OUString(pBuf, nLen);
                                 delete[] pBuf;
                             }
                         }

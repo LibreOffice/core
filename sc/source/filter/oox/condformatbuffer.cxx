@@ -64,8 +64,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -136,7 +134,7 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
 {
-    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+    OUString aType = rAttribs.getString( XML_type, OUString() );
 
     double nVal = rAttribs.getDouble( XML_val, 0.0 );
     pEntry->mnVal = nVal;
@@ -162,7 +160,7 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
     }
     else if( aType == "formula" )
     {
-        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
+        OUString aFormula = rAttribs.getString( XML_val, OUString() );
         pEntry->maFormula = aFormula;
     }
 
@@ -333,7 +331,7 @@ void IconSetRule::importCfvo( const AttributeList& rAttribs )
 
 void IconSetRule::importAttribs( const AttributeList& rAttribs )
 {
-    maIconSetType = rAttribs.getString( XML_iconSet, rtl::OUString("3TrafficLights1") );
+    maIconSetType = rAttribs.getString( XML_iconSet, OUString("3TrafficLights1") );
     mpFormatData->mbShowValue = rAttribs.getBool( XML_showValue, true );
     mpFormatData->mbReverse = rAttribs.getBool( XML_reverse, false );
 }
@@ -350,7 +348,7 @@ void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScA
     ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
     for(size_t i = 0; pIconSetMap[i].pName; ++i)
     {
-        if(rtl::OUString::createFromAscii(pIconSetMap[i].pName) == maIconSetType)
+        if(OUString::createFromAscii(pIconSetMap[i].pName) == maIconSetType)
         {
             eIconSetType = pIconSetMap[i].eType;
             break;

@@ -52,7 +52,6 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::rtl::OUString;
 
 namespace {
 
@@ -364,7 +363,7 @@ void ScDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 
 void ScDocShell::UpdateLinks()
 {
-    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StrSetType;
+    typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
 
     sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
     StrSetType aNames;
@@ -397,9 +396,9 @@ void ScDocShell::UpdateLinks()
         if (!aDocument.IsLinked(i))
             continue;
 
-        rtl::OUString aDocName = aDocument.GetLinkDoc(i);
-        rtl::OUString aFltName = aDocument.GetLinkFlt(i);
-        rtl::OUString aOptions = aDocument.GetLinkOpt(i);
+        OUString aDocName = aDocument.GetLinkDoc(i);
+        OUString aFltName = aDocument.GetLinkFlt(i);
+        OUString aOptions = aDocument.GetLinkOpt(i);
         sal_uLong nRefresh  = aDocument.GetLinkRefreshDelay(i);
         bool bThere = false;
         for (SCTAB j = 0; j < i && !bThere; ++j)                // im Dokument mehrfach?

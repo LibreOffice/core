@@ -26,9 +26,9 @@ class ScOrcusFilters
 public:
     virtual ~ScOrcusFilters() {}
 
-    virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
+    virtual bool importCSV(ScDocument& rDoc, const OUString& rPath) const = 0;
 
-    virtual bool importGnumeric(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
+    virtual bool importGnumeric(ScDocument& rDoc, const OUString& rPath) const = 0;
 
     /**
      * Create a context for XML file.  The context object stores session
@@ -39,7 +39,7 @@ public:
      * The caller is responsible for deleting the instance returned from this
      * method when it's done.
      */
-    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const = 0;
+    virtual ScOrcusXMLContext* createXMLContext(ScDocument& rDoc, const OUString& rPath) const = 0;
 };
 
 class ScOrcusXMLContext

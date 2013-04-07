@@ -51,7 +51,6 @@
 
 #include <memory>
 
-using rtl::OUString;
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -60,7 +59,7 @@ using namespace xmloff::token;
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
@@ -99,11 +98,11 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -124,7 +123,7 @@ ScXMLBodyContext::~ScXMLBodyContext()
 }
 
 SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

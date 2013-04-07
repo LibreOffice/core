@@ -27,7 +27,6 @@
 #include <rtl/random.h>
 #include <string.h>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
@@ -44,13 +43,13 @@ namespace comphelper {
 
 // ============================================================================
 
-static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
+static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
     uno::Sequence< sal_Int8 > aResult;
 
     if ( !aPassword.isEmpty() && aSalt.getLength() && nCount && nHashLength )
     {
-        ::rtl::OString aBytePass = ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
+        OString aBytePass = OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 );
         aResult.realloc( 16 );
         rtl_digest_PBKDF2( reinterpret_cast < sal_uInt8 * > ( aResult.getArray() ),
                            aResult.getLength(),
@@ -71,7 +70,7 @@ IDocPasswordVerifier::~IDocPasswordVerifier()
 }
 
 // ============================================================================
-uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const ::rtl::OUString& aPassword )
+uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const OUString& aPassword )
 {
     uno::Sequence< beans::PropertyValue > aResult;
 
@@ -96,12 +95,12 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
 }
 
 // ============================================================================
-sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
+sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     sal_Bool bResult = sal_False;
     if ( !aPassword.isEmpty() && aInfo.getLength() )
     {
-        ::rtl::OUString sAlgorithm;
+        OUString sAlgorithm;
         uno::Sequence< sal_Int8 > aSalt;
         uno::Sequence< sal_Int8 > aHash;
         sal_Int32 nCount = 0;
@@ -134,7 +133,7 @@ sal_Bool DocPasswordHelper::IsModifyPasswordCorrect( const ::rtl::OUString& aPas
 
 // ============================================================================
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
-                const ::rtl::OUString& aUString )
+                const OUString& aUString )
 {
     static sal_uInt16 pInitialCode[] = {
         0xE1F0, // 1
@@ -211,12 +210,12 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
 
 // ============================================================================
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
-                const ::rtl::OUString& aUString,
+                const OUString& aUString,
                 rtl_TextEncoding nEnc )
 {
     sal_uInt16 nResult = 0;
 
-    ::rtl::OString aString = ::rtl::OUStringToOString( aUString, nEnc );
+    OString aString = OUStringToOString( aUString, nEnc );
 
     if ( !aString.isEmpty() && aString.getLength() <= SAL_MAX_UINT16 )
     {
@@ -236,7 +235,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
 
 // ============================================================================
 Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
-                const ::rtl::OUString& aUString,
+                const OUString& aUString,
                 rtl_TextEncoding nEnc )
 {
     sal_uInt16 nHash = GetXLHashAsUINT16( aUString, nEnc );
@@ -264,7 +263,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
 
 // ============================================================================
-/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const ::rtl::OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
+/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
     if ( !aPassword.isEmpty() && aDocId.getLength() == 16 )

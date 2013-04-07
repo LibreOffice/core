@@ -52,7 +52,7 @@ public:
     SdXMLPageMasterStyleContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterStyleContext();
 
@@ -70,7 +70,7 @@ public:
 
 class SdXMLPageMasterContext: public SvXMLStyleContext
 {
-    rtl::OUString               msName;
+    OUString               msName;
     SdXMLPageMasterStyleContext*mpPageMasterStyle;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
@@ -82,15 +82,15 @@ public:
     SdXMLPageMasterContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPageMasterContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    const rtl::OUString& GetName() const { return msName; }
+    const OUString& GetName() const { return msName; }
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
 
@@ -99,10 +99,10 @@ public:
 
 class SdXMLMasterPageContext: public SdXMLGenericPageContext
 {
-    rtl::OUString               msPageMasterName;
-    rtl::OUString               msName;
-    rtl::OUString               msDisplayName;
-    rtl::OUString               msStyleName;
+    OUString               msPageMasterName;
+    OUString               msName;
+    OUString               msDisplayName;
+    OUString               msStyleName;
 
 public:
     TYPEINFO();
@@ -110,20 +110,20 @@ public:
     SdXMLMasterPageContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLMasterPageContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    const rtl::OUString& GetPageMasterName() const { return msPageMasterName; }
-    const rtl::OUString& GetEncodedName() const { return msName; }
-    const rtl::OUString& GetDisplayName() const { return msDisplayName; }
+    const OUString& GetPageMasterName() const { return msPageMasterName; }
+    const OUString& GetEncodedName() const { return msName; }
+    const OUString& GetDisplayName() const { return msDisplayName; }
 
 };
 typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
@@ -133,7 +133,7 @@ typedef ::std::vector< SdXMLMasterPageContext* > ImpMasterPageList;
 
 class SdXMLPresentationPlaceholderContext: public SvXMLImportContext
 {
-    rtl::OUString               msName;
+    OUString               msName;
     sal_Int32                   mnX;
     sal_Int32                   mnY;
     sal_Int32                   mnWidth;
@@ -146,11 +146,11 @@ public:
     SdXMLPresentationPlaceholderContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPlaceholderContext();
 
-    const rtl::OUString& GetName() const { return msName; }
+    const OUString& GetName() const { return msName; }
     sal_Int32 GetX() const { return mnX; }
     sal_Int32 GetY() const { return mnY; }
     sal_Int32 GetWidth() const { return mnWidth; }
@@ -163,7 +163,7 @@ typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList
 
 class SdXMLPresentationPageLayoutContext: public SvXMLStyleContext
 {
-    rtl::OUString               msName;
+    OUString               msName;
     ImpPlaceholderList          maList;
     sal_uInt16                  mnTypeId;
 
@@ -176,12 +176,12 @@ public:
     SdXMLPresentationPageLayoutContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     virtual ~SdXMLPresentationPageLayoutContext();
 
     virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
@@ -204,23 +204,23 @@ class SdXMLStylesContext : public SvXMLStylesContext
     void ImpSetGraphicStyles() const;
     void ImpSetCellStyles() const;
     void ImpSetGraphicStyles( com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >& xPageStyles,
-        sal_uInt16 nFamily, const rtl::OUString& rPrefix) const;
+        sal_uInt16 nFamily, const OUString& rPrefix) const;
 
 protected:
     virtual SvXMLStyleContext* CreateStyleChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
         sal_uInt16 nFamily,
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
@@ -229,12 +229,12 @@ public:
     SdXMLStylesContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         sal_Bool bIsAutoStyle);
     virtual ~SdXMLStylesContext();
 
-    virtual sal_uInt16 GetFamily( const rtl::OUString& rFamily ) const;
+    virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
     virtual void EndElement();
     virtual UniReference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const;
 
@@ -259,12 +259,12 @@ public:
     SdXMLMasterStylesContext(
         SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName);
+        const OUString& rLName);
     virtual ~SdXMLMasterStylesContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     const ImpMasterPageList& GetMasterPageList() const { return maMasterPageList; }
@@ -277,17 +277,17 @@ class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
 {
 public:
     SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual sal_Bool IsTransient() const;
     virtual void EndElement();
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
 private:
-    ::rtl::OUString maStrName;
-    ::rtl::OUString maStrText;
-    ::rtl::OUString maStrDateTimeFormat;
+    OUString maStrName;
+    OUString maStrText;
+    OUString maStrDateTimeFormat;
     sal_Bool        mbFixed;
 };
 

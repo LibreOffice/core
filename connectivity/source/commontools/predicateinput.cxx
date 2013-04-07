@@ -61,7 +61,7 @@ namespace dbtools
 
     //=====================================================================
     //---------------------------------------------------------------------
-    static sal_Unicode lcl_getSeparatorChar( const ::rtl::OUString& _rSeparator, sal_Unicode _nFallback )
+    static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
         OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
 
@@ -134,13 +134,13 @@ namespace dbtools
     }
 
     //---------------------------------------------------------------------
-    OSQLParseNode* OPredicateInputController::implPredicateTree(::rtl::OUString& _rErrorMessage, const ::rtl::OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
+    OSQLParseNode* OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
     {
         OSQLParseNode* pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nType;
+            _rxField->getPropertyValue( OUString( "Type" ) ) >>= nType;
 
             if  (   ( DataType::CHAR        == nType )
                 ||  ( DataType::VARCHAR     == nType )
@@ -148,15 +148,15 @@ namespace dbtools
                 ||  ( DataType::CLOB        == nType )
                 )
             {   // yes -> force a quoted text and try again
-                ::rtl::OUString sQuoted( _rStatement );
+                OUString sQuoted( _rStatement );
                 if  (   !sQuoted.isEmpty()
                     &&  (   (sQuoted.getStr()[0] != '\'')
                         ||  (sQuoted.getStr()[ sQuoted.getLength() - 1 ] != '\'' )
                         )
                     )
                 {
-                    static const ::rtl::OUString sSingleQuote( "'" );
-                    static const ::rtl::OUString sDoubleQuote( "''" );
+                    static const OUString sSingleQuote( "'" );
+                    static const OUString sDoubleQuote( "''" );
 
                     sal_Int32 nIndex = -1;
                     sal_Int32 nTemp = 0;
@@ -166,7 +166,7 @@ namespace dbtools
                         nTemp = nIndex+2;
                     }
 
-                    ::rtl::OUString sTemp( sSingleQuote );
+                    OUString sTemp( sSingleQuote );
                     ( sTemp += sQuoted ) += sSingleQuote;
                     sQuoted = sTemp;
                 }
@@ -199,17 +199,17 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString( "FormatKey" ) ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( OUString( "FormatKey" ) ) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue( ::rtl::OUString( "FormatKey" ) ) >>= nFormatKey;
+                        _rxField->getPropertyValue( OUString( "FormatKey" ) ) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;
                             ::comphelper::getNumberFormatProperty(
                                 m_xFormatter,
                                 nFormatKey,
-                                ::rtl::OUString( "Locale" )
+                                OUString( "Locale" )
                             ) >>= aFormatLocale;
 
                             // valid locale
@@ -230,7 +230,7 @@ namespace dbtools
                 if ( bDecDiffers || bFmtDiffers )
                 {   // okay, at least one differs
                     // "translate" the value into the "format locale"
-                    ::rtl::OUString sTranslated( _rStatement );
+                    OUString sTranslated( _rStatement );
                     const sal_Unicode nIntermediate( '_' );
                     sTranslated = sTranslated.replace( nCtxDecSep,  nIntermediate );
                     sTranslated = sTranslated.replace( nCtxThdSep,  nFmtThdSep );
@@ -245,7 +245,7 @@ namespace dbtools
 
     //---------------------------------------------------------------------
     sal_Bool OPredicateInputController::normalizePredicateString(
-        ::rtl::OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField, ::rtl::OUString* _pErrorMessage ) const
+        OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField, OUString* _pErrorMessage ) const
     {
         OSL_ENSURE( m_xConnection.is() && m_xFormatter.is() && _rxField.is(),
             "OPredicateInputController::normalizePredicateString: invalid state or params!" );
@@ -254,8 +254,8 @@ namespace dbtools
         if ( m_xConnection.is() && m_xFormatter.is() && _rxField.is() )
         {
             // parse the string
-            ::rtl::OUString sError;
-            ::rtl::OUString sTransformedText( _rPredicateValue );
+            OUString sError;
+            OUString sTransformedText( _rPredicateValue );
             OSQLParseNode* pParseNode = implPredicateTree( sError, sTransformedText, _rxField );
             if ( _pErrorMessage ) *_pErrorMessage = sError;
 
@@ -266,7 +266,7 @@ namespace dbtools
                 getSeparatorChars( rParseContext.getPreferredLocale(), nDecSeparator, nThousandSeparator );
 
                 // translate it back into a string
-                sTransformedText = ::rtl::OUString();
+                sTransformedText = OUString();
                 pParseNode->parseNodeToPredicateStr(
                     sTransformedText, m_xConnection, m_xFormatter, _rxField,
                     rParseContext.getPreferredLocale(), (sal_Char)nDecSeparator, &rParseContext
@@ -282,15 +282,15 @@ namespace dbtools
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OPredicateInputController::getPredicateValue(
-        const ::rtl::OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
-        sal_Bool _bForStatementUse, ::rtl::OUString* _pErrorMessage ) const
+    OUString OPredicateInputController::getPredicateValue(
+        const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
+        sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const
     {
         OSL_ENSURE( _rxField.is(), "OPredicateInputController::getPredicateValue: invalid params!" );
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         if ( _rxField.is() )
         {
-            ::rtl::OUString sValue( _rPredicateValue );
+            OUString sValue( _rPredicateValue );
 
             // a little problem : if the field is a text field, the normalizePredicateString added two
             // '-characters to the text. If we would give this to predicateTree this would add
@@ -305,8 +305,8 @@ namespace dbtools
             if ( bValidQuotedText )
             {
                 sValue = sValue.copy( 1, sValue.getLength() - 2 );
-                static const ::rtl::OUString sSingleQuote( "'" );
-                static const ::rtl::OUString sDoubleQuote( "''" );
+                static const OUString sSingleQuote( "'" );
+                static const OUString sDoubleQuote( "''" );
 
                 sal_Int32 nIndex = -1;
                 sal_Int32 nTemp = 0;
@@ -320,7 +320,7 @@ namespace dbtools
             // The following is mostly stolen from the former implementation in the parameter dialog
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
 
-            ::rtl::OUString sError;
+            OUString sError;
             OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
             if ( _pErrorMessage )
                 *_pErrorMessage = sError;
@@ -331,12 +331,12 @@ namespace dbtools
         return sReturn;
     }
 
-    ::rtl::OUString OPredicateInputController::getPredicateValue(
-        const ::rtl::OUString& _sField, const ::rtl::OUString& _rPredicateValue, sal_Bool _bForStatementUse, ::rtl::OUString* _pErrorMessage ) const
+    OUString OPredicateInputController::getPredicateValue(
+        const OUString& _sField, const OUString& _rPredicateValue, sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const
     {
-        ::rtl::OUString sReturn = _rPredicateValue;
-        ::rtl::OUString sError;
-        ::rtl::OUString sField = _sField;
+        OUString sReturn = _rPredicateValue;
+        OUString sError;
+        OUString sField = _sField;
         sal_Int32 nIndex = 0;
         sField = sField.getToken(0,'(',nIndex);
         if(nIndex == -1)
@@ -345,9 +345,9 @@ namespace dbtools
         if ( nType == DataType::OTHER || sField.isEmpty() )
         {
             // first try the international version
-            ::rtl::OUString sSql;
-            sSql += ::rtl::OUString("SELECT * ");
-            sSql += ::rtl::OUString(" FROM x WHERE ");
+            OUString sSql;
+            sSql += OUString("SELECT * ");
+            sSql += OUString(" FROM x WHERE ");
             sSql += sField;
             sSql += _rPredicateValue;
             ::std::auto_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );
@@ -363,9 +363,9 @@ namespace dbtools
 
         Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
         parse::OParseColumn* pColumn = new parse::OParseColumn( sField,
-                                                                ::rtl::OUString(),
-                                                                ::rtl::OUString(),
-                                                                ::rtl::OUString(),
+                                                                OUString(),
+                                                                OUString(),
+                                                                OUString(),
                                                                 ColumnValue::NULLABLE_UNKNOWN,
                                                                 0,
                                                                 0,
@@ -373,9 +373,9 @@ namespace dbtools
                                                                 sal_False,
                                                                 sal_False,
                                                                 xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
-                                                                ::rtl::OUString(),
-                                                                ::rtl::OUString(),
-                                                                ::rtl::OUString());
+                                                                OUString(),
+                                                                OUString(),
+                                                                OUString());
         Reference<XPropertySet> xColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(sField);
@@ -386,9 +386,9 @@ namespace dbtools
         return pParseNode ? implParseNode(pParseNode,_bForStatementUse) : sReturn;
     }
 
-    ::rtl::OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const
+    OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode,sal_Bool _bForStatementUse) const
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         if ( pParseNode )
         {
             boost::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);

@@ -32,13 +32,13 @@ namespace comphelper
     //= OInteractionPassword
     //=========================================================================
     //--------------------------------------------------------------------
-    void SAL_CALL OInteractionPassword::setPassword( const ::rtl::OUString& _Password ) throw (RuntimeException)
+    void SAL_CALL OInteractionPassword::setPassword( const OUString& _Password ) throw (RuntimeException)
     {
         m_sPassword = _Password;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException)
+    OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException)
     {
         return m_sPassword;
     }

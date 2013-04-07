@@ -97,32 +97,32 @@ ORowSetValue OOp_DayName::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     ::com::sun::star::util::Date aD = lhs;
     Date aDate(aD.Day,aD.Month,aD.Year);
     DayOfWeek eDayOfWeek = aDate.GetDayOfWeek();
     switch(eDayOfWeek)
     {
         case MONDAY:
-            sRet = ::rtl::OUString("Monday");
+            sRet = OUString("Monday");
             break;
         case TUESDAY:
-            sRet = ::rtl::OUString("Tuesday");
+            sRet = OUString("Tuesday");
             break;
         case WEDNESDAY:
-            sRet = ::rtl::OUString("Wednesday");
+            sRet = OUString("Wednesday");
             break;
         case THURSDAY:
-            sRet = ::rtl::OUString("Thursday");
+            sRet = OUString("Thursday");
             break;
         case FRIDAY:
-            sRet = ::rtl::OUString("Friday");
+            sRet = OUString("Friday");
             break;
         case SATURDAY:
-            sRet = ::rtl::OUString("Saturday");
+            sRet = OUString("Saturday");
             break;
         case SUNDAY:
-            sRet = ::rtl::OUString("Sunday");
+            sRet = OUString("Sunday");
             break;
         default:
             OSL_FAIL("Error in enum values for date");
@@ -135,45 +135,45 @@ ORowSetValue OOp_MonthName::operate(const ORowSetValue& lhs) const
     if ( lhs.isNull() )
         return lhs;
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     ::com::sun::star::util::Date aD = lhs;
     switch(aD.Month)
     {
         case 1:
-            sRet = ::rtl::OUString("January");
+            sRet = OUString("January");
             break;
         case 2:
-            sRet = ::rtl::OUString("February");
+            sRet = OUString("February");
             break;
         case 3:
-            sRet = ::rtl::OUString("March");
+            sRet = OUString("March");
             break;
         case 4:
-            sRet = ::rtl::OUString("April");
+            sRet = OUString("April");
             break;
         case 5:
-            sRet = ::rtl::OUString("May");
+            sRet = OUString("May");
             break;
         case 6:
-            sRet = ::rtl::OUString("June");
+            sRet = OUString("June");
             break;
         case 7:
-            sRet = ::rtl::OUString("July");
+            sRet = OUString("July");
             break;
         case 8:
-            sRet = ::rtl::OUString("August");
+            sRet = OUString("August");
             break;
         case 9:
-            sRet = ::rtl::OUString("September");
+            sRet = OUString("September");
             break;
         case 10:
-            sRet = ::rtl::OUString("October");
+            sRet = OUString("October");
             break;
         case 11:
-            sRet = ::rtl::OUString("November");
+            sRet = OUString("November");
             break;
         case 12:
-            sRet = ::rtl::OUString("December");
+            sRet = OUString("December");
             break;
     }
     return sRet;

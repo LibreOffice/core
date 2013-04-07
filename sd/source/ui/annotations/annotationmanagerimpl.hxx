@@ -75,7 +75,7 @@ public:
 
     void InsertAnnotation();
     void DeleteAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation );
-    void DeleteAnnotationsByAuthor( const rtl::OUString& sAuthor );
+    void DeleteAnnotationsByAuthor( const OUString& sAuthor );
     void DeleteAllAnnotations();
 
     void ExecuteAnnotationContextMenu( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, ::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu = false );

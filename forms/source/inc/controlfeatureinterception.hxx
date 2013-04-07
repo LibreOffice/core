@@ -70,7 +70,7 @@ namespace frm
         /** queries the interceptor chain for the given dispatch
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const ::com::sun::star::util::URL& _rURL, const ::rtl::OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+            queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */

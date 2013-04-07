@@ -56,8 +56,6 @@
 #include <map>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -79,7 +77,7 @@ using ::com::sun::star::document::XEventsSupplier;
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7
 
-typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess> ParamMap;
+typedef ::std::map < const OUString, OUString, ::comphelper::UStringLess> ParamMap;
 
 class XMLTextFrameContextHyperlink_Impl
 {
@@ -122,7 +120,7 @@ public:
 
     XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
                                          sal_uInt16 nPrfx,
-                                         const ::rtl::OUString& rLName,
+                                         const OUString& rLName,
                                          OUString& rTitleOrDesc );
     virtual ~XMLTextFrameTitleOrDescContext_Impl();
 
@@ -159,7 +157,7 @@ public:
     TYPEINFO();
 
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& rLName,
+                                  const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_uInt16 nType,
@@ -175,7 +173,7 @@ XMLTextFrameParam_Impl::~XMLTextFrameParam_Impl()
 
 XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
-          const ::rtl::OUString& rLName,
+          const OUString& rLName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 /*nType*/,
@@ -217,7 +215,7 @@ public:
     TYPEINFO();
 
     XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                  const ::rtl::OUString& rLName,
+                                  const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
@@ -348,44 +346,44 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     /// old list item and block (#89891#)
     bool mbListContextPushed;
 
-    const ::rtl::OUString sWidth;
-    const ::rtl::OUString sWidthType;
-    const ::rtl::OUString sRelativeWidth;
-    const ::rtl::OUString sHeight;
-    const ::rtl::OUString sRelativeHeight;
-    const ::rtl::OUString sSizeType;
-    const ::rtl::OUString sIsSyncWidthToHeight;
-    const ::rtl::OUString sIsSyncHeightToWidth;
-    const ::rtl::OUString sHoriOrient;
-    const ::rtl::OUString sHoriOrientPosition;
-    const ::rtl::OUString sVertOrient;
-    const ::rtl::OUString sVertOrientPosition;
-    const ::rtl::OUString sChainNextName;
-    const ::rtl::OUString sAnchorType;
-    const ::rtl::OUString sAnchorPageNo;
-    const ::rtl::OUString sGraphicURL;
-    const ::rtl::OUString sGraphicFilter;
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sDescription;
-    const ::rtl::OUString sFrameStyleName;
-    const ::rtl::OUString sGraphicRotation;
-    const ::rtl::OUString sTextBoxServiceName;
-    const ::rtl::OUString sGraphicServiceName;
+    const OUString sWidth;
+    const OUString sWidthType;
+    const OUString sRelativeWidth;
+    const OUString sHeight;
+    const OUString sRelativeHeight;
+    const OUString sSizeType;
+    const OUString sIsSyncWidthToHeight;
+    const OUString sIsSyncHeightToWidth;
+    const OUString sHoriOrient;
+    const OUString sHoriOrientPosition;
+    const OUString sVertOrient;
+    const OUString sVertOrientPosition;
+    const OUString sChainNextName;
+    const OUString sAnchorType;
+    const OUString sAnchorPageNo;
+    const OUString sGraphicURL;
+    const OUString sGraphicFilter;
+    const OUString sTitle;
+    const OUString sDescription;
+    const OUString sFrameStyleName;
+    const OUString sGraphicRotation;
+    const OUString sTextBoxServiceName;
+    const OUString sGraphicServiceName;
 
-    ::rtl::OUString sName;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sNextName;
-    ::rtl::OUString sHRef;
-    ::rtl::OUString sFilterName;
-    ::rtl::OUString sCode;
-    ::rtl::OUString sObject;
-    ::rtl::OUString sArchive;
-    ::rtl::OUString sMimeType;
-    ::rtl::OUString sFrameName;
-    ::rtl::OUString sAppletName;
-    ::rtl::OUString sFilterService;
-    ::rtl::OUString sBase64CharsLeft;
-    ::rtl::OUString sTblName;
+    OUString sName;
+    OUString sStyleName;
+    OUString sNextName;
+    OUString sHRef;
+    OUString sFilterName;
+    OUString sCode;
+    OUString sObject;
+    OUString sArchive;
+    OUString sMimeType;
+    OUString sFrameName;
+    OUString sAppletName;
+    OUString sFilterService;
+    OUString sBase64CharsLeft;
+    OUString sTblName;
 
     ParamMap aParamMap;
 
@@ -421,7 +419,7 @@ public:
 
     XMLTextFrameContext_Impl( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
             ::com::sun::star::text::TextContentAnchorType eAnchorType,
@@ -432,22 +430,22 @@ public:
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
-    void SetHyperlink( const ::rtl::OUString& rHRef,
-                       const ::rtl::OUString& rName,
-                       const ::rtl::OUString& rTargetFrameName,
+    void SetHyperlink( const OUString& rHRef,
+                       const OUString& rName,
+                       const OUString& rTargetFrameName,
                        sal_Bool bMap );
 
     // Implement Title/Description Elements UI (#i73249#)
-    void SetTitle( const ::rtl::OUString& rTitle );
+    void SetTitle( const OUString& rTitle );
 
-    void SetDesc( const ::rtl::OUString& rDesc );
+    void SetDesc( const OUString& rDesc );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
 
@@ -798,9 +796,9 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
     }
 }
 
-rtl::OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
+OUString XMLTextFrameContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
 {
-    rtl::OUString aRetval;
+    OUString aRetval;
     const XMLTextFrameContext_Impl* pXMLTextFrameContext_Impl = dynamic_cast< const XMLTextFrameContext_Impl* >(&rContext);
 
     if(pXMLTextFrameContext_Impl)
@@ -1251,8 +1249,8 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
 {
     static OUString s_HyperLinkURL("HyperLinkURL");
     static OUString s_HyperLinkName("HyperLinkName");
-    static ::rtl::OUString s_HyperLinkTarget("HyperLinkTarget");
-    static ::rtl::OUString s_ServerMap("ServerMap");
+    static OUString s_HyperLinkTarget("HyperLinkTarget");
+    static OUString s_ServerMap("ServerMap");
     if( !xPropSet.is() )
         return;
 

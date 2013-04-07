@@ -47,7 +47,7 @@ typedef map< String, StrSet, ltstr > FilterMap;
 
 
 //==================================================================================================
-void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequence< rtl::OUString >& rPluginTypes )
+void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OUString >& rPluginTypes )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XPluginManager > xPMgr( PluginManager::create(xContext) );
@@ -74,10 +74,10 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
         }
     }
 
-    rPluginNames = Sequence< rtl::OUString >( aMap.size() );
-    rPluginTypes = Sequence< rtl::OUString >( aMap.size() );
-    rtl::OUString* pPluginNames = rPluginNames.getArray();
-    rtl::OUString* pPluginTypes = rPluginTypes.getArray();
+    rPluginNames = Sequence< OUString >( aMap.size() );
+    rPluginTypes = Sequence< OUString >( aMap.size() );
+    OUString* pPluginNames = rPluginNames.getArray();
+    OUString* pPluginTypes = rPluginTypes.getArray();
     int nIndex = 0;
     for ( FilterMap::iterator iPos = aMap.begin(); iPos != aMap.end(); ++iPos )
     {
@@ -95,7 +95,7 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 
         if ( aType.Len() )
         {
-            aText += rtl::OUString( " (" );
+            aText += OUString( " (" );
             aText += aType;
             aText += ')';
             pPluginNames[nIndex] = aText;

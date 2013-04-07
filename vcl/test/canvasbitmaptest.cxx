@@ -66,7 +66,7 @@ SAL_IMPLEMENT_MAIN()
 
     uno::Reference< lang::XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory(
-        rtl::OUString( "applicat.rdb"  ),
+        OUString( "applicat.rdb"  ),
         sal_True );
 
     comphelper::setProcessServiceFactory( xMS );
@@ -111,7 +111,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString("CanvasBitmap test harness") );
+            SetText( OUString("CanvasBitmap test harness") );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -1024,7 +1024,7 @@ void Main()
 {
     TestWindow aWindow;
     aWindow.Execute();
-    aWindow.SetText( rtl::OUString( "VCL - canvasbitmaptest"  ) );
+    aWindow.SetText( OUString( "VCL - canvasbitmaptest"  ) );
 
     Application::Execute();
 }

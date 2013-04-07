@@ -39,9 +39,9 @@ public:
     virtual ~VbaDocumentBase() {}
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getFullName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getFullName() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getSaved() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setSaved( sal_Bool bSave ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getVBProject() throw (css::uno::RuntimeException);
@@ -56,8 +56,8 @@ public:
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif /* VBA_DOCUMENTBASE_HXX */

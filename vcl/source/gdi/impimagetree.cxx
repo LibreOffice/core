@@ -63,10 +63,10 @@
 
 namespace {
 
-rtl::OUString createPath(
-    rtl::OUString const & name, sal_Int32 pos, rtl::OUString const & locale)
+OUString createPath(
+    OUString const & name, sal_Int32 pos, OUString const & locale)
 {
-    rtl::OUStringBuffer b(name.copy(0, pos + 1));
+    OUStringBuffer b(name.copy(0, pos + 1));
     b.append(locale);
     b.append(name.copy(pos));
     return b.makeStringAndClear();
@@ -94,7 +94,7 @@ boost::shared_ptr< SvStream > wrapFile(osl::File & file)
 
 void loadFromFile(
     osl::File & file,
-    rtl::OUString const & path, BitmapEx & bitmap)
+    OUString const & path, BitmapEx & bitmap)
 {
     boost::shared_ptr< SvStream > s(wrapFile(file));
     if (path.endsWith(".png"))
@@ -131,7 +131,7 @@ boost::shared_ptr< SvStream > wrapStream(
 
 void loadFromStream(
     css::uno::Reference< css::io::XInputStream > const & stream,
-    rtl::OUString const & path, BitmapEx & bitmap)
+    OUString const & path, BitmapEx & bitmap)
 {
     boost::shared_ptr< SvStream > s(wrapStream(stream));
     if (path.endsWith(".png"))
@@ -150,7 +150,7 @@ ImplImageTree::ImplImageTree() { m_cacheIcons = true; }
 
 ImplImageTree::~ImplImageTree() {}
 
-bool ImplImageTree::checkStyle(rtl::OUString const & style)
+bool ImplImageTree::checkStyle(OUString const & style)
 {
     bool exists;
 
@@ -163,9 +163,9 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
     setStyle(style);
 
     exists = false;
-    const rtl::OUString sBrandURLSuffix("_brand");
+    const OUString sBrandURLSuffix("_brand");
     for (Paths::iterator i(m_paths.begin()); i != m_paths.end() && !exists; ++i) {
-        ::rtl::OUString aURL = i->first;
+        OUString aURL = i->first;
         sal_Int32 nFromIndex = aURL.getLength() - sBrandURLSuffix.getLength();
         // skip brand-specific icon themes; they are incomplete and thus not useful for this check
         if (nFromIndex < 0 || !aURL.match(sBrandURLSuffix, nFromIndex)) {
@@ -190,7 +190,7 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
 }
 
 bool ImplImageTree::loadImage(
-    rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
+    OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized, bool loadMissing )
 {
     bool found = false;
@@ -210,17 +210,17 @@ bool ImplImageTree::loadImage(
 }
 
 bool ImplImageTree::loadDefaultImage(
-    rtl::OUString const & style,
+    OUString const & style,
     BitmapEx& bitmap)
 {
     return doLoadImage(
-        rtl::OUString("res/grafikde.png"),
+        OUString("res/grafikde.png"),
         style, bitmap, false);
 }
 
 
 bool ImplImageTree::doLoadImage(
-    rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
+    OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized)
 {
     setStyle(style);
@@ -230,7 +230,7 @@ bool ImplImageTree::doLoadImage(
     if (!bitmap.IsEmpty()) {
         bitmap.SetEmpty();
     }
-    std::vector< rtl::OUString > paths;
+    std::vector< OUString > paths;
     paths.push_back(name);
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
@@ -240,10 +240,10 @@ bool ImplImageTree::doLoadImage(
                 Application::GetSettings().GetUILanguageTag().getLocale();
             paths.push_back(createPath(name, pos, loc.Language));
             if (!loc.Country.isEmpty()) {
-                rtl::OUStringBuffer b(loc.Language);
+                OUStringBuffer b(loc.Language);
                 b.append(sal_Unicode('-'));
                 b.append(loc.Country);
-                rtl::OUString p(createPath(name, pos, b.makeStringAndClear()));
+                OUString p(createPath(name, pos, b.makeStringAndClear()));
                 paths.push_back(p);
                 if (!loc.Variant.isEmpty()) {
                     b.append(p);
@@ -270,14 +270,14 @@ bool ImplImageTree::doLoadImage(
 }
 
 void ImplImageTree::shutDown() {
-    m_style = rtl::OUString();
+    m_style = OUString();
         // for safety; empty m_style means "not initialized"
     m_paths.clear();
     m_iconCache.clear();
     m_checkStyleCache.clear();
 }
 
-void ImplImageTree::setStyle(rtl::OUString const & style) {
+void ImplImageTree::setStyle(OUString const & style) {
     OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
     if (style != m_style) {
         m_style = style;
@@ -289,7 +289,7 @@ void ImplImageTree::setStyle(rtl::OUString const & style) {
 void ImplImageTree::resetPaths() {
     m_paths.clear();
     {
-        rtl::OUString url(
+        OUString url(
             "$BRAND_BASE_DIR/program/edition/images");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
@@ -300,12 +300,12 @@ void ImplImageTree::resetPaths() {
                 css::uno::Reference< css::container::XNameAccess >()));
     }
     {
-        rtl::OUString url(
+        OUString url(
             "$BRAND_BASE_DIR/share/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
-        rtl::OUStringBuffer b;
+        OUStringBuffer b;
         b.appendAscii("images_");
         b.append(m_style);
         b.appendAscii("_brand");
@@ -317,19 +317,19 @@ void ImplImageTree::resetPaths() {
                 css::uno::Reference< css::container::XNameAccess >()));
     }
     {
-        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images_brand");
+        OUString url( "$BRAND_BASE_DIR/share/config/images_brand");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(
                 url, css::uno::Reference< css::container::XNameAccess >()));
     }
     {
-        rtl::OUString url(
+        OUString url(
             "$BRAND_BASE_DIR/share/config");
         rtl::Bootstrap::expandMacros(url);
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
-        rtl::OUStringBuffer b;
+        OUStringBuffer b;
         b.appendAscii("images_");
         b.append(m_style);
         bool ok = u.Append(b.makeStringAndClear(), INetURLObject::ENCODE_ALL);
@@ -341,7 +341,7 @@ void ImplImageTree::resetPaths() {
     }
     if ( m_style == "default" )
     {
-        rtl::OUString url( "$BRAND_BASE_DIR/share/config/images");
+        OUString url( "$BRAND_BASE_DIR/share/config/images");
         rtl::Bootstrap::expandMacros(url);
         m_paths.push_back(
             std::make_pair(
@@ -350,7 +350,7 @@ void ImplImageTree::resetPaths() {
 }
 
 bool ImplImageTree::checkStyleCacheLookup(
-    rtl::OUString const & style, bool &exists)
+    OUString const & style, bool &exists)
 {
     CheckStyleCache::iterator i(m_checkStyleCache.find(style));
     if (i != m_checkStyleCache.end()) {
@@ -362,7 +362,7 @@ bool ImplImageTree::checkStyleCacheLookup(
 }
 
 bool ImplImageTree::iconCacheLookup(
-    rtl::OUString const & name, bool localized, BitmapEx & bitmap)
+    OUString const & name, bool localized, BitmapEx & bitmap)
 {
     IconCache::iterator i(m_iconCache.find(name));
     if (i != m_iconCache.end() && i->second.first == localized) {
@@ -374,11 +374,11 @@ bool ImplImageTree::iconCacheLookup(
 }
 
 bool ImplImageTree::find(
-    std::vector< rtl::OUString > const & paths, BitmapEx & bitmap)
+    std::vector< OUString > const & paths, BitmapEx & bitmap)
 {
     if (!m_cacheIcons) {
         for (Paths::iterator i(m_paths.begin()); i != m_paths.end(); ++i) {
-            for (std::vector< rtl::OUString >::const_reverse_iterator j(
+            for (std::vector< OUString >::const_reverse_iterator j(
                 paths.rbegin());
             j != paths.rend(); ++j)
             {
@@ -399,7 +399,7 @@ bool ImplImageTree::find(
             try {
                 i->second.set(
                     comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                        rtl::OUString( "com.sun.star.packages.zip.ZipFileAccess"),
+                        OUString( "com.sun.star.packages.zip.ZipFileAccess"),
                         args),
                     css::uno::UNO_QUERY_THROW);
             } catch (css::uno::RuntimeException &) {
@@ -411,7 +411,7 @@ bool ImplImageTree::find(
                 continue;
             }
         }
-        for (std::vector< rtl::OUString >::const_reverse_iterator j(
+        for (std::vector< OUString >::const_reverse_iterator j(
                  paths.rbegin());
              j != paths.rend(); ++j)
         {

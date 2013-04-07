@@ -240,7 +240,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     SetUpdateMode(sal_True);
 }
 // -----------------------------------------------------------------------------
-void ODbAdminDialog::setTitle(const ::rtl::OUString& _sTitle)
+void ODbAdminDialog::setTitle(const OUString& _sTitle)
 {
     SetText(_sTitle);
 }
@@ -307,7 +307,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -324,30 +324,30 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     _rpPool = NULL;
     _rppDefaults = NULL;
 
-    const ::rtl::OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
+    const OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
     // create and initialize the defaults
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
-    *pCounter++ = new SfxStringItem(DSID_NAME, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, rtl::OUString());
-    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
+    *pCounter++ = new SfxStringItem(DSID_NAME, OUString());
+    *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, OUString());
+    *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_READONLY, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_USER, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_PASSWORD, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_ADDITIONALOPTIONS, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_CHARSET, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_USER, OUString());
+    *pCounter++ = new SfxStringItem(DSID_PASSWORD, OUString());
+    *pCounter++ = new SfxStringItem(DSID_ADDITIONALOPTIONS, OUString());
+    *pCounter++ = new SfxStringItem(DSID_CHARSET, OUString());
     *pCounter++ = new SfxBoolItem(DSID_PASSWORDREQUIRED, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_SHOWDELETEDROWS, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_ALLOWLONGTABLENAMES, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, rtl::OUString(','));
-    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, rtl::OUString('"'));
-    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, rtl::OUString('.'));
-    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, rtl::OUString("txt"));
+    *pCounter++ = new SfxStringItem(DSID_JDBCDRIVERCLASS, OUString());
+    *pCounter++ = new SfxStringItem(DSID_FIELDDELIMITER, OUString(','));
+    *pCounter++ = new SfxStringItem(DSID_TEXTDELIMITER, OUString('"'));
+    *pCounter++ = new SfxStringItem(DSID_DECIMALDELIMITER, OUString('.'));
+    *pCounter++ = new SfxStringItem(DSID_THOUSANDSDELIMITER, OUString());
+    *pCounter++ = new SfxStringItem(DSID_TEXTFILEEXTENSION, OUString("txt"));
     *pCounter++ = new SfxBoolItem(DSID_TEXTFILEHEADER, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_PARAMETERNAMESUBST, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_CONN_PORTNUMBER, 8100);
@@ -356,16 +356,16 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_CONN_SHUTSERVICE, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_CONN_DATAINC, 20);
     *pCounter++ = new SfxInt32Item(DSID_CONN_CACHESIZE, 20);
-    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLUSER, OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONN_CTRLPWD, OUString());
     *pCounter++ = new SfxBoolItem(DSID_USECATALOG, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_CONN_HOSTNAME, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONN_HOSTNAME, OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONN_LDAP_BASEDN, OUString());
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_PORTNUMBER, 389);
     *pCounter++ = new SfxInt32Item(DSID_CONN_LDAP_ROWCOUNT, 100);
     *pCounter++ = new SfxBoolItem(DSID_SQL92CHECK, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, rtl::OUString());
-    *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_AUTOINCREMENTVALUE, OUString());
+    *pCounter++ = new SfxStringItem(DSID_AUTORETRIEVEVALUE, OUString());
     *pCounter++ = new SfxBoolItem(DSID_AUTORETRIEVEENABLED, sal_False);
     *pCounter++ = new SfxBoolItem(DSID_APPEND_TABLE_ALIAS, sal_False);
     *pCounter++ = new SfxInt32Item(DSID_MYSQL_PORTNUMBER, 3306);
@@ -377,15 +377,15 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_SCHEMA, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_INDEXAPPENDIX, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_CONN_LDAP_USESSL, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_DOCUMENT_URL, OUString());
     *pCounter++ = new SfxBoolItem(DSID_DOSLINEENDS, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_DATABASENAME, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_DATABASENAME, OUString());
     *pCounter++ = new SfxBoolItem(DSID_AS_BEFORE_CORRNAME, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, sal_False);
-    *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, OUString());
     *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True);
-    *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, rtl::OUString());
+    *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, OUString());
     *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
     *pCounter++ = new SfxInt32Item(DSID_MAX_ROW_SCAN, 100);
     *pCounter++ = new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,sal_False );
@@ -457,7 +457,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     };
 
     OSL_ENSURE(sizeof(aItemInfos)/sizeof(aItemInfos[0]) == DSID_LAST_ITEM_ID,"Invalid Ids!");
-    _rpPool = new SfxItemPool(rtl::OUString("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
+    _rpPool = new SfxItemPool(OUString("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
         aItemInfos, _rppDefaults);
     _rpPool->FreezeIdRanges();
 

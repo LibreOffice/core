@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 /** When the USE_OPTIMIZATIONS symbol is defined then at some optimizations
     are activated that work only together with XResourceId objects that are
@@ -53,19 +52,19 @@ Reference<XInterface> SAL_CALL ResourceId_createInstance (
 
 
 
-::rtl::OUString ResourceId_getImplementationName (void) throw(RuntimeException)
+OUString ResourceId_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.ResourceId");
+    return OUString("com.sun.star.comp.Draw.framework.ResourceId");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL ResourceId_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.ResourceId");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.framework.ResourceId");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

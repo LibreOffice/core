@@ -21,16 +21,16 @@
 
 namespace connectivity
 {
-    ::rtl::OUString OAutoRetrievingBase::getTransformedGeneratedStatement(const ::rtl::OUString& _sInsertStatement) const
+    OUString OAutoRetrievingBase::getTransformedGeneratedStatement(const OUString& _sInsertStatement) const
     {
         OSL_ENSURE( m_bAutoRetrievingEnabled,"Illegal call here. isAutoRetrievingEnabled is false!");
-        ::rtl::OUString sStmt = _sInsertStatement.toAsciiUpperCase();
-        ::rtl::OUString sStatement;
+        OUString sStmt = _sInsertStatement.toAsciiUpperCase();
+        OUString sStatement;
         if ( sStmt.startsWith("INSERT") )
         {
             sStatement = m_sGeneratedValueStatement;
-            static const ::rtl::OUString sColumn("$column");
-            static const ::rtl::OUString sTable("$table");
+            static const OUString sColumn("$column");
+            static const OUString sTable("$table");
             sal_Int32 nIndex = 0;
             nIndex = sStatement.indexOf(sColumn,nIndex);
             if ( -1 != nIndex )
@@ -50,7 +50,7 @@ namespace connectivity
                 while (sStmt.indexOf(' ') == 0 );
 
                 nIntoIndex = 0;
-                ::rtl::OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);
+                OUString sTableName = sStmt.getToken(0,' ',nIntoIndex);
                 sStatement = sStatement.replaceAt(nIndex,sTable.getLength(),sTableName);
             }
         }

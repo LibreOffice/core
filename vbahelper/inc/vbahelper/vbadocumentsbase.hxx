@@ -52,7 +52,7 @@ public:
 protected:
     css::uno::Any createDocument() throw (css::uno::RuntimeException);
     void closeDocuments() throw (css::uno::RuntimeException);
-    css::uno::Any openDocument( const ::rtl::OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
+    css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 
 #endif /* SC_VBA_WORKBOOKS_HXX */

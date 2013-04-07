@@ -33,9 +33,9 @@ struct ControllerFeature: public ::com::sun::star::frame::DispatchInformation
     sal_uInt16 nFeatureId;
 };
 
-typedef ::std::map< ::rtl::OUString,
+typedef ::std::map< OUString,
                     ControllerFeature,
-                    ::std::less< ::rtl::OUString > > SupportedFeatures;
+                    ::std::less< OUString > > SupportedFeatures;
 
 struct FeatureState
 {
@@ -57,7 +57,7 @@ public:
     // late initialisation, especially for adding as listener
     virtual void initialize();
 
-    virtual bool isFeatureSupported( const ::rtl::OUString& rCommandURL );
+    virtual bool isFeatureSupported( const OUString& rCommandURL );
 
 protected:
     // XDispatch
@@ -65,14 +65,14 @@ protected:
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void fireStatusEvent( const ::rtl::OUString& rURL,
+    virtual void fireStatusEvent( const OUString& rURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xSingleListener );
 
     // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand ) = 0;
+    virtual FeatureState getState( const OUString& rCommand ) = 0;
 
     // execute a feature
-    virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) = 0;
+    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs ) = 0;
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures() = 0;

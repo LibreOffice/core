@@ -36,12 +36,12 @@ namespace rtl
 
 struct XMLNumberFormat
 {
-    rtl::OUString   sCurrency;
+    OUString   sCurrency;
     sal_Int32       nNumberFormat;
     sal_Int16       nType;
     sal_Bool        bIsStandard : 1;
     XMLNumberFormat() : nNumberFormat(0), nType(0) {}
-    XMLNumberFormat(const rtl::OUString& sTempCurrency, sal_Int32 nTempFormat,
+    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat,
         sal_Int16 nTempType) : sCurrency(sTempCurrency), nNumberFormat(nTempFormat),
             nType(nTempType) {}
 };
@@ -60,18 +60,18 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
-    const rtl::OUString sEmpty;
-    const rtl::OUString sStandardFormat;
-    const rtl::OUString sType;
-    const rtl::OUString sAttrValueType;
-    const rtl::OUString sAttrValue;
-    const rtl::OUString sAttrDateValue;
-    const rtl::OUString sAttrTimeValue;
-    const rtl::OUString sAttrBooleanValue;
-    const rtl::OUString sAttrStringValue;
-    const rtl::OUString sAttrCurrency;
-    const rtl::OUString msCurrencySymbol;
-    const rtl::OUString msCurrencyAbbreviation;
+    const OUString sEmpty;
+    const OUString sStandardFormat;
+    const OUString sType;
+    const OUString sAttrValueType;
+    const OUString sAttrValue;
+    const OUString sAttrDateValue;
+    const OUString sAttrTimeValue;
+    const OUString sAttrBooleanValue;
+    const OUString sAttrStringValue;
+    const OUString sAttrCurrency;
+    const OUString msCurrencySymbol;
+    const OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
 public :
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
@@ -80,13 +80,13 @@ public :
     ~XMLNumberFormatAttributesExportHelper();
     void SetExport(SvXMLExport* pExp) { this->pExport = pExp; }
 
-    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, bool& bIsStandard);
+    sal_Int16 GetCellType(const sal_Int32 nNumberFormat, OUString& sCurrency, bool& bIsStandard);
     static void WriteAttributes(SvXMLExport& rXMLExport,
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
-                                const rtl::OUString& rCurrencySymbol,
+                                const OUString& rCurrencySymbol,
                                 sal_Bool bExportValue = sal_True);
-    static sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol,
+    static sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
     static sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard,
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier);
@@ -95,22 +95,22 @@ public :
                                           const double& rValue,
                                           sal_Bool bExportValue = sal_True);
     static void SetNumberFormatAttributes(SvXMLExport& rXMLExport,
-                                          const rtl::OUString& rValue,
-                                          const rtl::OUString& rCharacters,
+                                          const OUString& rValue,
+                                          const OUString& rCharacters,
                                           sal_Bool bExportValue = sal_True,
                                           sal_Bool bExportTypeAttribute = sal_True);
 
-    sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol);
+    sal_Bool GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol);
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, bool& bIsStandard);
     void WriteAttributes(const sal_Int16 nTypeKey,
                                           const double& rValue,
-                                          const rtl::OUString& rCurrencySymbol,
+                                          const OUString& rCurrencySymbol,
                                           sal_Bool bExportValue = sal_True);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
                                           const double& rValue,
                                           sal_Bool bExportValue = sal_True);
-    void SetNumberFormatAttributes(const rtl::OUString& rValue,
-                                          const rtl::OUString& rCharacters,
+    void SetNumberFormatAttributes(const OUString& rValue,
+                                          const OUString& rCharacters,
                                           sal_Bool bExportValue = sal_True,
                                           sal_Bool bExportTypeAttribute = sal_True);
 };

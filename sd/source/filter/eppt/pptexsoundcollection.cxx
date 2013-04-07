@@ -28,7 +28,7 @@
 namespace ppt
 {
 
-ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
+ExSoundEntry::ExSoundEntry(const OUString& rString)
     : nFileSize(0)
     , aSoundURL(rString)
 {
@@ -38,7 +38,7 @@ ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         sal_Int64 nVal = 0;
-        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( "Size" ) ) );
+        ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( OUString( "Size" ) ) );
         nFileSize = (sal_uInt32)nVal;
     }
     catch( ::com::sun::star::uno::Exception& )
@@ -47,13 +47,13 @@ ExSoundEntry::ExSoundEntry(const rtl::OUString& rString)
     }
 };
 
-rtl::OUString ExSoundEntry::ImplGetName() const
+OUString ExSoundEntry::ImplGetName() const
 {
     INetURLObject aTmp( aSoundURL );
     return aTmp.GetName();
 }
 
-rtl::OUString ExSoundEntry::ImplGetExtension() const
+OUString ExSoundEntry::ImplGetExtension() const
 {
     INetURLObject aTmp( aSoundURL );
     String aExtension( aTmp.GetExtension() );
@@ -62,15 +62,15 @@ rtl::OUString ExSoundEntry::ImplGetExtension() const
     return aExtension;
 }
 
-sal_Bool ExSoundEntry::IsSameURL(const rtl::OUString& rURL) const
+sal_Bool ExSoundEntry::IsSameURL(const OUString& rURL) const
 {
     return ( rURL == aSoundURL );
 }
 
 sal_uInt32 ExSoundEntry::GetSize( sal_uInt32 nId ) const
 {
-    rtl::OUString aName( ImplGetName() );
-    rtl::OUString aExtension( ImplGetExtension() );
+    OUString aName( ImplGetName() );
+    OUString aExtension( ImplGetExtension() );
 
     sal_uInt32 nSize = 8;                           // SoundContainer Header
     if ( !aName.isEmpty() )                         // String Atom          ( instance 0 - name of sound )
@@ -78,7 +78,7 @@ sal_uInt32 ExSoundEntry::GetSize( sal_uInt32 nId ) const
     if ( !aExtension.isEmpty() )                    // String Atom          ( instance 1 - extension of sound )
         nSize += aExtension.getLength() * 2 + 8;
 
-    rtl::OUString aId( OUString::number(nId) );   // String Atom          ( instance 2 - reference id )
+    OUString aId( OUString::number(nId) );   // String Atom          ( instance 2 - reference id )
     nSize += 2 * aId.getLength() + 8;
 
     nSize += nFileSize + 8;                         // SoundData Atom
@@ -97,7 +97,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
         // create SoundContainer
         rSt << (sal_uInt32)( ( EPP_Sound << 16 ) | 0xf ) << (sal_uInt32)( GetSize( nId ) - 8 );
 
-        rtl::OUString aSoundName( ImplGetName() );
+        OUString aSoundName( ImplGetName() );
         sal_Int32 i, nSoundNameLen = aSoundName.getLength();
         if ( nSoundNameLen )
         {
@@ -106,7 +106,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             for ( i = 0; i < nSoundNameLen; ++i )
                 rSt << aSoundName[i];
         }
-        rtl::OUString aExtension( ImplGetExtension() );
+        OUString aExtension( ImplGetExtension() );
         sal_Int32 nExtensionLen = aExtension.getLength();
         if ( nExtensionLen )
         {
@@ -116,7 +116,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
                 rSt << aExtension[i];
         }
         // id of sound ( instance 2 )
-        rtl::OUString aId( OUString::number(nId ) );
+        OUString aId( OUString::number(nId ) );
         sal_Int32 nIdLen = aId.getLength();
         rSt << (sal_uInt32)( ( EPP_CString << 16 ) | 32 ) << (sal_uInt32)( nIdLen * 2 );
         for ( i = 0; i < nIdLen; ++i )
@@ -145,7 +145,7 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
     }
 }
 
-sal_uInt32 ExSoundCollection::GetId(const rtl::OUString& rString)
+sal_uInt32 ExSoundCollection::GetId(const OUString& rString)
 {
     sal_uInt32 nSoundId = 0;
     if (!rString.isEmpty())

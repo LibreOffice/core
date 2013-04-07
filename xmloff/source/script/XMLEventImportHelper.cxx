@@ -25,7 +25,6 @@
 #include "xmloff/xmlnmspe.hxx"
 #include "xmloff/xmlerror.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;

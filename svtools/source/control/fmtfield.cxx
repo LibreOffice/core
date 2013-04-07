@@ -1262,7 +1262,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     {
         sNewFormat.append(aLocaleInfo.getNumDecimalSep());
 
-        rtl::OUStringBuffer sTemp;
+        OUStringBuffer sTemp;
         comphelper::string::padToLength(sTemp, nDigits, '0');
         sNewFormat.append(sTemp);
     }

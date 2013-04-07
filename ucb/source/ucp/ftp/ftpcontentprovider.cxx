@@ -95,8 +95,8 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 
 XSERVICEINFO_IMPL_1_CTX(
     FTPContentProvider,
-    rtl::OUString("com.sun.star.comp.FTPContentProvider"),
-    rtl::OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
+    OUString("com.sun.star.comp.FTPContentProvider"),
+    OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
 //=========================================================================
 //
@@ -150,7 +150,7 @@ FTPContentProvider::queryContent(
                     this);
 
         if(!m_pProxyDecider->shouldUseProxy(
-            rtl::OUString("ftp"),
+            OUString("ftp"),
             aURL.host(),
             aURL.port().toInt32()))
         {
@@ -190,11 +190,11 @@ CURL* FTPContentProvider::handle() {
 
 
 bool FTPContentProvider::forHost(
-    const rtl::OUString& host,
-    const rtl::OUString& port,
-    const rtl::OUString& username,
-    rtl::OUString& password,
-    rtl::OUString& account)
+    const OUString& host,
+    const OUString& port,
+    const OUString& username,
+    OUString& password,
+    OUString& account)
 {
     osl::MutexGuard aGuard(m_aMutex);
     for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
@@ -212,11 +212,11 @@ bool FTPContentProvider::forHost(
 
 
 bool  FTPContentProvider::setHost(
-    const rtl::OUString& host,
-    const rtl::OUString& port,
-    const rtl::OUString& username,
-    const rtl::OUString& password,
-    const rtl::OUString& account)
+    const OUString& host,
+    const OUString& port,
+    const OUString& username,
+    const OUString& password,
+    const OUString& account)
 {
     ServerInfo inf;
     inf.host = host;

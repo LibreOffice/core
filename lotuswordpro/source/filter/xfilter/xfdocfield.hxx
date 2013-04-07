@@ -66,10 +66,10 @@
 class XFFileName : public XFContent
 {
 public:
-    void SetType(rtl::OUString sType);
+    void SetType(OUString sType);
     virtual void    ToXml(IXFStream *pStrm);
 private:
-    rtl::OUString m_strType;
+    OUString m_strType;
 };
 class XFWordCount : public XFContent
 {

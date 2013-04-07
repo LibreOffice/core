@@ -67,18 +67,18 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper3<
         ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         //Methods from XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
 
         virtual sal_Bool SAL_CALL supportsService(
-            const ::rtl::OUString& ServiceName
+            const OUString& ServiceName
         ) throw( ::com::sun::star::uno::RuntimeException ) ;
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) ;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) ;
 
         //Helper for XServiceInfo
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getSupportedServiceNames() ;
+        static ::com::sun::star::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
-        static ::rtl::OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) ;
 
         //Helper for registry
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager ) throw( ::com::sun::star::uno::RuntimeException ) ;

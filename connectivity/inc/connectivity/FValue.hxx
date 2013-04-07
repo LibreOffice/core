@@ -99,7 +99,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const ::rtl::OUString& _rRH)
+        ORowSetValue(const OUString& _rRH)
             :m_eTypeKind(::com::sun::star::sdbc::DataType::VARCHAR)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -308,7 +308,7 @@ namespace connectivity
         ORowSetValue& operator=(const ::com::sun::star::util::Time& _rRH);
         ORowSetValue& operator=(const ::com::sun::star::util::DateTime& _rRH);
 
-        ORowSetValue& operator=(const ::rtl::OUString& _rRH);
+        ORowSetValue& operator=(const OUString& _rRH);
         // the type isn't set it will be set to VARCHAR if the type is different change it
         ORowSetValue& operator=(const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH);
         // we the possiblity to save a any for bookmarks
@@ -330,9 +330,9 @@ namespace connectivity
         operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
         operator double() const     {   return isNull() ? 0.0       : getDouble();  }
 
-        operator ::rtl::OUString() const
+        operator OUString() const
         {
-            return isNull() ? ::rtl::OUString() : getString();
+            return isNull() ? OUString() : getString();
         }
 
         operator ::com::sun::star::util::Date() const
@@ -403,7 +403,7 @@ namespace connectivity
         double          getDouble() const;
         float           getFloat()  const;
 
-        ::rtl::OUString getString() const;      // makes a automatic conversion if type isn't a string
+        OUString getString() const;      // makes a automatic conversion if type isn't a string
         ::com::sun::star::util::Date                getDate()       const;
         ::com::sun::star::util::Time                getTime()       const;
         ::com::sun::star::util::DateTime            getDateTime()   const;

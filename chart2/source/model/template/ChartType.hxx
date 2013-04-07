@@ -66,19 +66,19 @@ protected:
 
     // ____ XChartType ____
     // still abstract ! implement !
-    virtual ::rtl::OUString SAL_CALL getChartType()
+    virtual OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException) = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > SAL_CALL
         createCoordinateSystem( ::sal_Int32 DimensionCount )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedMandatoryRoles()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedOptionalRoles()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
+    virtual OUString SAL_CALL getRoleOfSequenceForSeriesLabel()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSeriesContainer ____

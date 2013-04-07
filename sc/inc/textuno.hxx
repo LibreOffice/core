@@ -99,11 +99,11 @@ public:
                                     com::sun::star::sheet::XHeaderFooterContent> xObj );
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -188,7 +188,7 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   insertString( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
-                                        const ::rtl::OUString& aString, sal_Bool bAbsorb )
+                                        const OUString& aString, sal_Bool bAbsorb )
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   insertControlCharacter( const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::text::XTextRange >& xRange,
@@ -203,8 +203,8 @@ public:
                             getStart() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
                             getEnd() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
+    virtual OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setString( const OUString& aString )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XTextRangeMover
@@ -229,11 +229,11 @@ public:
                             getTextFieldMasters() throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 

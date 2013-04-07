@@ -113,7 +113,7 @@ void SignatureEngine::tryToPerform( )
 {
     if (checkReady())
     {
-        const rtl::OUString ouSignatureTemplate (
+        const OUString ouSignatureTemplate (
             RTL_CONSTASCII_USTRINGPARAM( SIGNATURE_TEMPLATE ) );
         cssu::Reference < cssxc::XXMLSignatureTemplate >
             xSignatureTemplate( mxMSF->createInstance( ouSignatureTemplate ), cssu::UNO_QUERY );
@@ -217,7 +217,7 @@ void SAL_CALL SignatureEngine::setReferenceId( sal_Int32 id )
 
 /* XUriBinding */
 void SAL_CALL SignatureEngine::setUriBinding(
-    const rtl::OUString& uri,
+    const OUString& uri,
     const cssu::Reference< com::sun::star::io::XInputStream >& aInputStream )
     throw (cssu::Exception, cssu::RuntimeException)
 {
@@ -225,7 +225,7 @@ void SAL_CALL SignatureEngine::setUriBinding(
     m_vXInputStreams.push_back(aInputStream);
 }
 
-cssu::Reference< com::sun::star::io::XInputStream > SAL_CALL SignatureEngine::getUriBinding( const rtl::OUString& uri )
+cssu::Reference< com::sun::star::io::XInputStream > SAL_CALL SignatureEngine::getUriBinding( const OUString& uri )
     throw (cssu::Exception, cssu::RuntimeException)
 {
     cssu::Reference< com::sun::star::io::XInputStream > xInputStream;

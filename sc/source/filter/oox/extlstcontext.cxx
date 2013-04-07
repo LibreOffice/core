@@ -75,7 +75,7 @@ void ExtCfRuleContext::importDataBar( const AttributeList& rAttribs )
     ScDataBarFormatData* pDataBar = static_cast<ScDataBarFormatData*>(mpTarget);
     pDataBar->mbGradient = rAttribs.getBool( XML_gradient, true );
 
-    rtl::OUString aAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
+    OUString aAxisPosition = rAttribs.getString( XML_axisPosition, "automatic" );
     if( aAxisPosition == "none" )
         pDataBar->meAxisPosition = databar::NONE;
     else if( aAxisPosition == "middle" )
@@ -125,7 +125,7 @@ void ExtCfRuleContext::importCfvo( const AttributeList& rAttribs )
     else
         pEntry = pDataBar->mpUpperLimit.get();
 
-    rtl::OUString aColorScaleType = rAttribs.getString( XML_type, rtl::OUString() );
+    OUString aColorScaleType = rAttribs.getString( XML_type, OUString() );
     if(aColorScaleType == "min")
         pEntry->SetType(COLORSCALE_MIN);
     else if (aColorScaleType == "max")
@@ -178,11 +178,11 @@ void ExtLstLocalContext::onStartElement( const AttributeList& )
     }
 }
 
-void ExtLstLocalContext::onCharacters( const rtl::OUString& rChars )
+void ExtLstLocalContext::onCharacters( const OUString& rChars )
 {
     if (getCurrentElement() == XLS_EXT_TOKEN( id ))
     {
-        getExtLst().insert( std::pair< rtl::OUString, void*>(rChars, mpTarget) );
+        getExtLst().insert( std::pair< OUString, void*>(rChars, mpTarget) );
     }
 }
 
@@ -199,7 +199,7 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
     {
         if(nElement == XLS_EXT_TOKEN( cfRule ))
         {
-            rtl::OUString aId = rAttribs.getString( XML_id, rtl::OUString() );
+            OUString aId = rAttribs.getString( XML_id, OUString() );
 
             // an ext entrie does not need to have an existing corresponding entry
             ExtLst::const_iterator aExt = getExtLst().find( aId );

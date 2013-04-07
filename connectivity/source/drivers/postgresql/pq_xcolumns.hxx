@@ -65,28 +65,28 @@ namespace pq_sdbc_driver
 {
 
 void alterColumnByDescriptor(
-    const rtl::OUString & schemaName,
-    const rtl::OUString & tableName,
+    const OUString & schemaName,
+    const OUString & tableName,
     ConnectionSettings *settings,
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & past,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & future);
 
-rtl::OUString columnMetaData2SDBCX(
+OUString columnMetaData2SDBCX(
     ReflectionBase *pBase, const com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > &xRow );
 
 class Columns : public Container
 {
-    rtl::OUString m_schemaName;
-    rtl::OUString m_tableName;
+    OUString m_schemaName;
+    OUString m_tableName;
 
 public: // instances Columns 'exception safe'
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > create(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
+        const OUString &schemaName,
+        const OUString &tableName,
         Columns **pColumns);
 
 protected:
@@ -94,8 +94,8 @@ protected:
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName);
+        const OUString &schemaName,
+        const OUString &tableName);
 
 
     virtual ~Columns();
@@ -108,7 +108,7 @@ public: // XAppend
                ::com::sun::star::uno::RuntimeException);
 
 // public: // XDrop
-//     virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName )
+//     virtual void SAL_CALL dropByName( const OUString& elementName )
 //         throw (::com::sun::star::sdbc::SQLException,
 //                ::com::sun::star::container::NoSuchElementException,
 //                ::com::sun::star::uno::RuntimeException);

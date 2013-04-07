@@ -60,7 +60,7 @@ public:
     /* XSEInitializer */
     virtual com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext >
-        SAL_CALL createSecurityContext( const rtl::OUString& certDB )
+        SAL_CALL createSecurityContext( const OUString& certDB )
         throw (com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL freeSecurityContext( const com::sun::star::uno::Reference<
@@ -68,23 +68,23 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw (com::sun::star::uno::RuntimeException);
 };
 
-rtl::OUString SEInitializer_MSCryptImpl_getImplementationName()
+OUString SEInitializer_MSCryptImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SEInitializer_MSCryptImpl_supportsService( const OUString& ServiceName )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
+com::sun::star::uno::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

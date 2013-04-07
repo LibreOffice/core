@@ -37,15 +37,15 @@ public:
     virtual ~SwVbaFormField();
 
     // Methods
-    rtl::OUString SAL_CALL getResult() throw ( css::uno::RuntimeException );
-    void SAL_CALL setResult( const rtl::OUString& result ) throw ( css::uno::RuntimeException );
+    OUString SAL_CALL getResult() throw ( css::uno::RuntimeException );
+    void SAL_CALL setResult( const OUString& result ) throw ( css::uno::RuntimeException );
     sal_Bool SAL_CALL getEnabled() throw ( css::uno::RuntimeException );
     void SAL_CALL setEnabled( sal_Bool enabled ) throw ( css::uno::RuntimeException );
     css::uno::Any SAL_CALL CheckBox() throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_FORMFIELD_HXX */
 

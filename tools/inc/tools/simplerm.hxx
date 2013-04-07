@@ -64,7 +64,7 @@ public:
             an existent string
         @seealso IsAvailable
     */
-    rtl::OUString           ReadString( sal_uInt32 nId );
+    OUString           ReadString( sal_uInt32 nId );
 
     /** checks whether a certain resource is availble
         @param  _resourceType

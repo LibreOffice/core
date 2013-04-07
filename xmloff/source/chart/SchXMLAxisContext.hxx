@@ -28,10 +28,10 @@ class SchXMLAxisContext : public SvXMLImportContext
 {
 public:
     SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
-                       SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                       SvXMLImport& rImport, const OUString& rLocalName,
                        ::com::sun::star::uno::Reference< ::com::sun::star::chart::XDiagram > xDiagram,
                        std::vector< SchXMLAxis >& aAxes,
-                       ::rtl::OUString& rCategoriesAddress,
+                       OUString& rCategoriesAddress,
                        bool bAddMissingXAxisForNetCharts,
                        bool bAdaptWrongPercentScaleValues,
                        bool bAdaptXAxisOrientationForOld2DBarCharts,
@@ -42,12 +42,12 @@ public:
     virtual void EndElement();
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     static void CorrectAxisPositions( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xNewDoc,
-                          const ::rtl::OUString& rChartTypeServiceName,
-                          const ::rtl::OUString& rODFVersionOfFile,
+                          const OUString& rChartTypeServiceName,
+                          const OUString& rODFVersionOfFile,
                           bool bAxisPositionAttributeImported );
 
 private:
@@ -56,8 +56,8 @@ private:
     SchXMLAxis m_aCurrentAxis;
     std::vector< SchXMLAxis >& m_rAxes;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAxisProps;
-    rtl::OUString m_aAutoStyleName;
-    rtl::OUString& m_rCategoriesAddress;
+    OUString m_aAutoStyleName;
+    OUString& m_rCategoriesAddress;
     sal_Int32 m_nAxisType;//::com::sun::star::chart::ChartAxisType
     bool m_bAxisTypeImported;
     bool m_bDateScaleImported;
@@ -67,7 +67,7 @@ private:
     bool& m_rbAxisPositionAttributeImported;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTitleShape();
-    void CreateGrid( ::rtl::OUString sAutoStyleName, bool bIsMajor );
+    void CreateGrid( OUString sAutoStyleName, bool bIsMajor );
     void CreateAxis();
     void SetAxisTitle();
 };

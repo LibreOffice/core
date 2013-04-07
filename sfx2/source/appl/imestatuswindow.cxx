@@ -95,7 +95,7 @@ void ImeStatusWindow::init()
         {
             sal_Bool bShow = sal_Bool();
             if (getConfig()->getPropertyValue(
-                    rtl::OUString(
+                    OUString(
                                       "ShowStatusWindow"))
                 >>= bShow)
                 Application::ShowImeStatusWindow(bShow);
@@ -114,7 +114,7 @@ bool ImeStatusWindow::isShowing()
     {
         sal_Bool bShow = sal_Bool();
         if (getConfig()->getPropertyValue(
-                rtl::OUString("ShowStatusWindow"))
+                OUString("ShowStatusWindow"))
             >>= bShow)
             return bShow;
     }
@@ -133,7 +133,7 @@ void ImeStatusWindow::show(bool bShow)
     {
         css::uno::Reference< css::beans::XPropertySet > xConfig(getConfig());
         xConfig->setPropertyValue(
-            rtl::OUString("ShowStatusWindow"),
+            OUString("ShowStatusWindow"),
             css::uno::makeAny(static_cast< sal_Bool >(bShow)));
         css::uno::Reference< css::util::XChangesBatch > xCommit(
             xConfig, css::uno::UNO_QUERY);
@@ -162,7 +162,7 @@ ImeStatusWindow::~ImeStatusWindow()
         try
         {
             m_xConfig->removePropertyChangeListener(
-                rtl::OUString("ShowStatusWindow"),
+                OUString("ShowStatusWindow"),
                 m_xConfigListener);
         }
         catch (css::uno::Exception &)
@@ -201,15 +201,15 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                 throw css::lang::DisposedException();
             if (!m_xContext.is())
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
+                    OUString(
                             "null comphelper::getProcessServiceFactory"),
                     0);
             css::uno::Reference< css::lang::XMultiServiceFactory > xProvider =
                 css::configuration::theDefaultProvider::get( m_xContext );
             css::beans::PropertyValue aArg(
-                rtl::OUString("nodepath"), -1,
+                OUString("nodepath"), -1,
                 css::uno::makeAny(
-                    rtl::OUString(
+                    OUString(
                             "/org.openoffice.Office.Common/I18N/InputMethod")),
                 css::beans::PropertyState_DIRECT_VALUE);
             css::uno::Sequence< css::uno::Any > aArgs(1);
@@ -217,13 +217,13 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
             m_xConfig
                 = css::uno::Reference< css::beans::XPropertySet >(
                     xProvider->createInstanceWithArguments(
-                        rtl::OUString(
+                        OUString(
                        "com.sun.star.configuration.ConfigurationUpdateAccess"),
                         aArgs),
                     css::uno::UNO_QUERY);
             if (!m_xConfig.is())
                 throw css::uno::RuntimeException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
                                       "null com.sun.star.configuration."
                                       "ConfigurationUpdateAccess")),
                     0);
@@ -238,7 +238,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
         // no dispose notifications):
         m_xConfigListener = new WeakPropertyChangeListener(this);
         xConfig->addPropertyChangeListener(
-            rtl::OUString("ShowStatusWindow"),
+            OUString("ShowStatusWindow"),
             m_xConfigListener);
     }
     return xConfig;

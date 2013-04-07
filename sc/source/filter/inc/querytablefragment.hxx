@@ -34,7 +34,7 @@ class QueryTableFragment : public WorksheetFragmentBase
 public:
     explicit            QueryTableFragment(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );

@@ -95,7 +95,7 @@ protected:
         const SdwColor& rColor);
     void SetPosition(XFFrame* pObj);
     void SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth);
-    rtl::OUString GetArrowName(sal_uInt8 nArrowStyle);
+    OUString GetArrowName(sal_uInt8 nArrowStyle);
 
 protected:
     /**
@@ -107,21 +107,21 @@ protected:
      * @descr   register styles of a draw object according to the saved records data.
      * @return  the style name which has been registered.
      */
-    virtual rtl::OUString RegisterStyle() = 0;
+    virtual OUString RegisterStyle() = 0;
 
     /**
      * @descr   create XF-draw object and assign the style name to it.
      * @param   style name.
      * @return  pointer of the created XF-draw object.
      */
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName) = 0;
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName) = 0;
 
     /**
      * @descr   create XF-draw object and assign the style name to it.
      * @param   style name.
      * @return  pointer of the created XF-draw object.
      */
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName) = 0;
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName) = 0;
 
 public:
     /**
@@ -156,12 +156,12 @@ public:
 
 protected:
     virtual void Read() {}
-    virtual rtl::OUString RegisterStyle()
+    virtual OUString RegisterStyle()
     {
-        return rtl::OUString();
+        return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/) { return NULL; }
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/) { return NULL; }
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/) { return NULL; }
 };
 
 
@@ -180,9 +180,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 /**
@@ -201,9 +201,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 
@@ -223,9 +223,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 /**
@@ -243,12 +243,12 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 
 private:
-    XFFrame* CreateRoundedRect(const rtl::OUString& rStyleName);
+    XFFrame* CreateRoundedRect(const OUString& rStyleName);
 };
 
 /**
@@ -266,9 +266,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 
@@ -288,9 +288,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 /**
@@ -311,9 +311,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 /**
@@ -336,9 +336,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 
 /**
@@ -353,12 +353,12 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle()
+    virtual OUString RegisterStyle()
     {
-        return rtl::OUString();
+        return OUString();
     }
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& /*rStyleName*/){return NULL;}
+    virtual XFFrame* CreateDrawObj(const OUString& /*rStyleName*/){return NULL;}
+    virtual XFFrame* CreateStandardDrawObj(const OUString& /*rStyleName*/){return NULL;}
 };
 
 /**
@@ -376,9 +376,9 @@ public:
 
 protected:
     virtual void Read();
-    virtual rtl::OUString RegisterStyle();
-    virtual XFFrame* CreateDrawObj(const rtl::OUString& rStyleName);
-    virtual XFFrame* CreateStandardDrawObj(const rtl::OUString& rStyleName);
+    virtual OUString RegisterStyle();
+    virtual XFFrame* CreateDrawObj(const OUString& rStyleName);
+    virtual XFFrame* CreateStandardDrawObj(const OUString& rStyleName);
 };
 #endif
 

@@ -63,7 +63,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
             keys -> commands
         */
         typedef ::boost::unordered_map< css::awt::KeyEvent ,
-                                 ::rtl::OUString    ,
+                                 OUString    ,
                                  KeyEventHashCode   ,
                                  KeyEventEqualsFunc > TKey2Commands;
 
@@ -123,7 +123,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
                     sal_True if the speicfied key exists inside this container.
          */
         virtual sal_Bool hasKey(const css::awt::KeyEvent& aKey) const;
-        virtual sal_Bool hasCommand(const ::rtl::OUString& sCommand) const;
+        virtual sal_Bool hasCommand(const OUString& sCommand) const;
 
         //---------------------------------------
         /** TODO document me */
@@ -140,7 +140,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
                     describe the command.
           */
         virtual void setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
-                                       const ::rtl::OUString&    sCommand);
+                                       const OUString&    sCommand);
 
         //---------------------------------------
         /** @short  returns the list of keys, which are registered
@@ -152,16 +152,16 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
             @return [TKeyList]
                     the list of registered keys. Can be empty!
           */
-        virtual TKeyList getKeysByCommand(const ::rtl::OUString& sCommand) const;
+        virtual TKeyList getKeysByCommand(const OUString& sCommand) const;
 
         //---------------------------------------
         /** TODO */
-        virtual ::rtl::OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
+        virtual OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
 
         //---------------------------------------
         /** TODO */
         virtual void removeKey(const css::awt::KeyEvent& aKey);
-        virtual void removeCommand(const ::rtl::OUString& sCommand);
+        virtual void removeCommand(const OUString& sCommand);
 };
 
 } // namespace framework

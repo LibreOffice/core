@@ -34,7 +34,7 @@ class SVT_DLLPUBLIC CollatorResource
     public:
         CollatorResource();
         ~CollatorResource();
-        const rtl::OUString& GetTranslation (const rtl::OUString& r_Algorithm);
+        const OUString& GetTranslation (const OUString& r_Algorithm);
 };
 
 #endif /* SVTOOLS_COLLATORRESOURCE_HXX */

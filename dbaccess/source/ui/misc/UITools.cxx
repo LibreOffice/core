@@ -135,7 +135,7 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING;
 using ::com::sun::star::frame::XModel;
 
 // -----------------------------------------------------------------------------
-SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
+SQLExceptionInfo createConnection(  const OUString& _rsDataSourceName,
                                      const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
                                     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
@@ -166,7 +166,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
         return aInfo;
     }
 
-    ::rtl::OUString sPwd, sUser;
+    OUString sPwd, sUser;
     sal_Bool bPwdReq = sal_False;
     try
     {
@@ -213,7 +213,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     return aInfo;
 }
 // -----------------------------------------------------------------------------
-Reference< XDataSource > getDataSourceByName( const ::rtl::OUString& _rDataSourceName,
+Reference< XDataSource > getDataSourceByName( const OUString& _rDataSourceName,
     Window* _pErrorMessageParent, Reference< XComponentContext > _rxContext, ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     Reference< XDatabaseContext > xDatabaseContext = DatabaseContext::create(_rxContext);
@@ -296,8 +296,8 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
 
 TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                                sal_Int32 _nType,
-                               const ::rtl::OUString& _sTypeName,
-                               const ::rtl::OUString& _sCreateParams,
+                               const OUString& _sTypeName,
+                               const OUString& _sCreateParams,
                                sal_Int32 _nPrecision,
                                sal_Int32 _nScale,
                                sal_Bool _bAutoIncrement,
@@ -314,7 +314,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         {
             // search the best matching type
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
+            OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
             sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
             sal_Int32       nDBTypeScale        = aIter->second->nMaximumScale;     (void)nDBTypeScale;
             sal_Bool        bDBAutoIncrement    = aIter->second->bAutoIncrement;    (void)bDBAutoIncrement;
@@ -445,8 +445,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
     // Information for a single SQL type
     if(xRs.is())
     {
-        static const ::rtl::OUString aB1(" [ ");
-        static const ::rtl::OUString aB2(" ]");
+        static const OUString aB1(" [ ");
+        static const OUString aB2(" ]");
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
@@ -664,13 +664,13 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const ::rtl::OUString& _sName)
+OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const OUString& _sName)
 {
     OSL_ENSURE(_xMetaData.is(),"No MetaData!");
-    ::rtl::OUString sDefaultName = _sName;
+    OUString sDefaultName = _sName;
     try
     {
-        ::rtl::OUString sCatalog,sSchema,sCompsedName;
+        OUString sCatalog,sSchema,sCompsedName;
         if(_xMetaData->supportsCatalogsInTableDefinitions())
         {
             try
@@ -707,7 +707,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     return sDefaultName;
 }
 // -----------------------------------------------------------------------------
-sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
+sal_Bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 {
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
     sal_Bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
@@ -910,7 +910,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
-    SfxItemPool* pPool = new SfxItemPool(rtl::OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
+    SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
     pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -991,7 +991,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 //------------------------------------------------------------------------------
 const SfxFilter* getStandardDatabaseFilter()
 {
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
+    const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
     OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
     return pFilter;
 }
@@ -999,7 +999,7 @@ const SfxFilter* getStandardDatabaseFilter()
 
 // -----------------------------------------------------------------------------
 sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
-                        const ::rtl::OUString& _sName,
+                        const OUString& _sName,
                         const Reference< XComponentContext >& _rxContext,
                         Window* _pParent)
 {
@@ -1010,12 +1010,12 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
         Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
         if(xProp.is())
         {
-            Sequence< ::rtl::OUString > aFilter;
+            Sequence< OUString > aFilter;
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
             // first check if we have something like SCHEMA.%
             sal_Bool bHasToInsert = sal_True;
-            const ::rtl::OUString* pBegin = aFilter.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
+            const OUString* pBegin = aFilter.getConstArray();
+            const OUString* pEnd = pBegin + aFilter.getLength();
             for (;pBegin != pEnd; ++pBegin)
             {
                 if(pBegin->indexOf('%') != -1)
@@ -1127,7 +1127,7 @@ sal_Bool generateAsBeforeTableAlias(const Reference<XConnection>& _xConnection)
 // -----------------------------------------------------------------------------
 void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
                             sal_Bool& _rAutoIncrementValueEnabled,
-                            ::rtl::OUString& _rsAutoIncrementValue)
+                            OUString& _rsAutoIncrementValue)
 {
     if ( _xDatasource.is() )
     {
@@ -1143,7 +1143,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
             pValue->Value >>= _rsAutoIncrementValue;
         pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
-                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),::rtl::OUString("IsAutoRetrievingEnabled") ));
+                                                    ::std::bind2nd(TPropertyValueEqualFunctor(),OUString("IsAutoRetrievingEnabled") ));
         if ( pValue && pValue != (aInfo.getConstArray() + aInfo.getLength()) )
             pValue->Value >>= _rAutoIncrementValueEnabled;
     }
@@ -1151,7 +1151,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
 // -----------------------------------------------------------------------------
 void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
                             sal_Bool& _rAutoIncrementValueEnabled,
-                            ::rtl::OUString& _rsAutoIncrementValue)
+                            OUString& _rsAutoIncrementValue)
 {
     Reference< XChild> xChild(_xConnection,UNO_QUERY);
     if(xChild.is())
@@ -1161,7 +1161,7 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,::rtl::OUString& _rsDatabaseName)
+OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUString& _rsDatabaseName)
 {
     if ( _rsDatabaseName.isEmpty() && _xDataSource.is() )
     {
@@ -1174,27 +1174,27 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    ::rtl::OUString sName = _rsDatabaseName;
+    OUString sName = _rsDatabaseName;
     INetURLObject aURL(sName);
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_UNAMBIGUOUS);
     return sName;
 }
 // -----------------------------------------------------------------------------
-void AppendConfigToken( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
+void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
 {
     // query part exists?
     if ( _bQuestionMark )
         // no, so start with '?'
-        _rURL += ::rtl::OUString("?");
+        _rURL += OUString("?");
     else
         // yes, so only append with '&'
-        _rURL += ::rtl::OUString("&");
+        _rURL += OUString("&");
 
     // set parameters
-    _rURL += ::rtl::OUString("Language=");
+    _rURL += OUString("Language=");
     _rURL += utl::ConfigManager::getLocale();
-    _rURL += ::rtl::OUString("&System=");
+    _rURL += OUString("&System=");
     _rURL += SvtHelpOptions().GetSystem();
 }
 
@@ -1202,17 +1202,17 @@ namespace
 {
     // -----------------------------------------------------------------------
 
-    sal_Bool GetHelpAnchor_Impl( const ::rtl::OUString& _rURL, ::rtl::OUString& _rAnchor )
+    sal_Bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
     {
         sal_Bool bRet = sal_False;
-        ::rtl::OUString sAnchor;
+        OUString sAnchor;
 
         try
         {
             ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                                  Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
-            if ( ( aCnt.getPropertyValue( ::rtl::OUString("AnchorName") ) >>= sAnchor ) )
+            if ( ( aCnt.getPropertyValue( OUString("AnchorName") ) >>= sAnchor ) )
             {
 
                 if ( !sAnchor.isEmpty() )
@@ -1236,22 +1236,22 @@ namespace
 } // annonymous
 // .........................................................................
 // -----------------------------------------------------------------------------
-::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName, const rtl::OString& sHelpId)
+::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
-    aURL.Complete = ::rtl::OUString( "vnd.sun.star.help://" );
+    aURL.Complete = OUString( "vnd.sun.star.help://" );
     aURL.Complete += _sModuleName;
-    aURL.Complete += ::rtl::OUString( "/" );
-    aURL.Complete += ::rtl::OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
+    aURL.Complete += OUString( "/" );
+    aURL.Complete += OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
 
-    ::rtl::OUString sAnchor;
-    ::rtl::OUString sTempURL = aURL.Complete;
+    OUString sAnchor;
+    OUString sTempURL = aURL.Complete;
     AppendConfigToken( sTempURL, sal_True );
     sal_Bool bHasAnchor = GetHelpAnchor_Impl( sTempURL, sAnchor );
     AppendConfigToken(aURL.Complete,sal_True);
     if ( bHasAnchor )
     {
-        aURL.Complete += ::rtl::OUString("#");
+        aURL.Complete += OUString("#");
         aURL.Complete += sAnchor;
     }
     return aURL;
@@ -1373,7 +1373,7 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     }
     if ( !pTypeInfo )
     {
-        ::rtl::OUString sCreate("x"),sTypeName;
+        OUString sCreate("x"),sTypeName;
         sal_Bool bForce = sal_True;
         pTypeInfo = ::dbaui::getTypeInfoFromType(_rTypeInfo,DataType::VARCHAR,sTypeName,sCreate,50,0,sal_False,bForce);
     }
@@ -1381,11 +1381,11 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     return pTypeInfo;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const ::rtl::OUString& _sName)
+sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,sal_Bool _bAll,const OUString& _sName)
 {
     SolarMutexGuard aGuard;
     String aMsg = String(ModuleRes(_nText));
-    aMsg.SearchAndReplace(rtl::OUString("%1"),String(_sName));
+    aMsg.SearchAndReplace(OUString("%1"),String(_sName));
     OSQLMessageBox aAsk(_pParent,String(ModuleRes(_nTitle )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
     if ( _bAll )
     {
@@ -1398,9 +1398,9 @@ sal_Int32 askForUserAction(Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText
 // -----------------------------------------------------------------------------
 namespace
 {
-    static ::rtl::OUString lcl_createSDBCLevelStatement( const ::rtl::OUString& _rStatement, const Reference< XConnection >& _rxConnection )
+    static OUString lcl_createSDBCLevelStatement( const OUString& _rStatement, const Reference< XConnection >& _rxConnection )
     {
-        ::rtl::OUString sSDBCLevelStatement( _rStatement );
+        OUString sSDBCLevelStatement( _rStatement );
         try
         {
             Reference< XMultiServiceFactory > xAnalyzerFactory( _rxConnection, UNO_QUERY_THROW );
@@ -1417,8 +1417,8 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-Reference< XPropertySet > createView( const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConnection,
-                                    const ::rtl::OUString& _rCommand )
+Reference< XPropertySet > createView( const OUString& _rName, const Reference< XConnection >& _rxConnection,
+                                    const OUString& _rCommand )
 {
     Reference<XViewsSupplier> xSup(_rxConnection,UNO_QUERY);
     Reference< XNameAccess > xViews;
@@ -1433,7 +1433,7 @@ Reference< XPropertySet > createView( const ::rtl::OUString& _rName, const Refer
     if ( !xView.is() )
         return NULL;
 
-    ::rtl::OUString sCatalog,sSchema,sTable;
+    OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(_rxConnection->getMetaData(),
                                         _rName,
                                         sCatalog,
@@ -1467,10 +1467,10 @@ Reference< XPropertySet > createView( const ::rtl::OUString& _rName, const Refer
 }
 
 // -----------------------------------------------------------------------------
-Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConnection
+Reference<XPropertySet> createView( const OUString& _rName, const Reference< XConnection >& _rxConnection
                                    ,const Reference<XPropertySet>& _rxSourceObject)
 {
-    ::rtl::OUString sCommand;
+    OUString sCommand;
     Reference< XPropertySetInfo > xPSI( _rxSourceObject->getPropertySetInfo(), UNO_SET_THROW );
     if ( xPSI->hasPropertyByName( PROPERTY_COMMAND ) )
     {
@@ -1483,7 +1483,7 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Referen
     }
     else
     {
-        sCommand = ::rtl::OUString( "SELECT * FROM " );
+        sCommand = OUString( "SELECT * FROM " );
         sCommand += composeTableNameForSelect( _rxConnection, _rxSourceObject );
     }
     return createView( _rName, _rxConnection, sCommand );
@@ -1503,7 +1503,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         return sal_False;
 
     Reference<XNameAccess> xNameAccess( _xNames, UNO_QUERY );
-    ::rtl::OUString sName = _sParentFolder;
+    OUString sName = _sParentFolder;
     if ( _xNames->hasByHierarchicalName(sName) )
     {
         Reference<XChild> xChild(_xNames->getByHierarchicalName(sName),UNO_QUERY);
@@ -1516,7 +1516,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
     if ( !xNameAccess.is() )
         return sal_False;
 
-    ::rtl::OUString sNewName;
+    OUString sNewName;
     Reference<XPropertySet> xProp(_xContent,UNO_QUERY);
     if ( xProp.is() )
         xProp->getPropertyValue(PROPERTY_NAME) >>= sNewName;
@@ -1554,7 +1554,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
     {
         String sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
         sError.SearchAndReplaceAscii("#",sNewName);
-        throw SQLException(sError,NULL,::rtl::OUString("S1000") ,0,Any());
+        throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
     }
 
     try
@@ -1563,11 +1563,11 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         Sequence< Any > aArguments(3);
         PropertyValue aValue;
         // set as folder
-        aValue.Name = ::rtl::OUString("Name");
+        aValue.Name = OUString("Name");
         aValue.Value <<= sNewName;
         aArguments[0] <<= aValue;
         //parent
-        aValue.Name = ::rtl::OUString("Parent");
+        aValue.Name = OUString("Parent");
         aValue.Value <<= xNameAccess;
         aArguments[1] <<= aValue;
 
@@ -1575,7 +1575,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         aValue.Value <<= _xContent;
         aArguments[2] <<= aValue;
 
-        ::rtl::OUString sServiceName(_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
+        OUString sServiceName(_bCollection ? ((_bForm) ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION) : SERVICE_SDB_DOCUMENTDEFINITION);
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
         Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );

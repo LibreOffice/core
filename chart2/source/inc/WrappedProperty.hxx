@@ -36,11 +36,11 @@ class OOO_DLLPUBLIC_CHARTTOOLS WrappedProperty
     a corresponding property of the inner PropertySet. Use this class to do the conversion between the two.
     */
 public:
-    WrappedProperty( const ::rtl::OUString& rOuterName, const ::rtl::OUString& rInnerName );
+    WrappedProperty( const OUString& rOuterName, const OUString& rInnerName );
     virtual ~WrappedProperty();
 
-    const ::rtl::OUString& getOuterName() const;
-    virtual ::rtl::OUString getInnerName() const;
+    const OUString& getOuterName() const;
+    virtual OUString getInnerName() const;
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -62,8 +62,8 @@ protected:
     virtual ::com::sun::star::uno::Any convertOuterToInnerValue( const ::com::sun::star::uno::Any& rOuterValue ) const;
 
 protected:
-    ::rtl::OUString             m_aOuterName;
-    ::rtl::OUString             m_aInnerName;
+    OUString             m_aOuterName;
+    OUString             m_aInnerName;
 };
 
 //.............................................................................

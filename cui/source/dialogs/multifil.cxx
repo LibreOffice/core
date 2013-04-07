@@ -51,7 +51,7 @@ IMPL_LINK( SvxMultiFileDialog, AddHdl_Impl, PushButton *, pBtn )
     if ( IsClassPathMode() )
     {
         aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-        aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), rtl::OUString("*.jar;*.zip") );
+        aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), OUString("*.jar;*.zip") );
     }
 
     if ( aDlg.Execute() == ERRCODE_NONE )

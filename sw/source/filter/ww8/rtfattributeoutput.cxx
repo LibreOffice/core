@@ -1435,7 +1435,7 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
         m_aRunText->append("}}");
 }
 
-void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds )
+void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds )
 {
     for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
@@ -3273,7 +3273,7 @@ OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, S
 
 static void lcl_AppendSP( OStringBuffer& rBuffer,
     const char cName[],
-    const ::rtl::OUString& rValue,
+    const OUString& rValue,
     const RtfExport& rExport )
 {
     rBuffer.append( "{" OOO_STRING_SVTOOLS_RTF_SP "{" ); // "{\sp{"

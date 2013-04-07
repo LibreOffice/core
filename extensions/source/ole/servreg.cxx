@@ -30,7 +30,6 @@
 using namespace ole_adapter;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 namespace ole_adapter
 {

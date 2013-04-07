@@ -326,7 +326,7 @@ editeng::HangulHanjaConversion::ConversionDirection AbstractHangulHanjaConversio
 
 void AbstractHangulHanjaConversionDialog_Impl::SetCurrentString(
                     const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
+                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument
                 )
 {
@@ -391,7 +391,7 @@ sal_Bool AbstractInsertObjectDialog_Impl::IsCreateNew()
     return pDlg->IsCreateNew();
 }
 
-::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )
+::Reference< ::com::sun::star::io::XInputStream > AbstractInsertObjectDialog_Impl::GetIconIfIconified( OUString* pGraphicMediaType )
 {
    return pDlg->GetIconIfIconified( pGraphicMediaType );
 }
@@ -729,11 +729,11 @@ void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link& rLink, bool bCheck
     else
         pDlg->SetCheckNameHdl( Link(), bCheckImmediately );
 }
-void AbstractSvxNameDialog_Impl::SetEditHelpId(const rtl::OString& aHelpId)
+void AbstractSvxNameDialog_Impl::SetEditHelpId(const OString& aHelpId)
 {
     pDlg->SetEditHelpId( aHelpId );
 }
-void AbstractSvxNameDialog_Impl::SetHelpId( const rtl::OString& aHelpId )
+void AbstractSvxNameDialog_Impl::SetHelpId( const OString& aHelpId )
 {
     pDlg->SetHelpId( aHelpId );
 }
@@ -847,7 +847,7 @@ void AbstractSvxMultiFileDialog_Impl::SetTitle( const String& rNewTitle )
     pDlg->SetText( rNewTitle );
 }
 
-void AbstractSvxMultiFileDialog_Impl::SetHelpId( const rtl::OString& aHelpId )
+void AbstractSvxMultiFileDialog_Impl::SetHelpId( const OString& aHelpId )
 {
     pDlg->SetHelpId( aHelpId );
 }
@@ -1858,7 +1858,7 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
     return 0;
 }
 
-SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommand,
+SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDialog( Window* pParent, const OUString& rCommand,
             const Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList )
 {
@@ -1872,20 +1872,20 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 
     if ( pDlg )
     {
-        pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new AbstractInsertObjectDialog_Impl( pDlg );
     }
     return 0;
 }
 
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent,  const rtl::OUString& rCommand,
+VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* pParent,  const OUString& rCommand,
             const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
     InsertObjectDialog_Impl* pDlg=0;
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
-        pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
+        pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new CuiVclAbstractDialog_Impl( pDlg );
     }
     return 0;
@@ -1922,12 +1922,12 @@ SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( 
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
-    Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& /*rApplicationContext*/ )
+    Window* pParent, const OUString& rExtensionId, const OUString& /*rApplicationContext*/ )
 {
     return new CuiVclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
 }
 
-SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId )
+SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId )
 {
     return new SvxInsRowColDlg( pParent, bCol, sHelpId );
 }

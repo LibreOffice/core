@@ -30,13 +30,13 @@
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, rtl::OString const & registryType, bool fullModuleType)
+    FileStream & out, OString const & registryType, bool fullModuleType)
 {
     bool output = false;
     if (registryType != "/") {
         bool first = true;
         for (sal_Int32 i = 0; i >= 0;) {
-            rtl::OString id(registryType.getToken(0, '/', i));
+            OString id(registryType.getToken(0, '/', i));
             if (fullModuleType || i >= 0) {
                 if (!first) {
                     out << " ";
@@ -51,7 +51,7 @@ bool dumpNamespaceOpen(
 }
 
 bool dumpNamespaceClose(
-    FileStream & out, rtl::OString const & registryType, bool fullModuleType)
+    FileStream & out, OString const & registryType, bool fullModuleType)
 {
     bool output = false;
     if (registryType != "/") {
@@ -74,7 +74,7 @@ bool dumpNamespaceClose(
     return output;
 }
 
-void dumpTypeIdentifier(FileStream & out, rtl::OString const & registryType) {
+void dumpTypeIdentifier(FileStream & out, OString const & registryType) {
     out << registryType.copy(registryType.lastIndexOf('/') + 1);
 }
 

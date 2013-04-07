@@ -124,7 +124,7 @@ namespace XSLT
         OUString
         expandUrl(const OUString&);
 
-        css::uno::Reference<xslt::XXSLTTransformer> impl_createTransformer(const rtl::OUString& rTransformer, const Sequence<Any>& rArgs);
+        css::uno::Reference<xslt::XXSLTTransformer> impl_createTransformer(const OUString& rTransformer, const Sequence<Any>& rArgs);
 
     public:
 
@@ -179,10 +179,10 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     {
     }
 
-    ::rtl::OUString
-    XSLTFilter::expandUrl(const ::rtl::OUString& sUrl)
+    OUString
+    XSLTFilter::expandUrl(const OUString& sUrl)
     {
-        ::rtl::OUString sExpandedUrl;
+        OUString sExpandedUrl;
         try
             {
                 css::uno::Reference<XComponentContext> xContext(
@@ -201,7 +201,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
     }
 
     css::uno::Reference<xslt::XXSLTTransformer>
-    XSLTFilter::impl_createTransformer(const rtl::OUString& rTransformer, const Sequence<Any>& rArgs)
+    XSLTFilter::impl_createTransformer(const OUString& rTransformer, const Sequence<Any>& rArgs)
     {
         css::uno::Reference<xslt::XXSLTTransformer> xTransformer;
 
@@ -379,7 +379,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         ::com::sun::star::ucb::InteractiveAugmentedIOException exc(
-                                                rtl::OUString("Timeout!"),
+                                                OUString("Timeout!"),
                                                 static_cast< OWeakObject * >( this ),
                                                 InteractionClassification_ERROR,
                                                 ::com::sun::star::ucb::IOErrorCode_GENERAL,

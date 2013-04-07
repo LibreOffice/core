@@ -32,7 +32,7 @@ namespace rptxml
 
 OXMLReportElementBase::OXMLReportElementBase( ORptFilter& rImport
                 ,sal_uInt16 nPrfx
-                , const ::rtl::OUString& rLName
+                , const OUString& rLName
                 ,const Reference< XReportComponent > & _xComponent
                 ,OXMLTable* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -49,7 +49,7 @@ OXMLReportElementBase::~OXMLReportElementBase()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = _CreateChildContext(nPrefix,rLocalName,xAttrList);
@@ -60,7 +60,7 @@ SvXMLImportContext* OXMLReportElementBase::CreateChildContext(
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLReportElementBase::_CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

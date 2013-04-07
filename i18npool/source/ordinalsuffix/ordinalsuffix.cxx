@@ -25,7 +25,7 @@
 #include <unicode/rbnf.h>
 #include <unicode/normlzr.h>
 
-#define CSTR( ouStr ) rtl::OUStringToOString( ouStr, RTL_TEXTENCODING_UTF8 ).getStr( )
+#define CSTR( ouStr ) OUStringToOString( ouStr, RTL_TEXTENCODING_UTF8 ).getStr( )
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;

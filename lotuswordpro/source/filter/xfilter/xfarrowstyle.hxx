@@ -68,37 +68,37 @@ public:
     XFArrowStyle();
 
 public:
-    void    SetArrowName(rtl::OUString name);
+    void    SetArrowName(OUString name);
 
-    void    SetViewbox(rtl::OUString viewBox);
+    void    SetViewbox(OUString viewBox);
 
-    void    SetSVGPath(rtl::OUString path);
+    void    SetSVGPath(OUString path);
 
     virtual enumXFStyle GetStyleFamily();
 
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strName;
-    rtl::OUString   m_strViewBox;
-    rtl::OUString   m_strPath;
+    OUString   m_strName;
+    OUString   m_strViewBox;
+    OUString   m_strPath;
 };
 
 inline XFArrowStyle::XFArrowStyle()
 {
 }
 
-inline void XFArrowStyle::SetArrowName(rtl::OUString name)
+inline void XFArrowStyle::SetArrowName(OUString name)
 {
     m_strName = name;
 }
 
-inline void XFArrowStyle::SetViewbox(rtl::OUString viewBox)
+inline void XFArrowStyle::SetViewbox(OUString viewBox)
 {
     m_strViewBox = viewBox;
 }
 
-inline void XFArrowStyle::SetSVGPath(rtl::OUString path)
+inline void XFArrowStyle::SetSVGPath(OUString path)
 {
     m_strPath = path;
 }

@@ -105,7 +105,7 @@ public:
     struct ExternalTabInfo
     {
         ScRange         maRange;
-        ::rtl::OUString maTabName;
+        OUString maTabName;
         sal_uInt16      mnFileId;
         bool            mbExternal;
 

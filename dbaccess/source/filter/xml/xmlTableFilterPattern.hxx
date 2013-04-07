@@ -31,13 +31,13 @@ namespace dbaxml
     public:
         OXMLTableFilterPattern( SvXMLImport& rImport
                                 ,sal_uInt16 nPrfx
-                                ,const ::rtl::OUString& rLName
+                                ,const OUString& rLName
                                 ,sal_Bool _bNameFilter
                                 ,OXMLTableFilterList& _rParent);
 
         virtual ~OXMLTableFilterPattern();
 
-        virtual void Characters( const ::rtl::OUString& rChars );
+        virtual void Characters( const OUString& rChars );
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaxml

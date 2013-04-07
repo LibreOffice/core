@@ -152,8 +152,8 @@ namespace xmloff { namespace EnhancedCustomShapeToken {
         EAS_NotFound
     };
 
-    EnhancedCustomShapeTokenEnum EASGet( const rtl::OUString& );
-    rtl::OUString EASGet( const EnhancedCustomShapeTokenEnum );
+    EnhancedCustomShapeTokenEnum EASGet( const OUString& );
+    OUString EASGet( const EnhancedCustomShapeTokenEnum );
 }
 }
 

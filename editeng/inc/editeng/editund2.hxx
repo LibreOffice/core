@@ -57,7 +57,7 @@ public:
     virtual void    Redo()      = 0;
 
     virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
     virtual sal_uInt16  GetId() const;
 };
 

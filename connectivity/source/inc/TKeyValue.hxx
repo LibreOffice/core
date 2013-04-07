@@ -54,7 +54,7 @@ namespace connectivity
         }
         inline void setValue(sal_Int32 nVal) { m_nValue = nVal; }
 
-        ::rtl::OUString getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
+        OUString getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {
             OSL_ENSURE(m_aKeys.size() > i,"Wrong index for KEyValue");
             return m_aKeys[i]->getValue();

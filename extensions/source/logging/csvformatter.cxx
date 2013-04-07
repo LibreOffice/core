@@ -57,11 +57,11 @@ namespace logging
     class CsvFormatter : public CsvFormatter_Base
     {
     public:
-        virtual ::rtl::OUString SAL_CALL formatMultiColumn(const Sequence< ::rtl::OUString>& column_data) throw (RuntimeException);
+        virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException);
 
         // XServiceInfo - static version
-        static ::rtl::OUString SAL_CALL getImplementationName_static();
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+        static OUString SAL_CALL getImplementationName_static();
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& context );
 
     protected:
@@ -73,23 +73,23 @@ namespace logging
         virtual ::sal_Bool SAL_CALL getLogThread() throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL getLogTimestamp() throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL getLogSource() throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getColumnnames() throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getColumnnames() throw (RuntimeException);
 
         virtual void SAL_CALL setLogEventNo( ::sal_Bool log_event_no ) throw (RuntimeException);
         virtual void SAL_CALL setLogThread( ::sal_Bool log_thread ) throw (RuntimeException);
         virtual void SAL_CALL setLogTimestamp( ::sal_Bool log_timestamp ) throw (RuntimeException);
         virtual void SAL_CALL setLogSource( ::sal_Bool log_source ) throw (RuntimeException);
-        virtual void SAL_CALL setColumnnames( const Sequence< ::rtl::OUString>& column_names) throw (RuntimeException);
+        virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) throw (RuntimeException);
 
         // XLogFormatter
-        virtual ::rtl::OUString SAL_CALL getHead(  ) throw (RuntimeException);
-        virtual ::rtl::OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getTail(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
+        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& service_name ) throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& service_name ) throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
     private:
         ::comphelper::ComponentContext m_aContext;
@@ -98,20 +98,20 @@ namespace logging
         ::sal_Bool m_LogTimestamp;
         ::sal_Bool m_LogSource;
         ::sal_Bool m_MultiColumn;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > m_Columnnames;
+        ::com::sun::star::uno::Sequence< OUString > m_Columnnames;
     };
 } // namespace logging
 
 //= private helpers
 namespace
 {
-    const sal_Unicode quote_char = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")).toChar();
-    const sal_Unicode comma_char = ::rtl::OUString(",").toChar();
-    const ::rtl::OUString dos_newline = ::rtl::OUString("\r\n");
+    const sal_Unicode quote_char = OUString(RTL_CONSTASCII_USTRINGPARAM("\"")).toChar();
+    const sal_Unicode comma_char = OUString(",").toChar();
+    const OUString dos_newline = OUString("\r\n");
 
-    inline bool needsQuoting(const ::rtl::OUString& str)
+    inline bool needsQuoting(const OUString& str)
     {
-        static const ::rtl::OUString quote_trigger_chars = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("\",\n\r"));
+        static const OUString quote_trigger_chars = OUString( RTL_CONSTASCII_USTRINGPARAM("\",\n\r"));
         sal_Int32 len = str.getLength();
         for(sal_Int32 i=0; i<len; i++)
             if(quote_trigger_chars.indexOf(str[i])!=-1)
@@ -119,7 +119,7 @@ namespace
         return false;
     };
 
-    inline void appendEncodedString(::rtl::OUStringBuffer& buf, const ::rtl::OUString& str)
+    inline void appendEncodedString(OUStringBuffer& buf, const OUString& str)
     {
         if(needsQuoting(str))
         {
@@ -145,10 +145,10 @@ namespace
             buf.append(str);
     };
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> initialColumns()
+    ::com::sun::star::uno::Sequence< OUString> initialColumns()
     {
-        com::sun::star::uno::Sequence< ::rtl::OUString> result = ::com::sun::star::uno::Sequence< ::rtl::OUString>(1);
-        result[0] = ::rtl::OUString("message");
+        com::sun::star::uno::Sequence< OUString> result = ::com::sun::star::uno::Sequence< OUString>(1);
+        result[0] = OUString("message");
         return result;
     };
 }
@@ -189,7 +189,7 @@ namespace logging
         return m_LogSource;
     }
 
-    Sequence< ::rtl::OUString > CsvFormatter::getColumnnames() throw (RuntimeException)
+    Sequence< OUString > CsvFormatter::getColumnnames() throw (RuntimeException)
     {
         return m_Columnnames;
     }
@@ -214,15 +214,15 @@ namespace logging
         m_LogSource = log_source;
     }
 
-    void CsvFormatter::setColumnnames(const Sequence< ::rtl::OUString >& columnnames) throw (RuntimeException)
+    void CsvFormatter::setColumnnames(const Sequence< OUString >& columnnames) throw (RuntimeException)
     {
-        m_Columnnames = Sequence< ::rtl::OUString>(columnnames);
+        m_Columnnames = Sequence< OUString>(columnnames);
         m_MultiColumn = (m_Columnnames.getLength()>1);
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::getHead(  ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::getHead(  ) throw (RuntimeException)
     {
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         if(m_LogEventNo)
             buf.appendAscii("event no,");
         if(m_LogThread)
@@ -242,9 +242,9 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::format( const LogRecord& record ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::format( const LogRecord& record ) throw (RuntimeException)
     {
-        ::rtl::OUStringBuffer aLogEntry;
+        OUStringBuffer aLogEntry;
 
         if(m_LogEventNo)
         {
@@ -297,15 +297,15 @@ namespace logging
         return aLogEntry.makeStringAndClear();
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::getTail(  ) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::getTail(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString();
+        return OUString();
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::formatMultiColumn(const Sequence< ::rtl::OUString>& column_data) throw (RuntimeException)
+    OUString SAL_CALL CsvFormatter::formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException)
     {
         sal_Int32 columns = column_data.getLength();
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         for(int i=0; i<columns; i++)
         {
             appendEncodedString(buf, column_data[i]);
@@ -315,10 +315,10 @@ namespace logging
         return buf.makeStringAndClear();
     }
 
-    ::sal_Bool SAL_CALL CsvFormatter::supportsService( const ::rtl::OUString& service_name ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL CsvFormatter::supportsService( const OUString& service_name ) throw(RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const ::rtl::OUString* pServiceNames = aServiceNames.getConstArray();
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
+        for (   const OUString* pServiceNames = aServiceNames.getConstArray();
                 pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
                 ++pServiceNames
             )
@@ -327,25 +327,25 @@ namespace logging
         return sal_False;
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL CsvFormatter::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    ::rtl::OUString SAL_CALL CsvFormatter::getImplementationName_static()
+    OUString SAL_CALL CsvFormatter::getImplementationName_static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.CsvFormatter" );
+        return OUString( "com.sun.star.comp.extensions.CsvFormatter" );
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
+    Sequence< OUString > SAL_CALL CsvFormatter::getSupportedServiceNames_static()
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.CsvFormatter" );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString( "com.sun.star.logging.CsvFormatter" );
         return aServiceNames;
     }
 

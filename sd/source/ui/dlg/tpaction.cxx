@@ -441,7 +441,7 @@ void SdTPAction::OpenFileDialog()
             Application::SetDefDialogParent( this );
 
             // choose macro dialog
-            ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
+            OUString aScriptURL = SfxApplication::ChooseScript();
 
             if ( !aScriptURL.isEmpty() )
             {
@@ -466,7 +466,7 @@ void SdTPAction::OpenFileDialog()
             // links on the desktop to directories.
             aFileDialog.AddFilter (
                 String (SfxResId (STR_SFX_FILTERNAME_ALL)),
-                rtl::OUString("*.*"));
+                OUString("*.*"));
 
 
             if( aFileDialog.Execute() == ERRCODE_NONE )

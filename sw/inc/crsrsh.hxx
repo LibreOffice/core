@@ -548,8 +548,8 @@ public:
     // at CurCrsr.SPoint
     ::sw::mark::IMark* SetBookmark(
         const KeyCode&,
-        const ::rtl::OUString& rName,
-        const ::rtl::OUString& rShortName,
+        const OUString& rName,
+        const OUString& rShortName,
         IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::BOOKMARK);
     bool GotoMark( const ::sw::mark::IMark* const pMark );    // sets CurCrsr.SPoint
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bAtStart );
@@ -757,12 +757,12 @@ public:
     // get smart tags at point position
     void GetSmartTagTerm( const Point& rPt,
                           SwRect& rSelectRect,
-                          ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                          ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
                           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                           ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange );
 
     // get smart tags at current cursor position
-    void GetSmartTagTerm( ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+    void GetSmartTagTerm( ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
                           ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                           ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange ) const;
 

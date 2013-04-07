@@ -70,18 +70,18 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::co
 };
 
 /** unary function to convert ::com::sun::star::uno::Any into an
-    ::rtl::OUString.
+    OUString.
 */
-struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  ::rtl::OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::com::sun::star::uno::Any,  OUString >
 {
-    ::rtl::OUString operator() ( const ::com::sun::star::uno::Any & rAny )
+    OUString operator() ( const ::com::sun::star::uno::Any & rAny )
     {
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
         if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
             const double* pDouble = reinterpret_cast< const double * >( rAny.getValue() );
             if( ::rtl::math::isNan(*pDouble) )
-                return ::rtl::OUString();
+                return OUString();
             return ::rtl::math::doubleToUString(
                 * pDouble,
                 rtl_math_StringFormat_Automatic,
@@ -92,20 +92,20 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
         }
         else if( eClass == ::com::sun::star::uno::TypeClass_STRING )
         {
-            return * reinterpret_cast< const ::rtl::OUString * >( rAny.getValue() );
+            return * reinterpret_cast< const OUString * >( rAny.getValue() );
         }
 
-        return ::rtl::OUString();
+        return OUString();
     }
 };
 
-/** unary function to convert an ::rtl::OUString into a double number.
+/** unary function to convert an OUString into a double number.
 
     <p>For conversion rtl::math::StringToDouble is used.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public ::std::unary_function< ::rtl::OUString, double >
+struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public ::std::unary_function< OUString, double >
 {
-    double operator() ( const ::rtl::OUString & rStr )
+    double operator() ( const OUString & rStr )
     {
         rtl_math_ConversionStatus eConversionStatus;
         double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus, NULL );
@@ -117,13 +117,13 @@ struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble : public ::std::unary_function<
     }
 };
 
-/** unary function to convert a double number into an ::rtl::OUString.
+/** unary function to convert a double number into an OUString.
 
     <p>For conversion rtl::math::DoubleToOUString is used.</p>
  */
-struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function< double, ::rtl::OUString >
+struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function< double, OUString >
 {
-    ::rtl::OUString operator() ( double fNumber )
+    OUString operator() ( double fNumber )
     {
         return ::rtl::math::doubleToUString(
             fNumber,

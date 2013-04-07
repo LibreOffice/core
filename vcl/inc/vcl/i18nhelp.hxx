@@ -70,9 +70,9 @@ public:
                 I18nHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const LanguageTag& rLanguageTag );
                 ~I18nHelper();
 
-    sal_Int32   CompareString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const;
+    sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
-    sal_Bool    MatchString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const;
+    sal_Bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
     sal_Bool    MatchMnemonic( const String& rString, sal_Unicode cMnemonicChar ) const;
 
     String      GetNum( long nNumber, sal_uInt16 nDecimals, sal_Bool bUseThousandSep = sal_True, sal_Bool bTrailingZeros = sal_True ) const;

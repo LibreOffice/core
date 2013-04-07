@@ -70,7 +70,7 @@
 
 // =======================================================================
 
-void SalAbort( const rtl::OUString& rErrorText, bool )
+void SalAbort( const OUString& rErrorText, bool )
 {
     ImplFreeSalGDI();
 
@@ -1015,9 +1015,9 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
       @param aFileUrl
                 The file url of the document.
 */
-void WinSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& /*rMimeType*/)
+void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/)
 {
-    rtl::OUString system_path;
+    OUString system_path;
     osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(rFileUrl, system_path);
 
     OSL_ENSURE(osl::FileBase::E_None == rc, "Invalid file url");
@@ -1059,9 +1059,9 @@ SalI18NImeStatus* WinSalInstance::CreateI18NImeStatus()
 
 // -----------------------------------------------------------------------
 
-const ::rtl::OUString& SalGetDesktopEnvironment()
+const OUString& SalGetDesktopEnvironment()
 {
-    static ::rtl::OUString aDesktopEnvironment( "Windows" );
+    static OUString aDesktopEnvironment( "Windows" );
     return aDesktopEnvironment;
 }
 

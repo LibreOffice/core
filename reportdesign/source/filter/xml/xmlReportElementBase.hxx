@@ -31,7 +31,7 @@ namespace rptxml
     class SAL_NO_VTABLE IMasterDetailFieds
     {
     public:
-        virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair) = 0;
+        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair) = 0;
 
     protected:
         ~IMasterDetailFieds() {}
@@ -47,19 +47,19 @@ namespace rptxml
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >      m_xComponent;
 
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     public:
 
         OXMLReportElementBase( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer);
         virtual ~OXMLReportElementBase();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual void EndElement();

@@ -37,7 +37,7 @@ namespace rtl { class OUString; }
 /** Define various helper variables and functions for xmlimpit.cxx and
  * xmlexpit.cxx.  */
 
-bool sw_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
+bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       bool& rHasStyle, sal_uInt16& rStyle,
                                       bool& rHasWidth, sal_uInt16& rWidth,

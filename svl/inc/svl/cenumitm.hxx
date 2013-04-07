@@ -52,7 +52,7 @@ public:
 
     virtual sal_uInt16 GetValueCount() const = 0;
 
-    virtual rtl::OUString GetValueTextByPos(sal_uInt16 nPos) const;
+    virtual OUString GetValueTextByPos(sal_uInt16 nPos) const;
 
     virtual sal_uInt16 GetValueByPos(sal_uInt16 nPos) const;
 
@@ -158,7 +158,7 @@ public:
 
     virtual sal_uInt16 GetValueCount() const;
 
-    virtual rtl::OUString GetValueTextByVal(sal_Bool bTheValue) const;
+    virtual OUString GetValueTextByVal(sal_Bool bTheValue) const;
 
     sal_Bool GetValue() const { return m_bValue; }
 

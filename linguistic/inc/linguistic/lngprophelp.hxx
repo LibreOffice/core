@@ -59,7 +59,7 @@ typedef cppu::WeakImplHelper2
 class PropertyChgHelper :
     public PropertyChgHelperBase
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aPropNames;
+    ::com::sun::star::uno::Sequence< OUString >  aPropNames;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface >             xMyEvtObj;
     ::cppu::OInterfaceContainerHelper                   aLngSvcEvtListeners;
@@ -85,7 +85,7 @@ protected:
     virtual void    SetDefaultValues();
     virtual void    GetCurrentValues();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > &
+    ::com::sun::star::uno::Sequence< OUString > &
             GetPropNames()  { return aPropNames; }
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > &
@@ -135,7 +135,7 @@ public:
     void    LaunchEvent(
                 const ::com::sun::star::linguistic2::LinguServiceEvent& rEvt );
 
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > &
+    const ::com::sun::star::uno::Sequence< OUString > &
             GetPropNames() const    { return aPropNames; }
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > &

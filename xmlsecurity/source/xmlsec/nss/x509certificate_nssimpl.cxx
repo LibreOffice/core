@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificate ;
 using ::com::sun::star::util::DateTime ;
@@ -76,7 +75,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_NssImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
+OUString SAL_CALL X509Certificate_NssImpl :: getIssuerName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
         return OUString(m_pCert->issuerName , PL_strlen(m_pCert->issuerName) , RTL_TEXTENCODING_UTF8) ;
     } else {
@@ -84,7 +83,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
     }
 }
 
-::rtl::OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) {
+OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
         return OUString(m_pCert->subjectName , PL_strlen(m_pCert->subjectName) , RTL_TEXTENCODING_UTF8);
     } else {
@@ -186,11 +185,11 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         for( extns = m_pCert->extensions, len = 0; *extns != NULL; extns ++, len ++ ) {
             const SECItem id = (*extns)->id;
-            ::rtl::OString oidString(CERT_GetOidString(&id));
+            OString oidString(CERT_GetOidString(&id));
 
             // remove "OID." prefix if existing
-            ::rtl::OString objID;
-            ::rtl::OString oid("OID.");
+            OString objID;
+            OString oid("OID.");
             if (oidString.match(oid))
                 objID = oidString.copy(oid.getLength());
             else
@@ -230,7 +229,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
         for( extns = m_pCert->extensions; *extns != NULL; extns ++ ) {
             if( SECITEM_CompareItem( &idItem, &(*extns)->id ) == SECEqual ) {
                 const SECItem id = (*extns)->id;
-                ::rtl::OString objId(CERT_GetOidString(&id));
+                OString objId(CERT_GetOidString(&id));
                 if ( objId.equals("OID.2.5.29.17") )
                     pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
                 else
@@ -322,14 +321,14 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
     return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
-::rtl::OUString getAlgorithmDescription(SECAlgorithmID *aid)
+OUString getAlgorithmDescription(SECAlgorithmID *aid)
 {
     SECOidTag tag;
     tag = SECOID_GetAlgorithmTag(aid);
 
     const char *pDesc = SECOID_FindOIDTagDescription(tag);
 
-    return rtl::OUString::createFromAscii( pDesc ) ;
+    return OUString::createFromAscii( pDesc ) ;
 }
 
 ::com::sun::star::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate *pCert, SECOidTag id)
@@ -354,7 +353,7 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
     return ::com::sun::star::uno::Sequence< sal_Int8 >();
 }
 
-::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyAlgorithm()
+OUString SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCert != NULL )
@@ -390,7 +389,7 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
     return ::com::sun::star::uno::Sequence< sal_Int8 >();
 }
 
-::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
+OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
     throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( m_pCert != NULL )

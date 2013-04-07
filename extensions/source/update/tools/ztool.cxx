@@ -34,8 +34,8 @@ int SAL_CALL main( int argc, char **argv )
         show_usage();
         return -1;
     }
-    rtl::OUString aInName = rtl::OUString::createFromAscii(argv[1]);
-    rtl::OUString aOutName = rtl::OUString::createFromAscii(argv[2]);
+    OUString aInName = OUString::createFromAscii(argv[1]);
+    OUString aOutName = OUString::createFromAscii(argv[2]);
     SvFileStream aInFile( aInName, STREAM_READ );
     SvFileStream aOutFile( aOutName, STREAM_WRITE | STREAM_TRUNC );
 

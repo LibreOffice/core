@@ -98,9 +98,9 @@ public:
     /** Imports the shape client data from the xdr:clientData element. */
     void                importClientData( const AttributeList& rAttribs );
     /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
-    void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
+    void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue );
     /** Imports the client anchor settings from a VML element. */
-    void                importVmlAnchor( const ::rtl::OUString& rAnchor );
+    void                importVmlAnchor( const OUString& rAnchor );
 
     /** Calculates the resulting shape anchor in EMUs. */
     ::oox::drawingml::EmuRectangle calcAnchorRectEmu(

@@ -38,7 +38,7 @@ class UndoGuard
 {
 public:
     explicit UndoGuard(
-        const ::rtl::OUString& i_undoMessage,
+        const OUString& i_undoMessage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager,
         const ModelFacet i_facet = E_MODEL
     );
@@ -58,7 +58,7 @@ private:
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
 
     ::boost::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
-    rtl::OUString                           m_aUndoString;
+    OUString                           m_aUndoString;
     bool                                    m_bActionPosted;
 };
 
@@ -69,7 +69,7 @@ class UndoLiveUpdateGuard : public UndoGuard
 {
 public:
     explicit UndoLiveUpdateGuard(
-        const ::rtl::OUString& i_undoMessage,
+        const OUString& i_undoMessage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuard();
@@ -83,7 +83,7 @@ class UndoLiveUpdateGuardWithData :
 {
 public:
     explicit UndoLiveUpdateGuardWithData(
-        const ::rtl::OUString& i_undoMessage,
+        const OUString& i_undoMessage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
     );
     ~UndoLiveUpdateGuardWithData();
@@ -93,7 +93,7 @@ class UndoGuardWithSelection : public UndoGuard
 {
 public:
     explicit UndoGuardWithSelection(
-        const ::rtl::OUString& i_undoMessage,
+        const OUString& i_undoMessage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > & i_undoManager
     );
     virtual ~UndoGuardWithSelection();

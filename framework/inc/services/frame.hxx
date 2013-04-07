@@ -153,8 +153,8 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XComponentLoader
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::lang::XComponent >        SAL_CALL loadComponentFromURL               ( const ::rtl::OUString&                                                        sURL                ,
-                                                                                                                  const ::rtl::OUString&                                                        sTargetFrameName    ,
+        virtual css::uno::Reference< css::lang::XComponent >        SAL_CALL loadComponentFromURL               ( const OUString&                                                        sURL                ,
+                                                                                                                  const OUString&                                                        sTargetFrameName    ,
                                                                                                                         sal_Int32                                                               nSearchFlags        ,
                                                                                                                   const css::uno::Sequence< css::beans::PropertyValue >&                        lArguments          ) throw( css::io::IOException                ,
                                                                                                                                                                                                                              css::lang::IllegalArgumentException ,
@@ -175,9 +175,9 @@ class Frame :   // interfaces
         virtual css::uno::Reference< css::awt::XWindow >            SAL_CALL getContainerWindow                 (                                                                                                   ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL setCreator                         (   const   css::uno::Reference< css::frame::XFramesSupplier >&                 xCreator            ) throw( css::uno::RuntimeException );
         virtual css::uno::Reference< css::frame::XFramesSupplier >  SAL_CALL getCreator                         (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual ::rtl::OUString                                     SAL_CALL getName                            (                                                                                                   ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL setName                            (   const   ::rtl::OUString&                                                    sName               ) throw( css::uno::RuntimeException );
-        virtual css::uno::Reference< css::frame::XFrame >           SAL_CALL findFrame                          (   const   ::rtl::OUString&                                                    sTargetFrameName    ,
+        virtual OUString                                     SAL_CALL getName                            (                                                                                                   ) throw( css::uno::RuntimeException );
+        virtual void                                                SAL_CALL setName                            (   const   OUString&                                                    sName               ) throw( css::uno::RuntimeException );
+        virtual css::uno::Reference< css::frame::XFrame >           SAL_CALL findFrame                          (   const   OUString&                                                    sTargetFrameName    ,
                                                                                                                             sal_Int32                                                           nSearchFlags        ) throw( css::uno::RuntimeException );
         virtual sal_Bool                                            SAL_CALL isTop                              (                                                                                                   ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL activate                           (                                                                                                   ) throw( css::uno::RuntimeException );
@@ -207,7 +207,7 @@ class Frame :   // interfaces
         //  XDispatchProvider
         //---------------------------------------------------------------------------------------------------------
         virtual css::uno::Reference< css::frame::XDispatch >        SAL_CALL queryDispatch                      (   const   css::util::URL&                                                     aURL                ,
-                                                                                                                    const   ::rtl::OUString&                                                    sTargetFrameName    ,
+                                                                                                                    const   OUString&                                                    sTargetFrameName    ,
                                                                                                                             sal_Int32                                                           nSearchFlags        ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence<
                     css::uno::Reference< css::frame::XDispatch > >  SAL_CALL queryDispatches                    (   const   css::uno::Sequence< css::frame::DispatchDescriptor >&               lDescriptor         ) throw( css::uno::RuntimeException );
@@ -281,8 +281,8 @@ class Frame :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XTitle
         //---------------------------------------------------------------------------------------------------------
-        virtual ::rtl::OUString SAL_CALL getTitle(                               ) throw (css::uno::RuntimeException);
-        virtual void            SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (css::uno::RuntimeException);
+        virtual OUString SAL_CALL getTitle(                               ) throw (css::uno::RuntimeException);
+        virtual void            SAL_CALL setTitle( const OUString& sTitle ) throw (css::uno::RuntimeException);
 
         //---------------------------------------------------------------------------------------------------------
         //  XTitleChangeBroadcaster
@@ -297,11 +297,11 @@ class Frame :   // interfaces
 
         void impl_initializePropInfo();
 
-        virtual void SAL_CALL impl_setPropertyValue(const ::rtl::OUString& sProperty,
+        virtual void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
                                                           sal_Int32        nHandle  ,
                                                     const css::uno::Any&   aValue   );
 
-        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const ::rtl::OUString& sProperty,
+        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                    sal_Int32        nHandle  );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -395,7 +395,7 @@ class Frame :   // interfaces
         css::uno::Reference< css::frame::XController >                          m_xController                       ;   /// controller of the actual frame
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener               ;   /// listen to drag & drop
         EActiveState                                                            m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
-        ::rtl::OUString                                                         m_sName                             ;   /// name of this frame
+        OUString                                                         m_sName                             ;   /// name of this frame
         sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
         sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
         sal_Int16                                                               m_nExternalLockCount                ;
@@ -420,7 +420,7 @@ class Frame :   // interfaces
             return m_xFactory;
         }
 
-        inline ::rtl::OUString impl_getName()
+        inline OUString impl_getName()
         {
             ReadGuard aReadLock( m_aLock );
             return m_sName;

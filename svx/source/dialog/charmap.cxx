@@ -399,7 +399,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         int x = pix.X();
         int y = pix.Y();
 
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( i ) );
         String aCharStr(buf.makeStringAndClear());
         int nTextWidth = GetTextWidth(aCharStr);
@@ -722,7 +722,7 @@ void SvxShowCharSet::ReleaseAccessible()
         boost::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
             m_pAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
         aFind = m_aItems.insert(ItemsMap::value_type(_nPos, xItem)).first;
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendUtf32( maFontCharMap.GetCharFromIndex( _nPos ) );
         aFind->second->maText = buf.makeStringAndClear();
         Point pix = MapIndexToPixel( _nPos );

@@ -18,11 +18,11 @@ namespace oox { namespace ppt {
 
 struct CommentAuthor
 {
-    ::rtl::OUString clrIdx;
-    ::rtl::OUString id;
-    ::rtl::OUString initials;
-    ::rtl::OUString lastIdx;
-    ::rtl::OUString name;
+    OUString clrIdx;
+    OUString id;
+    OUString initials;
+    OUString lastIdx;
+    OUString name;
 };
 
 class CommentAuthorList
@@ -49,60 +49,60 @@ class CommentAuthorList
 class Comment
 {
     private:
-        ::rtl::OUString authorId;
-        ::rtl::OUString dt;
-        ::rtl::OUString idx;
-        ::rtl::OUString x;
-        ::rtl::OUString y;
-        ::rtl::OUString text;
+        OUString authorId;
+        OUString dt;
+        OUString idx;
+        OUString x;
+        OUString y;
+        OUString text;
         ::com::sun::star::util::DateTime aDateTime;
 
-        void setDateTime (::rtl::OUString datetime);
+        void setDateTime (OUString datetime);
 
     public:
-        void setAuthorId(const ::rtl::OUString& _aId)
+        void setAuthorId(const OUString& _aId)
         {
             authorId = _aId;
         }
-        void setdt(const ::rtl::OUString& _dt)
+        void setdt(const OUString& _dt)
         {
             dt=_dt;
             setDateTime(_dt);
         }
-        void setidx(const ::rtl::OUString& _idx)
+        void setidx(const OUString& _idx)
         {
             idx=_idx;
         }
-        void setPoint(const ::rtl::OUString& _x, const ::rtl::OUString& _y)
+        void setPoint(const OUString& _x, const OUString& _y)
         {
             x=_x;
             y=_y;
         }
-        void setText(const rtl::OUString& _text)
+        void setText(const OUString& _text)
         {
             text = _text;
         }
-        ::rtl::OUString getAuthorId()
+        OUString getAuthorId()
         {
             return authorId;
         }
-        ::rtl::OUString getdt()
+        OUString getdt()
         {
             return dt;
         }
-        ::rtl::OUString getidx()
+        OUString getidx()
         {
             return idx;
         }
-        ::rtl::OUString get_X()
+        OUString get_X()
         {
             return x;
         }
-        ::rtl::OUString get_Y()
+        OUString get_Y()
         {
             return y;
         }
-        ::rtl::OUString get_text()
+        OUString get_text()
         {
             return text;
         }
@@ -118,7 +118,7 @@ class Comment
         {
             return y.toInt32();
         }
-        ::rtl::OUString getAuthor ( const CommentAuthorList& list );
+        OUString getAuthor ( const CommentAuthorList& list );
 };
 
 class CommentList

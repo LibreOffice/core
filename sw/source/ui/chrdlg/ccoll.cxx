@@ -78,7 +78,7 @@ const char *aCommandContext[COND_COMMAND_COUNT] =
     "NumberingLevel10"
 };
 
-sal_Int16 GetCommandContextIndex( const rtl::OUString &rContextName )
+sal_Int16 GetCommandContextIndex( const OUString &rContextName )
 {
     sal_Int16 nRes = -1;
     for (sal_Int16 i = 0;  nRes == -1 && i < COND_COMMAND_COUNT;  ++i)
@@ -89,12 +89,12 @@ sal_Int16 GetCommandContextIndex( const rtl::OUString &rContextName )
     return nRes;
 }
 
-rtl::OUString GetCommandContextByIndex( sal_Int16 nIndex )
+OUString GetCommandContextByIndex( sal_Int16 nIndex )
 {
-    rtl::OUString aRes;
+    OUString aRes;
     if (0 <= nIndex  &&  nIndex < COND_COMMAND_COUNT)
     {
-        aRes = rtl::OUString::createFromAscii( aCommandContext[ nIndex ] );
+        aRes = OUString::createFromAscii( aCommandContext[ nIndex ] );
     }
     return aRes;
 }

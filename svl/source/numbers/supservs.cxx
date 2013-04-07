@@ -34,7 +34,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-#define PERSISTENT_SERVICE_NAME     ::rtl::OUString("com.sun.star.util.NumberFormatsSupplier");
+#define PERSISTENT_SERVICE_NAME     OUString("com.sun.star.util.NumberFormatsSupplier");
 
 //-------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
@@ -117,16 +117,16 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
+    return OUString("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aServices = getSupportedServiceNames();
-    const ::rtl::OUString* pServices = aServices.getConstArray();
+    Sequence< OUString > aServices = getSupportedServiceNames();
+    const OUString* pServices = aServices.getConstArray();
     for (sal_Int32 i=0; i<aServices.getLength(); ++i, ++pServices)
         if (pServices->equals(_rServiceName))
             return sal_True;
@@ -135,15 +135,15 @@ sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const :
 }
 
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
+    Sequence< OUString > aSupported(1);
     aSupported.getArray()[0] = PERSISTENT_SERVICE_NAME;
     return aSupported;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getServiceName(  ) throw(RuntimeException)
+OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getServiceName(  ) throw(RuntimeException)
 {
     return PERSISTENT_SERVICE_NAME;
 }

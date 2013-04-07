@@ -50,7 +50,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 #endif      // _SD_UNPRLOUT_HXX

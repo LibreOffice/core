@@ -206,7 +206,7 @@ void VDiagram::createShapes_2d()
                 else
                 {
                     //CID for selection handling
-                    rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
+                    OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
                     xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::makeAny( aWallCID ) );
                 }
             }
@@ -499,7 +499,7 @@ void VDiagram::createShapes_3d()
 
     //-------------------------------------------------------------------------
     //create additional group to manipulate the aspect ratio of the whole diagram:
-    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, rtl::OUString() );
+    xOuterGroup_Shapes = m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, OUString() );
 
     m_xAspectRatio3D = uno::Reference< beans::XPropertySet >( xOuterGroup_Shapes, uno::UNO_QUERY );
 
@@ -516,9 +516,9 @@ void VDiagram::createShapes_3d()
         if( m_xDiagram.is() )
             xWallProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getWall());
 
-        rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
+        OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
         if( !bAddFloorAndWall )
-            aWallCID = rtl::OUString();
+            aWallCID = OUString();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
 
         CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
@@ -657,7 +657,7 @@ void VDiagram::createShapes_3d()
         }
         else
         {
-            rtl::OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, rtl::OUString() ) );//@todo read CID from model
+            OUString aFloorCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) );//@todo read CID from model
             ShapeFactory::setShapeName( xShape, aFloorCID );
         }
     }

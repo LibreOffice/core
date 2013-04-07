@@ -31,7 +31,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star;
 using namespace std;
 
-using ::rtl::OUString;
 
 // ---------------------------------------------------
 ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManVector )
@@ -279,7 +278,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
     StringHashMap aConvertedAttribs;
-    ::rtl::OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
+    OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
 
     size_t nLevel = aStack.size();
 
@@ -349,7 +348,7 @@ namespace
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    ::rtl::OUString aConvertedName = ConvertName( aName );
+    OUString aConvertedName = ConvertName( aName );
     if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) )
     {
         if ( aConvertedName.equals( sFileEntryElement ) && aStack.back().m_bValid )
@@ -393,10 +392,10 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 }
 
 // ---------------------------------------------------
-::rtl::OUString ManifestImport::PushNameAndNamespaces( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
+OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs, StringHashMap& o_aConvertedAttribs )
 {
     StringHashMap aNamespaces;
-    ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > aAttribsStrs;
+    ::std::vector< ::std::pair< OUString, OUString > > aAttribsStrs;
 
     if ( xAttribs.is() )
     {
@@ -405,25 +404,25 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 
         for( sal_Int16 nInd = 0; nInd < nAttrCount; nInd++ )
         {
-            ::rtl::OUString aAttrName = xAttribs->getNameByIndex( nInd );
-            ::rtl::OUString aAttrValue = xAttribs->getValueByIndex( nInd );
+            OUString aAttrName = xAttribs->getNameByIndex( nInd );
+            OUString aAttrValue = xAttribs->getValueByIndex( nInd );
             if ( aAttrName.getLength() >= 5
               && aAttrName.startsWith("xmlns")
               && ( aAttrName.getLength() == 5 || aAttrName.getStr()[5] == ( sal_Unicode )':' ) )
             {
                 // this is a namespace declaration
-                ::rtl::OUString aNsName( ( aAttrName.getLength() == 5 ) ? ::rtl::OUString() : aAttrName.copy( 6 ) );
+                OUString aNsName( ( aAttrName.getLength() == 5 ) ? OUString() : aAttrName.copy( 6 ) );
                 aNamespaces[aNsName] = aAttrValue;
             }
             else
             {
                 // this is no namespace declaration
-                aAttribsStrs.push_back( pair< ::rtl::OUString, ::rtl::OUString >( aAttrName, aAttrValue ) );
+                aAttribsStrs.push_back( pair< OUString, OUString >( aAttrName, aAttrValue ) );
             }
         }
     }
 
-    ::rtl::OUString aConvertedName = ConvertNameWithNamespace( aName, aNamespaces );
+    OUString aConvertedName = ConvertNameWithNamespace( aName, aNamespaces );
     if ( !aConvertedName.getLength() )
         aConvertedName = ConvertName( aName );
 
@@ -439,10 +438,10 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 }
 
 // ---------------------------------------------------
-::rtl::OUString ManifestImport::ConvertNameWithNamespace( const ::rtl::OUString& aName, const StringHashMap& aNamespaces )
+OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces )
 {
-    ::rtl::OUString aNsAlias;
-    ::rtl::OUString aPureName = aName;
+    OUString aNsAlias;
+    OUString aPureName = aName;
 
     sal_Int32 nInd = aName.indexOf( ( sal_Unicode )':' );
     if ( nInd != -1 && nInd < aName.getLength() )
@@ -451,7 +450,7 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
         aPureName = aName.copy( nInd + 1 );
     }
 
-    ::rtl::OUString aResult;
+    OUString aResult;
 
     StringHashMap::const_iterator aIter = aNamespaces.find( aNsAlias );
     if ( aIter != aNamespaces.end()
@@ -466,9 +465,9 @@ void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax
 }
 
 // ---------------------------------------------------
-::rtl::OUString ManifestImport::ConvertName( const ::rtl::OUString& aName )
+OUString ManifestImport::ConvertName( const OUString& aName )
 {
-    ::rtl::OUString aConvertedName;
+    OUString aConvertedName;
     for ( ManifestStack::reverse_iterator aIter = aStack.rbegin(); !aConvertedName.getLength() && aIter != aStack.rend(); ++aIter )
     {
         if ( !aIter->m_aNamespaces.empty() )

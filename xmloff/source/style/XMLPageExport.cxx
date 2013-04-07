@@ -33,8 +33,6 @@
 #include "PageMasterPropMapper.hxx"
 #include "PageMasterExportPropMapper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -202,9 +200,9 @@ void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
 {
     if( xPageStyles.is() )
     {
-        uno::Sequence< ::rtl::OUString> aSeq = xPageStyles->getElementNames();
-        const ::rtl::OUString* pIter = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
+        const OUString* pIter = aSeq.getConstArray();
+        const OUString* pEnd   = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
             Reference< XStyle > xStyle(xPageStyles->getByName( *pIter ),uno::UNO_QUERY);

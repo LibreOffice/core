@@ -78,7 +78,7 @@ InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiSer
 DBG_NAME(OGridControlModel);
 //------------------------------------------------------------------
 OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OControlModel(_rxFactory, ::rtl::OUString())
+    :OControlModel(_rxFactory, OUString())
     ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,FontControlModel( false )
@@ -201,8 +201,8 @@ StringSequence OGridControlModel::getSupportedServiceNames() throw(RuntimeExcept
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString("com.sun.star.awt.UnoControlModel");
+    OUString*pArray = aSupported.getArray();
+    pArray[aSupported.getLength()-2] = OUString("com.sun.star.awt.UnoControlModel");
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_GRIDCONTROL;
     return aSupported;
 }
@@ -363,9 +363,9 @@ void OGridControlModel::removeSelectionChangeListener(const Reference< XSelectio
 
 // XGridColumnFactory
 //------------------------------------------------------------------------------
-Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const ::rtl::OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+Reference<XPropertySet> SAL_CALL OGridControlModel::createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    const Sequence< ::rtl::OUString >& rColumnTypes = frm::getColumnTypes();
+    const Sequence< OUString >& rColumnTypes = frm::getColumnTypes();
     return createColumn( ::detail::findPos( ColumnType, rColumnTypes ) );
 }
 
@@ -445,9 +445,9 @@ void OGridControlModel::_reset()
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
-        DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
+        DECL_PROP1(NAME,                OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
+        DECL_PROP1(TAG,                 OUString,    BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
         DECL_PROP3(TABSTOP,             sal_Bool,           BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
@@ -455,14 +455,14 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP2(ENABLEVISIBLE,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
         DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
-        DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
+        DECL_PROP1(DEFAULTCONTROL,      OUString,    BOUND);
         DECL_PROP3(TEXTCOLOR,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP3(BACKGROUNDCOLOR,     sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(FONT,                FontDescriptor,     BOUND, MAYBEDEFAULT);
         DECL_PROP3(ROWHEIGHT,           sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(HELPTEXT,            ::rtl::OUString,    BOUND);
-        DECL_PROP1(FONT_NAME,           ::rtl::OUString,    MAYBEDEFAULT);
-        DECL_PROP1(FONT_STYLENAME,      ::rtl::OUString,    MAYBEDEFAULT);
+        DECL_PROP1(HELPTEXT,            OUString,    BOUND);
+        DECL_PROP1(FONT_NAME,           OUString,    MAYBEDEFAULT);
+        DECL_PROP1(FONT_STYLENAME,      OUString,    MAYBEDEFAULT);
         DECL_PROP1(FONT_FAMILY,         sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_CHARSET,        sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_HEIGHT,         float,              MAYBEDEFAULT);
@@ -479,7 +479,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP4(CURSORCOLOR,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID , TRANSIENT);
         DECL_PROP3(ALWAYSSHOWCURSOR,    sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
         DECL_PROP3(DISPLAYSYNCHRON,     sal_Bool,           BOUND, MAYBEDEFAULT, TRANSIENT);
-        DECL_PROP2(HELPURL,             ::rtl::OUString,    BOUND, MAYBEDEFAULT);
+        DECL_PROP2(HELPURL,             OUString,    BOUND, MAYBEDEFAULT);
         DECL_PROP2(WRITING_MODE,        sal_Int16,          BOUND, MAYBEDEFAULT);
         DECL_PROP3(CONTEXT_WRITING_MODE,sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
@@ -733,7 +733,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aReturn <<= ::rtl::OUString( STARDIV_ONE_FORM_CONTROL_GRID  );
+            aReturn <<= OUString( STARDIV_ONE_FORM_CONTROL_GRID  );
             break;
 
         case PROPERTY_ID_PRINTABLE:
@@ -751,7 +751,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 
         case PROPERTY_ID_HELPURL:
         case PROPERTY_ID_HELPTEXT:
-            aReturn <<= ::rtl::OUString();
+            aReturn <<= OUString();
             break;
 
         case PROPERTY_ID_BORDER:
@@ -868,7 +868,7 @@ void OGridControlModel::approveNewElement( const Reference< XPropertySet >& _rxO
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OGridControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_GRID;  // old (non-sun) name for compatibility !
 }
@@ -1009,7 +1009,7 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         {
             // Lesen des Modelnamen
 
-            ::rtl::OUString sModelName;
+            OUString sModelName;
             _rxInStream >> sModelName;
 
             Reference<XPropertySet>  xCol(createColumn(getColumnTypeByModelName(sModelName)));

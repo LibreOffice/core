@@ -34,7 +34,6 @@ namespace uno = com::sun::star::uno;
 
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 #define PROP_SUPPRESS_LICENSE "SUPPRESS_LICENSE"
 #define PROP_EXTENSION_UPDATE "EXTENSION_UPDATE"
@@ -107,7 +106,7 @@ OUString ExtensionProperties::getPropertyValue(css::beans::NamedValue const & v)
 void ExtensionProperties::write()
 {
     ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
 
     if (m_prop_suppress_license)
     {
@@ -116,7 +115,7 @@ void ExtensionProperties::write()
         buf.append(*m_prop_suppress_license);
     }
 
-    ::rtl::OString stamp = ::rtl::OUStringToOString(
+    OString stamp = OUStringToOString(
         buf.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
     Reference<css::io::XInputStream> xData(
         ::xmlscript::createInputStream(

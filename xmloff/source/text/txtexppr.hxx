@@ -31,7 +31,7 @@ class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
 {
     SvXMLExport& rExport;
 
-    ::rtl::OUString sDropCharStyle;
+    OUString sDropCharStyle;
     sal_Bool bDropWholeWord;
 
     void ContextFontFilter(

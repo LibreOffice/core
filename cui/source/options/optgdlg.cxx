@@ -97,8 +97,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
-using ::rtl::OString;
-using ::rtl::OUString;
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -362,7 +360,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
     sal_Int64 nNum = m_pYearValueField->GetValue();
-    rtl::OUString aOutput(rtl::OUString::number(nNum));
+    OUString aOutput(OUString::number(nNum));
     m_pYearValueField->SetText(aOutput);
     m_pYearValueField->SetSelection( Selection( 0, aOutput.getLength() ) );
     TwoFigureHdl( pEd );
@@ -623,7 +621,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     // add real theme name to 'auto' theme, e.g. 'auto' => 'auto (classic)'
     if( m_pIconStyleLB->GetEntryCount() > 1 )
     {
-        ::rtl::OUString aAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
+        OUString aAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
 
         aAutoStr += " (";
 
@@ -636,7 +634,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
             aAutoStr += m_pIconStyleLB->GetEntry( aIconStyleItemId[nAutoStyle] );
 
         m_pIconStyleLB->RemoveEntry( 0 );
-        m_pIconStyleLB->InsertEntry( aAutoStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
+        m_pIconStyleLB->InsertEntry( aAutoStr += OUString(RTL_CONSTASCII_USTRINGPARAM(")") ), 0 );
         // separate auto and other icon themes
         m_pIconStyleLB->SetSeparatorPos( 0 );
     }

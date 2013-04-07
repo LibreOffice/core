@@ -37,7 +37,7 @@ namespace dbaxml
     using namespace ::com::sun::star::xml::sax;
 DBG_NAME(OXMLTableFilterList)
 
-OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName )
+OXMLTableFilterList::OXMLTableFilterList( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& _sLocalName )
     :SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
     DBG_CTOR(OXMLTableFilterList,NULL);
@@ -53,7 +53,7 @@ OXMLTableFilterList::~OXMLTableFilterList()
 
 SvXMLImportContext* OXMLTableFilterList::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;
@@ -87,9 +87,9 @@ void OXMLTableFilterList::EndElement()
     if ( xDataSource.is() )
     {
         if ( !m_aPatterns.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(Sequence< ::rtl::OUString>(&(*m_aPatterns.begin()),m_aPatterns.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(Sequence< OUString>(&(*m_aPatterns.begin()),m_aPatterns.size())));
         if ( !m_aTypes.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< ::rtl::OUString>(&(*m_aTypes.begin()),m_aTypes.size())));
+            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(Sequence< OUString>(&(*m_aTypes.begin()),m_aTypes.size())));
     }
 }
 //----------------------------------------------------------------------------

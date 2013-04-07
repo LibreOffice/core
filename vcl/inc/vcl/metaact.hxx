@@ -424,7 +424,7 @@ class VCL_DLLPUBLIC MetaTextAction : public MetaAction
 private:
 
     Point               maPt;
-    rtl::OUString       maStr;
+    OUString       maStr;
     sal_uInt16          mnIndex;
     sal_uInt16          mnLen;
 
@@ -433,14 +433,14 @@ private:
 public:
                         DECL_META_ACTION( Text, META_TEXT_ACTION )
 
-    MetaTextAction( const Point& rPt, const rtl::OUString& rStr,
+    MetaTextAction( const Point& rPt, const OUString& rStr,
                     sal_uInt16 nIndex, sal_uInt16 nLen );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Point&        GetPoint() const { return maPt; }
-    const rtl::OUString& GetText() const { return maStr; }
+    const OUString& GetText() const { return maStr; }
     sal_uInt16              GetIndex() const { return mnIndex; }
     sal_uInt16              GetLen() const { return mnLen; }
 };
@@ -450,7 +450,7 @@ class VCL_DLLPUBLIC MetaTextArrayAction : public MetaAction
 private:
 
     Point               maStartPt;
-    rtl::OUString       maStr;
+    OUString       maStr;
     sal_Int32*          mpDXAry;
     sal_uInt16          mnIndex;
     sal_uInt16          mnLen;
@@ -463,7 +463,7 @@ protected:
 public:
                         MetaTextArrayAction();
                         MetaTextArrayAction( const MetaTextArrayAction& rAction );
-    MetaTextArrayAction( const Point& rStartPt, const rtl::OUString& rStr,
+    MetaTextArrayAction( const Point& rStartPt, const OUString& rStr,
                          const sal_Int32* pDXAry, sal_uInt16 nIndex,
                          sal_uInt16 nLen );
 
@@ -478,7 +478,7 @@ public:
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
     const Point&        GetPoint() const { return maStartPt; }
-    const rtl::OUString& GetText() const { return maStr; }
+    const OUString& GetText() const { return maStr; }
     sal_uInt16              GetIndex() const { return mnIndex; }
     sal_uInt16              GetLen() const { return mnLen; }
     sal_Int32*          GetDXArray() const { return mpDXAry; }
@@ -489,7 +489,7 @@ class VCL_DLLPUBLIC MetaStretchTextAction : public MetaAction
 private:
 
     Point               maPt;
-    rtl::OUString       maStr;
+    OUString       maStr;
     sal_uInt32          mnWidth;
     sal_uInt16          mnIndex;
     sal_uInt16          mnLen;
@@ -500,14 +500,14 @@ public:
                         DECL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
     MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
-                           const rtl::OUString& rStr,
+                           const OUString& rStr,
                            sal_uInt16 nIndex, sal_uInt16 nLen );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Point&        GetPoint() const { return maPt; }
-    const rtl::OUString& GetText() const { return maStr; }
+    const OUString& GetText() const { return maStr; }
     sal_uInt32          GetWidth() const { return mnWidth; }
     sal_uInt16              GetIndex() const { return mnIndex; }
     sal_uInt16              GetLen() const { return mnLen; }
@@ -518,7 +518,7 @@ class VCL_DLLPUBLIC MetaTextRectAction : public MetaAction
 private:
 
     Rectangle           maRect;
-    rtl::OUString       maStr;
+    OUString       maStr;
     sal_uInt16          mnStyle;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
@@ -527,13 +527,13 @@ public:
                         DECL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 
     MetaTextRectAction( const Rectangle& rRect,
-                        const rtl::OUString& rStr, sal_uInt16 nStyle );
+                        const OUString& rStr, sal_uInt16 nStyle );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Rectangle&    GetRect() const { return maRect; }
-    const rtl::OUString& GetText() const { return maStr; }
+    const OUString& GetText() const { return maStr; }
     sal_uInt16              GetStyle() const { return mnStyle; }
 };
 
@@ -1254,7 +1254,7 @@ class VCL_DLLPUBLIC MetaCommentAction : public MetaAction
 {
 private:
 
-    rtl::OString        maComment;
+    OString        maComment;
     sal_Int32           mnValue;
     sal_uInt32          mnDataSize;
     sal_uInt8*          mpData;
@@ -1268,7 +1268,7 @@ protected:
 public:
                         MetaCommentAction( sal_Int32 nValue = 0L );
                         MetaCommentAction( const MetaCommentAction& rAct );
-                        MetaCommentAction( const rtl::OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
+                        MetaCommentAction( const OString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -1278,7 +1278,7 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData );
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData );
 
-    const rtl::OString& GetComment() const { return maComment; }
+    const OString& GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
     const sal_uInt8*        GetData() const { return mpData; }

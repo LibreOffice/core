@@ -31,7 +31,7 @@ namespace rptui
         static sal_uInt32 s_nReportFormat = (sal_uInt32)-1;
         if ( (sal_uInt32)-1 == s_nReportFormat )
         {
-            s_nReportFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"reportdesign.GroupFormat\"" ));
+            s_nReportFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"reportdesign.GroupFormat\"" ));
             OSL_ENSURE((sal_uInt32)-1 != s_nReportFormat, "Bad exchange id!");
         }
         return s_nReportFormat;

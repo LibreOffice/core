@@ -29,7 +29,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
-using ::rtl::OUString;
 
 //.............................................................................
 namespace chart
@@ -55,7 +54,7 @@ private:
 };
 
 WrappedScaleTextProperty::WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-    : ::chart::WrappedProperty( "ScaleText" , rtl::OUString() )
+    : ::chart::WrappedProperty( "ScaleText" , OUString() )
     , m_spChart2ModelContact( spChart2ModelContact )
 {
 }

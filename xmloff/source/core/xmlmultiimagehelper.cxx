@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    sal_uInt32 getQualityIndex(const rtl::OUString& rString)
+    sal_uInt32 getQualityIndex(const OUString& rString)
     {
         sal_uInt32 nRetval(0);
 
@@ -100,7 +100,7 @@ void multiImageImportHelper::solveMultipleImages()
 
         for(a = 0; a < maImplContextVector.size(); a++)
         {
-            const rtl::OUString aStreamURL(getGraphicURLFromImportContext(**maImplContextVector[a]));
+            const OUString aStreamURL(getGraphicURLFromImportContext(**maImplContextVector[a]));
             const sal_uInt32 nNewQuality(getQualityIndex(aStreamURL));
 
             if(nNewQuality > nBestQuality)

@@ -45,7 +45,7 @@ using namespace ::com::sun::star::beans;
 // Konstanten -------------------------------------------------------------
 
 
-BibToolBarListener::BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
+BibToolBarListener::BibToolBarListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
         nIndex(nId),
         aCommand(aStr),
         pToolBar(pTB)
@@ -73,12 +73,12 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
     }
 };
 
-rtl::OUString   BibToolBarListener::GetCommand() const
+OUString   BibToolBarListener::GetCommand() const
 {
     return aCommand;
 }
 
-BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
+BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -95,13 +95,13 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
-        if(aState.getValueType() == ::getCppuType((Sequence<rtl::OUString>*)0))
+        if(aState.getValueType() == ::getCppuType((Sequence<OUString>*)0))
         {
             pToolBar->UpdateSourceList(sal_False);
             pToolBar->ClearSourceList();
 
-            Sequence<rtl::OUString>* pStringSeq = (Sequence<rtl::OUString>*)aState.getValue();
-            const rtl::OUString* pStringArray = (const rtl::OUString*)pStringSeq->getConstArray();
+            Sequence<OUString>* pStringSeq = (Sequence<OUString>*)aState.getValue();
+            const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
             XubString aEntry;
@@ -118,7 +118,7 @@ void BibTBListBoxListener::statusChanged(const ::com::sun::star::frame::FeatureS
     }
 };
 
-BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
+BibTBQueryMenuListener::BibTBQueryMenuListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -135,12 +135,12 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
-        if(aState.getValueType()==::getCppuType((Sequence<rtl::OUString>*)0))
+        if(aState.getValueType()==::getCppuType((Sequence<OUString>*)0))
         {
             pToolBar->ClearFilterMenu();
 
-            Sequence<rtl::OUString>* pStringSeq = (Sequence<rtl::OUString>*) aState.getValue();
-            const rtl::OUString* pStringArray = (const rtl::OUString*)pStringSeq->getConstArray();
+            Sequence<OUString>* pStringSeq = (Sequence<OUString>*) aState.getValue();
+            const OUString* pStringArray = (const OUString*)pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
             for( sal_uInt32 i=0; i<nCount; i++ )
@@ -155,7 +155,7 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
     }
 };
 
-BibTBEditListener::BibTBEditListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
+BibTBEditListener::BibTBEditListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)
 {
 }
@@ -315,7 +315,7 @@ void BibToolBar::Select()
         Sequence<PropertyValue> aPropVal(2);
         PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
         pPropertyVal[0].Name="QueryText";
-        rtl::OUString aSelection = aEdQuery.GetText();
+        OUString aSelection = aEdQuery.GetText();
         pPropertyVal[0].Value <<= aSelection;
 
         pPropertyVal[1].Name="QueryField";
@@ -326,7 +326,7 @@ void BibToolBar::Select()
 
 void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& rArgs)
 {
-    rtl::OUString aCommand = GetItemCommand(nId);
+    OUString aCommand = GetItemCommand(nId);
 
     uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
@@ -341,7 +341,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
             xTrans->parseStrict( aURL );
 
-            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, rtl::OUString(), frame::FrameSearchFlag::SELF );
+            uno::Reference< frame::XDispatch >  xDisp = xDSP->queryDispatch( aURL, OUString(), frame::FrameSearchFlag::SELF );
 
             if ( xDisp.is() )
                     xDisp->dispatch( aURL, rArgs);
@@ -443,7 +443,7 @@ long BibToolBar::PreNotify( NotifyEvent& rNEvt )
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
             pPropertyVal[0].Name = "QueryText";
-            rtl::OUString aSelection = aEdQuery.GetText();
+            OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
@@ -470,7 +470,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
     pPropertyVal[0].Name = "DataSourceName";
     String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
-    rtl::OUString aSelection = aEntry;
+    OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);
 
@@ -497,7 +497,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
             pPropertyVal[0].Name = "QueryText";
-            rtl::OUString aSelection = aEdQuery.GetText();
+            OUString aSelection = aEdQuery.GetText();
             pPropertyVal[0].Value <<= aSelection;
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;

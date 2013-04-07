@@ -35,17 +35,17 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-const static rtl::OUString VALIDATION( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VALIDAT ) );
-const static rtl::OUString IGNOREBLANK( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_IGNOREBL ) );
-const static rtl::OUString SHOWINPUT( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWINP  ) );
-const static rtl::OUString SHOWERROR( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWERR  ) );
-const static rtl::OUString ERRORTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRTITLE  ) );
-const static rtl::OUString INPUTTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPTITLE  ) );
-const static rtl::OUString INPUTMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPMESS  ) );
-const static rtl::OUString ERRORMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRMESS  ) );
-const static rtl::OUString STYPE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_TYPE  ) );
-const static rtl::OUString SHOWLIST( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_SHOWLIST  ) );
-const static rtl::OUString ALERTSTYLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRALSTY  ) );
+const static OUString VALIDATION( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_VALIDAT ) );
+const static OUString IGNOREBLANK( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_IGNOREBL ) );
+const static OUString SHOWINPUT( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWINP  ) );
+const static OUString SHOWERROR( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SHOWERR  ) );
+const static OUString ERRORTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRTITLE  ) );
+const static OUString INPUTTITLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPTITLE  ) );
+const static OUString INPUTMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_INPMESS  ) );
+const static OUString ERRORMESS( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRMESS  ) );
+const static OUString STYPE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_TYPE  ) );
+const static OUString SHOWLIST( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_SHOWLIST  ) );
+const static OUString ALERTSTYLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRALSTY  ) );
 
 static void
 lcl_setValidationProps( const uno::Reference< table::XCellRange >& xRange, const uno::Reference< beans::XPropertySet >& xProps )
@@ -134,68 +134,68 @@ ScVbaValidation::setShowError( ::sal_Bool _showerror ) throw (uno::RuntimeExcept
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getErrorTitle() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    rtl::OUString sErrorTitle;
+    OUString sErrorTitle;
     xProps->getPropertyValue( ERRORTITLE )  >>= sErrorTitle;
     return sErrorTitle;
 }
 
 void
-ScVbaValidation::setErrorTitle( const rtl::OUString& _errormessage ) throw (uno::RuntimeException)
+ScVbaValidation::setErrorTitle( const OUString& _errormessage ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( ERRORTITLE, uno::makeAny( _errormessage ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getInputMessage() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    rtl::OUString sMsg;
+    OUString sMsg;
     xProps->getPropertyValue( INPUTMESS )  >>= sMsg;
     return sMsg;
 }
 
 void SAL_CALL
-ScVbaValidation::setInputMessage( const ::rtl::OUString& _inputmessage ) throw (uno::RuntimeException)
+ScVbaValidation::setInputMessage( const OUString& _inputmessage ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( INPUTMESS, uno::makeAny( _inputmessage ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getInputTitle() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    rtl::OUString sString;
+    OUString sString;
     xProps->getPropertyValue( INPUTTITLE )  >>= sString;
     return sString;
 }
 
 void SAL_CALL
-ScVbaValidation::setInputTitle( const ::rtl::OUString& _inputtitle ) throw (uno::RuntimeException)
+ScVbaValidation::setInputTitle( const OUString& _inputtitle ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( INPUTTITLE, uno::makeAny( _inputtitle ) );
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getErrorMessage() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
-    rtl::OUString sString;
+    OUString sString;
     xProps->getPropertyValue( ERRORMESS )  >>= sString;
     return sString;
 }
 
 void SAL_CALL
-ScVbaValidation::setErrorMessage( const ::rtl::OUString& _errormessage ) throw (uno::RuntimeException)
+ScVbaValidation::setErrorMessage( const OUString& _errormessage ) throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( ERRORMESS, uno::makeAny( _errormessage ) );
@@ -206,7 +206,7 @@ ScVbaValidation::setErrorMessage( const ::rtl::OUString& _errormessage ) throw (
 void SAL_CALL
 ScVbaValidation::Delete(  ) throw (uno::RuntimeException)
 {
-    rtl::OUString sBlank;
+    OUString sBlank;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
     xProps->setPropertyValue( IGNOREBLANK, uno::makeAny( sal_True ) );
@@ -233,15 +233,15 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     sheet::ValidationType nValType = sheet::ValidationType_ANY;
     xProps->getPropertyValue( STYPE )  >>= nValType;
     if ( nValType  != sheet::ValidationType_ANY  )
-        throw uno::RuntimeException( rtl::OUString( "validation object already exists" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "validation object already exists" ), uno::Reference< uno::XInterface >() );
     sal_Int32 nType = -1;
     if ( !Type.hasValue()  || !( Type >>= nType ) )
-        throw uno::RuntimeException( rtl::OUString( "missing required param" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "missing required param" ), uno::Reference< uno::XInterface >() );
 
     Delete(); // set up defaults
-    rtl::OUString sFormula1;
+    OUString sFormula1;
     Formula1 >>= sFormula1;
-    rtl::OUString sFormula2;
+    OUString sFormula2;
     Formula2 >>= sFormula2;
     switch ( nType )
     {
@@ -250,7 +250,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 // for validate list
                 // at least formula1 is required
                 if ( !Formula1.hasValue() )
-                    throw uno::RuntimeException( rtl::OUString( "missing param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString( "missing param" ), uno::Reference< uno::XInterface >() );
                 nValType = sheet::ValidationType_LIST;
                 xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
                 // #TODO validate required params
@@ -262,7 +262,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
             xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
             break;
         default:
-            throw uno::RuntimeException( rtl::OUString( "unsupported operation..." ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString( "unsupported operation..." ), uno::Reference< uno::XInterface >() );
     }
 
     sheet::ValidationAlertStyle eStyle = sheet::ValidationAlertStyle_STOP;
@@ -283,7 +283,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 eStyle = sheet::ValidationAlertStyle_INFO;
                 break;
             default:
-            throw uno::RuntimeException( rtl::OUString( "bad param..." ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString( "bad param..." ), uno::Reference< uno::XInterface >() );
 
         }
     }
@@ -306,11 +306,11 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
     lcl_setValidationProps( m_xRange, xProps );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getFormula1() throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
-    rtl::OUString sString = xCond->getFormula1();
+    OUString sString = xCond->getFormula1();
 
     sal_uInt16 nFlags = 0;
     ScRangeList aCellRanges;
@@ -327,7 +327,7 @@ ScVbaValidation::getFormula1() throw (uno::RuntimeException)
     return sString;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaValidation::getFormula2() throw (uno::RuntimeException)
 {
         uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
@@ -377,20 +377,20 @@ ScVbaValidation::getType() throw (uno::RuntimeException)
     return nExcelType;
 }
 
-rtl::OUString
+OUString
 ScVbaValidation::getServiceImplName()
 {
-    return rtl::OUString("ScVbaValidation");
+    return OUString("ScVbaValidation");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaValidation::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Validation" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Validation" );
     }
     return aServiceNames;
 }

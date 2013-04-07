@@ -233,7 +233,7 @@ namespace dbaui
                 LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
                 sObjectType = String( ModuleRes( (sal_uInt16)( _nCommandType + 1 ) ) );
             }
-            sMessageText.SearchAndReplace( rtl::OUString("$object$"), sObjectType );
+            sMessageText.SearchAndReplace( OUString("$object$"), sObjectType );
             return sMessageText;
         }
     }

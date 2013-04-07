@@ -103,11 +103,11 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 }
 
 // -------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
+OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
 {
     if(!m_aLiteralInfo.size())
         fillLiterals();
-    ::rtl::OUString sStr;
+    OUString sStr;
     ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
         sStr = (*aIter).second.pwszLiteralValue;
@@ -117,7 +117,7 @@ sal_Bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString("IS_GRANTABLE"),
+    m_mColumns[8] = OColumn(OUString(),OUString("IS_GRANTABLE"),
         ColumnValue::NULLABLE,
         3,3,0,
         DataType::VARCHAR);
@@ -125,31 +125,31 @@ void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString("TYPE_NAME"),
+    m_mColumns[6] = OColumn(OUString(),OUString("TYPE_NAME"),
         ColumnValue::NO_NULLS,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString("NULLABLE"),
+    m_mColumns[11] = OColumn(OUString(),OUString("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString("REMARKS"),
+    m_mColumns[12] = OColumn(OUString(),OUString("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString("COLUMN_DEF"),
+    m_mColumns[13] = OColumn(OUString(),OUString("COLUMN_DEF"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString("SQL_DATA_TYPE"),
+    m_mColumns[14] = OColumn(OUString(),OUString("SQL_DATA_TYPE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString("SQL_DATETIME_SUB"),
+    m_mColumns[15] = OColumn(OUString(),OUString("SQL_DATETIME_SUB"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString("CHAR_OCTET_LENGTH"),
+    m_mColumns[16] = OColumn(OUString(),OUString("CHAR_OCTET_LENGTH"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -157,7 +157,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString("REMARKS"),
+    m_mColumns[5] = OColumn(OUString(),OUString("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -165,7 +165,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 {
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString("NULLABLE"),
+    m_mColumns[12] = OColumn(OUString(),OUString("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -173,11 +173,11 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString("KEY_SEQ"),
+    m_mColumns[5] = OColumn(OUString(),OUString("KEY_SEQ"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString("PK_NAME"),
+    m_mColumns[6] = OColumn(OUString(),OUString("PK_NAME"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -185,15 +185,15 @@ void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString("NON_UNIQUE"),
+    m_mColumns[4] = OColumn(OUString(),OUString("NON_UNIQUE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::BIT);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString("INDEX_QUALIFIER"),
+    m_mColumns[5] = OColumn(OUString(),OUString("INDEX_QUALIFIER"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString("ASC_OR_DESC"),
+    m_mColumns[10] = OColumn(OUString(),OUString("ASC_OR_DESC"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -201,11 +201,11 @@ void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString("PRIVILEGE"),
+    m_mColumns[6] = OColumn(OUString(),OUString("PRIVILEGE"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString("IS_GRANTABLE"),
+    m_mColumns[7] = OColumn(OUString(),OUString("IS_GRANTABLE"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -213,7 +213,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 {
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString("KEY_SEQ"),
+    m_mColumns[9] = OColumn(OUString(),OUString("KEY_SEQ"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -221,27 +221,27 @@ void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 {
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString("PRECISION"),
+    m_mColumns[3] = OColumn(OUString(),OUString("PRECISION"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString("NULLABLE"),
+    m_mColumns[7] = OColumn(OUString(),OUString("NULLABLE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString("AUTO_INCREMENT"),
+    m_mColumns[12] = OColumn(OUString(),OUString("AUTO_INCREMENT"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::BIT);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString("SQL_DATA_TYPE"),
+    m_mColumns[16] = OColumn(OUString(),OUString("SQL_DATA_TYPE"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString("SQL_DATETIME_SUB"),
+    m_mColumns[17] = OColumn(OUString(),OUString("SQL_DATETIME_SUB"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
-    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString("NUM_PREC_RADIX"),
+    m_mColumns[18] = OColumn(OUString(),OUString("NUM_PREC_RADIX"),
         ColumnValue::NO_NULLS,
         1,1,0,
         DataType::INTEGER);
@@ -249,7 +249,7 @@ void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString("REMARKS"),
+    m_mColumns[7] = OColumn(OUString(),OUString("REMARKS"),
         ColumnValue::NULLABLE,
         0,0,0,
         DataType::VARCHAR);
@@ -269,32 +269,32 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isAutoIncrement( sal_Int32
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnServiceName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getTableName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getCatalogName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getColumnTypeName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 
@@ -306,11 +306,11 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isCaseSensitive( sal_Int32
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     if(m_mColumns.size() && (m_mColumnsIter = m_mColumns.find(column)) != m_mColumns.end())
         return (*m_mColumnsIter).second.getSchemaName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -547,7 +547,7 @@ void WpADOTable::Create()
     }
 }
 // -------------------------------------------------------------------------
-::rtl::OUString WpADOCatalog::GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum)
+OUString WpADOCatalog::GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum)
 {
     OLEVariant _rVar;
     _rVar.setNoArg();
@@ -571,7 +571,7 @@ void OAdoTable::fillPropertyValues()
         {
             WpADOProperties aProps = m_aTable.get_Properties();
             if(aProps.IsValid())
-                m_Description = OTools::getValue(aProps,::rtl::OUString("Description"));
+                m_Description = OTools::getValue(aProps,OUString("Description"));
         }
     }
 }

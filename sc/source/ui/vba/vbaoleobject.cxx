@@ -43,7 +43,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<frame::XModel> xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
 }
 
@@ -68,14 +68,14 @@ ScVbaOLEObject::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 ScVbaOLEObject::getVisible() throw (uno::RuntimeException)
 {
-    OSL_TRACE("OleObject %s returning visible %s", rtl::OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), m_xControl->getVisible() ? "true" : "false" );
+    OSL_TRACE("OleObject %s returning visible %s", OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), m_xControl->getVisible() ? "true" : "false" );
     return m_xControl->getVisible();
 }
 
 void SAL_CALL
 ScVbaOLEObject::setVisible( sal_Bool _visible ) throw (uno::RuntimeException)
 {
-    OSL_TRACE("OleObject %s set visible %s", rtl::OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), _visible ? "true" : "false" );
+    OSL_TRACE("OleObject %s set visible %s", OUStringToOString( m_xControl->getName(), RTL_TEXTENCODING_UTF8 ).getStr(), _visible ? "true" : "false" );
     m_xControl->setVisible( _visible );
 }
 
@@ -128,30 +128,30 @@ ScVbaOLEObject::setWidth( double _width ) throw (uno::RuntimeException)
     m_xControl->setWidth( _width );
 }
 
-rtl::OUString SAL_CALL ScVbaOLEObject::getLinkedCell() throw (uno::RuntimeException)
+OUString SAL_CALL ScVbaOLEObject::getLinkedCell() throw (uno::RuntimeException)
 {
     return m_xControl->getControlSource();
 }
 
-void SAL_CALL ScVbaOLEObject::setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell ) throw (uno::RuntimeException)
 {
     m_xControl->setControlSource( _linkedcell );
 }
 
-rtl::OUString
+OUString
 ScVbaOLEObject::getServiceImplName()
 {
-    return rtl::OUString("ScVbaOLEObject");
+    return OUString("ScVbaOLEObject");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaOLEObject::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.OLEObject" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.OLEObject" );
     }
     return aServiceNames;
 }

@@ -191,7 +191,7 @@ IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
-                                   ,const ::rtl::OUString& _sColorEntry
+                                   ,const OUString& _sColorEntry
                                    ,sal_uInt16 _nPosition)
 {
     m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
@@ -212,12 +212,12 @@ sal_uInt16 OScrollWindowHelper::getSectionCount() const
     return m_aReportWindow.getSectionCount();
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
 //----------------------------------------------------------------------------
-rtl::OUString OScrollWindowHelper::GetInsertObjString() const
+OUString OScrollWindowHelper::GetInsertObjString() const
 {
     return m_aReportWindow.GetInsertObjString();
 }

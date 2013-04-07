@@ -714,7 +714,7 @@ void SvxBackgroundTabPage::FillUserData()
 */
 
 {
-    SetUserData( m_pBtnPreview->IsChecked() ? rtl::OUString('1') : rtl::OUString('0') );
+    SetUserData( m_pBtnPreview->IsChecked() ? OUString('1') : OUString('0') );
 }
 
 //------------------------------------------------------------------------

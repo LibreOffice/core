@@ -419,7 +419,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
         xCharClass = vcl::unohelper::CreateCharacterClassification();
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
-    cCharCode = xCharClass->toUpper( rtl::OUString(cCharCode), 0, 1, rLocale )[0];
+    cCharCode = xCharClass->toUpper( OUString(cCharCode), 0, 1, rLocale )[0];
 
     if ( i < nFormEnd )
         pWindow = ImplGetNextWindow( pParent, i, i, sal_True );
@@ -432,7 +432,7 @@ static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Uni
         while ( nPos != STRING_NOTFOUND )
         {
             cCompareChar = aStr.GetChar( nPos+1 );
-            cCompareChar = xCharClass->toUpper( rtl::OUString(cCompareChar), 0, 1, rLocale )[0];
+            cCompareChar = xCharClass->toUpper( OUString(cCompareChar), 0, 1, rLocale )[0];
             if ( cCompareChar == cCharCode )
             {
                 if (pWindow->GetType() == WINDOW_FIXEDTEXT)

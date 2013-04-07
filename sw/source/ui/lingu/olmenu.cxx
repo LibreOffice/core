@@ -94,7 +94,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 extern void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
@@ -203,7 +202,7 @@ void SwSpellPopup::fillLangPopupMenu(
     sal_uInt16 nLangItemIdStart,
     uno::Sequence< OUString > aSeq,
     SwWrtShell* pWrtSh,
-    std::map< sal_Int16, ::rtl::OUString > &rLangTable )
+    std::map< sal_Int16, OUString > &rLangTable )
 {
     if (!pPopupMenu)
         return;
@@ -527,7 +526,7 @@ SwSpellPopup::SwSpellPopup(
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    String aCurrentLang = rtl::OUString("*");
+    String aCurrentLang = OUString("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );
@@ -682,7 +681,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
         aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
-    String aCurrentLang = rtl::OUString("*");
+    String aCurrentLang = OUString("*");
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
         aCurrentLang = aLanguageTable.GetString( nLang );
@@ -872,16 +871,16 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         {
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                 com::sun::star::system::SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
-            xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
+            xSystemShellExecute->execute( sExplanationLink, OUString(),
                     com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch (const uno::Exception&)
         {
             uno::Any exc( ::cppu::getCaughtException() );
-            rtl::OUString msg( ::comphelper::anyToString( exc ) );
+            OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
             ErrorBox aErrorBox( NULL, WB_OK, msg );
-            aErrorBox.SetText( rtl::OUString::createFromAscii( "Explanations" ) );
+            aErrorBox.SetText( OUString::createFromAscii( "Explanations" ) );
             aErrorBox.Execute();
         }
     }

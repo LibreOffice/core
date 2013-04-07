@@ -42,7 +42,7 @@ private:
 
     sal_Int32           mnFontID;
     sal_Bool            mbVertical;
-    rtl::OString        maBaseName;
+    OString        maBaseName;
     fonttype::type      meBaseType;
     rtl_TextEncoding    mnBaseEncoding;
     bool                mbUseFontEncoding;
@@ -55,12 +55,12 @@ private:
     char_list_t     maCharList;
     glyph_list_t    maGlyphList;
 
-    rtl::OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
-    rtl::OString    GetCharSetName (sal_Int32 nGlyphSetID);
+    OString    GetGlyphSetName (sal_Int32 nGlyphSetID);
+    OString    GetCharSetName (sal_Int32 nGlyphSetID);
     sal_Int32       GetGlyphSetEncoding (sal_Int32 nGlyphSetID);
-    rtl::OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
+    OString    GetGlyphSetEncodingName (sal_Int32 nGlyphSetID);
 
-    rtl::OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
+    OString    GetReencodedFontName (sal_Int32 nGlyphSetID);
     void            PSDefineReencodedFont (osl::File* pOutFile,
                                            sal_Int32 nGlyphSetID);
 
@@ -96,12 +96,12 @@ public:
 
     sal_Int32       GetFontID ();
     fonttype::type  GetFontType ();
-    static rtl::OString
+    static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
-                          const rtl::OString &rFontName);
-    static rtl::OString
+                          const OString &rFontName);
+    static OString
     GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
-                             const rtl::OString &rFontName);
+                             const OString &rFontName);
     sal_Bool        IsVertical ();
 
     void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
@@ -115,7 +115,7 @@ public:
                                 const sal_Int32* pDeltaArray,
                                 sal_Bool bUseGlyphs=sal_True);
     sal_Bool        PSUploadEncoding(osl::File* pOutFile, PrinterGfx &rGfx);
-    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< rtl::OString >& rSuppliedFonts );
+    sal_Bool        PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, std::list< OString >& rSuppliedFonts );
 };
 
 

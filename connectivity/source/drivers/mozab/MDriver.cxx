@@ -80,34 +80,34 @@ void MozabDriver::disposing()
 
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(MOZAB_DRIVER_IMPL_NAME);
+    return OUString(MOZAB_DRIVER_IMPL_NAME);
         // this name is referenced in the configuration and in the mozab.xml
         // Please take care when changing it.
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString( "com.sun.star.sdbc.Driver");
+    Sequence< OUString > aSNS( 1 );
+    aSNS[0] = OUString( "com.sun.star.sdbc.Driver");
     return aSNS;
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------
-sal_Bool SAL_CALL MozabDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL MozabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -115,13 +115,13 @@ sal_Bool SAL_CALL MozabDriver::supportsService( const ::rtl::OUString& _rService
 }
 
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
         return NULL;
@@ -134,7 +134,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap brfore call any mozilla codes
-        Reference<XInterface> xInstance = m_xMSFactory->createInstance(::rtl::OUString( "com.sun.star.mozilla.MozillaBootstrap") );
+        Reference<XInterface> xInstance = m_xMSFactory->createInstance(OUString( "com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
         OConnection* pCon = reinterpret_cast<OConnection*>((*m_pCreationFunc)(this));
@@ -146,9 +146,9 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     else
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+        const OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_LIB,
-                "$libname$", ::rtl::OUString( SVLIBRARY( "mozabdrv" ) )
+                "$libname$", OUString( SVLIBRARY( "mozabdrv" ) )
              ) );
 
         ::dbtools::throwGenericSQLException(sError,*this);
@@ -157,7 +157,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const ::rtl::OUString& u
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL MozabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -167,7 +167,7 @@ sal_Bool SAL_CALL MozabDriver::acceptsURL( const ::rtl::OUString& url )
     return impl_classifyURL(url) != Unknown;
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
         return Sequence< DriverPropertyInfo >();
@@ -179,23 +179,23 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const ::rt
 
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("BaseDN")
-                ,::rtl::OUString("Base DN.")
+                OUString("BaseDN")
+                ,OUString("Base DN.")
                 ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
+                ,OUString()
+                ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("MaxRowCount")
-                ,::rtl::OUString("Records (max.)")
+                OUString("MaxRowCount")
+                ,OUString("Records (max.)")
                 ,sal_False
-                ,::rtl::OUString("100")
-                ,Sequence< ::rtl::OUString >())
+                ,OUString("100")
+                ,Sequence< OUString >())
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     // if you have something special to say return it here :-)
     return Sequence< DriverPropertyInfo >();
@@ -211,22 +211,22 @@ sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
     return 0; // depends on you
 }
 // --------------------------------------------------------------------------------
-EDriverType MozabDriver::impl_classifyURL( const ::rtl::OUString& url )
+EDriverType MozabDriver::impl_classifyURL( const OUString& url )
 {
     // Skip 'sdbc:mozab: part of URL
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aAddrbookURI(url.copy(nLen+1));
+    OUString aAddrbookURI(url.copy(nLen+1));
     // Get Scheme
     nLen = aAddrbookURI.indexOf(':');
-    ::rtl::OUString aAddrbookScheme;
+    OUString aAddrbookScheme;
     if ( nLen == -1 )
     {
         // There isn't any subschema: - but could be just subschema
         if ( !aAddrbookURI.isEmpty() )
             aAddrbookScheme= aAddrbookURI;
-        else if(url == ::rtl::OUString("sdbc:address:") )
+        else if(url == OUString("sdbc:address:") )
             return Unknown; // TODO check
         else
             return Unknown;
@@ -267,12 +267,12 @@ namespace
         _rFunction = NULL;
         if ( _rModule )
         {
-            const ::rtl::OUString sSymbolName = ::rtl::OUString::createFromAscii( _pAsciiSymbolName );
+            const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
             _rFunction = (FUNCTION)( osl_getFunctionSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
             {   // did not find the symbol
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 aBuf.append( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " );
                 aBuf.append( sSymbolName );
                 OSL_FAIL( aBuf.makeStringAndClear().getStr() );
@@ -293,7 +293,7 @@ bool MozabDriver::ensureInit()
 
     OSL_ENSURE(NULL == m_pCreationFunc, "MozabDriver::ensureInit: inconsistence: already have a factory function!");
 
-    const ::rtl::OUString sModuleName(SVLIBRARY( "mozabdrv" ));
+    const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
 
     // load the mozabdrv library
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);

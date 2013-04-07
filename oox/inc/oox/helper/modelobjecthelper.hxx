@@ -41,15 +41,15 @@ class ObjectContainer
 public:
     explicit            ObjectContainer(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
-                            const ::rtl::OUString& rServiceName );
+                            const OUString& rServiceName );
                         ~ObjectContainer();
 
     /** Returns true, if the object with the passed name exists in the container. */
-    bool                hasObject( const ::rtl::OUString& rObjName ) const;
+    bool                hasObject( const OUString& rObjName ) const;
 
     /** Inserts the passed object into the container, returns its final name. */
-    ::rtl::OUString     insertObject(
-                            const ::rtl::OUString& rObjName,
+    OUString     insertObject(
+                            const OUString& rObjName,
                             const ::com::sun::star::uno::Any& rObj,
                             bool bInsertByUnusedName );
 
@@ -61,7 +61,7 @@ private:
                         mxModelFactory;         ///< Factory to create the container.
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxContainer;            ///< Container for the objects.
-    ::rtl::OUString     maServiceName;          ///< Service name to create the container.
+    OUString     maServiceName;          ///< Service name to create the container.
     sal_Int32           mnIndex;                ///< Index to create unique identifiers.
 };
 
@@ -81,27 +81,27 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
-    bool                hasLineMarker( const ::rtl::OUString& rMarkerName ) const;
+    bool                hasLineMarker( const OUString& rMarkerName ) const;
 
     /** Inserts a new named line marker, overwrites an existing line marker
         with the same name. Returns true, if the marker could be inserted. */
     bool                insertLineMarker(
-                            const ::rtl::OUString& rMarkerName,
+                            const OUString& rMarkerName,
                             const ::com::sun::star::drawing::PolyPolygonBezierCoords& rMarker );
 
     /** Inserts a new named line dash, returns the line dash name, based on an
         internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertLineDash( const ::com::sun::star::drawing::LineDash& rDash );
+    OUString     insertLineDash( const ::com::sun::star::drawing::LineDash& rDash );
 
     /** Inserts a new named fill gradient, returns the gradient name, based on
         an internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertFillGradient( const ::com::sun::star::awt::Gradient& rGradient );
 
-    ::rtl::OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient& rGradient );
+    OUString     insertTransGrandient( const ::com::sun::star::awt::Gradient& rGradient );
 
     /** Inserts a new named fill bitmap URL, returns the bitmap name, based on
         an internal constant name with a new unused index appended. */
-    ::rtl::OUString     insertFillBitmapUrl( const ::rtl::OUString& rGraphicUrl );
+    OUString     insertFillBitmapUrl( const OUString& rGraphicUrl );
 
 private:
     ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).
@@ -109,10 +109,10 @@ private:
     ObjectContainer     maGradientContainer;    ///< Contains all named fill gradients.
     ObjectContainer     maTransGradContainer;   ///< Contains all named transparency Gradients.
     ObjectContainer     maBitmapUrlContainer;   ///< Contains all named fill bitmap URLs.
-    const ::rtl::OUString maDashNameBase;       ///< Base name for all named line dashes.
-    const ::rtl::OUString maGradientNameBase;   ///< Base name for all named fill gradients.
-    const ::rtl::OUString maTransGradNameBase;   ///< Base name for all named fill gradients.
-    const ::rtl::OUString maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
+    const OUString maDashNameBase;       ///< Base name for all named line dashes.
+    const OUString maGradientNameBase;   ///< Base name for all named fill gradients.
+    const OUString maTransGradNameBase;   ///< Base name for all named fill gradients.
+    const OUString maBitmapUrlNameBase;  ///< Base name for all named fill bitmap URLs.
 };
 
 // ============================================================================

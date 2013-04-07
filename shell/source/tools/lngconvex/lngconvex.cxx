@@ -68,8 +68,6 @@ typedef unsigned short WORD;
 namespace /* private */
 {
 
-using rtl::OUString;
-using rtl::OString;
 
 void ShowUsage()
 {
@@ -82,10 +80,10 @@ void ShowUsage()
 }
 
 inline OUString OStringToOUString(const OString& str)
-{ return rtl::OStringToOUString(str, osl_getThreadTextEncoding()); }
+{ return OStringToOUString(str, osl_getThreadTextEncoding()); }
 
 inline OString OUStringToOString(const OUString& str)
-{ return rtl::OUStringToOString(str, osl_getThreadTextEncoding()); }
+{ return OUStringToOString(str, osl_getThreadTextEncoding()); }
 
 /** Get the directory where the module
     is located as system directory, the
@@ -316,7 +314,7 @@ typedef std::map< unsigned short , std::string , std::less< unsigned short > > s
 
 void add_group_entries(
     Config& aConfig,
-    const rtl::OString& GroupName,
+    const OString& GroupName,
     Substitutor& Substitutor)
 {
     OSL_ASSERT(aConfig.HasGroup(GroupName));
@@ -327,8 +325,8 @@ void add_group_entries(
 
     for (size_t i = 0; i < key_count; i++)
     {
-        rtl::OString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
-        rtl::OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
+        OString iso_lang = aConfig.GetKeyName(sal::static_int_cast<sal_uInt16>(i));
+        OString key_value_utf8 = aConfig.ReadKey(sal::static_int_cast<sal_uInt16>(i));
         iso_lang_identifier myiso_lang( iso_lang );
         LanguageType ltype = LanguageTag(
                 OStringToOUString( myiso_lang.language(), RTL_TEXTENCODING_UTF8),
@@ -340,7 +338,7 @@ void add_group_entries(
             key_value_utf8 = comphelper::string::strip(key_value_utf8, '\"');
 
             OUString key_value_utf16 =
-                rtl::OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
+                OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
             Substitutor.add_substitution(
                 GroupName.getStr(), make_winrc_unicode_string(key_value_utf16));
@@ -364,10 +362,10 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     // as the Config class is currently not able to deal correctly with
     // UTF8 files starting with a byte-order-mark we create a copy of the
     // original file without the byte-order-mark
-    rtl::OUString tmpfile_url;
+    OUString tmpfile_url;
     osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
 
-    rtl::OUString tmpfile_sys;
+    OUString tmpfile_sys;
     osl::FileBase::getSystemPathFromFileURL(tmpfile_url, tmpfile_sys);
 
     std::ifstream in(FileName.c_str());

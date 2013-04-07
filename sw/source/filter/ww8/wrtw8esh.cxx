@@ -181,34 +181,34 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
 
 void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
 {
-    rtl::OUString sSelected;
-    uno::Sequence<rtl::OUString> aListItems;
+    OUString sSelected;
+    uno::Sequence<OUString> aListItems;
     xPropSet->getPropertyValue("StringItemList") >>= aListItems;
     sal_Int32 nNoStrings = aListItems.getLength();
     if (nNoStrings)
     {
         uno::Any aTmp = xPropSet->getPropertyValue("DefaultText");
-        const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+        const OUString *pStr = (const OUString *)aTmp.getValue();
         if (pStr)
             sSelected = *pStr;
     }
 
-    rtl::OUString sName;
+    OUString sName;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+        const OUString *pStr = (const OUString *)aTmp.getValue();
         if (pStr)
             sName = *pStr;
     }
 
 
-    rtl::OUString sHelp;
+    OUString sHelp;
     {
         // property "Help" does not exist and due to the no-existence an exception is thrown.
         try
         {
             uno::Any aTmp = xPropSet->getPropertyValue("HelpText");
-            const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+            const OUString *pStr = (const OUString *)aTmp.getValue();
             if (pStr)
                 sHelp = *pStr;
         }
@@ -216,10 +216,10 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         {}
     }
 
-    rtl::OUString sToolTip;
+    OUString sToolTip;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const rtl::OUString *pStr = (const rtl::OUString *)aTmp.getValue();
+        const OUString *pStr = (const OUString *)aTmp.getValue();
         if (pStr)
             sToolTip = *pStr;
     }
@@ -227,11 +227,11 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     DoComboBox(sName, sHelp, sToolTip, sSelected, aListItems);
 }
 
-void WW8Export::DoComboBox(const rtl::OUString &rName,
-                             const rtl::OUString &rHelp,
-                             const rtl::OUString &rToolTip,
-                             const rtl::OUString &rSelected,
-                             uno::Sequence<rtl::OUString> &rListItems)
+void WW8Export::DoComboBox(const OUString &rName,
+                             const OUString &rHelp,
+                             const OUString &rToolTip,
+                             const OUString &rSelected,
+                             uno::Sequence<OUString> &rListItems)
 {
     OSL_ENSURE(bWrtWW8, "Not allowed");
     if (!bWrtWW8)
@@ -315,21 +315,21 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
     xPropSet->getPropertyValue("State") >>= nTemp;
     aFFData.setResult(nTemp);
 
-    ::rtl::OUString aStr;
-    static ::rtl::OUString sName("Name");
+    OUString aStr;
+    static OUString sName("Name");
     if (xPropSetInfo->hasPropertyByName(sName))
     {
         xPropSet->getPropertyValue(sName) >>= aStr;
         aFFData.setName(aStr);
     }
 
-    static ::rtl::OUString sHelpText("HelpText");
+    static OUString sHelpText("HelpText");
     if (xPropSetInfo->hasPropertyByName(sHelpText))
     {
         xPropSet->getPropertyValue(sHelpText) >>= aStr;
         aFFData.setHelp(aStr);
     }
-    static ::rtl::OUString sHelpF1Text("HelpF1Text");
+    static OUString sHelpF1Text("HelpF1Text");
     if (xPropSetInfo->hasPropertyByName(sHelpF1Text))
     {
         xPropSet->getPropertyValue(sHelpF1Text) >>= aStr;
@@ -1422,7 +1422,7 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
 
         Graphic         aGraphic(pGrfNd->GetGrf());
         GraphicObject   aGraphicObject( aGraphic );
-        rtl::OString aUniqueId = aGraphicObject.GetUniqueID();
+        OString aUniqueId = aGraphicObject.GetUniqueID();
 
         if (!aUniqueId.isEmpty())
         {
@@ -1631,7 +1631,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     sal_uInt32 nOpaque = 0;
     if (const GraphicObject *pGraphicObject = rBrush.GetGraphicObject())
     {
-        rtl::OString aUniqueId = pGraphicObject->GetUniqueID();
+        OString aUniqueId = pGraphicObject->GetUniqueID();
         if (!aUniqueId.isEmpty())
         {
             const Graphic &rGraphic = pGraphicObject->GetGraphic();
@@ -2731,7 +2731,7 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
 
     GraphicObject aGraphicObject(rGraphic);
-    rtl::OString aId = aGraphicObject.GetUniqueID();
+    OString aId = aGraphicObject.GetUniqueID();
     if (!aId.isEmpty())
     {
         Rectangle aRect = rObj.GetLogicRect();
@@ -2882,11 +2882,11 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
 
     //Open the ObjectPool
     SvStorageRef xObjPool = rWW8Wrt.GetWriter().GetStorage().OpenSotStorage(
-        rtl::OUString(SL::aObjectPool), STREAM_READWRITE |
+        OUString(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL);
 
     //Create a destination storage for the microsoft control
-    rtl::OUStringBuffer sStorageName;
+    OUStringBuffer sStorageName;
     sal_uInt32 nObjId = GenerateObjectID();
     sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
     SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear(),
@@ -2896,7 +2896,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
         return false;
 
 
-    rtl::OUString sUName;
+    OUString sUName;
     if (!WriteOCXStream( mxModel, xOleStg,xControlModel,aSize,sUName))
         return false;
 

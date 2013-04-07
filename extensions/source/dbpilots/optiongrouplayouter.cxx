@@ -109,7 +109,7 @@ namespace dbp
         ::com::sun::star::awt::Point aButtonPosition;
         aButtonPosition.X = aShapePosition.X + OFFSET;
 
-        ::rtl::OUString sElementsName("RadioGroup");
+        OUString sElementsName("RadioGroup");
         disambiguateName(Reference< XNameAccess >(_rContext.xForm, UNO_QUERY), sElementsName);
 
         StringArray::const_iterator aLabelIter = _rSettings.aLabels.begin();
@@ -119,28 +119,28 @@ namespace dbp
             aButtonPosition.Y = aShapePosition.Y + (i+1) * nTempHeight + nTopSpace;
 
             Reference< XPropertySet > xRadioModel(
-                    xDocFactory->createInstance(::rtl::OUString("com.sun.star.form.component.RadioButton")),
+                    xDocFactory->createInstance(OUString("com.sun.star.form.component.RadioButton")),
                 UNO_QUERY);
 
             // the label
-            xRadioModel->setPropertyValue(::rtl::OUString("Label"), makeAny(rtl::OUString(*aLabelIter)));
+            xRadioModel->setPropertyValue(OUString("Label"), makeAny(OUString(*aLabelIter)));
             // the value
-            xRadioModel->setPropertyValue(::rtl::OUString("RefValue"), makeAny(rtl::OUString(*aValueIter)));
+            xRadioModel->setPropertyValue(OUString("RefValue"), makeAny(OUString(*aValueIter)));
 
             // default selection
             if (_rSettings.sDefaultField == *aLabelIter)
-                xRadioModel->setPropertyValue(::rtl::OUString("DefaultState"), makeAny(sal_Int16(1)));
+                xRadioModel->setPropertyValue(OUString("DefaultState"), makeAny(sal_Int16(1)));
 
             // the connection to the database field
             if (0 != _rSettings.sDBField.Len())
-                xRadioModel->setPropertyValue(::rtl::OUString("DataField"), makeAny(::rtl::OUString(_rSettings.sDBField)));
+                xRadioModel->setPropertyValue(OUString("DataField"), makeAny(OUString(_rSettings.sDBField)));
 
             // the name for the model
-            xRadioModel->setPropertyValue(::rtl::OUString("Name"), makeAny(sElementsName));
+            xRadioModel->setPropertyValue(OUString("Name"), makeAny(sElementsName));
 
             // create a shape for the radio button
             Reference< XControlShape > xRadioShape(
-                    xDocFactory->createInstance(::rtl::OUString("com.sun.star.drawing.ControlShape")),
+                    xDocFactory->createInstance(OUString("com.sun.star.drawing.ControlShape")),
                 UNO_QUERY);
             Reference< XPropertySet > xShapeProperties(xRadioShape, UNO_QUERY);
 
@@ -155,7 +155,7 @@ namespace dbp
 
             // the name of the shape
             if (xShapeProperties.is())
-                xShapeProperties->setPropertyValue(::rtl::OUString("Name"), makeAny(sElementsName));
+                xShapeProperties->setPropertyValue(OUString("Name"), makeAny(sElementsName));
 
             // add to the page
             xPageShapes->add(xRadioShape.get());
@@ -164,7 +164,7 @@ namespace dbp
 
             // set the GroupBox as "LabelControl" for the RadioButton
             // (_after_ having inserted the model into the page!)
-            xRadioModel->setPropertyValue(::rtl::OUString("LabelControl"), makeAny(_rContext.xObjectModel));
+            xRadioModel->setPropertyValue(OUString("LabelControl"), makeAny(_rContext.xObjectModel));
         }
 
         // group the shapes
@@ -188,7 +188,7 @@ namespace dbp
     //---------------------------------------------------------------------
     void OOptionGroupLayouter::implAnchorShape(const Reference< XPropertySet >& _rxShapeProps)
     {
-        static const ::rtl::OUString s_sAnchorPropertyName("AnchorType");
+        static const OUString s_sAnchorPropertyName("AnchorType");
         Reference< XPropertySetInfo > xPropertyInfo;
         if (_rxShapeProps.is())
             xPropertyInfo = _rxShapeProps->getPropertySetInfo();

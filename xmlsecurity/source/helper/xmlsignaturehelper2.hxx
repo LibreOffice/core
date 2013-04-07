@@ -70,7 +70,7 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
     // com::sun::star::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startElement( const rtl::OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
+    virtual void SAL_CALL startElement( const OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL startDocument(  )
@@ -79,16 +79,16 @@ public:
     virtual void SAL_CALL endDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL endElement( const rtl::OUString& aName )
+    virtual void SAL_CALL endElement( const OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL characters( const rtl::OUString& aChars )
+    virtual void SAL_CALL characters( const OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL ignorableWhitespace( const rtl::OUString& aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL processingInstruction( const rtl::OUString& aTarget, const rtl::OUString& aData )
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setDocumentLocator( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
@@ -113,13 +113,13 @@ public:
     UriBindingHelper();
     UriBindingHelper( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStorage );
 
-    void SAL_CALL setUriBinding( const rtl::OUString& uri, const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
+    void SAL_CALL setUriBinding( const OUString& uri, const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
         throw (com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL getUriBinding( const rtl::OUString& uri )
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri )
         throw (com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    static com::sun::star::uno::Reference < com::sun::star::io::XInputStream > OpenInputStream( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore, const rtl::OUString& rURI );
+    static com::sun::star::uno::Reference < com::sun::star::io::XInputStream > OpenInputStream( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rxStore, const OUString& rURI );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

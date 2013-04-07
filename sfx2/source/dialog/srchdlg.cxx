@@ -40,7 +40,7 @@ namespace sfx2 {
 // SearchDialog
 // ============================================================================
 
-SearchDialog::SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName ) :
+SearchDialog::SearchDialog( Window* pWindow, const OUString& rConfigName ) :
 
     ModelessDialog( pWindow, SfxResId( RID_DLG_SEARCH ) ),
 
@@ -82,9 +82,9 @@ void SearchDialog::LoadConfig()
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
     if ( aViewOpt.Exists() )
     {
-        m_sWinState = rtl::OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
+        m_sWinState = OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
         Any aUserItem = aViewOpt.GetUserItem( "UserItem" );
-        ::rtl::OUString aTemp;
+        OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
             String sUserData( aTemp );
@@ -109,7 +109,7 @@ void SearchDialog::LoadConfig()
 void SearchDialog::SaveConfig()
 {
     SvtViewOptions aViewOpt( E_DIALOG, m_sConfigName );
-    aViewOpt.SetWindowState(rtl::OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
+    aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     String sUserData;
     sal_uInt16 i = 0, nCount = Min( m_aSearchEdit.GetEntryCount(), MAX_SAVE_COUNT );
     for ( ; i < nCount; ++i )
@@ -127,7 +127,7 @@ void SearchDialog::SaveConfig()
     sUserData += ';';
     sUserData += OUString::number( m_aBackwardsBox.IsChecked() ? 1 : 0 );
 
-    Any aUserItem = makeAny( ::rtl::OUString( sUserData ) );
+    Any aUserItem = makeAny( OUString( sUserData ) );
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 

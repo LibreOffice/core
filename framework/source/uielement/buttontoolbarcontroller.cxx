@@ -57,7 +57,7 @@ namespace framework
 ButtonToolbarController::ButtonToolbarController(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
     ToolBox*                                            pToolBar,
-    const rtl::OUString&                                aCommand ) :
+    const OUString&                                aCommand ) :
     cppu::OWeakObject(),
     m_bInitialized( sal_False ),
     m_bDisposed( sal_False ),
@@ -209,7 +209,7 @@ throw (::com::sun::star::uno::RuntimeException)
     uno::Reference< frame::XDispatch >      xDispatch;
     uno::Reference< frame::XFrame >         xFrame;
     uno::Reference< util::XURLTransformer > xURLTransformer;
-    rtl::OUString                           aCommandURL;
+    OUString                           aCommandURL;
     ::com::sun::star::util::URL             aTargetURL;
 
     {
@@ -239,7 +239,7 @@ throw (::com::sun::star::uno::RuntimeException)
     {
         aTargetURL.Complete = aCommandURL;
         xURLTransformer->parseStrict( aTargetURL );
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
     }
 
     if ( xDispatch.is() )
@@ -249,7 +249,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs( 1 );
 
             // Provide key modifier information to dispatch function
-            aArgs[0].Name   = rtl::OUString( "KeyModifier" );
+            aArgs[0].Name   = OUString( "KeyModifier" );
             aArgs[0].Value  <<= KeyModifier;
 
             xDispatch->dispatch( aTargetURL, aArgs );

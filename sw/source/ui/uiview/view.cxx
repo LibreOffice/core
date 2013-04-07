@@ -112,8 +112,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
@@ -765,7 +763,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     _CreateScrollbar( sal_False );
 
     m_pViewImpl = new SwView_Impl(this);
-    SetName(rtl::OUString("View"));
+    SetName(OUString("View"));
     SetWindow( m_pEditWin );
 
     m_aTimer.SetTimeout( 120 );
@@ -1499,7 +1497,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     beans::PropertyValue *pValue = rSequence.getArray();
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    pValue->Name = rtl::OUString( "ViewId" );
+    pValue->Name = OUString( "ViewId" );
     OUStringBuffer sBuffer ( OUString( "view" ) );
     ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
     pValue->Value <<= sBuffer.makeStringAndClear();

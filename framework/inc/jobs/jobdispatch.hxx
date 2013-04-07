@@ -83,7 +83,7 @@ class JobDispatch : public  css::lang::XTypeProvider
         css::uno::Reference< css::frame::XFrame > m_xFrame;
 
         /** name of module (writer, impress etc.) the frame is for */
-        ::rtl::OUString m_sModuleIdentifier;
+        OUString m_sModuleIdentifier;
 
     //___________________________________
     // native interface methods
@@ -93,13 +93,13 @@ class JobDispatch : public  css::lang::XTypeProvider
                   JobDispatch( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
          virtual ~JobDispatch(                                                                     );
 
-        void impl_dispatchEvent  ( const ::rtl::OUString&                                            sEvent    ,
+        void impl_dispatchEvent  ( const OUString&                                            sEvent    ,
                                    const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
-        void impl_dispatchService( const ::rtl::OUString&                                            sService  ,
+        void impl_dispatchService( const OUString&                                            sService  ,
                                    const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
-        void impl_dispatchAlias  ( const ::rtl::OUString&                                            sAlias    ,
+        void impl_dispatchAlias  ( const OUString&                                            sAlias    ,
                                    const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                    const css::uno::Reference< css::frame::XDispatchResultListener >& xListener );
 
@@ -119,7 +119,7 @@ class JobDispatch : public  css::lang::XTypeProvider
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
-                                                                                                             const ::rtl::OUString&                                      sTargetFrameName ,
+                                                                                                             const OUString&                                      sTargetFrameName ,
                                                                                                                    sal_Int32                                             nSearchFlags     ) throw(css::uno::RuntimeException);
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor      ) throw(css::uno::RuntimeException);
 

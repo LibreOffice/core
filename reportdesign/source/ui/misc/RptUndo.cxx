@@ -87,12 +87,12 @@ namespace
         }
     }
     //----------------------------------------------------------------------------
-    void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const ::std::vector< ::std::pair< ::rtl::OUString ,uno::Any> >& _aValues)
+    void lcl_setValues(const uno::Reference< report::XSection >& _xSection,const ::std::vector< ::std::pair< OUString ,uno::Any> >& _aValues)
     {
         if ( _xSection.is() )
         {
-            ::std::vector< ::std::pair< ::rtl::OUString ,uno::Any> >::const_iterator aIter = _aValues.begin();
-            ::std::vector< ::std::pair< ::rtl::OUString ,uno::Any> >::const_iterator aEnd = _aValues.end();
+            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aIter = _aValues.begin();
+            ::std::vector< ::std::pair< OUString ,uno::Any> >::const_iterator aEnd = _aValues.end();
             for (; aIter != aEnd; ++aIter)
             {
                 try
@@ -166,7 +166,7 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
         for(;pIter != pEnd;++pIter)
         {
             if ( 0 == (pIter->Attributes & beans::PropertyAttribute::READONLY) )
-                m_aValues.push_back(::std::pair< ::rtl::OUString ,uno::Any>(pIter->Name,_xSection->getPropertyValue(pIter->Name)));
+                m_aValues.push_back(::std::pair< OUString ,uno::Any>(pIter->Name,_xSection->getPropertyValue(pIter->Name)));
         }
         lcl_collectElements(_xSection,m_aControls);
     }
@@ -277,7 +277,7 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
     }
 }
 //----------------------------------------------------------------------------
-rtl::OUString OGroupSectionUndo::GetComment() const
+OUString OGroupSectionUndo::GetComment() const
 {
     if ( m_sName.isEmpty() )
     {

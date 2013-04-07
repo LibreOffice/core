@@ -46,7 +46,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using ::rtl::OUString;
 #define SERVICENAME "com.sun.star.script.Converter"
 #define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
 

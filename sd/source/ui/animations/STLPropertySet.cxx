@@ -21,7 +21,6 @@
 
 using namespace com::sun::star::beans;
 
-using rtl::OUString;
 using com::sun::star::uno::Any;
 
 namespace sd

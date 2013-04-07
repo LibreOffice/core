@@ -92,7 +92,7 @@ void xforms_booleanFromStringFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCase("true") ||
         aString.equalsIgnoreAsciiCase("1"))
         xmlXPathReturnTrue(ctxt);
@@ -224,7 +224,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
     if (aString.equalsIgnoreAsciiCase("version"))
         xmlXPathReturnString(ctxt, (xmlChar*)_version);
     else if (aString.equalsIgnoreAsciiCase("conformance-level"))
@@ -235,9 +235,9 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 // Date and Time Functions
 
-static ::rtl::OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
+static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
 {
-    ::rtl::OStringBuffer aDateTimeString;
+    OStringBuffer aDateTimeString;
     aDateTimeString.append((sal_Int32)aDateTime.GetYear());
     aDateTimeString.append("-");
     if (aDateTime.GetMonth()<10) aDateTimeString.append("0");
@@ -281,19 +281,19 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     indicated by a "Z".
     */
     DateTime aDateTime( DateTime::SYSTEM );
-    ::rtl::OString aDateTimeString = makeDateTimeString(aDateTime);
+    OString aDateTimeString = makeDateTimeString(aDateTime);
     xmlChar *pString = static_cast<xmlChar*>(xmlMalloc(aDateTimeString.getLength()+1));
     strncpy((char*)pString, (char*)aDateTimeString.getStr(), aDateTimeString.getLength());
     pString[aDateTimeString.getLength()] = 0;
     xmlXPathReturnString(ctxt, pString);
 }
 
-static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTime)
+static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 {
     // take apart a canonical literal xsd:dateTime string
     //CCYY-MM-DDThh:mm:ss(Z)
 
-    ::rtl::OUString aDateTimeString = aString.trim();
+    OUString aDateTimeString = aString.trim();
 
     // check length
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
@@ -302,10 +302,10 @@ static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTim
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aUTCString("Z");
+    OUString aUTCString("Z");
 
-    ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
-    ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
+    OUString aDateString = aDateTimeString.copy(0, nDateLength);
+    OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);
 
     sal_Int32 nIndex = 0;
     sal_Int32 nYear = aDateString.getToken(0, '-', nIndex).toInt32();
@@ -335,7 +335,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime( DateTime::EMPTY );
     if (parseDateTime(aString, aDateTime))
@@ -358,7 +358,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     DateTime aDateTime( DateTime::EMPTY );
 
@@ -507,7 +507,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar *pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    ::rtl::OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
+    OUString aString((char*)pString, strlen((char*)pString), RTL_TEXTENCODING_UTF8);
 
     Reference< XModel > aModel = ((CLibxml2XFormsExtension*)ctxt->context->funcLookupData)->getModel();
     if (aModel.is())

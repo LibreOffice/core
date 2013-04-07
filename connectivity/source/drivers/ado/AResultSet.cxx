@@ -52,24 +52,24 @@ using namespace com::sun::star::sdbc;
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
+OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
 {
-    return ::rtl::OUString("com.sun.star.sdbcx.ado.ResultSet");
+    return OUString("com.sun.star.sdbcx.ado.ResultSet");
 }
 // -------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
+    ::com::sun::star::uno::Sequence< OUString > aSupported(2);
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -153,7 +153,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -339,7 +339,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -753,7 +753,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     updateValue(columnIndex,x);
 }
@@ -901,7 +901,7 @@ sal_Bool SAL_CALL OResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runtim
     ADOS::ThrowException(*((OConnection*)m_pStmt->getConnection().get())->getConnection(),*this);
     OSL_ENSURE(aProps.IsValid(),"There are no properties at the connection");
 
-    WpADOProperty aProp(aProps.GetItem(::rtl::OUString("Bookmarks Ordered")));
+    WpADOProperty aProp(aProps.GetItem(OUString("Bookmarks Ordered")));
     OLEVariant aVar;
     if(aProp.IsValid())
         aVar = aProp.GetValue();
@@ -1033,10 +1033,10 @@ sal_Int32 OResultSet::getFetchSize() const
     return nValue;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OResultSet::getCursorName() const
+OUString OResultSet::getCursorName() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -1058,7 +1058,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
 
-    //  DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    //  DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);

@@ -88,16 +88,16 @@ private:
     com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > mxDiagram;
     com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > mxNewDiagram;
 
-    rtl::OUString msTableName;
-    rtl::OUStringBuffer msStringBuffer;
-    rtl::OUString msString;
+    OUString msTableName;
+    OUStringBuffer msStringBuffer;
+    OUString msString;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     sal_Bool mbHasSeriesLabels;
     sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     sal_Bool mbRowSourceColumns;
-    rtl::OUString msChartAddress;
-    rtl::OUString msTableNumberList;
+    OUString msChartAddress;
+    OUString msTableNumberList;
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     //::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
@@ -116,7 +116,7 @@ private:
     sal_Int32 getChartType(
          );
 
-    rtl::OUString parseFormula( const rtl::OUString& rRange );
+    OUString parseFormula( const OUString& rRange );
     void InitPlotArea();
 
     void _ExportContent();

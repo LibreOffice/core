@@ -74,14 +74,14 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void XSDValidationHelper::getAvailableDataTypeNames( ::std::vector< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(())
+    void XSDValidationHelper::getAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(())
     {
         _rNames.resize( 0 );
 
         try
         {
             Reference< XDataTypeRepository > xRepository = getDataTypeRepository();
-            Sequence< ::rtl::OUString > aElements;
+            Sequence< OUString > aElements;
             if ( xRepository.is() )
                 aElements = xRepository->getElementNames();
 
@@ -107,7 +107,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XDataTypeRepository > XSDValidationHelper::getDataTypeRepository( const ::rtl::OUString& _rModelName ) const SAL_THROW((Exception))
+    Reference< XDataTypeRepository > XSDValidationHelper::getDataTypeRepository( const OUString& _rModelName ) const SAL_THROW((Exception))
     {
         Reference< XDataTypeRepository > xRepository;
 
@@ -119,7 +119,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XDataType > XSDValidationHelper::getDataType( const ::rtl::OUString& _rName ) const SAL_THROW((Exception))
+    Reference< XDataType > XSDValidationHelper::getDataType( const OUString& _rName ) const SAL_THROW((Exception))
     {
         Reference< XDataType > xDataType;
 
@@ -133,9 +133,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString XSDValidationHelper::getValidatingDataTypeName( ) const SAL_THROW(())
+    OUString XSDValidationHelper::getValidatingDataTypeName( ) const SAL_THROW(())
     {
-        ::rtl::OUString sDataTypeName;
+        OUString sDataTypeName;
         try
         {
             Reference< XPropertySet > xBinding( getCurrentBinding() );
@@ -153,7 +153,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::Reference< XSDDataType > XSDValidationHelper::getDataTypeByName( const ::rtl::OUString& _rName ) const SAL_THROW(())
+    ::rtl::Reference< XSDDataType > XSDValidationHelper::getDataTypeByName( const OUString& _rName ) const SAL_THROW(())
     {
         ::rtl::Reference< XSDDataType > pReturn;
 
@@ -182,7 +182,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    bool XSDValidationHelper::cloneDataType( const ::rtl::Reference< XSDDataType >& _pDataType, const ::rtl::OUString& _rNewName ) const SAL_THROW(())
+    bool XSDValidationHelper::cloneDataType( const ::rtl::Reference< XSDDataType >& _pDataType, const OUString& _rNewName ) const SAL_THROW(())
     {
         OSL_ENSURE( _pDataType.is(), "XSDValidationHelper::removeDataTypeFromRepository: invalid data type!" );
         if ( !_pDataType.is() )
@@ -210,7 +210,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    bool XSDValidationHelper::removeDataTypeFromRepository( const ::rtl::OUString& _rName ) const SAL_THROW(())
+    bool XSDValidationHelper::removeDataTypeFromRepository( const OUString& _rName ) const SAL_THROW(())
     {
         try
         {
@@ -236,7 +236,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void XSDValidationHelper::setValidatingDataTypeByName( const ::rtl::OUString& _rName ) const SAL_THROW(())
+    void XSDValidationHelper::setValidatingDataTypeByName( const OUString& _rName ) const SAL_THROW(())
     {
         try
         {
@@ -246,7 +246,7 @@ namespace pcr
             if ( xBinding.is() )
             {
                 // get the old data type - this is necessary for notifying property changes
-                ::rtl::OUString sOldDataTypeName;
+                OUString sOldDataTypeName;
                 OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sOldDataTypeName );
                 Reference< XPropertySet > xOldType;
                 try { xOldType = xOldType.query( getDataType( sOldDataTypeName ) ); } catch( const Exception& ) { }
@@ -258,11 +258,11 @@ namespace pcr
                 Reference< XPropertySet > xNewType( getDataType( _rName ), UNO_QUERY );
 
                 // fire any changes in the properties which result from this new type
-                std::set< ::rtl::OUString > aFilter; aFilter.insert( static_cast<const rtl::OUString&>(PROPERTY_NAME) );
+                std::set< OUString > aFilter; aFilter.insert( static_cast<const OUString&>(PROPERTY_NAME) );
                 firePropertyChanges( xOldType, xNewType, aFilter );
 
                 // fire the change in the Data Type property
-                ::rtl::OUString sNewDataTypeName;
+                OUString sNewDataTypeName;
                 OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sNewDataTypeName );
                 firePropertyChange( PROPERTY_XSD_DATA_TYPE, makeAny( sOldDataTypeName ), makeAny( sNewDataTypeName ) );
             }
@@ -274,8 +274,8 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void XSDValidationHelper::copyDataType( const ::rtl::OUString& _rFromModel, const ::rtl::OUString& _rToModel,
-                const ::rtl::OUString& _rDataTypeName ) const SAL_THROW(())
+    void XSDValidationHelper::copyDataType( const OUString& _rFromModel, const OUString& _rToModel,
+                const OUString& _rDataTypeName ) const SAL_THROW(())
     {
         if ( _rFromModel == _rToModel )
             // nothing to do (me thinks)
@@ -298,7 +298,7 @@ namespace pcr
 
             // determine the built-in type belonging to the source type
             ::rtl::Reference< XSDDataType > pSourceType = new XSDDataType( xFromRepository->getDataType( _rDataTypeName ) );
-            ::rtl::OUString sTargetBaseType = getBasicTypeNameForClass( pSourceType->classify(), xToRepository );
+            OUString sTargetBaseType = getBasicTypeNameForClass( pSourceType->classify(), xToRepository );
 
             // create the target type
             Reference< XDataType > xTargetType = xToRepository->cloneDataType( sTargetBaseType, _rDataTypeName );
@@ -366,15 +366,15 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass ) const SAL_THROW(())
+    OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass ) const SAL_THROW(())
     {
         return getBasicTypeNameForClass( _nClass, getDataTypeRepository() );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass, Reference< XDataTypeRepository > _rxRepository ) const SAL_THROW(())
+    OUString XSDValidationHelper::getBasicTypeNameForClass( sal_Int16 _nClass, Reference< XDataTypeRepository > _rxRepository ) const SAL_THROW(())
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
         OSL_ENSURE( _rxRepository.is(), "XSDValidationHelper::getBasicTypeNameForClass: invalid repository!" );
         if ( !_rxRepository.is() )
             return sReturn;

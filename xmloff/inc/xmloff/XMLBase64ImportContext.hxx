@@ -32,13 +32,13 @@ class XMLOFF_DLLPUBLIC XMLBase64ImportContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::io::XOutputStream > xOut;
-    ::rtl::OUString sBase64CharsLeft;
+    OUString sBase64CharsLeft;
 
 public:
     TYPEINFO();
 
     XMLBase64ImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                            const ::rtl::OUString& rLName,
+                            const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         const ::com::sun::star::uno::Reference<
@@ -48,7 +48,7 @@ public:
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
 };
 

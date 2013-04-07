@@ -40,7 +40,7 @@
 
 
 ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName):
+                        const OUString& rLName):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     GetScImport().SetNewCondFormatData();
@@ -48,7 +48,7 @@ ScXMLConditionalFormatsContext::ScXMLConditionalFormatsContext( ScXMLImport& rIm
 }
 
 SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -77,20 +77,20 @@ void ScXMLConditionalFormatsContext::EndElement()
 }
 
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList):
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString sRange;
+    OUString sRange;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetCondFormatAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -110,7 +110,7 @@ ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImpo
 }
 
 SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -153,7 +153,7 @@ void ScXMLConditionalFormatContext::EndElement()
 }
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, ScConditionalFormat* pFormat):
+                        const OUString& rLName, ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pColorScaleFormat(NULL)
 {
@@ -162,7 +162,7 @@ ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport
 }
 
 SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -182,28 +182,28 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
 }
 
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpDataBarFormat(NULL),
     mpFormatData(NULL)
 {
-    rtl::OUString sPositiveColor;
-    rtl::OUString sNegativeColor;
-    rtl::OUString sGradient;
-    rtl::OUString sAxisPosition;
-    rtl::OUString sShowValue;
-    rtl::OUString sAxisColor;
+    OUString sPositiveColor;
+    OUString sNegativeColor;
+    OUString sGradient;
+    OUString sAxisPosition;
+    OUString sShowValue;
+    OUString sAxisColor;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataBarAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -283,7 +283,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
 }
 
 SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -315,22 +315,22 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 }
 
 ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString aIconSetType, sShowValue;
+    OUString aIconSetType, sShowValue;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetIconSetAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -349,7 +349,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
     ScIconSetType eType = IconSet_3Arrows;
     for(; pMap->pName; ++pMap)
     {
-        rtl::OUString aName = rtl::OUString::createFromAscii(pMap->pName);
+        OUString aName = OUString::createFromAscii(pMap->pName);
         if(aName ==aIconSetType)
         {
             eType = pMap->eType;
@@ -375,7 +375,7 @@ ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_u
 }
 
 SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -400,7 +400,7 @@ SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nP
 
 namespace {
 
-void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::OUString& rExpr1, rtl::OUString& rExpr2)
+void GetConditionData(const OUString& rValue, ScConditionMode& eMode, OUString& rExpr1, OUString& rExpr2)
 {
     if(rValue.indexOf("unique") == 0)
     {
@@ -561,23 +561,23 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
 }
 
 ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString sExpression;
-    rtl::OUString sStyle;
-    rtl::OUString sAddress;
+    OUString sExpression;
+    OUString sStyle;
+    OUString sAddress;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetConditionAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -595,13 +595,13 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
         }
     }
 
-    rtl::OUString aExpr1;
-    rtl::OUString aExpr2;
+    OUString aExpr1;
+    OUString aExpr2;
     ScConditionMode eMode;
     GetConditionData(sExpression, eMode, aExpr1, aExpr2);
 
     ScCondFormatEntry* pFormatEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, GetScImport().GetDocument(), ScAddress(), sStyle,
-                                                        rtl::OUString(), rtl::OUString(), formula::FormulaGrammar::GRAM_ODFF, formula::FormulaGrammar::GRAM_ODFF);
+                                                        OUString(), OUString(), formula::FormulaGrammar::GRAM_ODFF, formula::FormulaGrammar::GRAM_ODFF);
     pFormatEntry->SetSrcString(sAddress);
 
     pFormat->AddEntry(pFormatEntry);
@@ -609,7 +609,7 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
 
 namespace {
 
-void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, const rtl::OUString rFormula,
+void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const OUString rFormula,
         ScXMLImport& rImport)
 {
     if(rType == "minimum")
@@ -635,7 +635,7 @@ void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, co
 }
 
 ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleFormat* pFormat):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mpFormatEntry( NULL )
@@ -643,19 +643,19 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     double nVal = 0;
     Color aColor;
 
-    rtl::OUString sType;
-    rtl::OUString sVal;
-    rtl::OUString sColor;
+    OUString sType;
+    OUString sVal;
+    OUString sColor;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetColorScaleEntryAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -686,22 +686,22 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
 }
 
 ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString sVal;
-    rtl::OUString sType;
+    OUString sVal;
+    OUString sType;
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataBarEntryAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -726,7 +726,7 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, 
 
 namespace {
 
-condformat::ScCondFormatDateType getDateFromString(const rtl::OUString& rString)
+condformat::ScCondFormatDateType getDateFromString(const OUString& rString)
 {
     if(rString == "today")
         return condformat::TODAY;
@@ -762,20 +762,20 @@ condformat::ScCondFormatDateType getDateFromString(const rtl::OUString& rString)
 }
 
 ScXMLDateContext::ScXMLDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        const OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScConditionalFormat* pFormat ):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    rtl::OUString sDateType, sStyle;
+    OUString sDateType, sStyle;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetCondDateAttrMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                     sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

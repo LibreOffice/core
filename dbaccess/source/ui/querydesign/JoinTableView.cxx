@@ -284,9 +284,9 @@ OTableWindow* OJoinTableView::GetTabWindow( const String& rName )
     return aIter == m_aTableMap.end() ? NULL : aIter->second;
 }
 // -----------------------------------------------------------------------------
-TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::OUString& _rComposedName
-                                                                  ,const ::rtl::OUString& _sTableName
-                                                                  ,const ::rtl::OUString& _rWinName)
+TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUString& _rComposedName
+                                                                  ,const OUString& _sTableName
+                                                                  ,const OUString& _rWinName)
 {
     TTableWindowData::value_type pData( CreateImpl(_rComposedName, _sTableName,_rWinName) );
     OJoinDesignView* pParent = getDesignView();
@@ -318,14 +318,14 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const ::rtl::
     return pData;
 }
 // -----------------------------------------------------------------------------
-OTableWindowData* OJoinTableView::CreateImpl(const ::rtl::OUString& _rComposedName
-                                             ,const ::rtl::OUString& _sTableName
-                                             ,const ::rtl::OUString& _rWinName)
+OTableWindowData* OJoinTableView::CreateImpl(const OUString& _rComposedName
+                                             ,const OUString& _sTableName
+                                             ,const OUString& _rWinName)
 {
     return new OTableWindowData( NULL,_rComposedName,_sTableName, _rWinName );
 }
 //------------------------------------------------------------------------------
-void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
+void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");

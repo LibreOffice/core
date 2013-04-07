@@ -27,7 +27,7 @@ class SvxAutoCorrCfg;
 class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
-    com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
 public:
     SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rParent);
@@ -35,14 +35,14 @@ public:
 
     void                    Load(sal_Bool bInit);
     virtual void            Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
 };
 
 class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;
-    com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString>    GetPropertyNames();
 
 public:
     SvxSwAutoCorrCfg(SvxAutoCorrCfg& rParent);
@@ -50,7 +50,7 @@ public:
 
     void                    Load(sal_Bool bInit);
     virtual void            Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
 };
 /*--------------------------------------------------------------------

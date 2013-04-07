@@ -60,7 +60,7 @@ public:
     XMLChangeImportContext(
         SvXMLImport& rImport,
         sal_Int16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         sal_Bool bIsStart,  /// mark start of a change
         sal_Bool bIsEnd,    /// mark end of a change
         /// true if change mark is encountered outside of a paragraph

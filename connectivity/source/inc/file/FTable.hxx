@@ -56,11 +56,11 @@ namespace connectivity
         public:
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection);
             OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description = OUString(),
+                    const OUString& _SchemaName = OUString(),
+                    const OUString& _CatalogName = OUString()
                 );
 
             //XInterface
@@ -85,9 +85,9 @@ namespace connectivity
             // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
 
-            ::rtl::OUString SAL_CALL getName() throw() { return m_Name; }
+            OUString SAL_CALL getName() throw() { return m_Name; }
 
-            ::rtl::OUString getSchema() { return m_SchemaName; }
+            OUString getSchema() { return m_SchemaName; }
             sal_Bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // com::sun::star::lang::XUnoTunnel

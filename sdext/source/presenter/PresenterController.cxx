@@ -60,8 +60,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace {
     const sal_Int32 ResourceActivationEventType = 0;
@@ -429,7 +427,7 @@ void PresenterController::UpdateViews (void)
 }
 
 SharedBitmapDescriptor
-    PresenterController::GetViewBackground (const ::rtl::OUString& rsViewURL) const
+    PresenterController::GetViewBackground (const OUString& rsViewURL) const
 {
     if (mpTheme.get() != NULL)
     {
@@ -440,7 +438,7 @@ SharedBitmapDescriptor
 }
 
 PresenterTheme::SharedFontDescriptor
-    PresenterController::GetViewFont (const ::rtl::OUString& rsViewURL) const
+    PresenterController::GetViewFont (const OUString& rsViewURL) const
 {
     if (mpTheme.get() != NULL)
     {
@@ -555,7 +553,7 @@ Reference<css::frame::XDispatch> PresenterController::GetDispatch (const util::U
         frame::FrameSearchFlag::SELF);
 }
 
-util::URL PresenterController::CreateURLFromString (const ::rtl::OUString& rsURL) const
+util::URL PresenterController::CreateURLFromString (const OUString& rsURL) const
 {
     util::URL aURL;
 

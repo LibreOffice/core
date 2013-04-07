@@ -41,9 +41,9 @@ XSvgParser_createInstance(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         const &);
 
-rtl::OUString SAL_CALL XSvgParser_getImplementationName();
+OUString SAL_CALL XSvgParser_getImplementationName();
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+com::sun::star::uno::Sequence< OUString > SAL_CALL
 XSvgParser_getSupportedServiceNames();
 
 } }

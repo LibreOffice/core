@@ -391,7 +391,7 @@ String SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
         }
         else
         {
-            rtl::OUString aStr;
+            OUString aStr;
 
             if(!pHdl)
             {

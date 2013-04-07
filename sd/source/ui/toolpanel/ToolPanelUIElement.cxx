@@ -55,7 +55,7 @@ namespace sd { namespace toolpanel
     //= ToolPanelUIElement
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    ToolPanelUIElement::ToolPanelUIElement( const Reference< XFrame >& i_rFrame, const ::rtl::OUString& i_rResourceURL,
+    ToolPanelUIElement::ToolPanelUIElement( const Reference< XFrame >& i_rFrame, const OUString& i_rResourceURL,
             const Reference< XToolPanel >& i_rToolPanel )
         :ToolPanelUIElement_Base( m_aMutex )
         ,m_xFrame( i_rFrame )
@@ -73,7 +73,7 @@ namespace sd { namespace toolpanel
     void ToolPanelUIElement::checkDisposed()
     {
         if ( !m_xToolPanel.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace sd { namespace toolpanel
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ToolPanelUIElement::getResourceURL() throw (RuntimeException)
+    OUString SAL_CALL ToolPanelUIElement::getResourceURL() throw (RuntimeException)
     {
         UIElementMethodGuard aGuard( *this );
         return m_sResourceURL;

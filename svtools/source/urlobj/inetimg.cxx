@@ -40,7 +40,7 @@ sal_Bool INetImage::Write( SvStream& rOStm, sal_uLong nFormat ) const
             sString += TOKEN_SEPARATOR;
             sString += OUString::number( aSizePixel.Height() );
 
-            rtl::OString sOut(rtl::OUStringToOString(sString,
+            OString sOut(OUStringToOString(sString,
                 RTL_TEXTENCODING_UTF8));
 
             rOStm.Write(sOut.getStr(), sOut.getLength());

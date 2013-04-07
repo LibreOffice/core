@@ -69,13 +69,13 @@ private:
     sal_Bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
-    rtl::OUString       maCommand;
+    OUString       maCommand;
 
     DECL_LINK( SelectHdl, void * );
 
 public:
                             TableWindow( sal_uInt16                     nSlotId,
-                                         const rtl::OUString&       rCmd,
+                                         const OUString&       rCmd,
                                          const String&              rText,
                                          ToolBox&                   rParentTbx,
                                          const Reference< XFrame >& rFrame );
@@ -104,7 +104,7 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( sal_uInt16 nSlotId, const rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) ),
     aTableButton( this ),
     nCol( 0 ),
@@ -325,9 +325,9 @@ void TableWindow::PopupModeEnd()
     if ( !IsPopupModeCanceled() && nCol && nLine )
     {
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = ::rtl::OUString( "Columns" );
+        aArgs[0].Name = OUString( "Columns" );
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = ::rtl::OUString( "Rows" );
+        aArgs[1].Name = OUString( "Rows" );
         aArgs[1].Value = makeAny( sal_Int16( nLine ));
 
         TableDialog( aArgs );
@@ -370,7 +370,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
 
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if ( xDispatch.is() )
             xDispatch->dispatch( aTargetURL, rArgs );
     }
@@ -405,11 +405,11 @@ private:
     sal_Bool                m_bMod1;
     ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
-    ::rtl::OUString            maCommand;
+    OUString            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( sal_uInt16 nId, const ::rtl::OUString& rCmd, const String &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
+                            ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const String &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -424,7 +424,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const ::rtl::OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const String& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
     bInitialKeyInput(sal_True),
     m_bMod1(sal_False),
@@ -685,9 +685,9 @@ void ColumnsWindow::PopupModeEnd()
         pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, reinterpret_cast<void*>(nId));
 
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name = ::rtl::OUString( "Columns" );
+        aArgs[0].Name = OUString( "Columns" );
         aArgs[0].Value = makeAny( sal_Int16( nCol ));
-        aArgs[1].Name = ::rtl::OUString( "Modifier" );
+        aArgs[1].Name = OUString( "Modifier" );
         aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
 
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),

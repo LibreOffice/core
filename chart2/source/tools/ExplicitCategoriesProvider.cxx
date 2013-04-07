@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::std::vector;
 
 
@@ -109,7 +108,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
                             if( !aSeries.empty() )
                             {
                                 uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
-                                ::rtl::OUString aStringDummy;
+                                OUString aStringDummy;
                                 bool bDummy;
                                 uno::Sequence< sal_Int32 > aSeqDummy;
                                 DataSourceHelper::readArguments( xDataProvider->detectArguments( xSeriesSource),
@@ -180,7 +179,7 @@ std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategor
     return aLimitingBorders;
 }
 
-void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< rtl::OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, Reference< frame::XModel > xChartModel )
+void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUString >& rOutTexts, const uno::Sequence< uno::Any >& rInAnys, Reference< frame::XModel > xChartModel )
 {
     sal_Int32 nCount = rInAnys.getLength();
     if(!nCount)
@@ -207,7 +206,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< rtl::
 
     for(sal_Int32 nN=0;nN<nCount;nN++)
     {
-        rtl::OUString aText;
+        OUString aText;
         uno::Any aAny = rInAnys[nN];
         if( aAny.hasValue() )
         {
@@ -247,7 +246,7 @@ public:
     {}
 
     virtual sal_Int32 getLevelCount() const;
-    virtual uno::Sequence< rtl::OUString > getStringsForLevel( sal_Int32 nIndex ) const;
+    virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const;
 
 private:
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
@@ -260,9 +259,9 @@ sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
 {
     return m_rSplitCategoriesList.getLength();
 }
-uno::Sequence< rtl::OUString > SplitCategoriesProvider_ForLabeledDataSequences::getStringsForLevel( sal_Int32 nLevel ) const
+uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getStringsForLevel( sal_Int32 nLevel ) const
 {
-    uno::Sequence< rtl::OUString > aRet;
+    uno::Sequence< OUString > aRet;
     Reference< data::XLabeledDataSequence > xLabeledDataSequence( m_rSplitCategoriesList[nLevel] );
     if( xLabeledDataSequence.is() )
     {
@@ -274,7 +273,7 @@ uno::Sequence< rtl::OUString > SplitCategoriesProvider_ForLabeledDataSequences::
 }
 
 std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
-    const uno::Sequence< rtl::OUString >& rStrings
+    const uno::Sequence< OUString >& rStrings
     , const std::vector<sal_Int32>& rLimitingBorders, bool bCreateSingleCategories )
 {
     std::vector< ComplexCategory > aResult;
@@ -535,7 +534,7 @@ void ExplicitCategoriesProvider::init()
 }
 
 
-Sequence< ::rtl::OUString > ExplicitCategoriesProvider::getSimpleCategories()
+Sequence< OUString > ExplicitCategoriesProvider::getSimpleCategories()
 {
     if( !m_bIsExplicitCategoriesInited )
     {

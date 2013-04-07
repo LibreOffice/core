@@ -47,7 +47,7 @@ public:
         com::sun::star::uno::Reference<
             com::sun::star::container::XHierarchicalNameAccess > const &
             manager,
-        rtl::OUString const & name, rtl::OUString const & baseTypeName,
+        OUString const & name, OUString const & baseTypeName,
         com::sun::star::uno::Sequence< sal_Int8 > const & data, bool published);
 
     virtual ~StructTypeDescription();
@@ -55,7 +55,7 @@ public:
     virtual com::sun::star::uno::TypeClass SAL_CALL getTypeClass()
         throw (com::sun::star::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw (com::sun::star::uno::RuntimeException);
 
     virtual
@@ -69,10 +69,10 @@ public:
             com::sun::star::reflection::XTypeDescription > >
     SAL_CALL getMemberTypes() throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getMemberNames() throw (com::sun::star::uno::RuntimeException);
 
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getTypeParameters() throw (com::sun::star::uno::RuntimeException);
 
     virtual

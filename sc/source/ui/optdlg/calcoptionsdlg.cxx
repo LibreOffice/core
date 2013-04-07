@@ -37,10 +37,10 @@ namespace {
 
 class OptionString : public SvLBoxString
 {
-    rtl::OUString maDesc;
-    rtl::OUString maValue;
+    OUString maDesc;
+    OUString maValue;
 public:
-    OptionString(const rtl::OUString& rDesc, const rtl::OUString& rValue) :
+    OptionString(const OUString& rDesc, const OUString& rValue) :
         maDesc(rDesc), maValue(rValue) {}
 
     virtual void Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);
@@ -49,7 +49,7 @@ public:
 void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
     Point aPos = rPos;
-    rtl::OUString aDesc = maDesc + rtl::OUString(": ");
+    OUString aDesc = maDesc + OUString(": ");
     rDev.DrawText(aPos, aDesc);
 
     aPos.X() += rDev.GetTextWidth(aDesc);
@@ -141,7 +141,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     {
         // Syntax for INDIRECT function.
         SvTreeListEntry* pEntry = new SvTreeListEntry;
-        pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
+        pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
         OptionString* pItem = new OptionString(
             maCaptionStringRefSyntax, toString(maConfig.meStringRefAddressSyntax));
@@ -152,7 +152,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     {
         // Treat empty string as zero.
         SvTreeListEntry* pEntry = new SvTreeListEntry;
-        pEntry->AddItem(new SvLBoxString(pEntry, 0, rtl::OUString()));
+        pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), 0));
         OptionString* pItem = new OptionString(
             maCaptionEmptyStringAsZero, toString(maConfig.mbEmptyStringAsZero));
@@ -281,7 +281,7 @@ void ScCalcOptionsDialog::RadioValueChanged()
     }
 }
 
-rtl::OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
+OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
 {
     switch (eConv)
     {
@@ -298,7 +298,7 @@ rtl::OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConv
     return maUseFormulaSyntax;
 }
 
-rtl::OUString ScCalcOptionsDialog::toString(bool bVal) const
+OUString ScCalcOptionsDialog::toString(bool bVal) const
 {
     return bVal ? maTrue : maFalse;
 }

@@ -56,7 +56,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -105,7 +104,7 @@ namespace {
 
         void ReadElementMode (
             const Reference<beans::XPropertySet>& rxProperties,
-            const ::rtl::OUString& rsModeName,
+            const OUString& rsModeName,
             ::boost::shared_ptr<ElementMode>& rpDefaultMode,
             ::sdext::presenter::PresenterToolBar::Context& rContext);
     };
@@ -387,7 +386,7 @@ PresenterToolBar::PresenterToolBar (
 }
 
 void PresenterToolBar::Initialize (
-    const ::rtl::OUString& rsConfigurationPath)
+    const OUString& rsConfigurationPath)
 {
     try
     {
@@ -621,7 +620,7 @@ Reference<drawing::XDrawPage> SAL_CALL PresenterToolBar::getCurrentPage (void)
 //-----------------------------------------------------------------------------
 
 void PresenterToolBar::CreateControls (
-    const ::rtl::OUString& rsConfigurationPath)
+    const OUString& rsConfigurationPath)
 {
     if ( ! mxWindow.is())
         return;
@@ -1806,7 +1805,7 @@ TimeFormatter::TimeFormatter (void)
 
 OUString TimeFormatter::FormatTime (const oslDateTime& rTime)
 {
-    ::rtl::OUStringBuffer sText;
+    OUStringBuffer sText;
 
     const sal_Int32 nHours (sal::static_int_cast<sal_Int32>(rTime.Hours));
     const sal_Int32 nMinutes (sal::static_int_cast<sal_Int32>(rTime.Minutes));

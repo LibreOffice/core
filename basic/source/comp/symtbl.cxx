@@ -43,7 +43,7 @@ SbiStringPool::SbiStringPool( SbiParser* p )
 SbiStringPool::~SbiStringPool()
 {}
 
-const rtl::OUString& SbiStringPool::Find( sal_uInt32 n ) const
+const OUString& SbiStringPool::Find( sal_uInt32 n ) const
 {
     if( n == 0 || n > aData.size() )
         return aEmpty; //hack, returning a reference to a simulation of null
@@ -77,7 +77,7 @@ short SbiStringPool::Add( double n, SbxDataType t )
         case SbxDOUBLE:  snprintf( buf, sizeof(buf), "%.16g", n ); break;
         default: break;
     }
-    return Add( rtl::OUString::createFromAscii( buf ) );
+    return Add( OUString::createFromAscii( buf ) );
 }
 
 /***************************************************************************

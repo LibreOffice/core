@@ -895,7 +895,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
         if( nLen > 1 )
         {
-            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( rtl::OUString(rText.GetChar( nLen - 1 )) );
+            nNormWidth = pDX[ nLen - 2 ] + maVDev.GetTextWidth( OUString(rText.GetChar( nLen - 1 )) );
 
             if( nWidth && nNormWidth && ( nWidth != nNormWidth ) )
             {
@@ -1507,7 +1507,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             break;
 
             default:
-                OSL_FAIL(rtl::OStringBuffer(
+                OSL_FAIL(OStringBuffer(
                     "EMFWriter::ImplWriteActions: unsupported MetaAction #" ).
                      append(static_cast<sal_Int32>(nType)).getStr());
             break;

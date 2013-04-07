@@ -61,15 +61,15 @@ public:
     : m_eType( STREAM )
     {}
 
-    ContentProperties( const ContentType & rType, const rtl::OUString & rTitle )
+    ContentProperties( const ContentType & rType, const OUString & rTitle )
     : m_eType( rType ),
       m_aContentType( rType == STREAM
-        ? rtl::OUString( TDOC_STREAM_CONTENT_TYPE )
+        ? OUString( TDOC_STREAM_CONTENT_TYPE )
         : rType == FOLDER
-            ? rtl::OUString( TDOC_FOLDER_CONTENT_TYPE )
+            ? OUString( TDOC_FOLDER_CONTENT_TYPE )
             : rType == DOCUMENT
-                ? rtl::OUString( TDOC_DOCUMENT_CONTENT_TYPE )
-                : rtl::OUString( TDOC_ROOT_CONTENT_TYPE ) ),
+                ? OUString( TDOC_DOCUMENT_CONTENT_TYPE )
+                : OUString( TDOC_ROOT_CONTENT_TYPE ) ),
       m_aTitle( rTitle )
     {}
 
@@ -77,13 +77,13 @@ public:
 
     // Properties
 
-    const rtl::OUString & getContentType() const { return m_aContentType; }
+    const OUString & getContentType() const { return m_aContentType; }
 
     bool getIsFolder()   const { return m_eType > STREAM; }
     bool getIsDocument() const { return !getIsFolder(); }
 
-    const rtl::OUString & getTitle() const { return m_aTitle; }
-    void setTitle( const rtl::OUString & rTitle ) { m_aTitle = rTitle; }
+    const OUString & getTitle() const { return m_aTitle; }
+    void setTitle( const OUString & rTitle ) { m_aTitle = rTitle; }
 
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
     getCreatableContentsInfo() const;
@@ -92,8 +92,8 @@ public:
 
 private:
     ContentType   m_eType;
-    rtl::OUString m_aContentType;
-    rtl::OUString m_aTitle;
+    OUString m_aContentType;
+    OUString m_aTitle;
 };
 
 //=========================================================================
@@ -131,7 +131,7 @@ private:
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     static bool hasData( ContentProvider* pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
@@ -151,11 +151,11 @@ private:
                         com::sun::star::ucb::XContentIdentifier >& xNewId );
     bool removeData();
 
-    bool copyData( const Uri & rSourceUri, const rtl::OUString & rNewName );
+    bool copyData( const Uri & rSourceUri, const OUString & rNewName );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentIdentifier >
-    makeNewIdentifier( const rtl::OUString& rTitle );
+    makeNewIdentifier( const OUString& rTitle );
 
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
@@ -206,7 +206,7 @@ private:
                         ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
                        ContentProvider* pProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 
 
     static bool commitStorage(
@@ -232,7 +232,7 @@ private:
                 ::com::sun::star::task::DocumentPasswordRequest );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
-    queryChildContent( const rtl::OUString & rRelativeChildUri );
+    queryChildContent( const OUString & rRelativeChildUri );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
     getStream( const ::com::sun::star::uno::Reference<
@@ -267,15 +267,15 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XContent
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
@@ -320,11 +320,11 @@ public:
                        const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::beans::Property >& rProperties,
                        ContentProvider* pProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 
     void notifyDocumentClosed();
-    void notifyChildRemoved( const rtl::OUString & rRelativeChildUri );
-    void notifyChildInserted( const rtl::OUString & rRelativeChildUri );
+    void notifyChildRemoved( const OUString & rRelativeChildUri );
+    void notifyChildInserted( const OUString & rRelativeChildUri );
 
     rtl::Reference< ContentProvider > getContentProvider() const
     { return rtl::Reference< ContentProvider >( m_pProvider ); }

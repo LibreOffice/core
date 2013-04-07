@@ -14,7 +14,7 @@
 #include <rtl/ustring.hxx>
 #include <connectivity/sqlnode.hxx>
 
-::rtl::OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, sal_Bool bInternational);
+OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, sal_Bool bInternational);
 int SQLyyparse (void);
 void setParser( ::connectivity::OSQLParser* );
 

@@ -50,8 +50,8 @@ typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
 struct CustomShapeGuide
 {
-    rtl::OUString   maName;
-    rtl::OUString   maFormula;
+    OUString   maName;
+    OUString   maFormula;
 };
 
 struct AdjustHandle
@@ -61,12 +61,12 @@ struct AdjustHandle
                                             pos;
 
     // depending to the type (polar or not):
-    OptValue< rtl::OUString >               gdRef1; // gdRefX   or gdRefR
+    OptValue< OUString >               gdRef1; // gdRefX   or gdRefR
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
                                             min1;   // minX     or minR
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
                                             max1;   // maxX     or maxR
-    OptValue< rtl::OUString >               gdRef2; // gdRefY   or gdRefAng
+    OptValue< OUString >               gdRef2; // gdRefY   or gdRefAng
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
                                             min2;   // minX     or minAng
     OptValue< com::sun::star::drawing::EnhancedCustomShapeParameter >
@@ -133,7 +133,7 @@ public:
                         const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > & xShape);
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }
-    ::rtl::OUString getShapePresetTypeName() const;
+    OUString getShapePresetTypeName() const;
     void setShapePresetType( sal_Int32 nShapePresetType ){ mnShapePresetType = nShapePresetType; };
 
     std::vector< CustomShapeGuide >&    getAdjustmentGuideList(){ return maAdjustmentGuideList; };
@@ -148,7 +148,7 @@ public:
     void                                setTextRotateAngle( sal_Int32 nAngle ) { mnTextRotateAngle = nAngle; };
 
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
-    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const rtl::OUString& rFormulaName );
+    static sal_Int32 GetCustomShapeGuideValue( const std::vector< CustomShapeGuide >& rGuideList, const OUString& rFormulaName );
 
     sal_Int32 getArcNum() { return mnArcNum++; }
 

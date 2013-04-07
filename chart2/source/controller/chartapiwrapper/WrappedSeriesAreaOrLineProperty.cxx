@@ -23,7 +23,6 @@
 #include "macros.hxx"
 
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 
 //.............................................................................

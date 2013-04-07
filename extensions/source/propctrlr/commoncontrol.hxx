@@ -319,7 +319,7 @@ namespace pcr
     inline void CommonBehaviourControl< CONTROL_INTERFACE, CONTROL_WINDOW >::impl_checkDisposed_throw()
     {
         if ( ComponentBaseClass::rBHelper.bDisposed )
-            throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *this );
+            throw ::com::sun::star::lang::DisposedException( OUString(), *this );
     }
 
 //............................................................................

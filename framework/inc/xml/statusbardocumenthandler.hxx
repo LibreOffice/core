@@ -76,25 +76,25 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // S
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
-                                                    const rtl::OUString& aData)
+        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                    const OUString& aData)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -104,12 +104,12 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler : private ThreadHelpBase, // S
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::boost::unordered_map< ::rtl::OUString             ,
+        class StatusBarHashMap : public ::boost::unordered_map< OUString             ,
                                                          StatusBar_XML_Entry            ,
-                                                         rtl::OUStringHash,
-                                                         ::std::equal_to< ::rtl::OUString > >
+                                                         OUStringHash,
+                                                         ::std::equal_to< OUString > >
         {
             public:
                 inline void free()
@@ -140,8 +140,8 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler : private ThreadHelpBase // S
 
     protected:
         virtual void WriteStatusBarItem(
-            const rtl::OUString& rCommandURL,
-            const rtl::OUString& rHelpURL,
+            const OUString& rCommandURL,
+            const OUString& rHelpURL,
             sal_Int16            nOffset,
             sal_Int16            nStyle,
             sal_Int16            nWidth ) throw
@@ -151,10 +151,10 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler : private ThreadHelpBase // S
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >       m_aStatusBarItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
-        ::rtl::OUString                                                                     m_aXMLStatusBarNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
+        OUString                                                                     m_aXMLStatusBarNS;
+        OUString                                                                     m_aXMLXlinkNS;
+        OUString                                                                     m_aAttributeType;
+        OUString                                                                     m_aAttributeURL;
 };
 
 } // namespace framework

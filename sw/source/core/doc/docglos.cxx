@@ -86,7 +86,7 @@ static void lcl_copyDocumentProperties(
             = xSourceUDSet->getPropertySetInfo();
         uno::Sequence<beans::Property> srcprops = xSetInfo->getProperties();
         for (sal_Int32 i = 0; i < srcprops.getLength(); ++i) {
-            ::rtl::OUString name = srcprops[i].Name;
+            OUString name = srcprops[i].Name;
             xTargetUD->addProperty(name, srcprops[i].Attributes,
                 xSourceUDSet->getPropertyValue(name));
         }

@@ -49,14 +49,14 @@ namespace svt { namespace uno
         Wizard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext );
 
         // ::com::sun::star::lang::XServiceInfo - static version
-        static ::rtl::OUString SAL_CALL getImplementationName_static() throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static() throw(::com::sun::star::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static() throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext );
 
     protected:
         // ::com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::beans::XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -66,8 +66,8 @@ namespace svt { namespace uno
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         // ::com::sun::star::ui::dialogs::XWizard
-        virtual ::rtl::OUString SAL_CALL getHelpURL() throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setHelpURL( const ::rtl::OUString& _helpurl ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getHelpURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setHelpURL( const OUString& _helpurl ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getDialogWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardPage > SAL_CALL getCurrentPage(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL enableButton( ::sal_Int16 WizardButton, ::sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
@@ -81,7 +81,7 @@ namespace svt { namespace uno
         virtual void SAL_CALL activatePath( ::sal_Int16 PathIndex, ::sal_Bool Final ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::util::InvalidStateException, ::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::ui::dialogs::XExecutableDialog
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL execute(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XInitialization
@@ -98,7 +98,7 @@ namespace svt { namespace uno
         ::comphelper::ComponentContext                                                          m_aContext;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XWizardController >    m_xController;
-        ::rtl::OUString                                                                         m_sHelpURL;
+        OUString                                                                         m_sHelpURL;
     };
 
 //......................................................................................................................

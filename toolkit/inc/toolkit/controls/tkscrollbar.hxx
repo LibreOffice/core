@@ -51,7 +51,7 @@ namespace toolkit
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::io::XPersistObject
-        ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
         DECLIMPL_SERVICEINFO_DERIVED( UnoControlScrollBarModel, UnoControlModel, szServiceName2_UnoControlScrollBarModel )
@@ -69,7 +69,7 @@ namespace toolkit
 
     public:
                                     UnoScrollBarControl();
-        ::rtl::OUString             GetComponentServiceName();
+        OUString             GetComponentServiceName();
 
         ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
         ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

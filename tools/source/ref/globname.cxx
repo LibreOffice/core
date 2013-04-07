@@ -222,7 +222,7 @@ void SvGlobalName::MakeFromMemory( void * pData )
 
 sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
-    rtl::OString aStr(rtl::OUStringToOString(rIdStr,
+    OString aStr(OUStringToOString(rIdStr,
         RTL_TEXTENCODING_ASCII_US));
     const sal_Char *pStr = aStr.getStr();
     if( rIdStr.Len() == 36
@@ -300,7 +300,7 @@ sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 
 String SvGlobalName::GetHexName() const
 {
-    rtl::OStringBuffer aHexBuffer;
+    OStringBuffer aHexBuffer;
 
     sal_Char buf[ 10 ];
     sal_uInt32 Data1;
@@ -328,7 +328,7 @@ String SvGlobalName::GetHexName() const
         sprintf( buf, "%2.2x", pImp->szData[ i ] );
         aHexBuffer.append(buf);
     }
-    return rtl::OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+    return OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const

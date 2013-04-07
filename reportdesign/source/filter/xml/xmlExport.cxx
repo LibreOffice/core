@@ -76,15 +76,15 @@ namespace rptxml
         return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_SETTINGS ));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString ORptExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.XMLSettingsExporter");
+        return OUString("com.sun.star.comp.report.XMLSettingsExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > ORptExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
     //---------------------------------------------------------------------
@@ -93,15 +93,15 @@ namespace rptxml
         return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_CONTENT ));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString ORptContentExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.XMLContentExporter");
+        return OUString("com.sun.star.comp.report.XMLContentExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > ORptContentExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -112,15 +112,15 @@ namespace rptxml
             EXPORT_FONTDECLS|EXPORT_OASIS ));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString ORptStylesExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString ORptStylesExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.XMLStylesExporter");
+        return OUString("com.sun.star.comp.report.XMLStylesExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > ORptStylesExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -130,15 +130,15 @@ namespace rptxml
         return static_cast< XServiceInfo* >(new ORptExport(xContext, EXPORT_META ));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString ORptMetaExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.XMLMetaExporter");
+        return OUString("com.sun.star.comp.report.XMLMetaExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > ORptMetaExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -148,15 +148,15 @@ namespace rptxml
         return static_cast< XServiceInfo* >(new ORptExport(xContext,EXPORT_ALL));
     }
     //---------------------------------------------------------------------
-    ::rtl::OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString("com.sun.star.comp.report.XMLFullExporter");
+        return OUString("com.sun.star.comp.report.XMLFullExporter");
     }
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -288,19 +288,19 @@ ORptExport::ORptExport(const Reference< XComponentContext >& _rxContext,sal_uInt
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
 
-    ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
-    ::rtl::OUString aPrefix( 'P');
+    OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
+    OUString aPrefix( 'P');
     GetAutoStylePool()->AddFamily( XML_STYLE_FAMILY_TEXT_PARAGRAPH, sFamily,
                               m_xParaPropMapper, aPrefix );
 
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
-        m_xCellStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
-        m_xColumnStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
-        m_xRowStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
-    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
-        m_xTableStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
+        m_xCellStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
+        m_xColumnStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
+        m_xRowStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
+    GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
+        m_xTableStylesExportPropertySetMapper, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > ORptExport::create(Reference< XComponentContext > const & xContext)
@@ -309,31 +309,31 @@ Reference< XInterface > ORptExport::create(Reference< XComponentContext > const 
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString ORptExport::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.ExportFilter");
+    return OUString("com.sun.star.comp.report.ExportFilter");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORptExport::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL ORptExport::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > ORptExport::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
-    aServices.getArray()[0] = ::rtl::OUString("com.sun.star.document.ExportFilter");
+    uno::Sequence< OUString > aServices(1);
+    aServices.getArray()[0] = OUString("com.sun.star.document.ExportFilter");
 
     return aServices;
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL ORptExport::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ORptExport::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL ORptExport::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ORptExport::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -352,7 +352,7 @@ void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)
 void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
 {
     exportFormula(XML_FORMULA,_xFunction->getFormula());
-    beans::Optional< ::rtl::OUString> aInitial = _xFunction->getInitialFormula();
+    beans::Optional< OUString> aInitial = _xFunction->getInitialFormula();
     if ( aInitial.IsPresent && !aInitial.Value.isEmpty() )
         exportFormula(XML_INITIAL_FORMULA ,aInitial.Value );
     AddAttribute( XML_NAMESPACE_REPORT, XML_NAME , _xFunction->getName() );
@@ -366,17 +366,17 @@ void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
 // -----------------------------------------------------------------------------
 void ORptExport::exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet)
 {
-    const uno::Sequence< ::rtl::OUString> aMasterFields = _xReportComponet->getMasterFields();
+    const uno::Sequence< OUString> aMasterFields = _xReportComponet->getMasterFields();
     if ( aMasterFields.getLength() )
     {
         SvXMLElementExport aElement(*this,XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS, sal_True, sal_True);
-        const uno::Sequence< ::rtl::OUString> aDetailFields = _xReportComponet->getDetailFields();
+        const uno::Sequence< OUString> aDetailFields = _xReportComponet->getDetailFields();
 
         OSL_ENSURE(aDetailFields.getLength() == aMasterFields.getLength(),"not equal length for master and detail fields!");
 
-        const ::rtl::OUString* pDetailFieldsIter = aDetailFields.getConstArray();
-        const ::rtl::OUString* pIter = aMasterFields.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aMasterFields.getLength();
+        const OUString* pDetailFieldsIter = aDetailFields.getConstArray();
+        const OUString* pIter = aMasterFields.getConstArray();
+        const OUString* pEnd   = pIter + aMasterFields.getLength();
         for(;pIter != pEnd;++pIter,++pDetailFieldsIter)
         {
             AddAttribute( XML_NAMESPACE_REPORT, XML_MASTER , *pIter );
@@ -401,7 +401,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
         }
         if ( _xReportDefinition->getPageHeaderOn() )
         {
-            ::rtl::OUStringBuffer sValue;
+            OUStringBuffer sValue;
             sal_uInt16 nRet = _xReportDefinition->getPageHeaderOption();
             const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
@@ -415,7 +415,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
 
         if ( _xReportDefinition->getPageFooterOn() )
         {
-            ::rtl::OUStringBuffer sValue;
+            OUStringBuffer sValue;
             sal_uInt16 nRet = _xReportDefinition->getPageFooterOption();
             const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
             if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_EnumMap ) )
@@ -481,7 +481,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
         exportFormatConditions(_xReportElement);
     }
 
-    ::rtl::OUString sExpr = _xReportElement->getConditionalPrintExpression();
+    OUString sExpr = _xReportElement->getConditionalPrintExpression();
     if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
@@ -719,7 +719,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
 void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader)
 {
     OSL_ENSURE(_xSection.is(),"Section is NULL -> GPF");
-    ::rtl::OUStringBuffer sValue;
+    OUStringBuffer sValue;
     AddAttribute(XML_NAMESPACE_TABLE, XML_NAME,_xSection->getName());
 
     if ( !_xSection->getVisible() )
@@ -744,7 +744,7 @@ void ORptExport::exportSection(const Reference<XSection>& _xSection,bool bHeader
     /// TODO export as table layout
     SvXMLElementExport aComponents(*this,XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
 
-    ::rtl::OUString sExpr = _xSection->getConditionalPrintExpression();
+    OUString sExpr = _xSection->getConditionalPrintExpression();
     if ( !sExpr.isEmpty() )
     {
         exportFormula(XML_FORMULA,sExpr);
@@ -852,7 +852,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         {
                             XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
                             bool bIsStandard = false;
-                            ::rtl::OUString sEmpty;
+                            OUString sEmpty;
                             if ( util::NumberFormat::TEXT == aHelper.GetCellType(nFormatKey,bIsStandard) )
                                 aHelper.SetNumberFormatAttributes(sEmpty, sEmpty);
                             else
@@ -896,14 +896,14 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             else if ( xElement->supportsService(SERVICE_IMAGECONTROL) )
                             {
                                 eToken = XML_IMAGE;
-                                ::rtl::OUString sTargetLocation = xImage->getImageURL();
+                                OUString sTargetLocation = xImage->getImageURL();
                                 if ( !sTargetLocation.isEmpty() )
                                 {
                                     sTargetLocation = GetRelativeReference(sTargetLocation);
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
                                 bExportData = sal_True;
-                                ::rtl::OUStringBuffer sValue;
+                                OUStringBuffer sValue;
                                 const SvXMLEnumMapEntry* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
                                 if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
                                     AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
@@ -1012,19 +1012,19 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::convertFormula(const ::rtl::OUString& _sFormula)
+OUString ORptExport::convertFormula(const OUString& _sFormula)
 {
-    ::rtl::OUString sFormula = _sFormula;
+    OUString sFormula = _sFormula;
     if ( _sFormula.equalsAsciiL("rpt:",4) )
-        sFormula = ::rtl::OUString();
+        sFormula = OUString();
     return sFormula;
 }
 // -----------------------------------------------------------------------------
-bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula)
+bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula)
 {
-    const ::rtl::OUString sFieldData = convertFormula(_sFormula);
-    static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-    static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+    const OUString sFieldData = convertFormula(_sFormula);
+    static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
+    static const OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
     sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
     sal_Int32 nPageCountIndex = sFieldData.indexOf(s_sPageCount);
     bool bRet = nPageNumberIndex != -1 || nPageCountIndex != -1;
@@ -1034,7 +1034,7 @@ bool ORptExport::exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::
     return bRet;
 }
 // -----------------------------------------------------------------------------
-void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName)
+void ORptExport::exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName)
 {
     Reference<XPropertySet> xFind(_xProp);
     TPropertyStyleMap::iterator aFind = m_aAutoStyleNames.find(xFind);
@@ -1078,30 +1078,30 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     if ( xGroup->getResetPageNumber() )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
 
-                    const ::rtl::OUString sField = xGroup->getExpression();
-                    ::rtl::OUString sExpression  = sField;
+                    const OUString sField = xGroup->getExpression();
+                    OUString sExpression  = sField;
                     if ( !sExpression.isEmpty() )
                     {
-                        static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                        static OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
                         sal_Int32 nIndex = sExpression.indexOf('"');
                         while ( nIndex > -1 )
                         {
                             sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
                             nIndex = sExpression.indexOf('"',nIndex+2);
                         }
-                        ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
+                        OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
 
                         TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
                         if ( aGroupFind != m_aGroupFunctionMap.end() )
                             sExpression = aGroupFind->second->getName();
                         sFormula += sExpression;
-                        sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
+                        sFormula += OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
                         sExpression = sFormula;
                     }
                     AddAttribute(XML_NAMESPACE_REPORT, XML_SORT_EXPRESSION, sField);
                     AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
                     sal_Int16 nRet = xGroup->getKeepTogether();
-                    ::rtl::OUStringBuffer sValue;
+                    OUStringBuffer sValue;
                     const SvXMLEnumMapEntry* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
                     if ( SvXMLUnitConverter::convertEnum( sValue, nRet,aXML_KeepTogetherEnumMap ) )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER,sValue.makeStringAndClear());
@@ -1179,23 +1179,23 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         awt::Size aSize = xFixedLine->getSize();
         sal_Int32 nSectionHeight = xFixedLine->getSection()->getHeight();
 
-        ::rtl::OUString sBorderProp;
-        ::std::vector< ::rtl::OUString> aProps;
+        OUString sBorderProp;
+        ::std::vector< OUString> aProps;
         if ( xFixedLine->getOrientation() == 1 ) // vertical
         {
             // check if border should be left
             if ( !aPos.X )
             {
                 sBorderProp = PROPERTY_BORDERLEFT;
-                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERRIGHT));
+                aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERRIGHT));
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERRIGHT;
-                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERLEFT));
+                aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERLEFT));
             }
-            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
-            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERBOTTOM));
+            aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERTOP));
+            aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERBOTTOM));
         }
         else // horizontal
         {
@@ -1203,15 +1203,15 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             if ( (aPos.Y + aSize.Height) == nSectionHeight )
             {
                 sBorderProp = PROPERTY_BORDERBOTTOM;
-                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERTOP));
+                aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERTOP));
             }
             else
             {
                 sBorderProp = PROPERTY_BORDERTOP;
-                aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERBOTTOM));
+                aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERBOTTOM));
             }
-            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERRIGHT));
-            aProps.push_back(static_cast<const rtl::OUString&>(PROPERTY_BORDERLEFT));
+            aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERRIGHT));
+            aProps.push_back(static_cast<const OUString&>(PROPERTY_BORDERLEFT));
         }
 
         xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));
@@ -1265,16 +1265,16 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
 {
     if ( _xReport.is() )
     {
-        ::rtl::OUStringBuffer sValue;
+        OUStringBuffer sValue;
         const SvXMLEnumMapEntry* aXML_CommnadTypeEnumMap = OXMLHelper::GetCommandTypeOptions();
         if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(_xReport->getCommandType()),aXML_CommnadTypeEnumMap ) )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,sValue.makeStringAndClear());
 
-        ::rtl::OUString sComamnd = _xReport->getCommand();
+        OUString sComamnd = _xReport->getCommand();
         if ( !sComamnd.isEmpty() )
             AddAttribute(XML_NAMESPACE_REPORT, XML_COMMAND, sComamnd);
 
-        ::rtl::OUString sFilter( _xReport->getFilter() );
+        OUString sFilter( _xReport->getFilter() );
         if ( !sFilter.isEmpty() )
             AddAttribute( XML_NAMESPACE_REPORT, XML_FILTER, sFilter );
 
@@ -1284,7 +1284,7 @@ void ORptExport::exportReportAttributes(const Reference<XReportDefinition>& _xRe
         if ( !bEscapeProcessing )
             AddAttribute( XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING, ::xmloff::token::GetXMLToken( XML_FALSE ) );
 
-        ::rtl::OUString sName = _xReport->getCaption();
+        OUString sName = _xReport->getCaption();
         if ( !sName.isEmpty() )
             AddAttribute(XML_NAMESPACE_OFFICE, XML_CAPTION,sName);
         sName = _xReport->getName();
@@ -1381,9 +1381,9 @@ sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
     return SvXMLExport::exportDoc( eClass );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
+OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
 {
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     ::sax::Converter::convertNumber(aBuffer, _nValue);
     return aBuffer.makeStringAndClear();
 }
@@ -1420,10 +1420,10 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
     if ( Reference<XFormattedField>(_xReportElement,uno::UNO_QUERY).is() )
     {
-        ::rtl::OUString sFieldData = _xReportElement->getDataField();
-        static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-        static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
-        static const ::rtl::OUString s_sReportPrefix("rpt:");
+        OUString sFieldData = _xReportElement->getDataField();
+        static const OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
+        static const OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+        static const OUString s_sReportPrefix("rpt:");
         sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
         sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
         if ( nPageNumberIndex != -1 )
@@ -1431,21 +1431,21 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
             sal_Int32 nIndex = 0;
             do
             {
-                ::rtl::OUString sToken = sFieldData.getToken( 0, '&', nIndex );
+                OUString sToken = sFieldData.getToken( 0, '&', nIndex );
                 sToken = sToken.trim();
                 if ( !sToken.isEmpty() )
                 {
                     if ( sToken == s_sPageNumber )
                     {
-                        static const ::rtl::OUString s_sCurrent("current");
+                        static const OUString s_sCurrent("current");
                         AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
-                        Characters(::rtl::OUString("1"));
+                        Characters(OUString("1"));
                     }
                     else if ( sToken == s_sPageCount )
                     {
                         SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, sal_False, sal_False);
-                        Characters(::rtl::OUString("1"));
+                        Characters(OUString("1"));
                     }
                     else
                     {
@@ -1464,7 +1464,7 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     Reference< XFixedText > xFT(_xReportElement,UNO_QUERY);
     if ( xFT.is() )
     {
-        ::rtl::OUString sExpr = xFT->getLabel();
+        OUString sExpr = xFT->getLabel();
         bool bPrevCharIsSpace = false;
         GetTextParagraphExport()->exportText(sExpr,bPrevCharIsSpace);
     }
@@ -1497,7 +1497,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<SvXMLElementExport> pSubDocument;
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString("Model")),uno::UNO_QUERY);
+            uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(OUString("Model")),uno::UNO_QUERY);
             if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
@@ -1524,62 +1524,62 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
             if ( nGroupOn != report::GroupOn::DEFAULT )
             {
                 uno::Reference< XFunction> xFunction = xFunctions->createFunction();
-                ::rtl::OUString sFunction,sPrefix,sPostfix;
-                ::rtl::OUString sExpression = xGroup->getExpression();
-                ::rtl::OUString sFunctionName;
-                ::rtl::OUString sInitialFormula;
+                OUString sFunction,sPrefix,sPostfix;
+                OUString sExpression = xGroup->getExpression();
+                OUString sFunctionName;
+                OUString sInitialFormula;
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
-                        sFunction = ::rtl::OUString("LEFT");
-                        sPrefix = ::rtl::OUString(";") + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        sFunction = OUString("LEFT");
+                        sPrefix = OUString(";") + OUString::valueOf(xGroup->getGroupInterval());
                         break;
                     case report::GroupOn::YEAR:
-                        sFunction = ::rtl::OUString("YEAR");
+                        sFunction = OUString("YEAR");
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction   = ::rtl::OUString("INT((MONTH");
-                        sPostfix    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
-                        sFunctionName = ::rtl::OUString("QUARTAL_") + sExpression;
+                        sFunction   = OUString("INT((MONTH");
+                        sPostfix    = OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
+                        sFunctionName = OUString("QUARTAL_") + sExpression;
                         break;
                     case report::GroupOn::MONTH:
-                        sFunction = ::rtl::OUString("MONTH");
+                        sFunction = OUString("MONTH");
                         break;
                     case report::GroupOn::WEEK:
-                        sFunction = ::rtl::OUString("WEEK");
+                        sFunction = OUString("WEEK");
                         break;
                     case report::GroupOn::DAY:
-                        sFunction = ::rtl::OUString("DAY");
+                        sFunction = OUString("DAY");
                         break;
                     case report::GroupOn::HOUR:
-                        sFunction = ::rtl::OUString("HOUR");
+                        sFunction = OUString("HOUR");
                         break;
                     case report::GroupOn::MINUTE:
-                        sFunction = ::rtl::OUString("MINUTE");
+                        sFunction = OUString("MINUTE");
                         break;
                     case report::GroupOn::INTERVAL:
                         {
-                            sFunction = ::rtl::OUString("INT");
+                            sFunction = OUString("INT");
                             uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
-                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString("rpt:0")));
-                            ::rtl::OUString sCountName = sFunction + ::rtl::OUString("_count_") + sExpression;
+                            xCountFunction->setInitialFormula(beans::Optional< OUString>(sal_True,OUString("rpt:0")));
+                            OUString sCountName = sFunction + OUString("_count_") + sExpression;
                             xCountFunction->setName(sCountName);
-                            xCountFunction->setFormula(::rtl::OUString("rpt:[") + sCountName + ::rtl::OUString("] + 1"));
+                            xCountFunction->setFormula(OUString("rpt:[") + sCountName + OUString("] + 1"));
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             // The reference to sCountName in the formula of sFunctionName refers to the *old* value
                             // so we need to expand the the formula of sCountName
-                            sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" + 1) / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
-                            sFunctionName = sFunction + ::rtl::OUString("_") + sExpression;
-                            sFunction = sFunction + ::rtl::OUString("(");
-                            sInitialFormula = ::rtl::OUString("rpt:0");
+                            sPrefix = OUString(RTL_CONSTASCII_USTRINGPARAM(" + 1) / ")) + OUString::valueOf(xGroup->getGroupInterval());
+                            sFunctionName = sFunction + OUString("_") + sExpression;
+                            sFunction = sFunction + OUString("(");
+                            sInitialFormula = OUString("rpt:0");
                         }
                         break;
                     default:
                         ;
                 }
                 if ( sFunctionName.isEmpty() )
-                    sFunctionName = sFunction + ::rtl::OUString("_") + sExpression;
+                    sFunctionName = sFunction + OUString("_") + sExpression;
                 if ( !sFunction.isEmpty() )
                 {
                     sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
@@ -1588,15 +1588,15 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
 
                     xFunction->setName(sFunctionName);
                     if ( !sInitialFormula.isEmpty() )
-                        xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True, sInitialFormula));
-                    sFunction = ::rtl::OUString("rpt:") + sFunction;
-                    sFunction += ::rtl::OUString("([");
+                        xFunction->setInitialFormula(beans::Optional< OUString>(sal_True, sInitialFormula));
+                    sFunction = OUString("rpt:") + sFunction;
+                    sFunction += OUString("([");
                     sFunction += sExpression;
-                    sFunction += ::rtl::OUString("]");
+                    sFunction += OUString("]");
 
                     if ( !sPrefix.isEmpty() )
                         sFunction += sPrefix;
-                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    sFunction += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                     if ( !sPostfix.isEmpty() )
                         sFunction += sPostfix;
                     xFunction->setFormula(sFunction);

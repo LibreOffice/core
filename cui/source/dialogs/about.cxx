@@ -98,7 +98,7 @@ AboutDialog::AboutDialog(Window* pParent)
 
 IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 {
-    rtl::OUString sURL = "";
+    OUString sURL = "";
 
     // Find which button was pressed and from this, get the URL to be opened
     AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
@@ -117,12 +117,12 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     {
         Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext() ) );
-        xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch (const Exception&)
     {
         Any exc( ::cppu::getCaughtException() );
-        rtl::OUString msg( ::comphelper::anyToString( exc ) );
+        OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
         aErrorBox.SetText( GetText() );
@@ -249,9 +249,9 @@ OUString AboutDialog::GetVersionString()
     return sVersion;
 }
 
-rtl::OUString AboutDialog::GetCopyrightString()
+OUString AboutDialog::GetCopyrightString()
 {
-    rtl::OUString aCopyrightString = m_aVendorTextStr;
+    OUString aCopyrightString = m_aVendorTextStr;
     aCopyrightString += "\n";
 
     aCopyrightString += m_aCopyrightTextStr;

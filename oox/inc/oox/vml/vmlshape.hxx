@@ -57,42 +57,42 @@ const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 /** The shape model structure contains all properties shared by all types of shapes. */
 struct OOX_DLLPUBLIC ShapeTypeModel
 {
-    ::rtl::OUString     maShapeId;              ///< Unique identifier of the shape.
-    ::rtl::OUString     maShapeName;            ///< Name of the shape, if present.
+    OUString     maShapeId;              ///< Unique identifier of the shape.
+    OUString     maShapeName;            ///< Name of the shape, if present.
     OptValue< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
 
     OptValue< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.
     OptValue< Int32Pair > moCoordSize;          ///< Size of coordinate system for children scaling.
-    ::rtl::OUString     maPosition;             ///< Position type of the shape.
-    ::rtl::OUString     maLeft;                 ///< X position of the shape bounding box (number with unit).
-    ::rtl::OUString     maTop;                  ///< Y position of the shape bounding box (number with unit).
-    ::rtl::OUString     maWidth;                ///< Width of the shape bounding box (number with unit).
-    ::rtl::OUString     maHeight;               ///< Height of the shape bounding box (number with unit).
-    ::rtl::OUString     maMarginLeft;           ///< X position of the shape bounding box to shape anchor (number with unit).
-    ::rtl::OUString     maMarginTop;            ///< Y position of the shape bounding box to shape anchor (number with unit).
-    ::rtl::OUString     maPositionHorizontalRelative; ///< The X position is relative to this.
-    ::rtl::OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
-    ::rtl::OUString     maPositionHorizontal;   ///< The X position orientation (default: absolute).
-    ::rtl::OUString     maPositionVertical;     ///< The Y position orientation.
-    ::rtl::OUString     maWidthPercent;         ///< The width in percents of the WidthRelative
-    ::rtl::OUString     maHeightPercent;        ///< The height in percents of the HeightRelative
-    ::rtl::OUString     maWidthRelative;        ///< To what the width is relative
-    ::rtl::OUString     maHeightRelative;       ///< To what the height is relative
-    ::rtl::OUString     maRotation;             ///< Rotation of the shape, in degrees.
-    ::rtl::OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
+    OUString     maPosition;             ///< Position type of the shape.
+    OUString     maLeft;                 ///< X position of the shape bounding box (number with unit).
+    OUString     maTop;                  ///< Y position of the shape bounding box (number with unit).
+    OUString     maWidth;                ///< Width of the shape bounding box (number with unit).
+    OUString     maHeight;               ///< Height of the shape bounding box (number with unit).
+    OUString     maMarginLeft;           ///< X position of the shape bounding box to shape anchor (number with unit).
+    OUString     maMarginTop;            ///< Y position of the shape bounding box to shape anchor (number with unit).
+    OUString     maPositionHorizontalRelative; ///< The X position is relative to this.
+    OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
+    OUString     maPositionHorizontal;   ///< The X position orientation (default: absolute).
+    OUString     maPositionVertical;     ///< The Y position orientation.
+    OUString     maWidthPercent;         ///< The width in percents of the WidthRelative
+    OUString     maHeightPercent;        ///< The height in percents of the HeightRelative
+    OUString     maWidthRelative;        ///< To what the width is relative
+    OUString     maHeightRelative;       ///< To what the height is relative
+    OUString     maRotation;             ///< Rotation of the shape, in degrees.
+    OUString     maFlip;                 ///< Flip type of the shape (can be "x" or "y").
     sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
     sal_Bool            mbVisible;              ///< Visible or Hidden
-    ::rtl::OUString     maWrapStyle;            ///< Wrapping mode for text.
-    ::rtl::OUString     maArcsize;              ///< round rectangles arc size
+    OUString     maWrapStyle;            ///< Wrapping mode for text.
+    OUString     maArcsize;              ///< round rectangles arc size
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
     ShadowModel         maShadowModel;          ///< Shape shadow formatting.
 
-    OptValue< ::rtl::OUString > moGraphicPath;  ///< Path to a graphic for this shape.
-    OptValue< ::rtl::OUString > moGraphicTitle; ///< Title of the graphic.
-    OptValue< ::rtl::OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
-    OptValue< ::rtl::OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
+    OptValue< OUString > moGraphicPath;  ///< Path to a graphic for this shape.
+    OptValue< OUString > moGraphicTitle; ///< Title of the graphic.
+    OptValue< OUString > moWrapAnchorX;  ///< The base object from which our horizontal positioning should be calculated.
+    OptValue< OUString > moWrapAnchorY;  ///< The base object from which our vertical positioning should be calculated.
 
     explicit            ShapeTypeModel();
 
@@ -115,11 +115,11 @@ public:
     inline const ShapeTypeModel& getTypeModel() const { return maTypeModel; }
 
     /** Returns the shape identifier (which is unique through the containing drawing). */
-    inline const ::rtl::OUString& getShapeId() const { return maTypeModel.maShapeId; }
+    inline const OUString& getShapeId() const { return maTypeModel.maShapeId; }
     /** Returns the application defined shape type. */
     sal_Int32           getShapeType() const;
     /** Returns the fragment path to the embedded graphic used by this shape. */
-    ::rtl::OUString     getGraphicPath() const;
+    OUString     getGraphicPath() const;
 
     const Drawing& getDrawing() const { return mrDrawing; }
 
@@ -143,12 +143,12 @@ protected:
 /** Excel specific shape client data (such as cell anchor). */
 struct ClientData
 {
-    ::rtl::OUString     maAnchor;           ///< Cell anchor as comma-separated string.
-    ::rtl::OUString     maFmlaMacro;        ///< Link to macro associated to the control.
-    ::rtl::OUString     maFmlaPict;         ///< Target cell range of picture links.
-    ::rtl::OUString     maFmlaLink;         ///< Link to value cell associated to the control.
-    ::rtl::OUString     maFmlaRange;        ///< Link to cell range used as data source for the control.
-    ::rtl::OUString     maFmlaGroup;        ///< Link to value cell associated to a group of option buttons.
+    OUString     maAnchor;           ///< Cell anchor as comma-separated string.
+    OUString     maFmlaMacro;        ///< Link to macro associated to the control.
+    OUString     maFmlaPict;         ///< Target cell range of picture links.
+    OUString     maFmlaLink;         ///< Link to value cell associated to the control.
+    OUString     maFmlaRange;        ///< Link to cell range used as data source for the control.
+    OUString     maFmlaGroup;        ///< Link to value cell associated to a group of option buttons.
     sal_Int32           mnObjType;          ///< Type of the shape.
     sal_Int32           mnTextHAlign;       ///< Horizontal text alignment.
     sal_Int32           mnTextVAlign;       ///< Vertical text alignment.
@@ -186,16 +186,16 @@ struct ShapeModel
     typedef ::std::auto_ptr< ClientData >                   ClientDataPtr;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    ::rtl::OUString     maType;             ///< Shape template with default properties.
+    OUString     maType;             ///< Shape template with default properties.
     PointVector         maPoints;           ///< Points for the polyline shape.
     TextBoxPtr          mxTextBox;          ///< Text contents and properties.
     ClientDataPtr       mxClientData;       ///< Excel specific client data.
-    ::rtl::OUString     maLegacyDiagramPath;///< Legacy Diagram Fragment Path
-    ::rtl::OUString     maFrom;             ///< Start point for line shape.
-    ::rtl::OUString     maTo;               ///< End point for line shape.
-    ::rtl::OUString     maControl1;         ///< Bezier control point 1
-    ::rtl::OUString     maControl2;         ///< Bezier control point 2
-    ::rtl::OUString     maVmlPath;          ///< VML path for this shape
+    OUString     maLegacyDiagramPath;///< Legacy Diagram Fragment Path
+    OUString     maFrom;             ///< Start point for line shape.
+    OUString     maTo;               ///< End point for line shape.
+    OUString     maControl1;         ///< Bezier control point 1
+    OUString     maControl2;         ///< Bezier control point 2
+    OUString     maVmlPath;          ///< VML path for this shape
 
     explicit            ShapeModel();
                         ~ShapeModel();
@@ -227,12 +227,12 @@ public:
     virtual void        finalizeFragmentImport();
 
     /** Returns the real shape name if existing, or a generated shape name. */
-    ::rtl::OUString     getShapeName() const;
+    OUString     getShapeName() const;
 
     /** Returns the shape template with the passed identifier from the child shapes. */
-    virtual const ShapeType* getChildTypeById( const ::rtl::OUString& rShapeId ) const;
+    virtual const ShapeType* getChildTypeById( const OUString& rShapeId ) const;
     /** Returns the shape with the passed identifier from the child shapes. */
-    virtual const ShapeBase* getChildById( const ::rtl::OUString& rShapeId ) const;
+    virtual const ShapeBase* getChildById( const OUString& rShapeId ) const;
 
     /** Creates the corresponding XShape and inserts it into the passed container. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
@@ -273,9 +273,9 @@ protected:
 class SimpleShape : public ShapeBase
 {
 public:
-    explicit            SimpleShape( Drawing& rDrawing, const ::rtl::OUString& rService );
+    explicit            SimpleShape( Drawing& rDrawing, const OUString& rService );
 
-    void setService( rtl::OUString aService ) { maService = aService; }
+    void setService( OUString aService ) { maService = aService; }
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */
@@ -289,7 +289,7 @@ protected:
             const com::sun::star::awt::Rectangle& rShapeRect, OUString& rGraphicPath ) const;
 
 private:
-    ::rtl::OUString     maService;          ///< Name of the UNO shape service.
+    OUString     maService;          ///< Name of the UNO shape service.
 };
 
 // ============================================================================
@@ -411,9 +411,9 @@ public:
     virtual void        finalizeFragmentImport();
 
     /** Returns the shape template with the passed identifier from the child shapes. */
-    virtual const ShapeType* getChildTypeById( const ::rtl::OUString& rShapeId ) const;
+    virtual const ShapeType* getChildTypeById( const OUString& rShapeId ) const;
     /** Returns the shape with the passed identifier from the child shapes. */
-    virtual const ShapeBase* getChildById( const ::rtl::OUString& rShapeId ) const;
+    virtual const ShapeBase* getChildById( const OUString& rShapeId ) const;
 
 protected:
     /** Creates the corresponding XShape and inserts it into the passed container. */

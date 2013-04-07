@@ -101,7 +101,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                        ::rtl::OUString("DocumentRoot"),
+                        OUString("DocumentRoot"),
                         css::uno::Reference< css::embed::XStorage >());
 
     aWriteLock.unlock();
@@ -170,7 +170,7 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
         m_aPresetHandler.connectToResource(
             PresetHandler::E_DOCUMENT,
             PresetHandler::RESOURCETYPE_ACCELERATOR(),
-            ::rtl::OUString(),
+            OUString(),
             xDocumentRoot,
             aLanguageTag);
 

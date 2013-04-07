@@ -36,10 +36,10 @@ class SwFmtINetFmt;
 
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
-    const ::rtl::OUString sImplName;
+    const OUString sImplName;
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 protected:
     virtual ~SwHyperlinkEventDescriptor();
@@ -66,7 +66,7 @@ public:
 // All these objects are an SwXFrame, so they can use a common implementation
 class SwFrameEventDescriptor : public SvEventDescriptor
 {
-    ::rtl::OUString sSwFrameEventDescriptor;
+    OUString sSwFrameEventDescriptor;
 
     SwXFrame& rFrame;
 
@@ -77,7 +77,7 @@ public:
 
     ~SwFrameEventDescriptor();
 
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
@@ -88,7 +88,7 @@ protected:
 
 class SwFrameStyleEventDescriptor : public SvEventDescriptor
 {
-    ::rtl::OUString sSwFrameStyleEventDescriptor;
+    OUString sSwFrameStyleEventDescriptor;
 
     SwXFrameStyle& rStyle;
 
@@ -97,7 +97,7 @@ public:
 
     ~SwFrameStyleEventDescriptor();
 
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
         throw( ::com::sun::star::uno::RuntimeException );
 
 protected:

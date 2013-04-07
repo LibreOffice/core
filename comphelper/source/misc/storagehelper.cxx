@@ -85,7 +85,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
@@ -104,7 +104,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
@@ -199,7 +199,7 @@ void OStorageHelper::CopyInputToOutput(
 
 // ----------------------------------------------------------------------
 uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
-            const ::rtl::OUString& aURL,
+            const OUString& aURL,
             const uno::Reference< uno::XComponentContext >& context )
     throw ( uno::Exception )
 {
@@ -282,8 +282,8 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
-            const ::rtl::OUString& aFormat,
-            const ::rtl::OUString& aURL,
+            const OUString& aFormat,
+            const OUString& aURL,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
             sal_Bool bRepairStorage )
@@ -314,7 +314,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
-            const ::rtl::OUString& aFormat,
+            const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext,
             sal_Bool bRepairStorage )
@@ -345,7 +345,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
 
 // ----------------------------------------------------------------------
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
-            const ::rtl::OUString& aFormat,
+            const OUString& aFormat,
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -376,7 +376,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
 }
 
 // ----------------------------------------------------------------------
-uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const ::rtl::OUString& aPassword )
+uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const OUString& aPassword )
 {
     // TODO/LATER: Should not the method be part of DocPasswordHelper?
     uno::Sequence< beans::NamedValue > aEncryptionData;
@@ -391,7 +391,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             uno::Reference< xml::crypto::XNSSInitializer > xDigestContextSupplier = xml::crypto::NSSInitializer::create(xContext);
             uno::Reference< xml::crypto::XDigestContext > xDigestContext( xDigestContextSupplier->getDigestContext( xml::crypto::DigestID::SHA256, uno::Sequence< beans::NamedValue >() ), uno::UNO_SET_THROW );
 
-            ::rtl::OString aUTF8Password( ::rtl::OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
+            OString aUTF8Password( OUStringToOString( aPassword, RTL_TEXTENCODING_UTF8 ) );
             xDigestContext->updateDigest( uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUTF8Password.getStr() ), aUTF8Password.getLength() ) );
             uno::Sequence< sal_Int8 > aDigest = xDigestContext->finalizeDigestAndDispose();
 
@@ -415,7 +415,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 
         for ( sal_Int32 nInd = 0; nInd < 2; nInd++ )
         {
-            ::rtl::OString aByteStrPass = ::rtl::OUStringToOString( aPassword, pEncoding[nInd] );
+            OString aByteStrPass = OUStringToOString( aPassword, pEncoding[nInd] );
 
             sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_SHA1];
             rtlDigestError nError = rtl_digest_SHA1( aByteStrPass.getStr(),
@@ -437,7 +437,7 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
 }
 
 // ----------------------------------------------------------------------
-sal_Bool OStorageHelper::IsValidZipEntryFileName( const ::rtl::OUString& aName, sal_Bool bSlashAllowed )
+sal_Bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, sal_Bool bSlashAllowed )
 {
     return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
 }
@@ -471,7 +471,7 @@ sal_Bool OStorageHelper::IsValidZipEntryFileName(
 }
 
 // ----------------------------------------------------------------------
-sal_Bool OStorageHelper::PathHasSegment( const ::rtl::OUString& aPath, const ::rtl::OUString& aSegment )
+sal_Bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
 {
     sal_Bool bResult = sal_False;
     const sal_Int32 nPathLen = aPath.getLength();
@@ -521,8 +521,8 @@ void LifecycleProxy::commitStorages()
     }
 }
 
-static void splitPath( std::vector<rtl::OUString> &rElems,
-                       const ::rtl::OUString& rPath )
+static void splitPath( std::vector<OUString> &rElems,
+                       const OUString& rPath )
 {
     for (sal_Int32 i = 0; i >= 0;)
         rElems.push_back( rPath.getToken( 0, '/', i ) );
@@ -530,7 +530,7 @@ static void splitPath( std::vector<rtl::OUString> &rElems,
 
 static uno::Reference< embed::XStorage > LookupStorageAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
-        std::vector<rtl::OUString> &rElems, sal_uInt32 nOpenMode,
+        std::vector<OUString> &rElems, sal_uInt32 nOpenMode,
         LifecycleProxy &rNastiness )
 {
     uno::Reference< embed::XStorage > xStorage( xParentStorage );
@@ -545,22 +545,22 @@ static uno::Reference< embed::XStorage > LookupStorageAtPath(
 
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
         const uno::Reference< embed::XStorage > &xStorage,
-        const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
+        const OUString& rPath, sal_uInt32 nOpenMode,
         LifecycleProxy &rNastiness )
 {
-    std::vector<rtl::OUString> aElems;
+    std::vector<OUString> aElems;
     splitPath( aElems, rPath );
     return LookupStorageAtPath( xStorage, aElems, nOpenMode, rNastiness );
 }
 
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
-        const ::rtl::OUString& rPath, sal_uInt32 nOpenMode,
+        const OUString& rPath, sal_uInt32 nOpenMode,
         LifecycleProxy &rNastiness )
 {
-    std::vector<rtl::OUString> aElems;
+    std::vector<OUString> aElems;
     splitPath( aElems, rPath );
-    rtl::OUString aName( aElems.back() );
+    OUString aName( aElems.back() );
     aElems.pop_back();
     sal_uInt32 nStorageMode = nOpenMode & ~embed::ElementModes::TRUNCATE;
     uno::Reference< embed::XStorage > xStorage(
@@ -571,7 +571,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
 
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
         uno::Reference< embed::XStorage > const& xParentStorage,
-        const ::rtl::OUString& rURL, sal_uInt32 const nOpenMode,
+        const OUString& rURL, sal_uInt32 const nOpenMode,
         LifecycleProxy & rNastiness)
 {
     static char const s_PkgScheme[] = "vnd.sun.star.Package:";
@@ -579,7 +579,7 @@ uno::Reference< io::XStream > OStorageHelper::GetStreamAtPackageURL(
                 rURL.getStr(), rURL.getLength(),
                 s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
     {
-        ::rtl::OUString const path(rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
+        OUString const path(rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1));
         return GetStreamAtPath(xParentStorage, path, nOpenMode, rNastiness);
     }
     return 0;

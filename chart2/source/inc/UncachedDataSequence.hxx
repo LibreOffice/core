@@ -75,12 +75,12 @@ public:
     UncachedDataSequence(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XInternalDataProvider > & xIntDataProv,
-        const ::rtl::OUString & rRangeRepresentation );
+        const OUString & rRangeRepresentation );
     UncachedDataSequence(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XInternalDataProvider > & xIntDataProv,
-        const ::rtl::OUString & rRangeRepresentation,
-        const ::rtl::OUString & rRole );
+        const OUString & rRangeRepresentation,
+        const OUString & rRole );
     UncachedDataSequence( const UncachedDataSequence & rSource );
     virtual ~UncachedDataSequence();
 
@@ -105,9 +105,9 @@ protected:
     // ____ XDataSequence ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL getData()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSourceRangeRepresentation()
+    virtual OUString SAL_CALL getSourceRangeRepresentation()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL generateLabel(
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL generateLabel(
         ::com::sun::star::chart2::data::LabelOrigin nLabelOrigin )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
@@ -120,7 +120,7 @@ protected:
 
     // ____ XTextualDataSequence ____
     /// @see ::com::sun::star::chart::data::XTextualDataSequence
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getTextualData() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XIndexReplace ____
     virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
@@ -144,9 +144,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XNamed (for setting a new range representation) ____
-    virtual ::rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName )
+    virtual void SAL_CALL setName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
@@ -174,8 +174,8 @@ protected:
 
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
-    ::rtl::OUString                                 m_sRole;
-    ::rtl::OUString                                 m_aXMLRange;
+    OUString                                 m_sRole;
+    OUString                                 m_aXMLRange;
     // </properties>
 
     /** This method registers all properties.  It should be called by all
@@ -186,7 +186,7 @@ protected:
 private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XInternalDataProvider > m_xDataProvider;
-    ::rtl::OUString                 m_aSourceRepresentation;
+    OUString                 m_aSourceRepresentation;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >
         m_xModifyEventForwarder;
 };

@@ -99,7 +99,7 @@ public:
 private:
     bool isSkip( ::com::sun::star::uno::Reference<
                  ::com::sun::star::beans::XPropertySet> const& xPropSet,
-                 ::rtl::OUString const& shapeType,
+                 OUString const& shapeType,
              ::com::sun::star::uno::Reference<
              ::com::sun::star::drawing::XLayer> const& xLayer);
 
@@ -108,7 +108,7 @@ private:
         ::com::sun::star::drawing::XShape> const& xCurrShape,
         ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> const& xPropSet,
-        ::rtl::OUString const& shapeType ) const;
+        OUString const& shapeType ) const;
 
     void importPolygons(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const& xPropSet) ;
 

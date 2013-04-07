@@ -97,7 +97,7 @@ void ScAttrArray::TestData() const
 
     if (nErr)
     {
-        rtl::OStringBuffer aMsg;
+        OStringBuffer aMsg;
         aMsg.append(static_cast<sal_Int32>(nErr));
         aMsg.append(RTL_CONSTASCII_STRINGPARAM(
             " errors in attribute array, column "));

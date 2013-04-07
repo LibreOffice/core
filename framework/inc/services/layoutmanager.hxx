@@ -113,27 +113,27 @@ namespace framework
             virtual ::com::sun::star::awt::Rectangle SAL_CALL getCurrentDockingArea(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > SAL_CALL getDockingAreaAcceptor() throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setDockingAreaAcceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >& xDockingAreaAcceptor ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL createElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL destroyElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL requestElement( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL getElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL createElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL destroyElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL requestElement( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL getElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > > SAL_CALL getElements(  ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL showElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hideElement( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL dockWindow( const ::rtl::OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL showElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL hideElement( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL dockWindow( const OUString& aName, ::com::sun::star::ui::DockingArea DockingArea, const ::com::sun::star::awt::Point& Pos ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::sal_Bool SAL_CALL dockAllWindows( ::sal_Int16 nElementType ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL floatWindow( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL lockWindow( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL unlockWindow( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setElementSize( const ::rtl::OUString& aName, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setElementPos( const ::rtl::OUString& aName, const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL setElementPosSize( const ::rtl::OUString& aName, const ::com::sun::star::awt::Point& aPos, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isElementVisible( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isElementFloating( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL isElementDocked( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL isElementLocked( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::awt::Size SAL_CALL getElementSize( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::awt::Point SAL_CALL getElementPos( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL floatWindow( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL lockWindow( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL unlockWindow( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setElementSize( const OUString& aName, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setElementPos( const OUString& aName, const ::com::sun::star::awt::Point& aPos ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL setElementPosSize( const OUString& aName, const ::com::sun::star::awt::Point& aPos, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isElementVisible( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isElementFloating( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isElementDocked( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL isElementLocked( const OUString& ResourceURL ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::awt::Size SAL_CALL getElementSize( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::awt::Point SAL_CALL getElementPos( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL lock(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL unlock(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL doLayout(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -212,22 +212,22 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             //  query
             //---------------------------------------------------------------------------------------------------------
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const rtl::OUString& aName );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
 
-            void implts_writeNewStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
-            sal_Bool implts_readWindowStateData( const rtl::OUString& rName, UIElement& rElementData );
-            void implts_writeWindowStateData( const rtl::OUString& rName, const UIElement& rElementData );
+            void implts_writeNewStateData( const OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
+            sal_Bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
+            void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
             void implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
             void implts_sortUIElements();
             void implts_destroyElements();
             void implts_toggleFloatingUIElementsVisibility( sal_Bool bActive );
             void implts_reparentChildWindows();
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createDockingWindow( const ::rtl::OUString& aElementName );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
 
             sal_Bool implts_isEmbeddedLayoutManager() const;
             sal_Int16 implts_getCurrentSymbolsSize();
             sal_Int16 implts_getCurrentSymbolsStyle();
-            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const rtl::OUString& aName );
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const OUString& aName );
 
             // layouting methods
             sal_Bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
@@ -242,13 +242,13 @@ namespace framework
             // internal methods to control status/progress bar
             ::Size      implts_getStatusBarSize();
             void        implts_destroyStatusBar();
-            void        implts_createStatusBar( const rtl::OUString& rStatusBarName );
+            void        implts_createStatusBar( const OUString& rStatusBarName );
             void        implts_createProgressBar();
             void        implts_destroyProgressBar();
             void        implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize );
             sal_Bool    implts_showStatusBar( sal_Bool bStoreState=sal_False );
             sal_Bool    implts_hideStatusBar( sal_Bool bStoreState=sal_False );
-            void        implts_readStatusBarState( const rtl::OUString& rStatusBarName );
+            void        implts_readStatusBarState( const OUString& rStatusBarName );
             sal_Bool    implts_showProgressBar();
             sal_Bool    implts_hideProgressBar();
             void        implts_backupProgressBarWrapper();
@@ -320,19 +320,19 @@ namespace framework
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
-            rtl::OUString                                                               m_aModuleIdentifier;
-            rtl::OUString                                                               m_aStatusBarAlias;
-            rtl::OUString                                                               m_aProgressBarAlias;
-            rtl::OUString                                                               m_aPropDocked;
-            rtl::OUString                                                               m_aPropVisible;
-            rtl::OUString                                                               m_aPropDockingArea;
-            rtl::OUString                                                               m_aPropDockPos;
-            rtl::OUString                                                               m_aPropPos;
-            rtl::OUString                                                               m_aPropSize;
-            rtl::OUString                                                               m_aPropUIName;
-            rtl::OUString                                                               m_aPropStyle;
-            rtl::OUString                                                               m_aPropLocked;
-            rtl::OUString                                                               m_aCustomizeCmd;
+            OUString                                                               m_aModuleIdentifier;
+            OUString                                                               m_aStatusBarAlias;
+            OUString                                                               m_aProgressBarAlias;
+            OUString                                                               m_aPropDocked;
+            OUString                                                               m_aPropVisible;
+            OUString                                                               m_aPropDockingArea;
+            OUString                                                               m_aPropDockPos;
+            OUString                                                               m_aPropPos;
+            OUString                                                               m_aPropSize;
+            OUString                                                               m_aPropUIName;
+            OUString                                                               m_aPropStyle;
+            OUString                                                               m_aPropLocked;
+            OUString                                                               m_aCustomizeCmd;
             sal_Int16                                                                   m_eSymbolsSize;
             sal_Int16                                                                   m_eSymbolsStyle;
         Timer                                                                       m_aAsyncLayoutTimer;

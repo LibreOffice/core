@@ -252,7 +252,7 @@ public:
 class SC_DLLPUBLIC ScAutoFormatData
 {
 private:
-    rtl::OUString               aName;
+    OUString               aName;
     sal_uInt16                  nStrResId;
     // common flags of Calc and Writer
     bool                        bIncludeFont : 1;
@@ -277,8 +277,8 @@ public:
     ScAutoFormatData( const ScAutoFormatData& rData );
     ~ScAutoFormatData();
 
-    void            SetName( const rtl::OUString& rName )              { aName = rName; nStrResId = USHRT_MAX; }
-    const rtl::OUString& GetName() const { return aName; }
+    void            SetName( const OUString& rName )              { aName = rName; nStrResId = USHRT_MAX; }
+    const OUString& GetName() const { return aName; }
 
     bool            GetIncludeValueFormat() const               { return bIncludeValueFormat; }
     bool            GetIncludeFont() const                      { return bIncludeFont; }
@@ -311,7 +311,7 @@ public:
 
 class SC_DLLPUBLIC ScAutoFormat
 {
-    typedef boost::ptr_map<rtl::OUString, ScAutoFormatData> MapType;
+    typedef boost::ptr_map<OUString, ScAutoFormatData> MapType;
     MapType maData;
     bool mbSaveLater;
     ScAfVersions m_aVersions;
@@ -333,8 +333,8 @@ public:
     ScAutoFormatData* findByIndex(size_t nIndex);
     const_iterator find(const ScAutoFormatData* pData) const;
     iterator find(const ScAutoFormatData* pData);
-    const_iterator find(const rtl::OUString& rName) const;
-    iterator find(const rtl::OUString& rName);
+    const_iterator find(const OUString& rName) const;
+    iterator find(const OUString& rName);
 
     bool insert(ScAutoFormatData* pNew);
     void erase(const iterator& it);

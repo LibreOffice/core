@@ -136,7 +136,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
                 pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIndex) );
         if ( pTextMarkup )
         {
-            const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
+            const OUString rText = mrPortionData.GetAccessibleString();
             const sal_Int32 nStartPos =
                             mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos );
             const sal_Int32 nEndPos =
@@ -180,7 +180,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     ::std::vector< ::com::sun::star::accessibility::TextSegment > aTmpTextMarkups;
     if ( pTextMarkupList )
     {
-        const ::rtl::OUString rText = mrPortionData.GetAccessibleString();
+        const OUString rText = mrPortionData.GetAccessibleString();
 
         const sal_uInt16 nTextMarkupCount = pTextMarkupList->Count();
         for ( sal_uInt16 nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )

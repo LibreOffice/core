@@ -30,7 +30,7 @@ namespace migration
 {
 //.........................................................................
 
-    typedef ::std::vector< ::rtl::OUString > TStringVector;
+    typedef ::std::vector< OUString > TStringVector;
     typedef ::std::auto_ptr< TStringVector > TStringVectorPtr;
 
 //.........................................................................

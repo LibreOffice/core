@@ -48,7 +48,7 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
         virtual ~FrameStatusListener();
 
         // methods to support status forwarder, known by the old sfx2 toolbox controller implementation
-        void addStatusListener( const rtl::OUString& aCommandURL );
+        void addStatusListener( const OUString& aCommandURL );
         void bindListener();
         void unbindListener();
         sal_Bool isBound() const;
@@ -82,10 +82,10 @@ class SVT_DLLPUBLIC FrameStatusListener : public ::com::sun::star::frame::XStatu
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > xDispatch;
         };
 
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                 ::rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > URLToDispatchMap;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > URLToDispatchMap;
 
         sal_Bool                                                                            m_bInitialized : 1,
                                                                                             m_bDisposed : 1;

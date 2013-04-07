@@ -46,9 +46,9 @@ struct WebPrModel
     typedef ::std::vector< ::com::sun::star::uno::Any > TablesVector;
 
     TablesVector        maTables;           /// Names or indexes of the web query tables.
-    ::rtl::OUString     maUrl;              /// Source URL to refresh the data.
-    ::rtl::OUString     maPostMethod;       /// POST method to query data.
-    ::rtl::OUString     maEditPage;         /// Web page showing query data (for XML queries).
+    OUString     maUrl;              /// Source URL to refresh the data.
+    OUString     maPostMethod;       /// POST method to query data.
+    OUString     maEditPage;         /// Web page showing query data (for XML queries).
     sal_Int32           mnHtmlFormat;       /// Plain text, rich text, or HTML.
     bool                mbXml;              /// True = XML query, false = HTML query.
     bool                mbSourceData;       /// True = import XML source data referred by HTML table.
@@ -71,11 +71,11 @@ struct ConnectionModel
     typedef ::std::auto_ptr< WebPrModel > WebPrModelPtr;
 
     WebPrModelPtr       mxWebPr;            /// Special settings for web queries.
-    ::rtl::OUString     maName;             /// Unique name of this connection.
-    ::rtl::OUString     maDescription;      /// User description of this connection.
-    ::rtl::OUString     maSourceFile;       /// URL of a source data file.
-    ::rtl::OUString     maSourceConnFile;   /// URL of a source connection file.
-    ::rtl::OUString     maSsoId;            /// Single sign-on identifier.
+    OUString     maName;             /// Unique name of this connection.
+    OUString     maDescription;      /// User description of this connection.
+    OUString     maSourceFile;       /// URL of a source data file.
+    OUString     maSourceConnFile;   /// URL of a source connection file.
+    OUString     maSsoId;            /// Single sign-on identifier.
     sal_Int32           mnId;               /// Unique connection identifier.
     sal_Int32           mnType;             /// Data source type.
     sal_Int32           mnReconnectMethod;  /// Reconnection method.

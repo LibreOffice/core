@@ -43,8 +43,8 @@ namespace script {
 class LibraryContainer
 {
 public:
-    static ::rtl::OUString get_libname(
-        ::rtl::OUString const & url,
+    static OUString get_libname(
+        OUString const & url,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         css::uno::Reference<css::uno::XComponentContext> const & xContext );
 };

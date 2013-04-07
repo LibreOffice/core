@@ -100,7 +100,7 @@ public:
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
     /// receives notification of character data.
-    void SAL_CALL characters( const ::rtl::OUString& aChars )
+    void SAL_CALL characters( const OUString& aChars )
         throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
     void SAL_CALL setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream )
@@ -112,7 +112,7 @@ public:
     // C++ helpers
     void SAL_CALL writeId( ::sal_Int32 Element );
 
-    static ::rtl::OUString escapeXml( const ::rtl::OUString& s );
+    static OUString escapeXml( const OUString& s );
 
 public:
     /** From now on, don't write directly to the stream, but to top of a stack.
@@ -208,7 +208,7 @@ private:
     ::std::stack< boost::shared_ptr< ForMerge > > maSavedMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
-    void write( const ::rtl::OUString& s );
+    void write( const OUString& s );
 
 protected:
     rtl::ByteSequence maClosingBracket;

@@ -65,12 +65,12 @@ SdFilter::~SdFilter()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SdFilter::ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const
+OUString SdFilter::ImplGetFullLibraryName( const OUString& rLibraryName ) const
 {
-    String aTemp(::rtl::OUString(SVLIBRARY("?")));
+    String aTemp(OUString(SVLIBRARY("?")));
     xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
     aTemp.Replace( nIndex, 1, rLibraryName );
-    ::rtl::OUString aLibraryName( aTemp );
+    OUString aLibraryName( aTemp );
     return aLibraryName;
 }
 
@@ -79,7 +79,7 @@ SdFilter::~SdFilter()
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 
-::osl::Module* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
+::osl::Module* SdFilter::OpenLibrary( const OUString& rLibraryName ) const
 {
     std::auto_ptr< osl::Module > mod(new osl::Module);
     return mod->loadRelative(&thisModule, ImplGetFullLibraryName(rLibraryName),

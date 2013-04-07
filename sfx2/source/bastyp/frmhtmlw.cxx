@@ -72,7 +72,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     if( pIndent )
         rStrm << pIndent;
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta).append(' ')
         .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     rStrm << sOut.makeStringAndClear().getStr();
@@ -96,7 +96,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     if( pCharSet )
     {
-        String aContentType = rtl::OUString(sHTML_MIME_text_html);
+        String aContentType = OUString(sHTML_MIME_text_html);
         aContentType.AppendAscii( pCharSet );
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType, sal_True,
                  eDestEnc, pNonConvertableChars );
@@ -125,7 +125,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
             if( pIndent )
                 rStrm << pIndent;
 
-            rtl::OStringBuffer sOut;
+            OStringBuffer sOut;
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_base).append(' ')
                 .append(OOO_STRING_SVTOOLS_HTML_O_target).append("=\"");
             rStrm << sOut.makeStringAndClear().getStr();
@@ -136,7 +136,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
 
     // Who we are
     String sGenerator( SfxResId(STR_HTML_GENERATOR).toString() );
-    ::rtl::OUString os( "$_OS" );
+    OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator.SearchAndReplaceAscii( "%1", os );
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, sal_False, eDestEnc, pNonConvertableChars );
@@ -227,11 +227,11 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         {
             try
             {
-                ::rtl::OUString name = props[i].Name;
+                OUString name = props[i].Name;
                 uno::Any aStr = xConverter->convertToSimpleType(
                         xUserDefinedProps->getPropertyValue(name),
                         uno::TypeClass_STRING);
-                ::rtl::OUString str;
+                OUString str;
                 aStr >>= str;
                 String valstr(comphelper::string::stripEnd(str, ' '));
                 OutMeta( rStrm, pIndent, name, valstr, sal_False,
@@ -252,9 +252,9 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
 {
     try
     {
-        rtl::OStringBuffer sOut;
-        ::rtl::OUString aStr;
-        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString("FrameURL") );
+        OStringBuffer sOut;
+        OUString aStr;
+        uno::Any aAny = xSet->getPropertyValue( OUString("FrameURL") );
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
@@ -270,7 +270,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameName") );
+        aAny = xSet->getPropertyValue( OUString("FrameName") );
         if ( (aAny >>= aStr) && !aStr.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name)
@@ -281,13 +281,13 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         sal_Int32 nVal = SIZE_NOT_SET;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginWidth") );
+        aAny = xSet->getPropertyValue( OUString("FrameMarginWidth") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginwidth)
                 .append('=').append(nVal);
         }
-        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameMarginHeight") );
+        aAny = xSet->getPropertyValue( OUString("FrameMarginHeight") );
         if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_marginheight)
@@ -295,10 +295,10 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         sal_Bool bVal = sal_True;
-        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoScroll") );
+        aAny = xSet->getPropertyValue( OUString("FrameIsAutoScroll") );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsScrollingMode") );
+            aAny = xSet->getPropertyValue( OUString("FrameIsScrollingMode") );
             if ( aAny >>= bVal )
             {
                 const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
@@ -308,10 +308,10 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         }
 
         // frame border (MS+Netscape-Extension)
-        aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsAutoBorder") );
+        aAny = xSet->getPropertyValue( OUString("FrameIsAutoBorder") );
         if ( (aAny >>= bVal) && !bVal )
         {
-            aAny = xSet->getPropertyValue( ::rtl::OUString("FrameIsBorder") );
+            aAny = xSet->getPropertyValue( OUString("FrameIsBorder") );
             if ( aAny >>= bVal )
             {
                 const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;

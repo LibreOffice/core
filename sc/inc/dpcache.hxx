@@ -44,12 +44,12 @@ struct ScDPNumGroupInfo;
  */
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
-    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StringSetType;
+    typedef boost::unordered_set<OUString, OUStringHash> StringSetType;
 
 public:
     typedef std::vector<ScDPItemData> ItemsType;
     typedef std::set<ScDPObject*> ObjectSetType;
-    typedef std::vector<rtl::OUString> LabelsType;
+    typedef std::vector<OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
     struct GroupItems : boost::noncopyable
@@ -93,7 +93,7 @@ public:
     {
     public:
         virtual long getColumnCount() const = 0;
-        virtual rtl::OUString getColumnLabel(long nCol) const = 0;
+        virtual OUString getColumnLabel(long nCol) const = 0;
         virtual bool first() = 0;
         virtual bool next() = 0;
         virtual void finish() = 0;
@@ -126,13 +126,13 @@ private:
     bool mbDisposing;
 
 public:
-    const rtl::OUString* InternString(const rtl::OUString& rStr) const;
+    const OUString* InternString(const OUString& rStr) const;
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
     const ObjectSetType& GetAllReferences() const;
 
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
-    rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+    OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     long AppendGroupField();
     void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
@@ -141,7 +141,7 @@ public:
     const ScDPNumGroupInfo* GetNumGroupInfo(long nDim) const;
     sal_Int32 GetGroupType(long nDim) const;
 
-    SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
+    SCCOL GetDimensionIndex(const OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
     long GetDimMemberCount(long nDim) const;
@@ -154,7 +154,7 @@ public:
     SCROW GetRowCount() const;
     SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    rtl::OUString GetDimensionName(LabelsType::size_type nDim) const;
+    OUString GetDimensionName(LabelsType::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
@@ -173,7 +173,7 @@ public:
 private:
     void PostInit();
     void Clear();
-    void AddLabel(const rtl::OUString& rLabel);
+    void AddLabel(const OUString& rLabel);
     const GroupItems* GetGroupItems(long nDim) const;
 };
 

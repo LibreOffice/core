@@ -65,7 +65,7 @@ void cancelCommandExecution( const uno::Any & rException,
 
             if ( xSelection.is() )
                 throw ucb::CommandFailedException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     uno::Reference< uno::XInterface >(),
                                     rException );
         }
@@ -83,7 +83,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
                              const uno::Sequence< uno::Any > & rArgs,
                              const uno::Reference<
                                 ucb::XCommandEnvironment > & xEnv,
-                             const rtl::OUString & rMessage,
+                             const OUString & rMessage,
                              const uno::Reference<
                                     ucb::XCommandProcessor > & xContext )
     throw( uno::Exception )
@@ -103,7 +103,7 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
                 = xRequest->getSelection();
 
             if ( xSelection.is() )
-                throw ucb::CommandFailedException( rtl::OUString(),
+                throw ucb::CommandFailedException( OUString(),
                                                    xContext,
                                                    xRequest->getRequest() );
         }

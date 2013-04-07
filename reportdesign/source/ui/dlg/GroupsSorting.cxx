@@ -59,13 +59,13 @@ using namespace ::comphelper;
 
     void lcl_addToList_throw( ComboBoxControl& _rListBox, ::std::vector<ColumnInfo>& o_aColumnList,const uno::Reference< container::XNameAccess>& i_xColumns )
     {
-        uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
-        const ::rtl::OUString* pEntries = aEntries.getConstArray();
+        uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+        const OUString* pEntries = aEntries.getConstArray();
         sal_Int32 nEntries = aEntries.getLength();
         for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
         {
             uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),uno::UNO_QUERY_THROW);
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
             o_aColumnList.push_back( ColumnInfo(*pEntries,sLabel) );
@@ -357,7 +357,7 @@ void OFieldExpressionControl::lateInit()
         aFont.SetWeight( WEIGHT_LIGHT );
         SetFont(aFont);
 
-        InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(rtl::OUString('0')) * 4)/*, sal_True */);
+        InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
         InsertDataColumn( FIELD_EXPRESSION, String(ModuleRes(STR_RPT_EXPRESSION)), 100);
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );
@@ -455,7 +455,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
             if ( xGroup.is() )
             {
                 sal_uInt16 nPos = m_pComboCell->GetSelectEntryPos();
-                ::rtl::OUString sExpression;
+                OUString sExpression;
                 if ( COMBOBOX_ENTRY_NOTFOUND == nPos )
                     sExpression = m_pComboCell->GetText();
                 else
@@ -499,7 +499,7 @@ String OFieldExpressionControl::GetCellText( long nRow, sal_uInt16 /*nColId*/ ) 
         try
         {
             uno::Reference< report::XGroup> xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
-            ::rtl::OUString sExpression = xGroup->getExpression();
+            OUString sExpression = xGroup->getExpression();
 
             for(::std::vector<ColumnInfo>::const_iterator aIter = m_aColumnInfo.begin(); aIter != m_aColumnInfo.end();++aIter)
             {
@@ -1116,7 +1116,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 OGroupsSortingDialog::getColumnDataType(const ::rtl::OUString& _sColumnName)
+sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
 {
     sal_Int32 nDataType = sdbc::DataType::VARCHAR;
     try
@@ -1344,7 +1344,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             nPos = 0;
     }
     m_aGroupOnLst.SelectEntryPos(nPos);
-    m_aGroupIntervalEd.SetText(rtl::OUString::valueOf(_xGroup->getGroupInterval()));
+    m_aGroupIntervalEd.SetText(OUString::valueOf(_xGroup->getGroupInterval()));
     m_aGroupIntervalEd.SaveValue();
     m_aGroupIntervalEd.Enable( nPos != 0 );
     m_aKeepTogetherLst.SelectEntryPos(_xGroup->getKeepTogether());

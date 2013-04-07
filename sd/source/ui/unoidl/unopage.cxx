@@ -71,8 +71,6 @@
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -1526,7 +1524,7 @@ OUString SdGenericDrawPage::getBookmarkURL() const
 }
 
 //----------------------------------------------------------------------
-void SdGenericDrawPage::setBookmarkURL( rtl::OUString& rURL )
+void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
 {
     if( SvxFmDrawPage::mpPage )
     {

@@ -41,21 +41,20 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-const ::rtl::OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
+const OUString PresenterViewFactory::msCurrentSlidePreviewViewURL(
     "private:resource/view/Presenter/CurrentSlidePreview");
-const ::rtl::OUString PresenterViewFactory::msNextSlidePreviewViewURL(
+const OUString PresenterViewFactory::msNextSlidePreviewViewURL(
     "private:resource/view/Presenter/NextSlidePreview");
-const ::rtl::OUString PresenterViewFactory::msNotesViewURL(
+const OUString PresenterViewFactory::msNotesViewURL(
     "private:resource/view/Presenter/Notes");
-const ::rtl::OUString PresenterViewFactory::msToolBarViewURL(
+const OUString PresenterViewFactory::msToolBarViewURL(
     "private:resource/view/Presenter/ToolBar");
-const ::rtl::OUString PresenterViewFactory::msSlideSorterURL(
+const OUString PresenterViewFactory::msSlideSorterURL(
     "private:resource/view/Presenter/SlideSorter");
-const ::rtl::OUString PresenterViewFactory::msHelpViewURL(
+const OUString PresenterViewFactory::msHelpViewURL(
     "private:resource/view/Presenter/Help");
 
 //===== SimpleView ============================================================

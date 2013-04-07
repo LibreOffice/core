@@ -1283,7 +1283,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
 }
 
 ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& rFontSelData,
-    rtl::OUString& rMissingCodes, int nFallbackLevel ) const
+    OUString& rMissingCodes, int nFallbackLevel ) const
 {
     ImplDevFontListData* pFallbackData = NULL;
 
@@ -1318,11 +1318,11 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( FontSelectPattern& r
                 if( !bCached || (rFontSelData.maSearchName != aFontName) )
                     pRemainingCodes[ nRemainingLength++ ] = cChar;
             }
-            rMissingCodes = rtl::OUString( pRemainingCodes, nRemainingLength );
+            rMissingCodes = OUString( pRemainingCodes, nRemainingLength );
         }
         else
         {
-            rtl::OUString aOldMissingCodes = rMissingCodes;
+            OUString aOldMissingCodes = rMissingCodes;
             // call the hook to query the best matching glyph fallback font
             if( mpFallbackHook->FindFontSubstitute( rFontSelData, rMissingCodes ) )
                 // apply outdev3.cxx specific fontname normalization
@@ -1417,8 +1417,8 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySearchName( const OUString& rSea
     return pFoundData;
 }
 
-ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const rtl::OUString& rSearchName,
-    const rtl::OUString& rShortName) const
+ImplDevFontListData* ImplDevFontList::ImplFindByAliasName(const OUString& rSearchName,
+    const OUString& rShortName) const
 {
     // short circuit for impossible font name alias
     if (rSearchName.isEmpty())
@@ -1462,7 +1462,7 @@ ImplDevFontListData* ImplDevFontList::FindFontFamily( const String& rFontName ) 
     return pFound;
 }
 
-ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames(const rtl::OUString& rTokenStr) const
+ImplDevFontListData* ImplDevFontList::ImplFindByTokenNames(const OUString& rTokenStr) const
 {
     ImplDevFontListData* pFoundData = NULL;
 
@@ -1536,7 +1536,7 @@ void ImplDevFontList::InitMatchData() const
 
 ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( sal_uLong nSearchType,
     FontWeight eSearchWeight, FontWidth eSearchWidth,
-    FontItalic eSearchItalic, const rtl::OUString& rSearchFamilyName ) const
+    FontItalic eSearchItalic, const OUString& rSearchFamilyName ) const
 {
     if( (eSearchItalic != ITALIC_NONE) && (eSearchItalic != ITALIC_DONTKNOW) )
         nSearchType |= IMPL_FONT_ATTR_ITALIC;
@@ -2316,7 +2316,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
 
 namespace
 {
-    rtl::OUString stripCharSetFromName(rtl::OUString aName)
+    OUString stripCharSetFromName(OUString aName)
     {
         //I worry that someone will have a font which *does* have
         //e.g. "Greek" legitimately at the end of its name :-(
@@ -2439,7 +2439,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
         //Win 3.1/Win95 style fontnames which attempt to put the
         //charset encoding into the filename
         //http://www.webcenter.ru/~kazarn/eng/fonts_ttf.htm
-        rtl::OUString sStrippedName = stripCharSetFromName(rFSD.maTargetName);
+        OUString sStrippedName = stripCharSetFromName(rFSD.maTargetName);
         if (!sStrippedName.equals(rFSD.maTargetName))
         {
             rFSD.maTargetName = sStrippedName;
@@ -2672,7 +2672,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( FontSelectPattern& rFSD,
 }
 
 ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
-    FontSelectPattern& rFontSelData, int nFallbackLevel, rtl::OUString& rMissingCodes )
+    FontSelectPattern& rFontSelData, int nFallbackLevel, OUString& rMissingCodes )
 {
     // get a candidate font for glyph fallback
     // unless the previously selected font got a device specific substitution
@@ -3938,7 +3938,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     sal_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
-    const rtl::OUString aStrikeoutTest(aChars, nTestStrLen);
+    const OUString aStrikeoutTest(aChars, nTestStrLen);
 
     // calculate approximation of strikeout atom size
     long nStrikeoutWidth = 0;
@@ -3958,7 +3958,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     // build the strikeout string
     for( int i = nTestStrLen; i < nStrikeStrLen; ++i)
         aChars[i] = cStrikeoutChar;
-    const rtl::OUString aStrikeoutText(aChars, nStrikeStrLen);
+    const OUString aStrikeoutText(aChars, nStrikeStrLen);
 
     if( mpFontEntry->mnOrientation )
         ImplRotatePos( 0, 0, nDistX, nDistY, mpFontEntry->mnOrientation );
@@ -4699,7 +4699,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     rLineInfo.Clear();
     if ( !rStr.isEmpty() && (nWidth > 0) )
     {
-        ::rtl::OUString aText( rStr );
+        OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
         // get service provider
         uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -5992,11 +5992,11 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     // get list of unicodes that need glyph fallback
     int nCharPos = -1;
     bool bRTL = false;
-    rtl::OUStringBuffer aMissingCodeBuf;
+    OUStringBuffer aMissingCodeBuf;
     while( rLayoutArgs.GetNextPos( &nCharPos, &bRTL) )
         aMissingCodeBuf.append( rLayoutArgs.mpStr[ nCharPos ] );
     rLayoutArgs.ResetPos();
-    rtl::OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
+    OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
     FontSelectPattern aFontSelData = mpFontEntry->maFontSelData;
 
@@ -6142,7 +6142,7 @@ xub_StrLen OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
     xub_StrLen nRetVal = sal::static_int_cast<xub_StrLen>(pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor ));
 
     // calculate hyphenated break position
-    rtl::OUString aHyphenatorStr(nHyphenatorChar);
+    OUString aHyphenatorStr(nHyphenatorChar);
     sal_Int32 nTempLen = 1;
     SalLayout* pHyphenatorLayout = ImplLayout( aHyphenatorStr, 0, nTempLen );
     if( pHyphenatorLayout )
@@ -6712,8 +6712,8 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         }
         else if ( nStyle & TEXT_DRAW_PATHELLIPSIS )
         {
-            rtl::OUString aPath( rOrigStr );
-            rtl::OUString aAbbreviatedPath;
+            OUString aPath( rOrigStr );
+            OUString aAbbreviatedPath;
             osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, NULL );
             aStr = aAbbreviatedPath;
         }

@@ -71,10 +71,10 @@ struct SvxNumSettings_Impl
 {
     short           nNumberType;
     short           nParentNumbering;
-    rtl::OUString   sPrefix;
-    rtl::OUString   sSuffix;
-    rtl::OUString   sBulletChar;
-    rtl::OUString   sBulletFont;
+    OUString   sPrefix;
+    OUString   sSuffix;
+    OUString   sBulletChar;
+    OUString   sBulletFont;
     SvxNumSettings_Impl() :
         nNumberType(0),
         nParentNumbering(0)

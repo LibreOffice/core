@@ -403,7 +403,7 @@ sal_Bool    XFParaStyle::Equal(IXFStyle *pStyle)
 void    XFParaStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
 
     pAttrList->Clear();
     if( !style.isEmpty() )

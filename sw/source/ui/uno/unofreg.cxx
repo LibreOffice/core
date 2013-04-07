@@ -29,7 +29,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 
-using ::rtl::OUString;
 
 // module
 extern uno::Sequence< OUString > SAL_CALL SwUnoModule_getSupportedServiceNames() throw();
@@ -127,8 +126,8 @@ extern uno::Reference< uno::XInterface > SAL_CALL LayoutDumpFilter_createInstanc
 namespace comp_FinalThreadManager {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 

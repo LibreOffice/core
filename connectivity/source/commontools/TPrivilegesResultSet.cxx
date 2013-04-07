@@ -30,14 +30,14 @@ using namespace ::com::sun::star::lang;
 //------------------------------------------------------------------------------
 OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>& _rxMeta
                                            , const Any& catalog
-                                           , const ::rtl::OUString& schemaPattern
-                                           , const ::rtl::OUString& tableNamePattern)
+                                           , const OUString& schemaPattern
+                                           , const OUString& tableNamePattern)
                                            : ODatabaseMetaDataResultSet(eTablePrivileges)
                                            , m_bResetValues(sal_True)
 {
     osl_atomic_increment( &m_refCount );
     {
-        ::rtl::OUString sUserWorkingFor;
+        OUString sUserWorkingFor;
         Sequence< OUString > sTableTypes(3);
         // we want all catalogues, all schemas, all tables
         sTableTypes[0] = "VIEW";
@@ -58,7 +58,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         static ODatabaseMetaDataResultSet::ORow aRow(8);
         aRow[5] = new ORowSetValueDecorator(sUserWorkingFor);
         aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-        aRow[7] = new ORowSetValueDecorator(::rtl::OUString("YES"));
+        aRow[7] = new ORowSetValueDecorator(OUString("YES"));
         aRows.push_back(aRow);
         aRow[6] = ODatabaseMetaDataResultSet::getInsertValue();
         aRows.push_back(aRow);
@@ -74,7 +74,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         aRows.push_back(aRow);
         aRow[6] = ODatabaseMetaDataResultSet::getDropValue();
         aRows.push_back(aRow);
-        aRow[6] = new ORowSetValueDecorator(::rtl::OUString("REFERENCE"));
+        aRow[6] = new ORowSetValueDecorator(OUString("REFERENCE"));
         aRows.push_back(aRow);
 
         setRows(aRows);

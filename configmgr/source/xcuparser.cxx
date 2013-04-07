@@ -253,7 +253,7 @@ XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
 }
 
 void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
-    rtl::OStringBuffer buf;
+    OStringBuffer buf;
     buf.append('.');
     bool hasPackage = false;
     bool hasName = false;
@@ -417,7 +417,7 @@ void XcuParser::handlePropValue(
     xmlreader::XmlReader & reader, PropertyNode * prop)
  {
     bool nil = false;
-    rtl::OString separator;
+    OString separator;
     OUString external;
     for (;;) {
         int attrNsId;
@@ -451,7 +451,7 @@ void XcuParser::handlePropValue(
                      reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            separator = rtl::OString(s.begin, s.length);
+            separator = OString(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("external")))
         {
@@ -493,7 +493,7 @@ void XcuParser::handleLocpropValue(
 {
     OUString name;
     bool nil = false;
-    rtl::OString separator;
+    OString separator;
     Operation op = OPERATION_FUSE;
     for (;;) {
         int attrNsId;
@@ -531,7 +531,7 @@ void XcuParser::handleLocpropValue(
                      reader.getUrl()),
                     css::uno::Reference< css::uno::XInterface >());
             }
-            separator = rtl::OString(s.begin, s.length);
+            separator = OString(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
             attrLn.equals(RTL_CONSTASCII_STRINGPARAM("op")))
         {

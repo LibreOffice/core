@@ -33,7 +33,7 @@
 
 class ScSheetEvents
 {
-    rtl::OUString** mpScriptNames;
+    OUString** mpScriptNames;
 
     void        Clear();
 
@@ -44,10 +44,10 @@ public:
 
     const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
 
-    const rtl::OUString*    GetScript(sal_Int32 nEvent) const;
-    void                    SetScript(sal_Int32 nEvent, const rtl::OUString* pNew);
+    const OUString*    GetScript(sal_Int32 nEvent) const;
+    void                    SetScript(sal_Int32 nEvent, const OUString* pNew);
 
-    static rtl::OUString    GetEventName(sal_Int32 nEvent);
+    static OUString    GetEventName(sal_Int32 nEvent);
     static sal_Int32        GetVbaSheetEventId(sal_Int32 nEvent);
     static sal_Int32        GetVbaDocumentEventId(sal_Int32 nEvent);
 };

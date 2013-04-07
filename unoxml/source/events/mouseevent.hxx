@@ -27,9 +27,6 @@
 
 #include "uievent.hxx"
 
-
-using ::rtl::OUString;
-
 namespace DOM { namespace events {
 
 typedef ::cppu::ImplInheritanceHelper1< CUIEvent, XMouseEvent >

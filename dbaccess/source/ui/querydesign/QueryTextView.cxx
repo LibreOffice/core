@@ -78,7 +78,7 @@ sal_Bool OQueryTextView::checkStatement()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OQueryTextView::getStatement()
+OUString OQueryTextView::getStatement()
 {
     return m_pEdit->GetText();
 }
@@ -98,7 +98,7 @@ void OQueryTextView::clear()
     m_pEdit->SetText(String());
 }
 // -----------------------------------------------------------------------------
-void OQueryTextView::setStatement(const ::rtl::OUString& _rsStatement)
+void OQueryTextView::setStatement(const OUString& _rsStatement)
 {
     m_pEdit->SetText(_rsStatement);
 }

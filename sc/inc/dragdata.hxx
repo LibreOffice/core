@@ -41,11 +41,11 @@ struct ScDragData
     ScDrawTransferObj*  pDrawTransfer;
     ScDocument*         pJumpLocalDoc;
 
-    rtl::OUString       aLinkDoc;
-    rtl::OUString       aLinkTable;
-    rtl::OUString       aLinkArea;
-    rtl::OUString       aJumpTarget;
-    rtl::OUString       aJumpText;
+    OUString       aLinkDoc;
+    OUString       aLinkTable;
+    OUString       aLinkArea;
+    OUString       aJumpTarget;
+    OUString       aJumpText;
 };
 
 #endif

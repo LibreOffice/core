@@ -48,13 +48,9 @@ using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
 
 // Unix specific implementation
-static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& rDescriptions )
+static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDescriptions )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Trying plugin %s ... ", rPath.getStr() );
@@ -69,7 +65,7 @@ static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& 
         return false;
     }
 
-    rtl::OString aBaseName = rPath.copy(nPos+1);
+    OString aBaseName = rPath.copy(nPos+1);
     if (aBaseName.equalsL(RTL_CONSTASCII_STRINGPARAM("libnullplugin.so")))
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -89,7 +85,7 @@ static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& 
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    rtl::OString path;
+    OString path;
     if (!UnxPluginComm::getPluginappPath(&path))
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -97,11 +93,11 @@ static bool CheckPlugin( const rtl::OString& rPath, list< PluginDescription* >& 
 #endif
         return false;
     }
-    rtl::OStringBuffer cmd;
+    OStringBuffer cmd;
     tools::appendUnixShellWord(&cmd, path);
     cmd.append(' ');
     tools::appendUnixShellWord(&cmd, rPath);
-    rtl::OString aCommand(cmd.makeStringAndClear());
+    OString aCommand(cmd.makeStringAndClear());
 
     FILE* pResult = popen( aCommand.getStr(), "r" );
     int nDescriptions = 0;
@@ -188,9 +184,9 @@ union maxDirent
     struct dirent asDirent;
 };
 
-static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDescription* >& rDescriptions )
+static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescription* >& rDescriptions )
 {
-    rtl::OStringBuffer aPath( 1024 );
+    OStringBuffer aPath( 1024 );
     aPath.append( rPath );
     aPath.append( "/pluginreg.dat" );
     FILE* fp = fopen( aPath.getStr(), "r" );
@@ -207,7 +203,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
             for( nDotPos = nLineLen-1; nDotPos > 0 && aLine[nDotPos] != ':'; nDotPos-- )
                 ;
             if( aLine[0] == '/' && aLine[nDotPos] == ':' && aLine[nDotPos+1] == '$' )
-                CheckPlugin( rtl::OString(aLine, nDotPos), rDescriptions );
+                CheckPlugin( OString(aLine, nDotPos), rDescriptions );
         }
         fclose( fp );
     }
@@ -222,7 +218,7 @@ static void CheckPluginRegistryFiles( const rtl::OString& rPath, list< PluginDes
         char* pBaseName = u.asDirent.d_name;
         if( rtl_str_compare( ".", pBaseName ) && rtl_str_compare( "..", pBaseName ) )
         {
-            rtl::OStringBuffer aBuf( 1024 );
+            OStringBuffer aBuf( 1024 );
             aBuf.append( rPath );
             aBuf.append( '/' );
             aBuf.append( pBaseName );
@@ -255,26 +251,26 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         static const char* pNPXPluginPath = getenv( "NPX_PLUGIN_PATH" );
 
         // netscape!, quick, beam me back to the 90's when Motif roamed the earth
-        rtl::OStringBuffer aSearchBuffer(RTL_CONSTASCII_STRINGPARAM("/usr/lib/netscape/plugins"));
+        OStringBuffer aSearchBuffer(RTL_CONSTASCII_STRINGPARAM("/usr/lib/netscape/plugins"));
         if( pHome )
             aSearchBuffer.append(':').append(pHome).append("/.netscape/plugins");
         if( pNPXPluginPath )
             aSearchBuffer.append(':').append(pNPXPluginPath);
 
-        const Sequence< ::rtl::OUString >& rPaths( PluginManager::getAdditionalSearchPaths() );
+        const Sequence< OUString >& rPaths( PluginManager::getAdditionalSearchPaths() );
         for( i = 0; i < rPaths.getLength(); i++ )
         {
-            aSearchBuffer.append(':').append(rtl::OUStringToOString(
+            aSearchBuffer.append(':').append(OUStringToOString(
                 rPaths.getConstArray()[i], aEncoding));
         }
 
-        rtl::OString aSearchPath = aSearchBuffer.makeStringAndClear();
+        OString aSearchPath = aSearchBuffer.makeStringAndClear();
 
         sal_Int32 nIndex = 0;
         maxDirent u;
         do
         {
-            rtl::OString aPath(aSearchPath.getToken(0, ':', nIndex));
+            OString aPath(aSearchPath.getToken(0, ':', nIndex));
             if (!aPath.isEmpty())
             {
                 DIR* pDIR = opendir(aPath.getStr());
@@ -286,7 +282,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
                         pBaseName[1] != '.' ||
                         pBaseName[2] != 0 )
                     {
-                        rtl::OStringBuffer aFileName(aPath);
+                        OStringBuffer aFileName(aPath);
                         aFileName.append('/').append(pBaseName);
                         CheckPlugin( aFileName.makeStringAndClear(), aPlugins );
                     }
@@ -298,7 +294,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         while ( nIndex >= 0 );
 
         // try ~/.mozilla/pluginreg.dat
-        rtl::OStringBuffer aBuf(256);
+        OStringBuffer aBuf(256);
         aBuf.append( pHome );
         aBuf.append( "/.mozilla" );
         CheckPluginRegistryFiles( aBuf.makeStringAndClear(), aPlugins );

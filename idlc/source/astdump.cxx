@@ -219,13 +219,13 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     }
     RegistryKey localKey;
     if (rKey.createKey(
-            rtl::OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
+            OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8),
             localKey)) {
         fprintf(
             stderr, "%s: warning, could not create key '%s' in '%s'\n",
             idlc()->getOptions()->getProgramName().getStr(),
             getFullName().getStr(),
-            rtl::OUStringToOString(
+            OUStringToOString(
                 rKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return false;
     }
@@ -233,12 +233,12 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         version, getDocumentation(), emptyStr,
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
         m_bPublished,
-        rtl::OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
+        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
         superName.isEmpty() ? 0 : 1, properties, constructors,
         references);
     if (!superName.isEmpty()) {
         writer.setSuperTypeName(
-            0, rtl::OStringToOUString(superName, RTL_TEXTENCODING_UTF8));
+            0, OStringToOUString(superName, RTL_TEXTENCODING_UTF8));
     }
     sal_uInt16 constructorIndex = 0;
     sal_uInt16 propertyIndex = 0;
@@ -260,7 +260,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             writer.setReferenceData(
                 referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
                 (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                rtl::OStringToOUString( decl->getRealInterface()->getRelativName(),
+                OStringToOUString( decl->getRealInterface()->getRelativName(),
                                         RTL_TEXTENCODING_UTF8));
             break;
         }
@@ -271,7 +271,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
                 AstServiceMember * decl = (AstServiceMember *)(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
                     (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
-                    rtl::OStringToOUString(decl->getRealService()->getRelativName(),
+                    OStringToOUString(decl->getRealService()->getRelativName(),
                                            RTL_TEXTENCODING_UTF8));
             }
             break;
@@ -281,7 +281,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
                 AstObserves * decl = (AstObserves *)(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
                     RT_ACCESS_INVALID,
-                    rtl::OStringToOUString( decl->getRealInterface()->getRelativName(),
+                    OStringToOUString( decl->getRealInterface()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));
                 break;
             }
@@ -291,7 +291,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
                 AstNeeds * decl = (AstNeeds *)(*i);
                 writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
                     RT_ACCESS_INVALID,
-                    rtl::OStringToOUString( decl->getRealService()->getRelativName(),
+                    OStringToOUString( decl->getRealService()->getRelativName(),
                                             RTL_TEXTENCODING_UTF8));
                 break;
             }
@@ -304,7 +304,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     if (m_defaultConstructor) {
         writer.setMethodData(
             constructorIndex++, emptyStr, RT_MODE_TWOWAY,
-            emptyStr, rtl::OUString("void"),
+            emptyStr, OUString("void"),
             0, 0);
     }
     sal_uInt32 size;
@@ -317,7 +317,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
             idlc()->getOptions()->getProgramName().getStr(),
             getFullName().getStr(),
-            rtl::OUStringToOString(
+            OUStringToOString(
                 localKey.getRegistryName(), RTL_TEXTENCODING_UTF8).getStr());
         return false;
     }
@@ -385,7 +385,7 @@ sal_Bool AstAttribute::dumpBlob(
 }
 
 void AstAttribute::dumpExceptions(
-    typereg::Writer & writer, rtl::OUString const & documentation,
+    typereg::Writer & writer, OUString const & documentation,
     DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex)
 {
     if (!exceptions.empty()) {
@@ -396,7 +396,7 @@ void AstAttribute::dumpExceptions(
         writer.setMethodData(
             idx, documentation, flags,
             OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
-            rtl::OUString("void"), 0,
+            OUString("void"), 0,
             static_cast< sal_uInt16 >(exceptions.size()));
         sal_uInt16 exceptionIndex = 0;
         for (DeclList::const_iterator i(exceptions.begin());
@@ -404,7 +404,7 @@ void AstAttribute::dumpExceptions(
         {
             writer.setMethodExceptionTypeName(
                 idx, exceptionIndex++,
-                rtl::OStringToOUString(
+                OStringToOUString(
                     (*i)->getRelativName(), RTL_TEXTENCODING_UTF8));
         }
     }

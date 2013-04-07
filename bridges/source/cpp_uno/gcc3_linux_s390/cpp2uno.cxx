@@ -349,7 +349,7 @@ static typelib_TypeClass cpp_mediate(
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString( "illegal vtable index!" ),
+            OUString( "illegal vtable index!" ),
             (XInterface *)pCppI );
     }
 
@@ -443,7 +443,7 @@ static typelib_TypeClass cpp_mediate(
     default:
     {
         throw RuntimeException(
-            rtl::OUString( "no member description found!" ),
+            OUString( "no member description found!" ),
             (XInterface *)pCppI );
     }
     }

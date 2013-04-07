@@ -32,7 +32,7 @@ class SwVbaBookmark : public SwVbaBookmark_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::text::XTextContent > mxBookmark;
-    rtl::OUString maName;
+    OUString maName;
     bool mbValid;
 
 private:
@@ -40,19 +40,19 @@ private:
 
 public:
     SwVbaBookmark( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& rName ) throw ( css::uno::RuntimeException );
+        const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rName ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaBookmark();
 
    // Methods
-    virtual rtl::OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setName( const rtl::OUString& ) throw ( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException );
     virtual void SAL_CALL Delete() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL Select() throw ( css::uno::RuntimeException );
     virtual css::uno::Any SAL_CALL Range() throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_BOOKMARK_HXX */
 

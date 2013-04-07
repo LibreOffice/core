@@ -111,7 +111,7 @@ BinaryOutputStream::writeCharArrayUC( const OUString& rString, rtl_TextEncoding 
 }
 
 void
-BinaryOutputStream::writeUnicodeArray( const ::rtl::OUString& rString, bool bAllowNulChars )
+BinaryOutputStream::writeUnicodeArray( const OUString& rString, bool bAllowNulChars )
 {
     OUString sBuf( rString );
     if( !bAllowNulChars )
@@ -127,7 +127,7 @@ BinaryOutputStream::writeUnicodeArray( const ::rtl::OUString& rString, bool bAll
 }
 
 void
-BinaryOutputStream::writeCompressedUnicodeArray( const rtl::OUString& rString, bool bCompressed, bool bAllowNulChars )
+BinaryOutputStream::writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars )
 {
     if ( bCompressed )
          // ISO-8859-1 maps all byte values 0xHH to the same Unicode code point U+00HH

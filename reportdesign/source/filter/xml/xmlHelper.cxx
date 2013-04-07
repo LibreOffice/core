@@ -251,7 +251,7 @@ const SvXMLEnumMapEntry* OXMLHelper::GetCommandTypeOptions()
 #define PROPERTY_ID_FONTKERNING      14
 #define PROPERTY_ID_FONTWORDLINEMODE 15
 #define PROPERTY_ID_FONTTYPE         16
-void OXMLHelper::copyStyleElements(const bool _bOld,const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const uno::Reference<beans::XPropertySet>& _xProp)
+void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const uno::Reference<beans::XPropertySet>& _xProp)
 {
     if ( !_xProp.is() || _sStyleName.isEmpty() || !_pAutoStyles )
         return;

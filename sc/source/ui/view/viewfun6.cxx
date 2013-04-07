@@ -46,8 +46,6 @@
 
 #include <vector>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::vector;
 
 #define D_TIMEFACTOR              86400.0

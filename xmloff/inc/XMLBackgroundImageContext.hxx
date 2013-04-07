@@ -34,8 +34,8 @@ class XMLBackgroundImageContext : public XMLElementPropertyContext
     XMLPropertyState aTransparencyProp;
 
     ::com::sun::star::style::GraphicLocation ePos;
-    ::rtl::OUString sURL;
-    ::rtl::OUString sFilter;
+    OUString sURL;
+    OUString sFilter;
     sal_Int8 nTransparency;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
@@ -51,7 +51,7 @@ public:
     XMLBackgroundImageContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
@@ -63,7 +63,7 @@ public:
     virtual ~XMLBackgroundImageContext();
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 

@@ -75,16 +75,16 @@ using namespace ::svx;
 
 struct ColumnInfo
 {
-    ::rtl::OUString sColumnName;
-    ::rtl::OUString sLabel;
+    OUString sColumnName;
+    OUString sLabel;
     bool bColumn;
-    ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
+    ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
         : sColumnName(i_sColumnName)
         , sLabel(i_sLabel)
         , bColumn(true)
     {
     }
-    ColumnInfo(const ::rtl::OUString& i_sColumnName)
+    ColumnInfo(const OUString& i_sColumnName)
         : sColumnName(i_sColumnName)
         , bColumn(false)
     {
@@ -93,13 +93,13 @@ struct ColumnInfo
 
 static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
 {
-    uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
-    const ::rtl::OUString* pEntries = aEntries.getConstArray();
+    uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
+    const OUString* pEntries = aEntries.getConstArray();
     sal_Int32 nEntries = aEntries.getLength();
     for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
     {
         uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),UNO_QUERY_THROW);
-        ::rtl::OUString sLabel;
+        OUString sLabel;
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         if ( !sLabel.isEmpty() )
@@ -254,7 +254,7 @@ sal_Bool FmFieldWin::createSelectionControls( )
         aDescr[ daCommand ]     <<= GetObjectName();
         aDescr[ daCommandType ] <<= GetObjectType();
         ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
-        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//::rtl::OUString( pListBox->GetEntryText( pSelected) );
+        aDescr[ daColumnName ]  <<= pInfo->sColumnName;//OUString( pListBox->GetEntryText( pSelected) );
 
         // transfer this to the SFX world
         SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );

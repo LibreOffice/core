@@ -40,8 +40,8 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS OParseColumn :
             public OParseColumn_BASE, public OParseColumn_PROP
         {
-            ::rtl::OUString m_aRealName;
-            ::rtl::OUString m_sLabel;
+            OUString m_aRealName;
+            OUString m_sLabel;
             sal_Bool        m_bFunction;
             sal_Bool        m_bDbasePrecisionChanged;
             sal_Bool        m_bAggregateFunction;
@@ -54,10 +54,10 @@ namespace connectivity
             virtual ~OParseColumn();
         public:
             OParseColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase);
-            OParseColumn(const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    const ::rtl::OUString& _Description,
+            OParseColumn(const OUString& _Name,
+                    const OUString& _TypeName,
+                    const OUString& _DefaultValue,
+                    const OUString& _Description,
                     sal_Int32       _IsNullable,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
@@ -65,23 +65,23 @@ namespace connectivity
                     sal_Bool        _IsAutoIncrement,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase,
-                    const ::rtl::OUString& _CatalogName,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _TableName);
+                    const OUString& _CatalogName,
+                    const OUString& _SchemaName,
+                    const OUString& _TableName);
 
             virtual void construct();
 
-            void setRealName(const ::rtl::OUString& _rName)  { m_aRealName  = _rName; }
-            void setLabel(const ::rtl::OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
-            void setTableName(const ::rtl::OUString& _rName) { m_TableName = _rName; }
+            void setRealName(const OUString& _rName)  { m_aRealName  = _rName; }
+            void setLabel(const OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
+            void setTableName(const OUString& _rName) { m_TableName = _rName; }
             void setFunction(sal_Bool _bFunction)            { m_bFunction  = _bFunction; }
             void setAggregateFunction(sal_Bool _bFunction)   { m_bAggregateFunction = _bFunction; }
             void setIsSearchable( sal_Bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
             void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
 
-            const ::rtl::OUString& getRealName()   const { return  m_aRealName; }
-            const ::rtl::OUString& getLabel()      const { return  m_sLabel; }
-            const ::rtl::OUString& getTableName()  const { return  m_TableName; }
+            const OUString& getRealName()   const { return  m_aRealName; }
+            const OUString& getLabel()      const { return  m_sLabel; }
+            const OUString& getTableName()  const { return  m_TableName; }
             sal_Bool        getFunction()   const { return  m_bFunction; }
             sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
 
@@ -129,7 +129,7 @@ namespace connectivity
         public:
             OOrderColumn(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
-                const ::rtl::OUString& i_rOriginatingTableName,
+                const OUString& i_rOriginatingTableName,
                 sal_Bool _bCase,
                 sal_Bool _bAscending
             );
@@ -142,7 +142,7 @@ namespace connectivity
 
             virtual void construct();
 
-            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

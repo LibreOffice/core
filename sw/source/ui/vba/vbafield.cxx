@@ -51,20 +51,20 @@ sal_Bool SAL_CALL SwVbaField::Update() throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaField::getServiceImplName()
 {
-    return rtl::OUString("SwVbaField");
+    return OUString("SwVbaField");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaField::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Field" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Field" );
     }
     return aServiceNames;
 }
@@ -323,7 +323,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
 {
     sal_Int32 nType = word::WdFieldType::wdFieldEmpty;
     Type >>= nType;
-    rtl::OUString sText;
+    OUString sText;
     Text >>= sText;
 
     String sFieldName;
@@ -331,7 +331,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     {
         SwVbaReadFieldParams aReadParam(sText);
         sFieldName = aReadParam.GetFieldName();
-        OSL_TRACE("SwVbaFields::Add, the field name is %s ",rtl::OUStringToOString( sFieldName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("SwVbaFields::Add, the field name is %s ",OUStringToOString( sFieldName, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     uno::Reference< text::XTextContent > xTextField;
@@ -345,7 +345,7 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     }
     else
     {
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
@@ -355,9 +355,9 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
     return uno::Reference< word::XField >( new SwVbaField( mxParent, mxContext, uno::Reference< text::XTextDocument >( mxModel, uno::UNO_QUERY_THROW ), uno::Reference< text::XTextField >( xTextField, uno::UNO_QUERY_THROW ) ) );
 }
 
-uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl::OUString _text ) throw (uno::RuntimeException)
+uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUString _text ) throw (uno::RuntimeException)
 {
-    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( rtl::OUString("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( OUString("com.sun.star.text.TextField.FileName") ), uno::UNO_QUERY_THROW );
     sal_Int16 nFileFormat = text::FilenameDisplayFormat::NAME_AND_EXT;
     if( !_text.isEmpty() )
     {
@@ -375,14 +375,14 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const rtl
                     aReadParam.SkipToNextToken();
                     break;
                 default:
-                    DebugHelper::exception(SbERR_BAD_ARGUMENT, rtl::OUString());
+                    DebugHelper::exception(SbERR_BAD_ARGUMENT, OUString());
                     break;
             }
         }
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString("FileFormat"), uno::makeAny( nFileFormat ) );
+    xProps->setPropertyValue( OUString("FileFormat"), uno::makeAny( nFileFormat ) );
 
     return xTextField;
 }
@@ -424,7 +424,7 @@ static const DocPropertyTable aDocPropertyTables[] =
     { NULL, NULL }
 };
 
-uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const rtl::OUString _text ) throw (uno::RuntimeException)
+uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const OUString _text ) throw (uno::RuntimeException)
 {
     String aDocProperty;
     SwVbaReadFieldParams aReadParam( _text );
@@ -444,21 +444,21 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         }
     }
     aDocProperty = comphelper::string::remove(aDocProperty, '"');
-    OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",rtl::OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("SwVbaFields::Create_Field_DocProperty, the document property name is %s ",OUStringToOString( aDocProperty, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( aDocProperty.Len() == 0 )
     {
         throw uno::RuntimeException();
     }
 
     bool bCustom = true;
-    rtl::OUString sFieldService;
+    OUString sFieldService;
     // find the build in document properties
     for( const DocPropertyTable* pTable = aDocPropertyTables; pTable->sDocPropertyName != NULL; pTable++ )
     {
         if( aDocProperty.EqualsIgnoreCaseAscii( pTable->sDocPropertyName ) )
         {
             if( pTable->sFieldService != NULL )
-                sFieldService = rtl::OUString::createFromAscii(pTable->sFieldService);
+                sFieldService = OUString::createFromAscii(pTable->sFieldService);
             bCustom = false;
             break;
         }
@@ -466,11 +466,11 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
 
     if( bCustom )
     {
-        sFieldService = rtl::OUString( "com.sun.star.text.textfield.docinfo.Custom" );
+        sFieldService = OUString( "com.sun.star.text.textfield.docinfo.Custom" );
     }
     else if( sFieldService.isEmpty() )
     {
-        throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
     }
 
     uno::Reference< text::XTextField > xTextField( mxMSF->createInstance( sFieldService ), uno::UNO_QUERY_THROW );
@@ -478,8 +478,8 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     if( bCustom )
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-        rtl::OUString sDocPropertyName( aDocProperty );
-        xProps->setPropertyValue( rtl::OUString("Name"), uno::makeAny( sDocPropertyName ) );
+        OUString sDocPropertyName( aDocProperty );
+        xProps->setPropertyValue( OUString("Name"), uno::makeAny( sDocPropertyName ) );
     }
 
     return xTextField;
@@ -517,10 +517,10 @@ sal_Int32 SAL_CALL SwVbaFields::Update() throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaFields::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFields");
+    return OUString("SwVbaFields");
 }
 
 // XEnumerationAccess
@@ -530,14 +530,14 @@ SwVbaFields::getElementType() throw (uno::RuntimeException)
     return  word::XField::static_type(0);
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaFields::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Fields" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Fields" );
     }
     return aServiceNames;
 }

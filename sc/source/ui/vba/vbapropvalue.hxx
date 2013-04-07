@@ -43,7 +43,7 @@ public:
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException);
 
-    rtl::OUString SAL_CALL getDefaultPropertyName() throw (css::uno::RuntimeException) { return ::rtl::OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName() throw (css::uno::RuntimeException) { return OUString("Value"); }
 
 };
 #endif //SC_VBA_PROPVALULE_HXX

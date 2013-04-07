@@ -291,9 +291,9 @@ void LwpDocData::Read()
         pGlobal->SetEditorAttrMap(pEditorAttr->nID, pEditorAttr);
     }
 }
-rtl::OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
+OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append((sal_Int32)dt.tm_year);
     buf.append( A2OUSTR("-") );
     buf.append((sal_Int32)dt.tm_mon);
@@ -310,10 +310,10 @@ rtl::OUString   LwpDocData::DateTimeToOUString(LtTm& dt)
 
     return buf.makeStringAndClear();
 }
-rtl::OUString   LwpDocData::TimeToOUString(LtTm& dt)
+OUString   LwpDocData::TimeToOUString(LtTm& dt)
 {
     //PT3H43M44S
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append( A2OUSTR("PT") );
     buf.append((sal_Int32)dt.tm_hour);
     buf.append( A2OUSTR("H") );

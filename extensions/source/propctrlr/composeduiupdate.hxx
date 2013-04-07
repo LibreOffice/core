@@ -44,7 +44,7 @@ namespace pcr
     class SAL_NO_VTABLE IPropertyExistenceCheck
     {
     public:
-        virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual ::sal_Bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
     protected:
         ~IPropertyExistenceCheck() {}
@@ -143,7 +143,7 @@ namespace pcr
 
         /** invokes m_pPropertyCheck to check whether a given property should be handled
         */
-        bool shouldContinuePropertyHandling( const ::rtl::OUString& _rName ) const;
+        bool shouldContinuePropertyHandling( const OUString& _rName ) const;
 
     private:
         /// determines whether the instance is already disposed

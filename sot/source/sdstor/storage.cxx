@@ -439,7 +439,7 @@ void SotStorage::CreateStorage( sal_Bool bForceUCBStorage, StreamMode nMode, Sto
         INetURLObject aObj( m_aName );
         if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            rtl::OUString aURL;
+            OUString aURL;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( m_aName, aURL );
             aObj.SetURL( aURL );
             m_aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -658,7 +658,7 @@ sal_Bool SotStorage::IsStorageFile( const String & rFileName )
     INetURLObject aObj( aName );
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        rtl::OUString aURL;
+        OUString aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
@@ -701,7 +701,7 @@ const String & SotStorage::GetName() const
     return m_aName;
 }
 
-const rtl::OString& SotStorage::GetKey() const
+const OString& SotStorage::GetKey() const
 {
     return m_aKey;
 }
@@ -1083,8 +1083,8 @@ SotStorage* SotStorage::OpenOLEStorage( const com::sun::star::uno::Reference < c
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
             xStreamProps->setPropertyValue(
-                        ::rtl::OUString(  "MediaType"  ),
-                        uno::makeAny( ::rtl::OUString(  "application/vnd.sun.star.oleobject"  ) ) );
+                        OUString(  "MediaType"  ),
+                        uno::makeAny( OUString(  "application/vnd.sun.star.oleobject"  ) ) );
         }
 
            pStream = utl::UcbStreamHelper::CreateStream( xStream );
@@ -1105,8 +1105,8 @@ sal_Int32 SotStorage::GetFormatID( const com::sun::star::uno::Reference < com::s
     if ( !xProps.is() )
         return 0;
 
-    ::rtl::OUString aMediaType;
-    xProps->getPropertyValue( ::rtl::OUString("MediaType") ) >>= aMediaType;
+    OUString aMediaType;
+    xProps->getPropertyValue( OUString("MediaType") ) >>= aMediaType;
     if ( !aMediaType.isEmpty() )
     {
         ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

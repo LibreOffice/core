@@ -94,7 +94,7 @@ public:
     XHatchListRef     GetHatchList() const;
     XBitmapListRef    GetBitmapList() const;
 
-    SdrObject* getNamedSdrObject( const rtl::OUString& rName );
+    SdrObject* getNamedSdrObject( const OUString& rName );
     static SdrObject* getNamedSdrObject( const String& rName, SdrObjList* pObjList );
 
     static bool removeShape( const ::com::sun::star::uno::Reference<

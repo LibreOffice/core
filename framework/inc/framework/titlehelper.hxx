@@ -102,12 +102,12 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
 
         //---------------------------------------
         /** @see XTitle */
-        virtual ::rtl::OUString SAL_CALL getTitle()
+        virtual OUString SAL_CALL getTitle()
             throw (css::uno::RuntimeException);
 
         //---------------------------------------
         /** @see XTitle */
-        virtual void SAL_CALL setTitle(const ::rtl::OUString& sTitle)
+        virtual void SAL_CALL setTitle(const OUString& sTitle)
             throw (css::uno::RuntimeException);
 
         //---------------------------------------
@@ -156,16 +156,16 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         void impl_startListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
         void impl_updateListeningForFrame (const css::uno::Reference< css::frame::XFrame >& xFrame);
 
-        void impl_appendComponentTitle (      ::rtl::OUStringBuffer&                       sTitle    ,
+        void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                         const css::uno::Reference< css::uno::XInterface >& xComponent);
-        void impl_appendProductName (::rtl::OUStringBuffer& sTitle);
-        void impl_appendProductExtension (::rtl::OUStringBuffer& sTitle);
-        void impl_appendModuleName (::rtl::OUStringBuffer& sTitle);
-        void impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle);
+        void impl_appendProductName (OUStringBuffer& sTitle);
+        void impl_appendProductExtension (OUStringBuffer& sTitle);
+        void impl_appendModuleName (OUStringBuffer& sTitle);
+        void impl_appendDebugVersion (OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
 
-        ::rtl::OUString impl_convertURL2Title(const ::rtl::OUString& sURL);
+        OUString impl_convertURL2Title(const OUString& sURL);
 
     //-------------------------------------------
     // member
@@ -190,7 +190,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         ::sal_Bool m_bExternalTitle;
 
         /** the actual title value */
-        ::rtl::OUString m_sTitle;
+        OUString m_sTitle;
 
         /** knows the leased number which must be used for untitled components. */
         ::sal_Int32 m_nLeasedNumber;

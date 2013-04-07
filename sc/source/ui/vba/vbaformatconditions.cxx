@@ -31,11 +31,11 @@ using namespace ::com::sun::star;
 
 typedef std::vector< beans::PropertyValue > VecPropValues;
 
-static rtl::OUString OPERATOR("Operator");
-static rtl::OUString FORMULA1("Formula1");
-static rtl::OUString FORMULA2("Formula2");
-static rtl::OUString STYLENAME("StyleName");
-static rtl::OUString sStyleNamePrefix("Excel_CondFormat");
+static OUString OPERATOR("Operator");
+static OUString FORMULA1("Formula1");
+static OUString FORMULA2("Formula2");
+static OUString STYLENAME("StyleName");
+static OUString sStyleNamePrefix("Excel_CondFormat");
 
 void SAL_CALL
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
@@ -44,7 +44,7 @@ ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::Runti
     {
         ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
         if ( !pStyles )
-            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+            DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
         sal_Int32 nCount = mxSheetConditionalEntries->getCount();
         for (sal_Int32 i = nCount - 1; i >= 0; i--)
         {
@@ -56,7 +56,7 @@ ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::Runti
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
@@ -128,7 +128,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     uno::Reference< excel::XFormatCondition > xFormatCondition;
     try
     {
-        rtl::OUString sStyleName;
+        OUString sStyleName;
         if ( !xStyle.is() )
         {
             sStyleName = getStyleName();
@@ -186,7 +186,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
     catch (uno::Exception& )
     {
     }
-    DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+    DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     return xFormatCondition;
 }
 
@@ -203,36 +203,36 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue( rtl::OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue( OUString("ConditionalFormat"), uno::makeAny( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
-rtl::OUString
+OUString
 ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula) throw ( script::BasicErrorException )
 {
     // #TODO, #FIXME hook-in proper formula conversion detection & logic
-    rtl::OUString sFormula;
+    OUString sFormula;
     if ( !( _aFormula >>= sFormula ) )
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+        DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
     return sFormula;
 }
 
-rtl::OUString
+OUString
 ScVbaFormatConditions::getStyleName()
 {
     ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
     if ( !pStyles )
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
-    uno::Sequence< rtl::OUString > sCellStyleNames = pStyles->getStyleNames();
-    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, rtl::OUString("_"));
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
+    uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
+    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, OUString("_"));
 }
 
 void
-ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( script::BasicErrorException )
+ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( script::BasicErrorException )
 {
     try
     {
@@ -247,7 +247,7 @@ ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, 
                 {
                     ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
                     if ( !pStyles )
-                        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+                        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
                     pStyles->Delete( _sStyleName );
                 }
                 return;
@@ -256,24 +256,24 @@ ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, 
     }
     catch (uno::Exception& )
     {
-        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+        DebugHelper::exception(SbERR_METHOD_FAILED, OUString());
     }
 }
 
-rtl::OUString
+OUString
 ScVbaFormatConditions::getServiceImplName()
 {
-    return rtl::OUString("ScVbaFormatConditions");
+    return OUString("ScVbaFormatConditions");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaFormatConditions::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.FormatConditions" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.FormatConditions" );
     }
     return aServiceNames;
 }

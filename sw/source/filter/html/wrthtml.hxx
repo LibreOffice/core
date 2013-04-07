@@ -218,7 +218,7 @@ struct SwHTMLFmtInfo
     const SwFmt *pFmt;      // das Format selbst
     const SwFmt *pRefFmt;   // das Vergleichs-Format
 
-    rtl::OString aToken;          // das auszugebende Token
+    OString aToken;          // das auszugebende Token
     String aClass;          // die auszugebende Klasse
 
     SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
@@ -444,7 +444,7 @@ public:
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
                                        const sal_Char *pVal );
     inline void OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                       const rtl::OString& rVal );
+                                       const OString& rVal );
     inline void OutCSS1_Property( const sal_Char *pProp, const String& rVal );
     void OutCSS1_Property( const sal_Char *pProp, const sal_Char *pVal,
                            const String *pSVal );
@@ -469,8 +469,8 @@ public:
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
-    rtl::OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const String& rAltTxt,
-        sal_uInt32 nFrmOpts, const rtl::OString& rEndTags = rtl::OString() );
+    OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const String& rAltTxt,
+        sal_uInt32 nFrmOpts, const OString& rEndTags = OString() );
     void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_TableCellBorderHack(const SwFrmFmt& rFrmFmt);
     void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwFmtCol *pCol );
@@ -483,7 +483,7 @@ public:
 
     void IncIndentLevel() { nIndentLvl++; }
     void DecIndentLevel() { if ( nIndentLvl ) nIndentLvl--; }
-    rtl::OString GetIndentString(sal_uInt16 nIncLvl = 0);
+    OString GetIndentString(sal_uInt16 nIncLvl = 0);
 
     xub_StrLen GetLineLen() { return (xub_StrLen)(Strm().Tell()-nLastLFPos); }
     void OutNewLine( sal_Bool bCheck=sal_False );
@@ -520,7 +520,7 @@ public:
 
     static const SdrObject *GetHTMLControl( const SwDrawFrmFmt& rFmt );
     static const SdrObject *GetMarqueeTextObj( const SwDrawFrmFmt& rFmt );
-    static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, rtl::OString& rToken,
+    static sal_uInt16 GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                                    String& rClass, sal_uInt16& rRefPoolId,
                                    String *pPseudo=0 );
 
@@ -574,7 +574,7 @@ inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
 }
 
 inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,
-                                                 const rtl::OString& rVal )
+                                                 const OString& rVal )
 {
     OutCSS1_Property( pProp, rVal.getStr(), 0 );
 }

@@ -36,7 +36,7 @@ namespace fileaccess {
           public com::sun::star::beans::XPropertySetInfo
     {
     public:
-        XPropertySetInfo_impl( shell* pMyShell,const rtl::OUString& aUnqPath );
+        XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath );
         XPropertySetInfo_impl( shell* pMyShell,const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
 
         virtual ~XPropertySetInfo_impl();
@@ -69,12 +69,12 @@ namespace fileaccess {
 
         virtual com::sun::star::beans::Property SAL_CALL
         getPropertyByName(
-            const rtl::OUString& aName )
+            const OUString& aName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-        hasPropertyByName( const rtl::OUString& Name )
+        hasPropertyByName( const OUString& Name )
             throw( com::sun::star::uno::RuntimeException );
 
     private:

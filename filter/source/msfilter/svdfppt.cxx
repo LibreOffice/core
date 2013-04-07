@@ -7194,7 +7194,7 @@ void CreateTableRows( Reference< XTableRows > xTableRows, const std::set< sal_In
         else
             nHeight = nTableBottom - nLastPosition;
 
-        static const rtl::OUString  sWidth( "Height" );
+        static const OUString  sWidth( "Height" );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nHeight ) );
     }
@@ -7219,7 +7219,7 @@ void CreateTableColumns( Reference< XTableColumns > xTableColumns, const std::se
         else
             nWidth = nTableRight - nLastPosition;
 
-        static const rtl::OUString  sWidth( "Width" );
+        static const OUString  sWidth( "Width" );
         Reference< XPropertySet > xPropSet( xIndexAccess->getByIndex( n ), UNO_QUERY_THROW );
         xPropSet->setPropertyValue( sWidth, Any( nWidth ) );
     }
@@ -7254,16 +7254,16 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         const sal_Int32 nRightDist(((const SdrTextRightDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST)).GetValue());
         const sal_Int32 nUpperDist(((const SdrTextUpperDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST)).GetValue());
         const sal_Int32 nLowerDist(((const SdrTextLowerDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST)).GetValue());
-        static const rtl::OUString  sTopBorder( "TextUpperDistance" );
-        static const rtl::OUString  sBottomBorder( "TextLowerDistance" );
-        static const rtl::OUString  sLeftBorder( "TextLeftDistance" );
-        static const rtl::OUString  sRightBorder( "TextRightDistance" );
+        static const OUString  sTopBorder( "TextUpperDistance" );
+        static const OUString  sBottomBorder( "TextLowerDistance" );
+        static const OUString  sLeftBorder( "TextLeftDistance" );
+        static const OUString  sRightBorder( "TextRightDistance" );
         xPropSet->setPropertyValue( sTopBorder, Any( nUpperDist ) );
         xPropSet->setPropertyValue( sRightBorder, Any( nRightDist ) );
         xPropSet->setPropertyValue( sLeftBorder, Any( nLeftDist ) );
         xPropSet->setPropertyValue( sBottomBorder, Any( nLowerDist ) );
 
-        static const rtl::OUString  sTextVerticalAdjust( "TextVerticalAdjust" );
+        static const OUString  sTextVerticalAdjust( "TextVerticalAdjust" );
         const SdrTextVertAdjust eTextVertAdjust(((const SdrTextVertAdjustItem&)pObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue());
         drawing::TextVerticalAdjust eVA( drawing::TextVerticalAdjust_TOP );
         if ( eTextVertAdjust == SDRTEXTVERTADJUST_CENTER )
@@ -7275,8 +7275,8 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         //set textHorizontalAdjust and TextWritingMode attr
         const sal_Int32 eHA(((const SdrTextLeftDistItem&)pObj->GetMergedItem(SDRATTR_TEXT_HORZADJUST)).GetValue());
         const SvxFrameDirection eDirection = (const SvxFrameDirection)((( const SvxFrameDirectionItem&)pObj->GetMergedItem(EE_PARA_WRITINGDIR)).GetValue());
-        static const rtl::OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
-        static const rtl::OUString  sWritingMode( "TextWritingMode" );
+        static const OUString  sHorizontalAdjust( "TextHorizontalAdjust" );
+        static const OUString  sWritingMode( "TextWritingMode" );
         xPropSet->setPropertyValue(  sHorizontalAdjust , Any( eHA ) );
         if ( eDirection == FRMDIR_VERT_TOP_RIGHT )
         {//vertical writing
@@ -7289,7 +7289,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         {
             case XFILL_SOLID :
                 {
-                    static const rtl::OUString sFillColor( String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) );
+                    static const OUString sFillColor( String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) );
                     eFS = com::sun::star::drawing::FillStyle_SOLID;
                     Color aFillColor( ((XFillColorItem&)pObj->GetMergedItem( XATTR_FILLCOLOR )).GetColorValue() );
                     sal_Int32 nFillColor( aFillColor.GetColor() );
@@ -7313,7 +7313,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     aGradient.EndIntensity = aXGradient.GetEndIntens();
                     aGradient.StepCount = aXGradient.GetSteps();
 
-                    static const rtl::OUString sFillGradient( String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) );
+                    static const OUString sFillGradient( String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) );
                     xPropSet->setPropertyValue( sFillGradient, Any( aGradient ) );
                 }
                 break;
@@ -7325,7 +7325,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
                     eFS = com::sun::star::drawing::FillStyle_BITMAP;
 
                     const XFillBitmapItem aXFillBitmapItem((const XFillBitmapItem&)pObj->GetMergedItem( XATTR_FILLBITMAP ));
-                    rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+                    OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
                     aURL += OStringToOUString(
                         aXFillBitmapItem.GetGraphicObject().GetUniqueID(),
                         RTL_TEXTENCODING_ASCII_US);
@@ -7338,12 +7338,12 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
             break;
 
         }
-        static const rtl::OUString sFillStyle( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
+        static const OUString sFillStyle( String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) );
         xPropSet->setPropertyValue( sFillStyle, Any( eFS ) );
         if ( eFillStyle != XFILL_NONE )
         {
             sal_Int16 nFillTransparence( ( (const XFillTransparenceItem&)pObj->GetMergedItem( XATTR_FILLTRANSPARENCE ) ).GetValue() );
-            static const rtl::OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
+            static const OUString sFillTransparence( String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ) );
             xPropSet->setPropertyValue( sFillTransparence, Any( nFillTransparence ) );
         }
     }
@@ -7381,12 +7381,12 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
         std::vector< sal_Int32 >::const_iterator aIter( vPositions.begin() );
         while( aIter != vPositions.end() )
         {
-            static const rtl::OUString sTopBorder( String( RTL_CONSTASCII_USTRINGPARAM( "TopBorder" ) ) );
-            static const rtl::OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
-            static const rtl::OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
-            static const rtl::OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
-            static const rtl::OUString  sDiagonalTLBR( "DiagonalTLBR" );
-            static const rtl::OUString  sDiagonalBLTR( "DiagonalBLTR" );
+            static const OUString sTopBorder( String( RTL_CONSTASCII_USTRINGPARAM( "TopBorder" ) ) );
+            static const OUString sBottomBorder( String( RTL_CONSTASCII_USTRINGPARAM( "BottomBorder" ) ) );
+            static const OUString sLeftBorder( String( RTL_CONSTASCII_USTRINGPARAM( "LeftBorder" ) ) );
+            static const OUString sRightBorder( String( RTL_CONSTASCII_USTRINGPARAM( "RightBorder" ) ) );
+            static const OUString  sDiagonalTLBR( "DiagonalTLBR" );
+            static const OUString  sDiagonalBLTR( "DiagonalBLTR" );
 
             sal_Int32 nPosition = *aIter & 0xffffff;
             sal_Int32 nFlags = *aIter &~0xffffff;

@@ -39,7 +39,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 
-using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::UNO_QUERY;
@@ -98,7 +97,7 @@ void xforms_addXFormsModel(
 
 static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     Reference<frame::XModel>& xDocument,
-    const rtl::OUString& rBindingID,
+    const OUString& rBindingID,
     bool bBinding )
 {
     // find binding by iterating over all models, and look for the
@@ -153,14 +152,14 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
 
 Reference<XPropertySet> xforms_findXFormsBinding(
     Reference<frame::XModel>& xDocument,
-    const rtl::OUString& rBindingID )
+    const OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, true );
 }
 
 Reference<XPropertySet> xforms_findXFormsSubmission(
     Reference<frame::XModel>& xDocument,
-    const rtl::OUString& rBindingID )
+    const OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, false );
 }
@@ -265,7 +264,7 @@ sal_uInt16 xforms_getTypeClass(
 }
 
 
-rtl::OUString xforms_getTypeName(
+OUString xforms_getTypeName(
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -279,7 +278,7 @@ rtl::OUString xforms_getTypeName(
         : xforms_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
 }
 
-rtl::OUString xforms_getBasicTypeName(
+OUString xforms_getBasicTypeName(
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )

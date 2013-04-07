@@ -411,7 +411,7 @@ void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
     m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPBOTTOM).append(rRectangle.Bottom());
 }
 
-void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle )
+void RtfSdrExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -426,7 +426,7 @@ void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Re
 
 extern const char* pShapeTypes[];
 
-static void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::rtl::OString& rValue)
+static void lcl_AppendSP( OStringBuffer& rRunText, const char cName[], const OString& rValue)
 {
     rRunText.append('{').append(OOO_STRING_SVTOOLS_RTF_SP)
         .append('{').append(OOO_STRING_SVTOOLS_RTF_SN " ").append(cName).append('}')

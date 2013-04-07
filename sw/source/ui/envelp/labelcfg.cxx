@@ -132,8 +132,8 @@ SwLabelConfig::SwLabelConfig() :
     assert(res == xmlreader::XmlReader::RESULT_DONE);
 
     // add to m_aLabels and m_aManufacturers the custom labels
-    const Sequence<rtl::OUString>& rMan = GetNodeNames( OUString() );
-    const rtl::OUString* pMan = rMan.getConstArray();
+    const Sequence<OUString>& rMan = GetNodeNames( OUString() );
+    const OUString* pMan = rMan.getConstArray();
     for ( sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++ )
     {
         sManufacturer = pMan[nMan];
@@ -169,7 +169,7 @@ SwLabelConfig::~SwLabelConfig()
 // the config item is not writable ?:
 void SwLabelConfig::Commit() {}
 
-void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeasure, const OUString& rManufacturer)
 {
@@ -257,7 +257,7 @@ void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLab
         rLabArr.push_back( lcl_CreateSwLabRec(it->first, it->second.m_aMeasure, rManufacturer) );
 }
 
-sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rtl::OUString& rType)
+sal_Bool    SwLabelConfig::HasLabel(const OUString& rManufacturer, const OUString& rType)
 {
     return ( ( m_aLabels.find(rManufacturer) != m_aLabels.end() ) &&
              ( m_aLabels[rManufacturer].find(rType) != m_aLabels[rManufacturer].end() ) );
@@ -274,8 +274,8 @@ static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
 
 // label is always saved as a custom label
 // predefined labels can NOT be overwritten by custom labels with same manufacturer/name
-void SwLabelConfig::SaveLabel( const rtl::OUString& rManufacturer,
-        const rtl::OUString& rType, const SwLabRec& rRec )
+void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
+        const OUString& rType, const SwLabRec& rRec )
 {
     OUString sFoundNode;
     bool bManufacturerNodeFound;

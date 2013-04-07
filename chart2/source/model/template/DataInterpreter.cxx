@@ -39,7 +39,6 @@ using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 #if OSL_DEBUG_LEVEL > 1
 namespace

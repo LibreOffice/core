@@ -50,7 +50,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 
 #define BUFSIZE             4096
@@ -69,8 +68,8 @@ static const sal_Int16 DIC_VERSION_5 = 5;
 static const sal_Int16 DIC_VERSION_6 = 6;
 static const sal_Int16 DIC_VERSION_7 = 7;
 
-static bool getTag(const rtl::OString &rLine, const sal_Char *pTagName,
-    rtl::OString &rTagValue)
+static bool getTag(const OString &rLine, const sal_Char *pTagName,
+    OString &rTagValue)
 {
     sal_Int32 nPos = rLine.indexOf(pTagName);
     if (nPos == -1)
@@ -101,7 +100,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
         !strcmp(pMagicHeader, pVerOOo7))
     {
         sal_Bool bSuccess;
-        rtl::OString aLine;
+        OString aLine;
 
         nDicVersion = DIC_VERSION_7;
 
@@ -111,7 +110,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
         // 2nd line: language all | en-US | pt-BR ...
         while (sal_True == (bSuccess = rpStream->ReadLine(aLine)))
         {
-            rtl::OString aTagValue;
+            OString aTagValue;
 
             if (aLine[0] == '#') // skip comments
                 continue;
@@ -122,7 +121,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNe
                 if (aTagValue.equalsL(RTL_CONSTASCII_STRINGPARAM("<none>")))
                     nLng = LANGUAGE_NONE;
                 else
-                    nLng = LanguageTag(rtl::OStringToOUString(
+                    nLng = LanguageTag(OStringToOUString(
                         aTagValue, RTL_TEXTENCODING_ASCII_US)).getLanguageType();
             }
 
@@ -322,7 +321,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
             // Paste in dictionary without converting
             if(*aWordBuf)
             {
-                rtl::OUString aText(aWordBuf, rtl_str_getLength(aWordBuf), eEnc);
+                OUString aText(aWordBuf, rtl_str_getLength(aWordBuf), eEnc);
                 uno::Reference< XDictionaryEntry > xEntry =
                         new DicEntry( aText, bNegativ );
                 addEntry_Impl( xEntry , sal_True ); //! don't launch events here
@@ -348,14 +347,14 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     else if (DIC_VERSION_7 == nDicVersion)
     {
         sal_Bool bSuccess;
-        rtl::OString aLine;
+        OString aLine;
 
         // remaining lines - stock strings (a [==] b)
         while (sal_True == (bSuccess = pStream->ReadLine(aLine)))
         {
             if (aLine[0] == '#') // skip comments
                 continue;
-            rtl::OUString aText = rtl::OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
+            OUString aText = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
             uno::Reference< XDictionaryEntry > xEntry =
                     new DicEntry( aText, eDicType == DictionaryType_NEGATIVE );
             addEntry_Impl( xEntry , sal_True ); //! don't launch events here
@@ -372,15 +371,15 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     return pStream->GetError();
 }
 
-static rtl::OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
+static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
     rtl_TextEncoding eEnc )
 {
-   rtl::OStringBuffer aStr(rtl::OUStringToOString(xEntry->getDictionaryWord(), eEnc));
+   OStringBuffer aStr(OUStringToOString(xEntry->getDictionaryWord(), eEnc));
 
    if (xEntry->isNegative())
    {
        aStr.append(RTL_CONSTASCII_STRINGPARAM("=="));
-       aStr.append(rtl::OUStringToOString(xEntry->getReplacementText(), eEnc));
+       aStr.append(OUStringToOString(xEntry->getReplacementText(), eEnc));
    }
    return aStr.makeStringAndClear();
 }
@@ -459,35 +458,35 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     // Always write as the latest version, i.e. DIC_VERSION_7
     //
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
-    pStream->WriteLine(rtl::OString(pVerOOo7));
+    pStream->WriteLine(OString(pVerOOo7));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     /* XXX: the <none> case could be differentiated, is it absence or
      * undetermined or multiple? Earlier versions did not know about 'und' and
      * 'mul' and 'zxx' codes. Sync with ReadDicVersion() */
     if (LinguIsUnspecified(nLanguage))
-        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("lang: <none>")));
+        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("lang: <none>")));
     else
     {
-        rtl::OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
-        aLine.append(rtl::OUStringToOString(LanguageTag(nLanguage).getBcp47(), eEnc));
+        OStringBuffer aLine(RTL_CONSTASCII_STRINGPARAM("lang: "));
+        aLine.append(OUStringToOString(LanguageTag(nLanguage).getBcp47(), eEnc));
         pStream->WriteLine(aLine.makeStringAndClear());
     }
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     if (eDicType == DictionaryType_POSITIVE)
-        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("type: positive")));
+        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("type: positive")));
     else
-        pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("type: negative")));
+        pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("type: negative")));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
-    pStream->WriteLine(rtl::OString(RTL_CONSTASCII_STRINGPARAM("---")));
+    pStream->WriteLine(OString(RTL_CONSTASCII_STRINGPARAM("---")));
     if (0 != (nErr = pStream->GetError()))
         return nErr;
     const uno::Reference< XDictionaryEntry > *pEntry = aEntries.getConstArray();
     for (sal_Int32 i = 0;  i < nCount;  i++)
     {
-        rtl::OString aOutStr = formatForSave(pEntry[i], eEnc);
+        OString aOutStr = formatForSave(pEntry[i], eEnc);
         pStream->WriteLine (aOutStr);
         if (0 != (nErr = pStream->GetError()))
             break;

@@ -31,7 +31,6 @@
 
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 namespace utl
 {
@@ -46,14 +45,14 @@ class SfxMiscCfg : public utl::ConfigItem
     sal_Bool            bNotFound;
     sal_Int32       nYear2000;      // two digit year representation
 
-    const com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
 
 public:
     SfxMiscCfg( );
     ~SfxMiscCfg( );
 
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
     virtual void            Commit();
 
     sal_Bool        IsNotFoundWarning()     const {return bNotFound;}
@@ -153,7 +152,7 @@ void SfxMiscCfg::Load()
     }
 }
 
-void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+void SfxMiscCfg::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {
     Load();
 }

@@ -74,7 +74,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
     SwAsciiOptions aOpt;
     {
-        const rtl::OUString sFindNm = rtl::OUString::createFromAscii(
+        const OUString sFindNm = OUString::createFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
         sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );
@@ -290,7 +290,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.WriteUserData( sData );
     if( sData.Len() )
     {
-        const rtl::OUString sFindNm = rtl::OUString::createFromAscii(
+        const OUString sFindNm = OUString::createFromAscii(
                                     aFontLB.IsVisible() ? sDialogImpExtraData
                                               : sDialogExpExtraData);
         sal_uInt16 nEnd, nStt = GetExtraData().Search( sFindNm );

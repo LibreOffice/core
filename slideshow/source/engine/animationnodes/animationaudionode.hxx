@@ -56,7 +56,7 @@ private:
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAudio >  mxAudioNode;
-    ::rtl::OUString                             maSoundURL;
+    OUString                             maSoundURL;
     mutable SoundPlayerSharedPtr                mpPlayer;
 
     void createPlayer() const;

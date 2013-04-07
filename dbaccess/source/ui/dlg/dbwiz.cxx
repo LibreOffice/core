@@ -231,7 +231,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
+OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -320,7 +320,7 @@ sal_Bool ODbTypeWizDialog::leaveState(WizardState _nState)
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void ODbTypeWizDialog::setTitle(const ::rtl::OUString& _sTitle)
+void ODbTypeWizDialog::setTitle(const OUString& _sTitle)
 {
     SetText(_sTitle);
 }
@@ -342,7 +342,7 @@ sal_Bool ODbTypeWizDialog::saveDatasource()
     if ( pPage )
         pPage->FillItemSet(*m_pOutSet);
 
-    ::rtl::OUString sOldURL;
+    OUString sOldURL;
     if ( m_pImpl->getCurrentDataSource().is() )
         m_pImpl->getCurrentDataSource()->getPropertyValue(PROPERTY_URL) >>= sOldURL;
     DataSourceInfoConverter::convert( getORB(), m_pCollection,sOldURL,m_eType,m_pImpl->getCurrentDataSource());

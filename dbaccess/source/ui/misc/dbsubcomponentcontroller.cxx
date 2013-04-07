@@ -136,7 +136,7 @@ namespace dbaui
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
         // </properties>
-        ::rtl::OUString                 m_sDataSourceName;      // the data source we're working for
+        OUString                 m_sDataSourceName;      // the data source we're working for
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
         Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
@@ -195,7 +195,7 @@ namespace dbaui
         const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
         Reference< XConnection > xConnection;
-        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
+        xConnection = rArguments.getOrDefault( (OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
 
         if ( !xConnection.is() )
             ::dbtools::isEmbeddedInDatabase( getModel(), xConnection );
@@ -390,7 +390,7 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    void DBSubComponentController::appendError( const ::rtl::OUString& _rErrorMessage, const ::dbtools::StandardSQLState _eSQLState,
+    void DBSubComponentController::appendError( const OUString& _rErrorMessage, const ::dbtools::StandardSQLState _eSQLState,
             const sal_Int32 _nErrorCode )
     {
         m_pImpl->m_aCurrentError.append( ::dbtools::SQLExceptionInfo::SQL_EXCEPTION, _rErrorMessage, getStandardSQLStateAscii( _eSQLState ),
@@ -465,9 +465,9 @@ namespace dbaui
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString DBSubComponentController::getDataSourceName() const
+    OUString DBSubComponentController::getDataSourceName() const
     {
-        ::rtl::OUString sName;
+        OUString sName;
         Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps() );
         if ( xDataSourceProps.is() )
             xDataSourceProps->getPropertyValue(PROPERTY_NAME) >>= sName;
@@ -569,14 +569,14 @@ namespace dbaui
     }
     // -----------------------------------------------------------------------------
     // XTitle
-    ::rtl::OUString SAL_CALL DBSubComponentController::getTitle()
+    OUString SAL_CALL DBSubComponentController::getTitle()
         throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         if ( m_bExternalTitle )
             return impl_getTitleHelper_throw()->getTitle ();
 
-        ::rtl::OUStringBuffer sTitle;
+        OUStringBuffer sTitle;
         Reference< XTitle > xTitle(getPrivateModel(),UNO_QUERY);
         if ( xTitle.is() )
         {

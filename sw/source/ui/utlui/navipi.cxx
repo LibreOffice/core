@@ -503,7 +503,7 @@ void SwNavigationPI::MakeMark()
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
 
     // collect and sort navigator reminder names
-    ::std::vector< ::rtl::OUString > vNavMarkNames;
+    ::std::vector< OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
         ppMark != pMarkAccess->getMarksEnd();
         ++ppMark)
@@ -517,7 +517,7 @@ void SwNavigationPI::MakeMark()
     if(vNavMarkNames.size() == MAX_MARKS)
         pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[nAutoMarkIdx]));
 
-    rSh.SetBookmark(KeyCode(), ::rtl::OUString(), ::rtl::OUString(), IDocumentMarkAccess::NAVIGATOR_REMINDER);
+    rSh.SetBookmark(KeyCode(), OUString(), OUString(), IDocumentMarkAccess::NAVIGATOR_REMINDER);
     SwView::SetActMark( nAutoMarkIdx );
 
     if(++nAutoMarkIdx == MAX_MARKS)
@@ -1042,7 +1042,7 @@ void SwNavigationPI::UpdateListBox()
         if ( !pDoc->IsHelpDocument() )
         {
             String sEntry = pDoc->GetTitle();
-            sEntry += rtl::OUString(" (");
+            sEntry += OUString(" (");
             if (pView == pActView)
             {
                 nAct = nCount;
@@ -1068,7 +1068,7 @@ void SwNavigationPI::UpdateListBox()
     {
         String sEntry = aContentTree.GetHiddenWrtShell()->GetView().
                                         GetDocShell()->GetTitle();
-        sEntry += rtl::OUString(" (");
+        sEntry += OUString(" (");
         sEntry += aStatusArr[ST_HIDDEN - ST_STATUS_FIRST];
         sEntry += ')';
         aDocListBox.InsertEntry(sEntry);
@@ -1185,7 +1185,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     DELETEZ( pxObjectShell);
                 }
                 SfxStringItem aFileItem(SID_FILE_NAME, sFileName );
-                SfxStringItem aOptionsItem( SID_OPTIONS, rtl::OUString("HRC") );
+                SfxStringItem aOptionsItem( SID_OPTIONS, OUString("HRC") );
                 SfxLinkItem aLink( SID_DONELINK,
                                     LINK( this, SwNavigationPI, DoneLink ) );
                 GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(

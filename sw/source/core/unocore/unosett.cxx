@@ -1112,7 +1112,7 @@ OSL_FAIL("not implemented");
  ******************************************************************/
 const char aInvalidStyle[] = "__XXX___invalid";
 
-bool SwXNumberingRules::isInvalidStyle(const rtl::OUString &rName)
+bool SwXNumberingRules::isInvalidStyle(const OUString &rName)
 {
     return rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aInvalidStyle));
 }
@@ -1182,8 +1182,8 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule, SwDoc* doc) :
         pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     for(i = 0; i < MAXLEVEL; i++)
     {
-        sNewCharStyleNames[i] = rtl::OUString(aInvalidStyle);
-        sNewBulletFontNames[i] = rtl::OUString(aInvalidStyle);
+        sNewCharStyleNames[i] = OUString(aInvalidStyle);
+        sNewBulletFontNames[i] = OUString(aInvalidStyle);
     }
 }
 
@@ -1602,7 +1602,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
 
 static PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
 {
-    OUString sCmp = rtl::OUString::createFromAscii(cName);
+    OUString sCmp = OUString::createFromAscii(cName);
     for(sal_uInt16 i = 0; i < rPropertyValues.size(); i++)
     {
         PropValData* pTemp = rPropertyValues[i];
@@ -1748,7 +1748,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     SwStyleNameMapper::FillUIName( uTmp, sCharFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     if(sCharFmtName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)))
                     {
-                        sNewCharStyleNames[(sal_uInt16)nIndex] = rtl::OUString(aInvalidStyle);
+                        sNewCharStyleNames[(sal_uInt16)nIndex] = OUString(aInvalidStyle);
                         aFmt.SetCharFmt(0);
                     }
                     else if(pDocShell || pDoc)

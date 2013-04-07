@@ -41,20 +41,20 @@ SwVbaListGallery::ListTemplates( const uno::Any& index ) throw (uno::RuntimeExce
     return uno::makeAny( xCol );
 }
 
-rtl::OUString
+OUString
 SwVbaListGallery::getServiceImplName()
 {
-    return rtl::OUString("SwVbaListGallery");
+    return OUString("SwVbaListGallery");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaListGallery::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.ListGallery" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.ListGallery" );
     }
     return aServiceNames;
 }

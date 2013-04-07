@@ -46,7 +46,7 @@ namespace connectivity
                     com::sun::star::configuration::theDefaultProvider::get(
                         comphelper::getComponentContext( _rxORB ) ) );
 
-                ::rtl::OUString sCompleteNodePath( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+                OUString sCompleteNodePath( "/org.openoffice.Office.DataAccess/DriverSettings/" );
                 sCompleteNodePath += OConnection::getDriverImplementationName();
 
                 //=========================================================
@@ -54,14 +54,14 @@ namespace connectivity
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
                 aArguments[0] <<= PropertyValue(
-                    ::rtl::OUString("nodepath"),
+                    OUString("nodepath"),
                     0,
                     makeAny( sCompleteNodePath ),
                     PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    ::rtl::OUString("depth"),
+                    OUString("depth"),
                     0,
                     makeAny( (sal_Int32)-1 ),
                     PropertyState_DIRECT_VALUE
@@ -70,7 +70,7 @@ namespace connectivity
                 //=========================================================
                 // create the access
                 Reference< XInterface > xAccess = xConfigProvider->createInstanceWithArguments(
-                    ::rtl::OUString("com.sun.star.configuration.ConfigurationAccess" ),
+                    OUString("com.sun.star.configuration.ConfigurationAccess" ),
                     aArguments
                 );
                 OSL_ENSURE( xAccess.is(), "createDriverConfigNode: invalid access returned (should throw an exception instead)!" );
@@ -111,10 +111,10 @@ namespace connectivity
         }
 
         //-----------------------------------------------------------------
-        ::rtl::OUString getDescription(const sal_Char* sNode,const ::rtl::OUString & sDefault)
+        OUString getDescription(const sal_Char* sNode,const OUString & sDefault)
         {
-            ::rtl::OUString sPreferredName;
-            ::rtl::OUString sDescription;
+            OUString sPreferredName;
+            OUString sDescription;
 
             Reference< XMultiServiceFactory > xFactory = getMozabServiceFactory();
             OSL_ENSURE( xFactory.is(), "getPreferredProfileName: invalid service factory!" );
@@ -125,12 +125,12 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString("ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( OUString("ProfileName" ) ) >>= sPreferredName;
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString::createFromAscii(sNode) ) >>= sDescription;
+                        xMozPrefsNode->getPropertyValue( OUString::createFromAscii(sNode) ) >>= sDescription;
                     if (sDescription.getLength() == 0)
                         sDescription = sDefault;
                 }
@@ -144,9 +144,9 @@ namespace connectivity
             return sDescription;
         }
         //-----------------------------------------------------------------
-        ::rtl::OUString getPreferredProfileName( )
+        OUString getPreferredProfileName( )
         {
-            ::rtl::OUString sPreferredName;
+            OUString sPreferredName;
 
             Reference< XMultiServiceFactory > xFactory = getMozabServiceFactory();
             OSL_ENSURE( xFactory.is(), "getPreferredProfileName: invalid service factory!" );
@@ -157,10 +157,10 @@ namespace connectivity
                     Reference< XPropertySet > xDriverNode = createDriverConfigNode( xFactory );
                     Reference< XPropertySet > xMozPrefsNode;
                     if ( xDriverNode.is() )
-                        xDriverNode->getPropertyValue( ::rtl::OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
+                        xDriverNode->getPropertyValue( OUString("MozillaPreferences" ) ) >>= xMozPrefsNode;
                     OSL_ENSURE( xMozPrefsNode.is(), "getPreferredProfileName: could not access the node for the mozilla preferences!" );
                     if ( xMozPrefsNode.is() )
-                        xMozPrefsNode->getPropertyValue( ::rtl::OUString("ProfileName" ) ) >>= sPreferredName;
+                        xMozPrefsNode->getPropertyValue( OUString("ProfileName" ) ) >>= sPreferredName;
                 }
                 catch( const Exception& )
                 {
@@ -178,7 +178,7 @@ namespace connectivity
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 {
     static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  sUserProfile;
+    static OUString  sUserProfile;
     if ( !bReadConfig )
     {
         sUserProfile = ::connectivity::mozab::getPreferredProfileName( );
@@ -191,15 +191,15 @@ extern "C" const sal_Unicode* SAL_CALL getUserProfile( void )
 extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 {
     static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  usPabDescription;
-    static ::rtl::OString   sPabDescription;
+    static OUString  usPabDescription;
+    static OString   sPabDescription;
 
     if ( !bReadConfig )
     {
         usPabDescription = ::connectivity::mozab::getDescription(
                             "PabDescription" ,
-                            ::rtl::OUString("Personal Address Book" ));
-        sPabDescription = ::rtl::OUStringToOString( usPabDescription,
+                            OUString("Personal Address Book" ));
+        sPabDescription = OUStringToOString( usPabDescription,
                                                  RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;
     }
@@ -211,15 +211,15 @@ extern "C" const sal_Char* SAL_CALL getPabDescription( void )
 extern "C" const sal_Char* SAL_CALL getHisDescription( void )
 {
     static sal_Bool         bReadConfig = sal_False;
-    static ::rtl::OUString  usHisDescription;
-    static ::rtl::OString   sHisDescription;
+    static OUString  usHisDescription;
+    static OString   sHisDescription;
 
     if ( !bReadConfig )
     {
         usHisDescription = ::connectivity::mozab::getDescription(
                             "HisDescription" ,
-                            ::rtl::OUString("Collected Addresses" ));
-        sHisDescription = ::rtl::OUStringToOString( usHisDescription,
+                            OUString("Collected Addresses" ));
+        sHisDescription = OUStringToOString( usHisDescription,
                                                  RTL_TEXTENCODING_UTF8);
         bReadConfig = sal_True;
     }

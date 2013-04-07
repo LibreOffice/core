@@ -37,7 +37,7 @@ namespace frm
     //=
     //====================================================================
     //--------------------------------------------------------------------
-    OReferenceValueComponent::OReferenceValueComponent( const Reference< XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _rUnoControlModelTypeName, const ::rtl::OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
+    OReferenceValueComponent::OReferenceValueComponent( const Reference< XMultiServiceFactory>& _rxFactory, const OUString& _rUnoControlModelTypeName, const OUString& _rDefault, sal_Bool _bSupportNoCheckRefValue )
         :OBoundControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False, sal_True, sal_True )
         ,m_eDefaultChecked( STATE_NOCHECK )
         ,m_bSupportSecondRefValue( _bSupportNoCheckRefValue )
@@ -62,7 +62,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void OReferenceValueComponent::setReferenceValue( const ::rtl::OUString& _rRefValue )
+    void OReferenceValueComponent::setReferenceValue( const OUString& _rRefValue )
     {
         m_sReferenceValue = _rRefValue;
         calculateExternalValueType();
@@ -151,11 +151,11 @@ namespace frm
     void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
-            DECL_PROP1( REFVALUE,       ::rtl::OUString,    BOUND );
+            DECL_PROP1( REFVALUE,       OUString,    BOUND );
             DECL_PROP1( DEFAULT_STATE, sal_Int16,          BOUND );
             if ( m_bSupportSecondRefValue )
             {
-                DECL_PROP1( UNCHECKED_REFVALUE, ::rtl::OUString,    BOUND );
+                DECL_PROP1( UNCHECKED_REFVALUE, OUString,    BOUND );
             }
         END_DESCRIBE_PROPERTIES();
     }
@@ -167,7 +167,7 @@ namespace frm
         aTypes.push_back( ::getCppuType( static_cast< sal_Bool* >( NULL ) ) );
 
         if ( !m_sReferenceValue.isEmpty() )
-            aTypes.push_front( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+            aTypes.push_front( ::getCppuType( static_cast< OUString* >( NULL ) ) );
             // push_front, because this is the preferred type
 
         Sequence< Type > aTypesRet( aTypes.size() );
@@ -181,7 +181,7 @@ namespace frm
         sal_Int16 nState = STATE_DONTKNOW;
 
         sal_Bool bExternalState = sal_False;
-        ::rtl::OUString sExternalValue;
+        OUString sExternalValue;
         if ( _rExternalValue >>= bExternalState )
         {
             nState = ::sal::static_int_cast< sal_Int16 >( bExternalState ? STATE_CHECK : STATE_NOCHECK );
@@ -246,7 +246,7 @@ namespace frm
                 }
                 else if ( bStringExchange )
                 {
-                    aExternalValue <<= (m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : ::rtl::OUString());
+                    aExternalValue <<= (m_bSupportSecondRefValue ? m_sNoCheckReferenceValue : OUString());
                 }
                 break;
             }

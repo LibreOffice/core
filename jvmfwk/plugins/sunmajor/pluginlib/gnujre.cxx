@@ -25,7 +25,6 @@
 
 using namespace std;
 using namespace osl;
-using ::rtl::OUString;
 using ::rtl::Reference;
 
 namespace jfw_plugin
@@ -162,7 +161,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     if (m_sJavaHome.isEmpty())
-        m_sJavaHome = rtl::OUString("file:///usr/lib");
+        m_sJavaHome = OUString("file:///usr/lib");
 
     // init m_sRuntimeLibrary
     OSL_ASSERT(!m_sHome.isEmpty());
@@ -227,9 +226,9 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
 
 #ifdef X86_64
     //Make one last final legacy attempt on x86_64 in case the distro placed it in lib64 instead
-    if (!bRt && m_sJavaHome != rtl::OUString("file:///usr/lib"))
+    if (!bRt && m_sJavaHome != OUString("file:///usr/lib"))
     {
-        m_sHome = rtl::OUString("file:///usr/lib64");
+        m_sHome = OUString("file:///usr/lib64");
         for(i_path ip = libpaths.begin(); ip != libpaths.end(); ++ip)
         {
             //Construct an absolute path to the possible runtime
@@ -283,7 +282,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     return true;
 }
 
-int GnuInfo::compareVersions(const rtl::OUString&) const
+int GnuInfo::compareVersions(const OUString&) const
 {
     return 0;
 }

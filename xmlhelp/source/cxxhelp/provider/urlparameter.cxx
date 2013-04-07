@@ -78,7 +78,7 @@ using namespace com::sun::star::container;
 using namespace chelp;
 
 
-URLParameter::URLParameter( const rtl::OUString& aURL,
+URLParameter::URLParameter( const OUString& aURL,
                             Databases* pDatabases )
     throw( com::sun::star::ucb::IllegalIdentifierException )
     : m_pDatabases( pDatabases ),
@@ -104,9 +104,9 @@ bool URLParameter::isErrorDocument()
 }
 
 
-rtl::OString URLParameter::getByName( const char* par )
+OString URLParameter::getByName( const char* par )
 {
-    rtl::OUString val;
+    OUString val;
 
     if( strcmp( par,"Program" ) == 0 )
         val = get_program();
@@ -125,11 +125,11 @@ rtl::OString URLParameter::getByName( const char* par )
     else if( strcmp( par,"HelpPrefix" ) == 0 )
         val = get_prefix();
 
-    return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
+    return OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
 }
 
 
-rtl::OUString URLParameter::get_id()
+OUString URLParameter::get_id()
 {
     if( m_aId.compareToAscii("start") == 0 )
     {   // module is set
@@ -145,7 +145,7 @@ rtl::OUString URLParameter::get_id()
     return m_aId;
 }
 
-rtl::OUString URLParameter::get_tag()
+OUString URLParameter::get_tag()
 {
     if( isFile() )
         return get_the_tag();
@@ -154,7 +154,7 @@ rtl::OUString URLParameter::get_tag()
 }
 
 
-rtl::OUString URLParameter::get_title()
+OUString URLParameter::get_title()
 {
     if( isFile() )
         return get_the_title();
@@ -167,13 +167,13 @@ rtl::OUString URLParameter::get_title()
             m_aTitle = inf->get_title();
     }
     else   // This must be the root
-        m_aTitle = rtl::OUString("root");
+        m_aTitle = OUString("root");
 
     return m_aTitle;
 }
 
 
-rtl::OUString URLParameter::get_language()
+OUString URLParameter::get_language()
 {
     if( m_aLanguage.isEmpty() )
         return m_aDefaultLanguage;
@@ -182,7 +182,7 @@ rtl::OUString URLParameter::get_language()
 }
 
 
-rtl::OUString URLParameter::get_program()
+OUString URLParameter::get_program()
 {
     if( m_aProgram.isEmpty() )
     {
@@ -207,7 +207,7 @@ void URLParameter::init( bool bDefaultLanguageIsInitialized )
 }
 
 
-rtl::OUString URLParameter::get_the_tag()
+OUString URLParameter::get_the_tag()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )
@@ -218,12 +218,12 @@ rtl::OUString URLParameter::get_the_tag()
         return m_aTag;
     }
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 
 
-rtl::OUString URLParameter::get_the_path()
+OUString URLParameter::get_the_path()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )
@@ -238,7 +238,7 @@ rtl::OUString URLParameter::get_the_path()
 
 
 
-rtl::OUString URLParameter::get_the_title()
+OUString URLParameter::get_the_title()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )
@@ -248,11 +248,11 @@ rtl::OUString URLParameter::get_the_title()
         return m_aTitle;
     }
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 
-rtl::OUString URLParameter::get_the_jar()
+OUString URLParameter::get_the_jar()
 {
     if(m_bUseDB) {
         if( ! m_bHelpDataFileRead )
@@ -262,7 +262,7 @@ rtl::OUString URLParameter::get_the_jar()
         return m_aJar;
     }
     else
-        return get_module() + rtl::OUString(".jar");
+        return get_module() + OUString(".jar");
 }
 
 
@@ -271,8 +271,8 @@ void URLParameter::readHelpDataFile()
     if( get_id().compareToAscii("") == 0 )
         return;
 
-    rtl::OUString aModule = get_module();
-    rtl::OUString aLanguage = get_language();
+    OUString aModule = get_module();
+    OUString aLanguage = get_language();
 
     DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
     bool bSuccess = false;
@@ -280,15 +280,15 @@ void URLParameter::readHelpDataFile()
     const sal_Char* pData = NULL;
 
     helpdatafileproxy::HDFData aHDFData;
-    rtl::OUString aExtensionPath;
-    rtl::OUString aExtensionRegistryPath;
+    OUString aExtensionPath;
+    OUString aExtensionRegistryPath;
     while( true )
     {
         helpdatafileproxy::Hdf* pHdf = aDbIt.nextHdf( &aExtensionPath, &aExtensionRegistryPath );
         if( !pHdf )
             break;
 
-        rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
+        OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
         bSuccess = pHdf->getValueForKey( keyStr, aHDFData );
         if( bSuccess )
         {
@@ -306,7 +306,7 @@ void URLParameter::readHelpDataFile()
         m_aJar   = converter.getDatabase();
         if( !aExtensionPath.isEmpty() )
         {
-            rtl::OUStringBuffer aExtendedJarStrBuf;
+            OUStringBuffer aExtendedJarStrBuf;
             aExtendedJarStrBuf.append( '?' );
             aExtendedJarStrBuf.append( aExtensionPath );
             aExtendedJarStrBuf.append( '?' );
@@ -405,10 +405,10 @@ void URLParameter::open( const Command& aCommand,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString( "picture.jar" ),
+            m_pDatabases->jarFile( OUString( "picture.jar" ),
                                    get_language() );
 
-        rtl::OUString path = get_path();
+        OUString path = get_path();
         if( xNA.is() )
         {
             try
@@ -473,10 +473,10 @@ void URLParameter::open( const Command& aCommand,
     {
         Reference< XInputStream > xStream;
         Reference< XHierarchicalNameAccess > xNA =
-            m_pDatabases->jarFile( rtl::OUString( "picture.jar" ),
+            m_pDatabases->jarFile( OUString( "picture.jar" ),
                                    get_language() );
 
-        rtl::OUString path = get_path();
+        OUString path = get_path();
         if( xNA.is() )
         {
             try
@@ -522,12 +522,12 @@ bool URLParameter::scheme()
     if( m_aExpr.startsWith("vnd.sun.star.help:///") )
     {
         sal_Int32 nLen = m_aExpr.getLength();
-        rtl::OUString aLastStr =
+        OUString aLastStr =
             m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
         if( aLastStr.compareToAscii( "DbPAR=" ) == 0 )
         {
-            rtl::OUString aNewExpr = m_aExpr.copy( 0, 20 );
-            rtl::OUString aSharedStr("shared");
+            OUString aNewExpr = m_aExpr.copy( 0, 20 );
+            OUString aSharedStr("shared");
             aNewExpr += aSharedStr;
             aNewExpr += m_aExpr.copy( 20 );
             aNewExpr += aSharedStr;
@@ -593,7 +593,7 @@ bool URLParameter::name( bool modulePresent )
 
 bool URLParameter::query()
 {
-    rtl::OUString query_;
+    OUString query_;
 
     if( m_aExpr.isEmpty() )
         return true;
@@ -605,7 +605,7 @@ bool URLParameter::query()
 
     bool ret = true;
     sal_Int32 delimIdx,equalIdx;
-    rtl::OUString parameter,value;
+    OUString parameter,value;
 
     while( !query_.isEmpty() )
     {
@@ -615,7 +615,7 @@ bool URLParameter::query()
         if( delimIdx == -1 )
         {
             value = query_.copy( equalIdx + 1 ).trim();
-            query_ = rtl::OUString();
+            query_ = OUString();
         }
         else
         {
@@ -640,7 +640,7 @@ bool URLParameter::query()
             if( m_aQuery.isEmpty() )
                 m_aQuery = value;
             else
-                m_aQuery += ( rtl::OUString( " " ) + value );
+                m_aQuery += ( OUString( " " ) + value );
         }
         else if( parameter.compareToAscii( "Scope" ) == 0 )
             m_aScope = value;
@@ -707,14 +707,14 @@ helpMatch(const char * URI) {
 
 static void *
 fileOpen(const char *URI) {
-    osl::File *pRet = new osl::File(rtl::OUString(URI, strlen(URI), RTL_TEXTENCODING_UTF8));
+    osl::File *pRet = new osl::File(OUString(URI, strlen(URI), RTL_TEXTENCODING_UTF8));
     pRet->open(osl_File_OpenFlag_Read);
     return pRet;
 }
 
 static void *
 zipOpen(SAL_UNUSED_PARAMETER const char *) {
-    rtl::OUString language,jar,path;
+    OUString language,jar,path;
 
     if( !ugblData->m_pInitial->get_eid().isEmpty() )
         return (void*)(new Reference< XHierarchicalNameAccess >);
@@ -753,9 +753,9 @@ zipOpen(SAL_UNUSED_PARAMETER const char *) {
 
 static void *
 helpOpen(const char * URI) {
-    rtl::OUString language,jar,path;
+    OUString language,jar,path;
 
-    URLParameter urlpar( rtl::OUString::createFromAscii( URI ),
+    URLParameter urlpar( OUString::createFromAscii( URI ),
                          ugblData->m_pDatabases );
 
     jar = urlpar.get_jar();
@@ -868,43 +868,43 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
     {
         UserData userData( this,urlParam,pDatabases );
 
-        // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
+        // Uses the implementation detail, that OString::getStr returns a zero terminated character-array
 
         const char* parameter[47];
-        rtl::OString parString[46];
+        OString parString[46];
         int last = 0;
 
         parString[last++] = "Program";
-        rtl::OString aPureProgramm( urlParam->getByName( "Program" ) );
-        parString[last++] = rtl::OString('\'') + aPureProgramm + rtl::OString('\'');
+        OString aPureProgramm( urlParam->getByName( "Program" ) );
+        parString[last++] = OString('\'') + aPureProgramm + OString('\'');
         parString[last++] = "Database";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "DatabasePar" ) + rtl::OString('\'');
+        parString[last++] = OString('\'') + urlParam->getByName( "DatabasePar" ) + OString('\'');
         parString[last++] = "Id";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "Id" ) + rtl::OString('\'');
+        parString[last++] = OString('\'') + urlParam->getByName( "Id" ) + OString('\'');
         parString[last++] = "Path";
-        rtl::OString aPath( urlParam->getByName( "Path" ) );
-        parString[last++] = rtl::OString('\'') + aPath + rtl::OString('\'');
+        OString aPath( urlParam->getByName( "Path" ) );
+        parString[last++] = OString('\'') + aPath + OString('\'');
 
-        rtl::OString aPureLanguage = urlParam->getByName( "Language" );
+        OString aPureLanguage = urlParam->getByName( "Language" );
         parString[last++] = "Language";
-        parString[last++] = rtl::OString('\'') + aPureLanguage + rtl::OString('\'');
+        parString[last++] = OString('\'') + aPureLanguage + OString('\'');
         parString[last++] = "System";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "System" ) + rtl::OString('\'');
+        parString[last++] = OString('\'') + urlParam->getByName( "System" ) + OString('\'');
         parString[last++] = "productname";
-        parString[last++] = rtl::OString('\'') + rtl::OString(
+        parString[last++] = OString('\'') + OString(
             pDatabases->getProductName().getStr(),
             pDatabases->getProductName().getLength(),
-            RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
+            RTL_TEXTENCODING_UTF8 ) + OString('\'');
         parString[last++] = "productversion";
-        parString[last++] = rtl::OString('\'') +
-            rtl::OString(  pDatabases->getProductVersion().getStr(),
+        parString[last++] = OString('\'') +
+            OString(  pDatabases->getProductVersion().getStr(),
                           pDatabases->getProductVersion().getLength(),
-                          RTL_TEXTENCODING_UTF8 ) + rtl::OString('\'');
+                          RTL_TEXTENCODING_UTF8 ) + OString('\'');
 
         parString[last++] = "imgrepos";
-        parString[last++] = rtl::OString('\'') + pDatabases->getImagesZipFileURL() + rtl::OString('\'');
+        parString[last++] = OString('\'') + pDatabases->getImagesZipFileURL() + OString('\'');
         parString[last++] = "hp";
-        parString[last++] = rtl::OString('\'') + urlParam->getByName( "HelpPrefix" ) + rtl::OString('\'');
+        parString[last++] = OString('\'') + urlParam->getByName( "HelpPrefix" ) + OString('\'');
 
         if( !parString[last-1].isEmpty() )
         {
@@ -926,19 +926,19 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             parString[last++] = "'css'";
 
             parString[last++] = "vendorname";
-            parString[last++] = rtl::OString("''");
+            parString[last++] = OString("''");
             parString[last++] = "vendorversion";
-            parString[last++] = rtl::OString("''");
+            parString[last++] = OString("''");
             parString[last++] = "vendorshort";
-            parString[last++] = rtl::OString("''");
+            parString[last++] = OString("''");
         }
 
         // Do we need to add extension path?
-        ::rtl::OUString aExtensionPath;
-        rtl::OUString aJar = urlParam->get_jar();
+        OUString aExtensionPath;
+        OUString aJar = urlParam->get_jar();
 
         bool bAddExtensionPath = false;
-        rtl::OUString aExtensionRegistryPath;
+        OUString aExtensionRegistryPath;
         sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
         sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
         if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
@@ -961,29 +961,29 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             Reference< XComponentContext > xContext(
                 comphelper::getProcessComponentContext() );
 
-            rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );
-            rtl::OString aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
+            OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );
+            OString aExpandedExtensionPath = OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
 
             parString[last++] = "ExtensionPath";
-            parString[last++] = rtl::OString('\'') + aExpandedExtensionPath + rtl::OString('\'');
+            parString[last++] = OString('\'') + aExpandedExtensionPath + OString('\'');
 
             // ExtensionId
-            rtl::OString aPureExtensionId;
+            OString aPureExtensionId;
             sal_Int32 iSlash = aPath.indexOf( '/' );
             if( iSlash != -1 )
                 aPureExtensionId = aPath.copy( 0, iSlash );
 
             parString[last++] = "ExtensionId";
-            parString[last++] = rtl::OString('\'') + aPureExtensionId + rtl::OString('\'');
+            parString[last++] = OString('\'') + aPureExtensionId + OString('\'');
         }
 
         for( int i = 0; i < last; ++i )
             parameter[i] = parString[i].getStr();
         parameter[last] = 0;
 
-        rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
+        OUString xslURL = pDatabases->getInstallPathAsURL();
 
-        rtl::OString xslURLascii(
+        OString xslURLascii(
             xslURL.getStr(),
             xslURL.getLength(),
             RTL_TEXTENCODING_UTF8);

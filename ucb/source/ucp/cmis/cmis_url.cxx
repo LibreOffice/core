@@ -36,12 +36,12 @@ using namespace std;
 
 namespace cmis
 {
-    URL::URL( rtl::OUString const & urlStr )
+    URL::URL( OUString const & urlStr )
     {
         INetURLObject aUrl( urlStr );
 
         // Decode the authority to get the binding URL and repository id
-        rtl::OUString sDecodedHost = aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
+        OUString sDecodedHost = aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET );
         INetURLObject aHostUrl( sDecodedHost );
         m_sBindingUrl = aHostUrl.GetURLNoMark( );
         m_sRepositoryId = aHostUrl.GetMark( );
@@ -54,45 +54,45 @@ namespace cmis
         m_sId = aUrl.GetMark( INetURLObject::DECODE_WITH_CHARSET );
 
         if ( !m_sId.isEmpty( ) )
-            m_sPath = rtl::OUString( );
+            m_sPath = OUString( );
     }
 
-    rtl::OUString& URL::getObjectPath( )
+    OUString& URL::getObjectPath( )
     {
         return m_sPath;
     }
 
-    rtl::OUString& URL::getObjectId( )
+    OUString& URL::getObjectId( )
     {
         return m_sId;
     }
 
-    rtl::OUString& URL::getBindingUrl( )
+    OUString& URL::getBindingUrl( )
     {
         return m_sBindingUrl;
     }
 
-    rtl::OUString& URL::getRepositoryId( )
+    OUString& URL::getRepositoryId( )
     {
         return m_sRepositoryId;
     }
 
-    void URL::setObjectPath( rtl::OUString sPath )
+    void URL::setObjectPath( OUString sPath )
     {
         m_sPath = sPath;
-        m_sId = rtl::OUString( );
+        m_sId = OUString( );
     }
 
-    void URL::setObjectId( rtl::OUString sId )
+    void URL::setObjectId( OUString sId )
     {
-        m_sPath = rtl::OUString( );
+        m_sPath = OUString( );
         m_sId = sId;
     }
 
-    rtl::OUString URL::asString( )
+    OUString URL::asString( )
     {
-        rtl::OUString sUrl;
-        rtl::OUString sEncodedBinding = rtl::Uri::encode(
+        OUString sUrl;
+        OUString sEncodedBinding = rtl::Uri::encode(
                 m_sBindingUrl + "#" + m_sRepositoryId,
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
@@ -102,7 +102,7 @@ namespace cmis
         if ( !m_sPath.isEmpty( ) )
         {
             sal_Int32 nPos = -1;
-            rtl::OUString sEncodedPath;
+            OUString sEncodedPath;
             do
             {
                 sal_Int32 nStartPos = nPos + 1;
@@ -110,7 +110,7 @@ namespace cmis
                 sal_Int32 nLen = nPos - nStartPos;
                 if ( nPos == -1 )
                     nLen = m_sPath.getLength( ) - nStartPos;
-                rtl::OUString sSegment = m_sPath.copy( nStartPos, nLen );
+                OUString sSegment = m_sPath.copy( nStartPos, nLen );
 
                 if ( !sSegment.isEmpty( ) )
                 {

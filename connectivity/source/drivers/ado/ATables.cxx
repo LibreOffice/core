@@ -43,7 +43,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const OUString& _rName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
@@ -62,7 +62,7 @@ Reference< XPropertySet > OTables::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OTables::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoTable* pTable = NULL;
     if ( !getImplementation( pTable, descriptor ) || pTable == NULL )
@@ -77,14 +77,14 @@ sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString&, const Reference
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OTables::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OTables::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if ( !m_aCollection.Delete(_sElementName) )
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -----------------------------------------------------------------------------
-void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
+void OTables::appendNew(const OUString& _rsNewTable)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     m_aCollection.Refresh();

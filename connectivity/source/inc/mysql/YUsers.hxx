@@ -35,11 +35,11 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
             connectivity::sdbcx::IRefreshableUsers* m_pParent;
         public:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
-            virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-            virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+            virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
         public:
             OUsers( ::cppu::OWeakObject& _rParent,
                     ::osl::Mutex& _rMutex,

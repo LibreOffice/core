@@ -110,17 +110,17 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     if ( !pFieldmark) {
         return String();
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
-        return rtl::OUString(" FORMTEXT ");
+        return OUString(" FORMTEXT ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
-        return rtl::OUString(" FORMDROPDOWN ");
+        return OUString(" FORMDROPDOWN ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
-        return rtl::OUString(" FORMCHECKBOX ");
+        return OUString(" FORMCHECKBOX ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
-        return rtl::OUString(" TOC ");
+        return OUString(" TOC ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
-        return rtl::OUString(" HYPERLINK ");
+        return OUString(" HYPERLINK ");
     } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
-        return rtl::OUString(" PAGEREF ");
+        return OUString(" PAGEREF ");
     } else {
         return pFieldmark->GetFieldname();
     }
@@ -1845,7 +1845,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
-                        rtl::OUString sFieldId;
+                        OUString sFieldId;
                         it->second >>= sFieldId;
                         eFieldId = (ww::eField)sFieldId.toInt32();
                     }
@@ -1853,7 +1853,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
-                        rtl::OUString sOUCode;
+                        OUString sOUCode;
                         it->second >>= sOUCode;
                         sCode = sOUCode;
                     }
@@ -1878,7 +1878,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
-                        rtl::OUString sOleId;
+                        OUString sOleId;
                         uno::Any aValue = it->second;
                         aValue >>= sOleId;
                         if ( !sOleId.isEmpty() )
@@ -1899,7 +1899,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
-                        rtl::OUString sFieldId;
+                        OUString sFieldId;
                         it->second >>= sFieldId;
                         eFieldId = (ww::eField)sFieldId.toInt32();
                     }

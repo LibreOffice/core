@@ -291,7 +291,7 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "spacing")
         set_spacing(rValue.toInt32());
@@ -490,7 +490,7 @@ Size VclButtonBox::calculateRequisition() const
     return addSpacing(addReqGroups(aReq), nVisibleChildren);
 }
 
-bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclButtonBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "layout-style")
     {
@@ -1026,12 +1026,12 @@ void VclGrid::setAllocation(const Size& rAllocation)
     }
 }
 
-bool toBool(const rtl::OString &rValue)
+bool toBool(const OString &rValue)
 {
     return (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
 }
 
-bool VclGrid::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclGrid::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "row-spacing")
         set_row_spacing(rValue.toInt32());
@@ -1177,7 +1177,7 @@ Window *VclFrame::get_child()
     return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_child());
 }
 
-void VclFrame::set_label(const rtl::OUString &rLabel)
+void VclFrame::set_label(const OUString &rLabel)
 {
     Window *pLabel = get_label_widget();
     assert(pLabel);
@@ -1223,7 +1223,7 @@ void VclAlignment::setAllocation(const Size &rAllocation)
     setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-bool VclAlignment::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclAlignment::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "bottom-padding")
         m_nBottomPadding = rValue.toInt32();
@@ -1348,7 +1348,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
     }
 }
 
-bool VclExpander::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclExpander::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "expanded")
         m_aDisclosureButton.Check(toBool(rValue));
@@ -1452,7 +1452,7 @@ Size VclScrolledWindow::getVisibleChildSize() const
     return aRet;
 }
 
-bool VclScrolledWindow::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
 {
     bool bRet = VclBin::set_property(rKey, rValue);
     m_aVScroll.Show((GetStyle() & WB_VSCROLL) != 0);

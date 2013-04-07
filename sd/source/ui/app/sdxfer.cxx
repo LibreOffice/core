@@ -200,7 +200,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                 if( aTmp >>= eButtonType )
                 {
-                    ::rtl::OUString aLabel, aURL;
+                    OUString aLabel, aURL;
 
                     xPropSet->getPropertyValue( "Label" ) >>= aLabel;
                     xPropSet->getPropertyValue( "TargetURL" ) >>= aURL;
@@ -665,7 +665,7 @@ void SdTransferable::SetObjectDescriptor( const TransferableObjectDescriptor& rO
     PrepareOLE( rObjDesc );
 }
 
-void SdTransferable::SetPageBookmarks( const std::vector<rtl::OUString> &rPageBookmarks, sal_Bool bPersistent )
+void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmarks, sal_Bool bPersistent )
 {
     if( mpSourceDoc )
     {

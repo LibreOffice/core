@@ -98,7 +98,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OUString const aName((char*)m_aAttrPtr->name,
                 strlen((char*)m_aAttrPtr->name), RTL_TEXTENCODING_UTF8);
@@ -148,10 +148,10 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
-            return ::rtl::OUString();
+            return OUString();
         }
         if (0 == m_aAttrPtr->children) {
-            return ::rtl::OUString();
+            return OUString();
         }
         char const*const pContent((m_aAttrPtr->children)
             ? reinterpret_cast<char const*>(m_aAttrPtr->children->content)
@@ -232,11 +232,11 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (!m_aNodePtr) { return ::rtl::OUString(); }
+        if (!m_aNodePtr) { return OUString(); }
 
         if (m_pNamespace.get()) {
             OSL_ASSERT(!m_aNodePtr->parent);
-            OUString const ret(::rtl::OStringToOUString(
+            OUString const ret(OStringToOUString(
                         m_pNamespace->second, RTL_TEXTENCODING_UTF8));
             return ret;
         } else {
@@ -249,11 +249,11 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (!m_aNodePtr) { return ::rtl::OUString(); }
+        if (!m_aNodePtr) { return OUString(); }
 
         if (m_pNamespace.get()) {
             OSL_ASSERT(!m_aNodePtr->parent);
-            OUString const ret(::rtl::OStringToOUString(
+            OUString const ret(OStringToOUString(
                         m_pNamespace->first, RTL_TEXTENCODING_UTF8));
             return ret;
         } else {

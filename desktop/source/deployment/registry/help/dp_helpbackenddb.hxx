@@ -41,34 +41,34 @@ namespace help {
 class HelpBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual ::rtl::OUString getDbNSName();
+    virtual OUString getDbNSName();
 
-    virtual ::rtl::OUString getNSPrefix();
+    virtual OUString getNSPrefix();
 
-    virtual ::rtl::OUString getRootElementName();
+    virtual OUString getRootElementName();
 
-    virtual ::rtl::OUString getKeyElementName();
+    virtual OUString getKeyElementName();
 
 public:
     struct Data
     {
         /* the URL to the folder containing the compiled help files, etc.
          */
-        ::rtl::OUString dataUrl;
+        OUString dataUrl;
 
     };
 
 public:
 
     HelpBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        ::rtl::OUString const & url);
+                        OUString const & url);
 
-    void addEntry(::rtl::OUString const & url, Data const & data);
+    void addEntry(OUString const & url, Data const & data);
 
-    ::boost::optional<Data> getEntry(::rtl::OUString const & url);
+    ::boost::optional<Data> getEntry(OUString const & url);
     //must also return the data urls for entries with @activ="false". That is,
     //those are currently revoked.
-    ::std::list< ::rtl::OUString> getAllDataUrls();
+    ::std::list< OUString> getAllDataUrls();
 
 };
 

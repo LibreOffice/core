@@ -29,7 +29,6 @@
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace dp_manager {
 namespace factory {
@@ -49,7 +48,7 @@ class PackageManagerFactoryImpl : private MutexHolder, public t_pmfac_helper
     Reference<deployment::XPackageManager> m_xBakMgr;
     typedef ::boost::unordered_map<
         OUString, WeakReference<deployment::XPackageManager>,
-        ::rtl::OUStringHash > t_string2weakref;
+        OUStringHash > t_string2weakref;
     t_string2weakref m_managers;
 
 protected:

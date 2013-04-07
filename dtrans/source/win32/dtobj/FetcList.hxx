@@ -113,7 +113,7 @@ public:
 
 private:
     sal_Bool      SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
-    rtl::OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
+    OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
 
     sal_Bool SAL_CALL hasUnicodeFlavor(
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable ) const;

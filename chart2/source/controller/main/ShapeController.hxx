@@ -55,10 +55,10 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // state of a feature
-    virtual FeatureState getState( const ::rtl::OUString& rCommand );
+    virtual FeatureState getState( const OUString& rCommand );
 
     // execute a feature
-    virtual void execute( const ::rtl::OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
+    virtual void execute( const OUString& rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs );
 
     // all the features which should be handled by this class
     virtual void describeSupportedFeatures();

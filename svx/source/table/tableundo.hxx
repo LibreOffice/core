@@ -60,7 +60,7 @@ private:
 
         ::com::sun::star::table::CellContentType mnCellContentType;
 
-        ::rtl::OUString msFormula;
+        OUString msFormula;
         double          mfValue;
         ::sal_Int32     mnError;
         ::sal_Bool      mbMerged;
@@ -174,7 +174,7 @@ private:
         sal_Bool    mbOptimalWidth;
         sal_Bool    mbIsVisible;
         sal_Bool    mbIsStartOfNewPage;
-        ::rtl::OUString maName;
+        OUString maName;
     };
 
     void setData( const Data& rData );
@@ -207,7 +207,7 @@ private:
         sal_Bool    mbOptimalHeight;
         sal_Bool    mbIsVisible;
         sal_Bool    mbIsStartOfNewPage;
-        ::rtl::OUString maName;
+        OUString maName;
     };
 
     void setData( const Data& rData );

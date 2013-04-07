@@ -46,7 +46,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::Any;
@@ -170,16 +169,16 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
                 "com.sun.star.configuration.ConfigurationAccess",
                 Sequence<Any>( &propValue, 1 ) ),
                 UNO_QUERY_THROW );
-        uno::Sequence< rtl::OUString > aFiles;
+        uno::Sequence< OUString > aFiles;
         xNameAccess->getByName("TransitionFiles") >>= aFiles;
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            rtl::OUString aURL = aFiles[i];
+            OUString aURL = aFiles[i];
             if( aURL.startsWith( EXPAND_PROTOCOL ) )
             {
                 // cut protocol
-                rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+                OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
                 // decode uric class chars
                 aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
                 // expand macro string

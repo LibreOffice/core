@@ -29,8 +29,6 @@
 #include "xmloff/xmlnmspe.hxx"
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 /* The basic idea of this class is that we have two two ways to search our
@@ -179,7 +177,7 @@ OUString SvXMLNamespaceMap::GetAttrNameByKey( sal_uInt16 nKey ) const
     if (aIter != aNameMap.end())
     {
         sAttrName.append( sXMLNS  );
-        const ::rtl::OUString & prefix( (*aIter).second->sPrefix );
+        const OUString & prefix( (*aIter).second->sPrefix );
         if (!prefix.isEmpty()) // not default namespace
         {
             sAttrName.append( sal_Unicode(':') );
@@ -444,7 +442,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeURI( ::rtl::OUString& rName )
+sal_Bool SvXMLNamespaceMap::NormalizeURI( OUString& rName )
 {
     // try OASIS + W3 URI normalization
     sal_Bool bSuccess = NormalizeOasisURN( rName );
@@ -453,7 +451,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeURI( ::rtl::OUString& rName )
     return bSuccess;
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeW3URI( ::rtl::OUString& rName )
+sal_Bool SvXMLNamespaceMap::NormalizeW3URI( OUString& rName )
 {
     // check if URI matches:
     // http://www.w3.org/[0-9]*/[:letter:]*
@@ -477,7 +475,7 @@ sal_Bool SvXMLNamespaceMap::NormalizeW3URI( ::rtl::OUString& rName )
     return bSuccess;
 }
 
-sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
+sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
 {
     // #i38644#
     // we exported the wrong namespace for smil, so we correct this here on load

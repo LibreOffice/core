@@ -40,7 +40,7 @@ public:
             , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
             , const ::com::sun::star::awt::Rectangle& rPageRectangle );
 
-    static bool moveObject( const rtl::OUString& rObjectCID
+    static bool moveObject( const OUString& rObjectCID
             , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
             , const ::com::sun::star::awt::Rectangle& rPageRectangle );

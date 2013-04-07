@@ -61,7 +61,7 @@ public:
     virtual bool                AnyInput( sal_uInt16 nType );
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    void                        FillFontPathList( std::list< rtl::OString >& o_rFontPaths );
+    void                        FillFontPathList( std::list< OString >& o_rFontPaths );
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation
@@ -69,7 +69,7 @@ public:
         CreateClipboard( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& i_rArguments );
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
-    virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
 };
 
 #endif // _SV_SALINST_H

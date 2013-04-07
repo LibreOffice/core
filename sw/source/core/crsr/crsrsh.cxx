@@ -3153,12 +3153,12 @@ String SwCrsrShell::GetCrsrDescr() const
 
 // SMARTTAGS
 
-static void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
 {
     // Insert smart tag information
-    std::vector< rtl::OUString > aSmartTagTypes;
+    std::vector< OUString > aSmartTagTypes;
     std::vector< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
 
     for ( sal_uInt16 i = 0; i < rSmartTagList.Count(); ++i )
@@ -3182,7 +3182,7 @@ static void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTyp
         rSmartTagTypes.realloc( aSmartTagTypes.size() );
         rStringKeyMaps.realloc( aSmartTagTypes.size() );
 
-        std::vector< rtl::OUString >::const_iterator aTypesIter = aSmartTagTypes.begin();
+        std::vector< OUString >::const_iterator aTypesIter = aSmartTagTypes.begin();
         sal_uInt16 i = 0;
         for ( aTypesIter = aSmartTagTypes.begin(); aTypesIter != aSmartTagTypes.end(); ++aTypesIter )
             rSmartTagTypes[i++] = *aTypesIter;
@@ -3211,7 +3211,7 @@ static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     rRange = xRange;
 }
 
-void SwCrsrShell::GetSmartTagTerm( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+void SwCrsrShell::GetSmartTagTerm( uno::Sequence< OUString >& rSmartTagTypes,
                                    uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                                    uno::Reference< text::XTextRange>& rRange ) const
 {
@@ -3249,7 +3249,7 @@ void SwCrsrShell::GetSmartTagTerm( uno::Sequence< rtl::OUString >& rSmartTagType
 
 // see also SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
 void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
-                                   uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                                   uno::Sequence< OUString >& rSmartTagTypes,
                                    uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                                    uno::Reference<text::XTextRange>& rRange )
 {

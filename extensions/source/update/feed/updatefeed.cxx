@@ -140,18 +140,18 @@ class UpdateInformationProvider :
 public:
     static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
 
-    static uno::Sequence< rtl::OUString > getServiceNames();
-    static rtl::OUString getImplName();
+    static uno::Sequence< OUString > getServiceNames();
+    static OUString getImplName();
 
     uno::Reference< xml::dom::XElement > getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode);
-    uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, const rtl::OUString& rName);
+    uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, const OUString& rName);
 
 
     // XUpdateInformationService
     virtual uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
     getUpdateInformation(
-        uno::Sequence< rtl::OUString > const & repositories,
-        rtl::OUString const & extensionId
+        uno::Sequence< OUString > const & repositories,
+        OUString const & extensionId
     ) throw (uno::Exception, uno::RuntimeException);
 
     virtual void SAL_CALL cancel()
@@ -163,8 +163,8 @@ public:
 
     virtual uno::Reference< container::XEnumeration > SAL_CALL
     getUpdateInformationEnumeration(
-        uno::Sequence< rtl::OUString > const & repositories,
-        rtl::OUString const & extensionId
+        uno::Sequence< OUString > const & repositories,
+        OUString const & extensionId
     ) throw (uno::Exception, uno::RuntimeException);
 
     // XCommandEnvironment
@@ -176,24 +176,24 @@ public:
 
     // XWebDAVCommandEnvironment
     virtual uno::Sequence< beans::NamedValue > SAL_CALL getUserRequestHeaders(
-        const rtl::OUString&, const rtl::OUString& )
+        const OUString&, const OUString& )
         throw ( uno::RuntimeException ) { return m_aRequestHeaderList; };
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (uno::RuntimeException);
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
 protected:
 
     virtual ~UpdateInformationProvider();
-    static uno::Any getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item);
+    static uno::Any getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item);
 
 private:
-    uno::Reference< io::XInputStream > load(const rtl::OUString& rURL);
+    uno::Reference< io::XInputStream > load(const OUString& rURL);
 
     void storeCommandInfo( sal_Int32 nCommandId,
         uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
@@ -245,7 +245,7 @@ public:
         OSL_ASSERT( m_xUpdateInformationProvider.is() );
 
         if( !(m_nCount < m_nNodes ) )
-            throw container::NoSuchElementException(rtl::OUString::valueOf(m_nCount), *this);
+            throw container::NoSuchElementException(OUString::valueOf(m_nCount), *this);
 
         try
         {
@@ -302,7 +302,7 @@ public:
     uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if( m_nCount > 0 )
-            throw container::NoSuchElementException(rtl::OUString::valueOf(m_nCount), *this);
+            throw container::NoSuchElementException(OUString::valueOf(m_nCount), *this);
 
         ++m_nCount;
         return uno::makeAny(m_aEntry);
@@ -328,21 +328,21 @@ UpdateInformationProvider::UpdateInformationProvider(
     uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
         com::sun::star::configuration::theDefaultProvider::get(xContext));
 
-    rtl::OUStringBuffer buf;
-    rtl::OUString name;
+    OUStringBuffer buf;
+    OUString name;
     getConfigurationItem(
         xConfigurationProvider,
         "org.openoffice.Setup/Product",
         "ooName") >>= name;
     buf.append(name);
     buf.append(sal_Unicode(' '));
-    rtl::OUString version;
+    OUString version;
     getConfigurationItem(
         xConfigurationProvider,
         "org.openoffice.Setup/Product",
         "ooSetupVersion") >>= version;
     buf.append(version);
-    rtl::OUString edition(
+    OUString edition(
             "${${BRAND_BASE_DIR}/program/edition/edition.ini:"
             "EDITIONNAME}");
     rtl::Bootstrap::expandMacros(edition);
@@ -350,7 +350,7 @@ UpdateInformationProvider::UpdateInformationProvider(
         buf.append(sal_Unicode(' '));
         buf.append(edition);
     }
-    rtl::OUString extension;
+    OUString extension;
     getConfigurationItem(
         xConfigurationProvider,
         "org.openoffice.Setup/Product",
@@ -358,9 +358,9 @@ UpdateInformationProvider::UpdateInformationProvider(
     if (!extension.isEmpty()) {
         buf.append(extension);
     }
-    rtl::OUString product(buf.makeStringAndClear());
+    OUString product(buf.makeStringAndClear());
 
-    rtl::OUString aUserAgent( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
+    OUString aUserAgent( "${$BRAND_BASE_DIR/program/" SAL_CONFIGFILE("version") ":UpdateUserAgent}" );
     rtl::Bootstrap::expandMacros( aUserAgent );
 
     for (sal_Int32 i = 0;;) {
@@ -412,7 +412,7 @@ UpdateInformationProvider::~UpdateInformationProvider()
 //------------------------------------------------------------------------------
 
 uno::Any
-UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, rtl::OUString const & node, rtl::OUString const & item)
+UpdateInformationProvider::getConfigurationItem(uno::Reference<lang::XMultiServiceFactory> const & configurationProvider, OUString const & node, OUString const & item)
 {
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
@@ -446,7 +446,7 @@ UpdateInformationProvider::storeCommandInfo(
 //------------------------------------------------------------------------------
 
 uno::Reference< io::XInputStream >
-UpdateInformationProvider::load(const rtl::OUString& rURL)
+UpdateInformationProvider::load(const OUString& rURL)
 {
     uno::Reference< ucb::XContentIdentifier > xId = m_xUniversalContentBroker->createContentIdentifier(rURL);
 
@@ -551,7 +551,7 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
 
 uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
-                                        const rtl::OUString& rName)
+                                        const OUString& rName)
 {
     OSL_ASSERT(m_xXPathAPI.is());
     try {
@@ -566,8 +566,8 @@ UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >&
 
 uno::Reference< container::XEnumeration > SAL_CALL
 UpdateInformationProvider::getUpdateInformationEnumeration(
-    uno::Sequence< rtl::OUString > const & repositories,
-    rtl::OUString const & extensionId
+    uno::Sequence< OUString > const & repositories,
+    OUString const & extensionId
 ) throw (uno::Exception, uno::RuntimeException)
 {
     OSL_ASSERT(m_xDocumentBuilder.is());
@@ -589,7 +589,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
             {
                 if( xElement->getNodeName().equalsAsciiL("feed", 4) )
                 {
-                    rtl::OUString aXPathExpression;
+                    OUString aXPathExpression;
 
                     if( !extensionId.isEmpty() )
                         aXPathExpression = "//atom:entry/atom:category[@term=\'" + extensionId + "\']/..";
@@ -637,8 +637,8 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
 
 uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
 UpdateInformationProvider::getUpdateInformation(
-    uno::Sequence< rtl::OUString > const & repositories,
-    rtl::OUString const & extensionId
+    uno::Sequence< OUString > const & repositories,
+    OUString const & extensionId
 ) throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< container::XEnumeration > xEnumeration(
@@ -735,17 +735,17 @@ UpdateInformationProvider::getInteractionHandler()
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 UpdateInformationProvider::getServiceNames()
 {
-    uno::Sequence< rtl::OUString > aServiceList(1);
+    uno::Sequence< OUString > aServiceList(1);
     aServiceList[0] = "com.sun.star.deployment.UpdateInformationProvider";
     return aServiceList;
 };
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateInformationProvider::getImplName()
 {
     return OUString("vnd.sun.UpdateInformationProvider");
@@ -753,7 +753,7 @@ UpdateInformationProvider::getImplName()
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 UpdateInformationProvider::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplName();
@@ -761,7 +761,7 @@ UpdateInformationProvider::getImplementationName() throw (uno::RuntimeException)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UpdateInformationProvider::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getServiceNames();
@@ -770,9 +770,9 @@ UpdateInformationProvider::getSupportedServiceNames() throw (uno::RuntimeExcepti
 //------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
-UpdateInformationProvider::supportsService( rtl::OUString const & serviceName ) throw (uno::RuntimeException)
+UpdateInformationProvider::supportsService( OUString const & serviceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > aServiceNameList = getServiceNames();
+    uno::Sequence< OUString > aServiceNameList = getServiceNames();
 
     for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
         if( aServiceNameList[n].equals(serviceName) )

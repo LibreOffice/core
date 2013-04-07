@@ -48,8 +48,6 @@
 #include <set>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -101,9 +99,9 @@ struct SvXMLEmbeddedTextEntry
 {
     sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
     sal_Int32       nFormatPos;     // resulting position in embedded-text element
-    rtl::OUString   aText;
+    OUString   aText;
 
-    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const rtl::OUString& rT ) :
+    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const OUString& rT ) :
         nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
 };
 
@@ -257,7 +255,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
                        SvXMLExport& rExp,
                        const ::com::sun::star::uno::Reference<
                         ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
-                       const rtl::OUString& rPrefix ) :
+                       const OUString& rPrefix ) :
     rExport( rExp ),
     sPrefix( rPrefix ),
     pFormatter( NULL ),
@@ -301,7 +299,7 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 //  helper methods
 //
 
-static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const rtl::OUString& rPrefix )
+static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const OUString& rPrefix )
 {
     OUStringBuffer aFmtName( 10L );
     aFmtName.append( rPrefix );
@@ -628,7 +626,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                                           sal_True, sal_False );
 
         //  text as element content
-        rtl::OUString aContent( pObj->aText );
+        OUString aContent( pObj->aText );
         while ( nEntry+1 < nEntryCount && rEmbeddedEntries[nEntry+1].nFormatPos == pObj->nFormatPos )
         {
             // The array can contain several elements for the same position in the number
@@ -1755,7 +1753,7 @@ OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
     else
     {
         OSL_FAIL("There is no written Data-Style");
-        return rtl::OUString();
+        return OUString();
     }
 }
 

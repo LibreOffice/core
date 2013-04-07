@@ -26,7 +26,6 @@ namespace oox {
 namespace xls {
 
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
 
 // ============================================================================
 

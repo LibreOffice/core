@@ -78,11 +78,11 @@ namespace ControlModification
     static const ::sal_Int32 HEIGHT_GREATEST    = (sal_Int32)10;
 }
 
-class AnyConverter : public ::std::binary_function< ::rtl::OUString,::com::sun::star::uno::Any,::com::sun::star::uno::Any >
+class AnyConverter : public ::std::binary_function< OUString,::com::sun::star::uno::Any,::com::sun::star::uno::Any >
 {
 public:
     virtual ~AnyConverter(){}
-    virtual ::com::sun::star::uno::Any operator() (const ::rtl::OUString& /*_sPropertyName*/,const ::com::sun::star::uno::Any& lhs) const
+    virtual ::com::sun::star::uno::Any operator() (const OUString& /*_sPropertyName*/,const ::com::sun::star::uno::Any& lhs) const
     {
         return lhs;
     }
@@ -91,7 +91,7 @@ public:
     @param  _xComponent the report component
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-typedef ::std::pair< ::rtl::OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
+typedef ::std::pair< OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
 DECLARE_STL_USTRINGACCESS_MAP(TPropertyConverter , TPropertyNamePair);
 /** returns the property name map for the givern property id
     @param  _nObjectId  the object id
@@ -100,7 +100,7 @@ REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _n
 REPORTDESIGN_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle> getUsedStyle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport);
 
 // -----------------------------------------------------------------------------
-template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const ::rtl::OUString& _sPropertyName)
+template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName)
 {
     T nReturn = T();
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY_THROW);
@@ -108,7 +108,7 @@ template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference
     return nReturn;
 }
 // -----------------------------------------------------------------------------
-template<typename T> void setStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const ::rtl::OUString& _sPropertyName,const T& _aValue)
+template<typename T> void setStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const OUString& _sPropertyName,const T& _aValue)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY);
     if ( xProp.is() )

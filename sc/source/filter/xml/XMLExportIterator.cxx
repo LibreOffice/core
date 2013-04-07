@@ -33,7 +33,6 @@
 
 #include <algorithm>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 //==============================================================================

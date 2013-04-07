@@ -132,7 +132,7 @@ protected:
     com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     sal_Bool                    mbIsRangeChecked;
-    rtl::OUString               msPageRange;
+    OUString               msPageRange;
     sal_Bool                    mbSelectionIsChecked;
 
     sal_Bool                    mbExportRelativeFsysLinks;
@@ -141,13 +141,13 @@ protected:
     sal_Bool                    mbExportBmkToPDFDestination;
 
     sal_Bool                    mbSignPDF;
-    ::rtl::OUString             msSignPassword;
-    ::rtl::OUString             msSignLocation;
-    ::rtl::OUString             msSignContact;
-    ::rtl::OUString             msSignReason;
+    OUString             msSignPassword;
+    OUString             msSignLocation;
+    OUString             msSignContact;
+    OUString             msSignReason;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
-    ::rtl::OUString             maWatermarkText;
+    OUString             maWatermarkText;
 
 public:
 

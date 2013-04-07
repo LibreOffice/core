@@ -120,7 +120,7 @@ using namespace ::com::sun::star;
 class FFDataWriterHelper
 {
     ::sax_fastparser::FSHelperPtr m_pSerializer;
-    void writeCommonStart( const rtl::OUString& rName )
+    void writeCommonStart( const OUString& rName )
     {
         m_pSerializer->startElementNS( XML_w, XML_ffData, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_name,
@@ -137,7 +137,7 @@ class FFDataWriterHelper
     }
 public:
     FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr pSerializer ) : m_pSerializer( pSerializer ){}
-    void WriteFormCheckbox( const rtl::OUString& rName, const rtl::OUString& rDefault, bool bChecked )
+    void WriteFormCheckbox( const OUString& rName, const OUString& rDefault, bool bChecked )
     {
        writeCommonStart( rName );
        // Checkbox specific bits
@@ -150,14 +150,14 @@ public:
        {
            m_pSerializer->singleElementNS( XML_w, XML_default,
                FSNS( XML_w, XML_val ),
-                   rtl::OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+                   OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
        }
        if ( bChecked )
             m_pSerializer->singleElementNS( XML_w, XML_checked, FSEND );
         m_pSerializer->endElementNS( XML_w, XML_checkBox );
        writeFinish();
     }
-    void WriteFormText(  const rtl::OUString& rName, const rtl::OUString& rDefault )
+    void WriteFormText(  const OUString& rName, const OUString& rDefault )
     {
        writeCommonStart( rName );
        if ( !rDefault.isEmpty() )
@@ -165,7 +165,7 @@ public:
            m_pSerializer->startElementNS( XML_w, XML_textInput, FSEND );
            m_pSerializer->singleElementNS( XML_w, XML_default,
                FSNS( XML_w, XML_val ),
-               rtl::OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+               OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
            m_pSerializer->endElementNS( XML_w, XML_textInput );
        }
        writeFinish();
@@ -177,9 +177,9 @@ class FieldMarkParamsHelper
     const sw::mark::IFieldmark& mrFieldmark;
     public:
     FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
-    rtl::OUString getName() { return mrFieldmark.GetName(); }
+    OUString getName() { return mrFieldmark.GetName(); }
     template < typename T >
-    bool extractParam( const rtl::OUString& rKey, T& rResult )
+    bool extractParam( const OUString& rKey, T& rResult )
     {
         bool bResult = false;
         if ( mrFieldmark.GetParameters() )
@@ -706,8 +706,8 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     const ::sw::mark::IFieldmark& rFieldmark = *rInfos.pFieldmark;
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
-        uno::Sequence< ::rtl::OUString> vListEntries;
-        rtl::OUString sName, sHelp, sToolTip, sSelected;
+        uno::Sequence< OUString> vListEntries;
+        OUString sName, sHelp, sToolTip, sSelected;
 
         FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
@@ -724,7 +724,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        rtl::OUString sName;
+        OUString sName;
         bool bChecked = false;
 
         FieldMarkParamsHelper params( rFieldmark );
@@ -735,13 +735,13 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
             bChecked = true;
 
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormCheckbox( sName, rtl::OUString(), bChecked );
+        ffdataOut.WriteFormCheckbox( sName, OUString(), bChecked );
     }
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
         FieldMarkParamsHelper params( rFieldmark );
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormText( params.getName(), rtl::OUString() );
+        ffdataOut.WriteFormText( params.getName(), OUString() );
     }
 }
 
@@ -767,7 +767,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
                 if ( rInfos.pField )
                 {
                     const SwDropDownField& rFld2 = *(SwDropDownField*)rInfos.pField;
-                    uno::Sequence<rtl::OUString> aItems =
+                    uno::Sequence<OUString> aItems =
                         rFld2.GetItemSequence();
                     GetExport().DoComboBox(rFld2.GetName(),
                                rFld2.GetHelp(),
@@ -836,7 +836,7 @@ void DocxAttributeOutput::CmdField_Impl( FieldInfos& rInfos )
 
         // Replace tabs by </instrText><tab/><instrText>
         if ( i < ( nNbToken - 1 ) )
-            RunText( rtl::OUString( "\t" ) );
+            RunText( OUString( "\t" ) );
     }
 
     m_pSerializer->endElementNS( XML_w, XML_r );
@@ -1285,7 +1285,7 @@ bool DocxAttributeOutput::StartURL( const String& rUrl, const String& rTarget )
         {
             OUString osUrl( sUrl );
 
-            OString sId = rtl::OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
+            OString sId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
                         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
                         osUrl, true ), RTL_TEXTENCODING_UTF8 );
 
@@ -3671,7 +3671,7 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 void DocxAttributeOutput::CharScaleWidth( const SvxCharScaleWidthItem& rScaleWidth )
 {
     m_pSerializer->singleElementNS( XML_w, XML_w,
-            FSNS( XML_w, XML_val ), rtl::OString::valueOf( sal_Int32( rScaleWidth.GetValue() ) ).getStr(), FSEND );
+            FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( rScaleWidth.GetValue() ) ).getStr(), FSEND );
 }
 
 void DocxAttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
@@ -3774,9 +3774,9 @@ void DocxAttributeOutput::WritePostitFields()
         OString idstr = OString::valueOf( sal_Int32( i ));
         const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
-            FSNS( XML_w, XML_author ), rtl::OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSNS( XML_w, XML_date ), msfilter::util::DateTimeToOString(f->GetDateTime()).getStr(),
-            FSNS( XML_w, XML_initials ), rtl::OUStringToOString( f->GetInitials(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+            FSNS( XML_w, XML_initials ), OUStringToOString( f->GetInitials(), RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
         // Check for the text object existing, it seems that it can be NULL when saving a newly created
         // comment without giving focus back to the main document. As GetTxt() is empty in that case as well,
         // that is probably a bug in the Writer core.
@@ -3934,7 +3934,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
     {
         // autonumbered
         m_pSerializer->singleElementNS( XML_w, nToken,
-                FSNS( XML_w, XML_id ), ::rtl::OString::valueOf( nId ).getStr(),
+                FSNS( XML_w, XML_id ), OString::valueOf( nId ).getStr(),
                 FSEND );
     }
     else
@@ -3942,7 +3942,7 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
         // not autonumbered
         m_pSerializer->singleElementNS( XML_w, nToken,
                 FSNS( XML_w, XML_customMarkFollows ), "1",
-                FSNS( XML_w, XML_id ), ::rtl::OString::valueOf( nId ).getStr(),
+                FSNS( XML_w, XML_id ), OString::valueOf( nId ).getStr(),
                 FSEND );
 
         RunText( pFootnote->GetNumStr() );
@@ -4050,7 +4050,7 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
         fs->singleElementNS( XML_w, XML_numFmt, FSNS( XML_w, XML_val ), fmt, FSEND );
     if( info.nFtnOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
-            rtl::OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
+            OString::valueOf( sal_Int32( info.nFtnOffset + 1 )).getStr(), FSEND );
     if( listtag != 0 ) // we are writing to settings.xml, write also special footnote/endnote list
     { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );

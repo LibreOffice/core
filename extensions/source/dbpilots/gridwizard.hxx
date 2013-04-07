@@ -33,7 +33,7 @@ namespace dbp
     //=====================================================================
     struct OGridSettings : public OControlWizardSettings
     {
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >      aSelectedFields;
+        ::com::sun::star::uno::Sequence< OUString >      aSelectedFields;
     };
 
     //=====================================================================

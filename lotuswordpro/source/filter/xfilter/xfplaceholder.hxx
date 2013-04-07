@@ -71,14 +71,14 @@ class XFHolderStart : public XFContent
 public:
     XFHolderStart();
     ~XFHolderStart();
-    void SetType(rtl::OUString sType);
-    void SetDesc(rtl::OUString sDesc);
-    void SetPrompt(rtl::OUString sText);
+    void SetType(OUString sType);
+    void SetDesc(OUString sDesc);
+    void SetPrompt(OUString sText);
     void ToXml(IXFStream *pStrm);
 private:
-    rtl::OUString m_strType;
-    rtl::OUString m_strDesc;
-    rtl::OUString m_strText;
+    OUString m_strType;
+    OUString m_strDesc;
+    OUString m_strText;
 };
 
 XFHolderStart::XFHolderStart()
@@ -89,17 +89,17 @@ XFHolderStart::~XFHolderStart()
 {
 }
 
-inline void XFHolderStart::SetType(rtl::OUString sType)
+inline void XFHolderStart::SetType(OUString sType)
 {
     m_strType = sType;
 }
 
-inline void XFHolderStart::SetDesc(rtl::OUString sDesc)
+inline void XFHolderStart::SetDesc(OUString sDesc)
 {
     m_strDesc = sDesc;
 }
 
-inline void XFHolderStart::SetPrompt(rtl::OUString sText)
+inline void XFHolderStart::SetPrompt(OUString sText)
 {
     m_strText = sText;
 }

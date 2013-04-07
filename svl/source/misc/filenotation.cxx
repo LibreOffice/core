@@ -31,13 +31,13 @@ namespace svt
     //= OFileNotation
     //=====================================================================
     //---------------------------------------------------------------------
-    OFileNotation::OFileNotation( const ::rtl::OUString& _rUrlOrPath )
+    OFileNotation::OFileNotation( const OUString& _rUrlOrPath )
     {
         construct( _rUrlOrPath );
     }
 
     //---------------------------------------------------------------------
-    OFileNotation::OFileNotation( const ::rtl::OUString& _rUrlOrPath, NOTATION _eInputNotation )
+    OFileNotation::OFileNotation( const OUString& _rUrlOrPath, NOTATION _eInputNotation )
     {
         if ( _eInputNotation == N_URL )
         {
@@ -52,7 +52,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    bool OFileNotation::implInitWithSystemNotation( const ::rtl::OUString& _rSystemPath )
+    bool OFileNotation::implInitWithSystemNotation( const OUString& _rSystemPath )
     {
         bool bSuccess = false;
 
@@ -79,7 +79,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    bool OFileNotation::implInitWithURLNotation( const ::rtl::OUString& _rURL )
+    bool OFileNotation::implInitWithURLNotation( const OUString& _rURL )
     {
         m_sFileURL = _rURL;
         osl_getSystemPathFromFileURL( _rURL.pData, &m_sSystem.pData );
@@ -87,7 +87,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    void OFileNotation::construct( const ::rtl::OUString& _rUrlOrPath )
+    void OFileNotation::construct( const OUString& _rUrlOrPath )
     {
         bool bSuccess = false;
         // URL notation?
@@ -117,7 +117,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFileNotation::get(NOTATION _eOutputNotation)
+    OUString OFileNotation::get(NOTATION _eOutputNotation)
     {
         switch (_eOutputNotation)
         {
@@ -126,7 +126,7 @@ namespace svt
         }
 
         OSL_FAIL("OFileNotation::get: inavlid enum value!");
-        return ::rtl::OUString();
+        return OUString();
     }
 
 //.........................................................................

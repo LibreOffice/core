@@ -363,7 +363,7 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "SdrExchangeView::Paste(): Error when cloning "));
 
             if(nCloneErrCnt == 1)
@@ -754,7 +754,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "SdrExchangeView::GetMarkedObjModel(): Error when cloning "));
 
             if(nCloneErrCnt == 1)

@@ -48,7 +48,7 @@ public:
     static rtl::Reference< TypeDescriptionEnumerationImpl > createInstance(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess > & xTDMgr,
-        const rtl::OUString & rModuleName,
+        const OUString & rModuleName,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::TypeClass > & rTypes,
         ::com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,

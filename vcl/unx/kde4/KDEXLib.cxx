@@ -122,8 +122,8 @@ void KDEXLib::Init()
     sal_uInt16 nIdx;
 
     int nParams = osl_getCommandArgCount();
-    rtl::OString aDisplay;
-    rtl::OUString aParam, aBin;
+    OString aDisplay;
+    OUString aParam, aBin;
 
     for ( nIdx = 0; nIdx < nParams; ++nIdx )
     {
@@ -131,7 +131,7 @@ void KDEXLib::Init()
         if ( !m_pFreeCmdLineArgs && aParam == "-display" && nIdx + 1 < nParams )
         {
             osl_getCommandArg( nIdx + 1, &aParam.pData );
-            aDisplay = rtl::OUStringToOString( aParam, osl_getThreadTextEncoding() );
+            aDisplay = OUStringToOString( aParam, osl_getThreadTextEncoding() );
 
             m_pFreeCmdLineArgs = new char*[ m_nFakeCmdLineArgs + 2 ];
             m_pFreeCmdLineArgs[ m_nFakeCmdLineArgs + 0 ] = strdup( "-display" );
@@ -144,7 +144,7 @@ void KDEXLib::Init()
 
     osl_getExecutableFile( &aParam.pData );
     osl_getSystemPathFromFileURL( aParam.pData, &aBin.pData );
-    rtl::OString aExec = rtl::OUStringToOString( aBin, osl_getThreadTextEncoding() );
+    OString aExec = OUStringToOString( aBin, osl_getThreadTextEncoding() );
     m_pFreeCmdLineArgs[0] = strdup( aExec.getStr() );
     m_pFreeCmdLineArgs[1] = strdup( "--nocrashhandler" );
 

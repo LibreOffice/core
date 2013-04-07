@@ -57,13 +57,13 @@ namespace dbaccess
         // OFilteredContainer
         virtual void addMasterContainerListener();
         virtual void removeMasterContainerListener();
-        virtual ::rtl::OUString getTableTypeRestriction() const;
+        virtual OUString getTableTypeRestriction() const;
 
         // ::connectivity::sdbcx::OCollection
-        virtual connectivity::sdbcx::ObjectType     createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType     createObject(const OUString& _rName);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
-        virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+        virtual connectivity::sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+        virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
 
         virtual void SAL_CALL disposing();
 

@@ -60,9 +60,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString DummyPanel::GetDisplayName() const
+    OUString DummyPanel::GetDisplayName() const
     {
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------
@@ -72,9 +72,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    rtl::OString DummyPanel::GetHelpID() const
+    OString DummyPanel::GetHelpID() const
     {
-        return rtl::OString();
+        return OString();
     }
 
     //--------------------------------------------------------------------

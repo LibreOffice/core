@@ -71,13 +71,13 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet >& _rxControl)
+    OUString OFormLayerXMLExport::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         return m_pImpl->getControlId(_rxControl);
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
+    OUString OFormLayerXMLExport::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
     {
         return m_pImpl->getControlNumberStyle(_rxControl);
     }

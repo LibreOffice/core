@@ -1734,7 +1734,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     size_t nSize = rBase.aTOXSources.size();
                     if (nSize > 0)
                     {
-                        String aInsStr = rtl::OUString(cNumRepl);
+                        String aInsStr = OUString(cNumRepl);
                         for (size_t i = 1; i < nSize; ++i)
                         {
                             aInsStr.AppendAscii( sPageDeli );
@@ -2005,10 +2005,10 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     // collect starts end ends of main entry character style
     std::vector<sal_uInt16>* pCharStyleIdx = pMainEntryNums ? new std::vector<sal_uInt16> : 0;
 
-    rtl::OUString sSrchStr = rtl::OUStringBuffer().append(cNumRepl).
+    OUString sSrchStr = OUStringBuffer().append(cNumRepl).
         append(sPageDeli).append(cNumRepl).makeStringAndClear();
     sal_Int32 nStartPos = pNd->GetTxt().indexOf(sSrchStr);
-    sSrchStr = rtl::OUStringBuffer().append(cNumRepl).
+    sSrchStr = OUStringBuffer().append(cNumRepl).
         append(cEndPageNum).makeStringAndClear();
     sal_Int32 nEndPos = pNd->GetTxt().indexOf(sSrchStr);
     sal_uInt16 i;

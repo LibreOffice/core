@@ -25,28 +25,28 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    void lcl_convert(const uno::Sequence< ::rtl::OUString >& _aSource,uno::Any& _rDest)
+    void lcl_convert(const uno::Sequence< OUString >& _aSource,uno::Any& _rDest)
     {
         uno::Sequence<uno::Any> aRet(_aSource.getLength());
         uno::Any* pAny = aRet.getArray();
-        const ::rtl::OUString* pIter = _aSource.getConstArray();
-        const ::rtl::OUString* pEnd  = pIter + _aSource.getLength();
+        const OUString* pIter = _aSource.getConstArray();
+        const OUString* pEnd  = pIter + _aSource.getLength();
         for (;pIter != pEnd ; ++pIter,++pAny)
         {
             *pAny <<= *pIter;
         }
         _rDest <<= aRet;
     }
-    void lcl_fillValues(const ::utl::OConfigurationNode& _aURLPatternNode,const ::rtl::OUString& _sNode,::comphelper::NamedValueCollection& _rValues)
+    void lcl_fillValues(const ::utl::OConfigurationNode& _aURLPatternNode,const OUString& _sNode,::comphelper::NamedValueCollection& _rValues)
     {
         const ::utl::OConfigurationNode aPropertiesNode = _aURLPatternNode.openNode(_sNode);
         if ( aPropertiesNode.isValid() )
         {
-            uno::Sequence< ::rtl::OUString > aStringSeq;
-            static const ::rtl::OUString s_sValue("/Value");
-            const uno::Sequence< ::rtl::OUString > aProperties = aPropertiesNode.getNodeNames();
-            const ::rtl::OUString* pPropertiesIter = aProperties.getConstArray();
-            const ::rtl::OUString* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
+            uno::Sequence< OUString > aStringSeq;
+            static const OUString s_sValue("/Value");
+            const uno::Sequence< OUString > aProperties = aPropertiesNode.getNodeNames();
+            const OUString* pPropertiesIter = aProperties.getConstArray();
+            const OUString* pPropertiesEnd  = pPropertiesIter + aProperties.getLength();
             for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter)
             {
                 uno::Any aValue = aPropertiesNode.getNodeValue(*pPropertiesIter + s_sValue);
@@ -58,22 +58,22 @@ namespace
             } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter,++pNamedIter)
         } // if ( aPropertiesNode.isValid() )
     }
-    void lcl_readURLPatternNode(const ::utl::OConfigurationTreeRoot& _aInstalled,const ::rtl::OUString& _sEntry,TInstalledDriver& _rInstalledDriver)
+    void lcl_readURLPatternNode(const ::utl::OConfigurationTreeRoot& _aInstalled,const OUString& _sEntry,TInstalledDriver& _rInstalledDriver)
     {
         const ::utl::OConfigurationNode aURLPatternNode = _aInstalled.openNode(_sEntry);
         if ( aURLPatternNode.isValid() )
         {
-            ::rtl::OUString sParentURLPattern;
+            OUString sParentURLPattern;
             aURLPatternNode.getNodeValue("ParentURLPattern") >>= sParentURLPattern;
             if ( !sParentURLPattern.isEmpty() )
                 lcl_readURLPatternNode(_aInstalled,sParentURLPattern,_rInstalledDriver);
 
-            ::rtl::OUString sDriverFactory;
+            OUString sDriverFactory;
             aURLPatternNode.getNodeValue("Driver") >>= sDriverFactory;
             if ( !sDriverFactory.isEmpty() )
                 _rInstalledDriver.sDriverFactory = sDriverFactory;
 
-            ::rtl::OUString sDriverTypeDisplayName;
+            OUString sDriverTypeDisplayName;
             aURLPatternNode.getNodeValue("DriverTypeDisplayName") >>= sDriverTypeDisplayName;
             OSL_ENSURE(!sDriverTypeDisplayName.isEmpty(),"No valid DriverTypeDisplayName property!");
             if ( !sDriverTypeDisplayName.isEmpty() )
@@ -96,15 +96,15 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
     {
         if ( !m_aInstalled.isValid() )
         {
-            static const ::rtl::OUString s_sNodeName("org.openoffice.Office.DataAccess.Drivers/Installed"); ///Installed
+            static const OUString s_sNodeName("org.openoffice.Office.DataAccess.Drivers/Installed"); ///Installed
             m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 
         if ( m_aInstalled.isValid() )
         {
-            const uno::Sequence< ::rtl::OUString > aURLPatterns = m_aInstalled.getNodeNames();
-            const ::rtl::OUString* pPatternIter = aURLPatterns.getConstArray();
-            const ::rtl::OUString* pPatternEnd  = pPatternIter + aURLPatterns.getLength();
+            const uno::Sequence< OUString > aURLPatterns = m_aInstalled.getNodeNames();
+            const OUString* pPatternIter = aURLPatterns.getConstArray();
+            const OUString* pPatternEnd  = pPatternIter + aURLPatterns.getLength();
             for (;pPatternIter != pPatternEnd ; ++pPatternIter)
             {
                 TInstalledDriver aInstalledDriver;
@@ -143,11 +143,11 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString DriversConfig::getDriverFactoryName(const ::rtl::OUString& _sURL) const
+OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
-    ::rtl::OUString sRet;
-    ::rtl::OUString sOldPattern;
+    OUString sRet;
+    OUString sOldPattern;
     TInstalledDrivers::const_iterator aIter = rDrivers.begin();
     TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
@@ -163,11 +163,11 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
     return sRet;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString DriversConfig::getDriverTypeDisplayName(const ::rtl::OUString& _sURL) const
+OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
-    ::rtl::OUString sRet;
-    ::rtl::OUString sOldPattern;
+    OUString sRet;
+    OUString sOldPattern;
     TInstalledDrivers::const_iterator aIter = rDrivers.begin();
     TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
@@ -183,26 +183,26 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
     return sRet;
 }
 // -----------------------------------------------------------------------------
-const ::comphelper::NamedValueCollection& DriversConfig::getProperties(const ::rtl::OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getProperties(const OUString& _sURL) const
 {
     return impl_get(_sURL,1);
 }
 // -----------------------------------------------------------------------------
-const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(const ::rtl::OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(const OUString& _sURL) const
 {
     return impl_get(_sURL,0);
 }
 // -----------------------------------------------------------------------------
-const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const ::rtl::OUString& _sURL) const
+const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const OUString& _sURL) const
 {
     return impl_get(_sURL,2);
 }
 // -----------------------------------------------------------------------------
-const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const
+const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString& _sURL,sal_Int32 _nProps) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
     const ::comphelper::NamedValueCollection* pRet = NULL;
-    ::rtl::OUString sOldPattern;
+    OUString sOldPattern;
     TInstalledDrivers::const_iterator aIter = rDrivers.begin();
     TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter)
@@ -233,11 +233,11 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const ::rtl::O
     return *pRet;
 }
 // -----------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > DriversConfig::getURLs() const
+uno::Sequence< OUString > DriversConfig::getURLs() const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
-    uno::Sequence< ::rtl::OUString > aRet(rDrivers.size());
-    ::rtl::OUString* pIter = aRet.getArray();
+    uno::Sequence< OUString > aRet(rDrivers.size());
+    OUString* pIter = aRet.getArray();
     TInstalledDrivers::const_iterator aIter = rDrivers.begin();
     TInstalledDrivers::const_iterator aEnd = rDrivers.end();
     for(;aIter != aEnd;++aIter,++pIter)

@@ -99,7 +99,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const ::rtl::OUString& rLocalName,
+                  const OUString& rLocalName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -128,7 +128,7 @@ public:
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo (override parent method)
-    ::rtl::OUString SAL_CALL getImplementationName()
+    OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     void                    InsertStyles( sal_Bool bAuto );
@@ -138,22 +138,22 @@ public:
 
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
-    SvXMLImportContext *CreateMetaContext( const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateScriptContext( const ::rtl::OUString& rLocalName );
+    SvXMLImportContext *CreateMetaContext( const OUString& rLocalName );
+    SvXMLImportContext *CreateScriptContext( const OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 sal_Bool bAuto );
     SvXMLImportContext *CreateMasterStylesContext(
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateFontDeclsContext(
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    SvXMLImportContext *CreateBodyContentContext( const ::rtl::OUString& rLocalName );
+    SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     bool IsInsertMode() const { return bInsert; }
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
@@ -164,7 +164,7 @@ public:
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
     inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 sal_uInt16 nSubFamily, SfxItemSet& rItemSet );
@@ -174,15 +174,15 @@ public:
     const SvXMLTokenMap& GetTableCellAttrTokenMap();
 
     bool FindAutomaticStyle( sal_uInt16 nFamily,
-                             const ::rtl::OUString& rName,
+                             const OUString& rName,
                              const SfxItemSet **ppItemSet=0,
-                             ::rtl::OUString *pParent=0 ) const;
+                             OUString *pParent=0 ) const;
 
     virtual void SetStatistics(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue> & i_rStats);
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
-    virtual void SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName,
+    virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings);
 
     SvStorage *GetPackage() { return &xPackage; }

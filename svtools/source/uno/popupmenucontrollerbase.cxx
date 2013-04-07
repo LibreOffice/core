@@ -39,7 +39,6 @@
 //_________________________________________________________________________________________________________________
 //
 
-using ::rtl::OUString;
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -110,10 +109,10 @@ void SAL_CALL PopupMenuControllerBase::disposing()
 
 // XServiceInfo
 
-sal_Bool SAL_CALL PopupMenuControllerBase::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL PopupMenuControllerBase::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
-    const Sequence< rtl::OUString > aSNL( getSupportedServiceNames() );
-    const rtl::OUString * pArray = aSNL.getConstArray();
+    const Sequence< OUString > aSNL( getSupportedServiceNames() );
+    const OUString * pArray = aSNL.getConstArray();
 
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -158,7 +157,7 @@ void SAL_CALL PopupMenuControllerBase::select( const awt::MenuEvent& rEvent ) th
     }
 }
 
-void PopupMenuControllerBase::dispatchCommand( const ::rtl::OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
+void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -206,7 +205,7 @@ void SAL_CALL PopupMenuControllerBase::updatePopupMenu() throw ( ::com::sun::sta
     updateCommand( m_aCommandURL );
 }
 
-void SAL_CALL PopupMenuControllerBase::updateCommand( const rtl::OUString& rCommandURL )
+void SAL_CALL PopupMenuControllerBase::updateCommand( const OUString& rCommandURL )
 {
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -229,7 +228,7 @@ void SAL_CALL PopupMenuControllerBase::updateCommand( const rtl::OUString& rComm
 Reference< XDispatch > SAL_CALL
 PopupMenuControllerBase::queryDispatch(
     const URL& /*aURL*/,
-    const rtl::OUString& /*sTarget*/,
+    const OUString& /*sTarget*/,
     sal_Int32 /*nFlags*/ )
 throw( RuntimeException )
 {
@@ -312,12 +311,12 @@ throw( ::com::sun::star::uno::RuntimeException )
     rBHelper.removeListener( ::getCppuType( &xControl ), xControl );
 }
 
-::rtl::OUString PopupMenuControllerBase::determineBaseURL( const ::rtl::OUString& aURL )
+OUString PopupMenuControllerBase::determineBaseURL( const OUString& aURL )
 {
     // Just use the main part of the URL for popup menu controllers
     sal_Int32     nQueryPart( 0 );
     sal_Int32     nSchemePart( 0 );
-    rtl::OUString aMainURL( "vnd.sun.star.popup:" );
+    OUString aMainURL( "vnd.sun.star.popup:" );
 
     nSchemePart = aURL.indexOf( ':' );
     if (( nSchemePart > 0 ) &&
@@ -342,7 +341,7 @@ void SAL_CALL PopupMenuControllerBase::initialize( const Sequence< Any >& aArgum
     if ( !bInitalized )
     {
         PropertyValue       aPropValue;
-        rtl::OUString       aCommandURL;
+        OUString       aCommandURL;
         Reference< XFrame > xFrame;
 
         for ( int i = 0; i < aArguments.getLength(); i++ )
@@ -386,7 +385,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
         URL aTargetURL;
         aTargetURL.Complete = m_aCommandURL;
         m_xURLTransformer->parseStrict( aTargetURL );
-        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
         impl_setPopupMenu();
 

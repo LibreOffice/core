@@ -99,7 +99,7 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
             // The media in the application must be opened to lookup the
             // relative file links!! This is done through the link manager
             // of the Storage.
-            rData <<= rtl::OUString( sFileNm );
+            rData <<= OUString( sFileNm );
         }
         break;
 
@@ -197,7 +197,7 @@ sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
         break;
     case FILETYPE_OBJECT:
         // TODO/LATER: possibility to insert a new object
-        rData <<= rtl::OUString( sFileNm );
+        rData <<= OUString( sFileNm );
         break;
     }
     return sal_True/*0 != aTypeList.Count()*/;
@@ -381,15 +381,15 @@ String impl_getFilter( const String& _rURL )
     {
         css::uno::Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString("com.sun.star.document.TypeDetection") ),
+                OUString("com.sun.star.document.TypeDetection") ),
                 css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
             ::comphelper::MediaDescriptor aDescr;
-            aDescr[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( _rURL );
+            aDescr[ ::comphelper::MediaDescriptor::PROP_URL() ] <<= OUString( _rURL );
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
-            ::rtl::OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
+            OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, sal_True );
             if ( !sType.isEmpty() )
             {
                 css::uno::Reference< css::container::XNameAccess > xTypeCont( xTypeDetection,
@@ -398,7 +398,7 @@ String impl_getFilter( const String& _rURL )
                 {
                     ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
                     sFilter = lTypeProps.getUnpackedValueOrDefault(
-                        ::rtl::OUString("PreferredFilter"), ::rtl::OUString() );
+                        OUString("PreferredFilter"), OUString() );
                 }
             }
         }
@@ -606,7 +606,7 @@ void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
     if( !bStateChangeCalled && HasDataLinks() )
     {
         css::uno::Any aAny;
-        aAny <<= rtl::OUString::valueOf( (sal_Int32)nState );
+        aAny <<= OUString::valueOf( (sal_Int32)nState );
         DataChanged( SotExchange::GetFormatName(
                         sfx2::LinkManager::RegisterStatusInfoId()), aAny );
         bStateChangeCalled = sal_True;

@@ -61,7 +61,6 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <switerator.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  SwShapeImplementationIdMap );
@@ -450,20 +449,20 @@ uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration(void) t
         new SwXShapesEnumeration(this));
 }
 
-rtl::OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXDrawPage");
 }
 
-sal_Bool SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return rServiceName == "com.sun.star.drawing.GenericDrawPage";
 }
 
-uno::Sequence< rtl::OUString > SwXDrawPage::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
+    uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
     pArray[0] = "com.sun.star.drawing.GenericDrawPage";
     return aRet;
 }
@@ -1041,7 +1040,7 @@ uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeEx
 
         if( xAggShape.is() )
         {
-            const rtl::OUString aShapeType( xAggShape->getShapeType() );
+            const OUString aShapeType( xAggShape->getShapeType() );
             // did we already compute an implementation id for the agregated shape type?
             SwShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
             if( aIter == aImplementationIdMap.end() )
@@ -1095,7 +1094,7 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo(void) th
     return aRet;
 }
 
-void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::Any& aValue)
+void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
      throw( beans::UnknownPropertyException, beans::PropertyVetoException,
             lang::IllegalArgumentException, lang::WrappedTargetException,
             uno::RuntimeException)
@@ -1108,7 +1107,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw beans::PropertyVetoException ( rtl::OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::PropertyVetoException ( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
             if(pFmt)
             {
@@ -1465,7 +1464,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
     }
 }
 
-uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
+uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1541,7 +1540,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::Transformation>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString("Transformation") );
+                    aRet = _getPropAtAggrObj( OUString("Transformation") );
                 }
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
@@ -1552,13 +1551,13 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                 {
                     // get property <::drawing::Shape::StartPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString("StartPosition") );
+                    aRet = _getPropAtAggrObj( OUString("StartPosition") );
                 }
                 else if ( FN_SHAPE_ENDPOSITION_IN_HORI_L2R == pEntry->nWID )
                 {
                     // get property <::drawing::Shape::EndPosition>
                     // without conversion to layout direction as below
-                    aRet = _getPropAtAggrObj( rtl::OUString("EndPosition") );
+                    aRet = _getPropAtAggrObj( OUString("EndPosition") );
                 }
                 else
                 {
@@ -1618,7 +1617,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::Transformation>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString("Transformation") );
+                        aRet = _getPropAtAggrObj( OUString("Transformation") );
                     }
                     break;
                     case FN_SHAPE_POSITION_LAYOUT_DIR:
@@ -1631,14 +1630,14 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString("StartPosition") );
+                        aRet = _getPropAtAggrObj( OUString("StartPosition") );
                     }
                     break;
                     case FN_SHAPE_ENDPOSITION_IN_HORI_L2R:
                     {
                         // get property <::drawing::Shape::StartPosition>
                         // without conversion to layout direction as below
-                        aRet = _getPropAtAggrObj( rtl::OUString("EndPosition") );
+                        aRet = _getPropAtAggrObj( OUString("EndPosition") );
                     }
                     break;
                 }
@@ -1685,7 +1684,7 @@ uno::Any SwXShape::getPropertyValue(const rtl::OUString& rPropertyName)
     return aRet;
 }
 
-uno::Any SwXShape::_getPropAtAggrObj( const ::rtl::OUString& _rPropertyName )
+uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1705,19 +1704,19 @@ uno::Any SwXShape::_getPropAtAggrObj( const ::rtl::OUString& _rPropertyName )
     return aRet;
 }
 
-beans::PropertyState SwXShape::getPropertyState( const rtl::OUString& rPropertyName )
+beans::PropertyState SwXShape::getPropertyState( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< rtl::OUString > aNames(1);
-    rtl::OUString* pStrings = aNames.getArray();
+    uno::Sequence< OUString > aNames(1);
+    OUString* pStrings = aNames.getArray();
     pStrings[0] = rPropertyName;
     uno::Sequence< beans::PropertyState > aStates = getPropertyStates(aNames);
     return aStates.getConstArray()[0];
 }
 
 uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
-    const uno::Sequence< rtl::OUString >& aPropertyNames )
+    const uno::Sequence< OUString >& aPropertyNames )
         throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1734,7 +1733,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
             bGroupMember = pObject->GetUpGroup() != 0;
             bFormControl = pObject->GetObjInventor() == FmFormInventor;
         }
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = aPropertyNames.getConstArray();
         beans::PropertyState* pRet = aRet.getArray();
         uno::Reference< XPropertyState >  xShapePrState;
         for(sal_Int32 nProperty = 0; nProperty < aPropertyNames.getLength(); nProperty++)
@@ -1818,7 +1817,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     return aRet;
 }
 
-void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
+void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1829,7 +1828,7 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
-                throw uno::RuntimeException( rtl::OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw uno::RuntimeException( OUString( "Property is read-only: " ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -1880,7 +1879,7 @@ void SwXShape::setPropertyToDefault( const rtl::OUString& rPropertyName )
         throw uno::RuntimeException();
 }
 
-uno::Any SwXShape::getPropertyDefault( const rtl::OUString& rPropertyName )
+uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
@@ -1917,13 +1916,13 @@ uno::Any SwXShape::getPropertyDefault( const rtl::OUString& rPropertyName )
 }
 
 void SwXShape::addPropertyChangeListener(
-    const rtl::OUString& _propertyName,
+    const OUString& _propertyName,
     const uno::Reference< beans::XPropertyChangeListener > & _listener )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( ::rtl::OUString( "no shape aggregate" ), *this );
+        throw uno::RuntimeException( OUString( "no shape aggregate" ), *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -1932,13 +1931,13 @@ void SwXShape::addPropertyChangeListener(
 }
 
 void SwXShape::removePropertyChangeListener(
-    const rtl::OUString& _propertyName,
+    const OUString& _propertyName,
     const uno::Reference< beans::XPropertyChangeListener > & _listener)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
 {
     if ( !xShapeAgg.is() )
-        throw uno::RuntimeException( ::rtl::OUString( "no shape aggregate" ), *this );
+        throw uno::RuntimeException( OUString( "no shape aggregate" ), *this );
 
     // must be handled by the aggregate
     uno::Reference< beans::XPropertySet > xShapeProps;
@@ -1947,7 +1946,7 @@ void SwXShape::removePropertyChangeListener(
 }
 
 void SwXShape::addVetoableChangeListener(
-    const rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/ )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
@@ -1956,7 +1955,7 @@ void SwXShape::addVetoableChangeListener(
 }
 
 void SwXShape::removeVetoableChangeListener(
-    const rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
     throw( beans::UnknownPropertyException, lang::WrappedTargetException,
            uno::RuntimeException )
@@ -2125,12 +2124,12 @@ void SwXShape::removeEventListener(
         pSvxShape->removeEventListener(aListener);
 }
 
-rtl::OUString SwXShape::getImplementationName(void) throw( uno::RuntimeException )
+OUString SwXShape::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString("SwXShape");
 }
 
-sal_Bool SwXShape::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXShape::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
     if(COMPARE_EQUAL == rServiceName.compareToAscii("com.sun.star.drawing.Shape"))
@@ -2144,9 +2143,9 @@ sal_Bool SwXShape::supportsService(const rtl::OUString& rServiceName) throw( uno
     return bRet;
 }
 
-uno::Sequence< rtl::OUString > SwXShape::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SwXShape::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSeq;
+    uno::Sequence< OUString > aSeq;
     if(xShapeAgg.is())
     {
         uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
@@ -2327,9 +2326,9 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor
-::rtl::OUString SAL_CALL SwXShape::getShapeType() throw ( uno::RuntimeException )
+OUString SAL_CALL SwXShape::getShapeType() throw ( uno::RuntimeException )
 {
-    ::rtl::OUString aType;
+    OUString aType;
     if ( mxShape.is() )
     {
         aType = mxShape->getShapeType();
@@ -2367,9 +2366,9 @@ awt::Point SwXShape::_GetAttrPosition()
 {
     awt::Point aAttrPos;
 
-    uno::Any aHoriPos( getPropertyValue( rtl::OUString("HoriOrientPosition") ) );
+    uno::Any aHoriPos( getPropertyValue( OUString("HoriOrientPosition") ) );
     aHoriPos >>= aAttrPos.X;
-    uno::Any aVertPos( getPropertyValue( rtl::OUString("VertOrientPosition") ) );
+    uno::Any aVertPos( getPropertyValue( OUString("VertOrientPosition") ) );
     aVertPos >>= aAttrPos.Y;
     // #i35798# - fallback, if attribute position is (0,0)
     // and no anchor position is applied to the drawing object
@@ -2392,7 +2391,7 @@ awt::Point SwXShape::_GetAttrPosition()
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        rtl::OUString sAnchorType( "AnchorType" );
+        OUString sAnchorType( "AnchorType" );
         uno::Any aAny = getPropertyValue( sAnchorType );
         aAny >>= eTextAnchorType;
     }
@@ -2521,14 +2520,14 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     text::TextContentAnchorType eTextAnchorType =
                             text::TextContentAnchorType_AT_PARAGRAPH;
     {
-        rtl::OUString sAnchorType( "AnchorType" );
+        OUString sAnchorType( "AnchorType" );
         uno::Any aAny = getPropertyValue( sAnchorType );
         aAny >>= eTextAnchorType;
     }
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-postion
-        rtl::OUString aHoriPosPropStr("HoriOrientPosition");
+        OUString aHoriPosPropStr("HoriOrientPosition");
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
@@ -2537,7 +2536,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
-            rtl::OUString aHoriOrientPropStr("HoriOrient");
+            OUString aHoriOrientPropStr("HoriOrient");
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
@@ -2558,7 +2557,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
     // handle y-position
     {
         // determine current y-postion
-        rtl::OUString aVertPosPropStr("VertOrientPosition");
+        OUString aVertPosPropStr("VertOrientPosition");
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
@@ -2567,7 +2566,7 @@ void SwXShape::_AdjustPositionProperties( const awt::Point _aPosition )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
-            rtl::OUString aVertOrientPropStr("VertOrient");
+            OUString aVertOrientPropStr("VertOrient");
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void

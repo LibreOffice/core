@@ -27,9 +27,9 @@
 
 //for Cocoa types
 @interface NSString (OOoAdditions)
-+ (id) stringWithOUString:(const rtl::OUString&)ouString;
-- (id) initWithOUString:(const rtl::OUString&)ouString;
-- (rtl::OUString) OUString;
++ (id) stringWithOUString:(const OUString&)ouString;
+- (id) initWithOUString:(const OUString&)ouString;
+- (OUString) OUString;
 @end
 
 #endif // _NSSTRING_OOOADDITIONS_HXX_

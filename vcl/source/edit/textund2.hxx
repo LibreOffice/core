@@ -38,7 +38,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 
@@ -56,7 +56,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 
@@ -74,7 +74,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 
@@ -93,7 +93,7 @@ public:
 
     virtual sal_Bool    Merge( SfxUndoAction *pNextAction );
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 
@@ -110,7 +110,7 @@ public:
     virtual void    Undo();
     virtual void    Redo();
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 
@@ -127,7 +127,7 @@ public:
     virtual void        Undo();
     virtual void        Redo();
 
-    virtual rtl::OUString GetComment () const;
+    virtual OUString GetComment () const;
 };
 
 #endif // _TEXTUND2_HXX

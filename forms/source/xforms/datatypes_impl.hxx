@@ -23,7 +23,7 @@
 
 //--------------------------------------------------------------------
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
-ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::ODerivedDataType( const OUString& _rName, sal_Int16 _nTypeClass )
     :SUPERCLASS( _rName, _nTypeClass )
     ,m_bPropertiesRegistered( false )
 {
@@ -61,7 +61,7 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 
 //--------------------------------------------------------------------
 template< typename VALUE_TYPE >
-OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const ::rtl::OUString& _rName, sal_Int16 _nTypeClass )
+OValueLimitedType< VALUE_TYPE >::OValueLimitedType( const OUString& _rName, sal_Int16 _nTypeClass )
     :OValueLimitedType_Base( _rName, _nTypeClass )
 {
 }

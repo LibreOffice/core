@@ -43,7 +43,7 @@
 #include "resource/common_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -62,24 +62,24 @@ using namespace com::sun::star::util;
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
+OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)    \
 {
-    return ::rtl::OUString("com.sun.star.sdbcx.mork.ResultSet");
+    return OUString("com.sun.star.sdbcx.mork.ResultSet");
 }
 // -------------------------------------------------------------------------
- Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
+ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
+    ::com::sun::star::uno::Sequence< OUString > aSupported(2);
     aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
     aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
+sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -163,12 +163,12 @@ void OResultSet::methodEntry()
     if ( !m_pTable )
     {
         OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
     }
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
 
@@ -421,7 +421,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 // -------------------------------------------------------------------------
 
 
-::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
 
@@ -727,17 +727,17 @@ void SAL_CALL OResultSet::release() throw()
 }
 
 // -------------------------------------------------------------------------
-void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMatchString )
+void OResultSet::parseParameter( const OSQLParseNode* pNode, OUString& rMatchString )
 {
     OSL_ENSURE(pNode->count() > 0,"Error parsing parameter in Parse Tree");
     OSQLParseNode *pMark = pNode->getChild(0);
 
     // Initialize to empty string
-    rMatchString = ::rtl::OUString("");
+    rMatchString = OUString("");
 
-    rtl::OUString aParameterName;
+    OUString aParameterName;
     if (SQL_ISPUNCTUATION(pMark,"?")) {
-        aParameterName = ::rtl::OUString("?");
+        aParameterName = OUString("?");
     }
     else if (SQL_ISPUNCTUATION(pMark,":")) {
         aParameterName = pNode->getChild(1)->getTokenValue();
@@ -763,9 +763,9 @@ void OResultSet::parseParameter( const OSQLParseNode* pNode, rtl::OUString& rMat
 void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                     &queryExpression)
 {
-    ::rtl::OUString         columnName;
+    OUString         columnName;
     MQueryOp::cond_type     op( MQueryOp::Is );
-    ::rtl::OUString         matchString;
+    OUString         matchString;
 
     if ( parseTree == NULL )
         return;
@@ -774,7 +774,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         ::rtl::Reference<OSQLColumns> xColumns = m_pSQLIterator->getParameters();
         if(xColumns.is())
         {
-            ::rtl::OUString aColName, aParameterValue;
+            OUString aColName, aParameterValue;
             OSQLColumns::Vector::iterator aIter = xColumns->get().begin();
             sal_Int32 i = 1;
             for(;aIter != xColumns->get().end();++aIter)
@@ -857,7 +857,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         else if (pPrec->getNodeType() == SQL_NODE_NOTEQUAL)
             op = MQueryOp::IsNot;
 
-        ::rtl::OUString sTableRange;
+        OUString sTableRange;
         if(SQL_ISRULE(parseTree->getChild(0),column_ref))
             m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
         else if(parseTree->getChild(0)->isToken())
@@ -915,7 +915,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         const sal_Unicode ALT_WILDCARD = '*';
         const sal_Unicode MATCHCHAR = '_';
 
-        ::rtl::OUString sTableRange;
+        OUString sTableRange;
         if(SQL_ISRULE(pColumn,column_ref))
             m_pSQLIterator->getColumnRange(pColumn,columnName,sTableRange);
 
@@ -934,12 +934,12 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
 
         // Determine where '%' character is...
 
-        if ( matchString.equals( ::rtl::OUString::valueOf( WILDCARD ) ) )
+        if ( matchString.equals( OUString::valueOf( WILDCARD ) ) )
         {
             // String containing only a '%' and nothing else
             op = MQueryOp::Exists;
             // Will be ignored for Exists case, but clear anyway.
-            matchString = ::rtl::OUString("");
+            matchString = OUString("");
         }
         else if ( matchString.indexOf ( WILDCARD ) == -1 &&
              matchString.indexOf ( MATCHCHAR ) == -1 )
@@ -958,8 +958,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         {
             // Relatively simple "%string%" - ie, contains...
             // Cut '%'  from front and rear
-            matchString = matchString.replaceAt( 0, 1, rtl::OUString() );
-            matchString = matchString.replaceAt( matchString.getLength() -1 , 1, rtl::OUString() );
+            matchString = matchString.replaceAt( 0, 1, OUString() );
+            matchString = matchString.replaceAt( matchString.getLength() -1 , 1, OUString() );
 
             if (bNot)
                 op = MQueryOp::DoesNotContain;
@@ -982,17 +982,17 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
                     op = MQueryOp::EndsWith;
-                    matchString = matchString.replaceAt( 0, 1, rtl::OUString());
+                    matchString = matchString.replaceAt( 0, 1, OUString());
                 }
                 else if ( matchString.indexOf ( WILDCARD ) == matchString.getLength() -1 )
                 {
                     op = MQueryOp::BeginsWith;
-                    matchString = matchString.replaceAt( matchString.getLength() -1 , 1, rtl::OUString() );
+                    matchString = matchString.replaceAt( matchString.getLength() -1 , 1, OUString() );
                 }
                 else
                 {
                     sal_Int32 pos = matchString.indexOf ( WILDCARD );
-                    matchString = matchString.replaceAt( pos, 1,::rtl::OUString(".*") );
+                    matchString = matchString.replaceAt( pos, 1,OUString(".*") );
                     op = MQueryOp::RegExp;
                 }
 
@@ -1003,13 +1003,13 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                 sal_Int32 pos = matchString.indexOf ( WILDCARD );
                 while ( (pos = matchString.indexOf ( WILDCARD )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString(".*") );
+                    matchString = matchString.replaceAt( pos, 1, OUString(".*") );
                 }
 
                 pos = matchString.indexOf ( MATCHCHAR );
                 while ( (pos = matchString.indexOf( MATCHCHAR )) != -1 )
                 {
-                    matchString = matchString.replaceAt( pos, 1, ::rtl::OUString(".") );
+                    matchString = matchString.replaceAt( pos, 1, OUString(".") );
                 }
 
                 op = MQueryOp::RegExp;
@@ -1038,7 +1038,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             op = MQueryOp::DoesNotExist;
         }
 
-        ::rtl::OUString sTableRange;
+        OUString sTableRange;
         m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
 
         queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op ));
@@ -1066,8 +1066,8 @@ void OResultSet::fillRowData()
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
-    const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    ::rtl::OUString sName;
+    const OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    OUString sName;
     m_aAttributeStrings.clear();
     m_aAttributeStrings.reserve(m_xColumns->get().size());
     for (sal_Int32 i = 1; aIter != m_xColumns->get().end();++aIter, i++)
@@ -1100,7 +1100,7 @@ void OResultSet::fillRowData()
 
     m_aQueryHelper.setExpression( queryExpression );
 
-    rtl::OUString aStr(  m_pTable->getName() );
+    OUString aStr(  m_pTable->getName() );
     m_aQueryHelper.setAddressbook( aStr );
 
     sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
@@ -1348,12 +1348,12 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
     ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
-    ::rtl::OUString sTableColumnName, sSelectColumnRealName;
+    OUString sTableColumnName, sSelectColumnRealName;
 
-    const ::rtl::OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    const ::rtl::OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
+    const OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
 
-    ::std::vector< ::rtl::OUString> aColumnNames;
+    ::std::vector< OUString> aColumnNames;
     aColumnNames.reserve(_rxColumns->get().size());
     OValueVector::Vector::iterator aRowIter = _rRow->get().begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
@@ -1369,7 +1369,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
-                sTableColumnName = ::rtl::OUString();
+                sTableColumnName = OUString();
 
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...
@@ -1650,9 +1650,9 @@ void OResultSet::checkPendingUpdate() throw(SQLException, RuntimeException)
     if ((m_nNewRow && nCurrentRow != m_nNewRow)
         || ( m_nUpdatedRow && m_nUpdatedRow != nCurrentRow))
     {
-        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COMMIT_ROW,
-                "$position$", ::rtl::OUString::valueOf(nCurrentRow)
+                "$position$", OUString::valueOf(nCurrentRow)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -1734,7 +1734,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     updateValue(columnIndex,x);
 }
@@ -1783,9 +1783,9 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
 {
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
     {
-        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_UPDATEABLE,
-                "$position$", ::rtl::OUString::valueOf(columnIndex)
+                "$position$", OUString::valueOf(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     } // if (!::dbtools::implUpdateObject(this, columnIndex, x))
@@ -1796,9 +1796,9 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 {
     if (!::dbtools::implUpdateObject(this, columnIndex, x))
     {
-        const ::rtl::OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pStatement->getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_UPDATEABLE,
-                "$position$", ::rtl::OUString::valueOf(columnIndex)
+                "$position$", OUString::valueOf(columnIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

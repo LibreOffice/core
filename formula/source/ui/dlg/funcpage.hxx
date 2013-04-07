@@ -72,7 +72,7 @@ private:
                     m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
-    rtl::OString    m_aHelpId;
+    OString    m_aHelpId;
 
 
     void impl_addFunctions(const IFunctionCategory* _pCategory);

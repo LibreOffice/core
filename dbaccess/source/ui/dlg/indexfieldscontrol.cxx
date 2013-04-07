@@ -219,13 +219,13 @@ DBG_NAME(IndexFieldsControl)
             sal_Int32 nWidthAsc = GetTextWidth(m_sAscendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             sal_Int32 nWidthDesc = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             // maximum plus some additional space
-            return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth(rtl::OUString('0')) * 2;
+            return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth(OUString('0')) * 2;
         }
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
 
     //------------------------------------------------------------------
-    void IndexFieldsControl::Init(const Sequence< ::rtl::OUString >& _rAvailableFields)
+    void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields)
     {
         RemoveColumns();
 
@@ -249,7 +249,7 @@ DBG_NAME(IndexFieldsControl)
             nOther = GetTextWidth(m_sDescendingText) + GetSettings().GetStyleSettings().GetScrollBarSize();
             nSortOrderColumnWidth = nSortOrderColumnWidth > nOther ? nSortOrderColumnWidth : nOther;
             // (plus some additional space)
-            nSortOrderColumnWidth += GetTextWidth(rtl::OUString('0')) * 2;
+            nSortOrderColumnWidth += GetTextWidth(OUString('0')) * 2;
             InsertDataColumn(COLUMN_ID_ORDER, sColumnName, nSortOrderColumnWidth, HIB_STDSTYLE, 1);
 
             m_pSortingCell = new ListBoxControl(&GetDataWindow());
@@ -271,8 +271,8 @@ DBG_NAME(IndexFieldsControl)
         m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
         m_pFieldNameCell->InsertEntry(String());
         m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
-        const ::rtl::OUString* pFields = _rAvailableFields.getConstArray();
-        const ::rtl::OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
+        const OUString* pFields = _rAvailableFields.getConstArray();
+        const OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
             m_pFieldNameCell->InsertEntry(*pFields);
     }

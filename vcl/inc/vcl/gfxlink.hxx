@@ -51,7 +51,7 @@ struct ImpBuffer
 
 struct ImpSwap
 {
-    rtl::OUString   maURL;
+    OUString   maURL;
     sal_uLong           mnDataSize;
     sal_uLong           mnRefCount;
 

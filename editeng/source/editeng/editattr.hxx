@@ -333,7 +333,7 @@ public:
 // -------------------------------------------------------------------------
 class EditCharAttribField: public EditCharAttrib
 {
-    rtl::OUString   aFieldValue;
+    OUString   aFieldValue;
     Color*          pTxtColor;
     Color*          pFldColor;
 
@@ -352,8 +352,8 @@ public:
     Color*&         GetTxtColor()           { return pTxtColor; }
     Color*&         GetFldColor()           { return pFldColor; }
 
-    const rtl::OUString& GetFieldValue() const;
-    void SetFieldValue(const rtl::OUString& rVal);
+    const OUString& GetFieldValue() const;
+    void SetFieldValue(const OUString& rVal);
 
     void Reset();
 };

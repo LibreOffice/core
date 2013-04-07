@@ -142,7 +142,7 @@ void LwpPara::SetAllText(OUString sText)
 /**
  * @short   set first frib content
  */
-void LwpPara::SetFirstFrib(rtl::OUString Content,sal_uInt32 FontID)
+void LwpPara::SetFirstFrib(OUString Content,sal_uInt32 FontID)
 {
     m_FontID= FontID;
     m_Content=Content;

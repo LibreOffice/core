@@ -43,13 +43,13 @@ class SerfRequestProcessor
 {
 public:
     SerfRequestProcessor( SerfSession& rSerfSession,
-                          const rtl::OUString & inPath,
+                          const OUString & inPath,
                           const bool bUseChunkedEncoding );
     ~SerfRequestProcessor();
 
     // PROPFIND - allprop & named
     bool processPropFind( const Depth inDepth,
-                          const std::vector< ::rtl::OUString > & inPropNames,
+                          const std::vector< OUString > & inPropNames,
                           std::vector< DAVResource > & ioResources,
                           apr_status_t& outSerfStatus );
 
@@ -68,7 +68,7 @@ public:
 
     // GET inclusive header fields
     bool processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
-                     const std::vector< ::rtl::OUString > & inHeaderNames,
+                     const std::vector< OUString > & inHeaderNames,
                      DAVResource & ioResource,
                      apr_status_t& outSerfStatus );
 
@@ -78,12 +78,12 @@ public:
 
     // GET inclusive header fields
     bool processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
-                     const std::vector< ::rtl::OUString > & inHeaderNames,
+                     const std::vector< OUString > & inHeaderNames,
                      DAVResource & ioResource,
                      apr_status_t& outSerfStatus );
 
     // HEAD
-    bool processHead( const std::vector< ::rtl::OUString > & inHeaderNames,
+    bool processHead( const std::vector< OUString > & inHeaderNames,
                       DAVResource & ioResource,
                       apr_status_t& outSerfStatus );
 
@@ -95,16 +95,16 @@ public:
     // POST
     bool processPost( const char* inData,
                       apr_size_t inDataLen,
-                      const rtl::OUString & inContentType,
-                      const rtl::OUString & inReferer,
+                      const OUString & inContentType,
+                      const OUString & inReferer,
                       const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                       apr_status_t& outSerfStatus );
 
     // POST
     bool processPost( const char* inData,
                       apr_size_t inDataLen,
-                      const rtl::OUString & inContentType,
-                      const rtl::OUString & inReferer,
+                      const OUString & inContentType,
+                      const OUString & inReferer,
                       const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                       apr_status_t& outSerfStatus );
 
@@ -115,12 +115,12 @@ public:
     bool processMkCol( apr_status_t& outSerfStatus );
 
     // COPY
-    bool processCopy( const rtl::OUString & inDestinationPath,
+    bool processCopy( const OUString & inDestinationPath,
                       const bool inOverwrite,
                       apr_status_t& outSerfStatus );
 
     // MOVE
-    bool processMove( const rtl::OUString & inDestinationPath,
+    bool processMove( const OUString & inDestinationPath,
                       const bool inOverwrite,
                       apr_status_t& outSerfStatus );
 
@@ -165,8 +165,8 @@ public:
 
     DAVException* mpDAVException;
     sal_uInt16 mnHTTPStatusCode;
-    rtl::OUString mHTTPStatusCodeText;
-    rtl::OUString mRedirectLocation;
+    OUString mHTTPStatusCodeText;
+    OUString mRedirectLocation;
 
     sal_uInt8 mnSuccessfulCredentialAttempts;
     bool mbInputOfCredentialsAborted;

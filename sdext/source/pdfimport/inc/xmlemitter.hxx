@@ -39,7 +39,7 @@ namespace pdfi
         virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) = 0;
         /** Write PCTEXT as-is to output
          */
-        virtual void write( const rtl::OUString& rString ) = 0;
+        virtual void write( const OUString& rString ) = 0;
         /** Close previously opened tag
          */
         virtual void endTag( const char* pTag ) = 0;

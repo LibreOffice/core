@@ -52,7 +52,6 @@
 #include "pivot.hrc"
 
 using namespace com::sun::star;
-using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::WeakReference;
@@ -80,15 +79,15 @@ void DumpAllFuncData(const ScDPFieldControlBase::FuncDataType& rData)
 
 }
 
-ScDPFieldControlBase::FieldName::FieldName(const rtl::OUString& rText, bool bFits, sal_uInt8 nDupCount) :
+ScDPFieldControlBase::FieldName::FieldName(const OUString& rText, bool bFits, sal_uInt8 nDupCount) :
     maText(rText), mbFits(bFits), mnDupCount(nDupCount) {}
 
 ScDPFieldControlBase::FieldName::FieldName(const FieldName& r) :
     maText(r.maText), mbFits(r.mbFits), mnDupCount(r.mnDupCount) {}
 
-rtl::OUString ScDPFieldControlBase::FieldName::getDisplayedText() const
+OUString ScDPFieldControlBase::FieldName::getDisplayedText() const
 {
-    rtl::OUStringBuffer aBuf(maText);
+    OUStringBuffer aBuf(maText);
     if (mnDupCount > 0)
         aBuf.append(static_cast<sal_Int32>(mnDupCount+1));
     return aBuf.makeStringAndClear();
@@ -150,7 +149,7 @@ bool ScDPFieldControlBase::IsExistingIndex( size_t nIndex ) const
     return nIndex < maFieldNames.size();
 }
 
-void ScDPFieldControlBase::AppendField( const rtl::OUString& rText, const ScPivotFuncData& rFunc )
+void ScDPFieldControlBase::AppendField( const OUString& rText, const ScPivotFuncData& rFunc )
 {
     size_t nNewIndex = maFieldNames.size();
 
@@ -164,7 +163,7 @@ void ScDPFieldControlBase::AppendField( const rtl::OUString& rText, const ScPivo
 }
 
 size_t ScDPFieldControlBase::AddField(
-    const rtl::OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc)
+    const OUString& rText, const Point& rPos, const ScPivotFuncData& rFunc)
 {
     size_t nNewIndex = GetFieldIndex(rPos);
     if (nNewIndex == PIVOTFIELD_INVALID)
@@ -280,7 +279,7 @@ void ScDPFieldControlBase::ClearFields()
     maFuncData.clear();
 }
 
-void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nIndex, sal_uInt8 nDupCount)
+void ScDPFieldControlBase::SetFieldText(const OUString& rText, size_t nIndex, sal_uInt8 nDupCount)
 {
     if( IsExistingIndex( nIndex ) )
     {
@@ -293,11 +292,11 @@ void ScDPFieldControlBase::SetFieldText(const rtl::OUString& rText, size_t nInde
     }
 }
 
-rtl::OUString ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
+OUString ScDPFieldControlBase::GetFieldText( size_t nIndex ) const
 {
     if( IsExistingIndex( nIndex ) )
         return maFieldNames[nIndex].maText;
-    return rtl::OUString();
+    return OUString();
 }
 
 void ScDPFieldControlBase::GetExistingIndex( const Point& rPos, size_t& rnIndex )
@@ -600,7 +599,7 @@ void ScDPFieldControlBase::DrawField(
     // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
     aVirDev.EnableRTL( IsRTLEnabled() );
 
-    rtl::OUString aText = rText.getDisplayedText();
+    OUString aText = rText.getDisplayedText();
 
     Size aDevSize( rRect.GetSize() );
     long    nWidth       = aDevSize.Width();
@@ -618,7 +617,7 @@ void ScDPFieldControlBase::DrawField(
         do
         {
             sal_Int32 nCurrLen = (nMinLen + nMaxLen) / 2;
-            rtl::OUStringBuffer aBuf(rText.maText.copy(0, nCurrLen));
+            OUStringBuffer aBuf(rText.maText.copy(0, nCurrLen));
             aBuf.appendAscii("...");
             aText = aBuf.makeStringAndClear();
             nLabelWidth = rDev.GetTextWidth( aText );
@@ -731,7 +730,7 @@ void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
     MoveSelection( nNewIndex );
 }
 
-sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const rtl::OUString& rFieldText) const
+sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const OUString& rFieldText) const
 {
     sal_uInt8 nMax = 0;
     FieldNames::const_iterator it = maFieldNames.begin(), itEnd = maFieldNames.end();

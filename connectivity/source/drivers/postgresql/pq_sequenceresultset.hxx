@@ -77,7 +77,7 @@ class SequenceResultSet : public BaseResultSet
 protected:
     ::com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > > m_data;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_columnNames;
+    ::com::sun::star::uno::Sequence< OUString > m_columnNames;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > m_meta;
 
 protected:
@@ -94,7 +94,7 @@ public:
     SequenceResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
-        const com::sun::star::uno::Sequence< rtl::OUString > &colNames,
+        const com::sun::star::uno::Sequence< OUString > &colNames,
         const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc,
         const ColumnMetaDataVector *pVec = 0);
@@ -109,7 +109,7 @@ public: // XResultSetMetaDataSupplier
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 public: // XColumnLocate
-    virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName )
+    virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 };
 

@@ -48,20 +48,20 @@ ScVbaMenuBar::Menus( const uno::Any& aIndex ) throw (script::BasicErrorException
     return uno::makeAny( xMenus );
 }
 
-rtl::OUString
+OUString
 ScVbaMenuBar::getServiceImplName()
 {
-    return rtl::OUString("ScVbaMenuBar");
+    return OUString("ScVbaMenuBar");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaMenuBar::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuBar" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.MenuBar" );
     }
     return aServiceNames;
 }

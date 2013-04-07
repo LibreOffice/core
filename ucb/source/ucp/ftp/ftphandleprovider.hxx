@@ -31,17 +31,17 @@ namespace ftp {
         /** host is in the form host:port.
          */
 
-        virtual bool forHost(const rtl::OUString& host,
-                             const rtl::OUString& port,
-                             const rtl::OUString& username,
-                             rtl::OUString& password,
-                             rtl::OUString& account) = 0;
+        virtual bool forHost(const OUString& host,
+                             const OUString& port,
+                             const OUString& username,
+                             OUString& password,
+                             OUString& account) = 0;
 
-        virtual bool setHost(const rtl::OUString& host,
-                             const rtl::OUString& port,
-                             const rtl::OUString& username,
-                             const rtl::OUString& password,
-                             const rtl::OUString& account) = 0;
+        virtual bool setHost(const OUString& host,
+                             const OUString& port,
+                             const OUString& username,
+                             const OUString& password,
+                             const OUString& account) = 0;
 
     protected:
         ~FTPHandleProvider() {}

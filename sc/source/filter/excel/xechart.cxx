@@ -70,7 +70,6 @@
 #include "xepage.hxx"
 #include "xestyle.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -1146,7 +1145,7 @@ void XclExpChFrLabelProps::Convert( const ScfPropertySet& rPropSet, bool bShowSe
     // label value separator
     maData.maSeparator = rPropSet.GetStringProperty( EXC_CHPROP_LABELSEPARATOR );
     if( maData.maSeparator.isEmpty() )
-        maData.maSeparator = rtl::OUString(' ');
+        maData.maSeparator = OUString(' ');
 }
 
 void XclExpChFrLabelProps::WriteBody( XclExpStream& rStrm )
@@ -1229,7 +1228,7 @@ void XclExpChText::ConvertTitle( Reference< XTitle > xTitle, sal_uInt16 nTarget,
         if (pSubTitle)
         {
             // append subtitle as the 2nd line of the title.
-            String aSubTitle = rtl::OUString("\n");
+            String aSubTitle = OUString("\n");
             aSubTitle.Append(*pSubTitle);
             mxSrcLink->AppendString(aSubTitle);
         }

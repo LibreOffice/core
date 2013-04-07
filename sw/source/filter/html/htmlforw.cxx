@@ -63,7 +63,6 @@
 #include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 const sal_uInt32 HTML_FRMOPTS_CONTROL   =
     0;
@@ -165,7 +164,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
             }
         }
 
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ');
         if( pOpt && (EXTENDED_STYPE != eScriptType ||
                      pDescs[i].AddListenerParam.isEmpty()) )
@@ -173,10 +172,10 @@ static void lcl_html_outEvents( SvStream& rStrm,
         else
         {
             sOut.append(OOO_STRING_SVTOOLS_HTML_O_sdevent)
-                .append(rtl::OUStringToOString(sListener,
+                .append(OUStringToOString(sListener,
                     RTL_TEXTENCODING_ASCII_US))
                 .append('-')
-                .append(rtl::OUStringToOString(sMethod,
+                .append(OUStringToOString(sMethod,
                     RTL_TEXTENCODING_ASCII_US));
         }
         sOut.append("=\"");
@@ -187,10 +186,10 @@ static void lcl_html_outEvents( SvStream& rStrm,
             !pDescs[i].AddListenerParam.isEmpty() )
         {
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdaddparam)
-                .append(rtl::OUStringToOString(sListener,
+                .append(OUStringToOString(sListener,
                     RTL_TEXTENCODING_ASCII_US))
                 .append('-')
-                .append(rtl::OUStringToOString(sMethod,
+                .append(OUStringToOString(sMethod,
                     RTL_TEXTENCODING_ASCII_US))
                 .append("=\"");
             rStrm << sOut.makeStringAndClear().getStr();
@@ -470,7 +469,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     // die neue Form wird geoeffnet
     if( bLFPossible )
         OutNewLine();
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_form);
 
     uno::Reference< beans::XPropertySet > xFormPropSet( rFormComps, uno::UNO_QUERY );
@@ -609,7 +608,7 @@ void SwHTMLWriter::OutHiddenControls(
         {
             if( bLFPossible )
                 OutNewLine( sal_True );
-            rtl::OStringBuffer sOut;
+            OStringBuffer sOut;
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_input).append(' ')
                 .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
                 .append(OOO_STRING_SVTOOLS_HTML_IT_hidden);
@@ -750,7 +749,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         OOO_STRING_SVTOOLS_HTML_IT_button };
     Type eType = TYPE_NONE;
     OUString sValue;
-    rtl::OStringBuffer sOptions;
+    OStringBuffer sOptions;
     sal_Bool bEmptyValue = sal_False;
     uno::Any aTmp = xPropSet->getPropertyValue(
                     OUString("ClassId") );
@@ -967,7 +966,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     if( eTag == TAG_NONE )
         return rWrt;
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(TagNames[eTag]);
     if( eType != TYPE_NONE )
     {
@@ -1076,7 +1075,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                             ? HTML_FRMOPTS_IMG_CONTROL_CSS1
                             : HTML_FRMOPTS_CONTROL_CSS1);
     }
-    rtl::OString aEndTags;
+    OString aEndTags;
     if( nFrmOpts != 0 )
         aEndTags = rHTMLWrt.OutFrmFmtOptions( rFmt, aEmptyStr, nFrmOpts );
 

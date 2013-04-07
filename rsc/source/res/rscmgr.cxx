@@ -165,7 +165,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                         GetObjNode( pClassData->aRefId );
         if( !pObjNode && pTC )
         {
-            rtl::OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
+            OStringBuffer aMsg(pHS->getString(rInst.pClass->GetId()));
             aMsg.append(' ').append(pClassData->aRefId.GetName());
             aError = WRN_MGR_REFNOTFOUND;
             pTC->pEH->Error(aError, rInst.pClass, rId, aMsg.getStr());

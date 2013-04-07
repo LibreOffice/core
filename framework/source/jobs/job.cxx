@@ -245,7 +245,7 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("Got exception during job execution. Original Message was:\n\"");
         sMsg.append     (ex.Message);
         sMsg.appendAscii("\"");
@@ -377,28 +377,28 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     // Create list of environment variables. This list must be part of the
     // returned structure everytimes ... but some of its members are opetional!
     css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
-    lEnvArgs[0].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_ENVTYPE);
+    lEnvArgs[0].Name    = OUString::createFromAscii(JobData::PROP_ENVTYPE);
     lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
 
     if (m_xFrame.is())
     {
         sal_Int32 c = lEnvArgs.getLength();
         lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_FRAME);
+        lEnvArgs[c].Name    = OUString::createFromAscii(JobData::PROP_FRAME);
         lEnvArgs[c].Value <<= m_xFrame;
     }
     if (m_xModel.is())
     {
         sal_Int32 c = lEnvArgs.getLength();
         lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_MODEL);
+        lEnvArgs[c].Name    = OUString::createFromAscii(JobData::PROP_MODEL);
         lEnvArgs[c].Value <<= m_xModel;
     }
     if (eMode==JobData::E_EVENT)
     {
         sal_Int32 c = lEnvArgs.getLength();
         lEnvArgs.realloc(c+1);
-        lEnvArgs[c].Name    = ::rtl::OUString::createFromAscii(JobData::PROP_EVENTNAME);
+        lEnvArgs[c].Name    = OUString::createFromAscii(JobData::PROP_EVENTNAME);
         lEnvArgs[c].Value <<= m_aJobCfg.getEvent();
     }
 
@@ -421,28 +421,28 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name    = ::rtl::OUString::createFromAscii(JobData::PROPSET_CONFIG);
+        lAllArgs[nLength].Name    = OUString::createFromAscii(JobData::PROPSET_CONFIG);
         lAllArgs[nLength].Value <<= lConfigArgs;
     }
     if (lJobConfigArgs.getLength()>0)
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name    = ::rtl::OUString::createFromAscii(JobData::PROPSET_OWNCONFIG);
+        lAllArgs[nLength].Name    = OUString::createFromAscii(JobData::PROPSET_OWNCONFIG);
         lAllArgs[nLength].Value <<= lJobConfigArgs;
     }
     if (lEnvArgs.getLength()>0)
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name    = ::rtl::OUString::createFromAscii(JobData::PROPSET_ENVIRONMENT);
+        lAllArgs[nLength].Name    = OUString::createFromAscii(JobData::PROPSET_ENVIRONMENT);
         lAllArgs[nLength].Value <<= lEnvArgs;
     }
     if (lDynamicArgs.getLength()>0)
     {
         sal_Int32 nLength = lAllArgs.getLength();
         lAllArgs.realloc(nLength+1);
-        lAllArgs[nLength].Name    = ::rtl::OUString::createFromAscii(JobData::PROPSET_DYNAMICDATA);
+        lAllArgs[nLength].Name    = OUString::createFromAscii(JobData::PROPSET_DYNAMICDATA);
         lAllArgs[nLength].Value <<= lDynamicArgs;
     }
 

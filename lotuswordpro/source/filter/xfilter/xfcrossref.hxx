@@ -72,7 +72,7 @@ public:
     XFCrossRefStart();
     ~XFCrossRefStart();
     void SetRefType(sal_uInt8 nType);
-    void SetMarkName(rtl::OUString sName);
+    void SetMarkName(OUString sName);
     void ToXml(IXFStream *pStrm);
 private:
     enum{
@@ -82,7 +82,7 @@ private:
         CROSSREF_PARANUMBER = 3
     };
     sal_uInt8 m_nType;
-    rtl::OUString m_strMarkName;
+    OUString m_strMarkName;
 };
 
 inline void XFCrossRefStart::SetRefType(sal_uInt8 nType)
@@ -90,7 +90,7 @@ inline void XFCrossRefStart::SetRefType(sal_uInt8 nType)
     m_nType = nType;
 }
 
-inline void XFCrossRefStart::SetMarkName(rtl::OUString sName)
+inline void XFCrossRefStart::SetMarkName(OUString sName)
 {
     m_strMarkName = sName;
 }

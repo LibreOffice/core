@@ -80,7 +80,7 @@ class Request
 
         //---------------------------------------------------------------------
         template< class TArgumentType >
-        void setArgument(const ::rtl::OUString& sName ,
+        void setArgument(const OUString& sName ,
                          const TArgumentType&   aValue)
         {
             m_lArguments[sName] <<= aValue;
@@ -88,7 +88,7 @@ class Request
 
         //---------------------------------------------------------------------
         template< class TArgumentType >
-        TArgumentType getArgumentOrDefault(const ::rtl::OUString& sName   ,
+        TArgumentType getArgumentOrDefault(const OUString& sName   ,
                                            const TArgumentType&   aDefault)
         {
             return m_lArguments.getUnpackedValueOrDefault(sName, aDefault);

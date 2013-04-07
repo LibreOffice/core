@@ -36,7 +36,7 @@ namespace rtl { class OUString; }
  */
 class XMLIndexSpanEntryContext : public XMLIndexSimpleEntryContext
 {
-    ::rtl::OUStringBuffer sContent;
+    OUStringBuffer sContent;
 
 public:
 
@@ -46,14 +46,14 @@ public:
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLIndexSpanEntryContext();
 
 protected:
 
     /// Collect element contents
-    virtual void Characters(const ::rtl::OUString& sString);
+    virtual void Characters(const OUString& sString);
 
     /// add Text PropertyValue
     virtual void FillPropertyValues(

@@ -34,7 +34,6 @@
 using namespace ::com::sun::star::uno;
 
 using std::map;
-using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XEventsSupplier;
 using ::com::sun::star::container::XNameReplace;
@@ -146,8 +145,8 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
         else
         {
             // don't proceed further
-            ::rtl::OString aStr("Unknown event name:" );
-            aStr += ::rtl::OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
+            OString aStr("Unknown event name:" );
+            aStr += OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
             OSL_FAIL( aStr.getStr() );
         }
 #endif
@@ -196,8 +195,8 @@ void XMLEventExport::ExportSingleEvent(
     else
     {
         // don't proceed further
-        ::rtl::OString aStr("Unknown event name:" );
-        aStr += ::rtl::OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
+        OString aStr("Unknown event name:" );
+        aStr += OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
         OSL_FAIL( aStr.getStr() );
     }
 #endif

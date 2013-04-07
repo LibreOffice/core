@@ -142,12 +142,12 @@ namespace svxform
     namespace
     {
         //....................................................................
-        static ::rtl::OUString lcl_getUniqueLabel_nothrow( const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rBaseLabel )
+        static OUString lcl_getUniqueLabel_nothrow( const Reference< XPropertySet >& _rxControlModel, const OUString& _rBaseLabel )
         {
-            ::rtl::OUString sLabel( _rBaseLabel );
+            OUString sLabel( _rBaseLabel );
             try
             {
-                typedef ::std::set< ::rtl::OUString > StringBag;
+                typedef ::std::set< OUString > StringBag;
                 StringBag aUsedLabels;
 
                 Reference< XFormComponent > xFormComponent( _rxControlModel, UNO_QUERY_THROW );
@@ -163,7 +163,7 @@ namespace svxform
                     if ( !xPSI->hasPropertyByName( FM_PROP_LABEL ) )
                         continue;
 
-                    ::rtl::OUString sElementLabel;
+                    OUString sElementLabel;
                     OSL_VERIFY( xElement->getPropertyValue( FM_PROP_LABEL ) >>= sElementLabel );
                     aUsedLabels.insert( sElementLabel );
                 }
@@ -172,7 +172,7 @@ namespace svxform
                 sal_Int32 i=2;
                 while ( aUsedLabels.find( sLabel ) != aUsedLabels.end() )
                 {
-                    ::rtl::OUStringBuffer aBuffer( _rBaseLabel );
+                    OUStringBuffer aBuffer( _rBaseLabel );
                     aBuffer.appendAscii( " " );
                     aBuffer.append( (sal_Int32)i++ );
                     sLabel = aBuffer.makeStringAndClear();
@@ -208,14 +208,14 @@ namespace svxform
                 OSL_ENSURE( xForm.is(), "lcl_getDataSourceIndirectProperties: could not determine the form!" );
                 if ( !xForm.is() )
                     return aInfo;
-                ::rtl::OUString sDataSourceName;
+                OUString sDataSourceName;
                 xForm->getPropertyValue( FM_PROP_DATASOURCE ) >>= sDataSourceName;
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
                     xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext.getUNOContext() ) );
                 if ( xDsProperties.is() )
-                    xDsProperties->getPropertyValue( ::rtl::OUString( "Info" ) ) >>= aInfo;
+                    xDsProperties->getPropertyValue( OUString( "Info" ) ) >>= aInfo;
             }
             catch( const Exception& )
             {
@@ -366,11 +366,11 @@ namespace svxform
                 Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo(), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
-                ::rtl::OUString sPropertyName;
+                OUString sPropertyName;
                 const sal_Char** pCharacterProperty = aCharacterAndParagraphProperties;
                 while ( *pCharacterProperty )
                 {
-                    sPropertyName = ::rtl::OUString::createFromAscii( *pCharacterProperty );
+                    sPropertyName = OUString::createFromAscii( *pCharacterProperty );
 
                     if ( xSourcePropInfo->hasPropertyByName( sPropertyName ) && xDestPropInfo->hasPropertyByName( sPropertyName ) )
                         _rxModel->setPropertyValue( sPropertyName, xStyle->getPropertyValue( sPropertyName ) );
@@ -404,7 +404,7 @@ namespace svxform
             switch ( nClassId )
             {
                 case FormComponentType::SCROLLBAR:
-                    _rxControlModel->setPropertyValue( ::rtl::OUString( "LiveScroll" ), makeAny( (sal_Bool)sal_True ) );
+                    _rxControlModel->setPropertyValue( OUString( "LiveScroll" ), makeAny( (sal_Bool)sal_True ) );
                     // NO break!
                 case FormComponentType::SPINBUTTON:
                 {
@@ -444,7 +444,7 @@ namespace svxform
                 case FormComponentType::CHECKBOX:
                 case FormComponentType::FIXEDTEXT:
                 {
-                    ::rtl::OUString sVertAlignPropertyName( "VerticalAlign" );
+                    OUString sVertAlignPropertyName( "VerticalAlign" );
                     if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                         _rxControlModel->setPropertyValue( sVertAlignPropertyName, makeAny( VerticalAlignment_MIDDLE ) );
                 }
@@ -453,7 +453,7 @@ namespace svxform
                 case FormComponentType::IMAGEBUTTON:
                 case FormComponentType::IMAGECONTROL:
                 {
-                    const ::rtl::OUString sScaleModeProperty( "ScaleMode" );
+                    const OUString sScaleModeProperty( "ScaleMode" );
                     if ( xPSI->hasPropertyByName( sScaleModeProperty ) )
                         _rxControlModel->setPropertyValue( sScaleModeProperty, makeAny( ImageScaleMode::Isotropic ) );
                 }
@@ -463,11 +463,11 @@ namespace svxform
             // initial default label for the control
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
             {
-                ::rtl::OUString sExistingLabel;
+                OUString sExistingLabel;
                 OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_LABEL ) >>= sExistingLabel );
                 if ( sExistingLabel.isEmpty() )
                 {
-                    ::rtl::OUString sInitialLabel;
+                    OUString sInitialLabel;
                     OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_NAME ) >>= sInitialLabel );
 
                     sal_uInt16 nTitleResId = 0;
@@ -648,7 +648,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    ::rtl::OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
+    OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
     {
         sal_uInt16 nResId(0);
 
@@ -689,24 +689,24 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    ::rtl::OUString FormControlFactory::getDefaultUniqueName_ByComponentType( const Reference< XNameAccess >& _rxContainer,
+    OUString FormControlFactory::getDefaultUniqueName_ByComponentType( const Reference< XNameAccess >& _rxContainer,
         const Reference< XPropertySet >& _rxObject )
     {
         sal_Int16 nClassId = FormComponentType::CONTROL;
         OSL_VERIFY( _rxObject->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
-        ::rtl::OUString sBaseName = getDefaultName( nClassId, Reference< XServiceInfo >( _rxObject, UNO_QUERY ) );
+        OUString sBaseName = getDefaultName( nClassId, Reference< XServiceInfo >( _rxObject, UNO_QUERY ) );
 
         return getUniqueName( _rxContainer, sBaseName );
     }
 
     //------------------------------------------------------------------------------
-    ::rtl::OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const ::rtl::OUString& _rBaseName )
+    OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const OUString& _rBaseName )
     {
         sal_Int32 n = 0;
-        ::rtl::OUString sName;
+        OUString sName;
         do
         {
-            ::rtl::OUStringBuffer aBuf( _rBaseName );
+            OUStringBuffer aBuf( _rBaseName );
             aBuf.appendAscii( " " );
             aBuf.append( ++n );
             sName = aBuf.makeStringAndClear();

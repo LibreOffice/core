@@ -86,7 +86,7 @@ namespace chelp
             throw( ::com::sun::star::uno::RuntimeException );
 
         // XContent
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentType()
             throw( com::sun::star::uno::RuntimeException );
 

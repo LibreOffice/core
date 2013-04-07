@@ -67,7 +67,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::document;
 
-using ::rtl::OUString;
 
 
 namespace framework

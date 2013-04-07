@@ -48,8 +48,8 @@ public:
     explicit            Theme();
                         ~Theme();
 
-    inline void                     setStyleName( const ::rtl::OUString& rStyleName ) { maStyleName = rStyleName; }
-    inline const ::rtl::OUString&   getStyleName() const { return maStyleName; }
+    inline void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
+    inline const OUString&   getStyleName() const { return maStyleName; }
 
     inline ClrScheme&               getClrScheme() { return maClrScheme; }
     inline const ClrScheme&         getClrScheme() const { return maClrScheme; }
@@ -75,7 +75,7 @@ public:
     /** Returns theme font properties by scheme type (major/minor). */
     const TextCharacterProperties*  getFontStyle( sal_Int32 nSchemeType ) const;
     /** Returns theme font by placeholder name, e.g. the major latin theme font for the font name '+mj-lt'. */
-    const TextFont*                 resolveFont( const ::rtl::OUString& rName ) const;
+    const TextFont*                 resolveFont( const OUString& rName ) const;
 
     inline Shape&                   getSpDef() { return maSpDef; }
     inline const Shape&             getSpDef() const { return maSpDef; }
@@ -92,7 +92,7 @@ public:
         ::com::sun::star::xml::dom::XDocument>& getFragment() const { return mxFragment; }
 
 private:
-    ::rtl::OUString     maStyleName;
+    OUString     maStyleName;
     ClrScheme           maClrScheme;
     FillStyleList       maFillStyleList;
     FillStyleList       maBgFillStyleList;

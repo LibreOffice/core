@@ -38,7 +38,6 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 
 
-using rtl::OUString;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::util::XUpdatable;

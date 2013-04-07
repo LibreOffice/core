@@ -90,7 +90,7 @@ sal_Bool RASWriter::WriteRAS( const Graphic& rGraphic, FilterConfigItem* pFilter
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }

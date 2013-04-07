@@ -383,7 +383,7 @@ namespace svxform
                             aExpImg = aCollImg = _rImgLst.GetImage( IID_OTHER );
                     }
 
-                    ::rtl::OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
+                    OUString sName = m_xUIHelper->getNodeDisplayName( xChild, bShowDetails );
                     if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
@@ -400,7 +400,7 @@ namespace svxform
                                 {
                                     Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
                                     pNode = new ItemNode( xAttr );
-                                    ::rtl::OUString sAttrName =
+                                    OUString sAttrName =
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_aItemList.InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
@@ -686,7 +686,7 @@ namespace svxform
                             try
                             {
                                 String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-                                ::rtl::OUString sTemp;
+                                OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sNewName += String( sTemp );
                                 sNewName += sDelim;
@@ -755,7 +755,7 @@ namespace svxform
         const ImageList& rImageList = m_pNaviWin->GetItemImageList();
         sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
-        ::rtl::OUString sName;
+        OUString sName;
         try
         {
             sName = m_xUIHelper->getNodeDisplayName(
@@ -814,13 +814,13 @@ namespace svxform
 
     class lcl_ReplaceString : public lcl_ResourceString
     {
-        rtl::OUString m_sDoc_UI;
-        rtl::OUString m_sInstance_UI;
-        rtl::OUString m_sNone_UI;
+        OUString m_sDoc_UI;
+        OUString m_sInstance_UI;
+        OUString m_sNone_UI;
 
-        rtl::OUString m_sDoc_API;
-        rtl::OUString m_sInstance_API;
-        rtl::OUString m_sNone_API;
+        OUString m_sDoc_API;
+        OUString m_sInstance_API;
+        OUString m_sNone_API;
 
         lcl_ReplaceString() :
             lcl_ResourceString(),
@@ -862,7 +862,7 @@ namespace svxform
 
         /** convert submission replace string from API value to UI value.
             Use 'none' as default. */
-        rtl::OUString toUI( const rtl::OUString& rStr ) const
+        OUString toUI( const OUString& rStr ) const
         {
             if( rStr == m_sDoc_API )
                 return m_sDoc_UI;
@@ -874,7 +874,7 @@ namespace svxform
 
         /** convert submission replace string from UI to API.
             Use 'none' as default. */
-        rtl::OUString toAPI( const rtl::OUString& rStr ) const
+        OUString toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sDoc_UI )
                 return m_sDoc_API;
@@ -887,13 +887,13 @@ namespace svxform
 
     class lcl_MethodString : public lcl_ResourceString
     {
-        rtl::OUString m_sPost_UI;
-        rtl::OUString m_sPut_UI;
-        rtl::OUString m_sGet_UI;
+        OUString m_sPost_UI;
+        OUString m_sPut_UI;
+        OUString m_sGet_UI;
 
-        rtl::OUString m_sPost_API;
-        rtl::OUString m_sPut_API;
-        rtl::OUString m_sGet_API;
+        OUString m_sPost_API;
+        OUString m_sPut_API;
+        OUString m_sGet_API;
 
         lcl_MethodString() :
             lcl_ResourceString(),
@@ -932,7 +932,7 @@ namespace svxform
         }
 
         /** convert from API to UI; put is default. */
-        rtl::OUString toUI( const rtl::OUString& rStr ) const
+        OUString toUI( const OUString& rStr ) const
         {
             if( rStr == m_sGet_API )
                 return m_sGet_UI;
@@ -943,7 +943,7 @@ namespace svxform
         }
 
         /** convert from UI to API; put is default */
-        rtl::OUString toAPI( const rtl::OUString& rStr ) const
+        OUString toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sGet_UI )
                 return m_sGet_API;
@@ -962,7 +962,7 @@ namespace svxform
         Image aImage = rImageList.GetImage( IID_ELEMENT );
 
         ItemNode* pNode = new ItemNode( _rEntry );
-        rtl::OUString sTemp;
+        OUString sTemp;
 
         if ( DGTSubmission == m_eGroup )
         {
@@ -1007,7 +1007,7 @@ namespace svxform
             try
             {
                 String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
-                ::rtl::OUString sName;
+                OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += String( sTemp );
                 sName += sDelim;
@@ -1029,7 +1029,7 @@ namespace svxform
     void XFormsPage::EditEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvTreeListEntry* pEntry = NULL;
-        rtl::OUString sTemp;
+        OUString sTemp;
 
         if ( DGTSubmission == m_eGroup )
         {
@@ -1319,7 +1319,7 @@ namespace svxform
                                 if ( aAny >>= xPropSet )
                                 {
                                     String sEntry;
-                                    rtl::OUString sTemp;
+                                    OUString sTemp;
                                     xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                     sEntry += String( sTemp );
                                     sEntry += sDelim;
@@ -1360,10 +1360,10 @@ namespace svxform
         const Sequence< PropertyValue >& _xPropSeq, const ImageList& _rImgLst )
     {
         String sRet;
-        rtl::OUString sTemp;
-        rtl::OUString sInstModel = PN_INSTANCE_MODEL;
-        rtl::OUString sInstName = PN_INSTANCE_ID;
-        rtl::OUString sInstURL = PN_INSTANCE_URL;
+        OUString sTemp;
+        OUString sInstModel = PN_INSTANCE_MODEL;
+        OUString sInstName = PN_INSTANCE_ID;
+        OUString sInstURL = PN_INSTANCE_URL;
         const PropertyValue* pProps = _xPropSeq.getConstArray();
         const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
         for ( ; pProps != pPropsEnd; ++pProps )
@@ -1382,7 +1382,7 @@ namespace svxform
                     #if OSL_DEBUG_LEVEL > 0
                         css::xml::dom::NodeType eNodeType = xRoot->getNodeType(); (void)eNodeType;
                     #endif
-                        ::rtl::OUString sNodeName =
+                        OUString sNodeName =
                             m_xUIHelper->getNodeDisplayName( xRoot, m_pNaviWin->IsShowDetails() );
                         if ( sNodeName.isEmpty() )
                             sNodeName = xRoot->getNodeName();
@@ -1631,7 +1631,7 @@ namespace svxform
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
         sal_uInt16 nSelectedPos = m_aModelsBox.GetSelectEntryPos();
-        ::rtl::OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
+        OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try
         {
@@ -1683,7 +1683,7 @@ namespace svxform
 
                                     Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
                                     xModelProps->setPropertyValue(
-                                        ::rtl::OUString( "ExternalData" ),
+                                        OUString( "ExternalData" ),
                                         makeAny( sal_Bool( !bDocumentData ) ) );
 
                                     sal_uInt16 nNewPos = m_aModelsBox.InsertEntry( sNewName );
@@ -1713,7 +1713,7 @@ namespace svxform
                         Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                         sal_Bool bExternalData = sal_False;
                         OSL_VERIFY( xModelProps->getPropertyValue(
-                            ::rtl::OUString( "ExternalData" ) ) >>= bExternalData );
+                            OUString( "ExternalData" ) ) >>= bExternalData );
                         bDocumentData = ( bExternalData == sal_False );
                     }
                     catch( const Exception& )
@@ -1733,7 +1733,7 @@ namespace svxform
                                 Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                                 Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
                                 xModelProps->setPropertyValue(
-                                    ::rtl::OUString( "ExternalData" ),
+                                    OUString( "ExternalData" ),
                                     makeAny( sal_Bool( !bDocumentData ) ) );
                                 bIsDocModified = true;
                             }
@@ -1804,8 +1804,8 @@ namespace svxform
                     if ( aDlg.Execute() == RET_OK )
                     {
                         sal_uInt16 nInst = GetNewPageId();
-                        ::rtl::OUString sName = aDlg.GetName();
-                        ::rtl::OUString sURL = aDlg.GetURL();
+                        OUString sName = aDlg.GetName();
+                        OUString sURL = aDlg.GetURL();
                         bool bLinkOnce = aDlg.IsLinkInstance();
                         try
                         {
@@ -1841,7 +1841,7 @@ namespace svxform
                         if ( aDlg.Execute() == RET_OK )
                         {
                             String sNewName = aDlg.GetName();
-                            ::rtl::OUString sURL = aDlg.GetURL();
+                            OUString sURL = aDlg.GetURL();
                             bool bLinkOnce = aDlg.IsLinkInstance();
                             try
                             {
@@ -2061,9 +2061,9 @@ namespace svxform
                     if ( xContainer.is() )
                     {
                         m_xDataContainer = xContainer;
-                        Sequence< ::rtl::OUString > aNameList = m_xDataContainer->getElementNames();
+                        Sequence< OUString > aNameList = m_xDataContainer->getElementNames();
                         sal_Int32 i, nCount = aNameList.getLength();
-                        ::rtl::OUString* pNames = aNameList.getArray();
+                        OUString* pNames = aNameList.getArray();
                         for ( i = 0; i < nCount; ++i )
                         {
                             Any aAny = m_xDataContainer->getByName( pNames[i] );
@@ -2089,7 +2089,7 @@ namespace svxform
     // -----------------------------------------------------------------------
     void DataNavigatorWindow::SetPageModel()
     {
-        rtl::OUString sModel( m_aModelsBox.GetSelectEntry() );
+        OUString sModel( m_aModelsBox.GetSelectEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -2122,7 +2122,7 @@ namespace svxform
     // -----------------------------------------------------------------------
     void DataNavigatorWindow::InitPages()
     {
-        rtl::OUString sModel( m_aModelsBox.GetSelectEntry() );
+        OUString sModel( m_aModelsBox.GetSelectEntry() );
         try
         {
             Any aAny = m_xDataContainer->getByName( sModel );
@@ -2197,8 +2197,8 @@ namespace svxform
     // -----------------------------------------------------------------------
     void DataNavigatorWindow::CreateInstancePage( const Sequence< PropertyValue >& _xPropSeq )
     {
-        rtl::OUString sInstName;
-        rtl::OUString sID( PN_INSTANCE_ID );
+        OUString sInstName;
+        OUString sID( PN_INSTANCE_ID );
         const PropertyValue* pProps = _xPropSeq.getConstArray();
         const PropertyValue* pPropsEnd = pProps + _xPropSeq.getLength();
         for ( ; pProps != pPropsEnd; ++pProps )
@@ -2214,7 +2214,7 @@ namespace svxform
         if ( sInstName.isEmpty() )
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::CreateInstancePage(): instance without name" );
-            String sTemp = rtl::OUString("untitled");
+            String sTemp = OUString("untitled");
             sTemp += OUString::number( nPageId );
             sInstName = sTemp;
         }
@@ -2555,7 +2555,7 @@ namespace svxform
 
         if ( pBox && m_xTempBinding.is() )
         {
-            ::rtl::OUString sTemp, sPropName;
+            OUString sTemp, sPropName;
             if ( &m_aRequiredCB == pBox )
                 sPropName = PN_REQUIRED_EXPR;
             else if ( &m_aRelevantCB == pBox )
@@ -2571,7 +2571,7 @@ namespace svxform
             if ( bIsChecked && sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
             else if ( !bIsChecked && !sTemp.isEmpty() )
-                sTemp = ::rtl::OUString();
+                sTemp = OUString();
             m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
         }
 
@@ -2581,7 +2581,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK( AddDataItemDialog, ConditionHdl, PushButton *, pBtn )
     {
-        ::rtl::OUString sTemp, sPropName;
+        OUString sTemp, sPropName;
         if ( &m_aDefaultBtn == pBtn )
             sPropName = PN_BINDING_EXPR;
         else if ( &m_aRequiredBtn == pBtn )
@@ -2617,7 +2617,7 @@ namespace svxform
             {
 
                 m_xTempBinding->setPropertyValue(
-                    sPropName, makeAny( ::rtl::OUString( sNewCondition ) ) );
+                    sPropName, makeAny( OUString( sNewCondition ) ) );
             }
         }
         return 0;
@@ -2637,7 +2637,7 @@ namespace svxform
             Reference< XPropertySetInfo > xFromInfo = xFrom->getPropertySetInfo();
             for ( sal_Int32 i = 0; i < nProperties; ++i )
             {
-                const ::rtl::OUString& rName = pProperties[i].Name;
+                const OUString& rName = pProperties[i].Name;
 
                 // if both set have the property, copy the value
                 // (catch and ignore exceptions, if any)
@@ -2662,7 +2662,7 @@ namespace svxform
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
-        ::rtl::OUString sNewName( m_aNameED.GetText() );
+        OUString sNewName( m_aNameED.GetText() );
 
         if ( ( !bIsHandleBinding && !bIsHandleText && !m_xUIHelper->isValidXMLName( sNewName ) ) ||
              ( bIsHandleBinding && sNewName.isEmpty() ) )
@@ -2676,7 +2676,7 @@ namespace svxform
             return 0;
         }
 
-        ::rtl::OUString sDataType( m_aDataTypeLB.GetSelectEntry() );
+        OUString sDataType( m_aDataTypeLB.GetSelectEntry() );
         m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
 
         if ( bIsHandleBinding )
@@ -2685,7 +2685,7 @@ namespace svxform
             copyPropSet( m_xTempBinding, m_pItemNode->m_xPropSet );
             try
             {
-                ::rtl::OUString sValue = m_aNameED.GetText();
+                OUString sValue = m_aNameED.GetText();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, makeAny( sValue ) );
                 sValue = m_aDefaultED.GetText();
                 m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
@@ -2792,7 +2792,7 @@ namespace svxform
 
                     if ( m_eItemType != DITText )
                     {
-                        ::rtl::OUString sName( m_xUIHelper->getNodeName( m_pItemNode->m_xNode ) );
+                        OUString sName( m_xUIHelper->getNodeName( m_pItemNode->m_xNode ) );
                         m_aNameED.SetText( sName );
                     }
                     m_aDefaultED.SetText( m_pItemNode->m_xNode->getNodeValue() );
@@ -2820,7 +2820,7 @@ namespace svxform
                         SAL_WARN( "svx.form", "AddDataItemDialog::InitFromNode(): exception caught" );
                     }
                 }
-                rtl::OUString sTemp;
+                OUString sTemp;
                 try
                 {
                     Reference< XPropertySetInfo > xInfo = m_pItemNode->m_xPropSet->getPropertySetInfo();
@@ -2853,7 +2853,7 @@ namespace svxform
 
             if ( m_xTempBinding.is() )
             {
-                ::rtl::OUString sTemp;
+                OUString sTemp;
                 try
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
@@ -2928,16 +2928,16 @@ namespace svxform
                         xModel->getDataTypeRepository();
                     if ( xDataTypes.is() )
                     {
-                        Sequence< ::rtl::OUString > aNameList = xDataTypes->getElementNames();
+                        Sequence< OUString > aNameList = xDataTypes->getElementNames();
                         sal_Int32 i, nCount = aNameList.getLength();
-                        ::rtl::OUString* pNames = aNameList.getArray();
+                        OUString* pNames = aNameList.getArray();
                         for ( i = 0; i < nCount; ++i )
                             m_aDataTypeLB.InsertEntry( pNames[i] );
                     }
 
                     if ( m_xTempBinding.is() )
                     {
-                        rtl::OUString sTemp;
+                        OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
                             sal_uInt16 nPos = m_aDataTypeLB.GetEntryPos( String( sTemp ) );
@@ -2988,7 +2988,7 @@ namespace svxform
     //========================================================================
 
     AddConditionDialog::AddConditionDialog(
-        Window* pParent, const ::rtl::OUString& _rPropertyName,
+        Window* pParent, const OUString& _rPropertyName,
         const Reference< XPropertySet >& _rPropSet ) :
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_CONDITION ) ),
@@ -3022,7 +3022,7 @@ namespace svxform
         {
             try
             {
-                rtl::OUString sTemp;
+                OUString sTemp;
                 if ( ( m_xBinding->getPropertyValue( m_sPropertyName ) >>= sTemp )
                     && !sTemp.isEmpty() )
                 {
@@ -3085,7 +3085,7 @@ namespace svxform
         try
         {
             if ( m_xBinding.is() )
-                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( ::rtl::OUString( m_aConditionED.GetText() ) ) );
+                m_xBinding->setPropertyValue( m_sPropertyName, makeAny( OUString( m_aConditionED.GetText() ) ) );
         }
         catch( const Exception& )
         {
@@ -3220,7 +3220,7 @@ namespace svxform
         {
             SvTreeListEntry* pEntry = m_aNamespacesList.FirstSelected();
             DBG_ASSERT( pEntry, "NamespaceItemDialog::ClickHdl(): no entry" );
-            ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+            OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
             m_aRemovedList.push_back( sPrefix );
             m_aNamespacesList.GetModel()->Remove( pEntry );
         }
@@ -3247,8 +3247,8 @@ namespace svxform
             for( i = 0; i < nEntryCount; ++i )
             {
                 SvTreeListEntry* pEntry = m_aNamespacesList.GetEntry(i);
-                ::rtl::OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
-                ::rtl::OUString sURL( m_aNamespacesList.GetEntryText( pEntry, 1 ) );
+                OUString sPrefix( m_aNamespacesList.GetEntryText( pEntry, 0 ) );
+                OUString sURL( m_aNamespacesList.GetEntryText( pEntry, 1 ) );
 
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                     m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
@@ -3270,13 +3270,13 @@ namespace svxform
     {
         try
         {
-            Sequence< ::rtl::OUString > aAllNames = m_rNamespaces->getElementNames();
-            const ::rtl::OUString* pAllNames = aAllNames.getConstArray();
-            const ::rtl::OUString* pAllNamesEnd = pAllNames + aAllNames.getLength();
+            Sequence< OUString > aAllNames = m_rNamespaces->getElementNames();
+            const OUString* pAllNames = aAllNames.getConstArray();
+            const OUString* pAllNamesEnd = pAllNames + aAllNames.getLength();
             for ( ; pAllNames != pAllNamesEnd; ++pAllNames )
             {
-                ::rtl::OUString sURL;
-                ::rtl::OUString sPrefix = *pAllNames;
+                OUString sURL;
+                OUString sPrefix = *pAllNames;
                 if ( m_rNamespaces->hasByName( sPrefix ) )
                 {
                     Any aAny = m_rNamespaces->getByName( sPrefix );
@@ -3422,7 +3422,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl)
     {
-        rtl::OUString sName(m_aNameED.GetText());
+        OUString sName(m_aNameED.GetText());
         if(sName.isEmpty()) {
 
             ErrorBox aErrorBox(this,SVX_RES(RID_ERR_EMPTY_SUBMISSIONNAME));
@@ -3454,7 +3454,7 @@ namespace svxform
 
         if ( m_xSubmission.is() )
         {
-            rtl::OUString sTemp = m_aNameED.GetText();
+            OUString sTemp = m_aNameED.GetText();
             try
             {
                 m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
@@ -3510,7 +3510,7 @@ namespace svxform
                             if ( aAny >>= xPropSet )
                             {
                                 String sEntry;
-                                rtl::OUString sTemp;
+                                OUString sTemp;
                                 xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sEntry += String( sTemp );
                                 sEntry += sDelim;
@@ -3553,7 +3553,7 @@ namespace svxform
         if ( m_pItemNode && m_pItemNode->m_xPropSet.is() )
         {
             m_xSubmission = m_pItemNode->m_xPropSet;
-            rtl::OUString sTemp;
+            OUString sTemp;
             try
             {
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;

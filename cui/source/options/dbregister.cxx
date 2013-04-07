@@ -193,7 +193,7 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
         if ( pRegistration && !pRegistration->sLocation.isEmpty() )
         {
-            ::rtl::OUString sName( pPathBox->GetEntryText( pEntry, 0 ) );
+            OUString sName( pPathBox->GetEntryText( pEntry, 0 ) );
             OFileNotation aTransformer( pRegistration->sLocation );
             aRegistrations[ sName ] = DatabaseRegistration( aTransformer.get( OFileNotation::N_URL ), pRegistration->bReadOnly );
         }
@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
     return 0;
 }
 // -----------------------------------------------------------------------------
-void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,const ::rtl::OUString& _sLocation, const bool _bReadOnly )
+void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )
 {
     String aStr( _sName );
     aStr += '\t';

@@ -32,14 +32,14 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
 
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
-            virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-            virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+            virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
 
             void createTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-            virtual ::rtl::OUString getNameForObject(const sdbcx::ObjectType& _xObject);
+            virtual OUString getNameForObject(const sdbcx::ObjectType& _xObject);
         public:
             OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
@@ -50,29 +50,29 @@ namespace connectivity
             virtual void SAL_CALL disposing(void);
 
             // XDrop
-            void appendNew(const ::rtl::OUString& _rsNewTable);
+            void appendNew(const OUString& _rsNewTable);
             // some helper functions
             /**
                 returns a sql string which contains the column definition part for create or alter statements
             */
-            static ::rtl::OUString getColumnSqlType(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+            static OUString getColumnSqlType(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
             /**
                 returns the "not null" part or the default part of the table statement
             */
-            static ::rtl::OUString getColumnSqlNotNullDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+            static OUString getColumnSqlNotNullDefault(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
             /**
                 returns the corresponding typename
                 can contain () which have to filled with values
             */
-            static ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
+            static OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColProp);
 
             /** convert the sql statement to fit MySQL notation
                 @param  _sSql in/out
             */
-            static ::rtl::OUString adjustSQL(const ::rtl::OUString& _sSql);
+            static OUString adjustSQL(const OUString& _sSql);
 
             // ISQLStatementHelper
-            virtual void addComment(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut);
+            virtual void addComment(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,OUStringBuffer& _rOut);
         };
     }
 }

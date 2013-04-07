@@ -65,7 +65,7 @@ public:
             The rectangle of the inner window content.
     */
     css::awt::Rectangle AddBorder (
-        const ::rtl::OUString& rsPaneURL,
+        const OUString& rsPaneURL,
         const css::awt::Rectangle& rInnerBox,
         const css::drawing::framework::BorderType eBorderType) const;
 
@@ -80,7 +80,7 @@ public:
             supposed to contain the window title.
     */
     css::awt::Rectangle RemoveBorder (
-        const ::rtl::OUString& rsPaneURL,
+        const OUString& rsPaneURL,
         const css::awt::Rectangle& rOuterBox,
         const css::drawing::framework::BorderType eBorderType) const;
 
@@ -91,36 +91,36 @@ public:
     // XPaneBorderPainter
 
     virtual css::awt::Rectangle SAL_CALL addBorder (
-        const rtl::OUString& rsPaneBorderStyleName,
+        const OUString& rsPaneBorderStyleName,
         const css::awt::Rectangle& rRectangle,
         css::drawing::framework::BorderType eBorderType)
         throw(css::uno::RuntimeException);
 
     virtual css::awt::Rectangle SAL_CALL removeBorder (
-        const rtl::OUString& rsPaneBorderStyleName,
+        const OUString& rsPaneBorderStyleName,
         const css::awt::Rectangle& rRectangle,
         css::drawing::framework::BorderType eBorderType)
         throw(css::uno::RuntimeException);
 
     virtual void SAL_CALL paintBorder (
-        const rtl::OUString& rsPaneBorderStyleName,
+        const OUString& rsPaneBorderStyleName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rOuterBorderRectangle,
         const css::awt::Rectangle& rRepaintArea,
-        const rtl::OUString& rsTitle)
+        const OUString& rsTitle)
         throw(css::uno::RuntimeException);
 
     virtual void SAL_CALL paintBorderWithCallout (
-        const rtl::OUString& rsPaneBorderStyleName,
+        const OUString& rsPaneBorderStyleName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::awt::Rectangle& rOuterBorderRectangle,
         const css::awt::Rectangle& rRepaintArea,
-        const rtl::OUString& rsTitle,
+        const OUString& rsTitle,
         const css::awt::Point& rCalloutAnchor)
         throw(css::uno::RuntimeException);
 
     virtual css::awt::Point SAL_CALL getCalloutOffset (
-        const rtl::OUString& rsPaneBorderStyleName)
+        const OUString& rsPaneBorderStyleName)
         throw(css::uno::RuntimeException);
 
 private:

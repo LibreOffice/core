@@ -99,7 +99,7 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
 
 // -----------------------------------------------------------------------------
 
-void GalleryThemeEntry::SetName( const rtl::OUString& rNewName )
+void GalleryThemeEntry::SetName( const OUString& rNewName )
 {
     if( aName != rNewName )
     {
@@ -127,9 +127,9 @@ SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aThemeName, RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rEntry.aUIName, RTL_TEXTENCODING_UTF8);
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, (rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE )), RTL_TEXTENCODING_UTF8);
-    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, rtl::OUString(), RTL_TEXTENCODING_UTF8); //aImportName
+    write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, OUString(), RTL_TEXTENCODING_UTF8); //aImportName
 
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, rtl::OString());
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, OString());
     return rOut;
 }
 
@@ -170,7 +170,7 @@ public:
 // - Gallery -
 // -----------
 
-Gallery::Gallery( const rtl::OUString& rMultiPath )
+Gallery::Gallery( const OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
 ,       nLastFileNumber     ( 0 )
 ,       bMultiPath          ( sal_False )
@@ -213,7 +213,7 @@ Gallery* Gallery::GetGalleryInstance()
 
 // ------------------------------------------------------------------------
 
-void Gallery::ImplLoad( const rtl::OUString& rMultiPath )
+void Gallery::ImplLoad( const OUString& rMultiPath )
 {
     const sal_Int32 nTokenCount = comphelper::string::getTokenCount(rMultiPath, ';');
     sal_Bool        bIsReadOnlyDir;
@@ -301,10 +301,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
             if( xContentAccess.is() )
             {
-                static const ::rtl::OUString s_sTitle("Title");
-                static const ::rtl::OUString s_sIsReadOnly("IsReadOnly");
-                static const ::rtl::OUString s_sSDG_EXT("sdg");
-                static const ::rtl::OUString s_sSDV_EXT("sdv");
+                static const OUString s_sTitle("Title");
+                static const OUString s_sIsReadOnly("IsReadOnly");
+                static const OUString s_sSDG_EXT("sdg");
+                static const OUString s_sSDV_EXT("sdv");
 
                 while( xResultSet->next() )
                 {
@@ -443,7 +443,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
 // ------------------------------------------------------------------------
 
-GalleryThemeEntry* Gallery::ImplGetThemeEntry( const rtl::OUString& rThemeName )
+GalleryThemeEntry* Gallery::ImplGetThemeEntry( const OUString& rThemeName )
 {
     GalleryThemeEntry* pFound = NULL;
 
@@ -459,7 +459,7 @@ GalleryThemeEntry* Gallery::ImplGetThemeEntry( const rtl::OUString& rThemeName )
 
 // ------------------------------------------------------------------------
 
-rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
+OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
 {
     GalleryThemeEntry* pFound = NULL;
 
@@ -473,7 +473,7 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
     // try fallback, if no entry was found
     if( !pFound )
     {
-        rtl::OString aFallback;
+        OString aFallback;
 
         switch( nThemeId )
         {
@@ -502,10 +502,10 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
                 break;
         }
 
-        pFound = const_cast<Gallery*>(this)->ImplGetThemeEntry(rtl::OStringToOUString(aFallback, RTL_TEXTENCODING_ASCII_US));
+        pFound = const_cast<Gallery*>(this)->ImplGetThemeEntry(OStringToOUString(aFallback, RTL_TEXTENCODING_ASCII_US));
     }
 
-    return( pFound ? pFound->GetThemeName() : rtl::OUString() );
+    return( pFound ? pFound->GetThemeName() : OUString() );
 }
 
 // ------------------------------------------------------------------------

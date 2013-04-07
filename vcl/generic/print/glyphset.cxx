@@ -43,10 +43,6 @@
 using namespace vcl;
 using namespace psp;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OUStringToOString;
 
 GlyphSet::GlyphSet (sal_Int32 nFontID, sal_Bool bVertical)
         : mnFontID (nFontID),

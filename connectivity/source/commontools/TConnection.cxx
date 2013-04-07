@@ -86,7 +86,7 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
 // -----------------------------------------------------------------------------
 void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,const Reference< XInterface>& _xContext )
 {
-    ::rtl::OUString sErrorMessage;
+    OUString sErrorMessage;
     if ( _nErrorResourceId )
         sErrorMessage = m_aResources.getResourceString( _nErrorResourceId );
     Reference< XInterface> xContext = _xContext;

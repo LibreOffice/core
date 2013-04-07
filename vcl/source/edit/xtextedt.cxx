@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 // -------------------------------------------------------------------------
 // class ExtTextEngine
 // -------------------------------------------------------------------------
-ExtTextEngine::ExtTextEngine() : maGroupChars(rtl::OUString("(){}[]"))
+ExtTextEngine::ExtTextEngine() : maGroupChars(OUString("(){}[]"))
 {
 }
 

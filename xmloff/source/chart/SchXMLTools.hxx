@@ -67,37 +67,37 @@ namespace SchXMLTools
         XML_CHART_CLASS_UNKNOWN
     };
 
-    SchXMLChartTypeEnum GetChartTypeEnum( const ::rtl::OUString& rClassName );
+    SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName );
 
-    ::rtl::OUString GetChartTypeByClassName(
-        const ::rtl::OUString & rClassName, bool bUseOldNames );
+    OUString GetChartTypeByClassName(
+        const OUString & rClassName, bool bUseOldNames );
 
     ::xmloff::token::XMLTokenEnum getTokenByChartType(
-        const ::rtl::OUString & rChartTypeService, bool bUseOldNames );
+        const OUString & rChartTypeService, bool bUseOldNames );
 
-    ::rtl::OUString GetNewChartTypeName( const ::rtl::OUString & rOldChartTypeName );
+    OUString GetNewChartTypeName( const OUString & rOldChartTypeName );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > CreateDataSequence(
-        const ::rtl::OUString& rRange,
+        const OUString& rRange,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument >& xChartDoc );
 
     void CreateCategories(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > & xNewDoc,
-        const ::rtl::OUString & rRangeAddress,
+        const OUString & rRangeAddress,
         sal_Int32 nCooSysIndex,
         sal_Int32 nDimensionIndex,
         tSchXMLLSequencesPerIndex * pLSequencesPerIndex = 0 );
 
-    ::com::sun::star::uno::Any getPropertyFromContext( const ::rtl::OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
+    ::com::sun::star::uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
-    void exportText( SvXMLExport& rExport, const ::rtl::OUString& rText, bool bConvertTabsLFs );
+    void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsLFs );
 
-    void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue );
+    void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue );
 
     /** returns the properties of the equation of the first regression curve
         that is no mean-value line
@@ -113,7 +113,7 @@ namespace SchXMLTools
     void setXMLRangePropertyAtDataSequence(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
-        const ::rtl::OUString & rXMLRange );
+        const OUString & rXMLRange );
 
     /** checks if the data sequence has the property "CachedXMLRange" (true for
         internal data sequences), and if so retrieves this property and applies
@@ -127,7 +127,7 @@ namespace SchXMLTools
     bool getXMLRangePropertyFromDataSequence(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
-        ::rtl::OUString & rOutXMLRange,
+        OUString & rOutXMLRange,
         bool bClearProp = false );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > getDataProviderFromParent( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );

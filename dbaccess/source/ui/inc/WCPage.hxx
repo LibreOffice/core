@@ -89,7 +89,7 @@ namespace dbaui
             m_aCB_UseHeaderLine.Disable();
         }
 
-        void setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );
+        void setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
     };
 }
 #endif // DBAUI_WIZARD_CPAGE_HXX

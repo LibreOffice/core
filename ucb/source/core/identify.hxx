@@ -36,7 +36,7 @@ class ContentIdentifier :
 {
 public:
     ContentIdentifier( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                       const rtl::OUString& ContentId );
+                       const OUString& ContentId );
     virtual ~ContentIdentifier();
 
     // XInterface
@@ -46,15 +46,15 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XContentIdentifier
-    virtual rtl::OUString SAL_CALL getContentIdentifier()
+    virtual OUString SAL_CALL getContentIdentifier()
         throw( com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString SAL_CALL getContentProviderScheme()
+    virtual OUString SAL_CALL getContentProviderScheme()
         throw( com::sun::star::uno::RuntimeException );
 
 private:
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
-    rtl::OUString m_aContentId;
-    rtl::OUString m_aProviderScheme;
+    OUString m_aContentId;
+    OUString m_aProviderScheme;
 };
 
 #endif /* !_IDENTIFY_HXX */

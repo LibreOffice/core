@@ -48,21 +48,21 @@ class SalGtkPicker
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
-        virtual void SAL_CALL implsetTitle( const ::rtl::OUString& aTitle )
+        virtual void SAL_CALL implsetTitle( const OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL implsetDisplayDirectory( const rtl::OUString& rDirectory )
+        virtual void SAL_CALL implsetDisplayDirectory( const OUString& rDirectory )
             throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL implgetDisplayDirectory(  )
+        virtual OUString SAL_CALL implgetDisplayDirectory(  )
             throw( com::sun::star::uno::RuntimeException );
-        rtl::OUString uritounicode(const gchar *pIn);
-        rtl::OString unicodetouri(const rtl::OUString &rURL);
+        OUString uritounicode(const gchar *pIn);
+        OString unicodetouri(const OUString &rURL);
 
         // to instantiate own services
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
-        rtl::OUString getResString( sal_Int32 aId );
+        OUString getResString( sal_Int32 aId );
     private:
         void setGtkLanguage();
 };

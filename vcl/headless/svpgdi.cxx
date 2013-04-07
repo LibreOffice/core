@@ -48,7 +48,7 @@ rDevice
 {
     #if OSL_DEBUG_LEVEL > 2
     static int dbgStreamNum = 0;
-    rtl::OStringBuffer aBuf( 256 );
+    OStringBuffer aBuf( 256 );
     aBuf.append( "debug" );
     mkdir( aBuf.getStr(), 0777 );
     aBuf.append( "/" );

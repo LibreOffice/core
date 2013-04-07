@@ -33,8 +33,6 @@
 #include <cstdio>
 #include <unistd.h>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 extern "C" {
 typedef SalInstance*(*salFactoryProc)( oslModule pModule);
 }
@@ -205,7 +203,7 @@ static SalInstance* autodetect_plugin()
     SalInstance* pInst = NULL;
     while( pList[nListEntry] && pInst == NULL )
     {
-        rtl::OUString aTry( rtl::OUString::createFromAscii( pList[nListEntry] ) );
+        OUString aTry( OUString::createFromAscii( pList[nListEntry] ) );
         pInst = tryInstance( aTry );
         #if OSL_DEBUG_LEVEL > 1
         if( pInst )
@@ -277,12 +275,12 @@ void InitSalMain()
 {
 }
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     if( rErrorText.isEmpty() )
         std::fprintf( stderr, "Application Error\n" );
     else
-        std::fprintf( stderr, "%s\n", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+        std::fprintf( stderr, "%s\n", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
     if( bDumpCore )
         abort();
     else
@@ -293,10 +291,10 @@ static const char * desktop_strings[] = { "none", "unknown", "GNOME", "TDE", "KD
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static rtl::OUString aRet;
+    static OUString aRet;
     if( aRet.isEmpty())
     {
-        rtl::OUStringBuffer buf( 8 );
+        OUStringBuffer buf( 8 );
         buf.appendAscii( desktop_strings[ get_desktop_environment() ] );
         aRet = buf.makeStringAndClear();
     }

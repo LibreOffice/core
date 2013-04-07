@@ -32,7 +32,7 @@ class PageHeaderFooterContext : public SvXMLImportContext
 public:
 
     PageHeaderFooterContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                       const rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ::std::vector< XMLPropertyState > & rProperties,
@@ -43,7 +43,7 @@ public:
     virtual ~PageHeaderFooterContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

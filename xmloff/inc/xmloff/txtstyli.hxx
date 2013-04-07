@@ -28,20 +28,20 @@ class XMLEventsImportContext;
 
 class XMLOFF_DLLPUBLIC XMLTextStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString             sListStyleName;
-    ::rtl::OUString             sCategoryVal;
-    ::rtl::OUString             sDropCapTextStyleName;
-    ::rtl::OUString             sMasterPageName;
-    ::rtl::OUString             sDataStyleName; // for grid columns only
-    const ::rtl::OUString       sIsAutoUpdate;
-    const ::rtl::OUString       sCategory;
-    const ::rtl::OUString       sNumberingStyleName;
-    const ::rtl::OUString       sOutlineLevel;
+    OUString             sListStyleName;
+    OUString             sCategoryVal;
+    OUString             sDropCapTextStyleName;
+    OUString             sMasterPageName;
+    OUString             sDataStyleName; // for grid columns only
+    const OUString       sIsAutoUpdate;
+    const OUString       sCategory;
+    const OUString       sNumberingStyleName;
+    const OUString       sOutlineLevel;
 
 public:
-    const ::rtl::OUString       sDropCapCharStyleName;
+    const OUString       sDropCapCharStyleName;
 private:
-    const ::rtl::OUString       sPageDescName;
+    const OUString       sPageDescName;
 
     sal_Int8    nOutlineLevel;
 
@@ -58,15 +58,15 @@ private:
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 
 public:
 
     TYPEINFO();
 
     XMLTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
@@ -75,22 +75,22 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
 
-    const ::rtl::OUString& GetListStyle() const { return sListStyleName; }
+    const OUString& GetListStyle() const { return sListStyleName; }
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
     sal_Bool IsListStyleSet() const
     {
         return mbListStyleSet;
     }
 
-    const ::rtl::OUString& GetMasterPageName() const { return sMasterPageName; }
+    const OUString& GetMasterPageName() const { return sMasterPageName; }
     sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
-    const ::rtl::OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
-    const ::rtl::OUString& GetDataStyleName() const { return sDataStyleName; }
+    const OUString& GetDropCapStyleName() const { return sDropCapTextStyleName; }
+    const OUString& GetDataStyleName() const { return sDataStyleName; }
 
     virtual void CreateAndInsert( sal_Bool bOverwrite );
     virtual void Finish( sal_Bool bOverwrite );

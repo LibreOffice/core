@@ -28,7 +28,7 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS ConfigItemListener
 {
 public:
-    virtual void notify( const ::rtl::OUString & rPropertyName ) = 0;
+    virtual void notify( const OUString & rPropertyName ) = 0;
 
 protected:
     ~ConfigItemListener() {}

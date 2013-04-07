@@ -79,7 +79,7 @@ XCommandInfo_impl::getCommands(
 
 CommandInfo SAL_CALL
 XCommandInfo_impl::getCommandInfoByName(
-    const rtl::OUString& aName )
+    const OUString& aName )
     throw( UnsupportedCommandException,
            uno::RuntimeException)
 {
@@ -107,7 +107,7 @@ XCommandInfo_impl::getCommandInfoByHandle(
 
 sal_Bool SAL_CALL
 XCommandInfo_impl::hasCommandByName(
-    const rtl::OUString& aName )
+    const OUString& aName )
     throw( uno::RuntimeException )
 {
     for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )

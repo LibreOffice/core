@@ -76,7 +76,7 @@ void SAL_CALL UcbCommandEnvironment::initialize(
 //=========================================================================
 
 // virtual
-::rtl::OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
+OUString SAL_CALL UcbCommandEnvironment::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -85,11 +85,11 @@ void SAL_CALL UcbCommandEnvironment::initialize(
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL
-UcbCommandEnvironment::supportsService( const ::rtl::OUString& ServiceName )
+UcbCommandEnvironment::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString * pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if ( pArray[ i ] == ServiceName )
@@ -100,7 +100,7 @@ UcbCommandEnvironment::supportsService( const ::rtl::OUString& ServiceName )
 
 //=========================================================================
 // virtual
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UcbCommandEnvironment::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
@@ -109,17 +109,17 @@ UcbCommandEnvironment::getSupportedServiceNames()
 
 //=========================================================================
 // static
-rtl::OUString UcbCommandEnvironment::getImplementationName_Static()
+OUString UcbCommandEnvironment::getImplementationName_Static()
 {
-    return rtl::OUString( "com.sun.star.comp.ucb.CommandEnvironment" );
+    return OUString( "com.sun.star.comp.ucb.CommandEnvironment" );
 }
 
 //=========================================================================
 // static
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 UcbCommandEnvironment::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CommandEnvironment";
     return aSNS;
 }

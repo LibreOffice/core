@@ -192,9 +192,9 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet) throw (::com::sun::star::uno::RuntimeException);
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rUser,
-            const ::rtl::OUString& _rPwd,
+            const OUString& _rDataSourceName,
+            const OUString& _rUser,
+            const OUString& _rPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext)
         SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
@@ -211,7 +211,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
-        const ::rtl::OUString& _rName
+        const OUString& _rName
     );
 
     /** returns the primary key columns of the table
@@ -267,7 +267,7 @@ namespace dbtools
         getFieldsByCommandDescriptor(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
-            const ::rtl::OUString& _rCommand,
+            const OUString& _rCommand,
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
             SQLExceptionInfo* _pErrorInfo = NULL
         )   SAL_THROW( ( ) );
@@ -300,11 +300,11 @@ namespace dbtools
         @return
             an array of strings containing the names of the columns (aka fields) of the object
     */
-    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Sequence< OUString >
         getFieldNamesByCommandDescriptor(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const sal_Int32 _nCommandType,
-            const ::rtl::OUString& _rCommand,
+            const OUString& _rCommand,
             SQLExceptionInfo* _pErrorInfo = NULL
         )   SAL_THROW( ( ) );
 
@@ -312,13 +312,13 @@ namespace dbtools
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).
     */
-    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const ::rtl::OUString& _rContextDescription, const ::rtl::OUString& _rContextDetails );
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::sdb::SQLContext prependContextInfo(const ::com::sun::star::sdbc::SQLException& _rException, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext, const OUString& _rContextDescription, const OUString& _rContextDetails );
 
     OOO_DLLPUBLIC_DBTOOLS
     ::com::sun::star::sdbc::SQLException prependErrorInfo(
         const ::com::sun::star::sdbc::SQLException& _rChainedException,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-        const ::rtl::OUString& _rAdditionalError,
+        const OUString& _rAdditionalError,
         const StandardSQLState _eSQLState = SQL_ERROR_UNSPECIFIED,
         const sal_Int32 _nErrorCode = 0);
 
@@ -345,7 +345,7 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
-                                        ,const ::rtl::OUString& _sProperty,
+                                        ,const OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False);
 
     /** retrieves a particular indirect data source setting
@@ -371,21 +371,21 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool    getDataSourceSetting(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
-        const ::rtl::OUString& _sSettingsName,
+        const OUString& _sSettingsName,
         ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
     );
 
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+    OOO_DLLPUBLIC_DBTOOLS OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
     /** quote the given name with the given quote string.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName);
+    OOO_DLLPUBLIC_DBTOOLS OUString quoteName(const OUString& _rQuote, const OUString& _rName);
 
     /** quote the given table name (which may contain a catalog and a schema) according to the rules provided by the meta data
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
-                                    , const ::rtl::OUString& _rName
+    OUString quoteTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _rxMeta
+                                    , const OUString& _rName
                                     ,EComposeRule _eComposeRule);
 
     /** split a fully qualified table name (including catalog and schema, if appliable) into it's component parts.
@@ -397,7 +397,7 @@ namespace dbtools
         @param  _eComposeRule       where do you need the name for
     */
     OOO_DLLPUBLIC_DBTOOLS void qualifiedNameComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
-        const ::rtl::OUString& _rQualifiedName, ::rtl::OUString& _rCatalog, ::rtl::OUString& _rSchema, ::rtl::OUString& _rName,EComposeRule _eComposeRule);
+        const OUString& _rQualifiedName, OUString& _rCatalog, OUString& _rSchema, OUString& _rName,EComposeRule _eComposeRule);
 
     /** calculate a NumberFormatsSupplier for use with an given connection
         @param      _rxConn         the connection for which the formatter is requested
@@ -453,10 +453,10 @@ namespace dbtools
     //----------------------------------------------------------------------------------
     /** compose a complete table name from it's up to three parts, regarding to the database meta data composing rules
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableName( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
-                            const ::rtl::OUString& _rCatalog,
-                            const ::rtl::OUString& _rSchema,
-                            const ::rtl::OUString& _rName,
+    OOO_DLLPUBLIC_DBTOOLS OUString composeTableName( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMetaData,
+                            const OUString& _rCatalog,
+                            const OUString& _rSchema,
+                            const OUString& _rName,
                             sal_Bool _bQuote,
                             EComposeRule _eComposeRule);
 
@@ -466,11 +466,11 @@ namespace dbtools
         the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
         in the data source which the connection belongs to.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableNameForSelect(
+    OOO_DLLPUBLIC_DBTOOLS OUString composeTableNameForSelect(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                            const ::rtl::OUString& _rCatalog,
-                            const ::rtl::OUString& _rSchema,
-                            const ::rtl::OUString& _rName );
+                            const OUString& _rCatalog,
+                            const OUString& _rSchema,
+                            const OUString& _rName );
 
     /** composes a table name for usage in a SELECT statement
 
@@ -478,7 +478,7 @@ namespace dbtools
         the settings "UseCatalogInSelect" and "UseSchemaInSelect", which might be present
         in the data source which the connection belongs to.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableNameForSelect(
+    OOO_DLLPUBLIC_DBTOOLS OUString composeTableNameForSelect(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable );
     //----------------------------------------------------------------------------------
@@ -488,7 +488,7 @@ namespace dbtools
         @param  _xTable
             The table.
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString composeTableName(
+    OOO_DLLPUBLIC_DBTOOLS OUString composeTableName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
         EComposeRule _eComposeRule,
@@ -500,7 +500,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
                                     sal_Int32 _nDataType);
     // return the datasource for the given datasource name
-    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const ::rtl::OUString& _rsDataSourceName,
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> getDataSource(const OUString& _rsDataSourceName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
     /** search for a name that is NOT in the NameAcces
@@ -514,15 +514,15 @@ namespace dbtools
             A name which doesn't exist in the collection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
-                                     const ::rtl::OUString& _rBaseName,
+    OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
+                                     const OUString& _rBaseName,
                                      sal_Bool _bStartWithNumber = sal_True);
 
     /** creates a unique name which is not already used in the given name array
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString createUniqueName(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rNames,
-        const ::rtl::OUString& _rBaseName,
+    OOO_DLLPUBLIC_DBTOOLS OUString createUniqueName(
+        const ::com::sun::star::uno::Sequence< OUString >& _rNames,
+        const OUString& _rBaseName,
         sal_Bool _bStartWithNumber = sal_True
     );
 
@@ -532,7 +532,7 @@ namespace dbtools
 
         @see isValidSQLName
     */
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString convertName2SQLName(const ::rtl::OUString& _rName,const ::rtl::OUString& _rSpecials);
+    OOO_DLLPUBLIC_DBTOOLS OUString convertName2SQLName(const OUString& _rName,const OUString& _rSpecials);
 
     /** checks whether the given name is a valid SQL name
 
@@ -541,7 +541,7 @@ namespace dbtools
 
         @see convertName2SQLName
     */
-    OOO_DLLPUBLIC_DBTOOLS sal_Bool isValidSQLName( const ::rtl::OUString& _rName, const ::rtl::OUString& _rSpecials );
+    OOO_DLLPUBLIC_DBTOOLS sal_Bool isValidSQLName( const OUString& _rName, const OUString& _rSpecials );
 
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,
@@ -634,10 +634,10 @@ namespace dbtools
             The scale will also be added when the value is 0.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+    OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                                     ISQLStatementHelper* _pHelper,
-                                                    const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+                                                    const OUString& _sCreatePattern = OUString());
 
     /** creates the standard sql statement for the key part of a create table statement.
         @param  descriptor
@@ -646,7 +646,7 @@ namespace dbtools
             The connection.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardKeyStatement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
+    OUString createStandardKeyStatement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** creates the standard sql statement for the column part of a create table statement.
@@ -660,10 +660,10 @@ namespace dbtools
             Allow to add special SQL constructs.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+    OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
                                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                                 ,ISQLStatementHelper* _pHelper = NULL
-                                                ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+                                                ,const OUString& _sCreatePattern = OUString());
 
     /** creates a SQL CREATE TABLE statement
 
@@ -679,10 +679,10 @@ namespace dbtools
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+    OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                                                     ,ISQLStatementHelper* _pHelper = NULL
-                                                    ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+                                                    ,const OUString& _sCreatePattern = OUString());
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable
@@ -704,7 +704,7 @@ namespace dbtools
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
             createSDBCXColumn(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                const ::rtl::OUString& _rName,
+                                const OUString& _rName,
                                 sal_Bool _bCase,
                                 sal_Bool _bQueryForInfo = sal_True,
                                 sal_Bool _bIsAutoIncrement = sal_False,
@@ -722,7 +722,7 @@ namespace dbtools
             The datadefintion object.
     */
     OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier> getDataDefinitionByURLAndConnection(
-            const ::rtl::OUString& _rsUrl,
+            const OUString& _rsUrl,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
@@ -738,13 +738,13 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     sal_Int32 getTablePrivileges(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
-                                 const ::rtl::OUString& _sCatalog,
-                                 const ::rtl::OUString& _sSchema,
-                                 const ::rtl::OUString& _sTable);
+                                 const OUString& _sCatalog,
+                                 const OUString& _sSchema,
+                                 const OUString& _sTable);
 
     typedef ::std::pair<sal_Bool,sal_Bool> TBoolPair;
     typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
-    typedef ::std::multimap< ::rtl::OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
+    typedef ::std::multimap< OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     /** collects the information about auto increment, currency and data type for the given column name.
         The column must be quoted, * is also valid.
         @param  _xConnection
@@ -758,8 +758,8 @@ namespace dbtools
     */
     OOO_DLLPUBLIC_DBTOOLS
     void collectColumnInformation(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                    const ::rtl::OUString& _sComposedTableName,
-                                    const ::rtl::OUString& _rName,
+                                    const OUString& _sComposedTableName,
+                                    const OUString& _rName,
                                     ColumnInformationMap& _rInfo);
 
 
@@ -776,10 +776,10 @@ namespace dbtools
             the buffer to which the comparison predicate will be appended
     */
     OOO_DLLPUBLIC_DBTOOLS void getBoleanComparisonPredicate(
-            const ::rtl::OUString& _rExpression,
+            const OUString& _rExpression,
             const sal_Bool  _bValue,
             const sal_Int32 _nBooleanComparisonMode,
-            ::rtl::OUStringBuffer& _out_rSQLPredicate
+            OUStringBuffer& _out_rSQLPredicate
         );
 
 //.........................................................................

@@ -51,13 +51,13 @@ public:
     MimeConfigurationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 
-    static ::rtl::OUString GetStringClassIDRepresentation( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
+    static OUString GetStringClassIDRepresentation( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
 
-    static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const ::rtl::OUString& aClassID );
+    static ::com::sun::star::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const OUString& aClassID );
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                                            GetConfigurationByPath( const ::rtl::OUString& aPath );
+                                            GetConfigurationByPath( const OUString& aPath );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetObjConfiguration();
 
@@ -65,61 +65,61 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetMediaTypeConfiguration();
 
 
-    ::rtl::OUString GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName );
+    OUString GetDocServiceNameFromFilter( const OUString& aFilterName );
 
-    ::rtl::OUString GetDocServiceNameFromMediaType( const ::rtl::OUString& aMediaType );
+    OUString GetDocServiceNameFromMediaType( const OUString& aMediaType );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjPropsFromConfigEntry(
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xObjectProps );
 
-    sal_Bool GetVerbByShortcut( const ::rtl::OUString& aVerbShortcut,
+    sal_Bool GetVerbByShortcut( const OUString& aVerbShortcut,
                                 ::com::sun::star::embed::VerbDescriptor& aDescriptor );
 
-    ::rtl::OUString GetExplicitlyRegisteredObjClassID( const ::rtl::OUString& aMediaType );
+    OUString GetExplicitlyRegisteredObjClassID( const OUString& aMediaType );
 
 
     // retrieving object description from configuration
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByStringClassID(
-                                                                const ::rtl::OUString& aStringClassID );
+                                                                const OUString& aStringClassID );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByClassID(
                                                 const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByMediaType(
-                                                const ::rtl::OUString& aMediaType );
+                                                const OUString& aMediaType );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByFilter(
-                                                const ::rtl::OUString& aFilterName );
+                                                const OUString& aFilterName );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > GetObjectPropsByDocumentName(
-                                                const ::rtl::OUString& aDocumentName );
+                                                const OUString& aDocumentName );
 
     // retrieving object factory from configuration
-    ::rtl::OUString GetFactoryNameByStringClassID( const ::rtl::OUString& aStringClassID );
-    ::rtl::OUString GetFactoryNameByClassID( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
-    ::rtl::OUString GetFactoryNameByDocumentName( const ::rtl::OUString& aDocName );
-    ::rtl::OUString GetFactoryNameByMediaType( const ::rtl::OUString& aMediaType );
+    OUString GetFactoryNameByStringClassID( const OUString& aStringClassID );
+    OUString GetFactoryNameByClassID( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID );
+    OUString GetFactoryNameByDocumentName( const OUString& aDocName );
+    OUString GetFactoryNameByMediaType( const OUString& aMediaType );
 
     // typedetection related
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterFactory();
 
-    ::rtl::OUString UpdateMediaDescriptorWithFilterName(
+    OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         sal_Bool bIgnoreType );
-    ::rtl::OUString UpdateMediaDescriptorWithFilterName(
+    OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
 #ifdef WNT
-    sal_Int32 GetFilterFlags( const ::rtl::OUString& aFilterName );
+    sal_Int32 GetFilterFlags( const OUString& aFilterName );
 
     sal_Bool AddFilterNameCheckOwnFile(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
 #endif
 
-    ::rtl::OUString GetDefaultFilterFromServiceName( const ::rtl::OUString& aServName, sal_Int32 nVersion );
+    OUString GetDefaultFilterFromServiceName( const OUString& aServName, sal_Int32 nVersion );
 
-    ::rtl::OUString GetExportFilterFromImportFilter( const ::rtl::OUString& aImportFilterName );
+    OUString GetExportFilterFromImportFilter( const OUString& aImportFilterName );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,

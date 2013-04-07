@@ -33,7 +33,7 @@
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
 #define LOCALE_VERSION_DTD "2.0.3"
 
-typedef ::std::set< ::rtl::OUString > NameSet;
+typedef ::std::set< OUString > NameSet;
 typedef ::std::set< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
@@ -59,7 +59,7 @@ int LocaleNode::getError() const
 
 void LocaleNode::print () const {
     printf ("<");
-    ::rtl::OUString str (aName);
+    OUString str (aName);
     for(sal_Int32 i = 0; i < str.getLength(); i++)
         printf( "%c", str[i]);
     printf (">\n");
@@ -224,7 +224,7 @@ void print_node( const LocaleNode* p, int depth=0 )
 
 void LocaleNode :: generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString aDTD = getAttr().getValueByName("versionDTD");
+    OUString aDTD = getAttr().getValueByName("versionDTD");
     if ( aDTD != LOCALE_VERSION_DTD )
     {
         ++nError;
@@ -236,7 +236,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
 }
 
 
-::rtl::OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
+OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
         const char* pParameterName, const LocaleNode* pNode,
         sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
 {
@@ -272,7 +272,7 @@ void LocaleNode :: generateCode (const OFileWriter &of) const
 }
 
 
-::rtl::OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
+OUString LocaleNode::writeParameterCheckLen( const OFileWriter &of,
         const char* pNodeName, const char* pParameterName,
         sal_Int32 nMinLen, sal_Int32 nMaxLen ) const
 {
@@ -296,7 +296,7 @@ void LocaleNode::incError( const char* pStr ) const
     fprintf( stderr, "Error: %s\n", pStr);
 }
 
-void LocaleNode::incError( const ::rtl::OUString& rStr ) const
+void LocaleNode::incError( const OUString& rStr ) const
 {
     incError( OSTR( rStr));
 }
@@ -321,13 +321,13 @@ void LocaleNode::incErrorInt( const char* pStr, int nVal ) const
     fprintf( stderr, prepareErrorFormat( pStr, ": %d"), nVal);
 }
 
-void LocaleNode::incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const
+void LocaleNode::incErrorStr( const char* pStr, const OUString& rVal ) const
 {
     ++nError;
     fprintf( stderr, prepareErrorFormat( pStr, ": %s"), OSTR( rVal));
 }
 
-void LocaleNode::incErrorStrStr( const char* pStr, const ::rtl::OUString& rVal1, const ::rtl::OUString& rVal2 ) const
+void LocaleNode::incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const
 {
     ++nError;
     fprintf( stderr, prepareErrorFormat( pStr, ": %s %s"), OSTR( rVal1), OSTR( rVal2));
@@ -361,7 +361,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
                 "Variants are not supported by application.");
     }
     else
-        of.writeParameter("Variant", ::rtl::OUString());
+        of.writeParameter("Variant", OUString());
     of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
@@ -379,12 +379,12 @@ static OUString aDecSep;
 void LCCTYPENode::generateCode (const OFileWriter &of) const
 {
     const LocaleNode * sepNode = 0;
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getLocaleItem_", useLocale);
         return;
     }
-    ::rtl::OUString str =   getAttr().getValueByName("unoid");
+    OUString str =   getAttr().getValueByName("unoid");
     of.writeAsciiString("\n\n");
     of.writeParameter("LC_CTYPE_Unoid", str);;
 
@@ -627,7 +627,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
     }
 
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty())
     {
         switch (mnSection)
@@ -876,7 +876,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         if (n)
             of.writeParameter("FormatDefaultName", n->getValue(), formatCount);
         else
-            of.writeParameter("FormatDefaultName", ::rtl::OUString(), formatCount);
+            of.writeParameter("FormatDefaultName", OUString(), formatCount);
 
     }
 
@@ -1265,7 +1265,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
 void LCCollationNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getCollatorImplementation_", useLocale);
         of.writeRefFunction("getCollationOptions_", useLocale);
@@ -1279,7 +1279,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
         LocaleNode * currNode = getChildAt (j);
         if( currNode->getName().compareToAscii("Collator") == 0 )
         {
-            ::rtl::OUString str;
+            OUString str;
             str = currNode->getAttr().getValueByName("unoid");
             of.writeParameter("CollatorID", str, j);
             str = currNode->getValue();
@@ -1338,7 +1338,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
 
 void LCSearchNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getSearchOptions_", useLocale);
         return;
@@ -1376,7 +1376,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
 
 void LCIndexNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getIndexAlgorithm_", useLocale);
         of.writeRefFunction("getUnicodeScripts_", useLocale);
@@ -1391,7 +1391,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
         LocaleNode * currNode = getChildAt (i);
         if( currNode->getName().compareToAscii("IndexKey") == 0 )
         {
-            ::rtl::OUString str;
+            OUString str;
             str = currNode->getAttr().getValueByName("unoid");
             of.writeParameter("IndexID", str, nbOfIndexs);
             str = currNode->getAttr().getValueByName("module");
@@ -1536,13 +1536,13 @@ static void lcl_writeAbbrFullNarrArrays( const OFileWriter & of, sal_Int16 nCoun
 
 void LCCalendarNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getAllCalendars_", useLocale);
         return;
     }
     sal_Int16 nbOfCalendars = sal::static_int_cast<sal_Int16>( getNumberOfChildren() );
-    ::rtl::OUString str;
+    OUString str;
     sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfMonths = new sal_Int16[nbOfCalendars];
     sal_Int16 * nbOfGenitiveMonths = new sal_Int16[nbOfCalendars];
@@ -1568,7 +1568,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         // Generate Days of Week
         const sal_Char *elementTag;
         LocaleNode * daysNode = NULL;
-        ::rtl::OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
+        OUString ref_name = calNode->getChildAt(nChild)->getAttr().getValueByName("ref");
         if (!ref_name.isEmpty() && i > 0) {
             for (j = 0; j < i; j++) {
                 str = getChildAt(j)->getAttr().getValueByName("unoid");
@@ -1851,13 +1851,13 @@ bool isIso4217( const OUString& rStr )
 
 void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getAllCurrencies_", useLocale);
         return;
     }
     sal_Int16 nbOfCurrencies = 0;
-    ::rtl::OUString str;
+    OUString str;
     sal_Int16 i;
 
     bool bTheDefault= false;
@@ -1952,13 +1952,13 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
 
 void LCTransliterationNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
         of.writeRefFunction("getTransliterations_", useLocale);
         return;
     }
     sal_Int16 nbOfModules = 0;
-    ::rtl::OUString str;
+    OUString str;
     sal_Int16 i;
 
     for ( i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
@@ -2001,7 +2001,7 @@ static NameValuePair ReserveWord[] = {
 
 void LCMiscNode::generateCode (const OFileWriter &of) const
 {
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
     of.writeRefFunction("getForbiddenCharacters_", useLocale);
     of.writeRefFunction("getBreakIteratorRules_", useLocale);
@@ -2017,7 +2017,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     bool bEnglishLocale = (strncmp( of.getLocale(), "en_", 3) == 0);
 
     sal_Int16 nbOfWords = 0;
-    ::rtl::OUString str;
+    OUString str;
     sal_Int16 i;
 
     for ( i = 0; i < sal_Int16(SAL_N_ELEMENTS(ReserveWord)); i++,nbOfWords++) {
@@ -2060,9 +2060,9 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
          of.writeParameter( "hangingChars", forbidNode -> getChildAt(2)->getValue());
     } else {
-         of.writeParameter( "forbiddenBegin", ::rtl::OUString());
-         of.writeParameter( "forbiddenEnd", ::rtl::OUString());
-         of.writeParameter( "hangingChars", ::rtl::OUString());
+         of.writeParameter( "forbiddenBegin", OUString());
+         of.writeParameter( "forbiddenEnd", OUString());
+         of.writeParameter( "hangingChars", OUString());
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
@@ -2078,11 +2078,11 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeParameter( "CharacterMode", breakNode -> getChildAt(3)->getValue());
          of.writeParameter( "LineMode", breakNode -> getChildAt(4)->getValue());
     } else {
-         of.writeParameter( "EditMode", ::rtl::OUString());
-         of.writeParameter( "DictionaryMode", ::rtl::OUString());
-         of.writeParameter( "WordCountMode", ::rtl::OUString());
-         of.writeParameter( "CharacterMode", ::rtl::OUString());
-         of.writeParameter( "LineMode", ::rtl::OUString());
+         of.writeParameter( "EditMode", OUString());
+         of.writeParameter( "DictionaryMode", OUString());
+         of.writeParameter( "WordCountMode", OUString());
+         of.writeParameter( "CharacterMode", OUString());
+         of.writeParameter( "LineMode", OUString());
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCBreakIteratorRulesArray[] = {\n");
     of.writeAsciiString("\tEditMode,\n");
@@ -2098,7 +2098,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
 void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> ContinuousNumbering\n");
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
     of.writeRefFunction2("getContinuousNumberingLevels_", useLocale);
     return;
@@ -2168,7 +2168,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 {
      of.writeAsciiString("// ---> OutlineNumbering\n");
-    ::rtl::OUString useLocale =   getAttr().getValueByName("ref");
+    OUString useLocale =   getAttr().getValueByName("ref");
     if (!useLocale.isEmpty()) {
     of.writeRefFunction3("getOutlineNumberingLevels_", useLocale);
     return;

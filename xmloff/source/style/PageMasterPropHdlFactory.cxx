@@ -29,8 +29,6 @@
 #include <com/sun/star/text/TextGridMode.hpp>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;

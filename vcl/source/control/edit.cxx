@@ -214,7 +214,7 @@ void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
     }
 }
 
-bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool Edit::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "width-chars")
         SetWidthInChars(rValue.toInt32());
@@ -473,7 +473,7 @@ OUString Edit::ImplGetText() const
             cEchoChar = mcEchoChar;
         else
             cEchoChar = '*';
-        rtl::OUStringBuffer aText;
+        OUStringBuffer aText;
         comphelper::string::padToLength(aText, maText.getLength(), cEchoChar);
         return aText.makeStringAndClear();
     }
@@ -808,7 +808,7 @@ void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uI
 
 OUString Edit::ImplGetValidString( const OUString& rString ) const
 {
-    rtl::OUString aValidString( rString );
+    OUString aValidString( rString );
     aValidString = comphelper::string::remove(aValidString, _LF);
     aValidString = comphelper::string::remove(aValidString, _CR);
     aValidString = aValidString.replace('\t', ' ');
@@ -854,7 +854,7 @@ void Edit::ShowTruncationWarning( Window* pParent )
 
 // -----------------------------------------------------------------------
 
-bool Edit::ImplTruncateToMaxLen( rtl::OUString& rStr, sal_uInt32 nSelectionLen ) const
+bool Edit::ImplTruncateToMaxLen( OUString& rStr, sal_uInt32 nSelectionLen ) const
 {
     bool bWasTruncated = false;
     const sal_uInt32 nMaxLen = mnMaxTextLen < 65534 ? mnMaxTextLen : 65534;
@@ -951,7 +951,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, sal_B
             // the text that needs to be checked is only the one
             // before the current cursor position
             OUString aOldText( maText.getStr(), nTmpPos);
-            rtl::OUString aTmpText( aOldText );
+            OUString aTmpText( aOldText );
             if (bCTLSequenceCheckingTypeAndReplace)
             {
                 xISC->correctInputSequence( aTmpText, nTmpPos - 1, cChar, nCheckMode );
@@ -1434,7 +1434,7 @@ void Edit::ImplPaste( uno::Reference< datatransfer::clipboard::XClipboard >& rxC
             try
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
+                OUString aText;
                 aData >>= aText;
                 if( ImplTruncateToMaxLen( aText, maSelection.Len() ) )
                     ShowTruncationWarning( const_cast<Edit*>(this) );
@@ -1853,7 +1853,7 @@ sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     bDone = sal_True;   // read characters also when in ReadOnly
                     if ( !mbReadOnly )
                     {
-                        ImplInsertText(rtl::OUString(rKEvt.GetCharCode()), 0, sal_True);
+                        ImplInsertText(OUString(rKEvt.GetCharCode()), 0, sal_True);
                         if ( maAutocompleteHdl.IsSet() )
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
@@ -2841,7 +2841,7 @@ void Edit::SetSubEdit( Edit* pEdit )
     }
 }
 
-Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
+Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 {
     Size aSize;
     if (mnWidthInChars != -1)
@@ -2870,7 +2870,7 @@ Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
     Rectangle aContent, aBound;
     if( const_cast<Edit*>(this)->GetNativeControlRegion(
                    CTRL_EDITBOX, PART_ENTIRE_CONTROL,
-                   aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                   aRect, 0, aControlValue, OUString(), aBound, aContent) )
     {
         if( aBound.GetHeight() > aSize.Height() )
             aSize.Height() = aBound.GetHeight();
@@ -2904,7 +2904,7 @@ Size Edit::CalcSize( xub_StrLen nChars ) const
 {
     // width for N characters, independent from content.
     // works only correct for fixed fonts, average otherwise
-    Size aSz( GetTextWidth( rtl::OUString('x') ), GetTextHeight() );
+    Size aSz( GetTextWidth( OUString('x') ), GetTextHeight() );
     aSz.Width() *= nChars;
     aSz.Width() += ImplGetExtraOffset() * 2;
     aSz = CalcWindowSize( aSz );
@@ -2917,7 +2917,7 @@ xub_StrLen Edit::GetMaxVisChars() const
 {
     const Window* pW = mpSubEdit ? mpSubEdit : this;
     long nOutWidth = pW->GetOutputSizePixel().Width();
-    long nCharWidth = GetTextWidth( rtl::OUString('x') );
+    long nCharWidth = GetTextWidth( OUString('x') );
     return nCharWidth ? (xub_StrLen)(nOutWidth/nCharWidth) : 0;
 }
 
@@ -3070,7 +3070,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
             if ( xDataObj->isDataFlavorSupported( aFlavor ) )
             {
                 uno::Any aData = xDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
+                OUString aText;
                 aData >>= aText;
                 ImplInsertText( aText );
                 bChanges = sal_True;
@@ -3101,7 +3101,7 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     for( sal_Int32 i = 0; i < nEle; i++ )
     {
         sal_Int32 nIndex = 0;
-        rtl::OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
+        OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
         if ( aMimetype == "text/plain" )
         {
             mpDDInfo->bIsStringSupported = sal_True;

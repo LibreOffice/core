@@ -57,11 +57,11 @@ public:
 
     FieldUnit getFieldUnit();
     virtual void                    Commit();
-    virtual void                    Notify( const uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
 };
 
 CalcConfigItem::CalcConfigItem()
-    : ConfigItem( ::rtl::OUString( "Office.Calc/Layout" ))
+    : ConfigItem( OUString( "Office.Calc/Layout" ))
 {
 }
 
@@ -70,7 +70,7 @@ CalcConfigItem::~CalcConfigItem()
 }
 
 void CalcConfigItem::Commit() {}
-void CalcConfigItem::Notify( const uno::Sequence<rtl::OUString>& ) {}
+void CalcConfigItem::Notify( const uno::Sequence<OUString>& ) {}
 
 FieldUnit CalcConfigItem::getFieldUnit()
 {

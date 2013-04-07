@@ -68,11 +68,11 @@ class SvMetaSlot : public SvMetaAttribute
     SvMetaEnumValue* pEnumValue;
     SvString    aUnoName;
 
-    void            WriteSlot( const rtl::OString& rShellName,
-                            sal_uInt16 nCount, const rtl::OString& rSlotId,
+    void            WriteSlot( const OString& rShellName,
+                            sal_uInt16 nCount, const OString& rSlotId,
                             SvSlotElementList &rList,
                             size_t nStart,
-                            const rtl::OString& rPrefix,
+                            const OString& rPrefix,
                                SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
                             SvStream & rOutStm, sal_uInt16 nTab,
@@ -177,17 +177,17 @@ public:
 
     virtual sal_Bool    IsVariable() const;
     virtual sal_Bool    IsMethod() const;
-    virtual rtl::OString GetMangleName( sal_Bool bVariable ) const;
+    virtual OString GetMangleName( sal_Bool bVariable ) const;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
     sal_Bool                GetHasCoreId() const;
-    const rtl::OString&     GetGroupId() const;
-    const rtl::OString&     GetConfigId() const;
-    const rtl::OString&     GetExecMethod() const;
-    const rtl::OString&     GetStateMethod() const;
-    const rtl::OString&     GetDefault() const;
-    const rtl::OString&     GetDisableFlags() const;
+    const OString&     GetGroupId() const;
+    const OString&     GetConfigId() const;
+    const OString&     GetExecMethod() const;
+    const OString&     GetStateMethod() const;
+    const OString&     GetDefault() const;
+    const OString&     GetDisableFlags() const;
     sal_Bool                GetPseudoSlots() const;
     sal_Bool                GetCachable() const;
     sal_Bool                GetVolatile() const;
@@ -204,8 +204,8 @@ public:
     sal_Bool                GetRecordAbsolute() const;
 
     sal_Bool                GetHasDialog() const;
-    const rtl::OString&     GetPseudoPrefix() const;
-    const rtl::OString&     GetUnoName() const;
+    const OString&     GetPseudoPrefix() const;
+    const OString&     GetUnoName() const;
     sal_Bool                GetMenuConfig() const;
     sal_Bool                GetToolBoxConfig() const;
     sal_Bool                GetStatusBarConfig() const;
@@ -235,16 +235,16 @@ public:
     virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
                                     SvStream & rOutStm, sal_uInt16 nTab );
-    virtual void        Insert( SvSlotElementList&, const rtl::OString& rPrefix,
+    virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
-    void                WriteSlotStubs( const rtl::OString& rShellName,
+    void                WriteSlotStubs( const OString& rShellName,
                                     ByteStringList & rList,
                                     SvStream & rOutStm );
-    sal_uInt16          WriteSlotMap( const rtl::OString& rShellName,
+    sal_uInt16          WriteSlotMap( const OString& rShellName,
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
                                     size_t nStart,
-                                    const rtl::OString&,
+                                    const OString&,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
     sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,

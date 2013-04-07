@@ -51,7 +51,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
 
     void                                                    setActualSlidePersist( SlidePersistPtr pActualSlidePersist ){ mpActualSlidePersist = pActualSlidePersist; };
-    std::map< rtl::OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
+    std::map< OUString, oox::drawingml::ThemePtr >&    getThemes(){ return maThemes; };
     std::vector< SlidePersistPtr >&                         getDrawPages(){ return maDrawPages; };
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
@@ -68,14 +68,14 @@ public:
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual ::rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
 
 private:
-    rtl::OUString                                       maTableStyleListPath;
+    OUString                                       maTableStyleListPath;
     oox::drawingml::table::TableStyleListPtr            mpTableStyleList;
 
     SlidePersistPtr                                     mpActualSlidePersist;
-    std::map< rtl::OUString, oox::drawingml::ThemePtr > maThemes;
+    std::map< OUString, oox::drawingml::ThemePtr > maThemes;
 
     std::vector< SlidePersistPtr > maDrawPages;
     std::vector< SlidePersistPtr > maMasterPages;

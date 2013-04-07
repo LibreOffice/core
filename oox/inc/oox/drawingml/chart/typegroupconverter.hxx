@@ -149,7 +149,7 @@ public:
     /** Returns true, if this chart type has to reverse its series order. */
     bool                isReverseSeries() const;
     /** Returns series title, if the chart type group contains only one single series. */
-    ::rtl::OUString     getSingleSeriesTitle() const;
+    OUString     getSingleSeriesTitle() const;
 
     /** Creates a coordinate system according to the contained chart type. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >

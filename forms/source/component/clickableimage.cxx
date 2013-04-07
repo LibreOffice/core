@@ -77,7 +77,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _aService)
+    OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XMultiServiceFactory>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
         ,m_pThread(NULL)
         ,m_aSubmissionVetoListeners( m_aMutex )
@@ -296,7 +296,7 @@ namespace frm
                 {
                     m_pFeatureInterception->getTransformer().parseSmartWithAsciiProtocol( aURL, INET_FILE_SCHEME );
 
-                    ::rtl::OUString aTargetFrame;
+                    OUString aTargetFrame;
                     xSet->getPropertyValue(PROPERTY_TARGET_FRAME) >>= aTargetFrame;
 
                     Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch( aURL, aTargetFrame,
@@ -305,7 +305,7 @@ namespace frm
 
                     Sequence<PropertyValue> aArgs(1);
                     PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = ::rtl::OUString("Referer");
+                    rProp.Name = OUString("Referer");
                     rProp.Value <<= xModel->getURL();
 
                     if (xDisp.is())
@@ -315,18 +315,18 @@ namespace frm
                 {
                     URL aHyperLink = m_pFeatureInterception->getTransformer().getStrictURLFromAscii( ".uno:OpenHyperlink" );
 
-                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aHyperLink, ::rtl::OUString() , 0);
+                    Reference< XDispatch >  xDisp = Reference< XDispatchProvider > (xFrame,UNO_QUERY)->queryDispatch(aHyperLink, OUString() , 0);
 
                     if ( xDisp.is() )
                     {
                         Sequence<PropertyValue> aProps(3);
-                        aProps[0].Name  = ::rtl::OUString("URL");
+                        aProps[0].Name  = OUString("URL");
                         aProps[0].Value <<= aURL.Complete;
 
-                        aProps[1].Name  = ::rtl::OUString("FrameName");
+                        aProps[1].Name  = OUString("FrameName");
                         aProps[1].Value = xSet->getPropertyValue(PROPERTY_TARGET_FRAME);
 
-                        aProps[2].Name  = ::rtl::OUString("Referer");
+                        aProps[2].Name  = OUString("Referer");
                         aProps[2].Value <<= xModel->getURL();
 
                         xDisp->dispatch( aHyperLink, aProps );
@@ -368,12 +368,12 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported = OControl::getSupportedServiceNames();
+        Sequence< OUString > aSupported = OControl::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
 
-        ::rtl::OUString* pArray = aSupported.getArray();
+        OUString* pArray = aSupported.getArray();
         pArray[ aSupported.getLength() - 1 ] = FRM_SUN_CONTROL_SUBMITBUTTON;
 
         return aSupported;
@@ -429,7 +429,7 @@ namespace frm
         catch( const Exception& e )
         {
             OSL_FAIL( "OClickableImageBaseControl::implSubmit: caught an unknown exception!" );
-            throw WrappedTargetException( ::rtl::OUString(), *this, makeAny( e ) );
+            throw WrappedTargetException( OUString(), *this, makeAny( e ) );
         }
     }
 
@@ -448,8 +448,8 @@ namespace frm
     //------------------------------------------------------------------
     DBG_NAME( OClickableImageBaseModel )
     //------------------------------------------------------------------
-    OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& _rUnoControlModelTypeName,
-            const ::rtl::OUString& rDefault )
+    OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& _rUnoControlModelTypeName,
+            const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
         ,m_pMedium(NULL)
@@ -562,12 +562,12 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported = OControlModel::getSupportedServiceNames();
+        Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
 
-        ::rtl::OUString* pArray = aSupported.getArray();
+        OUString* pArray = aSupported.getArray();
         pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_SUBMITBUTTON;
 
         return aSupported;
@@ -678,8 +678,8 @@ namespace frm
     {
         ImageProducer *pImgProd = GetImageProducer();
         // grab the ImageURL
-        rtl::OUString sURL;
-        getPropertyValue( rtl::OUString("ImageURL") ) >>= sURL;
+        OUString sURL;
+        getPropertyValue( OUString("ImageURL") ) >>= sURL;
         if (!m_pMedium)
         {
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )
@@ -708,7 +708,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    void OClickableImageBaseModel::SetURL( const ::rtl::OUString& rURL )
+    void OClickableImageBaseModel::SetURL( const OUString& rURL )
     {
         if (m_pMedium || rURL.isEmpty())
         {
@@ -853,7 +853,7 @@ namespace frm
         {
             case PROPERTY_ID_BUTTONTYPE             : return makeAny( FormButtonType_PUSH );
             case PROPERTY_ID_TARGET_URL             :
-            case PROPERTY_ID_TARGET_FRAME           : return makeAny( ::rtl::OUString() );
+            case PROPERTY_ID_TARGET_FRAME           : return makeAny( OUString() );
             case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( sal_False );
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);

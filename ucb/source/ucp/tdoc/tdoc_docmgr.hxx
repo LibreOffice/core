@@ -38,8 +38,8 @@ namespace tdoc_ucp {
     class OfficeDocumentsEventListener
     {
     public:
-        virtual void notifyDocumentOpened( const rtl::OUString & rDocId ) = 0;
-        virtual void notifyDocumentClosed( const rtl::OUString & rDocId ) = 0;
+        virtual void notifyDocumentOpened( const OUString & rDocId ) = 0;
+        virtual void notifyDocumentClosed( const OUString & rDocId ) = 0;
 
     protected:
         ~OfficeDocumentsEventListener() {}
@@ -49,7 +49,7 @@ namespace tdoc_ucp {
 
     struct StorageInfo
     {
-        rtl::OUString aTitle;
+        OUString aTitle;
         com::sun::star::uno::Reference<
             com::sun::star::embed::XStorage > xStorage;
         com::sun::star::uno::Reference<
@@ -58,7 +58,7 @@ namespace tdoc_ucp {
         StorageInfo() {}; // needed for STL map only.
 
         StorageInfo(
-            const rtl::OUString & rTitle,
+            const OUString & rTitle,
             const com::sun::star::uno::Reference<
                 com::sun::star::embed::XStorage > & rxStorage,
             const com::sun::star::uno::Reference<
@@ -71,13 +71,13 @@ namespace tdoc_ucp {
     struct ltref
     {
         bool operator()(
-            const rtl::OUString & r1, const rtl::OUString & r2 ) const
+            const OUString & r1, const OUString & r2 ) const
         {
             return r1 < r2;
         }
     };
 
-    typedef std::map< rtl::OUString, StorageInfo, ltref > DocumentList;
+    typedef std::map< OUString, StorageInfo, ltref > DocumentList;
 
     //=======================================================================
 
@@ -132,21 +132,21 @@ namespace tdoc_ucp {
 
         // Non-interface
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-        queryStorage( const rtl::OUString & rDocId );
+        queryStorage( const OUString & rDocId );
 
-        rtl::OUString
+        OUString
         queryDocumentId(
             const com::sun::star::uno::Reference<
                 com::sun::star::frame::XModel > & xModel );
 
         com::sun::star::uno::Reference< com::sun::star::frame::XModel >
-        queryDocumentModel( const rtl::OUString & rDocId );
+        queryDocumentModel( const OUString & rDocId );
 
-        com::sun::star::uno::Sequence< rtl::OUString >
+        com::sun::star::uno::Sequence< OUString >
         queryDocuments();
 
-        rtl::OUString
-        queryStorageTitle( const rtl::OUString & rDocId );
+        OUString
+        queryStorageTitle( const OUString & rDocId );
 
     private:
         void buildDocumentsList();

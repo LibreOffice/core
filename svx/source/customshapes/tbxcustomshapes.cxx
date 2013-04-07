@@ -144,14 +144,14 @@ void SvxTbxCtlCustomShapes::Select( sal_Bool /*bMod1*/ )
     return sal_True;
 }
 
-::rtl::OUString SAL_CALL SvxTbxCtlCustomShapes::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SvxTbxCtlCustomShapes::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
     // Provide the controlled sub-toolbar name, so we are notified whenever
     // this toolbar executes a function.
     return m_aSubTbName;
 }
 
-void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rCommand ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const OUString& rCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
     // remind the new command
     m_aCommand = rCommand;

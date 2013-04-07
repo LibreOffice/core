@@ -74,28 +74,28 @@ namespace dbaui
         return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OTableWindowAccess_BASE::getTypes());
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OTableWindowAccess::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OTableWindowAccess::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
     // -----------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
     // -----------------------------------------------------------------------------
     // XServiceInfo - static methods
-    Sequence< ::rtl::OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
+    Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
-        Sequence< ::rtl::OUString > aSupported(2);
-        aSupported[0] = ::rtl::OUString("com.sun.star.accessibility.Accessible");
-        aSupported[1] = ::rtl::OUString("com.sun.star.accessibility.AccessibleContext");
+        Sequence< OUString > aSupported(2);
+        aSupported[0] = OUString("com.sun.star.accessibility.Accessible");
+        aSupported[1] = OUString("com.sun.star.accessibility.AccessibleContext");
         return aSupported;
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )
+    OUString OTableWindowAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
-        return ::rtl::OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
+        return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext
@@ -261,15 +261,15 @@ namespace dbaui
         return m_pTable && !m_pTable->getTableView()->getDesignView()->getController().isReadOnly();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException)
+    OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException)
     {
         return getAccessibleName(  );
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OTableWindowAccess::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL OTableWindowAccess::getAccessibleName(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        ::rtl::OUString sAccessibleName;
+        OUString sAccessibleName;
         if ( m_pTable )
             sAccessibleName = m_pTable->getTitle();
         return sAccessibleName;

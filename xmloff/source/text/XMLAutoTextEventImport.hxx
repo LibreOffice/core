@@ -63,7 +63,7 @@ protected:
 
     virtual SvXMLImportContext* CreateContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -72,11 +72,11 @@ protected:
 
 // global functions to support the component
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
     XMLAutoTextEventImport_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
+OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

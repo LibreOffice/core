@@ -86,7 +86,7 @@ namespace sd { namespace colortoolpanel
 
                 WindowDescriptor aWindow;
                 aWindow.Type = WindowClass_SIMPLE;
-                aWindow.WindowServiceName = ::rtl::OUString( "window" );
+                aWindow.WindowServiceName = OUString( "window" );
                 aWindow.Parent = i_rParentWindow;
                 aWindow.WindowAttributes = WindowAttribute::BORDER;
 
@@ -153,7 +153,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.get() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
         return m_xWindow;
     }
 
@@ -171,7 +171,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
         return m_xResourceId;
     }
 
@@ -180,7 +180,7 @@ namespace sd { namespace colortoolpanel
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
         return sal_False;
     }
 

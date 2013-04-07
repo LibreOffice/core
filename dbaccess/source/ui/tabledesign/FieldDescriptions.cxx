@@ -126,7 +126,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                     SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
                 {
-                    ::rtl::OUString sHelpText;
+                    OUString sHelpText;
                     xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
                     SetHelpText(sHelpText);
                 }
@@ -246,7 +246,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::SetName(const ::rtl::OUString& _rName)
+void OFieldDescription::SetName(const OUString& _rName)
 {
     try
     {
@@ -261,7 +261,7 @@ void OFieldDescription::SetName(const ::rtl::OUString& _rName)
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::SetHelpText(const ::rtl::OUString& _sHelpText)
+void OFieldDescription::SetHelpText(const OUString& _sHelpText)
 {
     try
     {
@@ -276,7 +276,7 @@ void OFieldDescription::SetHelpText(const ::rtl::OUString& _sHelpText)
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::SetDescription(const ::rtl::OUString& _rDescription)
+void OFieldDescription::SetDescription(const OUString& _rDescription)
 {
     try
     {
@@ -321,7 +321,7 @@ void OFieldDescription::SetControlDefault(const Any& _rControlDefault)
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue)
+void OFieldDescription::SetAutoIncrementValue(const OUString& _sAutoIncValue)
 {
     try
     {
@@ -476,7 +476,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString             OFieldDescription::GetName()                const
+OUString             OFieldDescription::GetName()                const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_NAME) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_NAME));
@@ -484,7 +484,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sName;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString             OFieldDescription::GetDescription()         const
+OUString             OFieldDescription::GetDescription()         const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DESCRIPTION) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_DESCRIPTION));
@@ -492,7 +492,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sDescription;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString             OFieldDescription::GetHelpText()            const
+OUString             OFieldDescription::GetHelpText()            const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_HELPTEXT));
@@ -508,7 +508,7 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_aControlDefault;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString             OFieldDescription::GetAutoIncrementValue()  const
+OUString             OFieldDescription::GetAutoIncrementValue()  const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION));
@@ -524,7 +524,7 @@ sal_Int32                   OFieldDescription::GetType()                const
         return m_pType.get() ? m_pType->nType : m_nType;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString             OFieldDescription::GetTypeName()            const
+OUString             OFieldDescription::GetTypeName()            const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
         return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_TYPENAME));
@@ -629,7 +629,7 @@ sal_Bool                    OFieldDescription::IsNullable()             const
         return m_nIsNullable == ::com::sun::star::sdbc::ColumnValue::NULLABLE;
 }
 // -----------------------------------------------------------------------------
-void OFieldDescription::SetTypeName(const ::rtl::OUString& _sTypeName)
+void OFieldDescription::SetTypeName(const OUString& _sTypeName)
 {
     try
     {

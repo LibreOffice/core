@@ -27,7 +27,6 @@
 #include "XMLTextNumRuleInfo.hxx"
 #include "xmloff/XMLTextListAutoStylePool.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -201,7 +200,7 @@ void XMLTextNumRuleInfo::Set(
             }
         }
 
-        msListLabelString = ::rtl::OUString();
+        msListLabelString = OUString();
         if ( bExportTextNumberElement &&
              xPropSetInfo->hasPropertyByName( msListLabelStringProp ) )
         {

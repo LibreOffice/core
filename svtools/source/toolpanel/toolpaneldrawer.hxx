@@ -60,7 +60,7 @@ namespace svt
     class ToolPanelDrawer : public Window
     {
     public:
-        ToolPanelDrawer( Window& i_rParent, const ::rtl::OUString& i_rTitle );
+        ToolPanelDrawer( Window& i_rParent, const OUString& i_rTitle );
         ~ToolPanelDrawer();
 
         long    GetPreferredHeightPixel() const;

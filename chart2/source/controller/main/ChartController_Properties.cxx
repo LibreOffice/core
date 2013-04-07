@@ -69,7 +69,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 namespace
 {

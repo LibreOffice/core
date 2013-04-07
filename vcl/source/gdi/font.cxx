@@ -334,7 +334,7 @@ void Font::SetAlign( FontAlign eAlign )
     }
 }
 
-void Font::SetName( const rtl::OUString& rFamilyName )
+void Font::SetName( const OUString& rFamilyName )
 {
     DBG_CHKTHIS( Font, NULL );
 
@@ -783,7 +783,7 @@ namespace
             if( aInfo.ufamily )
                 o_rResult.SetName( aInfo.ufamily );
             else if( aInfo.family )
-                o_rResult.SetName( rtl::OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
+                o_rResult.SetName( OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
             // set weight
             if( aInfo.weight )
             {
@@ -838,9 +838,9 @@ namespace
 
             // set style name
             if( aInfo.usubfamily )
-                o_rResult.SetStyleName( rtl::OUString( aInfo.usubfamily ) );
+                o_rResult.SetStyleName( OUString( aInfo.usubfamily ) );
             else if( aInfo.subfamily )
-                o_rResult.SetStyleName( rtl::OUString::createFromAscii( aInfo.subfamily ) );
+                o_rResult.SetStyleName( OUString::createFromAscii( aInfo.subfamily ) );
 
             // cleanup
             CloseTTFont( pTTF );
@@ -898,7 +898,7 @@ namespace
                     pClose++;
                 if( pClose - pOpen > 1 )
                 {
-                    o_rResult.SetName( rtl::OStringToOUString( rtl::OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
+                    o_rResult.SetName( OStringToOUString( OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
                 }
             }
 

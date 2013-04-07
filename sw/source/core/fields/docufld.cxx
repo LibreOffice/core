@@ -96,7 +96,6 @@
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace nsSwDocInfoSubType;
@@ -236,12 +235,12 @@ SwField* SwPageNumberField::Copy() const
     return pTmp;
 }
 
-rtl::OUString SwPageNumberField::GetPar2() const
+OUString SwPageNumberField::GetPar2() const
 {
     return OUString::number(nOffset);
 }
 
-void SwPageNumberField::SetPar2(const rtl::OUString& rStr)
+void SwPageNumberField::SetPar2(const OUString& rStr)
 {
     nOffset = (short)rStr.toInt32();
 }
@@ -394,7 +393,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_PAR1:
-        rAny <<= rtl::OUString(GetContent());
+        rAny <<= OUString(GetContent());
         break;
 
     default:
@@ -951,7 +950,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
         break;
     case DI_CUSTOM:
         {
-            ::rtl::OUString sVal;
+            OUString sVal;
             try
             {
                 uno::Any aAny;
@@ -1109,7 +1108,7 @@ String SwDocInfoField::Expand() const
                 if ( !IsFixed() )
                 {
                     // if the field is "fixed" we don't update it from the property
-                    ::rtl::OUString sVal;
+                    OUString sVal;
                     uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(comphelper::getProcessComponentContext()) );
                     util::Date aDate;
                     util::DateTime aDateTime;
@@ -1130,14 +1129,14 @@ String SwDocInfoField::Expand() const
                     }
                     else if( aAny >>= aDuration )
                     {
-                        String sText = aDuration.Negative ? rtl::OUString('-') : rtl::OUString('+');
+                        String sText = aDuration.Negative ? OUString('-') : OUString('+');
                         sText += ViewShell::GetShellRes()->sDurationFormat;
-                        sText.SearchAndReplace(rtl::OUString("%1"), OUString::number( aDuration.Years ) );
-                        sText.SearchAndReplace(rtl::OUString("%2"), OUString::number( aDuration.Months ) );
-                        sText.SearchAndReplace(rtl::OUString("%3"), OUString::number( aDuration.Days   ) );
-                        sText.SearchAndReplace(rtl::OUString("%4"), OUString::number( aDuration.Hours  ) );
-                        sText.SearchAndReplace(rtl::OUString("%5"), OUString::number( aDuration.Minutes) );
-                        sText.SearchAndReplace(rtl::OUString("%6"), OUString::number( aDuration.Seconds) );
+                        sText.SearchAndReplace(OUString("%1"), OUString::number( aDuration.Years ) );
+                        sText.SearchAndReplace(OUString("%2"), OUString::number( aDuration.Months ) );
+                        sText.SearchAndReplace(OUString("%3"), OUString::number( aDuration.Days   ) );
+                        sText.SearchAndReplace(OUString("%4"), OUString::number( aDuration.Hours  ) );
+                        sText.SearchAndReplace(OUString("%5"), OUString::number( aDuration.Minutes) );
+                        sText.SearchAndReplace(OUString("%6"), OUString::number( aDuration.Seconds) );
                         sVal = sText;
                     }
                     else
@@ -1243,7 +1242,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= rtl::OUString(Expand());
+        rAny <<= OUString(Expand());
         break;
     case FIELD_PROP_BOOL2:
         {
@@ -1488,13 +1487,13 @@ SwField* SwHiddenTxtField::Copy() const
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwHiddenTxtField::SetPar1(const rtl::OUString& rStr)
+void SwHiddenTxtField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
     bCanToggle = aCond.getLength() > 0;
 }
 
-const rtl::OUString& SwHiddenTxtField::GetPar1() const
+const OUString& SwHiddenTxtField::GetPar1() const
 {
     return aCond;
 }
@@ -1503,7 +1502,7 @@ const rtl::OUString& SwHiddenTxtField::GetPar1() const
     Beschreibung: True/False Text
  --------------------------------------------------------------------*/
 
-void SwHiddenTxtField::SetPar2(const rtl::OUString& rStr)
+void SwHiddenTxtField::SetPar2(const OUString& rStr)
 {
     if (nSubType == TYP_CONDTXTFLD)
     {
@@ -1520,7 +1519,7 @@ void SwHiddenTxtField::SetPar2(const rtl::OUString& rStr)
         aTRUETxt = rStr;
 }
 
-rtl::OUString SwHiddenTxtField::GetPar2() const
+OUString SwHiddenTxtField::GetPar2() const
 {
     String aRet(aTRUETxt);
     if(nSubType == TYP_CONDTXTFLD)
@@ -1538,7 +1537,7 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 
 bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    const rtl::OUString* pOut = 0;
+    const OUString* pOut = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
@@ -1573,7 +1572,7 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_PAR1:
         {
-            rtl::OUString sVal;
+            OUString sVal;
             rAny >>= sVal;
             SetPar1(sVal);
         }
@@ -1710,12 +1709,12 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwHiddenParaField::SetPar1(const rtl::OUString& rStr)
+void SwHiddenParaField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
 }
 
-const rtl::OUString& SwHiddenParaField::GetPar1() const
+const OUString& SwHiddenParaField::GetPar1() const
 {
     return aCond;
 }
@@ -1800,12 +1799,12 @@ SwField* SwPostItField::Copy() const
     Beschreibung: Author setzen
  --------------------------------------------------------------------*/
 
-void SwPostItField::SetPar1(const rtl::OUString& rStr)
+void SwPostItField::SetPar1(const OUString& rStr)
 {
     sAuthor = rStr;
 }
 
-const rtl::OUString& SwPostItField::GetPar1() const
+const OUString& SwPostItField::GetPar1() const
 {
     return sAuthor;
 }
@@ -1814,27 +1813,27 @@ const rtl::OUString& SwPostItField::GetPar1() const
     Beschreibung: Text fuers PostIt setzen
  --------------------------------------------------------------------*/
 
-void SwPostItField::SetPar2(const rtl::OUString& rStr)
+void SwPostItField::SetPar2(const OUString& rStr)
 {
     sTxt = rStr;
 }
 
-rtl::OUString SwPostItField::GetPar2() const
+OUString SwPostItField::GetPar2() const
 {
         return sTxt;
 }
 
-const rtl::OUString& SwPostItField::GetInitials() const
+const OUString& SwPostItField::GetInitials() const
 {
     return sInitials;
 }
 
-void SwPostItField::SetName(const rtl::OUString& rName)
+void SwPostItField::SetName(const OUString& rName)
 {
     sName = rName;
 }
 
-const rtl::OUString& SwPostItField::GetName() const
+const OUString& SwPostItField::GetName() const
 {
     return sName;
 }
@@ -2146,12 +2145,12 @@ SwField* SwRefPageSetField::Copy() const
     return new SwRefPageSetField( (SwRefPageSetFieldType*)GetTyp(), nOffset, bOn );
 }
 
-rtl::OUString SwRefPageSetField::GetPar2() const
+OUString SwRefPageSetField::GetPar2() const
 {
     return OUString::number(GetOffset());
 }
 
-void SwRefPageSetField::SetPar2(const rtl::OUString& rStr)
+void SwRefPageSetField::SetPar2(const OUString& rStr)
 {
     SetOffset( (short) rStr.toInt32() );
 }
@@ -2477,7 +2476,7 @@ SwJumpEditField::SwJumpEditField( SwJumpEditFieldType* pTyp, sal_uInt32 nForm,
 
 String SwJumpEditField::Expand() const
 {
-    return rtl::OUStringBuffer().append('<').
+    return OUStringBuffer().append('<').
         append(sTxt).append('>').makeStringAndClear();
 }
 
@@ -2489,24 +2488,24 @@ SwField* SwJumpEditField::Copy() const
 
 // Platzhalter-Text
 
-const rtl::OUString& SwJumpEditField::GetPar1() const
+const OUString& SwJumpEditField::GetPar1() const
 {
     return sTxt;
 }
 
-void SwJumpEditField::SetPar1(const rtl::OUString& rStr)
+void SwJumpEditField::SetPar1(const OUString& rStr)
 {
     sTxt = rStr;
 }
 
 // HinweisText
 
-rtl::OUString SwJumpEditField::GetPar2() const
+OUString SwJumpEditField::GetPar2() const
 {
     return sHelp;
 }
 
-void SwJumpEditField::SetPar2(const rtl::OUString& rStr)
+void SwJumpEditField::SetPar2(const OUString& rStr)
 {
     sHelp = rStr;
 }
@@ -2610,12 +2609,12 @@ SwField* SwCombinedCharField::Copy() const
                                         sCharacters );
 }
 
-const rtl::OUString& SwCombinedCharField::GetPar1() const
+const OUString& SwCombinedCharField::GetPar1() const
 {
     return sCharacters;
 }
 
-void SwCombinedCharField::SetPar1(const rtl::OUString& rStr)
+void SwCombinedCharField::SetPar1(const OUString& rStr)
 {
     sCharacters = rStr.copy(0, std::min<sal_Int32>(rStr.getLength(), MAX_COMBINED_CHARACTERS));
 }
@@ -2626,7 +2625,7 @@ bool SwCombinedCharField::QueryValue( uno::Any& rAny,
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        rAny <<= rtl::OUString( sCharacters );
+        rAny <<= OUString( sCharacters );
         break;
     default:
         OSL_FAIL("illegal property");
@@ -2641,7 +2640,7 @@ bool SwCombinedCharField::PutValue( const uno::Any& rAny,
     {
         case FIELD_PROP_PAR1:
         {
-            rtl::OUString sTmp;
+            OUString sTmp;
             rAny >>= sTmp;
             SetPar1(sTmp);
         }

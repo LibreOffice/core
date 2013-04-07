@@ -33,24 +33,24 @@
 
 namespace dp_misc {
 
-::rtl::OUString generateIdentifier(
-    ::boost::optional< ::rtl::OUString > const & optional,
-    ::rtl::OUString const & fileName)
+OUString generateIdentifier(
+    ::boost::optional< OUString > const & optional,
+    OUString const & fileName)
 {
     return optional ? *optional : generateLegacyIdentifier(fileName);
 }
 
-::rtl::OUString getIdentifier(
+OUString getIdentifier(
     css::uno::Reference< css::deployment::XPackage > const & package)
 {
     OSL_ASSERT(package.is());
-    css::beans::Optional< ::rtl::OUString > id(package->getIdentifier());
+    css::beans::Optional< OUString > id(package->getIdentifier());
     return id.IsPresent
         ? id.Value : generateLegacyIdentifier(package->getName());
 }
 
-::rtl::OUString generateLegacyIdentifier(::rtl::OUString const & fileName) {
-    rtl::OUStringBuffer b;
+OUString generateLegacyIdentifier(OUString const & fileName) {
+    OUStringBuffer b;
     b.appendAscii("org.openoffice.legacy.");
     b.append(fileName);
     return b.makeStringAndClear();

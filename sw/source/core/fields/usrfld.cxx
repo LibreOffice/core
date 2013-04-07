@@ -34,7 +34,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
     Beschreibung: Benutzerfelder
@@ -86,7 +85,7 @@ void SwUserField::SetValue( const double& rVal )
     Beschreibung: Name
  --------------------------------------------------------------------*/
 
-const rtl::OUString& SwUserField::GetPar1() const
+const OUString& SwUserField::GetPar1() const
 {
     return ((const SwUserFieldType*)GetTyp())->GetName();
 }
@@ -95,12 +94,12 @@ const rtl::OUString& SwUserField::GetPar1() const
     Beschreibung: Content
  --------------------------------------------------------------------*/
 
-rtl::OUString SwUserField::GetPar2() const
+OUString SwUserField::GetPar2() const
 {
     return ((SwUserFieldType*)GetTyp())->GetContent(GetFormat());
 }
 
-void SwUserField::SetPar2(const rtl::OUString& rStr)
+void SwUserField::SetPar2(const OUString& rStr)
 {
     ((SwUserFieldType*)GetTyp())->SetContent(rStr, GetFormat());
 }
@@ -212,7 +211,7 @@ SwFieldType* SwUserFieldType::Copy() const
     return pTmp;
 }
 
-const rtl::OUString& SwUserFieldType::GetName() const
+const OUString& SwUserFieldType::GetName() const
 {
     return aName;
 }
@@ -301,7 +300,7 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (double) nValue;
         break;
     case FIELD_PROP_PAR2:
-        rAny <<= rtl::OUString(aContent);
+        rAny <<= OUString(aContent);
         break;
     case FIELD_PROP_BOOL1:
         {

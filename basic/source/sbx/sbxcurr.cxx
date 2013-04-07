@@ -26,7 +26,7 @@
 #include "sbxconv.hxx"
 
 
-static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
+static OUString ImpCurrencyToString( const sal_Int64 &rVal )
 {
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;
@@ -37,8 +37,8 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     ImpGetIntntlSep( cDecimalSep, cThousandSep );
 #endif
 
-    rtl::OUString aAbsStr = rtl::OUString::valueOf( absVal );
-    rtl::OUStringBuffer aBuf;
+    OUString aAbsStr = OUString::valueOf( absVal );
+    OUStringBuffer aBuf;
 
     sal_Int32 initialLen = aAbsStr.getLength();
 
@@ -102,7 +102,7 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
 }
 
 
-static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
+static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 {
 
     sal_Int32   nFractDigit = 4;
@@ -155,11 +155,11 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
     // we should share some existing ( possibly from calc is there a currency
     // conversion there ? #TODO check )
 
-    rtl::OUString sTmp( rStr.trim() );
+    OUString sTmp( rStr.trim() );
     const sal_Unicode* p =  sTmp.getStr();
 
     // normalise string number by removeing thousands & decimal point seperators
-    rtl::OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
+    OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
 
     if ( *p == '-'  || *p == '+' )
         sNormalisedNumString.append( *p );
@@ -430,7 +430,7 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-                p->pOUString = new rtl::OUString;
+                p->pOUString = new OUString;
 
             *p->pOUString = ImpCurrencyToString( r );
             break;

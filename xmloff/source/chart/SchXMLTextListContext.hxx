@@ -31,20 +31,20 @@ class SchXMLTextListContext : public SvXMLImportContext
 {
 public:
     SchXMLTextListContext( SvXMLImport& rImport,
-                            const ::rtl::OUString& rLocalName,
-                            ::com::sun::star::uno::Sequence< ::rtl::OUString>& rTextList );
+                            const OUString& rLocalName,
+                            ::com::sun::star::uno::Sequence< OUString>& rTextList );
     virtual ~SchXMLTextListContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>& m_rTextList;
-    std::vector< ::rtl::OUString> m_aTextVector;
+    ::com::sun::star::uno::Sequence< OUString>& m_rTextList;
+    std::vector< OUString> m_aTextVector;
 };
 
 #endif  // _SCH_XMLTEXTLISTCONTEXT_HXX_

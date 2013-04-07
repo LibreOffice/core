@@ -99,7 +99,7 @@ uno::Reference<sheet::XSpreadsheet> getCurrentSheet(const uno::Reference<frame::
 
 }
 
-void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
+void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName,
                           const ScXMLTabProtectionData& rProtectData)
 {
     if (rImport.GetModel().is())
@@ -133,7 +133,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
     }
 }
 
-void ScMyTables::SetTableStyle(const rtl::OUString& sStyleName)
+void ScMyTables::SetTableStyle(const OUString& sStyleName)
 {
     //these uno calls are a bit difficult to remove, XMLTableStyleContext::FillPropertySet uses
     //SvXMLImportPropertyMapper::FillPropertySet
@@ -177,7 +177,7 @@ void ScMyTables::AddRow()
     maCurrentCellPos.SetCol(-1); //reset columns for new row
 }
 
-void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
+void ScMyTables::SetRowStyle(const OUString& rCellStyleName)
 {
     rImport.GetStylesImportHelper()->SetRowStyle(rCellStyleName);
 }
@@ -216,7 +216,7 @@ void ScMyTables::DeleteTable()
     }
 }
 
-void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName)
+void ScMyTables::AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName)
 {
     rImport.GetStylesImportHelper()->AddColumnStyle(rCellStyleName, nCurrentColCount, nRepeat);
     nCurrentColCount += nRepeat;
@@ -261,14 +261,14 @@ bool ScMyTables::HasXShapes()
 }
 
 void ScMyTables::AddOLE(uno::Reference <drawing::XShape>& rShape,
-      const rtl::OUString &rRangeList)
+      const OUString &rRangeList)
 {
       aFixupOLEs.AddOLE(rShape, rRangeList);
 }
 
 void ScMyTables::AddMatrixRange(
         const SCCOL nStartColumn, const SCROW nStartRow, const SCCOL nEndColumn, const SCROW nEndRow,
-        const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
+        const OUString& rFormula, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
     OSL_ENSURE(nEndRow >= nStartRow, "wrong row order");
     OSL_ENSURE(nEndColumn >= nStartColumn, "wrong column order");

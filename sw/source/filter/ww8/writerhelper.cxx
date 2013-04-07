@@ -295,7 +295,7 @@ namespace sw
             rObj.AbandonObject();
         }
 
-        bool DrawingOLEAdaptor::TransferToDoc( rtl::OUString &rName )
+        bool DrawingOLEAdaptor::TransferToDoc( OUString &rName )
         {
             OSL_ENSURE(mxIPRef.is(), "Transferring invalid object to doc");
             if (!mxIPRef.is())
@@ -312,7 +312,7 @@ namespace sw
                     ::svt::EmbeddedObjectRef::SetGraphicToContainer( *mpGraphic,
                                                                     mrPers.GetEmbeddedObjectContainer(),
                                                                     rName,
-                                                                    rtl::OUString() );
+                                                                    OUString() );
 
                 mxIPRef = 0;
             }
@@ -473,7 +473,7 @@ namespace sw
             return aStyles;
         }
 
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const rtl::OUString& rName)
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const OUString& rName)
         {
             // Search first in the Doc-Styles
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName(rName);
@@ -488,7 +488,7 @@ namespace sw
             return pColl;
         }
 
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const rtl::OUString& rName)
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const OUString& rName)
         {
             SwCharFmt *pFmt = rDoc.FindCharFmtByName(rName);
             if (!pFmt)
@@ -661,10 +661,10 @@ namespace sw
             }
         }
 
-        bool IsStarSymbol(const rtl::OUString &rFontName)
+        bool IsStarSymbol(const OUString &rFontName)
         {
             sal_Int32 nIndex = 0;
-            rtl::OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));
+            OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));
             return (sFamilyNm.equalsIgnoreAsciiCase("starsymbol") ||
                 sFamilyNm.equalsIgnoreAsciiCase("opensymbol"));
         }
@@ -785,10 +785,10 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
         }
 
-        sal_uInt16 WrtRedlineAuthor::AddName( const rtl::OUString& rNm )
+        sal_uInt16 WrtRedlineAuthor::AddName( const OUString& rNm )
         {
             sal_uInt16 nRet;
-            typedef std::vector<rtl::OUString>::iterator myiter;
+            typedef std::vector<OUString>::iterator myiter;
             myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
             if (aIter != maAuthors.end())
                 nRet = static_cast< sal_uInt16 >(aIter - maAuthors.begin());

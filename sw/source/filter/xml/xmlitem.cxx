@@ -21,7 +21,6 @@
 #include "xmlimpit.hxx"
 #include "xmlitem.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 SvXMLItemSetContext::SvXMLItemSetContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
@@ -63,7 +62,7 @@ SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
     SvXMLImportItemMapper with the mid flag MID_SW_FLAG_ELEMENT
 */
 SvXMLImportContext *SvXMLItemSetContext::CreateChildContext( sal_uInt16 nPrefix,
-                                   const rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/,
                                     SfxItemSet&  /*rItemSet*/,
                                    const SvXMLItemMapEntry& /*rEntry*/,

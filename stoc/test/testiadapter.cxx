@@ -48,9 +48,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 
 //==================================================================================================
@@ -119,7 +116,7 @@ void assign( test::TestElement & rData,
              sal_Int32 nLong, sal_uInt32 nULong,
              sal_Int64 nHyper, sal_uInt64 nUHyper,
              float fFloat, double fDouble,
-             test::TestEnum eEnum, const ::rtl::OUString& rStr,
+             test::TestEnum eEnum, const OUString& rStr,
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
              const ::com::sun::star::uno::Any& rAny )
 {
@@ -146,7 +143,7 @@ void assign( test::TestData & rData,
              sal_Int32 nLong, sal_uInt32 nULong,
              sal_Int64 nHyper, sal_uInt64 nUHyper,
              float fFloat, double fDouble,
-             test::TestEnum eEnum, const ::rtl::OUString& rStr,
+             test::TestEnum eEnum, const OUString& rStr,
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
              const ::com::sun::star::uno::Any& rAny,
              const com::sun::star::uno::Sequence< test::TestElement >& rSequence )
@@ -172,7 +169,7 @@ public:
                                      sal_Int32 nLong, sal_uInt32 nULong,
                                      sal_Int64 nHyper, sal_uInt64 nUHyper,
                                      float fFloat, double fDouble,
-                                     test::TestEnum eEnum, const ::rtl::OUString& rStr,
+                                     test::TestEnum eEnum, const OUString& rStr,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                                      const ::com::sun::star::uno::Any& rAny,
                                      const ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
@@ -184,7 +181,7 @@ public:
                                                 sal_Int32& nLong, sal_uInt32& nULong,
                                                 sal_Int64& nHyper, sal_uInt64& nUHyper,
                                                 float& fFloat, double& fDouble,
-                                                test::TestEnum& eEnum, rtl::OUString& rStr,
+                                                test::TestEnum& eEnum, OUString& rStr,
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                                                 ::com::sun::star::uno::Any& rAny,
                                                 ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
@@ -196,7 +193,7 @@ public:
                                                sal_Int32& nLong, sal_uInt32& nULong,
                                                sal_Int64& nHyper, sal_uInt64& nUHyper,
                                                float& fFloat, double& fDouble,
-                                               test::TestEnum& eEnum, rtl::OUString& rStr,
+                                               test::TestEnum& eEnum, OUString& rStr,
                                                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                                                ::com::sun::star::uno::Any& rAny,
                                                ::com::sun::star::uno::Sequence< test::TestElement >& rSequence,
@@ -227,7 +224,7 @@ public:
         { return _aData.Double; }
     virtual test::TestEnum SAL_CALL getEnum() throw(com::sun::star::uno::RuntimeException)
         { return _aData.Enum; }
-    virtual rtl::OUString SAL_CALL getString() throw(com::sun::star::uno::RuntimeException)
+    virtual OUString SAL_CALL getString() throw(com::sun::star::uno::RuntimeException)
         { return _aData.String; }
     virtual com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getInterface(  ) throw(com::sun::star::uno::RuntimeException)
         { return _aData.Interface; }
@@ -262,7 +259,7 @@ public:
         { _aData.Double = _double; }
     virtual void SAL_CALL setEnum( test::TestEnum _enum ) throw(::com::sun::star::uno::RuntimeException)
         { _aData.Enum = _enum; }
-    virtual void SAL_CALL setString( const ::rtl::OUString& _string ) throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL setString( const OUString& _string ) throw(::com::sun::star::uno::RuntimeException)
         { _aData.String = _string; }
     virtual void SAL_CALL setInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _interface ) throw(::com::sun::star::uno::RuntimeException)
         { _aData.Interface = _interface; }
@@ -274,7 +271,7 @@ public:
         { _aStructData = _struct; }
 
     // XLanguageBindingTest
-    virtual test::TestData SAL_CALL raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, ::rtl::OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence<test::TestElement >& aSequence,test::TestData& aStruct )
+    virtual test::TestData SAL_CALL raiseException( sal_Bool& bBool, sal_Unicode& cChar, sal_Int8& nByte, sal_Int16& nShort, sal_uInt16& nUShort, sal_Int32& nLong, sal_uInt32& nULong, sal_Int64& nHyper, sal_uInt64& nUHyper, float& fFloat, double& fDouble, test::TestEnum& eEnum, OUString& aString, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInterface, ::com::sun::star::uno::Any& aAny, ::com::sun::star::uno::Sequence<test::TestElement >& aSequence,test::TestData& aStruct )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getRuntimeException() throw(::com::sun::star::uno::RuntimeException);
@@ -676,7 +673,7 @@ void Test_Impl::setValues( sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                            sal_Int32 nLong, sal_uInt32 nULong,
                            sal_Int64 nHyper, sal_uInt64 nUHyper,
                            float fFloat, double fDouble,
-                           test::TestEnum eEnum, const ::rtl::OUString& rStr,
+                           test::TestEnum eEnum, const OUString& rStr,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                            const ::com::sun::star::uno::Any& rAny,
                            const ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
@@ -694,7 +691,7 @@ test::TestData Test_Impl::setValues2( sal_Bool& bBool, sal_Unicode& cChar, sal_I
                                       sal_Int32& nLong, sal_uInt32& nULong,
                                       sal_Int64& nHyper, sal_uInt64& nUHyper,
                                       float& fFloat, double& fDouble,
-                                      test::TestEnum& eEnum, rtl::OUString& rStr,
+                                      test::TestEnum& eEnum, OUString& rStr,
                                       ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                                       ::com::sun::star::uno::Any& rAny,
                                       ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
@@ -713,7 +710,7 @@ test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_In
                                      sal_Int32& nLong, sal_uInt32& nULong,
                                      sal_Int64& nHyper, sal_uInt64& nUHyper,
                                      float& fFloat, double& fDouble,
-                                     test::TestEnum& eEnum, rtl::OUString& rStr,
+                                     test::TestEnum& eEnum, OUString& rStr,
                                      ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xTest,
                                      ::com::sun::star::uno::Any& rAny,
                                      ::com::sun::star::uno::Sequence<test::TestElement >& rSequence,
@@ -853,7 +850,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 }
 
 //__________________________________________________________________________________________________
-test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, ::rtl::OUString& /*aString*/, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*xInterface*/, ::com::sun::star::uno::Any& /*aAny*/, ::com::sun::star::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
+test::TestData Test_Impl::raiseException( sal_Bool& /*bBool*/, sal_Unicode& /*cChar*/, sal_Int8& /*nByte*/, sal_Int16& /*nShort*/, sal_uInt16& /*nUShort*/, sal_Int32& /*nLong*/, sal_uInt32& /*nULong*/, sal_Int64& /*nHyper*/, sal_uInt64& /*nUHyper*/, float& /*fFloat*/, double& /*fDouble*/, test::TestEnum& /*eEnum*/, OUString& /*aString*/, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& /*xInterface*/, ::com::sun::star::uno::Any& /*aAny*/, ::com::sun::star::uno::Sequence< test::TestElement >& /*aSequence*/, test::TestData& /*aStruct*/ )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     IllegalArgumentException aExc;

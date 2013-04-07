@@ -29,7 +29,6 @@
 
 #include "svids.hrc"
 
-using ::rtl::OUString;
 
 // =======================================================================
 
@@ -81,7 +80,7 @@ Rectangle AquaSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScr
     return aRet;
 }
 
-rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
+OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
    NSArray* pScreens = [NSScreen screens];
    OUString aRet;
@@ -100,7 +99,7 @@ rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
 
 static NSString* getStandardString( int nButtonId, bool bUseResources )
 {
-    rtl::OUString aText;
+    OUString aText;
     if( bUseResources )
     {
         aText = Button::GetStandardText( nButtonId );
@@ -109,19 +108,19 @@ static NSString* getStandardString( int nButtonId, bool bUseResources )
     {
         switch( nButtonId )
         {
-        case BUTTON_OK:         aText = rtl::OUString( "OK" );break;
-        case BUTTON_ABORT:      aText = rtl::OUString( "Abort" );break;
-        case BUTTON_CANCEL:     aText = rtl::OUString( "Cancel" );break;
-        case BUTTON_RETRY:      aText = rtl::OUString( "Retry" );break;
-        case BUTTON_YES:        aText = rtl::OUString( "Yes" );break;
-        case BUTTON_NO :        aText = rtl::OUString( "No" );break;
+        case BUTTON_OK:         aText = OUString( "OK" );break;
+        case BUTTON_ABORT:      aText = OUString( "Abort" );break;
+        case BUTTON_CANCEL:     aText = OUString( "Cancel" );break;
+        case BUTTON_RETRY:      aText = OUString( "Retry" );break;
+        case BUTTON_YES:        aText = OUString( "Yes" );break;
+        case BUTTON_NO :        aText = OUString( "No" );break;
         }
     }
     return aText.isEmpty() ? nil : CreateNSString( aText);
 }
 
-int AquaSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                        const rtl::OUString& rMessage,
+int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
+                                        const OUString& rMessage,
                                         int nButtonCombination,
                                         int nDefaultButton, bool bUseResources)
 {

@@ -53,7 +53,7 @@ public:
      * @param nCol column position (0 to column size-1)
      * @param nRow row position (0 to row size-1)
      */
-    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const = 0;
+    virtual OUString getString(SCCOL nCol, SCROW nRow) const = 0;
 
     virtual SCCOL getFirstFieldColumn() const = 0;
 
@@ -67,7 +67,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const = 0;
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
+    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const = 0;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const = 0;
     virtual bool isRangeEqual(const ScRange& rRange) const = 0;
 
@@ -110,7 +110,7 @@ public:
      * @param nCol column position (0 to column size-1)
      * @param nRow row position (0 to row size-1)
      */
-    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
+    virtual OUString getString(SCCOL nCol, SCROW nRow) const;
 
     virtual SCCOL getFirstFieldColumn() const;
     /**
@@ -123,7 +123,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const;
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
+    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
 
@@ -151,7 +151,7 @@ public:
      * @param nCol column position (0 to column size-1)
      * @param nRow row position (0 to row size-1)
      */
-    virtual ::rtl::OUString getString(SCCOL nCol, SCROW nRow) const;
+    virtual OUString getString(SCCOL nCol, SCROW nRow) const;
 
     virtual SCCOL getFirstFieldColumn() const;
 
@@ -165,7 +165,7 @@ public:
      * @return 0-based column index
      */
     virtual SCCOL findFieldColumn(SCCOL nIndex) const;
-    virtual SCCOL findFieldColumn(const ::rtl::OUString& rStr, sal_uInt16* pErr = NULL) const;
+    virtual SCCOL findFieldColumn(const OUString& rStr, sal_uInt16* pErr = NULL) const;
     virtual ScDBQueryParamBase* createQueryParam(const ScDBRangeBase* pQueryRef) const;
     virtual bool isRangeEqual(const ScRange& rRange) const;
 

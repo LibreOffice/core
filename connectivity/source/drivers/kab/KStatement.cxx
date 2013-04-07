@@ -32,7 +32,7 @@
 
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -52,7 +52,7 @@ namespace
     void lcl_throwError(sal_uInt16 _nErrorId)
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(_nErrorId) );
+        const OUString sError( aResources.getResourceString(_nErrorId) );
         ::dbtools::throwGenericSQLException(sError,NULL);
     }
 }
@@ -85,7 +85,7 @@ void KabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc::S
     lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
 // -----------------------------------------------------------------------------
-void KabCommonStatement::getNextParameter(::rtl::OUString &) const throw(::com::sun::star::sdbc::SQLException)
+void KabCommonStatement::getNextParameter(OUString &) const throw(::com::sun::star::sdbc::SQLException)
 {
     lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
@@ -124,14 +124,14 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
             }
             else if (SQL_ISRULE(pLeft, column_ref))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
 
                 if (pRight->isToken() || SQL_ISRULE(pRight, parameter))
                 {
-                    ::rtl::OUString sMatchString;
+                    OUString sMatchString;
 
                     if (pRight->isToken())                      // WHERE Name = 'Doe'
                         sMatchString = pRight->getTokenValue();
@@ -189,7 +189,7 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
                             SQL_ISTOKEN(pMiddleLeft, IS) &&
                             SQL_ISTOKEN(pRight, NULL))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
@@ -210,14 +210,14 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
         {
             if (SQL_ISRULE(pLeft, column_ref))
             {
-                ::rtl::OUString sColumnName,
+                OUString sColumnName,
                                 sTableRange;
 
                 m_aSQLIterator.getColumnRange(pLeft, sColumnName, sTableRange);
 
                 if (pMiddleRight->isToken() || SQL_ISRULE(pMiddleRight, parameter))
                 {
-                    ::rtl::OUString sMatchString;
+                    OUString sMatchString;
 
                     if (pMiddleRight->isToken())                    // WHERE Name LIKE 'Sm%'
                         sMatchString = pMiddleRight->getTokenValue();
@@ -267,7 +267,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
 
                 if (pColumnRef->count() == 1)
                 {
-                    ::rtl::OUString sColumnName =
+                    OUString sColumnName =
                         pColumnRef->getChild(0)->getTokenValue();
                     sal_Bool bAscending =
                         SQL_ISTOKEN(pAscendingDescending, DESC)?
@@ -388,7 +388,7 @@ void SAL_CALL KabCommonStatement::close(  ) throw(SQLException, RuntimeException
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL KabCommonStatement::execute(
-        const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+        const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -399,7 +399,7 @@ sal_Bool SAL_CALL KabCommonStatement::execute(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabCommonStatement::executeQuery(
-        const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+        const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -408,7 +408,7 @@ OSL_TRACE("KDE Address book - SQL Request: %s", OUtoCStr(sql));
 
     KabResultSet* pResult = new KabResultSet(this);
     Reference< XResultSet > xRS = pResult;
-    ::rtl::OUString aErr;
+    OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr, sql);
     if (m_pParseTree == NULL)
@@ -448,7 +448,7 @@ Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQ
     return (Reference< XConnection >) m_pConnection;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -480,7 +480,7 @@ void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeE
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);

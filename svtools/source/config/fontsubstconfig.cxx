@@ -32,7 +32,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
 
 const sal_Char cReplacement[] = "Replacement";
 const sal_Char cFontPairs[] = "FontPairs";
@@ -50,7 +49,7 @@ struct SvtFontSubstConfig_Impl
 };
 
 SvtFontSubstConfig::SvtFontSubstConfig() :
-    ConfigItem(rtl::OUString("Office.Common/Font/Substitution")),
+    ConfigItem(OUString("Office.Common/Font/Substitution")),
     bIsEnabled(sal_False),
     pImpl(new SvtFontSubstConfig_Impl)
 {
@@ -69,13 +68,13 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();
     sal_Int32 nName = 0;
-    sPropPrefix += rtl::OUString("/");
+    sPropPrefix += OUString("/");
     sal_Int32 nNode;
     for(nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
         OUString sStart(sPropPrefix);
         sStart += pNodeNames[nNode];
-        sStart += rtl::OUString("/");
+        sStart += OUString("/");
         pNames[nName] = sStart;     pNames[nName++] += cReplaceFont;
         pNames[nName] = sStart;     pNames[nName++] += cSubstituteFont;
         pNames[nName] = sStart;     pNames[nName++] += cAlways;
@@ -100,7 +99,7 @@ SvtFontSubstConfig::~SvtFontSubstConfig()
     delete pImpl;
 }
 
-void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
 }
 

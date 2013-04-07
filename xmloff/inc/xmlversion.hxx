@@ -41,7 +41,7 @@ public:
     XMLVersionListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag >& rVersions,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler );
     virtual     ~XMLVersionListExport() {}
 
@@ -62,7 +62,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -87,14 +87,14 @@ public:
 
     XMLVersionListContext( XMLVersionListImport& rImport,
                            sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     ~XMLVersionListContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -107,14 +107,14 @@ private:
     XMLVersionListImport&  rLocalRef;
 
     static sal_Bool         ParseISODateTimeString(
-                                const rtl::OUString& rString,
+                                const OUString& rString,
                                 com::sun::star::util::DateTime& rDateTime );
 
 public:
 
     XMLVersionContext( XMLVersionListImport& rImport,
                           sal_uInt16 nPrefix,
-                          const rtl::OUString& rLocalName,
+                          const OUString& rLocalName,
                           const ::com::sun::star::uno::Reference<
                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -130,11 +130,11 @@ public:
     virtual void SAL_CALL store( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& Storage, const ::com::sun::star::uno::Sequence< ::com::sun::star::util::RevisionTag >& List ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
     XMLVersionListPersistence_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLVersionPersistence_getImplementationName()
+OUString SAL_CALL XMLVersionPersistence_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

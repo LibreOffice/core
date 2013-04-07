@@ -33,9 +33,9 @@ class ScTableLink : public ::sfx2::SvBaseLink, public ScRefreshTimer
 {
 private:
     TableLink_Impl* pImpl;
-    rtl::OUString aFileName;
-    rtl::OUString aFilterName;
-    rtl::OUString aOptions;
+    OUString aFileName;
+    OUString aFilterName;
+    OUString aOptions;
     bool bInCreate:1;
     bool bInEdit:1;
     bool bAddUndo:1;
@@ -60,9 +60,9 @@ public:
     void    SetAddUndo(bool bSet)       { bAddUndo = bSet; }
     void    SetPaint(bool bSet)         { bDoPaint = bSet; }
 
-    const rtl::OUString& GetFileName() const   { return aFileName; }
-    const rtl::OUString& GetFilterName() const { return aFilterName; }
-    const rtl::OUString& GetOptions() const    { return aOptions; }
+    const OUString& GetFileName() const   { return aFileName; }
+    const OUString& GetFilterName() const { return aFilterName; }
+    const OUString& GetOptions() const    { return aOptions; }
 
     sal_Bool    IsUsed() const;
 
@@ -85,18 +85,18 @@ private:
                                        bool bWithContent, bool bWithInteraction );
 
 public:
-                        ScDocumentLoader( const rtl::OUString& rFileName,
-                                          rtl::OUString& rFilterName, rtl::OUString& rOptions,
+                        ScDocumentLoader( const OUString& rFileName,
+                                          OUString& rFilterName, OUString& rOptions,
                                           sal_uInt32 nRekCnt = 0, bool bWithInteraction = false );
                         ~ScDocumentLoader();
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
     bool                IsError() const;
-    rtl::OUString       GetTitle() const;
+    OUString       GetTitle() const;
 
     void                ReleaseDocRef();    // without calling DoClose
 
-    static rtl::OUString GetOptions( SfxMedium& rMedium );
+    static OUString GetOptions( SfxMedium& rMedium );
 
     /** Returns the filter name and options from a file name.
         @param bWithContent
@@ -104,11 +104,11 @@ public:
             false = Detects filter by file name extension only (should be used in filter code only).
         @return sal_True if a filter could be found, sal_False otherwise. */
 
-    static bool         GetFilterName( const ::rtl::OUString& rFileName,
-                                       ::rtl::OUString& rFilter, ::rtl::OUString& rOptions,
+    static bool         GetFilterName( const OUString& rFileName,
+                                       OUString& rFilter, OUString& rOptions,
                                        bool bWithContent, bool bWithInteraction );
 
-    static void         RemoveAppPrefix( rtl::OUString& rFilterName );
+    static void         RemoveAppPrefix( OUString& rFilterName );
 };
 
 #endif

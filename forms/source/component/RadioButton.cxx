@@ -57,7 +57,7 @@ StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(Ru
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_RADIOBUTTON;
     return aSupported;
 }
@@ -78,7 +78,7 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>
     // (formerly this switch-off was done in the toolkit - but the correct place is here ...)
 //  Reference< XVclWindowPeer >  xVclWindowPeer( getPeer(), UNO_QUERY );
 //  if (xVclWindowPeer.is())
-//      xVclWindowPeer->setProperty(::rtl::OUString("AutoToggle"), ::cppu::bool2any(sal_False));
+//      xVclWindowPeer->setProperty(OUString("AutoToggle"), ::cppu::bool2any(sal_False));
     // new order: do _not_ switch off the auto toggle because:
     // * today, it is not necessary anymore to handle the toggling ourself (everything works fine without it)
     // * without auto toggle, the AccessibleEvents as fired by the radio buttons are
@@ -136,7 +136,7 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -153,10 +153,10 @@ StringSequence SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(Runt
 }
 
 //------------------------------------------------------------------------------
-void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, const Any& rValue)
+void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& rValue)
 {
     // my name
-    ::rtl::OUString sMyGroup;
+    OUString sMyGroup;
     if (hasProperty(PROPERTY_GROUP_NAME, this))
         this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sMyGroup;
     if (sMyGroup.isEmpty())
@@ -168,7 +168,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const ::rtl::OUString& rPropName, cons
     {
         Reference<XPropertySet> xMyProps;
         query_interface(static_cast<XWeak*>(this), xMyProps);
-        ::rtl::OUString sCurrentGroup;
+        OUString sCurrentGroup;
         sal_Int32 nNumSiblings = xIndexAccess->getCount();
         for (sal_Int32 i=0; i<nNumSiblings; ++i)
         {
@@ -237,7 +237,7 @@ void ORadioButtonModel::setControlSource()
     Reference<XIndexAccess> xIndexAccess(getParent(), UNO_QUERY);
     if (xIndexAccess.is())
     {
-        ::rtl::OUString sName, sGroupName;
+        OUString sName, sGroupName;
 
         if (hasProperty(PROPERTY_GROUP_NAME, this))
             this->getPropertyValue(PROPERTY_GROUP_NAME) >>= sGroupName;
@@ -261,7 +261,7 @@ void ORadioButtonModel::setControlSource()
                 // Only RadioButtons
                 continue;
 
-            ::rtl::OUString sSiblingName, sSiblingGroupName;
+            OUString sSiblingName, sSiblingGroupName;
             if (hasProperty(PROPERTY_GROUP_NAME, xSiblingProperties))
                 xSiblingProperties->getPropertyValue(PROPERTY_GROUP_NAME) >>= sSiblingGroupName;
             xSiblingProperties->getPropertyValue(PROPERTY_NAME) >>= sSiblingName;
@@ -287,7 +287,7 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_RADIOBUTTON;   // old (non-sun) name for compatibility !
 }
@@ -319,7 +319,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-    ::rtl::OUString sReferenceValue;
+    OUString sReferenceValue;
     sal_Int16 nDefaultChecked( 0 );
     switch (nVersion)
     {

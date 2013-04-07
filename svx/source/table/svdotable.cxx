@@ -59,7 +59,6 @@
 
 // -----------------------------------------------------------------------------
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
@@ -326,7 +325,7 @@ void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
 
         Reference< XStyleFamiliesSupplier > xSFS( pNewModel->getUnoModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilyNameAccess( xSFS->getStyleFamilies(), UNO_QUERY_THROW );
-        const rtl::OUString sFamilyName( "table" );
+        const OUString sFamilyName( "table" );
         Reference< XNameAccess > xTableFamilyAccess( xFamilyNameAccess->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         if( xTableFamilyAccess->hasByName( sStyleName ) )

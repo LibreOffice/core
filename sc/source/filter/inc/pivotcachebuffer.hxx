@@ -40,7 +40,7 @@ class WorksheetHelper;
 
 // ============================================================================
 
-typedef ::std::pair< sal_Int32, rtl::OUString > IdCaptionPair;
+typedef ::std::pair< sal_Int32, OUString > IdCaptionPair;
 typedef ::std::vector< IdCaptionPair > IdCaptionPairList;
 
 class PivotCacheItem
@@ -92,14 +92,14 @@ public:
     /** Returns the value of the item. */
     inline const ::com::sun::star::uno::Any& getValue() const { return maValue; }
     /** Returns the string representation of the item. */
-    ::rtl::OUString     getName() const;
+    OUString     getName() const;
     /** Returns true if the item is unused. */
     inline bool         isUnused() const { return mbUnused; }
 
 private:
 friend class PivotCacheItemList;
     // #FIXME hack Sets the value of this item to the given string ( and overwrites type if necessary
-    void                setStringValue( const rtl::OUString& sName );
+    void                setStringValue( const OUString& sName );
     ::com::sun::star::uno::Any maValue;     /// Value of the item.
     sal_Int32           mnType;             /// Value type (OOXML token identifier).
     bool                mbUnused;
@@ -127,7 +127,7 @@ public:
     /** Returns the specified item. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all items. */
-    void                getCacheItemNames( ::std::vector< ::rtl::OUString >& orItemNames ) const;
+    void                getCacheItemNames( ::std::vector< OUString >& orItemNames ) const;
     void                applyItemCaptions( const IdCaptionPairList& vCaptions );
 
 private:
@@ -145,10 +145,10 @@ private:
 
 struct PCFieldModel
 {
-    ::rtl::OUString     maName;             /// Fixed name of the cache field.
-    ::rtl::OUString     maCaption;          /// Caption of the ccahe field.
-    ::rtl::OUString     maPropertyName;     /// OLAP property name.
-    ::rtl::OUString     maFormula;          /// Formula of a calculated field.
+    OUString     maName;             /// Fixed name of the cache field.
+    OUString     maCaption;          /// Caption of the ccahe field.
+    OUString     maPropertyName;     /// OLAP property name.
+    OUString     maFormula;          /// Formula of a calculated field.
     sal_Int32           mnNumFmtId;         /// Number format for all items.
     sal_Int32           mnSqlType;          /// Data type from ODBC data source.
     sal_Int32           mnHierarchy;        /// Hierarchy this field is part of.
@@ -208,10 +208,10 @@ struct PCFieldGroupModel
 /** Helper struct for mapping original item names from/to group item names. */
 struct PivotCacheGroupItem
 {
-    ::rtl::OUString     maOrigName;
-    ::rtl::OUString     maGroupName;
+    OUString     maOrigName;
+    OUString     maGroupName;
 
-    inline explicit     PivotCacheGroupItem( const ::rtl::OUString& rItemName ) :
+    inline explicit     PivotCacheGroupItem( const OUString& rItemName ) :
                             maOrigName( rItemName ), maGroupName( rItemName ) {}
 };
 
@@ -278,7 +278,7 @@ public:
     inline bool         hasParentGrouping() const { return maFieldGroupModel.mnParentField >= 0; }
 
     /** Returns the name of the cache field. */
-    inline const ::rtl::OUString& getName() const { return maFieldModel.maName; }
+    inline const OUString& getName() const { return maFieldModel.maName; }
     /** Returns the index of the parent group field that groups the items of this field. */
     inline sal_Int32    getParentGroupField() const { return maFieldGroupModel.mnParentField; }
     /** Returns the index of the base field grouping is based on. */
@@ -287,7 +287,7 @@ public:
     /** Returns the shared or group item with the specified index. */
     const PivotCacheItem* getCacheItem( sal_Int32 nItemIdx ) const;
     /** Returns the names of all shared or group items. */
-    void                getCacheItemNames( ::std::vector< ::rtl::OUString >& orItemNames ) const;
+    void                getCacheItemNames( ::std::vector< OUString >& orItemNames ) const;
     /** Returns shared or group items. */
     PivotCacheItemList  getCacheItems() const;
 
@@ -295,10 +295,10 @@ public:
     void                convertNumericGrouping(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxDPField ) const;
     /** Creates inplace date grouping settings or a new date group field. */
-    ::rtl::OUString     createDateGroupField(
+    OUString     createDateGroupField(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField ) const;
     /** Creates a new grouped DataPilot field and returns its name. */
-    ::rtl::OUString     createParentGroupField(
+    OUString     createParentGroupField(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDataPilotField >& rxBaseDPField,
                             const PivotCacheField& rBaseCacheField,
                             PivotCacheGroupItemVector& orItemNames ) const;
@@ -341,8 +341,8 @@ private:
 
 struct PCDefinitionModel
 {
-    ::rtl::OUString     maRelId;            /// Relation identifier for cache records fragment.
-    ::rtl::OUString     maRefreshedBy;      /// Name of user who last refreshed the cache.
+    OUString     maRelId;            /// Relation identifier for cache records fragment.
+    OUString     maRefreshedBy;      /// Name of user who last refreshed the cache.
     double              mfRefreshedDate;    /// Date/time of last refresh.
     sal_Int32           mnRecords;          /// Number of data records in the cache.
     sal_Int32           mnMissItemsLimit;   /// Limit for discarding unused items.
@@ -375,9 +375,9 @@ struct PCSourceModel
 
 struct PCWorksheetSourceModel
 {
-    ::rtl::OUString     maRelId;            /// Relation identifier for an external document URL.
-    ::rtl::OUString     maSheet;            /// Sheet name for cell range or sheet-local defined names.
-    ::rtl::OUString     maDefName;          /// Defined name containing a cell range if present.
+    OUString     maRelId;            /// Relation identifier for an external document URL.
+    OUString     maSheet;            /// Sheet name for cell range or sheet-local defined names.
+    OUString     maDefName;          /// Defined name containing a cell range if present.
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// Source cell range of the data.
 
@@ -422,7 +422,7 @@ public:
     inline const ::com::sun::star::table::CellRangeAddress&
                         getSourceRange() const { return maSheetSrcModel.maRange; }
     /** Returns the relation identifier of the pivot cache records fragment. */
-    inline const ::rtl::OUString& getRecordsRelId() const { return maDefModel.maRelId; }
+    inline const OUString& getRecordsRelId() const { return maDefModel.maRelId; }
 
     /** Returns the number of pivot cache fields. */
     sal_Int32           getCacheFieldCount() const;
@@ -467,7 +467,7 @@ private:
     PCSourceModel       maSourceModel;      /// Pivot cache source settings.
     PCWorksheetSourceModel maSheetSrcModel; /// Sheet source data if cache type is sheet.
     ValueRangeSet       maColSpans;         /// Column spans used by SheetDataBuffer for optimized cell import.
-    ::rtl::OUString     maTargetUrl;        /// URL of an external source document.
+    OUString     maTargetUrl;        /// URL of an external source document.
     mutable sal_Int32   mnCurrRow;          /// Current row index in dummy sheet.
     bool                mbValidSource;      /// True = pivot cache is based on supported data source.
     bool                mbDummySheet;       /// True = pivot cache is based on a dummy sheet.
@@ -481,7 +481,7 @@ public:
     explicit            PivotCacheBuffer( const WorkbookHelper& rHelper );
 
     /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOXML/BIFF12 only). */
-    void                registerPivotCacheFragment( sal_Int32 nCacheId, const ::rtl::OUString& rFragmentPath );
+    void                registerPivotCacheFragment( sal_Int32 nCacheId, const OUString& rFragmentPath );
 
     /** Imports and stores a pivot cache definition fragment on first call,
         returns the imported cache on subsequent calls with the same identifier. */
@@ -492,7 +492,7 @@ private:
     PivotCache&         createPivotCache( sal_Int32 nCacheId );
 
 private:
-    typedef ::std::map< sal_Int32, ::rtl::OUString >    FragmentPathMap;
+    typedef ::std::map< sal_Int32, OUString >    FragmentPathMap;
     typedef RefMap< sal_Int32, PivotCache >             PivotCacheMap;
     typedef ::std::vector< sal_Int32 >                  PivotCacheIdVector;
 

@@ -56,7 +56,7 @@ public:
     virtual bool handleSpecialItem( const SvXMLItemMapEntry& rEntry,
                                     SfxPoolItem& rItem,
                                     SfxItemSet& rSet,
-                                    const ::rtl::OUString& rValue,
+                                    const OUString& rValue,
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap );
 
@@ -64,7 +64,7 @@ public:
         MID_SW_FLAG_NO_ITEM_IMPORT flag set */
     virtual bool handleNoItem( const SvXMLItemMapEntry& rEntry,
                                SfxItemSet& rSet,
-                               const ::rtl::OUString& rValue,
+                               const OUString& rValue,
                                const SvXMLUnitConverter& rUnitConverter,
                                const SvXMLNamespaceMap& rNamespaceMap );
 
@@ -81,7 +81,7 @@ public:
         upon an XML attribute value. */
     static bool PutXMLValue(
         SfxPoolItem& rItem,
-        const ::rtl::OUString& rValue,
+        const OUString& rValue,
         sal_uInt16 nMemberId,
         const SvXMLUnitConverter& rUnitConverter );
 };

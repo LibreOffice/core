@@ -93,15 +93,15 @@ public:
 class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
 protected:
-    rtl::OUString maText;
+    OUString maText;
 public:
-                    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const rtl::OUString& rStr);
+                    SvLBoxString(SvTreeListEntry*, sal_uInt16 nFlags, const OUString& rStr);
                     SvLBoxString();
     virtual         ~SvLBoxString();
     virtual sal_uInt16 GetType() const;
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*);
-    rtl::OUString   GetText() const { return maText; }
-    void            SetText( const rtl::OUString& rText ) { maText = rText; }
+    OUString   GetText() const { return maText; }
+    void            SetText( const OUString& rText ) { maText = rText; }
 
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry);

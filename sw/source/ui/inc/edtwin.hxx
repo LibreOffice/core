@@ -207,7 +207,7 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    virtual rtl::OUString GetSurroundingText() const;
+    virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
     void    ShowAutoTextCorrectQuickHelp( const String& rWord, SvxAutoCorrCfg* pACfg,

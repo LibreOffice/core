@@ -25,7 +25,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 
 //.............................................................................
@@ -47,7 +46,7 @@ const OUString& WrappedProperty::getOuterName() const
     return m_aOuterName;
 }
 
-::rtl::OUString WrappedProperty::getInnerName() const
+OUString WrappedProperty::getInnerName() const
 {
     return m_aInnerName;
 }
@@ -108,7 +107,7 @@ beans::PropertyState WrappedProperty::getPropertyState( const Reference< beans::
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
-    rtl::OUString aInnerName( this->getInnerName() );
+    OUString aInnerName( this->getInnerName() );
     if( xInnerPropertyState.is() && !aInnerName.isEmpty() )
         aState = xInnerPropertyState->getPropertyState( aInnerName );
     else

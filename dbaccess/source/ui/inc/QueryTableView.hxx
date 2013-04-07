@@ -62,11 +62,11 @@ namespace dbaui
 
         /// base class overwritten: create and delete windows
         /// (not really delete, as it becomes an UndoAction)
-        virtual void AddTabWin( const ::rtl::OUString& _rTableName, const ::rtl::OUString& _rAliasName, sal_Bool bNewTable = sal_False );
+        virtual void AddTabWin( const OUString& _rTableName, const OUString& _rAliasName, sal_Bool bNewTable = sal_False );
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
         /// AddTabWin, setting an alias
-        void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable = sal_False);
+        void    AddTabWin(const OUString& strDatabase, const OUString& strTableName, const OUString& strAlias, sal_Bool bNewTable = sal_False);
         /// search TabWin
         OQueryTableWindow*  FindTable(const String& rAliasName);
         sal_Bool            FindTableFromField(const String& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt);
@@ -118,9 +118,9 @@ namespace dbaui
 
         sal_Bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 
-        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName
-                                            ,const ::rtl::OUString& _sTableName
-                                            ,const ::rtl::OUString& _rWinName);
+        virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
+                                            ,const OUString& _sTableName
+                                            ,const OUString& _rWinName);
 
         /** opens the join dialog and allows to create a new join connection */
         void createNewConnection();

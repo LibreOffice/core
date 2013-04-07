@@ -64,7 +64,7 @@ Image PagePreviewProvider::operator () (
         aPreview = rRenderer.RenderPage(
             pPage,
             nWidth,
-            rtl::OUString(),
+            OUString(),
             false);
     }
 
@@ -92,7 +92,7 @@ bool PagePreviewProvider::NeedsPageObject (void)
 
 //===== TemplatePreviewProvider ===============================================
 
-TemplatePreviewProvider::TemplatePreviewProvider (const ::rtl::OUString& rsURL)
+TemplatePreviewProvider::TemplatePreviewProvider (const OUString& rsURL)
     : msURL(rsURL)
 {
 }
@@ -146,9 +146,9 @@ Image TemplatePreviewProvider::operator() (
         {
             OSL_TRACE (
                 "caught exception while trying to access Thumbnail/thumbnail.png of %s: %s",
-                ::rtl::OUStringToOString(msURL,
+                OUStringToOString(msURL,
                     RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
+                OUStringToOString(rException.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
 
@@ -176,9 +176,9 @@ Image TemplatePreviewProvider::operator() (
         {
             OSL_TRACE (
                 "caught exception while trying to access Thumbnails/thumbnail.png of %s: %s",
-                ::rtl::OUStringToOString(msURL,
+                OUStringToOString(msURL,
                     RTL_TEXTENCODING_UTF8).getStr(),
-                ::rtl::OUStringToOString(rException.Message,
+                OUStringToOString(rException.Message,
                     RTL_TEXTENCODING_UTF8).getStr());
         }
     }
@@ -186,9 +186,9 @@ Image TemplatePreviewProvider::operator() (
     {
         OSL_TRACE (
             "caught exception while trying to access tuhmbnail of %s: %s",
-            ::rtl::OUStringToOString(msURL,
+            OUStringToOString(msURL,
                 RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message,
+            OUStringToOString(rException.Message,
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 
@@ -229,7 +229,7 @@ bool TemplatePreviewProvider::NeedsPageObject (void)
 
 //===== TemplatePageObjectProvider =============================================
 
-TemplatePageObjectProvider::TemplatePageObjectProvider (const ::rtl::OUString& rsURL)
+TemplatePageObjectProvider::TemplatePageObjectProvider (const OUString& rsURL)
     : msURL(rsURL),
       mxDocumentShell()
 {
@@ -277,7 +277,7 @@ SdPage* TemplatePageObjectProvider::operator() (SdDrawDocument* pContainerDocume
 
 
 
-::sd::DrawDocShell* TemplatePageObjectProvider::LoadDocument (const ::rtl::OUString& sFileName)
+::sd::DrawDocShell* TemplatePageObjectProvider::LoadDocument (const OUString& sFileName)
 {
     SfxApplication* pSfxApp = SFX_APP();
     SfxItemSet* pSet = new SfxAllItemSet (pSfxApp->GetPool());

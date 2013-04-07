@@ -33,14 +33,14 @@
 class ScMoveTableDlg : public ModalDialog
 {
 public:
-    ScMoveTableDlg(Window* pParent, const rtl::OUString& rDefault);
+    ScMoveTableDlg(Window* pParent, const OUString& rDefault);
     ~ScMoveTableDlg();
 
     sal_uInt16  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
     bool    GetCopyTable            () const;
     bool    GetRenameTable          () const;
-    void    GetTabNameString( rtl::OUString& rString ) const;
+    void    GetTabNameString( OUString& rString ) const;
     void    SetForceCopyTable       ();
     void    EnableCopyTable         (sal_Bool bFlag=true);
     void    EnableRenameTable       (sal_Bool bFlag=true);
@@ -68,11 +68,11 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    rtl::OUString   maStrTabNameUsed;
-    rtl::OUString   maStrTabNameEmpty;
-    rtl::OUString   maStrTabNameInvalid;
+    OUString   maStrTabNameUsed;
+    OUString   maStrTabNameEmpty;
+    OUString   maStrTabNameInvalid;
 
-    const rtl::OUString maDefaultName;
+    const OUString maDefaultName;
 
     sal_uInt16      mnCurrentDocPos;
     sal_uInt16      nDocument;

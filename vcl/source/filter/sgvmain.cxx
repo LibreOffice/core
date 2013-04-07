@@ -941,7 +941,7 @@ sal_Bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath
     sal_Bool      bRdFlag=sal_False;         // Grafikentry gelesen ?
     sal_Bool      bRet=sal_False;            // Returncode
 
-    aIniPath.Append(rtl::OUString("sgf.ini"));
+    aIniPath.Append(OUString("sgf.ini"));
 
     pSgfFonts = new SgfFontLst;
 

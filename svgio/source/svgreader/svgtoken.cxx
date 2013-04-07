@@ -25,145 +25,145 @@ namespace svgio
 {
     namespace svgreader
     {
-        static rtl::OUString aSVGStrWidth(rtl::OUString::createFromAscii("width"));
-        static rtl::OUString aSVGStrHeight(rtl::OUString::createFromAscii("height"));
-        static rtl::OUString aSVGStrViewBox(rtl::OUString::createFromAscii("viewBox"));
-        static rtl::OUString aSVGStrTransform(rtl::OUString::createFromAscii("transform"));
-        static rtl::OUString aSVGStrStyle(rtl::OUString::createFromAscii("style"));
-        static rtl::OUString aSVGStrD(rtl::OUString::createFromAscii("d"));
-        static rtl::OUString aSVGStrX(rtl::OUString::createFromAscii("x"));
-        static rtl::OUString aSVGStrY(rtl::OUString::createFromAscii("y"));
-        static rtl::OUString aSVGStrXmlns(rtl::OUString::createFromAscii("xmlns"));
-        static rtl::OUString aSVGStrVersion(rtl::OUString::createFromAscii("version"));
-        static rtl::OUString aSVGStrId(rtl::OUString::createFromAscii("id"));
-        static rtl::OUString aSVGStrRx(rtl::OUString::createFromAscii("rx"));
-        static rtl::OUString aSVGStrRy(rtl::OUString::createFromAscii("ry"));
-        static rtl::OUString aSVGStrPoints(rtl::OUString::createFromAscii("points"));
-        static rtl::OUString aSVGStrDx(rtl::OUString::createFromAscii("dx"));
-        static rtl::OUString aSVGStrDy(rtl::OUString::createFromAscii("dy"));
-        static rtl::OUString aSVGStrRotate(rtl::OUString::createFromAscii("rotate"));
-        static rtl::OUString aSVGStrTextLength(rtl::OUString::createFromAscii("textLength"));
-        static rtl::OUString aSVGStrLengthAdjust(rtl::OUString::createFromAscii("lengthAdjust"));
-        static rtl::OUString aSVGStrFont(rtl::OUString::createFromAscii("font"));
-        static rtl::OUString aSVGStrFontFamily(rtl::OUString::createFromAscii("font-family"));
-        static rtl::OUString aSVGStrFontSize(rtl::OUString::createFromAscii("font-size"));
-        static rtl::OUString aSVGStrFontSizeAdjust(rtl::OUString::createFromAscii("font-size-adjust"));
-        static rtl::OUString aSVGStrFontStretch(rtl::OUString::createFromAscii("font-stretch"));
-        static rtl::OUString aSVGStrFontStyle(rtl::OUString::createFromAscii("font-style"));
-        static rtl::OUString aSVGStrFontVariant(rtl::OUString::createFromAscii("font-variant"));
-        static rtl::OUString aSVGStrFontWeight(rtl::OUString::createFromAscii("font-weight"));
-        static rtl::OUString aSVGStrDirection(rtl::OUString::createFromAscii("direction"));
-        static rtl::OUString aSVGStrLetterSpacing(rtl::OUString::createFromAscii("letter-spacing"));
-        static rtl::OUString aSVGStrTextDecoration(rtl::OUString::createFromAscii("text-decoration"));
-        static rtl::OUString aSVGStrUnicodeBidi(rtl::OUString::createFromAscii("unicode-bidi"));
-        static rtl::OUString aSVGStrWordSpacing(rtl::OUString::createFromAscii("word-spacing"));
-        static rtl::OUString aSVGStrTspan(rtl::OUString::createFromAscii("tspan"));
-        static rtl::OUString aSVGStrTref(rtl::OUString::createFromAscii("tref"));
-        static rtl::OUString aSVGStrTextPath(rtl::OUString::createFromAscii("textPath"));
-        static rtl::OUString aSVGStrStartOffset(rtl::OUString::createFromAscii("startOffset"));
-        static rtl::OUString aSVGStrMethod(rtl::OUString::createFromAscii("method"));
-        static rtl::OUString aSVGStrSpacing(rtl::OUString::createFromAscii("spacing"));
-        static rtl::OUString aSVGStrTextAlign(rtl::OUString::createFromAscii("text-align"));
-        static rtl::OUString aSVGStrPathLength(rtl::OUString::createFromAscii("pathLength"));
-        static rtl::OUString aSVGStrType(rtl::OUString::createFromAscii("type"));
-        static rtl::OUString aSVGStrClass(rtl::OUString::createFromAscii("class"));
-        static rtl::OUString aSVGStrTextAnchor(rtl::OUString::createFromAscii("text-anchor"));
-        static rtl::OUString aSVGStrXmlSpace(rtl::OUString::createFromAscii("xml:space"));
-        static rtl::OUString aSVGStrColor(rtl::OUString::createFromAscii("color"));
-        static rtl::OUString aSVGStrClipPathNode(rtl::OUString::createFromAscii("clipPath"));
-        static rtl::OUString aSVGStrClipPathProperty(rtl::OUString::createFromAscii("clip-path"));
-        static rtl::OUString aSVGStrMask(rtl::OUString::createFromAscii("mask"));
-        static rtl::OUString aSVGStrClipPathUnits(rtl::OUString::createFromAscii("clipPathUnits"));
-        static rtl::OUString aSVGStrMaskUnits(rtl::OUString::createFromAscii("maskUnits"));
-        static rtl::OUString aSVGStrMaskContentUnits(rtl::OUString::createFromAscii("maskContentUnits"));
-        static rtl::OUString aSVGStrClipRule(rtl::OUString::createFromAscii("clip-rule"));
-        static rtl::OUString aSVGStrMarker(rtl::OUString::createFromAscii("marker"));
-        static rtl::OUString aSVGStrMarkerStart(rtl::OUString::createFromAscii("marker-start"));
-        static rtl::OUString aSVGStrMarkerMid(rtl::OUString::createFromAscii("marker-mid"));
-        static rtl::OUString aSVGStrMarkerEnd(rtl::OUString::createFromAscii("marker-end"));
-        static rtl::OUString aSVGStrRefX(rtl::OUString::createFromAscii("refX"));
-        static rtl::OUString aSVGStrRefY(rtl::OUString::createFromAscii("refY"));
-        static rtl::OUString aSVGStrMarkerUnits(rtl::OUString::createFromAscii("markerUnits"));
-        static rtl::OUString aSVGStrMarkerWidth(rtl::OUString::createFromAscii("markerWidth"));
-        static rtl::OUString aSVGStrMarkerHeight(rtl::OUString::createFromAscii("markerHeight"));
-        static rtl::OUString aSVGStrOrient(rtl::OUString::createFromAscii("orient"));
-        static rtl::OUString aSVGStrPattern(rtl::OUString::createFromAscii("pattern"));
-        static rtl::OUString aSVGStrPatternUnits(rtl::OUString::createFromAscii("patternUnits"));
-        static rtl::OUString aSVGStrPatternContentUnits(rtl::OUString::createFromAscii("patternContentUnits"));
-        static rtl::OUString aSVGStrPatternTransform(rtl::OUString::createFromAscii("patternTransform"));
-        static rtl::OUString aSVGStrOpacity(rtl::OUString::createFromAscii("opacity"));
-        static rtl::OUString aSVGStrTitle(rtl::OUString::createFromAscii("title"));
-        static rtl::OUString aSVGStrDesc(rtl::OUString::createFromAscii("desc"));
+        static OUString aSVGStrWidth(OUString::createFromAscii("width"));
+        static OUString aSVGStrHeight(OUString::createFromAscii("height"));
+        static OUString aSVGStrViewBox(OUString::createFromAscii("viewBox"));
+        static OUString aSVGStrTransform(OUString::createFromAscii("transform"));
+        static OUString aSVGStrStyle(OUString::createFromAscii("style"));
+        static OUString aSVGStrD(OUString::createFromAscii("d"));
+        static OUString aSVGStrX(OUString::createFromAscii("x"));
+        static OUString aSVGStrY(OUString::createFromAscii("y"));
+        static OUString aSVGStrXmlns(OUString::createFromAscii("xmlns"));
+        static OUString aSVGStrVersion(OUString::createFromAscii("version"));
+        static OUString aSVGStrId(OUString::createFromAscii("id"));
+        static OUString aSVGStrRx(OUString::createFromAscii("rx"));
+        static OUString aSVGStrRy(OUString::createFromAscii("ry"));
+        static OUString aSVGStrPoints(OUString::createFromAscii("points"));
+        static OUString aSVGStrDx(OUString::createFromAscii("dx"));
+        static OUString aSVGStrDy(OUString::createFromAscii("dy"));
+        static OUString aSVGStrRotate(OUString::createFromAscii("rotate"));
+        static OUString aSVGStrTextLength(OUString::createFromAscii("textLength"));
+        static OUString aSVGStrLengthAdjust(OUString::createFromAscii("lengthAdjust"));
+        static OUString aSVGStrFont(OUString::createFromAscii("font"));
+        static OUString aSVGStrFontFamily(OUString::createFromAscii("font-family"));
+        static OUString aSVGStrFontSize(OUString::createFromAscii("font-size"));
+        static OUString aSVGStrFontSizeAdjust(OUString::createFromAscii("font-size-adjust"));
+        static OUString aSVGStrFontStretch(OUString::createFromAscii("font-stretch"));
+        static OUString aSVGStrFontStyle(OUString::createFromAscii("font-style"));
+        static OUString aSVGStrFontVariant(OUString::createFromAscii("font-variant"));
+        static OUString aSVGStrFontWeight(OUString::createFromAscii("font-weight"));
+        static OUString aSVGStrDirection(OUString::createFromAscii("direction"));
+        static OUString aSVGStrLetterSpacing(OUString::createFromAscii("letter-spacing"));
+        static OUString aSVGStrTextDecoration(OUString::createFromAscii("text-decoration"));
+        static OUString aSVGStrUnicodeBidi(OUString::createFromAscii("unicode-bidi"));
+        static OUString aSVGStrWordSpacing(OUString::createFromAscii("word-spacing"));
+        static OUString aSVGStrTspan(OUString::createFromAscii("tspan"));
+        static OUString aSVGStrTref(OUString::createFromAscii("tref"));
+        static OUString aSVGStrTextPath(OUString::createFromAscii("textPath"));
+        static OUString aSVGStrStartOffset(OUString::createFromAscii("startOffset"));
+        static OUString aSVGStrMethod(OUString::createFromAscii("method"));
+        static OUString aSVGStrSpacing(OUString::createFromAscii("spacing"));
+        static OUString aSVGStrTextAlign(OUString::createFromAscii("text-align"));
+        static OUString aSVGStrPathLength(OUString::createFromAscii("pathLength"));
+        static OUString aSVGStrType(OUString::createFromAscii("type"));
+        static OUString aSVGStrClass(OUString::createFromAscii("class"));
+        static OUString aSVGStrTextAnchor(OUString::createFromAscii("text-anchor"));
+        static OUString aSVGStrXmlSpace(OUString::createFromAscii("xml:space"));
+        static OUString aSVGStrColor(OUString::createFromAscii("color"));
+        static OUString aSVGStrClipPathNode(OUString::createFromAscii("clipPath"));
+        static OUString aSVGStrClipPathProperty(OUString::createFromAscii("clip-path"));
+        static OUString aSVGStrMask(OUString::createFromAscii("mask"));
+        static OUString aSVGStrClipPathUnits(OUString::createFromAscii("clipPathUnits"));
+        static OUString aSVGStrMaskUnits(OUString::createFromAscii("maskUnits"));
+        static OUString aSVGStrMaskContentUnits(OUString::createFromAscii("maskContentUnits"));
+        static OUString aSVGStrClipRule(OUString::createFromAscii("clip-rule"));
+        static OUString aSVGStrMarker(OUString::createFromAscii("marker"));
+        static OUString aSVGStrMarkerStart(OUString::createFromAscii("marker-start"));
+        static OUString aSVGStrMarkerMid(OUString::createFromAscii("marker-mid"));
+        static OUString aSVGStrMarkerEnd(OUString::createFromAscii("marker-end"));
+        static OUString aSVGStrRefX(OUString::createFromAscii("refX"));
+        static OUString aSVGStrRefY(OUString::createFromAscii("refY"));
+        static OUString aSVGStrMarkerUnits(OUString::createFromAscii("markerUnits"));
+        static OUString aSVGStrMarkerWidth(OUString::createFromAscii("markerWidth"));
+        static OUString aSVGStrMarkerHeight(OUString::createFromAscii("markerHeight"));
+        static OUString aSVGStrOrient(OUString::createFromAscii("orient"));
+        static OUString aSVGStrPattern(OUString::createFromAscii("pattern"));
+        static OUString aSVGStrPatternUnits(OUString::createFromAscii("patternUnits"));
+        static OUString aSVGStrPatternContentUnits(OUString::createFromAscii("patternContentUnits"));
+        static OUString aSVGStrPatternTransform(OUString::createFromAscii("patternTransform"));
+        static OUString aSVGStrOpacity(OUString::createFromAscii("opacity"));
+        static OUString aSVGStrTitle(OUString::createFromAscii("title"));
+        static OUString aSVGStrDesc(OUString::createFromAscii("desc"));
 
-        static rtl::OUString aSVGStrPreserveAspectRatio(rtl::OUString::createFromAscii("preserveAspectRatio"));
-        static rtl::OUString aSVGStrDefer(rtl::OUString::createFromAscii("defer"));
-        static rtl::OUString aSVGStrNone(rtl::OUString::createFromAscii("none"));
-        static rtl::OUString aSVGStrXMinYMin(rtl::OUString::createFromAscii("xMinYMin"));
-        static rtl::OUString aSVGStrXMidYMin(rtl::OUString::createFromAscii("xMidYMin"));
-        static rtl::OUString aSVGStrXMaxYMin(rtl::OUString::createFromAscii("xMaxYMin"));
-        static rtl::OUString aSVGStrXMinYMid(rtl::OUString::createFromAscii("xMinYMid"));
-        static rtl::OUString aSVGStrXMidYMid(rtl::OUString::createFromAscii("xMidYMid"));
-        static rtl::OUString aSVGStrXMaxYMid(rtl::OUString::createFromAscii("xMaxYMid"));
-        static rtl::OUString aSVGStrXMinYMax(rtl::OUString::createFromAscii("xMinYMax"));
-        static rtl::OUString aSVGStrXMidYMax(rtl::OUString::createFromAscii("xMidYMax"));
-        static rtl::OUString aSVGStrXMaxYMax(rtl::OUString::createFromAscii("xMaxYMax"));
-        static rtl::OUString aSVGStrMeet(rtl::OUString::createFromAscii("meet"));
-        static rtl::OUString aSVGStrSlice(rtl::OUString::createFromAscii("slice"));
+        static OUString aSVGStrPreserveAspectRatio(OUString::createFromAscii("preserveAspectRatio"));
+        static OUString aSVGStrDefer(OUString::createFromAscii("defer"));
+        static OUString aSVGStrNone(OUString::createFromAscii("none"));
+        static OUString aSVGStrXMinYMin(OUString::createFromAscii("xMinYMin"));
+        static OUString aSVGStrXMidYMin(OUString::createFromAscii("xMidYMin"));
+        static OUString aSVGStrXMaxYMin(OUString::createFromAscii("xMaxYMin"));
+        static OUString aSVGStrXMinYMid(OUString::createFromAscii("xMinYMid"));
+        static OUString aSVGStrXMidYMid(OUString::createFromAscii("xMidYMid"));
+        static OUString aSVGStrXMaxYMid(OUString::createFromAscii("xMaxYMid"));
+        static OUString aSVGStrXMinYMax(OUString::createFromAscii("xMinYMax"));
+        static OUString aSVGStrXMidYMax(OUString::createFromAscii("xMidYMax"));
+        static OUString aSVGStrXMaxYMax(OUString::createFromAscii("xMaxYMax"));
+        static OUString aSVGStrMeet(OUString::createFromAscii("meet"));
+        static OUString aSVGStrSlice(OUString::createFromAscii("slice"));
 
-        static rtl::OUString aSVGStrDefs(rtl::OUString::createFromAscii("defs"));
-        static rtl::OUString aSVGStrG(rtl::OUString::createFromAscii("g"));
-        static rtl::OUString aSVGStrSvg(rtl::OUString::createFromAscii("svg"));
-        static rtl::OUString aSVGStrSymbol(rtl::OUString::createFromAscii("symbol"));
-        static rtl::OUString aSVGStrUse(rtl::OUString::createFromAscii("use"));
+        static OUString aSVGStrDefs(OUString::createFromAscii("defs"));
+        static OUString aSVGStrG(OUString::createFromAscii("g"));
+        static OUString aSVGStrSvg(OUString::createFromAscii("svg"));
+        static OUString aSVGStrSymbol(OUString::createFromAscii("symbol"));
+        static OUString aSVGStrUse(OUString::createFromAscii("use"));
 
-        static rtl::OUString aSVGStrCircle(rtl::OUString::createFromAscii("circle"));
-        static rtl::OUString aSVGStrEllipse(rtl::OUString::createFromAscii("ellipse"));
-        static rtl::OUString aSVGStrLine(rtl::OUString::createFromAscii("line"));
-        static rtl::OUString aSVGStrPath(rtl::OUString::createFromAscii("path"));
-        static rtl::OUString aSVGStrPolygon(rtl::OUString::createFromAscii("polygon"));
-        static rtl::OUString aSVGStrPolyline(rtl::OUString::createFromAscii("polyline"));
-        static rtl::OUString aSVGStrRect(rtl::OUString::createFromAscii("rect"));
-        static rtl::OUString aSVGStrImage(rtl::OUString::createFromAscii("image"));
+        static OUString aSVGStrCircle(OUString::createFromAscii("circle"));
+        static OUString aSVGStrEllipse(OUString::createFromAscii("ellipse"));
+        static OUString aSVGStrLine(OUString::createFromAscii("line"));
+        static OUString aSVGStrPath(OUString::createFromAscii("path"));
+        static OUString aSVGStrPolygon(OUString::createFromAscii("polygon"));
+        static OUString aSVGStrPolyline(OUString::createFromAscii("polyline"));
+        static OUString aSVGStrRect(OUString::createFromAscii("rect"));
+        static OUString aSVGStrImage(OUString::createFromAscii("image"));
 
-        static rtl::OUString aSVGStrLinearGradient(rtl::OUString::createFromAscii("linearGradient"));
-        static rtl::OUString aSVGStrRadialGradient(rtl::OUString::createFromAscii("radialGradient"));
-        static rtl::OUString aSVGStrStop(rtl::OUString::createFromAscii("stop"));
-        static rtl::OUString aSVGStrOffset(rtl::OUString::createFromAscii("offset"));
-        static rtl::OUString aSVGStrX1(rtl::OUString::createFromAscii("x1"));
-        static rtl::OUString aSVGStrY1(rtl::OUString::createFromAscii("y1"));
-        static rtl::OUString aSVGStrX2(rtl::OUString::createFromAscii("x2"));
-        static rtl::OUString aSVGStrY2(rtl::OUString::createFromAscii("y2"));
-        static rtl::OUString aSVGStrCx(rtl::OUString::createFromAscii("cx"));
-        static rtl::OUString aSVGStrCy(rtl::OUString::createFromAscii("cy"));
-        static rtl::OUString aSVGStrFx(rtl::OUString::createFromAscii("fx"));
-        static rtl::OUString aSVGStrFy(rtl::OUString::createFromAscii("fy"));
-        static rtl::OUString aSVGStrR(rtl::OUString::createFromAscii("r"));
-        static rtl::OUString aSVGStrGradientUnits(rtl::OUString::createFromAscii("gradientUnits"));
-        static rtl::OUString aSVGStrGradientTransform(rtl::OUString::createFromAscii("gradientTransform"));
-        static rtl::OUString aSVGStrSpreadMethod(rtl::OUString::createFromAscii("spreadMethod"));
-        static rtl::OUString aSVGStrXlinkHref(rtl::OUString::createFromAscii("xlink:href"));
-        static rtl::OUString aSVGStrStopColor(rtl::OUString::createFromAscii("stop-color"));
-        static rtl::OUString aSVGStrStopOpacity(rtl::OUString::createFromAscii("stop-opacity"));
+        static OUString aSVGStrLinearGradient(OUString::createFromAscii("linearGradient"));
+        static OUString aSVGStrRadialGradient(OUString::createFromAscii("radialGradient"));
+        static OUString aSVGStrStop(OUString::createFromAscii("stop"));
+        static OUString aSVGStrOffset(OUString::createFromAscii("offset"));
+        static OUString aSVGStrX1(OUString::createFromAscii("x1"));
+        static OUString aSVGStrY1(OUString::createFromAscii("y1"));
+        static OUString aSVGStrX2(OUString::createFromAscii("x2"));
+        static OUString aSVGStrY2(OUString::createFromAscii("y2"));
+        static OUString aSVGStrCx(OUString::createFromAscii("cx"));
+        static OUString aSVGStrCy(OUString::createFromAscii("cy"));
+        static OUString aSVGStrFx(OUString::createFromAscii("fx"));
+        static OUString aSVGStrFy(OUString::createFromAscii("fy"));
+        static OUString aSVGStrR(OUString::createFromAscii("r"));
+        static OUString aSVGStrGradientUnits(OUString::createFromAscii("gradientUnits"));
+        static OUString aSVGStrGradientTransform(OUString::createFromAscii("gradientTransform"));
+        static OUString aSVGStrSpreadMethod(OUString::createFromAscii("spreadMethod"));
+        static OUString aSVGStrXlinkHref(OUString::createFromAscii("xlink:href"));
+        static OUString aSVGStrStopColor(OUString::createFromAscii("stop-color"));
+        static OUString aSVGStrStopOpacity(OUString::createFromAscii("stop-opacity"));
 
-        static rtl::OUString aSVGStrFill(rtl::OUString::createFromAscii("fill"));
-        static rtl::OUString aSVGStrFillOpacity(rtl::OUString::createFromAscii("fill-opacity"));
-        static rtl::OUString aSVGStrFillRule(rtl::OUString::createFromAscii("fill-rule"));
+        static OUString aSVGStrFill(OUString::createFromAscii("fill"));
+        static OUString aSVGStrFillOpacity(OUString::createFromAscii("fill-opacity"));
+        static OUString aSVGStrFillRule(OUString::createFromAscii("fill-rule"));
 
-        static rtl::OUString aSVGStrStroke(rtl::OUString::createFromAscii("stroke"));
-        static rtl::OUString aSVGStrStrokeDasharray(rtl::OUString::createFromAscii("stroke-dasharray"));
-        static rtl::OUString aSVGStrStrokeDashoffset(rtl::OUString::createFromAscii("stroke-dashoffset"));
-        static rtl::OUString aSVGStrStrokeLinecap(rtl::OUString::createFromAscii("stroke-linecap"));
-        static rtl::OUString aSVGStrStrokeLinejoin(rtl::OUString::createFromAscii("stroke-linejoin"));
-        static rtl::OUString aSVGStrStrokeMiterlimit(rtl::OUString::createFromAscii("stroke-miterlimit"));
-        static rtl::OUString aSVGStrStrokeOpacity(rtl::OUString::createFromAscii("stroke-opacity"));
-        static rtl::OUString aSVGStrStrokeWidth(rtl::OUString::createFromAscii("stroke-width"));
+        static OUString aSVGStrStroke(OUString::createFromAscii("stroke"));
+        static OUString aSVGStrStrokeDasharray(OUString::createFromAscii("stroke-dasharray"));
+        static OUString aSVGStrStrokeDashoffset(OUString::createFromAscii("stroke-dashoffset"));
+        static OUString aSVGStrStrokeLinecap(OUString::createFromAscii("stroke-linecap"));
+        static OUString aSVGStrStrokeLinejoin(OUString::createFromAscii("stroke-linejoin"));
+        static OUString aSVGStrStrokeMiterlimit(OUString::createFromAscii("stroke-miterlimit"));
+        static OUString aSVGStrStrokeOpacity(OUString::createFromAscii("stroke-opacity"));
+        static OUString aSVGStrStrokeWidth(OUString::createFromAscii("stroke-width"));
 
-        static rtl::OUString aSVGStrText(rtl::OUString::createFromAscii("text"));
+        static OUString aSVGStrText(OUString::createFromAscii("text"));
 
-        SVGToken StrToSVGToken(const rtl::OUString& rStr)
+        SVGToken StrToSVGToken(const OUString& rStr)
         {
-            typedef boost::unordered_map< rtl::OUString, SVGToken, rtl::OUStringHash,::std::equal_to< ::rtl::OUString >  > SVGTokenMapper;
-            typedef std::pair< rtl::OUString, SVGToken > SVGTokenValueType;
+            typedef boost::unordered_map< OUString, SVGToken, OUStringHash,::std::equal_to< OUString >  > SVGTokenMapper;
+            typedef std::pair< OUString, SVGToken > SVGTokenValueType;
             static SVGTokenMapper aSVGTokenMapperList;
 
             if(aSVGTokenMapperList.empty())
@@ -314,12 +314,12 @@ namespace svgio
             }
         }
 
-        const rtl::OUString& getStrTitle()
+        const OUString& getStrTitle()
         {
             return aSVGStrTitle;
         }
 
-        const rtl::OUString& getStrDesc()
+        const OUString& getStrDesc()
         {
             return aSVGStrDesc;
         }

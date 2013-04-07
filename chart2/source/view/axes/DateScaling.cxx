@@ -99,15 +99,15 @@ uno::Reference< XScaling > SAL_CALL DateScaling::getInverseScaling()
     return new InverseDateScaling( m_aNullDate, m_nTimeUnit, m_bShifted );
 }
 
-::rtl::OUString SAL_CALL DateScaling::getServiceName()
+OUString SAL_CALL DateScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_DateScaling;
 }
 
-uno::Sequence< ::rtl::OUString > DateScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_DateScaling, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_DateScaling, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -180,15 +180,15 @@ uno::Reference< XScaling > SAL_CALL InverseDateScaling::getInverseScaling()
     return new DateScaling( m_aNullDate, m_nTimeUnit, m_bShifted );
 }
 
-::rtl::OUString SAL_CALL InverseDateScaling::getServiceName()
+OUString SAL_CALL InverseDateScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_InverseDateScaling;
 }
 
-uno::Sequence< ::rtl::OUString > InverseDateScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_InverseDateScaling, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_InverseDateScaling, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

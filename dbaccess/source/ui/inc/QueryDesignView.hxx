@@ -68,7 +68,7 @@ namespace dbaui
         Splitter                            m_aSplitter;
 
         ::com::sun::star::lang::Locale      m_aLocale;
-        ::rtl::OUString                     m_sDecimalSep;
+        OUString                     m_sDecimalSep;
 
         OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
         ChildFocusState                     m_eChildFocus;
@@ -91,9 +91,9 @@ namespace dbaui
         // check if the statement is correct when not returning false
         virtual sal_Bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const ::rtl::OUString& _rsStatement);
+        virtual void setStatement(const OUString& _rsStatement);
         // returns the current sql statement
-        virtual ::rtl::OUString getStatement();
+        virtual OUString getStatement();
         /// late construction
         virtual void Construct();
         virtual void initialize();
@@ -106,18 +106,18 @@ namespace dbaui
         void setNoneVisbleRow(sal_Int32 _nRows);
 
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
-        ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
+        OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
 
         SqlParseError   InsertField( const OTableFieldDescRef& rInfo, sal_Bool bVis=sal_True, sal_Bool bActivate = sal_True);
-        bool            HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
+        bool            HasFieldByAliasName(const OUString& rFieldName, OTableFieldDescRef& rInfo) const;
         // save the position of the table window and the pos of the splitters
         // called when fields are deleted
-        void DeleteFields( const ::rtl::OUString& rAliasName );
+        void DeleteFields( const OUString& rAliasName );
         // called when a table from tabeview was deleted
-        void TableDeleted(const ::rtl::OUString& rAliasName);
+        void TableDeleted(const OUString& rAliasName);
 
         sal_Int32 getColWidth( sal_uInt16 _nColPos) const;
-        void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
+        void fillValidFields(const OUString& strTableName, ComboBox* pFieldList);
 
         void SaveUIConfig();
         void stopTimer();
@@ -142,11 +142,11 @@ namespace dbaui
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
-                                                                    ::rtl::OUString& _rsErrorMessage,
+                                                                    OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
 
         void fillFunctionInfo(   const ::connectivity::OSQLParseNode* pNode
-                                ,const ::rtl::OUString& sFunctionTerm
+                                ,const OUString& sFunctionTerm
                                 ,OTableFieldDescRef& aInfo);
     protected:
         // return the Rectangle where I can paint myself

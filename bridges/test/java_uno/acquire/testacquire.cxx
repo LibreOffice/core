@@ -180,19 +180,19 @@ class Service: public cppu::WeakImplHelper3<
     css::lang::XServiceInfo, css::lang::XMain, test::javauno::acquire::XTest >
 {
 public:
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return getImplementationName_static(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()  throw (css::uno::RuntimeException)
     { return getSupportedServiceNames_static(); }
 
     virtual sal_Int32 SAL_CALL
-    run(css::uno::Sequence< rtl::OUString > const & arguments)
+    run(css::uno::Sequence< OUString > const & arguments)
         throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL setInterfaceToInterface(
@@ -294,9 +294,9 @@ public:
         throw (css::uno::RuntimeException)
     { return obj; }
 
-    static rtl::OUString getImplementationName_static();
+    static OUString getImplementationName_static();
 
-    static css::uno::Sequence< rtl::OUString >
+    static css::uno::Sequence< OUString >
     getSupportedServiceNames_static();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -316,10 +316,10 @@ private:
 
 }
 
-sal_Bool Service::supportsService(rtl::OUString const & serviceName)
+sal_Bool Service::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > names(
+    css::uno::Sequence< OUString > names(
         getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i< names.getLength(); ++i) {
         if (names[i] == serviceName) {
@@ -341,7 +341,7 @@ template< typename T > void assertNotNull(css::uno::Reference< T > const & ref)
 
 }
 
-sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
+sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
     throw (css::uno::RuntimeException)
 {
     // - arguments[0] must be the UNO URL to connect to:
@@ -477,13 +477,13 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
     return 0;
 }
 
-rtl::OUString Service::getImplementationName_static() {
-    return rtl::OUString( "com.sun.star.test.bridges.testacquire.impl" );
+OUString Service::getImplementationName_static() {
+    return OUString( "com.sun.star.test.bridges.testacquire.impl" );
 }
 
-css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static() {
-    css::uno::Sequence< rtl::OUString > names(1);
-    names[0] = rtl::OUString( "com.sun.star.test.bridges.testacquire" );
+css::uno::Sequence< OUString > Service::getSupportedServiceNames_static() {
+    css::uno::Sequence< OUString > names(1);
+    names[0] = OUString( "com.sun.star.test.bridges.testacquire" );
     return names;
 }
 
@@ -515,11 +515,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(char const 
 
 namespace {
 
-bool writeInfo(void * registryKey, rtl::OUString const & implementationName,
-               css::uno::Sequence< rtl::OUString > const & serviceNames) {
-    rtl::OUString keyName( "/" );
+bool writeInfo(void * registryKey, OUString const & implementationName,
+               css::uno::Sequence< OUString > const & serviceNames) {
+    OUString keyName( "/" );
     keyName += implementationName;
-    keyName += rtl::OUString( "/UNO/SERVICES" );
+    keyName += OUString( "/UNO/SERVICES" );
     css::uno::Reference< css::registry::XRegistryKey > key;
     try {
         key = static_cast< css::registry::XRegistryKey * >(registryKey)->

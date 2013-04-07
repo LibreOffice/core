@@ -44,7 +44,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 namespace dp_gui {
 
@@ -102,17 +101,17 @@ namespace
         : public rtl::Static< String, Extension > {};
 }
 
-rtl::OUString ReplaceProductNameHookProc( const rtl::OUString& rStr )
+OUString ReplaceProductNameHookProc( const OUString& rStr )
 {
     if (rStr.indexOf( "%PRODUCT" ) == -1)
         return rStr;
 
-    rtl::OUString sProductName = ProductName::get();
-    rtl::OUString sVersion = Version::get();
-    rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
-    rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-    rtl::OUString sExtension = Extension::get();
-    rtl::OUString sOOOVendor = OOOVendor::get();
+    OUString sProductName = ProductName::get();
+    OUString sVersion = Version::get();
+    OUString sAboutBoxVersion = AboutBoxVersion::get();
+    OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+    OUString sExtension = Extension::get();
+    OUString sOOOVendor = OOOVendor::get();
 
     if ( sProductName.isEmpty() )
     {
@@ -127,7 +126,7 @@ rtl::OUString ReplaceProductNameHookProc( const rtl::OUString& rStr )
         }
     }
 
-    rtl::OUString sRet = rStr.replaceAll( "%PRODUCTNAME", sProductName );
+    OUString sRet = rStr.replaceAll( "%PRODUCTNAME", sProductName );
     sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
     sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
     sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
@@ -242,7 +241,7 @@ void ServiceImpl::startExecuteModal(
             app->SetSettings( as );
             app->SetDisplayName(
                 utl::ConfigManager::getProductName() +
-                rtl::OUString(" ") +
+                OUString(" ") +
                 utl::ConfigManager::getProductVersion());
             ExtensionCmdQueue::syncRepositories( m_xComponentContext );
         }

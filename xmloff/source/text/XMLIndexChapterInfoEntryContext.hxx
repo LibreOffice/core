@@ -52,7 +52,7 @@ public:
         SvXMLImport& rImport,
         XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         sal_Bool bTOC );
 
     ~XMLIndexChapterInfoEntryContext();

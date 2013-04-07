@@ -40,8 +40,6 @@
 using namespace ::xmloff::token;
 
 using ::std::vector;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::style::NumberingType::ARABIC;
 
 

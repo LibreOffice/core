@@ -49,7 +49,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Exception;
@@ -139,13 +138,13 @@ throw (::com::sun::star::uno::RuntimeException)
     m_pImpl->reset();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImageType )
+Sequence< OUString > SAL_CALL ImageManager::getAllImageNames( ::sal_Int16 nImageType )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return m_pImpl->getAllImageNames( nImageType );
 }
 
-::sal_Bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const ::rtl::OUString& aCommandURL )
+::sal_Bool SAL_CALL ImageManager::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     return m_pImpl->hasImage(nImageType,aCommandURL);
@@ -153,7 +152,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
 Sequence< uno::Reference< XGraphic > > SAL_CALL ImageManager::getImages(
     ::sal_Int16 nImageType,
-    const Sequence< ::rtl::OUString >& aCommandURLSequence )
+    const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     return m_pImpl->getImages(nImageType,aCommandURLSequence);
@@ -161,7 +160,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno:
 
 void SAL_CALL ImageManager::replaceImages(
     ::sal_Int16 nImageType,
-    const Sequence< ::rtl::OUString >& aCommandURLSequence,
+    const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
@@ -170,7 +169,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     m_pImpl->replaceImages(nImageType,aCommandURLSequence,aGraphicsSequence);
 }
 
-void SAL_CALL ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence )
+void SAL_CALL ImageManager::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
@@ -178,7 +177,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     m_pImpl->removeImages(nImageType,aCommandURLSequence);
 }
 
-void SAL_CALL ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
+void SAL_CALL ImageManager::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
 throw ( ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,

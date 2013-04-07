@@ -21,8 +21,6 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 
-using rtl::OUStringToOString;
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;

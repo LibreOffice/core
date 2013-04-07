@@ -214,7 +214,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            sTypeToken = rtl::OUString::createFromAscii(pMarkToOutline);
+            sTypeToken = OUString::createFromAscii(pMarkToOutline);
             sal_uInt16 nOutlineCount = nMemberCount =
                 static_cast<sal_uInt16>(pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount());
             if(nOutlineLevel < MAXLEVEL)
@@ -230,7 +230,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         break;
 
         case CONTENT_TYPE_TABLE     :
-            sTypeToken = rtl::OUString::createFromAscii(pMarkToTable);
+            sTypeToken = OUString::createFromAscii(pMarkToTable);
             nMemberCount = pWrtShell->GetTblFrmFmtCount(true);
             bEdit = true;
         break;
@@ -240,16 +240,16 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
         case CONTENT_TYPE_OLE       :
         {
             FlyCntType eType = FLYCNTTYPE_FRM;
-            sTypeToken = rtl::OUString::createFromAscii(pMarkToFrame);
+            sTypeToken = OUString::createFromAscii(pMarkToFrame);
             if(nContentType == CONTENT_TYPE_OLE)
             {
                 eType = FLYCNTTYPE_OLE;
-                sTypeToken = rtl::OUString::createFromAscii(pMarkToOLE);
+                sTypeToken = OUString::createFromAscii(pMarkToOLE);
             }
             else if(nContentType == CONTENT_TYPE_GRAPHIC)
             {
                 eType = FLYCNTTYPE_GRF;
-                sTypeToken = rtl::OUString::createFromAscii(pMarkToGraphic);
+                sTypeToken = OUString::createFromAscii(pMarkToGraphic);
             }
             nMemberCount = pWrtShell->GetFlyCount(eType);
             bEdit = true;
@@ -317,7 +317,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 }
             }
             nMemberCount = pMember->size();
-            sTypeToken = rtl::OUString::createFromAscii(pMarkToRegion);
+            sTypeToken = OUString::createFromAscii(pMarkToRegion);
             bEdit = true;
             bDelete = false;
             if(pOldMember)
@@ -642,10 +642,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
         break;
         case CONTENT_TYPE_REFERENCE:
         {
-            std::vector<rtl::OUString> aRefMarks;
+            std::vector<OUString> aRefMarks;
             nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
 
-            for(std::vector<rtl::OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
+            for(std::vector<OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
             {
                 // References sorted alphabetically
                 SwContent* pCnt = new SwContent(this, *i, 0);
@@ -785,7 +785,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         SvTreeListBox( pParent, rResId ),
 
-        sSpace(rtl::OUString("                    ")),
+        sSpace(OUString("                    ")),
 
         sRemoveIdx(SW_RES(ST_REMOVE_INDEX)),
         sUpdateIdx(SW_RES(ST_UPDATE)),
@@ -990,9 +990,9 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     if(pHiddenShell)
     {
         String sHiddenEntry = pHiddenShell->GetView().GetDocShell()->GetTitle();
-        sHiddenEntry += rtl::OUString(" ( ");
+        sHiddenEntry += OUString(" ( ");
         sHiddenEntry += aContextStrings[ ST_HIDDEN - ST_CONTEXT_FIRST];
-        sHiddenEntry += rtl::OUString(" )");
+        sHiddenEntry += OUString(" )");
         pSubPop3->InsertItem(nId, sHiddenEntry);
     }
 
@@ -2465,7 +2465,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                 if(((SwContent*)pUserData)->IsInvisible())
                 {
                     if(sEntry.Len())
-                        sEntry += rtl::OUString(", ");
+                        sEntry += OUString(", ");
                     sEntry += sInvisible;
                     bRet = true;
                 }
@@ -2897,11 +2897,11 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         String sForbiddenChars;
         if(CONTENT_TYPE_BOOKMARK == nType)
         {
-            sForbiddenChars = rtl::OUString("/\\@:*?\";,.#");
+            sForbiddenChars = OUString("/\\@:*?\";,.#");
         }
         else if(CONTENT_TYPE_TABLE == nType)
         {
-            sForbiddenChars = rtl::OUString(" .<>");
+            sForbiddenChars = OUString(" .<>");
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();

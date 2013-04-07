@@ -45,8 +45,6 @@
 #include <document.hxx>
 
 
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 using ::com::sun::star::xml::sax::InputSource;
 using namespace ucbhelper;
 using namespace ::com::sun::star::ucb;

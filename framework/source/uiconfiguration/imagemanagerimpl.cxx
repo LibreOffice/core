@@ -49,7 +49,6 @@
 #include <rtl/instance.hxx>
 #include <svtools/miscopt.hxx>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Exception;
@@ -121,13 +120,13 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
     return pGlobalImageList;
 }
 
-static rtl::OUString getCanonicalName( const rtl::OUString& rFileName )
+static OUString getCanonicalName( const OUString& rFileName )
 {
     bool               bRemoveSlash( true );
     sal_Int32          nLength = rFileName.getLength();
     const sal_Unicode* pString = rFileName.getStr();
 
-    rtl::OUStringBuffer aBuf( nLength );
+    OUStringBuffer aBuf( nLength );
     for ( sal_Int32 i = 0; i < nLength; i++ )
     {
         const sal_Unicode c = pString[i];
@@ -152,7 +151,7 @@ static rtl::OUString getCanonicalName( const rtl::OUString& rFileName )
 
 //_________________________________________________________________________________________________________________
 
-CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const rtl::OUString& aModuleIdentifier ) :
+CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
     m_bVectorInit( sal_False ),
     m_aModuleIdentifier( aModuleIdentifier ),
     m_xContext( rxContext ),
@@ -174,7 +173,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
     if ( !m_bVectorInit )
     {
-        const rtl::OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
+        const OUString aCommandImageList( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST );
         Sequence< OUString > aCmdImageSeq;
         uno::Reference< XNameAccess > xCmdDesc = frame::UICommandDescription::create( m_xContext );
 
@@ -210,7 +209,7 @@ void CmdImageList::impl_fillCommandToImageNameMap()
         }
 
         // We have to map commands which uses special characters like '/',':','?','\','<'.'>','|'
-        String aExt = rtl::OUString(".png");
+        String aExt = OUString(".png");
         m_aImageCommandNameVector.resize(aCmdImageSeq.getLength() );
         m_aImageNameVector.resize( aCmdImageSeq.getLength() );
 
@@ -281,17 +280,17 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
     return m_pImageList[nImageType];
 }
 
-std::vector< ::rtl::OUString >& CmdImageList::impl_getImageNameVector()
+std::vector< OUString >& CmdImageList::impl_getImageNameVector()
 {
     return m_aImageNameVector;
 }
 
-std::vector< rtl::OUString >& CmdImageList::impl_getImageCommandNameVector()
+std::vector< OUString >& CmdImageList::impl_getImageCommandNameVector()
 {
     return m_aImageCommandNameVector;
 }
 
-Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
+Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
 {
     impl_fillCommandToImageNameMap();
     CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
@@ -304,7 +303,7 @@ Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUS
     return Image();
 }
 
-bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const rtl::OUString& rCommandURL )
+bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const OUString& rCommandURL )
 {
     impl_fillCommandToImageNameMap();
     CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
@@ -314,12 +313,12 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const rtl::OUString& rCom
         return false;
 }
 
-::std::vector< rtl::OUString >& CmdImageList::getImageNames()
+::std::vector< OUString >& CmdImageList::getImageNames()
 {
     return impl_getImageNameVector();
 }
 
-::std::vector< rtl::OUString >& CmdImageList::getImageCommandNames()
+::std::vector< OUString >& CmdImageList::getImageCommandNames()
 {
     return impl_getImageCommandNameVector();
 }
@@ -327,7 +326,7 @@ bool CmdImageList::hasImage( sal_Int16 /*nImageType*/, const rtl::OUString& rCom
 //_________________________________________________________________________________________________________________
 
 GlobalImageList::GlobalImageList( const uno::Reference< uno::XComponentContext >& rxContext ) :
-    CmdImageList( rxContext, rtl::OUString() ),
+    CmdImageList( rxContext, OUString() ),
     m_nRefCount( 0 )
 {
 }
@@ -336,25 +335,25 @@ GlobalImageList::~GlobalImageList()
 {
 }
 
-Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
+Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
 }
 
-bool GlobalImageList::hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
+bool GlobalImageList::hasImage( sal_Int16 nImageType, const OUString& rCommandURL )
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return CmdImageList::hasImage( nImageType, rCommandURL );
 }
 
-::std::vector< rtl::OUString >& GlobalImageList::getImageNames()
+::std::vector< OUString >& GlobalImageList::getImageNames()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return impl_getImageNameVector();
 }
 
-::std::vector< rtl::OUString >& GlobalImageList::getImageCommandNames()
+::std::vector< OUString >& GlobalImageList::getImageCommandNames()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return impl_getImageCommandNameVector();
@@ -478,7 +477,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
     {
         try
         {
-            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( rtl::OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
+            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
                                                                                       ElementModes::READ );
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
@@ -500,7 +499,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
                 }
 
                 uno::Reference< XStream > xBitmapStream = xUserBitmapsStorage->openStreamElement(
-                                                        rtl::OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
+                                                        OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
                                                         ElementModes::READ );
 
                 if ( xBitmapStream.is() )
@@ -575,17 +574,17 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
                 pList->pImageItemList->push_back( pItem );
             }
 
-            pList->aURL = rtl::OUString("Bitmaps/");
-            pList->aURL += rtl::OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
+            pList->aURL = OUString("Bitmaps/");
+            pList->aURL += OUString::createFromAscii(BITMAP_FILE_NAMES[nImageType]);
 
             uno::Reference< XTransactedObject > xTransaction;
             uno::Reference< XOutputStream >     xOutputStream;
-            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( rtl::OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
+            uno::Reference< XStream > xStream = xUserImageStorage->openStreamElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ),
                                                                                       ElementModes::WRITE|ElementModes::TRUNCATE );
             if ( xStream.is() )
             {
                 uno::Reference< XStream > xBitmapStream =
-                    xUserBitmapsStorage->openStreamElement( rtl::OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
+                    xUserBitmapsStorage->openStreamElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ),
                                                             ElementModes::WRITE|ElementModes::TRUNCATE );
                 if ( xBitmapStream.is() )
                 {
@@ -620,7 +619,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
             // the NoSuchElementException as it can be possible that there is no stream at all!
             try
             {
-                xUserImageStorage->removeElement( rtl::OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
+                xUserImageStorage->removeElement( OUString::createFromAscii( IMAGELIST_XML_FILE[nImageType] ));
             }
             catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
@@ -628,7 +627,7 @@ sal_Bool ImageManagerImpl::implts_storeUserImages(
 
             try
             {
-                xUserBitmapsStorage->removeElement( rtl::OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
+                xUserBitmapsStorage->removeElement( OUString::createFromAscii( BITMAP_FILE_NAMES[nImageType] ));
             }
             catch ( const ::com::sun::star::container::NoSuchElementException& )
             {
@@ -776,7 +775,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                if ( xPropSet->getPropertyValue( rtl::OUString( "OpenMode" )) >>= nOpenMode )
+                if ( xPropSet->getPropertyValue( OUString( "OpenMode" )) >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
         }
@@ -805,7 +804,7 @@ throw (::com::sun::star::uno::RuntimeException)
         ImageList* pImageList = implts_getUserImageList( ImageType(i));
         pImageList->GetImageNames( aUserImageNames );
 
-        Sequence< rtl::OUString > aRemoveList( aUserImageNames.size() );
+        Sequence< OUString > aRemoveList( aUserImageNames.size() );
         const sal_uInt32 nCount = aUserImageNames.size();
         for ( sal_uInt32 j = 0; j < nCount; j++ )
             aRemoveList[j] = aUserImageNames[j];
@@ -818,7 +817,7 @@ throw (::com::sun::star::uno::RuntimeException)
     m_bModified = sal_True;
 }
 
-Sequence< ::rtl::OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
+Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -863,7 +862,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return aImageNameSeq;
 }
 
-::sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const ::rtl::OUString& aCommandURL )
+::sal_Bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -896,7 +895,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 
 Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     ::sal_Int16 nImageType,
-    const Sequence< ::rtl::OUString >& aCommandURLSequence )
+    const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -910,7 +909,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno:
 
     Sequence< uno::Reference< XGraphic > > aGraphSeq( aCommandURLSequence.getLength() );
 
-    const rtl::OUString* aStrArray = aCommandURLSequence.getConstArray();
+    const OUString* aStrArray = aCommandURLSequence.getConstArray();
 
     sal_Int16                         nIndex            = implts_convertImageTypeToIndex( nImageType );
     rtl::Reference< GlobalImageList > rGlobalImageList;
@@ -944,7 +943,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno:
 
 void ImageManagerImpl::replaceImages(
     ::sal_Int16 nImageType,
-    const Sequence< ::rtl::OUString >& aCommandURLSequence,
+    const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
@@ -1028,7 +1027,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 }
 
-void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence )
+void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
 throw ( ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
         ::com::sun::star::uno::RuntimeException)
@@ -1132,7 +1131,7 @@ throw ( ::com::sun::star::lang::IllegalArgumentException,
     }
 }
 
-void ImageManagerImpl::insertImages( ::sal_Int16 nImageType, const Sequence< ::rtl::OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
+void ImageManagerImpl::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
 throw ( ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::lang::IllegalAccessException,
@@ -1153,7 +1152,7 @@ throw ( ::com::sun::star::uno::Exception,
         throw DisposedException();
 
     CommandMap                   aOldUserCmdImageSet;
-    std::vector< rtl::OUString > aNewUserCmdImageSet;
+    std::vector< OUString > aNewUserCmdImageSet;
 
     if ( m_bModified )
     {
@@ -1161,7 +1160,7 @@ throw ( ::com::sun::star::uno::Exception,
         {
             if ( !m_bDisposed && m_bUserImageListModified[i] )
             {
-                std::vector< rtl::OUString > aOldUserCmdImageVector;
+                std::vector< OUString > aOldUserCmdImageVector;
                 ImageList* pImageList = implts_getUserImageList( (ImageType)i );
                 pImageList->GetImageNames( aOldUserCmdImageVector );
 

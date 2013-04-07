@@ -66,8 +66,6 @@
 #include <tools/debug.hxx>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1241,7 +1239,7 @@ XMLDateFieldImportContext::XMLDateFieldImportContext(
 
 void XMLDateFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -1527,7 +1525,7 @@ TYPEINIT1( XMLDatabaseSelectImportContext, XMLDatabaseNextImportContext );
 
 XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx, const ::rtl::OUString& sLocalName) :
+    sal_uInt16 nPrfx, const OUString& sLocalName) :
         XMLDatabaseNextImportContext(rImport, rHlp, sAPI_database_select,
                                      nPrfx, sLocalName),
         sPropertySetNumber(sAPI_set_number),
@@ -1538,7 +1536,7 @@ XMLDatabaseSelectImportContext::XMLDatabaseSelectImportContext(
 
 void XMLDatabaseSelectImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     if (XML_TOK_TEXTFIELD_ROW_NUMBER == nAttrToken)
     {
@@ -2283,7 +2281,7 @@ XMLFileNameImportContext::XMLFileNameImportContext(
 
 void XMLFileNameImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -2665,7 +2663,7 @@ XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
 
 void XMLPageVarSetFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     switch (nAttrToken)
     {
@@ -3197,7 +3195,7 @@ XMLDdeFieldImportContext::XMLDdeFieldImportContext(
 
 void XMLDdeFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     if (XML_TOK_TEXTFIELD_CONNECTION_NAME == nAttrToken)
     {
@@ -3282,7 +3280,7 @@ XMLSheetNameImportContext::XMLSheetNameImportContext(
 
 void XMLSheetNameImportContext::ProcessAttribute(
     sal_uInt16,
-    const ::rtl::OUString& )
+    const OUString& )
 {
     // no attributes -> nothing to be done
 }
@@ -3977,7 +3975,7 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
         SvXMLImport& rImport,
         XMLTextImportHelper& rHlp,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& sLocalName) :
+        const OUString& sLocalName) :
     XMLTextFieldImportContext( rImport, rHlp, sAPI_drop_down,
                                nPrfx, sLocalName ),
     aLabels(),
@@ -4049,7 +4047,7 @@ SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
 
 void XMLDropDownFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
-    const ::rtl::OUString& sAttrValue )
+    const OUString& sAttrValue )
 {
     if( nAttrToken == XML_TOK_TEXTFIELD_NAME )
     {
@@ -4118,7 +4116,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+        const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_header, nPrfx, sLocalName )
 {
     sServicePrefix = OUString(sAPI_presentation_prefix );
@@ -4126,7 +4124,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
 }
 
 /// process attribute values
-void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16, const ::rtl::OUString& )
+void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
 {
 }
 
@@ -4142,7 +4140,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+        const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, nPrfx, sLocalName )
 {
     sServicePrefix = OUString(sAPI_presentation_prefix );
@@ -4150,7 +4148,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
 }
 
 /// process attribute values
-void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16, const ::rtl::OUString& )
+void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16, const OUString& )
 {
 }
 
@@ -4167,7 +4165,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+        const OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
 {
     sServicePrefix = OUString(sAPI_presentation_prefix );
@@ -4176,7 +4174,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
 
 /// process attribute values
 void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16,
-                                   const ::rtl::OUString& )
+                                   const OUString& )
 {
 }
 

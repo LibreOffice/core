@@ -58,14 +58,14 @@ namespace basprov
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >             m_xLibContainerDoc;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >    m_xInvocationContext;
-        ::rtl::OUString  m_sScriptingContext;
+        OUString  m_sScriptingContext;
         bool m_bIsAppScriptCtx;
         bool m_bIsUserCtx;
-        ::rtl::OUString m_sCtxLocation;
+        OUString m_sCtxLocation;
 
         bool isLibraryShared(
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& rxLibContainer,
-            const ::rtl::OUString& rLibName );
+            const OUString& rLibName );
 
     public:
         BasicProviderImpl(
@@ -73,11 +73,11 @@ namespace basprov
         virtual ~BasicProviderImpl();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
@@ -86,11 +86,11 @@ namespace basprov
 
         // XScriptProvider
         virtual ::com::sun::star::uno::Reference < ::com::sun::star::script::provider::XScript > SAL_CALL getScript(
-            const ::rtl::OUString& scriptURI )
+            const OUString& scriptURI )
             throw (  ::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException);
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  )
+        virtual OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);

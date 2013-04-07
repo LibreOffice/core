@@ -69,17 +69,17 @@ OCacheSet::OCacheSet(sal_Int32 i_nMaxRows)
 
 }
 
-::rtl::OUString OCacheSet::getIdentifierQuoteString() const
+OUString OCacheSet::getIdentifierQuoteString() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getIdentifierQuoteString" );
-    ::rtl::OUString sQuote;
+    OUString sQuote;
     Reference<XDatabaseMetaData> xMeta;
     if ( m_xConnection.is() && (xMeta = m_xConnection->getMetaData()).is() )
         sQuote = xMeta->getIdentifierQuoteString();
     return sQuote;
 }
 
-void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
@@ -162,10 +162,10 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     OUStringBuffer aSql("INSERT INTO " + m_aComposedTableName + " ( ");
 
     // set values and column names
-    ::rtl::OUStringBuffer aValues(" VALUES ( ");
-    static ::rtl::OUString aPara("?,");
-    ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma(",");
+    OUStringBuffer aValues(" VALUES ( ");
+    static OUString aPara("?,");
+    OUString aQuote = getIdentifierQuoteString();
+    static OUString aComma(",");
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
     connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
@@ -200,8 +200,8 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 
 void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
-                                        ,::rtl::OUStringBuffer& _sCondition
-                                        ,::rtl::OUStringBuffer& _sParameter
+                                        ,OUStringBuffer& _sCondition
+                                        ,OUStringBuffer& _sParameter
                                         ,::std::list< sal_Int32>& _rOrgValues)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillParameters" );
@@ -232,18 +232,18 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
         }
     }
 
-    ::rtl::OUString aColumnName;
+    OUString aColumnName;
 
-    static ::rtl::OUString aPara("?,");
-    static ::rtl::OUString aAnd(" AND ");
+    static OUString aPara("?,");
+    static OUString aAnd(" AND ");
 
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    OUString aQuote  = getIdentifierQuoteString();
 
     sal_Int32 nCheckCount = 1; // index for the orginal values
     sal_Int32 i = 1;
 
-    ::rtl::OUString sIsNull(" IS NULL");
-    ::rtl::OUString sParam(" = ?");
+    OUString sIsNull(" IS NULL");
+    OUString sParam(" = ?");
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
     ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
@@ -292,7 +292,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     OUStringBuffer aSql("UPDATE " + m_aComposedTableName + " SET ");
     // list all cloumns that should be set
 
-    ::rtl::OUStringBuffer aCondition;
+    OUStringBuffer aCondition;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
     aSql[aSql.getLength() - 1] = ' ';
@@ -362,7 +362,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
         }
     }
 
-    ::rtl::OUStringBuffer aColumnName;
+    OUStringBuffer aColumnName;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
@@ -416,7 +416,7 @@ sal_Bool SAL_CALL OCacheSet::wasNull(  ) throw(SQLException, RuntimeException)
     return m_xDriverRow->wasNull();
 }
 
-::rtl::OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::getString" );
     return m_xDriverRow->getString(columnIndex);

@@ -130,7 +130,7 @@ namespace frm
         }
     }
     //--------------------------------------------------------------------
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const ::rtl::OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((RuntimeException))
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((RuntimeException))
     {
         Reference< XDispatch > xDispatcher;
         if ( m_xFirstDispatchInterceptor.is() )
@@ -141,7 +141,7 @@ namespace frm
     //--------------------------------------------------------------------
     Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL ) SAL_THROW((RuntimeException))
     {
-        return queryDispatch( _rURL, ::rtl::OUString(), 0 );
+        return queryDispatch( _rURL, OUString(), 0 );
     }
 
     //--------------------------------------------------------------------

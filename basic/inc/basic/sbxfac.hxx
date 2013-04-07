@@ -35,7 +35,7 @@ public:
     SbxFactory( bool bLast=false )  { bHandleLast = bLast; }
     bool IsHandleLast( void )       { return bHandleLast; }
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 };
 
 #endif

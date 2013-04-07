@@ -64,7 +64,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
 namespace dp_log {
 extern comphelper::service_decl::ServiceDecl const serviceDecl;
@@ -257,9 +256,9 @@ void PackageManagerImpl::initActivationLayer(
                             ucbhelper::Content remFileContent(
                                 url + "removed", Reference<XCommandEnvironment>(), m_xComponentContext);
                             ::rtl::ByteSequence data = dp_misc::readFile(remFileContent);
-                            ::rtl::OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
+                            OString osData(reinterpret_cast<const sal_Char*>(data.getConstArray()),
                                                   data.getLength());
-                            OUString sData = ::rtl::OStringToOUString(
+                            OUString sData = OStringToOUString(
                                 osData, RTL_TEXTENCODING_UTF8);
                             if (!sData.equals(aUserName))
                                 continue;
@@ -295,7 +294,7 @@ void PackageManagerImpl::initRegistryBackends()
 // as to whether a directory is truly read-only or not
 static bool isMacroURLReadOnly( const OUString &rMacro )
 {
-    rtl::OUString aDirURL( rMacro );
+    OUString aDirURL( rMacro );
     ::rtl::Bootstrap::expandMacros( aDirURL );
 
     ::osl::FileBase::RC aErr = ::osl::Directory::create( aDirURL );
@@ -306,7 +305,7 @@ static bool isMacroURLReadOnly( const OUString &rMacro )
 
     bool bError;
     sal_uInt64 nWritten = 0;
-    rtl::OUString aFileURL( aDirURL + "/stamp.sys" );
+    OUString aFileURL( aDirURL + "/stamp.sys" );
     ::osl::File aFile( aFileURL );
 
     bError = aFile.open( osl_File_OpenFlag_Read |
@@ -572,7 +571,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (throw_exc)
                 throw;
             (void) exc;
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -606,7 +605,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
         mediaType.matchIgnoreAsciiCase("application/vnd.sun.star.legacy-package-bundle"))
     {
         // inflate content:
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         if (!sourceContent.isFolder())
         {
             buf.appendAscii( "vnd.sun.star.zip://" );
@@ -848,7 +847,7 @@ void PackageManagerImpl::deletePackageFromCache(
 }
 //______________________________________________________________________________
 void PackageManagerImpl::removePackage(
-    OUString const & id, ::rtl::OUString const & fileName,
+    OUString const & id, OUString const & fileName,
     Reference<task::XAbortChannel> const & /*xAbortChannel*/,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
@@ -894,7 +893,7 @@ void PackageManagerImpl::removePackage(
                 ::osl::Security aSecurity;
                 aSecurity.getUserName( aUserName );
 
-                ::rtl::OString stamp = ::rtl::OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8);
+                OString stamp = OUStringToOString(aUserName, RTL_TEXTENCODING_UTF8);
                 Reference<css::io::XInputStream> xData(
                     ::xmlscript::createInputStream(
                         ::rtl::ByteSequence(
@@ -937,7 +936,7 @@ void PackageManagerImpl::removePackage(
 //______________________________________________________________________________
 OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
 {
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append( data.temporaryName );
     //The bundled extensions are not contained in an additional folder
     //with a unique name. data.temporaryName contains already the
@@ -979,7 +978,7 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
         {
             INetContentTypeParameter const * param = params.find(
-                rtl::OString("platform") );
+                OString("platform") );
             if (param != 0 && !platform_fits( param->m_sValue ))
                 throw lang::IllegalArgumentException(
                     getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
@@ -1028,13 +1027,13 @@ PackageManagerImpl::getDeployedPackages_(
         catch (const lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         catch (const deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
@@ -1043,7 +1042,7 @@ PackageManagerImpl::getDeployedPackages_(
 
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
-    OUString const & id, ::rtl::OUString const & fileName,
+    OUString const & id, OUString const & fileName,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)

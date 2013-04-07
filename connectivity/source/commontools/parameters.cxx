@@ -112,7 +112,7 @@ namespace dbtools
         m_aParameterInformation.swap( aEmptyInfo );
         m_aMasterFields.realloc( 0 );
         m_aDetailFields.realloc( 0 );
-        m_sIdentifierQuoteString = ::rtl::OUString();
+        m_sIdentifierQuoteString = OUString();
         ::std::vector< bool > aEmptyArray;
         m_aParametersVisited.swap( aEmptyArray );
         m_bUpToDate = false;
@@ -194,7 +194,7 @@ namespace dbtools
                 xParam.clear();
                 m_xInnerParamColumns->getByIndex( i ) >>= xParam;
 
-                ::rtl::OUString sName;
+                OUString sName;
                 xParam->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME) ) >>= sName;
 
                 // only append additonal parameters when they are not already in the list
@@ -220,22 +220,22 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ParameterManager::createFilterConditionFromColumnLink(
-        const ::rtl::OUString& _rMasterColumn, const ::rtl::OUString& _rDetailLink, ::rtl::OUString& _rNewParamName )
+    OUString ParameterManager::createFilterConditionFromColumnLink(
+        const OUString& _rMasterColumn, const OUString& _rDetailLink, OUString& _rNewParamName )
     {
-        ::rtl::OUString sFilter;
+        OUString sFilter;
 
         // format is:
         // <detail_column> = :<new_param_name>
         sFilter = quoteName( m_sIdentifierQuoteString, _rDetailLink );
-        sFilter += ::rtl::OUString( " = :" );
+        sFilter += OUString( " = :" );
 
         // generate a parameter name which is not already used
-        _rNewParamName = ::rtl::OUString( "link_from_" );
+        _rNewParamName = OUString( "link_from_" );
         _rNewParamName += convertName2SQLName( _rMasterColumn, m_sSpecialCharacters );
         while ( m_aParameterInformation.find( _rNewParamName ) != m_aParameterInformation.end() )
         {
-            _rNewParamName += ::rtl::OUString( "_" );
+            _rNewParamName += OUString( "_" );
         }
 
         return sFilter += _rNewParamName;
@@ -243,7 +243,7 @@ namespace dbtools
 
     //--------------------------------------------------------------------
     void ParameterManager::classifyLinks( const Reference< XNameAccess >& _rxParentColumns,
-        const Reference< XNameAccess >& _rxColumns, ::std::vector< ::rtl::OUString >& _out_rAdditionalFilterComponents ) SAL_THROW(( Exception ))
+        const Reference< XNameAccess >& _rxColumns, ::std::vector< OUString >& _out_rAdditionalFilterComponents ) SAL_THROW(( Exception ))
     {
         OSL_PRECOND( m_aMasterFields.getLength() == m_aDetailFields.getLength(),
             "ParameterManager::classifyLinks: master and detail fields should have the same length!" );
@@ -254,15 +254,15 @@ namespace dbtools
 
         // we may need to strip any links which are invalid, so here go the containers
         // for temporarirly holding the new pairs
-        ::std::vector< ::rtl::OUString > aStrippedMasterFields;
-        ::std::vector< ::rtl::OUString > aStrippedDetailFields;
+        ::std::vector< OUString > aStrippedMasterFields;
+        ::std::vector< OUString > aStrippedDetailFields;
 
         bool bNeedExchangeLinks = false;
 
         // classify the links
-        const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-        const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
-        const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
+        const OUString* pMasterFields = m_aMasterFields.getConstArray();
+        const OUString* pDetailFields = m_aDetailFields.getConstArray();
+        const OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
         for ( ; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
         {
             if ( pMasterFields->isEmpty() || pDetailFields->isEmpty() )
@@ -292,8 +292,8 @@ namespace dbtools
                 // does the detail name denote a column?
                 if ( _rxColumns->hasByName( *pDetailFields ) )
                 {
-                    ::rtl::OUString sNewParamName;
-                    const ::rtl::OUString sFilterCondition = createFilterConditionFromColumnLink( *pMasterFields, *pDetailFields, sNewParamName );
+                    OUString sNewParamName;
+                    const OUString sFilterCondition = createFilterConditionFromColumnLink( *pMasterFields, *pDetailFields, sNewParamName );
                     OSL_PRECOND( !sNewParamName.isEmpty(), "ParameterManager::classifyLinks: createFilterConditionFromColumnLink returned nonsense!" );
 
                     // remember meta information about this new parameter
@@ -327,10 +327,10 @@ namespace dbtools
 
         if ( bNeedExchangeLinks )
         {
-            ::rtl::OUString *pFields = aStrippedMasterFields.empty() ? 0 : &aStrippedMasterFields[0];
-            m_aMasterFields = Sequence< ::rtl::OUString >( pFields, aStrippedMasterFields.size() );
+            OUString *pFields = aStrippedMasterFields.empty() ? 0 : &aStrippedMasterFields[0];
+            m_aMasterFields = Sequence< OUString >( pFields, aStrippedMasterFields.size() );
             pFields = aStrippedDetailFields.empty() ? 0 : &aStrippedDetailFields[0];
-            m_aDetailFields = Sequence< ::rtl::OUString >( pFields, aStrippedDetailFields.size() );
+            m_aDetailFields = Sequence< OUString >( pFields, aStrippedDetailFields.size() );
         }
     }
 
@@ -374,16 +374,16 @@ namespace dbtools
                 return;
 
             // classify the links - depending on what the detail fields in each link pair denotes
-            ::std::vector< ::rtl::OUString > aAdditionalFilterComponents;
+            ::std::vector< OUString > aAdditionalFilterComponents;
             classifyLinks( xParentColumns, xColumns, aAdditionalFilterComponents );
 
             // did we find links where the detail field refers to a detail column (instead of a parameter name)?
             if ( !aAdditionalFilterComponents.empty() )
             {
-                const static ::rtl::OUString s_sAnd( " AND " );
+                const static OUString s_sAnd( " AND " );
                 // build a conjunction of all the filter components
-                ::rtl::OUStringBuffer sAdditionalFilter;
-                for (   ::std::vector< ::rtl::OUString >::const_iterator aComponent = aAdditionalFilterComponents.begin();
+                OUStringBuffer sAdditionalFilter;
+                for (   ::std::vector< OUString >::const_iterator aComponent = aAdditionalFilterComponents.begin();
                         aComponent != aAdditionalFilterComponents.end();
                         ++aComponent
                     )
@@ -547,8 +547,8 @@ namespace dbtools
         try
         {
             // the master and detail field( name)s of the
-            const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-            const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+            const OUString* pMasterFields = m_aMasterFields.getConstArray();
+            const OUString* pDetailFields = m_aDetailFields.getConstArray();
 
             sal_Int32 nMasterLen = m_aMasterFields.getLength();
             Any aParamType, aScale, aValue;
@@ -667,7 +667,7 @@ namespace dbtools
                 if ( xParamColumn.is() )
                 {
             #ifdef DBG_UTIL
-                    ::rtl::OUString sName;
+                    OUString sName;
                     xParamColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME) ) >>= sName;
                     OSL_ENSURE( sName == pFinalValues->Name, "ParameterManager::completeParameters: inconsistent parameter names!" );
             #endif
@@ -870,14 +870,14 @@ namespace dbtools
                 return;
 
             // loop through all links pairs
-            const ::rtl::OUString* pMasterFields = m_aMasterFields.getConstArray();
-            const ::rtl::OUString* pDetailFields = m_aDetailFields.getConstArray();
+            const OUString* pMasterFields = m_aMasterFields.getConstArray();
+            const OUString* pDetailFields = m_aDetailFields.getConstArray();
 
             Reference< XPropertySet > xMasterField;
             Reference< XPropertySet > xDetailField;
 
             // now really ....
-            const ::rtl::OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
+            const OUString* pDetailFieldsEnd = pDetailFields + m_aDetailFields.getLength();
             for ( ; pDetailFields < pDetailFieldsEnd; ++pDetailFields, ++pMasterFields )
             {
                 if ( !xParentColumns->hasByName( *pMasterFields ) )
@@ -914,7 +914,7 @@ namespace dbtools
                     if ( !xInnerParameter.is() )
                         continue;
 
-                    ::rtl::OUString sParamColumnRealName;
+                    OUString sParamColumnRealName;
                     xInnerParameter->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME) ) >>= sParamColumnRealName;
                     if ( xColumns->hasByName( sParamColumnRealName ) )
                     {   // our own columns have a column which's name equals the real name of the param column
@@ -960,7 +960,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void ParameterManager::setObjectNull( sal_Int32 _nIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName )
+    void ParameterManager::setObjectNull( sal_Int32 _nIndex, sal_Int32 sqlType, const OUString& typeName )
     {
         VISIT_PARAMETER( setObjectNull( _nIndex, sqlType, typeName ) );
     }
@@ -1008,7 +1008,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void ParameterManager::setString( sal_Int32 _nIndex, const ::rtl::OUString& x )
+    void ParameterManager::setString( sal_Int32 _nIndex, const OUString& x )
     {
         VISIT_PARAMETER( setString( _nIndex, x ) );
     }

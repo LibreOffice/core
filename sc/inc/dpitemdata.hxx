@@ -65,7 +65,7 @@ public:
 private:
 
     union {
-        const rtl::OUString* mpString;
+        const OUString* mpString;
         GroupValueAttr maGroupValue;
         double mfValue;
     };
@@ -81,19 +81,19 @@ public:
 
     ScDPItemData();
     ScDPItemData(const ScDPItemData& r);
-    ScDPItemData(const rtl::OUString& rStr);
+    ScDPItemData(const OUString& rStr);
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
     ~ScDPItemData();
 
     Type GetType() const;
     void SetEmpty();
-    void SetString(const rtl::OUString& rS);
-    void SetString(const rtl::OUString* pS);
+    void SetString(const OUString& rS);
+    void SetString(const OUString* pS);
     void SetValue(double fVal);
     void SetRangeStart(double fVal);
     void SetRangeFirst();
     void SetRangeLast();
-    void SetErrorString(const rtl::OUString* pS);
+    void SetErrorString(const OUString* pS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     // exact equality
@@ -105,7 +105,7 @@ public:
 
     bool IsEmpty() const;
     bool IsValue() const;
-    rtl::OUString GetString() const;
+    OUString GetString() const;
     double GetValue() const;
     GroupValueAttr GetGroupValue() const;
     bool HasStringData() const ;

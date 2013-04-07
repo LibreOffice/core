@@ -52,14 +52,10 @@
 using namespace osl;
 using namespace store;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 namespace {
 
-void printString(rtl::OUString const & s) {
+void printString(OUString const & s) {
     printf("\"");
     for (sal_Int32 i = 0; i < s.getLength(); ++i) {
         sal_Unicode c = s[i];
@@ -129,7 +125,7 @@ void printFieldOrReferenceFlags(RTFieldAccess flags) {
     }
 }
 
-void dumpType(typereg::Reader const & reader, rtl::OString const & indent) {
+void dumpType(typereg::Reader const & reader, OString const & indent) {
     if (reader.isValid()) {
         printf("version: %ld\n", static_cast< long >(reader.getVersion()));
         printf("%sdocumentation: ", indent.getStr());

@@ -32,8 +32,6 @@
 #include <vector>
 
 using ::std::vector;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // -----------------------------------------------------------------------
 

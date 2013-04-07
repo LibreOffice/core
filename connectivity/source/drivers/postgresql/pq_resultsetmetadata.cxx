@@ -71,9 +71,6 @@
 using osl::Mutex;
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OString;
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::RuntimeException;
@@ -100,9 +97,9 @@ namespace pq_sdbc_driver
 
 // struct ColumnMetaData
 // {
-//     rtl::OUString tableName;
-//     rtl::OUString schemaTableName;
-//     rtl::OUString typeName;
+//     OUString tableName;
+//     OUString schemaTableName;
+//     OUString typeName;
 //     com::sun::star::sdbc::DataType type;
 //     sal_Int32 precision;
 //     sal_Int32 scale;
@@ -144,8 +141,8 @@ ResultSetMetaData::ResultSetMetaData(
     ResultSet * pResultSet,
     ConnectionSettings **ppSettings,
     PGresult *pResult,
-    const rtl::OUString &schemaName,
-    const rtl::OUString &tableName ) :
+    const OUString &schemaName,
+    const OUString &tableName ) :
     m_refMutex( refMutex ),
     m_ppSettings( ppSettings ),
     m_origin( origin ),
@@ -245,7 +242,7 @@ void ResultSetMetaData::checkTable()
     }
 }
 
-sal_Int32 ResultSetMetaData::getIntColumnProperty( const rtl::OUString & name, int index, int def )
+sal_Int32 ResultSetMetaData::getIntColumnProperty( const OUString & name, int index, int def )
 {
     sal_Int32 ret = def; // give defensive answers, when data is not available
     try
@@ -265,7 +262,7 @@ sal_Int32 ResultSetMetaData::getIntColumnProperty( const rtl::OUString & name, i
     return ret;
 }
 
-sal_Bool ResultSetMetaData::getBoolColumnProperty( const rtl::OUString & name, int index, sal_Bool def )
+sal_Bool ResultSetMetaData::getBoolColumnProperty( const OUString & name, int index, sal_Bool def )
 {
     sal_Bool ret = def;
     try
@@ -361,13 +358,13 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     return m_colDesc[column-1].displaySize;
 }
 
-::rtl::OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
+OUString ResultSetMetaData::getColumnLabel( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     return getColumnName( column);
 }
 
-::rtl::OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString ResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -376,7 +373,7 @@ sal_Int32 ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
     return m_colDesc[column-1].name;
 }
 
-::rtl::OUString ResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
+OUString ResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
     (void) column;
     return m_schemaName;
@@ -400,12 +397,12 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
     return m_colDesc[column-1].scale;
 }
 
-::rtl::OUString ResultSetMetaData::getTableName( sal_Int32 column )
+OUString ResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
 // LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
-    rtl::OUString ret;
+    OUString ret;
     if( m_tableName.getLength() )
     {
         OUStringBuffer buf( 128 );
@@ -417,7 +414,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
     return ret;
 }
 
-::rtl::OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
+OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
@@ -438,10 +435,10 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
     return ret;
 }
 
-::rtl::OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
+OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    ::rtl::OUString ret; // give defensive answers, when data is not available
+    OUString ret; // give defensive answers, when data is not available
     try
     {
         MutexGuard guard( m_refMutex->mutex );
@@ -483,7 +480,7 @@ sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
-::rtl::OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
+OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;

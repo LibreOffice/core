@@ -82,8 +82,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #define EXPORT_SVC_NAME "com.sun.star.xml.XMLExportFilter"
 
@@ -532,7 +530,7 @@ throw( uno::Exception )
 
 // XServiceInfo
 // override empty method from parent class
-rtl::OUString SAL_CALL SmXMLExport::getImplementationName()
+OUString SAL_CALL SmXMLExport::getImplementationName()
 throw(uno::RuntimeException)
 {
     OUString aTxt;
@@ -714,7 +712,7 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                         {
                             pProps->Name = rPropName;
 
-                            rtl::OUString aActualName( rPropName );
+                            OUString aActualName( rPropName );
 
                             // handle 'save used symbols only'
                             if (bUsedSymbolsOnly && rPropName == "Symbols" )

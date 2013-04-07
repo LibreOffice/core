@@ -31,8 +31,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "xmloff/XMLTextShapeImportHelper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

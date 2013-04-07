@@ -269,7 +269,7 @@ void LwpFribPtr::XFConvert()
             break;
         case FRIB_TAG_HARDSPACE:
         {
-            rtl::OUString sHardSpace(sal_Unicode(0x00a0));
+            OUString sHardSpace(sal_Unicode(0x00a0));
             LwpHyperlinkMgr* pHyperlink =
                     m_pPara->GetStory()->GetHyperlinkMgr();
             if (pHyperlink->GetHyperlinkFlag())
@@ -280,7 +280,7 @@ void LwpFribPtr::XFConvert()
             break;
         case FRIB_TAG_SOFTHYPHEN:
         {
-            rtl::OUString sSoftHyphen(sal_Unicode(0x00ad));
+            OUString sSoftHyphen(sal_Unicode(0x00ad));
             pFrib->ConvertChars(m_pXFPara,sSoftHyphen);
         }
             break;

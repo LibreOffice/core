@@ -67,7 +67,7 @@ SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uI
     : SfxToolBoxControl( nSlotId, nId, rBox ),
     pAccExec( 0 )
 {
-    addStatusListener( rtl::OUString( ".uno:CurrentURL" ));
+    addStatusListener( OUString( ".uno:CurrentURL" ));
 }
 
 SfxURLToolBoxControl_Impl::~SfxURLToolBoxControl_Impl()
@@ -104,7 +104,7 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
     if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
         URL             aTargetURL;
-        ::rtl::OUString aTarget( ::rtl::OUString("_default"));
+        OUString aTarget( OUString("_default"));
 
         aTargetURL.Complete = aName;
 
@@ -113,18 +113,18 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ 
         if ( xDispatch.is() )
         {
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Name = ::rtl::OUString("Referer");
-            aArgs[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ));
-            aArgs[1].Name = ::rtl::OUString( "FileName" );
-            aArgs[1].Value = makeAny( ::rtl::OUString( aName ));
+            aArgs[0].Name = OUString("Referer");
+            aArgs[0].Value = makeAny( OUString(SFX_REFERER_USER ));
+            aArgs[1].Name = OUString( "FileName" );
+            aArgs[1].Value = makeAny( OUString( aName ));
 
             if ( aFilter.Len() )
             {
                 aArgs.realloc( 4 );
-                aArgs[2].Name = ::rtl::OUString("FilterOptions");
-                aArgs[2].Value = makeAny( ::rtl::OUString( aOptions ));
-                aArgs[3].Name = ::rtl::OUString("FilterName");
-                aArgs[3].Value = makeAny( ::rtl::OUString( aFilter ));
+                aArgs[2].Name = OUString("FilterOptions");
+                aArgs[2].Value = makeAny( OUString( aOptions ));
+                aArgs[3].Name = OUString("FilterName");
+                aArgs[3].Value = makeAny( OUString( aFilter ));
             }
 
             SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;
@@ -235,7 +235,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
                     if (lProps[p].Name != HISTORY_PROPERTYNAME_URL)
                         continue;
 
-                    ::rtl::OUString sURL;
+                    OUString sURL;
                     if (!(lProps[p].Value>>=sURL) || sURL.isEmpty())
                         continue;
 

@@ -55,13 +55,13 @@ namespace reportdesign
         ::sal_Int32                                         nTextLineColor;
         ::sal_Int32                                         nCharUnderlineColor;
         ::sal_Int32                                         nBackgroundColor;
-        ::rtl::OUString                                     sCharCombinePrefix;
-        ::rtl::OUString                                     sCharCombineSuffix;
-        ::rtl::OUString                                     sHyperLinkURL;
-        ::rtl::OUString                                     sHyperLinkTarget;
-        ::rtl::OUString                                     sHyperLinkName;
-        ::rtl::OUString                                     sVisitedCharStyleName;
-        ::rtl::OUString                                     sUnvisitedCharStyleName;
+        OUString                                     sCharCombinePrefix;
+        OUString                                     sCharCombineSuffix;
+        OUString                                     sHyperLinkURL;
+        OUString                                     sHyperLinkTarget;
+        OUString                                     sHyperLinkName;
+        OUString                                     sVisitedCharStyleName;
+        OUString                                     sUnvisitedCharStyleName;
         com::sun::star::style::VerticalAlignment            aVerticalAlignment;
         ::sal_Int16                                         nCharEscapement;
         ::sal_Int16                                         nCharCaseMap;
@@ -89,8 +89,8 @@ namespace reportdesign
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;
-        ::rtl::OUString                                     aDataField;
-        ::rtl::OUString                                     aConditionalPrintExpression;
+        OUString                                     aDataField;
+        OUString                                     aConditionalPrintExpression;
         sal_Bool                                            bPrintWhenGroupChange;
 
         OReportControlModel(osl::Mutex& _rMutex

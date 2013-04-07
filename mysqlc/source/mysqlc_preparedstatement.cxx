@@ -228,7 +228,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
     checkParameterIndex(parameter);
 
     try {
-        std::string stringie(::rtl::OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
+        std::string stringie(OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
         ((sql::PreparedStatement *)cppStatement)->setString(parameter, stringie);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);

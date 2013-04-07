@@ -30,7 +30,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     sNumberSeparator(RTL_CONSTASCII_USTRINGPARAM((". "))),
     nPos(1),
     nLevel(0),
-    sSeparator( rtl::OUString(": ") ),
+    sSeparator( OUString(": ") ),
     bIgnoreSeqOpts(false),
     bCopyAttributes(sal_False)
 {

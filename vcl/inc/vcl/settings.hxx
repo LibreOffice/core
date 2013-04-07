@@ -835,7 +835,7 @@ public:
 
     void                            SetPreferredSymbolsStyle( sal_uLong nStyle )
                                         { CopyData(); mpData->mnPreferredSymbolsStyle = nStyle; }
-    void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
+    void                            SetPreferredSymbolsStyleName( const OUString &rName );
     sal_uLong                           GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
     // check whether the symbols style is supported (icons are installed)
@@ -844,11 +844,11 @@ public:
 
     sal_uLong                           GetCurrentSymbolsStyle() const;
 
-    void                            SetSymbolsStyleName( const ::rtl::OUString &rName )
+    void                            SetSymbolsStyleName( const OUString &rName )
                                         { return SetSymbolsStyle( ImplNameToSymbolsStyle( rName ) ); }
-    ::rtl::OUString                 GetSymbolsStyleName() const
+    OUString                 GetSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetSymbolsStyle() ); }
-    ::rtl::OUString                 GetCurrentSymbolsStyleName() const
+    OUString                 GetCurrentSymbolsStyleName() const
                                         { return ImplSymbolsStyleToName( GetCurrentSymbolsStyle() ); }
 
     const Wallpaper&                GetWorkspaceGradient() const
@@ -877,8 +877,8 @@ public:
                                         { return !(*this == rSet); }
 
 protected:
-    ::rtl::OUString                 ImplSymbolsStyleToName( sal_uLong nStyle ) const;
-    sal_uLong                           ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const;
+    OUString                 ImplSymbolsStyleToName( sal_uLong nStyle ) const;
+    sal_uLong                           ImplNameToSymbolsStyle( const OUString &rName ) const;
 };
 
 // ----------------

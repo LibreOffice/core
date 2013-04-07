@@ -44,8 +44,6 @@ namespace ucss = unoidl::com::sun::star;
 
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 
 namespace cli_uno
@@ -183,7 +181,7 @@ System::Type^ loadCliType(System::String ^ unoName)
     }
     catch( System::Exception ^ e)
     {
-        rtl::OUString ouMessage(mapCliString(e->Message));
+        OUString ouMessage(mapCliString(e->Message));
         throw BridgeRuntimeError(ouMessage);
     }
     return retVal;
@@ -237,7 +235,7 @@ System::Type^ mapUnoType(typelib_TypeDescriptionReference const * pTD)
     case typelib_TypeClass_INTERFACE:
     {
         //special handling for XInterface, since it does not exist in cli.
-        rtl::OUString usXInterface("com.sun.star.uno.XInterface");
+        OUString usXInterface("com.sun.star.uno.XInterface");
         if (usXInterface.equals(pTD->pTypeName))
             retVal= System::Object::typeid;
         else
@@ -1072,7 +1070,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             {
                 typelib_TypeDescriptionReference * member_type= NULL;
 
-                rtl::OUString usUnoException("com.sun.star.uno.Exception");
+                OUString usUnoException("com.sun.star.uno.Exception");
                 for (; nPos < nMembers; ++nPos)
                 {
                     member_type= comp_td->ppTypeRefs[nPos];
@@ -1092,7 +1090,7 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                         // System.Exception property. Type.GetField("Message") returns null
                         if ( ! aField && usUnoException.equals(td.get()->pTypeName))
                         {// get Exception.Message property
-                            rtl::OUString usMessageMember("Message");
+                            OUString usMessageMember("Message");
                             if (usMessageMember.equals(comp_td->ppMemberNames[nPos]))
                             {
                                 sr::PropertyInfo^ pi= cliType->GetProperty(
@@ -1625,7 +1623,7 @@ void Bridge::map_to_cli(
                     pCTD = pCTD->pBaseTypeDescription;
                 int nPos = -1;
 
-                rtl::OUString usMessageMember("Message");
+                OUString usMessageMember("Message");
                 for (int i = 0; i < pCTD->nMembers; i ++)
                 {
 #if OSL_DEBUG_LEVEL >= 2
@@ -1685,7 +1683,7 @@ void Bridge::map_to_cli(
                 ((typelib_TypeDescription *)comp_td->pBaseTypeDescription)->pWeakRef, nullptr,
                 true);
         }
-        rtl::OUString usUnoException("com.sun.star.uno.Exception");
+        OUString usUnoException("com.sun.star.uno.Exception");
         for (sal_Int32 nPos = comp_td->nMembers; nPos--; )
         {
             typelib_TypeDescriptionReference * member_type = comp_td->ppTypeRefs[ nPos ];

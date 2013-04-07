@@ -51,17 +51,17 @@
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
-#define ROOTNODE_FACTORIES                  ::rtl::OUString("Setup/Office/Factories"        )
-#define PATHSEPERATOR                       ::rtl::OUString("/"                             )
+#define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories"        )
+#define PATHSEPERATOR                       OUString("/"                             )
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
 //            special code that uses hard coded strings to return them.
-#define PROPERTYNAME_SHORTNAME              ::rtl::OUString("ooSetupFactoryShortName"       )
-#define PROPERTYNAME_TEMPLATEFILE           ::rtl::OUString("ooSetupFactoryTemplateFile"    )
-#define PROPERTYNAME_WINDOWATTRIBUTES       ::rtl::OUString("ooSetupFactoryWindowAttributes")
-#define PROPERTYNAME_EMPTYDOCUMENTURL       ::rtl::OUString("ooSetupFactoryEmptyDocumentURL")
-#define PROPERTYNAME_DEFAULTFILTER          ::rtl::OUString("ooSetupFactoryDefaultFilter"   )
-#define PROPERTYNAME_ICON                   ::rtl::OUString("ooSetupFactoryIcon"            )
+#define PROPERTYNAME_SHORTNAME              OUString("ooSetupFactoryShortName"       )
+#define PROPERTYNAME_TEMPLATEFILE           OUString("ooSetupFactoryTemplateFile"    )
+#define PROPERTYNAME_WINDOWATTRIBUTES       OUString("ooSetupFactoryWindowAttributes")
+#define PROPERTYNAME_EMPTYDOCUMENTURL       OUString("ooSetupFactoryEmptyDocumentURL")
+#define PROPERTYNAME_DEFAULTFILTER          OUString("ooSetupFactoryDefaultFilter"   )
+#define PROPERTYNAME_ICON                   OUString("ooSetupFactoryIcon"            )
 
 #define PROPERTYHANDLE_SHORTNAME            0
 #define PROPERTYHANDLE_TEMPLATEFILE         1
@@ -72,16 +72,16 @@
 
 #define PROPERTYCOUNT                       6
 
-#define FACTORYNAME_WRITER                  ::rtl::OUString("com.sun.star.text.TextDocument"                )
-#define FACTORYNAME_WRITERWEB               ::rtl::OUString("com.sun.star.text.WebDocument"                 )
-#define FACTORYNAME_WRITERGLOBAL            ::rtl::OUString("com.sun.star.text.GlobalDocument"              )
-#define FACTORYNAME_CALC                    ::rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"        )
-#define FACTORYNAME_DRAW                    ::rtl::OUString("com.sun.star.drawing.DrawingDocument"          )
-#define FACTORYNAME_IMPRESS                 ::rtl::OUString("com.sun.star.presentation.PresentationDocument")
-#define FACTORYNAME_MATH                    ::rtl::OUString("com.sun.star.formula.FormulaProperties"        )
-#define FACTORYNAME_CHART                   ::rtl::OUString("com.sun.star.chart2.ChartDocument"             )
-#define FACTORYNAME_DATABASE                ::rtl::OUString("com.sun.star.sdb.OfficeDatabaseDocument"       )
-#define FACTORYNAME_STARTMODULE             ::rtl::OUString("com.sun.star.frame.StartModule"                )
+#define FACTORYNAME_WRITER                  OUString("com.sun.star.text.TextDocument"                )
+#define FACTORYNAME_WRITERWEB               OUString("com.sun.star.text.WebDocument"                 )
+#define FACTORYNAME_WRITERGLOBAL            OUString("com.sun.star.text.GlobalDocument"              )
+#define FACTORYNAME_CALC                    OUString("com.sun.star.sheet.SpreadsheetDocument"        )
+#define FACTORYNAME_DRAW                    OUString("com.sun.star.drawing.DrawingDocument"          )
+#define FACTORYNAME_IMPRESS                 OUString("com.sun.star.presentation.PresentationDocument")
+#define FACTORYNAME_MATH                    OUString("com.sun.star.formula.FormulaProperties"        )
+#define FACTORYNAME_CHART                   OUString("com.sun.star.chart2.ChartDocument"             )
+#define FACTORYNAME_DATABASE                OUString("com.sun.star.sdb.OfficeDatabaseDocument"       )
+#define FACTORYNAME_STARTMODULE             OUString("com.sun.star.frame.StartModule"                )
 
 #define FACTORYCOUNT                        10
 
@@ -124,7 +124,7 @@ struct FactoryInfo
         // returns list of properties, which has changed only!
         // We use given value of sNodeBase to build full qualified paths ...
         // Last sign of it must be "/". because we use it directly, without any additional things!
-        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const ::rtl::OUString& sNodeBase )
+        css::uno::Sequence< css::beans::PropertyValue > getChangedProperties( const OUString& sNodeBase )
         {
             // a) reserve memory for max. count of changed properties
             // b) add names and values of changed ones only and count it
@@ -190,11 +190,11 @@ struct FactoryInfo
         // That's why we can't make our member public. We must use get/set/init methods
         // to control access on it!
         sal_Bool            getInstalled        () const { return bInstalled;         };
-        ::rtl::OUString     getFactory          () const { return sFactory;           };
-        ::rtl::OUString     getShortName        () const { return sShortName;         };
-        ::rtl::OUString     getTemplateFile     () const { return sTemplateFile;      };
-        ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
-        ::rtl::OUString     getDefaultFilter    () const { return sDefaultFilter;     };
+        OUString     getFactory          () const { return sFactory;           };
+        OUString     getShortName        () const { return sShortName;         };
+        OUString     getTemplateFile     () const { return sTemplateFile;      };
+        OUString     getWindowAttributes () const { return sWindowAttributes;  };
+        OUString     getDefaultFilter    () const { return sDefaultFilter;     };
         sal_Bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
 
@@ -202,16 +202,16 @@ struct FactoryInfo
         // If you call set-methods - we check for changes of valkues and mark it.
         // But if you whish to set it without that ... you must initialize it!
         void initInstalled        ( sal_Bool               bNewInstalled        ) { bInstalled        = bNewInstalled        ; }
-        void initFactory          ( const ::rtl::OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
-        void initShortName        ( const ::rtl::OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }
-        void initWindowAttributes ( const ::rtl::OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes ; }
-        void initEmptyDocumentURL ( const ::rtl::OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL ; }
-        void initDefaultFilter    ( const ::rtl::OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter    ; }
+        void initFactory          ( const OUString& sNewFactory          ) { sFactory          = sNewFactory          ; }
+        void initShortName        ( const OUString& sNewShortName        ) { sShortName        = sNewShortName        ; }
+        void initWindowAttributes ( const OUString& sNewWindowAttributes ) { sWindowAttributes = sNewWindowAttributes ; }
+        void initEmptyDocumentURL ( const OUString& sNewEmptyDocumentURL ) { sEmptyDocumentURL = sNewEmptyDocumentURL ; }
+        void initDefaultFilter    ( const OUString& sNewDefaultFilter    ) { sDefaultFilter    = sNewDefaultFilter    ; }
         void setDefaultFilterReadonly( const sal_Bool bVal){bDefaultFilterReadonly = bVal;}
         void initIcon             ( sal_Int32              nNewIcon             ) { nIcon             = nNewIcon             ; }
 
         //---------------------------------------------------------------------------------------------------------
-        void initTemplateFile( const ::rtl::OUString& sNewTemplateFile )
+        void initTemplateFile( const OUString& sNewTemplateFile )
         {
             if ( !sNewTemplateFile.isEmpty() )
             {
@@ -226,7 +226,7 @@ struct FactoryInfo
         }
 
         //---------------------------------------------------------------------------------------------------------
-        void setTemplateFile( const ::rtl::OUString& sNewTemplateFile )
+        void setTemplateFile( const OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
             {
@@ -236,7 +236,7 @@ struct FactoryInfo
         };
 
         //---------------------------------------------------------------------------------------------------------
-        void setWindowAttributes( const ::rtl::OUString& sNewWindowAttributes )
+        void setWindowAttributes( const OUString& sNewWindowAttributes )
         {
             if( sWindowAttributes != sNewWindowAttributes )
             {
@@ -246,7 +246,7 @@ struct FactoryInfo
         };
 
         //---------------------------------------------------------------------------------------------------------
-        void setDefaultFilter( const ::rtl::OUString& sNewDefaultFilter )
+        void setDefaultFilter( const OUString& sNewDefaultFilter )
         {
             if( sDefaultFilter != sNewDefaultFilter )
             {
@@ -266,12 +266,12 @@ struct FactoryInfo
         }
 
         sal_Bool            bInstalled                      ;
-        ::rtl::OUString     sFactory                        ;
-        ::rtl::OUString     sShortName                      ;
-        ::rtl::OUString     sTemplateFile                   ;
-        ::rtl::OUString     sWindowAttributes               ;
-        ::rtl::OUString     sEmptyDocumentURL               ;
-        ::rtl::OUString     sDefaultFilter                  ;
+        OUString     sFactory                        ;
+        OUString     sShortName                      ;
+        OUString     sTemplateFile                   ;
+        OUString     sWindowAttributes               ;
+        OUString     sEmptyDocumentURL               ;
+        OUString     sDefaultFilter                  ;
         sal_Int32           nIcon                           ;
 
         sal_Bool            bChangedTemplateFile        :1  ;
@@ -313,35 +313,35 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
         //---------------------------------------------------------------------------------------------------------
         //  overloaded methods of baseclass
         //---------------------------------------------------------------------------------------------------------
-        virtual void Notify( const css::uno::Sequence< ::rtl::OUString >& lPropertyNames );
+        virtual void Notify( const css::uno::Sequence< OUString >& lPropertyNames );
         virtual void Commit(                                                             );
 
         //---------------------------------------------------------------------------------------------------------
         //  public interface
         //---------------------------------------------------------------------------------------------------------
         sal_Bool        IsModuleInstalled         (       SvtModuleOptions::EModule     eModule    ) const;
-        ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
-        ::rtl::OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        ::rtl::OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
-        ::rtl::OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
-        ::rtl::OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
-        ::rtl::OUString GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
+        ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
+        OUString GetFactoryName            (       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString GetFactoryShortName       (       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString GetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString GetFactoryEmptyDocumentURL(       SvtModuleOptions::EFactory    eFactory   ) const;
+        OUString GetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ) const;
         sal_Bool        IsDefaultFilterReadonly(          SvtModuleOptions::EFactory eFactory      ) const;
         sal_Int32       GetFactoryIcon            (       SvtModuleOptions::EFactory    eFactory   ) const;
-        static sal_Bool ClassifyFactoryByName     ( const ::rtl::OUString&              sName      ,
+        static sal_Bool ClassifyFactoryByName     ( const OUString&              sName      ,
                                                           SvtModuleOptions::EFactory&   eFactory   );
         void            SetFactoryStandardTemplate(       SvtModuleOptions::EFactory    eFactory   ,
-                                                    const ::rtl::OUString&              sTemplate  );
+                                                    const OUString&              sTemplate  );
         void            SetFactoryDefaultFilter   (       SvtModuleOptions::EFactory    eFactory   ,
-                                                    const ::rtl::OUString&              sFilter    );
+                                                    const OUString&              sFilter    );
         void            MakeReadonlyStatesAvailable();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
     private:
-        static css::uno::Sequence< ::rtl::OUString > impl_ExpandSetNames ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
-               void                                  impl_Read           ( const css::uno::Sequence< ::rtl::OUString >& lSetNames   );
+        static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
+               void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private types
@@ -380,7 +380,7 @@ SvtModuleOptions_Impl::SvtModuleOptions_Impl()
 
     // Get name list of all existing set node names in configuration to read her properties in impl_Read().
     // These list is a list of long names of our factories.
-    const css::uno::Sequence< ::rtl::OUString > lFactories = GetNodeNames( ::rtl::OUString() );
+    const css::uno::Sequence< OUString > lFactories = GetNodeNames( OUString() );
     impl_Read( lFactories );
 
     // Enable notification for changes by using configuration directly.
@@ -430,7 +430,7 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
     @onerror    -
     @threadsafe no
 *//*-*************************************************************************************************************/
-void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< ::rtl::OUString >& )
+void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
 {
     OSL_FAIL( "SvtModuleOptions_Impl::Notify()\nNot implemented yet!\n" );
 }
@@ -460,7 +460,7 @@ void SvtModuleOptions_Impl::Commit()
     css::uno::Sequence< css::beans::PropertyValue > lCommitProperties( FACTORYCOUNT*PROPERTYCOUNT );
     FactoryInfo*                                    pInfo            = NULL                        ;
     sal_Int32                                       nRealCount       = 0                           ;
-    ::rtl::OUString                                 sBasePath                                      ;
+    OUString                                 sBasePath                                      ;
     for( sal_Int32 nFactory=0; nFactory<FACTORYCOUNT; ++nFactory )
     {
         pInfo = &(m_lFactories[nFactory]);
@@ -484,7 +484,7 @@ void SvtModuleOptions_Impl::Commit()
     if( nRealCount > 0 )
     {
         lCommitProperties.realloc( nRealCount );
-        SetSetProperties( ::rtl::OUString(), lCommitProperties );
+        SetSetProperties( OUString(), lCommitProperties );
     }
 }
 
@@ -539,7 +539,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     return bInstalled;
 }
 
-::com::sun::star::uno::Sequence < ::rtl::OUString > SvtModuleOptions_Impl::GetAllServiceNames()
+::com::sun::star::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
 {
     sal_uInt32 nCount=0;
     if( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() )
@@ -563,7 +563,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
     if( m_lFactories[SvtModuleOptions::E_SDATABASE].getInstalled() )
         nCount++;
 
-    css::uno::Sequence < ::rtl::OUString > aRet( nCount );
+    css::uno::Sequence < OUString > aRet( nCount );
     sal_Int32 n=0;
     if( m_lFactories[SvtModuleOptions::E_WRITER].getInstalled() )
         aRet[n++] = m_lFactories[SvtModuleOptions::E_WRITER].getFactory();
@@ -590,9 +590,9 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryName( SvtModuleOptions::EFactory eFactory ) const
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
@@ -603,7 +603,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryShortName( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryShortName( SvtModuleOptions::EFactory eFactory ) const
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
     //            But it's good to plan further possibilities!
@@ -642,9 +642,9 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryStandardTemplate( SvtModuleOptions::EFactory eFactory ) const
 {
-    ::rtl::OUString sFile;
+    OUString sFile;
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
@@ -655,7 +655,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryEmptyDocumentURL( SvtModuleOptions::EFactory eFactory ) const
 {
     // Attention: Hard configured yet ... because it's not fine to make changes possible by xml file yet.
     //            But it's good to plan further possibilities!
@@ -693,9 +693,9 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
+OUString SvtModuleOptions_Impl::GetFactoryDefaultFilter( SvtModuleOptions::EFactory eFactory ) const
 {
-    ::rtl::OUString sDefaultFilter;
+    OUString sDefaultFilter;
 
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
@@ -729,7 +729,7 @@ sal_Int32 SvtModuleOptions_Impl::GetFactoryIcon( SvtModuleOptions::EFactory eFac
 
 //*****************************************************************************************************************
 void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::EFactory eFactory   ,
-                                                        const ::rtl::OUString&           sTemplate  )
+                                                        const OUString&           sTemplate  )
 {
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
@@ -740,7 +740,7 @@ void SvtModuleOptions_Impl::SetFactoryStandardTemplate(       SvtModuleOptions::
 
 //*****************************************************************************************************************
 void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFactory eFactory,
-                                                     const ::rtl::OUString&           sFilter )
+                                                     const OUString&           sFilter )
 {
     if( eFactory>=0 && eFactory<FACTORYCOUNT )
     {
@@ -763,11 +763,11 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
     @onerror    List will be empty.
     @threadsafe no
 *//*-*************************************************************************************************************/
-css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< ::rtl::OUString >& lSetNames )
+css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< OUString >& lSetNames )
 {
     sal_Int32                             nCount     = lSetNames.getLength() ;
-    css::uno::Sequence< ::rtl::OUString > lPropNames ( nCount*PROPERTYCOUNT );
-    ::rtl::OUString*                      pPropNames = lPropNames.getArray() ;
+    css::uno::Sequence< OUString > lPropNames ( nCount*PROPERTYCOUNT );
+    OUString*                      pPropNames = lPropNames.getArray() ;
     sal_Int32                             nPropStart = 0                     ;
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
@@ -803,7 +803,7 @@ css::uno::Sequence< ::rtl::OUString > SvtModuleOptions_Impl::impl_ExpandSetNames
     @onerror    We return false.
     @threadsafe no
 *//*-*************************************************************************************************************/
-sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sName, SvtModuleOptions::EFactory& eFactory )
+sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const OUString& sName, SvtModuleOptions::EFactory& eFactory )
 {
     sal_Bool bState;
 
@@ -882,11 +882,11 @@ sal_Bool SvtModuleOptions_Impl::ClassifyFactoryByName( const ::rtl::OUString& sN
     @onerror    We do nothing.
     @threadsafe no
 *//*-*************************************************************************************************************/
-void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString >& lFactories )
+void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< OUString >& lFactories )
 {
     // Expand every set node name in lFactories to full qualified paths to his properties
     // and get right values from configuration.
-    const css::uno::Sequence< ::rtl::OUString > lProperties = impl_ExpandSetNames( lFactories  );
+    const css::uno::Sequence< OUString > lProperties = impl_ExpandSetNames( lFactories  );
     const css::uno::Sequence< css::uno::Any >   lValues     = GetProperties( lProperties );
 
     // Safe impossible cases.
@@ -912,10 +912,10 @@ void SvtModuleOptions_Impl::impl_Read( const css::uno::Sequence< ::rtl::OUString
 
     for( sal_Int32 nSetNode=0; nSetNode<nNodeCount; ++nSetNode )
     {
-        const ::rtl::OUString& sFactoryName = lFactories[nSetNode];
+        const OUString& sFactoryName = lFactories[nSetNode];
         if( ClassifyFactoryByName( sFactoryName, eFactory ) == sal_True )
         {
-            ::rtl::OUString sTemp;
+            OUString sTemp;
             sal_Int32       nTemp = 0;
 
             pInfo = &(m_lFactories[eFactory]);
@@ -947,12 +947,12 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     if (m_bReadOnlyStatesWellKnown)
         return;
 
-    css::uno::Sequence< ::rtl::OUString > lFactories = GetNodeNames(::rtl::OUString());
+    css::uno::Sequence< OUString > lFactories = GetNodeNames(OUString());
     sal_Int32 c = lFactories.getLength();
     sal_Int32 i = 0;
     for (i=0; i<c; ++i)
     {
-        ::rtl::OUStringBuffer sPath(256);
+        OUStringBuffer sPath(256);
         sPath.append(lFactories[i]             );
         sPath.append(PATHSEPERATOR             );
         sPath.append(PROPERTYNAME_DEFAULTFILTER);
@@ -963,7 +963,7 @@ void SvtModuleOptions_Impl::MakeReadonlyStatesAvailable()
     css::uno::Sequence< sal_Bool > lReadonlyStates = GetReadOnlyStates(lFactories);
     for (i=0; i<c; ++i)
     {
-        ::rtl::OUString&            rFactoryName = lFactories[i];
+        OUString&            rFactoryName = lFactories[i];
         SvtModuleOptions::EFactory  eFactory                    ;
 
         if (!ClassifyFactoryByName(rFactoryName, eFactory))
@@ -1042,28 +1042,28 @@ sal_Bool SvtModuleOptions::IsModuleInstalled( EModule eModule ) const
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
+OUString SvtModuleOptions::GetFactoryName( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryName( eFactory );
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
+OUString SvtModuleOptions::GetFactoryStandardTemplate( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryStandardTemplate( eFactory );
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
+OUString SvtModuleOptions::GetFactoryEmptyDocumentURL( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryEmptyDocumentURL( eFactory );
 }
 
 //*****************************************************************************************************************
-::rtl::OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
+OUString SvtModuleOptions::GetFactoryDefaultFilter( EFactory eFactory ) const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetFactoryDefaultFilter( eFactory );
@@ -1083,7 +1083,7 @@ sal_Int32 SvtModuleOptions::GetFactoryIcon( EFactory eFactory ) const
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtModuleOptions::ClassifyFactoryByName( const ::rtl::OUString& sName    ,
+sal_Bool SvtModuleOptions::ClassifyFactoryByName( const OUString& sName    ,
                                                         EFactory&        eFactory )
 {
     // We don't need any mutex here ... because we don't use any member here!
@@ -1092,7 +1092,7 @@ sal_Bool SvtModuleOptions::ClassifyFactoryByName( const ::rtl::OUString& sName  
 
 //*****************************************************************************************************************
 void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFactory   ,
-                                                   const ::rtl::OUString& sTemplate  )
+                                                   const OUString& sTemplate  )
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->SetFactoryStandardTemplate( eFactory, sTemplate );
@@ -1100,7 +1100,7 @@ void SvtModuleOptions::SetFactoryStandardTemplate(       EFactory         eFacto
 
 //*****************************************************************************************************************
 void SvtModuleOptions::SetFactoryDefaultFilter(       EFactory         eFactory,
-                                                const ::rtl::OUString& sFilter )
+                                                const OUString& sFilter )
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     m_pDataContainer->SetFactoryDefaultFilter( eFactory, sFilter );
@@ -1183,29 +1183,29 @@ namespace
     return theModuleOptionsMutex::get();
 }
 
-::rtl::OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
+OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
 {
     switch( eModule )
     {
-        case SvtModuleOptions::E_SWRITER    :   { return ::rtl::OUString("Writer"); }
-        case SvtModuleOptions::E_SWEB       :   { return ::rtl::OUString("Web"); }
-        case SvtModuleOptions::E_SGLOBAL    :   { return ::rtl::OUString("Global"); }
-        case SvtModuleOptions::E_SCALC      :   { return ::rtl::OUString("Calc"); }
-        case SvtModuleOptions::E_SDRAW      :   { return ::rtl::OUString("Draw"); }
-        case SvtModuleOptions::E_SIMPRESS   :   { return ::rtl::OUString("Impress"); }
-        case SvtModuleOptions::E_SMATH      :   { return ::rtl::OUString("Math"); }
-        case SvtModuleOptions::E_SCHART     :   { return ::rtl::OUString("Chart"); }
-        case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString("Basic"); }
-        case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString("Database"); }
+        case SvtModuleOptions::E_SWRITER    :   { return OUString("Writer"); }
+        case SvtModuleOptions::E_SWEB       :   { return OUString("Web"); }
+        case SvtModuleOptions::E_SGLOBAL    :   { return OUString("Global"); }
+        case SvtModuleOptions::E_SCALC      :   { return OUString("Calc"); }
+        case SvtModuleOptions::E_SDRAW      :   { return OUString("Draw"); }
+        case SvtModuleOptions::E_SIMPRESS   :   { return OUString("Impress"); }
+        case SvtModuleOptions::E_SMATH      :   { return OUString("Math"); }
+        case SvtModuleOptions::E_SCHART     :   { return OUString("Chart"); }
+        case SvtModuleOptions::E_SBASIC     :   { return OUString("Basic"); }
+        case SvtModuleOptions::E_SDATABASE  :   { return OUString("Database"); }
         default:
             OSL_FAIL( "unknown module" );
             break;
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::rtl::OUString& sName)
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const OUString& sName)
 {
     if ( sName == "swriter" )
         return E_WRITER;
@@ -1231,7 +1231,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const ::
     return E_UNKNOWN_FACTORY;
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const ::rtl::OUString& sName)
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const OUString& sName)
 {
     if (sName.equals(FACTORYNAME_WRITERGLOBAL))
         return E_WRITERGLOBAL;
@@ -1255,7 +1255,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByServiceName(const 
     return E_UNKNOWN_FACTORY;
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::OUString&                                 sURL            ,
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const OUString&                                 sURL            ,
                                                                   const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -1277,13 +1277,13 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     ::comphelper::SequenceAsHashMap stlDesc(lMediaDescriptor);
 
     // is there already a filter inside the descriptor?
-    ::rtl::OUString sFilterName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString("FilterName"), ::rtl::OUString());
+    OUString sFilterName = stlDesc.getUnpackedValueOrDefault(OUString("FilterName"), OUString());
     if (!sFilterName.isEmpty())
     {
         try
         {
             ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sFilterName));
-            ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString("DocumentService"), ::rtl::OUString());
+            OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(OUString("DocumentService"), OUString());
             SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
             if (eApp != E_UNKNOWN_FACTORY)
@@ -1296,7 +1296,7 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     }
 
     // is there already a type inside the descriptor?
-    ::rtl::OUString sTypeName = stlDesc.getUnpackedValueOrDefault(::rtl::OUString("TypeName"), ::rtl::OUString());
+    OUString sTypeName = stlDesc.getUnpackedValueOrDefault(OUString("TypeName"), OUString());
     if (sTypeName.isEmpty())
     {
         // no :-(
@@ -1313,9 +1313,9 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByURL(const ::rtl::O
     try
     {
         ::comphelper::SequenceAsHashMap stlTypeProps     (xTypeCfg->getByName(sTypeName));
-        ::rtl::OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(::rtl::OUString("PreferredFilter"), ::rtl::OUString());
+        OUString                 sPreferredFilter = stlTypeProps.getUnpackedValueOrDefault(OUString("PreferredFilter"), OUString());
         ::comphelper::SequenceAsHashMap stlFilterProps   (xFilterCfg->getByName(sPreferredFilter));
-        ::rtl::OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(::rtl::OUString("DocumentService"), ::rtl::OUString());
+        OUString                 sDocumentService = stlFilterProps.getUnpackedValueOrDefault(OUString("DocumentService"), OUString());
         SvtModuleOptions::EFactory      eApp             = SvtModuleOptions::ClassifyFactoryByServiceName(sDocumentService);
 
         if (eApp != E_UNKNOWN_FACTORY)
@@ -1336,8 +1336,8 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     if (!xInfo.is())
         return E_UNKNOWN_FACTORY;
 
-    const css::uno::Sequence< ::rtl::OUString > lServices = xInfo->getSupportedServiceNames();
-    const ::rtl::OUString*                      pServices = lServices.getConstArray();
+    const css::uno::Sequence< OUString > lServices = xInfo->getSupportedServiceNames();
+    const OUString*                      pServices = lServices.getConstArray();
 
     for (sal_Int32 i=0; i<lServices.getLength() ; ++i)
     {
@@ -1349,15 +1349,15 @@ SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByModel(const css::u
     return E_UNKNOWN_FACTORY;
 }
 
-::com::sun::star::uno::Sequence < ::rtl::OUString > SvtModuleOptions::GetAllServiceNames()
+::com::sun::star::uno::Sequence < OUString > SvtModuleOptions::GetAllServiceNames()
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );
     return m_pDataContainer->GetAllServiceNames();
 }
 
-::rtl::OUString SvtModuleOptions::GetDefaultModuleName()
+OUString SvtModuleOptions::GetDefaultModuleName()
 {
-    ::rtl::OUString aModule;
+    OUString aModule;
     if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SWRITER))
         aModule = m_pDataContainer->GetFactoryShortName(SvtModuleOptions::E_WRITER);
     else if (m_pDataContainer->IsModuleInstalled(SvtModuleOptions::E_SCALC))

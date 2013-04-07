@@ -31,10 +31,10 @@ namespace dbaxml
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xParentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    m_xTable;
 
-        ::rtl::OUString m_sName;
-        ::rtl::OUString m_sStyleName;
-        ::rtl::OUString m_sCellStyleName;
-        ::rtl::OUString m_sHelpMessage;
+        OUString m_sName;
+        OUString m_sStyleName;
+        OUString m_sCellStyleName;
+        OUString m_sHelpMessage;
         ::com::sun::star::uno::Any m_aDefaultValue;
         sal_Bool        m_bHidden;
 
@@ -43,7 +43,7 @@ namespace dbaxml
 
         OXMLColumn( ODBFilter& rImport
                     , sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&    _xTable

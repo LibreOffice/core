@@ -80,7 +80,7 @@ FltError ExportBiff5::Write()
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg );
         sal_uLong nErr = aBasicImport.SaveOrDelMSVBAStorage( sal_True, EXC_STORAGE_VBA_PROJECT );
         if( nErr != ERRCODE_NONE )
-            pDocShell->SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            pDocShell->SetError( nErr, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc

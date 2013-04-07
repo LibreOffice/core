@@ -108,7 +108,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    sal_Int32 PropertyBagHelper::impl_findFreeHandle( const ::rtl::OUString& _rPropertyName )
+    sal_Int32 PropertyBagHelper::impl_findFreeHandle( const OUString& _rPropertyName )
     {
         ::comphelper::OPropertyArrayAggregationHelper& rPropInfo( impl_ts_getArrayHelper() );
 
@@ -181,7 +181,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void PropertyBagHelper::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
+    void PropertyBagHelper::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
@@ -208,7 +208,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void PropertyBagHelper::removeProperty( const ::rtl::OUString& _rName )
+    void PropertyBagHelper::removeProperty( const OUString& _rName )
     {
         ::osl::MutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
@@ -228,15 +228,15 @@ namespace frm
     namespace
     {
         //----------------------------------------------------------------
-        struct SelectNameOfProperty : public ::std::unary_function< Property, ::rtl::OUString >
+        struct SelectNameOfProperty : public ::std::unary_function< Property, OUString >
         {
-            const ::rtl::OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
+            const OUString& operator()( const Property& _rProp ) const { return _rProp.Name; }
         };
 
         //----------------------------------------------------------------
-        struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, ::rtl::OUString >
+        struct SelectNameOfPropertyValue : public ::std::unary_function< PropertyValue, OUString >
         {
-            const ::rtl::OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
+            const OUString& operator()( const PropertyValue& _rProp ) const { return _rProp.Name; }
         };
 
         //----------------------------------------------------------------
@@ -265,7 +265,7 @@ namespace frm
         Reference< XPropertySetInfo > xPSI( xMe->getPropertySetInfo(), UNO_QUERY_THROW );
 
         Sequence< Property > aProperties( xPSI->getProperties() );
-        Sequence< ::rtl::OUString > aPropertyNames( aProperties.getLength() );
+        Sequence< OUString > aPropertyNames( aProperties.getLength() );
         ::std::transform( aProperties.getConstArray(), aProperties.getConstArray() + aProperties.getLength(),
             aPropertyNames.getArray(), SelectNameOfProperty() );
 
@@ -285,8 +285,8 @@ namespace frm
         Sequence< PropertyValue > aPropertyValues( aValues.getLength() );
         PropertyValue* pPropertyValue = aPropertyValues.getArray();
 
-        const ::rtl::OUString* pName = aPropertyNames.getConstArray();
-        const ::rtl::OUString* pNameEnd = aPropertyNames.getConstArray() + aPropertyNames.getLength();
+        const OUString* pName = aPropertyNames.getConstArray();
+        const OUString* pNameEnd = aPropertyNames.getConstArray() + aPropertyNames.getLength();
         const Any* pValue = aValues.getConstArray();
         for ( ; pName != pNameEnd; ++pName, ++pValue, ++pPropertyValue )
         {
@@ -325,7 +325,7 @@ namespace frm
 
         // Now finally split into a Name and a Value sequence, and forward to
         // XMultiPropertySet::setPropertyValues
-        Sequence< ::rtl::OUString > aNames( nPropertyValues );
+        Sequence< OUString > aNames( nPropertyValues );
         ::std::transform( aSortedProps.getConstArray(), aSortedProps.getConstArray() + nPropertyValues,
             aNames.getArray(), SelectNameOfPropertyValue() );
 

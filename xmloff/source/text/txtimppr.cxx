@@ -34,7 +34,6 @@
 #define XML_LINE_TOP 2
 #define XML_LINE_BOTTOM 3
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -44,7 +43,7 @@ using namespace ::com::sun::star::text;
 bool XMLTextImportPropertyMapper::handleSpecialItem(
             XMLPropertyState& rProperty,
             ::std::vector< XMLPropertyState >& rProperties,
-            const ::rtl::OUString& rValue,
+            const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const
 {

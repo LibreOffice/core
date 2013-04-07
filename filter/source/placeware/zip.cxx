@@ -23,7 +23,6 @@
 #include "zip.hxx"
 #include "zipfile.hxx"
 
-using ::rtl::OString;
 /** this struct describes one entry in a zip file */
 struct ZipEntry
 {

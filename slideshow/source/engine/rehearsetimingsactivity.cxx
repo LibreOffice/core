@@ -184,7 +184,7 @@ RehearseTimingsActivity::~RehearseTimingsActivity()
     }
     catch (uno::Exception &)
     {
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -424,7 +424,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     // build timer string:
     const sal_Int32 nTimeSecs =
         static_cast<sal_Int32>(maElapsedTime.getElapsedTime());
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     sal_Int32 n = (nTimeSecs / 3600);
     if (n < 10)
         buf.append( static_cast<sal_Unicode>('0') );
@@ -439,7 +439,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     if (n < 10)
         buf.append( static_cast<sal_Unicode>('0') );
     buf.append( n );
-    const rtl::OUString time = buf.makeStringAndClear();
+    const OUString time = buf.makeStringAndClear();
 
     // create the MetaFile:
     GDIMetaFile metaFile;

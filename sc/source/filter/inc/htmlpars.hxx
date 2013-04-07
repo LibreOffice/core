@@ -50,30 +50,30 @@ class ScHTMLTable;
  */
 class ScHTMLStyles
 {
-    typedef ::boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash> PropsType;
-    typedef ::boost::ptr_map<rtl::OUString, PropsType> NamePropsType;
-    typedef ::boost::ptr_map<rtl::OUString, NamePropsType> ElemsType;
+    typedef ::boost::unordered_map<OUString, OUString, OUStringHash> PropsType;
+    typedef ::boost::ptr_map<OUString, PropsType> NamePropsType;
+    typedef ::boost::ptr_map<OUString, NamePropsType> ElemsType;
 
     NamePropsType maGlobalProps;     /// global properties (for a given class for all elements)
     NamePropsType maElemGlobalProps; /// element global properties (no class specified)
     ElemsType maElemProps;           /// element to class to properties (both element and class are given)
-    const rtl::OUString maEmpty;     /// just a persistent empty string.
+    const OUString maEmpty;     /// just a persistent empty string.
 public:
     ScHTMLStyles();
 
     void add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
-             const rtl::OUString& aProp, const rtl::OUString& aValue);
+             const OUString& aProp, const OUString& aValue);
 
     /**
      * Find best-matching property value for given element and class names.
      */
-    const rtl::OUString& getPropertyValue(
-        const rtl::OUString& rElem, const rtl::OUString& rClass, const rtl::OUString& rPropName) const;
+    const OUString& getPropertyValue(
+        const OUString& rElem, const OUString& rClass, const OUString& rPropName) const;
 
 private:
     static void insertProp(
-        NamePropsType& rProps, const rtl::OUString& aName,
-        const rtl::OUString& aProp, const rtl::OUString& aValue);
+        NamePropsType& rProps, const OUString& aName,
+        const OUString& aProp, const OUString& aValue);
 };
 
 /** Base class for HTML parser classes. */
@@ -165,9 +165,9 @@ class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
-    rtl::OUString       aBaseURL;
+    OUString       aBaseURL;
     ScHTMLTableStack    aTableStack;
-    rtl::OUString       aString;
+    OUString       aString;
     ScRangeListRef      xLockedList;        // je Table
     OuterMap*           pTables;
     ScHTMLColOffset*    pColOffset;
@@ -382,7 +382,7 @@ public:
     virtual             ~ScHTMLTable();
 
     /** Returns the name of the table, specified in the TABLE tag. */
-    inline const rtl::OUString& GetTableName() const { return maTableName; }
+    inline const OUString& GetTableName() const { return maTableName; }
     /** Returns the unique identifier of the table. */
     inline ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
     /** Returns the table size. */
@@ -565,7 +565,7 @@ private:
 private:
     ScHTMLTable*        mpParentTable;      /// Pointer to parent table.
     ScHTMLTableMapPtr   mxNestedTables;     /// Table of nested HTML tables.
-    rtl::OUString       maTableName;        /// Table name from <table id> option.
+    OUString       maTableName;        /// Table name from <table id> option.
     ScHTMLTableAutoId   maTableId;          /// Unique identifier of this table.
     SfxItemSet          maTableItemSet;     /// Items for the entire table.
     SfxItemSetPtr       mxRowItemSet;       /// Items for the current table row.
@@ -653,14 +653,14 @@ private:
     /** Closes the current table, regardless on opening tag. */
     void                CloseTable( const ImportInfo& rInfo );
 
-    void                ParseStyle(const rtl::OUString& rStrm);
+    void                ParseStyle(const OUString& rStrm);
 
     DECL_LINK( HTMLImportHdl, const ImportInfo* );
 
 private:
     typedef ::std::auto_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
 
-    rtl::OUStringBuffer maTitle;            /// The title of the document.
+    OUStringBuffer maTitle;            /// The title of the document.
     ScHTMLGlobalTablePtr mxGlobTable;       /// Contains the entire imported document.
     ScHTMLTable*        mpCurrTable;        /// Pointer to current table (performance).
     ScHTMLTableId       mnUnusedId;         /// First unused table identifier.

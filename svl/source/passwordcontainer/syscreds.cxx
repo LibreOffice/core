@@ -24,19 +24,19 @@ using namespace com::sun::star;
 
 SysCredentialsConfigItem::SysCredentialsConfigItem(
     SysCredentialsConfig * pOwner )
-: utl::ConfigItem( rtl::OUString("Office.Common/Passwords"),
+: utl::ConfigItem( OUString("Office.Common/Passwords"),
                    CONFIG_MODE_IMMEDIATE_UPDATE ),
   m_bInited( false ),
   m_pOwner( pOwner )
 {
-    uno::Sequence< ::rtl::OUString > aNode( 1 );
-    aNode[ 0 ] = rtl::OUString( "Office.Common/Passwords/AuthenticateUsingSystemCredentials" );
+    uno::Sequence< OUString > aNode( 1 );
+    aNode[ 0 ] = OUString( "Office.Common/Passwords/AuthenticateUsingSystemCredentials" );
     EnableNotification( aNode );
 }
 
 //virtual
 void SysCredentialsConfigItem::Notify(
-    const uno::Sequence< rtl::OUString > & /*seqPropertyNames*/ )
+    const uno::Sequence< OUString > & /*seqPropertyNames*/ )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -52,15 +52,15 @@ void SysCredentialsConfigItem::Commit()
     // does nothing
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SysCredentialsConfigItem::getSystemCredentialsURLs()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_bInited )
     {
         // read config item
-        uno::Sequence< ::rtl::OUString > aPropNames( 1 );
-        aPropNames[ 0 ] = rtl::OUString( "AuthenticateUsingSystemCredentials" );
+        uno::Sequence< OUString > aPropNames( 1 );
+        aPropNames[ 0 ] = OUString( "AuthenticateUsingSystemCredentials" );
         uno::Sequence< uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 
@@ -69,7 +69,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
             "SysCredentialsConfigItem::getSystemCredentialsURLs: "
             "Error reading config item!" );
 
-        uno::Sequence< rtl::OUString > aValues;
+        uno::Sequence< OUString > aValues;
         if ( ( aAnyValues[ 0 ] >>= aValues ) ||
              ( !aAnyValues[ 0 ].hasValue() ) )
         {
@@ -81,14 +81,14 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
 }
 
 void SysCredentialsConfigItem::setSystemCredentialsURLs(
-    const uno::Sequence< rtl::OUString > & seqURLList )
+    const uno::Sequence< OUString > & seqURLList )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // write config item.
-    uno::Sequence< rtl::OUString > aPropNames( 1 );
+    uno::Sequence< OUString > aPropNames( 1 );
     uno::Sequence< uno::Any > aPropValues( 1 );
-    aPropNames[ 0 ] = ::rtl::OUString( "AuthenticateUsingSystemCredentials" );
+    aPropNames[ 0 ] = OUString( "AuthenticateUsingSystemCredentials" );
     aPropValues[ 0 ] <<= seqURLList;
 
     utl::ConfigItem::SetModified();
@@ -103,7 +103,7 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
 namespace
 {
     // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
-    bool removeLastSegment( ::rtl::OUString & aURL )
+    bool removeLastSegment( OUString & aURL )
     {
         sal_Int32 aInd = aURL.lastIndexOf( sal_Unicode( '/' ) );
 
@@ -121,12 +121,12 @@ namespace
         return false;
     }
 
-    bool findURL( StringSet const & rContainer, rtl::OUString const & aURL, rtl::OUString & aResult )
+    bool findURL( StringSet const & rContainer, OUString const & aURL, OUString & aResult )
     {
         // TODO: This code is actually copied from svl/source/passwordcontainer.cxx
         if( !rContainer.empty() && !aURL.isEmpty() )
         {
-            ::rtl::OUString aUrl( aURL );
+            OUString aUrl( aURL );
 
             // each iteration remove last '/...' section from the aUrl
             // while it's possible, up to the most left '://'
@@ -141,9 +141,9 @@ namespace
                 }
                 else
                 {
-                    ::rtl::OUString tmpUrl( aUrl );
+                    OUString tmpUrl( aUrl );
                     if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                      tmpUrl += ::rtl::OUString("/");
+                      tmpUrl += OUString("/");
 
                     aIter = rContainer.lower_bound( tmpUrl );
                     if( aIter != rContainer.end() && aIter->match( tmpUrl ) )
@@ -155,7 +155,7 @@ namespace
             }
             while( removeLastSegment( aUrl ) && !aUrl.isEmpty() );
         }
-        aResult = rtl::OUString();
+        aResult = OUString();
         return false;
     }
 
@@ -172,7 +172,7 @@ void SysCredentialsConfig::initCfg()
     osl::MutexGuard aGuard( m_aMutex );
     if ( !m_bCfgInited )
     {
-        uno::Sequence< rtl::OUString > aURLs(
+        uno::Sequence< OUString > aURLs(
             m_aConfigItem.getSystemCredentialsURLs() );
         for ( sal_Int32 n = 0; n < aURLs.getLength(); ++n )
             m_aCfgContainer.insert( aURLs[ n ] );
@@ -187,7 +187,7 @@ void SysCredentialsConfig::writeCfg()
 
     OSL_ENSURE( m_bCfgInited, "SysCredentialsConfig::writeCfg : not initialized!" );
 
-    uno::Sequence< rtl::OUString > aURLs( m_aCfgContainer.size() );
+    uno::Sequence< OUString > aURLs( m_aCfgContainer.size() );
     StringSet::const_iterator it = m_aCfgContainer.begin();
     const StringSet::const_iterator end = m_aCfgContainer.end();
     sal_Int32 n = 0;
@@ -202,10 +202,10 @@ void SysCredentialsConfig::writeCfg()
     m_aConfigItem.setSystemCredentialsURLs( aURLs );
 }
 
-rtl::OUString SysCredentialsConfig::find( rtl::OUString const & aURL )
+OUString SysCredentialsConfig::find( OUString const & aURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    rtl::OUString aResult;
+    OUString aResult;
     if ( findURL( m_aMemContainer, aURL, aResult ) )
         return aResult;
 
@@ -213,10 +213,10 @@ rtl::OUString SysCredentialsConfig::find( rtl::OUString const & aURL )
     if ( findURL( m_aCfgContainer, aURL, aResult ) )
         return aResult;
 
-    return rtl::OUString();
+    return OUString();
 }
 
-void SysCredentialsConfig::add( rtl::OUString const & rURL, bool bPersistent )
+void SysCredentialsConfig::add( OUString const & rURL, bool bPersistent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -238,7 +238,7 @@ void SysCredentialsConfig::add( rtl::OUString const & rURL, bool bPersistent )
     }
 }
 
-void SysCredentialsConfig::remove( rtl::OUString const & rURL )
+void SysCredentialsConfig::remove( OUString const & rURL )
 {
     m_aMemContainer.erase( rURL );
 
@@ -247,12 +247,12 @@ void SysCredentialsConfig::remove( rtl::OUString const & rURL )
         writeCfg();
 }
 
-uno::Sequence< rtl::OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
+uno::Sequence< OUString > SysCredentialsConfig::list( bool bOnlyPersistent )
 {
     initCfg();
     sal_Int32 nCount = m_aCfgContainer.size()
                      + ( bOnlyPersistent ? 0 : m_aMemContainer.size() );
-    uno::Sequence< rtl::OUString > aResult( nCount );
+    uno::Sequence< OUString > aResult( nCount );
 
     StringSet::const_iterator it = m_aCfgContainer.begin();
     StringSet::const_iterator end = m_aCfgContainer.end();

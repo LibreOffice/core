@@ -59,9 +59,6 @@ typedef char const * AsciiString;
 namespace utl
 {
 // ---------------------------------------------------------------------------------------
-    using ::rtl::OUString;
-    using ::rtl::OUStringBuffer;
-    using ::rtl::OString;
 
 // ---------------------------------------------------------------------------------------
 // Implementation class: Bootstrap::Impl
@@ -330,7 +327,7 @@ PathStatus getDerivedPath(
     {
         OSL_PRECOND(_aBaseURL[_aBaseURL.getLength()-1] != cURLSeparator,"Unexpected: base URL ends in slash");
 
-        sDerivedURL = rtl::OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
+        sDerivedURL = OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
 
         // a derived (nested) URL can only exist or have a lesser status, if the parent exists
         if (aStatus == Bootstrap::PATH_EXISTS)
@@ -661,7 +658,7 @@ PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
 }
 // ---------------------------------------------------------------------------------------
 
-Bootstrap::Status Bootstrap::checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage, FailureCode& _rErrCode)
+Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage, FailureCode& _rErrCode)
 {
     Impl const& aData = data();
 

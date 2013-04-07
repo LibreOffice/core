@@ -50,12 +50,12 @@ namespace cppcanvas
         public:
             ImplFont( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::rendering::XCanvas >& rCanvas,
-                      const ::rtl::OUString& rFontName,
+                      const OUString& rFontName,
                       const double& rCellSize );
 
             virtual ~ImplFont();
 
-            virtual ::rtl::OUString getName() const;
+            virtual OUString getName() const;
             virtual double          getCellSize() const;
 
             virtual ::com::sun::star::uno::Reference<

@@ -156,7 +156,7 @@ namespace svx
         String  GetCurrentString( ) const;
         void    SetCurrentString(
                     const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
+                    const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
 
@@ -190,7 +190,7 @@ namespace svx
         DECL_LINK( ClickByCharacterHdl, CheckBox* );
 
         /// fill the suggestion list box with suggestions for the actual input
-        void FillSuggestions( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions );
+        void FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions );
     };
 
 
@@ -327,7 +327,7 @@ namespace svx
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
         void            EditFocusLost( Edit* _pEdit, sal_uInt8 _nEntryOffset );
 
-        bool            DeleteEntryFromDictionary( const ::rtl::OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
+        bool            DeleteEntryFromDictionary( const OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
 
     public:
                         HangulHanjaEditDictDialog( Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );

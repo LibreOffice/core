@@ -245,7 +245,7 @@ void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )
     {
         uno::Reference< beans::XPropertySet > xModelProperties( GetUnoControlModel(), uno::UNO_QUERY_THROW );
         xModelProperties->setPropertyValue(
-            ::rtl::OUString(  "ContextWritingMode"  ),
+            OUString(  "ContextWritingMode"  ),
             uno::makeAny( _nContextWritingMode )
         );
     }
@@ -334,8 +334,8 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue( rtl::OUString("DefaultControl")) );
-        ::rtl::OUString aStr;
+        uno::Any aValue( xSet->getPropertyValue( OUString("DefaultControl")) );
+        OUString aStr;
 
         if( aValue >>= aStr )
             aUnoControlTypeName = String(aStr);
@@ -536,7 +536,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
         if (xSet.is())
         {
             uno::Any aValue( xSet->getPropertyValue(String("DefaultControl", osl_getThreadTextEncoding())) );
-            ::rtl::OUString aStr;
+            OUString aStr;
             if( aValue >>= aStr )
                 aUnoControlTypeName = String(aStr);
         }

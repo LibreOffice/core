@@ -26,7 +26,7 @@ using namespace ucbhelper;
 //=========================================================================
 SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
                                                                         const com::sun::star::uno::Reference<com::sun::star::security::XCertificate> pCertificate,
-                                                                        const rtl::OUString & hostname)
+                                                                        const OUString & hostname)
 {
     // Fill request...
     ucb::CertificateValidationRequest aRequest;

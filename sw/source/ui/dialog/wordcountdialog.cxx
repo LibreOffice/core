@@ -50,7 +50,7 @@ namespace
 {
     void setValue(FixedText *pWidget, sal_uLong nValue)
     {
-        rtl::OUString sValue(OUString::number(nValue));
+        OUString sValue(OUString::number(nValue));
         pWidget->SetText(sValue);
     }
 }

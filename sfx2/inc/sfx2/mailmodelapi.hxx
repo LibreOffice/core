@@ -64,11 +64,11 @@ protected:
         SAVE_CANCELLED,
         SAVE_ERROR
     };
-    ::std::vector< ::rtl::OUString > maAttachedDocuments;
-    SaveResult          SaveDocumentAsFormat( const rtl::OUString& aSaveFileName,
+    ::std::vector< OUString > maAttachedDocuments;
+    SaveResult          SaveDocumentAsFormat( const OUString& aSaveFileName,
                                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
-                                              const rtl::OUString& rType,
-                                              rtl::OUString& rFileNamePath );
+                                              const OUString& rType,
+                                              OUString& rFileNamePath );
 
 private:
     AddressList_Impl*   mpToList;
@@ -83,8 +83,8 @@ private:
     void                ClearList( AddressList_Impl* pList );
     SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
-                                                 const ::rtl::OUString& rFilterName,
-                                                 const ::rtl::OUString& rType,
+                                                 const OUString& rFilterName,
+                                                 const OUString& rType,
                                                  bool bModified,
                                                  sal_Int32& rNumArgs,
                                                  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
@@ -118,12 +118,12 @@ public:
         The title which will be used as attachment title
     * \return @see error code
     */
-    SendMailResult      AttachDocument( const ::rtl::OUString& sDocumentType,
+    SendMailResult      AttachDocument( const OUString& sDocumentType,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
-                                        const ::rtl::OUString& sAttachmentTitle );
+                                        const OUString& sAttachmentTitle );
 
     SendMailResult      SaveAndSend( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                                     const rtl::OUString& rType );
+                                     const OUString& rType );
     SendMailResult      Send( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 
     sal_Bool            IsEmpty() const;

@@ -34,10 +34,10 @@
 
 #include <rtl/ustring.hxx>
 
-rtl::OUString GetOUString( CFStringRef );
-rtl::OUString GetOUString( NSString* );
-CFStringRef CreateCFString( const rtl::OUString& );
-NSString* CreateNSString( const rtl::OUString& );
+OUString GetOUString( CFStringRef );
+OUString GetOUString( NSString* );
+CFStringRef CreateCFString( const OUString& );
+NSString* CreateNSString( const OUString& );
 
 std::ostream &operator <<(std::ostream& s, CGRect &rRect);
 

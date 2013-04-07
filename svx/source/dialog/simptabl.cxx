@@ -209,7 +209,7 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
     }
     bPaintFlag=sal_True;
 }
-void SvxSimpleTable::InsertHeaderEntry(const rtl::OUString& rText,
+void SvxSimpleTable::InsertHeaderEntry(const OUString& rText,
     sal_uInt16 nCol, HeaderBarItemBits nBits)
 {
     sal_Int32 nEnd = rText.indexOf( sal_Unicode( '\t' ) );
@@ -222,7 +222,7 @@ void SvxSimpleTable::InsertHeaderEntry(const rtl::OUString& rText,
         sal_Int32 nIndex = 0;
         do
         {
-            rtl::OUString aString = rText.getToken(0, '\t', nIndex);
+            OUString aString = rText.getToken(0, '\t', nIndex);
             aHeaderBar.InsertItem(nHeaderItemId++, aString, 0, nBits, nCol);
         }
         while ( nIndex >= 0 );

@@ -114,8 +114,8 @@ namespace dbaui
         void            fillLines(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& _aValues);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const ::rtl::OUString& _rFieldName ) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getQueryColumn( const ::rtl::OUString& _rFieldName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
 
     public:
         DlgFilterCrit(  Window * pParent,

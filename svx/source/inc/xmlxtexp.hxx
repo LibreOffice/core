@@ -38,19 +38,19 @@ public:
     // #110680#
     SvxXMLXTableExportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
-        const rtl::OUString& rFileName,
+        const OUString& rFileName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler,
         const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > & xTable,
         com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
 
     ~SvxXMLXTableExportComponent();
 
-    static bool save( const rtl::OUString& rURL,
+    static bool save( const OUString& rURL,
                       const com::sun::star::uno::Reference<
                           ::com::sun::star::container::XNameContainer >& xTable,
                       const ::com::sun::star::uno::Reference <
                           ::com::sun::star::embed::XStorage > &xStorage,
-                      rtl::OUString *pOptName ) throw();
+                      OUString *pOptName ) throw();
 
     // methods without content:
     virtual void _ExportAutoStyles();

@@ -37,7 +37,7 @@ namespace stoc_tdmgr
 //=========================================================================
 
 TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
-        const rtl::OUString & rModuleName,
+        const OUString & rModuleName,
         const com::sun::star::uno::Sequence<
             com::sun::star::uno::TypeClass > & rTypes,
         com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,
@@ -88,7 +88,7 @@ uno::Any SAL_CALL TypeDescriptionEnumerationImpl::nextElement()
         return xEnum->nextElement();
 
     throw container::NoSuchElementException(
-        rtl::OUString("No further elements in enumeration!"),
+        OUString("No further elements in enumeration!"),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 
@@ -110,7 +110,7 @@ TypeDescriptionEnumerationImpl::nextTypeDescription()
         return xEnum->nextTypeDescription();
 
     throw container::NoSuchElementException(
-        rtl::OUString("No further elements in enumeration!"),
+        OUString("No further elements in enumeration!"),
         static_cast< cppu::OWeakObject * >( this  ) );
 }
 

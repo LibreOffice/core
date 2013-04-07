@@ -67,24 +67,24 @@ namespace
 
 //------------------------------------------------------------------------------
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.OResultSet","com.sun.star.sdbc.ResultSet");
-::rtl::OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
+OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.sdbcx.odbc.ResultSet");
+    return OUString("com.sun.star.sdbcx.odbc.ResultSet");
 }
 // -------------------------------------------------------------------------
- Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
+ Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-     Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
+     Sequence< OUString > aSupported(2);
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
+sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -222,14 +222,14 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
             {
                 case DataType::CHAR:
                 case DataType::VARCHAR:
-                    delete static_cast< ::rtl::OString* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< OString* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::BIGINT:
                     delete static_cast< sal_Int64* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
-                    delete static_cast< ::rtl::OString* >(reinterpret_cast< void * >(pValue->first));
+                    delete static_cast< OString* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
@@ -285,14 +285,14 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
     {
         case DataType::CHAR:
         case DataType::VARCHAR:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new ::rtl::OString()),_nType);
+            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new OString()),_nType);
             break;
         case DataType::BIGINT:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new sal_Int64(0)),_nType);
             break;
         case DataType::DECIMAL:
         case DataType::NUMERIC:
-            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new ::rtl::OString()),_nType);
+            aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new OString()),_nType);
             break;
         case DataType::REAL:
         case DataType::DOUBLE:
@@ -384,7 +384,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSet::findColumn" );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -503,7 +503,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         break;
     default:
     {
-        rtl::OUString sRet;
+        OUString sRet;
         sRet = m_aRow[columnIndex].getString();
         nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
     }
@@ -523,7 +523,7 @@ Sequence< sal_Int8 > OResultSet::impl_getBytes( sal_Int32 columnIndex ) throw(SQ
     case SQL_CHAR:
     case SQL_LONGVARCHAR:
     {
-        rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
+        OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
         return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
     }
     default:
@@ -635,15 +635,15 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::co
     return getValue<ORowSetValue>( columnIndex ).makeAny();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OResultSet::impl_getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString OResultSet::impl_getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     const SWORD nColumnType = impl_getColumnType_nothrow(columnIndex);
     return OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
 }
-::rtl::OUString OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return getValue<rtl::OUString>( columnIndex );
+    return getValue<OUString>( columnIndex );
 }
 // -------------------------------------------------------------------------
 Time OResultSet::impl_getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
@@ -1084,7 +1084,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     updateValue(columnIndex,SQL_DOUBLE,&x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nType = m_aRow[columnIndex].getTypeKind();
     SQLSMALLINT nOdbcType = OTools::jdbcTypeToOdbc(nType);
@@ -1353,12 +1353,12 @@ sal_Int32 OResultSet::getFetchSize() const
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE);
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OResultSet::getCursorName() const
+OUString OResultSet::getCursorName() const
 {
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
     N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
-    return ::rtl::OUString::createFromAscii((const char*)pName);
+    return OUString::createFromAscii((const char*)pName);
 }
 // -------------------------------------------------------------------------
 sal_Bool  OResultSet::isBookmarkable() const
@@ -1432,7 +1432,7 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);
@@ -1817,7 +1817,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 case SQL_WLONGVARCHAR:
                 {
-                    ::rtl::OUString sRet;
+                    OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
                     nRet = N3SQLPutData (m_aStatementHandle, (SQLPOINTER)sRet.getStr(), sizeof(sal_Unicode)*sRet.getLength());
                     break;
@@ -1825,9 +1825,9 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 case DataType::LONGVARCHAR:
                 case DataType::CLOB:
                 {
-                    ::rtl::OUString sRet;
+                    OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
-                    ::rtl::OString aString(::rtl::OUStringToOString(sRet,m_nTextEncoding));
+                    OString aString(OUStringToOString(sRet,m_nTextEncoding));
                     nRet = N3SQLPutData (m_aStatementHandle, (SQLPOINTER)aString.getStr(), aString.getLength());
                     break;
                 }

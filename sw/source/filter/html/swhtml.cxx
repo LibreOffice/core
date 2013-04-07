@@ -1426,11 +1426,11 @@ void SwHTMLParser::NextToken( int nToken )
         break;
 
     case HTML_NONBREAKSPACE:
-        pDoc->InsertString( *pPam, rtl::OUString(CHAR_HARDBLANK) );
+        pDoc->InsertString( *pPam, OUString(CHAR_HARDBLANK) );
         break;
 
     case HTML_SOFTHYPH:
-        pDoc->InsertString( *pPam, rtl::OUString(CHAR_SOFTHYPHEN) );
+        pDoc->InsertString( *pPam, OUString(CHAR_SOFTHYPHEN) );
         break;
 
     case HTML_LINEFEEDCHAR:
@@ -1952,7 +1952,7 @@ void SwHTMLParser::NextToken( int nToken )
             }
             else
             {
-                rtl::OUStringBuffer aComment;
+                OUStringBuffer aComment;
                 aComment.append('<').append(aToken).append('>');
                 InsertComment( aComment.makeStringAndClear() );
             }
@@ -2021,7 +2021,7 @@ void SwHTMLParser::NextToken( int nToken )
 
     if( bInsertUnknown )
     {
-        String aComment(rtl::OUString("HTML: <"));
+        String aComment(OUString("HTML: <"));
         if( (HTML_TOKEN_ONOFF & nToken) != 0 && (1 & nToken) != 0 )
             aComment += '/';
         aComment += sSaveToken;
@@ -2834,7 +2834,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                             IDocumentMarkAccess::BOOKMARK );
 
                         // jump to bookmark
-                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == ::rtl::OUString(sJmpMark) )
+                        if( JUMPTO_MARK == eJumpTo && pNewMark->GetName() == OUString(sJmpMark) )
                         {
                             bChkJumpMark = sal_True;
                             eJumpTo = JUMPTO_NONE;
@@ -5001,7 +5001,7 @@ void SwHTMLParser::InsertSpacer()
             else
             {
                 NewAttr( &aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
-                rtl::OUString aTmp( ' ' );
+                OUString aTmp( ' ' );
                 pDoc->InsertString( *pPam, aTmp );
                 EndAttr( aAttrTab.pKerning );
             }
@@ -5205,7 +5205,7 @@ void SwHTMLParser::InsertLineBreak()
     {
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
-        rtl::OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
+        OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
         pDoc->InsertString( *pPam, sTmp );
     }
     else if( pPam->GetPoint()->nContent.GetIndex() )
@@ -5437,7 +5437,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
         return;
     }
 
-    rtl::OUStringBuffer sText;
+    OUStringBuffer sText;
     sText.append("HTML: <");
     sText.append(OOO_STRING_SVTOOLS_HTML_meta);
     sText.append(' ');
@@ -5557,10 +5557,10 @@ bool SwHTMLParser::ParseMetaOptions(
 }
 
 // override so we can parse DOCINFO field subtypes INFO[1-4]
-void SwHTMLParser::AddMetaUserDefined( ::rtl::OUString const & i_rMetaName )
+void SwHTMLParser::AddMetaUserDefined( OUString const & i_rMetaName )
 {
     // unless we already have 4 names, append the argument to m_InfoNames
-    ::rtl::OUString* pName // the first empty string in m_InfoNames
+    OUString* pName // the first empty string in m_InfoNames
          (m_InfoNames[0].isEmpty() ? &m_InfoNames[0] :
          (m_InfoNames[1].isEmpty() ? &m_InfoNames[1] :
          (m_InfoNames[2].isEmpty() ? &m_InfoNames[2] :

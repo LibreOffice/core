@@ -47,7 +47,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight() throw (css::uno::RuntimeException)
         return uno::makeAny( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
-    mxRowProps->getPropertyValue( rtl::OUString("Height") ) >>= nHeight;
+    mxRowProps->getPropertyValue( OUString("Height") ) >>= nHeight;
     return uno::makeAny( (float)Millimeter::getInPoints( nHeight ) );
 }
 
@@ -57,20 +57,20 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::Ru
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue( rtl::OUString("Height"), uno::makeAny( nHeight ) );
+    mxRowProps->setPropertyValue( OUString("Height"), uno::makeAny( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule() throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = sal_False;
-    mxRowProps->getPropertyValue( rtl::OUString("IsAutoHeight") ) >>= isAutoHeight;
+    mxRowProps->getPropertyValue( OUString("IsAutoHeight") ) >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException)
 {
     sal_Bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue( rtl::OUString("IsAutoHeight"), uno::makeAny( isAutoHeight ) );
+    mxRowProps->setPropertyValue( OUString("IsAutoHeight"), uno::makeAny( isAutoHeight ) );
 }
 
 void SAL_CALL
@@ -81,17 +81,17 @@ SwVbaRow::Select( ) throw ( uno::RuntimeException )
 
 void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw ( uno::RuntimeException )
 {
-    rtl::OUStringBuffer aRangeName;
+    OUStringBuffer aRangeName;
     aRangeName.append('A').append(sal_Int32( nStartRow + 1 ) );
     SwVbaTableHelper aTableHelper( xTextTable );
     sal_Int32 nColCount = aTableHelper.getTabColumnsCount( nEndRow );
     // FIXME: the column count > 26
     //sal_Char cCol = 'A' + nColCount - 1;
-    rtl::OUString sCol = aTableHelper.getColumnStr( nColCount - 1);
+    OUString sCol = aTableHelper.getColumnStr( nColCount - 1);
     aRangeName.append(':').append( sCol ).append( sal_Int32( nEndRow + 1 ) );
 
     uno::Reference< table::XCellRange > xCellRange( xTextTable, uno::UNO_QUERY_THROW );
-    rtl::OUString sSelRange = aRangeName.makeStringAndClear();
+    OUString sSelRange = aRangeName.makeStringAndClear();
     uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( sSelRange );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -104,20 +104,20 @@ void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule ) throw (c
     setHeight( uno::makeAny( height ) );
 }
 
-rtl::OUString
+OUString
 SwVbaRow::getServiceImplName()
 {
-    return rtl::OUString("SwVbaRow");
+    return OUString("SwVbaRow");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaRow::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Row" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Row" );
     }
     return aServiceNames;
 }

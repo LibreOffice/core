@@ -37,7 +37,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 namespace
 {
@@ -232,7 +231,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     {
         (void) exc; // unused
         OSL_FAIL(
-            ::rtl::OUStringToOString(
+            OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return -1;
     }

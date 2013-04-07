@@ -137,7 +137,7 @@ void LwpGlobalMgr::SetEditorAttrMap(sal_uInt16 nID, LwpEditorAttr* pAttr)
     m_EditorAttrMap[nID] = pAttr;
 }
 
-rtl::OUString LwpGlobalMgr::GetEditorName(sal_uInt8 nID)
+OUString LwpGlobalMgr::GetEditorName(sal_uInt8 nID)
 {
     std::map<sal_uInt16,LwpEditorAttr*>::iterator iter;
     iter = m_EditorAttrMap.find(nID);

@@ -21,7 +21,6 @@
 #include <generic/gendisp.hxx>
 #include <generic/geninst.h>
 
-using ::rtl::OUString;
 
 SalGenericDisplay::SalGenericDisplay()
 {

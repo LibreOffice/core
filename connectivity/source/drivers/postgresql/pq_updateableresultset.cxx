@@ -72,10 +72,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OStringBuffer;
-using rtl::OString;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
@@ -109,9 +105,9 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
     ConnectionSettings **ppSettings,
     PGresult *result,
-    const rtl::OUString &schema,
-    const rtl::OUString &table,
-    const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey )
+    const OUString &schema,
+    const OUString &table,
+    const com::sun::star::uno::Sequence< OUString > &primaryKey )
 {
     ConnectionSettings *pSettings = *ppSettings;
     sal_Int32 columnCount = PQnfields( result );
@@ -120,7 +116,7 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     for( int i = 0 ; i < columnCount ; i ++ )
     {
         char * name = PQfname( result, i );
-        columnNames[i] = rtl::OUString( name, strlen(name), pSettings->encoding );
+        columnNames[i] = OUString( name, strlen(name), pSettings->encoding );
     }
     Sequence< Sequence< Any > > data( rowCount );
 
@@ -136,7 +132,7 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
                 char * val = PQgetvalue( result, row, col );
 
                 aRow[col] = makeAny(
-                    rtl::OUString( val, strlen( val ) , (*ppSettings)->encoding ) );
+                    OUString( val, strlen( val ) , (*ppSettings)->encoding ) );
             }
         }
         data[row] = aRow;
@@ -269,7 +265,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
 //             OUString val;
 //             m_updateableField[i].value >>= val;
 //             buf.append( val );
-//                 rtl::OStringToOUString(val, (*m_ppSettings)->encoding ) );
+//                 OStringToOUString(val, (*m_ppSettings)->encoding ) );
         }
     }
 
@@ -505,7 +501,7 @@ void UpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw 
     m_updateableField[columnIndex-1].value <<= OUString::valueOf( x );
 }
 
-void UpdateableResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw (SQLException, RuntimeException)
+void UpdateableResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();

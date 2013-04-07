@@ -84,19 +84,19 @@ public:
 class DdeString
 {
 private:
-    rtl::OUString m_aString;
+    OUString m_aString;
 protected:
     HSZ         hString;
     DWORD       hInst;
 
 public:
                 DdeString( DWORD, const sal_Unicode* );
-                DdeString( DWORD, const rtl::OUString& );
+                DdeString( DWORD, const OUString& );
                 ~DdeString();
 
     int         operator==( HSZ );
                 operator HSZ();
-    rtl::OUString toOUString() const { return m_aString; }
+    OUString toOUString() const { return m_aString; }
 };
 
 // --------------

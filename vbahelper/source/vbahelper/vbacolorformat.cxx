@@ -66,7 +66,7 @@ ScVbaColorFormat::getRGB() throw (uno::RuntimeException)
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
         //TODO BackColor not supported
-        // m_xPropertySet->setPropertyValue( rtl::OUString("Color"), uno::makeAny( nRGB ) );
+        // m_xPropertySet->setPropertyValue( OUString("Color"), uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
         m_xPropertySet->getPropertyValue( "FillColor" ) >>= nRGB;

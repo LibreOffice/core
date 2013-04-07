@@ -29,8 +29,8 @@
 #define INCLUDED_UNITS_HXX
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
 
-namespace rtl{ class OUString; }
 namespace svgi
 {
     struct State;
@@ -61,7 +61,7 @@ namespace svgi
          @param rState current state (needed for viewport dimensions etc.)
          @param dir direction - either 'h' or 'v' for horizonal or vertical, resp.
      */
-    double convLength( const rtl::OUString& sValue, const State& rState, char dir );
+    double convLength( const OUString& sValue, const State& rState, char dir );
 
     inline double pt2mm(double fVal) { return fVal*25.4/72.0; }
     inline double pt100thmm(double fVal) { return fVal*2540.0/72.0; }

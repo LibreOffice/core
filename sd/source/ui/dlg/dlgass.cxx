@@ -253,8 +253,8 @@ public:
     void ChangePage();
     void LeavePage();
 
-    String GetUiTextForCommand (const ::rtl::OUString& aCommandURL);
-    Image GetUiIconForCommand (const ::rtl::OUString& aCommandURL);
+    String GetUiTextForCommand (const OUString& aCommandURL);
+    Image GetUiIconForCommand (const OUString& aCommandURL);
 
     DECL_LINK( StartScanHdl, void * );
     DECL_LINK( SelectFileHdl, void * );
@@ -425,8 +425,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
         String sText (GetUiTextForCommand(".uno:Open"));
         // Remove the mnemonic and add a leading space so that icon and text
         // are not too close together.
-        sText.SearchAndReplaceAll(rtl::OUString("~"),String());
-        sText.Insert(rtl::OUString(" "),0);
+        sText.SearchAndReplaceAll(OUString("~"),String());
+        sText.Insert(OUString(" "),0);
         mpPage1OpenPB->SetText(sText);
         // Place icon left of text and both centered in the button.
         mpPage1OpenPB->SetModeImage(
@@ -619,7 +619,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     UpdatePreview( sal_True );
 
     //check whether we should start with a template document initialy and preselect it
-    const ::rtl::OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
+    const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
     String aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
     if( aStandardTemplate.Len() )
     {
@@ -784,10 +784,10 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     {
         //  Get the current history item's properties.
         uno::Sequence<beans::PropertyValue> aPropertySet = aHistory[nItem];
-        rtl::OUString   sURL;
-        rtl::OUString   sFilter;
-        rtl::OUString   sTitle;
-        rtl::OUString   sPassword;
+        OUString   sURL;
+        OUString   sFilter;
+        OUString   sTitle;
+        OUString   sPassword;
         sal_uInt32 nPropertyCount = aPropertySet.getLength();
         for (sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty)
             if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL)
@@ -809,7 +809,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
         }
 
         sal_Int32 nPropCount = lProps.getLength();
-        rtl::OUString sFactoryName;
+        OUString sFactoryName;
         for( sal_Int32 i=0; i<nPropCount; ++i )
         {
             if( lProps[i].Name.compareToAscii( "DocumentService" ) == 0 &&
@@ -1569,7 +1569,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aDocFile ));
             aReq.AppendItem( SfxStringItem( SID_REFERER, aEmptyStr ) );
-            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, rtl::OUString("_default") ) );
+            aReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
             aReq.AppendItem( SfxBoolItem( SID_HIDDEN, sal_True ) );
             aReq.AppendItem( SfxBoolItem( SID_PREVIEW, bDocPreview ) );
 
@@ -1724,7 +1724,7 @@ sal_Bool AssistentDlgImpl::IsOwnFormat( const String& rPath )
 
 
 
-String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL)
+String AssistentDlgImpl::GetUiTextForCommand (const OUString& sCommandURL)
 {
     String sLabel;
     Reference<container::XNameAccess> xUICommandLabels;
@@ -1749,7 +1749,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
             if ( ! xUICommandLabels.is())
                 break;
 
-            ::rtl::OUString sString;
+            OUString sString;
             Sequence<beans::PropertyValue> aProperties;
             Any aAny (xUICommandLabels->getByName(sCommandURL));
             if (aAny >>= aProperties)
@@ -1757,7 +1757,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
                 sal_Int32 nCount (aProperties.getLength());
                 for (sal_Int32 i=0; i<nCount; i++)
                 {
-                    ::rtl::OUString sPropertyName (aProperties[i].Name);
+                    OUString sPropertyName (aProperties[i].Name);
                     if ( sPropertyName == "Label" )
                     {
                         aProperties[i].Value >>= sString;
@@ -1779,7 +1779,7 @@ String AssistentDlgImpl::GetUiTextForCommand (const ::rtl::OUString& sCommandURL
 
 
 
-Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
+Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 {
     Image aIcon;
     Reference<container::XNameAccess> xUICommandLabels;
@@ -1809,7 +1809,7 @@ Image AssistentDlgImpl::GetUiIconForCommand (const ::rtl::OUString& sCommandURL)
                 xManager->getImageManager(),
                 UNO_QUERY_THROW);
 
-            Sequence<rtl::OUString> aCommandList(1);
+            Sequence<OUString> aCommandList(1);
             aCommandList[0] = sCommandURL;
             Sequence<Reference<graphic::XGraphic> > xIconList (
                 xImageManager->getImages(0,aCommandList));
@@ -1852,7 +1852,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
         {
             sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
-                rtl::OUString("simpress") );
+                OUString("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();

@@ -48,7 +48,6 @@ using namespace com::sun::star::style;
 using namespace com::sun::star::view;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-using rtl::OUString;
 
 SFX_IMPL_CHILDWINDOW( SvxRubyChildWindow, SID_RUBY_DIALOG );
 
@@ -846,7 +845,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
         break;
         case RubyAdjust_INDENT_BLOCK:
         {
-            long nCharWidth = GetTextWidth(rtl::OUString("X"));
+            long nCharWidth = GetTextWidth(OUString("X"));
             if(nOutTextWidth < (nRightEnd - nLeftStart - nCharWidth))
             {
                 nCharWidth /= 2;
@@ -862,7 +861,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
             long nSpace = ((nRightEnd - nLeftStart) - GetTextWidth(sOutputText)) / (nCount - 1);
             for(xub_StrLen i = 0; i < nCount; i++)
             {
-                rtl::OUString sChar(sOutputText.GetChar(i));
+                OUString sChar(sOutputText.GetChar(i));
                 DrawText( Point( nLeftStart , nYOutput),  sChar);
                 long nCharWidth = GetTextWidth(sChar);
                 nLeftStart += nCharWidth + nSpace;

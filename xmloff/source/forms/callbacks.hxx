@@ -48,7 +48,7 @@ namespace xmloff
         virtual void    exportCollectionElements(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxCollection) = 0;
 
-        virtual ::rtl::OUString                             getObjectStyleName(
+        virtual OUString                             getObjectStyleName(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) = 0;
 
     protected:

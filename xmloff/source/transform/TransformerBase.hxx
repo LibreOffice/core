@@ -59,8 +59,8 @@ class XMLTransformerBase : public XMLTransformer
     ::com::sun::star::uno::Reference<
         ::com::sun::star::i18n::XCharacterClassification > xCharClass;
 
-    ::rtl::OUString m_aExtPathPrefix;
-    ::rtl::OUString m_aClass;
+    OUString m_aExtPathPrefix;
+    OUString m_aClass;
 
     SvXMLNamespaceMap           *m_pNamespaceMap;
     SvXMLNamespaceMap           *m_pReplaceNamespaceMap;
@@ -74,8 +74,8 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     XMLTransformerContext *CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
-                                      const ::rtl::OUString& rQName );
+                                      const OUString& rLocalName,
+                                      const OUString& rQName );
 
     // this method may return an empty reference when the transformer service
     // was created outside the xmloff environment.
@@ -92,17 +92,17 @@ public:
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL startElement(const ::rtl::OUString& aName,
+    virtual void SAL_CALL startElement(const OUString& aName,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL endElement(const ::rtl::OUString& aName)
+    virtual void SAL_CALL endElement(const OUString& aName)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL characters(const ::rtl::OUString& aChars)
+    virtual void SAL_CALL characters(const OUString& aChars)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
+    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL processingInstruction(const ::rtl::OUString& aTarget,
-                                       const ::rtl::OUString& aData)
+    virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                       const OUString& aData)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
@@ -110,11 +110,11 @@ public:
     // ::com::sun::star::xml::sax::XExtendedDocumentHandler
     virtual void SAL_CALL startCDATA(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endCDATA(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL comment(const ::rtl::OUString& sComment)
+    virtual void SAL_CALL comment(const OUString& sComment)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL allowLineBreak(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL unknown(const ::rtl::OUString& sString)
+    virtual void SAL_CALL unknown(const OUString& sString)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     // XInitialization
@@ -134,9 +134,9 @@ public:
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n );
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
-                                      const ::rtl::OUString& rQName,
+                                      const OUString& rQName,
                                          sal_Bool bPersistent=sal_False ) = 0;
-    virtual ::rtl::OUString GetEventName( const ::rtl::OUString& rName,
+    virtual OUString GetEventName( const OUString& rName,
                                              sal_Bool bForm = sal_False ) = 0;
 
 
@@ -144,30 +144,30 @@ public:
                 ::com::sun::star::xml::sax::XAttributeList >& rAttrList,
                          sal_uInt16 nActionMap, sal_Bool bClone );
 
-    static sal_Bool ReplaceSingleInchWithIn( ::rtl::OUString& rValue );
-    static sal_Bool ReplaceSingleInWithInch( ::rtl::OUString& rValue );
-    static sal_Bool ReplaceInchWithIn( ::rtl::OUString& rValue );
-    static sal_Bool ReplaceInWithInch( ::rtl::OUString& rValue );
+    static sal_Bool ReplaceSingleInchWithIn( OUString& rValue );
+    static sal_Bool ReplaceSingleInWithInch( OUString& rValue );
+    static sal_Bool ReplaceInchWithIn( OUString& rValue );
+    static sal_Bool ReplaceInWithInch( OUString& rValue );
 
-    sal_Bool EncodeStyleName( ::rtl::OUString& rName ) const;
-    static sal_Bool DecodeStyleName( ::rtl::OUString& rName );
-    static sal_Bool NegPercent( ::rtl::OUString& rValue );
+    sal_Bool EncodeStyleName( OUString& rName ) const;
+    static sal_Bool DecodeStyleName( OUString& rName );
+    static sal_Bool NegPercent( OUString& rValue );
 
-    sal_Bool AddNamespacePrefix( ::rtl::OUString& rName,
+    sal_Bool AddNamespacePrefix( OUString& rName,
                                  sal_uInt16 nPrefix ) const;
-    sal_Bool RemoveNamespacePrefix( ::rtl::OUString& rName,
+    sal_Bool RemoveNamespacePrefix( OUString& rName,
                                     sal_uInt16 nPrefixOnly=0xffffU ) const;
 
-    sal_Bool ConvertURIToOASIS( ::rtl::OUString& rURI,
+    sal_Bool ConvertURIToOASIS( OUString& rURI,
                                 sal_Bool bSupportPackage=sal_False ) const;
-    sal_Bool ConvertURIToOOo( ::rtl::OUString& rURI,
+    sal_Bool ConvertURIToOOo( OUString& rURI,
                                 sal_Bool bSupportPackage=sal_False ) const;
 
     /** renames the given rOutAttributeValue if one of the parameters contains a
         matching token in its lower 16 bits.  The value is converted to the
         token that is given in the upper 16 bits of the matching parameter.
      */
-    sal_Bool RenameAttributeValue( ::rtl::OUString& rOutAttributeValue,
+    sal_Bool RenameAttributeValue( OUString& rOutAttributeValue,
                                    sal_Int32 nParam1,
                                    sal_Int32 nParam2,
                                    sal_Int32 nParam3 );
@@ -180,16 +180,16 @@ public:
             was found.
         @return <TRUE/> if the given string was changed
      */
-    static bool ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime );
+    static bool ConvertRNGDateTimeToISO( OUString& rDateTime );
 
-    ::xmloff::token::XMLTokenEnum GetToken( const ::rtl::OUString& rStr ) const;
+    ::xmloff::token::XMLTokenEnum GetToken( const OUString& rStr ) const;
 
     const XMLTransformerContext *GetCurrentContext() const;
     const XMLTransformerContext *GetAncestorContext( sal_uInt32 i ) const;
 
     // C++
-    inline void SetClass( const ::rtl::OUString& r ) { m_aClass = r; }
-    inline const ::rtl::OUString& GetClass() const { return m_aClass; }
+    inline void SetClass( const OUString& r ) { m_aClass = r; }
+    inline const OUString& GetClass() const { return m_aClass; }
 
     bool isWriter() const;
 

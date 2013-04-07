@@ -456,7 +456,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         if( pCurToken && nCurTokenLen )
-            aToken = rtl::OUString(pCurToken, nCurTokenLen);
+            aToken = OUString(pCurToken, nCurTokenLen);
         else
             aToken.Erase();
 

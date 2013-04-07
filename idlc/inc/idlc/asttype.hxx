@@ -24,7 +24,7 @@
 class AstType : public AstDeclaration
 {
 public:
-    AstType(const NodeType type, const ::rtl::OString& name, AstScope* pScope)
+    AstType(const NodeType type, const OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         {}
 

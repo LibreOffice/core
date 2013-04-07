@@ -22,41 +22,41 @@
 
 using namespace http_dav_ucp;
 
-const ::rtl::OUString DAVProperties::CREATIONDATE =
-                ::rtl::OUString::createFromAscii( "DAV:creationdate" );
-const ::rtl::OUString DAVProperties::DISPLAYNAME =
-                ::rtl::OUString::createFromAscii( "DAV:displayname" );
-const ::rtl::OUString DAVProperties::GETCONTENTLANGUAGE =
-                ::rtl::OUString::createFromAscii( "DAV:getcontentlanguage" );
-const ::rtl::OUString DAVProperties::GETCONTENTLENGTH =
-                ::rtl::OUString::createFromAscii( "DAV:getcontentlength" );
-const ::rtl::OUString DAVProperties::GETCONTENTTYPE =
-                ::rtl::OUString::createFromAscii( "DAV:getcontenttype" );
-const ::rtl::OUString DAVProperties::GETETAG =
-                ::rtl::OUString::createFromAscii( "DAV:getetag" );
-const ::rtl::OUString DAVProperties::GETLASTMODIFIED =
-                ::rtl::OUString::createFromAscii( "DAV:getlastmodified" );
-const ::rtl::OUString DAVProperties::LOCKDISCOVERY =
-                ::rtl::OUString::createFromAscii( "DAV:lockdiscovery" );
-const ::rtl::OUString DAVProperties::RESOURCETYPE =
-                ::rtl::OUString::createFromAscii( "DAV:resourcetype" );
-const ::rtl::OUString DAVProperties::SUPPORTEDLOCK =
-                ::rtl::OUString::createFromAscii( "DAV:supportedlock" );
+const OUString DAVProperties::CREATIONDATE =
+                OUString::createFromAscii( "DAV:creationdate" );
+const OUString DAVProperties::DISPLAYNAME =
+                OUString::createFromAscii( "DAV:displayname" );
+const OUString DAVProperties::GETCONTENTLANGUAGE =
+                OUString::createFromAscii( "DAV:getcontentlanguage" );
+const OUString DAVProperties::GETCONTENTLENGTH =
+                OUString::createFromAscii( "DAV:getcontentlength" );
+const OUString DAVProperties::GETCONTENTTYPE =
+                OUString::createFromAscii( "DAV:getcontenttype" );
+const OUString DAVProperties::GETETAG =
+                OUString::createFromAscii( "DAV:getetag" );
+const OUString DAVProperties::GETLASTMODIFIED =
+                OUString::createFromAscii( "DAV:getlastmodified" );
+const OUString DAVProperties::LOCKDISCOVERY =
+                OUString::createFromAscii( "DAV:lockdiscovery" );
+const OUString DAVProperties::RESOURCETYPE =
+                OUString::createFromAscii( "DAV:resourcetype" );
+const OUString DAVProperties::SUPPORTEDLOCK =
+                OUString::createFromAscii( "DAV:supportedlock" );
 
-const ::rtl::OUString DAVProperties::EXECUTABLE =
-                ::rtl::OUString::createFromAscii(
+const OUString DAVProperties::EXECUTABLE =
+                OUString::createFromAscii(
                                 "http://apache.org/dav/props/executable" );
 
 // -------------------------------------------------------------------
 // static
-void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
+void DAVProperties::createSerfPropName( const OUString & rFullName,
                                         SerfPropName & rName )
 {
     if ( rFullName.startsWith( "DAV:" ) )
     {
         rName.nspace = "DAV:";
         rName.name
-            = strdup( rtl::OUStringToOString(
+            = strdup( OUStringToOString(
                         rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
                                         RTL_TEXTENCODING_UTF8 ) );
     }
@@ -64,7 +64,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
     {
         rName.nspace = "http://apache.org/dav/props/";
         rName.name
-            = strdup( rtl::OUStringToOString(
+            = strdup( OUStringToOString(
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
@@ -74,7 +74,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
     {
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
-            = strdup( rtl::OUStringToOString(
+            = strdup( OUStringToOString(
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
@@ -84,8 +84,8 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
     {
         // Support for 3rd party namespaces/props
 
-        rtl::OString aFullName
-            = rtl::OUStringToOString( rFullName, RTL_TEXTENCODING_UTF8 );
+        OString aFullName
+            = OUStringToOString( rFullName, RTL_TEXTENCODING_UTF8 );
 
         // Format: <prop:the_propname xmlns:prop="the_namespace">
 
@@ -102,7 +102,7 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
         // Add our namespace to our own properties.
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
-            = strdup( rtl::OUStringToOString( rFullName,
+            = strdup( OUStringToOString( rFullName,
                                               RTL_TEXTENCODING_UTF8 ) );
     }
 }
@@ -111,12 +111,12 @@ void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
 // static
 void DAVProperties::createUCBPropName( const char * nspace,
                                        const char * name,
-                                       rtl::OUString & rFullName )
+                                       OUString & rFullName )
 {
-    rtl::OUString aNameSpace
-        = rtl::OStringToOUString( nspace, RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aName
-        = rtl::OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
+    OUString aNameSpace
+        = OStringToOUString( nspace, RTL_TEXTENCODING_UTF8 );
+    OUString aName
+        = OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
 
     if ( !aNameSpace.getLength() )
     {
@@ -135,7 +135,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
              DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) )
         {
-            aNameSpace = rtl::OUString( "DAV:" );
+            aNameSpace = OUString( "DAV:" );
         }
     }
 
@@ -162,11 +162,11 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = rtl::OUString::createFromAscii( "<prop:" );
+        rFullName  = OUString::createFromAscii( "<prop:" );
         rFullName += aName;
-        rFullName += rtl::OUString::createFromAscii( " xmlns:prop=\"" );
+        rFullName += OUString::createFromAscii( " xmlns:prop=\"" );
         rFullName += aNameSpace;
-        rFullName += rtl::OUString::createFromAscii( "\">" );
+        rFullName += OUString::createFromAscii( "\">" );
     }
 }
 

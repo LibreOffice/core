@@ -43,7 +43,7 @@ class TextualDataProvider : public ::cppu::WeakImplHelper1<
         >
 {
 public:
-    TextualDataProvider( const uno::Sequence< ::rtl::OUString >& rTextSequence )
+    TextualDataProvider( const uno::Sequence< OUString >& rTextSequence )
         : m_aTextSequence( rTextSequence )
     {
     }
@@ -52,14 +52,14 @@ public:
     }
 
     //XTextualDataSequence
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getTextualData()
+    virtual uno::Sequence< OUString > SAL_CALL getTextualData()
         throw ( uno::RuntimeException)
     {
         return m_aTextSequence;
     }
 
 private: //member
-    uno::Sequence< ::rtl::OUString > m_aTextSequence;
+    uno::Sequence< OUString > m_aTextSequence;
 };
 
 //.............................................................................

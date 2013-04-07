@@ -62,7 +62,7 @@ class SwSmartTagPopup : public PopupMenu
 
 public:
     SwSmartTagPopup( SwView* _pSwView,
-                     ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                     ::com::sun::star::uno::Sequence< OUString >& rSmartTagTypes,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
                      ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );
 

@@ -96,7 +96,7 @@ class SpellCache :
                         xFlushLstnr;
     FlushListener      *pFlushLstnr;
 
-    typedef std::set< ::rtl::OUString >             WordList_t;
+    typedef std::set< OUString >             WordList_t;
     typedef std::map< LanguageType, WordList_t >    LangWordList_t;
     LangWordList_t  aWordLists;
 
@@ -111,8 +111,8 @@ public:
     // Flushable
     virtual void    Flush();
 
-    void    AddWord( const ::rtl::OUString& rWord, LanguageType nLang );
-    bool    CheckWord( const ::rtl::OUString& rWord, LanguageType nLang );
+    void    AddWord( const OUString& rWord, LanguageType nLang );
+    bool    CheckWord( const OUString& rWord, LanguageType nLang );
 };
 
 

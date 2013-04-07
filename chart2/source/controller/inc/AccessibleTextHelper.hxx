@@ -82,9 +82,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+    virtual OUString SAL_CALL getAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+    virtual OUString SAL_CALL getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet()
         throw (::com::sun::star::uno::RuntimeException);

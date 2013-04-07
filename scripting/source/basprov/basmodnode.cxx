@@ -44,7 +44,7 @@ namespace basprov
     // =============================================================================
 
     BasicModuleNodeImpl::BasicModuleNodeImpl( const Reference< XComponentContext >& rxContext,
-        const ::rtl::OUString& sScriptingContext, SbModule* pModule, bool isAppScript )
+        const OUString& sScriptingContext, SbModule* pModule, bool isAppScript )
         :m_xContext( rxContext )
         ,m_sScriptingContext( sScriptingContext )
         ,m_pModule( pModule )
@@ -62,11 +62,11 @@ namespace basprov
     // XBrowseNode
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicModuleNodeImpl::getName(  ) throw (RuntimeException)
+    OUString BasicModuleNodeImpl::getName(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
 
-        ::rtl::OUString sModuleName;
+        OUString sModuleName;
         if ( m_pModule )
             sModuleName = m_pModule->GetName();
 

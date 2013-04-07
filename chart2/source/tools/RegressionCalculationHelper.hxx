@@ -25,7 +25,7 @@
 #include <functional>
 #include <vector>
 
-#define NUMBER_TO_STR(number) (::rtl::OStringToOUString(::rtl::math::doubleToString( \
+#define NUMBER_TO_STR(number) (OStringToOUString(::rtl::math::doubleToString( \
           number, rtl_math_StringFormat_G, 4, '.', true ),RTL_TEXTENCODING_ASCII_US ))
 
 #define UC_SPACE (sal_Unicode(' '))

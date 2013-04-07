@@ -116,7 +116,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     AbstractSdStartPresDlg* pDlg = pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : 0;
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
-        rtl::OUString aPage;
+        OUString aPage;
         long    nValue32;
         sal_Bool bValue;
         bool    bValuesChanged = sal_False;

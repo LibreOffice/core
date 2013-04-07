@@ -110,7 +110,7 @@ public:
     void ClearPageSet (void);
 
     using SfxShell::SetHelpId;
-    void SetHelpId( const rtl::OString& aId );
+    void SetHelpId( const OString& aId );
 
     /** Mark the preview that belongs to the given index as not up-to-date
         anymore with respect to page content or preview size.

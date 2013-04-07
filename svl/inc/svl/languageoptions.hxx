@@ -96,14 +96,14 @@ public:
 class SVL_DLLPUBLIC SvtSystemLanguageOptions : public utl::ConfigItem
 {
 private:
-    ::rtl::OUString m_sWin16SystemLocale;
+    OUString m_sWin16SystemLocale;
 
 public:
     SvtSystemLanguageOptions();
     ~SvtSystemLanguageOptions();
 
     virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
 
     LanguageType GetWin16SystemLanguage();
 };

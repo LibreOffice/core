@@ -119,7 +119,7 @@ namespace dbaui
 
         // enable editing for tables/views and queries
         virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-        virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
         virtual sal_Bool    DoubleClickHdl();
 

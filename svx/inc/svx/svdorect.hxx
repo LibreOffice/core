@@ -111,7 +111,7 @@ public:
     virtual void NbcShear(const Point& rRef, long nWink, double tn, bool bVShear);
 
     virtual bool DoMacro(const SdrObjMacroHitRec& rRec);
-    virtual rtl::OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
+    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
 
     virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;

@@ -33,8 +33,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 using ::std::vector;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 
 // ============================================================================

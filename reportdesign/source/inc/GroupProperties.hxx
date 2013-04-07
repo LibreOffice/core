@@ -26,7 +26,7 @@ namespace rptshared
     struct GroupProperties
     {
         ::sal_Int32                                                                 m_nGroupInterval;
-        ::rtl::OUString                                                             m_sExpression;
+        OUString                                                             m_sExpression;
         ::sal_Int16                                                                 m_nGroupOn;
         ::sal_Int16                                                                 m_nKeepTogether;
         ::sal_Bool                                                                  m_eSortAscending;

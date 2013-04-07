@@ -80,39 +80,39 @@ namespace drawinglayer
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
-            const ::rtl::OUString& getNamePropertyObjectTransformation()
+            const OUString& getNamePropertyObjectTransformation()
             {
-                static ::rtl::OUString s_sNameProperty("ObjectTransformation");
+                static OUString s_sNameProperty("ObjectTransformation");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyViewTransformation()
+            const OUString& getNamePropertyViewTransformation()
             {
-                static ::rtl::OUString s_sNameProperty("ViewTransformation");
+                static OUString s_sNameProperty("ViewTransformation");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyViewport()
+            const OUString& getNamePropertyViewport()
             {
-                static ::rtl::OUString s_sNameProperty("Viewport");
+                static OUString s_sNameProperty("Viewport");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyTime()
+            const OUString& getNamePropertyTime()
             {
-                static ::rtl::OUString s_sNameProperty("Time");
+                static OUString s_sNameProperty("Time");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyVisualizedPage()
+            const OUString& getNamePropertyVisualizedPage()
             {
-                static ::rtl::OUString s_sNameProperty("VisualizedPage");
+                static OUString s_sNameProperty("VisualizedPage");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyReducedDisplayQuality()
+            const OUString& getNamePropertyReducedDisplayQuality()
             {
-                static ::rtl::OUString s_sNameProperty("ReducedDisplayQuality");
+                static OUString s_sNameProperty("ReducedDisplayQuality");
                 return s_sNameProperty;
             }
 

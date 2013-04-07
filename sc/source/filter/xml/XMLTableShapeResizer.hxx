@@ -32,7 +32,7 @@ class ScDocument;
 struct ScMyToFixupOLE
 {
     com::sun::star::uno::Reference <com::sun::star::drawing::XShape> xShape;
-    rtl::OUString sRangeList;
+    OUString sRangeList;
 };
 
 typedef std::list<ScMyToFixupOLE> ScMyToFixupOLEs;
@@ -44,15 +44,15 @@ class ScMyOLEFixer
     ScChartListenerCollection*  pCollection;
 
     void CreateChartListener(ScDocument* pDoc,
-        const rtl::OUString& rName,
-        const rtl::OUString& rRangeList);
+        const OUString& rName,
+        const OUString& rRangeList);
 public:
     ScMyOLEFixer(ScXMLImport& rImport);
     ~ScMyOLEFixer();
 
     static sal_Bool IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape);
     void    AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                   const rtl::OUString &rRangeList);
+                   const OUString &rRangeList);
     void    FixupOLEs();
 };
 

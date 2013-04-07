@@ -36,8 +36,8 @@ SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const com::sun::star::uno::Reference<com::sun::star::text::XTextRange> rRange,
                                   const com::sun::star::uno::Reference<com::sun::star::frame::XController> rController,
                                   const com::sun::star::lang::Locale rLocale,
-                                  const rtl::OUString& rApplicationName,
-                                  const rtl::OUString& rRangeText ) :
+                                  const OUString& rApplicationName,
+                                  const OUString& rRangeText ) :
     SfxPoolItem( nId ),
     maActionComponentsSequence( rActionComponentsSequence ),
     maActionIndicesSequence( rActionIndicesSequence ),

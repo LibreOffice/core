@@ -32,8 +32,6 @@
 #include <xmloff/xmltkmap.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::xmloff::token;
 

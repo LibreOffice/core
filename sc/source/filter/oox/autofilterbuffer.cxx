@@ -41,8 +41,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -181,7 +179,7 @@ void ApiFilterSettings::appendField( bool bAnd, sal_Int32 nOperator, const OUStr
     rFilterField.Values[0].StringValue = rValue;
 }
 
-void ApiFilterSettings::appendField( bool bAnd, const std::vector<rtl::OUString>& rValues )
+void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rValues )
 {
     maFilterFields.resize( maFilterFields.size() + 1 );
     TableFilterField3& rFilterField = maFilterFields.back();

@@ -43,7 +43,7 @@ namespace rptxml
         ::std::vector<sal_Int32>                                                            m_aHeight;
         ::std::vector<sal_Int32>                                                            m_aWidth;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
-        ::rtl::OUString                                                                     m_sStyleName;
+        OUString                                                                     m_sStyleName;
         sal_Int32                                                                           m_nColSpan;
         sal_Int32                                                                           m_nRowSpan;
         sal_Int32                                                                           m_nRowIndex;
@@ -56,14 +56,14 @@ namespace rptxml
 
         OXMLTable( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                     );
         virtual ~OXMLTable();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual void EndElement();

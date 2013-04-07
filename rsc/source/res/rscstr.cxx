@@ -234,7 +234,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                 {
                     if( pTC )
                     {
-                        rtl::OStringBuffer aMsg(pHS->getString(
+                        OStringBuffer aMsg(pHS->getString(
                             pRefClass->GetId()));
                         aMsg.append(' ').append(aId.GetName());
                         aError = WRN_STR_REFNOTFOUND;

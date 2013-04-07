@@ -28,7 +28,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 namespace mysqlc_sdbc_driver
 {
@@ -36,11 +35,11 @@ namespace mysqlc_sdbc_driver
 void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( ": feature not implemented." );
+    const OUString sMessage = OUString::createFromAscii( _pAsciiFeatureName ) + OUString( ": feature not implemented." );
     throw SQLException(
         sMessage,
         _rxContext,
-        ::rtl::OUString("HYC00"),
+        OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -50,11 +49,11 @@ void throwFeatureNotImplementedException( const sal_Char* _pAsciiFeatureName, co
 void throwInvalidArgumentException( const sal_Char* _pAsciiFeatureName, const Reference< XInterface >& _rxContext, const Any* _pNextException )
     throw (SQLException)
 {
-    const ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( _pAsciiFeatureName ) + ::rtl::OUString( ": invalid arguments." );
+    const OUString sMessage = OUString::createFromAscii( _pAsciiFeatureName ) + OUString( ": invalid arguments." );
     throw SQLException(
         sMessage,
         _rxContext,
-        ::rtl::OUString("HYC00"),
+        OUString("HYC00"),
         0,
         _pNextException ? *_pNextException : Any()
     );
@@ -152,14 +151,14 @@ int mysqlToOOOType(int cppConnType)
 }
 
 
-::rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
+OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
-    return ::rtl::OUString( _string.c_str(), _string.size(), encoding );
+    return OUString( _string.c_str(), _string.size(), encoding );
 }
 
-::std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
+::std::string convert(const OUString& _string, const rtl_TextEncoding encoding)
 {
-    return ::std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
+    return ::std::string( OUStringToOString( _string, encoding ).getStr() );
 }
 
 

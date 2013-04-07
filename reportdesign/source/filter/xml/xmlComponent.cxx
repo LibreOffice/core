@@ -45,7 +45,7 @@ namespace rptxml
     DBG_NAME( rpt_OXMLComponent )
 OXMLComponent::OXMLComponent( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XReportComponent > & _xComponent
                 ) :
@@ -65,10 +65,10 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
     {
         try
         {
-            ::rtl::OUString sLocalName;
-            const ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {

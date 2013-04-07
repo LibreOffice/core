@@ -26,7 +26,6 @@
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <toolkit/helper/servicenames.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -103,9 +102,9 @@ public:
     virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setHasChildrenOnDemand( ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDisplayValue( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setNodeGraphicURL( const ::rtl::OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setExpandedGraphicURL( const ::rtl::OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setCollapsedGraphicURL( const ::rtl::OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setNodeGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
 
     // XTreeNode
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
@@ -114,9 +113,9 @@ public:
     virtual ::sal_Int32 SAL_CALL getIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getDisplayValue(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);

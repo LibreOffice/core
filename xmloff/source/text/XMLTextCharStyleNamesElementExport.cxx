@@ -28,7 +28,6 @@ namespace com { namespace sun { namespace star {
 
 using namespace ::com::sun::star::uno;
 using ::com::sun::star::beans::XPropertySet;
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 
 XMLTextCharStyleNamesElementExport::XMLTextCharStyleNamesElementExport(

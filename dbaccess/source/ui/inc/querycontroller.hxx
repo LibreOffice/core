@@ -70,11 +70,11 @@ namespace dbaui
         /// if we're editing an existing view, this is non-NULL
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAlterView >         m_xAlterView;
 
-        ::rtl::OUString m_sStatement;           // contains the current sql statement
-        ::rtl::OUString m_sUpdateCatalogName;   // catalog for update data
-        ::rtl::OUString m_sUpdateSchemaName;    // schema for update data
-        ::rtl::OUString m_sUpdateTableName;     // table for update data
-        mutable ::rtl::OUString
+        OUString m_sStatement;           // contains the current sql statement
+        OUString m_sUpdateCatalogName;   // catalog for update data
+        OUString m_sUpdateSchemaName;    // schema for update data
+        OUString m_sUpdateTableName;     // table for update data
+        mutable OUString
                         m_sName;                // name of the query
 
         sal_Int64       m_nLimit;           // the limit of the query result (All==-1)
@@ -112,9 +112,9 @@ namespace dbaui
 
         void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const;
         void loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings );
-        ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
+        OUString translateStatement( bool _bFireStatementChange = true );
 
-        ::rtl::OUString getDefaultName() const;
+        OUString getDefaultName() const;
 
         void execute_QueryPropDlg();
 
@@ -127,7 +127,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         virtual void            reconnect( sal_Bool _bUI );
-        virtual ::rtl::OUString getPrivateTitle( ) const;
+        virtual OUString getPrivateTitle( ) const;
 
         OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
@@ -148,7 +148,7 @@ namespace dbaui
         sal_Bool        isDistinct()            const { return m_bDistinct; }
         sal_Int64       getLimit()              const { return m_nLimit; }
 
-        ::rtl::OUString getStatement()          const { return m_sStatement; }
+        OUString getStatement()          const { return m_sStatement; }
         sal_Int32       getSplitPos()           const { return m_nSplitPos;}
         sal_Int32       getVisibleRows()        const { return m_nVisibleRows; }
 
@@ -179,11 +179,11 @@ namespace dbaui
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -227,7 +227,7 @@ namespace dbaui
         bool    impl_setViewMode( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
         /// sets m_sStatement, and notifies our respective property change listeners
-        void    setStatement_fireEvent( const ::rtl::OUString& _rNewStatement, bool _bFireStatementChange = true );
+        void    setStatement_fireEvent( const OUString& _rNewStatement, bool _bFireStatementChange = true );
         /// sets the m_bEscapeProcessing member, and notifies our respective property change listeners
         void    setEscapeProcessing_fireEvent( const sal_Bool _bEscapeProcessing );
 

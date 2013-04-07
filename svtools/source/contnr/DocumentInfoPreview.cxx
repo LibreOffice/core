@@ -58,12 +58,12 @@ void ODocumentInfoPreview::Resize() {
 }
 
 void ODocumentInfoPreview::clear() {
-    m_pEditWin.SetText(rtl::OUString());
+    m_pEditWin.SetText(OUString());
 }
 
 void ODocumentInfoPreview::fill(
     css::uno::Reference< css::document::XDocumentProperties > const & xDocProps,
-    rtl::OUString const & rURL)
+    OUString const & rURL)
 {
     assert(xDocProps.is());
 
@@ -102,15 +102,15 @@ void ODocumentInfoPreview::fill(
         user->getPropertySetInfo());
     css::uno::Sequence< css::beans::Property > props(info->getProperties());
     for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-        rtl::OUString name(props[i].Name);
+        OUString name(props[i].Name);
         css::uno::Any aAny(user->getPropertyValue(name));
         css::uno::Reference< css::script::XTypeConverter > conv(
             css::script::Converter::create(
                 comphelper::getProcessComponentContext()));
-        rtl::OUString value;
+        OUString value;
         try {
             value = conv->convertToSimpleType(aAny, css::uno::TypeClass_STRING).
-                get< rtl::OUString >();
+                get< OUString >();
         } catch (css::script::CannotConvertException & e) {
             SAL_INFO("svtools.contnr", "ignored CannotConvertException " << e.Message);
         }
@@ -124,12 +124,12 @@ void ODocumentInfoPreview::fill(
 }
 
 void ODocumentInfoPreview::insertEntry(
-    rtl::OUString const & title, rtl::OUString const & value)
+    OUString const & title, OUString const & value)
 {
     if (!m_pEditWin.GetText().isEmpty()) {
-        m_pEditWin.InsertText(rtl::OUString("\n\n"));
+        m_pEditWin.InsertText(OUString("\n\n"));
     }
-    rtl::OUString caption(title + rtl::OUString(":\n"));
+    OUString caption(title + OUString(":\n"));
     m_pEditWin.InsertText(caption);
     m_pEditWin.SetAttrib(
         TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 2,
@@ -137,7 +137,7 @@ void ODocumentInfoPreview::insertEntry(
     m_pEditWin.InsertText(value);
 }
 
-void ODocumentInfoPreview::insertNonempty(long id, rtl::OUString const & value)
+void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)
 {
     if (!value.isEmpty()) {
         insertEntry(m_pInfoTable->GetString(id), value);
@@ -153,7 +153,7 @@ void ODocumentInfoPreview::insertDateTime(
             value.Hours, value.Minutes, value.Seconds, value.HundredthSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
         const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-        rtl::OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
+        OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
         buf.append(rLocaleWrapper.getTime(aToolsDT));
         insertEntry(m_pInfoTable->GetString(id), buf.makeStringAndClear());

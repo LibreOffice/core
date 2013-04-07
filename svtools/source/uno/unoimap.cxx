@@ -109,9 +109,9 @@ public:
     virtual Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents(  ) throw(RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( RuntimeException );
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
 
 private:
     static PropertySetInfo* createPropertySetInfo( sal_uInt16 nType );
@@ -119,11 +119,11 @@ private:
 
     sal_uInt16 mnType;
 
-    ::rtl::OUString maURL;
-    ::rtl::OUString maAltText;
-    ::rtl::OUString maDesc;
-    ::rtl::OUString maTarget;
-    ::rtl::OUString maName;
+    OUString maURL;
+    OUString maAltText;
+    OUString maDesc;
+    OUString maTarget;
+    OUString maName;
     sal_Bool mbIsActive;
     awt::Rectangle maBoundary;
     awt::Point maCenter;
@@ -141,11 +141,11 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry aPolygonObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
                 { MAP_LEN( "Polygon" ),     HANDLE_POLYGON,     SEQTYPE(::getCppuType((const PointSequence*)0)),    0, 0 },
                 {0,0,0,0,0,0}
@@ -157,11 +157,11 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry aCircleObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Name" ),            HANDLE_NAME,        &::getCppuType((const OUString*)0),     0, 0 },
                 { MAP_LEN( "IsActive" ),        HANDLE_ISACTIVE,    &::getBooleanCppuType(),                0, 0 },
                 { MAP_LEN( "Center" ),      HANDLE_CENTER,      &::getCppuType((const awt::Point*)0),   0, 0 },
                 { MAP_LEN( "Radius" ),      HANDLE_RADIUS,      &::getCppuType((const sal_Int32*)0),    0, 0 },
@@ -175,11 +175,11 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
         {
             static PropertyMapEntry aRectangleObj_Impl[] =
             {
-                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
-                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const ::rtl::OUString*)0),     0, 0 },
-                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
-                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
-                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const ::rtl::OUString*)0), 0, 0 },
+                { MAP_LEN( "URL" ),         HANDLE_URL,         &::getCppuType((const OUString*)0), 0, 0 },
+                { MAP_LEN( "Title" ),       HANDLE_TITLE,       &::getCppuType((const OUString*)0),     0, 0 },
+                { MAP_LEN( "Description" ), HANDLE_DESCRIPTION, &::getCppuType((const OUString*)0), 0, 0 },
+                { MAP_LEN( "Target" ),      HANDLE_TARGET,      &::getCppuType((const OUString*)0), 0, 0 },
+                { MAP_LEN( "Name" ),        HANDLE_NAME,        &::getCppuType((const OUString*)0), 0, 0 },
                 { MAP_LEN( "IsActive" ),    HANDLE_ISACTIVE,    &::getBooleanCppuType(),            0, 0 },
                 { MAP_LEN( "Boundary" ),    HANDLE_BOUNDARY,    &::getCppuType((const awt::Rectangle*)0),   0, 0 },
                 {0,0,0,0,0,0}
@@ -384,10 +384,10 @@ uno::Sequence< sal_Int8 > SAL_CALL SvUnoImageMapObject::getImplementationId()
 
 // XServiceInfo
 
-sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  ::rtl::OUString& ServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  OUString& ServiceName ) throw(RuntimeException)
 {
-    const Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    const Sequence< OUString > aSNL( getSupportedServiceNames() );
+    const OUString * pArray = aSNL.getConstArray();
 
     const sal_Int32 nCount = aSNL.getLength();
     for( sal_Int32 i = 0; i < nCount; i++ )
@@ -397,38 +397,38 @@ sal_Bool SAL_CALL SvUnoImageMapObject::supportsService( const  ::rtl::OUString& 
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
     throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.image.ImageMapObject" );
+    Sequence< OUString > aSNS( 2 );
+    aSNS.getArray()[0] = OUString("com.sun.star.image.ImageMapObject" );
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
     default:
-        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapPolygonObject" );
+        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapPolygonObject" );
         break;
     case IMAP_OBJ_RECTANGLE:
-        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapRectangleObject" );
+        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapRectangleObject" );
         break;
     case IMAP_OBJ_CIRCLE:
-        aSNS.getArray()[1] = ::rtl::OUString("com.sun.star.image.ImageMapCircleObject" );
+        aSNS.getArray()[1] = OUString("com.sun.star.image.ImageMapCircleObject" );
         break;
     }
     return aSNS;
 }
 
-::rtl::OUString SAL_CALL SvUnoImageMapObject::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL SvUnoImageMapObject::getImplementationName() throw(RuntimeException)
 {
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
     default:
-        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapPolygonObject");
+        return OUString("org.openoffice.comp.svt.ImageMapPolygonObject");
     case IMAP_OBJ_CIRCLE:
-        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapCircleObject");
+        return OUString("org.openoffice.comp.svt.ImageMapCircleObject");
     case IMAP_OBJ_RECTANGLE:
-        return ::rtl::OUString("org.openoffice.comp.svt.ImageMapRectangleObject");
+        return OUString("org.openoffice.comp.svt.ImageMapRectangleObject");
     }
 }
 
@@ -571,12 +571,12 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw( RuntimeException );
 
     // XSerivceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw( RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( RuntimeException );
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(  ) throw( RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException );
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
 
 private:
-    ::rtl::OUString maName;
+    OUString maName;
 
     std::list< SvUnoImageMapObject* > maObjectList;
 };
@@ -718,17 +718,17 @@ sal_Bool SAL_CALL SvUnoImageMap::hasElements(  ) throw(RuntimeException)
 }
 
 // XSerivceInfo
-::rtl::OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
+OUString SAL_CALL SvUnoImageMap::getImplementationName(  )
     throw(RuntimeException)
 {
-    return ::rtl::OUString( "org.openoffice.comp.svt.SvUnoImageMap" );
+    return OUString( "org.openoffice.comp.svt.SvUnoImageMap" );
 }
 
-sal_Bool SAL_CALL SvUnoImageMap::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SvUnoImageMap::supportsService( const OUString& ServiceName )
     throw(RuntimeException)
 {
-    const Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    const Sequence< OUString > aSNL( getSupportedServiceNames() );
+    const OUString * pArray = aSNL.getConstArray();
 
     const sal_Int32 nCount = aSNL.getLength();
     for( sal_Int32 i = 0; i < nCount; i++ )
@@ -738,11 +738,11 @@ sal_Bool SAL_CALL SvUnoImageMap::supportsService( const ::rtl::OUString& Service
     return sal_False;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
+Sequence< OUString > SAL_CALL SvUnoImageMap::getSupportedServiceNames(  )
     throw(RuntimeException)
 {
-    const ::rtl::OUString aSN( "com.sun.star.image.ImageMap" );
-    return Sequence< ::rtl::OUString >( &aSN, 1 );
+    const OUString aSN( "com.sun.star.image.ImageMap" );
+    return Sequence< OUString >( &aSN, 1 );
 }
 
 sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const

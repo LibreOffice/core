@@ -60,7 +60,7 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >
         createTitle(  eTitleType nTitleIndex
-                    , const rtl::OUString& rTitleText
+                    , const OUString& rTitleText
                     , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xModel
                     , const ::com::sun::star::uno::Reference<
@@ -71,9 +71,9 @@ public:
                     , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xModel );
 
-    static rtl::OUString getCompleteString( const ::com::sun::star::uno::Reference<
+    static OUString getCompleteString( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XTitle >& xTitle );
-    static void setCompleteString( const rtl::OUString& rNewText
+    static void setCompleteString( const OUString& rNewText
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >& xTitle
         , const ::com::sun::star::uno::Reference<

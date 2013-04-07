@@ -54,7 +54,6 @@ using namespace osl;
 
 using ::std::vector;
 
-using ::rtl::OStringToOUString;
 
 std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 {

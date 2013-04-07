@@ -72,30 +72,30 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EFormsPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL EFormsPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.EFormsPropertyHandler" );
+        return OUString( "com.sun.star.comp.extensions.EFormsPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.XMLFormsPropertyHandler" );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.form.inspection.XMLFormsPropertyHandler" );
         return aSupported;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString EFormsPropertyHandler::getModelNamePropertyValue() const
+    OUString EFormsPropertyHandler::getModelNamePropertyValue() const
     {
-        ::rtl::OUString sModelName = m_pHelper->getCurrentFormModelName();
+        OUString sModelName = m_pHelper->getCurrentFormModelName();
         if ( sModelName.isEmpty() )
             sModelName = m_sBindingLessModelName;
         return sModelName;
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EFormsPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EFormsPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -131,11 +131,11 @@ namespace pcr
                 if ( xBindingProps.is() )
                 {
                     aReturn = xBindingProps->getPropertyValue( _rPropertyName );
-                    DBG_ASSERT( aReturn.getValueType().equals( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ),
+                    DBG_ASSERT( aReturn.getValueType().equals( ::getCppuType( static_cast< OUString* >( NULL ) ) ),
                         "EFormsPropertyHandler::getPropertyValue: invalid BindingExpression value type!" );
                 }
                 else
-                    aReturn <<= ::rtl::OUString();
+                    aReturn <<= OUString();
             }
             break;
 
@@ -147,9 +147,9 @@ namespace pcr
         catch( const Exception& )
         {
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "EFormsPropertyHandler::getPropertyValue: caught an exception!" );
+            OString sMessage( "EFormsPropertyHandler::getPropertyValue: caught an exception!" );
             sMessage += "\n(have been asked for the \"";
-            sMessage += ::rtl::OString( _rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
+            sMessage += OString( _rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
             sMessage += "\" property.)";
             OSL_FAIL( sMessage.getStr() );
 #endif
@@ -158,7 +158,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EFormsPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL EFormsPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -187,17 +187,17 @@ namespace pcr
                 // if the model changed, reset the binding to NULL
                 if ( m_pHelper->getCurrentFormModelName() != m_sBindingLessModelName )
                 {
-                    ::rtl::OUString sOldBindingName = m_pHelper->getCurrentBindingName();
+                    OUString sOldBindingName = m_pHelper->getCurrentBindingName();
                     m_pHelper->setBinding( NULL );
                     firePropertyChange( PROPERTY_BINDING_NAME, PROPERTY_ID_BINDING_NAME,
-                        makeAny( sOldBindingName ), makeAny( ::rtl::OUString() ) );
+                        makeAny( sOldBindingName ), makeAny( OUString() ) );
                 }
             }
             break;
 
             case PROPERTY_ID_BINDING_NAME:
             {
-                ::rtl::OUString sNewBindingName;
+                OUString sNewBindingName;
                 OSL_VERIFY( _rValue >>= sNewBindingName );
 
                 bool bPreviouslyEmptyModel = !m_pHelper->getCurrentFormModel().is();
@@ -223,7 +223,7 @@ namespace pcr
                     // However, there's no such mechanism in place currently.
                     m_bSimulatingModelChange = true;
                     firePropertyChange( PROPERTY_XML_DATA_MODEL, PROPERTY_ID_XML_DATA_MODEL,
-                        makeAny( ::rtl::OUString() ), makeAny( getModelNamePropertyValue() ) );
+                        makeAny( OUString() ), makeAny( getModelNamePropertyValue() ) );
                     m_bSimulatingModelChange = false;
                 }
             }
@@ -248,7 +248,7 @@ namespace pcr
                 DBG_ASSERT( xBindingProps.is(), "EFormsPropertyHandler::setPropertyValue: how can I set a property if there's no binding?" );
                 if ( xBindingProps.is() )
                 {
-                    DBG_ASSERT( _rValue.getValueType().equals( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) ),
+                    DBG_ASSERT( _rValue.getValueType().equals( ::getCppuType( static_cast< OUString* >( NULL ) ) ),
                         "EFormsPropertyHandler::setPropertyValue: invalid value type!" );
                     xBindingProps->setPropertyValue( _rPropertyName, _rValue );
                 }
@@ -316,7 +316,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EFormsPropertyHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EFormsPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aReturn;
@@ -327,7 +327,7 @@ namespace pcr
 
         PropertyId nPropId( m_pInfoService->getPropertyId( _rPropertyName ) );
 
-        ::rtl::OUString sControlValue;
+        OUString sControlValue;
         switch ( nPropId )
         {
         case PROPERTY_ID_LIST_BINDING:
@@ -349,7 +349,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EFormsPropertyHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EFormsPropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aReturn;
@@ -382,32 +382,32 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EFormsPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pHelper.get() )
-            return Sequence< ::rtl::OUString >();
+            return Sequence< OUString >();
 
-        ::std::vector< ::rtl::OUString > aInterestedInActuations( 2 );
+        ::std::vector< OUString > aInterestedInActuations( 2 );
         aInterestedInActuations[ 0 ] = PROPERTY_XML_DATA_MODEL;
         aInterestedInActuations[ 1 ] = PROPERTY_BINDING_NAME;
-        return Sequence< ::rtl::OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
+        return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EFormsPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pHelper.get() )
-            return Sequence< ::rtl::OUString >();
+            return Sequence< OUString >();
 
-        Sequence< ::rtl::OUString > aReturn( 1 );
+        Sequence< OUString > aReturn( 1 );
         aReturn[ 0 ] = PROPERTY_INPUT_REQUIRED;
         return aReturn;
     }
 
     //--------------------------------------------------------------------
-    LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+    LineDescriptor SAL_CALL EFormsPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
@@ -419,7 +419,7 @@ namespace pcr
 
         LineDescriptor aDescriptor;
         sal_Int16 nControlType = PropertyControlType::TextField;
-        ::std::vector< ::rtl::OUString > aListEntries;
+        ::std::vector< OUString > aListEntries;
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
         switch ( nPropId )
         {
@@ -436,18 +436,18 @@ namespace pcr
         case PROPERTY_ID_BINDING_NAME:
         {
             nControlType = PropertyControlType::ComboBox;
-            ::rtl::OUString sCurrentModel( getModelNamePropertyValue() );
+            OUString sCurrentModel( getModelNamePropertyValue() );
             if ( !sCurrentModel.isEmpty() )
                 m_pHelper->getBindingNames( sCurrentModel, aListEntries );
         }
         break;
 
-        case PROPERTY_ID_BIND_EXPRESSION:   aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BIND_EXPRESSION); break;
-        case PROPERTY_ID_XSD_REQUIRED:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_REQUIRED);    break;
-        case PROPERTY_ID_XSD_RELEVANT:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_RELEVANT);    break;
-        case PROPERTY_ID_XSD_READONLY:      aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_READONLY);    break;
-        case PROPERTY_ID_XSD_CONSTRAINT:    aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_CONSTRAINT);  break;
-        case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_XSD_CALCULATION); break;
+        case PROPERTY_ID_BIND_EXPRESSION:   aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_BIND_EXPRESSION); break;
+        case PROPERTY_ID_XSD_REQUIRED:      aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_XSD_REQUIRED);    break;
+        case PROPERTY_ID_XSD_RELEVANT:      aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_XSD_RELEVANT);    break;
+        case PROPERTY_ID_XSD_READONLY:      aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_XSD_READONLY);    break;
+        case PROPERTY_ID_XSD_CONSTRAINT:    aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_XSD_CONSTRAINT);  break;
+        case PROPERTY_ID_XSD_CALCULATION:   aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_XSD_CALCULATION); break;
 
         default:
             OSL_FAIL( "EFormsPropertyHandler::describePropertyLine: cannot handle this property!" );
@@ -468,13 +468,13 @@ namespace pcr
         }
 
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
-        aDescriptor.Category = ::rtl::OUString( "Data" );
+        aDescriptor.Category = OUString( "Data" );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
         return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL EFormsPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -505,22 +505,22 @@ namespace pcr
             // the binding for the dialog to work with
             Reference< XPropertySet > xBinding( m_pHelper->getCurrentBinding() );
             // the aspect of the binding which the dialog should modify
-            ::rtl::OUString sFacetName( _rPropertyName );
+            OUString sFacetName( _rPropertyName );
 
             OSL_ENSURE( xModel.is() && xBinding.is() && !sFacetName.isEmpty(),
                 "EFormsPropertyHandler::onInteractivePropertySelection: something is missing for the dialog initialization!" );
             if ( !( xModel.is() && xBinding.is() && !sFacetName.isEmpty() ) )
                 return InteractiveSelectionResult_Cancelled;
 
-            xDialogProps->setPropertyValue( ::rtl::OUString( "FormModel" ), makeAny( xModel ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( "Binding" ), makeAny( xBinding ) );
-            xDialogProps->setPropertyValue( ::rtl::OUString( "FacetName" ), makeAny( sFacetName ) );
+            xDialogProps->setPropertyValue( OUString( "FormModel" ), makeAny( xModel ) );
+            xDialogProps->setPropertyValue( OUString( "Binding" ), makeAny( xBinding ) );
+            xDialogProps->setPropertyValue( OUString( "FacetName" ), makeAny( sFacetName ) );
 
             if ( !xDialog->execute() )
                 // cancelled
                 return InteractiveSelectionResult_Cancelled;
 
-            _rData = xDialogProps->getPropertyValue( ::rtl::OUString( "ConditionValue" ) );
+            _rData = xDialogProps->getPropertyValue( OUString( "ConditionValue" ) );
             return InteractiveSelectionResult_ObtainedValue;
         }
         catch( const Exception& )
@@ -551,7 +551,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL EFormsPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -571,7 +571,7 @@ namespace pcr
         {
             if ( m_bSimulatingModelChange )
                 break;
-            ::rtl::OUString sDataModelName;
+            OUString sDataModelName;
             OSL_VERIFY( _rNewValue >>= sDataModelName );
             sal_Bool bBoundToSomeModel = !sDataModelName.isEmpty();
             _rxInspectorUI->rebuildPropertyUI( PROPERTY_BINDING_NAME );

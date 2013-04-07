@@ -36,19 +36,19 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XXMLOasisBasicImporter >    m_xHandler;
 
 public:
-    XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
 
     virtual ~XMLBasicImportContext();
 
-    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rxAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& rxAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 
@@ -62,19 +62,19 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xHandler;
 
 public:
-    XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rxHandler );
 
     virtual ~XMLBasicImportChildContext();
 
-    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 #endif // _XMLOFF_XMLBASICI_HXX

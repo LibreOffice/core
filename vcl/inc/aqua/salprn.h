@@ -82,7 +82,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
                                              long& o_rPageWidth, long& o_rPageHeight );
     virtual sal_uLong               GetCapabilities( const ImplJobSetup* i_pSetupData, sal_uInt16 i_nType );
     virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* i_pSetupData );
-    virtual rtl::OUString              GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin );
+    virtual OUString              GetPaperBinName( const ImplJobSetup* i_pSetupData, sal_uLong i_nPaperBin );
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
 
@@ -91,9 +91,9 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
-    sal_Bool                        StartJob( const rtl::OUString* i_pFileName,
-                                          const rtl::OUString& rJobName,
-                                          const rtl::OUString& i_rAppName,
+    sal_Bool                        StartJob( const OUString* i_pFileName,
+                                          const OUString& rJobName,
+                                          const OUString& i_rAppName,
                                           ImplJobSetup* i_pSetupData,
                                           vcl::PrinterController& i_rController );
     sal_Bool                        EndJob();
@@ -127,17 +127,17 @@ class AquaSalPrinter : public SalPrinter
     AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter );
     virtual ~AquaSalPrinter();
 
-    virtual sal_Bool                    StartJob( const rtl::OUString* i_pFileName,
-                                              const rtl::OUString& i_rJobName,
-                                              const rtl::OUString& i_rAppName,
+    virtual sal_Bool                    StartJob( const OUString* i_pFileName,
+                                              const OUString& i_rJobName,
+                                              const OUString& i_rAppName,
                                               sal_uLong i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual sal_Bool                    StartJob( const rtl::OUString* i_pFileName,
-                                              const rtl::OUString& rJobName,
-                                              const rtl::OUString& i_rAppName,
+    virtual sal_Bool                    StartJob( const OUString* i_pFileName,
+                                              const OUString& rJobName,
+                                              const OUString& i_rAppName,
                                               ImplJobSetup* i_pSetupData,
                                               vcl::PrinterController& i_rListener );
 

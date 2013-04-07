@@ -54,8 +54,6 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport),
@@ -75,21 +73,21 @@ ScMyEmptyDatabaseRangesContainer ScXMLExportDatabaseRanges::GetEmptyDatabaseRang
         uno::Reference <beans::XPropertySet> xPropertySet (rExport.GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG))), uno::UNO_QUERY);
+            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG))), uno::UNO_QUERY);
             rExport.CheckAttrList();
             if (xDatabaseRanges.is())
             {
-                uno::Sequence <rtl::OUString> aRanges(xDatabaseRanges->getElementNames());
+                uno::Sequence <OUString> aRanges(xDatabaseRanges->getElementNames());
                 sal_Int32 nDatabaseRangesCount = aRanges.getLength();
                 for (sal_Int32 i = 0; i < nDatabaseRangesCount; ++i)
                 {
-                    rtl::OUString sDatabaseRangeName(aRanges[i]);
+                    OUString sDatabaseRangeName(aRanges[i]);
                     uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
                     if (xDatabaseRange.is())
                     {
                         uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
                         if (xDatabaseRangePropertySet.is() &&
-                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
+                            ::cppu::any2bool(xDatabaseRangePropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
                         {
                             uno::Sequence <beans::PropertyValue> aImportProperties(xDatabaseRange->getImportDescriptor());
                             sal_Int32 nLength = aImportProperties.getLength();
@@ -400,13 +398,13 @@ private:
                     return OUString("=");
             }
             case SC_GREATER:
-                return rtl::OUString(">");
+                return OUString(">");
             case SC_GREATER_EQUAL:
-                return rtl::OUString(">=");
+                return OUString(">=");
             case SC_LESS:
-                return rtl::OUString("<");
+                return OUString("<");
             case SC_LESS_EQUAL:
-                return rtl::OUString("<=");
+                return OUString("<=");
             case SC_NOT_EQUAL:
                 if (bRegExp)
                     return GetXMLToken(XML_NOMATCH);
@@ -658,7 +656,7 @@ private:
                 break;
 
             sal_Int32 nFieldCol = static_cast<sal_Int32>(aParam.nField[i]);
-            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, rtl::OUString::valueOf(nFieldCol));
+            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, OUString::valueOf(nFieldCol));
             SvXMLElementExport aElemSTR(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, true, true);
 
             for (SCCOL j = 0, n = aParam.nSubTotals[i]; j < n; ++j)

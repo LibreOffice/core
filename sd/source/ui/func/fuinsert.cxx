@@ -256,7 +256,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         SdrObject* pPickObj = mpView->GetEmptyPresentationObject( ePresObjKind );
 
         // insert diagram or Calc table
-        ::rtl::OUString aObjName;
+        OUString aObjName;
         SvGlobalName aName;
         if (nSlotId == SID_INSERT_DIAGRAM)
             aName = SvGlobalName( SO3_SCH_CLASSID);
@@ -345,15 +345,15 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             {
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
-                    pOleObj->SetProgName( rtl::OUString( "StarChart" ));
+                    pOleObj->SetProgName( OUString( "StarChart" ));
                 }
                 else if (nSlotId == SID_ATTR_TABLE)
                 {
-                    pOleObj->SetProgName( rtl::OUString( "StarCalc" ) );
+                    pOleObj->SetProgName( OUString( "StarCalc" ) );
                 }
                 else if (nSlotId == SID_INSERT_MATH)
                 {
-                    pOleObj->SetProgName( rtl::OUString( "StarMath" ) );
+                    pOleObj->SetProgName( OUString( "StarMath" ) );
                 }
 
                 pOleObj->SetLogicRect(aRect);
@@ -387,9 +387,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         uno::Reference < embed::XEmbeddedObject > xObj;
         uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
         SvObjectServerList aServerLst;
-        ::rtl::OUString aName;
+        OUString aName;
 
-        ::rtl::OUString aIconMediaType;
+        OUString aIconMediaType;
         uno::Reference< io::XInputStream > xIconMetaFile;
 
         SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
@@ -467,7 +467,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 if ( xSet.is() )
                                 {
                                     xSet->setPropertyValue("PluginURL",
-                                            uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                                            uno::makeAny( OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                                 }
                             }
                         }
@@ -665,7 +665,7 @@ FunctionReference FuInsertAVMedia::Create( ViewShell* pViewSh, ::sd::Window* pWi
 
 void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
 {
-    ::rtl::OUString     aURL;
+    OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     bool                bAPI = false;
 

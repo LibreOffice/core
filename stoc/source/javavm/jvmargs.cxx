@@ -32,7 +32,7 @@ void JVM::pushProp(const OUString & property)
     _props.push_back(property);
 }
 
-const ::std::vector< ::rtl::OUString > & JVM::getProperties() const
+const ::std::vector< OUString > & JVM::getProperties() const
 {
     return _props;
 }

@@ -231,7 +231,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
         // search properties
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
@@ -311,7 +311,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar const*const pName =
@@ -322,7 +322,7 @@ namespace DOM
         ::boost::shared_ptr<xmlChar const> const pValue(
                 xmlGetNsProp(m_aNodePtr, pName, pNS), xmlFree);
         if (0 == pValue) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OUString const ret(reinterpret_cast<sal_Char const*>(pValue.get()),
                         strlen(reinterpret_cast<char const*>(pValue.get())),
@@ -372,7 +372,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OUString const ret((sal_Char*)m_aNodePtr->name,
                 strlen((char*)m_aNodePtr->name), RTL_TEXTENCODING_UTF8);
@@ -501,7 +501,7 @@ namespace DOM
 
         Reference< XAttr > aAttr;
         if (!oldAttr->getNamespaceURI().isEmpty()) {
-            ::rtl::OUStringBuffer qname(oldAttr->getPrefix());
+            OUStringBuffer qname(oldAttr->getPrefix());
             if (0 != qname.getLength()) {
                 qname.append(sal_Unicode(':'));
             }

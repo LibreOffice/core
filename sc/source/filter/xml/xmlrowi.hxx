@@ -26,8 +26,8 @@ class ScXMLImport;
 
 class ScXMLTableRowContext : public SvXMLImportContext
 {
-    rtl::OUString sStyleName;
-    rtl::OUString sVisibility;
+    OUString sStyleName;
+    OUString sVisibility;
     sal_Int32 nRepeatedRows;
     bool bHasCell;
 
@@ -37,14 +37,14 @@ class ScXMLTableRowContext : public SvXMLImportContext
 public:
 
     ScXMLTableRowContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableRowContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -67,7 +67,7 @@ class ScXMLTableRowsContext : public SvXMLImportContext
 public:
 
     ScXMLTableRowsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                        const bool bHeader, const bool bGroup);
@@ -75,7 +75,7 @@ public:
     virtual ~ScXMLTableRowsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

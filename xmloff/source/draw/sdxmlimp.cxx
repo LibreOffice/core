@@ -48,8 +48,6 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -434,7 +432,7 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         if( xInfoSetInfo->hasPropertyByName( msPreview ) )
             xInfoSet->getPropertyValue( msPreview ) >>= mbPreview;
 
-        ::rtl::OUString const sOrganizerMode(
+        OUString const sOrganizerMode(
             "OrganizerMode");
         if (xInfoSetInfo->hasPropertyByName(sOrganizerMode))
         {
@@ -1011,19 +1009,19 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
     }
 }
 
-void SdXMLImport::AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
+void SdXMLImport::AddHeaderDecl( const OUString& rName, const OUString& rText )
 {
     if( !rName.isEmpty() && !rText.isEmpty() )
         maHeaderDeclsMap[rName] = rText;
 }
 
-void SdXMLImport::AddFooterDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText )
+void SdXMLImport::AddFooterDecl( const OUString& rName, const OUString& rText )
 {
     if( !rName.isEmpty() && !rText.isEmpty() )
         maFooterDeclsMap[rName] = rText;
 }
 
-void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText, sal_Bool bFixed, const ::rtl::OUString& rDateTimeFormat )
+void SdXMLImport::AddDateTimeDecl( const OUString& rName, const OUString& rText, sal_Bool bFixed, const OUString& rDateTimeFormat )
 {
     if( !rName.isEmpty() && (!rText.isEmpty() || !bFixed) )
     {
@@ -1035,9 +1033,9 @@ void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OU
     }
 }
 
-::rtl::OUString SdXMLImport::GetHeaderDecl( const ::rtl::OUString& rName ) const
+OUString SdXMLImport::GetHeaderDecl( const OUString& rName ) const
 {
-    ::rtl::OUString aRet;
+    OUString aRet;
     HeaderFooterDeclMap::const_iterator aIter( maHeaderDeclsMap.find( rName ) );
     if( aIter != maHeaderDeclsMap.end() )
         aRet = (*aIter).second;
@@ -1045,9 +1043,9 @@ void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OU
     return aRet;
 }
 
-::rtl::OUString SdXMLImport::GetFooterDecl( const ::rtl::OUString& rName ) const
+OUString SdXMLImport::GetFooterDecl( const OUString& rName ) const
 {
-    ::rtl::OUString aRet;
+    OUString aRet;
     HeaderFooterDeclMap::const_iterator aIter( maFooterDeclsMap.find( rName ) );
     if( aIter != maFooterDeclsMap.end() )
         aRet = (*aIter).second;
@@ -1055,7 +1053,7 @@ void SdXMLImport::AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OU
     return aRet;
 }
 
-::rtl::OUString SdXMLImport::GetDateTimeDecl( const ::rtl::OUString& rName, sal_Bool& rbFixed, ::rtl::OUString& rDateTimeFormat )
+OUString SdXMLImport::GetDateTimeDecl( const OUString& rName, sal_Bool& rbFixed, OUString& rDateTimeFormat )
 {
     DateTimeDeclContextImpl aDecl;
 

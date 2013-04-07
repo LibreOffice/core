@@ -79,24 +79,24 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    rtl::OUString sDir;
+    OUString sDir;
 
     osl::File::getFileURLFromSystemPath(
-        rtl::OUString(dir.c_str(), dir.size(), osl_getThreadTextEncoding()),
+        OUString(dir.c_str(), dir.size(), osl_getThreadTextEncoding()),
         sDir);
 
-    rtl::OUString cwd;
+    OUString cwd;
     osl_getProcessWorkingDir(&cwd.pData);
 
     osl::File::getAbsoluteFileURL(cwd, sDir, sDir);
 
     HelpIndexer indexer(
-        rtl::OUString(lang.c_str(), lang.size(), osl_getThreadTextEncoding()),
-        rtl::OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
+        OUString(lang.c_str(), lang.size(), osl_getThreadTextEncoding()),
+        OUString(module.c_str(), module.size(), osl_getThreadTextEncoding()),
         sDir, sDir);
 
     if (!indexer.indexDocuments()) {
-        std::cerr << rtl::OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
+        std::cerr << OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
         return 2;
     }
     return 0;

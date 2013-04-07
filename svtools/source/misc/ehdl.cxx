@@ -84,9 +84,9 @@ static sal_uInt16 aWndFunc(
     String aErr(SvtResId(STR_ERR_HDLMESS).toString());
     String aAction(rAction);
     if ( aAction.Len() )
-        aAction += rtl::OUString(":\n");
-    aErr.SearchAndReplace(rtl::OUString("$(ACTION)"), aAction);
-    aErr.SearchAndReplace(rtl::OUString("$(ERROR)"), rErr);
+        aAction += OUString(":\n");
+    aErr.SearchAndReplace(OUString("$(ACTION)"), aAction);
+    aErr.SearchAndReplace(OUString("$(ERROR)"), rErr);
 
     MessBox* pBox;
     switch ( nFlags & 0xf000 )
@@ -191,7 +191,7 @@ sal_Bool SfxErrorHandler::CreateString(
         StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
         {
-            rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"),
+            rStr = rStr.replaceAll(OUString("$(ARG1)"),
                                       pStringInfo->GetErrorString());
         }
         else
@@ -349,7 +349,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
             sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
-            rStr = rStr.replaceAll(rtl::OUString("$(ERROR)"), aErrorString.GetString());
+            rStr = rStr.replaceAll(OUString("$(ERROR)"), aErrorString.GetString());
             bRet = sal_True;
         }
         else
@@ -362,8 +362,8 @@ sal_Bool SfxErrorHandler::GetErrorString(
         GetClassString(lErrId & ERRCODE_CLASS_MASK,
                        aErrStr);
         if(aErrStr.Len())
-            aErrStr += rtl::OUString(".\n");
-        rStr = rStr.replaceAll(rtl::OUString("$(CLASS)"),aErrStr);
+            aErrStr += OUString(".\n");
+        rStr = rStr.replaceAll(OUString("$(CLASS)"),aErrStr);
     }
 
     return bRet;
@@ -417,7 +417,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
         if ( aTestEr )
         {
             rStr = ( (ResString)aTestEr ).GetString();
-            rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"), aArg1 );
+            rStr = rStr.replaceAll(OUString("$(ARG1)"), aArg1 );
             bRet = true;
         }
         else
@@ -431,7 +431,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr = rStr.replaceAll( rtl::OUString("$(ERR)"), ( (ResString)aEr ).GetString() );
+            rStr = rStr.replaceAll( OUString("$(ERR)"), ( (ResString)aEr ).GetString() );
         }
     }
 

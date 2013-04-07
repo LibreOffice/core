@@ -79,17 +79,17 @@ public:
     // XMultiServiceFactory
     virtual com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
-    createInstance( const rtl::OUString & aServiceSpecifier )
+    createInstance( const OUString & aServiceSpecifier )
         throw ( com::sun::star::uno::Exception,
                 com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
-    createInstanceWithArguments( const rtl::OUString & ServiceSpecifier,
+    createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const com::sun::star::uno::Sequence<
                                     com::sun::star::uno::Any > & Arguments )
         throw ( com::sun::star::uno::Exception,
                 com::sun::star::uno::RuntimeException );
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getAvailableServiceNames()
         throw ( com::sun::star::uno::RuntimeException );
 
@@ -98,7 +98,7 @@ public:
 private:
     com::sun::star::uno::Reference<
         com::sun::star::uno::XInterface > SAL_CALL
-    createInstanceWithArguments( const rtl::OUString & ServiceSpecifier,
+    createInstanceWithArguments( const OUString & ServiceSpecifier,
                                  const com::sun::star::uno::Sequence<
                                     com::sun::star::uno::Any > & Arguments,
                                  bool bCheckArgs )
@@ -110,7 +110,7 @@ private:
     getConfigProvider();
 
     bool
-    createConfigPath( const rtl::OUString & rInPath, rtl::OUString & rOutPath );
+    createConfigPath( const OUString & rInPath, OUString & rOutPath );
 };
 
 } // namespace hierarchy_ucp

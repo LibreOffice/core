@@ -77,14 +77,14 @@ ScVbaCondition< Ifc1 >::retrieveAPIOperator( const uno::Any& _aOperator) throw (
 }
 
 template< typename Ifc1 >
-rtl::OUString
+OUString
 ScVbaCondition< Ifc1 >::Formula1( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula1();
 }
 
 template< typename Ifc1 >
-rtl::OUString
+OUString
 ScVbaCondition< Ifc1 >::Formula2( ) throw ( script::BasicErrorException, uno::RuntimeException )
 {
      return mxSheetCondition->getFormula2();
@@ -94,7 +94,7 @@ template< typename Ifc1 >
 void
 ScVbaCondition< Ifc1 >::setFormula1( const uno::Any& _aFormula1) throw ( script::BasicErrorException )
 {
-    rtl::OUString sFormula;
+    OUString sFormula;
     if ( (_aFormula1 >>= sFormula ))
     {
         mxSheetCondition->setFormula1( sFormula );
@@ -108,7 +108,7 @@ template< typename Ifc1 >
 void
 ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
 {
-    rtl::OUString sFormula2;
+    OUString sFormula2;
     // #TODO surely this can't be right?
     // ( from helperapi/impl/.../calc/ConditionImpl.java
     if ( (_aFormula2 >>= sFormula2 ))
@@ -157,7 +157,7 @@ ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script:
             }
         case sheet::ConditionOperator_NONE:
         default:
-            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString("Operator not supported"));
+            DebugHelper::exception(SbERR_METHOD_FAILED, OUString("Operator not supported"));
         break;
     }
     return retvalue;

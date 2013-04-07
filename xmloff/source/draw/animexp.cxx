@@ -36,8 +36,6 @@
 #include <xmloff/shapeexport.hxx>
 #include "anim.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;

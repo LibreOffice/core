@@ -27,18 +27,18 @@
 class HelpParser
 {
 private:
-    rtl::OString sHelpFile;
+    OString sHelpFile;
 
 #if OSL_DEBUG_LEVEL > 2
     /// Debugmethod, prints the content of the map to stdout
-    static void Dump(LangHashMap* rElem_in , const rtl::OString & sKey_in);
+    static void Dump(LangHashMap* rElem_in , const OString & sKey_in);
 
     /// Debugmethod, prints the content of the map to stdout
     static void Dump(XMLHashMap* rElem_in);
 #endif
 
 public:
-    HelpParser( const rtl::OString &rHelpFile );
+    HelpParser( const OString &rHelpFile );
     ~HelpParser(){};
 
 /// Method append a PO file with the content of a parsed XML file
@@ -48,13 +48,13 @@ public:
 
 /// Method merges the String from the POfile into XMLfile. Both Strings must
 /// point to existing files.
-    bool Merge( const rtl::OString &rPOFile_in, const rtl::OString &rDestinationFile_in ,
-        const rtl::OString& sLanguage , MergeDataFile& aMergeDataFile );
+    bool Merge( const OString &rPOFile_in, const OString &rDestinationFile_in ,
+        const OString& sLanguage , MergeDataFile& aMergeDataFile );
 
 private:
-    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const rtl::OString& sLanguage , rtl::OString const & sPath );
+    bool MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile , const OString& sLanguage , OString const & sPath );
 
-    void ProcessHelp( LangHashMap* aLangHM , const rtl::OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
+    void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile& aMergeDataFile );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

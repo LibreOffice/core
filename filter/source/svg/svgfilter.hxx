@@ -99,7 +99,7 @@ using namespace ::std;
 
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
-static const ::rtl::OUString sPlaceholderTag = ::rtl::OUString::createFromAscii( "<[:isPlaceholder:]>" );
+static const OUString sPlaceholderTag = OUString::createFromAscii( "<[:isPlaceholder:]>" );
 
 class SVGExport : public SvXMLExport
 {
@@ -169,9 +169,9 @@ struct PagePropertySet
     sal_Bool               bIsDateTimeFieldFixed;
     sal_Int16              nPageNumber;
     sal_Int32              nDateTimeFormat;
-    ::rtl::OUString        sDateTimeText;
-    ::rtl::OUString        sFooterText;
-    ::rtl::OUString        sHeaderText;
+    OUString        sDateTimeText;
+    OUString        sFooterText;
+    OUString        sHeaderText;
 };
 
 struct HashReferenceXInterface
@@ -184,7 +184,7 @@ struct HashReferenceXInterface
 
 struct HashOUString
 {
-    size_t operator()( const ::rtl::OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
+    size_t operator()( const OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
 };
 
 struct HashUChar
@@ -219,10 +219,10 @@ public:
     typedef Sequence< Reference< XDrawPage > >                                                                  XDrawPageSequence;
 
     typedef ::boost::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
-    typedef ::boost::unordered_map< ::rtl::OUString, UCharSet, HashOUString >                                   UCharSetMap;
+    typedef ::boost::unordered_map< OUString, UCharSet, HashOUString >                                   UCharSetMap;
     typedef ::boost::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
 
-    typedef ::boost::unordered_map< Reference< XInterface >, ::rtl::OUString, HashReferenceXInterface >         UOStringMap;
+    typedef ::boost::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;
 
     typedef ::boost::unordered_set< ObjectRepresentation, HashBitmap, EqualityBitmap >                  MetaBitmapActionSet;
 
@@ -240,7 +240,7 @@ private:
     sal_Bool                            mbSinglePage;
     sal_Int32                           mnVisiblePage;
     PagePropertySet                     mVisiblePagePropSet;
-    ::rtl::OUString                     msClipPathId;
+    OUString                     msClipPathId;
     UCharSetMapMap                      mTextFieldCharSets;
     Reference< XInterface >             mCreateOjectsCurrentMasterPage;
     UOStringMap                         mTextShapeIdListMap;
@@ -267,7 +267,7 @@ private:
     sal_Bool                            implGenerateMetaData();
     void                                implExportTextShapeIndex();
     void                                implEmbedBulletGlyphs();
-    void                                implEmbedBulletGlyph( sal_Unicode cBullet, const ::rtl::OUString & sPathData );
+    void                                implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData );
     sal_Bool                            implExportTextEmbeddedBitmaps();
     sal_Bool                            implGenerateScript();
 
@@ -278,7 +278,7 @@ private:
                                                                sal_Int32 nFirstPage, sal_Int32 nLastPage );
     sal_Bool                            implExportDrawPages( const XDrawPageSequence& rxPages,
                                                              sal_Int32 nFirstPage, sal_Int32 nLastPage );
-    sal_Bool                            implExportPage( const ::rtl::OUString & sPageId,
+    sal_Bool                            implExportPage( const OUString & sPageId,
                                                         const Reference< XDrawPage > & rxPage,
                                                         const Reference< XShapes > & xShapes,
                                                         sal_Bool bMaster );
@@ -291,12 +291,12 @@ private:
     sal_Bool                            implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
-    ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
+    OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     void                                implRegisterInterface( const Reference< XInterface >& rxIf );
-    const ::rtl::OUString &             implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
-    ::rtl::OUString                     implGetInterfaceName( const Reference< XInterface >& rxIf );
+    const OUString &             implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    OUString                     implGetInterfaceName( const Reference< XInterface >& rxIf );
     sal_Bool                            implLookForFirstVisiblePage();
-    Any                                 implSafeGetPagePropSet( const ::rtl::OUString & sPropertyName,
+    Any                                 implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
@@ -314,7 +314,7 @@ protected:
     virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException);
 
     // XExtendedFilterDetection
-    virtual rtl::OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException);
+    virtual OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException);
 
 public:
 

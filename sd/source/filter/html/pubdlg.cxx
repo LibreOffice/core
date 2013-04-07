@@ -57,7 +57,6 @@ using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
 
 #define NOOFPAGES 6
 
@@ -1319,9 +1318,9 @@ void SdPublishingDlg::LoadPreviewButtons()
             "collapse.png",
         };
 
-        std::vector< rtl::OUString > aButtonNames;
+        std::vector< OUString > aButtonNames;
         for( int i = 0; i < nButtonCount; ++i )
-            aButtonNames.push_back( rtl::OUString::createFromAscii( pButtonNames[i] ) );
+            aButtonNames.push_back( OUString::createFromAscii( pButtonNames[i] ) );
 
         int nSetCount = mpButtonSet->getCount();
 

@@ -75,7 +75,7 @@ namespace
         sal_Int16 m_nODF;
     public:
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
         SaveODFItem();
         //See group ODF in Common.xcs
         bool isLessODF1_2()
@@ -85,9 +85,9 @@ namespace
     };
 
 void SaveODFItem::Commit() {}
-void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
-    SaveODFItem::SaveODFItem(): utl::ConfigItem(::rtl::OUString(
+    SaveODFItem::SaveODFItem(): utl::ConfigItem(OUString(
         "Office.Common/Save")), m_nODF(0)
     {
         OUString sDef("ODF/DefaultVersion");
@@ -115,7 +115,7 @@ void SaveODFItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >
     The parameter is an encoded uri. However, the manifest contains paths. Therefore
     the path is encoded as uri, so they can be compared.
 */
-bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
+bool DigitalSignaturesDialog::isXML(const OUString& rURI )
 {
     OSL_ASSERT(mxStore.is());
 
@@ -171,7 +171,7 @@ bool DigitalSignaturesDialog::isXML(const rtl::OUString& rURI )
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     Window* pParent,
     uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-    sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature)
+    sal_Bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature)
     : ModalDialog(pParent, "DigitalSignaturesDialog", "xmlsec/ui/digitalsignaturesdialog.ui")
     , mxCtx(rxCtx)
     , maSignatureHelper(rxCtx)
@@ -428,7 +428,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
                 SAL_WARN( "xmlsecurity.dialogs", "no certificate selected" );
                 return -1;
             }
-            rtl::OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
+            OUString aCertSerial = xSerialNumberAdapter->toString( xCert->getSerialNumber() );
             if ( aCertSerial.isEmpty() )
             {
                 OSL_FAIL( "Error in Certificate, problem with serial number!" );
@@ -439,16 +439,16 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl)
 
             sal_Int32 nSecurityId = maSignatureHelper.GetNewSecurityId();
 
-            rtl::OUStringBuffer aStrBuffer;
+            OUStringBuffer aStrBuffer;
             ::sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
 
             maSignatureHelper.SetX509Certificate( nSecurityId,
                 xCert->getIssuerName(), aCertSerial,
                 aStrBuffer.makeStringAndClear());
 
-            std::vector< rtl::OUString > aElements =
+            std::vector< OUString > aElements =
                 DocumentSignatureHelper::CreateElementList(
-                    mxStore, rtl::OUString(), meSignatureMode, OOo3_2Document);
+                    mxStore, OUString(), meSignatureMode, OOo3_2Document);
 
             sal_Int32 nElements = aElements.size();
             for ( sal_Int32 n = 0; n < nElements; n++ )
@@ -585,9 +585,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, maCurrentSignatureInformations[n]);
-            std::vector< rtl::OUString > aElementsToBeVerified =
+            std::vector< OUString > aElementsToBeVerified =
                 DocumentSignatureHelper::CreateElementList(
-                mxStore, ::rtl::OUString(), meSignatureMode, mode);
+                mxStore, OUString(), meSignatureMode, mode);
 
             const SignatureInformation& rInfo = maCurrentSignatureInformations[n];
             //First we try to get the certificate which is embedded in the XML Signature

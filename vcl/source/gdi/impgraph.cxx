@@ -368,7 +368,7 @@ void ImpGraphic::ImplClear()
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                      comphelper::getProcessComponentContext() );
 
-                aCnt.executeCommand( ::rtl::OUString("delete"),
+                aCnt.executeCommand( OUString("delete"),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
             }
             catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1096,7 +1096,7 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                                          comphelper::getProcessComponentContext() );
 
-                                    aCnt.executeCommand( ::rtl::OUString("delete"),
+                                    aCnt.executeCommand( OUString("delete"),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                                 }
                                 catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1286,7 +1286,7 @@ sal_Bool ImpGraphic::ImplSwapOut()
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                                  comphelper::getProcessComponentContext() );
 
-                            aCnt.executeCommand( ::rtl::OUString("delete"),
+                            aCnt.executeCommand( OUString("delete"),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1392,7 +1392,7 @@ sal_Bool ImpGraphic::ImplSwapIn()
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                                  comphelper::getProcessComponentContext() );
 
-                            aCnt.executeCommand( ::rtl::OUString("delete"),
+                            aCnt.executeCommand( OUString("delete"),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1655,7 +1655,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                             if(mnSvgDataArrayLength)
                             {
                                 SvgDataArray aNewData(new sal_uInt8[mnSvgDataArrayLength]);
-                                rtl::OUString aPath;
+                                OUString aPath;
 
                                 rIStm.Read(aNewData.get(), mnSvgDataArrayLength);
                                 aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
@@ -1666,7 +1666,7 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                                         new SvgData(
                                             aNewData,
                                             mnSvgDataArrayLength,
-                                            rtl::OUString(aPath)));
+                                            OUString(aPath)));
 
                                     rImpGraphic = aSvgDataPtr;
                                 }

@@ -143,7 +143,7 @@ CFileOpenDialog::~CFileOpenDialog()
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setTitle(const rtl::OUString& aTitle)
+void SAL_CALL CFileOpenDialog::setTitle(const OUString& aTitle)
 {
     m_dialogTitle = aTitle;
     m_ofn.lpstrTitle = reinterpret_cast<LPCTSTR>(m_dialogTitle.getStr());
@@ -153,7 +153,7 @@ void SAL_CALL CFileOpenDialog::setTitle(const rtl::OUString& aTitle)
 //
 //------------------------------------------------------------------------
 
-void CFileOpenDialog::setFilter(const rtl::OUString& aFilter)
+void CFileOpenDialog::setFilter(const OUString& aFilter)
 {
     // Format is like
     // "*.TXT" or multiple separate by ';' like "*.TXT;*.DOC;*.SXW"
@@ -188,7 +188,7 @@ sal_uInt32 CFileOpenDialog::getSelectedFilterIndex() const
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setDefaultName(const rtl::OUString& aName)
+void SAL_CALL CFileOpenDialog::setDefaultName(const OUString& aName)
 {
     m_fileNameBuffer.setLength(0);
     m_fileNameBuffer.append(aName);
@@ -199,7 +199,7 @@ void SAL_CALL CFileOpenDialog::setDefaultName(const rtl::OUString& aName)
 //
 //------------------------------------------------------------------------
 
-void SAL_CALL CFileOpenDialog::setDisplayDirectory(const rtl::OUString& aDirectory)
+void SAL_CALL CFileOpenDialog::setDisplayDirectory(const OUString& aDirectory)
 {
     m_displayDirectory = aDirectory;
     m_ofn.lpstrInitialDir = reinterpret_cast<LPCTSTR>(m_displayDirectory.getStr());
@@ -209,7 +209,7 @@ void SAL_CALL CFileOpenDialog::setDisplayDirectory(const rtl::OUString& aDirecto
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
+OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
 {
     return m_displayDirectory;
 }
@@ -218,9 +218,9 @@ rtl::OUString SAL_CALL CFileOpenDialog::getLastDisplayDirectory() const
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getFullFileName() const
+OUString SAL_CALL CFileOpenDialog::getFullFileName() const
 {
-    return rtl::OUString(m_fileNameBuffer.getStr(),
+    return OUString(m_fileNameBuffer.getStr(),
         _wcslenex(m_fileNameBuffer.getStr()));
 }
 
@@ -228,29 +228,29 @@ rtl::OUString SAL_CALL CFileOpenDialog::getFullFileName() const
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getFileName() const
+OUString SAL_CALL CFileOpenDialog::getFileName() const
 {
-    return rtl::OUString(m_fileTitleBuffer.getStr());
+    return OUString(m_fileTitleBuffer.getStr());
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-rtl::OUString CFileOpenDialog::getFileExtension()
+OUString CFileOpenDialog::getFileExtension()
 {
     if (m_ofn.nFileExtension)
-        return rtl::OUString(m_fileNameBuffer.getStr() + m_ofn.nFileExtension,
+        return OUString(m_fileNameBuffer.getStr() + m_ofn.nFileExtension,
             rtl_ustr_getLength(m_fileNameBuffer.getStr() + m_ofn.nFileExtension));
 
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-void CFileOpenDialog::setDefaultFileExtension(const rtl::OUString& aExtension)
+void CFileOpenDialog::setDefaultFileExtension(const OUString& aExtension)
 {
     m_defaultExtension = aExtension;
     m_ofn.lpstrDefExt  = reinterpret_cast<LPCTSTR>(m_defaultExtension.getStr());
@@ -340,7 +340,7 @@ void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
         // Attention: assuming that nFileOffset is always greater 0 because under
         // Windows there is always a drive letter or a server in a complete path
         // the OPENFILENAME docu never says that nFileOffset can be 0
-        m_displayDirectory = rtl::OUString(reinterpret_cast<const sal_Unicode*>(m_ofn.lpstrFile),m_ofn.nFileOffset);
+        m_displayDirectory = OUString(reinterpret_cast<const sal_Unicode*>(m_ofn.lpstrFile),m_ofn.nFileOffset);
     }
 }
 
@@ -348,7 +348,7 @@ void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
+OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
@@ -361,16 +361,16 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFilePath() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer.getStr());
+        return OUString(m_helperBuffer.getStr());
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
+OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
@@ -383,16 +383,16 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFolderPath() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer.getStr());
+        return OUString(m_helperBuffer.getStr());
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
+OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
 {
     OSL_ASSERT(IsWindow(m_hwndFileOpenDlg));
 
@@ -405,16 +405,16 @@ rtl::OUString SAL_CALL CFileOpenDialog::getCurrentFileName() const
     if (nLen > 0)
     {
         m_helperBuffer.setLength((nLen * sizeof(sal_Unicode)) - 1);
-        return rtl::OUString(m_helperBuffer.getStr());
+        return OUString(m_helperBuffer.getStr());
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const rtl::OUString&)
+sal_uInt32 SAL_CALL CFileOpenDialog::onShareViolation(const OUString&)
 {
     return 0;
 }

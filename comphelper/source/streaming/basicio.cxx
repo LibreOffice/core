@@ -89,14 +89,14 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (const starun
 }
 
 //------------------------------------------------------------------------------
-const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, ::rtl::OUString& rStr)
+const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, OUString& rStr)
 {
     rStr = _rxInStream->readUTF();
     return _rxInStream;
 }
 
 //------------------------------------------------------------------------------
-const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, const ::rtl::OUString& rStr)
+const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, const OUString& rStr)
 {
     _rxOutStream->writeUTF(rStr);
     return _rxOutStream;

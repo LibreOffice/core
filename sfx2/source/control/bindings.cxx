@@ -1943,13 +1943,13 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
         ::com::sun::star::util::URL aURL;
         OUString aCmd( ".uno:" );
         aURL.Protocol = aCmd;
-        aURL.Path = ::rtl::OUString::createFromAscii(pSlot->GetUnoName());
+        aURL.Path = OUString::createFromAscii(pSlot->GetUnoName());
         aCmd += aURL.Path;
         aURL.Complete = aCmd;
         aURL.Main = aCmd;
 
         if ( !xDisp.is() )
-            xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDisp = pImp->xProv->queryDispatch( aURL, OUString(), 0 );
 
         if ( xDisp.is() )
         {
@@ -2003,9 +2003,9 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                         aAny >>= nTemp ;
                         pItem = new SfxUInt32Item( nSlot, nTemp );
                     }
-                    else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+                    else if ( pType == ::getCppuType((const OUString*)0) )
                     {
-                        ::rtl::OUString sTemp ;
+                        OUString sTemp ;
                         aAny >>= sTemp ;
                         pItem = new SfxStringItem( nSlot, sTemp );
                     }
@@ -2191,7 +2191,7 @@ sal_Bool SfxBindings::ExecuteCommand_Impl( const String& rCommand )
     aURL.Complete = rCommand;
     Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( aURL );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, OUString(), 0 );
     if ( xDisp.is() )
     {
         new SfxAsyncExec_Impl( aURL, xDisp );

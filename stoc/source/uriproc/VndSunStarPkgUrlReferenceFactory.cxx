@@ -55,13 +55,13 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context):
         m_context(context) {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
@@ -78,7 +78,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_context;
 };
 
-rtl::OUString Factory::getImplementationName()
+OUString Factory::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return
@@ -86,14 +86,14 @@ rtl::OUString Factory::getImplementationName()
         getImplementationName();
 }
 
-sal_Bool Factory::supportsService(rtl::OUString const & serviceName)
+sal_Bool Factory::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
     return stoc::uriproc::supportsService(
         getSupportedServiceNames(), serviceName);
 }
 
-css::uno::Sequence< rtl::OUString > Factory::getSupportedServiceNames()
+css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return stoc_services::VndSunStarPkgUrlReferenceFactory::
@@ -107,7 +107,7 @@ Factory::createVndSunStarPkgUrlReference(
 {
     OSL_ASSERT(authority.is());
     if (authority->isAbsolute() && !authority->hasFragment()) {
-        rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg://"));
         buf.append(
             rtl::Uri::encode(
@@ -136,17 +136,17 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Factory(context));
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString("std::bad_alloc"), 0);
+            OUString("std::bad_alloc"), 0);
     }
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory");
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString("com.sun.star.uri.VndSunStarPkgUrlReferenceFactory");
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    css::uno::Sequence< OUString > s(1);
+    s[0] = OUString("com.sun.star.uri.VndSunStarPkgUrlReferenceFactory");
     return s;
 }
 

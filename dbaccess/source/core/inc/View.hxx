@@ -43,9 +43,9 @@ namespace dbaccess
         View(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             sal_Bool _bCaseSensitive,
-            const ::rtl::OUString& _rCatalogName,
-            const ::rtl::OUString& _rSchemaName,
-            const ::rtl::OUString& _rName
+            const OUString& _rCatalogName,
+            const OUString& _rSchemaName,
+            const OUString& _rName
         );
 
         // UNO
@@ -53,7 +53,7 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER()
 
         // XAlterView
-        virtual void SAL_CALL alterCommand( const ::rtl::OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual ~View();

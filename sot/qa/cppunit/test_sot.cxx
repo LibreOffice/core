@@ -51,8 +51,8 @@ namespace
                           sal_uLong nSize );
         bool checkStorage( const SotStorageRef &xObjStor );
 
-        virtual bool load(const rtl::OUString &,
-            const rtl::OUString &rURL, const rtl::OUString &,
+        virtual bool load(const OUString &,
+            const OUString &rURL, const OUString &,
             unsigned int, unsigned int, unsigned int);
 
         void test();
@@ -120,8 +120,8 @@ namespace
         return true;
     }
 
-    bool SotTest::load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    bool SotTest::load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int)
     {
         SvFileStream aStream(rURL, STREAM_READ);
@@ -135,9 +135,9 @@ namespace
 
     void SotTest::test()
     {
-        testDir(rtl::OUString(),
+        testDir(OUString(),
             getURLFromSrc("/sot/qa/cppunit/data/"),
-            rtl::OUString());
+            OUString());
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(SotTest);

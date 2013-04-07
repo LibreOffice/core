@@ -41,11 +41,11 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 #ifndef DISABLE_DYNLOADING
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
-    static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
+    static const OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( sLibName ),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory"));
+            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory"));
     if ( fp )
         return fp();
     return 0;

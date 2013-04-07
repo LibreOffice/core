@@ -38,7 +38,6 @@
 #define SHARED_PACKAGE_MANAGER  OUString("shared")
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 namespace dp_gui {
 
@@ -138,7 +137,7 @@ void TheExtensionManager::Show()
 }
 
 //------------------------------------------------------------------------------
-void TheExtensionManager::SetText( const ::rtl::OUString &rTitle )
+void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
 
@@ -341,7 +340,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
     catch (const uno::Exception & exc) {
         (void) exc;
-        OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         return NOT_AVAILABLE;
     }
 }

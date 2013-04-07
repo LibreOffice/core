@@ -87,7 +87,7 @@ public:
 public: // XArray
 
     // Methods
-    virtual ::rtl::OUString SAL_CALL getBaseTypeName(  )
+    virtual OUString SAL_CALL getBaseTypeName(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getBaseType(  )

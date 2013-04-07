@@ -25,7 +25,7 @@ class AstInterfaceMember : public AstDeclaration
 {
 public:
     AstInterfaceMember(const sal_uInt32 flags, AstInterface* pRealInterface,
-                       const ::rtl::OString& name, AstScope* pScope)
+                       const OString& name, AstScope* pScope)
         : AstDeclaration(NT_interface_member, name, pScope)
         , m_flags(flags)
         , m_pRealInterface(pRealInterface)

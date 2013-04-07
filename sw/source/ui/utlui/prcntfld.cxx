@@ -34,7 +34,7 @@ PercentField::PercentField( Window* pWin, const ResId& rResId ) :
     nOldSpinSize = GetSpinSize();
     nRefValue = DenormalizePercent(MetricField::GetMax(FUNIT_TWIP));
     nOldDigits = GetDecimalDigits();
-    SetCustomUnitText(rtl::OUString('%'));
+    SetCustomUnitText(OUString('%'));
 }
 
 PercentFieldWrap::PercentFieldWrap()
@@ -53,7 +53,7 @@ void PercentFieldWrap::set(MetricField *pField)
     nOldSpinSize = m_pField->GetSpinSize();
     nRefValue = DenormalizePercent(m_pField->GetMax(FUNIT_TWIP));
     nOldDigits = m_pField->GetDecimalDigits();
-    m_pField->SetCustomUnitText(rtl::OUString('%'));
+    m_pField->SetCustomUnitText(OUString('%'));
 }
 
 void PercentField::SetRefValue(sal_Int64 nValue)

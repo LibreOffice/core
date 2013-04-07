@@ -2290,12 +2290,12 @@ namespace svt { namespace table
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString TableControl_Impl::getCellContentAsString( RowPos const i_row, ColPos const i_col )
+    OUString TableControl_Impl::getCellContentAsString( RowPos const i_row, ColPos const i_col )
     {
         Any aCellValue;
         m_pModel->getCellContent( i_col, i_row, aCellValue );
 
-        ::rtl::OUString sCellStringContent;
+        OUString sCellStringContent;
         m_pModel->getRenderer()->GetFormattedCellString( aCellValue, i_col, i_row, sCellStringContent );
 
         return sCellStringContent;

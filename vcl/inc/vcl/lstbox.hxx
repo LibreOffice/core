@@ -223,7 +223,7 @@ public:
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
     void setMaxWidthChars(sal_Int32 nWidth);
 
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 // ----------------

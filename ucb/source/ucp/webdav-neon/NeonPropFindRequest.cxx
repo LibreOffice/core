@@ -43,19 +43,16 @@ using namespace com::sun::star::ucb;
 using namespace std;
 using namespace webdav_ucp;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
 
 namespace
 {
     // strip "DAV:" namespace from XML snippets to avoid
     // parser error (undeclared namespace) later on.
-    rtl::OString stripDavNamespace( const rtl::OString & in )
+    OString stripDavNamespace( const OString & in )
     {
-        const rtl::OString inXML( in.toAsciiLowerCase() );
+        const OString inXML( in.toAsciiLowerCase() );
 
-        rtl::OStringBuffer buf;
+        OStringBuffer buf;
         sal_Int32 start = 0;
         sal_Int32 end = inXML.indexOf( "dav:" );
         while ( end != -1 )
@@ -76,7 +73,7 @@ namespace
         }
         buf.append( inXML.copy( start ) );
 
-        return rtl::OString( buf.makeStringAndClear() );
+        return OString( buf.makeStringAndClear() );
     }
 }
 

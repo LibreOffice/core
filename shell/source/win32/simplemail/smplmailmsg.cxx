@@ -31,7 +31,6 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::IllegalArgumentException;
-using rtl::OUString;
 using osl::Mutex;
 
 using namespace cppu;
@@ -46,7 +45,7 @@ CSmplMailMsg::CSmplMailMsg( )
 
 //------------------------------------------------
 
-void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
+void SAL_CALL CSmplMailMsg::setRecipient( const OUString& aRecipient )
     throw (RuntimeException)
 {
     m_aRecipient = aRecipient;
@@ -54,7 +53,7 @@ void SAL_CALL CSmplMailMsg::setRecipient( const ::rtl::OUString& aRecipient )
 
 //------------------------------------------------
 
-::rtl::OUString SAL_CALL CSmplMailMsg::getRecipient(  )
+OUString SAL_CALL CSmplMailMsg::getRecipient(  )
     throw (RuntimeException)
 {
     return m_aRecipient;
@@ -126,7 +125,7 @@ OUString SAL_CALL CSmplMailMsg::getSubject(  )
 
 //------------------------------------------------
 
-void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< ::rtl::OUString >& aAttachement )
+void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< OUString >& aAttachement )
     throw (IllegalArgumentException, RuntimeException)
 {
     m_Attachements = aAttachement;

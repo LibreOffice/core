@@ -74,9 +74,9 @@ namespace xmloff
     //= OFormLayerXMLExport_Impl
     //=====================================================================
     //---------------------------------------------------------------------
-    const ::rtl::OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
+    const OUString& OFormLayerXMLExport_Impl::getControlNumberStyleNamePrefix()
     {
-        static const ::rtl::OUString s_sControlNumberStyleNamePrefix("C");
+        static const OUString s_sControlNumberStyleNamePrefix("C");
         return s_sControlNumberStyleNamePrefix;
     }
 
@@ -96,7 +96,7 @@ namespace xmloff
         m_rContext.GetAutoStylePool()->AddFamily(
             XML_STYLE_FAMILY_CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
             m_xStyleExportMapper.get(),
-            ::rtl::OUString(  XML_STYLE_FAMILY_CONTROL_PREFIX )
+            OUString(  XML_STYLE_FAMILY_CONTROL_PREFIX )
         );
 
         // add our event translation table
@@ -150,13 +150,13 @@ namespace xmloff
         const Sequence< ScriptEventDescriptor >& _rEvents)
     {
         // the list of the referring controls
-        ::rtl::OUString sReferringControls;
+        OUString sReferringControls;
         MapPropertySet2String::const_iterator aReferring = m_aCurrentPageReferring->second.find(_rxControl);
         if (aReferring != m_aCurrentPageReferring->second.end())
             sReferringControls = aReferring->second;
 
         // the control id (should already have been created in examineForms)
-        ::rtl::OUString sControlId( getControlId( _rxControl ) );
+        OUString sControlId( getControlId( _rxControl ) );
 
         // do the exporting
         OControlExport aExportImpl(*this, _rxControl, sControlId, sReferringControls, _rEvents);
@@ -241,9 +241,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport_Impl::getObjectStyleName( const Reference< XPropertySet >& _rxObject )
+    OUString OFormLayerXMLExport_Impl::getObjectStyleName( const Reference< XPropertySet >& _rxObject )
     {
-        ::rtl::OUString aObjectStyle;
+        OUString aObjectStyle;
 
         MapPropertySet2String::const_iterator aObjectStylePos = m_aGridColumnStyles.find( _rxObject );
         if ( m_aGridColumnStyles.end() != aObjectStylePos )
@@ -389,10 +389,10 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
+    OUString OFormLayerXMLExport_Impl::getControlId(const Reference< XPropertySet >& _rxControl)
     {
         if (m_aCurrentPageIds == m_aControlIds.end())
-            return ::rtl::OUString();
+            return OUString();
 
         OSL_ENSURE(m_aCurrentPageIds->second.end() != m_aCurrentPageIds->second.find(_rxControl),
             "OFormLayerXMLExport_Impl::getControlId: can not find the control!");
@@ -400,9 +400,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport_Impl::getImmediateNumberStyle( const Reference< XPropertySet >& _rxObject )
+    OUString OFormLayerXMLExport_Impl::getImmediateNumberStyle( const Reference< XPropertySet >& _rxObject )
     {
-        ::rtl::OUString sNumberStyle;
+        OUString sNumberStyle;
 
         sal_Int32 nOwnFormatKey = implExamineControlNumberFormat( _rxObject );
         if ( -1 != nOwnFormatKey )
@@ -412,9 +412,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OFormLayerXMLExport_Impl::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
+    OUString OFormLayerXMLExport_Impl::getControlNumberStyle( const Reference< XPropertySet >& _rxControl )
     {
-        ::rtl::OUString sNumberStyle;
+        OUString sNumberStyle;
 
         ConstMapPropertySet2IntIterator aControlFormatPos = m_aControlNumberFormats.find(_rxControl);
         if (m_aControlNumberFormats.end() != aControlFormatPos)
@@ -503,13 +503,13 @@ namespace xmloff
             }
         };
 
-        ::rtl::OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
+        OUString lcl_findFreeControlId( const MapPropertySet2Map& _rAllPagesControlIds )
         {
-            static const ::rtl::OUString sControlIdBase(  "control"  );
-            ::rtl::OUString sControlId = sControlIdBase;
+            static const OUString sControlIdBase(  "control"  );
+            OUString sControlId = sControlIdBase;
 
             size_t nKnownControlCount = ::std::accumulate( _rAllPagesControlIds.begin(), _rAllPagesControlIds.end(), (size_t)0, AccumulateSize() );
-            sControlId += ::rtl::OUString::valueOf( (sal_Int32)nKnownControlCount + 1 );
+            sControlId += OUString::valueOf( (sal_Int32)nKnownControlCount + 1 );
 
         #ifdef DBG_UTIL
             // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
@@ -545,7 +545,7 @@ namespace xmloff
             // generate a new control id
 
             // find a free id
-            ::rtl::OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
+            OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
             // add it to the map
             m_aCurrentPageIds->second[_rxObject] = sCurrentId;
 
@@ -556,11 +556,11 @@ namespace xmloff
                 Reference< XPropertySet > xCurrentReference( _rxObject->getPropertyValue( PROPERTY_CONTROLLABEL ), UNO_QUERY );
                 if (xCurrentReference.is())
                 {
-                    ::rtl::OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
+                    OUString& sReferencedBy = m_aCurrentPageReferring->second[xCurrentReference];
                     if (!sReferencedBy.isEmpty())
                         // it's not the first _rxObject referring to the xCurrentReference
                         // -> separate the id
-                        sReferencedBy += ::rtl::OUString(",");
+                        sReferencedBy += OUString(",");
                     sReferencedBy += sCurrentId;
                 }
             }
@@ -618,7 +618,7 @@ namespace xmloff
                 // generate a new control id
 
                 // find a free id
-                ::rtl::OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
+                OUString sCurrentId = lcl_findFreeControlId( m_aControlIds );
                 // add it to the map
                 m_aCurrentPageIds->second[ xColumnProperties ] = sCurrentId;
 
@@ -629,7 +629,7 @@ namespace xmloff
                 ::std::vector< XMLPropertyState > aPropertyStates = m_xStyleExportMapper->Filter( xColumnProperties );
 
                 // care for the number format, additionally
-                ::rtl::OUString sColumnNumberStyle;
+                OUString sColumnNumberStyle;
                 if ( xColumnPropertiesMeta.is() && xColumnPropertiesMeta->hasPropertyByName( PROPERTY_FORMATKEY ) )
                     sColumnNumberStyle = getImmediateNumberStyle( xColumnProperties );
 
@@ -656,7 +656,7 @@ namespace xmloff
 
                 if ( !aPropertyStates.empty() )
                 {   // add to the style pool
-                    ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
+                    OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
 
                     OSL_ENSURE( m_aGridColumnStyles.end() == m_aGridColumnStyles.find( xColumnProperties ),
                         "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: already have a style for this column!" );
@@ -723,7 +723,7 @@ namespace xmloff
 
             // obtain the persistent (does not depend on the formats supplier) representation of the control's format
             Locale aFormatLocale;
-            ::rtl::OUString sFormatDescription;
+            OUString sFormatDescription;
             if (xControlFormats.is())
             {
                 Reference< XPropertySet > xControlFormat = xControlFormats->getByKey(nControlFormatKey);
@@ -762,9 +762,9 @@ namespace xmloff
             {
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
-                Locale aLocale (  ::rtl::OUString("en"),
-                                                 ::rtl::OUString("US"),
-                                                 ::rtl::OUString()
+                Locale aLocale (  OUString("en"),
+                                                 OUString("US"),
+                                                 OUString()
                                              );
                 xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
                 m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();

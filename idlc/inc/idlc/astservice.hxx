@@ -26,13 +26,13 @@ class AstService : public AstDeclaration
                  , public AstScope
 {
 public:
-    AstService(const ::rtl::OString& name, AstScope* pScope)
+    AstService(const OString& name, AstScope* pScope)
         : AstDeclaration(NT_service, name, pScope)
         , AstScope(NT_service)
         , m_singleInterfaceBasedService(false)
         , m_defaultConstructor(false)
         {}
-    AstService(const NodeType type, const ::rtl::OString& name, AstScope* pScope)
+    AstService(const NodeType type, const OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
         , m_singleInterfaceBasedService(false)

@@ -31,8 +31,6 @@
 
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -181,7 +179,7 @@ void XMLErrors::AddRecord(
     }
 
     // convert to byte string and signal the error
-    rtl::OString aError(rtl::OUStringToOString(sMessage.makeStringAndClear(),
+    OString aError(OUStringToOString(sMessage.makeStringAndClear(),
         RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL( aError.getStr() );
 #endif

@@ -39,7 +39,7 @@ class TypeDescriptionEnumerationImpl
 {
 public:
     TypeDescriptionEnumerationImpl(
-        const rtl::OUString & rModuleName,
+        const OUString & rModuleName,
         const com::sun::star::uno::Sequence<
             com::sun::star::uno::TypeClass > & rTypes,
         com::sun::star::reflection::TypeDescriptionSearchDepth eDepth,
@@ -67,7 +67,7 @@ private:
     queryCurrentChildEnumeration();
 
     osl::Mutex m_aMutex;
-    rtl::OUString m_aModuleName;
+    OUString m_aModuleName;
     com::sun::star::uno::Sequence< com::sun::star::uno::TypeClass > m_aTypes;
     com::sun::star::reflection::TypeDescriptionSearchDepth m_eDepth;
     TDEnumerationAccessStack m_aChildren;

@@ -64,7 +64,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::oox::core;
 
 using ::oox::drawingml::ThemeFragmentHandler;
-using ::rtl::OUString;
 
 // ============================================================================
 

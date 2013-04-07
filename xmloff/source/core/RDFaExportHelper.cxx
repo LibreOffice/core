@@ -57,18 +57,18 @@ using namespace ::com::sun::star;
 
 namespace xmloff {
 
-static ::rtl::OUString
+static OUString
 makeCURIE(SvXMLExport * i_pExport,
     uno::Reference<rdf::XURI> const & i_xURI)
 {
     OSL_ENSURE(i_xURI.is(), "makeCURIE: null URI");
     if (!i_xURI.is()) throw uno::RuntimeException();
 
-    const ::rtl::OUString Namespace( i_xURI->getNamespace() );
+    const OUString Namespace( i_xURI->getNamespace() );
     OSL_ENSURE(!Namespace.isEmpty(), "makeCURIE: no namespace");
     if (Namespace.isEmpty()) throw uno::RuntimeException();
 
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append( i_pExport->EnsureNamespace(Namespace) );
     buf.append( static_cast<sal_Unicode>(':') );
     // N.B.: empty LocalName is valid!
@@ -80,12 +80,12 @@ makeCURIE(SvXMLExport * i_pExport,
 // #i112473# SvXMLExport::GetRelativeReference() not right for RDF on SaveAs
 // because the URIs in the repository are not rewritten on SaveAs, the
 // URI of the loaded document has to be used, not the URI of the target doc.
-static ::rtl::OUString
-getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
+static OUString
+getRelativeReference(SvXMLExport const& rExport, OUString const& rURI)
 {
     uno::Reference< rdf::XURI > const xModelURI(
         rExport.GetModel(), uno::UNO_QUERY_THROW );
-    ::rtl::OUString const baseURI( xModelURI->getStringValue() );
+    OUString const baseURI( xModelURI->getStringValue() );
 
     uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory =
@@ -98,7 +98,7 @@ getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
     uno::Reference< uri::XUriReference > const xRelativeURI(
         xUriFactory->makeRelative(xBaseURI, xAbsoluteURI, true, true, false),
         uno::UNO_SET_THROW );
-    ::rtl::OUString const relativeURI(xRelativeURI->getUriReference());
+    OUString const relativeURI(xRelativeURI->getUriReference());
 
     return relativeURI;
 }
@@ -116,13 +116,13 @@ RDFaExportHelper::RDFaExportHelper(SvXMLExport & i_rExport)
     m_xRepository.set(xRS->getRDFRepository(), uno::UNO_QUERY_THROW);
 }
 
-::rtl::OUString
+OUString
 RDFaExportHelper::LookupBlankNode(
     uno::Reference<rdf::XBlankNode> const & i_xBlankNode)
 {
     OSL_ENSURE(i_xBlankNode.is(), "null BlankNode?");
     if (!i_xBlankNode.is()) throw uno::RuntimeException();
-    ::rtl::OUString & rEntry(
+    OUString & rEntry(
         m_BlankNodeMap[ i_xBlankNode->getStringValue() ] );
     if (rEntry.isEmpty())
     {
@@ -160,9 +160,9 @@ RDFaExportHelper::AddRDFa(
         }
         static const sal_Unicode s_OpenBracket ('[');
         static const sal_Unicode s_CloseBracket(']');
-        const ::rtl::OUString about( xSubjectURI.is()
+        const OUString about( xSubjectURI.is()
             ?   getRelativeReference(m_rExport, xSubjectURI->getStringValue())
-            :   ::rtl::OUStringBuffer().append(s_OpenBracket).append(
+            :   OUStringBuffer().append(s_OpenBracket).append(
                         LookupBlankNode(xSubjectBNode)).append(s_CloseBracket)
                     .makeStringAndClear()
             );
@@ -172,7 +172,7 @@ RDFaExportHelper::AddRDFa(
         const uno::Reference<rdf::XURI> xDatatype(xContent->getDatatype());
         if (xDatatype.is())
         {
-            const ::rtl::OUString datatype(
+            const OUString datatype(
                 makeCURIE(&m_rExport, xDatatype) );
             m_rExport.AddAttribute(XML_NAMESPACE_XHTML,
                 token::XML_DATATYPE, datatype);
@@ -183,7 +183,7 @@ RDFaExportHelper::AddRDFa(
                 xContent->getValue());
         }
 
-        ::rtl::OUStringBuffer property;
+        OUStringBuffer property;
         ::comphelper::intersperse(
             ::boost::make_transform_iterator(
                 ::comphelper::stl_begin(rStatements),
@@ -195,7 +195,7 @@ RDFaExportHelper::AddRDFa(
                 ::boost::bind(&makeCURIE, &m_rExport,
                     ::boost::bind(&rdf::Statement::Predicate, _1))),
             ::comphelper::OUStringBufferAppender(property),
-            ::rtl::OUString(" "));
+            OUString(" "));
 
         m_rExport.AddAttribute(XML_NAMESPACE_XHTML, token::XML_PROPERTY,
             property.makeStringAndClear());

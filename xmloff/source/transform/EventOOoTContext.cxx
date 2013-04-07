@@ -30,15 +30,13 @@
 
 #include <boost/unordered_map.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::boost::unordered_map< ::rtl::OUString, NameKey_Impl,
-                            ::rtl::OUStringHash, ::comphelper::UStringEqual >
+    public ::boost::unordered_map< OUString, NameKey_Impl,
+                            OUStringHash, ::comphelper::UStringEqual >
 {
 public:
 

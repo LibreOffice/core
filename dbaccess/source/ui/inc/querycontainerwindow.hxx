@@ -86,8 +86,8 @@ namespace dbaui
         void setReadOnly( sal_Bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
 
         sal_Bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
-        ::rtl::OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
-        void setStatement( const ::rtl::OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
+        OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
+        void setStatement( const OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
         void    initialize()                                                { m_pViewSwitch->initialize(); }
         void    SaveUIConfig()                                              { m_pViewSwitch->SaveUIConfig(); }

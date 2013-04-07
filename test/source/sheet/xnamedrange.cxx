@@ -53,48 +53,48 @@ namespace apitest {
 
 void XNamedRange::testGetContent()
 {
-    rtl::OUString aTestedNamedRangeString("initial1");
+    OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
-    rtl::OUString aExpectedContent("$Sheet1.$B$1");
+    OUString aExpectedContent("$Sheet1.$B$1");
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 on GetContent", xNamedRange->getContent().equals(aExpectedContent));
 }
 
 void XNamedRange::testSetContent()
 {
-    rtl::OUString aTestedNamedRangeString("initial1");
+    OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
-    rtl::OUString aExpectedContent;
+    OUString aExpectedContent;
 
     // test a cell
-    aExpectedContent = rtl::OUString("D1");
+    aExpectedContent = OUString("D1");
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cell", xNamedRange->getContent().equals(aExpectedContent));
 
     // test a cellrange
-    aExpectedContent = rtl::OUString("D1:D10");
+    aExpectedContent = OUString("D1:D10");
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", xNamedRange->getContent().equals(aExpectedContent));
 
     // test a formula
-    aExpectedContent = rtl::OUString("=D10");
+    aExpectedContent = OUString("=D10");
     xNamedRange->setContent(aExpectedContent);
-    aExpectedContent = rtl::OUString("D10");
+    aExpectedContent = OUString("D10");
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a formula", xNamedRange->getContent().equals(aExpectedContent));
 
 }
 
 void XNamedRange::testGetType()
 {
-    rtl::OUString aTestedNamedRangeString("initial1");
+    OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected Type", xNamedRange->getType() == 0);
 }
 
 void XNamedRange::testSetType()
 {
-    rtl::OUString aTestedNamedRangeString("initial1");
+    OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     sal_Int32 nType = ::sheet::NamedRangeFlag::ROW_HEADER;;
@@ -120,7 +120,7 @@ void XNamedRange::testSetType()
 
 void XNamedRange::testGetReferencePosition()
 {
-    rtl::OUString aTestedNamedRangeString("initial2");
+    OUString aTestedNamedRangeString("initial2");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
@@ -132,7 +132,7 @@ void XNamedRange::testGetReferencePosition()
 
 void XNamedRange::testSetReferencePosition()
 {
-    rtl::OUString aTestedNamedRangeString("initial1");
+    OUString aTestedNamedRangeString("initial1");
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress aBaseAddress = table::CellAddress(1,2,3);

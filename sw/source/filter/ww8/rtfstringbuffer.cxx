@@ -50,7 +50,7 @@ void RtfStringBufferValue::makeStringAndClear(RtfAttributeOutput* pAttributeOutp
         pAttributeOutput->FlyFrameGraphic(m_pFlyFrmFmt, m_pGrfNode);
 }
 
-rtl::OString RtfStringBufferValue::makeStringAndClear()
+OString RtfStringBufferValue::makeStringAndClear()
 {
     return m_aBuffer.makeStringAndClear();
 }
@@ -80,23 +80,23 @@ void RtfStringBuffer::makeStringAndClear(RtfAttributeOutput* pAttributeOutput)
         i->makeStringAndClear(pAttributeOutput);
 }
 
-rtl::OString RtfStringBuffer::makeStringAndClear()
+OString RtfStringBuffer::makeStringAndClear()
 {
-    rtl::OStringBuffer aBuf;
+    OStringBuffer aBuf;
     for (RtfStringBuffer::Values_t::iterator i = m_aValues.begin(); i != m_aValues.end(); ++i)
         if (!i->isGraphic())
             aBuf.append(i->makeStringAndClear());
     return aBuf.makeStringAndClear();
 }
 
-rtl::OStringBuffer& RtfStringBuffer::getLastBuffer()
+OStringBuffer& RtfStringBuffer::getLastBuffer()
 {
     if (m_aValues.empty() || m_aValues.back().isGraphic())
         m_aValues.push_back(RtfStringBufferValue());
     return m_aValues.back().m_aBuffer;
 }
 
-rtl::OStringBuffer* RtfStringBuffer::operator->()
+OStringBuffer* RtfStringBuffer::operator->()
 {
     return &getLastBuffer();
 }

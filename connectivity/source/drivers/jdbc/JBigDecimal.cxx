@@ -38,7 +38,7 @@ jclass java_math_BigDecimal::getMyClass() const
     return theClass;
 }
 
-java_math_BigDecimal::java_math_BigDecimal( const ::rtl::OUString& _par0 ): java_lang_Object( NULL, (jobject)NULL )
+java_math_BigDecimal::java_math_BigDecimal( const OUString& _par0 ): java_lang_Object( NULL, (jobject)NULL )
 {
     SDBThreadAttach t;
     if( !t.pEnv )

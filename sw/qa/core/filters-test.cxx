@@ -62,8 +62,8 @@ class SwFiltersTest
     , public test::BootstrapFixture
 {
 public:
-    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, unsigned int nFilterFlags,
+    virtual bool load( const OUString &rFilter, const OUString &rURL,
+        const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion);
     virtual void setUp();
 
@@ -78,14 +78,14 @@ private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
 };
 
-bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+bool SwFiltersTest::load(const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags,
         unsigned int nClipboardID, unsigned int nFilterVersion)
 {
     SfxFilter* pFilter = new SfxFilter(
-        rFilter, rtl::OUString(), nFilterFlags,
-        nClipboardID, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString());
+        rFilter, OUString(), nFilterFlags,
+        nClipboardID, OUString(), 0, OUString(),
+        rUserData, OUString());
     pFilter->SetVersion(nFilterVersion);
 
     SwDocShellRef xDocShRef = new SwDocShell;
@@ -95,7 +95,7 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     if (rUserData == FILTER_TEXT_DLG)
     {
         pSrcMed->GetItemSet()->Put(
-            SfxStringItem(SID_FILE_FILTEROPTIONS, rtl::OUString("UTF8,LF,Liberation Mono,en-US")));
+            SfxStringItem(SID_FILE_FILTEROPTIONS, OUString("UTF8,LF,Liberation Mono,en-US")));
     }
 
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
@@ -108,25 +108,25 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
 
 void SwFiltersTest::testCVEs()
 {
-    testDir(rtl::OUString("Staroffice XML (Writer)"),
+    testDir(OUString("Staroffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
-            rtl::OUString(FILTER_XML),
+            OUString(FILTER_XML),
             SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir(rtl::OUString("writer8"),
+    testDir(OUString("writer8"),
             getURLFromSrc("/sw/qa/core/data/odt/"),
-            rtl::OUString(FILTER_XML),
+            OUString(FILTER_XML),
             SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
-    testDir(rtl::OUString("MS Word 97"),
+    testDir(OUString("MS Word 97"),
             getURLFromSrc("/sw/qa/core/data/ww8/"),
-            rtl::OUString(FILTER_WW8));
+            OUString(FILTER_WW8));
 
-    testDir(rtl::OUString("Text (encoded)"),
+    testDir(OUString("Text (encoded)"),
             getURLFromSrc("/sw/qa/core/data/txt/"),
-            rtl::OUString(FILTER_TEXT_DLG));
+            OUString(FILTER_TEXT_DLG));
 }
 
 void SwFiltersTest::setUp()
@@ -136,7 +136,7 @@ void SwFiltersTest::setUp()
     //This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     //which is a private symbol to us, gets called
     m_xWriterComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
+        getMultiServiceFactory()->createInstance(OUString(
         "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
 }

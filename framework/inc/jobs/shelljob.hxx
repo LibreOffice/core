@@ -122,7 +122,7 @@ class ShellJob : private ThreadHelpBase
 
             @return the substituted command.
          */
-        ::rtl::OUString impl_substituteCommandVariables(const ::rtl::OUString& sCommand);
+        OUString impl_substituteCommandVariables(const OUString& sCommand);
 
         //---------------------------------------
         /** executes the command.
@@ -140,8 +140,8 @@ class ShellJob : private ThreadHelpBase
 
             @return sal_True if command was executed successfully; sal_False otherwise.
          */
-        ::sal_Bool impl_execute(const ::rtl::OUString&                       sCommand      ,
-                                const css::uno::Sequence< ::rtl::OUString >& lArguments    ,
+        ::sal_Bool impl_execute(const OUString&                       sCommand      ,
+                                const css::uno::Sequence< OUString >& lArguments    ,
                                       ::sal_Bool                             bCheckExitCode);
 };
 

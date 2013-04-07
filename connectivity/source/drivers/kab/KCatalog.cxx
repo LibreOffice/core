@@ -42,18 +42,18 @@ KabCatalog::KabCatalog(KabConnection* _pCon)
 void KabCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("%");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("%");
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(),
-        ::rtl::OUString("%"),
-        ::rtl::OUString("%"),
+        OUString("%"),
+        OUString("%"),
         aTypes);
 
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName;
+        OUString aName;
 
         while (xResult->next())
         {

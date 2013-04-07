@@ -483,8 +483,8 @@ String SfxDocumentTemplates::GetPath
 
 //------------------------------------------------------------------------
 
-::rtl::OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
-                                                                         const ::rtl::OUString& aTitle )
+OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString& aGroupName,
+                                                                         const OUString& aTitle )
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -499,7 +499,7 @@ String SfxDocumentTemplates::GetPath
                         INetURLObject::ENCODE_ALL );
 
 
-    ::rtl::OUString aResult;
+    OUString aResult;
     Content aTemplate;
     uno::Reference< XCommandEnvironment > aCmdEnv;
     if ( Content::create( aTemplateObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv, comphelper::getProcessComponentContext(), aTemplate ) )
@@ -611,7 +611,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
         INetURLObject aSourceObj( pSource->GetTargetURL() );
 
-        ::rtl::OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
+        OUString aNewTargetURL = GetTemplateTargetURLFromComponent( pTargetRgn->GetTitle(), aTitle );
         if ( aNewTargetURL.isEmpty() )
             return sal_False;
 
@@ -833,7 +833,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         uno::Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );;
 
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString("Hidden");
+        aArgs[0].Name = OUString("Hidden");
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );

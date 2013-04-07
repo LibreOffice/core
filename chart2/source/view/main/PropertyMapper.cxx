@@ -84,8 +84,8 @@ void PropertyMapper::getValueMap(
 
     for( ; aIt != aEnd; ++aIt )
     {
-        rtl::OUString aTarget = aIt->first;
-        rtl::OUString aSource = aIt->second;
+        OUString aTarget = aIt->first;
+        OUString aSource = aIt->second;
         try
         {
             uno::Any aAny( xSourceProp->getPropertyValue(aSource) );
@@ -143,7 +143,7 @@ void PropertyMapper::getMultiPropertyListsFromValueMap(
 
 uno::Any* PropertyMapper::getValuePointer( tAnySequence& rPropValues
                          , const tNameSequence& rPropNames
-                         , const rtl::OUString& rPropName )
+                         , const OUString& rPropName )
 {
     sal_Int32 nCount = rPropNames.getLength();
     for( sal_Int32 nN = 0; nN < nCount; nN++ )
@@ -373,7 +373,7 @@ void PropertyMapper::setMultiProperties(
     try
     {
         sal_Int32 nCount = std::max( rNames.getLength(), rValues.getLength() );
-        rtl::OUString aPropName;
+        OUString aPropName;
         uno::Any aValue;
         for( sal_Int32 nN = 0; nN < nCount; nN++ )
         {
@@ -416,7 +416,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(sal_True) ) ); // sal_Bool
     aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(sal_True) ) ); // sal_Bool
     if( bName )
-        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( rtl::OUString() ) ) ); //CID rtl::OUString - needs to be overwritten for each point
+        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
 
     if( nLimitedSpace > 0 )
     {

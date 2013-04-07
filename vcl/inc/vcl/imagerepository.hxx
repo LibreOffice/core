@@ -48,7 +48,7 @@ namespace vcl
                 whether or not the image could be loaded successfully.
         */
         static bool loadImage(
-            const ::rtl::OUString& _rName,
+            const OUString& _rName,
             BitmapEx& _out_rImage,
             bool bSearchLanguageDependent,
             bool loadMissing = false

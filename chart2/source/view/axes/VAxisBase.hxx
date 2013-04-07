@@ -66,7 +66,7 @@ public:
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 protected: //methods
-    sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< rtl::OUString >& rLabels );
+    sal_Int32 getIndexOfLongestLabel( const ::com::sun::star::uno::Sequence< OUString >& rLabels );
     void removeTextShapesFromTicks();
     void updateUnscaledValuesAtTicks( TickIter& rIter );
 
@@ -82,7 +82,7 @@ protected: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
     AxisProperties                                                                      m_aAxisProperties;
     AxisLabelProperties                                                                 m_aAxisLabelProperties;
-    ::com::sun::star::uno::Sequence< rtl::OUString >                                    m_aTextLabels;
+    ::com::sun::star::uno::Sequence< OUString >                                    m_aTextLabels;
     bool                                                                                m_bUseTextLabels;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape_Shapes;

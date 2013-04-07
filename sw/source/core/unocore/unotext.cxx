@@ -67,7 +67,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 
 const sal_Char cInvalidObject[] = "this object is invalid";
@@ -464,7 +463,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
     if (cIns)
     {
-        m_pImpl->m_pDoc->InsertString( aTmp, rtl::OUString(cIns), nInsertFlags );
+        m_pImpl->m_pDoc->InsertString( aTmp, OUString(cIns), nInsertFlags );
     }
 
     if (bAbsorb)
@@ -1119,7 +1118,7 @@ SwXText::getPropertySetInfo() throw(uno::RuntimeException)
 }
 
 void SAL_CALL
-SwXText::setPropertyValue(const ::rtl::OUString& /*aPropertyName*/,
+SwXText::setPropertyValue(const OUString& /*aPropertyName*/,
         const uno::Any& /*aValue*/)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
@@ -1130,7 +1129,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
 uno::Any SAL_CALL
 SwXText::getPropertyValue(
-    const ::rtl::OUString& rPropertyName)
+    const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
@@ -1186,7 +1185,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXText::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1196,7 +1195,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXText::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1206,7 +1205,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXText::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -1216,7 +1215,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXText::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -1283,7 +1282,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     uno::Reference< text::XTextRange > xRet;
     bool bIllegalException = false;
     bool bRuntimeException = false;
-    ::rtl::OUString sMessage;
+    OUString sMessage;
     m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , NULL);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
@@ -1396,7 +1395,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::insertTextPortion(
-        const ::rtl::OUString& rText,
+        const OUString& rText,
         const uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties,
         const uno::Reference<text::XTextRange>& xInsertPosition)
@@ -1419,7 +1418,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     bool bIllegalException = false;
     bool bRuntimeException = false;
-    ::rtl::OUString sMessage;
+    OUString sMessage;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
@@ -1481,7 +1480,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
   -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > SAL_CALL
 SwXText::appendTextPortion(
-        const ::rtl::OUString& rText,
+        const OUString& rText,
         const uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1603,7 +1602,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     bool bIllegalException = false;
     bool bRuntimeException = false;
-    ::rtl::OUString sMessage;
+    OUString sMessage;
     SwStartNode* pStartStartNode = aStartPam.GetNode()->StartOfSectionNode();
     while (pStartStartNode && pStartStartNode->IsSectionNode())
     {
@@ -1846,7 +1845,7 @@ void SwXText::Impl::ConvertCell(
     if (rCell.getLength() != 2)
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "rCell needs to contain 2 elements" ),
+                OUString::createFromAscii( "rCell needs to contain 2 elements" ),
                 uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
     const uno::Reference<text::XTextRange> xStartRange = rCell[0];
@@ -1861,7 +1860,7 @@ void SwXText::Impl::ConvertCell(
         !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
     {
         throw lang::IllegalArgumentException(
-                rtl::OUString::createFromAscii( "Start or End range cannot be resolved to a SwPaM" ),
+                OUString::createFromAscii( "Start or End range cannot be resolved to a SwPaM" ),
                 uno::Reference< text::XTextCopy >( &m_rThis ), sal_Int16( 2 ) );
     }
 
@@ -2034,7 +2033,7 @@ lcl_DebugCellProperties(
     const uno::Sequence< uno::Sequence< uno::Sequence<
         beans::PropertyValue > > >& rCellProperties)
 {
-    ::rtl::OUString sNames;
+    OUString sNames;
     for (sal_Int32  nDebugRow = 0; nDebugRow < rCellProperties.getLength();
          ++nDebugRow)
     {
@@ -2052,14 +2051,14 @@ lcl_DebugCellProperties(
             for (sal_Int32  nDebugProperty = 0;
                  nDebugProperty < nDebugCellProperties; ++nDebugProperty)
             {
-                const ::rtl::OUString sName =
+                const OUString sName =
                     rDebugCellProperties[nDebugProperty].Name;
                 sNames += sName;
-                sNames += ::rtl::OUString('-');
+                sNames += OUString('-');
             }
-            sNames += ::rtl::OUString('+');
+            sNames += OUString('+');
         }
-        sNames += ::rtl::OUString('|');
+        sNames += OUString('|');
     }
     (void)sNames;
 }
@@ -2193,7 +2192,7 @@ lcl_MergeCells(::std::vector<VerticallyMergedCell> & rMergedCells)
             while (aCellIter != aMergedIter->aCells.end())
             {
                 (*aCellIter)->setPropertyValue(
-                    rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)),
+                    OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)),
                     uno::makeAny(nCellCount));
                 if (bFirstCell)
                 {
@@ -2527,7 +2526,7 @@ throw (uno::RuntimeException)
     if (::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
         if ( !aPam.GetNode()->GetTxtNode() )
-            throw uno::RuntimeException( rtl::OUString("Invalid text range"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString("Invalid text range"), uno::Reference< uno::XInterface >() );
 
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
@@ -2548,7 +2547,7 @@ throw (uno::RuntimeException)
     }
     if(!aRef.is())
     {
-        throw uno::RuntimeException( rtl::OUString::createFromAscii( "End of content node doesn't have the proper start node" ),
+        throw uno::RuntimeException( OUString::createFromAscii( "End of content node doesn't have the proper start node" ),
                uno::Reference< uno::XInterface >( *this ) );
     }
     return aRef;

@@ -115,7 +115,7 @@ namespace toolkit
 
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlRoadmapModel, UnoControlRoadmapModel_Base, szServiceName2_UnoControlRoadmapModel )
@@ -160,7 +160,7 @@ namespace toolkit
         ItemListenerMultiplexer                 maItemListeners;
     public:
                             UnoRoadmapControl();
-        ::rtl::OUString     GetComponentServiceName();
+        OUString     GetComponentServiceName();
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
 

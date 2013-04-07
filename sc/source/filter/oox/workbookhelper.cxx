@@ -95,13 +95,12 @@ using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
-using ::rtl::OUString;
 
 // ============================================================================
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
-    // there is no wrapper in rtl::OUString, TODO: compare with collator
+    // there is no wrapper in OUString, TODO: compare with collator
     return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
         rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
 }
@@ -159,7 +158,7 @@ public:
             }
         }
         if ( !mpDoc )
-            throw RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Workbookhelper::getScDocument(): Failed to access ScDocument from model" ) ), Reference< XInterface >() );
+            throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM("Workbookhelper::getScDocument(): Failed to access ScDocument from model" ) ), Reference< XInterface >() );
         return *mpDoc;
     }
 
@@ -393,12 +392,12 @@ ScRangeData* lcl_addNewByNameAndTokens( ScDocument& rDoc, ScRangeName* pNames, c
     return pNew;
 }
 
-rtl::OUString findUnusedName( const ScRangeName* pRangeName, const rtl::OUString& rSuggestedName )
+OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggestedName )
 {
-    rtl::OUString aNewName = rSuggestedName;
+    OUString aNewName = rSuggestedName;
     sal_Int32 nIndex = 0;
     while(pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(aNewName)))
-        aNewName = rtl::OUStringBuffer(rSuggestedName).append( '_' ).append( nIndex++ ).makeStringAndClear();
+        aNewName = OUStringBuffer(rSuggestedName).append( '_' ).append( nIndex++ ).makeStringAndClear();
 
     return aNewName;
 }

@@ -53,7 +53,7 @@ public:
     XMLChangeElementImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         /// accept text content (paragraphs) in element as redline content?
         sal_Bool bAcceptContent,
         /// context of enclosing <text:changed-region> element
@@ -61,7 +61,7 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 

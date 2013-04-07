@@ -47,7 +47,7 @@ class XMLOFF_DLLPUBLIC XMLFontStylesContext : public SvXMLStylesContext
 protected:
 
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -56,7 +56,7 @@ public:
     TYPEINFO();
 
     XMLFontStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             rtl_TextEncoding eDfltEnc );
@@ -67,7 +67,7 @@ public:
         return *pFontStyleAttrTokenMap;
     }
 
-    sal_Bool FillProperties( const ::rtl::OUString& rName,
+    sal_Bool FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,
                          sal_Int32 nStyleNameIdx,

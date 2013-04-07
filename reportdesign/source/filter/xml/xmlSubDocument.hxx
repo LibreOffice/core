@@ -31,8 +31,8 @@ namespace rptxml
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xComponent;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>   m_xFake;
-        ::std::vector< ::rtl::OUString> m_aMasterFields;
-        ::std::vector< ::rtl::OUString> m_aDetailFields;
+        ::std::vector< OUString> m_aMasterFields;
+        ::std::vector< OUString> m_aDetailFields;
         OXMLCell*       m_pCellParent;
         sal_Int32       m_nCurrentCount;
         bool            m_bContainsShape;
@@ -41,20 +41,20 @@ namespace rptxml
         void operator =(const OXMLSubDocument&);
 
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     public:
 
         OXMLSubDocument( ORptFilter& rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent
                     ,OXMLTable* _pContainer
                     ,OXMLCell* _pCellParent);
         virtual ~OXMLSubDocument();
 
         virtual void EndElement();
-        virtual void addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair);
+        virtual void addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair);
     };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

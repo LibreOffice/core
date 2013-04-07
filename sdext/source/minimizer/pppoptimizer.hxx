@@ -52,18 +52,18 @@ public:
         throw( com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& sServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
 
     // XDispatchProvider
     virtual com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > SAL_CALL queryDispatch(
-        const com::sun::star::util::URL& aURL, const rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+        const com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
             throw(com::sun::star::uno::RuntimeException);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches(
@@ -81,11 +81,11 @@ public:
                                                 const com::sun::star::util::URL& aURL )
         throw( com::sun::star::uno::RuntimeException );
 
-    static sal_Int64 GetFileSize( const rtl::OUString& rURL );
+    static sal_Int64 GetFileSize( const OUString& rURL );
 };
 
-rtl::OUString PPPOptimizer_getImplementationName();
-com::sun::star::uno::Sequence< rtl::OUString > PPPOptimizer_getSupportedServiceNames();
+OUString PPPOptimizer_getImplementationName();
+com::sun::star::uno::Sequence< OUString > PPPOptimizer_getSupportedServiceNames();
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > PPPOptimizer_createInstance( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rSMgr )
     throw( com::sun::star::uno::Exception );
 

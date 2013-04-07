@@ -80,7 +80,7 @@ namespace toolkit
     {
         Reference< XInterface > const xSource( static_cast< ::cppu::OWeakObject* >( this ) );
         GridColumnEvent const aEvent(
-            xSource, ::rtl::OUString::createFromAscii( i_asciiAttributeName ),
+            xSource, OUString::createFromAscii( i_asciiAttributeName ),
             i_oldValue, i_newValue, m_nIndex
         );
 
@@ -145,27 +145,27 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL GridColumn::getTitle() throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL GridColumn::getTitle() throw (::com::sun::star::uno::RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_sTitle;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL GridColumn::setTitle(const OUString & value) throw (::com::sun::star::uno::RuntimeException)
     {
         impl_set( m_sTitle, value, "Title" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL GridColumn::getHelpText() throw (RuntimeException)
+    OUString SAL_CALL GridColumn::getHelpText() throw (RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_sHelpText;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::setHelpText( const ::rtl::OUString & value ) throw (RuntimeException)
+    void SAL_CALL GridColumn::setHelpText( const OUString & value ) throw (RuntimeException)
     {
         impl_set( m_sHelpText, value, "HelpText" );
     }
@@ -194,7 +194,7 @@ namespace toolkit
     void SAL_CALL GridColumn::setFlexibility( ::sal_Int32 i_value ) throw (IllegalArgumentException, RuntimeException)
     {
         if ( i_value < 0 )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
         impl_set( m_nFlexibility, i_value, "Flexibility" );
     }
 
@@ -228,7 +228,7 @@ namespace toolkit
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aIdentifier.clear();
-        m_sTitle = m_sHelpText = ::rtl::OUString();
+        m_sTitle = m_sHelpText = OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -259,15 +259,15 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL GridColumn::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL GridColumn::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.toolkit.GridColumn" );
+        return OUString( "org.openoffice.comp.toolkit.GridColumn" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool SAL_CALL GridColumn::supportsService( const ::rtl::OUString& i_serviceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL GridColumn::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
         for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
             if ( aServiceNames[i] == i_serviceName )
                 return sal_True;
@@ -275,10 +275,10 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_GridColumn ) );
-        const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
+        const OUString aServiceName( OUString::createFromAscii( szServiceName_GridColumn ) );
+        const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
 

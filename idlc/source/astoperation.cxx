@@ -46,11 +46,11 @@ sal_Bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     sal_uInt16      nExcep = nExceptions();
     RTMethodMode    methodMode = RT_MODE_TWOWAY;
 
-    rtl::OUString returnTypeName;
+    OUString returnTypeName;
     if (m_pReturnType == 0) {
-        returnTypeName = rtl::OUString("void");
+        returnTypeName = OUString("void");
     } else {
-        returnTypeName = rtl::OStringToOUString(
+        returnTypeName = OStringToOUString(
             m_pReturnType->getRelativName(), RTL_TEXTENCODING_UTF8);
     }
     rBlob.setMethodData(

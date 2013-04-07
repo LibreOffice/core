@@ -58,7 +58,7 @@ class PropertySetInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    sal_Bool queryProperty( const rtl::OUString& rName,
+    sal_Bool queryProperty( const OUString& rName,
                             com::sun::star::beans::Property& rProp );
 
 public:
@@ -79,11 +79,11 @@ public:
     getProperties()
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::beans::Property SAL_CALL
-    getPropertyByName( const rtl::OUString& aName )
+    getPropertyByName( const OUString& aName )
         throw( com::sun::star::beans::UnknownPropertyException,
                com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const rtl::OUString& Name )
+    hasPropertyByName( const OUString& Name )
         throw( com::sun::star::uno::RuntimeException );
 
     // Non-Interface methods.
@@ -114,7 +114,7 @@ class CommandProcessorInfo :
     ContentImplHelper*          m_pContent;
 
 private:
-    sal_Bool queryCommand( const rtl::OUString& rName,
+    sal_Bool queryCommand( const OUString& rName,
                            com::sun::star::ucb::CommandInfo& rCommand );
     sal_Bool queryCommand( sal_Int32 nHandle,
                            com::sun::star::ucb::CommandInfo& rCommand );
@@ -137,7 +137,7 @@ public:
     getCommands()
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::ucb::CommandInfo SAL_CALL
-    getCommandInfoByName( const rtl::OUString& Name )
+    getCommandInfoByName( const OUString& Name )
         throw( com::sun::star::ucb::UnsupportedCommandException,
         com::sun::star::uno::RuntimeException );
     virtual com::sun::star::ucb::CommandInfo SAL_CALL
@@ -145,7 +145,7 @@ public:
         throw( com::sun::star::ucb::UnsupportedCommandException,
         com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
-    hasCommandByName( const rtl::OUString& Name )
+    hasCommandByName( const OUString& Name )
         throw( com::sun::star::uno::RuntimeException );
     virtual sal_Bool SAL_CALL
     hasCommandByHandle( sal_Int32 Handle )

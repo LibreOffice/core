@@ -33,7 +33,6 @@
 #include "storlckb.hxx"
 
 using rtl::Reference;
-using rtl::OString;
 
 namespace store
 {

@@ -69,26 +69,26 @@ const StringSequence& getColumnTypes()
     static StringSequence aColumnTypes(10);
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
-        ::rtl::OUString* pNames = aColumnTypes.getArray();
-        pNames[TYPE_CHECKBOX]       = ::rtl::OUString( "CheckBox" );
-        pNames[TYPE_COMBOBOX]       = ::rtl::OUString( "ComboBox" );
-        pNames[TYPE_CURRENCYFIELD]  = ::rtl::OUString( "CurrencyField" );
-        pNames[TYPE_DATEFIELD]      = ::rtl::OUString( "DateField" );
-        pNames[TYPE_FORMATTEDFIELD] = ::rtl::OUString( "FormattedField" );
-        pNames[TYPE_LISTBOX]        = ::rtl::OUString( "ListBox" );
-        pNames[TYPE_NUMERICFIELD]   = ::rtl::OUString( "NumericField" );
-        pNames[TYPE_PATTERNFIELD]   = ::rtl::OUString( "PatternField" );
-        pNames[TYPE_TEXTFIELD]      = ::rtl::OUString( "TextField" );
-        pNames[TYPE_TIMEFIELD]      = ::rtl::OUString( "TimeField" );
+        OUString* pNames = aColumnTypes.getArray();
+        pNames[TYPE_CHECKBOX]       = OUString( "CheckBox" );
+        pNames[TYPE_COMBOBOX]       = OUString( "ComboBox" );
+        pNames[TYPE_CURRENCYFIELD]  = OUString( "CurrencyField" );
+        pNames[TYPE_DATEFIELD]      = OUString( "DateField" );
+        pNames[TYPE_FORMATTEDFIELD] = OUString( "FormattedField" );
+        pNames[TYPE_LISTBOX]        = OUString( "ListBox" );
+        pNames[TYPE_NUMERICFIELD]   = OUString( "NumericField" );
+        pNames[TYPE_PATTERNFIELD]   = OUString( "PatternField" );
+        pNames[TYPE_TEXTFIELD]      = OUString( "TextField" );
+        pNames[TYPE_TIMEFIELD]      = OUString( "TimeField" );
     }
     return aColumnTypes;
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
+sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix ("com.sun.star.form.component.");
-    const ::rtl::OUString aCompatibleModelPrefix ("stardiv.one.form.component.");
+    const OUString aModelPrefix ("com.sun.star.form.component.");
+    const OUString aCompatibleModelPrefix ("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FRM_COMPONENT_EDIT)
@@ -102,7 +102,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
         DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1),
                 "::getColumnTypeByModelName() : wrong servivce !");
 
-        ::rtl::OUString aColumnType = (nPrefixPos != -1)
+        OUString aColumnType = (nPrefixPos != -1)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 
@@ -200,7 +200,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
 
 DBG_NAME(OGridColumn);
 //------------------------------------------------------------------------------
-OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const ::rtl::OUString& _sModelName )
+OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
     ,m_aHidden( makeAny( sal_False ) )
@@ -304,7 +304,7 @@ void OGridColumn::disposing()
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_Bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
-    ::std::set< ::rtl::OUString > aForbiddenProperties;
+    ::std::set< OUString > aForbiddenProperties;
     aForbiddenProperties.insert( PROPERTY_ALIGN );
     aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
     aForbiddenProperties.insert( PROPERTY_BACKGROUNDCOLOR );
@@ -341,7 +341,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_VERTICAL_ALIGN );
     aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
     aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
-    aForbiddenProperties.insert( ::rtl::OUString( "EnableVisible" ) );
+    aForbiddenProperties.insert( OUString( "EnableVisible" ) );
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 
@@ -365,11 +365,11 @@ void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 {
     aDescriptor.realloc(5);
     Property* pProperties = aDescriptor.getArray();
-    DECL_PROP1(LABEL,               ::rtl::OUString,    BOUND);
+    DECL_PROP1(LABEL,               OUString,    BOUND);
     DECL_PROP3(WIDTH,               sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT);
     DECL_PROP3(ALIGN,               sal_Int16,          BOUND, MAYBEVOID, MAYBEDEFAULT);
     DECL_BOOL_PROP2(HIDDEN,                             BOUND, MAYBEDEFAULT);
-    DECL_PROP1(COLUMNSERVICENAME,   ::rtl::OUString,    READONLY);
+    DECL_PROP1(COLUMNSERVICENAME,   OUString,    READONLY);
 }
 
 // Reference<XPropertySet>

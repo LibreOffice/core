@@ -1291,10 +1291,10 @@ bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
     return (nPropValue & nMask) != 0;
 }
 
-::rtl::OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
+OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
 {
     sal_Size nOldPos = rStrm.Tell();
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     sal_uInt32 nBufferSize = GetPropertyValue( nId );
     if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
     {

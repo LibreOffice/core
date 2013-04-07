@@ -72,7 +72,7 @@ class SvxColorBox : public ColorLB
     Timer           aDelayTimer;
     Size            aLogicalSize;
     sal_Bool            bRelease;
-    ::rtl::OUString maCommand;
+    OUString maCommand;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
 #ifdef _SVX_ITEMWIN_CXX
@@ -81,7 +81,7 @@ class SvxColorBox : public ColorLB
 
 public:
     SvxColorBox( Window* pParent,
-                 const rtl::OUString& rCommand,
+                 const OUString& rCommand,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                  WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
     ~SvxColorBox();

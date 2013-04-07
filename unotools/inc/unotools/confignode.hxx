@@ -61,10 +61,10 @@ namespace utl
                     m_xDummy;
         sal_Bool    m_bEscapeNames;         /// escape names before accessing children ?
 
-        ::rtl::OUString
+        OUString
                     m_sCompletePath;
 
-        OConfigurationNode  insertNode(const ::rtl::OUString& _rName,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xNode) const throw();
+        OConfigurationNode  insertNode(const OUString& _rName,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xNode) const throw();
 
     protected:
         /// constructs a node object with an interface representing a node
@@ -88,19 +88,19 @@ namespace utl
         ~OConfigurationNode() {}
 
         /// returns the local name of the node
-        ::rtl::OUString     getLocalName() const;
+        OUString     getLocalName() const;
 
         /// returns the fully qualified path of the node
-        ::rtl::OUString     getNodePath() const;
+        OUString     getNodePath() const;
 
         /** open a sub node
             @param      _rPath      access path of the to-be-opened sub node. May be a hierarchical path.
         */
-        OConfigurationNode  openNode(const ::rtl::OUString& _rPath) const throw();
+        OConfigurationNode  openNode(const OUString& _rPath) const throw();
 
         OConfigurationNode  openNode( const sal_Char* _pAsciiPath ) const
         {
-            return openNode( ::rtl::OUString::createFromAscii( _pAsciiPath ) );
+            return openNode( OUString::createFromAscii( _pAsciiPath ) );
         }
 
         /** create a new child node
@@ -111,11 +111,11 @@ namespace utl
             becomes a part of it's hierarchy, no explicit insertion is necessary.
             @param      _rName      name for the new child. Must be level-1-depth.
         */
-        OConfigurationNode  createNode(const ::rtl::OUString& _rName) const throw();
+        OConfigurationNode  createNode(const OUString& _rName) const throw();
 
         OConfigurationNode  createNode( const sal_Char* _pAsciiName ) const
         {
-            return createNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+            return createNode( OUString::createFromAscii( _pAsciiName ) );
         }
 
         /** remove an existent child nod
@@ -123,11 +123,11 @@ namespace utl
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
-        sal_Bool            removeNode(const ::rtl::OUString& _rName) const throw();
+        sal_Bool            removeNode(const OUString& _rName) const throw();
 
         sal_Bool            removeNode( const sal_Char* _pAsciiName ) const
         {
-            return removeNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+            return removeNode( OUString::createFromAscii( _pAsciiName ) );
         }
 
         /** retrieves the content of a descendant
@@ -138,12 +138,12 @@ namespace utl
             "the path does not exist" (besides the assertion made :), or if the value is really void.
         */
         ::com::sun::star::uno::Any
-                            getNodeValue(const ::rtl::OUString& _rPath) const throw();
+                            getNodeValue(const OUString& _rPath) const throw();
 
         ::com::sun::star::uno::Any
                             getNodeValue( const sal_Char* _pAsciiPath ) const
         {
-            return getNodeValue( ::rtl::OUString::createFromAscii( _pAsciiPath ) );
+            return getNodeValue( OUString::createFromAscii( _pAsciiPath ) );
         }
 
         /** write a node value<p/>
@@ -152,15 +152,15 @@ namespace utl
             node.
             @return     sal_True if and only if the write was successfull.
         */
-        sal_Bool            setNodeValue(const ::rtl::OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
+        sal_Bool            setNodeValue(const OUString& _rPath, const ::com::sun::star::uno::Any& _rValue) const throw();
 
         sal_Bool            setNodeValue( const sal_Char* _pAsciiPath, const ::com::sun::star::uno::Any& _rValue ) const
         {
-            return setNodeValue( ::rtl::OUString::createFromAscii( _pAsciiPath ), _rValue );
+            return setNodeValue( OUString::createFromAscii( _pAsciiPath ), _rValue );
         }
 
         /// return the names of the existing children
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                             getNodeNames() const throw();
 
         /** enables or disables name escaping when accessing direct children<p/>
@@ -185,12 +185,12 @@ namespace utl
         sal_Bool isSetNode() const;
 
         /// checks whether or not a direct child with a given name exists
-        sal_Bool hasByName(const ::rtl::OUString& _rName) const throw();
-        sal_Bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( ::rtl::OUString::createFromAscii( _pAsciiName ) ); }
+        sal_Bool hasByName(const OUString& _rName) const throw();
+        sal_Bool hasByName( const sal_Char* _pAsciiName ) const { return hasByName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
-        sal_Bool hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw();
-        sal_Bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( ::rtl::OUString::createFromAscii( _pAsciiName ) ); }
+        sal_Bool hasByHierarchicalName( const OUString& _rName ) const throw();
+        sal_Bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// check if the objects represents a valid configuration node
         sal_Bool isValid() const { return m_xHierarchyAccess.is(); }
@@ -208,7 +208,7 @@ namespace utl
             NO_CONFIGURATION,       /// the name came from a configuration node
             NO_CALLER               /// the name came from a client of this class
         };
-        ::rtl::OUString normalizeName(const ::rtl::OUString& _rName, NAMEORIGIN _eOrigin) const;
+        OUString normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const;
     };
 
     //========================================================================
@@ -250,7 +250,7 @@ namespace utl
         */
         OConfigurationTreeRoot(
             const css::uno::Reference<css::uno::XComponentContext> & i_rContext,
-            const ::rtl::OUString& i_rNodePath,
+            const OUString& i_rNodePath,
             const bool i_bUpdatable
         );
 
@@ -275,7 +275,7 @@ namespace utl
         */
         static OConfigurationTreeRoot createWithProvider(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
-                const ::rtl::OUString& _rPath,
+                const OUString& _rPath,
                 sal_Int32 _nDepth = -1,
                 CREATION_MODE _eMode = CM_UPDATABLE,
                 sal_Bool _bLazyWrite = sal_True
@@ -294,7 +294,7 @@ namespace utl
             @param      _eMode          specifies which privileges should be applied when retrieving the node
         */
         static OConfigurationTreeRoot createWithComponentContext(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True);
 
         /** tolerant version of the <member>createWithServiceFactory</member>
 
@@ -303,7 +303,7 @@ namespace utl
             given node path does not exist) are still asserted.</p>
         */
         static OConfigurationTreeRoot tryCreateWithComponentContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
+            const OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
 
         /** commit all changes made on the subtree the object is the root for<p/>
             All changes made on any <type>OConfigurationNode</type> object retrieved (maybe indirect) from this root

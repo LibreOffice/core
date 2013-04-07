@@ -29,7 +29,7 @@ XMLTextOrientationHdl::~XMLTextOrientationHdl()
 }
 
 sal_Bool XMLTextOrientationHdl::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
@@ -50,7 +50,7 @@ sal_Bool XMLTextOrientationHdl::importXML(
 }
 
 sal_Bool XMLTextOrientationHdl::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {

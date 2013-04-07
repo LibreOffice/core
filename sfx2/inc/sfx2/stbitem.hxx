@@ -35,7 +35,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
     StatusBar* pStatusBar,
     unsigned short nID,
-    const ::rtl::OUString& aCommandURL );
+    const OUString& aCommandURL );
 typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar &rStb );
 
 struct SfxStbCtrlFactory

@@ -101,9 +101,9 @@ public:
      * @descr   Set layout for the paragraph.When such property was setted, this paragraph will
      *          start at an new page.
      */
-    void    SetMasterPage(rtl::OUString master);
+    void    SetMasterPage(OUString master);
 
-    rtl::OUString GetMasterPage();
+    OUString GetMasterPage();
 
     /**
      * @descr   set the paragraph defaut font.
@@ -242,7 +242,7 @@ public:
     sal_Bool GetNumberRight(){return m_bNumberRight;}
 
 protected:
-    rtl::OUString   m_strMasterPage;
+    OUString   m_strMasterPage;
     enumXFAlignType m_eAlignType;
     enumXFAlignType m_eLastLineAlign;
     sal_Bool        m_bJustSingleWord;
@@ -268,7 +268,7 @@ protected:
     sal_Bool m_bNumberRight;
 };
 
-inline void XFParaStyle::SetMasterPage(rtl::OUString master)
+inline void XFParaStyle::SetMasterPage(OUString master)
 {
     m_strMasterPage = master;
 }
@@ -328,7 +328,7 @@ inline void XFParaStyle::ClearTabStyles()
     m_aTabs.Reset();
 }
 
-inline  rtl::OUString XFParaStyle::GetMasterPage()
+inline  OUString XFParaStyle::GetMasterPage()
 {
     return m_strMasterPage;
 }

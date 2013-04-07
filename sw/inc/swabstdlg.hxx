@@ -104,8 +104,8 @@ class AbstractFldInputDlg : public VclAbstractDialog  //add for SwFldInputDlg
 {
 public:
     //from class SalFrame
-    virtual void         SetWindowState( const rtl::OString & rStr ) = 0;
-    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
+    virtual void         SetWindowState( const OString & rStr ) = 0;
+    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog  //add for SwInsFootNoteDlg
@@ -115,7 +115,7 @@ public:
     virtual sal_Bool            IsEndNote() = 0;
     virtual String          GetStr() = 0;
     //from class Window
-    virtual void    SetHelpId( const rtl::OString& sHelpId ) = 0;
+    virtual void    SetHelpId( const OString& sHelpId ) = 0;
     virtual void    SetText( const OUString& rStr ) = 0;
 };
 
@@ -141,7 +141,7 @@ class AbstractMailMergeDlg : public VclAbstractDialog  //add for SwMailMergeDlg
 {
 public:
     virtual sal_uInt16  GetMergeType() = 0;
-    virtual const ::rtl::OUString& GetSaveFilter() const = 0;
+    virtual const OUString& GetSaveFilter() const = 0;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const = 0;
     virtual bool IsSaveIndividualDocs() const = 0;
@@ -240,8 +240,8 @@ public:
 class AbstractDropDownFieldDialog : public VclAbstractDialog //add for DropDownFieldDialog
 {
 public:
-     virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
-     virtual void         SetWindowState( const rtl::OString & rStr ) =0;//this method inherit from SystemWindow
+     virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
+     virtual void         SetWindowState( const OString & rStr ) =0;//this method inherit from SystemWindow
 };
 
 class AbstractSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg

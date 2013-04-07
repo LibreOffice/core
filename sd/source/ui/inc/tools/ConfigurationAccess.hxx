@@ -49,12 +49,12 @@ public:
             access.
     */
     ConfigurationAccess(
-        const ::rtl::OUString& rsRootName,
+        const OUString& rsRootName,
         const WriteMode eMode);
 
     ConfigurationAccess(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::OUString& rsRootName,
+        const OUString& rsRootName,
         const WriteMode eMode);
 
     /** Return a configuration node below the root of the called object.
@@ -66,7 +66,7 @@ public:
             It is empty when the node was not found.
     */
     css::uno::Any GetConfigurationNode (
-        const ::rtl::OUString& rsPathToNode);
+        const OUString& rsPathToNode);
 
     /** Return a configuration node below the given node.
         @param rxNode
@@ -79,7 +79,7 @@ public:
     */
     static css::uno::Any GetConfigurationNode (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const ::rtl::OUString& rsPathToNode);
+        const OUString& rsPathToNode);
 
     /** Write any changes that have been made back to the configuration.
         This call is ignored when the called ConfigurationAccess object was
@@ -92,7 +92,7 @@ public:
         and the value of the item.
     */
     typedef ::boost::function<void(
-        const ::rtl::OUString&,
+        const OUString&,
         const std::vector<css::uno::Any>&) > Functor;
 
     /** Execute a functor for all elements of the given container.
@@ -109,7 +109,7 @@ public:
     */
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::std::vector<rtl::OUString>& rArguments,
+        const ::std::vector<OUString>& rArguments,
         const Functor& rFunctor);
 
     /** Fill a list with the string contents of all sub-elements in the given container.
@@ -125,15 +125,15 @@ public:
     */
     static void FillList(
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::rtl::OUString& rsArgument,
-        ::std::vector<rtl::OUString>& rList);
+        const OUString& rsArgument,
+        ::std::vector<OUString>& rList);
 
 private:
     css::uno::Reference<css::uno::XInterface> mxRoot;
 
     void Initialize (
         const css::uno::Reference<css::lang::XMultiServiceFactory>& rxProvider,
-        const ::rtl::OUString& rsRootName,
+        const OUString& rsRootName,
         const WriteMode eMode);
 };
 

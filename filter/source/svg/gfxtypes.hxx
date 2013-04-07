@@ -214,7 +214,7 @@ struct State
     basegfx::B2DRange           maViewBox;
 
     bool                        mbIsText;
-    rtl::OUString               maFontFamily;
+    OUString               maFontFamily;
     /** Absolute: xx-small=6.94 | x-small=8.33 | small=10 | medium=12 | large=14.4 | x-large=17.28 | xx-large=20.736
 
         Relative(to parent): larger (enlarge by 1.2)
@@ -222,8 +222,8 @@ struct State
 
      */
     double                      mnFontSize;
-    rtl::OUString               maFontStyle;
-    rtl::OUString               maFontVariant;
+    OUString               maFontStyle;
+    OUString               maFontVariant;
     double                      mnFontWeight;
 
     TextAlign                   meTextAnchor; // text-anchor

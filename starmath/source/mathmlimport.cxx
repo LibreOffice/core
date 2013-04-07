@@ -77,8 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 
@@ -507,7 +505,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
 
 // XServiceInfo
 // override empty method from parent class
-rtl::OUString SAL_CALL SmXMLImport::getImplementationName()
+OUString SAL_CALL SmXMLImport::getImplementationName()
     throw(uno::RuntimeException)
 {
     OUString aTxt;

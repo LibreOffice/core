@@ -215,10 +215,10 @@ void XclImpPageSettings::Finalize()
 
     // *** create page style sheet ***
 
-    rtl::OUStringBuffer aStyleName;
+    OUStringBuffer aStyleName;
     aStyleName.appendAscii("PageStyle_");
 
-    rtl::OUString aTableName;
+    OUString aTableName;
     if( GetDoc().GetName( nScTab, aTableName ) )
         aStyleName.append(aTableName);
     else

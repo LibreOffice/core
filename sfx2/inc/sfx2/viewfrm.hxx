@@ -150,7 +150,7 @@ public:
 
     void                    UpdateTitle();
 
-    static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL );
+    static void ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL );
 
     // interne Handler
     SAL_DLLPRIVATE virtual sal_Bool SetBorderPixelImpl( const SfxViewShell *pSh, const SvBorder &rBorder );
@@ -190,8 +190,8 @@ public:
         The buttons will be added from Right to Left at the right of the info bar. The parent, size
         and position of each button will be changed: only the width will remain unchanged.
       */
-    void                    AppendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
-    void                    RemoveInfoBar( const rtl::OUString& sId );
+    void                    AppendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons );
+    void                    RemoveInfoBar( const OUString& sId );
 
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();
@@ -224,14 +224,14 @@ public:
     SAL_DLLPRIVATE void MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl( sal_uInt16 nId );
-    SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const ::rtl::OUString& sMacro);
+    SAL_DLLPRIVATE void AddDispatchMacroToBasic_Impl(const OUString& sMacro);
 
     SAL_DLLPRIVATE void Exec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void INetState_Impl(SfxItemSet &);
 
     SAL_DLLPRIVATE void SetCurViewId_Impl( const sal_uInt16 i_nID );
-    SAL_DLLPRIVATE void ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL );
+    SAL_DLLPRIVATE void ActivateToolPanel_Impl( const OUString& i_rPanelURL );
 
 private:
     SAL_DLLPRIVATE sal_Bool SwitchToViewShell_Impl( sal_uInt16 nNo, sal_Bool bIsIndex = sal_False );

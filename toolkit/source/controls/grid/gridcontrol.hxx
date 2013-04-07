@@ -59,7 +59,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // OPropertySetHelper
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
@@ -80,7 +80,7 @@ class UnoGridControl : public UnoGridControl_Base
 {
 public:
     UnoGridControl();
-    ::rtl::OUString             GetComponentServiceName();
+    OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);

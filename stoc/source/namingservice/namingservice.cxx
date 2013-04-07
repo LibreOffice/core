@@ -41,7 +41,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
-using ::rtl::OUString;
 
 #define SERVICENAME "com.sun.star.uno.NamingService"
 #define IMPLNAME    "com.sun.star.comp.stoc.NamingService"
@@ -105,9 +104,9 @@ public:
         return Sequence< OUString >( &aStr, 1 );
     }
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const ::rtl::OUString& Name ) throw(Exception, RuntimeException);
-    virtual void SAL_CALL registerObject( const ::rtl::OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException);
-    virtual void SAL_CALL revokeObject( const ::rtl::OUString& Name ) throw(Exception, RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(Exception, RuntimeException);
+    virtual void SAL_CALL revokeObject( const OUString& Name ) throw(Exception, RuntimeException);
 };
 
 //==================================================================================================

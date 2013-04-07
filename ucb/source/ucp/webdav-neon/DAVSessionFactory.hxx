@@ -61,14 +61,14 @@ public:
     ~DAVSessionFactory() SAL_THROW(());
 
     rtl::Reference< DAVSession >
-        createDAVSession( const ::rtl::OUString & inUri,
+        createDAVSession( const OUString & inUri,
                           const ::uno::Sequence< ::com::sun::star::beans::NamedValue >& rFlags,
                           const ::uno::Reference< ::uno::XComponentContext >& rxContext )
             throw( DAVException );
 
     ::uno::Reference< ::uno::XComponentContext > getComponentContext() {  return m_xContext; }
 private:
-    typedef std::map< rtl::OUString, DAVSession * > Map;
+    typedef std::map< OUString, DAVSession * > Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;

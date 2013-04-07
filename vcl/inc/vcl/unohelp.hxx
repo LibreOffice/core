@@ -54,7 +54,7 @@ VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakI
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
 //Get access to singleton Natural String Sorter collating for Application::GetLocale
 VCL_DLLPUBLIC const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale();
-VCL_DLLPUBLIC ::rtl::OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
+VCL_DLLPUBLIC OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
 

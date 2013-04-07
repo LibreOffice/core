@@ -61,7 +61,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
     rOutProperties.push_back(
         Property( "FillTransparenceGradientName",
                   FillProperties::PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -69,7 +69,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
     rOutProperties.push_back(
         Property( "FillGradientName",
                   FillProperties::PROP_FILL_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -84,7 +84,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
     rOutProperties.push_back(
         Property( "FillHatchName",
                   FillProperties::PROP_FILL_HATCH_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -104,7 +104,7 @@ void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< ::com::sun:
     rOutProperties.push_back(
         Property( "FillBitmapName",
                   FillProperties::PROP_FILL_BITMAP_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));

@@ -31,14 +31,14 @@ class SwNavigationConfig : public utl::ConfigItem
     sal_Bool    bIsSmall;       //ShowListBox
     sal_Bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
     SwNavigationConfig();
     ~SwNavigationConfig();
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
     sal_Int32   GetRootType()const {return nRootType;}
     void        SetRootType(sal_Int32 nSet){

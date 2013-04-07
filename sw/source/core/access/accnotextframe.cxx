@@ -32,7 +32,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 const SwNoTxtNode *SwAccessibleNoTextFrame::GetNoTxtNode() const
 {

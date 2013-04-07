@@ -343,7 +343,7 @@ protected:
     // sammelt in strNames die Namen aller Formulare
     static void impl_collectFormSearchContexts_nothrow(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxStartingPoint,
-        const ::rtl::OUString& _rCurrentLevelPrefix,
+        const OUString& _rCurrentLevelPrefix,
         FmFormArray& _out_rForms,
         ::std::vector< OUString >& _out_rNames );
 
@@ -490,7 +490,7 @@ private:
         // closes the task-local beamer displaying a grid view for a form
 
     // ConfigItem related stuff
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
     virtual void Commit();
     void implAdjustConfigCache();
 
@@ -557,18 +557,18 @@ inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 
 class SAL_DLLPRIVATE SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
-    ::rtl::OUString         m_sCurrentValue;
+    OUString         m_sCurrentValue;
         // der aktuelle Wert der ControlSource-::com::sun::star::beans::Property
 
 public:
-    ::rtl::OUString     getCurrentValue() const { return m_sCurrentValue; }
+    OUString     getCurrentValue() const { return m_sCurrentValue; }
 
 public:
     SearchableControlIterator(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xStartingPoint);
 
     virtual sal_Bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rElement);
     virtual sal_Bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xContainer) const;
-    virtual void Invalidate() { IndexAccessIterator::Invalidate(); m_sCurrentValue = ::rtl::OUString(); }
+    virtual void Invalidate() { IndexAccessIterator::Invalidate(); m_sCurrentValue = OUString(); }
 };
 
 // ========================================================================

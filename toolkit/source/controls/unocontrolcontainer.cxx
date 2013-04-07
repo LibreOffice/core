@@ -46,16 +46,16 @@ using namespace ::com::sun::star;
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
-    ::rtl::OUString                 msName;
+    OUString                 msName;
 
 public:
-    UnoControlHolder( const ::rtl::OUString& rName, const uno::Reference< awt::XControl > & rControl )
+    UnoControlHolder( const OUString& rName, const uno::Reference< awt::XControl > & rControl )
     :   mxControl( rControl ),
         msName( rName )
     {
     }
 
-    inline const ::rtl::OUString&                   getName() const { return msName; }
+    inline const OUString&                   getName() const { return msName; }
     inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
 
@@ -82,7 +82,7 @@ public:
         @return
             the identifier of the newly added control
     */
-    ControlIdentifier   addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName );
+    ControlIdentifier   addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName );
 
     /** returns the number of controls in the list
     */
@@ -107,7 +107,7 @@ public:
     /** returns the first control which is registered under the given name
     */
     uno::Reference< awt::XControl >
-            getControlForName( const ::rtl::OUString& _rName ) const;
+            getControlForName( const OUString& _rName ) const;
 
     /** returns the identifier which a control is registered for, or -1 if the control
             isn't registered
@@ -150,7 +150,7 @@ private:
     */
     ControlIdentifier impl_addControl(
         const uno::Reference< awt::XControl >& _rxControl,
-        const ::rtl::OUString*  _pName
+        const OUString*  _pName
     );
 
     /** finds a free identifier
@@ -163,7 +163,7 @@ private:
         @throw uno::RuntimeException
             if no free name can be found
     */
-    ::rtl::OUString impl_getFreeName_throw();
+    OUString impl_getFreeName_throw();
 };
 
 //------------------------------------------------------------------------
@@ -177,7 +177,7 @@ UnoControlHolderList::~UnoControlHolderList()
 }
 
 //------------------------------------------------------------------------
-UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
     return impl_addControl( _rxControl, _pName );
 }
@@ -209,7 +209,7 @@ size_t UnoControlHolderList::getIdentifiers( uno::Sequence< sal_Int32 >& _out_rI
 }
 
 //------------------------------------------------------------------------
-uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const ::rtl::OUString& _rName ) const
+uno::Reference< awt::XControl > UnoControlHolderList::getControlForName( const OUString& _rName ) const
 {
     for (   ControlMap::const_iterator loop = maControls.begin();
             loop != maControls.end();
@@ -269,11 +269,11 @@ void UnoControlHolderList::replaceControlById( ControlIdentifier _nId, const uno
 }
 
 //------------------------------------------------------------------------
-UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
     DBG_ASSERT( _rxControl.is(), "UnoControlHolderList::impl_addControl: invalid control!" );
 
-    ::rtl::OUString sName = _pName ? *_pName : impl_getFreeName_throw();
+    OUString sName = _pName ? *_pName : impl_getFreeName_throw();
     sal_Int32 nId = impl_getFreeIdentifier_throw();
 
     maControls[ nId ] = ControlInfo( new UnoControlHolder( sName, _rxControl ) );
@@ -289,16 +289,16 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( existent == maControls.end() )
             return candidateId;
     }
-    throw uno::RuntimeException( ::rtl::OUString( "out of identifiers" ), NULL );
+    throw uno::RuntimeException( OUString( "out of identifiers" ), NULL );
 }
 
 //------------------------------------------------------------------------
-::rtl::OUString UnoControlHolderList::impl_getFreeName_throw()
+OUString UnoControlHolderList::impl_getFreeName_throw()
 {
-    ::rtl::OUString name( "control_" );
+    OUString name( "control_" );
     for ( ControlIdentifier candidateId = 0; candidateId < ::std::numeric_limits< ControlIdentifier >::max(); ++candidateId )
     {
-        ::rtl::OUString candidateName( name + ::rtl::OUString::valueOf( candidateId ) );
+        OUString candidateName( name + OUString::valueOf( candidateId ) );
         ControlMap::const_iterator loop = maControls.begin();
         for ( ; loop != maControls.end(); ++loop )
         {
@@ -308,7 +308,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_getFreeIdenti
         if ( loop == maControls.end() )
             return candidateName;
     }
-    throw uno::RuntimeException( ::rtl::OUString( "out of identifiers" ), NULL );
+    throw uno::RuntimeException( OUString( "out of identifiers" ), NULL );
 }
 //  ----------------------------------------------------
 //  Function to set the controls' visibility according
@@ -337,7 +337,7 @@ void implUpdateVisibility
                 ( xModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
-            ::rtl::OUString aPropName( "Step" );
+            OUString aPropName( "Step" );
             sal_Int32 nControlStep = 0;
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
@@ -494,7 +494,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     uno::Reference< awt::XControl > xControl;
     if ( !( _rElement >>= xControl ) || !xControl.is() )
         throw lang::IllegalArgumentException(
-            ::rtl::OUString( "Elements must support the XControl interface." ),
+            OUString( "Elements must support the XControl interface." ),
             *this,
             1
         );
@@ -509,7 +509,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException(
-            ::rtl::OUString( "There is no element with the given identifier." ),
+            OUString( "There is no element with the given identifier." ),
             *this
         );
 
@@ -523,14 +523,14 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     uno::Reference< awt::XControl > xExistentControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xExistentControl ) )
         throw container::NoSuchElementException(
-            ::rtl::OUString( "There is no element with the given identifier." ),
+            OUString( "There is no element with the given identifier." ),
             *this
         );
 
     uno::Reference< awt::XControl > xNewControl;
     if ( !( _rElement >>= xNewControl ) )
         throw lang::IllegalArgumentException(
-            ::rtl::OUString( "Elements must support the XControl interface." ),
+            OUString( "Elements must support the XControl interface." ),
             *this,
             1
         );
@@ -586,7 +586,7 @@ uno::Type SAL_CALL UnoControlContainer::getElementType(  ) throw (uno::RuntimeEx
 }
 
 // awt::XControlContainer
-void UnoControlContainer::setStatusText( const ::rtl::OUString& rStatusText ) throw(uno::RuntimeException)
+void UnoControlContainer::setStatusText( const OUString& rStatusText ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -604,7 +604,7 @@ uno::Sequence< uno::Reference< awt::XControl > > UnoControlContainer::getControl
     return aControls;
 }
 
-uno::Reference< awt::XControl > UnoControlContainer::getControl( const ::rtl::OUString& rName ) throw(uno::RuntimeException)
+uno::Reference< awt::XControl > UnoControlContainer::getControl( const OUString& rName ) throw(uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return mpControls->getControlForName( rName );
@@ -637,7 +637,7 @@ void UnoControlContainer::impl_createControlPeerIfNecessary( const uno::Referenc
 
 }
 
-sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pName )
+sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XControl >& _rxControl, const OUString* _pName )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     UnoControlHolderList::ControlIdentifier id = mpControls->addControl( _rxControl, _pName );
@@ -658,7 +658,7 @@ sal_Int32 UnoControlContainer::impl_addControl( const uno::Reference< awt::XCont
     return id;
 }
 
-void UnoControlContainer::addControl( const ::rtl::OUString& rName, const uno::Reference< awt::XControl >& rControl ) throw(uno::RuntimeException)
+void UnoControlContainer::addControl( const OUString& rName, const uno::Reference< awt::XControl >& rControl ) throw(uno::RuntimeException)
 {
     if ( rControl.is() )
         impl_addControl( rControl, &rName );
@@ -673,7 +673,7 @@ void UnoControlContainer::removingControl( const uno::Reference< awt::XControl >
     }
 }
 
-void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Reference< awt::XControl >& _rxControl, const ::rtl::OUString* _pNameAccessor )
+void UnoControlContainer::impl_removeControl( sal_Int32 _nId, const uno::Reference< awt::XControl >& _rxControl, const OUString* _pNameAccessor )
 {
 #ifdef DBG_UTIL
     {
@@ -776,7 +776,7 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 ( xModel, uno::UNO_QUERY );
             uno::Reference< beans::XPropertySetInfo >
                 xInfo = xPSet->getPropertySetInfo();
-            ::rtl::OUString aPropName( "Step" );
+            OUString aPropName( "Step" );
             if ( xInfo->hasPropertyByName( aPropName ) )
             {
                 ::com::sun::star::uno::Any aVal = xPSet->getPropertyValue( aPropName );

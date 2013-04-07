@@ -38,7 +38,6 @@
 #include <unomid.h>
 
 using namespace utl;
-using rtl::OUString;
 using namespace com::sun::star::uno;
 
 #define GLOB_NAME_CALC      0
@@ -293,7 +292,7 @@ static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 
-void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void SwRevisionConfig::Commit()
 {
@@ -584,9 +583,9 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
         OUString* pWebNames = aWebNames.getArray();
         int i;
         for(i = 0; i < nCount; i++)
-            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
         for(i = 0; i < nWebCount; i++)
-            pWebNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pWebNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return bIsWeb ? aWebNames : aNames;
 }
@@ -635,12 +634,12 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
         case 5: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
         case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
         case 7: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
-        case 8: pValues[nProp] <<= (::rtl::OUString&)rOpt.GetCharacterStyle(); break; //CharacterStyle
+        case 8: pValues[nProp] <<= (OUString&)rOpt.GetCharacterStyle(); break; //CharacterStyle
         case 9: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
     }
 }
 
-void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void SwInsertConfig::Commit()
 {
@@ -873,7 +872,7 @@ static void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp
         break;//Position",
         case 8 : //CharacterStyle
         {
-            ::rtl::OUString sTemp; pValues[nProp] >>= sTemp;
+            OUString sTemp; pValues[nProp] >>= sTemp;
             rOpt.SetCharacterStyle( sTemp );
         }
         break;
@@ -1148,7 +1147,7 @@ SwTableConfig::~SwTableConfig()
 {
 }
 
-void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void SwTableConfig::Commit()
 {
@@ -1246,12 +1245,12 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
-            pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+            pNames[i] = OUString::createFromAscii(aPropNames[i]);
     }
     return aNames;
 }
 
-void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void SwMiscConfig::Commit()
 {

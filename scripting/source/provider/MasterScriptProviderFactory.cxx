@@ -77,21 +77,21 @@ MasterScriptProviderFactory::getActiveMSPList() const
 // Namespace global methods for setting up MasterScriptProviderFactory service
 //############################################################################
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 mspf_getSupportedServiceNames( )
     SAL_THROW(())
 {
-    ::rtl::OUString str_name(
+    OUString str_name(
         "com.sun.star.script.provider.MasterScriptProviderFactory");
 
-    return Sequence< ::rtl::OUString >( &str_name, 1 );
+    return Sequence< OUString >( &str_name, 1 );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 mspf_getImplementationName( )
     SAL_THROW(())
 {
-    return ::rtl::OUString(
+    return OUString(
         "com.sun.star.script.provider.MasterScriptProviderFactory");
 }
 
@@ -107,14 +107,14 @@ mspf_create( Reference< XComponentContext > const & xComponentContext )
 // Implementation of XServiceInfo
 //############################################################################
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 MasterScriptProviderFactory::getImplementationName()
     throw (RuntimeException)
 {
     return mspf_getImplementationName();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 MasterScriptProviderFactory::getSupportedServiceNames()
     throw (RuntimeException)
 {
@@ -122,15 +122,15 @@ MasterScriptProviderFactory::getSupportedServiceNames()
 }
 
 sal_Bool MasterScriptProviderFactory::supportsService(
-    ::rtl::OUString const & serviceName )
+    OUString const & serviceName )
     throw (RuntimeException)
 {
 //     check();
 
-    Sequence< ::rtl::OUString > supported_services(
+    Sequence< OUString > supported_services(
         getSupportedServiceNames() );
 
-    ::rtl::OUString const * ar = supported_services.getConstArray();
+    OUString const * ar = supported_services.getConstArray();
 
     for ( sal_Int32 pos = supported_services.getLength(); pos--; )
     {

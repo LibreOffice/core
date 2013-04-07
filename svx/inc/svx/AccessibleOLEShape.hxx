@@ -52,7 +52,7 @@ public:
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
+    OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::uno::RuntimeException);
 
@@ -78,11 +78,11 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -94,12 +94,12 @@ public:
 
 protected:
     /// Create a name string that contains the accessible name.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleBaseName ()
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleDescription ()
         throw (::com::sun::star::uno::RuntimeException);
 

@@ -59,9 +59,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-#define PROPERTY_DIALOGSOURCEURL ::rtl::OUString( "DialogSourceURL" )
-#define PROPERTY_IMAGEURL ::rtl::OUString( "ImageURL" )
-#define PROPERTY_GRAPHIC ::rtl::OUString( "Graphic" )
+#define PROPERTY_DIALOGSOURCEURL OUString( "DialogSourceURL" )
+#define PROPERTY_IMAGEURL OUString( "ImageURL" )
+#define PROPERTY_GRAPHIC OUString( "Graphic" )
 //
 
 // we probably will need both a hash of control models and hash of controls
@@ -72,13 +72,13 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer
 template< typename T >
 class SimpleNamedThingContainer : public SimpleNameContainer_BASE
 {
-    typedef boost::unordered_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
-       ::std::equal_to< ::rtl::OUString > > NamedThingsHash;
+    typedef boost::unordered_map< OUString, Reference< T >, OUStringHash,
+       ::std::equal_to< OUString > > NamedThingsHash;
     NamedThingsHash things;
     ::osl::Mutex m_aMutex;
 public:
     // ::com::sun::star::container::XNameContainer, XNameReplace, XNameAccess
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
@@ -88,30 +88,30 @@ public:
             throw IllegalArgumentException();
         things[ aName ] = xElement;
     }
-    virtual Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    virtual Any SAL_CALL getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
             throw NoSuchElementException();
         return uno::makeAny( things[ aName ] );
     }
-    virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(RuntimeException)
+    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        Sequence< ::rtl::OUString > aResult( things.size() );
+        Sequence< OUString > aResult( things.size() );
         typename NamedThingsHash::iterator it = things.begin();
         typename NamedThingsHash::iterator it_end = things.end();
-        rtl::OUString* pName = aResult.getArray();
+        OUString* pName = aResult.getArray();
         for (; it != it_end; ++it, ++pName )
             *pName = it->first;
         return aResult;
     }
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(RuntimeException)
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( things.find( aName ) != things.end() );
     }
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL insertByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( hasByName( aName ) )
@@ -121,7 +121,7 @@ public:
             throw IllegalArgumentException();
         things[ aName ] = xElement;
     }
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL removeByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
@@ -140,7 +140,7 @@ public:
 };
 
 ////HELPER
-::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
+OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 //  ----------------------------------------------------
 //  class UnoControlDialogModel
@@ -186,9 +186,9 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
     Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
     Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel >() );
 
-    uno::Sequence< rtl::OUString > sNames = xSrcNameCont->getElementNames();
-    rtl::OUString* pName = sNames.getArray();
-    rtl::OUString* pNamesEnd = pName + sNames.getLength();
+    uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
+    OUString* pName = sNames.getArray();
+    OUString* pNamesEnd = pName + sNames.getLength();
     for ( ; pName != pNamesEnd; ++pName )
     {
         if ( xSrcNameCont->hasByName( *pName ) )
@@ -212,9 +212,9 @@ UnoControlModel* UnoControlDialogModel::Clone() const
 }
 
 
-::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
+OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel );
+    return OUString::createFromAscii( szServiceName_UnoControlDialogModel );
 }
 
 Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -224,7 +224,7 @@ Any UnoControlDialogModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
+            aAny <<= OUString::createFromAscii( szServiceName_UnoControlDialog );
             break;
         case BASEPROPERTY_SCROLLWIDTH:
         case BASEPROPERTY_SCROLLHEIGHT:
@@ -264,7 +264,7 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
     {
         if ( nHandle == BASEPROPERTY_IMAGEURL && ImplHasProperty( BASEPROPERTY_GRAPHIC ) )
         {
-            ::rtl::OUString sImageURL;
+            OUString sImageURL;
             OSL_VERIFY( rValue >>= sImageURL );
             setPropertyValue( GetPropertyName( BASEPROPERTY_GRAPHIC ), uno::makeAny( ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( mxGrfObj, sImageURL ) ) );
         }
@@ -291,15 +291,15 @@ UnoDialogControl::~UnoDialogControl()
 {
 }
 
-::rtl::OUString UnoDialogControl::GetComponentServiceName()
+OUString UnoDialogControl::GetComponentServiceName()
 {
 
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString("Dialog");
+        return OUString("Dialog");
     else
-        return ::rtl::OUString("TabPage");
+        return OUString("TabPage");
 }
 
 void UnoDialogControl::dispose() throw(RuntimeException)
@@ -373,12 +373,12 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
     // into the peer via propertiesChangeEvents. As the order of
     // can lead to overwrites we have to set the graphic property
     // before the propertiesChangeEvents are sent!
-    ::rtl::OUString aImageURL;
+    OUString aImageURL;
     Reference< graphic::XGraphic > xGraphic;
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( !aImageURL.isEmpty() ))
     {
-        ::rtl::OUString absoluteUrl = aImageURL;
+        OUString absoluteUrl = aImageURL;
         if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
             absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
                                  uno::makeAny( aImageURL ) );
@@ -475,11 +475,11 @@ throw (::com::sun::star::uno::RuntimeException)
         // Remember that changes have been done by listener. No need to
         // update the position because of property change event.
         mbSizeModified = true;
-        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
         // Properties in a sequence must be sorted!
-        aProps[0] = rtl::OUString( "Height" );
-        aProps[1] = rtl::OUString( "Width" );
+        aProps[0] = OUString( "Height" );
+        aProps[1] = OUString( "Width" );
         aValues[0] <<= aAppFontSize.Height();
         aValues[1] <<= aAppFontSize.Width();
 
@@ -503,10 +503,10 @@ throw (::com::sun::star::uno::RuntimeException)
         // Remember that changes have been done by listener. No need to
         // update the position because of property change event.
         mbPosModified = true;
-        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = rtl::OUString( "PositionX" );
-        aProps[1] = rtl::OUString( "PositionY" );
+        aProps[0] = OUString( "PositionX" );
+        aProps[1] = OUString( "PositionY" );
         aValues[0] <<= aTmp.Width();
         aValues[1] <<= aTmp.Height();
 
@@ -532,14 +532,14 @@ void SAL_CALL UnoDialogControl::endDialog( ::sal_Int32 i_result ) throw (Runtime
         xPeerDialog->endDialog( i_result );
 }
 
-void SAL_CALL UnoDialogControl::setHelpId( const rtl::OUString& i_id ) throw (RuntimeException)
+void SAL_CALL UnoDialogControl::setHelpId( const OUString& i_id ) throw (RuntimeException)
 {
     Reference< XDialog2 > xPeerDialog( getPeer(), UNO_QUERY );
     if ( xPeerDialog.is() )
         xPeerDialog->setHelpId( i_id );
 }
 
-void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
+void UnoDialogControl::setTitle( const OUString& Title ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     Any aAny;
@@ -547,7 +547,7 @@ void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeExc
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, sal_True );
 }
 
-::rtl::OUString UnoDialogControl::getTitle() throw(RuntimeException)
+OUString UnoDialogControl::getTitle() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     return ImplGetPropertyValue_UString( BASEPROPERTY_TITLE );
@@ -602,12 +602,12 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
         if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ImageURL", 8 ))
         {
-            ::rtl::OUString aImageURL;
+            OUString aImageURL;
             Reference< graphic::XGraphic > xGraphic;
             if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
                 ( !aImageURL.isEmpty() ))
             {
-                ::rtl::OUString absoluteUrl = aImageURL;
+                OUString absoluteUrl = aImageURL;
                 if ( !aImageURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
 
                     absoluteUrl = getPhysicalLocation( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL )),
@@ -749,14 +749,14 @@ uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType ) throw(
     return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
 }
 
-::rtl::OUString UnoMultiPageControl::GetComponentServiceName()
+OUString UnoMultiPageControl::GetComponentServiceName()
 {
     sal_Bool bDecoration( sal_True );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
     if ( bDecoration )
-        return ::rtl::OUString("tabcontrol");
+        return OUString("tabcontrol");
     // Hopefully we can tweak the tabcontrol to display without tabs
-    return ::rtl::OUString("tabcontrolnotabs");
+    return OUString("tabcontrolnotabs");
 }
 
 void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxControl )
@@ -772,7 +772,7 @@ void UnoMultiPageControl::bindPage( const uno::Reference< awt::XControl >& _rxCo
         VCLXMultiPage* pXTab = dynamic_cast< VCLXMultiPage* >( xTabCntrl.get() );
         if ( pXTab )
         {
-            rtl::OUString sTitle;
+            OUString sTitle;
             xProps->getPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ) ) >>= sTitle;
             pXTab->insertTab( pPage, sTitle);
         }
@@ -870,9 +870,9 @@ UnoMultiPageModel::Clone() const
     return pClone;
 }
 
-::rtl::OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoMultiPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+    return OUString::createFromAscii( szServiceName_UnoMultiPageModel );
 }
 
 uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -880,7 +880,7 @@ uno::Any UnoMultiPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageControl );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoMultiPageControl );
         return aAny;
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
@@ -904,7 +904,7 @@ uno::Reference< beans::XPropertySetInfo > UnoMultiPageModel::getPropertySetInfo(
     return xInfo;
 }
 
-void UnoMultiPageModel::insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void UnoMultiPageModel::insertByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     Reference< XServiceInfo > xInfo;
     aElement >>= xInfo;
@@ -913,7 +913,7 @@ void UnoMultiPageModel::insertByName( const ::rtl::OUString& aName, const Any& a
         throw IllegalArgumentException();
 
     // Only a Page model can be inserted into the multipage
-    if ( !xInfo->supportsService( rtl::OUString::createFromAscii( szServiceName_UnoPageModel ) ) )
+    if ( !xInfo->supportsService( OUString::createFromAscii( szServiceName_UnoPageModel ) ) )
         throw IllegalArgumentException();
 
     return ControlModelContainerBase::insertByName( aName, aElement );
@@ -938,9 +938,9 @@ UnoPageControl::~UnoPageControl()
 {
 }
 
-::rtl::OUString UnoPageControl::GetComponentServiceName()
+OUString UnoPageControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("tabpage");
+    return OUString("tabpage");
 }
 
 
@@ -990,9 +990,9 @@ UnoPageModel::Clone() const
     return pClone;
 }
 
-::rtl::OUString UnoPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoPageModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoPageModel );
+    return OUString::createFromAscii( szServiceName_UnoPageModel );
 }
 
 uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1000,7 +1000,7 @@ uno::Any UnoPageModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
     {
         uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoPageControl );
+        aAny <<= OUString::createFromAscii( szServiceName_UnoPageControl );
         return aAny;
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );
@@ -1045,15 +1045,15 @@ UnoFrameControl::~UnoFrameControl()
 {
 }
 
-::rtl::OUString UnoFrameControl::GetComponentServiceName()
+OUString UnoFrameControl::GetComponentServiceName()
 {
-    return ::rtl::OUString("frame");
+    return OUString("frame");
 }
 
 void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 {
     bool bOwnCtrl = false;
-    rtl::OUString sTitle;
+    OUString sTitle;
     if ( rxCtrl.get() == Reference<XControl>( this ).get() )
         bOwnCtrl = true;
     Reference< XPropertySet > xProps( getModel(), UNO_QUERY );
@@ -1155,9 +1155,9 @@ UnoFrameModel::Clone() const
     return pClone;
 }
 
-::rtl::OUString UnoFrameModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+OUString UnoFrameModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
+    return OUString::createFromAscii( szServiceName_UnoFrameModel );
 }
 
 uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
@@ -1167,7 +1167,7 @@ uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         case BASEPROPERTY_DEFAULTCONTROL:
         {
-            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoFrameControl );
+            aAny <<= OUString::createFromAscii( szServiceName_UnoFrameControl );
             return aAny;
         }
         case BASEPROPERTY_SCROLLWIDTH:

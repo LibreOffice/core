@@ -50,7 +50,7 @@ SwWebGrfShell::SwWebGrfShell(SwView &_rView) :
     SwGrfShell(_rView)
 
 {
-    SetName(rtl::OUString("Graphic"));
+    SetName(OUString("Graphic"));
     SetHelpId(SW_GRFSHELL);
 }
 

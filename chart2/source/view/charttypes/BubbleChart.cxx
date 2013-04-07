@@ -207,9 +207,9 @@ void BubbleChart::createShapes()
     //therefore create an own group for the texts and the error bars to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
     uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
     //update/create information for current group
     double fLogicZ        = 1.0;//as defined
@@ -311,7 +311,7 @@ void BubbleChart::createShapes()
                         continue;
 
                     //create a group shape for this point and add to the series shape:
-                    rtl::OUString aPointCID = ObjectIdentifier::createPointCID(
+                    OUString aPointCID = ObjectIdentifier::createPointCID(
                         pSeries->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
                         createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );

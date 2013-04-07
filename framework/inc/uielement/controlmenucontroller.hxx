@@ -72,10 +72,10 @@ namespace framework
             virtual void impl_setPopupMenu();
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
 
-            class UrlToDispatchMap : public ::boost::unordered_map< ::rtl::OUString,
+            class UrlToDispatchMap : public ::boost::unordered_map< OUString,
                                                              com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >,
-                                                             rtl::OUStringHash,
-                                                             ::std::equal_to< ::rtl::OUString > >
+                                                             OUStringHash,
+                                                             ::std::equal_to< OUString > >
             {
                 public:
                     inline void free()

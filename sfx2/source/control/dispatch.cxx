@@ -219,7 +219,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
             if ( xSet.is() )
             {
-                com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString("DispatchRecorderSupplier"));
+                com::sun::star::uno::Any aProp = xSet->getPropertyValue(OUString("DispatchRecorderSupplier"));
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
                 aProp >>= xSupplier;
@@ -246,7 +246,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                 pView = SfxViewFrame::Current();
             if ( pView )
             {
-                rtl::OString aCmd(".uno:");
+                OString aCmd(".uno:");
                 aCmd += rSlot.GetUnoName();
                 SfxHelp::OpenHelpAgent( &pView->GetFrame(), aCmd );
             }
@@ -379,7 +379,7 @@ SfxDispatcher::~SfxDispatcher()
 
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer sTemp(RTL_CONSTASCII_STRINGPARAM("Delete Dispatcher "));
+    OStringBuffer sTemp(RTL_CONSTASCII_STRINGPARAM("Delete Dispatcher "));
     sTemp.append(reinterpret_cast<sal_Int64>(this));
     OSL_TRACE("%s", sTemp.getStr());
     DBG_ASSERT( !pImp->bActive, "deleting active Dispatcher" );
@@ -689,7 +689,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     if ( bMDI )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer sTemp(
+        OStringBuffer sTemp(
             RTL_CONSTASCII_STRINGPARAM("Activate Dispatcher "));
         sTemp.append(reinterpret_cast<sal_Int64>(this));
         OSL_TRACE("%s", sTemp.getStr());
@@ -707,7 +707,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     else
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer sTemp(
+        OStringBuffer sTemp(
             RTL_CONSTASCII_STRINGPARAM("Non-MDI-Activate Dispatcher"));
         sTemp.append(reinterpret_cast<sal_Int64>(this));
         OSL_TRACE("%s", sTemp.getStr());
@@ -771,7 +771,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bMDI )
     {
-        OSL_TRACE(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Deactivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
+        OSL_TRACE(OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Deactivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
         DBG_ASSERT( pImp->bActive, "Deactivate error" );
         pImp->bActive = sal_False;
 
@@ -792,7 +792,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         }
     }
     else {
-        OSL_TRACE(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Non-MDI-DeActivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
+        OSL_TRACE(OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Non-MDI-DeActivate Dispatcher")).append(reinterpret_cast<sal_Int64>(this)).getStr());
     }
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
@@ -1261,11 +1261,11 @@ void SfxDispatcher::SetMenu_Impl()
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                     {
-                        rtl::OUString aMenuBarURL( "private:resource/menubar/menubar" );
+                        OUString aMenuBarURL( "private:resource/menubar/menubar" );
                         if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
                             xLayoutManager->createElement( aMenuBarURL );
                     }
@@ -1325,7 +1325,7 @@ void SfxDispatcher::Update_Impl( sal_Bool bForce )
     {
         try
         {
-            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ) );
+            com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
             aValue >>= xLayoutManager;
         }
         catch (const com::sun::star::uno::Exception&)
@@ -2041,7 +2041,7 @@ sal_Bool SfxDispatcher::_FillState
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     if ( !pItem->IsA(pIF->GetSlot(nSlotId)->GetType()->Type()) )
                     {
-                        rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
                             "item-type unequal to IDL (=> no BASIC)"));
                         aMsg.append(RTL_CONSTASCII_STRINGPARAM("\nwith SID: "));
                         aMsg.append(static_cast<sal_Int32>(nSlotId));
@@ -2170,7 +2170,7 @@ void SfxDispatcher::HideUI( sal_Bool bHide )
                 if ( xPropSet.is() )
                 {
                     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+                    com::sun::star::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
                     aValue >>= xLayoutManager;
                     if ( xLayoutManager.is() )
                         xLayoutManager->setVisible( !bHide );

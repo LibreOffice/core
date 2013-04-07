@@ -71,7 +71,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ObjectNameApproval::approveElement( const ::rtl::OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
+    void SAL_CALL ObjectNameApproval::approveElement( const OUString& _rName, const Reference< XInterface >& /*_rxElement*/ )
     {
         Reference< XConnection > xConnection( m_pImpl->aConnection );
         if ( !xConnection.is() )

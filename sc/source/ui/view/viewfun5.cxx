@@ -171,7 +171,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             }
             else
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 uno::Reference < embed::XEmbeddedObject > xObj = GetViewData()->GetViewShell()->GetObjectShell()->
                         GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 if ( xObj.is() )
@@ -202,7 +202,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         {
             if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 uno::Reference < embed::XEmbeddedObject > xObj;
 
                 if ( aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm )
@@ -216,12 +216,12 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     {
                         uno::Reference< embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
+                            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
                             uno::UNO_QUERY_THROW );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
-                                                            ::rtl::OUString( "DummyName" ),
+                                                            OUString( "DummyName" ),
                                                             uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
@@ -289,7 +289,7 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             ScAddress aCellPos( nPosX, nPosY, GetViewData()->GetTabNo() );
             ScImportExport aObj( GetViewData()->GetDocument(), aCellPos );
 
-            ::rtl::OUString aStr;
+            OUString aStr;
             SotStorageStreamRef xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
             {
@@ -667,7 +667,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
     // char array delimited by \0.
     // app \0 topic \0 item \0 (extra \0) where the extra is optional.
-    ::std::vector<rtl::OUString> aStrs;
+    ::std::vector<OUString> aStrs;
     const char* pStart = p;
     sal_Int32 nStart = 0;
     for (sal_Int32 i = 0; i < nSeqLen; ++i, ++p)
@@ -675,7 +675,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         if (*p == '\0')
         {
             sal_Int32 nLen = i - nStart;
-            aStrs.push_back(rtl::OUString(pStart, nLen, eSysEnc));
+            aStrs.push_back(OUString(pStart, nLen, eSysEnc));
             nStart = ++i;
             pStart = ++p;
         }
@@ -684,10 +684,10 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     if (aStrs.size() < 3)
         return false;
 
-    const rtl::OUString* pApp   = &aStrs[0];
-    const rtl::OUString* pTopic = &aStrs[1];
-    const rtl::OUString* pItem  = &aStrs[2];
-    const rtl::OUString* pExtra = NULL;
+    const OUString* pApp   = &aStrs[0];
+    const OUString* pTopic = &aStrs[1];
+    const OUString* pItem  = &aStrs[2];
+    const OUString* pExtra = NULL;
     if (aStrs.size() > 3)
         pExtra = &aStrs[3];
 
@@ -696,9 +696,9 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // Paste this as an external reference.  Note that paste link always
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.appendAscii("='");
-        rtl::OUString aPath = ScGlobal::GetAbsDocName(
+        OUString aPath = ScGlobal::GetAbsDocName(
             *pTopic, GetViewData()->GetDocument()->GetDocumentShell());
         aBuf.append(aPath);
         aBuf.appendAscii("'#");
@@ -711,7 +711,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // DDE in all other cases.
 
         // TODO: we could define ocQuote for "
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(sal_Unicode('='));
         aBuf.append(ScCompiler::GetNativeSymbol(ocDde));
         aBuf.append(ScCompiler::GetNativeSymbol(ocOpen));

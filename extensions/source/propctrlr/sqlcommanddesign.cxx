@@ -130,7 +130,7 @@ namespace pcr
             {
                 if ( PROPERTY_ACTIVECOMMAND == Event.PropertyName )
                 {
-                    ::rtl::OUString sCommand;
+                    OUString sCommand;
                     OSL_VERIFY( Event.NewValue >>= sCommand );
                     m_xObjectAdapter->setSQLCommand( sCommand );
                 }
@@ -243,12 +243,12 @@ namespace pcr
             aArgs[3].Name  = PROPERTY_ESCAPE_PROCESSING;
             aArgs[3].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
-            aArgs[4].Name  = ::rtl::OUString( "GraphicalDesign" );
+            aArgs[4].Name  = OUString( "GraphicalDesign" );
             aArgs[4].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(
-                ::rtl::OUString( ".component:DB/QueryDesign" ),
-                ::rtl::OUString( "_self" ),
+                OUString( ".component:DB/QueryDesign" ),
+                OUString( "_self" ),
                 FrameSearchFlag::TASKS | FrameSearchFlag::CREATE,
                 aArgs
             );
@@ -272,7 +272,7 @@ namespace pcr
             if ( xTitle.is() )
             {
                 ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
+                OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
                 xTitle->setTitle( sDisplayName );
             }
         }
@@ -295,7 +295,7 @@ namespace pcr
             Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
             Reference< XFrames > xDesktopFramesCollection( xDesktop->getFrames(), UNO_QUERY_THROW );
-            xFrame = xDesktop->findFrame( ::rtl::OUString( "_blank" ), FrameSearchFlag::CREATE );
+            xFrame = xDesktop->findFrame( OUString( "_blank" ), FrameSearchFlag::CREATE );
             OSL_ENSURE( xFrame.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: could not create an empty frame!" );
             xDesktopFramesCollection->remove( xFrame );
         }
@@ -329,11 +329,11 @@ namespace pcr
             // instead of calling XCloseable::close directly. The latter method would also close
             // the frame, but not care for things like shutting down the office when the last
             // frame is gone ...
-            const UnoURL aCloseURL( ::rtl::OUString( ".uno:CloseDoc" ),
+            const UnoURL aCloseURL( OUString( ".uno:CloseDoc" ),
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
             Reference< XDispatchProvider > xProvider( m_xDesigner->getFrame(), UNO_QUERY_THROW );
-            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, ::rtl::OUString( "_top" ), FrameSearchFlag::SELF ) );
+            Reference< XDispatch > xDispatch( xProvider->queryDispatch( aCloseURL, OUString( "_top" ), FrameSearchFlag::SELF ) );
             OSL_ENSURE( xDispatch.is(), "SQLCommandDesigner::impl_closeDesigner_nothrow: no dispatcher for the CloseDoc command!" );
             if ( xDispatch.is() )
             {

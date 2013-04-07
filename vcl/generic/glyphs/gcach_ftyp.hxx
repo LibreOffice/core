@@ -37,20 +37,20 @@ class GraphiteFaceWrapper;
 class FtFontFile
 {
 public:
-    static FtFontFile*      FindFontFile( const ::rtl::OString& rNativeFileName );
+    static FtFontFile*      FindFontFile( const OString& rNativeFileName );
 
     bool                    Map();
     void                    Unmap();
 
     const unsigned char*    GetBuffer() const { return mpFileMap; }
     int                     GetFileSize() const { return mnFileSize; }
-    const ::rtl::OString*   GetFileName() const { return &maNativeFileName; }
+    const OString*   GetFileName() const { return &maNativeFileName; }
     int                     GetLangBoost() const { return mnLangBoost; }
 
 private:
-                            FtFontFile( const ::rtl::OString& rNativeFileName );
+                            FtFontFile( const OString& rNativeFileName );
 
-    const ::rtl::OString    maNativeFileName;
+    const OString    maNativeFileName;
     const unsigned char*    mpFileMap;
     int                     mnFileSize;
     int                     mnRefCount;
@@ -64,7 +64,7 @@ class FtFontInfo
 {
 public:
                            FtFontInfo( const ImplDevFontAttributes&,
-                               const ::rtl::OString& rNativeFileName,
+                               const OString& rNativeFileName,
                                int nFaceNum, sal_IntPtr nFontId, int nSynthetic,
                                 const ExtraKernInfo* );
                           ~FtFontInfo();
@@ -77,7 +77,7 @@ public:
 #endif
     void                  ReleaseFaceFT( FT_FaceRec_* );
 
-    const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
+    const OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }
@@ -148,7 +148,7 @@ public:
                         FreetypeManager();
                         ~FreetypeManager();
 
-    void                AddFontFile( const rtl::OString& rNormalizedName,
+    void                AddFontFile( const OString& rNormalizedName,
                             int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
                             const ExtraKernInfo* );
     void                AnnounceFonts( ImplDevFontList* ) const;

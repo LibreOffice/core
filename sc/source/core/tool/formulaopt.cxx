@@ -39,7 +39,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::i18n::LocaleDataItem;
-using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 

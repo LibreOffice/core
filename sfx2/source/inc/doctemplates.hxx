@@ -56,21 +56,21 @@ public:
 
     // --- XDocumentTemplates ---
     css::uno::Reference< css::ucb::XContent > SAL_CALL  getContent() throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               storeTemplate( const ::rtl::OUString& GroupName,
-                                                   const ::rtl::OUString& TemplateName,
+    sal_Bool SAL_CALL               storeTemplate( const OUString& GroupName,
+                                                   const OUString& TemplateName,
                                                    const css::uno::Reference< css::frame::XStorable >& Storable ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               addTemplate( const ::rtl::OUString& GroupName,
-                                                 const ::rtl::OUString& TemplateName,
-                                                 const ::rtl::OUString& SourceURL ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               removeTemplate( const ::rtl::OUString& GroupName,
-                                                    const ::rtl::OUString& TemplateName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               renameTemplate( const ::rtl::OUString& GroupName,
-                                                    const ::rtl::OUString& OldTemplateName,
-                                                    const ::rtl::OUString& NewTemplateName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               addGroup( const ::rtl::OUString& GroupName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               removeGroup( const ::rtl::OUString& GroupName ) throw( css::uno::RuntimeException );
-    sal_Bool SAL_CALL               renameGroup( const ::rtl::OUString& OldGroupName,
-                                                 const ::rtl::OUString& NewGroupName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               addTemplate( const OUString& GroupName,
+                                                 const OUString& TemplateName,
+                                                 const OUString& SourceURL ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               removeTemplate( const OUString& GroupName,
+                                                    const OUString& TemplateName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               renameTemplate( const OUString& GroupName,
+                                                    const OUString& OldTemplateName,
+                                                    const OUString& NewTemplateName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               addGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               removeGroup( const OUString& GroupName ) throw( css::uno::RuntimeException );
+    sal_Bool SAL_CALL               renameGroup( const OUString& OldGroupName,
+                                                 const OUString& NewGroupName ) throw( css::uno::RuntimeException );
     void SAL_CALL                   update() throw( css::uno::RuntimeException );
 };
 

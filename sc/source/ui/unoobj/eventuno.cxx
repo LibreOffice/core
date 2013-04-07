@@ -56,7 +56,7 @@ void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-static sal_Int32 lcl_GetEventFromName( const rtl::OUString& aName )
+static sal_Int32 lcl_GetEventFromName( const OUString& aName )
 {
     for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
         if ( aName == ScSheetEvents::GetEventName(nEvent) )
@@ -67,7 +67,7 @@ static sal_Int32 lcl_GetEventFromName( const rtl::OUString& aName )
 
 // XNameReplace
 
-void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -84,7 +84,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
     if (pOldEvents)
         aNewEvents = *pOldEvents;
 
-    rtl::OUString aScript;
+    OUString aScript;
     if ( aElement.hasValue() )      // empty Any -> reset event
     {
         uno::Sequence<beans::PropertyValue> aPropSeq;
@@ -96,7 +96,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
                 const beans::PropertyValue& rProp = aPropSeq[nPos];
                 if ( rProp.Name.compareToAscii( SC_UNO_EVENTTYPE ) == 0 )
                 {
-                    rtl::OUString aEventType;
+                    OUString aEventType;
                     if ( rProp.Value >>= aEventType )
                     {
                         // only "Script" is supported
@@ -120,7 +120,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const rtl::OUString& aName, const
 
 // XNameAccess
 
-uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -128,7 +128,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     if (nEvent < 0)
         throw container::NoSuchElementException();
 
-    const rtl::OUString* pScript = NULL;
+    const OUString* pScript = NULL;
     if (mpDocShell)
     {
         const ScSheetEvents* pEvents = mpDocShell->GetDocument()->GetSheetEvents(mnTab);
@@ -141,10 +141,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
         aPropSeq[0] = beans::PropertyValue(
-                        rtl::OUString("EventType"), -1,
-                        uno::makeAny( rtl::OUString("Script") ), beans::PropertyState_DIRECT_VALUE );
+                        OUString("EventType"), -1,
+                        uno::makeAny( OUString("Script") ), beans::PropertyState_DIRECT_VALUE );
         aPropSeq[1] = beans::PropertyValue(
-                        rtl::OUString("Script"), -1,
+                        OUString("Script"), -1,
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }
@@ -152,16 +152,16 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const rtl::OUString& aName )
     return aRet;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScSheetEventsObj::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<rtl::OUString> aNames(SC_SHEETEVENT_COUNT);
+    uno::Sequence<OUString> aNames(SC_SHEETEVENT_COUNT);
     for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
         aNames[nEvent] = ScSheetEvents::GetEventName(nEvent);
     return aNames;
 }
 
-sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const ::rtl::OUString& aName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     sal_Int32 nEvent = lcl_GetEventFromName(aName);

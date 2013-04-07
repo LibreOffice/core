@@ -31,9 +31,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 void test_coreReflection()
 {

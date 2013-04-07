@@ -112,7 +112,7 @@ namespace sd
 {
     struct PresentationSettings
     {
-        rtl::OUString maPresPage;
+        OUString maPresPage;
         sal_Bool mbAll;
         sal_Bool mbEndless;
         sal_Bool mbCustomShow;
@@ -186,7 +186,7 @@ private:
                         DECL_LINK(OnlineSpellingHdl, void *);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
-    std::vector< rtl::OUString > maAnnotationAuthors;
+    std::vector< OUString > maAnnotationAuthors;
 
     bool                mbUseEmbedFonts;
 
@@ -249,8 +249,8 @@ public:
     SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const String& rBookmarkFile);
     SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
 
-    sal_Bool InsertBookmark(const std::vector<rtl::OUString> &rBookmarkList,
-                            std::vector<rtl::OUString> &rExchangeList, sal_Bool bLink,
+    sal_Bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
+                            std::vector<OUString> &rExchangeList, sal_Bool bLink,
                             sal_Bool bReplace, sal_uInt16 nPgPos, sal_Bool bNoDialogs,
                             ::sd::DrawDocShell* pBookmarkDocSh, sal_Bool bCopy,
                             Point* pObjPos);
@@ -304,15 +304,15 @@ public:
         page, or preserve the old name
      */
 
-    sal_Bool InsertBookmarkAsPage(const std::vector<rtl::OUString> &rBookmarkList,
-                                  std::vector<rtl::OUString> *pExchangeList,
+    sal_Bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
+                                  std::vector<OUString> *pExchangeList,
                               sal_Bool bLink, sal_Bool bReplace, sal_uInt16 nPgPos,
                               sal_Bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                               sal_Bool bCopy, sal_Bool bMergeMasterPages,
                               sal_Bool bPreservePageNames);
 
-    sal_Bool InsertBookmarkAsObject(const std::vector<rtl::OUString> &rBookmarkList,
-                                    const std::vector<rtl::OUString> &rExchangeList,
+    sal_Bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
+                                    const std::vector<OUString> &rExchangeList,
                                     sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                     Point* pObjPos, bool bCalcObjCount = false);
 
@@ -557,7 +557,7 @@ public:
 
     void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
-    sal_uInt16 GetAnnotationAuthorIndex( const rtl::OUString& rAuthor );
+    sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 
     bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }

@@ -65,7 +65,7 @@ struct _AtkObjectWrapper
 
     AtkObject *child_about_to_be_removed;
     gint       index_of_child_about_to_be_removed;
-//    ::rtl::OString * m_pKeyBindings
+//    OString * m_pKeyBindings
 };
 
 struct _AtkObjectWrapperClass
@@ -106,13 +106,13 @@ void                   valueIfaceInit(AtkValueIface *iface);
     (G_TYPE_CHECK_INSTANCE_CAST ((obj), ATK_TYPE_OBJECT_WRAPPER, AtkObjectWrapper))
 
 static inline gchar *
-OUStringToGChar(const rtl::OUString& rString )
+OUStringToGChar(const OUString& rString )
 {
-    rtl::OString aUtf8 = rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
+    OString aUtf8 = OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
     return g_strdup( aUtf8.getStr() );
 }
 
-#define OUStringToConstGChar( string ) rtl::OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()
+#define OUStringToConstGChar( string ) OUStringToOString( string, RTL_TEXTENCODING_UTF8 ).getStr()
 
 #endif /* __ATK_WRAPPER_HXX__ */
 

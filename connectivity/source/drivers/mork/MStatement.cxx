@@ -49,7 +49,7 @@
 #include "resource/common_res.hrc"
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -153,22 +153,22 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
         {
             const OSQLTables& xTabs = m_pSQLIterator->getTables();
             OSL_ENSURE( !xTabs.empty(), "Need a Table");
-            ::rtl::OUString ouTableName=xTabs.begin()->first;
+            OUString ouTableName=xTabs.begin()->first;
             xCreateColumn     = m_pSQLIterator->getCreateColumns();
             OSL_ENSURE(xCreateColumn.is(), "Need the Columns!!");
 
             const OColumnAlias& aColumnAlias = m_pConnection->getColumnAlias();
 
             OSQLColumns::Vector::const_iterator aIter = xCreateColumn->get().begin();
-            const ::rtl::OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-            ::rtl::OUString sName;
+            const OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+            OUString sName;
             for (sal_Int32 i = 1; aIter != xCreateColumn->get().end();++aIter, i++)
             {
                 (*aIter)->getPropertyValue(sProprtyName) >>= sName;
                 if ( !aColumnAlias.hasAlias( sName ) )
                 {
 
-                    const ::rtl::OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
+                    const OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
                             STR_INVALID_COLUMNNAME,
                             "$columnname$", sName
                          ) );
@@ -190,12 +190,12 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 */
 }
 // -------------------------------------------------------------------------
-OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
+OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , sal_Bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::parseSql()" );
 
-    ::rtl::OUString aErr;
+    OUString aErr;
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
 
@@ -258,7 +258,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUStrin
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
                         // So we append ("E-mail" varchar) to the last of it to make it work
     {
-        return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
+        return parseSql(sql + OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
 
     getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
@@ -319,7 +319,7 @@ void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pR
 }
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OCommonStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OCommonStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::execute()" );
 
@@ -334,7 +334,7 @@ sal_Bool SAL_CALL OCommonStatement::execute( const ::rtl::OUString& sql ) throw(
 }
 // -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::executeQuery()" );
 
@@ -373,7 +373,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
@@ -406,7 +406,7 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
     Sequence< Property > aProps(9);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);
@@ -555,7 +555,7 @@ void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
 {
     SAL_INFO("connectivity.mork", "=>  OCommonStatement::setOrderbyColumn()" );
 
-    ::rtl::OUString aColumnName;
+    OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)

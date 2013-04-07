@@ -31,11 +31,11 @@
 class XMLNamedBoolPropertyHdl : public XMLPropertyHandler
 {
 private:
-    const ::rtl::OUString maTrueStr;
-    const ::rtl::OUString maFalseStr;
+    const OUString maTrueStr;
+    const OUString maFalseStr;
 
 public:
-    XMLNamedBoolPropertyHdl( const ::rtl::OUString& rTrueStr, const ::rtl::OUString& rFalseStr ) : maTrueStr( rTrueStr ), maFalseStr( rFalseStr ) {}
+    XMLNamedBoolPropertyHdl( const OUString& rTrueStr, const OUString& rFalseStr ) : maTrueStr( rTrueStr ), maFalseStr( rFalseStr ) {}
 
     XMLNamedBoolPropertyHdl(
             ::xmloff::token::XMLTokenEnum eTrue,
@@ -47,8 +47,8 @@ public:
 
     virtual ~XMLNamedBoolPropertyHdl();
 
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 #endif      // _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX

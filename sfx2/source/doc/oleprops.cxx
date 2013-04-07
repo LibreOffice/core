@@ -34,7 +34,6 @@
 #define STREAM_BUFFER_SIZE 2048
 
 // usings
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::makeAny;
 
@@ -314,7 +313,7 @@ String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     rStrm >> nSize;
     // size field includes trailing NUL character
     DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
-        rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
             "SfxOleStringHelper::ImplLoadString8 - invalid string of len ")).
         append(nSize).getStr() );
     if( (0 < nSize) && (nSize <= 0xFFFF) )
@@ -352,7 +351,7 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
             rStrm.SeekRel( 2 );
         // create string from character array
         aBuffer.push_back( 0 );
-        aValue = rtl::OUString( &aBuffer.front() );
+        aValue = OUString( &aBuffer.front() );
     }
     return aValue;
 }
@@ -360,7 +359,7 @@ String SfxOleStringHelper::ImplLoadString16( SvStream& rStrm ) const
 void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const String& rValue ) const
 {
     // encode to byte string
-    rtl::OString aEncoded(rtl::OUStringToOString(rValue, GetTextEncoding()));
+    OString aEncoded(OUStringToOString(rValue, GetTextEncoding()));
     // write size field (including trailing NUL character)
     sal_Int32 nSize = aEncoded.getLength() + 1;
     rStrm << nSize;

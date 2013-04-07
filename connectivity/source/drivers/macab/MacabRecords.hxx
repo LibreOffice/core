@@ -53,7 +53,7 @@ namespace connectivity
                 MacabHeader *header;
                 MacabRecord **records;
                 ABAddressBookRef addressBook;
-                ::rtl::OUString m_sName;
+                OUString m_sName;
 
                 /* For converting CF types to AB types */
                 sal_Int32 lcl_CFTypesLength;
@@ -75,8 +75,8 @@ namespace connectivity
                 MacabHeader *createHeaderForProperty(const ABPropertyType _propertyType, const CFTypeRef _propertyValue, const CFStringRef _propertyName) const;
                 void manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length) const;
                 ABPropertyType getABTypeFromCFType(const CFTypeID cf_type ) const;
-                void insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const ::rtl::OUString  _propertyName, const CFTypeRef _propertyValue) const;
-                void insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const ::rtl::OUString  _propertyName, const CFTypeRef _propertyValue) const;
+                void insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const MacabHeader *_header, const OUString  _propertyName, const CFTypeRef _propertyValue) const;
+                void insertPropertyIntoMacabRecord(const ABPropertyType _propertyType, MacabRecord *_abrecord, const MacabHeader *_header, const OUString  _propertyName, const CFTypeRef _propertyValue) const;
             public:
                 MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_header, MacabRecord **_records, sal_Int32 _numRecords);
                 MacabRecords(const MacabRecords *_copy);
@@ -88,8 +88,8 @@ namespace connectivity
                 void setHeader(MacabHeader *_header);
                 MacabHeader *getHeader() const;
 
-                void setName(const ::rtl::OUString _sName);
-                ::rtl::OUString getName() const;
+                void setName(const OUString _sName);
+                OUString getName() const;
 
                 MacabRecord *insertRecord(MacabRecord *_newRecord, const sal_Int32 _location);
                 void insertRecord(MacabRecord *_newRecord);
@@ -97,8 +97,8 @@ namespace connectivity
                 void swap(const sal_Int32 _id1, const sal_Int32 _id2);
 
                 macabfield *getField(const sal_Int32 _recordNumber, const sal_Int32 _columnNumber) const;
-                macabfield *getField(const sal_Int32 _recordNumber, const ::rtl::OUString  _columnName) const;
-                sal_Int32 getFieldNumber(const ::rtl::OUString  _columnName) const;
+                macabfield *getField(const sal_Int32 _recordNumber, const OUString  _columnName) const;
+                sal_Int32 getFieldNumber(const OUString  _columnName) const;
 
                 sal_Int32 size() const;
 

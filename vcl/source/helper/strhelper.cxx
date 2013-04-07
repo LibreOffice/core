@@ -158,10 +158,10 @@ String GetCommandLineToken( int nToken, const String& rLine )
 
     *pLeap = 0;
 
-    return rtl::OUString(pBuffer);
+    return OUString(pBuffer);
 }
 
-rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
+OString GetCommandLineToken(int nToken, const OString& rLine)
 {
     sal_Int32 nLen = rLine.getLength();
     if (!nLen)
@@ -208,10 +208,10 @@ rtl::OString GetCommandLineToken(int nToken, const rtl::OString& rLine)
 
     *pLeap = 0;
 
-    return rtl::OString(pBuffer);
+    return OString(pBuffer);
 }
 
-int GetCommandLineTokenCount(const rtl::OUString& rLine)
+int GetCommandLineTokenCount(const OUString& rLine)
 {
     if (rLine.isEmpty())
         return 0;
@@ -314,10 +314,10 @@ String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    return rtl::OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
+    return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-rtl::OString WhitespaceToSpace(const rtl::OString& rLine, sal_Bool bProtect)
+OString WhitespaceToSpace(const OString& rLine, sal_Bool bProtect)
 {
     sal_Int32 nLen = rLine.getLength();
     if (!nLen)
@@ -370,7 +370,7 @@ rtl::OString WhitespaceToSpace(const rtl::OString& rLine, sal_Bool bProtect)
     if( *pLeap == ' ' )
         *pLeap = 0;
 
-    return rtl::OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
+    return OString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
 } // namespace

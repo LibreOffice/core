@@ -101,7 +101,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
 
-    rtl::OUString aTextStr;
+    OUString aTextStr;
     if ( rSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         const SvxPostItTextItem& rText =

@@ -61,7 +61,7 @@ private:
     void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );
 
     void checkName( uno::Reference< container::XIndexAccess > xIndex, sal_Int32 nIndex );
-    static std::vector<rtl::OUString> maFieldNames;
+    static std::vector<OUString> maFieldNames;
 };
 
 }

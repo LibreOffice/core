@@ -159,18 +159,18 @@ static FILE *_tmpfile(void)
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
-    ::rtl::OUString ustrValue("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
+    OUString ustrValue("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
     ::rtl::Bootstrap::expandMacros( ustrValue );
 
     if ( !ustrValue.isEmpty() )
     {
-        ustrValue += ::rtl::OUString("/user/crashdata");
+        ustrValue += OUString("/user/crashdata");
 
         ::osl::FileBase::RC result = ::osl::Directory::createPath( ustrValue );
 
         if ( ::osl::FileBase::E_None == result || ::osl::FileBase::E_EXIST == result )
         {
-            ::rtl::OUString ustrPath;
+            OUString ustrPath;
 
             result = ::osl::FileBase::getSystemPathFromFileURL( ustrValue, ustrPath );
             if (  ::osl::FileBase::E_None == result  )

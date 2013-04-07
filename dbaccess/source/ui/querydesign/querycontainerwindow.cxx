@@ -195,7 +195,7 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(::rtl::OUString("com.sun.star.frame.Frame"), m_pViewSwitch->getORB()),UNO_QUERY );
+            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->getServiceManager()->createInstanceWithContext(OUString("com.sun.star.frame.Frame"), m_pViewSwitch->getORB()),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
@@ -204,12 +204,12 @@ namespace dbaui
             Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
             try
             {
-                const ::rtl::OUString aLayoutManager( "LayoutManager" );
+                const OUString aLayoutManager( "LayoutManager" );
                 Reference < XPropertySet > xLMPropSet(xPropSet->getPropertyValue( aLayoutManager ),UNO_QUERY);
 
                 if ( xLMPropSet.is() )
                 {
-                    const ::rtl::OUString aAutomaticToolbars( "AutomaticToolbars" );
+                    const OUString aAutomaticToolbars( "AutomaticToolbars" );
                     xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
                 }
             }

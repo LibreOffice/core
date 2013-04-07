@@ -89,7 +89,7 @@ private:
     void                    LoadJREs();
     void                    AddJRE( JavaInfo* _pInfo );
     void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
-    void                    AddFolder( const ::rtl::OUString& _rFolder );
+    void                    AddFolder( const OUString& _rFolder );
 
 public:
     SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet );
@@ -139,8 +139,8 @@ public:
 
     virtual short           Execute();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > GetParameters() const;
-    void SetParameters( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rParams );
+    ::com::sun::star::uno::Sequence< OUString > GetParameters() const;
+    void SetParameters( ::com::sun::star::uno::Sequence< OUString >& rParams );
 };
 
 // class SvxJavaClassPathDlg ---------------------------------------------

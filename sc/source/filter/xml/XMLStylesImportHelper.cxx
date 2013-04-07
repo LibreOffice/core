@@ -24,12 +24,12 @@
 using namespace com::sun::star;
 using ::std::list;
 
-void ScMyStyleNumberFormats::AddStyleNumberFormat(const rtl::OUString& rStyleName, const sal_Int32 nNumberFormat)
+void ScMyStyleNumberFormats::AddStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nNumberFormat)
 {
     aSet.insert(ScMyStyleNumberFormat(rStyleName, nNumberFormat));
 }
 
-sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const rtl::OUString& rStyleName)
+sal_Int32 ScMyStyleNumberFormats::GetStyleNumberFormat(const OUString& rStyleName)
 {
     ScMyStyleNumberFormat aStyleNumberFormat(rStyleName);
     ScMyStyleNumberFormatSet::iterator aItr(aSet.find(aStyleNumberFormat));
@@ -110,7 +110,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
     }
 }
 
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUString* pCurrency)
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -161,15 +161,15 @@ void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDo
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const list<ScRange>& rRanges,
-    const rtl::OUString* pStyleName, const sal_Int16 nCellType,
-    const rtl::OUString* pCurrency, ScXMLImport& rImport)
+    const OUString* pStyleName, const sal_Int16 nCellType,
+    const OUString* pCurrency, ScXMLImport& rImport)
 {
     list<ScRange>::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
     for (; itr != itrEnd; ++itr)
         rImport.SetStyleToRange(*itr, pStyleName, nCellType, pCurrency);
 }
 
-void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport)
+void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport)
 {
     if (mpNumberList)
     {
@@ -268,7 +268,7 @@ void ScMyStylesImportHelper::ResetAttributes()
     nCellType = 0;
 }
 
-ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString* pStyleNameP)
+ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const OUString* pStyleNameP)
 {
     ScMyStyle aStyle;
     if (pStyleNameP)
@@ -312,7 +312,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                     aRange.aStart.SetCol(nStartCol);
                     aRange.aEnd.SetCol(i - 1);
                     delete pPrevStyleName;
-                    pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
+                    pPrevStyleName = new OUString(aPrevItr->sStyleName);
                     AddSingleRange(aRange);
                     nStartCol = i;
                     aPrevItr = aColDefaultStyles[i];
@@ -323,7 +323,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                 ScRange aRange(rRange);
                 aRange.aStart.SetCol(nStartCol);
                 delete pPrevStyleName;
-                pPrevStyleName = new rtl::OUString(aPrevItr->sStyleName);
+                pPrevStyleName = new OUString(aPrevItr->sStyleName);
                 AddSingleRange(aRange);
             }
             else
@@ -339,7 +339,7 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     else
     {
         delete pPrevStyleName;
-        pPrevStyleName = new rtl::OUString(aRowDefaultStyle->sStyleName);
+        pPrevStyleName = new OUString(aRowDefaultStyle->sStyleName);
         AddSingleRange(rRange);
     }
 }
@@ -365,7 +365,7 @@ void ScMyStylesImportHelper::AddRange()
     ResetAttributes();
 }
 
-void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
+void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
     (void)nColumn;  // avoid warning in product version
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
@@ -376,13 +376,13 @@ void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, con
         aColDefaultStyles.push_back(aItr);
 }
 
-void ScMyStylesImportHelper::SetRowStyle(const rtl::OUString& sStyleName)
+void ScMyStylesImportHelper::SetRowStyle(const OUString& sStyleName)
 {
     aRowDefaultStyle = GetIterator(&sStyleName);
 }
 
-void ScMyStylesImportHelper::SetAttributes(rtl::OUString* pStyleNameP,
-    rtl::OUString* pCurrencyP, const sal_Int16 nCellTypeP)
+void ScMyStylesImportHelper::SetAttributes(OUString* pStyleNameP,
+    OUString* pCurrencyP, const sal_Int16 nCellTypeP)
 {
     delete this->pStyleName;
     delete this->pCurrency;

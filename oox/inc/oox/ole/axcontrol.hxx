@@ -258,8 +258,8 @@ public:
         implementation will check which source types are supported. */
     void                bindToSources(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
-                            const ::rtl::OUString& rCtrlSource,
-                            const ::rtl::OUString& rRowSource,
+                            const OUString& rCtrlSource,
+                            const OUString& rRowSource,
                             sal_Int32 nRefSheet = 0 ) const;
 
     // ActiveX (Forms 2.0) specific conversion --------------------------------
@@ -313,14 +313,14 @@ public:
         properties. */
     void                convertAxState(
                             PropertyMap& rPropMap,
-                            const ::rtl::OUString& rValue,
+                            const OUString& rValue,
                             sal_Int32 nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
                             bool bAwtModel ) const;
 
     void                convertToAxState(
                             PropertySet& rPropSet,
-                            ::rtl::OUString& rValue,
+                            OUString& rValue,
                             sal_Int32& nMultiSelect,
                             ApiDefaultStateMode eDefStateMode,
                             bool bAwtModel ) const;
@@ -360,10 +360,10 @@ public:
 
     /** Returns the UNO service name used to construct the AWT control model,
         or the control form component. */
-    ::rtl::OUString     getServiceName() const;
+    OUString     getServiceName() const;
 
     /** Derived classes set specific OOXML properties at the model structure. */
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     /** Derived classes set binary data (picture, mouse icon) at the model structure. */
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     /** Derived classes import a form control model from the passed input stream. */
@@ -487,7 +487,7 @@ class OOX_DLLPUBLIC AxControlModelBase : public ControlModelBase
 public:
     explicit            AxControlModelBase();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
 };
 
 // ============================================================================
@@ -498,7 +498,7 @@ class OOX_DLLPUBLIC AxFontDataModel : public AxControlModelBase
 public:
     explicit            AxFontDataModel( bool bSupportsAlign = true );
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
@@ -522,7 +522,7 @@ class OOX_DLLPUBLIC AxCommandButtonModel : public AxFontDataModel
 public:
     explicit            AxCommandButtonModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
@@ -534,7 +534,7 @@ public:
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
-    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
+    OUString     maCaption;          ///< Visible caption of the button.
     sal_uInt32          mnTextColor;        ///< Text color.
     sal_uInt32          mnBackColor;        ///< Fill color.
     sal_uInt32          mnFlags;            ///< Various flags.
@@ -551,7 +551,7 @@ class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
 public:
     explicit            AxLabelModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
@@ -561,7 +561,7 @@ public:
     virtual void        convertFromProperties( PropertySet& rPropSet, const ControlConverter& rConv );
 
 public: // direct access needed for legacy VML drawing controls
-    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
+    OUString     maCaption;          ///< Visible caption of the button.
     sal_uInt32          mnTextColor;        ///< Text color.
     sal_uInt32          mnBackColor;        ///< Fill color.
     sal_uInt32          mnFlags;            ///< Various flags.
@@ -579,7 +579,7 @@ class OOX_DLLPUBLIC AxImageModel : public AxControlModelBase
 public:
     explicit            AxImageModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
@@ -608,7 +608,7 @@ class OOX_DLLPUBLIC AxMorphDataModelBase : public AxFontDataModel
 public:
     explicit            AxMorphDataModelBase();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual void        importPictureData( sal_Int32 nPropId, BinaryInputStream& rInStrm );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
@@ -616,9 +616,9 @@ public:
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
-    ::rtl::OUString     maCaption;          ///< Visible caption of the button.
-    ::rtl::OUString     maValue;            ///< Current value of the control.
-    ::rtl::OUString     maGroupName;        ///< Group name for option buttons.
+    OUString     maCaption;          ///< Visible caption of the button.
+    OUString     maValue;            ///< Current value of the control.
+    OUString     maGroupName;        ///< Group name for option buttons.
     sal_uInt32          mnTextColor;        ///< Text color.
     sal_uInt32          mnBackColor;        ///< Fill color.
     sal_uInt32          mnFlags;            ///< Various flags.
@@ -674,7 +674,7 @@ public:
     explicit            AxOptionButtonModel();
 
     /** Returns the group name used to goup several option buttons gogether. */
-    inline const ::rtl::OUString& getGroupName() const { return maGroupName; }
+    inline const OUString& getGroupName() const { return maGroupName; }
 
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
@@ -746,7 +746,7 @@ class OOX_DLLPUBLIC AxSpinButtonModel : public AxControlModelBase
 public:
     explicit            AxSpinButtonModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
 
@@ -775,7 +775,7 @@ class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
 public:
     explicit            AxScrollBarModel();
 
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        exportBinaryModel( BinaryOutputStream& rOutStrm );
     virtual void        exportCompObj( BinaryOutputStream& rOutStrm );
@@ -800,7 +800,7 @@ public: // direct access needed for legacy VML drawing controls
 
 // ============================================================================
 
-typedef ::std::vector< ::rtl::OUString > AxClassTable;
+typedef ::std::vector< OUString > AxClassTable;
 
 /** Base class for ActiveX container controls. */
 class OOX_DLLPUBLIC AxContainerModelBase : public AxFontDataModel
@@ -809,7 +809,7 @@ public:
     explicit            AxContainerModelBase( bool bFontSupport = false );
 
     /** Allows to set single properties specified by XML token identifier. */
-    virtual void        importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    virtual void        importProperty( sal_Int32 nPropId, const OUString& rValue );
     /** Reads the leading structure in the 'f' stream containing the model for
         this control. */
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
@@ -822,7 +822,7 @@ public:
 
 public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      ///< Binary picture stream.
-    ::rtl::OUString     maCaption;          ///< Visible caption of the form.
+    OUString     maCaption;          ///< Visible caption of the form.
     AxPairData          maLogicalSize;      ///< Logical form size (scroll area).
     AxPairData          maScrollPos;        ///< Scroll position.
     sal_uInt32          mnBackColor;        ///< Fill color.
@@ -868,7 +868,7 @@ public:
 
 class HtmlSelectModel : public AxListBoxModel
 {
-    com::sun::star::uno::Sequence< rtl::OUString > msListData;
+    com::sun::star::uno::Sequence< OUString > msListData;
     com::sun::star::uno::Sequence< sal_Int16 > msIndices;
 public:
     HtmlSelectModel();
@@ -889,7 +889,7 @@ public:
 class OOX_DLLPUBLIC EmbeddedControl
 {
 public:
-    explicit            EmbeddedControl( const ::rtl::OUString& rName );
+    explicit            EmbeddedControl( const OUString& rName );
     virtual             ~EmbeddedControl();
 
     /** Creates and returns the internal control model of the specified type. */
@@ -902,7 +902,7 @@ public:
 
     /** Creates and returns the internal control model according to the passed
         MS class identifier. */
-    ControlModelBase*   createModelFromGuid( const ::rtl::OUString& rClassId );
+    ControlModelBase*   createModelFromGuid( const OUString& rClassId );
 
     /** Returns true, if the internal control model exists. */
     inline bool         hasModel() const { return mxModel.get() != 0; }
@@ -912,7 +912,7 @@ public:
     inline ControlModelBase* getModel() { return mxModel.get(); }
 
     /** Returns the UNO service name needed to construct the control model. */
-    ::rtl::OUString     getServiceName() const;
+    OUString     getServiceName() const;
 
     /** Converts all control properties and inserts them into the passed model. */
     bool                convertProperties(
@@ -925,7 +925,7 @@ public:
 
 private:
     ControlModelRef     mxModel;            ///< Control model containing the properties.
-    ::rtl::OUString     maName;             ///< Name of the control.
+    OUString     maName;             ///< Name of the control.
 };
 
 // ----------------------------------------------------------------------------

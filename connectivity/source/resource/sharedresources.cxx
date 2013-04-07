@@ -56,7 +56,7 @@ namespace connectivity
         static SharedResources_Impl&
                         getInstance();
 
-        ::rtl::OUString getResourceString( ResourceId _nId );
+        OUString getResourceString( ResourceId _nId );
 
     private:
         SharedResources_Impl();
@@ -88,12 +88,12 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources_Impl::getResourceString( ResourceId _nId )
+    OUString SharedResources_Impl::getResourceString( ResourceId _nId )
     {
         if ( m_pResourceBundle.get() == NULL )
             // this should never happen, but we gracefully ignore it. It has been reported
             // in the constructor in non-product builds.
-            return ::rtl::OUString();
+            return OUString();
 
         return m_pResourceBundle->loadString( _nId );
     }
@@ -132,12 +132,12 @@ namespace connectivity
     //====================================================================
     namespace
     {
-        size_t lcl_substitute( ::rtl::OUString& _inout_rString,
-            const sal_Char* _pAsciiPattern, const ::rtl::OUString& _rReplace )
+        size_t lcl_substitute( OUString& _inout_rString,
+            const sal_Char* _pAsciiPattern, const OUString& _rReplace )
         {
             size_t nOccurrences = 0;
 
-            ::rtl::OUString sPattern( ::rtl::OUString::createFromAscii( _pAsciiPattern ) );
+            OUString sPattern( OUString::createFromAscii( _pAsciiPattern ) );
             sal_Int32 nIndex = 0;
             while ( ( nIndex = _inout_rString.indexOf( sPattern ) ) > -1 )
             {
@@ -165,50 +165,50 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResourceString( ResourceId _nResId ) const
+    OUString SharedResources::getResourceString( ResourceId _nResId ) const
     {
         return SharedResources_Impl::getInstance().getResourceString( _nResId );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                const sal_Char* _pAsciiPatternToReplace, const ::rtl::OUString& _rStringToSubstitute ) const
+    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+                const sal_Char* _pAsciiPatternToReplace, const OUString& _rStringToSubstitute ) const
     {
-        ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace, _rStringToSubstitute ) );
         return sString;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                const sal_Char* _pAsciiPatternToReplace1, const ::rtl::OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2, const ::rtl::OUString& _rStringToSubstitute2 ) const
+    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+                const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
+                const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2 ) const
     {
-        ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
         return sString;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                const sal_Char* _pAsciiPatternToReplace1, const ::rtl::OUString& _rStringToSubstitute1,
-                const sal_Char* _pAsciiPatternToReplace2, const ::rtl::OUString& _rStringToSubstitute2,
-                const sal_Char* _pAsciiPatternToReplace3, const ::rtl::OUString& _rStringToSubstitute3 ) const
+    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+                const sal_Char* _pAsciiPatternToReplace1, const OUString& _rStringToSubstitute1,
+                const sal_Char* _pAsciiPatternToReplace2, const OUString& _rStringToSubstitute2,
+                const sal_Char* _pAsciiPatternToReplace3, const OUString& _rStringToSubstitute3 ) const
     {
-        ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace1, _rStringToSubstitute1 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace2, _rStringToSubstitute2 ) );
         OSL_VERIFY( lcl_substitute( sString, _pAsciiPatternToReplace3, _rStringToSubstitute3 ) );
         return sString;
     }
     //--------------------------------------------------------------------
-    ::rtl::OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                    const ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > _aStringToSubstitutes) const
+    OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
+                    const ::std::list< ::std::pair<const sal_Char* , OUString > > _aStringToSubstitutes) const
     {
-        ::rtl::OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
-        ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aIter = _aStringToSubstitutes.begin();
-        ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > >::const_iterator aEnd  = _aStringToSubstitutes.end();
+        OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
+        ::std::list< ::std::pair<const sal_Char* , OUString > >::const_iterator aIter = _aStringToSubstitutes.begin();
+        ::std::list< ::std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _aStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)
             OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );
 

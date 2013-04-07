@@ -56,13 +56,13 @@ public:
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable ) = 0;
 
-    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel ) = 0;
+    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel ) = 0;
 
-    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId ) = 0;
+    virtual OUString SAL_CALL getLabel( sal_Int16 aControlId ) = 0;
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog ) = 0;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog ) = 0;
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog ) = 0;
+    virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog ) = 0;
 };
 
 //---------------------------------------------
@@ -82,13 +82,13 @@ public:
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
-    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel );
+    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel );
 
-    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId );
+    virtual OUString SAL_CALL getLabel( sal_Int16 aControlId );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
+    virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
 
     void SAL_CALL reset( );
 
@@ -116,13 +116,13 @@ public:
 
     virtual void SAL_CALL enableControl( sal_Int16 aControlId, sal_Bool bEnable );
 
-    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel );
+    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel );
 
-    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 aControlId );
+    virtual OUString SAL_CALL getLabel( sal_Int16 aControlId );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles( CFileOpenDialog* aFileOpenDialog );
 
-    virtual rtl::OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
+    virtual OUString SAL_CALL getDisplayDirectory( CFileOpenDialog* aFileOpenDialog );
 
     void SAL_CALL initFilePickerControls( CControlCommand* firstControlCommand );
 

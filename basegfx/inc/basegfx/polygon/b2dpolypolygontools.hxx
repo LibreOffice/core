@@ -117,7 +117,7 @@ namespace basegfx
             @return true, if the string was successfully parsed
          */
         BASEGFX_DLLPUBLIC bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
-                             const ::rtl::OUString& rSvgDAttribute, bool bWrongPositionAfterZ = false );
+                             const OUString& rSvgDAttribute, bool bWrongPositionAfterZ = false );
 
         /** Read poly-polygon from SVG.
 
@@ -134,7 +134,7 @@ namespace basegfx
             @return true, if the string was successfully parsed
          */
         BASEGFX_DLLPUBLIC bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const ::rtl::OUString& rSvgPointsAttribute );
+                                  const OUString& rSvgPointsAttribute );
 
 
         // grow for polyPolygon. Move all geometry in each point in the direction of the normal in that point
@@ -211,7 +211,7 @@ namespace basegfx
             @return the generated SVG-D statement (the XML d attribute
             value alone, without any "<path ...>" or "d="...")
          */
-        BASEGFX_DLLPUBLIC ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
+        BASEGFX_DLLPUBLIC OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
                                       bool                  bUseRelativeCoordinates=true,
                                       bool                  bDetectQuadraticBeziers=true );
 

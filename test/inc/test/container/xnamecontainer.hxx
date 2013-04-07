@@ -40,7 +40,7 @@ public:
     // removes default entry
     XNameContainer();
     // removes given entry
-    XNameContainer(const rtl::OUString& rName);
+    XNameContainer(const OUString& rName);
 
     virtual uno::Reference< uno::XInterface > init() = 0;
 
@@ -49,7 +49,7 @@ public:
     virtual ~XNameContainer() {}
 
 private:
-    rtl::OUString maNameToRemove;
+    OUString maNameToRemove;
 };
 
 }

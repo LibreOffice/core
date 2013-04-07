@@ -22,7 +22,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeName )
 {
@@ -67,7 +66,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
         return !mpDoc->GetCodeName().isEmpty();
 
     SCTAB nCount = mpDoc->GetTableCount();
-    rtl::OUString sSheetName, sCodeName;
+    OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
@@ -96,7 +95,7 @@ uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
     }
 
     SCTAB nCount = mpDoc->GetTableCount();
-    rtl::OUString sSheetName, sCodeName;
+    OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( mpDoc->GetName( i, sSheetName ) && sSheetName.equals(aName) )
@@ -121,7 +120,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     if( !mpDoc->GetCodeName().isEmpty() )
         aNames[nRealCount++] = msDocName;
 
-    rtl::OUString sSheetName, sCodeName;
+    OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         mpDoc->GetCodeName( i, sCodeName );
@@ -151,7 +150,7 @@ uno::Type SAL_CALL XMLCodeNameProvider::getElementType(  )
         return sal_True;
 
     SCTAB nCount = mpDoc->GetTableCount();
-    rtl::OUString sSheetName, sCodeName;
+    OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         mpDoc->GetCodeName( i, sCodeName );
@@ -175,7 +174,7 @@ void XMLCodeNameProvider::set( const uno::Reference< container::XNameAccess>& xN
     }
 
     SCTAB nCount = pDoc->GetTableCount();
-    rtl::OUString sSheetName;
+    OUString sSheetName;
     for( SCTAB i = 0; i < nCount; i++ )
     {
         if( pDoc->GetName( i, sSheetName ) &&

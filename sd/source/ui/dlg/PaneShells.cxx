@@ -49,7 +49,7 @@ TYPEINIT1(LeftImpressPaneShell, SfxShell);
 LeftImpressPaneShell::LeftImpressPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString("LeftImpressPane"));
+    SetName(OUString("LeftImpressPane"));
 }
 
 
@@ -82,7 +82,7 @@ TYPEINIT1(LeftDrawPaneShell, SfxShell);
 LeftDrawPaneShell::LeftDrawPaneShell (void)
     : SfxShell()
 {
-    SetName(rtl::OUString("LeftDrawPane"));
+    SetName(OUString("LeftDrawPane"));
 }
 
 
@@ -112,7 +112,7 @@ TYPEINIT1( ToolPanelPaneShell, SfxShell );
 ToolPanelPaneShell::ToolPanelPaneShell()
     :SfxShell()
 {
-    SetName(rtl::OUString("ToolPanel"));
+    SetName(OUString("ToolPanel"));
 }
 
 ToolPanelPaneShell::~ToolPanelPaneShell(void)

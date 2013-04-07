@@ -134,9 +134,9 @@ public:
     // *** write 8-bit-strings ***
     // (slice length setting has no effect here -> disabled automatically)
 
-    /** Writes string length field and rtl::OString buffer. */
+    /** Writes string length field and OString buffer. */
     void                WriteByteString(
-                            const rtl::OString& rString,
+                            const OString& rString,
                             sal_uInt16 nMaxLen = 0x00FF,
                             bool b16BitCount = false );
 
@@ -269,27 +269,27 @@ class XclXmlUtils
     XclXmlUtils(const XclXmlUtils&);
     XclXmlUtils& operator=(const XclXmlUtils&);
 public:
-    static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, ::rtl::OUString& rValue);
-    static ::rtl::OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
+    static void                     GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& sType, OUString& rValue);
+    static OUString          GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId );
 
-    static ::rtl::OString ToOString( const Color& rColor );
-    static ::rtl::OString ToOString( const ::rtl::OUString& s );
-    static ::rtl::OString ToOString( const ScfUInt16Vec& rBuffer );
-    static ::rtl::OString ToOString( const String& s );
-    static ::rtl::OString ToOString( const ScAddress& rRange );
-    static ::rtl::OString ToOString( const ScRange& rRange );
-    static ::rtl::OString ToOString( const ScRangeList& rRangeList );
-    static ::rtl::OString ToOString( const XclAddress& rAddress );
-    static ::rtl::OString ToOString( const XclExpString& s );
-    static ::rtl::OString ToOString( const XclRange& rRange );
-    static ::rtl::OString ToOString( const XclRangeList& rRangeList );
+    static OString ToOString( const Color& rColor );
+    static OString ToOString( const OUString& s );
+    static OString ToOString( const ScfUInt16Vec& rBuffer );
+    static OString ToOString( const String& s );
+    static OString ToOString( const ScAddress& rRange );
+    static OString ToOString( const ScRange& rRange );
+    static OString ToOString( const ScRangeList& rRangeList );
+    static OString ToOString( const XclAddress& rAddress );
+    static OString ToOString( const XclExpString& s );
+    static OString ToOString( const XclRange& rRange );
+    static OString ToOString( const XclRangeList& rRangeList );
 
-    static ::rtl::OUString ToOUString( const char* s );
-    static ::rtl::OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
-    static ::rtl::OUString ToOUString( const String& s );
-    static ::rtl::OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
+    static OUString ToOUString( const char* s );
+    static OUString ToOUString( const ScfUInt16Vec& rBuffer, sal_Int32 nStart = 0, sal_Int32 nLength = -1 );
+    static OUString ToOUString( const String& s );
+    static OUString ToOUString( ScDocument& rDocument, const ScAddress& rAddress,
                                        ScTokenArray* pTokenArray, const ScCompiler::OpCodeMapPtr & xOpCodeMap );
-    static ::rtl::OUString ToOUString( const XclExpString& s );
+    static OUString ToOUString( const XclExpString& s );
     static const char* ToPsz( bool b );
 
     static sax_fastparser::FSHelperPtr  WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue );
@@ -311,7 +311,7 @@ public:
     void PushStream( sax_fastparser::FSHelperPtr aStream );
     void PopStream();
 
-    sax_fastparser::FSHelperPtr     GetStreamForPath( const ::rtl::OUString& rPath );
+    sax_fastparser::FSHelperPtr     GetStreamForPath( const OUString& rPath );
 
     sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, const char* value, FSEND_t )
         { return WriteAttributesInternal( nAttribute, value, FSEND_internal ); }
@@ -319,12 +319,12 @@ public:
         { return WriteAttributesInternal( nAttribute, value.getStr(), FSEND_internal ); }
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
-                                        const ::rtl::OUString& sFullStream,
-                                        const ::rtl::OUString& sRelativeStream,
+                                        const OUString& sFullStream,
+                                        const OUString& sRelativeStream,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xParentRelation,
                                         const char* sContentType,
                                         const char* sRelationshipType,
-                                        ::rtl::OUString* pRelationshipId = NULL );
+                                        OUString* pRelationshipId = NULL );
 
     // ignore
     virtual bool exportDocument() throw();
@@ -368,12 +368,12 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual ::rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
     ScDocShell *getDocShell();
     sax_fastparser::FSHelperPtr&    WriteAttributesInternal( sal_Int32 nAttribute, ... );
 
-    typedef std::map< ::rtl::OUString,
-        std::pair< ::rtl::OUString,
+    typedef std::map< OUString,
+        std::pair< OUString,
             sax_fastparser::FSHelperPtr > >     XclExpXmlPathToStateMap;
 
     const XclExpRoot*                           mpRoot;

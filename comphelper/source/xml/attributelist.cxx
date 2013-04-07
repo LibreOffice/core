@@ -25,7 +25,6 @@
 using namespace osl;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 namespace comphelper {
 

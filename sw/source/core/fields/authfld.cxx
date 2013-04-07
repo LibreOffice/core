@@ -43,7 +43,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using rtl::OUString;
 
 
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
@@ -396,8 +395,8 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
         {
             Sequence<PropertyValues> aRet(m_SortKeyArr.size());
             PropertyValues* pValues = aRet.getArray();
-            OUString sProp1( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
-                     sProp2( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
+            OUString sProp1( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_SORT_KEY)) ),
+                     sProp2( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_IS_SORT_ASCENDING)));
             for(sal_uInt16 i = 0; i < m_SortKeyArr.size(); i++)
             {
                 const SwTOXSortKey* pKey = &m_SortKeyArr[i];
@@ -580,7 +579,7 @@ const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
     return pEntry->GetAuthorField( eField );
 }
 
-void    SwAuthorityField::SetPar1(const rtl::OUString& rStr)
+void    SwAuthorityField::SetPar1(const OUString& rStr)
 {
     SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
     pInitType->RemoveField(m_nHandle);
@@ -638,7 +637,7 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
     PropertyValue* pValues = aRet.getArray();
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
     {
-        pValues[i].Name = rtl::OUString::createFromAscii(aFieldNames[i]);
+        pValues[i].Name = OUString::createFromAscii(aFieldNames[i]);
         const String& rField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
         if(i == AUTH_FIELD_AUTHORITY_TYPE)
             pValues[i].Value <<= sal_Int16(rField.ToInt32());
@@ -667,7 +666,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     if(!(rAny >>= aParam))
         return false;
 
-    rtl::OUStringBuffer sBuf;
+    OUStringBuffer sBuf;
     comphelper::string::padToLength(sBuf, AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
     String sToSet(sBuf.makeStringAndClear());
     const PropertyValue* pParam = aParam.getConstArray();

@@ -30,7 +30,7 @@
 
 using namespace osl;
 
-namespace { struct TempNameBase_Impl : public rtl::Static< ::rtl::OUString, TempNameBase_Impl > {}; }
+namespace { struct TempNameBase_Impl : public rtl::Static< OUString, TempNameBase_Impl > {}; }
 
 struct TempFile_Impl
 {
@@ -40,7 +40,7 @@ struct TempFile_Impl
 OUString ConstructTempDir_Impl()
 {
     // use system directory
-    ::rtl::OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
+    OUString& rTempNameBase_Impl = TempNameBase_Impl::get();
     if ( rTempNameBase_Impl.isEmpty() )
         osl::FileBase::getTempDirURL( rTempNameBase_Impl );
     OUString aName = rTempNameBase_Impl;
@@ -59,14 +59,14 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
     const unsigned nRadix = 26;
     String aName( rName );
-    aName += rtl::OUString("sv");
+    aName += OUString("sv");
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks();
     for ( unsigned long nOld = u; ++u != nOld; )
     {
         u %= (nRadix*nRadix*nRadix);
-        rtl::OUString aTmp = rtl::OUStringBuffer(aName).
+        OUString aTmp = OUStringBuffer(aName).
             append((sal_Int32)(unsigned)u, nRadix).
             append(".tmp").
             makeStringAndClear();
@@ -140,13 +140,13 @@ TempFile::TempFile( const String& rLeadingChars, const String* pExtension )
     aName += rLeadingChars;
     for ( sal_Int32 i=0;; i++ )
     {
-        rtl::OUStringBuffer aTmpBuffer(aName);
+        OUStringBuffer aTmpBuffer(aName);
         aTmpBuffer.append(i);
         if ( pExtension )
             aTmpBuffer.append(*pExtension);
         else
             aTmpBuffer.append(".tmp");
-        rtl::OUString aTmp = aTmpBuffer.makeStringAndClear();
+        OUString aTmp = aTmpBuffer.makeStringAndClear();
 
         File aFile( aTmp );
         FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
@@ -174,7 +174,7 @@ TempFile::~TempFile()
 
 String TempFile::GetName() const
 {
-    rtl::OUString aTmp;
+    OUString aTmp;
     aTmp = pImp->aName;
     return aTmp;
 }

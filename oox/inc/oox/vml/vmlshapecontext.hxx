@@ -66,12 +66,12 @@ public:
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
 private:
     ClientData&         mrClientData;
-    ::rtl::OUString     maElementText;
+    OUString     maElementText;
 };
 
 // ============================================================================
@@ -105,10 +105,10 @@ public:
 
 private:
     /** Processes the 'style' attribute. */
-    void                setStyle( const ::rtl::OUString& rStyle );
+    void                setStyle( const OUString& rStyle );
 
     /** Resolve a relation identifier to a fragment path. */
-    OptValue< ::rtl::OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
+    OptValue< OUString > decodeFragmentPath( const AttributeList& rAttribs, sal_Int32 nToken ) const;
 
 private:
     ShapeTypeModel&     mrTypeModel;
@@ -129,17 +129,17 @@ public:
 
 private:
     /** Processes the 'points' attribute. */
-    void                setPoints( const ::rtl::OUString& rPoints );
+    void                setPoints( const OUString& rPoints );
     /** Processes the 'from' attribute. */
-    void                setFrom( const ::rtl::OUString& rPoints );
+    void                setFrom( const OUString& rPoints );
     /** Processes the 'to' attribute. */
-    void                setTo( const ::rtl::OUString& rPoints );
+    void                setTo( const OUString& rPoints );
     /** Processes the 'control1' attribute. */
-    void                setControl1( const ::rtl::OUString& rPoints );
+    void                setControl1( const OUString& rPoints );
     /** Processes the 'control2' attribute. */
-    void                setControl2( const ::rtl::OUString& rPoints );
+    void                setControl2( const OUString& rPoints );
     /** Processes the 'path' attribute. */
-    void                setVmlPath( const ::rtl::OUString& rPath );
+    void                setVmlPath( const OUString& rPath );
 
 protected:
     ShapeBase&          mrShape;

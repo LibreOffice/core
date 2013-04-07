@@ -32,7 +32,7 @@ namespace pcr
     //========================================================================
     struct OLineDescriptor : public ::com::sun::star::inspection::LineDescriptor
     {
-        ::rtl::OUString             sName;              // the name of the property
+        OUString             sName;              // the name of the property
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                     xPropertyHandler;   // the handler for this property
         ::com::sun::star::uno::Any  aValue;             // the current value of the property

@@ -46,23 +46,23 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-     ::rtl::OUString  m_sScriptingContext;
+     OUString  m_sScriptingContext;
         BasicManager* m_pBasicManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer > m_xLibContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLibrary;
-        ::rtl::OUString m_sLibName;
+        OUString m_sLibName;
         bool m_bIsAppScript;
 
     public:
         BasicLibraryNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-        const ::rtl::OUString& sScriptingContext,
+        const OUString& sScriptingContext,
             BasicManager* pBasicManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer,
-            const ::rtl::OUString& sLibName, bool isAppScript=true );
+            const OUString& sLibName, bool isAppScript=true );
         virtual ~BasicLibraryNodeImpl();
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  )
+        virtual OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);

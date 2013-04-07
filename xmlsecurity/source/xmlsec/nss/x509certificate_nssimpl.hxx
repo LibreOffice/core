@@ -47,8 +47,8 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::rtl::OUString SAL_CALL getIssuerName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
-        virtual ::rtl::OUString SAL_CALL getSubjectName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual OUString SAL_CALL getIssuerName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
+        virtual OUString SAL_CALL getSubjectName(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidBefore(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
         virtual ::com::sun::star::util::DateTime SAL_CALL getNotValidAfter(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
@@ -62,13 +62,13 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::rtl::OUString SAL_CALL getSubjectPublicKeyAlgorithm()
+        virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
-        virtual ::rtl::OUString SAL_CALL getSignatureAlgorithm()
+        virtual OUString SAL_CALL getSignatureAlgorithm()
             throw ( ::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint()

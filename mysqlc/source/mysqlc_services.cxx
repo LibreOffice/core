@@ -24,7 +24,6 @@
 #include <rtl/ustrbuf.hxx>
 
 using namespace connectivity::mysqlc;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::registry::XRegistryKey;

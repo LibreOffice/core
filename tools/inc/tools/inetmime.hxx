@@ -488,7 +488,7 @@ public:
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      HeaderFieldType eType,
-                                     const rtl::OUString& rBody,
+                                     const OUString& rBody,
                                      rtl_TextEncoding ePreferredEncoding,
                                      bool bInitialSpace = true);
 
@@ -497,8 +497,8 @@ public:
                                   rtl_TextEncoding eEncoding,
                                   sal_uInt32 & rCharacter);
 
-    static rtl::OUString decodeHeaderFieldBody(HeaderFieldType eType,
-                                           const rtl::OString& rBody);
+    static OUString decodeHeaderFieldBody(HeaderFieldType eType,
+                                           const OString& rBody);
 
 // #i70651#: Prevent warnings on Mac OS X.
 #ifdef MACOSX
@@ -926,13 +926,13 @@ public:
 
     /** Write a sequence of octets.
 
-        @param rOctets  A rtl::OString, interpreted as a sequence of octets.
+        @param rOctets  A OString, interpreted as a sequence of octets.
 
         @param nBegin  The offset of the first character to write.
 
         @param nEnd  The offset past the last character to write.
      */
-    void write(const rtl::OString& rOctets, xub_StrLen nBegin,
+    void write(const OString& rOctets, xub_StrLen nBegin,
                       xub_StrLen nEnd)
     {
         writeSequence(rOctets.getStr() + nBegin, rOctets.getStr() + nEnd);
@@ -959,11 +959,11 @@ public:
 
     /** Write a sequence of octets.
 
-        @param rOctets  A rtl::OString, interpreted as a sequence of octets.
+        @param rOctets  A OString, interpreted as a sequence of octets.
 
         @return  This instance.
      */
-    INetMIMEOutputSink & operator <<(const rtl::OString& rOctets)
+    INetMIMEOutputSink & operator <<(const OString& rOctets)
     {
         writeSequence(rOctets.getStr(), rOctets.getStr() + rOctets.getLength());
         m_nColumn += rOctets.getLength();
@@ -1047,7 +1047,7 @@ inline void INetMIME::writeEscapeSequence(INetMIMEOutputSink & rSink,
 
 class INetMIMEStringOutputSink: public INetMIMEOutputSink
 {
-    rtl::OStringBuffer m_aBuffer;
+    OStringBuffer m_aBuffer;
 
     using INetMIMEOutputSink::writeSequence;
 
@@ -1062,7 +1062,7 @@ public:
 
     virtual ErrCode getError() const;
 
-    rtl::OString takeBuffer()
+    OString takeBuffer()
     {
         return m_aBuffer.makeStringAndClear();
     }
@@ -1178,17 +1178,17 @@ struct INetContentTypeParameter
         will only be one item for the complete parameter, with the attribute
         name lacking any section suffix.
      */
-    const rtl::OString m_sAttribute;
+    const OString m_sAttribute;
 
     /** The optional character set specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    const rtl::OString m_sCharset;
+    const OString m_sCharset;
 
     /** The optional language specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    const rtl::OString m_sLanguage;
+    const OString m_sLanguage;
 
     /** The attribute value.  If the value is a quoted-string, it is
         'unpacked.'  If a character set is specified, and the value can be
@@ -1207,7 +1207,7 @@ struct INetContentTypeParameter
         within Unicode's Private Use Area (effectively adding 0xF800 to the
         character's numeric value).
      */
-    const rtl::OUString m_sValue;
+    const OUString m_sValue;
 
     /** This is true if the value is successfuly converted to Unicode, and
         false if the value is a special mixture of ISO-LATIN-1 characters and
@@ -1215,9 +1215,9 @@ struct INetContentTypeParameter
      */
     const bool m_bConverted;
 
-    INetContentTypeParameter(const rtl::OString& rTheAttribute,
-        const rtl::OString& rTheCharset, const rtl::OString& rTheLanguage,
-        const rtl::OUString& rTheValue, bool bTheConverted)
+    INetContentTypeParameter(const OString& rTheAttribute,
+        const OString& rTheCharset, const OString& rTheLanguage,
+        const OUString& rTheValue, bool bTheConverted)
     : m_sAttribute(rTheAttribute)
     , m_sCharset(rTheCharset)
     , m_sLanguage(rTheLanguage)
@@ -1248,7 +1248,7 @@ public:
         return &(maEntries[nIndex]);
     }
 
-    const INetContentTypeParameter * find(const rtl::OString& rAttribute) const;
+    const INetContentTypeParameter * find(const OString& rAttribute) const;
 
 private:
 

@@ -208,7 +208,7 @@ namespace slideshow
             class PathAnimation : public NumberAnimation
             {
             public:
-                PathAnimation( const ::rtl::OUString&       rSVGDPath,
+                PathAnimation( const OUString&       rSVGDPath,
                                sal_Int16                    nAdditive,
                                const ShapeManagerSharedPtr& rShapeManager,
                                const ::basegfx::B2DVector&  rSlideSize,
@@ -656,7 +656,7 @@ namespace slideshow
 
 
             uno::Any getShapeDefault( const AnimatableShapeSharedPtr&   rShape,
-                                      const ::rtl::OUString&            rPropertyName )
+                                      const OUString&            rPropertyName )
             {
                 uno::Reference< drawing::XShape > xShape( rShape->getXShape() );
 
@@ -675,7 +675,7 @@ namespace slideshow
             }
 
             template< typename ValueType > ValueType getDefault( const AnimatableShapeSharedPtr&    rShape,
-                                                                 const ::rtl::OUString&             rPropertyName )
+                                                                 const OUString&             rPropertyName )
             {
                 const uno::Any& rAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
@@ -684,7 +684,7 @@ namespace slideshow
                 {
                     OSL_FAIL( "getDefault(): cannot get requested shape property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape property",
-                               ::rtl::OUStringToOString( rPropertyName,
+                               OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
                     return ValueType();
                 }
@@ -696,7 +696,7 @@ namespace slideshow
                     {
                         OSL_FAIL( "getDefault(): cannot extract requested shape property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape property",
-                                   ::rtl::OUStringToOString( rPropertyName,
+                                   OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );
                         return ValueType();
                     }
@@ -706,7 +706,7 @@ namespace slideshow
             }
 
             template<> RGBColor getDefault< RGBColor >( const AnimatableShapeSharedPtr& rShape,
-                                                        const ::rtl::OUString&          rPropertyName )
+                                                        const OUString&          rPropertyName )
             {
                 const uno::Any& rAny( getShapeDefault( rShape,
                                                        rPropertyName ) );
@@ -715,7 +715,7 @@ namespace slideshow
                 {
                     OSL_FAIL( "getDefault(): cannot get requested shape color property" );
                     OSL_TRACE( "getDefault(): cannot get '%s' shape color property",
-                               ::rtl::OUStringToOString( rPropertyName,
+                               OUStringToOString( rPropertyName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
                     return RGBColor();
                 }
@@ -727,7 +727,7 @@ namespace slideshow
                     {
                         OSL_FAIL( "getDefault(): cannot extract requested shape color property" );
                         OSL_TRACE( "getDefault(): cannot extract '%s' shape color property",
-                                   ::rtl::OUStringToOString( rPropertyName,
+                                   OUStringToOString( rPropertyName,
                                                              RTL_TEXTENCODING_ASCII_US ).getStr() );
                         return RGBColor();
                     }
@@ -739,7 +739,7 @@ namespace slideshow
             }
         }
 
-        AnimationFactory::AttributeClass AnimationFactory::classifyAttributeName( const ::rtl::OUString& rAttrName )
+        AnimationFactory::AttributeClass AnimationFactory::classifyAttributeName( const OUString& rAttrName )
         {
             // ATTENTION: When changing this map, also the create*PropertyAnimation() methods must
             // be checked and possibly adapted in their switch statements
@@ -804,7 +804,7 @@ namespace slideshow
             }
         }
 
-        NumberAnimationSharedPtr AnimationFactory::createNumberPropertyAnimation( const ::rtl::OUString&                rAttrName,
+        NumberAnimationSharedPtr AnimationFactory::createNumberPropertyAnimation( const OUString&                rAttrName,
                                                                                   const AnimatableShapeSharedPtr&       rShape,
                                                                                   const ShapeManagerSharedPtr&          rShapeManager,
                                                                                   const ::basegfx::B2DVector&           rSlideSize,
@@ -968,7 +968,7 @@ namespace slideshow
             return NumberAnimationSharedPtr();
         }
 
-        EnumAnimationSharedPtr AnimationFactory::createEnumPropertyAnimation( const ::rtl::OUString&                rAttrName,
+        EnumAnimationSharedPtr AnimationFactory::createEnumPropertyAnimation( const OUString&                rAttrName,
                                                                               const AnimatableShapeSharedPtr&       rShape,
                                                                               const ShapeManagerSharedPtr&          rShapeManager,
                                                                               const ::basegfx::B2DVector&           /*rSlideSize*/,
@@ -1064,7 +1064,7 @@ namespace slideshow
             return EnumAnimationSharedPtr();
         }
 
-        ColorAnimationSharedPtr AnimationFactory::createColorPropertyAnimation( const ::rtl::OUString&              rAttrName,
+        ColorAnimationSharedPtr AnimationFactory::createColorPropertyAnimation( const OUString&              rAttrName,
                                                                                 const AnimatableShapeSharedPtr&     rShape,
                                                                                 const ShapeManagerSharedPtr&        rShapeManager,
                                                                                 const ::basegfx::B2DVector&         /*rSlideSize*/,
@@ -1216,7 +1216,7 @@ namespace slideshow
             return PairAnimationSharedPtr();
         }
 
-        StringAnimationSharedPtr AnimationFactory::createStringPropertyAnimation( const ::rtl::OUString&                rAttrName,
+        StringAnimationSharedPtr AnimationFactory::createStringPropertyAnimation( const OUString&                rAttrName,
                                                                                   const AnimatableShapeSharedPtr&       rShape,
                                                                                   const ShapeManagerSharedPtr&          rShapeManager,
                                                                                   const ::basegfx::B2DVector&           /*rSlideSize*/,
@@ -1282,7 +1282,7 @@ namespace slideshow
                     return makeGenericAnimation<StringAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isFontFamilyValid,
-                                                                  getDefault< ::rtl::OUString >( rShape, rAttrName ),
+                                                                  getDefault< OUString >( rShape, rAttrName ),
                                                                   &ShapeAttributeLayer::getFontFamily,
                                                                   &ShapeAttributeLayer::setFontFamily );
             }
@@ -1290,7 +1290,7 @@ namespace slideshow
             return StringAnimationSharedPtr();
         }
 
-        BoolAnimationSharedPtr AnimationFactory::createBoolPropertyAnimation( const ::rtl::OUString&                rAttrName,
+        BoolAnimationSharedPtr AnimationFactory::createBoolPropertyAnimation( const OUString&                rAttrName,
                                                                               const AnimatableShapeSharedPtr&       /*rShape*/,
                                                                               const ShapeManagerSharedPtr&          rShapeManager,
                                                                               const ::basegfx::B2DVector&           /*rSlideSize*/,
@@ -1365,7 +1365,7 @@ namespace slideshow
             return BoolAnimationSharedPtr();
         }
 
-        NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const ::rtl::OUString&            rSVGDPath,
+        NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const OUString&            rSVGDPath,
                                                                               sal_Int16                         nAdditive,
                                                                               const AnimatableShapeSharedPtr&   /*rShape*/,
                                                                               const ShapeManagerSharedPtr&      rShapeManager,

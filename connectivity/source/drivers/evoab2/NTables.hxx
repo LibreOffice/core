@@ -29,7 +29,7 @@ namespace connectivity
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
         public:
             OEvoabTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,

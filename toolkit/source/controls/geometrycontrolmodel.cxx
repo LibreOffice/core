@@ -40,15 +40,15 @@
 #define GCM_PROPERTY_ID_TAG                 8
 #define GCM_PROPERTY_ID_RESOURCERESOLVER    9
 
-#define GCM_PROPERTY_POS_X              ::rtl::OUString("PositionX")
-#define GCM_PROPERTY_POS_Y              ::rtl::OUString("PositionY")
-#define GCM_PROPERTY_WIDTH              ::rtl::OUString("Width")
-#define GCM_PROPERTY_HEIGHT             ::rtl::OUString("Height")
-#define GCM_PROPERTY_NAME               ::rtl::OUString("Name")
-#define GCM_PROPERTY_TABINDEX           ::rtl::OUString("TabIndex")
-#define GCM_PROPERTY_STEP               ::rtl::OUString("Step")
-#define GCM_PROPERTY_TAG                ::rtl::OUString("Tag")
-#define GCM_PROPERTY_RESOURCERESOLVER   ::rtl::OUString("ResourceResolver")
+#define GCM_PROPERTY_POS_X              OUString("PositionX")
+#define GCM_PROPERTY_POS_Y              OUString("PositionY")
+#define GCM_PROPERTY_WIDTH              OUString("Width")
+#define GCM_PROPERTY_HEIGHT             OUString("Height")
+#define GCM_PROPERTY_NAME               OUString("Name")
+#define GCM_PROPERTY_TABINDEX           OUString("TabIndex")
+#define GCM_PROPERTY_STEP               OUString("Step")
+#define GCM_PROPERTY_TAG                OUString("Tag")
+#define GCM_PROPERTY_RESOURCERESOLVER   OUString("ResourceResolver")
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -192,10 +192,10 @@
             case GCM_PROPERTY_ID_POS_Y:             aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_WIDTH:             aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_HEIGHT:            aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_NAME:              aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_NAME:              aDefault <<= OUString(); break;
             case GCM_PROPERTY_ID_TABINDEX:          aDefault <<= (sal_Int16) -1; break;
             case GCM_PROPERTY_ID_STEP:              aDefault <<= (sal_Int32) 0; break;
-            case GCM_PROPERTY_ID_TAG:               aDefault <<= ::rtl::OUString(); break;
+            case GCM_PROPERTY_ID_TAG:               aDefault <<= OUString(); break;
             case GCM_PROPERTY_ID_RESOURCERESOLVER:  aDefault <<= Reference< resource::XStringResourceResolver >(); break;
             default:                            OSL_FAIL( "ImplGetDefaultValueByHandle - unknown Property" );
         }
@@ -318,7 +318,7 @@
     void SAL_CALL OGeometryControlModel_Base::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
     {
         OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>(const_cast<OGeometryControlModel_Base*>(this)->getInfoHelper());
-        ::rtl::OUString sPropName;
+        OUString sPropName;
         sal_Int32   nOriginalHandle = -1;
 
         if (rPH.fillAggregatePropertyInfoByHandle(&sPropName, &nOriginalHandle, _nHandle))
@@ -400,14 +400,14 @@
             Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
             Reference< XNameContainer > xCloneEventCont = xCloneEventsSupplier->getEvents();
 
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames =
+            ::com::sun::star::uno::Sequence< OUString > aNames =
                 xEventCont->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
+            const OUString* pNames = aNames.getConstArray();
             sal_Int32 i, nNameCount = aNames.getLength();
 
             for( i = 0 ; i < nNameCount ; i++ )
             {
-                ::rtl::OUString aName = pNames[ i ];
+                OUString aName = pNames[ i ];
                 ::com::sun::star::uno::Any aElement = xEventCont->getByName( aName );
                 xCloneEventCont->insertByName( aName, aElement );
             }
@@ -440,7 +440,7 @@
     //====================================================================
     //--------------------------------------------------------------------
 
-    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > HashMapString2Int;
+    typedef ::boost::unordered_map< OUString, sal_Int32, OUStringHash > HashMapString2Int;
     typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
     typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 
@@ -464,7 +464,7 @@
 
 
     //--------------------------------------------------------------------
-    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const ::rtl::OUString& _rServiceSpecifier )
+    OCommonGeometryControlModel::OCommonGeometryControlModel( Reference< XCloneable >& _rxAgg, const OUString& _rServiceSpecifier )
         :OGeometryControlModel_Base( _rxAgg )
         ,m_sServiceSpecifier( _rServiceSpecifier )
         ,m_nPropertyMapId( 0 )
@@ -505,8 +505,8 @@
     //--------------------------------------------------------------------
     struct PropertyNameEqual : public ::std::unary_function< Property, bool >
     {
-        const ::rtl::OUString&  m_rCompare;
-        PropertyNameEqual( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+        const OUString&  m_rCompare;
+        PropertyNameEqual( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator()( const Property& _rLHS )
         {
@@ -621,7 +621,7 @@
         if ( rDuplicateIds.end() != aPos )
         {
             // yes, it is such a property
-            ::rtl::OUString sPropName;
+            OUString sPropName;
             sal_Int16 nAttributes(0);
             static_cast< OPropertyArrayAggregationHelper* >( getArrayHelper( m_nPropertyMapId ) )->fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
 

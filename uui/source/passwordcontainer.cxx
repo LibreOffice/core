@@ -119,7 +119,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     ucb::AuthenticationRequest const & rRequest,
     uno::Reference< ucb::XInteractionSupplyAuthentication > const &
         xSupplyAuthentication,
-    rtl::OUString const & rURL,
+    OUString const & rURL,
     uno::Reference< task::XInteractionHandler2 > const & xIH )
         SAL_THROW((uno::RuntimeException))
 {
@@ -143,7 +143,7 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     {
         // Runtime / Persistent info avail for current auth request?
 
-        rtl::OUString aResult = m_xPasswordContainer->findUrl(
+        OUString aResult = m_xPasswordContainer->findUrl(
             rURL.isEmpty() ? rRequest.ServerName : rURL );
         if ( !aResult.isEmpty() )
         {
@@ -222,9 +222,9 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 
 //=========================================================================
 bool PasswordContainerHelper::addRecord(
-    rtl::OUString const & rURL,
-    rtl::OUString const & rUsername,
-    uno::Sequence< rtl::OUString > const & rPasswords,
+    OUString const & rURL,
+    OUString const & rUsername,
+    uno::Sequence< OUString > const & rPasswords,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
         SAL_THROW((uno::RuntimeException))
@@ -294,7 +294,7 @@ PasswordContainerInteractionHandler::~PasswordContainerInteractionHandler()
 //=========================================================================
 
 // virtual
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 PasswordContainerInteractionHandler::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -305,11 +305,11 @@ PasswordContainerInteractionHandler::getImplementationName()
 // virtual
 sal_Bool SAL_CALL
 PasswordContainerInteractionHandler::supportsService(
-        const ::rtl::OUString& ServiceName )
+        const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString * pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if ( pArray[ i ] == ServiceName )
@@ -320,7 +320,7 @@ PasswordContainerInteractionHandler::supportsService(
 
 //=========================================================================
 // virtual
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 PasswordContainerInteractionHandler::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
@@ -376,7 +376,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
     if ( !( aAnyRequest >>= aAuthenticationRequest ) )
         return false;
 
-    rtl::OUString aURL;
+    OUString aURL;
     ucb::URLAuthenticationRequest aURLAuthenticationRequest;
     if ( aAnyRequest >>= aURLAuthenticationRequest )
         aURL = aURLAuthenticationRequest.URL;

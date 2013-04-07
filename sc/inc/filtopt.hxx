@@ -34,12 +34,12 @@ class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
     double      fExcelColScale;
     double      fExcelRowScale;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
             ScFilterOptions();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
     virtual void    Commit();
 
     sal_Bool        GetWK3Flag() const          { return bWK3Flag; }

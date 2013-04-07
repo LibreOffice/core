@@ -62,8 +62,8 @@ enum DrawingType
 /** Contains information about an OLE object embedded in a draw page. */
 struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 {
-    ::rtl::OUString     maShapeId;          ///< Shape identifier for shape lookup.
-    ::rtl::OUString     maName;             ///< Programmatical name of the OLE object.
+    OUString     maShapeId;          ///< Shape identifier for shape lookup.
+    OUString     maName;             ///< Programmatical name of the OLE object.
     bool                mbAutoLoad;
     const bool          mbDmlShape;         ///< True = DrawingML shape (PowerPoint), false = VML shape (Excel/Word).
 
@@ -78,9 +78,9 @@ struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 /** Contains information about a form control embedded in a draw page. */
 struct OOX_DLLPUBLIC ControlInfo
 {
-    ::rtl::OUString     maShapeId;          ///< Shape identifier for shape lookup.
-    ::rtl::OUString     maFragmentPath;     ///< Path to the fragment describing the form control properties.
-    ::rtl::OUString     maName;             ///< Programmatical name of the form control.
+    OUString     maShapeId;          ///< Shape identifier for shape lookup.
+    OUString     maFragmentPath;     ///< Path to the fragment describing the form control properties.
+    OUString     maName;             ///< Programmatical name of the form control.
 
     explicit            ControlInfo();
 
@@ -130,17 +130,17 @@ public:
     void                convertAndInsert() const;
 
     /** Returns the local shape index from the passed global shape identifier. */
-    sal_Int32           getLocalShapeIndex( const ::rtl::OUString& rShapeId ) const;
+    sal_Int32           getLocalShapeIndex( const OUString& rShapeId ) const;
     /** Returns the registered info structure for an OLE object, if extant. */
-    const OleObjectInfo* getOleObjectInfo( const ::rtl::OUString& rShapeId ) const;
+    const OleObjectInfo* getOleObjectInfo( const OUString& rShapeId ) const;
     /** Returns the registered info structure for a form control, if extant. */
-    const ControlInfo*  getControlInfo( const ::rtl::OUString& rShapeId ) const;
+    const ControlInfo*  getControlInfo( const OUString& rShapeId ) const;
 
     /** Creates a new UNO shape object, inserts it into the passed UNO shape
         container, and sets the shape position and size. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         createAndInsertXShape(
-                            const ::rtl::OUString& rService,
+                            const OUString& rService,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 
@@ -158,13 +158,13 @@ public:
 
     /** Derived classes may return additional base names for automatic shape
         name creation. */
-    virtual ::rtl::OUString getShapeBaseName( const ShapeBase& rShape ) const;
+    virtual OUString getShapeBaseName( const ShapeBase& rShape ) const;
 
     /** Derived classes may calculate the shape rectangle from a non-standard
         anchor information string. */
     virtual bool        convertClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
-                            const ::rtl::OUString& rShapeAnchor ) const;
+                            const OUString& rShapeAnchor ) const;
 
     /** Derived classes create a UNO shape according to the passed shape model.
         Called for shape models that specify being under host control. */
@@ -189,8 +189,8 @@ private:
     typedef ::std::auto_ptr< ::oox::ole::EmbeddedForm >     EmbeddedFormPtr;
     typedef ::std::auto_ptr< ShapeContainer >               ShapeContainerPtr;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    typedef ::std::map< ::rtl::OUString, OleObjectInfo >    OleObjectInfoMap;
-    typedef ::std::map< ::rtl::OUString, ControlInfo >      ControlInfoMap;
+    typedef ::std::map< OUString, OleObjectInfo >    OleObjectInfoMap;
+    typedef ::std::map< OUString, ControlInfo >      ControlInfoMap;
 
     ::oox::core::XmlFilterBase& mrFilter;   ///< Filter object that imports/exports the VML drawing.
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >

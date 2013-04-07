@@ -608,7 +608,7 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        std::vector<rtl::OUString> aLst;
+        std::vector<OUString> aLst;
         GetFldMgr().GetSubTypes(nTypeId, aLst);
         for(size_t i = 0; i < aLst.size(); ++i)
             aSelectionLB.InsertEntry(aLst[i]);
@@ -967,7 +967,7 @@ sal_uInt16 SwFldRefPage::GetGroup()
 
 void    SwFldRefPage::FillUserData()
 {
-    String sData(rtl::OUString(USER_DATA_VERSION));
+    String sData(OUString(USER_DATA_VERSION));
     sData += ';';
     sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )

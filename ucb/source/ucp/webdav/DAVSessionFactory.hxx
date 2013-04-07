@@ -50,7 +50,7 @@ public:
     ~DAVSessionFactory() SAL_THROW(());
 
     rtl::Reference< DAVSession >
-        createDAVSession( const ::rtl::OUString & inUri,
+        createDAVSession( const OUString & inUri,
                           const ::com::sun::star::uno::Reference<
                             ::com::sun::star::lang::XMultiServiceFactory >&
                                 rxSMgr )
@@ -58,7 +58,7 @@ public:
 
     ::uno::Reference< ::lang::XMultiServiceFactory > getServiceFactory() {  return m_xMSF; }
 private:
-    typedef std::map< rtl::OUString, DAVSession * > Map;
+    typedef std::map< OUString, DAVSession * > Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;

@@ -116,7 +116,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
 
 void SAL_CALL ChartController::executeDispatch_PositionAndSize()
 {
-    const ::rtl::OUString aCID( m_aSelection.getSelectedCID() );
+    const OUString aCID( m_aSelection.getSelectedCID() );
 
     if( aCID.isEmpty() )
         return;

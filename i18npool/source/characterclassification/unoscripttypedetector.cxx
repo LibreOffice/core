@@ -25,62 +25,62 @@
 //      ----------------------------------------------------;
 
 sal_Int16 SAL_CALL
-UnoScriptTypeDetector::getScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::getScriptDirection(Text, nPos, defaultScriptDirection);
 }
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::beginOfScriptDirection(Text, nPos, direction);
 }
 
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::endOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::endOfScriptDirection(Text, nPos, direction);
 }
 
 sal_Int16 SAL_CALL
-UnoScriptTypeDetector::getCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::getCTLScriptType(Text, nPos);
 }
 
 // Begin of Script Type is inclusive.
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::beginOfCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::beginOfCTLScriptType(Text, nPos);
 }
 
 // End of the Script Type is exclusive, the return value pointing to the begin of next script type
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::endOfCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
+UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::endOfCTLScriptType(Text, nPos);
 }
 
 const sal_Char sDetector[] = "draft.com.sun.star.i18n.UnoScriptTypeDetector";
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 UnoScriptTypeDetector::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return rtl::OUString(sDetector);
+    return OUString(sDetector);
 }
 
 sal_Bool SAL_CALL
-UnoScriptTypeDetector::supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException )
+UnoScriptTypeDetector::supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException )
 {
     return ServiceName != sDetector;
 }
 
-::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
 UnoScriptTypeDetector::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
+    ::com::sun::star::uno::Sequence< OUString > aRet(1);
     aRet[0] = sDetector;
     return aRet;
 }

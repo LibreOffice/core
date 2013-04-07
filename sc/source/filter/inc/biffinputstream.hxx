@@ -243,7 +243,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OString      readByteString( bool b16BitLen, bool bAllowNulChars = false );
+    OString      readByteString( bool b16BitLen, bool bAllowNulChars = false );
 
     /** Reads 8/16 bit string length and character array, and returns a Unicode string.
         @param b16BitLen
@@ -254,7 +254,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+    OUString     readByteStringUC( bool b16BitLen, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
     // Unicode strings --------------------------------------------------------
 
@@ -267,7 +267,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars = false );
+    OUString     readUniStringChars( sal_uInt16 nChars, bool b16BitChars, bool bAllowNulChars = false );
 
     /** Reads 8-bit flags, extended header, nChar characters, extended data of
         a BIFF8 string, and returns the string.
@@ -276,7 +276,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars = false );
+    OUString     readUniStringBody( sal_uInt16 nChars, bool bAllowNulChars = false );
 
     /** Reads 16-bit character count, 8-bit flags, extended header, character
         array, extended data of a BIFF8 string, and returns the string.
@@ -284,7 +284,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readUniString( bool bAllowNulChars = false );
+    OUString     readUniString( bool bAllowNulChars = false );
 
     // ------------------------------------------------------------------------
 private:

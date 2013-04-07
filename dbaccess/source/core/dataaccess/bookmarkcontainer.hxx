@@ -54,7 +54,7 @@ class OBookmarkContainer
             :public OBookmarkContainer_Base
 {
 protected:
-    DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString, MapString2String);
+    DECLARE_STL_USTRINGACCESS_MAP(OUString, MapString2String);
     DECLARE_STL_VECTOR(MapString2StringIterator, MapIteratorVector);
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
@@ -87,9 +87,9 @@ public:
     virtual void SAL_CALL release(  ) throw();
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -103,16 +103,16 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 _nIndex ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL replaceByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -143,22 +143,22 @@ protected:
         @param      _rName      the object name to check
         @return                 sal_True if there already exists such an object
     */
-    inline  sal_Bool    checkExistence(const ::rtl::OUString& _rName);
+    inline  sal_Bool    checkExistence(const OUString& _rName);
 
     void    implAppend(
-        const ::rtl::OUString& _rName,
-        const ::rtl::OUString& _rDocumentLocation
+        const OUString& _rName,
+        const OUString& _rDocumentLocation
         );
 
-    void implRemove(const ::rtl::OUString& _rName);
+    void implRemove(const OUString& _rName);
 
     void implReplace(
-        const ::rtl::OUString& _rName,
-        const ::rtl::OUString& _rNewLink);
+        const OUString& _rName,
+        const OUString& _rNewLink);
 
 };
 
-inline  sal_Bool OBookmarkContainer::checkExistence(const ::rtl::OUString& _rName)
+inline  sal_Bool OBookmarkContainer::checkExistence(const OUString& _rName)
 {
     return m_aBookmarks.find(_rName) != m_aBookmarks.end();
 }

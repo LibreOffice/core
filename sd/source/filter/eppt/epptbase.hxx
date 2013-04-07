@@ -128,7 +128,7 @@ class PPTExBulletProvider
 
     public :
 
-        sal_uInt16              GetId( const rtl::OString& rUniqueId, Size& rGraphicSize );
+        sal_uInt16              GetId( const OString& rUniqueId, Size& rGraphicSize );
 
                                 PPTExBulletProvider();
                                 ~PPTExBulletProvider();
@@ -179,7 +179,7 @@ public :
 
     ~FontCollection();
 
-    short GetScriptDirection( const rtl::OUString& rText ) const;
+    short GetScriptDirection( const OUString& rText ) const;
 
     sal_uInt32  GetId( FontCollectionEntry& rFontDescriptor );
 
@@ -341,7 +341,7 @@ protected:
     ::com::sun::star::awt::Size         maSize;
     ::com::sun::star::awt::Point        maPosition;
     Rectangle           maRect;
-    rtl::OString        mType;
+    OString        mType;
     sal_Bool            mbPresObj;
     sal_Bool            mbEmptyPresObj;
     sal_Int32           mnAngle;

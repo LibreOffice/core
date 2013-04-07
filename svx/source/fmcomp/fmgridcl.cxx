@@ -89,7 +89,7 @@ using namespace ::svx;
 
 //==============================================================================
 //------------------------------------------------------------------------------
-::rtl::OUString FieldServiceFromId(sal_Int32 nID)
+OUString FieldServiceFromId(sal_Int32 nID)
 {
     switch (nID)
     {
@@ -104,7 +104,7 @@ using namespace ::svx;
         case SID_FM_PATTERNFIELD    : return FM_COL_PATTERNFIELD;
         case SID_FM_FORMATTEDFIELD  : return FM_COL_FORMATTEDFIELD;
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //==============================================================================
@@ -193,7 +193,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
             try
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xColumn(xColumns->getByIndex(nPos),UNO_QUERY);
-                ::rtl::OUString aHelpText;
+                OUString aHelpText;
                 xColumn->getPropertyValue(FM_PROP_HELPTEXT) >>= aHelpText;
                 if ( aHelpText.isEmpty() )
                     xColumn->getPropertyValue(FM_PROP_DESCRIPTION) >>= aHelpText;
@@ -248,7 +248,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     }
 
     // extract the descriptor
-    ::rtl::OUString sDatasouce, sCommand, sFieldName,sDatabaseLocation,sConnnectionResource;
+    OUString sDatasouce, sCommand, sFieldName,sDatabaseLocation,sConnnectionResource;
     sal_Int32       nCommandType = CommandType::COMMAND;
     Reference< XPreparedStatement >     xStatement;
     Reference< XResultSet >             xResultSet;
@@ -284,8 +284,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         {   // the transferable did not contain the connection -> build an own one
             try
             {
-                ::rtl::OUString sSignificantSource( sDatasouce.isEmpty() ? sDatabaseLocation : sDatasouce );
-                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, ::rtl::OUString(),::rtl::OUString(),
+                OUString sSignificantSource( sDatasouce.isEmpty() ? sDatabaseLocation : sDatasouce );
+                xConnection = OStaticDataAccessTools().getConnection_withFeedback(sSignificantSource, OUString(),OUString(),
                                   comphelper::getComponentContext( static_cast<FmGridControl*>(GetParent())->getServiceManager() ));
             }
             catch(NoSuchElementException&)
@@ -336,7 +336,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                     // not interested in any results
 
                     Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
-                    xStatProps->setPropertyValue(rtl::OUString("MaxRows"), makeAny(sal_Int32(0)));
+                    xStatProps->setPropertyValue(OUString("MaxRows"), makeAny(sal_Int32(0)));
 
                     xResultSet = xStatement->executeQuery();
                     Reference< XColumnsSupplier >  xSupplyCols(xResultSet, UNO_QUERY);
@@ -381,12 +381,12 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //------------------------------------------------------------------------------
 IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 {
-    ::rtl::OUString             sCommand, sFieldName,sURL;
+    OUString             sCommand, sFieldName,sURL;
     sal_Int32                   nCommandType = CommandType::COMMAND;
     Reference< XPropertySet >   xField;
     Reference< XConnection >    xConnection;
 
-    ::rtl::OUString sDatasouce = m_pImpl->aDropData.getDataSource();
+    OUString sDatasouce = m_pImpl->aDropData.getDataSource();
     if ( sDatasouce.isEmpty() && m_pImpl->aDropData.has(daConnectionResource) )
         m_pImpl->aDropData[daConnectionResource]    >>= sURL;
     m_pImpl->aDropData[daCommand]       >>= sCommand;
@@ -509,7 +509,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
             bDateNTimeCol = nPreferedType == SID_FM_TWOFIELDS_DATE_N_TIME;
             sal_uInt16 nColCount = bDateNTimeCol ? 2 : 1;
-            ::rtl::OUString sFieldService;
+            OUString sFieldService;
             while (nColCount--)
             {
                 if (bDateNTimeCol)
@@ -537,10 +537,10 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         if (bDateNTimeCol)
         {
             String sTimePostfix( SVX_RES( RID_STR_POSTFIX_TIME ) );
-            xCol->setPropertyValue(FM_PROP_LABEL, makeAny( ::rtl::OUString( sFieldName + sTimePostfix ) ) );
+            xCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sTimePostfix ) ) );
 
             String sDatePostfix( SVX_RES( RID_STR_POSTFIX_DATE ) );
-            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( ::rtl::OUString( sFieldName + sDatePostfix ) ) );
+            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sDatePostfix ) ) );
         }
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
@@ -571,9 +571,9 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
                 sRealName += '_';
                 sRealName += sPurePostfix;
                 if (i)
-                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(::rtl::OUString(sRealName)));
+                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(OUString(sRealName)));
                 else
-                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(::rtl::OUString(sRealName)));
+                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(OUString(sRealName)));
             }
         }
         else
@@ -794,7 +794,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
     PopupMenu* pControlMenu = rMenu.GetPopupMenu(SID_FM_CHANGECOL);
     delete pControlMenu;
 
-    ::rtl::OUString aFieldType;
+    OUString aFieldType;
     sal_Bool    bReplace = sal_False;
     InspectorAction eInspectorAction = eNone;
     Reference< XPropertySet > xColumnToInspect;
@@ -940,7 +940,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             {
                 FormControlFactory factory( ::comphelper::getProcessServiceFactory() );
 
-                ::rtl::OUString sLabel = factory.getDefaultUniqueName_ByComponentType(
+                OUString sLabel = factory.getDefaultUniqueName_ByComponentType(
                     Reference< XNameAccess >( xCols, UNO_QUERY_THROW ), xNewCol );
                 xNewCol->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel ) );
                 xNewCol->setPropertyValue( FM_PROP_NAME, makeAny( sLabel ) );
@@ -1155,7 +1155,7 @@ void FmGridControl::DeleteSelectedRows()
             ::com::sun::star::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
         xTransformer->parseStrict( aUrl );
 
-        Reference< ::com::sun::star::frame::XDispatch >  xDispatch = xDispatcher->queryDispatch(aUrl, rtl::OUString(), 0);
+        Reference< ::com::sun::star::frame::XDispatch >  xDispatch = xDispatcher->queryDispatch(aUrl, OUString(), 0);
         Reference< ::com::sun::star::form::XConfirmDeleteListener >  xConfirm(xDispatch, UNO_QUERY);
         if (xConfirm.is())
         {
@@ -1608,7 +1608,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
 
-        rtl::OUString aName(
+        OUString aName(
             comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL)));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
@@ -1646,7 +1646,7 @@ void FmGridControl::InitColumnByField(
     DBG_ASSERT( _rxFieldsByNames == _rxFieldsByIndex, "FmGridControl::InitColumnByField: invalid container interfaces!" );
 
     // lookup the column which belongs to the control source
-    ::rtl::OUString sFieldName;
+    OUString sFieldName;
     _rxColumnModel->getPropertyValue( FM_PROP_CONTROLSOURCE ) >>= sFieldName;
     Reference< XPropertySet > xField;
     _rxColumnModel->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
@@ -1698,13 +1698,13 @@ void FmGridControl::InitColumnByField(
     }
 
     // the control type is determined by the ColumnServiceName
-    static ::rtl::OUString s_sPropColumnServiceName( "ColumnServiceName" );
+    static OUString s_sPropColumnServiceName( "ColumnServiceName" );
     if ( !::comphelper::hasProperty( s_sPropColumnServiceName, _rxColumnModel ) )
         return;
 
     _pColumn->setModel( _rxColumnModel );
 
-    ::rtl::OUString sColumnServiceName;
+    OUString sColumnServiceName;
     _rxColumnModel->getPropertyValue( s_sPropColumnServiceName ) >>= sColumnServiceName;
 
     sal_Int32 nTypeId = getColumnTypeByModelName( sColumnServiceName );
@@ -1897,9 +1897,9 @@ Sequence< Any> FmGridControl::getSelectionBookmarks()
 // -----------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString getColumnPropertyFromPeer(FmXGridPeer* _pPeer,sal_Int32 _nPosition,const ::rtl::OUString& _sPropName)
+    OUString getColumnPropertyFromPeer(FmXGridPeer* _pPeer,sal_Int32 _nPosition,const OUString& _sPropName)
     {
-        ::rtl::OUString sRetText;
+        OUString sRetText;
         if ( _pPeer && _nPosition != -1)
         {
             Reference<XIndexContainer> xIndex = _pPeer->getColumns();
@@ -1915,9 +1915,9 @@ namespace
     }
 }
 // Object data and state ------------------------------------------------------
-::rtl::OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
-    ::rtl::OUString sRetText;
+    OUString sRetText;
     switch( _eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
@@ -1942,9 +1942,9 @@ namespace
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
+OUString FmGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
-    ::rtl::OUString sRetText;
+    OUString sRetText;
     switch( _eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:

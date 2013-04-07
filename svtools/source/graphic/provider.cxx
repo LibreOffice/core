@@ -67,27 +67,27 @@ GraphicProvider::~GraphicProvider()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GraphicProvider::getImplementationName_Static()
+OUString GraphicProvider::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicProvider" );
+    return OUString( "com.sun.star.comp.graphic.GraphicProvider" );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GraphicProvider::getSupportedServiceNames_Static()
+uno::Sequence< OUString > GraphicProvider::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicProvider" );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicProvider" );
 
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GraphicProvider::getImplementationName()
+OUString SAL_CALL GraphicProvider::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -95,11 +95,11 @@ uno::Sequence< ::rtl::OUString > GraphicProvider::getSupportedServiceNames_Stati
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GraphicProvider::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL GraphicProvider::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+    const OUString*              pArray = aSNL.getConstArray();
 
     for( int i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -110,7 +110,7 @@ sal_Bool SAL_CALL GraphicProvider::supportsService( const ::rtl::OUString& Servi
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL GraphicProvider::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -144,14 +144,14 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const ::rtl::OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager url
         String aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
-        rtl::OString aUniqueID(rtl::OUStringToOString(aTmpStr,
+        OString aUniqueID(OUStringToOString(aTmpStr,
             RTL_TEXTENCODING_UTF8));
         GraphicObject aGrafObj(aUniqueID);
         // I don't call aGrafObj.GetXGraphic because it will call us back
@@ -163,7 +163,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( co
     return xRet;
 }
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const ::rtl::OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
@@ -186,7 +186,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const ::r
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const ::rtl::OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
@@ -207,14 +207,14 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const ::rtl::OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
     {
-        rtl::OUString sImageName( rResourceURL.copy( nIndex ) );
+        OUString sImageName( rResourceURL.copy( nIndex ) );
         if ( sImageName == "info" )
         {
             xRet = InfoBox::GetStandardImage().GetXGraphic();
@@ -270,21 +270,21 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
 
 // ------------------------------------------------------------------------------
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const ::rtl::OUString& rResourceURL ) const
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:resource" ) ) )
     {
-        rtl::OString aResMgrName(rtl::OUStringToOString(
+        OString aResMgrName(OUStringToOString(
             rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
 
         ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() );
 
         if( pResMgr )
         {
-            const ::rtl::OUString   aResourceType( rResourceURL.getToken( 0, '/', nIndex ) );
+            const OUString   aResourceType( rResourceURL.getToken( 0, '/', nIndex ) );
             const ResId             aResId( rResourceURL.getToken( 0, '/', nIndex ).toInt32(), *pResMgr );
 
             if( !aResourceType.isEmpty() )
@@ -355,13 +355,13 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
 {
     uno::Reference< beans::XPropertySet > xRet;
 
-    ::rtl::OUString aURL;
+    OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
 
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i )
     {
-        const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
+        const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
         if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
@@ -435,12 +435,12 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
     for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
     {
-        const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
+        const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
         if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
         {
-            ::rtl::OUString aURL;
+            OUString aURL;
             aValue >>= aURL;
             aPath = aURL;
         }
@@ -464,7 +464,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     sal_uInt16 nExtMapMode = 0;
     for( sal_Int32 i = 0; i < aFilterData.getLength(); ++i )
     {
-        const ::rtl::OUString   aName( aFilterData[ i ].Name );
+        const OUString   aName( aFilterData[ i ].Name );
         const uno::Any          aValue( aFilterData[ i ].Value );
 
         if( COMPARE_EQUAL == aName.compareToAscii( "ExternalWidth" ) )
@@ -637,7 +637,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
 
     for( sal_Int32 i = 0; i < rFilterData.getLength(); ++i )
     {
-        const ::rtl::OUString   aName(  rFilterData[ i ].Name );
+        const OUString   aName(  rFilterData[ i ].Name );
         const uno::Any          aValue( rFilterData[ i ].Value );
 
         if( COMPARE_EQUAL == aName.compareToAscii( "PixelWidth" ) )
@@ -773,12 +773,12 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
     for( i = 0; ( i < rMediaProperties.getLength() ) && !pOStm; ++i )
     {
-        const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
+        const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
 
         if( COMPARE_EQUAL == aName.compareToAscii( "URL" ) )
         {
-            ::rtl::OUString aURL;
+            OUString aURL;
 
             aValue >>= aURL;
             pOStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_WRITE | STREAM_TRUNC );
@@ -802,7 +802,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 
         for( i = 0; i < rMediaProperties.getLength(); ++i )
         {
-            const ::rtl::OUString   aName( rMediaProperties[ i ].Name );
+            const OUString   aName( rMediaProperties[ i ].Name );
             const uno::Any          aValue( rMediaProperties[ i ].Value );
 
             if( COMPARE_EQUAL == aName.compareToAscii( "FilterData" ) )
@@ -811,7 +811,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
             }
             else if( COMPARE_EQUAL == aName.compareToAscii( "MimeType" ) )
             {
-                ::rtl::OUString aMimeType;
+                OUString aMimeType;
 
                 aValue >>= aMimeType;
 
@@ -876,7 +876,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                     else
                     {
                         rFilter.ExportGraphic( aGraphic, aPath, aMemStrm,
-                                                rFilter.GetExportFormatNumberForShortName( ::rtl::OUString::createFromAscii( pFilterShortName ) ),
+                                                rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : NULL ) );
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );

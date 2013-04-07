@@ -59,15 +59,15 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialog::Create(const Reference< XMult
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODBTypeWizDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL ODBTypeWizDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ODBTypeWizDialog::getImplementationName_Static() throw(RuntimeException)
+OUString ODBTypeWizDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.ODBTypeWizDialog");
+    return OUString("org.openoffice.comp.dbu.ODBTypeWizDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -80,7 +80,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialog::Create(const Reference< XMult
 ::comphelper::StringSequence ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
     return aSupported;
 }
 

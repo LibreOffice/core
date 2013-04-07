@@ -37,8 +37,8 @@ namespace xls {
 /** Contains data from the 'sheet' element describing a sheet in the workbook. */
 struct SheetInfoModel
 {
-    ::rtl::OUString     maRelId;        /// Relation identifier for the sheet substream.
-    ::rtl::OUString     maName;         /// Original name of the sheet.
+    OUString     maRelId;        /// Relation identifier for the sheet substream.
+    OUString     maName;         /// Original name of the sheet.
     sal_Int64           mnBiffHandle;   /// BIFF record handle of the sheet substream.
     sal_Int32           mnSheetId;      /// Sheet identifier.
     sal_Int32           mnState;        /// Visibility state.
@@ -65,41 +65,41 @@ public:
     void                importSheet( SequenceInputStream& rStrm );
     /** Inserts a new empty sheet into the document. Looks for an unused name.
          @return  Index of the new sheet in the Calc document. */
-    sal_Int16           insertEmptySheet( const ::rtl::OUString& rPreferredName, bool bVisible );
+    sal_Int16           insertEmptySheet( const OUString& rPreferredName, bool bVisible );
 
     /** Returns the number of original sheets contained in the workbook. */
     sal_Int32           getWorksheetCount() const;
     /** Returns the OOXML relation identifier of the specified worksheet. */
-    ::rtl::OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
+    OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
 
     /** Returns the Calc index of the specified worksheet. */
     sal_Int16           getCalcSheetIndex( sal_Int32 nWorksheet ) const;
     /** Returns the finalized name of the specified worksheet. */
-    ::rtl::OUString     getCalcSheetName( sal_Int32 nWorksheet ) const;
+    OUString     getCalcSheetName( sal_Int32 nWorksheet ) const;
 
     /** Returns the Calc index of the sheet with the passed original worksheet name. */
-    sal_Int16           getCalcSheetIndex( const ::rtl::OUString& rWorksheetName ) const;
+    sal_Int16           getCalcSheetIndex( const OUString& rWorksheetName ) const;
     /** Returns the finalized name of the sheet with the passed worksheet name. */
-    ::rtl::OUString     getCalcSheetName( const ::rtl::OUString& rWorksheetName ) const;
+    OUString     getCalcSheetName( const OUString& rWorksheetName ) const;
     /** Converts sSheetNameRef (e.g. '#SheetName!A1' to '#SheetName.A1' )
         if sSheetNameRef doesn't start with '#' it is ignored and not modified
     */
-    void                convertSheetNameRef( ::rtl::OUString& sSheetNameRef ) const;
+    void                convertSheetNameRef( OUString& sSheetNameRef ) const;
 
 private:
     struct SheetInfo : public SheetInfoModel
     {
-        ::rtl::OUString     maCalcName;
-        ::rtl::OUString     maCalcQuotedName;
+        OUString     maCalcName;
+        OUString     maCalcQuotedName;
         sal_Int16           mnCalcSheet;
 
-        explicit            SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const ::rtl::OUString& rCalcName );
+        explicit            SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const OUString& rCalcName );
     };
 
-    typedef ::std::pair< sal_Int16, ::rtl::OUString > IndexNamePair;
+    typedef ::std::pair< sal_Int16, OUString > IndexNamePair;
 
     /** Creates a new sheet in the Calc document. Does not insert anything in the own lists. */
-    IndexNamePair       createSheet( const ::rtl::OUString& rPreferredName, sal_Int32 nSheetPos, bool bVisible );
+    IndexNamePair       createSheet( const OUString& rPreferredName, sal_Int32 nSheetPos, bool bVisible );
     /** Creates a new sheet in the Calc document and inserts the related SheetInfo. */
     void                insertSheet( const SheetInfoModel& rModel );
 
@@ -107,7 +107,7 @@ private:
     typedef RefVector< SheetInfo > SheetInfoVector;
     SheetInfoVector     maSheetInfos;
 
-    typedef RefMap< ::rtl::OUString, SheetInfo, IgnoreCaseCompare > SheetInfoMap;
+    typedef RefMap< OUString, SheetInfo, IgnoreCaseCompare > SheetInfoMap;
     SheetInfoMap        maSheetInfosByName;
 };
 

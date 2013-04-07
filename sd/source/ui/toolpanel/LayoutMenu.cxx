@@ -197,7 +197,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     SetExtraSpacing(2);
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     SetPool (&rDocumentShell.GetDoc()->GetPool());
-    SetName(rtl::OUString("LayoutMenu"));
+    SetName(OUString("LayoutMenu"));
     InvalidateContent();
 
     Link aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
@@ -759,7 +759,7 @@ void LayoutMenu::Fill (void)
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
     // Get URL of the view in the center pane.
-    ::rtl::OUString sCenterPaneViewName;
+    OUString sCenterPaneViewName;
     try
     {
         Reference<XControllerManager> xControllerManager (

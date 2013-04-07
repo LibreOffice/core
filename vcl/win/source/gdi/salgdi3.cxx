@@ -93,7 +93,7 @@ class ImplFontAttrCache
 {
 private:
     FontAttrMap     aFontAttributes;
-    rtl::OUString   aCacheFileName;
+    OUString   aCacheFileName;
     String          aBaseURL;
     sal_Bool            bModified;
 
@@ -184,7 +184,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
                 ++aIter;
             }
             // EOF Marker
-            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(aCacheFile, rtl::OString());
+            write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(aCacheFile, OString());
         }
     }
 }
@@ -439,10 +439,10 @@ class WinGlyphFallbackSubstititution
 public:
     explicit    WinGlyphFallbackSubstititution( HDC );
 
-    bool FindFontSubstitute( FontSelectPattern&, rtl::OUString& rMissingChars ) const;
+    bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingChars ) const;
 private:
     HDC mhDC;
-    bool HasMissingChars( const PhysicalFontFace*, const rtl::OUString& rMissingChars ) const;
+    bool HasMissingChars( const PhysicalFontFace*, const OUString& rMissingChars ) const;
 };
 
 inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
@@ -453,7 +453,7 @@ void ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,
     LOGFONTW&, bool /*bTestVerticalAvail*/ );
 
 // does a font face hold the given missing characters?
-bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pFace, const rtl::OUString& rMissingChars ) const
+bool WinGlyphFallbackSubstititution::HasMissingChars( const PhysicalFontFace* pFace, const OUString& rMissingChars ) const
 {
     const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFace);
     const ImplFontCharMap* pCharMap = pWinFont->GetImplFontCharMap();
@@ -512,14 +512,14 @@ namespace
         // get the default font for a specified locale
         const utl::DefaultFontConfiguration& rDefaults =
             utl::DefaultFontConfiguration::get();
-        const rtl::OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
+        const OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
         return rDevFontList.ImplFindByTokenNames(aDefault);
     }
 }
 
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and prefered?
-bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, rtl::OUString& rMissingChars ) const
+bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, OUString& rMissingChars ) const
 {
     // guess a locale matching to the missing chars
     com::sun::star::lang::Locale aLocale;
@@ -990,7 +990,7 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    rtl::OUString aFontName( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName) );
+    OUString aFontName( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName) );
     if (!aFontName.isEmpty())
     {
         rFont.SetName( aFontName );
@@ -1870,7 +1870,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 pInfo->mbCourier = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
             else
                 pInfo->mbCourier = FALSE;
-            String aName = rtl::OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
+            String aName = OUString(reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName));
             pInfo->mpName = &aName;
             memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.Len()+1)*sizeof( wchar_t ) );
             pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -1906,8 +1906,8 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
 
 struct TempFontItem
 {
-    ::rtl::OUString maFontFilePath;
-    ::rtl::OString maResourcePath;
+    OUString maFontFilePath;
+    OString maResourcePath;
     TempFontItem* mpNextItem;
 };
 
@@ -1936,10 +1936,10 @@ static int WINAPI __AddFontResourceExW( LPCWSTR lpszfileName, DWORD fl, PVOID pd
 }
 #endif
 
-bool ImplAddTempFont( SalData& rSalData, const rtl::OUString& rFontFileURL )
+bool ImplAddTempFont( SalData& rSalData, const OUString& rFontFileURL )
 {
     int nRet = 0;
-    ::rtl::OUString aUSytemPath;
+    OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
 #ifdef FR_PRIVATE
@@ -1961,7 +1961,7 @@ bool ImplAddTempFont( SalData& rSalData, const rtl::OUString& rFontFileURL )
         ::DeleteFileA( aResourceName );
 
         rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-        ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+        OString aCFileName = OUStringToOString( aUSytemPath, theEncoding );
         // TODO: font should be private => need to investigate why it doesn't work then
         if( !::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), NULL ) )
             return false;
@@ -1971,7 +1971,7 @@ bool ImplAddTempFont( SalData& rSalData, const rtl::OUString& rFontFileURL )
         if( nRet > 0 )
         {
             TempFontItem* pNewItem = new TempFontItem;
-            pNewItem->maResourcePath = rtl::OString( aResourceName );
+            pNewItem->maResourcePath = OString( aResourceName );
             pNewItem->maFontFilePath = aUSytemPath.getStr();
             pNewItem->mpNextItem = rSalData.mpTempFontItem;
             rSalData.mpTempFontItem = pNewItem;
@@ -2017,7 +2017,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
 static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     ImplDevFontAttributes& rDFA )
 {
-    ::rtl::OUString aUSytemPath;
+    OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
     // get FontAttributes from a *fot file
@@ -2042,11 +2042,11 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
 
     // Create font resource file (typically with a .fot file name extension).
     rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-    ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+    OString aCFileName = OUStringToOString( aUSytemPath, theEncoding );
     ::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), NULL );
 
     // Open and read the font resource file
-    rtl::OUString aFotFileName = rtl::OStringToOUString( aResourceName, osl_getThreadTextEncoding() );
+    OUString aFotFileName = OStringToOUString( aResourceName, osl_getThreadTextEncoding() );
     osl::FileBase::getFileURLFromSystemPath( aFotFileName, aFotFileName );
     osl::File aFotFile( aFotFileName );
     osl::FileBase::RC aError = aFotFile.open( osl_File_OpenFlag_Read );
@@ -2110,9 +2110,9 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
 // -----------------------------------------------------------------------
 
 bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const rtl::OUString& rFontFileURL, const rtl::OUString& rFontName )
+    const OUString& rFontFileURL, const OUString& rFontName )
 {
-    RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", rtl::OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    RTL_LOGFILE_TRACE1( "WinSalGraphics::AddTempDevFont(): %s", OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     ImplDevFontAttributes aDFA;
     aDFA.SetFamilyName(rFontName);
@@ -2179,7 +2179,7 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         // since we are only interested in fonts that could not be
         // registered before because of missing administration rights
         // only the font path of the user installation is needed
-        ::rtl::OUString aPath;
+        OUString aPath;
         osl_getExecutableFile( &aPath.pData );
         aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
         String aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
@@ -2193,12 +2193,12 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
             osl::DirectoryItem aDirItem;
             String aEmptyString;
 
-            ::rtl::OUString aBootStrap;
+            OUString aBootStrap;
             rtl::Bootstrap::get( String( RTL_CONSTASCII_USTRINGPARAM( "BRAND_BASE_DIR" ) ), aBootStrap );
             aBootStrap += String( RTL_CONSTASCII_USTRINGPARAM( "/program/" SAL_CONFIGFILE( "bootstrap" ) ) );
             rtl::Bootstrap aBootstrap( aBootStrap );
-            ::rtl::OUString aUserPath;
-            aBootstrap.getFrom( rtl::OUString( "UserInstallation" ), aUserPath );
+            OUString aUserPath;
+            aBootstrap.getFrom( OUString( "UserInstallation" ), aUserPath );
             aUserPath += String( RTL_CONSTASCII_USTRINGPARAM("/user/config/fontnames.dat") );
             String aBaseURL = aPath.copy( 0, aPath.lastIndexOf('/')+1 );
             mpFontAttrCache = new ImplFontAttrCache( aUserPath, aBaseURL );
@@ -2548,7 +2548,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
     return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
-sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const PhysicalFontFace* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
@@ -2577,11 +2577,11 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
 #endif
 
-    rtl::OUString aSysPath;
+    OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return FALSE;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const rtl::OString aToFile(rtl::OUStringToOString(aSysPath, aThreadEncoding));
+    const OString aToFile(OUStringToOString(aSysPath, aThreadEncoding));
 
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
@@ -2736,7 +2736,7 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
         nFNLen--;
     if( nFNLen == 0 )
         *pDataLen = 0;
-    rInfo.m_aPSName     = rtl::OUString(reinterpret_cast<const sal_Unicode*>(aFaceName), nFNLen);
+    rInfo.m_aPSName     = OUString(reinterpret_cast<const sal_Unicode*>(aFaceName), nFNLen);
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),

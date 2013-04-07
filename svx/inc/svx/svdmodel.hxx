@@ -226,7 +226,7 @@ public:
     sal_uInt32 GetNextUniqueCommentID();
 
     // get the author name
-    ::rtl::OUString GetDocumentAuthorName() const;
+    OUString GetDocumentAuthorName() const;
 
     // for export
     sal_uInt32 GetUniqueCommentID() const { return mnUniqueCommentID; }
@@ -317,7 +317,7 @@ public:
                 ::com::sun::star::embed::XStorage> GetDocumentStorage() const;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XInputStream >
-        GetDocumentStream(::rtl::OUString const& rURL,
+        GetDocumentStream(OUString const& rURL,
                 ::comphelper::LifecycleProxy & rProxy) const;
     // Die Vorlagenattribute der Zeichenobjekte in harte Attribute verwandeln.
     void BurnInStyleSheetAttributes();
@@ -405,8 +405,8 @@ public:
     bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void             TakeMetricStr(long nVal, rtl::OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
-    void             TakeWinkStr(long nWink, rtl::OUString& rStr, bool bNoDegChar = false) const;
+    void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
+    void             TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar = false) const;
     void             TakePercentStr(const Fraction& rVal, String& rStr, bool bNoPercentChar = false) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.

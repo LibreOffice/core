@@ -40,8 +40,8 @@ class FORMULA_DLLPUBLIC FormulaOpCodeMapperObj : public ::cppu::WeakImplHelper2<
     ::std::auto_ptr<FormulaCompiler> m_pCompiler;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 public:
-    static ::rtl::OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString> getSupportedServiceNames_Static();
+    static OUString  getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_Static();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext);
 
 protected:
@@ -57,7 +57,7 @@ private:
     virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() throw (::com::sun::star::uno::RuntimeException);
                             // Methods
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getMappings(
-                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
+                                    const ::com::sun::star::uno::Sequence< OUString >& rNames,
                                     sal_Int32 nLanguage )
                                 throw ( ::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
@@ -67,11 +67,11 @@ private:
                                         ::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
 };

@@ -25,10 +25,10 @@
 using namespace connectivity::mozab;
 
 // -------------------------------------------------------------------------
-void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &nss)
+void MTypeConverter::ouStringToNsString(OUString const &ous, nsString &nss)
 {
-    // Convert to ::rtl::OString (utf-8 encoding).
-    ::rtl::OString os(rtl::OUStringToOString(ous, RTL_TEXTENCODING_UTF8));
+    // Convert to OString (utf-8 encoding).
+    OString os(OUStringToOString(ous, RTL_TEXTENCODING_UTF8));
 
     const char *cs = os.getStr();
     PRUint32 csLen = os.getLength();
@@ -38,11 +38,11 @@ void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &ns
     nss = mozString; // temp.
 }
 // -------------------------------------------------------------------------
-::rtl::OString MTypeConverter::nsACStringToOString( const nsACString& _source )
+OString MTypeConverter::nsACStringToOString( const nsACString& _source )
 {
     const char* buffer = _source.BeginReading();
     const char* bufferEnd = _source.EndReading();
-    return ::rtl::OString( buffer, static_cast<sal_Int32>(bufferEnd - buffer) );
+    return OString( buffer, static_cast<sal_Int32>(bufferEnd - buffer) );
 }
 // -------------------------------------------------------------------------
 void MTypeConverter::asciiToNsACString( const sal_Char* _asciiString, nsACString& _dest )
@@ -51,7 +51,7 @@ void MTypeConverter::asciiToNsACString( const sal_Char* _asciiString, nsACString
     _dest.AppendASCII( _asciiString );
 }
 // -------------------------------------------------------------------------
-void MTypeConverter::nsStringToOUString(nsString const &nss, ::rtl::OUString &ous)
+void MTypeConverter::nsStringToOUString(nsString const &nss, OUString &ous)
 {
     // Get clone of buffer.
     PRUnichar *uc = ToNewUnicode(nss);
@@ -59,24 +59,24 @@ void MTypeConverter::nsStringToOUString(nsString const &nss, ::rtl::OUString &ou
 
     // TODO check if this is ok.
     // PRUnichar != sal_Unicode in mingw
-    ::rtl::OUString _ous(reinterpret_cast_mingw_only<sal_Unicode *>(uc), nssLen);
+    OUString _ous(reinterpret_cast_mingw_only<sal_Unicode *>(uc), nssLen);
     ous = _ous;
 
     nsMemory::Free(uc);
 }
 // -------------------------------------------------------------------------
-void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, ::rtl::OUString &ous)
+void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, OUString &ous)
 {
     // TODO, specify length.
     // PRUnichar != sal_Unicode in mingw
-    ::rtl::OUString _ous(reinterpret_cast_mingw_only<const sal_Unicode *>(pru));
+    OUString _ous(reinterpret_cast_mingw_only<const sal_Unicode *>(pru));
     ous = _ous;
 }
 // -------------------------------------------------------------------------
-char *MTypeConverter::ouStringToCCharStringAscii(::rtl::OUString const &ous)
+char *MTypeConverter::ouStringToCCharStringAscii(OUString const &ous)
 {
-    // Convert ::rtl::OUString to ::rtl::OString,
-    ::rtl::OString os(rtl::OUStringToOString(ous, RTL_TEXTENCODING_ASCII_US));
+    // Convert OUString to OString,
+    OString os(OUStringToOString(ous, RTL_TEXTENCODING_ASCII_US));
 
     return(strdup(os.getStr()));
 }

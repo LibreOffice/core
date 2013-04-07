@@ -40,7 +40,6 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 
-using ::rtl::OUString;
 
 //=============================================================================
 
@@ -84,8 +83,8 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
     // XServiceInfo - static versions (used for component registration)
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
-    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static OUString SAL_CALL getImplementationName_static();
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 };
 

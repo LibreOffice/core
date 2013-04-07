@@ -64,8 +64,8 @@ namespace toolkit
                 };
                 for ( size_t i=0; i < sizeof( aImageSets ) / sizeof( aImageSets[0] ); ++i )
                 {
-                    const ::std::vector< ::rtl::OUString > aDefaultURLs( Throbber::getDefaultImageURLs( aImageSets[i] ) );
-                    const Sequence< ::rtl::OUString > aImageURLs( &aDefaultURLs[0], aDefaultURLs.size() );
+                    const ::std::vector< OUString > aDefaultURLs( Throbber::getDefaultImageURLs( aImageSets[i] ) );
+                    const Sequence< OUString > aImageURLs( &aDefaultURLs[0], aDefaultURLs.size() );
                     insertImageSet( i, aImageURLs );
                 }
             }
@@ -102,9 +102,9 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
+    OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
+        return OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -114,11 +114,11 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(3);
-        aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
-        aServiceNames[1] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        aServiceNames[0] = OUString::createFromAscii( szServiceName_SpinningProgressControlModel );
+        aServiceNames[1] = OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
         aServiceNames[2] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }

@@ -89,8 +89,8 @@ namespace calc
 
         // XListEntrySource
         virtual sal_Int32 SAL_CALL getListEntryCount(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getListEntry( sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getListEntry( sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAllListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeListEntryListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntryListener >& Listener ) throw (::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
 
@@ -98,9 +98,9 @@ namespace calc
         virtual void SAL_CALL disposing();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -140,7 +140,7 @@ namespace calc
             @precond
                 our m_xRange is not <NULL/>
         */
-        ::rtl::OUString
+        OUString
                 getCellTextContent_noCheck(
                     sal_Int32 _nRangeRelativeColumn,
                     sal_Int32 _nRangeRelativeRow

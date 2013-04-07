@@ -230,9 +230,9 @@ class AndroidSalSystem : public SvpSalSystem {
 public:
     AndroidSalSystem() : SvpSalSystem() {}
     virtual ~AndroidSalSystem() {}
-    virtual int ShowNativeDialog( const rtl::OUString& rTitle,
-                                  const rtl::OUString& rMessage,
-                                  const std::list< rtl::OUString >& rButtons,
+    virtual int ShowNativeDialog( const OUString& rTitle,
+                                  const OUString& rMessage,
+                                  const std::list< OUString >& rButtons,
                                   int nDefButton );
 };
 
@@ -277,7 +277,7 @@ public:
         // Clobber the UI fonts
 #if 0
         psp::FastPrintFontInfo aInfo;
-        aInfo.m_aFamilyName = rtl::OUString( "Roboto" );
+        aInfo.m_aFamilyName = OUString( "Roboto" );
         aInfo.m_eItalic = ITALIC_NORMAL;
         aInfo.m_eWeight = WEIGHT_NORMAL;
         aInfo.m_eWidth = WIDTH_NORMAL;
@@ -285,7 +285,7 @@ public:
 #endif
 
         // FIXME: is 14 point enough ?
-        Font aFont( rtl::OUString( "Roboto" ), Size( 0, 14 ) );
+        Font aFont( OUString( "Roboto" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
@@ -320,15 +320,15 @@ void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
-    rtl::OUString aError( rErrorText );
+    OUString aError( rErrorText );
     if( aError.isEmpty() )
-        aError = rtl::OUString::createFromAscii("Unknown application error");
-    LOGI("%s", rtl::OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
+        aError = OUString::createFromAscii("Unknown application error");
+    LOGI("%s", OUStringToOString(rErrorText, osl_getThreadTextEncoding()).getStr() );
 
     LOGI("SalAbort: '%s'",
-         rtl::OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
+         OUStringToOString(aError, RTL_TEXTENCODING_ASCII_US).getStr());
     if( bDumpCore )
         abort();
     else
@@ -337,7 +337,7 @@ void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
 
 const OUString& SalGetDesktopEnvironment()
 {
-    static rtl::OUString aEnv( "android" );
+    static OUString aEnv( "android" );
     return aEnv;
 }
 
@@ -370,18 +370,18 @@ void DestroySalInstance( SalInstance *pInst )
 
 #include <vcl/msgbox.hxx>
 
-int AndroidSalSystem::ShowNativeDialog( const rtl::OUString& rTitle,
-                                        const rtl::OUString& rMessage,
-                                        const std::list< rtl::OUString >& rButtons,
+int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
+                                        const OUString& rMessage,
+                                        const std::list< OUString >& rButtons,
                                         int nDefButton )
 {
     (void)rButtons; (void)nDefButton;
     LOGI("LibreOffice native dialog '%s': '%s'",
-         rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-         rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+         OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+         OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
     LOGI("Dialog '%s': '%s'",
-         rtl::OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
-         rtl::OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
+         OUStringToOString(rTitle, RTL_TEXTENCODING_ASCII_US).getStr(),
+         OUStringToOString(rMessage, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (AndroidSalInstance::getInstance() != NULL)
     {

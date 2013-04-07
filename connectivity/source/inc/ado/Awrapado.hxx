@@ -63,23 +63,23 @@ namespace connectivity
 
             WpADOProperties get_Properties() const;
 
-             rtl::OUString GetConnectionString() const;
-             sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const;
+             OUString GetConnectionString() const;
+             sal_Bool PutConnectionString(const OUString &aCon) const;
              sal_Int32 GetCommandTimeout() const;
              void PutCommandTimeout(sal_Int32 nRet);
              sal_Int32 GetConnectionTimeout() const ;
              void PutConnectionTimeout(sal_Int32 nRet);
 
              sal_Bool Close( ) ;
-             sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
+             sal_Bool Execute(const OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
              sal_Bool BeginTrans();
              sal_Bool CommitTrans( ) ;
              sal_Bool RollbackTrans( );
-             sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options);
+             sal_Bool Open(const OUString& ConnectionString, const OUString& UserID,const OUString& Password,long Options);
              sal_Bool GetErrors(ADOErrors** pErrors);
 
-             ::rtl::OUString GetDefaultDatabase() const;
-             sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr);
+             OUString GetDefaultDatabase() const;
+             sal_Bool PutDefaultDatabase(const OUString& _bstr);
 
              IsolationLevelEnum get_IsolationLevel() const ;
              sal_Bool put_IsolationLevel(const IsolationLevelEnum& eNum) ;
@@ -93,48 +93,48 @@ namespace connectivity
              ConnectModeEnum get_Mode() const;
              sal_Bool put_Mode(const ConnectModeEnum &eNum) ;
 
-             ::rtl::OUString get_Provider() const;
-             sal_Bool put_Provider(const ::rtl::OUString& _bstr);
+             OUString get_Provider() const;
+             sal_Bool put_Provider(const OUString& _bstr);
 
              sal_Int32 get_State() const;
 
              sal_Bool OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OLEVariant& SchemaID,ADORecordset**pprset);
 
-             ::rtl::OUString get_Version() const;
+             OUString get_Version() const;
 
              // special methods
-             ADORecordset* getExportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
-             ADORecordset* getImportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
-             ADORecordset* getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table );
-             ADORecordset* getIndexInfo( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Bool unique, sal_Bool approximate );
+             ADORecordset* getExportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getIndexInfo( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate );
              ADORecordset* getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern );
              ADORecordset* getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
-                                                  const ::rtl::OUString& primarySchema,
-                                                  const ::rtl::OUString& primaryTable,
+                                                  const OUString& primarySchema,
+                                                  const OUString& primaryTable,
                                                   const ::com::sun::star::uno::Any& foreignCatalog,
-                                                  const ::rtl::OUString& foreignSchema,
-                                                  const ::rtl::OUString& foreignTable);
+                                                  const OUString& foreignSchema,
+                                                  const OUString& foreignTable);
              ADORecordset* getProcedures( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& procedureNamePattern );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& procedureNamePattern );
              ADORecordset* getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& procedureNamePattern,
-                                                  const ::rtl::OUString& columnNamePattern );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& procedureNamePattern,
+                                                  const OUString& columnNamePattern );
              ADORecordset* getTables( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern,
-                                                  const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern,
+                                                  const ::com::sun::star::uno::Sequence< OUString >& types );
              ADORecordset* getColumns( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern,
-                                                  const ::rtl::OUString& columnNamePattern );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern,
+                                                  const OUString& columnNamePattern );
              ADORecordset* getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& table,
-                                                  const ::rtl::OUString& columnNamePattern );
+                                                  const OUString& schemaPattern,
+                                                  const OUString& table,
+                                                  const OUString& columnNamePattern );
              ADORecordset* getTypeInfo(DataTypeEnum _eType = adEmpty );
         };
 
@@ -160,21 +160,21 @@ namespace connectivity
             void put_ActiveConnection(/* [in] */ const OLEVariant& vConn);
              void Create();
              sal_Int32 get_State() const;
-             ::rtl::OUString get_CommandText() const;
-             sal_Bool put_CommandText(const ::rtl::OUString &aCon) ;
+             OUString get_CommandText() const;
+             sal_Bool put_CommandText(const OUString &aCon) ;
              sal_Int32 get_CommandTimeout() const;
              void put_CommandTimeout(sal_Int32 nRet);
              sal_Bool get_Prepared() const;
              sal_Bool put_Prepared(VARIANT_BOOL bPrepared) const;
              sal_Bool Execute(OLEVariant& RecordsAffected,OLEVariant& Parameters,long Options, ADORecordset** ppiRset);
-             ADOParameter* CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value);
+             ADOParameter* CreateParameter(const OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value);
 
              ADOParameters* get_Parameters() const;
              sal_Bool put_CommandType( /* [in] */ CommandTypeEnum lCmdType);
              CommandTypeEnum get_CommandType( ) const ;
              // Returns the field's name
-             ::rtl::OUString GetName() const ;
-             sal_Bool put_Name(const ::rtl::OUString& _Name);
+             OUString GetName() const ;
+             sal_Bool put_Name(const OUString& _Name);
              sal_Bool Cancel();
         };
         //------------------------------------------------------------------------
@@ -193,10 +193,10 @@ namespace connectivity
 
             //////////////////////////////////////////////////////////////////////
 
-             ::rtl::OUString GetDescription() const;
-             ::rtl::OUString GetSource() const ;
+             OUString GetDescription() const;
+             OUString GetSource() const ;
              sal_Int32 GetNumber() const ;
-             ::rtl::OUString GetSQLState() const ;
+             OUString GetSQLState() const ;
              sal_Int32 GetNativeError() const ;
         };
 
@@ -223,7 +223,7 @@ namespace connectivity
              sal_Int32 GetStatus() const      ;
              sal_Int32 GetDefinedSize() const ;
              // Returns the field's name
-             ::rtl::OUString GetName() const ;
+             OUString GetName() const ;
              DataTypeEnum GetADOType() const  ;
              void get_Value(OLEVariant& aValVar) const ;
              OLEVariant get_Value() const;
@@ -267,7 +267,7 @@ namespace connectivity
              OLEVariant GetValue() const;
              void GetValue(OLEVariant &aValVar) const;
              sal_Bool PutValue(const OLEVariant &aValVar) ;
-             ::rtl::OUString GetName() const ;
+             OUString GetName() const ;
              DataTypeEnum GetADOType() const ;
              sal_Int32 GetAttributes() const ;
              sal_Bool PutAttributes(sal_Int32 _nDefSize);
@@ -351,7 +351,7 @@ namespace connectivity
                 {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-             ::rtl::OUString GetName() const ;
+             OUString GetName() const ;
              DataTypeEnum GetADOType() const ;
              void put_Type(const DataTypeEnum& _eType);
              sal_Bool put_Size(const sal_Int32& _nSize);

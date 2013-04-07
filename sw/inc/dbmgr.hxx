@@ -150,8 +150,8 @@ struct SwMergeDescriptor
     String                                              sAddressFromColumn;
     String                                              sMailBody;
     String                                              sAttachmentName;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aCopiesTo;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aBlindCopiesTo;
+    ::com::sun::star::uno::Sequence< OUString >  aCopiesTo;
+    ::com::sun::star::uno::Sequence< OUString >  aBlindCopiesTo;
 
     ::com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService > xSmtpServer;
 
@@ -205,7 +205,7 @@ friend class SwConnectionDisposedListener_Impl;
     const SwXMailMerge* pMergeEvtSrc;   ///< != 0 if mail merge events are to be send
 
     SW_DLLPRIVATE SwDSParam*          FindDSData(const SwDBData& rData, sal_Bool bCreate);
-    SW_DLLPRIVATE SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, sal_Bool bCreate);
+    SW_DLLPRIVATE SwDSParam*          FindDSConnection(const OUString& rSource, sal_Bool bCreate);
 
 
     SW_DLLPRIVATE DECL_LINK( PrtCancelHdl, Button * );
@@ -299,11 +299,11 @@ public:
     sal_uInt32      GetSelectedRecordId(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
     sal_Bool            GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId, long nLanguage,
-                            rtl::OUString& rResult, double* pNumber);
+                            OUString& rResult, double* pNumber);
     /** create and store or find an already stored connection to a data source for use
     in SwFldMgr and SwDBTreeList */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
-                    RegisterConnection(::rtl::OUString& rSource);
+                    RegisterConnection(OUString& rSource);
 
     const SwDSParam* CreateDSData(const SwDBData& rData)
                         {return FindDSData(rData, sal_True);}
@@ -314,7 +314,7 @@ public:
     void            CloseAll(sal_Bool bIncludingMerge = sal_True);
 
     sal_Bool            GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
-                                rtl::OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
+                                OUString &rResult, double *pNumber, sal_uInt32 *pFormat);
     sal_Bool            ToNextMergeRecord();
     sal_Bool            ToNextRecord(const String& rDataSource, const String& rTableOrQuery, sal_Int32 nCommandType = -1);
 
@@ -338,7 +338,7 @@ public:
                                     const String& rTableOrQuery,
                                     sal_uInt8   eTableOrQuery = SW_DB_SELECT_UNKNOWN);
 
-    static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
+    static ::com::sun::star::uno::Sequence<OUString> GetExistingDatabaseNames();
 
     /**
      Loads a data source from file and registers it. Returns the registered name.
@@ -359,7 +359,7 @@ public:
             The data source.
     */
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>
-            getDataSourceAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,const ::rtl::OUString& _sDataSourceName);
+            getDataSourceAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,const OUString& _sDataSourceName);
 
     /** creates a RowSet, which must be disposed after use.
         @param  _sDataSourceName
@@ -375,8 +375,8 @@ public:
 
     */
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>
-            createCursor(   const ::rtl::OUString& _sDataSourceName,
-                            const ::rtl::OUString& _sCommand,
+            createCursor(   const OUString& _sDataSourceName,
+                            const OUString& _sCommand,
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             );

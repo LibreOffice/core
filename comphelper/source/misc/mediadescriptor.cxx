@@ -50,45 +50,45 @@
 
 namespace comphelper{
 
-const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
+const OUString& MediaDescriptor::PROP_ABORTED()
 {
-    static const ::rtl::OUString sProp("Aborted");
+    static const OUString sProp("Aborted");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_ASTEMPLATE()
+const OUString& MediaDescriptor::PROP_ASTEMPLATE()
 {
-    static const ::rtl::OUString sProp("AsTemplate");
+    static const OUString sProp("AsTemplate");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_COMPONENTDATA()
+const OUString& MediaDescriptor::PROP_COMPONENTDATA()
 {
-    static const ::rtl::OUString sProp("ComponentData");
+    static const OUString sProp("ComponentData");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
+const OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
 {
-    static const ::rtl::OUString sProp("DocumentService");
+    static const OUString sProp("DocumentService");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
+const OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
 {
-    static const ::rtl::OUString sProp("EncryptionData");
+    static const OUString sProp("EncryptionData");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_FILENAME()
+const OUString& MediaDescriptor::PROP_FILENAME()
 {
-    static const ::rtl::OUString sProp("FileName");
+    static const OUString sProp("FileName");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_FILTERNAME()
+const OUString& MediaDescriptor::PROP_FILTERNAME()
 {
-    static const ::rtl::OUString sProp("FilterName");
+    static const OUString sProp("FilterName");
     return sProp;
 }
 
@@ -98,57 +98,57 @@ const OUString& MediaDescriptor::PROP_FILTERPROVIDER()
     return aProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_FILTEROPTIONS()
+const OUString& MediaDescriptor::PROP_FILTEROPTIONS()
 {
-    static const ::rtl::OUString sProp("FilterOptions");
+    static const OUString sProp("FilterOptions");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_FRAME()
+const OUString& MediaDescriptor::PROP_FRAME()
 {
-    static const ::rtl::OUString sProp("Frame");
+    static const OUString sProp("Frame");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_FRAMENAME()
+const OUString& MediaDescriptor::PROP_FRAMENAME()
 {
-    static const ::rtl::OUString sProp("FrameName");
+    static const OUString sProp("FrameName");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_HIDDEN()
+const OUString& MediaDescriptor::PROP_HIDDEN()
 {
-    static const ::rtl::OUString sProp("Hidden");
+    static const OUString sProp("Hidden");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_INPUTSTREAM()
+const OUString& MediaDescriptor::PROP_INPUTSTREAM()
 {
-    static const ::rtl::OUString sProp("InputStream");
+    static const OUString sProp("InputStream");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
+const OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
 {
-    static const ::rtl::OUString sProp("InteractionHandler");
+    static const OUString sProp("InteractionHandler");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_JUMPMARK()
+const OUString& MediaDescriptor::PROP_JUMPMARK()
 {
-    static const ::rtl::OUString sProp("JumpMark");
+    static const OUString sProp("JumpMark");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_MACROEXECUTIONMODE()
+const OUString& MediaDescriptor::PROP_MACROEXECUTIONMODE()
 {
-    static const ::rtl::OUString sProp("MacroExecutionMode");
+    static const OUString sProp("MacroExecutionMode");
     return sProp;
 }
 
-const ::rtl::OUString& MediaDescriptor::PROP_MEDIATYPE()
+const OUString& MediaDescriptor::PROP_MEDIATYPE()
 {
-    static const ::rtl::OUString sProp("MediaType");
+    static const OUString sProp("MediaType");
     return sProp;
 }
 
@@ -348,7 +348,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
         if (xContent.is())
         {
             css::uno::Reference< css::ucb::XContentIdentifier > xId(xContent->getIdentifier(), css::uno::UNO_QUERY);
-            ::rtl::OUString aScheme;
+            OUString aScheme;
             if (xId.is())
                 aScheme = xId->getContentProviderScheme();
 
@@ -371,7 +371,7 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
 
 // ----------------------------------------------------------------------------
 
-css::uno::Any MediaDescriptor::getComponentDataEntry( const ::rtl::OUString& rName ) const
+css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {
     css::uno::Any aEntry;
     SequenceAsHashMap::const_iterator aPropertyIter = find( PROP_COMPONENTDATA() );
@@ -380,7 +380,7 @@ css::uno::Any MediaDescriptor::getComponentDataEntry( const ::rtl::OUString& rNa
     return css::uno::Any();
 }
 
-void MediaDescriptor::setComponentDataEntry( const ::rtl::OUString& rName, const css::uno::Any& rValue )
+void MediaDescriptor::setComponentDataEntry( const OUString& rName, const css::uno::Any& rValue )
 {
     if( rValue.hasValue() )
     {
@@ -406,7 +406,7 @@ void MediaDescriptor::setComponentDataEntry( const ::rtl::OUString& rName, const
     }
 }
 
-void MediaDescriptor::clearComponentDataEntry( const ::rtl::OUString& rName )
+void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
 {
     SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
     if( aPropertyIter != end() )
@@ -464,22 +464,22 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         }
 
         // b) ... or we must get it from the given URL
-        ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
+        OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString());
         if (sURL.isEmpty())
             throw css::uno::Exception( OUString( "Found no URL." ),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
-        ::rtl::OUString sNormalizedURL = impl_normalizeURL( sURL );
+        OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
 #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("Invalid MediaDescriptor detected:\n");
         sMsg.append     (ex.Message                           );
-        OSL_FAIL(::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
+        OSL_FAIL(OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr());
     }
 #else
     catch(const css::uno::Exception&)
@@ -508,7 +508,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     css::uno::Reference< css::ucb::XCommandEnvironment > xCommandEnv(static_cast< css::ucb::XCommandEnvironment* >(pCommandEnv), css::uno::UNO_QUERY);
 
     // media type
-    ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
+    OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), OUString());
     if (sMediaType.isEmpty())
     {
         sMediaType = "application/x-www-form-urlencoded";
@@ -535,7 +535,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
         css::uno::Reference< css::io::XActiveDataSink > xSink( new ucbhelper::ActiveDataSink );
         aPostArgument.Sink = xSink;
         aPostArgument.MediaType = sMediaType;
-        aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), ::rtl::OUString() );
+        aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER(), OUString() );
 
         OUString sCommandName( "post" );
         aContent.executeCommand( sCommandName, css::uno::makeAny( aPostArgument ) );
@@ -694,7 +694,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, sal_Bool
     return xInputStream.is();
 }
 
-::rtl::OUString MediaDescriptor::impl_normalizeURL(const ::rtl::OUString& sURL)
+OUString MediaDescriptor::impl_normalizeURL(const OUString& sURL)
 {
     /* Remove Jumpmarks (fragments) of an URL only here.
        They are not part of any URL and as a result may be

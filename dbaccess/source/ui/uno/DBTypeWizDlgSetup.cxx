@@ -53,10 +53,10 @@ ODBTypeWizDialogSetup::ODBTypeWizDialogSetup(const Reference< XComponentContext 
     ,m_bOpenDatabase(sal_True)
     ,m_bStartTableWizard(sal_False)
 {
-    registerProperty(::rtl::OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
+    registerProperty(OUString("OpenDatabase"), 3, PropertyAttribute::TRANSIENT,
         &m_bOpenDatabase, getBooleanCppuType());
 
-    registerProperty(::rtl::OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
+    registerProperty(OUString("StartTableWizard"), 4, PropertyAttribute::TRANSIENT,
         &m_bStartTableWizard, getBooleanCppuType());
 }
 //-------------------------------------------------------------------------
@@ -74,15 +74,15 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL ODBTypeWizDialogSetup::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeException)
+OUString ODBTypeWizDialogSetup::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
+    return OUString("org.openoffice.comp.dbu.ODBTypeWizDialogSetup");
 }
 
 //-------------------------------------------------------------------------
@@ -95,7 +95,7 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 ::comphelper::StringSequence ODBTypeWizDialogSetup::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.DatabaseWizardDialog");
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.DatabaseWizardDialog");
     return aSupported;
 }
 

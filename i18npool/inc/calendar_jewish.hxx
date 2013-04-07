@@ -34,7 +34,7 @@ public:
     Calendar_jewish();
 
     // Methods in XExtendedCalendar
-    virtual rtl::OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) throw (com::sun::star::uno::RuntimeException);
 
 protected:
     void mapToGregorian() throw(com::sun::star::uno::RuntimeException);

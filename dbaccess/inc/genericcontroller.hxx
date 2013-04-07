@@ -124,7 +124,7 @@ namespace dbaui
         optional< bool >            bChecked;
         optional< bool >            bInvisible;
         ::com::sun::star::uno::Any  aValue;
-        optional< ::rtl::OUString > sTitle;
+        optional< OUString > sTitle;
 
         FeatureState() : bEnabled(sal_False) { }
     };
@@ -140,9 +140,9 @@ namespace dbaui
     };
 
     // ....................................................................
-    typedef ::std::map  <   ::rtl::OUString
+    typedef ::std::map  <   OUString
                         ,   ControllerFeature
-                        ,   ::std::less< ::rtl::OUString >
+                        ,   ::std::less< OUString >
                         >   SupportedFeatures;
 
     // ....................................................................
@@ -268,13 +268,13 @@ namespace dbaui
             @param  _nHelpId
                 The help id to dispatch.
         */
-        void openHelpAgent( const rtl::OString& _sHelpId );
+        void openHelpAgent( const OString& _sHelpId );
 
         /** open the help agent for the given help url.
             @param  _pHelpStringURL
                 The help url to dispatch.
         */
-        void openHelpAgent( const rtl::OUString& _suHelpStringURL );
+        void openHelpAgent( const OUString& _suHelpStringURL );
 
         /** opens the given Help URL in the help agent
 
@@ -342,7 +342,7 @@ namespace dbaui
 
             @see IController::registerCommandURL
         */
-        bool    isUserDefinedFeature( const ::rtl::OUString& _rFeatureURL ) const;
+        bool    isUserDefinedFeature( const OUString& _rFeatureURL ) const;
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
@@ -352,8 +352,8 @@ namespace dbaui
 
         // connect to a datasource
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
-            const ::rtl::OUString& _rsDataSourceName,
-            const ::rtl::OUString& _rContextInformation,
+            const OUString& _rsDataSourceName,
+            const OUString& _rContextInformation,
             ::dbtools::SQLExceptionInfo* _pErrorInfo
         );
 
@@ -369,7 +369,7 @@ namespace dbaui
         // XInitialize will be called inside initialize
         virtual void impl_initialize();
 
-        virtual ::rtl::OUString getPrivateTitle() const { return ::rtl::OUString(); }
+        virtual OUString getPrivateTitle() const { return OUString(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle > impl_getTitleHelper_throw();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const
@@ -393,7 +393,7 @@ namespace dbaui
         void ImplInvalidateFeature( sal_Int32 _nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _xListener, sal_Bool _bForceBroadcast );
 
         sal_Bool ImplInvalidateTBItem(sal_uInt16 nId, const FeatureState& rState);
-        void ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache);
+        void ImplBroadcastFeatureState(const OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, sal_Bool _bIgnoreCache);
 
         // link methods
         DECL_LINK(OnAsyncInvalidateAll, void*);
@@ -409,7 +409,7 @@ namespace dbaui
 
         // if xListener is NULL the change will be forwarded to all listeners to the given ::com::sun::star::util::URL
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        virtual void InvalidateFeature(const ::rtl::OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, sal_Bool _bForceBroadcast = sal_False);
+        virtual void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, sal_Bool _bForceBroadcast = sal_False);
         // if there is an ::com::sun::star::util::URL translation for the id ('handle') the preceding InvalidateFeature is used.
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
@@ -435,8 +435,8 @@ namespace dbaui
         virtual void executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual void executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
         virtual sal_Bool isCommandEnabled(sal_uInt16 _nCommandId) const;
-        virtual sal_Bool isCommandEnabled(const ::rtl::OUString& _rCompleteCommandURL) const;
-        virtual sal_uInt16 registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL );
+        virtual sal_Bool isCommandEnabled(const OUString& _rCompleteCommandURL) const;
+        virtual sal_uInt16 registerCommandURL( const OUString& _rCompleteCommandURL );
         virtual void notifyHiContrastChanged();
         virtual sal_Bool isDataSourceReadOnly() const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > getXController() throw( ::com::sun::star::uno::RuntimeException );
@@ -457,7 +457,7 @@ namespace dbaui
 
         // ::com::sun::star::frame::XController2
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XController
@@ -481,7 +481,7 @@ namespace dbaui
         virtual void SAL_CALL setMasterDispatchProvider(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & _xNewProvider) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::frame::XDispatchProvider
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
@@ -496,17 +496,17 @@ namespace dbaui
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
-        virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) = 0;
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException) = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) = 0;
 
         // XDispatchInformationProvider
         virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTitle
-        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTitleChangeBroadcaster
         virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);

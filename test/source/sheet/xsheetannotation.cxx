@@ -56,14 +56,14 @@ void XSheetAnnotation::testGetPosition()
 void XSheetAnnotation::testGetAuthor()
 {
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
-    rtl::OUString aAuthor = aSheetAnnotation->getAuthor();
+    OUString aAuthor = aSheetAnnotation->getAuthor();
 
     CPPUNIT_ASSERT_MESSAGE("Wrong author", aAuthor.equals("LG"));
 }
 void XSheetAnnotation::testGetDate()
 {
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
-    rtl::OUString aDate = aSheetAnnotation->getDate();
+    OUString aDate = aSheetAnnotation->getDate();
 
     CPPUNIT_ASSERT_MESSAGE("Wrong date", aDate.equals("01/17/2013"));
 }

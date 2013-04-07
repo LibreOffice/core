@@ -41,7 +41,7 @@
 
     #define LOG_REGISTRATION_GETFACTORY( SINFOTEXT )                                                            \
                 {                                                                                               \
-                    ::rtl::OStringBuffer sOut( 1024 );                                                          \
+                    OStringBuffer sOut( 1024 );                                                          \
                     sOut.append( "fw?_component_getFactory():" );                                               \
                     sOut.append( SINFOTEXT                 );                                                   \
                     WRITE_LOGFILE( LOGFILE_REGISTRATION, sOut.makeStringAndClear() )                            \

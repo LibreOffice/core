@@ -23,9 +23,6 @@
 #include "osl/process.h"
 #include "osl/thread.h"
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringToOString;
 
 #ifdef SAL_UNX
 #define SEPARATOR '/'

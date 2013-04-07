@@ -56,7 +56,6 @@
 #include "drawdoc.hxx"
 #include "smarttag.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -190,7 +189,7 @@ void ImageButtonHdl::HideTip()
 
 // --------------------------------------------------------------------
 
-extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
+extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {

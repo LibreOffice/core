@@ -45,20 +45,20 @@ public:
     /** Returns the font name, pitch, and family; tries to resolve theme
         placeholder names, e.g. '+mj-lt' for the major latin theme font. */
     bool                getFontData(
-                            ::rtl::OUString& rFontName,
+                            OUString& rFontName,
                             sal_Int16& rnFontPitch,
                             sal_Int16& rnFontFamily,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
 private:
     bool                implGetFontData(
-                            ::rtl::OUString& rFontName,
+                            OUString& rFontName,
                             sal_Int16& rnFontPitch,
                             sal_Int16& rnFontFamily ) const;
 
 private:
-    ::rtl::OUString     maTypeface;
-    ::rtl::OUString     maPanose;
+    OUString     maTypeface;
+    OUString     maPanose;
     sal_Int32           mnPitch;
     sal_Int32           mnCharset;
 };

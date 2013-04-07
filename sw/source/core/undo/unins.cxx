@@ -128,7 +128,7 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 sal_Bool SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
     if( !bIsAppend && bIsWordDelim ==
-        !GetAppCharClass().isLetterNumeric( rtl::OUString( cIns )) )
+        !GetAppCharClass().isLetterNumeric( OUString( cIns )) )
     {
         nLen++;
         nCntnt++;
@@ -433,7 +433,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             // TODO/MBA: seems that here a physical copy is done - not as in drawing layer! Testing!
             // TODO/LATER: Copying through the container would copy the replacement image as well
             comphelper::EmbeddedObjectContainer aCnt;
-            ::rtl::OUString aName = aCnt.CreateUniqueObjectName();
+            OUString aName = aCnt.CreateUniqueObjectName();
             if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, sal_True ) )
             {
                 uno::Reference < embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
@@ -486,8 +486,8 @@ SwRewriter SwUndoInsert::GetRewriter() const
 class SwUndoReplace::Impl
     : private SwUndoSaveCntnt
 {
-    ::rtl::OUString m_sOld;
-    ::rtl::OUString m_sIns;
+    OUString m_sOld;
+    OUString m_sIns;
     sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
     xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
     bool m_bSplitNext : 1;
@@ -497,7 +497,7 @@ class SwUndoReplace::Impl
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
 public:
-    Impl(SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp);
+    Impl(SwPaM const& rPam, OUString const& rIns, bool const bRegExp);
     virtual ~Impl()
     {
     }
@@ -507,13 +507,13 @@ public:
 
     void SetEnd(SwPaM const& rPam);
 
-    ::rtl::OUString const& GetOld() const { return m_sOld; }
-    ::rtl::OUString const& GetIns() const { return m_sIns; }
+    OUString const& GetOld() const { return m_sOld; }
+    OUString const& GetIns() const { return m_sIns; }
 };
 
 
 SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
-        ::rtl::OUString const& rIns, bool const bRegExp)
+        OUString const& rIns, bool const bRegExp)
     : SwUndo( UNDO_REPLACE )
     , m_pImpl(new Impl(rPam, rIns, bRegExp))
 {
@@ -535,7 +535,7 @@ void SwUndoReplace::RedoImpl(::sw::UndoRedoContext & rContext)
 
 SwRewriter
 MakeUndoReplaceRewriter(sal_uLong const occurrences,
-        ::rtl::OUString const& sOld, ::rtl::OUString const& sNew)
+        OUString const& sOld, OUString const& sNew)
 {
     SwRewriter aResult;
 
@@ -593,7 +593,7 @@ void SwUndoReplace::SetEnd(SwPaM const& rPam)
 }
 
 SwUndoReplace::Impl::Impl(
-        SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp)
+        SwPaM const& rPam, OUString const& rIns, bool const bRegExp)
     : m_sIns( rIns )
     , m_nOffset( 0 )
     , m_bRegExp(bRegExp)

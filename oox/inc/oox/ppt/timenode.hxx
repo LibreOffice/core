@@ -45,7 +45,7 @@ namespace oox { namespace ppt {
     class TimeNode
     {
     public:
-        typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any > UserDataMap;
+        typedef ::std::map< OUString, ::com::sun::star::uno::Any > UserDataMap;
 
         TimeNode( sal_Int16 nNodeType );
         virtual ~TimeNode();
@@ -59,7 +59,7 @@ namespace oox { namespace ppt {
             { return maChildren; }
 
         void setId( sal_Int32 nId );
-        const ::rtl::OUString & getId() const { return msId; }
+        const OUString & getId() const { return msId; }
 
         void addNode(
             const ::oox::core::XmlFilterBase& rFilter,
@@ -96,12 +96,12 @@ namespace oox { namespace ppt {
             { mbHasEndSyncValue = true; return maEndSyncValue; }
     protected:
 
-        static rtl::OUString getServiceName( sal_Int16 nNodeType );
+        static OUString getServiceName( sal_Int16 nNodeType );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
         createAndInsert(
             const ::oox::core::XmlFilterBase& rFilter,
-            const rtl::OUString& rServiceName,
+            const OUString& rServiceName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rxNode );
 
     private:
@@ -109,7 +109,7 @@ namespace oox { namespace ppt {
 
         TimeNodePtrList maChildren;
 
-        rtl::OUString   msId;
+        OUString   msId;
         NodePropertyMap            maNodeProperties;
         UserDataMap                maUserData; // a sequence to be stored as "UserData" property
         SlideTransition            maTransitionFilter;

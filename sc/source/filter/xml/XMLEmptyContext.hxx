@@ -25,7 +25,7 @@ class ScXMLImport;
 
 class ScXMLEmptyContext : public SvXMLImportContext
 {
-    rtl::OUString   sPrintRanges;
+    OUString   sPrintRanges;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -33,12 +33,12 @@ class ScXMLEmptyContext : public SvXMLImportContext
 public:
 
     ScXMLEmptyContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName);
+                        const OUString& rLName);
 
     virtual ~ScXMLEmptyContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

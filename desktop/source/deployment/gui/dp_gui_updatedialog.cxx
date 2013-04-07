@@ -138,7 +138,7 @@ static const sal_uInt16 CMD_IGNORE_ALL_UPDATES = 3;
 
 enum Kind { ENABLED_UPDATE, DISABLED_UPDATE, SPECIFIC_ERROR };
 
-rtl::OUString confineToParagraph(rtl::OUString const & text) {
+OUString confineToParagraph(OUString const & text) {
     // Confine arbitrary text to a single paragraph in a dp_gui::AutoScrollEdit.
     // This assumes that U+000A and U+000D are the only paragraph separators in
     // a dp_gui::AutoScrollEdit, and that replacing them with a single space
@@ -148,30 +148,30 @@ rtl::OUString confineToParagraph(rtl::OUString const & text) {
 }
 
 struct UpdateDialog::DisabledUpdate {
-    rtl::OUString name;
-    uno::Sequence< rtl::OUString > unsatisfiedDependencies;
+    OUString name;
+    uno::Sequence< OUString > unsatisfiedDependencies;
     // We also want to show release notes and publisher for disabled updates
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
     sal_uInt16 m_nID;
 };
 
 struct UpdateDialog::SpecificError {
-    rtl::OUString name;
-    rtl::OUString message;
+    OUString name;
+    OUString message;
     sal_uInt16 m_nID;
 };
 
 //------------------------------------------------------------------------------
 struct UpdateDialog::IgnoredUpdate {
-    rtl::OUString sExtensionID;
-    rtl::OUString sVersion;
+    OUString sExtensionID;
+    OUString sVersion;
     bool          bRemoved;
 
-    IgnoredUpdate( const rtl::OUString &rExtensionID, const rtl::OUString &rVersion );
+    IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion );
 };
 
 //------------------------------------------------------------------------------
-UpdateDialog::IgnoredUpdate::IgnoredUpdate( const rtl::OUString &rExtensionID, const rtl::OUString &rVersion ):
+UpdateDialog::IgnoredUpdate::IgnoredUpdate( const OUString &rExtensionID, const OUString &rVersion ):
     sExtensionID( rExtensionID ),
     sVersion( rVersion ),
     bRemoved( false )
@@ -184,13 +184,13 @@ struct UpdateDialog::Index
     bool          m_bIgnored;
     sal_uInt16        m_nID;
     sal_uInt16        m_nIndex;
-    rtl::OUString m_aName;
+    OUString m_aName;
 
-    Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const rtl::OUString &rName );
+    Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName );
 };
 
 //------------------------------------------------------------------------------
-UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const rtl::OUString &rName ):
+UpdateDialog::Index::Index( Kind theKind, sal_uInt16 nID, sal_uInt16 nIndex, const OUString &rName ):
     m_eKind( theKind ),
     m_bIgnored( false ),
     m_nID( nID ),
@@ -222,11 +222,11 @@ private:
     uno::Sequence< uno::Reference< xml::dom::XElement > >
     getUpdateInformation(
         uno::Reference< deployment::XPackage > const & package,
-        uno::Sequence< rtl::OUString > const & urls,
-        rtl::OUString const & identifier) const;
+        uno::Sequence< OUString > const & urls,
+        OUString const & identifier) const;
 
-    ::rtl::OUString getUpdateDisplayString(
-        dp_gui::UpdateData const & data, ::rtl::OUString const & version = ::rtl::OUString()) const;
+    OUString getUpdateDisplayString(
+        dp_gui::UpdateData const & data, OUString const & version = OUString()) const;
 
     void prepareUpdateData(
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & updateInfo,
@@ -318,12 +318,12 @@ void UpdateDialog::Thread::execute()
         prepareUpdateData(info.info, disableUpdate, updateData);
 
         //determine if the update is installed in the user or shared repository
-        rtl::OUString sOnlineVersion;
+        OUString sOnlineVersion;
         if (info.info.is())
             sOnlineVersion = info.version;
-        rtl::OUString sVersionUser;
-        rtl::OUString sVersionShared;
-        rtl::OUString sVersionBundled;
+        OUString sVersionUser;
+        OUString sVersionShared;
+        OUString sVersionBundled;
         uno::Sequence< uno::Reference< deployment::XPackage> > extensions;
         try {
             extensions = extMgr->getExtensionsWithSameIdentifier(
@@ -406,11 +406,11 @@ void UpdateDialog::Thread::handleSpecificError(
     }
 }
 
-::rtl::OUString UpdateDialog::Thread::getUpdateDisplayString(
-    dp_gui::UpdateData const & data, ::rtl::OUString const & version) const
+OUString UpdateDialog::Thread::getUpdateDisplayString(
+    dp_gui::UpdateData const & data, OUString const & version) const
 {
     OSL_ASSERT(data.aInstalledPackage.is());
-    rtl::OUStringBuffer b(data.aInstalledPackage->getDisplayName());
+    OUStringBuffer b(data.aInstalledPackage->getDisplayName());
     b.append(static_cast< sal_Unicode >(' '));
     {
         SolarMutexGuard g;
@@ -455,7 +455,7 @@ void UpdateDialog::Thread::prepareUpdateData(
         out_du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
 
-    const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
+    const ::boost::optional< OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
 
     out_du.name = getUpdateDisplayString(out_data, infoset.getVersion());
 
@@ -724,7 +724,7 @@ void UpdateDialog::addAdditional( UpdateDialog::Index * index, SvLBoxButtonKind 
 }
 
 //------------------------------------------------------------------------------
-void UpdateDialog::addEnabledUpdate( rtl::OUString const & name,
+void UpdateDialog::addEnabledUpdate( OUString const & name,
                                      dp_gui::UpdateData & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_enabledUpdates.size() );
@@ -808,7 +808,7 @@ void UpdateDialog::enableOk() {
 
 // *********************************************************************************
 void UpdateDialog::createNotifyJob( bool bPrepareOnly,
-    uno::Sequence< uno::Sequence< rtl::OUString > > &rItemList )
+    uno::Sequence< uno::Sequence< OUString > > &rItemList )
 {
     if ( !dp_misc::office_is_running() )
         return;
@@ -843,7 +843,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         uno::Reference < frame::XDesktop2 > xDesktop = frame::Desktop::create( xContext );
         uno::Reference< frame::XDispatchProvider > xDispatchProvider( xDesktop->getCurrentFrame(),
             uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
+        uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
 
         if( xDispatch.is() )
         {
@@ -871,14 +871,14 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
     if ( !dp_misc::office_is_running() )
         return;
 
-    uno::Sequence< uno::Sequence< rtl::OUString > > aItemList;
+    uno::Sequence< uno::Sequence< OUString > > aItemList;
 
     if ( ! bRecheckOnly )
     {
         sal_Int32 nCount = 0;
         for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
         {
-            uno::Sequence< rtl::OUString > aItem(2);
+            uno::Sequence< OUString > aItem(2);
 
             UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(m_updates.GetEntryData(i));
 
@@ -988,11 +988,11 @@ bool UpdateDialog::showDescription(uno::Reference< deployment::XPackage > const 
                            "");
 }
 
-bool UpdateDialog::showDescription(std::pair< rtl::OUString, rtl::OUString > const & pairPublisher,
-                                   rtl::OUString const & sReleaseNotes)
+bool UpdateDialog::showDescription(std::pair< OUString, OUString > const & pairPublisher,
+                                   OUString const & sReleaseNotes)
 {
-    rtl::OUString sPub = pairPublisher.first;
-    rtl::OUString sURL = pairPublisher.second;
+    OUString sPub = pairPublisher.first;
+    OUString sURL = pairPublisher.second;
 
     if ( sPub.isEmpty() && sURL.isEmpty() && sReleaseNotes.isEmpty() )
         // nothing to show
@@ -1056,12 +1056,12 @@ void UpdateDialog::getIgnoredUpdates()
     args[0] <<= aValue;
 
     uno::Reference< container::XNameAccess > xNameAccess( xConfig->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationAccess", args), uno::UNO_QUERY_THROW );
-    uno::Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
+    uno::Sequence< OUString > aElementNames = xNameAccess->getElementNames();
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
-        ::rtl::OUString aIdentifier = aElementNames[i];
-        ::rtl::OUString aVersion;
+        OUString aIdentifier = aElementNames[i];
+        OUString aVersion;
 
         uno::Any aPropValue( uno::Reference< beans::XPropertySet >( xNameAccess->getByName( aIdentifier ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aPropValue >>= aVersion;
@@ -1116,8 +1116,8 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 
     if (! m_ignoredUpdates.empty() )
     {
-        rtl::OUString aExtensionID;
-        rtl::OUString aVersion;
+        OUString aExtensionID;
+        OUString aVersion;
 
         if ( index->m_eKind == ENABLED_UPDATE )
         {
@@ -1129,7 +1129,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
         {
             DisabledUpdate &rData = m_disabledUpdates[ index->m_nIndex ];
             dp_misc::DescriptionInfoset aInfoset( m_context, rData.aUpdateInfo );
-            ::boost::optional< ::rtl::OUString > aID( aInfoset.getIdentifier() );
+            ::boost::optional< OUString > aID( aInfoset.getIdentifier() );
             if ( aID )
                 aExtensionID = *aID;
             aVersion = aInfoset.getVersion();
@@ -1157,8 +1157,8 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 //------------------------------------------------------------------------------
 void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, bool bIgnoreAll )
 {
-    rtl::OUString aExtensionID;
-    rtl::OUString aVersion;
+    OUString aExtensionID;
+    OUString aVersion;
 
     m_bModified = true;
 
@@ -1173,7 +1173,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
     {
         DisabledUpdate &rData = m_disabledUpdates[ pIndex->m_nIndex ];
         dp_misc::DescriptionInfoset aInfoset( m_context, rData.aUpdateInfo );
-        ::boost::optional< ::rtl::OUString > aID( aInfoset.getIdentifier() );
+        ::boost::optional< OUString > aID( aInfoset.getIdentifier() );
         if ( aID )
             aExtensionID = *aID;
         if ( !bIgnoreAll )
@@ -1205,7 +1205,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 
 IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {
-    rtl::OUStringBuffer b;
+    OUStringBuffer b;
     bool bInserted = false;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
         m_updates.GetEntryData(m_updates.GetSelectEntryPos()));
@@ -1244,8 +1244,8 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                 if (data.unsatisfiedDependencies.getLength() != 0)
                 {
                     // create error string for version mismatch
-                    ::rtl::OUString sVersion( "%VERSION" );
-                    ::rtl::OUString sProductName( "%PRODUCTNAME" );
+                    OUString sVersion( "%VERSION" );
+                    OUString sProductName( "%PRODUCTNAME" );
                     sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
                     if ( nPos >= 0 )
                     {
@@ -1380,9 +1380,9 @@ IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
 
 IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
 {
-    ::rtl::OUString sURL;
+    OUString sURL;
     if ( pHyperlink )
-        sURL = ::rtl::OUString( pHyperlink->GetURL() );
+        sURL = OUString( pHyperlink->GetURL() );
     if ( sURL.isEmpty() )
         return 0;
 
@@ -1391,7 +1391,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             com::sun::star::system::SystemShellExecute::create(m_context) );
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

@@ -95,7 +95,7 @@ void ScQueryEntry::SetQueryByEmpty()
     maQueryItems.resize(1);
     Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
-    rItem.maString = rtl::OUString();
+    rItem.maString = OUString();
     rItem.mfVal = SC_EMPTYFIELDS;
 }
 
@@ -117,7 +117,7 @@ void ScQueryEntry::SetQueryByNonEmpty()
     maQueryItems.resize(1);
     Item& rItem = maQueryItems[0];
     rItem.meType = ByEmpty;
-    rItem.maString = rtl::OUString();
+    rItem.maString = OUString();
     rItem.mfVal = SC_NONEMPTYFIELDS;
 }
 
@@ -178,7 +178,7 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const
 {
     if ( !pSearchParam )
     {
-        const rtl::OUString& rStr = maQueryItems[0].maString;
+        const OUString& rStr = maQueryItems[0].maString;
         pSearchParam = new utl::SearchParam(
             rStr, utl::SearchParam::SRCH_REGEXP, bCaseSens, false, false);
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );

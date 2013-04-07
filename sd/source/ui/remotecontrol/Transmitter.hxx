@@ -28,7 +28,7 @@ public:
     enum Priority { PRIORITY_LOW = 1, PRIORITY_HIGH };
     Transmitter( ::sd::IBluetoothSocket* aSocket );
     ~Transmitter();
-    void addMessage( const rtl::OString& aMessage, const Priority aPriority );
+    void addMessage( const OString& aMessage, const Priority aPriority );
     void notifyFinished();
 
 private:
@@ -41,8 +41,8 @@ private:
 
     ::osl::Mutex mQueueMutex;
 
-    std::queue<rtl::OString> mLowPriority;
-    std::queue<rtl::OString> mHighPriority;
+    std::queue<OString> mLowPriority;
+    std::queue<OString> mHighPriority;
 };
 
 }

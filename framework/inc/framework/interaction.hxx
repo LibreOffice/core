@@ -67,10 +67,10 @@ class FWE_DLLPUBLIC RequestFilterSelect
     RequestFilterSelect_Impl* pImp;
 
     public:
-        RequestFilterSelect( const ::rtl::OUString& sURL );
+        RequestFilterSelect( const OUString& sURL );
         ~RequestFilterSelect();
         sal_Bool        isAbort  () const;
-        ::rtl::OUString getFilter() const;
+        OUString getFilter() const;
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 

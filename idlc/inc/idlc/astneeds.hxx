@@ -24,7 +24,7 @@
 class AstNeeds : public AstDeclaration
 {
 public:
-    AstNeeds(AstService* pRealService, const ::rtl::OString& name, AstScope* pScope)
+    AstNeeds(AstService* pRealService, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_needs, name, pScope)
         , m_pRealService(pRealService)
         {}

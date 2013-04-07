@@ -64,15 +64,15 @@ private:
     Reference< ::com::sun::star::uno::XComponentContext >   m_xContext;
     FILE*                   fp;
     Reference< ::com::sun::star::plugin::XPlugin >          m_xPlugin;
-    ::rtl::OUString                 m_aMIMEType;
-    ::rtl::OUString                 m_aTarget;
-    ::rtl::OUString                 m_aFileName;
+    OUString                 m_aMIMEType;
+    OUString                 m_aTarget;
+    OUString                 m_aFileName;
 
 public:
     FileSink( const Reference< ::com::sun::star::uno::XComponentContext > &,
               const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
-              const ::rtl::OUString& mimetype,
-              const ::rtl::OUString& target,
+              const OUString& mimetype,
+              const OUString& target,
               const Reference< ::com::sun::star::io::XActiveDataSource > & source );
     virtual ~FileSink();
 
@@ -95,14 +95,14 @@ public:
     virtual ~XPluginContext_Impl();
 
 
-    virtual ::rtl::OUString SAL_CALL getValue(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL newStream(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& mimetype, const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual void SAL_CALL displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& message) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual OUString SAL_CALL getValue(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL newStream(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual void SAL_CALL displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& message) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
+    virtual OUString SAL_CALL getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin) throw( ::com::sun::star::plugin::PluginException, RuntimeException );
 };
 
 Reference< ::com::sun::star::plugin::XPluginContext >  XPluginManager_Impl::createPluginContext() throw()
@@ -120,14 +120,14 @@ XPluginContext_Impl::~XPluginContext_Impl()
 {
 }
 
-::rtl::OUString XPluginContext_Impl::getValue( const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, ::com::sun::star::plugin::PluginVariable /*variable*/ )
+OUString XPluginContext_Impl::getValue( const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, ::com::sun::star::plugin::PluginVariable /*variable*/ )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 
-void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException )
+void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target) throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     Reference< XDesktop2 > xDesktop = Desktop::create(m_xContext);
 
@@ -135,11 +135,11 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
-        aURL.SetSmartURL( ::rtl::OUStringToOString( url, m_aEncoding ) );
+        aURL.SetSmartURL( OUStringToOString( url, m_aEncoding ) );
 
-        rtl::OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
+        OUString aUrl = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
         // the mimetype cannot be specified
-        plugin->provideNewStream( ::rtl::OUString(),
+        plugin->provideNewStream( OUString(),
                                   Reference< XActiveDataSource >(),
                                   aUrl,
                                   0, 0, aUrl.startsWith("file:") );
@@ -153,7 +153,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name     = ::rtl::OUString("Referer");
+            aValue.Name     = OUString("Referer");
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
@@ -177,7 +177,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
     }
 }
 
-void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener )
+void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Reference< ::com::sun::star::lang::XEventListener > & listener )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     getURL( plugin, url, target );
@@ -185,18 +185,18 @@ void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin
         listener->disposing( ::com::sun::star::lang::EventObject() );
 }
 
-::rtl::OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/)
+OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
-    return ::rtl::OUString("Mozilla 3.0");
+    return OUString("Mozilla 3.0");
 }
 
-void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, const ::rtl::OUString& /*message*/)
+void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, const OUString& /*message*/)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
 }
 
-void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file)
+void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     Sequence< sal_Int8 > aBuf;
@@ -228,11 +228,11 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
         try
         {
             ::com::sun::star::beans::PropertyValue aValues[2];
-            aValues[0].Name = ::rtl::OUString("Referer");
+            aValues[0].Name = OUString("Referer");
             aValues[0].Value <<= pPlugin->getRefererURL();
 
-            aValues[1].Name = ::rtl::OUString("PostString");
-            aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
+            aValues[1].Name = OUString("PostString");
+            aValues[1].Value <<= OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
             Reference< ::com::sun::star::lang::XComponent >  xComp =
                 xDesktop->loadComponentFromURL(
@@ -254,7 +254,7 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
     }
 }
 
-void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& url, const ::rtl::OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener )
+void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& url, const OUString& target, const Sequence< sal_Int8 >& buf, sal_Bool file, const Reference< ::com::sun::star::lang::XEventListener > & listener )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     postURL( plugin, url, target, buf, file );
@@ -262,7 +262,7 @@ void XPluginContext_Impl::postURLNotify(const Reference< ::com::sun::star::plugi
         listener->disposing( ::com::sun::star::lang::EventObject() );
 }
 
-void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& mimetype, const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
+void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const OUString& mimetype, const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     FileSink*  pNewSink = new FileSink( m_xContext, plugin, mimetype, target, source );
@@ -272,8 +272,8 @@ void XPluginContext_Impl::newStream( const Reference< ::com::sun::star::plugin::
 
 
 FileSink::FileSink( const Reference< ::com::sun::star::uno::XComponentContext >  & rxContext, const Reference< ::com::sun::star::plugin::XPlugin > & plugin,
-                    const ::rtl::OUString& mimetype,
-                    const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
+                    const OUString& mimetype,
+                    const OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
         m_xContext( rxContext ),
         m_xPlugin( plugin ),
         m_aMIMEType( mimetype ),
@@ -308,7 +308,7 @@ void FileSink::closeOutput() throw()
         try
         {
             ::com::sun::star::beans::PropertyValue aValue;
-            aValue.Name = ::rtl::OUString("Referer");
+            aValue.Name = OUString("Referer");
             aValue.Value <<= pPlugin->getRefererURL();
 
             Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );

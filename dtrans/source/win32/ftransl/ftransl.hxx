@@ -53,7 +53,7 @@ struct FormatEntry
     );
 
     com::sun::star::datatransfer::DataFlavor aDataFlavor;
-    rtl::OUString                            aNativeFormatName;
+    OUString                            aNativeFormatName;
     sal_Int32                                aStandardFormatId;
 };
 
@@ -83,29 +83,29 @@ public:
     // XServiceInfo
     //------------------------------------------------
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw(::com::sun::star::uno::RuntimeException);
 
 private:
     void SAL_CALL initTranslationTable( );
 
     void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findDataFlavorForNativeFormatName( const rtl::OUString& aNativeFormatName, com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findStandardFormatIdForCharset( const rtl::OUString& aCharset, com::sun::star::uno::Any& aAny ) const;
-    void SAL_CALL setStandardFormatIdForNativeFormatName( const rtl::OUString& aNativeFormatName, com::sun::star::uno::Any& aAny ) const;
+    void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
+    void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, com::sun::star::uno::Any& aAny ) const;
+    void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, com::sun::star::uno::Any& aAny ) const;
     void SAL_CALL findStdFormatIdOrNativeFormatNameForFullMediaType(
         const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory >& aRefXMimeFactory,
-        const rtl::OUString& aFullMediaType, com::sun::star::uno::Any& aAny ) const;
+        const OUString& aFullMediaType, com::sun::star::uno::Any& aAny ) const;
 
-    sal_Bool isTextPlainMediaType( const rtl::OUString& fullMediaType ) const;
+    sal_Bool isTextPlainMediaType( const OUString& fullMediaType ) const;
 
-    com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const rtl::OUString& cnttype, const rtl::OUString& hpname, ::com::sun::star::uno::Type dtype );
+    com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const OUString& cnttype, const OUString& hpname, ::com::sun::star::uno::Type dtype );
 
 private:
     std::vector< FormatEntry >  m_TranslTable;

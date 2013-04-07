@@ -99,7 +99,7 @@ sal_uInt16 OObjectBase::getObjectType(const uno::Reference< report::XReportCompo
             return OBJ_DLG_IMAGECONTROL;
         if ( xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
             return OBJ_DLG_FORMATTEDFIELD;
-        if ( xServiceInfo->supportsService( ::rtl::OUString("com.sun.star.drawing.OLE2Shape") ) )
+        if ( xServiceInfo->supportsService( OUString("com.sun.star.drawing.OLE2Shape") ) )
             return OBJ_OLE2;
         if ( xServiceInfo->supportsService( SERVICE_SHAPE ))
             return OBJ_CUSTOMSHAPE;
@@ -119,7 +119,7 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
         case OBJ_DLG_FIXEDTEXT:
             {
                 OUnoObject* pUnoObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString("com.sun.star.form.component.FixedText")
+                                    ,OUString("com.sun.star.form.component.FixedText")
                                     ,OBJ_DLG_FIXEDTEXT);
                 pNewObj = pUnoObj;
 
@@ -130,18 +130,18 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
             break;
         case OBJ_DLG_IMAGECONTROL:
             pNewObj = new OUnoObject(_xComponent
-                                    ,::rtl::OUString("com.sun.star.form.component.DatabaseImageControl")
+                                    ,OUString("com.sun.star.form.component.DatabaseImageControl")
                                     ,OBJ_DLG_IMAGECONTROL);
             break;
         case OBJ_DLG_FORMATTEDFIELD:
             pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString("com.sun.star.form.component.FormattedField")
+                                    ,OUString("com.sun.star.form.component.FormattedField")
                                     ,OBJ_DLG_FORMATTEDFIELD);
             break;
         case OBJ_DLG_HFIXEDLINE:
         case OBJ_DLG_VFIXEDLINE:
             pNewObj = new OUnoObject( _xComponent
-                                    ,::rtl::OUString("com.sun.star.awt.UnoControlFixedLineModel")
+                                    ,OUString("com.sun.star.awt.UnoControlFixedLineModel")
                                     ,nType);
             break;
         case OBJ_CUSTOMSHAPE:
@@ -176,7 +176,7 @@ namespace
     class ParaAdjust : public AnyConverter
     {
     public:
-        virtual ::com::sun::star::uno::Any operator() (const ::rtl::OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const
+        virtual ::com::sun::star::uno::Any operator() (const OUString& _sPropertyName,const ::com::sun::star::uno::Any& lhs) const
         {
             uno::Any aRet;
             if (_sPropertyName.equalsAsciiL(PROPERTY_PARAADJUST.ascii, PROPERTY_PARAADJUST.length))
@@ -293,7 +293,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 if ( s_aNameMap.empty() )
                 {
                     ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
-                    s_aNameMap.insert(TPropertyNamePair::value_type(::rtl::OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter)));
+                    s_aNameMap.insert(TPropertyNamePair::value_type(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
                 }
                 return s_aNameMap;
@@ -315,7 +315,7 @@ OObjectBase::OObjectBase(const uno::Reference< report::XReportComponent>& _xComp
     m_xReportComponent = _xComponent;
 }
 //----------------------------------------------------------------------------
-OObjectBase::OObjectBase(const ::rtl::OUString& _sComponentName)
+OObjectBase::OObjectBase(const OUString& _sComponentName)
 :m_sComponentName(_sComponentName)
 ,m_bIsListening(sal_False)
 {
@@ -363,7 +363,7 @@ void OObjectBase::StartListening()
         {
             m_xPropertyChangeListener = new OObjectListener( this );
             // register listener to all properties
-            m_xReportComponent->addPropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
+            m_xReportComponent->addPropertyChangeListener( OUString() , m_xPropertyChangeListener );
         }
     }
 }
@@ -382,7 +382,7 @@ void OObjectBase::EndListening(sal_Bool /*bRemoveListener*/)
             // remove listener
             try
             {
-                m_xReportComponent->removePropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
+                m_xReportComponent->removePropertyChangeListener( OUString() , m_xPropertyChangeListener );
             }
             catch(const uno::Exception &)
             {
@@ -422,7 +422,7 @@ void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
 }
 
 //----------------------------------------------------------------------------
-sal_Bool OObjectBase::supportsService( const ::rtl::OUString& _sServiceName ) const
+sal_Bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
     DBG_CHKTHIS( rpt_OObjectBase,NULL);
     sal_Bool bSupports = sal_False;
@@ -486,7 +486,7 @@ OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xCo
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
-OCustomShape::OCustomShape(const ::rtl::OUString& _sComponentName)
+OCustomShape::OCustomShape(const OUString& _sComponentName)
           :SdrObjCustomShape()
           ,OObjectBase(_sComponentName)
 {
@@ -614,8 +614,8 @@ uno::Reference< uno::XInterface > OCustomShape::getUnoShape()
 TYPEINIT1(OUnoObject, SdrUnoObj);
 DBG_NAME( rpt_OUnoObject );
 //----------------------------------------------------------------------------
-OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
-                       ,const ::rtl::OUString& rModelName
+OUnoObject::OUnoObject(const OUString& _sComponentName
+                       ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
           :SdrUnoObj(rModelName, sal_True)
           ,OObjectBase(_sComponentName)
@@ -627,7 +627,7 @@ OUnoObject::OUnoObject(const ::rtl::OUString& _sComponentName
 }
 //----------------------------------------------------------------------------
 OUnoObject::OUnoObject(const uno::Reference< report::XReportComponent>& _xComponent
-                       ,const ::rtl::OUString& rModelName
+                       ,const OUString& rModelName
                        ,sal_uInt16   _nObjectType)
           :SdrUnoObj(rModelName, sal_True)
           ,OObjectBase(_xComponent)
@@ -654,7 +654,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         if ( xFormatted.is() )
         {
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
-            const ::rtl::OUString sTreatAsNumberProperty = ::rtl::OUString( "TreatAsNumber" );
+            const OUString sTreatAsNumberProperty = OUString( "TreatAsNumber" );
             xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
             xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
@@ -823,10 +823,10 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     return bResult;
 }
 //----------------------------------------------------------------------------
-::rtl::OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
+OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
     sal_uInt16 nResId = 0;
-    ::rtl::OUString aDefaultName = ::rtl::OUString("HERE WE HAVE TO INSERT OUR NAME!");
+    OUString aDefaultName = OUString("HERE WE HAVE TO INSERT OUR NAME!");
     if ( _pObj->supportsService( SERVICE_FIXEDTEXT ) )
     {
         nResId = RID_STR_CLASS_FIXEDTEXT;
@@ -845,7 +845,7 @@ bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
 
     if (nResId)
-        aDefaultName = ::rtl::OUString( String(ModuleRes(nResId)) );
+        aDefaultName = OUString( String(ModuleRes(nResId)) );
 
     return aDefaultName;
 }
@@ -879,11 +879,11 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw
             if ( xControlModel.is() && xControlModel->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
             {
                 // get old name
-                ::rtl::OUString aOldName;
+                OUString aOldName;
                 evt.OldValue >>= aOldName;
 
                 // get new name
-                ::rtl::OUString aNewName;
+                OUString aNewName;
                 evt.NewValue >>= aNewName;
 
                 if ( !aNewName.equals(aOldName) )
@@ -967,7 +967,7 @@ OOle2Obj::OOle2Obj(const uno::Reference< report::XReportComponent>& _xComponent,
     m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
-OOle2Obj::OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType)
+OOle2Obj::OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType)
           :SdrOle2Obj()
           ,OObjectBase(_sComponentName)
           ,m_nType(_nType)
@@ -1191,7 +1191,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
         if( xReceiver.is() )
         {
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
-            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString("com.sun.star.chart2.data.DataProvider")),uno::UNO_QUERY);
+            uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(OUString("com.sun.star.chart2.data.DataProvider")),uno::UNO_QUERY);
             xReceiver->attachDataProvider( xDataProvider.get() );
         }
     }
@@ -1214,7 +1214,7 @@ void OOle2Obj::initializeOle()
         {
             uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
             if ( xChartProps.is() )
-                xChartProps->setPropertyValue(::rtl::OUString("NullDate"),uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
+                xChartProps->setPropertyValue(OUString("NullDate"),uno::makeAny(util::DateTime(0,0,0,0,1,1,1900)));
         }
     }
 }
@@ -1241,7 +1241,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
         pRptModel->GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
         ::comphelper::NamedValueCollection aArgs;
-        aArgs.put( "CellRangeRepresentation", uno::makeAny( ::rtl::OUString( "all" ) ) );
+        aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
         aArgs.put( "HasCategories", uno::makeAny( sal_True ) );
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
         aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
@@ -1255,12 +1255,12 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
 uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XReportDefinition>& _xReport)
 {
     uno::Reference<container::XNameAccess> xStyles = _xReport->getStyleFamilies();
-    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(::rtl::OUString("PageStyles")),uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(OUString("PageStyles")),uno::UNO_QUERY);
 
     uno::Reference< style::XStyle> xReturn;
-    uno::Sequence< ::rtl::OUString> aSeq = xPageStyles->getElementNames();
-    const ::rtl::OUString* pIter = aSeq.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
+    const OUString* pIter = aSeq.getConstArray();
+    const OUString* pEnd   = pIter + aSeq.getLength();
     for(;pIter != pEnd && !xReturn.is() ;++pIter)
     {
         uno::Reference< style::XStyle> xStyle(xPageStyles->getByName(*pIter),uno::UNO_QUERY);

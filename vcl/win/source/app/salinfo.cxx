@@ -63,8 +63,8 @@ sal_Bool WinSalSystem::handleMonitorCallback( sal_IntPtr hMonitor, sal_IntPtr, s
     if( GetMonitorInfoW( reinterpret_cast<HMONITOR>(hMonitor), &aInfo ) )
     {
         aInfo.szDevice[CCHDEVICENAME-1] = 0;
-        rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aInfo.szDevice) );
-        std::map< rtl::OUString, unsigned int >::const_iterator it =
+        OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aInfo.szDevice) );
+        std::map< OUString, unsigned int >::const_iterator it =
             m_aDeviceNameToMonitor.find( aDeviceName );
         if( it != m_aDeviceNameToMonitor.end() )
         {
@@ -100,12 +100,12 @@ bool WinSalSystem::initMonitors()
     {
         int w = GetSystemMetrics( SM_CXSCREEN );
         int h = GetSystemMetrics( SM_CYSCREEN );
-        m_aMonitors.push_back( DisplayMonitor( rtl::OUString(),
-                                               rtl::OUString(),
+        m_aMonitors.push_back( DisplayMonitor( OUString(),
+                                               OUString(),
                                                Rectangle( Point(), Size( w, h ) ),
                                                Rectangle( Point(), Size( w, h ) ),
                                                0 ) );
-        m_aDeviceNameToMonitor[ rtl::OUString() ] = 0;
+        m_aDeviceNameToMonitor[ OUString() ] = 0;
         m_nPrimary = 0;
         RECT aWorkRect;
         if( SystemParametersInfo( SPI_GETWORKAREA, 0, &aWorkRect, 0 ) )
@@ -117,7 +117,7 @@ bool WinSalSystem::initMonitors()
         DISPLAY_DEVICEW aDev;
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
-        boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
+        boost::unordered_map< OUString, int, OUStringHash > aDeviceStringCount;
         while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
@@ -125,8 +125,8 @@ bool WinSalSystem::initMonitors()
             {
                 aDev.DeviceName[31] = 0;
                 aDev.DeviceString[127] = 0;
-                rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aDev.DeviceName) );
-                rtl::OUString aDeviceString( reinterpret_cast<const sal_Unicode *>(aDev.DeviceString) );
+                OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aDev.DeviceName) );
+                OUString aDeviceString( reinterpret_cast<const sal_Unicode *>(aDev.DeviceString) );
                 if( aDeviceStringCount.find( aDeviceString ) == aDeviceStringCount.end() )
                     aDeviceStringCount[ aDeviceString ] = 1;
                 else
@@ -143,15 +143,15 @@ bool WinSalSystem::initMonitors()
         EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
 
         // append monitor numbers to name strings
-        boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDevCount( aDeviceStringCount );
+        boost::unordered_map< OUString, int, OUStringHash > aDevCount( aDeviceStringCount );
         unsigned int nMonitorCount = m_aMonitors.size();
         for( unsigned int i = 0; i < nMonitorCount; i++ )
         {
-            const rtl::OUString& rDev( m_aMonitors[i].m_aName );
+            const OUString& rDev( m_aMonitors[i].m_aName );
             if( aDeviceStringCount[ rDev ] > 1 )
             {
                 int nInstance = aDeviceStringCount[ rDev ] - (-- aDevCount[ rDev ] );
-                rtl::OUStringBuffer aBuf( rDev.getLength() + 8 );
+                OUStringBuffer aBuf( rDev.getLength() + 8 );
                 aBuf.append( rDev );
                 aBuf.appendAscii( " (" );
                 aBuf.append( sal_Int32( nInstance ) );
@@ -188,10 +188,10 @@ Rectangle WinSalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScre
     return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aWorkArea : Rectangle();
 }
 
-rtl::OUString WinSalSystem::GetDisplayScreenName( unsigned int nScreen )
+OUString WinSalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
     initMonitors();
-    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aName : rtl::OUString();
+    return (nScreen < m_aMonitors.size()) ? m_aMonitors[nScreen].m_aName : OUString();
 }
 
 // -----------------------------------------------------------------------
@@ -211,7 +211,7 @@ static int DEFAULT_BTN_MAPPING_TABLE[][8] =
     { MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1, MB_DEFBUTTON1 }  //RETRY_CANCEL
 };
 
-int WinSalSystem::ShowNativeMessageBox(const rtl::OUString& rTitle, const rtl::OUString& rMessage, int nButtonCombination, int nDefaultButton, SAL_UNUSED_PARAMETER bool)
+int WinSalSystem::ShowNativeMessageBox(const OUString& rTitle, const OUString& rMessage, int nButtonCombination, int nDefaultButton, SAL_UNUSED_PARAMETER bool)
 {
     DBG_ASSERT( nButtonCombination >= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK &&
                 nButtonCombination <= SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL &&

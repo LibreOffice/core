@@ -165,7 +165,7 @@ namespace utl
     private:
         /// implements the ctors
         void implConstruct(
-            const ::rtl::OUString& _rConfigLocation,
+            const OUString& _rConfigLocation,
             const sal_uInt16 _nAccessFlags,
             const sal_Int32 _nLevels
         );

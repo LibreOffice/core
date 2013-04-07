@@ -38,35 +38,35 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 
-#define RECOVERY_CMDPART_PROTOCOL                   rtl::OUString( "vnd.sun.star.autorecovery:")
+#define RECOVERY_CMDPART_PROTOCOL                   OUString( "vnd.sun.star.autorecovery:")
 
-#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          rtl::OUString( "/doEmergencySave"         )
-#define RECOVERY_CMDPART_DO_RECOVERY                rtl::OUString( "/doAutoRecovery"          )
-#define RECOVERY_CMDPART_DO_CRASHREPORT             rtl::OUString( "/doCrashReport"           )
+#define RECOVERY_CMDPART_DO_EMERGENCY_SAVE          OUString( "/doEmergencySave"         )
+#define RECOVERY_CMDPART_DO_RECOVERY                OUString( "/doAutoRecovery"          )
+#define RECOVERY_CMDPART_DO_CRASHREPORT             OUString( "/doCrashReport"           )
 
-#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      rtl::OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
-#define RECOVERY_CMD_DO_EMERGENCY_SAVE              rtl::OUString( "vnd.sun.star.autorecovery:/doEmergencySave"       )
-#define RECOVERY_CMD_DO_RECOVERY                    rtl::OUString( "vnd.sun.star.autorecovery:/doAutoRecovery"        )
-#define RECOVERY_CMD_DO_ENTRY_BACKUP                rtl::OUString( "vnd.sun.star.autorecovery:/doEntryBackup"         )
-#define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString( "vnd.sun.star.autorecovery:/doEntryCleanUp"        )
+#define RECOVERY_CMD_DO_PREPARE_EMERGENCY_SAVE      OUString( "vnd.sun.star.autorecovery:/doPrepareEmergencySave")
+#define RECOVERY_CMD_DO_EMERGENCY_SAVE              OUString( "vnd.sun.star.autorecovery:/doEmergencySave"       )
+#define RECOVERY_CMD_DO_RECOVERY                    OUString( "vnd.sun.star.autorecovery:/doAutoRecovery"        )
+#define RECOVERY_CMD_DO_ENTRY_BACKUP                OUString( "vnd.sun.star.autorecovery:/doEntryBackup"         )
+#define RECOVERY_CMD_DO_ENTRY_CLEANUP               OUString( "vnd.sun.star.autorecovery:/doEntryCleanUp"        )
 
-#define PROP_STATUSINDICATOR                        rtl::OUString( "StatusIndicator"  )
-#define PROP_DISPATCHASYNCHRON                      rtl::OUString( "DispatchAsynchron")
-#define PROP_SAVEPATH                               rtl::OUString( "SavePath"         )
-#define PROP_ENTRYID                                rtl::OUString( "EntryID"          )
+#define PROP_STATUSINDICATOR                        OUString( "StatusIndicator"  )
+#define PROP_DISPATCHASYNCHRON                      OUString( "DispatchAsynchron")
+#define PROP_SAVEPATH                               OUString( "SavePath"         )
+#define PROP_ENTRYID                                OUString( "EntryID"          )
 
-#define STATEPROP_ID                                rtl::OUString( "ID"           )
-#define STATEPROP_STATE                             rtl::OUString( "DocumentState")
-#define STATEPROP_ORGURL                            rtl::OUString( "OriginalURL"  )
-#define STATEPROP_TEMPURL                           rtl::OUString( "TempURL"      )
-#define STATEPROP_FACTORYURL                        rtl::OUString( "FactoryURL"   )
-#define STATEPROP_TEMPLATEURL                       rtl::OUString( "TemplateURL"  )
-#define STATEPROP_TITLE                             rtl::OUString( "Title"        )
-#define STATEPROP_MODULE                            rtl::OUString( "Module"       )
+#define STATEPROP_ID                                OUString( "ID"           )
+#define STATEPROP_STATE                             OUString( "DocumentState")
+#define STATEPROP_ORGURL                            OUString( "OriginalURL"  )
+#define STATEPROP_TEMPURL                           OUString( "TempURL"      )
+#define STATEPROP_FACTORYURL                        OUString( "FactoryURL"   )
+#define STATEPROP_TEMPLATEURL                       OUString( "TemplateURL"  )
+#define STATEPROP_TITLE                             OUString( "Title"        )
+#define STATEPROP_MODULE                            OUString( "Module"       )
 
-#define RECOVERY_OPERATIONSTATE_START               rtl::OUString( "start" )
-#define RECOVERY_OPERATIONSTATE_STOP                rtl::OUString( "stop"  )
-#define RECOVERY_OPERATIONSTATE_UPDATE              rtl::OUString( "update")
+#define RECOVERY_OPERATIONSTATE_START               OUString( "start" )
+#define RECOVERY_OPERATIONSTATE_STOP                OUString( "stop"  )
+#define RECOVERY_OPERATIONSTATE_UPDATE              OUString( "update")
 
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                        1
@@ -125,22 +125,22 @@ struct TURLInfo
     sal_Int32 ID;
 
     /// the full qualified document URL
-    ::rtl::OUString OrgURL;
+    OUString OrgURL;
 
     /// the full qualified URL of the temp. file (if it's exists)
-    ::rtl::OUString TempURL;
+    OUString TempURL;
 
     /// a may be existing factory URL (e.g. for untitled documents)
-    ::rtl::OUString FactoryURL;
+    OUString FactoryURL;
 
     /// may be the document base on a template file !?
-    ::rtl::OUString TemplateURL;
+    OUString TemplateURL;
 
     /// the pure file name, without path, disc etcpp.
-    ::rtl::OUString DisplayName;
+    OUString DisplayName;
 
     /// the application module, where this document was loaded
-    ::rtl::OUString Module;
+    OUString Module;
 
     /// state info as e.g. VALID, CORRUPTED, NON EXISTING ...
     sal_Int32 DocState;
@@ -243,8 +243,8 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
         //---------------------------------------
         /** @short  TODO */
         static bool isBrokenTempEntry(const TURLInfo& rInfo);
-        virtual void saveBrokenTempEntries(const ::rtl::OUString& sSaveDir);
-        virtual void saveAllTempEntries(const ::rtl::OUString& sSaveDir);
+        virtual void saveBrokenTempEntries(const OUString& sSaveDir);
+        virtual void saveAllTempEntries(const OUString& sSaveDir);
         virtual void forgetBrokenTempEntries();
         virtual void forgetAllRecoveryEntries();
         void forgetBrokenRecoveryEntries();
@@ -295,7 +295,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        css::util::URL impl_getParsedURL(const ::rtl::OUString& sURL);
+        css::util::URL impl_getParsedURL(const OUString& sURL);
 };
 
 //===============================================
@@ -346,14 +346,14 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
 
         //---------------------------------------
         // XStatusIndicator
-        virtual void SAL_CALL start(const ::rtl::OUString& sText ,
+        virtual void SAL_CALL start(const OUString& sText ,
                                           sal_Int32        nRange)
             throw(css::uno::RuntimeException);
 
         virtual void SAL_CALL end()
             throw(css::uno::RuntimeException);
 
-        virtual void SAL_CALL setText(const ::rtl::OUString& sText)
+        virtual void SAL_CALL setText(const OUString& sText)
             throw(css::uno::RuntimeException);
 
         virtual void SAL_CALL setValue(sal_Int32 nValue)
@@ -696,7 +696,7 @@ class BrokenRecoveryDialog : public ModalDialog
         OKButton        m_aOkBtn;
         CancelButton    m_aCancelBtn;
 
-        ::rtl::OUString m_sSavePath;
+        OUString m_sSavePath;
         RecoveryCore*   m_pCore;
         bool        m_bBeforeRecovery;
         sal_Bool        m_bExecutionNeeded;
@@ -721,7 +721,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
         //---------------------------------------
         /** @short TODO */
-        virtual ::rtl::OUString getSaveDirURL();
+        virtual OUString getSaveDirURL();
 
     //-------------------------------------------
     // helper

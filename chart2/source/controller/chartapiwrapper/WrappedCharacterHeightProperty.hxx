@@ -34,7 +34,7 @@ class ReferenceSizePropertyProvider;
 class WrappedCharacterHeightProperty_Base : public WrappedProperty
 {
 public:
-    WrappedCharacterHeightProperty_Base( const ::rtl::OUString& rOuterEqualsInnerName, ReferenceSizePropertyProvider* pRefSizePropProvider );
+    WrappedCharacterHeightProperty_Base( const OUString& rOuterEqualsInnerName, ReferenceSizePropertyProvider* pRefSizePropProvider );
     virtual ~WrappedCharacterHeightProperty_Base();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

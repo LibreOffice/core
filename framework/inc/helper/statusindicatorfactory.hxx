@@ -79,7 +79,7 @@ struct IndicatorInfo
         css::uno::Reference< css::task::XStatusIndicator > m_xIndicator;
 
         /** @short  the last set text for this indicator */
-        ::rtl::OUString m_sText;
+        OUString m_sText;
 
         /** @short  the max range for this indicator. */
         sal_Int32 m_nRange;
@@ -104,7 +104,7 @@ struct IndicatorInfo
                     the max range for this indicator.
          */
         IndicatorInfo(const css::uno::Reference< css::task::XStatusIndicator >& xIndicator,
-                      const ::rtl::OUString&                                    sText     ,
+                      const OUString&                                    sText     ,
                             sal_Int32                                           nRange    )
         {
             m_xIndicator = xIndicator;
@@ -240,7 +240,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         //---------------------------------------
         // similar (XStatusIndicator)
         virtual void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
-                           const ::rtl::OUString&                                    sText ,
+                           const OUString&                                    sText ,
                                  sal_Int32                                           nRange);
 
         virtual void SAL_CALL reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
@@ -248,7 +248,7 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
         virtual void SAL_CALL end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
 
         virtual void SAL_CALL setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
-                                      const ::rtl::OUString&                                    sText );
+                                      const OUString&                                    sText );
 
         virtual void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);

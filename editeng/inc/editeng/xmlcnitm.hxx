@@ -60,23 +60,23 @@ public:
     virtual SfxPoolItem *Clone( SfxItemPool * = 0) const
     { return new SvXMLAttrContainerItem( *this ); }
 
-    sal_Bool AddAttr( const ::rtl::OUString& rLName,
-                          const ::rtl::OUString& rValue );
-    sal_Bool AddAttr( const ::rtl::OUString& rPrefix,
-                          const ::rtl::OUString& rNamespace,
-                          const ::rtl::OUString& rLName,
-                          const ::rtl::OUString& rValue );
+    sal_Bool AddAttr( const OUString& rLName,
+                          const OUString& rValue );
+    sal_Bool AddAttr( const OUString& rPrefix,
+                          const OUString& rNamespace,
+                          const OUString& rLName,
+                          const OUString& rValue );
 
     sal_uInt16 GetAttrCount() const;
-    ::rtl::OUString GetAttrNamespace( sal_uInt16 i ) const;
-    ::rtl::OUString GetAttrPrefix( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetAttrLName( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetAttrValue( sal_uInt16 i ) const;
+    OUString GetAttrNamespace( sal_uInt16 i ) const;
+    OUString GetAttrPrefix( sal_uInt16 i ) const;
+    const OUString& GetAttrLName( sal_uInt16 i ) const;
+    const OUString& GetAttrValue( sal_uInt16 i ) const;
 
     sal_uInt16 GetFirstNamespaceIndex() const;
     sal_uInt16 GetNextNamespaceIndex( sal_uInt16 nIdx ) const;
-    const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
+    const OUString& GetNamespace( sal_uInt16 i ) const;
+    const OUString& GetPrefix( sal_uInt16 i ) const;
 };
 
 #endif //  _SVX_XMLCNITM_HXX

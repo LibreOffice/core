@@ -98,7 +98,7 @@ static sal_Bool ImplAccelDisabled()
 
     if( nAccelDisabled == -1 )
     {
-        rtl::OUString aStr =
+        OUString aStr =
             vcl::SettingsConfigItem::get()->
             getValue( "Menu", "SuppressAccelerators" );
         nAccelDisabled = aStr.equalsIgnoreAsciiCase("true") ? 1 : 0;
@@ -838,14 +838,14 @@ static sal_Bool ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, sal_uInt1
             // is an id available, then call help with the id, otherwise
             // use help-index
             String aCommand = pMenu->GetItemCommand( nId );
-            rtl::OString aHelpId(  pMenu->GetHelpId( nId ) );
+            OString aHelpId(  pMenu->GetHelpId( nId ) );
             if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
             if ( aCommand.Len() )
                 pHelp->Start( aCommand, NULL );
             else
-                pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+                pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
         }
         bDone = sal_True;
     }
@@ -1298,7 +1298,7 @@ void Menu::InsertItem( const ResId& rResId, sal_uInt16 nPos )
 
     if ( nObjMask & RSC_MENUITEM_HELPID )
     {
-        rtl::OString aHelpId( ReadByteStringRes() );
+        OString aHelpId( ReadByteStringRes() );
         if ( !bSep )
             SetHelpId( nItemId, aHelpId );
     }
@@ -2035,7 +2035,7 @@ const XubString& Menu::ImplGetHelpText( sal_uInt16 nItemId ) const
                     pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
                 if( !pData->aHelpText.Len() && !pData->aHelpId.isEmpty() )
-                    pData->aHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
+                    pData->aHelpText = pHelp->GetHelpText( OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
             }
         }
 
@@ -2068,7 +2068,7 @@ const XubString& Menu::GetTipHelpText( sal_uInt16 nItemId ) const
         return ImplGetSVEmptyStr();
 }
 
-void Menu::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
+void Menu::SetHelpId( sal_uInt16 nItemId, const OString& rHelpId )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -2076,9 +2076,9 @@ void Menu::SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId )
         pData->aHelpId = rHelpId;
 }
 
-rtl::OString Menu::GetHelpId( sal_uInt16 nItemId ) const
+OString Menu::GetHelpId( sal_uInt16 nItemId ) const
 {
-    rtl::OString aRet;
+    OString aRet;
 
     MenuItemData* pData = pItemList->GetData( nItemId );
 
@@ -2087,7 +2087,7 @@ rtl::OString Menu::GetHelpId( sal_uInt16 nItemId ) const
         if ( !pData->aHelpId.isEmpty() )
             aRet = pData->aHelpId;
         else
-            aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
+            aRet = OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
     }
 
     return aRet;
@@ -2582,7 +2582,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
 
         bNativeOk = i_pWindow->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
                                                   aCtrlRegion, nState, aControlValue,
-                                                  rtl::OUString() );
+                                                  OUString() );
     }
 
     if( ! bNativeOk )
@@ -2603,7 +2603,7 @@ static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_
     {
         if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
         {
-            rtl::OUStringBuffer aBuf( i_rLong.Len() );
+            OUStringBuffer aBuf( i_rLong.Len() );
             aBuf.append( aNonMnem.GetBuffer(), nPos );
             aBuf.append( sal_Unicode('~') );
             aBuf.append( aNonMnem.GetBuffer()+nPos );
@@ -3674,7 +3674,7 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
         ResMgr* pResMgr = ImplGetResMgr();
         if( pResMgr )
         {
-            rtl::OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
+            OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
             MenuItemData* pData = pItemList->Insert(
                 0xFFFF, MENUITEM_STRING, 0, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
                 pData->bIsTemporary = sal_True;
@@ -5579,7 +5579,7 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
                             Point aPt;
                             Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
 
-                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+                            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, OUString() );
                         }
 
                         ImplAddNWFSeparator( this, aMenubarValue );
@@ -5813,7 +5813,7 @@ void MenuBarWindow::Paint( const Rectangle& )
             Point aPt;
             Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
+            DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, OUString() );
         }
 
         ImplAddNWFSeparator( this, aMenubarValue );

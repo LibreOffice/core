@@ -36,7 +36,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::comphelper;
-using ::rtl::OUString;
 
 #ifdef SW_PROP_NAME_STR
 #undef SW_PROP_NAME_STR
@@ -57,7 +56,7 @@ void SwVisitingCardPage::InitFrameControl()
 
     uno::Sequence<OUString> aNames = m_xAutoText->getElementNames();
     const OUString* pGroups = aNames.getConstArray();
-    OUString uTitleName( rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
+    OUString uTitleName( OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_TITLE)) );
 
     for(sal_uInt16 i = 0; i < aNames.getLength(); i++)
     {
@@ -184,7 +183,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     static const struct _SwLabItemMap {
         const char* pName;
-        rtl::OUString SwLabItem:: *pValue;
+        OUString SwLabItem:: *pValue;
     }  aArr[] = {
         { "BC_PRIV_FIRSTNAME"  , &SwLabItem::aPrivFirstName },
         { "BC_PRIV_NAME"       , &SwLabItem::aPrivName },
@@ -223,8 +222,8 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > & xModel, 
 
     try
     {
-        rtl::OUString sFldName("com.sun.star.text.FieldMaster.User.");
-        OUString uCntName( rtl::OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
+        OUString sFldName("com.sun.star.text.FieldMaster.User.");
+        OUString uCntName( OUString::createFromAscii( SW_PROP_NAME_STR(UNO_NAME_CONTENT )));
         for( const _SwLabItemMap* p = aArr; p->pName; ++p )
         {
             String sCurFldName( sFldName );

@@ -56,7 +56,7 @@ namespace dbaui
                     m_xDocumentUI;
         Window*     m_pDialogParent;
         String      m_sCurrentlyEditing;
-        ::rtl::OUString
+        OUString
                     m_sDataSourceName;
 
     public:
@@ -66,7 +66,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-            const ::rtl::OUString& _sDataSourceName
+            const OUString& _sDataSourceName
         );
         ~OLinkedDocumentsAccess();
 
@@ -74,7 +74,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>
                 open(
-                    const ::rtl::OUString& _rLinkName,
+                    const OUString& _rLinkName,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
                     ElementOpenMode _eOpenMode,
                     const ::comphelper::NamedValueCollection& _rAdditionalArgs
@@ -89,11 +89,11 @@ namespace dbaui
 
         void    newFormWithPilot(
                     const sal_Int32 _nCommandType = -1,
-                    const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                    const OUString& _rObjectName = OUString()
                 );
         void    newReportWithPilot(
                     const sal_Int32 _nCommandType = -1,
-                    const ::rtl::OUString& _rObjectName = ::rtl::OUString()
+                    const OUString& _rObjectName = OUString()
                 );
         void    newQueryWithPilot();
         void    newTableWithPilot();
@@ -107,7 +107,7 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             impl_open(
-                const ::rtl::OUString& _rLinkName,
+                const OUString& _rLinkName,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition,
                 ElementOpenMode _eOpenMode,
                 const ::comphelper::NamedValueCollection& _rAdditionalArgs
@@ -117,7 +117,7 @@ namespace dbaui
             impl_newWithPilot(
                 const char* _pWizardService,
                 const sal_Int32 _nCommandType,
-                const ::rtl::OUString& _rObjectName
+                const OUString& _rObjectName
             );
 
     };

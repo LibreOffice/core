@@ -50,18 +50,18 @@ namespace utl
     struct NodeValueAccessor
     {
     private:
-        ::rtl::OUString     sRelativePath;      // the relative path of the node
+        OUString     sRelativePath;      // the relative path of the node
         LocationType        eLocationType;      // the type of location where the value is stored
         void*               pLocation;          // the pointer to the location
         Type                aDataType;          // the type object pointed to by pLocation
 
     public:
-        NodeValueAccessor( const ::rtl::OUString& _rNodePath );
+        NodeValueAccessor( const OUString& _rNodePath );
 
         void bind( void* _pLocation, const Type& _rType );
 
         bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( NULL != pLocation ); }
-        const ::rtl::OUString&  getPath( ) const        { return sRelativePath; }
+        const OUString&  getPath( ) const        { return sRelativePath; }
         LocationType            getLocType( ) const     { return eLocationType; }
         void*                   getLocation( ) const    { return pLocation; }
         const Type&             getDataType( ) const    { return aDataType; }
@@ -70,7 +70,7 @@ namespace utl
         bool operator != ( const NodeValueAccessor& rhs ) const { return !operator == ( rhs ); }
     };
 
-    NodeValueAccessor::NodeValueAccessor( const ::rtl::OUString& _rNodePath )
+    NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )
         :sRelativePath( _rNodePath )
         ,eLocationType( ltUnbound )
         ,pLocation( NULL )
@@ -117,9 +117,9 @@ namespace utl
                         (uno_QueryInterfaceFunc)cpp_queryInterface, (uno_AcquireFunc)cpp_acquire, (uno_ReleaseFunc)cpp_release
                     );
                     #ifdef DBG_UTIL
-                    rtl::OStringBuffer aBuf( 256 );
+                    OStringBuffer aBuf( 256 );
                     aBuf.append("::utl::lcl_copyData( Accessor, Any ): could not assign the data (node path: ");
-                    aBuf.append( rtl::OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
+                    aBuf.append( OUStringToOString( _rAccessor.getPath(), RTL_TEXTENCODING_ASCII_US ) );
                     aBuf.append( " !" );
                     DBG_ASSERT( bSuccess, aBuf.getStr() );
                     #endif
@@ -234,7 +234,7 @@ namespace utl
             const sal_Char* _pConfigLocation, const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
         :m_pImpl( new OConfigurationValueContainerImpl( _rxORB, _rAccessSafety ) )
     {
-        implConstruct( ::rtl::OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
+        implConstruct( OUString::createFromAscii( _pConfigLocation ), _nAccessFlags, _nLevels );
     }
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
@@ -242,7 +242,7 @@ namespace utl
         delete m_pImpl;
     }
 
-    void OConfigurationValueContainer::implConstruct( const ::rtl::OUString& _rConfigLocation,
+    void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
         const sal_uInt16 _nAccessFlags, const sal_Int32 _nLevels )
     {
         DBG_ASSERT( !m_pImpl->aConfigRoot.isValid(), "OConfigurationValueContainer::implConstruct: already initialized!" );
@@ -257,9 +257,9 @@ namespace utl
             ( _nAccessFlags & CVC_IMMEDIATE_UPDATE ) ? sal_False : sal_True
         );
         #ifdef DBG_UTIL
-        rtl::OStringBuffer aBuf(256);
+        OStringBuffer aBuf(256);
         aBuf.append("Could not access the configuration node located at ");
-        aBuf.append( rtl::OUStringToOString( _rConfigLocation, RTL_TEXTENCODING_ASCII_US ) );
+        aBuf.append( OUStringToOString( _rConfigLocation, RTL_TEXTENCODING_ASCII_US ) );
         aBuf.append( " !" );
         DBG_ASSERT( m_pImpl->aConfigRoot.isValid(), aBuf.getStr() );
         #endif
@@ -281,7 +281,7 @@ namespace utl
                 "OConfigurationValueContainer::registerExchangeLocation: invalid type!" );
 
         // build an accessor for this container
-        NodeValueAccessor aNewAccessor( ::rtl::OUString::createFromAscii( _pRelativePath ) );
+        NodeValueAccessor aNewAccessor( OUString::createFromAscii( _pRelativePath ) );
         aNewAccessor.bind( _pContainer, _rValueType );
 
         // insert it into our structure

@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 //=========================================================================
 TYPEINIT1(OStringListItem, SfxPoolItem);
 //-------------------------------------------------------------------------
-OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< ::rtl::OUString >& _rList)
+OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& _rList)
     :SfxPoolItem(_nWhich)
     ,m_aList(_rList)
 {
@@ -53,8 +53,8 @@ int OStringListItem::operator==(const SfxPoolItem& _rItem) const
         return 0;
 
     // compare all strings individually
-    const ::rtl::OUString* pMyStrings = m_aList.getConstArray();
-    const ::rtl::OUString* pCompareStrings = pCompare->m_aList.getConstArray();
+    const OUString* pMyStrings = m_aList.getConstArray();
+    const OUString* pCompareStrings = pCompare->m_aList.getConstArray();
 
     for (sal_Int32 i=0; i<m_aList.getLength(); ++i, ++pMyStrings, ++pCompareStrings)
         if (!pMyStrings->equals(*pCompareStrings))

@@ -203,7 +203,7 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
     {
 //         Point aLogicHitPos = PixelToLogic( rHEvt.GetMousePosPixel()); // old chart: GetPointerPosPixel()
         Point aLogicHitPos = PixelToLogic( GetPointerPosPixel());
-        ::rtl::OUString aQuickHelpText;
+        OUString aQuickHelpText;
         awt::Rectangle aHelpRect;
         bool bIsBalloonHelp( Help::IsBalloonHelpEnabled() );
         bHelpHandled = m_pWindowController->requestQuickHelp( aLogicHitPos, bIsBalloonHelp, aQuickHelpText, aHelpRect );

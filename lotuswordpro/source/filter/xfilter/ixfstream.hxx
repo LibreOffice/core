@@ -87,19 +87,19 @@ public:
      * @descr   Wrap XDocumentHandler::startElement()
      * @param   oustr element tag name.
      */
-    virtual void    StartElement(const rtl::OUString& oustr) = 0;
+    virtual void    StartElement(const OUString& oustr) = 0;
 
     /**
      * @descr   Wrap XDocumentHandler::endElement()
      * @param   oustr element tag name.
      */
-    virtual void    EndElement(const rtl::OUString& oustr) = 0;
+    virtual void    EndElement(const OUString& oustr) = 0;
 
     /**
      * @descr   output text node.
      * @param   oustr text content.
      */
-    virtual void    Characters(const rtl::OUString& oustr) = 0;
+    virtual void    Characters(const OUString& oustr) = 0;
 
     /**
      * @descr   return the Attribute list interface.

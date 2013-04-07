@@ -43,10 +43,10 @@ using namespace ::com::sun::star;
 namespace
 {
 
-    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const rtl::OUString& rName, bool bCaseSensitive)
+    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(const IDocumentMarkAccess& rMarkAccess, const OUString& rName, bool bCaseSensitive)
     {
         //Iterating over all bookmarks, checking DdeBookmarks
-        const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
+        const OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
         for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
             ppMark != rMarkAccess.getMarksEnd();
             ++ppMark)
@@ -133,7 +133,7 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 
 
 
-bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
+bool SwDoc::GetData( const OUString& rItem, const String& rMimeType,
                      uno::Any & rValue ) const
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -178,7 +178,7 @@ bool SwDoc::GetData( const rtl::OUString& rItem, const String& rMimeType,
 
 
 
-bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
+bool SwDoc::SetData( const OUString& rItem, const String& rMimeType,
                      const uno::Any & rValue )
 {
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -224,7 +224,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
 
 
 
-::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const rtl::OUString& rItem)
+::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const OUString& rItem)
 {
     SwServerObject* pObj = NULL;
 

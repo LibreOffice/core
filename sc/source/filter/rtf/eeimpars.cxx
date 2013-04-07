@@ -202,7 +202,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
 
             // HTML
-            rtl::OUString aValStr, aNumStr;
+            OUString aValStr, aNumStr;
             double fVal;
             sal_uInt32 nNumForm = 0;
             LanguageType eNumLang = LANGUAGE_NONE;

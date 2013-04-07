@@ -101,7 +101,7 @@ using namespace ::comphelper;
 
 namespace
 {
-    void dropTable(const Reference<XNameAccess>& _rxTable,const ::rtl::OUString& _sTableName)
+    void dropTable(const Reference<XNameAccess>& _rxTable,const OUString& _sTableName)
     {
         if ( _rxTable->hasByName(_sTableName) )
         {
@@ -112,9 +112,9 @@ namespace
         }
     }
     //------------------------------------------------------------------------------
-    struct OTableRowCompare : public ::std::binary_function<  ::boost::shared_ptr<OTableRow> , ::rtl::OUString, bool>
+    struct OTableRowCompare : public ::std::binary_function<  ::boost::shared_ptr<OTableRow> , OUString, bool>
     {
-        bool operator() (const  ::boost::shared_ptr<OTableRow>  lhs, const ::rtl::OUString& rhs) const
+        bool operator() (const  ::boost::shared_ptr<OTableRow>  lhs, const OUString& rhs) const
         {
             OFieldDescription* pField = lhs->GetActFieldDescr();
             return pField && pField->GetName() == rhs;
@@ -124,25 +124,25 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OTableController::getImplementationName_Static() throw( RuntimeException )
+OUString OTableController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.OTableDesign");
+    return OUString("org.openoffice.comp.dbu.OTableDesign");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.TableDesign");
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.TableDesign");
     return aSupported;
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -315,7 +315,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     // TODO
 
     Reference<XNameAccess> xTables;
-    ::rtl::OUString sCatalog, sSchema;
+    OUString sCatalog, sSchema;
 
     sal_Bool bNew = m_sName.isEmpty();
     bNew = bNew || m_bNew || _bSaveAs;
@@ -456,7 +456,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
     {
         if(!bAlter || bNew)
         {
-            m_sName = ::rtl::OUString();
+            m_sName = OUString();
             stopTableListening();
             m_xTable = NULL;
         }
@@ -481,7 +481,7 @@ void OTableController::doEditIndexes()
     }
 
     Reference< XNameAccess > xIndexes;          // will be the keys of the table
-    Sequence< ::rtl::OUString > aFieldNames;    // will be the column names of the table
+    Sequence< OUString > aFieldNames;    // will be the column names of the table
     try
     {
         // get the keys
@@ -528,7 +528,7 @@ void OTableController::impl_initialize()
 
         const NamedValueCollection& rArguments( getInitParams() );
 
-        rArguments.get_ensureType( (::rtl::OUString)PROPERTY_CURRENTTABLE, m_sName );
+        rArguments.get_ensureType( (OUString)PROPERTY_CURRENTTABLE, m_sName );
 
         // read autoincrement value set in the datasource
         ::dbaui::fillAutoIncrementValue(getDataSource(),m_bAllowAutoIncrementValue,m_sAutoIncrementValue);
@@ -829,9 +829,9 @@ void OTableController::loadData()
         // Bei Add und Drop koennen alle Zeilen editiert werden.
         //  sal_Bool bReadOldRow = xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn();
         sal_Bool bIsAlterAllowed = isAlterAllowed();
-        Sequence< ::rtl::OUString> aColumns = xColumns->getElementNames();
-        const ::rtl::OUString* pIter    = aColumns.getConstArray();
-        const ::rtl::OUString* pEnd     = pIter + aColumns.getLength();
+        Sequence< OUString> aColumns = xColumns->getElementNames();
+        const OUString* pIter    = aColumns.getConstArray();
+        const OUString* pEnd     = pIter + aColumns.getLength();
 
         for(;pIter != pEnd;++pIter)
         {
@@ -845,7 +845,7 @@ void OTableController::loadData()
             sal_Int32 nAlign        = 0;
 
             sal_Bool bIsAutoIncrement = false, bIsCurrency = false;
-            ::rtl::OUString sName,sDescription,sTypeName,sHelpText;
+            OUString sName,sDescription,sTypeName,sHelpText;
             Any aControlDefault;
 
             // get the properties from the column
@@ -873,7 +873,7 @@ void OTableController::loadData()
             pTabEdRow->SetReadOnly(!bIsAlterAllowed);
             // search for type
             sal_Bool bForce;
-            ::rtl::OUString sCreate("x");
+            OUString sCreate("x");
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,sCreate,nPrecision,nScale,bIsAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
                 pTypeInfo = m_pTypeInfo;
@@ -904,9 +904,9 @@ void OTableController::loadData()
         Reference<XNameAccess> xKeyColumns  = getKeyColumns();
         if(xKeyColumns.is())
         {
-            Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-            const ::rtl::OUString* pKeyBegin    = aKeyColumns.getConstArray();
-            const ::rtl::OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
+            Sequence< OUString> aKeyColumns = xKeyColumns->getElementNames();
+            const OUString* pKeyBegin    = aKeyColumns.getConstArray();
+            const OUString* pKeyEnd      = pKeyBegin + aKeyColumns.getLength();
 
             for(;pKeyBegin != pKeyEnd;++pKeyBegin)
             {
@@ -999,7 +999,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pActFieldDescr->SetAutoIncrement(sal_False);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-            pActFieldDescr->SetName( createUniqueName(::rtl::OUString("ID") ));
+            pActFieldDescr->SetName( createUniqueName(OUString("ID") ));
             pActFieldDescr->SetPrimaryKey( sal_True );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
@@ -1037,7 +1037,7 @@ void OTableController::alterColumns()
     // contains all columns names which are already handled those which are not in the list will be deleted
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
-    ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->supportsMixedCaseQuotedIdentifiers() ? true : false): sal_True);
+    ::std::map< OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->supportsMixedCaseQuotedIdentifiers() ? true : false): sal_True);
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_vRowList.begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
@@ -1063,7 +1063,7 @@ void OTableController::alterColumns()
 
             sal_Int32 nType=0,nPrecision=0,nScale=0,nNullable=0;
             sal_Bool bAutoIncrement = false;
-            ::rtl::OUString sTypeName,sDescription;
+            OUString sTypeName,sDescription;
 
             xColumn->getPropertyValue(PROPERTY_TYPE)            >>= nType;
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
@@ -1172,7 +1172,7 @@ void OTableController::alterColumns()
                     if ( aMsg.Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
-                        ::rtl::OUString sName;
+                        OUString sName;
                         xNewColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
                         aColumns[sName] = sal_True;
                         aColumns[pField->GetName()] = sal_True;
@@ -1223,9 +1223,9 @@ void OTableController::alterColumns()
     // now we have to look for the columns who could be deleted
     if ( xDrop.is() )
     {
-        Sequence< ::rtl::OUString> aColumnNames = xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aColumnNames.getLength();
+        Sequence< OUString> aColumnNames = xColumns->getElementNames();
+        const OUString* pIter = aColumnNames.getConstArray();
+        const OUString* pEnd = pIter + aColumnNames.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if(aColumns.find(*pIter) == aColumns.end()) // found a column to delete
@@ -1258,7 +1258,7 @@ void OTableController::alterColumns()
 
                     SQLException aNewException;
                     aNewException.Message = sError;
-                    aNewException.SQLState = ::rtl::OUString("S1000");
+                    aNewException.SQLState = OUString("S1000");
                     aNewException.NextException = ::cppu::getCaughtException();
 
                     throw aNewException;
@@ -1495,9 +1495,9 @@ void OTableController::reSyncRows()
     setModified(sal_False);     // and we are not modified yet
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OTableController::createUniqueName(const ::rtl::OUString& _rName)
+OUString OTableController::createUniqueName(const OUString& _rName)
 {
-    ::rtl::OUString sName = _rName;
+    OUString sName = _rName;
     Reference< XDatabaseMetaData> xMetaData = getMetaData( );
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->supportsMixedCaseQuotedIdentifiers() : sal_True);
@@ -1509,16 +1509,16 @@ void OTableController::reSyncRows()
         OFieldDescription* pFieldDesc = (*aIter)->GetActFieldDescr();
         if (pFieldDesc && !pFieldDesc->GetName().isEmpty() && bCase(sName,pFieldDesc->GetName()))
         { // found a second name of _rName so we need another
-            sName = _rName + ::rtl::OUString::valueOf(++i);
+            sName = _rName + OUString::valueOf(++i);
             aIter = m_vRowList.begin(); // and retry
         }
     }
     return sName;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OTableController::getPrivateTitle() const
+OUString OTableController::getPrivateTitle() const
 {
-    ::rtl::OUString sTitle;
+    OUString sTitle;
     try
     {
         // get the table
@@ -1533,7 +1533,7 @@ void OTableController::reSyncRows()
         {
             String aName = String(ModuleRes(STR_TBL_TITLE));
             sTitle = aName.GetToken(0,' ');
-            sTitle += ::rtl::OUString::valueOf(getCurrentStartNumber());
+            sTitle += OUString::valueOf(getCurrentStartNumber());
         }
     }
     catch( const Exception& )

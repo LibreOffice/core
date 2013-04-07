@@ -28,8 +28,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 
@@ -247,13 +245,13 @@ XMLDateTimeFormatHdl::~XMLDateTimeFormatHdl()
 {
 }
 
-sal_Bool XMLDateTimeFormatHdl::importXML( const rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+sal_Bool XMLDateTimeFormatHdl::importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     rValue <<= rStrImpValue;
     return true;
 }
 
-sal_Bool XMLDateTimeFormatHdl::exportXML( rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
+sal_Bool XMLDateTimeFormatHdl::exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_Int32 nNumberFormat = 0;
     if( mpExport && (rValue >>= nNumberFormat) )

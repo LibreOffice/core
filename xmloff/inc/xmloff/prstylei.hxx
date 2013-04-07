@@ -35,8 +35,8 @@ namespace com { namespace sun { namespace star {
 
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {
-    const ::rtl::OUString msIsPhysical;
-    const ::rtl::OUString msFollowStyle;
+    const OUString msIsPhysical;
+    const OUString msFollowStyle;
     ::std::vector< XMLPropertyState > maProperties;
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > mxStyle;
     SvXMLImportContextRef               mxStyles;
@@ -47,8 +47,8 @@ class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
     SvXMLStylesContext *GetStyles() { return (SvXMLStylesContext *)&mxStyles; }
     ::std::vector< XMLPropertyState > & GetProperties() { return maProperties; }
 
@@ -63,7 +63,7 @@ public:
     TYPEINFO();
 
     XMLPropStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily = 0,
             sal_Bool bDefaultStyle=sal_False );
@@ -71,7 +71,7 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void FillPropertySet(

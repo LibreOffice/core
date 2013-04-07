@@ -226,12 +226,12 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
 
                 sal_Bool bTextBelow = ( aRange.aStart.Row() == 0 );
 
-                rtl::OUString aCurrent;
+                OUString aCurrent;
                 Color aColor( COL_LIGHTGRAY );
                 for (SCTAB nAct=nTab+1; nAct<nTabCount && pDoc->IsScenario(nAct); nAct++)
                     if ( pDoc->IsActiveScenario(nAct) && pDoc->HasScenarioRange(nAct,aRange) )
                     {
-                        rtl::OUString aDummyComment;
+                        OUString aDummyComment;
                         sal_uInt16 nDummyFlags;
                         pDoc->GetName( nAct, aCurrent );
                         pDoc->GetScenarioData( nAct, aDummyComment, aColor, nDummyFlags );

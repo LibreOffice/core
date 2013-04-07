@@ -29,7 +29,7 @@ namespace dbp
     using namespace ::com::sun::star::container;
 
     //---------------------------------------------------------------------
-    void disambiguateName(const Reference< XNameAccess >& _rxContainer, ::rtl::OUString& _rElementsName)
+    void disambiguateName(const Reference< XNameAccess >& _rxContainer, OUString& _rElementsName)
     {
         DBG_ASSERT(_rxContainer.is(), "::dbp::disambiguateName: invalid container!");
         if (!_rxContainer.is())
@@ -37,11 +37,11 @@ namespace dbp
 
         try
         {
-            ::rtl::OUString sBase(_rElementsName);
+            OUString sBase(_rElementsName);
             for (sal_Int32 i=1; i<0x7FFFFFFF; ++i)
             {
                 _rElementsName = sBase;
-                _rElementsName += ::rtl::OUString::valueOf((sal_Int32)i);
+                _rElementsName += OUString::valueOf((sal_Int32)i);
                 if (!_rxContainer->hasByName(_rElementsName))
                     return;
             }

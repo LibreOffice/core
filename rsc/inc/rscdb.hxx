@@ -41,8 +41,8 @@ class RscCmdLine;
 struct WriteRcContext
 {
     FILE *              fOutput;
-    rtl::OString        aOutputRc;
-    rtl::OString        aOutputSysList;
+    OString        aOutputRc;
+    OString        aOutputSysList;
     RscCmdLine*         pCmdLine;
 };
 
@@ -54,7 +54,7 @@ struct RscSysEntry
 {
     sal_uInt32      nKey;
     sal_uInt32      nRscTyp;
-    rtl::OString    aFileName;
+    OString    aFileName;
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
@@ -66,10 +66,10 @@ class RscTypCont
     CharSet             nSourceCharSet;
     sal_uInt32          nMachineId;         // Globaler Maschinentyp
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel oder
-    rtl::OString        aLanguage;          // output language
+    OString        aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    rtl::OString        aSearchPath;        // Suchen der Bitmap, Icon, Pointer
-    rtl::OString        aSysSearchPath;     // aSearchPath plus language specific paths
+    OString        aSearchPath;        // Suchen der Bitmap, Icon, Pointer
+    OString        aSysSearchPath;     // aSearchPath plus language specific paths
     sal_uInt32          nUniqueId;          // eindeutiger Id fuer Systemresourcen
     sal_uLong           nFilePos;           // Position in der Datei ( MTF )
     sal_uInt32          nPMId;              // eindeutiger Id fuer PM-Rseourcefile
@@ -254,7 +254,7 @@ class RscTypCont
                                              RscTop * pStyleFamily );
     RscTop *    InitClassSfxSlotInfo( RscTop * pSuper );
 
-    void        InsWinBit( RscTop * pClass, const rtl::OString& rName,
+    void        InsWinBit( RscTop * pClass, const OString& rName,
                            Atom nVal );
     void        WriteInc( FILE * fOutput, sal_uLong lKey );
 
@@ -290,7 +290,7 @@ public:
     std::map<sal_uInt64, sal_uLong> aIdTranslator; //Ordnet Resourcetypen und Id's einen Id zu
                                        //(unter PM), oder eine Dateiposition (MTF)
 
-    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const rtl::OString& rSearchPath, sal_uInt32 nFlags );
+    RscTypCont( RscError *, RSCBYTEORDER_TYPE, const OString& rSearchPath, sal_uInt32 nFlags );
     ~RscTypCont();
 
     Atom AddLanguage( const char* );
@@ -301,7 +301,7 @@ public:
                     { return (nFlags & NOSYSRESTEST_FLAG) ? sal_False : sal_True; }
     sal_Bool            IsSrsDefault() const
                     { return (nFlags & SRSDEFAULT_FLAG) ? sal_True : sal_False; }
-    rtl::OString ChangeLanguage(const rtl::OString & rNewLang);
+    OString ChangeLanguage(const OString & rNewLang);
     const std::vector< sal_uInt32 >& GetFallbacks() const
     { return aLangFallbacks; }
 
@@ -313,9 +313,9 @@ public:
         nSourceCharSet = aCharSet;
         return aOld;
     }
-    void            SetSearchPath( const rtl::OString& rStr) { aSearchPath = rStr; }
-    rtl::OString    GetSearchPath() const { return aSearchPath; }
-    void            SetSysSearchPath( const rtl::OString& rStr ) { aSysSearchPath = rStr; }
+    void            SetSearchPath( const OString& rStr) { aSearchPath = rStr; }
+    OString    GetSearchPath() const { return aSearchPath; }
+    void            SetSysSearchPath( const OString& rStr ) { aSysSearchPath = rStr; }
     void        InsertType( RscTop * pType )
                 {
                     aBaseLst.push_back( pType );

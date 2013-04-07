@@ -172,13 +172,13 @@ String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
         if ( !aResId.GetResMgr()->IsAvailable(aResId) )
         {
             OSL_FAIL( "GroupId-Name not defined in SFX!" );
-            return rtl::OUString();
+            return OUString();
         }
 
         return aResId.toString();
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 

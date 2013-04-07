@@ -47,7 +47,7 @@ public:
             The factory that will create resource objects of the specfied type.
     */
     void AddFactory (
-        const ::rtl::OUString& rsURL,
+        const OUString& rsURL,
         const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory)
         throw (css::uno::RuntimeException);
 
@@ -57,7 +57,7 @@ public:
             is registered for other URLs then these remain registered.
     */
     void RemoveFactoryForURL(
-        const ::rtl::OUString& rsURL)
+        const OUString& rsURL)
         throw (css::uno::RuntimeException);
 
     /** Unregister the specified factory.
@@ -78,21 +78,21 @@ public:
             is returned.  Otherwise an empty reference is returned.
     */
     css::uno::Reference<css::drawing::framework::XResourceFactory> GetFactory (
-        const ::rtl::OUString& rsURL)
+        const OUString& rsURL)
         throw (css::uno::RuntimeException);
 
 private:
     ::osl::Mutex maMutex;
     typedef ::boost::unordered_map<
-        ::rtl::OUString,
+        OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
-        ::rtl::OUStringHash,
+        OUStringHash,
         ::comphelper::UStringEqual> FactoryMap;
     FactoryMap maFactoryMap;
 
     typedef ::std::vector<
         ::std::pair<
-            rtl::OUString,
+            OUString,
             css::uno::Reference<css::drawing::framework::XResourceFactory> > >
         FactoryPatternList;
     FactoryPatternList maFactoryPatternList;
@@ -108,7 +108,7 @@ private:
             When the factory has not yet been added then return NULL.
     */
     css::uno::Reference<css::drawing::framework::XResourceFactory> FindFactory (
-        const ::rtl::OUString& rsURLBase)
+        const OUString& rsURLBase)
         throw (css::uno::RuntimeException);
 };
 

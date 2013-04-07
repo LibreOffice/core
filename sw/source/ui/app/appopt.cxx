@@ -152,17 +152,17 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
         using namespace ::com::sun::star::i18n::ScriptType;
 
-        Any aLang = aLinguCfg.GetProperty(rtl::OUString("DefaultLocale"));
+        Any aLang = aLinguCfg.GetProperty(OUString("DefaultLocale"));
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), LATIN);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_LANGUAGE));
 
-        aLang = aLinguCfg.GetProperty(rtl::OUString("DefaultLocale_CJK"));
+        aLang = aLinguCfg.GetProperty(OUString("DefaultLocale_CJK"));
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), ASIAN);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CJK_LANGUAGE));
 
-        aLang = aLinguCfg.GetProperty(rtl::OUString("DefaultLocale_CTL"));
+        aLang = aLinguCfg.GetProperty(OUString("DefaultLocale_CTL"));
         aLang >>= aLocale;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag(aLocale).getLanguageType(false), COMPLEX);
         pRet->Put(SvxLanguageItem(nLang, SID_ATTR_CHAR_CTL_LANGUAGE));

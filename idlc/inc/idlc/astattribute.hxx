@@ -30,13 +30,13 @@ namespace typereg { class Writer; }
 class AstAttribute: public AstDeclaration, public AstScope {
 public:
     AstAttribute(
-        sal_uInt32 flags, AstType const * type, rtl::OString const & name,
+        sal_uInt32 flags, AstType const * type, OString const & name,
         AstScope * scope):
         AstDeclaration(NT_attribute, name, scope),
         AstScope(NT_attribute), m_flags(flags), m_pType(type)
     {}
 
-    AstAttribute(NodeType nodeType, sal_uInt32 flags, AstType const * pType, const ::rtl::OString& name, AstScope* pScope)
+    AstAttribute(NodeType nodeType, sal_uInt32 flags, AstType const * pType, const OString& name, AstScope* pScope)
         : AstDeclaration(nodeType, name, pScope), AstScope(nodeType)
         , m_flags(flags)
         , m_pType(pType)
@@ -44,8 +44,8 @@ public:
     virtual ~AstAttribute() {}
 
     void setExceptions(
-        rtl::OUString const * getDoc, DeclList const * getExc,
-        rtl::OUString const * setDoc, DeclList const * setExc)
+        OUString const * getDoc, DeclList const * getExc,
+        OUString const * setDoc, DeclList const * setExc)
     {
         if (getDoc != 0) {
             m_getDocumentation = *getDoc;
@@ -97,15 +97,15 @@ public:
 
 private:
     void dumpExceptions(
-        typereg::Writer & writer, rtl::OUString const & documentation,
+        typereg::Writer & writer, OUString const & documentation,
         DeclList const & exceptions, RTMethodMode flags,
         sal_uInt16 * methodIndex);
 
     const sal_uInt32    m_flags;
     AstType const * m_pType;
-    rtl::OUString m_getDocumentation;
+    OUString m_getDocumentation;
     DeclList m_getExceptions;
-    rtl::OUString m_setDocumentation;
+    OUString m_setDocumentation;
     DeclList m_setExceptions;
 };
 

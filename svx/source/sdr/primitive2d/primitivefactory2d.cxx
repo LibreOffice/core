@@ -96,22 +96,22 @@ namespace drawinglayer
             return aRetval;
         }
 
-        rtl::OUString PrimitiveFactory2D::getImplementationName_Static()
+        OUString PrimitiveFactory2D::getImplementationName_Static()
         {
-            static rtl::OUString aRetval("com.sun.star.comp.graphic.PrimitiveFactory2D");
+            static OUString aRetval("com.sun.star.comp.graphic.PrimitiveFactory2D");
             return aRetval;
         }
 
-        uno::Sequence< rtl::OUString > PrimitiveFactory2D::getSupportedServiceNames_Static()
+        uno::Sequence< OUString > PrimitiveFactory2D::getSupportedServiceNames_Static()
         {
-            static uno::Sequence< rtl::OUString > aSeq;
+            static uno::Sequence< OUString > aSeq;
             osl::Mutex aMutex;
             osl::MutexGuard aGuard( aMutex );
 
             if(!aSeq.getLength())
             {
                 aSeq.realloc(1L);
-                aSeq.getArray()[0L] = rtl::OUString("com.sun.star.graphic.PrimitiveFactory2D");
+                aSeq.getArray()[0L] = OUString("com.sun.star.graphic.PrimitiveFactory2D");
             }
 
             return aSeq;

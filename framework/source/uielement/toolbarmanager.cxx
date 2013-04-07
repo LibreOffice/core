@@ -77,7 +77,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using rtl::OUString;
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
@@ -172,7 +171,7 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
     {
         try
         {
-            xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" )) >>= xLayoutManager;
+            xPropSet->getPropertyValue( OUString( "LayoutManager" )) >>= xLayoutManager;
         }
         catch (const RuntimeException&)
         {
@@ -210,7 +209,7 @@ DEFINE_XTYPEPROVIDER_6                  (   ToolBarManager                      
 
 ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServiceManager,
                                 const Reference< XFrame >& rFrame,
-                                const rtl::OUString& rResourceName,
+                                const OUString& rResourceName,
                                 ToolBar* pToolBar ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
@@ -259,7 +258,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     sal_uInt16 nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString("CreateDialog")))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, OUString("CreateDialog")))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
 
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -271,9 +270,9 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
     idx++; // will become 0 if '/' not found: use full string
-    ::rtl::OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
-    ::rtl::OUString  aToolbarName = rResourceName.copy( idx );
-    aHelpIdAsString += rtl::OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
+    OString  aHelpIdAsString( HELPID_PREFIX_TESTTOOL );
+    OUString  aToolbarName = rResourceName.copy( idx );
+    aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
     m_pToolBar->SetHelpId( aHelpIdAsString );
 
     m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
@@ -375,7 +374,7 @@ void ToolBarManager::RefreshImages()
 
         if ( nId > 0 )
         {
-            ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+            OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
             Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
             // Try also to query for add-on images before giving up and use an
             // empty image.
@@ -397,24 +396,24 @@ void ToolBarManager::UpdateImageOrientation()
     if ( m_xUICommandLabels.is() )
     {
         sal_Int32 i;
-        Sequence< rtl::OUString > aSeqMirrorCmd;
-        Sequence< rtl::OUString > aSeqRotateCmd;
+        Sequence< OUString > aSeqMirrorCmd;
+        Sequence< OUString > aSeqRotateCmd;
         m_xUICommandLabels->getByName(
-            rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aSeqMirrorCmd;
+            OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aSeqMirrorCmd;
         m_xUICommandLabels->getByName(
-            rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aSeqRotateCmd;
+            OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aSeqRotateCmd;
 
         CommandToInfoMap::iterator pIter;
         for ( i = 0; i < aSeqMirrorCmd.getLength(); i++ )
         {
-            rtl::OUString aMirrorCmd = aSeqMirrorCmd[i];
+            OUString aMirrorCmd = aSeqMirrorCmd[i];
             pIter = m_aCommandMap.find( aMirrorCmd );
             if ( pIter != m_aCommandMap.end() )
                 pIter->second.bMirrored = sal_True;
         }
         for ( i = 0; i < aSeqRotateCmd.getLength(); i++ )
         {
-            rtl::OUString aRotateCmd = aSeqRotateCmd[i];
+            OUString aRotateCmd = aSeqRotateCmd[i];
             pIter = m_aCommandMap.find( aRotateCmd );
             if ( pIter != m_aCommandMap.end() )
                 pIter->second.bRotated = sal_True;
@@ -426,7 +425,7 @@ void ToolBarManager::UpdateImageOrientation()
         sal_uInt16 nId = m_pToolBar->GetItemId( nPos );
         if ( nId > 0 )
         {
-            rtl::OUString aCmd = m_pToolBar->GetItemCommand( nId );
+            OUString aCmd = m_pToolBar->GetItemCommand( nId );
 
             CommandToInfoMap::const_iterator pIter = m_aCommandMap.find( aCmd );
             if ( pIter != m_aCommandMap.end() )
@@ -455,7 +454,7 @@ void ToolBarManager::UpdateControllers()
         Reference< XLayoutManager > xLayoutManager;
         Reference< XPropertySet > xFramePropSet( m_xFrame, UNO_QUERY );
         if ( xFramePropSet.is() )
-            a = xFramePropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ));
+            a = xFramePropSet->getPropertyValue( OUString( "LayoutManager" ));
         a >>= xLayoutManager;
         Reference< XDockableWindow > xDockable( VCLUnoHelper::GetInterface( m_pToolBar ), UNO_QUERY );
         if ( xLayoutManager.is() && xDockable.is() )
@@ -723,7 +722,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
         if ( xIfacDocImgMgr == Event.Source )
             nImageInfo = 0;
 
-        Sequence< rtl::OUString > aSeq = xNameAccess->getElementNames();
+        Sequence< OUString > aSeq = xNameAccess->getElementNames();
         for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
         {
             CommandToInfoMap::iterator pIter = m_aCommandMap.find( aSeq[i] );
@@ -737,7 +736,7 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
                         // Special case: An image from the document image manager has been removed.
                         // It is possible that we have a image at our module image manager. Before
                         // we can remove our image we have to ask our module image manager.
-                        Sequence< rtl::OUString > aCmdURLSeq( 1 );
+                        Sequence< OUString > aCmdURLSeq( 1 );
                         Sequence< Reference< XGraphic > > aGraphicSeq;
                         aCmdURLSeq[0] = pIter->first;
                         aGraphicSeq = m_xModuleImageManager->getImages( nImageType, aCmdURLSeq );
@@ -809,7 +808,7 @@ void ToolBarManager::RemoveControllers()
     m_aControllerMap.clear();
 }
 
-uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const ::rtl::OUString& rCmdURL )
+uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const OUString& rCmdURL )
 {
     Sequence< PropertyValue > aPropSeq;
 
@@ -844,9 +843,9 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     return aPropSeq;
 }
 
-::rtl::OUString ToolBarManager::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
-    ::rtl::OUString aLabel;
+    OUString aLabel;
     Sequence< PropertyValue > aPropSeq;
 
     // Retrieve popup menu labels
@@ -862,7 +861,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     return aLabel;
 }
 
-sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const ::rtl::OUString& aCmdURL )
+sal_Int32 ToolBarManager::RetrievePropertiesFromCommand( const OUString& aCmdURL )
 {
     sal_Int32 nProperties(0);
     Sequence< PropertyValue > aPropSeq;
@@ -899,8 +898,8 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        rtl::OUString                aLoadURL( ".uno:OpenUrl" );
-        rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
+        OUString                aLoadURL( ".uno:OpenUrl" );
+        OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
@@ -929,22 +928,22 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name     = rtl::OUString( "ModuleName" );
+                aPropValue.Name     = OUString( "ModuleName" );
                 aPropValue.Value    <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( "Frame" );
+                aPropValue.Name     = OUString( "Frame" );
                 aPropValue.Value    <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( "ServiceManager" );
+                aPropValue.Name     = OUString( "ServiceManager" );
                 aPropValue.Value    <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name     = rtl::OUString( "ParentWindow" );
+                aPropValue.Name     = OUString( "ParentWindow" );
                 aPropValue.Value    <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
                 if ( nWidth > 0 )
                 {
-                    aPropValue.Name     = rtl::OUString( "Width" );
+                    aPropValue.Name     = OUString( "Width" );
                     aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
@@ -968,7 +967,7 @@ void ToolBarManager::CreateControllers()
                 if ( m_pToolBar->GetItemData( nId ) != 0 )
                 {
                     // retrieve additional parameters
-                    ::rtl::OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
+                    OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
 
                     Reference< XStatusListener > xStatusListener(
                         ToolBarMerger::CreateController( m_xServiceManager,
@@ -1013,7 +1012,7 @@ void ToolBarManager::CreateControllers()
         Reference< XSubToolbarController > xSubToolBar( xController, UNO_QUERY );
         if ( xSubToolBar.is() && xSubToolBar->opensSubToolbar() )
         {
-            rtl::OUString aSubToolBarName = xSubToolBar->getSubToolbarName();
+            OUString aSubToolBarName = xSubToolBar->getSubToolbarName();
             if ( !aSubToolBarName.isEmpty() )
             {
                 SubToolBarToSubToolBarControllerMap::iterator pIter =
@@ -1039,25 +1038,25 @@ void ToolBarManager::CreateControllers()
                 PropertyValue aPropValue;
                 std::vector< Any > aPropertyVector;
 
-                aPropValue.Name = ::rtl::OUString( "Frame" );
+                aPropValue.Name = OUString( "Frame" );
                 aPropValue.Value <<= m_xFrame;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = ::rtl::OUString( "CommandURL" );
+                aPropValue.Name = OUString( "CommandURL" );
                 aPropValue.Value <<= aCommandURL;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = ::rtl::OUString( "ServiceManager" );
+                aPropValue.Name = OUString( "ServiceManager" );
                 aPropValue.Value <<= m_xServiceManager;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = rtl::OUString( "ParentWindow" );
+                aPropValue.Name = OUString( "ParentWindow" );
                 aPropValue.Value <<= xToolbarWindow;
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                aPropValue.Name = rtl::OUString( "ModuleName" );
+                aPropValue.Name = OUString( "ModuleName" );
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
                 if ( nWidth > 0 )
                 {
-                    aPropValue.Name     = rtl::OUString( "Width" );
+                    aPropValue.Name     = OUString( "Width" );
                     aPropValue.Value    <<= nWidth;
                     aPropertyVector.push_back( makeAny( aPropValue ));
                 }
@@ -1067,10 +1066,10 @@ void ToolBarManager::CreateControllers()
 
                 if (pController)
                 {
-                    if(aCommandURL == rtl::OUString( ".uno:SwitchXFormsDesignMode" ) ||
-                       aCommandURL == rtl::OUString( ".uno:ViewDataSourceBrowser" ) ||
-                       aCommandURL == rtl::OUString( ".uno:ParaLeftToRight" ) ||
-                       aCommandURL == rtl::OUString( ".uno:ParaRightToLeft" )
+                    if(aCommandURL == OUString( ".uno:SwitchXFormsDesignMode" ) ||
+                       aCommandURL == OUString( ".uno:ViewDataSourceBrowser" ) ||
+                       aCommandURL == OUString( ".uno:ParaLeftToRight" ) ||
+                       aCommandURL == OUString( ".uno:ParaRightToLeft" )
                        )
                         pController->setFastPropertyValue_NoBroadcast(1,makeAny(sal_True));
                 }
@@ -1102,7 +1101,7 @@ void ToolBarManager::CreateControllers()
             try
             {
                 sal_Bool bSupportVisible = sal_True;
-                Any a( xPropSet->getPropertyValue( ::rtl::OUString( "SupportsVisible" )) );
+                Any a( xPropSet->getPropertyValue( OUString( "SupportsVisible" )) );
                 a >>= bSupportVisible;
                 if (bSupportVisible)
                 {
@@ -1146,7 +1145,7 @@ void ToolBarManager::AddImageOrientationListener()
         m_xImageOrientationListener = Reference< XComponent >( static_cast< ::cppu::OWeakObject *>(
                                         pImageOrientation ), UNO_QUERY );
         pImageOrientation->addStatusListener(
-            rtl::OUString( ".uno:ImageOrientation" ));
+            OUString( ".uno:ImageOrientation" ));
         pImageOrientation->bindListener();
     }
 }
@@ -1176,7 +1175,7 @@ sal_uInt16 ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle )
 
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
-    ::rtl::OString aTbxName = rtl::OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
+    OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
 
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar" );
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "framework (cd100003) ::ToolBarManager::FillToolbar %s", aTbxName.getStr() );
@@ -1237,10 +1236,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         Sequence< PropertyValue >   aProp;
-        rtl::OUString               aCommandURL;
-        rtl::OUString               aLabel;
-        rtl::OUString               aHelpURL;
-        rtl::OUString               aTooltip;
+        OUString               aCommandURL;
+        OUString               aLabel;
+        OUString               aHelpURL;
+        OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
         sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
@@ -1306,7 +1305,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == ::com::sun::star::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    ::rtl::OUString aString( RetrieveLabelFromCommand( aCommandURL ));
+                    OUString aString( RetrieveLabelFromCommand( aCommandURL ));
 
                     sal_uInt16 nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1319,13 +1318,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     else
                     {
-                         ::rtl::OUString sQuickHelp( aString );
-                         ::rtl::OUString sShortCut;
+                         OUString sQuickHelp( aString );
+                         OUString sShortCut;
                          if( RetrieveShortcut( aCommandURL, sShortCut ) )
                          {
-                             sQuickHelp += rtl::OUString( " ("  );
+                             sQuickHelp += OUString( " ("  );
                              sQuickHelp += sShortCut;
-                             sQuickHelp += rtl::OUString( ")" );
+                             sQuickHelp += OUString( ")" );
                          }
 
                         m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
@@ -1390,7 +1389,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     MergeToolbarInstructionContainer aMergeInstructionContainer;
 
     // Retrieve the toolbar name from the resource name
-    ::rtl::OUString aToolbarName( m_aResourceName );
+    OUString aToolbarName( m_aResourceName );
     sal_Int32 nIndex = aToolbarName.lastIndexOf( '/' );
     if (( nIndex > 0 ) && ( nIndex < aToolbarName.getLength() ))
         aToolbarName = aToolbarName.copy( nIndex+1 );
@@ -1463,8 +1462,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     {
         try
         {
-            rtl::OUString aUIName;
-            xPropSet->getPropertyValue( rtl::OUString( "UIName" )) >>= aUIName;
+            OUString aUIName;
+            xPropSet->getPropertyValue( OUString( "UIName" )) >>= aUIName;
             if ( !aUIName.isEmpty() )
                 m_pToolBar->SetText( aUIName );
         }
@@ -1479,7 +1478,7 @@ void ToolBarManager::RequestImages()
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::RequestImages" );
 
     // Request images from image manager
-    Sequence< rtl::OUString > aCmdURLSeq( m_aCommandMap.size() );
+    Sequence< OUString > aCmdURLSeq( m_aCommandMap.size() );
     Sequence< Reference< XGraphic > > aDocGraphicSeq;
     Sequence< Reference< XGraphic > > aModGraphicSeq;
 
@@ -1526,7 +1525,7 @@ void ToolBarManager::RequestImages()
     }
 }
 
-void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElementName, const rtl::OUString& aCommand )
+void ToolBarManager::notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand )
 {
     ResetableGuard aGuard( m_aLock );
     if ( !m_aSubToolBarControllerMap.empty() )
@@ -1707,10 +1706,10 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
     if ( m_xFrame.is() )
     {
         Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-        aURL.Complete = ::rtl::OUString( ".uno:ConfigureDialog" );
+        aURL.Complete = OUString( ".uno:ConfigureDialog" );
         m_xURLTransformer->parseStrict( aURL );
         if ( xProv.is() )
-            xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+            xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
         if ( !xDisp.is() || IsPluginMode() )
             return 0;
@@ -1758,7 +1757,7 @@ PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
             if ( m_pToolBar->GetItemType(nPos) == TOOLBOXITEM_BUTTON )
             {
                 sal_uInt16 nId = m_pToolBar->GetItemId(nPos);
-                ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
+                OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
                 pItemMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MIB_CHECKABLE );
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
@@ -1867,10 +1866,10 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 if ( m_xFrame.is() )
                 {
                     Reference< XDispatchProvider > xProv( m_xFrame, UNO_QUERY );
-                    aURL.Complete = ::rtl::OUString( ".uno:ConfigureDialog" );
+                    aURL.Complete = OUString( ".uno:ConfigureDialog" );
                     m_xURLTransformer->parseStrict( aURL );
                     if ( xProv.is() )
-                        xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+                        xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
                 }
 
                 if ( xDisp.is() )
@@ -1878,7 +1877,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                     Sequence< PropertyValue > aPropSeq( 1 );
 
                     aPropSeq[ 0 ].Name =
-                        rtl::OUString( "ResourceURL");
+                        OUString( "ResourceURL");
                     aPropSeq[ 0 ].Value <<= m_aResourceName;
 
                     xDisp->dispatch( aURL, aPropSeq );
@@ -1943,7 +1942,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 if(( nId > 0 ) && ( nId < TOOLBOX_MENUITEM_START ))
                 {
                     // toggle toolbar button visibility
-                    rtl::OUString aCommand = pMenu->GetItemCommand( nId );
+                    OUString aCommand = pMenu->GetItemCommand( nId );
 
                     Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
                     if ( xLayoutManager.is() )
@@ -1957,7 +1956,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                             {
                                 Sequence< PropertyValue > aProp;
                                 sal_Int32                 nVisibleIndex( -1 );
-                                rtl::OUString             aCommandURL;
+                                OUString             aCommandURL;
                                 sal_Bool                  bVisible( sal_False );
 
                                 if ( xItemContainer->getByIndex( i ) >>= aProp )
@@ -1988,7 +1987,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                             if ( xPropSet.is() )
                                             {
                                                 Reference< XUIConfigurationPersistence > xUICfgMgr;
-                                                if (( xPropSet->getPropertyValue( rtl::OUString( "ConfigurationSource" )) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
+                                                if (( xPropSet->getPropertyValue( OUString( "ConfigurationSource" )) >>= xUICfgMgr ) && ( xUICfgMgr.is() ))
                                                     xUICfgMgr->store();
                                             }
                                         }
@@ -2162,7 +2161,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
     return 0;
 }
 
-Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages )
+Image ToolBarManager::QueryAddonsImage( const OUString& aCommandURL, bool bBigImages )
 {
     Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
     return aImage;
@@ -2170,8 +2169,8 @@ Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool
 
 bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
     const Reference< XAcceleratorConfiguration >& rAccelCfg,
-    const rtl::OUString& rCommand,
-    rtl::OUString& rShortCut )
+    const OUString& rCommand,
+    OUString& rShortCut )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::impl_RetrieveShortcutsFromConfiguration" );
     if ( rAccelCfg.is() )
@@ -2200,7 +2199,7 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
     return false;
 }
 
-bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut )
+bool ToolBarManager::RetrieveShortcut( const OUString& rCommandURL, OUString& rShortCut )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ToolBarManager::RetrieveShortcuts" );
     if ( m_bModuleIdentified )

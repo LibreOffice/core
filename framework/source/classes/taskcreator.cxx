@@ -58,7 +58,7 @@ TaskCreator::~TaskCreator()
 /*-****************************************************************************************************//**
     TODO document me
 *//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::OUString& sName    ,
+css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUString& sName    ,
                                                                          sal_Bool         bVisible )
 {
     /* SAFE { */
@@ -68,7 +68,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     /* } SAFE */
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xCreator;
-    ::rtl::OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
+    OUString sCreator = IMPLEMENTATIONNAME_FWK_TASKCREATOR;
 
     try
     {
@@ -102,23 +102,23 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;
 
-    aArg.Name    = rtl::OUString(ARGUMENT_PARENTFRAME);
+    aArg.Name    = OUString(ARGUMENT_PARENTFRAME);
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >( css::frame::Desktop::create( comphelper::getComponentContext(xSMGR) ), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
-    aArg.Name    = rtl::OUString(ARGUMENT_CREATETOPWINDOW);
+    aArg.Name    = OUString(ARGUMENT_CREATETOPWINDOW);
     aArg.Value <<= sal_True;
     lArgs[1]   <<= aArg;
 
-    aArg.Name    = rtl::OUString(ARGUMENT_MAKEVISIBLE);
+    aArg.Name    = OUString(ARGUMENT_MAKEVISIBLE);
     aArg.Value <<= bVisible;
     lArgs[2]   <<= aArg;
 
-    aArg.Name    = rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE);
+    aArg.Name    = OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE);
     aArg.Value <<= sal_True;
     lArgs[3]   <<= aArg;
 
-    aArg.Name    = rtl::OUString(ARGUMENT_FRAMENAME);
+    aArg.Name    = OUString(ARGUMENT_FRAMENAME);
     aArg.Value <<= sName;
     lArgs[4]   <<= aArg;
 

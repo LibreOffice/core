@@ -62,7 +62,7 @@ namespace svx
 
         FreeResource();
 
-        rtl::OUString sTemp("*.odb");
+        OUString sTemp("*.odb");
         m_aURL.SetFilter(sTemp);
 
         m_aName.SetModifyHdl( LINK(this, ODocumentLinkDialog, OnTextModified) );
@@ -103,7 +103,7 @@ namespace svx
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk)
     {
         // get the current URL
-        ::rtl::OUString sURL = m_aURL.GetText();
+        OUString sURL = m_aURL.GetText();
         OFileNotation aTransformer(sURL);
         sURL = aTransformer.get(OFileNotation::N_URL);
 
@@ -162,7 +162,7 @@ namespace svx
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
         if ( pFilter )
         {
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());

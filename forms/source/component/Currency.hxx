@@ -46,7 +46,7 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // ::com::sun::star::io::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException);
 
     // OControlModel's property handling
     virtual void describeFixedProperties(

@@ -165,8 +165,8 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
 
 #if OSL_DEBUG_LEVEL > 0
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
-        ::rtl::OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
-        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
+        OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
+        sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
         OSL_FAIL( sMessage.getStr() );
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
@@ -260,11 +260,11 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 // -------------------------------------------------------------------------------------
 
 #define DECLIMPL_SUPPORTS_SERVICE( ) \
-    sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
+    sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException) \
     { \
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() ); \
-        const ::rtl::OUString* pSupported = aServiceNames.getConstArray(); \
-        const ::rtl::OUString* pSupportedEnd = pSupported + aServiceNames.getLength(); \
+        ::com::sun::star::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() ); \
+        const OUString* pSupported = aServiceNames.getConstArray(); \
+        const OUString* pSupportedEnd = pSupported + aServiceNames.getLength(); \
         for ( ; pSupported != pSupportedEnd; ++pSupported ) \
             if ( *pSupported == rServiceName ) \
                 return sal_True; \
@@ -277,7 +277,7 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
     OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return OUString("stardiv.Toolkit." #ImplName ); } \
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
-                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                ::com::sun::star::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \
                                 aNames[ aNames.getLength() - 1 ] = OUString::createFromAscii( ServiceName ); \
                                 return aNames; \
@@ -287,9 +287,9 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodNa
 
 #define DECLIMPL_SERVICEINFO( ImplName, ServiceName ) \
     OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return OUString("stardiv.Toolkit." #ImplName ); } \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)   \
                             { \
-                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 ); \
+                                ::com::sun::star::uno::Sequence< OUString > aNames( 1 ); \
                                 aNames[ 0 ] = OUString::createFromAscii( ServiceName ); \
                                 return aNames; \
                             } \

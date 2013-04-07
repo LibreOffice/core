@@ -40,7 +40,7 @@ public:
     SwNumberingTypeListBox( Window* pWin, WinBits nStyle = WB_BORDER );
     ~SwNumberingTypeListBox();
 
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 
     void        Reload(sal_uInt16 nTypeFlags);
 

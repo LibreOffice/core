@@ -82,9 +82,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRemoveFile( ::sal_Bool _removefile )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getUri()
+    virtual OUString SAL_CALL getUri()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getResourceName()
+    virtual OUString SAL_CALL getResourceName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // XInputStream
@@ -121,16 +121,16 @@ public:
     virtual void SAL_CALL truncate()
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
     //::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > SAL_CALL XTempFile_createInstance( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
-    static ::rtl::OUString getImplementationName_Static ();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames_Static();
+    static OUString getImplementationName_Static ();
+    static ::com::sun::star::uno::Sequence < OUString > getSupportedServiceNames_Static();
 
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleComponentFactory > createServiceFactory_Static();
 

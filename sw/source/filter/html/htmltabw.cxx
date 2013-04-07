@@ -314,7 +314,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TH>/<TD> in neue Zeile
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<');
     sOut.append(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
 
@@ -550,7 +550,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     if( text::VertOrientation::TOP==eRowVertOri || text::VertOrientation::BOTTOM==eRowVertOri )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign)
             .append('=').append(text::VertOrientation::TOP==eRowVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
         rWrt.Strm() << sOut.makeStringAndClear().getStr();
@@ -634,7 +634,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     if( rWrt.bLFPossible )
         rWrt.OutNewLine();  // <TABLE> in neue Zeile
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
     sal_uInt16 nOldDirection = rWrt.nDirection;
@@ -746,7 +746,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     if( pCaption && pCaption->Len() )
     {
         rWrt.OutNewLine(); // <CAPTION> in neue Zeile
-        rtl::OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
+        OStringBuffer sOutStr(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_caption));
         sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOutStr.getStr(), sal_True );
@@ -775,7 +775,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
             const SwWriteTableCol *pColumn = aCols[nCol];
 
-            rtl::OStringBuffer sOutStr;
+            OStringBuffer sOutStr;
             sOutStr.append('<').append(OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
@@ -1112,7 +1112,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center, sal_True );
         else
         {
-            rtl::OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_division));
+            OStringBuffer sOut(RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_division));
             sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append('=')
                 .append(OOO_STRING_SVTOOLS_HTML_AL_right);
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr(),

@@ -33,11 +33,11 @@
 
 namespace skeletonmaker {
 
-typedef ::std::map< ::rtl::OString, ::std::vector< ::rtl::OString >,
-                    ::std::less< ::rtl::OString > > ProtocolCmdMap;
+typedef ::std::map< OString, ::std::vector< OString >,
+                    ::std::less< OString > > ProtocolCmdMap;
 
-typedef ::std::vector< ::std::pair< rtl::OString,
-                     ::std::pair< rtl::OString, sal_Int16 > > > AttributeInfo;
+typedef ::std::vector< ::std::pair< OString,
+                     ::std::pair< OString, sal_Int16 > > > AttributeInfo;
 
 
 struct ProgramOptions {
@@ -61,8 +61,8 @@ struct ProgramOptions {
     // 2 = calc add-in
     // 3 = add-on
     short componenttype;
-    rtl::OString outputpath;
-    rtl::OString implname;
+    OString outputpath;
+    OString implname;
     ProtocolCmdMap protocolCmdMap;
 };
 
@@ -73,7 +73,7 @@ struct ProgramOptions {
    @param o specifies the output stream
    @param filename specifies the source file name
 */
-void printLicenseHeader(std::ostream& o, rtl::OString const & filename);
+void printLicenseHeader(std::ostream& o, OString const & filename);
 
 /**
    create dependent on the output path, the implementation name and the
@@ -92,34 +92,34 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename);
    @return true if output is generated to standard out or else false
 */
 bool getOutputStream(ProgramOptions const & options,
-                     rtl::OString const & extension,
+                     OString const & extension,
                      std::ostream** ppOutputStream,
-                     rtl::OString & targetSourceFileName,
-                     rtl::OString & tmpSourceFileName);
+                     OString & targetSourceFileName,
+                     OString & tmpSourceFileName);
 
 codemaker::UnoType::Sort decomposeResolveAndCheck(
-    rtl::Reference< TypeManager > const & manager, rtl::OString const & type,
+    rtl::Reference< TypeManager > const & manager, OString const & type,
     bool resolveTypedefs, bool allowVoid, bool allowExtraEntities,
-    RTTypeClass * typeClass, rtl::OString * name, sal_Int32 * rank,
-    std::vector< rtl::OString > * arguments);
+    RTTypeClass * typeClass, OString * name, sal_Int32 * rank,
+    std::vector< OString > * arguments);
 
 void checkType(rtl::Reference< TypeManager > const & manager,
-               rtl::OString const & type,
-               boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaceTypes,
-               boost::unordered_set< rtl::OString, rtl::OStringHash >& serviceTypes,
+               OString const & type,
+               boost::unordered_set< OString, OStringHash >& interfaceTypes,
+               boost::unordered_set< OString, OStringHash >& serviceTypes,
                AttributeInfo& properties);
 
 void checkDefaultInterfaces(
-    boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaces,
-    const boost::unordered_set< rtl::OString, rtl::OStringHash >& services,
-    const rtl::OString & propertyhelper);
+    boost::unordered_set< OString, OStringHash >& interfaces,
+    const boost::unordered_set< OString, OStringHash >& services,
+    const OString & propertyhelper);
 
-rtl::OString checkPropertyHelper(
+OString checkPropertyHelper(
     ProgramOptions const & options, rtl::Reference< TypeManager > const & manager,
-    const boost::unordered_set< rtl::OString, rtl::OStringHash >& services,
-    const boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaces,
+    const boost::unordered_set< OString, OStringHash >& services,
+    const boost::unordered_set< OString, OStringHash >& interfaces,
     AttributeInfo& attributes,
-    boost::unordered_set< rtl::OString, rtl::OStringHash >& propinterfaces);
+    boost::unordered_set< OString, OStringHash >& propinterfaces);
 
 /**
    checks whether the return and parameters types are valid and allowed
@@ -145,7 +145,7 @@ void checkAddInTypes(rtl::Reference< TypeManager > const & manager,
    @return true if XComponent have to be supported
 */
 bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
-         boost::unordered_set< rtl::OString, rtl::OStringHash >& interfaces);
+         boost::unordered_set< OString, OStringHash >& interfaces);
 
 
 sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
@@ -155,7 +155,7 @@ sal_uInt16 checkAdditionalPropertyFlags(typereg::Reader const & reader,
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
-         const boost::unordered_set< ::rtl::OString, ::rtl::OStringHash >& interfaces);
+         const boost::unordered_set< OString, OStringHash >& interfaces);
 
 }
 

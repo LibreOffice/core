@@ -209,7 +209,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
                     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
-                                                        rtl::OUString("_beamer"),
+                                                        OUString("_beamer"),
                                                         frame::FrameSearchFlag::CHILDREN);
                     if ( xBeamerFrame.is() )
                         bWasOpen = sal_True;

@@ -57,7 +57,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     {
         // Die Spalten einer ::com::sun::star::sdbcx::View können nicht verändert werden
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
-        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString("VIEW"))
+        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == OUString("VIEW"))
             bRead = sal_True;
         else
         {
@@ -136,7 +136,7 @@ sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().isAutoIncrementValueEnabled();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OTableFieldControl::getAutoIncrementValue() const
+OUString OTableFieldControl::getAutoIncrementValue() const
 {
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getAutoIncrementValue();
 }

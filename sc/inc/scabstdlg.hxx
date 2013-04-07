@@ -96,8 +96,8 @@ public:
     virtual bool IsDatabase() const = 0;
     virtual bool IsExternal() const = 0;
     virtual bool IsNamedRange() const = 0;
-    virtual rtl::OUString GetSelectedNamedRange() const = 0;
-    virtual void AppendNamedRange(const ::rtl::OUString& rName) = 0;
+    virtual OUString GetSelectedNamedRange() const = 0;
+    virtual void AppendNamedRange(const OUString& rName) = 0;
 };
 
 class AbstractScDataPilotServiceDlg : public VclAbstractDialog  //add for ScDataPilotServiceDlg
@@ -214,7 +214,7 @@ public:
     virtual sal_uInt16  GetSelectedTable        () const = 0;
     virtual bool    GetCopyTable            () const = 0;
     virtual bool    GetRenameTable          () const = 0;
-    virtual void    GetTabNameString( rtl::OUString& rString ) const = 0;
+    virtual void    GetTabNameString( OUString& rString ) const = 0;
     virtual void    SetForceCopyTable       () = 0;
     virtual void    EnableCopyTable         (sal_Bool bFlag=true) = 0;
     virtual void    EnableRenameTable       (sal_Bool bFlag=true) = 0;
@@ -229,7 +229,7 @@ public:
 class AbstractScNamePasteDlg : public VclAbstractDialog  //add for ScNamePasteDlg
 {
 public:
-    virtual std::vector<rtl::OUString> GetSelectedNames() const = 0;
+    virtual std::vector<OUString> GetSelectedNames() const = 0;
     virtual bool                IsAllSelected() const = 0;
 };
 
@@ -276,10 +276,10 @@ class AbstractScNewScenarioDlg : public VclAbstractDialog  //add for ScNewScenar
 {
 public:
 
-    virtual void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
+    virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
                             const Color& rColor, sal_uInt16 nFlags ) = 0;
 
-    virtual void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
+    virtual void GetScenarioData( OUString& rName, OUString& rComment,
                             Color& rColor, sal_uInt16& rFlags ) const = 0;
 };
 
@@ -288,7 +288,7 @@ class AbstractScShowTabDlg : public VclAbstractDialog  //add for ScShowTabDlg
 public:
     virtual void    Insert( const String& rString, sal_Bool bSelected ) = 0;
     virtual sal_uInt16  GetSelectEntryCount() const = 0;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText, const rtl::OString& nDlgHelpId, const rtl::OString& nLbHelpId ) = 0;
+    virtual void SetDescription(const String& rTitle, const String& rFixedText, const OString& nDlgHelpId, const OString& nLbHelpId ) = 0;
     virtual String  GetSelectEntry(sal_uInt16 nPos) const = 0;
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const = 0;
 };
@@ -296,7 +296,7 @@ public:
 class AbstractScStringInputDlg :  public VclAbstractDialog  //add for ScStringInputDlg
 {
 public:
-    virtual void GetInputString( rtl::OUString& rString ) const = 0;
+    virtual void GetInputString( OUString& rString ) const = 0;
 };
 
 class AbstractScTabBgColorDlg : public VclAbstractDialog  //add for ScTabBgColorDlg
@@ -355,7 +355,7 @@ public:
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg ( Window* pParent, sal_Bool bEnableExternal, int nId ) = 0; //add for ScDataPilotSourceTypeDlg
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( Window* pParent, //add for ScDataPilotServiceDlg
-                                                                        const com::sun::star::uno::Sequence<rtl::OUString>& rServices,
+                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
                                                                         int nId ) = 0;
 
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId, sal_Bool bDisallowCellMove = false ) = 0 ; //add for ScDeleteCellDlg
@@ -460,14 +460,14 @@ public:
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
+                                                                const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId ) = 0;
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScTabBgColorDlg
                                                                 const String& rTitle, //Dialog Title
                                                                 const String& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor, //Currently selected Color
-                                                                const rtl::OString& ,
+                                                                const OString& ,
                                                                 int nId ) = 0;
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg

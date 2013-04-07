@@ -31,8 +31,6 @@
 
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;

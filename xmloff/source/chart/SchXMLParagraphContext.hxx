@@ -30,25 +30,25 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 class SchXMLParagraphContext : public SvXMLImportContext
 {
 private:
-    ::rtl::OUString& mrText;
-    ::rtl::OUString* mpId;
-    ::rtl::OUStringBuffer maBuffer;
+    OUString& mrText;
+    OUString* mpId;
+    OUStringBuffer maBuffer;
 
 public:
     SchXMLParagraphContext( SvXMLImport& rImport,
-                            const ::rtl::OUString& rLocalName,
-                            ::rtl::OUString& rText,
-                            ::rtl::OUString * pOutId = 0 );
+                            const OUString& rLocalName,
+                            OUString& rText,
+                            OUString * pOutId = 0 );
     virtual ~SchXMLParagraphContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    virtual void Characters( const rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 #endif  // _SCH_XMLPARAGRAPHCONTEXT_HXX_

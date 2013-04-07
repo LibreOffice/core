@@ -42,9 +42,9 @@ namespace UriSchemeParser_vndDOTsunDOTstarDOTscript {
             const &)
         SAL_THROW((com::sun::star::uno::Exception));
 
-    rtl::OUString SAL_CALL getImplementationName();
+    OUString SAL_CALL getImplementationName();
 
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames();
 }
 

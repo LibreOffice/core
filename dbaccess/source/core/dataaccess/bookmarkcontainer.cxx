@@ -90,7 +90,7 @@ OUString SAL_CALL OBookmarkContainer::getImplementationName(  ) throw(RuntimeExc
     return OUString("com.sun.star.comp.dba.OBookmarkContainer");
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL OBookmarkContainer::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -105,7 +105,7 @@ Sequence< OUString > SAL_CALL OBookmarkContainer::getSupportedServiceNames(  ) t
 }
 
 // XNameContainer
-void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
@@ -117,7 +117,7 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
         throw IllegalArgumentException();
 
     // approve the new object
-    ::rtl::OUString sNewLink;
+    OUString sNewLink;
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
 
@@ -134,9 +134,9 @@ void SAL_CALL OBookmarkContainer::insertByName( const ::rtl::OUString& _rName, c
     }
 }
 
-void SAL_CALL OBookmarkContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ::rtl::OUString sOldBookmark;
+    OUString sOldBookmark;
     {
         MutexGuard aGuard(m_rMutex);
         checkValid(sal_True);
@@ -166,7 +166,7 @@ void SAL_CALL OBookmarkContainer::removeByName( const ::rtl::OUString& _rName ) 
 }
 
 // XNameReplace
-void SAL_CALL OBookmarkContainer::replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL OBookmarkContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ClearableMutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
@@ -180,12 +180,12 @@ void SAL_CALL OBookmarkContainer::replaceByName( const ::rtl::OUString& _rName, 
         throw NoSuchElementException();
 
     // approve the new object
-    ::rtl::OUString sNewLink;
+    OUString sNewLink;
     if (!(aElement >>= sNewLink))
         throw IllegalArgumentException();
 
     // the old element (for the notifications)
-    ::rtl::OUString sOldLink = m_aBookmarks[_rName];
+    OUString sOldLink = m_aBookmarks[_rName];
 
     // do the replace
     implReplace(_rName, sNewLink);
@@ -220,7 +220,7 @@ Type SAL_CALL OBookmarkContainer::getElementType( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
-    return ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+    return ::getCppuType( static_cast< OUString* >(NULL) );
 }
 
 sal_Bool SAL_CALL OBookmarkContainer::hasElements( ) throw (RuntimeException)
@@ -257,7 +257,7 @@ Any SAL_CALL OBookmarkContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutO
     return makeAny(m_aBookmarksIndexed[_nIndex]->second);
 }
 
-Any SAL_CALL OBookmarkContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL OBookmarkContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -268,13 +268,13 @@ Any SAL_CALL OBookmarkContainer::getByName( const ::rtl::OUString& _rName ) thro
     return makeAny(m_aBookmarks[_rName]);
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
 
-    Sequence< ::rtl::OUString > aNames(m_aBookmarks.size());
-    ::rtl::OUString* pNames = aNames.getArray();
+    Sequence< OUString > aNames(m_aBookmarks.size());
+    OUString* pNames = aNames.getArray();
     ;
     for (   ConstMapIteratorVectorIterator aNameIter = m_aBookmarksIndexed.begin();
             aNameIter != m_aBookmarksIndexed.end();
@@ -287,7 +287,7 @@ Sequence< ::rtl::OUString > SAL_CALL OBookmarkContainer::getElementNames(  ) thr
     return aNames;
 }
 
-sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+sal_Bool SAL_CALL OBookmarkContainer::hasByName( const OUString& _rName ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
@@ -295,7 +295,7 @@ sal_Bool SAL_CALL OBookmarkContainer::hasByName( const ::rtl::OUString& _rName )
     return checkExistence(_rName);
 }
 
-void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
+void OBookmarkContainer::implRemove(const OUString& _rName)
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -324,7 +324,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
     m_aBookmarks.erase(aMapPos);
 }
 
-void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::OUString& _rDocumentLocation)
+void OBookmarkContainer::implAppend(const OUString& _rName, const OUString& _rDocumentLocation)
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -332,7 +332,7 @@ void OBookmarkContainer::implAppend(const ::rtl::OUString& _rName, const ::rtl::
     m_aBookmarksIndexed.push_back(m_aBookmarks.insert(  MapString2String::value_type(_rName,_rDocumentLocation)).first);
 }
 
-void OBookmarkContainer::implReplace(const ::rtl::OUString& _rName, const ::rtl::OUString& _rNewLink)
+void OBookmarkContainer::implReplace(const OUString& _rName, const OUString& _rNewLink)
 {
     MutexGuard aGuard(m_rMutex);
     OSL_ENSURE(checkExistence(_rName), "OBookmarkContainer::implReplace : invalid name !");

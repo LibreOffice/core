@@ -110,7 +110,7 @@ void SAL_CALL OContainerMediator::elementInserted( const ContainerEvent& _rEvent
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( _rEvent.Source == m_xSettings && m_xSettings.is() )
     {
-        ::rtl::OUString sElementName;
+        OUString sElementName;
         _rEvent.Accessor >>= sElementName;
         PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
         if ( aFind != m_aForwardList.end() )
@@ -127,7 +127,7 @@ void SAL_CALL OContainerMediator::elementRemoved( const ContainerEvent& _rEvent 
     Reference< XContainer > xContainer = m_xContainer;
     if ( _rEvent.Source == xContainer && xContainer.is() )
     {
-        ::rtl::OUString sElementName;
+        OUString sElementName;
         _rEvent.Accessor >>= sElementName;
         m_aForwardList.erase(sElementName);
         try
@@ -148,13 +148,13 @@ void SAL_CALL OContainerMediator::elementReplaced( const ContainerEvent& _rEvent
     Reference< XContainer > xContainer = m_xContainer;
     if ( _rEvent.Source == xContainer && xContainer.is() )
     {
-        ::rtl::OUString sElementName;
+        OUString sElementName;
         _rEvent.ReplacedElement >>= sElementName;
 
         PropertyForwardList::iterator aFind = m_aForwardList.find(sElementName);
         if ( aFind != m_aForwardList.end() )
         {
-            ::rtl::OUString sNewName;
+            OUString sNewName;
             _rEvent.Accessor >>= sNewName;
             try
             {
@@ -184,7 +184,7 @@ void SAL_CALL OContainerMediator::disposing( const EventObject& /*Source*/ ) thr
 }
 
 // -----------------------------------------------------------------------------
-void OContainerMediator::impl_initSettings_nothrow( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDestination )
+void OContainerMediator::impl_initSettings_nothrow( const OUString& _rName, const Reference< XPropertySet >& _rxDestination )
 {
     try
     {
@@ -201,7 +201,7 @@ void OContainerMediator::impl_initSettings_nothrow( const ::rtl::OUString& _rNam
 }
 
 // -----------------------------------------------------------------------------
-void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, const Reference< XPropertySet >& _xDest )
+void OContainerMediator::notifyElementCreated( const OUString& _sName, const Reference< XPropertySet >& _xDest )
 {
     if ( !m_xSettings.is() )
         return;
@@ -215,7 +215,7 @@ void OContainerMediator::notifyElementCreated( const ::rtl::OUString& _sName, co
         return;
     }
 
-    ::std::vector< ::rtl::OUString > aPropertyList;
+    ::std::vector< OUString > aPropertyList;
     try
     {
         // initially copy from the settings object (if existent) to the newly created object

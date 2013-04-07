@@ -28,7 +28,7 @@ namespace dbaui
     class SAL_NO_VTABLE IUpdateHelper
     {
     public:
-        virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue) = 0;
+        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) = 0;
         virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) = 0;
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) = 0;
         virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType) = 0;

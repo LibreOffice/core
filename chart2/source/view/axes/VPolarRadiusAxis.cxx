@@ -73,7 +73,7 @@ void VPolarRadiusAxis::setExplicitScaleAndIncrement(
 void VPolarRadiusAxis::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
-       , const rtl::OUString& rCID )
+       , const OUString& rCID )
             throw (uno::RuntimeException)
 {
     VPolarAxis::initPlotter(  xLogicTarget, xFinalTarget, xShapeFactory, rCID );

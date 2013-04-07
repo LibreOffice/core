@@ -155,8 +155,8 @@ namespace svgio
 
                 if(basegfx::fTools::more(fSnippetWidth, 0.0))
                 {
-                    const ::rtl::OUString aText(getSource().getText());
-                    const ::rtl::OUString aTrimmedChars(aText.copy(nIndex, nLength).trim());
+                    const OUString aText(getSource().getText());
+                    const OUString aTrimmedChars(aText.copy(nIndex, nLength).trim());
                     const double fEndPos(mfPosition + fSnippetWidth);
 
                     if(aTrimmedChars.getLength() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))
@@ -269,7 +269,7 @@ namespace svgio
             return &maSvgStyleAttributes;
         }
 
-        void SvgTextPathNode::parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgTextPathNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
@@ -302,8 +302,8 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrAlign(rtl::OUString::createFromAscii("align"));
-                        static rtl::OUString aStrStretch(rtl::OUString::createFromAscii("stretch"));
+                        static OUString aStrAlign(OUString::createFromAscii("align"));
+                        static OUString aStrStretch(OUString::createFromAscii("stretch"));
 
                         if(aContent.match(aStrAlign))
                         {
@@ -320,8 +320,8 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrAuto(rtl::OUString::createFromAscii("auto"));
-                        static rtl::OUString aStrExact(rtl::OUString::createFromAscii("exact"));
+                        static OUString aStrAuto(OUString::createFromAscii("auto"));
+                        static OUString aStrExact(OUString::createFromAscii("exact"));
 
                         if(aContent.match(aStrAuto))
                         {

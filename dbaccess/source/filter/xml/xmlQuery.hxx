@@ -28,8 +28,8 @@ namespace dbaxml
     class ODBFilter;
     class OXMLQuery : public OXMLTable
     {
-        ::rtl::OUString m_sCommand;
-        ::rtl::OUString m_sTable;
+        OUString m_sCommand;
+        OUString m_sTable;
         sal_Bool        m_bEscapeProcessing;
     protected:
         virtual void setProperties(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _xProp);
@@ -37,14 +37,14 @@ namespace dbaxml
 
         OXMLQuery( ODBFilter& rImport
                     , sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xParentContainer
                     );
         virtual ~OXMLQuery();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     };
 // -----------------------------------------------------------------------------

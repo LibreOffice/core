@@ -77,7 +77,7 @@ URLDlg::URLDlg( Window* pWindow, const String& rURL, const String& rAlternativeT
         maCbbTargets.InsertEntry( *rTargetList[ i ] );
 
     if( !rTarget.Len() )
-        maCbbTargets.SetText( rtl::OUString("_self") );
+        maCbbTargets.SetText( OUString("_self") );
     else
         maCbbTargets.SetText( rTarget );
 }

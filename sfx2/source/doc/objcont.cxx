@@ -181,7 +181,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
     if ( SvtSecurityOptions().IsOptionSet(
             SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
     {
-        xDocProps->resetUserData( ::rtl::OUString() );
+        xDocProps->resetUserData( OUString() );
     }
     else if ( IsModified() )
     {
@@ -190,11 +190,11 @@ void SfxObjectShell::UpdateDocInfoForSave()
         {
             // remove all data pointing to the current user
             if (xDocProps->getAuthor().equals(aUserName)) {
-                xDocProps->setAuthor( ::rtl::OUString() );
+                xDocProps->setAuthor( OUString() );
             }
-            xDocProps->setModifiedBy( ::rtl::OUString() );
+            xDocProps->setModifiedBy( OUString() );
             if (xDocProps->getPrintedBy().equals(aUserName)) {
-                xDocProps->setPrintedBy( ::rtl::OUString() );
+                xDocProps->setPrintedBy( OUString() );
             }
         }
         else
@@ -693,8 +693,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 
     // created from template?
     uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-    ::rtl::OUString aTemplName( xDocProps->getTemplateName() );
-    ::rtl::OUString aTemplURL( xDocProps->getTemplateURL() );
+    OUString aTemplName( xDocProps->getTemplateName() );
+    OUString aTemplURL( xDocProps->getTemplateURL() );
     String aFoundName;
 
     if ( !aTemplName.isEmpty() || (!aTemplURL.isEmpty() && !IsReadOnly()) )
@@ -762,7 +762,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
                         String sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
-                        sMessage.SearchAndReplace( rtl::OUString("$(ARG1)"), aTemplName );
+                        sMessage.SearchAndReplace( OUString("$(ARG1)"), aTemplName );
                         sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
                         if ( RET_YES == aBox.Execute() )
                             bLoad = sal_True;
@@ -816,10 +816,10 @@ void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const Strin
     if ( IsOwnStorageFormat_Impl( *GetMedium())  )
     {
         uno::Reference<document::XDocumentProperties> xDocProps(getDocProperties());
-        xDocProps->setTemplateURL( ::rtl::OUString() );
-        xDocProps->setTemplateName( ::rtl::OUString() );
+        xDocProps->setTemplateURL( OUString() );
+        xDocProps->setTemplateName( OUString() );
         xDocProps->setTemplateDate( util::DateTime() );
-        xDocProps->resetUserData( ::rtl::OUString() );
+        xDocProps->resetUserData( OUString() );
 
         // TODO/REFACTOR:
         // Title?

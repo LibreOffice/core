@@ -45,13 +45,13 @@ atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccess
 
 // FIXME
 static G_CONST_RETURN gchar *
-getAsConst( rtl::OUString rString )
+getAsConst( OUString rString )
 {
     static const int nMax = 10;
-    static rtl::OString aUgly[nMax];
+    static OString aUgly[nMax];
     static int nIdx = 0;
     nIdx = (nIdx + 1) % nMax;
-    aUgly[nIdx] = rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
+    aUgly[nIdx] = OUStringToOString( rString, RTL_TEXTENCODING_UTF8 );
     return aUgly[ nIdx ].getStr();
 }
 

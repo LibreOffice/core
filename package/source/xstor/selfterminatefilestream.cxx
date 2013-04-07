@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 
 //-----------------------------------------------
-OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext > xContext, const ::rtl::OUString& aURL )
+OSelfTerminateFileStream::OSelfTerminateFileStream( const uno::Reference< uno::XComponentContext > xContext, const OUString& aURL )
 : m_aURL( aURL )
 {
     uno::Reference< uno::XComponentContext > xOwnContext = xContext;

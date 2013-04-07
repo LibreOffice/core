@@ -227,7 +227,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 {
                     if ( pSlave->pLinkedSlot != pMasterSlot )
                     {
-                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "Wrong Master/Slave- link: "));
                         aStr.append(static_cast<sal_Int32>(
                             pMasterSlot->GetSlotId()));
@@ -239,7 +239,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
                     {
-                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "Wrong Master/Slave-Ids: "));
                         aStr.append(static_cast<sal_Int32>(
                             pMasterSlot->GetSlotId()));
@@ -259,7 +259,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                 {
                     if ( pIter->pLinkedSlot->GetKind() != SFX_KIND_ENUM )
                     {
-                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "Slave is no enum: "));
                         aStr.append(static_cast<sal_Int32>(pIter->GetSlotId()));
                         aStr.append(RTL_CONSTASCII_STRINGPARAM(" , "));
@@ -275,7 +275,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, sal_uInt16 nSlotCount )
                     pCurSlot = pCurSlot->pNextSlot;
                     if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
                     {
-                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "Linked Slots with different State Methods : "));
                         aStr.append(static_cast<sal_Int32>(
                             pCurSlot->GetSlotId()));

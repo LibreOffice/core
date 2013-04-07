@@ -86,7 +86,7 @@ public:
     ~SvXMLNumFmtHelper();
 
     SvXMLStyleContext*  CreateChildContext( SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+                sal_uInt16 nPrefix, const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                     SvXMLStylesContext& rStyles);
@@ -95,7 +95,7 @@ public:
 
     const SvXMLTokenMap&    GetStylesElemTokenMap();
 
-//  sal_uInt32  GetKeyForName( const rtl::OUString& rName );
+//  sal_uInt32  GetKeyForName( const OUString& rName );
 };
 
 //  SvXMLNumFmtDefaults is used in import and export
@@ -113,8 +113,8 @@ public:
 
 struct MyCondition
 {
-    rtl::OUString   sCondition;
-    rtl::OUString   sMapName;
+    OUString   sCondition;
+    OUString   sMapName;
 };
 
 class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
@@ -124,11 +124,11 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     std::vector <MyCondition>   aMyConditions;
     sal_uInt16          nType;
     sal_Int32           nKey;
-//  rtl::OUString       sFormatName;
-    rtl::OUString       sFormatTitle;
-//  rtl::OUString       sMapName;
-    rtl::OUString       sCalendar;
-    rtl::OUString       sFormatString;
+//  OUString       sFormatName;
+    OUString       sFormatTitle;
+//  OUString       sMapName;
+    OUString       sCalendar;
+    OUString       sFormatString;
     LanguageType        nFormatLang;
     com::sun::star::lang::Locale    aLocale;
     sal_Bool            bAutoOrder;
@@ -137,8 +137,8 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
     sal_Bool            bAutoDec;       // set in AddNumber
     sal_Bool            bAutoInt;       // set in AddNumber
     sal_Bool            bHasExtraText;
-    rtl::OUStringBuffer aFormatCode;
-    rtl::OUStringBuffer aConditions;
+    OUStringBuffer aFormatCode;
+    OUStringBuffer aConditions;
     sal_Bool            bHasLongDoW;
     sal_Bool            bHasEra;
     sal_Bool            bHasDateTime;
@@ -158,13 +158,13 @@ class XMLOFF_DLLPUBLIC SvXMLNumFormatContext : public SvXMLStyleContext
 
 public:
                 SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     SvXMLStylesContext& rStyles );
                 SvXMLNumFormatContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     const sal_Int32 nKey,
@@ -172,7 +172,7 @@ public:
     virtual     ~SvXMLNumFormatContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                    const rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void CreateAndInsert(sal_Bool bOverwrite);
@@ -190,19 +190,19 @@ public:
     sal_Bool HasEra() const                         { return bHasEra; }
     void SetHasEra(sal_Bool bSet)                   { bHasEra = bSet; }
 
-    void UpdateCalendar( const rtl::OUString& rNewCalendar );
+    void UpdateCalendar( const OUString& rNewCalendar );
 
     const LocaleDataWrapper& GetLocaleData() const;
 
-    void AddToCode( const rtl::OUString& rString );
+    void AddToCode( const OUString& rString );
     void AddToCode( sal_Unicode c );
     void AddNumber( const SvXMLNumberInfo& rInfo );
-    void AddCurrency( const rtl::OUString& rContent, LanguageType nLang );
+    void AddCurrency( const OUString& rContent, LanguageType nLang );
 
     void AddNfKeyword( sal_uInt16 nIndex );
     sal_Bool ReplaceNfKeyword( sal_uInt16 nOld, sal_uInt16 nNew );
     void AddCondition( const sal_Int32 nIndex );
-    void AddCondition( const rtl::OUString& rCondition, const rtl::OUString& rApplyName );
+    void AddCondition( const OUString& rCondition, const OUString& rApplyName );
     void AddColor( sal_uInt32 const nColor );
 
     /// determine whether number format uses the system language

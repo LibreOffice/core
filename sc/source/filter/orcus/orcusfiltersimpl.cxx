@@ -28,7 +28,7 @@
 OString ScOrcusFiltersImpl::toSystemPath(const OUString& rPath)
 {
     INetURLObject aURL(rPath);
-    return rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
+    return OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
 }
 
 bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) const
@@ -71,7 +71,7 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, const OUString& rPath)
     return true;
 }
 
-ScOrcusXMLContext* ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const rtl::OUString& rPath) const
+ScOrcusXMLContext* ScOrcusFiltersImpl::createXMLContext(ScDocument& rDoc, const OUString& rPath) const
 {
     return new ScOrcusXMLContextImpl(rDoc, rPath);
 }

@@ -37,7 +37,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::rtl::OUStringBuffer;
 using ::std::vector;
 
 XMLFootnoteSeparatorExport::XMLFootnoteSeparatorExport(SvXMLExport& rExp) :

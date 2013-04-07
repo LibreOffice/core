@@ -420,7 +420,7 @@ void ScFormulaResult::SetHybridDouble( double f )
     }
 }
 
-void ScFormulaResult::SetHybridString( const rtl::OUString & rStr )
+void ScFormulaResult::SetHybridString( const OUString & rStr )
 {
     // Obtain values before changing anything.
     double f = GetDouble();

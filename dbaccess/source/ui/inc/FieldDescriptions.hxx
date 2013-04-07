@@ -41,12 +41,12 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
 
-        ::rtl::OUString     m_sName;
-        ::rtl::OUString     m_sTypeName;
-        ::rtl::OUString     m_sDescription;
-        ::rtl::OUString     m_sHelpText;
+        OUString     m_sName;
+        OUString     m_sTypeName;
+        OUString     m_sDescription;
+        OUString     m_sHelpText;
 
-        ::rtl::OUString     m_sAutoIncrementValue;
+        OUString     m_sAutoIncrementValue;
         sal_Int32           m_nType;    // only used when m_pType is null
         sal_Int32           m_nPrecision;
         sal_Int32           m_nScale;
@@ -65,15 +65,15 @@ namespace dbaui
                          ,sal_Bool _bUseAsDest = sal_False);
         ~OFieldDescription();
 
-        void SetName(const ::rtl::OUString& _rName);
-        void SetDescription(const ::rtl::OUString& _rDescription);
-        void SetHelpText(const ::rtl::OUString& _sHelptext);
+        void SetName(const OUString& _rName);
+        void SetDescription(const OUString& _rDescription);
+        void SetHelpText(const OUString& _sHelptext);
         void SetDefaultValue(const ::com::sun::star::uno::Any& _rDefaultValue);
         void SetControlDefault(const ::com::sun::star::uno::Any& _rControlDefault);
-        void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue);
+        void SetAutoIncrementValue(const OUString& _sAutoIncValue);
         void SetType(TOTypeInfoSP _pType);
         void SetTypeValue(sal_Int32 _nType);
-        void SetTypeName(const ::rtl::OUString& _sTypeName);
+        void SetTypeName(const OUString& _sTypeName);
         void SetPrecision(const sal_Int32& _rPrecision);
         void SetScale(const sal_Int32& _rScale);
         void SetIsNullable(const sal_Int32& _rIsNullable);
@@ -90,13 +90,13 @@ namespace dbaui
 
         void FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bForce,sal_Bool _bReset);
 
-        ::rtl::OUString             GetName()               const;
-        ::rtl::OUString             GetDescription()        const;
-        ::rtl::OUString             GetHelpText()           const;
+        OUString             GetName()               const;
+        OUString             GetDescription()        const;
+        OUString             GetHelpText()           const;
         ::com::sun::star::uno::Any  GetControlDefault()     const;
-        ::rtl::OUString             GetAutoIncrementValue() const;
+        OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
-        ::rtl::OUString             GetTypeName()           const;
+        OUString             GetTypeName()           const;
         sal_Int32                   GetPrecision()          const;
         sal_Int32                   GetScale()              const;
         sal_Int32                   GetIsNullable()         const;

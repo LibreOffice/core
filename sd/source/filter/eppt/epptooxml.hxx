@@ -101,12 +101,12 @@ protected:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     sal_Bool WriteNotesMaster();
 
-    void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const ::rtl::OUString& rAttributeName );
+    void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any aValue, const OUString& rAttributeName );
     void WriteAnimateValues( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimate >& rXAnimate );
     void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any& rAny, sal_Bool bWriteEvent, sal_Bool bMainSeqChild );
     void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, sal_Bool bHasFDelay );
     void WriteAnimations( ::sax_fastparser::FSHelperPtr pFS );
-    void WriteAnimationAttributeName( ::sax_fastparser::FSHelperPtr pFS, const ::rtl::OUString& rAttributeName );
+    void WriteAnimationAttributeName( ::sax_fastparser::FSHelperPtr pFS, const OUString& rAttributeName );
     void WriteAnimationNode( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bMainSeqChild );
     void WriteAnimationNodeAnimate( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
     void WriteAnimationNodeAnimateInside( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bMainSeqChild, sal_Bool bSimple );
@@ -126,12 +126,12 @@ protected:
 
     sal_uInt32 GetNewSlideId() { return mnSlideIdMax ++; }
     sal_uInt32 GetNewSlideMasterId() { return mnSlideMasterIdMax ++; }
-    sal_Int32 GetAuthorIdAndLastIndex( ::rtl::OUString sAuthor, sal_Int32& nLastIndex );
+    sal_Int32 GetAuthorIdAndLastIndex( OUString sAuthor, sal_Int32& nLastIndex );
 
 private:
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );
 
-    virtual ::rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
 
     ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 
@@ -156,7 +156,7 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
     };
-    typedef ::boost::unordered_map< ::rtl::OUString, struct AuthorComments, rtl::OUStringHash, comphelper::UStringEqual > AuthorsMap;
+    typedef ::boost::unordered_map< OUString, struct AuthorComments, OUStringHash, comphelper::UStringEqual > AuthorsMap;
     AuthorsMap maAuthors;
 
     void WriteAuthors();

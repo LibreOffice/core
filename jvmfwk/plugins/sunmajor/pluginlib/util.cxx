@@ -53,11 +53,7 @@
 using namespace osl;
 using namespace std;
 
-using ::rtl::OUString;
 using ::rtl::Reference;
-using ::rtl::OString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
@@ -125,15 +121,15 @@ extern VendorSupportMapEntry gVendorMap[];
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
-bool decodeOutput(const rtl::OString& s, rtl::OUString* out);
+bool decodeOutput(const OString& s, OUString* out);
 
 
 
 namespace
 {
-    rtl::OUString getLibraryLocation()
+    OUString getLibraryLocation()
     {
-        rtl::OUString libraryFileUrl;
+        OUString libraryFileUrl;
         OSL_VERIFY(osl::Module::getUrlFromAddress((void *)(sal_IntPtr)getLibraryLocation, libraryFileUrl));
         return getDirFromFile(libraryFileUrl);
     }
@@ -153,7 +149,7 @@ namespace
        OUString const & operator()()
        {
            static OUString sIni;
-            rtl::OUStringBuffer buf( 255);
+            OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
@@ -217,7 +213,7 @@ public:
     inline FileHandleReader(oslFileHandle & rHandle) SAL_THROW(()):
         m_aGuard(rHandle), m_nSize(0), m_nIndex(0), m_bLf(false) {}
 
-    Result readLine(rtl::OString * pLine) SAL_THROW(());
+    Result readLine(OString * pLine) SAL_THROW(());
 
 private:
     enum { BUFFER_SIZE = 1024 };
@@ -230,7 +226,7 @@ private:
 };
 
 FileHandleReader::Result
-FileHandleReader::readLine(rtl::OString * pLine)
+FileHandleReader::readLine(OString * pLine)
     SAL_THROW(())
 {
     OSL_ENSURE(pLine, "specification violation");
@@ -273,13 +269,13 @@ FileHandleReader::readLine(rtl::OString * pLine)
             case 0x0D:
                 m_bLf = true;
             case 0x0A:
-                *pLine += rtl::OString(m_aBuffer + nStart,
+                *pLine += OString(m_aBuffer + nStart,
                                        m_nIndex - 1 - nStart);
                     //TODO! check for overflow, and not very efficient
                 return RESULT_OK;
             }
 
-        *pLine += rtl::OString(m_aBuffer + nStart, m_nIndex - nStart);
+        *pLine += OString(m_aBuffer + nStart, m_nIndex - nStart);
             //TODO! check for overflow, and not very efficient
     }
 }
@@ -365,7 +361,7 @@ bool getJavaProps(const OUString & exePath,
 #ifdef JVM_ONE_PATH_CHECK
                   const OUString & homePath,
 #endif
-                  std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
+                  std::vector<std::pair<OUString, OUString> >& props,
                   bool * bProcessRun)
 {
     bool ret = false;
@@ -375,7 +371,7 @@ bool getJavaProps(const OUString & exePath,
     //We need to set the CLASSPATH in case the office is started from
     //a different directory. The JREProperties.class is expected to reside
     //next to the plugin.
-    rtl::OUString sThisLib;
+    OUString sThisLib;
     if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
                                     & sThisLib.pData) == sal_False)
         return false;
@@ -496,7 +492,7 @@ bool getJavaProps(const OUString & exePath,
     readable strings. The strings are encoded as integer values separated
     by spaces.
  */
-bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
+bool decodeOutput(const OString& s, OUString* out)
 {
     OSL_ASSERT(out != 0);
     OUStringBuffer buff(512);
@@ -687,7 +683,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 
 
 bool getJREInfoFromBinPath(
-    const rtl::OUString& path, vector<rtl::Reference<VendorBase> > & vecInfos)
+    const OUString& path, vector<rtl::Reference<VendorBase> > & vecInfos)
 {
     // file:///c:/jre/bin
     //map:       jre/bin/java.exe
@@ -781,7 +777,7 @@ vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
     }
     return vec;
 }
-bool getJREInfoByPath(const rtl::OUString& path,
+bool getJREInfoByPath(const OUString& path,
                       std::vector<rtl::Reference<VendorBase> > & vecInfos)
 {
     bool ret = false;

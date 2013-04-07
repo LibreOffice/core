@@ -79,7 +79,7 @@ public:
     explicit ChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & rServiceName );
+        const OUString & rServiceName );
     virtual ~ChartTypeTemplate();
 
     APPHELPER_XSERVICEINFO_DECL()
@@ -126,7 +126,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
-    virtual ::rtl::OUString SAL_CALL getServiceName()
+    virtual OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // Methods to overload for automatic creation
@@ -265,7 +265,7 @@ protected:
             ::com::sun::star::chart2::XDataInterpreter > m_xDataInterpreter;
 
 private:
-    const ::rtl::OUString m_aServiceName;
+    const OUString m_aServiceName;
 
 private:
     /** modifies the given diagram

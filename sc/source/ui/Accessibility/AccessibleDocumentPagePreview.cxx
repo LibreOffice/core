@@ -1591,21 +1591,21 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDocumentPagePreview::ge
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName(void)
+OUString SAL_CALL ScAccessibleDocumentPagePreview::getImplementationName(void)
                     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString("ScAccessibleDocumentPagePreview");
+    return OUString("ScAccessibleDocumentPagePreview");
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
+uno::Sequence< OUString> SAL_CALL ScAccessibleDocumentPagePreview::getSupportedServiceNames(void)
                     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.AccessibleSpreadsheetPageView");
+    pNames[nOldSize] = OUString("com.sun.star.AccessibleSpreadsheetPageView");
 
     return aSequence;
 }
@@ -1626,17 +1626,17 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ========================================================
 
-::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription(void)
                     throw (uno::RuntimeException)
 {
-    rtl::OUString sDescription = String(ScResId(STR_ACC_PREVIEWDOC_DESCR));
+    OUString sDescription = String(ScResId(STR_ACC_PREVIEWDOC_DESCR));
     return sDescription;
 }
 
-::rtl::OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
+OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    rtl::OUString sName = String(ScResId(STR_ACC_PREVIEWDOC_NAME));
+    OUString sName = String(ScResId(STR_ACC_PREVIEWDOC_NAME));
     return sName;
 }
 

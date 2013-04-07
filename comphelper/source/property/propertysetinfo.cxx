@@ -173,7 +173,7 @@ void PropertySetInfo::add( PropertyMapEntry* pMap ) throw()
     mpMap->add( pMap );
 }
 
-void PropertySetInfo::remove( const rtl::OUString& aName ) throw()
+void PropertySetInfo::remove( const OUString& aName ) throw()
 {
     mpMap->remove( aName );
 }
@@ -183,12 +183,12 @@ Sequence< ::com::sun::star::beans::Property > SAL_CALL PropertySetInfo::getPrope
     return mpMap->getProperties();
 }
 
-Property SAL_CALL PropertySetInfo::getPropertyByName( const ::rtl::OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     return mpMap->getPropertyByName( aName );
 }
 
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException)
 {
     return mpMap->hasPropertyByName( Name );
 }

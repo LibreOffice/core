@@ -118,7 +118,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
     }
     //no double value is countained
     //is there any text?
-    uno::Sequence< rtl::OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
+    uno::Sequence< OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
     sal_Int32 nTextCount = aStrings.getLength();
     for( sal_Int32 j = 0; j < nTextCount; ++j )
     {
@@ -216,7 +216,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
             try
             {
                 uno::Any aARole = xProp->getPropertyValue("Role");
-                rtl::OUString aRole;
+                OUString aRole;
                 aARole >>= aRole;
 
                 if (aRole == "values-x")
@@ -363,7 +363,7 @@ void VDataSeries::setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex )
     m_nGlobalSeriesIndex = nGlobalSeriesIndex;
 }
 
-void VDataSeries::setParticle( const rtl::OUString& rSeriesParticle )
+void VDataSeries::setParticle( const OUString& rSeriesParticle )
 {
     m_aSeriesParticle = rSeriesParticle;
 
@@ -372,51 +372,51 @@ void VDataSeries::setParticle( const rtl::OUString& rSeriesParticle )
     m_aPointCID_Stub = ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT, m_aSeriesParticle );
 
     m_aLabelCID_Stub = ObjectIdentifier::createClassifiedIdentifierWithParent(
-                        OBJECTTYPE_DATA_LABEL, ::rtl::OUString(), getLabelsCID() );
+                        OBJECTTYPE_DATA_LABEL, OUString(), getLabelsCID() );
 }
-rtl::OUString VDataSeries::getSeriesParticle() const
+OUString VDataSeries::getSeriesParticle() const
 {
     return m_aSeriesParticle;
 }
-rtl::OUString VDataSeries::getCID() const
+OUString VDataSeries::getCID() const
 {
     return m_aCID;
 }
-rtl::OUString VDataSeries::getPointCID_Stub() const
+OUString VDataSeries::getPointCID_Stub() const
 {
     return m_aPointCID_Stub;
 }
-rtl::OUString VDataSeries::getErrorBarsCID(bool bYError) const
+OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
-    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType(
+    OUString aChildParticle( ObjectIdentifier::getStringForType(
                                       bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) );
     aChildParticle += "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
 }
-rtl::OUString VDataSeries::getLabelsCID() const
+OUString VDataSeries::getLabelsCID() const
 {
-    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
+    OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
     aChildParticle += "=";
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
 }
-rtl::OUString VDataSeries::getLabelCID_Stub() const
+OUString VDataSeries::getLabelCID_Stub() const
 {
     return m_aLabelCID_Stub;
 }
-rtl::OUString VDataSeries::getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const
+OUString VDataSeries::getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const
 {
-    rtl::OUString aRet;
+    OUString aRet;
     aRet = ObjectIdentifier::createDataCurveCID( m_aSeriesParticle, nCurveIndex, bAverageLine );
     return aRet;
 }
 
-rtl::OUString VDataSeries::getDataCurveEquationCID( sal_Int32 nCurveIndex ) const
+OUString VDataSeries::getDataCurveEquationCID( sal_Int32 nCurveIndex ) const
 {
-    rtl::OUString aRet;
+    OUString aRet;
     aRet = ObjectIdentifier::createDataCurveEquationCID( m_aSeriesParticle, nCurveIndex );
     return aRet;
 }
@@ -555,7 +555,7 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
         xPointProp->getPropertyValue(aPropName) >>= nNumberFormat;
     return nNumberFormat;
 }
-void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole )
+void VDataSeries::setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole )
 {
     if (rRole == "values-y")
         m_pValueSequenceForDataLabelNumberFormatDetection = &m_aValues_Y;

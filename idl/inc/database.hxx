@@ -33,7 +33,7 @@ class SvCommand;
 
 class SvIdlError
 {
-    rtl::OString aText;
+    OString aText;
 public:
     sal_uInt32  nLine, nColumn;
 
@@ -41,8 +41,8 @@ public:
             SvIdlError( sal_uInt32 nL, sal_uInt32 nC )
                 : nLine(nL), nColumn(nC) {}
 
-    const rtl::OString&  GetText() const { return aText; }
-    void SetText( const rtl::OString& rT ) { aText = rT; }
+    const OString&  GetText() const { return aText; }
+    void SetText( const OString& rT ) { aText = rT; }
     sal_Bool            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
     SvIdlError &    operator = ( const SvIdlError & rRef )
@@ -71,14 +71,14 @@ class SvIdlDataBase
     SvMetaTypeMemberList        aTmpTypeList; // not persistent
 
 protected:
-    ::std::set< ::rtl::OUString > m_DepFiles;
+    ::std::set< OUString > m_DepFiles;
     SvMetaObjectMemberStack     aContextStack;
     String                      aPath;
     SvIdlError                  aError;
     void WriteReset()
     {
         aUsedTypes.clear();
-        aIFaceName = rtl::OString();
+        aIFaceName = OString();
     }
 public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
@@ -93,11 +93,11 @@ public:
     SvMetaTypeMemberList &    GetTypeList();
     SvMetaClassMemberList &   GetClassList()  { return aClassList; }
     SvMetaModuleMemberList &  GetModuleList() { return aModuleList; }
-    SvMetaModule *            GetModule( const rtl::OString& rName );
+    SvMetaModule *            GetModule( const OString& rName );
 
     // list of used types while writing
     SvMetaTypeMemberList    aUsedTypes;
-    rtl::OString            aIFaceName;
+    OString            aIFaceName;
     SvNumberIdentifier      aStructSlotId;
 
     void                    StartNewFile( const String& rName );
@@ -111,13 +111,13 @@ public:
     const String &            GetPath() const { return aPath; }
     SvMetaObjectMemberStack & GetStack()      { return aContextStack; }
 
-    void                    Write(const rtl::OString& rText);
-    void                    WriteError(const rtl::OString& rErrWrn,
-                                    const rtl::OString& rFileName,
-                                    const rtl::OString& rErrorText,
+    void                    Write(const OString& rText);
+    void                    WriteError(const OString& rErrWrn,
+                                    const OString& rFileName,
+                                    const OString& rErrorText,
                                     sal_uLong nRow = 0, sal_uLong nColumn = 0 ) const;
     void                    WriteError( SvTokenStream & rInStm );
-    void                    SetError( const rtl::OString& rError, SvToken * pTok );
+    void                    SetError( const OString& rError, SvToken * pTok );
     void                    Push( SvMetaObject * pObj );
     sal_Bool                    Pop( sal_Bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
                             {
@@ -129,11 +129,11 @@ public:
                                 return bOk;
                             }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    sal_Bool                FindId( const rtl::OString& rIdName, sal_uLong * pVal );
-    sal_Bool                InsertId( const rtl::OString& rIdName, sal_uLong nVal );
+    sal_Bool                FindId( const OString& rIdName, sal_uLong * pVal );
+    sal_Bool                InsertId( const OString& rIdName, sal_uLong nVal );
     sal_Bool                    ReadIdFile( const String & rFileName );
 
-    SvMetaType *            FindType( const rtl::OString& rName );
+    SvMetaType *            FindType( const OString& rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
 
     SvMetaType *            ReadKnownType( SvTokenStream & rInStm );
@@ -142,7 +142,7 @@ public:
     SvMetaAttribute *       SearchKnownAttr( const SvNumberIdentifier& );
     SvMetaClass *           ReadKnownClass( SvTokenStream & rInStm );
     void AddDepFile(String const& rFileName);
-    bool WriteDepFile(SvFileStream & rStream, ::rtl::OUString const& rTarget);
+    bool WriteDepFile(SvFileStream & rStream, OUString const& rTarget);
 };
 
 class SvIdlWorkingBase : public SvIdlDataBase

@@ -38,7 +38,7 @@ static char const sHTML_O_Object[] = "OBJECT";
 
 }
 
-sal_uInt16 SwApplet_Impl::GetOptionType( const ::rtl::OUString& rName, sal_Bool bApplet )
+sal_uInt16 SwApplet_Impl::GetOptionType( const OUString& rName, sal_Bool bApplet )
 {
     sal_uInt16 nType = bApplet ? SWHTML_OPTTYPE_PARAM : SWHTML_OPTTYPE_TAG;
 
@@ -119,12 +119,12 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16
 {
 }
 
-void SwApplet_Impl::CreateApplet( const ::rtl::OUString& rCode, const ::rtl::OUString& rName,
-                                  sal_Bool bMayScript, const ::rtl::OUString& rCodeBase,
-                                  const ::rtl::OUString& rDocumentBaseURL )
+void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
+                                  sal_Bool bMayScript, const OUString& rCodeBase,
+                                  const OUString& rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
-    ::rtl::OUString aName;
+    OUString aName;
 
     // create Applet; it will be in running state
     xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
@@ -133,31 +133,31 @@ void SwApplet_Impl::CreateApplet( const ::rtl::OUString& rCode, const ::rtl::OUS
     INetURLObject aUrlBase(rDocumentBaseURL);
     aUrlBase.removeSegment();
 
-    ::rtl::OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
+    OUString sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
-        xSet->setPropertyValue( ::rtl::OUString("AppletCode"), uno::makeAny( rCode ) );
-        xSet->setPropertyValue( ::rtl::OUString("AppletName"), uno::makeAny( rName ) );
-        xSet->setPropertyValue( ::rtl::OUString("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
-        xSet->setPropertyValue( ::rtl::OUString("AppletDocBase"), uno::makeAny( sDocBase ) );
+        xSet->setPropertyValue( OUString("AppletCode"), uno::makeAny( rCode ) );
+        xSet->setPropertyValue( OUString("AppletName"), uno::makeAny( rName ) );
+        xSet->setPropertyValue( OUString("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
+        xSet->setPropertyValue( OUString("AppletDocBase"), uno::makeAny( sDocBase ) );
         if ( !rCodeBase.isEmpty() )
-            xSet->setPropertyValue( ::rtl::OUString("AppletCodeBase"), uno::makeAny( rCodeBase ) );
+            xSet->setPropertyValue( OUString("AppletCodeBase"), uno::makeAny( rCodeBase ) );
         else
-            xSet->setPropertyValue( ::rtl::OUString("AppletCodeBase"), uno::makeAny( sDocBase ) );
+            xSet->setPropertyValue( OUString("AppletCodeBase"), uno::makeAny( sDocBase ) );
     }
 }
 #ifdef SOLAR_JAVA
-sal_Bool SwApplet_Impl::CreateApplet( const ::rtl::OUString& rBaseURL )
+sal_Bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
 {
-    ::rtl::OUString aCode, aName, aCodeBase;
+    OUString aCode, aName, aCodeBase;
     sal_Bool bMayScript = sal_False;
 
     size_t nArgCount = aCommandList.size();
     for( size_t i = 0; i < nArgCount; i++ )
     {
         const SvCommand& rArg = aCommandList[i];
-        const ::rtl::OUString& rName = rArg.GetCommand();
+        const OUString& rName = rArg.GetCommand();
         if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_code ) )
             aCode = rArg.GetArgument();
         else if( rName.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_O_codebase ) )
@@ -185,12 +185,12 @@ void SwApplet_Impl::FinishApplet()
     {
         uno::Sequence < beans::PropertyValue > aProps;
         aCommandList.FillSequence( aProps );
-        xSet->setPropertyValue( ::rtl::OUString("AppletCommands"), uno::makeAny( aProps ) );
+        xSet->setPropertyValue( OUString("AppletCommands"), uno::makeAny( aProps ) );
     }
 }
 
 #ifdef SOLAR_JAVA
-void SwApplet_Impl::AppendParam( const ::rtl::OUString& rName, const ::rtl::OUString& rValue )
+void SwApplet_Impl::AppendParam( const OUString& rName, const OUString& rValue )
 {
     aCommandList.Append( rName, rValue );
 }

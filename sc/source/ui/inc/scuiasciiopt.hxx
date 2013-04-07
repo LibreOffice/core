@@ -35,7 +35,7 @@ class ScImportAsciiDlg : public ModalDialog
     sal_uLong*                      mpRowPosArray;
     sal_uLong                       mnRowPosCount;
 
-    rtl::OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
+    OUString               maPreviewLine[ CSV_PREVIEW_LINES ];
 
     FixedText*                  pFtCharSet;
 
@@ -101,7 +101,7 @@ private:
     void                        SetupSeparatorCtrls();
 
 
-    bool                        GetLine( sal_uLong nLine, rtl::OUString &rText );
+    bool                        GetLine( sal_uLong nLine, OUString &rText );
     void                        UpdateVertical();
     inline bool                 Seek( sal_uLong nPos ); // synced to and from mnStreamPos
 

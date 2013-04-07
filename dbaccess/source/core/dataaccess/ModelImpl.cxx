@@ -116,7 +116,7 @@ DBG_NAME( DocumentStorageAccess )
 class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStorageSupplier
                                                             ,   XTransactionListener >
 {
-    typedef ::std::map< ::rtl::OUString, Reference< XStorage > >    NamedStorages;
+    typedef ::std::map< OUString, Reference< XStorage > >    NamedStorages;
 
     ::osl::Mutex        m_aMutex;
     /// all sub storages which we ever gave to the outer world
@@ -144,8 +144,8 @@ public:
     void dispose();
 
     // XDocumentSubStorageSupplier
-    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 _nMode ) throw (RuntimeException);
-    virtual Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException);
+    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nMode ) throw (RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException);
 
     // XTransactionListener
     virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -168,7 +168,7 @@ public:
 private:
     /** opens the sub storage with the given name, in the given mode
     */
-    Reference< XStorage > impl_openSubStorage_nothrow( const ::rtl::OUString& _rStorageName, sal_Int32 _nMode );
+    Reference< XStorage > impl_openSubStorage_nothrow( const OUString& _rStorageName, sal_Int32 _nMode );
 
     void impl_suspendCommitPropagation()
     {
@@ -209,7 +209,7 @@ void DocumentStorageAccess::dispose()
     m_pModelImplementation = NULL;
 }
 
-Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const ::rtl::OUString& _rStorageName, sal_Int32 _nDesiredMode )
+Reference< XStorage > DocumentStorageAccess::impl_openSubStorage_nothrow( const OUString& _rStorageName, sal_Int32 _nDesiredMode )
 {
     OSL_ENSURE( !_rStorageName.isEmpty(),"ODatabaseModelImpl::impl_openSubStorage_nothrow: Invalid storage name!" );
 
@@ -309,7 +309,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
 
 }
 
-Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const ::rtl::OUString& aStorageName, ::sal_Int32 _nDesiredMode ) throw (RuntimeException)
+Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nDesiredMode ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     NamedStorages::iterator pos = m_aExposedStorages.find( aStorageName );
@@ -322,24 +322,24 @@ Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( con
     return pos->second;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException)
+Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException)
 {
     Reference< XStorage > xRootStor( m_pModelImplementation->getRootStorage() );
     if ( !xRootStor.is() )
-        return Sequence< ::rtl::OUString >();
+        return Sequence< OUString >();
 
-    ::std::vector< ::rtl::OUString > aNames;
+    ::std::vector< OUString > aNames;
 
     Reference< XNameAccess > xNames( xRootStor, UNO_QUERY_THROW );
-    Sequence< ::rtl::OUString > aElementNames( xNames->getElementNames() );
+    Sequence< OUString > aElementNames( xNames->getElementNames() );
     for ( sal_Int32 i=0; i<aElementNames.getLength(); ++i )
     {
         if ( xRootStor->isStorageElement( aElementNames[i] ) )
             aNames.push_back( aElementNames[i] );
     }
     return aNames.empty()
-        ?  Sequence< ::rtl::OUString >()
-        :  Sequence< ::rtl::OUString >( &aNames[0], aNames.size() );
+        ?  Sequence< OUString >()
+        :  Sequence< OUString >( &aNames[0], aNames.size() );
 }
 
 void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ ) throw (Exception, RuntimeException)
@@ -436,7 +436,7 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _r
 }
 
 ODatabaseModelImpl::ODatabaseModelImpl(
-                    const ::rtl::OUString& _rRegistrationName,
+                    const OUString& _rRegistrationName,
                     const Reference< XComponentContext >& _rxContext,
                     ODatabaseContext& _rDBContext
                     )
@@ -483,7 +483,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
         Type* pAllowedType = aAllowedTypes.getArray();
         *pAllowedType++ = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< double* >( NULL ) );
-        *pAllowedType++ = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< OUString* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< sal_Int16* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
@@ -503,7 +503,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
             if ( !pSettings->DefaultValue.hasValue() )
             {
                 Property aProperty(
-                    ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
+                    OUString::createFromAscii( pSettings->AsciiName ),
                     -1,
                     pSettings->ValueType,
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID
@@ -513,7 +513,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
             else
             {
                 xContainer->addProperty(
-                    ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
+                    OUString::createFromAscii( pSettings->AsciiName ),
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
                     pSettings->DefaultValue
                 );
@@ -529,7 +529,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
 
 namespace
 {
-    ::rtl::OUString lcl_getContainerStorageName_throw( ODatabaseModelImpl::ObjectType _eType )
+    OUString lcl_getContainerStorageName_throw( ODatabaseModelImpl::ObjectType _eType )
     {
         const sal_Char* pAsciiName( NULL );
         switch ( _eType )
@@ -541,7 +541,7 @@ namespace
         default:
             throw RuntimeException();
         }
-        return ::rtl::OUString::createFromAscii( pAsciiName );
+        return OUString::createFromAscii( pAsciiName );
     }
 
     bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const Reference< XStorage >& _rxContainerStorage )
@@ -554,11 +554,11 @@ namespace
             )
         {
 #if OSL_DEBUG_LEVEL > 0
-            const ::rtl::OUString& rName( object->first ); (void)rName;
+            const OUString& rName( object->first ); (void)rName;
 #endif
 
             const TContentPtr& rDefinition( object->second );
-            const ::rtl::OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
+            const OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
 
             if ( rPersistentName.isEmpty() )
             {   // it's a logical sub folder used to organize the real objects
@@ -605,7 +605,7 @@ namespace
     }
 }
 
-bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContainerStorage, const ::rtl::OUString& _rPersistentName )
+bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContainerStorage, const OUString& _rPersistentName )
 {
     OSL_PRECOND( _rxContainerStorage.is(), "ODatabaseModelImpl::objectHasMacros: this will crash!" );
 
@@ -762,13 +762,13 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
     return m_xNumberFormatsSupplier;
 }
 
-void ODatabaseModelImpl::setDocFileLocation( const ::rtl::OUString& i_rLoadedFrom )
+void ODatabaseModelImpl::setDocFileLocation( const OUString& i_rLoadedFrom )
 {
     ENSURE_OR_THROW( !i_rLoadedFrom.isEmpty(), "invalid URL" );
     m_sDocFileLocation = i_rLoadedFrom;
 }
 
-void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, const Sequence< PropertyValue >& _rArgs )
+void ODatabaseModelImpl::setResource( const OUString& i_rDocumentURL, const Sequence< PropertyValue >& _rArgs )
 {
     ENSURE_OR_THROW( !i_rDocumentURL.isEmpty(), "invalid URL" );
 
@@ -776,7 +776,7 @@ void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, con
 #if OSL_DEBUG_LEVEL > 0
     if ( aMediaDescriptor.has( "SalvagedFile" ) )
     {
-        ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
+        OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", OUString() ) );
         // If SalvagedFile is an empty string, this indicates "the document is being recovered, but i_rDocumentURL already
         // is the real document URL, not the temporary document location"
         if ( sSalvagedFile.isEmpty() )
@@ -1036,40 +1036,40 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     static const AsciiPropertyValue aKnownSettings[] =
     {
         // known JDBC settings
-        AsciiPropertyValue( "JavaDriverClass",            makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "JavaDriverClassPath",       makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "JavaDriverClass",            makeAny( OUString() ) ),
+        AsciiPropertyValue( "JavaDriverClassPath",       makeAny( OUString() ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         // known settings for file-based drivers
-        AsciiPropertyValue( "Extension",                  makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "CharSet",                    makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "Extension",                  makeAny( OUString() ) ),
+        AsciiPropertyValue( "CharSet",                    makeAny( OUString() ) ),
         AsciiPropertyValue( "HeaderLine",                 makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "FieldDelimiter",             makeAny( OUString( "," ) ) ),
         AsciiPropertyValue( "StringDelimiter",            makeAny( OUString( "\"" ) ) ),
         AsciiPropertyValue( "DecimalDelimiter",           makeAny( OUString( "." ) ) ),
-        AsciiPropertyValue( "ThousandDelimiter",          makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "ThousandDelimiter",          makeAny( OUString() ) ),
         AsciiPropertyValue( "ShowDeleted",                makeAny( (sal_Bool)sal_False ) ),
         // known ODBC settings
-        AsciiPropertyValue( "SystemDriverSettings",       makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "SystemDriverSettings",       makeAny( OUString() ) ),
         AsciiPropertyValue( "UseCatalog",                 makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
         // settings related to auto increment handling
-        AsciiPropertyValue( "AutoIncrementCreation",      makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "AutoIncrementCreation",      makeAny( OUString() ) ),
+        AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( OUString() ) ),
         AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( (sal_Bool)sal_False ) ),
         // known LDAP driver settings
-        AsciiPropertyValue( "HostName",                   makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "HostName",                   makeAny( OUString() ) ),
         AsciiPropertyValue( "PortNumber",                 makeAny( (sal_Int32)389 ) ),
-        AsciiPropertyValue( "BaseDN",                     makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "BaseDN",                     makeAny( OUString() ) ),
         AsciiPropertyValue( "MaxRowCount",                makeAny( (sal_Int32)100 ) ),
         // known MySQLNative driver settings
-        AsciiPropertyValue( "LocalSocket",                makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "NamedPipe",                  makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "LocalSocket",                makeAny( OUString() ) ),
+        AsciiPropertyValue( "NamedPipe",                  makeAny( OUString() ) ),
         // misc known driver settings
         AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AddIndexAppendix",           makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( (sal_Bool)sal_True ) ),
-        AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< ::rtl::OUString >::get() ),
-        AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< ::rtl::OUString >::get() ),
+        AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< OUString >::get() ),
+        AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< OUString >::get() ),
         AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
         AsciiPropertyValue( "ShowColumnDescription",      makeAny( (sal_Bool)sal_False ) ),
         // known SDB level settings
@@ -1089,15 +1089,15 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
 
         // known services to handle database tasks
-        AsciiPropertyValue( "TableAlterationServiceName", makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "TableRenameServiceName",     makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "ViewAlterationServiceName",  makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "ViewAccessServiceName",      makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "CommandDefinitions",         makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "Forms",                      makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "Reports",                    makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( ::rtl::OUString() ) ),
-        AsciiPropertyValue( "IndexAlterationServiceName", makeAny( ::rtl::OUString() ) ),
+        AsciiPropertyValue( "TableAlterationServiceName", makeAny( OUString() ) ),
+        AsciiPropertyValue( "TableRenameServiceName",     makeAny( OUString() ) ),
+        AsciiPropertyValue( "ViewAlterationServiceName",  makeAny( OUString() ) ),
+        AsciiPropertyValue( "ViewAccessServiceName",      makeAny( OUString() ) ),
+        AsciiPropertyValue( "CommandDefinitions",         makeAny( OUString() ) ),
+        AsciiPropertyValue( "Forms",                      makeAny( OUString() ) ),
+        AsciiPropertyValue( "Reports",                    makeAny( OUString() ) ),
+        AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( OUString() ) ),
+        AsciiPropertyValue( "IndexAlterationServiceName", makeAny( OUString() ) ),
 
         AsciiPropertyValue()
     };
@@ -1168,7 +1168,7 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
     catch( const Exception& )
     {
         throw WrappedTargetRuntimeException(
-            ::rtl::OUString(),
+            OUString(),
             xDocument,
             ::cppu::getCaughtException()
         );
@@ -1257,12 +1257,12 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
     return m_xDocumentStorage.getTyped();
 }
 
-void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocumentURL )
+void ODatabaseModelImpl::impl_switchToLogicalURL( const OUString& i_rDocumentURL )
 {
     if ( i_rDocumentURL == m_sDocumentURL )
         return;
 
-    const ::rtl::OUString sOldURL( m_sDocumentURL );
+    const OUString sOldURL( m_sDocumentURL );
     // update our name, if necessary
     if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
         ||  ( m_sName.isEmpty() )        // we do not have a name, yet (i.e. are not registered at the database context)
@@ -1293,7 +1293,7 @@ void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocu
     }
 }
 
-::rtl::OUString ODatabaseModelImpl::getObjectContainerStorageName( const ObjectType _eType )
+OUString ODatabaseModelImpl::getObjectContainerStorageName( const ObjectType _eType )
 {
     return lcl_getContainerStorageName_throw( _eType );
 }
@@ -1318,7 +1318,7 @@ sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
     return sal_True;
 }
 
-::rtl::OUString ODatabaseModelImpl::getDocumentLocation() const
+OUString ODatabaseModelImpl::getDocumentLocation() const
 {
     return getURL();
     // formerly, we returned getDocFileLocation here, which is the location of the file from which we

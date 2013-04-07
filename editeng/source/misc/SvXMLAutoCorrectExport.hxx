@@ -33,7 +33,7 @@ public:
     SvXMLAutoCorrectExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const SvxAutocorrWordList * pNewAutocorr_List,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLAutoCorrectExport ( void ) {}
@@ -53,7 +53,7 @@ public:
     SvXMLExceptionListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         const SvStringsISortDtor &rNewList,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLExceptionListExport ( void ) {}

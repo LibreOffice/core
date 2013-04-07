@@ -52,8 +52,6 @@
 #include <boost/foreach.hpp>
 #include <o3tl/sorted_vector.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

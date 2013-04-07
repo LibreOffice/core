@@ -170,7 +170,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     if( nSbxId == 0x65 )    // Dialog Id
         return new SbxVariable;
 
-    rtl::OUString aEmptyStr;
+    OUString aEmptyStr;
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
@@ -198,7 +198,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     return pNew;
 }
 
-SbxObject* SbxBase::CreateObject( const rtl::OUString& rClass )
+SbxObject* SbxBase::CreateObject( const OUString& rClass )
 {
     SbxAppData& r = GetSbxData_Impl();
     SbxObject* pNew = NULL;
@@ -341,7 +341,7 @@ SbxBase* SbxFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbxFactory::CreateObject( const rtl::OUString& )
+SbxObject* SbxFactory::CreateObject( const OUString& )
 {
     return NULL;
 }
@@ -351,7 +351,7 @@ SbxObject* SbxFactory::CreateObject( const rtl::OUString& )
 SbxInfo::~SbxInfo()
 {}
 
-void SbxInfo::AddParam(const rtl::OUString& rName, SbxDataType eType, sal_uInt16 nFlags)
+void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, sal_uInt16 nFlags)
 {
     aParams.push_back(new SbxParamInfo(rName, eType, nFlags));
 }
@@ -377,7 +377,7 @@ sal_Bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     {
         sal_uInt16 nType, nFlags;
         sal_uInt32 nUserData = 0;
-        rtl::OUString aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
+        OUString aName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
             RTL_TEXTENCODING_ASCII_US);
         rStrm >> nType >> nFlags;
         if( nVer > 1 )

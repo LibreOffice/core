@@ -42,7 +42,6 @@
 #include <tools/debug.hxx>
 
 
-using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::Any;

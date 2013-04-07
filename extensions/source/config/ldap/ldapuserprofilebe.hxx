@@ -58,15 +58,15 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         ~LdapUserProfileBe(void) ;
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
             getImplementationName(  )
                 throw (uno::RuntimeException) ;
 
         virtual sal_Bool SAL_CALL
-            supportsService( const rtl::OUString& aServiceName )
+            supportsService( const OUString& aServiceName )
                 throw (uno::RuntimeException) ;
 
-        virtual uno::Sequence<rtl::OUString> SAL_CALL
+        virtual uno::Sequence<OUString> SAL_CALL
             getSupportedServiceNames(  )
                 throw (uno::RuntimeException) ;
 
@@ -76,7 +76,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
         virtual void SAL_CALL setPropertyValue(
-            rtl::OUString const &, css::uno::Any const &)
+            OUString const &, css::uno::Any const &)
             throw (
                 css::beans::UnknownPropertyException,
                 css::beans::PropertyVetoException,
@@ -84,13 +84,13 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
                 css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         virtual css::uno::Any SAL_CALL getPropertyValue(
-            rtl::OUString const & PropertyName)
+            OUString const & PropertyName)
             throw (
                 css::beans::UnknownPropertyException,
                 css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         virtual void SAL_CALL addPropertyChangeListener(
-            rtl::OUString const &,
+            OUString const &,
             css::uno::Reference< css::beans::XPropertyChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
@@ -98,7 +98,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         {}
 
         virtual void SAL_CALL removePropertyChangeListener(
-            rtl::OUString const &,
+            OUString const &,
             css::uno::Reference< css::beans::XPropertyChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
@@ -106,7 +106,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         {}
 
         virtual void SAL_CALL addVetoableChangeListener(
-            rtl::OUString const &,
+            OUString const &,
             css::uno::Reference< css::beans::XVetoableChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
@@ -114,7 +114,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
         {}
 
         virtual void SAL_CALL removeVetoableChangeListener(
-            rtl::OUString const &,
+            OUString const &,
             css::uno::Reference< css::beans::XVetoableChangeListener > const &)
             throw (
                 css::beans::UnknownPropertyException,
@@ -125,23 +125,23 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
           Provides the implementation name.
           @return   implementation name
           */
-        static rtl::OUString SAL_CALL getLdapUserProfileBeName(void) ;
+        static OUString SAL_CALL getLdapUserProfileBeName(void) ;
         /**
           Provides the supported services names
           @return   service names
           */
-        static uno::Sequence<rtl::OUString> SAL_CALL
+        static uno::Sequence<OUString> SAL_CALL
             getLdapUserProfileBeServiceNames(void) ;
 
     private:
         /** Check if LDAP is configured */
         bool readLdapConfiguration(
             uno::Reference<uno::XComponentContext> const & context,
-            LdapDefinition * definition, rtl::OUString * loggedOnUser);
+            LdapDefinition * definition, OUString * loggedOnUser);
 
         bool getLdapStringParam(uno::Reference<container::XNameAccess>& xAccess,
-                                const rtl::OUString& aLdapSetting,
-                                rtl::OUString& aServerParameter);
+                                const OUString& aLdapSetting,
+                                OUString& aServerParameter);
 
     LdapData data_;
 } ;

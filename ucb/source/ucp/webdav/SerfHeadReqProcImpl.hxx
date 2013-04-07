@@ -37,7 +37,7 @@ class SerfHeadReqProcImpl : public SerfRequestProcessorImpl
 public:
     SerfHeadReqProcImpl( const char* inPath,
                          const DAVRequestHeaders& inRequestHeaders,
-                         const std::vector< ::rtl::OUString > & inHeaderNames,
+                         const std::vector< OUString > & inHeaderNames,
                          DAVResource & ioResource );
 
     virtual ~SerfHeadReqProcImpl();
@@ -56,7 +56,7 @@ protected:
     void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket );
 
 private:
-    const std::vector< ::rtl::OUString > * mpHeaderNames;
+    const std::vector< OUString > * mpHeaderNames;
     DAVResource* mpResource;
 };
 

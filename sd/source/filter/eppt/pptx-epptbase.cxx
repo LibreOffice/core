@@ -169,7 +169,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     if ( !InitSOIface() )
         return;
 
-    FontCollectionEntry aDefaultFontDesc( rtl::OUString( "Times New Roman" ),
+    FontCollectionEntry aDefaultFontDesc( OUString( "Times New Roman" ),
                                           ROMAN,
                                           awt::FontPitch::VARIABLE,
                                                     RTL_TEXTENCODING_MS_1252 );
@@ -179,10 +179,10 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
         return;
 
     sal_Int32 nWidth = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, rtl::OUString(  "Width" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, OUString(  "Width" ) ) )
         mAny >>= nWidth;
     sal_Int32 nHeight = 29700;
-    if ( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Height" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Height" ) ) )
         mAny >>= nHeight;
 
     maNotesPageSize = MapSize( awt::Size( nWidth, nHeight ) );
@@ -191,10 +191,10 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
         return;
 
     nWidth = 28000;
-    if ( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Width" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Width" ) ) )
         mAny >>= nWidth;
     nHeight = 21000;
-    if ( ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Height" ) ) )
+    if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Height" ) ) )
         mAny >>= nHeight;
     maDestPageSize = MapSize( awt::Size( nWidth, nHeight ) );
 
@@ -325,7 +325,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 
         /* try to get the "real" background PropertySet. If the normal page is not supporting this property, it is
            taken the property from the master */
-        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "Background" ), sal_True );
+        sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ), sal_True );
         if ( bHasBackground )
             bHasBackground = ( aAny >>= mXBackgroundPropSet );
         if ( !bHasBackground )
@@ -342,7 +342,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
                         ( aXMasterDrawPage, UNO_QUERY );
                     if ( aXMasterPagePropSet.is() )
                     {
-                        sal_Bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, rtl::OUString( "Background" ) );
+                        sal_Bool bBackground = GetPropertyValue( aAny, aXMasterPagePropSet, OUString( "Background" ) );
                         if ( bBackground )
                         {
                             aAny >>= mXBackgroundPropSet;
@@ -369,7 +369,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     SetCurrentStyleSheet( nMasterNum );
 
     Reference< XPropertySet > aXBackgroundPropSet;
-    sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "Background" ) );
+    sal_Bool bHasBackground = GetPropertyValue( aAny, mXPagePropSet, OUString( "Background" ) );
     if ( bHasBackground )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
 
@@ -388,7 +388,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
         }
     }
 */
-    if ( GetPropertyValue( aAny, mXPagePropSet, rtl::OUString( "IsBackgroundObjectsVisible" ) ) )
+    if ( GetPropertyValue( aAny, mXPagePropSet, OUString( "IsBackgroundObjectsVisible" ) ) )
     {
         sal_Bool bBackgroundObjectsVisible = sal_False;
         if ( aAny >>= bBackgroundObjectsVisible )
@@ -424,7 +424,7 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return sal_False;
     SetCurrentStyleSheet( nPageNum );
 
-    if ( !ImplGetPropertyValue( mXPagePropSet, rtl::OUString( "Background" ) ) )                // load background shape
+    if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                // load background shape
         return sal_False;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
@@ -441,7 +441,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
 {
     ::com::sun::star::uno::Any aAny;
     sal_Int32 nLayout = 20;
-    if ( GetPropertyValue( aAny, rXPropSet, rtl::OUString( "Layout" ) ), sal_True )
+    if ( GetPropertyValue( aAny, rXPropSet, OUString( "Layout" ) ), sal_True )
         aAny >>= nLayout;
 
     DBG(printf("GetLayoutOffset %" SAL_PRIdINT32 "\n", nLayout));
@@ -499,7 +499,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 
             if ( aXPropertySet.is() )
             {
-                if ( ImplGetPropertyValue( aXPropertySet, rtl::OUString( "Number" ) ) )
+                if ( ImplGetPropertyValue( aXPropertySet, OUString( "Number" ) ) )
                     nRetValue |= *(sal_Int16*)mAny.getValue();
                 if ( nRetValue & 0xffff )           // avoid overflow
                     nRetValue--;
@@ -546,7 +546,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
         Reference< XPropertySet >
             aXPropSet( mXModel, UNO_QUERY );
 
-        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, rtl::OUString( "TabStop" ) ) )
+        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, OUString( "TabStop" ) ) )
             ? (sal_uInt16)( *(sal_Int32*)mAny.getValue() / 4.40972 )
             : 1250;
 
@@ -571,25 +571,25 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                     case EPP_TEXTTYPE_CenterTitle :
                     case EPP_TEXTTYPE_Title :
                     {
-                        aStyle = rtl::OUString( "title" );
+                        aStyle = OUString( "title" );
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Body :
                     {
-                        aStyle = rtl::OUString( "outline1" );      // SD_LT_SEPARATOR
+                        aStyle = OUString( "outline1" );      // SD_LT_SEPARATOR
                         aFamily = aXNamed->getName();
                     }
                     break;
                     case EPP_TEXTTYPE_Other :
                     {
-                        aStyle = rtl::OUString( "standard" );
-                        aFamily = rtl::OUString( "graphics" );
+                        aStyle = OUString( "standard" );
+                        aFamily = OUString( "graphics" );
                     }
                     break;
                     case EPP_TEXTTYPE_CenterBody :
                     {
-                        aStyle = rtl::OUString( "subtitle" );
+                        aStyle = OUString( "subtitle" );
                         aFamily = aXNamed->getName();
                     }
                     break;
@@ -754,7 +754,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
         maSize = MapSize( mXShape->getSize() );
         maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
 
-        rtl::OStringBuffer aTypeBuffer(rtl::OUStringToOString(
+        OStringBuffer aTypeBuffer(OUStringToOString(
             mXShape->getShapeType(), RTL_TEXTENCODING_UTF8));
         // remove "com.sun.star."
         aTypeBuffer.remove(0, RTL_CONSTASCII_LENGTH("com.sun.star."));
@@ -764,14 +764,14 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
         mType = aTypeBuffer.makeStringAndClear();
 
         mbPresObj = mbEmptyPresObj = sal_False;
-        if ( ImplGetPropertyValue( rtl::OUString( "IsPresentationObject" ) ) )
+        if ( ImplGetPropertyValue( OUString( "IsPresentationObject" ) ) )
             mAny >>= mbPresObj;
 
-        if ( mbPresObj && ImplGetPropertyValue( rtl::OUString( "IsEmptyPresentationObject" ) ) )
+        if ( mbPresObj && ImplGetPropertyValue( OUString( "IsEmptyPresentationObject" ) ) )
             mAny >>= mbEmptyPresObj;
 
         mnAngle = ( PropValue::GetPropertyValue( aAny,
-            mXPropSet, rtl::OUString( "RotateAngle" ), sal_True ) )
+            mXPropSet, OUString( "RotateAngle" ), sal_True ) )
                 ? *((sal_Int32*)aAny.getValue() )
                 : 0;
 

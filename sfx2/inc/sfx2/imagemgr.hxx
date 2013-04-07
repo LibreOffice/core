@@ -27,7 +27,7 @@
 
 SFX2_DLLPUBLIC Image SAL_CALL GetImage(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
+    const OUString& aURL,
     bool bBig
 );
 

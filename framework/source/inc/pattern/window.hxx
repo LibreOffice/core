@@ -44,12 +44,12 @@ class WindowHelper
     public:
 
 //-----------------------------------------------
-static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
+static OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     if (!xWindow.is())
-        return ::rtl::OUString();
+        return OUString();
 
-    rtl::OString sWindowState;
+    OString sWindowState;
     // SOLAR SAFE -> ----------------------------
     {
         SolarMutexGuard aSolarGuard;
@@ -65,12 +65,12 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
     }
     // <- SOLAR SAFE ----------------------------
 
-    return rtl::OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
+    return OStringToOUString(sWindowState,RTL_TEXTENCODING_UTF8);
 }
 
 //-----------------------------------------------
 static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                           const ::rtl::OUString&                          sWindowState)
+                           const OUString&                          sWindowState)
 {
     if (
         (!xWindow.is()            ) ||

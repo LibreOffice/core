@@ -31,7 +31,7 @@ namespace dp_misc
 {
 
 inline void progressUpdate(
-    ::rtl::OUString const & status,
+    OUString const & status,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
 {
     if (xCmdEnv.is()) {
@@ -52,16 +52,16 @@ public:
     inline ~ProgressLevel();
     inline ProgressLevel(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
-        ::rtl::OUString const & status );
+        OUString const & status );
 
-    inline void update( ::rtl::OUString const & status ) const;
+    inline void update( OUString const & status ) const;
     inline void update( css::uno::Any const & status ) const;
 };
 
 //______________________________________________________________________________
 inline ProgressLevel::ProgressLevel(
     css::uno::Reference< css::ucb::XCommandEnvironment > const & xCmdEnv,
-    ::rtl::OUString const & status )
+    OUString const & status )
 {
     if (xCmdEnv.is())
         m_xProgressHandler = xCmdEnv->getProgressHandler();
@@ -77,7 +77,7 @@ inline ProgressLevel::~ProgressLevel()
 }
 
 //______________________________________________________________________________
-inline void ProgressLevel::update( ::rtl::OUString const & status ) const
+inline void ProgressLevel::update( OUString const & status ) const
 {
     if (m_xProgressHandler.is())
         m_xProgressHandler->update( css::uno::makeAny(status) );

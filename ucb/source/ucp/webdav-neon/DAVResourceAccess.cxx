@@ -53,10 +53,10 @@ using namespace com::sun::star;
 //=========================================================================
 // virtual
 int DAVAuthListener_Impl::authenticate(
-    const ::rtl::OUString & inRealm,
-    const ::rtl::OUString & inHostName,
-    ::rtl::OUString & inoutUserName,
-    ::rtl::OUString & outPassWord,
+    const OUString & inRealm,
+    const OUString & inHostName,
+    OUString & inoutUserName,
+    OUString & outPassWord,
     sal_Bool bCanUseSystemCredentials )
 {
     if ( m_xEnv.is() )
@@ -77,7 +77,7 @@ int DAVAuthListener_Impl::authenticate(
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                 = new ucbhelper::SimpleAuthenticationRequest(
                     m_aURL, inHostName, inRealm, inoutUserName,
-                    outPassWord, ::rtl::OUString(),
+                    outPassWord, OUString(),
                     true /*bAllowPersistentStoring*/,
                     bCanUseSystemCredentials );
             xIH->handle( xRequest.get() );
@@ -106,8 +106,8 @@ int DAVAuthListener_Impl::authenticate(
                     {
                         // This is the (strange) way to tell neon to use
                         // system credentials.
-                        inoutUserName = rtl::OUString();
-                        outPassWord   = rtl::OUString();
+                        inoutUserName = OUString();
+                        outPassWord   = OUString();
                     }
                     else
                     {
@@ -141,7 +141,7 @@ int DAVAuthListener_Impl::authenticate(
 DAVResourceAccess::DAVResourceAccess(
     const uno::Reference< uno::XComponentContext > & rxContext,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
-    const rtl::OUString & rURL )
+    const OUString & rURL )
 : m_aURL( rURL ),
   m_xSessionFactory( rSessionFactory ),
   m_xContext( rxContext )
@@ -194,7 +194,7 @@ void DAVResourceAccess::OPTIONS(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString( "OPTIONS" ),
+                                   OUString( "OPTIONS" ),
                                    aHeaders );
 
             m_xSession->OPTIONS( getRequestURI(),
@@ -219,7 +219,7 @@ void DAVResourceAccess::OPTIONS(
 //=========================================================================
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
-    const std::vector< rtl::OUString > & rPropertyNames,
+    const std::vector< OUString > & rPropertyNames,
     std::vector< DAVResource > & rResources,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -237,7 +237,7 @@ void DAVResourceAccess::PROPFIND(
 
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString( "PROPFIND" ),
+                                   OUString( "PROPFIND" ),
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -279,7 +279,7 @@ void DAVResourceAccess::PROPFIND(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString( "PROPFIND" ),
+                                   OUString( "PROPFIND" ),
                                    aHeaders );
 
             m_xSession->PROPFIND( getRequestURI(),
@@ -319,7 +319,7 @@ void DAVResourceAccess::PROPPATCH(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString( "PROPPATCH" ),
+                                   OUString( "PROPPATCH" ),
                                    aHeaders );
 
             m_xSession->PROPPATCH( getRequestURI(),
@@ -342,7 +342,7 @@ void DAVResourceAccess::PROPPATCH(
 
 //=========================================================================
 void DAVResourceAccess::HEAD(
-    const std::vector< rtl::OUString > & rHeaderNames,
+    const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
   throw( DAVException )
@@ -359,7 +359,7 @@ void DAVResourceAccess::HEAD(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("HEAD"),
+                                   OUString("HEAD"),
                                    aHeaders );
 
             m_xSession->HEAD( getRequestURI(),
@@ -399,7 +399,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("GET"),
+                                   OUString("GET"),
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -440,7 +440,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("GET"),
+                                   OUString("GET"),
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -463,7 +463,7 @@ void DAVResourceAccess::GET(
 
 //=========================================================================
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
-    const std::vector< rtl::OUString > & rHeaderNames,
+    const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -481,7 +481,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("GET"),
+                                   OUString("GET"),
                                    aHeaders );
 
             xStream = m_xSession->GET( getRequestURI(),
@@ -509,7 +509,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 //=========================================================================
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
-    const std::vector< rtl::OUString > & rHeaderNames,
+    const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -526,7 +526,7 @@ void DAVResourceAccess::GET(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("GET"),
+                                   OUString("GET"),
                                    aHeaders );
 
             m_xSession->GET( getRequestURI(),
@@ -611,7 +611,7 @@ void DAVResourceAccess::PUT(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("PUT"),
+                                   OUString("PUT"),
                                    aHeaders );
 
             m_xSession->PUT( getRequestURI(),
@@ -634,8 +634,8 @@ void DAVResourceAccess::PUT(
 
 //=========================================================================
 uno::Reference< io::XInputStream > DAVResourceAccess::POST(
-    const rtl::OUString & rContentType,
-    const rtl::OUString & rReferer,
+    const OUString & rContentType,
+    const OUString & rReferer,
     const uno::Reference< io::XInputStream > & rInputStream,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
   throw ( DAVException )
@@ -663,7 +663,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("POST"),
+                                   OUString("POST"),
                                    aHeaders );
 
             xStream = m_xSession->POST( getRequestURI(),
@@ -697,8 +697,8 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
 
 //=========================================================================
 void DAVResourceAccess::POST(
-    const rtl::OUString & rContentType,
-    const rtl::OUString & rReferer,
+    const OUString & rContentType,
+    const OUString & rReferer,
     const uno::Reference< io::XInputStream > & rInputStream,
     uno::Reference< io::XOutputStream > & rOutputStream,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -726,7 +726,7 @@ void DAVResourceAccess::POST(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("POST"),
+                                   OUString("POST"),
                                    aHeaders );
 
             m_xSession->POST( getRequestURI(),
@@ -774,7 +774,7 @@ void DAVResourceAccess::MKCOL(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("MKCOL"),
+                                   OUString("MKCOL"),
                                    aHeaders );
 
             m_xSession->MKCOL( getRequestURI(),
@@ -796,8 +796,8 @@ void DAVResourceAccess::MKCOL(
 
 //=========================================================================
 void DAVResourceAccess::COPY(
-    const ::rtl::OUString & rSourcePath,
-    const ::rtl::OUString & rDestinationURI,
+    const OUString & rSourcePath,
+    const OUString & rDestinationURI,
     sal_Bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -814,7 +814,7 @@ void DAVResourceAccess::COPY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("COPY"),
+                                   OUString("COPY"),
                                    aHeaders );
 
             m_xSession->COPY( rSourcePath,
@@ -838,8 +838,8 @@ void DAVResourceAccess::COPY(
 
 //=========================================================================
 void DAVResourceAccess::MOVE(
-    const ::rtl::OUString & rSourcePath,
-    const ::rtl::OUString & rDestinationURI,
+    const OUString & rSourcePath,
+    const OUString & rDestinationURI,
     sal_Bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -856,7 +856,7 @@ void DAVResourceAccess::MOVE(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("MOVE"),
+                                   OUString("MOVE"),
                                    aHeaders );
 
             m_xSession->MOVE( rSourcePath,
@@ -895,7 +895,7 @@ void DAVResourceAccess::DESTROY(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString( "DESTROY" ),
+                                   OUString( "DESTROY" ),
                                    aHeaders );
 
             m_xSession->DESTROY( getRequestURI(),
@@ -934,7 +934,7 @@ void DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("LOCK"),
+                                   OUString("LOCK"),
                                    aHeaders );
 
             m_xSession->LOCK( getRequestURI(),
@@ -976,7 +976,7 @@ sal_Int64 DAVResourceAccess::LOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("LOCK"),
+                                   OUString("LOCK"),
                                    aHeaders );
 
             nNewTimeout = m_xSession->LOCK( getRequestURI(),
@@ -1018,7 +1018,7 @@ void DAVResourceAccess::UNLOCK(
             DAVRequestHeaders aHeaders;
             getUserRequestHeaders( xEnv,
                                    getRequestURI(),
-                                   rtl::OUString("UNLOCK"),
+                                   OUString("UNLOCK"),
                                    aHeaders );
 
             m_xSession->UNLOCK( getRequestURI(),
@@ -1047,12 +1047,12 @@ void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFla
 }
 
 //=========================================================================
-void DAVResourceAccess::setURL( const rtl::OUString & rNewURL )
+void DAVResourceAccess::setURL( const OUString & rNewURL )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aURL  = rNewURL;
-    m_aPath = rtl::OUString(); // Next initialize() will create new session.
+    m_aPath = OUString(); // Next initialize() will create new session.
 }
 
 //=========================================================================
@@ -1064,7 +1064,7 @@ void DAVResourceAccess::initialize()
     if ( m_aPath.isEmpty() )
     {
         NeonUri aURI( m_aURL );
-        rtl::OUString aPath( aURI.GetPath() );
+        OUString aPath( aURI.GetPath() );
 
         /* #134089# - Check URI */
         if ( aPath.isEmpty() )
@@ -1098,7 +1098,7 @@ void DAVResourceAccess::initialize()
 }
 
 //=========================================================================
-const rtl::OUString & DAVResourceAccess::getRequestURI() const
+const OUString & DAVResourceAccess::getRequestURI() const
 {
     OSL_ENSURE( m_xSession.is(),
                 "DAVResourceAccess::getRequestURI - Not initialized!" );
@@ -1114,8 +1114,8 @@ const rtl::OUString & DAVResourceAccess::getRequestURI() const
 // static
 void DAVResourceAccess::getUserRequestHeaders(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
-    const rtl::OUString & rURI,
-    const rtl::OUString & rMethod,
+    const OUString & rURI,
+    const OUString & rMethod,
     DAVRequestHeaders & rRequestHeaders )
 {
     if ( xEnv.is() )
@@ -1130,7 +1130,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 
             for ( sal_Int32 n = 0; n < aRequestHeaders.getLength(); ++n )
             {
-                rtl::OUString aValue;
+                OUString aValue;
                 sal_Bool isString = aRequestHeaders[ n ].Value >>= aValue;
 
                 if ( !isString )
@@ -1164,7 +1164,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 
 //=========================================================================
 sal_Bool DAVResourceAccess::detectRedirectCycle(
-                                const rtl::OUString& rRedirectURL )
+                                const OUString& rRedirectURL )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );

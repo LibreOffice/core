@@ -59,24 +59,24 @@ public:
 
     virtual uno::Reference< lang::XComponent > getComponent() = 0;
     virtual uno::Reference< uno::XInterface > init() = 0;
-    virtual uno::Reference< lang::XComponent > loadFromDesktop(const rtl::OUString&) = 0;
-    virtual void createFileURL(const rtl::OUString&, rtl::OUString&) = 0;
+    virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString&) = 0;
+    virtual void createFileURL(const OUString&, OUString&) = 0;
 
 protected:
     uno::Reference< sheet::XSpreadsheetDocument> xDocument;
 
 private:
-    uno::Reference< sheet::XSpreadsheetDocument> getDoc(const rtl::OUString&, uno::Reference< lang::XComponent >&);
+    uno::Reference< sheet::XSpreadsheetDocument> getDoc(const OUString&, uno::Reference< lang::XComponent >&);
     uno::Reference< sheet::XNamedRanges> getNamedRanges(uno::Reference< sheet::XSpreadsheetDocument >);
     void importSheetToCopy();
-    bool isExternalReference(const rtl::OUString& aDestContent, const rtl::OUString& aSrcContent );
+    bool isExternalReference(const OUString& aDestContent, const OUString& aSrcContent );
 
     uno::Reference< sheet::XSpreadsheetDocument> xDestDoc;
     uno::Reference< sheet::XSpreadsheet > xDestSheet;
     uno::Reference< sheet::XSpreadsheet > xSrcSheet;
-    rtl::OUString aSrcSheetName;
-    rtl::OUString aSrcFileName;
-    rtl::OUString aDestFileBase;
+    OUString aSrcSheetName;
+    OUString aSrcFileName;
+    OUString aDestFileBase;
 };
 
 }

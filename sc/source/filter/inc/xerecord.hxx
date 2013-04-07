@@ -222,7 +222,7 @@ void XclExpValueRecord< Type >::SaveXml( XclExpXmlStream& rStrm )
     if( mnAttribute == -1 )
         return;
     rStrm.WriteAttributes(
-        mnAttribute,    rtl::OString::valueOf( (sal_Int32) maValue ).getStr(),
+        mnAttribute,    OString::valueOf( (sal_Int32) maValue ).getStr(),
         FSEND );
 }
 

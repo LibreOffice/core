@@ -79,7 +79,6 @@ bool ScInterpreter::bGlobalStackInUse = false;
 
 using namespace formula;
 using ::std::auto_ptr;
-using ::rtl::OUString;
 
 struct ScCompare
 {

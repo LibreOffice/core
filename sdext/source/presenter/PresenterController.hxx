@@ -97,9 +97,9 @@ public:
     void UpdateCurrentSlide (const sal_Int32 nOffset);
 
     SharedBitmapDescriptor
-        GetViewBackground (const ::rtl::OUString& rsViewURL) const;
+        GetViewBackground (const OUString& rsViewURL) const;
     PresenterTheme::SharedFontDescriptor
-        GetViewFont (const ::rtl::OUString& rsViewURL) const;
+        GetViewFont (const OUString& rsViewURL) const;
     ::boost::shared_ptr<PresenterTheme> GetTheme (void) const;
     ::rtl::Reference<PresenterWindowManager> GetWindowManager (void) const;
     css::uno::Reference<css::presentation::XSlideShowController>
@@ -111,13 +111,13 @@ public:
     ::boost::shared_ptr<PresenterPaintManager> GetPaintManager (void) const;
     void HideSlideSorter (void);
     double GetSlideAspectRatio (void) const;
-    void ShowView (const ::rtl::OUString& rsViewURL);
-    void HideView (const ::rtl::OUString& rsViewURL);
+    void ShowView (const OUString& rsViewURL);
+    void HideView (const OUString& rsViewURL);
     void SwitchMonitors (void);
-    void DispatchUnoCommand (const ::rtl::OUString& rsCommand) const;
+    void DispatchUnoCommand (const OUString& rsCommand) const;
     css::uno::Reference<css::frame::XDispatch> GetDispatch (
         const css::util::URL& rURL) const;
-    css::util::URL CreateURLFromString (const ::rtl::OUString& rsURL) const;
+    css::util::URL CreateURLFromString (const OUString& rsURL) const;
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         GetConfigurationController (void) const;
     css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide (void) const;

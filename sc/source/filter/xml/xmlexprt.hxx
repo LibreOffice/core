@@ -87,7 +87,7 @@ class ScXMLExport : public SvXMLExport
     ScRowStyles*                    pRowStyles;
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
-    std::vector<rtl::OUString>          aTableStyles;
+    std::vector<OUString>          aTableStyles;
     com::sun::star::table::CellRangeAddress aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
@@ -99,21 +99,21 @@ class ScXMLExport : public SvXMLExport
     ScMyValidationsContainer*   pValidationsContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
     ScChangeTrackingExportHelper*   pChangeTrackingExportHelper;
-    const rtl::OUString         sLayerID;
-    const rtl::OUString         sCaptionShape;
-    rtl::OUString               sExternalRefTabStyleName;
-    rtl::OUString               sAttrName;
-    rtl::OUString               sAttrStyleName;
-    rtl::OUString               sAttrColumnsRepeated;
-    rtl::OUString               sAttrFormula;
-    rtl::OUString               sAttrValueType;
-    rtl::OUString               sAttrStringValue;
-    rtl::OUString               sElemCell;
-    rtl::OUString               sElemCoveredCell;
-    rtl::OUString               sElemCol;
-    rtl::OUString               sElemRow;
-    rtl::OUString               sElemTab;
-    rtl::OUString               sElemP;
+    const OUString         sLayerID;
+    const OUString         sCaptionShape;
+    OUString               sExternalRefTabStyleName;
+    OUString               sAttrName;
+    OUString               sAttrStyleName;
+    OUString               sAttrColumnsRepeated;
+    OUString               sAttrFormula;
+    OUString               sAttrValueType;
+    OUString               sAttrStringValue;
+    OUString               sElemCell;
+    OUString               sElemCoveredCell;
+    OUString               sElemCol;
+    OUString               sElemRow;
+    OUString               sElemTab;
+    OUString               sElemP;
     sal_Int32                   nOpenRow;
     sal_Int32                   nProgressCount;
     sal_uInt16                  nCurrentTable;
@@ -163,7 +163,7 @@ class ScXMLExport : public SvXMLExport
     void CloseRow(const sal_Int32 nRow);
     void GetColumnRowHeader(bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
         bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
-        rtl::OUString& rPrintRanges) const;
+        OUString& rPrintRanges) const;
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
@@ -205,13 +205,13 @@ class ScXMLExport : public SvXMLExport
     void AddStyleFromCells(
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xProperties,
         const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xTable,
-        sal_Int32 nTable, const rtl::OUString* pOldName );
+        sal_Int32 nTable, const OUString* pOldName );
     void AddStyleFromColumn(
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xColumnProperties,
-        const rtl::OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible );
+        const OUString* pOldName, sal_Int32& rIndex, bool& rIsVisible );
     void AddStyleFromRow(
         const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xRowProperties,
-        const rtl::OUString* pOldName, sal_Int32& rIndex );
+        const OUString* pOldName, sal_Int32& rIndex );
 
     void IncrementProgressBar(bool bEditCell, sal_Int32 nInc = 1);
 
@@ -265,9 +265,9 @@ public:
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

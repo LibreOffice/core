@@ -56,12 +56,12 @@ namespace svx
             Reference< XDatabaseContext > xRegistrations(
                 DatabaseContext::create(xContext) );
 
-            Sequence< ::rtl::OUString > aRegistrationNames( xRegistrations->getRegistrationNames() );
-            const ::rtl::OUString* pRegistrationName = aRegistrationNames.getConstArray();
-            const ::rtl::OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
+            Sequence< OUString > aRegistrationNames( xRegistrations->getRegistrationNames() );
+            const OUString* pRegistrationName = aRegistrationNames.getConstArray();
+            const OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
             for ( ; pRegistrationName != pRegistrationNamesEnd; ++pRegistrationName )
             {
-                ::rtl::OUString sLocation( xRegistrations->getDatabaseLocation( *pRegistrationName ) );
+                OUString sLocation( xRegistrations->getDatabaseLocation( *pRegistrationName ) );
                 aSettings[ *pRegistrationName ] =
                     DatabaseRegistration( sLocation, xRegistrations->isDatabaseRegistrationReadOnly( *pRegistrationName ) );
             }
@@ -94,8 +94,8 @@ namespace svx
                     ++reg
                 )
             {
-                const ::rtl::OUString sName = reg->first;
-                const ::rtl::OUString sLocation = reg->second.sLocation;
+                const OUString sName = reg->first;
+                const OUString sLocation = reg->second.sLocation;
 
                 if ( xRegistrations->hasRegisteredDatabase( sName ) )
                 {
@@ -112,9 +112,9 @@ namespace svx
             }
 
             // delete unused entries
-            Sequence< ::rtl::OUString > aRegistrationNames = xRegistrations->getRegistrationNames();
-            const ::rtl::OUString* pRegistrationName = aRegistrationNames.getConstArray();
-            const ::rtl::OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
+            Sequence< OUString > aRegistrationNames = xRegistrations->getRegistrationNames();
+            const OUString* pRegistrationName = aRegistrationNames.getConstArray();
+            const OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
             for ( ; pRegistrationName != pRegistrationNamesEnd; ++pRegistrationName )
             {
                 if ( rNewRegistrations.find( *pRegistrationName ) == rNewRegistrations.end() )

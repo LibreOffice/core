@@ -73,7 +73,7 @@ void SAL_CALL OConnection::release() throw()
 }
 // -----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     (void) info; // avoid warnings
     SAL_INFO("connectivity.mork", "=> OConnection::construct()" );
@@ -124,7 +124,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         path = m_pProfileAccess->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
         SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
         SAL_INFO("connectivity.mork", "ProfilePath: " << path);
-        path += rtl::OUString( "/abook.mab" );
+        path += OUString( "/abook.mab" );
     }
     else
     {
@@ -133,7 +133,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     SAL_INFO("connectivity.mork", "AdressbookPath: " << path);
 
-    rtl::OString strPath = ::rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8 );
+    OString strPath = OUStringToOString(path, RTL_TEXTENCODING_UTF8 );
 
     // Open and parse mork file
     if (!m_pMork->open(strPath.getStr()))
@@ -175,7 +175,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
     SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
@@ -195,7 +195,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareCall()" );
     SAL_INFO("connectivity.mork", "sql: " << _sSql);
@@ -205,7 +205,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> OConnection::nativeSQL()" );
     SAL_INFO("connectivity.mork", "sql: " << _sSql);
@@ -278,14 +278,14 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
@@ -366,10 +366,10 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
         OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
             "OConnection::throwSQLException: unsupported error code combination!" );
 
-        ::rtl::OUString sParameter( _rError.getParameter() );
+        OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
         {
-            const ::rtl::OUString sError( getResources().getResourceStringWithSubstitution(
+            const OUString sError( getResources().getResourceStringWithSubstitution(
                 _rError.getResId(),
                 "$1$", sParameter
              ) );
@@ -384,7 +384,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     if ( _rError.getErrorCondition() != 0 )
     {
         SQLError aErrorHelper( comphelper::getComponentContext(getDriver()->getFactory()) );
-        ::rtl::OUString sParameter( _rError.getParameter() );
+        OUString sParameter( _rError.getParameter() );
         if ( !sParameter.isEmpty() )
             aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext, sParameter );
         else

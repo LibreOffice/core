@@ -31,8 +31,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "layerimp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #include "XMLStringBufferImportContext.hxx"
 
@@ -55,14 +53,14 @@ public:
     SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager );
     virtual ~SdXMLLayerContext();
 
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList );
     virtual void EndElement();
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLayerManager;
-    ::rtl::OUString msName;
-    ::rtl::OUStringBuffer sDescriptionBuffer;
-    ::rtl::OUStringBuffer sTitleBuffer;
+    OUString msName;
+    OUStringBuffer sDescriptionBuffer;
+    OUStringBuffer sTitleBuffer;
 };
 
 SdXMLLayerContext::SdXMLLayerContext( SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList, const Reference< XNameAccess >& xLayerManager )
@@ -91,7 +89,7 @@ SdXMLLayerContext::~SdXMLLayerContext()
 {
 }
 
-SvXMLImportContext * SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const Reference< XAttributeList >& )
+SvXMLImportContext * SdXMLLayerContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& )
 {
     if( (XML_NAMESPACE_SVG == nPrefix) && IsXMLToken(rLocalName, XML_TITLE) )
     {
@@ -145,7 +143,7 @@ void SdXMLLayerContext::EndElement()
 
 TYPEINIT1( SdXMLLayerSetContext, SvXMLImportContext );
 
-SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+SdXMLLayerSetContext::SdXMLLayerSetContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>&)
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
@@ -159,7 +157,7 @@ SdXMLLayerSetContext::~SdXMLLayerSetContext()
 {
 }
 
-SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * SdXMLLayerSetContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLLayerContext( GetImport(), nPrefix, rLocalName, xAttrList, mxLayerManager );

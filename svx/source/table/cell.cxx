@@ -54,7 +54,6 @@
 // -----------------------------------------------------------------------------
 
 using ::editeng::SvxBorderLine;
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -1753,7 +1752,7 @@ void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeExc
 
 static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
 
     if (nCol < 26*26)
     {

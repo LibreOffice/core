@@ -28,7 +28,7 @@ class SfxItemSet;
 class SfxItemPool;
 class SfxPoolItem;
 
-rtl::OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem);
+OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem);
 void        DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL );
 
 class EditDbg

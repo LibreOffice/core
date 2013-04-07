@@ -145,7 +145,7 @@ private:
 
     com::sun::star::text::WritingMode   meWritingMode;
 
-    const rtl::OUString msSize;
+    const OUString msSize;
 };
 
 } }

@@ -81,7 +81,7 @@ namespace svt
         bool                        m_bNeedInitialization : 1;  /// do we need to be initialized before any other API call is allowed?
 
         // <properties>
-        ::rtl::OUString                                                 m_sTitle;   /// title of the dialog
+        OUString                                                 m_sTitle;   /// title of the dialog
         com::sun::star::uno::Reference<com::sun::star::awt::XWindow>    m_xParent;  /// parent window
         // </properties>
 
@@ -104,8 +104,8 @@ namespace svt
         virtual com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(com::sun::star::uno::RuntimeException) = 0;
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException) = 0;
-        virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException) = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException) = 0;
 
         // OPropertySetHelper
@@ -113,7 +113,7 @@ namespace svt
         virtual sal_Bool SAL_CALL convertFastPropertyValue( com::sun::star::uno::Any& rConvertedValue, com::sun::star::uno::Any& rOldValue, sal_Int32 nHandle, const com::sun::star::uno::Any& rValue) throw(com::sun::star::lang::IllegalArgumentException);
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XInitialization

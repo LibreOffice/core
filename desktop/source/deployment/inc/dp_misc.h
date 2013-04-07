@@ -59,14 +59,14 @@ inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString expandUnoRcTerm( ::rtl::OUString const & term );
+OUString expandUnoRcTerm( OUString const & term );
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString makeRcTerm( ::rtl::OUString const & url );
+OUString makeRcTerm( OUString const & url );
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString expandUnoRcUrl( ::rtl::OUString const & url );
+OUString expandUnoRcUrl( OUString const & url );
 
 //==============================================================================
 
@@ -76,8 +76,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
     If the URL starts with vnd.sun.star.expand then the relative path will
     be again encoded for use in an "expand" URL.
  */
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
-    ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURL(
+    OUString const & baseURL, OUString const & relPath );
 
 
 /** appends a relative path to a url.
@@ -85,17 +85,17 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURL(
     This is the same as makeURL, but the relative Path must me a segment
     of an system path.
  */
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString makeURLAppendSysPathSegment(
-    ::rtl::OUString const & baseURL, ::rtl::OUString const & relPath );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString makeURLAppendSysPathSegment(
+    OUString const & baseURL, OUString const & relPath );
 
 //==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString generateRandomPipeId();
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();
 
 class AbortChannel;
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> resolveUnoURL(
-    ::rtl::OUString const & connectString,
+    OUString const & connectString,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xLocalContext,
     AbortChannel * abortChannel = 0 );
 
@@ -104,8 +104,8 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-oslProcess raiseProcess( ::rtl::OUString const & appURL,
-                         ::com::sun::star::uno::Sequence< ::rtl::OUString > const & args );
+oslProcess raiseProcess( OUString const & appURL,
+                         ::com::sun::star::uno::Sequence< OUString > const & args );
 
 //==============================================================================
 
@@ -116,13 +116,13 @@ oslProcess raiseProcess( ::rtl::OUString const & appURL,
     WriteConsoleW.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsole(::rtl::OUString const & sText);
+void writeConsole(OUString const & sText);
 
 /** writes the argument to the console using the error stream.
     Otherwise the same as writeConsole.
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void writeConsoleError(::rtl::OUString const & sText);
+void writeConsoleError(OUString const & sText);
 
 
 /** reads from the console.
@@ -131,14 +131,14 @@ void writeConsoleError(::rtl::OUString const & sText);
     size of 1024 and does NOT include leading and trailing white space(applied OUString::trim())
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::rtl::OUString readConsole();
+OUString readConsole();
 
 /** print the text to the console in a debug build.
     The argument is forwarded to writeConsole. The function does not add new line.
     The code is only executed if  OSL_DEBUG_LEVEL > 1
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-void TRACE(::rtl::OUString const & sText);
+void TRACE(OUString const & sText);
 
 /** registers or revokes shared or bundled extensions which have been
     recently added or removed.

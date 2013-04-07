@@ -48,7 +48,7 @@ static sal_Unicode const aMathAlpha[] =
     sal_Unicode('\0')
 };
 
-bool SmIsMathAlpha(const rtl::OUString &rText)
+bool SmIsMathAlpha(const OUString &rText)
     // true iff symbol (from StarMath Font) should be treated as letter
 {
     if (rText.isEmpty())
@@ -126,7 +126,7 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 
 
 void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                       const rtl::OUString &rText, sal_uInt16 nBorder)
+                       const OUString &rText, sal_uInt16 nBorder)
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
 
@@ -221,7 +221,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                  const rtl::OUString &rText, sal_uInt16 nEBorderWidth)
+                  const OUString &rText, sal_uInt16 nEBorderWidth)
     // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
 {
     BuildRect(rDev, pFormat, rText, nEBorderWidth);
@@ -229,7 +229,7 @@ void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-               const rtl::OUString &rText, long nEBorderWidth)
+               const OUString &rText, long nEBorderWidth)
 {
     OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
     if (nEBorderWidth < 0)
@@ -601,7 +601,7 @@ SmRect SmRect::AsGlyphRect() const
 }
 
 bool SmGetGlyphBoundRect(const OutputDevice &rDev,
-                         const rtl::OUString &rText, Rectangle &rRect)
+                         const OUString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
 {

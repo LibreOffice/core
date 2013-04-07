@@ -101,7 +101,7 @@ void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     mpInfo->add ( pNewSet->mpInfo->maMap, mnLastId );
 }
 
-void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
+void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -135,7 +135,7 @@ void SAL_CALL MasterPropertySet::setPropertyValue( const ::rtl::OUString& rPrope
     }
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rPropertyName )
+Any SAL_CALL MasterPropertySet::getPropertyValue( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -171,32 +171,32 @@ Any SAL_CALL MasterPropertySet::getPropertyValue( const ::rtl::OUString& rProper
     return aAny;
 }
 
-void SAL_CALL MasterPropertySet::addPropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
+void SAL_CALL MasterPropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removePropertyChangeListener( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
+void SAL_CALL MasterPropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::addVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
+void SAL_CALL MasterPropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
-void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const ::rtl::OUString&, const Reference< XVetoableChangeListener >& )
+void SAL_CALL MasterPropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     // todo
 }
 
 // XMultiPropertySet
-void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames, const Sequence< Any >& aValues )
+void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -262,7 +262,7 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< ::rtl::OUStr
     }
 }
 
-Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames )
+Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
     throw(RuntimeException)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
@@ -328,7 +328,7 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< :
     return aValues;
 }
 
-void SAL_CALL MasterPropertySet::addPropertiesChangeListener( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
+void SAL_CALL MasterPropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
@@ -340,14 +340,14 @@ void SAL_CALL MasterPropertySet::removePropertiesChangeListener( const Reference
     // todo
 }
 
-void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< ::rtl::OUString >&, const Reference< XPropertiesChangeListener >& )
+void SAL_CALL MasterPropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUString& PropertyName )
+PropertyState SAL_CALL MasterPropertySet::getPropertyState( const OUString& PropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter =  mpInfo->maMap.find( PropertyName );
@@ -379,7 +379,7 @@ PropertyState SAL_CALL MasterPropertySet::getPropertyState( const ::rtl::OUStrin
     return aState;
 }
 
-Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< ::rtl::OUString >& rPropertyNames )
+Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
     throw(UnknownPropertyException, RuntimeException)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
@@ -426,7 +426,7 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
     return aStates;
 }
 
-void SAL_CALL MasterPropertySet::setPropertyToDefault( const ::rtl::OUString& rPropertyName )
+void SAL_CALL MasterPropertySet::setPropertyToDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
@@ -436,7 +436,7 @@ void SAL_CALL MasterPropertySet::setPropertyToDefault( const ::rtl::OUString& rP
     _setPropertyToDefault( *((*aIter).second->mpInfo) );
 }
 
-Any SAL_CALL MasterPropertySet::getPropertyDefault( const ::rtl::OUString& rPropertyName )
+Any SAL_CALL MasterPropertySet::getPropertyDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertyDataHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );

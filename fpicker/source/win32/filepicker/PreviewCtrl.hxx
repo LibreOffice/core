@@ -140,7 +140,7 @@ public:
     // preview of the given file will be shown
     // returns true on success or false if an error
     // occurred (the file in not there or not accessible etc.)
-    virtual sal_Bool SAL_CALL update( const rtl::OUString& aFileName );
+    virtual sal_Bool SAL_CALL update( const OUString& aFileName );
 
 protected:
     // clients can create instances only through the static create method
@@ -162,7 +162,7 @@ protected:
 protected:
     virtual void SAL_CALL onPaint( HWND hWnd, HDC hDC );
 
-    sal_Bool loadFile( const rtl::OUString& aFileName );
+    sal_Bool loadFile( const OUString& aFileName );
 
 private:
     CAutoOleInit m_autoOleInit;

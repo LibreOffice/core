@@ -31,7 +31,7 @@ namespace framework
 
 typedef Image ( *pfunc_getImage)(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
+    const OUString& aURL,
     bool bBig
 );
 
@@ -39,7 +39,7 @@ pfunc_getImage FWE_DLLPUBLIC SAL_CALL SetImageProducer( pfunc_getImage pGetImage
 
 Image FWE_DLLPUBLIC SAL_CALL GetImageFromURL(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
+    const OUString& aURL,
     bool bBig
 );
 

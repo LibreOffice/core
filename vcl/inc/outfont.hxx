@@ -238,7 +238,7 @@ public:
 
     // suggest fonts for glyph fallback
     ImplDevFontListData*    GetGlyphFallbackFont( FontSelectPattern&,
-                        rtl::OUString& rMissingCodes, int nFallbackLevel ) const;
+                        OUString& rMissingCodes, int nFallbackLevel ) const;
 
     // prepare platform specific font substitutions
     void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
@@ -249,17 +249,17 @@ public:
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
-    ImplDevFontListData*    ImplFindByTokenNames(const rtl::OUString& rTokenStr) const;
+    ImplDevFontListData*    ImplFindByTokenNames(const OUString& rTokenStr) const;
 
 protected:
     void                    InitMatchData() const;
     bool                    AreMapNamesAvailable() const { return mbMapNames; }
 
-    ImplDevFontListData*    ImplFindByAliasName(const rtl::OUString& rSearchName,
-        const rtl::OUString& rShortName) const;
+    ImplDevFontListData*    ImplFindByAliasName(const OUString& rSearchName,
+        const OUString& rShortName) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
     ImplDevFontListData*    ImplFindByAttributes(sal_uLong nSearchType, FontWeight, FontWidth,
-                                                 FontItalic, const rtl::OUString& rSearchFamily) const;
+                                                 FontItalic, const OUString& rSearchFamily) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
 private:

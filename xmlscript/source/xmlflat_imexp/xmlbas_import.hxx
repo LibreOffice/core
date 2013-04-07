@@ -51,15 +51,15 @@ namespace xmlscript
     protected:
         BasicImport* m_pImport;
         BasicElementBase* m_pParent;
-        ::rtl::OUString m_aLocalName;
+        OUString m_aLocalName;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes > m_xAttributes;
 
-        bool getBoolAttr( sal_Bool* pRet, const ::rtl::OUString& rAttrName,
+        bool getBoolAttr( sal_Bool* pRet, const OUString& rAttrName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             sal_Int32 nUid );
 
     public:
-        BasicElementBase( const ::rtl::OUString& rLocalName,
+        BasicElementBase( const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport );
         virtual ~BasicElementBase();
@@ -67,23 +67,23 @@ namespace xmlscript
         // XElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL getParent()
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getLocalName()
+        virtual OUString SAL_CALL getLocalName()
             throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getUid()
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes > SAL_CALL getAttributes()
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL characters( const ::rtl::OUString& rChars )
+        virtual void SAL_CALL characters( const OUString& rChars )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL ignorableWhitespace(
-            const ::rtl::OUString& rWhitespaces )
+            const OUString& rWhitespaces )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL processingInstruction(
-            const ::rtl::OUString& rTarget, const ::rtl::OUString& rData )
+            const OUString& rTarget, const OUString& rData )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endElement()
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -100,14 +100,14 @@ namespace xmlscript
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer2 > m_xLibContainer;
 
     public:
-        BasicLibrariesElement( const ::rtl::OUString& rLocalName,
+        BasicLibrariesElement( const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer2 >& rxLibContainer );
 
         // XElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endElement()
@@ -124,19 +124,19 @@ namespace xmlscript
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer2 > m_xLibContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLib;
-        ::rtl::OUString m_aLibName;
+        OUString m_aLibName;
         bool m_bReadOnly;
 
     public:
-        BasicEmbeddedLibraryElement( const ::rtl::OUString& rLocalName,
+        BasicEmbeddedLibraryElement( const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer2 >& rxLibContainer,
-            const ::rtl::OUString& rLibName, bool bReadOnly );
+            const OUString& rLibName, bool bReadOnly );
 
         // XElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endElement()
@@ -152,18 +152,18 @@ namespace xmlscript
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLib;
-        ::rtl::OUString m_aName;
+        OUString m_aName;
 
     public:
-        BasicModuleElement( const ::rtl::OUString& rLocalName,
+        BasicModuleElement( const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxLib,
-            const ::rtl::OUString& rName );
+            const OUString& rName );
 
         // XElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL startChildElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endElement()
@@ -179,18 +179,18 @@ namespace xmlscript
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xLib;
-        ::rtl::OUString m_aName;
-        ::rtl::OUStringBuffer m_aBuffer;
+        OUString m_aName;
+        OUStringBuffer m_aBuffer;
 
     public:
-        BasicSourceCodeElement( const ::rtl::OUString& rLocalName,
+        BasicSourceCodeElement( const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxLib,
-            const ::rtl::OUString& rName );
+            const OUString& rName );
 
         // XElement
-        virtual void SAL_CALL characters( const ::rtl::OUString& rChars )
+        virtual void SAL_CALL characters( const OUString& rChars )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endElement()
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -228,13 +228,13 @@ namespace xmlscript
         virtual void SAL_CALL endDocument()
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL processingInstruction(
-            const ::rtl::OUString& rTarget, const ::rtl::OUString& rData )
+            const OUString& rTarget, const OUString& rData )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setDocumentLocator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XElement > SAL_CALL startRootElement(
-            sal_Int32 nUid, const ::rtl::OUString& rLocalName,
+            sal_Int32 nUid, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::input::XAttributes >& xAttributes )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     };
@@ -263,7 +263,7 @@ namespace xmlscript
         virtual ~XMLBasicImporterBase();
 
         // XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XImporter
@@ -275,16 +275,16 @@ namespace xmlscript
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL endDocument()
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL startElement( const ::rtl::OUString& aName,
+        virtual void SAL_CALL startElement( const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL endElement( const ::rtl::OUString& aName )
+        virtual void SAL_CALL endElement( const OUString& aName )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
+        virtual void SAL_CALL characters( const OUString& aChars )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData )
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
             throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -303,9 +303,9 @@ namespace xmlscript
         virtual ~XMLBasicImporter();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 
@@ -322,9 +322,9 @@ namespace xmlscript
         virtual ~XMLOasisBasicImporter();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
     };
 

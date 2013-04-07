@@ -146,7 +146,7 @@ KeyMapping::KeyMapping()
     sal_Int32 i = 0;
     while(KeyIdentifierMap[i].Code != 0)
     {
-        ::rtl::OUString sIdentifier = ::rtl::OUString::createFromAscii(KeyIdentifierMap[i].Identifier);
+        OUString sIdentifier = OUString::createFromAscii(KeyIdentifierMap[i].Identifier);
         sal_Int16       nCode       = KeyIdentifierMap[i].Code;
 
         m_lIdentifierHash[sIdentifier] = nCode      ;
@@ -162,7 +162,7 @@ KeyMapping::~KeyMapping()
 }
 
 //-----------------------------------------------
-sal_uInt16 KeyMapping::mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
+sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
     throw(css::lang::IllegalArgumentException)
 {
     Identifier2CodeHash::const_iterator pIt = m_lIdentifierHash.find(sIdentifier);
@@ -182,18 +182,18 @@ sal_uInt16 KeyMapping::mapIdentifierToCode(const ::rtl::OUString& sIdentifier)
 }
 
 //-----------------------------------------------
-::rtl::OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
+OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
 {
     Code2IdentifierHash::const_iterator pIt = m_lCodeHash.find(nCode);
     if (pIt != m_lCodeHash.end())
         return pIt->second;
 
     // If we have no well known identifier - use the pure code value!
-    return ::rtl::OUString::valueOf((sal_Int32)nCode);
+    return OUString::valueOf((sal_Int32)nCode);
 }
 
 //-----------------------------------------------
-sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUString& sIdentifier,
+sal_Bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
                                                                     sal_uInt16&      rCode      )
 {
     sal_Int32 nCode = sIdentifier.toInt32();

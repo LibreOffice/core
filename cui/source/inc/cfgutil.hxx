@@ -38,10 +38,10 @@ class SfxMacroInfoItem;
 
 struct SfxStyleInfo_Impl
 {
-    ::rtl::OUString sFamily;
-    ::rtl::OUString sStyle;
-    ::rtl::OUString sCommand;
-    ::rtl::OUString sLabel;
+    OUString sFamily;
+    OUString sStyle;
+    OUString sCommand;
+    OUString sLabel;
 
     SfxStyleInfo_Impl()
     {}
@@ -70,9 +70,9 @@ struct SfxStylesInfo_Impl
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
         ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
-        ::std::vector< SfxStyleInfo_Impl > getStyles(const ::rtl::OUString& sFamily);
+        ::std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
 
-        static ::rtl::OUString generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle);
+        static OUString generateCommand(const OUString& sFamily, const OUString& sStyle);
 };
 
 #define SFX_CFGGROUP_FUNCTION           1
@@ -133,7 +133,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxGroupInfoArr_Impl            aArr;
     sal_uLong                       nMode;
 
-    ::rtl::OUString m_sModuleLongName;
+    OUString m_sModuleLongName;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
     css::uno::Reference< css::container::XNameAccess > m_xGlobalCategoryInfo;
@@ -148,7 +148,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx,
-        ::rtl::OUString& docName
+        OUString& docName
     );
 
 
@@ -156,7 +156,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     void InitBasic();
     void InitStyles();
 
-    ::rtl::OUString MapCommand2UIName(const ::rtl::OUString& sCommand);
+    OUString MapCommand2UIName(const OUString& sCommand);
 
     SfxStylesInfo_Impl* pStylesInfo;
 
@@ -174,7 +174,7 @@ public:
 
     void                Init(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR          ,
                              const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
-                             const ::rtl::OUString&                                        sModuleLongName);
+                             const OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }
     void                Open( SvTreeListEntry*, sal_Bool );

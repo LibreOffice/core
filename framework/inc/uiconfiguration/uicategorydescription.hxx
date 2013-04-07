@@ -48,7 +48,7 @@ class UICategoryDescription :  public UICommandDescription
 
         DECLARE_XSERVICEINFO
     private:
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const ::rtl::OUString& _sName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const OUString& _sName);
 };
 
 } // namespace framework

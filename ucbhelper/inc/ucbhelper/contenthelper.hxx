@@ -148,7 +148,7 @@ private:
       *         be returned. If your content has more than one parent you may
       *         return the URL of one "preferred" parent or an empty string.
       */
-    UCBHELPER_DLLPRIVATE virtual ::rtl::OUString getParentURL() = 0;
+    UCBHELPER_DLLPRIVATE virtual OUString getParentURL() = 0;
 
 protected:
     /**
@@ -266,8 +266,8 @@ protected:
       *         children described by rOldKey shall be renamed too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool renameAdditionalPropertySet( const ::rtl::OUString& rOldKey,
-                                          const ::rtl::OUString& rNewKey,
+    sal_Bool renameAdditionalPropertySet( const OUString& rOldKey,
+                                          const OUString& rNewKey,
                                           sal_Bool bRecursive );
 
     /**
@@ -280,8 +280,8 @@ protected:
       *         children described by rSourceKey shall be copied too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool copyAdditionalPropertySet( const ::rtl::OUString& rSourceKey,
-                                        const ::rtl::OUString& rTargetKey,
+    sal_Bool copyAdditionalPropertySet( const OUString& rSourceKey,
+                                        const OUString& rTargetKey,
                                         sal_Bool bRecursive );
 
     /**
@@ -330,13 +330,13 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException ) = 0;
     virtual sal_Bool SAL_CALL
-    supportsService( const ::rtl::OUString& ServiceName )
+    supportsService( const OUString& ServiceName )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
@@ -358,7 +358,7 @@ public:
                 com::sun::star::ucb::XContentIdentifier > SAL_CALL
     getIdentifier()
         throw( com::sun::star::uno::RuntimeException );
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException ) = 0;
     virtual void SAL_CALL
@@ -391,13 +391,13 @@ public:
     // XPropertiesChangeNotifier
     virtual void SAL_CALL
     addPropertiesChangeListener(
-        const com::sun::star::uno::Sequence< rtl::OUString >& PropertyNames,
+        const com::sun::star::uno::Sequence< OUString >& PropertyNames,
          const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener >& Listener )
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
     removePropertiesChangeListener(
-        const com::sun::star::uno::Sequence< rtl::OUString >& PropertyNames,
+        const com::sun::star::uno::Sequence< OUString >& PropertyNames,
         const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener >& Listener )
         throw( com::sun::star::uno::RuntimeException );
@@ -427,7 +427,7 @@ public:
       * implementation of getPropertyInfoTable.
       */
     virtual void SAL_CALL
-    addProperty( const rtl::OUString& Name,
+    addProperty( const OUString& Name,
                  sal_Int16 Attributes,
                  const com::sun::star::uno::Any& DefaultValue )
         throw( com::sun::star::beans::PropertyExistException,
@@ -446,7 +446,7 @@ public:
       * implementation of getPropertyInfoTable.
       */
     virtual void SAL_CALL
-    removeProperty( const rtl::OUString& Name )
+    removeProperty( const OUString& Name )
         throw( com::sun::star::beans::UnknownPropertyException,
                com::sun::star::beans::NotRemoveableException,
                com::sun::star::uno::RuntimeException );

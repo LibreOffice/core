@@ -80,7 +80,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
     //      0x2c, 0x30 Skalierung x,y in Promille
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    SvStorageStreamRef xSrc3 = rSrc1->OpenSotStream( rtl::OUString("\3PIC"),
+    SvStorageStreamRef xSrc3 = rSrc1->OpenSotStream( OUString("\3PIC"),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pS = xSrc3;
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -125,7 +125,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, SvStorageRef& rSrc1)
 static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SvStorageRef& rSrc1)
 {
-    SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( rtl::OUString("\3META"),
+    SvStorageStreamRef xSrc2 = rSrc1->OpenSotStream( OUString("\3META"),
         STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
@@ -181,7 +181,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 {
     // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
-    SvStorageStreamRef xSrc4 = rSrc1->OpenSotStream(rtl::OUString("\3PICT"));
+    SvStorageStreamRef xSrc4 = rSrc1->OpenSotStream(OUString("\3PICT"));
     SvStorageStream* pStp = xSrc4;
     pStp->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     sal_uInt8 aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
@@ -230,7 +230,7 @@ SwFlyFrmFmt* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     // TODO/MBA: is the object inserted multiple times here? Testing!
     // And is it a problem that we now use the same naming scheme as in the other apps?
     sw::hack::DrawingOLEAdaptor aOLEObj(rObject, *pPersist);
-    ::rtl::OUString sNewName;
+    OUString sNewName;
     bool bSuccess = aOLEObj.TransferToDoc(sNewName);
 
     OSL_ENSURE(bSuccess, "Insert OLE failed");
@@ -344,11 +344,11 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     long nX=0, nY=0;                // nX, nY is graphic size
     bool bOleOk = true;
 
-    String aSrcStgName = rtl::OUString('_');
+    String aSrcStgName = OUString('_');
     // ergibt Name "_4711"
     aSrcStgName += OUString::number( nObjLocFc );
 
-    SvStorageRef xSrc0 = pStg->OpenSotStorage(rtl::OUString(SL::aObjectPool));
+    SvStorageRef xSrc0 = pStg->OpenSotStorage(OUString(SL::aObjectPool));
     SvStorageRef xSrc1 = xSrc0->OpenSotStorage( aSrcStgName,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
@@ -425,7 +425,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
             {
-                SvStorageStreamRef xObjInfoSrc = xSrc1->OpenSotStream(rtl::OUString("\3ObjInfo"),
+                SvStorageStreamRef xObjInfoSrc = xSrc1->OpenSotStream(OUString("\3ObjInfo"),
                     STREAM_STD_READ | STREAM_NOCREATE );
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {

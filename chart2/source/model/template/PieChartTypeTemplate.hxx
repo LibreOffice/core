@@ -38,7 +38,7 @@ public:
     PieChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & rServiceName,
+        const OUString & rServiceName,
         ::com::sun::star::chart2::PieChartOffsetMode eMode,
         bool bRings = false,
         sal_Int32 nDim = 2 );

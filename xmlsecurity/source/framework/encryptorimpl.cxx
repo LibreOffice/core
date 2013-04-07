@@ -199,7 +199,7 @@ void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
-    rtl::OUString ouTempString;
+    OUString ouTempString;
 
     aArguments[0] >>= ouTempString;
     m_nSecurityId = ouTempString.toInt32();
@@ -211,24 +211,24 @@ void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
 }
 
 
-rtl::OUString EncryptorImpl_getImplementationName ()
+OUString EncryptorImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL EncryptorImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL EncryptorImpl_supportsService( const OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName == SERVICE_NAME;
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    cssu::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
@@ -241,17 +241,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL EncryptorImpl_createInstance(
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL EncryptorImpl::getImplementationName(  )
+OUString SAL_CALL EncryptorImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_getImplementationName();
 }
-sal_Bool SAL_CALL EncryptorImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL EncryptorImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return EncryptorImpl_getSupportedServiceNames();

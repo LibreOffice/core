@@ -120,12 +120,12 @@ NSMenu* AquaSalInstance::GetDynamicDockMenu()
     return pDockMenu;
 }
 
-bool AquaSalInstance::isOnCommandLine( const rtl::OUString& rArg )
+bool AquaSalInstance::isOnCommandLine( const OUString& rArg )
 {
     sal_uInt32 nArgs = osl_getCommandArgCount();
     for( sal_uInt32 i = 0; i < nArgs; i++ )
     {
-        rtl::OUString aArg;
+        OUString aArg;
         osl_getCommandArg( i, &aArg.pData );
         if( aArg.equals( rArg ) )
             return true;
@@ -217,10 +217,10 @@ sal_Bool ImplSVMainHook( int * pnInit )
     {
         [NSApp postEvent: pEvent atStart: NO];
 
-        rtl::OUString aExeURL, aExe;
+        OUString aExeURL, aExe;
         osl_getExecutableFile( &aExeURL.pData );
         osl_getSystemPathFromFileURL( aExeURL.pData, &aExe.pData );
-        rtl::OString aByteExe( rtl::OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
+        OString aByteExe( OUStringToOString( aExe, osl_getThreadTextEncoding() ) );
 
 #ifdef DEBUG
         aByteExe += OString ( " NSAccessibilityDebugLogLevel 1" );
@@ -241,13 +241,13 @@ sal_Bool ImplSVMainHook( int * pnInit )
 
 // =======================================================================
 
-void SalAbort( const rtl::OUString& rErrorText, bool bDumpCore )
+void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
     if( rErrorText.isEmpty() )
         fprintf( stderr, "Application Error " );
     else
         fprintf( stderr, "%s ",
-            rtl::OUStringToOString( rErrorText, osl_getThreadTextEncoding() ).getStr() );
+            OUStringToOString( rErrorText, osl_getThreadTextEncoding() ).getStr() );
     if( bDumpCore )
         abort();
     else
@@ -264,7 +264,7 @@ void InitSalData()
 
 // -----------------------------------------------------------------------
 
-const ::rtl::OUString& SalGetDesktopEnvironment()
+const OUString& SalGetDesktopEnvironment()
 {
     static OUString aDesktopEnvironment( "MacOSX" );
     return aDesktopEnvironment;
@@ -923,7 +923,7 @@ void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString AquaSalInstance::GetDefaultPrinter()
+OUString AquaSalInstance::GetDefaultPrinter()
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
@@ -1013,7 +1013,7 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
 
 // We need to re-encode file urls because osl_getFileURLFromSystemPath converts
 // to UTF-8 before encoding non ascii characters, which is not what other apps expect.
-static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
+static OUString translateToExternalUrl(const OUString& internalUrl)
 {
     uno::Reference< uno::XComponentContext > context(
         comphelper::getProcessComponentContext());
@@ -1023,7 +1023,7 @@ static rtl::OUString translateToExternalUrl(const rtl::OUString& internalUrl)
 // #i104525# many versions of OSX have problems with some URLs:
 // when an app requests OSX to add one of these URLs to the "Recent Items" list
 // then this app gets killed (TextEdit, Preview, etc. and also OOo)
-static bool isDangerousUrl( const rtl::OUString& rUrl )
+static bool isDangerousUrl( const OUString& rUrl )
 {
     // use a heuristic that detects all known cases since there is no official comment
     // on the exact impact and root cause of the OSX bug
@@ -1051,10 +1051,10 @@ static bool isDangerousUrl( const rtl::OUString& rUrl )
     return false;
 }
 
-void AquaSalInstance::AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& /*rMimeType*/)
+void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/)
 {
     // Convert file URL for external use (see above)
-    rtl::OUString externalUrl = translateToExternalUrl(rFileUrl);
+    OUString externalUrl = translateToExternalUrl(rFileUrl);
     if( externalUrl.isEmpty() )
         externalUrl = rFileUrl;
 

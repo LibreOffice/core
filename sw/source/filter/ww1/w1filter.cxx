@@ -814,7 +814,7 @@ oncemore:
             }
             else // rekursion:
             {
-                rtl::OUString aName("Ww");
+                OUString aName("Ww");
                 aName += OUString::number( nPlcIndex );
                 SwFieldType* pFT = rOut.GetDoc().GetFldType( RES_SETEXPFLD, aName, false);
                 if (pFT == 0)
@@ -836,7 +836,7 @@ oncemore:
             aStr.Erase(0, 1);
             if( !aFName.Len() )
                 break;
-            aFName.SearchAndReplaceAscii( "\\\\", rtl::OUString('\\') );
+            aFName.SearchAndReplaceAscii( "\\\\", OUString('\\') );
 
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );

@@ -21,12 +21,12 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 // -----------------------------------------------------------------------
 
-rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
+OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
         OSL_FAIL("invalid event number");
-        return rtl::OUString();
+        return OUString();
     }
 
     static const sal_Char* aEventNames[] =
@@ -39,7 +39,7 @@ rtl::OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
         "OnChange",                 // SC_SHEETEVENT_CHANGE
         "OnCalculate"               // SC_SHEETEVENT_CALCULATE
     };
-    return rtl::OUString::createFromAscii(aEventNames[nEvent]);
+    return OUString::createFromAscii(aEventNames[nEvent]);
 }
 
 sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
@@ -105,17 +105,17 @@ const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
     Clear();
     if (rOther.mpScriptNames)
     {
-        mpScriptNames = new rtl::OUString*[SC_SHEETEVENT_COUNT];
+        mpScriptNames = new OUString*[SC_SHEETEVENT_COUNT];
         for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
             if (rOther.mpScriptNames[nEvent])
-                mpScriptNames[nEvent] = new rtl::OUString(*rOther.mpScriptNames[nEvent]);
+                mpScriptNames[nEvent] = new OUString(*rOther.mpScriptNames[nEvent]);
             else
                 mpScriptNames[nEvent] = NULL;
     }
     return *this;
 }
 
-const rtl::OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
+const OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
@@ -128,7 +128,7 @@ const rtl::OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
     return NULL;
 }
 
-void ScSheetEvents::SetScript(sal_Int32 nEvent, const rtl::OUString* pNew)
+void ScSheetEvents::SetScript(sal_Int32 nEvent, const OUString* pNew)
 {
     if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
     {
@@ -138,13 +138,13 @@ void ScSheetEvents::SetScript(sal_Int32 nEvent, const rtl::OUString* pNew)
 
     if (!mpScriptNames)
     {
-        mpScriptNames = new rtl::OUString*[SC_SHEETEVENT_COUNT];
+        mpScriptNames = new OUString*[SC_SHEETEVENT_COUNT];
         for (sal_Int32 nEventIdx=0; nEventIdx<SC_SHEETEVENT_COUNT; ++nEventIdx)
             mpScriptNames[nEventIdx] = NULL;
     }
     delete mpScriptNames[nEvent];
     if (pNew)
-        mpScriptNames[nEvent] = new rtl::OUString(*pNew);
+        mpScriptNames[nEvent] = new OUString(*pNew);
     else
         mpScriptNames[nEvent] = NULL;
 }

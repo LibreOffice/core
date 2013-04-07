@@ -25,13 +25,12 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::rtl::OUString;
 
 // #110680#
 SwXMLBlockListExport::SwXMLBlockListExport(
     const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks & rBlocks,
-    const rtl::OUString &rFileName,
+    const OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)
@@ -82,7 +81,7 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 SwXMLTextBlockExport::SwXMLTextBlockExport(
     const uno::Reference< uno::XComponentContext > xContext,
     SwXMLTextBlocks & rBlocks,
-    const rtl::OUString &rFileName,
+    const OUString &rFileName,
     uno::Reference< xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xContext, rFileName, util::MeasureUnit::CM, rHandler ),
     rBlockList(rBlocks)

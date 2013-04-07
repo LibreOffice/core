@@ -38,7 +38,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef ::boost::unordered_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
+            typedef ::boost::unordered_map< OString, OUString, OStringHash >  FieldMap;
 
             mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;
@@ -49,9 +49,9 @@ namespace connectivity
             MQueryHelperResultEntry();
             ~MQueryHelperResultEntry();
 
-            void            insert( const rtl::OString &key, rtl::OUString &value );
-            rtl::OUString   getValue( const rtl::OString &key ) const;
-            void            setValue( const rtl::OString &key, const rtl::OUString & rValue);
+            void            insert( const OString &key, OUString &value );
+            OUString   getValue( const OString &key ) const;
+            void            setValue( const OString &key, const OUString & rValue);
 
             void setCard(nsIAbCard *card);
             nsIAbCard *getCard();

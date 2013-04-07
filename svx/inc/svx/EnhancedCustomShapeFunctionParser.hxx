@@ -189,7 +189,7 @@ public:
         @return the generated function object.
        */
 
-    SVX_DLLPUBLIC static ExpressionNodeSharedPtr parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    SVX_DLLPUBLIC static ExpressionNodeSharedPtr parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
 private:
     // disabled constructor/destructor, since this is

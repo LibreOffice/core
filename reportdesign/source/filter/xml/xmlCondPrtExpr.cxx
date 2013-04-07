@@ -37,7 +37,7 @@ DBG_NAME( rpt_OXMLCondPrtExpr )
 
 OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
                 sal_uInt16 nPrfx
-                ,const ::rtl::OUString& rLName
+                ,const OUString& rLName
                 ,const uno::Reference< xml::sax::XAttributeList > & _xAttrList
                 ,const Reference< XPropertySet > & _xComponent ) :
     SvXMLImportContext( _rImport, nPrfx, rLName )
@@ -53,10 +53,10 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport,
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -83,7 +83,7 @@ OXMLCondPrtExpr::~OXMLCondPrtExpr()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void OXMLCondPrtExpr::Characters( const ::rtl::OUString& rChars )
+void OXMLCondPrtExpr::Characters( const OUString& rChars )
 {
     m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(rChars));
 }

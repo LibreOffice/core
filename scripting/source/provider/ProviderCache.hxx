@@ -47,8 +47,8 @@ struct ProviderDetails
     css::uno::Reference< css::lang::XSingleComponentFactory > factory;
     css::uno::Reference< css::script::provider::XScriptProvider > provider;
 };
-typedef ::boost::unordered_map < ::rtl::OUString, ProviderDetails , ::rtl::OUStringHash,
-            ::std::equal_to< ::rtl::OUString > > ProviderDetails_hash;
+typedef ::boost::unordered_map < OUString, ProviderDetails , OUStringHash,
+            ::std::equal_to< OUString > > ProviderDetails_hash;
 
 
 class ProviderCache
@@ -58,11 +58,11 @@ public:
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext )
         throw ( css::uno::RuntimeException );
      ProviderCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Sequence< css::uno::Any >& scriptContext,
-        const css::uno::Sequence< ::rtl::OUString >& blackList )
+        const css::uno::Sequence< OUString >& blackList )
         throw ( css::uno::RuntimeException );
     ~ProviderCache();
      css::uno::Reference< css::script::provider::XScriptProvider >
-         getProvider( const ::rtl::OUString& providerName );
+         getProvider( const OUString& providerName );
      css::uno::Sequence < css::uno::Reference< css::script::provider::XScriptProvider > >
          getAllProviders() throw ( css::uno::RuntimeException );
 private:
@@ -71,7 +71,7 @@ private:
 
    css::uno::Reference< css::script::provider::XScriptProvider >
         createProvider( ProviderDetails& details ) throw ( css::uno::RuntimeException );
-    bool isInBlackList( const ::rtl::OUString& serviceName )
+    bool isInBlackList( const OUString& serviceName )
     {
         if ( m_sBlackList.getLength() > 0 )
         {
@@ -85,7 +85,7 @@ private:
         }
         return false;
     }
-    css::uno::Sequence< ::rtl::OUString >  m_sBlackList;
+    css::uno::Sequence< OUString >  m_sBlackList;
     ProviderDetails_hash  m_hProviderDetailsCache;
     osl::Mutex m_mutex;
     css::uno::Sequence< css::uno::Any >  m_Sctx;

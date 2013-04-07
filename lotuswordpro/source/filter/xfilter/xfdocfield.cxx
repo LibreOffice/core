@@ -59,7 +59,7 @@
  ************************************************************************/
 #include "xfdocfield.hxx"
 
-void XFFileName::SetType(rtl::OUString sType)
+void XFFileName::SetType(OUString sType)
 {
     m_strType = sType;
 }

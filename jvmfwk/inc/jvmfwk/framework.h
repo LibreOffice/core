@@ -277,7 +277,7 @@ JVMFWK_DLLPUBLIC void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
    in the second <code>JavaInfo</code> object. The equality of the
    <code>rtl_uString</code> members is determined
    by the respective comparison function (see
-   <code>rtl::OUString::equals</code>).
+   <code>OUString::equals</code>).
    Similiarly the equality of the <code>sal_Sequence</code> is
    also determined by a comparison
    function (see <code>rtl::ByteSequence::operator ==</code>). </p>

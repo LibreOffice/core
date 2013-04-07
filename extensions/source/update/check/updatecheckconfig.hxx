@@ -63,15 +63,15 @@ public:
 
     bool isAutoCheckEnabled() const;
     bool isDownloadPaused() const;
-    rtl::OUString getLocalFileName() const;
+    OUString getLocalFileName() const;
     sal_Int64 getDownloadSize() const;
 
-    rtl::OUString getUpdateEntryVersion() const;
+    OUString getUpdateEntryVersion() const;
     void getUpdateEntry(UpdateInfo& rInfo) const;
 
 private:
 
-    rtl::OUString getStringValue(const sal_Char *) const;
+    OUString getStringValue(const sal_Char *) const;
 
     IByNameAccess& m_aNameAccess;
 };
@@ -97,8 +97,8 @@ class UpdateCheckConfig : public ::cppu::WeakImplHelper3<
 
 public:
 
-    static ::com::sun::star::uno::Sequence< rtl::OUString > getServiceNames();
-    static rtl::OUString getImplName();
+    static ::com::sun::star::uno::Sequence< OUString > getServiceNames();
+    static OUString getImplName();
 
     static ::rtl::Reference< UpdateCheckConfig > get(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
@@ -107,7 +107,7 @@ public:
     // Should really implement ROModel ..
     bool isAutoCheckEnabled() const;
     bool isAutoDownloadEnabled() const;
-    rtl::OUString getUpdateEntryVersion() const;
+    OUString getUpdateEntryVersion() const;
 
     /* Updates the timestamp of last check, but does not commit the change
      * as either clearUpdateFound() or setUpdateFound() are expected to get
@@ -127,16 +127,16 @@ public:
 
     /* Stores the specified data of an available update
      */
-    void storeUpdateFound(const UpdateInfo& rInfo, const rtl::OUString& aCurrentBuild);
+    void storeUpdateFound(const UpdateInfo& rInfo, const OUString& aCurrentBuild);
 
     // Returns the local file name of a started download
-    rtl::OUString getLocalFileName() const;
+    OUString getLocalFileName() const;
 
     // Returns the local file name of a started download
-    rtl::OUString getDownloadDestination() const;
+    OUString getDownloadDestination() const;
 
     // stores the local file name of a just started download
-    void storeLocalFileName(const rtl::OUString& rFileName, sal_Int64 nFileSize);
+    void storeLocalFileName(const OUString& rFileName, sal_Int64 nFileSize);
 
     // Removes the local file name of a download
     void clearLocalFileName();
@@ -145,16 +145,16 @@ public:
     void storeDownloadPaused(bool paused);
 
     // Returns the directory that acts as the user's desktop
-    static rtl::OUString getDesktopDirectory();
+    static OUString getDesktopDirectory();
 
     // Returns a directory accessible for all users
-    static rtl::OUString getAllUsersDirectory();
+    static OUString getAllUsersDirectory();
 
     // store and retrieve information about extensions
-    bool storeExtensionVersion( const rtl::OUString& rExtensionName,
-                                const rtl::OUString& rVersion );
-    bool checkExtensionVersion( const rtl::OUString& rExtensionName,
-                                const rtl::OUString& rVersion );
+    bool storeExtensionVersion( const OUString& rExtensionName,
+                                const OUString& rVersion );
+    bool checkExtensionVersion( const OUString& rExtensionName,
+                                const OUString& rVersion );
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
@@ -163,17 +163,17 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
@@ -189,17 +189,17 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
 
-    static rtl::OUString getSubVersion( const rtl::OUString& rVersion, sal_Int32 *nIndex );
-    static bool isVersionGreater( const rtl::OUString& rVersion1, const rtl::OUString& rVersion2 );
+    static OUString getSubVersion( const OUString& rVersion, sal_Int32 *nIndex );
+    static bool isVersionGreater( const OUString& rVersion1, const OUString& rVersion2 );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xContainer;
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xAvailableUpdates;
@@ -222,7 +222,7 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
             T value = T();
             if( ! (rNamedValues[n].Value >>= value) )
                 throw ::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString(
+                    OUString(
                         cppu_Any_extraction_failure_msg(
                             &rNamedValues[n].Value,
                             ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),

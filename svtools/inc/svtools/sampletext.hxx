@@ -47,18 +47,18 @@ SVT_DLLPUBLIC bool canRenderNameOfSelectedFont(OutputDevice &rDevice);
 
 //These ones are typically for use in the font dropdown box beside the
 //fontname, so say things roughly like "Script/Alphabet/Name-Of-Major-Language"
-SVT_DLLPUBLIC rtl::OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice);
-SVT_DLLPUBLIC rtl::OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice);
-SVT_DLLPUBLIC rtl::OUString makeShortRepresentativeTextForScript(UScriptCode eScript);
+SVT_DLLPUBLIC OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice);
+SVT_DLLPUBLIC OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice);
+SVT_DLLPUBLIC OUString makeShortRepresentativeTextForScript(UScriptCode eScript);
 //For the cases where the font doesn't fully support a script, but has partial support
 //for a useful subset
-SVT_DLLPUBLIC rtl::OUString makeShortMinimalTextForScript(UScriptCode eScript);
+SVT_DLLPUBLIC OUString makeShortMinimalTextForScript(UScriptCode eScript);
 
 //These ones are typically for use in the font preview window in format character
-SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont);
-SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForLanguage(LanguageType eLang);
-SVT_DLLPUBLIC rtl::OUString makeRepresentativeTextForScript(UScriptCode eScript);
-SVT_DLLPUBLIC rtl::OUString makeMinimalTextForScript(UScriptCode eScript);
+SVT_DLLPUBLIC OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont);
+SVT_DLLPUBLIC OUString makeRepresentativeTextForLanguage(LanguageType eLang);
+SVT_DLLPUBLIC OUString makeRepresentativeTextForScript(UScriptCode eScript);
+SVT_DLLPUBLIC OUString makeMinimalTextForScript(UScriptCode eScript);
 
 
 #endif

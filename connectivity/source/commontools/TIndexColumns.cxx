@@ -38,16 +38,16 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector)
+                        const ::std::vector< OUString> &_rVector)
             : connectivity::sdbcx::OCollection(*_pIndex,sal_True,_rMutex,_rVector)
             ,m_pIndex(_pIndex)
 {
 }
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexColumns::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aCatalog, aSchema, aTable;
+    OUString aCatalog, aSchema, aTable;
     ::com::sun::star::uno::Any Catalog(m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
     Catalog >>= aCatalog;
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
@@ -60,7 +60,7 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aD("D");
+        OUString aD("D");
         while( xResult->next() )
         {
             if(xRow->getString(9) == _rName)
@@ -80,11 +80,11 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
             if ( xRow->getString(4) == _rName )
             {
                 sal_Int32 nDataType = xRow->getInt(5);
-                ::rtl::OUString aTypeName(xRow->getString(6));
+                OUString aTypeName(xRow->getString(6));
                 sal_Int32 nSize = xRow->getInt(7);
                 sal_Int32 nDec  = xRow->getInt(9);
                 sal_Int32 nNull = xRow->getInt(11);
-                ::rtl::OUString aColumnDef(xRow->getString(13));
+                OUString aColumnDef(xRow->getString(13));
 
                 OIndexColumn* pRet = new OIndexColumn(bAsc,
                                                       _rName,

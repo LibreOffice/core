@@ -53,11 +53,11 @@ namespace comphelper
     {
     private:
         Reference< XComponentContext >  m_aContext;
-        ::rtl::OUString                 m_sLoggerName;
+        OUString                 m_sLoggerName;
         Reference< XLogger >            m_xLogger;
 
     public:
-        EventLogger_Impl( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rLoggerName )
+        EventLogger_Impl( const Reference< XComponentContext >& _rxContext, const OUString& _rLoggerName )
             :m_aContext( _rxContext )
             ,m_sLoggerName( _rLoggerName )
         {
@@ -65,7 +65,7 @@ namespace comphelper
         }
 
         inline bool isValid() const { return m_xLogger.is(); }
-        inline const ::rtl::OUString&  getName() const { return m_sLoggerName; }
+        inline const OUString&  getName() const { return m_sLoggerName; }
         inline const Reference< XLogger >& getLogger() const { return m_xLogger; }
         inline Reference< XComponentContext > getContext() const { return m_aContext; }
 
@@ -99,7 +99,7 @@ namespace comphelper
     //====================================================================
     //--------------------------------------------------------------------
     EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const sal_Char* _pAsciiLoggerName )
-        :m_pImpl( new EventLogger_Impl( _rxContext, ::rtl::OUString::createFromAscii( _pAsciiLoggerName ) ) )
+        :m_pImpl( new EventLogger_Impl( _rxContext, OUString::createFromAscii( _pAsciiLoggerName ) ) )
     {
     }
 
@@ -130,7 +130,7 @@ namespace comphelper
     //--------------------------------------------------------------------
     namespace
     {
-        void    lcl_replaceParameter( ::rtl::OUString& _inout_Message, const ::rtl::OUString& _rPlaceHolder, const ::rtl::OUString& _rReplacement )
+        void    lcl_replaceParameter( OUString& _inout_Message, const OUString& _rPlaceHolder, const OUString& _rReplacement )
         {
             sal_Int32 nPlaceholderPosition = _inout_Message.indexOf( _rPlaceHolder );
             OSL_ENSURE( nPlaceholderPosition >= 0, "lcl_replaceParameter: placeholder not found!" );
@@ -143,20 +143,20 @@ namespace comphelper
 
     //--------------------------------------------------------------------
     bool EventLogger::impl_log( const sal_Int32 _nLogLevel,
-        const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const ::rtl::OUString& _rMessage,
+        const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage,
         const OptionalString& _rArgument1, const OptionalString& _rArgument2,
         const OptionalString& _rArgument3, const OptionalString& _rArgument4,
         const OptionalString& _rArgument5, const OptionalString& _rArgument6 ) const
     {
-        // (if ::rtl::OUString had an indexOfAscii, we could save those ugly statics ...)
-        static ::rtl::OUString sPH1( "$1$" );
-        static ::rtl::OUString sPH2( "$2$" );
-        static ::rtl::OUString sPH3( "$3$" );
-        static ::rtl::OUString sPH4( "$4$" );
-        static ::rtl::OUString sPH5( "$5$" );
-        static ::rtl::OUString sPH6( "$6$" );
+        // (if OUString had an indexOfAscii, we could save those ugly statics ...)
+        static OUString sPH1( "$1$" );
+        static OUString sPH2( "$2$" );
+        static OUString sPH3( "$3$" );
+        static OUString sPH4( "$4$" );
+        static OUString sPH5( "$5$" );
+        static OUString sPH6( "$6$" );
 
-        ::rtl::OUString sMessage( _rMessage );
+        OUString sMessage( _rMessage );
         if ( !!_rArgument1 )
             lcl_replaceParameter( sMessage, sPH1, *_rArgument1 );
 
@@ -183,8 +183,8 @@ namespace comphelper
             {
                 xLogger->logp(
                     _nLogLevel,
-                    ::rtl::OUString::createFromAscii( _pSourceClass ),
-                    ::rtl::OUString::createFromAscii( _pSourceMethod ),
+                    OUString::createFromAscii( _pSourceClass ),
+                    OUString::createFromAscii( _pSourceMethod ),
                     sMessage
                 );
             }
@@ -208,7 +208,7 @@ namespace comphelper
     struct ResourceBasedEventLogger_Data
     {
         /// the base name of the resource bundle
-        ::rtl::OUString                 sBundleBaseName;
+        OUString                 sBundleBaseName;
         /// did we already attempt to load the bundle?
         bool                            bBundleLoaded;
         /// the lazily loaded bundle
@@ -248,13 +248,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString lcl_loadString_nothrow( const Reference< XResourceBundle >& _rxBundle, const sal_Int32 _nMessageResID )
+    OUString lcl_loadString_nothrow( const Reference< XResourceBundle >& _rxBundle, const sal_Int32 _nMessageResID )
     {
         OSL_PRECOND( _rxBundle.is(), "lcl_loadString_nothrow: this will crash!" );
-        ::rtl::OUString sMessage;
+        OUString sMessage;
         try
         {
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.appendAscii( "string:" );
             aBuffer.append( _nMessageResID );
             OSL_VERIFY( _rxBundle->getDirectElement( aBuffer.makeStringAndClear() ) >>= sMessage );
@@ -276,18 +276,18 @@ namespace comphelper
         :EventLogger( _rxContext, _pAsciiLoggerName )
         ,m_pData( new ResourceBasedEventLogger_Data )
     {
-        m_pData->sBundleBaseName = ::rtl::OUString::createFromAscii( _pResourceBundleBaseName );
+        m_pData->sBundleBaseName = OUString::createFromAscii( _pResourceBundleBaseName );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString ResourceBasedEventLogger::impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const
+    OUString ResourceBasedEventLogger::impl_loadStringMessage_nothrow( const sal_Int32 _nMessageResID ) const
     {
-        ::rtl::OUString sMessage;
+        OUString sMessage;
         if ( lcl_loadBundle_nothrow( m_pImpl->getContext(), *m_pData ) )
             sMessage = lcl_loadString_nothrow( m_pData->xBundle, _nMessageResID );
         if ( sMessage.isEmpty() )
         {
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.appendAscii( "<invalid event resource: '" );
             aBuffer.append( m_pData->sBundleBaseName );
             aBuffer.appendAscii( ":" );

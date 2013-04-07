@@ -46,7 +46,7 @@ namespace dbaccess
 class ODefinitionContainer_Impl : public OContentHelper_Impl
 {
 public:
-    typedef ::std::map< ::rtl::OUString, TContentPtr >  NamedDefinitions;
+    typedef ::std::map< OUString, TContentPtr >  NamedDefinitions;
     typedef NamedDefinitions::iterator                  iterator;
     typedef NamedDefinitions::const_iterator            const_iterator;
 
@@ -59,13 +59,13 @@ public:
     inline const_iterator begin() const   { return m_aDefinitions.begin(); }
     inline const_iterator end() const     { return m_aDefinitions.end(); }
 
-    inline const_iterator find( const ::rtl::OUString& _rName ) const { return m_aDefinitions.find( _rName ); }
+    inline const_iterator find( const OUString& _rName ) const { return m_aDefinitions.find( _rName ); }
            const_iterator find( TContentPtr _pDefinition ) const;
 
-    inline void erase( const ::rtl::OUString& _rName ) { m_aDefinitions.erase( _rName ); }
+    inline void erase( const OUString& _rName ) { m_aDefinitions.erase( _rName ); }
     void erase( TContentPtr _pDefinition );
 
-    inline void insert( const ::rtl::OUString& _rName, TContentPtr _pDefinition )
+    inline void insert( const OUString& _rName, TContentPtr _pDefinition )
     {
         m_aDefinitions.insert( NamedDefinitions::value_type( _rName, _pDefinition ) );
     }
@@ -165,8 +165,8 @@ public:
     DECLARE_TYPEPROVIDER( );
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -180,16 +180,16 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 _nIndex ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const OUString& _rName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL replaceByName( const OUString& _rName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainer
     virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
@@ -216,7 +216,7 @@ protected:
         @return                     the newly created object or an empty reference if somthing went wrong
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject(
-        const ::rtl::OUString& _rName) = 0;
+        const OUString& _rName) = 0;
 
     /** get the object specified by the given name. If desired, the object will be read if not already done so.<BR>
         @param      _rName              the object name
@@ -227,14 +227,14 @@ protected:
         @see    createObject
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
-                implGetByName(const ::rtl::OUString& _rName, sal_Bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
+                implGetByName(const OUString& _rName, sal_Bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occures, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check
         @return                 sal_True if there already exists such an object
     */
-    virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
+    virtual sal_Bool checkExistence(const OUString& _rName);
 
     /** append a new object to the container. No plausibility checks are done, e.g. if the object is non-NULL or
         if the name is already used by another object or anything like this. This method is for derived classes
@@ -248,7 +248,7 @@ protected:
         @see        implRemove
     */
     void    implAppend(
-        const ::rtl::OUString& _rName,
+        const OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxNewObject
         );
 
@@ -260,7 +260,7 @@ protected:
         @see            implReplace
         @see            implAppend
     */
-    void implRemove(const ::rtl::OUString& _rName);
+    void implRemove(const OUString& _rName);
 
     /** remove a object in the container. No plausibility checks are done, e.g. whether
         or not there exists an object with the given name or the object is non-NULL. This is the responsibility of the caller.<BR>
@@ -274,7 +274,7 @@ protected:
         @see            implRemove
     */
     void implReplace(
-        const ::rtl::OUString& _rName,
+        const OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxNewObject
         );
 
@@ -282,7 +282,7 @@ protected:
     */
     void notifyByName(
             ::osl::ResettableMutexGuard& _rGuard,
-            const ::rtl::OUString& _rName,
+            const OUString& _rName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _xNewElement,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& xOldElement,
             ContainerOperation _eOperation,
@@ -310,7 +310,7 @@ private:
             if another error occures which prevents insertion of the object into the container
     */
     void approveNewObject(
-            const ::rtl::OUString& _sName,
+            const OUString& _sName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxObject
         ) const;
 

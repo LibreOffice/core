@@ -153,7 +153,7 @@ public:
     /* is merging default attributes from type-shype into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
     MergeDefaultAttributes is called when creating CustomShapes via UI and after importing */
-    void MergeDefaultAttributes( const rtl::OUString* pType = NULL );
+    void MergeDefaultAttributes( const OUString* pType = NULL );
 
     /* the method is checking if the geometry data is unchanged/default, in this case the data might not be stored */
     enum DefaultType
@@ -253,7 +253,7 @@ public:
     virtual SdrHdl* GetHdl( sal_uInt32 nHdlNum ) const;
 
     // #i33136#
-    static bool doConstructOrthogonal(const ::rtl::OUString& rName);
+    static bool doConstructOrthogonal(const OUString& rName);
 
     using SdrTextObj::NbcSetOutlinerParaObject;
 };

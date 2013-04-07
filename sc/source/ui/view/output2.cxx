@@ -542,7 +542,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
 
 void ScDrawStringsVars::SetHashText()
 {
-    SetAutoText(rtl::OUString("###"));
+    SetAutoText(OUString("###"));
 }
 
 void ScDrawStringsVars::RepeatToFill( long colWidth )
@@ -550,7 +550,7 @@ void ScDrawStringsVars::RepeatToFill( long colWidth )
     if ( nPos ==  STRING_NOTFOUND || nPos > aString.Len() )
         return;
 
-    long charWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString(nChar));
+    long charWidth = pOutput->pFmtDevice->GetTextWidth(OUString(nChar));
     if ( charWidth < 1) return;
     if (bPixelToLogic)
         colWidth = pOutput->mpRefDevice->PixelToLogic(Size(colWidth,0)).Width();
@@ -717,7 +717,7 @@ long ScDrawStringsVars::GetMaxDigitWidth()
     for (sal_Char i = 0; i < 10; ++i)
     {
         sal_Char cDigit = cZero + i;
-        long n = pOutput->pFmtDevice->GetTextWidth(rtl::OUString(cDigit));
+        long n = pOutput->pFmtDevice->GetTextWidth(OUString(cDigit));
         nMaxDigitWidth = ::std::max(nMaxDigitWidth, n);
     }
     return nMaxDigitWidth;
@@ -728,7 +728,7 @@ long ScDrawStringsVars::GetSignWidth()
     if (nSignWidth > 0)
         return nSignWidth;
 
-    nSignWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString('-'));
+    nSignWidth = pOutput->pFmtDevice->GetTextWidth(OUString('-'));
     return nSignWidth;
 }
 
@@ -737,7 +737,7 @@ long ScDrawStringsVars::GetDotWidth()
     if (nDotWidth > 0)
         return nDotWidth;
 
-    const ::rtl::OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
+    const OUString& sep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator;
     nDotWidth = pOutput->pFmtDevice->GetTextWidth(sep);
     return nDotWidth;
 }
@@ -747,7 +747,7 @@ long ScDrawStringsVars::GetExpWidth()
     if (nExpWidth > 0)
         return nExpWidth;
 
-    nExpWidth = pOutput->pFmtDevice->GetTextWidth(rtl::OUString('E'));
+    nExpWidth = pOutput->pFmtDevice->GetTextWidth(OUString('E'));
     return nExpWidth;
 }
 
@@ -1371,7 +1371,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
 namespace {
 
-bool beginsWithRTLCharacter(const rtl::OUString& rStr)
+bool beginsWithRTLCharacter(const OUString& rStr)
 {
     if (rStr.isEmpty())
         return false;
@@ -2796,7 +2796,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(rtl::OUString("###"));
+            rParam.mpEngine->SetText(OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3178,7 +3178,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(rtl::OUString("###"));
+            rParam.mpEngine->SetText(OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3548,7 +3548,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(rtl::OUString("###"));
+            rParam.mpEngine->SetText(OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -3930,7 +3930,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
         if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
         {
-            rParam.mpEngine->SetText(rtl::OUString("###"));
+            rParam.mpEngine->SetText(OUString("###"));
             nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
             if (rParam.mbPixelToLogic)
                 nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -4339,7 +4339,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
     {
-        rParam.mpEngine->SetText(rtl::OUString("###"));
+        rParam.mpEngine->SetText(OUString("###"));
         nEngineWidth = (long) rParam.mpEngine->CalcTextWidth();
         if (rParam.mbPixelToLogic)
             nNeededPixel = mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width();
@@ -4641,7 +4641,7 @@ void ScOutputData::DrawEdit(sal_Bool bPixelToLogic)
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
                         // fdo#32530: Check if the first character is RTL.
-                        rtl::OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
+                        OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
                         DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
                         aParam.mbPixelToLogic = bPixelToLogic;
@@ -4966,7 +4966,7 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
                             {
                                 sal_uLong nFormat = pPattern->GetNumberFormat(
                                                             mpDoc->GetFormatTable(), pCondSet );
-                                rtl::OUString aString;
+                                OUString aString;
                                 Color* pColor;
                                 ScCellFormat::GetString( aCell,
                                                          nFormat,aString, &pColor,

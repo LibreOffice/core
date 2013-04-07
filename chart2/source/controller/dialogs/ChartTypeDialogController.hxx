@@ -86,7 +86,7 @@ public:
     bool                bSortByXValues;
 };
 
-typedef ::comphelper::MakeMap< ::rtl::OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
+typedef ::comphelper::MakeMap< OUString, ChartTypeParameter > tTemplateServiceChartTypeParameterMap;
 
 class ChartTypeDialogController : public ChangingResource
 {
@@ -114,13 +114,13 @@ public:
                                      , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps=::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >() ) const;
     virtual void    setTemplateProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xTemplateProps ) const throw (::com::sun::star::uno::RuntimeException);
 
-    virtual bool                isSubType( const rtl::OUString& rServiceName );
-    virtual ChartTypeParameter  getChartTypeParameterForService( const rtl::OUString& rServiceName, const ::com::sun::star::uno::Reference<
+    virtual bool                isSubType( const OUString& rServiceName );
+    virtual ChartTypeParameter  getChartTypeParameterForService( const OUString& rServiceName, const ::com::sun::star::uno::Reference<
                                                                 ::com::sun::star::beans::XPropertySet >& xTemplateProps );
     virtual void                adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter );//if you have different counts of subtypes you may need to adjust the index
     virtual void                adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void                adjustParameterToMainType( ChartTypeParameter& rParameter );
-    virtual rtl::OUString       getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
+    virtual OUString       getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
     virtual bool                commitToModel( const ChartTypeParameter& rParameter
         , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel );
     virtual ::com::sun::star::uno::Reference<

@@ -46,9 +46,9 @@ namespace func_provider
 
 ActiveMSPList::ActiveMSPList(  const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
 {
-    userDirString = ::rtl::OUString("user");
-    shareDirString =  ::rtl::OUString("share");
-    bundledDirString = ::rtl::OUString("bundled");
+    userDirString = OUString("user");
+    shareDirString =  OUString("share");
+    bundledDirString = OUString("bundled");
 }
 
 ActiveMSPList::~ActiveMSPList()
@@ -58,7 +58,7 @@ ActiveMSPList::~ActiveMSPList()
 Reference< provider::XScriptProvider >
 ActiveMSPList::createNewMSP( const uno::Any& context )
 {
-    ::rtl::OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
+    OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
     Sequence< Any > args( &context, 1 );
 
     Reference< provider::XScriptProvider > msp(
@@ -72,7 +72,7 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
             SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
-    ::rtl::OUString sContext;
+    OUString sContext;
     if ( aContext >>= sContext )
     {
         msp = getMSPFromStringContext( sContext );
@@ -122,7 +122,7 @@ Reference< provider::XScriptProvider >
         xScripts.set( xContext->getScriptContainer() );
     if ( !xScripts.is() )
     {
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
         buf.appendAscii( "Component supporting XEmbeddScripts interface not found." );
         throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
@@ -147,7 +147,7 @@ Reference< provider::XScriptProvider >
 }
 
 Reference< provider::XScriptProvider >
-    ActiveMSPList::getMSPFromStringContext( const ::rtl::OUString& context )
+    ActiveMSPList::getMSPFromStringContext( const OUString& context )
         SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
@@ -161,7 +161,7 @@ Reference< provider::XScriptProvider >
             Reference< document::XScriptInvocationContext > xScriptsContext( xModel, UNO_QUERY );
             if ( !xScripts.is() && !xScriptsContext.is() )
             {
-                ::rtl::OUStringBuffer buf;
+                OUStringBuffer buf;
                 buf.appendAscii( "Failed to create MasterScriptProvider for '" );
                 buf.append     ( context );
                 buf.appendAscii( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
@@ -207,7 +207,7 @@ Reference< provider::XScriptProvider >
     }
     catch( const Exception& )
     {
-        ::rtl::OUStringBuffer aMessage;
+        OUStringBuffer aMessage;
         aMessage.appendAscii( "Failed to create MasterScriptProvider for context '" );
         aMessage.append     ( context );
         aMessage.appendAscii( "'." );
@@ -285,7 +285,7 @@ ActiveMSPList::createNonDocMSPs()
             return;
         }
         // do creation of user and share MSPs here
-        ::rtl::OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
+        OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;

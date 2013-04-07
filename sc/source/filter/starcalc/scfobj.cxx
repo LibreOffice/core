@@ -51,7 +51,7 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
     if ( !SvtModuleOptions().IsChart() )
         return;
 
-    ::rtl::OUString aName;
+    OUString aName;
     uno::Reference < embed::XEmbeddedObject > xObj = pDoc->GetDocumentShell()->
             GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )

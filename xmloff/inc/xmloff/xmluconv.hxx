@@ -28,6 +28,8 @@
 #include <limits.h>
 #include <boost/utility.hpp>
 
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/solar.h>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -42,11 +44,6 @@
 // predeclarations
 
 class Time;
-namespace rtl
-{
-class OUString;
-class OUStringBuffer;
-}
 
 namespace com { namespace sun { namespace star {
     namespace util { struct DateTime; }
@@ -61,14 +58,14 @@ namespace basegfx
 class XMLOFF_DLLPUBLIC SvXMLTokenEnumerator
 {
 private:
-    const ::rtl::OUString&  maTokenString;
+    const OUString&  maTokenString;
     sal_Int32               mnNextTokenPos;
     sal_Unicode             mcSeperator;
 
 public:
-    SvXMLTokenEnumerator( const ::rtl::OUString& rString, sal_Unicode cSeperator = sal_Unicode(' ') );
+    SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator = sal_Unicode(' ') );
 
-    sal_Bool getNextToken( ::rtl::OUString& rToken );
+    sal_Bool getNextToken( OUString& rToken );
 };
 
 /** the SvXMLTypeConverter converts values of various types from
@@ -118,31 +115,31 @@ public:
     /** convert string to measure with meCoreMeasureUnit,
         using optional min and max values*/
     bool convertMeasureToCore( sal_Int32& rValue,
-                         const ::rtl::OUString& rString,
+                         const OUString& rString,
                          sal_Int32 nMin = SAL_MIN_INT32,
                          sal_Int32 nMax = SAL_MAX_INT32) const;
 
     /** convert measure to string: from meCoreMeasureUnit to meXMLMeasureUnit */
-    void convertMeasureToXML( ::rtl::OUStringBuffer& rBuffer,
+    void convertMeasureToXML( OUStringBuffer& rBuffer,
                          sal_Int32 nMeasure ) const;
 
     /** convert string to enum using given enum map, if the enum is
         not found in the map, this method will return false */
     static sal_Bool convertEnum( sal_uInt16& rEnum,
-                             const ::rtl::OUString& rValue,
+                             const OUString& rValue,
                              const SvXMLEnumMapEntry *pMap );
 
     /** convert string to enum using given token map, if the enum is
         not found in the map, this method will return false */
     static sal_Bool convertEnum( sal_uInt16& rEnum,
-                             const ::rtl::OUString& rValue,
+                             const OUString& rValue,
                              const SvXMLEnumStringMapEntry *pMap );
 
     /** convert enum to string using given enum map with an optional
         default token. If the enum is not found in the map,
         this method will either use the given default or return
         false if not default is set */
-    static sal_Bool convertEnum( ::rtl::OUStringBuffer& rBuffer,
+    static sal_Bool convertEnum( OUStringBuffer& rBuffer,
                                  unsigned int nValue,
                                  const SvXMLEnumMapEntry *pMap,
                                  enum ::xmloff::token::XMLTokenEnum eDefault =
@@ -150,65 +147,65 @@ public:
 
     /** convert double number to string (using ::rtl::math) and DO
 		convert to export MapUnit using meCoreMeasureUnit/meXMLMeasureUnit */
-    void convertDouble(::rtl::OUStringBuffer& rBuffer,
+    void convertDouble(OUStringBuffer& rBuffer,
         double fNumber, sal_Bool bWriteUnits) const;
 
     /** convert string to double number (using ::rtl::math) and DO convert. */
-    sal_Bool convertDouble(double& rValue, const ::rtl::OUString& rString, sal_Bool bLookForUnits) const;
+    sal_Bool convertDouble(double& rValue, const OUString& rString, sal_Bool bLookForUnits) const;
 
     /** get the Null Date of the XModel and set it to the UnitConverter */
     sal_Bool setNullDate (
         const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& xModel);
 
     /** convert double to ISO Date Time String */
-    void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+    void convertDateTime( OUStringBuffer& rBuffer,
                                 const double& fDateTime,
                                 bool const bAddTimeIf0AM = false);
 
     /** convert ISO Date Time String to double */
     bool convertDateTime(double& fDateTime,
-                         const ::rtl::OUString& rString);
+                         const OUString& rString);
 
     /// these 2 functions use tools Date, so they're not yet moved to sax
 
     /** convert double to ISO Date Time String */
-    static void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+    static void convertDateTime( OUStringBuffer& rBuffer,
                                 const double& fDateTime,
                                 const com::sun::star::util::Date& aNullDate,
                                    sal_Bool bAddTimeIf0AM=sal_False);
     /** convert ISO Date Time String to double */
     static sal_Bool convertDateTime( double& fDateTime,
-                                const ::rtl::OUString& rString,
+                                const OUString& rString,
                                 const com::sun::star::util::Date& aNullDate);
 
 
     /** convert string to ::basegfx::B3DVector */
     static sal_Bool convertB3DVector( ::basegfx::B3DVector& rVector,
-                              const ::rtl::OUString& rValue );
+                              const OUString& rValue );
 
     /** convert B3DVector to string */
-    static void convertB3DVector( ::rtl::OUStringBuffer &rBuffer,
+    static void convertB3DVector( OUStringBuffer &rBuffer,
         const ::basegfx::B3DVector& rVector );
 
     /** convert string to Position3D */
     sal_Bool convertPosition3D( com::sun::star::drawing::Position3D& rPosition,
-                              const ::rtl::OUString& rValue );
+                              const OUString& rValue );
 
     /** convert Position3D to string */
-    void convertPosition3D( ::rtl::OUStringBuffer &rBuffer,
+    void convertPosition3D( OUStringBuffer &rBuffer,
                               const com::sun::star::drawing::Position3D& rVector );
 
 
     /** convert num-forat and num-letter-sync values to NumberingType */
     sal_Bool convertNumFormat( sal_Int16& rType,
-                                const ::rtl::OUString& rNumFormat,
-                               const ::rtl::OUString& rNumLetterSync,
+                                const OUString& rNumFormat,
+                               const OUString& rNumLetterSync,
                                sal_Bool bNumberNone = sal_False ) const;
 
     /** convert NumberingType to num-forat and num-letter-sync values */
-    void convertNumFormat( ::rtl::OUStringBuffer& rBuffer,
+    void convertNumFormat( OUStringBuffer& rBuffer,
                            sal_Int16 nType ) const;
-    void convertNumLetterSync( ::rtl::OUStringBuffer& rBuffer,
+    void convertNumLetterSync( OUStringBuffer& rBuffer,
                                   sal_Int16 nType ) const;
 
     static void convertPropertySet(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps,
@@ -216,14 +213,14 @@ public:
     static void convertPropertySet(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& rProperties,
                         const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
-    ::rtl::OUString encodeStyleName( const ::rtl::OUString& rName,
+    OUString encodeStyleName( const OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;
     /** convert string (hex) to number (sal_uInt32) */
     static sal_Bool convertHex( sal_uInt32& nVal,
-                              const ::rtl::OUString& rValue );
+                              const OUString& rValue );
 
     /** convert number (sal_uInt32) to string (hex) */
-    static void convertHex( ::rtl::OUStringBuffer& rBuffer,
+    static void convertHex( OUStringBuffer& rBuffer,
                                sal_uInt32 nVal );
 
 };

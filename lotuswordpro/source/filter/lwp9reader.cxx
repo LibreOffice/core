@@ -209,7 +209,7 @@ void Lwp9Reader::ParseDocument()
     pChangeMgr->ConvertAllChange(m_pStream);
 
     doc->Parse(m_pStream);
-    m_pStream->EndElement(::rtl::OUString("office:body"));
+    m_pStream->EndElement(OUString("office:body"));
 
     WriteDocEnd();
 }
@@ -245,7 +245,7 @@ void Lwp9Reader::WriteDocHeader()
     pAttrList->AddAttribute( A2OUSTR("office:class"), A2OUSTR("text"));
     pAttrList->AddAttribute( A2OUSTR("office:version"), A2OUSTR("1.0"));
 
-    m_pStream->StartElement( ::rtl::OUString("office:document") );
+    m_pStream->StartElement( OUString("office:document") );
     pAttrList->Clear();
 
 }
@@ -254,7 +254,7 @@ void Lwp9Reader::WriteDocHeader()
  */
 void Lwp9Reader::WriteDocEnd()
 {
-    m_pStream->EndElement(::rtl::OUString("office:document"));
+    m_pStream->EndElement(OUString("office:document"));
     m_pStream->EndDocument();
 }
 

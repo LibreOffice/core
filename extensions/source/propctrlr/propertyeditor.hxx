@@ -45,7 +45,7 @@ namespace pcr
     class OPropertyEditor : public Control
     {
     private:
-        typedef ::std::map< ::rtl::OUString, sal_uInt16 >   MapStringToPageId;
+        typedef ::std::map< OUString, sal_uInt16 >   MapStringToPageId;
         struct HiddenPage
         {
             sal_uInt16  nPos;
@@ -84,28 +84,28 @@ namespace pcr
 
         void                        EnableHelpSection( bool _bEnable );
         bool                        HasHelpSection() const;
-        void                        SetHelpText( const ::rtl::OUString& _rHelpText );
+        void                        SetHelpText( const OUString& _rHelpText );
         void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
-        void                        SetHelpId( const rtl::OString& sHelpId );
-        sal_uInt16                  AppendPage( const String& r, const rtl::OString& _rHelpId );
+        void                        SetHelpId( const OString& sHelpId );
+        sal_uInt16                  AppendPage( const String& r, const OString& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);
         sal_uInt16                  GetCurPage();
         void                        ClearAll();
 
-        void                        SetPropertyValue(const ::rtl::OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue, bool _bUnknownValue );
-        ::com::sun::star::uno::Any  GetPropertyValue(const ::rtl::OUString& rEntryName ) const;
-        sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
+        void                        SetPropertyValue(const OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue, bool _bUnknownValue );
+        ::com::sun::star::uno::Any  GetPropertyValue(const OUString& rEntryName ) const;
+        sal_uInt16                  GetPropertyPos(const OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-                                    GetPropertyControl( const ::rtl::OUString& rEntryName );
-        void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-        void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
+                                    GetPropertyControl( const OUString& rEntryName );
+        void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
+        void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
 
         void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
         sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 _nPageId, sal_uInt16 nPos = EDITOR_LIST_APPEND );
-        void                        RemoveEntry( const ::rtl::OUString& _rName );
+        void                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
@@ -125,8 +125,8 @@ namespace pcr
         OBrowserPage* getPage( sal_uInt16& _rPageId );
         const OBrowserPage* getPage( sal_uInt16& _rPageId ) const;
 
-        OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName );
-        const OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName ) const;
+        OBrowserPage* getPage( const OUString& _rPropertyName );
+        const OBrowserPage* getPage( const OUString& _rPropertyName ) const;
 
         void Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction);
 

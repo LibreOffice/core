@@ -127,13 +127,13 @@ class ScAppCfg : public ScAppOptions
     DECL_LINK( MiscCommitHdl, void* );
     DECL_LINK( CompatCommitHdl, void* );
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetInputPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetRevisionPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetContentPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetSortListPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetMiscPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetCompatPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetLayoutPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetInputPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetRevisionPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetContentPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetSortListPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetMiscPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetCompatPropertyNames();
 
 public:
             ScAppCfg();

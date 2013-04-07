@@ -39,7 +39,7 @@ class SwAccessibleTable :
         public SwClient
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
-    ::rtl::OUString sDesc;
+    OUString sDesc;
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
@@ -60,7 +60,7 @@ protected:
     virtual ~SwAccessibleTable();
 
     // #i77106#
-    inline void SetDesc( ::rtl::OUString sNewDesc )
+    inline void SetDesc( OUString sNewDesc )
     {
         sDesc = sNewDesc;
     }
@@ -108,7 +108,7 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
@@ -118,11 +118,11 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleColumnCount(  )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription(
+    virtual OUString SAL_CALL getAccessibleRowDescription(
             sal_Int32 nRow )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription(
+    virtual OUString SAL_CALL getAccessibleColumnDescription(
             sal_Int32 nColumn )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
@@ -186,20 +186,20 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const ::rtl::OUString& sServiceName)
+        supportsService (const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext service.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -311,7 +311,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 

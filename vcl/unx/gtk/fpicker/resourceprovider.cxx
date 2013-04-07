@@ -68,9 +68,9 @@ static sal_Int16 CtrlIdToResId( sal_Int32 aControlId )
     return -1;
 }
 
-rtl::OUString SalGtkPicker::getResString( sal_Int32 aId )
+OUString SalGtkPicker::getResString( sal_Int32 aId )
 {
-    rtl::OUString aResString;
+    OUString aResString;
     try
     {
         // translate the control id to a resource id

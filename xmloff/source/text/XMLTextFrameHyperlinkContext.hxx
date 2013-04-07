@@ -31,9 +31,9 @@ namespace com { namespace sun { namespace star {
 
 class XMLTextFrameHyperlinkContext : public SvXMLImportContext
 {
-    ::rtl::OUString              sHRef;
-    ::rtl::OUString              sName;
-    ::rtl::OUString              sTargetFrameName;
+    OUString              sHRef;
+    OUString              sName;
+    OUString              sTargetFrameName;
     ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType;
     SvXMLImportContextRef       xFrameContext;
     sal_Bool                    bMap;
@@ -44,7 +44,7 @@ public:
 
     XMLTextFrameHyperlinkContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             ::com::sun::star::text::TextContentAnchorType eDefaultAnchorType );
@@ -53,7 +53,7 @@ public:
     virtual void EndElement();
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 

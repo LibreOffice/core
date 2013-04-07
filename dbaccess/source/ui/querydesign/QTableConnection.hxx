@@ -38,7 +38,7 @@ namespace dbaui
         OQueryTableConnection& operator=(const OQueryTableConnection& rConn);
         sal_Bool operator==(const OQueryTableConnection& rCompare);
 
-        inline ::rtl::OUString  GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
+        inline OUString  GetAliasName(EConnectionSide nWhich) const { return static_cast<OQueryTableConnectionData*>(GetData().get())->GetAliasName(nWhich); }
 
         inline sal_Bool IsVisited() const               { return m_bVisited; }
         inline void     SetVisited(sal_Bool bVisited)   { m_bVisited = bVisited; }

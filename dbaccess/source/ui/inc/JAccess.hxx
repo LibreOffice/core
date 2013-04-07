@@ -49,9 +49,9 @@ namespace dbaui
         DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo - static methods
-        static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
 
         // XAccessible
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);

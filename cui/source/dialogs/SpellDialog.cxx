@@ -64,7 +64,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-using ::rtl::OUString;
 
 // struct SpellDialog_Impl ---------------------------------------------
 
@@ -99,10 +98,10 @@ class SpellUndoAction_Impl : public SfxUndoAction
     long            m_nOldErrorStart;
     long            m_nOldErrorEnd;
     bool            m_bIsErrorLanguageSelected;
-    ::rtl::OUString m_sRuleId;
+    OUString m_sRuleId;
     //undo of AddToDictionary
     Reference<XDictionary>  m_xDictionary;
-    ::rtl::OUString                m_sAddedWord;
+    OUString                m_sAddedWord;
     //move end of error - ::ChangeMarkedWord()
     long            m_nOffset;
 
@@ -148,14 +147,14 @@ public:
 
     void                    SetDictionary(Reference<XDictionary> xDict) { m_xDictionary = xDict; }
     Reference<XDictionary>  GetDictionary() const {return m_xDictionary;}
-    void                    SetAddedWord(const ::rtl::OUString& rWord) {m_sAddedWord = rWord;}
-    const ::rtl::OUString&         GetAddedWord() const { return m_sAddedWord;}
+    void                    SetAddedWord(const OUString& rWord) {m_sAddedWord = rWord;}
+    const OUString&         GetAddedWord() const { return m_sAddedWord;}
 
     void                    SetOffset(long nSet) {m_nOffset = nSet;}
     long                    GetOffset() const {return m_nOffset;}
 
-    void                    SetErrorType( const ::rtl::OUString& rId ) { m_sRuleId = rId; }
-    const ::rtl::OUString&  GetErrorType() const { return m_sRuleId; }
+    void                    SetErrorType( const OUString& rId ) { m_sRuleId = rId; }
+    const OUString&  GetErrorType() const { return m_sRuleId; }
 
 };
 }//namespace svx
@@ -301,7 +300,7 @@ void SpellDialog::UpdateBoxes_Impl()
     const SpellErrorDescription* pSpellErrorDescription = m_pSentenceED->GetAlternatives();
 
     LanguageType nAltLanguage = LANGUAGE_NONE;
-    Sequence< ::rtl::OUString > aNewWords;
+    Sequence< OUString > aNewWords;
     bool bIsGrammarError = false;
     if( pSpellErrorDescription )
     {
@@ -324,7 +323,7 @@ void SpellDialog::UpdateBoxes_Impl()
     int nDicts = InitUserDicts();
 
     // enter alternatives
-    const ::rtl::OUString *pNewWords = aNewWords.getConstArray();
+    const OUString *pNewWords = aNewWords.getConstArray();
     const sal_Int32 nSize = aNewWords.getLength();
     for ( i = 0; i < nSize; ++i )
     {
@@ -627,7 +626,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
         String sErrorText(m_pSentenceED->GetErrorText());
         sal_uInt8 nAdded = linguistic::AddEntryToDic( aXDictionary,
             sErrorText, sal_False,
-            ::rtl::OUString(), LANGUAGE_NONE );
+            OUString(), LANGUAGE_NONE );
         if(nAdded == DIC_ERR_NONE)
         {
             SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
@@ -797,10 +796,10 @@ void SpellDialog::SetLanguage( sal_uInt16 nLang )
     m_pLanguageLB->SelectLanguage( nLang );
 }
 
-static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
+static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 {
     Image aRes;
-    ::rtl::OUString aTmp;
+    OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
@@ -1079,7 +1078,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
     if(!aSentence.empty())
     {
         SpellPortions::iterator aStart = aSentence.begin();
-        rtl::OUString sText;
+        OUString sText;
         while(aStart != aSentence.end())
         {
             // hidden text has to be ignored
@@ -1101,7 +1100,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                 if(aStart->xAlternatives.is())
                 {
                     uno::Reference< container::XNamed > xNamed( aStart->xAlternatives, uno::UNO_QUERY );
-                    ::rtl::OUString sServiceName;
+                    OUString sServiceName;
                     if( xNamed.is() )
                         sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
@@ -1111,7 +1110,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                 else if(aStart->bIsGrammarError )
                 {
                     beans::PropertyValues  aProperties = aStart->aGrammarError.aProperties;
-                    rtl::OUString sFullCommentURL;
+                    OUString sFullCommentURL;
                     sal_Int32 i = 0;
                     while ( sFullCommentURL.isEmpty() && i < aProperties.getLength() )
                     {
@@ -1169,7 +1168,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     {
         if(aStart->xAlternatives.is())
         {
-            const rtl::OUString &rString = aStart->sText;
+            const OUString &rString = aStart->sText;
 
             Reference<XDictionaryEntry> xEntry = xChangeAll->getEntry(rString);
 
@@ -1750,10 +1749,10 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
     DBG_ASSERT(static_cast<const SpellErrorAttrib*>(
             GetTextEngine()->FindAttrib( aCursor, TEXTATTR_SPELL_ERROR)), "no error set?");
 
-    ::rtl::OUString aWord;
+    OUString aWord;
     lang::Locale    aLocale;
-    uno::Sequence< ::rtl::OUString >    aAlts;
-    ::rtl::OUString sServiceName;
+    uno::Sequence< OUString >    aAlts;
+    OUString sServiceName;
     if (xAlt.is())
     {
         aWord   = xAlt->getWord();
@@ -2026,8 +2025,8 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
 IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
 {
-    rtl::OUString sURL=pHyperlink->GetURL();
-    rtl::OUString sTitle=GetText();
+    OUString sURL=pHyperlink->GetURL();
+    OUString sTitle=GetText();
 
     if ( sURL.isEmpty() ) // Nothing to do, when the URL is empty
         return 1;
@@ -2035,12 +2034,12 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
     {
         uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
             com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-        xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( uno::Exception& )
     {
         uno::Any exc( ::cppu::getCaughtException() );
-        rtl::OUString msg( ::comphelper::anyToString( exc ) );
+        OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ErrorBox aErrorBox( NULL, WB_OK, msg );
         aErrorBox.SetText( sTitle );

@@ -78,7 +78,7 @@ namespace sw { namespace sidebarwindows {
 #define POSTIT_META_HEIGHT  (sal_Int32)     30
 #define POSTIT_MINIMUMSIZE_WITHOUT_META     50
 
-#define EMPTYSTRING             rtl::OUString()
+#define EMPTYSTRING             OUString()
 
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
                             WinBits nBits,
@@ -409,7 +409,7 @@ void SwSidebarWin::CheckMetaText()
     }
     if (GetTime()!=0)
     {
-        sMeta = sMeta + rtl::OUString(" ")  + rLocalData.getTime( GetTime(),false );
+        sMeta = sMeta + OUString(" ")  + rLocalData.getTime( GetTime(),false );
     }
     if ( mpMetadataDate->GetText() != sMeta )
     {

@@ -33,7 +33,7 @@ extern WKTYP                eTyp;
 
 static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
 
-static DefTokenId           lcl_KnownAddIn(const rtl::OString& rTest);
+static DefTokenId           lcl_KnownAddIn(const OString& rTest);
 
 //extern double decipher_Number123( sal_uInt32 nValue );
 
@@ -51,10 +51,10 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
 
     if( eOc == ocNoName )
     {
-        rtl::OString t;
+        OString t;
         if( pExtString )
         {
-            const rtl::OString s(RTL_CONSTASCII_STRINGPARAM("@<<@123>>"));
+            const OString s(RTL_CONSTASCII_STRINGPARAM("@<<@123>>"));
 
             t = pExtString;
 
@@ -67,7 +67,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             eOc = lcl_KnownAddIn( t );
 
             if( eOc == ocNoName )
-                t = rtl::OString(RTL_CONSTASCII_STRINGPARAM("L123_")) + t;
+                t = OString(RTL_CONSTASCII_STRINGPARAM("L123_")) + t;
         }
         else
             t = "#UNKNOWN FUNC NAME#";
@@ -75,7 +75,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
         if( eOc == ocNoName )
         {
             bAddIn = sal_True;
-            nMerk0 = aPool.Store(eOc, rtl::OStringToOUString(t, eSrcChar));
+            nMerk0 = aPool.Store(eOc, OStringToOUString(t, eSrcChar));
 
             aPool << nMerk0;
         }
@@ -1986,7 +1986,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
 }
 
 
-static DefTokenId lcl_KnownAddIn( const rtl::OString& rTest )
+static DefTokenId lcl_KnownAddIn( const OString& rTest )
 {
     DefTokenId  eId = ocNoName;
 

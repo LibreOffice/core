@@ -527,7 +527,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.MoveAfterBracket(pBraceNode);
             }else{
                 if(code != 0){
-                    rCursor.InsertText(rtl::OUString(code));
+                    rCursor.InsertText(OUString(code));
                 }else if (! (GetView() && GetView()->KeyInput(rKEvt)) )
                     ScrollableWindow::KeyInput(rKEvt);
             }
@@ -1003,7 +1003,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 
     if (nTabs > 0)
     {
-        long TabPos = rDevice.GetTextWidth(rtl::OUString('n')) * 8;
+        long TabPos = rDevice.GetTextWidth(OUString('n')) * 8;
 
         aSize.Width() = 0;
 
@@ -1093,7 +1093,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
     if (nTabs > 0)
     {
-        long TabPos = rDevice.GetTextWidth(rtl::OUString('n')) * 8;
+        long TabPos = rDevice.GetTextWidth(OUString('n')) * 8;
 
         for (sal_uInt16 i = 0; i < nTabs; i++)
         {
@@ -1453,7 +1453,7 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( xNameAccess.is() && xNameAccess->getElementNames().getLength() )
     {
-        if ( xNameAccess->hasByName( rtl::OUString("content.xml") ) || xNameAccess->hasByName( rtl::OUString("Content.xml") ))
+        if ( xNameAccess->hasByName( OUString("content.xml") ) || xNameAccess->hasByName( OUString("Content.xml") ))
         {
             // is this a fabulous math package ?
             Reference<com::sun::star::frame::XModel> xModel(pDoc->GetModel());
@@ -1953,7 +1953,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 
     SetStatusText(OUString());
     SetWindow(&aGraphic);
-    SfxShell::SetName(rtl::OUString("SmView"));
+    SfxShell::SetName(OUString("SmView"));
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
     SetHelpId( HID_SMA_VIEWSHELL_DOCUMENT );
 }

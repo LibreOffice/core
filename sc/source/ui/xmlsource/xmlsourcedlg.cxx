@@ -541,7 +541,7 @@ void getFieldLinks(
         {
             if (!aPath.isEmpty())
                 // XPath should never be empty anyway, but it won't hurt to check...
-                rRangeLink.maFieldPaths.push_back(rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
+                rRangeLink.maFieldPaths.push_back(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8));
         }
 
         // Walk recursively.
@@ -578,7 +578,7 @@ void ScXMLSourceDlg::OkPressed()
 
             aParam.maCellLinks.push_back(
                 ScOrcusImportXMLParam::CellLink(
-                    pUserData->maLinkedPos, rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
+                    pUserData->maLinkedPos, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8)));
         }
     }
 

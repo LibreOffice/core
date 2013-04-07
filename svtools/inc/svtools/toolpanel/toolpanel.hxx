@@ -48,13 +48,13 @@ namespace svt
     {
     public:
         /// retrieves the display name of the panel
-        virtual ::rtl::OUString GetDisplayName() const = 0;
+        virtual OUString GetDisplayName() const = 0;
 
         /// retrieves the image associated with the panel, if any
         virtual Image GetImage() const = 0;
 
         /// retrieves the help ID associated with the panel, if any.
-        virtual rtl::OString GetHelpID() const = 0;
+        virtual OString GetHelpID() const = 0;
 
         /** activates the panel
 

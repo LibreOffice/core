@@ -48,7 +48,7 @@
 #include <osl/file.hxx>
 #include <plugin/impl.hxx>
 
-PluginComm::PluginComm( const ::rtl::OString& rLibName, bool bReusable ) :
+PluginComm::PluginComm( const OString& rLibName, bool bReusable ) :
         m_nRefCount( 0 ),
         m_aLibName( rLibName )
 {

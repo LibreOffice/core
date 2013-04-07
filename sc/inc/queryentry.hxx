@@ -41,7 +41,7 @@ struct SC_DLLPUBLIC ScQueryEntry
     {
         QueryType     meType;
         double        mfVal;
-        rtl::OUString maString;
+        OUString maString;
 
         Item() : meType(ByValue), mfVal(0.0) {}
 

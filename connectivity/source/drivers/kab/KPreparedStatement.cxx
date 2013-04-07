@@ -53,7 +53,7 @@ void KabPreparedStatement::setKabFields() const throw(SQLException)
     if (!xColumns.is())
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(
+        const OUString sError( aResources.getResourceString(
                 STR_INVALID_COLUMN_SELECTION
              ) );
         ::dbtools::throwGenericSQLException(sError,NULL);
@@ -66,12 +66,12 @@ void KabPreparedStatement::resetParameters() const throw(SQLException)
     m_nParameterIndex = 0;
 }
 // -------------------------------------------------------------------------
-void KabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const throw(SQLException)
+void KabPreparedStatement::getNextParameter(OUString &rParameter) const throw(SQLException)
 {
     if (m_nParameterIndex >= (sal_Int32) (m_aParameterRow->get()).size())
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(
+        const OUString sError( aResources.getResourceString(
                 STR_INVALID_PARA_COUNT
              ) );
         ::dbtools::throwGenericSQLException(sError,*(KabPreparedStatement *) this);
@@ -84,7 +84,7 @@ void KabPreparedStatement::getNextParameter(::rtl::OUString &rParameter) const t
 // -------------------------------------------------------------------------
 KabPreparedStatement::KabPreparedStatement(
     KabConnection* _pConnection,
-    const ::rtl::OUString& sql)
+    const OUString& sql)
     : KabPreparedStatement_BASE(_pConnection),
       m_sSqlStatement(sql),
       m_bPrepared(sal_False),
@@ -187,7 +187,7 @@ void SAL_CALL KabPreparedStatement::setNull(sal_Int32 parameterIndex, sal_Int32)
     (m_aParameterRow->get())[parameterIndex - 1].setNull();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setObjectNull(sal_Int32, sal_Int32, const OUString&) throw(SQLException, RuntimeException)
 {
 
 
@@ -251,7 +251,7 @@ void SAL_CALL KabPreparedStatement::setDouble(sal_Int32, double) throw(SQLExcept
 ::dbtools::throwFunctionNotSupportedException("setDouble", NULL);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const ::rtl::OUString &x) throw(SQLException, RuntimeException)
+void SAL_CALL KabPreparedStatement::setString(sal_Int32 parameterIndex, const OUString &x) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);

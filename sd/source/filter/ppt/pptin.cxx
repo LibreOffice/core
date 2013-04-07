@@ -126,7 +126,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
 #endif
 
     PowerPointImportParam aParam( rDocStream, nImportFlags );
-    SvStream* pCurrentUserStream = rStorage.OpenSotStream( rtl::OUString( "Current User" ), STREAM_STD_READ );
+    SvStream* pCurrentUserStream = rStorage.OpenSotStream( OUString( "Current User" ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
         *pCurrentUserStream >> aParam.aCurrentUserAtom;
@@ -183,7 +183,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
         {
             sal_uLong nPosMerk = rStCtrl.Tell();
 
-            pStData = rStorage_.OpenSotStream( rtl::OUString( "Pictures" ), STREAM_STD_READ );
+            pStData = rStorage_.OpenSotStream( OUString( "Pictures" ), STREAM_STD_READ );
 
             rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
             sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
@@ -257,7 +257,7 @@ sal_Bool ImplSdPPTImport::Import()
         SeekOle( pDocShell, mnFilterOptions );
 
     // hyperlinks
-    PropRead* pDInfoSec2 = new PropRead( mrStorage, rtl::OUString( "\005DocumentSummaryInformation" ) );
+    PropRead* pDInfoSec2 = new PropRead( mrStorage, OUString( "\005DocumentSummaryInformation" ) );
     if ( pDInfoSec2->IsValid() )
     {
         PropItem aPropItem;
@@ -358,7 +358,7 @@ sal_Bool ImplSdPPTImport::Import()
                 Dictionary aDict;
                 if ( pSection->GetDictionary( aDict ) )
                 {
-                    Dictionary::const_iterator iter = aDict.find( rtl::OUString("_PID_HLINKS") );
+                    Dictionary::const_iterator iter = aDict.find( OUString("_PID_HLINKS") );
 
                     if ( iter != aDict.end() )
                     {
@@ -413,13 +413,13 @@ sal_Bool ImplSdPPTImport::Import()
                                         {
                                             sal_uInt32 nPageNumber = 0;
                                             OUString aString( pHyperlink->aSubAdress );
-                                            rtl::OString aStringAry[ 3 ];
+                                            OString aStringAry[ 3 ];
                                             sal_uInt16 nTokenCount = comphelper::string::getTokenCount(aString, ',');
                                             if ( nTokenCount > 3 )
                                                 nTokenCount = 3;
                                             sal_uInt16 nToken;
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
-                                                aStringAry[nToken] = rtl::OUStringToOString(aString.getToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
+                                                aStringAry[nToken] = OUStringToOString(aString.getToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
 
                                             sal_Bool bSucceeded = sal_False;
 
@@ -1251,7 +1251,7 @@ sal_Bool ImplSdPPTImport::Import()
                 DffRecordHeader aContent;
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, aCuHeader.GetRecEndFilePos(), &aContent ) )
                 {
-                    rtl::OUString aCuShow;
+                    OUString aCuShow;
                     aContent.SeekToBegOfRecord( rStCtrl );
                     if ( ReadString( aCuShow ) )
                     {
@@ -1368,7 +1368,7 @@ sal_Bool ImplSdPPTImport::Import()
     uno::Reference<document::XDocumentProperties> xDocProps
         = xDPS->getDocumentProperties();
     sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
-    xDocProps->setTemplateName(::rtl::OUString());
+    xDocProps->setTemplateName(OUString());
 
     pSdrModel->setLock(false);
     pSdrModel->EnableUndo(true);
@@ -1853,7 +1853,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 
 String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
-    rtl::OUString aRetval;
+    OUString aRetval;
     sal_uInt32 nPosMerk = rStCtrl.Tell();
     DffRecordHeader aDocHd;
     if ( SeekToDocument( &aDocHd ) )
@@ -1870,7 +1870,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
             while( !bDone && SeekToRec( rStCtrl, PPT_PST_Sound, nDataLen, &aSoundRecHd ) )
             {
                 sal_uInt32 nStrLen = aSoundRecHd.GetRecEndFilePos();
-                rtl::OUString aRefStr;
+                OUString aRefStr;
                 sal_uInt32 nPosMerk2 = rStCtrl.Tell();
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 2 ) )
                 {
@@ -1962,7 +1962,7 @@ String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 
 String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
 {
-    rtl::OUString aRetVal;
+    OUString aRetVal;
     DffRecordHeader* pHd( const_cast<ImplSdPPTImport*>(this)->aDocRecManager.GetRecordHeader( PPT_PST_ExObjList, SEEK_FROM_BEGINNING ) );
     if ( pHd )
     {
@@ -1996,7 +1996,7 @@ String ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                         case PPT_PST_CString :
                                         {
                                             aHd.SeekToBegOfRecord( rStCtrl );
-                                            rtl::OUString aStr;
+                                            OUString aStr;
                                             if ( ReadString( aStr ) )
                                             {
                                                 if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aStr, aRetVal ) )
@@ -2605,7 +2605,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         case PPT_PST_InteractiveInfo:
                         {
                             sal_uInt32 nFilePosMerk2 = rSt.Tell();
-                            rtl::OUString aMacroName;
+                            OUString aMacroName;
 
                             if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL, 0 ) )
                                 ReadString(aMacroName);

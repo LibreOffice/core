@@ -170,7 +170,7 @@ public:
 
     inline LwpSilverBullet* GetSilverBullet();
     inline LwpObjectID GetSilverBulletID();
-    rtl::OUString GetBulletChar() const;
+    OUString GetBulletChar() const;
     sal_uInt32 GetBulletFontID() const;
     sal_uInt16 GetLevel() const;
     sal_Bool GetBulletFlag() const;
@@ -180,12 +180,12 @@ public:
     double GetBelowSpacing();
     LwpParaProperty* GetProperty(sal_uInt32 nPropType);
     void GatherDropcapInfo();
-    rtl::OUString GetBulletStyleName() const;
+    OUString GetBulletStyleName() const;
     void SetBelowSpacing(double value);
-    void SetBulletStyleName(const rtl::OUString& rNewName);
+    void SetBulletStyleName(const OUString& rNewName);
     void SetBulletFlag(sal_Bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
-    void SetFirstFrib(rtl::OUString Content,sal_uInt32 FontID);
+    void SetFirstFrib(OUString Content,sal_uInt32 FontID);
     OUString GetContentText(sal_Bool bAllText = sal_False);
 
     void SetParaDropcap(sal_Bool bFlag);
@@ -222,25 +222,25 @@ protected:
     LwpParaProperty*  m_pProps;
     //LwpForked3NotifyList* m_NotifyList;   //not saved
 
-    rtl::OUString m_StyleName;
-    rtl::OUString m_ParentStyleName;//Add to support toc
+    OUString m_StyleName;
+    OUString m_ParentStyleName;//Add to support toc
     LwpBreaksOverride* m_pBreaks;
-    rtl::OUString m_AftPageBreakName;
-    rtl::OUString m_BefPageBreakName;
-    rtl::OUString m_AftColumnBreakName;
+    OUString m_AftPageBreakName;
+    OUString m_BefPageBreakName;
+    OUString m_AftColumnBreakName;
 
-    rtl::OUString m_BefColumnBreakName;
+    OUString m_BefColumnBreakName;
     LwpIndentOverride* m_pIndentOverride;
-    rtl::OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
+    OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
     sal_uInt32 m_FontID;//for silver bullet
-    rtl::OUString m_AllText;//get all text in this paragraph
+    OUString m_AllText;//get all text in this paragraph
 
     sal_Bool m_bHasBullet;
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
     boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
-    rtl::OUString m_aBulletStyleName;
+    OUString m_aBulletStyleName;
     sal_Bool m_bBullContinue;
     //end add
 
@@ -253,7 +253,7 @@ protected:
 
     XFContentContainer* m_pXFContainer; //Current container for VO_PARA
 
-    rtl::OUString m_TabStyleName;
+    OUString m_TabStyleName;
     enum
     {
         /* bit definitions for the paragraph object flags */
@@ -305,7 +305,7 @@ inline LwpObjectID LwpPara::GetSilverBulletID()
 {
     return m_aSilverBulletID;
 }
-inline rtl::OUString LwpPara::GetBulletChar() const
+inline OUString LwpPara::GetBulletChar() const
 {
     return m_Content;
 }
@@ -317,7 +317,7 @@ inline sal_uInt16 LwpPara::GetLevel() const
 {
     return m_nLevel;
 }
-inline void LwpPara::SetBulletStyleName(const rtl::OUString& rNewName)
+inline void LwpPara::SetBulletStyleName(const OUString& rNewName)
 {
     m_aBulletStyleName = rNewName;
 }
@@ -341,7 +341,7 @@ inline XFContentContainer* LwpPara::GetXFContainer()
 {
     return m_pXFContainer;
 }
-inline rtl::OUString LwpPara::GetBulletStyleName() const
+inline OUString LwpPara::GetBulletStyleName() const
 {
     return m_aBulletStyleName;
 }

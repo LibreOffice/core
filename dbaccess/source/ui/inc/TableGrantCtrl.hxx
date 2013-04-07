@@ -46,10 +46,10 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>     m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>       m_xGrantUser;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aTableNames;
+    ::com::sun::star::uno::Sequence< OUString>                               m_aTableNames;
 
     mutable TTablePrivilegeMap  m_aPrivMap;
-    ::rtl::OUString             m_sUserName;
+    OUString             m_sUserName;
     ::svt::CheckBoxControl*     m_pCheckCell;
     Edit*                       m_pEdit;
     long                        m_nDataPos;
@@ -59,7 +59,7 @@ public:
     OTableGrantControl( Window* pParent,const ResId& _RsId);
     virtual ~OTableGrantControl();
     void UpdateTables();
-    void setUserName(const ::rtl::OUString _sUserName);
+    void setUserName(const OUString _sUserName);
     void setGrantUser(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XAuthorizable>& _xGrantUser);
 
     void setTablesSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >& _xTablesSup);

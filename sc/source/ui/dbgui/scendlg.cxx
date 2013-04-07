@@ -148,7 +148,7 @@ ScNewScenarioDlg::~ScNewScenarioDlg()
 
 //------------------------------------------------------------------------
 
-void ScNewScenarioDlg::GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
+void ScNewScenarioDlg::GetScenarioData( OUString& rName, OUString& rComment,
                                         Color& rColor, sal_uInt16& rFlags ) const
 {
     rComment = aEdComment.GetText();
@@ -180,7 +180,7 @@ void ScNewScenarioDlg::GetScenarioData( rtl::OUString& rName, rtl::OUString& rCo
     rFlags = nBits;
 }
 
-void ScNewScenarioDlg::SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
+void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& rComment,
                                         const Color& rColor, sal_uInt16 nFlags )
 {
     aEdComment.SetText(rComment);

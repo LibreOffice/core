@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
@@ -131,7 +130,7 @@ namespace chart
 ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
     Reference<
         uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
+    const OUString & rServiceName,
     StackMode eStackMode,
     sal_Int32 nNumberOfLines ) :
         ChartTypeTemplate( xContext, rServiceName ),
@@ -419,9 +418,9 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
 
 // ----------------------------------------
 
-uno::Sequence< ::rtl::OUString > ColumnLineChartTypeTemplate::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ColumnLineChartTypeTemplate::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.ChartTypeTemplate";
     return aServices;

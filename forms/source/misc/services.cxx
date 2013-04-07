@@ -92,16 +92,16 @@ DECLARE_SERVICE_INFO(ImageProducer)
 
 //---------------------------------------------------------------------------------------
 
-static Sequence< ::rtl::OUString >                      s_aClassImplementationNames;
-static Sequence<Sequence< ::rtl::OUString > >   s_aClassServiceNames;
+static Sequence< OUString >                      s_aClassImplementationNames;
+static Sequence<Sequence< OUString > >   s_aClassServiceNames;
 static Sequence<sal_Int64>                              s_aFactories;
     // need to use sal_Int64 instead of ComponentInstantiation, as ComponentInstantiation has no cppuType, so
     // it can't be used with sequences
 
 //---------------------------------------------------------------------------------------
 void registerClassInfo(
-        ::rtl::OUString _rClassImplName,                                // the ImplName of the class
-        const Sequence< ::rtl::OUString >& _rServiceNames,      // the services supported by this class
+        OUString _rClassImplName,                                // the ImplName of the class
+        const Sequence< OUString >& _rServiceNames,      // the services supported by this class
         ::cppu::ComponentInstantiation _pCreateFunction                 // the method for instantiating such a class
         )
 {
@@ -123,7 +123,7 @@ void registerClassInfo(
 //.......................................................................................
 #define REGISTER_CLASS_CORE(classImplName) \
     registerClassInfo( \
-        ::rtl::OUString("com.sun.star.form.") + ::rtl::OUString(#classImplName), \
+        OUString("com.sun.star.form.") + OUString(#classImplName), \
         aServices, \
         frm::classImplName##_CreateInstance)
 
@@ -163,7 +163,7 @@ void ensureClassInfos()
     if (s_aClassImplementationNames.getLength())
         // nothing to do
         return;
-    Sequence< ::rtl::OUString > aServices;
+    Sequence< OUString > aServices;
 
     // ========================================================================
     // = ControlModels
@@ -218,7 +218,7 @@ void ensureClassInfos()
     aServices.getArray()[2] = frm::FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
     aServices.getArray()[3] = frm::BINDABLE_DATABASE_FORMATTED_FIELD;
 
-    registerClassInfo(::rtl::OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
+    registerClassInfo(OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
         aServices,
         frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
 
@@ -265,7 +265,7 @@ void ensureClassInfos()
     // = XForms core
 #define REGISTER_XFORMS_CLASS(name) \
     aServices.realloc(1); \
-    aServices.getArray()[0] = rtl::OUString( "com.sun.star.xforms." #name ); \
+    aServices.getArray()[0] = OUString( "com.sun.star.xforms." #name ); \
     REGISTER_CLASS_CORE(name)
 
     REGISTER_XFORMS_CLASS(Model);
@@ -329,8 +329,8 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
         "forms::component_getFactory : invalid class infos !");
 
     // loop through the sequences and register the service providers
-    const ::rtl::OUString* pClasses = s_aClassImplementationNames.getConstArray();
-    const Sequence< ::rtl::OUString >* pServices = s_aClassServiceNames.getConstArray();
+    const OUString* pClasses = s_aClassImplementationNames.getConstArray();
+    const Sequence< OUString >* pServices = s_aClassServiceNames.getConstArray();
     const sal_Int64* pFunctionsAsInts = s_aFactories.getConstArray();
 
     for (sal_Int32 i=0; i<nClasses; ++i, ++pClasses, ++pServices, ++pFunctionsAsInts)
@@ -366,7 +366,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
             // let the module look for the component
             Reference< XInterface > xRet;
             xRet = ::frm::OFormsModule::getComponentFactory(
-                ::rtl::OUString::createFromAscii( _pImplName ),
+                OUString::createFromAscii( _pImplName ),
                 static_cast< XMultiServiceFactory* >( _pServiceManager ) );
 
             if ( xRet.is() )

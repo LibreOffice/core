@@ -72,7 +72,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -997,7 +996,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
                         aTmpFont.SetPhysFont( GetRefDevice() );
                         ImplInitDigitMode(GetRefDevice(), aTmpFont.GetLanguage());
 
-                        rtl::OUString aFieldValue = cChar ? rtl::OUString(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
+                        OUString aFieldValue = cChar ? OUString(cChar) : ((EditCharAttribField*)pNextFeature)->GetFieldValue();
                         if ( bCalcCharPositions || !pPortion->HasValidSize() )
                         {
                             pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), 0 );
@@ -1946,7 +1945,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // A portion for inserting the separator ...
         TextPortion* pHyphPortion = new TextPortion( 0 );
         pHyphPortion->GetKind() = PORTIONKIND_HYPHENATOR;
-        String aHyphText(rtl::OUString(CH_HYPH));
+        String aHyphText(OUString(CH_HYPH));
         if ( cAlternateReplChar )
         {
             TextPortion* pPrev = pParaPortion->GetTextPortions()[nEndPortion];
@@ -1961,7 +1960,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         else if ( cAlternateExtraChar )
         {
             pHyphPortion->SetExtraValue( cAlternateExtraChar );
-            aHyphText.Insert( rtl::OUString(cAlternateExtraChar), 0 );
+            aHyphText.Insert( OUString(cAlternateExtraChar), 0 );
         }
 
         // Determine the width of the Hyph-Portion:
@@ -3048,7 +3047,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                             if ( 0x200B == cChar || 0x2060 == cChar )
                                             {
-                                                const rtl::OUString aBlank( ' ' );
+                                                const OUString aBlank( ' ' );
                                                 long nHalfBlankWidth = aTmpFont.QuickGetTextSize( pOutDev, aBlank, 0, 1, 0 ).Width() / 2;
 
                                                 const long nAdvanceX = ( nTmpIdx == nTmpEnd ?
@@ -3093,7 +3092,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                                 if ( 0x200B == cChar )
                                                 {
-                                                    const rtl::OUString aSlash( '/' );
+                                                    const OUString aSlash( '/' );
                                                     const short nOldEscapement = aTmpFont.GetEscapement();
                                                     const sal_uInt8 nOldPropr = aTmpFont.GetPropr();
 
@@ -3377,7 +3376,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont( pOutDev );
-                                                rtl::OUStringBuffer aBlanks;
+                                                OUStringBuffer aBlanks;
                                                 comphelper::string::padToLength( aBlanks, (sal_Int32) nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
@@ -3504,7 +3503,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont( pOutDev );
                                     long nCharWidth = aTmpFont.QuickGetTextSize( pOutDev,
-                                        rtl::OUString(pTextPortion->GetExtraValue()), 0, 1, NULL ).Width();
+                                        OUString(pTextPortion->GetExtraValue()), 0, 1, NULL ).Width();
                                     sal_Int32 nChars = 2;
                                     if( nCharWidth )
                                         nChars = pTextPortion->GetSize().Width() / nCharWidth;
@@ -3513,7 +3512,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     else if ( nChars == 2 )
                                         nChars = 3; // looks better
 
-                                    rtl::OUStringBuffer aBuf;
+                                    OUStringBuffer aBuf;
                                     comphelper::string::padToLength(aBuf, nChars, pTextPortion->GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
                                     aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.getLength(), NULL );
@@ -3531,7 +3530,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                         // StripPortions() data callback
                                         GetEditEnginePtr()->DrawingTab( aTmpPos,
                                             pTextPortion->GetSize().Width(),
-                                            rtl::OUString(pTextPortion->GetExtraValue()),
+                                            OUString(pTextPortion->GetExtraValue()),
                                             aTmpFont, n, nIndex, pTextPortion->GetRightToLeft(),
                                             bEndOfLine, bEndOfParagraph,
                                             aOverlineColor, aTextLineColor);

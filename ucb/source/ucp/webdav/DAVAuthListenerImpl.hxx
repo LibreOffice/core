@@ -46,25 +46,25 @@ namespace http_dav_ucp
         DAVAuthListener_Impl(
             const com::sun::star::uno::Reference<
                 com::sun::star::ucb::XCommandEnvironment>& xEnv,
-            const ::rtl::OUString & inURL )
+            const OUString & inURL )
             : m_xEnv( xEnv ), m_aURL( inURL )
         {
         }
 
-        virtual int authenticate( const ::rtl::OUString & inRealm,
-                                  const ::rtl::OUString & inHostName,
-                                  ::rtl::OUString & inoutUserName,
-                                  ::rtl::OUString & outPassWord,
+        virtual int authenticate( const OUString & inRealm,
+                                  const OUString & inHostName,
+                                  OUString & inoutUserName,
+                                  OUString & outPassWord,
                                   sal_Bool bCanUseSystemCredentials,
                                   sal_Bool bUsePreviousCredentials = sal_True );
     private:
 
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > m_xEnv;
-        const rtl::OUString m_aURL;
+        const OUString m_aURL;
 
-        rtl::OUString m_aPrevPassword;
-        rtl::OUString m_aPrevUsername;
+        OUString m_aPrevPassword;
+        OUString m_aPrevUsername;
     };
 
 }

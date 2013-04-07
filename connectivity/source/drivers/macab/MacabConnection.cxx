@@ -59,7 +59,7 @@ void SAL_CALL MacabConnection::release() throw()
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-void MacabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyValue >&) throw(SQLException)
+void MacabConnection::construct(const OUString&, const Sequence< PropertyValue >&) throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -82,7 +82,7 @@ Reference< XStatement > SAL_CALL MacabConnection::createStatement(  ) throw(SQLE
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -94,7 +94,7 @@ Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareStatement( cons
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareCall( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareCall( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -103,7 +103,7 @@ Reference< XPreparedStatement > SAL_CALL MacabConnection::prepareCall( const ::r
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
@@ -186,7 +186,7 @@ sal_Bool SAL_CALL MacabConnection::isReadOnly(  ) throw(SQLException, RuntimeExc
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL MacabConnection::setCatalog( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+void SAL_CALL MacabConnection::setCatalog( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -194,14 +194,14 @@ void SAL_CALL MacabConnection::setCatalog( const ::rtl::OUString& ) throw(SQLExc
     // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
 
 
     // return your current catalog
-    return ::rtl::OUString();
+    return OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL MacabConnection::setTransactionIsolation( sal_Int32 ) throw(SQLException, RuntimeException)

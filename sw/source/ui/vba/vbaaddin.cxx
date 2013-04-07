@@ -25,7 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const rtl::OUString& rFileURL, sal_Bool bAutoload ) throw ( uno::RuntimeException ) :
+SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL, sal_Bool bAutoload ) throw ( uno::RuntimeException ) :
     SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbAutoload( bAutoload ), mbInstalled( bAutoload )
 {
 }
@@ -34,21 +34,21 @@ SwVbaAddin::~SwVbaAddin()
 {
 }
 
-::rtl::OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException)
 {
-    rtl::OUString sName;
+    OUString sName;
     INetURLObject aURL( msFileURL );
     ::osl::File::getSystemPathFromFileURL( aURL.GetLastName(), sName );
     return sName;
 }
 
 void SAL_CALL
-SwVbaAddin::setName( const rtl::OUString& ) throw ( css::uno::RuntimeException )
+SwVbaAddin::setName( const OUString& ) throw ( css::uno::RuntimeException )
 {
-    throw uno::RuntimeException( rtl::OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString(" Fail to set name"), uno::Reference< uno::XInterface >() );
 }
 
-::rtl::OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException)
 {
     INetURLObject aURL( msFileURL );
     aURL.CutLastName();
@@ -74,20 +74,20 @@ void SAL_CALL SwVbaAddin::setInstalled( ::sal_Bool _installed ) throw (uno::Runt
     }
 }
 
-rtl::OUString
+OUString
 SwVbaAddin::getServiceImplName()
 {
-    return rtl::OUString("SwVbaAddin");
+    return OUString("SwVbaAddin");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaAddin::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Addin" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Addin" );
     }
     return aServiceNames;
 }

@@ -58,31 +58,31 @@ public:
     static osl::Mutex& GetInitMutex ();
 
     // get the address token
-    rtl::OUString GetCompany        () const;
-    rtl::OUString GetFirstName      () const;
-    rtl::OUString GetLastName       () const;
-    rtl::OUString GetID             () const;
-    rtl::OUString GetStreet         () const;
-    rtl::OUString GetCity           () const;
-    rtl::OUString GetState          () const;
-    rtl::OUString GetZip            () const;
-    rtl::OUString GetCountry        () const;
-    rtl::OUString GetPosition       () const;
-    rtl::OUString GetTitle          () const;
-    rtl::OUString GetTelephoneHome  () const;
-    rtl::OUString GetTelephoneWork  () const;
-    rtl::OUString GetFax            () const;
-    rtl::OUString GetEmail          () const;
-    rtl::OUString GetCustomerNumber () const;
+    OUString GetCompany        () const;
+    OUString GetFirstName      () const;
+    OUString GetLastName       () const;
+    OUString GetID             () const;
+    OUString GetStreet         () const;
+    OUString GetCity           () const;
+    OUString GetState          () const;
+    OUString GetZip            () const;
+    OUString GetCountry        () const;
+    OUString GetPosition       () const;
+    OUString GetTitle          () const;
+    OUString GetTelephoneHome  () const;
+    OUString GetTelephoneWork  () const;
+    OUString GetFax            () const;
+    OUString GetEmail          () const;
+    OUString GetCustomerNumber () const;
 
-    rtl::OUString GetFullName       () const;
+    OUString GetFullName       () const;
 
     // set the address token
-    void SetCustomerNumber (rtl::OUString const&);
+    void SetCustomerNumber (OUString const&);
 
     sal_Bool      IsTokenReadonly (sal_uInt16 nToken) const;
-    rtl::OUString GetToken (sal_uInt16 nToken) const;
-    void          SetToken (sal_uInt16 nToken, rtl::OUString const& rNewToken);
+    OUString GetToken (sal_uInt16 nToken) const;
+    void          SetToken (sal_uInt16 nToken, OUString const& rNewToken);
 
 private:
     class Impl;

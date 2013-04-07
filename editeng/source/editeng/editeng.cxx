@@ -1105,10 +1105,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     bDebugPaint = !bDebugPaint;
-                    rtl::OStringBuffer aInfo(RTL_CONSTASCII_STRINGPARAM(
+                    OStringBuffer aInfo(RTL_CONSTASCII_STRINGPARAM(
                         "DebugPaint: "));
                     aInfo.append(bDebugPaint ? "On" : "Off");
-                    InfoBox(NULL, rtl::OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)).Execute();
+                    InfoBox(NULL, OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)).Execute();
                 }
                 bDone = sal_False;
             }
@@ -1380,7 +1380,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 const i18n::CalendarItem2* pArr = xItem.getArray();
                                 for( sal_Int32 n = 0; n <= nCount; ++n )
                                 {
-                                    const ::rtl::OUString& rDay = pArr[n].FullName;
+                                    const OUString& rDay = pArr[n].FullName;
                                     if( pTransliteration->isMatch( aWord, rDay) )
                                     {
                                         aComplete = rDay;
@@ -1395,7 +1395,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                     const i18n::CalendarItem2* pMonthArr = xItem.getArray();
                                     for( sal_Int32 n = 0; n <= nMonthCount; ++n )
                                     {
-                                        const ::rtl::OUString& rMon = pMonthArr[n].FullName;
+                                        const OUString& rMon = pMonthArr[n].FullName;
                                         if( pTransliteration->isMatch( aWord, rMon) )
                                         {
                                             aComplete = rMon;
@@ -2715,7 +2715,7 @@ Rectangle EditEngine::GetBulletArea( sal_uInt16 )
 XubString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return rtl::OUString(' ');
+    return OUString(' ');
 }
 
 void EditEngine::FieldClicked( const SvxFieldItem&, sal_uInt16, sal_uInt16 )

@@ -195,7 +195,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                     if ( xPropSet.is() )
                     {
                         aValue = xPropSet->getPropertyValue(
-                            ::rtl::OUString( "LockCount" ) );
+                            OUString( "LockCount" ) );
                         aValue >>= m_pWrkWin->m_nLock;
                     }
                 }
@@ -327,7 +327,7 @@ namespace
     class FilledToolBarResIdToResourceURLMap
     {
     private:
-        typedef boost::unordered_map< sal_Int32, rtl::OUString > ToolBarResIdToResourceURLMap;
+        typedef boost::unordered_map< sal_Int32, OUString > ToolBarResIdToResourceURLMap;
         ToolBarResIdToResourceURLMap m_aResIdToResourceURLMap;
     public:
         FilledToolBarResIdToResourceURLMap()
@@ -335,19 +335,19 @@ namespace
             sal_Int32 nIndex( 0 );
             while ( pToolBarResToName[nIndex].nId != 0 )
             {
-                rtl::OUString aResourceURL( rtl::OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
+                OUString aResourceURL( OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
                 m_aResIdToResourceURLMap.insert( ToolBarResIdToResourceURLMap::value_type(
                                                     sal_Int32( pToolBarResToName[nIndex].nId ), aResourceURL ));
                 ++nIndex;
             }
         }
 
-        rtl::OUString findURL(sal_uInt16 nResId) const
+        OUString findURL(sal_uInt16 nResId) const
         {
             ToolBarResIdToResourceURLMap::const_iterator aIter = m_aResIdToResourceURLMap.find( nResId );
             if ( aIter != m_aResIdToResourceURLMap.end() )
                 return aIter->second;
-            return rtl::OUString();
+            return OUString();
         }
     };
 
@@ -358,7 +358,7 @@ namespace
     };
 }
 
-static rtl::OUString GetResourceURLFromResId( sal_uInt16 nResId )
+static OUString GetResourceURLFromResId( sal_uInt16 nResId )
 {
     return theFilledToolBarResIdToResourceURLMap::get().findURL(nResId);
 }
@@ -1387,14 +1387,14 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         bool bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
         if ( bDestroy )
         {
-            rtl::OUString aTbxId( m_aTbxTypeName );
+            OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             xLayoutManager->destroyElement( aTbxId );
         }
         else if ( nId != 0 && ( ( bModesMatching && !bIsFullScreen ) ||
                                 ( bIsFullScreen && bFullScreenTbx ) ) )
         {
-            rtl::OUString aTbxId( m_aTbxTypeName );
+            OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
                 xLayoutManager->destroyElement( aTbxId );
@@ -1408,7 +1408,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
         else if ( nId != 0 )
         {
             // Delete the Toolbox at this Position if possible
-            rtl::OUString aTbxId( m_aTbxTypeName );
+            OUString aTbxId( m_aTbxTypeName );
             aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
             xLayoutManager->destroyElement( aTbxId );
         }

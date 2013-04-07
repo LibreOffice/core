@@ -61,7 +61,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
@@ -86,9 +85,9 @@ FakedUpdateableResultSet::FakedUpdateableResultSet(
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
-        const rtl::OUString &schema,
-        const rtl::OUString &table,
-        const rtl::OUString &aReason )
+        const OUString &schema,
+        const OUString &table,
+        const OUString &aReason )
     : ResultSet( mutex, owner, pSettings, result, schema, table ),
       m_aReason( aReason )
 {}
@@ -215,7 +214,7 @@ void FakedUpdateableResultSet::updateDouble( sal_Int32 /* columnIndex */, double
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateString( sal_Int32 /* columnIndex */, const ::rtl::OUString& /* x */ ) throw (SQLException, RuntimeException)
+void FakedUpdateableResultSet::updateString( sal_Int32 /* columnIndex */, const OUString& /* x */ ) throw (SQLException, RuntimeException)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }

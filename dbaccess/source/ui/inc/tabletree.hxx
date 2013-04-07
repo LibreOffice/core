@@ -64,7 +64,7 @@ public:
 
     ~OTableTreeListBox();
 
-    typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
+    typedef ::std::pair< OUString,sal_Bool>  TTableViewName;
     typedef ::std::vector< TTableViewName >         TNames;
 
     void    suppressEmptyFolders() { m_bNoEmptyFolders = true; }
@@ -103,8 +103,8 @@ public:
     */
     void    UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rTables,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rViews
+                const ::com::sun::star::uno::Sequence< OUString>& _rTables,
+                const ::com::sun::star::uno::Sequence< OUString>& _rViews
             );
 
     /** returns a NamedDatabaseObject record which describes the given entry
@@ -114,11 +114,11 @@ public:
 
     /** to be used if a foreign instance added a table
     */
-    SvTreeListEntry* addedTable( const ::rtl::OUString& _rName );
+    SvTreeListEntry* addedTable( const OUString& _rName );
 
     /** to be used if a foreign instance removed a table
     */
-    void    removedTable( const ::rtl::OUString& _rName );
+    void    removedTable( const OUString& _rName );
 
     /** returns the fully qualified name of a table entry
         @param _pEntry
@@ -126,7 +126,7 @@ public:
     */
     String getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
 
-    SvTreeListEntry*    getEntryByQualifiedName( const ::rtl::OUString& _rName );
+    SvTreeListEntry*    getEntryByQualifiedName( const OUString& _rName );
 
     SvTreeListEntry*    getAllObjectsEntry() const;
 
@@ -156,7 +156,7 @@ protected:
     */
     SvTreeListEntry* implAddEntry(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
-            const ::rtl::OUString& _rTableName,
+            const OUString& _rTableName,
             sal_Bool _bCheckName = sal_True
         );
 

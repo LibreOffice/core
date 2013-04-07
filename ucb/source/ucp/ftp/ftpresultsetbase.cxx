@@ -382,7 +382,7 @@ ResultSetBase::close(
 }
 
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ResultSetBase::queryContentIdentifierString(
     void )
     throw( uno::RuntimeException )
@@ -390,7 +390,7 @@ ResultSetBase::queryContentIdentifierString(
     if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
         return m_aPath[m_nRow];
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 
@@ -405,7 +405,7 @@ ResultSetBase::queryContentIdentifier(
     if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
     {
         if(!m_aIdents[m_nRow].is()) {
-            rtl::OUString url = queryContentIdentifierString();
+            OUString url = queryContentIdentifierString();
             if(!url.isEmpty() )
                 m_aIdents[m_nRow] =
                     uno::Reference< ucb::XContentIdentifier >(
@@ -470,7 +470,7 @@ public:
         return m_aSeq;
     }
 
-    beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
+    beans::Property SAL_CALL getPropertyByName( const OUString& aName )
         throw( beans::UnknownPropertyException,
                uno::RuntimeException)
     {
@@ -480,7 +480,7 @@ public:
         throw beans::UnknownPropertyException();
     }
 
-    sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
+    sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
         throw( uno::RuntimeException )
     {
         for( int i = 0; i < m_aSeq.getLength(); ++i )
@@ -502,12 +502,12 @@ ResultSetBase::getPropertySetInfo()
     throw( uno::RuntimeException)
 {
     uno::Sequence< beans::Property > seq(2);
-    seq[0].Name = rtl::OUString("RowCount");
+    seq[0].Name = OUString("RowCount");
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[1].Name = rtl::OUString("IsRowCountFinal");
+    seq[1].Name = OUString("IsRowCountFinal");
     seq[1].Handle = -1;
     seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
     seq[1].Attributes = beans::PropertyAttribute::READONLY;
@@ -520,15 +520,15 @@ ResultSetBase::getPropertySetInfo()
 
 
 void SAL_CALL ResultSetBase::setPropertyValue(
-    const rtl::OUString& aPropertyName, const uno::Any& /*aValue*/ )
+    const OUString& aPropertyName, const uno::Any& /*aValue*/ )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString("IsRowCountFinal") ||
-        aPropertyName == rtl::OUString("RowCount") )
+    if( aPropertyName == OUString("IsRowCountFinal") ||
+        aPropertyName == OUString("RowCount") )
         return;
 
     throw beans::UnknownPropertyException();
@@ -536,18 +536,18 @@ void SAL_CALL ResultSetBase::setPropertyValue(
 
 
 uno::Any SAL_CALL ResultSetBase::getPropertyValue(
-    const rtl::OUString& PropertyName )
+    const OUString& PropertyName )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( PropertyName == rtl::OUString("IsRowCountFinal") )
+    if( PropertyName == OUString("IsRowCountFinal") )
     {
         uno::Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
-    else if ( PropertyName == rtl::OUString("RowCount") )
+    else if ( PropertyName == OUString("RowCount") )
     {
         uno::Any aAny;
         sal_Int32 count = m_aItems.size();
@@ -560,13 +560,13 @@ uno::Any SAL_CALL ResultSetBase::getPropertyValue(
 
 
 void SAL_CALL ResultSetBase::addPropertyChangeListener(
-    const rtl::OUString& aPropertyName,
+    const OUString& aPropertyName,
     const uno::Reference< beans::XPropertyChangeListener >& xListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString("IsRowCountFinal") )
+    if( aPropertyName == OUString("IsRowCountFinal") )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pIsFinalListeners )
@@ -575,7 +575,7 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
 
         m_pIsFinalListeners->addInterface( xListener );
     }
-    else if ( aPropertyName == rtl::OUString("RowCount") )
+    else if ( aPropertyName == OUString("RowCount") )
     {
         osl::MutexGuard aGuard( m_aMutex );
         if ( ! m_pRowCountListeners )
@@ -589,19 +589,19 @@ void SAL_CALL ResultSetBase::addPropertyChangeListener(
 
 
 void SAL_CALL ResultSetBase::removePropertyChangeListener(
-    const rtl::OUString& aPropertyName,
+    const OUString& aPropertyName,
     const uno::Reference< beans::XPropertyChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
            uno::RuntimeException)
 {
-    if( aPropertyName == rtl::OUString("IsRowCountFinal") &&
+    if( aPropertyName == OUString("IsRowCountFinal") &&
         m_pIsFinalListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
         m_pIsFinalListeners->removeInterface( aListener );
     }
-    else if ( aPropertyName == rtl::OUString("RowCount") &&
+    else if ( aPropertyName == OUString("RowCount") &&
               m_pRowCountListeners )
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -613,7 +613,7 @@ void SAL_CALL ResultSetBase::removePropertyChangeListener(
 
 
 void SAL_CALL ResultSetBase::addVetoableChangeListener(
-    const rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
@@ -623,7 +623,7 @@ void SAL_CALL ResultSetBase::addVetoableChangeListener(
 
 
 void SAL_CALL ResultSetBase::removeVetoableChangeListener(
-    const rtl::OUString& /*PropertyName*/,
+    const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,

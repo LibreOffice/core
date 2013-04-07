@@ -28,8 +28,8 @@ struct ImplGroupData;
 class TOOLS_DLLPUBLIC Config
 {
 private:
-    rtl::OUString       maFileName;
-    rtl::OString        maGroupName;
+    OUString       maFileName;
+    OString        maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
     sal_uIntPtr         mnDataUpdateId;
@@ -43,25 +43,25 @@ private:
 #endif
 
 public:
-                        Config( const rtl::OUString& rFileName );
+                        Config( const OUString& rFileName );
                         ~Config();
 
-    const rtl::OUString& GetPathName() const { return maFileName; }
+    const OUString& GetPathName() const { return maFileName; }
 
-    void SetGroup(const rtl::OString& rGroup);
-    const rtl::OString& GetGroup() const { return maGroupName; }
-    void DeleteGroup(const rtl::OString& rGroup);
-    rtl::OString GetGroupName(sal_uInt16 nGroup) const;
+    void SetGroup(const OString& rGroup);
+    const OString& GetGroup() const { return maGroupName; }
+    void DeleteGroup(const OString& rGroup);
+    OString GetGroupName(sal_uInt16 nGroup) const;
     sal_uInt16 GetGroupCount() const;
-    sal_Bool HasGroup(const rtl::OString& rGroup) const;
+    sal_Bool HasGroup(const OString& rGroup) const;
 
-    rtl::OString ReadKey(const rtl::OString& rKey) const;
-    rtl::OUString ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const;
-    rtl::OString ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const;
-    void                WriteKey(const rtl::OString& rKey, const rtl::OString& rValue);
-    void DeleteKey(const rtl::OString& rKey);
-    rtl::OString GetKeyName(sal_uInt16 nKey) const;
-    rtl::OString ReadKey(sal_uInt16 nKey) const;
+    OString ReadKey(const OString& rKey) const;
+    OUString ReadKey(const OString& rKey, rtl_TextEncoding eEncoding) const;
+    OString ReadKey(const OString& rKey, const OString& rDefault) const;
+    void                WriteKey(const OString& rKey, const OString& rValue);
+    void DeleteKey(const OString& rKey);
+    OString GetKeyName(sal_uInt16 nKey) const;
+    OString ReadKey(sal_uInt16 nKey) const;
     sal_uInt16              GetKeyCount() const;
 
     sal_Bool            IsLocked() const { return (mnLockCount != 0); }

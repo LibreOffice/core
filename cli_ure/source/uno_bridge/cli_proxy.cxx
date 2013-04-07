@@ -39,10 +39,6 @@ namespace ucss = unoidl::com::sun::star;
 
 using namespace cli_uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
-using ::rtl::OUStringBuffer;
 extern "C"
 {
 //------------------------------------------------------------------------------
@@ -651,7 +647,7 @@ srrm::IMessage^ UnoInterfaceProxy::constructReturnMessage(
 //################################################################################
 CliProxy::CliProxy(Bridge const* bridge, System::Object^ cliI,
                          typelib_TypeDescription const* td,
-                         const rtl::OUString& usOid):
+                         const OUString& usOid):
     m_ref(1),
     m_bridge(bridge),
     m_cliI(cliI),
@@ -776,7 +772,7 @@ void CliProxy::makeMethodInfos()
 }
 
 sr::MethodInfo^ CliProxy::getMethodInfo(int nUnoFunctionPos,
-                                           const rtl::OUString& usMethodName, MethodKind methodKind)
+                                           const OUString& usMethodName, MethodKind methodKind)
 {
     sr::MethodInfo^ ret = nullptr;
 #if OSL_DEBUG_LEVEL >= 2
@@ -877,7 +873,7 @@ CliProxy::~CliProxy()
 uno_Interface* CliProxy::create(Bridge const * bridge,
                                  System::Object^ cliI,
                                  typelib_TypeDescription const* pTD,
-                                 const rtl::OUString& ousOid)
+                                 const OUString& ousOid)
 {
     uno_Interface* proxy= static_cast<uno_Interface*>(
         new CliProxy(bridge, cliI, pTD, ousOid));

@@ -234,7 +234,7 @@ private:
     CharSet     eStreamCharSet;
 
     // Encryption
-    rtl::OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
+    OString m_aCryptMaskKey;// aCryptMaskKey.getLength != 0  -> Encryption used
     unsigned char   nCryptMask;
 
     // Userdata
@@ -291,8 +291,8 @@ public:
                         { nCompressMode = nNewMode; }
     sal_uInt16      GetCompressMode() const { return nCompressMode; }
 
-    void SetCryptMaskKey(const rtl::OString& rCryptMaskKey);
-    const rtl::OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
+    void SetCryptMaskKey(const OString& rCryptMaskKey);
+    const OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
     void            SetStreamCharSet( CharSet eCharSet )
                         { eStreamCharSet = eCharSet; }
@@ -363,8 +363,8 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
-    sal_Bool        WriteLine( const rtl::OString& rStr );
+    sal_Bool        ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead = 0xFFFE );
+    sal_Bool        WriteLine( const OString& rStr );
 
     /** Read a line of bytes.
 
@@ -380,7 +380,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    sal_Bool        ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                         sal_Int32 nMaxBytesToRead = 0xFFFE );
     sal_Bool        ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet );
     sal_Bool        WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet );
@@ -413,15 +413,15 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
+    sal_Bool        ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Read a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcCharSet */
-    rtl::OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
+    OUString   ReadUniOrByteString(rtl_TextEncoding eSrcCharSet);
     /** Write a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise convert to eSrcCharSet
         and write a 16bit length prefixed sequence of bytes */
-    SvStream&       WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEncoding eDestCharSet );
+    SvStream&       WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding eDestCharSet );
 
     /** Read a line of Unicode if eSrcCharSet==RTL_TEXTENCODING_UNICODE,
         otherwise read a line of Bytecode and convert from eSrcCharSet
@@ -438,7 +438,7 @@ public:
               @endcode
               causing endless loops ...
     */
-    sal_Bool        ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+    sal_Bool        ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                              sal_Int32 nMaxCodepointsToRead = 0xFFFE );
     /** Write a sequence of Unicode characters if
         eDestCharSet==RTL_TEXTENCODING_UNICODE, otherwise write a sequence of
@@ -514,28 +514,28 @@ TOOLS_DLLPUBLIC SvStream& endlu( SvStream& rStr );
 /// call endlu() if eStreamCharSet==RTL_TEXTECODING_UNICODE otherwise endl()
 TOOLS_DLLPUBLIC SvStream& endlub( SvStream& rStr );
 
-/// Attempt to read nUnits 8bit units to an OString, returned rtl::OString's
+/// Attempt to read nUnits 8bit units to an OString, returned OString's
 /// length is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OString read_uInt8s_ToOString(SvStream& rStrm,
+TOOLS_DLLPUBLIC OString read_uInt8s_ToOString(SvStream& rStrm,
     sal_Size nUnits);
 
 /// Attempt to read nUnits 8bit units to an OUString
-TOOLS_DLLPUBLIC inline rtl::OUString read_uInt8s_ToOUString(SvStream& rStrm,
+TOOLS_DLLPUBLIC inline OUString read_uInt8s_ToOUString(SvStream& rStrm,
     sal_Size nUnits, rtl_TextEncoding eEnc)
 {
-    return rtl::OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
+    return OStringToOUString(read_uInt8s_ToOString(rStrm, nUnits), eEnc);
 }
 
 /// Attempt to read nUnits 16bit units to an OUString, returned
-/// rtl::OUString's length is number of units successfully read
-TOOLS_DLLPUBLIC rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm,
+/// OUString's length is number of units successfully read
+TOOLS_DLLPUBLIC OUString read_uInt16s_ToOUString(SvStream& rStrm,
     sal_Size nUnits);
 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-/// 16bit units to an OUString, returned rtl::OString's length is number of
+/// 16bit units to an OUString, returned OString's length is number of
 /// units successfully read.
 template<typename prefix>
-rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
+OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
 {
     prefix nUnits = 0;
     rStrm >> nUnits;
@@ -545,10 +545,10 @@ rtl::OUString read_lenPrefixed_uInt16s_ToOUString(SvStream& rStrm)
 /// Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
 /// returned value is number of bytes written
 TOOLS_DLLPUBLIC sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
-    const rtl::OUString& rStr, sal_Size nUnits);
+    const OUString& rStr, sal_Size nUnits);
 
 TOOLS_DLLPUBLIC inline sal_Size write_uInt16s_FromOUString(SvStream& rStrm,
-    const rtl::OUString& rStr)
+    const OUString& rStr)
 {
     return write_uInt16s_FromOUString(rStrm, rStr, rStr.getLength());
 }
@@ -580,27 +580,27 @@ namespace streamdetail
 /// of 16bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt16s_FromOUString(SvStream& rStrm,
-    const rtl::OUString &rStr)
+    const OUString &rStr)
 {
-    return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OUString, write_uInt16s_FromOUString>(rStrm, rStr);
+    return streamdetail::write_lenPrefixed_seq_From_str<prefix, OUString, write_uInt16s_FromOUString>(rStrm, rStr);
 }
 
 /// Attempt to read 8bit units to an OString until a zero terminator is
-/// encountered, returned rtl::OString's length is number of units *definitely*
+/// encountered, returned OString's length is number of units *definitely*
 /// successfully read, check SvStream::good() to see if null terminator was
 /// successfully read
-TOOLS_DLLPUBLIC rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm);
+TOOLS_DLLPUBLIC OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm);
 
 /// Attempt to read 8bit units assuming source encoding eEnc to an OUString
 /// until a zero terminator is encountered. Check SvStream::good() to see if
 /// null terminator was successfully read
-TOOLS_DLLPUBLIC rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, rtl_TextEncoding eEnc);
+TOOLS_DLLPUBLIC OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStrm, rtl_TextEncoding eEnc);
 
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-/// 8bit units to an OString, returned rtl::OString's length is number of units
+/// 8bit units to an OString, returned OString's length is number of units
 /// successfully read.
 template<typename prefix>
-rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
+OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 {
     prefix nUnits = 0;
     rStrm >> nUnits;
@@ -610,21 +610,21 @@ rtl::OString read_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
 /// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
 /// 8bit units to an OUString
 template<typename prefix>
-rtl::OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
+OUString read_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
     rtl_TextEncoding eEnc)
 {
-    return rtl::OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
+    return OStringToOUString(read_lenPrefixed_uInt8s_ToOString<prefix>(rStrm), eEnc);
 }
 
 /// Attempt to write a prefixed sequence of nUnits 8bit units from an OString,
 /// returned value is number of bytes written
-TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const rtl::OString& rStr,
+TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
     sal_Size nUnits)
 {
     return rStrm.Write(rStr.getStr(), nUnits);
 }
 
-TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const rtl::OString& rStr)
+TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)
 {
     return write_uInt8s_FromOString(rStrm, rStr, rStr.getLength());
 }
@@ -633,18 +633,18 @@ TOOLS_DLLPUBLIC inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const 
 /// of 8bit units from an OString, returned value is number of bytes written
 /// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOString(SvStream& rStrm,
-    const rtl::OString &rStr)
+    const OString &rStr)
 {
-    return streamdetail::write_lenPrefixed_seq_From_str<prefix, rtl::OString, write_uInt8s_FromOString>(rStrm, rStr);
+    return streamdetail::write_lenPrefixed_seq_From_str<prefix, OString, write_uInt8s_FromOString>(rStrm, rStr);
 }
 
 /// Attempt to write a pascal-style length (of type prefix) prefixed sequence
 /// of 8bit units from an OUString, returned value is number of bytes written
 /// (including byte-count of prefix)
 template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStream& rStrm,
-    const rtl::OUString &rStr, rtl_TextEncoding eEnc)
+    const OUString &rStr, rtl_TextEncoding eEnc)
 {
-    return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, rtl::OUStringToOString(rStr, eEnc));
+    return write_lenPrefixed_uInt8s_FromOString<prefix>(rStrm, OUStringToOString(rStr, eEnc));
 }
 
 // FileStream

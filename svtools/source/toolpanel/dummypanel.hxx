@@ -40,9 +40,9 @@ namespace svt
         ~DummyPanel();
 
         // IToolPanel
-        virtual ::rtl::OUString GetDisplayName() const;
+        virtual OUString GetDisplayName() const;
         virtual Image GetImage() const;
-        virtual rtl::OString GetHelpID() const;
+        virtual OString GetHelpID() const;
         virtual void Activate( Window& i_rParentWindow );
         virtual void Deactivate();
         virtual void SetSizePixel( const Size& i_rPanelWindowSize );

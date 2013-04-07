@@ -86,8 +86,8 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations()
 uno::Reference< uno::XInterface > ScAnnontationsObj::init()
 {
     // get the test file
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString("ScAnnotationObj.ods"), aFileURL);
+    OUString aFileURL;
+    createFileURL(OUString("ScAnnotationObj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT_MESSAGE("Component not loaded",mxComponent.is());

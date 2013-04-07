@@ -49,7 +49,7 @@ namespace slideshow
                 possibly other, less prioritized handlers are called,
                 too.
              */
-            virtual bool handleHyperlink( ::rtl::OUString const& rLink ) = 0;
+            virtual bool handleHyperlink( OUString const& rLink ) = 0;
 
         protected:
             ~HyperlinkHandler() {}

@@ -98,7 +98,7 @@ void ScDispatchProviderInterceptor::Notify( SfxBroadcaster&, const SfxHint& rHin
 // XDispatchProvider
 
 uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDispatch(
-                        const util::URL& aURL, const rtl::OUString& aTargetFrameName,
+                        const util::URL& aURL, const OUString& aTargetFrameName,
                         sal_Int32 nSearchFlags )
                         throw(uno::RuntimeException)
 {
@@ -266,7 +266,7 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
     {
         //  descriptor has to be complete anyway
 
-        rtl::OUString aEmpty;
+        OUString aEmpty;
         aDescriptor[svx::daDataSource]  <<= aEmpty;
         aDescriptor[svx::daCommand]     <<= aEmpty;
         aDescriptor[svx::daCommandType] <<= (sal_Int32)sdb::CommandType::TABLE;
@@ -367,7 +367,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
         {
             frame::FeatureStateEvent aEvent;
             aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-            aEvent.FeatureURL.Complete = rtl::OUString::createFromAscii( cURLDocDataSource );
+            aEvent.FeatureURL.Complete = OUString::createFromAscii( cURLDocDataSource );
 
             lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
 

@@ -45,9 +45,9 @@ protected:
                             RscTop * pSuperCl = NULL );
 
 public:
-    rtl::OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
-    rtl::OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
-    rtl::OString    aCallParType;   // Klassenaufruf mit Typen
+    OString    aCallPar1;      // Klassenaufruf ohne Typen bis ResId
+    OString    aCallPar2;      // Klassenaufruf ohne Typen ab ResId
+    OString    aCallParType;   // Klassenaufruf mit Typen
 
             void    SetSuperClass( RscTop * pClass )
                     {
@@ -64,8 +64,8 @@ public:
                     {
                         return( 0 != aCallParType.getLength() );
                     }
-            void    SetCallPar( const rtl::OString& rPar1, const rtl::OString& rPar2,
-                                const rtl::OString& rParType );
+            void    SetCallPar( const OString& rPar1, const OString& rPar2,
+                                const OString& rParType );
             void    SetRefClass( RscTop * pRef ) { pRefClass = pRef; }
             RscTop* GetRefClass() const { return pRefClass; }
     virtual RSCCLASS_TYPE GetClassType() const = 0;

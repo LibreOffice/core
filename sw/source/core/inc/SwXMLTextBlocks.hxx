@@ -39,7 +39,7 @@ protected:
     sal_Bool         bBlock;
     SfxObjectShellRef xDocShellRef;
     sal_uInt16       nFlags;
-    rtl::OUString aPackageName;
+    OUString aPackageName;
     SfxMediumRef xMedium;
 
     void ReadInfo();
@@ -55,7 +55,7 @@ public:
     SwXMLTextBlocks( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String& rFile );
     void   AddName( const String&, const String&, const String&, sal_Bool bOnlyTxt = sal_False );
     virtual void   AddName( const String&, const String&, sal_Bool bOnlyTxt = sal_False );
-    rtl::OUString GeneratePackageName ( const String& rShort );
+    OUString GeneratePackageName ( const String& rShort );
     virtual ~SwXMLTextBlocks();
     //virtual sal_Bool   IsOld() const;
     virtual sal_uLong Delete( sal_uInt16 );

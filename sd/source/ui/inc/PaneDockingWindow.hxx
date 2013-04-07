@@ -52,7 +52,7 @@ public:
         SfxChildWindow *pChildWindow,
         ::Window* pParent,
         const ResId& rResId,
-        const ::rtl::OUString& rsTitle);
+        const OUString& rsTitle);
 
     virtual ~PaneDockingWindow (void);
     virtual void StateChanged( StateChangedType nType );

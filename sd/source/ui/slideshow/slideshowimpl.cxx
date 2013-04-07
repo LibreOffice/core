@@ -78,8 +78,6 @@
 
 #include <boost/bind.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using ::cppu::OInterfaceContainerHelper;
 using ::comphelper::ImplementationReference;
 using ::com::sun::star::animations::XAnimationNode;
@@ -94,7 +92,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName );
+extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName );
 extern String getUiNameFromPageApiNameImpl( const OUString& rApiName );
 
 namespace sd
@@ -327,7 +325,7 @@ bool AnimationSlideController::getSlideAPI( sal_Int32 nSlideNumber, Reference< X
         OSL_FAIL(
             OString(OString("sd::AnimationSlideController::getSlideAPI(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
 
@@ -651,7 +649,7 @@ void SAL_CALL SlideshowImpl::disposing()
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::stop(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
 
@@ -879,7 +877,7 @@ bool SlideshowImpl::startPreview(
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::startPreview(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
         bRet = false;
@@ -1106,7 +1104,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::startShow(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
         bRet = false;
@@ -1167,7 +1165,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::startShowImpl(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
         return false;
@@ -1205,7 +1203,7 @@ void SlideshowImpl::paint( const Rectangle& /* rRect */ )
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::paint(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1259,7 +1257,7 @@ void SlideshowImpl::removeShapeEvents()
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::removeShapeEvents(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1294,7 +1292,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::registerShapeEvents(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1372,7 +1370,7 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( 
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::registerShapeEvents(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1443,7 +1441,7 @@ void SAL_CALL SlideshowImpl::pause() throw (RuntimeException)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::pause(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1479,7 +1477,7 @@ void SAL_CALL SlideshowImpl::resume() throw (RuntimeException)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::resume(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1663,7 +1661,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
 
 // ---------------------------------------------------------
 
-void SlideshowImpl::hyperLinkClicked( rtl::OUString const& aHyperLink ) throw (RuntimeException)
+void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
 {
     OUString aBookmark( aHyperLink );
 
@@ -1901,7 +1899,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
     {
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::updateSlideShow(), exception caught: ")
-                + rtl::OUStringToOString(
+                + OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -2033,7 +2031,7 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::keyInput(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -2422,7 +2420,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow() const
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::createSlideShow(), "
                      "exception caught: ") +
-             rtl::OUStringToOString(
+             OUStringToOString(
                  comphelper::anyToString( cppu::getCaughtException() ),
                  RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -2631,7 +2629,7 @@ void SlideshowImpl::resize( const Size& rSize )
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::resize(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -2987,7 +2985,7 @@ void SAL_CALL SlideshowImpl::setUsePen( sal_Bool bMouseAsPen ) throw (RuntimeExc
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::setUsePen(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -3280,7 +3278,7 @@ void SlideshowImpl::gotoPreviousSlide (const bool bSkipAllMainSequenceEffects)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::gotoPreviousSlide(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -3380,7 +3378,7 @@ void SAL_CALL SlideshowImpl::stopSound(  ) throw (RuntimeException)
         OSL_FAIL(
             OString(OString("sd::SlideshowImpl::stopSound(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -3728,7 +3726,7 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
 
 // ---------------------------------------------------------
 
-void SlideShowListenerProxy::hyperLinkClicked( rtl::OUString const& aHyperLink ) throw (RuntimeException)
+void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );

@@ -32,15 +32,15 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, eqFunc > StringHashMap;
+typedef ::boost::unordered_map< OUString, OUString, OUStringHash, eqFunc > StringHashMap;
 
 struct ManifestScopeEntry
 {
-    ::rtl::OUString m_aConvertedName;
+    OUString m_aConvertedName;
     StringHashMap   m_aNamespaces;
     bool            m_bValid;
 
-    ManifestScopeEntry( const ::rtl::OUString& aConvertedName, const StringHashMap& aNamespaces )
+    ManifestScopeEntry( const OUString& aConvertedName, const StringHashMap& aNamespaces )
     : m_aConvertedName( aConvertedName )
     , m_aNamespaces( aNamespaces )
     , m_bValid( true )
@@ -61,66 +61,66 @@ protected:
     sal_Int32 nDerivedKeySize;
     ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
 
-    const ::rtl::OUString sFileEntryElement;
-    const ::rtl::OUString sManifestElement;
-    const ::rtl::OUString sEncryptionDataElement;
-    const ::rtl::OUString sAlgorithmElement;
-    const ::rtl::OUString sStartKeyAlgElement;
-    const ::rtl::OUString sKeyDerivationElement;
+    const OUString sFileEntryElement;
+    const OUString sManifestElement;
+    const OUString sEncryptionDataElement;
+    const OUString sAlgorithmElement;
+    const OUString sStartKeyAlgElement;
+    const OUString sKeyDerivationElement;
 
-    const ::rtl::OUString sCdataAttribute;
-    const ::rtl::OUString sMediaTypeAttribute;
-    const ::rtl::OUString sVersionAttribute;
-    const ::rtl::OUString sFullPathAttribute;
-    const ::rtl::OUString sSizeAttribute;
-    const ::rtl::OUString sSaltAttribute;
-    const ::rtl::OUString sInitialisationVectorAttribute;
-    const ::rtl::OUString sIterationCountAttribute;
-    const ::rtl::OUString sKeySizeAttribute;
-    const ::rtl::OUString sAlgorithmNameAttribute;
-    const ::rtl::OUString sStartKeyAlgNameAttribute;
-    const ::rtl::OUString sKeyDerivationNameAttribute;
-    const ::rtl::OUString sChecksumAttribute;
-    const ::rtl::OUString sChecksumTypeAttribute;
+    const OUString sCdataAttribute;
+    const OUString sMediaTypeAttribute;
+    const OUString sVersionAttribute;
+    const OUString sFullPathAttribute;
+    const OUString sSizeAttribute;
+    const OUString sSaltAttribute;
+    const OUString sInitialisationVectorAttribute;
+    const OUString sIterationCountAttribute;
+    const OUString sKeySizeAttribute;
+    const OUString sAlgorithmNameAttribute;
+    const OUString sStartKeyAlgNameAttribute;
+    const OUString sKeyDerivationNameAttribute;
+    const OUString sChecksumAttribute;
+    const OUString sChecksumTypeAttribute;
 
-    const ::rtl::OUString sFullPathProperty;
-    const ::rtl::OUString sMediaTypeProperty;
-    const ::rtl::OUString sVersionProperty;
-    const ::rtl::OUString sIterationCountProperty;
-    const ::rtl::OUString sDerivedKeySizeProperty;
-    const ::rtl::OUString sSaltProperty;
-    const ::rtl::OUString sInitialisationVectorProperty;
-    const ::rtl::OUString sSizeProperty;
-    const ::rtl::OUString sDigestProperty;
-    const ::rtl::OUString sEncryptionAlgProperty;
-    const ::rtl::OUString sStartKeyAlgProperty;
-    const ::rtl::OUString sDigestAlgProperty;
+    const OUString sFullPathProperty;
+    const OUString sMediaTypeProperty;
+    const OUString sVersionProperty;
+    const OUString sIterationCountProperty;
+    const OUString sDerivedKeySizeProperty;
+    const OUString sSaltProperty;
+    const OUString sInitialisationVectorProperty;
+    const OUString sSizeProperty;
+    const OUString sDigestProperty;
+    const OUString sEncryptionAlgProperty;
+    const OUString sStartKeyAlgProperty;
+    const OUString sDigestAlgProperty;
 
-    const ::rtl::OUString sWhiteSpace;
+    const OUString sWhiteSpace;
 
-    const ::rtl::OUString sSHA256_URL;
-    const ::rtl::OUString sSHA1_Name;
-    const ::rtl::OUString sSHA1_URL;
+    const OUString sSHA256_URL;
+    const OUString sSHA1_Name;
+    const OUString sSHA1_URL;
 
-    const ::rtl::OUString sSHA256_1k_URL;
-    const ::rtl::OUString sSHA1_1k_Name;
-    const ::rtl::OUString sSHA1_1k_URL;
+    const OUString sSHA256_1k_URL;
+    const OUString sSHA1_1k_Name;
+    const OUString sSHA1_1k_URL;
 
-    const ::rtl::OUString sBlowfish_Name;
-    const ::rtl::OUString sBlowfish_URL;
-    const ::rtl::OUString sAES128_URL;
-    const ::rtl::OUString sAES192_URL;
-    const ::rtl::OUString sAES256_URL;
+    const OUString sBlowfish_Name;
+    const OUString sBlowfish_URL;
+    const OUString sAES128_URL;
+    const OUString sAES192_URL;
+    const OUString sAES256_URL;
 
-    const ::rtl::OUString sPBKDF2_Name;
-    const ::rtl::OUString sPBKDF2_URL;
+    const OUString sPBKDF2_Name;
+    const OUString sPBKDF2_URL;
 
 
-    ::rtl::OUString PushNameAndNamespaces( const ::rtl::OUString& aName,
+    OUString PushNameAndNamespaces( const OUString& aName,
                                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
                                            StringHashMap& o_aConvertedAttribs );
-    ::rtl::OUString ConvertNameWithNamespace( const ::rtl::OUString& aName, const StringHashMap& aNamespaces );
-    ::rtl::OUString ConvertName( const ::rtl::OUString& aName );
+    OUString ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces );
+    OUString ConvertName( const OUString& aName );
 
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
@@ -129,15 +129,15 @@ public:
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL endDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
+    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endElement( const ::rtl::OUString& aName )
+    virtual void SAL_CALL endElement( const OUString& aName )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
+    virtual void SAL_CALL characters( const OUString& aChars )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData )
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);

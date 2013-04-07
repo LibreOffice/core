@@ -116,7 +116,7 @@ DispatchProvider::~DispatchProvider()
     @threadsafe yes
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL DispatchProvider::queryDispatch( const css::util::URL&  aURL             ,
-                                                                                       const ::rtl::OUString& sTargetFrameName ,
+                                                                                       const OUString& sTargetFrameName ,
                                                                                              sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -184,7 +184,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Disp
  */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDesktopDispatch( const css::uno::Reference< css::frame::XFrame > xDesktop         ,
                                                                                             const css::util::URL&                           aURL             ,
-                                                                                            const ::rtl::OUString&                          sTargetFrameName ,
+                                                                                            const OUString&                          sTargetFrameName ,
                                                                                                   sal_Int32                                 nSearchFlags     )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -276,7 +276,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
 
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrameDispatch( const css::uno::Reference< css::frame::XFrame > xFrame           ,
                                                                                           const css::util::URL&                           aURL             ,
-                                                                                          const ::rtl::OUString&                          sTargetFrameName ,
+                                                                                          const OUString&                          sTargetFrameName ,
                                                                                                 sal_Int32                                 nSearchFlags     )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -286,7 +286,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //    But they are specified to use her own fix target. Detect such URLs here and use the correct target.
     //-----------------------------------------------------------------------------------------------------
 
-    ::rtl::OUString sTargetName = sTargetFrameName;
+    OUString sTargetName = sTargetFrameName;
 
     //-----------------------------------------------------------------------------------------------------
     // I) handle special cases which not right for using findFrame() first
@@ -576,7 +576,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
 */
 css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreateDispatchHelper( EDispatchHelper                                  eHelper     ,
                                                                                                  const css::uno::Reference< css::frame::XFrame >& xOwner      ,
-                                                                                                 const ::rtl::OUString&                           sTarget     ,
+                                                                                                 const OUString&                           sTarget     ,
                                                                                                        sal_Int32                                  nSearchFlags)
 {
     css::uno::Reference< css::frame::XDispatch > xDispatchHelper;

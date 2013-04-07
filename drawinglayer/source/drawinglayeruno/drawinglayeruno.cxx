@@ -39,8 +39,8 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
-        extern uno::Sequence< rtl::OUString > SAL_CALL XPrimitive2DRenderer_getSupportedServiceNames();
-        extern rtl::OUString SAL_CALL XPrimitive2DRenderer_getImplementationName();
+        extern uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer_getSupportedServiceNames();
+        extern OUString SAL_CALL XPrimitive2DRenderer_getImplementationName();
         extern uno::Reference< uno::XInterface > SAL_CALL XPrimitive2DRenderer_createInstance( const uno::Reference< lang::XMultiServiceFactory > & );
     } // end of namespace unorenderer
 } // end of namespace drawinglayer

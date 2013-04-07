@@ -47,9 +47,9 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider >   m_xTypeProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel >      m_xUnoTunnel;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >    m_xServiceInfo;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aMasterFields;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >                          m_aDetailFields;
-        ::rtl::OUString                                                             m_sName;
+        ::com::sun::star::uno::Sequence< OUString >                          m_aMasterFields;
+        ::com::sun::star::uno::Sequence< OUString >                          m_aDetailFields;
+        OUString                                                             m_sName;
         ::sal_Int32                                                                 m_nHeight;
         ::sal_Int32                                                                 m_nWidth;
         ::sal_Int32                                                                 m_nPosX;

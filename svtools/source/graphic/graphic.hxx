@@ -54,8 +54,8 @@ public:
 
     static const ::Graphic* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw();
     static ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-    static ::rtl::OUString getImplementationName_Static() throw();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
+    static OUString getImplementationName_Static() throw();
+    static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
 protected:
 
@@ -66,9 +66,9 @@ protected:
     virtual void SAL_CALL release() throw();
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);

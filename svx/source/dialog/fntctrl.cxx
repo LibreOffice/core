@@ -572,7 +572,7 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::SetPreviewText( const ::rtl::OUString& rString )
+void SvxFontPrevWindow::SetPreviewText( const OUString& rString )
 {
     pImpl->aText = rString;
     pImpl->bTextInited = true;
@@ -770,12 +770,12 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             long nTextWidth = 0;
             if(pImpl->cStartBracket)
             {
-                rtl::OUString sBracket(pImpl->cStartBracket);
+                OUString sBracket(pImpl->cStartBracket);
                 nStartBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
             }
             if(pImpl->cEndBracket)
             {
-                rtl::OUString sBracket(pImpl->cEndBracket);
+                OUString sBracket(pImpl->cEndBracket);
                 nEndBracketWidth = rFont.GetTxtSize( pPrinter, sBracket ).Width();
             }
             nTextWidth = pImpl->CalcTextSize( this, pPrinter, aSmallFont ).Width();
@@ -792,7 +792,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
 
             if(pImpl->cStartBracket)
             {
-                rtl::OUString sBracket(pImpl->cStartBracket);
+                OUString sBracket(pImpl->cStartBracket);
                 rFont.DrawPrev( this, pPrinter, Point( _nX, nY - nOffset - 4), sBracket );
                 _nX += nStartBracketWidth;
             }
@@ -806,7 +806,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
             if(pImpl->cEndBracket)
             {
                 Point aTmpPoint( _nX + 1, nY - nOffset - 4);
-                rtl::OUString sBracket(pImpl->cEndBracket);
+                OUString sBracket(pImpl->cEndBracket);
                 rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
             }
             pImpl->aCJKFont.SetSize( aOldSize );
@@ -951,7 +951,7 @@ void SvxFontPrevWindow::SetFromItemSet( const SfxItemSet &rSet,
     if( GetWhich( rSet, SID_CHAR_DLG_PREVIEW_STRING, nWhich ) )
     {
         const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
-        ::rtl::OUString aString = rItem.GetValue();
+        OUString aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
         else
@@ -1188,7 +1188,7 @@ void SvxFontPrevWindow::Init( const SfxItemSet& rSet )
     if( ISITEMSET )
     {
         const SfxStringItem& rItem = ( SfxStringItem& ) rSet.Get( nWhich );
-        ::rtl::OUString aString = rItem.GetValue();
+        OUString aString = rItem.GetValue();
         if( !aString.isEmpty() )
             SetPreviewText( aString );
         else

@@ -27,7 +27,6 @@ using namespace connectivity::mysqlc;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
-using ::rtl::OUString;
 
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
@@ -436,7 +435,7 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     OSL_TRACE("OResultSetMetaData::checkColumnIndex");
     if (columnIndex < 1 || columnIndex > (sal_Int32) meta->getColumnCount()) {
 
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         buf.appendAscii( "Column index out of range (expected 1 to " );
         buf.append( sal_Int32( meta->getColumnCount() ) );
         buf.appendAscii( ", got " );

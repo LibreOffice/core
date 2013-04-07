@@ -646,8 +646,8 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
 
 static bool lcl_IsMonoSpaceFont( const OutputDevice& rOut )
 {
-    const rtl::OUString aStr1( sal_Unicode( 0x3008 ) );
-    const rtl::OUString aStr2( sal_Unicode( 0x307C ) );
+    const OUString aStr1( sal_Unicode( 0x3008 ) );
+    const OUString aStr2( sal_Unicode( 0x307C ) );
     const long nWidth1 = rOut.GetTextWidth( aStr1 );
     const long nWidth2 = rOut.GetTextWidth( aStr2 );
     return nWidth1 == nWidth2;

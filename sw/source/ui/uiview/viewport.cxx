@@ -708,7 +708,7 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
                     m_pWrtShell->GetContentAtPos( aPos, aCnt );
                     if( aCnt.sStr.Len() )
                     {
-                        sPageStr += rtl::OUString("  - ");
+                        sPageStr += OUString("  - ");
                         sPageStr.Insert( aCnt.sStr, 0, 80 );
                         sPageStr.SearchAndReplaceAll( '\t', ' ' );
                         sPageStr.SearchAndReplaceAll( 0x0a, ' ' );

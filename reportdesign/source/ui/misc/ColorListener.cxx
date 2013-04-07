@@ -25,7 +25,7 @@ namespace rptui
 {
 //=====================================================================
     DBG_NAME( rpt_OColorListener )
-OColorListener::OColorListener(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
+OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
 ,m_nColor(COL_LIGHTBLUE)

@@ -66,7 +66,7 @@ FilterFactory::~FilterFactory()
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const ::rtl::OUString& sFilter)
+css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const OUString& sFilter)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
@@ -75,7 +75,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const ::rtl::OUString&                     sFilter   ,
+css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const OUString&                     sFilter   ,
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -83,7 +83,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    ::rtl::OUString sRealFilter = sFilter;
+    OUString sRealFilter = sFilter;
 
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
@@ -122,7 +122,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
     // search filter on cache
     CacheItem aFilter = m_rCache->getItem(FilterCache::E_FILTER, sRealFilter);
-    ::rtl::OUString sFilterService;
+    OUString sFilterService;
     aFilter[PROPNAME_FILTERSERVICE] >>= sFilterService;
 
     // create service instance
@@ -156,7 +156,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 
 
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
+css::uno::Sequence< OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
     /* Attention: Instead of getElementNames() this method have to return only filter names,
@@ -167,7 +167,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
     */
     CacheItem lIProps;
     CacheItem lEProps;
-    lEProps[PROPNAME_FILTERSERVICE] <<= ::rtl::OUString();
+    lEProps[PROPNAME_FILTERSERVICE] <<= OUString();
 
     OUStringList lUNOFilters;
     try
@@ -184,7 +184,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
 
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const OUString& sQuery)
     throw (css::uno::RuntimeException)
 {
     // reject old deprecated queries ...
@@ -194,7 +194,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
                     static_cast< css::container::XContainerQuery* >(this));
 
     // convert "_query_xxx:..." to "getByDocService=xxx:..."
-    ::rtl::OUString sNewQuery(sQuery);
+    OUString sNewQuery(sQuery);
     sal_Int32 pos = sNewQuery.indexOf("_query_");
     if (pos != -1)
     {
@@ -233,7 +233,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-    css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
+    css::uno::Sequence< OUString > lSet = lEnumSet.getAsConstList();
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
@@ -245,7 +245,7 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     // analyze query
     QueryTokenizer::const_iterator pIt;
 
-    ::rtl::OUString sDocumentService;
+    OUString sDocumentService;
     sal_Int32       nIFlags = 0;
     sal_Int32       nEFlags = 0;
 
@@ -258,47 +258,47 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     if ( sDocumentService == "writer" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.text.TextDocument" );
+        sDocumentService = OUString( "com.sun.star.text.TextDocument" );
     }
     else if ( sDocumentService == "web" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.text.WebDocument" );
+        sDocumentService = OUString( "com.sun.star.text.WebDocument" );
     }
     else if ( sDocumentService == "global" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.text.GlobalDocument" );
+        sDocumentService = OUString( "com.sun.star.text.GlobalDocument" );
     }
     else if ( sDocumentService == "calc" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" );
+        sDocumentService = OUString( "com.sun.star.sheet.SpreadsheetDocument" );
     }
     else if ( sDocumentService == "draw" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.drawing.DrawingDocument" );
+        sDocumentService = OUString( "com.sun.star.drawing.DrawingDocument" );
     }
     else if ( sDocumentService == "impress" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.presentation.PresentationDocument" );
+        sDocumentService = OUString( "com.sun.star.presentation.PresentationDocument" );
     }
     else if ( sDocumentService == "math" )
     {
         OSL_FAIL("DEPRECATED!\nPlease use right document service for filter query!");
-        sDocumentService = ::rtl::OUString( "com.sun.star.formula.FormulaProperties" );
+        sDocumentService = OUString( "com.sun.star.formula.FormulaProperties" );
     }
 #endif
 
     pIt = lTokens.find(QUERY_PARAM_IFLAGS);
     if (pIt != lTokens.end())
-        nIFlags = ::rtl::OUString(pIt->second).toInt32();
+        nIFlags = OUString(pIt->second).toInt32();
 
     pIt = lTokens.find(QUERY_PARAM_EFLAGS);
     if (pIt != lTokens.end())
-        nEFlags = ::rtl::OUString(pIt->second).toInt32();
+        nEFlags = OUString(pIt->second).toInt32();
 
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -314,14 +314,14 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     {
         try
         {
-            const ::rtl::OUString&          sName   = *pName;
+            const OUString&          sName   = *pName;
             const CacheItem                 aFilter = pCache->getItem(FilterCache::E_FILTER, sName);
                 CacheItem::const_iterator pProp   ;
 
             // "matchByDocumentService="                    => any filter will be addressed here
             // "matchByDocumentService=all"                 => any filter will be addressed here
             // "matchByDocumentService=com.sun.star..."     => only filter matching this document service will be addressed
-            ::rtl::OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
+            OUString sCheckValue = aFilter.getUnpackedValueOrDefault(PROPNAME_DOCUMENTSERVICE, OUString());
             if (
                 (!sDocumentService.isEmpty()                   ) &&
                 (!sDocumentService.equals(QUERY_CONSTVALUE_ALL)) &&
@@ -390,7 +390,7 @@ class stlcomp_removeIfMatchFlags
             , m_bIFlags(bIFlags)
         {}
 
-        bool operator() (const ::rtl::OUString& sFilter) const
+        bool operator() (const OUString& sFilter) const
         {
             try
             {
@@ -421,7 +421,7 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
     // analyze the given query parameter
     QueryTokenizer::const_iterator pIt1;
 
-    ::rtl::OUString sModule;
+    OUString sModule;
     sal_Int32       nIFlags = -1;
     sal_Int32       nEFlags = -1;
 
@@ -430,10 +430,10 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
         sModule = pIt1->second;
     pIt1 = lTokens.find(QUERY_PARAM_IFLAGS);
     if (pIt1 != lTokens.end())
-        nIFlags = ::rtl::OUString(pIt1->second).toInt32();
+        nIFlags = OUString(pIt1->second).toInt32();
     pIt1 = lTokens.find(QUERY_PARAM_EFLAGS);
     if (pIt1 != lTokens.end())
-        nEFlags = ::rtl::OUString(pIt1->second).toInt32();
+        nEFlags = OUString(pIt1->second).toInt32();
 
     // simple search for filters of one specific module.
     OUStringList lFilterList;
@@ -456,7 +456,7 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
                    pIt3 != lFilters4Module.end()  ;
                  ++pIt3                           )
             {
-                const ::rtl::OUString& sFilter = *pIt3;
+                const OUString& sFilter = *pIt3;
                 lFilterList.push_back(sFilter);
             }
         }
@@ -495,7 +495,7 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
 
 
 
-OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
+OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sModule,
                                                                     sal_Int32        nIFlags,
                                                                     sal_Int32        nEFlags) const
 {
@@ -524,7 +524,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
            pIt2 != lOtherFilters.end()  ;
          ++pIt2                         )
     {
-        const ::rtl::OUString& rFilter = *pIt2;
+        const OUString& rFilter = *pIt2;
         pIt3 = ::std::find(lSortedFilters.begin(), lSortedFilters.end(), rFilter);
         if (pIt3 == lSortedFilters.end())
             lMergedFilters.push_back(rFilter);
@@ -550,7 +550,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
 
 
 
-OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const
+OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule) const
 {
     // SAFE -> ----------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -589,17 +589,17 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
 
 
 
-::rtl::OUString FilterFactory::impl_getImplementationName()
+OUString FilterFactory::impl_getImplementationName()
 {
-    return ::rtl::OUString( "com.sun.star.comp.filter.config.FilterFactory" );
+    return OUString( "com.sun.star.comp.filter.config.FilterFactory" );
 }
 
 
 
-css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNames()
+css::uno::Sequence< OUString > FilterFactory::impl_getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString( "com.sun.star.document.FilterFactory" );
+    css::uno::Sequence< OUString > lServiceNames(1);
+    lServiceNames[0] = OUString( "com.sun.star.document.FilterFactory" );
     return lServiceNames;
 }
 

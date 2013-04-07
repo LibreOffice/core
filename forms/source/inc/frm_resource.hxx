@@ -58,7 +58,7 @@ namespace frm
     public:
         /** loads the string with the specified resource id from the FormLayer resource file
         */
-        static ::rtl::OUString loadString(sal_uInt16 _nResId);
+        static OUString loadString(sal_uInt16 _nResId);
     };
 
 //.........................................................................

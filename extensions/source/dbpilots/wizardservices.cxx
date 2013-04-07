@@ -57,16 +57,16 @@ namespace dbp
     //= OGroupBoxSI
     //=====================================================================
     //---------------------------------------------------------------------
-    ::rtl::OUString OGroupBoxSI::getImplementationName() const
+    OUString OGroupBoxSI::getImplementationName() const
     {
-        return ::rtl::OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
+        return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OGroupBoxSI::getServiceNames() const
+    Sequence< OUString > OGroupBoxSI::getServiceNames() const
     {
-        Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.GroupBoxAutoPilot");
+        Sequence< OUString > aReturn(1);
+        aReturn[0] = OUString("com.sun.star.sdb.GroupBoxAutoPilot");
         return aReturn;
     }
 
@@ -74,16 +74,16 @@ namespace dbp
     //= OListComboSI
     //=====================================================================
     //---------------------------------------------------------------------
-    ::rtl::OUString OListComboSI::getImplementationName() const
+    OUString OListComboSI::getImplementationName() const
     {
-        return ::rtl::OUString("org.openoffice.comp.dbp.OListComboWizard");
+        return OUString("org.openoffice.comp.dbp.OListComboWizard");
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OListComboSI::getServiceNames() const
+    Sequence< OUString > OListComboSI::getServiceNames() const
     {
-        Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.ListComboBoxAutoPilot");
+        Sequence< OUString > aReturn(1);
+        aReturn[0] = OUString("com.sun.star.sdb.ListComboBoxAutoPilot");
         return aReturn;
     }
 
@@ -91,16 +91,16 @@ namespace dbp
     //= OGridSI
     //=====================================================================
     //---------------------------------------------------------------------
-    ::rtl::OUString OGridSI::getImplementationName() const
+    OUString OGridSI::getImplementationName() const
     {
-        return ::rtl::OUString("org.openoffice.comp.dbp.OGridWizard");
+        return OUString("org.openoffice.comp.dbp.OGridWizard");
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OGridSI::getServiceNames() const
+    Sequence< OUString > OGridSI::getServiceNames() const
     {
-        Sequence< ::rtl::OUString > aReturn(1);
-        aReturn[0] = ::rtl::OUString("com.sun.star.sdb.GridControlAutoPilot");
+        Sequence< OUString > aReturn(1);
+        aReturn[0] = OUString("com.sun.star.sdb.GridControlAutoPilot");
         return aReturn;
     }
 

@@ -267,7 +267,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
     if (m_pFontWorkStyle)
     {
         // style
-        rtl::OUString aStr = A2OUSTR("");
+        OUString aStr = A2OUSTR("");
         switch (m_pFontWorkStyle->GetStyleType())
         {
         default: // fall through!

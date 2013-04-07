@@ -570,7 +570,7 @@ void LwpPara::RegisterStyle()
                 // test codes
                 if (m_pSilverBullet->IsBulletOrdered())
                 {
-                    rtl::OUString aPreBullStyleName;
+                    OUString aPreBullStyleName;
                     LwpNumberingOverride* pNumbering = this->GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     sal_Bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);

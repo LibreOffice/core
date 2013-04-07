@@ -94,7 +94,7 @@ public:
 
     // EnhancedCustomShapeGeometry.idl
     void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpTypeAsAttribute(rtl::OUString sType);
+    void dumpTypeAsAttribute(OUString sType);
     void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(sal_Bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(sal_Bool bMirroredY); // also used in EnhancedCustomShapeHandle
@@ -103,7 +103,7 @@ public:
     void dumpExtrusionAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aExtrusion);
     void dumpPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPath);
     void dumpTextPathAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aTextPath);
-    void dumpEquationsAsElement(com::sun::star::uno::Sequence< rtl::OUString > aEquations);
+    void dumpEquationsAsElement(com::sun::star::uno::Sequence< OUString > aEquations);
     void dumpHandlesAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues > aHandles);
 
     // EnhancedCustomShapeHandle.idl

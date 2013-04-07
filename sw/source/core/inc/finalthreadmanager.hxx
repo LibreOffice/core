@@ -38,8 +38,8 @@ class SwPauseThreadStarting;
 namespace comp_FinalThreadManager {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 
@@ -53,9 +53,9 @@ public:
     explicit FinalThreadManager(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context);
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::util::XJobManager:
     virtual void SAL_CALL registerJob(const com::sun::star::uno::Reference< com::sun::star::util::XCancellable > & Job) throw (com::sun::star::uno::RuntimeException);

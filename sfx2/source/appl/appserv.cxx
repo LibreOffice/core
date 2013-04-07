@@ -163,9 +163,9 @@ namespace
                 using namespace org::freedesktop::PackageKit;
                 using namespace svtools;
                 Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()));
-                Sequence< ::rtl::OUString > vPackages(1);
+                Sequence< OUString > vPackages(1);
                 vPackages[0] = "libreoffice-base";
-                ::rtl::OUString sInteraction;
+                OUString sInteraction;
                 xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
                 // Ill be back (hopefully)!
                 SolarMutexGuard aGuard;
@@ -179,22 +179,22 @@ namespace
             }
             return;
         }
-        SfxStringItem aURL(SID_FILE_NAME, rtl::OUString(".component:Bibliography/View1"));
-        SfxStringItem aRef(SID_REFERER, rtl::OUString("private:user"));
-        SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+        SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
+        SfxStringItem aRef(SID_REFERER, OUString("private:user"));
+        SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
         SfxViewFrame::Current()->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aURL, &aRef, &aTarget, 0L);
     }
 }
 /// Find the correct location of the document (LICENSE.odt, etc.), and return
 /// it in rURL if found.
-static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )
+static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
 {
     using namespace osl;
     DirectoryItem aDirItem;
 
-    rURL = rtl::OUString( "$BRAND_BASE_DIR/" );
-    rURL += rtl::OUString::createFromAscii( pName );
-    rURL += rtl::OUString::createFromAscii( pExt );
+    rURL = OUString( "$BRAND_BASE_DIR/" );
+    rURL += OUString::createFromAscii( pName );
+    rURL += OUString::createFromAscii( pExt );
     rtl::Bootstrap::expandMacros( rURL );
 
     if (!rURL.isEmpty())
@@ -209,16 +209,16 @@ static void showDocument( const char* pBaseName )
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         Sequence < com::sun::star::beans::PropertyValue > args(2);
-        args[0].Name = ::rtl::OUString("ViewOnly");
+        args[0].Name = OUString("ViewOnly");
         args[0].Value <<= sal_True;
-        args[1].Name = ::rtl::OUString("ReadOnly");
+        args[1].Name = OUString("ReadOnly");
         args[1].Value <<= sal_True;
 
-        rtl::OUString aURL;
+        OUString aURL;
         if ( checkURL ( pBaseName, ".odt", aURL ) ||
                 checkURL ( pBaseName, ".html", aURL ) ||
                 checkURL ( pBaseName, "", aURL ) ) {
-            xDesktop->loadComponentFromURL( aURL, ::rtl::OUString("_blank"), 0, args );
+            xDesktop->loadComponentFromURL( aURL, OUString("_blank"), 0, args );
         }
     } catch (const ::com::sun::star::uno::Exception &) {
     }
@@ -286,7 +286,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         return;
                 }
 
-                SfxStringItem aNameItem( SID_FILE_NAME, rtl::OUString("vnd.sun.star.cmd:logout") );
+                SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
                 SfxStringItem aReferer( SID_REFERER, "private/user" );
                 pAppData_Impl->pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aNameItem, &aReferer, 0L );
                 return;
@@ -428,14 +428,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            ::rtl::OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            ::rtl::OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+            OUString module = SfxHelp::GetCurrentModuleIdentifier();
+            OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf(".") + 1 )  );
             try
             {
                 uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     com::sun::star::system::SystemShellExecute::create(::comphelper::getProcessComponentContext()) );
-                xSystemShellExecute->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             }
             catch ( uno::Exception& )
             {
@@ -462,7 +462,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( rtl::OUString(".uno:HelpIndex"), NULL ); // show start page
+                pHelp->Start( OUString(".uno:HelpIndex"), NULL ); // show start page
                 bDone = true;
             }
             break;
@@ -658,7 +658,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     try
                     {
-                        Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+                        Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
                         aValue >>= xLayoutManager;
                     }
                     catch ( const ::com::sun::star::uno::RuntimeException& )
@@ -672,12 +672,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 if ( xLayoutManager.is() )
                 {
-                    rtl::OUString aToolbarResName( "private:resource/toolbar/" );
-                    rtl::OUStringBuffer aBuf( aToolbarResName );
+                    OUString aToolbarResName( "private:resource/toolbar/" );
+                    OUStringBuffer aBuf( aToolbarResName );
                     aBuf.append( pToolbarName->GetValue() );
 
                     // Evaluate Parameter
-                    rtl::OUString aToolbarName( aBuf.makeStringAndClear() );
+                    OUString aToolbarName( aBuf.makeStringAndClear() );
                     sal_Bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
                     if ( bShow )
@@ -843,18 +843,18 @@ extern "C" void basicide_macro_organizer( sal_Int16 );
 
 #endif
 
-::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
+OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const OUString& rMacroDesc = OUString() )
 {
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( "basicide_choose_macro"  );
+    OUString aSymbol( "basicide_choose_macro"  );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 #else
 #define pSymbol basicide_choose_macro
@@ -862,7 +862,7 @@ extern "C" void basicide_macro_organizer( sal_Int16 );
 
     // call basicide_choose_macro in basctl
     rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
-    ::rtl::OUString aScriptURL( pScriptURL );
+    OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
 
@@ -875,14 +875,14 @@ void MacroOrganizer( sal_Int16 nTabId )
 {
 #ifndef DISABLE_DYNLOADING
     // get basctl dllname
-    static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
+    static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
     // get symbol
-    ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
+    OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
     // call basicide_macro_organizer in basctl
     pSymbol( nTabId );
@@ -928,9 +928,9 @@ namespace
         return _pFallback;
     }
 
-    const ::rtl::OUString& lcl_getBasicIDEServiceName()
+    const OUString& lcl_getBasicIDEServiceName()
     {
-        static const ::rtl::OUString s_sBasicName( "com.sun.star.script.BasicIDE"  );
+        static const OUString s_sBasicName( "com.sun.star.script.BasicIDE"  );
         return s_sBasicName;
     }
 
@@ -960,7 +960,7 @@ namespace
                 try
                 {
                     Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
-                    ::rtl::OUString sModule = xCheck->identify( xFrame );
+                    OUString sModule = xCheck->identify( xFrame );
                     if ( sModule == "com.sun.star.frame.StartModule" )
                         return xFrame;
                 }
@@ -984,13 +984,13 @@ namespace
 #endif // !DISABLE_SCRIPTING
 }
 
-static ::rtl::OUString getConfigurationStringValue(
-    const ::rtl::OUString& rPackage,
-    const ::rtl::OUString& rRelPath,
-    const ::rtl::OUString& rKey,
-    const ::rtl::OUString& rDefaultValue )
+static OUString getConfigurationStringValue(
+    const OUString& rPackage,
+    const OUString& rRelPath,
+    const OUString& rKey,
+    const OUString& rDefaultValue )
 {
-    ::rtl::OUString aDefVal( rDefaultValue );
+    OUString aDefVal( rDefaultValue );
 
     try
     {
@@ -1060,29 +1060,29 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     css::system::SystemShellExecute::create(xContext) );
 
                 // read repository URL from configuration
-                ::rtl::OUString sTemplRepoURL =
+                OUString sTemplRepoURL =
                     getConfigurationStringValue(
-                        ::rtl::OUString("org.openoffice.Office.Common"),
-                        ::rtl::OUString("Dictionaries"),
-                        ::rtl::OUString("RepositoryURL"),
-                        ::rtl::OUString());
+                        OUString("org.openoffice.Office.Common"),
+                        OUString("Dictionaries"),
+                        OUString("RepositoryURL"),
+                        OUString());
 
                 if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
                 {
-                    ::rtl::OUStringBuffer aURLBuf( sTemplRepoURL );
+                    OUStringBuffer aURLBuf( sTemplRepoURL );
                     aURLBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM("?lang="));
 
                     // read locale from configuration
-                    ::rtl::OUString sLocale = getConfigurationStringValue(
-                        ::rtl::OUString("org.openoffice.Setup"),
-                        ::rtl::OUString("L10N"),
-                        ::rtl::OUString("ooLocale"),
-                        ::rtl::OUString("en-US"));
+                    OUString sLocale = getConfigurationStringValue(
+                        OUString("org.openoffice.Setup"),
+                        OUString("L10N"),
+                        OUString("ooLocale"),
+                        OUString("en-US"));
 
                     aURLBuf.append( sLocale );
                     xSystemShell->execute(
                         aURLBuf.makeStringAndClear(),
-                        ::rtl::OUString(),
+                        OUString(),
                         css::system::SystemShellExecuteFlags::URIS_ONLY );
                 }
             }
@@ -1115,7 +1115,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                         UNO_QUERY_THROW );
                     ::comphelper::NamedValueCollection aLoadArgs;
                     aLoadArgs.put( "Model", pBasicIDE->GetModel() );
-                    aLoadArgs.put( "URL", ::rtl::OUString( "private:factory/sbasic"  ) );
+                    aLoadArgs.put( "URL", OUString( "private:factory/sbasic"  ) );
 
                     Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( xContext ) );
                     if ( !xTargetFrame.is() )
@@ -1264,8 +1264,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 aLanguage = ((SfxScriptOrganizerItem*)pItem)->getLanguage();
             }
 
-            ::rtl::OUString aLang( aLanguage );
-            OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", ::rtl::OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+            OUString aLang( aLanguage );
+            OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
             // not sure about the Window*
             VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
@@ -1332,12 +1332,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
-            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            OUString aCmd = OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )
                 TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-            Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+            Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
             sal_Bool bSuccess = (aResult >>= aEvent) &&
                                 (aEvent.State == frame::DispatchResultState::SUCCESS);
@@ -1352,12 +1352,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = text::ModuleDispatcher::create( xContext );
 
-            ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
+            OUString aCmd = OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
             Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
             Sequence < beans::PropertyValue > aSeq;
             if ( rReq.GetArgs() )
                 TransformItems( rReq.GetSlot(), *rReq.GetArgs(), aSeq );
-            Any aResult = xHelper->executeDispatch( xProv, aCmd, ::rtl::OUString(), 0, aSeq );
+            Any aResult = xHelper->executeDispatch( xProv, aCmd, OUString(), 0, aSeq );
             frame::DispatchResultEvent aEvent;
             sal_Bool bSuccess = (aResult >>= aEvent) &&
                                 (aEvent.State == frame::DispatchResultState::SUCCESS);

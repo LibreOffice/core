@@ -104,12 +104,12 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
     {
         const css::util::ElementChange& aChange = aEvent.Changes[i];
 
-        ::rtl::OUString sOrgPath ;
-        ::rtl::OUString sTempPath;
+        OUString sOrgPath ;
+        OUString sTempPath;
 
-        ::rtl::OUString sProperty;
-        ::rtl::OUString sNode    ;
-        ::rtl::OUString sLocale  ;
+        OUString sProperty;
+        OUString sNode    ;
+        OUString sLocale  ;
 
         /*  at least we must be able to retrieve 2 path elements
             But sometimes the original path can contain 3 of them ... in case
@@ -126,8 +126,8 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         if ( ! ::utl::splitLastFromConfigurationPath(sOrgPath, sTempPath, sProperty))
         {
             sNode     = sLocale;
-            sProperty = ::rtl::OUString();
-            sLocale   = ::rtl::OUString();
+            sProperty = OUString();
+            sLocale   = OUString();
         }
         else
         {
@@ -136,7 +136,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
             {
                 sNode     = sProperty;
                 sProperty = sLocale;
-                sLocale   = ::rtl::OUString();
+                sLocale   = OUString();
             }
         }
 
@@ -154,7 +154,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
            pIt != lChangedItems.end()  ;
          ++pIt                         )
     {
-        const ::rtl::OUString& sItem = *pIt;
+        const OUString& sItem = *pIt;
         try
         {
             m_rCache.refreshItem(eType, sItem);

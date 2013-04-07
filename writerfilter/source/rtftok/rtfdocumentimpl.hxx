@@ -256,7 +256,7 @@ namespace writerfilter {
         {
             public:
                 RTFShape();
-                std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
+                std::vector< std::pair<OUString, OUString> > aProperties;
                 sal_Int32 nLeft;
                 sal_Int32 nTop;
                 sal_Int32 nRight;
@@ -405,7 +405,7 @@ namespace writerfilter {
                 int nMinute;
 
                 /// Text from special destinations.
-                rtl::OUStringBuffer aDestinationText;
+                OUStringBuffer aDestinationText;
 
                 /// Same as the int value of NS_rtf::LN_ISTD in aParagraphAttributes, for performance reasons.
                 int nCurrentStyleIndex;
@@ -441,15 +441,15 @@ namespace writerfilter {
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
                 void setSuperstream(RTFDocumentImpl *pSuperstream);
-                void setAuthor(rtl::OUString& rAuthor);
-                void setAuthorInitials(rtl::OUString& rAuthorInitials);
+                void setAuthor(OUString& rAuthor);
+                void setAuthorInitials(OUString& rAuthorInitials);
                 bool isSubstream() const;
                 void finishSubstream();
-                void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
+                void setIgnoreFirst(OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
                 uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
-                void setDestinationText(rtl::OUString& rString);
+                void setDestinationText(OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
                 void replayShapetext();
@@ -487,9 +487,9 @@ namespace writerfilter {
                 void resetSprms();
                 void resetAttributes();
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
-                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
+                void resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnoreFirst);
 
-                void text(rtl::OUString& rString);
+                void text(OUString& rString);
                 // Sends a single character to dmapper, taking care of buffering.
                 void singleChar(sal_uInt8 nValue, bool bRunProps = false);
                 // Sends run properties to dmapper, taking care of buffering.
@@ -558,15 +558,15 @@ namespace writerfilter {
                 std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
-                rtl::OUString m_aIgnoreFirst;
+                OUString m_aIgnoreFirst;
                 /// Bookmark name <-> index map.
-                std::map<rtl::OUString, int> m_aBookmarks;
+                std::map<OUString, int> m_aBookmarks;
                 /// Revision index <-> author map.
-                std::map<int, rtl::OUString> m_aAuthors;
+                std::map<int, OUString> m_aAuthors;
                 /// Annotation author of the next annotation.
-                rtl::OUString m_aAuthor;
+                OUString m_aAuthor;
                 /// Initials of author of the next annotation.
-                rtl::OUString m_aAuthorInitials;
+                OUString m_aAuthorInitials;
 
                 RTFSprms m_aFormfieldSprms;
                 RTFSprms m_aFormfieldAttributes;
@@ -592,9 +592,9 @@ namespace writerfilter {
                 /// If a frame start token is already sent to dmapper (nesting them is not OK).
                 bool m_bIsInFrame;
                 // Unicode characters are collected here so we don't have to send them one by one.
-                rtl::OUStringBuffer m_aUnicodeBuffer;
+                OUStringBuffer m_aUnicodeBuffer;
                 /// Same for hex characters.
-                rtl::OStringBuffer m_aHexBuffer;
+                OStringBuffer m_aHexBuffer;
                 /// Formula import.
                 oox::formulaimport::XmlStreamBuilder m_aMathBuffer;
                 /// Normal text property, that is math italic and math spacing are not applied to the current run.

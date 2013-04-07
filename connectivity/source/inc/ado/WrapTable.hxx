@@ -38,9 +38,9 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const;
-            void            put_Name(const ::rtl::OUString& _rName);
-            ::rtl::OUString get_Type() const;
+            OUString get_Name() const;
+            void            put_Name(const OUString& _rName);
+            OUString get_Type() const;
             WpADOColumns    get_Columns() const;
             WpADOIndexes    get_Indexes() const;
             WpADOKeys       get_Keys() const;

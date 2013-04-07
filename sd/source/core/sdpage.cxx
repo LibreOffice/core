@@ -314,7 +314,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_CHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarChart" ) );
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarChart" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
@@ -324,7 +324,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_ORGCHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarOrg" ) );
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarOrg" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
@@ -335,7 +335,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         case PRESOBJ_CALC:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( rtl::OUString( "StarCalc" ) );
+            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarCalc" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
@@ -2365,7 +2365,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         // to inside this method to work even when outliner is fetched here.
         pOutl->SetStyleSheet(0, pObj->GetStyleSheet());
 
-        rtl::OUString aString;
+        OUString aString;
 
         switch( eObjKind )
         {
@@ -2537,7 +2537,7 @@ const String& SdPage::GetName() const
     }
     else if (mePageKind == PK_HANDOUT && mbMaster)
     {
-        aCreatedPageName += rtl::OUString(" (");
+        aCreatedPageName += OUString(" (");
         aCreatedPageName += SdResId(STR_HANDOUT).toString();
         aCreatedPageName += sal_Unicode( ')' );
     }

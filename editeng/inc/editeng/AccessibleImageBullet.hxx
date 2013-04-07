@@ -67,8 +67,8 @@ namespace accessibility
         virtual sal_Int16 SAL_CALL getAccessibleRole() throw (::com::sun::star::uno::RuntimeException);
         /// Maximal length of text returned by getAccessibleDescription()
         enum { MaxDescriptionLen = 40 };
-        virtual ::rtl::OUString SAL_CALL getAccessibleDescription() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getAccessibleDescription() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getAccessibleName() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::lang::Locale SAL_CALL getLocale() throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
@@ -89,12 +89,12 @@ namespace accessibility
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService (const ::rtl::OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
 
         /** Set the current index in the accessibility parent
 

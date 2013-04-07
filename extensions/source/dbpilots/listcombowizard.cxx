@@ -164,11 +164,11 @@ namespace dbp
             // do some quotings
             if (xMetaData.is())
             {
-                ::rtl::OUString sQuoteString = xMetaData->getIdentifierQuoteString();
+                OUString sQuoteString = xMetaData->getIdentifierQuoteString();
                 if (isListBox()) // only when we have a listbox this should be not empty
                     getSettings().sLinkedListField = quoteName(sQuoteString, getSettings().sLinkedListField);
 
-                ::rtl::OUString sCatalog, sSchema, sName;
+                OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, getSettings().sListContentTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
                 getSettings().sListContentTable = ::dbtools::composeTableNameForSelect( xConn, sCatalog, sSchema, sName );
 
@@ -176,12 +176,12 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
+            getContext().xObjectModel->setPropertyValue(OUString("ListSourceType"), makeAny((sal_Int32)ListSourceType_SQL));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString("BoundColumn"), makeAny((sal_Int16)1));
+                getContext().xObjectModel->setPropertyValue(OUString("BoundColumn"), makeAny((sal_Int16)1));
 
                 // build the statement to set as list source
                 String sStatement;
@@ -191,9 +191,9 @@ namespace dbp
                 sStatement += getSettings().sLinkedListField;
                 sStatement.AppendAscii(" FROM ");
                 sStatement += getSettings().sListContentTable;
-                Sequence< ::rtl::OUString > aListSource(1);
+                Sequence< OUString > aListSource(1);
                 aListSource[0] = sStatement;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString("ListSource"), makeAny(aListSource));
+                getContext().xObjectModel->setPropertyValue(OUString("ListSource"), makeAny(aListSource));
             }
             else
             {
@@ -203,11 +203,11 @@ namespace dbp
                 sStatement += getSettings().sListContentField;
                 sStatement.AppendAscii(" FROM ");
                 sStatement += getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue(::rtl::OUString("ListSource"), makeAny(::rtl::OUString(sStatement)));
+                getContext().xObjectModel->setPropertyValue(OUString("ListSource"), makeAny(OUString(sStatement)));
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue(::rtl::OUString("DataField"), makeAny(::rtl::OUString(getSettings().sLinkedFormField)));
+            getContext().xObjectModel->setPropertyValue(OUString("DataField"), makeAny(OUString(getSettings().sLinkedFormField)));
         }
         catch(const Exception&)
         {
@@ -246,10 +246,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    Sequence< ::rtl::OUString > OLCPage::getTableFields(sal_Bool _bNeedIt)
+    Sequence< OUString > OLCPage::getTableFields(sal_Bool _bNeedIt)
     {
         Reference< XNameAccess > xTables = getTables(_bNeedIt);
-        Sequence< ::rtl::OUString > aColumnNames;
+        Sequence< OUString > aColumnNames;
         if (xTables.is())
         {
             try
@@ -335,7 +335,7 @@ namespace dbp
         try
         {
             Reference< XNameAccess > xTables = getTables(sal_True);
-            Sequence< ::rtl::OUString > aTableNames;
+            Sequence< OUString > aTableNames;
             if (xTables.is())
                 aTableNames = xTables->getElementNames();
             fillListBox(m_aSelectTable, aTableNames);

@@ -707,7 +707,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         xWrt->SetShowProgress( sal_False );
 
 #if defined(DEBUGPASTE)
-        SvFileStream aPasteDebug(rtl::OUString(
+        SvFileStream aPasteDebug(OUString(
             "PASTEBUFFER.debug"), STREAM_WRITE|STREAM_TRUNC);
         SwWriter aDbgWrt( aPasteDebug, *pDoc );
         aDbgWrt.Write( xWrt );
@@ -1553,7 +1553,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     SotStorageStreamRef xStrm;
     SvStream* pStream = 0;
     SwRead pRead = 0;
-    rtl::OUString sData;
+    OUString sData;
     switch( nFmt )
     {
     case SOT_FORMAT_STRING:
@@ -1710,7 +1710,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         // temporary storage until the object is inserted
         uno::Reference< embed::XStorage > xTmpStor;
         uno::Reference < embed::XEmbeddedObject > xObj;
-        ::rtl::OUString aName;
+        OUString aName;
            comphelper::EmbeddedObjectContainer aCnt;
 
         if ( xStrm.is() )
@@ -1734,12 +1734,12 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                     {
                         xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
                         uno::Reference < embed::XEmbedObjectClipboardCreator > xClipboardCreator(
-                            ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
+                            ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.embed.MSOLEObjectSystemCreator") ),
                             uno::UNO_QUERY_THROW );
 
                         embed::InsertedObjectInfo aInfo = xClipboardCreator->createInstanceInitFromClipboard(
                                                             xTmpStor,
-                                                            ::rtl::OUString( "DummyName" ),
+                                                            OUString( "DummyName" ),
                                                             uno::Sequence< beans::PropertyValue >() );
 
                         // TODO/LATER: in future InsertedObjectInfo will be used to get container related information
@@ -1776,7 +1776,7 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                 // it is important to have an icon, let an empty graphic be used
                 // if no other graphic is provided
                 // TODO/LATER: in future a default bitmap could be used
-                ::rtl::OUString aMimeType;
+                OUString aMimeType;
                 MapMode aMapMode( MAP_100TH_MM );
                 aGraphic.SetPrefSize( Size( 2500, 2500 ) );
                 aGraphic.SetPrefMapMode( aMapMode );
@@ -1996,7 +1996,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         int nRet = rData.GetGraphic( nFormat, aGrf );
         if( nRet )
         {
-            rtl::OUString sLnkTyp("DDE");
+            OUString sLnkTyp("DDE");
             if ( bReReadGrf )
                 rWrtShell.ReRead( aCmd, sLnkTyp, &aGrf );
             else
@@ -3458,8 +3458,8 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
 
         ::sw::mark::IMark* pMark = rSh.SetBookmark(
             KeyCode(),
-            ::rtl::OUString(),
-            ::rtl::OUString(),
+            OUString(),
+            OUString(),
             IDocumentMarkAccess::DDE_BOOKMARK);
         if(pMark)
         {
@@ -3515,11 +3515,11 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         return sal_False;
 
     rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
-    const rtl::OString aAppNm(rtl::OUStringToOString(
+    const OString aAppNm(OUStringToOString(
         GetpApp()->GetAppName(), eEncoding));
-    const rtl::OString aTopic(rtl::OUStringToOString(
+    const OString aTopic(OUStringToOString(
         pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
-    const rtl::OString aName(rtl::OUStringToOString(sName, eEncoding));
+    const OString aName(OUStringToOString(sName, eEncoding));
 
     sal_Char* pMem = new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ];
 
@@ -3555,7 +3555,7 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
             aPaM.SetMark();
             *aPaM.GetMark() = pMark->GetMarkEnd();
         }
-        ::rtl::OUString sMarkName = pMark->GetName();
+        OUString sMarkName = pMark->GetName();
 
         // remove mark
         pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark

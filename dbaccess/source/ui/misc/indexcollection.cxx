@@ -78,7 +78,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Indexes::const_iterator OIndexCollection::find(const String& _rName) const
     {
-        ::rtl::OUString sNameCompare(_rName);
+        OUString sNameCompare(_rName);
 
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
@@ -93,7 +93,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Indexes::iterator OIndexCollection::find(const String& _rName)
     {
-        ::rtl::OUString sNameCompare(_rName);
+        OUString sNameCompare(_rName);
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
@@ -108,7 +108,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Indexes::const_iterator OIndexCollection::findOriginal(const String& _rName) const
     {
-        ::rtl::OUString sNameCompare(_rName);
+        OUString sNameCompare(_rName);
 
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
@@ -123,7 +123,7 @@ namespace dbaui
     //------------------------------------------------------------------
     Indexes::iterator OIndexCollection::findOriginal(const String& _rName)
     {
-        ::rtl::OUString sNameCompare(_rName);
+        OUString sNameCompare(_rName);
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
@@ -165,9 +165,9 @@ namespace dbaui
             }
 
             // set the properties
-            static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString("IsUnique");
-            static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString("IsAscending");
-            static const ::rtl::OUString s_sNamePropertyName = ::rtl::OUString("Name");
+            static const OUString s_sUniquePropertyName = OUString("IsUnique");
+            static const OUString s_sSortPropertyName = OUString("IsAscending");
+            static const OUString s_sNamePropertyName = OUString("Name");
             // the index' own props
             xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
@@ -185,7 +185,7 @@ namespace dbaui
                 if (xColDescriptor.is())
                 {
                     xColDescriptor->setPropertyValue(s_sSortPropertyName, ::cppu::bool2any(aFieldLoop->bSortAscending));
-                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(::rtl::OUString(aFieldLoop->sFieldName)));
+                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(OUString(aFieldLoop->sFieldName)));
                     xAppendCols->appendByDescriptor(xColDescriptor);
                 }
             }
@@ -271,10 +271,10 @@ namespace dbaui
     //------------------------------------------------------------------
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
     {
-        static const ::rtl::OUString s_sPrimaryIndexPropertyName = ::rtl::OUString("IsPrimaryKeyIndex");
-        static const ::rtl::OUString s_sUniquePropertyName = ::rtl::OUString("IsUnique");
-        static const ::rtl::OUString s_sSortPropertyName = ::rtl::OUString("IsAscending");
-        static const ::rtl::OUString s_sCatalogPropertyName = ::rtl::OUString("Catalog");
+        static const OUString s_sPrimaryIndexPropertyName = OUString("IsPrimaryKeyIndex");
+        static const OUString s_sUniquePropertyName = OUString("IsUnique");
+        static const OUString s_sSortPropertyName = OUString("IsAscending");
+        static const OUString s_sCatalogPropertyName = OUString("Catalog");
 
         _rIndex.bPrimaryKey = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sPrimaryIndexPropertyName));
         _rIndex.bUnique = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sUniquePropertyName));
@@ -288,11 +288,11 @@ namespace dbaui
         OSL_ENSURE(xCols.is(), "OIndexCollection::implFillIndexInfo: the index does not have columns!");
         if (xCols.is())
         {
-            Sequence< ::rtl::OUString > aFieldNames = xCols->getElementNames();
+            Sequence< OUString > aFieldNames = xCols->getElementNames();
             _rIndex.aFields.resize(aFieldNames.getLength());
 
-            const ::rtl::OUString* pFieldNames = aFieldNames.getConstArray();
-            const ::rtl::OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
+            const OUString* pFieldNames = aFieldNames.getConstArray();
+            const OUString* pFieldNamesEnd = pFieldNames + aFieldNames.getLength();
             IndexFields::iterator aCopyTo = _rIndex.aFields.begin();
 
             Reference< XPropertySet > xIndexColumn;
@@ -362,9 +362,9 @@ namespace dbaui
         if (m_xIndexes.is())
         {
             // loop through all the indexes
-            Sequence< ::rtl::OUString > aNames = m_xIndexes->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+            Sequence< OUString > aNames = m_xIndexes->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
+            const OUString* pEnd = pNames + aNames.getLength();
             for (; pNames < pEnd; ++pNames)
             {
                 // extract the index object

@@ -55,9 +55,9 @@ namespace abp
     struct AddressSettings
     {
         AddressSourceType   eType;
-        ::rtl::OUString     sDataSourceName;
-        ::rtl::OUString     sRegisteredDataSourceName;
-        ::rtl::OUString     sSelectedTable;
+        OUString     sDataSourceName;
+        OUString     sRegisteredDataSourceName;
+        OUString     sSelectedTable;
         bool                bIgnoreNoTable;
         MapString2String    aFieldMapping;
         bool                bRegisterDataSource;

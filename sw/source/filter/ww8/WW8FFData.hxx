@@ -48,19 +48,19 @@ private:
     sal_uInt16 mnCheckboxHeight;
 
     // offset 10 and beyond
-    ::rtl::OUString msName;
-    ::rtl::OUString msDefault; // only for type == 0
+    OUString msName;
+    OUString msDefault; // only for type == 0
     sal_uInt16 mnDefault; // only for type != 0
-    ::rtl::OUString msFormat;
-    ::rtl::OUString msHelp;
-    ::rtl::OUString msStatus;
-    ::rtl::OUString msMacroEnter;
-    ::rtl::OUString msMacroExit;
+    OUString msFormat;
+    OUString msHelp;
+    OUString msStatus;
+    OUString msMacroEnter;
+    OUString msMacroExit;
 
-    ::std::vector< ::rtl::OUString > msListEntries;
+    ::std::vector< OUString > msListEntries;
 
 protected:
-    void WriteOUString(SvStream * pStream, const ::rtl::OUString & rStr, bool bAddZero);
+    void WriteOUString(SvStream * pStream, const OUString & rStr, bool bAddZero);
 
 public:
     WW8FFData();
@@ -84,24 +84,24 @@ public:
     sal_uInt16 getMaxLen() const { return mnMaxLen; }
     void setCheckboxHeight(sal_uInt16 nCheckboxHeight) { mnCheckboxHeight = nCheckboxHeight; }
     sal_uInt16 getCheckboxHeight() const { return mnCheckboxHeight; }
-    void setName(const ::rtl::OUString & rName) { msName = rName; }
-    const ::rtl::OUString & getName() const { return msName; }
-    void setDefaultString(const ::rtl::OUString & rDefault) { msDefault = rDefault; }
-    const ::rtl::OUString & getDefaultString() const { return msDefault; }
+    void setName(const OUString & rName) { msName = rName; }
+    const OUString & getName() const { return msName; }
+    void setDefaultString(const OUString & rDefault) { msDefault = rDefault; }
+    const OUString & getDefaultString() const { return msDefault; }
     void setDefaultResult(sal_uInt16 nDefault) { mnDefault = nDefault; }
     sal_uInt16 getDefaultResult() const { return mnDefault; }
-    void setFormat(const ::rtl::OUString & rFormat) { msFormat = rFormat; }
-    const ::rtl::OUString & getFormat() const { return msFormat; }
-    void setHelp(const ::rtl::OUString & rHelp);
-    const ::rtl::OUString getHelp() const { return msHelp; }
-    void setStatus(const ::rtl::OUString & rStatus);
-    const ::rtl::OUString & getStatus() const { return msStatus; }
-    void setMacroEnter(const ::rtl::OUString & rMacroEnter) { msMacroEnter = rMacroEnter; }
-    const ::rtl::OUString & getMacroEnter() const { return msMacroEnter; }
-    void setMacroExit(const ::rtl::OUString & rMacroExit) { msMacroExit = rMacroExit; }
-    const ::rtl::OUString & getMacroExit() const { return msMacroExit; }
+    void setFormat(const OUString & rFormat) { msFormat = rFormat; }
+    const OUString & getFormat() const { return msFormat; }
+    void setHelp(const OUString & rHelp);
+    const OUString getHelp() const { return msHelp; }
+    void setStatus(const OUString & rStatus);
+    const OUString & getStatus() const { return msStatus; }
+    void setMacroEnter(const OUString & rMacroEnter) { msMacroEnter = rMacroEnter; }
+    const OUString & getMacroEnter() const { return msMacroEnter; }
+    void setMacroExit(const OUString & rMacroExit) { msMacroExit = rMacroExit; }
+    const OUString & getMacroExit() const { return msMacroExit; }
 
-    void addListboxEntry(const ::rtl::OUString & rEntry);
+    void addListboxEntry(const OUString & rEntry);
 
     void Write(SvStream * pDataStrm);
 };

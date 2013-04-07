@@ -191,7 +191,7 @@ void SvpSalFrame::PostPaint(bool bImmediate) const
     }
 }
 
-void SvpSalFrame::SetTitle( const rtl::OUString& )
+void SvpSalFrame::SetTitle( const OUString& )
 {
 }
 
@@ -400,9 +400,9 @@ void SvpSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
-rtl::OUString SvpSalFrame::GetKeyName( sal_uInt16 )
+OUString SvpSalFrame::GetKeyName( sal_uInt16 )
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )

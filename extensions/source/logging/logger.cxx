@@ -66,10 +66,10 @@ namespace logging
     //====================================================================
     namespace
     {
-        sal_Bool lcl_supportsService_nothrow( XServiceInfo& _rSI, const ::rtl::OUString& _rServiceName )
+        sal_Bool lcl_supportsService_nothrow( XServiceInfo& _rSI, const OUString& _rServiceName )
         {
-            const Sequence< ::rtl::OUString > aServiceNames( _rSI.getSupportedServiceNames() );
-            for (   const ::rtl::OUString* pServiceNames = aServiceNames.getConstArray();
+            const Sequence< OUString > aServiceNames( _rSI.getSupportedServiceNames() );
+            for (   const OUString* pServiceNames = aServiceNames.getConstArray();
                     pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
                     ++pServiceNames
                 )
@@ -95,26 +95,26 @@ namespace logging
 
         // <attributes>
         sal_Int32       m_nLogLevel;
-        ::rtl::OUString m_sName;
+        OUString m_sName;
         // </attributes>
 
     public:
-        EventLogger( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rName );
+        EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName );
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
         // XLogger
-        virtual ::rtl::OUString SAL_CALL getName() throw (RuntimeException);
+        virtual OUString SAL_CALL getName() throw (RuntimeException);
         virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException);
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException);
         virtual void SAL_CALL addLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException);
         virtual void SAL_CALL removeLogHandler( const Reference< XLogHandler >& LogHandler ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL isLoggable( ::sal_Int32 _nLevel ) throw (RuntimeException);
-        virtual void SAL_CALL log( ::sal_Int32 Level, const ::rtl::OUString& Message ) throw (RuntimeException);
-        virtual void SAL_CALL logp( ::sal_Int32 Level, const ::rtl::OUString& SourceClass, const ::rtl::OUString& SourceMethod, const ::rtl::OUString& Message ) throw (RuntimeException);
+        virtual void SAL_CALL log( ::sal_Int32 Level, const OUString& Message ) throw (RuntimeException);
+        virtual void SAL_CALL logp( ::sal_Int32 Level, const OUString& SourceClass, const OUString& SourceMethod, const OUString& Message ) throw (RuntimeException);
 
     protected:
         ~EventLogger();
@@ -141,7 +141,7 @@ namespace logging
     class LoggerPool : public LoggerPool_Base
     {
     private:
-        typedef ::std::map< ::rtl::OUString, WeakReference< XLogger > > ImplPool;
+        typedef ::std::map< OUString, WeakReference< XLogger > > ImplPool;
 
     private:
         ::osl::Mutex                    m_aMutex;
@@ -152,18 +152,18 @@ namespace logging
         LoggerPool( const Reference< XComponentContext >& _rxContext );
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
         // helper for factories
-        static Sequence< ::rtl::OUString > getSupportedServiceNames_static();
-        static ::rtl::OUString  getImplementationName_static();
-        static ::rtl::OUString  getSingletonName_static();
+        static Sequence< OUString > getSupportedServiceNames_static();
+        static OUString  getImplementationName_static();
+        static OUString  getSingletonName_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
         // XLoggerPool
-        virtual Reference< XLogger > SAL_CALL getNamedLogger( const ::rtl::OUString& Name ) throw (RuntimeException);
+        virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) throw (RuntimeException);
         virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException);
     };
 
@@ -171,7 +171,7 @@ namespace logging
     //= EventLogger - implementation
     //====================================================================
     //--------------------------------------------------------------------
-    EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const ::rtl::OUString& _rName )
+    EventLogger::EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName )
         :m_aContext( _rxContext )
         ,m_aHandlers( m_aMutex )
         ,m_nEventNumber( 0 )
@@ -217,7 +217,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EventLogger::getName() throw (RuntimeException)
+    OUString SAL_CALL EventLogger::getName() throw (RuntimeException)
     {
         return m_sName;
     }
@@ -258,7 +258,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventLogger::log( ::sal_Int32 _nLevel, const ::rtl::OUString& _rMessage ) throw (RuntimeException)
+    void SAL_CALL EventLogger::log( ::sal_Int32 _nLevel, const OUString& _rMessage ) throw (RuntimeException)
     {
         impl_ts_logEvent_nothrow( createLogRecord(
             m_sName,
@@ -269,7 +269,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventLogger::logp( ::sal_Int32 _nLevel, const ::rtl::OUString& _rSourceClass, const ::rtl::OUString& _rSourceMethod, const ::rtl::OUString& _rMessage ) throw (RuntimeException)
+    void SAL_CALL EventLogger::logp( ::sal_Int32 _nLevel, const OUString& _rSourceClass, const OUString& _rSourceMethod, const OUString& _rMessage ) throw (RuntimeException)
     {
         impl_ts_logEvent_nothrow( createLogRecord(
             m_sName,
@@ -282,22 +282,22 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EventLogger::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL EventLogger::getImplementationName() throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.EventLogger" );
+        return OUString( "com.sun.star.comp.extensions.EventLogger" );
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool EventLogger::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool EventLogger::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
         return lcl_supportsService_nothrow( *this, _rServiceName );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL EventLogger::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.Logger" );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString( "com.sun.star.logging.Logger" );
         return aServiceNames;
     }
 
@@ -311,41 +311,41 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL LoggerPool::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL LoggerPool::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL LoggerPool::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL LoggerPool::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
         return lcl_supportsService_nothrow( *this, _rServiceName );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL LoggerPool::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL LoggerPool::getImplementationName_static()
+    OUString SAL_CALL LoggerPool::getImplementationName_static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.LoggerPool" );
+        return OUString( "com.sun.star.comp.extensions.LoggerPool" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
+    Sequence< OUString > SAL_CALL LoggerPool::getSupportedServiceNames_static()
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
+        Sequence< OUString > aServiceNames(1);
         aServiceNames[0] = getSingletonName_static();
         return aServiceNames;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString LoggerPool::getSingletonName_static()
+    OUString LoggerPool::getSingletonName_static()
     {
-        return ::rtl::OUString( "com.sun.star.logging.LoggerPool" );
+        return OUString( "com.sun.star.logging.LoggerPool" );
     }
 
     //--------------------------------------------------------------------
@@ -355,7 +355,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const ::rtl::OUString& _rName ) throw (RuntimeException)
+    Reference< XLogger > SAL_CALL LoggerPool::getNamedLogger( const OUString& _rName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -374,7 +374,7 @@ namespace logging
     //--------------------------------------------------------------------
     Reference< XLogger > SAL_CALL LoggerPool::getDefaultLogger(  ) throw (RuntimeException)
     {
-        return getNamedLogger( ::rtl::OUString( "org.openoffice.logging.DefaultLogger" ) );
+        return getNamedLogger( OUString( "org.openoffice.logging.DefaultLogger" ) );
     }
 
     //--------------------------------------------------------------------

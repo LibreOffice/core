@@ -32,7 +32,7 @@ private:
     SvGlobalName    aOleId;
     String          sCategory;
     sal_uInt16          nNumType;
-    ::rtl::OUString sNumberSeparator;
+    OUString sNumberSeparator;
     String          sCaption;
     sal_uInt16          nPos;
     sal_uInt16          nLevel;
@@ -62,8 +62,8 @@ public:
     inline sal_uInt16           GetNumType() const              { return nNumType; }
     inline void             SetNumType(const sal_uInt16 nNT)    { nNumType = nNT; }
 
-    const ::rtl::OUString&  GetNumSeparator() const { return sNumberSeparator; }
-    void                    SetNumSeparator(const ::rtl::OUString& rSet) {sNumberSeparator = rSet;}
+    const OUString&  GetNumSeparator() const { return sNumberSeparator; }
+    void                    SetNumSeparator(const OUString& rSet) {sNumberSeparator = rSet;}
 
     inline const String&    GetCaption() const              { return sCaption; }
     inline void             SetCaption(const String& rCap)  { sCaption = rCap; }

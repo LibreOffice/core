@@ -46,8 +46,8 @@ class TextSearch: public cppu::WeakImplHelper2
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::util::SearchOptions aSrchPara;
-    ::rtl::OUString sSrchStr;
-    ::rtl::OUString sSrchStr2;
+    OUString sSrchStr;
+    OUString sSrchStr2;
 
     mutable com::sun::star::uno::Reference<
         com::sun::star::i18n::XCharacterClassification > xCharClass;
@@ -59,7 +59,7 @@ class TextSearch: public cppu::WeakImplHelper2
 
     // define a function pointer for the different search nethods
     typedef ::com::sun::star::util::SearchResult
-        (SAL_CALL TextSearch:: *FnSrch)( const ::rtl::OUString& searchStr,
+        (SAL_CALL TextSearch:: *FnSrch)( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     FnSrch fnForward;
@@ -76,22 +76,22 @@ class TextSearch: public cppu::WeakImplHelper2
     void MakeBackwardTab2();
     sal_Int32 GetDiff( const sal_Unicode ) const;
     ::com::sun::star::util::SearchResult SAL_CALL
-        NSrchFrwrd( const ::rtl::OUString& searchStr,
+        NSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::util::SearchResult SAL_CALL
-        NSrchBkwrd( const ::rtl::OUString& searchStr,
+        NSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
 
     // Members and methods for the regular expression search
     RegexMatcher* pRegexMatcher;
     ::com::sun::star::util::SearchResult SAL_CALL
-        RESrchFrwrd( const ::rtl::OUString& searchStr,
+        RESrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::util::SearchResult SAL_CALL
-        RESrchBkwrd( const ::rtl::OUString& searchStr,
+        RESrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
     void RESrchPrepare( const ::com::sun::star::util::SearchOptions&);
@@ -101,18 +101,18 @@ class TextSearch: public cppu::WeakImplHelper2
     WLevDistance* pWLD;
     com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > xBreak;
     ::com::sun::star::util::SearchResult SAL_CALL
-        ApproxSrchFrwrd( const ::rtl::OUString& searchStr,
+        ApproxSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::util::SearchResult SAL_CALL
-        ApproxSrchBkwrd( const ::rtl::OUString& searchStr,
+        ApproxSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
 
-    bool IsDelimiter( const ::rtl::OUString& rStr, sal_Int32 nPos ) const;
+    bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
     sal_Bool checkCTLStart, checkCTLEnd;
-    sal_Bool SAL_CALL isCellStart(const ::rtl::OUString& searchStr, sal_Int32 nPos)
+    sal_Bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos)
                             throw(::com::sun::star::uno::RuntimeException);
 
 public:
@@ -126,20 +126,20 @@ public:
         setOptions( const ::com::sun::star::util::SearchOptions& options )
                             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::util::SearchResult SAL_CALL
-        searchForward( const ::rtl::OUString& searchStr,
+        searchForward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::util::SearchResult SAL_CALL
-        searchBackward( const ::rtl::OUString& searchStr,
+        searchBackward( const OUString& searchStr,
                         sal_Int32 startPos, sal_Int32 endPos )
                             throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
                 throw( ::com::sun::star::uno::RuntimeException );
 };
 

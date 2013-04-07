@@ -73,16 +73,16 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString DefaultHelpProvider::getImplementationName_static(  ) throw(RuntimeException)
+    OUString DefaultHelpProvider::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.extensions.DefaultHelpProvider");
+        return OUString("org.openoffice.comp.extensions.DefaultHelpProvider");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > DefaultHelpProvider::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.inspection.DefaultHelpProvider");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.inspection.DefaultHelpProvider");
         return aSupported;
     }
 
@@ -96,7 +96,7 @@ namespace pcr
     void SAL_CALL DefaultHelpProvider::focusGained( const Reference< XPropertyControl >& _Control ) throw (RuntimeException)
     {
         if ( !m_xInspectorUI.is() )
-            throw RuntimeException( ::rtl::OUString(), *this );
+            throw RuntimeException( OUString(), *this );
 
         try
         {
@@ -128,14 +128,14 @@ namespace pcr
             return;
         }
 
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
     //--------------------------------------------------------------------
     void DefaultHelpProvider::create( const Reference< XObjectInspectorUI >& _rxUI )
     {
         if ( !_rxUI.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         try
         {
@@ -172,9 +172,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString DefaultHelpProvider::impl_getHelpText_nothrow( const Reference< XPropertyControl >& _rxControl )
+    OUString DefaultHelpProvider::impl_getHelpText_nothrow( const Reference< XPropertyControl >& _rxControl )
     {
-        ::rtl::OUString sHelpText;
+        OUString sHelpText;
         OSL_PRECOND( _rxControl.is(), "DefaultHelpProvider::impl_getHelpText_nothrow: illegal control!" );
         if ( !_rxControl.is() )
             return sHelpText;

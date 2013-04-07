@@ -35,10 +35,10 @@ namespace connectivity
         OSQLInternalNode(const sal_Char* pNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const ::rtl::OString& _rNewValue,
+        OSQLInternalNode(const OString& _rNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
-        OSQLInternalNode(const ::rtl::OUString& _rNewValue,
+        OSQLInternalNode(const OUString& _rNewValue,
                          SQLNodeType eNodeType,
                          sal_uInt32 nNodeID = 0);
 

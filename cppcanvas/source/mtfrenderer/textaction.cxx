@@ -239,7 +239,7 @@ namespace cppcanvas
             void initArrayAction( rendering::RenderState&                   o_rRenderState,
                                   uno::Reference< rendering::XTextLayout >& o_rTextLayout,
                                   const ::basegfx::B2DPoint&                rStartPoint,
-                                  const ::rtl::OUString&                    rText,
+                                  const OUString&                    rText,
                                   sal_Int32                                 nStartPos,
                                   sal_Int32                                 nLen,
                                   const uno::Sequence< double >&            rOffsets,
@@ -620,14 +620,14 @@ namespace cppcanvas
             {
             public:
                 TextAction( const ::basegfx::B2DPoint&  rStartPoint,
-                            const ::rtl::OUString&      rString,
+                            const OUString&      rString,
                             sal_Int32                   nStartPos,
                             sal_Int32                   nLen,
                             const CanvasSharedPtr&      rCanvas,
                             const OutDevState&          rState );
 
                 TextAction( const ::basegfx::B2DPoint&      rStartPoint,
-                            const ::rtl::OUString&          rString,
+                            const OUString&          rString,
                             sal_Int32                       nStartPos,
                             sal_Int32                       nLen,
                             const CanvasSharedPtr&          rCanvas,
@@ -660,7 +660,7 @@ namespace cppcanvas
             };
 
             TextAction::TextAction( const ::basegfx::B2DPoint&  rStartPoint,
-                                    const ::rtl::OUString&      rString,
+                                    const OUString&      rString,
                                     sal_Int32                   nStartPos,
                                     sal_Int32                   nLen,
                                     const CanvasSharedPtr&      rCanvas,
@@ -680,7 +680,7 @@ namespace cppcanvas
             }
 
             TextAction::TextAction( const ::basegfx::B2DPoint&      rStartPoint,
-                                    const ::rtl::OUString&          rString,
+                                    const OUString&          rString,
                                     sal_Int32                       nStartPos,
                                     sal_Int32                       nLen,
                                     const CanvasSharedPtr&          rCanvas,
@@ -780,7 +780,7 @@ namespace cppcanvas
                                   const ::Color&             rReliefColor,
                                   const ::basegfx::B2DSize&  rShadowOffset,
                                   const ::Color&             rShadowColor,
-                                  const ::rtl::OUString&     rText,
+                                  const OUString&     rText,
                                   sal_Int32                  nStartPos,
                                   sal_Int32                  nLen,
                                   VirtualDevice&             rVDev,
@@ -792,7 +792,7 @@ namespace cppcanvas
                                   const ::Color&                    rReliefColor,
                                   const ::basegfx::B2DSize&         rShadowOffset,
                                   const ::Color&                    rShadowColor,
-                                  const ::rtl::OUString&            rText,
+                                  const OUString&            rText,
                                   sal_Int32                         nStartPos,
                                   sal_Int32                         nLen,
                                   VirtualDevice&                    rVDev,
@@ -841,7 +841,7 @@ namespace cppcanvas
                                                 const ::Color&             rReliefColor,
                                                 const ::basegfx::B2DSize&  rShadowOffset,
                                                 const ::Color&             rShadowColor,
-                                                const ::rtl::OUString&     rText,
+                                                const OUString&     rText,
                                                 sal_Int32                  nStartPos,
                                                 sal_Int32                  nLen,
                                                 VirtualDevice&             rVDev,
@@ -880,7 +880,7 @@ namespace cppcanvas
                                                 const ::Color&                  rReliefColor,
                                                 const ::basegfx::B2DSize&       rShadowOffset,
                                                 const ::Color&                  rShadowColor,
-                                                const ::rtl::OUString&          rText,
+                                                const OUString&          rText,
                                                 sal_Int32                       nStartPos,
                                                 sal_Int32                       nLen,
                                                 VirtualDevice&                  rVDev,
@@ -1014,7 +1014,7 @@ namespace cppcanvas
             {
             public:
                 TextArrayAction( const ::basegfx::B2DPoint&     rStartPoint,
-                                 const ::rtl::OUString&         rString,
+                                 const OUString&         rString,
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
@@ -1022,7 +1022,7 @@ namespace cppcanvas
                                  const OutDevState&             rState );
 
                 TextArrayAction( const ::basegfx::B2DPoint&     rStartPoint,
-                                 const ::rtl::OUString&         rString,
+                                 const OUString&         rString,
                                  sal_Int32                      nStartPos,
                                  sal_Int32                      nLen,
                                  const uno::Sequence< double >& rOffsets,
@@ -1054,7 +1054,7 @@ namespace cppcanvas
             };
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
-                                              const ::rtl::OUString&            rString,
+                                              const OUString&            rString,
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
@@ -1076,7 +1076,7 @@ namespace cppcanvas
             }
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
-                                              const ::rtl::OUString&            rString,
+                                              const OUString&            rString,
                                               sal_Int32                         nStartPos,
                                               sal_Int32                         nLen,
                                               const uno::Sequence< double >&    rOffsets,
@@ -1199,7 +1199,7 @@ namespace cppcanvas
                                        const ::Color&                   rReliefColor,
                                        const ::basegfx::B2DSize&        rShadowOffset,
                                        const ::Color&                   rShadowColor,
-                                       const ::rtl::OUString&           rText,
+                                       const OUString&           rText,
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
@@ -1211,7 +1211,7 @@ namespace cppcanvas
                                        const ::Color&                   rReliefColor,
                                        const ::basegfx::B2DSize&        rShadowOffset,
                                        const ::Color&                   rShadowColor,
-                                       const ::rtl::OUString&           rText,
+                                       const OUString&           rText,
                                        sal_Int32                        nStartPos,
                                        sal_Int32                        nLen,
                                        const uno::Sequence< double >&   rOffsets,
@@ -1258,7 +1258,7 @@ namespace cppcanvas
                                                           const ::Color&                    rReliefColor,
                                                           const ::basegfx::B2DSize&         rShadowOffset,
                                                           const ::Color&                    rShadowColor,
-                                                          const ::rtl::OUString&            rText,
+                                                          const OUString&            rText,
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,
@@ -1298,7 +1298,7 @@ namespace cppcanvas
                                                           const ::Color&                    rReliefColor,
                                                           const ::basegfx::B2DSize&         rShadowOffset,
                                                           const ::Color&                    rShadowColor,
-                                                          const ::rtl::OUString&            rText,
+                                                          const OUString&            rText,
                                                           sal_Int32                         nStartPos,
                                                           sal_Int32                         nLen,
                                                           const uno::Sequence< double >&    rOffsets,

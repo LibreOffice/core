@@ -58,7 +58,7 @@ namespace dbaui
                         m_xFrameLoader;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
                         m_xApplication;
-        ::rtl::OUString m_sComponentURL;
+        OUString m_sComponentURL;
 
 
     private:
@@ -83,14 +83,14 @@ namespace dbaui
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
             const ::com::sun::star::uno::Any& _rDataSource,
-            const ::rtl::OUString& _rObjectName,
+            const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
         );
 
         virtual void fillDispatchArgs(
                           ::comphelper::NamedValueCollection& i_rDispatchArgs,
                     const ::com::sun::star::uno::Any& _rDataSource,
-                    const ::rtl::OUString& _rObjectName
+                    const OUString& _rObjectName
                 );
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >&
@@ -103,7 +103,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            const ::rtl::OUString& _rComponentURL
+            const OUString& _rComponentURL
         );
         virtual ~DatabaseObjectView(){}
 
@@ -144,7 +144,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             openExisting(
                 const ::com::sun::star::uno::Any& _aDataSource,
-                const ::rtl::OUString& _rName,
+                const OUString& _rName,
                 const ::comphelper::NamedValueCollection& i_rDispatchArgs
             );
     };
@@ -161,7 +161,7 @@ namespace dbaui
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
-            const ::rtl::OUString& _rObjectName
+            const OUString& _rObjectName
         );
 
     public:
@@ -182,12 +182,12 @@ namespace dbaui
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
-            const ::rtl::OUString& _rObjectName
+            const OUString& _rObjectName
         );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > doCreateView(
             const ::com::sun::star::uno::Any& _rDataSource,
-            const ::rtl::OUString& _rObjectName,
+            const OUString& _rObjectName,
             const ::comphelper::NamedValueCollection& i_rCreationArgs
         );
 
@@ -208,7 +208,7 @@ namespace dbaui
             @see com::sun::star::sdb::application::XTableUIProvider
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                impl_getConnectionProvidedDesigner_nothrow( const ::rtl::OUString& _rTableName );
+                impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName );
     };
 
     //======================================================================
@@ -223,7 +223,7 @@ namespace dbaui
         virtual void fillDispatchArgs(
                   ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const ::com::sun::star::uno::Any& _aDataSource,
-            const ::rtl::OUString& _rQualifiedName
+            const OUString& _rQualifiedName
         );
 
     public:

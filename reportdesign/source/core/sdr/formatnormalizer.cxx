@@ -111,7 +111,7 @@ namespace rptui
     }
 
     //--------------------------------------------------------------------
-    void FormatNormalizer::impl_onDefinitionPropertyChange( const ::rtl::OUString& _rChangedPropName )
+    void FormatNormalizer::impl_onDefinitionPropertyChange( const OUString& _rChangedPropName )
     {
         if  ( _rChangedPropName != "Command" && _rChangedPropName != "CommandType" && _rChangedPropName != "EscapeProcessing" )
             // nothing we're interested in
@@ -120,7 +120,7 @@ namespace rptui
     }
 
     //--------------------------------------------------------------------
-    void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const ::rtl::OUString& _rChangedPropName )
+    void FormatNormalizer::impl_onFormattedProperttyChange( const Reference< XFormattedField >& _rxFormatted, const OUString& _rChangedPropName )
     {
         if  ( _rChangedPropName != "DataField" )
             // nothing we're interested in
@@ -145,10 +145,10 @@ namespace rptui
                 for ( sal_Int32 i=0; i<nCount; ++i )
                 {
                     xColumn.set( _rxColumns->getByIndex( i ), UNO_QUERY_THROW );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Name"       ) ) >>= aField.sName       );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Type"       ) ) >>= aField.nDataType   );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "Scale"      ) ) >>= aField.nScale      );
-                    OSL_VERIFY( xColumn->getPropertyValue( ::rtl::OUString( "IsCurrency" ) ) >>= aField.bIsCurrency );
+                    OSL_VERIFY( xColumn->getPropertyValue( OUString( "Name"       ) ) >>= aField.sName       );
+                    OSL_VERIFY( xColumn->getPropertyValue( OUString( "Type"       ) ) >>= aField.nDataType   );
+                    OSL_VERIFY( xColumn->getPropertyValue( OUString( "Scale"      ) ) >>= aField.nScale      );
+                    OSL_VERIFY( xColumn->getPropertyValue( OUString( "IsCurrency" ) ) >>= aField.bIsCurrency );
                     _inout_rFields.push_back( aField );
                 }
             }
@@ -221,8 +221,8 @@ namespace rptui
                 // it's not the "standard numeric" format -> not interested in
                 return;
 
-            ::rtl::OUString sDataField( _rxFormatted->getDataField() );
-            const ::rtl::OUString sFieldPrefix( "field:[" );
+            OUString sDataField( _rxFormatted->getDataField() );
+            const OUString sFieldPrefix( "field:[" );
             if ( sDataField.indexOf( sFieldPrefix ) != 0 )
                 // not bound to a table field
                 // TODO: we might also do this kind of thing for functions and expressions ...

@@ -60,17 +60,17 @@ MQueryHelperResultEntry::getCard()
 {
     return m_Card;
 }
-void MQueryHelperResultEntry::insert( const rtl::OString &key, rtl::OUString &value )
+void MQueryHelperResultEntry::insert( const OString &key, OUString &value )
 {
     m_Fields[ key ] = value;
 }
 
-rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
+OUString MQueryHelperResultEntry::getValue( const OString &key ) const
 {
     FieldMap::const_iterator iter = m_Fields.find( key );
     if ( iter == m_Fields.end() )
     {
-        return rtl::OUString();
+        return OUString();
     }
     else
     {
@@ -78,7 +78,7 @@ rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
     }
 }
 
-void MQueryHelperResultEntry::setValue( const rtl::OString &key, const rtl::OUString & rValue)
+void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rValue)
 {
     m_Fields[ key ] = rValue;
 }

@@ -105,7 +105,7 @@ public:
             value.
     */
     void SetAccessibleDescription (
-        const ::rtl::OUString& rsDescription,
+        const OUString& rsDescription,
         StringOrigin eDescriptionOrigin)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -119,7 +119,7 @@ public:
             numerical value overrides one with a higher value.
     */
     void SetAccessibleName (
-        const ::rtl::OUString& rsName,
+        const OUString& rsName,
         StringOrigin eNameOrigin)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -205,12 +205,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -253,20 +253,20 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const ::rtl::OUString& sServiceName)
+        supportsService (const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext service.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -306,7 +306,7 @@ protected:
             The returned string is a unique (among the accessible object's
             siblings) name.
     */
-    virtual ::rtl::OUString CreateAccessibleName (void)
+    virtual OUString CreateAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Create the accessible object's descriptive string.  May be called
@@ -314,7 +314,7 @@ protected:
         @return
             Descriptive string.  Not necessarily unique.
     */
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -353,7 +353,7 @@ private:
         be set from the outside.  Furthermore, it changes according the the
         draw page's display mode.
     */
-    ::rtl::OUString msDescription;
+    OUString msDescription;
 
     /** The origin of the description is used to determine whether new
         descriptions given to the SetAccessibleDescription is ignored or
@@ -364,7 +364,7 @@ private:
     /** Name of this object.  It changes according the draw page's
         display mode.
     */
-    ::rtl::OUString msName;
+    OUString msName;
 
     /** The origin of the name is used to determine whether new
         name given to the SetAccessibleName is ignored or

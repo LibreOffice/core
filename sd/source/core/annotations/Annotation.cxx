@@ -34,7 +34,6 @@
 #include "sdpage.hxx"
 #include "textapi.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
@@ -45,7 +44,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star;
 
-extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const Reference< XInterface >& xSource );
+extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const OUString& rEventName, const Reference< XInterface >& xSource );
 
 namespace sd {
 
@@ -170,7 +169,7 @@ void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 
 Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* pPage )
 : ::cppu::WeakComponentImplHelper1< XAnnotation >(m_aMutex)
-, ::cppu::PropertySetMixin< XAnnotation >(context, static_cast< Implements >(IMPLEMENTS_PROPERTY_SET), Sequence< ::rtl::OUString >())
+, ::cppu::PropertySetMixin< XAnnotation >(context, static_cast< Implements >(IMPLEMENTS_PROPERTY_SET), Sequence< OUString >())
 , mpPage( pPage )
 {
 }

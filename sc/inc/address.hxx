@@ -250,7 +250,7 @@ public:
 
     struct ExternalInfo
     {
-        ::rtl::OUString maTabName;
+        OUString maTabName;
         sal_uInt16  mnFileId;
         bool        mbExternal;
 
@@ -293,7 +293,7 @@ public:
                   const ::com::sun::star::uno::Sequence<
                     const ::com::sun::star::sheet::ExternalLinkInfo > * pExternalLinks = NULL );
 
-    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
     SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const Details& rDetails = detailsOOOa1) const;
@@ -493,7 +493,7 @@ public:
     SC_DLLPUBLIC void Format( String&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
-    SC_DLLPUBLIC void Format( rtl::OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
+    SC_DLLPUBLIC void Format( OUString&, sal_uInt16 = 0, const ScDocument* = NULL,
                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 ) const;
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
@@ -774,18 +774,18 @@ bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         ScAddress::ExternalInfo* pExtInfo = NULL );
 
 /// append alpha representation of column to buffer
-SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);
+SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);
 
 inline void ScColToAlpha( String& rStr, SCCOL nCol)
 {
-    rtl::OUStringBuffer aBuf(2);
+    OUStringBuffer aBuf(2);
     ScColToAlpha( aBuf, nCol);
     rStr.Append( aBuf.getStr(), static_cast<xub_StrLen>(aBuf.getLength()));
 }
 
 inline String ScColToAlpha( SCCOL nCol )
 {
-    rtl::OUStringBuffer aBuf(2);
+    OUStringBuffer aBuf(2);
     ScColToAlpha( aBuf, nCol);
     return aBuf.makeStringAndClear();
 }

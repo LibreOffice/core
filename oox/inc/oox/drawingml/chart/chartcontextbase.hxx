@@ -48,7 +48,7 @@ template< typename ModelType >
 class FragmentBase : public ::oox::core::FragmentHandler2
 {
 public:
-    explicit            FragmentBase( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, ModelType& rModel ) :
+    explicit            FragmentBase( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, ModelType& rModel ) :
                             ::oox::core::FragmentHandler2( rFilter, rFragmentPath, false ), mrModel( rModel ) {}
     virtual             ~FragmentBase() {}
 

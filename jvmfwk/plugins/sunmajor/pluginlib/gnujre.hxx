@@ -29,7 +29,7 @@ namespace jfw_plugin
 class GnuInfo: public VendorBase
 {
 private:
-    rtl::OUString m_sJavaHome;
+    OUString m_sJavaHome;
 public:
     static char const* const* getJavaExePaths(int * size);
 
@@ -38,8 +38,8 @@ public:
     virtual char const* const* getRuntimePaths(int * size);
 
     virtual bool initialize(
-        std::vector<std::pair<rtl::OUString, rtl::OUString> > props);
-    virtual int compareVersions(const rtl::OUString& sSecond) const;
+        std::vector<std::pair<OUString, OUString> > props);
+    virtual int compareVersions(const OUString& sSecond) const;
 
 };
 

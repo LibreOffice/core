@@ -54,7 +54,7 @@ public:
     virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
     virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
     virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual rtl::OUString             GetDefaultPrinter();
+    virtual OUString             GetDefaultPrinter();
     virtual SalTimer*           CreateSalTimer();
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
@@ -72,7 +72,7 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* );
     virtual SalSession*                         CreateSalSession();
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };

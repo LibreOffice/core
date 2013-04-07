@@ -35,7 +35,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 static SvtHelpOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;
@@ -70,8 +69,8 @@ class SvtHelpOptions_Impl : public utl::ConfigItem
 public:
                     SvtHelpOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-    void            Load( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aPropertyNames);
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    void            Load( const ::com::sun::star::uno::Sequence< OUString>& aPropertyNames);
     virtual void    Commit();
 
     void            SetExtendedHelp( sal_Bool b )           { bExtendedHelp= b; SetModified(); }
@@ -102,7 +101,7 @@ protected:
     void    implLoadURLCounters();
     void    implSaveURLCounters();
     // to be called with aIgnoreCounterSafety locked
-    void    implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounter );
+    void    implGetURLCounters( Sequence< OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounter );
 };
 
 Sequence< OUString > SvtHelpOptions_Impl::GetPropertyNames()
@@ -162,8 +161,8 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
 }
 
 // -----------------------------------------------------------------------
-static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
-                const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
+static int lcl_MapPropertyName( const OUString rCompare,
+                const uno::Sequence< OUString>& aInternalPropertyNames)
 {
     for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
     {
@@ -173,9 +172,9 @@ static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
     return -1;
 }
 
-void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rPropertyNames)
+void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
 {
-    const uno::Sequence< ::rtl::OUString> aInternalPropertyNames( GetPropertyNames());
+    const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > aValues = GetProperties( rPropertyNames );
     const Any* pValues = aValues.getConstArray();
     DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
@@ -189,7 +188,7 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
             if ( pValues[nProp].hasValue() )
             {
                 sal_Bool bTmp = sal_Bool();
-                ::rtl::OUString aTmpStr;
+                OUString aTmpStr;
                 sal_Int32 nTmpInt = 0;
                 if ( pValues[nProp] >>= bTmp )
                 {
@@ -260,29 +259,29 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< ::rtl::OUString>& rProperty
 
 // -----------------------------------------------------------------------
 
-void SvtHelpOptions_Impl::implGetURLCounters( Sequence< ::rtl::OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounters )
+void SvtHelpOptions_Impl::implGetURLCounters( Sequence< OUString >& _rNodeNames, Sequence< Any >& _rURLs, Sequence< Any >& _rCounters )
 {
     // the ignore counters for the help agent URLs
-    const ::rtl::OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
-    const ::rtl::OUString sPathSeparator( "/" );
-    const ::rtl::OUString sURLLocalPath( "/Name" );
-    const ::rtl::OUString sCounterLocalPath( "/Counter" );
+    const OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
+    const OUString sPathSeparator( "/" );
+    const OUString sURLLocalPath( "/Name" );
+    const OUString sCounterLocalPath( "/Counter" );
 
     // get the names of all the nodes containing ignore counters
     // collect the node names we have to ask
     // first get the node names of all children of HelpAgent/IgnoreList
     _rNodeNames = GetNodeNames(sIgnoreListNodePath);
-    const ::rtl::OUString* pIgnoredURLsNodes = _rNodeNames.getConstArray();
-    const ::rtl::OUString* pIgnoredURLsNodesEnd = pIgnoredURLsNodes + _rNodeNames.getLength();
+    const OUString* pIgnoredURLsNodes = _rNodeNames.getConstArray();
+    const OUString* pIgnoredURLsNodesEnd = pIgnoredURLsNodes + _rNodeNames.getLength();
 
     // then assemble the two lists (of node paths) for the URLs and the counters
-    Sequence< ::rtl::OUString > aIgnoredURLs(_rNodeNames.getLength());
-    Sequence< ::rtl::OUString > aIgnoredURLsCounter(_rNodeNames.getLength());
-    ::rtl::OUString* pIgnoredURLs = aIgnoredURLs.getArray();
-    ::rtl::OUString* pIgnoredURLsCounter = aIgnoredURLsCounter.getArray();
+    Sequence< OUString > aIgnoredURLs(_rNodeNames.getLength());
+    Sequence< OUString > aIgnoredURLsCounter(_rNodeNames.getLength());
+    OUString* pIgnoredURLs = aIgnoredURLs.getArray();
+    OUString* pIgnoredURLsCounter = aIgnoredURLsCounter.getArray();
     for (;pIgnoredURLsNodes != pIgnoredURLsNodesEnd; ++pIgnoredURLsNodes, ++pIgnoredURLs, ++pIgnoredURLsCounter)
     {
-        ::rtl::OUString sLocalURLAccess = sIgnoreListNodePath;
+        OUString sLocalURLAccess = sIgnoreListNodePath;
         sLocalURLAccess += sPathSeparator;
         sLocalURLAccess += *pIgnoredURLsNodes;
 
@@ -323,36 +322,36 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
 {
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
 
-    const ::rtl::OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
-    const ::rtl::OUString sPathSeparator( "/" );
-    const ::rtl::OUString sURLLocalPath( "/Name" );
-    const ::rtl::OUString sCounterLocalPath( "/Counter" );
+    const OUString sIgnoreListNodePath( "HelpAgent/IgnoreList" );
+    const OUString sPathSeparator( "/" );
+    const OUString sURLLocalPath( "/Name" );
+    const OUString sCounterLocalPath( "/Counter" );
 
     // get the current URL/counter pairs (as they're persistent at the moment)
-    Sequence< ::rtl::OUString > aNodeNames;
+    Sequence< OUString > aNodeNames;
     Sequence< Any >             aURLs;
     Sequence< Any >             aCounters;
 
     implGetURLCounters(aNodeNames, aURLs, aCounters);
     sal_Int32 nKnownURLs = aURLs.getLength();
 
-    const ::rtl::OUString* pNodeNames   = aNodeNames.getConstArray();
+    const OUString* pNodeNames   = aNodeNames.getConstArray();
     const Any* pURLs                    = aURLs.getConstArray();
     const Any* pCounters                = aCounters.getConstArray();
 
     // check which of them must be deleted/modified
-    Sequence< ::rtl::OUString >     aDeleteFromConfig(nKnownURLs);  // names of nodes to be deleted
-    ::rtl::OUString*                pDeleteFromConfig = aDeleteFromConfig.getArray();
-    ::std::set< ::rtl::OUString >   aAlreadyPresent;    // URLs currently persistent
+    Sequence< OUString >     aDeleteFromConfig(nKnownURLs);  // names of nodes to be deleted
+    OUString*                pDeleteFromConfig = aDeleteFromConfig.getArray();
+    ::std::set< OUString >   aAlreadyPresent;    // URLs currently persistent
 
     // for modifying already existent nodes
-    Sequence< ::rtl::OUString > aNewCounterNodePaths(nKnownURLs);
+    Sequence< OUString > aNewCounterNodePaths(nKnownURLs);
     Sequence< Any >             aNewCounterValues(nKnownURLs);
-    ::rtl::OUString*            pNewCounterNodePaths = aNewCounterNodePaths.getArray();
+    OUString*            pNewCounterNodePaths = aNewCounterNodePaths.getArray();
     Any*                        pNewCounterValues = aNewCounterValues.getArray();
 
     // temporaries needed inside the loop
-    ::rtl::OUString sCurrentURL, sCurrentURLNodeName;
+    OUString sCurrentURL, sCurrentURLNodeName;
 
     for (sal_Int32 i=0; i<nKnownURLs; ++i, ++pNodeNames, ++pURLs, ++pCounters)
     {
@@ -407,10 +406,10 @@ void SvtHelpOptions_Impl::implSaveURLCounters()
     }
 
     // and for the new ones ...
-    ::rtl::OUString sNewNodeName;
-    Sequence< ::rtl::OUString > aNewCounterDataNodeNames(2);
+    OUString sNewNodeName;
+    Sequence< OUString > aNewCounterDataNodeNames(2);
     Sequence< Any >             aNewCounterDataValues(2);
-    const ::rtl::OUString sNodeNameBase( "URL" );
+    const OUString sNodeNameBase( "URL" );
     for (   ConstMapString2IntIterator aCollectNew = aURLIgnoreCounters.begin();
             aCollectNew != aURLIgnoreCounters.end();
             ++aCollectNew
@@ -451,7 +450,7 @@ void SvtHelpOptions_Impl::implLoadURLCounters()
 {
     ::osl::MutexGuard aGuard(aIgnoreCounterSafety);
 
-    Sequence< ::rtl::OUString > aNodeNames;
+    Sequence< OUString > aNodeNames;
     Sequence< Any >             aURLs;
     Sequence< Any >             aCounters;
 
@@ -461,7 +460,7 @@ void SvtHelpOptions_Impl::implLoadURLCounters()
     const Any* pURLs = aURLs.getConstArray();
     const Any* pCounters = aCounters.getConstArray();
 
-    ::rtl::OUString sCurrentURL;
+    OUString sCurrentURL;
     sal_Int32 nCurrentCounter;
     for (sal_Int32 i=0; i<nKnownURLs; ++i, ++pURLs, ++pCounters)
     {
@@ -504,14 +503,14 @@ void SvtHelpOptions_Impl::Commit()
                 break;
 
             case LOCALE:
-                pValues[nProp] <<= ::rtl::OUString(aLocale);
+                pValues[nProp] <<= OUString(aLocale);
                 break;
 
             case SYSTEM:
-                pValues[nProp] <<= ::rtl::OUString(aSystem);
+                pValues[nProp] <<= OUString(aSystem);
                 break;
             case STYLESHEET :
-                pValues[nProp] <<= ::rtl::OUString(sHelpStyleSheet);
+                pValues[nProp] <<= OUString(sHelpStyleSheet);
             break;
 
         }
@@ -524,7 +523,7 @@ void SvtHelpOptions_Impl::Commit()
 
 // -----------------------------------------------------------------------
 
-void SvtHelpOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void SvtHelpOptions_Impl::Notify( const Sequence<OUString>& aPropertyNames )
 {
     Load( aPropertyNames );
 }

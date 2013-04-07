@@ -41,8 +41,8 @@ namespace comphelper
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > (SAL_CALL *FactoryInstantiation)
     (
         ::cppu::ComponentFactoryFunc _pFactoryFunc,
-        ::rtl::OUString const& _rComponentName,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > const & _rServiceNames,
+        OUString const& _rComponentName,
+        ::com::sun::star::uno::Sequence< OUString > const & _rServiceNames,
         rtl_ModuleCount* _pModuleCounter
     ) SAL_THROW(());
 
@@ -52,13 +52,13 @@ namespace comphelper
     struct COMPHELPER_DLLPUBLIC ComponentDescription
     {
         /// the implementation name of the component
-        ::rtl::OUString                                     sImplementationName;
+        OUString                                     sImplementationName;
         /// the services supported by the component implementation
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSupportedServices;
+        ::com::sun::star::uno::Sequence< OUString >  aSupportedServices;
         /** the name under which the component implementation should be registered as singleton,
             or empty if the component does not implement a singleton.
         */
-        ::rtl::OUString                                     sSingletonName;
+        OUString                                     sSingletonName;
         /// the function to create an instance of the component
         ::cppu::ComponentFactoryFunc                        pComponentCreationFunc;
         /// the function to create a factory for the component (usually <code>::cppu::createSingleComponentFactory</code>)
@@ -74,9 +74,9 @@ namespace comphelper
         }
 
         ComponentDescription(
-                const ::rtl::OUString& _rImplementationName,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSupportedServices,
-                const ::rtl::OUString& _rSingletonName,
+                const OUString& _rImplementationName,
+                const ::com::sun::star::uno::Sequence< OUString >& _rSupportedServices,
+                const OUString& _rSingletonName,
                 ::cppu::ComponentFactoryFunc _pComponentCreationFunc,
                 FactoryInstantiation _pFactoryCreationFunc
             )
@@ -118,8 +118,8 @@ namespace comphelper
                 a function for creating a factory for that component
         */
         void registerImplementation(
-            const ::rtl::OUString& _rImplementationName,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
+            const OUString& _rImplementationName,
+            const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
             ::cppu::ComponentFactoryFunc _pCreateFunction,
             FactoryInstantiation _pFactoryFunction = ::cppu::createSingleComponentFactory );
 
@@ -135,7 +135,7 @@ namespace comphelper
                 the XInterface access to a factory for the component
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-            const ::rtl::OUString& _rImplementationName );
+            const OUString& _rImplementationName );
 
         /** version of getComponentFactory which directly takes the char argument you got in your component_getFactory call
         */
@@ -191,8 +191,8 @@ namespace comphelper
         /** automatically provides all component information to an OModule instance
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static()</code><li/>
+                    <li><code>static OUString getImplementationName_static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static()</code><li/>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>
@@ -226,9 +226,9 @@ namespace comphelper
 
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static()</code><li/>
-                    <li><code>static ::rtl::OUString getSingletonName_static()</code></li>
+                    <li><code>static OUString getImplementationName_static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static()</code><li/>
+                    <li><code>static OUString getSingletonName_static()</code></li>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>

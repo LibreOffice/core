@@ -38,7 +38,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
-                                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                                        const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
@@ -62,7 +62,7 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
-                                        const std::vector< ::rtl::OUString > & inHeaderNames,
+                                        const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream()
@@ -139,7 +139,7 @@ void SerfGetReqProcImpl::handleEndOfResponseData( serf_bucket_t * inSerfResponse
 void SerfGetReqProcImpl::processSingleResponseHeader( const char* inHeaderName,
                                                       const char* inHeaderValue )
 {
-    rtl::OUString aHeaderName( rtl::OUString::createFromAscii( inHeaderName ) );
+    OUString aHeaderName( OUString::createFromAscii( inHeaderName ) );
 
     bool bStoreHeaderField = false;
 
@@ -151,8 +151,8 @@ void SerfGetReqProcImpl::processSingleResponseHeader( const char* inHeaderName,
     else
     {
         // store only header fields which are requested
-        std::vector< ::rtl::OUString >::const_iterator it( mpHeaderNames->begin() );
-        const std::vector< ::rtl::OUString >::const_iterator end( mpHeaderNames->end() );
+        std::vector< OUString >::const_iterator it( mpHeaderNames->begin() );
+        const std::vector< OUString >::const_iterator end( mpHeaderNames->end() );
 
         while ( it != end )
         {
@@ -174,7 +174,7 @@ void SerfGetReqProcImpl::processSingleResponseHeader( const char* inHeaderName,
         DAVPropertyValue thePropertyValue;
         thePropertyValue.IsCaseSensitive = false;
         thePropertyValue.Name = aHeaderName;
-        thePropertyValue.Value <<= rtl::OUString::createFromAscii( inHeaderValue );
+        thePropertyValue.Value <<= OUString::createFromAscii( inHeaderValue );
         mpResource->properties.push_back( thePropertyValue );
     }
 }

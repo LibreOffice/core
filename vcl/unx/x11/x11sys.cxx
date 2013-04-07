@@ -90,17 +90,17 @@ Rectangle X11SalSystem::GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScre
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
+OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
 {
-    rtl::OUString aScreenName;
+    OUString aScreenName;
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
     if( pSalDisp->IsXinerama() )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
         if( nScreen >= rScreens.size() )
             nScreen = 0;
-        rtl::OUStringBuffer aBuf( 256 );
-        aBuf.append( rtl::OStringToOUString( rtl::OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
+        OUStringBuffer aBuf( 256 );
+        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
         aBuf.appendAscii( " [" );
         aBuf.append( static_cast<sal_Int32>(nScreen) );
         aBuf.append( sal_Unicode(']') );
@@ -110,8 +110,8 @@ rtl::OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
     {
         if( nScreen >= static_cast<unsigned int>(pSalDisp->GetXScreenCount()) )
             nScreen = 0;
-        rtl::OUStringBuffer aBuf( 256 );
-        aBuf.append( rtl::OStringToOUString( rtl::OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
+        OUStringBuffer aBuf( 256 );
+        aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
         // search backwards for ':'
         int nPos = aBuf.getLength();
         if( nPos > 0 )
@@ -131,7 +131,7 @@ rtl::OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
     return aScreenName;
 }
 
-int X11SalSystem::ShowNativeDialog( const rtl::OUString& rTitle, const rtl::OUString& rMessage, const std::list< rtl::OUString >& rButtons, int nDefButton )
+int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMessage, const std::list< OUString >& rButtons, int nDefButton )
 {
     int nRet = -1;
 
@@ -144,7 +144,7 @@ int X11SalSystem::ShowNativeDialog( const rtl::OUString& rTitle, const rtl::OUSt
     aWarn.Clear();
 
     sal_uInt16 nButton = 0;
-    for( std::list< rtl::OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
+    for( std::list< OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
             aWarn.AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;

@@ -34,7 +34,7 @@ public:
     SwXMLBlockListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         SwXMLTextBlocks & rBlocks,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLBlockListExport ( void ) {}
@@ -53,7 +53,7 @@ public:
     SwXMLTextBlockExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         SwXMLTextBlocks & rBlocks,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SwXMLTextBlockExport ( void ) {}

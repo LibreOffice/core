@@ -43,14 +43,14 @@ namespace rtl { class OUString; }
  */
 class XMLIndexTOCStylesContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sLevelParagraphStyles;
+    const OUString sLevelParagraphStyles;
 
     /// XPropertySet of the index
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
 
     /// style names for this level
-    ::std::vector< ::rtl::OUString > aStyleNames;
+    ::std::vector< OUString > aStyleNames;
 
     /// outline level
     sal_Int32 nOutlineLevel;
@@ -64,7 +64,7 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLIndexTOCStylesContext();
 
@@ -78,7 +78,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

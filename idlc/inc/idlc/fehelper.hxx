@@ -34,12 +34,12 @@ public:
         FD_complex      // Complex declarator (complex_part field used)
     };
 
-    FeDeclarator(const ::rtl::OString& name, DeclaratorType declType, AstDeclaration* pComplPart);
+    FeDeclarator(const OString& name, DeclaratorType declType, AstDeclaration* pComplPart);
     virtual ~FeDeclarator();
 
     AstDeclaration* getComplexPart()
         { return m_pComplexPart; }
-    const ::rtl::OString& getName()
+    const OString& getName()
         { return m_name; }
     DeclaratorType  getDeclType()
         { return m_declType; }
@@ -48,7 +48,7 @@ public:
     AstType const * compose(AstDeclaration const * pDecl);
 private:
     AstDeclaration* m_pComplexPart;
-    ::rtl::OString  m_name;
+    OString  m_name;
     DeclaratorType  m_declType;
 };
 
@@ -58,8 +58,8 @@ class FeInheritanceHeader
 {
 public:
     FeInheritanceHeader(
-        NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits,
-        std::vector< rtl::OString > * typeParameters);
+        NodeType nodeType, OString* pName, OString* pInherits,
+        std::vector< OString > * typeParameters);
 
     virtual ~FeInheritanceHeader()
     {
@@ -69,21 +69,21 @@ public:
 
     NodeType getNodeType()
         { return m_nodeType; }
-    ::rtl::OString* getName()
+    OString* getName()
         { return m_pName; }
     AstDeclaration* getInherits()
         { return m_pInherits; }
 
-    std::vector< rtl::OString > const & getTypeParameters() const
+    std::vector< OString > const & getTypeParameters() const
     { return m_typeParameters; }
 
 private:
-    void initializeInherits(::rtl::OString* pinherits);
+    void initializeInherits(OString* pinherits);
 
     NodeType        m_nodeType;
-    ::rtl::OString* m_pName;
+    OString* m_pName;
     AstDeclaration* m_pInherits;
-    std::vector< rtl::OString > m_typeParameters;
+    std::vector< OString > m_typeParameters;
 };
 
 #endif // _IDLC_FEHELPER_HXX_

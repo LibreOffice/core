@@ -563,7 +563,7 @@ void XclImpHFConverter::InsertField( const SvxFieldItem& rFieldItem )
 void XclImpHFConverter::InsertLineBreak()
 {
     ESelection& rSel = GetCurrSel();
-    mrEE.QuickInsertText( rtl::OUString('\n'), ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
+    mrEE.QuickInsertText( OUString('\n'), ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
     ++rSel.nEndPara;
     rSel.nEndPos = 0;
     GetCurrInfo().mnHeight += GetCurrMaxLineHeight();
@@ -761,7 +761,7 @@ void XclImpUrlHelper::DecodeUrl(
 }
 
 void XclImpUrlHelper::DecodeUrl(
-    ::rtl::OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const ::rtl::OUString& rEncodedUrl )
+    OUString& rUrl, bool& rbSameWb, const XclImpRoot& rRoot, const OUString& rEncodedUrl )
 {
     String aTabName;
     String aUrl;

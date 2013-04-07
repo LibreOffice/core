@@ -262,9 +262,9 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
         osl::MutexGuard g(mutex_);
         notifier_ = n;
     }
-    css::uno::Sequence< rtl::OUString > s(2);
-    s[0] = rtl::OUString("FontHeight");
-    s[1] = rtl::OUString("FontName");
+    css::uno::Sequence< OUString > s(2);
+    s[0] = OUString("FontHeight");
+    s[1] = OUString("FontName");
     n->addPropertiesChangeListener(s, listener_.get());
 }
 
@@ -548,7 +548,7 @@ void SwSrcEditWindow::InitScrollBars()
     pVScrollbar->SetThumbPos( pTextView->GetStartDocPos().Y() );
     pHScrollbar->SetVisibleSize( aOutSz.Width() );
     pHScrollbar->SetPageSize( aOutSz.Width() * 8 / 10 );
-    pHScrollbar->SetLineSize( pOutWin->GetTextWidth(rtl::OUString('x')) );
+    pHScrollbar->SetLineSize( pOutWin->GetTextWidth(OUString('x')) );
     pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
 
 }
@@ -948,9 +948,9 @@ static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLan
 }
 void SwSrcEditWindow::SetFont()
 {
-    rtl::OUString sFontName(
+    OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or(rtl::OUString()));
+        get_value_or(OUString()));
     if(sFontName.isEmpty())
     {
         LanguageType aLanguages[5] =

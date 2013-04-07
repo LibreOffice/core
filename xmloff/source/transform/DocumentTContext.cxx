@@ -31,7 +31,6 @@
 
 #include "DocumentTContext.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
@@ -83,7 +82,7 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             };
             for (int k=0; aTmp[k]; k++)
             {
-                ::rtl::OUString sTmpString = ::rtl::OUString::createFromAscii(aTmp[k]);
+                OUString sTmpString = OUString::createFromAscii(aTmp[k]);
                 if( rValue.matchAsciiL( aTmp[k], sTmpString.getLength() ) )
                 {
                     aClass = rValue.copy( sTmpString.getLength() );

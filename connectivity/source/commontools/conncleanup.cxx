@@ -33,9 +33,9 @@ namespace dbtools
     using namespace ::com::sun::star::lang;
 
     //=====================================================================
-    static const ::rtl::OUString& getActiveConnectionPropertyName()
+    static const OUString& getActiveConnectionPropertyName()
     {
-        static const ::rtl::OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
+        static const OUString s_sActiveConnectionPropertyName( "ActiveConnection" );
         return s_sActiveConnectionPropertyName;
     }
 

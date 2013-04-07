@@ -38,16 +38,15 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-using rtl::OUString;
 
 //-----------------------------------------------------------------------------
 
 class ScXMLChangeInfoContext : public SvXMLImportContext
 {
     ScMyActionInfo                      aInfo;
-    ::rtl::OUStringBuffer               sAuthorBuffer;
-    ::rtl::OUStringBuffer               sDateTimeBuffer;
-    ::rtl::OUStringBuffer               sCommentBuffer;
+    OUStringBuffer               sAuthorBuffer;
+    OUStringBuffer               sDateTimeBuffer;
+    OUStringBuffer               sCommentBuffer;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     sal_uInt32                          nParagraphCount;
 
@@ -55,14 +54,14 @@ class ScXMLChangeInfoContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLChangeInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLChangeInfoContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLChangeInfoContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -79,14 +78,14 @@ class ScXMLBigRangeContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLBigRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLBigRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScBigRange& rBigRange);
     virtual ~ScXMLBigRangeContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -97,10 +96,10 @@ public:
 
 class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
-    rtl::OUString                       sFormulaAddress;
-    rtl::OUString                       sFormula;
-    rtl::OUString                       sFormulaNmsp;
-    rtl::OUString                       sInputString;
+    OUString                       sFormulaAddress;
+    OUString                       sFormula;
+    OUString                       sFormulaNmsp;
+    OUString                       sInputString;
     ScBigRange                          aBigRange;
     double                              fValue;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -118,14 +117,14 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLCellContentDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLCellContentDeletionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -142,14 +141,14 @@ class ScXMLDependenceContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLDependenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLDependenceContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLDependenceContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -166,14 +165,14 @@ class ScXMLDependingsContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLDependingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLDependingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLDependingsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -190,14 +189,14 @@ class ScXMLChangeDeletionContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLChangeDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLChangeDeletionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -214,14 +213,14 @@ class ScXMLDeletionsContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLDeletionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLDeletionsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLDeletionsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -235,8 +234,8 @@ class ScXMLChangeCellContext;
 class ScXMLChangeTextPContext : public SvXMLImportContext
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> xAttrList;
-    rtl::OUString               sLName;
-    rtl::OUStringBuffer         sText;
+    OUString               sLName;
+    OUStringBuffer         sText;
     ScXMLChangeCellContext*     pChangeCellContext;
     SvXMLImportContext*         pTextPContext;
     sal_uInt16                      nPrefix;
@@ -247,7 +246,7 @@ class ScXMLChangeTextPContext : public SvXMLImportContext
 public:
 
     ScXMLChangeTextPContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
@@ -255,11 +254,11 @@ public:
     virtual ~ScXMLChangeTextPContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void EndElement();
 };
@@ -270,8 +269,8 @@ class ScXMLChangeCellContext : public SvXMLImportContext
 {
     ScCellValue& mrOldCell;
 
-    rtl::OUString           sText;
-    rtl::OUString&          rInputString;
+    OUString           sText;
+    OUString&          rInputString;
     ScEditEngineTextObj*    pEditTextObj;
     double&                 rDateTimeValue;
     double                  fValue;
@@ -285,24 +284,24 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLChangeCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLChangeCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScCellValue& rOldCell, rtl::OUString& sAddress,
-                                      rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp,
+                                      ScCellValue& rOldCell, OUString& sAddress,
+                                      OUString& rFormula, OUString& rFormulaNmsp,
                                       formula::FormulaGrammar::Grammar& rGrammar,
-                                      rtl::OUString& rInputString, double& fValue, sal_uInt16& nType,
+                                      OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
     virtual ~ScXMLChangeCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     void CreateTextPContext(sal_Bool bIsNewParagraph);
     sal_Bool IsEditCell() { return pEditTextObj != 0; }
-    void SetText(const rtl::OUString& sTempText) { sText = sTempText; }
+    void SetText(const OUString& sTempText) { sText = sTempText; }
 
     virtual void EndElement();
 };
@@ -311,10 +310,10 @@ public:
 
 class ScXMLPreviousContext : public SvXMLImportContext
 {
-    rtl::OUString                       sFormulaAddress;
-    rtl::OUString                       sFormula;
-    rtl::OUString                       sFormulaNmsp;
-    rtl::OUString                       sInputString;
+    OUString                       sFormulaAddress;
+    OUString                       sFormula;
+    OUString                       sFormulaNmsp;
+    OUString                       sInputString;
     double                              fValue;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScCellValue maOldCell;
@@ -329,14 +328,14 @@ class ScXMLPreviousContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLPreviousContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLPreviousContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -354,14 +353,14 @@ class ScXMLContentChangeContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLContentChangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLContentChangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLContentChangeContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -377,14 +376,14 @@ class ScXMLInsertionContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLInsertionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLInsertionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLInsertionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -400,14 +399,14 @@ class ScXMLInsertionCutOffContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLInsertionCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLInsertionCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLInsertionCutOffContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -423,14 +422,14 @@ class ScXMLMovementCutOffContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLMovementCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLMovementCutOffContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLMovementCutOffContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -446,14 +445,14 @@ class ScXMLCutOffsContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLCutOffsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLCutOffsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLCutOffsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -469,14 +468,14 @@ class ScXMLDeletionContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLDeletionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLDeletionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -494,14 +493,14 @@ class ScXMLMovementContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLMovementContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLMovementContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLMovementContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -517,14 +516,14 @@ class ScXMLRejectionContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
 public:
-    ScXMLRejectionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+    ScXMLRejectionContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLRejectionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                                    const ::rtl::OUString& rLocalName,
+                                                    const OUString& rLocalName,
                                                     const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
@@ -534,7 +533,7 @@ public:
 
 ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                               ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -546,11 +545,11 @@ ScXMLTrackedChangesContext::ScXMLTrackedChangesContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
             if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
@@ -572,7 +571,7 @@ ScXMLTrackedChangesContext::~ScXMLTrackedChangesContext()
 }
 
 SvXMLImportContext *ScXMLTrackedChangesContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -614,7 +613,7 @@ void ScXMLTrackedChangesContext::EndElement()
 
 ScXMLChangeInfoContext::ScXMLChangeInfoContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -625,11 +624,11 @@ ScXMLChangeInfoContext::ScXMLChangeInfoContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
@@ -650,7 +649,7 @@ ScXMLChangeInfoContext::~ScXMLChangeInfoContext()
 }
 
 SvXMLImportContext *ScXMLChangeInfoContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -690,7 +689,7 @@ void ScXMLChangeInfoContext::EndElement()
 
 ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScBigRange& rTempBigRange ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -711,11 +710,11 @@ ScXMLBigRangeContext::ScXMLBigRangeContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -763,7 +762,7 @@ ScXMLBigRangeContext::~ScXMLBigRangeContext()
 }
 
 SvXMLImportContext *ScXMLBigRangeContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -776,7 +775,7 @@ void ScXMLBigRangeContext::EndElement()
 
 ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -792,11 +791,11 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -811,7 +810,7 @@ ScXMLCellContentDeletionContext::~ScXMLCellContentDeletionContext()
 }
 
 SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -851,7 +850,7 @@ void ScXMLCellContentDeletionContext::EndElement()
 
 ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -861,11 +860,11 @@ ScXMLDependenceContext::ScXMLDependenceContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -881,7 +880,7 @@ ScXMLDependenceContext::~ScXMLDependenceContext()
 }
 
 SvXMLImportContext *ScXMLDependenceContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -894,7 +893,7 @@ void ScXMLDependenceContext::EndElement()
 
 ScXMLDependingsContext::ScXMLDependingsContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                             const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -908,7 +907,7 @@ ScXMLDependingsContext::~ScXMLDependingsContext()
 }
 
 SvXMLImportContext *ScXMLDependingsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -933,7 +932,7 @@ void ScXMLDependingsContext::EndElement()
 
 ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -943,11 +942,11 @@ ScXMLChangeDeletionContext::ScXMLChangeDeletionContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -963,7 +962,7 @@ ScXMLChangeDeletionContext::~ScXMLChangeDeletionContext()
 }
 
 SvXMLImportContext *ScXMLChangeDeletionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -976,7 +975,7 @@ void ScXMLChangeDeletionContext::EndElement()
 
 ScXMLDeletionsContext::ScXMLDeletionsContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                             const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -990,7 +989,7 @@ ScXMLDeletionsContext::~ScXMLDeletionsContext()
 }
 
 SvXMLImportContext *ScXMLDeletionsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1016,7 +1015,7 @@ void ScXMLDeletionsContext::EndElement()
 
 ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList,
                                       ScXMLChangeCellContext* pTempChangeCellContext) :
@@ -1038,7 +1037,7 @@ ScXMLChangeTextPContext::~ScXMLChangeTextPContext()
 }
 
 SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList )
 {
@@ -1050,9 +1049,9 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
-            rtl::OUString aLocalName;
+            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+            const OUString& sValue(xAttrList->getValueByIndex( i ));
+            OUString aLocalName;
             sal_uInt16 nPrfx(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName ));
             if ((nPrfx == XML_NAMESPACE_TEXT) && (IsXMLToken(aLocalName, XML_C)))
@@ -1089,7 +1088,7 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
     return pContext;
 }
 
-void ScXMLChangeTextPContext::Characters( const ::rtl::OUString& rChars )
+void ScXMLChangeTextPContext::Characters( const OUString& rChars )
 {
     if (!pTextPContext)
         sText.append(rChars);
@@ -1105,12 +1104,12 @@ void ScXMLChangeTextPContext::EndElement()
 
 ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScCellValue& rOldCell, rtl::OUString& rAddress,
-                                            rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp,
+                                            ScCellValue& rOldCell, OUString& rAddress,
+                                            OUString& rFormula, OUString& rFormulaNmsp,
                                             formula::FormulaGrammar::Grammar& rGrammar,
-                                            rtl::OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
+                                            OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
                                             sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     mrOldCell(rOldCell),
@@ -1128,11 +1127,11 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1209,7 +1208,7 @@ ScXMLChangeCellContext::~ScXMLChangeCellContext()
 }
 
 SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1313,7 +1312,7 @@ void ScXMLChangeCellContext::EndElement()
 
 ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1328,11 +1327,11 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1347,7 +1346,7 @@ ScXMLPreviousContext::~ScXMLPreviousContext()
 }
 
 SvXMLImportContext *ScXMLPreviousContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1371,7 +1370,7 @@ void ScXMLPreviousContext::EndElement()
 
 ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1384,11 +1383,11 @@ ScXMLContentChangeContext::ScXMLContentChangeContext(  ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1421,7 +1420,7 @@ ScXMLContentChangeContext::~ScXMLContentChangeContext()
 }
 
 SvXMLImportContext *ScXMLContentChangeContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1463,7 +1462,7 @@ void ScXMLContentChangeContext::EndElement()
 
 ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1480,11 +1479,11 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1537,7 +1536,7 @@ ScXMLInsertionContext::~ScXMLInsertionContext()
 }
 
 SvXMLImportContext *ScXMLInsertionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1568,7 +1567,7 @@ void ScXMLInsertionContext::EndElement()
 
 ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1579,11 +1578,11 @@ ScXMLInsertionCutOffContext::ScXMLInsertionCutOffContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1605,7 +1604,7 @@ ScXMLInsertionCutOffContext::~ScXMLInsertionCutOffContext()
 }
 
 SvXMLImportContext *ScXMLInsertionCutOffContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -1618,7 +1617,7 @@ void ScXMLInsertionCutOffContext::EndElement()
 
 ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1632,11 +1631,11 @@ ScXMLMovementCutOffContext::ScXMLMovementCutOffContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1669,7 +1668,7 @@ ScXMLMovementCutOffContext::~ScXMLMovementCutOffContext()
 }
 
 SvXMLImportContext *ScXMLMovementCutOffContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -1682,7 +1681,7 @@ void ScXMLMovementCutOffContext::EndElement()
 
 ScXMLCutOffsContext::ScXMLCutOffsContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                             const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1696,7 +1695,7 @@ ScXMLCutOffsContext::~ScXMLCutOffsContext()
 }
 
 SvXMLImportContext *ScXMLCutOffsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1722,7 +1721,7 @@ void ScXMLCutOffsContext::EndElement()
 
 ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1739,11 +1738,11 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1801,7 +1800,7 @@ ScXMLDeletionContext::~ScXMLDeletionContext()
 }
 
 SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1838,7 +1837,7 @@ void ScXMLDeletionContext::EndElement()
 
 ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1851,11 +1850,11 @@ ScXMLMovementContext::ScXMLMovementContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1888,7 +1887,7 @@ ScXMLMovementContext::~ScXMLMovementContext()
 }
 
 SvXMLImportContext *ScXMLMovementContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -1924,7 +1923,7 @@ void ScXMLMovementContext::EndElement()
 
 ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
-                                                   const ::rtl::OUString& rLName,
+                                                   const OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1937,11 +1936,11 @@ ScXMLRejectionContext::ScXMLRejectionContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -1974,7 +1973,7 @@ ScXMLRejectionContext::~ScXMLRejectionContext()
 }
 
 SvXMLImportContext *ScXMLRejectionContext::CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

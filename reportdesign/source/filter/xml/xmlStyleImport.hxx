@@ -38,9 +38,9 @@ namespace rptxml
 
     class OControlStyleContext : public XMLPropStyleContext
     {
-        ::rtl::OUString             m_sDataStyleName;
-        ::rtl::OUString             sPageStyle;
-        const rtl::OUString         sNumberFormat;
+        OUString             m_sDataStyleName;
+        OUString             sPageStyle;
+        const OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
         //  std::vector<ScXMLMapContent>    aMaps;
         com::sun::star::uno::Any    aConditionalFormat;
@@ -56,15 +56,15 @@ namespace rptxml
     protected:
 
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                                const ::rtl::OUString& rLocalName,
-                                const ::rtl::OUString& rValue );
+                                const OUString& rLocalName,
+                                const OUString& rValue );
 
     public:
 
         TYPEINFO();
 
         OControlStyleContext( ORptFilter& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
+                const OUString& rLName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle = sal_False );
 
@@ -83,10 +83,10 @@ namespace rptxml
 
     class OReportStylesContext : public SvXMLStylesContext
     {
-        const ::rtl::OUString m_sTableStyleFamilyName;
-        const ::rtl::OUString m_sColumnStyleFamilyName;
-        const ::rtl::OUString m_sRowStyleFamilyName;
-        const ::rtl::OUString m_sCellStyleFamilyName;
+        const OUString m_sTableStyleFamilyName;
+        const OUString m_sColumnStyleFamilyName;
+        const OUString m_sRowStyleFamilyName;
+        const OUString m_sCellStyleFamilyName;
         ORptFilter&           m_rImport;
         sal_Int32 m_nNumberFormatIndex;
         sal_Int32 nMasterPageNameIndex;
@@ -117,12 +117,12 @@ namespace rptxml
         virtual SvXMLStyleContext *CreateStyleStyleChildContext(
                 sal_uInt16 nFamily,
                 sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
         virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
                 sal_uInt16 nFamily, sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -131,7 +131,7 @@ namespace rptxml
         TYPEINFO();
 
         OReportStylesContext( ORptFilter& rImport, sal_uInt16 nPrfx ,
-                const ::rtl::OUString& rLName ,
+                const OUString& rLName ,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 const sal_Bool bAutoStyles );
         virtual ~OReportStylesContext();
@@ -143,8 +143,8 @@ namespace rptxml
         virtual ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XNameContainer >
             GetStylesContainer( sal_uInt16 nFamily ) const;
-        virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
-        virtual sal_uInt16 GetFamily( const ::rtl::OUString& rFamily ) const;
+        virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
+        virtual sal_uInt16 GetFamily( const OUString& rFamily ) const;
 
         sal_Int32 GetIndex(const sal_Int16 nContextID);
     };

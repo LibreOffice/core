@@ -49,7 +49,6 @@
 
 using namespace vcl_sal;
 
-using ::rtl::OUString;
 
 /***************************************************************
  * class GtkSalDisplay                                         *
@@ -680,7 +679,7 @@ void GtkData::Init()
         osl_getExecutableFile( &aProgramFileURL.pData );
         OUString aProgramSystemPath;
         osl_getSystemPathFromFileURL (aProgramFileURL.pData, &aProgramSystemPath.pData);
-        OString  aProgramName = rtl::OUStringToOString(
+        OString  aProgramName = OUStringToOString(
                                             aProgramSystemPath,
                                             osl_getThreadTextEncoding() );
         fprintf( stderr, "%s X11 error: Can't open display: %s\n",

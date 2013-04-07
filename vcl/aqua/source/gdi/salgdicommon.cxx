@@ -136,7 +136,7 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
     }
 }
 
-sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
                                             const PhysicalFontFace* pFontData,
                                             sal_Int32* pGlyphIDs, sal_uInt8* pEncoding,
                                             sal_Int32* pGlyphWidths, int nGlyphCount,
@@ -145,11 +145,11 @@ sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // TODO: move more of the functionality here into the generic subsetter code
 
     // prepare the requested file name for writing the font-subset file
-    rtl::OUString aSysPath;
+    OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return sal_False;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const rtl::OString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
+    const OString aToFile( OUStringToOString( aSysPath, aThreadEncoding ) );
 
     // get the raw-bytes from the font to be subset
     ByteVector aBuffer;

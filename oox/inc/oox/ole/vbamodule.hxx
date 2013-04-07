@@ -46,7 +46,7 @@ public:
     explicit            VbaModule(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
-                            const ::rtl::OUString& rName,
+                            const OUString& rName,
                             rtl_TextEncoding eTextEnc,
                             bool bExecutable );
 
@@ -56,9 +56,9 @@ public:
     inline void         setType( sal_Int32 nType ) { mnType = nType; }
 
     /** Returns the name of the module. */
-    inline const ::rtl::OUString& getName() const { return maName; }
+    inline const OUString& getName() const { return maName; }
     /** Returns the stream name of the module. */
-    inline const ::rtl::OUString& getStreamName() const { return maStreamName; }
+    inline const OUString& getStreamName() const { return maStreamName; }
 
     /** Imports all records for this module until the MODULEEND record. */
     void                importDirRecords( BinaryInputStream& rDirStrm );
@@ -75,11 +75,11 @@ public:
 
 private:
     /** Reads and returns the VBA source code from the passed storage. */
-    ::rtl::OUString     readSourceCode( StorageBase& rVbaStrg ) const;
+    OUString     readSourceCode( StorageBase& rVbaStrg ) const;
 
     /** Creates a new Basic module and inserts it into the passed Basic library. */
     void                createModule(
-                            const ::rtl::OUString& rVBASourceCode,
+                            const OUString& rVBASourceCode,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
 
@@ -88,9 +88,9 @@ private:
                         mxContext;          ///< Component context with service manager.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                         mxDocModel;         ///< Document model used to import/export the VBA project.
-    ::rtl::OUString     maName;
-    ::rtl::OUString     maStreamName;
-    ::rtl::OUString     maDocString;
+    OUString     maName;
+    OUString     maStreamName;
+    OUString     maDocString;
     rtl_TextEncoding    meTextEnc;
     sal_Int32           mnType;
     sal_uInt32          mnOffset;

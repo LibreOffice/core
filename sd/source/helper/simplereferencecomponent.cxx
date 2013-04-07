@@ -60,7 +60,7 @@ void SimpleReferenceComponent::release()
             ) // don't break throw ()
         {
 #if OSL_DEBUG_LEVEL > 0
-            rtl::OString msg( rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
             OSL_FAIL( msg.getStr() );
 #endif
         }

@@ -50,7 +50,7 @@ private:
 
     SerfUri                 m_aUri;
 
-    rtl::OUString           m_aProxyName;
+    OUString           m_aProxyName;
     sal_Int32               m_nProxyPort;
 
     SerfConnection*         m_pSerfConnection;
@@ -69,14 +69,14 @@ private:
     char* getHostinfo();
     bool isSSLNeeded();
 
-    SerfRequestProcessor* createReqProc( const rtl::OUString & inPath );
+    SerfRequestProcessor* createReqProc( const OUString & inPath );
 
 protected:
     virtual ~SerfSession();
 
 public:
     SerfSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
-                 const rtl::OUString& inUri,
+                 const OUString& inUri,
                  const ucbhelper::InternetProxyDecider & rProxyDecider )
         throw ( DAVException );
 
@@ -111,7 +111,7 @@ public:
     SerfConnection* getSerfConnection();
 
     // DAVSession methods
-    virtual sal_Bool CanUse( const ::rtl::OUString & inUri );
+    virtual sal_Bool CanUse( const OUString & inUri );
 
     virtual sal_Bool UsesProxy();
 
@@ -120,30 +120,30 @@ public:
 
     // allprop & named
     virtual void
-    PROPFIND( const ::rtl::OUString & inPath,
+    PROPFIND( const OUString & inPath,
               const Depth inDepth,
-              const std::vector< ::rtl::OUString > & inPropNames,
+              const std::vector< OUString > & inPropNames,
               std::vector< DAVResource > & ioResources,
               const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     // propnames
     virtual void
-    PROPFIND( const ::rtl::OUString & inPath,
+    PROPFIND( const OUString & inPath,
               const Depth inDepth,
               std::vector< DAVResourceInfo >& ioResInfo,
               const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    PROPPATCH( const ::rtl::OUString & inPath,
+    PROPPATCH( const OUString & inPath,
                const std::vector< ProppatchValue > & inValues,
                const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    HEAD( const ::rtl::OUString &  inPath,
-          const std::vector< ::rtl::OUString > & inHeaderNames,
+    HEAD( const OUString &  inPath,
+          const std::vector< OUString > & inHeaderNames,
           DAVResource & ioResource,
           const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
@@ -151,53 +151,53 @@ public:
     bool isHeadRequestInProgress();
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    GET( const ::rtl::OUString & inPath,
+    GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    GET( const ::rtl::OUString & inPath,
+    GET( const OUString & inPath,
          com::sun::star::uno::Reference<
              com::sun::star::io::XOutputStream > &  ioOutputStream,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    GET( const ::rtl::OUString & inPath,
-         const std::vector< ::rtl::OUString > & inHeaderNames,
+    GET( const OUString & inPath,
+         const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    GET( const ::rtl::OUString & inPath,
+    GET( const OUString & inPath,
          com::sun::star::uno::Reference<
              com::sun::star::io::XOutputStream > & ioOutputStream,
-         const std::vector< ::rtl::OUString > & inHeaderNames,
+         const std::vector< OUString > & inHeaderNames,
          DAVResource & ioResource,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    PUT( const ::rtl::OUString & inPath,
+    PUT( const OUString & inPath,
          const com::sun::star::uno::Reference<
              com::sun::star::io::XInputStream > & inInputStream,
          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    POST( const rtl::OUString & inPath,
-          const rtl::OUString & rContentType,
-          const rtl::OUString & rReferer,
+    POST( const OUString & inPath,
+          const OUString & rContentType,
+          const OUString & rReferer,
           const com::sun::star::uno::Reference<
               com::sun::star::io::XInputStream > & inInputStream,
           const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    POST( const rtl::OUString & inPath,
-          const rtl::OUString & rContentType,
-          const rtl::OUString & rReferer,
+    POST( const OUString & inPath,
+          const OUString & rContentType,
+          const OUString & rReferer,
           const com::sun::star::uno::Reference<
               com::sun::star::io::XInputStream > & inInputStream,
           com::sun::star::uno::Reference<
@@ -206,41 +206,41 @@ public:
         throw ( DAVException );
 
     virtual void
-    MKCOL( const ::rtl::OUString & inPath,
+    MKCOL( const OUString & inPath,
            const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     virtual void
-    COPY( const ::rtl::OUString & inSourceURL,
-          const ::rtl::OUString & inDestinationURL,
+    COPY( const OUString & inSourceURL,
+          const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
           sal_Bool inOverWrite )
         throw ( DAVException );
 
     virtual void
-    MOVE( const ::rtl::OUString & inSourceURL,
-          const ::rtl::OUString & inDestinationURL,
+    MOVE( const OUString & inSourceURL,
+          const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
           sal_Bool inOverWrite )
         throw ( DAVException );
 
-    virtual void DESTROY( const ::rtl::OUString & inPath,
+    virtual void DESTROY( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     // set new lock.
-    virtual void LOCK( const ::rtl::OUString & inURL,
+    virtual void LOCK( const OUString & inURL,
                        com::sun::star::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
     // refresh existing lock.
-    virtual sal_Int64 LOCK( const ::rtl::OUString & inURL,
+    virtual sal_Int64 LOCK( const OUString & inURL,
                             sal_Int64 nTimeout,
                             const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
-    virtual void UNLOCK( const ::rtl::OUString & inURL,
+    virtual void UNLOCK( const OUString & inURL,
                          const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
@@ -248,13 +248,13 @@ public:
     virtual void abort()
         throw ( DAVException );
 
-    const rtl::OUString & getHostName() const { return m_aUri.GetHost(); }
+    const OUString & getHostName() const { return m_aUri.GetHost(); }
     int getPort() const { return m_aUri.GetPort(); }
 
     const ::uno::Reference< ::lang::XMultiServiceFactory > getMSF()
     { return m_xFactory->getServiceFactory(); }
 
-    sal_Bool isDomainMatch( rtl::OUString certHostName );
+    sal_Bool isDomainMatch( OUString certHostName );
 
 private:
     friend class SerfLockStore;
@@ -270,7 +270,7 @@ private:
 
     const ucbhelper::InternetProxyServer & getProxySettings() const;
 
-    bool removeExpiredLocktoken( const rtl::OUString & inURL,
+    bool removeExpiredLocktoken( const OUString & inURL,
                                  const DAVRequestEnvironment & rEnv );
 
     // refresh lock, called by SerfLockStore::refreshLocks
@@ -302,8 +302,8 @@ private:
               const char * buffer,
               //ne_block_reader reader,
               void * userdata,
-              const rtl::OUString & rContentType,
-              const rtl::OUString & rReferer );
+              const OUString & rContentType,
+              const OUString & rReferer );
     */
 
     // Helper: XInputStream -> Sequence< sal_Int8 >
@@ -314,7 +314,7 @@ private:
         bool bAppendTrailingZeroByte );
 
     /*
-    rtl::OUString makeAbsoluteURL( rtl::OUString const & rURL ) const;
+    OUString makeAbsoluteURL( OUString const & rURL ) const;
     */
 };
 

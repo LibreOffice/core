@@ -31,9 +31,6 @@
 
 #include <string.h>
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::std;
 using namespace ::osl;
 using namespace ::cppu;
@@ -557,7 +554,7 @@ void FastSaxParser::setLocale( const Locale & Locale ) throw (RuntimeException)
 Sequence< OUString > FastSaxParser::getSupportedServiceNames_Static(void)
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ::rtl::OUString( PARSER_SERVICE_NAME );
+    aRet.getArray()[0] = OUString( PARSER_SERVICE_NAME );
     return aRet;
 }
 

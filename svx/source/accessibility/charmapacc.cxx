@@ -184,13 +184,13 @@ sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  ) throw (Runtim
     return css::accessibility::AccessibleRole::SCROLL_PANE;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleDescription(  ) throw (RuntimeException)
+OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleDescription(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
     return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleName(  ) throw (RuntimeException)
+OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleName(  ) throw (RuntimeException)
 {
     OExternalLockGuard aGuard( this );
     return SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC);
@@ -409,7 +409,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
+OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -418,7 +418,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
+OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
@@ -513,14 +513,14 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumnCount(  ) throw (Runtim
     return COLUMN_COUNT;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 /*nRow*/ ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString SAL_CALL SvxShowCharSetAcc::getAccessibleRowDescription( sal_Int32 /*nRow*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
+OUString SAL_CALL SvxShowCharSetAcc::getAccessibleColumnDescription( sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowExtentAt( sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ ) throw (IndexOutOfBoundsException, RuntimeException)
@@ -693,7 +693,7 @@ sal_Int16 SAL_CALL SvxShowCharSetItemAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
+OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );

@@ -144,7 +144,7 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 
 // XInteractionRequestImpl
 
-XInteractionRequestImpl::XInteractionRequestImpl(const rtl::OUString& aName)
+XInteractionRequestImpl::XInteractionRequestImpl(const OUString& aName)
     : p1( new XInteractionApproveImpl ),
       p2( new XInteractionDisapproveImpl ),
       m_aName(aName),

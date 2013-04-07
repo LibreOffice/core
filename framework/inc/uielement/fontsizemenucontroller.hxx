@@ -65,7 +65,7 @@ namespace framework
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             void setCurHeight( long nHeight, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            rtl::OUString retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+            OUString retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
             long*                                                               m_pHeightArray;
             com::sun::star::awt::FontDescriptor                                 m_aFontDescriptor;

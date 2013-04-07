@@ -110,7 +110,7 @@ DBG_NAME(OUserAdminDlg)
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
                 String sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
-                throw SQLException(sError,NULL,::rtl::OUString("S1000") ,0,Any());
+                throw SQLException(sError,NULL,OUString("S1000") ,0,Any());
             }
         }
         catch(const SQLException&)
@@ -172,7 +172,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    ::rtl::OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }
@@ -182,7 +182,7 @@ DBG_NAME(OUserAdminDlg)
         m_pImpl->clearPassword();
     }
     // -----------------------------------------------------------------------------
-    void OUserAdminDlg::setTitle(const ::rtl::OUString& _sTitle)
+    void OUserAdminDlg::setTitle(const OUString& _sTitle)
     {
         SetText(_sTitle);
     }

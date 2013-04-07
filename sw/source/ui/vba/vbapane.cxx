@@ -43,24 +43,24 @@ SwVbaPane::View() throw ( css::uno::RuntimeException )
 void SAL_CALL
 SwVbaPane::Close( ) throw ( css::uno::RuntimeException )
 {
-    rtl::OUString url = rtl::OUString( ".uno:CloseWin");
+    OUString url = OUString( ".uno:CloseWin");
     dispatchRequests( mxModel,url );
 }
 
-rtl::OUString
+OUString
 SwVbaPane::getServiceImplName()
 {
-    return rtl::OUString("SwVbaPane");
+    return OUString("SwVbaPane");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaPane::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Pane" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Pane" );
     }
     return aServiceNames;
 }

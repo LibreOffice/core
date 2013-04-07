@@ -417,7 +417,7 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
             if( xBitmapCanvas.is() )
             {
                 args[0] = uno::Any( xBitmapCanvas );
-                xMtfRenderer.set( xFactory->createInstanceWithArguments( ::rtl::OUString("com.sun.star.rendering.MtfRenderer"),
+                xMtfRenderer.set( xFactory->createInstanceWithArguments( OUString("com.sun.star.rendering.MtfRenderer"),
                                                                          args ), uno::UNO_QUERY );
 
                 if( xMtfRenderer.is() )
@@ -484,15 +484,15 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
     if( !pData )
         return;
 
-    ::rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     while( pData<pEndData && *pData )
         aBuffer.append(static_cast<sal_Unicode>(*pData++));
-    const ::rtl::OUString aRendererServiceName=aBuffer.makeStringAndClear();
+    const OUString aRendererServiceName=aBuffer.makeStringAndClear();
     ++pData;
 
     while( pData<pEndData && *pData )
         aBuffer.append(static_cast<sal_Unicode>(*pData++));
-    const ::rtl::OUString aGraphicServiceName=aBuffer.makeStringAndClear();
+    const OUString aGraphicServiceName=aBuffer.makeStringAndClear();
     ++pData;
 
     uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -1602,7 +1602,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
             MetaTextLineAction* pAct = (MetaTextLineAction*) pAction;
             // measure a test string to get ascend and descent right
             static const sal_Unicode pStr[] = { 0xc4, 0x67, 0 };
-            rtl::OUString aStr( pStr );
+            OUString aStr( pStr );
 
             Rectangle aRect;
             aMapVDev.GetTextBoundRect( aRect, aStr, 0, 0, aStr.getLength(), 0, NULL );
@@ -3000,19 +3000,19 @@ void GDIMetaFile::UseCanvas( sal_Bool _bUseCanvas )
     bUseCanvas = _bUseCanvas;
 }
 
-MetaCommentAction* makePluggableRendererAction( const rtl::OUString& rRendererServiceName,
-                                                const rtl::OUString& rGraphicServiceName,
+MetaCommentAction* makePluggableRendererAction( const OUString& rRendererServiceName,
+                                                const OUString& rGraphicServiceName,
                                                 const void* _pData,
                                                 sal_uInt32 nDataSize )
 {
     const sal_uInt8* pData=(sal_uInt8*)_pData;
 
     // FIXME: Data gets copied twice, unfortunately
-    rtl::OString aRendererServiceName(
+    OString aRendererServiceName(
         rRendererServiceName.getStr(),
         rRendererServiceName.getLength(),
         RTL_TEXTENCODING_ASCII_US);
-    rtl::OString aGraphicServiceName(
+    OString aGraphicServiceName(
         rGraphicServiceName.getStr(),
         rGraphicServiceName.getLength(),
         RTL_TEXTENCODING_ASCII_US);

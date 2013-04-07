@@ -50,7 +50,7 @@ sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
 }
 
 // ::cppu::IPropertyArrayHelper
-sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
+sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nPropId )
 {
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >(nPropId);
     sal_Bool bValid = ImplHasProperty( id );
@@ -99,7 +99,7 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
     return aProps;
 }
 
-::com::sun::star::beans::Property UnoPropertyArrayHelper::getPropertyByName(const ::rtl::OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException)
+::com::sun::star::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& rPropertyName) throw (::com::sun::star::beans::UnknownPropertyException)
 {
     ::com::sun::star::beans::Property aProp;
     sal_uInt16 nId = GetPropertyId( rPropertyName );
@@ -114,20 +114,20 @@ sal_Bool UnoPropertyArrayHelper::fillPropertyMembersByHandle( ::rtl::OUString * 
     return aProp;
 }
 
-sal_Bool UnoPropertyArrayHelper::hasPropertyByName(const ::rtl::OUString& rPropertyName)
+sal_Bool UnoPropertyArrayHelper::hasPropertyByName(const OUString& rPropertyName)
 {
     return ImplHasProperty( GetPropertyId( rPropertyName ) );
 }
 
-sal_Int32 UnoPropertyArrayHelper::getHandleByName( const ::rtl::OUString & rPropertyName )
+sal_Int32 UnoPropertyArrayHelper::getHandleByName( const OUString & rPropertyName )
 {
     sal_Int32 nId = (sal_Int32 ) GetPropertyId( rPropertyName );
     return nId ? nId : (-1);
 }
 
-sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPropNames )
+sal_Int32 UnoPropertyArrayHelper::fillHandles( sal_Int32* pHandles, const ::com::sun::star::uno::Sequence< OUString > & rPropNames )
 {
-    const ::rtl::OUString* pNames = rPropNames.getConstArray();
+    const OUString* pNames = rPropNames.getConstArray();
     sal_Int32 nValues = rPropNames.getLength();
     sal_Int32 nValidHandles = 0;
 

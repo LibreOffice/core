@@ -296,7 +296,7 @@ namespace {
               mbSkipIgnorable( bSkipIgnorable )
         {}
         virtual StylePool::SfxItemSet_Pointer_t getNext();
-        virtual ::rtl::OUString getName();
+        virtual OUString getName();
     };
 
     StylePool::SfxItemSet_Pointer_t Iterator::getNext()
@@ -331,9 +331,9 @@ namespace {
         return pReturn;
     }
 
-    ::rtl::OUString Iterator::getName()
+    OUString Iterator::getName()
     {
-        ::rtl::OUString aString;
+        OUString aString;
         if( mpNode && mpNode->hasItemSet( false ) )
         {
             aString = StylePool::nameOf( mpNode->getUsedOrLastAddedItemSet() );
@@ -346,9 +346,9 @@ namespace {
 /* This static method creates a unique name from a shared pointer to a SfxItemSet
    The name is the memory address of the SfxItemSet itself. */
 
-::rtl::OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
+OUString StylePool::nameOf( SfxItemSet_Pointer_t pSet )
 {
-    return ::rtl::OUString::valueOf( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
+    return OUString::valueOf( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
 
 // class StylePoolImpl organized a tree-structure where every node represents a SfxItemSet.

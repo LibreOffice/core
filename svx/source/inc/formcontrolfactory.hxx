@@ -84,19 +84,19 @@ namespace svxform
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats
                 );
 
-        static ::rtl::OUString getDefaultName(
+        static OUString getDefaultName(
                     const sal_Int16 nClassId,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
                 );
 
-        static ::rtl::OUString getDefaultUniqueName_ByComponentType(
+        static OUString getDefaultUniqueName_ByComponentType(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject
                 );
 
-        static ::rtl::OUString getUniqueName(
+        static OUString getUniqueName(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
-                    const ::rtl::OUString& _rBaseName
+                    const OUString& _rBaseName
                 );
 
     private:

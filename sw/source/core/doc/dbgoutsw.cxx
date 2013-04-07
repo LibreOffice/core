@@ -47,7 +47,7 @@
 
 using namespace std;
 
-static rtl::OString aDbgOutResult;
+static OString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
 
@@ -92,7 +92,7 @@ SW_DLLPUBLIC const char * dbg_out(const void * pVoid)
 
 SW_DLLPUBLIC const char * dbg_out(const String & aStr)
 {
-    aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
+    aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
 
     if (bDbgOutStdErr)
         fprintf(stderr, "%s", aDbgOutResult.getStr());
@@ -100,9 +100,9 @@ SW_DLLPUBLIC const char * dbg_out(const String & aStr)
     return aDbgOutResult.getStr();
 }
 
-SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
+SW_DLLPUBLIC const char * dbg_out(const OUString & aStr)
 {
-    aDbgOutResult = rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
+    aDbgOutResult = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US);
     return aDbgOutResult.getStr();
 }
 

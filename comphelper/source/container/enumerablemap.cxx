@@ -214,14 +214,14 @@ namespace comphelper
         virtual ::sal_Bool SAL_CALL hasElements() throw (RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     public:
         // XServiceInfo, static version (used for component registration)
-        static ::rtl::OUString SAL_CALL getImplementationName_static(  );
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  );
+        static OUString SAL_CALL getImplementationName_static(  );
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 
     private:
@@ -491,7 +491,7 @@ namespace comphelper
 
         if ( !bValid )
         {
-            ::rtl::OUStringBuffer aMessage;
+            OUStringBuffer aMessage;
             aMessage.appendAscii( "Incompatible value type. Found '" );
             aMessage.append( _value.getValueTypeName() );
             aMessage.appendAscii( "', where '" );
@@ -688,15 +688,15 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EnumerableMap::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL EnumerableMap::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL EnumerableMap::supportsService( const ::rtl::OUString& _serviceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL EnumerableMap::supportsService( const OUString& _serviceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( getSupportedServiceNames() );
+        Sequence< OUString > aServices( getSupportedServiceNames() );
         for ( sal_Int32 i=0; i<aServices.getLength(); ++i )
             if ( _serviceName == aServices[i] )
                 return sal_True;
@@ -704,7 +704,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
@@ -736,7 +736,7 @@ namespace comphelper
     ::sal_Bool MapEnumerator::hasMoreElements()
     {
         if ( m_disposed )
-            throw DisposedException( ::rtl::OUString(), m_rParent );
+            throw DisposedException( OUString(), m_rParent );
         return m_mapPos != m_rMapData.m_pValues->end();
     }
 

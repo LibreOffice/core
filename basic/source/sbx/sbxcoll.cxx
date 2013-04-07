@@ -37,10 +37,10 @@ SbxCollection::SbxCollection( const OUString& rClass )
 {
     if( !nCountHash )
     {
-        pCount  = rtl::OUString::createFromAscii(GetSbxRes( STRING_COUNTPROP ));
-        pAdd    = rtl::OUString::createFromAscii(GetSbxRes( STRING_ADDMETH ));
-        pItem   = rtl::OUString::createFromAscii(GetSbxRes( STRING_ITEMMETH ));
-        pRemove = rtl::OUString::createFromAscii(GetSbxRes( STRING_REMOVEMETH ));
+        pCount  = OUString::createFromAscii(GetSbxRes( STRING_COUNTPROP ));
+        pAdd    = OUString::createFromAscii(GetSbxRes( STRING_ADDMETH ));
+        pItem   = OUString::createFromAscii(GetSbxRes( STRING_ITEMMETH ));
+        pRemove = OUString::createFromAscii(GetSbxRes( STRING_REMOVEMETH ));
         nCountHash  = MakeHashCode( pCount );
         nAddHash    = MakeHashCode( pAdd );
         nItemHash   = MakeHashCode( pItem );
@@ -101,7 +101,7 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
     }
 }
 
-SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
 {
     if( GetParameters() )
     {

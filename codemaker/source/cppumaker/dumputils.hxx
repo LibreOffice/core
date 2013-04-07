@@ -20,18 +20,19 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 
-namespace rtl { class OString; }
+#include <rtl/ustring.hxx>
+
 class FileStream;
 
 namespace codemaker { namespace cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, rtl::OString const & registryType, bool fullModuleType);
+    FileStream & out, OString const & registryType, bool fullModuleType);
 
 bool dumpNamespaceClose(
-    FileStream & out, rtl::OString const & registryType, bool fullModuleType);
+    FileStream & out, OString const & registryType, bool fullModuleType);
 
-void dumpTypeIdentifier(FileStream & out, rtl::OString const & registryType);
+void dumpTypeIdentifier(FileStream & out, OString const & registryType);
 
 } }
 

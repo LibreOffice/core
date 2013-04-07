@@ -234,7 +234,7 @@ public:
 
         @return  True if the string was successfuly read and reconstructed.
      */
-    static rtl::OUString readByteString(SvStream & rStream);
+    static OUString readByteString(SvStream & rStream);
 
     /** Write a byte string representation of a Unicode string into a stream.
 
@@ -244,7 +244,7 @@ public:
         @param rString  Some Unicode string.
      */
     static void writeByteString(SvStream & rStream,
-                                const rtl::OUString& rString);
+                                const OUString& rString);
 
     /** Read in a Unicode string from either a streamed Unicode or byte string
         representation.
@@ -257,7 +257,7 @@ public:
 
         @return          On success, returns the reconstructed Unicode string.
      */
-    static rtl::OUString readUnicodeString(SvStream & rStream, bool bUnicode);
+    static OUString readUnicodeString(SvStream & rStream, bool bUnicode);
 
     /** Write a Unicode string representation of a Unicode string into a
         stream.
@@ -267,7 +267,7 @@ public:
         @param rString  Some Unicode string.
      */
     static void writeUnicodeString(SvStream & rStream,
-                                   const rtl::OUString& rString);
+                                   const OUString& rString);
 
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& );    // n.i.!!

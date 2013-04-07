@@ -40,7 +40,7 @@ namespace svt
         CellValueConversion();
         ~CellValueConversion();
 
-        ::rtl::OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
+        OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
 
     private:
         ::boost::scoped_ptr< CellValueConversion_Data > m_pData;

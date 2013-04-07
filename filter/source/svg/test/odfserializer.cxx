@@ -48,11 +48,11 @@ public:
 
     virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
     virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
-    virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
-    virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException);
-    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException);
+    virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
+    virtual void SAL_CALL endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException);
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException);
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException);
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) throw (xml::sax::SAXException, uno::RuntimeException);
 
 private:
@@ -65,7 +65,7 @@ void SAL_CALL ODFSerializer::startDocument(  ) throw (xml::sax::SAXException, un
 {
     OSL_PRECOND(m_xOutStream.is(), "ODFSerializer(): invalid output stream");
 
-    rtl::OUStringBuffer aElement;
+    OUStringBuffer aElement;
     aElement.appendAscii("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     characters(aElement.makeStringAndClear());
 }
@@ -73,7 +73,7 @@ void SAL_CALL ODFSerializer::startDocument(  ) throw (xml::sax::SAXException, un
 void SAL_CALL ODFSerializer::endDocument() throw (xml::sax::SAXException, uno::RuntimeException)
 {}
 
-void SAL_CALL ODFSerializer::startElement( const ::rtl::OUString& aName,
+void SAL_CALL ODFSerializer::startElement( const OUString& aName,
                                            const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
     OUStringBuffer aElement("<" + aName + " ");
@@ -86,14 +86,14 @@ void SAL_CALL ODFSerializer::startElement( const ::rtl::OUString& aName,
     characters(aElement.makeStringAndClear() + ">");
 }
 
-void SAL_CALL ODFSerializer::endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL ODFSerializer::endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
     characters("</" + aName + ">");
 }
 
-void SAL_CALL ODFSerializer::characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL ODFSerializer::characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    const rtl::OString aStr = rtl::OUStringToOString(aChars,
+    const OString aStr = OUStringToOString(aChars,
                                                      RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
     m_aBuf.realloc( nLen );
@@ -105,14 +105,14 @@ void SAL_CALL ODFSerializer::characters( const ::rtl::OUString& aChars ) throw (
     m_xOutStream->writeBytes(m_aLineFeed);
 }
 
-void SAL_CALL ODFSerializer::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL ODFSerializer::ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException)
 {
     // TODO(F1): Make pretty printing configurable
     characters(aWhitespaces);
 }
 
-void SAL_CALL ODFSerializer::processingInstruction( const ::rtl::OUString&,
-                                                    const ::rtl::OUString& ) throw (xml::sax::SAXException, uno::RuntimeException)
+void SAL_CALL ODFSerializer::processingInstruction( const OUString&,
+                                                    const OUString& ) throw (xml::sax::SAXException, uno::RuntimeException)
 {}
 
 void SAL_CALL ODFSerializer::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& ) throw (xml::sax::SAXException, uno::RuntimeException)

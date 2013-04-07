@@ -29,7 +29,7 @@ namespace http_dav_ucp
 {
 
 SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
-                                            const rtl::OUString & inPath,
+                                            const OUString & inPath,
                                             const bool bUseChunkedEncoding )
     : mrSerfSession( rSerfSession )
     , mPathStr( 0 )
@@ -50,7 +50,7 @@ SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
     , mbHandleSerfResponseCalled( false )
 {
     mPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                            rtl::OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ) );
+                            OUStringToOString( inPath, RTL_TEXTENCODING_UTF8 ) );
 }
 
 SerfRequestProcessor::~SerfRequestProcessor()
@@ -64,8 +64,8 @@ void SerfRequestProcessor::prepareProcessor()
     delete mpDAVException;
     mpDAVException = 0;
     mnHTTPStatusCode = SC_NONE;
-    mHTTPStatusCodeText = rtl::OUString();
-    mRedirectLocation = rtl::OUString();
+    mHTTPStatusCodeText = OUString();
+    mRedirectLocation = OUString();
 
     mnSuccessfulCredentialAttempts = 0;
     mbInputOfCredentialsAborted = false;
@@ -76,7 +76,7 @@ void SerfRequestProcessor::prepareProcessor()
 
 // PROPFIND - allprop & named
 bool SerfRequestProcessor::processPropFind( const Depth inDepth,
-                                            const std::vector< ::rtl::OUString > & inPropNames,
+                                            const std::vector< OUString > & inPropNames,
                                             std::vector< DAVResource > & ioResources,
                                             apr_status_t& outSerfStatus )
 {
@@ -130,7 +130,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< Ser
 
 // GET inclusive header fields
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
-                                       const std::vector< ::rtl::OUString > & inHeaderNames,
+                                       const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
 {
@@ -158,7 +158,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
 
 // GET inclusive header fields
 bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
-                                       const std::vector< ::rtl::OUString > & inHeaderNames,
+                                       const std::vector< OUString > & inHeaderNames,
                                        DAVResource & ioResource,
                                        apr_status_t& outSerfStatus )
 {
@@ -173,7 +173,7 @@ bool SerfRequestProcessor::processGet( const com::sun::star::uno::Reference< com
 }
 
 // HEAD
-bool SerfRequestProcessor::processHead( const std::vector< ::rtl::OUString > & inHeaderNames,
+bool SerfRequestProcessor::processHead( const std::vector< OUString > & inHeaderNames,
                                         DAVResource & ioResource,
                                         apr_status_t& outSerfStatus )
 {
@@ -203,15 +203,15 @@ bool SerfRequestProcessor::processPut( const char* inData,
 // POST
 bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
-                                        const rtl::OUString & inContentType,
-                                        const rtl::OUString & inReferer,
+                                        const OUString & inContentType,
+                                        const OUString & inReferer,
                                         const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
@@ -227,15 +227,15 @@ bool SerfRequestProcessor::processPost( const char* inData,
 // POST
 bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
-                                        const rtl::OUString & inContentType,
-                                        const rtl::OUString & inReferer,
+                                        const OUString & inContentType,
+                                        const OUString & inReferer,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                         apr_status_t& outSerfStatus )
 {
     mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
-                            rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
+                            OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
@@ -269,12 +269,12 @@ bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
 }
 
 // COPY
-bool SerfRequestProcessor::processCopy( const rtl::OUString & inDestinationPath,
+bool SerfRequestProcessor::processCopy( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
     mpProcImpl = createCopyReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
@@ -285,12 +285,12 @@ bool SerfRequestProcessor::processCopy( const rtl::OUString & inDestinationPath,
 }
 
 // MOVE
-bool SerfRequestProcessor::processMove( const rtl::OUString & inDestinationPath,
+bool SerfRequestProcessor::processMove( const OUString & inDestinationPath,
                                         const bool inOverwrite,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
+                                OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ) );
     mpProcImpl = createMoveReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
@@ -501,7 +501,7 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
                            : SC_NONE;
         if ( sl.reason )
         {
-            mHTTPStatusCodeText = ::rtl::OUString::createFromAscii( sl.reason );
+            mHTTPStatusCodeText = OUString::createFromAscii( sl.reason );
         }
         if ( ( sl.version == 0 || sl.code < 0 ) ||
              mnHTTPStatusCode >= 300 )
@@ -516,7 +516,7 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
                 const char* location = serf_bucket_headers_get( headers, "Location" );
                 if ( location )
                 {
-                    mRedirectLocation = rtl::OUString::createFromAscii( location );
+                    mRedirectLocation = OUString::createFromAscii( location );
                 }
                 mbProcessingDone = true;
                 return APR_EGENERAL;

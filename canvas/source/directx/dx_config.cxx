@@ -81,7 +81,7 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
@@ -122,13 +122,13 @@ namespace dxcanvas
         }
         catch( const uno::Exception& )
         {
-            OSL_FAIL( rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             comphelper::anyToString( cppu::getCaughtException() ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 
-    void DXCanvasItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& ) {}
+    void DXCanvasItem::Notify( const com::sun::star::uno::Sequence<OUString>& ) {}
     void DXCanvasItem::Commit() {}
 
     bool DXCanvasItem::isDeviceUsable( const DeviceInfo& rDeviceInfo ) const

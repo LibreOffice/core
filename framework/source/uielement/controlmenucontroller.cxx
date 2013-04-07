@@ -380,10 +380,10 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
 
         for (sal_uInt32 i=0; i<sizeof(aCommands)/sizeof(aCommands[0]); ++i)
         {
-            aTargetURL.Complete = rtl::OUString::createFromAscii( aCommands[i] );
+            aTargetURL.Complete = OUString::createFromAscii( aCommands[i] );
             m_xURLTransformer->parseStrict( aTargetURL );
 
-            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
             if ( xDispatch.is() )
             {
                 xDispatch->addStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
@@ -399,7 +399,7 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
     svt::PopupMenuControllerBase::initialize(aArguments);
-    m_aBaseURL = ::rtl::OUString();
+    m_aBaseURL = OUString();
 }
 
 }

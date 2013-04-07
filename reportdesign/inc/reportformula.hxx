@@ -47,15 +47,15 @@ namespace rptui
 
     private:
         BindType            m_eType;
-        ::rtl::OUString     m_sCompleteFormula;
-        ::rtl::OUString     m_sUndecoratedContent;
+        OUString     m_sCompleteFormula;
+        OUString     m_sUndecoratedContent;
 
     public:
         /// constructs a ReportFormula object from a string
-        ReportFormula( const ::rtl::OUString& _rFormula );
+        ReportFormula( const OUString& _rFormula );
 
         /// constructs a ReportFormula by BindType
-        ReportFormula( const BindType _eType, const ::rtl::OUString& _rFieldOrExpression );
+        ReportFormula( const BindType _eType, const OUString& _rFieldOrExpression );
         ~ReportFormula();
 
         ReportFormula& operator=(class ReportFormula const &);
@@ -67,7 +67,7 @@ namespace rptui
         inline BindType    getType() const { return m_eType; }
 
         /// returns the complete formula represented by the object
-        const ::rtl::OUString&
+        const OUString&
                     getCompleteFormula() const;
 
         /** gets the <em>undecorated formula</em> content
@@ -78,18 +78,18 @@ namespace rptui
             If the formula denotes an expression, then the <em>undecorated content</em> is the expression
             itself.
         */
-        const ::rtl::OUString& getUndecoratedContent() const;
+        const OUString& getUndecoratedContent() const;
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on an expression
-        inline ::rtl::OUString  getFieldName() const;
+        inline OUString  getFieldName() const;
 
         /**
             @returns "=" + getFieldName()
         */
-        ::rtl::OUString getEqualUndecoratedContent() const;
+        OUString getEqualUndecoratedContent() const;
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on a field
-        inline ::rtl::OUString  getExpression() const;
+        inline OUString  getExpression() const;
 
         /** returns a bracketed field name of the formula denotes a field reference,
             or the undecorated expression if the formula denotes an expression.
@@ -97,21 +97,21 @@ namespace rptui
             Effectively, this means the method returns the complete formular, stripped by the prefix
             which indicates a field or a expression.
         */
-        ::rtl::OUString getBracketedFieldOrExpression() const;
+        OUString getBracketedFieldOrExpression() const;
 
     private:
-        void    impl_construct( const ::rtl::OUString& _rFormula );
+        void    impl_construct( const OUString& _rFormula );
     };
 
     //--------------------------------------------------------------------
-    inline ::rtl::OUString ReportFormula::getFieldName() const
+    inline OUString ReportFormula::getFieldName() const
     {
         OSL_PRECOND( getType() == Field, "ReportFormula::getFieldName: not bound to a field!" );
         return getUndecoratedContent();
     }
 
     //--------------------------------------------------------------------
-    inline ::rtl::OUString ReportFormula::getExpression() const
+    inline OUString ReportFormula::getExpression() const
     {
         OSL_PRECOND( getType() == Expression, "ReportFormula::getExpression: not bound to an expression!" );
         return getUndecoratedContent();

@@ -56,9 +56,9 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
 
     while ( aHeaderIter != aEnd )
     {
-        const rtl::OString aHeader = rtl::OUStringToOString( (*aHeaderIter).first,
+        const OString aHeader = OUStringToOString( (*aHeaderIter).first,
                                                                RTL_TEXTENCODING_UTF8 );
-        const rtl::OString aValue = rtl::OUStringToOString( (*aHeaderIter).second,
+        const OString aValue = OUStringToOString( (*aHeaderIter).second,
                                                             RTL_TEXTENCODING_UTF8 );
 
         serf_bucket_headers_set( inoutSerfHeaderBucket,

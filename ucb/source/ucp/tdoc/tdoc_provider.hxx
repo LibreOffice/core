@@ -94,41 +94,41 @@ public:
 
     // Non-UNO interfaces
     com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-    queryStorage( const rtl::OUString & rUri, StorageAccessMode eMode ) const;
+    queryStorage( const OUString & rUri, StorageAccessMode eMode ) const;
 
     com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
-    queryStorageClone( const rtl::OUString & rUri ) const;
+    queryStorageClone( const OUString & rUri ) const;
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    queryInputStream( const rtl::OUString & rUri,
-                      const rtl::OUString & rPassword ) const
+    queryInputStream( const OUString & rUri,
+                      const OUString & rPassword ) const
         throw ( com::sun::star::packages::WrongPasswordException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
-    queryOutputStream( const rtl::OUString & rUri,
-                       const rtl::OUString & rPassword,
+    queryOutputStream( const OUString & rUri,
+                       const OUString & rPassword,
                        bool bTruncate ) const
         throw ( com::sun::star::packages::WrongPasswordException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XStream >
-    queryStream( const rtl::OUString & rUri,
-                 const rtl::OUString & rPassword,
+    queryStream( const OUString & rUri,
+                 const OUString & rPassword,
                  bool bTruncate ) const
         throw ( com::sun::star::packages::WrongPasswordException );
 
     bool queryNamesOfChildren(
-        const rtl::OUString & rUri,
-        com::sun::star::uno::Sequence< rtl::OUString > & rNames ) const;
+        const OUString & rUri,
+        com::sun::star::uno::Sequence< OUString > & rNames ) const;
 
     // storage properties
-    rtl::OUString queryStorageTitle( const rtl::OUString & rUri ) const;
+    OUString queryStorageTitle( const OUString & rUri ) const;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >
-    queryDocumentModel( const rtl::OUString & rUri ) const;
+    queryDocumentModel( const OUString & rUri ) const;
 
     // interface OfficeDocumentsEventListener
-    virtual void notifyDocumentOpened( const rtl::OUString & rDocId );
-    virtual void notifyDocumentClosed( const rtl::OUString & rDocId );
+    virtual void notifyDocumentOpened( const OUString & rDocId );
+    virtual void notifyDocumentClosed( const OUString & rDocId );
 
 private:
     rtl::Reference< OfficeDocumentsManager > m_xDocsMgr;

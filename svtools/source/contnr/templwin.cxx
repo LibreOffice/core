@@ -117,7 +117,7 @@ struct FolderHistory
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
 };
 
-typedef ::std::vector< ::rtl::OUString* > NewDocList_Impl;
+typedef ::std::vector< OUString* > NewDocList_Impl;
 
 // class SvtDummyHeaderBar_Impl ------------------------------------------
 
@@ -427,10 +427,10 @@ SvtFileViewWindow_Impl::~SvtFileViewWindow_Impl()
 void GetMenuEntry_Impl
 (
     Sequence< PropertyValue >& aDynamicMenuEntry,
-    ::rtl::OUString& rTitle,
-    ::rtl::OUString& rURL,
-    ::rtl::OUString& rFrame,
-    ::rtl::OUString& rImageId
+    OUString& rTitle,
+    OUString& rURL,
+    OUString& rFrame,
+    OUString& rImageId
 )
 {
     for ( int i = 0; i < aDynamicMenuEntry.getLength(); i++ )
@@ -446,20 +446,20 @@ void GetMenuEntry_Impl
     }
 }
 
-Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
+Sequence< OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
 {
     NewDocList_Impl aNewDocs;
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
     aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_NEWMENU );
 
-    ::rtl::OUString aTitle;
-    ::rtl::OUString aURL;
-    ::rtl::OUString aImageURL;
-    ::rtl::OUString aTargetFrame;
+    OUString aTitle;
+    OUString aURL;
+    OUString aImageURL;
+    OUString aTargetFrame;
 
     sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
-    ::rtl::OUString sSeparator( "private:separator" );
-    ::rtl::OUString sSlotURL( "slot:5500" );
+    OUString sSeparator( "private:separator" );
+    OUString sSlotURL( "slot:5500" );
 
     for ( i = 0; i < nCount; ++i )
     {
@@ -469,7 +469,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
         if( aURL == sSeparator )
         {
             String aSeparator( aSeparatorStr );
-            ::rtl::OUString* pSeparator = new ::rtl::OUString( aSeparator );
+            OUString* pSeparator = new OUString( aSeparator );
             aNewDocs.push_back( pSeparator );
         }
         else
@@ -495,17 +495,17 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
                 aRow += String( aImageURL );
             }
 
-            ::rtl::OUString* pRow = new ::rtl::OUString( aRow );
+            OUString* pRow = new OUString( aRow );
             aNewDocs.push_back( pRow );
         }
     }
 
     nCount = aNewDocs.size();
-    Sequence < ::rtl::OUString > aRet( nCount );
-    ::rtl::OUString* pRet = aRet.getArray();
+    Sequence < OUString > aRet( nCount );
+    OUString* pRet = aRet.getArray();
     for ( i = 0; i < nCount; ++i )
     {
-        ::rtl::OUString* pNewDoc = aNewDocs[i];
+        OUString* pNewDoc = aNewDocs[i];
         pRet[i] = *( pNewDoc );
         delete pNewDoc;
     }
@@ -563,7 +563,7 @@ sal_Bool SvtFileViewWindow_Impl::HasPreviousLevel( String& rURL ) const
 
 String SvtFileViewWindow_Impl::GetFolderTitle() const
 {
-    rtl::OUString aTitle;
+    OUString aTitle;
     ::utl::UCBContentHelper::GetTitle( aFolderURL, &aTitle );
     return aTitle;
 }
@@ -583,14 +583,14 @@ SvtDocInfoTable_Impl::SvtDocInfoTable_Impl() :
 }
 // -----------------------------------------------------------------------
 
-rtl::OUString SvtDocInfoTable_Impl::GetString( long nId ) const
+OUString SvtDocInfoTable_Impl::GetString( long nId ) const
 {
     sal_uInt32 nPos( FindIndex( nId ) );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos )
         return ResStringArray::GetString( nPos );
 
-    return rtl::OUString();
+    return OUString();
 }
 
 // class SvtFrameWindow_Impl ---------------------------------------------
@@ -663,7 +663,7 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
         uno::Sequence < beans::PropertyValue> aProps(1);
-        aProps[0].Name = ::rtl::OUString( "InteractionHandler" );
+        aProps[0].Name = OUString( "InteractionHandler" );
         aProps[0].Value <<= xInteractionHandler;
         m_xDocProps->loadFromMedium( rURL, aProps );
         pEditWin->fill( m_xDocProps, rURL );
@@ -745,14 +745,14 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
 
                         uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
                             task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
-                        aArgs[3].Name = ::rtl::OUString( "InteractionHandler" );
+                        aArgs[3].Name = OUString( "InteractionHandler" );
                         aArgs[3].Value <<= xInteractionHandler;
 
                         b = sal_False;
                         aArgs[2].Value.setValue( &b, ::getBooleanCppuType() );
                         xDisp->dispatch( aURL, aArgs );
 
-                        ::rtl::OUString                                         aDispURL;
+                        OUString                                         aDispURL;
                         Reference< ::com::sun::star::frame::XController >       xCtrl = xFrame->getController();
                         if( xCtrl.is() )
                         {
@@ -765,7 +765,7 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                         {
                             xFrame->setComponent( Reference < com::sun::star::awt::XWindow >(), Reference < XController >() );
                             ViewEmptyWin();
-                            m_aOpenURL = rtl::OUString();
+                            m_aOpenURL = OUString();
                         }
                         else
                             m_aOpenURL = aDispURL;
@@ -778,13 +778,13 @@ void SvtFrameWindow_Impl::OpenFile( const String& rURL, sal_Bool bPreview, sal_B
                 aArgs[0].Name = "AsTemplate";
                 aArgs[0].Value <<= bAsTemplate;
                 xDisp->dispatch( aURL, aArgs );
-                m_aOpenURL = rtl::OUString();
+                m_aOpenURL = OUString();
             }
             else
             {
                 Sequence < PropertyValue > aArgs;
                 xDisp->dispatch( aURL, aArgs );
-                m_aOpenURL = rtl::OUString();
+                m_aOpenURL = OUString();
             }
         }
     }
@@ -1309,7 +1309,7 @@ void SvtTemplateWindow::ReadViewSettings()
     sal_Int32 nSelectedGroup    =   ICON_POS_TEMPLATES;
     sal_Int32 nSelectedView     =   TI_DOCTEMPLATE_DOCINFO;
     double nSplitRatio          =   0.5;
-    ::rtl::OUString sLastFolder;
+    OUString sLastFolder;
 
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
     if ( aViewSettings.Exists() )
@@ -1380,7 +1380,7 @@ void SvtTemplateWindow::WriteViewSettings()
 
     // last folder
     aSettings[3].Name   =   VIEWSETTING_LASTFOLDER;
-    aSettings[3].Value  <<= ::rtl::OUString( pFileWin->GetFolderURL() );
+    aSettings[3].Value  <<= OUString( pFileWin->GetFolderURL() );
 
     // write
     SvtViewOptions aViewSettings( E_DIALOG, VIEWSETTING_NEWFROMTEMPLATE );
@@ -1532,10 +1532,10 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
 {
     sal_Bool bEnable = sal_False;
 
-    ::rtl::OUString aFolderURL = pImpl->pWin->GetFolderURL();
+    OUString aFolderURL = pImpl->pWin->GetFolderURL();
     if ( pImpl->pWin->IsFileSelected() && !aFolderURL.isEmpty() )
     {
-        ::rtl::OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
+        OUString aFileTargetURL = pImpl->pWin->GetSelectedFile();
         bEnable = !aFileTargetURL.isEmpty();
     }
 
@@ -1627,7 +1627,7 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 
     Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
     Reference < XDispatch > xDisp;
-    xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    xDisp = xProv->queryDispatch( aTargetURL, OUString(), 0 );
 
     if ( xDisp.is() )
     {
@@ -1649,9 +1649,9 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, PackageHdl_Impl)
     {
         using namespace org::freedesktop::PackageKit;
         Reference< XSyncDbusSessionHelper > xSyncDbusSessionHelper(SyncDbusSessionHelper::create(comphelper::getProcessComponentContext()), UNO_QUERY);
-        Sequence< ::rtl::OUString > vPackages(1);
+        Sequence< OUString > vPackages(1);
         vPackages[0] = "libreoffice-templates";
-        ::rtl::OUString sInteraction("");
+        OUString sInteraction("");
         xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
     }
     catch (Exception & e)
@@ -1702,7 +1702,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 
 IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
 {
-    ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
+    OUString sURL( aMoreTemplatesLink.GetURL() );
     if ( !sURL.isEmpty() )
     {
         localizeWebserviceURI(sURL);
@@ -1713,13 +1713,13 @@ IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
             uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShell(
                 com::sun::star::system::SystemShellExecute::create(xContext) );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                xSystemShell->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );
         }
         catch( const uno::Exception& e )
         {
              OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-                rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
     return 0;

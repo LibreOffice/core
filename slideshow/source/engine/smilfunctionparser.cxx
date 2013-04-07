@@ -532,14 +532,14 @@ namespace slideshow
 #endif
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const ::rtl::OUString&          rSmilValue,
+        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
                                                                     const ::basegfx::B2DRectangle&  rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
             // gives better conversion robustness here (we might want to map space
             // etc. to ASCII space here)
-            const ::rtl::OString& rAsciiSmilValue(
-                rtl::OUStringToOString( rSmilValue, RTL_TEXTENCODING_ASCII_US ) );
+            const OString& rAsciiSmilValue(
+                OUStringToOString( rSmilValue, RTL_TEXTENCODING_ASCII_US ) );
 
             StringIteratorT aStart( rAsciiSmilValue.getStr() );
             StringIteratorT aEnd( rAsciiSmilValue.getStr()+rAsciiSmilValue.getLength() );
@@ -578,14 +578,14 @@ namespace slideshow
             return pContext->maOperandStack.top();
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const ::rtl::OUString&           rSmilFunction,
+        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
                                                                        const ::basegfx::B2DRectangle&   rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
             // gives better conversion robustness here (we might want to map space
             // etc. to ASCII space here)
-            const ::rtl::OString& rAsciiSmilFunction(
-                rtl::OUStringToOString( rSmilFunction, RTL_TEXTENCODING_ASCII_US ) );
+            const OString& rAsciiSmilFunction(
+                OUStringToOString( rSmilFunction, RTL_TEXTENCODING_ASCII_US ) );
 
             StringIteratorT aStart( rAsciiSmilFunction.getStr() );
             StringIteratorT aEnd( rAsciiSmilFunction.getStr()+rAsciiSmilFunction.getLength() );

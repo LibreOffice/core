@@ -52,8 +52,6 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::container;
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::beans::NamedValue;
 
@@ -131,7 +129,7 @@ namespace sd
             OSL_FAIL(
                 OString(OString("sd::CustomAnimationClonerImpl::Clone(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
 
@@ -215,7 +213,7 @@ namespace sd
             OSL_FAIL(
                 OString(OString("sd::CustomAnimationClonerImpl::transformNode(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -289,7 +287,7 @@ namespace sd
             OSL_FAIL(
                 OString(OString("sd::CustomAnimationClonerImpl::transformValue(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }

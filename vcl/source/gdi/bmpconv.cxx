@@ -34,7 +34,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::awt;
 
-using ::rtl::OUString;
 
 namespace vcl {
 

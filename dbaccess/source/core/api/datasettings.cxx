@@ -143,7 +143,7 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
         case PROPERTY_ID_GROUP_BY:
         case PROPERTY_ID_FILTER:
         case PROPERTY_ID_ORDER:
-            _rDefault <<= ::rtl::OUString();
+            _rDefault <<= OUString();
             break;
         case PROPERTY_ID_FONT:
             _rDefault <<= ::comphelper::getDefaultFont();

@@ -41,7 +41,7 @@ namespace connectivity
         class ProfileStruct;
     }
 }
-typedef ::std::map < ::rtl::OUString, ::connectivity::mork::ProfileStruct* > ProfileList;
+typedef ::std::map < OUString, ::connectivity::mork::ProfileStruct* > ProfileList;
 namespace connectivity
 {
     namespace mork
@@ -49,24 +49,24 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct,::rtl::OUString aProfileName,
-                          const ::rtl::OUString &aProfilePath
+            ProfileStruct(MozillaProductType aProduct,OUString aProfileName,
+                          const OUString &aProfilePath
                             );
             MozillaProductType getProductType() { return product;}
-            ::rtl::OUString getProfileName(){ return profileName;}
-            ::rtl::OUString getProfilePath() ;
+            OUString getProfileName(){ return profileName;}
+            OUString getProfilePath() ;
         protected:
             MozillaProductType product;
-            ::rtl::OUString profileName;
-            ::rtl::OUString profilePath;
+            OUString profileName;
+            OUString profilePath;
         };
 
         class ProductStruct
         {
         public:
-            void setCurrentProfile(::rtl::OUString aProfileName){mCurrentProfileName = aProfileName;}
+            void setCurrentProfile(OUString aProfileName){mCurrentProfileName = aProfileName;}
 
-            ::rtl::OUString mCurrentProfileName;
+            OUString mCurrentProfileName;
 
             ProfileList mProfileList;
         };
@@ -78,8 +78,8 @@ namespace connectivity
 
             virtual ~ProfileAccess();
             ProfileAccess();
-            ::rtl::OUString getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
-            ::rtl::OUString getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
+            OUString getProfilePath( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
+            OUString getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException);
         protected:
             ProductStruct m_ProductProfileList[4];
             sal_Int32 LoadProductsInfo();

@@ -35,7 +35,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -117,7 +116,7 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
 
-::rtl::OUString PresenterPaneBase::GetTitle (void) const
+OUString PresenterPaneBase::GetTitle (void) const
 {
     return msTitle;
 }
@@ -448,7 +447,7 @@ void PresenterPaneBase::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString( "PresenterPane object has already been disposed"),
+            OUString( "PresenterPane object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

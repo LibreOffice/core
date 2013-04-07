@@ -30,7 +30,6 @@ using namespace osl;
 using namespace std;
 
 using ::dtrans::ClipboardManager;
-using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 

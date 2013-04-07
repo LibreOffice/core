@@ -99,7 +99,7 @@ namespace pdfi
 
         void sortElements( Element* pElement, bool bDeep = false );
 
-        rtl::OUString mirrorString( const rtl::OUString& i_rInString ) const;
+        OUString mirrorString( const OUString& i_rInString ) const;
 
     private:
         void processGlyphLine();
@@ -109,11 +109,11 @@ namespace pdfi
                              FrameElement* pFrame,
                              bool         bIsWhiteSpaceInLine );
 
-        void drawGlyphLine( const rtl::OUString&                               rGlyphs,
+        void drawGlyphLine( const OUString&                               rGlyphs,
                             const ::com::sun::star::geometry::RealRectangle2D& rRect,
                             const ::com::sun::star::geometry::Matrix2D&        rFontMatrix  );
 
-        void drawCharGlyphs( rtl::OUString&             rGlyphs,
+        void drawCharGlyphs( OUString&             rGlyphs,
                              ::com::sun::star::geometry::RealRectangle2D&  rRect,
                              const GraphicsContext& aGC,
                              ParagraphElement* pPara,
@@ -129,7 +129,7 @@ namespace pdfi
         virtual void endPage();
 
         virtual void hyperLink( const ::com::sun::star::geometry::RealRectangle2D& rBounds,
-                                const ::rtl::OUString&                             rURI );
+                                const OUString&                             rURI );
         virtual void pushState();
         virtual void popState();
         virtual void setFlatness( double );
@@ -158,7 +158,7 @@ namespace pdfi
         virtual void intersectEoClip(const ::com::sun::star::uno::Reference<
                                            ::com::sun::star::rendering::XPolyPolygon2D >& rPath);
 
-        virtual void drawGlyphs( const rtl::OUString&                               rGlyphs,
+        virtual void drawGlyphs( const OUString&                               rGlyphs,
                                  const ::com::sun::star::geometry::RealRectangle2D& rRect,
                                  const ::com::sun::star::geometry::Matrix2D&        rFontMatrix );
         virtual void endText();
@@ -188,7 +188,7 @@ namespace pdfi
                                                 ::com::sun::star::beans::PropertyValue>& xMask);
 
         /// nElements == -1 means fill in number of pages
-        void startIndicator( const rtl::OUString& rText, sal_Int32 nElements = -1 );
+        void startIndicator( const OUString& rText, sal_Int32 nElements = -1 );
         void endIndicator();
 
         void setupImage(ImageId nImage);
@@ -238,13 +238,13 @@ namespace pdfi
         public:
             CharGlyph(double fXPrevGlyphPosition, double fYPrevGlyphPosition, double fPrevGlyphHeight, double fPrevGlyphWidth,
                Element* pCurElement, const GraphicsContext& rCurrentContext, const com::sun::star::geometry::Matrix2D& rFontMatrix,
-               const com::sun::star::geometry::RealRectangle2D& rRect, const rtl::OUString& rGlyphs  )
+               const com::sun::star::geometry::RealRectangle2D& rRect, const OUString& rGlyphs  )
                : m_fXPrevGlyphPosition(fXPrevGlyphPosition), m_fYPrevGlyphPosition(fYPrevGlyphPosition), m_fPrevGlyphHeight(fPrevGlyphHeight),
                  m_fPrevGlyphWidth(fPrevGlyphWidth), m_pCurElement(pCurElement), m_rCurrentContext(rCurrentContext),
                  m_rFontMatrix(rFontMatrix), m_rRect(rRect), m_rGlyphs(rGlyphs) {};
 
             virtual ~CharGlyph(){};
-            rtl::OUString& getGlyph(){ return m_rGlyphs; }
+            OUString& getGlyph(){ return m_rGlyphs; }
             com::sun::star::geometry::RealRectangle2D& getRect(){ return m_rRect; }
             com::sun::star::geometry::Matrix2D&  getFontMatrix(){ return m_rFontMatrix; }
             GraphicsContext&  getGC(){ return m_rCurrentContext; }
@@ -272,7 +272,7 @@ namespace pdfi
             GraphicsContext             m_rCurrentContext ;
             com::sun::star::geometry::Matrix2D          m_rFontMatrix ;
             com::sun::star::geometry::RealRectangle2D   m_rRect ;
-            rtl::OUString               m_rGlyphs ;
+            OUString               m_rGlyphs ;
     };
 }
 

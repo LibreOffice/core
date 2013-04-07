@@ -146,7 +146,7 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getDeclaringClass()
         MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
-            rtl::OUString aName(getAttributeTypeDescr()->aBase.aBase.pTypeName);
+            OUString aName(getAttributeTypeDescr()->aBase.aBase.pTypeName);
             sal_Int32 i = aName.indexOf(':');
             OSL_ASSERT(i >= 0);
             _xDeclClass = getReflection()->forName(aName.copy(0, i));
@@ -451,7 +451,7 @@ Reference< XIdlClass > IdlInterfaceMethodImpl::getDeclaringClass()
         MutexGuard aGuard( getMutexAccess() );
         if (! _xDeclClass.is())
         {
-            rtl::OUString aName(getMethodTypeDescr()->aBase.aBase.pTypeName);
+            OUString aName(getMethodTypeDescr()->aBase.aBase.pTypeName);
             sal_Int32 i = aName.indexOf(':');
             OSL_ASSERT(i >= 0);
             _xDeclClass = getReflection()->forName(aName.copy(0, i));

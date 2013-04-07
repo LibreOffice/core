@@ -56,14 +56,14 @@ public:
     ~DialogModel();
 
     typedef ::std::pair<
-                ::rtl::OUString,
+                OUString,
                 ::std::pair< ::com::sun::star::uno::Reference<
                                  ::com::sun::star::chart2::XDataSeries >,
                              ::com::sun::star::uno::Reference<
                                  ::com::sun::star::chart2::XChartType > > >
         tSeriesWithChartTypeByName;
 
-    typedef ::std::map< ::rtl::OUString, ::rtl::OUString >
+    typedef ::std::map< OUString, OUString >
         tRolesWithRanges;
 
     void setTemplate(
@@ -91,7 +91,7 @@ public:
     tRolesWithRanges getRolesWithRanges(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xSeries,
-        const ::rtl::OUString & aRoleOfSequenceForLabel,
+        const OUString & aRoleOfSequenceForLabel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType > & xChartType ) const;
 
@@ -127,12 +127,12 @@ public:
     void setCategories( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
 
-    ::rtl::OUString getCategoriesRange() const;
+    OUString getCategoriesRange() const;
 
     bool isCategoryDiagram() const;
 
     void detectArguments(
-        ::rtl::OUString & rOutRangeString,
+        OUString & rOutRangeString,
         bool & rOutUseColumns, bool & rOutFirstCellAsLabel, bool & rOutHasCategories ) const;
 
     bool allArgumentsForRectRangeDetected() const;
@@ -142,12 +142,12 @@ public:
 
     void startControllerLockTimer();
 
-    static ::rtl::OUString ConvertRoleFromInternalToUI( const ::rtl::OUString & rRoleString );
-    static ::rtl::OUString GetRoleDataLabel();
+    static OUString ConvertRoleFromInternalToUI( const OUString & rRoleString );
+    static OUString GetRoleDataLabel();
 
     // pass a role string (not translated) and get an index that serves for
     // relative ordering, to get e.g. x-values and y-values in the right order
-    static sal_Int32 GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString );
+    static sal_Int32 GetRoleIndexForSorting( const OUString & rInternalRoleString );
 
 private:
     ::com::sun::star::uno::Reference<

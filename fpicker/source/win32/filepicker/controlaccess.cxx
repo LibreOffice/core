@@ -34,7 +34,6 @@
 // namespace directives
 //------------------------------------------------------------
 
-using rtl::OUString;
 
 namespace // private
 {

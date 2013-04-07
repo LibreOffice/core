@@ -66,7 +66,6 @@ using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::sheet::DataPilotTableResultData;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 #define SC_DP_FRAME_INNER_BOLD      20
 #define SC_DP_FRAME_OUTER_BOLD      40
@@ -83,8 +82,8 @@ struct ScDPOutLevelData
     long                                nDimPos;
     sal_uInt32 mnSrcNumFmt; /// Prevailing number format used in the source data.
     uno::Sequence<sheet::MemberResult>  aResult;
-    rtl::OUString                       maName;   /// Name is the internal field name.
-    rtl::OUString                       maCaption; /// Caption is the name visible in the output table.
+    OUString                       maName;   /// Name is the internal field name.
+    OUString                       maCaption; /// Caption is the name visible in the output table.
     bool                                mbHasHiddenMember:1;
     bool                                mbDataLayout:1;
     bool                                mbPageDim:1;
@@ -287,7 +286,7 @@ void lcl_SetStyleById( ScDocument* pDoc, SCTAB nTab,
         return;
     }
 
-    rtl::OUString aStyleName = ScGlobal::GetRscString( nStrId );
+    OUString aStyleName = ScGlobal::GetRscString( nStrId );
     ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
     ScStyleSheet* pStyle = (ScStyleSheet*) pStlPool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if (!pStyle)
@@ -346,7 +345,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
     //  get names/formats for all data dimensions
     //! merge this with the loop to collect ScDPOutLevelData?
 
-    rtl::OUString aDataNames[SC_DPOUT_MAXLEVELS];
+    OUString aDataNames[SC_DPOUT_MAXLEVELS];
     sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
     long nDataCount = 0;
     long nDimCount = xDims->getCount();
@@ -360,14 +359,14 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         {
             sheet::DataPilotFieldOrientation eDimOrient =
                 (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                    xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
+                    xDimProp, OUString(SC_UNO_DP_ORIENTATION),
                     sheet::DataPilotFieldOrientation_HIDDEN );
             if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 aDataNames[nDataCount] = xDimName->getName();
                 long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                         xDimProp,
-                                        rtl::OUString(SC_UNONAME_NUMFMT) );
+                                        OUString(SC_UNONAME_NUMFMT) );
                 nDataFormats[nDataCount] = nFormat;
                 ++nDataCount;
             }
@@ -379,7 +378,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
 
     const sheet::MemberResult* pArray = aResult.getConstArray();
 
-    rtl::OUString aName;
+    OUString aName;
     sal_uInt32* pNumFmt = new sal_uInt32[nSize];
     if (nDataCount == 1)
     {
@@ -424,13 +423,13 @@ sal_uInt32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAcces
         {
             sheet::DataPilotFieldOrientation eDimOrient =
                 (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                    xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
+                    xDimProp, OUString(SC_UNO_DP_ORIENTATION),
                     sheet::DataPilotFieldOrientation_HIDDEN );
             if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                         xDimProp,
-                                        rtl::OUString(SC_UNONAME_NUMFMT) );
+                                        OUString(SC_UNONAME_NUMFMT) );
 
                 return nFormat;     // use format from first found data dimension
             }
@@ -555,12 +554,12 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
                     (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
+                        xDimProp, OUString(SC_UNO_DP_ORIENTATION),
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 long nDimPos = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                        rtl::OUString(SC_UNO_DP_POSITION) );
+                        OUString(SC_UNO_DP_POSITION) );
                 bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
-                    xDimProp, rtl::OUString(SC_UNO_DP_ISDATALAYOUT));
+                    xDimProp, OUString(SC_UNO_DP_ISDATALAYOUT));
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
                     xDimProp, OUString(SC_UNO_DP_HAS_HIDDEN_MEMBER));
                 sal_Int32 nNumFmt = ScUnoHelpFunctions::GetLongProperty(
@@ -572,7 +571,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                             new ScNameToIndexAccess( xDimSupp->getHierarchies() );
                     long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
                                             xDimProp,
-                                            rtl::OUString(SC_UNO_DP_USEDHIERARCHY) );
+                                            OUString(SC_UNO_DP_USEDHIERARCHY) );
                     if ( nHierarchy >= xHiers->getCount() )
                         nHierarchy = 0;
 
@@ -595,7 +594,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                     xLevel, uno::UNO_QUERY );
                             if ( xLevNam.is() && xLevRes.is() )
                             {
-                                rtl::OUString aName = xLevNam->getName();
+                                OUString aName = xLevNam->getName();
                                 Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
                                 // Caption equals the field name by default.
                                 // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
@@ -706,8 +705,8 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         try
         {
             uno::Any aAny = xSrcProp->getPropertyValue(
-                    rtl::OUString(SC_UNO_DP_DATADESC) );
-            rtl::OUString aUStr;
+                    OUString(SC_UNO_DP_DATADESC) );
+            OUString aUStr;
             aAny >>= aUStr;
             aDataDescription = aUStr;
         }
@@ -1235,7 +1234,7 @@ bool ScDPOutput::GetHeaderLayout() const
 namespace {
 
 void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, sal_Int32& rDataLayoutIndex,
-                       std::vector<rtl::OUString>& rDataNames, std::vector<rtl::OUString>& rGivenNames,
+                       std::vector<OUString>& rDataNames, std::vector<OUString>& rGivenNames,
                        sheet::DataPilotFieldOrientation& rDataOrient,
                        const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
@@ -1246,12 +1245,12 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
 
     uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
     bool bColGrand = ScUnoHelpFunctions::GetBoolProperty(
-        xSrcProp, rtl::OUString(SC_UNO_DP_COLGRAND));
+        xSrcProp, OUString(SC_UNO_DP_COLGRAND));
     if ( bColGrand )
         rGrandTotalCols = 1;    // default if data layout not in columns
 
     bool bRowGrand = ScUnoHelpFunctions::GetBoolProperty(
-        xSrcProp, rtl::OUString(SC_UNO_DP_ROWGRAND));
+        xSrcProp, OUString(SC_UNO_DP_ROWGRAND));
     if ( bRowGrand )
         rGrandTotalRows = 1;    // default if data layout not in rows
 
@@ -1272,18 +1271,18 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
                     (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(SC_UNO_DP_ORIENTATION),
+                        xDimProp, OUString(SC_UNO_DP_ORIENTATION),
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 if ( ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                         rtl::OUString(SC_UNO_DP_ISDATALAYOUT) ) )
+                                         OUString(SC_UNO_DP_ISDATALAYOUT) ) )
                 {
                     rDataLayoutIndex = nDim;
                     rDataOrient = eDimOrient;
                 }
                 if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
                 {
-                    rtl::OUString aSourceName;
-                    rtl::OUString aGivenName;
+                    OUString aSourceName;
+                    OUString aGivenName;
                     ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xDim );
                     try
                     {
@@ -1350,7 +1349,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             if (xPropSet.is())
             {
                 sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                            rtl::OUString(SC_UNO_DP_DATAFIELDCOUNT) );
+                                            OUString(SC_UNO_DP_DATAFIELDCOUNT) );
                 if (nDataFieldCount > 0)
                     aResData.DataFieldIndex = (nRow - nDataStartRow) % nDataFieldCount;
             }
@@ -1432,7 +1431,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         return false;
 
     sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                rtl::OUString(SC_UNO_DP_DATAFIELDCOUNT) );
+                                OUString(SC_UNO_DP_DATAFIELDCOUNT) );
     if (nDataFieldCount == 0)
         // No data field is present in this datapilot table.
         return false;
@@ -1441,8 +1440,8 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     sal_Int32 nGrandTotalCols;
     sal_Int32 nGrandTotalRows;
     sal_Int32 nDataLayoutIndex;
-    std::vector<rtl::OUString> aDataNames;
-    std::vector<rtl::OUString> aGivenNames;
+    std::vector<OUString> aDataNames;
+    std::vector<OUString> aGivenNames;
     sheet::DataPilotFieldOrientation eDataOrient;
     lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 
@@ -1521,7 +1520,7 @@ namespace {
 //  helper functions for ScDPOutput::GetPivotData
 //
 
-bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const rtl::OUString& rSourceName, const rtl::OUString& rGivenName )
+bool lcl_IsNamedDataField( const ScDPGetPivotDataField& rTarget, const OUString& rSourceName, const OUString& rGivenName )
 {
     // match one of the names, ignoring case
     return ScGlobal::GetpTransliteration()->isEqual( rTarget.maFieldName, rSourceName ) ||
@@ -1614,7 +1613,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
     {
         try
         {
-            uno::Any aValue = xLevelProp->getPropertyValue( rtl::OUString(SC_UNO_DP_SUBTOTAL) );
+            uno::Any aValue = xLevelProp->getPropertyValue( OUString(SC_UNO_DP_SUBTOTAL) );
             aValue >>= aSubTotals;
         }
         catch(const uno::Exception&)
@@ -1631,7 +1630,7 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                         std::vector<bool>& rFilterUsed,
                         bool& rBeforeDataLayout,
                         sal_Int32 nGrandTotals, sal_Int32 nDataLayoutIndex,
-                        const std::vector<rtl::OUString>& rDataNames, const std::vector<rtl::OUString>& rGivenNames,
+                        const std::vector<OUString>& rDataNames, const std::vector<OUString>& rGivenNames,
                         const ScDPGetPivotDataField& rTarget, const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     // returns true if a filter was given for the field
@@ -1699,8 +1698,8 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                     // grand total is always automatic
                     sal_Int32 nDataPos = j - ( nSize - nGrandTotals );
                     OSL_ENSURE( nDataPos < (sal_Int32)rDataNames.size(), "wrong data count" );
-                    rtl::OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
-                    rtl::OUString aGivenName( rGivenNames[nDataPos] );
+                    OUString aSourceName( rDataNames[nDataPos] );     // vector contains source names
+                    OUString aGivenName( rGivenNames[nDataPos] );
 
                     rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
                 }
@@ -1735,8 +1734,8 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                         sal_Int32 nFuncPos = nSubTotalCount / nDataCount;       // outer order: subtotal functions
                         sal_Int32 nDataPos = nSubTotalCount % nDataCount;       // inner order: data fields
 
-                        rtl::OUString aSourceName( rDataNames[nDataPos] );             // vector contains source names
-                        rtl::OUString aGivenName( rGivenNames[nDataPos] );
+                        OUString aSourceName( rDataNames[nDataPos] );             // vector contains source names
+                        OUString aGivenName( rGivenNames[nDataPos] );
 
                         OSL_ENSURE( nFuncPos < aSubTotals.getLength(), "wrong subtotal count" );
                         rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName ) &&
@@ -1755,8 +1754,8 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                     if ( rBeforeDataLayout )
                     {
                         OSL_ENSURE( nSubTotalCount < (sal_Int32)rDataNames.size(), "wrong data count" );
-                        rtl::OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
-                        rtl::OUString aGivenName( rGivenNames[nSubTotalCount] );
+                        OUString aSourceName( rDataNames[nSubTotalCount] );       // vector contains source names
+                        OUString aGivenName( rGivenNames[nSubTotalCount] );
 
                         rResult[j] = lcl_IsNamedDataField( rTarget, aSourceName, aGivenName );
                     }
@@ -1780,7 +1779,7 @@ void lcl_FilterInclude( std::vector<bool>& rResult, std::vector< sal_Int32 >& rS
                 {
                     // Asterisks are added in ScDPSaveData::WriteToSource to create unique names.
                     //! preserve original name there?
-                    rtl::OUString aSourceName = ScDPUtil::getSourceDimensionName(aResultEntry.Name);
+                    OUString aSourceName = ScDPUtil::getSourceDimensionName(aResultEntry.Name);
 
                     rResult[j] = lcl_IsNamedDataField(
                         rTarget, aSourceName, aResultEntry.Caption);
@@ -1819,7 +1818,7 @@ void lcl_StripSubTotals( std::vector<bool>& rResult, const std::vector<sal_Int32
         }
 }
 
-rtl::OUString lcl_GetDataFieldName( const rtl::OUString& rSourceName, sheet::GeneralFunction eFunc )
+OUString lcl_GetDataFieldName( const OUString& rSourceName, sheet::GeneralFunction eFunc )
 {
     sal_uInt16 nStrId = 0;
     switch ( eFunc )
@@ -1843,9 +1842,9 @@ rtl::OUString lcl_GetDataFieldName( const rtl::OUString& rSourceName, sheet::Gen
         }
     }
     if ( !nStrId )
-        return rtl::OUString();
+        return OUString();
 
-    rtl::OUStringBuffer aRet( ScGlobal::GetRscString( nStrId ) );
+    OUStringBuffer aRet( ScGlobal::GetRscString( nStrId ) );
     aRet.appendAscii(RTL_CONSTASCII_STRINGPARAM(" - "));
     aRet.append(rSourceName);
     return aRet.makeStringAndClear();
@@ -1854,7 +1853,7 @@ rtl::OUString lcl_GetDataFieldName( const rtl::OUString& rSourceName, sheet::Gen
 }
 
 void ScDPOutput::GetDataDimensionNames(
-    rtl::OUString& rSourceName, rtl::OUString& rGivenName, const uno::Reference<uno::XInterface>& xDim )
+    OUString& rSourceName, OUString& rGivenName, const uno::Reference<uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
     uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
@@ -1868,7 +1867,7 @@ void ScDPOutput::GetDataDimensionNames(
         //! Should use a stored name when available
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                xDimProp, rtl::OUString(SC_UNO_DP_FUNCTION),
+                                xDimProp, OUString(SC_UNO_DP_FUNCTION),
                                 sheet::GeneralFunction_NONE );
         rGivenName = lcl_GetDataFieldName( rSourceName, eFunc );
     }
@@ -1883,8 +1882,8 @@ bool ScDPOutput::GetPivotData( ScDPGetPivotDataField& rTarget,
     sal_Int32 nGrandTotalCols;
     sal_Int32 nGrandTotalRows;
     sal_Int32 nDataLayoutIndex;
-    std::vector<rtl::OUString> aDataNames;
-    std::vector<rtl::OUString> aGivenNames;
+    std::vector<OUString> aDataNames;
+    std::vector<OUString> aGivenNames;
     sheet::DataPilotFieldOrientation eDataOrient;
     lcl_GetTableVars( nGrandTotalCols, nGrandTotalRows, nDataLayoutIndex, aDataNames, aGivenNames, eDataOrient, xSource );
 

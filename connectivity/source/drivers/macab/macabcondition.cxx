@@ -51,7 +51,7 @@ sal_Bool MacabConditionConstant::eval(const MacabRecord *) const
     return m_bValue;
 }
 // -----------------------------------------------------------------------------
-MacabConditionColumn::MacabConditionColumn(const MacabHeader *header, const ::rtl::OUString &sColumnName) throw(SQLException)
+MacabConditionColumn::MacabConditionColumn(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabCondition(),
       m_nFieldNumber(header->getColumnNumber(sColumnName))
 {
@@ -69,7 +69,7 @@ sal_Bool MacabConditionColumn::isAlwaysFalse() const
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-MacabConditionNull::MacabConditionNull(const MacabHeader *header, const ::rtl::OUString &sColumnName) throw(SQLException)
+MacabConditionNull::MacabConditionNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabConditionColumn(header, sColumnName)
 {
 }
@@ -86,7 +86,7 @@ sal_Bool MacabConditionNull::eval(const MacabRecord *aRecord) const
         return sal_False;
 }
 // -----------------------------------------------------------------------------
-MacabConditionNotNull::MacabConditionNotNull(const MacabHeader *header, const ::rtl::OUString &sColumnName) throw(SQLException)
+MacabConditionNotNull::MacabConditionNotNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
     : MacabConditionColumn(header, sColumnName)
 {
 }
@@ -103,13 +103,13 @@ sal_Bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
         return sal_True;
 }
 // -----------------------------------------------------------------------------
-MacabConditionCompare::MacabConditionCompare(const MacabHeader *header, const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+MacabConditionCompare::MacabConditionCompare(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionColumn(header, sColumnName),
       m_sMatchString(sMatchString)
 {
 }
 // -----------------------------------------------------------------------------
-MacabConditionEqual::MacabConditionEqual(const MacabHeader *header, const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+MacabConditionEqual::MacabConditionEqual(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
@@ -132,7 +132,7 @@ sal_Bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
     return nReturn == 0;
 }
 // -----------------------------------------------------------------------------
-MacabConditionDifferent::MacabConditionDifferent(const MacabHeader *header, const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+MacabConditionDifferent::MacabConditionDifferent(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
@@ -155,7 +155,7 @@ sal_Bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
     return nReturn != 0;
 }
 // -----------------------------------------------------------------------------
-MacabConditionSimilar::MacabConditionSimilar(const MacabHeader *header, const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+MacabConditionSimilar::MacabConditionSimilar(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : MacabConditionCompare(header, sColumnName, sMatchString)
 {
 }
@@ -167,7 +167,7 @@ sal_Bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
     if(aValue == NULL)
         return sal_False;
 
-    ::rtl::OUString sName = MacabRecord::fieldToString(aValue);
+    OUString sName = MacabRecord::fieldToString(aValue);
 
     return match(m_sMatchString, sName, '\0');
 }

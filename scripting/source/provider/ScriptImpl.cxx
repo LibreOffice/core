@@ -35,7 +35,7 @@ namespace func_provider
 ScriptImpl::ScriptImpl(
     const Reference< beans::XPropertySet > & scriptingContext,
     const Reference< runtime::XScriptInvocation > & runtimeMgr,
-    const ::rtl::OUString& scriptURI )
+    const OUString& scriptURI )
 throw ( RuntimeException ) :
         m_XScriptingContext( scriptingContext, UNO_SET_THROW ),
         m_RunTimeManager( runtimeMgr, UNO_SET_THROW ),
@@ -69,14 +69,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     }
     catch ( const lang::IllegalArgumentException & iae )
     {
-        ::rtl::OUString temp = "ScriptImpl::invoke IllegalArgumentException : ";
+        OUString temp = "ScriptImpl::invoke IllegalArgumentException : ";
         throw lang::IllegalArgumentException( temp.concat( iae.Message ),
                                               Reference< XInterface > (),
                                               iae.ArgumentPosition );
     }
     catch ( const script::CannotConvertException & cce )
     {
-        ::rtl::OUString temp = "ScriptImpl::invoke CannotConvertException : ";
+        OUString temp = "ScriptImpl::invoke CannotConvertException : ";
         throw script::CannotConvertException( temp.concat( cce.Message ),
                                               Reference< XInterface > (),
                                               cce.DestinationTypeClass,
@@ -85,14 +85,14 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException,
     }
     catch ( const reflection::InvocationTargetException & ite )
     {
-        ::rtl::OUString temp = "ScriptImpl::invoke InvocationTargetException : ";
+        OUString temp = "ScriptImpl::invoke InvocationTargetException : ";
         throw reflection::InvocationTargetException( temp.concat( ite.Message ),
                 Reference< XInterface > (),
                 ite.TargetException );
     }
     catch ( const RuntimeException & re )
     {
-        ::rtl::OUString temp = "ScriptImpl::invoke RuntimeException : ";
+        OUString temp = "ScriptImpl::invoke RuntimeException : ";
         throw RuntimeException( temp.concat( re.Message ),
                                 Reference< XInterface > () );
     }

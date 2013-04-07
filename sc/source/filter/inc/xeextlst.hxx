@@ -34,7 +34,7 @@ public:
     virtual XclExpExtType GetType() = 0;
 
 protected:
-    rtl::OString maURI;
+    OString maURI;
 };
 
 class XclExpExtCfvo : public XclExpRecordBase, protected XclExpRoot
@@ -45,7 +45,7 @@ public:
 
 private:
     ScColorScaleEntryType meType;
-    rtl::OString maValue;
+    OString maValue;
     bool mbFirst;
 };
 
@@ -90,12 +90,12 @@ typedef boost::shared_ptr<XclExpExtDataBar> XclExpExtDataBarRef;
 class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const rtl::OString& rId );
+    XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
     virtual void SaveXml( XclExpXmlStream& rStrm );
 
 private:
     XclExpExtDataBarRef maDataBar;
-    rtl::OString maId;
+    OString maId;
 };
 
 typedef boost::shared_ptr<XclExpExt> XclExpExtRef;
@@ -104,7 +104,7 @@ typedef boost::shared_ptr<XclExpExtCfRule> XclExpExtCfRuleRef;
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const rtl::OString& rId );
+    explicit XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId );
     virtual void SaveXml( XclExpXmlStream& rStrm );
 
 private:

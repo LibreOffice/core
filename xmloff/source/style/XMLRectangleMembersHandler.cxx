@@ -27,8 +27,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 
 XMLRectangleMembersHdl::XMLRectangleMembersHdl( sal_Int32 nType )
@@ -105,7 +103,7 @@ sal_Bool XMLRectangleMembersHdl::exportXML(
             break;
     }
 
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
     rUnitConverter.convertMeasureToXML( sBuffer, nValue );
     rStrExpValue = sBuffer.makeStringAndClear();
     return sal_True;

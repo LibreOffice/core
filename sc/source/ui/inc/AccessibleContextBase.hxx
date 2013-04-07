@@ -166,12 +166,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -228,20 +228,20 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService(const ::rtl::OUString& sServiceName)
+        supportsService(const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext and Accessible service.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -260,12 +260,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -299,9 +299,9 @@ protected:
         throw (::com::sun::star::lang::DisposedException);
 
     /// Use this method to set initial Name without notification
-    void SetName(const rtl::OUString& rName) { msName = rName; }
+    void SetName(const OUString& rName) { msName = rName; }
     /// Use this method to set initial Description without notification
-    void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
+    void SetDescription(const OUString& rDesc) { msDescription = rDesc; }
 
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<
@@ -312,12 +312,12 @@ private:
         be set from the outside.  Furthermore, it changes according the the
         draw page's display mode.
     */
-    ::rtl::OUString msDescription;
+    OUString msDescription;
 
     /** Name of this object.  It changes according the draw page's
         display mode.
     */
-    ::rtl::OUString msName;
+    OUString msName;
 
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 mnClientId;

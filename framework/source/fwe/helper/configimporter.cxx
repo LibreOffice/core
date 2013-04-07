@@ -44,11 +44,11 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
         {
             for ( sal_uInt16 i = 1; i <= 4; i++ )
             {
-                rtl::OUStringBuffer aCustomTbxName( 20 );
+                OUStringBuffer aCustomTbxName( 20 );
                 aCustomTbxName.appendAscii( USERDEFTOOLBOX );
                 aCustomTbxName[14] = aCustomTbxName[14] + i;
 
-                rtl::OUString aTbxStreamName( aCustomTbxName.makeStringAndClear() );
+                OUString aTbxStreamName( aCustomTbxName.makeStringAndClear() );
                 uno::Reference< io::XStream > xStream = rToolbarStorage->openStreamElement( aTbxStreamName, embed::ElementModes::READ );
                 if ( xStream.is() )
                 {

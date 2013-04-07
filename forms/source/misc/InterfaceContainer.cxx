@@ -123,7 +123,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString("ooo.vba.VBACodeNameProvider") ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( OUString("ooo.vba.VBACodeNameProvider") ), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -140,15 +140,15 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             // Try getting the code name from the container first (faster),
             // then from the element if that fails (slower).
             Reference<XInterface> xThis = static_cast<XContainer*>(this);
-            rtl::OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
+            OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
             if (sCodeName.isEmpty())
                 sCodeName = xNameQuery->getCodeNameForObject(xElement);
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
-            ::rtl::OUString sServiceName;
-            xProps->getPropertyValue( rtl::OUString("DefaultControl") ) >>= sServiceName;
+            OUString sServiceName;
+            xProps->getPropertyValue( OUString("DefaultControl") ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString("ooo.vba.VBAToOOEventDesc") ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( OUString("ooo.vba.VBAToOOEventDesc") ), UNO_QUERY_THROW );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( m_xServiceFactory->createInstance( sServiceName ), sCodeName );
             // register the vba script events
             m_xEventAttacher->registerScriptEvents( i_nIndex, vbaEvents );
@@ -223,7 +223,7 @@ void OInterfaceContainer::clonedFrom( const OInterfaceContainer& _cloneSource )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            ::rtl::OUString( "Could not clone the given interface hierarchy." ),
+            OUString( "Could not clone the given interface hierarchy." ),
             static_cast< XIndexContainer* >( const_cast< OInterfaceContainer* >( &_cloneSource ) ),
             ::cppu::getCaughtException()
         );
@@ -370,7 +370,7 @@ struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescr
             if ( 0 <= nPrefixLength )
             {   // the macro name does not already contain a :
 #ifdef DBG_UTIL
-                const ::rtl::OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
+                const OUString sPrefix = _rDescriptor.ScriptCode.copy( 0, nPrefixLength );
                 DBG_ASSERT( 0 == sPrefix.compareToAscii( "document" )
                         ||  0 == sPrefix.compareToAscii( "application" ),
                         "TransformEventTo52Format: invalid (unknown) prefix!" );
@@ -392,7 +392,7 @@ struct TransformEventTo60Format : public ::std::unary_function< ScriptEventDescr
             if ( _rDescriptor.ScriptCode.indexOf( ':' ) < 0 )
             {   // the macro name does not already contain a :
                 // -> default the type to "document"
-                ::rtl::OUString sNewScriptCode( "document:" );
+                OUString sNewScriptCode( "document:" );
                 sNewScriptCode += _rDescriptor.ScriptCode;
                 _rDescriptor.ScriptCode = sNewScriptCode;
             }
@@ -688,12 +688,12 @@ throw (::com::sun::star::uno::RuntimeException) {
     {
         ::osl::MutexGuard aGuard( m_rMutex );
         OInterfaceMap::iterator i = ::std::find(m_aMap.begin(), m_aMap.end(),
-            ::std::pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
+            ::std::pair<const OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
         if (i != m_aMap.end())
         {
             InterfaceRef  xCorrectType((*i).second);
             m_aMap.erase(i);
-            m_aMap.insert(::std::pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(::std::pair<const OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
     }
 }
@@ -721,7 +721,7 @@ Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw(
 
 // XNameAccess
 //------------------------------------------------------------------------------
-Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -736,7 +736,7 @@ Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) thr
 StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeException)
 {
     StringSequence aNameList(m_aItems.size());
-    ::rtl::OUString* pStringArray = aNameList.getArray();
+    OUString* pStringArray = aNameList.getArray();
 
     for (OInterfaceMap::const_iterator i = m_aMap.begin(); i != m_aMap.end(); ++i, ++pStringArray)
     {
@@ -746,7 +746,7 @@ StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeExce
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OInterfaceContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName ) throw(RuntimeException)
 {
     ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
@@ -835,7 +835,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     // exist
 
     // set the name, and add as change listener for the name
-    ::rtl::OUString sName;
+    OUString sName;
     _rxElement->getPropertyValue(PROPERTY_NAME) >>= sName;
     _rxElement->addPropertyChangeListener(PROPERTY_NAME, this);
 
@@ -848,7 +848,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     else
         m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert( ::std::pair< const ::rtl::OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
+    m_aMap.insert( ::std::pair< const OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
     pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
@@ -870,7 +870,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     bool bHandleVbaEvents = false;
     try
     {
-        _rxElement->getPropertyValue(rtl::OUString("GenerateVbaEvents") ) >>= bHandleVbaEvents;
+        _rxElement->getPropertyValue(OUString("GenerateVbaEvents") ) >>= bHandleVbaEvents;
     }
     catch( const Exception& )
     {
@@ -1006,14 +1006,14 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     m_aMap.erase(j);
 
     // examine the new element
-    ::rtl::OUString sName;
+    OUString sName;
     DBG_ASSERT( aElementMetaData.get()->xPropertySet.is(), "OInterfaceContainer::implReplaceByIndex: what did approveNewElement do?" );
 
     aElementMetaData.get()->xPropertySet->getPropertyValue(PROPERTY_NAME) >>= sName;
     aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the new one
-    m_aMap.insert( ::std::pair<const ::rtl::OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
+    m_aMap.insert( ::std::pair<const OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
     m_aItems[ _nIndex ] = aElementMetaData.get()->xInterface;
 
     aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
@@ -1110,7 +1110,7 @@ ElementDescription* OInterfaceContainer::createElementMetaData( )
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const Any& _rElement) throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException )
 {
     Reference< XPropertySet > xElementProps;
 
@@ -1143,7 +1143,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1171,7 +1171,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
+void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
     ::std::pair <OInterfaceMap::iterator,
@@ -1210,7 +1210,7 @@ void SAL_CALL OInterfaceContainer::registerScriptEvents( sal_Int32 nIndex, const
 }
 
 //------------------------------------------------------------------------
-void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
+void SAL_CALL OInterfaceContainer::revokeScriptEvent( sal_Int32 nIndex, const OUString& aListenerType, const OUString& aEventMethod, const OUString& aRemoveListenerParam ) throw(IllegalArgumentException, RuntimeException)
 {
     if ( m_xEventAttacher.is() )
         m_xEventAttacher->revokeScriptEvent( nIndex, aListenerType, aEventMethod, aRemoveListenerParam );

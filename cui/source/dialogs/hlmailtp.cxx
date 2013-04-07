@@ -161,7 +161,7 @@ String SvxHyperlinkMailTp::CreateAbsoluteURL() const
     {
         if ( maEdSubject.GetText() != OUString(aEmptyStr) )
         {
-            String aQuery = rtl::OUString("subject=");
+            String aQuery = OUString("subject=");
             aQuery.Append( maEdSubject.GetText() );
             aURL.SetParam(aQuery);
         }
@@ -241,8 +241,8 @@ void SvxHyperlinkMailTp::RemoveImproperProtocol(const String& aProperScheme)
 String SvxHyperlinkMailTp::GetSchemeFromButtons() const
 {
     if( maRbtNews.IsChecked() )
-        return rtl::OUString(INET_NEWS_SCHEME);
-    return rtl::OUString(INET_MAILTO_SCHEME);
+        return OUString(INET_NEWS_SCHEME);
+    return OUString(INET_MAILTO_SCHEME);
 }
 
 INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const

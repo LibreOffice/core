@@ -33,11 +33,11 @@ namespace hierarchy_ucp {
 
 class HierarchyUri
 {
-    mutable ::rtl::OUString m_aUri;
-    mutable ::rtl::OUString m_aParentUri;
-    mutable ::rtl::OUString m_aService;
-    mutable ::rtl::OUString m_aPath;
-    mutable ::rtl::OUString m_aName;
+    mutable OUString m_aUri;
+    mutable OUString m_aParentUri;
+    mutable OUString m_aService;
+    mutable OUString m_aPath;
+    mutable OUString m_aName;
     mutable bool            m_bValid;
 
 private:
@@ -45,28 +45,28 @@ private:
 
 public:
     HierarchyUri() : m_bValid( false ) {}
-    HierarchyUri( const ::rtl::OUString & rUri )
+    HierarchyUri( const OUString & rUri )
     : m_aUri( rUri ), m_bValid( false ) {}
 
     sal_Bool isValid() const
     { init(); return m_bValid; }
 
-    const ::rtl::OUString & getUri() const
+    const OUString & getUri() const
     { init(); return m_aUri; }
 
-    void setUri( const ::rtl::OUString & rUri )
-    { m_aPath = ::rtl::OUString(); m_aUri = rUri; m_bValid = false; }
+    void setUri( const OUString & rUri )
+    { m_aPath = OUString(); m_aUri = rUri; m_bValid = false; }
 
-    const ::rtl::OUString & getParentUri() const
+    const OUString & getParentUri() const
     { init(); return m_aParentUri; }
 
-    const ::rtl::OUString & getService() const
+    const OUString & getService() const
     { init(); return m_aService; }
 
-    const ::rtl::OUString & getPath() const
+    const OUString & getPath() const
     { init(); return m_aPath; }
 
-    const ::rtl::OUString & getName() const
+    const OUString & getName() const
     { init(); return m_aName; }
 
     inline sal_Bool isRootFolder() const;

@@ -38,19 +38,19 @@ struct ScDPNumGroupInfo;
 class ScDPUtil
 {
 public:
-    static bool isDuplicateDimension(const rtl::OUString& rName);
+    static bool isDuplicateDimension(const OUString& rName);
 
-    SC_DLLPUBLIC static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
+    SC_DLLPUBLIC static OUString getSourceDimensionName(const OUString& rName);
 
-    static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
+    static OUString createDuplicateDimensionName(const OUString& rOriginal, size_t nDupCount);
 
-    static rtl::OUString getDateGroupName(
+    static OUString getDateGroupName(
         sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
         double fStart, double fEnd);
 
     static double getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo);
 
-    static rtl::OUString getNumGroupName(
+    static OUString getNumGroupName(
         double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep,
         SvNumberFormatter* pFormatter);
 

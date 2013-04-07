@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 #include "mysqlc_propertyids.hxx"
 
-using ::rtl::OUString;
 
 namespace connectivity
 {

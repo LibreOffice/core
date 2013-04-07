@@ -82,7 +82,7 @@ class SfxAbstractInsertObjectDialog : virtual public VclAbstractDialog
 {
 public:
     virtual com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()=0;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType )=0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType )=0;
     virtual sal_Bool IsCreateNew()=0;
 };
 
@@ -130,10 +130,10 @@ public:
                                             const String *pUserButtonText=0 ) = 0;
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
-    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const rtl::OUString& rCommand,
+    virtual SfxAbstractInsertObjectDialog* CreateInsertObjectDialog( Window* pParent, const OUString& rCommand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStor,
             const SvObjectServerList* pList = 0 )=0;
-    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const rtl::OUString& rCommand,
+    virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, const OUString& rCommand,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
     virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, sal_Bool bHTML=sal_False, sfx2::SvBaseLink* p=0 )=0;
@@ -150,7 +150,7 @@ public:
         Window* pParent, com::sun::star::uno::Any aException ) = 0;
 
     virtual VclAbstractDialog*  CreateOptionsDialog(
-        Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& rApplicationContext ) = 0;
+        Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) = 0;
 };
 
 #endif

@@ -52,7 +52,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::beans::Property;
 
-using ::rtl::OUString;
 
 namespace chart
 {

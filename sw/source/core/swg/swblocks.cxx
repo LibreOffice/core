@@ -175,11 +175,11 @@ const String& SwImpBlocks::GetLongName( sal_uInt16 n ) const
     return aEmptyStr;
 }
 
-rtl::OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
+OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
 {
     if( n < aNames.size() )
         return aNames[n]->aPackageName;
-    return rtl::OUString();
+    return OUString();
 }
 
 void SwImpBlocks::AddName( const String& rShort, const String& rLong,

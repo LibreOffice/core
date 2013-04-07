@@ -159,7 +159,7 @@ void ColumnEdit::Down()
 void ColumnEdit::First()
 {
     nCol = 1;
-    SetText(rtl::OUString('A'));
+    SetText(OUString('A'));
 }
 
 //------------------------------------------------------------------------
@@ -647,7 +647,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     //  eListMode wird von aussen gesetzt, Root weiter unten
 
     aLbDocuments.SetDropDownLineCount(9);
-    rtl::OUString aOpen(" (");
+    OUString aOpen(" (");
     aStrActive = aOpen;
     aStrActive += String( ScResId( STR_ACTIVE ) );
     aStrActive += ')';                                      // " (aktiv)"
@@ -1007,13 +1007,13 @@ void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
     }
 }
 
-void ScNavigatorDlg::SetCurrentTableStr( const rtl::OUString& rName )
+void ScNavigatorDlg::SetCurrentTableStr( const OUString& rName )
 {
     if (!GetViewData()) return;
 
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nCount     = pDoc->GetTableCount();
-    rtl::OUString aTabName;
+    OUString aTabName;
 
     for ( SCTAB i=0; i<nCount; i++ )
     {

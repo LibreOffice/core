@@ -90,14 +90,14 @@ private:
 
     String          sFromBrowser;
 
-    const rtl::OUString aProxyModePN;
-    const rtl::OUString aHttpProxyPN;
-    const rtl::OUString aHttpPortPN;
-    const rtl::OUString aHttpsProxyPN;
-    const rtl::OUString aHttpsPortPN;
-    const rtl::OUString aFtpProxyPN;
-    const rtl::OUString aFtpPortPN;
-    const rtl::OUString aNoProxyDescPN;
+    const OUString aProxyModePN;
+    const OUString aHttpProxyPN;
+    const OUString aHttpPortPN;
+    const OUString aHttpsProxyPN;
+    const OUString aHttpsPortPN;
+    const OUString aFtpProxyPN;
+    const OUString aFtpPortPN;
+    const OUString aNoProxyDescPN;
 
     uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
 

@@ -39,16 +39,16 @@ class ColorNameMap: private boost::noncopyable {
 public:
     ColorNameMap();
 
-    rtl::OUString lookUp(long color) const;
+    OUString lookUp(long color) const;
 
 private:
-    typedef boost::unordered_map< long, rtl::OUString > Map;
+    typedef boost::unordered_map< long, OUString > Map;
 
     Map map_;
 };
 
 ColorNameMap::ColorNameMap() {
-    css::uno::Sequence< rtl::OUString > aNames;
+    css::uno::Sequence< OUString > aNames;
     css::uno::Reference< css::container::XNameAccess > xNA;
 
     try
@@ -94,13 +94,13 @@ ColorNameMap::ColorNameMap() {
         }
 }
 
-rtl::OUString ColorNameMap::lookUp(long color) const {
+OUString ColorNameMap::lookUp(long color) const {
     Map::const_iterator i(map_.find(color));
     if (i != map_.end()) {
         return i->second;
     }
     // Did not find the given color; return its RGB tuple representation:
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append(sal_Unicode('#'));
     buf.append(color, 16);
     return buf.makeStringAndClear();
@@ -112,7 +112,7 @@ struct theColorNameMap: public rtl::Static< ColorNameMap, theColorNameMap > {};
 
 namespace accessibility {
 
-rtl::OUString lookUpColorName(long color) {
+OUString lookUpColorName(long color) {
     return theColorNameMap::get().lookUp(color);
 }
 

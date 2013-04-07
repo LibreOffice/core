@@ -61,27 +61,27 @@
 #include "ixfstream.hxx"
 #include "ixfattrlist.hxx"
 
-void    XFOfficeMeta::SetCreator(rtl::OUString creator)
+void    XFOfficeMeta::SetCreator(OUString creator)
 {
     m_strCreator = creator;
 }
-void    XFOfficeMeta::SetDescription(rtl::OUString dsr)
+void    XFOfficeMeta::SetDescription(OUString dsr)
 {
     m_strDsr = dsr;
 }
-void XFOfficeMeta::SetKeywords(rtl::OUString keywords)
+void XFOfficeMeta::SetKeywords(OUString keywords)
 {
     m_strKeywords = keywords;
 }
-void XFOfficeMeta::SetCreationTime(rtl::OUString crtime)
+void XFOfficeMeta::SetCreationTime(OUString crtime)
 {
     m_strCrtime = crtime;
 }
-void XFOfficeMeta::SetLastTime(rtl::OUString lstime)
+void XFOfficeMeta::SetLastTime(OUString lstime)
 {
     m_strLstime = lstime;
 }
-void XFOfficeMeta::SetEditTime(rtl::OUString edtime)
+void XFOfficeMeta::SetEditTime(OUString edtime)
 {
     m_strEdtime = edtime;
 }

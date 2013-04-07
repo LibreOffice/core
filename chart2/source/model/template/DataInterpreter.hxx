@@ -44,19 +44,19 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
     // convenience methods
-    static  ::rtl::OUString GetRole(
+    static  OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSeq );
 
     static void SetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSeq,
-        const ::rtl::OUString & rRole );
+        const OUString & rRole );
 
     static ::com::sun::star::uno::Any GetProperty(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue > & aArguments,
-        const ::rtl::OUString & rName );
+        const OUString & rName );
 
     static bool HasCategories(
         const ::com::sun::star::uno::Sequence<

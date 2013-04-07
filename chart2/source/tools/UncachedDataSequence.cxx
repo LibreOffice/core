@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 // necessary for MS compiler
@@ -282,7 +281,7 @@ uno::Type SAL_CALL UncachedDataSequence::getElementType()
 }
 
 // ____ XNamed ____
-::rtl::OUString SAL_CALL UncachedDataSequence::getName()
+OUString SAL_CALL UncachedDataSequence::getName()
     throw (uno::RuntimeException)
 {
     return m_aSourceRepresentation;

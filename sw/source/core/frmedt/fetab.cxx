@@ -2353,7 +2353,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
     if( !pTab )
         return sal_False;
 
-    rFml = rtl::OUString::createFromAscii( sCalc_Sum );
+    rFml = OUString::createFromAscii( sCalc_Sum );
 
     SwCellFrms aCells;
     if( ::GetAutoSumSel( *this, aCells ))
@@ -2383,7 +2383,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                     // restore previous spaces!
                     for( size_t i = aCells.size(); n+1 < i; )
                     {
-                        String sTmp(rtl::OUString("|<"));
+                        String sTmp(OUString("|<"));
                         sTmp += aCells[ --i ]->GetTabBox()->GetName();
                         sTmp += '>';
                         rFml.Insert( sTmp, nInsPos );
@@ -2420,7 +2420,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                         // restore previous spaces!
                         for( size_t i = aCells.size(); n+1 < i; )
                         {
-                            String sTmp(rtl::OUString("|<" ));
+                            String sTmp(OUString("|<" ));
                             sTmp += aCells[ --i ]->GetTabBox()->GetName();
                             sTmp += '>';
                             rFml.Insert( sTmp, nInsPos );

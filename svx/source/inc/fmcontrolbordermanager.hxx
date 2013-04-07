@@ -97,7 +97,7 @@ namespace svxform
     struct ControlData : public BorderDescriptor, UnderlineDescriptor
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xControl;
-        ::rtl::OUString                                                     sOriginalHelpText;
+        OUString                                                     sOriginalHelpText;
 
         ControlData() : BorderDescriptor() { }
         ControlData( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl )
@@ -109,7 +109,7 @@ namespace svxform
             BorderDescriptor::clear();
             UnderlineDescriptor::clear();
             xControl.clear();
-            sOriginalHelpText = ::rtl::OUString();
+            sOriginalHelpText = OUString();
         }
     };
 

@@ -95,7 +95,7 @@ namespace XSLT
     void SAL_CALL OleHandler::initRootStorageFromBase64(const OString& content)
     {
         Sequence<sal_Int8> oleData;
-        ::sax::Converter::decodeBase64(oleData, ::rtl::OStringToOUString(
+        ::sax::Converter::decodeBase64(oleData, OStringToOUString(
             content, RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS));
         m_rootStream = createTempFile();
         Reference<XOutputStream> xOutput = m_rootStream->getOutputStream();
@@ -155,7 +155,7 @@ namespace XSLT
         //return the base64 string of the uncompressed data
         OUStringBuffer buf(oleLength);
         ::sax::Converter::encodeBase64(buf, result);
-        return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
+        return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
     }
 
     void SAL_CALL
@@ -188,7 +188,7 @@ namespace XSLT
             //return the base64 encoded string
             OUStringBuffer buf(oleLength);
             ::sax::Converter::encodeBase64(buf, oledata);
-            return ::rtl::OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
+            return OUStringToOString(buf.toString(), RTL_TEXTENCODING_UTF8);
         }
         return encodeSubStorage(streamName);
     }
@@ -199,7 +199,7 @@ namespace XSLT
         //decode the base64 string
         Sequence<sal_Int8> oledata;
         ::sax::Converter::decodeBase64(oledata,
-                rtl::OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
+                OStringToOUString(content, RTL_TEXTENCODING_ASCII_US));
         //create a temp stream to write data to
         Reference<XStream> subStream = createTempFile();
         Reference<XInputStream> xInput = subStream->getInputStream();

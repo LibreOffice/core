@@ -30,7 +30,7 @@ namespace dbaccess
     {
     public:
         virtual void registerProperty(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     void* _pPointerToMember,
@@ -38,7 +38,7 @@ namespace dbaccess
                 ) = 0;
 
         virtual void registerMayBeVoidProperty(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     ::com::sun::star::uno::Any* _pPointerToMember,
@@ -46,7 +46,7 @@ namespace dbaccess
                 ) = 0;
 
         virtual void registerPropertyNoMember(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     sal_Int32 _nHandle,
                     sal_Int32 _nAttributes,
                     const ::com::sun::star::uno::Type& _rType,

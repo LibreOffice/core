@@ -108,7 +108,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
 
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-            rtl::OUString( FILTER_XML ),
+            OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
     //save the current document into a temporary file
     {
@@ -124,7 +124,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
-    pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+    pValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
 
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
@@ -139,9 +139,9 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aLeftMF.SetValue(m_aLeftMF.Normalize(DEFAULT_LEFT_DISTANCE), FUNIT_TWIP);
     m_aTopMF.SetValue(m_aTopMF.Normalize(DEFAULT_TOP_DISTANCE), FUNIT_TWIP);
 
-    m_aZoomLB.InsertEntry(rtl::OUString("50 %"), 1);
-    m_aZoomLB.InsertEntry(rtl::OUString("75 %"), 2);
-    m_aZoomLB.InsertEntry(rtl::OUString("100 %"), 3);
+    m_aZoomLB.InsertEntry(OUString("50 %"), 1);
+    m_aZoomLB.InsertEntry(OUString("75 %"), 2);
+    m_aZoomLB.InsertEntry(OUString("100 %"), 3);
     m_aZoomLB.SelectEntryPos(0); //page size
     m_aZoomLB.SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 
@@ -309,7 +309,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
     OSL_ENSURE( pRet, "Fly not inserted" );
 
     rShell.UnSelectFrm();
-    const Sequence< ::rtl::OUString> aBlocks = rConfigItem.GetAddressBlocks();
+    const Sequence< OUString> aBlocks = rConfigItem.GetAddressBlocks();
     if(bExample)
     {
         rShell.Insert(aBlocks[0]);
@@ -335,14 +335,14 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
 
         sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
         sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
-        const ::rtl::OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+        const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
         bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
 
         const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
         String sCountryColumn = rHeaders.GetString(MM_PART_COUNTRY);
-        Sequence< ::rtl::OUString> aAssignment =
+        Sequence< OUString> aAssignment =
                         rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-        const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+        const OUString* pAssignment = aAssignment.getConstArray();
         if(aAssignment.getLength() > MM_PART_COUNTRY && !aAssignment[MM_PART_COUNTRY].isEmpty())
             sCountryColumn = aAssignment[MM_PART_COUNTRY];
         //
@@ -499,7 +499,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
             {
-                Sequence< ::rtl::OUString > aEntries =
+                Sequence< OUString > aEntries =
                             rConfigItem.GetGreetings((SwMailMergeConfigItem::Gender)eGender);
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
@@ -520,7 +520,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             String sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
             String sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
 
-            const ::rtl::OUString& rFemaleGenderValue = rConfigItem.GetFemaleGenderValue();
+            const OUString& rFemaleGenderValue = rConfigItem.GetFemaleGenderValue();
             sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
             const SwDBData& rData = rConfigItem.GetCurrentDBData();
             String sConditionBase(rData.sDataSource);
@@ -554,7 +554,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
             {
-                Sequence< ::rtl::OUString> aEntries = rConfigItem.GetGreetings((SwMailMergeConfigItem::Gender)eGender);
+                Sequence< OUString> aEntries = rConfigItem.GetGreetings((SwMailMergeConfigItem::Gender)eGender);
                 sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting((SwMailMergeConfigItem::Gender)eGender);
                 if( nCurrent >= 0 && nCurrent < aEntries.getLength())
                 {
@@ -600,9 +600,9 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                     }
                     //now the text has to be inserted
                     const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
-                    Sequence< ::rtl::OUString> aAssignment =
+                    Sequence< OUString> aAssignment =
                                     rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
-                    const ::rtl::OUString* pAssignment = aAssignment.getConstArray();
+                    const OUString* pAssignment = aAssignment.getConstArray();
                     SwAddressIterator aIter(sGreeting);
                     while(aIter.HasMore())
                     {
@@ -641,7 +641,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     }
     else
     {
-        Sequence< ::rtl::OUString> aEntries = rConfigItem.GetGreetings(SwMailMergeConfigItem::NEUTRAL);
+        Sequence< OUString> aEntries = rConfigItem.GetGreetings(SwMailMergeConfigItem::NEUTRAL);
         sal_Int32 nCurrent = rConfigItem.GetCurrentGreeting(SwMailMergeConfigItem::NEUTRAL);
         if( nCurrent >= 0 && nCurrent < aEntries.getLength())
             sGreeting = aEntries[nCurrent];
@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
 
     Any aZoom;
     aZoom <<= (sal_Int16)DocumentZoomType::ENTIRE_PAGE;
-    m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+    m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
 
     const SwFmtFrmSize& rPageSize = m_pExampleWrtShell->GetPageDesc(
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
@@ -717,9 +717,9 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
         }
         Any aZoom;
         aZoom <<= eType;
-        m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
+        m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_TYPE)), aZoom);
         aZoom <<= nZoom;
-        m_xViewProperties->setPropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
+        m_xViewProperties->setPropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_ZOOM_VALUE)), aZoom);
 
     }
     return 0;

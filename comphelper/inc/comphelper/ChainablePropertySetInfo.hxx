@@ -52,15 +52,15 @@ namespace comphelper
 
         void add( PropertyInfo* pMap, sal_Int32 nCount = -1 )
             throw();
-        void remove( const rtl::OUString& aName )
+        void remove( const OUString& aName )
             throw();
 
         // XPropertySetInfo
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties()
             throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name )
+        virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )
             throw(::com::sun::star::uno::RuntimeException);
     };
 }

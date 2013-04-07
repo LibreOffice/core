@@ -35,7 +35,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;
-using ::rtl::OUString;
 
 OLEString::OLEString()
     :m_sStr(NULL)
@@ -45,7 +44,7 @@ OLEString::OLEString(const BSTR& _sBStr)
     :m_sStr(_sBStr)
 {
 }
-OLEString::OLEString(const ::rtl::OUString& _sBStr)
+OLEString::OLEString(const OUString& _sBStr)
 {
     m_sStr = ::SysAllocString(reinterpret_cast<LPCOLESTR>(_sBStr.getStr()));
 }
@@ -54,7 +53,7 @@ OLEString::~OLEString()
     if(m_sStr)
         ::SysFreeString(m_sStr);
 }
-OLEString& OLEString::operator=(const ::rtl::OUString& _rSrc)
+OLEString& OLEString::operator=(const OUString& _rSrc)
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
@@ -78,9 +77,9 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
     m_sStr = _rSrc;
     return *this;
 }
-OLEString::operator ::rtl::OUString() const
+OLEString::operator OUString() const
 {
-    return (m_sStr != NULL) ? ::rtl::OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : ::rtl::OUString();
+    return (m_sStr != NULL) ? OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : OUString();
 }
 OLEString::operator BSTR() const
 {
@@ -120,7 +119,7 @@ OLEVariant::OLEVariant(sal_Int16 n)             {   VariantInit(this);  vt = VT_
 OLEVariant::OLEVariant(sal_Int32 n)             {   VariantInit(this);  vt = VT_I4;     lVal        = n;}
 OLEVariant::OLEVariant(sal_Int64 x)             {   VariantInit(this);  vt = VT_I4;     lVal        = (LONG)x;}
 
-OLEVariant::OLEVariant(const rtl::OUString& us)
+OLEVariant::OLEVariant(const OUString& us)
 {
     ::VariantInit(this);
     vt      = VT_BSTR;
@@ -289,7 +288,7 @@ void OLEVariant::setBool(sal_Bool b)
     vt = VT_BOOL;
     boolVal     = b ? VARIANT_TRUE : VARIANT_FALSE;
 }
-void OLEVariant::setString(const rtl::OUString& us)
+void OLEVariant::setString(const OUString& us)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
@@ -398,13 +397,13 @@ void OLEVariant::set(double n)
     }
 }
 
-OLEVariant::operator rtl::OUString() const
+OLEVariant::operator OUString() const
 {
     if (V_VT(this) == VT_BSTR)
         return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(this)));
 
     if(isNull())
-        return ::rtl::OUString();
+        return OUString();
 
     OLEVariant varDest;
 
@@ -432,11 +431,11 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
                                             vartype ) ) )
         {
             ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceString(STR_TYPE_NOT_CONVERT));
+            const OUString sError( aResources.getResourceString(STR_TYPE_NOT_CONVERT));
             throw ::com::sun::star::sdbc::SQLException(
                 sError,
                 NULL,
-                ::rtl::OUString( "S1000" ),
+                OUString( "S1000" ),
                 1000,
                 ::com::sun::star::uno::Any()
             );
@@ -486,10 +485,10 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
     return aRet;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OLEVariant::getString() const
+OUString OLEVariant::getString() const
 {
     if(isNull())
-        return ::rtl::OUString();
+        return OUString();
     else
         return *this;
 }

@@ -289,22 +289,22 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
         case accessibility::AccessibleEventId::NAME_CHANGED:
         {
-            rtl::OUString aName;
+            OUString aName;
             if( aEvent.NewValue >>= aName )
             {
                 atk_object_set_name(atk_obj,
-                    rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+                    OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
             break;
 
         case accessibility::AccessibleEventId::DESCRIPTION_CHANGED:
         {
-            rtl::OUString aDescription;
+            OUString aDescription;
             if( aEvent.NewValue >>= aDescription )
             {
                 atk_object_set_description(atk_obj,
-                    rtl::OUStringToOString(aDescription, RTL_TEXTENCODING_UTF8).getStr());
+                    OUStringToOString(aDescription, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
             break;

@@ -235,7 +235,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
     if ( !bFmtInserted && pSelFmtData )
     {
         String              aStrStandard( SfxResId(STR_STANDARD) );
-        rtl::OUString aFormatName;
+        OUString aFormatName;
         ScStringInputDlg*   pDlg;
         bool bOk = false;
 
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
     while( !bOk )
     {
 
-        rtl::OUString aFormatName = aLbFormat.GetSelectEntry();
+        OUString aFormatName = aLbFormat.GetSelectEntry();
         String aEntry;
 
         ScStringInputDlg* pDlg = new ScStringInputDlg( this,
@@ -453,10 +453,10 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 
 //------------------------------------------------------------------------
 
-rtl::OUString ScAutoFormatDlg::GetCurrFormatName()
+OUString ScAutoFormatDlg::GetCurrFormatName()
 {
     const ScAutoFormatData* p = pFormat->findByIndex(nIndex);
-    return p ? p->GetName() : rtl::OUString();
+    return p ? p->GetName() : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -119,20 +119,20 @@ SwVbaHeadersFooters::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaHeadersFooters::getServiceImplName()
 {
-    return rtl::OUString("SwVbaHeadersFooters");
+    return OUString("SwVbaHeadersFooters");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaHeadersFooters::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.HeadersFooters");
+        sNames[0] = OUString("ooo.vba.word.HeadersFooters");
     }
     return sNames;
 }

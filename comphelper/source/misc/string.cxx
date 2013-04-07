@@ -62,14 +62,14 @@ namespace
     }
 }
 
-rtl::OString stripStart(const rtl::OString &rIn, sal_Char c)
+OString stripStart(const OString &rIn, sal_Char c)
 {
-    return tmpl_stripStart<rtl::OString, sal_Char>(rIn, c);
+    return tmpl_stripStart<OString, sal_Char>(rIn, c);
 }
 
-rtl::OUString stripStart(const rtl::OUString &rIn, sal_Unicode c)
+OUString stripStart(const OUString &rIn, sal_Unicode c)
 {
-    return tmpl_stripStart<rtl::OUString, sal_Unicode>(rIn, c);
+    return tmpl_stripStart<OUString, sal_Unicode>(rIn, c);
 }
 
 namespace
@@ -93,22 +93,22 @@ namespace
     }
 }
 
-rtl::OString stripEnd(const rtl::OString &rIn, sal_Char c)
+OString stripEnd(const OString &rIn, sal_Char c)
 {
-    return tmpl_stripEnd<rtl::OString, sal_Char>(rIn, c);
+    return tmpl_stripEnd<OString, sal_Char>(rIn, c);
 }
 
-rtl::OUString stripEnd(const rtl::OUString &rIn, sal_Unicode c)
+OUString stripEnd(const OUString &rIn, sal_Unicode c)
 {
-    return tmpl_stripEnd<rtl::OUString, sal_Unicode>(rIn, c);
+    return tmpl_stripEnd<OUString, sal_Unicode>(rIn, c);
 }
 
-rtl::OString strip(const rtl::OString &rIn, sal_Char c)
+OString strip(const OString &rIn, sal_Char c)
 {
     return stripEnd(stripStart(rIn, c), c);
 }
 
-rtl::OUString strip(const rtl::OUString &rIn, sal_Unicode c)
+OUString strip(const OUString &rIn, sal_Unicode c)
 {
     return stripEnd(stripStart(rIn, c), c);
 }
@@ -132,18 +132,18 @@ namespace
     }
 }
 
-sal_Int32 getTokenCount(const rtl::OString &rIn, sal_Char cTok)
+sal_Int32 getTokenCount(const OString &rIn, sal_Char cTok)
 {
-    return tmpl_getTokenCount<rtl::OString, sal_Char>(rIn, cTok);
+    return tmpl_getTokenCount<OString, sal_Char>(rIn, cTok);
 }
 
-sal_Int32 getTokenCount(const rtl::OUString &rIn, sal_Unicode cTok)
+sal_Int32 getTokenCount(const OUString &rIn, sal_Unicode cTok)
 {
-    return tmpl_getTokenCount<rtl::OUString, sal_Unicode>(rIn, cTok);
+    return tmpl_getTokenCount<OUString, sal_Unicode>(rIn, cTok);
 }
 
 sal_uInt32 decimalStringToNumber(
-    ::rtl::OUString const & str )
+    OUString const & str )
 {
     sal_uInt32 result = 0;
     for( sal_Int32 i = 0 ; i < str.getLength() ; )
@@ -243,10 +243,10 @@ using namespace ::com::sun::star;
 
 // convert between sequence of string and comma separated string
 
-::rtl::OUString convertCommaSeparated(
-    uno::Sequence< ::rtl::OUString > const& i_rSeq)
+OUString convertCommaSeparated(
+    uno::Sequence< OUString > const& i_rSeq)
 {
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     ::comphelper::intersperse(
         ::comphelper::stl_begin(i_rSeq), ::comphelper::stl_end(i_rSeq),
         ::comphelper::OUStringBufferAppender(buf),
@@ -254,26 +254,26 @@ using namespace ::com::sun::star;
     return buf.makeStringAndClear();
 }
 
-uno::Sequence< ::rtl::OUString >
-    convertCommaSeparated( ::rtl::OUString const& i_rString )
+uno::Sequence< OUString >
+    convertCommaSeparated( OUString const& i_rString )
 {
-    std::vector< ::rtl::OUString > vec;
+    std::vector< OUString > vec;
     sal_Int32 idx = 0;
     do {
-      ::rtl::OUString kw =
+      OUString kw =
         i_rString.getToken(0, static_cast<sal_Unicode> (','), idx);
       kw = kw.trim();
       if (!kw.isEmpty()) {
           vec.push_back(kw);
       }
     } while (idx >= 0);
-    uno::Sequence< ::rtl::OUString > kws(vec.size());
+    uno::Sequence< OUString > kws(vec.size());
     std::copy(vec.begin(), vec.end(), stl_begin(kws));
     return kws;
 }
 
 
-sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & rRHS,
+sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
     const uno::Reference< i18n::XCollator > &rCollator,
     const uno::Reference< i18n::XBreakIterator > &rBI,
     const lang::Locale &rLocale )
@@ -365,12 +365,12 @@ namespace
     }
 }
 
-bool isdigitAsciiString(const rtl::OString &rString)
+bool isdigitAsciiString(const OString &rString)
 {
     return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
 }
 
-bool isdigitAsciiString(const rtl::OUString &rString)
+bool isdigitAsciiString(const OUString &rString)
 {
     return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
 }
@@ -390,17 +390,17 @@ namespace
     }
 }
 
-rtl::OUString reverseString(const rtl::OUString &rStr)
+OUString reverseString(const OUString &rStr)
 {
-    return tmpl_reverseString<rtl::OUString, rtl::OUStringBuffer>(rStr);
+    return tmpl_reverseString<OUString, OUStringBuffer>(rStr);
 }
 
-rtl::OString reverseString(const rtl::OString &rStr)
+OString reverseString(const OString &rStr)
 {
-    return tmpl_reverseString<rtl::OString, rtl::OStringBuffer>(rStr);
+    return tmpl_reverseString<OString, OStringBuffer>(rStr);
 }
 
-sal_Int32 indexOfAny(rtl::OUString const& rIn,
+sal_Int32 indexOfAny(OUString const& rIn,
         sal_Unicode const*const pChars, sal_Int32 const nPos)
 {
     for (sal_Int32 i = nPos; i < rIn.getLength(); ++i)

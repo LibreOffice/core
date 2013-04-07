@@ -104,7 +104,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
             @param  sPrefix
                     the new prefix for untitled components.
          */
-        void setUntitledPrefix(const ::rtl::OUString& sPrefix);
+        void setUntitledPrefix(const OUString& sPrefix);
 
         //---------------------------------------
         /** @see css.frame.XUntitledNumbers */
@@ -126,7 +126,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
         //---------------------------------------
         /** @see css.frame.XUntitledNumbers */
-        virtual ::rtl::OUString SAL_CALL getUntitledPrefix()
+        virtual OUString SAL_CALL getUntitledPrefix()
             throw (css::uno::RuntimeException);
 
     //-------------------------------------------
@@ -160,7 +160,7 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
     private:
 
         /// localized string to be used for untitled components
-        ::rtl::OUString m_sUntitledPrefix;
+        OUString m_sUntitledPrefix;
 
         /// cache of all "leased numbers" and its bound components
         TNumberedItemHash m_lComponents;

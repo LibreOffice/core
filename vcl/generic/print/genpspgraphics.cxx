@@ -57,8 +57,6 @@
 
 using namespace psp;
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
 // ----- Implementation of PrinterBmp by means of SalBitmap/BitmapBuffer ---------------
 
@@ -279,7 +277,7 @@ GenPspGraphics::GenPspGraphics()
 }
 
 void GenPspGraphics::Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                           rtl::OUString* pPhone, bool bSwallow,
+                           OUString* pPhone, bool bSwallow,
                            SalInfoPrinter* pInfoPrinter )
 {
     m_pJobData = pJob;
@@ -700,7 +698,7 @@ private:
     bool                mbVertical;
     bool                mbArtItalic;
     bool                mbArtBold;
-    rtl::OUString       maText;
+    OUString       maText;
     int                 mnMinCharPos;
 };
 
@@ -887,7 +885,7 @@ void GenPspGraphics::SetTextColor( SalColor nSalColor )
     m_pPrinterGfx->SetTextColor (aColor);
 }
 
-bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const rtl::OUString&,const rtl::OUString& )
+bool GenPspGraphics::AddTempDevFont( ImplDevFontList*, const OUString&,const OUString& )
 {
     return false;
 }
@@ -918,7 +916,7 @@ void GenPspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     const psp::PrinterInfo& rInfo = psp::PrinterInfoManager::get().getPrinterInfo( m_pJobData->m_aPrinterName );
     if( rInfo.m_bPerformFontSubstitution )
     {
-        for( boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
+        for( boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it = rInfo.m_aFontSubstitutes.begin(); it != rInfo.m_aFontSubstitutes.end(); ++it )
             pOutDev->ImplAddDevFontSubstitute( it->first, it->second, FONT_SUBSTITUTE_ALWAYS );
     }
 }
@@ -1040,7 +1038,7 @@ SalLayout* GenPspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 //--------------------------------------------------------------------------
 
 sal_Bool GenPspGraphics::CreateFontSubset(
-                                   const rtl::OUString& rToFile,
+                                   const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
@@ -1171,8 +1169,8 @@ ImplDevFontAttributes GenPspGraphics::Info2DevFontAttributes( const psp::FastPri
 #if OSL_DEBUG_LEVEL > 2
     if( bHasMapNames )
     {
-        rtl::OString aOrigName(rtl::OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
-        rtl::OString aAliasNames(rtl::OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
+        OString aOrigName(OUStringToOString(aDFA.GetFamilyName(), osl_getThreadTextEncoding()));
+        OString aAliasNames(OUStringToOString(aDFA.GetAliasNames(), osl_getThreadTextEncoding()));
         SAL_INFO( "vcl.fonts", "using alias names " << aAliasNames.getStr() << " for font family " << aOrigName.getStr() );
     }
 #endif
@@ -1235,7 +1233,7 @@ void GenPspGraphics::AnnounceFonts( ImplDevFontList* pFontList, const psp::FastP
     pFontList->Add( pFD );
 }
 
-bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop )
+bool GenPspGraphics::filterText( const OUString& rOrig, OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop )
 {
     if( ! m_pPhoneNr )
         return false;
@@ -1253,7 +1251,7 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
     sal_Int32 nPos;
     sal_Int32 nStart = 0;
     sal_Int32 nStop = rLen;
-    rtl::OUString aPhone = rOrig.copy( nIndex, rLen );
+    OUString aPhone = rOrig.copy( nIndex, rLen );
 
     if( ! m_bPhoneCollectionActive )
     {
@@ -1282,7 +1280,7 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
         m_aPhoneCollection += aPhone.copy( nTokenStart, nTokenStop - nTokenStart );
         if( ! m_bPhoneCollectionActive )
         {
-            rtl::OUStringBuffer aPhoneNr;
+            OUStringBuffer aPhoneNr;
             aPhoneNr.append( "<Fax#>" );
             aPhoneNr.append( m_aPhoneCollection );
             aPhoneNr.append( "</Fax#>" );
@@ -1303,7 +1301,7 @@ bool GenPspGraphics::filterText( const rtl::OUString& rOrig, rtl::OUString& rNew
         rCutStart = nStart+nIndex;
         rCutStop = nStop+nIndex;
         if (rCutStart != rCutStop)
-            rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : rtl::OUString() ) + rOrig.copy( rCutStop );
+            rNewText = ( rCutStart ? rOrig.copy( 0, rCutStart ) : OUString() ) + rOrig.copy( rCutStop );
     }
 
     return bRet && m_bSwallowFaxNo;
@@ -1391,8 +1389,8 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     *pDataLen = aStat.st_size;
 #else
     // FIXME: test me ! ...
-    rtl::OUString aURL;
-    if( !osl::File::getFileURLFromSystemPath( rtl::OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) )
+    OUString aURL;
+    if( !osl::File::getFileURLFromSystemPath( OStringToOUString( aSysPath, osl_getThreadTextEncoding() ), aURL ) )
         return NULL;
     osl::File aFile( aURL );
     if( aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock ) != osl::File::E_None )

@@ -87,7 +87,7 @@ private:
 typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** An array of string values as a property. */
-typedef ::std::vector< ::rtl::OUString > AxStringArray;
+typedef ::std::vector< OUString > AxStringArray;
 
 // ============================================================================
 
@@ -111,10 +111,10 @@ public:
     void                readPairProperty( AxPairData& orPairData );
     /** Reads the next string property from the stream, if the respective flag
         in the property mask is set. */
-    void                readStringProperty( ::rtl::OUString& orValue );
+    void                readStringProperty( OUString& orValue );
     /** Reads the next GUID property from the stream, if the respective flag
         in the property mask is set. The GUID will be enclosed in braces. */
-    void                readGuidProperty( ::rtl::OUString& orGuid );
+    void                readGuidProperty( OUString& orGuid );
     /** Reads the next font property from the stream, if the respective flag in
         the property mask is set. */
     void                readFontProperty( AxFontData& orFontData );
@@ -176,10 +176,10 @@ private:
     /** Complex property for a string value. */
     struct StringProperty : public ComplexProperty
     {
-        ::rtl::OUString&    mrValue;
+        OUString&    mrValue;
         sal_uInt32          mnSize;
 
-        inline explicit     StringProperty( ::rtl::OUString& rValue, sal_uInt32 nSize ) :
+        inline explicit     StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -197,9 +197,9 @@ private:
     /** Complex property for a GUID value. */
     struct GuidProperty : public ComplexProperty
     {
-        ::rtl::OUString&    mrGuid;
+        OUString&    mrGuid;
 
-        inline explicit     GuidProperty( ::rtl::OUString& rGuid ) :
+        inline explicit     GuidProperty( OUString& rGuid ) :
                                 mrGuid( rGuid ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm );
     };
@@ -233,7 +233,7 @@ private:
     AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
     AxFontData          maDummyFontData;    ///< Dummy font for unsupported properties.
     StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
-    ::rtl::OUString     maDummyString;      ///< Dummy string for unsupported properties.
+    OUString     maDummyString;      ///< Dummy string for unsupported properties.
     AxStringArray       maDummyStringArray; ///< Dummy string array for unsupported properties.
     sal_Int64           mnPropFlags;        ///< Flags specifying existing properties.
     sal_Int64           mnNextProp;         ///< Next property to read.

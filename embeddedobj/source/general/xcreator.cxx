@@ -41,18 +41,18 @@ using namespace ::com::sun::star;
 
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString("com.sun.star.embed.EmbeddedObjectCreator");
-    aRet[1] = ::rtl::OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = OUString("com.sun.star.embed.EmbeddedObjectCreator");
+    aRet[1] = OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
+OUString SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
+    return OUString("com.sun.star.comp.embed.EmbeddedObjectCreator");
 }
 
 //-------------------------------------------------------------------------
@@ -65,9 +65,9 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::impl_static
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
-                                            const ::rtl::OUString& aClassName,
+                                            const OUString& aClassName,
                                             const uno::Reference< embed::XStorage >& xStorage,
-                                            const ::rtl::OUString& sEntName,
+                                            const OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
             io::IOException,
@@ -79,21 +79,21 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
-    ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
+    OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
     if ( aEmbedFactory.isEmpty() )
     {
         // use system fallback
         // TODO: in future users factories can be tested
-        aEmbedFactory = ::rtl::OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
+        aEmbedFactory = OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
     }
 
     uno::Reference < uno::XInterface > xFact( m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext) );
@@ -110,7 +110,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
-                                                                    const ::rtl::OUString& sEntName,
+                                                                    const OUString& sEntName,
                                                                     const uno::Sequence< beans::PropertyValue >& aMedDescr,
                                                                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
@@ -122,12 +122,12 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) UNOEmbeddedObjectCreator::createInstanceInitFromEntry" );
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -139,8 +139,8 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     if ( !xNameAccess->hasByName( sEntName ) )
         throw container::NoSuchElementException();
 
-    ::rtl::OUString aMediaType;
-    ::rtl::OUString aEmbedFactory;
+    OUString aMediaType;
+    OUString aEmbedFactory;
     if ( xStorage->isStorageElement( sEntName ) )
     {
         // the object must be based on storage
@@ -152,7 +152,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             throw uno::RuntimeException();
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( "MediaType" ));
+            uno::Any aAny = xPropSet->getPropertyValue( OUString( "MediaType" ));
             aAny >>= aMediaType;
         }
         catch ( const uno::Exception& )
@@ -184,10 +184,10 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
             throw uno::RuntimeException();
 
         try {
-            uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( "MediaType" ));
+            uno::Any aAny = xPropSet->getPropertyValue( OUString( "MediaType" ));
             aAny >>= aMediaType;
             if ( aMediaType == "application/vnd.sun.star.oleobject" )
-                aEmbedFactory = ::rtl::OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
+                aEmbedFactory = OUString( "com.sun.star.embed.OLEEmbeddedObjectFactory" );
         }
         catch ( const uno::Exception& )
         {
@@ -217,7 +217,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
         uno::Reference < embed::XEmbedObjectFactory > xEmbFact( xFact, uno::UNO_QUERY );
         if ( xEmbFact.is() )
-            return xEmbFact->createInstanceUserInit( uno::Sequence< sal_Int8 >(), ::rtl::OUString(), xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs);
+            return xEmbFact->createInstanceUserInit( uno::Sequence< sal_Int8 >(), OUString(), xStorage, sEntName, embed::EntryInitModes::DEFAULT_INIT, aMedDescr, lObjArgs);
     }
 
     // the default object should be created, it will allow to store the contents on the next saving
@@ -230,7 +230,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
-        const ::rtl::OUString& sEntName,
+        const OUString& sEntName,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& lObjArgs )
     throw ( lang::IllegalArgumentException,
@@ -243,12 +243,12 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     // TODO: use lObjArgs
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -256,7 +256,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is FilterName
-    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
+    OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
     if ( !aFilterName.isEmpty() )
     {
@@ -292,9 +292,9 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceUserInit(
         const uno::Sequence< sal_Int8 >& aClassID,
-        const ::rtl::OUString& sClassName,
+        const OUString& sClassName,
         const uno::Reference< embed::XStorage >& xStorage,
-        const ::rtl::OUString& sEntName,
+        const OUString& sEntName,
         sal_Int32 nEntryConnectionMode,
         const uno::Sequence< beans::PropertyValue >& aArgs,
         const uno::Sequence< beans::PropertyValue >& aObjectArgs )
@@ -308,16 +308,16 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     uno::Reference< uno::XInterface > xResult;
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             3 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
-    ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
+    OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
     uno::Reference< embed::XEmbedObjectFactory > xEmbFactory(
                         m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext),
                         uno::UNO_QUERY );
@@ -336,7 +336,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
-                                            const ::rtl::OUString& sEntName,
+                                            const OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& aMediaDescr,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
@@ -351,17 +351,17 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is URL, URL must exist
-    ::rtl::OUString aURL;
+    OUString aURL;
     for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
         if ( aTempMedDescr[nInd].Name == "URL" )
             aTempMedDescr[nInd].Value >>= aURL;
 
     if ( aURL.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No URL for the link is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No URL for the link is provided!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
-    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
+    OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
     if ( !aFilterName.isEmpty() )
     {
@@ -386,13 +386,13 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         // was also extended.
 
         if ( !xStorage.is() )
-            throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+            throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                                 uno::Reference< uno::XInterface >(
                                                     static_cast< ::cppu::OWeakObject* >(this) ),
                                                 3 );
 
         if ( sEntName.isEmpty() )
-            throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+            throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                                 uno::Reference< uno::XInterface >(
                                                     static_cast< ::cppu::OWeakObject* >(this) ),
                                                 4 );
@@ -409,9 +409,9 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLinkUserInit(
                                                 const uno::Sequence< sal_Int8 >& aClassID,
-                                                const ::rtl::OUString& aClassName,
+                                                const OUString& aClassName,
                                                 const uno::Reference< embed::XStorage >& xStorage,
-                                                const ::rtl::OUString& sEntName,
+                                                const OUString& sEntName,
                                                 const uno::Sequence< beans::PropertyValue >& lArguments,
                                                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
         throw ( lang::IllegalArgumentException,
@@ -423,7 +423,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 
     uno::Reference< uno::XInterface > xResult;
 
-    ::rtl::OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
+    OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
     uno::Reference< embed::XLinkFactory > xLinkFactory(
                         m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext),
                         uno::UNO_QUERY );
@@ -440,17 +440,17 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
+OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName == aSeq[nInd] )
@@ -460,7 +460,7 @@ sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const ::rtl::OUStri
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

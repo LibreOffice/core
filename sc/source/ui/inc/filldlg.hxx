@@ -41,7 +41,7 @@ public:
                              FillDir        eFillDir,
                              FillCmd        eFillCmd,
                              FillDateCmd    eFillDateCmd,
-                             const rtl::OUString& aStartStr,
+                             const OUString& aStartStr,
                              double         fStep,
                              double         fMax,
                              sal_uInt16     nPossDir );
@@ -54,14 +54,14 @@ public:
     double      GetStep() const             { return fIncrement; }
     double      GetMax() const              { return fEndVal; }
 
-    rtl::OUString GetStartStr() const       { return aEdStartVal.GetText(); }
+    OUString GetStartStr() const       { return aEdStartVal.GetText(); }
 
     void SetEdStartValEnabled(bool bFlag = false);
 
 private:
     FixedText       aFtStartVal;
     Edit            aEdStartVal;
-    const rtl::OUString aStartStrVal;
+    const OUString aStartStrVal;
 
     FixedText       aFtEndVal;
     Edit            aEdEndVal;
@@ -92,7 +92,7 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    const rtl::OUString aErrMsgInvalidVal;
+    const OUString aErrMsgInvalidVal;
 
     //----------------------------------------------------------
 

@@ -25,7 +25,6 @@
 
 #include <tools/debug.hxx>
 
-using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
 
@@ -124,7 +123,7 @@ static bool lcl_IsWhiteSpace( sal_Unicode c )
         || c == sal_Unicode( 0x0D );
 }
 
-void TokenContext::Characters( const ::rtl::OUString& rCharacters )
+void TokenContext::Characters( const OUString& rCharacters )
 {
     // get iterators for string data
     const sal_Unicode* pBegin = rCharacters.getStr();

@@ -29,8 +29,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::xmloff::token;
 

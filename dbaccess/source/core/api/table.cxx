@@ -69,11 +69,11 @@ DBG_NAME(ODBTable)
 
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const Reference< XConnection >& _rxConn
-        ,const ::rtl::OUString& _rCatalog
-        ,const ::rtl::OUString& _rSchema
-        ,const ::rtl::OUString& _rName
-        ,const ::rtl::OUString& _rType
-        ,const ::rtl::OUString& _rDesc
+        ,const OUString& _rCatalog
+        ,const OUString& _rSchema
+        ,const OUString& _rName
+        ,const OUString& _rType
+        ,const OUString& _rDesc
         ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
     :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
     ,m_xColumnDefinitions(_xColumnDefinitions)
@@ -106,7 +106,7 @@ ODBTable::~ODBTable()
 
 IMPLEMENT_FORWARD_REFCOUNT(ODBTable,OTable_Base)
 
-OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
+OColumn* ODBTable::createColumn(const OUString& _rName) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::createColumn" );
     OColumn* pReturn = NULL;
@@ -136,7 +136,7 @@ void ODBTable::columnAppended( const Reference< XPropertySet >& /*_rxSourceDescr
     // not interested in
 }
 
-void ODBTable::columnDropped(const ::rtl::OUString& _sName)
+void ODBTable::columnDropped(const OUString& _sName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::columnDropped" );
     Reference<XDrop> xDrop(m_xColumnDefinitions,UNO_QUERY);
@@ -311,7 +311,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 }
 
 // XRename,
-void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
+void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::rename" );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -325,7 +325,7 @@ void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLExce
 }
 
 // XAlterTable,
-void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::alterColumnByName" );
     ::osl::MutexGuard aGuard(m_aMutex);

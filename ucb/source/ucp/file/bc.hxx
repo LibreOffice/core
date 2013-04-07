@@ -75,14 +75,14 @@ namespace fileaccess {
 
         // A special creator for inserted contents; Creates an ugly object
         BaseContent( shell* pMyShell,
-                     const rtl::OUString& parentName,
+                     const OUString& parentName,
                      sal_Bool bFolder );
 
     public:
         BaseContent(
             shell* pMyShell,
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& xContentIdentifier,
-            const rtl::OUString& aUnqPath );
+            const OUString& aUnqPath );
 
         virtual ~BaseContent();
 
@@ -125,15 +125,15 @@ namespace fileaccess {
 
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getImplementationName()
             throw( com::sun::star::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL
-        supportsService( const rtl::OUString& ServiceName )
+        supportsService( const OUString& ServiceName )
             throw( com::sun::star::uno::RuntimeException);
 
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 
@@ -165,7 +165,7 @@ namespace fileaccess {
             void )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentType(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -184,13 +184,13 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addPropertiesChangeListener(
-            const com::sun::star::uno::Sequence< rtl::OUString >& PropertyNames,
+            const com::sun::star::uno::Sequence< OUString >& PropertyNames,
             const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertiesChangeListener >& Listener )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL
-        removePropertiesChangeListener( const com::sun::star::uno::Sequence< rtl::OUString >& PropertyNames,
+        removePropertiesChangeListener( const com::sun::star::uno::Sequence< OUString >& PropertyNames,
                                         const com::sun::star::uno::Reference<
                                         com::sun::star::beans::XPropertiesChangeListener >& Listener )
             throw( com::sun::star::uno::RuntimeException );
@@ -199,7 +199,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addProperty(
-            const rtl::OUString& Name,
+            const OUString& Name,
             sal_Int16 Attributes,
             const com::sun::star::uno::Any& DefaultValue )
             throw( com::sun::star::beans::PropertyExistException,
@@ -209,7 +209,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removeProperty(
-            const rtl::OUString& Name )
+            const OUString& Name )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::beans::NotRemoveableException,
                    com::sun::star::uno::RuntimeException );
@@ -257,17 +257,17 @@ namespace fileaccess {
         // Notifier
 
         ContentEventNotifier*          cDEL( void );
-        ContentEventNotifier*          cEXC( const rtl::OUString aNewName );
+        ContentEventNotifier*          cEXC( const OUString aNewName );
         ContentEventNotifier*          cCEL( void );
         PropertySetInfoChangeNotifier* cPSL( void );
         PropertyChangeNotifier*        cPCL( void );
-        rtl::OUString                  getKey( void );
+        OUString                  getKey( void );
 
     private:
         // Data members
         shell*                                                                      m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >   m_xContentIdentifier;
-        rtl::OUString                                                               m_aUncPath;
+        OUString                                                               m_aUncPath;
 
         enum state { NameForInsertionSet = 1,
                      JustInserted = 2,

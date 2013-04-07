@@ -45,8 +45,8 @@ NumberFormatCodeMapper::~NumberFormatCodeMapper()
 NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException)
 {
 
-    ::rtl::OUString elementType = mapElementTypeShortToString(formatType);
-    ::rtl::OUString elementUsage = mapElementUsageShortToString(formatUsage);
+    OUString elementType = mapElementTypeShortToString(formatType);
+    OUString elementUsage = mapElementUsageShortToString(formatUsage);
 
     getFormats( rLocale );
 
@@ -175,24 +175,24 @@ void NumberFormatCodeMapper::getFormats( const ::com::sun::star::lang::Locale& r
 }
 
 
-::rtl::OUString
+OUString
 NumberFormatCodeMapper::mapElementTypeShortToString(sal_Int16 formatType)
 {
 
     switch ( formatType )
     {
         case com::sun::star::i18n::KNumberFormatType::SHORT :
-            return ::rtl::OUString(  "short"  );
+            return OUString(  "short"  );
         case com::sun::star::i18n::KNumberFormatType::MEDIUM :
-            return ::rtl::OUString(  "medium"  );
+            return OUString(  "medium"  );
         case com::sun::star::i18n::KNumberFormatType::LONG :
-            return ::rtl::OUString(  "long"  );
+            return OUString(  "long"  );
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 sal_Int16
-NumberFormatCodeMapper::mapElementTypeStringToShort(const ::rtl::OUString& formatType)
+NumberFormatCodeMapper::mapElementTypeStringToShort(const OUString& formatType)
 {
     if ( formatType == "short" )
         return com::sun::star::i18n::KNumberFormatType::SHORT;
@@ -204,34 +204,34 @@ NumberFormatCodeMapper::mapElementTypeStringToShort(const ::rtl::OUString& forma
     return com::sun::star::i18n::KNumberFormatType::SHORT;
 }
 
-::rtl::OUString
+OUString
 NumberFormatCodeMapper::mapElementUsageShortToString(sal_Int16 formatUsage)
 {
     switch ( formatUsage )
     {
         case com::sun::star::i18n::KNumberFormatUsage::DATE :
-            return ::rtl::OUString(  "DATE"  );
+            return OUString(  "DATE"  );
         case com::sun::star::i18n::KNumberFormatUsage::TIME :
-            return ::rtl::OUString(  "TIME"  );
+            return OUString(  "TIME"  );
         case com::sun::star::i18n::KNumberFormatUsage::DATE_TIME :
-            return ::rtl::OUString(  "DATE_TIME"  );
+            return OUString(  "DATE_TIME"  );
         case com::sun::star::i18n::KNumberFormatUsage::FIXED_NUMBER :
-            return ::rtl::OUString(  "FIXED_NUMBER"  );
+            return OUString(  "FIXED_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::FRACTION_NUMBER :
-            return ::rtl::OUString(  "FRACTION_NUMBER"  );
+            return OUString(  "FRACTION_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::PERCENT_NUMBER :
-            return ::rtl::OUString(  "PERCENT_NUMBER"  );
+            return OUString(  "PERCENT_NUMBER"  );
         case com::sun::star::i18n::KNumberFormatUsage::CURRENCY :
-            return ::rtl::OUString(  "CURRENCY"  );
+            return OUString(  "CURRENCY"  );
         case com::sun::star::i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER :
-            return ::rtl::OUString(  "SCIENTIFIC_NUMBER"  );
+            return OUString(  "SCIENTIFIC_NUMBER"  );
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 
 sal_Int16
-NumberFormatCodeMapper::mapElementUsageStringToShort(const ::rtl::OUString& formatUsage)
+NumberFormatCodeMapper::mapElementUsageStringToShort(const OUString& formatUsage)
 {
     if ( formatUsage == "DATE" )
         return com::sun::star::i18n::KNumberFormatUsage::DATE;
@@ -263,27 +263,27 @@ NumberFormatCodeMapper::createLocaleDataObject() {
     mxLocaleData.set( com::sun::star::i18n::LocaleData::create(mxContext) );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName(void)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString("com.sun.star.i18n.NumberFormatCodeMapper");
+    return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
 }
 
 const sal_Char cNumFormat[] = "com.sun.star.i18n.NumberFormatMapper";
 
 sal_Bool SAL_CALL
-NumberFormatCodeMapper::supportsService(const rtl::OUString& rServiceName)
+NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
                 throw( ::com::sun::star::uno::RuntimeException )
 {
     return !rServiceName.compareToAscii(cNumFormat);
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
 NumberFormatCodeMapper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii(cNumFormat);
+    ::com::sun::star::uno::Sequence< OUString > aRet(1);
+    aRet[0] = OUString::createFromAscii(cNumFormat);
     return aRet;
 }
 

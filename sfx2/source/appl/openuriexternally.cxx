@@ -50,19 +50,19 @@
 #include "app.hrc"
 
 bool sfx2::openUriExternally(
-    rtl::OUString const & uri, bool handleSystemShellExecuteException)
+    OUString const & uri, bool handleSystemShellExecuteException)
 {
     css::uno::Reference< css::system::XSystemShellExecute > exec(
         css::system::SystemShellExecute::create(comphelper::getProcessComponentContext()));
     try {
         exec->execute(
-            uri, rtl::OUString(),
+            uri, OUString(),
             css::system::SystemShellExecuteFlags::URIS_ONLY);
         return true;
     } catch (css::lang::IllegalArgumentException & e) {
         if (e.ArgumentPosition != 0) {
             throw css::uno::RuntimeException(
-                (rtl::OUString(
+                (OUString(
                         "unexpected IllegalArgumentException: ")
                  + e.Message),
                 css::uno::Reference< css::uno::XInterface >());

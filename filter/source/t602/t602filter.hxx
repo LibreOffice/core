@@ -53,10 +53,10 @@ typedef enum {
 
 typedef enum {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT} tnode;
 
-::rtl::OUString getImplementationName()
+OUString getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames()
+::com::sun::star::uno::Sequence < OUString > getSupportedServiceNames()
     throw ( ::com::sun::star::uno::RuntimeException );
 
 
@@ -101,13 +101,13 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
     ResMgr *mpResMgr;
     sal_Bool OptionsDlg();
     ResMgr* getResMgr();
-    rtl::OUString getResStr( sal_Int16 resid );
+    OUString getResStr( sal_Int16 resid );
     void initLocale();
 
     ~T602ImportFilterDialog();
 
     // XExecutableDialog
-       virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
+       virtual void SAL_CALL setTitle( const OUString& aTitle )
             throw (::com::sun::star::uno::RuntimeException);
        virtual sal_Int16 SAL_CALL execute()
             throw (::com::sun::star::uno::RuntimeException);
@@ -119,11 +119,11 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper4 <
             throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
 
     // XPropertyAccess
@@ -157,7 +157,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > mxInputStream;
-    ::rtl::OUString msFilterName;
+    OUString msFilterName;
 
     SvXMLAttributeList *mpAttrList;
 
@@ -230,7 +230,7 @@ private:
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XExtendedTypeDetection
-        virtual ::rtl::OUString SAL_CALL detect(
+        virtual OUString SAL_CALL detect(
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Descriptor )
             throw( com::sun::star::uno::RuntimeException );
 
@@ -239,34 +239,34 @@ private:
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw (::com::sun::star::uno::RuntimeException);
 };
 
-::rtl::OUString T602ImportFilter_getImplementationName()
+OUString T602ImportFilter_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL T602ImportFilter_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL T602ImportFilter_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
     throw ( ::com::sun::star::uno::Exception );
 
-::rtl::OUString T602ImportFilterDialog_getImplementationName()
+OUString T602ImportFilterDialog_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL T602ImportFilterDialog_supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >

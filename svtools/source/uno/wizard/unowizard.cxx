@@ -121,13 +121,13 @@ namespace svt { namespace uno
         {
             // need at least one path
             if ( i_rPaths.getLength() == 0 )
-                throw IllegalArgumentException( ::rtl::OUString(), i_rContext, 2 );
+                throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
             // each path must be of length 1, at least
             for ( sal_Int32 i = 0; i < i_rPaths.getLength(); ++i )
             {
                 if ( i_rPaths[i].getLength() == 0 )
-                    throw IllegalArgumentException( ::rtl::OUString(), i_rContext, 2 );
+                    throw IllegalArgumentException( OUString(), i_rContext, 2 );
 
                 // page IDs must be in ascending order
                 sal_Int16 nPreviousPageID = i_rPaths[i][0];
@@ -135,12 +135,12 @@ namespace svt { namespace uno
                 {
                     if ( i_rPaths[i][j] <= nPreviousPageID )
                     {
-                        ::rtl::OStringBuffer message;
+                        OStringBuffer message;
                         message.append( "Path " );
                         message.append( i );
                         message.append( ": invalid page ID sequence - each page ID must be greater than the previous one." );
                         throw IllegalArgumentException(
-                            ::rtl::OStringToOUString( message.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ),
+                            OStringToOUString( message.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ),
                             i_rContext, 2 );
                     }
                     nPreviousPageID = i_rPaths[i][j];
@@ -157,7 +157,7 @@ namespace svt { namespace uno
             {
                 if ( i_rPaths[i][0] != nFirstPageId )
                     throw IllegalArgumentException(
-                        ::rtl::OUString( "All paths must start with the same page id." ),
+                        OUString( "All paths must start with the same page id." ),
                         i_rContext, 2 );
             }
         }
@@ -168,15 +168,15 @@ namespace svt { namespace uno
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( m_bInitialized )
-            throw AlreadyInitializedException( ::rtl::OUString(), *this );
+            throw AlreadyInitializedException( OUString(), *this );
 
         if ( i_Arguments.getLength() != 2 )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, -1 );
+            throw IllegalArgumentException( OUString(), *this, -1 );
 
         // the second argument must be a XWizardController, for each constructor
         m_xController.set( i_Arguments[1], UNO_QUERY );
         if ( !m_xController.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
+            throw IllegalArgumentException( OUString(), *this, 2 );
 
         // the first arg is either a single path (short[]), or multiple paths (short[][])
         Sequence< sal_Int16 > aSinglePath;
@@ -196,21 +196,21 @@ namespace svt { namespace uno
         m_bInitialized = true;
     }
 
-    static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
+    static OString lcl_getHelpId( const OUString& _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
-            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+            return OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
         else
-            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
+            return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------
-    static ::rtl::OUString lcl_getHelpURL( const rtl::OString& sHelpId )
+    static OUString lcl_getHelpURL( const OString& sHelpId )
     {
-        ::rtl::OUStringBuffer aBuffer;
-        ::rtl::OUString aTmp(
-            rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
+        OUStringBuffer aBuffer;
+        OUString aTmp(
+            OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
             aBuffer.appendAscii( INET_HID_SCHEME );
@@ -237,27 +237,27 @@ namespace svt { namespace uno
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL Wizard::getImplementationName_static() throw(RuntimeException)
+    OUString SAL_CALL Wizard::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.svtools.uno.Wizard" );
+        return OUString( "com.sun.star.comp.svtools.uno.Wizard" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames_static() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices(1);
-        aServices[0] = ::rtl::OUString( "com.sun.star.ui.dialogs.Wizard" );
+        Sequence< OUString > aServices(1);
+        aServices[0] = OUString( "com.sun.star.ui.dialogs.Wizard" );
         return aServices;
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL Wizard::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL Wizard::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL Wizard::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
@@ -283,7 +283,7 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL Wizard::getHelpURL() throw (RuntimeException)
+    OUString SAL_CALL Wizard::getHelpURL() throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -295,7 +295,7 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL Wizard::setHelpURL( const ::rtl::OUString& i_HelpURL ) throw (RuntimeException)
+    void SAL_CALL Wizard::setHelpURL( const OUString& i_HelpURL ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -374,10 +374,10 @@ namespace svt { namespace uno
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::enablePage: invalid dialog implementation!" );
 
         if ( !pWizardImpl->knowsPage( i_PageID ) )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         if ( i_PageID == pWizardImpl->getCurrentPage() )
-            throw InvalidStateException( ::rtl::OUString(), *this );
+            throw InvalidStateException( OUString(), *this );
 
         pWizardImpl->enablePage( i_PageID, i_Enable );
     }
@@ -437,7 +437,7 @@ namespace svt { namespace uno
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if ( ( i_PathIndex < 0 ) || ( i_PathIndex >= m_aWizardSteps.getLength() ) )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         WizardShell* pWizardImpl = dynamic_cast< WizardShell* >( m_pDialog );
         ENSURE_OR_RETURN_VOID( pWizardImpl, "Wizard::activatePath: invalid dialog implementation!" );
@@ -446,7 +446,7 @@ namespace svt { namespace uno
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL Wizard::setTitle( const ::rtl::OUString& i_Title ) throw (RuntimeException)
+    void SAL_CALL Wizard::setTitle( const OUString& i_Title ) throw (RuntimeException)
     {
         // simply disambiguate
         Wizard_Base::OGenericUnoDialog::setTitle( i_Title );

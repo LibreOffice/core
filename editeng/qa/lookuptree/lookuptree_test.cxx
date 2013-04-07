@@ -194,25 +194,25 @@ void LookupTreeTest::test()
     CPPUNIT_ASSERT_EQUAL( OUString("uer"), a->suggestAutoCompletion() );
 
     // Test unicode
-    OUString aQueryString = rtl::OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );
+    OUString aQueryString = OStringToOUString( "H\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );
     a->insert( aQueryString );
     a->returnToRoot();
     a->advance( sal_Unicode('H') );
 
     OUString aAutocompletedString = a->suggestAutoCompletion();
-    OUString aExpectedString = rtl::OStringToOUString( "\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );
+    OUString aExpectedString = OStringToOUString( "\xC3\xA4llo", RTL_TEXTENCODING_UTF8 );
 
     CPPUNIT_ASSERT_EQUAL( aExpectedString, aAutocompletedString );
 
     OString aUtf8String( "\xe3\x81\x82\xe3\x81\x97\xe3\x81\x9f" );
-    aQueryString = rtl::OStringToOUString( aUtf8String, RTL_TEXTENCODING_UTF8 );
+    aQueryString = OStringToOUString( aUtf8String, RTL_TEXTENCODING_UTF8 );
     a->insert( aQueryString );
 
-    OUString aGotoString = rtl::OStringToOUString( "\xe3\x81\x82", RTL_TEXTENCODING_UTF8 );
+    OUString aGotoString = OStringToOUString( "\xe3\x81\x82", RTL_TEXTENCODING_UTF8 );
     a->gotoNode( aGotoString );
 
     aAutocompletedString = a->suggestAutoCompletion();
-    aExpectedString      = rtl::OStringToOUString( "\xe3\x81\x97\xe3\x81\x9f", RTL_TEXTENCODING_UTF8 );
+    aExpectedString      = OStringToOUString( "\xe3\x81\x97\xe3\x81\x9f", RTL_TEXTENCODING_UTF8 );
     CPPUNIT_ASSERT_EQUAL( aExpectedString, aAutocompletedString );
 
     delete a;

@@ -370,7 +370,7 @@ static void openStorageStream( xml::sax::InputSource *pParserInput,
     *ppGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
 }
 
-bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
+bool SvxXMLXTableImport::load( const OUString &rPath,
                                const uno::Reference < embed::XStorage > &xStorage,
                                const uno::Reference< XNameContainer >& xTable,
                                bool *bOptLoadedFromStorage ) throw()
@@ -455,7 +455,7 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
 //      on the current machine. FIXME: would be better to check a file exists
 //      before importing ...
 //        fprintf (stderr, "parsing etc. exception '%s'\n",
-//                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+//                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         bRet = false;
     }
 

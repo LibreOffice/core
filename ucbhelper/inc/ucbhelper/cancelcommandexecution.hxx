@@ -92,7 +92,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const com::sun::star::ucb::IOEr
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandEnvironment > &
                                     xEnv,
-                             const rtl::OUString & rMessage = rtl::OUString(),
+                             const OUString & rMessage = OUString(),
                              const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XCommandProcessor > &
                                     xContext = 0 )

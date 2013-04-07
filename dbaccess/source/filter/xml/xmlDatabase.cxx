@@ -41,7 +41,7 @@ namespace dbaxml
 DBG_NAME(OXMLDatabase)
 
 OXMLDatabase::OXMLDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName ) :
+                sal_uInt16 nPrfx, const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     DBG_CTOR(OXMLDatabase,NULL);
@@ -58,7 +58,7 @@ OXMLDatabase::~OXMLDatabase()
 
 SvXMLImportContext* OXMLDatabase::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -74,7 +74,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
-                ::rtl::OUString sService;
+                OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Forms",aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )
@@ -89,7 +89,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
-                ::rtl::OUString sService;
+                OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Reports",aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )
@@ -104,7 +104,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
             {
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
-                ::rtl::OUString sService;
+                OUString sService;
                 dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitions",aValue);
                 aValue >>= sService;
                 if ( sService.isEmpty() )

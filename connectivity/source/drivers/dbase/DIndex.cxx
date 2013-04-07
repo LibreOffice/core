@@ -68,8 +68,8 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
 // -------------------------------------------------------------------------
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
-                            const ::rtl::OUString& _rName)
-    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
+                            const OUString& _rName)
+    :OIndex(_rName,OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True)
     ,m_pFileStream(NULL)
     ,m_aHeader(_rHeader)
     ,m_nCurNode(NODE_NOTFOUND)
@@ -92,7 +92,7 @@ void ODbaseIndex::refreshColumns()
     {
         OSL_ENSURE(m_pFileStream,"FileStream is not opened!");
         OSL_ENSURE(m_aHeader.db_name[0] != '\0',"Invalid name for the column!");
-        aVector.push_back(::rtl::OUString::createFromAscii(m_aHeader.db_name));
+        aVector.push_back(OUString::createFromAscii(m_aHeader.db_name));
     }
 
     if(m_pColumns)
@@ -141,7 +141,7 @@ sal_Bool ODbaseIndex::openIndexFile()
 {
     if(!m_pFileStream)
     {
-        ::rtl::OUString sFile = getCompletePath();
+        OUString sFile = getCompletePath();
         if(UCBContentHelper::Exists(sFile))
         {
             m_pFileStream = OFileTable::createStream_simpleError(sFile, STREAM_READWRITE | STREAM_NOCREATE | STREAM_SHARE_DENYWRITE);
@@ -156,7 +156,7 @@ sal_Bool ODbaseIndex::openIndexFile()
         }
         if(!m_pFileStream)
         {
-            const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+            const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_FILE,
                 "$filename$", sFile
              ) );
@@ -363,12 +363,12 @@ SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rInd
     return rStream;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString ODbaseIndex::getCompletePath()
+OUString ODbaseIndex::getCompletePath()
 {
-    ::rtl::OUString sDir = m_pTable->getConnection()->getURL();
+    OUString sDir = m_pTable->getConnection()->getURL();
     sDir += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sDir += m_Name;
-    sDir += ::rtl::OUString(".ndx");
+    sDir += OUString(".ndx");
     return sDir;
 }
 //------------------------------------------------------------------
@@ -376,44 +376,44 @@ void ODbaseIndex::createINFEntry()
 {
     // synchronize inf-file
     String sEntry = m_Name;
-    sEntry += rtl::OUString(".ndx");
+    sEntry += OUString(".ndx");
 
-    ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
+    OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString(".inf");
+    sCfgFile += OUString(".inf");
 
-    rtl::OUString sPhysicalPath;
+    OUString sPhysicalPath;
     LocalFileHelper::ConvertURLToPhysicalName(sCfgFile,sPhysicalPath);
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
 
     sal_uInt16 nSuffix = aInfFile.GetKeyCount();
-    rtl::OString aNewEntry,aKeyName;
+    OString aNewEntry,aKeyName;
     sal_Bool bCase = isCaseSensitive();
     while (aNewEntry.isEmpty())
     {
-        aNewEntry = rtl::OString(RTL_CONSTASCII_STRINGPARAM("NDX"));
+        aNewEntry = OString(RTL_CONSTASCII_STRINGPARAM("NDX"));
         aNewEntry += OString::number(++nSuffix);
         for (sal_uInt16 i = 0; i < aInfFile.GetKeyCount(); i++)
         {
             aKeyName = aInfFile.GetKeyName(i);
             if (bCase ? aKeyName.equals(aNewEntry) : aKeyName.equalsIgnoreAsciiCase(aNewEntry))
             {
-                aNewEntry = rtl::OString();
+                aNewEntry = OString();
                 break;
             }
         }
     }
-    aInfFile.WriteKey(aNewEntry, rtl::OUStringToOString(sEntry, m_pTable->getConnection()->getTextEncoding()));
+    aInfFile.WriteKey(aNewEntry, OUStringToOString(sEntry, m_pTable->getConnection()->getTextEncoding()));
 }
 // -------------------------------------------------------------------------
 sal_Bool ODbaseIndex::DropImpl()
 {
     closeImpl();
 
-    ::rtl::OUString sPath = getCompletePath();
+    OUString sPath = getCompletePath();
     if(UCBContentHelper::Exists(sPath))
     {
         if(!UCBContentHelper::Kill(sPath))
@@ -421,21 +421,21 @@ sal_Bool ODbaseIndex::DropImpl()
     }
 
     // synchronize inf-file
-    ::rtl::OUString sCfgFile(m_pTable->getConnection()->getURL());
+    OUString sCfgFile(m_pTable->getConnection()->getURL());
     sCfgFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sCfgFile += m_pTable->getName();
-    sCfgFile += ::rtl::OUString(".inf");
+    sCfgFile += OUString(".inf");
 
-    rtl::OUString sPhysicalPath;
+    OUString sPhysicalPath;
     OSL_VERIFY_RES( LocalFileHelper::ConvertURLToPhysicalName(sCfgFile, sPhysicalPath),
         "Can not convert Config Filename into Physical Name!");
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-    rtl::OString aKeyName;
+    OString aKeyName;
     String sEntry = m_Name;
-    sEntry += rtl::OUString(".ndx");
+    sEntry += OUString(".ndx");
 
     // delete entries from the inf file
     for (sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++)
@@ -444,7 +444,7 @@ sal_Bool ODbaseIndex::DropImpl()
         aKeyName = aInfFile.GetKeyName( nKey );
         if (aKeyName.copy(0,3).equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
         {
-            if(sEntry == String(rtl::OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
+            if(sEntry == String(OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
             {
                 aInfFile.DeleteKey(aKeyName);
                 break;
@@ -454,7 +454,7 @@ sal_Bool ODbaseIndex::DropImpl()
     return sal_True;
 }
 // -------------------------------------------------------------------------
-void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile)
+void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile)
 {
     closeImpl();
     if(UCBContentHelper::Exists(_sFile))
@@ -465,10 +465,10 @@ void ODbaseIndex::impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::
 sal_Bool ODbaseIndex::CreateImpl()
 {
     // Create the Index
-    const ::rtl::OUString sFile = getCompletePath();
+    const OUString sFile = getCompletePath();
     if(UCBContentHelper::Exists(sFile))
     {
-        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
             STR_COULD_NOT_CREATE_INDEX_NAME,
             "$filename$", sFile
          ) );
@@ -488,7 +488,7 @@ sal_Bool ODbaseIndex::CreateImpl()
     m_pFileStream = OFileTable::createStream_simpleError(sFile,STREAM_READWRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC);
     if (!m_pFileStream)
     {
-        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
             STR_COULD_NOT_LOAD_FILE,
             "$filename$", sFile
          ) );
@@ -552,7 +552,7 @@ sal_Bool ODbaseIndex::CreateImpl()
 
     m_pFileStream->SetStreamSize(DINDEX_PAGE_SIZE);
 
-    rtl::OString aCol(rtl::OUStringToOString(aName, m_pTable->getConnection()->getTextEncoding()));
+    OString aCol(OUStringToOString(aName, m_pTable->getConnection()->getTextEncoding()));
     strncpy(m_aHeader.db_name, aCol.getStr(), std::min<size_t>(sizeof(m_aHeader.db_name), aCol.getLength()));
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;

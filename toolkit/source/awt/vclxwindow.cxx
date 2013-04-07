@@ -329,7 +329,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 {
     SolarMutexGuard aGuard;
     if ( mbDisposed )
-        throw DisposedException( ::rtl::OUString(), mrAntiImpl );
+        throw DisposedException( OUString(), mrAntiImpl );
     if ( !mxWindowStyleSettings.is() )
         mxWindowStyleSettings = new ::toolkit::WindowStyleSettings( maListenerContainerMutex, mrAntiImpl );
     return mxWindowStyleSettings;
@@ -1406,7 +1406,7 @@ namespace
     }
 }
 
-void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1512,7 +1512,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         case BASEPROPERTY_LABEL:
         case BASEPROPERTY_TITLE:
         {
-            ::rtl::OUString aText;
+            OUString aText;
             if ( Value >>= aText )
             {
                 switch (eWinType)
@@ -1534,27 +1534,27 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         break;
         case BASEPROPERTY_ACCESSIBLENAME:
         {
-            ::rtl::OUString aText;
+            OUString aText;
             if ( Value >>= aText )
                 pWindow->SetAccessibleName( aText );
         }
         break;
         case BASEPROPERTY_HELPURL:
         {
-            ::rtl::OUString aURL;
+            OUString aURL;
             if ( Value >>= aURL )
             {
                 INetURLObject aHelpURL( aURL );
                 if ( aHelpURL.GetProtocol() == INET_PROT_HID )
-                    pWindow->SetHelpId( rtl::OUStringToOString( aHelpURL.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+                    pWindow->SetHelpId( OUStringToOString( aHelpURL.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
-                    pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
+                    pWindow->SetHelpId( OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
             }
         }
         break;
         case BASEPROPERTY_HELPTEXT:
         {
-            ::rtl::OUString aHelpText;
+            OUString aHelpText;
             if ( Value >>= aHelpText )
             {
                 pWindow->SetQuickHelpText( aHelpText );
@@ -1926,14 +1926,14 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
         case BASEPROPERTY_DEFAULTCONTROL:
         {
-            rtl::OUString aName;
+            OUString aName;
             Value >>= aName;
             break;
         }
     }
 }
 
-::com::sun::star::uno::Any VCLXWindow::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXWindow::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2001,26 +2001,26 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
             {
-                ::rtl::OUString aText = GetWindow()->GetText();
+                OUString aText = GetWindow()->GetText();
                 aProp <<= aText;
             }
             break;
             case BASEPROPERTY_ACCESSIBLENAME:
             {
-                ::rtl::OUString aText = GetWindow()->GetAccessibleName();
+                OUString aText = GetWindow()->GetAccessibleName();
                 aProp <<= aText;
             }
             break;
             case BASEPROPERTY_HELPTEXT:
             {
-                ::rtl::OUString aText = GetWindow()->GetQuickHelpText();
+                OUString aText = GetWindow()->GetQuickHelpText();
                 aProp <<= aText;
             }
             break;
             case BASEPROPERTY_HELPURL:
             {
-                rtl::OUString aHelpId( rtl::OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
-                aProp <<= ::rtl::OUString( aHelpId );
+                OUString aHelpId( OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                aProp <<= OUString( aHelpId );
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
@@ -2582,13 +2582,13 @@ VCLXWindow::getProperties() throw (::com::sun::star::uno::RuntimeException)
     return GetPropHelper()->getProperties();
 }
 ::com::sun::star::beans::Property SAL_CALL
-VCLXWindow::getPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+VCLXWindow::getPropertyByName( const OUString& rName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     return GetPropHelper()->getPropertyByName( rName );
 }
 
 ::sal_Bool SAL_CALL
-VCLXWindow::hasPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun::star::uno::RuntimeException)
+VCLXWindow::hasPropertyByName( const OUString& rName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return GetPropHelper()->hasPropertyByName( rName );
 }

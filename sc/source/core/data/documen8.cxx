@@ -326,7 +326,7 @@ void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 
 //------------------------------------------------------------------------
 
-void ScDocument::InvalidateTextWidth( const rtl::OUString& rStyleName )
+void ScDocument::InvalidateTextWidth( const OUString& rStyleName )
 {
     const SCTAB nCount = GetTableCount();
     for ( SCTAB i=0; i<nCount && maTabs[i]; i++ )
@@ -345,7 +345,7 @@ void ScDocument::InvalidateTextWidth( SCTAB nTab )
 
 //------------------------------------------------------------------------
 
-bool ScDocument::IsPageStyleInUse( const rtl::OUString& rStrPageStyle, SCTAB* pInTab )
+bool ScDocument::IsPageStyleInUse( const OUString& rStrPageStyle, SCTAB* pInTab )
 {
     bool         bInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -362,7 +362,7 @@ bool ScDocument::IsPageStyleInUse( const rtl::OUString& rStrPageStyle, SCTAB* pI
 
 //------------------------------------------------------------------------
 
-bool ScDocument::RemovePageStyleInUse( const rtl::OUString& rStyle )
+bool ScDocument::RemovePageStyleInUse( const OUString& rStyle )
 {
     bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -377,7 +377,7 @@ bool ScDocument::RemovePageStyleInUse( const rtl::OUString& rStyle )
     return bWasInUse;
 }
 
-bool ScDocument::RenamePageStyleInUse( const rtl::OUString& rOld, const rtl::OUString& rNew )
+bool ScDocument::RenamePageStyleInUse( const OUString& rOld, const OUString& rNew )
 {
     bool bWasInUse = false;
     const SCTAB nCount = GetTableCount();
@@ -398,7 +398,7 @@ sal_uInt8 ScDocument::GetEditTextDirection(SCTAB nTab) const
 {
     EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
 
-    rtl::OUString aStyleName = GetPageStyle( nTab );
+    OUString aStyleName = GetPageStyle( nTab );
     SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
     if ( pStyle )
     {
@@ -1110,13 +1110,13 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
             {
                 // Update failed.  Notify the user.
 
-                rtl::OUString aFile;
+                OUString aFile;
                 pLinkManager->GetDisplayNames(pRefLink, NULL, &aFile, NULL, NULL);
                 // Decode encoded URL for display friendliness.
                 INetURLObject aUrl(aFile,INetURLObject::WAS_ENCODED);
                 aFile = aUrl.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
 
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 aBuf.append(String(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
                 aBuf.appendAscii("\n\n");
                 aBuf.append(aFile);
@@ -1166,11 +1166,11 @@ void ScDocument::UpdateDdeLinks(Window* pWin)
                 else
                 {
                     // Update failed.  Notify the user.
-                    rtl::OUString aFile = pDdeLink->GetTopic();
-                    rtl::OUString aElem = pDdeLink->GetItem();
-                    rtl::OUString aType = pDdeLink->GetAppl();
+                    OUString aFile = pDdeLink->GetTopic();
+                    OUString aElem = pDdeLink->GetItem();
+                    OUString aType = pDdeLink->GetAppl();
 
-                    rtl::OUStringBuffer aBuf;
+                    OUStringBuffer aBuf;
                     aBuf.append(String(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
                     aBuf.appendAscii("\n\n");
                     aBuf.appendAscii("Source : ");
@@ -1198,7 +1198,7 @@ void ScDocument::UpdateDdeLinks(Window* pWin)
     }
 }
 
-bool ScDocument::UpdateDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem )
+bool ScDocument::UpdateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem )
 {
     //  fuer refresh() per StarOne Api
     //  ResetValue() fuer einzelnen Link nicht noetig
@@ -1215,9 +1215,9 @@ bool ScDocument::UpdateDdeLink( const rtl::OUString& rAppl, const rtl::OUString&
             if (pBase->ISA(ScDdeLink))
             {
                 ScDdeLink* pDdeLink = (ScDdeLink*)pBase;
-                if ( rtl::OUString(pDdeLink->GetAppl()) == rAppl &&
-                     rtl::OUString(pDdeLink->GetTopic()) == rTopic &&
-                     rtl::OUString(pDdeLink->GetItem()) == rItem )
+                if ( OUString(pDdeLink->GetAppl()) == rAppl &&
+                     OUString(pDdeLink->GetTopic()) == rTopic &&
+                     OUString(pDdeLink->GetItem()) == rItem )
                 {
                     pDdeLink->TryUpdate();
                     bFound = true;          // koennen theoretisch mehrere sein (Mode), darum weitersuchen
@@ -1296,7 +1296,7 @@ namespace {
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
         const sfx2::LinkManager* pLinkManager,
-        const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem, sal_uInt8 nMode,
+        const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode,
         sal_uInt16* pnDdePos = NULL )
 {
     if( pLinkManager )
@@ -1309,9 +1309,9 @@ ScDdeLink* lclGetDdeLink(
             ::sfx2::SvBaseLink* pLink = *rLinks[ nIndex ];
             if( ScDdeLink* pDdeLink = PTR_CAST( ScDdeLink, pLink ) )
             {
-                if( (rtl::OUString(pDdeLink->GetAppl()) == rAppl) &&
-                    (rtl::OUString(pDdeLink->GetTopic()) == rTopic) &&
-                    (rtl::OUString(pDdeLink->GetItem()) == rItem) &&
+                if( (OUString(pDdeLink->GetAppl()) == rAppl) &&
+                    (OUString(pDdeLink->GetTopic()) == rTopic) &&
+                    (OUString(pDdeLink->GetItem()) == rItem) &&
                     ((nMode == SC_DDE_IGNOREMODE) || (nMode == pDdeLink->GetMode())) )
                     return pDdeLink;
                 if( pnDdePos ) ++*pnDdePos;
@@ -1349,12 +1349,12 @@ ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, sal_uInt16 nDde
 
 // ----------------------------------------------------------------------------
 
-bool ScDocument::FindDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos )
+bool ScDocument::FindDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, sal_uInt16& rnDdePos )
 {
     return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
-bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, rtl::OUString& rAppl, rtl::OUString& rTopic, rtl::OUString& rItem ) const
+bool ScDocument::GetDdeLinkData( sal_uInt16 nDdePos, OUString& rAppl, OUString& rTopic, OUString& rItem ) const
 {
     if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
@@ -1382,7 +1382,7 @@ const ScMatrix* ScDocument::GetDdeLinkResultMatrix( sal_uInt16 nDdePos ) const
     return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
-bool ScDocument::CreateDdeLink( const rtl::OUString& rAppl, const rtl::OUString& rTopic, const rtl::OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
+bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, const OUString& rItem, sal_uInt8 nMode, ScMatrixRef pResults )
 {
     /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
         unwanted connections. First try to find existing link. Set result array
@@ -1684,7 +1684,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
 
                     uno::Sequence<sal_Int32> aOffsets;
-                    rtl::OUString aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+                    OUString aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )
                     {

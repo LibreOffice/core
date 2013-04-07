@@ -60,7 +60,6 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 struct DispatchInfo
 {
@@ -99,7 +98,7 @@ static DispatchInfo SupportedCommandsArray[] =
     { 0                         ,   0                               , sal_False }
 };
 
-typedef ::boost::unordered_map< ::rtl::OUString, CacheDispatchInfo, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > CmdToInfoCache;
+typedef ::boost::unordered_map< OUString, CacheDispatchInfo, OUStringHash, ::std::equal_to< OUString > > CmdToInfoCache;
 
 const CmdToInfoCache& GetCommandToInfoCache()
 {
@@ -114,7 +113,7 @@ const CmdToInfoCache& GetCommandToInfoCache()
             sal_Int32 i( 0 );
             while ( SupportedCommandsArray[i].pCommand != 0 )
             {
-                rtl::OUString aCommand( rtl::OUString::createFromAscii( SupportedCommandsArray[i].pCommand ));
+                OUString aCommand( OUString::createFromAscii( SupportedCommandsArray[i].pCommand ));
 
                 CacheDispatchInfo aDispatchInfo;
                 aDispatchInfo.nGroupId          = SupportedCommandsArray[i].nGroupId;
@@ -202,22 +201,22 @@ BibFrameController_Impl::~BibFrameController_Impl()
         CloseBibModul(pBibMod);
 }
 
-::rtl::OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.extensions.Bibliography");
+    return OUString("com.sun.star.comp.extensions.Bibliography");
 }
 
-sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ( sServiceName == "com.sun.star.frame.Bibliography" || sServiceName == "com.sun.star.frame.Controller" );
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException)
 {
     // return only top level services ...
     // base services are included there and should be asked by uno-rtti.
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString("com.sun.star.frame.Bibliography");
+    ::com::sun::star::uno::Sequence< OUString > lNames(1);
+    lNames[0] = OUString("com.sun.star.frame.Bibliography");
     return lNames;
 }
 
@@ -281,7 +280,7 @@ void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::X
     pImp->aLC.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const rtl::OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !bDisposing )
     {
@@ -434,14 +433,14 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
         else if(aCommand.EqualsAscii("Bib/sdbsource"))
         {
-            rtl::OUString aURL = pDatMan->CreateDBChangeDialog(pParent);
+            OUString aURL = pDatMan->CreateDBChangeDialog(pParent);
             if(!aURL.isEmpty())
             {
                 try
                 {
                     uno::Sequence< beans::PropertyValue > aNewDataSource(2);
                     beans::PropertyValue* pProps = aNewDataSource.getArray();
-                    pProps[0].Value <<= rtl::OUString();
+                    pProps[0].Value <<= OUString();
                     pProps[1].Value <<= aURL;
                     ChangeDataSource(aNewDataSource);
                 }
@@ -471,11 +470,11 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
 
             const beans::PropertyValue* pPropertyValue = aArgs.getConstArray();
             uno::Any aValue=pPropertyValue[0].Value;
-            rtl::OUString aQuery;
+            OUString aQuery;
             aValue >>= aQuery;
 
             aValue=pPropertyValue[1].Value;
-            rtl::OUString aQueryField;
+            OUString aQueryField;
             aValue >>= aQueryField;
             BibConfig* pConfig = BibModul::GetConfig();
             pConfig->setQueryField(aQueryField);
@@ -495,7 +494,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                 {
                     // the dialog has been executed successfully, and the filter on the query composer
                     // has been changed
-                    ::rtl::OUString sNewFilter = pDatMan->getParser()->getFilter();
+                    OUString sNewFilter = pDatMan->getParser()->getFilter();
                     pDatMan->setFilter( sNewFilter );
                 }
             }
@@ -669,15 +668,15 @@ void BibFrameController_Impl::addStatusListener(
     {
         aEvent.IsEnabled  = sal_True;
         const char*  pHier = bHierarchical? "" : "*" ;
-        aEvent.State <<= rtl::OUString::createFromAscii(pHier);
+        aEvent.State <<= OUString::createFromAscii(pHier);
     }
     else if(aURL.Path == "Bib/MenuFilter")
     {
         aEvent.IsEnabled  = sal_True;
         aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
-        uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getQueryFields();
-        aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
+        uno::Sequence<OUString> aStringSeq=pDatMan->getQueryFields();
+        aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<OUString>*)0));
 
     }
     else if ( aURL.Path == "Bib/source")
@@ -685,8 +684,8 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.IsEnabled  = sal_True;
         aEvent.FeatureDescriptor=pDatMan->getActiveDataTable();
 
-        uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getDataSources();
-        aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<rtl::OUString>*)0));
+        uno::Sequence<OUString> aStringSeq=pDatMan->getDataSources();
+        aEvent.State.setValue(&aStringSeq,::getCppuType((uno::Sequence<OUString>*)0));
     }
     else if( aURL.Path == "Bib/sdbsource" ||
              aURL.Path == "Bib/Mapping" ||
@@ -702,7 +701,7 @@ void BibFrameController_Impl::addStatusListener(
     }
     else if (aURL.Path == "Bib/removeFilter" )
     {
-        rtl::OUString aFilterStr=pDatMan->getFilter();
+        OUString aFilterStr=pDatMan->getFilter();
         aEvent.IsEnabled  = !aFilterStr.isEmpty();
     }
     else if(aURL.Path == "Cut")
@@ -746,7 +745,7 @@ void BibFrameController_Impl::addStatusListener(
                     try
                     {
                         uno::Any aData = xDataObj->getTransferData( aFlavor );
-                        ::rtl::OUString aText;
+                        OUString aText;
                         aData >>= aText;
                         aEvent.IsEnabled  = !aText.isEmpty();
                     }
@@ -804,7 +803,7 @@ void BibFrameController_Impl::removeStatusListener(
 //-----------------------------------------------------------------------------
 void BibFrameController_Impl::RemoveFilter()
 {
-    rtl::OUString aQuery;
+    OUString aQuery;
     pDatMan->startQueryWith(aQuery);
 
     sal_uInt16 nCount = aStatusListeners.size();
@@ -847,14 +846,14 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
 {
     const beans::PropertyValue* pPropertyValue = aArgs.getConstArray();
     uno::Any aValue=pPropertyValue[0].Value;
-    rtl::OUString aDBTableName;
+    OUString aDBTableName;
     aValue >>= aDBTableName;
 
 
     if(aArgs.getLength() > 1)
     {
         uno::Any aDB = pPropertyValue[1].Value;
-        rtl::OUString aURL;
+        OUString aURL;
         aDB >>= aURL;
         pDatMan->setActiveDataSource(aURL);
         aDBTableName = pDatMan->getActiveDataTable();
@@ -884,7 +883,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.Source     = (XDispatch *) this;
             aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
-            uno::Sequence<rtl::OUString> aStringSeq=pDatMan->getQueryFields();
+            uno::Sequence<OUString> aStringSeq=pDatMan->getQueryFields();
             aEvent.State  = makeAny( aStringSeq );
 
             pObj->xListener->statusChanged( aEvent );

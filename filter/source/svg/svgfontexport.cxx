@@ -52,7 +52,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const Font& rFont )
 {
     FontWeight      eWeight( WEIGHT_NORMAL );
     FontItalic      eItalic( ITALIC_NONE );
-    ::rtl::OUString aFontName( rFont.GetName() );
+    OUString aFontName( rFont.GetName() );
     sal_Int32       nNextTokenPos( 0 );
 
     switch( rFont.GetWeight() )
@@ -92,7 +92,7 @@ void SVGFontExport::implCollectGlyphs()
 
             for( size_t i = 0, nCount = rMtf.GetActionSize(); i < nCount; ++i )
             {
-                ::rtl::OUString     aText;
+                OUString     aText;
                 MetaAction*         pAction = rMtf.GetAction( i );
                 const sal_uInt16    nType = pAction->GetType();
 
@@ -159,7 +159,7 @@ void SVGFontExport::implCollectGlyphs()
                         const sal_Unicode* pStr = aText.getStr();
 
                         for( sal_uInt32 k = 0, nLen = aText.getLength(); k < nLen; ++k )
-                            rGlyphSet.insert( rtl::OUString( pStr[ k ] ) );
+                            rGlyphSet.insert( OUString( pStr[ k ] ) );
                     }
                 }
             }
@@ -186,8 +186,8 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
 
             {
                 SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
-                ::rtl::OUString     aCurIdStr( aEmbeddedFontStr );
-                ::rtl::OUString     aUnitsPerEM( ::rtl::OUString::valueOf( nFontEM ) );
+                OUString     aCurIdStr( aEmbeddedFontStr );
+                OUString     aUnitsPerEM( OUString::valueOf( nFontEM ) );
                 VirtualDevice       aVDev;
                 Font                aFont( rFont );
 
@@ -197,13 +197,13 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                 aVDev.SetMapMode( MAP_100TH_MM );
                 aVDev.SetFont( aFont );
 
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += ::rtl::OUString::valueOf( ++mnCurFontId ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += OUString::valueOf( ++mnCurFontId ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
                 {
                     SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", sal_True, sal_True );
-                    ::rtl::OUString     aFontWeight;
-                    ::rtl::OUString     aFontStyle;
+                    OUString     aFontWeight;
+                    OUString     aFontStyle;
                     const Size         aSize( nFontEM, nFontEM );
 
                     // Font Weight
@@ -222,14 +222,14 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-weight", aFontWeight );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-style", aFontStyle );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", ::rtl::OUString::valueOf( aVDev.GetFontMetric().GetAscent() ) );
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", ::rtl::OUString::valueOf( aVDev.GetFontMetric().GetDescent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", OUString::valueOf( aVDev.GetFontMetric().GetAscent() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", OUString::valueOf( aVDev.GetFontMetric().GetDescent() ) );
 
                     {
                         SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", sal_True, sal_True );
                     }
 
-                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", ::rtl::OUString::valueOf( aSize.Width() ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::valueOf( aSize.Width() ) );
 
                     {
                         const Point         aPos;
@@ -255,7 +255,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
-void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rCellStr )
+void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr )
 {
     PolyPolygon         aPolyPoly;
     const sal_Unicode   nSpace = ' ';
@@ -272,11 +272,11 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", rCellStr );
 
         if( rCellStr[ 0 ] == nSpace && rCellStr.getLength() == 1 )
-            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( rtl::OUString(' ') ), 0 ) );
+            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( OUString(' ') ), 0 ) );
 
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", ::rtl::OUString::valueOf( aBoundRect.GetWidth() ) );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", OUString::valueOf( aBoundRect.GetWidth() ) );
 
-        const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
+        const OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
         if( !aPathString.isEmpty() )
         {
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
@@ -328,10 +328,10 @@ void SVGFontExport::EmbedFonts()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SVGFontExport::GetMappedFontName( const ::rtl::OUString& rFontName ) const
+OUString SVGFontExport::GetMappedFontName( const OUString& rFontName ) const
 {
     sal_Int32       nNextTokenPos( 0 );
-    ::rtl::OUString aRet( rFontName.getToken( 0, ';', nNextTokenPos ) );
+    OUString aRet( rFontName.getToken( 0, ';', nNextTokenPos ) );
 
     if( mnCurFontId )
         aRet += " embedded";

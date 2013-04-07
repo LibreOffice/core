@@ -53,8 +53,8 @@ private:
     void ListOptionValueChanged();
     void RadioValueChanged();
 
-    rtl::OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
-    rtl::OUString toString(bool bVal) const;
+    OUString toString(formula::FormulaGrammar::AddressConvention eConv) const;
+    OUString toString(bool bVal) const;
 
 private:
     SvxCheckListBox maLbSettings;
@@ -70,19 +70,19 @@ private:
     OKButton maBtnOK;
     CancelButton maBtnCancel;
 
-    rtl::OUString maTrue;
-    rtl::OUString maFalse;
+    OUString maTrue;
+    OUString maFalse;
 
-    rtl::OUString maCalcA1;
-    rtl::OUString maExcelA1;
-    rtl::OUString maExcelR1C1;
+    OUString maCalcA1;
+    OUString maExcelA1;
+    OUString maExcelR1C1;
 
-    rtl::OUString maCaptionStringRefSyntax;
-    rtl::OUString maDescStringRefSyntax;
-    rtl::OUString maUseFormulaSyntax;
+    OUString maCaptionStringRefSyntax;
+    OUString maDescStringRefSyntax;
+    OUString maUseFormulaSyntax;
 
-    rtl::OUString maCaptionEmptyStringAsZero;
-    rtl::OUString maDescEmptyStringAsZero;
+    OUString maCaptionEmptyStringAsZero;
+    OUString maDescEmptyStringAsZero;
 
     ScCalcConfig maConfig;
 };

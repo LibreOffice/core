@@ -55,10 +55,10 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) { notImplemented(); }
     //  XStorable
     virtual void SAL_CALL store() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL storeAsURL(   const   ::rtl::OUString& sURL,
+    virtual void SAL_CALL storeAsURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL storeToURL(   const   ::rtl::OUString& sURL,
+    virtual void SAL_CALL storeToURL(   const   OUString& sURL,
         const   ::com::sun::star::uno::Sequence< css::beans::PropertyValue >&   seqArguments    )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 

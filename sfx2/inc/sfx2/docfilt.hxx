@@ -44,11 +44,11 @@ friend class SfxFilterContainer;
     WildCard        aWildCard;
     sal_uIntPtr     lFormat;
     String          aTypeName;
-    rtl::OUString   aUserData;
+    OUString   aUserData;
     SfxFilterFlags  nFormatType;
     sal_uInt16      nDocIcon;
-    rtl::OUString   aServiceName;
-    rtl::OUString   aMimeType;
+    OUString   aServiceName;
+    OUString   aMimeType;
     String          aFilterName;
     String          aPattern;
     sal_uIntPtr     nVersion;
@@ -76,7 +76,7 @@ public:
     bool IsInternal() const { return nFormatType & SFX_FILTER_INTERNAL; }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const String&   GetFilterName() const { return aFilterName; }
-    const ::rtl::OUString& GetMimeType() const { return aMimeType; }
+    const OUString& GetMimeType() const { return aMimeType; }
     const String&   GetName() const { return  aFilterName; }
     const WildCard& GetWildcard() const { return aWildCard; }
     const String&   GetRealTypeName() const { return aTypeName; }
@@ -84,7 +84,7 @@ public:
     const String&   GetTypeName() const { return aTypeName; }
     const String&   GetUIName() const { return aUIName; }
     sal_uInt16          GetDocIconId() const { return nDocIcon; }
-    const rtl::OUString& GetUserData() const { return aUserData; }
+    const OUString& GetUserData() const { return aUserData; }
     const String&   GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const String& rStr ) { aDefaultTemplate = rStr; }
     sal_Bool            UsesStorage() const { return GetFormat() != 0; }
@@ -95,7 +95,7 @@ public:
     sal_uIntPtr           GetVersion() const { return nVersion; }
     String          GetSuffixes() const;
     String          GetDefaultExtension() const;
-    const rtl::OUString& GetServiceName() const { return aServiceName; }
+    const OUString& GetServiceName() const { return aServiceName; }
 
     static const SfxFilter* GetDefaultFilter( const String& rName );
     static const SfxFilter* GetFilterByName( const String& rName );

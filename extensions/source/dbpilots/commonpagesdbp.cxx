@@ -110,8 +110,8 @@ namespace dbp
         const OControlWizardContext& rContext = getContext();
         try
         {
-            ::rtl::OUString sDataSourceName;
-            rContext.xForm->getPropertyValue(::rtl::OUString("DataSourceName")) >>= sDataSourceName;
+            OUString sDataSourceName;
+            rContext.xForm->getPropertyValue(OUString("DataSourceName")) >>= sDataSourceName;
 
             Reference< XConnection > xConnection;
             bool bEmbedded = ::dbtools::isEmbeddedInDatabase( rContext.xForm, xConnection );
@@ -128,10 +128,10 @@ namespace dbp
 
             implFillTables(xConnection);
 
-            ::rtl::OUString sCommand;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString("Command") ) >>= sCommand );
+            OUString sCommand;
+            OSL_VERIFY( rContext.xForm->getPropertyValue( OUString("Command") ) >>= sCommand );
             sal_Int32 nCommandType = CommandType::TABLE;
-            OSL_VERIFY( rContext.xForm->getPropertyValue( ::rtl::OUString("CommandType") ) >>= nCommandType );
+            OSL_VERIFY( rContext.xForm->getPropertyValue( OUString("CommandType") ) >>= nCommandType );
 
             // search the entry of the given type with the given name
             for ( sal_uInt16 nLookup = 0; nLookup < m_aTable.GetEntryCount(); ++nLookup )
@@ -166,14 +166,14 @@ namespace dbp
             {
                 xOldConn = getFormConnection();
 
-                ::rtl::OUString sDataSource = m_aDatasource.GetSelectEntry();
-                rContext.xForm->setPropertyValue( ::rtl::OUString("DataSourceName"), makeAny( sDataSource ) );
+                OUString sDataSource = m_aDatasource.GetSelectEntry();
+                rContext.xForm->setPropertyValue( OUString("DataSourceName"), makeAny( sDataSource ) );
             }
-            ::rtl::OUString sCommand = m_aTable.GetSelectEntry();
+            OUString sCommand = m_aTable.GetSelectEntry();
             sal_Int32 nCommandType = reinterpret_cast< sal_IntPtr >( m_aTable.GetEntryData( m_aTable.GetSelectEntryPos() ) );
 
-            rContext.xForm->setPropertyValue( ::rtl::OUString("Command"), makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue( ::rtl::OUString("CommandType"), makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue( OUString("Command"), makeAny( sCommand ) );
+            rContext.xForm->setPropertyValue( OUString("CommandType"), makeAny( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, sal_False );
@@ -196,7 +196,7 @@ namespace dbp
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {
@@ -241,10 +241,10 @@ namespace dbp
     //---------------------------------------------------------------------
     namespace
     {
-        void    lcl_fillEntries( ListBox& _rListBox, const Sequence< ::rtl::OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
+        void    lcl_fillEntries( ListBox& _rListBox, const Sequence< OUString >& _rNames, const Image& _rImage, sal_Int32 _nCommandType )
         {
-            const ::rtl::OUString* pNames = _rNames.getConstArray();
-            const ::rtl::OUString* pNamesEnd = _rNames.getConstArray() + _rNames.getLength();
+            const OUString* pNames = _rNames.getConstArray();
+            const OUString* pNamesEnd = _rNames.getConstArray() + _rNames.getLength();
             sal_uInt16 nPos = 0;
             while ( pNames != pNamesEnd )
             {
@@ -262,8 +262,8 @@ namespace dbp
         WaitObject aWaitCursor(this);
 
         // will be the table tables of the selected data source
-        Sequence< ::rtl::OUString > aTableNames;
-        Sequence< ::rtl::OUString > aQueryNames;
+        Sequence< OUString > aTableNames;
+        Sequence< OUString > aQueryNames;
 
         // connect to the data source
         Any aSQLException;
@@ -275,7 +275,7 @@ namespace dbp
             // connect to the data source
             try
             {
-                ::rtl::OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
+                OUString sCurrentDatasource = m_aDatasource.GetSelectEntry();
                 if (!sCurrentDatasource.isEmpty())
                 {
                     // obtain the DS object

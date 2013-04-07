@@ -29,7 +29,6 @@ using namespace com::sun::star::container;
 using namespace std;
 using namespace osl;
 
-using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // constants
@@ -183,7 +182,7 @@ void SAL_CALL CMimeContentType::type( void )
 {
     skipSpaces( );
 
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
 
     // check FIRST( type )
     if ( !isInRange( m_nxtSym, sToken ) )
@@ -216,7 +215,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 {
     skipSpaces( );
 
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
 
     // check FIRST( subtype )
     if ( !isInRange( m_nxtSym, sToken ) )
@@ -244,7 +243,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 
 void SAL_CALL CMimeContentType::trailer( void )
 {
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
         if ( m_nxtSym == OUString("(") )
@@ -291,7 +290,7 @@ OUString SAL_CALL CMimeContentType::pName( )
 {
     OUString pname;
 
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
     while( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, sToken ) )
@@ -314,7 +313,7 @@ OUString SAL_CALL CMimeContentType::pValue( )
 {
     OUString pvalue;
 
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
     // quoted pvalue
     if ( m_nxtSym == OUString( "\"" ) )
     {
@@ -360,7 +359,7 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
         {
             break;
         }
-        else if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(TSPECIALS) + rtl::OUString(SPACE) ) )
+        else if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(TSPECIALS) + OUString(SPACE) ) )
         {
             pvalue += m_nxtSym;
             if ( m_nxtSym == OUString( "\"" ) )
@@ -384,7 +383,7 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 {
     OUString pvalue;
 
-    rtl::OUString sToken(TOKEN);
+    OUString sToken(TOKEN);
     while ( !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, sToken ) )
@@ -407,7 +406,7 @@ void SAL_CALL CMimeContentType::comment( void )
 {
     while ( !m_nxtSym.isEmpty( ) )
     {
-        if ( isInRange( m_nxtSym, rtl::OUString(TOKEN) + rtl::OUString(SPACE) ) )
+        if ( isInRange( m_nxtSym, OUString(TOKEN) + OUString(SPACE) ) )
             getSym( );
         else if ( m_nxtSym == OUString(")") )
             break;
@@ -420,7 +419,7 @@ void SAL_CALL CMimeContentType::comment( void )
 //
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CMimeContentType::isInRange( const rtl::OUString& aChr, const rtl::OUString& aRange )
+sal_Bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
 {
     return ( aRange.indexOf( aChr ) > -1 );
 }

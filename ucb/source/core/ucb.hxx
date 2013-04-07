@@ -100,7 +100,7 @@ public:
     registerContentProvider( const com::sun::star::uno::Reference<
                                 com::sun::star::ucb::XContentProvider >&
                                     Provider,
-                             const rtl::OUString& Scheme,
+                             const OUString& Scheme,
                              sal_Bool ReplaceExisting )
         throw( com::sun::star::ucb::DuplicateProviderException,
                com::sun::star::uno::RuntimeException );
@@ -108,7 +108,7 @@ public:
     deregisterContentProvider( const com::sun::star::uno::Reference<
                                     com::sun::star::ucb::XContentProvider >&
                                         Provider,
-                               const rtl::OUString& Scheme )
+                               const OUString& Scheme )
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Sequence<
         com::sun::star::ucb::ContentProviderInfo > SAL_CALL
@@ -116,7 +116,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider > SAL_CALL
-    queryContentProvider( const rtl::OUString& Identifier )
+    queryContentProvider( const OUString& Identifier )
         throw( com::sun::star::uno::RuntimeException );
 
     // XContentProvider
@@ -136,7 +136,7 @@ public:
     // XContentIdentifierFactory
     virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentIdentifier > SAL_CALL
-    createContentIdentifier( const rtl::OUString& ContentId )
+    createContentIdentifier( const OUString& ContentId )
         throw( com::sun::star::uno::RuntimeException );
 
     // XCommandProcessor
@@ -169,7 +169,7 @@ public:
 
 private:
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
-    queryContentProvider( const rtl::OUString& Identifier,
+    queryContentProvider( const OUString& Identifier,
                           sal_Bool bResolved );
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
@@ -191,8 +191,8 @@ private:
         throw ( com::sun::star::uno::RuntimeException);
 
     bool getContentProviderData(
-            const rtl::OUString & rKey1,
-            const rtl::OUString & rKey2,
+            const OUString & rKey1,
+            const OUString & rKey2,
             ucbhelper::ContentProviderDataList & rListToFill);
 
     void prepareAndRegister( const ucbhelper::ContentProviderDataList& rData);

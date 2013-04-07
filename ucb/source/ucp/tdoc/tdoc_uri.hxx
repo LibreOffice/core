@@ -35,13 +35,13 @@ class Uri
 {
     enum State { UNKNOWN, INVALID, VALID };
 
-    mutable ::rtl::OUString m_aUri;
-    mutable ::rtl::OUString m_aParentUri;
-    mutable ::rtl::OUString m_aPath;
-    mutable ::rtl::OUString m_aDocId;
-    mutable ::rtl::OUString m_aInternalPath;
-    mutable ::rtl::OUString m_aName;
-    mutable ::rtl::OUString m_aDecodedName;
+    mutable OUString m_aUri;
+    mutable OUString m_aParentUri;
+    mutable OUString m_aPath;
+    mutable OUString m_aDocId;
+    mutable OUString m_aInternalPath;
+    mutable OUString m_aName;
+    mutable OUString m_aDecodedName;
     mutable State           m_eState;
 
 private:
@@ -49,7 +49,7 @@ private:
 
 public:
     Uri() : m_eState( UNKNOWN ) {}
-    Uri( const ::rtl::OUString & rUri )
+    Uri( const OUString & rUri )
     : m_aUri( rUri ), m_eState( UNKNOWN ) {}
 
     bool operator== ( const Uri & rOther ) const
@@ -61,27 +61,27 @@ public:
     sal_Bool isValid() const
     { init(); return m_eState == VALID; }
 
-    const ::rtl::OUString & getUri() const
+    const OUString & getUri() const
     { init(); return m_aUri; }
 
-    inline void setUri( const ::rtl::OUString & rUri );
+    inline void setUri( const OUString & rUri );
 
-    const ::rtl::OUString & getParentUri() const
+    const OUString & getParentUri() const
     { init(); return m_aParentUri; }
 
-    const ::rtl::OUString & getPath() const
+    const OUString & getPath() const
     { init(); return m_aPath; }
 
-    const ::rtl::OUString & getDocumentId() const
+    const OUString & getDocumentId() const
     { init(); return m_aDocId; }
 
-    const ::rtl::OUString & getInternalPath() const
+    const OUString & getInternalPath() const
     { init(); return m_aInternalPath; }
 
-    const ::rtl::OUString & getName() const
+    const OUString & getName() const
     { init(); return m_aName; }
 
-    const ::rtl::OUString & getDecodedName() const
+    const OUString & getDecodedName() const
     { init(); return m_aDecodedName; }
 
     inline sal_Bool isRoot() const;
@@ -91,12 +91,12 @@ public:
     inline sal_Bool isFolder() const;
 };
 
-inline void Uri::setUri( const ::rtl::OUString & rUri )
+inline void Uri::setUri( const OUString & rUri )
 {
     m_eState = UNKNOWN;
     m_aUri = rUri;
     m_aParentUri = m_aDocId = m_aInternalPath = m_aPath = m_aName
-        = m_aDecodedName = rtl::OUString();
+        = m_aDecodedName = OUString();
 }
 
 inline sal_Bool Uri::isRoot() const

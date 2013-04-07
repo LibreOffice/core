@@ -147,8 +147,8 @@ public:
     sal_uInt32      GetId()        const { return m_nResId & ~RSC_DONTRELEASE; }
     RSHEADER_TYPE*  GetpResource() const { return m_pResource; }
 
-    TOOLS_DLLPUBLIC rtl::OUString toString() const;
-    TOOLS_DLLPUBLIC operator rtl::OUString() const { return toString(); }
+    TOOLS_DLLPUBLIC OUString toString() const;
+    TOOLS_DLLPUBLIC operator OUString() const { return toString(); }
 };
 
 #endif

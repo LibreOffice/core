@@ -99,12 +99,12 @@ void TestTeleTubes::setUp()
 
     TeleManager::addSuffixToNames( "TeleTest");
 
-    rtl::OUString aOffererIdentifier;
+    OUString aOffererIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
         aTestConfig.getFrom("offerer", aOffererIdentifier));
     maOffererIdentifier = OUStringToOString( aOffererIdentifier, RTL_TEXTENCODING_UTF8);
 
-    rtl::OUString aAccepterIdentifier;
+    OUString aAccepterIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
         aTestConfig.getFrom("accepter", aAccepterIdentifier));
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);

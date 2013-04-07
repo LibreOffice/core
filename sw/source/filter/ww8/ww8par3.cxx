@@ -160,8 +160,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
         maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-        maFieldStack.back().getParameters()["Description"] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()["Name"] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        maFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -213,8 +213,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(OUString(aFormula.sTitle));
+            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(OUString(aFormula.sToolTip));
 
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
@@ -285,7 +285,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
-                uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
+                uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
                 (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
@@ -1075,7 +1075,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
 SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 {
     // wird erstmal zur Bildung des Style Namens genommen
-    String sPrefix(rtl::OUString("WW8Num"));
+    String sPrefix(OUString("WW8Num"));
     sPrefix += OUString::number(nUniqueList++);
     // #i86652#
     sal_uInt16 nRul =
@@ -1318,7 +1318,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
-                String sPrefix(rtl::OUString("WW8NumSt"));
+                String sPrefix(OUString("WW8NumSt"));
                 sPrefix += OUString::number( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
@@ -2220,7 +2220,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         {
             if ( iRes != 25 )
                 nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? rtl::OUString( "0" ) :  rtl::OUString( "1" );
+            sDefault = ( wDef == 0 ) ? OUString( "0" ) :  OUString( "1" );
         }
     }
     // xstzTextFormat
@@ -2274,7 +2274,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
 }
 
 WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(rtl::OUString(SL::aListBox), rR)
+    : WW8FormulaControl(OUString(SL::aListBox), rR)
 {
 }
 
@@ -2333,7 +2333,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
                 String pNm;
                 if (xPropSetInfo->hasPropertyByName(pNm = "FontStyleName"))
                 {
-                    aTmp <<= rtl::OUString( pFontItem->GetStyleName());
+                    aTmp <<= OUString( pFontItem->GetStyleName());
                     rPropSet->setPropertyValue( pNm, aTmp );
                 }
                 if (xPropSetInfo->hasPropertyByName(pNm = "FontFamily"))
@@ -2352,7 +2352,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
                     rPropSet->setPropertyValue( pNm, aTmp );
                 }
 
-                aTmp <<= rtl::OUString( pFontItem->GetFamilyName());
+                aTmp <<= OUString( pFontItem->GetFamilyName());
                 aFont.SetName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetFamily( pFontItem->GetFamily() );
@@ -2398,8 +2398,8 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
             break;
         }
 
-        if (bSet && xPropSetInfo->hasPropertyByName(rtl::OUString::createFromAscii(pMap->pPropNm)))
-            rPropSet->setPropertyValue(rtl::OUString::createFromAscii(pMap->pPropNm), aTmp);
+        if (bSet && xPropSetInfo->hasPropertyByName(OUString::createFromAscii(pMap->pPropNm)))
+            rPropSet->setPropertyValue(OUString::createFromAscii(pMap->pPropNm), aTmp);
     }
     // now calculate the size of the control
     OutputDevice* pOut = Application::GetDefaultDevice();
@@ -2450,9 +2450,9 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
     if (!maListEntries.empty())
     {
         sal_uInt32 nLen = maListEntries.size();
-        uno::Sequence< ::rtl::OUString > aListSource(nLen);
+        uno::Sequence< OUString > aListSource(nLen);
         for (sal_uInt32 nI = 0; nI < nLen; ++nI)
-            aListSource[nI] = rtl::OUString(maListEntries[nI]);
+            aListSource[nI] = OUString(maListEntries[nI]);
         aTmp <<= aListSource;
         xPropSet->setPropertyValue("StringItemList", aTmp );
 
@@ -2475,20 +2475,20 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
         {
             0x2002,0x2002,0x2002,0x2002,0x2002
         };
-        rSz = rRdr.MiserableDropDownFormHack(rtl::OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
+        rSz = rRdr.MiserableDropDownFormHack(OUString(aBlank, SAL_N_ELEMENTS(aBlank)), xPropSet);
     }
 
     return sal_True;
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(rtl::OUString(SL::aCheckBox), rR)
+    : WW8FormulaControl(OUString(SL::aCheckBox), rR)
 {
 }
 
 static void lcl_AddToPropertyContainer
 (uno::Reference<beans::XPropertySet> xPropSet,
- const rtl::OUString & rPropertyName, const rtl::OUString & rValue)
+ const OUString & rPropertyName, const OUString & rValue)
 {
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo =
         xPropSet->getPropertySetInfo();
@@ -2547,7 +2547,7 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
 }
 
 WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
-    : WW8FormulaControl(rtl::OUString(SL::aTextField) ,rR)
+    : WW8FormulaControl(OUString(SL::aTextField) ,rR)
 {
 }
 

@@ -67,8 +67,8 @@ namespace abp
         try
         {
             // the service name of the administration dialog
-            const static ::rtl::OUString s_sAdministrationServiceName = ::rtl::OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
-            const static ::rtl::OUString s_sDataSourceTypeChangeDialog = ::rtl::OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
+            const static OUString s_sAdministrationServiceName = OUString("com.sun.star.sdb.DatasourceAdministrationDialog");
+            const static OUString s_sDataSourceTypeChangeDialog = OUString("com.sun.star.sdb.DataSourceTypeChangeDialog");
 
             // the parameters for the call
             Sequence< Any > aArguments(3);
@@ -76,14 +76,14 @@ namespace abp
 
             // the parent window
             Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface(m_pMessageParent);
-            *pArguments++ <<= PropertyValue(::rtl::OUString("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(OUString("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
             String sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE));
-            *pArguments++ <<= PropertyValue(::rtl::OUString("Title"), -1, makeAny(::rtl::OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(OUString("Title"), -1, makeAny(OUString(sAdminDialogTitle)), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
-            *pArguments++ <<= PropertyValue(::rtl::OUString("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue(OUString("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
 
             // create the dialog
             Reference< XExecutableDialog > xDialog;

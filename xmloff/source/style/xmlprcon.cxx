@@ -22,8 +22,6 @@
 
 #include <xmloff/xmlprcon.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::std;
@@ -83,7 +81,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
 */
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&,
     ::std::vector< XMLPropertyState > &,
     const XMLPropertyState& )

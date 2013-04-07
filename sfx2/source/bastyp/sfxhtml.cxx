@@ -254,7 +254,7 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
                         : STRING_MAXLEN;
 
         aStream.Seek( 0 );
-        rtl::OString sBuffer = read_uInt8s_ToOString(aStream, nLen);
+        OString sBuffer = read_uInt8s_ToOString(aStream, nLen);
         rStr = S2U(sBuffer);
     }
 

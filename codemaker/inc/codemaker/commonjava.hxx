@@ -24,12 +24,12 @@
 
 namespace codemaker { namespace java {
 
-rtl::OString translateUnoToJavaType(
+OString translateUnoToJavaType(
     codemaker::UnoType::Sort sort, RTTypeClass typeClass,
-    rtl::OString const & nucleus, bool referenceType);
+    OString const & nucleus, bool referenceType);
 
-rtl::OString translateUnoToJavaIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix);
+OString translateUnoToJavaIdentifier(
+    OString const & identifier, OString const & prefix);
 
 } }
 

@@ -45,7 +45,7 @@ namespace ooo
         VBAHELPER_DLLPRIVATE inline css::uno::Reference< css::uno::XInterface > createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const css::uno::Sequence< css::uno::Any >& aArgs ) throw (css::uno::Exception)
         {
             OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
-            ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
+            OUString sVarName( OUString::createFromAscii( _pAsciiName ) );
             css::uno::Reference< css::uno::XInterface > xIf = getVBAServiceFactory( pShell )->createInstanceWithArguments( sVarName, aArgs  );
             return xIf;
         }

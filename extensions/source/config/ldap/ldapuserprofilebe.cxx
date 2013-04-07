@@ -40,7 +40,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
   BackendBase(mMutex)
 {
     LdapDefinition aDefinition;
-    rtl::OUString loggedOnUser;
+    OUString loggedOnUser;
 
     // This whole rigmarole is to prevent an infinite recursion where reading
     // the configuration for the backend would create another instance of the
@@ -61,7 +61,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                         xContext, &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
-                        rtl::OUString("LdapUserProfileBe- LDAP not configured"),
+                        OUString("LdapUserProfileBe- LDAP not configured"),
                         NULL);
                 }
 
@@ -87,19 +87,19 @@ LdapUserProfileBe::~LdapUserProfileBe()
 
 bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    LdapDefinition * definition, rtl::OUString * loggedOnUser)
+    LdapDefinition * definition, OUString * loggedOnUser)
 {
     OSL_ASSERT(context.is() && definition != 0 && loggedOnUser != 0);
-    const rtl::OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
-    const rtl::OUString kComponent("org.openoffice.LDAP/UserDirectory");
-    const rtl::OUString kServerDefiniton("ServerDefinition");
-    const rtl::OUString kServer("Server");
-    const rtl::OUString kPort("Port");
-    const rtl::OUString kBaseDN("BaseDN");
-    const rtl::OUString kUser("SearchUser");
-    const rtl::OUString kPassword("SearchPassword");
-    const rtl::OUString kUserObjectClass("UserObjectClass");
-    const rtl::OUString kUserUniqueAttr("UserUniqueAttribute");
+    const OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
+    const OUString kComponent("org.openoffice.LDAP/UserDirectory");
+    const OUString kServerDefiniton("ServerDefinition");
+    const OUString kServer("Server");
+    const OUString kPort("Port");
+    const OUString kBaseDN("BaseDN");
+    const OUString kUser("SearchUser");
+    const OUString kPassword("SearchPassword");
+    const OUString kUserObjectClass("UserObjectClass");
+    const OUString kUserUniqueAttr("UserUniqueAttribute");
 
     uno::Reference< XInterface > xIface;
     try
@@ -107,7 +107,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath(rtl::OUString("nodepath"), uno::makeAny(kComponent) );
+        css::beans::NamedValue aPath(OUString("nodepath"), uno::makeAny(kComponent) );
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<=  aPath;
@@ -140,7 +140,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     catch (const uno::Exception & e)
     {
         OSL_TRACE("LdapUserProfileBackend: access to configuration data failed: %s",
-                rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+                OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         return false;
     }
 
@@ -153,7 +153,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         *loggedOnUser = loggedOnUser->copy(nIndex+1);
 
     //Remember to remove
-    OSL_TRACE("Logged on user is %s", rtl::OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
+    OSL_TRACE("Logged on user is %s", OUStringToOString(*loggedOnUser,RTL_TEXTENCODING_ASCII_US).getStr());
 
     return true;
 }
@@ -161,8 +161,8 @@ bool LdapUserProfileBe::readLdapConfiguration(
 //------------------------------------------------------------------------------
 bool LdapUserProfileBe::getLdapStringParam(
     uno::Reference<container::XNameAccess>& xAccess,
-    const rtl::OUString& aLdapSetting,
-    rtl::OUString& aServerParameter)
+    const OUString& aLdapSetting,
+    OUString& aServerParameter)
 {
     xAccess->getByName(aLdapSetting) >>= aServerParameter;
 
@@ -170,19 +170,19 @@ bool LdapUserProfileBe::getLdapStringParam(
 }
 //------------------------------------------------------------------------------
 void LdapUserProfileBe::setPropertyValue(
-    rtl::OUString const &, css::uno::Any const &)
+    OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString("setPropertyValue not supported"),
+        OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
 css::uno::Any LdapUserProfileBe::getPropertyValue(
-    rtl::OUString const & PropertyName)
+    OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -211,30 +211,30 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
-    return rtl::OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
+OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
+    return OUString("com.sun.star.comp.configuration.backend.LdapUserProfileBe");
 }
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
+OUString SAL_CALL LdapUserProfileBe::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getLdapUserProfileBeName() ;
 }
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
+uno::Sequence<OUString> SAL_CALL LdapUserProfileBe::getLdapUserProfileBeServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServices(1) ;
-    aServices[0] = rtl::OUString("com.sun.star.configuration.backend.LdapUserProfileBe") ;
+    uno::Sequence<OUString> aServices(1) ;
+    aServices[0] = OUString("com.sun.star.configuration.backend.LdapUserProfileBe") ;
     return aServices ;
 }
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const rtl::OUString& aServiceName)
+sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > const svc = getLdapUserProfileBeServiceNames();
+    uno::Sequence< OUString > const svc = getLdapUserProfileBeServiceNames();
 
     for(sal_Int32 i = 0; i < svc.getLength(); ++i )
         if(svc[i] == aServiceName)
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL LdapUserProfileBe::supportsService(const rtl::OUString& aServi
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SAL_CALL LdapUserProfileBe::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {

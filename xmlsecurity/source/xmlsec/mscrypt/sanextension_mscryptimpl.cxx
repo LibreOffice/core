@@ -31,7 +31,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificateExtension ;
 
@@ -79,7 +78,7 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                     PCERT_OTHER_NAME pOtherName = pEntry->pOtherName;
 
                     ::com::sun::star::beans::NamedValue otherNameProp;
-                    otherNameProp.Name = ::rtl::OUString::createFromAscii(pOtherName->pszObjId);
+                    otherNameProp.Name = OUString::createFromAscii(pOtherName->pszObjId);
 
                     Sequence< sal_Int8 > otherName( pOtherName->Value.cbData ) ;
                     for( unsigned int n = 0; n < (unsigned int) pOtherName->Value.cbData ; n ++ )
@@ -92,11 +91,11 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                 }
             case CERT_ALT_NAME_RFC822_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszRfc822Name);
+                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszRfc822Name);
                 break;
             case CERT_ALT_NAME_DNS_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszDNSName);
+                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszDNSName);
                 break;
             case CERT_ALT_NAME_DIRECTORY_NAME :
                 {
@@ -105,7 +104,7 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                 }
             case CERT_ALT_NAME_URL :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszURL);
+                arrCertAltNameEntry[i].Value <<= OUString((const sal_Unicode*)pEntry->pwszURL);
                 break;
             case CERT_ALT_NAME_IP_ADDRESS :
                 {
@@ -120,7 +119,7 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                 }
             case CERT_ALT_NAME_REGISTERED_ID :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_REGISTERED_ID;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString::createFromAscii(pEntry->pszRegisteredID);
+                arrCertAltNameEntry[i].Value <<= OUString::createFromAscii(pEntry->pszRegisteredID);
                 break;
           }
         }

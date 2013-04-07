@@ -32,7 +32,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL scn_component_getFactory( const s
     Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory;
     void*                                                pRet = 0;
 
-    if( ::rtl::OUString::createFromAscii( pImplName ) == ScannerManager::getImplementationName_Static() )
+    if( OUString::createFromAscii( pImplName ) == ScannerManager::getImplementationName_Static() )
     {
         xFactory = Reference< ::com::sun::star::lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ),

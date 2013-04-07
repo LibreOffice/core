@@ -45,17 +45,17 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
 {
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException)
+OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException)
 {
 
     ::comphelper::SequenceAsHashMap aTemp(Descriptor);
-    ::rtl::OUString sTemp = aTemp.getUnpackedValueOrDefault(::rtl::OUString("URL"),::rtl::OUString());
+    OUString sTemp = aTemp.getUnpackedValueOrDefault(OUString("URL"),OUString());
 
     if ( !sTemp.isEmpty() )
     {
         INetURLObject aURL(sTemp);
         if ( aURL.GetExtension().equalsIgnoreAsciiCase("orp") )
-            return ::rtl::OUString("StarBaseReport");
+            return OUString("StarBaseReport");
         else
         {
             try
@@ -63,10 +63,10 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
                 Reference<XPropertySet> xProp(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ, m_xContext),UNO_QUERY);
                 if ( xProp.is() )
                 {
-                    ::rtl::OUString sMediaType;
-                    xProp->getPropertyValue( ::rtl::OUString("MediaType") ) >>= sMediaType;
+                    OUString sMediaType;
+                    xProp->getPropertyValue( OUString("MediaType") ) >>= sMediaType;
                     if ( sMediaType == MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII )
-                        return ::rtl::OUString("StarBaseReport");
+                        return OUString("StarBaseReport");
                     ::comphelper::disposeComponent(xProp);
                 }
             }
@@ -75,7 +75,7 @@ ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xCon
             }
         }
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL
@@ -85,29 +85,29 @@ Reference< XInterface > SAL_CALL
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-::rtl::OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
+OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 // -------------------------------------------------------------------------
 
 // XServiceInfo
-sal_Bool SAL_CALL ORptTypeDetection::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 // -------------------------------------------------------------------------
 // XServiceInfo
-Sequence< ::rtl::OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 // -------------------------------------------------------------------------
 // ORegistryServiceManager_Static
-Sequence< ::rtl::OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.document.ExtendedTypeDetection");
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString("com.sun.star.document.ExtendedTypeDetection");
     return aSNS;
 }
 // -----------------------------------------------------------------------------

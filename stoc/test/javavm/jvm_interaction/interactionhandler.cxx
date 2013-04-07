@@ -57,9 +57,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::java;
 using namespace com::sun::star::task;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
 

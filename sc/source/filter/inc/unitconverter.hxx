@@ -86,18 +86,18 @@ public:
     ::com::sun::star::util::DateTime calcDateTimeFromSerial( double fSerial ) const;
 
     /** Returns a BIFF error code from the passed error string. */
-    sal_uInt8           calcBiffErrorCode( const ::rtl::OUString& rErrorCode ) const;
+    sal_uInt8           calcBiffErrorCode( const OUString& rErrorCode ) const;
 
 private:
     /** Adds an error code to the internal maps. */
-    void                addErrorCode( sal_uInt8 nErrorCode, const ::rtl::OUString& rErrorCode );
+    void                addErrorCode( sal_uInt8 nErrorCode, const OUString& rErrorCode );
     /** Returns the conversion coefficient for the passed unit. */
     double              getCoefficient( Unit eUnit ) const;
 
 private:
     typedef ::std::vector< double >                     DoubleVector;
-    typedef ::std::map< ::rtl::OUString, sal_uInt8 >    OoxErrorCodeMap;
-    typedef ::std::map< sal_uInt8, ::rtl::OUString >    BiffErrorCodeMap;
+    typedef ::std::map< OUString, sal_uInt8 >    OoxErrorCodeMap;
+    typedef ::std::map< sal_uInt8, OUString >    BiffErrorCodeMap;
 
     DoubleVector        maCoeffs;           /// Coefficients for unit conversion.
     OoxErrorCodeMap     maOoxErrCodes;      /// Maps error code strings to BIFF error constants.

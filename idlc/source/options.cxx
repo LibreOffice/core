@@ -27,8 +27,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
 
 Options::Options(char const * progname)
   : m_program(progname), m_stdin(false), m_verbose(false), m_quiet(false)

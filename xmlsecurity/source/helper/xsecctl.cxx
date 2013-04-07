@@ -68,7 +68,7 @@ XSecController::~XSecController()
  */
 /** convert string to number with optional min and max values */
 sal_Bool XSecController::convertNumber( sal_Int32& rValue,
-                                        const rtl::OUString& rString,
+                                        const OUString& rString,
                                         sal_Int32 /*nMin*/, sal_Int32 /*nMax*/ )
 {
     sal_Bool bNeg = sal_False;
@@ -105,7 +105,7 @@ sal_Bool XSecController::convertNumber( sal_Int32& rValue,
 }
 
 /** convert util::DateTime to ISO Date String */
-void XSecController::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
+void XSecController::convertDateTime( OUStringBuffer& rBuffer,
                                 const com::sun::star::util::DateTime& rDateTime )
 {
     rBuffer.append((sal_Int32) rDateTime.Year);
@@ -146,11 +146,11 @@ void XSecController::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
 /** convert ISO Date String to util::DateTime */
 sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const ::rtl::OUString& rString )
+                                     const OUString& rString )
 {
     sal_Bool bSuccess = sal_True;
 
-    rtl::OUString aDateStr, aTimeStr, sHundredth;
+    OUString aDateStr, aTimeStr, sHundredth;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
     sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
     if ( nPos >= 0 )
@@ -176,14 +176,14 @@ sal_Bool XSecController::convertDateTime( com::sun::star::util::DateTime& rDateT
             sHundredth = rString.copy(nPos2 + 1);
             sal_Int32 len = sHundredth.getLength();
             if (len == 1)
-                sHundredth += rtl::OUString("0");
+                sHundredth += OUString("0");
             if (len > 2)
                 sHundredth = sHundredth.copy(0, 2);
         }
         else
         {
             aTimeStr = rString.copy(nPos + 1);
-            sHundredth = rtl::OUString("0");
+            sHundredth = OUString("0");
         }
     }
     else
@@ -324,9 +324,9 @@ void XSecController::createXSecComponent( )
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    rtl::OUString sSAXEventKeeper( SAXEVENTKEEPER_COMPONENT );
-    rtl::OUString sXMLSignature( XMLSIGNATURE_COMPONENT );
-    rtl::OUString sXMLDocument( XMLDOCUMENTWRAPPER_COMPONENT );
+    OUString sSAXEventKeeper( SAXEVENTKEEPER_COMPONENT );
+    OUString sXMLSignature( XMLSIGNATURE_COMPONENT );
+    OUString sXMLDocument( XMLDOCUMENTWRAPPER_COMPONENT );
 
     /*
      * marks all security components are not available.
@@ -644,7 +644,7 @@ void XSecController::initializeSAXChain()
 }
 
 cssu::Reference< com::sun::star::io::XInputStream >
-    XSecController::getObjectInputStream( const rtl::OUString& objectURL )
+    XSecController::getObjectInputStream( const OUString& objectURL )
 /****** XSecController/getObjectInputStream ************************************
  *
  *   NAME
@@ -895,26 +895,26 @@ void XSecController::exportSignature(
     /*
      * defines all element tags in Signature element.
      */
-    rtl::OUString tag_Signature(TAG_SIGNATURE);
-    rtl::OUString tag_SignedInfo(TAG_SIGNEDINFO);
-    rtl::OUString tag_CanonicalizationMethod(TAG_CANONICALIZATIONMETHOD);
-    rtl::OUString tag_SignatureMethod(TAG_SIGNATUREMETHOD);
-    rtl::OUString tag_Reference(TAG_REFERENCE);
-    rtl::OUString tag_Transforms(TAG_TRANSFORMS);
-    rtl::OUString tag_Transform(TAG_TRANSFORM);
-    rtl::OUString tag_DigestMethod(TAG_DIGESTMETHOD);
-    rtl::OUString tag_DigestValue(TAG_DIGESTVALUE);
-    rtl::OUString tag_SignatureValue(TAG_SIGNATUREVALUE);
-    rtl::OUString tag_KeyInfo(TAG_KEYINFO);
-    rtl::OUString tag_X509Data(TAG_X509DATA);
-    rtl::OUString tag_X509IssuerSerial(TAG_X509ISSUERSERIAL);
-    rtl::OUString tag_X509IssuerName(TAG_X509ISSUERNAME);
-    rtl::OUString tag_X509SerialNumber(TAG_X509SERIALNUMBER);
-    rtl::OUString tag_X509Certificate(TAG_X509CERTIFICATE);
-    rtl::OUString tag_Object(TAG_OBJECT);
-    rtl::OUString tag_SignatureProperties(TAG_SIGNATUREPROPERTIES);
-    rtl::OUString tag_SignatureProperty(TAG_SIGNATUREPROPERTY);
-    rtl::OUString tag_Date(TAG_DATE);
+    OUString tag_Signature(TAG_SIGNATURE);
+    OUString tag_SignedInfo(TAG_SIGNEDINFO);
+    OUString tag_CanonicalizationMethod(TAG_CANONICALIZATIONMETHOD);
+    OUString tag_SignatureMethod(TAG_SIGNATUREMETHOD);
+    OUString tag_Reference(TAG_REFERENCE);
+    OUString tag_Transforms(TAG_TRANSFORMS);
+    OUString tag_Transform(TAG_TRANSFORM);
+    OUString tag_DigestMethod(TAG_DIGESTMETHOD);
+    OUString tag_DigestValue(TAG_DIGESTVALUE);
+    OUString tag_SignatureValue(TAG_SIGNATUREVALUE);
+    OUString tag_KeyInfo(TAG_KEYINFO);
+    OUString tag_X509Data(TAG_X509DATA);
+    OUString tag_X509IssuerSerial(TAG_X509ISSUERSERIAL);
+    OUString tag_X509IssuerName(TAG_X509ISSUERNAME);
+    OUString tag_X509SerialNumber(TAG_X509SERIALNUMBER);
+    OUString tag_X509Certificate(TAG_X509CERTIFICATE);
+    OUString tag_Object(TAG_OBJECT);
+    OUString tag_SignatureProperties(TAG_SIGNATUREPROPERTIES);
+    OUString tag_SignatureProperty(TAG_SIGNATUREPROPERTY);
+    OUString tag_Date(TAG_DATE);
 
     const SignatureReferenceInformations& vReferenceInfors = signatureInfo.vSignatureReferenceInfors;
     SvXMLAttributeList *pAttributeList;
@@ -924,14 +924,14 @@ void XSecController::exportSignature(
      */
     pAttributeList = new SvXMLAttributeList();
     pAttributeList->AddAttribute(
-        rtl::OUString(ATTR_XMLNS),
-        rtl::OUString(NS_XMLDSIG));
+        OUString(ATTR_XMLNS),
+        OUString(NS_XMLDSIG));
 
     if (!signatureInfo.ouSignatureId.isEmpty())
     {
         pAttributeList->AddAttribute(
-            rtl::OUString(ATTR_ID),
-            rtl::OUString(signatureInfo.ouSignatureId));
+            OUString(ATTR_ID),
+            OUString(signatureInfo.ouSignatureId));
     }
 
     xDocumentHandler->startElement( tag_Signature, cssu::Reference< cssxs::XAttributeList > (pAttributeList));
@@ -944,16 +944,16 @@ void XSecController::exportSignature(
             /* Write CanonicalizationMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
-                rtl::OUString(ATTR_ALGORITHM),
-                rtl::OUString(ALGO_C14N));
+                OUString(ATTR_ALGORITHM),
+                OUString(ALGO_C14N));
             xDocumentHandler->startElement( tag_CanonicalizationMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( tag_CanonicalizationMethod );
 
             /* Write SignatureMethod element */
             pAttributeList = new SvXMLAttributeList();
             pAttributeList->AddAttribute(
-                rtl::OUString(ATTR_ALGORITHM),
-                rtl::OUString(ALGO_RSASHA1));
+                OUString(ATTR_ALGORITHM),
+                OUString(ALGO_RSASHA1));
             xDocumentHandler->startElement( tag_SignatureMethod, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
             xDocumentHandler->endElement( tag_SignatureMethod );
 
@@ -972,7 +972,7 @@ void XSecController::exportSignature(
                  */
                 {
                     pAttributeList->AddAttribute(
-                        rtl::OUString(ATTR_URI),
+                        OUString(ATTR_URI),
                         refInfor.ouURI);
                 }
                 else
@@ -981,8 +981,8 @@ void XSecController::exportSignature(
                  */
                 {
                     pAttributeList->AddAttribute(
-                        rtl::OUString(ATTR_URI),
-                        rtl::OUString(CHAR_FRAGMENT)+refInfor.ouURI);
+                        OUString(ATTR_URI),
+                        OUString(CHAR_FRAGMENT)+refInfor.ouURI);
                 }
 
                 xDocumentHandler->startElement( tag_Reference, cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -999,8 +999,8 @@ void XSecController::exportSignature(
                         {
                             pAttributeList = new SvXMLAttributeList();
                             pAttributeList->AddAttribute(
-                                rtl::OUString(ATTR_ALGORITHM),
-                                rtl::OUString(ALGO_C14N));
+                                OUString(ATTR_ALGORITHM),
+                                OUString(ALGO_C14N));
                             xDocumentHandler->startElement(
                                 tag_Transform,
                                 cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -1012,8 +1012,8 @@ void XSecController::exportSignature(
                     /* Write DigestMethod element */
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
-                        rtl::OUString(ATTR_ALGORITHM),
-                        rtl::OUString(ALGO_XMLDSIGSHA1));
+                        OUString(ATTR_ALGORITHM),
+                        OUString(ALGO_XMLDSIGSHA1));
                     xDocumentHandler->startElement(
                         tag_DigestMethod,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList) );
@@ -1096,11 +1096,11 @@ void XSecController::exportSignature(
                 /* Write SignatureProperty element */
                 pAttributeList = new SvXMLAttributeList();
                 pAttributeList->AddAttribute(
-                    rtl::OUString(ATTR_ID),
+                    OUString(ATTR_ID),
                     signatureInfo.ouPropertyId);
                 pAttributeList->AddAttribute(
-                    rtl::OUString(ATTR_TARGET),
-                    rtl::OUString(CHAR_FRAGMENT)+signatureInfo.ouSignatureId);
+                    OUString(ATTR_TARGET),
+                    OUString(CHAR_FRAGMENT)+signatureInfo.ouSignatureId);
                 xDocumentHandler->startElement(
                     tag_SignatureProperty,
                     cssu::Reference< cssxs::XAttributeList > (pAttributeList));
@@ -1109,18 +1109,18 @@ void XSecController::exportSignature(
 
                     pAttributeList = new SvXMLAttributeList();
                     pAttributeList->AddAttribute(
-                        rtl::OUString(ATTR_XMLNS)
-                            +rtl::OUString(":")
-                            +rtl::OUString(NSTAG_DC),
-                        rtl::OUString(NS_DC));
+                        OUString(ATTR_XMLNS)
+                            +OUString(":")
+                            +OUString(NSTAG_DC),
+                        OUString(NS_DC));
 
                     xDocumentHandler->startElement(
-                        rtl::OUString(NSTAG_DC)
-                            +rtl::OUString(":")
+                        OUString(NSTAG_DC)
+                            +OUString(":")
                             +tag_Date,
                         cssu::Reference< cssxs::XAttributeList > (pAttributeList));
 
-                    ::rtl::OUStringBuffer buffer;
+                    OUStringBuffer buffer;
                     //If the xml signature was already contained in the document,
                     //then we use the original date and time string, rather then the
                     //converted one. When the original string is converted to the DateTime
@@ -1136,8 +1136,8 @@ void XSecController::exportSignature(
                     xDocumentHandler->characters( buffer.makeStringAndClear() );
 
                     xDocumentHandler->endElement(
-                        rtl::OUString(NSTAG_DC)
-                            +rtl::OUString(":")
+                        OUString(NSTAG_DC)
+                            +OUString(":")
                             +tag_Date);
                 }
                 xDocumentHandler->endElement( tag_SignatureProperty );

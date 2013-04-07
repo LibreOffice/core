@@ -377,7 +377,7 @@ String ScGlobal::GetAbsDocName( const String& rFileName,
 String ScGlobal::GetDocTabName( const String& rFileName,
                                 const String& rTabName )
 {
-    String aDocTab(rtl::OUString('\''));
+    String aDocTab(OUString('\''));
     aDocTab += rFileName;
     xub_StrLen nPos = 1;
     while( (nPos = aDocTab.Search( '\'', nPos ))

@@ -37,7 +37,6 @@
 #include "xmlimpit.hxx"
 #include "xmlexpit.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;

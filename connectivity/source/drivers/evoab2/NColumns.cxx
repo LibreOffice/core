@@ -35,12 +35,12 @@ using namespace ::com::sun::star::lang;
 using namespace connectivity::evoab;
 
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OEvoabColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
 {
     const Any aCatalog;
-    const ::rtl::OUString sCatalogName;
-    const ::rtl::OUString sSchemaName(m_pTable->getSchema());
-    const ::rtl::OUString sTableName(m_pTable->getTableName());
+    const OUString sCatalogName;
+    const OUString sSchemaName(m_pTable->getSchema());
+    const OUString sTableName(m_pTable->getTableName());
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
         aCatalog,
         sSchemaName,

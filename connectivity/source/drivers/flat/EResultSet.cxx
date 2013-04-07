@@ -43,24 +43,24 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                ::getBooleanCppuType());
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException)
+OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.sdbcx.flat.ResultSet");
+    return OUString("com.sun.star.sdbcx.flat.ResultSet");
 }
 // -------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
+Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-     Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
-    aSupported[1] = ::rtl::OUString("com.sun.star.sdbcx.ResultSet");
+     Sequence< OUString > aSupported(2);
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OFlatResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
+sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 

@@ -65,8 +65,8 @@ SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
     pDashItem       ( NULL ),
     bUpdate         ( sal_False )
 {
-    addStatusListener( ::rtl::OUString( ".uno:LineDash" ));
-    addStatusListener( ::rtl::OUString( ".uno:DashListState" ));
+    addStatusListener( OUString( ".uno:LineDash" ));
+    addStatusListener( OUString( ".uno:DashListState" ));
 }
 
 //========================================================================
@@ -205,7 +205,7 @@ SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    addStatusListener( rtl::OUString( ".uno:MetricUnit" ));
+    addStatusListener( OUString( ".uno:MetricUnit" ));
 }
 
 //========================================================================
@@ -272,7 +272,7 @@ SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
-    addStatusListener( rtl::OUString( ".uno:ColorTableState" ));
+    addStatusListener( OUString( ".uno:ColorTableState" ));
 }
 
 //========================================================================
@@ -412,7 +412,7 @@ void SvxLineEndWindow::implInit()
     // ValueSet mit Eintraegen der LineEndList fuellen
     FillValueSet();
 
-    AddStatusListener( rtl::OUString( ".uno:LineEndListState" ));
+    AddStatusListener( OUString( ".uno:LineEndListState" ));
 
     //ChangeHelpId( HID_POPUP_LINEENDSTYLE );
     aLineEndSet.Show();
@@ -464,13 +464,13 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 
     if ( pLineStartItem )
     {
-        aArgs[0].Name = ::rtl::OUString( "LineStart" );
+        aArgs[0].Name = OUString( "LineStart" );
         pLineStartItem->QueryValue( a );
         aArgs[0].Value = a;
     }
     else
     {
-        aArgs[0].Name = ::rtl::OUString( "LineEnd" );
+        aArgs[0].Name = OUString( "LineEnd" );
         pLineEndItem->QueryValue( a );
         aArgs[0].Value = a;
     }
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     aLineEndSet.SetNoSelection();
 
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
-                                 ::rtl::OUString( ".uno:LineEndStyle" ),
+                                 OUString( ".uno:LineEndStyle" ),
                                  aArgs );
 
     delete pLineEndItem;

@@ -61,8 +61,6 @@ using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 #define IMPLNAME "com.sun.star.comp.stoc.ImplementationRegistration"
 #define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
 namespace stoc_impreg
@@ -583,7 +581,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                 } else
                 {
                     oldImpl = implEntries.getConstArray()[0];
-                    rtl::OUString path(xOldKey->getKeyName());
+                    OUString path(xOldKey->getKeyName());
                     xOldKey->closeKey();
                     xRootKey->deleteKey(path);
                 }
@@ -599,7 +597,7 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
             {
                 bClean = sal_True;
                 hasNoImplementations = sal_False;
-                rtl::OUString path(xOldKey->getKeyName());
+                OUString path(xOldKey->getKeyName());
                 xOldKey->closeKey();
                 xRootKey->deleteKey(path);
             }
@@ -762,7 +760,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
             if (hasLocationUrl)
             {
                 hasLocationUrl = sal_False;
-                rtl::OUString path(xImplKey->getKeyName());
+                OUString path(xImplKey->getKeyName());
                 xImplKey->closeKey();
                 xReg->getRootKey()->deleteKey(path);
             }
@@ -771,13 +769,13 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
         subKeys = xSource->openKeys();
         if (subKeys.getLength() == 0)
         {
-            rtl::OUString path(xSource->getKeyName());
+            OUString path(xSource->getKeyName());
             xSource->closeKey();
             xReg->getRootKey()->deleteKey(path);
         }
     } else
     {
-        rtl::OUString path(xSource->getKeyName());
+        OUString path(xSource->getKeyName());
         xSource->closeKey();
         xReg->getRootKey()->deleteKey(path);
     }
@@ -904,7 +902,7 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
             if (hasNoImplementations)
             {
                 hasNoImplementations = sal_False;
-                rtl::OUString path(xServiceKey->getKeyName());
+                OUString path(xServiceKey->getKeyName());
                 xServiceKey->closeKey();
                 xReg->getRootKey()->deleteKey(path);
             }
@@ -913,13 +911,13 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
         subKeys = xSource->openKeys();
         if (subKeys.getLength() == 0)
         {
-            rtl::OUString path(xSource->getKeyName());
+            OUString path(xSource->getKeyName());
             xSource->closeKey();
             xReg->getRootKey()->deleteKey(path);
         }
     } else
     {
-        rtl::OUString path(xSource->getKeyName());
+        OUString path(xSource->getKeyName());
         xSource->closeKey();
         xReg->getRootKey()->deleteKey(path);
     }

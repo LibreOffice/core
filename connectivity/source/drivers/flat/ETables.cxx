@@ -39,10 +39,10 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-sdbcx::ObjectType OFlatTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OFlatTables::createObject(const OUString& _rName)
 {
     OFlatTable* pRet = new OFlatTable(this,(OFlatConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString("TABLE"));
+                                        _rName,OUString("TABLE"));
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;

@@ -33,7 +33,7 @@ namespace rtl { class OUString; }
 
 
 class XMLTextListAutoStylePool_Impl;
-typedef std::set<rtl::OUString> XMLTextListAutoStylePoolNames_Impl;
+typedef std::set<OUString> XMLTextListAutoStylePoolNames_Impl;
 class XMLTextListAutoStylePoolEntry_Impl;
 class SvXMLExport;
 
@@ -41,7 +41,7 @@ class XMLOFF_DLLPUBLIC XMLTextListAutoStylePool
 {
     SvXMLExport& rExport;
 
-    ::rtl::OUString sPrefix;
+    OUString sPrefix;
 
     XMLTextListAutoStylePool_Impl *pPool;
     XMLTextListAutoStylePoolNames_Impl m_aNames;
@@ -58,16 +58,16 @@ public:
     XMLTextListAutoStylePool( SvXMLExport& rExport );
     ~XMLTextListAutoStylePool();
 
-    void RegisterName( const ::rtl::OUString& rName );
+    void RegisterName( const OUString& rName );
 
-    ::rtl::OUString Add(
+    OUString Add(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::container::XIndexReplace > & rNumRules );
 
-    ::rtl::OUString Find(
+    OUString Find(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::container::XIndexReplace > & rNumRules ) const;
-    ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
+    OUString Find( const OUString& rInternalName ) const;
 
     void exportXML() const;
 };

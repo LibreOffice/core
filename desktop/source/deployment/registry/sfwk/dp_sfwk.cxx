@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::script;
 
-using ::rtl::OUString;
 
 namespace dp_registry
 {

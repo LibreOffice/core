@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 // XMLBasicImportContext
 // =============================================================================
 
-XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< frame::XModel >& rxModel )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
@@ -53,7 +53,7 @@ XMLBasicImportContext::~XMLBasicImportContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -84,7 +84,7 @@ void XMLBasicImportContext::StartElement(
         sal_uInt16 nPos = rNamespaceMap.GetFirstKey();
         while ( nPos != USHRT_MAX )
         {
-            ::rtl::OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
+            OUString aAttrName( rNamespaceMap.GetAttrNameByKey( nPos ) );
             if ( xAttrList->getValueByName( aAttrName ).isEmpty() )
                 pAttrList->AddAttribute( aAttrName, rNamespaceMap.GetNameByKey( nPos ) );
             nPos = rNamespaceMap.GetNextKey( nPos );
@@ -110,7 +110,7 @@ void XMLBasicImportContext::EndElement()
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicImportContext::Characters( const ::rtl::OUString& rChars )
+void XMLBasicImportContext::Characters( const OUString& rChars )
 {
     if ( m_xHandler.is() )
         m_xHandler->characters( rChars );
@@ -121,7 +121,7 @@ void XMLBasicImportContext::Characters( const ::rtl::OUString& rChars )
 // XMLBasicImportChildContext
 // =============================================================================
 
-XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XDocumentHandler >& rxHandler )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xHandler( rxHandler )
@@ -137,7 +137,7 @@ XMLBasicImportChildContext::~XMLBasicImportChildContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLBasicImportChildContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& )
 {
     return new XMLBasicImportChildContext( GetImport(), nPrefix, rLocalName, m_xHandler );
@@ -169,7 +169,7 @@ void XMLBasicImportChildContext::EndElement()
 
 // -----------------------------------------------------------------------------
 
-void XMLBasicImportChildContext::Characters( const ::rtl::OUString& rChars )
+void XMLBasicImportChildContext::Characters( const OUString& rChars )
 {
     if ( m_xHandler.is() )
         m_xHandler->characters( rChars );

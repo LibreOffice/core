@@ -1049,7 +1049,7 @@ OUString DefaultNumberingProvider::getImplementationName(void)
     return OUString::createFromAscii(cDefaultNumberingProvider);
 }
 
-sal_Bool DefaultNumberingProvider::supportsService(const rtl::OUString& rServiceName)
+sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
     return rServiceName.equalsAscii(cDefaultNumberingProvider);

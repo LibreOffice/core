@@ -57,12 +57,12 @@ private:
 
     SchXMLAxis* mpAttachedAxis;
     sal_Int32 mnAttachedAxis;
-    ::rtl::OUString msAutoStyleName;
-    ::std::vector< ::rtl::OUString > maDomainAddresses;
-    ::rtl::OUString maGlobalChartTypeName;
-    ::rtl::OUString maSeriesChartTypeName;
-    ::rtl::OUString m_aSeriesRange;
-    ::rtl::OUString m_aSeriesLabelRange;
+    OUString msAutoStyleName;
+    ::std::vector< OUString > maDomainAddresses;
+    OUString maGlobalChartTypeName;
+    OUString maSeriesChartTypeName;
+    OUString m_aSeriesRange;
+    OUString m_aSeriesLabelRange;
     bool            m_bHasDomainContext;
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
     tSchXMLLSequencesPerIndex maPostponedSequences;
@@ -72,7 +72,7 @@ private:
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,
-                          SvXMLImport& rImport, const rtl::OUString& rLocalName,
+                          SvXMLImport& rImport, const OUString& rLocalName,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::chart2::XChartDocument > & xNewDoc,
                           std::vector< SchXMLAxis >& rAxes,
@@ -80,7 +80,7 @@ public:
                           sal_Int32 nSeriesIndex,
                           sal_Bool bStockHasVolume,
                           GlobalSeriesImportInfo& rGlobalSeriesImportInfo,
-                          const ::rtl::OUString & aGlobalChartTypeName,
+                          const OUString & aGlobalChartTypeName,
                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                           bool& rGlobalChartTypeUsedBySeries,
                           const ::com::sun::star::awt::Size & rChartSize );
@@ -89,7 +89,7 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
@@ -101,7 +101,7 @@ public:
     static void setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , ::rtl::OUString& rCurrStyleName
+        , OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart
@@ -110,12 +110,12 @@ public:
     static void setStylesToStatisticsObjects( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , rtl::OUString &rCurrStyleName );
+        , OUString &rCurrStyleName );
 
     static void setStylesToDataPoints( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
         , const SvXMLStylesContext* pStylesCtxt
         , const SvXMLStyleContext*& rpStyle
-        , ::rtl::OUString& rCurrStyleName
+        , OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
         , const SvXMLImport& rImport
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter );

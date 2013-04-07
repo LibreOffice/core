@@ -246,7 +246,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
                  "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-        throw RuntimeException( rtl::OUString("illegal vtable index!"),
+        throw RuntimeException( OUString("illegal vtable index!"),
                                 (XInterface *)pThis );
     }
 
@@ -340,7 +340,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
     default:
     {
         throw RuntimeException(
-            rtl::OUString("no member description found!"),
+            OUString("no member description found!"),
             (XInterface *)pThis );
     }
     }
@@ -446,7 +446,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
         Rtti():
             n0(0), n1(0), n2(0),
             rtti(CPPU_CURRENT_NAMESPACE::msci_getRTTI(
-                     rtl::OUString(
+                     OUString(
                                        "com.sun.star.uno.XInterface")))
         {}
     };

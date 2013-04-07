@@ -97,7 +97,7 @@ public:
 
     void UpdateViewSize();
 
-    void            InsertHeaderEntry(const rtl::OUString& rText,
+    void            InsertHeaderEntry(const OUString& rText,
                             sal_uInt16 nCol=HEADERBAR_APPEND,
                             HeaderBarItemBits nBits = HIB_STDSTYLE);
 
@@ -146,7 +146,7 @@ public:
     void            SetHeaderBarDblClickHdl( const Link& rLink ) { aHeaderBarDblClickLink = rLink; }
     const Link&     GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
 
-    void            SetHeaderBarHelpId(const rtl::OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
+    void            SetHeaderBarHelpId(const OString& rHelpId) {aHeaderBar.SetHelpId(rHelpId);}
 
     HeaderBar&      GetTheHeaderBar() {return aHeaderBar;}
 };

@@ -90,15 +90,15 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    static const FeatureSet& lcl_getFeatureSet( const ::rtl::OUString _rURL )
+    static const FeatureSet& lcl_getFeatureSet( const OUString _rURL )
     {
-        typedef ::std::map< ::rtl::OUString, FeatureSet, ::comphelper::UStringLess >    FeatureSets;
+        typedef ::std::map< OUString, FeatureSet, ::comphelper::UStringLess >    FeatureSets;
         static FeatureSets s_aFeatureSets;
         if ( s_aFeatureSets.empty() )
         {
             ::connectivity::DriversConfig aDriverConfig( ::comphelper::getProcessComponentContext() );
-            const uno::Sequence< ::rtl::OUString > aPatterns = aDriverConfig.getURLs();
-            for (   const ::rtl::OUString* pattern = aPatterns.getConstArray();
+            const uno::Sequence< OUString > aPatterns = aDriverConfig.getURLs();
+            for (   const OUString* pattern = aPatterns.getConstArray();
                     pattern != aPatterns.getConstArray() + aPatterns.getLength();
                     ++pattern
                 )
@@ -123,22 +123,22 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    static AuthenticationMode getAuthenticationMode( const ::rtl::OUString& _sURL )
+    static AuthenticationMode getAuthenticationMode( const OUString& _sURL )
     {
         static std::map< OUString, FeatureSupport > s_aSupport;
         if ( s_aSupport.empty() )
         {
             ::connectivity::DriversConfig aDriverConfig(::comphelper::getProcessComponentContext());
-            const uno::Sequence< ::rtl::OUString > aURLs = aDriverConfig.getURLs();
-            const ::rtl::OUString* pIter = aURLs.getConstArray();
-            const ::rtl::OUString* pEnd = pIter + aURLs.getLength();
+            const uno::Sequence< OUString > aURLs = aDriverConfig.getURLs();
+            const OUString* pIter = aURLs.getConstArray();
+            const OUString* pEnd = pIter + aURLs.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 FeatureSupport aInit( AuthNone );
                 const ::comphelper::NamedValueCollection& aMetaData = aDriverConfig.getMetaData(*pIter);
                 if ( aMetaData.has("Authentication") )
                 {
-                    ::rtl::OUString sAuth;
+                    OUString sAuth;
                     aMetaData.get("Authentication") >>= sAuth;
                     if ( sAuth == "UserPassword" )
                         aInit = AuthUserPwd;
@@ -158,16 +158,16 @@ namespace dbaui
     class DataSourceMetaData_Impl
     {
     public:
-        DataSourceMetaData_Impl( const ::rtl::OUString& _sURL );
+        DataSourceMetaData_Impl( const OUString& _sURL );
 
-        inline ::rtl::OUString getType() const { return m_sURL; }
+        inline OUString getType() const { return m_sURL; }
 
     private:
-        const ::rtl::OUString m_sURL;
+        const OUString m_sURL;
     };
 
     //--------------------------------------------------------------------
-    DataSourceMetaData_Impl::DataSourceMetaData_Impl( const ::rtl::OUString& _sURL )
+    DataSourceMetaData_Impl::DataSourceMetaData_Impl( const OUString& _sURL )
         :m_sURL( _sURL )
     {
     }
@@ -176,7 +176,7 @@ namespace dbaui
     //= DataSourceMetaData
     //====================================================================
     //--------------------------------------------------------------------
-    DataSourceMetaData::DataSourceMetaData( const ::rtl::OUString& _sURL )
+    DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
         :m_pImpl( new DataSourceMetaData_Impl( _sURL ) )
     {
     }
@@ -193,7 +193,7 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    AuthenticationMode  DataSourceMetaData::getAuthentication( const ::rtl::OUString& _sURL )
+    AuthenticationMode  DataSourceMetaData::getAuthentication( const OUString& _sURL )
     {
         return getAuthenticationMode( _sURL );
     }

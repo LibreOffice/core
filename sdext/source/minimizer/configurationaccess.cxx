@@ -162,9 +162,9 @@ ConfigurationAccess::~ConfigurationAccess()
 {
 }
 
-rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
+OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
 {
-    rtl::OUString aPath;
+    OUString aPath;
     try
     {
         static const OUString sProtocol( "vnd.sun.star.expand:" );
@@ -173,7 +173,7 @@ rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
             xSet->getByName( TKGet( eToken ) ) >>= aPath;
         if ( aPath.match( sProtocol, 0 ) )
         {
-            rtl::OUString aTmp( aPath.copy( 20 ) );
+            OUString aTmp( aPath.copy( 20 ) );
             Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxMSF);
             aPath = xExpander->expandMacros( aTmp );
         }
@@ -184,10 +184,10 @@ rtl::OUString ConfigurationAccess::getPath( const PPPOptimizerTokenEnum eToken )
     return aPath;
 }
 
-rtl::OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
+OUString ConfigurationAccess::getString( const PPPOptimizerTokenEnum eToken ) const
 {
-    std::map< PPPOptimizerTokenEnum, rtl::OUString, Compare >::const_iterator aIter( maStrings.find( eToken ) );
-    return aIter != maStrings.end() ? ((*aIter).second) : rtl::OUString();
+    std::map< PPPOptimizerTokenEnum, OUString, Compare >::const_iterator aIter( maStrings.find( eToken ) );
+    return aIter != maStrings.end() ? ((*aIter).second) : OUString();
 }
 
 void ConfigurationAccess::LoadStrings()
@@ -364,9 +364,9 @@ Reference< XInterface > ConfigurationAccess::GetConfigurationNode(
     catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            ::rtl::OUStringToOString(sPathToNode,
+            OUStringToOString(sPathToNode,
                 RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message,
+            OUStringToOString(rException.Message,
                 RTL_TEXTENCODING_UTF8).getStr());
         (void)rException;
     }
@@ -501,7 +501,7 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
     return aRet;
 }
 
-std::vector< OptimizerSettings >::iterator ConfigurationAccess::GetOptimizerSettingsByName( const rtl::OUString& rName )
+std::vector< OptimizerSettings >::iterator ConfigurationAccess::GetOptimizerSettingsByName( const OUString& rName )
 {
     std::vector< OptimizerSettings >::iterator aIter( maSettings.begin() + 1 );
     const std::vector< OptimizerSettings >::const_iterator aEnd( maSettings.end() );

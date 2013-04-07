@@ -202,14 +202,14 @@ void PrintDialog::PrintPreviewWindow::Command( const CommandEvent& rEvt )
 
 void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPreview,
                                                   const Size& i_rOrigSize,
-                                                  const rtl::OUString& i_rPaperName,
-                                                  const rtl::OUString& i_rReplacement,
+                                                  const OUString& i_rPaperName,
+                                                  const OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
                                                   sal_Int32 i_nDPIY,
                                                   bool i_bGreyscale
                                                  )
 {
-    rtl::OUStringBuffer aBuf( 256 );
+    OUStringBuffer aBuf( 256 );
     aBuf.append( maToolTipString );
     SetQuickHelpText( aBuf.makeStringAndClear() );
     maMtf = i_rNewPreview;
@@ -325,7 +325,7 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
     aFont.SetSize( Size( 0, 24 ) );
     SetFont( aFont );
-    Size aSampleTextSize( GetTextWidth( rtl::OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
+    Size aSampleTextSize( GetTextWidth( OUString::valueOf( sal_Int32(nPages+1) ) ), GetTextHeight() );
 
     Size aOutSize( GetOutputSizePixel() );
     Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
@@ -341,7 +341,7 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
     long nTextHeight = GetTextHeight();
     for( int i = 0; i < nPages; i++ )
     {
-        rtl::OUString aPageText( rtl::OUString::valueOf( sal_Int32(i+1) ) );
+        OUString aPageText( OUString::valueOf( sal_Int32(i+1) ) );
         int nX = 0, nY = 0;
         switch( mnOrderMode )
         {
@@ -499,10 +499,10 @@ PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
 void PrintDialog::JobTabPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue;
+    OUString aValue;
 
-    aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                              rtl::OUString( "CollateBox"  ) );
+    aValue = pItem->getValue( OUString( "PrintDialog"  ),
+                              OUString( "CollateBox"  ) );
     if( aValue.equalsIgnoreAsciiCase("alwaysoff") )
     {
         mnCollateUIMode = 1;
@@ -512,8 +512,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     else
     {
         mnCollateUIMode = 0;
-        aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                                  rtl::OUString( "Collate"  ) );
+        aValue = pItem->getValue( OUString( "PrintDialog"  ),
+                                  OUString( "Collate"  ) );
         mpCollateBox->Check( aValue.equalsIgnoreAsciiCase("true") );
     }
 }
@@ -521,13 +521,13 @@ void PrintDialog::JobTabPage::readFromSettings()
 void PrintDialog::JobTabPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "CopyCount"  ),
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "CopyCount"  ),
                      mpCopyCountField->GetText() );
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "Collate"  ),
-                     mpCollateBox->IsChecked() ? rtl::OUString("true") :
-                                                 rtl::OUString("false") );
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "Collate"  ),
+                     mpCollateBox->IsChecked() ? OUString("true") :
+                                                 OUString("false") );
 }
 
 PrintDialog::OutputOptPage::OutputOptPage( VclBuilder *pUIBuilder )
@@ -539,9 +539,9 @@ PrintDialog::OutputOptPage::OutputOptPage( VclBuilder *pUIBuilder )
 void PrintDialog::OutputOptPage::readFromSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue;
-    aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                              rtl::OUString( "CollateSingleJobs"  ) );
+    OUString aValue;
+    aValue = pItem->getValue( OUString( "PrintDialog"  ),
+                              OUString( "CollateSingleJobs"  ) );
     if ( aValue.equalsIgnoreAsciiCase("true") )
     {
         mpCollateSingleJobsBox->Check( sal_True );
@@ -555,14 +555,14 @@ void PrintDialog::OutputOptPage::readFromSettings()
 void PrintDialog::OutputOptPage::storeToSettings()
 {
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "ToFile"  ),
-                     mpToFileBox->IsChecked() ? rtl::OUString("true")
-                                             : rtl::OUString("false") );
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "CollateSingleJobs"  ),
-                     mpCollateSingleJobsBox->IsChecked() ? rtl::OUString("true") :
-                                                rtl::OUString("false") );
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "ToFile"  ),
+                     mpToFileBox->IsChecked() ? OUString("true")
+                                             : OUString("false") );
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "CollateSingleJobs"  ),
+                     mpCollateSingleJobsBox->IsChecked() ? OUString("true") :
+                                                OUString("false") );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
@@ -602,8 +602,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.mpReverseOrderBox->Check( maPController->getReversePrint() );
 
     // fill printer listbox
-    const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
-    for( std::vector< rtl::OUString >::const_iterator it = rQueues.begin();
+    const std::vector< OUString >& rQueues( Printer::GetPrinterQueues() );
+    for( std::vector< OUString >::const_iterator it = rQueues.begin();
          it != rQueues.end(); ++it )
     {
         maJobPage.mpPrinters->InsertEntry( *it );
@@ -617,8 +617,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     {
         // fall back to last printer
         SettingsConfigItem* pItem = SettingsConfigItem::get();
-        String aValue( pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                                        rtl::OUString( "LastPrinter"  ) ) );
+        String aValue( pItem->getValue( OUString( "PrintDialog"  ),
+                                        OUString( "LastPrinter"  ) ) );
         if( maJobPage.mpPrinters->GetEntryPos( aValue ) != LISTBOX_ENTRY_NOTFOUND )
         {
             maJobPage.mpPrinters->SelectEntry( aValue );
@@ -703,7 +703,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // setup dependencies
     checkControlDependencies();
 
-    if ( maPController->getBoolProperty( rtl::OUString( "HideHelpButton" ), sal_False ) )
+    if ( maPController->getBoolProperty( OUString( "HideHelpButton" ), sal_False ) )
         mpHelpButton->Hide();
     // set initial focus to "Number of copies"
     maJobPage.mpCopyCountField->GrabFocus();
@@ -725,8 +725,8 @@ void PrintDialog::readFromSettings()
 
     // read last selected tab page; if it exists, actiavte it
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    rtl::OUString aValue = pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                                            rtl::OUString( "LastPage"  ) );
+    OUString aValue = pItem->getValue( OUString( "PrintDialog"  ),
+                                            OUString( "LastPage"  ) );
     sal_uInt16 nCount = mpTabCtrl->GetPageCount();
     for( sal_uInt16 i = 0; i < nCount; i++ )
     {
@@ -740,10 +740,10 @@ void PrintDialog::readFromSettings()
     mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
 
     // persistent window state
-    rtl::OUString aWinState( pItem->getValue( rtl::OUString( "PrintDialog"  ),
-                                              rtl::OUString( "WindowState"  ) ) );
+    OUString aWinState( pItem->getValue( OUString( "PrintDialog"  ),
+                                              OUString( "WindowState"  ) ) );
     if( !aWinState.isEmpty() )
-        SetWindowState( rtl::OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
+        SetWindowState( OUStringToOString( aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     if( maOptionsPage.mpToFileBox->IsChecked() )
     {
@@ -760,16 +760,16 @@ void PrintDialog::storeToSettings()
 
     // store last selected printer
     SettingsConfigItem* pItem = SettingsConfigItem::get();
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "LastPrinter"  ),
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "LastPrinter"  ),
                      maJobPage.mpPrinters->GetSelectEntry() );
 
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "LastPage"  ),
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "LastPage"  ),
                      mpTabCtrl->GetPageText( mpTabCtrl->GetCurPageId() ) );
-    pItem->setValue( rtl::OUString( "PrintDialog"  ),
-                     rtl::OUString( "WindowState"  ),
-                     rtl::OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
+    pItem->setValue( OUString( "PrintDialog"  ),
+                     OUString( "WindowState"  ),
+                     OStringToOUString( GetWindowState(), RTL_TEXTENCODING_UTF8 )
                      );
     pItem->Commit();
 }
@@ -789,13 +789,13 @@ bool PrintDialog::isSingleJobs()
     return maOptionsPage.mpCollateSingleJobsBox->IsChecked();
 }
 
-void setHelpId( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpIds, sal_Int32 i_nIndex )
+void setHelpId( Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
 {
     if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
-        i_pWindow->SetHelpId( rtl::OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );
+        i_pWindow->SetHelpId( OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );
 }
 
-static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+static void setHelpText( Window* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
 {
     // without a help text set and the correct smartID,
     // help texts will be retrieved from the online help system
@@ -810,7 +810,7 @@ void PrintDialog::setupOptionalUI()
     {
         if (rOptions[i].Name == "OptionsUIFile")
         {
-            rtl::OUString sOptionsUIFile;
+            OUString sOptionsUIFile;
             rOptions[i].Value >>= sOptionsUIFile;
 
             Window *pCustom = get<Window>("customcontents");
@@ -826,18 +826,18 @@ void PrintDialog::setupOptionalUI()
         rOptions[i].Value >>= aOptProp;
 
         // extract ui element
-        rtl::OUString aCtrlType;
-        rtl::OString aID;
-        rtl::OUString aText;
-        rtl::OUString aPropertyName;
-        Sequence< rtl::OUString > aChoices;
+        OUString aCtrlType;
+        OString aID;
+        OUString aText;
+        OUString aPropertyName;
+        Sequence< OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
-        Sequence< rtl::OUString > aHelpTexts;
-        Sequence< rtl::OUString > aIDs;
-        Sequence< rtl::OUString > aHelpIds;
+        Sequence< OUString > aHelpTexts;
+        Sequence< OUString > aIDs;
+        Sequence< OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
-        rtl::OUString aGroupingHint;
-        rtl::OUString aDependsOnName;
+        OUString aGroupingHint;
+        OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
         sal_Bool bUseDependencyRow = sal_False;
 
@@ -847,7 +847,7 @@ void PrintDialog::setupOptionalUI()
             if ( rEntry.Name == "ID" )
             {
                 rEntry.Value >>= aIDs;
-                aID = rtl::OUStringToOString(aIDs[0], RTL_TEXTENCODING_UTF8);
+                aID = OUStringToOString(aIDs[0], RTL_TEXTENCODING_UTF8);
             }
             if ( rEntry.Name == "Text" )
             {
@@ -904,7 +904,7 @@ void PrintDialog::setupOptionalUI()
             {
                 if( ! (rEntry.Value >>= aHelpTexts) )
                 {
-                    rtl::OUString aHelpText;
+                    OUString aHelpText;
                     if( (rEntry.Value >>= aHelpText) )
                     {
                         aHelpTexts.realloc( 1 );
@@ -916,7 +916,7 @@ void PrintDialog::setupOptionalUI()
             {
                 if( ! (rEntry.Value >>= aHelpIds ) )
                 {
-                    rtl::OUString aHelpId;
+                    OUString aHelpId;
                     if( (rEntry.Value >>= aHelpId) )
                     {
                         aHelpIds.realloc( 1 );
@@ -943,7 +943,7 @@ void PrintDialog::setupOptionalUI()
 
             // set help id
             if (aHelpIds.getLength() > 0)
-                mpTabCtrl->SetHelpId(nPageId, rtl::OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
+                mpTabCtrl->SetHelpId(nPageId, OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
 
             // set help text
             if (aHelpTexts.getLength() > 0)
@@ -1024,7 +1024,7 @@ void PrintDialog::setupOptionalUI()
                 pVal->Value >>= nSelectVal;
             for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
             {
-                aID = rtl::OUStringToOString(aIDs[m], RTL_TEXTENCODING_UTF8);
+                aID = OUStringToOString(aIDs[m], RTL_TEXTENCODING_UTF8);
                 RadioButton* pBtn = get<RadioButton>(aID);
                 if (!pBtn && mpCustomOptionsUIBuilder)
                     pBtn = mpCustomOptionsUIBuilder->get<RadioButton>(aID);
@@ -1108,7 +1108,7 @@ void PrintDialog::setupOptionalUI()
             if (!pField && mpCustomOptionsUIBuilder)
                 pField = mpCustomOptionsUIBuilder->get<Edit>(aID);
 
-            rtl::OUString aCurVal;
+            OUString aCurVal;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal && pVal->Value.hasValue() )
                 pVal->Value >>= aCurVal;
@@ -1126,9 +1126,9 @@ void PrintDialog::setupOptionalUI()
         }
         else
         {
-            rtl::OStringBuffer sMessage;
+            OStringBuffer sMessage;
             sMessage.append("Unsupported UI option: \"");
-            sMessage.append(rtl::OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
+            sMessage.append(OUStringToOString(aCtrlType, RTL_TEXTENCODING_UTF8));
             sMessage.append('"');
             OSL_FAIL( sMessage.getStr() );
         }
@@ -1189,7 +1189,7 @@ void PrintDialog::checkControlDependencies()
 
 void PrintDialog::checkOptionalControlDependencies()
 {
-    for( std::map< Window*, rtl::OUString >::iterator it = maControlToPropertyMap.begin();
+    for( std::map< Window*, OUString >::iterator it = maControlToPropertyMap.begin();
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
@@ -1204,7 +1204,7 @@ void PrintDialog::checkOptionalControlDependencies()
             // "Page Range" instead of "Print All" if the Edit gets modified
             if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
             {
-                rtl::OUString aDep( maPController->getDependency( it->second ) );
+                OUString aDep( maPController->getDependency( it->second ) );
                 // if the dependency is at least enabled, then enable this control anyway
                 if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
                     bShouldbeEnabled = true;
@@ -1228,12 +1228,12 @@ void PrintDialog::checkOptionalControlDependencies()
     }
 }
 
-static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char* i_pRepl, sal_Int32 i_nReplLen, const rtl::OUString& i_rRepl )
+static OUString searchAndReplace( const OUString& i_rOrig, const char* i_pRepl, sal_Int32 i_nReplLen, const OUString& i_rRepl )
 {
     sal_Int32 nPos = i_rOrig.indexOfAsciiL( i_pRepl, i_nReplLen );
     if( nPos != -1 )
     {
-        rtl::OUStringBuffer aBuf( i_rOrig.getLength() );
+        OUStringBuffer aBuf( i_rOrig.getLength() );
         aBuf.append( i_rOrig.getStr(), nPos );
         aBuf.append( i_rRepl );
         if( nPos + i_nReplLen < i_rOrig.getLength() )
@@ -1245,14 +1245,14 @@ static rtl::OUString searchAndReplace( const rtl::OUString& i_rOrig, const char*
 
 void PrintDialog::updatePrinterText()
 {
-    const rtl::OUString aDefPrt( Printer::GetDefaultPrinterName() );
+    const OUString aDefPrt( Printer::GetDefaultPrinterName() );
     const QueueInfo* pInfo = Printer::GetQueueInfo( maJobPage.mpPrinters->GetSelectEntry(), true );
     if( pInfo )
     {
         maJobPage.mpLocationTxt->SetText( pInfo->GetLocation() );
         maJobPage.mpCommentTxt->SetText( pInfo->GetComment() );
         // FIXME: status text
-        rtl::OUString aStatus;
+        OUString aStatus;
         if( aDefPrt == pInfo->GetPrinterName() )
             aStatus = maDefPrtText;
         maJobPage.mpStatusTxt->SetText( aStatus );
@@ -1267,7 +1267,7 @@ void PrintDialog::updatePrinterText()
 
 void PrintDialog::setPreviewText( sal_Int32 )
 {
-    rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
+    OUString aNewText( searchAndReplace( maPageStr, "%n", 2, OUString::valueOf( mnCachedPages )  ) );
     mpNumPagesText->SetText( aNewText );
 }
 
@@ -1306,7 +1306,7 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         mpPreviewWindow->setPreview( aMtf, aCurPageSize,
                                     aPrt->GetPaperName( false ),
-                                    nPages > 0 ? rtl::OUString() : maNoPageStr,
+                                    nPages > 0 ? OUString() : maNoPageStr,
                                     aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY(),
                                     aPrt->GetPrinterOptions().IsConvertToGreyscales()
                                    );
@@ -1517,7 +1517,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            pHelp->Start( rtl::OUString("vcl/ui/printdialog"), mpOKButton );
+            pHelp->Start( OUString("vcl/ui/printdialog"), mpOKButton );
         }
     }
     else if( pButton == mpForwardBtn )
@@ -1562,7 +1562,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == maJobPage.mpCollateBox )
     {
-        maPController->setValue( rtl::OUString( "Collate"  ),
+        maPController->setValue( OUString( "Collate"  ),
                                  makeAny( sal_Bool(isCollate()) ) );
         checkControlDependencies();
     }
@@ -1570,7 +1570,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     {
         sal_Bool bChecked = maJobPage.mpReverseOrderBox->IsChecked();
         maPController->setReversePrint( bChecked );
-        maPController->setValue( rtl::OUString( "PrintReverse"  ),
+        maPController->setValue( OUString( "PrintReverse"  ),
                                  makeAny( bChecked ) );
         preparePreview( true, true );
     }
@@ -1606,9 +1606,9 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     }
     else if( pEdit == maJobPage.mpCopyCountField )
     {
-        maPController->setValue( rtl::OUString( "CopyCount"  ),
+        maPController->setValue( OUString( "CopyCount"  ),
                                makeAny( sal_Int32(maJobPage.mpCopyCountField->GetValue()) ) );
-        maPController->setValue( rtl::OUString( "Collate"  ),
+        maPController->setValue( OUString( "Collate"  ),
                                makeAny( sal_Bool(isCollate()) ) );
     }
     return 0;
@@ -1623,7 +1623,7 @@ IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
 PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
 {
     PropertyValue* pVal = NULL;
-    std::map< Window*, rtl::OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    std::map< Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
         pVal = maPController->getValue( it->second );
@@ -1636,10 +1636,10 @@ PropertyValue* PrintDialog::getValueForWindow( Window* i_pWindow ) const
     return pVal;
 }
 
-void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
+void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
 {
     beans::PropertyValue* pValue = maPController->getValue( i_rProperty );
-    std::map< rtl::OUString, std::vector< Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
+    std::map< OUString, std::vector< Window* > >::const_iterator it = maPropertyToWindowMap.find( i_rProperty );
     if( pValue && it != maPropertyToWindowMap.end() )
     {
         const std::vector< Window* >& rWindows( it->second );
@@ -1690,10 +1690,10 @@ void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
 
 void PrintDialog::makeEnabled( Window* i_pWindow )
 {
-    std::map< Window*, rtl::OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
+    std::map< Window*, OUString >::const_iterator it = maControlToPropertyMap.find( i_pWindow );
     if( it != maControlToPropertyMap.end() )
     {
-        rtl::OUString aDependency( maPController->makeEnabled( it->second ) );
+        OUString aDependency( maPController->makeEnabled( it->second ) );
         if( !aDependency.isEmpty() )
             updateWindowFromProperty( aDependency );
     }
@@ -1781,7 +1781,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
         }
         else
         {
-            rtl::OUString aVal( i_pBox->GetText() );
+            OUString aVal( i_pBox->GetText() );
             pVal->Value <<= aVal;
         }
 
@@ -1871,7 +1871,7 @@ void PrintProgressDialog::implCalcProgressRect()
         Rectangle aControlRegion( Point(), Size( 100, mnProgressHeight ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                    CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                    CTRL_STATE_ENABLED, aValue, OUString(),
                                     aNativeControlRegion, aNativeContentRegion ) )
         {
             mnProgressHeight = aNativeControlRegion.GetHeight();
@@ -1894,8 +1894,8 @@ void PrintProgressDialog::setProgress( int i_nCurrent, int i_nMax )
     if( mnMax < 1 )
         mnMax = 1;
 
-    rtl::OUString aNewText( searchAndReplace( maStr, "%p", 2, rtl::OUString::valueOf( mnCur ) ) );
-    aNewText = searchAndReplace( aNewText, "%n", 2, rtl::OUString::valueOf( mnMax ) );
+    OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::valueOf( mnCur ) ) );
+    aNewText = searchAndReplace( aNewText, "%n", 2, OUString::valueOf( mnMax ) );
     maText.SetText( aNewText );
 
     // update progress

@@ -48,7 +48,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
 
 namespace dp_registry {
@@ -166,7 +165,7 @@ PackageRegistryImpl::~PackageRegistryImpl()
 //______________________________________________________________________________
 OUString normalizeMediaType( OUString const & mediaType )
 {
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     sal_Int32 index = 0;
     for (;;) {
         buf.append( mediaType.getToken( 0, '/', index ).trim() );
@@ -180,7 +179,7 @@ OUString normalizeMediaType( OUString const & mediaType )
 //______________________________________________________________________________
 
 void PackageRegistryImpl::packageRemoved(
-    ::rtl::OUString const & url, ::rtl::OUString const & mediaType)
+    OUString const & url, OUString const & mediaType)
     throw (css::deployment::DeploymentException,
            css::uno::RuntimeException)
 {
@@ -197,7 +196,7 @@ void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
     m_allBackends.insert( xBackend );
-    typedef ::boost::unordered_set<OUString, ::rtl::OUStringHash> t_stringset;
+    typedef ::boost::unordered_set<OUString, OUStringHash> t_stringset;
     t_stringset ambiguousFilters;
 
     const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
@@ -273,7 +272,7 @@ void PackageRegistryImpl::insertBackend(
 #if OSL_DEBUG_LEVEL > 0
         else
         {
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             buf.appendAscii( "more than one PackageRegistryBackend for media-type=\"" );
             buf.append( mediaType );
             buf.appendAscii( "\" => " );
@@ -281,7 +280,7 @@ void PackageRegistryImpl::insertBackend(
                             xBackend, UNO_QUERY_THROW )->
                         getImplementationName() );
             buf.appendAscii( "\"!" );
-            OSL_FAIL( ::rtl::OUStringToOString(
+            OSL_FAIL( OUStringToOString(
                             buf.makeStringAndClear(),
                             RTL_TEXTENCODING_UTF8).getStr() );
         }
@@ -394,7 +393,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                   that->m_filter2mediaType.begin() );
               iPos != that->m_filter2mediaType.end(); ++iPos )
         {
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             buf.appendAscii( "extension \"" );
             buf.append( iPos->first );
             buf.appendAscii( "\" maps to media-type \"" );
@@ -413,7 +412,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
                   that->m_ambiguousBackends.begin() );
               iPos != that->m_ambiguousBackends.end(); ++iPos )
         {
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             buf.append(
                 Reference<lang::XServiceInfo>(
                     *iPos, UNO_QUERY_THROW )->getImplementationName() );

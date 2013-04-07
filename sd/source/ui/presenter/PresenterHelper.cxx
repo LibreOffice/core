@@ -38,7 +38,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sd { namespace presenter {
 
@@ -53,7 +52,7 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 
 
 
-::rtl::OUString PresenterHelperService_getImplementationName (void)
+OUString PresenterHelperService_getImplementationName (void)
     throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.Draw.PresenterHelper");
@@ -62,11 +61,11 @@ Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
 
 
 
-Sequence<rtl::OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.PresenterHelper");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.PresenterHelper");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

@@ -146,9 +146,9 @@ protected:
 
 private:
     ShapeAnchor         maAnchor;       /// Position of the drawing object.
-    ::rtl::OUString     maObjName;      /// Name of the object.
-    ::rtl::OUString     maMacroName;    /// Name of an attached macro.
-    ::rtl::OUString     maHyperlink;    /// On-click hyperlink URL.
+    OUString     maObjName;      /// Name of the object.
+    OUString     maMacroName;    /// Name of an attached macro.
+    OUString     maHyperlink;    /// On-click hyperlink URL.
     sal_uInt16          mnObjId;        /// The object identifier (unique per drawing).
     sal_uInt16          mnObjType;      /// The object type from OBJ record.
     bool                mbHidden;       /// True = object is hidden.

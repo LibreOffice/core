@@ -44,7 +44,7 @@ InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServ
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
     return FRM_SUN_FORMS_COLLECTION;
 }
@@ -106,16 +106,16 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.forms.OFormsCollection");
+    return OUString("com.sun.star.comp.forms.OFormsCollection");
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFormsCollection::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
-    const rtl::OUString* pSupported = aSupported.getConstArray();
+    Sequence<OUString> aSupported = getSupportedServiceNames();
+    const OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rServiceName))
             return sal_True;
@@ -128,7 +128,7 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
     StringSequence aReturn(2);
 
     aReturn.getArray()[0] = FRM_SUN_FORMS_COLLECTION;
-    aReturn.getArray()[1] = ::rtl::OUString("com.sun.star.form.FormComponents");
+    aReturn.getArray()[1] = OUString("com.sun.star.form.FormComponents");
 
     return aReturn;
 }

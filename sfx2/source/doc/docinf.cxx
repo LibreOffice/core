@@ -82,7 +82,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         if( xGlobSect->GetStringValue( aStrValue, PROPID_AUTHOR) )
             i_xDocProps->setAuthor( aStrValue );
         else
-            i_xDocProps->setAuthor( ::rtl::OUString() );
+            i_xDocProps->setAuthor( OUString() );
         if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_CREATED ) )
             i_xDocProps->setCreationDate( aDateTime );
         else
@@ -91,13 +91,13 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         if( xGlobSect->GetStringValue( aStrValue, PROPID_LASTAUTHOR) )
             i_xDocProps->setModifiedBy( aStrValue );
         else
-            i_xDocProps->setModifiedBy( ::rtl::OUString() );
+            i_xDocProps->setModifiedBy( OUString() );
         if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_LASTSAVED ) )
             i_xDocProps->setModificationDate( aDateTime );
         else
             i_xDocProps->setModificationDate( aInvalid );
 
-        i_xDocProps->setPrintedBy( ::rtl::OUString() );
+        i_xDocProps->setPrintedBy( OUString() );
         if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_LASTPRINTED ) )
             i_xDocProps->setPrintDate( aDateTime );
         else
@@ -149,7 +149,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         for( ::std::vector< sal_Int32 >::const_iterator aIt = aPropIds.begin(),
              aEnd = aPropIds.end(); aIt != aEnd; ++aIt )
         {
-            ::rtl::OUString aPropName = xCustomSect->GetPropertyName( *aIt );
+            OUString aPropName = xCustomSect->GetPropertyName( *aIt );
             uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
             if( !aPropName.isEmpty() && aPropValue.hasValue() )
             {
@@ -232,13 +232,13 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     rGlobSect.SetFileTimeValue( PROPID_EDITTIME, aEditTime );
 
     rGlobSect.SetStringValue( PROPID_REVNUMBER,
-                rtl::OUString::valueOf( static_cast<sal_Int32>(i_xDocProps->getEditingCycles()) ) );
+                OUString::valueOf( static_cast<sal_Int32>(i_xDocProps->getEditingCycles()) ) );
     if ( i_pThumb && i_pThumb->getLength() )
         rGlobSect.SetThumbnailValue( PROPID_THUMBNAIL, *i_pThumb );
 
     // save the property set
     ErrCode nGlobError = aGlobSet.SavePropertySet(i_pStorage,
-        ::rtl::OUString(STREAM_SUMMARYINFO));
+        OUString(STREAM_SUMMARYINFO));
 
     // *** custom properties into stream "005DocumentSummaryInformation" ***
 
@@ -255,7 +255,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString("_PID_GUID") );
+            OUString("_PID_GUID") );
     }
 
     // write hyperlinks
@@ -263,7 +263,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
         rCustomSect.SetPropertyName( nPropId,
-            ::rtl::OUString("_PID_HLINKS") );
+            OUString("_PID_HLINKS") );
     }
 
     uno::Reference<beans::XPropertySet> xUserDefinedProps(
@@ -280,7 +280,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
             // skip transient properties
             if (~props[i].Attributes & beans::PropertyAttribute::TRANSIENT)
             {
-                const ::rtl::OUString name = props[i].Name;
+                const OUString name = props[i].Name;
                 const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
                 if (rCustomSect.SetAnyValue( nPropId,
                             xUserDefinedProps->getPropertyValue(name))) {

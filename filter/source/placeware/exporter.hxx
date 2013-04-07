@@ -37,7 +37,7 @@ public:
 
     sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc,
                         ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream,
-                            const rtl::OUString& rURL,
+                            const OUString& rURL,
                                 ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler,
                                 ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator >& rxStatusIndicator );
 

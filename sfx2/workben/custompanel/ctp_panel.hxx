@@ -86,13 +86,13 @@ namespace sd { namespace colortoolpanel
         PanelUIElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& i_rParentWindow,
-            const ::rtl::OUString& i_rResourceURL,
+            const OUString& i_rResourceURL,
             const ::sal_Int32 i_nPanelColor
         );
 
         // XUIElement
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -103,7 +103,7 @@ namespace sd { namespace colortoolpanel
         ~PanelUIElement();
 
     private:
-        const ::rtl::OUString   m_sResourceURL;
+        const OUString   m_sResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XToolPanel >
                                 m_xToolPanel;
     };

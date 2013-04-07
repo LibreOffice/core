@@ -37,13 +37,13 @@ class ScXMLExport;
 
 struct ScMyValidation
 {
-    rtl::OUString               sName;
-    rtl::OUString               sErrorMessage;
-    rtl::OUString               sErrorTitle;
-    rtl::OUString               sImputMessage;
-    rtl::OUString               sImputTitle;
-    rtl::OUString               sFormula1;
-    rtl::OUString               sFormula2;
+    OUString               sName;
+    OUString               sErrorMessage;
+    OUString               sErrorTitle;
+    OUString               sImputMessage;
+    OUString               sImputTitle;
+    OUString               sFormula1;
+    OUString               sFormula2;
     com::sun::star::table::CellAddress          aBaseCell;
     com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
     com::sun::star::sheet::ValidationType       aValidationType;
@@ -65,36 +65,36 @@ class ScMyValidationsContainer
 {
 private:
     ScMyValidationVec           aValidationVec;
-    const rtl::OUString         sEmptyString;
-    const rtl::OUString         sERRALSTY;
-    const rtl::OUString         sIGNOREBL;
-    const rtl::OUString         sSHOWLIST;
-    const rtl::OUString         sTYPE;
-    const rtl::OUString         sSHOWINP;
-    const rtl::OUString         sSHOWERR;
-    const rtl::OUString         sINPTITLE;
-    const rtl::OUString         sINPMESS;
-    const rtl::OUString         sERRTITLE;
-    const rtl::OUString         sERRMESS;
-    const rtl::OUString         sOnError;
-    const rtl::OUString         sEventType;
-    const rtl::OUString         sStarBasic;
-    const rtl::OUString         sScript;
-    const rtl::OUString         sLibrary;
-    const rtl::OUString         sMacroName;
+    const OUString         sEmptyString;
+    const OUString         sERRALSTY;
+    const OUString         sIGNOREBL;
+    const OUString         sSHOWLIST;
+    const OUString         sTYPE;
+    const OUString         sSHOWINP;
+    const OUString         sSHOWERR;
+    const OUString         sINPTITLE;
+    const OUString         sINPMESS;
+    const OUString         sERRTITLE;
+    const OUString         sERRMESS;
+    const OUString         sOnError;
+    const OUString         sEventType;
+    const OUString         sStarBasic;
+    const OUString         sScript;
+    const OUString         sLibrary;
+    const OUString         sMacroName;
 
 public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();
     bool                        AddValidation(const com::sun::star::uno::Any& aAny,
                                     sal_Int32& nValidationIndex);
-    rtl::OUString               GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
-    rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
+    OUString               GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation);
+    OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
     void                        WriteMessage(ScXMLExport& rExport,
-                                    const rtl::OUString& sTitle, const rtl::OUString& sMessage,
+                                    const OUString& sTitle, const OUString& sMessage,
                                     const bool bShowMessage, const bool bIsHelpMessage);
     void                        WriteValidations(ScXMLExport& rExport);
-    const rtl::OUString&        GetValidationName(const sal_Int32 nIndex);
+    const OUString&        GetValidationName(const sal_Int32 nIndex);
 };
 
 //==============================================================================
@@ -174,7 +174,7 @@ public:
     void Sort();
 };
 
-typedef std::vector<rtl::OUString*>     ScMyOUStringVec;
+typedef std::vector<OUString*>     ScMyOUStringVec;
 
 struct ScMyFormatRange
 {
@@ -206,8 +206,8 @@ public:
     void SetRowDefaults(const ScMyDefaultStyleList* pDefaults) { pRowDefaults = pDefaults; }
     void SetColDefaults(const ScMyDefaultStyleList* pDefaults) { pColDefaults = pDefaults; }
     void AddNewTable(const sal_Int32 nTable);
-    bool AddStyleName(rtl::OUString* pString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
-    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, bool& bIsAutoStyle);
+    bool AddStyleName(OUString* pString, sal_Int32& rIndex, const bool bIsAutoStyle = true);
+    sal_Int32 GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix, bool& bIsAutoStyle);
     // does not delete ranges
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
         bool& bIsAutoStyle) const;
@@ -218,7 +218,7 @@ public:
                     const sal_Int32 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
                     const bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
+    OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle);
     void Sort();
 };
 
@@ -231,10 +231,10 @@ public:
     virtual ~ScColumnRowStylesBase();
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
-    sal_Int32 AddStyleName(rtl::OUString* pString);
-    sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix);
-    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) = 0;
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
+    sal_Int32 AddStyleName(OUString* pString);
+    sal_Int32 GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix);
+    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) = 0;
+    OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 
 struct ScColumnStyle
@@ -259,7 +259,7 @@ public:
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
         bool& bIsVisible);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const bool bIsVisible);
-    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
+    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
 class ScRowStyles : public ScColumnRowStylesBase
@@ -286,7 +286,7 @@ public:
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField, const sal_Int32 nStringIndex, const sal_Int32 nEndField);
-    virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
+    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
 #endif

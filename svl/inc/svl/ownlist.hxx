@@ -40,17 +40,17 @@ class SvCommand
     aus: Kommando = Argument.
 */
 {
-    ::rtl::OUString aCommand;
-    ::rtl::OUString aArgument;
+    OUString aCommand;
+    OUString aArgument;
 public:
                     SvCommand() {}
-    SvCommand( const ::rtl::OUString & rCommand, const ::rtl::OUString & rArg )
+    SvCommand( const OUString & rCommand, const OUString & rArg )
                     {
                         aCommand = rCommand;
                         aArgument = rArg;
                     }
-    const ::rtl::OUString & GetCommand() const { return aCommand; }
-    const ::rtl::OUString & GetArgument() const { return aArgument; }
+    const OUString & GetCommand() const { return aCommand; }
+    const OUString & GetArgument() const { return aArgument; }
 };
 
 typedef ::std::vector< SvCommand > SvCommandList_impl;
@@ -68,8 +68,8 @@ private:
     SvCommandList_impl  aCommandList;
 
 public:
-    SvCommand&      Append( const ::rtl::OUString & rCommand, const ::rtl::OUString & rArg );
-    bool        AppendCommands( const ::rtl::OUString & rCmd, sal_Int32 * pEaten );
+    SvCommand&      Append( const OUString & rCommand, const OUString & rArg );
+    bool        AppendCommands( const OUString & rCmd, sal_Int32 * pEaten );
 
     bool FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
     void FillSequence( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );

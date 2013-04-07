@@ -46,8 +46,8 @@ namespace
     public:
         virtual void setUp();
 
-        virtual bool load(const rtl::OUString &,
-            const rtl::OUString &rURL, const rtl::OUString &,
+        virtual bool load(const OUString &,
+            const OUString &rURL, const OUString &,
             unsigned int, unsigned int, unsigned int);
 
         void test();
@@ -64,26 +64,26 @@ namespace
         test::BootstrapFixture::setUp();
 
         m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance(
-            ::rtl::OUString(
+            OUString(
                 "com.sun.comp.hwpimport.HwpImportFilter")),
             uno::UNO_QUERY_THROW);
     }
 
-    bool HwpFilterTest::load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    bool HwpFilterTest::load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
-        aDescriptor[0].Name = rtl::OUString("URL");
+        aDescriptor[0].Name = OUString("URL");
         aDescriptor[0].Value <<= rURL;
         return m_xFilter->filter(aDescriptor);
     }
 
     void HwpFilterTest::test()
     {
-        testDir(rtl::OUString(),
+        testDir(OUString(),
             getURLFromSrc("/hwpfilter/qa/cppunit/data/"),
-            rtl::OUString());
+            OUString());
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(HwpFilterTest);

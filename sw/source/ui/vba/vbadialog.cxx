@@ -37,33 +37,33 @@ static const WordDialogTable aWordDialogTable[] =
     { 0, 0 }
 };
 
-rtl::OUString
+OUString
 SwVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
     for( const WordDialogTable* pTable = aWordDialogTable; pTable != NULL; pTable++ )
     {
         if( nIndex == pTable->wdDialog )
         {
-            return rtl::OUString::createFromAscii( pTable->ooDialog );
+            return OUString::createFromAscii( pTable->ooDialog );
         }
     }
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString
+OUString
 SwVbaDialog::getServiceImplName()
 {
-    return rtl::OUString("SwVbaDialog");
+    return OUString("SwVbaDialog");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaDialog::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Dialog" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Dialog" );
     }
     return aServiceNames;
 }

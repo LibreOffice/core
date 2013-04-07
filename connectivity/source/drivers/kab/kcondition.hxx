@@ -59,7 +59,7 @@ class KabConditionColumn : public KabCondition
 
     public:
         KabConditionColumn(
-            const ::rtl::OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool isAlwaysTrue() const;
         virtual sal_Bool isAlwaysFalse() const;
 };
@@ -68,7 +68,7 @@ class KabConditionNull : public KabConditionColumn
 {
     public:
         KabConditionNull(
-            const ::rtl::OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
 // -----------------------------------------------------------------------------
@@ -76,27 +76,27 @@ class KabConditionNotNull : public KabConditionColumn
 {
     public:
         KabConditionNotNull(
-            const ::rtl::OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
 // -----------------------------------------------------------------------------
 class KabConditionCompare : public KabConditionColumn
 {
     protected:
-        const ::rtl::OUString m_sMatchString;
+        const OUString m_sMatchString;
 
     public:
         KabConditionCompare(
-            const ::rtl::OUString &sColumnName,
-            const ::rtl::OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName,
+            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
 };
 // -----------------------------------------------------------------------------
 class KabConditionEqual : public KabConditionCompare
 {
     public:
         KabConditionEqual(
-            const ::rtl::OUString &sColumnName,
-            const ::rtl::OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName,
+            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
 // -----------------------------------------------------------------------------
@@ -104,8 +104,8 @@ class KabConditionDifferent : public KabConditionCompare
 {
     public:
         KabConditionDifferent(
-            const ::rtl::OUString &sColumnName,
-            const ::rtl::OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName,
+            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
 // -----------------------------------------------------------------------------
@@ -113,8 +113,8 @@ class KabConditionSimilar : public KabConditionCompare
 {
     public:
         KabConditionSimilar(
-            const ::rtl::OUString &sColumnName,
-            const ::rtl::OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName,
+            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
         virtual sal_Bool eval(const ::KABC::Addressee &aAddressee) const;
 };
 // -----------------------------------------------------------------------------

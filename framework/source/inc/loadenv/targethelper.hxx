@@ -75,7 +75,7 @@ class TargetHelper
             @return It returns <TRUE/> if <var>sCheckTarget</var> represent
                     the expected <var>eSpecialTarget</var> value; <FALSE/> otherwise.
          */
-        static sal_Bool matchSpecialTarget(const ::rtl::OUString& sCheckTarget  ,
+        static sal_Bool matchSpecialTarget(const OUString& sCheckTarget  ,
                                                  ESpecialTarget   eSpecialTarget);
 
         //___________________________________________
@@ -99,7 +99,7 @@ class TargetHelper
             @param  sName
                     the new frame name, which sould be checked.
          */
-        static sal_Bool isValidNameForFrame(const ::rtl::OUString& sName);
+        static sal_Bool isValidNameForFrame(const OUString& sName);
 };
 
 } // namespace framework

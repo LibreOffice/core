@@ -532,7 +532,7 @@ String2Underline( uno::Any& rAny, const gchar * value )
 static gchar*
 GetString(const uno::Any& rAny)
 {
-    rtl::OString aFontName = rtl::OUStringToOString( rAny.get< rtl::OUString > (), RTL_TEXTENCODING_UTF8 );
+    OString aFontName = OUStringToOString( rAny.get< OUString > (), RTL_TEXTENCODING_UTF8 );
 
     if( !aFontName.isEmpty() )
         return g_strdup( aFontName.getStr() );
@@ -543,11 +543,11 @@ GetString(const uno::Any& rAny)
 static bool
 SetString( uno::Any& rAny, const gchar * value )
 {
-    rtl::OString aFontName( value );
+    OString aFontName( value );
 
     if( !aFontName.isEmpty() )
     {
-        rAny = uno::makeAny( rtl::OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ) );
+        rAny = uno::makeAny( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ) );
         return true;
     }
 
@@ -709,8 +709,8 @@ Locale2String(const uno::Any& rAny)
 {
     lang::Locale aLocale = rAny.get<lang::Locale> ();
     return g_strdup_printf( "%s-%s",
-        rtl::OUStringToOString( aLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
-        rtl::OUStringToOString( aLocale.Country, RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase().getStr() );
+        OUStringToOString( aLocale.Language, RTL_TEXTENCODING_ASCII_US).getStr(),
+        OUStringToOString( aLocale.Country, RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase().getStr() );
 }
 
 static bool
@@ -725,11 +725,11 @@ String2Locale( uno::Any& rAny, const gchar * value )
 
         lang::Locale aLocale;
 
-        aLocale.Language = rtl::OUString::createFromAscii(str_array[0]);
+        aLocale.Language = OUString::createFromAscii(str_array[0]);
         if( str_array[1] != NULL )
         {
             gchar * country = g_ascii_strup(str_array[1], -1);
-            aLocale.Country = rtl::OUString::createFromAscii(country);
+            aLocale.Country = OUString::createFromAscii(country);
             g_free(country);
         }
 
@@ -1339,7 +1339,7 @@ attribute_set_map_to_property_values(
                 if( ! g_TextAttrMap[text_attr].toPropertyValue( aAttributeList[nIndex].Value, attribute->value) )
                     return false;
 
-                aAttributeList[nIndex].Name = rtl::OUString::createFromAscii( g_TextAttrMap[text_attr].name );
+                aAttributeList[nIndex].Name = OUString::createFromAscii( g_TextAttrMap[text_attr].name );
                 aAttributeList[nIndex].State = beans::PropertyState_DIRECT_VALUE;
                 ++nIndex;
             }

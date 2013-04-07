@@ -46,9 +46,6 @@ using namespace osl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-using ::rtl::OUString;
-
-
 // The client
 // has to call XComponent::dispose. The thread that calls initialize
 // must also execute the destruction of the instance. This is because

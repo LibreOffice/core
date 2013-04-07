@@ -97,9 +97,9 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     return new ::ucbhelper::ContentIdentifier( aIdentifier );
 }
 
-::rtl::OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const
+OUString OContentHelper::impl_getHierarchicalName( bool _includingRootContainer ) const
 {
-    ::rtl::OUStringBuffer aHierarchicalName( m_pImpl->m_aProps.aTitle );
+    OUStringBuffer aHierarchicalName( m_pImpl->m_aProps.aTitle );
     Reference< XInterface > xParent = m_xParentContainer;
     while( xParent.is() )
     {
@@ -108,20 +108,20 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
         xParent.set( xChild.is() ? xChild->getParent() : Reference< XInterface >(), UNO_QUERY );
         if ( xProp.is() && xParent.is() )
         {
-            ::rtl::OUString sName;
+            OUString sName;
             xProp->getPropertyValue( PROPERTY_NAME ) >>= sName;
 
-            ::rtl::OUString sPrevious = aHierarchicalName.makeStringAndClear();
+            OUString sPrevious = aHierarchicalName.makeStringAndClear();
             aHierarchicalName.append( sName + "/" + sPrevious );
         }
     }
-    ::rtl::OUString sHierarchicalName( aHierarchicalName.makeStringAndClear() );
+    OUString sHierarchicalName( aHierarchicalName.makeStringAndClear() );
     if ( !_includingRootContainer )
         sHierarchicalName = sHierarchicalName.copy( sHierarchicalName.indexOf( '/' ) + 1 );
     return sHierarchicalName;
 }
 
-::rtl::OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
+OUString SAL_CALL OContentHelper::getContentType() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -170,7 +170,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -190,7 +190,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -202,7 +202,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
             OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                    rtl::OUString(),
+                                    OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -232,7 +232,7 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
 
         ucbhelper::cancelCommandExecution(
             makeAny( UnsupportedCommandException(
-                            rtl::OUString(),
+                            OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
         // Unreachable
@@ -246,44 +246,44 @@ void SAL_CALL OContentHelper::abort( sal_Int32 /*CommandId*/ ) throw (RuntimeExc
 }
 
 // XPropertiesChangeNotifier
-void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::addPropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     sal_Int32 nCount = PropertyNames.getLength();
     if ( !nCount )
     {
         // Note: An empty sequence means a listener for "all" properties.
-        m_aPropertyChangeListeners.addInterface(::rtl::OUString(), Listener );
+        m_aPropertyChangeListeners.addInterface(OUString(), Listener );
     }
     else
     {
-        const ::rtl::OUString* pSeq = PropertyNames.getConstArray();
+        const OUString* pSeq = PropertyNames.getConstArray();
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-            const ::rtl::OUString& rName = pSeq[ n ];
+            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.addInterface(rName, Listener );
         }
     }
 }
 
-void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::rtl::OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
+void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< OUString >& PropertyNames, const Reference< XPropertiesChangeListener >& Listener ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     sal_Int32 nCount = PropertyNames.getLength();
     if ( !nCount )
     {
         // Note: An empty sequence means a listener for "all" properties.
-        m_aPropertyChangeListeners.removeInterface( ::rtl::OUString(), Listener );
+        m_aPropertyChangeListeners.removeInterface( OUString(), Listener );
     }
     else
     {
-        const ::rtl::OUString* pSeq = PropertyNames.getConstArray();
+        const OUString* pSeq = PropertyNames.getConstArray();
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-            const ::rtl::OUString& rName = pSeq[ n ];
+            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_aPropertyChangeListeners.removeInterface( rName, Listener );
         }
@@ -291,12 +291,12 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
 }
 
 // XPropertyContainer
-void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL OContentHelper::addProperty( const OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
     OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
 
-void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL OContentHelper::removeProperty( const OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
     OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
@@ -365,7 +365,7 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
         }
         else if ( rValue.Name == "Title" )
         {
-            rtl::OUString aNewValue;
+            OUString aNewValue;
             if ( rValue.Value >>= aNewValue )
             {
                 if ( aNewValue != m_pImpl->m_aProps.aTitle )
@@ -460,13 +460,13 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
         // Append all Core Properties.
         xRow->appendString (
             Property( "ContentType", -1,
-                      getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                      getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND
                         | PropertyAttribute::READONLY ),
             getContentType() );
         xRow->appendString (
             Property( "Title", -1,
-                      getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                      getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             m_pImpl->m_aProps.aTitle );
         xRow->appendBoolean(
@@ -495,7 +495,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
     if ( nCount )
     {
         // First, notify listeners interested in changes of every property.
-        OInterfaceContainerHelper* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( ::rtl::OUString() );
+        OInterfaceContainerHelper* pAllPropsContainer = m_aPropertyChangeListeners.getContainer( OUString() );
         if ( pAllPropsContainer )
         {
             OInterfaceIteratorHelper aIter( *pAllPropsContainer );
@@ -517,7 +517,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         for ( sal_Int32 n = 0; n < nCount; ++n, ++propertyChangeEvent )
         {
             const PropertyChangeEvent& rEvent = *propertyChangeEvent;
-            const ::rtl::OUString& rName = rEvent.PropertyName;
+            const OUString& rName = rEvent.PropertyName;
 
             OInterfaceContainerHelper* pPropsContainer = m_aPropertyChangeListeners.getContainer( rName );
             if ( pPropsContainer )
@@ -597,7 +597,7 @@ void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent
     m_xParentContainer = _xParent;
 }
 
-void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify )
+void OContentHelper::impl_rename_throw(const OUString& _sNewName,bool _bNotify )
 {
     osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
     if ( _sNewName.equals( m_pImpl->m_aProps.aTitle ) )
@@ -626,7 +626,7 @@ void OContentHelper::impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bN
     }
 }
 
-void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
+void SAL_CALL OContentHelper::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
 
     impl_rename_throw(newName);

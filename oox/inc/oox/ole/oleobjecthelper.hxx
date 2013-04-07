@@ -39,8 +39,8 @@ namespace ole {
 struct OleObjectInfo
 {
     StreamDataSequence  maEmbeddedData;     ///< Data of an embedded OLE object.
-    ::rtl::OUString     maTargetLink;       ///< Path to external data for linked OLE object.
-    ::rtl::OUString     maProgId;
+    OUString     maTargetLink;       ///< Path to external data for linked OLE object.
+    OUString     maProgId;
     bool                mbLinked;           ///< True = linked OLE object, false = embedded OLE object.
     bool                mbShowAsIcon;       ///< True = show as icon, false = show contents.
     bool                mbAutoUpdate;
@@ -65,7 +65,7 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedObjectResolver > mxResolver;
-    const ::rtl::OUString maEmbeddedObjScheme;
+    const OUString maEmbeddedObjScheme;
     sal_Int32           mnObjectId;
 };
 

@@ -134,9 +134,9 @@ sal_Bool EditUndo::CanRepeat(SfxRepeatTarget&) const
     return sal_False;
 }
 
-rtl::OUString EditUndo::GetComment() const
+OUString EditUndo::GetComment() const
 {
-    rtl::OUString aComment;
+    OUString aComment;
 
     if (mpEditEngine)
         aComment = mpEditEngine->GetUndoComment( GetId() );

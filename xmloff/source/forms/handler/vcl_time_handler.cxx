@@ -47,14 +47,14 @@ namespace xmloff
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString VCLTimeHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
+    OUString VCLTimeHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {
         OSL_ENSURE( false, "VCLTimeHandler::getAttributeValue: unexpected call!" );
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
+    OUString VCLTimeHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         sal_Int32 nVCLTime(0);
         OSL_VERIFY( i_propertyValue >>= nVCLTime );
@@ -66,13 +66,13 @@ namespace xmloff
         aDuration.Seconds = aVCLTime.GetSec();
         aDuration.MilliSeconds = aVCLTime.Get100Sec() * 10;
 
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         ::sax::Converter::convertDuration( aBuffer, aDuration );
         return aBuffer.makeStringAndClear();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool VCLTimeHandler::getPropertyValues( const ::rtl::OUString i_attributeValue, PropertyValues& o_propertyValues ) const
+    bool VCLTimeHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         sal_Int32 nVCLTime(0);
 

@@ -146,8 +146,8 @@ class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTy
     virtual bool IsDatabase() const;
     virtual bool IsExternal() const;
     virtual bool IsNamedRange() const;
-    virtual rtl::OUString GetSelectedNamedRange() const;
-    virtual void AppendNamedRange(const ::rtl::OUString& rName);
+    virtual OUString GetSelectedNamedRange() const;
+    virtual void AppendNamedRange(const OUString& rName);
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg  //add for ScDataPilotServiceDlg
@@ -265,7 +265,7 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScM
     virtual sal_uInt16  GetSelectedTable        () const;
     virtual bool    GetCopyTable            () const;
     virtual bool    GetRenameTable          () const;
-    virtual void    GetTabNameString( rtl::OUString& rString ) const;
+    virtual void    GetTabNameString( OUString& rString ) const;
     virtual void    SetForceCopyTable       ();
     virtual void    EnableCopyTable         (sal_Bool bFlag=true);
     virtual void    EnableRenameTable       (sal_Bool bFlag=true);
@@ -280,7 +280,7 @@ class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg  //add for S
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg  //add for ScNamePasteDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg )
-    virtual std::vector<rtl::OUString>          GetSelectedNames() const;
+    virtual std::vector<OUString>          GetSelectedNames() const;
     virtual bool                                IsAllSelected() const;
 };
 
@@ -326,10 +326,10 @@ class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for ScNewScenarioDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg )
-    virtual void SetScenarioData( const rtl::OUString& rName, const rtl::OUString& rComment,
+    virtual void SetScenarioData( const OUString& rName, const OUString& rComment,
                             const Color& rColor, sal_uInt16 nFlags );
 
-    virtual void GetScenarioData( rtl::OUString& rName, rtl::OUString& rComment,
+    virtual void GetScenarioData( OUString& rName, OUString& rComment,
                             Color& rColor, sal_uInt16& rFlags ) const;
 };
 
@@ -338,7 +338,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const String& rString, sal_Bool bSelected );
     virtual sal_uInt16  GetSelectEntryCount() const;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText, const rtl::OString& sDlgHelpId, const rtl::OString& sLbHelpId );
+    virtual void SetDescription(const String& rTitle, const String& rFixedText, const OString& sDlgHelpId, const OString& sLbHelpId );
     virtual String  GetSelectEntry(sal_uInt16 nPos) const;
     virtual sal_uInt16  GetSelectEntryPos(sal_uInt16 nPos) const;
 };
@@ -346,7 +346,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add for ScStringInputDlg
 {
     DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
-    virtual void GetInputString( rtl::OUString& rString ) const;
+    virtual void GetInputString( OUString& rString ) const;
 };
 
 class AbstractScTabBgColorDlg_Impl :  public AbstractScTabBgColorDlg  //add for ScTabBgColorDlg
@@ -422,7 +422,7 @@ public:
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg (  Window* pParent, sal_Bool bEnableExternal, int nId ) ; //add for ScDataPilotSourceTypeDlg
 
     virtual AbstractScDataPilotServiceDlg * CreateScDataPilotServiceDlg( Window* pParent, //add for ScDataPilotServiceDlg
-                                                                        const com::sun::star::uno::Sequence<rtl::OUString>& rServices,
+                                                                        const com::sun::star::uno::Sequence<OUString>& rServices,
                                                                         int nId );
     virtual AbstractScDeleteCellDlg * CreateScDeleteCellDlg( Window* pParent, int nId,
                                                             sal_Bool bDisallowCellMove = false ); //add for ScDeleteCellDlg
@@ -529,14 +529,14 @@ public:
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
+                                                                const OString& sHelpId, const OString& sEditHelpId,
                                                                 int nId );
 
     virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScStringInputDlg
                                                                 const String& rTitle, //Dialog Title
                                                                 const String& rTabBgColorNoColorText, //Label for no tab color
                                                                 const Color& rDefaultColor, //Currently selected Color
-                                                                const rtl::OString& sHelpId ,
+                                                                const OString& sHelpId ,
                                                                 int nId );
 
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg

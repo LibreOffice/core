@@ -40,7 +40,7 @@ rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Loc
 {
     //Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
     //in last-ditch broken-file-format cases to guess the right 8bit encodings
-    const rtl::OUString &rLanguage = rLocale.Language;
+    const OUString &rLanguage = rLocale.Language;
     if (rLanguage == "cs" || rLanguage == "hu" || rLanguage == "pl")
         return RTL_TEXTENCODING_MS_1250;
     if (rLanguage == "ru" || rLanguage == "uk")
@@ -99,7 +99,7 @@ DateTime DTTM2DateTime( long lDTTM )
 }
 
 /// Append the number as 2-digit when less than 10.
-static void lcl_AppendTwoDigits( rtl::OStringBuffer &rBuffer, sal_Int32 nNum )
+static void lcl_AppendTwoDigits( OStringBuffer &rBuffer, sal_Int32 nNum )
 {
     if ( nNum < 0 || nNum > 99 )
     {
@@ -113,14 +113,14 @@ static void lcl_AppendTwoDigits( rtl::OStringBuffer &rBuffer, sal_Int32 nNum )
     rBuffer.append( nNum );
 }
 
-rtl::OString DateTimeToOString( const DateTime& rDateTime )
+OString DateTimeToOString( const DateTime& rDateTime )
 {
     DateTime aInUTC( rDateTime );
 // HACK: this is correct according to the spec, but MSOffice believes everybody lives
 // in UTC+0 when reading it back
 //    aInUTC.ConvertToUTC();
 
-    rtl::OStringBuffer aBuffer( 25 );
+    OStringBuffer aBuffer( 25 );
     aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
     aBuffer.append( '-' );
 
@@ -143,10 +143,10 @@ rtl::OString DateTimeToOString( const DateTime& rDateTime )
 }
 
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
-    rtl_TextEncoding& rChrSet, rtl::OUString& rFontName, bool bDisableUnicodeSupport)
+    rtl_TextEncoding& rChrSet, OUString& rFontName, bool bDisableUnicodeSupport)
 {
     StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
-    rtl::OUString sFont = pConvert->ConvertChar(cChar);
+    OUString sFont = pConvert->ConvertChar(cChar);
     delete pConvert;
     if (!sFont.isEmpty())
     {
@@ -224,7 +224,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
   U+FE50–U+FE6F Use latin font
   Otherwise Use ea font
 */
-TextCategory categorizeCodePoint(sal_uInt32 codePoint, const rtl::OUString &rBcp47LanguageTag)
+TextCategory categorizeCodePoint(sal_uInt32 codePoint, const OUString &rBcp47LanguageTag)
 {
     TextCategory eRet = ea;
     if (codePoint <= 0x007F)

@@ -35,8 +35,8 @@ RscTop::RscTop( Atom nId, sal_uInt32 nTypIdent, RscTop * pSuperCl )
                     pSuperClass->aCallParType );
 }
 
-void RscTop::SetCallPar(const rtl::OString& rPar1, const rtl::OString& rPar2,
-    const rtl::OString& rParType)
+void RscTop::SetCallPar(const OString& rPar1, const OString& rPar2,
+    const OString& rParType)
 {
     aCallPar1 = rPar1;
     aCallPar2 = rPar2;

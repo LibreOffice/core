@@ -214,7 +214,7 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
 }
 
 /// get the accessible base name for an object
-::rtl::OUString
+OUString
     ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
     throw (::com::sun::star::uno::RuntimeException)
 {

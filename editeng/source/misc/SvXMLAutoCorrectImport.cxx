@@ -38,7 +38,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     xStorage ( rNewStorage )
 {
     GetNamespaceMap().Add(
-            rtl::OUString(aBlockList),
+            OUString(aBlockList),
             GetXMLToken ( XML_N_BLOCK_LIST),
             XML_NAMESPACE_BLOCKLIST );
 }
@@ -149,7 +149,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
     rList (rNewList)
 {
     GetNamespaceMap().Add(
-            rtl::OUString(aBlockList),
+            OUString(aBlockList),
             GetXMLToken ( XML_N_BLOCK_LIST),
             XML_NAMESPACE_BLOCKLIST );
 }

@@ -61,7 +61,7 @@ void SAL_CALL KabConnection::release() throw()
     relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
-void KabConnection::construct(const ::rtl::OUString&, const Sequence< PropertyValue >&) throw(SQLException)
+void KabConnection::construct(const OUString&, const Sequence< PropertyValue >&) throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -87,7 +87,7 @@ Reference< XStatement > SAL_CALL KabConnection::createStatement(  ) throw(SQLExc
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -99,7 +99,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const 
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -108,7 +108,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const ::rtl
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
@@ -191,7 +191,7 @@ sal_Bool SAL_CALL KabConnection::isReadOnly(  ) throw(SQLException, RuntimeExcep
     return sal_False;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL KabConnection::setCatalog( const ::rtl::OUString& ) throw(SQLException, RuntimeException)
+void SAL_CALL KabConnection::setCatalog( const OUString& ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -199,14 +199,14 @@ void SAL_CALL KabConnection::setCatalog( const ::rtl::OUString& ) throw(SQLExcep
     // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
 
 
     // return your current catalog
-    return ::rtl::OUString();
+    return OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 ) throw(SQLException, RuntimeException)

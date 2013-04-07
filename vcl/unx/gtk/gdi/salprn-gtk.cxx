@@ -95,7 +95,7 @@ public:
     }
     void updateControllerPrintRange();
 #if 0
-    void ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings* pSettings) const;
+    void ExportAsPDF(const OUString &rFileURL, GtkPrintSettings* pSettings) const;
 #endif
     ~GtkPrintDialog();
 
@@ -130,7 +130,7 @@ private:
 private:
     GtkWidget* m_pDialog;
     vcl::PrinterController& m_rController;
-    std::map<GtkWidget*, rtl::OUString> m_aControlToPropertyMap;
+    std::map<GtkWidget*, OUString> m_aControlToPropertyMap;
     std::map<GtkWidget*, sal_Int32> m_aControlToNumValMap;
     boost::shared_ptr<GtkPrintWrapper> m_pWrapper;
 };
@@ -138,8 +138,8 @@ private:
 
 struct GtkSalPrinter_Impl
 {
-    rtl::OString m_sSpoolFile;
-    rtl::OUString m_sJobName;
+    OString m_sSpoolFile;
+    OUString m_sJobName;
     GtkPrinter* m_pPrinter;
     GtkPrintSettings* m_pSettings;
 
@@ -197,9 +197,9 @@ GtkSalPrinter::GtkSalPrinter(SalInfoPrinter* const i_pInfoPrinter)
 
 bool
 GtkSalPrinter::impl_doJob(
-        const rtl::OUString* const i_pFileName,
-        const rtl::OUString& i_rJobName,
-        const rtl::OUString& i_rAppName,
+        const OUString* const i_pFileName,
+        const OUString& i_rJobName,
+        const OUString& i_rAppName,
         ImplJobSetup* const io_pSetupData,
         const int i_nCopies,
         const bool i_bCollate,
@@ -231,9 +231,9 @@ GtkSalPrinter::impl_doJob(
 
 sal_Bool
 GtkSalPrinter::StartJob(
-        const rtl::OUString* const i_pFileName,
-        const rtl::OUString& i_rJobName,
-        const rtl::OUString& i_rAppName,
+        const OUString* const i_pFileName,
+        const OUString& i_rJobName,
+        const OUString& i_rAppName,
         ImplJobSetup* io_pSetupData,
         vcl::PrinterController& io_rController)
 {
@@ -245,9 +245,9 @@ GtkSalPrinter::StartJob(
     m_pImpl.reset(new GtkSalPrinter_Impl());
     m_pImpl->m_sJobName = i_rJobName;
 
-    rtl::OString sFileName;
+    OString sFileName;
     if (i_pFileName)
-        sFileName = rtl::OUStringToOString(*i_pFileName, osl_getThreadTextEncoding());
+        sFileName = OUStringToOString(*i_pFileName, osl_getThreadTextEncoding());
 
     GtkPrintDialog aDialog(io_rController);
     if (!aDialog.run())
@@ -265,7 +265,7 @@ GtkSalPrinter::StartJob(
         const gchar *pStr = gtk_print_settings_get(m_pImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
         if (pStr && !strcmp(pStr, "pdf"))
         {
-            aDialog.ExportAsPDF(rtl::OUString((const sal_Char *)uri, strlen((const sal_Char *)uri), RTL_TEXTENCODING_UTF8), m_pImpl->m_pSettings);
+            aDialog.ExportAsPDF(OUString((const sal_Char *)uri, strlen((const sal_Char *)uri), RTL_TEXTENCODING_UTF8), m_pImpl->m_pSettings);
             bDoJob = false;
         }
     }
@@ -277,10 +277,10 @@ GtkSalPrinter::StartJob(
     bool bCollate = false;
 
     //To-Do proper name, watch for encodings
-    sFileName = rtl::OString("/tmp/hacking.ps");
+    sFileName = OString("/tmp/hacking.ps");
     m_pImpl->m_sSpoolFile = sFileName;
 
-    rtl::OUString aFileName = rtl::OStringToOUString(sFileName, osl_getThreadTextEncoding());
+    OUString aFileName = OStringToOUString(sFileName, osl_getThreadTextEncoding());
 
     //To-Do, swap ps/pdf for gtk_printer_accepts_ps()/gtk_printer_accepts_pdf() ?
 
@@ -315,7 +315,7 @@ GtkSalPrinter::EndJob()
 #endif
 
     GtkPrintJob* const pJob = pWrapper->print_job_new(
-        rtl::OUStringToOString(m_pImpl->m_sJobName, RTL_TEXTENCODING_UTF8).getStr(),
+        OUStringToOString(m_pImpl->m_sJobName, RTL_TEXTENCODING_UTF8).getStr(),
         m_pImpl->m_pPrinter, m_pImpl->m_pSettings, pPageSetup);
 
     GError* error = NULL;
@@ -344,13 +344,13 @@ namespace
 void
 lcl_setHelpText(
         GtkWidget* const io_pWidget,
-        const uno::Sequence<rtl::OUString>& i_rHelpTexts,
+        const uno::Sequence<OUString>& i_rHelpTexts,
         const sal_Int32 i_nIndex)
 {
 #if GTK_CHECK_VERSION(2,12,0)
     if (i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength())
         gtk_widget_set_tooltip_text(io_pWidget,
-            rtl::OUStringToOString(i_rHelpTexts.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(i_rHelpTexts.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8).getStr());
 #else
     (void)io_pWidget;
     (void)i_rHelpTexts;
@@ -362,8 +362,8 @@ lcl_setHelpText(
 static GtkWidget*
 lcl_makeFrame(
         GtkWidget* const i_pChild,
-        const rtl::OUString &i_rText,
-        const uno::Sequence<rtl::OUString> &i_rHelpTexts,
+        const OUString &i_rText,
+        const uno::Sequence<OUString> &i_rHelpTexts,
         sal_Int32* const io_pCurHelpText)
 {
     GtkWidget* const pLabel = gtk_label_new(NULL);
@@ -372,7 +372,7 @@ lcl_makeFrame(
 
     {
         gchar* const pText = g_markup_printf_escaped("<b>%s</b>",
-            rtl::OUStringToOString(i_rText, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(i_rText, RTL_TEXTENCODING_UTF8).getStr());
         gtk_label_set_markup_with_mnemonic(GTK_LABEL(pLabel), pText);
         g_free(pText);
     }
@@ -391,11 +391,11 @@ lcl_makeFrame(
 void
 lcl_extractHelpTextsOrIds(
         const beans::PropertyValue& rEntry,
-        uno::Sequence<rtl::OUString>& rHelpStrings)
+        uno::Sequence<OUString>& rHelpStrings)
 {
     if (!(rEntry.Value >>= rHelpStrings))
     {
-        rtl::OUString aHelpString;
+        OUString aHelpString;
         if ((rEntry.Value >>= aHelpString))
         {
             rHelpStrings.realloc(1);
@@ -473,8 +473,8 @@ GtkPrintDialog::impl_initDialog()
 void
 GtkPrintDialog::impl_initCustomTab()
 {
-    typedef std::map<rtl::OUString, GtkWidget*> DependencyMap_t;
-    typedef std::vector<std::pair<GtkWidget*, rtl::OUString> > CustomTabs_t;
+    typedef std::map<OUString, GtkWidget*> DependencyMap_t;
+    typedef std::vector<std::pair<GtkWidget*, OUString> > CustomTabs_t;
 
     const uno::Sequence<beans::PropertyValue>& rOptions(m_rController.getUIOptions());
     DependencyMap_t aPropertyToDependencyRowMap;
@@ -489,15 +489,15 @@ GtkPrintDialog::impl_initCustomTab()
         uno::Sequence<beans::PropertyValue> aOptProp;
         rOptions[i].Value >>= aOptProp;
 
-        rtl::OUString aCtrlType;
-        rtl::OUString aText;
-        rtl::OUString aPropertyName;
-        uno::Sequence<rtl::OUString> aChoices;
+        OUString aCtrlType;
+        OUString aText;
+        OUString aPropertyName;
+        uno::Sequence<OUString> aChoices;
         uno::Sequence<sal_Bool> aChoicesDisabled;
-        uno::Sequence<rtl::OUString> aHelpTexts;
+        uno::Sequence<OUString> aHelpTexts;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
-        rtl::OUString aDependsOnName;
+        OUString aDependsOnName;
         sal_Int32 nDependsOnValue = 0;
         sal_Bool bUseDependencyRow = sal_False;
         sal_Bool bIgnore = sal_False;
@@ -509,7 +509,7 @@ GtkPrintDialog::impl_initCustomTab()
             const beans::PropertyValue& rEntry(aOptProp[ n ]);
             if ( rEntry.Name == "Text" )
             {
-                rtl::OUString aValue;
+                OUString aValue;
                 rEntry.Value >>= aValue;
                 aText = aValue.replace('~', '_');
             }
@@ -537,7 +537,7 @@ GtkPrintDialog::impl_initCustomTab()
                 rEntry.Value >>= nMaxValue;
             else if ( rEntry.Name == "HelpId" )
             {
-                uno::Sequence<rtl::OUString> aHelpIds;
+                uno::Sequence<OUString> aHelpIds;
                 lcl_extractHelpTextsOrIds(rEntry, aHelpIds);
                 Help* const pHelp = Application::GetHelp();
                 if (pHelp)
@@ -619,7 +619,7 @@ GtkPrintDialog::impl_initCustomTab()
             if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Bool")) && pCurParent)
             {
                 pWidget = gtk_check_button_new_with_mnemonic(
-                    rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+                    OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
                 lcl_setHelpText(pWidget, aHelpTexts, 0);
                 m_aControlToPropertyMap[pWidget] = aPropertyName;
 
@@ -649,14 +649,14 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                     pWidget = gtk_radio_button_new_with_mnemonic_from_widget(
                         GTK_RADIO_BUTTON(m == 0 ? NULL : pWidget),
-                        rtl::OUStringToOString(aChoices[m].replace('~', '_'), RTL_TEXTENCODING_UTF8).getStr());
+                        OUStringToOString(aChoices[m].replace('~', '_'), RTL_TEXTENCODING_UTF8).getStr());
                     lcl_setHelpText(pWidget, aHelpTexts, nCurHelpText++);
                     m_aControlToPropertyMap[pWidget] = aPropertyName;
                     m_aControlToNumValMap[pWidget] = m;
                     GtkWidget* const pRow = gtk_hbox_new(FALSE, 12);
                     gtk_box_pack_start(GTK_BOX(pVbox), pRow, FALSE, FALSE, 0);
                     gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
-                    aPropertyToDependencyRowMap[aPropertyName + rtl::OUString::valueOf(m)] = pRow;
+                    aPropertyToDependencyRowMap[aPropertyName + OUString::valueOf(m)] = pRow;
                     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pWidget), m == nSelectVal);
                     gtk_widget_set_sensitive(pWidget,
                         m_rController.isUIOptionEnabled(aPropertyName) && pVal != NULL);
@@ -684,7 +684,7 @@ GtkPrintDialog::impl_initCustomTab()
                    for (sal_Int32 m = 0; m != aChoices.getLength(); m++)
                    {
                        lcl_combo_box_text_append(pWidget,
-                           rtl::OUStringToOString(aChoices[m], RTL_TEXTENCODING_UTF8).getStr());
+                           OUStringToOString(aChoices[m], RTL_TEXTENCODING_UTF8).getStr());
                    }
 
                    sal_Int32 nSelectVal = 0;
@@ -698,12 +698,12 @@ GtkPrintDialog::impl_initCustomTab()
                 {
                    pWidget = gtk_entry_new();
 
-                   rtl::OUString aCurVal;
+                   OUString aCurVal;
                    pVal = m_rController.getValue(aPropertyName);
                    if (pVal && pVal->Value.hasValue())
                        pVal->Value >>= aCurVal;
                    gtk_entry_set_text(GTK_ENTRY(pWidget),
-                       rtl::OUStringToOString(aCurVal, RTL_TEXTENCODING_UTF8).getStr());
+                       OUStringToOString(aCurVal, RTL_TEXTENCODING_UTF8).getStr());
                 }
                 else if (aCtrlType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Range")) && pCurParent)
                 {
@@ -725,7 +725,7 @@ GtkPrintDialog::impl_initCustomTab()
                 if (!aText.isEmpty())
                 {
                     GtkWidget* const pLabel = gtk_label_new_with_mnemonic(
-                        rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+                        OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
                     gtk_label_set_mnemonic_widget(GTK_LABEL(pLabel), pWidget);
                     gtk_box_pack_start(GTK_BOX(pHbox), pLabel, FALSE, FALSE, 0);
                 }
@@ -743,7 +743,7 @@ GtkPrintDialog::impl_initCustomTab()
             {
                 if (bUseDependencyRow && !aDependsOnName.isEmpty())
                 {
-                    pRow = aPropertyToDependencyRowMap[aDependsOnName + rtl::OUString::valueOf(nDependsOnValue)];
+                    pRow = aPropertyToDependencyRowMap[aDependsOnName + OUString::valueOf(nDependsOnValue)];
                     if (!pRow)
                     {
                         gtk_widget_destroy(pWidget);
@@ -759,7 +759,7 @@ GtkPrintDialog::impl_initCustomTab()
                     gtk_box_pack_start(GTK_BOX(pCurParent), pRow, FALSE, FALSE, 0);
                 }
                 if (!pGroup)
-                    aPropertyToDependencyRowMap[aPropertyName + rtl::OUString::valueOf(sal_Int32(0))] = pRow;
+                    aPropertyToDependencyRowMap[aPropertyName + OUString::valueOf(sal_Int32(0))] = pRow;
                 gtk_box_pack_start(GTK_BOX(pRow), pWidget, FALSE, FALSE, 0);
             }
         }
@@ -773,7 +773,7 @@ GtkPrintDialog::impl_initCustomTab()
     {
         gtk_widget_show_all(aI->first);
         m_pWrapper->print_unix_dialog_add_custom_tab(GTK_PRINT_UNIX_DIALOG(m_pDialog), aI->first,
-            gtk_label_new(rtl::OUStringToOString(aI->second, RTL_TEXTENCODING_UTF8).getStr()));
+            gtk_label_new(OUStringToOString(aI->second, RTL_TEXTENCODING_UTF8).getStr()));
     }
 }
 
@@ -798,7 +798,7 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     }
 
     beans::PropertyValue* const pPrintContent(
-            m_rController.getValue(rtl::OUString("PrintContent")));
+            m_rController.getValue(OUString("PrintContent")));
 
     if (pPrintContent)
     {
@@ -835,7 +835,7 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
 void
 GtkPrintDialog::impl_checkOptionalControlDependencies()
 {
-    for (std::map<GtkWidget*, rtl::OUString>::iterator it = m_aControlToPropertyMap.begin();
+    for (std::map<GtkWidget*, OUString>::iterator it = m_aControlToPropertyMap.begin();
          it != m_aControlToPropertyMap.end(); ++it)
     {
         gtk_widget_set_sensitive(it->first, m_rController.isUIOptionEnabled(it->second));
@@ -847,7 +847,7 @@ beans::PropertyValue*
 GtkPrintDialog::impl_queryPropertyValue(GtkWidget* const i_pWidget) const
 {
     beans::PropertyValue* pVal(0);
-    std::map<GtkWidget*, rtl::OUString>::const_iterator aIt(m_aControlToPropertyMap.find(i_pWidget));
+    std::map<GtkWidget*, OUString>::const_iterator aIt(m_aControlToPropertyMap.find(i_pWidget));
     if (aIt != m_aControlToPropertyMap.end())
     {
         pVal = m_rController.getValue(aIt->second);
@@ -936,7 +936,7 @@ GtkPrintDialog::run()
 }
 
 #if 0
-void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings *pSettings) const
+void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSettings) const
 {
     uno::Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFrame > xFrame(xDesktop->getActiveFrame());
@@ -944,7 +944,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
         xFrame = uno::Reference < XFrame >(xDesktop, UNO_QUERY);
 
     uno::Reference < XFilter > xFilter(
-        ::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString("com.sun.star.document.PDFFilter")),
+        ::comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.document.PDFFilter")),
         UNO_QUERY);
 
     if (xFilter.is())
@@ -962,9 +962,9 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
         uno::Reference< XExporter > xExport(xFilter, UNO_QUERY);
         xExport->setSourceDocument(xDoc);
         uno::Sequence<beans::PropertyValue> aFilterData(2);
-        aFilterData[0].Name = rtl::OUString("PageLayout");
+        aFilterData[0].Name = OUString("PageLayout");
         aFilterData[0].Value <<= sal_Int32(0);
-        aFilterData[1].Name = rtl::OUString("FirstPageOnLeft");
+        aFilterData[1].Name = OUString("FirstPageOnLeft");
         aFilterData[1].Value <<= sal_False;
 
 
@@ -987,8 +987,8 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                     aRangeText.AppendAscii(",");
             }
             aFilterData.realloc(aFilterData.getLength()+1);
-            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("PageRange");
-            aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(aRangeText);
+            aFilterData[aFilterData.getLength()-1].Name = OUString("PageRange");
+            aFilterData[aFilterData.getLength()-1].Value <<= OUString(aRangeText);
         }
         else if (pStr && !strcmp(pStr, "current"))
         {
@@ -1012,7 +1012,7 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                        xSheets = uno::Reference< XIndexAccess >(xSheetDoc->getSheets(), UNO_QUERY);
                    if (xSheets.is())
                    {
-                       const rtl::OUString &rName = xName->getName();
+                       const OUString &rName = xName->getName();
 
                        sal_Int32 i;
 
@@ -1027,8 +1027,8 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
                        if (i < xSheets->getCount())
                        {
                             aFilterData.realloc(aFilterData.getLength()+1);
-                            aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("PageRange");
-                            aFilterData[aFilterData.getLength()-1].Value <<= rtl::OUString(OUString::number(i + 1));
+                            aFilterData[aFilterData.getLength()-1].Name = OUString("PageRange");
+                            aFilterData[aFilterData.getLength()-1].Value <<= OUString(OUString::number(i + 1));
                        }
                    }
             }
@@ -1053,15 +1053,15 @@ void GtkPrintDialog::ExportAsPDF(const rtl::OUString &rFileURL, GtkPrintSettings
             if (aSelection.hasValue())
             {
                 aFilterData.realloc(aFilterData.getLength()+1);
-                aFilterData[aFilterData.getLength()-1].Name = rtl::OUString("Selection");
+                aFilterData[aFilterData.getLength()-1].Name = OUString("Selection");
                 aFilterData[aFilterData.getLength()-1].Value <<= aSelection;
             }
         }
 #endif
         uno::Sequence<beans::PropertyValue> aArgs(2);
-        aArgs[0].Name = rtl::OUString("FilterData");
+        aArgs[0].Name = OUString("FilterData");
         aArgs[0].Value <<= aFilterData;
-        aArgs[1].Name = rtl::OUString("OutputStream");
+        aArgs[1].Name = OUString("OutputStream");
         aArgs[1].Value <<= xOStm;
         xFilter->filter(aArgs);
     }
@@ -1076,9 +1076,9 @@ GtkPrintDialog::updateControllerPrintRange()
     // TODO: use get_print_pages
     if (const gchar* const pStr = m_pWrapper->print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES))
     {
-        beans::PropertyValue* pVal = m_rController.getValue(rtl::OUString("PrintRange"));
+        beans::PropertyValue* pVal = m_rController.getValue(OUString("PrintRange"));
         if (!pVal)
-            pVal = m_rController.getValue(rtl::OUString("PrintContent"));
+            pVal = m_rController.getValue(OUString("PrintContent"));
         SAL_WARN_IF(!pVal, "vcl.gtk", "Nothing to map standard print options to!");
         if (pVal)
         {
@@ -1093,11 +1093,11 @@ GtkPrintDialog::updateControllerPrintRange()
 
             if (nVal == 1)
             {
-                pVal = m_rController.getValue(rtl::OUString("PageRange"));
+                pVal = m_rController.getValue(OUString("PageRange"));
                 SAL_WARN_IF(!pVal, "vcl.gtk", "PageRange doesn't exist!");
                 if (pVal)
                 {
-                    rtl::OUStringBuffer sBuf;
+                    OUStringBuffer sBuf;
                     gint num_ranges;
                     const GtkPageRange* const pRanges = m_pWrapper->print_settings_get_page_ranges(pSettings, &num_ranges);
                     for (gint i = 0; i != num_ranges && pRanges; ++i)
@@ -1133,11 +1133,11 @@ GtkPrintDialog::impl_readFromSettings()
     vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
     GtkPrintSettings* const pSettings(getSettings());
 
-    const rtl::OUString aPrintDialogStr("PrintDialog");
-    const rtl::OUString aCopyCount(pItem->getValue(aPrintDialogStr,
-                rtl::OUString("CopyCount")));
-    const rtl::OUString aCollate(pItem->getValue(aPrintDialogStr,
-                rtl::OUString("Collate")));
+    const OUString aPrintDialogStr("PrintDialog");
+    const OUString aCopyCount(pItem->getValue(aPrintDialogStr,
+                OUString("CopyCount")));
+    const OUString aCollate(pItem->getValue(aPrintDialogStr,
+                OUString("Collate")));
 
     bool bChanged(false);
 
@@ -1171,17 +1171,17 @@ const
     vcl::SettingsConfigItem* const pItem(vcl::SettingsConfigItem::get());
     GtkPrintSettings* const pSettings(getSettings());
 
-    const rtl::OUString aPrintDialogStr("PrintDialog");
+    const OUString aPrintDialogStr("PrintDialog");
     pItem->setValue(aPrintDialogStr,
-            rtl::OUString("CopyCount"),
-            rtl::OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));
+            OUString("CopyCount"),
+            OUString::valueOf(sal_Int32(m_pWrapper->print_settings_get_n_copies(pSettings))));
     pItem->setValue(aPrintDialogStr,
-            rtl::OUString("Collate"),
+            OUString("Collate"),
             m_pWrapper->print_settings_get_collate(pSettings)
-                ? rtl::OUString("true")
-                : rtl::OUString("false"))
+                ? OUString("true")
+                : OUString("false"))
         ;
-    // pItem->setValue(aPrintDialog, rtl::OUString::createFromAscii("ToFile"), );
+    // pItem->setValue(aPrintDialog, OUString::createFromAscii("ToFile"), );
     g_object_unref(G_OBJECT(pSettings));
     pItem->Commit();
 }

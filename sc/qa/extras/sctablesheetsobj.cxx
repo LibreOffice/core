@@ -62,8 +62,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
     virtual uno::Reference< lang::XComponent > getComponent();
-    virtual void createFileURL(const rtl::OUString& rFileBase, rtl::OUString& rFileURL);
-    virtual uno::Reference< lang::XComponent > loadFromDesktop(const rtl::OUString& rString);
+    virtual void createFileURL(const OUString& rFileBase, OUString& rFileURL);
+    virtual uno::Reference< lang::XComponent > loadFromDesktop(const OUString& rString);
     virtual uno::Reference< uno::XInterface > init();
 protected:
     static uno::Reference< lang::XComponent > mxComponent;
@@ -75,7 +75,7 @@ sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
             UnoApiTest("/sc/qa/extras/testdocuments"),
-            apitest::XNameContainer(rtl::OUString("Sheet2"))
+            apitest::XNameContainer(OUString("Sheet2"))
 {
 
 }
@@ -85,20 +85,20 @@ uno::Reference< lang::XComponent > ScTableSheetsObj::getComponent()
     return mxComponent;
 }
 
-void ScTableSheetsObj::createFileURL(const rtl::OUString& rFileBase, rtl::OUString& rFileURL)
+void ScTableSheetsObj::createFileURL(const OUString& rFileBase, OUString& rFileURL)
 {
     UnoApiTest::createFileURL(rFileBase, rFileURL);
 }
 
-uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const rtl::OUString& rString)
+uno::Reference< lang::XComponent > ScTableSheetsObj::loadFromDesktop(const OUString& rString)
 {
     return UnoApiTest::loadFromDesktop(rString);
 }
 
 uno::Reference< uno::XInterface > ScTableSheetsObj::init()
 {
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString("rangenamessrc.ods"), aFileURL);
+    OUString aFileURL;
+    createFileURL(OUString("rangenamessrc.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL);
     CPPUNIT_ASSERT(mxComponent.is());

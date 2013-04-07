@@ -151,15 +151,15 @@ public:
     /** The URL is not empty for master pages loaded from a template
         document.
     */
-    ::rtl::OUString msURL;
+    OUString msURL;
 
     /** Taken from the title of the template file.
     */
-    ::rtl::OUString msPageName;
+    OUString msPageName;
 
     /** Taken from the master page object.
     */
-    ::rtl::OUString msStyleName;
+    OUString msStyleName;
 
     const bool mbIsPrecious;
 
@@ -203,13 +203,13 @@ public:
     sal_Int32 mnUseCount;
 
     class URLComparator { public:
-        ::rtl::OUString msURL;
-        URLComparator (const ::rtl::OUString& sURL);
+        OUString msURL;
+        URLComparator (const OUString& sURL);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class StyleNameComparator { public:
-        ::rtl::OUString msStyleName;
-        StyleNameComparator (const ::rtl::OUString& sStyleName);
+        OUString msStyleName;
+        StyleNameComparator (const OUString& sStyleName);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class PageObjectComparator { public:

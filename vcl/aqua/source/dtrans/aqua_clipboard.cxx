@@ -36,7 +36,6 @@ using namespace osl;
 using namespace std;
 using namespace comphelper;
 
-using ::rtl::OUString;
 
 @implementation EventListener;
 

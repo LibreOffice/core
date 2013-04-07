@@ -1498,7 +1498,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
     if (pCol->Search( nRow, nLo ) && bFirstStringIgnore &&
             pCol->maItems[nLo].pCell->HasStringData())
     {
-        rtl::OUString aCellStr;
+        OUString aCellStr;
         sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[nLo].nRow);
         aCell.assign(*pCol->maItems[nLo].pCell);
         ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);
@@ -1631,7 +1631,7 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
         }
         else if (bStr && bByString)
         {
-            rtl::OUString aCellStr;
+            OUString aCellStr;
             sal_uLong nFormat = pCol->GetNumberFormat( pCol->maItems[i].nRow);
             aCell.assign(*pCol->maItems[i].pCell);
             ScCellFormat::GetInputString(aCell, nFormat, aCellStr, rFormatter);

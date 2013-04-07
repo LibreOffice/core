@@ -91,7 +91,7 @@ struct DispatchParams
 
         //---------------------------------------
         /** TODO document me */
-        ::rtl::OUString m_sSavePath;
+        OUString m_sSavePath;
 
         //---------------------------------------
         /** @short  define the current cache entry, which should be used for current
@@ -275,20 +275,20 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
                 //-------------------------------
                 /** TODO: document me */
-                ::rtl::OUString OrgURL;
-                ::rtl::OUString FactoryURL;
-                ::rtl::OUString TemplateURL;
+                OUString OrgURL;
+                OUString FactoryURL;
+                OUString TemplateURL;
 
-                ::rtl::OUString OldTempURL;
-                ::rtl::OUString NewTempURL;
+                OUString OldTempURL;
+                OUString NewTempURL;
 
-                ::rtl::OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
-                ::rtl::OUString FactoryService; // the service to create a document of the module
-                ::rtl::OUString RealFilter;     // real filter, which was used at loading time
-                ::rtl::OUString DefaultFilter;  // supports saving of the default format without loosing data
-                ::rtl::OUString Extension;      // file extension of the default filter
-                ::rtl::OUString Title;          // can be used as "DisplayName" on every recovery UI!
-                ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
+                OUString FactoryService; // the service to create a document of the module
+                OUString RealFilter;     // real filter, which was used at loading time
+                OUString DefaultFilter;  // supports saving of the default format without loosing data
+                OUString Extension;      // file extension of the default filter
+                OUString Title;          // can be used as "DisplayName" on every recovery UI!
+                ::com::sun::star::uno::Sequence< OUString >
                                 ViewNames;      // names of the view which were active at emergency-save time
 
                 sal_Int32 ID;
@@ -774,7 +774,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
             @threadsafe
           */
-        void implts_saveOneDoc(const ::rtl::OUString&                                    sBackupPath      ,
+        void implts_saveOneDoc(const OUString&                                    sBackupPath      ,
                                      AutoRecovery::TDocumentInfo&                        rInfo            ,
                                const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress);
 
@@ -790,13 +790,13 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        void implts_openOneDoc(const ::rtl::OUString&               sURL       ,
+        void implts_openOneDoc(const OUString&               sURL       ,
                                      ::comphelper::MediaDescriptor& lDescriptor,
                                      AutoRecovery::TDocumentInfo&   rInfo      );
 
         //---------------------------------------
         // TODO document me
-        void implts_generateNewTempURL(const ::rtl::OUString&               sBackupPath     ,
+        void implts_generateNewTempURL(const OUString&               sBackupPath     ,
                                              ::comphelper::MediaDescriptor& rMediaDescriptor,
                                              AutoRecovery::TDocumentInfo&   rInfo           );
 
@@ -840,7 +840,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     the event structure for sending.
          */
         static css::frame::FeatureStateEvent implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
-                                                                            const ::rtl::OUString&             sEventType,
+                                                                            const OUString&             sEventType,
                                                                                   AutoRecovery::TDocumentInfo* pInfo     );
 
 
@@ -931,9 +931,9 @@ class AutoRecovery  : public  css::lang::XTypeProvider
 
         //---------------------------------------
         // TODO document me
-        AutoRecovery::EFailureSafeResult implts_copyFile(const ::rtl::OUString& sSource    ,
-                                                         const ::rtl::OUString& sTargetPath,
-                                                         const ::rtl::OUString& sTargetName);
+        AutoRecovery::EFailureSafeResult implts_copyFile(const OUString& sSource    ,
+                                                         const OUString& sTargetPath,
+                                                         const OUString& sTargetName);
 
         //---------------------------------------
         /** @short  converts m_eJob into a job description, which
@@ -948,7 +948,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     a suitable job description of form:
                         vnd.sun.star.autorecovery:/do...
          */
-        static ::rtl::OUString implst_getJobDescription(sal_Int32 eJob);
+        static OUString implst_getJobDescription(sal_Int32 eJob);
 
         //---------------------------------------
         /** @short  mape the given URL to an internal int representation.
@@ -1020,7 +1020,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
             @param  sURL
                     the url of the file, which should be removed.
          */
-        void st_impl_removeFile(const ::rtl::OUString& sURL);
+        void st_impl_removeFile(const OUString& sURL);
 
         //---------------------------------------
         /** try to remove ".lock" file from disc if office will be terminated

@@ -48,13 +48,13 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
 {
     if(_xIndexes.is())
     {
-        ::rtl::OUString sName;
+        OUString sName;
         Reference<XPropertySetInfo> xColInfo = _xColumn->getPropertySetInfo();
         Reference<XPropertySet> xIndex;
 
-        Sequence< ::rtl::OUString> aSeq = _xIndexes->getElementNames();
-        const ::rtl::OUString* pBegin = aSeq.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aSeq.getLength();
+        Sequence< OUString> aSeq = _xIndexes->getElementNames();
+        const OUString* pBegin = aSeq.getConstArray();
+        const OUString* pEnd   = pBegin + aSeq.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
             _xIndexes->getByName(*pBegin) >>= xIndex;

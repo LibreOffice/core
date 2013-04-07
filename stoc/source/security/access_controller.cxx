@@ -60,9 +60,6 @@ using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 extern ::rtl_StandardModuleCount g_moduleCount;
 
@@ -348,7 +345,7 @@ static inline Reference< security::XAccessControlContext > getDynamicRestriction
 {
     if (xContext.is())
     {
-        Any acc(xContext->getValueByName(rtl::OUString(s_acRestriction)));
+        Any acc(xContext->getValueByName(OUString(s_acRestriction)));
         if (typelib_TypeClass_INTERFACE == acc.pType->eTypeClass)
         {
             // avoid ref-counting
@@ -409,7 +406,7 @@ class AccessController
     bool m_defaultPerm_init;
     bool m_singleUser_init;
     // for multi-user mode
-    lru_cache< OUString, PermissionCollection, ::rtl::OUStringHash, equal_to< OUString > >
+    lru_cache< OUString, PermissionCollection, OUStringHash, equal_to< OUString > >
         m_user2permissions;
 
     ThreadData m_rec;
@@ -606,13 +603,13 @@ static void dumpPermissions(
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("> dumping default permissions:") );
     }
-    OString str( ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+    OString str( OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", str.getStr() );
     Sequence< OUString > permissions( collection.toStrings() );
     OUString const * p = permissions.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < permissions.getLength(); ++nPos )
     {
-        OString str( ::rtl::OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
+        OString str( OUStringToOString( p[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "%s", str.getStr() );
     }
     OSL_TRACE( "> permission dump done" );
@@ -754,7 +751,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.append( userId );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"") );
         OString str(
-            ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+            OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "%s", str.getStr() );
 #endif
         return PermissionCollection( new AllPermission() );

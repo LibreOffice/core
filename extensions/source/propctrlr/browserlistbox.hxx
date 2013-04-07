@@ -54,12 +54,12 @@ namespace pcr
     typedef ::boost::shared_ptr< OBrowserLine > BrowserLinePointer;
     struct ListBoxLine
     {
-        ::rtl::OUString                         aName;
+        OUString                         aName;
         BrowserLinePointer                      pLine;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >
                                                 xHandler;
 
-        ListBoxLine( const ::rtl::OUString& rName, BrowserLinePointer _pLine, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler )
+        ListBoxLine( const OUString& rName, BrowserLinePointer _pLine, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxHandler )
             : aName( rName ),
               pLine( _pLine ),
               xHandler( _rxHandler )
@@ -141,21 +141,21 @@ namespace pcr
 
         void                        EnableHelpSection( bool _bEnable );
         bool                        HasHelpSection() const;
-        void                        SetHelpText( const ::rtl::OUString& _rHelpText );
+        void                        SetHelpText( const OUString& _rHelpText );
         void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
         void                        Clear();
 
         sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND );
-        sal_Bool                    RemoveEntry( const ::rtl::OUString& _rName );
+        sal_Bool                    RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
 
-        void                        SetPropertyValue( const ::rtl::OUString& rEntryName, const ::com::sun::star::uno::Any& rValue, bool _bUnknownValue );
-        sal_uInt16                  GetPropertyPos( const ::rtl::OUString& rEntryName ) const;
+        void                        SetPropertyValue( const OUString& rEntryName, const ::com::sun::star::uno::Any& rValue, bool _bUnknownValue );
+        sal_uInt16                  GetPropertyPos( const OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
-                                    GetPropertyControl( const ::rtl::OUString& rEntryName );
-        void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
-        void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+                                    GetPropertyControl( const OUString& rEntryName );
+        void                        EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable );
+        void                        EnablePropertyLine( const OUString& _rEntryName, bool _bEnable );
 
         sal_Int32                   GetMinimumWidth();
         sal_Int32                   GetMinimumHeight();
@@ -208,7 +208,7 @@ namespace pcr
                 <TRUE/> if and only if a non-<NULL/> line for the given entry name could be
                 found.
         */
-        bool        impl_getBrowserLineForName( const ::rtl::OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
+        bool        impl_getBrowserLineForName( const OUString& _rEntryName, BrowserLinePointer& _out_rpLine ) const;
 
         /** returns the preferred height (in pixels) of the help section, or 0 if we
             currently don't have a help section

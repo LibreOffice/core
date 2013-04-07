@@ -33,7 +33,7 @@
 
 #include <boost/unordered_set.hpp>
 
-typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> ScDPUniqueStringSet;
+typedef boost::unordered_set<OUString, OUStringHash> ScDPUniqueStringSet;
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

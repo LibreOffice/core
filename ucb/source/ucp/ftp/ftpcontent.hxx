@@ -78,7 +78,7 @@ namespace ftp
         XSERVICEINFO_DECL()
 
         // XContent
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentType()
             throw( com::sun::star::uno::RuntimeException );
 
@@ -145,7 +145,7 @@ namespace ftp
                     com::sun::star::ucb::XCommandEnvironment > & xEnv);
 
 
-        virtual ::rtl::OUString getParentURL();
+        virtual OUString getParentURL();
 
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRow>
         getPropertyValues(

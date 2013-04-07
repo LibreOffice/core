@@ -74,7 +74,6 @@ namespace svt
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::document::DocumentProperties;
-    using ::rtl::OUString;
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
@@ -93,7 +92,7 @@ namespace svt
         ,m_pFilter               ( NULL            )
         ,m_pTranslator           ( _pTranslator    )
         ,m_bCancelled            ( false           )
-        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< ::rtl::OUString >() )
+        ,m_rBlackList            ( ::com::sun::star::uno::Sequence< OUString >() )
     {
     }
 
@@ -118,7 +117,7 @@ namespace svt
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
         const IUrlFilter* _pFilter,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList )
+        const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
     {
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -361,9 +360,9 @@ namespace svt
 
     //--------------------------------------------------------------------
 
-    sal_Bool FileViewContentEnumerator::URLOnBlackList ( const ::rtl::OUString& sRealURL )
+    sal_Bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
     {
-        ::rtl::OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
+        OUString entryName = sRealURL.copy( sRealURL.lastIndexOf( '/' ) + 1 );
 
         for (int i = 0; i < m_rBlackList.getLength() ; i++)
         {

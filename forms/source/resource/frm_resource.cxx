@@ -58,9 +58,9 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
+    OUString ResourceManager::loadString(sal_uInt16 _nResId)
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
 
         ensureImplExists();
         if (m_pImpl)

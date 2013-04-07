@@ -295,10 +295,10 @@ sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     //! load strings from resource
-    rtl::OUString aText;
+    OUString aText;
     switch ( nPos )
     {
         case SVX_LINESPACE_USER:
@@ -459,7 +459,7 @@ sal_uInt16 SvxAdjustItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos <= (sal_uInt16)SVX_ADJUST_BLOCKLINE, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_ADJUST_BEGIN + nPos);
@@ -1021,7 +1021,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         }
                         if (!(rAnySeq[2] >>= aSeq[n].DecimalChar))
                         {
-                            ::rtl::OUString aVal;
+                            OUString aVal;
                             if ( (rAnySeq[2] >>= aVal) && aVal.getLength() == 1 )
                                 aSeq[n].DecimalChar = aVal.toChar();
                             else
@@ -1029,7 +1029,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         }
                         if (!(rAnySeq[3] >>= aSeq[n].FillChar))
                         {
-                            ::rtl::OUString aVal;
+                            OUString aVal;
                             if ( (rAnySeq[3] >>= aVal) && aVal.getLength() == 1 )
                                 aSeq[n].FillChar = aVal.toChar();
                             else
@@ -1319,7 +1319,7 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     switch ( nMemberId )
     {
         case MID_AUTO: rVal <<= (sal_Bool) bAuto; break;
-        case MID_NAME: rVal <<= ::rtl::OUString( GetValue() ); break;
+        case MID_NAME: rVal <<= OUString( GetValue() ); break;
         default: OSL_FAIL("Wrong MemberId!"); return sal_False;
     }
 
@@ -1330,7 +1330,7 @@ bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet;
-    ::rtl::OUString aStr;
+    OUString aStr;
     switch ( nMemberId )
     {
         case MID_AUTO: bRet = ( rVal >>= bAuto ); break;

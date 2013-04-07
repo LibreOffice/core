@@ -553,7 +553,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rtl::OUString(rText.GetChar((sal_uInt16) nLen - 1)) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( OUString(rText.GetChar((sal_uInt16) nLen - 1)) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {

@@ -25,8 +25,6 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -56,7 +54,7 @@ void XMLBase64ImportContext::EndElement()
     xOut->closeOutput();
 }
 
-void XMLBase64ImportContext::Characters( const ::rtl::OUString& rChars )
+void XMLBase64ImportContext::Characters( const OUString& rChars )
 {
     OUString sTrimmedChars( rChars. trim() );
     if( !sTrimmedChars.isEmpty() )

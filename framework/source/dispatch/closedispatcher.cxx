@@ -74,7 +74,7 @@ DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
 //-----------------------------------------------
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
                                  const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                                 const ::rtl::OUString&                                        sTarget)
+                                 const OUString&                                        sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex()                   )
     , ::cppu::OWeakObject(                                                )
     , m_xSMGR            (xSMGR                                           )
@@ -128,14 +128,14 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
-        lViewInfos[0].Command = rtl::OUString(URL_CLOSEWIN);
+        lViewInfos[0].Command = OUString(URL_CLOSEWIN);
         lViewInfos[0].GroupId = css::frame::CommandGroup::VIEW;
         return lViewInfos;
     }
     else if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
     {
         css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(1);
-        lDocInfos[0].Command = rtl::OUString(URL_CLOSEDOC);
+        lDocInfos[0].Command = OUString(URL_CLOSEDOC);
         lDocInfos[0].GroupId = css::frame::CommandGroup::DOCUMENT;
         return lDocInfos;
     }
@@ -591,7 +591,7 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
 
 //-----------------------------------------------
 css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
-                                                                                              const ::rtl::OUString&                           sTarget)
+                                                                                              const OUString&                           sTarget)
 {
     if (sTarget.equalsIgnoreAsciiCase("_self"))
         return xFrame;

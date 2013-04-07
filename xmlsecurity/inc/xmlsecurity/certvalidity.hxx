@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 
-rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) ;
+OUString certificateValidityToOUString( ::sal_Int32 certValidity ) ;
 
 #endif
 

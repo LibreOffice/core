@@ -152,9 +152,9 @@ namespace svt { namespace table
         /** Creates and returns the accessible object of the whole GridControl. */
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
         SVT_DLLPRIVATE virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex );
-        SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const;
         SVT_DLLPRIVATE virtual sal_Bool GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow );
-        SVT_DLLPRIVATE virtual ::rtl::OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
+        SVT_DLLPRIVATE virtual OUString GetAccessibleObjectDescription(AccessibleTableControlObjType eObjType, sal_Int32 _nPosition = -1) const;
         SVT_DLLPRIVATE virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet, AccessibleTableControlObjType eObjType ) const;
 
         // temporary methods
@@ -184,14 +184,14 @@ namespace svt { namespace table
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
         virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;
-        virtual ::rtl::OUString GetRowDescription( sal_Int32 _nRow ) const;
-        virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const;
-        virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
-        virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const;
+        virtual OUString GetRowDescription( sal_Int32 _nRow ) const;
+        virtual OUString GetRowName(sal_Int32 _nIndex) const;
+        virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
+        virtual OUString GetColumnName( sal_Int32 _nIndex ) const;
         virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
-        virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
+        virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
 
         virtual sal_Int32 GetSelectedRowCount() const;
         virtual sal_Int32 GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const;

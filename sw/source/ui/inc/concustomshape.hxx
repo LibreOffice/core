@@ -35,7 +35,7 @@ class SfxRequest;
 class ConstCustomShape : public SwDrawBase
 {
 
-    rtl::OUString aCustomShape;
+    OUString aCustomShape;
 
     void SetAttributes( SdrObject* pObj );
 
@@ -49,8 +49,8 @@ class ConstCustomShape : public SwDrawBase
 
     virtual void Activate(const sal_uInt16 nSlotId);    // activate function
 
-    rtl::OUString GetShapeType() const;
-    static rtl::OUString GetShapeTypeFromRequest( SfxRequest& rReq );
+    OUString GetShapeType() const;
+    static OUString GetShapeTypeFromRequest( SfxRequest& rReq );
 
     virtual void CreateDefaultObject();
 

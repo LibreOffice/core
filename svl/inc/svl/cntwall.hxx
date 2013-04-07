@@ -31,7 +31,7 @@ class SvStream;
 class SVL_DLLPUBLIC CntWallpaperItem : public SfxPoolItem
 {
 private:
-    rtl::OUString           _aURL;
+    OUString           _aURL;
     Color                   _nColor;
     sal_uInt16              _nStyle;
 
@@ -55,11 +55,11 @@ public:
     virtual bool            PutValue  ( const com::sun::star::uno::Any& rVal,
                                          sal_uInt8 nMemberId = 0 );
 
-    void                    SetBitmapURL( const rtl::OUString& rURL ) { _aURL = rURL; }
+    void                    SetBitmapURL( const OUString& rURL ) { _aURL = rURL; }
     void                    SetColor( Color nColor ) { _nColor = nColor; }
     void                    SetStyle( sal_uInt16 nStyle ) { _nStyle = nStyle; }
 
-    const rtl::OUString&    GetBitmapURL() const { return _aURL; }
+    const OUString&    GetBitmapURL() const { return _aURL; }
     Color                   GetColor() const { return _nColor; }
     sal_uInt16              GetStyle() const { return _nStyle; }
 };

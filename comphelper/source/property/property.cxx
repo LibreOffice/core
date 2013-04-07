@@ -91,15 +91,15 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
             catch (Exception&)
             {
 #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OStringBuffer aBuffer;
+                OStringBuffer aBuffer;
                 aBuffer.append( "::comphelper::copyProperties: could not copy property '" );
-                aBuffer.append( ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                aBuffer.append( OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US ) );
                 aBuffer.append( "' to the destination set (a '" );
 
                 Reference< XServiceInfo > xSI( _rxDest, UNO_QUERY );
                 if ( xSI.is() )
                 {
-                    aBuffer.append( ::rtl::OUStringToOString( xSI->getImplementationName(), osl_getThreadTextEncoding() ) );
+                    aBuffer.append( OUStringToOString( xSI->getImplementationName(), osl_getThreadTextEncoding() ) );
                 }
                 else
                 {
@@ -109,15 +109,15 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 
                 Any aException( ::cppu::getCaughtException() );
                 aBuffer.append( "Caught an exception of type '" );
-                ::rtl::OUString sExceptionType( aException.getValueTypeName() );
-                aBuffer.append( ::rtl::OString( sExceptionType.getStr(), sExceptionType.getLength(), RTL_TEXTENCODING_ASCII_US ) );
+                OUString sExceptionType( aException.getValueTypeName() );
+                aBuffer.append( OString( sExceptionType.getStr(), sExceptionType.getLength(), RTL_TEXTENCODING_ASCII_US ) );
                 aBuffer.append( "'" );
 
                 Exception aBaseException;
                 if ( ( aException >>= aBaseException ) && !aBaseException.Message.isEmpty() )
                 {
                     aBuffer.append( ", saying '" );
-                    aBuffer.append( ::rtl::OString( aBaseException.Message.getStr(), aBaseException.Message.getLength(), osl_getThreadTextEncoding() ) );
+                    aBuffer.append( OString( aBaseException.Message.getStr(), aBaseException.Message.getLength(), osl_getThreadTextEncoding() ) );
                     aBuffer.append( "'" );
                 }
                 aBuffer.append( "." );
@@ -130,7 +130,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
 }
 
 //------------------------------------------------------------------
-sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>& _rxSet)
+sal_Bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
 {
     if (_rxSet.is())
     {
@@ -141,7 +141,7 @@ sal_Bool hasProperty(const rtl::OUString& _rName, const Reference<XPropertySet>&
 }
 
 //------------------------------------------------------------------
-void RemoveProperty(Sequence<Property>& _rProps, const rtl::OUString& _rPropName)
+void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();
 
@@ -159,7 +159,7 @@ void RemoveProperty(Sequence<Property>& _rProps, const rtl::OUString& _rPropName
 }
 
 //------------------------------------------------------------------
-void ModifyPropertyAttributes(Sequence<Property>& seqProps, const ::rtl::OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
+void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
     sal_Int32 nLen = seqProps.getLength();
 

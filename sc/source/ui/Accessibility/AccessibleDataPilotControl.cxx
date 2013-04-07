@@ -102,7 +102,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -116,12 +116,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -447,10 +447,10 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotControl::getAc
 
     ///=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
+OUString SAL_CALL ScAccessibleDataPilotControl::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleDataPilotControl");
+    return OUString("ScAccessibleDataPilotControl");
 }
 
     ///=====  XTypeProvider  ===================================================
@@ -468,7 +468,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 
     //=====  internal  ========================================================
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void)
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -476,10 +476,10 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
     if (mpFieldWindow)
         return mpFieldWindow->GetDescription();
 
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleName(void)
+OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleName(void)
         throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -487,7 +487,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
     if (mpFieldWindow)
         return mpFieldWindow->GetName();
 
-    return rtl::OUString();
+    return OUString();
 }
 
 Rectangle ScAccessibleDataPilotControl::GetBoundingBoxOnScreen(void) const
@@ -658,10 +658,10 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
 
     ///=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
+OUString SAL_CALL ScAccessibleDataPilotButton::getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleDataPilotButton");
+    return OUString("ScAccessibleDataPilotButton");
 }
 
     ///=====  XTypeProvider  ===================================================
@@ -677,13 +677,13 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationI
     return theScAccessibleDataPilotButtonImplementationId::get().getSeq();
 }
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)
+OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleName(void)
+OUString SAL_CALL ScAccessibleDataPilotButton::createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -691,7 +691,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationI
     if (mpFieldWindow)
         return mpFieldWindow->GetFieldText(getAccessibleIndexInParent());
 
-    return rtl::OUString();
+    return OUString();
 }
 
 Rectangle ScAccessibleDataPilotButton::GetBoundingBoxOnScreen(void) const

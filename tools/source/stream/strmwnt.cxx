@@ -108,7 +108,7 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nMode )
 
     SetBufferSize( 8192 );
     // convert URL to SystemPath, if necessary
-    ::rtl::OUString aFileName, aNormPath;
+    OUString aFileName, aNormPath;
 
     if ( FileBase::getSystemPathFromFileURL( rFileName, aFileName ) != FileBase::E_None )
         aFileName = rFileName;
@@ -280,7 +280,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     eStreamMode &= ~STREAM_TRUNC; // don't truncate on reopen
 
     aFilename = aParsedFilename;
-    rtl::OString aFileNameA(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
+    OString aFileNameA(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
     SetLastError( ERROR_SUCCESS );  // might be changed by Redirector
 
     DWORD   nOpenAction;

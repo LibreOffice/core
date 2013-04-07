@@ -58,7 +58,7 @@ namespace pdfi
 
         void setFirstOnPage( ParagraphElement&    rElem,
                              StyleContainer&      rStyles,
-                             const rtl::OUString& rMasterPageName );
+                             const OUString& rMasterPageName );
 
     public:
         explicit WriterXmlFinalizer(StyleContainer& rStyleContainer,

@@ -663,16 +663,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                      pReqArgs->GetItemState( SID_FILE_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
                      pItem->ISA(SfxStringItem) )
                 {
-                    rtl::OUString aFileName =
+                    OUString aFileName =
                         static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-                    rtl::OUString aFilterName;
+                    OUString aFilterName;
                     if ( pReqArgs->GetItemState( SID_FILTER_NAME, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
                         aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     }
-                    rtl::OUString aOptions;
+                    OUString aOptions;
                     if ( pReqArgs->GetItemState( SID_FILE_FILTEROPTIONS, sal_True, &pItem ) == SFX_ITEM_SET &&
                          pItem->ISA(SfxStringItem) )
                     {
@@ -709,7 +709,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     pImpl->pRequest = new SfxRequest( rReq );
                     delete pImpl->pDocInserter;
                     pImpl->pDocInserter = new ::sfx2::DocumentInserter(
-                        rtl::OUString::createFromAscii( ScDocShell::Factory().GetShortName() ), 0 );
+                        OUString::createFromAscii( ScDocShell::Factory().GetShortName() ), 0 );
                     pImpl->pDocInserter->StartExecuteModal( LINK( this, ScDocShell, DialogClosedHdl ) );
                     return ;
                 }
@@ -831,13 +831,13 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( pItem->ISA(SfxStringItem) )
                     {
-                        rtl::OUString aName = ((const SfxStringItem*)pItem)->GetValue();
+                        OUString aName = ((const SfxStringItem*)pItem)->GetValue();
                         SCTAB nTab;
                         if (aDocument.GetTable( aName, nTab ))
                         {
                             if (aDocument.IsScenario(nTab))
                             {
-                                rtl::OUString aComment;
+                                OUString aComment;
                                 Color aColor;
                                 sal_uInt16 nFlags;
                                 aDocument.GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -994,7 +994,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         try
                                         {
                                             ::svt::DocumentLockFile aLockFile( GetSharedFileURL() );
-                                            uno::Sequence< ::rtl::OUString > aData = aLockFile.GetLockData();
+                                            uno::Sequence< OUString > aData = aLockFile.GetLockData();
                                             if ( aData.getLength() > LOCKFILE_SYSUSERNAME_ID )
                                             {
                                                 if ( !aData[LOCKFILE_OOOUSERNAME_ID].isEmpty() )
@@ -1080,8 +1080,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
 #endif
         case SID_OPEN_CALC:
         {
-            SfxStringItem aApp(SID_DOC_SERVICE, rtl::OUString("com.sun.star.sheet.SpreadsheetDocument"));
-            SfxStringItem aTarget(SID_TARGETNAME, rtl::OUString("_blank"));
+            SfxStringItem aApp(SID_DOC_SERVICE, OUString("com.sun.star.sheet.SpreadsheetDocument"));
+            SfxStringItem aTarget(SID_TARGETNAME, OUString("_blank"));
             GetViewData()->GetDispatcher().Execute(
                 SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aApp, &aTarget, 0L);
         }
@@ -1299,8 +1299,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             ScDocShellModificator aModificator( *this );
 
-            rtl::OUString aNewName = pStyle->GetName();
-            rtl::OUString aOldName = aNewName;
+            OUString aNewName = pStyle->GetName();
+            OUString aOldName = aNewName;
             sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
@@ -1337,8 +1337,8 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
     {
         if ( nId == SFX_STYLESHEET_MODIFIED)
         {
-            rtl::OUString aNewName = pStyle->GetName();
-            rtl::OUString aOldName = aNewName;
+            OUString aNewName = pStyle->GetName();
+            OUString aOldName = aNewName;
             sal_Bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
             if (bExtended)
                 aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
@@ -1472,7 +1472,7 @@ bool ScDocShell::AdjustPrintZoom( const ScRange& rRange )
     return bChange;
 }
 
-void ScDocShell::PageStyleModified( const rtl::OUString& rStyleName, sal_Bool bApi )
+void ScDocShell::PageStyleModified( const OUString& rStyleName, sal_Bool bApi )
 {
     ScDocShellModificator aModificator( *this );
 
@@ -2072,7 +2072,7 @@ long ScDocShell::DdeGetData( const String& rItem,
     {
         if( rItem.EqualsIgnoreCaseAscii( "Format" ) )
         {
-            rtl::OString aFmtByte(rtl::OUStringToOString(aDdeTextFmt,
+            OString aFmtByte(OUStringToOString(aDdeTextFmt,
                 osl_getThreadTextEncoding()));
             rValue <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
                                         (const sal_Int8*)aFmtByte.getStr(),
@@ -2088,7 +2088,7 @@ long ScDocShell::DdeGetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "SYLK" ) ||
             aDdeTextFmt.EqualsAscii( "FSYLK" ) )
         {
-            rtl::OString aData;
+            OString aData;
             if( aObj.ExportByteString( aData, osl_getThreadTextEncoding(),
                                         SOT_FORMATSTR_ID_SYLK ) )
             {
@@ -2345,7 +2345,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         SC_MOD()->SetInSharedDocLoading( true );
         uno::Reference< frame::XDesktop2 > xLoader = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
         uno::Sequence < beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString( "Hidden" );
+        aArgs[0].Name = OUString( "Hidden" );
         aArgs[0].Value <<= sal_True;
 
         if ( GetMedium() )
@@ -2360,7 +2360,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
         }
 
         xModel.set(
-            xLoader->loadComponentFromURL( GetSharedFileURL(), ::rtl::OUString( "_blank" ), 0, aArgs ),
+            xLoader->loadComponentFromURL( GetSharedFileURL(), OUString( "_blank" ), 0, aArgs ),
             uno::UNO_QUERY_THROW );
         SC_MOD()->SetInSharedDocLoading( false );
     }

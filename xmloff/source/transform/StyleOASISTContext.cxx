@@ -37,7 +37,6 @@
 #include "StyleOASISTContext.hxx"
 #include <xmloff/xmluconv.hxx>
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
@@ -70,11 +69,11 @@ class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 
     XMLPropType m_ePropType;
     sal_Bool    m_bControlStyle;
-    ::rtl::OUString m_aStyleFamily;
+    OUString m_aStyleFamily;
 
 public:
 
-    void SetQNameAndPropType( const ::rtl::OUString& rQName,
+    void SetQNameAndPropType( const OUString& rQName,
                                  XMLPropType ePropType  )
     {
         m_ePropType = ePropType;
@@ -84,9 +83,9 @@ public:
     TYPEINFO();
 
     XMLPropertiesTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                            XMLPropType eP,
-                           const ::rtl::OUString& rStyleFamily,
+                           const OUString& rStyleFamily,
                            sal_Bool _bControlStyle = sal_False );
 
     virtual ~XMLPropertiesTContext_Impl();
@@ -108,7 +107,7 @@ TYPEINIT1( XMLPropertiesTContext_Impl, XMLPersElemContentTContext );
 
 XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
     XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP,
-        const ::rtl::OUString& rStyleFamily, sal_Bool _bControlStyle ) :
+        const OUString& rStyleFamily, sal_Bool _bControlStyle ) :
     XMLPersElemContentTContext( rImp, rQName, XML_NAMESPACE_STYLE,
                                 XML_PROPERTIES),
     m_ePropType( eP ),
@@ -465,7 +464,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                             if( nValue )
                             {
                                 nValue *= 100;
-                                rtl::OUStringBuffer aOut;
+                                OUStringBuffer aOut;
                                 ::sax::Converter::convertPercent(aOut, nValue);
                                 aAttrValue = aOut.makeStringAndClear();
                             }
@@ -506,7 +505,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( !aNewAttrValue.isEmpty() )
                             {
-                                aNewAttrValue += rtl::OUString(" " );
+                                aNewAttrValue += OUString(" " );
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )
@@ -552,7 +551,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         }
                         nValue = 100 - nValue;
 
-                        rtl::OUStringBuffer aOut;
+                        OUStringBuffer aOut;
                         ::sax::Converter::convertPercent(aOut, nValue);
                         pAttrList->AddAttribute( rAttrName, aOut.makeStringAndClear() );
                     }
@@ -587,7 +586,7 @@ void XMLPropertiesTContext_Impl::StartElement(
             if( nIntervalMinorDivisor != 0)
                 fIntervalMinor = fIntervalMajor / static_cast< double >( nIntervalMinorDivisor );
 
-            ::rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             ::sax::Converter::convertDouble( aBuf, fIntervalMinor );
             pAttrList->AddAttribute(
                 GetTransformer().GetNamespaceMap().GetQNameByKey(

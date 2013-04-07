@@ -183,7 +183,7 @@ sal_Int16 SAL_CALL CValueControlCommand::getControlAction( ) const
 
 CLabelControlCommand::CLabelControlCommand(
         sal_Int16 aControlId,
-        const rtl::OUString& aLabel ) :
+        const OUString& aLabel ) :
     CControlCommand( aControlId ),
     m_aLabel( aLabel )
 {
@@ -239,7 +239,7 @@ CControlCommandResult* SAL_CALL CLabelControlCommand::handleRequest( CControlCom
 //
 //---------------------------------------------
 
-rtl::OUString SAL_CALL CLabelControlCommand::getLabel( ) const
+OUString SAL_CALL CLabelControlCommand::getLabel( ) const
 {
     return m_aLabel;
 }

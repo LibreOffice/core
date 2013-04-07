@@ -33,7 +33,6 @@ using ::com::sun::star::style::XStyleSupplier;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 // needed for MS compiler

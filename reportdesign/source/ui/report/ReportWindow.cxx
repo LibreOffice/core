@@ -96,13 +96,13 @@ void OReportWindow::initialize()
     m_aViewsWindow.initialize();
 }
 //----------------------------------------------------------------------------
-void OReportWindow::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
+void OReportWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_aViewsWindow.SetInsertObj( eObj,_sShapeType);
 }
 
 //----------------------------------------------------------------------------
-rtl::OUString OReportWindow::GetInsertObjString() const
+OUString OReportWindow::GetInsertObjString() const
 {
     return m_aViewsWindow.GetInsertObjString();
 }
@@ -119,7 +119,7 @@ void OReportWindow::removeSection(sal_uInt16 _nPosition)
     m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
 }
 //----------------------------------------------------------------------------
-void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
+void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
     if ( !_xSection.is() )
         return;

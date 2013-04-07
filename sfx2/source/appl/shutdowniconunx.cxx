@@ -201,8 +201,8 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
     Sequence < Sequence < PropertyValue > > aMenu = aOpt.GetMenu( E_NEWMENU );
     for ( sal_Int32 n=0; n<aMenu.getLength(); n++ )
     {
-        ::rtl::OUString aURL;
-        ::rtl::OUString aDescription;
+        OUString aURL;
+        OUString aDescription;
         Sequence < PropertyValue >& aEntry = aMenu[n];
         for ( sal_Int32 m=0; m<aEntry.getLength(); m++ )
         {
@@ -223,10 +223,10 @@ static void add_ugly_db_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
 static GtkWidget *
 add_image_menu_item( GtkMenuShell *pMenuShell,
                      const gchar *stock_id,
-                     rtl::OUString aLabel,
+                     OUString aLabel,
                      GCallback     activate_cb )
 {
-    OString aUtfLabel = rtl::OUStringToOString (aLabel, RTL_TEXTENCODING_UTF8 );
+    OString aUtfLabel = OUStringToOString (aLabel, RTL_TEXTENCODING_UTF8 );
 
     GtkWidget *pImage;
     pImage = gtk_image_new_from_stock( stock_id, GTK_ICON_SIZE_MENU );
@@ -372,7 +372,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     OString aLabel;
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
 
-    aLabel = rtl::OUStringToOString (
+    aLabel = OUStringToOString (
             pShutdownIcon->GetResString( STR_QUICKSTART_TIP ),
             RTL_TEXTENCODING_UTF8 );
 
@@ -397,9 +397,9 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
 #ifdef ENABLE_GIO
     GFile* pFile = NULL;
-    rtl::OUString sLibraryFileUrl;
+    OUString sLibraryFileUrl;
     if (osl::Module::getUrlFromAddress(plugin_init_sys_tray, sLibraryFileUrl))
-        pFile = g_file_new_for_uri(rtl::OUStringToOString(sLibraryFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+        pFile = g_file_new_for_uri(OUStringToOString(sLibraryFileUrl, RTL_TEXTENCODING_UTF8).getStr());
 
     if (pFile)
     {

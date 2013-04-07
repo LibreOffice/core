@@ -223,7 +223,7 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
     }
 }
 
-rtl::OUString BufferNode::printChildren() const
+OUString BufferNode::printChildren() const
 /****** BufferNode/printChildren *********************************************
  *
  *   NAME
@@ -246,39 +246,39 @@ rtl::OUString BufferNode::printChildren() const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    rtl::OUString rc;
+    OUString rc;
     std::vector< const ElementCollector* >::const_iterator ii = m_vElementCollectors.begin();
 
     for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
-        rc += rtl::OUString( "BufID=" );
-        rc += rtl::OUString::valueOf((*ii)->getBufferId());
+        rc += OUString( "BufID=" );
+        rc += OUString::valueOf((*ii)->getBufferId());
 
         if (((ElementCollector*)(*ii))->getModify())
         {
-            rc += rtl::OUString( "[M]" );
+            rc += OUString( "[M]" );
         }
 
-        rc += rtl::OUString( ",Pri=" );
+        rc += OUString( ",Pri=" );
 
         switch (((ElementCollector*)(*ii))->getPriority())
         {
             case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
-                rc += rtl::OUString( "BEFOREMODIFY" );
+                rc += OUString( "BEFOREMODIFY" );
                 break;
             case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
-                rc += rtl::OUString( "AFTERMODIFY" );
+                rc += OUString( "AFTERMODIFY" );
                 break;
             default:
-                rc += rtl::OUString( "UNKNOWN" );
+                rc += OUString( "UNKNOWN" );
                 break;
         }
 
-        rc += rtl::OUString( "(" );
-        rc += rtl::OUString( "SecID=" );
-        rc += rtl::OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
-        rc += rtl::OUString( " " );
+        rc += OUString( "(" );
+        rc += OUString( "SecID=" );
+        rc += OUString::valueOf(((ElementCollector*)(*ii))->getSecurityId());
+        rc += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
+        rc += OUString( " " );
     }
 
     return rc;

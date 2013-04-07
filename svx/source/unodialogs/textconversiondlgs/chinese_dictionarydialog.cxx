@@ -172,18 +172,18 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
     if(!m_xDictionary.is())
         return;
 
-    Sequence< rtl::OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
+    Sequence< OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
     sal_Int32 nCount = aLeftList.getLength();
 
     Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
 
-    rtl::OUString aLeft, aRight;
+    OUString aLeft, aRight;
     sal_Int16 nConversionPropertyType;
 
     for(sal_Int32 nN=0; nN<nCount; nN++)
     {
         aLeft  = aLeftList[nN];
-        Sequence< rtl::OUString > aRightList( m_xDictionary->getConversions(
+        Sequence< OUString > aRightList( m_xDictionary->getConversions(
             aLeft, 0, aLeft.getLength()
             , linguistic2::ConversionDirection_FROM_LEFT, nTextConversionOptions ) );
 
@@ -230,7 +230,7 @@ DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
     return pEntry;
 }
 
-DictionaryEntry* DictionaryList::getTermEntry( const rtl::OUString& rTerm ) const
+DictionaryEntry* DictionaryList::getTermEntry( const OUString& rTerm ) const
 {
     DictionaryEntry* pE = 0;
     for( sal_Int32 nN=GetRowCount(); nN--; )
@@ -242,12 +242,12 @@ DictionaryEntry* DictionaryList::getTermEntry( const rtl::OUString& rTerm ) cons
     return 0;
 }
 
-bool DictionaryList::hasTerm( const rtl::OUString& rTerm ) const
+bool DictionaryList::hasTerm( const OUString& rTerm ) const
 {
     return getTermEntry(rTerm) !=0 ;
 }
 
-void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+void DictionaryList::addEntry( const OUString& rTerm, const OUString& rMapping
                               , sal_Int16 nConversionPropertyType, sal_uIntPtr nPos )
 {
     if( hasTerm( rTerm ) )
@@ -274,7 +274,7 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     }
 }
 
-sal_uIntPtr DictionaryList::deleteEntries( const rtl::OUString& rTerm )
+sal_uIntPtr DictionaryList::deleteEntries( const OUString& rTerm )
 {
     sal_uIntPtr nPos = LIST_APPEND;
     for( sal_Int32 nN=GetRowCount(); nN--; )
@@ -419,7 +419,7 @@ SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-DictionaryEntry::DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+DictionaryEntry::DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType
                     , sal_Bool bNewEntry )
         : m_aTerm( rTerm )
@@ -482,7 +482,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )) ) );
+    Any aAny( aLngCfg.GetProperty( OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )) ) );
     if( aAny >>= bValue )
         m_aCB_Reverse.Check( bValue );
 
@@ -503,17 +503,17 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
             {
                 try
                 {
-                    rtl::OUString aNameTo_Simplified("ChineseT2S");
-                    rtl::OUString aNameTo_Traditional("ChineseS2T");
+                    OUString aNameTo_Simplified("ChineseT2S");
+                    OUString aNameTo_Traditional("ChineseS2T");
                     lang::Locale aLocale;
-                    aLocale.Language = rtl::OUString("zh");
+                    aLocale.Language = OUString("zh");
 
                     if( xContainer->hasByName( aNameTo_Simplified ) )
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = rtl::OUString("TW");
+                        aLocale.Country = OUString("TW");
                         xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Simplified
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -528,7 +528,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                                 xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                     else
                     {
-                        aLocale.Country = rtl::OUString("CN");
+                        aLocale.Country = OUString("CN");
                         xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
                                 xDictionaryList->addNewDictionary( aNameTo_Traditional
                                 , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -673,9 +673,9 @@ bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() con
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if( pE )
     {
-        if( pE->m_aTerm != rtl::OUString( m_aED_Term.GetText() ) )
+        if( pE->m_aTerm != OUString( m_aED_Term.GetText() ) )
             return false;
-        if( pE->m_aMapping != rtl::OUString( m_aED_Mapping.GetText() ) )
+        if( pE->m_aMapping != OUString( m_aED_Mapping.GetText() ) )
             return false;
         if( pE->m_nConversionPropertyType != m_aLB_Property.GetSelectEntryPos()+1 )
             return false;
@@ -752,8 +752,8 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl)
 }
 IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl)
 {
-    rtl::OUString aTerm( m_aED_Term.GetText() );
-    rtl::OUString aMapping( m_aED_Mapping.GetText() );
+    OUString aTerm( m_aED_Term.GetText() );
+    OUString aMapping( m_aED_Mapping.GetText() );
     sal_Int16 nConversionPropertyType = m_aLB_Property.GetSelectEntryPos()+1;
 
     DictionaryList& rActive  = getActiveDictionary();
@@ -792,7 +792,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl)
     {
         DictionaryEntry* pEntry;
 
-        rtl::OUString aMapping;
+        OUString aMapping;
         for( sal_Int32 nN=rActive.GetRowCount(); nN--; )
         {
             if( rActive.IsRowSelected( nN ) )
@@ -831,7 +831,7 @@ short ChineseDictionaryDialog::Execute()
         SvtLinguConfig  aLngCfg;
         Any aAny;
         aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
-        aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )), aAny );
+        aLngCfg.SetProperty( OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )), aAny );
 
         m_aCT_DictionaryToSimplified.save();
         m_aCT_DictionaryToTraditional.save();

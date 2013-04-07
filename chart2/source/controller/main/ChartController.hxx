@@ -122,7 +122,7 @@ public:
      */
     virtual bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
-        ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) = 0;
+        OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() = 0;
 };
@@ -219,7 +219,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XDispatch> SAL_CALL
         queryDispatch( const ::com::sun::star::util::URL& rURL
-                            , const rtl::OUString& rTargetFrameName
+                            , const OUString& rTargetFrameName
                             , sal_Int32 nSearchFlags)
                             throw (::com::sun::star::uno::RuntimeException);
 
@@ -398,16 +398,16 @@ public:
     // ::com::sun::star::lang XMultiServiceFactory
     //-----------------------------------------------------------------
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        createInstance( const ::rtl::OUString& aServiceSpecifier )
+        createInstance( const OUString& aServiceSpecifier )
             throw (::com::sun::star::uno::Exception,
                    ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier,
+        createInstanceWithArguments( const OUString& ServiceSpecifier,
                                      const ::com::sun::star::uno::Sequence<
                                          ::com::sun::star::uno::Any >& Arguments )
             throw (::com::sun::star::uno::Exception,
                    ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
@@ -453,7 +453,7 @@ public:
 
     virtual bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
-        ::rtl::OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect );
+        OUString & rOutQuickHelpText, ::com::sun::star::awt::Rectangle & rOutEqualRect );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -599,9 +599,9 @@ private:
 
     //executeDispatch methods
     void SAL_CALL       executeDispatch_ObjectProperties();
-    void SAL_CALL       executeDispatch_FormatObject( const ::rtl::OUString& rDispatchCommand );
-    void SAL_CALL       executeDlg_ObjectProperties( const ::rtl::OUString& rObjectCID );
-    bool                executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl::OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso );
+    void SAL_CALL       executeDispatch_FormatObject( const OUString& rDispatchCommand );
+    void SAL_CALL       executeDlg_ObjectProperties( const OUString& rObjectCID );
+    bool                executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso );
 
     void SAL_CALL       executeDispatch_ChartType();
 
@@ -694,10 +694,10 @@ private:
     };
     /// @return </sal_True>, if resize/move was successful
     bool impl_moveOrResizeObject(
-        const ::rtl::OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
-    bool impl_DragDataPoint( const ::rtl::OUString & rCID, double fOffset );
+        const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
+    bool impl_DragDataPoint( const OUString & rCID, double fOffset );
 
-    ::std::set< ::rtl::OUString > impl_getAvailableCommands();
+    ::std::set< OUString > impl_getAvailableCommands();
 
     /** Creates a helper accesibility class that must be initialized via XInitialization.  For
         parameters see
@@ -713,7 +713,7 @@ private:
     void impl_PasteGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > & xGraphic,
                             const ::Point & aPosition );
     void impl_PasteShapes( SdrModel* pModel );
-    void impl_PasteStringAsTextShape( const ::rtl::OUString& rString, const ::com::sun::star::awt::Point& rPosition );
+    void impl_PasteStringAsTextShape( const OUString& rString, const ::com::sun::star::awt::Point& rPosition );
     void impl_SetMousePointer( const MouseEvent & rEvent );
 
     void impl_ClearSelection();

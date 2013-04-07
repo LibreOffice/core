@@ -37,7 +37,7 @@ namespace sd { namespace tools {
 SlotStateListener::SlotStateListener (
     Link& rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
-    const ::rtl::OUString& rSlotName)
+    const OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),
       maCallback(),
       mxDispatchProviderWeak(NULL)
@@ -84,7 +84,7 @@ void SlotStateListener::ConnectToDispatchProvider (
 
 
 
-void SlotStateListener::ObserveSlot (const ::rtl::OUString& rSlotName)
+void SlotStateListener::ObserveSlot (const OUString& rSlotName)
 {
     ThrowIfDisposed();
 

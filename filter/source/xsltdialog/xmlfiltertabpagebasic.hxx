@@ -38,8 +38,8 @@ public:
     bool FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
-    static rtl::OUString decodeComment( const rtl::OUString& rComment );
-    static rtl::OUString encodeComment( const rtl::OUString& rComment );
+    static OUString decodeComment( const OUString& rComment );
+    static OUString encodeComment( const OUString& rComment );
 
     FixedText       maFTFilterName;
     Edit            maEDFilterName;

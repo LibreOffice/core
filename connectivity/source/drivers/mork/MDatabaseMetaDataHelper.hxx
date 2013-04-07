@@ -32,10 +32,10 @@ namespace connectivity
 
             //
             sal_Bool getTableStrings( OConnection*                        _pCon,
-                                      ::std::vector< ::rtl::OUString >&   _rStrings);
+                                      ::std::vector< OUString >&   _rStrings);
 
             sal_Bool getTables( OConnection* _pCon,
-                                const ::rtl::OUString& tableNamePattern,
+                                const OUString& tableNamePattern,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
         };
     }

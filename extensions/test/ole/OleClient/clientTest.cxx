@@ -49,7 +49,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 Reference<XInvocation> convertComObject( IUnknown* pUnk);
 Reference<XInvocation> getComObject( OUString progId);

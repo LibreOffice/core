@@ -23,7 +23,7 @@
 #include "diagnose_ex.h"
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -43,7 +43,7 @@ using namespace com::sun::star::util;
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.mork.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
     :OCommonStatement(_pConnection)
     ,m_nNumParams(0)
     ,m_sSqlStatement(sql)
@@ -78,7 +78,7 @@ void SAL_CALL OPreparedStatement::disposing()
 }
 // -----------------------------------------------------------------------------
 
-OCommonStatement::StatementType OPreparedStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted )
+OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sql , sal_Bool bAdjusted )
     throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
     SAL_INFO("connectivity.mork", "=> OPreparedStatement::parseSql()" );
@@ -186,7 +186,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
@@ -315,7 +315,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     setNull(parameterIndex,sqlType);
 }
@@ -411,7 +411,7 @@ size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
     OSL_UNUSED( pMark );
 #endif
 
-    ::rtl::OUString sParameterName;
+    OUString sParameterName;
 
     // set up Parameter-Column:
     sal_Int32 eType = DataType::VARCHAR;
@@ -432,9 +432,9 @@ size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
     }
 
     Reference<XPropertySet> xParaColumn = new connectivity::sdbcx::OColumn(sParameterName
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
+                                                    ,OUString()
+                                                    ,OUString()
+                                                    ,OUString()
                                                     ,nNullable
                                                     ,nPrecision
                                                     ,nScale
@@ -443,9 +443,9 @@ size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
                                                     ,sal_False
                                                     ,sal_False
                                                     ,m_pSQLIterator->isCaseSensitive()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString()
-                                                    ,::rtl::OUString());
+                                                    ,OUString()
+                                                    ,OUString()
+                                                    ,OUString());
     m_xParamColumns->get().push_back(xParaColumn);
     return nParameter;
 }
@@ -456,7 +456,7 @@ _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
     Reference<XPropertySet> xProp;
     if(SQL_ISRULE(_pNode,column_ref))
     {
-        ::rtl::OUString sColumnName,sTableRange;
+        OUString sColumnName,sTableRange;
         m_pSQLIterator->getColumnRange(_pNode,sColumnName,sTableRange);
         if(!sColumnName.isEmpty())
         {

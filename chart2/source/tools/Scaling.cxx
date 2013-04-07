@@ -74,16 +74,16 @@ LogarithmicScaling::getInverseScaling()
     return new ExponentialScaling( m_fBase );
 }
 
-    ::rtl::OUString SAL_CALL
+    OUString SAL_CALL
 LogarithmicScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_Logarithmic;
 }
 
-uno::Sequence< ::rtl::OUString > LogarithmicScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Logarithmic, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_Logarithmic, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -125,16 +125,16 @@ ExponentialScaling::getInverseScaling()
     return new LogarithmicScaling( m_fBase );
 }
 
-    ::rtl::OUString SAL_CALL
+    OUString SAL_CALL
 ExponentialScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_Exponential;
 }
 
-uno::Sequence< ::rtl::OUString > ExponentialScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Exponential, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_Exponential, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -178,16 +178,16 @@ uno::Reference< XScaling > SAL_CALL
     return new LinearScaling( 1.0 / m_fSlope, m_fOffset / m_fSlope );
 }
 
-    ::rtl::OUString SAL_CALL
+    OUString SAL_CALL
 LinearScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_Linear;
 }
 
-uno::Sequence< ::rtl::OUString > LinearScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Linear, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_Linear, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
@@ -229,16 +229,16 @@ uno::Reference< XScaling > SAL_CALL
     return new PowerScaling( 1.0 / m_fExponent );
 }
 
-    ::rtl::OUString SAL_CALL
+    OUString SAL_CALL
 PowerScaling::getServiceName()
     throw (uno::RuntimeException)
 {
     return lcl_aServiceName_Power;
 }
 
-uno::Sequence< ::rtl::OUString > PowerScaling::getSupportedServiceNames_Static()
+uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 {
-    return uno::Sequence< ::rtl::OUString >( & lcl_aServiceName_Power, 1 );
+    return uno::Sequence< OUString >( & lcl_aServiceName_Power, 1 );
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static

@@ -775,7 +775,7 @@ InteractionSupplyAuthentication::canSetRealm()
 //=========================================================================
 // virtual
 void SAL_CALL
-InteractionSupplyAuthentication::setRealm( const rtl::OUString& Realm )
+InteractionSupplyAuthentication::setRealm( const OUString& Realm )
     throw( uno::RuntimeException )
 {
     OSL_ENSURE( m_bCanSetPassword,
@@ -797,7 +797,7 @@ InteractionSupplyAuthentication::canSetUserName()
 //=========================================================================
 // virtual
 void SAL_CALL
-InteractionSupplyAuthentication::setUserName( const rtl::OUString& UserName )
+InteractionSupplyAuthentication::setUserName( const OUString& UserName )
     throw( uno::RuntimeException )
 {
     OSL_ENSURE( m_bCanSetUserName,
@@ -819,7 +819,7 @@ InteractionSupplyAuthentication::canSetPassword()
 //=========================================================================
 // virtual
 void SAL_CALL
-InteractionSupplyAuthentication::setPassword( const rtl::OUString& Password )
+InteractionSupplyAuthentication::setPassword( const OUString& Password )
     throw( uno::RuntimeException )
 {
     OSL_ENSURE( m_bCanSetPassword,
@@ -862,7 +862,7 @@ InteractionSupplyAuthentication::canSetAccount()
 //=========================================================================
 // virtual
 void SAL_CALL
-InteractionSupplyAuthentication::setAccount( const rtl::OUString& Account )
+InteractionSupplyAuthentication::setAccount( const OUString& Account )
     throw( uno::RuntimeException )
 {
     OSL_ENSURE( m_bCanSetAccount,
@@ -1029,7 +1029,7 @@ void SAL_CALL InteractionSupplyName::select()
 
 // virtual
 void SAL_CALL
-InteractionSupplyName::setName( const rtl::OUString& Name )
+InteractionSupplyName::setName( const OUString& Name )
     throw( uno::RuntimeException )
 {
     m_aName = Name;

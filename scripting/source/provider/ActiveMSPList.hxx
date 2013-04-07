@@ -48,10 +48,10 @@ typedef ::std::map  <   css::uno::Reference< css::uno::XInterface >
                     ,   ::comphelper::OInterfaceCompare< css::uno::XInterface >
                     >   ScriptComponent_map;
 
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::boost::unordered_map< OUString,
     css::uno::Reference< css::script::provider::XScriptProvider >,
-    ::rtl::OUStringHash,
-            ::std::equal_to< ::rtl::OUString > > Msp_hash;
+    OUStringHash,
+            ::std::equal_to< OUString > > Msp_hash;
 
 class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener  >
 {
@@ -63,7 +63,7 @@ public:
     ~ActiveMSPList();
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromStringContext( const ::rtl::OUString& context )
+        getMSPFromStringContext( const OUString& context )
             SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
 
     css::uno::Reference< css::script::provider::XScriptProvider >
@@ -86,7 +86,7 @@ private:
     css::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const css::uno::Any& context );
     css::uno::Reference< css::script::provider::XScriptProvider >
-        createNewMSP( const ::rtl::OUString& context )
+        createNewMSP( const OUString& context )
     {
         return createNewMSP( css::uno::makeAny( context ) );
     }
@@ -95,9 +95,9 @@ private:
     Msp_hash m_hMsps;
     ScriptComponent_map m_mScriptComponents;
     osl::Mutex m_mutex;
-    ::rtl::OUString userDirString;
-    ::rtl::OUString shareDirString;
-    ::rtl::OUString bundledDirString;
+    OUString userDirString;
+    OUString shareDirString;
+    OUString bundledDirString;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 } // func_provider

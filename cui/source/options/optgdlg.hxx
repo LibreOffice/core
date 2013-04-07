@@ -174,7 +174,7 @@ class OfaLanguagesTabPage : public SfxTabPage
     sal_Bool        m_bOldCtl;
     LanguageConfig_Impl*    pLangConfig;
 
-    rtl::OUString m_sUserLocaleValue;
+    OUString m_sUserLocaleValue;
 
     DECL_LINK(  SupportHdl, CheckBox* ) ;
     DECL_LINK(  LocaleSettingHdl, SvxLanguageBox* ) ;

@@ -49,7 +49,7 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
             {
                 case CTF_RPT_NUMBERFORMAT :
                 {
-                    rtl::OUString sAttrValue;
+                    OUString sAttrValue;
                     if ( i->maValue >>= sAttrValue )
                     {
                         if ( !sAttrValue.isEmpty() )

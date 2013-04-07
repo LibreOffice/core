@@ -54,7 +54,7 @@ OString translateUnoToJavaType(
             buf.append(nucleus);
         }
     } else {
-        rtl::OString const javaTypes[codemaker::UnoType::SORT_ANY + 1][2] = {
+        OString const javaTypes[codemaker::UnoType::SORT_ANY + 1][2] = {
             { "void", "java/lang/Void" },
             { "boolean", "java/lang/Boolean" },
             { "byte", "java/lang/Byte" },
@@ -75,8 +75,8 @@ OString translateUnoToJavaType(
     return buf.makeStringAndClear();
 }
 
-rtl::OString translateUnoToJavaIdentifier(
-    rtl::OString const & identifier, rtl::OString const & prefix)
+OString translateUnoToJavaIdentifier(
+    OString const & identifier, OString const & prefix)
 {
     if (identifier == "abstract"
         || identifier == "assert" // since Java 1.4

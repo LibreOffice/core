@@ -29,7 +29,7 @@
 
 #include "LuceneHelper.hxx"
 
-std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr)
+std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr)
 {
     //UTF-16
     if (sizeof(TCHAR) == sizeof(sal_Unicode))
@@ -46,14 +46,14 @@ std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr)
     return aRet;
 }
 
-rtl::OUString TCHARArrayToOUString(TCHAR const *str)
+OUString TCHARArrayToOUString(TCHAR const *str)
 {
     // UTF-16
     if (sizeof(TCHAR) == sizeof(sal_Unicode))
-        return rtl::OUString((const sal_Unicode*)(str));
+        return OUString((const sal_Unicode*)(str));
 
     // UTF-32
-    return rtl::OUString((const sal_uInt32*)str, wcslen(str));
+    return OUString((const sal_uInt32*)str, wcslen(str));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

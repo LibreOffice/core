@@ -32,7 +32,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL xstor_component_getFactory( const sal_Char 
 {
     void * pRet = 0;
 
-    ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
+    OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     if ( pServiceManager && aImplName.equals( OStorageFactory::impl_staticGetImplementationName() ) )

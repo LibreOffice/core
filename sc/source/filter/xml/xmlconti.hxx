@@ -26,8 +26,8 @@ class ScXMLImport;
 
 class ScXMLContentContext : public SvXMLImportContext
 {
-    rtl::OUStringBuffer sOUText;
-    rtl::OUStringBuffer& sValue;
+    OUStringBuffer sOUText;
+    OUStringBuffer& sValue;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -35,19 +35,19 @@ class ScXMLContentContext : public SvXMLImportContext
 public:
 
     ScXMLContentContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                       const ::rtl::OUString& rLName,
+                       const OUString& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        rtl::OUStringBuffer& sValue);
+                        OUStringBuffer& sValue);
 
     virtual ~ScXMLContentContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void EndElement();
 };

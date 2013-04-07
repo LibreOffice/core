@@ -151,7 +151,7 @@ void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 }
 
 
-::rtl::OUString java_lang_Object::toString() const
+OUString java_lang_Object::toString() const
 {
     static jmethodID mID(NULL);
     return callStringMethod("toString",mID);
@@ -183,12 +183,12 @@ namespace
 #if OSL_DEBUG_LEVEL > 0
             pThrow->printStackTrace();
 #endif
-            ::rtl::OUString sMessage = pThrow->getMessage();
+            OUString sMessage = pThrow->getMessage();
             if ( sMessage.isEmpty() )
                 sMessage = pThrow->getLocalizedMessage();
             if(  sMessage.isEmpty() )
                 sMessage = pThrow->toString();
-            _out_rException = SQLException( sMessage, _rxContext, ::rtl::OUString(), -1, Any() );
+            _out_rException = SQLException( sMessage, _rxContext, OUString(), -1, Any() );
             return true;
         }
         else
@@ -328,7 +328,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
         ThrowSQLException( t.pEnv, NULL );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
+OUString java_lang_Object::callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID ) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
@@ -358,7 +358,7 @@ jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char*
     return out;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
+OUString java_lang_Object::callStringMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID , sal_Int32 _nArgument) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callStringMethod: no Java enviroment anymore!" );
@@ -366,7 +366,7 @@ jobject java_lang_Object::callObjectMethodWithIntArg( JNIEnv * _pEnv,const char*
     return JavaString2String( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
-void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const ::rtl::OUString& _nArgument ) const
+void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethod: no Java enviroment anymore!" );
@@ -378,7 +378,7 @@ void java_lang_Object::callVoidMethodWithStringArg( const char* _pMethodName, jm
     ThrowSQLException( t.pEnv, NULL );
 }
 // -------------------------------------------------------------------------
-sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const ::rtl::OUString& _nArgument ) const
+sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName, jmethodID& _inout_MethodID,const OUString& _nArgument ) const
 {
     SDBThreadAttach t;
     OSL_ENSURE( t.pEnv, "java_lang_Object::callIntMethodWithStringArg: no Java enviroment anymore!" );

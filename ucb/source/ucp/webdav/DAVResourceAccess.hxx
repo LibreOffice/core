@@ -45,8 +45,8 @@ class DAVSessionFactory;
 class DAVResourceAccess
 {
     osl::Mutex    m_aMutex;
-    rtl::OUString m_aURL;
-    rtl::OUString m_aPath;
+    OUString m_aURL;
+    OUString m_aPath;
     rtl::Reference< DAVSession > m_xSession;
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
@@ -59,17 +59,17 @@ public:
                            com::sun::star::lang::XMultiServiceFactory > & rSMgr,
                        rtl::Reference<
                        DAVSessionFactory > const & rSessionFactory,
-                       const rtl::OUString & rURL );
+                       const OUString & rURL );
     DAVResourceAccess( const DAVResourceAccess & rOther );
 
     DAVResourceAccess & operator=( const DAVResourceAccess & rOther );
 
-    void setURL( const rtl::OUString & rNewURL )
+    void setURL( const OUString & rNewURL )
         throw ( DAVException );
 
     void resetUri();
 
-    const rtl::OUString & getURL() const { return m_aURL; }
+    const OUString & getURL() const { return m_aURL; }
 
     rtl::Reference< DAVSessionFactory > getSessionFactory() const
     { return m_xSessionFactory; }
@@ -80,7 +80,7 @@ public:
     // allprop & named
     void
     PROPFIND( const Depth nDepth,
-              const std::vector< rtl::OUString > & rPropertyNames,
+              const std::vector< OUString > & rPropertyNames,
               std::vector< DAVResource > & rResources,
               const com::sun::star::uno::Reference<
                   com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -101,7 +101,7 @@ public:
         throw ( DAVException );
 
     void
-    HEAD( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+    HEAD( const std::vector< OUString > & rHeaderNames, // empty == 'all'
           DAVResource & rResource,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment >& xEnv )
@@ -120,7 +120,7 @@ public:
         throw ( DAVException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    GET( const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+    GET( const std::vector< OUString > & rHeaderNames, // empty == 'all'
          DAVResource & rResource,
          const com::sun::star::uno::Reference<
              com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -129,7 +129,7 @@ public:
     void
     GET( com::sun::star::uno::Reference<
              com::sun::star::io::XOutputStream > & rStream,
-         const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
+         const std::vector< OUString > & rHeaderNames, // empty == 'all'
          DAVResource & rResource,
          const com::sun::star::uno::Reference<
              com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -143,8 +143,8 @@ public:
         throw ( DAVException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-    POST( const rtl::OUString & rContentType,
-          const rtl::OUString & rReferer,
+    POST( const OUString & rContentType,
+          const OUString & rReferer,
           const com::sun::star::uno::Reference<
               com::sun::star::io::XInputStream > & rInputStream,
           const com::sun::star::uno::Reference<
@@ -152,8 +152,8 @@ public:
         throw ( DAVException );
 
     void
-    POST( const rtl::OUString & rContentType,
-          const rtl::OUString & rReferer,
+    POST( const OUString & rContentType,
+          const OUString & rReferer,
           const com::sun::star::uno::Reference<
               com::sun::star::io::XInputStream > & rInputStream,
           com::sun::star::uno::Reference<
@@ -168,16 +168,16 @@ public:
         throw ( DAVException );
 
     void
-    COPY( const ::rtl::OUString & rSourcePath,
-          const ::rtl::OUString & rDestinationURI,
+    COPY( const OUString & rSourcePath,
+          const OUString & rDestinationURI,
           sal_Bool bOverwrite,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
     void
-    MOVE( const ::rtl::OUString & rSourcePath,
-          const ::rtl::OUString & rDestinationURI,
+    MOVE( const OUString & rSourcePath,
+          const OUString & rDestinationURI,
           sal_Bool bOverwrite,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
@@ -218,13 +218,13 @@ public:
     getUserRequestHeaders(
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv,
-        const rtl::OUString & rURI,
-        const rtl::OUString & rMethod,
+        const OUString & rURI,
+        const OUString & rMethod,
         DAVRequestHeaders & rRequestHeaders );
 
 private:
-    const rtl::OUString & getRequestURI() const;
-    sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL )
+    const OUString & getRequestURI() const;
+    sal_Bool detectRedirectCycle( const OUString& rRedirectURL )
         throw ( DAVException );
     sal_Bool handleException( DAVException & e, int errorCount )
         throw ( DAVException );

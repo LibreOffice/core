@@ -56,13 +56,13 @@ void OHierarchyHolder_Impl::RemoveStreamHierarchically( OStringList_Impl& aListP
 
 //-----------------------------------------------
 // static
-OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const ::rtl::OUString& aPath )
+OStringList_Impl OHierarchyHolder_Impl::GetListPathFromString( const OUString& aPath )
 {
     OStringList_Impl aResult;
     sal_Int32 nIndex = 0;
     do
     {
-        ::rtl::OUString aName = aPath.getToken( 0, '/', nIndex );
+        OUString aName = aPath.getToken( 0, '/', nIndex );
         if ( aName.isEmpty() )
             throw lang::IllegalArgumentException();
 
@@ -88,7 +88,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     if ( !aListPath.size() )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aNextName = *(aListPath.begin());
+    OUString aNextName = *(aListPath.begin());
     aListPath.erase( aListPath.begin() );
 
     uno::Reference< embed::XExtendedStorageStream > xResult;
@@ -172,7 +172,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     if ( !aListPath.size() )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aNextName = *(aListPath.begin());
+    OUString aNextName = *(aListPath.begin());
     aListPath.erase( aListPath.begin() );
 
     uno::Reference< embed::XExtendedStorageStream > xResult;

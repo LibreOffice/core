@@ -29,7 +29,7 @@ namespace tools
     class StringListResource : public Resource
     {
     public:
-        StringListResource(const ResId& _aResId,::std::vector< ::rtl::OUString>& _rToFill ) : Resource(_aResId)
+        StringListResource(const ResId& _aResId,::std::vector< OUString>& _rToFill ) : Resource(_aResId)
         {
             sal_uInt16 i = 1;
             while( IsAvailableRes(ResId(i,*m_pResMgr).SetRT(RSC_STRING)) )

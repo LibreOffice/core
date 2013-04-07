@@ -37,17 +37,17 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-typedef ::std::map< ::rtl::OUString, RedlineInfo* > RedlineMapType;
+typedef ::std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper
 {
-    const ::rtl::OUString sEmpty;
-    const ::rtl::OUString sInsertion;
-    const ::rtl::OUString sDeletion;
-    const ::rtl::OUString sFormatChange;
-    const ::rtl::OUString sShowChanges;
-    const ::rtl::OUString sRecordChanges;
-    const ::rtl::OUString sRedlineProtectionKey;
+    const OUString sEmpty;
+    const OUString sInsertion;
+    const OUString sDeletion;
+    const OUString sFormatChange;
+    const OUString sShowChanges;
+    const OUString sRecordChanges;
+    const OUString sRedlineProtectionKey;
 
     RedlineMapType aRedlineMap;
 
@@ -81,10 +81,10 @@ public:
     /// (The redline will be inserted into the document after both start
     ///  and end cursor has been set.)
     void Add(
-        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
-        const ::rtl::OUString& rId,         /// use to identify this redline
-        const ::rtl::OUString& rAuthor,     /// name of the author
-        const ::rtl::OUString& rComment,    /// redline comment
+        const OUString& rType,       /// redline type (insert, del,... )
+        const OUString& rId,         /// use to identify this redline
+        const OUString& rAuthor,     /// name of the author
+        const OUString& rComment,    /// redline comment
         const ::com::sun::star::util::DateTime& rDateTime, /// date+time
         sal_Bool bMergeLastParagraph);      /// merge last paragraph?
 
@@ -94,12 +94,12 @@ public:
         ::com::sun::star::text::XTextCursor> CreateRedlineTextSection(
             ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> xOldCursor,
-            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
+            const OUString& rId);    /// ID used to RedlineAdd() call
 
     /// Set start or end position for a redline in the text body.
     /// Accepts XTextRange objects.
     void SetCursor(
-        const ::rtl::OUString& rId,     /// ID used in RedlineAdd() call
+        const OUString& rId,     /// ID used in RedlineAdd() call
         sal_Bool bStart,                /// start or end Range
         ::com::sun::star::uno::Reference<   /// the actual XTextRange
             ::com::sun::star::text::XTextRange> & rRange,
@@ -116,7 +116,7 @@ public:
      * only be considered valid if it points to the next text node
      * after the position given in a previous SetCursor */
     void AdjustStartNodeCursor(
-         const ::rtl::OUString& rId,        /// ID used in RedlineAdd() call
+         const OUString& rId,        /// ID used in RedlineAdd() call
         sal_Bool bStart,
         /// XTextRange _inside_ a table/section
         ::com::sun::star::uno::Reference<

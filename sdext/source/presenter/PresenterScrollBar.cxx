@@ -38,7 +38,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 const static double gnScrollBarGap (10);
 

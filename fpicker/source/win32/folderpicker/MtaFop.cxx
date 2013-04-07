@@ -27,7 +27,6 @@
 
 #include <systools/win32/comtools.hxx>
 
-using rtl::OUString;
 using osl::Condition;
 
 const sal_uInt32 MSG_BROWSEFORFOLDER = WM_USER + 1;
@@ -341,7 +340,7 @@ OUString SAL_CALL CMtaFolderPicker::getDirectory( )
 //
 //--------------------------------------------------------------------
 
-void SAL_CALL CMtaFolderPicker::setDescription( const rtl::OUString& aDescription )
+void SAL_CALL CMtaFolderPicker::setDescription( const OUString& aDescription )
 {
     m_Description = aDescription;
 }
@@ -429,7 +428,7 @@ void SAL_CALL CMtaFolderPicker::releaseItemIdList( LPITEMIDLIST lpItemIdList )
 //
 //--------------------------------------------------------------------
 
-LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUString& aDirectory )
+LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const OUString& aDirectory )
 {
     // parameter checking
     if ( !aDirectory.getLength( ) )
@@ -491,7 +490,7 @@ void SAL_CALL CMtaFolderPicker::enableOk( sal_Bool bEnable )
 //
 //--------------------------------------------------------------------
 
-void SAL_CALL CMtaFolderPicker::setSelection( const rtl::OUString& aDirectory )
+void SAL_CALL CMtaFolderPicker::setSelection( const OUString& aDirectory )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
 
@@ -506,7 +505,7 @@ void SAL_CALL CMtaFolderPicker::setSelection( const rtl::OUString& aDirectory )
 //
 //--------------------------------------------------------------------
 
-void SAL_CALL CMtaFolderPicker::setStatusText( const rtl::OUString& aStatusText )
+void SAL_CALL CMtaFolderPicker::setStatusText( const OUString& aStatusText )
 {
     OSL_ASSERT( IsWindow( m_hwnd ) );
 

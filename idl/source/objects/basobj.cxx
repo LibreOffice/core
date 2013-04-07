@@ -152,7 +152,7 @@ void SvMetaName::Save( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm << aDescription;
 }
 
-sal_Bool SvMetaName::SetName( const rtl::OString& rName, SvIdlDataBase * )
+sal_Bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
 {
     aName.setString(rName);
     return sal_True;
@@ -220,7 +220,7 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
 {
     rOutStm << "<DESCRIPTION>" << endl;
 
-    rtl::OString aDesc( GetDescription().getString() );
+    OString aDesc( GetDescription().getString() );
     sal_Int32 nPos = aDesc.indexOf('\n');
     while ( nPos != -1 )
     {
@@ -378,7 +378,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     {
         WriteTab( rOutStm, nTab );
         rOutStm << "helpcontext("
-                << rtl::OString::valueOf(static_cast<sal_Int64>(
+                << OString::valueOf(static_cast<sal_Int64>(
                     GetHelpContext().GetValue())).getStr()
                 << ")," << endl;
     }
@@ -558,7 +558,7 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     WriteTab( rOutStm, nTab );
     rOutStm << "// class SvMetaExtern" << endl;
     WriteTab( rOutStm, nTab );
-    rOutStm << "uuid(" << rtl::OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << ")," << endl;
+    rOutStm << "uuid(" << OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << ")," << endl;
     WriteTab( rOutStm, nTab );
     rOutStm << "version("
         << OString::number(aVersion.GetMajorVersion()).getStr()

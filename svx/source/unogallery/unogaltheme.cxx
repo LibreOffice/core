@@ -41,7 +41,7 @@ namespace unogallery {
 // - GalleryTheme -
 // -----------------
 
-GalleryTheme::GalleryTheme( const ::rtl::OUString& rThemeName )
+GalleryTheme::GalleryTheme( const OUString& rThemeName )
 {
     mpGallery = ::Gallery::GetGalleryInstance();
     mpTheme = ( mpGallery ? mpGallery->AcquireTheme( rThemeName, *this ) : NULL );
@@ -71,27 +71,27 @@ GalleryTheme::~GalleryTheme()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GalleryTheme::getImplementationName_Static()
+OUString GalleryTheme::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.gallery.GalleryTheme" );
+    return OUString( "com.sun.star.comp.gallery.GalleryTheme" );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GalleryTheme::getSupportedServiceNames_Static()
+uno::Sequence< OUString > GalleryTheme::getSupportedServiceNames_Static()
     throw()
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.gallery.GalleryTheme" );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.gallery.GalleryTheme" );
 
     return aSeq;
 }
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GalleryTheme::getImplementationName()
+OUString SAL_CALL GalleryTheme::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -99,11 +99,11 @@ uno::Sequence< ::rtl::OUString > GalleryTheme::getSupportedServiceNames_Static()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GalleryTheme::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL GalleryTheme::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+    const OUString*              pArray = aSNL.getConstArray();
 
     for( int i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL GalleryTheme::supportsService( const ::rtl::OUString& ServiceN
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL GalleryTheme::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
@@ -204,11 +204,11 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GalleryTheme::getName(  )
+OUString SAL_CALL GalleryTheme::getName(  )
     throw (uno::RuntimeException)
 {
     const SolarMutexGuard aGuard;
-    ::rtl::OUString     aRet;
+    OUString     aRet;
 
     if( mpTheme )
         aRet = mpTheme->GetName();
@@ -233,7 +233,7 @@ void SAL_CALL GalleryTheme::update(  )
 // ------------------------------------------------------------------------------
 
 ::sal_Int32 SAL_CALL GalleryTheme::insertURLByIndex(
-    const ::rtl::OUString& rURL, ::sal_Int32 nIndex )
+    const OUString& rURL, ::sal_Int32 nIndex )
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
     const SolarMutexGuard aGuard;

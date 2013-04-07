@@ -57,7 +57,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
-using ::rtl::OUString;
 
 // =======================================================================
 
@@ -79,7 +78,7 @@ SalSystem* ImplGetSalSystem()
 }
 
 
-static rtl::OUString ReplaceJavaErrorMessages( const rtl::OUString& rString )
+static OUString ReplaceJavaErrorMessages( const OUString& rString )
 {
     return rString.replaceAll("%OK", Button::GetStandardText(BUTTON_OK)).
             replaceAll("%IGNORE", Button::GetStandardText(BUTTON_IGNORE)).
@@ -186,7 +185,7 @@ ResMgr* ImplGetResMgr()
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
             fprintf( stderr, "%s\n", pMsg );
-            ErrorBox aBox( NULL, WB_OK | WB_DEF_OK, rtl::OUString( pMsg, strlen( pMsg ), RTL_TEXTENCODING_ASCII_US ) );
+            ErrorBox aBox( NULL, WB_OK | WB_DEF_OK, OUString( pMsg, strlen( pMsg ), RTL_TEXTENCODING_ASCII_US ) );
             aBox.Execute();
         }
     }
@@ -237,7 +236,7 @@ FieldUnitStringList* ImplGetCleanedFieldUnits()
             pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
             for( size_t i = 0; i < nUnits; ++i )
             {
-                rtl::OUString aUnit( (*pUnits)[i].first );
+                OUString aUnit( (*pUnits)[i].first );
                 aUnit = comphelper::string::remove(aUnit, ' ');
                 aUnit = aUnit.toAsciiLowerCase();
                 std::pair< String, FieldUnit > aElement( aUnit, (*pUnits)[i].second );
@@ -265,13 +264,13 @@ public:
         m_prevContext( context ) {}
 
     // XCurrentContext
-    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
         throw (com::sun::star::uno::RuntimeException);
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_prevContext;
 };
 
-com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::OUString & Name )
+com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUString & Name )
     throw (com::sun::star::uno::RuntimeException)
 {
     com::sun::star::uno::Any ret;
@@ -347,8 +346,8 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            rtl::OUString aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr).toString());
-            rtl::OUStringBuffer aMessage((ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr)).toString());
+            OUString aTitle(ResId(SV_ACCESSERROR_JAVA_NOT_CONFIGURED, *pResMgr).toString());
+            OUStringBuffer aMessage((ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr)).toString());
 
             aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
@@ -370,8 +369,8 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            rtl::OUString aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr).toString());
-            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            OUString aTitle(ResId(SV_ACCESSERROR_FAULTY_JAVA, *pResMgr).toString());
+            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
             aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
@@ -393,8 +392,8 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            rtl::OUString aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr).toString());
-            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            OUString aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, *pResMgr).toString());
+            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
             aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
@@ -416,8 +415,8 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && bAllowCancel && pResMgr )
         {
-            rtl::OUString aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr).toString());
-            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
+            OUString aTitle(ResId(SV_ACCESSERROR_JAVA_DISABLED, *pResMgr).toString());
+            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_JAVA_MSG, *pResMgr).toString());
 
             aMessage.append(' ').append(ResId(SV_ACCESSERROR_OK_CANCEL_MSG, *pResMgr).toString());
 
@@ -439,8 +438,8 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ResMgr *pResMgr = ImplGetResMgr();
         if( bErrorMessage && pResMgr )
         {
-            rtl::OUString aTitle;
-            rtl::OUStringBuffer aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
+            OUString aTitle;
+            OUStringBuffer aMessage(ResId(SV_ACCESSERROR_BRIDGE_MSG, *pResMgr).toString());
 
             if( e.Message.startsWith("ClassNotFound") )
             {

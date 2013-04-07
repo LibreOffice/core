@@ -513,7 +513,7 @@ SdPage* DocumentHelper::ProvideMasterPage (
     SdPage* pMasterPageInDocument = NULL;
     // Search for a master page with the same name as the given one in
     // the target document.
-    const rtl::OUString sMasterPageLayoutName (pMasterPage->GetLayoutName());
+    const OUString sMasterPageLayoutName (pMasterPage->GetLayoutName());
     for (sal_uInt16 nIndex=0,nCount=rTargetDocument.GetMasterPageCount(); nIndex<nCount; ++nIndex)
     {
         SdPage* pCandidate = static_cast<SdPage*>(rTargetDocument.GetMasterPage(nIndex));

@@ -152,7 +152,7 @@ void SdStyleSheet::SetApiName( const OUString& rApiName )
     msApiName = rApiName;
 }
 
-rtl::OUString SdStyleSheet::GetApiName() const
+OUString SdStyleSheet::GetApiName() const
 {
     if( !msApiName.isEmpty() )
         return msApiName;

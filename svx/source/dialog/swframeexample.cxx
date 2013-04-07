@@ -161,13 +161,13 @@ void SvxSwFrameExample::InitAllRects_Impl()
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() - 2));
             SetFont(aFont);
-            aParaPrtArea.SetSize(Size(GetTextWidth(rtl::OUString(DEMOTEXT)), GetTextHeight()));
+            aParaPrtArea.SetSize(Size(GetTextWidth(OUString(DEMOTEXT)), GetTextHeight()));
         }
         else
         {
             aFont.SetSize(Size(0, aParaPrtArea.GetHeight() / 2));
             SetFont(aFont);
-            aAutoCharFrame.SetSize(Size(GetTextWidth(rtl::OUString('A')), GetTextHeight()));
+            aAutoCharFrame.SetSize(Size(GetTextWidth(OUString('A')), GetTextHeight()));
             aAutoCharFrame.SetPos(Point(aParaPrtArea.Left() + (aParaPrtArea.GetWidth() - aAutoCharFrame.GetWidth()) / 2,
                 aParaPrtArea.Top() + (aParaPrtArea.GetHeight() - aAutoCharFrame.GetHeight()) / 2));
         }
@@ -207,7 +207,7 @@ void SvxSwFrameExample::InitAllRects_Impl()
     }
     else
     {
-        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(rtl::OUString(DEMOTEXT));
+        sal_uIntPtr nFreeWidth = aPagePrtArea.GetWidth() - GetTextWidth(OUString(DEMOTEXT));
 
         aFrmSize = Size(nFreeWidth / 2, (aTextLine.GetHeight() + 2) * 3);
         aDrawObj.SetSize(Size(Max(5L, (long)nFreeWidth / 3L), Max(5L, aFrmSize.Height() * 3L)));
@@ -665,11 +665,11 @@ void SvxSwFrameExample::Paint(const Rectangle&)
             aPara.Bottom() -= nDiff;
         }
         if (nAnchor == TextContentAnchorType_AT_CHARACTER && bIgnoreWrap)
-            DrawText(aAutoCharFrame, rtl::OUString('A'));
+            DrawText(aAutoCharFrame, OUString('A'));
     }
     else
     {
-        DrawText(aParaPrtArea, rtl::OUString(DEMOTEXT));
+        DrawText(aParaPrtArea, OUString(DEMOTEXT));
         DrawRect_Impl(aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 

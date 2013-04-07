@@ -61,7 +61,7 @@ public:
     /** Imports the absolute anchor size from the cdr:ext element. */
     void                importExt( const AttributeList& rAttribs );
     /** Sets an the relative anchor position from the cdr:from or cdr:to element. */
-    void                setPos( sal_Int32 nElement, sal_Int32 nParentContext, const ::rtl::OUString& rValue );
+    void                setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue );
 
     /** Calculates the resulting shape anchor in EMUs. */
     EmuRectangle        calcAnchorRectEmu( const EmuRectangle& rChartRect ) const;
@@ -84,7 +84,7 @@ class ChartDrawingFragment : public ::oox::core::FragmentHandler2
 public:
     explicit            ChartDrawingFragment(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxDrawPage,
                             const ::com::sun::star::awt::Size& rChartSize,
                             const ::com::sun::star::awt::Point& rShapesOffset,
@@ -92,7 +92,7 @@ public:
     virtual             ~ChartDrawingFragment();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
 private:

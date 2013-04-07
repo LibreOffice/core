@@ -35,7 +35,7 @@ class XMLLineNumberingImportContext;
 /** import <text:linenumbering-separator> elements */
 class XMLLineNumberingSeparatorImportContext : public SvXMLImportContext
 {
-    ::rtl::OUStringBuffer sSeparatorBuf;
+    OUStringBuffer sSeparatorBuf;
     XMLLineNumberingImportContext& rLineNumberingContext;
 
 public:
@@ -45,7 +45,7 @@ public:
     XMLLineNumberingSeparatorImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         XMLLineNumberingImportContext& rLineNumbering);
 
     ~XMLLineNumberingSeparatorImportContext();
@@ -56,7 +56,7 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void EndElement();
 };

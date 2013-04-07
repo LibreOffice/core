@@ -63,14 +63,14 @@ namespace framework
      description of com::sun::star::frame::XModuleManager.
 
 */
-bool MenuBarMerger::IsCorrectContext( const ::rtl::OUString& rContext, const ::rtl::OUString& rModuleIdentifier )
+bool MenuBarMerger::IsCorrectContext( const OUString& rContext, const OUString& rModuleIdentifier )
 {
     return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
 
 void MenuBarMerger::RetrieveReferencePath(
-    const ::rtl::OUString& rReferencePathString,
-    ::std::vector< ::rtl::OUString >& rReferencePath )
+    const OUString& rReferencePathString,
+    ::std::vector< OUString >& rReferencePath )
 {
     const sal_Char aDelimiter = '\\';
 
@@ -78,7 +78,7 @@ void MenuBarMerger::RetrieveReferencePath(
     sal_Int32 nIndex( 0 );
     do
     {
-        ::rtl::OUString aToken = rReferencePathString.getToken( 0, aDelimiter, nIndex );
+        OUString aToken = rReferencePathString.getToken( 0, aDelimiter, nIndex );
         if ( !aToken.isEmpty() )
             rReferencePath.push_back( aToken );
     }
@@ -86,7 +86,7 @@ void MenuBarMerger::RetrieveReferencePath(
 }
 
 ReferencePathInfo MenuBarMerger::FindReferencePath(
-    const ::std::vector< ::rtl::OUString >& rReferencePath,
+    const ::std::vector< OUString >& rReferencePath,
     Menu* pMenu )
 {
     sal_uInt32       i( 0 );
@@ -107,7 +107,7 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     do
     {
         ++nLevel;
-        ::rtl::OUString aCmd( rReferencePath[i] );
+        OUString aCmd( rReferencePath[i] );
 
         if ( i == nCount-1 )
         {
@@ -148,14 +148,14 @@ ReferencePathInfo MenuBarMerger::FindReferencePath(
     return aResult;
 }
 
-sal_uInt16 MenuBarMerger::FindMenuItem( const ::rtl::OUString& rCmd, Menu* pCurrMenu )
+sal_uInt16 MenuBarMerger::FindMenuItem( const OUString& rCmd, Menu* pCurrMenu )
 {
     for ( sal_uInt16 i = 0; i < pCurrMenu->GetItemCount(); i++ )
     {
         const sal_uInt16 nItemId = pCurrMenu->GetItemId( i );
         if ( nItemId > 0 )
         {
-            if ( rCmd == ::rtl::OUString( pCurrMenu->GetItemCommand( nItemId )))
+            if ( rCmd == OUString( pCurrMenu->GetItemCommand( nItemId )))
                 return i;
         }
     }
@@ -166,7 +166,7 @@ sal_uInt16 MenuBarMerger::FindMenuItem( const ::rtl::OUString& rCmd, Menu* pCurr
 bool MenuBarMerger::CreateSubMenu(
     Menu*                     pSubMenu,
     sal_uInt16&               nItemId,
-    const ::rtl::OUString&    rModuleIdentifier,
+    const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonSubMenu )
 {
     const sal_uInt32 nSize = rAddonSubMenu.size();
@@ -206,7 +206,7 @@ bool MenuBarMerger::MergeMenuItems(
     sal_uInt16                nPos,
     sal_uInt16                nModIndex,
     sal_uInt16&               nItemId,
-    const ::rtl::OUString&    rModuleIdentifier,
+    const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {
     sal_uInt16       nIndex( 0 );
@@ -247,7 +247,7 @@ bool MenuBarMerger::ReplaceMenuItem(
     Menu*                     pMenu,
     sal_uInt16                nPos,
     sal_uInt16&               rItemId,
-    const ::rtl::OUString&    rModuleIdentifier,
+    const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {
     // There is no replace available. Therfore we first have to
@@ -260,7 +260,7 @@ bool MenuBarMerger::ReplaceMenuItem(
 bool MenuBarMerger::RemoveMenuItems(
     Menu*                     pMenu,
     sal_uInt16                nPos,
-    const ::rtl::OUString&    rMergeCommandParameter )
+    const OUString&    rMergeCommandParameter )
 {
     const sal_uInt16 nParam( sal_uInt16( rMergeCommandParameter.toInt32() ));
     sal_uInt16       nCount( 1 );
@@ -281,9 +281,9 @@ bool MenuBarMerger::ProcessMergeOperation(
     Menu*                     pMenu,
     sal_uInt16                nPos,
     sal_uInt16&               nItemId,
-    const ::rtl::OUString&    rMergeCommand,
-    const ::rtl::OUString&    rMergeCommandParameter,
-    const ::rtl::OUString&    rModuleIdentifier,
+    const OUString&    rMergeCommand,
+    const OUString&    rMergeCommandParameter,
+    const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {
     sal_uInt16 nModIndex( 0 );
@@ -313,10 +313,10 @@ bool MenuBarMerger::ProcessMergeOperation(
 bool MenuBarMerger::ProcessFallbackOperation(
     const ReferencePathInfo&                aRefPathInfo,
     sal_uInt16&                             rItemId,
-    const ::rtl::OUString&                  rMergeCommand,
-    const ::rtl::OUString&                  rMergeFallback,
-    const ::std::vector< ::rtl::OUString >& rReferencePath,
-    const ::rtl::OUString&                  rModuleIdentifier,
+    const OUString&                  rMergeCommand,
+    const OUString&                  rMergeFallback,
+    const ::std::vector< OUString >& rReferencePath,
+    const OUString&                  rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )
 {
     if (( rMergeFallback.equalsAsciiL( MERGEFALLBACK_IGNORE, MERGEFALLBACK_IGNORE_LEN )) ||
@@ -355,7 +355,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
             }
             else
             {
-                const ::rtl::OUString aCmd( rReferencePath[nLevel] );
+                const OUString aCmd( rReferencePath[nLevel] );
 
                 sal_uInt16 nInsPos( MENU_APPEND );
                 PopupMenu* pPopupMenu( new PopupMenu );
@@ -397,7 +397,7 @@ void MenuBarMerger::GetMenuEntry(
 
     for ( sal_Int32 i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
-        ::rtl::OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
         if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_URL, ADDONSMENUITEM_URL_LEN ))
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aURL;
         else if ( aMenuEntryPropName.equalsAsciiL( ADDONSMENUITEM_STRING_TITLE, ADDONSMENUITEM_TITLE_LEN ))

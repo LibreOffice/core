@@ -722,11 +722,11 @@ struct tScMyCellRange
 
 struct ScMyNamedExpression
 {
-    rtl::OUString      sName;
-    rtl::OUString      sContent;
-    rtl::OUString      sContentNmsp;
-    rtl::OUString      sBaseCellAddress;
-    rtl::OUString      sRangeType;
+    OUString      sName;
+    OUString      sContent;
+    OUString      sContentNmsp;
+    OUString      sBaseCellAddress;
+    OUString      sRangeType;
     formula::FormulaGrammar::Grammar eGrammar;
     bool               bIsExpression;
 };
@@ -735,8 +735,8 @@ typedef ::boost::ptr_list<ScMyNamedExpression> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
-    rtl::OUString   sLabelRangeStr;
-    rtl::OUString   sDataRangeStr;
+    OUString   sLabelRangeStr;
+    OUString   sDataRangeStr;
     bool            bColumnOrientation;
 };
 
@@ -744,16 +744,16 @@ typedef std::list<const ScMyLabelRange*> ScMyLabelRanges;
 
 struct ScMyImportValidation
 {
-    rtl::OUString                                   sName;
-    rtl::OUString                                   sImputTitle;
-    rtl::OUString                                   sImputMessage;
-    rtl::OUString                                   sErrorTitle;
-    rtl::OUString                                   sErrorMessage;
-    rtl::OUString                                   sFormula1;
-    rtl::OUString                                   sFormula2;
-    rtl::OUString                                   sFormulaNmsp1;
-    rtl::OUString                                   sFormulaNmsp2;
-    rtl::OUString                                   sBaseCellAddress;   // string is used directly
+    OUString                                   sName;
+    OUString                                   sImputTitle;
+    OUString                                   sImputMessage;
+    OUString                                   sErrorTitle;
+    OUString                                   sErrorMessage;
+    OUString                                   sFormula1;
+    OUString                                   sFormula2;
+    OUString                                   sFormulaNmsp1;
+    OUString                                   sFormulaNmsp2;
+    OUString                                   sBaseCellAddress;   // string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
@@ -772,7 +772,7 @@ class ScXMLEditAttributeMap;
 
 class ScXMLImport: public SvXMLImport, boost::noncopyable
 {
-    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
+    typedef ::boost::unordered_map< OUString, sal_Int16, OUStringHash >   CellTypeMap;
     typedef ::boost::ptr_map<SCTAB, ScMyNamedExpressions> SheetNamedExpMap;
 
     CellTypeMap             aCellTypeMap;
@@ -784,11 +784,11 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     ScMyViewContextList                 aViewContextList;
     ScMyStylesImportHelper*             pStylesImportHelper;
-    rtl::OUString                       sNumberFormat;
-    rtl::OUString                       sLocale;
-    rtl::OUString                       sCellStyle;
-    rtl::OUString                       sStandardFormat;
-    rtl::OUString                       sType;
+    OUString                       sNumberFormat;
+    OUString                       sLocale;
+    OUString                       sCellStyle;
+    OUString                       sStandardFormat;
+    OUString                       sType;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
@@ -890,7 +890,7 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     ScMyImpDetectiveOpArray*    pDetectiveOpArray;
     SolarMutexGuard*        pSolarMutexGuard;
 
-    std::vector<rtl::OUString>          aTableStyles;
+    std::vector<OUString>          aTableStyles;
     XMLNumberFormatAttributesExportHelper* pNumberFormatAttributesExportHelper;
     ScMyStyleNumberFormats* pStyleNumberFormats;
     com::sun::star::uno::Reference <com::sun::star::util::XNumberFormats> xNumberFormats;
@@ -898,9 +898,9 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
-    rtl::OUString           sEmpty;
-    rtl::OUString           sPrevStyleName;
-    rtl::OUString           sPrevCurrency;
+    OUString           sEmpty;
+    OUString           sPrevStyleName;
+    OUString           sPrevCurrency;
     sal_uInt32              nSolarMutexLocked;
     sal_Int32               nProgressCount;
     sal_uInt16              nStyleFamilyMask;// Mask of styles to load
@@ -919,7 +919,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
+                                      const OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual XMLShapeImportHelper* CreateShapeImport();
@@ -936,15 +936,15 @@ public:
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
     SvXMLImportContext *CreateMetaContext(
-                                    const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName );
+    SvXMLImportContext *CreateFontDeclsContext(const sal_uInt16 nPrefix, const OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateScriptContext(
-                                    const ::rtl::OUString& rLocalName );
-    SvXMLImportContext *CreateStylesContext(const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName );
+    SvXMLImportContext *CreateStylesContext(const OUString& rLocalName,
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, bool bAutoStyles );
     SvXMLImportContext *CreateBodyContext(
-                                    const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void SetStatistics(
@@ -960,7 +960,7 @@ public:
 
     bool IsLatinDefaultStyle() const  { return bLatinDefaultStyle; }
 
-    sal_Int16 GetCellType(const ::rtl::OUString& rStrValue) const;
+    sal_Int16 GetCellType(const OUString& rStrValue) const;
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
@@ -1069,7 +1069,7 @@ public:
         if (!pValidations)
             pValidations = new ScMyImportValidations();
         pValidations->push_back(rValidation); }
-    bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
+    bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 
     inline ScMyImpDetectiveOpArray* GetDetectiveOpArray()   {
         if (!pDetectiveOpArray)
@@ -1087,15 +1087,15 @@ public:
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
-    void SetTableStyle(const rtl::OUString& rValue) { aTableStyles.push_back(rValue); }
-    std::vector<rtl::OUString> GetTableStyle() { return aTableStyles; }
+    void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
+    std::vector<OUString> GetTableStyle() { return aTableStyles; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
-    sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUString& rCurrency);
-    bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const rtl::OUString& sCurrencySymbol, const rtl::OUString& sBankSymbol);
+    sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
+    bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, const OUString& sBankSymbol);
     void SetType(com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet>& rProperties,
         sal_Int32& rNumberFormat,
         const sal_Int16 nCellType,
-        const rtl::OUString& rCurrency);
+        const OUString& rCurrency);
 
     void ProgressBarIncrement(bool bEditCell, sal_Int32 nInc = 1);
 
@@ -1108,8 +1108,8 @@ private:
 
     void ExamineDefaultStyle();
 public:
-    void SetStyleToRange(const ScRange& rRange, const rtl::OUString* pStyleName,
-        const sal_Int16 nCellType, const rtl::OUString* pCurrency);
+    void SetStyleToRange(const ScRange& rRange, const OUString* pStyleName,
+        const sal_Int16 nCellType, const OUString* pCurrency);
     bool SetNullDateOnUnitConverter();
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
     ScMyStyleNumberFormats* GetStyleNumberFormats();
@@ -1120,7 +1120,7 @@ public:
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL startDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
@@ -1148,7 +1148,7 @@ public:
 
     void SetRangeOverflowType(sal_uInt32 nType);
 
-    sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
+    sal_Int32   GetRangeType(const OUString sRangeType) const;
     void SetNamedRanges();
     void SetSheetNamedRanges();
     void SetLabelRanges();
@@ -1185,10 +1185,10 @@ public:
             with range operator.
      */
     void ExtractFormulaNamespaceGrammar(
-            ::rtl::OUString& rFormula,
-            ::rtl::OUString& rFormulaNmsp,
+            OUString& rFormula,
+            OUString& rFormulaNmsp,
             ::formula::FormulaGrammar::Grammar& reGrammar,
-            const ::rtl::OUString& rAttrValue,
+            const OUString& rAttrValue,
             bool bRestrictToExternalNmsp = false ) const;
 
     bool IsFormulaErrorConstant( const OUString& rStr ) const;

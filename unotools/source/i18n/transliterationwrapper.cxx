@@ -120,17 +120,17 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName(rtl::OUString("SENTENCE_CASE"), nLang);
+            loadModuleByImplName(OUString("SENTENCE_CASE"), nLang);
     }
     else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TITLE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName(rtl::OUString("TITLE_CASE"), nLang);
+            loadModuleByImplName(OUString("TITLE_CASE"), nLang);
     }
     else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TOGGLE_CASE )
     {
         if( bLoad )
-            loadModuleByImplName(rtl::OUString("TOGGLE_CASE"), nLang);
+            loadModuleByImplName(OUString("TOGGLE_CASE"), nLang);
     }
     else
     {

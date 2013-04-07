@@ -52,7 +52,7 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
     m_xAggregateAsParameters = Reference< XParameters >( m_xAggregateAsSet, UNO_QUERY_THROW );
 
     Reference<XDatabaseMetaData> xMeta = _xConn->getMetaData();
-    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),::std::vector< OUString>(), NULL,NULL);
 }
 
 OPreparedStatement::~OPreparedStatement()
@@ -120,19 +120,19 @@ void OPreparedStatement::release() throw ()
 }
 
 // XServiceInfo
-rtl::OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException)
+OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.OPreparedStatement");
+    return OUString("com.sun.star.sdb.OPreparedStatement");
 }
 
-sal_Bool OPreparedStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > OPreparedStatement::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = SERVICE_SDBC_PREPAREDSTATEMENT;
     aSNS.getArray()[1] = SERVICE_SDB_PREPAREDSTATMENT;
     return aSNS;
@@ -169,7 +169,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
             for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
             {
                 // retrieve the name of the column
-                rtl::OUString aName = xMetaData->getColumnName(i + 1);
+                OUString aName = xMetaData->getColumnName(i + 1);
                 OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1, xDBMeta);
                 m_pColumns->append(aName, pColumn);
             }
@@ -245,7 +245,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     m_xAggregateAsParameters->setNull(parameterIndex, sqlType);
 }
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -309,7 +309,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     m_xAggregateAsParameters->setDouble(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);

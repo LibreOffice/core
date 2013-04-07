@@ -78,7 +78,7 @@ char* rsc_strdup( const char* pStr )
     return pBuffer;
 }
 
-rtl::OString GetTmpFileName()
+OString GetTmpFileName()
 {
     OUString aTmpURL, aTmpFile;
     osl_createTempFile( NULL, NULL, &aTmpURL.pData );
@@ -86,7 +86,7 @@ rtl::OString GetTmpFileName()
     return OUStringToOString( aTmpFile, RTL_TEXTENCODING_MS_1252 );
 }
 
-sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
+sal_Bool Append(FILE * fDest, const OString &rTmpFile)
 {
 #define MAX_BUF 4096
     FILE *fSource = fopen(rTmpFile.getStr(), "rb");
@@ -112,7 +112,7 @@ sal_Bool Append(FILE * fDest, const rtl::OString &rTmpFile)
     return bSuccess;
 }
 
-sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
+sal_Bool Append(const OString &rOutputSrs, const OString &rTmpFile)
 {
     FILE * fDest = fopen(rOutputSrs.getStr(), "ab");
 
@@ -125,7 +125,7 @@ sal_Bool Append(const rtl::OString &rOutputSrs, const rtl::OString &rTmpFile)
 }
 
 /* replaces extension of a file name */
-rtl::OString OutputFile(const rtl::OString &rInput, const char * pExt)
+OString OutputFile(const OString &rInput, const char * pExt)
 {
     sal_Int32 nSepInd = rInput.lastIndexOf(".");
 

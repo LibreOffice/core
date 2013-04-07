@@ -238,7 +238,7 @@ bool SbiBuffer::operator +=( const OUString& n )
     sal_uInt32 len = n.getLength() + 1;
     if( Check( len ) )
     {
-        rtl::OString aByteStr(rtl::OUStringToOString(n, osl_getThreadTextEncoding()));
+        OString aByteStr(OUStringToOString(n, osl_getThreadTextEncoding()));
         memcpy( pCur, aByteStr.getStr(), len );
         pCur += len;
         nOff += len;

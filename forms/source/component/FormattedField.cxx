@@ -266,7 +266,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
         return;
 
     Any aTmp(xFormSet->getPropertyValue( PROPERTY_TARGET_URL ));
-    if (!isA(aTmp, static_cast< ::rtl::OUString* >(NULL)) ||
+    if (!isA(aTmp, static_cast< OUString* >(NULL)) ||
         getString(aTmp).isEmpty() )
         return;
 
@@ -322,7 +322,7 @@ StringSequence  OFormattedControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_FORMATTEDFIELD;
     return aSupported;
 }
@@ -404,7 +404,7 @@ StringSequence OFormattedModel::getSupportedServiceNames() throw()
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -440,9 +440,9 @@ Sequence< Type > OFormattedModel::_getTypes()
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OFormattedModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(FRM_COMPONENT_EDIT);
+    return OUString(FRM_COMPONENT_EDIT);
 }
 
 // XPropertySet
@@ -509,7 +509,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
+void OFormattedModel::setPropertyToDefault(const OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
     OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -533,7 +533,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 }
 
 //------------------------------------------------------------------------------
-Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
+Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
     OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -601,7 +601,7 @@ void OFormattedModel::updateFormatterNullDate()
     // calc the current NULL date
     Reference< XNumberFormatsSupplier > xSupplier( calcFormatsSupplier() );
     if ( xSupplier.is() )
-        xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString( "NullDate" ) ) >>= m_aNullDate;
+        xSupplier->getNumberFormatSettings()->getPropertyValue( OUString( "NullDate" ) ) >>= m_aNullDate;
 }
 
 //------------------------------------------------------------------------------
@@ -774,7 +774,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
     Reference<XNumberFormatsSupplier>  xSupplier = calcFormatsSupplier();
     m_bNumeric = getBOOL( getPropertyValue( PROPERTY_TREATASNUMERIC ) );
     m_nKeyType  = getNumberFormatType( xSupplier->getNumberFormats(), nFormatKey );
-    xSupplier->getNumberFormatSettings()->getPropertyValue( ::rtl::OUString("NullDate") ) >>= m_aNullDate;
+    xSupplier->getNumberFormatSettings()->getPropertyValue( OUString("NullDate") ) >>= m_aNullDate;
 
     OEditBaseModel::onConnectedDbColumn( _rxForm );
 }
@@ -833,10 +833,10 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
 
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
 
-        ::rtl::OUString         sFormatDescription;
+        OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
 
-        static const ::rtl::OUString s_aLocaleProp ("Locale");
+        static const OUString s_aLocaleProp ("Locale");
         Reference<com::sun::star::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
@@ -849,7 +849,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
             }
         }
 
-        static const ::rtl::OUString s_aFormatStringProp ("FormatString");
+        static const OUString s_aFormatStringProp ("FormatString");
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
 
@@ -919,7 +919,7 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) thr
             if (bNonVoidKey)
             {
                 // den String und die Language lesen ....
-                ::rtl::OUString sFormatDescription = _rxInStream->readUTF();
+                OUString sFormatDescription = _rxInStream->readUTF();
                 LanguageType eDescriptionLanguage = (LanguageType)_rxInStream->readLong();
 
                 // und daraus von einem Formatter zu einem Key zusammenwuerfeln lassen ...
@@ -1128,7 +1128,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
     {
     case TypeClass_STRING:
     {
-        ::rtl::OUString sString;
+        OUString sString;
         if ( aControlValue >>= sString )
         {
             aExternalValue <<= sString;
@@ -1212,7 +1212,7 @@ Sequence< Type > OFormattedModel::getSupportedBindingTypes()
         aTypes.push_front(::getCppuType( static_cast< UNODateTime* >( NULL ) ) );
         break;
     case NumberFormat::TEXT:
-        aTypes.push_front(::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+        aTypes.push_front(::getCppuType( static_cast< OUString* >( NULL ) ) );
         break;
     case NumberFormat::LOGICAL:
         aTypes.push_front(::getCppuType( static_cast< sal_Bool* >( NULL ) ) );

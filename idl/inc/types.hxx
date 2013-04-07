@@ -98,7 +98,7 @@ public:
 
     virtual sal_Bool        IsMethod() const;
     virtual sal_Bool        IsVariable() const;
-    virtual rtl::OString    GetMangleName( sal_Bool bVariable ) const;
+    virtual OString    GetMangleName( sal_Bool bVariable ) const;
 
 
     virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -111,14 +111,14 @@ public:
                                           WriteType, WriteAttribute );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    sal_uLong           MakeSfx( rtl::OStringBuffer& rAtrrArray );
-    virtual void        Insert( SvSlotElementList&, const rtl::OString& rPrefix,
+    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
+    virtual void        Insert( SvSlotElementList&, const OString& rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   HelpIdTable& rIdTable );
     virtual void        WriteCSV( SvIdlDataBase&, SvStream& );
     void                FillIDTable(HelpIdTable& rIDTable);
-    rtl::OString        Compare( SvMetaAttribute *pAttr );
+    OString        Compare( SvMetaAttribute *pAttr );
 };
 SV_IMPL_REF(SvMetaAttribute)
 
@@ -144,7 +144,7 @@ class SvMetaType : public SvMetaExtern
     sal_Bool                        bIsShell;
     char                        cParserChar;
 
-    void    WriteSfxItem( const rtl::OString& rItemName, SvIdlDataBase & rBase,
+    void    WriteSfxItem( const OString& rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
 protected:
     sal_Bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
@@ -166,12 +166,12 @@ protected:
 public:
             SV_DECL_META_FACTORY1( SvMetaType, SvMetaExtern, 18 )
             SvMetaType();
-            SvMetaType( const rtl::OString& rTypeName, char cParserChar,
-                                const rtl::OString& rCName );
-            SvMetaType( const rtl::OString& rTypeName, const rtl::OString& rSbxName,
-                        const rtl::OString& rOdlName, char cParserChar,
-                        const rtl::OString& rCName, const rtl::OString& rBasicName,
-                        const rtl::OString& rBasicPostfix );
+            SvMetaType( const OString& rTypeName, char cParserChar,
+                                const OString& rCName );
+            SvMetaType( const OString& rTypeName, const OString& rSbxName,
+                        const OString& rOdlName, char cParserChar,
+                        const OString& rCName, const OString& rBasicName,
+                        const OString& rBasicPostfix );
 
     SvMetaAttributeMemberList & GetAttrList() const;
     sal_uLong               GetAttrCount() const
@@ -202,18 +202,18 @@ public:
     void                SetCall1( int e);
     int                 GetCall1() const;
 
-    void                SetBasicName(const rtl::OString& rName)
+    void                SetBasicName(const OString& rName)
                         { aBasicName.setString(rName); }
 
-    const rtl::OString& GetBasicName() const;
-    rtl::OString GetBasicPostfix() const;
-    const rtl::OString& GetSvName() const;
-    const rtl::OString& GetSbxName() const;
-    const rtl::OString& GetOdlName() const;
-    const rtl::OString& GetCName() const;
+    const OString& GetBasicName() const;
+    OString GetBasicPostfix() const;
+    const OString& GetSvName() const;
+    const OString& GetSbxName() const;
+    const OString& GetOdlName() const;
+    const OString& GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
-    virtual sal_Bool    SetName( const rtl::OString& rName, SvIdlDataBase * = NULL );
+    virtual sal_Bool    SetName( const OString& rName, SvIdlDataBase * = NULL );
 
 
     virtual sal_Bool    ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -221,20 +221,20 @@ public:
                                     SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    rtl::OString        GetCString() const;
+    OString        GetCString() const;
     void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
-    sal_uLong           MakeSfx( rtl::OStringBuffer& rAtrrArray );
+    sal_uLong           MakeSfx( OStringBuffer& rAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     sal_Bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
     void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
     void                WriteMethodArgs( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
     void                WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
-    rtl::OString GetParserString() const;
+    OString GetParserString() const;
     void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                        const rtl::OString& rChief );
+                                        const OString& rChief );
 };
 SV_IMPL_REF(SvMetaType)
 
@@ -252,7 +252,7 @@ class SvMetaTypeStringMemberList : public SvDeclPersistList<SvMetaTypeString *> 
 
 class SvMetaEnumValue : public SvMetaName
 {
-    rtl::OString aEnumValue;
+    OString aEnumValue;
 public:
     SV_DECL_META_FACTORY1( SvMetaEnumValue, SvMetaName, 20 )
     SvMetaEnumValue();
@@ -269,7 +269,7 @@ class SvMetaEnumValueMemberList : public SvDeclPersistList<SvMetaEnumValue *> {}
 class SvMetaTypeEnum : public SvMetaType
 {
     SvMetaEnumValueMemberList   aEnumValueList;
-    rtl::OString aPrefix;
+    OString aPrefix;
 protected:
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
@@ -282,7 +282,7 @@ public:
 
     sal_uInt16              GetMaxValue() const;
     sal_uLong               Count() const { return aEnumValueList.size(); }
-    const rtl::OString&     GetPrefix() const { return aPrefix; }
+    const OString&     GetPrefix() const { return aPrefix; }
     SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList[n]; }
 

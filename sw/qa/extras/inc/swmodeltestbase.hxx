@@ -141,7 +141,7 @@ protected:
      *
      * If the attribute is omitted, the text of the node is returned.
      */
-    OUString parseDump(rtl::OString aXPath, rtl::OString aAttribute = OString())
+    OUString parseDump(OString aXPath, OString aAttribute = OString())
     {
         if (!mpXmlBuffer)
             dumpLayout();

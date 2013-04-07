@@ -42,7 +42,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
-using rtl::OUString;
 
 const sal_Char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
 const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";

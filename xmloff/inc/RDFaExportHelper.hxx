@@ -45,14 +45,14 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XDocumentRepository> m_xRepository;
 
-    typedef ::std::map< ::rtl::OUString, ::rtl::OUString >
+    typedef ::std::map< OUString, OUString >
         BlankNodeMap_t;
 
     BlankNodeMap_t m_BlankNodeMap;
 
     long m_Counter;
 
-    ::rtl::OUString
+    OUString
     LookupBlankNode( ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XBlankNode> const & i_xBlankNode);
 

@@ -63,9 +63,9 @@ namespace drawinglayer
                 ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException);
 
             // XServiceInfo
-            virtual rtl::OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL supportsService(const rtl::OUString&) throw(uno::RuntimeException);
-            virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
+            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException);
+            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
         };
     } // end of namespace unorenderer
 } // end of namespace drawinglayer
@@ -77,17 +77,17 @@ namespace drawinglayer
 {
     namespace unorenderer
     {
-        uno::Sequence< rtl::OUString > XPrimitive2DRenderer_getSupportedServiceNames()
+        uno::Sequence< OUString > XPrimitive2DRenderer_getSupportedServiceNames()
         {
-            static rtl::OUString aServiceName("com.sun.star.graphic.Primitive2DTools" );
-            static uno::Sequence< rtl::OUString > aServiceNames( &aServiceName, 1 );
+            static OUString aServiceName("com.sun.star.graphic.Primitive2DTools" );
+            static uno::Sequence< OUString > aServiceNames( &aServiceName, 1 );
 
             return( aServiceNames );
         }
 
-        rtl::OUString XPrimitive2DRenderer_getImplementationName()
+        OUString XPrimitive2DRenderer_getImplementationName()
         {
-            return rtl::OUString( "drawinglayer::unorenderer::XPrimitive2DRenderer" );
+            return OUString( "drawinglayer::unorenderer::XPrimitive2DRenderer" );
         }
 
         uno::Reference< uno::XInterface > SAL_CALL XPrimitive2DRenderer_createInstance(const uno::Reference< lang::XMultiServiceFactory >&)
@@ -186,14 +186,14 @@ namespace drawinglayer
             return XBitmap;
         }
 
-        rtl::OUString SAL_CALL XPrimitive2DRenderer::getImplementationName() throw(uno::RuntimeException)
+        OUString SAL_CALL XPrimitive2DRenderer::getImplementationName() throw(uno::RuntimeException)
         {
             return(XPrimitive2DRenderer_getImplementationName());
         }
 
-        sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const rtl::OUString& rServiceName) throw(uno::RuntimeException)
+        sal_Bool SAL_CALL XPrimitive2DRenderer::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
         {
-            const uno::Sequence< rtl::OUString > aServices(XPrimitive2DRenderer_getSupportedServiceNames());
+            const uno::Sequence< OUString > aServices(XPrimitive2DRenderer_getSupportedServiceNames());
 
             for(sal_Int32 nService(0); nService < aServices.getLength(); nService++)
             {
@@ -206,7 +206,7 @@ namespace drawinglayer
             return sal_False;
         }
 
-        uno::Sequence< rtl::OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames() throw(uno::RuntimeException)
+        uno::Sequence< OUString > SAL_CALL XPrimitive2DRenderer::getSupportedServiceNames() throw(uno::RuntimeException)
         {
             return XPrimitive2DRenderer_getSupportedServiceNames();
         }

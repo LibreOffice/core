@@ -58,8 +58,6 @@ using namespace ucb_impl;
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #define CONFIG_CONTENTPROVIDERS_KEY \
                 "/org.openoffice.ucb.Configuration/ContentProviders"

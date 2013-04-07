@@ -68,7 +68,7 @@ namespace
     void lcl_throwError(sal_uInt16 _nErrorId,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xContext)
     {
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sMessage = aResources.getResourceString(_nErrorId);
+        const OUString sMessage = aResources.getResourceString(_nErrorId);
         ::dbtools::throwGenericSQLException(sMessage ,_xContext);
     }
 }
@@ -203,7 +203,7 @@ Sequence< Type > SAL_CALL OResultSet::getTypes(  ) throw(RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::findColumn" );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -375,7 +375,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::getString" );
     return getValue(columnIndex);
@@ -795,7 +795,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
     updateValue(columnIndex,x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OResultSet::updateString" );
     updateValue(columnIndex,x);
@@ -1634,11 +1634,11 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
     ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
-    ::rtl::OUString sTableColumnName, sSelectColumnRealName;
+    OUString sTableColumnName, sSelectColumnRealName;
 
-    const ::rtl::OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
-    const ::rtl::OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
-    const ::rtl::OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
+    const OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
+    const OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
 
     typedef ::std::map<OSQLColumns::Vector::iterator,sal_Bool> IterMap;
     IterMap aSelectIters;
@@ -1657,7 +1657,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
-                sTableColumnName = ::rtl::OUString();
+                sTableColumnName = OUString();
 
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...
@@ -1703,7 +1703,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
     if ( _bSetColumnMapping && aSelectIters.size() != _rColMapping.size() )
     {
         Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
-        Sequence< ::rtl::OUString > aSelectColumns = xNameAccess->getElementNames();
+        Sequence< OUString > aSelectColumns = xNameAccess->getElementNames();
 
         for (   OSQLColumns::Vector::iterator aIter = _rxColumns->get().begin();
                 aIter != _rxColumns->get().end();
@@ -1721,8 +1721,8 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                 {
                     aSelectIters.insert(IterMap::value_type(aIter,sal_True));
                     sal_Int32 nSelectColumnPos = aIter - _rxColumns->get().begin() + 1;
-                    const ::rtl::OUString* pBegin = aSelectColumns.getConstArray();
-                    const ::rtl::OUString* pEnd   = pBegin + aSelectColumns.getLength();
+                    const OUString* pBegin = aSelectColumns.getConstArray();
+                    const OUString* pEnd   = pBegin + aSelectColumns.getLength();
                     for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
                     {
                         if ( aCase(*pBegin, sSelectColumnRealName) )

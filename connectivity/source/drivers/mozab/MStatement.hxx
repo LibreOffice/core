@@ -75,7 +75,7 @@ namespace connectivity
 
             //  for this Statement
 
-            ::std::list< ::rtl::OUString>               m_aBatchList;
+            ::std::list< OUString>               m_aBatchList;
 
             OTable*                                     m_pTable;
             OConnection*                                m_pConnection;  // The owning Connection object
@@ -122,7 +122,7 @@ namespace connectivity
             /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
             */
             virtual StatementType
-                            parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+                            parseSql( const OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
             /** called to initialize a result set, according to a previously parsed SQL statement
             */
             virtual void    initializeResultSet( OResultSet* _pResult );
@@ -167,9 +167,9 @@ namespace connectivity
             // XPropertySet
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
             // XStatement
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             // XWarningsSupplier
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

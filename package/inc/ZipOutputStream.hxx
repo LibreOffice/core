@@ -48,7 +48,7 @@ protected:
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
 
-    ::rtl::OUString     sComment;
+    OUString     sComment;
     ZipUtils::Deflater  aDeflater;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;

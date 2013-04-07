@@ -51,8 +51,8 @@ public:
     virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() throw ( css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 
@@ -70,8 +70,8 @@ public:
     virtual ~ScVbaHPageBreak(){}
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 //VPageBreak
@@ -88,8 +88,8 @@ public:
     virtual ~ScVbaVPageBreak();
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif

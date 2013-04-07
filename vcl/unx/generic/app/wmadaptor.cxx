@@ -211,7 +211,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "Window Manager's name is \"%s\"\n",
-        rtl::OUStringToOString(pAdaptor->getWindowManagerName(),
+        OUStringToOString(pAdaptor->getWindowManagerName(),
         RTL_TEXTENCODING_UTF8).getStr());
 #endif
     return pAdaptor;
@@ -843,7 +843,7 @@ bool WMAdaptor::getNetWmName()
                                         && nItems != 0
                                         )
                                     {
-                                        rtl::OUString aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                        OUString aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
                                         nVersionMajor = aMetaVersion.getToken(0, '.').toInt32();
                                         nVersionMinor = aMetaVersion.getToken(1, '.').toInt32();
                                     }
@@ -888,8 +888,8 @@ bool WMAdaptor::getWMshouldSwitchWorkspace() const
 
         pWMA->m_bWMshouldSwitchWorkspace = true;
         vcl::SettingsConfigItem* pItem = vcl::SettingsConfigItem::get();
-        rtl::OUString aSetting( pItem->getValue( rtl::OUString( "WM" ),
-                                                 rtl::OUString( "ShouldSwitchWorkspace" ) ) );
+        OUString aSetting( pItem->getValue( OUString( "WM" ),
+                                                 OUString( "ShouldSwitchWorkspace" ) ) );
         if( aSetting.isEmpty() )
         {
             if( m_aWMName.EqualsAscii( "awesome" ) )
@@ -981,27 +981,27 @@ void GnomeWMAdaptor::initAtoms()
 
 void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 {
-    rtl::OString aTitle(rtl::OUStringToOString(rWMName,
+    OString aTitle(OUStringToOString(rWMName,
         osl_getThreadTextEncoding()));
 
     /* FIXME-BCP47: what slumbering dogs may we wake up here? */
-    ::rtl::OString aWMLocale;
+    OString aWMLocale;
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale( &pLocale );
     if( pLocale )
     {
-        ::rtl::OUString aLocaleString( pLocale->Language );
-        ::rtl::OUString aCountry( pLocale->Country );
-        ::rtl::OUString aVariant( pLocale->Variant );
+        OUString aLocaleString( pLocale->Language );
+        OUString aCountry( pLocale->Country );
+        OUString aVariant( pLocale->Variant );
 
         if( !aCountry.isEmpty() )
         {
-            aLocaleString += ::rtl::OUString("_");
+            aLocaleString += OUString("_");
             aLocaleString += aCountry;
         }
         if( !aVariant.isEmpty() )
             aLocaleString += aVariant;
-        aWMLocale = ::rtl::OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
+        aWMLocale = OUStringToOString( aLocaleString, RTL_TEXTENCODING_ISO_8859_1 );
     }
     else
     {
@@ -1101,7 +1101,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 {
     WMAdaptor::setWMName( pFrame, rWMName );
 
-    rtl::OString aTitle(rtl::OUStringToOString(rWMName, RTL_TEXTENCODING_UTF8));
+    OString aTitle(OUStringToOString(rWMName, RTL_TEXTENCODING_UTF8));
     const SystemEnvData* pEnv = pFrame->GetSystemData();
     if( m_aWMAtoms[ NET_WM_NAME ] )
         XChangeProperty( m_pDisplay,
@@ -2386,7 +2386,7 @@ void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
 */
 void WMAdaptor::setClientMachine( X11SalFrame* i_pFrame ) const
 {
-    rtl::OString aWmClient( rtl::OUStringToOString( GetGenericData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
+    OString aWmClient( OUStringToOString( GetGenericData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
     XTextProperty aClientProp = { (unsigned char*)aWmClient.getStr(), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }

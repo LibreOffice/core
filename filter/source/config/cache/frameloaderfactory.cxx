@@ -48,7 +48,7 @@ FrameLoaderFactory::~FrameLoaderFactory()
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const ::rtl::OUString& sLoader)
+css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstance(const OUString& sLoader)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
@@ -57,7 +57,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const ::rtl::OUString&                     sLoader  ,
+css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createInstanceWithArguments(const OUString&                     sLoader  ,
                                                                                                      const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -65,7 +65,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    ::rtl::OUString sRealLoader = sLoader;
+    OUString sRealLoader = sLoader;
 
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
@@ -79,7 +79,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
         {
             _FILTER_CONFIG_LOG_("FrameLoaderFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
-            css::uno::Sequence< ::rtl::OUString > lTypes(1);
+            css::uno::Sequence< OUString > lTypes(1);
             lTypes[0] = sLoader;
 
             css::uno::Sequence< css::beans::NamedValue > lQuery(1);
@@ -136,7 +136,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FrameLoaderFactory::createI
 
 
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
+css::uno::Sequence< OUString > SAL_CALL FrameLoaderFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!

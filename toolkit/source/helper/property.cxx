@@ -57,7 +57,7 @@ using ::com::sun::star::graphic::XGraphic;
 
 struct ImplPropertyInfo
 {
-    ::rtl::OUString                 aName;
+    OUString                 aName;
     sal_uInt16                      nPropId;
     ::com::sun::star::uno::Type     aType;
     sal_Int16                       nAttribs;
@@ -70,7 +70,7 @@ struct ImplPropertyInfo
            bDependsOnOthers = sal_False;
      }
 
-    ImplPropertyInfo( rtl::OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
+    ImplPropertyInfo( OUString const & theName, sal_uInt16 nId, const ::com::sun::star::uno::Type& rType,
                         sal_Int16 nAttrs, sal_Bool bDepends = sal_False )
      : aName( theName )
      {
@@ -83,16 +83,16 @@ struct ImplPropertyInfo
 };
 
 #define DECL_PROP_1( asciiname, id, type, attrib1 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 )
 #define DECL_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 )
 #define DECL_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3 )
 
 #define DECL_DEP_PROP_2( asciiname, id, type, attrib1, attrib2 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, sal_True )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2, sal_True )
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
-    ImplPropertyInfo( ::rtl::OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3, sal_True )
+    ImplPropertyInfo( OUString::createFromAscii( asciiname ), BASEPROPERTY_##id, ::getCppuType( static_cast< const type* >( NULL ) ), ::com::sun::star::beans::PropertyAttribute::attrib1 | ::com::sun::star::beans::PropertyAttribute::attrib2 | ::com::sun::star::beans::PropertyAttribute::attrib3, sal_True )
 
 ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 {
@@ -105,7 +105,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         {
             static ImplPropertyInfo aImplPropertyInfos [] =
             {
-            DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,     OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "Align",                  ALIGN,              sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "Autocomplete",           AUTOCOMPLETE,       bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "AutoHScroll",            AUTOHSCROLL,        bool,               BOUND, MAYBEDEFAULT ),
@@ -117,8 +117,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "Border",                 BORDER,             sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_DEP_PROP_3 ( "BorderColor",            BORDERCOLOR,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "Closeable",              CLOSEABLE,          bool,               BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "CurrencySymbol",         CURRENCYSYMBOL,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "CustomUnitText",         CUSTOMUNITTEXT,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "CurrencySymbol",         CURRENCYSYMBOL,     OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "CustomUnitText",         CUSTOMUNITTEXT,     OUString,    BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "Date",                   DATE,               sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "DateFormat",             EXTDATEFORMAT,      sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DateMax",                DATEMAX,            sal_Int32,          BOUND, MAYBEDEFAULT ),
@@ -126,12 +126,12 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "DateShowCentury",        DATESHOWCENTURY,    bool,               BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "DecimalAccuracy",        DECIMALACCURACY,    sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DefaultButton",          DEFAULTBUTTON,      bool,               BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "DefaultControl",         DEFAULTCONTROL,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "DefaultControl",         DEFAULTCONTROL,     OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DesktopAsParent",        DESKTOP_AS_PARENT,  bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DisplayBackgroundColor", DISPLAYBACKGROUNDCOLOR, sal_Int32, BOUND, MAYBEVOID ),
             DECL_PROP_2     ( "Dropdown",               DROPDOWN,           bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "EchoChar",               ECHOCHAR,           sal_Int16,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "EditMask",               EDITMASK,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "EditMask",               EDITMASK,           OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "EffectiveDefault",       EFFECTIVE_DEFAULT, Any,                BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "EffectiveMax",           EFFECTIVE_MAX,      double,             BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "EffectiveMin",           EFFECTIVE_MIN,      double,             BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -145,8 +145,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "FontDescriptor",         FONTDESCRIPTOR,     FontDescriptor,     BOUND, MAYBEDEFAULT ),
 
             // Teile des ::com::sun::star::awt::FontDescriptor
-            DECL_PROP_2     ( "FontName",               FONTDESCRIPTORPART_NAME,         ::rtl::OUString,BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "FontStyleName",          FONTDESCRIPTORPART_STYLENAME,    ::rtl::OUString,BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "FontName",               FONTDESCRIPTORPART_NAME,         OUString,BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "FontStyleName",          FONTDESCRIPTORPART_STYLENAME,    OUString,BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontFamily",             FONTDESCRIPTORPART_FAMILY,       sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontCharset",            FONTDESCRIPTORPART_CHARSET,      sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "FontHeight",             FONTDESCRIPTORPART_HEIGHT,       float,          BOUND, MAYBEDEFAULT ),
@@ -166,23 +166,23 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< ::com::sun::star::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
 
             DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< XGraphic >, BOUND, TRANSIENT ),
-            DECL_PROP_2     ( "GroupName",              GROUPNAME,          ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "HelpText",               HELPTEXT,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "HelpURL",                HELPURL,            ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "GroupName",              GROUPNAME,          OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "HelpText",               HELPTEXT,           OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "HelpURL",                HELPURL,            OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HideInactiveSelection",  HIDEINACTIVESELECTION, bool,            BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HighContrastMode",       HIGHCONTRASTMODE,   bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HScroll",                HSCROLL,            bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HardLineBreaks",         HARDLINEBREAKS,     bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ImageAlign",             IMAGEALIGN,         sal_Int16,          BOUND, MAYBEDEFAULT),
             DECL_PROP_2     ( "ImagePosition",          IMAGEPOSITION,      sal_Int16,          BOUND, MAYBEDEFAULT),
-            DECL_PROP_2     ( "ImageURL",               IMAGEURL,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ImageURL",               IMAGEURL,           OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ItemSeparatorPos",       ITEM_SEPARATOR_POS, sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_2     ( "Label",                  LABEL,              ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Label",                  LABEL,              OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "LineColor",              LINECOLOR,          sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "LineCount",              LINECOUNT,          sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "LineEndFormat",          LINE_END_FORMAT,    sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_2 ( "LineIncrement",          LINEINCREMENT,      sal_Int32,          BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "LiteralMask",            LITERALMASK,        ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "LiteralMask",            LITERALMASK,        OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "LiveScroll",             LIVE_SCROLL,        bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "MaxTextLen",             MAXTEXTLEN,         sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Moveable",               MOVEABLE,           bool,               BOUND, MAYBEDEFAULT ),
@@ -224,18 +224,18 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "SpinValueMin",           SPINVALUE_MIN,          sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_2 ( "State",                  STATE,                  sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "StrictFormat",           STRICTFORMAT,           bool,           BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "StringItemList",         STRINGITEMLIST,         Sequence< ::rtl::OUString >, BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "StringItemList",         STRINGITEMLIST,         Sequence< OUString >, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "VisualEffect",           VISUALEFFECT,           sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "SymbolColor",            SYMBOL_COLOR,           sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "Tabstop",                TABSTOP,                bool,           BOUND, MAYBEDEFAULT, MAYBEVOID ),
-            DECL_PROP_2     ( "Text",                   TEXT,                   ::rtl::OUString, BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Text",                   TEXT,                   OUString, BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "TextColor",              TEXTCOLOR,              sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "TextLineColor",          TEXTLINECOLOR,          sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_DEP_PROP_3 ( "Time",                   TIME,                   sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "TimeFormat",             EXTTIMEFORMAT,          sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "TimeMax",                TIMEMAX,                sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "TimeMin",                TIMEMIN,                sal_Int32,      BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "Title",                  TITLE,                  ::rtl::OUString, BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Title",                  TITLE,                  OUString, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Toggle",                 TOGGLE,                 bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "TreatAsNumber",          TREATASNUMBER,          bool,           BOUND, MAYBEDEFAULT,TRANSIENT ),
             DECL_PROP_2     ( "TriState",               TRISTATE,               bool,           BOUND, MAYBEDEFAULT ),
@@ -263,8 +263,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ShowsRootHandles",       TREE_SHOWSROOTHANDLES,  sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "RowHeight",              ROW_HEIGHT,             sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "InvokesStopNodeEditing", TREE_INVOKESSTOPNODEEDITING, sal_Bool,      BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL,        ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL,        OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "URL",                    URL,                    OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "WritingMode",            WRITING_MODE,           sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "ContextWritingMode",     CONTEXT_WRITING_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT, TRANSIENT ),
             DECL_PROP_2     ( "ShowRowHeader",          GRID_SHOWROWHEADER,     sal_Bool,           BOUND, MAYBEDEFAULT ),
@@ -297,17 +297,17 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 }
 
 
-struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,::rtl::OUString,bool>
+struct ImplPropertyInfoCompareFunctor : ::std::binary_function<ImplPropertyInfo,OUString,bool>
 {
     inline bool operator()(const ImplPropertyInfo& lhs,const ImplPropertyInfo& rhs) const
     {
         return lhs.aName.compareTo(rhs.aName) < 0;
     }
-    inline bool operator()(const ImplPropertyInfo& lhs,const ::rtl::OUString& rhs)  const
+    inline bool operator()(const ImplPropertyInfo& lhs,const OUString& rhs)  const
     {
         return lhs.aName.compareTo(rhs) < 0;
     }
-    inline bool operator()(const ::rtl::OUString& lhs,const ImplPropertyInfo& rhs)  const
+    inline bool operator()(const OUString& lhs,const ImplPropertyInfo& rhs)  const
     {
         return lhs.compareTo(rhs.aName) < 0;
     }
@@ -325,7 +325,7 @@ void ImplAssertValidPropertyArray()
     }
 }
 
-sal_uInt16 GetPropertyId( const ::rtl::OUString& rPropertyName )
+sal_uInt16 GetPropertyId( const OUString& rPropertyName )
 {
     ImplAssertValidPropertyArray();
 
@@ -367,7 +367,7 @@ sal_uInt16 GetPropertyOrderNr( sal_uInt16 nPropertyId )
     return 0xFFFF;
 }
 
-const ::rtl::OUString& GetPropertyName( sal_uInt16 nPropertyId )
+const OUString& GetPropertyName( sal_uInt16 nPropertyId )
 {
     const ImplPropertyInfo* pImplPropertyInfo = ImplGetImplPropertyInfo( nPropertyId );
     DBG_ASSERT( pImplPropertyInfo, "Invalid PropertyId!" );

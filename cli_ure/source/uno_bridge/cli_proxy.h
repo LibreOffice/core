@@ -99,7 +99,7 @@ public:
     static System::Object^ create(Bridge * bridge,
                                   uno_Interface * pUnoI,
                                   typelib_InterfaceTypeDescription* pTd,
-                                  const rtl::OUString& oid);
+                                  const OUString& oid);
 
     /** RealProxy::Invoke */
     virtual srrm::IMessage^ Invoke(srrm::IMessage^ msg) override;
@@ -139,7 +139,7 @@ private:
         Bridge * bridge,
         uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription* pTD,
-        const rtl::OUString& oid );
+        const OUString& oid );
 
     static srrm::IMessage^ constructReturnMessage(System::Object^ retVal,
                            array<System::Object^>^ outArgs,
@@ -178,7 +178,7 @@ struct CliProxy: public uno_Interface
     gcroot<System::Type^> m_type;
     const com::sun::star::uno::TypeDescription m_unoType;
     const gcroot<System::String^> m_oid;
-    const rtl::OUString m_usOid;
+    const OUString m_usOid;
 
     enum MethodKind {MK_METHOD = 0, MK_SET, MK_GET};
     /** The array contains MethodInfos  of the cli object. Each one reflects an
@@ -235,13 +235,13 @@ struct CliProxy: public uno_Interface
 
     CliProxy( Bridge const* bridge, System::Object^ cliI,
                  typelib_TypeDescription const* pTD,
-                 const rtl::OUString& usOid);
+                 const OUString& usOid);
     ~CliProxy();
 
     static uno_Interface* create(Bridge const * bridge,
                                  System::Object^ cliI,
                                  typelib_TypeDescription const * TD,
-                                 rtl::OUString const & usOid );
+                                 OUString const & usOid );
 
     /** Prepares an array (m_arMethoInfos) containing MethodInfo object of the
         interface and all inherited interfaces. At index null is the first
@@ -276,7 +276,7 @@ struct CliProxy: public uno_Interface
        Position of the method in the uno interface.
      */
     sr::MethodInfo^ getMethodInfo(int nUnoFunctionPos,
-                                  const rtl::OUString & usMethodName,
+                                  const OUString & usMethodName,
                                   MethodKind mk);
 
     void SAL_CALL uno_DispatchMethod(

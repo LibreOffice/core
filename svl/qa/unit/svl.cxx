@@ -60,8 +60,6 @@
 #endif
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #if DEBUG_UNIT_TEST
 using ::std::cout;
@@ -73,7 +71,7 @@ namespace {
 #if DEBUG_UNIT_TEST
 ::std::ostream& operator<< (::std::ostream& os, const OUString& str)
 {
-    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
+    return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
 #endif
 

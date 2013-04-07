@@ -70,9 +70,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -108,8 +105,8 @@ Indexes::Indexes(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName)
+        const OUString &schemaName,
+        const OUString &tableName)
     : Container( refMutex, origin, pSettings,  getStatics().KEY ),
       m_schemaName( schemaName ),
       m_tableName( tableName )
@@ -126,7 +123,7 @@ void Indexes::refresh()
     {
         if( isLog( m_pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append( "sdbcx.Indexes get refreshed for table " );
             buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
             buf.append( "." );
@@ -315,8 +312,8 @@ Reference< com::sun::star::container::XNameAccess > Indexes::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const rtl::OUString & schemaName,
-    const rtl::OUString & tableName)
+    const OUString & schemaName,
+    const OUString & tableName)
 {
     Indexes *pIndexes = new Indexes( refMutex, origin, pSettings, schemaName, tableName );
     Reference< com::sun::star::container::XNameAccess > ret = pIndexes;

@@ -41,7 +41,7 @@ namespace dbaui
         {
         }
         virtual ~ORowUpdateHelper() {}
-        virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue)
+        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue)
         {
             m_xRowUpdate->updateString(_nPos, _sValue);
         }
@@ -91,7 +91,7 @@ namespace dbaui
         {
         }
         virtual ~OParameterUpdateHelper() {}
-        virtual void updateString(sal_Int32 _nPos, const ::rtl::OUString& _sValue)
+        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue)
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OParameterUpdateHelper::updateString" );
             m_xParameters->setString(_nPos, _sValue);

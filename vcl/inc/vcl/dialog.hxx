@@ -82,7 +82,7 @@ public:
 
 protected:
                     Dialog( WindowType nType );
-                    Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType );
+                    Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 protected:
@@ -92,7 +92,7 @@ protected:
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
+                    Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
     virtual long    Notify( NotifyEvent& rNEvt );
@@ -105,7 +105,7 @@ public:
     void            setOptimalLayoutSize();
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
     virtual void queue_layout();
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
     VclButtonBox* get_action_area();
     VclBox* get_content_area();
 
@@ -153,7 +153,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
 
 public:
                     ModelessDialog( Window* pParent, const ResId& rResId );
-                    ModelessDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
+                    ModelessDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
 };
 
 // ---------------
@@ -164,7 +164,7 @@ class VCL_DLLPUBLIC ModalDialog : public Dialog
 {
 public:
                     ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
-                    ModalDialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
+                    ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
                     ModalDialog( Window* pParent, const ResId& rResId );
 
 protected:

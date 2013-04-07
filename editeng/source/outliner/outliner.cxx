@@ -653,7 +653,7 @@ XubString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara
 {
     DBG_CHKTHIS(Outliner,0);
     if ( !aCalcFieldValueHdl.IsSet() )
-        return rtl::OUString( ' ' );
+        return OUString( ' ' );
 
     EditFieldInfo aFldInfo( this, rField, nPara, nPos );
     // The FldColor is preset with COL_LIGHTGRAY.

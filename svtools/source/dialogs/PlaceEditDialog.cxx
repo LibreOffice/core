@@ -104,13 +104,13 @@ PlaceEditDialog::~PlaceEditDialog()
 {
 }
 
-rtl::OUString PlaceEditDialog::GetServerUrl()
+OUString PlaceEditDialog::GetServerUrl()
 {
-    rtl::OUString sUrl;
+    OUString sUrl;
     if ( m_pCurrentDetails.get( ) )
     {
         INetURLObject aUrl = m_pCurrentDetails->getUrl();
-        rtl::OUString sUsername = rtl::OUString( m_pEDUsername->GetText( ) ).trim( );
+        OUString sUsername = OUString( m_pEDUsername->GetText( ) ).trim( );
         if ( !sUsername.isEmpty( ) )
             aUrl.SetUser( sUsername );
         if ( !aUrl.HasError( ) )
@@ -171,8 +171,8 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
 
 IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
 {
-    rtl::OUString sUrl = GetServerUrl( );
-    rtl::OUString sName = rtl::OUString( m_pEDServerName->GetText() ).trim( );
+    OUString sUrl = GetServerUrl( );
+    OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
     return 1;
 }
@@ -182,7 +182,7 @@ IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
     for ( std::vector< boost::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
     {
-        ( *it )->setUsername( rtl::OUString( m_pEDUsername->GetText() ) );
+        ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
     }
     return 1;
 }

@@ -58,7 +58,7 @@ struct HTMLOutFuncs
     static const sal_Char sNewLine[];   // \015\012
 #endif
 
-    SVT_DLLPUBLIC static rtl::OString ConvertStringToHTML( const String& sSrc,
+    SVT_DLLPUBLIC static OString ConvertStringToHTML( const String& sSrc,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
 
@@ -104,7 +104,7 @@ struct HTMLOutFuncs
                         String *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
-    SVT_DLLPUBLIC static rtl::OString CreateTableDataOptionsValNum(
+    SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(
                 sal_Bool bValue, double fVal, sal_uLong nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,

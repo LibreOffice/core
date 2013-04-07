@@ -39,7 +39,6 @@
 #include <cppuhelper/implbase2.hxx>
 
 
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;

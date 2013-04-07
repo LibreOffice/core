@@ -63,7 +63,7 @@ namespace svt
 
         void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
 
-        void            ChangeRoadmapItemLabel( ItemId _nID, const ::rtl::OUString& sLabel, ItemIndex _nStartIndex = 0 );
+        void            ChangeRoadmapItemLabel( ItemId _nID, const OUString& sLabel, ItemIndex _nStartIndex = 0 );
         void            ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex = 0  );
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
@@ -75,8 +75,8 @@ namespace svt
         ItemIndex       GetItemCount() const;
         ItemId          GetItemID( ItemIndex _nIndex ) const;
 
-        void            InsertRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled = sal_True );
-        void            ReplaceRoadmapItem( ItemIndex _Index, const ::rtl::OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled );
+        void            InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled = sal_True );
+        void            ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled );
         void            DeleteRoadmapItem( ItemIndex _nIndex );
 
         ItemId          GetCurrentRoadmapItemID() const;
@@ -110,7 +110,7 @@ namespace svt
         ItemId                      GetNextAvailableItemId( ItemIndex _NewIndex );
         ItemId                      GetPreviousAvailableItemId( ItemIndex _NewIndex );
         RoadmapItem*                GetByPointer(Window* pWindow);
-        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const ::rtl::OUString& _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
+        RoadmapItem*                InsertHyperLabel( ItemIndex _Index, const OUString& _aStr, ItemId _RMID, sal_Bool _bEnabled = sal_True  );
         void                        UpdatefollowingHyperLabels( ItemIndex _Index );
     };
 

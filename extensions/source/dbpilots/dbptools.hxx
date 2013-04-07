@@ -29,7 +29,7 @@ namespace dbp
 
     void disambiguateName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
-        ::rtl::OUString& _rElementsName);
+        OUString& _rElementsName);
 
 //.........................................................................
 }   // namespace dbp

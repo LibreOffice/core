@@ -46,7 +46,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;

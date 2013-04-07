@@ -45,8 +45,8 @@ namespace uno = com::sun::star::uno ;
 struct OutData
 {
     rtl::Reference< DownloadInteractionHandler >Handler;
-    rtl::OUString   File;
-    rtl::OUString   DestinationDir;
+    OUString   File;
+    OUString   DestinationDir;
     oslFileHandle   FileHandle;
     sal_uInt64      Offset;
     osl::Condition& StopCondition;
@@ -65,7 +65,7 @@ static void openFile( OutData& out )
     double fDownloadSize;
     curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize);
 
-    rtl::OString aURL(effective_url);
+    OString aURL(effective_url);
 
     // ensure no trailing '/'
     sal_Int32 nLen = aURL.getLength();
@@ -76,7 +76,7 @@ static void openFile( OutData& out )
     sal_Int32 nIndex = aURL.lastIndexOf('/');
     if( nIndex > 0 )
     {
-        out.File = out.DestinationDir + rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
+        out.File = out.DestinationDir + OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
 
         oslFileError rc;
 
@@ -101,22 +101,22 @@ static void openFile( OutData& out )
 
 //------------------------------------------------------------------------------
 
-static inline rtl::OString
-getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const rtl::OUString& aName)
+static inline OString
+getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const OUString& aName)
 {
-    rtl::OString aRet;
+    OString aRet;
 
     OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
-    return rtl::OUStringToOString(aValue.get<rtl::OUString>(), RTL_TEXTENCODING_UTF8);
+    return OUStringToOString(aValue.get<OUString>(), RTL_TEXTENCODING_UTF8);
 }
 
 //------------------------------------------------------------------------------
 
 static inline sal_Int32
 getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
-                    const rtl::OUString& aName, sal_Int32 nDefault=-1)
+                    const OUString& aName, sal_Int32 nDefault=-1)
 {
     OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
@@ -180,7 +180,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 //------------------------------------------------------------------------------
 
 void
-Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int32& rPort) const
+Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const
 {
     uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
         com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
@@ -223,7 +223,7 @@ Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int
 
 //------------------------------------------------------------------------------
 
-bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProxyHost, sal_Int32 nProxyPort)
+bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
 {
     /* Need to investigate further whether it is necessary to call
      * curl_global_init or not - leave it for now (as the ftp UCB content
@@ -237,7 +237,7 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
     {
         out.curl = pCURL;
 
-        rtl::OString aURL(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+        OString aURL(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
         curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
 
         // abort on http errors
@@ -301,7 +301,7 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
         // Only report errors when not stopped
         else
         {
-            rtl::OString aMessage(RTL_CONSTASCII_STRINGPARAM("Unknown error"));
+            OString aMessage(RTL_CONSTASCII_STRINGPARAM("Unknown error"));
 
             const char * error_message = curl_easy_strerror(cc);
             if( NULL != error_message )
@@ -313,9 +313,9 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
                 curl_easy_getinfo( pCURL, CURLINFO_RESPONSE_CODE, &nError );
 
                 if ( 403 == nError )
-                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" ) );
+                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " 403: Access denied!" ) );
                 else if ( 404 == nError )
-                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" ) );
+                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " 404: File not found!" ) );
                 else if ( 416 == nError )
                 {
                     // we got this error probably, because we already downloaded the file
@@ -324,13 +324,13 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
                 }
                 else
                 {
-                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( ":error code = " ) );
+                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( ":error code = " ) );
                     aMessage += aMessage.valueOf( nError );
-                    aMessage += rtl::OString( RTL_CONSTASCII_STRINGPARAM( " !" ) );
+                    aMessage += OString( RTL_CONSTASCII_STRINGPARAM( " !" ) );
                 }
             }
             if ( !ret )
-                out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
+                out.Handler->downloadStalled( OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
         }
 
         curl_easy_cleanup(pCURL);
@@ -342,19 +342,19 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
 //------------------------------------------------------------------------------
 
 bool
-Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl::OUString& rDestinationDir)
+Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDestinationDir)
 {
     OSL_ASSERT( m_aHandler.is() );
 
     OutData out(m_aCondition);
-    rtl::OUString aFile( rFile );
+    OUString aFile( rFile );
 
     // when rFile is empty, there is no remembered file name. If there is already a file with the
     // same name ask the user if she wants to resume a download or restart the download
     if ( aFile.isEmpty() )
     {
         // GetFileName()
-        rtl::OUString aURL( rURL );
+        OUString aURL( rURL );
         // ensure no trailing '/'
         sal_Int32 nLen = aURL.getLength();
         while( (nLen > 0) && ('/' == aURL[ nLen-1 ]) )
@@ -374,7 +374,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
             if ( m_aHandler->checkDownloadDestination( aURL.copy( nIndex+1 ) ) )
             {
                 osl_removeFile( aFile.pData );
-                aFile = rtl::OUString();
+                aFile = OUString();
             }
             else
                 m_aHandler->downloadStarted( aFile, 0 );
@@ -382,7 +382,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
         else
         {
             osl_removeFile( aFile.pData );
-            aFile = rtl::OUString();
+            aFile = OUString();
         }
     }
 
@@ -403,10 +403,10 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl
             }
         }
         else if( osl_File_E_NOENT == rc ) // file has been deleted meanwhile ..
-            out.File = rtl::OUString();
+            out.File = OUString();
     }
 
-    rtl::OString aProxyHost;
+    OString aProxyHost;
     sal_Int32    nProxyPort = -1;
     getProxyForURL(rURL, aProxyHost, nProxyPort);
 

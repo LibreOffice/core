@@ -57,8 +57,8 @@ public:
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
-    const rtl::OUString msTrue;
-    const rtl::OUString msFalse;
+    const OUString msTrue;
+    const OUString msFalse;
     bool mbAdaptPercentage;
 
     SvXMLExport& mrExport;
@@ -107,7 +107,7 @@ public:
     virtual bool handleSpecialItem(
         XMLPropertyState& rProperty,
         ::std::vector< XMLPropertyState >& rProperties,
-        const ::rtl::OUString& rValue,
+        const OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const;
 

@@ -115,7 +115,7 @@ private:
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW, false );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SHOW_CORRELATION_COEFF, false );
-        //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, ::rtl::OUString( sal_Unicode( '\n' )));
+        //::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_EQUATION_SEPARATOR, OUString( sal_Unicode( '\n' )));
 
         // override other defaults
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::FillProperties::PROP_FILL_STYLE, drawing::FillStyle_NONE );
@@ -309,11 +309,11 @@ void SAL_CALL RegressionEquation::setText( const uno::Sequence< uno::Reference< 
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > RegressionEquation::getSupportedServiceNames_Static()
+uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames_Static()
 {
     const sal_Int32 nNumServices( 5 );
     sal_Int32 nI = 0;
-    uno::Sequence< ::rtl::OUString > aServices( nNumServices );
+    uno::Sequence< OUString > aServices( nNumServices );
     aServices[ nI++ ] = lcl_aServiceName;
     aServices[ nI++ ] = "com.sun.star.beans.PropertySet";
     aServices[ nI++ ] = "com.sun.star.drawing.FillProperties";

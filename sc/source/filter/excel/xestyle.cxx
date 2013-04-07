@@ -52,8 +52,6 @@
 #include <oox/token/tokens.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-using ::rtl::OString;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace oox;
 
@@ -1214,7 +1212,7 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
             XML_numFmtId,   OString::number( mnXclNumFmt ).getStr(),
-            XML_formatCode, rtl::OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
+            XML_formatCode, OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
             FSEND );
 }
 
@@ -2896,7 +2894,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                                 pFormatEntry->GetType() != condformat::DATE))
                         continue;
 
-                    rtl::OUString aStyleName;
+                    OUString aStyleName;
                     if(pFormatEntry->GetType() == condformat::CONDITION)
                     {
                         const ScCondFormatEntry* pEntry = static_cast<const ScCondFormatEntry*>(pFormatEntry);
@@ -2910,7 +2908,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                     if (maStyleNameToDxfId.find(aStyleName) == maStyleNameToDxfId.end())
                     {
-                        maStyleNameToDxfId.insert(std::pair<rtl::OUString, sal_Int32>(aStyleName, nIndex));
+                        maStyleNameToDxfId.insert(std::pair<OUString, sal_Int32>(aStyleName, nIndex));
 
                         SfxStyleSheetBase* pStyle = rRoot.GetDoc().GetStyleSheetPool()->Find(aStyleName);
                         if(!pStyle)
@@ -2973,9 +2971,9 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
     }
 }
 
-sal_Int32 XclExpDxfs::GetDxfId( const rtl::OUString& rStyleName )
+sal_Int32 XclExpDxfs::GetDxfId( const OUString& rStyleName )
 {
-    std::map<rtl::OUString, sal_Int32>::iterator itr = maStyleNameToDxfId.find(rStyleName);
+    std::map<OUString, sal_Int32>::iterator itr = maStyleNameToDxfId.find(rStyleName);
     if(itr!= maStyleNameToDxfId.end())
         return itr->second;
     return -1;

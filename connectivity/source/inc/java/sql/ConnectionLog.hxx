@@ -40,9 +40,9 @@ namespace comphelper { namespace log { namespace convert
 //........................................................................
 
     // helpers for logging more data types than are defined in comphelper/logging.hxx
-    ::rtl::OUString convertLogArgToString( const ::com::sun::star::util::Date& _rDate );
-    ::rtl::OUString convertLogArgToString( const ::com::sun::star::util::Time& _rTime );
-    ::rtl::OUString convertLogArgToString( const ::com::sun::star::util::DateTime& _rDateTime );
+    OUString convertLogArgToString( const ::com::sun::star::util::Date& _rDate );
+    OUString convertLogArgToString( const ::com::sun::star::util::Time& _rTime );
+    OUString convertLogArgToString( const ::com::sun::star::util::DateTime& _rDateTime );
 
 //........................................................................
 } } }

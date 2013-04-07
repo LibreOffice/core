@@ -37,10 +37,10 @@ namespace connectivity
         {
         private:
             sal_Bool                                        m_bProfileExists ;
-            ::std::vector< ::rtl::OUString >                m_aTableNames;
-            ::std::vector< ::rtl::OUString >                m_aTableTypes;
+            ::std::vector< OUString >                m_aTableNames;
+            ::std::vector< OUString >                m_aTableTypes;
             ::com::sun::star::mozilla::MozillaProductType   m_ProductType;
-            ::rtl::OUString                                 m_ProfileName;
+            OUString                                 m_ProfileName;
             ErrorDescriptor                                 m_aError;
 
         public:
@@ -49,15 +49,15 @@ namespace connectivity
 
             //
             sal_Bool getTableStrings( OConnection*                        _pCon,
-                                      ::std::vector< ::rtl::OUString >&   _rStrings,
-                                      ::std::vector< ::rtl::OUString >&   _rTypes);
+                                      ::std::vector< OUString >&   _rStrings,
+                                      ::std::vector< OUString >&   _rTypes);
 
             sal_Bool getTables( OConnection* _pCon,
-                                const ::rtl::OUString& tableNamePattern,
-                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types,
+                                const OUString& tableNamePattern,
+                                const ::com::sun::star::uno::Sequence< OUString >& types,
                                 ODatabaseMetaDataResultSet::ORows& _rRows);
             sal_Bool   testLDAPConnection( OConnection* _pCon );
-            sal_Bool   NewAddressBook( OConnection* _pCon,const ::rtl::OUString & aTableName);
+            sal_Bool   NewAddressBook( OConnection* _pCon,const OUString & aTableName);
 
             inline const ErrorDescriptor& getError() const { return m_aError; }
         };

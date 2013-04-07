@@ -168,14 +168,14 @@ void FormulaBuffer::applyArrayFormulas( const std::vector< TokenRangeAddressItem
     }
 }
 
-void FormulaBuffer::createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
+void FormulaBuffer::createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
 {
     std::vector<SharedFormulaEntry>& rSharedFormulas = sharedFormulas[ rAddress.Sheet ];
     SharedFormulaEntry aEntry( rAddress, rTokens, nSharedId );
     rSharedFormulas.push_back( aEntry );
 }
 
-void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const rtl::OUString& rTokenStr )
+void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& rAddress, const OUString& rTokenStr )
 {
     cellFormulas[ rAddress.Sheet ].push_back( TokenAddressItem( rTokenStr, rAddress ) );
 }
@@ -185,7 +185,7 @@ void FormulaBuffer::setCellFormula( const ::com::sun::star::table::CellAddress& 
     sharedFormulaIds[ rAddress.Sheet ].push_back( SharedFormulaDesc( rAddress, nSharedId ) );
 }
 
-void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
+void FormulaBuffer::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
 
     TokenAddressItem tokenPair( rTokenStr, rTokenAddress );
@@ -197,13 +197,13 @@ void FormulaBuffer::setCellFormulaValue( const ::com::sun::star::table::CellAddr
     cellFormulaValues[ rAddress.Sheet ].push_back( ValueAddressPair( rAddress, fValue ) );
 }
 
-void  FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const rtl::OUString& rTokenStr )
+void  FormulaBuffer::createSharedFormula( const ::com::sun::star::table::CellAddress& rAddress,  sal_Int32 nSharedId, const OUString& rTokenStr )
 {
     ApiTokenSequence aTokens = getFormulaParser().importFormula( rAddress, rTokenStr );
-    rtl::OUString aName = rtl::OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
+    OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
         append( static_cast< sal_Int32 >( rAddress.Sheet + 1 ) ).
         append( sal_Unicode( '_' ) ).append( nSharedId ).
-        append( rtl::OUString("_0") ).makeStringAndClear();
+        append( OUString("_0") ).makeStringAndClear();
     ScRangeData* pScRangeData  = createNamedRangeObject( aName, aTokens, 0  );
 
     pScRangeData->SetType(RT_SHARED);

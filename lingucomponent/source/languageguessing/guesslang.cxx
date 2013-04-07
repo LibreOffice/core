@@ -103,7 +103,7 @@ public:
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
     // XLanguageGuessing implementation
-    virtual ::com::sun::star::lang::Locale SAL_CALL guessPrimaryLanguage( const ::rtl::OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL enableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getAvailableLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -111,7 +111,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getDisabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // implementation specific
-    void SetFingerPrintsDB( const rtl::OUString &fileName ) throw (RuntimeException);
+    void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
 
     static const OUString & SAL_CALL getImplementationName_Static() throw();
 
@@ -136,13 +136,13 @@ void LangGuess_Impl::EnsureInitialized()
         m_bInitialized = true;
 
         // set default fingerprint path to where those get installed
-        rtl::OUString aPhysPath;
-        rtl::OUString aURL( SvtPathOptions().GetFingerprintPath() );
+        OUString aPhysPath;
+        OUString aURL( SvtPathOptions().GetFingerprintPath() );
         utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
 #ifdef WNT
-        aPhysPath = aPhysPath + rtl::OUString(static_cast<sal_Unicode>('\\'));
+        aPhysPath = aPhysPath + OUString(static_cast<sal_Unicode>('\\'));
 #else
-        aPhysPath = aPhysPath + rtl::OUString(static_cast<sal_Unicode>('/'));
+        aPhysPath = aPhysPath + OUString(static_cast<sal_Unicode>('/'));
 #endif
 
         SetFingerPrintsDB( aPhysPath );
@@ -184,7 +184,7 @@ void LangGuess_Impl::EnsureInitialized()
 //*************************************************************************
 
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
-        const ::rtl::OUString& rText,
+        const OUString& rText,
         ::sal_Int32 nStartPos,
         ::sal_Int32 nLen )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -211,7 +211,7 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
 #define DEFAULT_CONF_FILE_NAME "fpdb.conf"
 
 void LangGuess_Impl::SetFingerPrintsDB(
-        const rtl::OUString &filePath )
+        const OUString &filePath )
     throw (RuntimeException)
 {
     //! text encoding for file name / path needs to be in the same encoding the OS uses

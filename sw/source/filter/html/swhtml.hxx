@@ -471,7 +471,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     sal_Bool bRemoveHidden : 1; // the filter implementation might set the hidden flag
 
     /// the names corresponding to the DOCINFO field subtypes INFO[1-4]
-    ::rtl::OUString m_InfoNames[4];
+    OUString m_InfoNames[4];
 
     SfxViewFrame* pTempViewFrame;
 
@@ -749,7 +749,7 @@ private:
     void AddScriptSource();
 
     // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
-    void InsertBasicDocEvent( rtl::OUString aEventName, const String& rName,
+    void InsertBasicDocEvent( OUString aEventName, const String& rName,
                               ScriptType eScrType, const String& rScrType );
 
     // ein Event an ein VC-Control anhaengen (htmlform.cxx)
@@ -891,7 +891,7 @@ protected:
     // If the document is removed, remove the parser as well
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
-    virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
+    virtual void AddMetaUserDefined( OUString const & i_rMetaName );
 
 public:
 

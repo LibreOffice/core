@@ -33,7 +33,7 @@ namespace connectivity
         typedef file::OFileTable ODbaseTable_BASE;
         class ODbaseConnection;
 
-        typedef ::std::map< ::rtl::OUString,
+        typedef ::std::map< OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
 
         class ODbaseTable : public ODbaseTable_BASE
@@ -112,8 +112,8 @@ namespace connectivity
             void AllocBuffer();
 
             void throwInvalidDbaseFormat();
-            void SAL_CALL renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-            void throwInvalidColumnType(const sal_uInt16 _nErrorId,const ::rtl::OUString& _sColumnName);
+            void SAL_CALL renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+            void throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName);
 
         protected:
             virtual void FileClose();
@@ -126,11 +126,11 @@ namespace connectivity
         public:
             ODbaseTable( sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection);
             ODbaseTable( sdbcx::OCollection* _pTables,ODbaseConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description = OUString(),
+                    const OUString& _SchemaName = OUString(),
+                    const OUString& _CatalogName = OUString()
                 );
 
             void construct(); // can throw any exception
@@ -148,10 +148,10 @@ namespace connectivity
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             // XRename
-            virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
             sal_Bool    DropImpl();
             sal_Bool    CreateImpl();
@@ -164,8 +164,8 @@ namespace connectivity
             virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
 
-            static String   getEntry(file::OConnection* _pConnection,const ::rtl::OUString& _sURL );
-            static sal_Bool     Drop_Static(const ::rtl::OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
+            static String   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
+            static sal_Bool     Drop_Static(const OUString& _sUrl,sal_Bool _bHasMemoFields,sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader();
 

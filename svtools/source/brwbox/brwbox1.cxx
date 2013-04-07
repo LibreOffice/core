@@ -230,7 +230,7 @@ void BrowseBox::SetFont( const Font& rNewFont )
 
 sal_uLong BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
 {
-    return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth(rtl::OUString('0')) * 4;
+    return GetDataWindow().GetTextWidth( _rText ) + GetDataWindow().GetTextWidth(OUString('0')) * 4;
 }
 
 //-------------------------------------------------------------------
@@ -550,8 +550,8 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const String& rTitle )
     BrowserColumn *pCol = (*pCols)[ nItemPos ];
     if ( pCol->Title() != rTitle )
     {
-        ::rtl::OUString sNew(rTitle);
-        ::rtl::OUString sOld(pCol->Title());
+        OUString sNew(rTitle);
+        OUString sOld(pCol->Title());
 
         pCol->Title() = rTitle;
 

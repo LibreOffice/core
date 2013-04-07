@@ -82,12 +82,12 @@ protected:
     virtual Sequence< Type > SAL_CALL getTypes() throw (RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException);
-    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     // XExecutableDialog
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle ) throw(RuntimeException);
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw(RuntimeException);
 
     // XInitialization
@@ -206,8 +206,8 @@ Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames(
 
 sal_Bool SAL_CALL XMLFilterDialogComponent_supportsService( const OUString& ServiceName ) throw ( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aSupported(XMLFilterDialogComponent_getSupportedServiceNames());
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
+    Sequence< OUString > aSupported(XMLFilterDialogComponent_getSupportedServiceNames());
+    const OUString* pArray = aSupported.getConstArray();
     for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
         if (pArray->equals(ServiceName))
             return sal_True;
@@ -222,7 +222,7 @@ Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const 
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::sun::star::uno::RuntimeException)
+OUString SAL_CALL XMLFilterDialogComponent::getImplementationName() throw(com::sun::star::uno::RuntimeException)
 {
     return XMLFilterDialogComponent_getImplementationName();
 }
@@ -271,13 +271,13 @@ Sequence< Type > XMLFilterDialogComponent::getTypes() throw (RuntimeException)
 
 //-------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
+Sequence< OUString > SAL_CALL XMLFilterDialogComponent::getSupportedServiceNames() throw(com::sun::star::uno::RuntimeException)
 {
     return XMLFilterDialogComponent_getSupportedServiceNames();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
+sal_Bool SAL_CALL XMLFilterDialogComponent::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
     return XMLFilterDialogComponent_supportsService( ServiceName );
 }
@@ -338,7 +338,7 @@ void SAL_CALL XMLFilterDialogComponent::disposing( const EventObject& /* Source 
 }
 
 //-------------------------------------------------------------------------
-void SAL_CALL XMLFilterDialogComponent::setTitle( const ::rtl::OUString& /* _rTitle */ ) throw(RuntimeException)
+void SAL_CALL XMLFilterDialogComponent::setTitle( const OUString& /* _rTitle */ ) throw(RuntimeException)
 {
 }
 

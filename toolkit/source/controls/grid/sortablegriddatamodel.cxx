@@ -228,7 +228,7 @@ namespace toolkit
         DBG_CHECK_ME();
 
         if ( m_delegator.is() )
-            throw AlreadyInitializedException( ::rtl::OUString(), *this );
+            throw AlreadyInitializedException( OUString(), *this );
 
         Reference< XMutableGridDataModel > xDelegator;
         Reference< XCollator > xCollator;
@@ -243,11 +243,11 @@ namespace toolkit
             xDelegator.set( i_arguments[0], UNO_QUERY );
             xCollator.set( i_arguments[1], UNO_QUERY );
             if ( !xCollator.is() )
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 2 );
+                throw IllegalArgumentException( OUString(), *this, 2 );
             break;
         }
         if ( !xDelegator.is() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         m_delegator = xDelegator;
         m_collator = xCollator;
@@ -521,7 +521,7 @@ namespace toolkit
         DBG_CHECK_ME();
 
         if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= getColumnCount() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         if ( !impl_reIndex_nothrow( i_columnIndex, i_sortAscending ) )
             return;
@@ -834,9 +834,9 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::sal_Bool SAL_CALL SortableGridDataModel::supportsService( const ::rtl::OUString& i_serviceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL SortableGridDataModel::supportsService( const OUString& i_serviceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > const aServiceNames( getSupportedServiceNames() );
+        Sequence< OUString > const aServiceNames( getSupportedServiceNames() );
         for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
             if ( aServiceNames[i] == i_serviceName )
                 return sal_True;
@@ -844,10 +844,10 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL SortableGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_SortableGridDataModel );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString::createFromAscii( szServiceName_SortableGridDataModel );
         return aServiceNames;
     }
 
@@ -855,7 +855,7 @@ namespace toolkit
     ::sal_Int32 SortableGridDataModel::impl_getPrivateRowIndex_throw( ::sal_Int32 const i_publicRowIndex ) const
     {
         if ( ( i_publicRowIndex < 0 ) || ( i_publicRowIndex >= m_delegator->getRowCount() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< SortableGridDataModel* >( this ) );
+            throw IndexOutOfBoundsException( OUString(), *const_cast< SortableGridDataModel* >( this ) );
 
         if ( !impl_isSorted_nothrow() )
             // no need to translate anything

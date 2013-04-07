@@ -311,7 +311,7 @@ void SAL_CALL OInterceptor::removeStatusListener(
 
 
 //XInterceptorInfo
-Sequence< ::rtl::OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   throw ( RuntimeException    )
+Sequence< OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   throw ( RuntimeException    )
 {
     // now implemented as update
     return m_aInterceptedURL;
@@ -320,12 +320,12 @@ Sequence< ::rtl::OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   thro
 
 // XDispatchProvider
 
-Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,const ::rtl::OUString& TargetFrameName,sal_Int32 SearchFlags )
+Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,const OUString& TargetFrameName,sal_Int32 SearchFlags )
     throw (RuntimeException)
 {
     osl::MutexGuard aGuard(m_aMutex);
-    const ::rtl::OUString* pIter = m_aInterceptedURL.getConstArray();
-    const ::rtl::OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
+    const OUString* pIter = m_aInterceptedURL.getConstArray();
+    const OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if ( _URL.Complete == *pIter )
@@ -349,8 +349,8 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
 
     for(sal_Int32 i = 0; i < Requests.getLength(); ++i)
     {
-        const ::rtl::OUString* pIter = m_aInterceptedURL.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
+        const OUString* pIter = m_aInterceptedURL.getConstArray();
+        const OUString* pEnd   = pIter + m_aInterceptedURL.getLength();
         for(;pIter != pEnd;++pIter)
         {
             if ( Requests[i].FeatureURL.Complete == *pIter )

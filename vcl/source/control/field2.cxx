@@ -158,7 +158,7 @@ static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 
     try
     {
-        rtl::OUString aCharStr(cChar);
+        OUString aCharStr(cChar);
         nType = ImplGetCharClass()->getStringType( aCharStr, 0, aCharStr.getLength(),
                 Application::GetSettings().GetLanguageTag().getLocale() );
     }
@@ -209,7 +209,7 @@ static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
              (cEditMask == EDITMASK_UPPERALPHANUM) ||
              ( cEditMask == EDITMASK_UPPERALLCHAR ) )
         {
-            cChar = ImplGetCharClass()->toUpper(rtl::OUString(cChar), 0, 1,
+            cChar = ImplGetCharClass()->toUpper(OUString(cChar), 0, 1,
                     Application::GetSettings().GetLanguageTag().getLocale())[0];
         }
         return cChar;
@@ -429,7 +429,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen nCursorPos)
+static xub_StrLen ImplPatternLeftPos(const OString& rEditMask, xub_StrLen nCursorPos)
 {
     // search non-literal predecessor
     xub_StrLen nNewPos = nCursorPos;
@@ -448,7 +448,7 @@ static xub_StrLen ImplPatternLeftPos(const rtl::OString& rEditMask, xub_StrLen n
 
 // -----------------------------------------------------------------------
 
-static xub_StrLen ImplPatternRightPos( const OUString& rStr, const rtl::OString& rEditMask,
+static xub_StrLen ImplPatternRightPos( const OUString& rStr, const OString& rEditMask,
                                        sal_uInt16 nFormatFlags, sal_Bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
@@ -1304,7 +1304,7 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
         }
     }
 
-    return rtl::OUString(aBuf, pBuf-aBuf);
+    return OUString(aBuf, pBuf-aBuf);
 }
 
 // -----------------------------------------------------------------------
@@ -2236,7 +2236,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     // Search for separators
     if (!rLocaleDataWrapper.getTimeSep().isEmpty())
     {
-        rtl::OUStringBuffer aSepStr(",.;:/");
+        OUStringBuffer aSepStr(",.;:/");
         if ( !bDuration )
             aSepStr.append('-');
 

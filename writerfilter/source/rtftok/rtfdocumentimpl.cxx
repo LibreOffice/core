@@ -83,11 +83,6 @@
             break
 
 using std::make_pair;
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 namespace writerfilter {
 namespace rtftok {
@@ -326,12 +321,12 @@ void RTFDocumentImpl::setSuperstream(RTFDocumentImpl *pSuperstream)
     m_pSuperstream = pSuperstream;
 }
 
-void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
+void RTFDocumentImpl::setAuthor(OUString& rAuthor)
 {
     m_aAuthor = rAuthor;
 }
 
-void RTFDocumentImpl::setAuthorInitials(rtl::OUString& rAuthorInitials)
+void RTFDocumentImpl::setAuthorInitials(OUString& rAuthorInitials)
 {
     m_aAuthorInitials = rAuthorInitials;
 }
@@ -3179,16 +3174,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_TRRH:
             {
-                rtl::OUString hRule = rtl::OUString::createFromAscii("auto");
+                OUString hRule = OUString::createFromAscii("auto");
                 if ( nParam < 0 )
                 {
                     RTFValue::Pointer_t pAbsValue(new RTFValue(-nParam));
                     pIntValue.swap( pAbsValue );
 
-                    hRule = rtl::OUString::createFromAscii("exact");
+                    hRule = OUString::createFromAscii("exact");
                 }
                 else if ( nParam > 0 )
-                    hRule = rtl::OUString::createFromAscii("atLeast");
+                    hRule = OUString::createFromAscii("atLeast");
 
                 lcl_putNestedAttribute(m_aStates.top().aTableRowSprms,
                         NS_ooxml::LN_CT_TrPrBase_trHeight, NS_ooxml::LN_CT_Height_val, pIntValue);

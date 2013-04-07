@@ -578,12 +578,12 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Cha
     {
         if( 0 == rtl_str_compare( sImplementationName, pArr->pImplementationNm ) )
         {
-            uno::Sequence< ::rtl::OUString > aServiceNames(1);
+            uno::Sequence< OUString > aServiceNames(1);
             aServiceNames.getArray()[0] =
-                ::rtl::OUString::createFromAscii( pArr->pServiceNm );
+                OUString::createFromAscii( pArr->pServiceNm );
             xFactory = ::cppu::createSingleFactory(
                     pServiceManager,
-                    ::rtl::OUString::createFromAscii( pArr->pImplementationNm ),
+                    OUString::createFromAscii( pArr->pImplementationNm ),
                     *pArr->pFn, aServiceNames );
             break;
         }

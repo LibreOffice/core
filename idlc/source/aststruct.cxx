@@ -26,13 +26,13 @@
 using namespace ::rtl;
 
 AstStruct::AstStruct(
-    const OString& name, std::vector< rtl::OString > const & typeParameters,
+    const OString& name, std::vector< OString > const & typeParameters,
     AstStruct* pBaseType, AstScope* pScope)
     : AstType(NT_struct, name, pScope)
     , AstScope(NT_struct)
     , m_pBaseType(pBaseType)
 {
-    for (std::vector< rtl::OString >::const_iterator i(typeParameters.begin());
+    for (std::vector< OString >::const_iterator i(typeParameters.begin());
          i != typeParameters.end(); ++i)
     {
         m_typeParameters.push_back(
@@ -59,7 +59,7 @@ AstStruct::~AstStruct()
     }
 }
 
-AstDeclaration const * AstStruct::findTypeParameter(rtl::OString const & name)
+AstDeclaration const * AstStruct::findTypeParameter(OString const & name)
     const
 {
     for (DeclList::const_iterator i(m_typeParameters.begin());
@@ -133,7 +133,7 @@ sal_Bool AstStruct::dump(RegistryKey& rKey)
             {
                 pMember = (AstMember*)pDecl;
                 RTFieldAccess flags = RT_ACCESS_READWRITE;
-                rtl::OString typeName;
+                OString typeName;
                 if (pMember->getType()->getNodeType() == NT_type_parameter) {
                     flags |= RT_ACCESS_PARAMETERIZED_TYPE;
                     typeName = pMember->getType()->getLocalName();

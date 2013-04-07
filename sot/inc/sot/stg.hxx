@@ -113,7 +113,7 @@ public:
     virtual sal_Bool                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 ) = 0;
+                                  sal_Bool bDirect = sal_True, const OString* pKey=0 ) = 0;
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    bool bDirect = false ) = 0;
@@ -213,7 +213,7 @@ public:
     virtual sal_Bool                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 );
+                                  sal_Bool bDirect = sal_True, const OString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        bool bDirect = false );
@@ -249,7 +249,7 @@ protected:
                                 ~UCBStorageStream();
 public:
                                 TYPEINFO();
-                                UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const rtl::OString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
+                                UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const OString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual sal_uLong               Read( void * pData, sal_uLong nSize );
@@ -329,7 +329,7 @@ public:
     virtual sal_Bool                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  sal_Bool bDirect = sal_True, const rtl::OString* pKey=0 );
+                                  sal_Bool bDirect = sal_True, const OString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
                                        bool bDirect = false );

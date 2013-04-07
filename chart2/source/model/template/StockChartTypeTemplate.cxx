@@ -44,7 +44,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
@@ -162,7 +161,7 @@ namespace chart
 StockChartTypeTemplate::StockChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
+    const OUString & rServiceName,
     StockVariant eVariant,
     bool bJapaneseStyle ) :
         ChartTypeTemplate( xContext, rServiceName ),

@@ -50,7 +50,7 @@ public:
         createRegressionCurveByServiceName(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext,
-            ::rtl::OUString aServiceName );
+            OUString aServiceName );
 
     // ------------------------------------------------------------
 
@@ -163,7 +163,7 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveCalculator >
         createRegressionCurveCalculatorByServiceName(
-            ::rtl::OUString aServiceName );
+            OUString aServiceName );
 
     /** recalculates the regression parameters according to the data given in
         the data source.
@@ -200,7 +200,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
 
-    static ::rtl::OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
+    static OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >& xCurve );
 
     static ::std::vector< ::com::sun::star::uno::Reference<

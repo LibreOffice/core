@@ -45,7 +45,6 @@
 #include <rtl/ref.hxx>
 #include <vcl/svapp.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
@@ -289,7 +288,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterView::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterView::getAccessibleDescription (void)
+OUString SAL_CALL AccessibleSlideSorterView::getAccessibleDescription (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -301,7 +300,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterView::getAccessibleRole (void)
 
 
 
-::rtl::OUString SAL_CALL AccessibleSlideSorterView::getAccessibleName (void)
+OUString SAL_CALL AccessibleSlideSorterView::getAccessibleName (void)
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -716,7 +715,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        AccessibleSlideSorterView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -734,7 +733,7 @@ sal_Bool SAL_CALL
 
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    uno::Sequence< ::rtl::OUString> aSupportedServices (
+    uno::Sequence< OUString> aSupportedServices (
         getSupportedServiceNames ());
     for (int i=0; i<aSupportedServices.getLength(); i++)
         if (sServiceName == aSupportedServices[i])
@@ -745,7 +744,7 @@ sal_Bool SAL_CALL
 
 
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
        AccessibleSlideSorterView::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

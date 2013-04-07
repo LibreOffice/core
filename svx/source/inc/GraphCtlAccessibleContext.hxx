@@ -86,8 +86,8 @@ public:
     SvxGraphCtrlAccessibleContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent,
         GraphCtrl&              rRepresentation,
-        const ::rtl::OUString*  pName = NULL,
-        const ::rtl::OUString*  pDescription = NULL );
+        const OUString*  pName = NULL,
+        const OUString*  pDescription = NULL );
 
     void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
 
@@ -127,8 +127,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleParent (void) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent (void) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getAccessibleRole (void) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription (void) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getAccessibleDescription (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet (void) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale (void) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
@@ -142,9 +142,9 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService (const ::rtl::OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XTypeProvider  ===================================================
 
@@ -152,7 +152,7 @@ public:
 
     //=====  XServiceName  ====================================================
 
-    virtual ::rtl::OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleSelection =============================================
 
@@ -223,11 +223,11 @@ private:
     /** Description of this object.  This is not a constant because it can
         be set from the outside.
     */
-    ::rtl::OUString msDescription;
+    OUString msDescription;
 
     /** Name of this object.
     */
-    ::rtl::OUString msName;
+    OUString msName;
 
     /// map of accessible shapes
     struct SdrObjectCompareLess

@@ -144,7 +144,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE sal_uLong         DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                              ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc );
     SC_DLLPRIVATE sal_uLong DBaseExport(
-        const rtl::OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo );
+        const OUString& rFullFileName, CharSet eCharSet, bool& bHasMemo );
 
     SC_DLLPRIVATE static bool       MoveFile( const INetURLObject& rSource, const INetURLObject& rDest );
     SC_DLLPRIVATE static bool       KillFile( const INetURLObject& rURL );
@@ -201,7 +201,7 @@ public:
     virtual sal_Bool    Load( SfxMedium& rMedium );
     virtual sal_Bool    LoadFrom( SfxMedium& rMedium );
     virtual sal_Bool    ConvertFrom( SfxMedium &rMedium );
-    virtual bool        LoadExternal(SfxMedium& rMedium, const rtl::OUString& rProvider);
+    virtual bool        LoadExternal(SfxMedium& rMedium, const OUString& rProvider);
     virtual sal_Bool    Save();
     virtual sal_Bool    SaveAs( SfxMedium& rMedium );
     virtual sal_Bool    ConvertTo( SfxMedium &rMedium );
@@ -278,7 +278,7 @@ public:
 
     void            LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellStyles, bool bPageStyles );
 
-    void            PageStyleModified( const rtl::OUString& rStyleName, sal_Bool bApi );
+    void            PageStyleModified( const OUString& rStyleName, sal_Bool bApi );
 
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const String& rStyle );

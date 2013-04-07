@@ -42,14 +42,14 @@ using namespace ::ooo::vba;
 // =============================================================================
 
 //ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
-rtl::OUString sDocCtxName( "ExcelDocumentContext" );
+OUString sDocCtxName( "ExcelDocumentContext" );
 
 ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, sDocCtxName )
 {
     OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
 
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString("Application");
+        aInitArgs[ 0 ].Name = OUString("Application");
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -93,7 +93,7 @@ ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
         return xWorkbook;
     }
 // FIXME check if this is correct/desired behavior
-    throw uno::RuntimeException( rtl::OUString(
+    throw uno::RuntimeException( OUString(
         "No activeWorkbook available" ), Reference< uno::XInterface >() );
 }
 
@@ -198,7 +198,7 @@ ScVbaGlobals::Intersect( const css::uno::Reference< ov::excel::XRange >& Arg1, c
 }
 
 uno::Any SAL_CALL
-ScVbaGlobals::Evaluate( const ::rtl::OUString& Name ) throw (uno::RuntimeException)
+ScVbaGlobals::Evaluate( const OUString& Name ) throw (uno::RuntimeException)
 {
     return getApplication()->Evaluate( Name );
 }
@@ -230,7 +230,7 @@ ScVbaGlobals::getDebug() throw (uno::RuntimeException)
     {
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(
-            ::rtl::OUString( "ooo.vba.Debug" ), mxContext );
+            OUString( "ooo.vba.Debug" ), mxContext );
         return uno::Any( xVBADebug );
     }
     catch( uno::Exception& )
@@ -245,21 +245,21 @@ ScVbaGlobals::MenuBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
     return uno::Any( getApplication()->MenuBars(aIndex) );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
     static bool bInit = false;
-    static uno::Sequence< rtl::OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
+    static uno::Sequence< OUString > serviceNames( ScVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         rtl::OUString names[] = {
-            ::rtl::OUString(  "ooo.vba.excel.Range"  ),
-            ::rtl::OUString(  "ooo.vba.excel.Workbook"  ),
-            ::rtl::OUString(  "ooo.vba.excel.Window"  ),
-            ::rtl::OUString(  "ooo.vba.excel.Worksheet"  ),
-            ::rtl::OUString(  "ooo.vba.excel.Application"  ),
-            ::rtl::OUString(  "ooo.vba.excel.Hyperlink"  ),
-            ::rtl::OUString(  "com.sun.star.script.vba.VBASpreadsheetEventProcessor"  )
+         OUString names[] = {
+            OUString(  "ooo.vba.excel.Range"  ),
+            OUString(  "ooo.vba.excel.Workbook"  ),
+            OUString(  "ooo.vba.excel.Window"  ),
+            OUString(  "ooo.vba.excel.Worksheet"  ),
+            OUString(  "ooo.vba.excel.Application"  ),
+            OUString(  "ooo.vba.excel.Hyperlink"  ),
+            OUString(  "com.sun.star.script.vba.VBASpreadsheetEventProcessor"  )
           };
         sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
         sal_Int32 startIndex = serviceNames.getLength();
@@ -271,20 +271,20 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
     return serviceNames;
 }
 
-rtl::OUString
+OUString
 ScVbaGlobals::getServiceImplName()
 {
-    return rtl::OUString("ScVbaGlobals");
+    return OUString("ScVbaGlobals");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.excel.Globals"  );
+                aServiceNames[ 0 ] = OUString( "ooo.vba.excel.Globals"  );
         }
         return aServiceNames;
 }

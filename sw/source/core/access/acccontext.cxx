@@ -49,7 +49,6 @@
 using namespace sw::access;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 void SwAccessibleContext::InitStates()
 {

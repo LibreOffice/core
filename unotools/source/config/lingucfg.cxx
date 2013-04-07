@@ -42,7 +42,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 using ::rtl::Uri;
 
 #define EXPAND_PROTOCOL     "vnd.sun.star.expand:"
@@ -152,7 +151,7 @@ public:
     virtual ~SvtLinguConfigItem();
 
     // utl::ConfigItem
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames );
     virtual void    Commit();
 
     // make some protected functions of utl::ConfigItem public
@@ -165,24 +164,24 @@ public:
 
 
     com::sun::star::uno::Any
-            GetProperty( const rtl::OUString &rPropertyName ) const;
+            GetProperty( const OUString &rPropertyName ) const;
     com::sun::star::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
-    sal_Bool    SetProperty( const rtl::OUString &rPropertyName,
+    sal_Bool    SetProperty( const OUString &rPropertyName,
                          const com::sun::star::uno::Any &rValue );
     sal_Bool    SetProperty( sal_Int32 nPropertyHandle,
                          const com::sun::star::uno::Any &rValue );
 
     const SvtLinguOptions& GetOptions() const;
 
-    sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
+    sal_Bool    IsReadOnly( const OUString &rPropertyName ) const;
     sal_Bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 };
 
 
 SvtLinguConfigItem::SvtLinguConfigItem() :
-    utl::ConfigItem( rtl::OUString("Office.Linguistic") )
+    utl::ConfigItem( OUString("Office.Linguistic") )
 {
     const uno::Sequence< OUString > &rPropertyNames = GetPropertyNames();
     LoadOptions( rPropertyNames );
@@ -274,7 +273,7 @@ const uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
     {
         const sal_Char *pFullPropName = aNamesToHdl[i].pFullPropName;
         if (pFullPropName)
-            pNames[ nIdx++ ] = ::rtl::OUString::createFromAscii( pFullPropName );
+            pNames[ nIdx++ ] = OUString::createFromAscii( pFullPropName );
     }
     aNames.realloc( nIdx );
 
@@ -738,7 +737,7 @@ sal_Bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProp
     return bRet;
 }
 
-sal_Bool SvtLinguConfigItem::IsReadOnly( const rtl::OUString &rPropertyName ) const
+sal_Bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
 
@@ -882,14 +881,14 @@ sal_Bool SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
     return sal_True;
 }
 
-sal_Bool SvtLinguConfig::IsReadOnly( const rtl::OUString &rPropertyName ) const
+sal_Bool SvtLinguConfig::IsReadOnly( const OUString &rPropertyName ) const
 {
     return GetConfigItem().IsReadOnly( rPropertyName );
 }
 
 sal_Bool SvtLinguConfig::GetElementNamesFor(
-     const rtl::OUString &rNodeName,
-     uno::Sequence< rtl::OUString > &rElementNames ) const
+     const OUString &rNodeName,
+     uno::Sequence< OUString > &rElementNames ) const
 {
     bool bSuccess = false;
     try
@@ -907,9 +906,9 @@ sal_Bool SvtLinguConfig::GetElementNamesFor(
 }
 
 sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
-    const rtl::OUString &rSetName,
-    const rtl::OUString &rSetEntry,
-    uno::Sequence< rtl::OUString > &rFormatList ) const
+    const OUString &rSetName,
+    const OUString &rSetEntry,
+    uno::Sequence< OUString > &rFormatList ) const
 {
     if (rSetName.isEmpty() || rSetEntry.isEmpty())
         return sal_False;
@@ -972,7 +971,7 @@ static bool lcl_GetFileUrlFromOrigin(
 
 
 sal_Bool SvtLinguConfig::GetDictionaryEntry(
-    const rtl::OUString &rNodeName,
+    const OUString &rNodeName,
     SvtLinguConfigDictionaryEntry &rDicEntry ) const
 {
     if (rNodeName.isEmpty())
@@ -1002,7 +1001,7 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
             // get file URL's for the locations
             for (sal_Int32 i = 0;  i < aLocations.getLength();  ++i)
             {
-                rtl::OUString &rLocation = aLocations[i];
+                OUString &rLocation = aLocations[i];
                 if (!lcl_GetFileUrlFromOrigin( rLocation, rLocation ))
                     bSuccess = false;
             }
@@ -1022,9 +1021,9 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     return bSuccess;
 }
 
-uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
+uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
 {
-    uno::Sequence< rtl::OUString > aResult;
+    uno::Sequence< OUString > aResult;
     try
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
@@ -1046,10 +1045,10 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
 
     try
     {
-        uno::Sequence< rtl::OUString > aElementNames;
-        GetElementNamesFor( rtl::OUString(aG_Dictionaries), aElementNames );
+        uno::Sequence< OUString > aElementNames;
+        GetElementNamesFor( OUString(aG_Dictionaries), aElementNames );
         sal_Int32 nLen = aElementNames.getLength();
-        const rtl::OUString *pElementNames = aElementNames.getConstArray();
+        const OUString *pElementNames = aElementNames.getConstArray();
 
         SvtLinguConfigDictionaryEntry aDicEntry;
         for (sal_Int32 i = 0;  i < nLen;  ++i)
@@ -1060,7 +1059,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
             {
                 // check if it is active or not
                 bool bDicIsActive = true;
-                const uno::Sequence< rtl::OUString > aDisabledDics( GetDisabledDictionaries() );
+                const uno::Sequence< OUString > aDisabledDics( GetDisabledDictionaries() );
                 for (sal_Int32 k = 0;  bDicIsActive && k < aDisabledDics.getLength();  ++k)
                 {
                     if (aDisabledDics[k] == pElementNames[i])
@@ -1119,11 +1118,11 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
 }
 
 
-rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
-    const rtl::OUString &rServiceImplName,
-    const rtl::OUString &rImageName ) const
+OUString SvtLinguConfig::GetVendorImageUrl_Impl(
+    const OUString &rServiceImplName,
+    const OUString &rImageName ) const
 {
-    rtl::OUString aRes;
+    OUString aRes;
     try
     {
         uno::Reference< container::XNameAccess > xImagesNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
@@ -1132,14 +1131,14 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
         uno::Reference< container::XNameAccess > xNA( xImagesNA->getByName(OUString("ServiceNameEntries")), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rServiceImplName ), uno::UNO_QUERY_THROW );
         uno::Any aAny(xNA->getByName(OUString("VendorImagesNode")));
-        rtl::OUString aVendorImagesNode;
+        OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {
             xNA = xImagesNA;
             xNA.set( xNA->getByName(OUString("VendorImages")), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
             aAny = xNA->getByName( rImageName );
-            rtl::OUString aTmp;
+            OUString aTmp;
             if (aAny >>= aTmp)
             {
                 if (lcl_GetFileUrlFromOrigin( aTmp, aTmp ))
@@ -1155,11 +1154,11 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
 }
 
 
-rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
-    const rtl::OUString &rServiceImplName
+OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
+    const OUString &rServiceImplName
 ) const
 {
-    rtl::OUString   aRes;
+    OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
         OUString aImageName( "SpellAndGrammarContextMenuSuggestionImage" );
@@ -1170,11 +1169,11 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
 }
 
 
-rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
-    const rtl::OUString &rServiceImplName
+OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
+    const OUString &rServiceImplName
 ) const
 {
-    rtl::OUString   aRes;
+    OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
         OUString aImageName( "SpellAndGrammarContextMenuDictionaryImage" );
@@ -1184,11 +1183,11 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     return aRes;
 }
 
-::rtl::OUString SvtLinguConfig::GetSynonymsContextImage(
-    const ::rtl::OUString &rServiceImplName
+OUString SvtLinguConfig::GetSynonymsContextImage(
+    const OUString &rServiceImplName
 ) const
 {
-    rtl::OUString   aRes;
+    OUString   aRes;
     if (!rServiceImplName.isEmpty())
     {
         OUString aImageName( "SynonymsContextMenuImage" );

@@ -57,17 +57,15 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 namespace
 {
 
-rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& xChartModel )
+OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& xChartModel )
 {
-    ::rtl::OUString aGenerator;
+    OUString aGenerator;
     uno::Reference< document::XDocumentPropertiesSupplier> xChartDocumentPropertiesSupplier( xChartModel, uno::UNO_QUERY );
     if( xChartDocumentPropertiesSupplier.is() )
     {
@@ -79,9 +77,9 @@ rtl::OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& 
     return aGenerator;
 }
 
-rtl::OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XModel >& xChartModel )
+OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XModel >& xChartModel )
 {
-    ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+    OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
     if( aGenerator.isEmpty() ) //try to get the missing info from the parent document
     {
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
@@ -91,7 +89,7 @@ rtl::OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame:
     return aGenerator;
 }
 
-sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
+sal_Int32 lcl_getBuildIDFromGenerator( const OUString& rGenerator )
 {
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
@@ -105,7 +103,7 @@ sal_Int32 lcl_getBuildIDFromGenerator( const ::rtl::OUString& rGenerator )
     return nBuildId;
 }
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
+OUString lcl_ConvertRange( const OUString & rRange, const Reference< chart2::data::XDataProvider >& xDataProvider )
 {
     OUString aResult = rRange;
     Reference< chart2::data::XRangeXMLConversion > xRangeConversion( xDataProvider, uno::UNO_QUERY );
@@ -161,42 +159,42 @@ SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
     return SchXMLChartTypeEnum(nEnumVal);
 }
 
-typedef ::comphelper::MakeMap< ::rtl::OUString, ::rtl::OUString > tMakeStringStringMap;
+typedef ::comphelper::MakeMap< OUString, OUString > tMakeStringStringMap;
 //static
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
     //shape property -- chart model object property
     static tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
-        ( ::rtl::OUString( "com.sun.star.chart.LineDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.LineChartType" ) )
+        ( OUString( "com.sun.star.chart.LineDiagram" )
+        , OUString( "com.sun.star.chart2.LineChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.AreaDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.AreaChartType" ) )
+        ( OUString( "com.sun.star.chart.AreaDiagram" )
+        , OUString( "com.sun.star.chart2.AreaChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.BarDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.ColumnChartType" ) )
+        ( OUString( "com.sun.star.chart.BarDiagram" )
+        , OUString( "com.sun.star.chart2.ColumnChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.PieDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.PieChartType" ) )
+        ( OUString( "com.sun.star.chart.PieDiagram" )
+        , OUString( "com.sun.star.chart2.PieChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.DonutDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.DonutChartType" ) )
+        ( OUString( "com.sun.star.chart.DonutDiagram" )
+        , OUString( "com.sun.star.chart2.DonutChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.XYDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.ScatterChartType" ) )
+        ( OUString( "com.sun.star.chart.XYDiagram" )
+        , OUString( "com.sun.star.chart2.ScatterChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.NetDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.NetChartType" ) )
+        ( OUString( "com.sun.star.chart.NetDiagram" )
+        , OUString( "com.sun.star.chart2.NetChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.FilledNetDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.FilledNetChartType" ) )
+        ( OUString( "com.sun.star.chart.FilledNetDiagram" )
+        , OUString( "com.sun.star.chart2.FilledNetChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.StockDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.CandleStickChartType" ) )
+        ( OUString( "com.sun.star.chart.StockDiagram" )
+        , OUString( "com.sun.star.chart2.CandleStickChartType" ) )
 
-        ( ::rtl::OUString( "com.sun.star.chart.BubbleDiagram" )
-        , ::rtl::OUString( "com.sun.star.chart2.BubbleChartType" ) )
+        ( OUString( "com.sun.star.chart.BubbleDiagram" )
+        , OUString( "com.sun.star.chart2.BubbleChartType" ) )
 
         ;
     return g_aChartTypeNameMap;
@@ -482,8 +480,8 @@ void CreateCategories(
                                 catch( const lang::IllegalArgumentException & ex )
                                 {
                                     (void)ex; // avoid warning for pro build
-                                    OSL_FAIL( ::rtl::OUStringToOString(
-                                                    ::rtl::OUString(  "IllegalArgumentException caught, Message: " ) +
+                                    OSL_FAIL( OUStringToOString(
+                                                    OUString(  "IllegalArgumentException caught, Message: " ) +
                                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                                 }
                                 aData.Categories.set( xLabeledSeq );
@@ -509,7 +507,7 @@ void CreateCategories(
 }
 
 
-uno::Any getPropertyFromContext( const rtl::OUString& rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
 {
     uno::Any aRet;
     if( !pPropStyleContext || !pStylesCtxt )
@@ -586,7 +584,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
     }
 }
 
-void exportRangeToSomewhere( SvXMLExport& rExport, const ::rtl::OUString& rValue )
+void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
 {
     //with issue #i366# and CWS chart20 ranges for error bars were introduced
     //to keep them during copy paste from calc to impress for example it
@@ -658,8 +656,8 @@ void setXMLRangePropertyAtDataSequence(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( ::rtl::OUStringToOString(
-                        ::rtl::OUString(  "Exception caught, Message: " ) +
+        OSL_FAIL( OUStringToOString(
+                        OUString(  "Exception caught, Message: " ) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
 }
@@ -688,8 +686,8 @@ bool getXMLRangePropertyFromDataSequence(
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( ::rtl::OUStringToOString(
-                            ::rtl::OUString(  "Exception caught, Message: " ) +
+            OSL_FAIL( OUStringToOString(
+                            OUString(  "Exception caught, Message: " ) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
     }
@@ -760,7 +758,7 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
 
 void setBuildIDAtImportInfo( uno::Reference< frame::XModel > xModel, Reference< beans::XPropertySet > xImportInfo )
 {
-    ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
+    OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xModel) );
     if( !aGenerator.isEmpty() )
         SvXMLMetaDocumentContext::setBuildId( aGenerator, xImportInfo );
 }
@@ -770,7 +768,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame:
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel );
     if( !bResult )
     {
-        ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
         if( aGenerator.indexOf( "OpenOffice.org_project/3" ) != -1 )
         {
             if( aGenerator.indexOf( "OpenOffice.org_project/300m" ) != -1 )
@@ -793,7 +791,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_0( const uno::Reference< frame:
     bool bResult = isDocumentGeneratedWithOpenOfficeOlderThan2_3( xChartModel );
     if( !bResult )
     {
-        ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+        OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
         if( aGenerator.indexOf( "OpenOffice.org_project/680m" ) != -1 )
             bResult= true;
     }
@@ -817,7 +815,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const uno::Reference< frame:
 bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame::XModel >& xChartModel )
 {
     bool bResult = false;
-    ::rtl::OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
+    OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
     //if there is a meta stream at the chart object it was not written with an older OpenOffice version < 2.3
     if( aGenerator.isEmpty() )
     {
@@ -845,7 +843,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
 bool isDocumentGeneratedWithOpenOfficeOlderThan2_0( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel)
 {
     bool bResult = false;
-    ::rtl::OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
+    OUString aGenerator( lcl_getGeneratorFromModelOrItsParent(xChartModel) );
     if(    ( aGenerator.indexOf( "OpenOffice.org 1" ) == 0 )
         || ( aGenerator.indexOf( "StarOffice 6" ) == 0 )
         || ( aGenerator.indexOf( "StarOffice 7" ) == 0 )

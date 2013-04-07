@@ -101,7 +101,7 @@ public:
     ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
-    rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+    OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
 
@@ -110,7 +110,7 @@ public:
 
     virtual long                    GetColumnCount() = 0;
     virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
-    virtual rtl::OUString           getDimensionName(long nColumn) = 0;
+    virtual OUString           getDimensionName(long nColumn) = 0;
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual sal_Bool                    IsDateDimension(long nDim) = 0;
     virtual sal_uLong                   GetNumberFormat(long nDim);

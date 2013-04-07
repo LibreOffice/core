@@ -78,8 +78,8 @@ using namespace ::com::sun::star;
         {
             // Printer and VirtualDevice, or rather: no OutDev
             uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
-            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(rtl::OUString("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
+            const_cast< SdrPageWindow* >( this )->mxControlContainer = uno::Reference< awt::XControlContainer >(xFactory->createInstance(OUString("com.sun.star.awt.UnoControlContainer")), uno::UNO_QUERY);
+            uno::Reference< awt::XControlModel > xModel(xFactory->createInstance(OUString("com.sun.star.awt.UnoControlContainerModel")), uno::UNO_QUERY);
             uno::Reference< awt::XControl > xControl(mxControlContainer, uno::UNO_QUERY);
             if (xControl.is())
                 xControl->setModel(xModel);

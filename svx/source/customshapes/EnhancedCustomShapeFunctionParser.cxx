@@ -838,13 +838,13 @@ public:
         {
             case ENUM_FUNC_ADJUSTMENT :
             {
-                rtl::OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+                OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
                 mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new AdjustmentExpression( *mpContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
             case ENUM_FUNC_EQUATION :
                 {
-                rtl::OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+                OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
                 mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new EquationExpression( *mpContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
@@ -1176,13 +1176,13 @@ namespace EnhancedCustomShape  {
 
 
 
-ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
+ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space
     // etc. to ASCII space here)
-    const ::rtl::OString& rAsciiFunction(
-        rtl::OUStringToOString( rFunction, RTL_TEXTENCODING_ASCII_US ) );
+    const OString& rAsciiFunction(
+        OUStringToOString( rFunction, RTL_TEXTENCODING_ASCII_US ) );
 
     StringIteratorT aStart( rAsciiFunction.getStr() );
     StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );

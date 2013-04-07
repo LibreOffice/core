@@ -225,7 +225,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
 }
 
 void SAL_CALL VCLXContainer::setProperty(
-    const ::rtl::OUString& PropertyName,
+    const OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {

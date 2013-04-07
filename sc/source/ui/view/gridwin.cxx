@@ -132,7 +132,6 @@
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 const sal_uInt8 SC_NESTEDBUTTON_NONE = 0;
 const sal_uInt8 SC_NESTEDBUTTON_DOWN = 1;
@@ -576,7 +575,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, sal_Bool bHasSel
 
                 if ( bHasSelection )
                 {
-                    const ::rtl::OUString aName = rStr;
+                    const OUString aName = rStr;
                     pDim->SetCurrentPage( &aName );
                 }
                 else
@@ -626,12 +625,12 @@ public:
     }
 };
 
-class AddItemToEntry : public std::unary_function<rtl::OUString, void>
+class AddItemToEntry : public std::unary_function<OUString, void>
 {
     ScQueryEntry::QueryItemsType& mrItems;
 public:
     AddItemToEntry(ScQueryEntry::QueryItemsType& rItems) : mrItems(rItems) {}
-    void operator() (const rtl::OUString& rSelected)
+    void operator() (const OUString& rSelected)
     {
         ScQueryEntry::Item aNew;
         aNew.maString = rSelected;
@@ -643,9 +642,9 @@ public:
 
 class AddSelectedItemString : public std::unary_function<ScQueryEntry::Item, void>
 {
-    boost::unordered_set<rtl::OUString, rtl::OUStringHash>& mrSet;
+    boost::unordered_set<OUString, OUStringHash>& mrSet;
 public:
-    AddSelectedItemString(boost::unordered_set<rtl::OUString, rtl::OUStringHash>& r) :
+    AddSelectedItemString(boost::unordered_set<OUString, OUStringHash>& r) :
         mrSet(r) {}
 
     void operator() (const ScQueryEntry::Item& rItem)
@@ -684,7 +683,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
     ScQueryEntry* pEntry = aParam.FindEntryByField(nCol, false);
-    boost::unordered_set<rtl::OUString, rtl::OUStringHash> aSelected;
+    boost::unordered_set<OUString, OUStringHash> aSelected;
     if (pEntry && pEntry->bDoQuery)
     {
         if (pEntry->eOp == SC_EQUAL)
@@ -703,7 +702,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     std::vector<ScTypedStrData>::const_iterator it = aStrings.begin(), itEnd = aStrings.end();
     for (; it != itEnd; ++it)
     {
-        const rtl::OUString& aVal = it->GetString();
+        const OUString& aVal = it->GetString();
         bool bSelected = true;
         if (!aSelected.empty())
             bSelected = aSelected.count(aVal) > 0;
@@ -836,7 +835,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
                 ScCheckListMenuWindow::ResultType aResult;
                 mpAutoFilterPopup->getResult(aResult);
-                std::vector<rtl::OUString> aSelected;
+                std::vector<OUString> aSelected;
                 ScCheckListMenuWindow::ResultType::const_iterator itr = aResult.begin(), itrEnd = aResult.end();
                 for (; itr != itrEnd; ++itr)
                 {
@@ -852,7 +851,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             case Top10:
                 pEntry->eOp = SC_TOPVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
-                pEntry->GetQueryItem().maString = rtl::OUString("10");
+                pEntry->GetQueryItem().maString = OUString("10");
             break;
             case Empty:
                 pEntry->SetQueryByEmpty();
@@ -980,8 +979,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     //  Listbox fuellen
 
     long nMaxText = 0;
-    rtl::OUString aCurrent;
-    rtl::OUString aTabName;
+    OUString aCurrent;
+    OUString aTabName;
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nEntryCount = 0;
     for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
@@ -1210,7 +1209,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                             bValid = false;
                     if (rEntry.nField == nCol)
                     {
-                        const rtl::OUString& rQueryStr = rEntry.GetQueryItem().maString;
+                        const OUString& rQueryStr = rEntry.GetQueryItem().maString;
                         if (rEntry.eOp == SC_EQUAL)
                         {
                             if (!rQueryStr.isEmpty())
@@ -1434,7 +1433,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp = SC_TOPVAL;
-                        rItem.maString = rtl::OUString("10");
+                        rItem.maString = OUString("10");
                     }
                     else if (nSel == SC_AUTOFILTER_EMPTY)
                     {
@@ -3437,7 +3436,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         ScDocument* pThisDoc   = pViewData->GetDocument();
         if (pSourceDoc == pThisDoc)
         {
-            rtl::OUString aName;
+            OUString aName;
             if ( pThisDoc->HasChartAtPoint(pViewData->GetTabNo(), PixelToLogic(aPos), aName ))
             {
                 if (bDragRect)          // Rechteck loeschen
@@ -3654,7 +3653,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         if ( !rData.aLinkDoc.isEmpty() )
         {
-            rtl::OUString aThisName;
+            OUString aThisName;
             ScDocShell* pDocSh = pViewData->GetDocShell();
             if (pDocSh && pDocSh->HasName())
                 aThisName = pDocSh->GetMedium()->GetName();
@@ -3988,7 +3987,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         }
         else                                        // move/copy block
         {
-            rtl::OUString aChartName;
+            OUString aChartName;
             if (pThisDoc->HasChartAtPoint( nThisTab, rLogicPos, aChartName ))
             {
                 String aRangeName;
@@ -4178,9 +4177,9 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                     aSource.Format( aItem, SCA_VALID | SCA_TAB_3D, pSourceDoc );
 
                     // TODO: we could define ocQuote for "
-                    const rtl::OUString aQuote('"');
+                    const OUString aQuote('"');
                     const String& sSep = ScCompiler::GetNativeSymbol( ocSep);
-                    rtl::OUStringBuffer aFormula;
+                    OUStringBuffer aFormula;
                     aFormula.append('=');
                     aFormula.append(ScCompiler::GetNativeSymbol(ocDde));
                     aFormula.append(ScCompiler::GetNativeSymbol(ocOpen));
@@ -4270,7 +4269,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         //  try to insert a link
 
         bool bOk = true;
-        rtl::OUString aThisName;
+        OUString aThisName;
         ScDocShell* pDocSh = pViewData->GetDocShell();
         if (pDocSh && pDocSh->HasName())
             aThisName = pDocSh->GetMedium()->GetName();

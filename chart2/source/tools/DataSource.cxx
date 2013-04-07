@@ -21,7 +21,6 @@
 #include "DataSource.hxx"
 #include "LabeledDataSequence.hxx"
 
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;

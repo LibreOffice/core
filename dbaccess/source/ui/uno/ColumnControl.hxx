@@ -32,7 +32,7 @@ namespace dbaui
         OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext);
 
         // UnoControl
-        virtual ::rtl::OUString GetComponentServiceName();
+        virtual OUString GetComponentServiceName();
 
         // XServiceInfo
         DECLARE_SERVICE_INFO_STATIC();

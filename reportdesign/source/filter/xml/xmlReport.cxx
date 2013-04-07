@@ -40,7 +40,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLReport )
 
 OXMLReport::OXMLReport( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+                sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XReportDefinition >& _xComponent
                 ,OXMLTable* _pContainer) :
@@ -56,15 +56,15 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
     const SvXMLTokenMap& rTokenMap = m_rImport.GetReportElemTokenMap();
 
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-         ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+         OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -133,7 +133,7 @@ void OXMLReport::impl_initRuntimeDefaults() const
 
 SvXMLImportContext* OXMLReport::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = _CreateChildContext(nPrefix,rLocalName,xAttrList);
@@ -212,12 +212,12 @@ void OXMLReport::EndElement()
         xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(aIter->second));
 
     if ( !m_aMasterFields.empty() )
-        m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
+        m_xComponent->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
     if ( !m_aDetailFields.empty() )
-        m_xComponent->setDetailFields(Sequence< ::rtl::OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
+        m_xComponent->setDetailFields(Sequence< OUString>(&*m_aDetailFields.begin(),m_aDetailFields.size()));
 }
 // -----------------------------------------------------------------------------
-void OXMLReport::addMasterDetailPair(const ::std::pair< ::rtl::OUString,::rtl::OUString >& _aPair)
+void OXMLReport::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);

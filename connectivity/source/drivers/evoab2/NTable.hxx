@@ -29,7 +29,7 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable OEvoabTable_TYPEDEF;
 
-        ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
+        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
         class OEvoabTable : public OEvoabTable_TYPEDEF
         {
@@ -39,19 +39,19 @@ namespace connectivity
         public:
             OEvoabTable(    sdbcx::OCollection* _pTables,
                     OEvoabConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description = OUString(),
+                    const OUString& _SchemaName = OUString(),
+                    const OUString& _CatalogName = OUString()
                 );
 
             OEvoabConnection* getConnection() { return m_pConnection;}
 
             virtual void refreshColumns();
 
-            ::rtl::OUString getTableName() const { return m_Name; }
-            ::rtl::OUString getSchema() const { return m_SchemaName; }
+            OUString getTableName() const { return m_Name; }
+            OUString getSchema() const { return m_SchemaName; }
         };
     }
 }

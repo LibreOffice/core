@@ -28,25 +28,25 @@ typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XAddin > SwVbaAddin_BASE;
 class SwVbaAddin : public SwVbaAddin_BASE
 {
 private:
-    rtl::OUString msFileURL;
+    OUString msFileURL;
     sal_Bool mbAutoload;
     sal_Bool mbInstalled;
 
 public:
-    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const rtl::OUString& rFileURL, sal_Bool bAutoload ) throw ( css::uno::RuntimeException );
+    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL, sal_Bool bAutoload ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaAddin();
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getAutoload() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getInstalled() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setInstalled( ::sal_Bool _installed ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_ADDIN_HXX */
 

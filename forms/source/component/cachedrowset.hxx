@@ -70,9 +70,9 @@ namespace frm
 
             @throws Exception
         */
-        void    setCommandFromQuery ( const ::rtl::OUString& _rQueryName );
+        void    setCommandFromQuery ( const OUString& _rQueryName );
 
-        void    setCommand          ( const ::rtl::OUString& _rCommand );
+        void    setCommand          ( const OUString& _rCommand );
         void    setEscapeProcessing ( const sal_Bool _bEscapeProcessing );
         void    setConnection       ( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
 

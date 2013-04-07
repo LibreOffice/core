@@ -56,13 +56,13 @@ namespace sfx2
         FileDialogHelper*           mpAntiImpl;
         Window*                     mpPreferredParentWindow;
 
-        ::comphelper::SequenceAsVector< ::rtl::OUString > mlLastURLs;
+        ::comphelper::SequenceAsVector< OUString > mlLastURLs;
 
-        ::rtl::OUString             maPath;
-        ::rtl::OUString             maFileName;
-        ::rtl::OUString             maCurFilter;
-        ::rtl::OUString             maSelectFilter;
-        ::rtl::OUString             maButtonLabel;
+        OUString             maPath;
+        OUString             maFileName;
+        OUString             maCurFilter;
+        OUString             maSelectFilter;
+        OUString             maButtonLabel;
 
         Timer                       maPreViewTimer;
         Graphic                     maGraphic;
@@ -103,8 +103,8 @@ namespace sfx2
         void                    addFilters( const String& rFactory,
                                             SfxFilterFlags nMust,
                                             SfxFilterFlags nDont );
-        void                    addFilter( const ::rtl::OUString& rFilterName,
-                                           const ::rtl::OUString& rExtension );
+        void                    addFilter( const OUString& rFilterName,
+                                           const OUString& rExtension );
         void                    addGraphicFilter();
         void                    enablePasswordBox( sal_Bool bInit );
         void                    updateFilterOptionsBox();
@@ -120,7 +120,7 @@ namespace sfx2
         const SfxFilter*        getCurentSfxFilter();
         sal_Bool                updateExtendedControl( sal_Int16 _nExtendedControlId, sal_Bool _bEnable );
 
-        ErrCode                 getGraphic( const ::rtl::OUString& rURL, Graphic& rGraphic ) const;
+        ErrCode                 getGraphic( const OUString& rURL, Graphic& rGraphic ) const;
         void                    setDefaultValues();
 
         void                    preExecute();
@@ -137,8 +137,8 @@ namespace sfx2
         sal_Bool                isInOpenMode() const;
         String                  getCurrentFilterUIName() const;
 
-        void                    LoadLastUsedFilter( const ::rtl::OUString& _rContextIdentifier );
-        void                    SaveLastUsedFilter( const ::rtl::OUString& _rContextIdentifier );
+        void                    LoadLastUsedFilter( const OUString& _rContextIdentifier );
+        void                    SaveLastUsedFilter( const OUString& _rContextIdentifier );
         void                    SaveLastUsedFilter( void );
 
         void                    implInitializeFileName( );
@@ -146,7 +146,7 @@ namespace sfx2
         void                    verifyPath( );
 
         void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
-                                                      std::vector<rtl::OUString>&               rpURLList,
+                                                      std::vector<OUString>&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
 
         DECL_LINK(TimeOutHdl_Impl, void *);
@@ -157,7 +157,7 @@ namespace sfx2
         // XFilePickerListener methods
         virtual void SAL_CALL               fileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL               directoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL    helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL    helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL               controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL               dialogSizeChanged() throw( ::com::sun::star::uno::RuntimeException );
 
@@ -170,7 +170,7 @@ namespace sfx2
         // handle XFilePickerListener events
         void                    handleFileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleDirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-        ::rtl::OUString         handleHelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+        OUString         handleHelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleControlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleDialogSizeChanged();
 
@@ -181,38 +181,38 @@ namespace sfx2
                                     sal_Int64 nFlags,
                                     sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                                     Window* _pPreferredParentWindow = NULL,
-                                    const String& sStandardDir = rtl::OUString(),
-                                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >&   rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >()
+                                    const String& sStandardDir = OUString(),
+                                    const ::com::sun::star::uno::Sequence< OUString >&   rBlackList = ::com::sun::star::uno::Sequence< OUString >()
                                 );
         virtual                 ~FileDialogHelper_Impl();
 
-        ErrCode                 execute( std::vector<rtl::OUString>& rpURLList,
+        ErrCode                 execute( std::vector<OUString>& rpURLList,
                                          SfxItemSet *&   rpSet,
                                          String&         rFilter );
         ErrCode                 execute();
 
-        void                    setFilter( const ::rtl::OUString& rFilter );
+        void                    setFilter( const OUString& rFilter );
 
         /** sets the directory which should be browsed
 
             <p>If the given path does not point to a valid (existent and accessible) folder, the request
             is silently dropped</p>
         */
-        void                    displayFolder( const ::rtl::OUString& rPath );
-        void                    setFileName( const ::rtl::OUString& _rFile );
+        void                    displayFolder( const OUString& rPath );
+        void                    setFileName( const OUString& _rFile );
 
-        ::rtl::OUString         getPath() const;
-        ::rtl::OUString         getFilter() const;
+        OUString         getPath() const;
+        OUString         getFilter() const;
         void                    getRealFilter( String& _rFilter ) const;
 
         ErrCode                 getGraphic( Graphic& rGraphic ) const;
         void                    createMatcher( const String& rFactory );
 
         sal_Bool                isShowFilterExtensionEnabled() const;
-        void                    addFilterPair( const ::rtl::OUString& rFilter,
-                                               const ::rtl::OUString& rFilterWithExtension );
-        ::rtl::OUString         getFilterName( const ::rtl::OUString& rFilterWithExtension ) const;
-        ::rtl::OUString         getFilterWithExtension( const ::rtl::OUString& rFilter ) const;
+        void                    addFilterPair( const OUString& rFilter,
+                                               const OUString& rFilterWithExtension );
+        OUString         getFilterName( const OUString& rFilterWithExtension ) const;
+        OUString         getFilterWithExtension( const OUString& rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
 

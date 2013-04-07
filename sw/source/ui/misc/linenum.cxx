@@ -55,17 +55,17 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     get(m_pNumberingOnCB, "shownumbering");
 
     String sIntervalName = m_pDivIntervalFT->GetAccessibleName();
-    sIntervalName += rtl::OUString("(");
+    sIntervalName += OUString("(");
     sIntervalName += m_pDivRowsFT->GetAccessibleName();
-    sIntervalName += rtl::OUString(")");
+    sIntervalName += OUString(")");
     m_pDivIntervalNF->SetAccessibleName(sIntervalName);
 
     Window *pNumIntervalFT = get<Window>("interval");
     Window *pNumRowsFT = get<Window>("intervallines");
     sIntervalName = pNumIntervalFT->GetAccessibleName();
-    sIntervalName += rtl::OUString("(");
+    sIntervalName += OUString("(");
     sIntervalName += pNumRowsFT->GetAccessibleName();
-    sIntervalName += rtl::OUString(")");
+    sIntervalName += OUString(")");
     m_pNumIntervalNF->SetAccessibleName(sIntervalName);
 
     // char styles

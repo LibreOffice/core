@@ -233,8 +233,8 @@ public:
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void ClearDevFontCache();
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
-    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
+    virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,

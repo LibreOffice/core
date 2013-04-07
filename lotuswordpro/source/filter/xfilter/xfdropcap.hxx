@@ -89,7 +89,7 @@ private:
     sal_Int32       m_nCharCount;
     sal_Int32       m_nLines;
     double          m_fDistance;
-    rtl::OUString   m_strStyleName;
+    OUString   m_strStyleName;
 };
 
 inline void XFDropcap::SetCharCount(sal_Int32 count)

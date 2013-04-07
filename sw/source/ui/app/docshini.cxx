@@ -92,7 +92,6 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 // Load Document
 sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
@@ -570,7 +569,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         UpdateFontList();
         InitDraw();
 
-        SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        SetError( nErr, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
         if ( bRet && !pDoc->IsInLoadAsynchron() &&
@@ -598,7 +597,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         String aStreamName;
-        aStreamName = rtl::OUString("styles.xml");
+        aStreamName = OUString("styles.xml");
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
@@ -621,7 +620,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             OSL_FAIL("Code removed!");
         }
 
-        SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        SetError( nErr, OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
 
     } while( false );

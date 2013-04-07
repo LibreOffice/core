@@ -42,7 +42,7 @@ public:
     explicit OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput );
 
     virtual void beginTag( const char* pTag, const PropertyMap& rProperties );
-    virtual void write( const rtl::OUString& rString );
+    virtual void write( const OUString& rString );
     virtual void endTag( const char* pTag );
 };
 
@@ -54,7 +54,7 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     OSL_PRECOND(m_xOutput.is(), "OdfEmitter(): invalid output stream");
     m_aLineFeed[0] = '\n';
 
-    rtl::OUStringBuffer aElement;
+    OUStringBuffer aElement;
     aElement.appendAscii("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     write(aElement.makeStringAndClear());
 }
@@ -63,17 +63,17 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
 {
     OSL_PRECOND(pTag,"Invalid tag string");
 
-    rtl::OUStringBuffer aElement;
+    OUStringBuffer aElement;
     aElement.appendAscii("<");
     aElement.appendAscii(pTag);
     aElement.appendAscii(" ");
 
-    std::vector<rtl::OUString>        aAttributes;
+    std::vector<OUString>        aAttributes;
     PropertyMap::const_iterator       aCurr(rProperties.begin());
     const PropertyMap::const_iterator aEnd(rProperties.end());
     while( aCurr != aEnd )
     {
-        rtl::OUStringBuffer aAttribute;
+        OUStringBuffer aAttribute;
         aAttribute.append(aCurr->first);
         aAttribute.appendAscii("=\"");
         aAttribute.append(aCurr->second);
@@ -88,8 +88,8 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     std::sort(aAttributes.begin(), aAttributes.end());
     std::for_each(aAttributes.begin(),
                   aAttributes.end(),
-                  boost::bind( (rtl::OUStringBuffer& (rtl::OUStringBuffer::*)(const rtl::OUString&))
-                               (&rtl::OUStringBuffer::append),
+                  boost::bind( (OUStringBuffer& (OUStringBuffer::*)(const OUString&))
+                               (&OUStringBuffer::append),
                                boost::ref(aElement),
                                _1 ));
     aElement.appendAscii(">");
@@ -97,9 +97,9 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     write(aElement.makeStringAndClear());
 }
 
-void OdfEmitter::write( const rtl::OUString& rText )
+void OdfEmitter::write( const OUString& rText )
 {
-    const rtl::OString aStr = rtl::OUStringToOString(rText,RTL_TEXTENCODING_UTF8);
+    const OString aStr = OUStringToOString(rText,RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
     m_aBuf.realloc( nLen );
     const sal_Char* pStr = aStr.getStr();
@@ -111,7 +111,7 @@ void OdfEmitter::write( const rtl::OUString& rText )
 
 void OdfEmitter::endTag( const char* pTag )
 {
-    rtl::OUStringBuffer aElement;
+    OUStringBuffer aElement;
     aElement.appendAscii("</");
     aElement.appendAscii(pTag);
     aElement.appendAscii(">");

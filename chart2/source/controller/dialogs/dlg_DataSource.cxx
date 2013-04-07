@@ -39,7 +39,6 @@ using namespace ::chart;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // --------------------------------------------------------------------------------
 

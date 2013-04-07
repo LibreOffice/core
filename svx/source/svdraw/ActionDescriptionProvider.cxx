@@ -22,8 +22,8 @@
 #include "svx/svdglob.hxx"
 #include "svx/svdstr.hrc"
 
-::rtl::OUString ActionDescriptionProvider::createDescription( ActionType eActionType
-                        , const ::rtl::OUString& rObjectName )
+OUString ActionDescriptionProvider::createDescription( ActionType eActionType
+                        , const OUString& rObjectName )
 {
     sal_uInt16 nResID=0;
     switch( eActionType )
@@ -63,7 +63,7 @@
         break;
     }
     if(!nResID)
-        return rtl::OUString();
+        return OUString();
 
     OUString aStr(ImpGetResStr(nResID));
     return aStr.replaceAll("%1", rObjectName);

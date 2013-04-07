@@ -31,7 +31,7 @@
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 
 #if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
+# define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 #else /* OSL_DEBUG_LEVEL */
 # define OUtoCStr( x ) ("dummy")
 #endif /* OSL_DEBUG_LEVEL */
@@ -113,7 +113,7 @@ void MQuery::construct()
     NS_IF_ADDREF( m_aQueryHelper);
 }
 // -------------------------------------------------------------------------
-void MQuery::setAddressbook(::rtl::OUString &ab)
+void MQuery::setAddressbook(OUString &ab)
 {
     OSL_TRACE("IN MQuery::setAddressbook()");
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -166,7 +166,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 
             // Set the 'name' property of the boolString.
             // Check if it's an alias first...
-            rtl::OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
+            OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             boolString->SetName( strdup( attrName.getStr() ) );
             OSL_TRACE("Name = %s ;", attrName.getStr() );
             // Set the 'matchType' property of the boolString. Check for equal length.
@@ -256,9 +256,9 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
 {
     nsresult rv;        // Store return values.
 
-    rtl::OUString nameAB    = _pCon->getHost().replace('.','_');
-    rtl::OUString bindDN    = _pCon->getBindDN();
-    rtl::OUString password  = _pCon->getPassword();
+    OUString nameAB    = _pCon->getHost().replace('.','_');
+    OUString bindDN    = _pCon->getBindDN();
+    OUString password  = _pCon->getPassword();
     sal_Bool      useSSL    = _pCon->getUseSSL();
 
     nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
@@ -301,7 +301,7 @@ sal_Bool isProfileLocked(OConnection* _pCon)
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
     xMozillaBootstrap = ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XMozillaBootstrap >(xInstance,::com::sun::star::uno::UNO_QUERY);
     if (_pCon)
@@ -620,7 +620,7 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
 }
 // -------------------------------------------------------------------------
 sal_Bool
-MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType ) const
+MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
     MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
 
@@ -645,7 +645,7 @@ MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
 
 // -------------------------------------------------------------------------
 sal_Bool
-MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType ) const
+MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType ) const
 {
     MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
 

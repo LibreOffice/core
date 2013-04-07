@@ -51,7 +51,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
             uno::Reference< container::XNamed > & xN,

@@ -59,11 +59,11 @@ void ConfigurationTracer::TraceBoundResources (
     const int nIndentation)
 {
     Sequence<Reference<XResourceId> > aResourceList (
-        rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
-    const ::rtl::OUString sIndentation ("    ");
+        rxConfiguration->getResources(rxResourceId, OUString(), AnchorBindingMode_DIRECT));
+    const OUString sIndentation ("    ");
     for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
     {
-        ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
+        OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
         SAL_INFO("sd.ui","" << OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());

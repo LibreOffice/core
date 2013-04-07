@@ -74,7 +74,7 @@ void OTableRowView::Init()
     SetFont(aFont);
 
     // HandleColumn, fuer maximal fuenf Ziffern einrichten
-    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(rtl::OUString('0')) * 4)/*, sal_True */);
+    InsertHandleColumn(static_cast<sal_uInt16>(GetTextWidth(OUString('0')) * 4)/*, sal_True */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                         BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;
@@ -99,7 +99,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
             ::com::sun::star::util::URL aUrl;
-            aUrl.Complete =::rtl::OUString(".uno:DSBEditDoc");
+            aUrl.Complete =OUString(".uno:DSBEditDoc");
             GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }

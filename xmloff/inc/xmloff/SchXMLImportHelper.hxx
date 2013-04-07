@@ -91,7 +91,7 @@ public:
      */
     SvXMLImportContext* CreateChartContext(
         SvXMLImport& rImport,
-        sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference<
             com::sun::star::frame::XModel > xChartModel,
         const com::sun::star::uno::Reference<
@@ -138,7 +138,7 @@ public:
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::XChartDocument > & xDoc,
                     sal_Int32 nCoordinateSystemIndex,
-                    const ::rtl::OUString & rChartTypeName,
+                    const OUString & rChartTypeName,
                     bool bPushLastChartType = false );
 
     static void DeleteDataSeries(

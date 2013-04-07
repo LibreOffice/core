@@ -32,9 +32,9 @@ namespace svgio
     namespace svgreader
     {
 #ifdef DBG_UTIL
-        void myAssert(const rtl::OUString& rMessage)
+        void myAssert(const OUString& rMessage)
         {
-            rtl::OString aMessage2;
+            OString aMessage2;
 
             rMessage.convertToString(&aMessage2, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
             OSL_ENSURE(false, aMessage2.getStr());
@@ -42,10 +42,10 @@ namespace svgio
 #endif
 
         // common non-token strings
-        const rtl::OUString commonStrings::aStrUserSpaceOnUse(rtl::OUString::createFromAscii("userSpaceOnUse"));
-        const rtl::OUString commonStrings::aStrObjectBoundingBox(rtl::OUString::createFromAscii("objectBoundingBox"));
-        const rtl::OUString commonStrings::aStrNonzero(rtl::OUString::createFromAscii("nonzero"));
-        const rtl::OUString commonStrings::aStrEvenOdd(rtl::OUString::createFromAscii("evenodd"));
+        const OUString commonStrings::aStrUserSpaceOnUse(OUString::createFromAscii("userSpaceOnUse"));
+        const OUString commonStrings::aStrObjectBoundingBox(OUString::createFromAscii("objectBoundingBox"));
+        const OUString commonStrings::aStrNonzero(OUString::createFromAscii("nonzero"));
+        const OUString commonStrings::aStrEvenOdd(OUString::createFromAscii("evenodd"));
 
         basegfx::B2DHomMatrix SvgAspectRatio::createLinearMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource)
         {
@@ -250,7 +250,7 @@ namespace svgio
             return basegfx::fTools::moreOrEqual(mfNumber, 0.0);
         }
 
-        void skip_char(const rtl::OUString& rCandidate, const sal_Unicode& rChar, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(const OUString& rCandidate, const sal_Unicode& rChar, sal_Int32& nPos, const sal_Int32 nLen)
         {
             while(nPos < nLen && rChar == rCandidate[nPos])
             {
@@ -258,7 +258,7 @@ namespace svgio
             }
         }
 
-        void skip_char(const rtl::OUString& rCandidate, const sal_Unicode& rCharA, const sal_Unicode& rCharB, sal_Int32& nPos, const sal_Int32 nLen)
+        void skip_char(const OUString& rCandidate, const sal_Unicode& rCharA, const sal_Unicode& rCharB, sal_Int32& nPos, const sal_Int32 nLen)
         {
             while(nPos < nLen && (rCharA == rCandidate[nPos] || rCharB == rCandidate[nPos]))
             {
@@ -266,7 +266,7 @@ namespace svgio
             }
         }
 
-        void copySign(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copySign(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             if(nPos < nLen)
             {
@@ -280,7 +280,7 @@ namespace svgio
             }
         }
 
-        void copyNumber(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyNumber(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnNumber(true);
 
@@ -298,7 +298,7 @@ namespace svgio
             }
         }
 
-        void copyHex(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyHex(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnHex(true);
 
@@ -318,7 +318,7 @@ namespace svgio
             }
         }
 
-        void copyString(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyString(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             bool bOnChar(true);
 
@@ -338,7 +338,7 @@ namespace svgio
             }
         }
 
-        void copyToLimiter(const rtl::OUString& rCandidate, const sal_Unicode& rLimiter, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen)
+        void copyToLimiter(const OUString& rCandidate, const sal_Unicode& rLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen)
         {
             while(nPos < nLen && rLimiter != rCandidate[nPos])
             {
@@ -347,11 +347,11 @@ namespace svgio
             }
         }
 
-        bool readNumber(const rtl::OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen)
+        bool readNumber(const OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen)
         {
             if(nPos < nLen)
             {
-                rtl::OUStringBuffer aNum;
+                OUStringBuffer aNum;
 
                 copySign(rCandidate, nPos, aNum, nLen);
                 copyNumber(rCandidate, nPos, aNum, nLen);
@@ -367,7 +367,7 @@ namespace svgio
                         // by error. First try if there are numbers after the 'e',
                         // safe current state
                         nPos++;
-                        const rtl::OUStringBuffer aNum2(aNum);
+                        const OUStringBuffer aNum2(aNum);
                         const sal_Int32 nPosAfterE(nPos);
 
                         aNum.append(aChar);
@@ -399,7 +399,7 @@ namespace svgio
             return false;
         }
 
-        SvgUnit readUnit(const rtl::OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen)
+        SvgUnit readUnit(const OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen)
         {
             SvgUnit aRetval(Unit_px);
 
@@ -502,7 +502,7 @@ namespace svgio
             return aRetval;
         }
 
-        bool readNumberAndUnit(const rtl::OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen)
+        bool readNumberAndUnit(const OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen)
         {
             double fNum(0.0);
 
@@ -517,7 +517,7 @@ namespace svgio
             return false;
         }
 
-        bool readAngle(const rtl::OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen)
+        bool readAngle(const OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen)
         {
             if(readNumber(rCandidate, nPos, fAngle, nLen))
             {
@@ -533,8 +533,8 @@ namespace svgio
                 if(nPos < nLen)
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
-                    static rtl::OUString aStrGrad(rtl::OUString::createFromAscii("grad"));
-                    static rtl::OUString aStrRad(rtl::OUString::createFromAscii("rad"));
+                    static OUString aStrGrad(OUString::createFromAscii("grad"));
+                    static OUString aStrRad(OUString::createFromAscii("rad"));
 
                     switch(aChar)
                     {
@@ -601,164 +601,164 @@ namespace svgio
             }
         }
 
-        bool match_colorKeyword(basegfx::BColor& rColor, const rtl::OUString& rName)
+        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName)
         {
-            typedef boost::unordered_map< rtl::OUString, Color,
-                      rtl::OUStringHash,
-                      ::std::equal_to< ::rtl::OUString >
+            typedef boost::unordered_map< OUString, Color,
+                      OUStringHash,
+                      ::std::equal_to< OUString >
                       > ColorTokenMapper;
-            typedef std::pair< rtl::OUString, Color > ColorTokenValueType;
+            typedef std::pair< OUString, Color > ColorTokenValueType;
             ColorTokenMapper aColorTokenMapperList;
 
             if(aColorTokenMapperList.empty())
             {
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("aliceblue"), Color(240, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("antiquewhite"), Color(250, 235, 215)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("aqua"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("aquamarine"), Color(127, 255, 212)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("azure"), Color(240, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("beige"), Color(245, 245, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("bisque"), Color(255, 228, 196)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("black"), Color( 0, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("blanchedalmond"), Color(255, 235, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("blue"), Color( 0, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("blueviolet"), Color(138, 43, 226)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("brown"), Color(165, 42, 42)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("burlywood"), Color(222, 184, 135)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("cadetblue"), Color( 95, 158, 160)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("chartreuse"), Color(127, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("chocolate"), Color(210, 105, 30)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("coral"), Color(255, 127, 80)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("cornflowerblue"), Color(100, 149, 237)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("cornsilk"), Color(255, 248, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("crimson"), Color(220, 20, 60)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("cyan"), Color( 0, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkblue"), Color( 0, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkcyan"), Color( 0, 139, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkgoldenrod"), Color(184, 134, 11)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkgray"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkgreen"), Color( 0, 100, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkgrey"), Color(169, 169, 169)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkkhaki"), Color(189, 183, 107)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkmagenta"), Color(139, 0, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkolivegreen"), Color( 85, 107, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkorange"), Color(255, 140, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkorchid"), Color(153, 50, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkred"), Color(139, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darksalmon"), Color(233, 150, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkseagreen"), Color(143, 188, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkslateblue"), Color( 72, 61, 139)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkslategray"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkslategrey"), Color( 47, 79, 79)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkturquoise"), Color( 0, 206, 209)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("darkviolet"), Color(148, 0, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("deeppink"), Color(255, 20, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("deepskyblue"), Color( 0, 191, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("dimgray"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("dimgrey"), Color(105, 105, 105)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("dodgerblue"), Color( 30, 144, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("firebrick"), Color(178, 34, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("floralwhite"), Color(255, 250, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("forestgreen"), Color( 34, 139, 34)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("fuchsia"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("gainsboro"), Color(220, 220, 220)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("ghostwhite"), Color(248, 248, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("gold"), Color(255, 215, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("goldenrod"), Color(218, 165, 32)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("gray"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("grey"), Color(128, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("green"), Color(0, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("greenyellow"), Color(173, 255, 47)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("honeydew"), Color(240, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("hotpink"), Color(255, 105, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("indianred"), Color(205, 92, 92)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("indigo"), Color( 75, 0, 130)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("ivory"), Color(255, 255, 240)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("khaki"), Color(240, 230, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lavender"), Color(230, 230, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lavenderblush"), Color(255, 240, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lawngreen"), Color(124, 252, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lemonchiffon"), Color(255, 250, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightblue"), Color(173, 216, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightcoral"), Color(240, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightcyan"), Color(224, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightgoldenrodyellow"), Color(250, 250, 210)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightgray"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightgreen"), Color(144, 238, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightgrey"), Color(211, 211, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightpink"), Color(255, 182, 193)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightsalmon"), Color(255, 160, 122)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightseagreen"), Color( 32, 178, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightskyblue"), Color(135, 206, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightslategray"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightslategrey"), Color(119, 136, 153)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightsteelblue"), Color(176, 196, 222)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lightyellow"), Color(255, 255, 224)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("lime"), Color( 0, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("limegreen"), Color( 50, 205, 50)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("linen"), Color(250, 240, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("magenta"), Color(255, 0, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("maroon"), Color(128, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumaquamarine"), Color(102, 205, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumblue"), Color( 0, 0, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumorchid"), Color(186, 85, 211)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumpurple"), Color(147, 112, 219)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumseagreen"), Color( 60, 179, 113)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumslateblue"), Color(123, 104, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumspringgreen"), Color( 0, 250, 154)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumturquoise"), Color( 72, 209, 204)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mediumvioletred"), Color(199, 21, 133)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("midnightblue"), Color( 25, 25, 112)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mintcream"), Color(245, 255, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("mistyrose"), Color(255, 228, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("moccasin"), Color(255, 228, 181)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("navajowhite"), Color(255, 222, 173)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("navy"), Color( 0, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("oldlace"), Color(253, 245, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("olive"), Color(128, 128, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("olivedrab"), Color(107, 142, 35)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("orange"), Color(255, 165, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("orangered"), Color(255, 69, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("orchid"), Color(218, 112, 214)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("palegoldenrod"), Color(238, 232, 170)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("palegreen"), Color(152, 251, 152)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("paleturquoise"), Color(175, 238, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("palevioletred"), Color(219, 112, 147)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("papayawhip"), Color(255, 239, 213)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("peachpuff"), Color(255, 218, 185)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("peru"), Color(205, 133, 63)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("pink"), Color(255, 192, 203)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("plum"), Color(221, 160, 221)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("powderblue"), Color(176, 224, 230)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("purple"), Color(128, 0, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("red"), Color(255, 0, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("rosybrown"), Color(188, 143, 143)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("royalblue"), Color( 65, 105, 225)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("saddlebrown"), Color(139, 69, 19)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("salmon"), Color(250, 128, 114)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("sandybrown"), Color(244, 164, 96)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("seagreen"), Color( 46, 139, 87)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("seashell"), Color(255, 245, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("sienna"), Color(160, 82, 45)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("silver"), Color(192, 192, 192)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("skyblue"), Color(135, 206, 235)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("slateblue"), Color(106, 90, 205)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("slategray"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("slategrey"), Color(112, 128, 144)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("snow"), Color(255, 250, 250)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("springgreen"), Color( 0, 255, 127)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("steelblue"), Color( 70, 130, 180)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("tan"), Color(210, 180, 140)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("teal"), Color( 0, 128, 128)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("thistle"), Color(216, 191, 216)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("tomato"), Color(255, 99, 71)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("turquoise"), Color( 64, 224, 208)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("violet"), Color(238, 130, 238)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("wheat"), Color(245, 222, 179)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("white"), Color(255, 255, 255)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("whitesmoke"), Color(245, 245, 245)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("yellow"), Color(255, 255, 0)));
-                aColorTokenMapperList.insert(ColorTokenValueType(rtl::OUString::createFromAscii("yellowgreen"), Color(154, 205, 50)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aliceblue"), Color(240, 248, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("antiquewhite"), Color(250, 235, 215)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aqua"), Color( 0, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("aquamarine"), Color(127, 255, 212)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("azure"), Color(240, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("beige"), Color(245, 245, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("bisque"), Color(255, 228, 196)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("black"), Color( 0, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blanchedalmond"), Color(255, 235, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blue"), Color( 0, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("blueviolet"), Color(138, 43, 226)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("brown"), Color(165, 42, 42)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("burlywood"), Color(222, 184, 135)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cadetblue"), Color( 95, 158, 160)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("chartreuse"), Color(127, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("chocolate"), Color(210, 105, 30)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("coral"), Color(255, 127, 80)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cornflowerblue"), Color(100, 149, 237)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cornsilk"), Color(255, 248, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("crimson"), Color(220, 20, 60)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("cyan"), Color( 0, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkblue"), Color( 0, 0, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkcyan"), Color( 0, 139, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgoldenrod"), Color(184, 134, 11)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgray"), Color(169, 169, 169)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgreen"), Color( 0, 100, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkgrey"), Color(169, 169, 169)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkkhaki"), Color(189, 183, 107)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkmagenta"), Color(139, 0, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkolivegreen"), Color( 85, 107, 47)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkorange"), Color(255, 140, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkorchid"), Color(153, 50, 204)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkred"), Color(139, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darksalmon"), Color(233, 150, 122)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkseagreen"), Color(143, 188, 143)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslateblue"), Color( 72, 61, 139)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslategray"), Color( 47, 79, 79)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkslategrey"), Color( 47, 79, 79)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkturquoise"), Color( 0, 206, 209)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("darkviolet"), Color(148, 0, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("deeppink"), Color(255, 20, 147)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("deepskyblue"), Color( 0, 191, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dimgray"), Color(105, 105, 105)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dimgrey"), Color(105, 105, 105)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("dodgerblue"), Color( 30, 144, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("firebrick"), Color(178, 34, 34)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("floralwhite"), Color(255, 250, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("forestgreen"), Color( 34, 139, 34)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("fuchsia"), Color(255, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gainsboro"), Color(220, 220, 220)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("ghostwhite"), Color(248, 248, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gold"), Color(255, 215, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("goldenrod"), Color(218, 165, 32)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("gray"), Color(128, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("grey"), Color(128, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("green"), Color(0, 128, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("greenyellow"), Color(173, 255, 47)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("honeydew"), Color(240, 255, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("hotpink"), Color(255, 105, 180)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("indianred"), Color(205, 92, 92)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("indigo"), Color( 75, 0, 130)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("ivory"), Color(255, 255, 240)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("khaki"), Color(240, 230, 140)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lavender"), Color(230, 230, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lavenderblush"), Color(255, 240, 245)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lawngreen"), Color(124, 252, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lemonchiffon"), Color(255, 250, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightblue"), Color(173, 216, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightcoral"), Color(240, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightcyan"), Color(224, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgoldenrodyellow"), Color(250, 250, 210)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgray"), Color(211, 211, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgreen"), Color(144, 238, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightgrey"), Color(211, 211, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightpink"), Color(255, 182, 193)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightsalmon"), Color(255, 160, 122)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightseagreen"), Color( 32, 178, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightskyblue"), Color(135, 206, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightslategray"), Color(119, 136, 153)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightslategrey"), Color(119, 136, 153)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightsteelblue"), Color(176, 196, 222)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lightyellow"), Color(255, 255, 224)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("lime"), Color( 0, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("limegreen"), Color( 50, 205, 50)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("linen"), Color(250, 240, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("magenta"), Color(255, 0, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("maroon"), Color(128, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumaquamarine"), Color(102, 205, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumblue"), Color( 0, 0, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumorchid"), Color(186, 85, 211)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumpurple"), Color(147, 112, 219)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumseagreen"), Color( 60, 179, 113)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumslateblue"), Color(123, 104, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumspringgreen"), Color( 0, 250, 154)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumturquoise"), Color( 72, 209, 204)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mediumvioletred"), Color(199, 21, 133)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("midnightblue"), Color( 25, 25, 112)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mintcream"), Color(245, 255, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("mistyrose"), Color(255, 228, 225)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("moccasin"), Color(255, 228, 181)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("navajowhite"), Color(255, 222, 173)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("navy"), Color( 0, 0, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("oldlace"), Color(253, 245, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("olive"), Color(128, 128, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("olivedrab"), Color(107, 142, 35)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orange"), Color(255, 165, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orangered"), Color(255, 69, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("orchid"), Color(218, 112, 214)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palegoldenrod"), Color(238, 232, 170)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palegreen"), Color(152, 251, 152)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("paleturquoise"), Color(175, 238, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("palevioletred"), Color(219, 112, 147)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("papayawhip"), Color(255, 239, 213)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("peachpuff"), Color(255, 218, 185)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("peru"), Color(205, 133, 63)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("pink"), Color(255, 192, 203)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("plum"), Color(221, 160, 221)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("powderblue"), Color(176, 224, 230)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("purple"), Color(128, 0, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("red"), Color(255, 0, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("rosybrown"), Color(188, 143, 143)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("royalblue"), Color( 65, 105, 225)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("saddlebrown"), Color(139, 69, 19)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("salmon"), Color(250, 128, 114)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("sandybrown"), Color(244, 164, 96)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("seagreen"), Color( 46, 139, 87)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("seashell"), Color(255, 245, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("sienna"), Color(160, 82, 45)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("silver"), Color(192, 192, 192)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("skyblue"), Color(135, 206, 235)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slateblue"), Color(106, 90, 205)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slategray"), Color(112, 128, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("slategrey"), Color(112, 128, 144)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("snow"), Color(255, 250, 250)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("springgreen"), Color( 0, 255, 127)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("steelblue"), Color( 70, 130, 180)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("tan"), Color(210, 180, 140)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("teal"), Color( 0, 128, 128)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("thistle"), Color(216, 191, 216)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("tomato"), Color(255, 99, 71)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("turquoise"), Color( 64, 224, 208)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("violet"), Color(238, 130, 238)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("wheat"), Color(245, 222, 179)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("white"), Color(255, 255, 255)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("whitesmoke"), Color(245, 245, 245)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("yellow"), Color(255, 255, 0)));
+                aColorTokenMapperList.insert(ColorTokenValueType(OUString::createFromAscii("yellowgreen"), Color(154, 205, 50)));
             }
 
             const ColorTokenMapper::const_iterator aResult(aColorTokenMapperList.find(rName));
@@ -774,7 +774,7 @@ namespace svgio
             }
         }
 
-        bool read_color(const rtl::OUString& rCandidate, basegfx::BColor& rColor)
+        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -786,7 +786,7 @@ namespace svgio
                 if(aChar == sal_Unicode('#'))
                 {
                     // hex definition
-                    rtl::OUStringBuffer aNum;
+                    OUStringBuffer aNum;
                     sal_Int32 nPos(1);
 
                     copyHex(rCandidate, nPos, aNum, nLen);
@@ -822,7 +822,7 @@ namespace svgio
                 }
                 else
                 {
-                    static rtl::OUString aStrRgb(rtl::OUString::createFromAscii("rgb"));
+                    static OUString aStrRgb(OUString::createFromAscii("rgb"));
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
@@ -893,7 +893,7 @@ namespace svgio
             return false;
         }
 
-        basegfx::B2DRange readViewBox(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider)
+        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider& rInfoProvider)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -934,7 +934,7 @@ namespace svgio
             return basegfx::B2DRange();
         }
 
-        basegfx::B2DHomMatrix readTransform(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider)
+        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider& rInfoProvider)
         {
             basegfx::B2DHomMatrix aMatrix;
             const sal_Int32 nLen(rCandidate.getLength());
@@ -948,12 +948,12 @@ namespace svgio
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
                     const sal_Int32 nInitPos(nPos);
-                    static rtl::OUString aStrMatrix(rtl::OUString::createFromAscii("matrix"));
-                    static rtl::OUString aStrTranslate(rtl::OUString::createFromAscii("translate"));
-                    static rtl::OUString aStrScale(rtl::OUString::createFromAscii("scale"));
-                    static rtl::OUString aStrRotate(rtl::OUString::createFromAscii("rotate"));
-                    static rtl::OUString aStrSkewX(rtl::OUString::createFromAscii("skewX"));
-                    static rtl::OUString aStrSkewY(rtl::OUString::createFromAscii("skewY"));
+                    static OUString aStrMatrix(OUString::createFromAscii("matrix"));
+                    static OUString aStrTranslate(OUString::createFromAscii("translate"));
+                    static OUString aStrScale(OUString::createFromAscii("scale"));
+                    static OUString aStrRotate(OUString::createFromAscii("rotate"));
+                    static OUString aStrSkewX(OUString::createFromAscii("skewX"));
+                    static OUString aStrSkewY(OUString::createFromAscii("skewY"));
 
                     switch(aChar)
                     {
@@ -1139,7 +1139,7 @@ namespace svgio
             return aMatrix;
         }
 
-        bool readSingleNumber(const rtl::OUString& rCandidate, SvgNumber& aNum)
+        bool readSingleNumber(const OUString& rCandidate, SvgNumber& aNum)
         {
             const sal_Int32 nLen(rCandidate.getLength());
             sal_Int32 nPos(0);
@@ -1147,9 +1147,9 @@ namespace svgio
             return readNumberAndUnit(rCandidate, nPos, aNum, nLen);
         }
 
-        bool readLocalUrl(const rtl::OUString& rCandidate, rtl::OUString& rURL)
+        bool readLocalUrl(const OUString& rCandidate, OUString& rURL)
         {
-            static rtl::OUString aStrUrl(rtl::OUString::createFromAscii("url"));
+            static OUString aStrUrl(OUString::createFromAscii("url"));
 
             if(rCandidate.match(aStrUrl, 0))
             {
@@ -1157,7 +1157,7 @@ namespace svgio
                 sal_Int32 nPos(aStrUrl.getLength());
 
                 skip_char(rCandidate, sal_Unicode('('), sal_Unicode('#'), nPos, nLen);
-                rtl::OUStringBuffer aTokenValue;
+                OUStringBuffer aTokenValue;
                 copyToLimiter(rCandidate, sal_Unicode(')'), nPos, aTokenValue, nLen);
                 rURL = aTokenValue.makeStringAndClear();
 
@@ -1167,7 +1167,7 @@ namespace svgio
             return false;
         }
 
-        bool readSvgPaint(const rtl::OUString& rCandidate, SvgPaint& rSvgPaint, rtl::OUString& rURL)
+        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1182,8 +1182,8 @@ namespace svgio
                 }
                 else
                 {
-                    static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
-                    static rtl::OUString aStrCurrentColor(rtl::OUString::createFromAscii("currentColor"));
+                    static OUString aStrNone(OUString::createFromAscii("none"));
+                    static OUString aStrCurrentColor(OUString::createFromAscii("currentColor"));
 
                     if(rCandidate.match(aStrNone, 0))
                     {
@@ -1206,7 +1206,7 @@ namespace svgio
             return false;
         }
 
-        bool readSvgNumberVector(const rtl::OUString& rCandidate, SvgNumberVector& rSvgNumberVector)
+        bool readSvgNumberVector(const OUString& rCandidate, SvgNumberVector& rSvgNumberVector)
         {
             const sal_Int32 nLen(rCandidate.getLength());
             rSvgNumberVector.clear();
@@ -1229,7 +1229,7 @@ namespace svgio
             return false;
         }
 
-        SvgAspectRatio readSvgAspectRatio(const rtl::OUString& rCandidate)
+        SvgAspectRatio readSvgAspectRatio(const OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
@@ -1245,7 +1245,7 @@ namespace svgio
                 {
                     const sal_Int32 nInitPos(nPos);
                     skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
-                    rtl::OUStringBuffer aTokenName;
+                    OUStringBuffer aTokenName;
                     copyString(rCandidate, nPos, aTokenName, nLen);
 
                     if(aTokenName.getLength())
@@ -1353,7 +1353,7 @@ namespace svgio
             return SvgAspectRatio();
         }
 
-        bool readSvgStringVector(const rtl::OUString& rCandidate, SvgStringVector& rSvgStringVector)
+        bool readSvgStringVector(const OUString& rCandidate, SvgStringVector& rSvgStringVector)
         {
             rSvgStringVector.clear();
             const sal_Int32 nLen(rCandidate.getLength());
@@ -1361,14 +1361,14 @@ namespace svgio
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                rtl::OUStringBuffer aTokenValue;
+                OUStringBuffer aTokenValue;
                 skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(','), nPos, nLen);
 
                 while(nPos < nLen)
                 {
                     copyToLimiter(rCandidate, sal_Unicode(','), nPos, aTokenValue, nLen);
                     skip_char(rCandidate, sal_Unicode(','), sal_Unicode(' '), nPos, nLen);
-                    const rtl::OUString aString = aTokenValue.makeStringAndClear();
+                    const OUString aString = aTokenValue.makeStringAndClear();
 
                     if(aString.getLength())
                     {
@@ -1380,9 +1380,9 @@ namespace svgio
             return !rSvgStringVector.empty();
         }
 
-        void readImageLink(const rtl::OUString& rCandidate, rtl::OUString& rXLink, rtl::OUString& rUrl, rtl::OUString& rMimeType, rtl::OUString& rData)
+        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData)
         {
-            rXLink = rUrl = rMimeType = rData = rtl::OUString();
+            rXLink = rUrl = rMimeType = rData = OUString();
 
             if(sal_Unicode('#') == rCandidate[0])
             {
@@ -1391,14 +1391,14 @@ namespace svgio
             }
             else
             {
-                static rtl::OUString aStrData(rtl::OUString::createFromAscii("data:"));
+                static OUString aStrData(OUString::createFromAscii("data:"));
 
                 if(rCandidate.match(aStrData, 0))
                 {
                     // embedded data
                     sal_Int32 nPos(aStrData.getLength());
                     sal_Int32 nLen(rCandidate.getLength());
-                    rtl::OUStringBuffer aBuffer;
+                    OUStringBuffer aBuffer;
 
                     // read mime type
                     skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
@@ -1408,13 +1408,13 @@ namespace svgio
 
                     if(rMimeType.getLength() && nPos < nLen)
                     {
-                        static rtl::OUString aStrImage(rtl::OUString::createFromAscii("image"));
+                        static OUString aStrImage(OUString::createFromAscii("image"));
 
                         if(rMimeType.match(aStrImage, 0))
                         {
                             // image data
-                            rtl::OUString aData(rCandidate.copy(nPos));
-                            static rtl::OUString aStrBase64(rtl::OUString::createFromAscii("base64"));
+                            OUString aData(rCandidate.copy(nPos));
+                            static OUString aStrBase64(OUString::createFromAscii("base64"));
 
                             if(aData.match(aStrBase64, 0))
                             {
@@ -1440,14 +1440,14 @@ namespace svgio
             }
         }
 
-        rtl::OUString convert(const rtl::OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove)
+        OUString convert(const OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                rtl::OUStringBuffer aBuffer;
+                OUStringBuffer aBuffer;
                 bool bChanged(false);
 
                 while(nPos < nLen)
@@ -1480,14 +1480,14 @@ namespace svgio
             return rCandidate;
         }
 
-        rtl::OUString consolidateContiguosSpace(const rtl::OUString& rCandidate)
+        OUString consolidateContiguosSpace(const OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
 
             if(nLen)
             {
                 sal_Int32 nPos(0);
-                rtl::OUStringBuffer aBuffer;
+                OUStringBuffer aBuffer;
                 bool bInsideSpace(false);
                 const sal_Unicode aSpace(' ');
 
@@ -1527,14 +1527,14 @@ namespace svgio
             return rCandidate;
         }
 
-        rtl::OUString whiteSpaceHandlingDefault(const rtl::OUString& rCandidate)
+        OUString whiteSpaceHandlingDefault(const OUString& rCandidate)
         {
             const sal_Unicode aNewline('\n');
             const sal_Unicode aTab('\t');
             const sal_Unicode aSpace(' ');
 
             // remove all newline characters
-            rtl::OUString aRetval(convert(rCandidate, aNewline, aNewline, true));
+            OUString aRetval(convert(rCandidate, aNewline, aNewline, true));
 
             // convert tab to space
             aRetval = convert(aRetval, aTab, aSpace, false);
@@ -1548,14 +1548,14 @@ namespace svgio
             return aRetval;
         }
 
-        rtl::OUString whiteSpaceHandlingPreserve(const rtl::OUString& rCandidate)
+        OUString whiteSpaceHandlingPreserve(const OUString& rCandidate)
         {
             const sal_Unicode aNewline('\n');
             const sal_Unicode aTab('\t');
             const sal_Unicode aSpace(' ');
 
             // convert newline to space
-            rtl::OUString aRetval(convert(rCandidate, aNewline, aSpace, false));
+            OUString aRetval(convert(rCandidate, aNewline, aSpace, false));
 
             // convert tab to space
             aRetval = convert(rCandidate, aTab, aSpace, false);

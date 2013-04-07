@@ -120,20 +120,20 @@ const ::com::sun::star::lang::Locale& LocaleDataWrapper::getMyLocale() const
 
 void LocaleDataWrapper::invalidateData()
 {
-    aCurrSymbol = rtl::OUString();
-    aCurrBankSymbol = rtl::OUString();
+    aCurrSymbol = OUString();
+    aCurrBankSymbol = OUString();
     nDateFormat = nLongDateFormat = nDateFormatInvalid;
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
         for (sal_Int32 j=0; j<LocaleItem::COUNT; ++j)
-            aLocaleItem[j] = rtl::OUString();
+            aLocaleItem[j] = OUString();
         bLocaleDataItemValid = sal_False;
     }
     if ( bReservedWordValid )
     {
         for ( sal_Int16 j=0; j<reservedWords::COUNT; ++j )
-            aReservedWord[j] = rtl::OUString();
+            aReservedWord[j] = OUString();
         bReservedWordValid = sal_False;
     }
     xDefaultCalendar.reset();
@@ -216,7 +216,7 @@ void LocaleDataWrapper::invalidateData()
 }
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getReservedWord() const
+::com::sun::star::uno::Sequence< OUString > LocaleDataWrapper::getReservedWord() const
 {
     try
     {
@@ -226,7 +226,7 @@ void LocaleDataWrapper::invalidateData()
     {
         SAL_WARN( "unotools.i18n", "getReservedWord: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
+    return ::com::sun::star::uno::Sequence< OUString >(0);
 }
 
 
@@ -302,7 +302,7 @@ void LocaleDataWrapper::invalidateData()
         {
             if (areChecksEnabled())
             {
-                rtl::OUStringBuffer aMsg("LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n");
+                OUStringBuffer aMsg("LocaleDataWrapper::getInstalledLanguageTypes: Variants not supported, locale\n");
                 aMsg.append(aDebugLocale);
                 outputCheckMessage(aMsg.makeStringAndClear());
             }
@@ -314,7 +314,7 @@ void LocaleDataWrapper::invalidateData()
         // In checks, exclude known problems because no MS-LCID defined.
         if (areChecksEnabled() && eLang == LANGUAGE_DONTKNOW)
         {
-            rtl::OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
+            OUStringBuffer aMsg("ConvertIsoNamesToLanguage: unknown MS-LCID for locale\n");
             aMsg.append(aDebugLocale);
             outputCheckMessage(aMsg.makeStringAndClear());
         }
@@ -339,7 +339,7 @@ void LocaleDataWrapper::invalidateData()
 //                      && !aDebugLocale.EqualsAscii( "es-BR" ) // ?!? Brazil/es
                     )
                 {
-                    rtl::OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
+                    OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
                     aMsg.append(aDebugLocale);
                     aMsg.appendAscii("  ->  0x");
                     aMsg.append(static_cast<sal_Int32>(eLang), 16);
@@ -360,7 +360,7 @@ void LocaleDataWrapper::invalidateData()
     return rInstalledLanguageTypes;
 }
 
-const rtl::OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
+const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nItem >= LocaleItem::COUNT )
@@ -456,7 +456,7 @@ void LocaleDataWrapper::getOneReservedWordImpl( sal_Int16 nWord )
 }
 
 
-const rtl::OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
+const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if ( nWord < 0 || nWord >= reservedWords::COUNT )
@@ -473,7 +473,7 @@ const rtl::OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) co
 }
 
 
-MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const rtl::OUString& rMS ) const
+MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString& rMS ) const
 {
 //! TODO: could be cached too
     if ( rMS.equalsIgnoreAsciiCase( "metric" ) )
@@ -533,7 +533,7 @@ const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > L
 
 // --- currencies -----------------------------------------------------
 
-const rtl::OUString& LocaleDataWrapper::getCurrSymbol() const
+const OUString& LocaleDataWrapper::getCurrSymbol() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (aCurrSymbol.isEmpty())
@@ -545,7 +545,7 @@ const rtl::OUString& LocaleDataWrapper::getCurrSymbol() const
 }
 
 
-const rtl::OUString& LocaleDataWrapper::getCurrBankSymbol() const
+const OUString& LocaleDataWrapper::getCurrBankSymbol() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
     if (aCurrBankSymbol.isEmpty())
@@ -608,15 +608,15 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" );
+            OUString aMsg( "LocaleDataWrapper::getCurrSymbolsImpl: no default currency" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nElem = 0;
         if ( nElem >= nCnt )
         {
             if (areChecksEnabled())
-                outputCheckMessage(rtl::OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
-            aCurrSymbol = rtl::OUString("ShellsAndPebbles");
+                outputCheckMessage(OUString("LocaleDataWrapper::getCurrSymbolsImpl: no currency at all, using ShellsAndPebbles"));
+            aCurrSymbol = OUString("ShellsAndPebbles");
             aCurrBankSymbol = aCurrSymbol;
             nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
             nCurrDigits = 2;
@@ -629,7 +629,7 @@ void LocaleDataWrapper::getCurrSymbolsImpl()
 }
 
 
-void LocaleDataWrapper::scanCurrFormatImpl( const rtl::OUString& rCode,
+void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
         sal_Int32 nStart, sal_Int32& nSign, sal_Int32& nPar,
         sal_Int32& nNum, sal_Int32& nBlank, sal_Int32& nSym )
 {
@@ -717,7 +717,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" );
+            OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: no currency formats" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nCurrPositiveFormat = nCurrNegativeFormat = nCurrFormatDefault;
@@ -765,7 +765,7 @@ void LocaleDataWrapper::getCurrFormatsImpl()
     scanCurrFormatImpl( pFormatArr[nElem].Code, 0, nSign, nPar, nNum, nBlank, nSym );
     if (areChecksEnabled() && (nNum == -1 || nSym == -1))
     {
-        rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" );
+        OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrPositiveFormat?" );
         outputCheckMessage( appendLocaleInfo( aMsg ) );
     }
     if (nBlank == -1)
@@ -788,12 +788,12 @@ void LocaleDataWrapper::getCurrFormatsImpl()
         nCurrNegativeFormat = nCurrFormatDefault;
     else
     {
-        const ::rtl::OUString& rCode = pFormatArr[nNeg].Code;
+        const OUString& rCode = pFormatArr[nNeg].Code;
         sal_Int32 nDelim = rCode.indexOf(';');
         scanCurrFormatImpl( rCode, nDelim+1, nSign, nPar, nNum, nBlank, nSym );
         if (areChecksEnabled() && (nNum == -1 || nSym == -1 || (nPar == -1 && nSign == -1)))
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" );
+            OUString aMsg( "LocaleDataWrapper::getCurrFormatsImpl: CurrNegativeFormat?" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         // NOTE: one of nPar or nSign are allowed to be -1
@@ -877,7 +877,7 @@ DateFormat LocaleDataWrapper::getLongDateFormat() const
 }
 
 
-DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
+DateFormat LocaleDataWrapper::scanDateFormatImpl( const OUString& rCode )
 {
     // Only some european versions were translated, the ones with different
     // keyword combinations are:
@@ -929,7 +929,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
         {
             if (areChecksEnabled())
             {
-                rtl::OUString aMsg( "LocaleDataWrapper::scanDateFormat: not all DMY present" );
+                OUString aMsg( "LocaleDataWrapper::scanDateFormat: not all DMY present" );
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
             if (nDay == -1)
@@ -951,7 +951,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applyable" );
+            OUString aMsg( "LocaleDataWrapper::scanDateFormat: no magic applyable" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         return DMY;
@@ -969,7 +969,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {   // bad luck
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no date formats" );
+            OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no date formats" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         nDateFormat = nLongDateFormat = DMY;
@@ -1013,14 +1013,14 @@ void LocaleDataWrapper::getDateFormatsImpl()
     {
         if (areChecksEnabled())
         {
-            rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no edit" );
+            OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no edit" );
             outputCheckMessage( appendLocaleInfo( aMsg ) );
         }
         if ( nDef == -1 )
         {
             if (areChecksEnabled())
             {
-                rtl::OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no default" );
+                OUString aMsg( "LocaleDataWrapper::getDateFormatsImpl: no default" );
                 outputCheckMessage( appendLocaleInfo( aMsg ) );
             }
             if ( nMedium != -1 )
@@ -1188,7 +1188,7 @@ static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, sal_uInt16 nNumber, int bLe
 }
 
 
-inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const rtl::OUString& rStr )
+inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
     if ( rStr.getLength() == 1 )
         *pBuf++ = rStr[0];
@@ -1280,7 +1280,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     }
     else
     {
-        const rtl::OUString& rThoSep = getNumThousandSep();
+        const OUString& rThoSep = getNumThousandSep();
 
         // copy number to buffer (excluding decimals)
         sal_uInt16 nNumLen2 = nNumLen-nDecimals;
@@ -1328,7 +1328,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 
 // --- simple date and time formatting --------------------------------
 
-rtl::OUString LocaleDataWrapper::getDate( const Date& rDate ) const
+OUString LocaleDataWrapper::getDate( const Date& rDate ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
@@ -1371,11 +1371,11 @@ rtl::OUString LocaleDataWrapper::getDate( const Date& rDate ) const
             pBuf = ImplAdd2UNum( pBuf, nDay, sal_True /* IsDateDayLeadingZero() */ );
     }
 
-    return rtl::OUString(aBuf, pBuf-aBuf);
+    return OUString(aBuf, pBuf-aBuf);
 }
 
 
-rtl::OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
 //!TODO: leading zeros et al
@@ -1409,7 +1409,7 @@ rtl::OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_
         }
     }
 
-    rtl::OUString aStr(aBuf, pBuf - aBuf);
+    OUString aStr(aBuf, pBuf - aBuf);
 
     if ( bHour12 )
     {
@@ -1423,7 +1423,7 @@ rtl::OUString LocaleDataWrapper::getTime( const Time& rTime, sal_Bool bSec, sal_
 }
 
 
-rtl::OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
+OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
         sal_Int16 nDisplayDayOfWeek, sal_Bool bDayOfMonthWithLeadingZero,
         sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
 {
@@ -1441,17 +1441,17 @@ rtl::OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper
     // day of month
     nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
     pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
-    rtl::OUString aDay(aBuf, pBuf-aBuf);
+    OUString aDay(aBuf, pBuf-aBuf);
     // month of year
     nVal = rCal.getValue( CalendarFieldIndex::MONTH );
-    rtl::OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
+    OUString aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
     // year
     nVal = rCal.getValue( CalendarFieldIndex::YEAR );
     if ( bTwoDigitYear )
         pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
     else
         pBuf = ImplAddUNum( aBuf, nVal );
-    rtl::OUString aYear(aBuf, pBuf-aBuf);
+    OUString aYear(aBuf, pBuf-aBuf);
     // concatenate
     switch ( getLongDateFormat() )
     {
@@ -1480,7 +1480,7 @@ rtl::OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper
 }
 
 
-rtl::OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
+OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, sal_Bool b100Sec ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[128];
@@ -1507,7 +1507,7 @@ rtl::OUString LocaleDataWrapper::getDuration( const Time& rTime, sal_Bool bSec, 
         }
     }
 
-    return rtl::OUString(aBuf, pBuf-aBuf);
+    return OUString(aBuf, pBuf-aBuf);
 }
 
 
@@ -1525,7 +1525,7 @@ inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal
 }
 
 
-rtl::OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
+OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
         sal_Bool bUseThousandSep, sal_Bool bTrailingZeros ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
@@ -1537,15 +1537,15 @@ rtl::OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals
 
     sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
         bUseThousandSep, bTrailingZeros );
-    rtl::OUString aStr(pBuffer, pBuf-pBuffer);
+    OUString aStr(pBuffer, pBuf-pBuffer);
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
     return aStr;
 }
 
-rtl::OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        const rtl::OUString& rCurrencySymbol, sal_Bool bUseThousandSep ) const
+OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
+        const OUString& rCurrencySymbol, sal_Bool bUseThousandSep ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
     sal_Unicode aBuf[192];
@@ -1735,7 +1735,7 @@ rtl::OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimal
         }
     }
 
-    rtl::OUString aNumber(pBuffer, pBuf-pBuffer);
+    OUString aNumber(pBuffer, pBuf-pBuffer);
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
@@ -1755,10 +1755,10 @@ LanguageTag LocaleDataWrapper::getLoadedLanguageTag() const
 }
 
 
-rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg) const
+OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nBlockCritical );
-    rtl::OUStringBuffer aDebugMsg(rDebugMsg);
+    OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append(static_cast<sal_Unicode>('\n'));
     aDebugMsg.append(maLanguageTag.getBcp47());
     aDebugMsg.appendAscii(" requested\n");
@@ -1770,9 +1770,9 @@ rtl::OUString LocaleDataWrapper::appendLocaleInfo(const rtl::OUString& rDebugMsg
 
 
 // static
-void LocaleDataWrapper::outputCheckMessage( const rtl::OUString& rMsg )
+void LocaleDataWrapper::outputCheckMessage( const OUString& rMsg )
 {
-    outputCheckMessage(rtl::OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8).getStr());
+    outputCheckMessage(OUStringToOString(rMsg, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 
@@ -1836,7 +1836,7 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
 
 // --- XLocaleData4 ----------------------------------------------------------
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
+::com::sun::star::uno::Sequence< OUString > LocaleDataWrapper::getDateAcceptancePatterns() const
 {
     ::utl::ReadWriteGuard aGuard( aMutex );
 
@@ -1855,13 +1855,13 @@ void LocaleDataWrapper::evaluateLocaleDataChecking()
     {
         SAL_WARN( "unotools.i18n", "getDateAcceptancePatterns: Exception caught " << e.Message );
     }
-    return ::com::sun::star::uno::Sequence< ::rtl::OUString >(0);
+    return ::com::sun::star::uno::Sequence< OUString >(0);
 }
 
 // --- Override layer --------------------------------------------------------
 
 void LocaleDataWrapper::setDateAcceptancePatterns(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rPatterns )
+        const ::com::sun::star::uno::Sequence< OUString > & rPatterns )
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nWrite );
 

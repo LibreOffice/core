@@ -50,18 +50,18 @@ void HierarchyUri::init() const
     if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aService = m_aParentUri = m_aName = rtl::OUString();
+        m_aService = m_aParentUri = m_aName = OUString();
 
         // URI must match at least: <sheme>:
         if ( ( m_aUri.getLength() < HIERARCHY_URL_SCHEME_LENGTH + 1 ) )
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString("/");
+            m_aPath = OUString("/");
             return;
         }
 
         // Scheme is case insensitive.
-        rtl::OUString aScheme
+        OUString aScheme
             = m_aUri.copy( 0, HIERARCHY_URL_SCHEME_LENGTH ).toAsciiLowerCase();
         if ( aScheme == HIERARCHY_URL_SCHEME )
         {
@@ -75,8 +75,8 @@ void HierarchyUri::init() const
             if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 1 )
             {
                 // root folder URI without path and service specifier.
-                m_aUri += rtl::OUString( "//" DEFAULT_DATA_SOURCE_SERVICE "/"  );
-                m_aService = rtl::OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                m_aUri += OUString( "//" DEFAULT_DATA_SOURCE_SERVICE "/"  );
+                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
 
                 nPos = m_aUri.getLength() - 1;
             }
@@ -86,8 +86,8 @@ void HierarchyUri::init() const
                                                     == sal_Unicode( '/' ) ) )
             {
                 // root folder URI without service specifier.
-                m_aUri += rtl::OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  );
-                m_aService = rtl::OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                m_aUri += OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  );
+                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
 
                 nPos = m_aUri.getLength() - 1;
             }
@@ -100,8 +100,8 @@ void HierarchyUri::init() const
                 m_aUri = m_aUri.replaceAt(
                             HIERARCHY_URL_SCHEME_LENGTH + 2,
                             0,
-                            rtl::OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  ) );
-                m_aService = rtl::OUString( DEFAULT_DATA_SOURCE_SERVICE  );
+                            OUString( "/" DEFAULT_DATA_SOURCE_SERVICE "/"  ) );
+                m_aService = OUString( DEFAULT_DATA_SOURCE_SERVICE  );
 
                 nPos
                     = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
@@ -118,17 +118,17 @@ void HierarchyUri::init() const
                 if ( nStart == m_aUri.getLength() )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString("/");
+                    m_aPath = OUString("/");
                     return;
                 }
 
                 // Empty path segments?
                 if ( m_aUri.indexOf(
-                        rtl::OUString("//"),
+                        OUString("//"),
                         nStart ) != -1 )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString("/");
+                    m_aPath = OUString("/");
                     return;
                 }
 
@@ -138,7 +138,7 @@ void HierarchyUri::init() const
                 if ( nEnd == nStart )
                 {
                     // error, but remember that we did a init().
-                    m_aPath = rtl::OUString("/");
+                    m_aPath = OUString("/");
                     return;
                 }
 
@@ -146,7 +146,7 @@ void HierarchyUri::init() const
                 {
                     // Trailing slash missing.
                     nEnd = m_aUri.getLength();
-                    m_aUri += rtl::OUString("/");
+                    m_aUri += OUString("/");
                 }
 
                 m_aService = m_aUri.copy( nStart, nEnd - nStart );
@@ -182,7 +182,7 @@ void HierarchyUri::init() const
         else
         {
             // error, but remember that we did a init().
-            m_aPath = rtl::OUString("/");
+            m_aPath = OUString("/");
         }
     }
 }

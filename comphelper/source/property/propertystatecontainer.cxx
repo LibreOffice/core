@@ -31,13 +31,13 @@ namespace comphelper
 
     namespace
     {
-        static ::rtl::OUString lcl_getUnknownPropertyErrorMessage( const ::rtl::OUString& _rPropertyName )
+        static OUString lcl_getUnknownPropertyErrorMessage( const OUString& _rPropertyName )
         {
             // TODO: perhaps it's time to think about resources in the comphelper module?
             // Would be nice to have localized exception strings (a simply resource file containing
             // strings only would suffice, and could be realized with an UNO service, so we do not
             // need the dependency to the Tools project)
-            ::rtl::OUStringBuffer sMessage;
+            OUStringBuffer sMessage;
             sMessage.appendAscii( "The property \"" );
             sMessage.append( _rPropertyName );
             sMessage.appendAscii( "\" is unknown." );
@@ -67,7 +67,7 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyStateContainer, OPropertyContainer, OPropertyStateContainer_TBase )
 
     //--------------------------------------------------------------------
-    sal_Int32 OPropertyStateContainer::getHandleForName( const ::rtl::OUString& _rPropertyName ) SAL_THROW( ( UnknownPropertyException ) )
+    sal_Int32 OPropertyStateContainer::getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( UnknownPropertyException ) )
     {
         // look up the handle for the name
         ::cppu::IPropertyArrayHelper& rPH = getInfoHelper();
@@ -80,13 +80,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL OPropertyStateContainer::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         return getPropertyStateByHandle( getHandleForName( _rPropertyName ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< ::rtl::OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException)
+    Sequence< PropertyState > SAL_CALL OPropertyStateContainer::getPropertyStates( const Sequence< OUString >& _rPropertyNames ) throw (UnknownPropertyException, RuntimeException)
     {
         sal_Int32 nProperties = _rPropertyNames.getLength();
         Sequence< PropertyState> aStates( nProperties );
@@ -96,17 +96,17 @@ namespace comphelper
 #ifdef _DEBUG
         // precondition: property sequence is sorted (the algorythm below relies on this)
         {
-            const ::rtl::OUString* pNames = _rPropertyNames.getConstArray();
-            const ::rtl::OUString* pNamesCompare = pNames + 1;
-            const ::rtl::OUString* pNamesEnd = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
+            const OUString* pNames = _rPropertyNames.getConstArray();
+            const OUString* pNamesCompare = pNames + 1;
+            const OUString* pNamesEnd = _rPropertyNames.getConstArray() + _rPropertyNames.getLength();
             for ( ; pNamesCompare != pNamesEnd; ++pNames, ++pNamesCompare )
                 OSL_PRECOND( pNames->compareTo( *pNamesCompare ) < 0,
                     "OPropertyStateContainer::getPropertyStates: property sequence not sorted!" );
         }
 #endif
 
-        const ::rtl::OUString* pLookup = _rPropertyNames.getConstArray();
-        const ::rtl::OUString* pLookupEnd = pLookup + nProperties;
+        const OUString* pLookup = _rPropertyNames.getConstArray();
+        const OUString* pLookupEnd = pLookup + nProperties;
         PropertyState* pStates = aStates.getArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
@@ -139,13 +139,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL OPropertyStateContainer::setPropertyToDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         setPropertyToDefaultByHandle( getHandleForName( _rPropertyName ) );
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL OPropertyStateContainer::getPropertyDefault( const OUString& _rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
     {
         Any aDefault;
         getPropertyDefaultByHandle( getHandleForName( _rPropertyName ), aDefault );

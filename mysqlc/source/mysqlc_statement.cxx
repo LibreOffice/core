@@ -48,7 +48,6 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
-using ::rtl::OUString;
 
 #include <stdio.h>
 
@@ -181,7 +180,7 @@ sal_Bool SAL_CALL OCommonStatement::execute(const OUString& sql)
     OSL_TRACE("OCommonStatement::execute");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const ::rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
+    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement( sql );
 
     sal_Bool success = false;
     try {
@@ -202,7 +201,7 @@ Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery(const OUString& 
 
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const ::rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
 
     Reference< XResultSet > xResultSet;
     try {
@@ -289,7 +288,7 @@ sal_Int32 SAL_CALL OCommonStatement::executeUpdate(const OUString& sql)
     OSL_TRACE("OCommonStatement::executeUpdate");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
-    const ::rtl::OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
+    const OUString sSqlStatement = m_pConnection->transFormPreparedStatement(sql);
 
     sal_Int32 affectedRows = 0;
     try {

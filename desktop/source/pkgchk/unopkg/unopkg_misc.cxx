@@ -40,8 +40,6 @@
 #include "comphelper/sequence.hxx"
 #include <stdio.h>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -50,10 +48,10 @@ namespace unopkg {
 
 bool getLockFilePath(OUString & out);
 
-::rtl::OUString toString( OptionInfo const * info )
+OUString toString( OptionInfo const * info )
 {
     OSL_ASSERT( info != 0 );
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii("--");
     buf.appendAscii(info->m_name);
     if (info->m_short_option != '\0')
@@ -93,7 +91,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_FAIL( ::rtl::OUStringToOString(
+    OSL_FAIL( OUStringToOString(
                     opt, osl_getThreadTextEncoding() ).getStr() );
     return 0;
 }
@@ -224,7 +222,7 @@ OUString makeAbsoluteFileUrl(
             base_url.pData, file_url.pData, &abs.pData ) != osl_File_E_None)
     {
         if (throw_exc) {
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             buf.appendAscii( "making absolute file url failed: \"" );
             buf.append( base_url );
             buf.appendAscii( "\" (base-url) and \"" );
@@ -381,7 +379,7 @@ Reference<XComponentContext> connectToOffice(
     args[ 1 ] = "--nodefault";
 
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii( "--accept=pipe,name=" );
     buf.append( pipeId );
     buf.appendAscii( ";urp;" );
@@ -446,8 +444,8 @@ Reference<XComponentContext> getUNO(
     // do not create any user data (for the root user) in --shared mode:
     if (shared) {
         rtl::Bootstrap::set(
-            rtl::OUString("CFG_CacheUrl"),
-            rtl::OUString());
+            OUString("CFG_CacheUrl"),
+            OUString());
     }
 
     // hold lock during process runtime:

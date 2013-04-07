@@ -29,7 +29,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt::tree;
@@ -101,7 +100,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TREE_SHOWSHANDLES:
         return Any( sal_True );
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_TreeControl ) );
+        return uno::makeAny( OUString::createFromAscii( szServiceName_TreeControl ) );
     default:
         return UnoControlModel::ImplGetDefaultValue( nPropId );
     }

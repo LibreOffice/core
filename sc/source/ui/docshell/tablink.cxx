@@ -128,7 +128,7 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        rtl::OUString aFile, aFilter;
+        OUString aFile, aFilter;
         pLinkManager->GetDisplayNames(this, 0, &aFile, NULL, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix
@@ -173,7 +173,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     if (!rNewFile.Len() || !rNewFilter.Len())
         return false;
 
-    rtl::OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
+    OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, pImpl->m_pDocSh);
     bool bNewUrlName = !aFileName.equals(aNewUrl);
 
     const SfxFilter* pFilter = pImpl->m_pDocSh->GetFactory().GetFilterContainer()->GetFilter4FilterName(rNewFilter);
@@ -187,7 +187,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if (!aFilterName.equals(rNewFilter))
-        aOptions = rtl::OUString();
+        aOptions = OUString();
     if ( pNewOptions )                  // Optionen hart angegeben?
         aOptions = *pNewOptions;
 
@@ -259,7 +259,7 @@ sal_Bool ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
             if ( bNewUrlName && nMode == SC_LINK_VALUE )
             {
-                rtl::OUString aName;
+                OUString aName;
                 pDoc->GetName( nTab, aName );
                 if ( ScGlobal::GetpTransliteration()->isEqual(
                         ScGlobal::GetDocTabName( aFileName, aTabName ), aName ) )
@@ -433,7 +433,7 @@ IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
 
 // === ScDocumentLoader ==================================================
 
-rtl::OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
+OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;
@@ -510,9 +510,9 @@ bool ScDocumentLoader::GetFilterName(
     return bRet;
 }
 
-void ScDocumentLoader::RemoveAppPrefix( rtl::OUString& rFilterName )
+void ScDocumentLoader::RemoveAppPrefix( OUString& rFilterName )
 {
-    rtl::OUStringBuffer aAppPrefix;
+    OUStringBuffer aAppPrefix;
     aAppPrefix.appendAscii(STRING_SCAPP);
     aAppPrefix.appendAscii(": ");
     sal_Int32 nPreLen = aAppPrefix.getLength();
@@ -520,8 +520,8 @@ void ScDocumentLoader::RemoveAppPrefix( rtl::OUString& rFilterName )
         rFilterName = rFilterName.copy(nPreLen);
 }
 
-ScDocumentLoader::ScDocumentLoader( const rtl::OUString& rFileName,
-                                    rtl::OUString& rFilterName, rtl::OUString& rOptions,
+ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
+                                    OUString& rFilterName, OUString& rOptions,
                                     sal_uInt32 nRekCnt, bool bWithInteraction ) :
         pDocShell(0),
         pMedium(0)
@@ -560,7 +560,7 @@ ScDocumentLoader::ScDocumentLoader( const rtl::OUString& rFileName,
 
     pDocShell->DoLoad( pMedium );
 
-    rtl::OUString aNew = GetOptions(*pMedium);         // Optionen werden beim Laden per Dialog gesetzt
+    OUString aNew = GetOptions(*pMedium);         // Optionen werden beim Laden per Dialog gesetzt
     if (!aNew.isEmpty() && aNew != rOptions)
         rOptions = aNew;
 }
@@ -599,7 +599,7 @@ bool ScDocumentLoader::IsError() const
         return true;
 }
 
-rtl::OUString ScDocumentLoader::GetTitle() const
+OUString ScDocumentLoader::GetTitle() const
 {
     if ( pDocShell )
         return pDocShell->GetTitle();

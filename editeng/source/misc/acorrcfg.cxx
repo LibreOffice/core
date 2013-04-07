@@ -33,7 +33,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
@@ -53,7 +52,7 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     {
         *pS = sAutoPath.GetToken( n, ';' );
         INetURLObject aPath( *pS );
-        aPath.insertName(rtl::OUString("acor"));
+        aPath.insertName(OUString("acor"));
         *pS = aPath.GetMainURL(INetURLObject::DECODE_TO_IURI);
     }
     pAutoCorrect = new SvxAutoCorrect( sSharePath, sUserPath );
@@ -217,7 +216,7 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
 }
 
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(rtl::OUString("Office.Common/AutoCorrect")),
+    utl::ConfigItem(OUString("Office.Common/AutoCorrect")),
     rParent(rPar)
 {
 }
@@ -526,7 +525,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
 }
 
 SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(rtl::OUString("Office.Writer/AutoFunction")),
+    utl::ConfigItem(OUString("Office.Writer/AutoFunction")),
     rParent(rPar)
 {
 }

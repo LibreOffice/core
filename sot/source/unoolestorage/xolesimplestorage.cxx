@@ -72,17 +72,17 @@ OLESimpleStorage::~OLESimpleStorage()
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString("com.sun.star.embed.OLESimpleStorage");
+    uno::Sequence< OUString > aRet(1);
+    aRet[0] = OUString("com.sun.star.embed.OLESimpleStorage");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OLESimpleStorage::impl_staticGetImplementationName()
+OUString SAL_CALL OLESimpleStorage::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.embed.OLESimpleStorage");
+    return OUString("com.sun.star.comp.embed.OLESimpleStorage");
 }
 
 //-------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void OLESimpleStorage::UpdateOriginal_Impl()
 }
 
 //-------------------------------------------------------------------------
-void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< io::XInputStream >& xInputStream )
+void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, OUString aName, const uno::Reference< io::XInputStream >& xInputStream )
     throw ( uno::Exception )
 {
     if ( !pStorage || aName.isEmpty() || !xInputStream.is() )
@@ -164,7 +164,7 @@ void OLESimpleStorage::InsertInputStreamToStorage_Impl( BaseStorage* pStorage, :
 }
 
 //-------------------------------------------------------------------------
-void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const uno::Reference< container::XNameAccess >& xNameAccess )
+void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, OUString aName, const uno::Reference< container::XNameAccess >& xNameAccess )
     throw ( uno::Exception )
 {
     if ( !pStorage || aName.isEmpty() || !xNameAccess.is() )
@@ -184,7 +184,7 @@ void OLESimpleStorage::InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::
 
     try
     {
-        uno::Sequence< ::rtl::OUString > aElements = xNameAccess->getElementNames();
+        uno::Sequence< OUString > aElements = xNameAccess->getElementNames();
         for ( sal_Int32 nInd = 0; nInd < aElements.getLength(); nInd++ )
         {
             uno::Reference< io::XInputStream > xInputStream;
@@ -315,7 +315,7 @@ void SAL_CALL OLESimpleStorage::initialize( const uno::Sequence< uno::Any >& aAr
 //____________________________________________________________________________________________________
 
 // --------------------------------------------------------------------------------
-void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL OLESimpleStorage::insertByName( const OUString& aName, const uno::Any& aElement )
         throw ( lang::IllegalArgumentException,
                 container::ElementExistException,
                 lang::WrappedTargetException,
@@ -360,14 +360,14 @@ void SAL_CALL OLESimpleStorage::insertByName( const ::rtl::OUString& aName, cons
     }
     catch( const uno::Exception& e )
     {
-        throw lang::WrappedTargetException( ::rtl::OUString(  "Insert has failed!"  ),
+        throw lang::WrappedTargetException( OUString(  "Insert has failed!"  ),
                                             uno::Reference< uno::XInterface >(),
                                             uno::makeAny( e ) );
     }
 }
 
 // --------------------------------------------------------------------------------
-void SAL_CALL OLESimpleStorage::removeByName( const ::rtl::OUString& aName )
+void SAL_CALL OLESimpleStorage::removeByName( const OUString& aName )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
                 uno::RuntimeException)
@@ -396,7 +396,7 @@ void SAL_CALL OLESimpleStorage::removeByName( const ::rtl::OUString& aName )
 }
 
 // --------------------------------------------------------------------------------
-void SAL_CALL OLESimpleStorage::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL OLESimpleStorage::replaceByName( const OUString& aName, const uno::Any& aElement )
         throw ( lang::IllegalArgumentException,
                 container::NoSuchElementException,
                 lang::WrappedTargetException,
@@ -417,14 +417,14 @@ void SAL_CALL OLESimpleStorage::replaceByName( const ::rtl::OUString& aName, con
     {
            uno::Any aCaught( ::cppu::getCaughtException() );
 
-        throw lang::WrappedTargetException( ::rtl::OUString("Can't copy raw stream"),
+        throw lang::WrappedTargetException( OUString("Can't copy raw stream"),
                                             uno::Reference< uno::XInterface >(),
                                             aCaught );
     }
 }
 
 // --------------------------------------------------------------------------------
-uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
+uno::Any SAL_CALL OLESimpleStorage::getByName( const OUString& aName )
         throw ( container::NoSuchElementException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -479,7 +479,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
 
         uno::Reference< container::XNameContainer > xResultNameContainer(
             m_xFactory->createInstanceWithArguments(
-                    ::rtl::OUString("com.sun.star.embed.OLESimpleStorage"),
+                    OUString("com.sun.star.embed.OLESimpleStorage"),
                     aArgs ),
             uno::UNO_QUERY_THROW );
 
@@ -537,7 +537,7 @@ uno::Any SAL_CALL OLESimpleStorage::getByName( const ::rtl::OUString& aName )
 }
 
 // --------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getElementNames()
+uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -557,7 +557,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getElementNames()
         throw uno::RuntimeException(); // TODO:
     }
 
-    uno::Sequence< ::rtl::OUString > aSeq( aList.size() );
+    uno::Sequence< OUString > aSeq( aList.size() );
     for ( sal_uInt32 nInd = 0; nInd < aList.size(); nInd++ )
         aSeq[nInd] = aList[nInd].GetName();
 
@@ -565,7 +565,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getElementNames()
 }
 
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL OLESimpleStorage::hasByName( const ::rtl::OUString& aName )
+sal_Bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -755,14 +755,14 @@ uno::Sequence< sal_Int8 > SAL_CALL OLESimpleStorage::getClassID()
     return m_pStorage->GetClassName().GetByteSequence();
 }
 
-::rtl::OUString SAL_CALL OLESimpleStorage::getClassName()
+OUString SAL_CALL OLESimpleStorage::getClassName()
     throw ( uno::RuntimeException )
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /*aClassID*/,
-                            const ::rtl::OUString& /*sClassName*/ )
+                            const OUString& /*sClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
@@ -774,17 +774,17 @@ void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /
 //____________________________________________________________________________________________________
 
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OLESimpleStorage::getImplementationName()
+OUString SAL_CALL OLESimpleStorage::getImplementationName()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 // --------------------------------------------------------------------------------
-::sal_Bool SAL_CALL OLESimpleStorage::supportsService( const ::rtl::OUString& ServiceName )
+::sal_Bool SAL_CALL OLESimpleStorage::supportsService( const OUString& ServiceName )
         throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -794,7 +794,7 @@ void SAL_CALL OLESimpleStorage::setClassInfo( const uno::Sequence< sal_Int8 >& /
 }
 
 // --------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OLESimpleStorage::getSupportedServiceNames()
         throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

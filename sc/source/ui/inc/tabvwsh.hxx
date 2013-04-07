@@ -176,10 +176,10 @@ private:
     String                  aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
     // ugly hack for Add button in ScNameDlg
-    boost::ptr_map<rtl::OUString, ScRangeName> maRangeMap;
+    boost::ptr_map<OUString, ScRangeName> maRangeMap;
     bool    mbInSwitch;
-    rtl::OUString   maName;
-    rtl::OUString   maScope;
+    OUString   maName;
+    OUString   maScope;
 
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );

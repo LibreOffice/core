@@ -1253,7 +1253,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                                             (const SfxPoolItem**)&pAnchor );
 
                     SwIndex aIdx( this, *pAttr->GetStart() );
-                    const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
+                    const OUString c(GetCharOfTxtAttr(*pAttr));
                     OUString const ins( InsertText(c, aIdx, nInsertFlags) );
                     if (ins.isEmpty())
                     {
@@ -1378,7 +1378,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // entstehen koennen und das Attribut im _SortArr_ am
                     // Dokument nicht eingetrage wird.
                     SwIndex aNdIdx( this, *pAttr->GetStart() );
-                    const rtl::OUString c(GetCharOfTxtAttr(*pAttr));
+                    const OUString c(GetCharOfTxtAttr(*pAttr));
                     OUString const ins( InsertText(c, aNdIdx, nInsertFlags) );
                     if (ins.isEmpty())
                     {

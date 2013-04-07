@@ -90,10 +90,10 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        rtl::OString(
+        OString(
             text.begin + RTL_CONSTASCII_LENGTH("0X"),
             text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
-        rtl::OString(text.begin, text.length).toInt32();
+        OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
@@ -109,10 +109,10 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        rtl::OString(
+        OString(
             text.begin + RTL_CONSTASCII_LENGTH("0X"),
             text.length - RTL_CONSTASCII_LENGTH("0X")).toInt32(16) :
-        rtl::OString(text.begin, text.length).toInt32();
+        OString(text.begin, text.length).toInt32();
         //TODO: check valid lexical representation
     return true;
 }
@@ -124,17 +124,17 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
             RTL_CONSTASCII_LENGTH("0X")) == 0 ?
-        rtl::OString(
+        OString(
             text.begin + RTL_CONSTASCII_LENGTH("0X"),
             text.length - RTL_CONSTASCII_LENGTH("0X")).toInt64(16) :
-        rtl::OString(text.begin, text.length).toInt64();
+        OString(text.begin, text.length).toInt64();
         //TODO: check valid lexical representation
     return true;
 }
 
 bool parseValue(xmlreader::Span const & text, double * value) {
     assert(text.is() && value != 0);
-    *value = rtl::OString(text.begin, text.length).toDouble();
+    *value = OString(text.begin, text.length).toDouble();
         //TODO: check valid lexical representation
     return true;
 }
@@ -180,7 +180,7 @@ template< typename T > css::uno::Any parseSingleValue(
 }
 
 template< typename T > css::uno::Any parseListValue(
-    rtl::OString const & separator, xmlreader::Span const & text)
+    OString const & separator, xmlreader::Span const & text)
 {
     comphelper::SequenceAsVector< T > seq;
     xmlreader::Span sep;
@@ -213,7 +213,7 @@ template< typename T > css::uno::Any parseListValue(
 }
 
 css::uno::Any parseValue(
-    rtl::OString const & separator, xmlreader::Span const & text, Type type)
+    OString const & separator, xmlreader::Span const & text, Type type)
 {
     switch (type) {
     case TYPE_ANY:
@@ -418,7 +418,7 @@ bool ValueParser::endElement() {
                 assert(false); // this cannot happen
                 break;
             }
-            separator_ = rtl::OString();
+            separator_ = OString();
             node_.clear();
         }
         break;
@@ -428,7 +428,7 @@ bool ValueParser::endElement() {
         break;
     case STATE_IT:
         items_.push_back(
-            parseValue(rtl::OString(), pad_.get(), elementType(type_)));
+            parseValue(OString(), pad_.get(), elementType(type_)));
         pad_.clear();
         state_ = STATE_TEXT;
         break;

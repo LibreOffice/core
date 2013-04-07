@@ -73,7 +73,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText(rtl::OUString("VCL - Workbench"));
+    aMainWin.SetText(OUString("VCL - Workbench"));
     aMainWin.Show();
 
     Application::Execute();

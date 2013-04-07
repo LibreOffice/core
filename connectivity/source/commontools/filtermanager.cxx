@@ -66,13 +66,13 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString& FilterManager::getFilterComponent( FilterComponent _eWhich ) const
+    const OUString& FilterManager::getFilterComponent( FilterComponent _eWhich ) const
     {
         return m_aFilterComponents[ _eWhich ];
     }
 
     //--------------------------------------------------------------------
-    void FilterManager::setFilterComponent( FilterComponent _eWhich, const ::rtl::OUString& _rComponent )
+    void FilterManager::setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent )
     {
         m_aFilterComponents[ _eWhich ]  = _rComponent;
         try
@@ -108,7 +108,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    void FilterManager::appendFilterComponent( ::rtl::OUStringBuffer& io_appendTo, const ::rtl::OUString& i_component ) const
+    void FilterManager::appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const
     {
         if ( io_appendTo.getLength() > 0 )
         {
@@ -123,7 +123,7 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    bool FilterManager::isThereAtMostOneComponent( ::rtl::OUStringBuffer& o_singleComponent ) const
+    bool FilterManager::isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const
     {
         sal_Int32 nOnlyNonEmpty = -1;
         sal_Int32 i;
@@ -154,9 +154,9 @@ namespace dbtools
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString FilterManager::getComposedFilter( ) const
+    OUString FilterManager::getComposedFilter( ) const
     {
-        ::rtl::OUStringBuffer aComposedFilter;
+        OUStringBuffer aComposedFilter;
 
         // if we have only one non-empty component, then there's no need to compose anything
         if ( !isThereAtMostOneComponent( aComposedFilter ) )

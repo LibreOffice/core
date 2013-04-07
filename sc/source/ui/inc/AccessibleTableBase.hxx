@@ -78,13 +78,13 @@ public:
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Returns the description of the specified row in the table.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
                 getAccessibleRowDescription( sal_Int32 nRow )
                     throw (::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Returns the description text of the specified column in the table.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
                 getAccessibleColumnDescription( sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException,
                     ::com::sun::star::lang::IndexOutOfBoundsException);
@@ -196,12 +196,12 @@ public:
 
 protected:
     /// Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -258,7 +258,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 

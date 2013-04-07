@@ -78,8 +78,8 @@ private:
     void                    ImpSetAttrToGrafInfo(); // Werte vom Pool kopieren
     GraphicAttr             aGrafInfo;
 
-    rtl::OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
-    rtl::OUString aFilterName;
+    OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
+    OUString aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
     GraphicObject*          mpReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
@@ -137,12 +137,12 @@ public:
     void                    ForceSwapIn() const;
     void                    ForceSwapOut() const;
 
-    void                    SetGraphicLink(const rtl::OUString& rFileName, const String& rFilterName);
+    void                    SetGraphicLink(const OUString& rFileName, const String& rFilterName);
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
-    const rtl::OUString& GetFileName() const;
-    const rtl::OUString& GetFilterName() const;
+    const OUString& GetFileName() const;
+    const OUString& GetFilterName() const;
 
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
 

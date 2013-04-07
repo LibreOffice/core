@@ -207,7 +207,7 @@ StringSequence  OImageControlModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_IMAGECONTROL;
     return aSupported;
 }
@@ -291,10 +291,10 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
             {
                 // if that's an external graphic, i.e. one which has not been loaded by ourselves in response to a
                 // new image URL, then also adjust our ImageURL.
-                ::rtl::OUString sNewImageURL;
+                OUString sNewImageURL;
                 if ( m_xGraphicObject.is() )
                 {
-                    sNewImageURL = ::rtl::OUString( "vnd.sun.star.GraphicObject:" );
+                    sNewImageURL = OUString( "vnd.sun.star.GraphicObject:" );
                     sNewImageURL = sNewImageURL + m_xGraphicObject->getUniqueID();
                 }
                 m_sImageURL = sNewImageURL;
@@ -340,7 +340,7 @@ void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps 
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OBoundControlModel )
         DECL_IFACE_PROP2( GRAPHIC,   XGraphic,        BOUND, TRANSIENT );
-        DECL_PROP1      ( IMAGE_URL, ::rtl::OUString, BOUND );
+        DECL_PROP1      ( IMAGE_URL, OUString, BOUND );
         DECL_BOOL_PROP1 ( READONLY,                   BOUND );
         DECL_PROP1      ( TABINDEX,  sal_Int16,       BOUND );
     END_DESCRIBE_PROPERTIES();
@@ -357,7 +357,7 @@ void OImageControlModel::describeAggregateProperties( Sequence< Property >& /* [
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString OImageControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_IMAGECONTROL;  // old (non-sun) name for compatibility !
 }
@@ -412,7 +412,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator )
+sal_Bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     // create a stream for the image specified by the URL
     ::std::auto_ptr< SvStream > pImageStream;
@@ -465,7 +465,7 @@ sal_Bool OImageControlModel::impl_handleNewImageURL_lck( ValueChangeInstigator _
 
     case ImageStoreLink:
     {
-        ::rtl::OUString sCommitURL( m_sImageURL );
+        OUString sCommitURL( m_sImageURL );
         if ( !m_sDocumentURL.isEmpty() )
             sCommitURL = URIHelper::simpleNormalizedMakeRelative( m_sDocumentURL, sCommitURL );
         OSL_ENSURE( m_xColumnUpdate.is(), "OImageControlModel::impl_handleNewImageURL_lck: no bound field, but ImageStoreLink?!" );
@@ -514,7 +514,7 @@ sal_Bool OImageControlModel::commitControlValueToDbColumn( bool _bPostReset )
 //------------------------------------------------------------------------------
 namespace
 {
-    bool lcl_isValidDocumentURL( const ::rtl::OUString& _rDocURL )
+    bool lcl_isValidDocumentURL( const OUString& _rDocURL )
     {
         return ( !_rDocURL.isEmpty() && _rDocURL != "private:object" );
     }
@@ -555,7 +555,7 @@ void OImageControlModel::onDisconnectedDbColumn()
 {
     OBoundControlModel::onDisconnectedDbColumn();
 
-    m_sDocumentURL = ::rtl::OUString();
+    m_sDocumentURL = OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -572,7 +572,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
     }
     case ImageStoreLink:
     {
-        ::rtl::OUString sImageLink( m_xColumn->getString() );
+        OUString sImageLink( m_xColumn->getString() );
         if ( !m_sDocumentURL.isEmpty() )
             sImageLink = INetURLObject::GetAbsURL( m_sDocumentURL, sImageLink );
         return makeAny( sImageLink );
@@ -612,7 +612,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
 
     case ImageStoreLink:
     {
-        ::rtl::OUString sImageURL;
+        OUString sImageURL;
         _rValue >>= sImageURL;
         GetImageProducer()->SetImage( sImageURL );
         bStartProduction = true;
@@ -749,7 +749,7 @@ StringSequence  OImageControlControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_IMAGECONTROL;
     return aSupported;
 }
@@ -789,18 +789,18 @@ void OImageControlControl::implClearGraphics( sal_Bool _bForce )
     {
         if ( _bForce )
         {
-            ::rtl::OUString sOldImageURL;
+            OUString sOldImageURL;
             xSet->getPropertyValue( PROPERTY_IMAGE_URL ) >>= sOldImageURL;
 
             if ( sOldImageURL.isEmpty() )
                 // the ImageURL is already empty, so simply setting a new empty one would not suffice
                 // (since it would be ignored)
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( "private:emptyImage" ) ) );
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
                     // (the concrete URL we're passing here doens't matter. It's important that
                     // the model cannot resolve it to a a valid resource describing an image stream
         }
 
-        xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString() ) );
+        xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString() ) );
     }
 }
 
@@ -811,7 +811,7 @@ bool OImageControlControl::implInsertGraphics()
     if ( !xSet.is() )
         return false;
 
-    ::rtl::OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
+    OUString sTitle = FRM_RES_STRING(RID_STR_IMPORT_GRAPHIC);
     // build some arguments for the upcoming dialog
     try
     {
@@ -858,7 +858,7 @@ bool OImageControlControl::implInsertGraphics()
                  xSet->setPropertyValue( PROPERTY_GRAPHIC, makeAny( aGraphic.GetXGraphic() ) );
             }
             else
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( ::rtl::OUString( aDialog.GetPath() ) ) );
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( aDialog.GetPath() ) ) );
 
             return true;
         }
@@ -879,7 +879,7 @@ bool OImageControlControl::impl_isEmptyGraphics_nothrow() const
     {
         Reference< XPropertySet > xModelProps( const_cast< OImageControlControl* >( this )->getModel(), UNO_QUERY_THROW );
         Reference< XGraphic > xGraphic;
-        OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "Graphic" ) ) >>= xGraphic );
+        OSL_VERIFY( xModelProps->getPropertyValue( OUString( "Graphic" ) ) >>= xGraphic );
         bIsEmpty = !xGraphic.is();
     }
     catch( const Exception& )

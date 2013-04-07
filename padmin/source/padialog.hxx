@@ -64,7 +64,7 @@ namespace padmin {
         String                              m_aRenameStr;
 
         ::psp::PrinterInfoManager&          m_rPIManager;
-        ::std::list< ::rtl::OUString >      m_aPrinters;
+        ::std::list< OUString >      m_aPrinters;
 
         Image                               m_aPrinterImg;
         Image                               m_aFaxImg;

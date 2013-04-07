@@ -33,10 +33,6 @@
 #endif
 
 using ::comphelper::SequenceAsVector;
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
@@ -82,7 +78,7 @@ namespace sax_fastparser {
 
     OUString FastSaxSerializer::escapeXml( const OUString& s )
     {
-        ::rtl::OUStringBuffer sBuf( s.getLength() );
+        OUStringBuffer sBuf( s.getLength() );
         const sal_Unicode* pStr = s.getStr();
         sal_Int32 nLen = s.getLength();
         for( sal_Int32 i = 0; i < nLen; ++i)

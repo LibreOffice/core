@@ -77,14 +77,14 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const ::rtl::OUString& _rIanaName) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findIanaName(const OUString& _rIanaName) const
     {
         OCharsetMap::const_iterator aBaseIter = OCharsetMap::find(_rIanaName, OCharsetMap::IANA());
         return const_iterator( this, aBaseIter );
     }
 
     //-------------------------------------------------------------------------
-    OCharsetDisplay::const_iterator OCharsetDisplay::findDisplayName(const ::rtl::OUString& _rDisplayName) const
+    OCharsetDisplay::const_iterator OCharsetDisplay::findDisplayName(const OUString& _rDisplayName) const
     {
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
         if ( _rDisplayName != m_aSystemDisplayName )
@@ -107,7 +107,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const ::rtl::OUString& _rDisplayName)
+    CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper_Base& _rBase, const OUString& _rDisplayName)
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {
@@ -140,7 +140,7 @@ namespace dbaui
         rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
         return CharsetDisplayDerefHelper(
             *m_aPosition,
-            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : (::rtl::OUString)m_pContainer->GetTextString( eEncoding )
+            RTL_TEXTENCODING_DONTKNOW == eEncoding ? m_pContainer->m_aSystemDisplayName : (OUString)m_pContainer->GetTextString( eEncoding )
         );
     }
 

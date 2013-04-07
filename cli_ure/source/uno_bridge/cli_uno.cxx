@@ -24,7 +24,6 @@
 
 namespace sr=System::Reflection;
 
-using ::rtl::OUStringBuffer;
 
 namespace cli_uno
 {

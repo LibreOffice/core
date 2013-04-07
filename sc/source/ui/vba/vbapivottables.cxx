@@ -66,20 +66,20 @@ ScVbaPivotTables::getElementType() throw (uno::RuntimeException)
     return excel::XPivotTable::static_type(0);
 }
 
-rtl::OUString
+OUString
 ScVbaPivotTables::getServiceImplName()
 {
-    return rtl::OUString("ScVbaPivotTables");
+    return OUString("ScVbaPivotTables");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaPivotTables::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.excel.PivotTables");
+        sNames[0] = OUString("ooo.vba.excel.PivotTables");
     }
     return sNames;
 }

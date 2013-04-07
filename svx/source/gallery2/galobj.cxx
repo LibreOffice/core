@@ -177,7 +177,7 @@ void SgaObject::ReadData(SvStream& rIn, sal_uInt16& rReadVersion )
     else
         rIn >> aThumbMtf;
 
-    rtl::OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
+    OUString aTmpStr = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIn, RTL_TEXTENCODING_UTF8);
     aURL = INetURLObject(aTmpStr);
 }
 
@@ -196,7 +196,7 @@ const String SgaObject::GetTitle() const
             if ( aPrivateInd.EqualsAscii( "private" ) &&
                 aResourceName.Len() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
-                rtl::OString aMgrName(rtl::OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
+                OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
                 ResMgr* pResMgr = ResMgr::CreateResMgr( aMgrName.getStr(),
                             Application::GetSettings().GetUILanguageTag() );
                 if ( pResMgr )
@@ -285,7 +285,7 @@ void SgaObjectBmp::WriteData( SvStream& rOut, const String& rDestDir ) const
     SgaObject::WriteData( rOut, rDestDir );
     char aDummy[ 10 ];
     rOut.Write( aDummy, 10 );
-    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, rtl::OString()); //dummy
+    write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOut, OString()); //dummy
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOut, aTitle, RTL_TEXTENCODING_UTF8);
 }
 

@@ -60,7 +60,7 @@ public:
     virtual bool handleSpecialItem(
             XMLPropertyState& /*rProperty*/,
             ::std::vector< XMLPropertyState >& /*rProperties*/,
-            const ::rtl::OUString& /*rValue*/,
+            const OUString& /*rValue*/,
             const SvXMLUnitConverter& /*rUnitConverter*/,
             const SvXMLNamespaceMap& /*rNamespaceMap*/ ) const
     {
@@ -74,11 +74,11 @@ TYPEINIT1( OReportStylesContext, SvXMLStylesContext );
 DBG_NAME( rpt_OControlStyleContext )
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
-        sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
-    sNumberFormat(rtl::OUString("NumberFormat")),
+    sNumberFormat(OUString("NumberFormat")),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
     m_rImport(rImport),
@@ -142,8 +142,8 @@ void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
 }
 // -----------------------------------------------------------------------------
 void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
-                                        const ::rtl::OUString& rLocalName,
-                                        const ::rtl::OUString& rValue )
+                                        const OUString& rLocalName,
+                                        const OUString& rValue )
 {
     // TODO: use a map here
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
@@ -163,14 +163,14 @@ DBG_NAME( rpt_OReportStylesContext )
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
         sal_uInt16 nPrfx ,
-        const ::rtl::OUString& rLName ,
+        const OUString& rLName ,
         const Reference< XAttributeList > & xAttrList,
         const sal_Bool bTempAutoStyles ) :
     SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
-    m_sTableStyleFamilyName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
-    m_sColumnStyleFamilyName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
-    m_sRowStyleFamilyName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
-    m_sCellStyleFamilyName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))),
+    m_sTableStyleFamilyName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ))),
+    m_sColumnStyleFamilyName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ))),
+    m_sRowStyleFamilyName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ))),
+    m_sCellStyleFamilyName( OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ))),
     m_rImport(rImport),
     m_nNumberFormatIndex(-1),
     bAutoStyles(bTempAutoStyles)
@@ -255,7 +255,7 @@ UniReference < SvXMLImportPropertyMapper >
 }
 // -----------------------------------------------------------------------------
 SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = 0;
@@ -278,7 +278,7 @@ SvXMLStyleContext *OReportStylesContext::CreateDefaultStyleStyleChildContext(
 }
 // ----------------------------------------------------------------------------
 SvXMLStyleContext *OReportStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily, sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle = SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
@@ -310,7 +310,7 @@ Reference < XNameContainer >
     Reference < XNameContainer > xStyles(SvXMLStylesContext::GetStylesContainer(nFamily));
     if (!xStyles.is())
     {
-     ::rtl::OUString sName;
+     OUString sName;
         switch( nFamily )
         {
             case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -319,7 +319,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xTableStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString( "TableStyles" ));
+                     OUString( OUString( "TableStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_CELL:
@@ -328,7 +328,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xCellStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString( "CellStyles" ));
+                     OUString( OUString( "CellStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
@@ -337,7 +337,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xColumnStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString( "ColumnStyles" ));
+                     OUString( OUString( "ColumnStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_TABLE_ROW:
@@ -346,7 +346,7 @@ Reference < XNameContainer >
                     xStyles.set(m_xRowStyles);
                 else
                     sName =
-                     ::rtl::OUString( rtl::OUString( "RowStyles" ));
+                     OUString( OUString( "RowStyles" ));
             }
             break;
             case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
@@ -390,9 +390,9 @@ Reference < XNameContainer >
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
+OUString OReportStylesContext::GetServiceName( sal_uInt16 nFamily ) const
 {
-    rtl::OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
+    OUString sServiceName = SvXMLStylesContext::GetServiceName(nFamily);
     if (sServiceName.isEmpty())
     {
         switch( nFamily )
@@ -434,7 +434,7 @@ ORptFilter& OReportStylesContext::GetOwnImport() const
     return m_rImport;
 }
 // -----------------------------------------------------------------------------
-sal_uInt16 OReportStylesContext::GetFamily( const ::rtl::OUString& rFamily ) const
+sal_uInt16 OReportStylesContext::GetFamily( const OUString& rFamily ) const
 {
     sal_uInt16 nFamily = SvXMLStylesContext::GetFamily(rFamily);
     return nFamily;

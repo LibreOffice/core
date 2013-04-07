@@ -26,7 +26,6 @@
 #include <xmloff/txtimp.hxx>    // XMLTextImportHelper partially implemented here
 
 
-using ::rtl::OUString;
 using ::std::vector;
 using ::std::map;
 using ::com::sun::star::uno::Reference;
@@ -36,7 +35,7 @@ using ::com::sun::star::beans::XPropertySet;
 
 template<class A>
 XMLPropertyBackpatcher<A>::XMLPropertyBackpatcher(
-    const ::rtl::OUString& sPropName)
+    const OUString& sPropName)
 :   sPropertyName(sPropName)
 ,   bDefaultHandling(sal_False)
 ,   bPreserveProperty(sal_False)
@@ -164,7 +163,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::BackpatcherImpl
     ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pSequenceIdBackpatcher;
 
-    ::std::auto_ptr< XMLPropertyBackpatcher< ::rtl::OUString> >
+    ::std::auto_ptr< XMLPropertyBackpatcher< OUString> >
         m_pSequenceNameBackpatcher;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
@@ -176,9 +175,9 @@ XMLTextImportHelper::MakeBackpatcherImpl()
     return ::boost::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
 }
 
-static ::rtl::OUString const& GetSequenceNumber()
+static OUString const& GetSequenceNumber()
 {
-    static ::rtl::OUString s_SequenceNumber("SequenceNumber");
+    static OUString s_SequenceNumber("SequenceNumber");
     return s_SequenceNumber;
 }
 

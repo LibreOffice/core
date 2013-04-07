@@ -107,7 +107,7 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
-        rtl::OUString aArg;
+        OUString aArg;
         if ( osl_getCommandArg( i, &aArg.pData ) )
             break;
         if ( aArg.matchIgnoreAsciiCaseAsciiL( PIPE_ARG, sizeof( PIPE_ARG ) - 1, 0 ) )
@@ -117,7 +117,7 @@ UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::
             m_pOutFd = fdopen( fd, "w" );
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Got argument '--splash-pipe=%d ('%s') (%p)\n",
-                     fd, rtl::OUStringToOString( aNum, RTL_TEXTENCODING_UTF8 ).getStr(),
+                     fd, OUStringToOString( aNum, RTL_TEXTENCODING_UTF8 ).getStr(),
                      m_pOutFd );
 #endif
         }

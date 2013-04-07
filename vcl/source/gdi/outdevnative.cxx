@@ -268,7 +268,7 @@ sal_Bool OutputDevice::DrawNativeControl( ControlType nType,
                             const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            ::rtl::OUString aCaption )
+                            OUString aCaption )
 {
     if( !lcl_enableNativeWidget( *this ) )
         return sal_False;
@@ -310,7 +310,7 @@ sal_Bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 const Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
-                                ::rtl::OUString aCaption,
+                                OUString aCaption,
                                 Rectangle &rNativeBoundingRegion,
                                 Rectangle &rNativeContentRegion ) const
 {

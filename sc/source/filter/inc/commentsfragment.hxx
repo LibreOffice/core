@@ -33,10 +33,10 @@ class CommentsFragment : public WorksheetFragmentBase
 public:
     explicit            CommentsFragment(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );

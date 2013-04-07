@@ -49,7 +49,7 @@ public:
 
     inline sal_uInt16   GetTypeFlag() const { return mnTypeFlag; }
 
-    bool                EqualsText( const rtl::OUString& rText ) const;
+    bool                EqualsText( const OUString& rText ) const;
     bool                EqualsDouble( double fValue ) const;
     bool                EqualsDateTime( const DateTime& rDateTime ) const;
     bool                EqualsBool( bool bValue ) const;
@@ -85,14 +85,14 @@ public:
     void                ConvertToNumGroup( const ScDPObject& rDPObj, const ScDPSaveNumGroupDimension& rNumGroupDim );
 
     /** Returns the name of this cache field. */
-    inline const rtl::OUString& GetFieldName() const { return maFieldInfo.maName; }
+    inline const OUString& GetFieldName() const { return maFieldInfo.maName; }
 
     /** Returns the number of visible items of this field. */
     sal_uInt16          GetItemCount() const;
     /** Returns the specified pivot cache item (returns visible items in groupings). */
     const XclExpPCItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the index of a pivot cache item, or EXC_PC_NOITEM on error. */
-    sal_uInt16          GetItemIndex( const rtl::OUString& rItemName ) const;
+    sal_uInt16          GetItemIndex( const OUString& rItemName ) const;
 
     /** Returns the size an item index needs to write out. */
     sal_Size            GetIndexSize() const;
@@ -230,8 +230,8 @@ private:
 
     XclPCInfo           maPCInfo;           /// Pivot cache settings (SXDB record).
     XclExpPCFieldList   maFieldList;        /// List of all pivot cache fields.
-    rtl::OUString       maTabName;          /// Name of source data sheet.
-    rtl::OUString       maSrcRangeName;     /// Range name for source data.
+    OUString       maTabName;          /// Name of source data sheet.
+    OUString       maSrcRangeName;     /// Range name for source data.
     ScRange             maOrigSrcRange;     /// The original sheet source range.
     ScRange             maExpSrcRange;      /// The exported sheet source range.
     ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.
@@ -257,7 +257,7 @@ public:
     explicit            XclExpPTItem( sal_uInt16 nItemType, sal_uInt16 nCacheIdx, bool bUseCache );
 
     /** Returns the internal name of this item. */
-    rtl::OUString       GetItemName() const;
+    OUString       GetItemName() const;
 
     /** Fills this item with properties from the passed save member. */
     void                SetPropertiesFromMember( const ScDPSaveMember& rSaveMem );
@@ -281,7 +281,7 @@ public:
     // data access ------------------------------------------------------------
 
     /** Returns the name of this field. */
-    rtl::OUString       GetFieldName() const;
+    OUString       GetFieldName() const;
     /** Returns the pivot table field list index of this field. */
     sal_uInt16          GetFieldIndex() const;
 
@@ -290,7 +290,7 @@ public:
 
     /** Returns the list index of an item by its name.
         @param nDefaultIdx  This value will be returned, if the item could not be found. */
-    sal_uInt16          GetItemIndex( const rtl::OUString& rName, sal_uInt16 nDefaultIdx ) const;
+    sal_uInt16          GetItemIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const;
 
     // fill data --------------------------------------------------------------
 
@@ -315,7 +315,7 @@ public:
     // ------------------------------------------------------------------------
 private:
     /** Returns an item by its name. */
-    XclExpPTItem*       GetItemAcc( const rtl::OUString& rName );
+    XclExpPTItem*       GetItemAcc( const OUString& rName );
 
     /** Appends a special item describing a field subtotal entry. */
     void                AppendSubtotalItem( sal_uInt16 nItemType );
@@ -355,11 +355,11 @@ public:
     /** Returns a pivot table field by its name. */
     const XclExpPTField* GetField( sal_uInt16 nFieldIdx ) const;
     /** Returns a pivot table field by its name. */
-    const XclExpPTField* GetField( const rtl::OUString& rName ) const;
+    const XclExpPTField* GetField( const OUString& rName ) const;
 
     /** Returns the data-field-only index of the first data field with the passed name.
         @param nDefaultIdx  This value will be returned, if the field could not be found. */
-    sal_uInt16          GetDataFieldIndex( const rtl::OUString& rName, sal_uInt16 nDefaultIdx ) const;
+    sal_uInt16          GetDataFieldIndex( const OUString& rName, sal_uInt16 nDefaultIdx ) const;
 
     /** Writes the entire pivot table. */
     virtual void        Save( XclExpStream& rStrm );
@@ -368,7 +368,7 @@ public:
     // ------------------------------------------------------------------------
 private:
     /** Returns a pivot table field by its name. */
-    XclExpPTField*      GetFieldAcc( const rtl::OUString& rName );
+    XclExpPTField*      GetFieldAcc( const OUString& rName );
     /** Returns a pivot table field corresponding to the passed save dimension. */
     XclExpPTField*      GetFieldAcc( const ScDPSaveDimension& rSaveDim );
 

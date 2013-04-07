@@ -146,7 +146,7 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
-        static const ::rtl::OUString s_sFormulaResultType("FormulaResultType");
+        static const OUString s_sFormulaResultType("FormulaResultType");
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
@@ -228,7 +228,7 @@ static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int3
 
 static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
                         sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
-                        ::rtl::OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
+                        OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetColumnInfo" );
     //! avoid duplicate field names
@@ -265,7 +265,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
             sal_Int16 nNumType = NumberFormat::NUMBER;
             try
             {
-                static ::rtl::OUString s_NumberFormat("NumberFormat");
+                static OUString s_NumberFormat("NumberFormat");
                 sal_Int32 nKey = 0;
 
                 if ( xProp->getPropertyValue( s_NumberFormat ) >>= nKey )
@@ -431,14 +431,14 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
 
 // -------------------------------------------------------------------------
 
-static ::rtl::OUString lcl_GetColumnStr( sal_Int32 nColumn )
+static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetColumnStr" );
     if ( nColumn < 26 )
-        return ::rtl::OUString::valueOf( (sal_Unicode) ( 'A' + nColumn ) );
+        return OUString::valueOf( (sal_Unicode) ( 'A' + nColumn ) );
     else
     {
-        ::rtl::OUStringBuffer aBuffer(2);
+        OUStringBuffer aBuffer(2);
         aBuffer.setLength( 2 );
         aBuffer[0] = (sal_Unicode) ( 'A' + ( nColumn / 26 ) - 1 );
         aBuffer[1] = (sal_Unicode) ( 'A' + ( nColumn % 26 ) );
@@ -454,13 +454,13 @@ void OCalcTable::fillColumns()
 
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
-    ::rtl::OUString aTypeName;
+    OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
     const sal_Bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < m_nDataCols; i++)
     {
-        ::rtl::OUString aColumnName;
+        OUString aColumnName;
         sal_Int32 eType = DataType::OTHER;
         sal_Bool bCurrency = sal_False;
 
@@ -477,41 +477,41 @@ void OCalcTable::fillColumns()
         {
             case DataType::VARCHAR:
                 {
-                    static const ::rtl::OUString s_sType("VARCHAR");
+                    static const OUString s_sType("VARCHAR");
                     aTypeName = s_sType;
                 }
                 break;
             case DataType::DECIMAL:
-                aTypeName = ::rtl::OUString("DECIMAL");
+                aTypeName = OUString("DECIMAL");
                 break;
             case DataType::BIT:
-                aTypeName = ::rtl::OUString("BOOL");
+                aTypeName = OUString("BOOL");
                 break;
             case DataType::DATE:
-                aTypeName = ::rtl::OUString("DATE");
+                aTypeName = OUString("DATE");
                 break;
             case DataType::TIME:
-                aTypeName = ::rtl::OUString("TIME");
+                aTypeName = OUString("TIME");
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = ::rtl::OUString("TIMESTAMP");
+                aTypeName = OUString("TIMESTAMP");
                 break;
             default:
                 OSL_FAIL("missing type name");
-                aTypeName = ::rtl::OUString();
+                aTypeName = OUString();
         }
 
         // check if the column name already exists
-        ::rtl::OUString aAlias = aColumnName;
+        OUString aAlias = aColumnName;
         OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
         while(aFind != m_aColumns->get().end())
         {
-            (aAlias = aColumnName) += ::rtl::OUString::valueOf((sal_Int32)++nExprCnt);
+            (aAlias = aColumnName) += OUString::valueOf((sal_Int32)++nExprCnt);
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),::rtl::OUString(),
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, OUString(),OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
                                                 eType, sal_False, sal_False, bCurrency,
                                                 bStoresMixedCaseQuotedIdentifiers,
@@ -526,11 +526,11 @@ void OCalcTable::fillColumns()
 
 // -------------------------------------------------------------------------
 OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description ,
+                    const OUString& _SchemaName,
+                    const OUString& _CatalogName
                 ) : OCalcTable_BASE(_pTables,_pConnection,_Name,
                                   _Type,
                                   _Description,
@@ -570,7 +570,7 @@ void OCalcTable::construct()
             Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
             if ( xDocProp.is() )
             {
-                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( ::rtl::OUString("DatabaseRanges") ),UNO_QUERY);
+                Reference<XDatabaseRanges> xRanges(xDocProp->getPropertyValue( OUString("DatabaseRanges") ),UNO_QUERY);
 
                 if ( xRanges.is() && xRanges->hasByName( m_Name ) )
                 {
@@ -584,7 +584,7 @@ void OCalcTable::construct()
                         sal_Bool bRangeHeader = sal_True;
                         Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
                         if ( xFiltProp.is() )
-                            xFiltProp->getPropertyValue(::rtl::OUString("ContainsHeader")) >>= bRangeHeader;
+                            xFiltProp->getPropertyValue(OUString("ContainsHeader")) >>= bRangeHeader;
 
                         Reference<XSheetCellRange> xSheetRange( xRefer->getReferredCells(), UNO_QUERY );
                         Reference<XCellRangeAddressable> xAddr( xSheetRange, UNO_QUERY );
@@ -618,7 +618,7 @@ void OCalcTable::construct()
         if (xProp.is())
         {
             ::com::sun::star::util::Date aDateStruct;
-            if ( xProp->getPropertyValue( ::rtl::OUString("NullDate") ) >>= aDateStruct )
+            if ( xProp->getPropertyValue( OUString("NullDate") ) >>= aDateStruct )
                 m_aNullDate = ::Date( aDateStruct.Day, aDateStruct.Month, aDateStruct.Year );
         }
     }

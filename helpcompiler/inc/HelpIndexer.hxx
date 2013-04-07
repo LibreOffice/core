@@ -51,13 +51,13 @@ class Reader;
 
 class L10N_DLLPUBLIC HelpIndexer {
 	private:
-		rtl::OUString d_lang;
-		rtl::OUString d_module;
-		rtl::OUString d_captionDir;
-		rtl::OUString d_contentDir;
-		rtl::OUString d_indexDir;
-		rtl::OUString d_error;
-		std::set<rtl::OUString> d_files;
+                OUString d_lang;
+                OUString d_module;
+                OUString d_captionDir;
+                OUString d_contentDir;
+                OUString d_indexDir;
+                OUString d_error;
+                std::set<OUString> d_files;
 
 	public:
 
@@ -67,8 +67,8 @@ class L10N_DLLPUBLIC HelpIndexer {
 	 * @param srcDir The help directory to index
 	 * @param outDir The directory to write the "module".idxl directory to
 	 */
-	HelpIndexer(rtl::OUString const &lang, rtl::OUString const &module,
-		rtl::OUString const &srcDir, rtl::OUString const &outDir);
+        HelpIndexer(OUString const &lang, OUString const &module,
+            OUString const &srcDir, OUString const &outDir);
 
 	/**
 	 * Run the indexer.
@@ -79,7 +79,7 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * Get the error string (empty if no error occurred).
 	 */
-	rtl::OUString const & getErrorMessage();
+        OUString const & getErrorMessage();
 
 	private:
 
@@ -91,17 +91,17 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * Scan for files in the given directory.
 	 */
-	bool scanForFiles(rtl::OUString const &path);
+        bool scanForFiles(OUString const &path);
 
 	/**
 	 * Fill the Document with information on the given help file.
 	 */
-	bool helpDocument(rtl::OUString const & fileName, lucene::document::Document *doc);
+        bool helpDocument(OUString const & fileName, lucene::document::Document *doc);
 
 	/**
 	 * Create a reader for the given file, and create an "empty" reader in case the file doesn't exist.
 	 */
-	lucene::util::Reader *helpFileReader(rtl::OUString const & path);
+        lucene::util::Reader *helpFileReader(OUString const & path);
 };
 
 #endif

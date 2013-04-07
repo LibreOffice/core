@@ -223,7 +223,7 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
 {
     m_pImpl->acquire();
     SetPool( &SFX_APP()->GetPool() );
-    SetName( rtl::OUString("Form") );
+    SetName( OUString("Form") );
 
     SetView(m_pFormView);
 }
@@ -773,7 +773,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, ::rtl::OUString( "Position" ), makeAny( (sal_Int32)nRecord ) );
+                rController->execute( nSlot, OUString( "Position" ), makeAny( (sal_Int32)nRecord ) );
 
             rReq.Done();
         }   break;
@@ -1138,7 +1138,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 }
                 else if ( SID_FM_RECORD_TOTAL == nWhich )
                 {
-                    ::rtl::OUString sTotalCount;
+                    OUString sTotalCount;
                     aState.State >>= sTotalCount;
                     rSet.Put( SfxStringItem( nWhich, sTotalCount ) );
                 }

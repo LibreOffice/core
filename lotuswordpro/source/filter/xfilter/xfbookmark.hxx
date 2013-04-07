@@ -74,15 +74,15 @@ public:
         m_bStart = isStart;
     }
 
-    rtl::OUString GetDivision(){return m_strDivision;}
-    void SetDivision(rtl::OUString sDivName){m_strDivision = sDivName;}
-    rtl::OUString GetName(){return m_strName;}
+    OUString GetDivision(){return m_strDivision;}
+    void SetDivision(OUString sDivName){m_strDivision = sDivName;}
+    OUString GetName(){return m_strName;}
 
 public:
     /**
      * @descr   Set bookmark name, which will be used in bookmark-ref or formula.
      */
-    void    SetName(rtl::OUString name)
+    void    SetName(OUString name)
     {
         m_strName = name;
     }
@@ -107,8 +107,8 @@ public:
 
 private:
     sal_Bool    m_bStart;
-    rtl::OUString m_strName;
-    rtl::OUString m_strDivision;
+    OUString m_strName;
+    OUString m_strDivision;
 };
 
 class XFBookmarkStart : public XFBookmark

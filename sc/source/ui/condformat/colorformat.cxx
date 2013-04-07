@@ -72,7 +72,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
     if(pEntry->GetType() == COLORSCALE_FORMULA)
         aEdit.SetText(pEntry->GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
     else if(pEntry->GetType() != COLORSCALE_MIN && pEntry->GetType() != COLORSCALE_MAX)
-        aEdit.SetText(rtl::OUString::valueOf(pEntry->GetValue()));
+        aEdit.SetText(OUString::valueOf(pEntry->GetValue()));
     else
         aEdit.Disable();
 }
@@ -234,8 +234,8 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 
         if(nSelectMax != COLORSCALE_FORMULA && nSelectMax != COLORSCALE_AUTO)
         {
-            rtl::OUString aMinString = maEdMin.GetText();
-            rtl::OUString aMaxString = maEdMax.GetText();
+            OUString aMinString = maEdMin.GetText();
+            OUString aMaxString = maEdMax.GetText();
             double nMinValue = 0;
             sal_uInt32 nIndex = 0;
             mpNumberFormatter->IsNumberFormat(aMinString, nIndex, nMinValue);

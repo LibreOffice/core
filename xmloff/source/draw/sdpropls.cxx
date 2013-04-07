@@ -68,8 +68,6 @@
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -740,11 +738,11 @@ class XMLCaptionEscapeRelative : public XMLPropertyHandler
 {
 public:
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 };
@@ -782,11 +780,11 @@ public:
     XMLMoveSizeProtectHdl( sal_Int32 nType ) : mnType( nType ) {}
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& rUnitConverter ) const;
 private:
@@ -825,8 +823,8 @@ class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
 public:
     virtual ~XMLSdHeaderFooterVisibilityTypeHdl();
 
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
 XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
@@ -834,7 +832,7 @@ XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
 }
 
 sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
-        const ::rtl::OUString& rStrImpValue,
+        const OUString& rStrImpValue,
         ::com::sun::star::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
 {

@@ -64,21 +64,21 @@ typedef cppu::ImplInheritanceHelper2<
 class Submission : public Submission_t
 {
     // submission properties
-    rtl::OUString msID;
-    rtl::OUString msBind;
+    OUString msID;
+    OUString msBind;
     ComputedExpression maRef;
-    rtl::OUString msAction;
-    rtl::OUString msMethod;
-    rtl::OUString msVersion;
+    OUString msAction;
+    OUString msMethod;
+    OUString msVersion;
     bool mbIndent;
-    rtl::OUString msMediaType;
-    rtl::OUString msEncoding;
+    OUString msMediaType;
+    OUString msEncoding;
     bool mbOmitXmlDeclaration;
     bool mbStandalone;
-    rtl::OUString msCDataSectionElement;
-    rtl::OUString msReplace;
-    rtl::OUString msSeparator;
-    com::sun::star::uno::Sequence< rtl::OUString > msIncludeNamespacePrefixes;
+    OUString msCDataSectionElement;
+    OUString msReplace;
+    OUString msSeparator;
+    com::sun::star::uno::Sequence< OUString > msIncludeNamespacePrefixes;
 
 private:
 
@@ -108,32 +108,32 @@ public:
     void setModel(
         const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& );
 
-    rtl::OUString getID() const;         /// get ID for this submission
-    void setID( const rtl::OUString& );  /// set ID for this submission
+    OUString getID() const;         /// get ID for this submission
+    void setID( const OUString& );  /// set ID for this submission
 
-    rtl::OUString getBind() const;
-    void setBind( const rtl::OUString& );
+    OUString getBind() const;
+    void setBind( const OUString& );
 
-    rtl::OUString getRef() const;
-    void setRef( const rtl::OUString& );
+    OUString getRef() const;
+    void setRef( const OUString& );
 
-    rtl::OUString getAction() const;
-    void setAction( const rtl::OUString& );
+    OUString getAction() const;
+    void setAction( const OUString& );
 
-    rtl::OUString getMethod() const;
-    void setMethod( const rtl::OUString& );
+    OUString getMethod() const;
+    void setMethod( const OUString& );
 
-    rtl::OUString getVersion() const;
-    void setVersion( const rtl::OUString& );
+    OUString getVersion() const;
+    void setVersion( const OUString& );
 
     bool getIndent() const;
     void setIndent( bool );
 
-    rtl::OUString getMediaType() const;
-    void setMediaType( const rtl::OUString& );
+    OUString getMediaType() const;
+    void setMediaType( const OUString& );
 
-    rtl::OUString getEncoding() const;
-    void setEncoding( const rtl::OUString& );
+    OUString getEncoding() const;
+    void setEncoding( const OUString& );
 
     bool getOmitXmlDeclaration() const;
     void setOmitXmlDeclaration( bool );
@@ -141,17 +141,17 @@ public:
     bool getStandalone() const;
     void setStandalone( bool );
 
-    rtl::OUString getCDataSectionElement() const;
-    void setCDataSectionElement( const rtl::OUString& );
+    OUString getCDataSectionElement() const;
+    void setCDataSectionElement( const OUString& );
 
-    rtl::OUString getReplace() const;
-    void setReplace( const rtl::OUString& );
+    OUString getReplace() const;
+    void setReplace( const OUString& );
 
-    rtl::OUString getSeparator() const;
-    void setSeparator( const rtl::OUString& );
+    OUString getSeparator() const;
+    void setSeparator( const OUString& );
 
-    com::sun::star::uno::Sequence< rtl::OUString > getIncludeNamespacePrefixes() const;
-    void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< rtl::OUString >& );
+    com::sun::star::uno::Sequence< OUString > getIncludeNamespacePrefixes() const;
+    void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< OUString >& );
 
 
     /** perform the submission
@@ -207,10 +207,10 @@ public:
     //   get/set name
     //
 
-    virtual rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setName( const rtl::OUString& )
+    virtual void SAL_CALL setName( const OUString& )
         throw( com::sun::star::uno::RuntimeException );
 
 
@@ -249,12 +249,12 @@ public:
     // (need to disambiguate this)
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
 

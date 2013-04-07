@@ -51,8 +51,8 @@ using namespace ::com::sun::star;
 // hence the shared_ptr.
 struct MediaTempFile
 {
-    ::rtl::OUString const m_TempFileURL;
-    MediaTempFile(::rtl::OUString const& rURL) : m_TempFileURL(rURL) {}
+    OUString const m_TempFileURL;
+    MediaTempFile(OUString const& rURL) : m_TempFileURL(rURL) {}
     ~MediaTempFile()
     {
         ::osl::File::remove(m_TempFileURL);
@@ -184,7 +184,7 @@ uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot()
 {
     if( !m_pImpl->m_xCachedSnapshot.is() )
     {
-        rtl::OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
+        OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
             aRealURL = m_pImpl->m_MediaProperties.getURL();
         m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, true );
@@ -240,7 +240,7 @@ void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /
 
 // ------------------------------------------------------------------------------
 
-void SdrMediaObj::setURL( const ::rtl::OUString& rURL)
+void SdrMediaObj::setURL( const OUString& rURL)
 {
     ::avmedia::MediaItem aURLItem;
 
@@ -250,7 +250,7 @@ void SdrMediaObj::setURL( const ::rtl::OUString& rURL)
 
 // ------------------------------------------------------------------------------
 
-const ::rtl::OUString& SdrMediaObj::getURL() const
+const OUString& SdrMediaObj::getURL() const
 {
     return m_pImpl->m_MediaProperties.getURL();
 }
@@ -294,9 +294,9 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 
 /// copy a stream from XStorage to temp file
 static bool lcl_HandlePackageURL(
-        ::rtl::OUString const & rURL,
+        OUString const & rURL,
         SdrModel *const pModel,
-        ::rtl::OUString & o_rTempFileURL)
+        OUString & o_rTempFileURL)
 {
     if (!pModel)
     {
@@ -310,7 +310,7 @@ static bool lcl_HandlePackageURL(
     }
     catch (container::NoSuchElementException const&)
     {
-        SAL_INFO("svx", "not found: '" << ::rtl::OUString(rURL) << "'");
+        SAL_INFO("svx", "not found: '" << OUString(rURL) << "'");
         return false;
     }
     catch (uno::Exception const& e)
@@ -324,7 +324,7 @@ static bool lcl_HandlePackageURL(
         return false;
     }
 
-    ::rtl::OUString tempFileURL;
+    OUString tempFileURL;
     ::osl::FileBase::RC const err =
         ::osl::FileBase::createTempFile(0, 0, & tempFileURL);
     if (::osl::FileBase::E_None != err)
@@ -361,7 +361,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
         ( rNewProperties.getURL() != getURL() ))
     {
         m_pImpl->m_xCachedSnapshot.clear();
-        ::rtl::OUString const url(rNewProperties.getURL());
+        OUString const url(rNewProperties.getURL());
         if ((0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength(
                 url.getStr(), url.getLength(),
                 s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1)))
@@ -370,7 +370,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 || (m_pImpl->m_pTempFile->m_TempFileURL !=
                                 rNewProperties.getTempURL()))
             {
-                ::rtl::OUString tempFileURL;
+                OUString tempFileURL;
                 bool const bSuccess = lcl_HandlePackageURL(
                     url, GetModel(), tempFileURL);
                 if (bSuccess)
@@ -381,7 +381,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                 else // this case is for Clone via operator=
                 {
                     m_pImpl->m_pTempFile.reset();
-                    m_pImpl->m_MediaProperties.setURL(::rtl::OUString(), 0);
+                    m_pImpl->m_MediaProperties.setURL(OUString(), 0);
                 }
             }
             else

@@ -410,7 +410,7 @@ namespace
                 const Type* pCurrentListeners = pCurrentArray->getConstArray();
                 for (j=0; j<pCurrentArray->getLength(); ++j, ++pCurrentListeners)
                 {
-                    rtl::OUString aListener = (*pCurrentListeners).getTypeName();
+                    OUString aListener = (*pCurrentListeners).getTypeName();
                     sal_Int32 nTokens = comphelper::string::getTokenCount(aListener, '.');
                     if (nTokens)
                         aListener = comphelper::string::getToken(aListener, nTokens - 1, '.');
@@ -420,9 +420,9 @@ namespace
                         continue;
 
                     // now check the methods
-                    Sequence< ::rtl::OUString> aMethodsNames = ::comphelper::getEventMethodsForType(*pCurrentListeners);
+                    Sequence< OUString> aMethodsNames = ::comphelper::getEventMethodsForType(*pCurrentListeners);
 
-                    const ::rtl::OUString* pMethodsNames = aMethodsNames.getConstArray();
+                    const OUString* pMethodsNames = aMethodsNames.getConstArray();
                     for (k=0; k<aMethodsNames.getLength(); ++k, ++pMethodsNames)
                     {
                         if ((*pMethodsNames).compareTo(pCurrent->EventMethod) != COMPARE_EQUAL)
@@ -447,7 +447,7 @@ namespace
     }
 
     //------------------------------------------------------------------------------
-    ::rtl::OUString getServiceNameByControlType(sal_Int16 nType)
+    OUString getServiceNameByControlType(sal_Int16 nType)
     {
         switch (nType)
         {
@@ -474,7 +474,7 @@ namespace
             case OBJ_FM_SPINBUTTON      : return FM_SUN_COMPONENT_SPINBUTTON;
             case OBJ_FM_NAVIGATIONBAR   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
         }
-        return ::rtl::OUString();
+        return OUString();
     }
 
 }
@@ -483,7 +483,7 @@ namespace
 // check if the control has one of the interfaces we can use for searching
 // *_pCurrentText will be filled with the current text of the control (as used when searching this control)
 sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
-    ::rtl::OUString* _pCurrentText )
+    OUString* _pCurrentText )
 {
     if ( !_rxControl.is() )
         return sal_False;
@@ -511,9 +511,9 @@ sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun
         {
             switch ( (::TriState)xCheckBox->getState() )
             {
-                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString("0" ); break;
-                case STATE_CHECK: *_pCurrentText = ::rtl::OUString("1" ); break;
-                default: *_pCurrentText = ::rtl::OUString(); break;
+                case STATE_NOCHECK: *_pCurrentText = OUString("0" ); break;
+                case STATE_CHECK: *_pCurrentText = OUString("1" ); break;
+                default: *_pCurrentText = OUString(); break;
             }
         }
         return sal_True;
@@ -639,7 +639,7 @@ DBG_NAME(FmXFormShell);
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)
-        ,FmXFormShell_CFGBASE(::rtl::OUString("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
+        ,FmXFormShell_CFGBASE(OUString("Office.Common/Misc"), CONFIG_MODE_DELAYED_UPDATE)
         ,m_eNavigate( NavigationBarMode_NONE )
         ,m_nInvalidationEvent( 0 )
         ,m_nActivationEvent( 0 )
@@ -676,8 +676,8 @@ FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
     // cache the current configuration settings we're interested in
     implAdjustConfigCache();
     // and register for changes on this settings
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString("FormControlPilotsEnabled");
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString("FormControlPilotsEnabled");
     EnableNotification(aNames);
 }
 
@@ -1165,7 +1165,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
             if ( !pFormObject )
                 return false;
 
-            ::rtl::OUString sNewName( getServiceNameByControlType( nObjectTypes[ lookupSlot ] ) );
+            OUString sNewName( getServiceNameByControlType( nObjectTypes[ lookupSlot ] ) );
             Reference< XControlModel> xNewModel( ::comphelper::getProcessServiceFactory()->createInstance( sNewName ), UNO_QUERY );
             if (!xNewModel.is())
                 return false;
@@ -1473,11 +1473,11 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
     {
         Sequence< Any > aDialogArgs( 3 );
         aDialogArgs[0] <<= NamedValue(
-            ::rtl::OUString( "TabbingModel"  ),
+            OUString( "TabbingModel"  ),
             makeAny( _rxForForm )
         );
         aDialogArgs[1] <<= NamedValue(
-            ::rtl::OUString( "ControlContext"  ),
+            OUString( "ControlContext"  ),
             makeAny( getControlContainerForView() )
         );
 
@@ -1485,13 +1485,13 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
         if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
             xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow() );
         aDialogArgs[2] <<= NamedValue(
-            ::rtl::OUString( "ParentWindow"  ),
+            OUString( "ParentWindow"  ),
             makeAny( xParentWindow )
         );
 
         Reference< dialogs::XExecutableDialog > xDialog(
             ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
-                ::rtl::OUString( "com.sun.star.form.ui.TabOrderDialog"  ),
+                OUString( "com.sun.star.form.ui.TabOrderDialog"  ),
                 aDialogArgs
             ),
             UNO_QUERY
@@ -1517,7 +1517,7 @@ void FmXFormShell::ExecuteSearch()
     FmFormArray aEmpty;
     m_aSearchForms.swap( aEmpty );
     ::std::vector< OUString > aContextNames;
-    impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), ::rtl::OUString(), m_aSearchForms, aContextNames );
+    impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), OUString(), m_aSearchForms, aContextNames );
     OSL_POSTCOND( m_aSearchForms.size() == aContextNames.size(),
         "FmXFormShell::ExecuteSearch: nonsense!" );
     if ( m_aSearchForms.size() != aContextNames.size() )
@@ -1618,7 +1618,7 @@ void FmXFormShell::ExecuteSearch()
                 Reference< XIndexAccess> xColControls(xGridPeer, UNO_QUERY);
                 Reference< XInterface> xCurControl;
                 xColControls->getByIndex(nViewCol) >>= xCurControl;
-                ::rtl::OUString sInitialText;
+                OUString sInitialText;
                 if (IsSearchableControl(xCurControl, &sInitialText))
                     strInitialText = sInitialText.getStr();
             }
@@ -1679,7 +1679,7 @@ sal_Bool FmXFormShell::GetY2KState(sal_uInt16& n)
         {
             try
             {
-                Any aVal( xSet->getPropertyValue(::rtl::OUString("TwoDigitDateStart")) );
+                Any aVal( xSet->getPropertyValue(OUString("TwoDigitDateStart")) );
                 aVal >>= n;
                 return sal_True;
             }
@@ -1712,7 +1712,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(OUString("TwoDigitDateStart"), aVal);
                 }
                 catch(Exception&)
                 {
@@ -1753,7 +1753,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 {
                     Any aVal;
                     aVal <<= n;
-                    xSet->setPropertyValue(::rtl::OUString("TwoDigitDateStart"), aVal);
+                    xSet->setPropertyValue(OUString("TwoDigitDateStart"), aVal);
                 }
                 catch(Exception&)
                 {
@@ -2159,7 +2159,7 @@ void FmXFormShell::startListening()
             // TODO: this is strange - shouldn't this depend on a isLoaded instead of
             // a "has command value"? Finally, the command value only means that it was
             // intended to be loaded, not that it actually *is* loaded
-            ::rtl::OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
+            OUString aSource = ::comphelper::getString(xActiveFormSet->getPropertyValue(FM_PROP_COMMAND));
             if (!aSource.isEmpty())
             {
                 m_bDatabaseBar = sal_True;
@@ -2421,7 +2421,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     FmFormPage* pCurrentPage = m_pShell->GetCurPage();
     DBG_ASSERT(pCurrentPage!=NULL, "FmXFormShell::OnSearchContextRequest : no page !");
     // Search all SdrControls of this page...
-    ::rtl::OUString sControlSource, aName;
+    OUString sControlSource, aName;
 
     SdrObjListIter aPageIter( *pCurrentPage );
     while ( aPageIter.IsMore() )
@@ -2949,7 +2949,7 @@ Reference< XControl> FmXFormShell::impl_getControl( const Reference< XControlMod
 
 //------------------------------------------------------------------------------
 void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
-    const ::rtl::OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
+    const OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< OUString >& _out_rNames )
 {
     try
     {
@@ -2961,8 +2961,8 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
         if ( nCount == 0 )
             return;
 
-        ::rtl::OUString sCurrentFormName;
-        ::rtl::OUStringBuffer aNextLevelPrefix;
+        OUString sCurrentFormName;
+        OUStringBuffer aNextLevelPrefix;
         for ( sal_Int32 i=0; i<nCount; ++i )
         {
             // is the current child a form?
@@ -2974,7 +2974,7 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
             sCurrentFormName = xNamed->getName();
 
             // the name of the current form
-            ::rtl::OUStringBuffer sCompleteCurrentName( sCurrentFormName );
+            OUStringBuffer sCompleteCurrentName( sCurrentFormName );
             if ( !_rCurrentLevelPrefix.isEmpty() )
             {
                 sCompleteCurrentName.appendAscii( " (" );
@@ -3032,7 +3032,7 @@ void FmXFormShell::startFiltering()
         {
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( ::rtl::OUString( "FilterMode"  ) );
+                xModeSelector->setMode( OUString( "FilterMode"  ) );
         }
     }
 
@@ -3102,7 +3102,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
     if ( pAdapter.is() )
     {
         const ::std::vector< Reference< runtime::XFormController > >& rControllerList = pAdapter->GetList();
-        ::std::vector < ::rtl::OUString >   aOriginalFilters;
+        ::std::vector < OUString >   aOriginalFilters;
         ::std::vector < sal_Bool >          aOriginalApplyFlags;
 
         if (bSave)
@@ -3125,7 +3125,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 
                         if (aOriginalFilters.size() == aOriginalApplyFlags.size())
                             // the first getPropertyValue failed -> use two dummies
-                            aOriginalFilters.push_back( ::rtl::OUString() );
+                            aOriginalFilters.push_back( OUString() );
                         aOriginalApplyFlags.push_back( sal_False );
                     }
                 }
@@ -3138,7 +3138,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 
             Reference< XModeSelector> xModeSelector(*j, UNO_QUERY);
             if (xModeSelector.is())
-                xModeSelector->setMode( ::rtl::OUString( "DataMode"  ) );
+                xModeSelector->setMode( OUString( "DataMode"  ) );
         }
         if (bSave)  // execute the filter
         {
@@ -3162,7 +3162,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
 
                 if (!isRowSetAlive(xFormSet))
                 {   // something went wrong -> restore the original state
-                    ::rtl::OUString sOriginalFilter = aOriginalFilters[ j - rControllers.begin() ];
+                    OUString sOriginalFilter = aOriginalFilters[ j - rControllers.begin() ];
                     sal_Bool bOriginalApplyFlag = aOriginalApplyFlags[ j - rControllers.begin() ];
                     try
                     {
@@ -3194,7 +3194,7 @@ void FmXFormShell::CreateExternalView()
     // the frame the external view is displayed in
     sal_Bool bAlreadyExistent = m_xExternalViewController.is();
     Reference< ::com::sun::star::frame::XFrame> xExternalViewFrame;
-    ::rtl::OUString sFrameName("_beamer");
+    OUString sFrameName("_beamer");
     sal_Int32 nSearchFlags = ::com::sun::star::frame::FrameSearchFlag::CHILDREN | ::com::sun::star::frame::FrameSearchFlag::CREATE;
 
     Reference< runtime::XFormController > xCurrentNavController( getNavController());
@@ -3278,7 +3278,7 @@ void FmXFormShell::CreateExternalView()
         URL aClearURL;
         aClearURL.Complete = FMURL_GRIDVIEW_CLEARVIEW;
 
-        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, ::rtl::OUString(), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xClear( xCommLink->queryDispatch(aClearURL, OUString(), 0));
         if (xClear.is())
             xClear->dispatch(aClearURL, Sequence< PropertyValue>());
     }
@@ -3295,10 +3295,10 @@ void FmXFormShell::CreateExternalView()
         // collect the dispatchers we will need
         URL aAddColumnURL;
         aAddColumnURL.Complete = FMURL_GRIDVIEW_ADDCOLUMN;
-        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, ::rtl::OUString(), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAddColumnDispatch( xCommLink->queryDispatch(aAddColumnURL, OUString(), 0));
         URL aAttachURL;
         aAttachURL.Complete = FMURL_GRIDVIEW_ATTACHTOFORM;
-        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, ::rtl::OUString(), 0));
+        Reference< ::com::sun::star::frame::XDispatch> xAttachDispatch( xCommLink->queryDispatch(aAttachURL, OUString(), 0));
 
         if (xAddColumnDispatch.is() && xAttachDispatch.is())
         {
@@ -3309,7 +3309,7 @@ void FmXFormShell::CreateExternalView()
             sal_Int16 nAddedColumns = 0;
 
             // for radio buttons we need some special structures
-            typedef std::map< OUString, Sequence< ::rtl::OUString> > MapUString2UstringSeq;
+            typedef std::map< OUString, Sequence< OUString> > MapUString2UstringSeq;
             typedef std::map< OUString, OUString > FmMapUString2UString;
             typedef std::map< OUString, sal_Int16 > FmMapUString2Int16;
 
@@ -3321,7 +3321,7 @@ void FmXFormShell::CreateExternalView()
             FmXBoundFormFieldIterator aModelIterator(xCurrentNavController->getModel());
             Reference< XPropertySet> xCurrentModelSet;
             Any aCurrentBoundField;
-            ::rtl::OUString sColumnType,aGroupName,sControlSource;
+            OUString sColumnType,aGroupName,sControlSource;
             Sequence< Property> aProps;
             Reference< XPropertySet> xCurrentBoundField;
             while ((xCurrentModelSet = Reference< XPropertySet>(aModelIterator.Next(), UNO_QUERY)).is())
@@ -3340,13 +3340,13 @@ void FmXFormShell::CreateExternalView()
                         aGroupName = getLabelName(xCurrentModelSet);
 
                         // add the reference value of the radio button to the list source sequence
-                        Sequence< ::rtl::OUString>& aThisGroupLabels = aRadioListSources[aGroupName];
+                        Sequence< OUString>& aThisGroupLabels = aRadioListSources[aGroupName];
                         sal_Int32 nNewSizeL = aThisGroupLabels.getLength() + 1;
                         aThisGroupLabels.realloc(nNewSizeL);
                         aThisGroupLabels.getArray()[nNewSizeL - 1] = ::comphelper::getString(xCurrentModelSet->getPropertyValue(FM_PROP_REFVALUE));
 
                         // add the label to the value list sequence
-                        Sequence< ::rtl::OUString>& aThisGroupControlSources = aRadioValueLists[aGroupName];
+                        Sequence< OUString>& aThisGroupControlSources = aRadioValueLists[aGroupName];
                         sal_Int32 nNewSizeC = aThisGroupControlSources.getLength() + 1;
                         aThisGroupControlSources.realloc(nNewSizeC);
                         aThisGroupControlSources.getArray()[nNewSizeC - 1] = ::comphelper::getString(xCurrentModelSet->getPropertyValue(FM_PROP_LABEL));
@@ -3462,7 +3462,7 @@ void FmXFormShell::CreateExternalView()
                 aColumnProps.realloc(pColumnProps - aColumnProps.getArray());
 
                 // columns props are a dispatch argument
-                pDispatchArgs->Name = ::rtl::OUString("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = OUString("ColumnProperties"); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aColumnProps);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3532,9 +3532,9 @@ void FmXFormShell::CreateExternalView()
 
                 // column type : listbox
                 pDispatchArgs->Name = FMARG_ADDCOL_COLUMNTYPE;
-                ::rtl::OUString fColName = FM_COL_LISTBOX;
+                OUString fColName = FM_COL_LISTBOX;
                 pDispatchArgs->Value <<= fColName;
-//              pDispatchArgs->Value <<= (::rtl::OUString)FM_COL_LISTBOX;
+//              pDispatchArgs->Value <<= (OUString)FM_COL_LISTBOX;
                 ++pDispatchArgs;
 
                 // column position
@@ -3549,7 +3549,7 @@ void FmXFormShell::CreateExternalView()
                 ++pDispatchArgs;
 
                 // the
-                pDispatchArgs->Name = ::rtl::OUString("ColumnProperties"); // TODO : fmurl.*
+                pDispatchArgs->Name = OUString("ColumnProperties"); // TODO : fmurl.*
                 pDispatchArgs->Value = makeAny(aListBoxDescription);
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
@@ -3599,21 +3599,21 @@ void FmXFormShell::CreateExternalView()
 void FmXFormShell::implAdjustConfigCache()
 {
     // get (cache) the wizard usage flag
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString("FormControlPilotsEnabled");
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString("FormControlPilotsEnabled");
     Sequence< Any > aFlags = GetProperties(aNames);
     if (1 == aFlags.getLength())
         m_bUseWizards = ::cppu::any2bool(aFlags[0]);
 }
 
 //------------------------------------------------------------------------
-void FmXFormShell::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames)
+void FmXFormShell::Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames)
 {
     if ( impl_checkDisposed() )
         return;
 
-    const ::rtl::OUString* pSearch = _rPropertyNames.getConstArray();
-    const ::rtl::OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
+    const OUString* pSearch = _rPropertyNames.getConstArray();
+    const OUString* pSearchTil = pSearch + _rPropertyNames.getLength();
     for (;pSearch < pSearchTil; ++pSearch)
         if (0 == pSearch->compareToAscii("FormControlPilotsEnabled"))
         {
@@ -3631,8 +3631,8 @@ void FmXFormShell::SetWizardUsing(sal_Bool _bUseThem)
 {
     m_bUseWizards = _bUseThem;
 
-    Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString("FormControlPilotsEnabled");
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString("FormControlPilotsEnabled");
     Sequence< Any > aValues(1);
     aValues[0] = ::cppu::bool2any(m_bUseWizards);
     PutProperties(aNames, aValues);
@@ -3795,8 +3795,8 @@ void FmXFormShell::smartControlReset( const Reference< XIndexAccess >& _rxModels
         return;
     }
 
-    static const ::rtl::OUString sClassIdPropertyName = FM_PROP_CLASSID;
-    static const ::rtl::OUString sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
+    static const OUString sClassIdPropertyName = FM_PROP_CLASSID;
+    static const OUString sBoundFieldPropertyName = FM_PROP_BOUNDFIELD;
     sal_Int32 nCount = _rxModels->getCount();
     Reference< XPropertySet > xCurrent;
     Reference< XPropertySetInfo > xCurrentInfo;
@@ -3876,7 +3876,7 @@ namespace
             if ( xConn.is() )
                 return sal_True;
 
-            ::rtl::OUString sPropertyValue;
+            OUString sPropertyValue;
             OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
             if ( !sPropertyValue.isEmpty() )
                 return sal_True;
@@ -4076,7 +4076,7 @@ sal_Bool SearchableControlIterator::ShouldHandleElement(const Reference< XInterf
         Any aClassId( xProperties->getPropertyValue(FM_PROP_CLASSID) );
         if (::comphelper::getINT16(aClassId) == FormComponentType::GRIDCONTROL)
         {
-            m_sCurrentValue = ::rtl::OUString();
+            m_sCurrentValue = OUString();
             return sal_True;
         }
     }

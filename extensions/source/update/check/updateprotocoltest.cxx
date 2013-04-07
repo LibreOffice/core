@@ -52,8 +52,8 @@ SAL_IMPLEMENT_MAIN()
     com::sun::star::ucb::UniversalContentBroker::create(rComponentContext);
 
 
-    rtl::OUString aURL;
-    rtl::OUString aVersion;
+    OUString aURL;
+    OUString aVersion;
 
     try
     {

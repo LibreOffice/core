@@ -67,7 +67,7 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     sal_uInt32 m_nShapeFlags;
 
     /// Remember style, the most important shape attribute ;-)
-    rtl::OStringBuffer *m_pShapeStyle;
+    OStringBuffer *m_pShapeStyle;
 
     /// Remember which shape types we had already written.
     bool *m_pShapeTypeWritten;
@@ -89,7 +89,7 @@ protected:
     ///
     /// This should be called from within StartShape() to ensure that the
     /// added attribute is preserved.
-    void                AddShapeAttribute( sal_Int32 nAttribute, const rtl::OString& sValue );
+    void                AddShapeAttribute( sal_Int32 nAttribute, const OString& sValue );
 
     using EscherEx::StartShape;
     using EscherEx::EndShape;
@@ -118,13 +118,13 @@ private:
 
 private:
     /// Create an OString representing the id from a numerical id.
-    static rtl::OString ShapeIdString( sal_uInt32 nId );
+    static OString ShapeIdString( sal_uInt32 nId );
 
     /// Add starting and ending point of a line to the m_pShapeAttrList.
     void AddLineDimensions( const Rectangle& rRectangle );
 
     /// Add position and size to the OStringBuffer.
-    void AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Rectangle& rRectangle );
+    void AddRectangleDimensions( OStringBuffer& rBuffer, const Rectangle& rRectangle );
 };
 
 } // namespace vml

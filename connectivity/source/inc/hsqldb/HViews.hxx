@@ -32,11 +32,11 @@ namespace connectivity
             sal_Bool m_bInDrop;
 
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor();
-        virtual sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-            virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+            virtual void dropObject(sal_Int32 _nPos,const OUString _sElementName);
 
             void createView( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         public:
@@ -47,7 +47,7 @@ namespace connectivity
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
 
-            void dropByNameImpl(const ::rtl::OUString& elementName);
+            void dropByNameImpl(const OUString& elementName);
         };
     }
 }

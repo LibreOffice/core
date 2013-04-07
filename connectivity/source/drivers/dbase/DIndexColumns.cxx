@@ -35,7 +35,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseIndexColumns::createObject(const OUString& _rName)
 {
     const ODbaseTable* pTable = m_pIndex->getTable();
 
@@ -51,7 +51,7 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const ::rtl::OUString& _rName
 
     sdbcx::ObjectType xRet = new sdbcx::OIndexColumn(sal_True,_rName
                                                     ,getString(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)))
-                                                    ,::rtl::OUString()
+                                                    ,OUString()
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)))
                                                     ,getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)))
@@ -78,7 +78,7 @@ Reference< XPropertySet > ODbaseIndexColumns::createDescriptor()
     return new sdbcx::OIndexColumn(m_pIndex->getTable()->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 }
 // -------------------------------------------------------------------------
-sdbcx::ObjectType ODbaseIndexColumns::appendObject( const ::rtl::OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseIndexColumns::appendObject( const OUString& /*_rForName*/, const Reference< XPropertySet >& descriptor )
 {
     return cloneDescriptor( descriptor );
 }

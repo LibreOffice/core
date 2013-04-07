@@ -106,7 +106,7 @@ ServiceHandler::~ServiceHandler()
                 at the same implementation.
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                     const ::rtl::OUString& /*sTarget*/ ,
+                                                                                     const OUString& /*sTarget*/ ,
                                                                                            sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -226,9 +226,9 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 
     // extract service name and may optional given parameters from given URL
     // and use it to create and start the component
-    ::rtl::OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
-    ::rtl::OUString sServiceName;
-    ::rtl::OUString sArguments  ;
+    OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
+    OUString sServiceName;
+    OUString sArguments  ;
 
     sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
     if (nArgStart!=-1)

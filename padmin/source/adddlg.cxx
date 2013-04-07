@@ -36,9 +36,6 @@ using namespace psp;
 using namespace padmin;
 using namespace std;
 
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
-using ::rtl::OUStringToOString;
 
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
@@ -285,7 +282,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         int nPos = file->SearchBackward( '.' );
                         if( file->Copy( 0, nPos ) == String( aPPD ) )
                         {
-                            rtl::OString aSysPath(OUStringToOString(aFile, aEncoding));
+                            OString aSysPath(OUStringToOString(aFile, aEncoding));
                             if (unlink(aSysPath.getStr()))
                             {
                                 OUString aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
@@ -487,37 +484,37 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
     // read defaults
     aConfig.SetGroup( "Xprinter,PostScript" );
-    rtl::OString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
-    rtl::OString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
-    rtl::OString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
-    rtl::OString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
-    rtl::OString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
-    rtl::OString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
-    rtl::OString aDefScale( aConfig.ReadKey( "Scale" ) );
+    OString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
+    OString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
+    OString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
+    OString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
+    OString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
+    OString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
+    OString aDefScale( aConfig.ReadKey( "Scale" ) );
 
     aConfig.SetGroup( "devices" );
     int nDevices = aConfig.GetKeyCount();
     for( int nKey = 0; nKey < nDevices; nKey++ )
     {
         aConfig.SetGroup( "devices" );
-        rtl::OString aPrinter(aConfig.GetKeyName(nKey));
-        rtl::OString aValue(aConfig.ReadKey(aPrinter));
-        rtl::OString aPort(aValue.getToken(1, ','));
-        rtl::OString aDriver(aValue.getToken(0, ' '));
-        rtl::OString aPS( aValue.getToken(0, ',').getToken(1, ' ') );
-        rtl::OString aNewDriver(aDriver);
+        OString aPrinter(aConfig.GetKeyName(nKey));
+        OString aValue(aConfig.ReadKey(aPrinter));
+        OString aPort(aValue.getToken(1, ','));
+        OString aDriver(aValue.getToken(0, ' '));
+        OString aPS( aValue.getToken(0, ',').getToken(1, ' ') );
+        OString aNewDriver(aDriver);
         if( aDriver == "GENERIC")
-            aNewDriver = rtl::OString("SGENPRT");
+            aNewDriver = OString("SGENPRT");
 
         if( aPS != "PostScript" )
             continue;
 
-        const PPDParser* pParser = PPDParser::getParser(rtl::OStringToOUString(aNewDriver, aEncoding));
+        const PPDParser* pParser = PPDParser::getParser(OStringToOUString(aNewDriver, aEncoding));
         if( pParser == NULL )
         {
             OUString aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText = aText.replaceFirst( OUString(  "%s1"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
-            aText = aText.replaceFirst( OUString(  "%s2"  ), rtl::OStringToOUString(aDriver, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s1"  ), OStringToOUString(aPrinter, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s2"  ), OStringToOUString(aDriver, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -525,28 +522,28 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
 
         // read the command
         aConfig.SetGroup( "ports" );
-        rtl::OString aCommand( aConfig.ReadKey( aPort ) );
+        OString aCommand( aConfig.ReadKey( aPort ) );
         if (!aCommand.isEmpty())
         {
             OUString aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText = aText.replaceFirst( OUString(  "%s"  ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText = aText.replaceFirst( OUString(  "%s"  ), OStringToOUString(aPrinter, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
         }
 
 
-        String aUPrinter( AddPrinterDialog::uniquePrinterName(rtl::OStringToOUString(aPrinter, aEncoding)) );
+        String aUPrinter( AddPrinterDialog::uniquePrinterName(OStringToOUString(aPrinter, aEncoding)) );
 
         PrinterInfo aInfo;
-        aInfo.m_aDriverName = rtl::OStringToOUString(aNewDriver, aEncoding);
+        aInfo.m_aDriverName = OStringToOUString(aNewDriver, aEncoding);
         aInfo.m_pParser         = pParser;
         aInfo.m_aContext.setParser( pParser );
         aInfo.m_aPrinterName    = aUPrinter;
-        aInfo.m_aCommand = rtl::OStringToOUString(aCommand, aEncoding);
+        aInfo.m_aCommand = OStringToOUString(aCommand, aEncoding);
 
         // read the printer settings
-        rtl::OStringBuffer aGroup(aDriver);
+        OStringBuffer aGroup(aDriver);
         aGroup.append(",PostScript,");
         aGroup.append(aPort);
         aConfig.SetGroup(aGroup.makeStringAndClear());
@@ -554,11 +551,11 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
         int nLeft, nRight, nTop, nBottom;
         if( !aValue.isEmpty() &&
-            aInfo.m_pParser->getMargins( rtl::OStringToOUString(aValue, aEncoding),
+            aInfo.m_pParser->getMargins( OStringToOUString(aValue, aEncoding),
                                          nLeft, nRight, nTop, nBottom ) )
         {
             const PPDKey* pKey = aInfo.m_pParser->getKey( String(  "PageSize"  ) );
-            const PPDValue* pValue = pKey ? pKey->getValue( rtl::OStringToOUString(aValue, aEncoding) ) : NULL;
+            const PPDValue* pValue = pKey ? pKey->getValue( OStringToOUString(aValue, aEncoding) ) : NULL;
             if( pKey && pValue )
                 aInfo.m_aContext.setValue( pKey, pValue );
             aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
@@ -580,7 +577,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             aInfo.m_nCopies = aValue.toInt32();
 
         aValue = aConfig.ReadKey( "Comment" );
-        aInfo.m_aComment = rtl::OStringToOUString(aValue, aEncoding);
+        aInfo.m_aComment = OStringToOUString(aValue, aEncoding);
 
         aValue = aConfig.ReadKey( "Level" );
         if (!aValue.isEmpty())
@@ -592,7 +589,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         int nGroupKeys = aConfig.GetKeyCount();
         for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
         {
-            rtl::OString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
+            OString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
             // ignore page region
             // there are some ppd keys in old Xpdefaults that
             // should never have been writte because they are defaults
@@ -602,8 +599,8 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             {
                 aValue = aConfig.ReadKey( nPPDKey );
                 aPPDKey = aPPDKey.copy(4);
-                const PPDKey* pKey = aInfo.m_pParser->getKey( rtl::OStringToOUString(aPPDKey, RTL_TEXTENCODING_ISO_8859_1) );
-                const PPDValue* pValue = pKey ? ( aValue == "*nil" ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
+                const PPDKey* pKey = aInfo.m_pParser->getKey( OStringToOUString(aPPDKey, RTL_TEXTENCODING_ISO_8859_1) );
+                const PPDValue* pValue = pKey ? ( aValue == "*nil" ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
                 if( pKey )
                     aInfo.m_aContext.setValue( pKey, pValue, true );
             }
@@ -1080,22 +1077,22 @@ OUString AddPrinterDialog::uniquePrinterName( const OUString& rBase )
 String AddPrinterDialog::getOldPrinterLocation()
 {
     static const char* pHome = getenv( "HOME" );
-    rtl::OString aFileName;
+    OString aFileName;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     if( pHome )
     {
-        aFileName = rtl::OStringBuffer().append(pHome).
+        aFileName = OStringBuffer().append(pHome).
             append("/.Xpdefaults").makeStringAndClear();
         if (access(aFileName.getStr(), F_OK))
         {
-            aFileName = rtl::OStringBuffer().append(pHome).
+            aFileName = OStringBuffer().append(pHome).
                 append("/.sversionrc").makeStringAndClear();
-            Config aSVer(rtl::OStringToOUString(aFileName, aEncoding));
+            Config aSVer(OStringToOUString(aFileName, aEncoding));
             aSVer.SetGroup( "Versions" );
             aFileName = aSVer.ReadKey( "StarOffice 5.2" );
             if (!aFileName.isEmpty())
-                aFileName = aFileName + rtl::OString("/share/xp3/Xpdefaults");
+                aFileName = aFileName + OString("/share/xp3/Xpdefaults");
             else if(
                     (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).getLength()
                     ||
@@ -1104,14 +1101,14 @@ String AddPrinterDialog::getOldPrinterLocation()
                     (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).getLength()
                     )
             {
-                aFileName = aFileName + rtl::OString("/xp3/Xpdefaults");
+                aFileName = aFileName + OString("/xp3/Xpdefaults");
             }
             if (!aFileName.isEmpty() && access(aFileName.getStr(), F_OK))
-                aFileName = rtl::OString();
+                aFileName = OString();
         }
     }
 
-    return !aFileName.isEmpty() ? rtl::OStringToOUString(aFileName, aEncoding) : OUString();
+    return !aFileName.isEmpty() ? OStringToOUString(aFileName, aEncoding) : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

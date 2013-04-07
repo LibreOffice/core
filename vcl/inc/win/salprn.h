@@ -50,9 +50,9 @@ class WinSalInfoPrinter : public SalInfoPrinter
 {
 public:
     WinSalGraphics*         mpGraphics;             // current Printer graphics
-    rtl::OUString               maDriverName;           // printer driver name
-    rtl::OUString               maDeviceName;           // printer device name
-    rtl::OUString               maPortName;             // printer port name
+    OUString               maDriverName;           // printer driver name
+    OUString               maDeviceName;           // printer device name
+    OUString               maPortName;             // printer port name
     HDC                     mhDC;                   // printer hdc
     sal_Bool                    mbGraphics;             // is Graphics used
 public:
@@ -70,7 +70,7 @@ public:
                                                  long& rPageWidth, long& rPageHeight );
     virtual sal_uIntPtr                 GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType );
     virtual sal_uIntPtr                 GetPaperBinCount( const ImplJobSetup* pSetupData );
-    virtual rtl::OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
+    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uIntPtr nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
@@ -98,9 +98,9 @@ public:
     virtual ~WinSalPrinter();
 
     using SalPrinter::StartJob;
-    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
-                                              const rtl::OUString& rJobName,
-                                              const rtl::OUString& rAppName,
+    virtual sal_Bool                    StartJob( const OUString* pFileName,
+                                              const OUString& rJobName,
+                                              const OUString& rAppName,
                                               sal_uIntPtr nCopies,
                                               bool bCollate,
                                               bool bDirect,

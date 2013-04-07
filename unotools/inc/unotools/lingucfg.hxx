@@ -41,8 +41,8 @@ class SvtLinguConfigItem;
 
 struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 {
-    ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveDics;
-    ::com::sun::star::uno::Sequence< rtl::OUString >    aActiveConvDics;
+    ::com::sun::star::uno::Sequence< OUString >    aActiveDics;
+    ::com::sun::star::uno::Sequence< OUString >    aActiveConvDics;
 
     sal_Bool                                                bROActiveDics;
     sal_Bool                                                bROActiveConvDics;
@@ -136,11 +136,11 @@ struct UNOTOOLS_DLLPUBLIC SvtLinguOptions
 struct UNOTOOLS_DLLPUBLIC SvtLinguConfigDictionaryEntry
 {
     // the URL's pointing to the location of the files the dictionary consists of
-    com::sun::star::uno::Sequence< rtl::OUString >  aLocations;
+    com::sun::star::uno::Sequence< OUString >  aLocations;
     // the name of the dictionary format implement
-    rtl::OUString                                   aFormatName;
+    OUString                                   aFormatName;
     // the list of languages (ISO names) the dictionary can be used for
-    com::sun::star::uno::Sequence< rtl::OUString >  aLocaleNames;
+    com::sun::star::uno::Sequence< OUString >  aLocaleNames;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -157,10 +157,10 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 
     com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetMainUpdateAccess() const;
 
-    com::sun::star::uno::Sequence< rtl::OUString > GetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName ) const;
-    void SetCurrentOrLastActiveDicts_Impl( const rtl::OUString &rPropName, const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
+    com::sun::star::uno::Sequence< OUString > GetCurrentOrLastActiveDicts_Impl( const OUString &rPropName ) const;
+    void SetCurrentOrLastActiveDicts_Impl( const OUString &rPropName, const com::sun::star::uno::Sequence< OUString > &rDictionaries ) const;
 
-    rtl::OUString GetVendorImageUrl_Impl( const rtl::OUString &rServiceImplName, const rtl::OUString &rImageName ) const;
+    OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 
     // disallow copy-constructor and assignment-operator for now
     SvtLinguConfig( const SvtLinguConfig & );
@@ -173,50 +173,50 @@ public:
     //
     // borrowed from utl::ConfigItem
     //
-    com::sun::star::uno::Sequence< rtl::OUString >
-        GetNodeNames( const rtl::OUString &rNode );
+    com::sun::star::uno::Sequence< OUString >
+        GetNodeNames( const OUString &rNode );
     //
     com::sun::star::uno::Sequence< com::sun::star::uno::Any >
         GetProperties(
-            const com::sun::star::uno::Sequence< rtl::OUString > &rNames );
+            const com::sun::star::uno::Sequence< OUString > &rNames );
     //
     sal_Bool
         ReplaceSetProperties(
-            const rtl::OUString &rNode,
+            const OUString &rNode,
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > rValues );
 
     com::sun::star::uno::Any
-            GetProperty( const rtl::OUString &rPropertyName ) const;
+            GetProperty( const OUString &rPropertyName ) const;
     com::sun::star::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
-    sal_Bool    SetProperty( const rtl::OUString &rPropertyName,
+    sal_Bool    SetProperty( const OUString &rPropertyName,
                          const com::sun::star::uno::Any &rValue );
     sal_Bool    SetProperty( sal_Int32 nPropertyHandle,
                          const com::sun::star::uno::Any &rValue );
 
     sal_Bool    GetOptions( SvtLinguOptions &rOptions ) const;
 
-    sal_Bool    IsReadOnly( const rtl::OUString &rPropertyName ) const;
+    sal_Bool    IsReadOnly( const OUString &rPropertyName ) const;
 
     //!
     //! the following functions work on the 'ServiceManager' sub node of the
     //! linguistic configuration only
     //!
-    sal_Bool GetElementNamesFor( const rtl::OUString &rNodeName, com::sun::star::uno::Sequence< rtl::OUString > &rElementNames ) const;
+    sal_Bool GetElementNamesFor( const OUString &rNodeName, com::sun::star::uno::Sequence< OUString > &rElementNames ) const;
     //
-    sal_Bool GetSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, com::sun::star::uno::Sequence< rtl::OUString > &rFormatList ) const;
+    sal_Bool GetSupportedDictionaryFormatsFor( const OUString &rSetName, const OUString &rSetEntry, com::sun::star::uno::Sequence< OUString > &rFormatList ) const;
 
-    sal_Bool GetDictionaryEntry( const rtl::OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
+    sal_Bool GetDictionaryEntry( const OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
 
-    com::sun::star::uno::Sequence< rtl::OUString > GetDisabledDictionaries() const;
+    com::sun::star::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
-    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
+    std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const OUString &rFormatName );
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise
-    ::rtl::OUString     GetSpellAndGrammarContextSuggestionImage( const ::rtl::OUString &rServiceImplName ) const;
-    ::rtl::OUString     GetSpellAndGrammarContextDictionaryImage( const ::rtl::OUString &rServiceImplName ) const;
-    ::rtl::OUString     GetSynonymsContextImage( const ::rtl::OUString &rServiceImplName ) const;
+    OUString     GetSpellAndGrammarContextSuggestionImage( const OUString &rServiceImplName ) const;
+    OUString     GetSpellAndGrammarContextDictionaryImage( const OUString &rServiceImplName ) const;
+    OUString     GetSynonymsContextImage( const OUString &rServiceImplName ) const;
 
     bool                HasGrammarChecker() const;
 };

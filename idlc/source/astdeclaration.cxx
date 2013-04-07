@@ -97,7 +97,7 @@ void AstDeclaration::setPredefined(bool bPredefined)
     }
 }
 
-void AstDeclaration::setName(const ::rtl::OString& name)
+void AstDeclaration::setName(const OString& name)
 {
     m_scopedName = name;
     sal_Int32 nIndex = name.lastIndexOf( ':' );

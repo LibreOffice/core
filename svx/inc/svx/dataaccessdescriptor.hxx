@@ -116,14 +116,14 @@ namespace svx
 
         /** returns either the data source name if given or the database location
         */
-        ::rtl::OUString getDataSource() const;
+        OUString getDataSource() const;
 
 
         /** set the data source name, if it is not file URL
             @param  _sDataSourceNameOrLocation
                 the data source name or database location
         */
-        void setDataSource(const ::rtl::OUString& _sDataSourceNameOrLocation);
+        void setDataSource(const OUString& _sDataSourceNameOrLocation);
     };
 
 //........................................................................

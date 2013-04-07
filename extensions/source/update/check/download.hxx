@@ -27,22 +27,22 @@
 
 struct DownloadInteractionHandler : public rtl::IReference
 {
-    virtual bool checkDownloadDestination(const rtl::OUString& rFileName) = 0;
+    virtual bool checkDownloadDestination(const OUString& rFileName) = 0;
 
     // called if the destination file already exists, but resume is false
-    virtual bool downloadTargetExists(const rtl::OUString& rFileName) = 0;
+    virtual bool downloadTargetExists(const OUString& rFileName) = 0;
 
     // called when curl reports an error
-    virtual void downloadStalled(const rtl::OUString& rErrorMessage) = 0;
+    virtual void downloadStalled(const OUString& rErrorMessage) = 0;
 
     // progress handler
     virtual void downloadProgressAt(sal_Int8 nPercent) = 0;
 
     // called on first progress notification
-    virtual void downloadStarted(const rtl::OUString& rFileName, sal_Int64 nFileSize) = 0;
+    virtual void downloadStarted(const OUString& rFileName, sal_Int64 nFileSize) = 0;
 
     // called when download has been finished
-    virtual void downloadFinished(const rtl::OUString& rFileName) = 0;
+    virtual void downloadFinished(const OUString& rFileName) = 0;
 
 protected:
     ~DownloadInteractionHandler() {}
@@ -56,7 +56,7 @@ public:
              const rtl::Reference< DownloadInteractionHandler >& rHandler) : m_xContext(xContext), m_aHandler(rHandler) {};
 
     // returns true when the content of rURL was successfully written to rLocalFile
-    bool start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl::OUString& rDestinationDir);
+    bool start(const OUString& rURL, const OUString& rFile, const OUString& rDestinationDir);
 
     // stops the download after the next write operation
     void stop();
@@ -68,7 +68,7 @@ public:
 protected:
 
     // Determines the appropriate proxy settings for the given URL. Returns true if a proxy should be used
-    void getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int32& rPort) const;
+    void getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort) const;
 
 private:
     osl::Condition m_aCondition;

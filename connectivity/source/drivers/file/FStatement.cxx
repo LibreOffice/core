@@ -82,7 +82,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
 
     sal_Int32 nAttrib = 0;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),      PROPERTY_ID_CURSORNAME,         nAttrib,&m_aCursorName,     ::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),      PROPERTY_ID_CURSORNAME,         nAttrib,&m_aCursorName,     ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),    PROPERTY_ID_MAXFIELDSIZE,       nAttrib,&m_nMaxFieldSize,       ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),         PROPERTY_ID_MAXROWS,            nAttrib,&m_nMaxRows,        ::getCppuType(static_cast<sal_Int32*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),    PROPERTY_ID_QUERYTIMEOUT,       nAttrib,&m_nQueryTimeOut,   ::getCppuType(static_cast<sal_Int32*>(0)));
@@ -284,7 +284,7 @@ void SAL_CALL OStatement::release() throw()
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -295,7 +295,7 @@ sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& sql ) throw(SQLExc
 
 // -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -317,7 +317,7 @@ Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLExcepti
     return (Reference< XConnection >)m_pConnection;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -398,7 +398,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setOrderbyColumn" );
-    ::rtl::OUString aColumnName;
+    OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
@@ -427,10 +427,10 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
 }
 
 // -----------------------------------------------------------------------------
-void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
+void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::construct" );
-    ::rtl::OUString aErr;
+    OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
     {
@@ -503,7 +503,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
         anylizeSQL();
     }
     else
-        throw SQLException(aErr,*this,::rtl::OUString(),0,Any());
+        throw SQLException(aErr,*this,OUString(),0,Any());
 }
 // -----------------------------------------------------------------------------
 void OStatement_Base::createColumnMapping()
@@ -573,9 +573,9 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(SQL_ISRULE(pOptColumnCommalist,opt_column_commalist),"OResultSet: Fehler im Parse Tree");
         if (pOptColumnCommalist->count() == 0)
         {
-            const Sequence< ::rtl::OUString>& aNames = m_xColNames->getElementNames();
-            const ::rtl::OUString* pBegin = aNames.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + aNames.getLength();
+            const Sequence< OUString>& aNames = m_xColNames->getElementNames();
+            const OUString* pBegin = aNames.getConstArray();
+            const OUString* pEnd = pBegin + aNames.getLength();
             for (; pBegin != pEnd; ++pBegin)
                 aColumnNameList.push_back(*pBegin);
         }

@@ -42,7 +42,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OColumns::createObject(const OUString& _rName)
 {
     return new OAdoColumn(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -59,7 +59,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
     Reference< XPropertySet > xColumn;
@@ -82,7 +82,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
     nType = ADOS::MapADOType2Jdbc(aColumn.get_Type());
 #endif
 
-    ::rtl::OUString sTypeName;
+    OUString sTypeName;
     pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
     const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
@@ -110,7 +110,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
             sal_Bool bAutoIncrement = sal_False;
             pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
             if ( bAutoIncrement )
-                OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString("Autoincrement"), bAutoIncrement );
+                OTools::putValue( aAddedColumn.get_Properties(), OUString("Autoincrement"), bAutoIncrement );
 
             if ( aFind != pTypeInfoMap->end() &&  aColumn.get_Type() != aAddedColumn.get_Type() ) // change column type if necessary
                 aColumn.put_Type(aFind->first);
@@ -127,7 +127,7 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OColumns::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OColumns::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));

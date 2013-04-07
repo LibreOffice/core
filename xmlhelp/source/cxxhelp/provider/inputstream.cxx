@@ -27,7 +27,7 @@ using namespace com::sun::star::ucb;
 
 
 
-XInputStream_impl::XInputStream_impl( const rtl::OUString& aUncPath )
+XInputStream_impl::XInputStream_impl( const OUString& aUncPath )
     : m_bIsOpen( false ),
       m_aFile( aUncPath )
 {
@@ -128,7 +128,7 @@ XInputStream_impl::skipBytes(
 {
     if (m_aFile.setPos(osl_Pos_Current, sal_uInt64(nBytesToSkip)) != osl::FileBase::E_None)
     {
-        throw io::IOException(::rtl::OUString(
+        throw io::IOException(OUString(
             "XInputStream_impl::skipBytes failed seek"), uno::Reference< uno::XInterface >());
     }
 }

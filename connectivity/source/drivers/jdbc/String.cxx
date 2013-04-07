@@ -42,11 +42,11 @@ jclass java_lang_String::st_getMyClass()
 }
 
 //--------------------------------------------------------------------------
-java_lang_String::operator ::rtl::OUString()
+java_lang_String::operator OUString()
 {
     SDBThreadAttach t;
     if(!t.pEnv)
-        return ::rtl::OUString();
+        return OUString();
     return JavaString2String(t.pEnv,(jstring)object);
 }
 

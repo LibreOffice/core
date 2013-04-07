@@ -48,7 +48,7 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
 void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
-       , const rtl::OUString& rCID )
+       , const OUString& rCID )
             throw (uno::RuntimeException)
 {
     OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
@@ -82,7 +82,7 @@ void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& 
 
 uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
             const uno::Reference< drawing::XShapes >& xTarget
-            , ::rtl::OUString rName )
+            , OUString rName )
 {
     if(!m_xShapeFactory.is())
         return NULL;

@@ -62,7 +62,7 @@ namespace pcr
         };
 
         //================================================================
-        typedef ::std::set< ::rtl::OUString >       StringBag;
+        typedef ::std::set< OUString >       StringBag;
         typedef ::std::map< sal_Int16, StringBag >  MapIntToStringBag;
     }
 
@@ -138,16 +138,16 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const ::rtl::OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (RuntimeException);
-        virtual void SAL_CALL enablePropertyUIElements( const ::rtl::OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (RuntimeException);
-        virtual void SAL_CALL rebuildPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
-        virtual void SAL_CALL showPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
-        virtual void SAL_CALL hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
-        virtual void SAL_CALL showCategory( const ::rtl::OUString& _rCategory, ::sal_Bool _bShow ) throw (RuntimeException);
-        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException);
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (RuntimeException);
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (RuntimeException);
+        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException);
+        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException);
+        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException);
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, ::sal_Bool _bShow ) throw (RuntimeException);
+        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException);
         virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException);
         virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException);
-        virtual void SAL_CALL setHelpSectionText( const ::rtl::OUString& _HelpText ) throw (NoSupportException, RuntimeException);
+        virtual void SAL_CALL setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException);
 
         // UNOCompatibleNonUNOReference overridables
         virtual void SAL_CALL acquire() throw();
@@ -163,7 +163,7 @@ namespace pcr
         void checkDisposed() const;
 
     private:
-        void    impl_markElementEnabledOrDisabled( const ::rtl::OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable );
+        void    impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable );
 
         /** calls <member>m_pUIChangeNotification</member> at <member>m_rMaster</member>
         */
@@ -242,7 +242,7 @@ namespace pcr
     //----------------------------------------------------------------
     namespace
     {
-        void lcl_markStringKeyPositiveOrNegative( const ::rtl::OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, sal_Bool _bMarkPositive )
+        void lcl_markStringKeyPositiveOrNegative( const OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, sal_Bool _bMarkPositive )
         {
             if ( _bMarkPositive )
             {
@@ -256,7 +256,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::enablePropertyUI( const ::rtl::OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
+    void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -267,7 +267,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::impl_markElementEnabledOrDisabled( const ::rtl::OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable )
+    void CachedInspectorUI::impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable )
     {
         if ( _nElementIdOrZero == 0 )
             return;
@@ -287,7 +287,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::enablePropertyUIElements( const ::rtl::OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
+    void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -301,7 +301,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::rebuildPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void CachedInspectorUI::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -313,7 +313,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::showPropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void CachedInspectorUI::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -327,7 +327,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::hidePropertyUI( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    void CachedInspectorUI::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -338,7 +338,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void CachedInspectorUI::showCategory( const ::rtl::OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
+    void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
 
@@ -347,7 +347,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -375,7 +375,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    void SAL_CALL CachedInspectorUI::setHelpSectionText( const ::rtl::OUString& _HelpText ) throw (NoSupportException, RuntimeException)
+    void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException)
     {
         m_rMaster.getDelegatorUI()->setHelpSectionText( _HelpText );
     }
@@ -481,7 +481,7 @@ namespace pcr
         //============================================================
         /** a typedef for a ->XObjectInspectorUI member function taking a string
         */
-        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const ::rtl::OUString& );
+        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
 
         //============================================================
         //= PropertyUIOperator
@@ -489,7 +489,7 @@ namespace pcr
         /** an STL-compatible struct which calls a certain member method (taking a string) at a
             given ->XObjectInspectorUI instance
         */
-        struct PropertyUIOperator : public ::std::unary_function< ::rtl::OUString, void >
+        struct PropertyUIOperator : public ::std::unary_function< OUString, void >
         {
         private:
             Reference< XObjectInspectorUI > m_xUpdater;
@@ -502,7 +502,7 @@ namespace pcr
             {
             }
 
-            void operator()( const ::rtl::OUString& _rPropertyName )
+            void operator()( const OUString& _rPropertyName )
             {
                 ((m_xUpdater.get())->*m_pSetter)( _rPropertyName );
             }
@@ -522,7 +522,7 @@ namespace pcr
         class IStringKeyBooleanUIUpdate
         {
         public:
-            virtual void updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const = 0;
+            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const = 0;
 
             virtual ~IStringKeyBooleanUIUpdate() { }
         };
@@ -548,11 +548,11 @@ namespace pcr
             {
             }
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const;
+            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
         //............................................................
-        void EnablePropertyUIElement::updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const
+        void EnablePropertyUIElement::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             m_xUIUpdate->enablePropertyUIElements( _rKey, m_nElement, _bFlag );
         }
@@ -562,7 +562,7 @@ namespace pcr
         //============================================================
         /** a ->XObjectInspectorUI method taking a string and a boolean
         */
-        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const ::rtl::OUString&, sal_Bool );
+        typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
 
         //============================================================
         //= DefaultStringKeyBooleanUIUpdate
@@ -579,7 +579,7 @@ namespace pcr
         public:
             DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter );
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const;
+            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
         //............................................................
@@ -590,7 +590,7 @@ namespace pcr
         }
 
         //............................................................
-        void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const ::rtl::OUString& _rKey, sal_Bool _bFlag ) const
+        void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             ((m_xUIUpdate.get())->*m_pSetter)( _rKey, _bFlag );
         }
@@ -601,7 +601,7 @@ namespace pcr
         /** an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
             operation with a fixed boolean value, for a given string value
         */
-        struct BooleanUIAspectUpdate : public ::std::unary_function< ::rtl::OUString, void >
+        struct BooleanUIAspectUpdate : public ::std::unary_function< OUString, void >
         {
         private:
             const IStringKeyBooleanUIUpdate&    m_rUpdater;
@@ -614,7 +614,7 @@ namespace pcr
             {
             }
 
-            void operator()( const ::rtl::OUString& _rPropertyName )
+            void operator()( const OUString& _rPropertyName )
             {
                 m_rUpdater.updateUIForKey( _rPropertyName, m_bFlag );
             }
@@ -630,7 +630,7 @@ namespace pcr
         //============================================================
         /** an STL-compatible structure subtracting a given string from a fixed ->StringBag
         */
-        struct StringBagComplement : public ::std::unary_function< ::rtl::OUString, void >
+        struct StringBagComplement : public ::std::unary_function< OUString, void >
         {
         private:
             StringBag&  m_rMinuend;
@@ -638,7 +638,7 @@ namespace pcr
         public:
             StringBagComplement( StringBag& _rMinuend ) :m_rMinuend( _rMinuend ) { }
 
-            void operator()( const ::rtl::OUString& _rPropertyToSubtract )
+            void operator()( const OUString& _rPropertyToSubtract )
             {
                 m_rMinuend.erase( _rPropertyToSubtract );
             }
@@ -830,7 +830,7 @@ namespace pcr
     }
 
     //----------------------------------------------------------------
-    bool ComposedPropertyUIUpdate::shouldContinuePropertyHandling( const ::rtl::OUString& _rName ) const
+    bool ComposedPropertyUIUpdate::shouldContinuePropertyHandling( const OUString& _rName ) const
     {
         if ( !m_pPropertyCheck )
             return true;

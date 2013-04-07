@@ -32,7 +32,7 @@ namespace xls {
 /** Settings for workbook write protection. */
 struct FileSharingModel
 {
-    ::rtl::OUString     maUserName;             /// User who added the write protection password.
+    OUString     maUserName;             /// User who added the write protection password.
     sal_uInt16          mnPasswordHash;         /// Hash value of the write protection password.
     bool                mbRecommendReadOnly;    /// True = recommend read-only mode on opening.
 
@@ -44,7 +44,7 @@ struct FileSharingModel
 /** Global workbook settings. */
 struct WorkbookSettingsModel
 {
-    ::rtl::OUString     maCodeName;             /// VBA codename for the workbook.
+    OUString     maCodeName;             /// VBA codename for the workbook.
     sal_Int32           mnShowObjectMode;       /// Specifies how objects are shown.
     sal_Int32           mnUpdateLinksMode;      /// Specifies how external links are updated.
     sal_Int32           mnDefaultThemeVer;      /// Default theme version.

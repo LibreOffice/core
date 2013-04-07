@@ -91,10 +91,10 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=31271
     {
-        rtl::OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
+        OUString aTest(RTL_CONSTASCII_USTRINGPARAM("(some text here)"));
 
-        aLocale.Language = rtl::OUString("en");
-        aLocale.Country = rtl::OUString("US");
+        aLocale.Language = OUString("en");
+        aLocale.Country = OUString("US");
 
         {
             //Here we want the line break to leave text here) on the next line
@@ -112,11 +112,11 @@ void TestBreakIterator::testLineBreaking()
     //See https://bugs.freedesktop.org/show_bug.cgi?id=49849
     {
         const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
-        rtl::OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
-        rtl::OUString aTest(rtl::OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
+        OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
+        OUString aTest(OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
 
-        aLocale.Language = rtl::OUString("he");
-        aLocale.Country = rtl::OUString("IL");
+        aLocale.Language = OUString("he");
+        aLocale.Country = OUString("IL");
 
         {
             //Here we want the line break to happen at the whitespace
@@ -127,10 +127,10 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=17155
     {
-        rtl::OUString aTest("foo /bar/baz");
+        OUString aTest("foo /bar/baz");
 
-        aLocale.Language = rtl::OUString("en");
-        aLocale.Country = rtl::OUString("US");
+        aLocale.Language = OUString("en");
+        aLocale.Country = OUString("US");
 
         {
             //Here we want the line break to leave /bar/ba clumped together on the next line
@@ -142,10 +142,10 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=19716
     {
-        rtl::OUString aTest("aaa]aaa");
+        OUString aTest("aaa]aaa");
 
-        aLocale.Language = rtl::OUString("en");
-        aLocale.Country = rtl::OUString("US");
+        aLocale.Language = OUString("en");
+        aLocale.Country = OUString("US");
 
         {
             //Here we want the line break to move the whole lot to the next line
@@ -160,14 +160,14 @@ void TestBreakIterator::testLineBreaking()
 void TestBreakIterator::testWordBoundaries()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("en");
-    aLocale.Country = rtl::OUString("US");
+    aLocale.Language = OUString("en");
+    aLocale.Country = OUString("US");
 
     i18n::Boundary aBounds;
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=11993
     {
-        rtl::OUString aTest("abcd ef  ghi??? KLM");
+        OUString aTest("abcd ef  ghi??? KLM");
 
         CPPUNIT_ASSERT(!m_xBreak->isBeginWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isEndWord(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD));
@@ -198,7 +198,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=21907
     {
-        rtl::OUString aTest("b a?");
+        OUString aTest("b a?");
 
         CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 1, aLocale, i18n::WordType::ANY_WORD));
         CPPUNIT_ASSERT(m_xBreak->isBeginWord(aTest, 2, aLocale, i18n::WordType::ANY_WORD));
@@ -226,7 +226,7 @@ void TestBreakIterator::testWordBoundaries()
             't', ' ', 'e', 'v', 'e', 'n', ' ' , 0x00BF, 'r', 'e', 'a', 'l', '?', ' ',
             'S', 'p', 'a', 'n', 'i', 's', 'h'
         };
-        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 7);
@@ -257,8 +257,8 @@ void TestBreakIterator::testWordBoundaries()
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
         for (size_t i = 0; i < SAL_N_ELEMENTS(aBreakTests); ++i)
         {
-            rtl::OUString aTest("Word");
-            aTest += rtl::OUString(aBreakTests[i]) + rtl::OUString("Word");
+            OUString aTest("Word");
+            aTest += OUString(aBreakTests[i]) + OUString("Word");
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -287,8 +287,8 @@ void TestBreakIterator::testWordBoundaries()
         //make sure that in all cases isBeginWord and isEndWord matches getWordBoundary
         for (size_t i = 0; i < SAL_N_ELEMENTS(aJoinTests); ++i)
         {
-            rtl::OUString aTest("Word");
-            aTest += rtl::OUString(aJoinTests[i]) + rtl::OUString("Word");
+            OUString aTest("Word");
+            aTest += OUString(aJoinTests[i]) + OUString("Word");
             aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, mode, true);
             switch (mode)
             {
@@ -313,7 +313,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=13494
     {
-        const rtl::OUString aBase("xxAAxxBBxxCCxx");
+        const OUString aBase("xxAAxxBBxxCCxx");
         const sal_Unicode aTests[] =
         {
             '\'', ';', ',', '.', '!', '@', '#', '%', '&', '*',
@@ -324,7 +324,7 @@ void TestBreakIterator::testWordBoundaries()
         const sal_Int32 aDoublePositions[] = {0, 2, 4, 6, 8, 10, 12, 14};
         for (size_t j = 0; j < SAL_N_ELEMENTS(aTests); ++j)
         {
-            rtl::OUString aTest = aBase.replace('x', aTests[j]);
+            OUString aTest = aBase.replace('x', aTests[j]);
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
@@ -347,7 +347,7 @@ void TestBreakIterator::testWordBoundaries()
         const sal_Int32 aSinglePositions[] = {0, 1, 3, 4, 6, 7, 9, 10};
         for (size_t j = 1; j < SAL_N_ELEMENTS(aTests); ++j)
         {
-            rtl::OUString aTest = aBase.replaceAll(rtl::OUString("xx"), rtl::OUString(aTests[j]));
+            OUString aTest = aBase.replaceAll(OUString("xx"), OUString(aTests[j]));
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
@@ -370,7 +370,7 @@ void TestBreakIterator::testWordBoundaries()
         const sal_Int32 aSingleQuotePositions[] = {0, 1, 9, 10};
         CPPUNIT_ASSERT(aTests[0] == '\'');
         {
-            rtl::OUString aTest = aBase.replaceAll(rtl::OUString("xx"), rtl::OUString(aTests[0]));
+            OUString aTest = aBase.replaceAll(OUString("xx"), OUString(aTests[0]));
             sal_Int32 nPos = -1;
             size_t i = 0;
             do
@@ -393,10 +393,10 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=13451
     {
-        aLocale.Language = rtl::OUString("ca");
-        aLocale.Country = rtl::OUString("ES");
+        aLocale.Language = OUString("ca");
+        aLocale.Country = OUString("ES");
 
-        rtl::OUString aTest("mirar-se comprar-vos donem-nos les mans aneu-vos-en!");
+        OUString aTest("mirar-se comprar-vos donem-nos les mans aneu-vos-en!");
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {8, 20, 30, 34, 39, 51, 52};
@@ -418,12 +418,12 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = rtl::OUString("en");
-                aLocale.Country = rtl::OUString("US");
+                aLocale.Language = OUString("en");
+                aLocale.Country = OUString("US");
                 break;
             case 1:
-                aLocale.Language = rtl::OUString("ca");
-                aLocale.Country = rtl::OUString("ES");
+                aLocale.Language = OUString("ca");
+                aLocale.Country = OUString("ES");
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -434,7 +434,7 @@ void TestBreakIterator::testWordBoundaries()
         {
             'I', 0x200B, 'w', 'a', 'n', 't', 0x200B, 't', 'o', 0x200B, 'g', 'o'
         };
-        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {1, 6, 9, 12};
@@ -456,12 +456,12 @@ void TestBreakIterator::testWordBoundaries()
         switch (j)
         {
             case 0:
-                aLocale.Language = rtl::OUString("en");
-                aLocale.Country = rtl::OUString("US");
+                aLocale.Language = OUString("en");
+                aLocale.Country = OUString("US");
                 break;
             case 1:
-                aLocale.Language = rtl::OUString("grc");
-                aLocale.Country = rtl::OUString();
+                aLocale.Language = OUString("grc");
+                aLocale.Country = OUString();
                 break;
             default:
                 CPPUNIT_ASSERT(false);
@@ -475,7 +475,7 @@ void TestBreakIterator::testWordBoundaries()
             0x03C2, 0x0020, 0x1F00, 0x03BB, 0x03BB, 0x0020, 0x1F24,
             0x03C3, 0x03B8, 0x03B9, 0x03BF, 0x03BD
         };
-        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {5, 15, 19, 26};
@@ -496,7 +496,7 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "fi";
         aLocale.Country = "FI";
 
-        rtl::OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi");
+        OUString aTest("Kuorma-auto kaakkois- ja Keski-Suomi");
 
         {
             sal_Int32 nPos = 0;
@@ -533,14 +533,14 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=107843
     {
-        aLocale.Language = rtl::OUString("en");
-        aLocale.Country = rtl::OUString("US");
+        aLocale.Language = OUString("en");
+        aLocale.Country = OUString("US");
 
         const sal_Unicode TEST[] =
         {
             'r', 'u', 0xFB00, 'l', 'e', ' ', 0xFB01, 's', 'h'
         };
-        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 5);
@@ -551,14 +551,14 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://issues.apache.org/ooo/show_bug.cgi?id=113785
     {
-        aLocale.Language = rtl::OUString("en");
-        aLocale.Country = rtl::OUString("US");
+        aLocale.Language = OUString("en");
+        aLocale.Country = OUString("US");
 
         const sal_Unicode TEST[] =
         {
             'a', 0x2013, 'b', 0x2014, 'c'
         };
-        rtl::OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
+        OUString aTest(TEST, SAL_N_ELEMENTS(TEST));
 
         aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 1);
@@ -578,12 +578,12 @@ void TestBreakIterator::testWordBoundaries()
 void TestBreakIterator::testGraphemeIteration()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("bn");
-    aLocale.Country = rtl::OUString("IN");
+    aLocale.Language = OUString("bn");
+    aLocale.Country = OUString("IN");
 
     {
         const sal_Unicode BA_HALANT_LA[] = { 0x09AC, 0x09CD, 0x09AF };
-        rtl::OUString aTest(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
+        OUString aTest(BA_HALANT_LA, SAL_N_ELEMENTS(BA_HALANT_LA));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
@@ -597,7 +597,7 @@ void TestBreakIterator::testGraphemeIteration()
 
     {
         const sal_Unicode HA_HALANT_NA_VOWELSIGNI[] = { 0x09B9, 0x09CD, 0x09A3, 0x09BF };
-        rtl::OUString aTest(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
+        OUString aTest(HA_HALANT_NA_VOWELSIGNI, SAL_N_ELEMENTS(HA_HALANT_NA_VOWELSIGNI));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
@@ -611,7 +611,7 @@ void TestBreakIterator::testGraphemeIteration()
 
     {
         const sal_Unicode TA_HALANT_MA_HALANT_YA  [] = { 0x09A4, 0x09CD, 0x09AE, 0x09CD, 0x09AF };
-        rtl::OUString aTest(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
+        OUString aTest(TA_HALANT_MA_HALANT_YA, SAL_N_ELEMENTS(TA_HALANT_MA_HALANT_YA));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
@@ -623,12 +623,12 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should skip full grapheme", nPos == 0);
     }
 
-    aLocale.Language = rtl::OUString("ta");
-    aLocale.Country = rtl::OUString("IN");
+    aLocale.Language = OUString("ta");
+    aLocale.Country = OUString("IN");
 
     {
         const sal_Unicode KA_VIRAMA_SSA[] = { 0x0B95, 0x0BCD, 0x0BB7 };
-        rtl::OUString aTest(KA_VIRAMA_SSA, SAL_N_ELEMENTS(KA_VIRAMA_SSA));
+        OUString aTest(KA_VIRAMA_SSA, SAL_N_ELEMENTS(KA_VIRAMA_SSA));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -643,7 +643,7 @@ void TestBreakIterator::testGraphemeIteration()
 
     {
         const sal_Unicode KA_VOWELSIGNU[] = { 0x0B95, 0x0BC1 };
-        rtl::OUString aTest(KA_VOWELSIGNU, SAL_N_ELEMENTS(KA_VOWELSIGNU));
+        OUString aTest(KA_VOWELSIGNU, SAL_N_ELEMENTS(KA_VOWELSIGNU));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -659,7 +659,7 @@ void TestBreakIterator::testGraphemeIteration()
     {
         const sal_Unicode CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI[] =
             { 0x0B9A, 0x0BBF, 0x0BA4, 0x0BCD, 0x0BA4, 0x0BBF, 0x0BB0, 0x0BC8 };
-        rtl::OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI,
+        OUString aTest(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI,
             SAL_N_ELEMENTS(CA_VOWELSIGNI_TA_VIRAMA_TA_VOWELSIGNI_RA_VOWELSIGNAI));
 
         sal_Int32 nDone=0;
@@ -684,7 +684,7 @@ void TestBreakIterator::testGraphemeIteration()
 
     {
         const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
-        rtl::OUString aText(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+        OUString aText(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
 
         sal_Int32 nGraphemeCount = 0;
 
@@ -700,12 +700,12 @@ void TestBreakIterator::testGraphemeIteration()
         CPPUNIT_ASSERT_MESSAGE("Should be considered 1 grapheme", nGraphemeCount == 1);
     }
 
-    aLocale.Language = rtl::OUString("hi");
-    aLocale.Country = rtl::OUString("IN");
+    aLocale.Language = OUString("hi");
+    aLocale.Country = OUString("IN");
 
     {
         const sal_Unicode SHA_VOWELSIGNII[] = { 0x936, 0x940 };
-        rtl::OUString aTest(SHA_VOWELSIGNII, SAL_N_ELEMENTS(SHA_VOWELSIGNII));
+        OUString aTest(SHA_VOWELSIGNII, SAL_N_ELEMENTS(SHA_VOWELSIGNII));
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -725,8 +725,8 @@ void TestBreakIterator::testGraphemeIteration()
 void TestBreakIterator::testWeak()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("en");
-    aLocale.Country = rtl::OUString("US");
+    aLocale.Language = OUString("en");
+    aLocale.Country = OUString("US");
 
     {
         const sal_Unicode WEAKS[] =
@@ -744,12 +744,12 @@ void TestBreakIterator::testWeak()
             0x25A0, 0x25FF, //Geometric Shapes
             0x2B30, 0x2B4C  //Miscellaneous Symbols and Arrows
         };
-        rtl::OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
+        OUString aWeaks(WEAKS, SAL_N_ELEMENTS(WEAKS));
 
         for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aWeaks, i);
-            rtl::OStringBuffer aMsg;
+            OStringBuffer aMsg;
             aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
             aMsg.append(static_cast<sal_Int32>(aWeaks.getStr()[i]), 16);
             aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been weak"));
@@ -766,8 +766,8 @@ void TestBreakIterator::testWeak()
 void TestBreakIterator::testAsian()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("en");
-    aLocale.Country = rtl::OUString("US");
+    aLocale.Language = OUString("en");
+    aLocale.Country = OUString("US");
 
     {
         const sal_Unicode ASIANS[] =
@@ -783,12 +783,12 @@ void TestBreakIterator::testAsian()
             //UAX25 as "Latin", i.e. by that logic LATIN
             0xFF21, 0xFF5A
         };
-        rtl::OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
+        OUString aAsians(ASIANS, SAL_N_ELEMENTS(ASIANS));
 
         for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
         {
             sal_Int16 nScript = m_xBreak->getScriptType(aAsians, i);
-            rtl::OStringBuffer aMsg;
+            OStringBuffer aMsg;
             aMsg.append(RTL_CONSTASCII_STRINGPARAM("Char 0x"));
             aMsg.append(static_cast<sal_Int32>(aAsians.getStr()[i]), 16);
             aMsg.append(RTL_CONSTASCII_STRINGPARAM(" should have been asian"));
@@ -802,13 +802,13 @@ void TestBreakIterator::testAsian()
 void TestBreakIterator::testThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("th");
-    aLocale.Country = rtl::OUString("TH");
+    aLocale.Language = OUString("th");
+    aLocale.Country = OUString("TH");
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
         const sal_Unicode THAI[] = { 0x0E01, 0x0E38, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-        rtl::OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+        OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_MESSAGE("Should skip full word",
@@ -827,7 +827,7 @@ void TestBreakIterator::testThai()
             0x0E2B, 0x0E48, 0x0E07, 0x0E0A, 0x0E32, 0x0E15, 0x0E34,
             0x0E19, 0x0E49, 0x0E33, 0x0E2B, 0x0E19, 0x0E32, 0x0E27
         };
-        rtl::OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
+        OUString aTest(THAI, SAL_N_ELEMENTS(THAI));
 
         std::stack<sal_Int32> aPositions;
         sal_Int32 nPos = -1;
@@ -855,11 +855,11 @@ void TestBreakIterator::testThai()
 void TestBreakIterator::testNorthernThai()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("nod");
-    aLocale.Country = rtl::OUString("TH");
+    aLocale.Language = OUString("nod");
+    aLocale.Country = OUString("TH");
 
     const sal_Unicode NORTHERN_THAI1[] = { 0x0E01, 0x0E38, 0x0E4A, 0x0E2B, 0x0E25, 0x0E32, 0x0E1A };
-    rtl::OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
+    OUString aTest(NORTHERN_THAI1, SAL_N_ELEMENTS(NORTHERN_THAI1));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
     CPPUNIT_ASSERT_MESSAGE("Should skip full word",
@@ -876,12 +876,12 @@ void TestBreakIterator::testNorthernThai()
 void TestBreakIterator::testKhmer()
 {
     lang::Locale aLocale;
-    aLocale.Language = rtl::OUString("km");
-    aLocale.Country = rtl::OUString("KH");
+    aLocale.Language = OUString("km");
+    aLocale.Country = OUString("KH");
 
     const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
 
-    rtl::OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
+    OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
@@ -904,7 +904,7 @@ void TestBreakIterator::testJapanese()
     {
         const sal_Unicode JAPANESE[] = { 0x30B7, 0x30E3, 0x30C3, 0x30C8, 0x30C0, 0x30A6, 0x30F3 };
 
-        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
         aBounds = m_xBreak->getWordBoundary(aTest, 5, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 
@@ -914,7 +914,7 @@ void TestBreakIterator::testJapanese()
     {
         const sal_Unicode JAPANESE[] = { 0x9EBB, 0x306E, 0x8449, 0x9EBB, 0x306E, 0x8449 };
 
-        rtl::OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
+        OUString aTest(JAPANESE, SAL_N_ELEMENTS(JAPANESE));
         aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
 

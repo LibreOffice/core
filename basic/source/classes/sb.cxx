@@ -1058,7 +1058,7 @@ SbModule* StarBASIC::MakeModule32( const OUString& rName, const OUString& rSrc )
 SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInfo, const OUString& rSrc )
 {
 
-    OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
+    OSL_TRACE("create module %s type mInfo %d", OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
     SbModule* p = NULL;
     switch ( mInfo.ModuleType )
     {

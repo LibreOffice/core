@@ -45,7 +45,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
+OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
 {
     // create variable library name suffixes
     OUString aDLLSuffix = OUString::createFromAscii( SAL_STRINGIFY( DLLPOSTFIX ) );
@@ -58,7 +58,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     {
         aLibName += aDLLSuffix;
     }
-    aLibName += rtl::OUString( ".dll" );
+    aLibName += OUString( ".dll" );
 #else
     aLibName = OUString( "lib" );
     aLibName += OUString::createFromAscii( pModName );

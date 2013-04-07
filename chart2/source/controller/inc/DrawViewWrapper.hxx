@@ -82,7 +82,7 @@ public:
 
     SfxItemSet   getPositionAndSizeItemSetFromMarkedObject() const;
 
-    SdrObject* getNamedSdrObject( const rtl::OUString& rName ) const;
+    SdrObject* getNamedSdrObject( const OUString& rName ) const;
     bool IsObjectHit( SdrObject* pObj, const Point& rPnt ) const;
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);

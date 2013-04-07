@@ -61,7 +61,7 @@ namespace sax
         }
 
         virtual void SAL_CALL
-        startElement(const ::rtl::OUString& aName,
+        startElement(const OUString& aName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
                 throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
         {
@@ -69,27 +69,27 @@ namespace sax
         }
 
         virtual void SAL_CALL
-        endElement(const ::rtl::OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
+        endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
-        characters(const ::rtl::OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
+        characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
-        ignorableWhitespace(const ::rtl::OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
+        ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
-        processingInstruction(const ::rtl::OUString& aTarget, const ::rtl::OUString& aData)
+        processingInstruction(const OUString& aTarget, const OUString& aData)
                 throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
         {
             m_handler->processingInstruction(aTarget, aData);
@@ -153,7 +153,7 @@ namespace sax
         }
 
         virtual void SAL_CALL
-        startElement(const ::rtl::OUString& aName,
+        startElement(const OUString& aName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
                 throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
         {
@@ -161,27 +161,27 @@ namespace sax
         }
 
         virtual void SAL_CALL
-        endElement(const ::rtl::OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
+        endElement(const OUString& aName) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->endElement(aName);
         }
 
         virtual void SAL_CALL
-        characters(const ::rtl::OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
+        characters(const OUString& aChars) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->characters(aChars);
         }
 
         virtual void SAL_CALL
-        ignorableWhitespace(const ::rtl::OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
+        ignorableWhitespace(const OUString& aWhitespaces) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->ignorableWhitespace(aWhitespaces);
         }
         virtual void SAL_CALL
-        processingInstruction(const ::rtl::OUString& aTarget, const ::rtl::OUString& aData)
+        processingInstruction(const OUString& aTarget, const OUString& aData)
                 throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
         {
             m_handler->processingInstruction(aTarget, aData);
@@ -204,13 +204,13 @@ namespace sax
             m_handler->endCDATA();
         }
         virtual void SAL_CALL
-        comment(const ::rtl::OUString& sComment) throw (::com::sun::star::xml::sax::SAXException,
+        comment(const OUString& sComment) throw (::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException)
         {
             m_handler->comment(sComment);
         }
         virtual void SAL_CALL
-        unknown(const ::rtl::OUString& sString) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
+        unknown(const OUString& sString) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
         {
             m_handler->unknown(sString);
         }

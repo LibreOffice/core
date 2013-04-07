@@ -48,7 +48,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 
-using ::rtl::OUString;
 namespace ole_adapter
 {
 
@@ -112,17 +111,17 @@ public:
         throw(Exception, RuntimeException);
 
     // XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
     // XDefaultMethod
-    virtual ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultMethodName(  ) throw (::com::sun::star::uno::RuntimeException) { return m_sDefaultMember; }
 
-    virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const ::rtl::OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams, ::com::sun::star::uno::Sequence< ::sal_Int16 >& aOutParamIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XDirectInvocation
-    virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const ::rtl::OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasMember( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL directInvoke( const OUString& aName, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException, ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
 
     Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
@@ -237,7 +236,7 @@ protected:
     Sequence<Type> m_seqTypes;
     CComPtr<IUnknown> m_spUnknown;
     CComPtr<IDispatch> m_spDispatch;
-        rtl::OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type
+        OUString m_sTypeName; // is "" ( not initialised ), "IDispatch" ( we have no idea ) or "SomeLibrary.SomeTypeName" if we managed to get a type
     /** This value is set dureing XInitialization::initialize. It indicates that the COM interface
     was transported as VT_DISPATCH in a VARIANT rather then a VT_UNKNOWN
     */
@@ -256,7 +255,7 @@ protected:
     bool m_bComTlbIndexInit;
     // Keeps the ITypeInfo obtained from IDispatch::GetTypeInfo
     CComPtr< ITypeInfo > m_spTypeInfo;
-    rtl::OUString m_sDefaultMember;
+    OUString m_sDefaultMember;
     bool m_bHasDfltMethod;
     bool m_bHasDfltProperty;
 };

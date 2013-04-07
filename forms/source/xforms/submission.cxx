@@ -57,8 +57,6 @@
 
 
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::beans::PropertyVetoException;
 using com::sun::star::lang::IllegalArgumentException;
@@ -440,7 +438,7 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
     {
         // for convinience reasons (????), we accept a string which contains
         // a comma-separated list of namespace prefixes
-        ::rtl::OUString sTokenList;
+        OUString sTokenList;
         if ( rValue >>= sTokenList )
         {
             std::vector< OUString > aPrefixes;
@@ -448,7 +446,7 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
             while ( p >= 0 )
                 aPrefixes.push_back( sTokenList.getToken( 0, ',', p ) );
 
-            Sequence< ::rtl::OUString > aConvertedPrefixes( &aPrefixes[0], aPrefixes.size() );
+            Sequence< OUString > aConvertedPrefixes( &aPrefixes[0], aPrefixes.size() );
             return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, makeAny( aConvertedPrefixes ) );
         }
     }
@@ -498,11 +496,11 @@ void SAL_CALL Submission::submitWithInteraction(
     // as long as this class is not really threadsafe, we need to copy
     // the members we're interested in
     Reference< XModel > xModel( mxModel );
-    ::rtl::OUString sID( msID );
+    OUString sID( msID );
 
     if ( !xModel.is() || msID.isEmpty() )
         throw RuntimeException(
-                ::rtl::OUString( "This is not a valid submission object." ),
+                OUString( "This is not a valid submission object." ),
                 *this
               );
 
@@ -680,27 +678,27 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL Submission::getP
 {
     return PropertySetBase::getPropertySetInfo();
 }
-void SAL_CALL Submission::setPropertyValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+void SAL_CALL Submission::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     PropertySetBase::setPropertyValue( aPropertyName, aValue );
 }
-Any SAL_CALL Submission::getPropertyValue( const ::rtl::OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+Any SAL_CALL Submission::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     return PropertySetBase::getPropertyValue( PropertyName );
 }
-void SAL_CALL Submission::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Submission::addPropertyChangeListener( const OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertySetBase::addPropertyChangeListener( aPropertyName, xListener );
 }
-void SAL_CALL Submission::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Submission::removePropertyChangeListener( const OUString& aPropertyName, const Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertySetBase::removePropertyChangeListener( aPropertyName, aListener );
 }
-void SAL_CALL Submission::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Submission::addVetoableChangeListener( const OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertySetBase::addVetoableChangeListener( PropertyName, aListener );
 }
-void SAL_CALL Submission::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL Submission::removeVetoableChangeListener( const OUString& PropertyName, const Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     PropertySetBase::removeVetoableChangeListener( PropertyName, aListener );
 }

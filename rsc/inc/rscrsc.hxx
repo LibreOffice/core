@@ -41,29 +41,29 @@ class RscCmdLine
 public:
 
     RscStrList          aInputList;     // Liste der Quelldateien
-    rtl::OString        aPath;          // Liste der Pfade
+    OString        aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
-    rtl::OString        aOutputSrs;     // Name der Srs-Ausgabedatei
-    rtl::OString        aILDir;
+    OString        aOutputSrs;     // Name der Srs-Ausgabedatei
+    OString        aILDir;
 
     struct OutputFile
     {
-        rtl::OString aLangName;         // language name
-        rtl::OString aOutputRc;         // target file
-        rtl::OString aLangSearchPath;   // language specific search path
-        ::std::list< rtl::OString >    aSysSearchDirs;    // paths to search for images
+        OString aLangName;         // language name
+        OString aOutputRc;         // target file
+        OString aLangSearchPath;   // language specific search path
+        ::std::list< OString >    aSysSearchDirs;    // paths to search for images
 
         OutputFile() {}
     };
 
     std::list<OutputFile>                                   m_aOutputFiles;
-    std::list< std::pair< rtl::OString, rtl::OString > >    m_aReplacements;
+    std::list< std::pair< OString, OString > >    m_aReplacements;
 
     RscCmdLine( int argc, char ** argv, RscError * pEH );
     ~RscCmdLine();
 
-    ::rtl::OString     substitutePaths( const ::rtl::OString& rIn );
+    OString     substitutePaths( const OString& rIn );
 };
 /****************** R s c ************************************************/
 
@@ -73,12 +73,12 @@ class RscCompiler
 {
 private:
     void            CreateResFile( const char * pRc );
-    void            Append( const rtl::OString& rOutputSrs, const rtl::OString& rTmpFile );
+    void            Append( const OString& rOutputSrs, const OString& rTmpFile );
 
     bool            GetImageFilePath( const RscCmdLine::OutputFile& rOutputFile,
                                       const WriteRcContext& rContext,
-                                      const rtl::OString& rBaseFileName,
-                                      rtl::OString& rImagePath,
+                                      const OString& rBaseFileName,
+                                      OString& rImagePath,
                                       FILE* pSysListFile );
     void            PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                                        const WriteRcContext& rContext,

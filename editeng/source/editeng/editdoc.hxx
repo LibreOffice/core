@@ -808,7 +808,7 @@ public:
     /// does not delete
     void Release(size_t nPos);
 
-    static rtl::OUString GetSepStr( LineEnd eEnd );
+    static OUString GetSepStr( LineEnd eEnd );
 };
 
 inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, size_t nAttr)

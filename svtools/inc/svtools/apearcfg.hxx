@@ -55,14 +55,14 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 
     static sal_Bool  bInitialized ;
 
-    SVT_DLLPRIVATE const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    SVT_DLLPRIVATE const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
 
 public:
     SvtTabAppearanceCfg( );
     ~SvtTabAppearanceCfg( );
 
     virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 
     sal_uInt16  GetDragMode  () const { return nDragMode; }
 

@@ -65,7 +65,7 @@ namespace dbaui
     {
     private:
         OGenericUnoController*  m_pController;
-        ::rtl::OUString         m_sTableNameForAppend;
+        OUString         m_sTableNameForAppend;
 
     public:
         // is needed to describe the drop target
@@ -74,7 +74,7 @@ namespace dbaui
             ::svx::ODataAccessDescriptor    aDroppedData;
 
             //for transfor the tablename
-            ::rtl::OUString                 sDefaultTableName;
+            OUString                 sDefaultTableName;
 
             String                          aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
@@ -96,7 +96,7 @@ namespace dbaui
                 The name of the dest data source.
         */
         void pasteTable( const TransferableDataHelper& _rTransData
-                        ,const ::rtl::OUString& _sDestDataSourceName
+                        ,const OUString& _sDestDataSourceName
                         ,const SharedConnection& _xConnection);
 
         /** pastes a table into the data source
@@ -109,7 +109,7 @@ namespace dbaui
         */
         void pasteTable( SotFormatStringId _nFormatId
                         ,const TransferableDataHelper& _rTransData
-                        ,const ::rtl::OUString& _sDestDataSourceName
+                        ,const OUString& _sDestDataSourceName
                         ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
@@ -133,7 +133,7 @@ namespace dbaui
                 The connection
         */
         void asyncCopyTagTable(  DropDescriptor& _rDesc
-                                ,const ::rtl::OUString& _sDestDataSourceName
+                                ,const OUString& _sDestDataSourceName
                                 ,const SharedConnection& _xConnection);
 
         /** copies a table which was constructed by tags like HTML or RTF
@@ -151,9 +151,9 @@ namespace dbaui
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
         sal_Bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
 
-        inline void                     SetTableNameForAppend( const ::rtl::OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
-        inline void                     ResetTableNameForAppend() { SetTableNameForAppend( ::rtl::OUString() ); }
-        inline const ::rtl::OUString&   GetTableNameForAppend() const { return m_sTableNameForAppend ;}
+        inline void                     SetTableNameForAppend( const OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
+        inline void                     ResetTableNameForAppend() { SetTableNameForAppend( OUString() ); }
+        inline const OUString&   GetTableNameForAppend() const { return m_sTableNameForAppend ;}
 
     private:
         /** pastes a table into the data source
@@ -164,21 +164,21 @@ namespace dbaui
         */
         void pasteTable(
             const ::svx::ODataAccessDescriptor& _rPasteData,
-            const ::rtl::OUString& _sDestDataSourceName,
+            const OUString& _sDestDataSourceName,
             const SharedConnection& _xDestConnection
         );
 
         /** insert a table into the data source. The source can eihter be a table or a query
         */
         void insertTable(
-            const ::rtl::OUString& i_rSourceDataSource,
+            const OUString& i_rSourceDataSource,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rSourceConnection,
-            const ::rtl::OUString& i_rCommand,
+            const OUString& i_rCommand,
             const sal_Int32 i_nCommandType,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& i_rSourceRows,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelection,
             const sal_Bool i_bBookmarkSelection,
-            const ::rtl::OUString& i_rDestDataSource,
+            const OUString& i_rDestDataSource,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_rDestConnection
         );
 

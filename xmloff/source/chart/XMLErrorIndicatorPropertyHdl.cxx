@@ -33,7 +33,7 @@ using namespace com::sun::star;
 XMLErrorIndicatorPropertyHdl::~XMLErrorIndicatorPropertyHdl()
 {}
 
-sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImpValue,
+sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const OUString& rStrImpValue,
                                                   uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
     bool bValue(false);
@@ -78,10 +78,10 @@ sal_Bool XMLErrorIndicatorPropertyHdl::importXML( const ::rtl::OUString& rStrImp
     return sal_True;
 }
 
-sal_Bool XMLErrorIndicatorPropertyHdl::exportXML( ::rtl::OUString& rStrExpValue,
+sal_Bool XMLErrorIndicatorPropertyHdl::exportXML( OUString& rStrExpValue,
                                                   const uno::Any& rValue, const SvXMLUnitConverter& /*rUnitConverter*/ ) const
 {
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     chart::ChartErrorIndicatorType eType;
 
     rValue >>= eType;

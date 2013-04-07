@@ -31,7 +31,7 @@ namespace dbaccess
     //====================================================================
     //= TokenComposer
     //====================================================================
-    struct TokenComposer : public ::std::unary_function< ::rtl::OUString, void >
+    struct TokenComposer : public ::std::unary_function< OUString, void >
     {
     private:
         #ifdef DBG_UTIL
@@ -39,10 +39,10 @@ namespace dbaccess
         #endif
 
     protected:
-        ::rtl::OUStringBuffer   m_aBuffer;
+        OUStringBuffer   m_aBuffer;
 
     public:
-        ::rtl::OUString getComposedAndClear()
+        OUString getComposedAndClear()
         {
             #ifdef DBG_UTIL
             m_bUsed = true;
@@ -70,12 +70,12 @@ namespace dbaccess
         {
         }
 
-        void operator() (const ::rtl::OUString& lhs)
+        void operator() (const OUString& lhs)
         {
             append(lhs);
         }
 
-        void append( const ::rtl::OUString& lhs )
+        void append( const OUString& lhs )
         {
             #ifdef DBG_UTIL
             OSL_ENSURE( !m_bUsed, "FilterCreator::append: already used up!" );
@@ -90,7 +90,7 @@ namespace dbaccess
         }
 
         /// append the given part. Only to be called when both the part and our buffer so far are not empty
-        virtual void appendNonEmptyToNonEmpty( const ::rtl::OUString& lhs ) = 0;
+        virtual void appendNonEmptyToNonEmpty( const OUString& lhs ) = 0;
     };
 
     //====================================================================
@@ -98,7 +98,7 @@ namespace dbaccess
     //====================================================================
     struct FilterCreator : public TokenComposer
     {
-        virtual void appendNonEmptyToNonEmpty( const ::rtl::OUString& lhs )
+        virtual void appendNonEmptyToNonEmpty( const OUString& lhs )
         {
             m_aBuffer.insert( 0, (sal_Unicode)' ' );
             m_aBuffer.insert( 0, (sal_Unicode)'(' );
@@ -113,7 +113,7 @@ namespace dbaccess
     //====================================================================
     struct OrderCreator : public TokenComposer
     {
-        virtual void appendNonEmptyToNonEmpty( const ::rtl::OUString& lhs )
+        virtual void appendNonEmptyToNonEmpty( const OUString& lhs )
         {
             m_aBuffer.appendAscii( ", " );
             m_aBuffer.append( lhs );

@@ -63,7 +63,7 @@ private:
 
     Window* getParent() { return m_pParent; };
 
-    void setDescriptionText( const rtl::OUString &aText ) { m_aLabel1.SetText( aText ); };
+    void setDescriptionText( const OUString &aText ) { m_aLabel1.SetText( aText ); };
 
 };
 

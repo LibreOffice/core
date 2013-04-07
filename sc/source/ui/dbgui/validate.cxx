@@ -882,7 +882,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 
     // Use static SfxApplication method to bring up selector dialog for
     // choosing a script
-    ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
+    OUString aScriptURL = SfxApplication::ChooseScript();
 
     Application::SetDefDialogParent( pOld );
 

@@ -54,20 +54,20 @@ SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException 
     xRange->setStyle( style );
 }
 
-rtl::OUString
+OUString
 SwVbaParagraph::getServiceImplName()
 {
-    return rtl::OUString("SwVbaParagraph");
+    return OUString("SwVbaParagraph");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaParagraph::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Paragraph" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Paragraph" );
     }
     return aServiceNames;
 }
@@ -100,7 +100,7 @@ public:
         while( xParEnum->hasMoreElements() )
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xParEnum->nextElement(), uno::UNO_QUERY_THROW );
-            if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.Paragraph") ) )
+            if( xServiceInfo->supportsService( OUString("com.sun.star.text.Paragraph") ) )
             {
                 nCount++;
             }
@@ -116,7 +116,7 @@ public:
             while( xParEnum->hasMoreElements() )
             {
                 uno::Reference< lang::XServiceInfo > xServiceInfo( xParEnum->nextElement(), uno::UNO_QUERY_THROW );
-                if( xServiceInfo->supportsService( rtl::OUString("com.sun.star.text.Paragraph") ) )
+                if( xServiceInfo->supportsService( OUString("com.sun.star.text.Paragraph") ) )
                 {
                     if( Index == nCount )
                         return uno::makeAny( xServiceInfo );
@@ -157,20 +157,20 @@ SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaParagraphs::getServiceImplName()
 {
-    return rtl::OUString("SwVbaParagraphs");
+    return OUString("SwVbaParagraphs");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaParagraphs::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Paragraphs");
+        sNames[0] = OUString("ooo.vba.word.Paragraphs");
     }
     return sNames;
 }

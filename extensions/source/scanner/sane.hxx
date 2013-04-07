@@ -147,7 +147,7 @@ public:
     inline int      GetOptionElements( int n );
     int             GetOptionByName( const char* );
     sal_Bool            GetOptionValue( int, sal_Bool& );
-    sal_Bool            GetOptionValue( int, rtl::OString& );
+    sal_Bool            GetOptionValue( int, OString& );
     sal_Bool            GetOptionValue( int, double&, int nElement = 0 );
     sal_Bool            GetOptionValue( int, double* );
 

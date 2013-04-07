@@ -30,7 +30,7 @@ namespace xls {
 
 struct QueryTableModel : public AutoFormatModel
 {
-    ::rtl::OUString     maDefName;          /// Defined name containing the target cell range.
+    OUString     maDefName;          /// Defined name containing the target cell range.
     sal_Int32           mnConnId;           /// Identifier of the external connection used to query the data.
     sal_Int32           mnGrowShrinkType;   /// Behaviour when source data size changes.
     bool                mbHeaders;          /// True = source data contains a header row.

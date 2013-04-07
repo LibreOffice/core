@@ -106,7 +106,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::svxform;
 
-::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
+OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
     sal_uInt16 nClassNameResourceId = 0;
 
@@ -182,7 +182,7 @@ using namespace ::svxform;
             nClassNameResourceId = RID_STR_CONTROL; break;
     }
 
-    return ::rtl::OUString( String( SVX_RES( nClassNameResourceId ) ) );
+    return OUString( String( SVX_RES( nClassNameResourceId ) ) );
 }
 
 //========================================================================
@@ -208,7 +208,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString("com.sun.star.frame.Frame") ), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(OUString("com.sun.star.frame.Frame") ), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             // create an intermediate window, which is to be the container window of the frame
@@ -221,7 +221,7 @@ FmPropBrw::FmPropBrw( const Reference< XMultiServiceFactory >& _xORB, SfxBinding
             m_xFrameContainerWindow = VCLUnoHelper::GetInterface ( pContainerWindow );
 
             m_xMeAsFrame->initialize( m_xFrameContainerWindow );
-            m_xMeAsFrame->setName(::rtl::OUString("form property browser") );
+            m_xMeAsFrame->setName(OUString("form property browser") );
             if ( _pBindings->GetDispatcher() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFramesSupplier >
@@ -282,10 +282,10 @@ FmPropBrw::~FmPropBrw()
         Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const ::rtl::OUString pProps[] = { ::rtl::OUString( "ContextDocument" )
-                                             , ::rtl::OUString( "DialogParentWindow" )
-                                             , ::rtl::OUString( "ControlContext" )
-                                             , ::rtl::OUString( "ControlShapeAccess" ) };
+            const OUString pProps[] = { OUString( "ContextDocument" )
+                                             , OUString( "DialogParentWindow" )
+                                             , OUString( "ControlContext" )
+                                             , OUString( "ControlShapeAccess" ) };
             for ( size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i )
                 xName->removeByName( pProps[i] );
         }
@@ -298,9 +298,9 @@ FmPropBrw::~FmPropBrw()
 }
 
 //-----------------------------------------------------------------------
-::rtl::OUString FmPropBrw::getCurrentPage() const
+OUString FmPropBrw::getCurrentPage() const
 {
-    ::rtl::OUString sCurrentPage;
+    OUString sCurrentPage;
     try
     {
         if ( m_xBrowserController.is() )
@@ -512,8 +512,8 @@ namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
-        const ::rtl::OUString sConfigName( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" );
-        const ::rtl::OUString sPropertyName( "DirectHelp" );
+        const OUString sConfigName( "/org.openoffice.Office.Common/Forms/PropertyBrowser/" );
+        const OUString sPropertyName( "DirectHelp" );
 
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
@@ -564,10 +564,10 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // a ComponentContext for the
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( ::rtl::OUString( "ContextDocument" ), makeAny( xDocument ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( "DialogParentWindow" ), makeAny( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( "ControlContext" ), makeAny( xControlContext ) ),
-        ::cppu::ContextEntry_Init( ::rtl::OUString( "ControlShapeAccess" ), makeAny( xControlMap ) )
+        ::cppu::ContextEntry_Init( OUString( "ContextDocument" ), makeAny( xDocument ) ),
+        ::cppu::ContextEntry_Init( OUString( "DialogParentWindow" ), makeAny( xParentWindow ) ),
+        ::cppu::ContextEntry_Init( OUString( "ControlContext" ), makeAny( xControlContext ) ),
+        ::cppu::ContextEntry_Init( OUString( "ControlShapeAccess" ), makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
@@ -589,7 +589,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
 
     if ( !m_xBrowserController.is() )
     {
-        ::rtl::OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
+        OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
         ShowServiceNotAvailableError( GetParent(), sServiceName, sal_True );
     }
     else

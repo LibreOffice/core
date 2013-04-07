@@ -39,7 +39,7 @@ namespace rptxml
     using namespace ::com::sun::star::report;
     using namespace ::com::sun::star::xml::sax;
 
-    sal_uInt16 lcl_getKeepTogetherOption(const ::rtl::OUString& _sValue)
+    sal_uInt16 lcl_getKeepTogetherOption(const OUString& _sValue)
     {
         sal_uInt16 nRet = report::KeepTogether::NO;
         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetKeepTogetherOptions();
@@ -50,7 +50,7 @@ DBG_NAME( rpt_OXMLGroup )
 
 OXMLGroup::OXMLGroup( ORptFilter& _rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ) :
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
@@ -67,13 +67,13 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
     const SvXMLTokenMap& rTokenMap = _rImport.GetGroupElemTokenMap();
     m_xGroup->setSortAscending(sal_False);// the default value has to be set
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        const ::rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        ::rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         try
         {
@@ -94,15 +94,15 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                         if ( nLen )
                         {
 
-                            const static ::rtl::OUString s_sChanged(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
+                            const static OUString s_sChanged(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
                             sal_Int32 nPos = sValue.indexOf(s_sChanged);
                             if ( nPos == -1 )
                                 nPos = 5;
                             else
                             {
                                 nPos = s_sChanged.getLength();
-                                static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
-                                static ::rtl::OUString s_sSingleQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
+                                static OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                                static OUString s_sSingleQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
                                 sal_Int32 nIndex = sValue.indexOf(s_sQuote,nPos);
                                 while ( nIndex > -1 )
                                 {
@@ -117,49 +117,49 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             if ( aFind != aFunctions.end() )
                             {
                                 sal_Int32 nIndex = 0;
-                                const ::rtl::OUString sCompleteFormula = aFind->second->getFormula();
-                                ::rtl::OUString sExpression = sCompleteFormula.getToken(1,'[',nIndex);
+                                const OUString sCompleteFormula = aFind->second->getFormula();
+                                OUString sExpression = sCompleteFormula.getToken(1,'[',nIndex);
                                 nIndex = 0;
                                 sExpression = sExpression.getToken(0,']',nIndex);
                                 nIndex = 0;
-                                const ::rtl::OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
+                                const OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
-                                if ( sFormula ==::rtl::OUString("rpt:LEFT"))
+                                if ( sFormula ==OUString("rpt:LEFT"))
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
-                                    ::rtl::OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
+                                    OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
                                     nIndex = 0;
                                     sInterval = sInterval.getToken(0,')',nIndex);
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
-                                else if ( sFormula == ::rtl::OUString("rpt:YEAR"))
+                                else if ( sFormula == OUString("rpt:YEAR"))
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula == ::rtl::OUString("rpt:MONTH"))
+                                else if ( sFormula == OUString("rpt:MONTH"))
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
-                                else if ( sCompleteFormula.matchIgnoreAsciiCase(::rtl::OUString("rpt:INT((MONTH"),0)
+                                else if ( sCompleteFormula.matchIgnoreAsciiCase(OUString("rpt:INT((MONTH"),0)
                                        && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",8) )
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
-                                else if ( sFormula ==::rtl::OUString("rpt:WEEK"))
+                                else if ( sFormula ==OUString("rpt:WEEK"))
                                     nGroupOn = report::GroupOn::WEEK;
-                                else if ( sFormula ==::rtl::OUString("rpt:DAY"))
+                                else if ( sFormula ==OUString("rpt:DAY"))
                                     nGroupOn = report::GroupOn::DAY;
-                                else if ( sFormula ==::rtl::OUString("rpt:HOUR"))
+                                else if ( sFormula ==OUString("rpt:HOUR"))
                                     nGroupOn = report::GroupOn::HOUR;
-                                else if ( sFormula ==::rtl::OUString("rpt:MINUTE"))
+                                else if ( sFormula ==OUString("rpt:MINUTE"))
                                     nGroupOn = report::GroupOn::MINUTE;
-                                else if ( sFormula ==::rtl::OUString("rpt:INT"))
+                                else if ( sFormula ==OUString("rpt:INT"))
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
-                                    sExpression = sExpression.copy(::rtl::OUString("INT_count_").getLength());
+                                    sExpression = sExpression.copy(OUString("INT_count_").getLength());
 
                                     nIndex = 0;
-                                    ::rtl::OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);
+                                    OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);
                                     nIndex = 0;
                                     sInterval = sInterval.getToken(0,')',nIndex);
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
@@ -197,7 +197,7 @@ OXMLGroup::~OXMLGroup()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLGroup::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

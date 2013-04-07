@@ -56,7 +56,6 @@
 namespace {
 
 using css::uno::Reference;
-using ::rtl::OUString;
 
 class EmptyNodeList: public ::cppu::WeakImplHelper1< css::xml::dom::XNodeList >
 {
@@ -90,7 +89,7 @@ css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
         static_cast< ::cppu::OWeakObject * >(this));
 }
 
-::rtl::OUString getNodeValue(
+OUString getNodeValue(
     css::uno::Reference< css::xml::dom::XNode > const & node)
 {
     OSL_ASSERT(node.is());
@@ -122,7 +121,7 @@ public:
      */
     ExtensionDescription(
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
-        const ::rtl::OUString& installDir,
+        const OUString& installDir,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
     ~ExtensionDescription();
@@ -132,7 +131,7 @@ public:
         return m_xRoot;
     }
 
-    ::rtl::OUString getExtensionRootUrl() const
+    OUString getExtensionRootUrl() const
     {
         return m_sExtensionRootUrl;
     }
@@ -140,7 +139,7 @@ public:
 
 private:
     css::uno::Reference<css::xml::dom::XNode> m_xRoot;
-    ::rtl::OUString m_sExtensionRootUrl;
+    OUString m_sExtensionRootUrl;
 };
 
 class NoDescriptionException
@@ -357,11 +356,11 @@ DescriptionInfoset::DescriptionInfoset(
 
 DescriptionInfoset::~DescriptionInfoset() {}
 
-::boost::optional< ::rtl::OUString > DescriptionInfoset::getIdentifier() const {
+::boost::optional< OUString > DescriptionInfoset::getIdentifier() const {
     return getOptionalValue("desc:identifier/@value");
 }
 
-::rtl::OUString DescriptionInfoset::getNodeValueFromExpression(::rtl::OUString const & expression) const
+OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
@@ -371,7 +370,7 @@ DescriptionInfoset::~DescriptionInfoset() {}
             // ignore
         }
     }
-    return n.is() ? getNodeValue(n) : ::rtl::OUString();
+    return n.is() ? getNodeValue(n) : OUString();
 }
 
 void DescriptionInfoset::checkBlacklist() const
@@ -392,8 +391,8 @@ void DescriptionInfoset::checkBlacklist() const
 
         css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
         css::beans::PropertyValue prop;
-        prop.Name = ::rtl::OUString("nodepath");
-        prop.Value <<= ::rtl::OUString("/org.openoffice.Office.ExtensionDependencies/Extensions");
+        prop.Name = OUString("nodepath");
+        prop.Value <<= OUString("/org.openoffice.Office.ExtensionDependencies/Extensions");
         args[0] <<= prop;
 
         css::uno::Reference< css::container::XNameAccess > blacklist(
@@ -407,19 +406,19 @@ void DescriptionInfoset::checkBlacklist() const
 
             css::uno::Any anyValue = extProps->getPropertyValue("Versions");
 
-            css::uno::Sequence< ::rtl::OUString > blversions;
+            css::uno::Sequence< OUString > blversions;
             anyValue >>= blversions;
 
             // check if the current version requires further dependency checks from the blacklist
             if (checkBlacklistVersion(currentversion, blversions)) {
                 anyValue = extProps->getPropertyValue("Dependencies");
-                ::rtl::OUString udeps;
+                OUString udeps;
                 anyValue >>= udeps;
 
                 if (udeps.getLength() == 0)
                     return; // nothing todo
 
-                ::rtl::OString xmlDependencies = ::rtl::OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
+                OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
 
                 css::uno::Reference< css::xml::dom::XDocumentBuilder> docbuilder(
                     manager->createInstanceWithContext("com.sun.star.xml.dom.DocumentBuilder", m_context),
@@ -467,8 +466,8 @@ void DescriptionInfoset::checkBlacklist() const
 }
 
 bool DescriptionInfoset::checkBlacklistVersion(
-    ::rtl::OUString currentversion,
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & versions) const
+    OUString currentversion,
+    ::com::sun::star::uno::Sequence< OUString > const & versions) const
 {
     sal_Int32 nLen = versions.getLength();
     for (sal_Int32 i=0; i<nLen; i++) {
@@ -479,12 +478,12 @@ bool DescriptionInfoset::checkBlacklistVersion(
     return false;
 }
 
-::rtl::OUString DescriptionInfoset::getVersion() const
+OUString DescriptionInfoset::getVersion() const
 {
     return getNodeValueFromExpression( "desc:version/@value" );
 }
 
-css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getSupportedPlaforms() const
+css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
 {
     //When there is no description.xml then we assume that we support all platforms
     if (! m_element.is())
@@ -501,13 +500,13 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getSupportedPlaforms()
     }
 
     //There is a platform element.
-    const ::rtl::OUString value = getNodeValueFromExpression("desc:platform/@value");
+    const OUString value = getNodeValueFromExpression("desc:platform/@value");
     //parse the string, it can contained multiple strings separated by commas
-    ::std::vector< ::rtl::OUString> vec;
+    ::std::vector< OUString> vec;
     sal_Int32 nIndex = 0;
     do
     {
-        ::rtl::OUString aToken = value.getToken( 0, ',', nIndex );
+        OUString aToken = value.getToken( 0, ',', nIndex );
         aToken = aToken.trim();
         if (!aToken.isEmpty())
             vec.push_back(aToken);
@@ -533,21 +532,21 @@ DescriptionInfoset::getDependencies() const {
     return new EmptyNodeList;
 }
 
-css::uno::Sequence< ::rtl::OUString >
+css::uno::Sequence< OUString >
 DescriptionInfoset::getUpdateInformationUrls() const {
     return getUrls("desc:update-information/desc:src/@xlink:href");
 }
 
-css::uno::Sequence< ::rtl::OUString >
+css::uno::Sequence< OUString >
 DescriptionInfoset::getUpdateDownloadUrls() const
 {
     return getUrls("desc:update-download/desc:src/@xlink:href");
 }
 
-::rtl::OUString DescriptionInfoset::getIconURL( sal_Bool bHighContrast ) const
+OUString DescriptionInfoset::getIconURL( sal_Bool bHighContrast ) const
 {
-    css::uno::Sequence< ::rtl::OUString > aStrList = getUrls( "desc:icon/desc:default/@xlink:href" );
-    css::uno::Sequence< ::rtl::OUString > aStrListHC = getUrls( "desc:icon/desc:high-contrast/@xlink:href" );
+    css::uno::Sequence< OUString > aStrList = getUrls( "desc:icon/desc:default/@xlink:href" );
+    css::uno::Sequence< OUString > aStrListHC = getUrls( "desc:icon/desc:high-contrast/@xlink:href" );
 
     if ( bHighContrast && aStrListHC.hasElements() && !aStrListHC[0].isEmpty() )
         return aStrListHC[0];
@@ -555,24 +554,24 @@ DescriptionInfoset::getUpdateDownloadUrls() const
     if ( aStrList.hasElements() && !aStrList[0].isEmpty() )
         return aStrList[0];
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::boost::optional< ::rtl::OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
+::boost::optional< OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
     const
 {
     bool bParentExists = false;
-    const ::rtl::OUString sURL (getLocalizedHREFAttrFromChild("/desc:description/desc:update-website", &bParentExists ));
+    const OUString sURL (getLocalizedHREFAttrFromChild("/desc:description/desc:update-website", &bParentExists ));
 
     if (!sURL.isEmpty())
-        return ::boost::optional< ::rtl::OUString >(sURL);
+        return ::boost::optional< OUString >(sURL);
     else
-        return bParentExists ? ::boost::optional< ::rtl::OUString >(::rtl::OUString()) :
-            ::boost::optional< ::rtl::OUString >();
+        return bParentExists ? ::boost::optional< OUString >(OUString()) :
+            ::boost::optional< OUString >();
 }
 
-::boost::optional< ::rtl::OUString > DescriptionInfoset::getOptionalValue(
-    ::rtl::OUString const & expression) const
+::boost::optional< OUString > DescriptionInfoset::getOptionalValue(
+    OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
@@ -583,12 +582,12 @@ DescriptionInfoset::getUpdateDownloadUrls() const
         }
     }
     return n.is()
-        ? ::boost::optional< ::rtl::OUString >(getNodeValue(n))
-        : ::boost::optional< ::rtl::OUString >();
+        ? ::boost::optional< OUString >(getNodeValue(n))
+        : ::boost::optional< OUString >();
 }
 
-css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
-    ::rtl::OUString const & expression) const
+css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
+    OUString const & expression) const
 {
     css::uno::Reference< css::xml::dom::XNodeList > ns;
     if (m_element.is()) {
@@ -598,23 +597,23 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
             // ignore
         }
     }
-    css::uno::Sequence< ::rtl::OUString > urls(ns.is() ? ns->getLength() : 0);
+    css::uno::Sequence< OUString > urls(ns.is() ? ns->getLength() : 0);
     for (::sal_Int32 i = 0; i < urls.getLength(); ++i) {
         urls[i] = getNodeValue(ns->item(i));
     }
     return urls;
 }
 
-::std::pair< ::rtl::OUString, ::rtl::OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
+::std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
 {
     css::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild("desc:publisher");
 
-    ::rtl::OUString sPublisherName;
-    ::rtl::OUString sURL;
+    OUString sPublisherName;
+    OUString sURL;
     if (node.is())
     {
-        const ::rtl::OUString exp1("text()");
+        const OUString exp1("text()");
         css::uno::Reference< css::xml::dom::XNode > xPathName;
         try {
             xPathName = m_xpath->selectSingleNode(node, exp1);
@@ -625,7 +624,7 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         if (xPathName.is())
             sPublisherName = xPathName->getNodeValue();
 
-        const ::rtl::OUString exp2("@xlink:href");
+        const OUString exp2("@xlink:href");
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, exp2);
@@ -639,18 +638,18 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
     return ::std::make_pair(sPublisherName, sURL);
 }
 
-::rtl::OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
+OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
 {
     return getLocalizedHREFAttrFromChild("/desc:description/desc:release-notes", NULL);
 }
 
-::rtl::OUString DescriptionInfoset::getLocalizedDisplayName() const
+OUString DescriptionInfoset::getLocalizedDisplayName() const
 {
     css::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild("desc:display-name");
     if (node.is())
     {
-        const ::rtl::OUString exp("text()");
+        const OUString exp("text()");
         css::uno::Reference< css::xml::dom::XNode > xtext;
         try {
             xtext = m_xpath->selectSingleNode(node, exp);
@@ -660,10 +659,10 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         if (xtext.is())
             return xtext->getNodeValue();
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString DescriptionInfoset::getLocalizedLicenseURL() const
+OUString DescriptionInfoset::getLocalizedLicenseURL() const
 {
     return getLocalizedHREFAttrFromChild("/desc:description/desc:registration/desc:simple-license", NULL);
 
@@ -686,13 +685,13 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
             attributes.acceptBy =
                 getNodeValueFromExpression("/desc:description/desc:registration/desc:simple-license/@accept-by");
 
-            ::boost::optional< ::rtl::OUString > suppressOnUpdate = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-on-update");
+            ::boost::optional< OUString > suppressOnUpdate = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-on-update");
             if (suppressOnUpdate)
                 attributes.suppressOnUpdate = (*suppressOnUpdate).trim().equalsIgnoreAsciiCase("true");
             else
                 attributes.suppressOnUpdate = false;
 
-            ::boost::optional< ::rtl::OUString > suppressIfRequired = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-if-required");
+            ::boost::optional< OUString > suppressIfRequired = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-if-required");
             if (suppressIfRequired)
                 attributes.suppressIfRequired = (*suppressIfRequired).trim().equalsIgnoreAsciiCase("true");
             else
@@ -704,13 +703,13 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
     return ::boost::optional<SimpleLicenseAttributes>();
 }
 
-::rtl::OUString DescriptionInfoset::getLocalizedDescriptionURL() const
+OUString DescriptionInfoset::getLocalizedDescriptionURL() const
 {
     return getLocalizedHREFAttrFromChild("/desc:description/desc:extension-description", NULL);
 }
 
 css::uno::Reference< css::xml::dom::XNode >
-DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
+DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
 {
     if ( ! m_element.is() || sParent.isEmpty())
         return css::uno::Reference< css::xml::dom::XNode > ();
@@ -756,7 +755,7 @@ DescriptionInfoset::matchLanguageTag(
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
     //first try exact match for lang
-    const ::rtl::OUString exp1("*[@lang=\"" + rTag + "\"]");
+    const OUString exp1("*[@lang=\"" + rTag + "\"]");
     try {
         nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
     } catch (const css::xml::xpath::XPathException &) {
@@ -767,7 +766,7 @@ DescriptionInfoset::matchLanguageTag(
     //example en  matches in en-US-montana, en-US, en-montana
     if (!nodeMatch.is())
     {
-        const ::rtl::OUString exp2(
+        const OUString exp2(
             "*[starts-with(@lang,\"" + rTag + "-\")]");
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
@@ -794,7 +793,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         if (nodeDefault.is())
         {
             //The old way
-            const ::rtl::OUString exp1("desc:license-text[@license-id = \""
+            const OUString exp1("desc:license-text[@license-id = \""
                 + nodeDefault->getNodeValue()
                 + "\"]");
             try {
@@ -805,7 +804,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         }
     }
 
-    const ::rtl::OUString exp2("*[1]");
+    const OUString exp2("*[1]");
     try {
         return m_xpath->selectSingleNode(xParent, exp2);
     } catch (const css::xml::xpath::XPathException &) {
@@ -814,19 +813,19 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
     }
 }
 
-::rtl::OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
-    ::rtl::OUString const & sXPathParent, bool * out_bParentExists)
+OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
+    OUString const & sXPathParent, bool * out_bParentExists)
     const
 {
     css::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild(sXPathParent);
 
-    ::rtl::OUString sURL;
+    OUString sURL;
     if (node.is())
     {
         if (out_bParentExists)
             *out_bParentExists = true;
-        const ::rtl::OUString exp("@xlink:href");
+        const OUString exp("@xlink:href");
         css::uno::Reference< css::xml::dom::XNode > xURL;
         try {
             xURL = m_xpath->selectSingleNode(node, exp);

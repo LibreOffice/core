@@ -104,9 +104,9 @@ public:
 
     /** Returns the complete DDE link data of this DDE item. */
     bool                getDdeLinkData(
-                            ::rtl::OUString& orDdeServer,
-                            ::rtl::OUString& orDdeTopic,
-                            ::rtl::OUString& orDdeItem );
+                            OUString& orDdeServer,
+                            OUString& orDdeTopic,
+                            OUString& orDdeItem );
 
 private:
     /** Sets the size of the result matrix. */
@@ -236,11 +236,11 @@ public:
     inline bool         isInternalLink() const { return (meLinkType == LINKTYPE_SELF) || (meLinkType == LINKTYPE_INTERNAL); }
 
     /** Returns the relation identifier for the external link fragment. */
-    inline const ::rtl::OUString& getRelId() const { return maRelId; }
+    inline const OUString& getRelId() const { return maRelId; }
     /** Returns the class name of this external link. */
-    inline const ::rtl::OUString& getClassName() const { return maClassName; }
+    inline const OUString& getClassName() const { return maClassName; }
     /** Returns the target URL of this external link. */
-    inline const ::rtl::OUString& getTargetUrl() const { return maTargetUrl; }
+    inline const OUString& getTargetUrl() const { return maTargetUrl; }
     /** Returns the link info needed by the XML formula parser. */
     ::com::sun::star::sheet::ExternalLinkInfo getLinkInfo() const;
 
@@ -262,12 +262,12 @@ public:
     ExternalNameRef     getNameByIndex( sal_Int32 nIndex ) const;
 
 private:
-    void                setExternalTargetUrl( const ::rtl::OUString& rTargetUrl, const ::rtl::OUString& rTargetType );
-    void                setDdeOleTargetUrl( const ::rtl::OUString& rClassName, const ::rtl::OUString& rTargetUrl, ExternalLinkType eLinkType );
-    void                parseExternalReference( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
+    void                setExternalTargetUrl( const OUString& rTargetUrl, const OUString& rTargetType );
+    void                setDdeOleTargetUrl( const OUString& rClassName, const OUString& rTargetUrl, ExternalLinkType eLinkType );
+    void                parseExternalReference( const ::oox::core::Relations& rRelations, const OUString& rRelId );
 
     /** Creates an external locument link and the sheet cache for the passed sheet name. */
-    void                insertExternalSheet( const ::rtl::OUString& rSheetName );
+    void                insertExternalSheet( const OUString& rSheetName );
 
     ExternalNameRef     createExternalName();
 
@@ -278,9 +278,9 @@ private:
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
     FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is LINKTYPE_LIBRARY.
-    ::rtl::OUString     maRelId;            /// Relation identifier for the external link fragment.
-    ::rtl::OUString     maClassName;        /// DDE service, OLE class name.
-    ::rtl::OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.
+    OUString     maRelId;            /// Relation identifier for the external link fragment.
+    OUString     maClassName;        /// DDE service, OLE class name.
+    OUString     maTargetUrl;        /// Target link, DDE topic, OLE target.
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalDocLink >
                         mxDocLink;          /// Interface for an external document.
     Int16Vector         maCalcSheets;       /// Internal sheet indexes.

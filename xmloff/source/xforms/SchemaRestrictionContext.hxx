@@ -42,16 +42,16 @@ class SchemaRestrictionContext : public TokenContext
 {
     com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository> mxRepository;
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> mxDataType;
-    ::rtl::OUString msTypeName;
-    ::rtl::OUString msBaseName;
+    OUString msTypeName;
+    OUString msBaseName;
 
 public:
 
     SchemaRestrictionContext( SvXMLImport& rImport,
                               sal_uInt16 nPrfx,
-                              const ::rtl::OUString& rLName,
+                              const OUString& rLName,
                               com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
-                              const ::rtl::OUString& sTypeName );
+                              const OUString& sTypeName );
     virtual ~SchemaRestrictionContext();
 
 
@@ -66,12 +66,12 @@ protected:
 
     virtual void HandleAttribute(
         sal_uInt16 nToken,
-        const rtl::OUString& rValue );
+        const OUString& rValue );
 
     virtual SvXMLImportContext* HandleChild(
         sal_uInt16 nToken,
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 

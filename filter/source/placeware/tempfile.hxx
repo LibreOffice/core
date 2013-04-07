@@ -26,14 +26,14 @@
 class TempFile : public osl::File
 {
 public:
-    TempFile( const rtl::OUString& aURL );
+    TempFile( const OUString& aURL );
     ~TempFile();
 
-    static rtl::OUString createTempFileURL();
-    rtl::OUString   getFileURL();
+    static OUString createTempFileURL();
+    OUString   getFileURL();
 
 private:
-    rtl::OUString   maURL;
+    OUString   maURL;
 };
 
 

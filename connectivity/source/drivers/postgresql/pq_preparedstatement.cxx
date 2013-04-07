@@ -78,12 +78,6 @@
 using osl::Mutex;
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringToOString;
-using rtl::OStringToOUString;
-using rtl::OUStringBuffer;
-using rtl::OStringBuffer;
-using rtl::OString;
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
@@ -176,13 +170,13 @@ static bool isOperator( char c )
     return *w != 0;
 }
 
-static bool isNamedParameterStart( const rtl::OString & o , int index )
+static bool isNamedParameterStart( const OString & o , int index )
 {
     return o[index] == ':' && (
         isWhitespace( o[index-1] ) || isOperator(o[index-1]) );
 }
 
-static bool isQuoted( const rtl::OString & str )
+static bool isQuoted( const OString & str )
 {
     return str[0] == '"' || str[0] == '\'';
 }
@@ -191,7 +185,7 @@ PreparedStatement::PreparedStatement(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< XConnection > & conn,
     struct ConnectionSettings *pSettings,
-    const ::rtl::OString & stmt )
+    const OString & stmt )
     : OComponentHelper( refMutex->mutex ),
       OPropertySetHelper( OComponentHelper::rBHelper ),
       m_connection( conn ),
@@ -354,7 +348,7 @@ void PreparedStatement::raiseSQLException(
         buf.appendAscii( "]" );
     }
     buf.append(
-        rtl::OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
     buf.appendAscii( " (caused by statement '" );
     buf.appendAscii( m_executedStatement.getStr() );
     buf.appendAscii( "')" );
@@ -448,7 +442,7 @@ sal_Bool PreparedStatement::execute( )
     m_executedStatement = buf.makeStringAndClear();
 
     m_lastResultset.clear();
-    m_lastTableInserted  = rtl::OUString();
+    m_lastTableInserted  = OUString();
 
     struct CommandData data;
     data.refMutex = m_refMutex;
@@ -490,7 +484,7 @@ void PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 }
 
 void PreparedStatement::setObjectNull(
-    sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& typeName )
+    sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
     throw (SQLException, RuntimeException)
 {
     (void) sqlType; (void) typeName;
@@ -578,7 +572,7 @@ void PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
     m_vars[parameterIndex-1] = buf.makeStringAndClear();
 }
 
-void PreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x )
+void PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
     throw (SQLException, RuntimeException)
 {
 //     printf( "setString %d %s\n ", parameterIndex,

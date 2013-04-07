@@ -46,15 +46,15 @@ namespace FORMS_MODULE_NAMESPACE
     //- registration helper
     //--------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString >*                OFormsModule::s_pImplementationNames = NULL;
-    Sequence< Sequence< ::rtl::OUString > >*    OFormsModule::s_pSupportedServices = NULL;
+    Sequence< OUString >*                OFormsModule::s_pImplementationNames = NULL;
+    Sequence< Sequence< OUString > >*    OFormsModule::s_pSupportedServices = NULL;
     Sequence< sal_Int64 >*                      OFormsModule::s_pCreationFunctionPointers = NULL;
     Sequence< sal_Int64 >*                      OFormsModule::s_pFactoryFunctionPointers = NULL;
 
     //--------------------------------------------------------------------------
     void OFormsModule::registerComponent(
-        const ::rtl::OUString& _rImplementationName,
-        const Sequence< ::rtl::OUString >& _rServiceNames,
+        const OUString& _rImplementationName,
+        const Sequence< OUString >& _rServiceNames,
         ComponentInstantiation _pCreateFunction,
         FactoryInstantiation _pFactoryFunction)
     {
@@ -62,8 +62,8 @@ namespace FORMS_MODULE_NAMESPACE
         {
             OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
                 "OFormsModule::registerComponent : inconsistent state (the pointers (1)) !");
-            s_pImplementationNames = new Sequence< ::rtl::OUString >;
-            s_pSupportedServices = new Sequence< Sequence< ::rtl::OUString > >;
+            s_pImplementationNames = new Sequence< OUString >;
+            s_pSupportedServices = new Sequence< Sequence< OUString > >;
             s_pCreationFunctionPointers = new Sequence< sal_Int64 >;
             s_pFactoryFunctionPointers = new Sequence< sal_Int64 >;
         }
@@ -88,7 +88,7 @@ namespace FORMS_MODULE_NAMESPACE
     }
 
     //--------------------------------------------------------------------------
-    void OFormsModule::revokeComponent(const ::rtl::OUString& _rImplementationName)
+    void OFormsModule::revokeComponent(const OUString& _rImplementationName)
     {
         if (!s_pImplementationNames)
         {
@@ -103,7 +103,7 @@ namespace FORMS_MODULE_NAMESPACE
             "OFormsModule::revokeComponent : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
-        const ::rtl::OUString* pImplNames = s_pImplementationNames->getConstArray();
+        const OUString* pImplNames = s_pImplementationNames->getConstArray();
         for (sal_Int32 i=0; i<nLen; ++i, ++pImplNames)
         {
             if (pImplNames->equals(_rImplementationName))
@@ -127,7 +127,7 @@ namespace FORMS_MODULE_NAMESPACE
 
     //--------------------------------------------------------------------------
     Reference< XInterface > OFormsModule::getComponentFactory(
-        const ::rtl::OUString& _rImplementationName,
+        const OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
         OSL_ENSURE(_rxServiceManager.is(), "OFormsModule::getComponentFactory : invalid argument (service manager) !");
@@ -150,8 +150,8 @@ namespace FORMS_MODULE_NAMESPACE
 
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
-        const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
-        const Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
+        const OUString* pImplName = s_pImplementationNames->getConstArray();
+        const Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
         const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
         const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
 

@@ -142,11 +142,11 @@ public:
 
     virtual ~CFileOpenDialog();
 
-    virtual void SAL_CALL setTitle(const rtl::OUString& aTitle);
+    virtual void SAL_CALL setTitle(const OUString& aTitle);
 
     // to set a filter string using the M$ format
     // e.g. FltName\0*.txt;*.rtf\0...\0\0
-    void SAL_CALL setFilter(const rtl::OUString& aFilter);
+    void SAL_CALL setFilter(const OUString& aFilter);
 
     // set the index of the current filter when the
     // dialog is about to shown, the index starts with 1
@@ -162,29 +162,29 @@ public:
     // set the name and optional the path of the
     // file that will be initially be shown when
     // the dialog will be displayed
-    virtual void SAL_CALL setDefaultName(const rtl::OUString& aName);
+    virtual void SAL_CALL setDefaultName(const OUString& aName);
 
     // set the initial directory
-    virtual void SAL_CALL setDisplayDirectory(const rtl::OUString& aDirectory);
+    virtual void SAL_CALL setDisplayDirectory(const OUString& aDirectory);
 
     // returns only the path of the selected file
-    virtual rtl::OUString SAL_CALL getLastDisplayDirectory() const;
+    virtual OUString SAL_CALL getLastDisplayDirectory() const;
 
     // returns the full file name including drive letter, path
     // file name and file extension
-    virtual rtl::OUString SAL_CALL getFullFileName() const;
+    virtual OUString SAL_CALL getFullFileName() const;
 
     // returns the file name and the file extension without
     // drive letter and path
-    rtl::OUString SAL_CALL getFileName() const;
+    OUString SAL_CALL getFileName() const;
 
     // returns the file extension of the selected file
-    rtl::OUString SAL_CALL getFileExtension();
+    OUString SAL_CALL getFileExtension();
 
     // set a default extension, only the first three letters of
     // the given extension will be used; the given extension
     // should not contain a '.'
-    void SAL_CALL setDefaultFileExtension(const rtl::OUString& aExtension);
+    void SAL_CALL setDefaultFileExtension(const OUString& aExtension);
 
     // enables or disables the multiselection mode for
     // the FileOpen/FileSave dialog
@@ -209,14 +209,14 @@ public:
     // including path and drive information
     // can be called only if the dialog is
     // already displayed
-    rtl::OUString SAL_CALL getCurrentFilePath() const;
+    OUString SAL_CALL getCurrentFilePath() const;
 
     // retrievs the currently selected folder
-    rtl::OUString SAL_CALL getCurrentFolderPath() const;
+    OUString SAL_CALL getCurrentFolderPath() const;
 
     // retrievs the currently selected file name
     // without drive and path
-    rtl::OUString SAL_CALL getCurrentFileName() const;
+    OUString SAL_CALL getCurrentFileName() const;
 
 protected:
     // have to be overwritten when subclasses
@@ -234,7 +234,7 @@ protected:
     virtual void SAL_CALL postModal(sal_Int16 nDialogResult);
 
     // message handler, to be overwritten by subclasses
-    virtual sal_uInt32 SAL_CALL onShareViolation(const rtl::OUString& aPathName);
+    virtual sal_uInt32 SAL_CALL onShareViolation(const OUString& aPathName);
     virtual sal_uInt32 SAL_CALL onFileOk();
     virtual void SAL_CALL onSelChanged(HWND hwndListBox);
     virtual void SAL_CALL onHelp();
@@ -276,14 +276,14 @@ protected:
 private:
     // FileOpen or FileSaveDialog
     bool            m_bFileOpenDialog;
-    rtl::OUString   m_dialogTitle;
-    rtl::OUString   m_displayDirectory;
-    rtl::OUString   m_defaultExtension;
+    OUString   m_dialogTitle;
+    OUString   m_displayDirectory;
+    OUString   m_defaultExtension;
 
-    mutable rtl::OUStringBuffer m_filterBuffer;
-    mutable rtl::OUStringBuffer m_fileTitleBuffer;
-    mutable rtl::OUStringBuffer m_helperBuffer;
-    mutable rtl::OUStringBuffer m_fileNameBuffer;
+    mutable OUStringBuffer m_filterBuffer;
+    mutable OUStringBuffer m_fileTitleBuffer;
+    mutable OUStringBuffer m_helperBuffer;
+    mutable OUStringBuffer m_fileNameBuffer;
 
     CGetFileNameWrapper m_GetFileNameWrapper;
 

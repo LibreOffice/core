@@ -308,7 +308,7 @@ sal_Bool AquaSalFrame::PostEvent( void *pData )
 }
 
 // -----------------------------------------------------------------------
-void AquaSalFrame::SetTitle(const rtl::OUString& rTitle)
+void AquaSalFrame::SetTitle(const OUString& rTitle)
 {
     if ( !mpWindow )
         return;
@@ -352,14 +352,14 @@ void AquaSalFrame::SetIcon( sal_uInt16 )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetRepresentedURL( const rtl::OUString& i_rDocURL )
+void AquaSalFrame::SetRepresentedURL( const OUString& i_rDocURL )
 {
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
     if( i_rDocURL.indexOfAsciiL( "file:", 5 ) == 0 )
     {
-        rtl::OUString aSysPath;
+        OUString aSysPath;
         osl_getSystemPathFromFileURL( i_rDocURL.pData, &aSysPath.pData );
         NSString* pStr = CreateNSString( aSysPath );
         if( pStr )
@@ -728,7 +728,7 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
     }
 }
 
-void AquaSalFrame::SetApplicationID( const rtl::OUString &/*rApplicationID*/ )
+void AquaSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 {
 }
 
@@ -1054,74 +1054,74 @@ void AquaSalFrame::EndExtTextInput( sal_uInt16 )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
+OUString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
-    static std::map< sal_uInt16, rtl::OUString > aKeyMap;
+    static std::map< sal_uInt16, OUString > aKeyMap;
     if( aKeyMap.empty() )
     {
         sal_uInt16 i;
         for( i = KEY_A; i <= KEY_Z; i++ )
-            aKeyMap[ i ] = rtl::OUString( sal_Unicode( 'A' + (i - KEY_A) ) );
+            aKeyMap[ i ] = OUString( sal_Unicode( 'A' + (i - KEY_A) ) );
         for( i = KEY_0; i <= KEY_9; i++ )
-            aKeyMap[ i ] = rtl::OUString( sal_Unicode( '0' + (i - KEY_0) ) );
+            aKeyMap[ i ] = OUString( sal_Unicode( '0' + (i - KEY_0) ) );
         for( i = KEY_F1; i <= KEY_F26; i++ )
         {
-            rtl::OUStringBuffer aKey( 3 );
+            OUStringBuffer aKey( 3 );
             aKey.append( sal_Unicode( 'F' ) );
             aKey.append( sal_Int32( i - KEY_F1 + 1 ) );
             aKeyMap[ i ] = aKey.makeStringAndClear();
         }
 
-        aKeyMap[ KEY_DOWN ]     = rtl::OUString( sal_Unicode( 0x21e3 ) );
-        aKeyMap[ KEY_UP ]       = rtl::OUString( sal_Unicode( 0x21e1 ) );
-        aKeyMap[ KEY_LEFT ]     = rtl::OUString( sal_Unicode( 0x21e0 ) );
-        aKeyMap[ KEY_RIGHT ]    = rtl::OUString( sal_Unicode( 0x21e2 ) );
-        aKeyMap[ KEY_HOME ]     = rtl::OUString( sal_Unicode( 0x2196 ) );
-        aKeyMap[ KEY_END ]      = rtl::OUString( sal_Unicode( 0x2198 ) );
-        aKeyMap[ KEY_PAGEUP ]   = rtl::OUString( sal_Unicode( 0x21de ) );
-        aKeyMap[ KEY_PAGEDOWN ] = rtl::OUString( sal_Unicode( 0x21df ) );
-        aKeyMap[ KEY_RETURN ]   = rtl::OUString( sal_Unicode( 0x21a9 ) );
-        aKeyMap[ KEY_ESCAPE ]   = rtl::OUString( "esc" );
-        aKeyMap[ KEY_TAB ]      = rtl::OUString( sal_Unicode( 0x21e5 ) );
-        aKeyMap[ KEY_BACKSPACE ]= rtl::OUString( sal_Unicode( 0x232b ) );
-        aKeyMap[ KEY_SPACE ]    = rtl::OUString( sal_Unicode( 0x2423 ) );
-        aKeyMap[ KEY_DELETE ]   = rtl::OUString( sal_Unicode( 0x2326 ) );
-        aKeyMap[ KEY_ADD ]      = rtl::OUString( sal_Unicode( '+' ) );
-        aKeyMap[ KEY_SUBTRACT ] = rtl::OUString( sal_Unicode( '-' ) );
-        aKeyMap[ KEY_DIVIDE ]   = rtl::OUString( sal_Unicode( '/' ) );
-        aKeyMap[ KEY_MULTIPLY ] = rtl::OUString( sal_Unicode( '*' ) );
-        aKeyMap[ KEY_POINT ]    = rtl::OUString( sal_Unicode( '.' ) );
-        aKeyMap[ KEY_COMMA ]    = rtl::OUString( sal_Unicode( ',' ) );
-        aKeyMap[ KEY_LESS ]     = rtl::OUString( sal_Unicode( '<' ) );
-        aKeyMap[ KEY_GREATER ]  = rtl::OUString( sal_Unicode( '>' ) );
-        aKeyMap[ KEY_EQUAL ]    = rtl::OUString( sal_Unicode( '=' ) );
-        aKeyMap[ KEY_OPEN ]     = rtl::OUString( sal_Unicode( 0x23cf ) );
+        aKeyMap[ KEY_DOWN ]     = OUString( sal_Unicode( 0x21e3 ) );
+        aKeyMap[ KEY_UP ]       = OUString( sal_Unicode( 0x21e1 ) );
+        aKeyMap[ KEY_LEFT ]     = OUString( sal_Unicode( 0x21e0 ) );
+        aKeyMap[ KEY_RIGHT ]    = OUString( sal_Unicode( 0x21e2 ) );
+        aKeyMap[ KEY_HOME ]     = OUString( sal_Unicode( 0x2196 ) );
+        aKeyMap[ KEY_END ]      = OUString( sal_Unicode( 0x2198 ) );
+        aKeyMap[ KEY_PAGEUP ]   = OUString( sal_Unicode( 0x21de ) );
+        aKeyMap[ KEY_PAGEDOWN ] = OUString( sal_Unicode( 0x21df ) );
+        aKeyMap[ KEY_RETURN ]   = OUString( sal_Unicode( 0x21a9 ) );
+        aKeyMap[ KEY_ESCAPE ]   = OUString( "esc" );
+        aKeyMap[ KEY_TAB ]      = OUString( sal_Unicode( 0x21e5 ) );
+        aKeyMap[ KEY_BACKSPACE ]= OUString( sal_Unicode( 0x232b ) );
+        aKeyMap[ KEY_SPACE ]    = OUString( sal_Unicode( 0x2423 ) );
+        aKeyMap[ KEY_DELETE ]   = OUString( sal_Unicode( 0x2326 ) );
+        aKeyMap[ KEY_ADD ]      = OUString( sal_Unicode( '+' ) );
+        aKeyMap[ KEY_SUBTRACT ] = OUString( sal_Unicode( '-' ) );
+        aKeyMap[ KEY_DIVIDE ]   = OUString( sal_Unicode( '/' ) );
+        aKeyMap[ KEY_MULTIPLY ] = OUString( sal_Unicode( '*' ) );
+        aKeyMap[ KEY_POINT ]    = OUString( sal_Unicode( '.' ) );
+        aKeyMap[ KEY_COMMA ]    = OUString( sal_Unicode( ',' ) );
+        aKeyMap[ KEY_LESS ]     = OUString( sal_Unicode( '<' ) );
+        aKeyMap[ KEY_GREATER ]  = OUString( sal_Unicode( '>' ) );
+        aKeyMap[ KEY_EQUAL ]    = OUString( sal_Unicode( '=' ) );
+        aKeyMap[ KEY_OPEN ]     = OUString( sal_Unicode( 0x23cf ) );
 
         /* yet unmapped KEYCODES:
-        aKeyMap[ KEY_INSERT ]   = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_CUT ]      = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_COPY ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_PASTE ]    = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_UNDO ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_REPEAT ]   = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_FIND ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_PROPERTIES ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_FRONT ]    = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_CONTEXTMENU ]    = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_MENU ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_HELP ]     = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_HANGUL_HANJA ]   = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_DECIMAL ]  = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_TILDE ]    = rtl::OUString( sal_Unicode( ) );
-        aKeyMap[ KEY_QUOTELEFT ]= rtl::OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_INSERT ]   = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_CUT ]      = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_COPY ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_PASTE ]    = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_UNDO ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_REPEAT ]   = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_FIND ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_PROPERTIES ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_FRONT ]    = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_CONTEXTMENU ]    = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_MENU ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_HELP ]     = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_HANGUL_HANJA ]   = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_DECIMAL ]  = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_TILDE ]    = OUString( sal_Unicode( ) );
+        aKeyMap[ KEY_QUOTELEFT ]= OUString( sal_Unicode( ) );
         */
 
     }
 
-    rtl::OUStringBuffer aResult( 16 );
+    OUStringBuffer aResult( 16 );
 
     sal_uInt16 nUnmodifiedCode = (nKeyCode & KEY_CODE);
-    std::map< sal_uInt16, rtl::OUString >::const_iterator it = aKeyMap.find( nUnmodifiedCode );
+    std::map< sal_uInt16, OUString >::const_iterator it = aKeyMap.find( nUnmodifiedCode );
     if( it != aKeyMap.end() )
     {
         if( (nKeyCode & KEY_SHIFT) != 0 )

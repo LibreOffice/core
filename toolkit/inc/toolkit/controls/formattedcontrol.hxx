@@ -68,7 +68,7 @@ namespace toolkit
         UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
 
         // ::com::sun::star::io::XPersistObject
-        ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::beans::XMultiPropertySet
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -84,7 +84,7 @@ namespace toolkit
         void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XPropertySet
-        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
         // UnoControlModel
         virtual void ImplNormalizePropertySequence(
@@ -106,7 +106,7 @@ namespace toolkit
     {
     public:
                             UnoFormattedFieldControl();
-        ::rtl::OUString     GetComponentServiceName();
+        OUString     GetComponentServiceName();
 
         // ::com::sun::star::awt::XTextListener
         void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);

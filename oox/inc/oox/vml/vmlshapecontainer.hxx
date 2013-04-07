@@ -70,10 +70,10 @@ public:
 
     /** Returns the shape template with the passed identifier.
         @param bDeep  True = searches in all group shapes too. */
-    const ShapeType*    getShapeTypeById( const ::rtl::OUString& rShapeId, bool bDeep ) const;
+    const ShapeType*    getShapeTypeById( const OUString& rShapeId, bool bDeep ) const;
     /** Returns the shape with the passed identifier.
         @param bDeep  True = searches in all group shapes too. */
-    const ShapeBase*    getShapeById( const ::rtl::OUString& rShapeId, bool bDeep ) const;
+    const ShapeBase*    getShapeById( const OUString& rShapeId, bool bDeep ) const;
 
     /** Searches for a shape type by using the passed functor that takes a
         constant reference of a ShapeType object. */
@@ -110,8 +110,8 @@ public:
 private:
     typedef RefVector< ShapeType >                  ShapeTypeVector;
     typedef RefVector< ShapeBase >                  ShapeVector;
-    typedef RefMap< ::rtl::OUString, ShapeType >    ShapeTypeMap;
-    typedef RefMap< ::rtl::OUString, ShapeBase >    ShapeMap;
+    typedef RefMap< OUString, ShapeType >    ShapeTypeMap;
+    typedef RefMap< OUString, ShapeBase >    ShapeMap;
 
     Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
     ShapeTypeVector     maTypes;            ///< All shape templates.

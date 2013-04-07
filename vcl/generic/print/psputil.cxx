@@ -158,7 +158,7 @@ WritePS (osl::File* pFile, const sal_Char* pString, sal_uInt64 nInLength)
 }
 
 sal_Bool
-WritePS (osl::File* pFile, const rtl::OString &rString)
+WritePS (osl::File* pFile, const OString &rString)
 {
     sal_uInt64 nInLength = rString.getLength();
     sal_uInt64 nOutLength = 0;
@@ -170,9 +170,9 @@ WritePS (osl::File* pFile, const rtl::OString &rString)
 }
 
 sal_Bool
-WritePS (osl::File* pFile, const rtl::OUString &rString)
+WritePS (osl::File* pFile, const OUString &rString)
 {
-    return WritePS (pFile, rtl::OUStringToOString(rString, RTL_TEXTENCODING_ASCII_US));
+    return WritePS (pFile, OUStringToOString(rString, RTL_TEXTENCODING_ASCII_US));
 }
 
 /*

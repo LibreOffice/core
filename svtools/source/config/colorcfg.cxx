@@ -43,7 +43,6 @@
 using namespace utl;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 namespace svtools
 {
@@ -63,32 +62,32 @@ class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue    m_aConfigValues[ColorConfigEntryCount];
     sal_Bool            m_bEditMode;
-    rtl::OUString       m_sIsVisible;
-    rtl::OUString       m_sLoadedScheme;
+    OUString       m_sIsVisible;
+    OUString       m_sLoadedScheme;
 
-    uno::Sequence< ::rtl::OUString> GetPropertyNames(const rtl::OUString& rScheme);
+    uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme);
 public:
     ColorConfig_Impl(sal_Bool bEditMode = sal_False);
     virtual ~ColorConfig_Impl();
 
-    void                            Load(const rtl::OUString& rScheme);
+    void                            Load(const OUString& rScheme);
     void                            CommitCurrentSchemeName();
     //changes the name of the current scheme but doesn't load it!
-    void                            SetCurrentSchemeName(const rtl::OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
+    void                            SetCurrentSchemeName(const OUString& rSchemeName) {m_sLoadedScheme = rSchemeName;}
     virtual void                    Commit();
-    virtual void                    Notify( const uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void                    Notify( const uno::Sequence<OUString>& aPropertyNames);
 
     const ColorConfigValue&         GetColorConfigValue(ColorConfigEntry eValue)
                                                             {return m_aConfigValues[eValue];}
     void                            SetColorConfigValue(ColorConfigEntry eValue,
                                                             const ColorConfigValue& rValue );
 
-    const rtl::OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
+    const OUString&            GetLoadedScheme() const {return m_sLoadedScheme;}
 
-    uno::Sequence< ::rtl::OUString> GetSchemeNames();
+    uno::Sequence< OUString> GetSchemeNames();
 
-    sal_Bool                        AddScheme(const rtl::OUString& rNode);
-    sal_Bool                        RemoveScheme(const rtl::OUString& rNode);
+    sal_Bool                        AddScheme(const OUString& rNode);
+    sal_Bool                        RemoveScheme(const OUString& rNode);
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
@@ -99,7 +98,7 @@ public:
     void ImplUpdateApplicationSettings();
 };
 
-uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString& rScheme)
+uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
 {
     uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
     OUString* pNames = aNames.getArray();
@@ -166,7 +165,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
     const int nCount = ColorConfigEntryCount;
     for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
     {
-        rtl::OUString sBaseName(sBase);
+        OUString sBaseName(sBase);
         sal_Int32 nPos = i / 4;
         sBaseName += OUString(cNames[nPos].cName, cNames[nPos].nLength, cNames[nPos].eEncoding);
         pNames[nIndex] += sBaseName;
@@ -189,10 +188,10 @@ ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     if(!m_bEditMode)
     {
         //try to register on the root node - if possible
-        uno::Sequence < ::rtl::OUString > aNames(1);
+        uno::Sequence < OUString > aNames(1);
         EnableNotification( aNames );
     }
-    Load(::rtl::OUString());
+    Load(OUString());
 
     ImplUpdateApplicationSettings();
 
@@ -207,23 +206,23 @@ ColorConfig_Impl::~ColorConfig_Impl()
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
 }
 
-void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
+void ColorConfig_Impl::Load(const OUString& rScheme)
 {
-    rtl::OUString sScheme(rScheme);
+    OUString sScheme(rScheme);
     if(sScheme.isEmpty())
     {
         //detect current scheme name
-        uno::Sequence < ::rtl::OUString > aCurrent(1);
+        uno::Sequence < OUString > aCurrent(1);
         aCurrent.getArray()[0] = "CurrentColorScheme";
         uno::Sequence< uno::Any > aCurrentVal = GetProperties( aCurrent );
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
     m_sLoadedScheme = sScheme;
     //
-    uno::Sequence < ::rtl::OUString > aColorNames = GetPropertyNames(sScheme);
+    uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
     uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
     const uno::Any* pColors = aColors.getConstArray();
-    const ::rtl::OUString* pColorNames = aColorNames.getConstArray();
+    const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
     for(int i = 0; i < 2 * ColorConfigEntryCount && aColors.getLength() > nIndex; i+= 2)
     {
@@ -243,16 +242,16 @@ void ColorConfig_Impl::Load(const rtl::OUString& rScheme)
 void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
     //loading via notification always uses the default setting
-    Load(::rtl::OUString());
+    Load(OUString());
     NotifyListeners(0);
 }
 
 void ColorConfig_Impl::Commit()
 {
-    uno::Sequence < ::rtl::OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
+    uno::Sequence < OUString > aColorNames = GetPropertyNames(m_sLoadedScheme);
     uno::Sequence < beans::PropertyValue > aPropValues(aColorNames.getLength());
     beans::PropertyValue* pPropValues = aPropValues.getArray();
-    const ::rtl::OUString* pColorNames = aColorNames.getConstArray();
+    const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
     const uno::Type& rBoolType = ::getBooleanCppuType();
     for(int i = 0; i < 2 * ColorConfigEntryCount && aColorNames.getLength() > nIndex; i+= 2)
@@ -273,7 +272,7 @@ void ColorConfig_Impl::Commit()
              nIndex++;
         }
     }
-    rtl::OUString sNode("ColorSchemes");
+    OUString sNode("ColorSchemes");
     SetSetProperties(sNode, aPropValues);
 
     CommitCurrentSchemeName();
@@ -282,7 +281,7 @@ void ColorConfig_Impl::Commit()
 void ColorConfig_Impl::CommitCurrentSchemeName()
 {
     //save current scheme name
-    uno::Sequence < ::rtl::OUString > aCurrent(1);
+    uno::Sequence < OUString > aCurrent(1);
     aCurrent.getArray()[0] = "CurrentColorScheme";
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
@@ -298,12 +297,12 @@ void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorC
     }
 }
 
-uno::Sequence< ::rtl::OUString> ColorConfig_Impl::GetSchemeNames()
+uno::Sequence< OUString> ColorConfig_Impl::GetSchemeNames()
 {
     return GetNodeNames("ColorSchemes");
 }
 
-sal_Bool ColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
+sal_Bool ColorConfig_Impl::AddScheme(const OUString& rScheme)
 {
     if(ConfigItem::AddNode("ColorSchemes", rScheme))
     {
@@ -314,9 +313,9 @@ sal_Bool ColorConfig_Impl::AddScheme(const rtl::OUString& rScheme)
     return sal_False;
 }
 
-sal_Bool ColorConfig_Impl::RemoveScheme(const rtl::OUString& rScheme)
+sal_Bool ColorConfig_Impl::RemoveScheme(const OUString& rScheme)
 {
-    uno::Sequence< rtl::OUString > aElements(1);
+    uno::Sequence< OUString > aElements(1);
     aElements.getArray()[0] = rScheme;
     return ClearNodeElements("ColorSchemes", aElements);
 }
@@ -499,22 +498,22 @@ EditableColorConfig::~EditableColorConfig()
     delete m_pImpl;
 }
 
-uno::Sequence< ::rtl::OUString >  EditableColorConfig::GetSchemeNames() const
+uno::Sequence< OUString >  EditableColorConfig::GetSchemeNames() const
 {
     return m_pImpl->GetSchemeNames();
 }
 
-void EditableColorConfig::DeleteScheme(const ::rtl::OUString& rScheme )
+void EditableColorConfig::DeleteScheme(const OUString& rScheme )
 {
     m_pImpl->RemoveScheme(rScheme);
 }
 
-void EditableColorConfig::AddScheme(const ::rtl::OUString& rScheme )
+void EditableColorConfig::AddScheme(const OUString& rScheme )
 {
     m_pImpl->AddScheme(rScheme);
 }
 
-sal_Bool EditableColorConfig::LoadScheme(const ::rtl::OUString& rScheme )
+sal_Bool EditableColorConfig::LoadScheme(const OUString& rScheme )
 {
     if(m_bModified)
         m_pImpl->SetModified();
@@ -527,13 +526,13 @@ sal_Bool EditableColorConfig::LoadScheme(const ::rtl::OUString& rScheme )
     return sal_True;
 }
 
-const ::rtl::OUString& EditableColorConfig::GetCurrentSchemeName()const
+const OUString& EditableColorConfig::GetCurrentSchemeName()const
 {
     return m_pImpl->GetLoadedScheme();
 }
 
 // Changes the name of the current scheme but doesn't load it!
-void EditableColorConfig::SetCurrentSchemeName(const ::rtl::OUString& rScheme)
+void EditableColorConfig::SetCurrentSchemeName(const OUString& rScheme)
 {
     m_pImpl->SetCurrentSchemeName(rScheme);
     m_pImpl->CommitCurrentSchemeName();

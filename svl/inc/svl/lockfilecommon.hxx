@@ -45,21 +45,21 @@ class SVL_DLLPUBLIC LockFileCommon
 {
 protected:
     ::osl::Mutex m_aMutex;
-    ::rtl::OUString m_aURL;
+    OUString m_aURL;
 
     INetURLObject ResolveLinks( const INetURLObject& aDocURL );
 
 public:
-    LockFileCommon( const ::rtl::OUString& aOrigURL, const ::rtl::OUString& aPrefix );
+    LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix );
     ~LockFileCommon();
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    static ::rtl::OUString ParseName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
-    static ::rtl::OUString EscapeCharacters( const ::rtl::OUString& aSource );
-    static ::rtl::OUString GetOOOUserName();
-    static ::rtl::OUString GetCurrentLocalTime();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > GenerateOwnEntry();
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > ParseList( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer );
+    static ::com::sun::star::uno::Sequence< OUString > ParseEntry( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
+    static OUString ParseName( const ::com::sun::star::uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& o_nCurPos );
+    static OUString EscapeCharacters( const OUString& aSource );
+    static OUString GetOOOUserName();
+    static OUString GetCurrentLocalTime();
+    static ::com::sun::star::uno::Sequence< OUString > GenerateOwnEntry();
 };
 
 }

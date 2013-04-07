@@ -27,7 +27,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 //=========================================================================
 //=========================================================================
@@ -382,7 +381,7 @@ UcbContentProviderProxy::getContentProvider()
     }
 
     OSL_ENSURE( m_xProvider.is(),
-        rtl::OStringBuffer("UcbContentProviderProxy::getContentProvider - No provider for '").append(rtl::OUStringToOString(m_aService, osl_getThreadTextEncoding())).append(".").getStr() );
+        OStringBuffer("UcbContentProviderProxy::getContentProvider - No provider for '").append(OUStringToOString(m_aService, osl_getThreadTextEncoding())).append(".").getStr() );
     return m_xTargetProvider;
 }
 

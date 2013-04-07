@@ -650,7 +650,7 @@ public:
     // Edits the Entry's first StringItem, 0 == Cursor
     void            EditEntry( SvTreeListEntry* pEntry = NULL );
     virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     virtual void    Paint( const Rectangle& rRect );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );

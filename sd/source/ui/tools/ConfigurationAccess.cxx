@@ -29,7 +29,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sd { namespace tools {
 
@@ -130,8 +129,8 @@ Any ConfigurationAccess::GetConfigurationNode (
     catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            ::rtl::OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return Any();
@@ -180,7 +179,7 @@ void ConfigurationAccess::ForAll (
 
 void ConfigurationAccess::FillList(
     const Reference<container::XNameAccess>& rxContainer,
-    const ::rtl::OUString& rsArgument,
+    const OUString& rsArgument,
     ::std::vector<OUString>& rList)
 {
     try

@@ -45,12 +45,12 @@ namespace connectivity
         ~OSimpleParseNode();
 
         // ISQLParseNode
-        virtual void parseNodeToStr(::rtl::OUString& _rString,
+        virtual void parseNodeToStr(OUString& _rString,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const IParseContext* _pContext
         ) const;
 
-        virtual void parseNodeToPredicateStr(::rtl::OUString& _rString,
+        virtual void parseNodeToPredicateStr(OUString& _rString,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,

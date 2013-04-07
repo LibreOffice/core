@@ -32,27 +32,27 @@ public:
 
     // mixed content persistence only
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     // mixed content persistence + attribute processing
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nActionMap );
 
     // mixed content persistence + renaming
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
     // mixed content persistence + renaming + attribute processing
     XMLPersMixedContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual ~XMLPersMixedContentTContext();
 };

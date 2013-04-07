@@ -138,7 +138,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     StartListening( *pBindingsP, sal_True );
 
     Point aTopLeft=aCatBox.GetPosPixel();
-    rtl::OUString aString("ww");
+    OUString aString("ww");
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     nMinWidth=aTxtSize.Width()+aTopLeft.X()
             +2*aFuncList.GetPosPixel().X();
@@ -325,7 +325,7 @@ void ScFunctionDockWin::SetLeftRightSize()
         aDiffSize.Width()-=aNewSize.Width();
         aDiffSize.Height()-=aNewSize.Height();
 
-        rtl::OUString aString("ww");
+        OUString aString("ww");
         Size aTxtSize( aFuncList.GetTextWidth(aString), aFuncList.GetTextHeight() );
 
         Range aYRange(3*aTxtSize.Height()+aFuncList.GetPosPixel().Y(),
@@ -560,7 +560,7 @@ void ScFunctionDockWin::SetDescription()
     {
         pDesc->initArgumentInfo();      // full argument info is needed
 
-        ::rtl::OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
+        OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
         if(nDockMode==0)
         {
             aBuf.appendAscii(":\n\n");
@@ -658,7 +658,7 @@ sal_Bool ScFunctionDockWin::Close()
 SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
-    String aString = rtl::OUString("ww");
+    String aString = OUString("ww");
     Size aTxtSize( aFiFuncDesc.GetTextWidth(aString), aFiFuncDesc.GetTextHeight() );
     if(!bInit)
     {
@@ -868,7 +868,7 @@ void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
                 aArgStr = aFirstArgStr;
                 if ( nArgs != VAR_ARGS && nArgs != PAIRED_VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
-                    rtl::OUString aArgSep("; ");
+                    OUString aArgSep("; ");
                     sal_uInt16 nFix;
                     if (nArgs >= PAIRED_VAR_ARGS)
                         nFix = nArgs - PAIRED_VAR_ARGS + 2;
@@ -1057,7 +1057,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         if ( pInfo->aExtraString.Len() )
         {
             xub_StrLen nPos = pInfo->aExtraString.Search(
-                rtl::OUString("ScFuncList:"));
+                OUString("ScFuncList:"));
 
             // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
             // er nicht vorhanden ist, liegt eine "altere Version vor

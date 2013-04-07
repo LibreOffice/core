@@ -54,7 +54,7 @@ namespace pcr
             NULL
         };
 
-        static sal_Int32 lcl_getNavigationURLIndex( const ::rtl::OUString& _rNavURL )
+        static sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )
         {
             const sal_Char** pLookup = pNavigationURLs;
             while ( *pLookup )
@@ -108,7 +108,7 @@ namespace pcr
         {
             // there's a chance that this is a "virtual" button type
             // (which are realized by special URLs)
-            ::rtl::OUString sTargetURL;
+            OUString sTargetURL;
             m_xControlModel->getPropertyValue( PROPERTY_TARGET_URL ) >>= sTargetURL;
 
             sal_Int32 nNavigationURLIndex = lcl_getNavigationURLIndex( sTargetURL );
@@ -147,13 +147,13 @@ namespace pcr
         {
             sal_Int32 nButtonType = FormButtonType_PUSH;
             OSL_VERIFY( ::cppu::enum2int( nButtonType, _rValue ) );
-            ::rtl::OUString sTargetURL;
+            OUString sTargetURL;
 
             bool bIsVirtualButtonType = nButtonType >= s_nFirstVirtualButtonType;
             if ( bIsVirtualButtonType )
             {
                 const sal_Char* pURL = lcl_getNavigationURL( nButtonType - s_nFirstVirtualButtonType );
-                sTargetURL = ::rtl::OUString::createFromAscii( pURL );
+                sTargetURL = OUString::createFromAscii( pURL );
 
                 nButtonType = FormButtonType_URL;
             }
@@ -220,7 +220,7 @@ namespace pcr
                     // pretend (to the user) that there's no URL set - since
                     // virtual button types imply a special (technical) URL which
                     // the user should not see
-                    aReturn <<= ::rtl::OUString();
+                    aReturn <<= OUString();
                 }
             }
         }
@@ -286,7 +286,7 @@ namespace pcr
     //------------------------------------------------------------------------
     bool PushButtonNavigation::hasNonEmptyCurrentTargetURL() const
     {
-        ::rtl::OUString sTargetURL;
+        OUString sTargetURL;
         OSL_VERIFY( getCurrentTargetURL() >>= sTargetURL );
         return !sTargetURL.isEmpty();
     }

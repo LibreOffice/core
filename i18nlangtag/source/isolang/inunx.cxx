@@ -108,7 +108,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
 #endif
             }
 #else   /* MACOSX */
-            rtl::OString aUnxLang( (pGetLangFromEnv)() );
+            OString aUnxLang( (pGetLangFromEnv)() );
             nLang = MsLangId::convertUnxByteStringToLanguage( aUnxLang );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             rSystemLanguage = nLang;

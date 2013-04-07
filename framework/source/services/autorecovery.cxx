@@ -310,7 +310,7 @@ void CacheLockGuard::lock(sal_Bool bLockForAddRemoveVectorItems)
     {
         OSL_FAIL("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp.");
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."),
+                OUString("Re-entrance problem detected. Using of an stl structure in combination with iteration, adding, removing of elements etcpp."),
                 m_xOwner);
     }
 
@@ -337,7 +337,7 @@ void CacheLockGuard::unlock()
     {
         OSL_FAIL("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)");
         throw css::uno::RuntimeException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Wrong using of member m_nDocCacheLock detected. A ref counted value shouldn't reach values <0 .-)")),
                 m_xOwner);
     }
     aWriteLock.unlock();
@@ -356,7 +356,7 @@ DispatchParams::DispatchParams(const ::comphelper::SequenceAsHashMap&           
 {
     m_nWorkingEntryID         = lArgs.getUnpackedValueOrDefault(PROP_ENTRY_ID, (sal_Int32)-1                                       );
     m_xProgress               = lArgs.getUnpackedValueOrDefault(PROP_PROGRESS, css::uno::Reference< css::task::XStatusIndicator >());
-    m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, ::rtl::OUString()                                   );
+    m_sSavePath               = lArgs.getUnpackedValueOrDefault(PROP_SAVEPATH, OUString()                                   );
     m_xHoldRefForAsyncOpAlive = xOwner;
 };
 
@@ -386,7 +386,7 @@ DispatchParams& DispatchParams::operator=(const DispatchParams& rCopy)
 //-----------------------------------------------
 void DispatchParams::forget()
 {
-    m_sSavePath       = ::rtl::OUString();
+    m_sSavePath       = OUString();
     m_nWorkingEntryID = -1;
     m_xProgress.clear();
     m_xHoldRefForAsyncOpAlive.clear();
@@ -715,7 +715,7 @@ void SAL_CALL AutoRecovery::addStatusListener(const css::uno::Reference< css::fr
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.addInterface(aURL.Complete, xListener);
 
@@ -750,7 +750,7 @@ void SAL_CALL AutoRecovery::removeStatusListener(const css::uno::Reference< css:
     throw(css::uno::RuntimeException)
 {
     if (!xListener.is())
-        throw css::uno::RuntimeException(::rtl::OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
+        throw css::uno::RuntimeException(OUString("Invalid listener reference."), static_cast< css::frame::XDispatch* >(this));
     // container is threadsafe by using a shared mutex!
     m_lListener.removeInterface(aURL.Complete, xListener);
 }
@@ -845,7 +845,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
 
     for (i=0; i<c; ++i)
     {
-        ::rtl::OUString sPath;
+        OUString sPath;
         pChanges[i].Accessor >>= sPath;
 
         if ( sPath == CFG_ENTRY_AUTOSAVE_ENABLED )
@@ -935,7 +935,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
-    rtl::OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
+    OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
     // throws a RuntimeException if an error occure!
     css::uno::Reference< css::container::XNameAccess > xCFG(
         ::comphelper::ConfigurationHelper::openConfig(xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
@@ -946,17 +946,17 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 
     try
     {
-        rtl::OUString sCFG_PATH_AUTOSAVE(CFG_PATH_AUTOSAVE);
+        OUString sCFG_PATH_AUTOSAVE(CFG_PATH_AUTOSAVE);
         ::comphelper::ConfigurationHelper::readDirectKey(xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         rtl::OUString(CFG_ENTRY_MINSPACE_DOCSAVE),
+                                                         OUString(CFG_ENTRY_MINSPACE_DOCSAVE),
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
 
         ::comphelper::ConfigurationHelper::readDirectKey(xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
-                                                         rtl::OUString(CFG_ENTRY_MINSPACE_CONFIGSAVE),
+                                                         OUString(CFG_ENTRY_MINSPACE_CONFIGSAVE),
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
@@ -985,11 +985,11 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSave [bool]
     sal_Bool bEnabled = sal_False;
-    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
+    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
 
     // UserAutoSave [bool]
     sal_Bool bUserEnabled = sal_False;
-    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
+    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_USERAUTOSAVE_ENABLED)) >>= bUserEnabled;
 
     // SAFE -> ------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -1017,7 +1017,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSaveTimeIntervall [int] in min
     sal_Int32 nTimeIntervall = 15;
-    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
+    xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -1050,14 +1050,14 @@ void AutoRecovery::implts_readConfig()
     css::uno::Any aValue;
 
     // RecoveryList [set]
-    aValue = xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_RECOVERYLIST));
+    aValue = xCommonRegistry->getByHierarchicalName(OUString(CFG_ENTRY_RECOVERYLIST));
     css::uno::Reference< css::container::XNameAccess > xList;
     aValue >>= xList;
     if (xList.is())
     {
-        const rtl::OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
-        const css::uno::Sequence< ::rtl::OUString > lItems = xList->getElementNames();
-        const ::rtl::OUString*                      pItems = lItems.getConstArray();
+        const OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
+        const css::uno::Sequence< OUString > lItems = xList->getElementNames();
+        const OUString*                      pItems = lItems.getConstArray();
               sal_Int32                             c      = lItems.getLength();
               sal_Int32                             i      = 0;
 
@@ -1072,22 +1072,22 @@ void AutoRecovery::implts_readConfig()
                 continue;
 
             AutoRecovery::TDocumentInfo aInfo;
-            aInfo.NewTempURL = ::rtl::OUString();
+            aInfo.NewTempURL = OUString();
             aInfo.Document   = css::uno::Reference< css::frame::XModel >();
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL       ;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL   ;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL  ;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter   ;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE)) >>= aInfo.DocumentState;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_MODULE)) >>= aInfo.AppModule;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TITLE)) >>= aInfo.Title;
-            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES)) >>= aInfo.ViewNames;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL       ;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL   ;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL  ;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter   ;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_DOCUMENTSTATE)) >>= aInfo.DocumentState;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_MODULE)) >>= aInfo.AppModule;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_TITLE)) >>= aInfo.Title;
+            xItem->getPropertyValue(OUString(CFG_ENTRY_PROP_VIEWNAMES)) >>= aInfo.ViewNames;
             implts_specifyAppModuleAndFactory(aInfo);
             implts_specifyDefaultFilterAndExtension(aInfo);
 
             if (pItems[i].indexOf(sRECOVERY_ITEM_BASE_IDENTIFIER)==0)
             {
-                ::rtl::OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
+                OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
                 aInfo.ID = sID.toInt32();
                 // SAFE -> ----------------------
                 aWriteLock.lock();
@@ -1124,7 +1124,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
     if (rInfo.AppModule.isEmpty())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Cant find out the default filter and its extension, if no application module is known!"),
+                OUString("Cant find out the default filter and its extension, if no application module is known!"),
                 static_cast< css::frame::XDispatch* >(this));
     }
 
@@ -1141,7 +1141,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             // open module config on demand and cache the update access
             xCFG = css::uno::Reference< css::container::XNameAccess >(
-                ::comphelper::ConfigurationHelper::openConfig(comphelper::getComponentContext(xSMGR), rtl::OUString(CFG_PACKAGE_MODULES),
+                ::comphelper::ConfigurationHelper::openConfig(comphelper::getComponentContext(xSMGR), OUString(CFG_PACKAGE_MODULES),
                 ::comphelper::ConfigurationHelper::E_STANDARD),
                 css::uno::UNO_QUERY_THROW);
 
@@ -1156,27 +1156,27 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             xCFG->getByName(rInfo.AppModule),
             css::uno::UNO_QUERY_THROW);
 
-        xModuleProps->getByName(rtl::OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
+        xModuleProps->getByName(OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
-        ::rtl::OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(rtl::OUString(FILTER_PROP_TYPE), ::rtl::OUString());
+        OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(OUString(FILTER_PROP_TYPE), OUString());
         ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
-        css::uno::Sequence< ::rtl::OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(rtl::OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< ::rtl::OUString >());
+        css::uno::Sequence< OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< OUString >());
         if (lExtensions.getLength())
         {
-            rInfo.Extension  = ::rtl::OUString(".");
+            rInfo.Extension  = OUString(".");
             rInfo.Extension += lExtensions[0];
         }
         else
-            rInfo.Extension = ::rtl::OUString(".unknown");
+            rInfo.Extension = OUString(".unknown");
     }
     catch(const css::uno::Exception&)
     {
-        rInfo.DefaultFilter = ::rtl::OUString();
-        rInfo.Extension     = ::rtl::OUString();
+        rInfo.DefaultFilter = OUString();
+        rInfo.Extension     = OUString();
     }
 }
 
@@ -1200,8 +1200,8 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xManager->getByName(rInfo.AppModule));
-    lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
-    lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
+    lModuleDescription[OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
+    lModuleDescription[OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
 }
 
 //-----------------------------------------------
@@ -1212,7 +1212,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     i_rInfo.ViewNames.realloc(0);
 
     // obtain list of controllers of this document
-    ::std::vector< ::rtl::OUString > aViewNames;
+    ::std::vector< OUString > aViewNames;
     const Reference< XModel2 > xModel( i_rInfo.Document, UNO_QUERY );
     if ( xModel.is() )
     {
@@ -1220,7 +1220,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
         while ( xEnumControllers->hasMoreElements() )
         {
             const Reference< XController2 > xController( xEnumControllers->nextElement(), UNO_QUERY );
-            ::rtl::OUString sViewName;
+            OUString sViewName;
             if ( xController.is() )
                 sViewName = xController->getViewControllerName();
             OSL_ENSURE( !sViewName.isEmpty(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
@@ -1232,7 +1232,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     else
     {
         const Reference< XController2 > xController( xModel->getCurrentController(), UNO_QUERY );
-        ::rtl::OUString sViewName;
+        OUString sViewName;
         if ( xController.is() )
             sViewName = xController->getViewControllerName();
         OSL_ENSURE( !sViewName.isEmpty(), "AutoRecovery::implts_collectActiveViewNames: (no XController2 ->) no view name -> no recovery of this view!" );
@@ -1272,15 +1272,15 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         xCFG = css::uno::Reference< css::container::XHierarchicalNameAccess >(implts_openConfig(), css::uno::UNO_QUERY_THROW);
 
         css::uno::Reference< css::container::XNameAccess > xCheck;
-        xCFG->getByHierarchicalName(rtl::OUString(CFG_ENTRY_RECOVERYLIST)) >>= xCheck;
+        xCFG->getByHierarchicalName(OUString(CFG_ENTRY_RECOVERYLIST)) >>= xCheck;
 
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
 
-        ::rtl::OUStringBuffer sIDBuf;
+        OUStringBuffer sIDBuf;
         sIDBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(RECOVERY_ITEM_BASE_IDENTIFIER));
         sIDBuf.append((sal_Int32)rInfo.ID);
-        ::rtl::OUString sID = sIDBuf.makeStringAndClear();
+        OUString sID = sIDBuf.makeStringAndClear();
 
         // remove
         if (bRemoveIt)
@@ -1307,14 +1307,14 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             else
                 xCheck->getByName(sID) >>= xSet;
 
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL), css::uno::makeAny(rInfo.OrgURL       ));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPURL), css::uno::makeAny(rInfo.OldTempURL   ));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL), css::uno::makeAny(rInfo.TemplateURL  ));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_FILTER), css::uno::makeAny(rInfo.RealFilter));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), css::uno::makeAny(rInfo.DocumentState));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_MODULE), css::uno::makeAny(rInfo.AppModule));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TITLE), css::uno::makeAny(rInfo.Title));
-            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES), css::uno::makeAny(rInfo.ViewNames));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_ORIGINALURL), css::uno::makeAny(rInfo.OrgURL       ));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TEMPURL), css::uno::makeAny(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TEMPLATEURL), css::uno::makeAny(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_FILTER), css::uno::makeAny(rInfo.RealFilter));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), css::uno::makeAny(rInfo.DocumentState));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_MODULE), css::uno::makeAny(rInfo.AppModule));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_TITLE), css::uno::makeAny(rInfo.Title));
+            xSet->setPropertyValue(OUString(CFG_ENTRY_PROP_VIEWNAMES), css::uno::makeAny(rInfo.ViewNames));
 
             if (bNew)
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
@@ -1742,7 +1742,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // and save an information about the real used filter by this document.
     // We save this document with DefaultFilter ... and load it with the RealFilter.
     implts_specifyDefaultFilterAndExtension(aNew);
-    aNew.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME()  , ::rtl::OUString());
+    aNew.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME()  , OUString());
 
     // Further we must know, if this document base on a template.
     // Then we must load it in a different way.
@@ -1925,22 +1925,22 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     css::uno::Reference< css::frame::XStorable > xDoc(rInfo.Document, css::uno::UNO_QUERY);
     rInfo.OrgURL = xDoc->getLocation();
 
-    ::rtl::OUString sRemoveURL1 = rInfo.OldTempURL;
-    ::rtl::OUString sRemoveURL2 = rInfo.NewTempURL;
-    rInfo.OldTempURL = ::rtl::OUString();
-    rInfo.NewTempURL = ::rtl::OUString();
+    OUString sRemoveURL1 = rInfo.OldTempURL;
+    OUString sRemoveURL2 = rInfo.NewTempURL;
+    rInfo.OldTempURL = OUString();
+    rInfo.NewTempURL = OUString();
 
     ::comphelper::MediaDescriptor lDescriptor(rInfo.Document->getArgs());
-    rInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
+    rInfo.RealFilter = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), OUString());
 
     css::uno::Reference< css::frame::XTitle > xDocTitle(xDocument, css::uno::UNO_QUERY);
     if (xDocTitle.is ())
         rInfo.Title = xDocTitle->getTitle ();
     else
     {
-        rInfo.Title      = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TITLE()     , ::rtl::OUString());
+        rInfo.Title      = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TITLE()     , OUString());
         if (rInfo.Title.isEmpty())
-            rInfo.Title  = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTTITLE(), ::rtl::OUString());
+            rInfo.Title  = lDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_DOCUMENTTITLE(), OUString());
     }
 
     rInfo.UsedForSaving = sal_False;
@@ -2029,7 +2029,7 @@ void lc_removeLockFile(AutoRecovery::TDocumentInfo& rInfo)
         try
         {
             css::uno::Reference< css::frame::XStorable > xStore(rInfo.Document, css::uno::UNO_QUERY_THROW);
-            ::rtl::OUString aURL = xStore->getLocation();
+            OUString aURL = xStore->getLocation();
             if ( !aURL.isEmpty() )
             {
                 ::svt::DocumentLockFile aLockFile( aURL );
@@ -2153,7 +2153,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
         xExternalProgress = pParams->m_xProgress;
 
     css::uno::Reference< css::frame::XDesktop2 > xDesktop   = css::frame::Desktop::create( comphelper::getComponentContext(xSMGR));
-    ::rtl::OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
+    OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
 
     css::uno::Reference< css::frame::XController > xActiveController;
     css::uno::Reference< css::frame::XModel >      xActiveModel     ;
@@ -2315,7 +2315,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(      sal_Bool        bAl
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                                    sBackupPath      ,
+void AutoRecovery::implts_saveOneDoc(const OUString&                                    sBackupPath      ,
                                            AutoRecovery::TDocumentInfo&                        rInfo            ,
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
@@ -2333,7 +2333,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // if the document was loaded with a password, it should be
     // stored with password
     ::comphelper::MediaDescriptor lNewArgs;
-    ::rtl::OUString sPassword = lOldArgs.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PASSWORD(), ::rtl::OUString());
+    OUString sPassword = lOldArgs.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PASSWORD(), OUString());
     if (!sPassword.isEmpty())
         lNewArgs[::comphelper::MediaDescriptor::PROP_PASSWORD()] <<= sPassword;
 
@@ -2349,7 +2349,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
 
     // #i66598# use special handling of property "DocumentBaseURL" (it must be an empty string!)
     // for make hyperlinks working
-    lNewArgs[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
+    lNewArgs[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
 
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
@@ -2421,7 +2421,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     else
     {
         // safe the state about error ...
-        rInfo.NewTempURL     = ::rtl::OUString();
+        rInfo.NewTempURL     = OUString();
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
         rInfo.DocumentState |=  AutoRecovery::E_INCOMPLETE;
@@ -2433,9 +2433,9 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     // try to remove the old temp file.
     // Ignore any error here. We have a new temp file, which is up to date.
     // The only thing is: we fill the disk with temp files, if we cant remove old ones :-)
-    ::rtl::OUString sRemoveFile      = rInfo.OldTempURL;
+    OUString sRemoveFile      = rInfo.OldTempURL;
                     rInfo.OldTempURL = rInfo.NewTempURL;
-                    rInfo.NewTempURL = ::rtl::OUString();
+                    rInfo.NewTempURL = OUString();
 
     implts_flushConfigItem(rInfo);
 
@@ -2489,8 +2489,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         ::comphelper::MediaDescriptor lDescriptor;
 
         // its an UI feature - so the "USER" itself must be set as referer
-        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= ::rtl::OUString(REFERRER_USER);
-        lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
+        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= OUString(REFERRER_USER);
+        lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= OUString();
 
         // recovered documents are loaded hidden, and shown all at once, later
         lDescriptor[::comphelper::MediaDescriptor::PROP_HIDDEN()] <<= true;
@@ -2518,8 +2518,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             }
         }
 
-        ::rtl::OUString sLoadOriginalURL;
-        ::rtl::OUString sLoadBackupURL  ;
+        OUString sLoadOriginalURL;
+        OUString sLoadBackupURL  ;
 
         if (!bBackupWasTried)
             sLoadBackupURL = rInfo.OldTempURL;
@@ -2542,7 +2542,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 
         // A "Salvaged" item must exists every time. The core can make something special then for recovery.
         // Of course it should be the real file name of the original file, in case we load the temp. backup here.
-        ::rtl::OUString sURL;
+        OUString sURL;
         if (!sLoadBackupURL.isEmpty())
         {
             sURL = sLoadBackupURL;
@@ -2642,7 +2642,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL       ,
+void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
                                            ::comphelper::MediaDescriptor& lDescriptor,
                                            AutoRecovery::TDocumentInfo&   rInfo      )
 {
@@ -2685,7 +2685,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
             Reference< XDocumentRecovery > xDocRecover( xModel, UNO_QUERY_THROW );
             xDocRecover->recoverFromFile(
                 sURL,
-                lDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_SALVAGEDFILE(), ::rtl::OUString() ),
+                lDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_SALVAGEDFILE(), OUString() ),
                 lDescriptor.getAsConstPropertyValueList()
             );
 
@@ -2694,14 +2694,14 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         }
 
         // re-create all the views
-        ::std::vector< ::rtl::OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
+        ::std::vector< OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
         if ( rInfo.ViewNames.getLength() )
             ::std::copy( rInfo.ViewNames.getConstArray(), rInfo.ViewNames.getConstArray() + rInfo.ViewNames.getLength(), aViewsToRestore.begin() );
         // if we don't have views for whatever reason, then create a default-view, at least
         if ( aViewsToRestore.empty() )
-            aViewsToRestore.push_back( ::rtl::OUString() );
+            aViewsToRestore.push_back( OUString() );
 
-        for (   ::std::vector< ::rtl::OUString >::const_iterator viewName = aViewsToRestore.begin();
+        for (   ::std::vector< OUString >::const_iterator viewName = aViewsToRestore.begin();
                 viewName != aViewsToRestore.end();
                 ++viewName
             )
@@ -2753,7 +2753,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
         }
 
         // re-throw
-        ::rtl::OUStringBuffer sMsg(256);
+        OUStringBuffer sMsg(256);
         sMsg.appendAscii("Recovery of \"");
         sMsg.append     (sURL            );
         sMsg.appendAscii("\" failed."    );
@@ -2767,7 +2767,7 @@ void AutoRecovery::implts_openOneDoc(const ::rtl::OUString&               sURL  
 }
 
 //-----------------------------------------------
-void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&               sBackupPath     ,
+void AutoRecovery::implts_generateNewTempURL(const OUString&               sBackupPath     ,
                                                    ::comphelper::MediaDescriptor& /*rMediaDescriptor*/,
                                                    AutoRecovery::TDocumentInfo&   rInfo           )
 {
@@ -2785,7 +2785,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
     // we should not save it realy. Then we put the information about such "empty document"
     // into the configuration and dont create any recovery file on disk.
     // We use the title of the document to make it unique.
-    ::rtl::OUStringBuffer sUniqueName;
+    OUStringBuffer sUniqueName;
     if (!rInfo.OrgURL.isEmpty())
     {
         css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
@@ -2800,7 +2800,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
 
     // TODO: Must we strip some illegal signes - if we use the title?
 
-    rtl::OUString sName(sUniqueName.makeStringAndClear());
+    OUString sName(sUniqueName.makeStringAndClear());
     String sExtension(rInfo.Extension);
     String sPath(sBackupPath);
     ::utl::TempFile aTempFile(sName, &sExtension, &sPath);
@@ -2814,7 +2814,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 {
     // Helper shares mutex with us -> threadsafe!
     ::cppu::OInterfaceContainerHelper* pListenerForURL = 0;
-    ::rtl::OUString                    sJob            = AutoRecovery::implst_getJobDescription(eJob);
+    OUString                    sJob            = AutoRecovery::implst_getJobDescription(eJob);
 
     // inform listener, which are registered for any URLs(!)
     pListenerForURL = m_lListener.getContainer(sJob);
@@ -2837,10 +2837,10 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 }
 
 //-----------------------------------------------
-::rtl::OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
+OUString AutoRecovery::implst_getJobDescription(sal_Int32 eJob)
 {
     // describe the current running operation
-    ::rtl::OUStringBuffer sFeature(256);
+    OUStringBuffer sFeature(256);
     sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL));
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
@@ -2908,7 +2908,7 @@ sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 
 //-----------------------------------------------
 css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(      sal_Int32                    eJob      ,
-                                                                           const ::rtl::OUString&             sEventType,
+                                                                           const OUString&             sEventType,
                                                                                  AutoRecovery::TDocumentInfo* pInfo     )
 {
     css::frame::FeatureStateEvent aEvent;
@@ -2919,15 +2919,15 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_ID), pInfo->ID );
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL), pInfo->OrgURL );
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule) ;
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
-        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), pInfo->DocumentState);
+        aInfo.put( OUString(CFG_ENTRY_PROP_ID), pInfo->ID );
+        aInfo.put( OUString(CFG_ENTRY_PROP_ORIGINALURL), pInfo->OrgURL );
+        aInfo.put( OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
+        aInfo.put( OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
+        aInfo.put( OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
+        aInfo.put( OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule) ;
+        aInfo.put( OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
+        aInfo.put( OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
+        aInfo.put( OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), pInfo->DocumentState);
 
         aEvent.State <<= aInfo.getPropertyValues();
     }
@@ -2981,9 +2981,9 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
         comphelper::getComponentContext(m_xSMGR),
-        rtl::OUString(CFG_PACKAGE_RECOVERY),
-        rtl::OUString(CFG_PATH_RECOVERYINFO),
-        rtl::OUString(CFG_ENTRY_CRASHED),
+        OUString(CFG_PACKAGE_RECOVERY),
+        OUString(CFG_PATH_RECOVERYINFO),
+        OUString(CFG_ENTRY_CRASHED),
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3042,9 +3042,9 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
         comphelper::getComponentContext(m_xSMGR),
-        rtl::OUString(CFG_PACKAGE_RECOVERY),
-        rtl::OUString(CFG_PATH_RECOVERYINFO),
-        rtl::OUString(CFG_ENTRY_CRASHED),
+        OUString(CFG_PACKAGE_RECOVERY),
+        OUString(CFG_PATH_RECOVERYINFO),
+        OUString(CFG_ENTRY_CRASHED),
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 }
@@ -3109,9 +3109,9 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // the on next startup we know what's happen last time
     ::comphelper::ConfigurationHelper::writeDirectKey(
         comphelper::getComponentContext(m_xSMGR),
-        rtl::OUString(CFG_PACKAGE_RECOVERY),
-        rtl::OUString(CFG_PATH_RECOVERYINFO),
-        rtl::OUString(CFG_ENTRY_SESSIONDATA),
+        OUString(CFG_PACKAGE_RECOVERY),
+        OUString(CFG_PATH_RECOVERYINFO),
+        OUString(CFG_ENTRY_SESSIONDATA),
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3146,9 +3146,9 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     LOG_RECOVERY("... reset config key 'SessionData'")
     ::comphelper::ConfigurationHelper::writeDirectKey(
         comphelper::getComponentContext(m_xSMGR),
-        rtl::OUString(CFG_PACKAGE_RECOVERY),
-        rtl::OUString(CFG_PATH_RECOVERYINFO),
-        rtl::OUString(CFG_ENTRY_SESSIONDATA),
+        OUString(CFG_PACKAGE_RECOVERY),
+        OUString(CFG_PATH_RECOVERYINFO),
+        OUString(CFG_ENTRY_SESSIONDATA),
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3169,7 +3169,7 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
         if (rInfo.ID != aParams.m_nWorkingEntryID)
             continue;
 
-        ::rtl::OUString sSourceURL;
+        OUString sSourceURL;
         // Prefer temp file. It contains the changes against the original document!
         if (!rInfo.OldTempURL.isEmpty())
             sSourceURL = rInfo.OldTempURL;
@@ -3216,9 +3216,9 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 }
 
 //-----------------------------------------------
-AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const ::rtl::OUString& sSource    ,
-                                                               const ::rtl::OUString& sTargetPath,
-                                                               const ::rtl::OUString& sTargetName)
+AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& sSource    ,
+                                                               const OUString& sTargetPath,
+                                                               const OUString& sTargetName)
 {
     // create content for the parent folder and call transfer on that content with the source content
     // and the destination file name as parameters
@@ -3283,9 +3283,9 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     sal_Bool bSessionData  = sal_False;
                     ::comphelper::ConfigurationHelper::readDirectKey(
                                                     comphelper::getComponentContext(m_xSMGR),
-                                                    rtl::OUString(CFG_PACKAGE_RECOVERY),
-                                                    rtl::OUString(CFG_PATH_RECOVERYINFO),
-                                                    rtl::OUString(CFG_ENTRY_SESSIONDATA),
+                                                    OUString(CFG_PACKAGE_RECOVERY),
+                                                    OUString(CFG_PATH_RECOVERYINFO),
+                                                    OUString(CFG_ENTRY_SESSIONDATA),
                                                     ::comphelper::ConfigurationHelper::E_READONLY) >>= bSessionData;
 
                     sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
@@ -3302,18 +3302,18 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
         case AUTORECOVERY_PROPHANDLE_CRASHED :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             comphelper::getComponentContext(m_xSMGR),
-                            rtl::OUString(CFG_PACKAGE_RECOVERY),
-                            rtl::OUString(CFG_PATH_RECOVERYINFO),
-                            rtl::OUString(CFG_ENTRY_CRASHED),
+                            OUString(CFG_PACKAGE_RECOVERY),
+                            OUString(CFG_PATH_RECOVERYINFO),
+                            OUString(CFG_ENTRY_CRASHED),
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             comphelper::getComponentContext(m_xSMGR),
-                            rtl::OUString(CFG_PACKAGE_RECOVERY),
-                            rtl::OUString(CFG_PATH_RECOVERYINFO),
-                            rtl::OUString(CFG_ENTRY_SESSIONDATA),
+                            OUString(CFG_PACKAGE_RECOVERY),
+                            OUString(CFG_PATH_RECOVERYINFO),
+                            OUString(CFG_ENTRY_SESSIONDATA),
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
     }
@@ -3459,7 +3459,7 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 
     sal_uInt64 nFreeSpace = SAL_MAX_UINT64;
 
-    ::rtl::OUString     sBackupPath(SvtPathOptions().GetBackupPath());
+    OUString     sBackupPath(SvtPathOptions().GetBackupPath());
     ::osl::VolumeInfo   aInfo      (osl_VolumeInfo_Mask_FreeSpace);
     ::osl::FileBase::RC aRC         = ::osl::Directory::getVolumeInfo(sBackupPath, aInfo);
 
@@ -3479,13 +3479,13 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 //-----------------------------------------------
 void AutoRecovery::impl_showFullDiscError()
 {
-    rtl::OUString sBtn(FWK_RESSTR(STR_FULL_DISC_RETRY_BUTTON));
-    rtl::OUString sMsg(FWK_RESSTR(STR_FULL_DISC_MSG));
+    OUString sBtn(FWK_RESSTR(STR_FULL_DISC_RETRY_BUTTON));
+    OUString sMsg(FWK_RESSTR(STR_FULL_DISC_MSG));
 
-    rtl::OUString sBackupURL(SvtPathOptions().GetBackupPath());
+    OUString sBackupURL(SvtPathOptions().GetBackupPath());
     INetURLObject aConverter(sBackupURL);
     sal_Unicode aDelimiter;
-    rtl::OUString sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
+    OUString sBackupPath = aConverter.getFSysPath(INetURLObject::FSYS_DETECT, &aDelimiter);
     if (sBackupPath.getLength() < 1)
         sBackupPath = sBackupURL;
 
@@ -3621,7 +3621,7 @@ void AutoRecovery::impl_flushALLConfigChanges()
 }
 
 //-----------------------------------------------
-void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
+void AutoRecovery::st_impl_removeFile(const OUString& sURL)
 {
     if ( sURL.isEmpty())
         return;
@@ -3629,7 +3629,7 @@ void AutoRecovery::st_impl_removeFile(const ::rtl::OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent = ::ucbhelper::Content(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getComponentContext(m_xSMGR));
-        aContent.executeCommand(::rtl::OUString("delete"), css::uno::makeAny(sal_True));
+        aContent.executeCommand(OUString("delete"), css::uno::makeAny(sal_True));
     }
     catch(const css::uno::Exception&)
     {
@@ -3641,13 +3641,13 @@ void AutoRecovery::st_impl_removeLockFile()
 {
     try
     {
-        ::rtl::OUString sUserURL;
+        OUString sUserURL;
         ::utl::Bootstrap::locateUserInstallation( sUserURL );
 
-        ::rtl::OUStringBuffer sLockURLBuf;
+        OUStringBuffer sLockURLBuf;
         sLockURLBuf.append     (sUserURL);
         sLockURLBuf.appendAscii("/.lock");
-        ::rtl::OUString sLockURL = sLockURLBuf.makeStringAndClear();
+        OUString sLockURL = sLockURLBuf.makeStringAndClear();
 
         AutoRecovery::st_impl_removeFile(sLockURL);
     }

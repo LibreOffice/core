@@ -114,13 +114,13 @@ namespace pdfi
     {
         friend class ElementFactory;
     protected:
-        HyperlinkElement( Element* pParent, const rtl::OUString& rURI )
+        HyperlinkElement( Element* pParent, const OUString& rURI )
         : Element( pParent ), URI( rURI ) {}
     public:
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
 
-        rtl::OUString URI;
+        OUString URI;
     };
 
     struct GraphicalElement : public Element
@@ -168,7 +168,7 @@ namespace pdfi
         // ElementTreeVisitable
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& );
 
-        rtl::OUStringBuffer Text;
+        OUStringBuffer Text;
         sal_Int32           FontId;
     };
 
@@ -285,7 +285,7 @@ namespace pdfi
         ElementFactory() {}
         virtual ~ElementFactory();
 
-        virtual HyperlinkElement* createHyperlinkElement( Element* pParent, const rtl::OUString& rURI )
+        virtual HyperlinkElement* createHyperlinkElement( Element* pParent, const OUString& rURI )
         { return new HyperlinkElement( pParent, rURI ); }
 
         virtual TextElement* createTextElement( Element* pParent, sal_Int32 nGCId, sal_Int32 nFontId )

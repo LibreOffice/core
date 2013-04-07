@@ -35,22 +35,22 @@ class FWE_DLLPUBLIC XMLNamespaces
         XMLNamespaces( const XMLNamespaces& );
         virtual ~XMLNamespaces();
 
-        void addNamespace( const ::rtl::OUString& aName, const ::rtl::OUString& aValue )
+        void addNamespace( const OUString& aName, const OUString& aValue )
             throw(  ::com::sun::star::xml::sax::SAXException );
 
-        ::rtl::OUString applyNSToAttributeName( const ::rtl::OUString& ) const
+        OUString applyNSToAttributeName( const OUString& ) const
             throw(  ::com::sun::star::xml::sax::SAXException );
-        ::rtl::OUString applyNSToElementName( const ::rtl::OUString& ) const
+        OUString applyNSToElementName( const OUString& ) const
             throw(  ::com::sun::star::xml::sax::SAXException );
 
     private:
-        typedef ::std::map< ::rtl::OUString, ::rtl::OUString > NamespaceMap;
+        typedef ::std::map< OUString, OUString > NamespaceMap;
 
-        ::rtl::OUString getNamespaceValue( const ::rtl::OUString& aNamespace ) const
+        OUString getNamespaceValue( const OUString& aNamespace ) const
             throw( ::com::sun::star::xml::sax::SAXException );
 
-        ::rtl::OUString m_aDefaultNamespace;
-        ::rtl::OUString m_aXMLAttributeNamespace;
+        OUString m_aDefaultNamespace;
+        OUString m_aXMLAttributeNamespace;
         NamespaceMap    m_aNamespaceMap;
 };
 

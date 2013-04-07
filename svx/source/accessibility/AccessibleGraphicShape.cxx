@@ -48,7 +48,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape (void)
 
 //=====  XAccessibleImage  ====================================================
 
-::rtl::OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
+OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleShape::getAccessibleDescription ();
@@ -121,7 +121,7 @@ OUString SAL_CALL
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleGraphicShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -164,7 +164,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 /// Create the base name of this object, i.e. the name without appended number.
-::rtl::OUString
+OUString
     AccessibleGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -189,7 +189,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-::rtl::OUString
+OUString
     AccessibleGraphicShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

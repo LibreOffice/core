@@ -49,9 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 const char  *OfficeIPCThread::sc_aShowSequence = "-tofront";
 const int OfficeIPCThread::sc_nShSeqLength = 5;
@@ -110,7 +107,7 @@ namespace {
 
 class Parser: public CommandLineArgs::Supplier {
 public:
-    explicit Parser(rtl::OString const & input): m_input(input) {
+    explicit Parser(OString const & input): m_input(input) {
         if (!m_input.match(ARGUMENT_PREFIX) ||
             m_input.getLength() == RTL_CONSTASCII_LENGTH(ARGUMENT_PREFIX))
         {
@@ -122,7 +119,7 @@ public:
             break;
         case '1':
             {
-                rtl::OUString url;
+                OUString url;
                 if (!next(&url, false)) {
                     throw CommandLineArgs::Supplier::Exception();
                 }
@@ -131,11 +128,11 @@ public:
             }
         case '2':
             {
-                rtl::OUString path;
+                OUString path;
                 if (!next(&path, false)) {
                     throw CommandLineArgs::Supplier::Exception();
                 }
-                rtl::OUString url;
+                OUString url;
                 if (osl::FileBase::getFileURLFromSystemPath(path, url) ==
                     osl::FileBase::E_None)
                 {
@@ -150,12 +147,12 @@ public:
 
     virtual ~Parser() {}
 
-    virtual boost::optional< rtl::OUString > getCwdUrl() { return m_cwdUrl; }
+    virtual boost::optional< OUString > getCwdUrl() { return m_cwdUrl; }
 
-    virtual bool next(rtl::OUString * argument) { return next(argument, true); }
+    virtual bool next(OUString * argument) { return next(argument, true); }
 
 private:
-    virtual bool next(rtl::OUString * argument, bool prefix) {
+    virtual bool next(OUString * argument, bool prefix) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_input.getLength()) {
             if (prefix) {
@@ -164,7 +161,7 @@ private:
                 }
                 ++m_index;
             }
-            rtl::OStringBuffer b;
+            OStringBuffer b;
             while (m_index < m_input.getLength()) {
                 char c = m_input[m_index];
                 if (c == ',') {
@@ -190,7 +187,7 @@ private:
                 }
                 b.append(c);
             }
-            rtl::OString b2(b.makeStringAndClear());
+            OString b2(b.makeStringAndClear());
             if (!rtl_convertStringToUString(
                     &argument->pData, b2.getStr(), b2.getLength(),
                     RTL_TEXTENCODING_UTF8,
@@ -206,15 +203,15 @@ private:
         }
     }
 
-    boost::optional< rtl::OUString > m_cwdUrl;
-    rtl::OString m_input;
+    boost::optional< OUString > m_cwdUrl;
+    OString m_input;
     sal_Int32 m_index;
 };
 
-bool addArgument(rtl::OStringBuffer &rArguments, char prefix,
-    const rtl::OUString &rArgument)
+bool addArgument(OStringBuffer &rArguments, char prefix,
+    const OUString &rArgument)
 {
-    rtl::OString utf8;
+    OString utf8;
     if (!rArgument.convertToString(
             &utf8, RTL_TEXTENCODING_UTF8,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
@@ -256,7 +253,7 @@ String CreateMD5FromString( const OUString& aMsg )
 {
 #if (OSL_DEBUG_LEVEL > 2)
     fprintf( stderr, "create md5 from '%s'\n",
-             rtl::OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8).getStr() );
+             OUStringToOString (aMsg, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
     rtlDigest handle = rtl_digest_create( rtl_Digest_AlgorithmMD5 );
@@ -421,7 +418,7 @@ void OfficeIPCThread::EnableRequests( bool i_bEnable )
         if( i_bEnable )
         {
             // hit the compiler over the head
-            ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< rtl::OUString >() );
+            ProcessDocumentsRequest aEmptyReq = ProcessDocumentsRequest( boost::optional< OUString >() );
             // trigger already queued requests
             OfficeIPCThread::ExecuteCmdLineRequests( aEmptyReq );
         }
@@ -458,8 +455,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     if( pGlobalOfficeIPCThread.is() )
         return IPC_STATUS_OK;
 
-    ::rtl::OUString aUserInstallPath;
-    ::rtl::OUString aDummy;
+    OUString aUserInstallPath;
+    OUString aDummy;
 
     rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
 
@@ -574,8 +571,8 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
-        rtl::OStringBuffer aArguments(ARGUMENT_PREFIX);
-        rtl::OUString cwdUrl;
+        OStringBuffer aArguments(ARGUMENT_PREFIX);
+        OUString cwdUrl;
         if (!(tools::getProcessWorkingDir(cwdUrl) &&
               addArgument(aArguments, '1', cwdUrl)))
         {
@@ -710,7 +707,7 @@ void OfficeIPCThread::execute()
                 continue;
             }
 
-            rtl::OString aArguments = readStringFromPipe(aStreamPipe);
+            OString aArguments = readStringFromPipe(aStreamPipe);
 
             // Is this a lookup message from another application? if so, ignore
             if (aArguments.isEmpty())
@@ -758,9 +755,9 @@ void OfficeIPCThread::execute()
                 }
 
                 // handle request for acceptor
-                std::vector< rtl::OUString > const & accept = aCmdLineArgs->
+                std::vector< OUString > const & accept = aCmdLineArgs->
                     GetAccept();
-                for (std::vector< rtl::OUString >::const_iterator i(accept.begin());
+                for (std::vector< OUString >::const_iterator i(accept.begin());
                      i != accept.end(); ++i)
                 {
                     ApplicationEvent* pAppEvent = new ApplicationEvent(
@@ -768,9 +765,9 @@ void OfficeIPCThread::execute()
                     ImplPostForeignAppEvent( pAppEvent );
                 }
                 // handle acceptor removal
-                std::vector< rtl::OUString > const & unaccept = aCmdLineArgs->
+                std::vector< OUString > const & unaccept = aCmdLineArgs->
                     GetUnaccept();
-                for (std::vector< rtl::OUString >::const_iterator i(
+                for (std::vector< OUString >::const_iterator i(
                          unaccept.begin());
                      i != unaccept.end(); ++i)
                 {
@@ -844,7 +841,7 @@ void OfficeIPCThread::execute()
 
                 if ( !aCmdLineArgs->IsQuickstart() ) {
                     sal_Bool bShowHelp = sal_False;
-                    rtl::OUStringBuffer aHelpURLBuffer;
+                    OUStringBuffer aHelpURLBuffer;
                     if (aCmdLineArgs->IsHelpWriter()) {
                         bShowHelp = sal_True;
                         aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
@@ -957,13 +954,13 @@ void OfficeIPCThread::execute()
 
 static void AddToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
-    boost::optional< rtl::OUString > const & cwdUrl,
-    std::vector< rtl::OUString > const & aRequestList,
+    boost::optional< OUString > const & cwdUrl,
+    std::vector< OUString > const & aRequestList,
     DispatchWatcher::RequestType nType,
     const OUString& aParam,
     const OUString& aFactory )
 {
-    for (std::vector< rtl::OUString >::const_iterator i(aRequestList.begin());
+    for (std::vector< OUString >::const_iterator i(aRequestList.begin());
          i != aRequestList.end(); ++i)
     {
         rDispatchList.push_back(
@@ -973,8 +970,8 @@ static void AddToDispatchList(
 
 static void AddConversionsToDispatchList(
     DispatchWatcher::DispatchList& rDispatchList,
-    boost::optional< rtl::OUString > const & cwdUrl,
-    std::vector< rtl::OUString > const & rRequestList,
+    boost::optional< OUString > const & cwdUrl,
+    std::vector< OUString > const & rRequestList,
     const OUString& rParam,
     const OUString& rPrinterName,
     const OUString& rFactory,
@@ -995,7 +992,7 @@ static void AddConversionsToDispatchList(
     }
 
     OUString aOutDir( rParamOut.trim() );
-    ::rtl::OUString aPWD;
+    OUString aPWD;
     ::tools::getProcessWorkingDir( aPWD );
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
@@ -1003,16 +1000,16 @@ static void AddConversionsToDispatchList(
 
     if( !rParamOut.trim().isEmpty() )
     {
-        aParam += ::rtl::OUString(";");
+        aParam += OUString(";");
         aParam += aOutDir;
     }
     else
     {
         ::osl::FileBase::getSystemPathFromFileURL( aPWD, aPWD );
-        aParam += ::rtl::OUString(";" ) + aPWD;
+        aParam += OUString(";" ) + aPWD;
     }
 
-    for (std::vector< rtl::OUString >::const_iterator i(rRequestList.begin());
+    for (std::vector< OUString >::const_iterator i(rRequestList.begin());
          i != rRequestList.end(); ++i)
     {
         rDispatchList.push_back(
@@ -1028,7 +1025,7 @@ sal_Bool OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequ
 
     static DispatchWatcher::DispatchList    aDispatchList;
 
-    rtl::OUString aEmpty;
+    OUString aEmpty;
     // Create dispatch list for dispatch watcher
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aInFilter, DispatchWatcher::REQUEST_INFILTER, aEmpty, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty, aRequest.aModule );

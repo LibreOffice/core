@@ -378,11 +378,11 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
     }
 }
 
-rtl::OUString SidebarTxtControl::GetSurroundingText() const
+OUString SidebarTxtControl::GetSurroundingText() const
 {
     if (GetTextView())
         return GetTextView()->GetSurroundingText();
-    return rtl::OUString();
+    return OUString();
 }
 
 Selection SidebarTxtControl::GetSurroundingTextSelection() const

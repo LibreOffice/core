@@ -95,7 +95,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDiagram ____
-    virtual ::rtl::OUString SAL_CALL getDiagramType()
+    virtual OUString SAL_CALL getDiagramType()
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getDataRowProperties( sal_Int32 nRow )
@@ -118,7 +118,7 @@ public:
                ::com::sun::star::uno::RuntimeException);
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual ::rtl::OUString SAL_CALL getShapeType()
+    virtual OUString SAL_CALL getShapeType()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XAxisSupplier ____

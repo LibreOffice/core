@@ -42,7 +42,7 @@ PasswordDialog::PasswordDialog(
     Window* _pParent,
     task::PasswordRequestMode nDlgMode,
     ResMgr * pResMgr,
-    rtl::OUString& aDocURL,
+    OUString& aDocURL,
     bool bOpenToModify,
     bool bIsSimplePasswordRequest )
 
@@ -64,13 +64,13 @@ PasswordDialog::PasswordDialog(
     {
         const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
-        rtl::OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
+        OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
         ErrorBox aErrorBox( GetParent(), WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
 
     // default settings for enter password or reenter passwd...
-    rtl::OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
+    OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
     aFTConfirmPassword.Hide();
     aEDConfirmPassword.Hide();
     aFTConfirmPassword.Enable( sal_False );

@@ -31,7 +31,7 @@
 #include "IMark.hxx"
 #include "globals.hrc"
 
-const String BookmarkCombo::aForbiddenChars = rtl::OUString("/\\@:*?\";,.#");
+const String BookmarkCombo::aForbiddenChars = OUString("/\\@:*?\";,.#");
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
@@ -227,7 +227,7 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
     if( EVENT_KEYINPUT == rNEvt.GetType() &&
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
-        rtl::OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
+        OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
         if(STRING_NOTFOUND != aForbiddenChars.Search(sKey))
             nHandled = 1;
     }

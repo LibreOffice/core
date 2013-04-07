@@ -425,7 +425,7 @@ void GetEnglishSearchFontName( OUString& rName )
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
-        typedef boost::unordered_map<const rtl::OUString, const char*, FontNameHash> FontNameDictionary;
+        typedef boost::unordered_map<const OUString, const char*, FontNameHash> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
         // the font name dictionary needs to be intialized once
         if( aDictionary.empty() )

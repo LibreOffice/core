@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using rtl::OString;
 using namespace ::osl;
 using namespace ::comphelper;
 
@@ -51,11 +50,11 @@ namespace sd {
         ClientInfo
     {
         BufferedStreamSocket *mpStreamSocket;
-        rtl::OUString mPin;
+        OUString mPin;
 
-        ClientInfoInternal( const rtl::OUString rName,
-                            const rtl::OUString rAddress,
-                            BufferedStreamSocket *pSocket, rtl::OUString rPin ):
+        ClientInfoInternal( const OUString rName,
+                            const OUString rAddress,
+                            BufferedStreamSocket *pSocket, OUString rPin ):
                 ClientInfo( rName, rAddress ),
                 mpStreamSocket( pSocket ),
                 mPin( rPin ) {}
@@ -249,7 +248,7 @@ std::vector<ClientInfo*> RemoteServer::getClients()
     return aClients;
 }
 
-sal_Bool RemoteServer::connectClient( ClientInfo* pClient, rtl::OUString aPin )
+sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )

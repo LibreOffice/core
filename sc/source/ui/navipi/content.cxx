@@ -629,7 +629,7 @@ void ScContentTree::GetTableNames()
     if (!pDoc)
         return;
 
-    rtl::OUString aName;
+    OUString aName;
     SCTAB nCount = pDoc->GetTableCount();
     for ( SCTAB i=0; i<nCount; i++ )
     {
@@ -640,12 +640,12 @@ void ScContentTree::GetTableNames()
 
 namespace {
 
-rtl::OUString createLocalRangeName(const rtl::OUString& rName, const rtl::OUString& rTableName)
+OUString createLocalRangeName(const OUString& rName, const OUString& rTableName)
 {
-    rtl::OUStringBuffer aString (rName);
-    aString.append(rtl::OUString(" ("));
+    OUStringBuffer aString (rName);
+    aString.append(OUString(" ("));
     aString.append(rTableName);
-    aString.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aString.append(OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
     return aString.makeStringAndClear();
 }
 }
@@ -660,7 +660,7 @@ void ScContentTree::GetAreaNames()
         return;
 
     ScRange aDummy;
-    std::set<rtl::OUString> aSet;
+    std::set<OUString> aSet;
     ScRangeName* pRangeNames = pDoc->GetRangeName();
     if (!pRangeNames->empty())
     {
@@ -676,7 +676,7 @@ void ScContentTree::GetAreaNames()
         ScRangeName* pLocalRangeName = pDoc->GetRangeName(i);
         if (pLocalRangeName && !pLocalRangeName->empty())
         {
-            rtl::OUString aTableName;
+            OUString aTableName;
             pDoc->GetName(i, aTableName);
             for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
             {
@@ -688,7 +688,7 @@ void ScContentTree::GetAreaNames()
 
     if (!aSet.empty())
     {
-        for (std::set<rtl::OUString>::iterator itr = aSet.begin();
+        for (std::set<OUString>::iterator itr = aSet.begin();
                 itr != aSet.end(); ++itr)
         {
             InsertContent(SC_CONTENT_RANGENAME, *itr);
@@ -710,7 +710,7 @@ void ScContentTree::GetDbNames()
     ScDBCollection::NamedDBs::const_iterator itr = rDBs.begin(), itrEnd = rDBs.end();
     for (; itr != itrEnd; ++itr)
     {
-        const::rtl::OUString& aStrName = itr->GetName();
+        const OUString& aStrName = itr->GetName();
         InsertContent(SC_CONTENT_DBAREA, aStrName);
     }
 }
@@ -1190,8 +1190,8 @@ void ScContentTree::DoDrag()
                     ScDocShell* pSrcShell = NULL;
                     if ( bHiddenDoc )
                     {
-                        rtl::OUString aFilter, aOptions;
-                        rtl::OUString aURL = aHiddenName;
+                        OUString aFilter, aOptions;
+                        OUString aURL = aHiddenName;
                         pDocLoader = new ScDocumentLoader( aURL, aFilter, aOptions );
                         if (!pDocLoader->IsError())
                             pSrcShell = pDocLoader->GetDocShell();
@@ -1269,8 +1269,8 @@ sal_Bool ScContentTree::LoadFile( const String& rUrl )
         aDocName.Erase(nPos);           // nur der Name, ohne #...
 
     sal_Bool bReturn = false;
-    rtl::OUString aURL = aDocName;
-    rtl::OUString aFilter, aOptions;
+    OUString aURL = aDocName;
+    OUString aFilter, aOptions;
     ScDocumentLoader aLoader( aURL, aFilter, aOptions );
     if ( !aLoader.IsError() )
     {

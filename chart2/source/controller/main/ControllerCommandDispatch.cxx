@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
@@ -701,7 +700,7 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
     return false;
 }
 
-bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const ::rtl::OUString& rCommand )
+bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const OUString& rCommand )
 {
     ShapeController* pShapeController = ( m_pDispatchContainer ? m_pDispatchContainer->getShapeController() : NULL );
     if ( pShapeController )

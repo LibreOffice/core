@@ -108,10 +108,10 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-static void getNewSpreadsheetName (rtl::OUString &aNewName, rtl::OUString aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
+static void getNewSpreadsheetName (OUString &aNewName, OUString aOldName, uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getNewSpreadsheetName() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "getNewSpreadsheetName() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
     static OUString aUnderScore( "_" );
     int currentNum =2;
     aNewName = aOldName + aUnderScore + OUString::number(currentNum) ;
@@ -122,10 +122,10 @@ static void getNewSpreadsheetName (rtl::OUString &aNewName, rtl::OUString aOldNa
     }
 }
 
-static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, rtl::OUString aSheetName)
+static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, OUString aSheetName)
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "removeAllSheets() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "removeAllSheets() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
     uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
 
@@ -152,7 +152,7 @@ static void removeAllSheets( uno::Reference <sheet::XSpreadsheetDocument>& xSpre
 }
 
 static uno::Reference<frame::XModel>
-openNewDoc(rtl::OUString aSheetName )
+openNewDoc(OUString aSheetName )
 {
     uno::Reference<frame::XModel> xModel;
     try
@@ -163,8 +163,8 @@ openNewDoc(rtl::OUString aSheetName )
         uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);
 
         uno::Reference<lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL(
-                rtl::OUString( "private:factory/scalc" ),
-                rtl::OUString( "_blank" ), 0,
+                OUString( "private:factory/scalc" ),
+                OUString( "_blank" ), 0,
                 uno::Sequence < ::com::sun::star::beans::PropertyValue >() ) );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
         if ( xSpreadDoc.is() )
@@ -191,7 +191,7 @@ ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
     if ( args.getLength() < 3 )
         throw lang::IllegalArgumentException();
 
-    rtl::OUString sSheetName;
+    OUString sSheetName;
     args[2] >>= sSheetName;
 
     uno::Reference< sheet::XSpreadsheetDocument > xSpreadDoc( mxModel, uno::UNO_QUERY_THROW );
@@ -214,7 +214,7 @@ const uno::Sequence<sal_Int8>& ScVbaWorksheet::getUnoTunnelId()
 }
 
 uno::Reference< ov::excel::XWorksheet >
-ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
+ScVbaWorksheet::createSheetCopyInNewDoc(OUString aCurrSheetName)
 {
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
     uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
@@ -235,7 +235,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
     uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
 
     ScDocShell* pShell = excel::getDocShell( xModel );
-    rtl::OUString aCodeName;
+    OUString aCodeName;
     pShell->GetDocument()->GetCodeName( 0, aCodeName );
     return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
@@ -243,7 +243,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(rtl::OUString aCurrSheetName)
 css::uno::Reference< ov::excel::XWorksheet >
 ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool bAfter)
 {
-    rtl::OUString aCurrSheetName = getName();
+    OUString aCurrSheetName = getName();
     ScVbaWorksheet* pDestSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
 
     uno::Reference <sheet::XSpreadsheetDocument> xDestDoc( pDestSheet->getModel(), uno::UNO_QUERY );
@@ -251,7 +251,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool b
 
     SCTAB nDest = 0;
     SCTAB nSrc = 0;
-    rtl::OUString aSheetName = xSheet->getName();
+    OUString aSheetName = xSheet->getName();
     bool bSameDoc = ( pDestSheet->getModel() == getModel() );
     bool bDestSheetExists = ScVbaWorksheets::nameExists (xDestDoc, aSheetName, nDest );
     bool bSheetExists = ScVbaWorksheets::nameExists (xSrcDoc, aCurrSheetName, nSrc );
@@ -282,7 +282,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool b
     return xNewSheet;
 }
 
-::rtl::OUString
+OUString
 ScVbaWorksheet::getName() throw (uno::RuntimeException)
 {
     uno::Reference< container::XNamed > xNamed( getSheet(), uno::UNO_QUERY_THROW );
@@ -290,7 +290,7 @@ ScVbaWorksheet::getName() throw (uno::RuntimeException)
 }
 
 void
-ScVbaWorksheet::setName(const ::rtl::OUString &rName ) throw (uno::RuntimeException)
+ScVbaWorksheet::setName(const OUString &rName ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XNamed > xNamed( getSheet(), uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
@@ -362,7 +362,7 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException)
         return excel::XlEnableSelection::xlNoSelection;
     }
     else
-        throw uno::RuntimeException(::rtl::OUString( "Sheet Name does not exist. "),
+        throw uno::RuntimeException(OUString( "Sheet Name does not exist. "),
                                 uno::Reference< XInterface >() );
 }
 
@@ -374,7 +374,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         (nSelection != excel::XlEnableSelection::xlUnlockedCells) &&
         (nSelection != excel::XlEnableSelection::xlNoSelection) )
     {
-        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+        DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );
     }
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
@@ -403,7 +403,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         }
     }
     else
-        throw uno::RuntimeException(::rtl::OUString( "Sheet Name does not exist. "),
+        throw uno::RuntimeException(OUString( "Sheet Name does not exist. "),
                                 uno::Reference< XInterface >() );
 
 }
@@ -517,7 +517,7 @@ sal_Bool
 ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException)
 {
     SCTAB nTab = 0;
-    rtl::OUString aSheetName = getName();
+    OUString aSheetName = getName();
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
     bool bSheetExists = ScVbaWorksheets::nameExists (xSpreadDoc, aSheetName, nTab);
     if ( bSheetExists )
@@ -555,7 +555,7 @@ void
 ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After ) throw (uno::RuntimeException)
 {
     uno::Reference<excel::XWorksheet> xSheet;
-    rtl::OUString aCurrSheetName = getName();
+    OUString aCurrSheetName = getName();
 
     if (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()))
     {
@@ -617,7 +617,7 @@ void
 ScVbaWorksheet::Delete() throw (uno::RuntimeException)
 {
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( getModel(), uno::UNO_QUERY_THROW );
-    rtl::OUString aSheetName = getName();
+    OUString aSheetName = getName();
     if ( xSpreadDoc.is() )
     {
         SCTAB nTab = 0;
@@ -667,7 +667,7 @@ ScVbaWorksheet::Protect( const uno::Any& Password, const uno::Any& /*DrawingObje
     // #TODO# #FIXME# is there anything we can do witht the unused param
     // can the implementation use anything else here
     uno::Reference<util::XProtectable > xProtectable(getSheet(), uno::UNO_QUERY_THROW);
-    ::rtl::OUString aPasswd;
+    OUString aPasswd;
     Password >>= aPasswd;
     xProtectable->protect( aPasswd );
 }
@@ -676,7 +676,7 @@ void
 ScVbaWorksheet::Unprotect( const uno::Any& Password ) throw (uno::RuntimeException)
 {
     uno::Reference<util::XProtectable > xProtectable(getSheet(), uno::UNO_QUERY_THROW);
-    ::rtl::OUString aPasswd;
+    OUString aPasswd;
     Password >>= aPasswd;
     xProtectable->unprotect( aPasswd );
 }
@@ -700,7 +700,7 @@ void
 ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::Any& /*IgnoreUppercase*/,const uno::Any& /*AlwaysSuggest*/, const uno::Any& /*SpellingLang*/ ) throw (uno::RuntimeException)
 {
     // #TODO# #FIXME# unused params above, can we do anything with those
-    rtl::OUString url = rtl::OUString( ".uno:SpellDialog");
+    OUString url = OUString( ".uno:SpellDialog");
     uno::Reference< frame::XModel > xModel( getModel() );
     dispatchRequests(xModel,url);
 }
@@ -802,7 +802,7 @@ ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeExceptio
     // #163498# initialize Names object with correct parent (this worksheet)
     // TODO: real sheet-local names...
     uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( OUString("NamedRanges") ), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
     if ( aIndex.hasValue() )
         return uno::Any( xNames->Item( aIndex, uno::Any() ) );
@@ -913,7 +913,7 @@ ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaWorksheet::Evaluate( const ::rtl::OUString& Name ) throw (uno::RuntimeException)
+ScVbaWorksheet::Evaluate( const OUString& Name ) throw (uno::RuntimeException)
 {
     // #TODO Evaluate allows other things to be evaluated, e.g. functions
     // I think ( like SIN(3) etc. ) need to investigate that
@@ -930,32 +930,32 @@ ScVbaWorksheet::getIntrospection(  ) throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaWorksheet::invoke( const ::rtl::OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWorksheet::invoke( const OUString& aFunctionName, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     OSL_TRACE("** ScVbaWorksheet::invoke( %s ), will barf",
-        rtl::OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     throw uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL
-ScVbaWorksheet::setValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+ScVbaWorksheet::setValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     setDefaultPropByIntrospection( uno::makeAny( getValue( aPropertyName ) ), aValue );
 }
 uno::Any SAL_CALL
-ScVbaWorksheet::getValue( const ::rtl::OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+ScVbaWorksheet::getValue( const OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     uno::Reference< drawing::XControlShape > xControlShape( getControlShape( aPropertyName ), uno::UNO_QUERY_THROW );
 
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
-    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
+    uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
     return uno::makeAny( xControl );
 }
 
 ::sal_Bool SAL_CALL
-ScVbaWorksheet::hasMethod( const ::rtl::OUString& /*aName*/ ) throw (uno::RuntimeException)
+ScVbaWorksheet::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException)
 {
     return false;
 }
@@ -984,7 +984,7 @@ ScVbaWorksheet::getFormControls()
 
                 }
 ::sal_Bool SAL_CALL
-ScVbaWorksheet::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+ScVbaWorksheet::hasProperty( const OUString& aName ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XNameAccess > xFormControls( getFormControls() );
     if ( xFormControls.is() )
@@ -993,7 +993,7 @@ ScVbaWorksheet::hasProperty( const ::rtl::OUString& aName ) throw (uno::RuntimeE
 }
 
 uno::Any
-ScVbaWorksheet::getControlShape( const ::rtl::OUString& sName )
+ScVbaWorksheet::getControlShape( const OUString& sName )
 {
     // ideally we would get an XControl object but it appears an XControl
     // implementation only exists for a Control implementation optained from the
@@ -1026,10 +1026,10 @@ ScVbaWorksheet::getControlShape( const ::rtl::OUString& sName )
 }
 
 
-rtl::OUString
+OUString
 ScVbaWorksheet::getServiceImplName()
 {
-    return rtl::OUString("ScVbaWorksheet");
+    return OUString("ScVbaWorksheet");
 }
 
 void SAL_CALL
@@ -1045,23 +1045,23 @@ ScVbaWorksheet::getEnableCalculation(  ) throw (css::script::BasicErrorException
     return xCalculatable->isAutomaticCalculationEnabled();
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaWorksheet::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Worksheet" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Worksheet" );
     }
     return aServiceNames;
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xSheetProp( mxSheet, uno::UNO_QUERY_THROW );
-    return xSheetProp->getPropertyValue( ::rtl::OUString( "CodeName" ) ).get< ::rtl::OUString >();
+    return xSheetProp->getPropertyValue( OUString( "CodeName" ) ).get< OUString >();
 }
 
 sal_Int16

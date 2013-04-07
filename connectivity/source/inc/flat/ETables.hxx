@@ -32,7 +32,7 @@ namespace connectivity
         class OFlatTables : public OFlatTables_BASE
         {
         protected:
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
         public:
             OFlatTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)

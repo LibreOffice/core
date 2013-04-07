@@ -40,12 +40,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
-typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
+typedef sal_uInt32 ( SAL_CALL *ImportCGMPointer )( OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+typedef sal_Bool ( SAL_CALL *ExportCGMPointer )( OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 #ifdef DISABLE_DYNLOADING
 
-extern "C" sal_uInt32 ImportCGM( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+extern "C" sal_uInt32 ImportCGM( OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
 
 #endif
 
@@ -76,7 +76,7 @@ sal_Bool SdCGMFilter::Import()
 #else
         ImportCGMPointer FncImportCGM = ImportCGM;
 #endif
-        ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         sal_uInt32          nRetValue;
 
         if( mrDocument.GetPageCount() == 0L )
@@ -125,7 +125,7 @@ sal_Bool SdCGMFilter::Export()
 
         if( FncCGMExport )
         {
-            ::rtl::OUString aPhysicalName( mrMedium.GetPhysicalName() );
+            OUString aPhysicalName( mrMedium.GetPhysicalName() );
 
             CreateStatusIndicator();
             bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );

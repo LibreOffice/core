@@ -84,12 +84,12 @@ class LwpBulletStyleMgr
 public:
     LwpBulletStyleMgr();
     virtual ~LwpBulletStyleMgr();
-    rtl::OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
+    OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(sal_Bool bFlag);
     XFContentContainer* AddBulletList(XFContentContainer* pCont, sal_Bool bIsOrdered,
-        const rtl::OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped);
+        const OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped);
     inline void SetCurrentPos(sal_uInt16 nNewPos);
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
     inline LwpObjectID GetCurrentSilverBullet();
@@ -99,9 +99,9 @@ public:
 
 private:
     typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
-    std::vector <rtl::OUString> m_vStyleNameList;
+    std::vector <OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
-    rtl::OUString m_aCurrentStyleName;
+    OUString m_aCurrentStyleName;
     LwpFoundry* m_pFoundry;
     XFList* m_pBulletList;
     sal_Bool m_bContinue;

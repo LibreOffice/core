@@ -59,7 +59,7 @@ class OEditBaseModel :  public OBoundControlModel
 protected:
 // [properties]         for all EditingFields
     ::com::sun::star::uno::Any  m_aDefault;
-    ::rtl::OUString             m_aDefaultText;             // default value
+    OUString             m_aDefaultText;             // default value
     sal_Bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
     sal_Bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
 // [properties]

@@ -37,7 +37,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 using ::oox::core::CodecHelper;
-using ::rtl::OUString;
 
 // ============================================================================
 

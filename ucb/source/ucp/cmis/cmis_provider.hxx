@@ -39,7 +39,7 @@ namespace cmis
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
 private:
-    std::map< rtl::OUString, libcmis::Session* > m_aSessionCache;
+    std::map< OUString, libcmis::Session* > m_aSessionCache;
 
 public:
     ContentProvider( const ::com::sun::star::uno::Reference<
@@ -63,8 +63,8 @@ public:
         throw( ::com::sun::star::ucb::IllegalIdentifierException,
                ::com::sun::star::uno::RuntimeException );
 
-    libcmis::Session* getSession( const rtl::OUString& sBindingUrl );
-    void registerSession( const rtl::OUString& sBindingUrl, libcmis::Session* pSession );
+    libcmis::Session* getSession( const OUString& sBindingUrl );
+    void registerSession( const OUString& sBindingUrl, libcmis::Session* pSession );
 };
 
 }

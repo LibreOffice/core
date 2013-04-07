@@ -296,7 +296,7 @@ static const TokenTable pTokenTableArray[] =
     { "NotFound",           TK_NotFound }
 };
 
-PPPOptimizerTokenEnum TKGet( const rtl::OUString& rToken )
+PPPOptimizerTokenEnum TKGet( const OUString& rToken )
 {
     if ( !pHashMap )
     {   // init hash map
@@ -324,12 +324,12 @@ PPPOptimizerTokenEnum TKGet( const rtl::OUString& rToken )
     return eRetValue;
 }
 
-rtl::OUString TKGet( const PPPOptimizerTokenEnum eToken )
+OUString TKGet( const PPPOptimizerTokenEnum eToken )
 {
     sal_uInt32 i = eToken >= TK_Last
         ? (sal_uInt32)TK_NotFound
         : (sal_uInt32)eToken;
-    return rtl::OUString::createFromAscii( pTokenTableArray[ i ].pS );
+    return OUString::createFromAscii( pTokenTableArray[ i ].pS );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

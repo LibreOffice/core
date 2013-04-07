@@ -189,7 +189,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatementBase::createArrayHelper" );
     BEGIN_PROPERTY_HELPER(10)
-        DECL_PROP0(CURSORNAME,              ::rtl::OUString);
+        DECL_PROP0(CURSORNAME,              OUString);
         DECL_PROP0_BOOL(ESCAPE_PROCESSING);
         DECL_PROP0(FETCHDIRECTION,          sal_Int32);
         DECL_PROP0(FETCHSIZE,               sal_Int32);
@@ -227,7 +227,7 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
             if ( m_xAggregateAsSet.is() )
             {
                 // get the property name
-                ::rtl::OUString sPropName;
+                OUString sPropName;
                 getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
 
                 // now set the value
@@ -266,7 +266,7 @@ void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
         default:
             if ( m_xAggregateAsSet.is() )
             {
-                ::rtl::OUString sPropName;
+                OUString sPropName;
                 getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
                 m_xAggregateAsSet->setPropertyValue( sPropName, rValue );
             }
@@ -292,7 +292,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
         default:
             if ( m_xAggregateAsSet.is() )
             {
-                ::rtl::OUString sPropName;
+                OUString sPropName;
                 const_cast< OStatementBase* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
                 rValue = m_xAggregateAsSet->getPropertyValue( sPropName );
             }
@@ -449,28 +449,28 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OStatementBase, OStatement_IFACE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE );
 
 // XServiceInfo
-rtl::OUString OStatement::getImplementationName(  ) throw(RuntimeException)
+OUString OStatement::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getImplementationName" );
-    return rtl::OUString("com.sun.star.sdb.OStatement");
+    return OUString("com.sun.star.sdb.OStatement");
 }
 
-sal_Bool OStatement::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::supportsService" );
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
-Sequence< ::rtl::OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::getSupportedServiceNames" );
-    Sequence< ::rtl::OUString > aSNS( 1 );
+    Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = SERVICE_SDBC_STATEMENT;
     return aSNS;
 }
 
 // XStatement
-Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
+Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::executeQuery" );
     MutexGuard aGuard(m_aMutex);
@@ -479,7 +479,7 @@ Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) t
     disposeResultSet();
     Reference< XResultSet > xResultSet;
 
-    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
 
     Reference< XResultSet > xInnerResultSet = m_xAggregateStatement->executeQuery( sSQL );
     Reference< XConnection > xConnection( m_xParent, UNO_QUERY_THROW );
@@ -497,7 +497,7 @@ Reference< XResultSet > OStatement::executeQuery( const rtl::OUString& _rSQL ) t
     return xResultSet;
 }
 
-sal_Int32 OStatement::executeUpdate( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
+sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::executeUpdate" );
     MutexGuard aGuard(m_aMutex);
@@ -505,11 +505,11 @@ sal_Int32 OStatement::executeUpdate( const rtl::OUString& _rSQL ) throw( SQLExce
 
     disposeResultSet();
 
-    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
-sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
+sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -517,11 +517,11 @@ sal_Bool OStatement::execute( const rtl::OUString& _rSQL ) throw( SQLException, 
 
     disposeResultSet();
 
-    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     return m_xAggregateStatement->execute( sSQL );
 }
 
-void OStatement::addBatch( const rtl::OUString& _rSQL ) throw( SQLException, RuntimeException )
+void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::execute" );
     MutexGuard aGuard(m_aMutex);
@@ -532,7 +532,7 @@ void OStatement::addBatch( const rtl::OUString& _rSQL ) throw( SQLException, Run
     if (!xMeta.is() && !xMeta->supportsBatchUpdates())
         throwFunctionSequenceException(*this);
 
-    ::rtl::OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
+    OUString sSQL( impl_doEscapeProcessing_nothrow( _rSQL ) );
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
 }
 
@@ -576,7 +576,7 @@ void SAL_CALL OStatement::disposing()
     m_xAggregateStatement.clear();
 }
 
-::rtl::OUString OStatement::impl_doEscapeProcessing_nothrow( const ::rtl::OUString& _rSQL ) const
+OUString OStatement::impl_doEscapeProcessing_nothrow( const OUString& _rSQL ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OStatement::impl_doEscapeProcessing_nothrow" );
     if ( !m_bEscapeProcessing )
@@ -594,7 +594,7 @@ void SAL_CALL OStatement::disposing()
             // if we cannot parse it, silently accept this. The driver is probably able to cope with it then
             return _rSQL;
 
-        ::rtl::OUString sLowLevelSQL = m_xComposer->getQueryWithSubstitution();
+        OUString sLowLevelSQL = m_xComposer->getQueryWithSubstitution();
         return sLowLevelSQL;
     }
     catch( const Exception& )

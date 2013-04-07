@@ -41,7 +41,7 @@ SvHashTable::~SvHashTable()
 {
 }
 
-sal_Bool SvHashTable::Test_Insert( const rtl::OString& rElement, sal_Bool bInsert,
+sal_Bool SvHashTable::Test_Insert( const OString& rElement, sal_Bool bInsert,
                                sal_uInt32 * pInsertPos )
 {
     sal_uInt32    nHash;
@@ -114,7 +114,7 @@ SvStringHashTable::~SvStringHashTable()
     delete [] pEntries;
 }
 
-sal_uInt32 SvStringHashTable::HashFunc( const rtl::OString& rElement ) const
+sal_uInt32 SvStringHashTable::HashFunc( const OString& rElement ) const
 {
     sal_uInt32          nHash = 0;  // hash value
     const char *    pStr = rElement.getStr();
@@ -135,7 +135,7 @@ sal_uInt32 SvStringHashTable::HashFunc( const rtl::OString& rElement ) const
     return( nHash );
 }
 
-rtl::OString SvStringHashTable::GetNearString( const rtl::OString& rName ) const
+OString SvStringHashTable::GetNearString( const OString& rName ) const
 {
     for( sal_uInt32 i = 0; i < GetMax(); i++ )
     {
@@ -146,7 +146,7 @@ rtl::OString SvStringHashTable::GetNearString( const rtl::OString& rName ) const
                 return pE->GetName();
         }
     }
-    return rtl::OString();
+    return OString();
 }
 
 sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
@@ -156,7 +156,7 @@ sal_Bool SvStringHashTable::IsEntry( sal_uInt32 nIndex ) const
     return pEntries[ nIndex ].HasId();
 }
 
-sal_Bool SvStringHashTable::Insert( const rtl::OString& rName, sal_uInt32 * pIndex )
+sal_Bool SvStringHashTable::Insert( const OString& rName, sal_uInt32 * pIndex )
 {
     sal_uInt32 nIndex;
 
@@ -170,7 +170,7 @@ sal_Bool SvStringHashTable::Insert( const rtl::OString& rName, sal_uInt32 * pInd
     return sal_True;
 }
 
-sal_Bool SvStringHashTable::Test( const rtl::OString& rName, sal_uInt32 * pPos ) const
+sal_Bool SvStringHashTable::Test( const OString& rName, sal_uInt32 * pPos ) const
 {
     return const_cast<SvStringHashTable*>(this)->Test_Insert( rName, sal_False, pPos );
 }
@@ -182,7 +182,7 @@ SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
     return( NULL );
 }
 
-bool SvStringHashTable::equals( const rtl::OString& rElement,
+bool SvStringHashTable::equals( const OString& rElement,
                                           sal_uInt32 nIndex ) const
 {
     return rElement.equals( pEntries[ nIndex ].GetName() );

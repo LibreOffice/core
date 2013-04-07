@@ -34,10 +34,10 @@ class XMLSectionSourceDDEImportContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & rSectionPropertySet;
 
-    const ::rtl::OUString sDdeCommandFile;
-    const ::rtl::OUString sDdeCommandType;
-    const ::rtl::OUString sDdeCommandElement;
-    const ::rtl::OUString sIsAutomaticUpdate;
+    const OUString sDdeCommandFile;
+    const OUString sDdeCommandType;
+    const OUString sDdeCommandElement;
+    const OUString sIsAutomaticUpdate;
 
 public:
 
@@ -46,7 +46,7 @@ public:
     XMLSectionSourceDDEImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rSectPropSet);
 
@@ -62,7 +62,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

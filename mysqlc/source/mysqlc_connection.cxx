@@ -55,7 +55,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using ::osl::MutexGuard;
-using ::rtl::OUString;
 
 
 #define MYSQLC_URI_PREFIX "sdbc:mysqlc:"
@@ -210,9 +209,9 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // Check if the server is 4.1 or above
     if (this->getMysqlVersion() < 40100) {
         throw SQLException(
-            ::rtl::OUString( "MariaDB LibreOffice Connector requires MySQL Server 4.1 or above"  ),
+            OUString( "MariaDB LibreOffice Connector requires MySQL Server 4.1 or above"  ),
             *this,
-            ::rtl::OUString(),
+            OUString(),
             0,
             Any());
     }
@@ -257,7 +256,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUS
     OSL_TRACE("OConnection::prepareStatement");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
-    const ::rtl::OUString sSqlStatement = transFormPreparedStatement( _sSql );
+    const OUString sSqlStatement = transFormPreparedStatement( _sSql );
 
     Reference< XPreparedStatement > xStatement;
     try {
@@ -295,8 +294,8 @@ OUString SAL_CALL OConnection::nativeSQL(const OUString& _sSql)
     OSL_TRACE("OConnection::nativeSQL");
     MutexGuard aGuard(m_aMutex);
 
-    const ::rtl::OUString sSqlStatement = transFormPreparedStatement( _sSql );
-    ::rtl::OUString sNativeSQL;
+    const OUString sSqlStatement = transFormPreparedStatement( _sSql );
+    OUString sNativeSQL;
     try {
         sNativeSQL = mysqlc_sdbc_driver::convert(m_settings.cppConnection->nativeSQL(mysqlc_sdbc_driver::convert(sSqlStatement, getConnectionEncoding())),
                                                                                 getConnectionEncoding());
@@ -658,7 +657,7 @@ OUString OConnection::getMysqlVariable(const char *varname)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     OUString ret;
-    ::rtl::OUStringBuffer aStatement;
+    OUStringBuffer aStatement;
     aStatement.appendAscii( "SHOW SESSION VARIABLES LIKE '" );
     aStatement.appendAscii( varname );
     aStatement.append( sal_Unicode( '\'' ) );
@@ -717,16 +716,16 @@ sal_Int32 OConnection::getMysqlVersion()
 //  return 0;
 //}
 // -----------------------------------------------------------------------------
-::rtl::OUString OConnection::transFormPreparedStatement(const ::rtl::OUString& _sSQL)
+OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
 {
-    ::rtl::OUString sSqlStatement = _sSQL;
+    OUString sSqlStatement = _sSQL;
     if ( !m_xParameterSubstitution.is() ) {
         try {
             Sequence< Any > aArgs(1);
             Reference< XConnection> xCon = this;
-            aArgs[0] <<= NamedValue(::rtl::OUString("ActiveConnection"), makeAny(xCon));
+            aArgs[0] <<= NamedValue(OUString("ActiveConnection"), makeAny(xCon));
 
-            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments(::rtl::OUString("org.openoffice.comp.helper.ParameterSubstitution"),aArgs),UNO_QUERY);
+            m_xParameterSubstitution.set(m_rDriver.getFactory()->createInstanceWithArguments(OUString("org.openoffice.comp.helper.ParameterSubstitution"),aArgs),UNO_QUERY);
         } catch(const Exception&) {}
     }
     if ( m_xParameterSubstitution.is() ) {

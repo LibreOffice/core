@@ -142,9 +142,9 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
 {
-    maEdLogin.SetText(rtl::OUString(sAnonymous));
+    maEdLogin.SetText(OUString(sAnonymous));
     SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : rtl::OUString() );
+    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString() );
 
     maFtLogin.Disable ();
     maFtPassword.Disable ();
@@ -336,8 +336,8 @@ void SvxHyperlinkInternetTp::RemoveImproperProtocol(const String& aProperScheme)
 String SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
     if( maRbtLinktypFTP.IsChecked() )
-        return rtl::OUString(INET_FTP_SCHEME);
-    return rtl::OUString(INET_HTTP_SCHEME);
+        return OUString(INET_FTP_SCHEME);
+    return OUString(INET_HTTP_SCHEME);
 }
 
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
@@ -415,8 +415,8 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
     /////////////////////////////////////////////////
     // Open URL if available
 
-    SfxStringItem aName( SID_FILE_NAME, rtl::OUString("http://") );
-    SfxStringItem aRefererItem( SID_REFERER, rtl::OUString("private:user") );
+    SfxStringItem aName( SID_FILE_NAME, OUString("http://") );
+    SfxStringItem aRefererItem( SID_REFERER, OUString("private:user") );
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
     SfxBoolItem aSilent( SID_SILENT, sal_True );
     SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );

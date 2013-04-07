@@ -64,54 +64,54 @@
 #include <rtl/ustrbuf.hxx>
 #include <sstream>
 
-rtl::OUString Int32ToOUString(sal_Int32 num)
+OUString Int32ToOUString(sal_Int32 num)
 {
     /*std::stringstream sstrm;
 
     sstrm<<(int)num;
-    return rtl::OUString::createFromAscii(sstrm.str().c_str());
+    return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return rtl::OUString::valueOf(num);
+    return OUString::valueOf(num);
 }
 
-rtl::OUString Int16ToOUString(sal_Int16 num)
+OUString Int16ToOUString(sal_Int16 num)
 {
     /*std::stringstream sstrm;
 
     sstrm<<(int)num;
-    return rtl::OUString::createFromAscii(sstrm.str().c_str());
+    return OUString::createFromAscii(sstrm.str().c_str());
     */
     sal_Int32 nNum = static_cast<sal_Int32>(num);
-    return rtl::OUString::valueOf(nNum);
+    return OUString::valueOf(nNum);
 }
 
-rtl::OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
+OUString   FloatToOUString(float num, sal_Int32 /*precision*/)
 {
     /*std::stringstream sstrm;
     std::string         strRet;
 
     sstrm.precision(precision);
     sstrm<<num;
-    return rtl::OUString::createFromAscii(sstrm.str().c_str());
+    return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return rtl::OUString::valueOf(num);
+    return OUString::valueOf(num);
 }
 
-rtl::OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
+OUString   DoubleToOUString(double num, sal_Int32 /*precision*/)
 {
     /*std::stringstream sstrm;
     std::string         strRet;
 
     sstrm.precision(precision);
     sstrm<<num;
-    return rtl::OUString::createFromAscii(sstrm.str().c_str());
+    return OUString::createFromAscii(sstrm.str().c_str());
     */
-    return rtl::OUString::valueOf(num);
+    return OUString::valueOf(num);
 }
 
-rtl::OUString   DateTimeToOUString(XFDateTime& dt)
+OUString   DateTimeToOUString(XFDateTime& dt)
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.append(dt.nYear);
     buf.append( A2OUSTR("-") );
     buf.append(dt.nMonth);
@@ -129,7 +129,7 @@ rtl::OUString   DateTimeToOUString(XFDateTime& dt)
     return buf.makeStringAndClear();
 }
 
-rtl::OUString   GetTableColName(sal_Int32 col)
+OUString   GetTableColName(sal_Int32 col)
 {
     int     remain = 0;
     char    ch;
@@ -156,7 +156,7 @@ rtl::OUString   GetTableColName(sal_Int32 col)
 }
 
 //tool functions:
-rtl::OUString   GetUnderlineName(enumXFUnderline type)
+OUString   GetUnderlineName(enumXFUnderline type)
 {
     switch(type)
     {
@@ -218,7 +218,7 @@ rtl::OUString   GetUnderlineName(enumXFUnderline type)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetReliefName(enumXFRelief type)
+OUString   GetReliefName(enumXFRelief type)
 {
     switch(type)
     {
@@ -234,7 +234,7 @@ rtl::OUString   GetReliefName(enumXFRelief type)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetCrossoutName(enumXFCrossout type)
+OUString   GetCrossoutName(enumXFCrossout type)
 {
     switch(type)
     {
@@ -259,7 +259,7 @@ rtl::OUString   GetCrossoutName(enumXFCrossout type)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetTransformName(enumXFTransform type)
+OUString   GetTransformName(enumXFTransform type)
 {
     switch(type) {
     case enumXFTransformUpper:
@@ -280,7 +280,7 @@ rtl::OUString   GetTransformName(enumXFTransform type)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetEmphasizeName(enumXFEmphasize type)
+OUString   GetEmphasizeName(enumXFEmphasize type)
 {
     switch(type) {
     case enumXFEmphasizeDot:
@@ -301,7 +301,7 @@ rtl::OUString   GetEmphasizeName(enumXFEmphasize type)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetTextDirName(enumXFTextDir dir)
+OUString   GetTextDirName(enumXFTextDir dir)
 {
     switch(dir)
     {
@@ -335,7 +335,7 @@ rtl::OUString   GetTextDirName(enumXFTextDir dir)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetFrameXPos(enumXFFrameXPos pos)
+OUString   GetFrameXPos(enumXFFrameXPos pos)
 {
     switch(pos)
     {
@@ -357,7 +357,7 @@ rtl::OUString   GetFrameXPos(enumXFFrameXPos pos)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetFrameXRel(enumXFFrameXRel rel)
+OUString   GetFrameXRel(enumXFFrameXRel rel)
 {
     switch(rel)
     {
@@ -406,7 +406,7 @@ rtl::OUString   GetFrameXRel(enumXFFrameXRel rel)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetFrameYPos(enumXFFrameYPos pos)
+OUString   GetFrameYPos(enumXFFrameYPos pos)
 {
     switch(pos)
     {
@@ -424,7 +424,7 @@ rtl::OUString   GetFrameYPos(enumXFFrameYPos pos)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetFrameYRel(enumXFFrameYRel rel)
+OUString   GetFrameYRel(enumXFFrameYRel rel)
 {
     switch(rel)
     {
@@ -452,7 +452,7 @@ rtl::OUString   GetFrameYRel(enumXFFrameYRel rel)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetAlignName(enumXFAlignType align)
+OUString   GetAlignName(enumXFAlignType align)
 {
     if( align == enumXFAlignStart )
         return A2OUSTR("start");
@@ -474,7 +474,7 @@ rtl::OUString   GetAlignName(enumXFAlignType align)
     return A2OUSTR("");
 }
 
-rtl::OUString   GetDrawKind(enumXFDrawKind kind)
+OUString   GetDrawKind(enumXFDrawKind kind)
 {
     if( kind == enumXFDrawKindFull )
         return A2OUSTR("full");
@@ -486,9 +486,9 @@ rtl::OUString   GetDrawKind(enumXFDrawKind kind)
         return A2OUSTR("arc");
 }
 
-rtl::OUString   GetPageUsageName(enumXFPageUsage usage)
+OUString   GetPageUsageName(enumXFPageUsage usage)
 {
-    rtl::OUString sRet;
+    OUString sRet;
     switch(usage)
     {
     case enumXFPageUsageAll:
@@ -510,9 +510,9 @@ rtl::OUString   GetPageUsageName(enumXFPageUsage usage)
     return sRet;
 }
 
-rtl::OUString   GetValueType(enumXFValueType type)
+OUString   GetValueType(enumXFValueType type)
 {
-    rtl::OUString sRet;
+    OUString sRet;
     switch(type)
     {
     case enumXFValueTypeBoolean:
@@ -543,7 +543,7 @@ rtl::OUString   GetValueType(enumXFValueType type)
     return sRet;
 }
 
-rtl::OUString   GetColorMode(enumXFColorMode mode)
+OUString   GetColorMode(enumXFColorMode mode)
 {
     switch(mode)
     {

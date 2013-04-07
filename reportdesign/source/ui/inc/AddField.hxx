@@ -62,8 +62,8 @@ class  OAddFieldWindow  :public FloatingWindow
 
     PushButton                                                                  m_aInsertButton;
     Link                                                                        m_aCreateLink;
-    ::rtl::OUString                                                             m_aCommandName;
-    ::rtl::OUString                                                             m_sFilter;
+    OUString                                                             m_aCommandName;
+    OUString                                                             m_sFilter;
     sal_Int32                                                                   m_nCommandType;
     sal_Bool                                                                    m_bEscapeProcessing;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
@@ -84,7 +84,7 @@ public:
     virtual void GetFocus();
     virtual long PreNotify( NotifyEvent& _rNEvt );
 
-    inline const ::rtl::OUString&       GetCommand()            const { return m_aCommandName; }
+    inline const OUString&       GetCommand()            const { return m_aCommandName; }
     inline sal_Int32                    GetCommandType()        const { return m_nCommandType; }
     inline sal_Bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
     inline void SetCreateHdl(const Link& _aCreateLink) { m_aCreateLink = _aCreateLink; }

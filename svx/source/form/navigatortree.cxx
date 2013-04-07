@@ -466,7 +466,7 @@ namespace svxform
 
                             pFormModel->BegUndo(aUndoStr);
                             // dieser Slot war guletig bei (genau) einem selektierten Formular
-                            rtl::OUString fControlName = FM_COMPONENT_HIDDEN;
+                            OUString fControlName = FM_COMPONENT_HIDDEN;
                             NewControl( fControlName, *m_arrCurrentSelection.begin() );
                             pFormModel->EndUndo();
 
@@ -1001,7 +1001,7 @@ namespace svxform
             for (sal_Int32 i=0; i<nCount; ++i)
             {
                 // neues Control anlegen
-                rtl::OUString fControlName = FM_COMPONENT_HIDDEN;
+                OUString fControlName = FM_COMPONENT_HIDDEN;
                 FmControlData* pNewControlData = NewControl( fControlName, _pTargetEntry, sal_False);
                 Reference< XPropertySet >  xNewPropSet( pNewControlData->GetPropertySet() );
 
@@ -1019,7 +1019,7 @@ namespace svxform
                 Property* pAllCurrentProps = seqAllCurrentProps.getArray();
                 for (sal_Int32 j=0; j<seqAllCurrentProps.getLength(); ++j)
                 {
-                    ::rtl::OUString sCurrentProp = pAllCurrentProps[j].Name;
+                    OUString sCurrentProp = pAllCurrentProps[j].Name;
                     if (((pAllCurrentProps[j].Attributes & PropertyAttribute::READONLY) == 0) && (sCurrentProp != FM_PROP_NAME))
                     {   // (read-only attribs werden natuerlich nicht gesetzt, dito der Name, den hat das NewControl schon eindeutig
                         // festgelegt)
@@ -1372,7 +1372,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
-        ::rtl::OUString aName = GenerateName(pNewFormData);
+        OUString aName = GenerateName(pNewFormData);
         pNewFormData->SetText(aName);
 
         Reference< XPropertySet >  xPropertySet(xNewForm, UNO_QUERY);
@@ -1414,7 +1414,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    FmControlData* NavigatorTree::NewControl( const ::rtl::OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
+    FmControlData* NavigatorTree::NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NewControl" );
         //////////////////////////////////////////////////////////////////////
@@ -1441,7 +1441,7 @@ namespace svxform
         SdrPageView*    pPageView       = pFormView->GetSdrPageView();
         FmFormPage*     pPage           = (FmFormPage*)pPageView->GetPage();
 
-        ::rtl::OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
+        OUString sName = pPage->GetImpl().setUniqueName( xNewComponent, xParentForm );
 
         pNewFormControlData->SetText( sName );
 
@@ -1463,11 +1463,11 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString NavigatorTree::GenerateName( FmEntryData* pEntryData )
+    OUString NavigatorTree::GenerateName( FmEntryData* pEntryData )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::GenerateName" );
         const sal_uInt16 nMaxCount = 99;
-        ::rtl::OUString aNewName;
+        OUString aNewName;
 
         //////////////////////////////////////////////////////////////////////
         // BasisNamen erzeugen
@@ -1486,8 +1486,8 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += ::rtl::OUString(" ");
-                aNewName += ::rtl::OUString::valueOf(i).getStr();
+                aNewName += OUString(" ");
+                aNewName += OUString::valueOf(i).getStr();
             }
 
             if( GetNavModel()->FindData(aNewName, pFormParentData,sal_False) == NULL )
@@ -1498,7 +1498,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
+    sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditedEntry" );
         if (EditingCanceled())

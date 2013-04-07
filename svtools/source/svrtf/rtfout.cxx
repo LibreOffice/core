@@ -25,8 +25,6 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
 #if defined(UNX)
 const sal_Char RTFOutFuncs::sNewLine = '\012';
@@ -133,11 +131,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                             // #i47831# add an additional whitespace, so that
                             // "document whitespaces" are not ignored.;
                             rStream << "\\uc"
-                                << rtl::OString::valueOf(nLen).getStr() << " ";
+                                << OString::valueOf(nLen).getStr() << " ";
                             *pUCMode = nLen;
                         }
                         rStream << "\\u"
-                            << rtl::OString::valueOf(
+                            << OString::valueOf(
                                 static_cast<sal_Int32>(c)).getStr();
                     }
 

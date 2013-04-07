@@ -773,7 +773,7 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
 
 sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                             ControlState nState, const ImplControlValue& aValue,
-                                            const rtl::OUString& )
+                                            const OUString& )
 {
     GtkStateFlags flags;
     GtkShadowType shadow;
@@ -997,7 +997,7 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
 }
 
 sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState,
-                                                const ImplControlValue&, const rtl::OUString&,
+                                                const ImplControlValue&, const OUString&,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 {
     /* TODO: all this funcions needs improvements */
@@ -1306,7 +1306,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
-                  rtl::OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                  OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 
     int nPointHeight = 0;
     /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();

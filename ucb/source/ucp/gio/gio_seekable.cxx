@@ -46,7 +46,7 @@ void SAL_CALL Seekable::truncate( void )
         throw io::NotConnectedException();
 
     if (!g_seekable_can_truncate(mpStream))
-        throw io::IOException(rtl::OUString("Truncate unsupported"),
+        throw io::IOException(OUString("Truncate unsupported"),
             static_cast< cppu::OWeakObject * >(this));
 
     GError *pError=NULL;
@@ -61,7 +61,7 @@ void SAL_CALL Seekable::seek( sal_Int64 location )
         throw io::NotConnectedException();
 
     if (!g_seekable_can_seek(mpStream))
-        throw io::IOException(rtl::OUString("Seek unsupported"),
+        throw io::IOException(OUString("Seek unsupported"),
             static_cast< cppu::OWeakObject * >(this));
 
     GError *pError=NULL;
@@ -111,7 +111,7 @@ sal_Int64 SAL_CALL Seekable::getLength() throw( io::IOException, uno::RuntimeExc
     }
 
     if (!bOk)
-        throw io::IOException(rtl::OUString("Getting size unsupported"),
+        throw io::IOException(OUString("Getting size unsupported"),
             static_cast< cppu::OWeakObject * >(this));
 
     return nSize;

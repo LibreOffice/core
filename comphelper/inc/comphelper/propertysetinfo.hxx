@@ -71,11 +71,11 @@ public:
     void add( PropertyMapEntry* pMap ) throw();
 
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
-    void remove( const rtl::OUString& aName ) throw();
+    void remove( const OUString& aName ) throw();
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //.........................................................................

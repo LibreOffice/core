@@ -104,7 +104,7 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
     sal_Int32                                              mnOffset;
     bool                                                   mbValidInput;
 
-    bool setRange( const rtl::OUString& i_rNewRange, bool i_bStrict = false );
+    bool setRange( const OUString& i_rNewRange, bool i_bStrict = false );
     bool insertRange( sal_Int32 nFirst, sal_Int32 nLast, bool bSequence, bool bMayAdjust );
     bool insertJoinedRanges( const std::vector< sal_Int32 >& rNumbers, bool i_bStrict );
     bool checkValue( sal_Int32, const std::set< sal_Int32 >* i_pPossibleValues = NULL ) const;
@@ -135,7 +135,7 @@ public:
 
     friend class StringRangeEnumerator::Iterator;
 
-    StringRangeEnumerator( const rtl::OUString& i_rInput,
+    StringRangeEnumerator( const OUString& i_rInput,
                            sal_Int32 i_nMinNumber,
                            sal_Int32 i_nMaxNumber,
                            sal_Int32 i_nLogicalOffset = -1
@@ -172,7 +172,7 @@ public:
     - single number that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be ignored
     - range that doesn't fit in [i_nMinNumber,i_nMaxNumber] will be adjusted
     */
-    static bool getRangesFromString( const rtl::OUString& i_rPageRange,
+    static bool getRangesFromString( const OUString& i_rPageRange,
                                      std::vector< sal_Int32 >& o_rPageVector,
                                      sal_Int32 i_nMinNumber,
                                      sal_Int32 i_nMaxNumber,

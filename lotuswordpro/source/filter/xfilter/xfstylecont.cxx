@@ -65,7 +65,7 @@
 #include "xffontfactory.hxx"
 #include "../lwpglobalmgr.hxx"
 
-XFStyleContainer::XFStyleContainer(const rtl::OUString& strStyleNamePrefix)
+XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
     :m_strStyleNamePrefix(strStyleNamePrefix)
 {
 }
@@ -111,7 +111,7 @@ void    XFStyleContainer::Reset()
 IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 {
     IXFStyle    *pConStyle = NULL;
-    rtl::OUString   name;
+    OUString   name;
 
     if( !pStyle )
         return NULL;
@@ -168,7 +168,7 @@ IXFStyle*   XFStyleContainer::FindSameStyle(IXFStyle *pStyle)
     return NULL;
 }
 
-IXFStyle*   XFStyleContainer::FindStyle(rtl::OUString name)
+IXFStyle*   XFStyleContainer::FindStyle(OUString name)
 {
     std::vector<IXFStyle*>::iterator it;
     for( it = m_aStyles.begin(); it != m_aStyles.end(); ++it )

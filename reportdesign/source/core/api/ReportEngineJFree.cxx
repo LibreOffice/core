@@ -64,7 +64,7 @@ DBG_NAME( rpt_OReportEngineJFree )
 // -----------------------------------------------------------------------------
 OReportEngineJFree::OReportEngineJFree( const uno::Reference< uno::XComponentContext >& context)
 :ReportEngineBase(m_aMutex)
-,ReportEnginePropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
+,ReportEnginePropertySet(context,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
 ,m_xContext(context)
 ,m_nMaxRows(0)
 {
@@ -87,20 +87,20 @@ void SAL_CALL OReportEngineJFree::dispose() throw(uno::RuntimeException)
     m_xActiveConnection.clear();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OReportEngineJFree::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OReportEngineJFree::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OReportEngineJFree");
+    return OUString("com.sun.star.comp.report.OReportEngineJFree");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OReportEngineJFree::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OReportEngineJFree::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = OUString("com.sun.star.report.ReportEngine");
 
     return aServices;
@@ -112,12 +112,12 @@ uno::Reference< uno::XInterface > OReportEngineJFree::create(uno::Reference< uno
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OReportEngineJFree::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OReportEngineJFree::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OReportEngineJFree::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -157,26 +157,26 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
     set(PROPERTY_STATUSINDICATOR,_statusindicator,m_StatusIndicator);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OReportEngineJFree::getNewOutputName()
+OUString OReportEngineJFree::getNewOutputName()
 {
-    ::rtl::OUString sOutputName;
+    OUString sOutputName;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportEngineBase::rBHelper.bDisposed);
         if ( !m_xReport.is() || !m_xActiveConnection.is() )
             throw lang::IllegalArgumentException();
 
-        static const ::rtl::OUString s_sMediaType("MediaType");
+        static const OUString s_sMediaType("MediaType");
         try
         {
             MimeConfigurationHelper aConfighelper(m_xContext);
-            const ::rtl::OUString sMimeType = m_xReport->getMimeType();
+            const OUString sMimeType = m_xReport->getMimeType();
             const SfxFilter* pFilter = SfxFilter::GetDefaultFilter( aConfighelper.GetDocServiceNameFromMediaType(sMimeType) );
             String sExt;
             if ( pFilter )
                 sExt = ::comphelper::string::stripStart(pFilter->GetDefaultExtension(), '*');
             else
-                sExt = rtl::OUString(".rpt");
+                sExt = OUString(".rpt");
 
             uno::Reference< embed::XStorage > xTemp = OStorageHelper::GetTemporaryStorage(/*sFileTemp,embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,*/ m_xContext);
             utl::DisposableComponent aTemp(xTemp);
@@ -190,11 +190,11 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             uno::Sequence< beans::NamedValue > aConvertedProperties(8);
             sal_Int32 nPos = 0;
-            aConvertedProperties[nPos].Name = ::rtl::OUString("InputStorage");
+            aConvertedProperties[nPos].Name = OUString("InputStorage");
             aConvertedProperties[nPos++].Value <<= xTemp;
-            aConvertedProperties[nPos].Name = ::rtl::OUString("OutputStorage");
+            aConvertedProperties[nPos].Name = OUString("OutputStorage");
 
-            ::rtl::OUString sFileURL;
+            OUString sFileURL;
             String sName = m_xReport->getCaption();
             if ( !sName.Len() )
                 sName = m_xReport->getName();
@@ -231,19 +231,19 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
 
             // some meta data
             SvtUserOptions aUserOpts;
-            ::rtl::OUStringBuffer sAuthor(aUserOpts.GetFirstName());
+            OUStringBuffer sAuthor(aUserOpts.GetFirstName());
             sAuthor.appendAscii(" ");
             sAuthor.append(aUserOpts.GetLastName());
-            static const ::rtl::OUString s_sAuthor("Author");
+            static const OUString s_sAuthor("Author");
             aConvertedProperties[nPos].Name = s_sAuthor;
             aConvertedProperties[nPos++].Value <<= sAuthor.makeStringAndClear();
 
-            static const ::rtl::OUString s_sTitle("Title");
+            static const OUString s_sTitle("Title");
             aConvertedProperties[nPos].Name = s_sTitle;
             aConvertedProperties[nPos++].Value <<= m_xReport->getCaption();
 
             // create job factory and initialize
-            const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
+            const OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xContext);
             uno::Reference<task::XJob> xJob(m_xContext->getServiceManager()->createInstanceWithContext(sReportEngineServiceName,m_xContext),uno::UNO_QUERY_THROW);
             if ( !m_xReport->getCommand().isEmpty() )
             {
@@ -284,7 +284,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
 uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive( const uno::Reference< frame::XFrame >& _frame,bool _bHidden ) throw (lang::DisposedException, lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
-    ::rtl::OUString sOutputName = getNewOutputName(); // starts implicite the report generator
+    OUString sOutputName = getNewOutputName(); // starts implicite the report generator
     if ( !sOutputName.isEmpty() )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -294,7 +294,7 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         {
             // if there is no frame given, find the right
             xFrameLoad.set( frame::Desktop::create(m_xContext), uno::UNO_QUERY);
-            ::rtl::OUString sTarget("_blank");
+            OUString sTarget("_blank");
             sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
             uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
             xFrameLoad.set( xFrame,uno::UNO_QUERY);
@@ -304,22 +304,22 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
         {
             uno::Sequence < beans::PropertyValue > aArgs( _bHidden ? 3 : 2 );
             sal_Int32 nLen = 0;
-            aArgs[nLen].Name = ::rtl::OUString("AsTemplate");
+            aArgs[nLen].Name = OUString("AsTemplate");
             aArgs[nLen++].Value <<= sal_False;
 
-            aArgs[nLen].Name = ::rtl::OUString("ReadOnly");
+            aArgs[nLen].Name = OUString("ReadOnly");
             aArgs[nLen++].Value <<= sal_True;
 
             if ( _bHidden )
             {
-                aArgs[nLen].Name = ::rtl::OUString("Hidden");
+                aArgs[nLen].Name = OUString("Hidden");
                 aArgs[nLen++].Value <<= sal_True;
             }
 
             uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
             xModel.set( xFrameLoad->loadComponentFromURL(
                 sOutputName,
-                ::rtl::OUString(), // empty frame name
+                OUString(), // empty frame name
                 0,
                 aArgs
                 ),uno::UNO_QUERY);
@@ -353,32 +353,32 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OReportEngineJFree::getProper
     return ReportEnginePropertySet::getPropertySetInfo();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OReportEngineJFree::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportEngineJFree::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OReportEngineJFree::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OReportEngineJFree::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return ReportEnginePropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportEngineJFree::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportEngineJFree::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportEngineJFree::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportEngineJFree::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportEngineJFree::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportEngineJFree::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportEngineJFree::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OReportEngineJFree::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ReportEnginePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }

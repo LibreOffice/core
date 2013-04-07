@@ -317,11 +317,11 @@ void RtfExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/
     SAL_INFO("sw.rtf", "TODO: " << OSL_THIS_FUNC);
 }
 
-void RtfExport::DoComboBox(const rtl::OUString& /*rName*/,
-                             const rtl::OUString& /*rHelp*/,
-                             const rtl::OUString& /*rToolTip*/,
-                             const rtl::OUString& /*rSelected*/,
-                             uno::Sequence<rtl::OUString>& /*rListItems*/)
+void RtfExport::DoComboBox(const OUString& /*rName*/,
+                             const OUString& /*rHelp*/,
+                             const OUString& /*rToolTip*/,
+                             const OUString& /*rSelected*/,
+                             uno::Sequence<OUString>& /*rListItems*/)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -332,10 +332,10 @@ void RtfExport::DoFormText(const SwInputField* pFld )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    ::rtl::OUString sResult = pFld->ExpandField(true);
-    ::rtl::OUString sHelp( pFld->GetHelp() );
-    ::rtl::OUString sName = pFld->GetPar2();
-    ::rtl::OUString sStatus = pFld->GetToolTip();
+    OUString sResult = pFld->ExpandField(true);
+    OUString sHelp( pFld->GetHelp() );
+    OUString sName = pFld->GetPar2();
+    OUString sStatus = pFld->GetToolTip();
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST "{ FORMTEXT }");
     m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD " {" OOO_STRING_SVTOOLS_RTF_FFTYPE "0" );
     if( !sHelp.isEmpty() )
@@ -739,7 +739,7 @@ void RtfExport::OutputOLENode( const SwOLENode& )
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
-void RtfExport::OutputLinkedOLE( const rtl::OUString& )
+void RtfExport::OutputLinkedOLE( const OUString& )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 }

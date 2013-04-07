@@ -144,14 +144,14 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
                 pDataBase->Load( aStm );
                 if( aStm.GetError() != SVSTREAM_OK )
                 {
-                    rtl::OStringBuffer aStr;
+                    OStringBuffer aStr;
                     if( aStm.GetError() == SVSTREAM_FILEFORMAT_ERROR )
                         aStr.append("error: incompatible format, file ");
                     else if( aStm.GetError() == SVSTREAM_WRONGVERSION )
                         aStr.append("error: wrong version, file ");
                     else
                         aStr.append("error during load, file ");
-                    aStr.append(rtl::OUStringToOString(aFileName,
+                    aStr.append(OUStringToOString(aFileName,
                         RTL_TEXTENCODING_UTF8));
                     fprintf( stderr, "%s\n", aStr.getStr() );
                     return sal_False;
@@ -166,7 +166,7 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         }
         else
         {
-            const rtl::OString aStr(rtl::OUStringToOString(aFileName,
+            const OString aStr(OUStringToOString(aFileName,
                 RTL_TEXTENCODING_UTF8));
             fprintf( stderr, "unable to read input file: %s\n", aStr.getStr() );
             return sal_False;
@@ -178,16 +178,16 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // program name
-    pList->push_back( new String(rtl::OUString::createFromAscii(*argv) ) );
+    pList->push_back( new String(OUString::createFromAscii(*argv) ) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
         { // when @, then response file
-            SvFileStream aStm( rtl::OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
+            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
                 return sal_False;
 
-            rtl::OString aStr;
+            OString aStr;
             while( aStm.ReadLine( aStr ) )
             {
                 sal_uInt16 n = 0;
@@ -200,12 +200,12 @@ static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
                     while( aStr[n] && !isspace( aStr[n] ) )
                         n++;
                     if( n != nPos )
-                        pList->push_back( new String( rtl::OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) ) );
+                        pList->push_back( new String( OStringToOUString(aStr.copy(nPos, n - nPos), RTL_TEXTENCODING_ASCII_US) ) );
                 }
             }
         }
         else if( argv[ i ] )
-            pList->push_back( new String( rtl::OUString::createFromAscii( argv[ i ] ) ) );
+            pList->push_back( new String( OUString::createFromAscii( argv[ i ] ) ) );
     }
     return sal_True;
 }
@@ -293,7 +293,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                     {
                         printf(
                             "unknown switch: %s\n",
-                            rtl::OUStringToOString(
+                            OUStringToOString(
                                 aParam, RTL_TEXTENCODING_UTF8).getStr());
                         exit( -1 );
                     }
@@ -336,7 +336,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                     // temporary compatibility hack
                     printf(
                         "unknown switch: %s\n",
-                        rtl::OUStringToOString(
+                        OUStringToOString(
                             aParam, RTL_TEXTENCODING_UTF8).getStr());
                     exit( -1 );
                 }
@@ -356,13 +356,13 @@ SvCommand::SvCommand( int argc, char ** argv )
         delete aList[ i ];
     aList.clear();
 
-    rtl::OString aInc(getenv("INCLUDE"));
+    OString aInc(getenv("INCLUDE"));
     // append include environment variable
     if( aInc.getLength() )
     {
         if( aPath.Len() )
             aPath += OUString( SAL_PATHSEPARATOR );
-        aPath += rtl::OStringToOUString(aInc, RTL_TEXTENCODING_ASCII_US);
+        aPath += OStringToOUString(aInc, RTL_TEXTENCODING_ASCII_US);
     }
 }
 

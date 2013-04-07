@@ -43,9 +43,9 @@ bool
 registerAtUcb(
     uno::Reference< ucb::XContentProviderManager > const & rManager,
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
-    rtl::OUString const & rName,
-    rtl::OUString const & rArguments,
-    rtl::OUString const & rTemplate,
+    OUString const & rName,
+    OUString const & rArguments,
+    OUString const & rTemplate,
     ContentProviderRegistrationInfo * pInfo)
     throw (uno::RuntimeException)
 {
@@ -53,7 +53,7 @@ registerAtUcb(
                "ucb::registerAtUcb(): No service factory");
 
     bool bNoProxy = rArguments.startsWith("{noproxy}");
-    rtl::OUString
+    OUString
         aProviderArguments(bNoProxy ?
                                rArguments.
                                    copy(RTL_CONSTASCII_LENGTH("{noproxy}")) :
@@ -68,7 +68,7 @@ registerAtUcb(
         {
             uno::Reference< beans::XPropertySet > xFactoryProperties( rServiceFactory, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext = uno::Reference< uno::XComponentContext >(
-                xFactoryProperties->getPropertyValue( ::rtl::OUString( "DefaultContext" ) ),
+                xFactoryProperties->getPropertyValue( OUString( "DefaultContext" ) ),
                 uno::UNO_QUERY );
             xProxyFactory
                 = uno::Reference< ucb::XContentProviderFactory >(

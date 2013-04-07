@@ -48,8 +48,6 @@
 // ause
 #include "editutil.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::utl::AccessibleRelationSetHelper;
 using ::utl::AccessibleStateSetHelper;
 using ::accessibility::AccessibleStaticTextBase;
@@ -455,7 +453,7 @@ sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
 }
 
 Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* aRequestedAttributes */ )
+            const ::com::sun::star::uno::Sequence< OUString >& /* aRequestedAttributes */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     SolarMutexGuard aGuard;

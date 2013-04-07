@@ -118,7 +118,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         pOutDev->SetFont( maFont );
 
         nRet = sal::static_int_cast< sal_Int16 >(
-            pOutDev->GetTextWidth( rtl::OUString(c) ));
+            pOutDev->GetTextWidth( OUString(c) ));
 
         pOutDev->SetFont( aOldFont );
     }
@@ -142,7 +142,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
         {
             aSeq.getArray()[n] = sal::static_int_cast< sal_Int16 >(
                 pOutDev->GetTextWidth(
-                    rtl::OUString(static_cast< sal_Unicode >(nFirst+n)) ));
+                    OUString(static_cast< sal_Unicode >(nFirst+n)) ));
         }
 
         pOutDev->SetFont( aOldFont );
@@ -150,7 +150,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     return aSeq;
 }
 
-sal_Int32 VCLXFont::getStringWidth( const ::rtl::OUString& str ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int32 VCLXFont::getStringWidth( const OUString& str ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -166,7 +166,7 @@ sal_Int32 VCLXFont::getStringWidth( const ::rtl::OUString& str ) throw(::com::su
     return nRet;
 }
 
-sal_Int32 VCLXFont::getStringWidthArray( const ::rtl::OUString& str, ::com::sun::star::uno::Sequence< sal_Int32 >& rDXArray ) throw(::com::sun::star::uno::RuntimeException)
+sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, ::com::sun::star::uno::Sequence< sal_Int32 >& rDXArray ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -189,7 +189,7 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& /*r
 }
 
 // ::com::sun::star::awt::XFont2
-sal_Bool VCLXFont::hasGlyphs( const ::rtl::OUString& aText )
+sal_Bool VCLXFont::hasGlyphs( const OUString& aText )
     throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

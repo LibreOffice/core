@@ -40,12 +40,9 @@ using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OStringToOUString;
-using ::rtl::OStringBuffer;
 
 
-CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionGet::CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }

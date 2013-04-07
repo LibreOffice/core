@@ -44,10 +44,10 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
 
-        ::rtl::OUString m_sCatalogName;         // catalog for update data
-        ::rtl::OUString m_sSchemaName;          // schema for update data
-        ::rtl::OUString m_sName;                // table for update data
-        ::rtl::OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
+        OUString m_sCatalogName;         // catalog for update data
+        OUString m_sSchemaName;          // schema for update data
+        OUString m_sName;                // table for update data
+        OUString m_sAutoIncrementValue;  // the autoincrement value set in the datasource
         String          m_sTypeNames;           // these type names are the ones out of the resource file
         TOTypeInfoSP    m_pTypeInfo;            // fall back when type is unknown because database driver has a failure
 
@@ -65,7 +65,7 @@ namespace dbaui
         void alterColumns();
         void dropPrimaryKey();
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
-        ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
+        OUString createUniqueName(const OUString& _rName);
 
         void reload();
 
@@ -78,7 +78,7 @@ namespace dbaui
 
         virtual void losingConnection( );
 
-        virtual ::rtl::OUString getPrivateTitle( ) const;
+        virtual OUString getPrivateTitle( ) const;
 
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
@@ -95,7 +95,7 @@ namespace dbaui
         bool     isAutoIncrementPrimaryKey() const;
 
         inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
-        inline const ::rtl::OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
+        inline const OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
         virtual void impl_onModifyChanged();
 
@@ -122,11 +122,11 @@ namespace dbaui
         virtual void        SAL_CALL disposing();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 

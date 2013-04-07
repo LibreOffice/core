@@ -62,7 +62,7 @@ namespace slideshow
     {
         ViewAppletShape::ViewAppletShape( const ViewLayerSharedPtr&                       rViewLayer,
                                           const uno::Reference< drawing::XShape >&        rxShape,
-                                          const ::rtl::OUString&                          rServiceName,
+                                          const OUString&                          rServiceName,
                                           const char**                                    pPropCopyTable,
                                           sal_Size                                        nNumPropEntries,
                                           const uno::Reference< uno::XComponentContext >& rxContext ) :
@@ -90,10 +90,10 @@ namespace slideshow
                                                                    uno::UNO_QUERY_THROW );
 
             // copy shape properties to applet viewer
-            ::rtl::OUString aPropName;
+            OUString aPropName;
             for( sal_Size i=0; i<nNumPropEntries; ++i )
             {
-                aPropName = ::rtl::OUString::createFromAscii( pPropCopyTable[i] );
+                aPropName = OUString::createFromAscii( pPropCopyTable[i] );
                 mxViewerPropSet->setPropertyValue( aPropName,
                                                    xShapePropSet->getPropertyValue(
                                                        aPropName ));
@@ -110,7 +110,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -139,7 +139,7 @@ namespace slideshow
 
                 uno::Reference< awt::XWindow2 > xParentWindow(
                     xPropSet->getPropertyValue(
-                        ::rtl::OUString("Window" )),
+                        OUString("Window" )),
                     uno::UNO_QUERY_THROW );
 
                 uno::Reference<lang::XMultiComponentFactory> xFactory(
@@ -153,7 +153,7 @@ namespace slideshow
                     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(mxComponentContext);
 
                     awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_SIMPLE,
-                                                             ::rtl::OUString(),
+                                                             OUString(),
                                                              uno::Reference< awt::XWindowPeer >(xParentWindow,
                                                                                                 uno::UNO_QUERY_THROW),
                                                              0,
@@ -172,7 +172,7 @@ namespace slideshow
 
                     mxFrame.set(
                         xFactory->createInstanceWithContext(
-                            ::rtl::OUString("com.sun.star.frame.Frame" ),
+                            OUString("com.sun.star.frame.Frame" ),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 

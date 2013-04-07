@@ -32,7 +32,7 @@ namespace tools {
 // @param rUrl
 // Receives the directory URL (with or without a final slash) upon successful
 // return, and the empty string upon unsuccessful return
-TOOLS_DLLPUBLIC bool getProcessWorkingDir(rtl::OUString& rUrl);
+TOOLS_DLLPUBLIC bool getProcessWorkingDir(OUString& rUrl);
 
 }
 

@@ -1151,7 +1151,7 @@ public:
                                             const Rectangle& rControlRegion,
                                             ControlState nState,
                                             const ImplControlValue& aValue,
-                                            ::rtl::OUString aCaption );
+                                            OUString aCaption );
 
     // Query the native control's actual drawing region (including adornment)
     sal_Bool                GetNativeControlRegion( ControlType nType,
@@ -1159,7 +1159,7 @@ public:
                                                 const Rectangle& rControlRegion,
                                                 ControlState nState,
                                                 const ImplControlValue& aValue,
-                                                ::rtl::OUString aCaption,
+                                                OUString aCaption,
                                                 Rectangle &rNativeBoundingRegion,
                                                 Rectangle &rNativeContentRegion ) const;
 

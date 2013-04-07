@@ -49,9 +49,9 @@ namespace core {
 
 struct Relation
 {
-    ::rtl::OUString     maId;
-    ::rtl::OUString     maType;
-    ::rtl::OUString     maTarget;
+    OUString     maId;
+    OUString     maType;
+    OUString     maTarget;
     bool                mbExternal;
 
     inline explicit     Relation() : mbExternal( false ) {}
@@ -62,35 +62,35 @@ struct Relation
 class Relations;
 typedef ::boost::shared_ptr< Relations > RelationsRef;
 
-class OOX_DLLPUBLIC Relations : public ::std::map< ::rtl::OUString, Relation >
+class OOX_DLLPUBLIC Relations : public ::std::map< OUString, Relation >
 {
 public:
-    explicit            Relations( const ::rtl::OUString& rFragmentPath );
+    explicit            Relations( const OUString& rFragmentPath );
 
     /** Returns the path of the fragment this relations collection is related to. */
-    inline const ::rtl::OUString& getFragmentPath() const { return maFragmentPath; }
+    inline const OUString& getFragmentPath() const { return maFragmentPath; }
 
     /** Returns the relation with the passed relation identifier. */
-    const Relation*     getRelationFromRelId( const ::rtl::OUString& rId ) const;
+    const Relation*     getRelationFromRelId( const OUString& rId ) const;
     /** Returns the first relation with the passed type. */
-    const Relation*     getRelationFromFirstType( const ::rtl::OUString& rType ) const;
+    const Relation*     getRelationFromFirstType( const OUString& rType ) const;
     /** Finds all relations associated with the passed type. */
-    RelationsRef        getRelationsFromType( const ::rtl::OUString& rType ) const;
+    RelationsRef        getRelationsFromType( const OUString& rType ) const;
 
     /** Returns the external target of the relation with the passed relation identifier. */
-    ::rtl::OUString     getExternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
+    OUString     getExternalTargetFromRelId( const OUString& rRelId ) const;
     /** Returns the internal target of the relation with the passed relation identifier. */
-    ::rtl::OUString     getInternalTargetFromRelId( const ::rtl::OUString& rRelId ) const;
+    OUString     getInternalTargetFromRelId( const OUString& rRelId ) const;
 
     /** Returns the full fragment path for the target of the passed relation. */
-    ::rtl::OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;
+    OUString     getFragmentPathFromRelation( const Relation& rRelation ) const;
     /** Returns the full fragment path for the passed relation identifier. */
-    ::rtl::OUString     getFragmentPathFromRelId( const ::rtl::OUString& rRelId ) const;
+    OUString     getFragmentPathFromRelId( const OUString& rRelId ) const;
     /** Returns the full fragment path for the first relation of the passed type. */
-    ::rtl::OUString     getFragmentPathFromFirstType( const ::rtl::OUString& rType ) const;
+    OUString     getFragmentPathFromFirstType( const OUString& rType ) const;
 
 private:
-    ::rtl::OUString     maFragmentPath;
+    OUString     maFragmentPath;
 };
 
 // ============================================================================

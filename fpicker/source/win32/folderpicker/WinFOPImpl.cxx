@@ -33,7 +33,6 @@
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::EventObject;
-using rtl::OUString;
 
 using namespace com::sun::star::ui::dialogs;
 using osl::FileBase;

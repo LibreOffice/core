@@ -149,7 +149,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if (comphelper::string::isalphaAscii(cNextCh))
                 {
                     // den naechsten Identifer scannen
-                    ::rtl::OUStringBuffer sTmpBuffer( 32L );
+                    OUStringBuffer sTmpBuffer( 32L );
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
@@ -245,7 +245,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if( 'i'==cNextCh || 'I'==cNextCh)
                 {
                     // den naechsten Identifer scannen
-                    ::rtl::OUStringBuffer sTmpBuffer( 32L );
+                    OUStringBuffer sTmpBuffer( 32L );
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
@@ -284,7 +284,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 sal_Unicode cQuoteChar = cNextCh;
                 cNextCh = GetNextChar();
 
-                ::rtl::OUStringBuffer sTmpBuffer( MAX_LEN );
+                OUStringBuffer sTmpBuffer( MAX_LEN );
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();
@@ -315,7 +315,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 sal_Bool bEOFSave = bEOF;
 
                 // erstmal versuchen eine Hex-Zahl zu scannen
-                ::rtl::OUStringBuffer sTmpBuffer( 16 );
+                OUStringBuffer sTmpBuffer( 16 );
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();
@@ -351,7 +351,7 @@ CSS1Token CSS1Parser::GetNextToken()
                          !IsEOF() );
 
                 aToken += String(sTmpBuffer.makeStringAndClear());
-                nValue = rtl::OUString(aToken).toDouble();
+                nValue = OUString(aToken).toDouble();
 
                 // White Space ueberlesen
                 while( ( ' ' == cNextCh ||
@@ -389,7 +389,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         // den naechsten Identifer scannen
                         String aIdent;
-                        ::rtl::OUStringBuffer sTmpBuffer2( 64L );
+                        OUStringBuffer sTmpBuffer2( 64L );
                         do {
                             sTmpBuffer2.append( cNextCh );
                             cNextCh = GetNextChar();
@@ -539,7 +539,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 sal_Bool bEOFSave = bEOF;
 
                 // erstmal versuchen eine Hex-Zahl zu scannen
-                ::rtl::OUStringBuffer sTmpBuffer( 6L );
+                OUStringBuffer sTmpBuffer( 6L );
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();
@@ -595,7 +595,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 sal_Bool bHexColor = sal_True;
 
                 // den naechsten Identifer scannen
-                ::rtl::OUStringBuffer sTmpBuffer( 64L );
+                OUStringBuffer sTmpBuffer( 64L );
                 do {
                     sTmpBuffer.append( cNextCh );
                     if( bHexColor )
@@ -625,7 +625,7 @@ CSS1Token CSS1Parser::GetNextToken()
                        aToken.EqualsIgnoreCaseAscii(sCSS1_rgb)) ) )
                 {
                     sal_uInt16 nNestCnt = 0;
-                    ::rtl::OUStringBuffer sTmpBuffer2( 64L );
+                    OUStringBuffer sTmpBuffer2( 64L );
                     do {
                         sTmpBuffer2.append( cNextCh );
                         switch( cNextCh )

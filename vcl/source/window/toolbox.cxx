@@ -175,7 +175,7 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
         Rectangle aArea( aPoint, pThis->GetOutputSizePixel() );
 
         if ( pThis->GetNativeControlRegion(CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
-                aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+                aArea, 0, aControlValue, OUString(), aBound, aContent) )
         {
             width = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
@@ -301,7 +301,7 @@ void ToolBox::ImplDrawGrip( ToolBox* pThis )
             ControlState        nState = CTRL_STATE_ENABLED;
 
             bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
-                                            aCtrlRegion, nState, aToolbarValue, rtl::OUString() );
+                                            aCtrlRegion, nState, aToolbarValue, OUString() );
         }
 
         if( bNativeOk )
@@ -497,7 +497,7 @@ sal_Bool ToolBox::ImplDrawNativeBackground( ToolBox* pThis, const Region & )
     ControlState  nState = CTRL_STATE_ENABLED;
 
     return pThis->DrawNativeControl( CTRL_TOOLBAR, pThis->mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
-                                    aCtrlRegion, nState, ImplControlValue(), rtl::OUString() );
+                                    aCtrlRegion, nState, ImplControlValue(), OUString() );
 }
 
 void ToolBox::ImplDrawTransparentBackground( ToolBox* pThis, const Region &rRegion )
@@ -2936,7 +2936,7 @@ void ToolBox::ImplDrawSeparator( sal_uInt16 nPos, Rectangle rRect )
         ImplControlValue    aControlValue;
         ControlState        nState = 0;
         bNativeOk = DrawNativeControl( CTRL_TOOLBAR, nPart,
-                                       rRect, nState, aControlValue, rtl::OUString() );
+                                       rRect, nState, aControlValue, OUString() );
     }
 
     /* Draw the widget only if it can't be drawn natively. */
@@ -2993,7 +2993,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, sal_uInt16 h
 
 
         bNativeOk = pThis->DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON,
-                                              rRect, nState, aControlValue, rtl::OUString() );
+                                              rRect, nState, aControlValue, OUString() );
     }
 
     if( !bNativeOk )
@@ -4241,7 +4241,7 @@ const XubString& ToolBox::ImplGetHelpText( sal_uInt16 nItemId ) const
                 if ( pItem->maCommandStr.Len() )
                     pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
                 if ( !pItem->maHelpText.Len() && !pItem->maHelpId.isEmpty() )
-                    pItem->maHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                    pItem->maHelpText = pHelp->GetHelpText( OStringToOUString( pItem->maHelpId, RTL_TEXTENCODING_UTF8 ), this );
             }
         }
 
@@ -4307,7 +4307,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
             String aCommand = GetItemCommand( nItemId );
-            rtl::OString  aHelpId( GetHelpId( nItemId ) );
+            OString  aHelpId( GetHelpId( nItemId ) );
 
             if ( aCommand.Len() || !aHelpId.isEmpty() )
             {
@@ -4318,7 +4318,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                     if ( aCommand.Len() )
                         pHelp->Start( aCommand, this );
                     else if ( !aHelpId.isEmpty() )
-                        pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
+                        pHelp->Start( OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), this );
                 }
                 return;
             }

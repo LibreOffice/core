@@ -46,17 +46,17 @@ namespace comphelper
 // comparisation functions
 
 //------------------------------------------------------------------------
-    struct UStringLess : public ::std::binary_function< ::rtl::OUString, ::rtl::OUString, bool>
+    struct UStringLess : public ::std::binary_function< OUString, OUString, bool>
 {
-    bool operator() (const ::rtl::OUString& x, const ::rtl::OUString& y) const { return x < y ? true : false;}      // construct prevents a MSVC6 warning
+    bool operator() (const OUString& x, const OUString& y) const { return x < y ? true : false;}      // construct prevents a MSVC6 warning
 };
 //------------------------------------------------------------------------
-struct UStringMixLess : public ::std::binary_function< ::rtl::OUString, ::rtl::OUString, bool>
+struct UStringMixLess : public ::std::binary_function< OUString, OUString, bool>
 {
     bool m_bCaseSensitive;
 public:
     UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
-    bool operator() (const ::rtl::OUString& x, const ::rtl::OUString& y) const
+    bool operator() (const OUString& x, const OUString& y) const
     {
         if (m_bCaseSensitive)
             return rtl_ustr_compare(x.getStr(), y.getStr()) < 0 ? true : false;
@@ -69,13 +69,13 @@ public:
 //------------------------------------------------------------------------
 struct UStringEqual
 {
-    sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const { return lhs.equals( rhs );}
+    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const { return lhs.equals( rhs );}
 };
 
 //------------------------------------------------------------------------
 struct UStringIEqual
 {
-    sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const { return lhs.equalsIgnoreAsciiCase( rhs );}
+    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const { return lhs.equalsIgnoreAsciiCase( rhs );}
 };
 
 //------------------------------------------------------------------------
@@ -85,14 +85,14 @@ class UStringMixEqual
 
 public:
     UStringMixEqual(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
-    sal_Bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const
+    sal_Bool operator() (const OUString& lhs, const OUString& rhs) const
     {
         return m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs );
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 //------------------------------------------------------------------------
-class TStringMixEqualFunctor : public ::std::binary_function< ::rtl::OUString,::rtl::OUString,bool>
+class TStringMixEqualFunctor : public ::std::binary_function< OUString,OUString,bool>
 {
     sal_Bool m_bCaseSensitive;
 
@@ -100,30 +100,30 @@ public:
     TStringMixEqualFunctor(sal_Bool bCaseSensitive = sal_True)
         :m_bCaseSensitive(bCaseSensitive)
     {}
-    bool operator() (const ::rtl::OUString& lhs, const ::rtl::OUString& rhs) const
+    bool operator() (const OUString& lhs, const OUString& rhs) const
     {
         return !!(m_bCaseSensitive ? lhs.equals( rhs ) : lhs.equalsIgnoreAsciiCase( rhs ));
     }
     sal_Bool isCaseSensitive() const {return m_bCaseSensitive;}
 };
 //------------------------------------------------------------------------
-class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,::rtl::OUString,bool>
+class TPropertyValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,OUString,bool>
 {
 public:
     TPropertyValueEqualFunctor()
     {}
-    bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::rtl::OUString& rhs) const
+    bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }
 };
 //------------------------------------------------------------------------
-class TNamedValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::NamedValue,::rtl::OUString,bool>
+class TNamedValueEqualFunctor : public ::std::binary_function< ::com::sun::star::beans::NamedValue,OUString,bool>
 {
 public:
     TNamedValueEqualFunctor()
     {}
-    bool operator() (const ::com::sun::star::beans::NamedValue& lhs, const ::rtl::OUString& rhs) const
+    bool operator() (const ::com::sun::star::beans::NamedValue& lhs, const OUString& rhs) const
     {
         return !!(lhs.Name == rhs);
     }
@@ -135,7 +135,7 @@ class UStringMixHash
 
 public:
     UStringMixHash(sal_Bool bCaseSensitive = sal_True):m_bCaseSensitive(bCaseSensitive){}
-    size_t operator() (const ::rtl::OUString& rStr) const
+    size_t operator() (const OUString& rStr) const
     {
         return m_bCaseSensitive ? rStr.hashCode() : rStr.toAsciiUpperCase().hashCode();
     }
@@ -195,9 +195,9 @@ public:
     typedef void pointer;
     typedef size_t difference_type;
 
-    OUStringBufferAppender(::rtl::OUStringBuffer & i_rBuffer)
+    OUStringBufferAppender(OUStringBuffer & i_rBuffer)
         : m_rBuffer(i_rBuffer) { }
-    Self & operator=(::rtl::OUString const & i_rStr)
+    Self & operator=(OUString const & i_rStr)
     {
         m_rBuffer.append( i_rStr );
         return *this;
@@ -207,7 +207,7 @@ public:
     Self & operator++(int) { return *this; }
 
 private:
-    ::rtl::OUStringBuffer & m_rBuffer;
+    OUStringBuffer & m_rBuffer;
 };
 
 //.........................................................................
@@ -258,7 +258,7 @@ OutputIter intersperse(
     DECLARE_STL_ITERATORS(classname)                \
 
 #define DECLARE_STL_USTRINGACCESS_MAP(valuetype, classname)                 \
-    DECLARE_STL_MAP(::rtl::OUString, valuetype, ::comphelper::UStringLess, classname)   \
+    DECLARE_STL_MAP(OUString, valuetype, ::comphelper::UStringLess, classname)   \
 
 #define DECLARE_STL_STDKEY_SET(valuetype, classname)    \
     typedef ::std::set< valuetype > classname;          \

@@ -63,7 +63,7 @@ namespace ucb { namespace ucp { namespace ext
             getArtificialNodePropertyValues(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProperties,
-                const ::rtl::OUString& rTitle
+                const OUString& rTitle
             );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
@@ -72,29 +72,29 @@ namespace ucb { namespace ucp { namespace ext
                 const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
             );
 
-        static ::rtl::OUString
-            encodeIdentifier( const ::rtl::OUString& i_rIdentifier );
-        static ::rtl::OUString
-            decodeIdentifier( const ::rtl::OUString& i_rIdentifier );
+        static OUString
+            encodeIdentifier( const OUString& i_rIdentifier );
+        static OUString
+            decodeIdentifier( const OUString& i_rIdentifier );
 
-        virtual ::rtl::OUString getParentURL();
+        virtual OUString getParentURL();
 
         ExtensionContentType getExtensionContentType() const { return m_eExtContentType; }
 
         /** retrieves the URL of the underlying physical content. Not to be called when getExtensionContentType()
             returns E_ROOT.
         */
-        ::rtl::OUString getPhysicalURL() const;
+        OUString getPhysicalURL() const;
 
     protected:
         virtual ~Content();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XContent
-        virtual rtl::OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getContentType() throw( com::sun::star::uno::RuntimeException );
 
         // XCommandProcessor
         virtual com::sun::star::uno::Any SAL_CALL
@@ -125,7 +125,7 @@ namespace ucb { namespace ucp { namespace ext
                 const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& xEnv
             );
 
-        static bool denotesRootContent( const ::rtl::OUString& i_rContentIdentifier );
+        static bool denotesRootContent( const OUString& i_rContentIdentifier );
 
         bool impl_isFolder();
         void impl_determineContentType();
@@ -133,9 +133,9 @@ namespace ucb { namespace ucp { namespace ext
     private:
         ExtensionContentType                    m_eExtContentType;
         ::boost::optional< bool >               m_aIsFolder;
-        ::boost::optional< ::rtl::OUString >    m_aContentType;
-        ::rtl::OUString                         m_sExtensionId;
-        ::rtl::OUString                         m_sPathIntoExtension;
+        ::boost::optional< OUString >    m_aContentType;
+        OUString                         m_sExtensionId;
+        OUString                         m_sPathIntoExtension;
     };
 
 //......................................................................................................................

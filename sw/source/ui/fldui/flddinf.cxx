@@ -126,7 +126,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         nSelEntryData = static_cast< sal_uInt16 >(sVal.ToInt32());
     }
 
-    std::vector<rtl::OUString> aLst;
+    std::vector<OUString> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
     for(size_t i = 0; i < aLst.size(); ++i)
     {
@@ -146,7 +146,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)
                         {
-                            rtl::OUString sEntry = rProperties[n].Name;
+                            OUString sEntry = rProperties[n].Name;
                             pEntry = aTypeTLB.InsertEntry(sEntry, pInfo);
                             if(m_sOldCustomFieldName.equals( sEntry ))
                             {
@@ -242,7 +242,7 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                 if( nSubType == DI_CUSTOM )
                 {
                     //find out which type the custom field has - for a start set to DATE format
-                    ::rtl::OUString sName = aTypeTLB.GetEntryText(pSelEntry);
+                    OUString sName = aTypeTLB.GetEntryText(pSelEntry);
                     try
                     {
                         uno::Any aVal = xCustomPropertySet->getPropertyValue( sName );
@@ -424,7 +424,7 @@ sal_Bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
 
     sal_uInt16 nPos = aSelectionLB.GetSelectEntryPos();
 
-    ::rtl::OUString aName;
+    OUString aName;
     if (DI_CUSTOM == nSubType)
         aName = aTypeTLB.GetEntryText(pSelEntry);
 
@@ -462,7 +462,7 @@ sal_uInt16 SwFldDokInfPage::GetGroup()
 
 void    SwFldDokInfPage::FillUserData()
 {
-    String sData(rtl::OUString(USER_DATA_VERSION));
+    String sData(OUString(USER_DATA_VERSION));
     sData += ';';
     SvTreeListEntry* pEntry = aTypeTLB.FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;

@@ -28,7 +28,7 @@ MacabOrder::~MacabOrder()
 {
 }
 // -----------------------------------------------------------------------------
-MacabSimpleOrder::MacabSimpleOrder(MacabHeader *header, ::rtl::OUString &sColumnName, sal_Bool bAscending)
+MacabSimpleOrder::MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, sal_Bool bAscending)
     : MacabOrder(),
       m_nFieldNumber(header->getColumnNumber(sColumnName)),
       m_bAscending(bAscending)

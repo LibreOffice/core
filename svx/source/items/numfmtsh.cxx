@@ -1502,7 +1502,7 @@ String SvxNumberFormatShell::GetStandardName() const
     return pFormatter->GetStandardName( eCurLanguage);
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList, sal_uInt16* pPos)
+void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, sal_uInt16* pPos)
 {
     const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
@@ -1541,7 +1541,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList,
 
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList, bool bFlag)
+void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool bFlag)
 {
     aCurCurrencyList.clear();
 
@@ -1597,7 +1597,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<rtl::OUString>& rList,
     for(sal_uInt16 i = 1; i < nCount; ++i)
     {
         bool bInsert = true;
-        rtl::OUString aStr(ApplyLreOrRleEmbedding(rCurrencyTable[i].GetBankSymbol()));
+        OUString aStr(ApplyLreOrRleEmbedding(rCurrencyTable[i].GetBankSymbol()));
 
         sal_uInt16 j = nCont;
         for(; j < rList.size() && bInsert; ++j)
@@ -1771,7 +1771,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
 }
 
 bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
-        bool const bTmpBanking, ::rtl::OUString const& rFmtString)
+        bool const bTmpBanking, OUString const& rFmtString)
 {
     bool bFlag=false;
 

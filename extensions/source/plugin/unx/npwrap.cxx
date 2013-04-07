@@ -178,8 +178,8 @@ void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
 
 static oslModule LoadModule( const char* pPath )
 {
-    ::rtl::OUString sSystemPath( ::rtl::OUString::createFromAscii( pPath ) );
-    ::rtl::OUString sFileURL;
+    OUString sSystemPath( OUString::createFromAscii( pPath ) );
+    OUString sFileURL;
     osl_getFileURLFromSystemPath( sSystemPath.pData, &sFileURL.pData );
 
     oslModule pLib = osl_loadModule( sFileURL.pData, SAL_LOADMODULE_LAZY );

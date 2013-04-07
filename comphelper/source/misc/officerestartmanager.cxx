@@ -32,9 +32,9 @@ namespace comphelper
 {
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames_static()
+uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames_static()
 {
-    uno::Sequence< rtl::OUString > aResult( 1 );
+    uno::Sequence< OUString > aResult( 1 );
     aResult[0] = getServiceName_static();
     return aResult;
 }
@@ -133,7 +133,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
             // Turn Quickstarter veto off
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
-            ::rtl::OUString aVetoPropName( "SuspendQuickstartVeto" );
+            OUString aVetoPropName( "SuspendQuickstartVeto" );
             uno::Any aValue;
             aValue <<= (sal_Bool)sal_True;
             xPropertySet->setPropertyValue( aVetoPropName, aValue );
@@ -163,15 +163,15 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 
 // XServiceInfo
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::RuntimeException)
+OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();
 }
 
 // ----------------------------------------------------------
-::sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const ::rtl::OUString& aServiceName ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OOfficeRestartManager::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException)
 {
-    const uno::Sequence< rtl::OUString > & aSupportedNames = getSupportedServiceNames_static();
+    const uno::Sequence< OUString > & aSupportedNames = getSupportedServiceNames_static();
     for ( sal_Int32 nInd = 0; nInd < aSupportedNames.getLength(); nInd++ )
     {
         if ( aSupportedNames[ nInd ].equals( aServiceName ) )
@@ -182,7 +182,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
 }
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }

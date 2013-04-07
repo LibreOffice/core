@@ -104,28 +104,28 @@ class ContentHandlerFactory :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XMultiServiceFactory
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance             ( const ::rtl::OUString&                        sTypeName   ) throw( css::uno::Exception        ,
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance             ( const OUString&                        sTypeName   ) throw( css::uno::Exception        ,
                                                                                                                                                                      css::uno::RuntimeException );
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString&                        sTypeName   ,
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString&                        sTypeName   ,
                                                                                                   const css::uno::Sequence< css::uno::Any >&    lArguments  ) throw( css::uno::Exception, css::uno::RuntimeException );
-        virtual css::uno::Sequence< ::rtl::OUString >       SAL_CALL getAvailableServiceNames   (                                                           ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< OUString >       SAL_CALL getAvailableServiceNames   (                                                           ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XNameContainer
         //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL insertByName( const ::rtl::OUString&  sHandlerName        ,
+        virtual void SAL_CALL insertByName( const OUString&  sHandlerName        ,
                                             const css::uno::Any&    aHandlerProperties  ) throw( css::lang::IllegalArgumentException     ,
                                                                                                  css::container::ElementExistException   ,
                                                                                                  css::lang::WrappedTargetException       ,
                                                                                                  css::uno::RuntimeException              );
-        virtual void SAL_CALL removeByName( const ::rtl::OUString&  sHandlerName        ) throw( css::container::NoSuchElementException  ,
+        virtual void SAL_CALL removeByName( const OUString&  sHandlerName        ) throw( css::container::NoSuchElementException  ,
                                                                                                  css::lang::WrappedTargetException       ,
                                                                                                  css::uno::RuntimeException              );
 
         //---------------------------------------------------------------------------------------------------------
         //  XNameReplace
         //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL replaceByName( const ::rtl::OUString& sHandlerName       ,
+        virtual void SAL_CALL replaceByName( const OUString& sHandlerName       ,
                                              const css::uno::Any&   aHandlerProperties ) throw( css::lang::IllegalArgumentException    ,
                                                                                                 css::container::NoSuchElementException ,
                                                                                                 css::lang::WrappedTargetException      ,
@@ -134,11 +134,11 @@ class ContentHandlerFactory :   // interfaces
         //---------------------------------------------------------------------------------------------------------
         //  XNameAccess
         //---------------------------------------------------------------------------------------------------------
-        virtual css::uno::Any                         SAL_CALL getByName      ( const ::rtl::OUString& sName ) throw( css::container::NoSuchElementException ,
+        virtual css::uno::Any                         SAL_CALL getByName      ( const OUString& sName ) throw( css::container::NoSuchElementException ,
                                                                                                                       css::lang::WrappedTargetException      ,
                                                                                                                       css::uno::RuntimeException             );
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(                              ) throw( css::uno::RuntimeException             );
-        virtual sal_Bool                              SAL_CALL hasByName      ( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException             );
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(                              ) throw( css::uno::RuntimeException             );
+        virtual sal_Bool                              SAL_CALL hasByName      ( const OUString& sName ) throw( css::uno::RuntimeException             );
 
         //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
@@ -183,11 +183,11 @@ class ContentHandlerFactory :   // interfaces
     private:
 
         static sal_Bool implcp_ContentHandlerFactory        (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory            );
-        static sal_Bool implcp_createInstanceWithArguments  (   const   ::rtl::OUString&                                        sTypeName           ,
+        static sal_Bool implcp_createInstanceWithArguments  (   const   OUString&                                        sTypeName           ,
                                                                   const css::uno::Sequence< css::uno::Any >&                    lArguments          );
-        static sal_Bool implcp_getByName                    (   const   ::rtl::OUString&                                        sName               );
-        static sal_Bool implcp_hasByName                    (   const   ::rtl::OUString&                                        sName               );
-        static sal_Bool implcp_removeByName                 (   const   ::rtl::OUString&                                        sHandlerName        );
+        static sal_Bool implcp_getByName                    (   const   OUString&                                        sName               );
+        static sal_Bool implcp_hasByName                    (   const   OUString&                                        sName               );
+        static sal_Bool implcp_removeByName                 (   const   OUString&                                        sHandlerName        );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 

@@ -76,7 +76,7 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 {
     document::EventObject aDocEvent;
     aDocEvent.Source = Source.Source;
-    aDocEvent.EventName = rtl::OUString( "OfficeDocumentsListener::notifyClosing" );
+    aDocEvent.EventName = OUString( "OfficeDocumentsListener::notifyClosing" );
     m_pManager->notifyEvent( aDocEvent );
 }
 
@@ -134,10 +134,10 @@ void OfficeDocumentsManager::destroy()
 }
 
 //=========================================================================
-static rtl::OUString
+static OUString
 getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 {
-    rtl::OUString aId;
+    OUString aId;
 
     // Try to get the UID directly from the document.
     uno::Reference< beans::XPropertySet > xPropSet( xDoc, uno::UNO_QUERY );
@@ -146,7 +146,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         try
         {
             uno::Any aValue = xPropSet->getPropertyValue(
-                rtl::OUString( "RuntimeUID" ) );
+                OUString( "RuntimeUID" ) );
             aValue >>= aId;
         }
         catch ( beans::UnknownPropertyException const & )
@@ -167,7 +167,7 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
         // different IDs
         uno::Reference< uno::XInterface > xNormalizedIFace( xDoc, uno::UNO_QUERY );
         sal_Int64 nId = reinterpret_cast< sal_Int64 >( xNormalizedIFace.get() );
-        aId = rtl::OUString::valueOf( nId );
+        aId = OUString::valueOf( nId );
     }
 
     OSL_ENSURE( !aId.isEmpty(), "getDocumentId - Empty id!" );
@@ -275,7 +275,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
                     if ( m_pDocEventListener )
                     {
-                        rtl::OUString aDocId( (*it).first );
+                        OUString aDocId( (*it).first );
                         m_pDocEventListener->notifyDocumentClosed( aDocId );
                     }
                     break;
@@ -480,8 +480,8 @@ void OfficeDocumentsManager::buildDocumentsList()
                     if ( it == m_aDocs.end() )
                     {
                         // new document
-                        rtl::OUString aDocId = getDocumentId( xModel );
-                        rtl::OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
+                        OUString aDocId = getDocumentId( xModel );
+                        OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
 
                         uno::Reference< document::XStorageBasedDocument >
                                 xDoc( xModel, uno::UNO_QUERY );
@@ -516,7 +516,7 @@ void OfficeDocumentsManager::buildDocumentsList()
 
 //=========================================================================
 uno::Reference< embed::XStorage >
-OfficeDocumentsManager::queryStorage( const rtl::OUString & rDocId )
+OfficeDocumentsManager::queryStorage( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( m_aMtx );
 
@@ -528,7 +528,7 @@ OfficeDocumentsManager::queryStorage( const rtl::OUString & rDocId )
 }
 
 //=========================================================================
-rtl::OUString OfficeDocumentsManager::queryDocumentId(
+OUString OfficeDocumentsManager::queryDocumentId(
     const uno::Reference< frame::XModel > & xModel )
 {
     return getDocumentId( xModel );
@@ -536,7 +536,7 @@ rtl::OUString OfficeDocumentsManager::queryDocumentId(
 
 //=========================================================================
 uno::Reference< frame::XModel >
-OfficeDocumentsManager::queryDocumentModel( const rtl::OUString & rDocId )
+OfficeDocumentsManager::queryDocumentModel( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( m_aMtx );
 
@@ -548,11 +548,11 @@ OfficeDocumentsManager::queryDocumentModel( const rtl::OUString & rDocId )
 }
 
 //=========================================================================
-uno::Sequence< rtl::OUString > OfficeDocumentsManager::queryDocuments()
+uno::Sequence< OUString > OfficeDocumentsManager::queryDocuments()
 {
     osl::MutexGuard aGuard( m_aMtx );
 
-    uno::Sequence< rtl::OUString > aRet( m_aDocs.size() );
+    uno::Sequence< OUString > aRet( m_aDocs.size() );
     sal_Int32 nPos = 0;
 
     DocumentList::const_iterator it = m_aDocs.begin();
@@ -566,14 +566,14 @@ uno::Sequence< rtl::OUString > OfficeDocumentsManager::queryDocuments()
 }
 
 //=========================================================================
-rtl::OUString
-OfficeDocumentsManager::queryStorageTitle( const rtl::OUString & rDocId )
+OUString
+OfficeDocumentsManager::queryStorageTitle( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( m_aMtx );
 
     DocumentList::const_iterator it = m_aDocs.find( rDocId );
     if ( it == m_aDocs.end() )
-        return rtl::OUString();
+        return OUString();
 
     return (*it).second.aTitle;
 }
@@ -598,7 +598,7 @@ bool OfficeDocumentsManager::isHelpDocument(
     if ( !xModel.is() )
         return false;
 
-    ::rtl::OUString sURL( xModel->getURL() );
+    OUString sURL( xModel->getURL() );
     if ( sURL.match( "vnd.sun.star.help://" ) )
         return true;
 
@@ -657,7 +657,7 @@ bool OfficeDocumentsManager::isBasicIDE(
 
     if ( m_xModuleMgr.is() )
     {
-        rtl::OUString aModule;
+        OUString aModule;
         try
         {
             aModule = m_xModuleMgr->identify( xModel );

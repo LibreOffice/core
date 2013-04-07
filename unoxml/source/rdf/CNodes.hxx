@@ -28,8 +28,8 @@
 namespace comp_CBlankNode {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
@@ -39,8 +39,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Referenc
 namespace comp_CURI {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
@@ -50,8 +50,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Referenc
 namespace comp_CLiteral {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace

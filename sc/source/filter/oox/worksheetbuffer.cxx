@@ -43,8 +43,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -110,7 +108,7 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
     return pSheetInfo ? pSheetInfo->maCalcName : OUString();
 }
 
-void WorksheetBuffer::convertSheetNameRef( ::rtl::OUString& sSheetNameRef ) const
+void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
 {
     // convert '#SheetName!A1' to '#SheetName.A1'
     if( !sSheetNameRef.isEmpty() && (sSheetNameRef[ 0 ] == '#') )

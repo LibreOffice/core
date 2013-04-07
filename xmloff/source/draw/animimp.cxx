@@ -37,8 +37,6 @@
 #include "anim.hxx"
 #include "animimp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;
@@ -662,7 +660,7 @@ void XMLAnimationsEffectContext::EndElement()
 
 TYPEINIT1( XMLAnimationsContext, SvXMLImportContext );
 
-XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+XMLAnimationsContext::XMLAnimationsContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& )
 : SvXMLImportContext(rImport, nPrfx, rLocalName)
 {
@@ -674,7 +672,7 @@ XMLAnimationsContext::~XMLAnimationsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * XMLAnimationsContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new XMLAnimationsEffectContext( GetImport(), nPrefix, rLocalName,  xAttrList, mpImpl );

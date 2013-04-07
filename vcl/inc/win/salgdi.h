@@ -241,9 +241,9 @@ protected:
                                               const Point& aPos, sal_Bool& rIsInside );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
-                                           const rtl::OUString& aCaption );
+                                           const OUString& aCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
@@ -299,7 +299,7 @@ public:
     // graphics should call ImplAddDevFontSubstitute on supplied
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
     // returns TRUE if creation of subset was successfull
@@ -312,7 +312,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,

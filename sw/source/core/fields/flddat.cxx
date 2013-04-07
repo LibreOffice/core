@@ -106,16 +106,16 @@ void SwDateTimeField::SetSubType(sal_uInt16 nType)
     nSubType = nType;
 }
 
-void SwDateTimeField::SetPar2(const rtl::OUString& rStr)
+void SwDateTimeField::SetPar2(const OUString& rStr)
 {
     nOffset = rStr.toInt32();
 }
 
-rtl::OUString SwDateTimeField::GetPar2() const
+OUString SwDateTimeField::GetPar2() const
 {
     if (nOffset)
         return OUString::number(nOffset);
-    return rtl::OUString();
+    return OUString();
 }
 
 void SwDateTimeField::SetDateTime(const DateTime& rDT)

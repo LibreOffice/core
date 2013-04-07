@@ -64,7 +64,7 @@ public:
                             VectorToSequence( const ::std::vector< Type >& rVector );
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
-    static ::rtl::OUString GetServiceName( XInterfaceRef xInt );
+    static OUString GetServiceName( XInterfaceRef xInt );
 
     /** Returns the multi service factory from a document shell. */
     static XServiceFactoryRef GetServiceFactory( SfxObjectShell* pShell );
@@ -72,21 +72,21 @@ public:
     /** Creates an instance from the passed service name, using the passed service factory. */
     static XInterfaceRef CreateInstance(
                             XServiceFactoryRef xFactory,
-                            const ::rtl::OUString& rServiceName );
+                            const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the service factory of the passed object. */
     static XInterfaceRef CreateInstance(
                             SfxObjectShell* pShell,
-                            const ::rtl::OUString& rServiceName );
+                            const OUString& rServiceName );
 
     /** Creates an instance from the passed service name, using the process service factory. */
-    static XInterfaceRef CreateInstance( const ::rtl::OUString& rServiceName );
+    static XInterfaceRef CreateInstance( const OUString& rServiceName );
 
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,
                             ::comphelper::IDocPasswordVerifier& rVerifier,
-                            const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0 );
+                            const ::std::vector< OUString >* pDefaultPasswords = 0 );
 };
 
 template< typename Type >
@@ -122,7 +122,7 @@ public:
                 ::com::sun::star::beans::XMultiPropertySet >    XMultiPropSetRef;
     typedef ::com::sun::star::uno::Any                          UnoAny;
     typedef ::com::sun::star::uno::Sequence< UnoAny >           UnoAnySequence;
-    typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringSequence;
+    typedef ::com::sun::star::uno::Sequence< OUString >  OUStringSequence;
 
 public:
     inline explicit     ScfPropertySet() {}
@@ -148,33 +148,33 @@ public:
     inline XPropertySetRef GetApiPropertySet() const { return mxPropSet; }
 
     /** Returns the service name provided via the XServiceName interface, or an empty string on error. */
-    ::rtl::OUString     GetServiceName() const;
+    OUString     GetServiceName() const;
 
     // Get properties ---------------------------------------------------------
 
     /** Returns true, if the property set contains the specified property. */
-    bool                HasProperty( const ::rtl::OUString& rPropName ) const;
+    bool                HasProperty( const OUString& rPropName ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the Any could be filled with the property value. */
-    bool                GetAnyProperty( UnoAny& rValue, const ::rtl::OUString& rPropName ) const;
+    bool                GetAnyProperty( UnoAny& rValue, const OUString& rPropName ) const;
 
     /** Gets the specified property from the property set.
         @return  true, if the passed variable could be filled with the property value. */
     template< typename Type >
-    inline bool         GetProperty( Type& rValue, const ::rtl::OUString& rPropName ) const
+    inline bool         GetProperty( Type& rValue, const OUString& rPropName ) const
                             { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
         @return  true = property contains true; false = property contains false or error occurred. */
-    bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
+    bool                GetBoolProperty( const OUString& rPropName ) const;
 
     /** Gets the specified Boolean property from the property set. */
-    rtl::OUString       GetStringProperty( const ::rtl::OUString& rPropName ) const;
+    OUString       GetStringProperty( const OUString& rPropName ) const;
 
     /** Gets the specified color property from the property set.
         @return  true, if the passed color variable could be filled with the property value. */
-    bool                GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const;
+    bool                GetColorProperty( Color& rColor, const OUString& rPropName ) const;
 
     /** Gets the specified properties from the property set. Tries to use the XMultiPropertySet interface.
         @param rPropNames  The property names. MUST be ordered alphabetically.
@@ -184,23 +184,23 @@ public:
     // Set properties ---------------------------------------------------------
 
     /** Puts the passed Any into the property set. */
-    void                SetAnyProperty( const ::rtl::OUString& rPropName, const UnoAny& rValue );
+    void                SetAnyProperty( const OUString& rPropName, const UnoAny& rValue );
 
     /** Puts the passed value into the property set. */
     template< typename Type >
-    inline void         SetProperty( const ::rtl::OUString& rPropName, const Type& rValue )
+    inline void         SetProperty( const OUString& rPropName, const Type& rValue )
                             { SetAnyProperty( rPropName, ::com::sun::star::uno::makeAny( rValue ) ); }
 
     /** Puts the passed Boolean value into the property set. */
-    inline void         SetBoolProperty( const ::rtl::OUString& rPropName, bool bValue )
+    inline void         SetBoolProperty( const OUString& rPropName, bool bValue )
                             { SetAnyProperty( rPropName, ::comphelper::makeBoolAny( bValue ) ); }
 
     /** Puts the passed string into the property set. */
-    inline void         SetStringProperty( const ::rtl::OUString& rPropName, const String& rValue )
-                            { SetProperty( rPropName, ::rtl::OUString( rValue ) ); }
+    inline void         SetStringProperty( const OUString& rPropName, const String& rValue )
+                            { SetProperty( rPropName, OUString( rValue ) ); }
 
     /** Puts the passed color into the property set. */
-    inline void         SetColorProperty( const ::rtl::OUString& rPropName, const Color& rColor )
+    inline void         SetColorProperty( const OUString& rPropName, const Color& rColor )
                             { SetProperty( rPropName, ScfApiHelper::ConvertToApiColor( rColor ) ); }
 
     /** Puts the passed properties into the property set. Tries to use the XMultiPropertySet interface.
@@ -268,7 +268,7 @@ public:
     void                WriteValue( const UnoAny& rAny );
     /** Writes a tools string to the value sequence. */
     inline void         WriteValue( const String& rString )
-                            { WriteValue( ::rtl::OUString( rString ) ); }
+                            { WriteValue( OUString( rString ) ); }
     /** Writes a color value to the value sequence. */
     inline void         WriteValue( const Color& rColor )
                             { WriteValue( ScfApiHelper::ConvertToApiColor( rColor ) ); }
@@ -284,7 +284,7 @@ private:
     UnoAny*             GetNextAny();
 
 private:
-    typedef ::com::sun::star::uno::Sequence< ::rtl::OUString >  OUStringSequence;
+    typedef ::com::sun::star::uno::Sequence< OUString >  OUStringSequence;
     typedef ::com::sun::star::uno::Sequence< UnoAny >           UnoAnySequence;
 
     OUStringSequence    maNameSeq;          /// Sequence of property names.

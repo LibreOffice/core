@@ -198,9 +198,9 @@ FltError ImportLotus::Read()
     // duemmliche Namen eliminieren
     SCTAB       nTabs = pD->GetTableCount();
     SCTAB       nCnt;
-    rtl::OUString aTabName;
-    rtl::OUString aBaseName;
-    rtl::OUString aRef( "temp" );
+    OUString aTabName;
+    OUString aBaseName;
+    OUString aRef( "temp" );
     if( nTabs != 0 )
     {
         if( nTabs > 1 )

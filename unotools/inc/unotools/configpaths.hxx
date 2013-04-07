@@ -21,11 +21,7 @@
 #ifndef UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
 #define UNOTOOLS_CONFIGPATHS_HXX_INCLUDED
 #include <sal/types.h>
-
-namespace rtl
-{
-    class OUString;
-}
+#include <rtl/ustring.hxx>
 
 //----------------------------------------------------------------------------
 namespace utl
@@ -56,9 +52,9 @@ namespace utl
             <FALSE/>, if the path was a one-level path or an invalid path
 
     */
-    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(::rtl::OUString const& _sInPath,
-                                            ::rtl::OUString& _rsOutPath,
-                                            ::rtl::OUString& _rsLocalName);
+    UNOTOOLS_DLLPUBLIC sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
+                                            OUString& _rsOutPath,
+                                            OUString& _rsLocalName);
 
 //----------------------------------------------------------------------------
     /** extract the first nodename from a configuration path.
@@ -78,8 +74,8 @@ namespace utl
             configuration path, it is returned unaltered.
 
     */
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString extractFirstFromConfigurationPath(
-        ::rtl::OUString const& _sInPath, ::rtl::OUString* _sOutPath = 0);
+    UNOTOOLS_DLLPUBLIC OUString extractFirstFromConfigurationPath(
+        OUString const& _sInPath, OUString* _sOutPath = 0);
 
 //----------------------------------------------------------------------------
     /** check whether a path is to a nested node with respect to a parent path.
@@ -102,8 +98,8 @@ namespace utl
             If both paths are equal <TRUE/> is returned.
 
     */
-    sal_Bool isPrefixOfConfigurationPath(::rtl::OUString const& _sNestedPath,
-                                         ::rtl::OUString const& _sPrefixPath);
+    sal_Bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
+                                         OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------
     /** get the relative path to a nested node with respect to a parent path.
@@ -127,8 +123,8 @@ namespace utl
             <var>_sNestedPath</var> is returned unaltered.
 
     */
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString dropPrefixFromConfigurationPath(::rtl::OUString const& _sNestedPath,
-                                                    ::rtl::OUString const& _sPrefixPath);
+    UNOTOOLS_DLLPUBLIC OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
+                                                    OUString const& _sPrefixPath);
 
 //----------------------------------------------------------------------------
     /** Create a one-level relative configuration path from a set element name
@@ -143,7 +139,7 @@ namespace utl
             "*['<Name>']", where <Name> is properly escaped.
 
     */
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString wrapConfigurationElementName(::rtl::OUString const& _sElementName);
+    UNOTOOLS_DLLPUBLIC OUString wrapConfigurationElementName(OUString const& _sElementName);
 
 //----------------------------------------------------------------------------
     /** Create a one-level relative configuration path from a set element name
@@ -162,8 +158,8 @@ namespace utl
             "<Type>['<Name>']", where <Name> is properly escaped.
 
     */
-    ::rtl::OUString wrapConfigurationElementName(::rtl::OUString const& _sElementName,
-                                                 ::rtl::OUString const& _sTypeName);
+    OUString wrapConfigurationElementName(OUString const& _sElementName,
+                                                 OUString const& _sTypeName);
 
 //----------------------------------------------------------------------------
 }   // namespace utl

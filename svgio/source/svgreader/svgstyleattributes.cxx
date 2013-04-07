@@ -171,7 +171,7 @@ namespace svgio
             return nRetval;
         }
 
-        void SvgStyleAttributes::readStyle(const rtl::OUString& rCandidate)
+        void SvgStyleAttributes::readStyle(const OUString& rCandidate)
         {
             const sal_Int32 nLen(rCandidate.getLength());
             sal_Int32 nPos(0);
@@ -180,17 +180,17 @@ namespace svgio
             {
                 const sal_Int32 nInitPos(nPos);
                 skip_char(rCandidate, sal_Unicode(' '), nPos, nLen);
-                rtl::OUStringBuffer aTokenName;
+                OUStringBuffer aTokenName;
                 copyString(rCandidate, nPos, aTokenName, nLen);
 
                 if(aTokenName.getLength())
                 {
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(':'), nPos, nLen);
-                    rtl::OUStringBuffer aTokenValue;
+                    OUStringBuffer aTokenValue;
                     copyToLimiter(rCandidate, sal_Unicode(';'), nPos, aTokenValue, nLen);
                     skip_char(rCandidate, sal_Unicode(' '), sal_Unicode(';'), nPos, nLen);
-                    const rtl::OUString aOUTokenName(aTokenName.makeStringAndClear());
-                    const rtl::OUString aOUTokenValue(aTokenValue.makeStringAndClear());
+                    const OUString aOUTokenName(aTokenName.makeStringAndClear());
+                    const OUString aOUTokenValue(aTokenValue.makeStringAndClear());
 
                     parseStyleAttribute(aOUTokenName, StrToSVGToken(aOUTokenName), aOUTokenValue);
                 }
@@ -203,7 +203,7 @@ namespace svgio
             }
         }
 
-        void SvgStyleAttributes::checkForCssStyle(const rtl::OUString& rClassStr) const
+        void SvgStyleAttributes::checkForCssStyle(const OUString& rClassStr) const
         {
             if(!mpCssStyleParent)
             {
@@ -214,7 +214,7 @@ namespace svgio
                 {
                     if(mrOwner.getClass())
                     {
-                        rtl::OUString aId(rtl::OUString::createFromAscii("."));
+                        OUString aId(OUString::createFromAscii("."));
                         aId = aId + *mrOwner.getClass();
                         pNew = rDocument.findSvgStyleAttributesById(aId);
 
@@ -1216,14 +1216,14 @@ namespace svgio
         {
         }
 
-        void SvgStyleAttributes::parseStyleAttribute(const rtl::OUString& /*rTokenName*/, SVGToken aSVGToken, const rtl::OUString& aContent)
+        void SvgStyleAttributes::parseStyleAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
         {
             switch(aSVGToken)
             {
                 case SVGTokenFill:
                 {
                     SvgPaint aSvgPaint;
-                    rtl::OUString aURL;
+                    OUString aURL;
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL))
                     {
@@ -1280,7 +1280,7 @@ namespace svgio
                 case SVGTokenStroke:
                 {
                     SvgPaint aSvgPaint;
-                    rtl::OUString aURL;
+                    OUString aURL;
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL))
                     {
@@ -1334,9 +1334,9 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrButt(rtl::OUString::createFromAscii("butt"));
-                        static rtl::OUString aStrRound(rtl::OUString::createFromAscii("round"));
-                        static rtl::OUString aStrSquare(rtl::OUString::createFromAscii("square"));
+                        static OUString aStrButt(OUString::createFromAscii("butt"));
+                        static OUString aStrRound(OUString::createFromAscii("round"));
+                        static OUString aStrSquare(OUString::createFromAscii("square"));
 
                         if(aContent.match(aStrButt))
                         {
@@ -1357,9 +1357,9 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrMiter(rtl::OUString::createFromAscii("miter"));
-                        static rtl::OUString aStrRound(rtl::OUString::createFromAscii("round"));
-                        static rtl::OUString aStrBevel(rtl::OUString::createFromAscii("bevel"));
+                        static OUString aStrMiter(OUString::createFromAscii("miter"));
+                        static OUString aStrRound(OUString::createFromAscii("round"));
+                        static OUString aStrBevel(OUString::createFromAscii("bevel"));
 
                         if(aContent.match(aStrMiter))
                         {
@@ -1418,7 +1418,7 @@ namespace svgio
                 case SVGTokenStopColor:
                 {
                     SvgPaint aSvgPaint;
-                    rtl::OUString aURL;
+                    OUString aURL;
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL))
                     {
@@ -1471,17 +1471,17 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrNormal(rtl::OUString::createFromAscii("normal"));
-                        static rtl::OUString aStrWider(rtl::OUString::createFromAscii("wider"));
-                        static rtl::OUString aStrNarrower(rtl::OUString::createFromAscii("narrower"));
-                        static rtl::OUString aStrUltra_condensed(rtl::OUString::createFromAscii("ultra-condensed"));
-                        static rtl::OUString aStrExtra_condensed(rtl::OUString::createFromAscii("extra-condensed"));
-                        static rtl::OUString aStrCondensed(rtl::OUString::createFromAscii("condensed"));
-                        static rtl::OUString aStrSemi_condensed(rtl::OUString::createFromAscii("semi-condensed"));
-                        static rtl::OUString aStrSemi_expanded(rtl::OUString::createFromAscii("semi-expanded"));
-                        static rtl::OUString aStrExpanded(rtl::OUString::createFromAscii("expanded"));
-                        static rtl::OUString aStrExtra_expanded(rtl::OUString::createFromAscii("extra-expanded"));
-                        static rtl::OUString aStrUltra_expanded(rtl::OUString::createFromAscii("ultra-expanded"));
+                        static OUString aStrNormal(OUString::createFromAscii("normal"));
+                        static OUString aStrWider(OUString::createFromAscii("wider"));
+                        static OUString aStrNarrower(OUString::createFromAscii("narrower"));
+                        static OUString aStrUltra_condensed(OUString::createFromAscii("ultra-condensed"));
+                        static OUString aStrExtra_condensed(OUString::createFromAscii("extra-condensed"));
+                        static OUString aStrCondensed(OUString::createFromAscii("condensed"));
+                        static OUString aStrSemi_condensed(OUString::createFromAscii("semi-condensed"));
+                        static OUString aStrSemi_expanded(OUString::createFromAscii("semi-expanded"));
+                        static OUString aStrExpanded(OUString::createFromAscii("expanded"));
+                        static OUString aStrExtra_expanded(OUString::createFromAscii("extra-expanded"));
+                        static OUString aStrUltra_expanded(OUString::createFromAscii("ultra-expanded"));
 
                         if(aContent.match(aStrNormal))
                         {
@@ -1534,9 +1534,9 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrNormal(rtl::OUString::createFromAscii("normal"));
-                        static rtl::OUString aStrItalic(rtl::OUString::createFromAscii("italic"));
-                        static rtl::OUString aStrOblique(rtl::OUString::createFromAscii("oblique"));
+                        static OUString aStrNormal(OUString::createFromAscii("normal"));
+                        static OUString aStrItalic(OUString::createFromAscii("italic"));
+                        static OUString aStrOblique(OUString::createFromAscii("oblique"));
 
                         if(aContent.match(aStrNormal))
                         {
@@ -1557,8 +1557,8 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrNormal(rtl::OUString::createFromAscii("normal"));
-                        static rtl::OUString aStrSmallCaps(rtl::OUString::createFromAscii("small-caps"));
+                        static OUString aStrNormal(OUString::createFromAscii("normal"));
+                        static OUString aStrSmallCaps(OUString::createFromAscii("small-caps"));
 
                         if(aContent.match(aStrNormal))
                         {
@@ -1575,19 +1575,19 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrNormal(rtl::OUString::createFromAscii("normal"));
-                        static rtl::OUString aStrBold(rtl::OUString::createFromAscii("bold"));
-                        static rtl::OUString aStrBolder(rtl::OUString::createFromAscii("bolder"));
-                        static rtl::OUString aStrLighter(rtl::OUString::createFromAscii("lighter"));
-                        static rtl::OUString aStr100(rtl::OUString::createFromAscii("100"));
-                        static rtl::OUString aStr200(rtl::OUString::createFromAscii("200"));
-                        static rtl::OUString aStr300(rtl::OUString::createFromAscii("300"));
-                        static rtl::OUString aStr400(rtl::OUString::createFromAscii("400"));
-                        static rtl::OUString aStr500(rtl::OUString::createFromAscii("500"));
-                        static rtl::OUString aStr600(rtl::OUString::createFromAscii("600"));
-                        static rtl::OUString aStr700(rtl::OUString::createFromAscii("700"));
-                        static rtl::OUString aStr800(rtl::OUString::createFromAscii("800"));
-                        static rtl::OUString aStr900(rtl::OUString::createFromAscii("900"));
+                        static OUString aStrNormal(OUString::createFromAscii("normal"));
+                        static OUString aStrBold(OUString::createFromAscii("bold"));
+                        static OUString aStrBolder(OUString::createFromAscii("bolder"));
+                        static OUString aStrLighter(OUString::createFromAscii("lighter"));
+                        static OUString aStr100(OUString::createFromAscii("100"));
+                        static OUString aStr200(OUString::createFromAscii("200"));
+                        static OUString aStr300(OUString::createFromAscii("300"));
+                        static OUString aStr400(OUString::createFromAscii("400"));
+                        static OUString aStr500(OUString::createFromAscii("500"));
+                        static OUString aStr600(OUString::createFromAscii("600"));
+                        static OUString aStr700(OUString::createFromAscii("700"));
+                        static OUString aStr800(OUString::createFromAscii("800"));
+                        static OUString aStr900(OUString::createFromAscii("900"));
 
                         if(aContent.match(aStr100))
                         {
@@ -1648,11 +1648,11 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
-                        static rtl::OUString aStrUnderline(rtl::OUString::createFromAscii("underline"));
-                        static rtl::OUString aStrOverline(rtl::OUString::createFromAscii("overline"));
-                        static rtl::OUString aStrLineThrough(rtl::OUString::createFromAscii("line-through"));
-                        static rtl::OUString aStrBlink(rtl::OUString::createFromAscii("blink"));
+                        static OUString aStrNone(OUString::createFromAscii("none"));
+                        static OUString aStrUnderline(OUString::createFromAscii("underline"));
+                        static OUString aStrOverline(OUString::createFromAscii("overline"));
+                        static OUString aStrLineThrough(OUString::createFromAscii("line-through"));
+                        static OUString aStrBlink(OUString::createFromAscii("blink"));
 
                         if(aContent.match(aStrNone))
                         {
@@ -1689,9 +1689,9 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrStart(rtl::OUString::createFromAscii("start"));
-                        static rtl::OUString aStrMiddle(rtl::OUString::createFromAscii("middle"));
-                        static rtl::OUString aStrEnd(rtl::OUString::createFromAscii("end"));
+                        static OUString aStrStart(OUString::createFromAscii("start"));
+                        static OUString aStrMiddle(OUString::createFromAscii("middle"));
+                        static OUString aStrEnd(OUString::createFromAscii("end"));
 
                         if(aContent.match(aStrStart))
                         {
@@ -1712,10 +1712,10 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
-                        static rtl::OUString aStrLeft(rtl::OUString::createFromAscii("left"));
-                        static rtl::OUString aStrRight(rtl::OUString::createFromAscii("right"));
-                        static rtl::OUString aStrCenter(rtl::OUString::createFromAscii("center"));
-                        static rtl::OUString aStrJustify(rtl::OUString::createFromAscii("justify"));
+                        static OUString aStrLeft(OUString::createFromAscii("left"));
+                        static OUString aStrRight(OUString::createFromAscii("right"));
+                        static OUString aStrCenter(OUString::createFromAscii("center"));
+                        static OUString aStrJustify(OUString::createFromAscii("justify"));
 
                         if(aContent.match(aStrLeft))
                         {
@@ -1739,7 +1739,7 @@ namespace svgio
                 case SVGTokenColor:
                 {
                     SvgPaint aSvgPaint;
-                    rtl::OUString aURL;
+                    OUString aURL;
 
                     if(readSvgPaint(aContent, aSvgPaint, aURL))
                     {
@@ -2381,7 +2381,7 @@ namespace svgio
             return 0;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerStartXLink() const
+        const OUString SvgStyleAttributes::getMarkerStartXLink() const
         {
             if(maMarkerStartXLink.getLength())
             {
@@ -2395,14 +2395,14 @@ namespace svgio
                 return pSvgStyleAttributes->getMarkerStartXLink();
             }
 
-            return rtl::OUString();
+            return OUString();
         }
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerStartXLink() const
         {
             if(!mpMarkerStartXLink)
             {
-                const rtl::OUString aMarker(getMarkerStartXLink());
+                const OUString aMarker(getMarkerStartXLink());
 
                 if(aMarker.getLength())
                 {
@@ -2413,7 +2413,7 @@ namespace svgio
             return mpMarkerStartXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerMidXLink() const
+        const OUString SvgStyleAttributes::getMarkerMidXLink() const
         {
             if(maMarkerMidXLink.getLength())
             {
@@ -2427,14 +2427,14 @@ namespace svgio
                 return pSvgStyleAttributes->getMarkerMidXLink();
             }
 
-            return rtl::OUString();
+            return OUString();
         }
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerMidXLink() const
         {
             if(!mpMarkerMidXLink)
             {
-                const rtl::OUString aMarker(getMarkerMidXLink());
+                const OUString aMarker(getMarkerMidXLink());
 
                 if(aMarker.getLength())
                 {
@@ -2445,7 +2445,7 @@ namespace svgio
             return mpMarkerMidXLink;
         }
 
-        const rtl::OUString SvgStyleAttributes::getMarkerEndXLink() const
+        const OUString SvgStyleAttributes::getMarkerEndXLink() const
         {
             if(maMarkerEndXLink.getLength())
             {
@@ -2459,14 +2459,14 @@ namespace svgio
                 return pSvgStyleAttributes->getMarkerEndXLink();
             }
 
-            return rtl::OUString();
+            return OUString();
         }
 
         const SvgMarkerNode* SvgStyleAttributes::accessMarkerEndXLink() const
         {
             if(!mpMarkerEndXLink)
             {
-                const rtl::OUString aMarker(getMarkerEndXLink());
+                const OUString aMarker(getMarkerEndXLink());
 
                 if(aMarker.getLength())
                 {

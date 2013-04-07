@@ -58,7 +58,6 @@ namespace connectivity
 
     namespace mysqlc
     {
-        using ::rtl::OUString;
         using ::com::sun::star::sdbc::SQLWarning;
         using ::com::sun::star::sdbc::SQLException;
         using ::com::sun::star::uno::RuntimeException;
@@ -215,7 +214,7 @@ namespace connectivity
             // TODO: Not used
             //sal_Int32 sdbcColumnType(OUString typeName);
             inline const ConnectionSettings& getConnectionSettings() const { return m_settings; }
-            ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
+            OUString transFormPreparedStatement(const OUString& _sSQL);
 
             // should we use the catalog on filebased databases
             inline sal_Bool             isCatalogUsed()     const { return m_bUseCatalog; }

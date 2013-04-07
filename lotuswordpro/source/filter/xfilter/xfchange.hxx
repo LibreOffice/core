@@ -84,12 +84,12 @@ public:
     XFChangeRegion(){}
     ~XFChangeRegion(){}
     virtual void ToXml(IXFStream *pStrm);
-    void SetChangeID(rtl::OUString sID){m_sID=sID;}
-    rtl::OUString GetChangeID(){return m_sID;}
-    void SetEditor(rtl::OUString sEditor){m_sEditor=sEditor;}
+    void SetChangeID(OUString sID){m_sID=sID;}
+    OUString GetChangeID(){return m_sID;}
+    void SetEditor(OUString sEditor){m_sEditor=sEditor;}
 protected:
-    rtl::OUString m_sID;
-    rtl::OUString m_sEditor;
+    OUString m_sID;
+    OUString m_sEditor;
 };
 
 class XFChangeInsert : public XFChangeRegion
@@ -114,10 +114,10 @@ public:
     XFChange(){}
     ~XFChange(){}
     void ToXml(IXFStream *pStrm);
-    void SetChangeID(rtl::OUString sID){m_sID=sID;}
-    rtl::OUString GetChangeID(){return m_sID;}
+    void SetChangeID(OUString sID){m_sID=sID;}
+    OUString GetChangeID(){return m_sID;}
 private:
-    rtl::OUString m_sID;
+    OUString m_sID;
 };
 
 class XFChangeStart : public XFContent
@@ -126,10 +126,10 @@ public:
     XFChangeStart(){}
     ~XFChangeStart(){}
     void ToXml(IXFStream *pStrm);
-    void SetChangeID(rtl::OUString sID){m_sID=sID;}
-    rtl::OUString GetChangeID(){return m_sID;}
+    void SetChangeID(OUString sID){m_sID=sID;}
+    OUString GetChangeID(){return m_sID;}
 private:
-    rtl::OUString m_sID;
+    OUString m_sID;
 };
 
 class XFChangeEnd : public XFContent
@@ -138,10 +138,10 @@ public:
     XFChangeEnd(){}
     ~XFChangeEnd(){}
     void ToXml(IXFStream *pStrm);
-    void SetChangeID(rtl::OUString sID){m_sID=sID;}
-    rtl::OUString GetChangeID(){return m_sID;}
+    void SetChangeID(OUString sID){m_sID=sID;}
+    OUString GetChangeID(){return m_sID;}
 private:
-    rtl::OUString m_sID;
+    OUString m_sID;
 };
 
 #endif

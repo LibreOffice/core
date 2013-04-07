@@ -301,7 +301,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         }
 
         // env string
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         OUString aPath, aPluginPipeName;
 
         if(!Bootstrap::get("BRAND_BASE_DIR", aPath))
@@ -310,7 +310,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             return Reference< lang::XMultiServiceFactory >(NULL);
         }
 
-        aPluginPipeName = ::rtl::OUString::valueOf( aPath.hashCode() );
+        aPluginPipeName = OUString::valueOf( aPath.hashCode() );
 
         // accept string
         OSL_ASSERT( buf.isEmpty() );
@@ -361,11 +361,11 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
             NSP_Close_Pipe(read_fd);
             execl( "/bin/sh",
                    "/bin/sh",
-                   ::rtl::OUStringToOString( aOfficePath, osl_getThreadTextEncoding() ).getStr(),
-                   ::rtl::OUStringToOString( args[0], osl_getThreadTextEncoding() ).getStr(),
-                   ::rtl::OUStringToOString( args[1], osl_getThreadTextEncoding() ).getStr(),
-                   ::rtl::OUStringToOString( args[2], osl_getThreadTextEncoding() ).getStr(),
-                   ::rtl::OUStringToOString( args[3], osl_getThreadTextEncoding() ).getStr(),
+                   OUStringToOString( aOfficePath, osl_getThreadTextEncoding() ).getStr(),
+                   OUStringToOString( args[0], osl_getThreadTextEncoding() ).getStr(),
+                   OUStringToOString( args[1], osl_getThreadTextEncoding() ).getStr(),
+                   OUStringToOString( args[2], osl_getThreadTextEncoding() ).getStr(),
+                   OUStringToOString( args[3], osl_getThreadTextEncoding() ).getStr(),
                    NULL);
             _exit(255);
         }

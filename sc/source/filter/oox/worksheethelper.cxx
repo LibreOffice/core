@@ -87,8 +87,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -1598,7 +1596,7 @@ void WorksheetHelper::finalizeDrawingImport()
     mrSheetGlob.finalizeDrawingImport();
 }
 
-void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
+void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
 }
@@ -1608,12 +1606,12 @@ void WorksheetHelper::setCellFormula( const ::com::sun::star::table::CellAddress
     getFormulaBuffer().setCellFormula( rTokenAddress,  nSharedId );
 }
 
-void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString& rTokenStr )
+void WorksheetHelper::setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
 }
 
-void WorksheetHelper::createSharedFormulaMapEntry(  const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens )
+void WorksheetHelper::createSharedFormulaMapEntry(  const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
 {
     getFormulaBuffer().createSharedFormulaMapEntry( rAddress, nSharedId, rTokens );
 }

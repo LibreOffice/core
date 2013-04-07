@@ -53,12 +53,12 @@ MQueryHelperResultEntry::~MQueryHelperResultEntry()
 {
 }
 
-rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
+OUString MQueryHelperResultEntry::getValue( const OString &key ) const
 {
     FieldMap::const_iterator iter = m_Fields.find( key );
     if ( iter == m_Fields.end() )
     {
-        return rtl::OUString();
+        return OUString();
     }
     else
     {
@@ -66,7 +66,7 @@ rtl::OUString MQueryHelperResultEntry::getValue( const rtl::OString &key ) const
     }
 }
 
-void MQueryHelperResultEntry::setValue( const rtl::OString &key, const rtl::OUString & rValue)
+void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rValue)
 {
 //    SAL_INFO("connectivity.mork", "MQueryHelper::setValue()" );
 //    SAL_INFO("connectivity.mork", "key: " << &key << " value: " << &rValue);
@@ -93,7 +93,7 @@ MQueryHelper::~MQueryHelper()
 }
 
 // -------------------------------------------------------------------------
-void MQueryHelper::setAddressbook(::rtl::OUString &ab)
+void MQueryHelper::setAddressbook(OUString &ab)
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::setAddressbook()");
 
@@ -186,7 +186,7 @@ sal_Bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 }
 
 
-sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType )
+sal_Bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType )
 {
     SAL_INFO("connectivity.mork", "MQueryHelper::getRowValue()" );
     MQueryHelperResultEntry* xResEntry = getByIndex( nDBRow );
@@ -216,7 +216,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
     reset();
 
-    rtl::OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
+    OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
     std::set<int> listRecords;
     bool handleListTable = false;
 
@@ -264,7 +264,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                     std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
-                    rtl::OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
+                    OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
                 ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
@@ -298,10 +298,10 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
         if ( (*evIter)->isStringExpr() ) {
             MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
             // Set the 'name' property of the boolString.
-            rtl::OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
+            OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
             sal_Bool requiresValue = sal_True;
-            rtl::OUString currentValue = entry->getValue(attrName);
+            OUString currentValue = entry->getValue(attrName);
             if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)
             {
                 requiresValue = sal_False;
@@ -309,7 +309,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
             if (requiresValue)
             {
                 SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
-                rtl::OUString searchedValue = evStr->getValue();
+                OUString searchedValue = evStr->getValue();
                 if (evStr->getCond() == MQueryOp::Is) {
                     SAL_INFO("connectivity.mork", "MQueryOp::Is; done");
                     resultVector.push_back((currentValue == searchedValue) ? sal_True : sal_False);

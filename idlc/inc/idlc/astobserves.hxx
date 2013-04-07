@@ -24,7 +24,7 @@
 class AstObserves : public AstDeclaration
 {
 public:
-    AstObserves(AstInterface* pRealInterface, const ::rtl::OString& name, AstScope* pScope)
+    AstObserves(AstInterface* pRealInterface, const OString& name, AstScope* pScope)
         : AstDeclaration(NT_observes, name, pScope)
         , m_pRealInterface(pRealInterface)
         {}

@@ -28,7 +28,7 @@ namespace jfw_plugin
 {
 
 class VendorBase;
-std::vector<rtl::OUString> getVectorFromCharArray(char const * const * ar, int size);
+std::vector<OUString> getVectorFromCharArray(char const * const * ar, int size);
 
 /*   The function uses the relative paths, such as "bin/java.exe" and the provided
      path to derive the home directory. The home directory is then used as
@@ -36,8 +36,8 @@ std::vector<rtl::OUString> getVectorFromCharArray(char const * const * ar, int s
      file:///c:/j2sdk/jre/bin then file:///c:/j2sdk/jre would be derived.
  */
 bool getJREInfoFromBinPath(
-    const rtl::OUString& path, std::vector<rtl::Reference<VendorBase> > & vecInfos);
-inline rtl::OUString getDirFromFile(const rtl::OUString& usFilePath);
+    const OUString& path, std::vector<rtl::Reference<VendorBase> > & vecInfos);
+inline OUString getDirFromFile(const OUString& usFilePath);
 void createJavaInfoFromPath(std::vector<rtl::Reference<VendorBase> >& vecInfos);
 void createJavaInfoFromJavaHome(std::vector<rtl::Reference<VendorBase> > &vecInfos);
 void createJavaInfoDirScan(std::vector<rtl::Reference<VendorBase> >& vecInfos);
@@ -45,7 +45,7 @@ void createJavaInfoDirScan(std::vector<rtl::Reference<VendorBase> >& vecInfos);
 void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> >& vecInfos);
 #endif
 
-bool makeDriveLetterSame(rtl::OUString * fileURL);
+bool makeDriveLetterSame(OUString * fileURL);
 
 
 /* for std::find_if
@@ -54,8 +54,8 @@ bool makeDriveLetterSame(rtl::OUString * fileURL);
 */
 struct InfoFindSame
 {
-    rtl::OUString sJava;
-    InfoFindSame(const rtl::OUString& sJavaHome):sJava(sJavaHome){}
+    OUString sJava;
+    InfoFindSame(const OUString& sJavaHome):sJava(sJavaHome){}
 
     bool operator () (const rtl::Reference<VendorBase> & aVendorInfo)
     {
@@ -65,16 +65,16 @@ struct InfoFindSame
 
 struct SameOrSubDirJREMap
 {
-    rtl::OUString s1;
-    SameOrSubDirJREMap(const rtl::OUString& s):s1(s){
+    OUString s1;
+    SameOrSubDirJREMap(const OUString& s):s1(s){
     }
 
-    bool operator () (const std::pair<const rtl::OUString, rtl::Reference<VendorBase> > & s2)
+    bool operator () (const std::pair<const OUString, rtl::Reference<VendorBase> > & s2)
     {
         if (s1 == s2.first)
             return true;
-        rtl::OUString sSub;
-        sSub = s2.first + rtl::OUString("/");
+        OUString sSub;
+        sSub = s2.first + OUString("/");
         if (s1.match(sSub) == sal_True)
             return true;
         return false;
@@ -87,7 +87,7 @@ struct SameOrSubDirJREMap
    This depends if there is a JRE at all and if it is from a vendor that
    is supported by this plugin.
  */
-rtl::Reference<VendorBase> getJREInfoByPath(const rtl::OUString& path);
+rtl::Reference<VendorBase> getJREInfoByPath(const OUString& path);
 
 /* Creates a VendorBase object if a JRE could be found at the specified path.
 
@@ -102,17 +102,17 @@ rtl::Reference<VendorBase> getJREInfoByPath(const rtl::OUString& path);
    false - no VendorBase has been created. Either the path did not represent a
    supported JRE installation or there was already a VendorBase in vecInfos.
  */
-bool getJREInfoByPath(const rtl::OUString& path,
+bool getJREInfoByPath(const OUString& path,
                       std::vector<rtl::Reference<VendorBase> > & vecInfos);
 
 std::vector<rtl::Reference<VendorBase> > getAllJREInfos();
 
 bool getJavaProps(
-    const rtl::OUString & exePath,
+    const OUString & exePath,
 #ifdef JVM_ONE_PATH_CHECK
-    const rtl::OUString & homePath,
+    const OUString & homePath,
 #endif
-    std::vector<std::pair<rtl::OUString, rtl::OUString> >& props,
+    std::vector<std::pair<OUString, OUString> >& props,
     bool * bProcessRun);
 
 void  createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfos);

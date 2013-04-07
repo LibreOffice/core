@@ -89,7 +89,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
       mrViewShell(rViewShell),
       mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {
-    SetName (rtl::OUString("AllMasterPagesSelector"));
+    SetName (OUString("AllMasterPagesSelector"));
     MasterPagesSelector::Fill();
 }
 

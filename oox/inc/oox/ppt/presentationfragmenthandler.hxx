@@ -38,7 +38,7 @@ namespace oox { namespace ppt {
 class PresentationFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath ) throw();
+    PresentationFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath ) throw();
     virtual ~PresentationFragmentHandler() throw();
     virtual void finalizeImport();
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs );
@@ -51,9 +51,9 @@ private:
 
     void importSlide(sal_uInt32 nSlide, sal_Bool bFirstSlide, sal_Bool bImportNotes);
 
-    std::vector< rtl::OUString > maSlideMasterVector;
-    std::vector< rtl::OUString > maSlidesVector;
-    std::vector< rtl::OUString > maNotesMasterVector;
+    std::vector< OUString > maSlideMasterVector;
+    std::vector< OUString > maSlidesVector;
+    std::vector< OUString > maNotesMasterVector;
     ::oox::drawingml::TextListStylePtr mpTextListStyle;
 
     ::com::sun::star::awt::Size maSlideSize;

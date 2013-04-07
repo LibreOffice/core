@@ -71,8 +71,8 @@ public:
     // associated XGraphicObject ( if url is valid for that ) and is set
     // appropriately ( e.g. NULL if non GraphicObject scheme ) or a valid
     // object if the rURL points to a valid object
-    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >& xOutGraphicObject, const ::rtl::OUString& _rURL );
-    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicAndGraphicObjectFromURL_nothrow( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >& xOutGraphicObject, const OUString& _rURL );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > getGraphicFromURL_nothrow( const OUString& _rURL );
 
 };
 
@@ -92,7 +92,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlEditModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -119,7 +119,7 @@ private:
     // Not all fields derived from UnoEditCOntrol have the property "Text"
     // They only support XTextComponent, so keep the text
     // here, maybe there is no Peer when calling setText()...
-    ::rtl::OUString     maText;
+    OUString     maText;
     sal_uInt16              mnMaxTextLen;
 
     sal_Bool            mbSetTextInPeer;
@@ -129,10 +129,10 @@ private:
 public:
 
                                 UnoEditControl();
-    ::rtl::OUString             GetComponentServiceName();
+    OUString             GetComponentServiceName();
     TextListenerMultiplexer&    GetTextListeners()  { return maTextListeners; }
 
-    void                        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    void                        ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
@@ -153,10 +153,10 @@ public:
     // XTextComponent
     void SAL_CALL addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL insertText( const ::com::sun::star::awt::Selection& Sel, const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getSelectedText(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL insertText( const ::com::sun::star::awt::Selection& Sel, const OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getSelectedText(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Selection SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isEditable(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -174,8 +174,8 @@ public:
     void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     sal_Bool SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model) throw ( ::com::sun::star::uno::RuntimeException );
 };
@@ -196,7 +196,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlFileControlModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -212,7 +212,7 @@ class UnoFileControl : public UnoEditControl
 {
 public:
                         UnoFileControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoFileControl, UnoEditControl, szServiceName2_UnoControlFileControl )
@@ -267,7 +267,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlButtonModel, GraphicControlModel, szServiceName2_UnoControlButtonModel )
@@ -287,12 +287,12 @@ class UnoButtonControl :    public UnoButtonControl_Base
 private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
-    ::rtl::OUString             maActionCommand;
+    OUString             maActionCommand;
 
 public:
 
                         UnoButtonControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -300,8 +300,8 @@ public:
     // ::com::sun::star::awt::XButton
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XToggleButton
     // ::com::sun::star::awt::XItemEventBroadcaster
@@ -345,7 +345,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlImageControlModel, GraphicControlModel, szServiceName2_UnoControlImageControlModel )
@@ -364,12 +364,12 @@ class UnoImageControlControl : public UnoImageControlControl_Base
 {
 private:
     ActionListenerMultiplexer   maActionListeners;
-    ::rtl::OUString             maActionCommand;
+    OUString             maActionCommand;
 
 public:
 
                             UnoImageControlControl();
-    ::rtl::OUString         GetComponentServiceName();
+    OUString         GetComponentServiceName();
 
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -402,7 +402,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlRadioButtonModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -426,12 +426,12 @@ class UnoRadioButtonControl : public UnoRadioButtonControl_Base
 private:
     ItemListenerMultiplexer     maItemListeners;
     ActionListenerMultiplexer   maActionListeners;
-    ::rtl::OUString             maActionCommand;
+    OUString             maActionCommand;
 
 public:
 
                             UnoRadioButtonControl();
-    ::rtl::OUString         GetComponentServiceName();
+    OUString         GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -443,14 +443,14 @@ public:
     // ::com::sun::star::awt::XButton
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XRadioButton
     void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL getState(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XItemListener
     void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -481,7 +481,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlCheckBoxModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -504,13 +504,13 @@ class UnoCheckBoxControl : public UnoCheckBoxControl_Base
 private:
     ItemListenerMultiplexer     maItemListeners;
     ActionListenerMultiplexer   maActionListeners;
-    ::rtl::OUString             maActionCommand;
+    OUString             maActionCommand;
 
 public:
 
                             UnoCheckBoxControl();
                             ~UnoCheckBoxControl(){;}
-    ::rtl::OUString         GetComponentServiceName();
+    OUString         GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -522,7 +522,7 @@ public:
     // ::com::sun::star::awt::XButton
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setActionCommand( const OUString& Command ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw (::com::sun::star::uno::RuntimeException);
@@ -530,7 +530,7 @@ public:
 
     sal_Int16 SAL_CALL getState(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setState( sal_Int16 n ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLabel( const OUString& Label ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL enableTriState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XItemListener
@@ -562,7 +562,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlFixedHyperlinkModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -584,7 +584,7 @@ private:
 public:
     UnoFixedHyperlinkControl();
 
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -602,10 +602,10 @@ public:
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XFixedHyperlink
-    void SAL_CALL setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getURL(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setURL( const OUString& URL ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getURL(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
@@ -636,7 +636,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlFixedTextModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -655,7 +655,7 @@ class UnoFixedTextControl : public UnoControlBase,
 {
 public:
                         UnoFixedTextControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -670,8 +670,8 @@ public:
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XFixedText
-    void SAL_CALL setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -701,7 +701,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlGroupBoxModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -718,7 +718,7 @@ class UnoGroupBoxControl :  public UnoControlBase
 {
 public:
                         UnoGroupBoxControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -764,28 +764,28 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XItemList
     virtual ::sal_Int32 SAL_CALL getItemCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertItem( ::sal_Int32 Position, const ::rtl::OUString& ItemText, const ::rtl::OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertItemText( ::sal_Int32 Position, const ::rtl::OUString& ItemText ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertItemImage( ::sal_Int32 Position, const ::rtl::OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertItem( ::sal_Int32 Position, const OUString& ItemText, const OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertItemText( ::sal_Int32 Position, const OUString& ItemText ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertItemImage( ::sal_Int32 Position, const OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeItem( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeAllItems(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setItemText( ::sal_Int32 Position, const ::rtl::OUString& ItemText ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setItemImage( ::sal_Int32 Position, const ::rtl::OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setItemTextAndImage( ::sal_Int32 Position, const ::rtl::OUString& ItemText, const ::rtl::OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemText( ::sal_Int32 Position, const OUString& ItemText ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemImage( ::sal_Int32 Position, const OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setItemTextAndImage( ::sal_Int32 Position, const OUString& ItemText, const OUString& ItemImageURL ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setItemData( ::sal_Int32 Position, const ::com::sun::star::uno::Any& DataValue ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getItemText( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getItemImage( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::beans::Pair< ::rtl::OUString, ::rtl::OUString > SAL_CALL getItemTextAndImage( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getItemText( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getItemImage( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::beans::Pair< OUString, OUString > SAL_CALL getItemTextAndImage( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getItemData( ::sal_Int32 Position ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pair< ::rtl::OUString, ::rtl::OUString > > SAL_CALL getAllItems(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pair< OUString, OUString > > SAL_CALL getAllItems(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addItemListListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeItemListListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -799,15 +799,15 @@ protected:
 private:
     void    impl_notifyItemListEvent_nolck(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< ::rtl::OUString >& i_rItemText,
-                const ::boost::optional< ::rtl::OUString >& i_rItemImageURL,
+                const ::boost::optional< OUString >& i_rItemText,
+                const ::boost::optional< OUString >& i_rItemImageURL,
                 void ( SAL_CALL ::com::sun::star::awt::XItemListListener::*NotificationMethod )( const ::com::sun::star::awt::ItemListEvent& )
             );
 
     void    impl_handleInsert(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< ::rtl::OUString >& i_rItemText,
-                const ::boost::optional< ::rtl::OUString >& i_rItemImageURL,
+                const ::boost::optional< OUString >& i_rItemText,
+                const ::boost::optional< OUString >& i_rItemImageURL,
                 ::osl::ClearableMutexGuard& i_rClearBeforeNotify
             );
 
@@ -818,13 +818,13 @@ private:
 
     void    impl_handleModify(
                 const sal_Int32 i_nItemPosition,
-                const ::boost::optional< ::rtl::OUString >& i_rItemText,
-                const ::boost::optional< ::rtl::OUString >& i_rItemImageURL,
+                const ::boost::optional< OUString >& i_rItemText,
+                const ::boost::optional< OUString >& i_rItemImageURL,
                 ::osl::ClearableMutexGuard& i_rClearBeforeNotify
             );
 
-    void    impl_getStringItemList( ::std::vector< ::rtl::OUString >& o_rStringItems ) const;
-    void    impl_setStringItemList_nolck( const ::std::vector< ::rtl::OUString >& i_rStringItems );
+    void    impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const;
+    void    impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems );
 
 protected:
     ::boost::scoped_ptr< UnoControlListBoxModel_Data >  m_pData;
@@ -845,7 +845,7 @@ class TOOLKIT_DLLPUBLIC UnoListBoxControl : public UnoListBoxControl_Base
 {
 public:
                         UnoListBoxControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -856,19 +856,19 @@ public:
     void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getItemCount(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getSelectedItemPos(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getSelectedItem(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedItems(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getSelectedItem(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedItems(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL selectItemsPos( const ::com::sun::star::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL selectItem( const ::rtl::OUString& aItem, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL selectItem( const OUString& aItem, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isMutipleMode(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setMultipleMode( sal_Bool bMulti ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -898,12 +898,12 @@ public:
     virtual void SAL_CALL itemListChanged( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 protected:
     void                ImplUpdateSelectedItemsProperty();
-    virtual void        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    virtual void        ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void        updateFromModel();
 
 private:
@@ -927,7 +927,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlComboBoxModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -935,8 +935,8 @@ public:
     void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
 };
 
@@ -955,7 +955,7 @@ private:
 public:
 
                         UnoComboBoxControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoEditControl::disposing( Source ); }
@@ -976,12 +976,12 @@ public:
     void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getItemCount(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL getDropDownLineCount(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -999,10 +999,10 @@ public:
     virtual void SAL_CALL itemStateChanged( const ::com::sun::star::awt::ItemEvent& rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
-    ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 protected:
-    virtual void        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    virtual void        ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void        updateFromModel();
     ActionListenerMultiplexer&  getActionListeners();
     ItemListenerMultiplexer&    getItemListeners();
@@ -1064,7 +1064,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlDateFieldModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1086,7 +1086,7 @@ private:
     sal_Bool        mbLongFormat;
 public:
                             UnoDateFieldControl();
-    ::rtl::OUString         GetComponentServiceName();
+    OUString         GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1140,7 +1140,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlTimeFieldModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1162,7 +1162,7 @@ private:
 
 public:
                         UnoTimeFieldControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1215,7 +1215,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlNumericFieldModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1237,7 +1237,7 @@ private:
 
 public:
                         UnoNumericFieldControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1292,7 +1292,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlCurrencyFieldModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1314,7 +1314,7 @@ private:
 
 public:
                         UnoCurrencyFieldControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1368,7 +1368,7 @@ public:
     UnoControlModel*    Clone() const { return new UnoControlPatternFieldModel( *this ); }
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1385,11 +1385,11 @@ class UnoPatternFieldControl :  public UnoSpinFieldControl,
                                 public ::com::sun::star::awt::XPatternField
 {
 protected:
-    void            ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+    void            ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
 public:
                         UnoPatternFieldControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoSpinFieldControl::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1401,10 +1401,10 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XPatternField
-    void SAL_CALL setMasks( const ::rtl::OUString& EditMask, const ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL getMasks( ::rtl::OUString& EditMask, ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setString( const ::rtl::OUString& Str ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getString(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL getMasks( OUString& EditMask, OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setString( const OUString& Str ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getString(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL isStrictFormat(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -1432,7 +1432,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlProgressBarModel, UnoControlModel, szServiceName2_UnoControlProgressBarModel )
@@ -1446,7 +1446,7 @@ class UnoProgressBarControl :   public UnoControlBase,
 {
 public:
                                 UnoProgressBarControl();
-    ::rtl::OUString             GetComponentServiceName();
+    OUString             GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -1488,7 +1488,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedLineModel, UnoControlModel, szServiceName2_UnoControlFixedLineModel )
@@ -1502,7 +1502,7 @@ class UnoFixedLineControl : public UnoControlBase
 {
 public:
                         UnoFixedLineControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
 

@@ -63,7 +63,7 @@ public:
         const ::boost::shared_ptr<PresenterTheme>& rpTheme,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
-        const ::rtl::OUString& rsConfigurationName);
+        const OUString& rsConfigurationName);
     ~PresenterButton (void);
 
     virtual void SAL_CALL disposing (void);
@@ -125,10 +125,10 @@ private:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
-    const ::rtl::OUString msText;
+    const OUString msText;
     const PresenterTheme::SharedFontDescriptor mpFont;
     const PresenterTheme::SharedFontDescriptor mpMouseOverFont;
-    const ::rtl::OUString msAction;
+    const OUString msAction;
     css::geometry::RealPoint2D maCenter;
     css::geometry::IntegerSize2D maButtonSize;
     PresenterBitmapDescriptor::Mode meState;
@@ -142,8 +142,8 @@ private:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const PresenterTheme::SharedFontDescriptor& rFont,
         const PresenterTheme::SharedFontDescriptor& rMouseOverFont,
-        const ::rtl::OUString& rxText,
-        const ::rtl::OUString& rxAction);
+        const OUString& rxText,
+        const OUString& rxAction);
     void RenderButton (
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::geometry::IntegerSize2D& rSize,
@@ -160,7 +160,7 @@ private:
     void SetupButtonBitmaps (void);
     static css::uno::Reference<css::beans::XPropertySet> GetConfigurationProperties (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
-        const ::rtl::OUString& rsConfgurationName);
+        const OUString& rsConfgurationName);
 
     void ThrowIfDisposed (void) const
         throw (::com::sun::star::lang::DisposedException);

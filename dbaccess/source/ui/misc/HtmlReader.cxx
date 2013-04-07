@@ -384,7 +384,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
                     aFontName += aFName;
                 }
                 if ( aFontName.Len() )
-                    _rFont.Name = ::rtl::OUString(aFontName);
+                    _rFont.Name = OUString(aFontName);
             }
             break;
         case HTML_O_SIZE :
@@ -430,7 +430,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     DBG_CHKTHIS(OHTMLReader,NULL);
     String aTempName(ModuleRes(STR_TBL_TITLE));
     aTempName = aTempName.GetToken(0,' ');
-    aTempName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTempName )));
+    aTempName = String(::dbtools::createUniqueName(m_xTables,OUString(aTempName )));
 
     int nTmpToken2 = nToken;
     sal_Bool bCaption = sal_False;
@@ -490,7 +490,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
             case HTML_CAPTION_OFF:
                 aTableName = comphelper::string::strip(aTableName, ' ');
                 if(!aTableName.Len())
-                    aTableName = String(::dbtools::createUniqueName(m_xTables,::rtl::OUString(aTableName)));
+                    aTableName = String(::dbtools::createUniqueName(m_xTables,OUString(aTableName)));
                 else
                     aTableName = aTempName;
                 bCaption = sal_False;

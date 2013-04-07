@@ -138,7 +138,7 @@ SalSession * SessionManagerClient::m_pSession = NULL;
 boost::scoped_ptr< ICEConnectionObserver >
 SessionManagerClient::m_pICEConnectionObserver;
 SmcConn SessionManagerClient::m_pSmcConnection = NULL;
-rtl::OString SessionManagerClient::m_aClientID;
+OString SessionManagerClient::m_aClientID;
 bool SessionManagerClient::m_bDocSaveDone = false; // HACK
 
 extern "C" {
@@ -164,7 +164,7 @@ static void BuildSmPropertyList()
 {
     if( ! pSmProps )
     {
-        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
+        OString aExec(OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
 
         nSmProps = 5;
         pSmProps = new SmProp[ nSmProps ];
@@ -198,8 +198,8 @@ static void BuildSmPropertyList()
         pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.getLength()+1;
         pSmProps[ 2 ].vals[2].value = strdup(aRestartOptionNoLogo.getStr());
 
-        rtl::OUString aUserName;
-        rtl::OString aUser;
+        OUString aUserName;
+        OString aUser;
         oslSecurity aSec = osl_getCurrentSecurity();
         if( aSec )
         {
@@ -431,7 +431,7 @@ void SessionManagerClient::open(SalSession * pSession)
             aCallbacks.save_complete.client_data        = NULL;
             aCallbacks.shutdown_cancelled.callback      = ShutdownCanceledProc;
             aCallbacks.shutdown_cancelled.client_data   = NULL;
-            rtl::OString aPrevId(getPreviousSessionID());
+            OString aPrevId(getPreviousSessionID());
             char* pClientID = NULL;
             char aErrBuf[1024];
             m_pSmcConnection = SmcOpenConnection( NULL,
@@ -476,7 +476,7 @@ void SessionManagerClient::open(SalSession * pSession)
     }
 }
 
-rtl::OString SessionManagerClient::getSessionID()
+OString SessionManagerClient::getSessionID()
 {
     return m_aClientID;
 }
@@ -522,9 +522,9 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
 }
 
 
-rtl::OUString SessionManagerClient::getExecName()
+OUString SessionManagerClient::getExecName()
 {
-    rtl::OUString aExec, aSysExec;
+    OUString aExec, aSysExec;
     osl_getExecutableFile( &aExec.pData );
     osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
 
@@ -534,18 +534,18 @@ rtl::OUString SessionManagerClient::getExecName()
 }
 
 
-rtl::OString SessionManagerClient::getPreviousSessionID()
+OString SessionManagerClient::getPreviousSessionID()
 {
-    rtl::OString aPrevId;
+    OString aPrevId;
 
     sal_uInt32 n = rtl_getAppCommandArgCount();
     for (sal_uInt32 i = 0; i != n; ++i)
     {
-        ::rtl::OUString aArg;
+        OUString aArg;
         rtl_getAppCommandArg( i, &aArg.pData );
         if(aArg.match("--session="))
         {
-            aPrevId = rtl::OUStringToOString(
+            aPrevId = OUStringToOString(
                 aArg.copy(RTL_CONSTASCII_LENGTH("--session=")),
                 osl_getThreadTextEncoding());
             break;

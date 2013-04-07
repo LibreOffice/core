@@ -109,7 +109,7 @@ namespace dbaui
                             m_xORB;
     public:
         OGenericAdministrationPage(Window* _pParent, const ResId& _rId, const SfxItemSet& _rAttrSet);
-        OGenericAdministrationPage(Window* _pParent, const rtl::OString& _rId, const rtl::OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
+        OGenericAdministrationPage(Window* _pParent, const OString& _rId, const OUString& _rUIXMLDescription, const SfxItemSet& _rAttrSet);
         ~OGenericAdministrationPage();
 
         /// set a handler which gets called every time something on the page has been modified
@@ -146,7 +146,7 @@ namespace dbaui
             @return
                 <FALSE/> if an error occurred, otherwise <TRUE/>
         */
-        sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
+        sal_Bool getSelectedDataSource(OUString& _sReturn,OUString& _sCurr);
 
         // svt::IWizardPageController
         virtual void initializePage();

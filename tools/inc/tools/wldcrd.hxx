@@ -26,7 +26,7 @@
 class TOOLS_DLLPUBLIC WildCard
 {
 private:
-    rtl::OString aWildString;
+    OString aWildString;
     char cSepSymbol;
 
     sal_uInt16 ImpMatch( const char *pWild, const char *pStr ) const;
@@ -38,20 +38,20 @@ public:
     {
     }
 
-    WildCard(const rtl::OUString& rWildCard, const char cSeparator = '\0')
-        : aWildString(rtl::OUStringToOString(rWildCard, osl_getThreadTextEncoding()))
+    WildCard(const OUString& rWildCard, const char cSeparator = '\0')
+        : aWildString(OUStringToOString(rWildCard, osl_getThreadTextEncoding()))
         , cSepSymbol(cSeparator)
     {
     }
 
-    const rtl::OUString getGlob() const
+    const OUString getGlob() const
     {
-        return rtl::OStringToOUString(aWildString, osl_getThreadTextEncoding());
+        return OStringToOUString(aWildString, osl_getThreadTextEncoding());
     }
 
-    void setGlob(const rtl::OUString& rString)
+    void setGlob(const OUString& rString)
     {
-        aWildString = rtl::OUStringToOString(rString, osl_getThreadTextEncoding());
+        aWildString = OUStringToOString(rString, osl_getThreadTextEncoding());
     }
 
     sal_Bool Matches( const String& rStr ) const;

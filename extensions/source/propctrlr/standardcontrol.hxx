@@ -286,7 +286,7 @@ namespace pcr
     class OColorControl : public OColorControl_Base
     {
     private:
-        ::std::set< ::rtl::OUString >   m_aNonColorEntries;
+        ::std::set< OUString >   m_aNonColorEntries;
 
     public:
         OColorControl( Window* pParent, WinBits nWinStyle );
@@ -298,9 +298,9 @@ namespace pcr
 
         // XStringListControl
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void modified();
@@ -324,9 +324,9 @@ namespace pcr
 
         // XStringListControl
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void modified();
@@ -348,9 +348,9 @@ namespace pcr
 
         // XStringListControl
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         DECL_LINK( OnEntrySelected, void* );
@@ -387,11 +387,11 @@ namespace pcr
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
         MultiLineOperationMode getOperationMode() const { return m_nOperationMode; }
 
-        void            SetTextValue( const ::rtl::OUString& _rText );
-        ::rtl::OUString GetTextValue() const;
+        void            SetTextValue( const OUString& _rText );
+        OUString GetTextValue() const;
 
-        void            SetStringListValue( const StlSyntaxSequence< ::rtl::OUString >& _rStrings );
-        StlSyntaxSequence< ::rtl::OUString >
+        void            SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings );
+        StlSyntaxSequence< OUString >
                         GetStringListValue() const;
 
         // ControlWindow overridables

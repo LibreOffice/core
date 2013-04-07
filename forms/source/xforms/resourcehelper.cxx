@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 
-using rtl::OUString;
 
 namespace xforms
 {

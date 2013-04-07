@@ -29,22 +29,22 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
 {
     // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
 
-    registerProperty( ::rtl::OUString("Label"), RM_PROPERTY_ID_LABEL,
+    registerProperty( OUString("Label"), RM_PROPERTY_ID_LABEL,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
                       & m_sLabel, ::getCppuType( &m_sLabel ) );
     m_nID = -1;
-    registerProperty( ::rtl::OUString("ID"), RM_PROPERTY_ID_ID,
+    registerProperty( OUString("ID"), RM_PROPERTY_ID_ID,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
                       ::com::sun::star::beans::PropertyAttribute::CONSTRAINED,
                       & m_nID, ::getCppuType( &m_nID ) );
     m_bEnabled = sal_True;
-    registerProperty( ::rtl::OUString("Enabled"), RM_PROPERTY_ID_ENABLED,
+    registerProperty( OUString("Enabled"), RM_PROPERTY_ID_ENABLED,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bEnabled, ::getCppuType( &m_bEnabled ) );
 
-    registerProperty( ::rtl::OUString("Interactive"), RM_PROPERTY_ID_INTERACTIVE,
+    registerProperty( OUString("Interactive"), RM_PROPERTY_ID_INTERACTIVE,
                     ::com::sun::star::beans::PropertyAttribute::BOUND |
                     ::com::sun::star::beans::PropertyAttribute::MAYBEDEFAULT,
                     & m_bInteractive, ::getCppuType( &m_bInteractive ) );
@@ -78,22 +78,22 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
         createPropertySetInfo( getInfoHelper() ) );
 }
 
-::rtl::OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
+    OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
     return aStr;
 }
 
-sal_Bool SAL_CALL ORoadmapEntry::supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ServiceName == "com.sun.star.awt.RoadmapItem";
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
-    ::rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = ::rtl::OUString("com.sun.star.awt.RoadmapItem");
+    ::com::sun::star::uno::Sequence< OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString("com.sun.star.awt.RoadmapItem");
     return aRet;
 }
 //--------------------------------------------------------------------------

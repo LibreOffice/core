@@ -53,7 +53,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
-using ::rtl::OUString;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010 }
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT }
@@ -629,7 +628,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                     sal_Int32 nNumberFormat = 0;
                     if (i->maValue >>= nNumberFormat)
                     {
-                        rtl::OUString sAttrValue(rScXMLExport.getDataStyleName(nNumberFormat));
+                        OUString sAttrValue(rScXMLExport.getDataStyleName(nNumberFormat));
                         if (!sAttrValue.isEmpty())
                         {
                             GetExport().AddAttribute(
@@ -656,7 +655,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             {
                 case CTF_SC_MASTERPAGENAME :
                 {
-                    rtl::OUString sName;
+                    OUString sName;
                     if (i->maValue >>= sName)
                     {
                         GetExport().AddAttribute(
@@ -705,7 +704,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                 uno::Reference <sheet::XSheetConditionalEntry> xSheetConditionalEntry(xIndex->getByIndex(nCondition), uno::UNO_QUERY);
                                 if (xSheetConditionalEntry.is())
                                 {
-                                    rtl::OUString sStyleName(xSheetConditionalEntry->getStyleName());
+                                    OUString sStyleName(xSheetConditionalEntry->getStyleName());
                                     uno::Reference <sheet::XSheetCondition> xSheetCondition(xSheetConditionalEntry, uno::UNO_QUERY);
                                     if (xSheetCondition.is())
                                     {
@@ -714,9 +713,9 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                         {
                                             if (aOperator == sheet::ConditionOperator_FORMULA)
                                             {
-                                                rtl::OUString sCondition("is-true-formula(");
+                                                OUString sCondition("is-true-formula(");
                                                 sCondition += xSheetCondition->getFormula1();
-                                                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
@@ -728,41 +727,41 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                             }
                                             else
                                             {
-                                                rtl::OUString sCondition;
+                                                OUString sCondition;
                                                 if (aOperator == sheet::ConditionOperator_BETWEEN ||
                                                     aOperator == sheet::ConditionOperator_NOT_BETWEEN)
                                                 {
                                                     if (aOperator == sheet::ConditionOperator_BETWEEN)
-                                                        sCondition = rtl::OUString("cell-content-is-between(");
+                                                        sCondition = OUString("cell-content-is-between(");
                                                     else
-                                                        sCondition = rtl::OUString("cell-content-is-not-between(");
+                                                        sCondition = OUString("cell-content-is-not-between(");
                                                     sCondition += xSheetCondition->getFormula1();
-                                                    sCondition += rtl::OUString(",");
+                                                    sCondition += OUString(",");
                                                     sCondition += xSheetCondition->getFormula2();
-                                                    sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                                                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 }
                                                 else
                                                 {
-                                                    sCondition = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
+                                                    sCondition = OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:
-                                                            sCondition += rtl::OUString("<");
+                                                            sCondition += OUString("<");
                                                         break;
                                                         case sheet::ConditionOperator_GREATER:
-                                                            sCondition += rtl::OUString(">");
+                                                            sCondition += OUString(">");
                                                         break;
                                                         case sheet::ConditionOperator_LESS_EQUAL:
-                                                            sCondition += rtl::OUString("<=");
+                                                            sCondition += OUString("<=");
                                                         break;
                                                         case sheet::ConditionOperator_GREATER_EQUAL:
-                                                            sCondition += rtl::OUString(">=");
+                                                            sCondition += OUString(">=");
                                                         break;
                                                         case sheet::ConditionOperator_EQUAL:
-                                                            sCondition += rtl::OUString("=");
+                                                            sCondition += OUString("=");
                                                         break;
                                                         case sheet::ConditionOperator_NOT_EQUAL:
-                                                            sCondition += rtl::OUString("!=");
+                                                            sCondition += OUString("!=");
                                                         break;
                                                         default:
                                                         {
@@ -812,7 +811,7 @@ void ScXMLStyleExport::exportStyleAttributes(
     if (xPropSet.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo(xPropSet->getPropertySetInfo());
-        rtl::OUString sNumberFormat("NumberFormat");
+        OUString sNumberFormat("NumberFormat");
         if( xPropSetInfo->hasPropertyByName( sNumberFormat ) )
         {
             uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
@@ -836,7 +835,7 @@ void ScXMLStyleExport::exportStyleContent(
 
 ScXMLStyleExport::ScXMLStyleExport(
         SvXMLExport& rExp,
-        const ::rtl::OUString& rPoolStyleName,
+        const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP )
     : XMLStyleExport(rExp, rPoolStyleName, pAutoStyleP)
 {
@@ -964,7 +963,7 @@ bool XmlScPropHdl_CellProtection::equals(
 }
 
 sal_Bool XmlScPropHdl_CellProtection::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -993,8 +992,8 @@ sal_Bool XmlScPropHdl_CellProtection::importXML(
                         sal_Int16 i(0);
                         while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
                             ++i;
-                        rtl::OUString sFirst(rStrImpValue.copy(0, i));
-                        rtl::OUString sSecond(rStrImpValue.copy(i + 1));
+                        OUString sFirst(rStrImpValue.copy(0, i));
+                        OUString sSecond(rStrImpValue.copy(i + 1));
                         aCellProtection.IsFormulaHidden = false;
                         aCellProtection.IsHidden = false;
                         aCellProtection.IsLocked = false;
@@ -1046,7 +1045,7 @@ sal_Bool XmlScPropHdl_CellProtection::importXML(
 }
 
 sal_Bool XmlScPropHdl_CellProtection::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1080,7 +1079,7 @@ sal_Bool XmlScPropHdl_CellProtection::exportXML(
         else if (aCellProtection.IsFormulaHidden && aCellProtection.IsLocked)
         {
             rStrExpValue = GetXMLToken(XML_PROTECTED);
-            rStrExpValue += rtl::OUString(" ");
+            rStrExpValue += OUString(" ");
             rStrExpValue += GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = sal_True;
         }
@@ -1107,7 +1106,7 @@ bool XmlScPropHdl_PrintContent::equals(
 }
 
 sal_Bool XmlScPropHdl_PrintContent::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1137,7 +1136,7 @@ sal_Bool XmlScPropHdl_PrintContent::importXML(
 }
 
 sal_Bool XmlScPropHdl_PrintContent::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1146,7 +1145,7 @@ sal_Bool XmlScPropHdl_PrintContent::exportXML(
     util::CellProtection aCellProtection;
     if(rValue >>= aCellProtection)
     {
-        rtl::OUStringBuffer sValue;
+        OUStringBuffer sValue;
         ::sax::Converter::convertBool(sValue, !aCellProtection.IsPrintHidden);
         rStrExpValue = sValue.makeStringAndClear();
         bRetval = sal_True;
@@ -1172,7 +1171,7 @@ bool XmlScPropHdl_JustifyMethod::equals(
 }
 
 sal_Bool XmlScPropHdl_JustifyMethod::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1198,7 +1197,7 @@ sal_Bool XmlScPropHdl_JustifyMethod::importXML(
 }
 
 sal_Bool XmlScPropHdl_JustifyMethod::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1246,7 +1245,7 @@ bool XmlScPropHdl_HoriJustify::equals(
 }
 
 sal_Bool XmlScPropHdl_HoriJustify::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1288,7 +1287,7 @@ sal_Bool XmlScPropHdl_HoriJustify::importXML(
 }
 
 sal_Bool XmlScPropHdl_HoriJustify::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1350,7 +1349,7 @@ bool XmlScPropHdl_HoriJustifySource::equals(
 }
 
 sal_Bool XmlScPropHdl_HoriJustifySource::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1371,7 +1370,7 @@ sal_Bool XmlScPropHdl_HoriJustifySource::importXML(
 }
 
 sal_Bool XmlScPropHdl_HoriJustifySource::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1411,7 +1410,7 @@ bool XmlScPropHdl_HoriJustifyRepeat::equals(
 }
 
 sal_Bool XmlScPropHdl_HoriJustifyRepeat::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1432,7 +1431,7 @@ sal_Bool XmlScPropHdl_HoriJustifyRepeat::importXML(
 }
 
 sal_Bool XmlScPropHdl_HoriJustifyRepeat::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1472,7 +1471,7 @@ bool XmlScPropHdl_Orientation::equals(
 }
 
 sal_Bool XmlScPropHdl_Orientation::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1496,7 +1495,7 @@ sal_Bool XmlScPropHdl_Orientation::importXML(
 }
 
 sal_Bool XmlScPropHdl_Orientation::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1541,7 +1540,7 @@ bool XmlScPropHdl_RotateAngle::equals(
 }
 
 sal_Bool XmlScPropHdl_RotateAngle::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1559,7 +1558,7 @@ sal_Bool XmlScPropHdl_RotateAngle::importXML(
 }
 
 sal_Bool XmlScPropHdl_RotateAngle::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1568,7 +1567,7 @@ sal_Bool XmlScPropHdl_RotateAngle::exportXML(
 
     if(rValue >>= nVal)
     {
-        rtl::OUStringBuffer sValue;
+        OUStringBuffer sValue;
         ::sax::Converter::convertNumber(sValue, sal_Int32(nVal / 100));
         rStrExpValue = sValue.makeStringAndClear();
         bRetval = sal_True;
@@ -1593,7 +1592,7 @@ bool XmlScPropHdl_RotateReference::equals(
 }
 
 sal_Bool XmlScPropHdl_RotateReference::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1629,7 +1628,7 @@ sal_Bool XmlScPropHdl_RotateReference::importXML(
 }
 
 sal_Bool XmlScPropHdl_RotateReference::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1690,7 +1689,7 @@ bool XmlScPropHdl_VertJustify::equals(
 }
 
 sal_Bool XmlScPropHdl_VertJustify::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1732,7 +1731,7 @@ sal_Bool XmlScPropHdl_VertJustify::importXML(
 }
 
 sal_Bool XmlScPropHdl_VertJustify::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1799,7 +1798,7 @@ bool XmlScPropHdl_BreakBefore::equals(
 }
 
 sal_Bool XmlScPropHdl_BreakBefore::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1823,7 +1822,7 @@ sal_Bool XmlScPropHdl_BreakBefore::importXML(
 }
 
 sal_Bool XmlScPropHdl_BreakBefore::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1855,7 +1854,7 @@ bool XmlScPropHdl_IsTextWrapped::equals(
 }
 
 sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1876,7 +1875,7 @@ sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
 }
 
 sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1896,7 +1895,7 @@ sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
     return bRetval;
 }
 
-sal_Bool XmlScPropHdl_IsEqual::importXML( const ::rtl::OUString& /* rStrImpValue */,
+sal_Bool XmlScPropHdl_IsEqual::importXML( const OUString& /* rStrImpValue */,
     ::com::sun::star::uno::Any& /* rValue */,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1904,7 +1903,7 @@ sal_Bool XmlScPropHdl_IsEqual::importXML( const ::rtl::OUString& /* rStrImpValue
     return false;
 }
 
-sal_Bool XmlScPropHdl_IsEqual::exportXML( ::rtl::OUString& /* rStrExpValue */,
+sal_Bool XmlScPropHdl_IsEqual::exportXML( OUString& /* rStrExpValue */,
     const ::com::sun::star::uno::Any& /* rValue */,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1924,7 +1923,7 @@ bool XmlScPropHdl_Vertical::equals(
 }
 
 sal_Bool XmlScPropHdl_Vertical::importXML(
-    const ::rtl::OUString& rStrImpValue,
+    const OUString& rStrImpValue,
     ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
@@ -1945,7 +1944,7 @@ sal_Bool XmlScPropHdl_Vertical::importXML(
 }
 
 sal_Bool XmlScPropHdl_Vertical::exportXML(
-    ::rtl::OUString& rStrExpValue,
+    OUString& rStrExpValue,
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {

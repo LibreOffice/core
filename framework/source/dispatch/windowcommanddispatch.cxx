@@ -125,16 +125,16 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const int nCommand = pData->GetDialogId();
-    ::rtl::OUString sCommand;
+    OUString sCommand;
 
     switch (nCommand)
     {
         case SHOWDIALOG_ID_PREFERENCES :
-                sCommand = rtl::OUString(".uno:OptionsTreeDialog");
+                sCommand = OUString(".uno:OptionsTreeDialog");
                 break;
 
         case SHOWDIALOG_ID_ABOUT :
-                sCommand = rtl::OUString(".uno:About");
+                sCommand = OUString(".uno:About");
                 break;
 
         default :
@@ -147,7 +147,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
 }
 
 //-----------------------------------------------
-void WindowCommandDispatch::impl_dispatchCommand(const ::rtl::OUString& sCommand)
+void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)
 {
     // ignore all errors here. It's clicking a menu entry only ...
     // The user will try it again, in case nothing happens .-)

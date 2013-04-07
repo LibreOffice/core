@@ -76,9 +76,7 @@
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 using namespace com::sun::star;
-using ::rtl::OUString;
 
-using rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -109,8 +107,8 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
-    const rtl::OUString& sComponentName, const rtl::OUString& sDocName,
-    const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
+    const OUString& sComponentName, const OUString& sDocName,
+    const OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
     sal_Bool bMustBeSuccessfull)
 {
     uno::Reference < io::XStream > xDocStream;
@@ -118,7 +116,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         xStorage = pMedium->GetStorage();
 
     sal_Bool bEncrypted = false;
-    rtl::OUString sStream(sDocName);
+    OUString sStream(sDocName);
     if( xStorage.is() )
     {
         try
@@ -163,7 +161,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        rtl::OUString sPropName("StreamName");
+        OUString sPropName("StreamName");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sStream ) );
     }
 
@@ -212,9 +210,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
                 "SAX parse exception catched while importing:\n"));
-            aError.append(rtl::OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
+            aError.append(OUStringToOString(r.Message, RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL(aError.getStr());
 #endif
 
@@ -249,9 +247,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         {
 
 #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
                 "SAX exception catched while importing:\n"));
-            aError.append(rtl::OUStringToOString(r.Message,
+            aError.append(OUStringToOString(r.Message,
                 RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL(aError.getStr());
 #endif
@@ -263,9 +261,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const packages::zip::ZipIOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "Zip exception catched while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL( aError.getStr() );
 #endif
@@ -276,9 +274,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const io::IOException& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "IO exception catched while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -289,9 +287,9 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     catch( const uno::Exception& r )
     {
 #if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "uno exception catched while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
@@ -340,7 +338,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh )
     {
-        rtl::OUString sEmpty;
+        OUString sEmpty;
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
 
         /** property map for export info set */
@@ -351,9 +349,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "NumberStyles" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "PrivateData" ), 0, &::getCppuType( (uno::Reference<uno::XInterface> *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamName" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "VBACompatibilityMode" ), 0, &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -389,13 +387,13 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         {
             sal_Int32 nProgressRange(1000000);
             xStatusIndicator->start(ScGlobal::GetRscString(STR_LOAD_DOC), nProgressRange);
-            xInfoSet->setPropertyValue(rtl::OUString("ProgressRange"), uno::makeAny(nProgressRange));
+            xInfoSet->setPropertyValue(OUString("ProgressRange"), uno::makeAny(nProgressRange));
         }
 
         // Set base URI
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
-        ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : ::rtl::OUString();
-        rtl::OUString sPropName("BaseURI");
+        OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
+        OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
@@ -410,18 +408,18 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     aName = pDocHierarchItem->GetValue();
             }
             else
-                aName = ::rtl::OUString( "dummyObjectName" );
+                aName = OUString( "dummyObjectName" );
 
             if( !aName.isEmpty() )
             {
-                sPropName = rtl::OUString("StreamRelPath");
+                sPropName = OUString("StreamRelPath");
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
             }
         }
 
         if (bStylesOnly)
         {
-            ::rtl::OUString const sOrganizerMode(
+            OUString const sOrganizerMode(
                 RTL_CONSTASCII_USTRINGPARAM("OrganizerMode"));
             xInfoSet->setPropertyValue(sOrganizerMode, uno::makeAny(sal_True));
         }
@@ -472,8 +470,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
         nMetaRetval = ImportFromComponent(
                                 xServiceFactory, xModel, xXMLParser, aParserInput,
-                                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
-                                : rtl::OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
+                                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaImporter")
+                                : OUString("com.sun.star.comp.Calc.XMLMetaImporter"),
                                 "meta.xml", "Meta.xml", aMetaArgs, false);
 
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
@@ -516,8 +514,8 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
             nSettingsRetval = ImportFromComponent(
                                 xServiceFactory, xModel, xXMLParser, aParserInput,
-                                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
-                                       : rtl::OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
+                                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
+                                       : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
                                 "settings.xml", sEmpty, aSettingsArgs, false);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
@@ -528,9 +526,9 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
 
             nStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
-                rtl::OUString("styles.xml"),
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
+                       : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
+                OUString("styles.xml"),
                 sEmpty, aStylesArgs, sal_True);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
@@ -549,10 +547,10 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import start" );
 
             nDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLContentImporter"),
-                rtl::OUString("content.xml"),
-                rtl::OUString("Content.xml"), aDocArgs,
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentImporter")
+                       : OUString("com.sun.star.comp.Calc.XMLContentImporter"),
+                OUString("content.xml"),
+                OUString("Content.xml"), aDocArgs,
                 sal_True);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import end" );
@@ -661,8 +659,8 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
 
 sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XWriter>& xWriter,
-    uno::Sequence<beans::PropertyValue>& aDescriptor, const rtl::OUString& sName,
-    const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
+    uno::Sequence<beans::PropertyValue>& aDescriptor, const OUString& sName,
+    const OUString& sMediaType, const OUString& sComponentName,
     uno::Sequence<uno::Any>& aArgs, ScMySharedData*& pSharedData)
 {
     sal_Bool bRet(false);
@@ -682,7 +680,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if (xSet.is())
         {
-            xSet->setPropertyValue(rtl::OUString("MediaType"), uno::makeAny(sMediaType));
+            xSet->setPropertyValue(OUString("MediaType"), uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
             // advise storage impl to use common encryption
@@ -699,7 +697,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        rtl::OUString sPropName("StreamName");
+        OUString sPropName("StreamName");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sName ) );
     }
 
@@ -805,10 +803,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "WrittenNumberStyles" ), 0, &::getCppuType((uno::Sequence<sal_Int32>*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "UsePrettyPrinting" ), 0, &::getCppuType((sal_Bool*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
-        { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { MAP_LEN( "StyleNames" ), 0, &::getCppuType( (uno::Sequence<rtl::OUString>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "BaseURI" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StreamName" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { MAP_LEN( "StyleNames" ), 0, &::getCppuType( (uno::Sequence<OUString>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "StyleFamilies" ), 0, &::getCppuType( (uno::Sequence<sal_Int32>*)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { MAP_LEN( "TargetStorage" ), 0, &embed::XStorage::static_type(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
@@ -834,8 +832,8 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         xInfoSet->setPropertyValue( sTargetStorage, uno::Any( xStorage ) );
 
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
-        ::rtl::OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : ::rtl::OUString();
-        rtl::OUString sPropName("BaseURI");
+        OUString aBaseURL = pMedium ? pMedium->GetBaseURL( true ) : OUString();
+        OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
         // TODO/LATER: do not do it for embedded links
@@ -852,7 +850,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
             if( !aName.isEmpty() )
             {
-                sPropName = rtl::OUString("StreamRelPath");
+                sPropName = OUString("StreamRelPath");
                 xInfoSet->setPropertyValue( sPropName, uno::makeAny( aName ) );
             }
         }
@@ -871,9 +869,9 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             const uno::Reference< beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
             try
             {
-                ::rtl::OUString aVersion;
+                OUString aVersion;
                 if (( xPropSet->getPropertyValue(
-                    rtl::OUString("Version")) >>= aVersion )
+                    OUString("Version")) >>= aVersion )
                     && !aVersion.equals(ODFVER_010_TEXT)
                     && !aVersion.equals(ODFVER_011_TEXT) )
                 {
@@ -902,10 +900,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export start" );
 
             bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
-                rtl::OUString("meta.xml"),
+                OUString("meta.xml"),
                 sTextMediaType,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisMetaExporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLMetaExporter"),
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisMetaExporter")
+                       : OUString("com.sun.star.comp.Calc.XMLMetaExporter"),
                 aMetaArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export end" );
@@ -943,10 +941,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export start" );
 
             bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
-                rtl::OUString("styles.xml"),
+                OUString("styles.xml"),
                 sTextMediaType,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisStylesExporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLStylesExporter"),
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesExporter")
+                       : OUString("com.sun.star.comp.Calc.XMLStylesExporter"),
                 aStylesArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export end" );
@@ -967,10 +965,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export start" );
 
             bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
-                rtl::OUString("content.xml"),
+                OUString("content.xml"),
                 sTextMediaType,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisContentExporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLContentExporter"),
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisContentExporter")
+                       : OUString("com.sun.star.comp.Calc.XMLContentExporter"),
                 aDocArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export end" );
@@ -995,10 +993,10 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export start" );
 
             bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
-                rtl::OUString("settings.xml"),
+                OUString("settings.xml"),
                 sTextMediaType,
-                bOasis ? rtl::OUString("com.sun.star.comp.Calc.XMLOasisSettingsExporter")
-                       : rtl::OUString("com.sun.star.comp.Calc.XMLSettingsExporter"),
+                bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsExporter")
+                       : OUString("com.sun.star.comp.Calc.XMLSettingsExporter"),
                 aSettingsArgs, pSharedData);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );

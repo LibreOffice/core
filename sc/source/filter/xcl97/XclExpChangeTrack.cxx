@@ -33,9 +33,6 @@
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
 using namespace oox;
 
 static OString lcl_GuidToOString( sal_uInt8 aGuid[ 16 ] )
@@ -141,9 +138,9 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
 {
     sal_uInt8 aGUID[ 16 ];
     sal_Bool bValidGUID = false;
-    const std::set<rtl::OUString>& rStrColl = rChangeTrack.GetUserCollection();
+    const std::set<OUString>& rStrColl = rChangeTrack.GetUserCollection();
     aViews.reserve(rStrColl.size());
-    std::set<rtl::OUString>::const_iterator it = rStrColl.begin(), itEnd = rStrColl.end();
+    std::set<OUString>::const_iterator it = rStrColl.begin(), itEnd = rStrColl.end();
     for (; it != itEnd; ++it)
     {
         lcl_GenerateGUID( aGUID, bValidGUID );
@@ -1537,7 +1534,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();
-    rtl::OUString sTabName;
+    OUString sTabName;
     for( sal_Int32 nIndex = 0; nIndex < nOrigCount; nIndex++ )
     {
         pTempDoc->CreateValidTabName( sTabName );

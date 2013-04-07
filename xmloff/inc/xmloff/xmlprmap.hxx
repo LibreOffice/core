@@ -53,8 +53,8 @@ class XMLPropertyHandler;
 */
 struct XMLPropertySetMapperEntry_Impl
 {
-    ::rtl::OUString sXMLAttributeName;
-    ::rtl::OUString sAPIPropertyName;
+    OUString sXMLAttributeName;
+    OUString sAPIPropertyName;
     sal_uInt16 nXMLNameSpace;
     sal_Int32  nType;
     sal_Int16  nContextId;
@@ -114,14 +114,14 @@ public:
     }
 
     /** Returns the 'local' XML-name of the entry */
-    const ::rtl::OUString& GetEntryXMLName( sal_Int32 nIndex ) const
+    const OUString& GetEntryXMLName( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return aMapEntries[nIndex].sXMLAttributeName;
     }
 
     /** Returns the entry API name */
-    const ::rtl::OUString& GetEntryAPIName( sal_Int32 nIndex ) const
+    const OUString& GetEntryAPIName( sal_Int32 nIndex ) const
     {
         DBG_ASSERT( (nIndex >= 0) && (nIndex < (sal_Int32)aMapEntries.size() ), "illegal access to invalid entry!" );
         return aMapEntries[nIndex].sAPIPropertyName;
@@ -144,7 +144,7 @@ public:
     /** Returns the index of an entry with the given XML-name and namespace
         If there is no matching entry the method returns -1 */
     sal_Int32 GetEntryIndex( sal_uInt16 nNamespace,
-                                   const ::rtl::OUString& rStrName,
+                                   const OUString& rStrName,
                                    sal_uInt32 nPropType,
                                    sal_Int32 nStartAt = -1 ) const;
 
@@ -157,17 +157,17 @@ public:
 
     /** import/export
         This methods calls the respective im/export-method of the respective PropertyHandler. */
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue,
+    virtual sal_Bool exportXML( OUString& rStrExpValue,
                                 const XMLPropertyState& rProperty,
                                 const SvXMLUnitConverter& rUnitConverter ) const;
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue,
+    virtual sal_Bool importXML( const OUString& rStrImpValue,
                                 XMLPropertyState& rProperty,
                                 const SvXMLUnitConverter& rUnitConverter ) const;
 
     /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
     sal_Int32 FindEntryIndex( const sal_Char* sApiName,
                               sal_uInt16 nNameSpace,
-                              const ::rtl::OUString& sXMLName ) const;
+                              const OUString& sXMLName ) const;
 
     /** searches for an entry that matches the given ContextId or gives -1 if nothing found */
     sal_Int32 FindEntryIndex( const sal_Int16 nContextId ) const;

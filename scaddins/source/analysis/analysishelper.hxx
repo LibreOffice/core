@@ -232,7 +232,7 @@ struct FuncDataBase
 class FuncData
 {
 private:
-    ::rtl::OUString         aIntName;
+    OUString         aIntName;
     sal_uInt16              nUINameID;
     sal_uInt16              nDescrID;           // leads also to parameter descriptions!
     sal_Bool                bDouble;            // flag for names, wich already exist in Calc
@@ -252,7 +252,7 @@ public:
     inline sal_Bool         HasIntParam( void ) const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
-    inline sal_Bool         Is( const ::rtl::OUString& rCompareTo ) const;
+    inline sal_Bool         Is( const OUString& rCompareTo ) const;
 
     inline const StringList&    GetCompNameList( void ) const;
 
@@ -276,7 +276,7 @@ public:
 
 class FuncDataList : private MyList
 {
-    ::rtl::OUString         aLastName;
+    OUString         aLastName;
     sal_uInt32              nLast;
 public:
                             FuncDataList( ResMgr& );
@@ -286,7 +286,7 @@ public:
     inline const FuncData*  Get( sal_uInt32 nIndex ) const;
     using MyList::Count;
 
-    const FuncData*         Get( const ::rtl::OUString& aProgrammaticName ) const;
+    const FuncData*         Get( const OUString& aProgrammaticName ) const;
 };
 
 
@@ -761,7 +761,7 @@ inline sal_Bool FuncData::HasIntParam( void ) const
 }
 
 
-inline sal_Bool FuncData::Is( const ::rtl::OUString& r ) const
+inline sal_Bool FuncData::Is( const OUString& r ) const
 {
     return aIntName == r;
 }
@@ -1041,7 +1041,7 @@ private:
                                         on strings not representing any double value.
                                     @return  the converted double value. */
     double                      convertToDouble(
-                                    const ::rtl::OUString& rString ) const
+                                    const OUString& rString ) const
                                 throw( css::lang::IllegalArgumentException );
 
 public:

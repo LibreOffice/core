@@ -69,21 +69,21 @@ namespace connectivity
 
         ::std::auto_ptr< OSQLParseTreeIteratorImpl >    m_pImpl;
 
-        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const ::rtl::OUString& _aColumnName, ::rtl::OUString& _aTableRange, const ::rtl::OUString& _rColumnAlias);
+        void                traverseParameter(const OSQLParseNode* _pParseNode,const OSQLParseNode* _pColumnRef,const OUString& _aColumnName, OUString& _aTableRange, const OUString& _rColumnAlias);
         // inserts a table into the map
-        void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange );
+        void                traverseOneTableName( OSQLTables& _rTables,const OSQLParseNode * pTableName, const OUString & rTableRange );
         void                traverseSearchCondition(OSQLParseNode * pSearchCondition);
         void                traverseOnePredicate(
                                                 OSQLParseNode * pColumnRef,
-                                                ::rtl::OUString& aValue,
+                                                OUString& aValue,
                                                 OSQLParseNode * pParameter);
         void traverseByColumnNames(const OSQLParseNode* pSelectNode,sal_Bool _bOrder);
         void                traverseParameters(const OSQLParseNode* pSelectNode);
 
-        const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, ::rtl::OUString& aTableRange );
-        void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, ::rtl::OUString& aTableRange );
+        const OSQLParseNode*    getTableNode( OSQLTables& _rTables, const OSQLParseNode* pTableRef, OUString& aTableRange );
+        void                    getQualified_join( OSQLTables& _rTables, const OSQLParseNode *pTableRef, OUString& aTableRange );
         void                    getSelect_statement(OSQLTables& _rTables,const OSQLParseNode* pSelect);
-        ::rtl::OUString         getUniqueColumnName(const ::rtl::OUString & rColumnName)    const;
+        OUString         getUniqueColumnName(const OUString & rColumnName)    const;
 
         /** finds the column with a given name, belonging to a given table, in a given tables collection
             @param  _rTables
@@ -96,7 +96,7 @@ namespace connectivity
                 the desired column object, or <NULL/> if no such column could be found
         */
         static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
-            const OSQLTables& _rTables, const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange );
+            const OSQLTables& _rTables, const OUString & rColumnName, OUString & rTableRange );
 
         /** finds a column with a given name, belonging to a given table
             @param  rColumnName
@@ -109,11 +109,11 @@ namespace connectivity
             @return
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > findColumn(
-            const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, bool _bLookInSubTables );
+            const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables );
 
       protected:
-        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
-        void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const ::rtl::OUString& _rTableAlias,const OSQLTable& _rTable);
+        void setSelectColumnName(::rtl::Reference<OSQLColumns>& _rColumns,const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange,sal_Bool bFkt=sal_False,sal_Int32 _nType = com::sun::star::sdbc::DataType::VARCHAR,sal_Bool bAggFkt=sal_False);
+        void appendColumns(::rtl::Reference<OSQLColumns>& _rColumns,const OUString& _rTableAlias,const OSQLTable& _rTable);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
         // in its constructor and, after the "traverse" routines have been used,
@@ -219,8 +219,8 @@ namespace connectivity
                 The table range to be set.
         */
         void getColumnRange(    const OSQLParseNode* _pColumnRef,
-                                ::rtl::OUString &_rColumnName,
-                                ::rtl::OUString& _rTableRange) const;
+                                OUString &_rColumnName,
+                                OUString& _rTableRange) const;
 
         /** retrieves a column's name, table range, and alias
 
@@ -235,9 +235,9 @@ namespace connectivity
                 this alias is returned here.
         */
         void getColumnRange(    const OSQLParseNode* _pColumnRef,
-                                ::rtl::OUString& _out_rColumnName,
-                                ::rtl::OUString& _out_rTableRange,
-                                ::rtl::OUString& _out_rColumnAliasIfPresent
+                                OUString& _out_rColumnName,
+                                OUString& _out_rTableRange,
+                                OUString& _out_rColumnAliasIfPresent
                                 ) const;
 
         /** return the alias name of a column
@@ -246,7 +246,7 @@ namespace connectivity
             @return
                 The alias name of the column or an empty string.
         */
-        static ::rtl::OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
+        static OUString getColumnAlias(const OSQLParseNode* _pDerivedColumn);
 
         /** return the columname and the table range
             @param  _pColumnRef
@@ -260,11 +260,11 @@ namespace connectivity
         */
         static void getColumnRange( const OSQLParseNode* _pColumnRef,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-                                    ::rtl::OUString &_rColumnName,
-                                    ::rtl::OUString& _rTableRange);
+                                    OUString &_rColumnName,
+                                    OUString& _rTableRange);
 
         // empty if ambiguous
-        sal_Bool getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const;
+        sal_Bool getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
         sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
@@ -303,12 +303,12 @@ namespace connectivity
             only used when we're iterating through a CREATE TABLE statement
         */
         OSQLTable   impl_createTableObject(
-            const ::rtl::OUString& rTableName, const ::rtl::OUString& rCatalogName, const ::rtl::OUString& rSchemaName );
+            const OUString& rTableName, const OUString& rCatalogName, const OUString& rSchemaName );
 
         /** locates a record source (a table or query) with the given name
         */
         OSQLTable   impl_locateRecordSource(
-            const ::rtl::OUString& _rComposedName
+            const OUString& _rComposedName
         );
 
         /** implementation for both traverseAll and traverseSome
@@ -319,8 +319,8 @@ namespace connectivity
         */
         void    impl_getQueryParameterColumns( const OSQLTable& _rQuery );
 
-        void setOrderByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange, sal_Bool bAscending);
-        void setGroupByColumnName(const ::rtl::OUString & rColumnName, ::rtl::OUString & rTableRange);
+        void setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, sal_Bool bAscending);
+        void setGroupByColumnName(const OUString & rColumnName, OUString & rTableRange);
 
     private:
         /** appends an SQLException corresponding to the given error code to our error collection
@@ -335,7 +335,7 @@ namespace connectivity
                 in the error message will be replaced with _rReplaceToken2
         */
         void impl_appendError( IParseContext::ErrorCode _eError,
-            const ::rtl::OUString* _pReplaceToken1 = NULL, const ::rtl::OUString* _pReplaceToken2 = NULL );
+            const OUString* _pReplaceToken1 = NULL, const OUString* _pReplaceToken2 = NULL );
 
         /** appends an SQLException corresponding to the given error code to our error collection
         */

@@ -232,7 +232,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
                 if( xCTCnt.is() )
                 {
-                    ::rtl::OUString aRoleToMatch;
+                    OUString aRoleToMatch;
                     if( nDimensionIndex == 0 )
                         aRoleToMatch = "values-x";
                     Sequence< Reference< XChartType > > aChartTypes( xCTCnt->getChartTypes());

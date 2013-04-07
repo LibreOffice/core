@@ -59,8 +59,8 @@ namespace frm
     {
     protected:
         ::com::sun::star::form::FormButtonType  m_eButtonType;      // Art des Buttons (push,submit,reset)
-        ::rtl::OUString                         m_sTargetURL;       // URL fuer den URL-Button
-        ::rtl::OUString                         m_sTargetFrame;     // TargetFrame zum Oeffnen
+        OUString                         m_sTargetURL;       // URL fuer den URL-Button
+        OUString                         m_sTargetFrame;     // TargetFrame zum Oeffnen
 
         // ImageProducer stuff
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
@@ -79,7 +79,7 @@ namespace frm
         inline ImageProducer* GetImageProducer() { return m_pProducer; }
 
         void StartProduction();
-        void SetURL(const ::rtl::OUString& rURL);
+        void SetURL(const OUString& rURL);
         void DataAvailable();
         void DownloadDone();
 
@@ -126,7 +126,7 @@ namespace frm
         virtual void SAL_CALL setSubmission( const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >& _submission ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         using OControlModel::disposing;
@@ -159,7 +159,7 @@ namespace frm
         {
             if ( NULL == _rModel.getImageProducer( OClickableImageBaseModel::GuardAccess() ) )
                 throw ::com::sun::star::lang::DisposedException(
-                    ::rtl::OUString(),
+                    OUString(),
                     static_cast< ::com::sun::star::form::XImageProducerSupplier* >( &_rModel )
                 );
         }
@@ -187,7 +187,7 @@ namespace frm
     protected:
         ::cppu::OInterfaceContainerHelper m_aApproveActionListeners;
         ::cppu::OInterfaceContainerHelper m_aActionListeners;
-        ::rtl::OUString m_aActionCommand;
+        OUString m_aActionCommand;
 
         // XSubmission
         virtual void SAL_CALL submit(  ) throw (::com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -196,7 +196,7 @@ namespace frm
         virtual void SAL_CALL removeSubmissionVetoListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmissionVetoListener >& listener ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         using OControl::disposing;
@@ -204,7 +204,7 @@ namespace frm
     public:
         OClickableImageBaseControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-            const ::rtl::OUString& _aService);
+            const OUString& _aService);
         virtual ~OClickableImageBaseControl();
 
     protected:

@@ -59,7 +59,7 @@ class ToolBarWrapper : public ::com::sun::star::ui::XUIFunctionListener,
         virtual void SAL_CALL updateSettings() throw (::com::sun::star::uno::RuntimeException);
 
         // XUIFunctionListener
-        virtual void SAL_CALL functionExecute( const ::rtl::OUString& aUIElementName, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL functionExecute( const OUString& aUIElementName, const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         using cppu::OPropertySetHelper::disposing;

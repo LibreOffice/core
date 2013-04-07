@@ -137,7 +137,7 @@ FmNavRemovedHint::~FmNavRemovedHint()
 TYPEINIT1( FmNavNameChangedHint, SfxHint );
 DBG_NAME(FmNavNameChangedHint);
 //------------------------------------------------------------------------
-FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName )
+FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName )
     :pEntryData( pData )
     ,aNewName( rNewName )
 {
@@ -351,12 +351,12 @@ FmFormData::FmFormData(
         Reference< XPropertySet >  xSet(m_xForm, UNO_QUERY);
         if (xSet.is())
         {
-            ::rtl::OUString aEntryName(::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
+            OUString aEntryName(::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
             SetText(aEntryName);
         }
     }
     else
-        SetText( ::rtl::OUString() );
+        SetText( OUString() );
 }
 
 //------------------------------------------------------------------------

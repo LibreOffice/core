@@ -27,7 +27,7 @@ namespace framework{
 
 LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR       ,
                                const css::uno::Reference< css::frame::XFrame >&              xOwnerFrame ,
-                               const ::rtl::OUString                                         sTargetName ,
+                               const OUString                                         sTargetName ,
                                      sal_Int32                                               nSearchFlags)
     : ThreadHelpBase(            )
     , m_xSMGR       (xSMGR       )

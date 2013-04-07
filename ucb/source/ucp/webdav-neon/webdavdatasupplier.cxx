@@ -58,7 +58,7 @@ namespace webdav_ucp
 
 struct ResultListEntry
 {
-    rtl::OUString                             aId;
+    OUString                             aId;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
@@ -127,13 +127,13 @@ DataSupplier::~DataSupplier()
 
 //=========================================================================
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ].aId;
+        OUString aId = m_pImpl->m_aResults[ nIndex ].aId;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -143,23 +143,23 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
     if ( getResult( nIndex ) )
     {
-        rtl::OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
+        OUString aId = m_pImpl->m_xContent->getResourceAccess().getURL();
 
         const ContentProperties& props
                             = *( m_pImpl->m_aResults[ nIndex ].pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString("/");
+            aId += OUString("/");
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += rtl::OUString("/");
+            aId += OUString("/");
 
         m_pImpl->m_aResults[ nIndex ].aId = aId;
         return aId;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //=========================================================================
@@ -180,7 +180,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -343,7 +343,7 @@ sal_Bool DataSupplier::getData()
 
     if ( !m_pImpl->m_bCountFinal )
     {
-        std::vector< rtl::OUString > propertyNames;
+        std::vector< OUString > propertyNames;
         ContentProperties::UCBNamesToDAVNames(
                         getResultSet()->getProperties(), propertyNames );
 
@@ -351,9 +351,9 @@ sal_Bool DataSupplier::getData()
         // needed to get a valid ContentProperties::pIsFolder value, which
         // is needed for OpenMode handling.
 
-        std::vector< rtl::OUString >::const_iterator it
+        std::vector< OUString >::const_iterator it
             = propertyNames.begin();
-        std::vector< rtl::OUString >::const_iterator end
+        std::vector< OUString >::const_iterator end
             = propertyNames.end();
 
         while ( it != end )
@@ -390,7 +390,7 @@ sal_Bool DataSupplier::getData()
             {
                 NeonUri aURI(
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
-                rtl::OUString aPath = aURI.GetPath();
+                OUString aPath = aURI.GetPath();
 
                 if ( aPath.getStr()[ aPath.getLength() - 1 ]
                      == sal_Unicode( '/' ) )
@@ -410,7 +410,7 @@ sal_Bool DataSupplier::getData()
                         try
                         {
                             NeonUri aCurrURI( rRes.uri );
-                            rtl::OUString aCurrPath = aCurrURI.GetPath();
+                            OUString aCurrPath = aCurrURI.GetPath();
                             if ( aCurrPath.getStr()[
                                      aCurrPath.getLength() - 1 ]
                                  == sal_Unicode( '/' ) )
@@ -444,7 +444,7 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString( "IsFolder"  ) );
+                                    OUString( "IsFolder"  ) );
                             rValue >>= bFolder;
 
                             if ( !bFolder )
@@ -459,7 +459,7 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString( "IsDocument"  ) );
+                                    OUString( "IsDocument"  ) );
                             rValue >>= bDocument;
 
                             if ( !bDocument )

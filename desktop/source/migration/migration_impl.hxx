@@ -46,28 +46,28 @@ namespace desktop
 
 struct install_info
 {
-    rtl::OUString productname;  // human readeable product name
-    rtl::OUString userdata;     // file: url for user installation
+    OUString productname;  // human readeable product name
+    OUString userdata;     // file: url for user installation
 };
 
-typedef std::vector< rtl::OUString > strings_v;
+typedef std::vector< OUString > strings_v;
 typedef std::auto_ptr< strings_v > strings_vr;
 
 struct migration_step
 {
-    rtl::OUString name;
+    OUString name;
     strings_v includeFiles;
     strings_v excludeFiles;
     strings_v includeConfig;
     strings_v excludeConfig;
     strings_v includeExtensions;
     strings_v excludeExtensions;
-    rtl::OUString service;
+    OUString service;
 };
 
 struct supported_migration
 {
-    rtl::OUString name;
+    OUString name;
     sal_Int32     nPriority;
     strings_v     supported_versions;
 };
@@ -83,9 +83,9 @@ typedef std::vector< supported_migration > migrations_available;
 */
 struct MigrationItem
 {
-    ::rtl::OUString m_sParentNodeName;
-    ::rtl::OUString m_sPrevSibling;
-    ::rtl::OUString m_sCommandURL;
+    OUString m_sParentNodeName;
+    OUString m_sPrevSibling;
+    OUString m_sCommandURL;
     css::uno::Reference< css::container::XIndexContainer > m_xPopupMenu;
 
     MigrationItem()
@@ -93,9 +93,9 @@ struct MigrationItem
     {
     }
 
-    MigrationItem(const ::rtl::OUString& sParentNodeName,
-        const ::rtl::OUString& sPrevSibling,
-        const ::rtl::OUString& sCommandURL,
+    MigrationItem(const OUString& sParentNodeName,
+        const OUString& sPrevSibling,
+        const OUString& sCommandURL,
         const css::uno::Reference< css::container::XIndexContainer > xPopupMenu)
     {
         m_sParentNodeName = sParentNodeName;
@@ -122,22 +122,22 @@ struct MigrationItem
             aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
     }
 
-    ::rtl::OUString GetPrevSibling() const { return m_sPrevSibling; }
+    OUString GetPrevSibling() const { return m_sPrevSibling; }
 };
 
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::boost::unordered_map< OUString,
                          ::std::vector< MigrationItem >,
-                         ::rtl::OUStringHash,
-                         ::std::equal_to< ::rtl::OUString > > MigrationHashMap;
+                         OUStringHash,
+                         ::std::equal_to< OUString > > MigrationHashMap;
 
 struct MigrationItemInfo
 {
-    ::rtl::OUString m_sResourceURL;
+    OUString m_sResourceURL;
     MigrationItem m_aMigrationItem;
 
     MigrationItemInfo(){}
 
-    MigrationItemInfo(const ::rtl::OUString& sResourceURL, const MigrationItem& aMigrationItem)
+    MigrationItemInfo(const OUString& sResourceURL, const MigrationItem& aMigrationItem)
     : m_sResourceURL(sResourceURL), m_aMigrationItem(aMigrationItem)
     {
     }
@@ -149,9 +149,9 @@ struct MigrationItemInfo
 */
 struct MigrationModuleInfo
 {
-    ::rtl::OUString sModuleShortName;
+    OUString sModuleShortName;
     sal_Bool        bHasMenubar;
-    ::std::vector< ::rtl::OUString > m_vToolbars;
+    ::std::vector< OUString > m_vToolbars;
 
     MigrationModuleInfo():bHasMenubar(sal_False){};
 };
@@ -164,9 +164,9 @@ class NewVersionUIInfo
 {
 public:
 
-    css::uno::Reference< css::ui::XUIConfigurationManager > getConfigManager(const ::rtl::OUString& sModuleShortName) const;
-    css::uno::Reference< css::container::XIndexContainer > getNewMenubarSettings(const ::rtl::OUString& sModuleShortName) const;
-    css::uno::Reference< css::container::XIndexContainer > getNewToolbarSettings(const ::rtl::OUString& sModuleShortName, const ::rtl::OUString& sToolbarName) const;
+    css::uno::Reference< css::ui::XUIConfigurationManager > getConfigManager(const OUString& sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewMenubarSettings(const OUString& sModuleShortName) const;
+    css::uno::Reference< css::container::XIndexContainer > getNewToolbarSettings(const OUString& sModuleShortName, const OUString& sToolbarName) const;
     void init(const ::std::vector< MigrationModuleInfo >& vModulesInfo);
 
 private:
@@ -188,12 +188,12 @@ private:
     strings_vr           m_vrFileList;           // final list of files to be copied
      MigrationHashMap     m_aOldVersionItemsHashMap;
      MigrationHashMap     m_aNewVersionItemsHashMap;
-     ::rtl::OUString      m_sModuleIdentifier;
+     OUString      m_sModuleIdentifier;
 
     // functions to control the migration process
     bool          readAvailableMigrations(migrations_available&);
     bool          alreadyMigrated();
-    migrations_vr readMigrationSteps(const ::rtl::OUString& rMigrationName);
+    migrations_vr readMigrationSteps(const OUString& rMigrationName);
     sal_Int32     findPreferedMigrationProcess(const migrations_available&);
 #if defined UNX && ! defined MACOSX
     OUString preXDGConfigDir(const OUString& rConfigDir);
@@ -203,19 +203,19 @@ private:
     strings_vr    compileFileList();
 
     // helpers
-    strings_vr getAllFiles(const rtl::OUString& baseURL) const;
+    strings_vr getAllFiles(const OUString& baseURL) const;
     strings_vr applyPatterns(const strings_v& vSet, const strings_v& vPatterns) const;
     css::uno::Reference< css::container::XNameAccess > getConfigAccess(const sal_Char* path, sal_Bool rw=sal_False);
 
     ::std::vector< MigrationModuleInfo > dectectUIChangesForAllModules() const;
-    void compareOldAndNewConfig(const ::rtl::OUString& sParentNodeName,
+    void compareOldAndNewConfig(const OUString& sParentNodeName,
         const css::uno::Reference< css::container::XIndexContainer >& xOldIndexContainer,
         const css::uno::Reference< css::container::XIndexContainer >& xNewIndexContainer,
-        const ::rtl::OUString& sToolbarName);
+        const OUString& sToolbarName);
     void mergeOldToNewVersion(const css::uno::Reference< css::ui::XUIConfigurationManager >& xCfgManager,
         const css::uno::Reference< css::container::XIndexContainer>& xIndexContainer,
-        const ::rtl::OUString& sModuleIdentifier,
-        const ::rtl::OUString& sResourceURL);
+        const OUString& sModuleIdentifier,
+        const OUString& sResourceURL);
 
     // actual processing function that perform the migration steps
     void copyFiles();
@@ -231,7 +231,7 @@ public:
     ~MigrationImpl();
     bool initializeMigration();
     sal_Bool doMigration();
-    rtl::OUString getOldVersionName();
+    OUString getOldVersionName();
 };
 }
 

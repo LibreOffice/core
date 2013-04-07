@@ -437,9 +437,9 @@ DBG_NAME(OTextConnectionHelper)
     {
         String sExtension;
         if (m_aRBAccessTextFiles.IsChecked())
-            sExtension = rtl::OUString("txt");
+            sExtension = OUString("txt");
         else if (m_aRBAccessCSVFiles.IsChecked())
-            sExtension = rtl::OUString("csv");
+            sExtension = OUString("csv");
         else
         {
             sExtension = m_aETOwnExtension.GetText();
@@ -458,11 +458,11 @@ DBG_NAME(OTextConnectionHelper)
             return rBox.GetText().copy(0);
 
         if ( !( &m_aTextSeparator == &rBox && nPos == (rBox.GetEntryCount()-1) ) )
-            return rtl::OUString(
+            return OUString(
                 static_cast< sal_Unicode >(
                     rList.GetToken(((nPos*2)+1), nTok ).ToInt32()));
         // somewhat strange ... translates for instance an "32" into " "
-        return rtl::OUString();
+        return OUString();
     }
 
     void OTextConnectionHelper::SetSeparator( ComboBox& rBox, const String& rList, const String& rVal )
@@ -473,7 +473,7 @@ DBG_NAME(OTextConnectionHelper)
 
         for( i=0 ; i<nCnt ; i+=2 )
         {
-            rtl::OUString  sTVal(
+            OUString  sTVal(
                 static_cast< sal_Unicode >(
                     rList.GetToken( (i+1), nTok ).ToInt32()));
 

@@ -165,7 +165,7 @@ public:
         B2DPolyPolygon randomPoly;
         tools::importFromSvgD(
             randomPoly,
-            rtl::OUString::createFromAscii(randomSvg));
+            OUString::createFromAscii(randomSvg));
         std::for_each(randomPoly.begin(),
                       randomPoly.end(),
                       boost::bind(
@@ -241,9 +241,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE(sName,
                                tools::importFromSvgD(
                                    aTmp1,
-                                   rtl::OUString::createFromAscii(sSvg)));
+                                   OUString::createFromAscii(sSvg)));
 
-        const rtl::OUString aSvg=
+        const OUString aSvg=
             tools::exportToSvgD(toTest.solveCrossovers());
         B2DPolyPolygon aTmp2;
         CPPUNIT_ASSERT_MESSAGE(sName,
@@ -320,7 +320,7 @@ public:
         (void)pName; (void)rPoly;
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(rPoly),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
@@ -363,32 +363,32 @@ public:
 
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input      - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         genericClip),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         const B2DPolyPolygon boxClipResult=rRange.solveCrossovers();
-        const rtl::OUString boxClipSvg(
+        const OUString boxClipSvg(
             basegfx::tools::exportToSvgD(
                 normalizePoly(
                     boxClipResult)));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s boxclipper - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     boxClipSvg,
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
         genericClip = tools::solveCrossovers(genericClip);
-        const rtl::OUString genericClipSvg(
+        const OUString genericClipSvg(
             basegfx::tools::exportToSvgD(
                 normalizePoly(
                     genericClip)));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s genclipper - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     genericClipSvg,
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif

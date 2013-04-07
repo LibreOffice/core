@@ -26,9 +26,9 @@
 struct DownloadSource
 {
     bool IsDirect;
-    rtl::OUString URL;
+    OUString URL;
 
-    DownloadSource(bool bIsDirect, const rtl::OUString& aURL) : IsDirect(bIsDirect), URL(aURL) {};
+    DownloadSource(bool bIsDirect, const OUString& aURL) : IsDirect(bIsDirect), URL(aURL) {};
     DownloadSource(const DownloadSource& ds) : IsDirect(ds.IsDirect), URL(ds.URL) {};
 
     DownloadSource & operator=( const DownloadSource & ds ) { IsDirect = ds.IsDirect; URL = ds.URL; return *this; };
@@ -37,12 +37,12 @@ struct DownloadSource
 struct ReleaseNote
 {
     sal_uInt8 Pos;
-    rtl::OUString URL;
+    OUString URL;
     sal_uInt8 Pos2;
-    rtl::OUString URL2;
+    OUString URL2;
 
-    ReleaseNote(sal_uInt8 pos, const rtl::OUString aURL) : Pos(pos), URL(aURL), Pos2(0), URL2() {};
-    ReleaseNote(sal_uInt8 pos, const rtl::OUString aURL, sal_uInt8 pos2, const rtl::OUString aURL2) : Pos(pos), URL(aURL), Pos2(pos2), URL2(aURL2) {};
+    ReleaseNote(sal_uInt8 pos, const OUString aURL) : Pos(pos), URL(aURL), Pos2(0), URL2() {};
+    ReleaseNote(sal_uInt8 pos, const OUString aURL, sal_uInt8 pos2, const OUString aURL2) : Pos(pos), URL(aURL), Pos2(pos2), URL2(aURL2) {};
 
     ReleaseNote(const ReleaseNote& rn) :Pos(rn.Pos), URL(rn.URL), Pos2(rn.Pos2), URL2(rn.URL2) {};
     ReleaseNote & operator=( const ReleaseNote& rn) { Pos=rn.Pos; URL=rn.URL; Pos2=rn.Pos2; URL2=rn.URL2; return *this; };
@@ -50,9 +50,9 @@ struct ReleaseNote
 
 struct UpdateInfo
 {
-    rtl::OUString BuildId;
-    rtl::OUString Version;
-    rtl::OUString Description;
+    OUString BuildId;
+    OUString Version;
+    OUString Description;
     std::vector< DownloadSource > Sources;
     std::vector< ReleaseNote > ReleaseNotes;
 
@@ -73,7 +73,7 @@ UpdateInfo & UpdateInfo::operator=( const UpdateInfo& ui )
 
 
 // Returns the URL of the release note for the given position
-rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled=false);
+OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled=false);
 
 #endif
 

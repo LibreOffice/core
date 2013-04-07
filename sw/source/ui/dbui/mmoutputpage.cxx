@@ -73,21 +73,21 @@ using namespace ::com::sun::star::uno;
 
 static String lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
-    rtl::OUString sExtension;
+    OUString sExtension;
     switch( nDocType )
     {
-        case MM_DOCTYPE_OOO : sExtension = rtl::OUString( "odt" ); break;
-        case MM_DOCTYPE_PDF : sExtension = rtl::OUString( "pdf" ); break;
-        case MM_DOCTYPE_WORD: sExtension = rtl::OUString( "doc" ); break;
-        case MM_DOCTYPE_HTML: sExtension = rtl::OUString( "html" ); break;
-        case MM_DOCTYPE_TEXT: sExtension = rtl::OUString( "txt" ); break;
+        case MM_DOCTYPE_OOO : sExtension = OUString( "odt" ); break;
+        case MM_DOCTYPE_PDF : sExtension = OUString( "pdf" ); break;
+        case MM_DOCTYPE_WORD: sExtension = OUString( "doc" ); break;
+        case MM_DOCTYPE_HTML: sExtension = OUString( "html" ); break;
+        case MM_DOCTYPE_TEXT: sExtension = OUString( "txt" ); break;
     }
     return sExtension;
 }
 
-static ::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
+static OUString lcl_GetColumnValueOf(const OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
     try
     {
         if (rxColAccess->hasByName(rColumn))
@@ -378,7 +378,7 @@ SwMailMergeOutputPage::~SwMailMergeOutputPage()
 void SwMailMergeOutputPage::ActivatePage()
 {
     //fill printer ListBox
-    const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+    const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
     if ( nCount )
     {
@@ -546,10 +546,10 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
             //get the name of the actual columns
             uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
-            uno::Sequence< ::rtl::OUString > aFields;
+            uno::Sequence< OUString > aFields;
             if(xColAccess.is())
                 aFields = xColAccess->getElementNames();
-            const ::rtl::OUString* pFields = aFields.getConstArray();
+            const OUString* pFields = aFields.getConstArray();
             for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
                 m_aMailToLB.InsertEntry(pFields[nField]);
 
@@ -557,7 +557,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             // then select the right one - may not be available
             const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
             String sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
-            Sequence< ::rtl::OUString> aAssignment =
+            Sequence< OUString> aAssignment =
                             rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
             if(aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
                 sEMailColumn = aAssignment[MM_PART_E_MAIL];
@@ -669,7 +669,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
-        pValues[0].Value <<= ::rtl::OUString(sFilter);
+        pValues[0].Value <<= OUString(sFilter);
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         sal_uInt32 nErrorCode = ERRCODE_NONE;
@@ -715,13 +715,13 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             INetURLObject(), utl::TempFile::CreateTempName(),
             URIHelper::GetMaybeFileHdl());
         const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                rtl::OUString( FILTER_XML ),
+                OUString( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
 
         uno::Sequence< beans::PropertyValue > aValues(1);
         beans::PropertyValue* pValues = aValues.getArray();
         pValues[0].Name = "FilterName";
-        pValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+        pValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         sal_uInt32 nErrorCode = ERRCODE_NONE;
@@ -791,7 +791,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             pTargetView->GetWrtShell().EndAction();
             //then save it
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-            String sCounter = rtl::OUString('_');
+            String sCounter = OUString('_');
             sCounter += OUString::number(nDoc);
             sOutPath.Insert(sCounter, sOutPath.Len() - sExtension.Len() - 1);
 
@@ -803,7 +803,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 bool bFailed = false;
                 try
                 {
-                    pValues[0].Value <<= ::rtl::OUString(sFilter);
+                    pValues[0].Value <<= OUString(sFilter);
                     uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
                     xTempStore->storeToURL( sOutPath, aValues   );
                 }
@@ -906,9 +906,9 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
-    rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
-    sPages += rtl::OUString(" - ");
-    sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
+    OUString sPages(OUString::valueOf( rStartInfo.nStartPageInTarget ));
+    sPages += OUString(" - ");
+    sPages += OUString::valueOf(  rEndInfo.nEndPageInTarget );
 
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
@@ -928,9 +928,9 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
-    aProps[0]. Name = rtl::OUString("MonitorVisible");
+    aProps[0]. Name = OUString("MonitorVisible");
     aProps[0].Value <<= sal_True;
-    aProps[1]. Name = rtl::OUString("Pages");
+    aProps[1]. Name = OUString("Pages");
     aProps[1]. Value <<= sPages;
 
     pTargetView->ExecPrint( aProps, false, true );
@@ -1046,14 +1046,14 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             //Make sure we don't pick e.g. the flat xml filter
             //for this format
             pSfxFlt = SwIoSystem::GetFilterOfFormat(
-                rtl::OUString( FILTER_XML ),
+                OUString( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
         }
         break;
         case MM_DOCTYPE_PDF:
         {
             pSfxFlt = pFilterContainer->GetFilter4FilterName(
-                ::rtl::OUString("writer_pdf_Export"),
+                OUString("writer_pdf_Export"),
                 SFX_FILTER_EXPORT);
         }
         break;
@@ -1096,7 +1096,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(!pSfxFlt)
         return 0;
-    ::rtl::OUString sMimeType = pSfxFlt->GetMimeType();
+    OUString sMimeType = pSfxFlt->GetMimeType();
 
     if(m_aSubjectED.GetText().isEmpty())
     {
@@ -1154,13 +1154,13 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         INetURLObject(), utl::TempFile::CreateTempName(),
         URIHelper::GetMaybeFileHdl());
     const SfxFilter *pTargetSfxFlt = SwIoSystem::GetFilterOfFormat(
-            rtl::OUString( FILTER_XML ),
+            OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
 
     uno::Sequence< beans::PropertyValue > aValues(1);
     beans::PropertyValue* pValues = aValues.getArray();
     pValues[0].Name = "FilterName";
-    pValues[0].Value <<= ::rtl::OUString(pTargetSfxFlt->GetFilterName());
+    pValues[0].Value <<= OUString(pTargetSfxFlt->GetFilterName());
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
@@ -1208,11 +1208,11 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
             beans::PropertyValue* pFilterValues = aFilterValues.getArray();
             pFilterValues[0].Name = "FilterName";
-            pFilterValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
+            pFilterValues[0].Value <<= OUString(pSfxFlt->GetFilterName());
             if(MM_DOCTYPE_TEXT == nDocType)
             {
                 pFilterValues[1].Name = "FilterOptions";
-                pFilterValues[1].Value <<= ::rtl::OUString(sFilterOptions);
+                pFilterValues[1].Value <<= OUString(sFilterOptions);
             }
 
             uno::Reference< frame::XStorable > xTempStore( pTempView->GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -1224,10 +1224,10 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         OSL_ENSURE( nTarget == rInfo.nDBRow, "row of current document could not be selected");
         (void)nTarget;
         OSL_ENSURE( sEMailColumn.Len(), "No email column selected");
-        ::rtl::OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
+        OUString sEMail = lcl_GetColumnValueOf(sEMailColumn, xColAccess);
         SwMailDescriptor aDesc;
         aDesc.sEMail = sEMail;
-        rtl::OUString sBody;
+        OUString sBody;
         if(bAsBody)
         {
             {
@@ -1241,12 +1241,12 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     OSL_FAIL("no output file created?");
                     continue;
                 }
-                rtl::OString sLine;
+                OString sLine;
                 sal_Bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {
-                    sBody += rtl::OStringToOUString(sLine, eEncoding);
-                    sBody += rtl::OUString('\n');
+                    sBody += OStringToOUString(sLine, eEncoding);
+                    sBody += OUString('\n');
                     bDone = pInStream->ReadLine( sLine );
                 }
             }
@@ -1271,14 +1271,14 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
             if(rConfigItem.IsGreetingLine(sal_True))
             {
-                ::rtl::OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
-                ::rtl::OUString sName = lcl_GetColumnValueOf(sNameColumn, xColAccess);
+                OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
+                OUString sName = lcl_GetColumnValueOf(sNameColumn, xColAccess);
                 String sGreeting;
                 if(!sName.isEmpty() && rConfigItem.IsIndividualGreeting(sal_True))
                 {
-                    ::rtl::OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
-                    const ::rtl::OUString& sFemaleValue = rConfigItem.GetFemaleGenderValue();
-                    ::rtl::OUString sGenderValue = lcl_GetColumnValueOf(sGenderColumn, xColAccess);
+                    OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
+                    const OUString& sFemaleValue = rConfigItem.GetFemaleGenderValue();
+                    OUString sGenderValue = lcl_GetColumnValueOf(sGenderColumn, xColAccess);
                     SwMailMergeConfigItem::Gender eGenderType = sGenderValue == sFemaleValue ?
                         SwMailMergeConfigItem::FEMALE :
                         SwMailMergeConfigItem::MALE;
@@ -1296,7 +1296,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
                 }
                 sGreeting += '\n';
-                ::rtl::OUString sTemp( sGreeting );
+                OUString sTemp( sGreeting );
                 sTemp += sBody;
                 sBody = sTemp;
             }
@@ -1304,13 +1304,13 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aDesc.sBodyContent = sBody;
         if(MM_DOCTYPE_HTML == nDocType)
         {
-            aDesc.sBodyMimeType = ::rtl::OUString("text/html; charset=");
-            aDesc.sBodyMimeType += ::rtl::OUString::createFromAscii(
+            aDesc.sBodyMimeType = OUString("text/html; charset=");
+            aDesc.sBodyMimeType += OUString::createFromAscii(
                                 rtl_getBestMimeCharsetFromTextEncoding( eEncoding ));
         }
         else
             aDesc.sBodyMimeType =
-                ::rtl::OUString("text/plain; charset=UTF-8; format=flowed");
+                OUString("text/plain; charset=UTF-8; format=flowed");
 
         aDesc.sSubject = m_aSubjectED.GetText();
         aDesc.sCC = m_sCC;

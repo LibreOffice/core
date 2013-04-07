@@ -139,7 +139,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     // SAFE {
     ResetableGuard aLock( m_aLock );
 
-    rtl::OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
+    OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
     css::uno::Sequence< css::uno::Any > lParams(1);
     lParams[0] <<= aURL.Main;
 
@@ -148,7 +148,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
     xService = m_xFactory->createInstanceWithArguments( sServiceName, lParams );
     css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
     if ( xExecuteable.is() )
-        xExecuteable->trigger( rtl::OUString() );
+        xExecuteable->trigger( OUString() );
 
     if ( xListener.is() )
     {
@@ -192,15 +192,15 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
     @onerror    We return nothing.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-::rtl::OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
+OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
     throw( css::uno::RuntimeException )
 {
     // Our default is "nothing". So we can return it, if detection failed or fily type is realy unknown.
-    ::rtl::OUString sTypeName;
+    OUString sTypeName;
 
     // Analyze given descriptor to find filename or input stream or ...
     ::comphelper::MediaDescriptor aDescriptor( lDescriptor );
-    ::rtl::OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), ::rtl::OUString() );
+    OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( ::comphelper::MediaDescriptor::PROP_URL(), OUString() );
 
     long nLength = sURL.getLength();
     if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
@@ -210,7 +210,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = ::rtl::OUString("oxt_OpenOffice_Extension");
+        sTypeName = OUString("oxt_OpenOffice_Extension");
         aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }

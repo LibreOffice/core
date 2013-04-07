@@ -121,7 +121,7 @@ void SwDocTest::testPageDescName()
 {
     ShellResource aShellResources;
 
-    std::vector<rtl::OUString> aResults;
+    std::vector<OUString> aResults;
 
     //These names must be unique for each different combination, otherwise
     //duplicate page description names may exist, which will causes lookup
@@ -141,7 +141,7 @@ void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
     //SwFileNameFields we want to restore the original readable filename
-    utl::TempFile aTempFile(rtl::OUString("demo [name]"));
+    utl::TempFile aTempFile(OUString("demo [name]"));
     aTempFile.EnableKillingFile();
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
@@ -149,9 +149,9 @@ void SwDocTest::testFileNameFields()
     SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE);
 
     SfxFilter aFilter(
-        rtl::OUString("Text"),
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rtl::OUString("TEXT"), rtl::OUString() );
+        OUString("Text"),
+        OUString(), 0, 0, OUString(), 0, OUString(),
+        OUString("TEXT"), OUString() );
     aDstMed.SetFilter(&aFilter);
 
     m_xDocShRef->DoSaveAs(aDstMed);
@@ -162,29 +162,29 @@ void SwDocTest::testFileNameFields()
     SwFileNameFieldType aNameField(m_pDoc);
 
     {
-        rtl::OUString sResult(aNameField.Expand(FF_NAME));
-        rtl::OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
+        OUString sResult(aNameField.Expand(FF_NAME));
+        OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DECODE_WITH_CHARSET));
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
 
     {
-        rtl::OUString sResult(aNameField.Expand(FF_PATHNAME));
-        rtl::OUString sExpected(rUrlObj.GetFull());
+        OUString sResult(aNameField.Expand(FF_PATHNAME));
+        OUString sExpected(rUrlObj.GetFull());
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
 
     {
-        rtl::OUString sResult(aNameField.Expand(FF_PATH));
+        OUString sResult(aNameField.Expand(FF_PATH));
         INetURLObject aTemp(rUrlObj);
         aTemp.removeSegment();
-        rtl::OUString sExpected(aTemp.PathToFileName());
+        OUString sExpected(aTemp.PathToFileName());
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
 
     {
-        rtl::OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
-        rtl::OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
+        OUString sResult(aNameField.Expand(FF_NAME_NOEXT));
+        OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DECODE_WITH_CHARSET));
         //Chop off .tmp
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
@@ -204,7 +204,7 @@ void SwDocTest::testDocStat()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    rtl::OUString sText("Hello World");
+    OUString sText("Hello World");
     m_pDoc->InsertString(aPaM, sText);
 
     CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->GetDocStat().nChar == 0);
@@ -227,14 +227,14 @@ void SwDocTest::testUserPerceivedCharCount()
     //Grapheme example, two different unicode code-points perceived by the user as a single
     //glyph
     const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
-    ::rtl::OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
+    OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
     sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
     CPPUNIT_ASSERT_MESSAGE("Grapheme Count should be 1", nGraphemeCount == 1);
 
     //Surrogate pair example, one single unicode code-point (U+1D11E)
     //represented as two code units in UTF-16
     const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
-    ::rtl::OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
+    OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
 }
@@ -246,17 +246,17 @@ void SwDocTest::testModelToViewHelper()
 
     {
         SwFmtFtn aFtn;
-        aFtn.SetNumStr(rtl::OUString("foo"));
+        aFtn.SetNumStr(OUString("foo"));
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString("AAAAA BBBBB "));
+        m_pDoc->InsertString(aPaM, OUString("AAAAA BBBBB "));
         SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
         xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->InsertString(aPaM, rtl::OUString(" CCCCC "));
+        m_pDoc->InsertString(aPaM, OUString(" CCCCC "));
         nPos = aPaM.GetPoint()->nContent.GetIndex();
         pTxtNode->InsertItem(aFtn, nPos, nPos);
-        m_pDoc->InsertString(aPaM, rtl::OUString(" DDDDD"));
+        m_pDoc->InsertString(aPaM, OUString(" DDDDD"));
         CPPUNIT_ASSERT(pTxtNode->GetTxt().getLength() == (4*5) + 5 + 2);
 
         //set start of selection to first B
@@ -282,21 +282,21 @@ void SwDocTest::testModelToViewHelper()
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, PASSTHROUGH);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
-            rtl::OUString sModelText = pTxtNode->GetTxt();
+            OUString sViewText = aModelToViewHelper.getViewText();
+            OUString sModelText = pTxtNode->GetTxt();
             CPPUNIT_ASSERT(sViewText == sModelText);
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAAA BBBBB foo CCCCC foo DDDDD");
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
-            rtl::OUStringBuffer aBuffer;
+            OUString sViewText = aModelToViewHelper.getViewText();
+            OUStringBuffer aBuffer;
             aBuffer.append("AAAAA CCCCC ");
             aBuffer.append(CH_TXTATR_BREAKWORD);
             aBuffer.append(" DDDDD");
@@ -305,8 +305,8 @@ void SwDocTest::testModelToViewHelper()
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEREDLINED);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
-            rtl::OUStringBuffer aBuffer;
+            OUString sViewText = aModelToViewHelper.getViewText();
+            OUStringBuffer aBuffer;
             aBuffer.append("AAAABB ");
             aBuffer.append(CH_TXTATR_BREAKWORD);
             aBuffer.append(" CCCCC ");
@@ -317,20 +317,20 @@ void SwDocTest::testModelToViewHelper()
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAAA CCCCC foo DDDDD");
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEREDLINED);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAABB foo CCCCC foo DDDDD");
         }
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, HIDEINVISIBLE | HIDEREDLINED);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
-            rtl::OUStringBuffer aBuffer;
+            OUString sViewText = aModelToViewHelper.getViewText();
+            OUStringBuffer aBuffer;
             aBuffer.append("AAAACCCCC ");
             aBuffer.append(CH_TXTATR_BREAKWORD);
             aBuffer.append(" DDDDD");
@@ -339,7 +339,7 @@ void SwDocTest::testModelToViewHelper()
 
         {
             ModelToViewHelper aModelToViewHelper(*pTxtNode, EXPANDFIELDS | HIDEINVISIBLE | HIDEREDLINED);
-            rtl::OUString sViewText = aModelToViewHelper.getViewText();
+            OUString sViewText = aModelToViewHelper.getViewText();
             CPPUNIT_ASSERT(sViewText == "AAAACCCCC foo DDDDD");
         }
     }
@@ -356,23 +356,23 @@ void SwDocTest::testSwScanner()
 
     //See https://bugs.freedesktop.org/show_bug.cgi?id=40449
     //See https://bugs.freedesktop.org/show_bug.cgi?id=39365
-    //Use a temporary rtl::OUString as the arg, as that's the trouble behind
+    //Use a temporary OUString as the arg, as that's the trouble behind
     //fdo#40449 and fdo#39365
     {
         SwScanner aScanner(*pTxtNode,
-            rtl::OUString("Hello World"),
+            OUString("Hello World"),
             0, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
         bool bFirstOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
-        const rtl::OUString &rHello = aScanner.GetWord();
+        const OUString &rHello = aScanner.GetWord();
         CPPUNIT_ASSERT_MESSAGE("Should be Hello",
             rHello == "Hello");
 
         bool bSecondOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
-        const rtl::OUString &rWorld = aScanner.GetWord();
+        const OUString &rWorld = aScanner.GetWord();
         CPPUNIT_ASSERT_MESSAGE("Should be World",
             rWorld == "World");
     }
@@ -381,7 +381,7 @@ void SwDocTest::testSwScanner()
     {
         const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
 
-        m_pDoc->InsertString(aPaM, rtl::OUString(IDEOGRAPHICFULLSTOP_D,
+        m_pDoc->InsertString(aPaM, OUString(IDEOGRAPHICFULLSTOP_D,
             SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D)));
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_CHINESE_SIMPLIFIED, RES_CHRATR_CJK_LANGUAGE );
@@ -417,7 +417,7 @@ void SwDocTest::testSwScanner()
             0x0069, 0x0073, 0x0020, 0x0064, 0x006F, 0x003F, 0x0020, 0x0020
         };
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString(test,
+        m_pDoc->InsertString(aPaM, OUString(test,
             SAL_N_ELEMENTS(test)));
 
         SvxLanguageItem aCJKLangItem( LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE );
@@ -446,7 +446,7 @@ void SwDocTest::testSwScanner()
         };
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
+        m_pDoc->InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
         CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
@@ -463,7 +463,7 @@ void SwDocTest::testSwScanner()
         };
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
+        m_pDoc->InsertString(aPaM, OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
@@ -475,11 +475,11 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+        m_pDoc->InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         xub_StrLen nPos = aPaM.GetPoint()->nContent.GetIndex();
         SwFmtFtn aFtn;
-        aFtn.SetNumStr(rtl::OUString("banana"));
+        aFtn.SetNumStr(OUString("banana"));
         SwTxtAttr* pTA = pTxtNode->InsertItem(aFtn, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
         CPPUNIT_ASSERT(pTxtNode->Len() == 6); //Apple + 0x02
@@ -489,7 +489,7 @@ void SwDocTest::testSwScanner()
 
         xub_StrLen nNextPos = aPaM.GetPoint()->nContent.GetIndex();
         CPPUNIT_ASSERT(nNextPos == nPos+1);
-        SwFmtRefMark aRef(rtl::OUString("refmark"));
+        SwFmtRefMark aRef(OUString("refmark"));
         pTA = pTxtNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
 
@@ -500,15 +500,15 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+        m_pDoc->InsertString(aPaM, OUString("Apple"));
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), rtl::OUString("An Author"),
-            rtl::OUString("Some Text"), rtl::OUString("Initials"), OUString("Name"), aDate );
+            (SwPostItFieldType*)m_pDoc->GetSysFldType(RES_POSTITFLD), OUString("An Author"),
+            OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
         m_pDoc->InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
 
-        m_pDoc->InsertString(aPaM, rtl::OUString("Apple"));
+        m_pDoc->InsertString(aPaM, OUString("Apple"));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         aDocStat.Reset();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
@@ -525,7 +525,7 @@ void SwDocTest::testSwScanner()
 
         const char aString[] = "Lorem ipsum";
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, rtl::OUString(aString));
+        m_pDoc->InsertString(aPaM, OUString(aString));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(2));
@@ -558,7 +558,7 @@ void SwDocTest::testSwScanner()
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len()); //but word-counting the text should only count the non-deleted text
         CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
 
-        rtl::OUString sLorem = pTxtNode->GetTxt();
+        OUString sLorem = pTxtNode->GetTxt();
         CPPUNIT_ASSERT(sLorem == "Lorem");
 
         const SwRedlineTbl& rTbl = m_pDoc->GetRedlineTbl();
@@ -572,7 +572,7 @@ void SwDocTest::testSwScanner()
         pTxtNode = rNds[ pNodeIdx->GetIndex() + 1 ]->GetTxtNode();        //first deleted txtnode
         CPPUNIT_ASSERT(pTxtNode);
 
-        rtl::OUString sIpsum = pTxtNode->GetTxt();
+        OUString sIpsum = pTxtNode->GetTxt();
         CPPUNIT_ASSERT(sIpsum == " ipsum");
 
         aDocStat.Reset();
@@ -585,7 +585,7 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        rtl::OUString sTemplate("ThisXis a test.");
+        OUString sTemplate("ThisXis a test.");
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
         m_pDoc->InsertString(aPaM, sTemplate.replace('X', ' '));
@@ -597,7 +597,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" = ")));
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" = ")));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -606,7 +606,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" _ ")));
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" _ ")));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -615,7 +615,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), rtl::OUString(" -- ")));
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" -- ")));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -680,9 +680,9 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
-        rtl::OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
+        OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
         m_pDoc->AppendTxtNode(*aPaM.GetPoint());
-        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(rtl::OUString('X'), sChunk));
+        m_pDoc->InsertString(aPaM, sTemplate.replaceAll(OUString('X'), sChunk));
         pTxtNode = aPaM.GetNode()->GetTxtNode();
         pTxtNode->CountWords(aDocStat, 0, pTxtNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&
@@ -700,14 +700,14 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
 
-    m_pDoc->InsertString(aPaM, rtl::OUString("Paragraph 1"));
+    m_pDoc->InsertString(aPaM, OUString("Paragraph 1"));
     m_pDoc->AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, rtl::OUString("graphic anchor>><<graphic anchor"));
+    m_pDoc->InsertString(aPaM, OUString("graphic anchor>><<graphic anchor"));
     SwNodeIndex nPara2 = aPaM.GetPoint()->nNode;
     m_pDoc->AppendTxtNode(*aPaM.GetPoint());
 
-    m_pDoc->InsertString(aPaM, rtl::OUString("Paragraph 3"));
+    m_pDoc->InsertString(aPaM, OUString("Paragraph 3"));
 
     aPaM.GetPoint()->nNode = nPara2;
     aPaM.GetPoint()->nContent.Assign(aPaM.GetCntntNode(), RTL_CONSTASCII_LENGTH("graphic anchor>>"));
@@ -717,7 +717,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwFmtAnchor aAnchor(FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
-    SwFlyFrmFmt *pFrame = m_pDoc->Insert(aPaM, rtl::OUString(), rtl::OUString(), NULL, &aFlySet, NULL, NULL);
+    SwFlyFrmFmt *pFrame = m_pDoc->Insert(aPaM, OUString(), OUString(), NULL, &aFlySet, NULL, NULL);
     CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != NULL);
 
     CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
@@ -733,7 +733,7 @@ void SwDocTest::testGraphicAnchorDeletion()
 
 #ifdef DEBUG_AS_HTML
     {
-        SvFileStream aPasteDebug(rtl::OUString("cppunitDEBUG.html"), STREAM_WRITE|STREAM_TRUNC);
+        SvFileStream aPasteDebug(OUString("cppunitDEBUG.html"), STREAM_WRITE|STREAM_TRUNC);
         WriterRef xWrt;
         GetHTMLWriter( String(), String(), xWrt );
         SwWriter aDbgWrt( aPasteDebug, *m_pDoc );
@@ -756,15 +756,15 @@ getRand(int modulus)
     return rand() % modulus;
 }
 
-static rtl::OUString
+static OUString
 getRandString()
 {
-    rtl::OUString aText("AAAAA BBBB CCC DD E \n");
+    OUString aText("AAAAA BBBB CCC DD E \n");
     int s = getRand(aText.getLength());
     int j = getRand(aText.getLength() - s);
-    rtl::OUString aRet(aText.copy(s, j));
+    OUString aRet(aText.copy(s, j));
     if (!getRand(5))
-        aRet += rtl::OUString(sal_Unicode('\n'));
+        aRet += OUString(sal_Unicode('\n'));
 //    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
     return aRet;
 }
@@ -805,7 +805,7 @@ void SwDocTest::randomTest()
 
         // setup redlining
         m_pDoc->SetRedlineMode(modes[rlm]);
-        SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[0]));
+        SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[0]));
 
         for( int i = 0; i < 2000; i++ )
         {
@@ -825,7 +825,7 @@ void SwDocTest::randomTest()
                 break;
             case 2: { // switch author
                 int a = getRand(SAL_N_ELEMENTS(authors));
-                SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[a]));
+                SW_MOD()->SetRedlineAuthor(OUString::createFromAscii(authors[a]));
                 break;
             }
 
@@ -872,7 +872,7 @@ void SwDocTest::randomTest()
 
 // Debug / verify the produced document has real content
 #if 0
-        rtl::OStringBuffer aBuffer("nodes-");
+        OStringBuffer aBuffer("nodes-");
         aBuffer.append(sal_Int32(rlm));
         aBuffer.append(".xml");
 

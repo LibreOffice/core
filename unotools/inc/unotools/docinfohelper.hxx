@@ -28,7 +28,7 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC DocInfoHelper
 {
 public:
-    static ::rtl::OUString GetGeneratorString();
+    static OUString GetGeneratorString();
 
 };
 

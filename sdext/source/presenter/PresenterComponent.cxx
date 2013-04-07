@@ -27,7 +27,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 

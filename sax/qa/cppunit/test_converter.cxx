@@ -97,12 +97,12 @@ static void doTest(util::Duration const & rid, char const*const pis,
 {
     char const*const pos((i_pos) ? i_pos : pis);
     util::Duration od;
-    ::rtl::OUString is(::rtl::OUString::createFromAscii(pis));
+    OUString is(OUString::createFromAscii(pis));
     bool bSuccess = Converter::convertDuration(od, is);
     SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "m");
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDuration(rid, od));
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     Converter::convertDuration(buf, od);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
@@ -112,7 +112,7 @@ static void doTestDurationF(char const*const pis)
 {
     util::Duration od;
     bool bSuccess = Converter::convertDuration(od,
-            ::rtl::OUString::createFromAscii(pis));
+            OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","" << od.Negative << " " << od.Years << "Y " << od.Months << "M " << od.Days << "D " << od.Hours << "H " << od.Minutes << "M " << od.Seconds << "S " << od.MilliSeconds << "H");
     CPPUNIT_ASSERT(!bSuccess);
 }
@@ -162,13 +162,13 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
         char const*const i_pos = 0)
 {
     char const*const pos((i_pos) ? i_pos : pis);
-    ::rtl::OUString is(::rtl::OUString::createFromAscii(pis));
+    OUString is(OUString::createFromAscii(pis));
     util::DateTime odt;
     bool bSuccess( Converter::convertDateTime(odt, is) );
     SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << " M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT(eqDateTime(rdt, odt));
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     Converter::convertDateTime(buf, odt, true);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
@@ -178,7 +178,7 @@ static void doTestDateTimeF(char const*const pis)
 {
     util::DateTime odt;
     bool bSuccess = Converter::convertDateTime(odt,
-            ::rtl::OUString::createFromAscii(pis));
+            OUString::createFromAscii(pis));
     SAL_INFO("sax.cppunit","Y:" << odt.Year << " M:" << odt.Month << " D:" << odt.Day << "  H:" << odt.Hours << "H M:" << odt.Minutes << " S:" << odt.Seconds << " H:" << odt.HundredthSeconds);
     CPPUNIT_ASSERT(!bSuccess);
 }
@@ -251,13 +251,13 @@ void ConverterTest::testDateTime()
 void doTestDouble(char const*const pis, double const rd,
         sal_Int16 const nSourceUnit, sal_Int16 const nTargetUnit)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     double od;
     bool bSuccess(Converter::convertDouble(od, is, nSourceUnit, nTargetUnit));
     SAL_INFO("sax.cppunit","" << od);
     CPPUNIT_ASSERT(bSuccess);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(rd, od, 0.00000001);
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     Converter::convertDouble(buf, od, true, nTargetUnit, nSourceUnit);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -317,7 +317,7 @@ void ConverterTest::testDouble()
 
 void doTestStringToMeasure(sal_Int32 rValue, char const*const pis, sal_Int16 nTargetUnit, sal_Int32 nMin, sal_Int32 nMax)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     sal_Int32 nVal;
     bool bSuccess(Converter::convertMeasure(nVal, is, nTargetUnit, nMin, nMax));
     SAL_INFO("sax.cppunit","" << nVal);
@@ -327,8 +327,8 @@ void doTestStringToMeasure(sal_Int32 rValue, char const*const pis, sal_Int16 nTa
 
 void doTestMeasureToString(char const*const pis, sal_Int32 nMeasure, sal_Int16 const nSourceUnit, sal_Int16 const nTargetUnit)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::convertMeasure(buf, nMeasure, nSourceUnit, nTargetUnit);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -380,7 +380,7 @@ void ConverterTest::testMeasure()
 
 void doTestStringToBool(bool bBool, char const*const pis)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     bool bTemp;
     bool bSuccess(Converter::convertBool(bTemp, is));
     SAL_INFO("sax.cppunit","" << bTemp);
@@ -391,8 +391,8 @@ void doTestStringToBool(bool bBool, char const*const pis)
 
 void doTestBoolToString(char const*const pis, bool bValue )
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::convertBool(buf, bValue);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -408,7 +408,7 @@ void ConverterTest::testBool()
 
 void doTestStringToPercent(sal_Int32 nValue, char const*const pis)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     sal_Int32 nTemp;
     bool bSuccess(Converter::convertPercent(nTemp, is));
     SAL_INFO("sax.cppunit","" << nTemp);
@@ -418,8 +418,8 @@ void doTestStringToPercent(sal_Int32 nValue, char const*const pis)
 
 void doTestPercentToString(char const*const pis, sal_Int32 nValue)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::convertPercent(buf, nValue);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -440,7 +440,7 @@ void ConverterTest::testPercent()
 
 void doTestStringToColor(sal_Int32 nValue, char const*const pis)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     sal_Int32 nTemp;
     bool bSuccess(Converter::convertColor(nTemp, is));
     SAL_INFO("sax.cppunit","" << nTemp);
@@ -450,8 +450,8 @@ void doTestStringToColor(sal_Int32 nValue, char const*const pis)
 
 void doTestColorToString(char const*const pis, sal_Int32 nValue)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::convertColor(buf, nValue);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -471,7 +471,7 @@ void ConverterTest::testColor()
 
 void doTestStringToNumber(sal_Int32 nValue, char const*const pis, sal_Int32 nMin, sal_Int32 nMax)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     sal_Int32 nTemp;
     bool bSuccess(Converter::convertNumber(nTemp, is, nMin, nMax));
     SAL_INFO("sax.cppunit","" << nTemp);
@@ -481,8 +481,8 @@ void doTestStringToNumber(sal_Int32 nValue, char const*const pis, sal_Int32 nMin
 
 void doTestNumberToString(char const*const pis, sal_Int32 nValue)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::convertNumber(buf, nValue);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -504,8 +504,8 @@ void ConverterTest::testNumber()
 
 void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPass)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
-    ::rtl::OUStringBuffer buf;
+    OUString const is(OUString::createFromAscii(pis));
+    OUStringBuffer buf;
     Converter::encodeBase64(buf, aPass);
     SAL_INFO("sax.cppunit","" << buf.getStr());
     CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
@@ -513,7 +513,7 @@ void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8> aPas
 
 void doTestDecodeBase64(const uno::Sequence<sal_Int8> aPass, char const*const pis)
 {
-    ::rtl::OUString const is(::rtl::OUString::createFromAscii(pis));
+    OUString const is(OUString::createFromAscii(pis));
     uno::Sequence< sal_Int8 > tempSequence;
     Converter::decodeBase64(tempSequence, is);
     SAL_INFO("sax.cppunit","" << is.getStr());

@@ -25,7 +25,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/executable-registry/2010"
 #define NS_PREFIX "exe"
@@ -38,7 +37,7 @@ namespace executable {
 
 ExecutableBackendDb::ExecutableBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):RegisteredDb(xContext, url)
+    OUString const & url):RegisteredDb(xContext, url)
 {
 
 }

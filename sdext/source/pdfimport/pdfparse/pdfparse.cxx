@@ -47,8 +47,6 @@
 using namespace boost::spirit;
 using namespace pdfparse;
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
 
 class StringEmitContext : public EmitContext
 {
@@ -94,7 +92,7 @@ public:
     double m_fDouble;
     std::vector< unsigned int > m_aUIntStack;
     std::vector< PDFEntry* >    m_aObjectStack;
-    rtl::OString                m_aErrorString;
+    OString                m_aErrorString;
     iteratorT                   m_aGlobalBegin;
 
 public:
@@ -279,9 +277,9 @@ public:
         throw_( pLocation, pMessage );
     }
 
-    rtl::OString iteratorToString( iteratorT first, iteratorT last ) const
+    OString iteratorToString( iteratorT first, iteratorT last ) const
     {
-        rtl::OStringBuffer aStr( 32 );
+        OStringBuffer aStr( 32 );
         while( first != last )
         {
             aStr.append( *first );

@@ -32,7 +32,6 @@
 // namespace directives
 //------------------------------------------------------------
 
-using rtl::OUString;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 

@@ -78,7 +78,7 @@ ScCellShell::ScCellShell(ScViewData* pData) :
     bPastePossible(false)
 {
     SetHelpId(HID_SCSHELL_CELLSH);
-    SetName(rtl::OUString("Cell"));
+    SetName(OUString("Cell"));
 }
 
 ScCellShell::~ScCellShell()
@@ -674,7 +674,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     // In interpreter may happen via rescheduled Basic
                     if ( pDoc->IsInInterpreter() )
-                        rSet.Put( SfxStringItem( nWhich, rtl::OUString("...") ) );
+                        rSet.Put( SfxStringItem( nWhich, OUString("...") ) );
                     else
                     {
                         sal_uInt16 nErrCode = 0;
@@ -764,7 +764,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
                     if ( !pDoc->IsScenario(nTab) )
                     {
-                        rtl::OUString aStr;
+                        OUString aStr;
                         sal_uInt16 nFlags;
                         SCTAB nScTab = nTab + 1;
                         String aProtect;
@@ -784,7 +784,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        rtl::OUString aComment;
+                        OUString aComment;
                         sal_uInt16  nDummyFlags;
                         pDoc->GetScenarioData( nTab, aComment, aDummyCol, nDummyFlags );
                         OSL_ENSURE( aList.empty(), "List not empty!" );

@@ -101,7 +101,6 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
-using ::rtl::OUString;
 
 // The constant parameters to CopyBlockFromClip
 struct ScCopyBlockFromClipParams

@@ -73,20 +73,20 @@ SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException )
         pDoc->RejectRedline( GetPosition(), sal_True );
 }
 
-rtl::OUString
+OUString
 SwVbaRevision::getServiceImplName()
 {
-    return rtl::OUString("SwVbaRevision");
+    return OUString("SwVbaRevision");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaRevision::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Revision" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Revision" );
     }
     return aServiceNames;
 }

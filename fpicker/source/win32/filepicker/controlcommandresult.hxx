@@ -78,19 +78,19 @@ private:
 class CLabelCommandResult : public CControlCommandResult
 {
 public:
-    CLabelCommandResult( sal_Bool bResult, const rtl::OUString& aLabel ) :
+    CLabelCommandResult( sal_Bool bResult, const OUString& aLabel ) :
         CControlCommandResult( bResult ),
         m_aLabel( aLabel )
     {
     }
 
-    rtl::OUString SAL_CALL getLabel( ) const
+    OUString SAL_CALL getLabel( ) const
     {
         return m_aLabel;
     }
 
 private:
-    rtl::OUString m_aLabel;
+    OUString m_aLabel;
 };
 
 #endif

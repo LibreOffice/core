@@ -52,7 +52,7 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
     sal_Bool m_bDisposed;
 
-    ::rtl::OUString m_aEntryName;
+    OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
     sal_Int32 m_nObjectState;
 
@@ -64,12 +64,12 @@ class ODummyEmbeddedObject : public ::cppu::WeakImplHelper2
 
     // following information will be used between SaveAs and SaveCompleted
     sal_Bool m_bWaitSaveCompleted;
-    ::rtl::OUString m_aNewEntryName;
+    OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
 
 protected:
     void CheckInit();
-    void PostEvent_Impl( const ::rtl::OUString& aEventName );
+    void PostEvent_Impl( const OUString& aEventName );
 
 public:
 
@@ -133,7 +133,7 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setContainerName( const ::rtl::OUString& sName )
+    virtual void SAL_CALL setContainerName( const OUString& sName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
 
@@ -165,7 +165,7 @@ public:
 
     virtual void SAL_CALL setPersistentEntry(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                    const ::rtl::OUString& sEntName,
+                    const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
@@ -175,7 +175,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
+    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -184,7 +184,7 @@ public:
 
     virtual void SAL_CALL storeAsEntry(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                const ::rtl::OUString& sEntName,
+                const OUString& sEntName,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
@@ -202,7 +202,7 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getEntryName()
+    virtual OUString SAL_CALL getEntryName()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -234,11 +234,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getClassID()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getClassName()
+    virtual OUString SAL_CALL getClassName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setClassInfo(
-                const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
         throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
 

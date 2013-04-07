@@ -168,8 +168,8 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "flush" );
 
-    ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
-    ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+    OUString sKey = StorageContainer::jstring2ustring(env,key);
+    OUString sName = StorageContainer::jstring2ustring(env,name);
 #endif
 }
 // -----------------------------------------------------------------------------

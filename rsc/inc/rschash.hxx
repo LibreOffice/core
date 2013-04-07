@@ -30,15 +30,15 @@ typedef sal_uInt32 Atom;
 class AtomContainer
 {
     Atom m_nNextID;
-    boost::unordered_map< rtl::OString, Atom, rtl::OStringHash > m_aStringToID;
-    boost::unordered_map< Atom, rtl::OString > m_aIDToString;
+    boost::unordered_map< OString, Atom, OStringHash > m_aStringToID;
+    boost::unordered_map< Atom, OString > m_aIDToString;
 
     public:
     AtomContainer();
     ~AtomContainer();
 
-    Atom getID( const rtl::OString& rStr, bool bOnlyIfExists = false );
-    const rtl::OString& getString( Atom nAtom );
+    Atom getID( const OString& rStr, bool bOnlyIfExists = false );
+    const OString& getString( Atom nAtom );
 
 };
 

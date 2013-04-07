@@ -63,7 +63,6 @@
 #include <svl/itemset.hxx>
 #include "app.hrc"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::style;
@@ -1021,8 +1020,8 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     SvxNumberFormat aFrmt( pDefaultRule->GetLevel(i) );
                     aFrmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFrmt.SetPrefix(::rtl::OUString());
-                    aFrmt.SetSuffix(::rtl::OUString());
+                    aFrmt.SetPrefix(OUString());
+                    aFrmt.SetSuffix(OUString());
                     aFrmt.SetStart(1);
                     aFrmt.SetBulletRelSize(45);
                     aFrmt.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34

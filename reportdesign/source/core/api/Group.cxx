@@ -40,7 +40,7 @@ DBG_NAME( rpt_OGroup )
 OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
                ,const uno::Reference< uno::XComponentContext >& _xContext)
 :GroupBase(m_aMutex)
-,GroupPropertySet(_xContext,static_cast< GroupPropertySet::Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
+,GroupPropertySet(_xContext,static_cast< GroupPropertySet::Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
 ,m_xContext(_xContext)
 ,m_xParent(_xParent)
 {
@@ -78,24 +78,24 @@ void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)
 //--------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.Group");
+    return OUString("com.sun.star.comp.report.Group");
 }
 //------------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> OGroup::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
+uno::Sequence< OUString> OGroup::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString> aSupported(1);
+    uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_GROUP;
     return aSupported;
 }
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString> SAL_CALL OGroup::getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence< OUString> SAL_CALL OGroup::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OGroup::supportsService( const ::rtl::OUString& _rServiceName ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL OGroup::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
     return ::comphelper::existsValue(_rServiceName,getSupportedServiceNames_Static());
 }
@@ -138,7 +138,7 @@ void SAL_CALL OGroup::setHeaderOn( ::sal_Bool _headeron ) throw (uno::RuntimeExc
 {
     if ( _headeron != m_xHeader.is() )
     {
-        ::rtl::OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER,m_xContext->getServiceManager()));
+        OUString sName(RPT_RESSTRING(RID_STR_GROUP_HEADER,m_xContext->getServiceManager()));
         setSection(PROPERTY_HEADERON,_headeron,sName,m_xHeader);
     }
 }
@@ -153,7 +153,7 @@ void SAL_CALL OGroup::setFooterOn( ::sal_Bool _footeron ) throw (uno::RuntimeExc
 {
     if ( _footeron != m_xFooter.is() )
     {
-        ::rtl::OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER,m_xContext->getServiceManager()));
+        OUString sName(RPT_RESSTRING(RID_STR_GROUP_FOOTER,m_xContext->getServiceManager()));
         setSection(PROPERTY_FOOTERON,_footeron,sName,m_xFooter);
     }
 }
@@ -193,7 +193,7 @@ uno::Reference< report::XSection > SAL_CALL OGroup::getFooter() throw (container
 void SAL_CALL OGroup::setGroupOn( ::sal_Int16 _groupon ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( _groupon < report::GroupOn::DEFAULT || _groupon > report::GroupOn::INTERVAL )
-        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::GroupOn")
+        throwIllegallArgumentException(OUString("com::sun::star::report::GroupOn")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -220,7 +220,7 @@ void SAL_CALL OGroup::setGroupInterval( ::sal_Int32 _groupinterval ) throw (uno:
 void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     if ( _keeptogether < report::KeepTogether::NO || _keeptogether > report::KeepTogether::WITH_FIRST_DETAIL )
-        throwIllegallArgumentException(::rtl::OUString("com::sun::star::report::KeepTogether")
+        throwIllegallArgumentException(OUString("com::sun::star::report::KeepTogether")
                         ,*this
                         ,1
                         ,m_xContext);
@@ -232,13 +232,13 @@ uno::Reference< report::XGroups > SAL_CALL OGroup::getGroups() throw (uno::Runti
     return m_xParent;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OGroup::getExpression() throw (uno::RuntimeException)
+OUString SAL_CALL OGroup::getExpression() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.m_sExpression;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::setExpression( const ::rtl::OUString& _expression ) throw (uno::RuntimeException)
+void SAL_CALL OGroup::setExpression( const OUString& _expression ) throw (uno::RuntimeException)
 {
     set(PROPERTY_EXPRESSION,_expression,m_aProps.m_sExpression);
 }
@@ -282,39 +282,39 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OGroup::getPropertySetInfo(  
     return GroupPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OGroup::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     GroupPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OGroup::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OGroup::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return GroupPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OGroup::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     GroupPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OGroup::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     GroupPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OGroup::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     GroupPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OGroup::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OGroup::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     GroupPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void OGroup::setSection(     const ::rtl::OUString& _sProperty
+void OGroup::setSection(     const OUString& _sProperty
                             ,const sal_Bool& _bOn
-                            ,const ::rtl::OUString& _sName
+                            ,const OUString& _sName
                             ,uno::Reference< report::XSection>& _member)
 {
     BoundListeners l;

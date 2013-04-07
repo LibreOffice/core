@@ -148,7 +148,7 @@ sal_Bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem* pFilt
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }

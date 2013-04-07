@@ -67,7 +67,7 @@ private:
     boost::scoped_ptr<ExternalRefListener> mpExtRefListener;
     boost::scoped_ptr<std::vector<ScTokenRef> > mpTokens;
 
-    rtl::OUString maName;
+    OUString maName;
     ScChartUnoData* pUnoData;
     ScDocument*     mpDoc;
     bool            bUsed:1;  // for ScChartListenerCollection::FreeUnused
@@ -78,14 +78,14 @@ private:
     ScChartListener& operator=( const ScChartListener& );
 
 public:
-    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
+    ScChartListener( const OUString& rName, ScDocument* pDoc,
                      const ScRangeListRef& rRangeListRef );
-    ScChartListener( const rtl::OUString& rName, ScDocument* pDoc,
+    ScChartListener( const OUString& rName, ScDocument* pDoc,
                      ::std::vector<ScTokenRef>* pTokens );
     ScChartListener( const ScChartListener& );
     ~ScChartListener();
 
-    const rtl::OUString& GetName() const;
+    const OUString& GetName() const;
 
     void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -143,8 +143,8 @@ public:
         explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
     };
 
-    typedef boost::ptr_map<rtl::OUString, ScChartListener> ListenersType;
-    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StringSetType;
+    typedef boost::ptr_map<OUString, ScChartListener> ListenersType;
+    typedef boost::unordered_set<OUString, OUStringHash> StringSetType;
 private:
     ListenersType maListeners;
     ::std::list<RangeListenerItem> maHiddenListeners;
@@ -167,8 +167,8 @@ public:
     void            StartAllListeners();
 
     SC_DLLPUBLIC void insert(ScChartListener* pListener);
-    ScChartListener* findByName(const rtl::OUString& rName);
-    const ScChartListener* findByName(const rtl::OUString& rName) const;
+    ScChartListener* findByName(const OUString& rName);
+    const ScChartListener* findByName(const OUString& rName) const;
     bool hasListeners() const;
 
     const ListenersType& getListeners() const;
@@ -179,7 +179,7 @@ public:
      * Create a unique name that's not taken by any existing chart listener
      * objects.  The name consists of a prefix given followed by a number.
      */
-    rtl::OUString getUniqueName(const rtl::OUString& rPrefix) const;
+    OUString getUniqueName(const OUString& rPrefix) const;
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,

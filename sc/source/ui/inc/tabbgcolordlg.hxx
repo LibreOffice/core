@@ -34,7 +34,7 @@ public:
                      const String& rTitle,
                      const String& rTabBgColorNoColorText,
                      const Color& rDefaultColor,
-                     const rtl::OString& nHelpId );
+                     const OString& nHelpId );
     ~ScTabBgColorDlg();
 
     void GetSelectedColor( Color& rColor ) const;
@@ -57,7 +57,7 @@ private:
     HelpButton              aBtnHelp;
     Color                   aTabBgColor;
     const String            aTabBgColorNoColorText;
-    rtl::OString            msHelpId;
+    OString            msHelpId;
 
     void            FillColorValueSets_Impl();
 

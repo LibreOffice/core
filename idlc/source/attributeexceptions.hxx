@@ -24,7 +24,7 @@
 
 struct AttributeExceptions {
     struct Part {
-        rtl::OUString const * documentation;
+        OUString const * documentation;
         DeclList const * exceptions;
     };
     Part get;

@@ -46,7 +46,7 @@ ScXMLAnnotationData::~ScXMLAnnotationData()
 
 ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLAnnotationData& rAnnotationData,
                                       ScXMLTableRowCellContext* pTempCellContext) :
@@ -69,11 +69,11 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAnnotationAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -122,7 +122,7 @@ void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< 
 }
 
 SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -153,7 +153,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( sal_uInt16 nPref
     return pContext;
 }
 
-void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
+void ScXMLAnnotationContext::Characters( const OUString& rChars )
 {
     maTextBuffer.append(rChars);
 }
@@ -178,7 +178,7 @@ void ScXMLAnnotationContext::EndElement()
 }
 
 void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& rxShape, const uno::Reference< drawing::XShapes >& rxShapes,
-                                       const rtl::OUString& rStyleName, const rtl::OUString& rTextStyle )
+                                       const OUString& rStyleName, const OUString& rTextStyle )
 {
     mrAnnotationData.mxShape = rxShape;
     mrAnnotationData.mxShapes = rxShapes;
@@ -186,7 +186,7 @@ void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& 
     mrAnnotationData.maTextStyle = rTextStyle;
 }
 
-void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection )
+void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection )
 {
     mrAnnotationData.maContentStyles.push_back( ScXMLAnnotationStyleEntry( nFamily, rName, rSelection ) );
 }

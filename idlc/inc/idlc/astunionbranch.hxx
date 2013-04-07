@@ -25,7 +25,7 @@
 class AstUnionBranch : public AstMember
 {
 public:
-    AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const ::rtl::OString& name, AstScope* pScope);
+    AstUnionBranch(AstUnionLabel* pLabel, AstType const * pType, const OString& name, AstScope* pScope);
     virtual ~AstUnionBranch();
 
     AstUnionLabel* getLabel()

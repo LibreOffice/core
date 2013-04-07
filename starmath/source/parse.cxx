@@ -1023,7 +1023,7 @@ void SmParser::Align()
         if (CONVERT_40_TO_50 == GetConversion())
             // encapsulate expression to be aligned in group braces
             // (here group-open brace)
-        {   Insert(rtl::OUString('{'), GetTokenIndex());
+        {   Insert(OUString('{'), GetTokenIndex());
             bNeedGroupClose = true;
 
             // get first valid align statement in sequence
@@ -1061,7 +1061,7 @@ void SmParser::Align()
     Expression();
 
     if (bNeedGroupClose)
-        Insert(rtl::OUString('}'), GetTokenIndex());
+        Insert(OUString('}'), GetTokenIndex());
 
     if (pSNode)
     {
@@ -1551,7 +1551,7 @@ void SmParser::Term()
                 else    // encapsulate old 4.0 style parsing in braces
                 {
                     // insert opening brace
-                    Insert(rtl::OUString('{'), GetTokenIndex());
+                    Insert(OUString('{'), GetTokenIndex());
 
                     //
                     // parse in 4.0 style
@@ -1568,7 +1568,7 @@ void SmParser::Term()
                     }
 
                     // insert closing brace
-                    Insert(rtl::OUString('}'), GetTokenIndex());
+                    Insert(OUString('}'), GetTokenIndex());
 
                     SmStructureNode *pSNode = new SmExpressionNode(pFunc->GetToken());
                     pSNode->SetSubNodes(pFunc, lcl_popOrZero(m_aNodeStack));
@@ -1901,7 +1901,7 @@ void SmParser::Font()
 
 // gets number used as arguments in Math formulas (e.g. 'size' command)
 // Format: no negative numbers, must start with a digit, no exponent notation, ...
-static bool lcl_IsNumber(const rtl::OUString& rText)
+static bool lcl_IsNumber(const OUString& rText)
 {
     bool bPoint = false;
     const sal_Unicode* pBuffer = rText.getStr();
@@ -1959,7 +1959,7 @@ void SmParser::FontSize()
     Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
-        double fTmp = rtl::OUString(m_aCurToken.aText).toDouble();
+        double fTmp = OUString(m_aCurToken.aText).toDouble();
         if (fTmp != 0.0)
         {
             aValue = fTmp;

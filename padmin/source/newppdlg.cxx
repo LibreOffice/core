@@ -44,7 +44,6 @@ using namespace padmin;
 using namespace psp;
 using namespace osl;
 
-using ::rtl::OUStringToOString;
 
 PPDImportDialog::PPDImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_PPDIMPORT_DLG ) ),
@@ -67,12 +66,12 @@ PPDImportDialog::PPDImportDialog( Window* pParent ) :
 
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
-    m_aPathBox.SetText( rtl::OStringToOUString(rConfig.ReadKey("LastDir"), RTL_TEXTENCODING_UTF8) );
+    m_aPathBox.SetText( OStringToOUString(rConfig.ReadKey("LastDir"), RTL_TEXTENCODING_UTF8) );
     for (sal_Int32 i = 0; i < 11; ++i)
     {
-        rtl::OString aEntry(rConfig.ReadKey(rtl::OString::valueOf(i)));
+        OString aEntry(rConfig.ReadKey(OString::valueOf(i)));
         if (!aEntry.isEmpty())
-            m_aPathBox.InsertEntry(rtl::OStringToOUString(aEntry, RTL_TEXTENCODING_UTF8));
+            m_aPathBox.InsertEntry(OStringToOUString(aEntry, RTL_TEXTENCODING_UTF8));
     }
 
     m_aOKBtn.SetClickHdl( LINK( this, PPDImportDialog, ClickBtnHdl ) );
@@ -100,7 +99,7 @@ void PPDImportDialog::Import()
 
     Config& rConfig = getPadminRC();
     rConfig.SetGroup( PPDIMPORT_GROUP );
-    rConfig.WriteKey( "LastDir", rtl::OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
+    rConfig.WriteKey( "LastDir", OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
 
     int nEntries = m_aPathBox.GetEntryCount();
     while( nEntries-- )
@@ -109,9 +108,9 @@ void PPDImportDialog::Import()
     if( nEntries < 0 )
     {
         sal_Int32 nNextEntry = rConfig.ReadKey("NextEntry").toInt32();
-        rConfig.WriteKey( rtl::OString::valueOf(nNextEntry), rtl::OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
+        rConfig.WriteKey( OString::valueOf(nNextEntry), OUStringToOString(aImportPath, RTL_TEXTENCODING_UTF8) );
         nNextEntry = nNextEntry < 10 ? nNextEntry+1 : 0;
-        rConfig.WriteKey( "NextEntry", rtl::OString::valueOf(nNextEntry) );
+        rConfig.WriteKey( "NextEntry", OString::valueOf(nNextEntry) );
         m_aPathBox.InsertEntry( aImportPath );
     }
     while( m_aDriverLB.GetEntryCount() )
@@ -141,7 +140,7 @@ void PPDImportDialog::Import()
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "Warning: File %s has empty printer name.\n",
-                     rtl::OUStringToOString( aPath.PathToFileName(), osl_getThreadTextEncoding() ).getStr() );
+                     OUStringToOString( aPath.PathToFileName(), osl_getThreadTextEncoding() ).getStr() );
 #endif
             continue;
         }
@@ -212,7 +211,7 @@ IMPL_LINK( PPDImportDialog, ModifyHdl, ComboBox*, pListBox )
 {
     if( pListBox == &m_aPathBox )
     {
-        rtl::OString aDir(rtl::OUStringToOString(m_aPathBox.GetText(), osl_getThreadTextEncoding()));
+        OString aDir(OUStringToOString(m_aPathBox.GetText(), osl_getThreadTextEncoding()));
         if (!access( aDir.getStr(), F_OK))
             Import();
     }

@@ -55,16 +55,16 @@ namespace connectivity
         public:
             OLEString();
             OLEString(const BSTR& _sBStr);
-            OLEString(const ::rtl::OUString& _sBStr);
+            OLEString(const OUString& _sBStr);
             OLEString(const OLEString& _rRh)
             {
                 OLEString::operator=(_rRh);
             }
             ~OLEString();
-            OLEString& operator=(const ::rtl::OUString& _rSrc);
+            OLEString& operator=(const OUString& _rSrc);
             OLEString& operator=(const BSTR& _rSrc);
             OLEString& operator=(const OLEString& _rSrc);
-            operator ::rtl::OUString() const;
+            operator OUString() const;
             operator BSTR() const;
             BSTR* operator &();
             sal_Int32 length() const;
@@ -82,7 +82,7 @@ namespace connectivity
             OLEVariant(sal_Int32 n) ;
             OLEVariant(sal_Int64 x) ;
 
-            OLEVariant(const rtl::OUString& us) ;
+            OLEVariant(const OUString& us) ;
             ~OLEVariant()                   ;
             OLEVariant(const ::com::sun::star::util::Date& x );
             OLEVariant(const ::com::sun::star::util::Time& x );
@@ -107,7 +107,7 @@ namespace connectivity
             void setChar(unsigned char a)           ;
             void setCurrency(double aCur)           ;
             void setBool(sal_Bool b)                ;
-            void setString(const rtl::OUString& us) ;
+            void setString(const OUString& us) ;
             void setNoArg()                         ;
 
             void setIDispatch(IDispatch* pDispInterface);
@@ -123,7 +123,7 @@ namespace connectivity
             void ChangeType(VARTYPE vartype, const OLEVariant* pSrc);
 
 
-            operator ::rtl::OUString() const;
+            operator OUString() const;
 
             operator sal_Bool()     const { return getBool();   }
             operator sal_Int8()     const { return getInt8();   }
@@ -136,7 +136,7 @@ namespace connectivity
             operator ::com::sun::star::util::Date() const ;
             operator ::com::sun::star::util::Time() const ;
             operator ::com::sun::star::util::DateTime()const ;
-            ::rtl::OUString getString()     const;
+            OUString getString()     const;
             sal_Bool        getBool()       const;
             IUnknown*       getIUnknown()   const;
             IDispatch*      getIDispatch()  const;

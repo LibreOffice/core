@@ -32,7 +32,7 @@ namespace pcr
 {
 //............................................................................
 
-    ::rtl::OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
+    OUString GetUIHeadlineName(sal_Int16 _nClassId, const ::com::sun::star::uno::Any& _rUnoObject);
     sal_Int16 classifyComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
     //========================================================================
@@ -53,10 +53,10 @@ namespace pcr
     struct FindPropertyByName : public ::std::unary_function< ::com::sun::star::beans::Property, bool >
     {
     private:
-        ::rtl::OUString m_sName;
+        OUString m_sName;
 
     public:
-        FindPropertyByName( const ::rtl::OUString& _rName ) : m_sName( _rName ) { }
+        FindPropertyByName( const OUString& _rName ) : m_sName( _rName ) { }
         bool operator()( const ::com::sun::star::beans::Property& _rProp ) const
         {
             return m_sName == _rProp.Name;

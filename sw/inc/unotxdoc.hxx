@@ -221,7 +221,7 @@ private:
     SwDoc *         GetRenderDoc( SfxViewShell *&rpView, const css::uno::Any& rSelection, bool bIsPDFExport );
     SfxViewShell *  GetRenderView( bool &rbIsSwSrcView, const css::uno::Sequence< css::beans::PropertyValue >& rxOptions, bool bIsPDFExport );
 
-    rtl::OUString           maBuildId;
+    OUString           maBuildId;
 
     // boolean for XPagePrintable
     // set in XPagePrintable::printPages(..) to indicate that the PagePrintSettings
@@ -257,8 +257,8 @@ public:
     virtual void SAL_CALL reformat(void) throw( css::uno::RuntimeException );
 
     //XModel
-    virtual sal_Bool SAL_CALL attachResource( const ::rtl::OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw(css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getURL(  ) throw(css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw(css::uno::RuntimeException);
+    virtual OUString SAL_CALL getURL(  ) throw(css::uno::RuntimeException);
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) throw(css::uno::RuntimeException);
@@ -341,18 +341,18 @@ public:
     virtual css::uno::Reference< css::style::XAutoStyles > SAL_CALL getAutoStyles(  ) throw (css::uno::RuntimeException);
 
     //XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const rtl::OUString& ServiceSpecifier)
+    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstance(const OUString& ServiceSpecifier)
                 throw( css::uno::Exception, css::uno::RuntimeException );
-    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstanceWithArguments(const rtl::OUString& ServiceSpecifier,
+    virtual css::uno::Reference< css::uno::XInterface >  SAL_CALL createInstanceWithArguments(const OUString& ServiceSpecifier,
                 const css::uno::Sequence< css::uno::Any >& Arguments)
                 throw( css::uno::Exception, css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getAvailableServiceNames(void)
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(void)
                 throw( css::uno::RuntimeException );
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     // css::drawing::XDrawPageSupplier
     virtual css::uno::Reference< css::drawing::XDrawPage >  SAL_CALL getDrawPage(void) throw( css::uno::RuntimeException );
@@ -362,18 +362,18 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     //XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState( const ::rtl::OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
-    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< ::rtl::OUString >& rPropertyNames ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyToDefault( const ::rtl::OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& rPropertyNames ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyToDefault( const OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& rPropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     //XLinkTargetSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getLinks(void) throw( css::uno::RuntimeException );
@@ -450,18 +450,18 @@ public:
     ~SwXLinkTargetSupplier();
 
     //XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(const rtl::OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getElementNames(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& Name) throw( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getByName(const OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( css::uno::RuntimeException );
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     //
     void    Invalidate() {pxDoc = 0;}
@@ -491,9 +491,9 @@ public:
     ~SwXLinkNameAccessWrapper();
 
     //XNameAccess
-    virtual css::uno::Any SAL_CALL getByName(const rtl::OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getElementNames(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL hasByName(const rtl::OUString& Name) throw( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL getByName(const OUString& Name)  throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( css::uno::RuntimeException );
 
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException);
@@ -501,20 +501,20 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     //XLinkTargetSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getLinks(void) throw( css::uno::RuntimeException );
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
 };
 
@@ -533,17 +533,17 @@ public:
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 };
 
 class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable

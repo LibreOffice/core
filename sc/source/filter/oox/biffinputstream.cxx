@@ -27,10 +27,6 @@ namespace xls {
 
 // ============================================================================
 
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 

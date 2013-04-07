@@ -37,18 +37,18 @@ struct OHierarchyElement_Impl;
 
 struct eqFunc
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
+    sal_Bool operator()( const OUString &r1,
+                         const OUString &r2) const
     {
         return r1 == r2;
     }
 };
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::boost::unordered_map< OUString,
                          ::rtl::Reference< OHierarchyElement_Impl >,
-                         ::rtl::OUStringHash,
+                         OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;
 
-typedef ::std::vector< ::rtl::OUString > OStringList_Impl;
+typedef ::std::vector< OUString > OStringList_Impl;
 typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
                         OWeakStorRefList_Impl;
 
@@ -118,7 +118,7 @@ public:
     , m_xChild( new OHierarchyElement_Impl( ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >( xOwnStorage ) ) )
     {}
 
-    static OStringList_Impl GetListPathFromString( const ::rtl::OUString& aPath );
+    static OStringList_Impl GetListPathFromString( const OUString& aPath );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,

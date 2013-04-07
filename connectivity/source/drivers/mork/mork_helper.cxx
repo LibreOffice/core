@@ -40,15 +40,15 @@ int main( int argc, const char* argv[] )
   x++;
   argv++;
   ProfileAccess* access = new ProfileAccess();
-  ::rtl::OUString defaultProfile = access->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
+  OUString defaultProfile = access->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
   SAL_INFO("connectivity.mork", "DefaultProfile: " << defaultProfile);
 
-  ::rtl::OUString profilePath = access->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+  OUString profilePath = access->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
   SAL_INFO("connectivity.mork", "ProfilePath: " << profilePath);
 
-  profilePath += rtl::OUString( "/abook.mab" );
+  profilePath += OUString( "/abook.mab" );
 
   SAL_INFO("connectivity.mork", "abook.mab: " << profilePath);
-  rtl::OString aOString = ::rtl::OUStringToOString( profilePath, RTL_TEXTENCODING_UTF8 );
+  OString aOString = OUStringToOString( profilePath, RTL_TEXTENCODING_UTF8 );
   openAddressBook(aOString.getStr());
 }

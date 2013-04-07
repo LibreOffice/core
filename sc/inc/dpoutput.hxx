@@ -47,11 +47,11 @@ struct ScDPOutLevelData;
 
 struct ScDPGetPivotDataField
 {
-    rtl::OUString maFieldName;
+    OUString maFieldName;
     com::sun::star::sheet::GeneralFunction meFunction;
 
     bool   mbValIsStr;
-    rtl::OUString maValStr;
+    OUString maValStr;
     double mnValNum;
 
         ScDPGetPivotDataField() :
@@ -80,7 +80,7 @@ private:
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
-    rtl::OUString           aDataDescription;
+    OUString           aDataDescription;
 
     // Number format related parameters
     sal_uInt32*                 pColNumFmt;
@@ -161,7 +161,7 @@ public:
     bool            GetHeaderLayout() const;
 
     static void GetDataDimensionNames(
-        rtl::OUString& rSourceName, rtl::OUString& rGivenName,
+        OUString& rSourceName, OUString& rGivenName,
         const com::sun::star::uno::Reference<
             com::sun::star::uno::XInterface>& xDim );
 };

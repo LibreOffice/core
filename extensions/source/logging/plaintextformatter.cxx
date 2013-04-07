@@ -64,19 +64,19 @@ namespace logging
         virtual ~PlainTextFormatter();
 
         // XLogFormatter
-        virtual ::rtl::OUString SAL_CALL getHead(  ) throw (RuntimeException);
-        virtual ::rtl::OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getTail(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getHead(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
+        virtual OUString SAL_CALL getTail(  ) throw (RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
     public:
         // XServiceInfo - static version
-        static ::rtl::OUString SAL_CALL getImplementationName_static();
-        static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+        static OUString SAL_CALL getImplementationName_static();
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
     };
 
@@ -95,9 +95,9 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException)
     {
-        ::rtl::OUStringBuffer aHeader;
+        OUStringBuffer aHeader;
         aHeader.appendAscii( "  event no" );                 // column 1: the event number
         aHeader.appendAscii( " " );
         aHeader.appendAscii( "thread  " );                   // column 2: the thread ID
@@ -112,7 +112,7 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::format( const LogRecord& _rRecord ) throw (RuntimeException)
     {
         char buffer[ 30 ];
         const int buffer_size = sizeof( buffer );
@@ -120,11 +120,11 @@ namespace logging
         if ( used >= buffer_size || used < 0 )
             buffer[ buffer_size - 1 ] = 0;
 
-        ::rtl::OUStringBuffer aLogEntry;
+        OUStringBuffer aLogEntry;
         aLogEntry.appendAscii( buffer );
         aLogEntry.appendAscii( " " );
 
-        ::rtl::OString sThreadID( ::rtl::OUStringToOString( _rRecord.ThreadID, osl_getThreadTextEncoding() ) );
+        OString sThreadID( OUStringToOString( _rRecord.ThreadID, osl_getThreadTextEncoding() ) );
         snprintf( buffer, buffer_size, "%8s", sThreadID.getStr() );
         aLogEntry.appendAscii( buffer );
         aLogEntry.appendAscii( " " );
@@ -150,17 +150,17 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PlainTextFormatter::getTail(  ) throw (RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getTail(  ) throw (RuntimeException)
     {
         // no tail
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL PlainTextFormatter::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    ::sal_Bool SAL_CALL PlainTextFormatter::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
-        for (   const ::rtl::OUString* pServiceNames = aServiceNames.getConstArray();
+        const Sequence< OUString > aServiceNames( getSupportedServiceNames() );
+        for (   const OUString* pServiceNames = aServiceNames.getConstArray();
                 pServiceNames != aServiceNames.getConstArray() + aServiceNames.getLength();
                 ++pServiceNames
             )
@@ -170,28 +170,28 @@ namespace logging
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL PlainTextFormatter::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL PlainTextFormatter::getImplementationName_static()
+    OUString SAL_CALL PlainTextFormatter::getImplementationName_static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.PlainTextFormatter" );
+        return OUString( "com.sun.star.comp.extensions.PlainTextFormatter" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
+    Sequence< OUString > SAL_CALL PlainTextFormatter::getSupportedServiceNames_static()
     {
-        Sequence< ::rtl::OUString > aServiceNames(1);
-        aServiceNames[0] = ::rtl::OUString( "com.sun.star.logging.PlainTextFormatter" );
+        Sequence< OUString > aServiceNames(1);
+        aServiceNames[0] = OUString( "com.sun.star.logging.PlainTextFormatter" );
         return aServiceNames;
     }
 

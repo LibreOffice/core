@@ -46,13 +46,13 @@ namespace dbaccess
     class ODatabaseModelImpl;
     struct ContentProperties
     {
-        ::rtl::OUString aTitle;         // Title
-        ::boost::optional< ::rtl::OUString >
+        OUString aTitle;         // Title
+        ::boost::optional< OUString >
                         aContentType;   // ContentType (aka MediaType aka MimeType)
         sal_Bool        bIsDocument;    // IsDocument
         sal_Bool        bIsFolder;      // IsFolder
         sal_Bool        bAsTemplate;    // AsTemplate
-        ::rtl::OUString sPersistentName;// persistent name of the document
+        OUString sPersistentName;// persistent name of the document
 
         ContentProperties()
             :bIsDocument( sal_True )
@@ -75,8 +75,8 @@ namespace dbaccess
     typedef ::boost::shared_ptr<OContentHelper_Impl> TContentPtr;
 
 
-    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString,
-                                                            ::rtl::OUStringHash,
+    typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString,
+                                                            OUStringHash,
                                                             ::comphelper::UStringEqual
                                                         > PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
@@ -103,7 +103,7 @@ namespace dbaccess
             getProperties( const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
-        void impl_rename_throw(const ::rtl::OUString& _sNewName,bool _bNotify = true);
+        void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 
     protected:
         ::cppu::OInterfaceContainerHelper       m_aContentListeners;
@@ -128,7 +128,7 @@ namespace dbaccess
         */
         void notifyPropertiesChange( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyChangeEvent >& evt ) const;
 
-        ::rtl::OUString impl_getHierarchicalName( bool _includingRootContainer ) const;
+        OUString impl_getHierarchicalName( bool _includingRootContainer ) const;
 
     public:
 
@@ -141,13 +141,13 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
         // ::com::sun::star::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XContent
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException) ;
-        virtual ::rtl::OUString SAL_CALL getContentType(  ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual OUString SAL_CALL getContentType(  ) throw (::com::sun::star::uno::RuntimeException) ;
         virtual void SAL_CALL addContentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentEventListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
         virtual void SAL_CALL removeContentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentEventListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
 
@@ -157,12 +157,12 @@ namespace dbaccess
         virtual void SAL_CALL abort( sal_Int32 CommandId ) throw (::com::sun::star::uno::RuntimeException) ;
 
         // XPropertiesChangeNotifier
-        virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
-        virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual void SAL_CALL addPropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual void SAL_CALL removePropertiesChangeListener( const ::com::sun::star::uno::Sequence< OUString >& PropertyNames, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException) ;
 
         // XPropertyContainer
-        virtual void SAL_CALL addProperty( const ::rtl::OUString& Name, sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
-        virtual void SAL_CALL removeProperty( const ::rtl::OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException) ;
+        virtual void SAL_CALL addProperty( const OUString& Name, sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) ;
+        virtual void SAL_CALL removeProperty( const OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException) ;
 
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -176,7 +176,7 @@ namespace dbaccess
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
         // XRename
-        virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
         inline const ContentProperties& getContentProperties() const { return m_pImpl->m_aProps; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
@@ -188,7 +188,7 @@ namespace dbaccess
         inline TContentPtr getImpl() const { return m_pImpl; }
 
     protected:
-        virtual ::rtl::OUString determineContentType() const = 0;
+        virtual OUString determineContentType() const = 0;
     };
 
 }   // namespace dbaccess

@@ -32,7 +32,6 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include "vbasheetobject.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 

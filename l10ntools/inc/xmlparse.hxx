@@ -56,21 +56,21 @@ using namespace std;
 class XMLAttribute
 {
 private:
-    rtl::OUString sName;
-    rtl::OUString sValue;
+    OUString sName;
+    OUString sValue;
 
 public:
     /// creates an attribute
     XMLAttribute(
-        const rtl::OUString &rName,    // attributes name
-        const rtl::OUString &rValue    // attributes data
+        const OUString &rName,    // attributes name
+        const OUString &rValue    // attributes data
     )
                 : sName( rName ), sValue( rValue ) {}
 
-    rtl::OUString GetName() const { return sName; }
-    rtl::OUString GetValue() const { return sValue; }
+    OUString GetName() const { return sName; }
+    OUString GetValue() const { return sValue; }
 
-    void setValue(const rtl::OUString &rValue){sValue=rValue;}
+    void setValue(const OUString &rValue){sValue=rValue;}
 
     /// returns true if two attributes are equal and have the same value
     sal_Bool IsEqual(
@@ -164,16 +164,16 @@ public:
 //-------------------------------------------------------------------------
 
 /// Mapping numeric Language code <-> XML Element
-typedef boost::unordered_map<rtl::OString, XMLElement*, rtl::OStringHash> LangHashMap;
+typedef boost::unordered_map<OString, XMLElement*, OStringHash> LangHashMap;
 
 /// Mapping XML Element string identifier <-> Language Map
-typedef boost::unordered_map<rtl::OString, LangHashMap*, rtl::OStringHash> XMLHashMap;
+typedef boost::unordered_map<OString, LangHashMap*, OStringHash> XMLHashMap;
 
 /// Mapping iso alpha string code <-> iso numeric code
-typedef boost::unordered_map<rtl::OString, int, rtl::OStringHash> HashMap;
+typedef boost::unordered_map<OString, int, OStringHash> HashMap;
 
 /// Mapping XML tag names <-> have localizable strings
-typedef boost::unordered_map<rtl::OString, sal_Bool, rtl::OStringHash> TagMap;
+typedef boost::unordered_map<OString, sal_Bool, OStringHash> TagMap;
 
 /** Holds information of a XML file, is root node of tree
  */
@@ -183,7 +183,7 @@ class XMLFile : public XMLParentNode
 {
 public:
     XMLFile(
-        const rtl::OUString &rFileName // the file name, empty if created from memory stream
+        const OUString &rFileName // the file name, empty if created from memory stream
     );
     XMLFile( const XMLFile& obj ) ;
     ~XMLFile();
@@ -193,7 +193,7 @@ public:
     void        Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){return XMLStrings;}
-    void Write( rtl::OString const &rFilename );
+    void Write( OString const &rFilename );
     sal_Bool        Write( ofstream &rStream , XMLNode *pCur = NULL );
 
     bool        CheckExportStatus( XMLParentNode *pCur = NULL );// , int pos = 0 );
@@ -203,25 +203,25 @@ public:
     virtual sal_uInt16  GetNodeType();
 
     /// returns file name
-    rtl::OUString GetName() { return sFileName; }
-    void          SetName( const rtl::OUString &rFilename ) { sFileName = rFilename; }
-    const std::vector<rtl::OString> getOrder(){ return order; }
+    OUString GetName() { return sFileName; }
+    void          SetName( const OUString &rFilename ) { sFileName = rFilename; }
+    const std::vector<OString> getOrder(){ return order; }
 
 protected:
     // writes a string as UTF8 with dos line ends to a given stream
-    void        WriteString( ofstream &rStream, const rtl::OUString &sString );
+    void        WriteString( ofstream &rStream, const OUString &sString );
 
     void        InsertL10NElement( XMLElement* pElement);
 
     // DATA
-    rtl::OUString      sFileName;
+    OUString      sFileName;
 
-    const rtl::OString ID, OLDREF, XML_LANG;
+    const OString ID, OLDREF, XML_LANG;
 
     TagMap      nodes_localize;
     XMLHashMap* XMLStrings;
 
-    std::vector <rtl::OString> order;
+    std::vector <OString> order;
 };
 
 /// An Utility class for XML
@@ -245,9 +245,9 @@ public:
 class XMLElement : public XMLParentNode
 {
 private:
-    rtl::OUString sElementName;
+    OUString sElementName;
     XMLAttributeList *pAttributes;
-    rtl::OString   project,
+    OString   project,
                  filename,
                  id,
                  sOldRef,
@@ -261,7 +261,7 @@ public:
     /// create a element node
     XMLElement(){}
     XMLElement(
-        const rtl::OUString &rName,    // the element name
+        const OUString &rName,    // the element name
         XMLParentNode *Parent   // parent node of this element
     ):          XMLParentNode( Parent ),
                 sElementName( rName ),
@@ -283,34 +283,34 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns element name
-    rtl::OUString GetName() { return sElementName; }
+    OUString GetName() { return sElementName; }
 
     /// returns list of attributes of this element
     XMLAttributeList *GetAttributeList() { return pAttributes; }
 
     /// adds a new attribute to this element, typically used by parser
-    void AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue );
+    void AddAttribute( const OUString &rAttribute, const OUString &rValue );
 
-    void ChangeLanguageTag( const rtl::OUString &rValue );
+    void ChangeLanguageTag( const OUString &rValue );
 
     // Return a Unicode String representation of this object
     OUString ToOUString();
 
-    void SetProject         ( rtl::OString const & prj        ){ project = prj;        }
-    void SetFileName        ( rtl::OString const & fn         ){ filename = fn;        }
-    void SetId              ( rtl::OString const & theId      ){ id = theId;           }
-    void SetResourceType    ( rtl::OString const & rt         ){ resourceType = rt;    }
-    void SetLanguageId      ( rtl::OString const & lid        ){ languageId = lid;     }
+    void SetProject         ( OString const & prj        ){ project = prj;        }
+    void SetFileName        ( OString const & fn         ){ filename = fn;        }
+    void SetId              ( OString const & theId      ){ id = theId;           }
+    void SetResourceType    ( OString const & rt         ){ resourceType = rt;    }
+    void SetLanguageId      ( OString const & lid        ){ languageId = lid;     }
     void SetPos             ( int nPos_in           ){ nPos = nPos_in;       }
-    void SetOldRef          ( rtl::OString const & sOldRef_in ){ sOldRef = sOldRef_in; }
+    void SetOldRef          ( OString const & sOldRef_in ){ sOldRef = sOldRef_in; }
 
     virtual int        GetPos()         { return nPos;         }
-    rtl::OString GetProject()     { return project;      }
-    rtl::OString GetFileName()    { return filename;     }
-    rtl::OString GetId()          { return id;           }
-    rtl::OString GetOldref()      { return sOldRef;      }
-    rtl::OString GetResourceType(){ return resourceType; }
-    rtl::OString GetLanguageId()  { return languageId;   }
+    OString GetProject()     { return project;      }
+    OString GetFileName()    { return filename;     }
+    OString GetId()          { return id;           }
+    OString GetOldref()      { return sOldRef;      }
+    OString GetResourceType(){ return resourceType; }
+    OString GetLanguageId()  { return languageId;   }
 
 
 };
@@ -322,18 +322,18 @@ public:
 class XMLData : public XMLChildNode
 {
 private:
-    rtl::OUString sData;
+    OUString sData;
     bool   isNewCreated;
 
 public:
     /// create a data node
     XMLData(
-        const rtl::OUString &rData,    // the initial data
+        const OUString &rData,    // the initial data
         XMLParentNode *Parent   // the parent node of this data, typically a element node
     )
                 : XMLChildNode( Parent ), sData( rData ) , isNewCreated ( false ){}
     XMLData(
-        const rtl::OUString &rData,    // the initial data
+        const OUString &rData,    // the initial data
         XMLParentNode *Parent,  // the parent node of this data, typically a element node
         bool newCreated
     )
@@ -345,12 +345,12 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the data
-    rtl::OUString GetData() { return sData; }
+    OUString GetData() { return sData; }
 
     bool isNew() { return isNewCreated; }
     /// adds new character data to the existing one
     void AddData(
-        const rtl::OUString &rData // the new data
+        const OUString &rData // the new data
     );
 
 
@@ -364,12 +364,12 @@ public:
 class XMLComment : public XMLChildNode
 {
 private:
-    rtl::OUString sComment;
+    OUString sComment;
 
 public:
     /// create a comment node
     XMLComment(
-        const rtl::OUString &rComment, // the comment
+        const OUString &rComment, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sComment( rComment ) {}
@@ -381,7 +381,7 @@ public:
     XMLComment& operator=(const XMLComment& obj);
 
     /// returns the comment
-    rtl::OUString GetComment()  { return sComment; }
+    OUString GetComment()  { return sComment; }
 };
 
 //-------------------------------------------------------------------------
@@ -391,12 +391,12 @@ public:
 class XMLDefault : public XMLChildNode
 {
 private:
-    rtl::OUString sDefault;
+    OUString sDefault;
 
 public:
     /// create a comment node
     XMLDefault(
-        const rtl::OUString &rDefault, // the comment
+        const OUString &rDefault, // the comment
         XMLParentNode *Parent   // the parent node of this comemnt, typically a element node
     )
                 : XMLChildNode( Parent ), sDefault( rDefault ) {}
@@ -409,7 +409,7 @@ public:
     virtual sal_uInt16 GetNodeType();
 
     /// returns the comment
-    rtl::OUString GetDefault()  { return sDefault; }
+    OUString GetDefault()  { return sDefault; }
 };
 
 //-------------------------------------------------------------------------
@@ -420,7 +420,7 @@ struct XMLError {
     XML_Error eCode;    // the error code
     std::size_t nLine; // error line number
     std::size_t nColumn; // error column number
-    rtl::OUString sMessage;    // readable error message
+    OUString sMessage;    // readable error message
 };
 
 //-------------------------------------------------------------------------
@@ -460,7 +460,7 @@ public:
 
     /// parse a file, returns NULL on criticall errors
     XMLFile *Execute(
-        const rtl::OUString &rFileName,    // the file name
+        const OUString &rFileName,    // the file name
         XMLFile *pXMLFileIn         // the XMLFile
     );
 

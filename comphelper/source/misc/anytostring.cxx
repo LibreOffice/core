@@ -30,14 +30,14 @@ namespace comphelper {
 namespace {
 
 void appendTypeError(
-    rtl::OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
+    OUStringBuffer & buf, typelib_TypeDescriptionReference * typeRef )
 {
     buf.append( "<cannot get type description of type " );
     buf.append( OUString::unacquired( &typeRef->pTypeName ) );
     buf.append( static_cast< sal_Unicode >('>') );
 }
 
-inline void appendChar( rtl::OUStringBuffer & buf, sal_Unicode c )
+inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
 {
     if (c < ' ' || c > '~') {
         buf.append( "\\X" );
@@ -53,7 +53,7 @@ inline void appendChar( rtl::OUStringBuffer & buf, sal_Unicode c )
 }
 
 //------------------------------------------------------------------------------
-void appendValue( rtl::OUStringBuffer & buf,
+void appendValue( OUStringBuffer & buf,
                   void const * val, typelib_TypeDescriptionReference * typeRef,
                   bool prependType )
 {
@@ -202,7 +202,7 @@ void appendValue( rtl::OUStringBuffer & buf,
         break;
     case typelib_TypeClass_STRING: {
         buf.append( static_cast< sal_Unicode >('\"') );
-        rtl::OUString const & str = rtl::OUString::unacquired(
+        OUString const & str = OUString::unacquired(
             static_cast< rtl_uString * const * >(val) );
         sal_Int32 len = str.getLength();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -311,9 +311,9 @@ void appendValue( rtl::OUStringBuffer & buf,
 } // anon namespace
 
 //==============================================================================
-rtl::OUString anyToString( uno::Any const & value )
+OUString anyToString( uno::Any const & value )
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     appendValue( buf, value.getValue(), value.getValueTypeRef(), true );
     return buf.makeStringAndClear();
 }

@@ -47,7 +47,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace {
     const static sal_Int32 gnVerticalGap (10);

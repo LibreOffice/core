@@ -69,10 +69,10 @@ private:
     SvxChartColorTable          maDefColors;
     sal_Bool                    mbIsInitialized;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
                             maPropertyNames;
 
-    inline ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const
+    inline ::com::sun::star::uno::Sequence< OUString > GetPropertyNames() const
         { return maPropertyNames; }
     sal_Bool RetrieveOptions();
 
@@ -84,7 +84,7 @@ public:
     void                        SetDefaultColors( const SvxChartColorTable& aCol );
 
     virtual void                Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 };
 
 // ====================

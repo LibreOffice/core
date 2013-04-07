@@ -41,13 +41,13 @@ using namespace comphelper;
 //=========================================================================
 
 //=========================================================================
-static bool makeCanonicalFileURL( rtl::OUString & rURL )
+static bool makeCanonicalFileURL( OUString & rURL )
 {
     OSL_ENSURE( rURL.matchAsciiL( "file:", sizeof( "file:" ) - 1 , 0 ) ,
                 "File URL expected!" );
 
-    rtl::OUString aNormalizedURL;
-    if ( osl::FileBase::getAbsoluteFileURL( rtl::OUString(),
+    OUString aNormalizedURL;
+    if ( osl::FileBase::getAbsoluteFileURL( OUString(),
                                             rURL,
                                             aNormalizedURL )
             == osl::DirectoryItem::E_None )
@@ -113,42 +113,42 @@ OfficeInstallationDirectories::~OfficeInstallationDirectories()
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
     throw ( uno::RuntimeException )
 {
     initDirs();
-    return rtl::OUString( *m_pOfficeBrandDir );
+    return OUString( *m_pOfficeBrandDir );
 }
 
 //=========================================================================
 // virtual
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
     throw ( uno::RuntimeException )
 {
     initDirs();
-    return rtl::OUString( *m_pUserDir );
+    return OUString( *m_pUserDir );
 }
 
 
 //=========================================================================
 // virtual
-rtl::OUString SAL_CALL
-OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
+OUString SAL_CALL
+OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
     throw ( uno::RuntimeException )
 {
     if ( !URL.isEmpty() )
     {
         initDirs();
 
-        rtl::OUString aCanonicalURL( URL );
+        OUString aCanonicalURL( URL );
         makeCanonicalFileURL( aCanonicalURL );
 
         sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pOfficeBrandDir );
         if ( nIndex  != -1 )
         {
-            return rtl::OUString(
+            return OUString(
                 aCanonicalURL.replaceAt( nIndex,
                                          m_pOfficeBrandDir->getLength(),
                                          m_aOfficeBrandDirMacro ) );
@@ -158,20 +158,20 @@ OfficeInstallationDirectories::makeRelocatableURL( const rtl::OUString& URL )
             nIndex = aCanonicalURL.indexOf( *m_pUserDir );
             if ( nIndex  != -1 )
             {
-                return rtl::OUString(
+                return OUString(
                     aCanonicalURL.replaceAt( nIndex,
                                              m_pUserDir->getLength(),
                                              m_aUserDirMacro ) );
             }
         }
     }
-    return rtl::OUString( URL );
+    return OUString( URL );
 }
 
 //=========================================================================
 // virtual
-rtl::OUString SAL_CALL
-OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
+OUString SAL_CALL
+OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
     throw ( uno::RuntimeException )
 {
     if ( !URL.isEmpty() )
@@ -181,7 +181,7 @@ OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
         {
             initDirs();
 
-            return rtl::OUString(
+            return OUString(
                 URL.replaceAt( nIndex,
                                m_aOfficeBrandDirMacro.getLength(),
                                *m_pOfficeBrandDir ) );
@@ -193,14 +193,14 @@ OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
             {
                 initDirs();
 
-                return rtl::OUString(
+                return OUString(
                     URL.replaceAt( nIndex,
                                    m_aUserDirMacro.getLength(),
                                    *m_pUserDir ) );
             }
         }
     }
-    return rtl::OUString( URL );
+    return OUString( URL );
 }
 
 //=========================================================================
@@ -208,7 +208,7 @@ OfficeInstallationDirectories::makeAbsoluteURL( const rtl::OUString& URL )
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -218,12 +218,12 @@ OfficeInstallationDirectories::getImplementationName()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL
-OfficeInstallationDirectories::supportsService( const rtl::OUString& ServiceName )
+OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    const uno::Sequence< rtl::OUString > & aNames
+    const uno::Sequence< OUString > & aNames
         = getSupportedServiceNames();
-    const rtl::OUString * p = aNames.getConstArray();
+    const OUString * p = aNames.getConstArray();
     for ( sal_Int32 nPos = 0; nPos < aNames.getLength(); nPos++ )
     {
         if ( p[ nPos ].equals( ServiceName ) )
@@ -235,7 +235,7 @@ OfficeInstallationDirectories::supportsService( const rtl::OUString& ServiceName
 
 //=========================================================================
 // virtual
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
@@ -244,7 +244,7 @@ OfficeInstallationDirectories::getSupportedServiceNames()
 
 //=========================================================================
 // static
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName_static()
 {
     return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
@@ -287,8 +287,8 @@ void OfficeInstallationDirectories::initDirs()
         osl::MutexGuard aGuard( m_aMutex );
         if ( m_pOfficeBrandDir == 0 )
         {
-            m_pOfficeBrandDir = new rtl::OUString;
-            m_pUserDir        = new rtl::OUString;
+            m_pOfficeBrandDir = new OUString;
+            m_pUserDir        = new OUString;
 
             uno::Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(m_xCtx);
 

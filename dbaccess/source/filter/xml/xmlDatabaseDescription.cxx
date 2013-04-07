@@ -37,7 +37,7 @@ namespace dbaxml
 DBG_NAME(OXMLDatabaseDescription)
 
 OXMLDatabaseDescription::OXMLDatabaseDescription( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName) :
+                sal_uInt16 nPrfx, const OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_bFoundOne(false)
 {
@@ -54,7 +54,7 @@ OXMLDatabaseDescription::~OXMLDatabaseDescription()
 
 SvXMLImportContext* OXMLDatabaseDescription::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

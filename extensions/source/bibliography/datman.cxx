@@ -81,7 +81,7 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
+Reference< XConnection > getConnection(const OUString& _rURL)
 {
     // first get the sdb::DataSource corresponding to the url
     Reference< XDataSource >    xDataSource;
@@ -166,7 +166,7 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             {
                 DBG_ASSERT((*(sal_Int32*)xFormProps->getPropertyValue("CommandType").getValue()) == CommandType::TABLE,
                     "::getColumns : invalid form (has no table as data source) !");
-                ::rtl::OUString sTable;
+                OUString sTable;
                 xFormProps->getPropertyValue("Command") >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
@@ -178,10 +178,10 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             catch (const Exception& e)
             {
 #ifdef DBG_UTIL
-                String sMsg(rtl::OUString("::getColumns : catched an exception ("));
+                String sMsg(OUString("::getColumns : catched an exception ("));
                 sMsg += String(e.Message);
                 sMsg.AppendAscii(") ...");
-                OSL_FAIL(rtl::OUStringToOString(sMsg, RTL_TEXTENCODING_ASCII_US ).getStr());
+                OSL_FAIL(OUStringToOString(sMsg, RTL_TEXTENCODING_ASCII_US ).getStr());
 #else
                 (void)e;
 #endif
@@ -280,7 +280,7 @@ public:
 };
 
 static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
-                                    const ::rtl::OUString& rLogicalColumnName)
+                                    const OUString& rLogicalColumnName)
 {
     for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
     {
@@ -400,7 +400,7 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
 
     aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     String sTitle = GetText();
-    sTitle.SearchAndReplace(rtl::OUString("%1"), pDatMan->getActiveDataTable(), 0);
+    sTitle.SearchAndReplace(OUString("%1"), pDatMan->getActiveDataTable(), 0);
     SetText(sTitle);
 
     aListBoxes[0] = &aIdentifierLB;
@@ -440,9 +440,9 @@ MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
     DBG_ASSERT(xFields.is(), "MappingDialog_Impl::MappingDialog_Impl : gave me an invalid form !");
     if(xFields.is())
     {
-        Sequence< ::rtl::OUString > aNames = xFields->getElementNames();
+        Sequence< OUString > aNames = xFields->getElementNames();
         sal_Int32 nFieldsCount = aNames.getLength();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
+        const OUString* pNames = aNames.getConstArray();
 
         for(sal_Int32 nField = 0; nField < nFieldsCount; nField++)
             aListBoxes[0]->InsertEntry(pNames[nField]);
@@ -579,9 +579,9 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         aSelectionLB.SetStyle(aSelectionLB.GetStyle()|WB_CLIPCHILDREN|WB_SORT);
         aSelectionLB.GetModel()->SetSortMode(SortAscending);
 
-        ::rtl::OUString sActiveSource = pDatMan->getActiveDataSource();
-        const Sequence< ::rtl::OUString >& rSources = aConfig.GetDataSourceNames();
-        const ::rtl::OUString* pSourceNames = rSources.getConstArray();
+        OUString sActiveSource = pDatMan->getActiveDataSource();
+        const Sequence< OUString >& rSources = aConfig.GetDataSourceNames();
+        const OUString* pSourceNames = rSources.getConstArray();
         for(int i = 0; i < rSources.getLength(); i++)
         {
             SvTreeListEntry* pEntry = aSelectionLB.InsertEntry(pSourceNames[i]);
@@ -644,7 +644,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL
-    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
+    BibInterceptorHelper::queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XDispatch > xReturn;
 
@@ -696,11 +696,11 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun:
 
 //-----------------------------------------------------------------------------
 #define STR_UID "uid"
-::rtl::OUString gGridName("theGrid");
-::rtl::OUString gViewName("theView");
-::rtl::OUString gGlobalName("theGlobals");
-::rtl::OUString gBeamerSize("theBeamerSize");
-::rtl::OUString gViewSize("theViewSize");
+OUString gGridName("theGrid");
+OUString gViewName("theView");
+OUString gGlobalName("theGlobals");
+OUString gBeamerSize("theBeamerSize");
+OUString gViewSize("theViewSize");
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
@@ -749,9 +749,9 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
         // remove the old fields
         if ( xColContainer->hasElements() )
         {
-            Sequence< ::rtl::OUString > aNames = xColContainer->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
-            const ::rtl::OUString* pNamesEnd = pNames + aNames.getLength();
+            Sequence< OUString > aNames = xColContainer->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
+            const OUString* pNamesEnd = pNames + aNames.getLength();
             for ( ; pNames != pNamesEnd; ++pNames )
                 xColContainer->removeByName( *pNames );
         }
@@ -764,16 +764,16 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
 
         Reference< XPropertySet >  xField;
 
-        Sequence< ::rtl::OUString > aFields( xFields->getElementNames() );
-        const ::rtl::OUString* pFields = aFields.getConstArray();
-        const ::rtl::OUString* pFieldsEnd = pFields + aFields.getLength();
+        Sequence< OUString > aFields( xFields->getElementNames() );
+        const OUString* pFields = aFields.getConstArray();
+        const OUString* pFieldsEnd = pFields + aFields.getLength();
 
         for ( ; pFields != pFieldsEnd; ++pFields )
         {
             xFields->getByName( *pFields ) >>= xField;
 
-            ::rtl::OUString sCurrentModelType;
-            const ::rtl::OUString sType("Type");
+            OUString sCurrentModelType;
+            const OUString sType("Type");
             sal_Int32 nType = 0;
             sal_Bool bIsFormatted           = sal_False;
             sal_Bool bFormattedIsNumeric    = sal_True;
@@ -807,7 +807,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
             Reference< XPropertySet >  xCurrentCol = xColFactory->createColumn(sCurrentModelType);
             if (bIsFormatted)
             {
-                ::rtl::OUString sFormatKey("FormatKey");
+                OUString sFormatKey("FormatKey");
                 xCurrentCol->setPropertyValue(sFormatKey, xField->getPropertyValue(sFormatKey));
                 Any aFormatted(&bFormattedIsNumeric, ::getBooleanCppuType());
                 xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
@@ -835,7 +835,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
     try
     {
         Reference< XPropertySet >  aFormPropSet( xDbForm, UNO_QUERY );
-        ::rtl::OUString sName;
+        OUString sName;
         aFormPropSet->getPropertyValue("Command") >>= sName;
 
         if ( !m_xGridModel.is() )
@@ -889,13 +889,13 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
             Reference< XNameAccess >  xTables = xSupplyTables.is() ?
                                 xSupplyTables->getTables() : Reference< XNameAccess > ();
 
-            Sequence< ::rtl::OUString > aTableNameSeq;
+            Sequence< OUString > aTableNameSeq;
             if (xTables.is())
                 aTableNameSeq = xTables->getElementNames();
 
             if(aTableNameSeq.getLength() > 0)
             {
-                const ::rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
+                const OUString* pTableNames = aTableNameSeq.getConstArray();
                 if(!rDesc.sTableOrQuery.isEmpty())
                     aActiveDataTable = rDesc.sTableOrQuery;
                 else
@@ -915,11 +915,11 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
-                ::rtl::OUString aString("SELECT * FROM ");
+                OUString aString("SELECT * FROM ");
 
-                ::rtl::OUString sCatalog, sSchema, sName;
+                OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
                 aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
@@ -940,9 +940,9 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     return xResult;
 }
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > BibDataManager::getDataSources()
+Sequence< OUString > BibDataManager::getDataSources()
 {
-    Sequence< ::rtl::OUString > aTableNameSeq;
+    Sequence< OUString > aTableNameSeq;
 
     try
     {
@@ -961,19 +961,19 @@ Sequence< ::rtl::OUString > BibDataManager::getDataSources()
     return aTableNameSeq;
 }
 //------------------------------------------------------------------------
-::rtl::OUString BibDataManager::getActiveDataTable()
+OUString BibDataManager::getActiveDataTable()
 {
     return aActiveDataTable;
 }
 //------------------------------------------------------------------------
-void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
+void BibDataManager::setFilter(const OUString& rQuery)
 {
     if(!m_xParser.is())
         return;
     try
     {
         m_xParser->setFilter( rQuery );
-        ::rtl::OUString aQuery = m_xParser->getFilter();
+        OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
         xFormProps->setPropertyValue( "Filter", makeAny( aQuery ) );
         xFormProps->setPropertyValue( "ApplyFilter", makeAny( sal_True ) );
@@ -987,10 +987,10 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
 
 }
 //------------------------------------------------------------------------
-::rtl::OUString BibDataManager::getFilter()
+OUString BibDataManager::getFilter()
 {
 
-    ::rtl::OUString aQueryString;
+    OUString aQueryString;
     try
     {
         Reference< XPropertySet > xFormProps( m_xForm, UNO_QUERY_THROW );
@@ -1006,23 +1006,23 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
 
 }
 //------------------------------------------------------------------------
-Sequence< ::rtl::OUString > BibDataManager::getQueryFields()
+Sequence< OUString > BibDataManager::getQueryFields()
 {
-    Sequence< ::rtl::OUString > aFieldSeq;
+    Sequence< OUString > aFieldSeq;
     Reference< XNameAccess >  xFields = getColumns( m_xForm );
     if (xFields.is())
         aFieldSeq = xFields->getElementNames();
     return aFieldSeq;
 }
 //------------------------------------------------------------------------
-::rtl::OUString BibDataManager::getQueryField()
+OUString BibDataManager::getQueryField()
 {
     BibConfig* pConfig = BibModul::GetConfig();
-    ::rtl::OUString aFieldString = pConfig->getQueryField();
+    OUString aFieldString = pConfig->getQueryField();
     if(aFieldString.isEmpty())
     {
-        Sequence< ::rtl::OUString > aSeq = getQueryFields();
-        const ::rtl::OUString* pFields = aSeq.getConstArray();
+        Sequence< OUString > aSeq = getQueryFields();
+        const OUString* pFields = aSeq.getConstArray();
         if(aSeq.getLength()>0)
         {
             aFieldString=pFields[0];
@@ -1031,12 +1031,12 @@ Sequence< ::rtl::OUString > BibDataManager::getQueryFields()
     return aFieldString;
 }
 //------------------------------------------------------------------------
-void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
+void BibDataManager::startQueryWith(const OUString& rQuery)
 {
     BibConfig* pConfig = BibModul::GetConfig();
     pConfig->setQueryText( rQuery );
 
-    ::rtl::OUString aQueryString;
+    OUString aQueryString;
     if(!rQuery.isEmpty())
     {
         aQueryString=aQuoteChar;
@@ -1052,9 +1052,9 @@ void BibDataManager::startQueryWith(const ::rtl::OUString& rQuery)
     setFilter(aQueryString);
 }
 
-void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
+void BibDataManager::setActiveDataSource(const OUString& rURL)
 {
-    ::rtl::OUString sTmp(aDataSourceURL);
+    OUString sTmp(aDataSourceURL);
     aDataSourceURL = rURL;
 
     Reference< XPropertySet >  aPropertySet( m_xForm, UNO_QUERY );
@@ -1075,12 +1075,12 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         aPropertySet->setPropertyValue("ActiveConnection", aVal);
         Reference< XMultiServiceFactory >   xFactory(xConnection, UNO_QUERY);
         if ( xFactory.is() )
-            m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+            m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
         if(xOldConnection.is())
             xOldConnection->dispose();
 
-        Sequence< ::rtl::OUString > aTableNameSeq;
+        Sequence< OUString > aTableNameSeq;
         Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
         if(xSupplyTables.is())
         {
@@ -1089,7 +1089,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
         }
         if(aTableNameSeq.getLength() > 0)
         {
-            const ::rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
+            const OUString* pTableNames = aTableNameSeq.getConstArray();
             aActiveDataTable = pTableNames[0];
             aVal <<= aActiveDataTable;
             aPropertySet->setPropertyValue("Command", aVal);
@@ -1097,12 +1097,12 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
             //Caching for Performance
             aVal <<= (sal_Int32)50;
             aPropertySet->setPropertyValue("FetchSize", aVal);
-            ::rtl::OUString aString("SELECT * FROM ");
+            OUString aString("SELECT * FROM ");
             // quote the table name which may contain catalog.schema.table
             Reference<XDatabaseMetaData> xMetaData(xConnection->getMetaData(),UNO_QUERY);
             aQuoteChar = xMetaData->getIdentifierQuoteString();
 
-            ::rtl::OUString sCatalog, sSchema, sName;
+            OUString sCatalog, sSchema, sName;
             ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
             aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
@@ -1133,7 +1133,7 @@ void BibDataManager::setActiveDataSource(const ::rtl::OUString& rURL)
 }
 
 
-void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
+void BibDataManager::setActiveDataTable(const OUString& rTable)
 {
     ResetIdentifierMapping();
     try
@@ -1145,11 +1145,11 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
             Reference< XConnection >    xConnection = getConnection( m_xForm );
             Reference< XTablesSupplier >  xSupplyTables(xConnection, UNO_QUERY);
             Reference< XNameAccess > xAccess = xSupplyTables->getTables();
-            Sequence< ::rtl::OUString > aTableNameSeq = xAccess->getElementNames();
+            Sequence< OUString > aTableNameSeq = xAccess->getElementNames();
             sal_uInt32 nCount = aTableNameSeq.getLength();
 
-            const ::rtl::OUString* pTableNames = aTableNameSeq.getConstArray();
-            const ::rtl::OUString* pTableNamesEnd = pTableNames + nCount;
+            const OUString* pTableNames = aTableNameSeq.getConstArray();
+            const OUString* pTableNamesEnd = pTableNames + nCount;
 
             for ( ; pTableNames != pTableNamesEnd; ++pTableNames )
             {
@@ -1168,11 +1168,11 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
 
                 Reference< XMultiServiceFactory > xFactory(xConnection, UNO_QUERY);
                 if ( xFactory.is() )
-                    m_xParser.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
+                    m_xParser.set( xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer" ) ), UNO_QUERY );
 
-                ::rtl::OUString aString("SELECT * FROM ");
+                OUString aString("SELECT * FROM ");
 
-                ::rtl::OUString sCatalog, sSchema, sName;
+                OUString sCatalog, sSchema, sName;
                 ::dbtools::qualifiedNameComponents( xMetaData, aActiveDataTable, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
                 aString += ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sName );
 
@@ -1291,7 +1291,7 @@ void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener
 }
 
 //------------------------------------------------------------------------
-Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUString& rName)
+Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& rName)
 {
     Reference< awt::XControlModel > xModel;
 
@@ -1307,17 +1307,17 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
         xPropSet->setPropertyValue( "Name", makeAny( rName ) );
 
         // set the name of the to-be-created control
-        ::rtl::OUString aControlName("com.sun.star.form.control.InteractionGridControl");
+        OUString aControlName("com.sun.star.form.control.InteractionGridControl");
         Any aAny; aAny <<= aControlName;
         xPropSet->setPropertyValue( "DefaultControl",aAny );
 
         // the helpURL
-        ::rtl::OUString uProp("HelpURL");
+        OUString uProp("HelpURL");
         Reference< XPropertySetInfo > xPropInfo = xPropSet->getPropertySetInfo();
         if (xPropInfo->hasPropertyByName(uProp))
         {
-            ::rtl::OUString sId(RTL_CONSTASCII_USTRINGPARAM( INET_HID_SCHEME ));
-            sId += ::rtl::OUString::createFromAscii( HID_BIB_DB_GRIDCTRL );
+            OUString sId(RTL_CONSTASCII_USTRINGPARAM( INET_HID_SCHEME ));
+            sId += OUString::createFromAscii( HID_BIB_DB_GRIDCTRL );
             xPropSet->setPropertyValue( uProp, makeAny( sId ) );
         }
     }
@@ -1329,9 +1329,9 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
     return xModel;
 }
 //------------------------------------------------------------------------
-::rtl::OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
+OUString BibDataManager::getControlName(sal_Int32 nFormatKey )
 {
-    ::rtl::OUString aResStr;
+    OUString aResStr;
     switch (nFormatKey)
     {
         case DataType::BIT:
@@ -1369,10 +1369,10 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
 }
 //------------------------------------------------------------------------
 Reference< awt::XControlModel > BibDataManager::loadControlModel(
-                    const ::rtl::OUString& rName, sal_Bool bForceListBox)
+                    const OUString& rName, sal_Bool bForceListBox)
 {
     Reference< awt::XControlModel > xModel;
-    ::rtl::OUString aName("View_");
+    OUString aName("View_");
     aName += rName;
 
     try
@@ -1390,11 +1390,11 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             aElement >>= xField;
             Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
 
-            const ::rtl::OUString sType("Type");
+            const OUString sType("Type");
             sal_Int32 nFormatKey = 0;
             xField->getPropertyValue(sType) >>= nFormatKey;
 
-            ::rtl::OUString aInstanceName("com.sun.star.form.component.");
+            OUString aInstanceName("com.sun.star.form.component.");
 
             if (bForceListBox)
                 aInstanceName += "ListBox";
@@ -1409,7 +1409,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
             xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
-            xPropSet->setPropertyValue( ::rtl::OUString( "NativeWidgetLook" ), makeAny( (sal_Bool)sal_True ) );
+            xPropSet->setPropertyValue( OUString( "NativeWidgetLook" ), makeAny( (sal_Bool)sal_True ) );
 
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
@@ -1494,11 +1494,11 @@ void BibDataManager::SetMeAsUidListener()
         if (!xFields.is())
             return;
 
-        Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
-        const ::rtl::OUString* pFields = aFields.getConstArray();
+        Sequence< OUString > aFields(xFields->getElementNames());
+        const OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        rtl::OUString StrUID(STR_UID);
-        ::rtl::OUString theFieldName;
+        OUString StrUID(STR_UID);
+        OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             String aName= pFields[i];
@@ -1538,11 +1538,11 @@ void BibDataManager::RemoveMeAsUidListener()
             return;
 
 
-        Sequence< ::rtl::OUString > aFields(xFields->getElementNames());
-        const ::rtl::OUString* pFields = aFields.getConstArray();
+        Sequence< OUString > aFields(xFields->getElementNames());
+        const OUString* pFields = aFields.getConstArray();
         sal_Int32 nCount=aFields.getLength();
-        rtl::OUString StrUID(STR_UID);
-        ::rtl::OUString theFieldName;
+        OUString StrUID(STR_UID);
+        OUString theFieldName;
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             String aName= pFields[i];
@@ -1582,9 +1582,9 @@ void BibDataManager::CreateMappingDialog(Window* pParent)
     delete pDlg;
 }
 
-::rtl::OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
+OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
 {
-    ::rtl::OUString uRet;
+    OUString uRet;
     DBChangeDialog_Impl * pDlg = new DBChangeDialog_Impl(pParent, this );
     if(RET_OK == pDlg->Execute())
     {
@@ -1604,7 +1604,7 @@ void BibDataManager::DispatchDBChangeDialog()
         pToolbar->SendDispatch(TBC_BT_CHANGESOURCE, Sequence< PropertyValue >());
 }
 
-const ::rtl::OUString& BibDataManager::GetIdentifierMapping()
+const OUString& BibDataManager::GetIdentifierMapping()
 {
     if(sIdentifierMapping.isEmpty())
     {

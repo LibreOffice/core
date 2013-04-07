@@ -81,25 +81,25 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
-                                                    const rtl::OUString& aData)
+        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                    const OUString& aData)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -109,12 +109,12 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
                 ::com::sun::star::uno::RuntimeException );
 
     private:
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
-        class ToolBoxHashMap : public ::boost::unordered_map<   ::rtl::OUString                 ,
+        class ToolBoxHashMap : public ::boost::unordered_map<   OUString                 ,
                                                         ToolBox_XML_Entry               ,
-                                                        rtl::OUStringHash,
-                                                        ::std::equal_to< ::rtl::OUString >  >
+                                                        OUStringHash,
+                                                        ::std::equal_to< OUString >  >
         {
             public:
                 inline void free()
@@ -142,13 +142,13 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler : private ThreadHelpBase,   // S
         sal_Int32                                                                       m_nHashCode_Style_DropDownOnly;
         sal_Int32                                                                       m_nHashCode_Style_Text;
         sal_Int32                                                                       m_nHashCode_Style_Image;
-        rtl::OUString                                                                   m_aType;
-        rtl::OUString                                                                   m_aLabel;
-        rtl::OUString                                                                   m_aStyle;
-        rtl::OUString                                                                   m_aHelpURL;
-        rtl::OUString                                                                   m_aTooltip;
-        rtl::OUString                                                                   m_aIsVisible;
-        rtl::OUString                                                                   m_aCommandURL;
+        OUString                                                                   m_aType;
+        OUString                                                                   m_aLabel;
+        OUString                                                                   m_aStyle;
+        OUString                                                                   m_aHelpURL;
+        OUString                                                                   m_aTooltip;
+        OUString                                                                   m_aIsVisible;
+        OUString                                                                   m_aCommandURL;
 };
 
 
@@ -165,7 +165,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL, const rtl::OUString& aTooltip, sal_Int16 nStyle,
+        virtual void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
                                        sal_Int16 nWidth, sal_Bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
@@ -185,10 +185,10 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler : private ThreadHelpBase   // S
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >      m_xEmptyList;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >           m_rItemAccess;
-        ::rtl::OUString                                                                     m_aXMLToolbarNS;
-        ::rtl::OUString                                                                     m_aXMLXlinkNS;
-        ::rtl::OUString                                                                     m_aAttributeType;
-        ::rtl::OUString                                                                     m_aAttributeURL;
+        OUString                                                                     m_aXMLToolbarNS;
+        OUString                                                                     m_aXMLXlinkNS;
+        OUString                                                                     m_aAttributeType;
+        OUString                                                                     m_aAttributeURL;
 };
 
 } // namespace framework

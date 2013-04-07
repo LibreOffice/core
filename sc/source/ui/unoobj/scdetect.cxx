@@ -71,7 +71,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
 ScFilterDetect::ScFilterDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ )
 {
@@ -155,11 +154,11 @@ static const SfxFilter* lcl_DetectExcelXML( SvStream& rStream, SfxFilterMatcher&
     {
         // Be consistent with XMLFilterDetect service: Check for presence of "Workbook" in XML file.
 
-        rtl::OString aTryStr( "Workbook" );
-        rtl::OString aFileString(reinterpret_cast<const sal_Char*>(aBuffer), nBytesRead);
+        OString aTryStr( "Workbook" );
+        OString aFileString(reinterpret_cast<const sal_Char*>(aBuffer), nBytesRead);
 
         if (aFileString.indexOf(aTryStr) >= 0)
-            pFound = rMatcher.GetFilter4FilterName( rtl::OUString(pFilterExcelXML) );
+            pFound = rMatcher.GetFilter4FilterName( OUString(pFilterExcelXML) );
     }
 
     return pFound;
@@ -216,18 +215,18 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     return ( 0x0d == nEndFlag );
 }
 
-::rtl::OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
+OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
     throw( uno::RuntimeException )
 {
     uno::Reference< XInputStream > xStream;
     uno::Reference< XContent > xContent;
     uno::Reference< XInteractionHandler > xInteraction;
     String aURL;
-    ::rtl::OUString sTemp;
+    OUString sTemp;
     String aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     String aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
 
-    ::rtl::OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; // interesting only if set in this method
 
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
@@ -309,11 +308,11 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aPrefix = rtl::OUString( "private:factory/" );
+    String aPrefix = OUString( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
         String aPattern( aPrefix );
-        aPattern += rtl::OUString("scalc");
+        aPattern += OUString("scalc");
         if ( aURL.Match( aPattern ) >= aPattern.Len() )
             pFilter = SfxFilter::GetDefaultFilterFromFactory( aURL );
     }
@@ -653,14 +652,14 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                             // get file header
                             rStr.Seek( 0 );
                             const sal_Size nTrySize = 80;
-                            rtl::OString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
+                            OString aHeader = read_uInt8s_ToOString(rStr, nTrySize);
 
                             bool bMaybeHtml = HTMLParser::IsHTMLFormat( aHeader.getStr());
 
                             if ( aHeader.copy(0, 5).equalsL("{\\rtf", 5) )
                             {
                                 // test for RTF
-                                pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterRtf) );
+                                pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterRtf) );
                             }
                             else if ( bIsXLS && (bMaybeText && !bMaybeHtml) )
                             {
@@ -669,7 +668,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 // The configured detection for Excel 2003 XML is still in XMLFilterDetect.
                                 pFilter = lcl_DetectExcelXML( rStr, aMatcher );
                                 if (!pFilter)
-                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterAscii) );
+                                    pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterAscii) );
                                 bFakeXLS = true;
                             }
                             else if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
@@ -693,7 +692,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
                                 }
                                 else
                                 {
-                                    pFilter = aMatcher.GetFilter4FilterName( rtl::OUString(pFilterHtmlWeb) );
+                                    pFilter = aMatcher.GetFilter4FilterName( OUString(pFilterHtmlWeb) );
                                     if ( bIsXLS )
                                         bFakeXLS = true;
                                 }
@@ -788,11 +787,11 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
             lDescriptor[nPropertyCount].Name = "FilterName";
-            lDescriptor[nPropertyCount].Value <<= rtl::OUString(pFilter->GetName());
+            lDescriptor[nPropertyCount].Value <<= OUString(pFilter->GetName());
             nPropertyCount++;
         }
         else
-            lDescriptor[nIndexOfFilterName].Value <<= rtl::OUString(pFilter->GetName());
+            lDescriptor[nIndexOfFilterName].Value <<= OUString(pFilter->GetName());
     }
 
     if ( pFilter )

@@ -32,7 +32,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
 {
     void * pRet = 0;
 
-    ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
+    OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     if ( pServiceManager && aImplName.equals( UNOMainThreadExecutor::impl_staticGetImplementationName() ) )
@@ -62,11 +62,11 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 
             uno::Reference< registry::XRegistryKey >  xNewKey;
 
-            xNewKey = xKey->createKey( ::rtl::OUString("/") +
+            xNewKey = xKey->createKey( OUString("/") +
                                         UNOMainThreadExecutor::impl_staticGetImplementationName() +
-                                        ::rtl::OUString( "/UNO/SERVICES")  );
+                                        OUString( "/UNO/SERVICES")  );
 
-            uno::Sequence< ::rtl::OUString > &rServices = UNOMainThreadExecutor::impl_staticGetSupportedServiceNames();
+            uno::Sequence< OUString > &rServices = UNOMainThreadExecutor::impl_staticGetSupportedServiceNames();
             for( sal_Int32 ind = 0; ind < rServices.getLength(); ind++ )
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 

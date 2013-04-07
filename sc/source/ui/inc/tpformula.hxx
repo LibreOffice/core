@@ -48,7 +48,7 @@ private:
     void UpdateCustomCalcRadioButtons(bool bDefault);
     void LaunchCustomCalcSettings();
 
-    bool IsValidSeparator(const ::rtl::OUString& rSep) const;
+    bool IsValidSeparator(const OUString& rSep) const;
     bool IsValidSeparatorSet() const;
 
     DECL_LINK( ButtonHdl, Button* );
@@ -83,7 +83,7 @@ private:
 
     /** Stores old separator value of currently focused separator edit box.
         This value is used to revert undesired value change. */
-    ::rtl::OUString maOldSepValue;
+    OUString maOldSepValue;
 
     ScCalcConfig maSavedConfig;
     ScCalcConfig maCurrentConfig;

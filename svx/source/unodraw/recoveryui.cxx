@@ -33,8 +33,8 @@
 #include <boost/scoped_ptr.hpp>
 
 
-#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString("com.sun.star.comp.svx.RecoveryUI")
-#define SERVICENAME_RECOVERYUI              ::rtl::OUString("com.sun.star.dialog.RecoveryUI")
+#define IMPLEMENTATIONNAME_RECOVERYUI       OUString("com.sun.star.comp.svx.RecoveryUI")
+#define SERVICENAME_RECOVERYUI              OUString("com.sun.star.dialog.RecoveryUI")
 
 
 namespace svx
@@ -59,22 +59,22 @@ RecoveryUI::~RecoveryUI()
 }
 
 //===============================================
-::rtl::OUString SAL_CALL RecoveryUI::getImplementationName()
+OUString SAL_CALL RecoveryUI::getImplementationName()
     throw(css::uno::RuntimeException)
 {
     return RecoveryUI::st_getImplementationName();
 }
 
 //===============================================
-sal_Bool SAL_CALL RecoveryUI::supportsService(const ::rtl::OUString& sServiceName)
+sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
     throw(css::uno::RuntimeException)
 {
-    const css::uno::Sequence< ::rtl::OUString > lServices = RecoveryUI::st_getSupportedServiceNames();
+    const css::uno::Sequence< OUString > lServices = RecoveryUI::st_getSupportedServiceNames();
           sal_Int32                             c         = lServices.getLength();
           sal_Int32                             i         = 0;
     for (i=0; i<c; ++i)
     {
-        const ::rtl::OUString& sSupportedService = lServices[i];
+        const OUString& sSupportedService = lServices[i];
         if (sSupportedService.equals(sServiceName))
             return sal_True;
     }
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL RecoveryUI::supportsService(const ::rtl::OUString& sServiceNam
 }
 
 //===============================================
-css::uno::Sequence< ::rtl::OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
     return RecoveryUI::st_getSupportedServiceNames();
@@ -150,15 +150,15 @@ void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::f
 }
 
 //===============================================
-::rtl::OUString RecoveryUI::st_getImplementationName()
+OUString RecoveryUI::st_getImplementationName()
 {
-    return ::rtl::OUString(IMPLEMENTATIONNAME_RECOVERYUI);
+    return OUString(IMPLEMENTATIONNAME_RECOVERYUI);
 }
 
 //===============================================
-css::uno::Sequence< ::rtl::OUString > RecoveryUI::st_getSupportedServiceNames()
+css::uno::Sequence< OUString > RecoveryUI::st_getSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > lServiceNames(1);    lServiceNames.getArray() [0] = SERVICENAME_RECOVERYUI;
+    css::uno::Sequence< OUString > lServiceNames(1);    lServiceNames.getArray() [0] = SERVICENAME_RECOVERYUI;
     return lServiceNames;
 }
 
@@ -276,9 +276,9 @@ void RecoveryUI::impl_doRecovery()
 {
     sal_Bool bRecoveryOnly( sal_False );
 
-    ::rtl::OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/");
-    ::rtl::OUString CFG_PATH_CRASHREPORTER(  "CrashReporter" );
-    ::rtl::OUString CFG_ENTRY_ENABLED( "Enabled" );
+    OUString CFG_PACKAGE_RECOVERY( "org.openoffice.Office.Recovery/");
+    OUString CFG_PATH_CRASHREPORTER(  "CrashReporter" );
+    OUString CFG_ENTRY_ENABLED( "Enabled" );
 
     sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(

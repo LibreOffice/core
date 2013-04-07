@@ -63,10 +63,10 @@ XFSvgPathEntry::XFSvgPathEntry()
 {
 }
 
-rtl::OUString XFSvgPathEntry::ToString()
+OUString XFSvgPathEntry::ToString()
 {
     assert(!m_strCommand.isEmpty());
-    rtl::OUString str = m_strCommand;
+    OUString str = m_strCommand;
     std::vector<XFPoint>::iterator it;
 
     for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
@@ -140,13 +140,13 @@ void    XFDrawPath::ToXml(IXFStream *pStrm)
     //view-box:
     XFRect  rect = m_aRect;
 
-    rtl::OUString strViewBox = A2OUSTR("0 0 ");
+    OUString strViewBox = A2OUSTR("0 0 ");
     strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
     strViewBox += DoubleToOUString(rect.GetHeight()*1000);
     pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
 
     //points
-    rtl::OUString   strPath;
+    OUString   strPath;
     std::vector<XFSvgPathEntry>::iterator it;
     for( it = m_aPaths.begin(); it != m_aPaths.end(); ++it )
     {

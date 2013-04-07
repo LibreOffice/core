@@ -53,7 +53,6 @@ using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
 namespace dp_registry {
 namespace backend {
@@ -222,7 +221,7 @@ BackendImpl::BackendImpl(
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<PersistentMap> pMap;
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        rtl::OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
+        OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
 
         // Don't create it if it doesn't exist already
         if ( ::utl::UCBContentHelper::Exists( expandUnoRcUrl( aCompatURL ) ) )
@@ -235,7 +234,7 @@ BackendImpl::BackendImpl(
             }
             catch (const Exception &e)
             {
-                rtl::OUStringBuffer aStr( "Exception loading legacy package database: '" );
+                OUStringBuffer aStr( "Exception loading legacy package database: '" );
                 aStr.append( e.Message );
                 aStr.append( "' - ignoring file, please remove it.\n" );
                 dp_misc::writeConsole( aStr.getStr() );
@@ -427,7 +426,7 @@ void BackendImpl::configmgrini_flush(
     if (!m_configmgrini_inited || !m_configmgrini_modified)
         return;
 
-    ::rtl::OStringBuffer buf;
+    OStringBuffer buf;
     if (! m_xcs_files.empty())
     {
         t_stringlist::const_iterator iPos( m_xcs_files.begin() );
@@ -435,8 +434,8 @@ void BackendImpl::configmgrini_flush(
         buf.append( "SCHEMA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
-            const ::rtl::OString item(
-                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
             buf.append( item );
             ++iPos;
             if (iPos != iEnd)
@@ -451,8 +450,8 @@ void BackendImpl::configmgrini_flush(
         buf.append( "DATA=" );
         while (iPos != iEnd) {
             // encoded ASCII file-urls:
-            const ::rtl::OString item(
-                ::rtl::OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
+            const OString item(
+                OUStringToOString( *iPos, RTL_TEXTENCODING_ASCII_US ) );
             buf.append( item );
             ++iPos;
             if (iPos != iEnd)
@@ -549,7 +548,7 @@ BackendImpl::PackageImpl::isRegistered_(
     Reference<XCommandEnvironment> const & )
 {
     BackendImpl * that = getMyBackend();
-    const rtl::OUString url(getURL());
+    const OUString url(getURL());
 
     bool bReg = false;
     if (that->hasActiveEntry(getURL()))
@@ -560,7 +559,7 @@ BackendImpl::PackageImpl::isRegistered_(
     {
         // fallback for user extension registered in berkeley DB
         bReg = that->m_registeredPackages->has(
-            rtl::OUStringToOString( url, RTL_TEXTENCODING_UTF8 ));
+            OUStringToOString( url, RTL_TEXTENCODING_UTF8 ));
     }
 #endif
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
@@ -572,7 +571,7 @@ OUString encodeForXml( OUString const & text )
 {
     // encode conforming xml:
     sal_Int32 len = text.getLength();
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     for ( sal_Int32 pos = 0; pos < len; ++pos )
     {
         sal_Unicode c = text[ pos ];
@@ -610,7 +609,7 @@ OUString replaceOrigin(
     ::rtl::ByteSequence filtered( bytes.getLength() * 2,
                                   ::rtl::BYTESEQ_NODEFAULT );
     bool use_filtered = false;
-    ::rtl::OString origin;
+    OString origin;
     sal_Char const * pBytes = reinterpret_cast<sal_Char const *>(
         bytes.getConstArray());
     sal_Size nBytes = bytes.getLength();
@@ -653,7 +652,7 @@ OUString replaceOrigin(
         {
             if (origin.isEmpty()) {
                 // encode only once
-                origin = ::rtl::OUStringToOString(
+                origin = OUStringToOString(
                     encodeForXml( url.copy( 0, url.lastIndexOf( '/' ) ) ),
                     // xxx todo: encode always for UTF-8? => lookup doc-header?
                     RTL_TEXTENCODING_UTF8 );
@@ -673,7 +672,7 @@ OUString replaceOrigin(
         return url;
     if (write_pos < filtered.getLength())
         filtered.realloc( write_pos );
-    rtl::OUString newUrl(url);
+    OUString newUrl(url);
     if (!destFolder.isEmpty())
     {
         //get the file name of the xcu and add it to the url of the temporary folder
@@ -758,8 +757,8 @@ void BackendImpl::PackageImpl::processPackage_(
                 //structur containing the xcu, xcs files from all extensions. Now,
                 //we just add all other xcu/xcs files to the configmgr.ini instead of
                 //rebuilding the directory structure.
-                rtl::OUString url2(
-                    rtl::OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
+                OUString url2(
+                    OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
                 if (url2 != url) {
                    bool schema = i->second.equalsIgnoreAsciiCase(
                        "vnd.sun.star.configuration-schema");

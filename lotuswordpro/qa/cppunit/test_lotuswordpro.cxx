@@ -47,8 +47,8 @@ namespace
 
         virtual void setUp();
 
-        virtual bool load(const rtl::OUString &,
-            const rtl::OUString &rURL, const rtl::OUString &,
+        virtual bool load(const OUString &,
+            const OUString &rURL, const OUString &,
             unsigned int, unsigned int, unsigned int);
 
         void test();
@@ -69,8 +69,8 @@ namespace
             uno::UNO_QUERY_THROW);
     }
 
-    bool LotusWordProTest::load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    bool LotusWordProTest::load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int)
     {
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
@@ -81,9 +81,9 @@ namespace
 
     void LotusWordProTest::test()
     {
-        testDir(rtl::OUString(),
+        testDir(OUString(),
             getURLFromSrc("/lotuswordpro/qa/cppunit/data/"),
-            rtl::OUString());
+            OUString());
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(LotusWordProTest);

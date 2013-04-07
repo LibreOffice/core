@@ -38,15 +38,15 @@ namespace {
 
 void process_headers( ne_request * req,
                       DAVResource & rResource,
-                      const std::vector< ::rtl::OUString > & rHeaderNames )
+                      const std::vector< OUString > & rHeaderNames )
 {
     void * cursor = NULL;
     const char * name, *value;
 
     while ( ( cursor = ne_response_header_iterate( req, cursor,
                                                    &name, &value ) ) != NULL ) {
-        rtl::OUString aHeaderName( rtl::OUString::createFromAscii( name ) );
-        rtl::OUString aHeaderValue( rtl::OUString::createFromAscii( value ) );
+        OUString aHeaderName( OUString::createFromAscii( name ) );
+        OUString aHeaderValue( OUString::createFromAscii( value ) );
 
         // Note: Empty vector means that all headers are requested.
         bool bIncludeIt = ( rHeaderNames.empty() );
@@ -54,9 +54,9 @@ void process_headers( ne_request * req,
         if ( !bIncludeIt )
         {
             // Check whether this header was requested.
-            std::vector< ::rtl::OUString >::const_iterator it(
+            std::vector< OUString >::const_iterator it(
                 rHeaderNames.begin() );
-            const std::vector< ::rtl::OUString >::const_iterator end(
+            const std::vector< OUString >::const_iterator end(
                 rHeaderNames.end() );
 
             while ( it != end )
@@ -90,8 +90,8 @@ void process_headers( ne_request * req,
 extern osl::Mutex aGlobalNeonMutex;
 
 NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
-                                  const rtl::OUString & inPath,
-                                  const std::vector< ::rtl::OUString > &
+                                  const OUString & inPath,
+                                  const std::vector< OUString > &
                                     inHeaderNames,
                                   DAVResource & ioResource,
                                   int & nError )
@@ -103,7 +103,7 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
     // header fields.
     ne_request * req = ne_request_create( inSession,
                                           "HEAD",
-                                          rtl::OUStringToOString(
+                                          OUStringToOString(
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ).getStr() );
 

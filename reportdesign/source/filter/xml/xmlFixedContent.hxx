@@ -29,15 +29,15 @@ namespace rptxml
     class OXMLCell;
     class OXMLFixedContent : public OXMLReportElementBase
     {
-        ::rtl::OUString     m_sPageText; // page count and page number
-        ::rtl::OUString     m_sLabel;
+        OUString     m_sPageText; // page count and page number
+        OUString     m_sLabel;
         OXMLCell&           m_rCell;
         OXMLFixedContent*   m_pInP; // if set than we are in text-p element
         bool                m_bFormattedField;
 
     protected:
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     private:
         OXMLFixedContent(const OXMLFixedContent&);
@@ -45,7 +45,7 @@ namespace rptxml
     public:
 
         OXMLFixedContent( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName
+                    const OUString& rLName
                     ,OXMLCell& _rCell
                     ,OXMLTable* _pContainer
                     ,OXMLFixedContent* _pInP = NULL);
@@ -53,7 +53,7 @@ namespace rptxml
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.
-        virtual void Characters( const ::rtl::OUString& rChars );
+        virtual void Characters( const OUString& rChars );
 
         virtual void EndElement();
     };

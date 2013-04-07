@@ -28,7 +28,7 @@
 using namespace ::svxform;
 
 //-----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
     if ( ServiceSpecifier.indexOf( "com.sun.star.form.component." ) == 0 )
@@ -46,15 +46,15 @@ using namespace ::svxform;
 }
 
 //-----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL  SvxFmMSFactory::createInstanceWithArguments(const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL  SvxFmMSFactory::createInstanceWithArguments(const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     return SvxUnoDrawMSFactory::createInstanceWithArguments(ServiceSpecifier, Arguments );
 }
 
 //-----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    static const ::rtl::OUString aSvxComponentServiceNameList[] =
+    static const OUString aSvxComponentServiceNameList[] =
     {
         FM_SUN_COMPONENT_TEXTFIELD,
         FM_SUN_COMPONENT_FORM,
@@ -79,12 +79,12 @@ using namespace ::svxform;
 
     static const sal_uInt16 nSvxComponentServiceNameListCount = sizeof(aSvxComponentServiceNameList) / sizeof ( aSvxComponentServiceNameList[0] );
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq( nSvxComponentServiceNameListCount );
-    ::rtl::OUString* pStrings = aSeq.getArray();
+    ::com::sun::star::uno::Sequence< OUString > aSeq( nSvxComponentServiceNameListCount );
+    OUString* pStrings = aSeq.getArray();
     for( sal_uInt16 nIdx = 0; nIdx < nSvxComponentServiceNameListCount; nIdx++ )
         pStrings[nIdx] = aSvxComponentServiceNameList[nIdx];
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
+    ::com::sun::star::uno::Sequence< OUString > aParentSeq( SvxUnoDrawMSFactory::getAvailableServiceNames() );
     return concatServiceNames( aParentSeq, aSeq );
 }
 

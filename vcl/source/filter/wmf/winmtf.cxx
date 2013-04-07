@@ -283,7 +283,7 @@ void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
     {
         if ( ( nAssertCount == 0 ) || ( bOnlyOnce == sal_False ) )
         {
-            rtl::OStringBuffer aText("WMF/EMF Import: ");
+            OStringBuffer aText("WMF/EMF Import: ");
             if (pAction)
                 aText.append(pAction);
             aText.append(" needs to be implemented");
@@ -321,7 +321,7 @@ WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, FilterConfigI
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }
@@ -1615,7 +1615,7 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
         if( pDXArry )
         {
             sal_uInt32 nLen = rText.Len();
-            nTextWidth = aVDev.GetTextWidth( rtl::OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
+            nTextWidth = aVDev.GetTextWidth( OUString(rText.GetChar( (sal_uInt16)( nLen - 1 ) )) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
         }

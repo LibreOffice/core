@@ -31,9 +31,6 @@ using namespace osl;
 
 using jvmaccess::JavaInfo;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 #define JAVA_VERSION "1.4.1_01"
 

@@ -53,10 +53,10 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const = 0;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
-        virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
+        virtual OUString getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;
         virtual sal_Bool saveDatasource() = 0;
-        virtual void setTitle(const ::rtl::OUString& _sTitle) = 0;
+        virtual void setTitle(const OUString& _sTitle) = 0;
 
         /** enables or disables the user's possibility to confirm the settings
 

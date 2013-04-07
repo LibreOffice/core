@@ -48,7 +48,7 @@ namespace dbaui
 class OOdbcLibWrapper
 {
     oslModule           m_pOdbcLib;     // the library handle
-    ::rtl::OUString     m_sLibPath;     // the path to the library
+    OUString     m_sLibPath;     // the path to the library
 
 public:
 #ifdef HAVE_ODBC_SUPPORT
@@ -56,7 +56,7 @@ public:
 #else
     sal_Bool    isLoaded() const { return sal_False; }
 #endif
-    ::rtl::OUString getLibraryName() const { return m_sLibPath; }
+    OUString getLibraryName() const { return m_sLibPath; }
 
 protected:
 #ifndef HAVE_ODBC_SUPPORT

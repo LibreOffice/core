@@ -153,7 +153,7 @@ StringSequence  OEditControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_TEXTFIELD;
     return aSupported;
 }
@@ -180,7 +180,7 @@ void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
     {
-        ::rtl::OUString sNewHtmlChangeValue;
+        OUString sNewHtmlChangeValue;
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= sNewHtmlChangeValue;
         if( sNewHtmlChangeValue != m_aHtmlChangeValue )
         {
@@ -217,7 +217,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
         return;
 
     aTmp = xFormSet->getPropertyValue( PROPERTY_TARGET_URL );
-    if (!aTmp.getValueType().equals(::getCppuType((const ::rtl::OUString*)NULL)) ||
+    if (!aTmp.getValueType().equals(::getCppuType((const OUString*)NULL)) ||
         getString(aTmp).isEmpty() )
         return;
 
@@ -338,7 +338,7 @@ void OEditModel::disposing()
 
 // XPersistObject
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_EDIT;  // old (non-sun) name for compatibility !
 }
@@ -351,7 +351,7 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -388,7 +388,7 @@ void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
         DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
-        DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
+        DECL_PROP2(DEFAULT_TEXT,        OUString,        BOUND, MAYBEDEFAULT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
@@ -477,13 +477,13 @@ namespace
                 catch(const IllegalArgumentException& e)
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OString sMessage( "could not transfer the property named '" );
-                    sMessage += ::rtl::OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    sMessage += ::rtl::OString( "'." );
+                    OString sMessage( "could not transfer the property named '" );
+                    sMessage += OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sMessage += OString( "'." );
                     if ( !e.Message.isEmpty() )
                     {
-                        sMessage += ::rtl::OString( "\n\nMessage:\n" );
-                        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+                        sMessage += OString( "\n\nMessage:\n" );
+                        sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
                     }
                     OSL_FAIL( sMessage.getStr() );
 #else
@@ -508,7 +508,7 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext().createComponent( (rtl::OUString)VCL_CONTROLMODEL_EDIT ),
+        getContext().createComponent( (OUString)VCL_CONTROLMODEL_EDIT ),
         UNO_QUERY
     );
     OSL_ENSURE( xFakedAggregate.is(), "OEditModel::writeAggregate: could not create an old EditControlModel!" );
@@ -530,7 +530,7 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     // but for compatibility, we need to use an "old" aggregate for writing and reading
 
     Reference< XPropertySet > xFakedAggregate(
-        getContext().createComponent( (rtl::OUString)VCL_CONTROLMODEL_EDIT ),
+        getContext().createComponent( (OUString)VCL_CONTROLMODEL_EDIT ),
         UNO_QUERY
     );
     Reference< XPersistObject > xFakedPersist( xFakedAggregate, UNO_QUERY );
@@ -567,7 +567,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
         // we aren't changing the prop (it didn't notify the - implicite - change of the text prop while setting the max text len)
         // This seems to be a bug with in toolkit's EditControl-implementation.
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(::rtl::OUString()));
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(OUString()));
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, aCurrentText);
     }
 }
@@ -587,7 +587,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
             &&  (getString(aDefaultControl) == STARDIV_ONE_FORM_CONTROL_TEXTFIELD )
             )
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (::rtl::OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
             // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
             // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
         }
@@ -619,7 +619,7 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
             if ( !m_bMaxTextLenModified )
             {
                 sal_Int32 nFieldLen = 0;
-                xField->getPropertyValue(::rtl::OUString("Precision") ) >>= nFieldLen;
+                xField->getPropertyValue(OUString("Precision") ) >>= nFieldLen;
 
                 if (nFieldLen && nFieldLen <= USHRT_MAX)
                 {
@@ -673,7 +673,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
 
-    ::rtl::OUString sNewValue;
+    OUString sNewValue;
     aNewValue >>= sNewValue;
 
     if  (   !aNewValue.hasValue()
@@ -713,7 +713,7 @@ Any OEditModel::translateDbColumnToControlValue()
     Any aRet;
     if ( m_pValueFormatter.get() )
     {
-        ::rtl::OUString sValue( m_pValueFormatter->getFormattedValue() );
+        OUString sValue( m_pValueFormatter->getFormattedValue() );
         if  (   sValue.isEmpty()
             &&  m_pValueFormatter->getColumn().is()
             &&  m_pValueFormatter->getColumn()->wasNull()
@@ -727,14 +727,14 @@ Any OEditModel::translateDbColumnToControlValue()
             if ( nMaxTextLen && sValue.getLength() > nMaxTextLen )
             {
                 sal_Int32 nDiff = sValue.getLength() - nMaxTextLen;
-                sValue = sValue.replaceAt( nMaxTextLen, nDiff, ::rtl::OUString() );
+                sValue = sValue.replaceAt( nMaxTextLen, nDiff, OUString() );
             }
 
             aRet <<= sValue;
         }
     }
 
-    return aRet.hasValue() ? aRet : makeAny( ::rtl::OUString() );
+    return aRet.hasValue() ? aRet : makeAny( OUString() );
 }
 
 //------------------------------------------------------------------------------

@@ -53,7 +53,6 @@
 #include "pres.hxx"
 #include "slidelayoutcontroller.hxx"
 
-using rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -66,7 +65,7 @@ using namespace ::com::sun::star::beans;
 namespace sd
 {
 
-extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
+extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
 // -----------------------------------------------------------------------
 
@@ -363,7 +362,7 @@ Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Ref
 // class SlideLayoutController
 //========================================================================
 
-SlideLayoutController::SlideLayoutController( const Reference< lang::XMultiServiceFactory >& rServiceManager, const rtl::OUString& sCommandURL, bool bInsertPage )
+SlideLayoutController::SlideLayoutController( const Reference< lang::XMultiServiceFactory >& rServiceManager, const OUString& sCommandURL, bool bInsertPage )
 : svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), sCommandURL )
 , mbInsertPage( bInsertPage )
 {

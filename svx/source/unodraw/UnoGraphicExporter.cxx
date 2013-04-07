@@ -72,7 +72,6 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -158,7 +157,7 @@ namespace svx
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
         // XMimeTypeInfo
-        virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
+        virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
         VirtualDevice* CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
@@ -585,7 +584,7 @@ void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescripto
     // putting the StatusIndicator that we got from the MediaDescriptor into our local FilterData copy
     if ( rSettings.mxStatusIndicator.is() )
     {
-        rtl::OUString sStatusIndicator( "StatusIndicator" );
+        OUString sStatusIndicator( "StatusIndicator" );
         int i = rSettings.maFilterData.getLength();
         rSettings.maFilterData.realloc( i + 1 );
         rSettings.maFilterData[ i ].Name = sStatusIndicator;

@@ -159,7 +159,7 @@ void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rx
 //------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection ) throw(SQLException)
 {
-    Sequence< ::rtl::OUString > sTables, sViews;
+    Sequence< OUString > sTables, sViews;
 
     String sCurrentActionError;
     try
@@ -204,16 +204,16 @@ namespace
 {
     struct OViewSetter : public ::std::unary_function< OTableTreeListBox::TNames::value_type, bool>
     {
-        const Sequence< ::rtl::OUString> m_aViews;
+        const Sequence< OUString> m_aViews;
         ::comphelper::TStringMixEqualFunctor m_aEqualFunctor;
 
-        OViewSetter(const Sequence< ::rtl::OUString>& _rViews,sal_Bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
-        OTableTreeListBox::TNames::value_type operator() (const ::rtl::OUString& lhs)
+        OViewSetter(const Sequence< OUString>& _rViews,sal_Bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
+        OTableTreeListBox::TNames::value_type operator() (const OUString& lhs)
         {
             OTableTreeListBox::TNames::value_type aRet;
             aRet.first = lhs;
-            const ::rtl::OUString* pIter = m_aViews.getConstArray();
-            const ::rtl::OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
+            const OUString* pIter = m_aViews.getConstArray();
+            const OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
             aRet.second = (::std::find_if(pIter,pEnd,::std::bind2nd(m_aEqualFunctor,lhs)) != pEnd);
 
             return aRet;
@@ -224,14 +224,14 @@ namespace
 // -----------------------------------------------------------------------------
 void OTableTreeListBox::UpdateTableList(
                 const Reference< XConnection >& _rxConnection,
-                const Sequence< ::rtl::OUString>& _rTables,
-                const Sequence< ::rtl::OUString>& _rViews
+                const Sequence< OUString>& _rTables,
+                const Sequence< OUString>& _rViews
             )
 {
     TNames aTables;
     aTables.resize(_rTables.getLength());
-    const ::rtl::OUString* pIter = _rTables.getConstArray();
-    const ::rtl::OUString* pEnd = _rTables.getConstArray() + _rTables.getLength();
+    const OUString* pIter = _rTables.getConstArray();
+    const OUString* pEnd = _rTables.getConstArray() + _rTables.getLength();
     try
     {
         Reference< XDatabaseMetaData > xMeta( _rxConnection->getMetaData(), UNO_QUERY_THROW );
@@ -248,9 +248,9 @@ void OTableTreeListBox::UpdateTableList(
 //------------------------------------------------------------------------
 namespace
 {
-    ::std::vector< ::rtl::OUString > lcl_getMetaDataStrings_throw( const Reference< XResultSet >& _rxMetaDataResult, sal_Int32 _nColumnIndex )
+    ::std::vector< OUString > lcl_getMetaDataStrings_throw( const Reference< XResultSet >& _rxMetaDataResult, sal_Int32 _nColumnIndex )
     {
-        ::std::vector< ::rtl::OUString > aStrings;
+        ::std::vector< OUString > aStrings;
         Reference< XRow > xRow( _rxMetaDataResult, UNO_QUERY_THROW );
         while ( _rxMetaDataResult->next() )
             aStrings.push_back( xRow->getString( _nColumnIndex ) );
@@ -322,12 +322,12 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                 // implAddEntry)
                 bool bCatalogs = bSupportsCatalogs && xMeta->isCatalogAtStart();
 
-                ::std::vector< ::rtl::OUString > aFolderNames( lcl_getMetaDataStrings_throw(
+                ::std::vector< OUString > aFolderNames( lcl_getMetaDataStrings_throw(
                     bCatalogs ? xMeta->getCatalogs() : xMeta->getSchemas(), 1 ) );
                 sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
 
                 SvTreeListEntry* pRootEntry = getAllObjectsEntry();
-                for (   ::std::vector< ::rtl::OUString >::const_iterator folder = aFolderNames.begin();
+                for (   ::std::vector< OUString >::const_iterator folder = aFolderNames.begin();
                         folder != aFolderNames.end();
                         ++folder
                     )
@@ -439,7 +439,7 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
 //------------------------------------------------------------------------
 SvTreeListEntry* OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
-        const ::rtl::OUString& _rTableName,
+        const OUString& _rTableName,
         sal_Bool _bCheckName
     )
 {
@@ -448,7 +448,7 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
         return NULL;
 
     // split the complete name into it's components
-    ::rtl::OUString sCatalog, sSchema, sName;
+    OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
 
     SvTreeListEntry* pParentEntry = getAllObjectsEntry();
@@ -462,9 +462,9 @@ SvTreeListEntry* OTableTreeListBox::implAddEntry(
     //   +- catalog
     //      +- table
     sal_Bool bCatalogAtStart = _rxMeta->isCatalogAtStart();
-    const ::rtl::OUString& rFirstName  = bCatalogAtStart ? sCatalog : sSchema;
+    const OUString& rFirstName  = bCatalogAtStart ? sCatalog : sSchema;
     const sal_Int32 nFirstFolderType   = bCatalogAtStart ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
-    const ::rtl::OUString& rSecondName = bCatalogAtStart ? sSchema : sCatalog;
+    const OUString& rSecondName = bCatalogAtStart ? sSchema : sCatalog;
     const sal_Int32 nSecondFolderType  = bCatalogAtStart ? DatabaseObjectContainer::SCHEMA : DatabaseObjectContainer::CATALOG;
 
     if ( !rFirstName.isEmpty() )
@@ -515,7 +515,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
         SvTreeListEntry* pParent = GetParent( _pEntry );
         sal_Int32 nParentEntryType = pParent ? reinterpret_cast< sal_IntPtr >( pParent->GetUserData() ) : -1;
 
-        ::rtl::OUStringBuffer buffer;
+        OUStringBuffer buffer;
         if  ( nEntryType == DatabaseObjectContainer::CATALOG )
         {
             if ( nParentEntryType == DatabaseObjectContainer::SCHEMA )
@@ -545,7 +545,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry 
 }
 
 //------------------------------------------------------------------------
-SvTreeListEntry* OTableTreeListBox::addedTable( const ::rtl::OUString& _rName )
+SvTreeListEntry* OTableTreeListBox::addedTable( const OUString& _rName )
 {
     try
     {
@@ -580,9 +580,9 @@ String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) cons
         if ( !impl_getAndAssertMetaData( xMeta ) )
             return String();
 
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sSchema;
-        ::rtl::OUString sTable;
+        OUString sCatalog;
+        OUString sSchema;
+        OUString sTable;
 
         SvTreeListEntry* pSchema = GetParent( _pEntry );
         if ( pSchema )
@@ -616,7 +616,7 @@ String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) cons
 }
 
 //------------------------------------------------------------------------
-SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& _rName )
+SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const OUString& _rName )
 {
     try
     {
@@ -625,7 +625,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUStri
             return NULL;
 
         // split the complete name into it's components
-        ::rtl::OUString sCatalog, sSchema, sName;
+        OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 
         SvTreeListEntry* pParent = getAllObjectsEntry();
@@ -654,7 +654,7 @@ SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUStri
     return NULL;
 }
 //------------------------------------------------------------------------
-void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
+void OTableTreeListBox::removedTable( const OUString& _rName )
 {
     try
     {

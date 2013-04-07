@@ -43,7 +43,6 @@ const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDoc
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 using lang::IndexOutOfBoundsException;
 

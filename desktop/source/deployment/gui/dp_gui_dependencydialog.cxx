@@ -37,7 +37,7 @@ class Window;
 using dp_gui::DependencyDialog;
 
 DependencyDialog::DependencyDialog(
-    Window * parent, std::vector< rtl::OUString > const & dependencies):
+    Window * parent, std::vector< OUString > const & dependencies):
     ModalDialog(parent, DpGuiResId(RID_DLG_DEPENDENCIES) ),
     m_text(this, DpGuiResId(RID_DLG_DEPENDENCIES_TEXT)),
     m_list(this, DpGuiResId(RID_DLG_DEPENDENCIES_LIST)),
@@ -49,7 +49,7 @@ DependencyDialog::DependencyDialog(
     FreeResource();
     SetMinOutputSizePixel(GetOutputSizePixel());
     m_list.SetReadOnly();
-    for (std::vector< rtl::OUString >::const_iterator i(dependencies.begin());
+    for (std::vector< OUString >::const_iterator i(dependencies.begin());
          i != dependencies.end(); ++i)
     {
         m_list.InsertEntry(*i);

@@ -32,7 +32,6 @@
 
 using namespace ::com::sun::star::uno;
 using ::test::java_uno::anytest::XTransport;
-using ::rtl::OUString;
 
 namespace
 {

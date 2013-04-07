@@ -80,9 +80,9 @@ namespace dbaccess
     }
 
 // -----------------------------------------------------------------------------
-    ::rtl::OUString extractExceptionMessage( const Reference<XComponentContext> & _rContext, const Any& _rError )
+    OUString extractExceptionMessage( const Reference<XComponentContext> & _rContext, const Any& _rError )
     {
-        ::rtl::OUString sDisplayMessage;
+        OUString sDisplayMessage;
 
         try
         {
@@ -91,7 +91,7 @@ namespace dbaccess
             ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
             ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
             pRequest->addContinuation( pApprove.get() );
-            Optional< ::rtl::OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
+            Optional< OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
             if ( aMessage.IsPresent )
                 sDisplayMessage = aMessage.Value;
         }
@@ -105,7 +105,7 @@ namespace dbaccess
             Exception aExcept;
             _rError >>= aExcept;
 
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.append( _rError.getValueTypeName() );
             aBuffer.appendAscii( ":\n" );
             aBuffer.append( aExcept.Message );

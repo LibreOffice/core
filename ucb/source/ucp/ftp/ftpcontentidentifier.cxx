@@ -33,7 +33,7 @@ using namespace com::sun::star::lang;
 
 
 FTPContentIdentifier::FTPContentIdentifier(
-    const rtl::OUString& ident
+    const OUString& ident
 )
     : m_ident(ident)
 {
@@ -112,7 +112,7 @@ FTPContentIdentifier::getTypes(
 }
 
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 FTPContentIdentifier::getContentIdentifier(
 )
     throw (
@@ -123,14 +123,14 @@ FTPContentIdentifier::getContentIdentifier(
 }
 
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 FTPContentIdentifier::getContentProviderScheme(
 )
     throw (
         com::sun::star::uno::RuntimeException
     )
 {
-    return rtl::OUString("ftp");
+    return OUString("ftp");
 }
 
 

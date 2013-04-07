@@ -244,27 +244,27 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
     return xInst;
 }
 
-rtl::OUString ScFunctionAccess::getImplementationName_Static()
+OUString ScFunctionAccess::getImplementationName_Static()
 {
-    return rtl::OUString( "stardiv.StarCalc.ScFunctionAccess" );
+    return OUString( "stardiv.StarCalc.ScFunctionAccess" );
 }
 
-uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
+uno::Sequence<OUString> ScFunctionAccess::getSupportedServiceNames_Static()
 {
-    uno::Sequence<rtl::OUString> aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
+    uno::Sequence<OUString> aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
     return aRet;
 }
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScFunctionAccess");
+    return OUString( "ScFunctionAccess");
 }
 
-sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr(rServiceName);
@@ -272,13 +272,13 @@ sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServi
            aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCSETTINGS_SERVICE ));
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONACCESS_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCDOCSETTINGS_SERVICE ));
     return aRet;
 }
 
@@ -294,7 +294,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySe
 }
 
 void SAL_CALL ScFunctionAccess::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -319,7 +319,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -340,10 +340,10 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
+static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
-    rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
+    OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
 
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name
@@ -365,7 +365,7 @@ static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString&
 
     // 3. new (uno) add in functions
 
-    rtl::OUString aIntName =
+    OUString aIntName =
         ScGlobal::GetAddInCollection()->FindFunction(aUpper, false);
     if (!aIntName.isEmpty())
     {
@@ -398,7 +398,7 @@ public:
     SimpleVisitor( ScDocument* pDoc ) : mbArgError( false ), mpDoc( pDoc ) {}
     // could possibly just get away with JUST the following overload
     // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
-    // 2) virtual void visitElem( long& nCol, long& nRow, const rtl::OUString& elem )
+    // 2) virtual void visitElem( long& nCol, long& nRow, const OUString& elem )
     // 3) virtual void visitElem( long& nCol, long& nRow, const uno::Any& elem )
     // the other types methods are here just to reflect the orig code and for
     // completeness.
@@ -415,7 +415,7 @@ public:
     {
         mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
     }
-    void visitElem( long nCol, long nRow, const rtl::OUString& elem )
+    void visitElem( long nCol, long nRow, const OUString& elem )
     {
         if (!elem.isEmpty())
         {
@@ -447,7 +447,7 @@ public:
         }
         else if ( eElemClass == uno::TypeClass_STRING )
         {
-            rtl::OUString aUStr;
+            OUString aUStr;
             rElement >>= aUStr;
             visitElem( nCol, nRow, aUStr );
         }
@@ -517,7 +517,7 @@ static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArr
 }
 };
 
-uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
+uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                             const uno::Sequence<uno::Any>& aArguments )
                 throw(container::NoSuchElementException, lang::IllegalArgumentException,
                         uno::RuntimeException)
@@ -597,7 +597,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         }
         else if ( eClass == uno::TypeClass_STRING )
         {
-            rtl::OUString aUStr;
+            OUString aUStr;
             rArg >>= aUStr;
             String aStr( aUStr );
             aTokenArr.AddString( aStr.GetBuffer() );
@@ -614,9 +614,9 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         {
             ArrayOfArrayProc<double>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<rtl::OUString> > *)0 ) ) )
+        else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<OUString> > *)0 ) ) )
         {
-            ArrayOfArrayProc<rtl::OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
+            ArrayOfArrayProc<OUString>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
         else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<uno::Any> > *)0 ) ) )
         {
@@ -699,7 +699,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
             else
             {
                 // string result
-                rtl::OUString aStrVal = pFormula->GetString();
+                OUString aStrVal = pFormula->GetString();
                 aRet <<= aStrVal;
             }
         }

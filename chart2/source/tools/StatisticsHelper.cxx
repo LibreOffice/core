@@ -33,8 +33,6 @@
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 
 namespace

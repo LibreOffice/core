@@ -42,18 +42,18 @@ class SC_DLLPUBLIC ScLinkConfigItem : public utl::ConfigItem
     Link    aCommitLink;
 
 public:
-            ScLinkConfigItem( const rtl::OUString& rSubTree );
-            ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode );
+            ScLinkConfigItem( const OUString& rSubTree );
+            ScLinkConfigItem( const OUString& rSubTree, sal_Int16 nMode );
     void    SetCommitLink( const Link& rLink );
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
     virtual void    Commit();
 
     void    SetModified()   { ConfigItem::SetModified(); }
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-            GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+            GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
-    sal_Bool PutProperties( const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+    sal_Bool PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
                             const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues)
                             { return ConfigItem::PutProperties( rNames, rValues ); }
 

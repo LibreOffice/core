@@ -340,7 +340,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
                 case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
             }
-            pOLV->InsertText( rtl::OUString(cIns));
+            pOLV->InsertText( OUString(cIns));
             rReq.Done();
             break;
         }
@@ -1128,7 +1128,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -1138,7 +1138,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString("ParentWindow");
+                            aParam.Name = OUString("ParentWindow");
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -1454,7 +1454,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
             {
                 if( pUndoManager )
                 {
-                    rtl::OUString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
+                    OUString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )

@@ -470,13 +470,13 @@ static bool AddLocalTempFontDirs( void )
 
     // add private font files
 
-    rtl::OUString aBrandStr( "$BRAND_BASE_DIR" );
+    OUString aBrandStr( "$BRAND_BASE_DIR" );
     rtl_bootstrap_expandMacros( &aBrandStr.pData );
-    rtl::OUString aBrandSysPath;
+    OUString aBrandSysPath;
     OSL_VERIFY( osl_getSystemPathFromFileURL( aBrandStr.pData, &aBrandSysPath.pData ) == osl_File_E_None );
 
-    rtl::OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
-    aBrandFontDir.append( rtl::OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
+    OStringBuffer aBrandFontDir( aBrandSysPath.getLength()*2 );
+    aBrandFontDir.append( OUStringToOString( aBrandSysPath, RTL_TEXTENCODING_UTF8 ) );
     aBrandFontDir.append( "/share/fonts/truetype/" );
     return AddTempFontDir( aBrandFontDir.getStr() );
 }
@@ -513,14 +513,14 @@ void AquaSalGraphics::ClearDevFontCache()
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
-    const rtl::OUString& rFontFileURL, const rtl::OUString& /*rFontName*/ )
+    const OUString& rFontFileURL, const OUString& /*rFontName*/ )
 {
-    ::rtl::OUString aUSytemPath;
+    OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
     FSRef aNewRef;
     Boolean bIsDirectory = true;
-    ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
+    OString aCFileName = OUStringToOString( aUSytemPath, RTL_TEXTENCODING_UTF8 );
     OSStatus eStatus = FSPathMakeRef( (UInt8*)aCFileName.getStr(), &aNewRef, &bIsDirectory );
     DBG_ASSERT( (eStatus==noErr) && !bIsDirectory, "vcl AddTempDevFont() with invalid fontfile name!" );
     if( eStatus != noErr )
@@ -774,11 +774,11 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 
 #if OSL_DEBUG_LEVEL > 3
     fprintf( stderr, "SetFont to (\"%s\", \"%s\", fontid=%d) for (\"%s\" \"%s\" weight=%d, slant=%d size=%dx%d orientation=%d)\n",
-             ::rtl::OUStringToOString( pMacFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             ::rtl::OUStringToOString( pMacFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( pMacFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( pMacFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
              (int)nFontID,
-             ::rtl::OUStringToOString( pReqFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-             ::rtl::OUStringToOString( pReqFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( pReqFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+             OUStringToOString( pReqFont->GetStyleName(), RTL_TEXTENCODING_UTF8 ).getStr(),
              pReqFont->GetWeight(),
              pReqFont->GetSlant(),
              pReqFont->mnHeight,

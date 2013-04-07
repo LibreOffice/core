@@ -49,25 +49,25 @@ using css::system::XSimpleMailMessage;
 using css::system::SimpleMailClientFlags::NO_USER_INTERFACE;
 using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
-typedef std::vector<rtl::OUString> StringList_t;
+typedef std::vector<OUString> StringList_t;
 
-const rtl::OUString TO("--to");
-const rtl::OUString CC("--cc");
-const rtl::OUString BCC("--bcc");
-const rtl::OUString FROM("--from");
-const rtl::OUString SUBJECT("--subject");
-const rtl::OUString ATTACH("--attach");
-const rtl::OUString FLAG_MAPI_DIALOG("--mapi-dialog");
-const rtl::OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
+const OUString TO("--to");
+const OUString CC("--cc");
+const OUString BCC("--bcc");
+const OUString FROM("--from");
+const OUString SUBJECT("--subject");
+const OUString ATTACH("--attach");
+const OUString FLAG_MAPI_DIALOG("--mapi-dialog");
+const OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
 
 namespace /* private */
 {
     /** @internal
         look if an alternative program is configured
         which should be used as senddoc executable */
-    rtl::OUString getAlternativeSenddocUrl()
+    OUString getAlternativeSenddocUrl()
     {
-        rtl::OUString altSenddocUrl;
+        OUString altSenddocUrl;
         HKEY hkey;
         LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
         if (lret == ERROR_SUCCESS)
@@ -91,13 +91,13 @@ namespace /* private */
         the absolute file Url of the senddoc executable. In case
         of an error an empty string will be returned.
     */
-    rtl::OUString getSenddocUrl()
+    OUString getSenddocUrl()
     {
-        rtl::OUString senddocUrl = getAlternativeSenddocUrl();
+        OUString senddocUrl = getAlternativeSenddocUrl();
 
         if (senddocUrl.getLength() == 0)
         {
-            senddocUrl = rtl::OUString( "$BRAND_BASE_DIR/program/senddoc.exe");
+            senddocUrl = OUString( "$BRAND_BASE_DIR/program/senddoc.exe");
             rtl::Bootstrap::expandMacros(senddocUrl); //TODO: detect failure
         }
         return senddocUrl;
@@ -114,7 +114,7 @@ namespace /* private */
     */
     bool executeSenddoc(const StringList_t& rCommandArgs)
     {
-        rtl::OUString senddocUrl = getSenddocUrl();
+        OUString senddocUrl = getSenddocUrl();
         if (senddocUrl.getLength() == 0)
             return false;
 
@@ -122,7 +122,7 @@ namespace /* private */
         oslProcessError err = osl_Process_E_Unknown;
 
         /* for efficiency reasons we are using a 'bad' cast here
-        as a vector or rtl::OUStrings is nothing else than
+        as a vector or OUStrings is nothing else than
         an array of pointers to rtl_uString's */
         err = osl_executeProcess(
             senddocUrl.pData,
@@ -175,49 +175,49 @@ void CSmplMailClient::assembleCommandLine(
 {
     OSL_ENSURE(rCommandArgs.empty(), "Provided command argument buffer not empty");
 
-    rtl::OUString to = xSimpleMailMessage->getRecipient();
+    OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)
     {
         rCommandArgs.push_back(TO);
         rCommandArgs.push_back(to);
     }
 
-    Sequence<rtl::OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
+    Sequence<OUString> ccRecipients = xSimpleMailMessage->getCcRecipient();
     for (int i = 0; i < ccRecipients.getLength(); i++)
     {
         rCommandArgs.push_back(CC);
         rCommandArgs.push_back(ccRecipients[i]);
     }
 
-    Sequence<rtl::OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
+    Sequence<OUString> bccRecipients = xSimpleMailMessage->getBccRecipient();
     for (int i = 0; i < bccRecipients.getLength(); i++)
     {
         rCommandArgs.push_back(BCC);
         rCommandArgs.push_back(bccRecipients[i]);
     }
 
-    rtl::OUString from = xSimpleMailMessage->getOriginator();
+    OUString from = xSimpleMailMessage->getOriginator();
     if (from.getLength() > 0)
     {
         rCommandArgs.push_back(FROM);
         rCommandArgs.push_back(from);
     }
 
-    rtl::OUString subject = xSimpleMailMessage->getSubject();
+    OUString subject = xSimpleMailMessage->getSubject();
     if (subject.getLength() > 0)
     {
         rCommandArgs.push_back(SUBJECT);
         rCommandArgs.push_back(subject);
     }
 
-    Sequence<rtl::OUString> attachments = xSimpleMailMessage->getAttachement();
+    Sequence<OUString> attachments = xSimpleMailMessage->getAttachement();
     for (int i = 0; i < attachments.getLength(); i++)
     {
-        rtl::OUString sysPath;
+        OUString sysPath;
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(attachments[i], sysPath);
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
-                rtl::OUString("Invalid attachment file URL"),
+                OUString("Invalid attachment file URL"),
                 static_cast<XSimpleMailClient*>(this),
                 1);
 
@@ -243,7 +243,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
 
     if (!executeSenddoc(senddocParams))
         throw Exception(
-            rtl::OUString("Send email failed"),
+            OUString("Send email failed"),
             static_cast<XSimpleMailClient*>(this));
 }
 
@@ -252,7 +252,7 @@ void CSmplMailClient::validateParameter(
 {
     if (!xSimpleMailMessage.is())
         throw IllegalArgumentException(
-            rtl::OUString("Empty mail message reference"),
+            OUString("Empty mail message reference"),
             static_cast<XSimpleMailClient*>(this),
             1);
 
@@ -261,14 +261,14 @@ void CSmplMailClient::validateParameter(
     // check the flags, the allowed range is 0 - (2^n - 1)
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(
-            rtl::OUString("Invalid flag value"),
+            OUString("Invalid flag value"),
             static_cast<XSimpleMailClient*>(this),
             2);
 
     // check if a recipient is specified of the flags NO_USER_INTERFACE is specified
     if ((aFlag & NO_USER_INTERFACE) && !xSimpleMailMessage->getRecipient().getLength())
         throw IllegalArgumentException(
-            rtl::OUString("No recipient specified"),
+            OUString("No recipient specified"),
             static_cast<XSimpleMailClient*>(this),
             1);
 }

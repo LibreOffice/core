@@ -1115,7 +1115,7 @@ SfxItemPresentation SwGammaGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    rtl::OUStringBuffer aText;
+    OUStringBuffer aText;
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NAMELESS:

@@ -25,7 +25,6 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Reference;

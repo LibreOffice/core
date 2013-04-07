@@ -39,10 +39,10 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
     throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
 {
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
 
     if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(), static_cast<staruno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
     aData.realloc(nBytesToRead);
@@ -53,7 +53,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& 
     m_nActPos += (sal_uInt32)nRead;
 
     if (nError != ERRCODE_NONE)
-        throw stario::IOException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::IOException(OUString(), static_cast<staruno::XWeak*>(this));
 
     // adjust sequence if data read is lower than the desired data
     if (nRead < (sal_uInt32)nBytesToRead)
@@ -101,10 +101,10 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
 
     if (nBytesToSkip < 0)
-        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::BufferSizeExceededException(OUString(), static_cast<staruno::XWeak*>(this));
 
     m_nActPos += nBytesToSkip;
 }
@@ -115,7 +115,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
 
     return m_nAvailable;
 }
@@ -126,7 +126,7 @@ void SAL_CALL OInputStreamHelper::closeInput()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+        throw stario::NotConnectedException(OUString(), static_cast<staruno::XWeak*>(this));
 
     m_xLockBytes = NULL;
 }

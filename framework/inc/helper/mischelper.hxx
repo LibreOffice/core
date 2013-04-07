@@ -100,22 +100,22 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >  GetGuesser() const;
 };
 
-FWI_DLLPUBLIC ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL
+FWI_DLLPUBLIC OUString RetrieveLabelFromCommand( const OUString& aCmdURL
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&    _xContext
             ,::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >&        _xUICommandLabels
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame
-            ,::rtl::OUString& _rModuleIdentifier
+            ,OUString& _rModuleIdentifier
             ,sal_Bool& _rIni
             ,const sal_Char* _pName);
 
-FWI_DLLPUBLIC void FillLangItems( std::set< ::rtl::OUString > &rLangItems,
+FWI_DLLPUBLIC void FillLangItems( std::set< OUString > &rLangItems,
         const SvtLanguageTable &rLanguageTable,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
         sal_Int16               nScriptType,
-        const ::rtl::OUString & rCurLang,
-        const ::rtl::OUString & rKeyboardLang,
-        const ::rtl::OUString & rGuessedTextLang );
+        const OUString & rCurLang,
+        const OUString & rKeyboardLang,
+        const OUString & rGuessedTextLang );
 
 //It's common for an object to want to create and own a Broadcaster and set
 //itself as a Listener on its own Broadcaster member.

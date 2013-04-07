@@ -132,7 +132,7 @@ void removeDimAsNewRecoverItem( SbxVariable* pVar );
 SbxVariable::~SbxVariable()
 {
 #ifdef DBG_UTIL
-    OString aBStr(rtl::OUStringToOString(maName, RTL_TEXTENCODING_ASCII_US));
+    OString aBStr(OUStringToOString(maName, RTL_TEXTENCODING_ASCII_US));
     DbgOutf( "SbxVariable::Dtor %lx (%s)", (void*)this, aBStr.getStr() );
     if ( maName.equalsAscii( "Cells"))
     {
@@ -451,7 +451,7 @@ void SbxVariable::SetParent( SbxObject* p )
             aMsg += "].SetParent([";
             aMsg += p->GetName();
             aMsg += "])";
-            rtl::OString aBStr(rtl::OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US));
+            OString aBStr(OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US));
             DbgOut( aBStr.getStr(), DBG_OUT_WARNING, __FILE__, __LINE__);
         }
     }
@@ -735,11 +735,11 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
 void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
 {
-    rtl::OString aBNameStr(rtl::OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
+    OString aBNameStr(OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
     rStrm << "Variable( "
-          << rtl::OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr() << "=="
+          << OString::valueOf(reinterpret_cast<sal_Int64>(this)).getStr() << "=="
           << aBNameStr.getStr();
-    rtl::OString aBParentNameStr(rtl::OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
+    OString aBParentNameStr(OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )
     {
         rStrm << " in parent '" << aBParentNameStr.getStr() << "'";

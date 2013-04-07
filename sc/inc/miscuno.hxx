@@ -30,43 +30,43 @@
 #include "scdllapi.h"
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
-::rtl::OUString SAL_CALL ClassName::getImplementationName()                      \
+OUString SAL_CALL ClassName::getImplementationName()                      \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
-    return ::rtl::OUString::createFromAscii(ClassNameAscii);                         \
+    return OUString::createFromAscii(ClassNameAscii);                         \
 }                                                                                    \
-sal_Bool SAL_CALL ClassName::supportsService( const ::rtl::OUString& ServiceName ) \
+sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
     return !ServiceName.compareToAscii(ServiceAscii);                                \
 }                                                                                    \
-::com::sun::star::uno::Sequence< ::rtl::OUString >                                   \
+::com::sun::star::uno::Sequence< OUString >                                   \
     SAL_CALL ClassName::getSupportedServiceNames(void)                           \
     throw(::com::sun::star::uno::RuntimeException)                                   \
 {                                                                                    \
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);                      \
-    ::rtl::OUString* pArray = aRet.getArray();                                       \
-    pArray[0] = ::rtl::OUString::createFromAscii(ServiceAscii);                  \
+    ::com::sun::star::uno::Sequence< OUString > aRet(1);                      \
+    OUString* pArray = aRet.getArray();                                       \
+    pArray[0] = OUString::createFromAscii(ServiceAscii);                  \
     return aRet;                                                                     \
 }
 
 #define SC_IMPL_DUMMY_PROPERTY_LISTENER( ClassName )                                \
-    void SAL_CALL ClassName::addPropertyChangeListener( const rtl::OUString&,       \
+    void SAL_CALL ClassName::addPropertyChangeListener( const OUString&,       \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::removePropertyChangeListener( const rtl::OUString&,    \
+    void SAL_CALL ClassName::removePropertyChangeListener( const OUString&,    \
                             const uno::Reference<beans::XPropertyChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::addVetoableChangeListener( const rtl::OUString&,       \
+    void SAL_CALL ClassName::addVetoableChangeListener( const OUString&,       \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
     { OSL_FAIL("not implemented"); }                                                \
-    void SAL_CALL ClassName::removeVetoableChangeListener( const rtl::OUString&,    \
+    void SAL_CALL ClassName::removeVetoableChangeListener( const OUString&,    \
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
                             throw(beans::UnknownPropertyException,                  \
                             lang::WrappedTargetException, uno::RuntimeException)    \
@@ -91,12 +91,12 @@ class ScIndexEnumeration : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess> xIndex;
-    rtl::OUString           sServiceName;
+    OUString           sServiceName;
     sal_Int32               nPos;
 
 public:
                             ScIndexEnumeration(const com::sun::star::uno::Reference<
-                                com::sun::star::container::XIndexAccess>& rInd, const rtl::OUString& rServiceName);
+                                com::sun::star::container::XIndexAccess>& rInd, const OUString& rServiceName);
     virtual                 ~ScIndexEnumeration();
 
                             // XEnumeration
@@ -107,11 +107,11 @@ public:
                                         ::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -122,7 +122,7 @@ class ScNameToIndexAccess : public cppu::WeakImplHelper2<
 {
 private:
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xNameAccess;
-    com::sun::star::uno::Sequence<rtl::OUString> aNames;
+    com::sun::star::uno::Sequence<OUString> aNames;
 
 public:
                             ScNameToIndexAccess(
@@ -143,11 +143,11 @@ public:
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -158,16 +158,16 @@ public:
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
     static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, sal_Bool bDefault = false );
+                                            const OUString& rName, sal_Bool bDefault = false );
     static sal_Int32        GetLongProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, long nDefault = 0 );
+                                            const OUString& rName, long nDefault = 0 );
     static sal_Int32        GetEnumProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
-                                            const ::rtl::OUString& rName, long nDefault );
-    static ::rtl::OUString  GetStringProperty(
+                                            const OUString& rName, long nDefault );
+    static OUString  GetStringProperty(
         const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xProp,
-        const ::rtl::OUString& rName, const ::rtl::OUString& rDefault );
+        const OUString& rName, const OUString& rDefault );
 
     static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );

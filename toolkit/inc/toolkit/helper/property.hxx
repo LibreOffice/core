@@ -23,6 +23,7 @@
 #include <toolkit/dllapi.h>
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace com {
 namespace sun {
@@ -32,14 +33,10 @@ namespace uno {
     class Any;
 } } } }
 
-namespace rtl {
-    class OUString;
-}
-
 
 #define BASEPROPERTY_NOTFOUND                        0
 
-#define BASEPROPERTY_TEXT                            1  // ::rtl::OUString
+#define BASEPROPERTY_TEXT                            1  // OUString
 #define BASEPROPERTY_BACKGROUNDCOLOR                 2  // sal_Int32
 #define BASEPROPERTY_FILLCOLOR                       3  // sal_Int32
 #define BASEPROPERTY_TEXTCOLOR                       4  // sal_Int32
@@ -57,14 +54,14 @@ namespace rtl {
 #define BASEPROPERTY_FONT_TYPE                       16 // OLD: Font_Type
 #define BASEPROPERTY_FONT_SIZE                       17 // OLD: Font_Size
 #define BASEPROPERTY_FONT_ATTRIBS                    18 // OLD: Font_Attribs
-#define BASEPROPERTY_DEFAULTCONTROL                  19 // ::rtl::OUString (ServiceName)
-#define BASEPROPERTY_LABEL                           20 // ::rtl::OUString
+#define BASEPROPERTY_DEFAULTCONTROL                  19 // OUString (ServiceName)
+#define BASEPROPERTY_LABEL                           20 // OUString
 #define BASEPROPERTY_LINECOUNT                       21 // sal_Int16
 #define BASEPROPERTY_EXTDATEFORMAT                   22 // sal_Int16
 #define BASEPROPERTY_DATESHOWCENTURY                 23 // sal_Bool
 #define BASEPROPERTY_EXTTIMEFORMAT                   24 // sal_Int16
 #define BASEPROPERTY_NUMSHOWTHOUSANDSEP              25 // sal_Bool
-#define BASEPROPERTY_CURRENCYSYMBOL                  26 // ::rtl::OUString
+#define BASEPROPERTY_CURRENCYSYMBOL                  26 // OUString
 #define BASEPROPERTY_SPIN                            27 // sal_Bool
 #define BASEPROPERTY_STRICTFORMAT                    28 // sal_Bool
 #define BASEPROPERTY_DECIMALACCURACY                 29 // sal_Int16
@@ -78,9 +75,9 @@ namespace rtl {
 #define BASEPROPERTY_VALUEMIN_INT32                  37 // sal_Int32
 #define BASEPROPERTY_VALUEMAX_INT32                  38 // sal_Int32
 #define BASEPROPERTY_VALUESTEP_INT32                 39 // sal_Int32
-#define BASEPROPERTY_EDITMASK                        40 // ::rtl::OUString
-#define BASEPROPERTY_LITERALMASK                     41 // ::rtl::OUString
-#define BASEPROPERTY_IMAGEURL                        42 // ::rtl::OUString
+#define BASEPROPERTY_EDITMASK                        40 // OUString
+#define BASEPROPERTY_LITERALMASK                     41 // OUString
+#define BASEPROPERTY_IMAGEURL                        42 // OUString
 #define BASEPROPERTY_READONLY                        43 // sal_Bool
 #define BASEPROPERTY_ENABLED                         44 // sal_Bool
 #define BASEPROPERTY_PRINTABLE                       45 // sal_Bool
@@ -96,7 +93,7 @@ namespace rtl {
 #define BASEPROPERTY_VALUESTEP_DOUBLE                55 // DOUBLE
 #define BASEPROPERTY_TRISTATE                        56 // sal_Bool
 #define BASEPROPERTY_DEFAULTBUTTON                   57 // sal_Bool
-#define BASEPROPERTY_HELPURL                         58 // ::rtl::OUString
+#define BASEPROPERTY_HELPURL                         58 // OUString
 #define BASEPROPERTY_AUTOTOGGLE                      59 // sal_Bool
 //#define BASEPROPERTY_FOCUSSELECTIONHIDE            60 // sal_Bool
 #define BASEPROPERTY_FORMATKEY                       61 // sal_Bool
@@ -107,11 +104,11 @@ namespace rtl {
 #define BASEPROPERTY_EFFECTIVE_MIN                   66 // Double
 #define BASEPROPERTY_EFFECTIVE_MAX                   67 // Double
 #define BASEPROPERTY_CURSYM_POSITION                 68 // sal_Bool
-#define BASEPROPERTY_TITLE                           69 // ::rtl::OUString
+#define BASEPROPERTY_TITLE                           69 // OUString
 #define BASEPROPERTY_MOVEABLE                        70 // sal_Bool
 #define BASEPROPERTY_CLOSEABLE                       71 // sal_Bool
 #define BASEPROPERTY_SIZEABLE                        72 // sal_Bool
-#define BASEPROPERTY_HELPTEXT                        73 // ::rtl::OUString
+#define BASEPROPERTY_HELPTEXT                        73 // OUString
 #define BASEPROPERTY_PROGRESSVALUE                   74 // sal_Int32
 #define BASEPROPERTY_PROGRESSVALUE_MIN               75 // sal_Int32
 #define BASEPROPERTY_PROGRESSVALUE_MAX               76 // sal_Int32
@@ -130,7 +127,7 @@ namespace rtl {
 #define BASEPROPERTY_DISPLAYBACKGROUNDCOLOR          89 // sal_Int32
 #define BASEPROPERTY_AUTOMNEMONICS                   90 // sal_Bool
 #define BASEPROPERTY_MOUSETRANSPARENT                91 // sal_Bool
-#define BASEPROPERTY_ACCESSIBLENAME                  92  // ::rtl::OUString
+#define BASEPROPERTY_ACCESSIBLENAME                  92  // OUString
 #define BASEPROPERTY_PLUGINPARENT                    93  // sal_Int64
 #define BASEPROPERTY_SCROLLVALUE_MIN                 94  // sal_Int32
 #define BASEPROPERTY_REPEAT_DELAY                    95  // sal_Int32
@@ -173,10 +170,10 @@ namespace rtl {
 #define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    131
 #define BASEPROPERTY_TREE_END                       131
 #define BASEPROPERTY_DIALOGSOURCEURL                132
-#define BASEPROPERTY_NOLABEL                        133  // ::rtl::OUString  added for issue79712
-#define BASEPROPERTY_URL                            134  // ::rtl::OUString
+#define BASEPROPERTY_NOLABEL                        133  // OUString  added for issue79712
+#define BASEPROPERTY_URL                            134  // OUString
 #define BASEPROPERTY_UNIT                           135  // ::awt::FieldUnit
-#define BASEPROPERTY_CUSTOMUNITTEXT                 136  // ::rtl::OUString
+#define BASEPROPERTY_CUSTOMUNITTEXT                 136  // OUString
 #define BASEPROPERTY_IMAGE_SCALE_MODE               137
 #define BASEPROPERTY_WRITING_MODE                   138
 #define BASEPROPERTY_CONTEXT_WRITING_MODE           139
@@ -195,7 +192,7 @@ namespace rtl {
 #define BASEPROPERTY_GRID_LINE_COLOR                151
 #define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
 #define BASEPROPERTY_ITEM_SEPARATOR_POS             153
-#define BASEPROPERTY_GROUPNAME                      154  // ::rtl::OUString
+#define BASEPROPERTY_GROUPNAME                      154  // OUString
 #define BASEPROPERTY_MULTIPAGEVALUE                 155  // sal_Int32
 #define BASEPROPERTY_USERFORMCONTAINEES             156  // css::container::XNameContainer
 #define BASEPROPERTY_AUTO_REPEAT                    157
@@ -214,8 +211,8 @@ namespace rtl {
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
-#define BASEPROPERTY_FONTDESCRIPTORPART_NAME            1000    // ::rtl::OUString, not bound
-#define BASEPROPERTY_FONTDESCRIPTORPART_STYLENAME       1001    // ::rtl::OUString, not bound
+#define BASEPROPERTY_FONTDESCRIPTORPART_NAME            1000    // OUString, not bound
+#define BASEPROPERTY_FONTDESCRIPTORPART_STYLENAME       1001    // OUString, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_FAMILY          1002    // sal_Int16, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_CHARSET         1003    // sal_Int16, not bound
 #define BASEPROPERTY_FONTDESCRIPTORPART_HEIGHT          1004    // sal_Int16, not bound
@@ -240,9 +237,9 @@ namespace rtl {
 #define PROPERTY_STATE_ON                       1
 #define PROPERTY_STATE_DONTCARE                 2
 
-TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const ::rtl::OUString& rPropertyName );
+TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const OUString& rPropertyName );
 const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
-TOOLKIT_DLLPUBLIC const ::rtl::OUString&    GetPropertyName( sal_uInt16 nPropertyId );
+TOOLKIT_DLLPUBLIC const OUString&    GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 sal_uInt16                          GetPropertyOrderNr( sal_uInt16 nPropertyId );
 sal_Bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );

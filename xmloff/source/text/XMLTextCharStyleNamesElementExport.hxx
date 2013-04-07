@@ -32,7 +32,7 @@ class SvXMLExport;
 class XMLTextCharStyleNamesElementExport
 {
     SvXMLExport& rExport;
-    ::rtl::OUString aName;
+    OUString aName;
     sal_Int32 nCount;
 
 public:
@@ -41,7 +41,7 @@ public:
                         SvXMLExport& rExp, sal_Bool bDoSomething, sal_Bool bAllStyles,
                         const ::com::sun::star::uno::Reference <
                             ::com::sun::star::beans::XPropertySet > & rPropSet,
-                            const ::rtl::OUString& rPropName );
+                            const OUString& rPropName );
     ~XMLTextCharStyleNamesElementExport();
 };
 

@@ -51,8 +51,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OString;
 
 #if defined WNT
 #define SOFFICE1 "soffice.exe"
@@ -113,7 +111,7 @@ const OUString OfficePipeId::operator () ()
 
     // create hex-value string from the MD5 value to keep
     // the string size minimal
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     buf.appendAscii( "SingleOfficeIPC_" );
     for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
         buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
@@ -239,7 +237,7 @@ namespace {
 inline OUString encodeForRcFile( OUString const & str )
 {
     // escape $\{} (=> rtl bootstrap files)
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     sal_Int32 pos = 0;
     const sal_Int32 len = str.getLength();
     for ( ; pos < len; ++pos ) {
@@ -261,7 +259,7 @@ inline OUString encodeForRcFile( OUString const & str )
 //==============================================================================
 OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 {
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     if (baseURL.getLength() > 1 && baseURL[ baseURL.getLength() - 1 ] == '/')
         buf.append( baseURL.copy( 0, baseURL.getLength() - 1 ) );
     else
@@ -429,7 +427,7 @@ OUString generateRandomPipeId()
             s_hPool, bytes, ARLEN(bytes) ) != rtl_Random_E_None) {
         throw RuntimeException( "random pool error!?", 0 );
     }
-    ::rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     for ( sal_uInt32 i = 0; i < ARLEN(bytes); ++i ) {
         buf.append( static_cast<sal_Int32>(bytes[ i ]), 0x10 );
     }
@@ -462,14 +460,14 @@ Reference<XInterface> resolveUnoURL(
 }
 
 #ifdef WNT
-void writeConsoleWithStream(::rtl::OUString const & sText, HANDLE stream)
+void writeConsoleWithStream(OUString const & sText, HANDLE stream)
 {
     DWORD nWrittenChars = 0;
     WriteFile(stream, sText.getStr(),
         sText.getLength() * 2, &nWrittenChars, NULL);
 }
 #else
-void writeConsoleWithStream(::rtl::OUString const & sText, FILE * stream)
+void writeConsoleWithStream(OUString const & sText, FILE * stream)
 {
     OString s = OUStringToOString(sText, osl_getThreadTextEncoding());
     fprintf(stream, "%s", s.getStr());
@@ -477,7 +475,7 @@ void writeConsoleWithStream(::rtl::OUString const & sText, FILE * stream)
 }
 #endif
 
-void writeConsole(::rtl::OUString const & sText)
+void writeConsole(OUString const & sText)
 {
 #ifdef WNT
     writeConsoleWithStream(sText, GetStdHandle(STD_OUTPUT_HANDLE));
@@ -486,7 +484,7 @@ void writeConsole(::rtl::OUString const & sText)
 #endif
 }
 
-void writeConsoleError(::rtl::OUString const & sText)
+void writeConsoleError(OUString const & sText)
 {
 #ifdef WNT
     writeConsoleWithStream(sText, GetStdHandle(STD_ERROR_HANDLE));
@@ -513,14 +511,14 @@ OUString readConsole()
     // read one char less so that the last char in buf is always zero
     if (fgets(buf, 1024, stdin) != NULL)
     {
-        OUString value = ::rtl::OStringToOUString(::rtl::OString(buf), osl_getThreadTextEncoding());
+        OUString value = OStringToOUString(OString(buf), osl_getThreadTextEncoding());
         return value.trim();
     }
 #endif
     return OUString();
 }
 
-void TRACE(::rtl::OUString const & sText)
+void TRACE(OUString const & sText)
 {
     (void) sText;
 #if OSL_DEBUG_LEVEL > 1

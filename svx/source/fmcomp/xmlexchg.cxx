@@ -48,7 +48,7 @@ namespace svx
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
         if ( SOT_FORMATSTR_ID_XFORMS == nFormatId )
         {
-            return SetString(rtl::OUString("XForms-Transferable"), _rFlavor);
+            return SetString(OUString("XForms-Transferable"), _rFlavor);
         }
         return sal_False;
     }

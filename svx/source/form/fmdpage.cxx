@@ -83,7 +83,7 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type&
 
 SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xDescr ) throw ()
 {
-    ::rtl::OUString aShapeType( xDescr->getShapeType() );
+    OUString aShapeType( xDescr->getShapeType() );
 
     if  (   aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ShapeControl" ) )   // compatibility
         ||  aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) )
@@ -128,7 +128,7 @@ sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::Ru
 }
 
 // ::com::sun::star::lang::XServiceInfo
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     return SvxDrawPage::getSupportedServiceNames();
 }

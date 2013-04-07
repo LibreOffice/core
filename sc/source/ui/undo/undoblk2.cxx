@@ -65,7 +65,7 @@ ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoWidthOrHeight::GetComment() const
+OUString ScUndoWidthOrHeight::GetComment() const
 {
     // [ "optimal " ] "Column width" | "row height"
     return ( bWidth ?

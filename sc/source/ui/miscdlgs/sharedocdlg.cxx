@@ -112,8 +112,8 @@ void ScShareDocumentDlg::UpdateView()
         try
         {
             ::svt::ShareControlFile aControlFile( mpDocShell->GetSharedFileURL() );
-            uno::Sequence< uno::Sequence< ::rtl::OUString > > aUsersData = aControlFile.GetUsersData();
-            const uno::Sequence< ::rtl::OUString >* pUsersData = aUsersData.getConstArray();
+            uno::Sequence< uno::Sequence< OUString > > aUsersData = aControlFile.GetUsersData();
+            const uno::Sequence< OUString >* pUsersData = aUsersData.getConstArray();
             sal_Int32 nLength = aUsersData.getLength();
 
             if ( nLength > 0 )
@@ -139,10 +139,10 @@ void ScShareDocumentDlg::UpdateView()
                         }
 
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"
-                        ::rtl::OUString aDateTimeStr = pUsersData[i][SHARED_EDITTIME_ID];
+                        OUString aDateTimeStr = pUsersData[i][SHARED_EDITTIME_ID];
                         sal_Int32 nIndex = 0;
-                        ::rtl::OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
-                        ::rtl::OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
+                        OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
+                        OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         nIndex = 0;
                         sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
                         sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
@@ -189,7 +189,7 @@ void ScShareDocumentDlg::UpdateView()
         if ( aUser.Len() == 0 )
         {
             // get sys user name
-            ::rtl::OUString aUserName;
+            OUString aUserName;
             ::osl::Security aSecurity;
             aSecurity.getUserName( aUserName );
             aUser = aUserName;

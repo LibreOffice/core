@@ -29,23 +29,23 @@ namespace http_dav_ucp
 
 struct DAVProperties
 {
-    static const ::rtl::OUString CREATIONDATE;
-    static const ::rtl::OUString DISPLAYNAME;
-    static const ::rtl::OUString GETCONTENTLANGUAGE;
-    static const ::rtl::OUString GETCONTENTLENGTH;
-    static const ::rtl::OUString GETCONTENTTYPE;
-    static const ::rtl::OUString GETETAG;
-    static const ::rtl::OUString GETLASTMODIFIED;
-    static const ::rtl::OUString LOCKDISCOVERY;
-    static const ::rtl::OUString RESOURCETYPE;
-    static const ::rtl::OUString SUPPORTEDLOCK;
-    static const ::rtl::OUString EXECUTABLE;
+    static const OUString CREATIONDATE;
+    static const OUString DISPLAYNAME;
+    static const OUString GETCONTENTLANGUAGE;
+    static const OUString GETCONTENTLENGTH;
+    static const OUString GETCONTENTTYPE;
+    static const OUString GETETAG;
+    static const OUString GETLASTMODIFIED;
+    static const OUString LOCKDISCOVERY;
+    static const OUString RESOURCETYPE;
+    static const OUString SUPPORTEDLOCK;
+    static const OUString EXECUTABLE;
 
-    static void createSerfPropName( const rtl::OUString & rFullName,
+    static void createSerfPropName( const OUString & rFullName,
                                     SerfPropName & rName );
     static void createUCBPropName ( const char * nspace,
                                     const char * name,
-                                    rtl::OUString & rFullName );
+                                    OUString & rFullName );
 
     static bool isUCBDeadProperty( const SerfPropName & rName );
 };

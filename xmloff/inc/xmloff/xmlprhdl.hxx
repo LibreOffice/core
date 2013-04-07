@@ -23,9 +23,9 @@
 #include "sal/config.h"
 #include "xmloff/dllapi.h"
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 namespace com{ namespace sun{ namespace star{ namespace uno{ class Any; } } } }
-namespace rtl{ class OUString; }
 
 class SvXMLUnitConverter;
 struct XMLPropertyState;
@@ -48,9 +48,9 @@ public:
     virtual bool equals( const ::com::sun::star::uno::Any& r1, const ::com::sun::star::uno::Any& r2 ) const;
 
     /// Imports the given value in cas of the given XML-data-type
-    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
+    virtual sal_Bool importXML( const OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
     /// Exports the given value in cas of the given XML-data-type
-    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
+    virtual sal_Bool exportXML( OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const =0;
 };
 
 #endif      // _XMLOFF_PROPERTYHANDLERBASE_HXX

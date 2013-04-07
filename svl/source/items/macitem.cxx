@@ -41,7 +41,7 @@ SjJSbxObjectBase* SjJSbxObjectBase::Clone( void )
     return NULL;
 }
 
-SvxMacro::SvxMacro( const ::rtl::OUString &rMacName, const ::rtl::OUString &rLanguage)
+SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
       pFunctionObject(NULL), eType( EXTENDED_STYPE)
 {
@@ -57,19 +57,19 @@ SvxMacro::~SvxMacro()
     delete pFunctionObject;
 }
 
-::rtl::OUString SvxMacro::GetLanguage()const
+OUString SvxMacro::GetLanguage()const
 {
     if(eType==STARBASIC)
     {
-        return ::rtl::OUString(SVX_MACRO_LANGUAGE_STARBASIC);
+        return OUString(SVX_MACRO_LANGUAGE_STARBASIC);
     }
     else if(eType==JAVASCRIPT)
     {
-        return ::rtl::OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+        return OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
     }
     else if(eType==EXTENDED_STYPE)
     {
-        return ::rtl::OUString(SVX_MACRO_LANGUAGE_SF);
+        return OUString(SVX_MACRO_LANGUAGE_SF);
 
     }
     return aLibName;

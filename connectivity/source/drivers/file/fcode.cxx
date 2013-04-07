@@ -154,7 +154,7 @@ const ORowSetValue& OOperandValue::getValue() const
 }
 
 //------------------------------------------------------------------
-OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUString& aStrValue)
+OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const OUString& aStrValue)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OOperandConst::OOperandConst" );
     switch (rColumnRef.getNodeType())
@@ -336,7 +336,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
         {
-            rtl::OUString sLH = aLH, sRH = aRH;
+            OUString sLH = aLH, sRH = aRH;
             sal_Int32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
                  sLH.pData->buffer,

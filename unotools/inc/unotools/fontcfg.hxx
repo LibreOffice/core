@@ -72,7 +72,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
     {
         // the real string used in the configuration
         // used to get rid of upper/lower case problems
-        rtl::OUString aConfigLocaleString;
+        OUString aConfigLocaleString;
         // xAccess is mutable to be able to be filled on demand
         mutable com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xAccess;
     };
@@ -82,7 +82,7 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
                    utl::LocaleHash >
             m_aConfig;
 
-    rtl::OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rType ) const;
+    OUString tryLocale( const com::sun::star::lang::Locale& rLocale, const OUString& rType ) const;
 
     public:
     DefaultFontConfiguration();
@@ -90,8 +90,8 @@ class UNOTOOLS_DLLPUBLIC DefaultFontConfiguration
 
     static DefaultFontConfiguration& get();
 
-    rtl::OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
-    rtl::OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;
+    OUString getDefaultFont( const com::sun::star::lang::Locale& rLocale, int nType ) const;
+    OUString getUserInterfaceFont( const com::sun::star::lang::Locale& rLocale ) const;
 };
 
 // IMPL_FONT_ATTR_DEFAULT       - Default-Font like Andale Sans UI, Palace Script, Albany, Thorndale, Cumberland, ...
@@ -173,7 +173,7 @@ private:
             m_xConfigAccess;
     struct LocaleSubst
     {
-        rtl::OUString                           aConfigLocaleString;
+        OUString                           aConfigLocaleString;
         mutable bool                            bConfigRead;
         // note: aSubstAttributes must be sorted alphabetically by Name
         // searches on the substitutes are done with Name as key, where
@@ -184,19 +184,19 @@ private:
         LocaleSubst() : bConfigRead( false ) {}
     };
     boost::unordered_map< com::sun::star::lang::Locale, LocaleSubst, utl::LocaleHash > m_aSubst;
-    typedef boost::unordered_set< rtl::OUString, rtl::OUStringHash > UniqueSubstHash;
+    typedef boost::unordered_set< OUString, OUStringHash > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
 
 
     void fillSubstVector( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                          const rtl::OUString& rType,
+                          const OUString& rType,
                           std::vector< String >& rSubstVector ) const;
     FontWeight getSubstWeight( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                          const rtl::OUString& rType ) const;
+                          const OUString& rType ) const;
     FontWidth getSubstWidth( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                             const rtl::OUString& rType ) const;
+                             const OUString& rType ) const;
     unsigned long getSubstType( const com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xFont,
-                                const rtl::OUString& rType ) const;
+                                const OUString& rType ) const;
     void readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const;
 public:
     FontSubstConfiguration();

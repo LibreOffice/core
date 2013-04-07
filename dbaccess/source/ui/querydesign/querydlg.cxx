@@ -220,7 +220,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
                 m_pTableControl->lateInit();
                 m_pJoinControl->m_aCBNatural.Check(sal_False);
                 m_pTableControl->enableRelation(false);
-                ::rtl::OUString sEmpty;
+                OUString sEmpty;
                 m_pConnData->AppendConnLine(sEmpty,sEmpty);
                 aPB_OK.Enable(sal_True);
             }
@@ -282,9 +282,9 @@ IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
         try
         {
             Reference<XNameAccess> xReferencedTableColumns(m_pConnData->getReferencedTable()->getColumns());
-            Sequence< ::rtl::OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
-            const ::rtl::OUString* pIter = aSeq.getConstArray();
-            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            Sequence< OUString> aSeq = m_pConnData->getReferencingTable()->getColumns()->getElementNames();
+            const OUString* pIter = aSeq.getConstArray();
+            const OUString* pEnd   = pIter + aSeq.getLength();
             for(;pIter != pEnd;++pIter)
             {
                 if ( xReferencedTableColumns->hasByName(*pIter) )

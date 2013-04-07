@@ -85,10 +85,10 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( "Position" );
+        aArgs[0].Name = OUString( "Position" );
         aPositionParam.QueryValue( a );
         aArgs[0].Value = a;
-        m_pController->Dispatch( rtl::OUString( ".uno:AbsoluteRecord" ),
+        m_pController->Dispatch( OUString( ".uno:AbsoluteRecord" ),
                                  aArgs );
         m_pController->updateStatus();
 
@@ -191,8 +191,8 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
             case SID_FM_SCROLLBAR:
             case SID_FM_SPINBUTTON:
             {   // set a new image, matching to this slot
-                rtl::OUString aSlotURL( "slot:" );
-                aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
+                OUString aSlotURL( "slot:" );
+                aSlotURL += OUString::valueOf( sal_Int32( nSlot ));
                 Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;
@@ -238,7 +238,7 @@ void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nModifier*/ )
         if ( SlotToCommands[n].nSlotId > 0 )
         {
             Sequence< PropertyValue > aArgs;
-            Dispatch( rtl::OUString::createFromAscii( SlotToCommands[n].pCommand ),
+            Dispatch( OUString::createFromAscii( SlotToCommands[n].pCommand ),
                       aArgs );
         }
     }

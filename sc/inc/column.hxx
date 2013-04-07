@@ -274,14 +274,14 @@ public:
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const sal_uInt16 nError);
 
-    void        GetString( SCROW nRow, rtl::OUString& rString ) const;
+    void        GetString( SCROW nRow, OUString& rString ) const;
     const OUString* GetStringCell( SCROW nRow ) const;
     double* GetValueCell( SCROW nRow );
-    void        GetInputString( SCROW nRow, rtl::OUString& rString ) const;
+    void        GetInputString( SCROW nRow, OUString& rString ) const;
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr );
-    void        GetFormula( SCROW nRow, rtl::OUString& rFormula ) const;
+    void        GetFormula( SCROW nRow, OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCROW nRow );

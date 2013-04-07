@@ -61,16 +61,16 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
+        return OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.CellBindingPropertyHandler" );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.form.inspection.CellBindingPropertyHandler" );
         return aSupported;
     }
 
@@ -92,9 +92,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aInterestingProperties( 3 );
+        Sequence< OUString > aInterestingProperties( 3 );
         aInterestingProperties[0] = PROPERTY_LIST_CELL_RANGE;
         aInterestingProperties[1] = PROPERTY_BOUND_CELL;
         aInterestingProperties[2] = PROPERTY_CONTROLSOURCE;
@@ -102,7 +102,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
@@ -168,7 +168,7 @@ namespace pcr
                 try
                 {
                     if ( !xSource.is() )
-                        setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< ::rtl::OUString >() ) );
+                        setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< OUString >() ) );
                 }
                 catch( const Exception& )
                 {
@@ -181,7 +181,7 @@ namespace pcr
         // ----- DataField -----
         case PROPERTY_ID_CONTROLSOURCE:
         {
-            ::rtl::OUString sControlSource;
+            OUString sControlSource;
             _rNewValue >>= sControlSource;
             if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_BOUND_CELL ) )
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUND_CELL, sControlSource.isEmpty() );
@@ -230,7 +230,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -276,7 +276,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -348,7 +348,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL CellBindingPropertyHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL CellBindingPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aPropertyValue;
@@ -359,7 +359,7 @@ namespace pcr
 
         PropertyId nPropId( m_pInfoService->getPropertyId( _rPropertyName ) );
 
-        ::rtl::OUString sControlValue;
+        OUString sControlValue;
         OSL_VERIFY( _rControlValue >>= sControlValue );
         switch( nPropId )
         {
@@ -396,7 +396,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL CellBindingPropertyHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName,
+    Any SAL_CALL CellBindingPropertyHandler::convertToControlValue( const OUString& _rPropertyName,
         const Any& _rPropertyValue, const Type& /*_rControlValueType*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -468,7 +468,7 @@ namespace pcr
             if ( bAllowCellLinking )
             {
                 aProperties[ --nPos ] = Property( PROPERTY_BOUND_CELL, PROPERTY_ID_BOUND_CELL,
-                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ), 0 );
+                    ::getCppuType( static_cast< OUString* >( NULL ) ), 0 );
             }
             if ( bAllowCellIntLinking )
             {
@@ -478,7 +478,7 @@ namespace pcr
             if ( bAllowListCellRange )
             {
                 aProperties[ --nPos ] = Property( PROPERTY_LIST_CELL_RANGE, PROPERTY_ID_LIST_CELL_RANGE,
-                    ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ), 0 );
+                    ::getCppuType( static_cast< OUString* >( NULL ) ), 0 );
             }
         }
 

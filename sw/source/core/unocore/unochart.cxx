@@ -52,7 +52,6 @@
 #define SN_LABELED_DATA_SEQUENCE    "com.sun.star.chart2.data.LabeledDataSequence"
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 // from unotbl.cxx
 extern void sw_GetCellPosition( const String &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
@@ -1751,7 +1750,7 @@ void SwChartDataProvider::AddRowCols(
 }
 
 // XRangeXMLConversion ---------------------------------------------------
-rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUString& rRangeRepresentation )
+OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRangeRepresentation )
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
     SolarMutexGuard aGuard;
@@ -1819,7 +1818,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     return aRes;
 }
 
-rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUString& rXMLRange )
+OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const OUString& rXMLRange )
     throw ( uno::RuntimeException, lang::IllegalArgumentException )
 {
     SolarMutexGuard aGuard;
@@ -1832,7 +1831,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
     // multiple ranges are delimeted by a ' ' like in
     // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
     xub_StrLen nNumRanges = comphelper::string::getTokenCount(aXMLRange, ' ');
-    rtl::OUString aFirstFoundTable; // to check that only one table will be used
+    OUString aFirstFoundTable; // to check that only one table will be used
     for (sal_uInt16 i = 0;  i < nNumRanges;  ++i)
     {
         String aRange( aXMLRange.GetToken(i, ' ') );
@@ -2169,13 +2168,13 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             String aNew;
                             if (bUseCol)
                             {
-                                aRplc = rtl::OUString("%COLUMNLETTER");
-                                aNew = rtl::OUString(aCellName.GetBuffer(), pBuf - aCellName.GetBuffer());
+                                aRplc = OUString("%COLUMNLETTER");
+                                aNew = OUString(aCellName.GetBuffer(), pBuf - aCellName.GetBuffer());
                             }
                             else
                             {
-                                aRplc = rtl::OUString("%ROWNUMBER");
-                                aNew = rtl::OUString(pBuf, (aCellName.GetBuffer() + nLen) - pBuf);
+                                aRplc = OUString("%ROWNUMBER");
+                                aNew = OUString(pBuf, (aCellName.GetBuffer() + nLen) - pBuf);
                             }
                             xub_StrLen nPos = aTxt.Search( aRplc );
                             if (nPos != STRING_NOTFOUND)

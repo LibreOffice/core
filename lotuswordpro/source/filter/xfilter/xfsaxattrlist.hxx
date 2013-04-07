@@ -76,7 +76,7 @@ public:
 
 public:
     //Interface ISaxAttributeList:
-    virtual void    AddAttribute(const rtl::OUString& name, const rtl::OUString& value);
+    virtual void    AddAttribute(const OUString& name, const OUString& value);
 
     virtual void    Clear();
 

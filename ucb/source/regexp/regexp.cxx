@@ -39,10 +39,10 @@ using namespace ucb_impl;
 //
 //============================================================================
 
-inline Regexp::Regexp(Kind eTheKind, rtl::OUString const & rThePrefix,
-                      bool bTheEmptyDomain, rtl::OUString const & rTheInfix,
+inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
+                      bool bTheEmptyDomain, OUString const & rTheInfix,
                       bool bTheTranslation,
-                      rtl::OUString const & rTheReversePrefix):
+                      OUString const & rTheReversePrefix):
     m_eKind(eTheKind),
     m_aPrefix(rThePrefix),
     m_aInfix(rTheInfix),
@@ -60,7 +60,7 @@ namespace unnamed_ucb_regexp {
 
 bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
                            sal_Unicode const * pEnd,
-                           rtl::OUString const & rString)
+                           OUString const & rString)
 {
     sal_Unicode const * p = *pBegin;
 
@@ -88,8 +88,8 @@ bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
 
 }
 
-bool Regexp::matches(rtl::OUString const & rString,
-                     rtl::OUString * pTranslation, bool * pTranslated) const
+bool Regexp::matches(OUString const & rString,
+                     OUString * pTranslation, bool * pTranslated) const
 {
     sal_Unicode const * pBegin = rString.getStr();
     sal_Unicode const * pEnd = pBegin + rString.getLength();
@@ -151,7 +151,7 @@ bool Regexp::matches(rtl::OUString const & rString,
             {
                 if (pTranslation)
                 {
-                    rtl::OUStringBuffer aBuffer(m_aReversePrefix);
+                    OUStringBuffer aBuffer(m_aReversePrefix);
                     aBuffer.append(pBlock1Begin, pBlock1End - pBlock1Begin);
                     aBuffer.append(m_aInfix);
                     aBuffer.append(pBlock2Begin, pBlock2End - pBlock2Begin);
@@ -176,7 +176,7 @@ bool Regexp::matches(rtl::OUString const & rString,
 //============================================================================
 namespace unnamed_ucb_regexp {
 
-bool isScheme(rtl::OUString const & rString, bool bColon)
+bool isScheme(OUString const & rString, bool bColon)
 {
     using comphelper::string::isalphaAscii;
     using comphelper::string::isdigitAscii;
@@ -197,8 +197,8 @@ bool isScheme(rtl::OUString const & rString, bool bColon)
     return false;
 }
 
-void appendStringLiteral(rtl::OUStringBuffer * pBuffer,
-                         rtl::OUString const & rString)
+void appendStringLiteral(OUStringBuffer * pBuffer,
+                         OUString const & rString)
 {
     OSL_ASSERT(pBuffer);
 
@@ -217,11 +217,11 @@ void appendStringLiteral(rtl::OUStringBuffer * pBuffer,
 
 }
 
-rtl::OUString Regexp::getRegexp(bool bReverse) const
+OUString Regexp::getRegexp(bool bReverse) const
 {
     if (m_bTranslation)
     {
-        rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         if (bReverse)
         {
             if (!m_aReversePrefix.isEmpty())
@@ -268,7 +268,7 @@ rtl::OUString Regexp::getRegexp(bool bReverse) const
         return m_aPrefix.copy(0, m_aPrefix.getLength() - 1);
     else
     {
-        rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         if (!m_aPrefix.isEmpty())
             appendStringLiteral(&aBuffer, m_aPrefix);
         switch (m_eKind)
@@ -320,14 +320,14 @@ bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 }
 
 bool scanStringLiteral(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
-                       rtl::OUString * pString)
+                       OUString * pString)
 {
     sal_Unicode const * p = *pBegin;
 
     if (p == pEnd || *p++ != '"')
         return false;
 
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     for (;;)
     {
         if (p == pEnd)
@@ -353,7 +353,7 @@ bool scanStringLiteral(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 }
 
-Regexp Regexp::parse(rtl::OUString const & rRegexp)
+Regexp Regexp::parse(OUString const & rRegexp)
 {
     // Detect an input of '<scheme>' as an abbreviation of '"<scheme>:".*'
     // where <scheme> is as defined in RFC 2396:
@@ -361,14 +361,14 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         return Regexp(Regexp::KIND_PREFIX,
                       rRegexp + ":",
                       false,
-                      rtl::OUString(),
+                      OUString(),
                       false,
-                      rtl::OUString());
+                      OUString());
 
     sal_Unicode const * p = rRegexp.getStr();
     sal_Unicode const * pEnd = p + rRegexp.getLength();
 
-    rtl::OUString aPrefix;
+    OUString aPrefix;
     scanStringLiteral(&p, pEnd, &aPrefix);
 
     if (p == pEnd)
@@ -382,19 +382,19 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         if (p != pEnd)
             throw lang::IllegalArgumentException();
 
-        return Regexp(Regexp::KIND_PREFIX, aPrefix, false, rtl::OUString(),
-                      false, rtl::OUString());
+        return Regexp(Regexp::KIND_PREFIX, aPrefix, false, OUString(),
+                      false, OUString());
     }
     else if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("(.*)->")))
     {
-        rtl::OUString aReversePrefix;
+        OUString aReversePrefix;
         scanStringLiteral(&p, pEnd, &aReversePrefix);
 
         if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("\\1"))
             || p != pEnd)
             throw lang::IllegalArgumentException();
 
-        return Regexp(Regexp::KIND_PREFIX, aPrefix, false, rtl::OUString(),
+        return Regexp(Regexp::KIND_PREFIX, aPrefix, false, OUString(),
                       true, aReversePrefix);
     }
     else if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("([/?#].*)?")))
@@ -402,19 +402,19 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
         if (p != pEnd)
             throw lang::IllegalArgumentException();
 
-        return Regexp(Regexp::KIND_AUTHORITY, aPrefix, false, rtl::OUString(),
-                      false, rtl::OUString());
+        return Regexp(Regexp::KIND_AUTHORITY, aPrefix, false, OUString(),
+                      false, OUString());
     }
     else if (matchString(&p, pEnd,
                          RTL_CONSTASCII_STRINGPARAM("(([/?#].*)?)->")))
     {
-        rtl::OUString aReversePrefix;
+        OUString aReversePrefix;
         if (!(scanStringLiteral(&p, pEnd, &aReversePrefix)
               && matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("\\1"))
               && p == pEnd))
             throw lang::IllegalArgumentException();
 
-        return Regexp(Regexp::KIND_AUTHORITY, aPrefix, false, rtl::OUString(),
+        return Regexp(Regexp::KIND_AUTHORITY, aPrefix, false, OUString(),
                       true, aReversePrefix);
     }
     else
@@ -433,13 +433,13 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
             throw lang::IllegalArgumentException();
         bool bEmptyDomain = *p++ == '*';
 
-        rtl::OUString aInfix;
+        OUString aInfix;
         scanStringLiteral(&p, pEnd, &aInfix);
 
         if (!matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM("([/?#].*)?")))
             throw lang::IllegalArgumentException();
 
-        rtl::OUString aReversePrefix;
+        OUString aReversePrefix;
         if (bOpen
             && !(matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM(")->"))
                  && scanStringLiteral(&p, pEnd, &aReversePrefix)

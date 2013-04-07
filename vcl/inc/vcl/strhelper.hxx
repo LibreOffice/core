@@ -29,16 +29,16 @@
 namespace psp
 {
     VCL_DLLPUBLIC String GetCommandLineToken( int, const String& );
-    VCL_DLLPUBLIC rtl::OString GetCommandLineToken(int, const rtl::OString&);
+    VCL_DLLPUBLIC OString GetCommandLineToken(int, const OString&);
     // gets one token of a unix command line style string
     // doublequote, singlequote and singleleftquote protect their respective
     // contents
 
-    VCL_DLLPUBLIC int GetCommandLineTokenCount(const rtl::OUString&);
+    VCL_DLLPUBLIC int GetCommandLineTokenCount(const OUString&);
     // returns number of tokens (zero if empty or whitespace only)
 
     VCL_DLLPUBLIC String WhitespaceToSpace( const String&, sal_Bool bProtect = sal_True );
-    VCL_DLLPUBLIC rtl::OString WhitespaceToSpace(const rtl::OString&, sal_Bool bProtect = sal_True);
+    VCL_DLLPUBLIC OString WhitespaceToSpace(const OString&, sal_Bool bProtect = sal_True);
     // returns a string with multiple adjacent occurrences of whitespace
     // converted to a single space. if bProtect is sal_True (nonzero), then
     // doublequote, singlequote and singleleftquote protect their respective
@@ -51,7 +51,7 @@ namespace psp
         return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
     }
 
-    VCL_DLLPUBLIC inline double StringToDouble(const rtl::OString& rStr)
+    VCL_DLLPUBLIC inline double StringToDouble(const OString& rStr)
     {
         return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
     }
@@ -61,7 +61,7 @@ namespace psp
     // returns the string len
     VCL_DLLPUBLIC inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
     {
-        rtl::OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
+        OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
         int nLen = aStr.getLength();
         std::strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
         return nLen;

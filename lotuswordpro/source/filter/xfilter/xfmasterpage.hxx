@@ -73,7 +73,7 @@ public:
     virtual ~XFMasterPage();
 
 public:
-    void    SetPageMaster(rtl::OUString pm);
+    void    SetPageMaster(OUString pm);
 
     void    SetHeader(XFHeader *pHeader);
 
@@ -84,7 +84,7 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strPageMaster;
+    OUString   m_strPageMaster;
     XFHeader    *m_pHeader;
     XFFooter    *m_pFooter;
 };

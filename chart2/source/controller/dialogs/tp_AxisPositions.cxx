@@ -316,7 +316,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
         else
         {
             m_aED_CrossesAtCategory.SetNoSelection();
-            m_aED_CrossesAt.SetTextValue(rtl::OUString());
+            m_aED_CrossesAt.SetTextValue(OUString());
         }
     }
     else
@@ -438,7 +438,7 @@ void AxisPositionsTabPage::SetCrossingAxisIsCategoryAxis( bool bCrossingAxisIsCa
     m_bCrossingAxisIsCategoryAxis = bCrossingAxisIsCategoryAxis;
 }
 
-void AxisPositionsTabPage::SetCategories( const ::com::sun::star::uno::Sequence< rtl::OUString >& rCategories )
+void AxisPositionsTabPage::SetCategories( const ::com::sun::star::uno::Sequence< OUString >& rCategories )
 {
     m_aCategories = rCategories;
 }

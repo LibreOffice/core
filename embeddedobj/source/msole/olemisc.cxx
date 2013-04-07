@@ -31,13 +31,13 @@
 
 using namespace ::com::sun::star;
 
-sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
+sal_Bool KillFile_Impl( const OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
 
 //------------------------------------------------------
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                       const uno::Sequence< sal_Int8 >& aClassID,
-                                      const ::rtl::OUString& aClassName )
+                                      const OUString& aClassName )
 : m_pOleComponent( NULL )
 , m_pInterfaceContainer( NULL )
 , m_bReadOnly( sal_False )
@@ -154,7 +154,7 @@ OleEmbeddedObject::~OleEmbeddedObject()
 }
 
 //------------------------------------------------------
-void OleEmbeddedObject::MakeEventListenerNotification_Impl( const ::rtl::OUString& aEventName )
+void OleEmbeddedObject::MakeEventListenerNotification_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
     {
@@ -317,7 +317,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 }
 
 //------------------------------------------------------
-::rtl::OUString SAL_CALL OleEmbeddedObject::getClassName()
+OUString SAL_CALL OleEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
     // begin wrapping related part ====================
@@ -338,7 +338,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OleEmbeddedObject::getClassID()
 
 //------------------------------------------------------
 void SAL_CALL OleEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
+                const uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {
@@ -376,7 +376,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_nObjectState == -1 ) // || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
-        throw embed::WrongStateException( ::rtl::OUString( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 

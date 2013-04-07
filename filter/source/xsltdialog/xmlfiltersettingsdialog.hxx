@@ -114,9 +114,9 @@ private:
 
     bool    insertOrEdit( filter_info_impl* pNewInfo, const filter_info_impl* pOldInfo = NULL );
 
-    rtl::OUString createUniqueFilterName( const rtl::OUString& rUIName );
-    rtl::OUString createUniqueTypeName( const rtl::OUString& rTypeName );
-    rtl::OUString createUniqueInterfaceName( const rtl::OUString& rInterfaceName );
+    OUString createUniqueFilterName( const OUString& rUIName );
+    OUString createUniqueTypeName( const OUString& rTypeName );
+    OUString createUniqueInterfaceName( const OUString& rInterfaceName );
 
 private:
 

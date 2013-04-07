@@ -64,16 +64,16 @@ class AstDeclaration
 {
 public:
     // Constructors
-    AstDeclaration(NodeType type, const ::rtl::OString& name, AstScope* pScope);
+    AstDeclaration(NodeType type, const OString& name, AstScope* pScope);
     virtual ~AstDeclaration();
 
     // Data access
-    void setName(const ::rtl::OString& name);
-    const ::rtl::OString& getLocalName() const
+    void setName(const OString& name);
+    const OString& getLocalName() const
         { return m_localName; }
-    const ::rtl::OString&   getScopedName() const
+    const OString&   getScopedName() const
         { return m_scopedName; }
-    const ::rtl::OString&   getFullName()
+    const OString&   getFullName()
         { return m_fullName; }
     virtual const sal_Char* getRelativName() const
         { return m_fullName.getStr()+1; }
@@ -95,13 +95,13 @@ public:
         { return m_lineNumber; }
     void setLineNumber(sal_Int32 lineNumber)
         { m_lineNumber = lineNumber; }
-    const ::rtl::OString& getFileName() const
+    const OString& getFileName() const
         { return m_fileName; }
-    void setFileName(const ::rtl::OString& rFileName)
+    void setFileName(const OString& rFileName)
         { m_fileName = rFileName; }
-    const ::rtl::OUString& getDocumentation() const
+    const OUString& getDocumentation() const
         { return m_documentation; }
-    void setDocumentation(const ::rtl::OUString& rDocumentation)
+    void setDocumentation(const OUString& rDocumentation)
         { m_documentation = rDocumentation; }
     sal_Bool isAdded()
         { return m_bIsAdded; }
@@ -121,9 +121,9 @@ public:
     void setPredefined(bool bPredefined);
 
 protected:
-    ::rtl::OString      m_localName;
-    ::rtl::OString      m_scopedName;       // full qualified name
-    ::rtl::OString      m_fullName;         // full qualified name with '/' as seperator
+    OString      m_localName;
+    OString      m_scopedName;       // full qualified name
+    OString      m_fullName;         // full qualified name with '/' as seperator
     AstScope*           m_pScope;
     NodeType            m_nodeType;
     sal_Bool            m_bImported;        // imported ?
@@ -132,8 +132,8 @@ protected:
     bool                m_bPublished;
     bool                m_bPredefined;
     sal_Int32           m_lineNumber;       // line number defined in
-    ::rtl::OString      m_fileName;         // fileName defined in
-    ::rtl::OUString     m_documentation;    // fileName defined in
+    OString      m_fileName;         // fileName defined in
+    OUString     m_documentation;    // fileName defined in
 };
 
 #endif // _IDLC_ASTDECLARATION_HXX_

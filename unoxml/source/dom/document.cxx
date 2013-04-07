@@ -481,7 +481,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         OString const oData(
-                ::rtl::OUStringToOString(data, RTL_TEXTENCODING_UTF8));
+                OUStringToOString(data, RTL_TEXTENCODING_UTF8));
         xmlChar const*const pData =
             reinterpret_cast<xmlChar const*>(oData.getStr());
         xmlNodePtr const pText =
@@ -1020,7 +1020,7 @@ namespace DOM
     void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
                                             const Reference< XFastTokenHandler >& i_xTokenHandler,
                                             const Sequence< beans::StringPair >& i_rNamespaces,
-                                            const Sequence< beans::Pair< rtl::OUString, sal_Int32 > >& i_rRegisterNamespaces )
+                                            const Sequence< beans::Pair< OUString, sal_Int32 > >& i_rRegisterNamespaces )
         throw (SAXException, RuntimeException)
     {
         ::osl::MutexGuard const g(m_Mutex);

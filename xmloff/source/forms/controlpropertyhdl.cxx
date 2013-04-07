@@ -143,9 +143,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlTextEmphasisHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OControlTextEmphasisHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        ::rtl::OUStringBuffer aReturn;
+        OUStringBuffer aReturn;
         sal_Bool bSuccess = sal_False;
         sal_Int16 nFontEmphasis = sal_Int16();
         if (_rValue >>= nFontEmphasis)
@@ -170,7 +170,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlTextEmphasisHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OControlTextEmphasisHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_True;
         sal_uInt16 nEmphasis = awt::FontEmphasisMark::NONE;
@@ -178,7 +178,7 @@ namespace xmloff
         sal_Bool bBelow = sal_False;
         sal_Bool bHasPos = sal_False, bHasType = sal_False;
 
-        ::rtl::OUString sToken;
+        OUString sToken;
         SvXMLTokenEnumerator aTokenEnum(_rStrImpValue);
         while (aTokenEnum.getNextToken(sToken))
         {
@@ -228,9 +228,9 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OControlBorderHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
-        ::rtl::OUString sToken;
+        OUString sToken;
         SvXMLTokenEnumerator aTokens(_rStrImpValue);
 
         sal_uInt16 nStyle = 1;
@@ -266,11 +266,11 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OControlBorderHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OControlBorderHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Bool bSuccess = sal_False;
 
-        ::rtl::OUStringBuffer aOut;
+        OUStringBuffer aOut;
         switch ( m_eFacet )
         {
         case STYLE:
@@ -311,7 +311,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFontWidthHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OFontWidthHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int32 nWidth = 0;
         bool const bSuccess = ::sax::Converter::convertMeasure(
@@ -323,10 +323,10 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OFontWidthHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool OFontWidthHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         sal_Int16 nWidth = 0;
-        ::rtl::OUStringBuffer aResult;
+        OUStringBuffer aResult;
         if (_rValue >>= nWidth)
         {
             ::sax::Converter::convertMeasure(aResult, nWidth,
@@ -346,7 +346,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool ORotationAngleHandler::importXML( const OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& ) const
     {
         double fValue;
         bool const bSucces =
@@ -361,14 +361,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    sal_Bool ORotationAngleHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
+    sal_Bool ORotationAngleHandler::exportXML( OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& ) const
     {
         float fAngle = 0;
         sal_Bool bSuccess = (_rValue >>= fAngle);
 
         if (bSuccess)
         {
-            rtl::OUStringBuffer sValue;
+            OUStringBuffer sValue;
             ::sax::Converter::convertDouble(sValue, ((double)fAngle) / 10);
             _rStrExpValue = sValue.makeStringAndClear();
         }

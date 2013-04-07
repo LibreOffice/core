@@ -33,9 +33,9 @@ AtomProvider::~AtomProvider()
 {
 }
 
-int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
+int AtomProvider::getAtom( const OUString& rString, sal_Bool bCreate )
 {
-    ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >::iterator it = m_aAtomMap.find( rString );
+    ::boost::unordered_map< OUString, int, OUStringHash >::iterator it = m_aAtomMap.find( rString );
     if( it != m_aAtomMap.end() )
         return it->second;
     if( ! bCreate )
@@ -46,10 +46,10 @@ int AtomProvider::getAtom( const ::rtl::OUString& rString, sal_Bool bCreate )
     return m_nAtoms-1;
 }
 
-const ::rtl::OUString& AtomProvider::getString( int nAtom ) const
+const OUString& AtomProvider::getString( int nAtom ) const
 {
-    static ::rtl::OUString aEmpty;
-    ::boost::unordered_map< int, ::rtl::OUString, ::boost::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
+    static OUString aEmpty;
+    ::boost::unordered_map< int, OUString, ::boost::hash< int > >::const_iterator it = m_aStringMap.find( nAtom );
 
     return it == m_aStringMap.end() ? aEmpty : it->second;
 }
@@ -66,7 +66,7 @@ MultiAtomProvider::~MultiAtomProvider()
         delete it->second;
 }
 
-int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, sal_Bool bCreate )
+int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, sal_Bool bCreate )
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::iterator it =
           m_aAtomLists.find( atomClass );
@@ -82,14 +82,14 @@ int MultiAtomProvider::getAtom( int atomClass, const ::rtl::OUString& rString, s
     return INVALID_ATOM;
 }
 
-const ::rtl::OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
+const OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
     ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > >::const_iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getString( atom );
 
-    static ::rtl::OUString aEmpty;
+    static OUString aEmpty;
     return aEmpty;
 }
 

@@ -116,13 +116,13 @@ private:
     CheckBox        aBtnDestPers;
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
-    const rtl::OUString aStrUndefined;
-    const rtl::OUString aStrNone;
+    const OUString aStrUndefined;
+    const OUString aStrNone;
 
-    const rtl::OUString aStrEmpty;
-    const rtl::OUString aStrNotEmpty;
-    const rtl::OUString aStrRow;
-    const rtl::OUString aStrColumn;
+    const OUString aStrEmpty;
+    const OUString aStrNotEmpty;
+    const OUString aStrRow;
+    const OUString aStrColumn;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
@@ -204,8 +204,8 @@ private:
     CheckBox        aBtnDestPers;
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
-    const rtl::OUString aStrUndefined;
-    const rtl::OUString aStrNoName;
+    const OUString aStrUndefined;
+    const OUString aStrNoName;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

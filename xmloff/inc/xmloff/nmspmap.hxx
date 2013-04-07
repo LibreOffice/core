@@ -43,17 +43,17 @@ class NameSpaceEntry : public cppu::OWeakObject
 {
 public:
     // sName refers to the full namespace name
-    ::rtl::OUString     sName;
+    OUString     sName;
     // sPrefix is the prefix used to declare a given item to be from a given namespace
-    ::rtl::OUString     sPrefix;
+    OUString     sPrefix;
     // nKey is the unique identifier of a namespace
     sal_uInt16          nKey;
 };
 
 struct OUStringEqFunc
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
+    sal_Bool operator()( const OUString &r1,
+                         const OUString &r2) const
     {
         return r1 == r2;
     }
@@ -67,7 +67,7 @@ struct uInt32lt
         return r1 < r2;
     }
 };
-typedef ::std::pair < sal_uInt16, rtl::OUString > QNamePair;
+typedef ::std::pair < sal_uInt16, OUString > QNamePair;
 
 struct QNamePairHash
 {
@@ -77,20 +77,20 @@ struct QNamePairHash
     }
 };
 
-typedef ::boost::unordered_map < QNamePair, ::rtl::OUString, QNamePairHash > QNameCache;
-typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::Reference <NameSpaceEntry >, rtl::OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::boost::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
+typedef ::boost::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash, OUStringEqFunc > NameSpaceHash;
 typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
 {
-    const ::rtl::OUString       sXMLNS;
-    const ::rtl::OUString       sEmpty;
+    const OUString       sXMLNS;
+    const OUString       sEmpty;
 
     NameSpaceHash               aNameHash;
     mutable NameSpaceHash       aNameCache;
     NameSpaceMap                aNameMap;
     mutable QNameCache          aQNameCache;
-    SAL_DLLPRIVATE sal_uInt16 _Add( const rtl::OUString& rPrefix, const rtl::OUString &rName, sal_uInt16 nKey );
+    SAL_DLLPRIVATE sal_uInt16 _Add( const OUString& rPrefix, const OUString &rName, sal_uInt16 nKey );
 
 public:
 
@@ -102,34 +102,34 @@ public:
     void operator =( const SvXMLNamespaceMap& rCmp );
     int operator ==( const SvXMLNamespaceMap& rCmp ) const;
 
-    sal_uInt16 Add( const ::rtl::OUString& rPrefix,
-                const ::rtl::OUString& rName,
+    sal_uInt16 Add( const OUString& rPrefix,
+                const OUString& rName,
                 sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
-    sal_uInt16 AddIfKnown( const ::rtl::OUString& rPrefix,
-                const ::rtl::OUString& rName );
+    sal_uInt16 AddIfKnown( const OUString& rPrefix,
+                const OUString& rName );
 
-    sal_uInt16 GetKeyByName( const ::rtl::OUString& rName ) const;
-    const ::rtl::OUString& GetNameByKey( sal_uInt16 nKey ) const;
+    sal_uInt16 GetKeyByName( const OUString& rName ) const;
+    const OUString& GetNameByKey( sal_uInt16 nKey ) const;
 
-    sal_uInt16 GetKeyByPrefix( const ::rtl::OUString& rPrefix ) const;
-    const ::rtl::OUString& GetPrefixByKey( sal_uInt16 nKey ) const;
+    sal_uInt16 GetKeyByPrefix( const OUString& rPrefix ) const;
+    const OUString& GetPrefixByKey( sal_uInt16 nKey ) const;
 
-    ::rtl::OUString GetQNameByKey( sal_uInt16 nKey,
-                           const ::rtl::OUString& rLocalName,
+    OUString GetQNameByKey( sal_uInt16 nKey,
+                           const OUString& rLocalName,
                            sal_Bool bCache = sal_True) const;
 
-    ::rtl::OUString GetAttrNameByKey( sal_uInt16 nKey ) const;
+    OUString GetAttrNameByKey( sal_uInt16 nKey ) const;
 
     /* This will replace the version with the unused 5th default parameter */
-    sal_uInt16 _GetKeyByAttrName( const ::rtl::OUString& rAttrName,
-                             ::rtl::OUString *pPrefix,
-                             ::rtl::OUString *pLocalName,
-                             ::rtl::OUString *pNamespace = 0,
+    sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
+                             OUString *pPrefix,
+                             OUString *pLocalName,
+                             OUString *pNamespace = 0,
                              sal_Bool bCache = sal_True) const;
 
     /* This will replace the version with the unused 3rd default parameter */
-    sal_uInt16 _GetKeyByAttrName( const ::rtl::OUString& rAttrName,
-                             ::rtl::OUString *pLocalName = 0,
+    sal_uInt16 _GetKeyByAttrName( const OUString& rAttrName,
+                             OUString *pLocalName = 0,
                              sal_Bool bCache = sal_True) const;
 
     sal_uInt16 GetFirstKey() const;
@@ -140,28 +140,28 @@ public:
        This might be replaced by a better interface later. */
     const NameSpaceHash& GetAllEntries() const { return aNameHash; }
 
-    static sal_Bool NormalizeOasisURN( ::rtl::OUString& rName );
-    static sal_Bool NormalizeW3URI( ::rtl::OUString& rName );
-    static sal_Bool NormalizeURI( ::rtl::OUString& rName );
+    static sal_Bool NormalizeOasisURN( OUString& rName );
+    static sal_Bool NormalizeW3URI( OUString& rName );
+    static sal_Bool NormalizeURI( OUString& rName );
 
-/* deprecated */ sal_Bool AddAtIndex( sal_uInt16 nIdx, const ::rtl::OUString& rPrefix,
-                     const ::rtl::OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
+/* deprecated */ sal_Bool AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
+                     const OUString& rName, sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN );
 /* deprecated */ sal_uInt16 GetIndexByKey( sal_uInt16 nKey ) const;
-/* deprecated */ sal_uInt16 GetIndexByPrefix( const ::rtl::OUString& rPrefix ) const;
+/* deprecated */ sal_uInt16 GetIndexByPrefix( const OUString& rPrefix ) const;
 /* deprecated */ sal_uInt16 GetFirstIndex() const;
 /* deprecated */ sal_uInt16 GetNextIndex( sal_uInt16 nOldIdx ) const;
-/* deprecated */ const ::rtl::OUString& GetPrefixByIndex( sal_uInt16 nIdx ) const;
-/* deprecated */ const ::rtl::OUString& GetNameByIndex( sal_uInt16 nIdx ) const;
-/* deprecated */ ::rtl::OUString GetAttrNameByIndex( sal_uInt16 nIdx ) const;
-/* deprecated */ ::rtl::OUString GetQNameByIndex( sal_uInt16 nIdx,
-                            const ::rtl::OUString& rLocalName ) const;
-/* deprecated */ sal_uInt16 GetKeyByAttrName( const ::rtl::OUString& rAttrName,
-                             ::rtl::OUString *pPrefix,
-                             ::rtl::OUString *pLocalName,
-                             ::rtl::OUString *pNamespace=0,
+/* deprecated */ const OUString& GetPrefixByIndex( sal_uInt16 nIdx ) const;
+/* deprecated */ const OUString& GetNameByIndex( sal_uInt16 nIdx ) const;
+/* deprecated */ OUString GetAttrNameByIndex( sal_uInt16 nIdx ) const;
+/* deprecated */ OUString GetQNameByIndex( sal_uInt16 nIdx,
+                            const OUString& rLocalName ) const;
+/* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
+                             OUString *pPrefix,
+                             OUString *pLocalName,
+                             OUString *pNamespace=0,
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
-/* deprecated */ sal_uInt16 GetKeyByAttrName( const ::rtl::OUString& rAttrName,
-                             ::rtl::OUString *pLocalName = 0,
+/* deprecated */ sal_uInt16 GetKeyByAttrName( const OUString& rAttrName,
+                             OUString *pLocalName = 0,
                              sal_uInt16 nIdxGuess = USHRT_MAX ) const;
 };
 

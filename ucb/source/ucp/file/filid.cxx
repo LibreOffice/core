@@ -27,7 +27,7 @@ using namespace com::sun::star::ucb;
 
 FileContentIdentifier::FileContentIdentifier(
     shell* pMyShell,
-    const rtl::OUString& aUnqPath,
+    const OUString& aUnqPath,
     sal_Bool IsNormalized )
     : m_pMyShell( pMyShell )
 {
@@ -118,7 +118,7 @@ FileContentIdentifier::getTypes(
 }
 
 
-rtl::OUString
+OUString
 SAL_CALL
 FileContentIdentifier::getContentIdentifier(
     void )
@@ -128,7 +128,7 @@ FileContentIdentifier::getContentIdentifier(
 }
 
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 FileContentIdentifier::getContentProviderScheme(
     void )
     throw( uno::RuntimeException )

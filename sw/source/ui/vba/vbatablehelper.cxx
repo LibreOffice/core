@@ -72,7 +72,7 @@ sal_Int32 SwVbaTableHelper::getTabColumnsMaxCount( ) throw (uno::RuntimeExceptio
     return nRet;
 }
 
-sal_Int32 SwVbaTableHelper::getTabRowIndex( const rtl::OUString& CellName ) throw (uno::RuntimeException)
+sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& CellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
     String sCellName(CellName);
@@ -87,7 +87,7 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const rtl::OUString& CellName ) thro
     return nRet;
 }
 
-sal_Int32 SwVbaTableHelper::getTabColIndex( const rtl::OUString& CellName ) throw (uno::RuntimeException)
+sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& CellName ) throw (uno::RuntimeException)
 {
     sal_Int32 nRet = 0;
     String sCellName(CellName);
@@ -99,7 +99,7 @@ sal_Int32 SwVbaTableHelper::getTabColIndex( const rtl::OUString& CellName ) thro
     return nRet;
 }
 
-rtl::OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
+OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
 {
     const sal_Int32 coDiff = 52; // 'A'-'Z' 'a' - 'z'
     sal_Int32 nCalc = 0;
@@ -125,14 +125,14 @@ sal_Int32 SwVbaTableHelper::getTableWidth( ) throw (uno::RuntimeException)
     sal_Int32 nWidth = 0;
     sal_Bool isWidthRelatvie = sal_False;
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
-    xTableProps->getPropertyValue( rtl::OUString("IsWidthRelative") ) >>= isWidthRelatvie;
+    xTableProps->getPropertyValue( OUString("IsWidthRelative") ) >>= isWidthRelatvie;
     if( isWidthRelatvie )
     {
-        xTableProps->getPropertyValue( rtl::OUString("RelativeWidth") ) >>= nWidth;
+        xTableProps->getPropertyValue( OUString("RelativeWidth") ) >>= nWidth;
     }
     else
     {
-        xTableProps->getPropertyValue( rtl::OUString("Width") ) >>= nWidth;
+        xTableProps->getPropertyValue( OUString("Width") ) >>= nWidth;
     }
     return nWidth;
 }

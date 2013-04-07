@@ -38,7 +38,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_SIZE 256
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION FetchDirection::FORWARD

@@ -93,11 +93,10 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 
 sal_Bool IsWordproFile( uno::Reference<XInputStream>& rInputStream);
-sal_Bool IsWordproFile(rtl::OUString file);
+sal_Bool IsWordproFile(OUString file);
 
 LWPFilterReader::LWPFilterReader()
 {
@@ -110,7 +109,7 @@ LWPFilterReader::~LWPFilterReader()
 sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     throw( RuntimeException )
 {
-    ::rtl::OUString sURL;
+    OUString sURL;
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
         //Note we should attempt to use "InputStream" if it exists first!
@@ -206,11 +205,11 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
 }
 
 
-::rtl::OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+OUString SAL_CALL LWPFilterImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
         throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString   ret;
-    rtl::OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
+    OUString   ret;
+    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
     // opening as template is done when a parameter tells to do so and a template filter can be detected
     // (otherwise no valid filter would be found) or if the detected filter is a template filter and
     // there is no parameter that forbids to open as template
@@ -247,7 +246,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = OUString("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
                     return OUString("wordpro_template");
@@ -281,7 +280,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
                     if(!bOpenAsTemplate)
                     {
                         aDescriptor.realloc( nPropertyCount + 1 );
-                        aDescriptor[nPropertyCount].Name = ::rtl::OUString("AsTemplate");
+                        aDescriptor[nPropertyCount].Name = OUString("AsTemplate");
                         aDescriptor[nPropertyCount].Value <<= sal_True;
                     }
                     return OUString("wordpro_template");
@@ -450,7 +449,7 @@ sal_Bool IsWordProStr(const sal_Int8 *pBuf)
     return bRet;
 }
 
-sal_Bool IsWordproFile(rtl::OUString file)
+sal_Bool IsWordproFile(OUString file)
 {
     sal_Bool bRet = sal_False;
     SfxMedium aMedium( file, STREAM_STD_READ);

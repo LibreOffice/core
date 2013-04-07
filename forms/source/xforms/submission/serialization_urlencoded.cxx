@@ -70,9 +70,9 @@ sal_Bool CSerializationURLEncoded::is_unreserved(sal_Char c)
     }
     return sal_False;
 }
-void  CSerializationURLEncoded::encode_and_append(const ::rtl::OUString& aString, ::rtl::OStringBuffer& aBuffer)
+void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStringBuffer& aBuffer)
 {
-    ::rtl::OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+    OString utf8String = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
     const sal_uInt8 *pString = reinterpret_cast< const sal_uInt8 * >( utf8String.getStr() );
     sal_Char tmpChar[4]; tmpChar[3] = 0;
 
@@ -119,9 +119,9 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
     // is this an element node?
     if (aNode->getNodeType() == NodeType_ELEMENT_NODE)
     {
-        ::rtl::OUString  aName = aNode->getNodeName();
+        OUString  aName = aNode->getNodeName();
         // find any text children
-        ::rtl::OUStringBuffer aValue;
+        OUStringBuffer aValue;
         Reference< XText > aText;
         for(sal_Int32 i=0; i < aChildList->getLength(); i++)
         {
@@ -136,8 +136,8 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         // found anything?
         if (aValue.getLength() > 0)
         {
-            ::rtl::OUString aUnencValue = aValue.makeStringAndClear();
-            ::rtl::OStringBuffer aEncodedBuffer;
+            OUString aUnencValue = aValue.makeStringAndClear();
+            OStringBuffer aEncodedBuffer;
             encode_and_append(aName, aEncodedBuffer);
             aEncodedBuffer.append("=");
             encode_and_append(aUnencValue, aEncodedBuffer);

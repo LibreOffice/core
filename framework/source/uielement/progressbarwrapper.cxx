@@ -83,7 +83,7 @@ uno::Reference< awt::XWindow > ProgressBarWrapper::getStatusBar() const
 }
 
 // wrapped methods of ::com::sun::star::task::XStatusIndicator
-void ProgressBarWrapper::start( const ::rtl::OUString& Text, ::sal_Int32 Range )
+void ProgressBarWrapper::start( const OUString& Text, ::sal_Int32 Range )
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -152,7 +152,7 @@ throw (uno::RuntimeException)
     }
 }
 
-void ProgressBarWrapper::setText( const ::rtl::OUString& Text )
+void ProgressBarWrapper::setText( const OUString& Text )
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
@@ -194,7 +194,7 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
 throw (uno::RuntimeException)
 {
     uno::Reference< awt::XWindow > xWindow;
-    rtl::OUString aText;
+    OUString aText;
     sal_Bool      bSetValue( sal_False );
 
     {
@@ -239,7 +239,7 @@ throw (uno::RuntimeException)
 void ProgressBarWrapper::reset()
 throw (uno::RuntimeException)
 {
-    setText( rtl::OUString() );
+    setText( OUString() );
     setValue( 0 );
 }
 

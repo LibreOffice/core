@@ -38,10 +38,10 @@ public:
     ~SbiDllMgr();
 
     SbError Call(
-        rtl::OUString const & function, rtl::OUString const &  library,
+        OUString const & function, OUString const &  library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
 
-    void FreeDll(rtl::OUString const & library);
+    void FreeDll(OUString const & library);
 
 private:
     struct Impl;

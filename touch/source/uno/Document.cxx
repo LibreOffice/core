@@ -26,7 +26,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 namespace org { namespace libreoffice { namespace touch

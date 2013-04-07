@@ -72,7 +72,7 @@ void OptimizerDialog::InitDialog()
 
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
@@ -102,7 +102,7 @@ void OptimizerDialog::InitRoadmap()
 
         sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-        Sequence< rtl::OUString >   aNames( pNames, nCount );
+        Sequence< OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );
 
         mxRoadmapControlModel = insertControlModel( OUString( "com.sun.star.awt.UnoControlRoadmapModel"  ),
@@ -117,9 +117,9 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 3, sal_True, getString( STR_OLE_OBJECTS ), ITEM_ID_OLE_OPTIMIZATION );
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
-        rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
-        rtl::OUString sBitmap( "/minimizepresi_80.png" );
-        rtl::OUString sURL( sBitmapPath += sBitmap );
+        OUString sBitmapPath( getPath( TK_BitmapPath ) );
+        OUString sBitmap( "/minimizepresi_80.png" );
+        OUString sURL( sBitmapPath += sBitmap );
 
         xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
         xPropertySet->setPropertyValue( TKGet( TK_Activated ), Any( (sal_Bool)sal_True ) );
@@ -134,7 +134,7 @@ void OptimizerDialog::InitRoadmap()
 
 // -----------------------------------------------------------------------------
 
-void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const rtl::OUString& rLabel, const sal_Int32 nItemID )
+void OptimizerDialog::InsertRoadmapItem( const sal_Int32 nIndex, const sal_Bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID )
 {
     try
     {
@@ -308,7 +308,7 @@ void OptimizerDialog::UpdateControlStates( sal_Int16 nPage )
 
 // -----------------------------------------------------------------------------
 
-rtl::OUString OptimizerDialog::GetSelectedString( const PPPOptimizerTokenEnum eToken )
+OUString OptimizerDialog::GetSelectedString( const PPPOptimizerTokenEnum eToken )
 {
     OUString aSelectedItem;
     Sequence< sal_Int16 > sSelectedItems;
@@ -337,7 +337,7 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
         const Any* pVal( maStats.GetStatusValue( TK_Status ) );
         if ( pVal )
         {
-            rtl::OUString sStatus;
+            OUString sStatus;
             if ( *pVal >>= sStatus )
             {
                 setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
@@ -521,14 +521,14 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
             mrOptimizerDialog.getControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ) ) >>= nInt16;
             if ( nInt16 )
             {
-                rtl::OUString aSaveAsURL;
+                OUString aSaveAsURL;
                 FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxMSF );
 
                 // generating default file name
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
                 if ( xStorable.is() && xStorable->hasLocation() )
                 {
-                    rtl::OUString aLocation( xStorable->getLocation() );
+                    OUString aLocation( xStorable->getLocation() );
                     if ( !aLocation.isEmpty() )
                     {
                         sal_Int32 nIndex = aLocation.lastIndexOf( '/', aLocation.getLength() - 1 );
@@ -685,7 +685,7 @@ void TextListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::Ev
 void TextListenerComboBox0Pg1::textChanged( const TextEvent& /* rEvent */ )
     throw ( com::sun::star::uno::RuntimeException )
 {
-    rtl::OUString aString;
+    OUString aString;
     Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_ComboBox0Pg1 ), TKGet( TK_Text ) );
     if ( aAny >>= aString )
     {

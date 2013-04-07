@@ -133,7 +133,7 @@ protected:
 
 private:
     /** Returns the localized function name for the specified (1-based) resource index. */
-    inline const rtl::OUString& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[nFuncIdx-1]; }
+    inline const OUString& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[nFuncIdx-1]; }
 
     /** Fills the field windows from the current pivot table settings. */
     void                InitFieldWindows();
@@ -145,9 +145,9 @@ private:
     void                    InitFieldWindow ( const ::std::vector<ScPivotField>& rFields, ScPivotFieldType eType );
     void                    AdjustDlgSize();
     ScDPLabelData* GetLabelData( SCCOL nCol );
-    rtl::OUString GetLabelString(SCsCOL nCol);
+    OUString GetLabelString(SCsCOL nCol);
     bool                    IsOrientationAllowed( SCsCOL nCol, ScPivotFieldType eType );
-    rtl::OUString GetFuncString( sal_uInt16& rFuncMask, bool bIsValue = true );
+    OUString GetFuncString( sal_uInt16& rFuncMask, bool bIsValue = true );
 
     void                    AddField        ( size_t nFromIndex,
                                               ScPivotFieldType eToType, const Point& rAtPos );
@@ -231,8 +231,8 @@ private:
     PushButton              maBtnRemove;
     PushButton              maBtnOptions;
     MoreButton              maBtnMore;
-    std::vector<rtl::OUString> maFuncNames;     /// Localized function names from resource.
-    boost::ptr_vector<rtl::OUString> maRefStrs; /// Reference strings stored with the output list box.
+    std::vector<OUString> maFuncNames;     /// Localized function names from resource.
+    boost::ptr_vector<OUString> maRefStrs; /// Reference strings stored with the output list box.
     ScDPObjectPtr           mxDlgDPObject;      /// Clone of the pivot table object this dialog is based on.
     ScPivotParam            maPivotData;        /// The pivot table field configuration.
     ScDPLabelDataVector     maLabelData;        /// Information about all dimensions.
@@ -241,9 +241,9 @@ private:
     ScDocument*             mpDoc;
     formula::RefEdit*       mpRefInputEdit;
 
-    const rtl::OUString     maStrUndefined;
-    const rtl::OUString     maStrNewTable;
-    rtl::OUString           maOutputRefStr; /// Used only for caching in UI.
+    const OUString     maStrUndefined;
+    const OUString     maStrNewTable;
+    OUString           maOutputRefStr; /// Used only for caching in UI.
 
     ScPivotFieldType           meDnDFromType;
     size_t                  mnDnDFromIndex;

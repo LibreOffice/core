@@ -61,7 +61,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     bool        bSyntErrWarn = false;
     bool        bOverflowWarn = false;
 
-    rtl::OUString   aData = aDifParser.aData;
+    OUString   aData = aDifParser.aData;
     bool        bData = false;
 
     rIn.Seek( 0 );
@@ -308,7 +308,7 @@ TOPIC DifParser::GetNextTopic( void )
     };
 
     STATE                   eS = S_START;
-    rtl::OUString           aLine;
+    OUString           aLine;
 
     nVector = 0;
     nVal = 0;
@@ -430,7 +430,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     else
     {   // ...und zur Strafe mit'm Numberformatter...
         OSL_ENSURE( pNumFormatter, "-DifParser::GetNextDataset(): No Formatter, more fun!" );
-        rtl::OUString aTestVal( pPossibleNumericData );
+        OUString aTestVal( pPossibleNumericData );
         sal_uInt32 nFormat = 0;
         double fTmpVal;
         if( pNumFormatter->IsNumberFormat( aTestVal, nFormat, fTmpVal ) )
@@ -445,7 +445,7 @@ DATASET DifParser::GetNumberDataset( const sal_Unicode* pPossibleNumericData )
     return eRet;
 }
 
-bool DifParser::ReadNextLine( rtl::OUString& rStr )
+bool DifParser::ReadNextLine( OUString& rStr )
 {
     if( aLookAheadLine.isEmpty() )
     {
@@ -454,7 +454,7 @@ bool DifParser::ReadNextLine( rtl::OUString& rStr )
     else
     {
         rStr = aLookAheadLine;
-        aLookAheadLine = rtl::OUString();
+        aLookAheadLine = OUString();
         return true;
     }
 }
@@ -502,7 +502,7 @@ bool DifParser::LookAhead()
 DATASET DifParser::GetNextDataset( void )
 {
     DATASET             eRet = D_UNKNOWN;
-    rtl::OUString       aLine;
+    OUString       aLine;
     const sal_Unicode*      pAktBuffer;
 
     ReadNextLine( aLine );
@@ -529,7 +529,7 @@ DATASET DifParser::GetNextDataset( void )
             {
                 pAktBuffer++;
                 eRet = GetNumberDataset(pAktBuffer);
-                rtl::OUString aTmpLine;
+                OUString aTmpLine;
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell

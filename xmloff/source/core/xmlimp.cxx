@@ -62,8 +62,6 @@
 
 using ::com::sun::star::beans::XPropertySetInfo;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -269,9 +267,9 @@ public:
     INetURLObject aDocBase;
 
     /// name of stream in package, e.g., "content.xml"
-    ::rtl::OUString mStreamName;
+    OUString mStreamName;
 
-    ::rtl::OUString aODFVersion;
+    OUString aODFVersion;
 
     // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
@@ -689,7 +687,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 #ifdef TIMELOG
         // If we do profiling, we want a trace message for the first element
         // in order to identify the stream.
-        rtl::OString aString(rtl::OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
+        OString aString(OUStringToOString(rName, RTL_TEXTENCODING_ASCII_US));
         RTL_LOGFILE_TRACE_AUTHOR1( "xmloff", "unknown",
                                    "SvXMLImport::StartElement( \"%s\", ... )",
                                    aString.getStr() );
@@ -1160,7 +1158,7 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     return mxDashHelper;
 }
 
-sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
+sal_Bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 {
 
     // if, and only if, only parts are imported, then we're in a package
@@ -1206,16 +1204,16 @@ sal_Bool SvXMLImport::IsPackageURL( const ::rtl::OUString& rURL ) const
     return sal_True;
 }
 
-::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL,
+OUString SvXMLImport::ResolveGraphicObjectURL( const OUString& rURL,
                                                       sal_Bool bLoadOnDemand )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
 
     if( IsPackageURL( rURL ) )
     {
         if( !bLoadOnDemand && mxGraphicResolver.is() )
         {
-            ::rtl::OUString     aTmp( msPackageProtocol );
+            OUString     aTmp( msPackageProtocol );
             aTmp += rURL;
             sRet = mxGraphicResolver->resolveGraphicObjectURL( aTmp );
         }
@@ -1244,7 +1242,7 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
     return xOStm;
 }
 
-::rtl::OUString SvXMLImport::ResolveGraphicObjectURLFromBase64(
+OUString SvXMLImport::ResolveGraphicObjectURLFromBase64(
                                  const Reference < XOutputStream >& rOut )
 {
     OUString sURL;
@@ -1255,11 +1253,11 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
     return sURL;
 }
 
-::rtl::OUString SvXMLImport::ResolveEmbeddedObjectURL(
-                                    const ::rtl::OUString& rURL,
-                                    const ::rtl::OUString& rClassId )
+OUString SvXMLImport::ResolveEmbeddedObjectURL(
+                                    const OUString& rURL,
+                                    const OUString& rClassId )
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
 
     if( IsPackageURL( rURL ) )
     {
@@ -1304,9 +1302,9 @@ Reference < XOutputStream >
     return xOLEStream;
 }
 
-::rtl::OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
+OUString SvXMLImport::ResolveEmbeddedObjectURLFromBase64()
 {
-    ::rtl::OUString sRet;
+    OUString sRet;
 
     if( mxEmbeddedResolver.is() )
     {
@@ -1373,7 +1371,7 @@ void SvXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
 {
 }
 
-void SvXMLImport::SetDocumentSpecificSettings(const ::rtl::OUString& _rSettingsGroupName, const uno::Sequence<beans::PropertyValue>& _rSettings)
+void SvXMLImport::SetDocumentSpecificSettings(const OUString& _rSettingsGroupName, const uno::Sequence<beans::PropertyValue>& _rSettings)
 {
     (void)_rSettingsGroupName;
     (void)_rSettings;
@@ -1489,7 +1487,7 @@ void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
     if (pAutoStyles && mxNumberStyles.is() && (mnImportFlags & IMPORT_CONTENT) )
     {
         uno::Reference<xml::sax::XAttributeList> xAttrList;
-        uno::Sequence< ::rtl::OUString > aNames = mxNumberStyles->getElementNames();
+        uno::Sequence< OUString > aNames = mxNumberStyles->getElementNames();
         sal_uInt32 nCount(aNames.getLength());
         if (nCount)
         {
@@ -1566,7 +1564,7 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
         return rValue;
 }
 
-sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion )
+sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 {
     // the check returns sal_False only if the storage version could be retrieved
     sal_Bool bResult = sal_True;
@@ -1582,7 +1580,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
             uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
 
             // the check should be done only for OASIS format
-            ::rtl::OUString aMediaType;
+            OUString aMediaType;
             xStorProps->getPropertyValue( "MediaType" ) >>= aMediaType;
             if ( ::comphelper::OStorageHelper::GetXStorageFormat( xStor ) >= SOFFICE_FILEFORMAT_8 )
             {
@@ -1597,7 +1595,7 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const ::rtl::OUString& aODFVersion
                 // check only if not in Repair mode
                 if ( !bRepairPackage )
                 {
-                    ::rtl::OUString aStorVersion;
+                    OUString aStorVersion;
                     xStorProps->getPropertyValue( "Version" )
                         >>= aStorVersion;
 
@@ -1773,17 +1771,17 @@ SvXMLImport::GetComponentContext() const
     return mpImpl->mxComponentContext;
 }
 
-::rtl::OUString SvXMLImport::GetBaseURL() const
+OUString SvXMLImport::GetBaseURL() const
 {
     return mpImpl->aBaseURL.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-::rtl::OUString SvXMLImport::GetDocumentBase() const
+OUString SvXMLImport::GetDocumentBase() const
 {
     return mpImpl->aDocBase.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-::rtl::OUString SvXMLImport::GetStreamName() const
+OUString SvXMLImport::GetStreamName() const
 {
     return mpImpl->mStreamName;
 }
@@ -1847,14 +1845,14 @@ bool SvXMLImport::isGraphicLoadOnDemandSupported() const
     return mbIsGraphicLoadOnDemandSupported;
 }
 
-::rtl::OUString SvXMLImport::GetODFVersion() const
+OUString SvXMLImport::GetODFVersion() const
 {
     return mpImpl->aODFVersion;
 }
 
 // xml:id for RDF metadata
 void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
-    ::rtl::OUString const & i_rXmlId)
+    OUString const & i_rXmlId)
 {
     if (!i_rXmlId.isEmpty()) {
         try {
@@ -1888,10 +1886,10 @@ SvXMLImport::GetRDFaImportHelper()
 
 void
 SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
-    ::rtl::OUString const & i_rAbout,
-    ::rtl::OUString const & i_rProperty,
-    ::rtl::OUString const & i_rContent,
-    ::rtl::OUString const & i_rDatatype)
+    OUString const & i_rAbout,
+    OUString const & i_rProperty,
+    OUString const & i_rContent,
+    OUString const & i_rDatatype)
 {
     // N.B.: we only get called if i_xObject had xhtml:about attribute
     // (an empty attribute value is valid)

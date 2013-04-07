@@ -56,9 +56,9 @@ namespace pcr
     namespace
     {
         //--------------------------------------------------------------------
-        ::rtl::OUString composeModelElementUIName( const ::rtl::OUString& _rModelName, const ::rtl::OUString& _rElementName )
+        OUString composeModelElementUIName( const OUString& _rModelName, const OUString& _rElementName )
         {
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.appendAscii( "[" );
             aBuffer.append( _rModelName );
             aBuffer.appendAscii( "] " );
@@ -222,11 +222,11 @@ namespace pcr
 
         if ( _bDoListening )
         {
-            xBindingProps->addPropertyChangeListener( ::rtl::OUString(), _rxListener );
+            xBindingProps->addPropertyChangeListener( OUString(), _rxListener );
         }
         else
         {
-            xBindingProps->removePropertyChangeListener( ::rtl::OUString(), _rxListener );
+            xBindingProps->removePropertyChangeListener( OUString(), _rxListener );
         }
     }
 
@@ -298,7 +298,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::getFormModelNames( ::std::vector< ::rtl::OUString >& /* [out] */ _rModelNames ) const SAL_THROW(())
+    void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(())
     {
         if ( m_xDocument.is() )
         {
@@ -310,7 +310,7 @@ namespace pcr
                 OSL_ENSURE( xForms.is(), "EFormsHelper::getFormModelNames: invalid forms container!" );
                 if ( xForms.is() )
                 {
-                    Sequence< ::rtl::OUString > aModelNames = xForms->getElementNames();
+                    Sequence< OUString > aModelNames = xForms->getElementNames();
                     _rModelNames.resize( aModelNames.getLength() );
                     ::std::copy( aModelNames.getConstArray(), aModelNames.getConstArray() + aModelNames.getLength(),
                         _rModelNames.begin()
@@ -325,7 +325,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::getBindingNames( const ::rtl::OUString& _rModelName, ::std::vector< ::rtl::OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(())
+    void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(())
     {
         _rBindingNames.resize( 0 );
         try
@@ -337,7 +337,7 @@ namespace pcr
                 OSL_ENSURE( xBindings.is(), "EFormsHelper::getBindingNames: invalid bindings container obtained from the model!" );
                 if ( xBindings.is() )
                 {
-                    Sequence< ::rtl::OUString > aNames = xBindings->getElementNames();
+                    Sequence< OUString > aNames = xBindings->getElementNames();
                     _rBindingNames.resize( aNames.getLength() );
                     ::std::copy( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), _rBindingNames.begin() );
                 }
@@ -350,7 +350,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< xforms::XModel > EFormsHelper::getFormModelByName( const ::rtl::OUString& _rModelName ) const SAL_THROW(())
+    Reference< xforms::XModel > EFormsHelper::getFormModelByName( const OUString& _rModelName ) const SAL_THROW(())
     {
         Reference< xforms::XModel > xReturn;
         try
@@ -387,9 +387,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
+    OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
     {
-        ::rtl::OUString sModelName;
+        OUString sModelName;
         try
         {
             Reference< xforms::XModel > xFormsModel( getCurrentFormModel() );
@@ -422,9 +422,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
+    OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
     {
-        ::rtl::OUString sBindingName;
+        OUString sBindingName;
         try
         {
             Reference< XPropertySet > xBinding( getCurrentBinding() );
@@ -489,7 +489,7 @@ namespace pcr
             m_xBindableControl->setValueBinding( xBinding );
             impl_toggleBindingPropertyListening_throw( true, NULL );
 
-            ::std::set< ::rtl::OUString > aSet;
+            ::std::set< OUString > aSet;
             firePropertyChanges( xOldBinding, _rxBinding, aSet );
         }
         catch( const Exception& )
@@ -499,25 +499,25 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !_rBindingName.isEmpty(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
         return implGetOrCreateBinding( _rTargetModel, _rBindingName );
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const ::rtl::OUString& _rTargetModel, const ::rtl::OUString& _rBindingName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !( _rTargetModel.isEmpty() && !_rBindingName.isEmpty() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
 
         Reference< XPropertySet > xBinding;
         try
         {
-            ::rtl::OUString sTargetModel( _rTargetModel );
+            OUString sTargetModel( _rTargetModel );
             // determine the model which the binding should belong to
             if ( sTargetModel.isEmpty() )
             {
-                ::std::vector< ::rtl::OUString > aModelNames;
+                ::std::vector< OUString > aModelNames;
                 getFormModelNames( aModelNames );
                 if ( !aModelNames.empty() )
                     sTargetModel = *aModelNames.begin();
@@ -549,12 +549,12 @@ namespace pcr
                     {
                         // find a nice name for it
                         String sBaseName( PcrRes( RID_STR_BINDING_UI_NAME ) );
-                        sBaseName += rtl::OUString(" ");
+                        sBaseName += OUString(" ");
                         String sNewName;
                         sal_Int32 nNumber = 1;
                         do
                         {
-                            sNewName = sBaseName + ::rtl::OUString::valueOf( nNumber++ );
+                            sNewName = sBaseName + OUString::valueOf( nNumber++ );
                         }
                         while ( xBindingNames->hasByName( sNewName ) );
                         Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );
@@ -609,9 +609,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const SAL_THROW(())
+    OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const SAL_THROW(())
     {
-        ::rtl::OUString sUIName;
+        OUString sUIName;
         try
         {
             // determine the model which the element belongs to
@@ -621,7 +621,7 @@ namespace pcr
             OSL_ENSURE( xHelper.is(), "EFormsHelper::getModelElementUIName: invalid element or model!" );
             if ( xHelper.is() )
             {
-                ::rtl::OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( _rxElement, sal_True ) : xHelper->getBindingName( _rxElement, sal_True );
+                OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( _rxElement, sal_True ) : xHelper->getBindingName( _rxElement, sal_True );
                 Reference< xforms::XModel > xModel( xHelper, UNO_QUERY_THROW );
                 sUIName = composeModelElementUIName( xModel->getID(), sElementName );
             }
@@ -635,7 +635,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const ::rtl::OUString& _rUIName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const OUString& _rUIName ) const SAL_THROW(())
     {
         const MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
         MapStringToPropertySet::const_iterator pos = rMapUINameToElement.find( _rUIName );
@@ -645,24 +645,24 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::getAllElementUINames( const ModelElementType _eType, ::std::vector< ::rtl::OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
+    void EFormsHelper::getAllElementUINames( const ModelElementType _eType, ::std::vector< OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
     {
         MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
         rMapUINameToElement.clear();
         _rElementNames.resize( 0 );
 
         if ( _bPrepentEmptyEntry )
-            rMapUINameToElement[ ::rtl::OUString() ] = Reference< XPropertySet >();
+            rMapUINameToElement[ OUString() ] = Reference< XPropertySet >();
 
         try
         {
             // obtain the model names
-            ::std::vector< ::rtl::OUString > aModels;
+            ::std::vector< OUString > aModels;
             getFormModelNames( aModels );
             _rElementNames.reserve( aModels.size() * 2 );    // heuristics
 
             // for every model, obtain the element
-            for ( ::std::vector< ::rtl::OUString >::const_iterator pModelName = aModels.begin();
+            for ( ::std::vector< OUString >::const_iterator pModelName = aModels.begin();
                   pModelName != aModels.end();
                   ++pModelName
                 )
@@ -693,8 +693,8 @@ namespace pcr
                             xElement->setPropertyValue( PROPERTY_MODEL, makeAny( xModel ) );
                     }
 #endif
-                    ::rtl::OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, sal_True ) : xHelper->getBindingName( xElement, sal_True );
-                    ::rtl::OUString sUIName = composeModelElementUIName( *pModelName, sElementName );
+                    OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, sal_True ) : xHelper->getBindingName( xElement, sal_True );
+                    OUString sUIName = composeModelElementUIName( *pModelName, sElementName );
 
                     OSL_ENSURE( rMapUINameToElement.find( sUIName ) == rMapUINameToElement.end(), "EFormsHelper::getAllElementUINames: duplicate name!" );
                     rMapUINameToElement.insert( MapStringToPropertySet::value_type( sUIName, xElement ) );
@@ -711,7 +711,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::firePropertyChange( const ::rtl::OUString& _rName, const Any& _rOldValue, const Any& _rNewValue ) const
+    void EFormsHelper::firePropertyChange( const OUString& _rName, const Any& _rOldValue, const Any& _rNewValue ) const
     {
         if ( m_aPropertyListeners.empty() )
             return;
@@ -737,7 +737,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< ::rtl::OUString >& _rFilter ) const
+    void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< OUString >& _rFilter ) const
     {
         if ( m_aPropertyListeners.empty() )
             return;

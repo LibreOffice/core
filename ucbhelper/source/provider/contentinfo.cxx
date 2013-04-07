@@ -151,7 +151,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 //=========================================================================
 // virtual
 beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
-        const rtl::OUString& aName )
+        const OUString& aName )
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
     beans::Property aProp;
@@ -164,7 +164,7 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
-        const rtl::OUString& Name )
+        const OUString& Name )
     throw( uno::RuntimeException )
 {
     beans::Property aProp;
@@ -186,7 +186,7 @@ void PropertySetInfo::reset()
 
 //=========================================================================
 sal_Bool PropertySetInfo::queryProperty(
-    const rtl::OUString& rName, beans::Property& rProp )
+    const OUString& rName, beans::Property& rProp )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -298,7 +298,7 @@ CommandProcessorInfo::getCommands()
 // virtual
 com::sun::star::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName(
-        const rtl::OUString& Name )
+        const OUString& Name )
     throw( com::sun::star::ucb::UnsupportedCommandException,
            uno::RuntimeException )
 {
@@ -326,7 +326,7 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
-       const rtl::OUString& Name )
+       const OUString& Name )
     throw( uno::RuntimeException )
 {
     com::sun::star::ucb::CommandInfo aInfo;
@@ -358,7 +358,7 @@ void CommandProcessorInfo::reset()
 
 //=========================================================================
 sal_Bool CommandProcessorInfo::queryCommand(
-    const rtl::OUString& rName,
+    const OUString& rName,
     com::sun::star::ucb::CommandInfo& rCommand )
 {
     osl::MutexGuard aGuard( m_aMutex );

@@ -201,12 +201,12 @@ sal_Bool ScValidationData::DoScript( const ScAddress& rPos, const String& rInput
     if ( bIsValue )
         aParams[0] = ::com::sun::star::uno::makeAny( nValue );
     else
-        aParams[0] = ::com::sun::star::uno::makeAny( ::rtl::OUString( aValStr ) );
+        aParams[0] = ::com::sun::star::uno::makeAny( OUString( aValStr ) );
 
     //  2) Position der Zelle
     String aPosStr;
     rPos.Format( aPosStr, SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention() );
-    aParams[1] = ::com::sun::star::uno::makeAny( ::rtl::OUString( aPosStr ) );
+    aParams[1] = ::com::sun::star::uno::makeAny( OUString( aPosStr ) );
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running

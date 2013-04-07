@@ -282,7 +282,7 @@ static const NameTypeTable pNameTypeTableArray[] =
     // gallery: fontwork-arch-left-pour
     // gallery: fontwork-arch-right-pour
 
-MSO_SPT EnhancedCustomShapeTypeNames::Get( const rtl::OUString& rShapeType )
+MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
 {
     if ( !pHashMap )
     {   // init hash map
@@ -310,11 +310,11 @@ MSO_SPT EnhancedCustomShapeTypeNames::Get( const rtl::OUString& rShapeType )
     return eRetValue;
 }
 
-rtl::OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
+OUString EnhancedCustomShapeTypeNames::Get( const MSO_SPT eShapeType )
 {
     return eShapeType <= mso_sptTextBox
-        ? rtl::OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
-        : rtl::OUString();
+        ? OUString::createFromAscii( pNameTypeTableArray[ eShapeType ].pS )
+        : OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

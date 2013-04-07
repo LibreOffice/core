@@ -69,14 +69,14 @@ DECLARE_STL_STDKEY_SET( sal_Int32, SdXMLFormatMap );
 
 struct HeaderFooterPageSettingsImpl
 {
-    rtl::OUString maStrHeaderDeclName;
-    rtl::OUString maStrFooterDeclName;
-    rtl::OUString maStrDateTimeDeclName;
+    OUString maStrHeaderDeclName;
+    OUString maStrFooterDeclName;
+    OUString maStrDateTimeDeclName;
 };
 
 struct DateTimeDeclImpl
 {
-    rtl::OUString maStrText;
+    OUString maStrText;
     sal_Bool mbFixed;
     sal_Int32 mnFormat;
 };
@@ -101,17 +101,17 @@ class SdXMLExport : public SvXMLExport
     ImpXMLEXPPageMasterInfo*    mpHandoutPageMaster;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
-    com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
+    com::sun::star::uno::Sequence< OUString > maDrawPagesAutoLayoutNames;
 
-    ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
-    ::std::vector< ::rtl::OUString >        maDrawNotesPagesStyleNames;
-    ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
-    ::rtl::OUString                         maHandoutMasterStyleName;
+    ::std::vector< OUString >        maDrawPagesStyleNames;
+    ::std::vector< OUString >        maDrawNotesPagesStyleNames;
+    ::std::vector< OUString >        maMasterPagesStyleNames;
+    OUString                         maHandoutMasterStyleName;
     ::std::vector< HeaderFooterPageSettingsImpl >   maDrawPagesHeaderFooterSettings;
     ::std::vector< HeaderFooterPageSettingsImpl >   maDrawNotesPagesHeaderFooterSettings;
 
-    ::std::vector< ::rtl::OUString >        maHeaderDeclsVector;
-    ::std::vector< ::rtl::OUString >        maFooterDeclsVector;
+    ::std::vector< OUString >        maHeaderDeclsVector;
+    ::std::vector< OUString >        maFooterDeclsVector;
     ::std::vector< DateTimeDeclImpl >       maDateTimeDeclsVector;
 
     HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
@@ -127,12 +127,12 @@ class SdXMLExport : public SvXMLExport
     sal_Bool                    mbFamilyGraphicUsed;
     sal_Bool                    mbFamilyPresentationUsed;
 
-    const rtl::OUString         msZIndex;
-    const rtl::OUString         msEmptyPres;
-    const rtl::OUString         msModel;
-    const rtl::OUString         msStartShape;
-    const rtl::OUString         msEndShape;
-    const rtl::OUString         msPageLayoutNames;
+    const OUString         msZIndex;
+    const OUString         msEmptyPres;
+    const OUString         msModel;
+    const OUString         msStartShape;
+    const OUString         msEndShape;
+    const OUString         msPageLayoutNames;
 
     virtual void _ExportStyles(sal_Bool bUsed);
     virtual void _ExportAutoStyles();
@@ -148,14 +148,14 @@ class SdXMLExport : public SvXMLExport
     void ImpWritePageMasterInfos();
     void ImpPrepAutoLayoutInfos();
     HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xDrawPage );
-    ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const rtl::OUString& rName);
+    ImpXMLEXPPageMasterInfo* ImpGetPageMasterInfoByName(const OUString& rName);
 
     void ImpPrepDrawPageInfos();
     void ImpPrepMasterPageInfos();
     void ImpWritePresentationStyles();
-    ::rtl::OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
+    OUString ImpCreatePresPageStyleName( com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> xDrawPage, bool bExportBackground = true );
 
-    sal_Bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, rtl::OUString& rName);
+    sal_Bool ImpPrepAutoLayoutInfo(const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xPage, OUString& rName);
     void ImpWriteAutoLayoutInfos();
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
     void ImpWriteHeaderFooterDecls();
@@ -167,7 +167,7 @@ class SdXMLExport : public SvXMLExport
     // #82003# helper function for recursive object count
     sal_uInt32 ImpRecursiveObjectCount( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes);
 
-    rtl::OUString getNavigationOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
+    OUString getNavigationOrder( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
 
     void collectAnnotationAutoStyles( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
     void exportAnnotations( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage );
@@ -204,10 +204,10 @@ public:
     virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
     virtual void exportDataStyles();
     virtual void exportAutoDataStyles();
-    virtual rtl::OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
+    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
 
     // XServiceInfo ( : SvXMLExport )
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 };
 
 #endif  //  _SDXMLEXP_HXX

@@ -30,10 +30,10 @@ using namespace com::sun::star;
 
 int UIPreviewApp::Main()
 {
-    std::vector<rtl::OUString> uifiles;
+    std::vector<OUString> uifiles;
     for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
     {
-        rtl::OUString aFileUrl;
+        OUString aFileUrl;
         osl::File::getFileURLFromSystemPath(GetCommandLineParam(i), aFileUrl);
         uifiles.push_back(aFileUrl);
     }
@@ -65,7 +65,7 @@ int UIPreviewApp::Main()
         Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG);
 
         {
-            VclBuilder aBuilder(pDialog, rtl::OUString(), uifiles[0]);
+            VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
             Dialog *pRealDialog = dynamic_cast<Dialog*>(aBuilder.get_widget_root());
 
             if (!pRealDialog)
@@ -73,7 +73,7 @@ int UIPreviewApp::Main()
 
             if (pRealDialog)
             {
-                pRealDialog->SetText(rtl::OUString("LibreOffice ui-previewer"));
+                pRealDialog->SetText(OUString("LibreOffice ui-previewer"));
                 pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
                 pRealDialog->Execute();
             }
@@ -83,7 +83,7 @@ int UIPreviewApp::Main()
     }
     catch (const uno::Exception &e)
     {
-        fprintf(stderr, "fatal error: %s\n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
 
     return EXIT_SUCCESS;

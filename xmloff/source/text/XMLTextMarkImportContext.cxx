@@ -40,8 +40,6 @@
 #include "RDFaImportHelper.hxx"
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -52,7 +50,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-using rtl::OUString;
 
 
 XMLFieldParamImportContext::XMLFieldParamImportContext(
@@ -69,8 +66,8 @@ XMLFieldParamImportContext::XMLFieldParamImportContext(
 void XMLFieldParamImportContext::StartElement(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList)
 {
     SvXMLImport& rImport = GetImport();
-    ::rtl::OUString sName;
-    ::rtl::OUString sValue;
+    OUString sName;
+    OUString sValue;
 
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
@@ -130,7 +127,7 @@ static SvXMLEnumMapEntry const lcl_aMarkTypeMap[] =
 };
 
 
-static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
+static const char *lcl_getFormFieldmarkName(OUString &name)
 {
     static const char sCheckbox[]=ODF_FORMCHECKBOX;
     static const char sFormDropDown[]=ODF_FORMDROPDOWN;
@@ -146,14 +143,14 @@ static const char *lcl_getFormFieldmarkName(rtl::OUString &name)
         return NULL;
 }
 
-static rtl::OUString lcl_getFieldmarkName(rtl::OUString &name)
+static OUString lcl_getFieldmarkName(OUString &name)
 {
     static const char sFormtext[]=ODF_FORMTEXT;
     if (name.compareToAscii("msoffice.field.FORMTEXT")==0 ||
             name.compareToAscii("ecma.office-open-xml.field.FORMTEXT")==0)
-        return rtl::OUString::createFromAscii(sFormtext);
+        return OUString::createFromAscii(sFormtext);
     else if (name.compareToAscii(ODF_FORMTEXT)==0)
-        return rtl::OUString::createFromAscii(sFormtext);
+        return OUString::createFromAscii(sFormtext);
     else
         return name;
 }
@@ -205,7 +202,7 @@ void XMLTextMarkImportContext::EndElement()
                         sAPI_reference_mark,
                         m_sBookmarkName,
                         m_rHelper.GetCursorAsRange()->getStart(),
-                        ::rtl::OUString());
+                        OUString());
                     break;
 
                 case TypeFieldmark:
@@ -224,7 +221,7 @@ void XMLTextMarkImportContext::EndElement()
                             if (xContent.is() && bImportAsField) {
                                 // setup fieldmark...
                                 Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
-                                xFormField->setFieldType(rtl::OUString::createFromAscii(formFieldmarkName));
+                                xFormField->setFieldType(OUString::createFromAscii(formFieldmarkName));
                                 if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
                                     m_rHelper.setCurrentFieldParamsTo(xFormField);
                                 }
@@ -314,8 +311,8 @@ void XMLTextMarkImportContext::EndElement()
                                     // setup fieldmark...
                                     Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
                                     if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
-                                        rtl::OUString givenTypeName=m_rHelper.getCurrentFieldType();
-                                        rtl::OUString fieldmarkTypeName=lcl_getFieldmarkName(givenTypeName);
+                                        OUString givenTypeName=m_rHelper.getCurrentFieldType();
+                                        OUString fieldmarkTypeName=lcl_getFieldmarkName(givenTypeName);
 
                                         xFormField->setFieldType(fieldmarkTypeName);
                                         m_rHelper.setCurrentFieldParamsTo(xFormField);
@@ -344,7 +341,7 @@ void XMLTextMarkImportContext::EndElement()
 }
 
 SvXMLImportContext *XMLTextMarkImportContext::CreateChildContext( sal_uInt16 nPrefix,
-                                        const ::rtl::OUString& rLocalName,
+                                        const OUString& rLocalName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >&  )
 {
     return new XMLFieldParamImportContext(GetImport(), m_rHelper,

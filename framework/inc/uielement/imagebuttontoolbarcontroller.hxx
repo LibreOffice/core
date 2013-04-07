@@ -40,7 +40,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                       ToolBox*             pToolBar,
                                       sal_uInt16               nID,
-                                      const rtl::OUString& aCommand );
+                                      const OUString& aCommand );
         virtual ~ImageButtonToolbarController();
 
         // XComponent
@@ -50,7 +50,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
         virtual void executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand );
 
     private:
-        sal_Bool ReadImageFromURL( sal_Bool bBigImage, const rtl::OUString& aImageURL, Image& aImage );
+        sal_Bool ReadImageFromURL( sal_Bool bBigImage, const OUString& aImageURL, Image& aImage );
 };
 
 }

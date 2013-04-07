@@ -100,7 +100,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pDoc = pViewData->GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
-    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COMPILEFAP)),uno::makeAny(sal_True));
+    xSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COMPILEFAP)),uno::makeAny(sal_True));
 
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
 
@@ -168,7 +168,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
 
         if ( !bEdit )
         {
-            rtl::OUString aNewFormula('=');
+            OUString aNewFormula('=');
             if ( aFormula.Len() > 0 && aFormula.GetChar(0) == '=' )
                 aNewFormula = aFormula;
 
@@ -329,7 +329,7 @@ bool ScFormulaDlg::calculateValue( const String& rStrExp, String& rStrResult )
         if ( pCell->GetCode()->GetCodeLen() <= 1 )
         {   // ==1: einzelner ist als Parameter immer Bereich
             // ==0: es waere vielleicht einer, wenn..
-            rtl::OUStringBuffer aBraced;
+            OUStringBuffer aBraced;
             aBraced.append('(');
             aBraced.append(rStrExp);
             aBraced.append(')');
@@ -447,7 +447,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
                 aArray.AddDoubleReference(aRefData);
             ScCompiler aComp(pDoc, aCursorPos, aArray);
             aComp.SetGrammar(pDoc->GetGrammar());
-            ::rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             aComp.CreateStringFromTokenArray(aBuf);
             aRefStr = aBuf.makeStringAndClear();
         }

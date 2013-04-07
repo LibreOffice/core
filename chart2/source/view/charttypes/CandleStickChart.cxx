@@ -40,7 +40,6 @@ using namespace ::com::sun::star;
 using namespace ::rtl::math;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -106,15 +105,15 @@ void CandleStickChart::createShapes()
     //(because the text group is created after the series group the texts are displayed on top)
 
     uno::Reference< drawing::XShapes > xSeriesTarget(
-        createGroupShape( m_xLogicTarget,rtl::OUString() ));
+        createGroupShape( m_xLogicTarget,OUString() ));
     uno::Reference< drawing::XShapes > xLossTarget(
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_LOSS, rtl::OUString() )));
+            OBJECTTYPE_DATA_STOCK_LOSS, OUString() )));
     uno::Reference< drawing::XShapes > xGainTarget(
         createGroupShape( m_xLogicTarget, ObjectIdentifier::createClassifiedIdentifier(
-            OBJECTTYPE_DATA_STOCK_GAIN, rtl::OUString() )));
+            OBJECTTYPE_DATA_STOCK_GAIN, OUString() )));
     uno::Reference< drawing::XShapes > xTextTarget(
-        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -242,7 +241,7 @@ void CandleStickChart::createShapes()
                     uno::Reference< beans::XPropertySet > xPointProp( (*aSeriesIter)->getPropertiesOfPoint( nIndex ));
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(0);
                     {
-                        rtl::OUString aPointCID = ObjectIdentifier::createPointCID( (*aSeriesIter)->getPointCID_Stub(), nIndex );
+                        OUString aPointCID = ObjectIdentifier::createPointCID( (*aSeriesIter)->getPointCID_Stub(), nIndex );
                         uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes( getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
                         xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
                     }

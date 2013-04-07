@@ -63,8 +63,8 @@ namespace logging
         bool    getIsInitialized() const { return m_bInitialized; }
         void    setIsInitialized() { m_bInitialized = true; }
 
-        bool    getEncoding(        ::rtl::OUString& _out_rEncoding ) const;
-        bool    setEncoding( const  ::rtl::OUString& _rEncoding     );
+        bool    getEncoding(        OUString& _out_rEncoding ) const;
+        bool    setEncoding( const  OUString& _rEncoding     );
 
         inline  rtl_TextEncoding
                 getTextEncoding() const { return m_eEncoding; }
@@ -108,19 +108,19 @@ namespace logging
             Finally, the unicode string is encoded into a byte string, using our encoding setting. Then,
             <TRUE/> is returned.
         */
-        bool    formatForPublishing( const ::com::sun::star::logging::LogRecord& _rRecord, ::rtl::OString& _out_rEntry ) const;
+        bool    formatForPublishing( const ::com::sun::star::logging::LogRecord& _rRecord, OString& _out_rEntry ) const;
 
         /** retrieves our formatter's heading, encoded with our encoding
 
             @return <TRUE/> in case of success, <FALSE/> if any error occurred
         */
-        bool    getEncodedHead( ::rtl::OString& _out_rHead ) const;
+        bool    getEncodedHead( OString& _out_rHead ) const;
 
         /** retrieves our formatter's tail, encoded with our encoding
 
             @return <TRUE/> in case of success, <FALSE/> if any error occurred
         */
-        bool    getEncodedTail( ::rtl::OString& _out_rTail ) const;
+        bool    getEncodedTail( OString& _out_rTail ) const;
 
         /** initializes the instance from a collection of named settings
 

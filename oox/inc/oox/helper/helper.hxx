@@ -47,14 +47,14 @@ namespace oox {
 #define STATIC_ARRAY_SELECT( array, index, def ) \
     ((static_cast<size_t>(index) < STATIC_ARRAY_SIZE(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
 
-/** Expands to a temporary ::rtl::OString, created from a literal(!) character
+/** Expands to a temporary OString, created from a literal(!) character
     array. */
 #define CREATE_OSTRING( ascii ) \
-    ::rtl::OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
+    OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
 
 /** Convert an OUString to an ASCII C string. Use for debug purposes only. */
 #define OUSTRING_TO_CSTR( str ) \
-    ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
+    OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
 
 // Common constants ===========================================================
 

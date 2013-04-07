@@ -50,7 +50,7 @@ namespace pcr
     class OBrowserLine
     {
     private:
-        ::rtl::OUString         m_sEntryName;
+        OUString         m_sEntryName;
         FixedText               m_aFtTitle;
         Size                    m_aOutputSize;
         Point                   m_aLinePos;
@@ -67,7 +67,7 @@ namespace pcr
         bool                    m_bReadOnly;
 
     public:
-                            OBrowserLine( const ::rtl::OUString& _rEntryName, Window* pParent);
+                            OBrowserLine( const OUString& _rEntryName, Window* pParent);
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
@@ -80,10 +80,10 @@ namespace pcr
             return m_pControlWindow;
         }
 
-        const ::rtl::OUString&
+        const OUString&
                             GetEntryName() const { return m_sEntryName; }
 
-        void                SetComponentHelpIds( const rtl::OString& _rHelpId, const rtl::OString& _sPrimaryButtonId, const rtl::OString& _sSecondaryButtonId );
+        void                SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId );
 
         void                SetTitle(const String& rString );
         void                FullFillTitleString();
@@ -99,7 +99,7 @@ namespace pcr
         void                SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
 
         sal_Bool            GrabFocus();
-        void                ShowBrowseButton( const ::rtl::OUString& _rImageURL, sal_Bool _bPrimary );
+        void                ShowBrowseButton( const OUString& _rImageURL, sal_Bool _bPrimary );
         void                ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary );
         void                ShowBrowseButton( sal_Bool _bPrimary );
         void                HideBrowseButton( sal_Bool _bPrimary );
@@ -123,7 +123,7 @@ namespace pcr
         void    impl_layoutComponents();
 
         PushButton& impl_ensureButton( bool _bPrimary );
-        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage );
+        void        impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage );
     };
 
 //............................................................................

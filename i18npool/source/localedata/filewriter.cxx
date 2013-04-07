@@ -49,7 +49,7 @@ void OFileWriter::writeAsciiString(const char* str) const
     fprintf(m_f, "%s", str);
 }
 
-void OFileWriter::writeStringCharacters(const ::rtl::OUString& str) const
+void OFileWriter::writeStringCharacters(const OUString& str) const
 {
     for(int i = 0; i < str.getLength(); i++)
         fprintf(m_f, "0x%x, ", str[i]);
@@ -62,7 +62,7 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -80,7 +80,7 @@ void OFileWriter::writeFunction(const char *func, const char *count, const char 
     fprintf(m_f, "\treturn (sal_Unicode**)%s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction(const char *func, const ::rtl::OUString& useLocale, const char *to) const
+void OFileWriter::writeRefFunction(const char *func, const OUString& useLocale, const char *to) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -99,7 +99,7 @@ void OFileWriter::writeFunction2(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction2(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction2(const char *func, const OUString& useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -117,7 +117,7 @@ void OFileWriter::writeFunction3(const char *func, const char *style, const char
     fprintf(m_f, "\treturn %s;\n}\n", array);
 }
 
-void OFileWriter::writeRefFunction3(const char *func, const ::rtl::OUString& useLocale) const
+void OFileWriter::writeRefFunction3(const char *func, const OUString& useLocale) const
 {
     OString aRefLocale( OUStringToOString(useLocale, RTL_TEXTENCODING_ASCII_US) );
     const char* locale = aRefLocale.getStr();
@@ -131,56 +131,56 @@ void OFileWriter::writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 c
     fprintf(m_f, "static const sal_Unicode %s%d[] = {%d};\n", pAsciiStr, count, val);
 }
 
-bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const
+bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const
 {
     bool bBool = (str == "true" ? 1 : 0);
     fprintf(m_f,"static const sal_Unicode default%s%d[] = {%d};\n", pAsciiStr, count, bBool);
     return bBool;
 }
 
-bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const
+bool OFileWriter::writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str) const
 {
     bool bBool = (str == "true" ? 1 : 0);
     fprintf(m_f,"static const sal_Unicode default%s[] = {%d};\n", pAsciiStr, bBool);
     return bBool;
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const
+void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const
 {
     fprintf(m_f, "static const sal_Unicode %s[] = {", pAsciiStr);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count) const
+void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const
 {
     fprintf(m_f, "static const sal_Unicode %s%d[] = {", pAsciiStr, count);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
+void OFileWriter::writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
 {
     fprintf(m_f, "static const sal_Unicode %s%d%d[] = {", pAsciiStr, count0, count1);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, const sal_Int16 count) const
+void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const
 {
     fprintf(m_f, "static const sal_Unicode %s%s%d[] = {", pTagStr, pAsciiStr, count);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const
+void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars) const
 {
     fprintf(m_f, "static const sal_Unicode %s%s[] = {", pTagStr, pAsciiStr);
     writeStringCharacters(aChars);
     fprintf(m_f, "0x0};\n");
 }
 
-void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
+void OFileWriter::writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const
 {
     fprintf(m_f, "static const sal_Unicode %s%s%d%d[] = {", pTagStr, pAsciiStr, count0, count1);
     writeStringCharacters(aChars);

@@ -59,9 +59,9 @@ namespace connectivity
         {
         protected:
             // -----------------------------------------------------------------------------
-            virtual ::rtl::OUString getDropForeignKey() const
+            virtual OUString getDropForeignKey() const
             {
-                return ::rtl::OUString(" DROP FOREIGN KEY ");
+                return OUString(" DROP FOREIGN KEY ");
             }
         public:
             OMySQLKeysHelper(   OTableHelper* _pTable,
@@ -92,11 +92,11 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
 // -------------------------------------------------------------------------
 OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName,
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description ,
+                    const OUString& _SchemaName,
+                    const OUString& _CatalogName,
                     sal_Int32 _nPrivileges
                 ) : OTableHelper(   _pTables,
                                     _xConnection,
@@ -170,7 +170,7 @@ sal_Int64 OMySQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
 }
 // -------------------------------------------------------------------------
 // XAlterTable
-void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
+void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -211,7 +211,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
         bool bColumnNameChanged = false;
-        ::rtl::OUString sOldDesc,sNewDesc;
+        OUString sOldDesc,sNewDesc;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION))      >>= sOldDesc;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION)) >>= sNewDesc;
 
@@ -226,15 +226,15 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
             // if a column should be an auto_incmrement one
             if ( bOldAutoIncrement != bAutoIncrement )
             {
-                ::rtl::OUString sTypeName;
+                OUString sTypeName;
                 descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
 
-                static ::rtl::OUString s_sAutoIncrement("auto_increment");
+                static OUString s_sAutoIncrement("auto_increment");
                 if ( bAutoIncrement )
                 {
                     if ( sTypeName.indexOf(s_sAutoIncrement) == -1 )
                     {
-                        sTypeName += ::rtl::OUString(" ");
+                        sTypeName += OUString(" ");
                         sTypeName += s_sAutoIncrement;
                     }
                 }
@@ -253,7 +253,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         }
 
         // third: check the default values
-        ::rtl::OUString sNewDefault,sOldDefault;
+        OUString sNewDefault,sOldDefault;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
@@ -267,15 +267,15 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
             alterDefaultValue(sNewDefault,colName);
 
         // now we should look if the name of the column changed
-        ::rtl::OUString sNewColumnName;
+        OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
         if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) && !bColumnNameChanged )
         {
-            ::rtl::OUString sSql = getAlterTableColumnPart();
-            sSql += ::rtl::OUString(" CHANGE ");
-            const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+            OUString sSql = getAlterTableColumnPart();
+            sSql += OUString(" CHANGE ");
+            const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
-            sSql += ::rtl::OUString(" ");
+            sSql += OUString(" ");
             sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
             executeStatement(sSql);
         }
@@ -292,13 +292,13 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 
 }
 // -----------------------------------------------------------------------------
-void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
+void OMySQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(" CHANGE ");
-    const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+    OUString sSql = getAlterTableColumnPart();
+    sSql += OUString(" CHANGE ");
+    const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(" ");
+    sSql += OUString(" ");
 
     OColumn* pColumn = new OColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;
@@ -309,53 +309,53 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OMySQLTable::getTypeCreatePattern() const
+OUString OMySQLTable::getTypeCreatePattern() const
 {
-    static const ::rtl::OUString s_sCreatePattern("(M,D)");
+    static const OUString s_sCreatePattern("(M,D)");
     return s_sCreatePattern;
 }
 // -----------------------------------------------------------------------------
-void OMySQLTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
+void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(" ALTER ");
+    OUString sSql = getAlterTableColumnPart();
+    sSql += OUString(" ALTER ");
 
-    const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+    const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(" SET DEFAULT '") + _sNewDefault;
-    sSql += ::rtl::OUString("'");
+    sSql += OUString(" SET DEFAULT '") + _sNewDefault;
+    sSql += OUString("'");
 
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
-void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
+void OMySQLTable::dropDefaultValue(const OUString& _rColName)
 {
-    ::rtl::OUString sSql = getAlterTableColumnPart();
-    sSql += ::rtl::OUString(" ALTER ");
+    OUString sSql = getAlterTableColumnPart();
+    sSql += OUString(" ALTER ");
 
-    const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
+    const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
-    sSql += ::rtl::OUString(" DROP DEFAULT");
+    sSql += OUString(" DROP DEFAULT");
 
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OMySQLTable::getAlterTableColumnPart()
+OUString OMySQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql(  "ALTER TABLE " );
+    OUString sSql(  "ALTER TABLE " );
 
-    ::rtl::OUString sComposedName(
+    OUString sComposedName(
         ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
     sSql += sComposedName;
 
     return sSql;
 }
 // -----------------------------------------------------------------------------
-void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
+void OMySQLTable::executeStatement(const OUString& _rStatement )
 {
-    ::rtl::OUString sSQL = _rStatement;
+    OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(")"));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,OUString(")"));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )
@@ -365,9 +365,9 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OMySQLTable::getRenameStart() const
+OUString OMySQLTable::getRenameStart() const
 {
-    return ::rtl::OUString("RENAME TABLE ");
+    return OUString("RENAME TABLE ");
 }
 
 

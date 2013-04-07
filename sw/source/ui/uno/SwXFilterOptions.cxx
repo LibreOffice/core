@@ -50,15 +50,15 @@ SwXFilterOptions::~SwXFilterOptions()
 {
 }
 
-::rtl::OUString  SwXFilterOptions::getImplementationName_Static()
+OUString  SwXFilterOptions::getImplementationName_Static()
 {
-    return ::rtl::OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
+    return OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
 }
 
-uno::Sequence< ::rtl::OUString> SwXFilterOptions::getSupportedServiceNames_Static()
+uno::Sequence< OUString> SwXFilterOptions::getSupportedServiceNames_Static()
 {
-    ::rtl::OUString sService(SWFILTEROPTIONSOBJ_SERVICE);
-    return uno::Sequence< ::rtl::OUString> (&sService, 1);
+    OUString sService(SWFILTEROPTIONSOBJ_SERVICE);
+    return uno::Sequence< OUString> (&sService, 1);
 }
 
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() throw (uno::RuntimeException)
@@ -66,7 +66,7 @@ uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues() thro
     uno::Sequence<beans::PropertyValue> aRet(1);
     beans::PropertyValue* pArray = aRet.getArray();
 
-    pArray[0].Name = rtl::OUString( FILTER_OPTIONS_NAME );
+    pArray[0].Name = OUString( FILTER_OPTIONS_NAME );
     pArray[0].Value <<= sFilterOptions;
 
     return aRet;
@@ -81,18 +81,18 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        ::rtl::OUString aPropName = rProp.Name;
+        OUString aPropName = rProp.Name;
 
         if ( aPropName.equalsAscii( SW_PROP_NAME_STR(UNO_NAME_FILTER_NAME) ) )
             rProp.Value >>= sFilterName;
-        else if ( aPropName == ::rtl::OUString(FILTER_OPTIONS_NAME) )
+        else if ( aPropName == OUString(FILTER_OPTIONS_NAME) )
             rProp.Value >>= sFilterOptions;
         else if ( aPropName == "InputStream" )
             rProp.Value >>= xInputStream;
     }
 }
 
-void   SwXFilterOptions::setTitle( const ::rtl::OUString& /*rTitle*/ )
+void   SwXFilterOptions::setTitle( const OUString& /*rTitle*/ )
     throw (uno::RuntimeException)
 {
 }
@@ -152,18 +152,18 @@ void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& x
     xModel = xDoc;
 }
 
-::rtl::OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
+OUString SwXFilterOptions::getImplementationName() throw(uno::RuntimeException)
 {
-    return ::rtl::OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
+    return OUString(SWFILTEROPTIONSOBJ_IMPLNAME);
 }
 
-sal_Bool SwXFilterOptions::supportsService( const ::rtl::OUString& rServiceName )
+sal_Bool SwXFilterOptions::supportsService( const OUString& rServiceName )
     throw(uno::RuntimeException)
 {
-    return rServiceName == ::rtl::OUString(SWFILTEROPTIONSOBJ_SERVICE);
+    return rServiceName == OUString(SWFILTEROPTIONSOBJ_SERVICE);
 }
 
-uno::Sequence< ::rtl::OUString > SwXFilterOptions::getSupportedServiceNames()
+uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
                 throw(uno::RuntimeException)
 {
     return SwXFilterOptions::getSupportedServiceNames_Static();

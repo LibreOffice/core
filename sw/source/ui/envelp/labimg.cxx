@@ -32,7 +32,6 @@
 using namespace utl;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 SwLabItem::SwLabItem() :
 
@@ -192,7 +191,7 @@ SfxPoolItem* SwLabItem::Clone(SfxItemPool*) const
     return new SwLabItem(*this);
 }
 
-Sequence<rtl::OUString> SwLabCfgItem::GetPropertyNames()
+Sequence<OUString> SwLabCfgItem::GetPropertyNames()
 {
     static const char* aLabelPropNames[] =
     {
@@ -397,7 +396,7 @@ SwLabCfgItem::SwLabCfgItem(sal_Bool bLabel) :
     }
 }
 
-void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwLabCfgItem::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void    SwLabCfgItem::Commit()
 {

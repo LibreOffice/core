@@ -97,7 +97,7 @@ namespace dbp
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
             getTables(sal_Bool _bNeedIt);
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
             getTableFields(sal_Bool _bNeedIt);
     };
 

@@ -126,11 +126,11 @@ public:
 private:
   /* Determines if the provided Mime content type is valid.
    */
-  bool isValidMimeContentType(const rtl::OUString& contentType) const;
+  bool isValidMimeContentType(const OUString& contentType) const;
 
 private:
   ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
-  typedef boost::unordered_map< rtl::OUString, NSString*, rtl::OUStringHash > OfficeOnlyTypes;
+  typedef boost::unordered_map< OUString, NSString*, OUStringHash > OfficeOnlyTypes;
   mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };
 

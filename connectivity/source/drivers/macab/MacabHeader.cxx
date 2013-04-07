@@ -140,14 +140,14 @@ void MacabHeader::operator+= (const MacabHeader *r)
 }
 
 // -------------------------------------------------------------------------
-::rtl::OUString MacabHeader::getString(const sal_Int32 i) const
+OUString MacabHeader::getString(const sal_Int32 i) const
 {
-    ::rtl::OUString nRet;
+    OUString nRet;
 
     if(i < size)
     {
         if(fields[i] == NULL || fields[i]->value == NULL || CFGetTypeID(fields[i]->value) != CFStringGetTypeID())
-            return ::rtl::OUString();
+            return OUString();
         try
         {
             nRet = CFStringToOUString( (CFStringRef) fields[i]->value);
@@ -264,7 +264,7 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 MacabHeader::getColumnNumber(const ::rtl::OUString s) const
+sal_Int32 MacabHeader::getColumnNumber(const OUString s) const
 {
     sal_Int32 i;
     for(i = 0; i < size; i++)

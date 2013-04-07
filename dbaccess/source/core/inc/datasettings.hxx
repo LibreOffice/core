@@ -40,10 +40,10 @@ class ODataSettings_Base
 {
 public:
 // <properties>
-    ::rtl::OUString                             m_sFilter;
-    ::rtl::OUString                             m_sHavingClause;
-    ::rtl::OUString                             m_sGroupBy;
-    ::rtl::OUString                             m_sOrder;
+    OUString                             m_sFilter;
+    OUString                             m_sHavingClause;
+    OUString                             m_sGroupBy;
+    OUString                             m_sOrder;
     sal_Bool                                    m_bApplyFilter;     // no BitField ! the base class needs a pointer to this member !
     ::com::sun::star::awt::FontDescriptor       m_aFont;
     ::com::sun::star::uno::Any                  m_aRowHeight;

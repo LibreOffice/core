@@ -132,12 +132,12 @@ GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
     }
 }
 
-::rtl::OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
+OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
 {
     if ( nIndex < (sal_Int32) m_supportedEvents.size() )
         return m_supportedEvents[nIndex];
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 //*****************************************************************************************************************
@@ -183,7 +183,7 @@ void GlobalEventConfig_Impl::Commit()
         if(it->second.isEmpty() )
             continue;
         sNode = sPrefix + it->first + sPostfix;
-        OSL_TRACE("writing binding for: %s",::rtl::OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        OSL_TRACE("writing binding for: %s",OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         seqValues[ 0 ].Name = sNode;
         seqValues[ 0 ].Value <<= it->second;
         //write the data to the registry
@@ -214,7 +214,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
         aBuffer.append( lEventNames[i] );
         aBuffer.append( aCommandKey );
         lMacros[0] = aBuffer.makeStringAndClear();
-        OSL_TRACE("reading binding for: %s",::rtl::OUStringToOString(lMacros[0] , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
+        OSL_TRACE("reading binding for: %s",OUStringToOString(lMacros[0] , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         Sequence< Any > lValues = GetProperties( lMacros );
         OUString sMacroURL;
         if( lValues.getLength() > 0 )
@@ -280,8 +280,8 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 
 Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw (RuntimeException)
 {
-    const ::rtl::OUString* pRet = m_supportedEvents.empty() ? NULL : &m_supportedEvents[0];
-    return uno::Sequence< ::rtl::OUString >(pRet, m_supportedEvents.size());
+    const OUString* pRet = m_supportedEvents.empty() ? NULL : &m_supportedEvents[0];
+    return uno::Sequence< OUString >(pRet, m_supportedEvents.size());
 }
 
 sal_Bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
@@ -393,7 +393,7 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
     return theGlobalEventConfigMutex::get();
 }
 
-::rtl::OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )
+OUString GlobalEventConfig::GetEventName( sal_Int32 nIndex )
 {
     return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
 }

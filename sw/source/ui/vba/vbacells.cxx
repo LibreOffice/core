@@ -192,20 +192,20 @@ SwVbaCells::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaCells::getServiceImplName()
 {
-    return rtl::OUString("SwVbaCells");
+    return OUString("SwVbaCells");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaCells::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Cells");
+        sNames[0] = OUString("ooo.vba.word.Cells");
     }
     return sNames;
 }

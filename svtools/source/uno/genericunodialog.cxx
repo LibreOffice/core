@@ -55,9 +55,9 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         ,m_bNeedInitialization( false )
         ,m_aContext(_rxContext)
 {
-    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
+    registerProperty(OUString(UNODIALOG_PROPERTY_TITLE), UNODIALOG_PROPERTY_ID_TITLE, PropertyAttribute::TRANSIENT,
         &m_sTitle, getCppuType(&m_sTitle));
-    registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
+    registerProperty(OUString(UNODIALOG_PROPERTY_PARENT), UNODIALOG_PROPERTY_ID_PARENT, PropertyAttribute::TRANSIENT,
         &m_xParent, getCppuType(&m_xParent));
 }
 
@@ -98,10 +98,10 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const ::rtl::OUString& ServiceName) throw(RuntimeException)
+sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pArray = aSupported.getConstArray();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pArray = aSupported.getConstArray();
     for (sal_Int32 i = 0; i < aSupported.getLength(); ++i, ++pArray)
         if (pArray->equals(ServiceName))
             return sal_True;
@@ -147,13 +147,13 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
 }
 
 //-------------------------------------------------------------------------
-void SAL_CALL OGenericUnoDialog::setTitle( const ::rtl::OUString& _rTitle ) throw(RuntimeException)
+void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(RuntimeException)
 {
     UnoDialogEntryGuard aGuard( *this );
 
     try
     {
-        setPropertyValue(::rtl::OUString(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
+        setPropertyValue(OUString(UNODIALOG_PROPERTY_TITLE), makeAny(_rTitle));
     }
     catch(RuntimeException&)
     {
@@ -215,7 +215,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 
         if (m_bExecuting)
             throw RuntimeException(
-                    ::rtl::OUString( "already executing the dialog (recursive call)" ),
+                    OUString( "already executing the dialog (recursive call)" ),
                     *this
                   );
 
@@ -307,7 +307,7 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bInitialized )
-        throw AlreadyInitializedException( ::rtl::OUString(), *this );
+        throw AlreadyInitializedException( OUString(), *this );
 
     const Any* pArguments = aArguments.getConstArray();
     for (sal_Int32 i=0; i<aArguments.getLength(); ++i, ++pArguments)

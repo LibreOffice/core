@@ -61,8 +61,8 @@ public:
     RtfWriter m_aWriter;
 };
 
-::rtl::OUString RtfExport_getImplementationName();
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL RtfExport_getSupportedServiceNames()
+OUString RtfExport_getImplementationName();
+::com::sun::star::uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames()
     throw();
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL RtfExport_createInstance(
                                                                         const ::com::sun::star::uno::Reference<

@@ -41,14 +41,14 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
     if( pWhere )
     {
         uno::Reference< text::XTextRange > xTextRange = pWhere->getXTextRange();
-        xTextRange->setString( rtl::OUString("x") ); // set marker
+        xTextRange->setString( OUString("x") ); // set marker
         uno::Reference< text::XTextRange > xEndMarker = xTextRange->getEnd();
-        xEndMarker->setString( rtl::OUString("x") ); // set marker
+        xEndMarker->setString( OUString("x") ); // set marker
         uno::Reference< text::XText > xText = pWhere->getXText();
         mxEntry->applyTo( xEndMarker->getStart() );
         uno::Reference< text::XTextCursor > xTC = xText->createTextCursorByRange( xTextRange->getStart() );
         xTC->goRight( 1, sal_True );
-        xTC->setString( rtl::OUString("") ); // remove marker
+        xTC->setString( OUString("") ); // remove marker
         // remove the blank paragraph if it is a rich text
         sal_Bool bRich = sal_False;
         _richtext >>= bRich;
@@ -63,32 +63,32 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_QUERY_THROW );
                 xTVCursor->gotoRange( xCurrentRange, sal_False );
-                rtl::OUString url = rtl::OUString( ".uno:Delete");
+                OUString url = OUString( ".uno:Delete");
                 dispatchRequests( xModel,url );
                 xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
             }
         }
-        xEndMarker->setString( rtl::OUString("") ); // remove marker
+        xEndMarker->setString( OUString("") ); // remove marker
         xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
     return uno::Reference< word::XRange >( pWhere );
 }
 
-rtl::OUString
+OUString
 SwVbaAutoTextEntry::getServiceImplName()
 {
-    return rtl::OUString("SwVbaAutoTextEntry");
+    return OUString("SwVbaAutoTextEntry");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaAutoTextEntry::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.AutoTextEntry" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.AutoTextEntry" );
     }
     return aServiceNames;
 }
@@ -107,7 +107,7 @@ SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 }
 
 uno::Any
@@ -117,20 +117,20 @@ SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaAutoTextEntries::getServiceImplName()
 {
-    return rtl::OUString("SwVbaAutoTextEntries");
+    return OUString("SwVbaAutoTextEntries");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaAutoTextEntries::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.AutoTextEntries");
+        sNames[0] = OUString("ooo.vba.word.AutoTextEntries");
     }
     return sNames;
 }

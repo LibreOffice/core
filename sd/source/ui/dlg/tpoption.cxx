@@ -686,7 +686,7 @@ sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int
     if( comphelper::string::getTokenCount(aScale, TOKEN) != 2 )
         return( sal_False );
 
-    rtl::OUString aTmp(aScale.GetToken( 0, TOKEN ));
+    OUString aTmp(aScale.GetToken( 0, TOKEN ));
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return sal_False;
 

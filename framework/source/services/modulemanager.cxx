@@ -42,7 +42,7 @@ namespace framework
 static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
 static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
-rtl::OUString ModuleManager::impl_getStaticImplementationName() {
+OUString ModuleManager::impl_getStaticImplementationName() {
     return IMPLEMENTATIONNAME_MODULEMANAGER;
 }
 
@@ -55,9 +55,9 @@ ModuleManager::impl_createFactory(
         impl_getSupportedServiceNames());
 }
 
-css::uno::Sequence< rtl::OUString >
+css::uno::Sequence< OUString >
 ModuleManager::impl_getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > s(1);
+    css::uno::Sequence< OUString > s(1);
     s[0] = "com.sun.star.frame.ModuleManager";
     return s;
 }
@@ -80,16 +80,16 @@ ModuleManager::~ModuleManager()
         m_xCFG.clear();
 }
 
-rtl::OUString ModuleManager::getImplementationName()
+OUString ModuleManager::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
 
-sal_Bool ModuleManager::supportsService(rtl::OUString const & ServiceName)
+sal_Bool ModuleManager::supportsService(OUString const & ServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > s(getSupportedServiceNames());
+    css::uno::Sequence< OUString > s(getSupportedServiceNames());
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
         if (s[i] == ServiceName) {
             return true;
@@ -98,13 +98,13 @@ sal_Bool ModuleManager::supportsService(rtl::OUString const & ServiceName)
     return false;
 }
 
-css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
+css::uno::Sequence< OUString > ModuleManager::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return impl_getSupportedServiceNames();
 }
 
-::rtl::OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
+OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::XInterface >& xModule)
     throw(css::lang::IllegalArgumentException,
           css::frame::UnknownModuleException,
           css::uno::RuntimeException         )
@@ -123,7 +123,7 @@ css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
        )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString("Given module is not a frame nor a window, controller or model."),
+                OUString("Given module is not a frame nor a window, controller or model."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -141,7 +141,7 @@ css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
     // No fallbacks to higher components are allowed !
     // Note : A frame provides access to module components only ... but it's not a module by himself.
 
-    ::rtl::OUString sModule;
+    OUString sModule;
     if (xModel.is())
         sModule = implts_identify(xModel);
     else if (xController.is())
@@ -151,13 +151,13 @@ css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
 
     if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
-                ::rtl::OUString("Cant find suitable module for the given component."),
+                OUString("Cant find suitable module for the given component."),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;
 }
 
-void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
+void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
                                            const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException   ,
            css::container::NoSuchElementException,
@@ -168,7 +168,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString("No properties given to replace part of module."),
+                OUString("No properties given to replace part of module."),
                 static_cast< cppu::OWeakObject * >(this),
                 2);
     }
@@ -186,7 +186,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         comphelper::getComponentContext(xSMGR),
-                                                                        rtl::OUString(CFGPATH_FACTORIES),
+                                                                        OUString(CFGPATH_FACTORIES),
                                                                         ::comphelper::ConfigurationHelper::E_STANDARD);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameReplace > xModule  ;
@@ -195,7 +195,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
+                OUString("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -204,7 +204,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
            pProp != lProps.end()  ;
          ++pProp                  )
     {
-        const ::rtl::OUString& sPropName  = pProp->first;
+        const OUString& sPropName  = pProp->first;
         const css::uno::Any&   aPropValue = pProp->second;
 
         // let "NoSuchElementException" out ! We support the same API ...
@@ -215,7 +215,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
-css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
+css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     throw(css::container::NoSuchElementException,
           css::lang::WrappedTargetException     ,
           css::uno::RuntimeException            )
@@ -227,34 +227,34 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                ::rtl::OUString("Was not able to get write access to the requested module entry inside configuration."),
+                OUString("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< cppu::OWeakObject * >(this));
     }
 
     // convert it to seq< PropertyValue >
-    const css::uno::Sequence< ::rtl::OUString > lPropNames = xModule->getElementNames();
+    const css::uno::Sequence< OUString > lPropNames = xModule->getElementNames();
           ::comphelper::SequenceAsHashMap       lProps     ;
           sal_Int32                             c          = lPropNames.getLength();
           sal_Int32                             i          = 0;
 
-    lProps[rtl::OUString(MODULEPROP_IDENTIFIER)] <<= sName;
+    lProps[OUString(MODULEPROP_IDENTIFIER)] <<= sName;
     for (i=0; i<c; ++i)
     {
-        const ::rtl::OUString& sPropName         = lPropNames[i];
+        const OUString& sPropName         = lPropNames[i];
                                lProps[sPropName] = xModule->getByName(sPropName);
     }
 
     return css::uno::makeAny(lProps.getAsConstPropertyValueList());
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL ModuleManager::getElementNames()
+css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
     throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     return xCFG->getElementNames();
 }
 
-sal_Bool SAL_CALL ModuleManager::hasByName(const ::rtl::OUString& sName)
+sal_Bool SAL_CALL ModuleManager::hasByName(const OUString& sName)
     throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
@@ -274,7 +274,7 @@ sal_Bool SAL_CALL ModuleManager::hasElements()
     return xCFG->hasElements();
 }
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const ::rtl::OUString&)
+css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const OUString&)
     throw(css::uno::RuntimeException)
 {
     return css::uno::Reference< css::container::XEnumeration >();
@@ -284,7 +284,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
     throw(css::uno::RuntimeException)
 {
     ::comphelper::SequenceAsHashMap                 lSearchProps (lProperties);
-    css::uno::Sequence< ::rtl::OUString >           lModules     = getElementNames();
+    css::uno::Sequence< OUString >           lModules     = getElementNames();
     sal_Int32                                       c            = lModules.getLength();
     sal_Int32                                       i            = 0;
     ::comphelper::SequenceAsVector< css::uno::Any > lResult      ;
@@ -293,7 +293,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
     {
         try
         {
-            const ::rtl::OUString&                sModule      = lModules[i];
+            const OUString&                sModule      = lModules[i];
                   ::comphelper::SequenceAsHashMap lModuleProps = getByName(sModule);
 
             if (lModuleProps.match(lSearchProps))
@@ -325,7 +325,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     {
         xCfg = ::comphelper::ConfigurationHelper::openConfig(
                     comphelper::getComponentContext(xSMGR),
-                    rtl::OUString(CFGPATH_FACTORIES),
+                    OUString(CFGPATH_FACTORIES),
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }
     catch(const css::uno::RuntimeException&)
@@ -344,7 +344,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     // <- SAFE ----------------------------------
 }
 
-::rtl::OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
+OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
     // Search for an optional (!) interface XModule first.
     // Its used to overrule an existing service name. Used e.g. by our database form designer
@@ -357,10 +357,10 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     // comparing service names with configured entries ...
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
     if (!xInfo.is())
-        return ::rtl::OUString();
+        return OUString();
 
-    const css::uno::Sequence< ::rtl::OUString > lKnownModules = getElementNames();
-    const ::rtl::OUString*                      pKnownModules = lKnownModules.getConstArray();
+    const css::uno::Sequence< OUString > lKnownModules = getElementNames();
+    const OUString*                      pKnownModules = lKnownModules.getConstArray();
           sal_Int32                             c             = lKnownModules.getLength();
           sal_Int32                             i             = 0;
 
@@ -370,7 +370,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
             return pKnownModules[i];
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 } // namespace framework

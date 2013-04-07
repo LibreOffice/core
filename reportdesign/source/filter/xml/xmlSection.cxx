@@ -41,7 +41,7 @@ namespace rptxml
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xml::sax;
 
-      sal_uInt16 lcl_getReportPrintOption(const ::rtl::OUString& _sValue)
+      sal_uInt16 lcl_getReportPrintOption(const OUString& _sValue)
     {
         sal_uInt16 nRet = report::ReportPrintOption::ALL_PAGES;
         const SvXMLEnumMapEntry* aXML_EnumMap = OXMLHelper::GetReportPrintOptions();
@@ -53,7 +53,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLSection )
 
 OXMLSection::OXMLSection( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const uno::Reference< xml::sax::XAttributeList > & _xAttrList
                 ,const uno::Reference< report::XSection >& _xSection
                 ,sal_Bool _bPageHeader)
@@ -68,15 +68,15 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
     const SvXMLTokenMap& rTokenMap = rImport.GetSectionElemTokenMap();
 
     const sal_Int16 nLength = (m_xSection.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -110,7 +110,7 @@ OXMLSection::~OXMLSection()
 
 SvXMLImportContext* OXMLSection::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const ::rtl::OUString& _rLocalName,
+        const OUString& _rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

@@ -703,7 +703,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     }
                     if (bOk)
                     {
-                        rtl::OString aTmp(OUStringToOString(aStr,
+                        OString aTmp(OUStringToOString(aStr,
                             osl_getThreadTextEncoding()));
                         // In case the xub_StrLen will be longer than USHORT
                         // one day, and room for pad byte check.
@@ -827,7 +827,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         }
                         else
                         {
-                            rtl::OString aTmp(OUStringToOString(aStr,
+                            OString aTmp(OUStringToOString(aStr,
                                 osl_getThreadTextEncoding()));
                             // In case the xub_StrLen will be longer than USHORT
                             // one day, and room for pad byte check.
@@ -2548,7 +2548,7 @@ void ScInterpreter::ScExternal()
                         break;
                     case PTR_STRING :
                         {
-                            rtl::OString aStr(OUStringToOString(GetString(),
+                            OString aStr(OUStringToOString(GetString(),
                                 osl_getThreadTextEncoding()));
                             if ( aStr.getLength() >= ADDIN_MAXSTRLEN )
                                 SetError( errStringOverflow );

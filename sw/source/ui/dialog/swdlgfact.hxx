@@ -180,8 +180,8 @@ class AbstractSwInsertDBColAutoPilot_Impl :  public AbstractSwInsertDBColAutoPil
 class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //add for DropDownFieldDialog
 {
     DECL_ABSTDLG_BASE(AbstractDropDownFieldDialog_Impl, sw::DropDownFieldDialog)
-    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const; //this method inherit from SystemWindow
-    virtual void         SetWindowState( const rtl::OString& rStr );//this method inherit from SystemWindow
+    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const; //this method inherit from SystemWindow
+    virtual void         SetWindowState( const OString& rStr );//this method inherit from SystemWindow
 };
 //add for DropDownFieldDialog end
 
@@ -276,8 +276,8 @@ class AbstractFldInputDlg_Impl : public AbstractFldInputDlg
 {
     DECL_ABSTDLG_BASE(AbstractFldInputDlg_Impl,SwFldInputDlg)
     //from class SalFrame
-    virtual void         SetWindowState( const rtl::OString & rStr ) ;
-    virtual rtl::OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
+    virtual void         SetWindowState( const OString & rStr ) ;
+    virtual OString GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const ;
 };
 //for SwFldInputDlg end
 
@@ -290,7 +290,7 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
     virtual sal_Bool            IsEndNote();
     virtual String          GetStr();
     //from class Window
-    virtual void    SetHelpId( const rtl::OString& sHelpId );
+    virtual void    SetHelpId( const OString& sHelpId );
     virtual void    SetText( const OUString& rStr );
 };
 //for SwInsFootNoteDlg end
@@ -325,7 +325,7 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 {
     DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
     virtual sal_uInt16  GetMergeType() ;
-    virtual const ::rtl::OUString& GetSaveFilter() const;
+    virtual const OUString& GetSaveFilter() const;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
     virtual bool IsSaveIndividualDocs() const;

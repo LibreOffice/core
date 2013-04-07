@@ -33,9 +33,9 @@ CreateTabPage   GetSSOCreator( void );
 struct OrderedEntry
 {
     sal_Int32       m_nIndex;
-    rtl::OUString   m_sId;
+    OUString   m_sId;
 
-    OrderedEntry( sal_Int32 nIndex, const rtl::OUString& rId ) :
+    OrderedEntry( sal_Int32 nIndex, const OUString& rId ) :
         m_nIndex( nIndex ), m_sId( rId ) {}
 };
 
@@ -45,29 +45,29 @@ typedef std::vector< OrderedEntry* > VectorOfOrderedEntries;
 
 struct Module
 {
-    rtl::OUString           m_sName;
+    OUString           m_sName;
     bool                    m_bActive;
     VectorOfOrderedEntries  m_aNodeList;
 
-    Module( const rtl::OUString& rName ) : m_sName( rName ), m_bActive( false ) {}
+    Module( const OUString& rName ) : m_sName( rName ), m_bActive( false ) {}
 };
 
 // struct OptionsLeaf ----------------------------------------------------
 
 struct OptionsLeaf
 {
-    rtl::OUString   m_sId;
-    rtl::OUString   m_sLabel;
-    rtl::OUString   m_sPageURL;
-    rtl::OUString   m_sEventHdl;
-    rtl::OUString   m_sGroupId;
+    OUString   m_sId;
+    OUString   m_sLabel;
+    OUString   m_sPageURL;
+    OUString   m_sEventHdl;
+    OUString   m_sGroupId;
     sal_Int32       m_nGroupIndex;
 
-    OptionsLeaf(    const rtl::OUString& rId,
-                    const rtl::OUString& rLabel,
-                    const rtl::OUString& rPageURL,
-                    const rtl::OUString& rEventHdl,
-                    const rtl::OUString& rGroupId,
+    OptionsLeaf(    const OUString& rId,
+                    const OUString& rLabel,
+                    const OUString& rPageURL,
+                    const OUString& rEventHdl,
+                    const OUString& rGroupId,
                     sal_Int32 nGroupIndex ) :
         m_sId( rId ),
         m_sLabel( rLabel ),
@@ -84,20 +84,20 @@ typedef ::std::vector< VectorOfLeaves > VectorOfGroupedLeaves;
 
 struct OptionsNode
 {
-    rtl::OUString           m_sId;
-    rtl::OUString           m_sLabel;
-    rtl::OUString           m_sPageURL;
+    OUString           m_sId;
+    OUString           m_sLabel;
+    OUString           m_sPageURL;
     bool                    m_bAllModules;
-    rtl::OUString           m_sGroupId;
+    OUString           m_sGroupId;
     sal_Int32               m_nGroupIndex;
     VectorOfLeaves          m_aLeaves;
     VectorOfGroupedLeaves   m_aGroupedLeaves;
 
-    OptionsNode(    const rtl::OUString& rId,
-                    const rtl::OUString& rLabel,
-                    const rtl::OUString& rPageURL,
+    OptionsNode(    const OUString& rId,
+                    const OUString& rLabel,
+                    const OUString& rPageURL,
                     bool bAllModules,
-                    const rtl::OUString& rGroupId,
+                    const OUString& rGroupId,
                     sal_Int32 nGroupIndex ) :
         m_sId( rId ),
         m_sLabel( rLabel ),
@@ -120,8 +120,8 @@ typedef ::std::vector< OptionsNode* > VectorOfNodes;
 struct LastPageSaver
 {
     sal_uInt16          m_nLastPageId;
-    rtl::OUString   m_sLastPageURL_Tools;
-    rtl::OUString   m_sLastPageURL_ExtMgr;
+    OUString   m_sLastPageURL_Tools;
+    OUString   m_sLastPageURL_ExtMgr;
 
     LastPageSaver() : m_nLastPageId( USHRT_MAX ) {}
 };
@@ -179,11 +179,11 @@ private:
     void            Initialize( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
     void            ResizeTreeLB( void );   // resizes dialog so that treelistbox has no horizontal scroll bar
 
-    void            LoadExtensionOptions( const rtl::OUString& rExtensionId );
-    rtl::OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
+    void            LoadExtensionOptions( const OUString& rExtensionId );
+    OUString   GetModuleIdentifier( const com::sun::star::uno::Reference<
                                             com::sun::star::frame::XFrame >& xFrame );
-    Module*         LoadModule( const rtl::OUString& rModuleIdentifier );
-    VectorOfNodes   LoadNodes( Module* pModule, const rtl::OUString& rExtensionId );
+    Module*         LoadModule( const OUString& rModuleIdentifier );
+    VectorOfNodes   LoadNodes( Module* pModule, const OUString& rExtensionId );
     void            InsertNodes( const VectorOfNodes& rNodeList );
 
     virtual void queue_layout();
@@ -204,7 +204,7 @@ public:
     OfaTreeOptionsDialog( Window* pParent,
         const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame,
         bool bActivateLastSelection = true );
-    OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId );
+    OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId );
     ~OfaTreeOptionsDialog();
 
     OptionsPageInfo*    AddTabPage( sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup );
@@ -262,10 +262,10 @@ namespace com { namespace sun { namespace star { namespace awt { class XContaine
 class ExtensionsTabPage : public TabPage
 {
 private:
-    rtl::OUString       m_sPageURL;
+    OUString       m_sPageURL;
     com::sun::star::uno::Reference< com::sun::star::awt::XWindow >
                         m_xPage;
-    rtl::OUString       m_sEventHdl;
+    OUString       m_sEventHdl;
     com::sun::star::uno::Reference< com::sun::star::awt::XContainerWindowEventHandler >
                         m_xEventHdl;
     com::sun::star::uno::Reference< com::sun::star::awt::XContainerWindowProvider >
@@ -273,12 +273,12 @@ private:
     bool                m_bIsWindowHidden;
 
     void                CreateDialogWithHandler();
-    sal_Bool            DispatchAction( const rtl::OUString& rAction );
+    sal_Bool            DispatchAction( const OUString& rAction );
 
 public:
     ExtensionsTabPage(
         Window* pParent, WinBits nStyle,
-        const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
+        const OUString& rPageURL, const OUString& rEvtHdl,
         const com::sun::star::uno::Reference<
             com::sun::star::awt::XContainerWindowProvider >& rProvider );
 

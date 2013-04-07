@@ -95,26 +95,26 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
 IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, AccessibleExtendedComponentHelper_BASE, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
 
-::rtl::OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getImplementationName() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.toolkit.AccessibleWindow");
+    return OUString("com.sun.star.comp.toolkit.AccessibleWindow");
 }
 
-sal_Bool VCLXAccessibleComponent::supportsService( const ::rtl::OUString& rServiceName ) throw (uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames( getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
+    uno::Sequence< OUString > aNames( getSupportedServiceNames() );
+    const OUString* pNames = aNames.getConstArray();
+    const OUString* pEnd = pNames + aNames.getLength();
     for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
         ;
 
     return pNames != pEnd;
 }
 
-uno::Sequence< ::rtl::OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > VCLXAccessibleComponent::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString("com.sun.star.awt.AccessibleWindow");
+    uno::Sequence< OUString > aNames(1);
+    aNames[0] = OUString("com.sun.star.awt.AccessibleWindow");
     return aNames;
 }
 
@@ -332,8 +332,8 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
         break;
         case VCLEVENT_WINDOW_FRAMETITLECHANGED:
         {
-            ::rtl::OUString aOldName( *((::rtl::OUString*) rVclWindowEvent.GetData()) );
-            ::rtl::OUString aNewName( getAccessibleName() );
+            OUString aOldName( *((OUString*) rVclWindowEvent.GetData()) );
+            OUString aNewName( getAccessibleName() );
             aOldValue <<= aOldName;
             aNewValue <<= aNewName;
             NotifyAccessibleEvent( accessibility::AccessibleEventId::NAME_CHANGED, aOldValue, aNewValue );
@@ -668,11 +668,11 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     return nRole;
 }
 
-::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString aDescription;
+    OUString aDescription;
 
     if ( GetWindow() )
         aDescription = GetWindow()->GetAccessibleDescription();
@@ -680,18 +680,18 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeExce
     return aDescription;
 }
 
-::rtl::OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException)
+OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString aName;
+    OUString aName;
     if ( GetWindow() )
     {
         aName = GetWindow()->GetAccessibleName();
 #if OSL_DEBUG_LEVEL > 1
-        aName += rtl::OUString(" (Type = ");
-        aName += rtl::OUString::valueOf(static_cast<sal_Int32>(GetWindow()->GetType()));
-        aName += rtl::OUString( ")");
+        aName += OUString(" (Type = ");
+        aName += OUString::valueOf(static_cast<sal_Int32>(GetWindow()->GetType()));
+        aName += OUString( ")");
 #endif
     }
     return aName;
@@ -896,22 +896,22 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
     return xFont;
 }
 
-::rtl::OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
+OUString SAL_CALL VCLXAccessibleComponent::getTitledBorderText(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( GetWindow() )
         sRet = GetWindow()->GetText();
 
     return sRet;
 }
 
-::rtl::OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException)
+OUString SAL_CALL VCLXAccessibleComponent::getToolTipText(  ) throw (uno::RuntimeException)
 {
     OExternalLockGuard aGuard( this );
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     if ( GetWindow() )
         sRet = GetWindow()->GetQuickHelpText();
 

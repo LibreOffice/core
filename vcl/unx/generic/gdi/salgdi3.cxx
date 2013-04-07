@@ -88,7 +88,6 @@ struct _XRegion
     BOX *rects;
     BOX extents;
 };
-using ::rtl::OUString;
 // ===========================================================================
 
 // PspKernInfo allows on-demand-querying of psprint provided kerning info (#i29881#)
@@ -529,10 +528,10 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
 // ----------------------------------------------------------------------------
 
 bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const rtl::OUString& rFileURL, const rtl::OUString& rFontName )
+    const OUString& rFileURL, const OUString& rFontName )
 {
     // inform PSP font manager
-    rtl::OUString aUSystemPath;
+    OUString aUSystemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFileURL, aUSystemPath ) );
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OString aOFileName( OUStringToOString( aUSystemPath, aEncoding ) );
@@ -556,7 +555,7 @@ bool X11SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
 
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
-        const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
+        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
     }
 
@@ -603,7 +602,7 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
         // inform GlyphCache about this font provided by the PsPrint subsystem
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
-        const rtl::OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
+        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA, pExtraKernInfo );
    }
 
@@ -787,7 +786,7 @@ SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
 //--------------------------------------------------------------------------
 
 sal_Bool X11SalGraphics::CreateFontSubset(
-                                   const rtl::OUString& rToFile,
+                                   const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
                                    sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,

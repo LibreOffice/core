@@ -52,7 +52,7 @@ namespace basprov
     {
     private:
         SbMethodRef         m_xMethod;
-        ::rtl::OUString     m_funcName;
+        OUString     m_funcName;
         BasicManager*       m_documentBasicManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >
                             m_xDocumentScriptContext;
@@ -69,11 +69,11 @@ namespace basprov
 
     public:
         BasicScriptImpl(
-            const ::rtl::OUString& funcName,
+            const OUString& funcName,
             SbMethodRef xMethod
         );
         BasicScriptImpl(
-            const ::rtl::OUString& funcName,
+            const OUString& funcName,
             SbMethodRef xMethod,
             BasicManager& documentBasicManager,
             const ::com::sun::star::uno::Reference< ::com::sun::star::document::XScriptInvocationContext >& documentScriptContext

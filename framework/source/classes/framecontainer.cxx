@@ -287,7 +287,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const ::rtl::OUString& sName ) const
+css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( const OUString& sName ) const
 {
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -325,7 +325,7 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
 
     @threadsafe yes
  *****************************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const ::rtl::OUString& sName ) const
+css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildrens( const OUString& sName ) const
 {
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );

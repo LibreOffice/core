@@ -96,7 +96,7 @@ void    XFBGImage::ToXml(IXFStream *pStrm)
 
     if( m_bPosition )
     {
-        rtl::OUString str = GetAlignName(m_eVertAlign) + A2OUSTR(" ");
+        OUString str = GetAlignName(m_eVertAlign) + A2OUSTR(" ");
         if( m_eHoriAlign == enumXFAlignStart )
             str += A2OUSTR("left");
         else if( m_eHoriAlign == enumXFAlignCenter )

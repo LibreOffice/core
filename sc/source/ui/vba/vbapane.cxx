@@ -48,7 +48,7 @@ ScVbaPane::setScrollColumn( sal_Int32 _scrollcolumn ) throw (uno::RuntimeExcepti
 {
     if( _scrollcolumn < 1 )
     {
-        throw uno::RuntimeException( rtl::OUString( "Column number should not less than 1" ),
+        throw uno::RuntimeException( OUString( "Column number should not less than 1" ),
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleColumn( _scrollcolumn - 1 );
@@ -65,7 +65,7 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
 {
     if( _scrollrow < 1 )
     {
-        throw uno::RuntimeException( rtl::OUString( "Row number should not less than 1" ),
+        throw uno::RuntimeException( OUString( "Row number should not less than 1" ),
                 uno::Reference< uno::XInterface >() );
     }
     m_xViewPane->setFirstVisibleRow( _scrollrow - 1 );
@@ -88,7 +88,7 @@ ScVbaPane::getVisibleRange() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
-    rtl::OUString messageBuffer;
+    OUString messageBuffer;
     sal_Int32 downRows = 0;
     sal_Int32 rightCols = 0;
     table::CellRangeAddress visibleRange = m_xViewPane->getVisibleRange();
@@ -99,7 +99,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downRows += down;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: Down\n" );
+            messageBuffer += OUString( "Error getting parameter: Down\n" );
     }
     if( Up.hasValue() )
     {
@@ -107,7 +107,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downRows -= up;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: Up\n" );
+            messageBuffer += OUString( "Error getting parameter: Up\n" );
     }
     if( ToRight.hasValue() )
     {
@@ -115,7 +115,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             rightCols += right;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: ToRight\n" );
+            messageBuffer += OUString( "Error getting parameter: ToRight\n" );
     }
     if( ToLeft.hasValue() )
     {
@@ -123,7 +123,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             rightCols -= left;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: ToLeft\n" );
+            messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
     }
     if( !messageBuffer.isEmpty() )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
@@ -141,7 +141,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
 void SAL_CALL
 ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
-    rtl::OUString messageBuffer;
+    OUString messageBuffer;
     table::CellRangeAddress visibleRange = m_xViewPane->getVisibleRange();
 
     sal_Int32 vertPageSize = 1 + visibleRange.EndRow - visibleRange.StartRow;
@@ -154,7 +154,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downPages += down;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: Down\n" );
+            messageBuffer += OUString( "Error getting parameter: Down\n" );
     }
     if( Up.hasValue() )
     {
@@ -162,7 +162,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downPages -= up;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: Up\n" );
+            messageBuffer += OUString( "Error getting parameter: Up\n" );
     }
     if( ToRight.hasValue() )
     {
@@ -170,7 +170,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             acrossPages += right;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: ToRight\n" );
+            messageBuffer += OUString( "Error getting parameter: ToRight\n" );
     }
     if( ToLeft.hasValue() )
     {
@@ -178,7 +178,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             acrossPages -= left;
         else
-            messageBuffer += rtl::OUString( "Error getting parameter: ToLeft\n" );
+            messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
     }
     if( !messageBuffer.isEmpty() )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );

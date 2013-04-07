@@ -37,7 +37,7 @@ namespace rptxml
 DBG_NAME( rpt_OXMLReportElement )
 
 OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+                sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XReportControlModel > & _xComponent) :
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -49,16 +49,16 @@ OXMLReportElement::OXMLReportElement( ORptFilter& rImport,
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetReportElementElemTokenMap();
 
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -89,7 +89,7 @@ OXMLReportElement::~OXMLReportElement()
 
 SvXMLImportContext* OXMLReportElement::CreateChildContext(
         sal_uInt16 _nPrefix,
-        const ::rtl::OUString& _rLocalName,
+        const OUString& _rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

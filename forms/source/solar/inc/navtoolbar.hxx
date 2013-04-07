@@ -94,7 +94,7 @@ namespace frm
         void    checkFeature( sal_Int16 _nFeatureId, bool _bEnabled );
 
         /// sets the text of a given feature
-        void    setFeatureText( sal_Int16 _nFeatureId, const ::rtl::OUString& _rText );
+        void    setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText );
 
         /** retrieves the current image size
         */

@@ -83,15 +83,15 @@ namespace connectivity
             ODbaseTable*    m_pTable;
             sal_Bool        m_bUseCollector : 1;            // Use the Garbage Collector
 
-            ::rtl::OUString getCompletePath();
+            OUString getCompletePath();
             void closeImpl();
             // Closes and kills the index file and throws an error
-            void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const ::rtl::OUString& _sFile);
+            void impl_killFileAndthrowError_throw(sal_uInt16 _nErrorId,const OUString& _sFile);
         protected:
             virtual ~ODbaseIndex();
         public:
             ODbaseIndex(ODbaseTable* _pTable);
-            ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const ::rtl::OUString& _Name);
+            ODbaseIndex(ODbaseTable* _pTable,const NDXHeader& _aHeader,const OUString& _Name);
 
             sal_Bool openIndexFile();
             virtual void refreshColumns();

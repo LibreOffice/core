@@ -428,7 +428,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 
     if (SQL_ISRULE(pPredicateNode,column_ref))
     {
-        ::rtl::OUString aColumnName;
+        OUString aColumnName;
         if (pPredicateNode->count() == 1)
         {
             aColumnName = pPredicateNode->getChild(0)->getTokenValue();
@@ -443,7 +443,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
 
         if(!m_orgColumns->hasByName(aColumnName))
         {
-            const ::rtl::OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
+            const OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
                  ) );
@@ -458,7 +458,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             }
             else
             {// Column doesn't exist in the Result-set
-                const ::rtl::OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
+                const OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
                  ) );
@@ -488,7 +488,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
             pPredicateNode->getChild(1)->getNodeType() == SQL_NODE_INTNUM)
     { // if -1 or +1 is there
-        ::rtl::OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
+        OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
         aValue += pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
     }
@@ -503,7 +503,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
             SQL_ISTOKEN(pODBCNodeChild,T) ||
             SQL_ISTOKEN(pODBCNodeChild,TS) ))
         {
-            ::rtl::OUString sDateTime = pODBCNode->getChild(1)->getTokenValue();
+            OUString sDateTime = pODBCNode->getChild(1)->getTokenValue();
             pOperand = new OOperandConst(*pODBCNode->getChild(1), sDateTime);
             if(SQL_ISTOKEN(pODBCNodeChild,D))
             {

@@ -39,7 +39,7 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-::rtl::OUString GetRole(
+OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
 
@@ -56,7 +56,7 @@ namespace DataSeriesHelper
 OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >
     getDataSequenceByRole( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::chart2::data::XDataSource > & xSource,
-                           ::rtl::OUString aRole,
+                           OUString aRole,
                            bool bMatchPrefix = false );
 
 /** Retrieves all data sequences in the given data source that match the given
@@ -73,7 +73,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::std::vector<
     getAllDataSequencesByRole( const ::com::sun::star::uno::Sequence<
                                    ::com::sun::star::uno::Reference<
                                        ::com::sun::star::chart2::data::XLabeledDataSequence > > & aDataSequences,
-                               ::rtl::OUString aRole,
+                               OUString aRole,
                                bool bMatchPrefix = false );
 
 /** Retrieves all data sequences found in the given data series and puts them
@@ -93,14 +93,14 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference<
         The data sequence contained in xSeries that has this role will be used
         to take its label.
  */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getDataSeriesLabel(
+OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > & xSeries,
-    const ::rtl::OUString & rLabelSequenceRole );
+    const OUString & rLabelSequenceRole );
 
 /** Get the label of a labeled sequence including neccessary automatic generation
  */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString getLabelForLabeledDataSequence(
+OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence > & xLabeledSeq );
 
@@ -157,13 +157,13 @@ void makeLinesThickOrThin( const ::com::sun::star::uno::Reference<
 OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >& xSeries,
-        const ::rtl::OUString& rPropertyName,
+        const OUString& rPropertyName,
         const ::com::sun::star::uno::Any& rPropertyValue );
 
 OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries >& xSeries,
-    const ::rtl::OUString& rPropertyName,
+    const OUString& rPropertyName,
     const ::com::sun::star::uno::Any& rPropertyValue );
 
 OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(

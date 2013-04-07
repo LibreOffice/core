@@ -271,7 +271,7 @@ sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(:
 //XExtendedFilterDetection
 OUString HwpImportFilter::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rDescriptor ) throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString sTypeName;
+    OUString sTypeName;
 
     comphelper::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();

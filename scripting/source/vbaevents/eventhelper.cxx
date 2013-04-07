@@ -94,11 +94,11 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
-#define MAP_CHAR_LEN(x) ::rtl::OUString(x)
+#define MAP_CHAR_LEN(x) OUString(x)
 #define GET_TYPE(x) ::getCppuType((uno::Reference< x > *)0);
 
 // Some constants
-const static rtl::OUString DELIM("::");
+const static OUString DELIM("::");
 const static sal_Int32 DELIMLEN = DELIM.getLength();
 
 bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
@@ -191,22 +191,22 @@ typedef Sequence< Any > (*Translator)(const Sequence< Any >&);
 //expand the "TranslateInfo" struct to support more kinds of events
 struct TranslateInfo
 {
-    rtl::OUString sVBAName; //vba event name
+    OUString sVBAName; //vba event name
     Translator toVBA;       //the method to convert OO event parameters to VBA event parameters
     bool (*ApproveRule)(const ScriptEvent& evt, void* pPara); //this method is used to determine which types of controls should execute the event
     void *pPara;            //Parameters for the above approve method
 };
 
 
-typedef boost::unordered_map< rtl::OUString,
+typedef boost::unordered_map< OUString,
 std::list< TranslateInfo >,
-::rtl::OUStringHash,
-::std::equal_to< ::rtl::OUString > > EventInfoHash;
+OUStringHash,
+::std::equal_to< OUString > > EventInfoHash;
 
 
 struct TranslatePropMap
 {
-    rtl::OUString sEventInfo;   //OO event name
+    OUString sEventInfo;   //OO event name
     TranslateInfo aTransInfo;
 };
 
@@ -288,7 +288,7 @@ EventInfoHash& getEventTransInfo()
     static EventInfoHash eventTransInfo;
     if ( !initialised )
     {
-        rtl::OUString sEventInfo = MAP_CHAR_LEN("");
+        OUString sEventInfo = MAP_CHAR_LEN("");
         TranslatePropMap* pTransProp = aTranslatePropMap_Impl;
         int nCount = sizeof(aTranslatePropMap_Impl) / sizeof(aTranslatePropMap_Impl[0]);
 
@@ -317,22 +317,22 @@ class ScriptEventHelper
 {
 public:
     ScriptEventHelper( const Reference< XInterface >& xControl );
-    Sequence< ScriptEventDescriptor > createEvents( const rtl::OUString& sCodeName );
-    Sequence< rtl::OUString > getEventListeners();
+    Sequence< ScriptEventDescriptor > createEvents( const OUString& sCodeName );
+    Sequence< OUString > getEventListeners();
 private:
     Reference< XComponentContext > m_xCtx;
     Reference< XInterface > m_xControl;
 };
 
 bool
-eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescriptor& evtDesc, const ::rtl::OUString& sCodeName )
+eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& evtDesc, const OUString& sCodeName )
 {
     // format of ControlListener is TypeName::methodname e.g.
     // "com.sun.star.awt.XActionListener::actionPerformed" or
     // "XActionListener::actionPerformed
 
-    ::rtl::OUString sMethodName;
-    ::rtl::OUString sTypeName;
+    OUString sMethodName;
+    OUString sTypeName;
     sal_Int32 nDelimPos = rEventMethod.indexOf( DELIM );
     if ( nDelimPos == -1 )
     {
@@ -358,7 +358,7 @@ eventMethodToDescriptor( const ::rtl::OUString& rEventMethod, ScriptEventDescrip
 
         // set this it VBAInterop, ensures that it doesn't
         // get persisted or shown in property editors
-        evtDesc.ScriptType = rtl::OUString(
+        evtDesc.ScriptType = OUString(
             "VBAInterop" );
         return true;
     }
@@ -371,10 +371,10 @@ ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ):
     m_xControl( xControl )
 {}
 
-Sequence< rtl::OUString >
+Sequence< OUString >
 ScriptEventHelper::getEventListeners()
 {
-    std::list< rtl::OUString > eventMethods;
+    std::list< OUString > eventMethods;
 
     Reference< beans::XIntrospection > xIntrospection = beans::Introspection::create( m_xCtx );
 
@@ -386,22 +386,22 @@ ScriptEventHelper::getEventListeners()
     for ( sal_Int32 i = 0; i< nLength; ++i )
     {
         Type& listType = aControlListeners[ i ];
-        rtl::OUString sFullTypeName = listType.getTypeName();
-        Sequence< ::rtl::OUString > sMeths =
+        OUString sFullTypeName = listType.getTypeName();
+        Sequence< OUString > sMeths =
             comphelper::getEventMethodsForType( listType );
         sal_Int32 sMethLen = sMeths.getLength();
         for ( sal_Int32 j=0 ; j < sMethLen; ++j )
         {
-            rtl::OUString sEventMethod = sFullTypeName;
+            OUString sEventMethod = sFullTypeName;
             sEventMethod += DELIM;
             sEventMethod += sMeths[ j ];
             eventMethods.push_back( sEventMethod );
         }
     }
 
-    Sequence< rtl::OUString > sEventMethodNames( eventMethods.size() );
-    std::list< rtl::OUString >::const_iterator it = eventMethods.begin();
-    rtl::OUString* pDest = sEventMethodNames.getArray();
+    Sequence< OUString > sEventMethodNames( eventMethods.size() );
+    std::list< OUString >::const_iterator it = eventMethods.begin();
+    OUString* pDest = sEventMethodNames.getArray();
 
     for ( ; it != eventMethods.end(); ++it, ++pDest )
         *pDest = *it;
@@ -410,10 +410,10 @@ ScriptEventHelper::getEventListeners()
 }
 
 Sequence< ScriptEventDescriptor >
-ScriptEventHelper::createEvents( const rtl::OUString& sCodeName )
+ScriptEventHelper::createEvents( const OUString& sCodeName )
 {
-    Sequence< rtl::OUString > aControlListeners = getEventListeners();
-    rtl::OUString* pSrc = aControlListeners.getArray();
+    Sequence< OUString > aControlListeners = getEventListeners();
+    OUString* pSrc = aControlListeners.getArray();
     sal_Int32 nLength = aControlListeners.getLength();
 
     Sequence< ScriptEventDescriptor > aDest( nLength );
@@ -445,47 +445,47 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > NameContainer_BASE;
 class ReadOnlyEventsNameContainer : public NameContainer_BASE
 {
 public:
-    ReadOnlyEventsNameContainer( const Sequence< rtl::OUString >& eventMethods, const rtl::OUString& sCodeName );
+    ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName );
     // XNameContainer
 
-    virtual void SAL_CALL insertByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL insertByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
 
     }
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL removeByName( const OUString& ) throw (::com::sun::star::container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString&, const Any& ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
     {
-        throw RuntimeException( rtl::OUString("ReadOnly container"), Reference< XInterface >() );
+        throw RuntimeException( OUString("ReadOnly container"), Reference< XInterface >() );
 
     }
 
     // XNameAccess
-    virtual Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException);
-    virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException);
 
     // XElementAccess
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
-    { return getCppuType(static_cast< const rtl::OUString * >(0) ); }
+    { return getCppuType(static_cast< const OUString * >(0) ); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException)
     { return ( ( m_hEvents.size() > 0 ? sal_True : sal_False ) ); }
 private:
 
-typedef boost::unordered_map< rtl::OUString, Any, ::rtl::OUStringHash,
-::std::equal_to< ::rtl::OUString > > EventSupplierHash;
+typedef boost::unordered_map< OUString, Any, OUStringHash,
+::std::equal_to< OUString > > EventSupplierHash;
 
     EventSupplierHash m_hEvents;
 };
 
-ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< rtl::OUString >& eventMethods, const rtl::OUString& sCodeName )
+ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< OUString >& eventMethods, const OUString& sCodeName )
 {
-    const rtl::OUString* pSrc = eventMethods.getConstArray();
+    const OUString* pSrc = eventMethods.getConstArray();
     sal_Int32 nLen = eventMethods.getLength();
     for ( sal_Int32 index = 0; index < nLen; ++index, ++pSrc )
     {
@@ -500,18 +500,18 @@ ReadOnlyEventsNameContainer::ReadOnlyEventsNameContainer( const Sequence< rtl::O
 }
 
 Any SAL_CALL
-ReadOnlyEventsNameContainer::getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException){
+ReadOnlyEventsNameContainer::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException){
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
         throw container::NoSuchElementException();
     return it->second;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > names(m_hEvents.size());
-    rtl::OUString* pDest = names.getArray();
+    Sequence< OUString > names(m_hEvents.size());
+    OUString* pDest = names.getArray();
     EventSupplierHash::const_iterator it = m_hEvents.begin();
     EventSupplierHash::const_iterator it_end = m_hEvents.end();
     for ( sal_Int32 index = 0; it != it_end; ++index, ++pDest, ++it )
@@ -520,7 +520,7 @@ ReadOnlyEventsNameContainer::getElementNames(  ) throw (RuntimeException)
 }
 
 sal_Bool SAL_CALL
-ReadOnlyEventsNameContainer::hasByName( const ::rtl::OUString& aName ) throw (RuntimeException)
+ReadOnlyEventsNameContainer::hasByName( const OUString& aName ) throw (RuntimeException)
 {
     EventSupplierHash::const_iterator it = m_hEvents.find( aName );
     if ( it == m_hEvents.end() )
@@ -533,7 +533,7 @@ typedef ::cppu::WeakImplHelper1< XScriptEventsSupplier > EventsSupplier_BASE;
 class ReadOnlyEventsSupplier : public EventsSupplier_BASE
 {
 public:
-    ReadOnlyEventsSupplier( const Sequence< ::rtl::OUString >& eventMethods, const rtl::OUString& sCodeName )
+    ReadOnlyEventsSupplier( const Sequence< OUString >& eventMethods, const OUString& sCodeName )
     { m_xNameContainer = new ReadOnlyEventsNameContainer( eventMethods, sCodeName ); }
 
     // XScriptEventSupplier
@@ -545,7 +545,7 @@ private:
 typedef ::cppu::WeakImplHelper3< XScriptListener, util::XCloseListener, lang::XInitialization > EventListener_BASE;
 
 #define EVENTLSTNR_PROPERTY_ID_MODEL         1
-#define EVENTLSTNR_PROPERTY_MODEL            ::rtl::OUString( "Model"  )
+#define EVENTLSTNR_PROPERTY_MODEL            OUString( "Model"  )
 
 class EventListener : public EventListener_BASE
     ,public ::comphelper::OMutexAndBroadcastHelper
@@ -619,7 +619,7 @@ private:
     Reference< frame::XModel > m_xModel;
     bool m_bDocClosed;
     SfxObjectShell* mpShell;
-    rtl::OUString msProject;
+    OUString msProject;
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
@@ -627,7 +627,7 @@ OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
-    msProject = rtl::OUString("Standard");
+    msProject = OUString("Standard");
 }
 
 void
@@ -649,7 +649,7 @@ EventListener::setShellFromModel()
     try
     {
         uno::Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
-        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( OUString( "BasicLibraries" ) ), uno::UNO_QUERY_THROW );
         msProject = xVBAMode->getProjectName();
     }
     catch ( uno::Exception& ) {}
@@ -834,18 +834,18 @@ void
 EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeException)
 {
     OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
-    static const ::rtl::OUString vbaInterOp =
-        ::rtl::OUString("VBAInterop");
+    static const OUString vbaInterOp =
+        OUString("VBAInterop");
 
     // let default handlers deal with non vba stuff
     if ( !evt.ScriptType.equals( vbaInterOp ) )
         return;
     lang::EventObject aEvent;
     evt.Arguments[ 0 ] >>= aEvent;
-    OSL_TRACE("evt.MethodName is  %s", rtl::OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
-    OSL_TRACE("Argument[0] is  %s", rtl::OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("evt.MethodName is  %s", OUStringToOString( evt.MethodName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("Argument[0] is  %s", OUStringToOString( comphelper::anyToString( evt.Arguments[0] ), RTL_TEXTENCODING_UTF8 ).getStr() );
     OSL_TRACE("Getting Control");
-    rtl::OUString sName = rtl::OUString( "UserForm" );
+    OUString sName = OUString( "UserForm" );
     OSL_TRACE("Getting Name");
 
     uno::Reference< awt::XDialog > xDlg( aEvent.Source, uno::UNO_QUERY );
@@ -877,7 +877,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             uno::Reference< beans::XPropertySet > xProps;
             OSL_TRACE("Getting properties");
             xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( rtl::OUString( "Name" ) ) >>= sName;
+            xProps->getPropertyValue( OUString( "Name" ) ) >>= sName;
         }
     }
     //dumpEvent( evt );
@@ -887,7 +887,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     if ( eventInfo_it == it_end )
     {
         OSL_TRACE("Bogus event for %s",
-            rtl::OUStringToOString( evt.ScriptType, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OUStringToOString( evt.ScriptType, RTL_TEXTENCODING_UTF8 ).getStr() );
         return;
     }
 
@@ -904,13 +904,13 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         std::list< TranslateInfo >::const_iterator txInfo_end = eventInfo_it->second.end();
 
         BasicManager* pBasicManager = mpShell->GetBasicManager();
-        rtl::OUString sProject;
-        rtl::OUString sScriptCode( evt.ScriptCode );
+        OUString sProject;
+        OUString sScriptCode( evt.ScriptCode );
         // dialogs pass their own library, presence of Dot determines that
         if ( sScriptCode.indexOf( '.' ) == -1 )
         {
             //'Project' is a better default but I want to force failures
-            //rtl::OUString sMacroLoc("Project");
+            //OUString sMacroLoc("Project");
             sProject = "Standard";
 
             if (!pBasicManager->GetName().isEmpty())
@@ -924,11 +924,11 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
             sProject = sScriptCode.copy( 0, nIndex );
             sScriptCode = sScriptCode.copy( nIndex + 1 );
         }
-        rtl::OUString sMacroLoc = sProject;
-        sMacroLoc = sMacroLoc.concat(  rtl::OUString(".") );
-        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(".") );
+        OUString sMacroLoc = sProject;
+        sMacroLoc = sMacroLoc.concat(  OUString(".") );
+        sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( OUString(".") );
 
-        OSL_TRACE("sMacroLoc is %s", rtl::OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("sMacroLoc is %s", OUStringToOString( sMacroLoc, RTL_TEXTENCODING_UTF8 ).getStr() );
         for ( ; txInfo != txInfo_end; ++txInfo )
         {
             // If the document is closed, we should not execute macro.
@@ -937,13 +937,13 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                 break;
             }
 
-            rtl::OUString sTemp = sName.concat( (*txInfo).sVBAName );
+            OUString sTemp = sName.concat( (*txInfo).sVBAName );
             // see if we have a match for the handlerextension
             // where ScriptCode is methodname_handlerextension
-            rtl::OUString sToResolve = sMacroLoc.concat( sTemp );
+            OUString sToResolve = sMacroLoc.concat( sTemp );
 
             OSL_TRACE("*** trying to invoke %s ",
-                rtl::OUStringToOString( sToResolve, RTL_TEXTENCODING_UTF8 ).getStr() );
+                OUStringToOString( sToResolve, RTL_TEXTENCODING_UTF8 ).getStr() );
             ooo::vba::MacroResolvedInfo aMacroResolvedInfo = ooo::vba::resolveVBAMacro( mpShell, sToResolve );
             if ( aMacroResolvedInfo.mbFound )
             {
@@ -968,14 +968,14 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                     // call basic event handlers for event
 
                     // create script url
-                    rtl::OUString url = aMacroResolvedInfo.msResolvedMacro;
+                    OUString url = aMacroResolvedInfo.msResolvedMacro;
 
                     OSL_TRACE("resolved script = %s",
-                        rtl::OUStringToOString( url,
+                        OUStringToOString( url,
                             RTL_TEXTENCODING_UTF8 ).getStr() );
                     try
                     {
-                        uno::Any aDummyCaller = uno::makeAny( rtl::OUString("Error") );
+                        uno::Any aDummyCaller = uno::makeAny( OUString("Error") );
                         if ( pRet )
                         {
                             ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
@@ -988,7 +988,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                     }
                     catch ( uno::Exception& e )
                     {
-                        OSL_TRACE("event script raised %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                        OSL_TRACE("event script raised %s", OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                }
            }
@@ -1005,8 +1005,8 @@ public:
     VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext );
 
     // XVBAToOOEventDescGen
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const Reference< XInterface >& control, const rtl::OUString& sCodeName ) throw (RuntimeException);
-    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const rtl::OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual Sequence< ScriptEventDescriptor > SAL_CALL getEventDescriptions( const Reference< XInterface >& control, const OUString& sCodeName ) throw (RuntimeException);
+    virtual Reference< XScriptEventsSupplier > SAL_CALL getEventSupplier( const Reference< XInterface >& xControl,  const OUString& sCodeName ) throw (::com::sun::star::uno::RuntimeException);
 private:
     Reference< XComponentContext > m_xContext;
 
@@ -1015,14 +1015,14 @@ private:
 VBAToOOEventDescGen::VBAToOOEventDescGen( const Reference< XComponentContext >& rxContext ):m_xContext( rxContext ) {}
 
 Sequence< ScriptEventDescriptor > SAL_CALL
-VBAToOOEventDescGen::getEventDescriptions( const Reference< XInterface >& xControl, const rtl::OUString& sCodeName ) throw (RuntimeException)
+VBAToOOEventDescGen::getEventDescriptions( const Reference< XInterface >& xControl, const OUString& sCodeName ) throw (RuntimeException)
 {
     ScriptEventHelper evntHelper( xControl );
     return evntHelper.createEvents( sCodeName );
 }
 
 Reference< XScriptEventsSupplier > SAL_CALL
-VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const rtl::OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException)
+VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, const OUString& sCodeName  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ScriptEventHelper evntHelper( xControl );
     Reference< XScriptEventsSupplier > xSupplier =
@@ -1035,15 +1035,15 @@ VBAToOOEventDescGen::getEventSupplier( const Reference< XInterface >& xControl, 
 
 namespace evtlstner
 {
-    ::rtl::OUString SAL_CALL getImplementationName()
+    OUString SAL_CALL getImplementationName()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( "ooo.vba.EventListener"  );
+                static OUString aImplName( "ooo.vba.EventListener"  );
                 pImplName = &aImplName;
             }
         }
@@ -1057,23 +1057,23 @@ namespace evtlstner
         return static_cast< lang::XTypeProvider * >( new EventListener( xContext ) );
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
     {
-        const ::rtl::OUString strName( ::evtlstner::getImplementationName() );
-        return Sequence< ::rtl::OUString >( &strName, 1 );
+        const OUString strName( ::evtlstner::getImplementationName() );
+        return Sequence< OUString >( &strName, 1 );
     }
 }
 namespace ooevtdescgen
 {
-    ::rtl::OUString SAL_CALL getImplementationName()
+    OUString SAL_CALL getImplementationName()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( "ooo.vba.VBAToOOEventDesc"  );
+                static OUString aImplName( "ooo.vba.VBAToOOEventDesc"  );
                 pImplName = &aImplName;
             }
         }
@@ -1087,10 +1087,10 @@ namespace ooevtdescgen
         return static_cast< lang::XTypeProvider * >( new VBAToOOEventDescGen( xContext ) );
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    Sequence< OUString > SAL_CALL getSupportedServiceNames()
     {
-        const ::rtl::OUString strName( ::ooevtdescgen::getImplementationName() );
-        return Sequence< ::rtl::OUString >( &strName, 1 );
+        const OUString strName( ::ooevtdescgen::getImplementationName() );
+        return Sequence< OUString >( &strName, 1 );
     }
 }
 

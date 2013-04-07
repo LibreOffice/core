@@ -69,11 +69,11 @@ namespace package_ucp
 
 struct ContentProperties
 {
-    ::rtl::OUString  aTitle;                // Title
-    ::rtl::OUString  aContentType;          // ContentType
+    OUString  aTitle;                // Title
+    OUString  aContentType;          // ContentType
     sal_Bool         bIsDocument;           // IsDocument
     sal_Bool         bIsFolder;             // IsFolder
-    ::rtl::OUString  aMediaType;            // MediaType
+    OUString  aMediaType;            // MediaType
     com::sun::star::uno::Sequence <
         sal_Int8 >   aEncryptionKey;        // EncryptionKey
     sal_Int64        nSize;                 // Size
@@ -86,7 +86,7 @@ struct ContentProperties
       bCompressed( sal_True ), bEncrypted( sal_False ),
       bHasEncryptedEntries( sal_False ) {}
 
-    ContentProperties( const ::rtl::OUString& rContentType );
+    ContentProperties( const OUString& rContentType );
 
     com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
     getCreatableContentsInfo( PackageUri const & rUri ) const;
@@ -139,7 +139,7 @@ private:
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Reference<
@@ -149,7 +149,7 @@ private:
                        const ContentProperties& rData,
                        const rtl::Reference<
                             ::ucbhelper::ContentProviderImplHelper >& rProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
@@ -261,15 +261,15 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XContent
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException );
 
@@ -311,15 +311,15 @@ public:
                        const ::com::sun::star::uno::Sequence<
                             ::com::sun::star::beans::Property >& rProperties,
                        ContentProvider* pProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 
     // Called from resultset data supplier.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XEnumeration >
     getIterator();
 
-    static ::rtl::OUString
-    getContentType( const ::rtl::OUString& aScheme,  sal_Bool bFolder );
+    static OUString
+    getContentType( const OUString& aScheme,  sal_Bool bFolder );
 };
 
 }

@@ -34,8 +34,6 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 
-
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::xpath;

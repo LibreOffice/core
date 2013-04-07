@@ -36,24 +36,23 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-const ::rtl::OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
+const OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
     "private:resource/pane/Presenter/Pane1");
-const ::rtl::OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
+const OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
     "private:resource/pane/Presenter/Pane2");
-const ::rtl::OUString PresenterPaneFactory::msNotesPaneURL(
+const OUString PresenterPaneFactory::msNotesPaneURL(
     "private:resource/pane/Presenter/Pane3");
-const ::rtl::OUString PresenterPaneFactory::msToolBarPaneURL(
+const OUString PresenterPaneFactory::msToolBarPaneURL(
     "private:resource/pane/Presenter/Pane4");
-const ::rtl::OUString PresenterPaneFactory::msSlideSorterPaneURL(
+const OUString PresenterPaneFactory::msSlideSorterPaneURL(
     "private:resource/pane/Presenter/Pane5");
-const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
+const OUString PresenterPaneFactory::msHelpPaneURL(
     "private:resource/pane/Presenter/Pane6");
 
-const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
+const OUString PresenterPaneFactory::msOverlayPaneURL(
     "private:resource/pane/Presenter/Overlay");
 
 //===== PresenterPaneFactory ==================================================

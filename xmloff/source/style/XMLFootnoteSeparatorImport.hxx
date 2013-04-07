@@ -54,7 +54,7 @@ public:
     XMLFootnoteSeparatorImport(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
         const UniReference<XMLPropertySetMapper> & rMapperRef,
         sal_Int32 nIndex);

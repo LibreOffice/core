@@ -159,7 +159,7 @@ namespace rptui
         inline  ComparisonOperation
                     impl_getCurrentComparisonOperation() const;
 
-        void    impl_setCondition( const ::rtl::OUString& _rConditionFormula );
+        void    impl_setCondition( const OUString& _rConditionFormula );
 
     private:
         DECL_LINK( OnTypeSelected, ListBox* );

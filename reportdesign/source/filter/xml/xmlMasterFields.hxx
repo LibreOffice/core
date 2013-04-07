@@ -32,13 +32,13 @@ namespace rptxml
     public:
 
         OXMLMasterFields( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
+                    const OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,IMasterDetailFieds* _pReport);
         virtual ~OXMLMasterFields();
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                    const ::rtl::OUString& rLocalName,
+                    const OUString& rLocalName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     };

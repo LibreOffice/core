@@ -30,8 +30,8 @@ namespace rptxml
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >  m_xComponent;
-        ::rtl::OUString m_sName;
-        ::rtl::OUString m_sTextStyleName;
+        OUString m_sName;
+        OUString m_sTextStyleName;
 
         OXMLComponent(const OXMLComponent&);
         OXMLComponent& operator =(const OXMLComponent&);
@@ -39,7 +39,7 @@ namespace rptxml
 
         OXMLComponent( ORptFilter& rImport
                     , sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent
                     );

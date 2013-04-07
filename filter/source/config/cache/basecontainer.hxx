@@ -69,11 +69,11 @@ class BaseContainer : public BaseLock
 
         /** @short  the implementation name of our derived class, which we provide
                     at the interface XServiceInfo of our class ... */
-        ::rtl::OUString m_sImplementationName;
+        OUString m_sImplementationName;
 
         /** @short  the list of supported uno service names of our derived class, which we provide
                     at the interface XServiceInfo of our class ... */
-        css::uno::Sequence< ::rtl::OUString > m_lServiceNames;
+        css::uno::Sequence< OUString > m_lServiceNames;
 
         /** @short  reference(!) to a singleton filter cache implementation,
                     which is used to work with the underlying configuration. */
@@ -156,8 +156,8 @@ class BaseContainer : public BaseLock
                     must be wrapped by this container interface.
          */
         virtual void init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext          ,
-                          const ::rtl::OUString&                                        sImplementationName,
-                          const css::uno::Sequence< ::rtl::OUString >&                  lServiceNames      ,
+                          const OUString&                                        sImplementationName,
+                          const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                 FilterCache::EItemType                                  eType              );
 
     //-------------------------------------------
@@ -214,26 +214,26 @@ class BaseContainer : public BaseLock
         //---------------------------------------
         // XServiceInfo
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw (css::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService(const ::rtl::OUString& sServiceName)
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
             throw (css::uno::RuntimeException);
 
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (css::uno::RuntimeException);
 
         //---------------------------------------
         // XNameContainer
 
-        virtual void SAL_CALL insertByName(const ::rtl::OUString& sItem ,
+        virtual void SAL_CALL insertByName(const OUString& sItem ,
                                            const css::uno::Any&   aValue)
             throw (css::lang::IllegalArgumentException  ,
                    css::container::ElementExistException,
                    css::lang::WrappedTargetException    ,
                    css::uno::RuntimeException           );
 
-        virtual void SAL_CALL removeByName(const ::rtl::OUString& sItem)
+        virtual void SAL_CALL removeByName(const OUString& sItem)
             throw (css::container::NoSuchElementException,
                    css::lang::WrappedTargetException     ,
                    css::uno::RuntimeException            );
@@ -241,7 +241,7 @@ class BaseContainer : public BaseLock
         //---------------------------------------
         // XNameReplace
 
-        virtual void SAL_CALL replaceByName(const ::rtl::OUString& sItem ,
+        virtual void SAL_CALL replaceByName(const OUString& sItem ,
                                             const css::uno::Any&   aValue)
             throw (css::lang::IllegalArgumentException   ,
                    css::container::NoSuchElementException,
@@ -251,15 +251,15 @@ class BaseContainer : public BaseLock
         //---------------------------------------
         // XElementAccess
 
-        virtual css::uno::Any SAL_CALL getByName(const ::rtl::OUString& sItem)
+        virtual css::uno::Any SAL_CALL getByName(const OUString& sItem)
             throw (css::container::NoSuchElementException,
                    css::lang::WrappedTargetException     ,
                    css::uno::RuntimeException            );
 
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw (css::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName(const ::rtl::OUString& sItem)
+        virtual sal_Bool SAL_CALL hasByName(const OUString& sItem)
             throw (css::uno::RuntimeException);
 
         virtual css::uno::Type SAL_CALL getElementType()
@@ -274,7 +274,7 @@ class BaseContainer : public BaseLock
         // must be implemented realy by derived class ...
         // We implement return of an empty result here only!
         // But we show an assertion :-)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
             throw (css::uno::RuntimeException);
 
         virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)

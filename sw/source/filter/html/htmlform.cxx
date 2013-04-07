@@ -79,7 +79,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::form;
-using ::rtl::OUString;
 
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;
@@ -2501,7 +2500,7 @@ void SwHTMLParser::EndSelect()
 
         for(size_t i = 0; i < nEntryCnt; ++i)
         {
-            rtl::OUString sText(pFormImpl->GetStringList()[i]);
+            OUString sText(pFormImpl->GetStringList()[i]);
             sText = comphelper::string::stripEnd(sText, ' ');
             pStrings[i] = sText;
 

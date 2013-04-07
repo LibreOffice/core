@@ -31,26 +31,26 @@
 #ifndef _XMLOFF_SVXMLATTR_HXX
 #define _XMLOFF_SVXMLATTR_HXX
 
-#include <rtl/ustring.hxx>   //rtl::OUString
+#include <rtl/ustring.hxx>   //OUString
 
 class SvXMLAttr {
 private:
     sal_uInt16      aPrefixPos;
-    rtl::OUString aLName;
-    rtl::OUString aValue;
+    OUString aLName;
+    OUString aValue;
 public:
     // Assuming OUString is well behaved, the default copy constructor and
     // assignment operator are fine.
-    SvXMLAttr( const rtl::OUString& rLName,
-               const rtl::OUString& rValue );
+    SvXMLAttr( const OUString& rLName,
+               const OUString& rValue );
     SvXMLAttr( const sal_uInt16 nPos,
-               const rtl::OUString& rLName,
-               const rtl::OUString& rValue );
+               const OUString& rLName,
+               const OUString& rValue );
     bool operator== (const SvXMLAttr &rCmp) const;
 
     sal_uInt16       getPrefixPos() const;
-    const rtl::OUString& getLName() const;
-    const rtl::OUString& getValue() const;
+    const OUString& getLName() const;
+    const OUString& getValue() const;
 };
 
 #endif /* _XMLOFF_SVXMLATTR_HXX */

@@ -94,9 +94,9 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
         osl::MutexGuard g(m_mutex);
         m_notifier = n;
     }
-    css::uno::Sequence< rtl::OUString > s(2);
-    s[0] = rtl::OUString("FontHeight");
-    s[1] = rtl::OUString("FontName");
+    css::uno::Sequence< OUString > s(2);
+    s[0] = OUString("FontHeight");
+    s[1] = OUString("FontName");
     n->addPropertiesChangeListener(s, m_listener.get());
     m_ColorConfig.AddListener(this);
 
@@ -242,9 +242,9 @@ void OSqlEdit::ImplSetFont()
 {
     AllSettings aSettings = GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    rtl::OUString sFontName(
+    OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or( rtl::OUString() ) );
+        get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
         Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );

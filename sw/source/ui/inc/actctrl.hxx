@@ -68,12 +68,12 @@ public:
     TableNameEdit(Window* pWin, const ResId& rResId)
         : NoSpaceEdit(pWin, rResId)
     {
-        SetForbiddenChars(rtl::OUString(" .<>"));
+        SetForbiddenChars(OUString(" .<>"));
     }
     TableNameEdit(Window* pWin)
         : NoSpaceEdit(pWin)
     {
-        SetForbiddenChars(rtl::OUString(" .<>"));
+        SetForbiddenChars(OUString(" .<>"));
     }
 };
 

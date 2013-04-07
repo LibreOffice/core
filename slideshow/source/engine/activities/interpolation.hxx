@@ -52,11 +52,11 @@ namespace basegfx
         }
 
         /// Specialization also for string, although this code should not be called
-        template<> ::rtl::OUString lerp< ::rtl::OUString >( const ::rtl::OUString&,
-                                                            const ::rtl::OUString&  rTo,
+        template<> OUString lerp< OUString >( const OUString&,
+                                                            const OUString&  rTo,
                                                             double                       )
         {
-            OSL_FAIL( "lerp<::rtl::OUString> called" );
+            OSL_FAIL( "lerp<OUString> called" );
             return rTo;
         }
 
@@ -151,9 +151,9 @@ namespace slideshow
         }
 
         /// Specialization for non-interpolatable strings
-        template<> ::rtl::OUString lerp< ::rtl::OUString >( const Interpolator< ::rtl::OUString >&  /*rInterpolator*/,
-                                                            const ::rtl::OUString&                  rFrom,
-                                                            const ::rtl::OUString&                  rTo,
+        template<> OUString lerp< OUString >( const Interpolator< OUString >&  /*rInterpolator*/,
+                                                            const OUString&                  rFrom,
+                                                            const OUString&                  rTo,
                                                             sal_uInt32                              nFrame,
                                                             ::std::size_t                           nTotalFrames )
         {

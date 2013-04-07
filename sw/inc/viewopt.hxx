@@ -136,7 +136,7 @@ class SwViewOption
 protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
-    rtl::OUString   sSymbolFont;        // Symbolfont.
+    OUString   sSymbolFont;        // Symbolfont.
     sal_uInt32      nCoreOptions;       // Bits for ViewShell.
     sal_uInt32      nCore2Options;      // Bits for ViewShell.
     sal_uInt32      nUIOptions;         // UI-Bits
@@ -489,8 +489,8 @@ public:
     void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
     void            SetTblDest( sal_uInt8 nNew )    { nTblDest = nNew;  }
 
-    const rtl::OUString& GetSymbolFont() const {return sSymbolFont;}
-    void            SetSymbolFont(const rtl::OUString& sSet) {sSymbolFont = sSet;}
+    const OUString& GetSymbolFont() const {return sSymbolFont;}
+    void            SetSymbolFont(const OUString& sSet) {sSymbolFont = sSet;}
 
     const Color&    GetRetoucheColor() const        { return aRetoucheColor;}
     void            SetRetoucheColor(const Color&r) { aRetoucheColor = r;   }

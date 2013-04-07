@@ -38,7 +38,6 @@
 
 #include "buttonset.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::embed;
@@ -89,13 +88,13 @@ Reference< XInputStream > ButtonsImpl::getInputStream( const OUString& rName )
     return xInputStream;
 }
 
-bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvider, const rtl::OUString& rName, Graphic& rGraphic )
+bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvider, const OUString& rName, Graphic& rGraphic )
 {
     Reference< XInputStream > xInputStream( getInputStream( rName ) );
     if( xInputStream.is() && xGraphicProvider.is() ) try
     {
         Sequence< PropertyValue > aMediaProperties( 1 );
-        aMediaProperties[0].Name = ::rtl::OUString("InputStream"  );
+        aMediaProperties[0].Name = OUString("InputStream"  );
         aMediaProperties[0].Value <<= xInputStream;
         Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
 
@@ -142,8 +141,8 @@ public:
 
     int getCount() const;
 
-    bool getPreview( int nSet, const std::vector< rtl::OUString >& rButtons, Image& rImage );
-    bool exportButton( int nSet, const rtl::OUString& rPath, const rtl::OUString& rName );
+    bool getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage );
+    bool exportButton( int nSet, const OUString& rPath, const OUString& rName );
 
     void scanForButtonSets( const OUString& rPath );
 
@@ -190,7 +189,7 @@ int ButtonSetImpl::getCount() const
     return maButtons.size();
 }
 
-bool ButtonSetImpl::getPreview( int nSet, const std::vector< rtl::OUString >& rButtons, Image& rImage )
+bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
 {
     if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
     {
@@ -202,7 +201,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< rtl::OUString >& rB
         aDev.SetMapMode(MapMode(MAP_PIXEL));
 
         Size aSize;
-        std::vector< rtl::OUString >::const_iterator aIter( rButtons.begin() );
+        std::vector< OUString >::const_iterator aIter( rButtons.begin() );
         while( aIter != rButtons.end() )
         {
             Graphic aGraphic;
@@ -241,7 +240,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< rtl::OUString >& rB
     return false;
 }
 
-bool ButtonSetImpl::exportButton( int nSet, const rtl::OUString& rPath, const rtl::OUString& rName )
+bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUString& rName )
 {
     if( (nSet >= 0) && (nSet < static_cast<int>(maButtons.size())))
     {
@@ -278,12 +277,12 @@ int ButtonSet::getCount() const
     return mpImpl->getCount();
 }
 
-bool ButtonSet::getPreview( int nSet, const std::vector< rtl::OUString >& rButtons, Image& rImage )
+bool ButtonSet::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
 {
     return mpImpl->getPreview( nSet, rButtons, rImage );
 }
 
-bool ButtonSet::exportButton( int nSet, const rtl::OUString& rPath, const rtl::OUString& rName )
+bool ButtonSet::exportButton( int nSet, const OUString& rPath, const OUString& rName )
 {
     return mpImpl->exportButton( nSet, rPath, rName );
 }

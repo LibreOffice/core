@@ -56,7 +56,7 @@ public:
           nType == 0 -> pages
           nType == 1 -> objects    */
 
-    std::vector<rtl::OUString> GetList ( const sal_uInt16 nType ) ;
+    std::vector<OUString> GetList ( const sal_uInt16 nType ) ;
 
     sal_Bool        IsLink();
     sal_Bool        IsRemoveUnnessesaryMasterPages() const;

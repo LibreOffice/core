@@ -33,7 +33,7 @@ namespace rtl { class OUString; }
 
 class XMLAutoMarkFileContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sIndexAutoMarkFileURL;
+    const OUString sIndexAutoMarkFileURL;
 
 public:
 
@@ -42,7 +42,7 @@ public:
     XMLAutoMarkFileContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName);
+        const OUString& rLocalName);
 
     ~XMLAutoMarkFileContext();
 

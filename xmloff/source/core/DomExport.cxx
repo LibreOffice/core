@@ -54,8 +54,6 @@ using std::vector;
 
 using namespace com::sun::star::xml::dom;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 
 class DomVisitor

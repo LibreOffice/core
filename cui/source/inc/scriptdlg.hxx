@@ -46,8 +46,8 @@
 #define INPUTMODE_NEWMACRO      2
 #define INPUTMODE_RENAME        3
 
-typedef ::boost::unordered_map < ::rtl::OUString, ::rtl::OUString ,
-    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > Selection_hash;
+typedef ::boost::unordered_map < OUString, OUString ,
+    OUStringHash, ::std::equal_to< OUString > > Selection_hash;
 
 class SFEntry;
 
@@ -60,14 +60,14 @@ private:
     Image m_libImage;
     Image m_macImage;
     Image m_docImage;
-    ::rtl::OUString m_sMyMacros;
-    ::rtl::OUString m_sProdMacros;
+    OUString m_sMyMacros;
+    OUString m_sProdMacros;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
-        getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
+        getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& root, OUString& language );
     void delUserData( SvTreeListEntry* pEntry );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, OUString& docName );
 
 protected:
     void                    ExpandTree( SvTreeListEntry* pRootEntry );
@@ -75,7 +75,7 @@ protected:
     virtual void            ExpandedHdl();
     virtual long            ExpandingHdl();
 public:
-    void                    Init( const ::rtl::OUString& language );
+    void                    Init( const OUString& language );
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox(Window* pParent);
@@ -89,7 +89,7 @@ public:
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData,
-                              ::rtl::OUString factoryURL );
+                              OUString factoryURL );
     SvTreeListEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
@@ -148,7 +148,7 @@ protected:
     PushButton*             m_pRenameButton;
     PushButton*             m_pDelButton;
 
-    ::rtl::OUString         m_sLanguage;
+    OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
     const String m_delErrStr;
     const String m_delErrTitleStr;
@@ -164,7 +164,7 @@ protected:
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    sal_Bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
+    sal_Bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
 
@@ -181,7 +181,7 @@ protected:
 public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
-                    SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language );
+                    SvxScriptOrgDialog( Window* pParent, OUString language );
                     ~SvxScriptOrgDialog();
 
     virtual short   Execute();
@@ -192,9 +192,9 @@ class SvxScriptErrorDialog : public VclAbstractDialog
 {
 private:
 
-    ::rtl::OUString m_sMessage;
+    OUString m_sMessage;
 
-    DECL_LINK( ShowDialog, ::rtl::OUString* );
+    DECL_LINK( ShowDialog, OUString* );
 
 public:
 

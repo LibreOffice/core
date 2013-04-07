@@ -53,8 +53,8 @@ int xmlStreamMatch( const char* uri )
         //first. If this failed it would try this
         //again with the original escaped string. However, it does not get this far, because there
         //is another callback registered by libxml which claims to be able to handle this uri.
-        ::rtl::OUString sUri =
-            ::rtl::Uri::encode( ::rtl::OUString::createFromAscii( uri ),
+        OUString sUri =
+            ::rtl::Uri::encode( OUString::createFromAscii( uri ),
             rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
         xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
         if (!xInputStream.is())
@@ -62,7 +62,7 @@ int xmlStreamMatch( const char* uri )
             //Try the passed in uri directly.
             //For old documents prior OOo 3.0. We did not use URIs then.
             xInputStream = m_xUriBinding->getUriBinding(
-                ::rtl::OUString::createFromAscii(uri));
+                OUString::createFromAscii(uri));
         }
     }
     if (xInputStream.is())
@@ -82,8 +82,8 @@ void* xmlStreamOpen( const char* uri )
             return NULL ;
 
         //see xmlStreamMatch
-        ::rtl::OUString sUri =
-            ::rtl::Uri::encode( ::rtl::OUString::createFromAscii( uri ),
+        OUString sUri =
+            ::rtl::Uri::encode( OUString::createFromAscii( uri ),
             rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
         xInputStream = m_xUriBinding->getUriBinding( sUri ) ;
         if (!xInputStream.is())
@@ -91,7 +91,7 @@ void* xmlStreamOpen( const char* uri )
             //For old documents.
             //try the passed in uri directly.
             xInputStream = m_xUriBinding->getUriBinding(
-                ::rtl::OUString::createFromAscii(uri));
+                OUString::createFromAscii(uri));
         }
 
         if( xInputStream.is() ) {

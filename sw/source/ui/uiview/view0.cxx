@@ -69,7 +69,6 @@
 #include <PostItMgr.hxx>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 #include <unotools/moduleoptions.hxx>
 
@@ -498,7 +497,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             pOpt->SetOnlineSpell(bSet);
             {
                 uno::Any aVal( &bSet, ::getCppuBooleanType() );
-                rtl::OUString aPropName(UPN_IS_SPELL_AUTO);
+                OUString aPropName(UPN_IS_SPELL_AUTO);
 
                 SvtLinguConfig  aCfg;
                 aCfg.SetProperty( aPropName, aVal );

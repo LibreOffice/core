@@ -73,7 +73,7 @@ inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                             rtl_TextEncoding eDestEnc,
                             String *pNonConvertableChars )
 {
-    String sTmp = rtl::OUString::createFromAscii(pName);
+    String sTmp = OUString::createFromAscii(pName);
     OutMeta( rStrm, pIndent, sTmp, rContent, bHTTPEquiv, eDestEnc, pNonConvertableChars );
 }
 

@@ -44,8 +44,8 @@ namespace svgio
                 SvgNode* pParent);
             virtual ~SvgStyleNode();
 
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
-            void addCssStyleSheet(const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            void addCssStyleSheet(const OUString& aContent);
 
             /// textCss access
             bool isTextCss() const { return mbTextCss; }

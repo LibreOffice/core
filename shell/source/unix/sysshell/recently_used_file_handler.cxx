@@ -122,7 +122,7 @@ namespace /* private */ {
             write_xml_tag(TAG_URI, uri_, file);
             write_xml_tag(TAG_MIME_TYPE, mime_type_, file);
 
-            rtl::OString ts = rtl::OString::valueOf((sal_sSize)timestamp_);
+            OString ts = OString::valueOf((sal_sSize)timestamp_);
             write_xml_tag(TAG_TIMESTAMP, ts.getStr(), file);
 
             if (is_private_)
@@ -143,9 +143,9 @@ namespace /* private */ {
             write_xml_end_tag(TAG_RECENT_ITEM, file);
         }
 
-        static rtl::OString escape_content(const string_t &text)
+        static OString escape_content(const string_t &text)
         {
-            rtl::OStringBuffer aBuf;
+            OStringBuffer aBuf;
             for (sal_uInt32 i = 0; i < text.length(); i++)
             {
                 switch (text[i])
@@ -164,7 +164,7 @@ namespace /* private */ {
         void write_xml_tag(const string_t& name, const string_t& value, const recently_used_file& file) const
         {
             write_xml_start_tag(name, file);
-            rtl::OString escaped = escape_content (value);
+            OString escaped = escape_content (value);
             file.write(escaped.getStr(), escaped.getLength());
             write_xml_end_tag(name, file);
         }
@@ -398,9 +398,9 @@ namespace /* private */ {
 
     //------------------------------------------------
     void recently_used_item_list_add(
-        recently_used_item_list_t& item_list, const rtl::OUString& file_url, const rtl::OUString& mime_type)
+        recently_used_item_list_t& item_list, const OUString& file_url, const OUString& mime_type)
     {
-        rtl::OString f = rtl::OUStringToOString(file_url, RTL_TEXTENCODING_UTF8);
+        OString f = OUStringToOString(file_url, RTL_TEXTENCODING_UTF8);
 
         recently_used_item_list_t::iterator iter =
             std::find_if(
@@ -427,7 +427,7 @@ namespace /* private */ {
             groups.push_back(GROUP_STAR_SUITE);
 
             string_t uri(f.getStr());
-            string_t mimetype(rtl::OUStringToOString(mime_type, osl_getThreadTextEncoding()).getStr());
+            string_t mimetype(OUStringToOString(mime_type, osl_getThreadTextEncoding()).getStr());
 
             if (mimetype.length() == 0)
                 mimetype = "application/octet-stream";
@@ -481,8 +481,8 @@ namespace /* private */ {
 */
 
 extern "C" SAL_DLLPUBLIC_EXPORT
-void add_to_recently_used_file_list(const rtl::OUString& file_url,
-        const rtl::OUString& mime_type)
+void add_to_recently_used_file_list(const OUString& file_url,
+        const OUString& mime_type)
 {
     try
     {

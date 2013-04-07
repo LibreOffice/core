@@ -70,10 +70,10 @@ struct InteractionHandlerData
 {
     /** The UNO service name to use to instanciate the content provider.
      */
-    rtl::OUString ServiceName;
+    OUString ServiceName;
 
     InteractionHandlerData() {};
-    InteractionHandlerData(const rtl::OUString & rService)
+    InteractionHandlerData(const OUString & rService)
     : ServiceName( rService ){}
 };
 
@@ -81,7 +81,7 @@ typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
 typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
 
-typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
+typedef ::boost::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
 
 //============================================================================
 class UUIInteractionHelper
@@ -116,17 +116,17 @@ public:
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    com::sun::star::beans::Optional< rtl::OUString >
+    com::sun::star::beans::Optional< OUString >
     getStringFromRequest(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     // Helper.
-    static ::rtl::OUString
+    static OUString
     replaceMessageWithArguments(
-        ::rtl::OUString aMessage,
-            std::vector< rtl::OUString > const & rArguments );
+        OUString aMessage,
+            std::vector< OUString > const & rArguments );
 
     ::com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
     getORB() const
@@ -138,13 +138,13 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     static long
     handlerequest(void* pHandleData, void* pInteractionHandler);
 
-    com::sun::star::beans::Optional< rtl::OUString >
+    com::sun::star::beans::Optional< OUString >
     getStringFromRequest_impl(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest)
@@ -161,7 +161,7 @@ private:
     getParentXWindow() const
         SAL_THROW(());
 
-    rtl::OUString
+    OUString
     getContextProperty()
         SAL_THROW(());
 
@@ -198,7 +198,7 @@ private:
             com::sun::star::task::XInteractionRequest > const & rRequest,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     bool
@@ -256,14 +256,14 @@ private:
     handleErrorHandlerRequest(
         com::sun::star::task::InteractionClassification eClassification,
         ErrCode nErrorCode,
-        std::vector< rtl::OUString > const & rArguments,
+        std::vector< OUString > const & rArguments,
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<
                 com::sun::star::task::XInteractionContinuation > > const &
                     rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
@@ -275,15 +275,15 @@ private:
                     rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
     handleMacroConfirmRequest(
-        const ::rtl::OUString& aDocumentURL,
+        const OUString& aDocumentURL,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::embed::XStorage >& xZipStorage,
-        const ::rtl::OUString& aDocumentVersion,
+        const OUString& aDocumentVersion,
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::security::DocumentSignatureInformation >
                 aSignInfo,
@@ -305,14 +305,14 @@ private:
 
     void
     handleBrokenPackageRequest(
-        std::vector< rtl::OUString > const & rArguments,
+        std::vector< OUString > const & rArguments,
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::task::XInteractionContinuation > > const &
                     rContinuations,
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
-        rtl::OUString & rErrorString)
+        OUString & rErrorString)
         SAL_THROW((::com::sun::star::uno::RuntimeException));
 
     bool handleLockedDocumentRequest(
@@ -332,7 +332,7 @@ private:
 
     bool    handleCustomRequest(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_rRequest,
-                const ::rtl::OUString& i_rServiceName
+                const OUString& i_rServiceName
             ) const;
 };
 
@@ -343,7 +343,7 @@ public:
 
     inline ~ErrorResource() SAL_THROW(()) { FreeResource(); }
 
-    bool getString(ErrCode nErrorCode, rtl::OUString &rString) const
+    bool getString(ErrCode nErrorCode, OUString &rString) const
         SAL_THROW(());
 };
 

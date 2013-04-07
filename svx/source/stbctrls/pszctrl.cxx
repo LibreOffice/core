@@ -71,7 +71,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
     if ( nConvVal < 0 && ( nConvVal / 100 == 0 ) )
         sMetric += '-';
-    sMetric += rtl::OUString::valueOf(nConvVal / 100);
+    sMetric += OUString::valueOf(nConvVal / 100);
 
     if( FUNIT_NONE != eOutUnit )
     {
@@ -82,7 +82,7 @@ String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
             nFract *= -1;
         if ( nFract < 10 )
             sMetric += '0';
-        sMetric += rtl::OUString::valueOf(nFract);
+        sMetric += OUString::valueOf(nFract);
     }
 
     return sMetric;
@@ -178,9 +178,9 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_POSITION )));         // SID_ATTR_POSITION
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_TABLECELL )));   // SID_TABLE_CELL
-    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STR_FUNC )));    // SID_PSZ_FUNCTION
+    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_POSITION )));         // SID_ATTR_POSITION
+    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_TABLECELL )));   // SID_TABLE_CELL
+    addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( STR_FUNC )));    // SID_PSZ_FUNCTION
 }
 
 // -----------------------------------------------------------------------
@@ -324,11 +324,11 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
 
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-                aArgs[0].Name  = rtl::OUString( "StatusBarFunc" );
+                aArgs[0].Name  = OUString( "StatusBarFunc" );
                 aItem.QueryValue( a );
                 aArgs[0].Value = a;
 
-                execute( rtl::OUString( ".uno:StatusBarFunc" ), aArgs );
+                execute( OUString( ".uno:StatusBarFunc" ), aArgs );
 //              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }

@@ -75,8 +75,6 @@
 #include <libpq-fe.h>
 #include <string.h>
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -107,14 +105,14 @@ using com::sun::star::container::XEnumerationAccess;
 namespace pq_sdbc_driver
 {
 
-rtl::OUString date2String( const com::sun::star::util::Date & x )
+OUString date2String( const com::sun::star::util::Date & x )
 {
     char buffer[64];
     sprintf( buffer, "%d-%02d-%02d", x.Year, x.Month, x.Day );
     return OUString::createFromAscii( buffer );
 }
 
-com::sun::star::util::Date string2Date( const  rtl::OUString &date )
+com::sun::star::util::Date string2Date( const  OUString &date )
 {
     // Format: Year-Month-Day
     com::sun::star::util::Date ret;
@@ -135,7 +133,7 @@ com::sun::star::util::Date string2Date( const  rtl::OUString &date )
     return ret;
 }
 
-rtl::OUString time2String( const com::sun::star::util::Time & x )
+OUString time2String( const com::sun::star::util::Time & x )
 {
     char buffer[64];
     sprintf( buffer, "%02d:%02d:%02d.%02d", x.Hours, x.Minutes, x.Seconds, x.HundredthSeconds );
@@ -144,7 +142,7 @@ rtl::OUString time2String( const com::sun::star::util::Time & x )
 }
 
 
-com::sun::star::util::Time string2Time( const rtl::OUString & time )
+com::sun::star::util::Time string2Time( const OUString & time )
 {
     com::sun::star::util::Time ret;
 
@@ -173,7 +171,7 @@ com::sun::star::util::Time string2Time( const rtl::OUString & time )
 
 
 
-rtl::OUString dateTime2String( const com::sun::star::util::DateTime & x )
+OUString dateTime2String( const com::sun::star::util::DateTime & x )
 {
     char buffer[128];
     sprintf( buffer, "%d-%02d-%02d %02d:%02d:%02d.%02d",
@@ -183,7 +181,7 @@ rtl::OUString dateTime2String( const com::sun::star::util::DateTime & x )
 
 }
 
-com::sun::star::util::DateTime string2DateTime( const rtl::OUString & dateTime )
+com::sun::star::util::DateTime string2DateTime( const OUString & dateTime )
 {
     int space = dateTime.indexOf( ' ' );
     com::sun::star::util::DateTime ret;
@@ -204,29 +202,29 @@ com::sun::star::util::DateTime string2DateTime( const rtl::OUString & dateTime )
     return ret;
 }
 
-rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b)
+OUString concatQualified( const OUString & a, const OUString &b)
 {
-    rtl::OUStringBuffer buf( a.getLength() + 2 + b.getLength() );
+    OUStringBuffer buf( a.getLength() + 2 + b.getLength() );
     buf.append( a );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
     buf.append( b );
     return buf.makeStringAndClear();
 }
 
-static inline rtl::OString iOUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
+static inline OString iOUStringToOString( const OUString str, ConnectionSettings *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
-    return rtl::OUStringToOString( str, settings->encoding );
+    return OUStringToOString( str, settings->encoding );
 }
 
-rtl::OString OUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
+OString OUStringToOString( const OUString str, ConnectionSettings *settings) {
     return iOUStringToOString( str, settings );
 }
 
-void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
 {
 
-    rtl::OString y = iOUStringToOString( value, settings );
-    rtl::OStringBuffer strbuf( y.getLength() * 2 + 2 );
+    OString y = iOUStringToOString( value, settings );
+    OStringBuffer strbuf( y.getLength() * 2 + 2 );
     int error;
     int len = PQescapeStringConn(settings->pConnection, ((char*)strbuf.getStr()), y.getStr() , y.getLength(), &error );
     if ( error )
@@ -246,22 +244,22 @@ void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & valu
     strbuf.setLength( len );
     // Previously here RTL_TEXTENCODING_ASCII_US; as we set the PostgreSQL client_encoding to UTF8,
     // we get UTF8 here, too. I'm not sure why it worked well before...
-    buf.append( rtl::OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+    buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
-static inline void ibufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+static inline void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
 {
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
     bufferEscapeConstant( buf, value, settings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
 }
 
-void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+void bufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
 {
     return ibufferQuoteConstant( buf, value, settings );
 }
 
-void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val, ConnectionSettings *settings )
+void bufferQuoteAnyConstant( OUStringBuffer & buf, const Any &val, ConnectionSettings *settings )
 {
     if( val.hasValue() )
     {
@@ -273,11 +271,11 @@ void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val, Connecti
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NULL" ) );
 }
 
-static inline void ibufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
+static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
 {
     OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
 
-    rtl::OString y = iOUStringToOString( toQuote, settings );
+    OString y = iOUStringToOString( toQuote, settings );
     char *cstr = PQescapeIdentifier(settings->pConnection, y.getStr(), y.getLength());
     if ( cstr == NULL )
     {
@@ -289,18 +287,18 @@ static inline void ibufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl:
                            -1,
                            Any());
     }
-    buf.append( rtl::OStringToOUString( cstr, RTL_TEXTENCODING_UTF8 ) );
+    buf.append( OStringToOUString( cstr, RTL_TEXTENCODING_UTF8 ) );
     PQfreemem( cstr );
 }
 
-void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
+void bufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
 {
     return ibufferQuoteIdentifier(buf, toQuote, settings);
 }
 
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &table, ConnectionSettings *settings )
+    OUStringBuffer & buf, const OUString &schema, const OUString &table, ConnectionSettings *settings )
 {
     ibufferQuoteIdentifier(buf, schema, settings);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
@@ -308,10 +306,10 @@ void bufferQuoteQualifiedIdentifier(
 }
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf,
-    const rtl::OUString &schema,
-    const rtl::OUString &table,
-    const rtl::OUString &col,
+    OUStringBuffer & buf,
+    const OUString &schema,
+    const OUString &table,
+    const OUString &col,
     ConnectionSettings *settings)
 {
     ibufferQuoteIdentifier(buf, schema, settings);
@@ -322,16 +320,16 @@ void bufferQuoteQualifiedIdentifier(
 }
 
 
-rtl::OUString extractStringProperty(
-    const Reference< XPropertySet > & descriptor, const rtl::OUString &name )
+OUString extractStringProperty(
+    const Reference< XPropertySet > & descriptor, const OUString &name )
 {
-    rtl::OUString value;
+    OUString value;
     descriptor->getPropertyValue( name ) >>= value;
     return value;
 }
 
 sal_Bool extractBoolProperty(
-    const Reference< XPropertySet > & descriptor, const rtl::OUString &name )
+    const Reference< XPropertySet > & descriptor, const OUString &name )
 {
     sal_Bool value = sal_False;
     descriptor->getPropertyValue( name ) >>= value;
@@ -339,7 +337,7 @@ sal_Bool extractBoolProperty(
 }
 
 sal_Int32 extractIntProperty(
-    const Reference< XPropertySet > & descriptor, const rtl::OUString &name )
+    const Reference< XPropertySet > & descriptor, const OUString &name )
 {
     sal_Int32 ret = 0;
     descriptor->getPropertyValue( name ) >>= ret;
@@ -381,7 +379,7 @@ Reference< XConnection > extractConnectionFromStatement( const Reference< XInter
         if( ! ret.is() )
             throw SQLException(
                 "PQSDBC: Couldn't retrieve connection from statement",
-                Reference< XInterface > () , rtl::OUString(), 0 , com::sun::star::uno::Any()  );
+                Reference< XInterface > () , OUString(), 0 , com::sun::star::uno::Any()  );
     }
 
     return ret;
@@ -410,7 +408,7 @@ void TransactionGuard::commit()
     m_commited = sal_True;
 }
 
-void TransactionGuard::executeUpdate( const rtl::OUString & sql )
+void TransactionGuard::executeUpdate( const OUString & sql )
 {
     m_stmt->executeUpdate( sql );
 }
@@ -436,9 +434,9 @@ bool isWhitespace( sal_Unicode c )
     return ' ' == c || 9 == c || 10 == c || 13 == c;
 }
 
-::rtl::OUString extractTableFromInsert( const rtl::OUString & sql )
+OUString extractTableFromInsert( const OUString & sql )
 {
-    rtl::OUString ret;
+    OUString ret;
     int i = 0;
     for( ; i < sql.getLength() && isWhitespace(sql[i])  ; i++ );
 
@@ -484,7 +482,7 @@ bool isWhitespace( sal_Unicode c )
                     }
                 }
             }
-            ret = rtl::OUString( &sql.getStr()[start], i - start ).trim();
+            ret = OUString( &sql.getStr()[start], i - start ).trim();
 //             printf( "pq_statement: parsed table name %s from insert\n" ,
 //                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
         }
@@ -524,7 +522,7 @@ static bool isOperator( char c )
     return ret;
 }
 
-void splitSQL( const rtl::OString & sql, OStringVector &vec )
+void splitSQL( const OString & sql, OStringVector &vec )
 {
     int length = sql.getLength();
 
@@ -539,7 +537,7 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i-start+1  ) );
+                vec.push_back( OString( &sql.getStr()[start], i-start+1  ) );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -554,7 +552,7 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
             }
             else if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i - start +1 ) );
+                vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -563,20 +561,20 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
+                vec.push_back( OString( &sql.getStr()[start], i - start ) );
                 doubleQuote = true;
                 start = i;
             }
             else if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
+                vec.push_back( OString( &sql.getStr()[start], i - start ) );
                 singleQuote = true;
                 start = i;
             }
         }
     }
     if( start < i )
-        vec.push_back( rtl::OString( &sql.getStr()[start] , i - start ) );
+        vec.push_back( OString( &sql.getStr()[start] , i - start ) );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -584,7 +582,7 @@ void splitSQL( const rtl::OString & sql, OStringVector &vec )
 
 }
 
-void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
+void tokenizeSQL( const OString & sql, OStringVector &vec  )
 {
     int length = sql.getLength();
 
@@ -599,7 +597,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
         {
             if( '"' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i-start  ) );
+                vec.push_back( OString( &sql.getStr()[start], i-start  ) );
                 start = i + 1;
                 doubleQuote = false;
             }
@@ -608,7 +606,7 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
         {
             if( '\'' == c )
             {
-                vec.push_back( rtl::OString( &sql.getStr()[start], i - start +1 ) );
+                vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
                 start = i + 1; // leave single quotes !
                 singleQuote = false;
             }
@@ -631,15 +629,15 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
                     start ++;   // skip additional whitespace
                 else
                 {
-                    vec.push_back( rtl::OString( &sql.getStr()[start], i - start  ) );
+                    vec.push_back( OString( &sql.getStr()[start], i - start  ) );
                     start = i +1;
                 }
             }
             else if( ',' == c || isOperator( c ) || '(' == c || ')' == c )
             {
                 if( i - start )
-                    vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
-                vec.push_back( rtl::OString( &sql.getStr()[i], 1 ) );
+                    vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                vec.push_back( OString( &sql.getStr()[i], 1 ) );
                 start = i + 1;
             }
             else if( '.' == c )
@@ -652,15 +650,15 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
                 else
                 {
                     if( i - start )
-                        vec.push_back( rtl::OString( &sql.getStr()[start], i - start ) );
-                    vec.push_back( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "." ) ) );
+                        vec.push_back( OString( &sql.getStr()[start], i - start ) );
+                    vec.push_back( OString( RTL_CONSTASCII_STRINGPARAM( "." ) ) );
                     start = i + 1;
                 }
             }
         }
     }
     if( start < i )
-        vec.push_back( rtl::OString( &sql.getStr()[start] , i - start ) );
+        vec.push_back( OString( &sql.getStr()[start] , i - start ) );
 
 //     for( i = 0 ; i < vec.size() ; i ++ )
 //         printf( "%s!" , vec[i].getStr() );
@@ -668,21 +666,21 @@ void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  )
 }
 
 
-void splitConcatenatedIdentifier( const rtl::OUString & source, rtl::OUString *first, rtl::OUString *second)
+void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second)
 {
     OStringVector vec;
-    tokenizeSQL( rtl::OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
+    tokenizeSQL( OUStringToOString( source, RTL_TEXTENCODING_UTF8 ), vec );
     if( vec.size() == 3 )
     {
-        *first = rtl::OStringToOUString( vec[0] , RTL_TEXTENCODING_UTF8 );
-        *second = rtl::OStringToOUString( vec[2], RTL_TEXTENCODING_UTF8 );
+        *first = OStringToOUString( vec[0] , RTL_TEXTENCODING_UTF8 );
+        *second = OStringToOUString( vec[2], RTL_TEXTENCODING_UTF8 );
     }
 }
 
 typedef std::vector< sal_Int32 , Allocator< sal_Int32 > > IntVector;
 
 
-rtl::OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
+OUString array2String( const com::sun::star::uno::Sequence< Any > &seq )
 {
     OUStringBuffer buf(128);
     int len = seq.getLength();
@@ -718,7 +716,7 @@ std::vector
     Allocator< com::sun::star::uno::Any >
 > AnyVector;
 
-com::sun::star::uno::Sequence< Any > parseArray( const rtl::OUString & str ) throw( SQLException )
+com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( SQLException )
 {
     com::sun::star::uno::Sequence< Any > ret;
 
@@ -769,7 +767,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const rtl::OUString & str ) thr
                 buf.appendAscii( "')" );
                 throw SQLException(
                     buf.makeStringAndClear(),
-                    Reference< XInterface > (), rtl::OUString(), 1, Any() );
+                    Reference< XInterface > (), OUString(), 1, Any() );
             }
             if( brackets == 0 )
             {
@@ -818,7 +816,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const rtl::OUString & str ) thr
     return sequence_of_vector(elements);
 }
 
-com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const ::rtl::OUString & str )
+com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str )
 {
     sal_Int32 start = 0;
     IntVector vec;
@@ -837,8 +835,8 @@ com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const ::rtl::OUString 
 void fillAttnum2attnameMap(
     Int2StringMap &map,
     const Reference< com::sun::star::sdbc::XConnection > &conn,
-    const rtl::OUString &schema,
-    const rtl::OUString &table )
+    const OUString &schema,
+    const OUString &table )
 {
     Reference< XPreparedStatement > prep = conn->prepareStatement(
                    "SELECT attname,attnum "
@@ -859,9 +857,9 @@ void fillAttnum2attnameMap(
     }
 }
 
-::rtl::OString extractSingleTableFromSelect( const OStringVector &vec )
+OString extractSingleTableFromSelect( const OStringVector &vec )
 {
-    rtl::OString ret;
+    OString ret;
 
     if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             vec[0].pData->buffer, vec[0].pData->length, "select" , 6 , 6 ) )
@@ -890,7 +888,7 @@ void fillAttnum2attnameMap(
                 RTL_CONSTASCII_STRINGPARAM("(") ) )
         {
             // it is a table or a function name
-            rtl::OStringBuffer buf(128);
+            OStringBuffer buf(128);
             if( '"' == vec[token][0] )
                 buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
             else
@@ -924,7 +922,7 @@ void fillAttnum2attnameMap(
                     RTL_CONSTASCII_STRINGPARAM( "(" ) ) == 0 )
             {
                 // whoops, it is a function
-                ret = rtl::OString();
+                ret = OString();
             }
             else
             {
@@ -944,7 +942,7 @@ void fillAttnum2attnameMap(
                             RTL_CONSTASCII_STRINGPARAM( "," ) ) == 0 )
                     {
                         // whoops, multiple tables are used
-                        ret = rtl::OString();
+                        ret = OString();
                     }
                     else
                     {
@@ -958,7 +956,7 @@ void fillAttnum2attnameMap(
                                  strlen(forbiddenKeywords[i]) ) )
                             {
                                 // whoops, it is a join
-                                ret = rtl::OString();
+                                ret = OString();
                             }
                         }
                     }
@@ -970,7 +968,7 @@ void fillAttnum2attnameMap(
 
 }
 
-com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUString & str )
+com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str )
 {
     com::sun::star::uno::Sequence< sal_Int32 > ret;
     const sal_Int32 strlen = str.getLength();
@@ -991,7 +989,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUStrin
         std::vector< sal_Int32, Allocator< sal_Int32 > > vec;
         do
         {
-            ::rtl::OUString digits;
+            OUString digits;
             sal_Int32 c;
             while ( isdigit( c = str.iterateCodePoints(&start) ) )
             {
@@ -1017,10 +1015,10 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUStrin
 }
 
 
-Sequence< rtl::OUString > convertMappedIntArray2StringArray(
+Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const Sequence< sal_Int32 > &intArray )
 {
-    Sequence< ::rtl::OUString > ret( intArray.getLength() );
+    Sequence< OUString > ret( intArray.getLength() );
     for( int i = 0; i < intArray.getLength() ; i ++ )
     {
         Int2StringMap::const_iterator ii = map.find( intArray[i] );
@@ -1031,7 +1029,7 @@ Sequence< rtl::OUString > convertMappedIntArray2StringArray(
 }
 
 
-::rtl::OUString sqltype2string( const Reference< XPropertySet > & desc )
+OUString sqltype2string( const Reference< XPropertySet > & desc )
 {
     OUStringBuffer typeName;
     typeName.append( extractStringProperty( desc, getStatics().TYPE_NAME ) );
@@ -1183,13 +1181,13 @@ void bufferKey2TableConstraint(
 
 }
 
-static bool equalsIgnoreCase( const rtl::OString & str, const char *str2, int length2 )
+static bool equalsIgnoreCase( const OString & str, const char *str2, int length2 )
 {
     return 0 == rtl_str_compareIgnoreAsciiCase_WithLength(
         str.pData->buffer, str.pData->length, str2, length2 );
 }
 
-void extractNameValuePairsFromInsert( String2StringMap & map, const rtl::OString & lastQuery )
+void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery )
 {
     OStringVector vec;
     tokenizeSQL( lastQuery, vec  );
@@ -1204,7 +1202,7 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const rtl::OString
 
 //         printf( "1a\n" );
         // extract table name
-        rtl::OString tableName;
+        OString tableName;
         if( equalsIgnoreCase( vec[n+1], RTL_CONSTASCII_STRINGPARAM( "." ) ) )
         {
             tableName = vec[n];
@@ -1255,9 +1253,9 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const rtl::OString
     }
 }
 
-rtl::OUString querySingleValue(
+OUString querySingleValue(
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &connection,
-    const rtl::OUString &query )
+    const OUString &query )
 {
     OUString ret;
     Reference< XStatement > stmt = connection->createStatement();
@@ -1289,7 +1287,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_STRING:
-            _rxParameters->setString(_nColumnIndex, *(rtl::OUString*)_rValue.getValue());
+            _rxParameters->setString(_nColumnIndex, *(OUString*)_rValue.getValue());
             break;
 
         case typelib_TypeClass_BOOLEAN:
@@ -1306,7 +1304,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_CHAR:
-            _rxParameters->setString(_nColumnIndex, ::rtl::OUString((sal_Unicode *)_rValue.getValue(),1));
+            _rxParameters->setString(_nColumnIndex, OUString((sal_Unicode *)_rValue.getValue(),1));
             break;
 
         case typelib_TypeClass_UNSIGNED_LONG:

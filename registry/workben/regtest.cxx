@@ -27,8 +27,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 
 #if (defined UNX)
 int main()

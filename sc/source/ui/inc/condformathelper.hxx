@@ -26,10 +26,10 @@ enum ScCondFormatEntryType
 class ScCondFormatHelper
 {
 public:
-    static SC_DLLPUBLIC rtl::OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
+    static SC_DLLPUBLIC OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
-    static SC_DLLPUBLIC rtl::OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
-            rtl::OUString aStr1 = rtl::OUString(), rtl::OUString aStr2 = rtl::OUString() );
+    static SC_DLLPUBLIC OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
+            OUString aStr1 = OUString(), OUString aStr2 = OUString() );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

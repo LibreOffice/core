@@ -54,7 +54,7 @@ public:
     explicit            PropertyMap();
 
     /** Returns the name of the passed property identifier. */
-    static const ::rtl::OUString& getPropertyName( sal_Int32 nPropId );
+    static const OUString& getPropertyName( sal_Int32 nPropId );
 
     /** Returns true, if the map contains a property with the passed identifier. */
     inline bool         hasProperty( sal_Int32 nPropId ) const
@@ -84,7 +84,7 @@ public:
 
     /** Fills the passed sequences of names and anys with all contained properties. */
     void                fillSequences(
-                            ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames,
+                            ::com::sun::star::uno::Sequence< OUString >& rNames,
                             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rValues ) const;
 
     /** Creates a property set supporting the XPropertySet interface and inserts all properties. */

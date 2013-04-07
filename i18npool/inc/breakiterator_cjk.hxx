@@ -31,23 +31,23 @@ class BreakIterator_CJK : public BreakIterator_Unicode
 public:
     BreakIterator_CJK();
 
-    Boundary SAL_CALL nextWord( const rtl::OUString& Text, sal_Int32 nStartPos,
+    Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType)
             throw(com::sun::star::uno::RuntimeException);
-    Boundary SAL_CALL previousWord( const rtl::OUString& Text, sal_Int32 nStartPos,
+    Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType)
             throw(com::sun::star::uno::RuntimeException);
-    Boundary SAL_CALL getWordBoundary( const rtl::OUString& Text, sal_Int32 nPos,
+    Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
             const com::sun::star::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
             throw(com::sun::star::uno::RuntimeException);
-    LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
+    LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
         throw(com::sun::star::uno::RuntimeException);
 
 protected:
     xdictionary *dict;
-    rtl::OUString hangingCharacters;
+    OUString hangingCharacters;
 };
 
 #define BREAKITERATOR_CJK( lang ) \

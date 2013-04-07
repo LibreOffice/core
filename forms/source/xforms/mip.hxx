@@ -46,9 +46,9 @@ class MIP
     bool mbHasCalculate;
 
     bool mbHasTypeName;
-    rtl::OUString msTypeName;
+    OUString msTypeName;
 
-    rtl::OUString msConstraintExplanation;
+    OUString msConstraintExplanation;
 
 public:
     MIP();
@@ -64,8 +64,8 @@ public:
     // - type (static; default: xsd:string)
     //        (currently default implemented as empty string)
     bool hasTypeName() const;
-    rtl::OUString getTypeName() const;
-    void setTypeName( const rtl::OUString& );
+    OUString getTypeName() const;
+    void setTypeName( const OUString& );
     void resetTypeName();
 
     // - readonly (computed XPath; default: false; true if calculate exists)
@@ -93,8 +93,8 @@ public:
     void resetConstraint();
 
     // explain _why_ a constraint failed
-    void setConstraintExplanation( const rtl::OUString& );
-    rtl::OUString getConstraintExplanation() const;
+    void setConstraintExplanation( const OUString& );
+    OUString getConstraintExplanation() const;
 
     // - calculate (computed XPath; default: has none (false))
     //   (for calculate, we only store whether a calculate MIP is present;

@@ -74,7 +74,7 @@ bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
     aSeq[1] = ::com::sun::star::uno::makeAny( pImp->nAngle );
     aSeq[2] = ::com::sun::star::uno::makeAny( pImp->bMirrored );
-    aSeq[3] = ::com::sun::star::uno::makeAny( rtl::OUString( pImp->aURL ));
+    aSeq[3] = ::com::sun::star::uno::makeAny( OUString( pImp->aURL ));
 
     rVal = ::com::sun::star::uno::makeAny( aSeq );
     return true;
@@ -86,7 +86,7 @@ bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
     {
         sal_Int16     nVal = sal_Int16();
-        rtl::OUString aURL;
+        OUString aURL;
         if ( aSeq[0] >>= nVal )
             SetValue( nVal );
         aSeq[1] >>= pImp->nAngle;

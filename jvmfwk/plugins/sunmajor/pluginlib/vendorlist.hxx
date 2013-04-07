@@ -46,13 +46,13 @@ VendorSupportMapEntry gVendorMap[] ={
     {NULL, NULL, NULL} };
 
 
-com::sun::star::uno::Sequence<rtl::OUString> getVendorNames();
+com::sun::star::uno::Sequence<OUString> getVendorNames();
 
 /* Examines if the vendor supplied in parameter sVendor is part of the
    list of supported vendors. That is the arry of VendorSupportMapEntry
    is search for an respective entry.
 */
-bool isVendorSupported(const rtl::OUString & sVendor);
+bool isVendorSupported(const OUString & sVendor);
 }
 
 #endif

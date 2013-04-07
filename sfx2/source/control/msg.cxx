@@ -50,16 +50,16 @@ sal_uInt16 SfxSlot::GetWhich( const SfxItemPool &rPool ) const
     return nMasterSlotId;
 }
 
-::rtl::OString SfxSlot::GetCommand() const
+OString SfxSlot::GetCommand() const
 {
-    rtl::OString sRet(".uno:");
+    OString sRet(".uno:");
     sRet += pUnoName;
     return sRet;
 }
 
-::rtl::OUString SfxSlot::GetCommandString() const
+OUString SfxSlot::GetCommandString() const
 {
-    return rtl::OStringToOUString(GetCommand(), RTL_TEXTENCODING_UTF8);
+    return OStringToOUString(GetCommand(), RTL_TEXTENCODING_UTF8);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

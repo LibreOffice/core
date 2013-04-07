@@ -33,7 +33,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-using ::rtl::OUString;
 
 #define SETTINGS_CONFIGNODE "VCL/Settings"
 
@@ -65,7 +64,7 @@ void SettingsConfigItem::Commit()
     if( ! IsValidConfigMgr() )
         return;
 
-    boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group;
+    boost::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -145,7 +144,7 @@ void SettingsConfigItem::getValues()
 
 const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
-    ::boost::unordered_map< OUString, SmallOUStrMap, rtl::OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
+    ::boost::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
         static OUString aEmpty;

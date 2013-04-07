@@ -94,14 +94,14 @@ Any SAL_CALL ODataColumn::queryInterface( const Type & _rType ) throw (RuntimeEx
 }
 
 // XServiceInfo
-rtl::OUString ODataColumn::getImplementationName(  ) throw(RuntimeException)
+OUString ODataColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.ODataColumn");
+    return OUString("com.sun.star.sdb.ODataColumn");
 }
 
-Sequence< ::rtl::OUString > ODataColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > ODataColumn::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 3 );
+    Sequence< OUString > aSNS( 3 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;
     aSNS[1] = SERVICE_SDB_RESULTCOLUMN;
     aSNS[2] = SERVICE_SDB_DATACOLUMN;
@@ -126,7 +126,7 @@ sal_Bool ODataColumn::wasNull(void) throw( SQLException, RuntimeException )
     return m_xRow->wasNull();
 }
 
-rtl::OUString ODataColumn::getString(void) throw( SQLException, RuntimeException )
+OUString ODataColumn::getString(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(!m_xRow.is());
@@ -343,7 +343,7 @@ void ODataColumn::updateDouble(double x) throw( SQLException, RuntimeException )
     m_xRowUpdate->updateDouble(m_nPos, x);
 }
 
-void ODataColumn::updateString(const rtl::OUString& x) throw( SQLException, RuntimeException )
+void ODataColumn::updateString(const OUString& x) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed(!m_xRowUpdate.is());

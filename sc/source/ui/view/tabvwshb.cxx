@@ -565,7 +565,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                         size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (size_t i=0; i<nCount; ++i)
                         {
-                            aList.push_back( rtl::OUString( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
+                            aList.push_back( OUString( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
                                                        pUndoManager->GetRedoActionComment(i) ) );
                         }
                     }

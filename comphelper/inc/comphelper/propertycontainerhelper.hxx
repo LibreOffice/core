@@ -54,7 +54,7 @@ struct COMPHELPER_DLLPUBLIC PropertyDescription
     LocationAccess      aLocation;      // access to the property value
 
     PropertyDescription()
-        :aProperty( ::rtl::OUString(), -1, ::com::sun::star::uno::Type(), 0 )
+        :aProperty( OUString(), -1, ::com::sun::star::uno::Type(), 0 )
         ,eLocated( ltHoldMyself )
     {
         aLocation.nOwnClassVectorIndex = -1;
@@ -101,7 +101,7 @@ protected:
         @param      _rMemberType        the cppu type of the property represented by the object
                                         to which _pPointerToMember points.
     */
-    void    registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void    registerProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType);
 
 
@@ -115,7 +115,7 @@ protected:
         @param      _rExpectedType      the expected type of the property. NOT the type of the object to which
                                         _pPointerToMember points (this is always an Any).
     */
-    void    registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void    registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType);
 
     /** register a property. The repository will create an own object holding this property, so there is no
@@ -128,7 +128,7 @@ protected:
                                         the ::com::sun::star::beans::PropertyAttribute::MAYBEVOID flag.
                                         Else it must be a pointer to an object of the type described by _rType.
     */
-    void    registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+    void    registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue);
 
     /** revokes a previously registered property
@@ -142,7 +142,7 @@ protected:
     sal_Bool    isRegisteredProperty( sal_Int32 _nHandle ) const;
 
     /// checkes whether a property with the given name has been registered
-    sal_Bool    isRegisteredProperty( const ::rtl::OUString& _rName ) const;
+    sal_Bool    isRegisteredProperty( const OUString& _rName ) const;
 
 
     // helper for implementing OPropertySetHelper overridables
@@ -180,7 +180,7 @@ protected:
             if no property with the given name is registered
     */
     const ::com::sun::star::beans::Property&
-            getProperty( const ::rtl::OUString& _rName ) const;
+            getProperty( const OUString& _rName ) const;
 
 private:
     /// insertion of _rProp into m_aProperties, keeping the sort order

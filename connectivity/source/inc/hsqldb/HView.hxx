@@ -44,8 +44,8 @@ namespace connectivity { namespace hsqldb
         HView(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             sal_Bool _bCaseSensitive,
-            const ::rtl::OUString& _rSchemaName,
-            const ::rtl::OUString& _rName
+            const OUString& _rSchemaName,
+            const OUString& _rName
         );
 
         // UNO
@@ -53,7 +53,7 @@ namespace connectivity { namespace hsqldb
         DECLARE_XTYPEPROVIDER()
 
         // XAlterView
-        virtual void SAL_CALL alterCommand( const ::rtl::OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual ~HView();
@@ -72,7 +72,7 @@ namespace connectivity { namespace hsqldb
                 if an error occurs while retrieving the command from the database and
                 <arg>_bAllowSQLException</arg> is <TRUE/>
         */
-        ::rtl::OUString impl_getCommand_throw( bool _bAllowSQLException ) const;
+        OUString impl_getCommand_throw( bool _bAllowSQLException ) const;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;

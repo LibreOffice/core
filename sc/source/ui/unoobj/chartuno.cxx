@@ -155,7 +155,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
     return NULL;
 }
 
-ScChartObj* ScChartsObj::GetObjectByName_Impl(const rtl::OUString& aName) const
+ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
     String aNameString(aName);
     if ( lcl_FindChartObj( pDocShell, nTab, aNameString ) )
@@ -165,7 +165,7 @@ ScChartObj* ScChartsObj::GetObjectByName_Impl(const rtl::OUString& aName) const
 
 // XTableCharts
 
-void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
+void SAL_CALL ScChartsObj::addNewByName( const OUString& aName,
                                         const awt::Rectangle& aRect,
                                         const uno::Sequence<table::CellRangeAddress>& aRanges,
                                         sal_Bool bColumnHeaders, sal_Bool bRowHeaders )
@@ -208,7 +208,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     ScRangeListRef xNewRanges( pList );
 
     uno::Reference < embed::XEmbeddedObject > xObj;
-    ::rtl::OUString aTmp( aNameString );
+    OUString aTmp( aNameString );
     if ( SvtModuleOptions().IsChart() )
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aTmp );
     if ( xObj.is() )
@@ -251,7 +251,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 if( sRangeStr.Len() )
                     xReceiver->attachDataProvider( xDataProvider );
                 else
-                    sRangeStr = rtl::OUString("all");
+                    sRangeStr = OUString("all");
 
                 uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
                 xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
@@ -259,16 +259,16 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    ::rtl::OUString("CellRangeRepresentation"), -1,
-                    uno::makeAny( ::rtl::OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
+                    OUString("CellRangeRepresentation"), -1,
+                    uno::makeAny( OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    ::rtl::OUString("HasCategories"), -1,
+                    OUString("HasCategories"), -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    ::rtl::OUString("FirstCellAsLabel"), -1,
+                    OUString("FirstCellAsLabel"), -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    ::rtl::OUString("DataRowSource"), -1,
+                    OUString("DataRowSource"), -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -289,7 +289,7 @@ void SAL_CALL ScChartsObj::addNewByName( const rtl::OUString& aName,
     }
 }
 
-void SAL_CALL ScChartsObj::removeByName( const rtl::OUString& aName )
+void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
                                             throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -314,7 +314,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.table.TableChartsEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableChartsEnumeration"));
 }
 
 // XIndexAccess
@@ -371,7 +371,7 @@ sal_Bool SAL_CALL ScChartsObj::hasElements() throw(uno::RuntimeException)
     return getCount() != 0;
 }
 
-uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -383,7 +383,7 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
         throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
@@ -391,8 +391,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
         ScDocument* pDoc = pDocShell->GetDocument();
 
         long nCount = getCount();
-        uno::Sequence<rtl::OUString> aSeq(nCount);
-        rtl::OUString* pAry = aSeq.getArray();
+        uno::Sequence<OUString> aSeq(nCount);
+        OUString* pAry = aSeq.getArray();
 
         long nPos = 0;
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
@@ -424,10 +424,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::
 
         return aSeq;
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
-sal_Bool SAL_CALL ScChartsObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -447,7 +447,7 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     pDocShell->GetDocument()->AddUnoObject(*this);
 
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
-    registerPropertyNoMember( ::rtl::OUString( "RelatedCellRanges" ),
+    registerPropertyNoMember( OUString( "RelatedCellRanges" ),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
         ::getCppuType( &aInitialPropValue ), &aInitialPropValue );
 }
@@ -485,7 +485,7 @@ void ScChartObj::GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool&
             {
                 uno::Sequence< beans::PropertyValue > aArgs( xProvider->detectArguments( xReceiver->getUsedData() ) );
 
-                rtl::OUString aRanges;
+                OUString aRanges;
                 chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
                 bool bHasCategories=false;
                 bool bFirstCellAsLabel=false;
@@ -766,13 +766,13 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
 
 // XNamed
 
-rtl::OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aChartName;
 }
 
-void SAL_CALL ScChartObj::setName( const rtl::OUString& /* aName */ ) throw(uno::RuntimeException)
+void SAL_CALL ScChartObj::setName( const OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     throw uno::RuntimeException();      // name cannot be changed

@@ -117,7 +117,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
     , ::cppu::OWeakObject (                                                                )
     , m_xSMGR             (xSMGR                                                           )
     , m_xModuleManager    (                                                                )
-    , m_aConfig           (comphelper::getComponentContext(xSMGR), ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
+    , m_aConfig           (comphelper::getComponentContext(xSMGR), OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
     // Don't do any reference related code here! Do it inside special
     // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further informations.
@@ -141,7 +141,7 @@ JobExecutor::~JobExecutor()
     @param  sEvent
                 is used to locate registered jobs
  */
-void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException)
+void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT(aLog, "fwk (as96863) JobExecutor::trigger()");
 
@@ -157,7 +157,7 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
+    css::uno::Sequence< OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
 
     aReadLock.unlock();
     /* } SAFE */
@@ -197,8 +197,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     const char EVENT_ON_LOAD[] = "OnLoad";                          // Doc UI  event
     const char EVENT_ON_CREATE[] = "OnCreate";                      // Doc API event
     const char EVENT_ON_LOAD_FINISHED[] = "OnLoadFinished";         // Doc API event
-    ::rtl::OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
-    ::rtl::OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
+    OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
+    OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -211,7 +211,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     // see using of m_lEvents.find() below ...
 
     // retrieve event context from event source
-    rtl::OUString aModuleIdentifier;
+    OUString aModuleIdentifier;
     try
     {
         aModuleIdentifier = m_xModuleManager->identify( aEvent.Source );
@@ -285,10 +285,10 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
 void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
 {
-    ::rtl::OUString sValue;
+    OUString sValue;
     if (aEvent.Accessor >>= sValue)
     {
-        ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
+        OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
             OUStringList::iterator pEvent = m_lEvents.find(sEvent);
@@ -300,10 +300,10 @@ void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent
 
 void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
 {
-    ::rtl::OUString sValue;
+    OUString sValue;
     if (aEvent.Accessor >>= sValue)
     {
-        ::rtl::OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
+        OUString sEvent = ::utl::extractFirstFromConfigurationPath(sValue);
         if (!sEvent.isEmpty())
         {
             OUStringList::iterator pEvent = m_lEvents.find(sEvent);

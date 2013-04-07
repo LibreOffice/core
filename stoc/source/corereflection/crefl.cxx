@@ -31,9 +31,6 @@ using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 #include "base.hxx"
 

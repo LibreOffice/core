@@ -59,15 +59,15 @@ public:
 
     sal_Bool GUIStoreModel(
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
-                    const ::rtl::OUString& aSlotName,
+                    const OUString& aSlotName,
                     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
                     sal_Bool bPreselectPassword,
-                    ::rtl::OUString aUserSelectedName,
+                    OUString aUserSelectedName,
                     sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
 
     static sal_Bool CheckFilterOptionsAppearence(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
-                    const ::rtl::OUString& aFilterName );
+                    const OUString& aFilterName );
 
 
     static void SetDocInfoState(
@@ -78,8 +78,8 @@ public:
 
     static sal_Bool WarnUnacceptableFormat(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
-                                    ::rtl::OUString aOldUIName,
-                                    ::rtl::OUString aDefUIName,
+                                    OUString aOldUIName,
+                                    OUString aDefUIName,
                                     sal_Bool bCanProceedFurther );
 
     static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );

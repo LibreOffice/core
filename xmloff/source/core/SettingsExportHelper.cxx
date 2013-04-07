@@ -62,7 +62,7 @@ XMLSettingsExportHelper::~XMLSettingsExportHelper()
 }
 
 void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
-                                            const rtl::OUString& rName) const
+                                            const OUString& rName) const
 {
     uno::Any aAny( rAny );
     ManipulateSetting( aAny, rName );
@@ -122,7 +122,7 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         case uno::TypeClass_STRING:
         {
-            rtl::OUString sString;
+            OUString sString;
             aAny >>= sString;
             exportString(sString, rName);
         }
@@ -180,13 +180,13 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
     }
 }
 
-void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_BOOLEAN );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUString sValue;
+    OUString sValue;
     if (bValue)
         sValue = GetXMLToken(XML_TRUE);
     else
@@ -195,7 +195,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const OUString& rName) const
 {
     (void) nValue; (void) rName;
     OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
@@ -203,54 +203,54 @@ void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUStr
         "so storing them is disabled!\n"
         "Use a different type instead (e.g. \"short\").");
 }
-void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
 	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
 	::sax::Converter::convertNumber(sBuffer, nValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_LONG );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUString sValue(rtl::OUString::valueOf(nValue));
+    OUString sValue(OUString::valueOf(nValue));
     m_rContext.Characters( sValue );
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportDouble(const double fValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DOUBLE );
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
 	::sax::Converter::convertDouble(sBuffer, fValue);
     m_rContext.Characters( sBuffer.makeStringAndClear() );
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportString(const OUString& sValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
@@ -261,12 +261,12 @@ void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rt
     m_rContext.EndElement( sal_False );
 }
 
-void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
+void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_DATETIME );
-    rtl::OUStringBuffer sBuffer;
+    OUStringBuffer sBuffer;
 	::sax::Converter::convertDateTime(sBuffer, aValue);
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     m_rContext.Characters( sBuffer.makeStringAndClear() );
@@ -275,7 +275,7 @@ void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
                     const uno::Sequence<beans::PropertyValue>& aProps,
-                    const rtl::OUString& rName) const
+                    const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     sal_Int32 nLength(aProps.getLength());
@@ -290,20 +290,20 @@ void XMLSettingsExportHelper::exportSequencePropertyValue(
 }
 void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const uno::Sequence < formula::SymbolDescriptor > &rProps,
-                    const rtl::OUString rName) const
+                    const OUString rName) const
 {
     uno::Reference< container::XIndexContainer > xBox = document::IndexedPropertyValues::create(m_rContext.GetComponentContext());
 
-    const rtl::OUString sName     ( "Name" );
-    const rtl::OUString sExportName ( "ExportName" );
-    const rtl::OUString sSymbolSet ( "SymbolSet" );
-    const rtl::OUString sCharacter ( "Character" );
-    const rtl::OUString sFontName ( "FontName" );
-    const rtl::OUString sCharSet  ( "CharSet" );
-    const rtl::OUString sFamily   ( "Family" );
-    const rtl::OUString sPitch    ( "Pitch" );
-    const rtl::OUString sWeight   ( "Weight" );
-    const rtl::OUString sItalic   ( "Italic" );
+    const OUString sName     ( "Name" );
+    const OUString sExportName ( "ExportName" );
+    const OUString sSymbolSet ( "SymbolSet" );
+    const OUString sCharacter ( "Character" );
+    const OUString sFontName ( "FontName" );
+    const OUString sCharSet  ( "CharSet" );
+    const OUString sFamily   ( "Family" );
+    const OUString sPitch    ( "Pitch" );
+    const OUString sWeight   ( "Weight" );
+    const OUString sItalic   ( "Italic" );
 
     sal_Int32 nCount = rProps.getLength();
     const formula::SymbolDescriptor *pDescriptor = rProps.getConstArray();
@@ -342,7 +342,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
 }
 void XMLSettingsExportHelper::exportbase64Binary(
                     const uno::Sequence<sal_Int8>& aProps,
-                    const rtl::OUString& rName) const
+                    const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     sal_Int32 nLength(aProps.getLength());
@@ -351,7 +351,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
     m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
     if(nLength)
     {
-        rtl::OUStringBuffer sBuffer;
+        OUStringBuffer sBuffer;
 		::sax::Converter::encodeBase64(sBuffer, aProps);
         m_rContext.Characters( sBuffer.makeStringAndClear() );
     }
@@ -359,7 +359,7 @@ void XMLSettingsExportHelper::exportbase64Binary(
 }
 
 void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
-                                        const rtl::OUString& rName,
+                                        const OUString& rName,
                                         const sal_Bool bNameAccess) const
 {
     DBG_ASSERT((bNameAccess && !rName.isEmpty()) || !bNameAccess, "no name");
@@ -379,7 +379,7 @@ void XMLSettingsExportHelper::exportMapEntry(const uno::Any& rAny,
 
 void XMLSettingsExportHelper::exportNameAccess(
                     const uno::Reference<container::XNameAccess>& aNamed,
-                    const rtl::OUString& rName) const
+                    const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(aNamed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
@@ -388,7 +388,7 @@ void XMLSettingsExportHelper::exportNameAccess(
     {
         m_rContext.AddAttribute( XML_NAME, rName );
         m_rContext.StartElement( XML_CONFIG_ITEM_MAP_NAMED, sal_True );
-        uno::Sequence< rtl::OUString > aNames(aNamed->getElementNames());
+        uno::Sequence< OUString > aNames(aNamed->getElementNames());
         for (sal_Int32 i = 0; i < aNames.getLength(); i++)
             exportMapEntry(aNamed->getByName(aNames[i]), aNames[i], sal_True);
         m_rContext.EndElement( sal_True );
@@ -397,12 +397,12 @@ void XMLSettingsExportHelper::exportNameAccess(
 
 void XMLSettingsExportHelper::exportIndexAccess(
                     const uno::Reference<container::XIndexAccess> aIndexed,
-                    const rtl::OUString rName) const
+                    const OUString rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
-    rtl::OUString sEmpty;
+    OUString sEmpty;
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -418,7 +418,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
 
 void XMLSettingsExportHelper::exportForbiddenCharacters(
                     const uno::Any &rAny,
-                    const rtl::OUString rName) const
+                    const OUString rName) const
 {
     uno::Reference<i18n::XForbiddenCharacters> xForbChars;
     uno::Reference<linguistic2::XSupportedLocales> xLocales;
@@ -437,11 +437,11 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
     const sal_Int32 nCount = aLocales.getLength();
 
-    const rtl::OUString sLanguage  ( "Language" );
-    const rtl::OUString sCountry   ( "Country" );
-    const rtl::OUString sVariant   ( "Variant" );
-    const rtl::OUString sBeginLine ( "BeginLine" );
-    const rtl::OUString sEndLine   ( "EndLine" );
+    const OUString sLanguage  ( "Language" );
+    const OUString sCountry   ( "Country" );
+    const OUString sVariant   ( "Variant" );
+    const OUString sBeginLine ( "BeginLine" );
+    const OUString sEndLine   ( "EndLine" );
 
     sal_Int32 nPos = 0;
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
@@ -474,7 +474,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
 
 void XMLSettingsExportHelper::exportAllSettings(
                     const uno::Sequence<beans::PropertyValue>& aProps,
-                    const rtl::OUString& rName) const
+                    const OUString& rName) const
 {
     DBG_ASSERT(!rName.isEmpty(), "no name");
     exportSequencePropertyValue(aProps, rName);
@@ -485,7 +485,7 @@ void XMLSettingsExportHelper::exportAllSettings(
  * from their XML settings representation. This is your chance to do
  * so!
  */
-void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUString& rName ) const
+void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const OUString& rName ) const
 {
     if( rName == msPrinterIndependentLayout )
     {
@@ -493,11 +493,11 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
         if( rAny >>= nTmp )
         {
             if( nTmp == document::PrinterIndependentLayout::LOW_RESOLUTION )
-                rAny <<= rtl::OUString("low-resolution");
+                rAny <<= OUString("low-resolution");
             else if( nTmp == document::PrinterIndependentLayout::DISABLED )
-                rAny <<= rtl::OUString("disabled");
+                rAny <<= OUString("disabled");
             else if( nTmp == document::PrinterIndependentLayout::HIGH_RESOLUTION )
-                rAny <<= rtl::OUString("high-resolution");
+                rAny <<= OUString("high-resolution");
         }
     }
     else if( (rName == msColorTableURL) || (rName == msLineEndTableURL) || (rName == msHatchTableURL) ||
@@ -518,7 +518,7 @@ void XMLSettingsExportHelper::ManipulateSetting( uno::Any& rAny, const rtl::OUSt
 
         if( mxStringSubsitution.is() )
         {
-            ::rtl::OUString aURL;
+            OUString aURL;
             rAny >>= aURL;
             aURL = mxStringSubsitution->reSubstituteVariables( aURL );
             rAny <<= aURL;

@@ -64,20 +64,20 @@ GraphicRendererVCL::~GraphicRendererVCL()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString GraphicRendererVCL::getImplementationName_Static()
+OUString GraphicRendererVCL::getImplementationName_Static()
     throw()
 {
-    return ::rtl::OUString( "com.sun.star.comp.graphic.GraphicRendererVCL" );
+    return OUString( "com.sun.star.comp.graphic.GraphicRendererVCL" );
 }
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > GraphicRendererVCL::getSupportedServiceNames_Static()
+uno::Sequence< OUString > GraphicRendererVCL::getSupportedServiceNames_Static()
     throw(  )
 {
-    uno::Sequence< ::rtl::OUString > aSeq( 1 );
+    uno::Sequence< OUString > aSeq( 1 );
 
-    aSeq.getArray()[ 0 ] = ::rtl::OUString( "com.sun.star.graphic.GraphicRendererVCL" );
+    aSeq.getArray()[ 0 ] = OUString( "com.sun.star.graphic.GraphicRendererVCL" );
 
     return aSeq;
 }
@@ -133,7 +133,7 @@ void SAL_CALL GraphicRendererVCL::release()
 
 // ------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL GraphicRendererVCL::getImplementationName()
+OUString SAL_CALL GraphicRendererVCL::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -141,11 +141,11 @@ void SAL_CALL GraphicRendererVCL::release()
 
 // ------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString >    aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString*              pArray = aSNL.getConstArray();
+    uno::Sequence< OUString >    aSNL( getSupportedServiceNames() );
+    const OUString*              pArray = aSNL.getConstArray();
 
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -156,7 +156,7 @@ sal_Bool SAL_CALL GraphicRendererVCL::supportsService( const rtl::OUString& Serv
 
 // ------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();

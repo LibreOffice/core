@@ -388,9 +388,9 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
     virtual void    GetName( String& rName ) ;
     virtual void    SetCheckNameHdl( const Link& rLink, bool bCheckImmediately = false ) ;
-    virtual void    SetEditHelpId(const rtl::OString&) ;
+    virtual void    SetEditHelpId(const OString&) ;
     //from class Window
-    virtual void    SetHelpId( const rtl::OString& ) ;
+    virtual void    SetHelpId( const OString& ) ;
     virtual void    SetText( const OUString& rStr ) ;
 private:
     Link aCheckNameHdl;
@@ -460,7 +460,7 @@ class AbstractSvxMultiFileDialog_Impl :public AbstractSvxMultiFileDialog
     virtual void            EnableRadioButtonMode();
     virtual void            SetTitle( const String& rNewTitle );
     //From Class Window
-    virtual void    SetHelpId( const rtl::OString& ) ;
+    virtual void    SetHelpId( const OString& ) ;
 
 };
 //for SvxMultiFileDialog end
@@ -777,9 +777,9 @@ public:
     virtual SvxAbstractNewTableDialog* CreateSvxNewTableDialog( Window* pParent ) ;
 
     virtual VclAbstractDialog*          CreateOptionsDialog(
-        Window* pParent, const OUString& rExtensionId, const rtl::OUString& rApplicationContext );
+        Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext );
 
-    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
+    virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId );
 
     virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify );
 };

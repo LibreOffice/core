@@ -165,7 +165,7 @@ void ScQueryParamBase::Resize(size_t nNew)
     }
 }
 
-void ScQueryParamBase::FillInExcelSyntax(const rtl::OUString& rStr, SCSIZE nIndex)
+void ScQueryParamBase::FillInExcelSyntax(const OUString& rStr, SCSIZE nIndex)
 {
     const String aCellStr = rStr;
     if (aCellStr.Len() > 0)

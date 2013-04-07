@@ -84,7 +84,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
@@ -601,7 +600,7 @@ bool ChartController::executeDispatch_Delete()
     bool bReturn = false;
 
     // remove the selected object
-    rtl::OUString aCID( m_aSelection.getSelectedCID() );
+    OUString aCID( m_aSelection.getSelectedCID() );
     if( !aCID.isEmpty() )
     {
         if( !isObjectDeleteable( uno::Any( aCID ) ) )
@@ -759,7 +758,7 @@ bool ChartController::executeDispatch_Delete()
                 {
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
-                        ActionDescriptionProvider::DELETE, ::rtl::OUString( String(
+                        ActionDescriptionProvider::DELETE, OUString( String(
                             SchResId( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )))),
                                 m_xUndoManager );
                     chart2::DataPointLabel aLabel;

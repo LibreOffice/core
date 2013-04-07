@@ -44,22 +44,22 @@ public:
     virtual ~ScVbaName();
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setNameLocal( const ::rtl::OUString &rName ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString &rName ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setNameLocal( const OUString &rName ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getValue() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setValue( const ::rtl::OUString &rValue ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRefersTo() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRefersTo( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRefersToLocal() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRefersToLocal( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRefersToR1C1() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRefersToR1C1( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRefersToR1C1Local( const ::rtl::OUString &rRefersTo ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getValue() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setValue( const OUString &rValue ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRefersTo() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRefersTo( const OUString &rRefersTo ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRefersToLocal() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRefersToLocal( const OUString &rRefersTo ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRefersToR1C1() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRefersToR1C1( const OUString &rRefersTo ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setRefersToRange( const css::uno::Reference< ov::excel::XRange > xRange ) throw (css::uno::RuntimeException);
 
@@ -67,8 +67,8 @@ public:
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SC_VBA_NAME_HXX */
 

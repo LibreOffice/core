@@ -36,7 +36,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::IllegalArgumentException;
-using rtl::OUString;
 
 //------------------------------------------------------------------------
 //

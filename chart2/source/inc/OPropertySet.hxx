@@ -172,19 +172,19 @@ protected:
 
     // ____ XPropertyState ____
     virtual ::com::sun::star::beans::PropertyState SAL_CALL
-        getPropertyState( const ::rtl::OUString& PropertyName )
+        getPropertyState( const OUString& PropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState > SAL_CALL
-        getPropertyStates( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyName )
+        getPropertyStates( const ::com::sun::star::uno::Sequence< OUString >& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        setPropertyToDefault( const ::rtl::OUString& PropertyName )
+        setPropertyToDefault( const OUString& PropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL
-        getPropertyDefault( const ::rtl::OUString& aPropertyName )
+        getPropertyDefault( const OUString& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException);
@@ -196,11 +196,11 @@ protected:
         setAllPropertiesToDefault()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
-        setPropertiesToDefault( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+        setPropertiesToDefault( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
-        getPropertyDefaults( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames )
+        getPropertyDefaults( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException);
@@ -214,7 +214,7 @@ protected:
 
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
+        const ::com::sun::star::uno::Sequence< OUString >& PropertyNames,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values )
         throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 

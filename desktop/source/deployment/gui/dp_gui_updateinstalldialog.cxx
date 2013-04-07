@@ -77,7 +77,6 @@ class Window;
 namespace cssu = ::com::sun::star::uno;
 
 using dp_misc::StrTitle;
-using ::rtl::OUString;
 
 namespace dp_gui {
 
@@ -96,7 +95,7 @@ private:
 
     virtual void execute();
     void downloadExtensions();
-    void download(::rtl::OUString const & aUrls, UpdateData & aUpdatData);
+    void download(OUString const & aUrls, UpdateData & aUpdatData);
     void installExtensions();
     void removeTempDownloads();
 
@@ -111,7 +110,7 @@ private:
     ::rtl::Reference<UpdateCommandEnv> m_updateCmdEnv;
 
     //A folder which is created in the temp directory in which then the updates are downloaded
-    ::rtl::OUString m_sDownloadFolder;
+    OUString m_sDownloadFolder;
 
     bool m_stop;
 
@@ -272,7 +271,7 @@ void UpdateInstallDialog::updateDone()
 }
 // make sure the solar mutex is locked before calling
 //sets an error message in the text area
-void UpdateInstallDialog::setError(INSTALL_ERROR err, ::rtl::OUString const & sExtension,
+void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtension,
     OUString const & exceptionMessage)
 {
     String sError;
@@ -409,7 +408,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 if (curData.sLocalURL.isEmpty())
                 {
                     //Construct a string of all messages contained in the exceptions plus the respective download URLs
-                    ::rtl::OUStringBuffer buf(256);
+                    OUStringBuffer buf(256);
                     typedef ::std::vector< ::std::pair<OUString, cssu::Exception > >::const_iterator CIT;
                     for (CIT j = vecExceptions.begin(); j != vecExceptions.end(); ++j)
                     {

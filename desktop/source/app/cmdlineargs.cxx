@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 namespace desktop
 {
@@ -69,7 +68,7 @@ public:
         m_count(rtl_getAppCommandArgCount()),
         m_index(0)
     {
-        rtl::OUString url;
+        OUString url;
         if (tools::getProcessWorkingDir(url)) {
             m_cwdUrl.reset(url);
         }
@@ -77,9 +76,9 @@ public:
 
     virtual ~ExtCommandLineSupplier() {}
 
-    virtual boost::optional< rtl::OUString > getCwdUrl() { return m_cwdUrl; }
+    virtual boost::optional< OUString > getCwdUrl() { return m_cwdUrl; }
 
-    virtual bool next(rtl::OUString * argument) {
+    virtual bool next(OUString * argument) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_count) {
             rtl_getAppCommandArg(m_index++, &argument->pData);
@@ -90,7 +89,7 @@ public:
     }
 
 private:
-    boost::optional< rtl::OUString > m_cwdUrl;
+    boost::optional< OUString > m_cwdUrl;
     sal_uInt32 m_count;
     sal_uInt32 m_index;
 };
@@ -148,7 +147,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     for (;;)
     {
-        ::rtl::OUString aArg;
+        OUString aArg;
         if ( !supplier.next( &aArg ) )
         {
             break;
@@ -157,7 +156,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         if ( !aArg.isEmpty() )
         {
             m_bEmpty = false;
-            ::rtl::OUString oArg;
+            OUString oArg;
             if ( !InterpretCommandLineParameter( aArg, oArg ))
             {
                 if ( aArg.toChar() == '-' )
@@ -380,18 +379,18 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
         m_bDocumentArgs = true;
 }
 
-bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg, ::rtl::OUString& oArg )
+bool CommandLineArgs::InterpretCommandLineParameter( const OUString& aArg, OUString& oArg )
 {
     bool bDeprecated = false;
     if (aArg.matchIgnoreAsciiCase("--"))
     {
-        oArg = ::rtl::OUString(aArg.getStr()+2, aArg.getLength()-2);
+        oArg = OUString(aArg.getStr()+2, aArg.getLength()-2);
     }
     else if (aArg.toChar() == '-')
     {
         if ( aArg.getLength() > 2 ) // -h, -o, -n, -? are still valid
             bDeprecated = true;
-        oArg = ::rtl::OUString(aArg.getStr()+1, aArg.getLength()-1);
+        oArg = OUString(aArg.getStr()+1, aArg.getLength()-1);
     }
     else
     {
@@ -578,7 +577,7 @@ bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg
 
     if (bDeprecated)
     {
-        rtl::OString sArg(rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()));
+        OString sArg(OUStringToOString(aArg, osl_getThreadTextEncoding()));
         fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
     }
     return true;
@@ -773,76 +772,76 @@ bool CommandLineArgs::HasSplashPipe() const
     return m_splashpipe;
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetAccept() const
+std::vector< OUString > const & CommandLineArgs::GetAccept() const
 {
     return m_accept;
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetUnaccept() const
+std::vector< OUString > const & CommandLineArgs::GetUnaccept() const
 {
     return m_unaccept;
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetOpenList() const
+std::vector< OUString > CommandLineArgs::GetOpenList() const
 {
     return translateExternalUris(m_openlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetViewList() const
+std::vector< OUString > CommandLineArgs::GetViewList() const
 {
     return translateExternalUris(m_viewlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetStartList() const
+std::vector< OUString > CommandLineArgs::GetStartList() const
 {
     return translateExternalUris(m_startlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetForceOpenList() const
+std::vector< OUString > CommandLineArgs::GetForceOpenList() const
 {
     return translateExternalUris(m_forceopenlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetForceNewList() const
+std::vector< OUString > CommandLineArgs::GetForceNewList() const
 {
     return translateExternalUris(m_forcenewlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetPrintList() const
+std::vector< OUString > CommandLineArgs::GetPrintList() const
 {
     return translateExternalUris(m_printlist);
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetPrintToList() const
+std::vector< OUString > CommandLineArgs::GetPrintToList() const
 {
     return translateExternalUris(m_printtolist);
 }
 
-rtl::OUString CommandLineArgs::GetPrinterName() const
+OUString CommandLineArgs::GetPrinterName() const
 {
     return m_printername;
 }
 
-rtl::OUString CommandLineArgs::GetLanguage() const
+OUString CommandLineArgs::GetLanguage() const
 {
     return m_language;
 }
 
-std::vector< rtl::OUString > const & CommandLineArgs::GetInFilter() const
+std::vector< OUString > const & CommandLineArgs::GetInFilter() const
 {
     return m_infilter;
 }
 
-std::vector< rtl::OUString > CommandLineArgs::GetConversionList() const
+std::vector< OUString > CommandLineArgs::GetConversionList() const
 {
     return translateExternalUris(m_conversionlist);
 }
 
-rtl::OUString CommandLineArgs::GetConversionParams() const
+OUString CommandLineArgs::GetConversionParams() const
 {
     return m_conversionparams;
 }
-rtl::OUString CommandLineArgs::GetConversionOut() const
+OUString CommandLineArgs::GetConversionOut() const
 {
     return translateExternalUris(m_conversionout);
 }

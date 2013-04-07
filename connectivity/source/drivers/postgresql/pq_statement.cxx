@@ -88,11 +88,6 @@
 using osl::Mutex;
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-using rtl::OStringToOUString;
-using rtl::OString;
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
@@ -304,7 +299,7 @@ void Statement::raiseSQLException(
         buf.appendAscii( "]" );
     }
     buf.append(
-        rtl::OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
     buf.appendAscii( " (caused by statement '" );
     buf.append( sql );
     buf.appendAscii( "')" );
@@ -355,9 +350,9 @@ static void raiseSQLException(
         buf.appendAscii( "]" );
     }
     buf.append(
-        rtl::OUString( errorMsg, strlen(errorMsg) , pSettings->encoding ) );
+        OUString( errorMsg, strlen(errorMsg) , pSettings->encoding ) );
     buf.appendAscii( " (caused by statement '" );
-    buf.append( rtl::OStringToOUString( sql, pSettings->encoding ) );
+    buf.append( OStringToOUString( sql, pSettings->encoding ) );
     buf.appendAscii( "')" );
     OUString error = buf.makeStringAndClear();
     log( pSettings, LogLevel::ERROR, error );
@@ -367,14 +362,14 @@ static void raiseSQLException(
 
 // returns the elements of the primary key of the given table
 // static Sequence< Reference< com::sun::star::beans::XPropertySet > > lookupKeys(
-static Sequence< ::rtl::OUString > lookupKeys(
+static Sequence< OUString > lookupKeys(
     const Reference< com::sun::star::container::XNameAccess > &tables,
     const OUString & table,
     OUString *pSchema,
     OUString *pTable,
     ConnectionSettings *pSettings)
 {
-    Sequence< ::rtl::OUString  > ret;
+    Sequence< OUString  > ret;
     Reference< XKeysSupplier > keySupplier;
     Statics & st = getStatics();
 
@@ -393,7 +388,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
             Reference< XPropertySet > set;
             enumeration->nextElement() >>= set;
             OUString name;
-//             ::rtl::OUString schema;
+//             OUString schema;
 
             if( set->getPropertyValue( st.NAME ) >>= name )
             {
@@ -410,7 +405,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
                         keySupplier.clear();
                         if( isLog( pSettings, LogLevel::INFO ) )
                         {
-                            rtl::OStringBuffer buf( 128 );
+                            OStringBuffer buf( 128 );
                             buf.append( "Can't offer updateable result set because table " );
                             buf.append( OUStringToOString(name, pSettings->encoding) );
                             buf.append( " is duplicated, add schema to resolve ambiguity" );
@@ -427,7 +422,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
     {
         if( isLog( pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf( 128 );
+            OStringBuffer buf( 128 );
             buf.append( "Can't offer updateable result set ( table " );
             buf.append( OUStringToOString(table, pSettings->encoding) );
             buf.append( " is unknown)" );
@@ -474,7 +469,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
         {
             if( isLog( pSettings, LogLevel::INFO ) )
             {
-                rtl::OStringBuffer buf( 128 );
+                OStringBuffer buf( 128 );
                 buf.append( "Can't offer updateable result set ( table " );
                 buf.append( OUStringToOString(table, pSettings->encoding) );
                 buf.append( " does not have a primary key)" );
@@ -485,7 +480,7 @@ static Sequence< ::rtl::OUString > lookupKeys(
     return ret;
 }
 
-bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data )
+bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 {
     ConnectionSettings *pSettings = *(data->ppSettings);
 
@@ -498,7 +493,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
 
     ExecStatusType state = PQresultStatus( result );
     *(data->pLastOidInserted) = 0;
-    *(data->pLastTableInserted) = rtl::OUString();
+    *(data->pLastTableInserted) = OUString();
     *(data->pLastQuery) = cmd;
 
     sal_Bool ret = sal_False;
@@ -518,7 +513,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
             extractTableFromInsert( OStringToOUString( cmd, pSettings->encoding ) );
         if( isLog( pSettings, LogLevel::SQL ) )
         {
-            rtl::OStringBuffer buf( 128 );
+            OStringBuffer buf( 128 );
             buf.append( "executed command '" );
             buf.append( cmd.getStr() );
             buf.append( "' successfully (" );
@@ -545,7 +540,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
         // In case it is a single table, it has a primary key and all columns
         // belonging to the primary key are in the result set, allow updateable result sets
         // otherwise, don't
-        rtl::OUString table, schema;
+        OUString table, schema;
         Sequence< OUString > sourceTableKeys;
         OStringVector vec;
         tokenizeSQL( cmd, vec );
@@ -589,7 +584,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
                 }
                 else if( ! table.getLength() )
                 {
-                    rtl::OStringBuffer buf( 128 );
+                    OStringBuffer buf( 128 );
                     buf.append(
                         RTL_CONSTASCII_STRINGPARAM(
                             "can't support updateable resultset, because a single table in the "
@@ -600,35 +595,35 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
                 }
                 else if( sourceTableKeys.getLength() )
                 {
-                    ::rtl::OStringBuffer buf( 128 );
+                    OStringBuffer buf( 128 );
                     buf.append(
                         RTL_CONSTASCII_STRINGPARAM(
                             "can't support updateable resultset for table " ) );
-                    buf.append( rtl::OUStringToOString( schema, pSettings->encoding ) );
+                    buf.append( OUStringToOString( schema, pSettings->encoding ) );
                     buf.append( RTL_CONSTASCII_STRINGPARAM( "." ) );
-                    buf.append( rtl::OUStringToOString( table, pSettings->encoding ) );
+                    buf.append( OUStringToOString( table, pSettings->encoding ) );
                     buf.append( RTL_CONSTASCII_STRINGPARAM( ", because resultset does not contain a part of the primary key ( column " ) );
-                    buf.append( rtl::OUStringToOString( sourceTableKeys[i], pSettings->encoding ) );
+                    buf.append( OUStringToOString( sourceTableKeys[i], pSettings->encoding ) );
                     buf.append( RTL_CONSTASCII_STRINGPARAM( " is missing )") );
                     aReason = buf.makeStringAndClear();
                 }
                 else
                 {
 
-                    ::rtl::OStringBuffer buf( 128 );
+                    OStringBuffer buf( 128 );
                     buf.append(
                         RTL_CONSTASCII_STRINGPARAM(
                             "can't support updateable resultset for table " ) );
-                    buf.append( rtl::OUStringToOString( schema, pSettings->encoding ) );
+                    buf.append( OUStringToOString( schema, pSettings->encoding ) );
                     buf.append( RTL_CONSTASCII_STRINGPARAM( "." ) );
-                    buf.append( rtl::OUStringToOString( table, pSettings->encoding ) );
+                    buf.append( OUStringToOString( table, pSettings->encoding ) );
                     buf.append( RTL_CONSTASCII_STRINGPARAM( ", because resultset table does not have a primary key " ) );
                     aReason = buf.makeStringAndClear();
                 }
             }
             else
             {
-                ::rtl::OStringBuffer buf( 128 );
+                OStringBuffer buf( 128 );
                 buf.append(
                     RTL_CONSTASCII_STRINGPARAM(
                         "can't support updateable result for selects with multiple tables (" ) );
@@ -669,7 +664,7 @@ bool executePostgresCommand( const rtl::OString & cmd, struct CommandData *data 
         ret = sal_True;
         if( isLog( pSettings, LogLevel::SQL ) )
         {
-            rtl::OStringBuffer buf( 128 );
+            OStringBuffer buf( 128 );
             buf.append( RTL_CONSTASCII_STRINGPARAM("executed query '") );
             buf.append( cmd );
             buf.append( RTL_CONSTASCII_STRINGPARAM("' successfully") );
@@ -763,8 +758,8 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
     ConnectionSettings *pConnectionSettings,
     const Reference< XConnection > &connection,
     sal_Int32 nLastOid,
-    const rtl::OUString & lastTableInserted,
-    const rtl::OString & lastQuery )
+    const OUString & lastTableInserted,
+    const OString & lastQuery )
 {
     Reference< XResultSet > ret;
     OUString query;
@@ -791,7 +786,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         extractNameValuePairsFromInsert( namedValues, lastQuery );
 
         // debug ...
-//         rtl::OStringBuffer buf( 128);
+//         OStringBuffer buf( 128);
 //         buf.append( "extracting name/value from '" );
 //         buf.append( lastQuery.getStr() );
 //         buf.append( "' to [" );
@@ -900,7 +895,7 @@ sal_Bool Statement::execute( const OUString& sql )
     OString cmd = OUStringToOString( sql, m_pSettings );
 
     m_lastResultset.clear();
-    m_lastTableInserted  = rtl::OUString();
+    m_lastTableInserted  = OUString();
 
     struct CommandData data;
     data.refMutex = m_refMutex;

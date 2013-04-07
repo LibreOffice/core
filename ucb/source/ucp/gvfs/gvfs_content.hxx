@@ -94,11 +94,11 @@ private:
                              GnomeVFSSetFileInfoMask                       setMask,
                              const ::com::sun::star::uno::Reference<
                              ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-    ::rtl::OUString            makeNewURL      ( const char *newName );
+    OUString            makeNewURL      ( const char *newName );
     // End Internal helpers
 
     // For ucbhelper
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
     // For ucbhelper
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
     getProperties( const com::sun::star::uno::Reference<
@@ -176,8 +176,8 @@ private:
 public:
     // Non-interface bits
     char         *getURI ();
-    rtl::OString  getOURI ();
-    rtl::OUString getOUURI ();
+    OString  getOURI ();
+    OUString getOUURI ();
 
 //=========================================================================
 //                            Externals
@@ -206,14 +206,14 @@ public:
     XTYPEPROVIDER_DECL()
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XContent
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException );
 

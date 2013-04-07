@@ -56,7 +56,7 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
     sal_Bool                                                                      mbSuccess;
     double                                                                        mfResultValue;
     com::sun::star::uno::Sequence< double >                                       maSolution;
-    rtl::OUString                                                                 maStatus;
+    OUString                                                                 maStatus;
 
 public:
                             SolverComponent( const com::sun::star::uno::Reference<
@@ -101,17 +101,17 @@ public:
     virtual void SAL_CALL solve() throw(::com::sun::star::uno::RuntimeException);
 
                             // XSolverDescription
-    virtual ::rtl::OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getStatusDescription() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getPropertyDescription( const ::rtl::OUString& aPropertyName )
+    virtual OUString SAL_CALL getComponentDescription() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getStatusDescription() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getPropertyDescription( const OUString& aPropertyName )
                                 throw (::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 

@@ -46,7 +46,7 @@ namespace sfx2
     class SAL_NO_VTABLE ITaskPaneToolPanelAccess
     {
     public:
-        virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL ) = 0;
+        virtual void ActivateToolPanel( const OUString& i_rPanelURL ) = 0;
 
     protected:
         ~ITaskPaneToolPanelAccess() {}
@@ -69,7 +69,7 @@ namespace sfx2
         SFX_DECL_CHILDWINDOW( TaskPaneWrapper );
 
         // ITaskPaneToolPanelAccess
-        virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+        virtual void ActivateToolPanel( const OUString& i_rPanelURL );
     };
 
     //==================================================================================================================
@@ -87,8 +87,8 @@ namespace sfx2
 
         */
         virtual short compareToolPanelsURLs(
-                        const ::rtl::OUString& i_rLHS,
-                        const ::rtl::OUString& i_rRHS
+                        const OUString& i_rLHS,
+                        const OUString& i_rRHS
                     ) const = 0;
 
     protected:
@@ -152,11 +152,11 @@ namespace sfx2
         /** returns the position of the panel with the given resource URL
         */
         ::boost::optional< size_t >
-                    GetPanelPos( const ::rtl::OUString& i_rResourceURL );
+                    GetPanelPos( const OUString& i_rResourceURL );
 
         /** returns the resource URL of the panel at the specified position
         */
-        ::rtl::OUString
+        OUString
                     GetPanelResourceURL( const size_t i_nPanelPos ) const;
 
         /// sets the "classical" layout of the tool panel deck, using drawers
@@ -193,7 +193,7 @@ namespace sfx2
         ~TaskPaneController();
 
         /// activates the panel with the given URL
-        void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+        void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     private:
         ::boost::scoped_ptr< TaskPaneController_Impl >  m_pImpl;
@@ -210,7 +210,7 @@ namespace sfx2
             Window* i_pParent, WinBits i_nBits );
 
         // ITaskPaneToolPanelAccess
-        virtual void    ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+        virtual void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     protected:
         // Window overridables

@@ -59,7 +59,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbp_component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::dbp::OModule::getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName),
+            OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }
 

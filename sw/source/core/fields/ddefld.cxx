@@ -32,7 +32,6 @@
 #include <unofldmid.h>
 #include <hints.hxx>
 
-using rtl::OUString;
 using namespace ::com::sun::star;
 
 #define DDE_TXT_ENCODING    osl_getThreadTextEncoding()
@@ -263,7 +262,7 @@ SwFieldType* SwDDEFieldType::Copy() const
     return pType;
 }
 
-const rtl::OUString& SwDDEFieldType::GetName() const
+const OUString& SwDDEFieldType::GetName() const
 {
     return aName;
 }
@@ -333,7 +332,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR5:
-        rVal <<= ::rtl::OUString(aExpansion);
+        rVal <<= OUString(aExpansion);
     break;
     default:
         OSL_FAIL("illegal property");
@@ -358,7 +357,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR5:
     {
-        ::rtl::OUString sTemp;
+        OUString sTemp;
         rVal >>= sTemp;
         aExpansion = sTemp;
     }
@@ -411,7 +410,7 @@ SwField* SwDDEField::Copy() const
     Beschreibung: Parameter des Typen erfragen
                   Name
  --------------------------------------------------------------------*/
-const rtl::OUString& SwDDEField::GetPar1() const
+const OUString& SwDDEField::GetPar1() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetName();
 }
@@ -420,12 +419,12 @@ const rtl::OUString& SwDDEField::GetPar1() const
     Beschreibung: Parameter des Typen erfragen
                   Commando
  --------------------------------------------------------------------*/
-rtl::OUString SwDDEField::GetPar2() const
+OUString SwDDEField::GetPar2() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetCmd();
 }
 
-void SwDDEField::SetPar2(const rtl::OUString& rStr)
+void SwDDEField::SetPar2(const OUString& rStr)
 {
     ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);
 }

@@ -51,7 +51,6 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
 
 extern rtl_StandardModuleCount g_moduleCount;
 

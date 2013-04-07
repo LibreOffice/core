@@ -63,10 +63,10 @@ OParseColumn::OParseColumn(const Reference<XPropertySet>& _xColumn,sal_Bool     
 }
 
 // -------------------------------------------------------------------------
-OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    const ::rtl::OUString& _Description,
+OParseColumn::OParseColumn( const OUString& _Name,
+                    const OUString& _TypeName,
+                    const OUString& _DefaultValue,
+                    const OUString& _Description,
                     sal_Int32       _IsNullable,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
@@ -74,9 +74,9 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
                     sal_Bool        _IsAutoIncrement,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase,
-                    const ::rtl::OUString& _CatalogName,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _TableName
+                    const OUString& _CatalogName,
+                    const OUString& _SchemaName,
+                    const OUString& _TableName
                 ) : connectivity::sdbcx::OColumn(_Name,
                                   _TypeName,
                                   _DefaultValue,
@@ -115,7 +115,7 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
         if ( i_xQueryColumns.is() && i_xQueryColumns->hasByName(pColumn->getRealName()) )
         {
             Reference<XPropertySet> xColumn(i_xQueryColumns->getByName(pColumn->getRealName()),UNO_QUERY_THROW);
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LABEL)) >>= sLabel;
             if ( !sLabel.isEmpty() )
                 pColumn->setLabel(sLabel);
@@ -129,16 +129,16 @@ OParseColumn::OParseColumn( const ::rtl::OUString& _Name,
 OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSetMetaData >& _rxResMetaData,
     const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos, StringMap& _rColumns )
 {
-    ::rtl::OUString sLabel = _rxResMetaData->getColumnLabel( _nColumnPos );
+    OUString sLabel = _rxResMetaData->getColumnLabel( _nColumnPos );
     // retrieve the name of the column
     // check for duplicate entries
     if(_rColumns.find(sLabel) != _rColumns.end())
     {
-        ::rtl::OUString sAlias(sLabel);
+        OUString sAlias(sLabel);
         sal_Int32 searchIndex=1;
         while(_rColumns.find(sAlias) != _rColumns.end())
         {
-            (sAlias = sLabel) += ::rtl::OUString::valueOf(searchIndex++);
+            (sAlias = sLabel) += OUString::valueOf(searchIndex++);
         }
         sLabel = sAlias;
     }
@@ -146,8 +146,8 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     OParseColumn* pColumn = new OParseColumn(
         sLabel,
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
-        ::rtl::OUString(),
-        ::rtl::OUString(),
+        OUString(),
+        OUString(),
         _rxResMetaData->isNullable( _nColumnPos ),
         _rxResMetaData->getPrecision( _nColumnPos ),
         _rxResMetaData->getScale( _nColumnPos ),
@@ -192,7 +192,7 @@ void OParseColumn::construct()
 }
 
 // -----------------------------------------------------------------------------
-OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const ::rtl::OUString& i_rOriginatingTableName,
+OOrderColumn::OOrderColumn( const Reference<XPropertySet>& _xColumn, const OUString& i_rOriginatingTableName,
                             sal_Bool    _bCase, sal_Bool _bAscending )
     : connectivity::sdbcx::OColumn(
         getString(_xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),
@@ -266,10 +266,10 @@ void OOrderColumn::construct()
     return *OOrderColumn_PROP::getArrayHelper();
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdb.OrderColumn");
+    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
+    aSupported[0] = OUString("com.sun.star.sdb.OrderColumn");
 
     return aSupported;
 }

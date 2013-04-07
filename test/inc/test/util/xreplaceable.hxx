@@ -37,8 +37,8 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XReplaceable
 {
 public:
-	XReplaceable( const rtl::OUString& rSearchString, const rtl::OUString& rReplaceString):
-				maSearchString(rSearchString), maReplaceString(rReplaceString) {}
+        XReplaceable( const OUString& rSearchString, const OUString& rReplaceString):
+            maSearchString(rSearchString), maReplaceString(rReplaceString) {}
 	virtual uno::Reference< uno::XInterface > init() = 0;
 
 	void testCreateReplaceDescriptor();
@@ -48,8 +48,8 @@ protected:
     ~XReplaceable() {}
 
 private:
-	rtl::OUString maSearchString;
-	rtl::OUString maReplaceString;
+        OUString maSearchString;
+        OUString maReplaceString;
 };
 
 }

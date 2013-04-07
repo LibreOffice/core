@@ -47,7 +47,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LogoImageStatusbarController        
 DEFINE_INIT_SERVICE                     (   LogoImageStatusbarController, {} )
 
 LogoImageStatusbarController::LogoImageStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
-    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 )
+    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), OUString(), 0 )
 {
     Image aImage( FwlResId( RID_IMAGE_STATUSBAR_LOGO ));
     m_aLogoImage = aImage;

@@ -278,8 +278,8 @@ namespace comphelper
                 if ( xContext.is() )
                 {
                     //TODO: do something
-                    //::rtl::OUString sName = xContext->getAccessibleName();
-                    //::rtl::OUString sDescription = xContext->getAccessibleDescription();
+                    //OUString sName = xContext->getAccessibleName();
+                    //OUString sDescription = xContext->getAccessibleDescription();
                     //sal_Int32 nPlaceYourBreakpointHere = 0;
                 }
             }
@@ -573,13 +573,13 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAccessibleContextWrapper::getAccessibleDescription(  ) throw (RuntimeException)
+    OUString SAL_CALL OAccessibleContextWrapper::getAccessibleDescription(  ) throw (RuntimeException)
     {
         return m_xInnerContext->getAccessibleDescription();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAccessibleContextWrapper::getAccessibleName(  ) throw (RuntimeException)
+    OUString SAL_CALL OAccessibleContextWrapper::getAccessibleName(  ) throw (RuntimeException)
     {
         return m_xInnerContext->getAccessibleName();
     }

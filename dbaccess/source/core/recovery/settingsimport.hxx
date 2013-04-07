@@ -50,33 +50,33 @@ namespace dbaccess
 
         // own overriables
         virtual ::rtl::Reference< SettingsImport >  nextState(
-            const ::rtl::OUString& i_rElementName
+            const OUString& i_rElementName
         ) = 0;
         virtual void startElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& i_rAttributes
         );
         virtual void endElement();
-        virtual void characters( const ::rtl::OUString& i_rCharacters );
+        virtual void characters( const OUString& i_rCharacters );
 
     protected:
         virtual ~SettingsImport();
 
     protected:
-        static void split( const ::rtl::OUString& i_rElementName, ::rtl::OUString& o_rNamespace, ::rtl::OUString& o_rLocalName );
+        static void split( const OUString& i_rElementName, OUString& o_rNamespace, OUString& o_rLocalName );
 
     protected:
-        const ::rtl::OUString&          getItemName() const                 { return m_sItemName; }
-        const ::rtl::OUString&          getItemType() const                 { return m_sItemType; }
-        const ::rtl::OUStringBuffer&    getAccumulatedCharacters() const    { return m_aCharacters; }
+        const OUString&          getItemName() const                 { return m_sItemName; }
+        const OUString&          getItemType() const                 { return m_sItemType; }
+        const OUStringBuffer&    getAccumulatedCharacters() const    { return m_aCharacters; }
 
     private:
         oslInterlockedCount     m_refCount;
         // value of the config:name attribute, if any
-        ::rtl::OUString         m_sItemName;
+        OUString         m_sItemName;
         // value of the config:type attribute, if any
-        ::rtl::OUString         m_sItemType;
+        OUString         m_sItemType;
         // accumulated characters, if any
-        ::rtl::OUStringBuffer   m_aCharacters;
+        OUStringBuffer   m_aCharacters;
     };
 
     //====================================================================
@@ -91,7 +91,7 @@ namespace dbaccess
 
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
-            const ::rtl::OUString& i_rElementName
+            const OUString& i_rElementName
         );
 
     private:
@@ -110,7 +110,7 @@ namespace dbaccess
 
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
-            const ::rtl::OUString& i_rElementName
+            const OUString& i_rElementName
         );
 
     protected:
@@ -135,7 +135,7 @@ namespace dbaccess
     public:
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
-            const ::rtl::OUString& i_rElementName
+            const OUString& i_rElementName
         );
         virtual void endElement();
 
@@ -163,7 +163,7 @@ namespace dbaccess
     public:
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
-            const ::rtl::OUString& i_rElementName
+            const OUString& i_rElementName
         );
 
     protected:

@@ -46,12 +46,12 @@ namespace xmloff
         static ::com::sun::star::uno::Any convertString(
             SvXMLImport& _rImporter,
             const ::com::sun::star::uno::Type& _rExpectedType,
-            const ::rtl::OUString& _rReadCharacters,
+            const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry* _pEnumMap = NULL,
             const sal_Bool _bInvertBoolean = sal_False
         );
 
-        static ::com::sun::star::uno::Type xmlTypeToUnoType( const ::rtl::OUString& _rType );
+        static ::com::sun::star::uno::Type xmlTypeToUnoType( const OUString& _rType );
     };
 
     class OFormLayerXMLImport_Impl;
@@ -74,7 +74,7 @@ namespace xmloff
         PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
-        DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
+        DECLARE_STL_STDKEY_SET( OUString, StringSet );
         StringSet                   m_aEncounteredAttributes;
 
         OFormLayerXMLImport_Impl&       m_rContext;
@@ -86,15 +86,15 @@ namespace xmloff
         // style properties) can be done in our own EndElement instead of letting derived classes do this.
 
     public:
-        OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName);
+        OPropertyImport(OFormLayerXMLImport_Impl& _rImport, sal_uInt16 _nPrefix, const OUString& _rName);
 
         virtual SvXMLImportContext* CreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void Characters(const ::rtl::OUString& _rChars);
+        virtual void Characters(const OUString& _rChars);
 
     protected:
         /** handle one single attribute.
@@ -112,20 +112,20 @@ namespace xmloff
                 attribute value
         */
         virtual bool handleAttribute(sal_uInt16 _nNamespaceKey,
-            const ::rtl::OUString& _rLocalName,
-            const ::rtl::OUString& _rValue);
+            const OUString& _rLocalName,
+            const OUString& _rValue);
 
         /** determine if the element imported by the object had an given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool    encounteredAttribute(const ::rtl::OUString& _rAttributeName) const;
+        sal_Bool    encounteredAttribute(const OUString& _rAttributeName) const;
 
         /** determine if the element imported by the object had an given attribute.
             <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
             All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
         */
-        sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(::rtl::OUString::createFromAscii(_pAttributeName)); }
+        sal_Bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(OUString::createFromAscii(_pAttributeName)); }
 
         /** enables the tracking of the encountered attributes
             <p>The tracking will raise the import costs a little bit, but it's cheaper than
@@ -138,7 +138,7 @@ namespace xmloff
             m_aValues.push_back(_rProp);
         }
 
-        inline void implPushBackPropertyValue( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rValue )
+        inline void implPushBackPropertyValue( const OUString& _rName, const ::com::sun::star::uno::Any& _rValue )
         {
             m_aValues.push_back( ::com::sun::star::beans::PropertyValue(
                 _rName, -1, _rValue, ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) );
@@ -162,17 +162,17 @@ namespace xmloff
         OPropertyImportRef  m_xPropertyImporter;    // to add the properties
 
     public:
-        OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OPropertyElementsContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter);
 
         virtual SvXMLImportContext* CreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
 #if OSL_DEBUG_LEVEL > 0
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-        virtual void Characters(const ::rtl::OUString& _rChars);
+        virtual void Characters(const OUString& _rChars);
 #endif
     };
 
@@ -186,11 +186,11 @@ namespace xmloff
         OPropertyImportRef          m_xPropertyImporter;    // to add the properties
 
     public:
-        OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter);
 
         virtual SvXMLImportContext* CreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
 
         virtual void StartElement(
@@ -203,12 +203,12 @@ namespace xmloff
     class OListPropertyContext : public SvXMLImportContext
     {
         OPropertyImportRef                  m_xPropertyImporter;
-        ::rtl::OUString                     m_sPropertyName;
-        ::rtl::OUString                     m_sPropertyType;
-        ::std::vector< ::rtl::OUString >    m_aListValues;
+        OUString                     m_sPropertyName;
+        OUString                     m_sPropertyType;
+        ::std::vector< OUString >    m_aListValues;
 
     public:
-        OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+        OListPropertyContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
                 const OPropertyImportRef& _rPropertyImporter );
 
         virtual void StartElement(
@@ -217,7 +217,7 @@ namespace xmloff
         virtual void EndElement();
 
         virtual SvXMLImportContext* CreateChildContext(
-            sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+            sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
@@ -226,11 +226,11 @@ namespace xmloff
     //=====================================================================
     class OListValueContext : public SvXMLImportContext
     {
-        ::rtl::OUString& m_rListValueHolder;
+        OUString& m_rListValueHolder;
 
     public:
-        OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
-            ::rtl::OUString& _rListValueHolder );
+        OListValueContext( SvXMLImport& _rImport, sal_uInt16 _nPrefix, const OUString& _rName,
+            OUString& _rListValueHolder );
 
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );

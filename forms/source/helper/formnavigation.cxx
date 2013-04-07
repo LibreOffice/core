@@ -298,7 +298,7 @@ namespace frm
             if ( aInfo->second.xDispatcher.is() )
             {
                 Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( _pParamAsciiName );
+                aArgs[0].Name = OUString::createFromAscii( _pParamAsciiName );
                 aArgs[0].Value = _rParamValue;
 
                 aInfo->second.xDispatcher->dispatch( aInfo->second.aURL, aArgs );
@@ -343,9 +343,9 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString OFormNavigationHelper::getStringState( sal_Int16 _nFeatureId ) const
+    OUString OFormNavigationHelper::getStringState( sal_Int16 _nFeatureId ) const
     {
-        ::rtl::OUString sState;
+        OUString sState;
 
         FeatureMap::const_iterator aInfo = m_aSupportedFeatures.find( _nFeatureId );
         if ( m_aSupportedFeatures.end() != aInfo )
@@ -457,7 +457,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    sal_Int16 OFormNavigationMapper::getFeatureId( const ::rtl::OUString& _rCompleteURL )
+    sal_Int16 OFormNavigationMapper::getFeatureId( const OUString& _rCompleteURL )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();
         while ( pFeatures->pAsciiURL )

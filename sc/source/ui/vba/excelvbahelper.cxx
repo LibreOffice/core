@@ -50,7 +50,7 @@ GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( uno::RuntimeException )
     if ( pShell )
         xModel.set( pShell->GetModel(), uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xModelProps( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue( rtl::OUString("UnnamedDatabaseRanges") ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XUnnamedDatabaseRanges > xUnnamedDBRanges( xModelProps->getPropertyValue( OUString("UnnamedDatabaseRanges") ), uno::UNO_QUERY_THROW );
     return xUnnamedDBRanges;
 }
 
@@ -66,7 +66,7 @@ GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( uno::RuntimeExc
         uno::Reference< sheet::XDatabaseRange > xDBRange( xUnnamedDBRanges->getByTable( nSheet ) , uno::UNO_QUERY_THROW );
         sal_Bool bHasAuto = false;
         uno::Reference< beans::XPropertySet > xProps( xDBRange, uno::UNO_QUERY_THROW );
-        xProps->getPropertyValue( rtl::OUString("AutoFilter") ) >>= bHasAuto;
+        xProps->getPropertyValue( OUString("AutoFilter") ) >>= bHasAuto;
         if ( bHasAuto )
         {
             xDataBaseRange=xDBRange;
@@ -80,7 +80,7 @@ ScDocShell* GetDocShellFromRange( const uno::Reference< uno::XInterface >& xRang
     ScCellRangesBase* pScCellRangesBase = ScCellRangesBase::getImplementation( xRange );
     if ( !pScCellRangesBase )
     {
-        throw uno::RuntimeException( rtl::OUString( "Failed to access underlying doc shell uno range object" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Failed to access underlying doc shell uno range object" ), uno::Reference< uno::XInterface >() );
     }
     return pScCellRangesBase->GetDocShell();
 }
@@ -101,7 +101,7 @@ void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom
     pViewSh->RefreshZoom();
 }
 
-const ::rtl::OUString REPLACE_CELLS_WARNING( "ReplaceCellsWarning");
+const OUString REPLACE_CELLS_WARNING( "ReplaceCellsWarning");
 
 class PasteCellsWarningReseter
 {
@@ -113,7 +113,7 @@ private:
             comphelper::getProcessComponentContext() );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
                 xContext->getServiceManager() );
-        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( "com.sun.star.sheet.GlobalSheetSettings" ) ,xContext ), uno::UNO_QUERY_THROW );
+        static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( OUString( "com.sun.star.sheet.GlobalSheetSettings" ) ,xContext ), uno::UNO_QUERY_THROW );
         return xProps;
     }
 
@@ -264,8 +264,8 @@ uno::Reference< XHelperInterface >
 getUnoSheetModuleObj( const uno::Reference< sheet::XSpreadsheet >& xSheet ) throw ( uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet > xProps( xSheet, uno::UNO_QUERY_THROW );
-    rtl::OUString sCodeName;
-    xProps->getPropertyValue( rtl::OUString("CodeName") ) >>= sCodeName;
+    OUString sCodeName;
+    xProps->getPropertyValue( OUString("CodeName") ) >>= sCodeName;
     // #TODO #FIXME ideally we should 'throw' here if we don't get a valid parent, but... it is possible
     // to create a module ( and use 'Option VBASupport 1' ) for a calc document, in this scenario there
     // are *NO* special document module objects ( of course being able to switch between vba/non vba mode at
@@ -327,7 +327,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             {
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
-                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( rtl::OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance( OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
                 ScDocument* pDoc = pShell->GetDocument();
@@ -338,19 +338,19 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                     pDoc->SetCodeName( sCodeName );
                 }
 
-                std::vector< rtl::OUString > sDocModuleNames;
+                std::vector< OUString > sDocModuleNames;
                 sDocModuleNames.push_back( sCodeName );
 
                 for ( SCTAB index = 0; index < pDoc->GetTableCount(); index++)
                 {
-                    rtl::OUString aName;
+                    OUString aName;
                     pDoc->GetCodeName( index, aName );
                     sDocModuleNames.push_back( aName );
                 }
 
-                std::vector<rtl::OUString>::iterator it_end = sDocModuleNames.end();
+                std::vector<OUString>::iterator it_end = sDocModuleNames.end();
 
-                for ( std::vector<rtl::OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
+                for ( std::vector<OUString>::iterator it = sDocModuleNames.begin(); it != it_end; ++it )
                 {
                     script::ModuleInfo sModuleInfo;
 
@@ -359,9 +359,9 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                     xVBAModuleInfo->insertModuleInfo( *it, sModuleInfo );
                     if( xLib->hasByName( *it ) )
-                        xLib->replaceByName( *it, uno::makeAny( rtl::OUString( "Option VBASupport 1\n") ) );
+                        xLib->replaceByName( *it, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
                     else
-                        xLib->insertByName( *it, uno::makeAny( rtl::OUString( "Option VBASupport 1\n" ) ) );
+                        xLib->insertByName( *it, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
                 }
             }
         }

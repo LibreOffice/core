@@ -117,17 +117,17 @@ struct SearchDlg_Impl
         bDeltaCalculated( sal_False ),
         pRanges         ( NULL )
         {
-            aCommand1URL.Complete = aCommand1URL.Main = rtl::OUString("vnd.sun.search:SearchViaComponent1");
-            aCommand1URL.Protocol = rtl::OUString("vnd.sun.search:");
-            aCommand1URL.Path = rtl::OUString("SearchViaComponent1");
-            aCommand2URL.Complete = aCommand2URL.Main = rtl::OUString("vnd.sun.search:SearchViaComponent2");
-            aCommand2URL.Protocol = rtl::OUString("vnd.sun.search:");
-            aCommand2URL.Path = rtl::OUString("SearchViaComponent2");
+            aCommand1URL.Complete = aCommand1URL.Main = OUString("vnd.sun.search:SearchViaComponent1");
+            aCommand1URL.Protocol = OUString("vnd.sun.search:");
+            aCommand1URL.Path = OUString("SearchViaComponent1");
+            aCommand2URL.Complete = aCommand2URL.Main = OUString("vnd.sun.search:SearchViaComponent2");
+            aCommand2URL.Protocol = OUString("vnd.sun.search:");
+            aCommand2URL.Path = OUString("SearchViaComponent2");
         }
     ~SearchDlg_Impl() { delete[] pRanges; }
 };
 
-void ListToStrArr_Impl( sal_uInt16 nId, std::vector<rtl::OUString>& rStrLst, ComboBox& rCBox )
+void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )
 {
     SfxStringListItem* pSrchItem =
         (SfxStringListItem*)SFX_APP()->GetItem( nId );
@@ -144,12 +144,12 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<rtl::OUString>& rStrLst, Com
     }
 }
 
-void StrArrToList_Impl( sal_uInt16 nId, const std::vector<rtl::OUString>& rStrLst )
+void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
 {
     DBG_ASSERT( !rStrLst.empty(), "check in advance");
     std::vector<String> aLst;
 
-    for (std::vector<rtl::OUString>::const_iterator i = rStrLst.begin(); i != rStrLst.end(); ++i)
+    for (std::vector<OUString>::const_iterator i = rStrLst.begin(); i != rStrLst.end(); ++i)
         aLst.push_back(String(*i));
 
     SFX_APP()->PutItem( SfxStringListItem( nId, &aLst ) );
@@ -433,7 +433,7 @@ void SvxSearchDialog::Construct_Impl()
     // vnd.sun.star::SearchViaComponent1 and 2 are supported
     const uno::Reference< frame::XFrame >xFrame = rBindings.GetActiveFrame();
     const uno::Reference< frame::XDispatchProvider > xDispatchProv(xFrame, uno::UNO_QUERY);
-    rtl::OUString sTarget("_self");
+    OUString sTarget("_self");
 
     bool bSearchComponent1 = false;
     bool bSearchComponent2 = false;
@@ -456,24 +456,24 @@ void SvxSearchDialog::Construct_Impl()
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                     configuration::theDefaultProvider::get( comphelper::getComponentContext(xMgr) );
             uno::Sequence< uno::Any > aArgs(1);
-            ::rtl::OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
+            OUString sPath( "/org.openoffice.Office.Common/SearchOptions/");
             aArgs[0] <<= sPath;
 
             uno::Reference< uno::XInterface > xIFace = xConfigurationProvider->createInstanceWithArguments(
-                        ::rtl::OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"),
+                        OUString( "com.sun.star.configuration.ConfigurationUpdateAccess"),
                         aArgs);
             uno::Reference< container::XNameAccess> xDirectAccess(xIFace, uno::UNO_QUERY);
             if(xDirectAccess.is())
             {
-                ::rtl::OUString sTemp;
-                ::rtl::OUString sProperty( "ComponentSearchGroupLabel");
+                OUString sTemp;
+                OUString sProperty( "ComponentSearchGroupLabel");
                 uno::Any aRet = xDirectAccess->getByName(sProperty);
                 aRet >>= sTemp;
                 aSearchComponentFL.SetText( sTemp );
-                aRet = xDirectAccess->getByName(::rtl::OUString( "ComponentSearchCommandLabel1"));
+                aRet = xDirectAccess->getByName(OUString( "ComponentSearchCommandLabel1"));
                 aRet >>= sTemp;
                 aSearchComponent1PB.SetText( sTemp );
-                aRet = xDirectAccess->getByName(::rtl::OUString( "ComponentSearchCommandLabel2"));
+                aRet = xDirectAccess->getByName(OUString( "ComponentSearchCommandLabel2"));
                 aRet >>= sTemp;
                 aSearchComponent2PB.SetText( sTemp );
             }
@@ -1527,9 +1527,9 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     {
         uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
-        pArgs[0].Name = ::rtl::OUString("SearchString");
-        pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
-        pArgs[1].Name = ::rtl::OUString("ParentWindow");
+        pArgs[0].Name = OUString("SearchString");
+        pArgs[0].Value <<= OUString(aSearchLB.GetText());
+        pArgs[1].Name = OUString("ParentWindow");
         pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == &aSearchComponent1PB)
         {
@@ -1706,11 +1706,11 @@ void SvxSearchDialog::Remember_Impl( const String &rStr,sal_Bool _bSearch )
     if ( !rStr.Len() )
         return;
 
-    std::vector<rtl::OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
+    std::vector<OUString>* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
     ComboBox* pListBox = _bSearch ? &aSearchLB : &aReplaceLB;
 
     // ignore identical strings
-    for (std::vector<rtl::OUString>::const_iterator i = pArr->begin(); i != pArr->end(); ++i)
+    for (std::vector<OUString>::const_iterator i = pArr->begin(); i != pArr->end(); ++i)
     {
         if ((*i).equals(rStr))
             return;

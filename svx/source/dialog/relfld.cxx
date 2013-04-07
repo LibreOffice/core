@@ -99,7 +99,7 @@ void SvxRelativeField::SetRelative( sal_Bool bNewRelative )
         SetDecimalDigits( 0 );
         SetMin( nRelMin );
         SetMax( nRelMax );
-        SetCustomUnitText( rtl::OUString('%') );
+        SetCustomUnitText( OUString('%') );
         SetUnit( FUNIT_CUSTOM );
     }
     else

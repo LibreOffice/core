@@ -95,7 +95,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             sal_Int32 n = 0;
                             while( -1 != n )
                             {
-                                rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
+                                OUString s( sTopics.GetToken( 0, '\t', n ));
                                 if( s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                                     ++nTopics;
                             }
@@ -123,7 +123,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     sal_Int32 n = 0;
                     while( -1 != n )
                     {
-                        rtl::OUString s( sTopics.GetToken( 0, '\t', n ));
+                        OUString s( sTopics.GetToken( 0, '\t', n ));
                         s = comphelper::string::remove(s, '\n');
                         s = comphelper::string::remove(s, '\r');
                         if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
@@ -224,7 +224,7 @@ found:
     if ( pItem )
         pTopic->aItem = pItem->GetName();
     else
-        pTopic->aItem = rtl::OUString();
+        pTopic->aItem = OUString();
 
     sal_Bool bRes = sal_False;
     pInst->hCurConvSvr = (long)hConv;
@@ -519,7 +519,7 @@ DdeService::~DdeService()
 
 // --- DdeService::GetName() ---------------------------------------
 
-const rtl::OUString DdeService::GetName() const
+const OUString DdeService::GetName() const
 {
     return pName->toOUString();
 }
@@ -612,7 +612,7 @@ void DdeService::RemoveFormat( sal_uLong nFmt )
 
 // --- DdeTopic::DdeTopic() ----------------------------------------
 
-DdeTopic::DdeTopic( const rtl::OUString& rName )
+DdeTopic::DdeTopic( const OUString& rName )
 {
     DdeInstData* pInst = ImpGetInstData();
     DBG_ASSERT(pInst,"SVDDE:No instance data");
@@ -635,7 +635,7 @@ DdeTopic::~DdeTopic()
 
 // --- DdeTopic::GetName() -----------------------------------------
 
-const rtl::OUString DdeTopic::GetName() const
+const OUString DdeTopic::GetName() const
 {
     return pName->toOUString();
 }
@@ -838,7 +838,7 @@ DdeItem::~DdeItem()
 
 // --- DdeItem::GetName() ------------------------------------------
 
-const rtl::OUString DdeItem::GetName() const
+const OUString DdeItem::GetName() const
 {
     return pName->toOUString();
 }
@@ -985,7 +985,7 @@ String DdeService::SysItems()
                     s += '\t';
                 s += (*iterItem)->GetName();
             }
-            s += rtl::OUString("\r\n");
+            s += OUString("\r\n");
         }
     }
 
@@ -1006,7 +1006,7 @@ String DdeService::Topics()
             s += '\t';
         s += (*iter)->GetName();
     }
-    s += rtl::OUString("\r\n");
+    s += OUString("\r\n");
 
     return s;
 }
@@ -1028,22 +1028,22 @@ String DdeService::Formats()
         switch( (sal_uInt16)f )
         {
             case CF_TEXT:
-                s += rtl::OUString("TEXT");
+                s += OUString("TEXT");
                 break;
             case CF_BITMAP:
-                s += rtl::OUString("BITMAP");
+                s += OUString("BITMAP");
                 break;
             default:
                 {
                     TCHAR buf[128];
                     GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
-                    s += rtl::OUString(reinterpret_cast<sal_Unicode*>(buf));
+                    s += OUString(reinterpret_cast<sal_Unicode*>(buf));
                 }
                 break;
         }
 
     }
-    s += rtl::OUString("\r\n");
+    s += OUString("\r\n");
 
     return s;
 }
@@ -1052,7 +1052,7 @@ String DdeService::Formats()
 
 String DdeService::Status()
 {
-    return IsBusy() ? rtl::OUString("Busy\r\n") : rtl::OUString("Ready\r\n");
+    return IsBusy() ? OUString("Busy\r\n") : OUString("Ready\r\n");
 }
 
 // --- DdeService::IsBusy() ----------------------------------------
@@ -1069,12 +1069,12 @@ String DdeService::GetHelp()
     return String();
 }
 
-sal_Bool DdeTopic::MakeItem( const rtl::OUString& )
+sal_Bool DdeTopic::MakeItem( const OUString& )
 {
     return sal_False;
 }
 
-sal_Bool DdeService::MakeTopic( const rtl::OUString& )
+sal_Bool DdeService::MakeTopic( const OUString& )
 {
     return sal_False;
 }

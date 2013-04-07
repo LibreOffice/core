@@ -19,7 +19,6 @@
 
 #include <cppuhelper/implementationentry.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 
 // Declare static functions providing service information =====================

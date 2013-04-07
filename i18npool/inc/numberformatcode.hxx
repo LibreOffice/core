@@ -46,11 +46,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode > SAL_CALL getAllFormatCodes( const ::com::sun::star::lang::Locale& rLocale ) throw(::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName(void)
+    virtual OUString SAL_CALL getImplementationName(void)
                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
                 throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
                 throw( ::com::sun::star::uno::RuntimeException );
 
 private:
@@ -62,10 +62,10 @@ private:
 
     void setupLocale( const ::com::sun::star::lang::Locale& rLocale );
     void getFormats( const ::com::sun::star::lang::Locale& rLocale );
-    ::rtl::OUString mapElementTypeShortToString(sal_Int16 formatType);
-    sal_Int16 mapElementTypeStringToShort(const ::rtl::OUString& formatType);
-    ::rtl::OUString mapElementUsageShortToString(sal_Int16 formatUsage);
-    sal_Int16 mapElementUsageStringToShort(const ::rtl::OUString& formatUsage);
+    OUString mapElementTypeShortToString(sal_Int16 formatType);
+    sal_Int16 mapElementTypeStringToShort(const OUString& formatType);
+    OUString mapElementUsageShortToString(sal_Int16 formatUsage);
+    sal_Int16 mapElementUsageStringToShort(const OUString& formatUsage);
     void createLocaleDataObject();
 };
 

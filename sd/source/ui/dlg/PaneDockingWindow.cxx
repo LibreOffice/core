@@ -40,7 +40,7 @@ namespace sd {
 
 PaneDockingWindow::PaneDockingWindow(
         SfxBindings *_pBindings, SfxChildWindow *pChildWindow, ::Window* pParent,
-        const ResId& rResId, const ::rtl::OUString& rsTitle )
+        const ResId& rResId, const OUString& rsTitle )
         :TitledDockingWindow( _pBindings, pChildWindow, pParent, rResId )
 {
     SetTitle( rsTitle );

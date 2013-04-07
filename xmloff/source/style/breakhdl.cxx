@@ -24,8 +24,6 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

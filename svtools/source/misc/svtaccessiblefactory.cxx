@@ -279,11 +279,11 @@ namespace svt
             if ( !s_pFactory.get() )
             {
 #ifndef DISABLE_DYNLOADING
-                const ::rtl::OUString sModuleName( SVLIBRARY( "acc" ));
+                const OUString sModuleName( SVLIBRARY( "acc" ));
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
-                    const ::rtl::OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
+                    const OUString sFactoryCreationFunc( "getSvtAccessibilityComponentFactory" );
                     s_pAccessibleFactoryFunc = (GetSvtAccessibilityComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

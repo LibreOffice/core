@@ -92,7 +92,7 @@ namespace svxform
 
         if( pEntryData )
         {
-            ::rtl::OUString aNewName =  ::comphelper::getString(evt.NewValue);
+            OUString aNewName =  ::comphelper::getString(evt.NewValue);
             pEntryData->SetText( aNewName );
             FmNavNameChangedHint aNameChangedHint( pEntryData, aNewName );
             m_pNavModel->Broadcast( aNameChangedHint );
@@ -307,7 +307,7 @@ namespace svxform
             if( bUndo )
             {
                 XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                aUndoStr.SearchAndReplace(OUString('#'), aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }
 
@@ -406,7 +406,7 @@ namespace svxform
             if( bUndo )
             {
                 XubString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE));
-                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                aUndoStr.SearchAndReplace(OUString('#'), aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }
         }
@@ -689,7 +689,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    FmEntryData* NavigatorTreeModel::FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs )
+    FmEntryData* NavigatorTreeModel::FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::FindData" );
         FmEntryDataList* pDataList;
@@ -698,7 +698,7 @@ namespace svxform
         else
             pDataList = pParentData->GetChildList();
 
-        ::rtl::OUString aEntryText;
+        OUString aEntryText;
         FmEntryData* pEntryData;
         FmEntryData* pChildData;
 
@@ -948,7 +948,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText )
+    sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const OUString& rNewText )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Rename" );
         //////////////////////////////////////////////////////////////////////

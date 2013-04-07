@@ -78,15 +78,15 @@ namespace pcr
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
+    OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.form.ui.OTabOrderDialog");
+        return OUString("org.openoffice.comp.form.ui.OTabOrderDialog");
     }
 
     //---------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace pcr
     ::comphelper::StringSequence OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString(  "com.sun.star.form.ui.TabOrderDialog"  );
+        aSupported.getArray()[0] = OUString(  "com.sun.star.form.ui.TabOrderDialog"  );
         return aSupported;
     }
 

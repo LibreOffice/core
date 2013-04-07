@@ -57,7 +57,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 // ----------------------------------------
@@ -90,7 +89,7 @@ LOCAL_CONST_STR( sXML_import_chart_oasis_meta_service,      "com.sun.star.comp.C
 
 uno::Reference< embed::XStorage > lcl_getWriteStorage(
     const Sequence< beans::PropertyValue >& rMediaDescriptor,
-    const uno::Reference< uno::XComponentContext >& xContext,const ::rtl::OUString& _sMediaType)
+    const uno::Reference< uno::XComponentContext >& xContext,const OUString& _sMediaType)
 {
     uno::Reference< embed::XStorage > xStorage;
     try
@@ -793,7 +792,7 @@ void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDes
         rOutOASIS = aMDHelper.FilterName == "chart8";
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString XMLFilter::getMediaType(bool _bOasis)
+OUString XMLFilter::getMediaType(bool _bOasis)
 {
     return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART : MIMETYPE_VND_SUN_XML_CHART;
 }
@@ -809,7 +808,7 @@ void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >
         rOutOASIS = aMDHelper.FilterName == "StarOffice XML (Base) Report Chart";
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString XMLReportFilterHelper::getMediaType(bool )
+OUString XMLReportFilterHelper::getMediaType(bool )
 {
     return MIMETYPE_OASIS_OPENDOCUMENT_REPORT_CHART;
 }

@@ -32,7 +32,7 @@ namespace cppcanvas
     {
 
         ImplFont::ImplFont( const uno::Reference< rendering::XCanvas >& rCanvas,
-                            const ::rtl::OUString& rFontName,
+                            const OUString& rFontName,
                             const double& rCellSize ) :
             mxCanvas( rCanvas ),
             mxFont( NULL )
@@ -56,7 +56,7 @@ namespace cppcanvas
         {
         }
 
-        ::rtl::OUString ImplFont::getName() const
+        OUString ImplFont::getName() const
         {
             OSL_ENSURE( mxFont.is(), "ImplFont::getName(): Invalid Font" );
 

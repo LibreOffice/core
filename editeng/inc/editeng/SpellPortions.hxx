@@ -39,7 +39,7 @@ struct SpellPortion
 {
     /** contains the text of the portion.
      */
-    rtl::OUString   sText;
+    OUString   sText;
     /** Marks the portion as field, footnote symbol or any other special content that
      should be protected against unintentional deletion.
      */
@@ -69,7 +69,7 @@ struct SpellPortion
      */
     /** contains the proposed dialog title if the proof reading component provides one.
      */
-    rtl::OUString   sDialogTitle;
+    OUString   sDialogTitle;
 
     bool bIgnoreThisError;
     SpellPortion() :

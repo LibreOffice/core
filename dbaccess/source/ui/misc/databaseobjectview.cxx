@@ -62,7 +62,7 @@ namespace dbaui
     DatabaseObjectView::DatabaseObjectView( const Reference< XComponentContext >& _rxORB,
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
-            const ::rtl::OUString& _rComponentURL )
+            const OUString& _rComponentURL )
         :m_xORB             ( _rxORB            )
         ,m_xParentFrame     ( _rxParentFrame    )
         ,m_xFrameLoader     (                   )
@@ -85,18 +85,18 @@ namespace dbaui
     //----------------------------------------------------------------------
     Reference< XComponent > DatabaseObjectView::createNew( const Reference< XDataSource >& _xDataSource, const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
-        return doCreateView( makeAny( _xDataSource ), ::rtl::OUString(), i_rDispatchArgs );
+        return doCreateView( makeAny( _xDataSource ), OUString(), i_rDispatchArgs );
     }
 
     //----------------------------------------------------------------------
-    Reference< XComponent > DatabaseObjectView::openExisting( const Any& _rDataSource, const ::rtl::OUString& _rName,
+    Reference< XComponent > DatabaseObjectView::openExisting( const Any& _rDataSource, const OUString& _rName,
             const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
         return doCreateView( _rDataSource, _rName, i_rDispatchArgs );
     }
 
     //----------------------------------------------------------------------
-    Reference< XComponent > DatabaseObjectView::doCreateView( const Any& _rDataSource, const ::rtl::OUString& _rObjectName,
+    Reference< XComponent > DatabaseObjectView::doCreateView( const Any& _rDataSource, const OUString& _rObjectName,
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
         ::comphelper::NamedValueCollection aDispatchArgs;
@@ -124,11 +124,11 @@ namespace dbaui
                     NamedValue      aProp;
                     sal_Int32       nArg = 0;
 
-                    aProp.Name    = ::rtl::OUString("ParentFrame");
+                    aProp.Name    = OUString("ParentFrame");
                     aProp.Value <<= m_xParentFrame;
                     lArgs[nArg++] <<= aProp;
 
-                    aProp.Name    = ::rtl::OUString("TopWindow");
+                    aProp.Name    = OUString("TopWindow");
                     aProp.Value <<= sal_True;
                     lArgs[nArg++] <<= aProp;
 
@@ -147,7 +147,7 @@ namespace dbaui
                 Reference< XComponentLoader > xFrameLoader( m_xFrameLoader, UNO_QUERY_THROW );
                 xReturn = xFrameLoader->loadComponentFromURL(
                     m_sComponentURL,
-                    ::rtl::OUString("_self"),
+                    OUString("_self"),
                     0,
                     i_rDispatchArgs.getPropertyValues()
                 );
@@ -164,21 +164,21 @@ namespace dbaui
     void DatabaseObjectView::fillDispatchArgs(
             ::comphelper::NamedValueCollection& i_rDispatchArgs,
             const Any& _aDataSource,
-            const ::rtl::OUString& /* _rName */
+            const OUString& /* _rName */
         )
     {
-        ::rtl::OUString sDataSource;
+        OUString sDataSource;
         Reference<XDataSource> xDataSource;
         if ( _aDataSource >>= sDataSource )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_DATASOURCENAME, sDataSource );
+            i_rDispatchArgs.put( (OUString)PROPERTY_DATASOURCENAME, sDataSource );
         }
         else if ( _aDataSource >>= xDataSource )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_DATASOURCE, xDataSource );
+            i_rDispatchArgs.put( (OUString)PROPERTY_DATASOURCE, xDataSource );
         }
 
-        i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, getConnection() );
+        i_rDispatchArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, getConnection() );
     }
 
     //======================================================================
@@ -194,24 +194,24 @@ namespace dbaui
 
     //----------------------------------------------------------------------
     void QueryDesigner::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
-        const ::rtl::OUString& _rObjectName )
+        const OUString& _rObjectName )
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
         const bool bIncludeQueryName = !_rObjectName.isEmpty();
-        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
+        const bool bGraphicalDesign = i_rDispatchArgs.getOrDefault( (OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
         const bool bEditViewAsSQLCommand = ( m_nCommandType == CommandType::TABLE ) && !bGraphicalDesign;
 
-        i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
+        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
 
         if ( bIncludeQueryName )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_COMMAND, _rObjectName );
+            i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND, _rObjectName );
         }
 
         if ( bEditViewAsSQLCommand )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, sal_False );
+            i_rDispatchArgs.put( (OUString)PROPERTY_ESCAPE_PROCESSING, sal_False );
         }
     }
 
@@ -220,24 +220,24 @@ namespace dbaui
     //======================================================================
     //----------------------------------------------------------------------
     TableDesigner::TableDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_TABLEDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_TABLEDESIGN ) )
     {
     }
 
     //----------------------------------------------------------------------
     void TableDesigner::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
-        const ::rtl::OUString& _rObjectName )
+        const OUString& _rObjectName )
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rObjectName );
 
         if ( !_rObjectName.isEmpty() )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_CURRENTTABLE, _rObjectName );
+            i_rDispatchArgs.put( (OUString)PROPERTY_CURRENTTABLE, _rObjectName );
         }
     }
 
     //----------------------------------------------------------------------
-    Reference< XComponent > TableDesigner::doCreateView( const Any& _rDataSource, const ::rtl::OUString& _rObjectName,
+    Reference< XComponent > TableDesigner::doCreateView( const Any& _rDataSource, const OUString& _rObjectName,
         const ::comphelper::NamedValueCollection& i_rCreationArgs )
     {
         bool bIsNewDesign =  _rObjectName.isEmpty();
@@ -265,7 +265,7 @@ namespace dbaui
     }
 
     //----------------------------------------------------------------------
-    Reference< XInterface > TableDesigner::impl_getConnectionProvidedDesigner_nothrow( const ::rtl::OUString& _rTableName )
+    Reference< XInterface > TableDesigner::impl_getConnectionProvidedDesigner_nothrow( const OUString& _rTableName )
     {
         Reference< XInterface > xDesigner;
         try
@@ -287,32 +287,32 @@ namespace dbaui
     //----------------------------------------------------------------------
     ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             sal_Bool _bTable )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < ::rtl::OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
         ,m_bTable(_bTable)
     {
     }
 
     //----------------------------------------------------------------------
     void ResultSetBrowser::fillDispatchArgs( ::comphelper::NamedValueCollection& i_rDispatchArgs, const Any& _aDataSource,
-        const ::rtl::OUString& _rQualifiedName)
+        const OUString& _rQualifiedName)
     {
         DatabaseObjectView::fillDispatchArgs( i_rDispatchArgs, _aDataSource, _rQualifiedName );
         OSL_ENSURE( !_rQualifiedName.isEmpty(),"A Table name must be set");
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sSchema;
-        ::rtl::OUString sTable;
+        OUString sCatalog;
+        OUString sSchema;
+        OUString sTable;
         if ( m_bTable )
             ::dbtools::qualifiedNameComponents( getConnection()->getMetaData(), _rQualifiedName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
 
-        i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_COMMAND_TYPE, (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
-        i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_COMMAND, _rQualifiedName );
-        i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_ENABLE_BROWSER, sal_False );
+        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND_TYPE, (m_bTable ? CommandType::TABLE : CommandType::QUERY) );
+        i_rDispatchArgs.put( (OUString)PROPERTY_COMMAND, _rQualifiedName );
+        i_rDispatchArgs.put( (OUString)PROPERTY_ENABLE_BROWSER, sal_False );
 
         if ( m_bTable )
         {
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, sCatalog );
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, sSchema );
-            i_rDispatchArgs.put( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, sTable );
+            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_CATALOGNAME, sCatalog );
+            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_SCHEMANAME, sSchema );
+            i_rDispatchArgs.put( (OUString)PROPERTY_UPDATE_TABLENAME, sTable );
         }
     }
 
@@ -321,7 +321,7 @@ namespace dbaui
     //======================================================================
     //----------------------------------------------------------------------
     RelationDesigner::RelationDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
 // .........................................................................

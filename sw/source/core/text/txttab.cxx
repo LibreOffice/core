@@ -619,7 +619,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         {
             // 6864: always with kerning, also on printer!
             KSHORT nChar = Width() / nCharWidth;
-            rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, ' ');
             rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
         }
@@ -638,7 +638,7 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
             KSHORT nChar = Width() / nCharWidth;
             if ( cFill == '_' )
                 ++nChar; // to avoid gaps (Bug 13430)
-            rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             comphelper::string::padToLength(aBuf, nChar, cFill);
             rInf.DrawText(aBuf.makeStringAndClear(), *this, 0, nChar, sal_True);
         }

@@ -58,8 +58,6 @@ using com::sun::star::lang::XMultiServiceFactory;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::PropertyValue;
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using com::sun::star::beans::PropertyVetoException;
 using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::util::VetoException;
@@ -188,12 +186,12 @@ void Model::setForeignSchema( const XDocument_t& rDocument )
     mxForeignSchema = rDocument;
 }
 
-rtl::OUString Model::getSchemaRef() const
+OUString Model::getSchemaRef() const
 {
     return msSchemaRef;
 }
 
-void Model::setSchemaRef( const rtl::OUString& rSchemaRef )
+void Model::setSchemaRef( const OUString& rSchemaRef )
 {
     msSchemaRef = rSchemaRef;
 }
@@ -322,7 +320,7 @@ void Model::deferNotifications( bool bDefer )
 
 
 bool Model::setSimpleContent( const XNode_t& xConstNode,
-                              const rtl::OUString& sValue )
+                              const OUString& sValue )
 {
     OSL_ENSURE( xConstNode.is(), "need node to set data" );
 
@@ -454,14 +452,14 @@ bool Model::isValid() const
 // implement xforms::XModel
 //
 
-rtl::OUString Model::getID()
+OUString Model::getID()
     throw( RuntimeException )
 {
     DBG_INVARIANT();
     return msID;
 }
 
-void Model::setID( const rtl::OUString& sID )
+void Model::setID( const OUString& sID )
     throw( RuntimeException )
 {
     DBG_INVARIANT();
@@ -510,7 +508,7 @@ void Model::refresh()
 
 
 void SAL_CALL Model::submitWithInteraction(
-    const rtl::OUString& sID,
+    const OUString& sID,
     const XInteractionHandler_t& _rxHandler )
     throw( VetoException,
            WrappedTargetException,
@@ -531,7 +529,7 @@ void SAL_CALL Model::submitWithInteraction(
     }
 }
 
-void Model::submit( const rtl::OUString& sID )
+void Model::submit( const OUString& sID )
     throw( VetoException, WrappedTargetException, RuntimeException )
 {
     submitWithInteraction( sID, NULL );
@@ -556,7 +554,7 @@ Model::XSet_t Model::getInstances()
     return mxInstances;
 }
 
-Model::XDocument_t Model::getInstanceDocument( const rtl::OUString& rName )
+Model::XDocument_t Model::getInstanceDocument( const OUString& rName )
     throw( RuntimeException )
 {
     ensureAtLeastOneInstance();
@@ -600,7 +598,7 @@ Model::XPropertySet_t Model::cloneBinding( const XPropertySet_t& xBinding )
     return xNewBinding;
 }
 
-Model::XPropertySet_t Model::getBinding( const rtl::OUString& sId )
+Model::XPropertySet_t Model::getBinding( const OUString& sId )
     throw( RuntimeException )
 {
     DBG_INVARIANT();
@@ -637,7 +635,7 @@ Model::XSubmission_t Model::cloneSubmission(const XPropertySet_t& xSubmission)
     return xNewSubmission;
 }
 
-Model::XSubmission_t Model::getSubmission( const rtl::OUString& sId )
+Model::XSubmission_t Model::getSubmission( const OUString& sId )
     throw( RuntimeException )
 {
     DBG_INVARIANT();

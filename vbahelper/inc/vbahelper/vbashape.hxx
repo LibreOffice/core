@@ -49,8 +49,8 @@ protected:
     virtual void addListeners();
     virtual void removeShapeListener() throw( css::uno::RuntimeException );
     virtual void removeShapesListener() throw( css::uno::RuntimeException );
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 public:
     ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType ) throw ( css::lang::IllegalArgumentException );
     virtual ~ScVbaShape();
@@ -60,8 +60,8 @@ public:
     static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape > xShape ) throw (css::uno::RuntimeException);
 
     // Attributes
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const rtl::OUString& _name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException);

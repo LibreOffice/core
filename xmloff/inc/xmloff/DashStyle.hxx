@@ -46,7 +46,7 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         ::com::sun::star::uno::Any& rValue,
-        ::rtl::OUString& rStrName );
+        OUString& rStrName );
 };
 
 
@@ -58,7 +58,7 @@ public:
     XMLDashStyleExport( SvXMLExport& rExport );
     ~XMLDashStyleExport();
 
-    sal_Bool exportXML( const ::rtl::OUString& rStrName,
+    sal_Bool exportXML( const OUString& rStrName,
                         const ::com::sun::star::uno::Any& rValue );
 };
 

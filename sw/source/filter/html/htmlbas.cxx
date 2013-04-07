@@ -110,11 +110,11 @@ void SwHTMLParser::EndScript()
         RemoveSGMLComment( aScriptSource, sal_True );
 
         // get library name
-        ::rtl::OUString aLibName;
+        OUString aLibName;
         if( aBasicLib.Len() )
             aLibName = aBasicLib;
         else
-            aLibName = ::rtl::OUString("Standard");
+            aLibName = OUString("Standard");
 
         // get module library container
         Reference< script::XLibraryContainer > xModLibContainer( pDocSh->GetBasicContainer(), UNO_QUERY );
@@ -144,16 +144,16 @@ void SwHTMLParser::EndScript()
                     {
                         aBasicModule.AssignAscii( "Modul" );
                         aBasicModule += OUString::number( (sal_Int32)(++nSBModuleCnt) );
-                        bFound = xModLib->hasByName( ::rtl::OUString( aBasicModule ) );
+                        bFound = xModLib->hasByName( OUString( aBasicModule ) );
                     }
                 }
 
                 // create module
-                ::rtl::OUString aModName( aBasicModule );
+                OUString aModName( aBasicModule );
                 if ( !xModLib->hasByName( aModName ) )
                 {
                     Any aElement;
-                    aElement <<= ::rtl::OUString( aScriptSource );
+                    aElement <<= OUString( aScriptSource );
                     xModLib->insertByName( aModName , aElement );
                 }
             }
@@ -232,7 +232,7 @@ void SwHTMLParser::AddScriptSource()
     }
 }
 
-void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rName,
+void SwHTMLParser::InsertBasicDocEvent( OUString aEvent, const String& rName,
                                         ScriptType eScrType,
                                         const String& rScrType )
 {
@@ -281,13 +281,13 @@ void SwHTMLWriter::OutBasic()
             const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
             OSL_ENSURE( pModule, "Wo ist das Modul?" );
 
-            rtl::OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
+            OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
             ScriptType eType = STARBASIC;
 
             if( 0==i && 0==j )
             {
                 OutNewLine();
-                rtl::OStringBuffer sOut;
+                OStringBuffer sOut;
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_meta)
                     .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_httpequiv)
                     .append("=\"")
@@ -296,7 +296,7 @@ void SwHTMLWriter::OutBasic()
                     .append("=\"text/x-");
                 Strm() << sOut.getStr();
                 // Entities aren't welcome here
-                Strm() << rtl::OUStringToOString(sLang, eDestEnc).getStr()
+                Strm() << OUStringToOString(sLang, eDestEnc).getStr()
                     << "\">";
             }
 
@@ -328,7 +328,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
     uno::Reference < container::XNameReplace > xEvents = xSup->getEvents();
     for ( sal_Int32 i=0; i<4; i++ )
     {
-        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
+        SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
         if ( pMacro )
         {
             pDocTable->Insert( aBodyEventTable[i].nEvent, *pMacro );

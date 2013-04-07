@@ -83,13 +83,13 @@ public:
     APPHELPER_SERVICE_FACTORY_HELPER(InternalDataProvider)
 
     // ____ XInternalDataProvider ____
-    virtual ::sal_Bool SAL_CALL hasDataByRangeRepresentation( const ::rtl::OUString& aRange )
+    virtual ::sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL
-        getDataByRangeRepresentation( const ::rtl::OUString& aRange )
+        getDataByRangeRepresentation( const OUString& aRange )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDataByRangeRepresentation(
-        const ::rtl::OUString& aRange,
+        const OUString& aRange,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aNewData )
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex )
@@ -124,22 +124,22 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
-        const ::rtl::OUString& aRangeRepresentation )
+        const OUString& aRangeRepresentation )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
-        const ::rtl::OUString& aRangeRepresentation )
+        const OUString& aRangeRepresentation )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XRangeXMLConversion ____
-    virtual ::rtl::OUString SAL_CALL convertRangeToXML(
-        const ::rtl::OUString& aRangeRepresentation )
+    virtual OUString SAL_CALL convertRangeToXML(
+        const OUString& aRangeRepresentation )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL convertRangeFromXML(
-        const ::rtl::OUString& aXMLRange )
+    virtual OUString SAL_CALL convertRangeFromXML(
+        const OUString& aXMLRange )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
@@ -162,17 +162,17 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
         getComplexRowDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexRowDescriptions(
         const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aRowDescriptions )
+        ::com::sun::star::uno::Sequence< OUString > >& aRowDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > SAL_CALL
         getComplexColumnDescriptions() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setComplexColumnDescriptions(
         const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > >& aColumnDescriptions )
+        ::com::sun::star::uno::Sequence< OUString > >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
@@ -181,15 +181,15 @@ public:
     virtual void SAL_CALL setData(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aData )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getRowDescriptions()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getRowDescriptions()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRowDescriptions(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRowDescriptions )
+        const ::com::sun::star::uno::Sequence< OUString >& aRowDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getColumnDescriptions()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getColumnDescriptions()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setColumnDescriptions(
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aColumnDescriptions )
+        const ::com::sun::star::uno::Sequence< OUString >& aColumnDescriptions )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XChartData (base of XChartDataArray) ____
@@ -214,28 +214,28 @@ public:
 
 private:
     void lcl_addDataSequenceToMap(
-        const ::rtl::OUString & rRangeRepresentation,
+        const OUString & rRangeRepresentation,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence > & xSequence );
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        lcl_createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation,
-                                       const ::rtl::OUString & rRole );
+        lcl_createDataSequenceAndAddToMap( const OUString & rRangeRepresentation,
+                                       const OUString & rRole );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataSequence >
-        lcl_createDataSequenceAndAddToMap( const ::rtl::OUString & rRangeRepresentation );
+        lcl_createDataSequenceAndAddToMap( const OUString & rRangeRepresentation );
 
-    void lcl_deleteMapReferences( const ::rtl::OUString & rRangeRepresentation );
+    void lcl_deleteMapReferences( const OUString & rRangeRepresentation );
 
     void lcl_adaptMapReferences(
-        const ::rtl::OUString & rOldRangeRepresentation,
-        const ::rtl::OUString & rNewRangeRepresentation );
+        const OUString & rOldRangeRepresentation,
+        const OUString & rNewRangeRepresentation );
 
     void lcl_increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
     void lcl_decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
 
-    typedef ::std::multimap< ::rtl::OUString,
+    typedef ::std::multimap< OUString,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::chart2::data::XDataSequence > >
         tSequenceMap;
     typedef ::std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;

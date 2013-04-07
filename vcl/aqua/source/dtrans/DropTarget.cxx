@@ -52,7 +52,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
-using ::rtl::OUString;
 
 OUString dropTarget_getImplementationName()
 {

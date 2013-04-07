@@ -62,7 +62,7 @@ void SAL_CALL Test_MultiServiceFactory::release( void ) throw()
  Reference<
 XInterface > SAL_CALL
 Test_MultiServiceFactory::createInstance(
-    const ::rtl::OUString& aServiceSpecifier
+    const OUString& aServiceSpecifier
 )
     throw (
         Exception,
@@ -77,7 +77,7 @@ Test_MultiServiceFactory::createInstance(
 Reference<
 XInterface > SAL_CALL
 Test_MultiServiceFactory::createInstanceWithArguments(
-    const ::rtl::OUString& ServiceSpecifier,
+    const OUString& ServiceSpecifier,
     const Sequence
     < Any >& Arguments
 )
@@ -90,14 +90,14 @@ Test_MultiServiceFactory::createInstanceWithArguments(
         XInterface >(0);
 }
 
-Sequence< ::rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 Test_MultiServiceFactory::getAvailableServiceNames(
 )
     throw (
         RuntimeException
     )
 {
-    return Sequence< ::rtl::OUString >(0);
+    return Sequence< OUString >(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

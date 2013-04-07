@@ -66,49 +66,49 @@
 #include <string>
 
 
-#define A2OUSTR(str)    rtl::OUString::createFromAscii(str)
+#define A2OUSTR(str)    OUString::createFromAscii(str)
 
-rtl::OUString   Int32ToOUString(sal_Int32 num);
+OUString   Int32ToOUString(sal_Int32 num);
 
-rtl::OUString   Int16ToOUString(sal_Int16 num);
+OUString   Int16ToOUString(sal_Int16 num);
 
-rtl::OUString   FloatToOUString(float num, sal_Int32 precision=6);
+OUString   FloatToOUString(float num, sal_Int32 precision=6);
 
-rtl::OUString   DoubleToOUString(double num, sal_Int32 precision=6);
+OUString   DoubleToOUString(double num, sal_Int32 precision=6);
 
-rtl::OUString   DateTimeToOUString(XFDateTime& dt);
+OUString   DateTimeToOUString(XFDateTime& dt);
 
-rtl::OUString   GetTableColName(sal_Int32 col);
+OUString   GetTableColName(sal_Int32 col);
 
-rtl::OUString   GetUnderlineName(enumXFUnderline type);
+OUString   GetUnderlineName(enumXFUnderline type);
 
-rtl::OUString   GetReliefName(enumXFRelief type);
+OUString   GetReliefName(enumXFRelief type);
 
-rtl::OUString   GetCrossoutName(enumXFCrossout type);
+OUString   GetCrossoutName(enumXFCrossout type);
 
-rtl::OUString   GetTransformName(enumXFTransform type);
+OUString   GetTransformName(enumXFTransform type);
 
-rtl::OUString   GetEmphasizeName(enumXFEmphasize type);
+OUString   GetEmphasizeName(enumXFEmphasize type);
 
-rtl::OUString   GetTextDirName(enumXFTextDir dir);
+OUString   GetTextDirName(enumXFTextDir dir);
 
-rtl::OUString   GetFrameXPos(enumXFFrameXPos pos);
+OUString   GetFrameXPos(enumXFFrameXPos pos);
 
-rtl::OUString   GetFrameXRel(enumXFFrameXRel rel);
+OUString   GetFrameXRel(enumXFFrameXRel rel);
 
-rtl::OUString   GetFrameYPos(enumXFFrameYPos pos);
+OUString   GetFrameYPos(enumXFFrameYPos pos);
 
-rtl::OUString   GetFrameYRel(enumXFFrameYRel rel);
+OUString   GetFrameYRel(enumXFFrameYRel rel);
 
-rtl::OUString   GetAlignName(enumXFAlignType align);
+OUString   GetAlignName(enumXFAlignType align);
 
-rtl::OUString   GetDrawKind(enumXFDrawKind kind);
+OUString   GetDrawKind(enumXFDrawKind kind);
 
-rtl::OUString   GetPageUsageName(enumXFPageUsage usage);
+OUString   GetPageUsageName(enumXFPageUsage usage);
 
-rtl::OUString   GetValueType(enumXFValueType type);
+OUString   GetValueType(enumXFValueType type);
 
-rtl::OUString   GetColorMode(enumXFColorMode mode);
+OUString   GetColorMode(enumXFColorMode mode);
 
 #endif
 

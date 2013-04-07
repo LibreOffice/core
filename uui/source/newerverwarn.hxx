@@ -36,7 +36,7 @@ namespace uui
         PushButton      m_aUpdateBtn;
         CancelButton    m_aLaterBtn;
 
-        ::rtl::OUString m_sVersion;
+        OUString m_sVersion;
 
         DECL_LINK(UpdateHdl, void *);
         DECL_LINK(LaterHdl, void *);
@@ -44,7 +44,7 @@ namespace uui
         void            InitButtonWidth();
 
     public:
-        NewerVersionWarningDialog( Window* pParent, const ::rtl::OUString& rVersion, ResMgr& rResMgr );
+        NewerVersionWarningDialog( Window* pParent, const OUString& rVersion, ResMgr& rResMgr );
         ~NewerVersionWarningDialog();
     };
 } // namespace uui

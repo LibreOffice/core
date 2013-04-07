@@ -48,7 +48,7 @@ namespace rptui
         OStartMarker(OStartMarker&);
         void operator =(OStartMarker&);
     public:
-        OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sColorEntry);
+        OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
         virtual ~OStartMarker();
 
         // SfxListener

@@ -52,7 +52,7 @@ namespace dbaccess
     // -------------------------------------------------------------------
     struct DBACCESS_DLLPRIVATE SubComponentDescriptor
     {
-        ::rtl::OUString     sName;
+        OUString     sName;
         bool                bForEditing;
 
         SubComponentDescriptor()
@@ -61,7 +61,7 @@ namespace dbaccess
         {
         }
 
-        SubComponentDescriptor( const ::rtl::OUString& i_rName, const bool i_bForEditing )
+        SubComponentDescriptor( const OUString& i_rName, const bool i_bForEditing )
             :sName( i_rName )
             ,bForEditing( i_bForEditing )
         {
@@ -69,7 +69,7 @@ namespace dbaccess
     };
 
     // -------------------------------------------------------------------
-    typedef ::boost::unordered_map< ::rtl::OUString, SubComponentDescriptor, ::rtl::OUStringHash > MapStringToCompDesc;
+    typedef ::boost::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;
     typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
 

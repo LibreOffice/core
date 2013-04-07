@@ -35,8 +35,8 @@ class XMLReplacementImageContext : public SvXMLImportContext
 ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > m_xPropSet;
 
-    ::rtl::OUString m_sHRef;
-    const ::rtl::OUString m_sGraphicURL;
+    OUString m_sHRef;
+    const OUString m_sGraphicURL;
 
 public:
 
@@ -44,7 +44,7 @@ public:
 
     XMLReplacementImageContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & rAttrList,
             const ::com::sun::star::uno::Reference <
@@ -54,7 +54,7 @@ public:
     virtual void EndElement();
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 

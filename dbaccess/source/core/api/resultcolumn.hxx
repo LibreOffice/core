@@ -45,7 +45,7 @@ namespace dbaccess
         mutable ::boost::optional< sal_Bool > m_isDefinitelyWritable;
         mutable ::boost::optional< sal_Bool > m_isAutoIncrement;
         mutable ::boost::optional< sal_Int32 > m_isNullable;
-        mutable ::boost::optional< ::rtl::OUString > m_sColumnLabel;
+        mutable ::boost::optional< OUString > m_sColumnLabel;
         mutable ::boost::optional< sal_Int32 > m_nColumnDisplaySize;
         mutable ::boost::optional< sal_Int32 > m_nColumnType;
         mutable ::boost::optional< sal_Int32 > m_nPrecision;
@@ -62,8 +62,8 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
 
     // com::sun::star::lang::XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);

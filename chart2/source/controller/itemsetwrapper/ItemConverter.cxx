@@ -213,7 +213,7 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 catch( const uno::Exception &ex )
                 {
                     (void)ex;
-                    OSL_FAIL( ::rtl::OUStringToOString(
+                    OSL_FAIL( OUStringToOString(
                                     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
                 }
             }

@@ -44,22 +44,22 @@ namespace PropertyHelper
 
     @return The name used for storing this element in the table
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addLineDashUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS OUString addLineDashUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-    const ::rtl::OUString & rPreferredName );
+    const OUString & rPreferredName );
 
 /** adds a gradient with a unique name to the gradient obtained by the given
     factory.
 
     @return The name used for storing this element in the table
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addGradientUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS OUString addGradientUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-    const ::rtl::OUString & rPreferredName );
+    const OUString & rPreferredName );
 
 /** adds a transparency gradient with a unique name to the gradient obtained
     by the given factory.
@@ -67,33 +67,33 @@ OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addGradientUniqueNameToTable(
     @return The name used for storing this element in the table
 */
 OOO_DLLPUBLIC_CHARTTOOLS
-::rtl::OUString addTransparencyGradientUniqueNameToTable(
+OUString addTransparencyGradientUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-    const ::rtl::OUString & rPreferredName );
+    const OUString & rPreferredName );
 
 /** adds a hatch with a unique name to the gradient obtained by the given
     factory.
 
     @return The name used for storing this element in the table
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addHatchUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS OUString addHatchUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-    const ::rtl::OUString & rPreferredName );
+    const OUString & rPreferredName );
 
 /** adds a bitmap with a unique name to the gradient obtained by the given
     factory.
 
     @return The name used for storing this element in the table
 */
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString addBitmapUniqueNameToTable(
+OOO_DLLPUBLIC_CHARTTOOLS OUString addBitmapUniqueNameToTable(
     const ::com::sun::star::uno::Any & rValue,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XMultiServiceFactory > & xFact,
-    const ::rtl::OUString & rPreferredName );
+    const OUString & rPreferredName );
 
 // --------------------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS PropertyLess : public ::std::binary_function<
 
 struct OOO_DLLPUBLIC_CHARTTOOLS PropertyValueNameEquals : public ::std::unary_function< ::com::sun::star::beans::PropertyValue, bool >
 {
-    explicit PropertyValueNameEquals( const ::rtl::OUString & rName ) :
+    explicit PropertyValueNameEquals( const OUString & rName ) :
             m_aName( rName )
     {}
 
@@ -180,7 +180,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS PropertyValueNameEquals : public ::std::unary_fu
     }
 
 private:
-    ::rtl::OUString m_aName;
+    OUString m_aName;
 };
 
 } //  namespace chart

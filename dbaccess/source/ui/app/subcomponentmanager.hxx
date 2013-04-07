@@ -64,7 +64,7 @@ namespace dbaui
 
         // container access
         void        onSubComponentOpened(
-                        const ::rtl::OUString&  _rName,
+                        const OUString&  _rName,
                         const sal_Int32         _nComponentType,
                         const ElementOpenMode   _eOpenMode,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
@@ -79,7 +79,7 @@ namespace dbaui
                 previously
         */
         bool        activateSubFrame(
-                        const ::rtl::OUString& _rName,
+                        const OUString& _rName,
                         const sal_Int32 _nComponentType,
                         const ElementOpenMode _eOpenMode,
                               ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rComponent
@@ -95,7 +95,7 @@ namespace dbaui
                 exist.
         */
         bool        closeSubFrames(
-                        const ::rtl::OUString& _rName,
+                        const OUString& _rName,
                         const sal_Int32 _nComponentType
                     );
 
@@ -112,7 +112,7 @@ namespace dbaui
         */
         bool        lookupSubComponent(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent,
-                              ::rtl::OUString&  o_rName,
+                              OUString&  o_rName,
                               sal_Int32&        o_rComponentType
                     );
 

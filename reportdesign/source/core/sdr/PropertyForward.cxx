@@ -115,7 +115,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                     else
                     {
                         TPropertyNamePair::iterator aFind = m_aNameMap.find(evt.PropertyName);
-                        ::rtl::OUString sPropName;
+                        OUString sPropName;
                         if ( aFind != m_aNameMap.end() )
                             sPropName = aFind->second.first;
                         else
@@ -124,7 +124,7 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                                 m_aNameMap.begin(),
                                 m_aNameMap.end(),
                                 ::o3tl::compose1(
-                                ::std::bind2nd(::std::equal_to< ::rtl::OUString >(), evt.PropertyName),
+                                ::std::bind2nd(::std::equal_to< OUString >(), evt.PropertyName),
                                     ::o3tl::compose1(::o3tl::select1st<TPropertyConverter>(),::o3tl::select2nd<TPropertyNamePair::value_type>())
                                 )
                             );
@@ -179,17 +179,17 @@ void SAL_CALL OPropertyMediator::disposing()
 void OPropertyMediator::stopListening()
 {
     if ( m_xSource.is() )
-        m_xSource->removePropertyChangeListener(::rtl::OUString(), this);
+        m_xSource->removePropertyChangeListener(OUString(), this);
     if ( m_xDest.is() )
-        m_xDest->removePropertyChangeListener(::rtl::OUString(), this);
+        m_xDest->removePropertyChangeListener(OUString(), this);
 }
 // -----------------------------------------------------------------------------
 void OPropertyMediator::startListening()
 {
     if ( m_xSource.is() )
-        m_xSource->addPropertyChangeListener(::rtl::OUString(), this);
+        m_xSource->addPropertyChangeListener(OUString(), this);
     if ( m_xDest.is() )
-        m_xDest->addPropertyChangeListener(::rtl::OUString(), this);
+        m_xDest->addPropertyChangeListener(OUString(), this);
 }
 // -----------------------------------------------------------------------------
 //........................................................................

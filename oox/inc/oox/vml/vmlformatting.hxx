@@ -49,13 +49,13 @@ public:
     /** Returns two values contained in rValue separated by cSep.
      */
     static bool         separatePair(
-                            ::rtl::OUString& orValue1, ::rtl::OUString& orValue2,
-                            const ::rtl::OUString& rValue, sal_Unicode cSep );
+                            OUString& orValue1, OUString& orValue2,
+                            const OUString& rValue, sal_Unicode cSep );
 
     /** Returns the boolean value from the passed string of a VML attribute.
         Supported values: 'f', 't', 'false', 'true'. False for anything else.
      */
-    static bool         decodeBool( const ::rtl::OUString& rValue );
+    static bool         decodeBool( const OUString& rValue );
 
     /** Converts the passed VML percentage measure string to a normalized
         floating-point value.
@@ -67,7 +67,7 @@ public:
             the value will be divided by 65536.
      */
     static double       decodePercent(
-                            const ::rtl::OUString& rValue,
+                            const OUString& rValue,
                             double fDefValue );
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
@@ -90,7 +90,7 @@ public:
      */
     static sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
-                            const ::rtl::OUString& rValue,
+                            const OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
                             bool bDefaultAsPixel );
@@ -105,7 +105,7 @@ public:
      */
     static sal_Int32    decodeMeasureToHmm(
                             const GraphicHelper& rGraphicHelper,
-                            const ::rtl::OUString& rValue,
+                            const OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
                             bool bDefaultAsPixel );
@@ -134,7 +134,7 @@ public:
      */
     static ::oox::drawingml::Color decodeColor(
                             const GraphicHelper& rGraphicHelper,
-                            const OptValue< ::rtl::OUString >& roVmlColor,
+                            const OptValue< OUString >& roVmlColor,
                             const OptValue< double >& roVmlOpacity,
                             sal_Int32 nDefaultRgb,
                             sal_Int32 nPrimaryRgb = API_RGB_TRANSPARENT );
@@ -181,10 +181,10 @@ struct StrokeModel
     OptValue< bool >    moStroked;              ///< Shape border line on/off.
     StrokeArrowModel    maStartArrow;           ///< Start line arrow style.
     StrokeArrowModel    maEndArrow;             ///< End line arrow style.
-    OptValue< ::rtl::OUString > moColor;        ///< Solid line color.
+    OptValue< OUString > moColor;        ///< Solid line color.
     OptValue< double > moOpacity;               ///< Solid line color opacity.
-    OptValue< ::rtl::OUString > moWeight;       ///< Line width.
-    OptValue< ::rtl::OUString > moDashStyle;    ///< Line dash (predefined or manually).
+    OptValue< OUString > moWeight;       ///< Line width.
+    OptValue< OUString > moDashStyle;    ///< Line dash (predefined or manually).
     OptValue< sal_Int32 > moLineStyle;          ///< Line style (single, double, ...).
     OptValue< sal_Int32 > moEndCap;             ///< Type of line end cap.
     OptValue< sal_Int32 > moJoinStyle;          ///< Type of line join.
@@ -203,16 +203,16 @@ struct StrokeModel
 struct FillModel
 {
     OptValue< bool >    moFilled;               ///< Shape fill on/off.
-    OptValue< ::rtl::OUString > moColor;        ///< Solid fill color.
+    OptValue< OUString > moColor;        ///< Solid fill color.
     OptValue< double >  moOpacity;              ///< Solid fill color opacity.
-    OptValue< ::rtl::OUString > moColor2;       ///< End color of gradient.
+    OptValue< OUString > moColor2;       ///< End color of gradient.
     OptValue< double >  moOpacity2;             ///< End color opacity of gradient.
     OptValue< sal_Int32 > moType;               ///< Fill type.
     OptValue< sal_Int32 > moAngle;              ///< Gradient rotation angle.
     OptValue< double >  moFocus;                ///< Linear gradient focus of second color.
     OptValue< DoublePair > moFocusPos;          ///< Rectangular gradient focus position of second color.
     OptValue< DoublePair > moFocusSize;         ///< Rectangular gradient focus size of second color.
-    OptValue< ::rtl::OUString > moBitmapPath;   ///< Path to fill bitmap fragment.
+    OptValue< OUString > moBitmapPath;   ///< Path to fill bitmap fragment.
     OptValue< bool >    moRotate;               ///< True = rotate gradient/bitmap with shape.
 
     void                assignUsed( const FillModel& rSource );

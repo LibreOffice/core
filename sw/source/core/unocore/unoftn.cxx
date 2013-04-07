@@ -41,7 +41,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /******************************************************************
  * SwXFootnote
@@ -59,7 +58,7 @@ public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     const SwFmtFtn *            m_pFmtFtn;
-    ::rtl::OUString             m_sLabel;
+    OUString             m_sLabel;
 
     Impl(   SwXFootnote & rThis,
             SwDoc *const pDoc, SwFmtFtn const*const pFootnote,
@@ -255,7 +254,7 @@ OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString sRet;
+    OUString sRet;
     SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
     {
@@ -523,7 +522,7 @@ throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-SwXFootnote::setPropertyValue(const ::rtl::OUString&, const uno::Any&)
+SwXFootnote::setPropertyValue(const OUString&, const uno::Any&)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
         uno::RuntimeException)
@@ -574,7 +573,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXFootnote::addPropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -584,7 +583,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXFootnote::removePropertyChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -594,7 +593,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXFootnote::addVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
@@ -604,7 +603,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
 void SAL_CALL
 SwXFootnote::removeVetoableChangeListener(
-        const ::rtl::OUString& /*rPropertyName*/,
+        const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)

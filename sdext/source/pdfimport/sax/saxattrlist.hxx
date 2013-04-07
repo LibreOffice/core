@@ -37,28 +37,28 @@ namespace pdfi
     {
         struct AttrEntry
         {
-            rtl::OUString m_aName;
-            rtl::OUString m_aValue;
+            OUString m_aName;
+            OUString m_aValue;
 
-            AttrEntry( const rtl::OUString& i_rName, const rtl::OUString& i_rValue )
+            AttrEntry( const OUString& i_rName, const OUString& i_rValue )
             : m_aName( i_rName ), m_aValue( i_rValue ) {}
         };
         std::vector< AttrEntry >                                    m_aAttributes;
-        boost::unordered_map< rtl::OUString, size_t, rtl::OUStringHash >   m_aIndexMap;
+        boost::unordered_map< OUString, size_t, OUStringHash >   m_aIndexMap;
 
     public:
         SaxAttrList() {}
-        SaxAttrList( const boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >& );
+        SaxAttrList( const boost::unordered_map< OUString, OUString, OUStringHash >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();
 
         // ::com::sun::star::xml::sax::XAttributeList
         virtual sal_Int16 SAL_CALL getLength() throw();
-        virtual rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i) throw();
-        virtual rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw();
-        virtual rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName) throw();
-        virtual rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i) throw();
-        virtual rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName) throw();
+        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw();
+        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw();
+        virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw();
+        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw();
+        virtual OUString SAL_CALL getValueByName(const OUString& aName) throw();
 
         // ::com::sun::star::util::XCloneable
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw();

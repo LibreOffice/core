@@ -29,7 +29,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-using ::rtl::OUString;
 
 
 static const char aRootName[] = "Office.Math";
@@ -380,27 +379,27 @@ const String SmFontFormatList::GetFontFormatId( size_t nPos ) const
 }
 
 
-const rtl::OUString SmFontFormatList::GetNewFontFormatId() const
+const OUString SmFontFormatList::GetNewFontFormatId() const
 {
     // returns first unused FormatId
 
-    rtl::OUString aPrefix("Id");
+    OUString aPrefix("Id");
     sal_Int32 nCnt = GetCount();
     for (sal_Int32 i = 1;  i <= nCnt + 1;  ++i)
     {
-        rtl::OUString aTmpId =  aPrefix + rtl::OUString::valueOf(i);
+        OUString aTmpId =  aPrefix + OUString::valueOf(i);
         if (!GetFontFormat(aTmpId))
             return aTmpId;
     }
     OSL_ENSURE( !this, "failed to create new FontFormatId" );
 
-    return rtl::OUString();
+    return OUString();
 }
 
 /////////////////////////////////////////////////////////////////
 
 SmMathConfig::SmMathConfig() :
-    ConfigItem(rtl::OUString(aRootName))
+    ConfigItem(OUString(aRootName))
 {
     pFormat         = 0;
     pOther          = 0;
@@ -441,8 +440,8 @@ void SmMathConfig::SetFontFormatListModified( bool bVal )
 
 
 void SmMathConfig::ReadSymbol( SmSym &rSymbol,
-                        const rtl::OUString &rSymbolName,
-                        const rtl::OUString &rBaseNode ) const
+                        const OUString &rSymbolName,
+                        const OUString &rBaseNode ) const
 {
     Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
     sal_Int32 nProps = aNames.getLength();
@@ -1271,7 +1270,7 @@ void SmMathConfig::SetShowFormulaCursor( bool bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
-void SmMathConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void SmMathConfig::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {}
 
 /////////////////////////////////////////////////////////////////

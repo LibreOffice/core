@@ -32,7 +32,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

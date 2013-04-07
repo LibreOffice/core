@@ -186,20 +186,20 @@ Any SAL_CALL OFormattedFieldWrapper::queryAggregation(const Type& _rType) throw 
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedFieldWrapper::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OFormattedFieldWrapper::getServiceName() throw(RuntimeException)
 {
     // return the old compatibility name for an EditModel
     return FRM_COMPONENT_EDIT;
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL OFormattedFieldWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.forms.OFormattedFieldWrapper");
+    return OUString("com.sun.star.comp.forms.OFormattedFieldWrapper");
 }
 
 //------------------------------------------------------------------
-sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
 {
     DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::supportsService: should never have made it 'til here without an aggregate!");
     Reference< XServiceInfo > xSI;
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL OFormattedFieldWrapper::supportsService( const ::rtl::OUString
 }
 
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL OFormattedFieldWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::getSupportedServiceNames: should never have made it 'til here without an aggregate!");
     Reference< XServiceInfo > xSI;
@@ -237,7 +237,7 @@ void SAL_CALL OFormattedFieldWrapper::write(const Reference<XObjectOutputStream>
     // else we have to write an edit part first
     OSL_ENSURE(m_pEditPart.is(), "OFormattedFieldWrapper::write : formatted part without edit part ?");
     if ( !m_pEditPart.is() )
-        throw RuntimeException( ::rtl::OUString(), *this );
+        throw RuntimeException( OUString(), *this );
 
     // for this we transfer the current props of the formatted part to the edit part
     Reference<XPropertySet>  xFormatProps(m_xFormattedPart, UNO_QUERY);

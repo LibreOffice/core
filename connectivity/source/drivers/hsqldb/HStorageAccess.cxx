@@ -67,8 +67,8 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_NativeStorageAcc
 {
 #ifdef HSQLDB_DBG
     {
-        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
-        ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+        OUString sKey = StorageContainer::jstring2ustring(env,key);
+        OUString sName = StorageContainer::jstring2ustring(env,name);
     }
 #endif
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
@@ -213,8 +213,8 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
     OSL_UNUSED( logger );
 #ifdef HSQLDB_DBG
     {
-        ::rtl::OUString sKey = StorageContainer::jstring2ustring(env,key);
-        ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+        OUString sKey = StorageContainer::jstring2ustring(env,key);
+        OUString sName = StorageContainer::jstring2ustring(env,name);
     }
 #endif
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);

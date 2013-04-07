@@ -75,7 +75,7 @@ namespace connectivity
             EBookQuery*     pQuery;
 
         public:
-            ::rtl::OUString                             sTable;
+            OUString                             sTable;
             QueryFilterType                             eFilterType;
             ::rtl::Reference< ::connectivity::OSQLColumns >  xSelectColumns;
             SortDescriptor                              aSortOrder;
@@ -153,7 +153,7 @@ namespace connectivity
             connectivity::OSQLParseNode          *m_pParseTree;
 
             // <properties>
-            ::rtl::OUString                             m_aCursorName;
+            OUString                             m_aCursorName;
             sal_Int32                                   m_nMaxFieldSize;
             sal_Int32                                   m_nMaxRows;
             sal_Int32                                   m_nQueryTimeOut;
@@ -176,14 +176,14 @@ namespace connectivity
             virtual ~OCommonStatement();
 
         protected:
-            void         parseSql( const ::rtl::OUString& sql, QueryData& _out_rQueryData );
+            void         parseSql( const OUString& sql, QueryData& _out_rQueryData );
             EBookQuery  *whereAnalysis( const OSQLParseNode*  parseTree );
             void         orderByAnalysis( const OSQLParseNode* _pOrderByClause, SortDescriptor& _out_rSort );
-            rtl::OUString getTableName();
+            OUString getTableName();
             EBookQuery  *createTrue();
-            EBookQuery  *createTest( const ::rtl::OUString &aColumnName,
+            EBookQuery  *createTest( const OUString &aColumnName,
                                      EBookQueryTest eTest,
-                                     const ::rtl::OUString &aMatch );
+                                     const OUString &aMatch );
 
         public:
 
@@ -221,10 +221,10 @@ namespace connectivity
                 Also, all statement dependent members (such as the parser/iterator) will be inited afterwards.
             */
             QueryData
-                impl_getEBookQuery_throw( const ::rtl::OUString& _rSql );
+                impl_getEBookQuery_throw( const OUString& _rSql );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
-                impl_executeQuery_throw( const ::rtl::OUString& _rSql );
+                impl_executeQuery_throw( const OUString& _rSql );
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
                 impl_executeQuery_throw( const QueryData& _rData );
@@ -232,7 +232,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                 impl_getConnection() { return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >( (::com::sun::star::sdbc::XConnection*)m_pConnection ); }
 
-            ::rtl::OUString
+            OUString
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
         };
 
@@ -263,9 +263,9 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             // XStatement
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-            virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
         };
     }

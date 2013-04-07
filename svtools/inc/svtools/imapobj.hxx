@@ -70,10 +70,10 @@ protected:
     virtual void        ReadIMapObject(  SvStream& rIStm ) = 0;
 
     // Hilfsmethoden
-    void AppendCERNCoords(rtl::OStringBuffer& rBuf, const Point& rPoint100) const;
-    void AppendCERNURL(rtl::OStringBuffer& rBuf, const String& rBaseURL) const;
-    void AppendNCSACoords(rtl::OStringBuffer& rBuf, const Point& rPoint100) const;
-    void AppendNCSAURL(rtl::OStringBuffer&rBuf, const String& rBaseURL) const;
+    void AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100) const;
+    void AppendCERNURL(OStringBuffer& rBuf, const String& rBaseURL) const;
+    void AppendNCSACoords(OStringBuffer& rBuf, const Point& rPoint100) const;
+    void AppendNCSAURL(OStringBuffer&rBuf, const String& rBaseURL) const;
 
 public:
 

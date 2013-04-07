@@ -40,7 +40,7 @@ System::Type^ loadCliType(System::String ^ typeName);
 System::Type^ mapUnoType(typelib_TypeDescription const * pTD);
 System::Type^ mapUnoType(typelib_TypeDescriptionReference const * pTD);
 typelib_TypeDescriptionReference* mapCliType(System::Type^ cliType);
-rtl::OUString mapCliString(System::String ^ data);
+OUString mapCliString(System::String ^ data);
 System::String^ mapUnoString(rtl_uString const * data);
 System::String^ mapUnoTypeName(rtl_uString const * typeName);
 
@@ -105,9 +105,9 @@ ref struct Constants
 
 struct BridgeRuntimeError
 {
-    ::rtl::OUString m_message;
+    OUString m_message;
 
-    inline BridgeRuntimeError( ::rtl::OUString const & message )
+    inline BridgeRuntimeError( OUString const & message )
         : m_message( message )
         {}
 };
@@ -160,7 +160,7 @@ inline TypeDescr::TypeDescr( typelib_TypeDescriptionReference * td_ref )
     {
         throw BridgeRuntimeError(
             "cannot get comprehensive type description for " +
-            *reinterpret_cast< ::rtl::OUString const * >( &td_ref->pTypeName ) );
+            *reinterpret_cast< OUString const * >( &td_ref->pTypeName ) );
     }
 }
 

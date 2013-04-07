@@ -39,10 +39,10 @@ DBG_NAME(OXMLComponent)
 
 OXMLComponent::OXMLComponent( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
-                ,const ::rtl::OUString& _sComponentServiceName
+                ,const OUString& _sComponentServiceName
                 ) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_bAsTemplate(sal_False)
@@ -54,13 +54,13 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
     const SvXMLTokenMap& rTokenMap = rImport.GetComponentElemTokenMap();
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {

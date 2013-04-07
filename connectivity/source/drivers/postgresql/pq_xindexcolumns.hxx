@@ -65,30 +65,30 @@ namespace pq_sdbc_driver
 
 class IndexColumns : public Container
 {
-    rtl::OUString m_schemaName;
-    rtl::OUString m_tableName;
-    rtl::OUString m_indexName;
-    com::sun::star::uno::Sequence< rtl::OUString > m_columns;
+    OUString m_schemaName;
+    OUString m_tableName;
+    OUString m_indexName;
+    com::sun::star::uno::Sequence< OUString > m_columns;
 
 public: // instances IndexColumns 'exception safe'
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > create(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const rtl::OUString &indexName,
-        const com::sun::star::uno::Sequence< ::rtl::OUString > &columns );
+        const OUString &schemaName,
+        const OUString &tableName,
+        const OUString &indexName,
+        const com::sun::star::uno::Sequence< OUString > &columns );
 
 protected:
     IndexColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const rtl::OUString &indexName,
-        const com::sun::star::uno::Sequence< ::rtl::OUString > &columns );
+        const OUString &schemaName,
+        const OUString &tableName,
+        const OUString &indexName,
+        const com::sun::star::uno::Sequence< OUString > &columns );
 
     virtual ~IndexColumns();
 
@@ -100,7 +100,7 @@ public: // XAppend
                ::com::sun::star::uno::RuntimeException);
 
 public: // XDrop
-    virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName )
+    virtual void SAL_CALL dropByName( const OUString& elementName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);

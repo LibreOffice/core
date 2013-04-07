@@ -37,13 +37,13 @@ namespace dbaccess
     class Veto : public Veto_Base
     {
     private:
-        const ::rtl::OUString               m_sReason;
+        const OUString               m_sReason;
         const ::com::sun::star::uno::Any    m_aDetails;
 
     public:
-        Veto( const ::rtl::OUString& _rReason, const ::com::sun::star::uno::Any& _rDetails );
+        Veto( const OUString& _rReason, const ::com::sun::star::uno::Any& _rDetails );
 
-        virtual ::rtl::OUString SAL_CALL getReason() throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getReason() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getDetails() throw (::com::sun::star::uno::RuntimeException);
 
     protected:

@@ -34,10 +34,10 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
 {
     public:
         virtual int authenticate(
-            const ::rtl::OUString & inRealm,
-            const ::rtl::OUString & inHostName,
-            ::rtl::OUString & inoutUserName,
-            ::rtl::OUString & outPassWord,
+            const OUString & inRealm,
+            const OUString & inHostName,
+            OUString & inoutUserName,
+            OUString & outPassWord,
             sal_Bool bCanUseSystemCredentials,
             sal_Bool bUsePreviousCredentials = sal_True ) = 0;
 };

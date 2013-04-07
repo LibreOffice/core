@@ -21,7 +21,6 @@
 #include <ContentInfo.hxx>
 
 using namespace com::sun::star;
-using rtl::OUString;
 
 ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( ContentHash &rInput)
 : rContents (rInput)

@@ -45,8 +45,8 @@ public:
 
     virtual void setUp();
 
-    virtual bool load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &,
+    virtual bool load(const OUString &,
+        const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int);
 
     void test();
@@ -65,8 +65,8 @@ void RtfTest::setUp()
     m_xFilter = uno::Reference< document::XFilter >(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 }
 
-bool RtfTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &,
+bool RtfTest::load(const OUString &,
+    const OUString &rURL, const OUString &,
     unsigned int, unsigned int, unsigned int)
 {
     uno::Sequence< beans::PropertyValue > aDescriptor(1);

@@ -71,7 +71,7 @@ namespace dbp
         DECLARE_STL_USTRINGACCESS_MAP(sal_Int32,TNameTypeMap);
         TNameTypeMap aTypes;
         // the column names of the object the form is bound to (table, query or SQL statement)
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                     aFieldNames;
 
         sal_Bool bEmbedded;

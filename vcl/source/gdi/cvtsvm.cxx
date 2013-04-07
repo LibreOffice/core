@@ -199,7 +199,7 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
     char    aName[32];
     short   nWeight;
 
-    rtl::OString aByteName(rtl::OUStringToOString(rFont.GetName(),
+    OString aByteName(OUStringToOString(rFont.GetName(),
         rOStm.GetStreamCharSet()));
     strncpy( aName, aByteName.getStr(), 32 );
 
@@ -849,12 +849,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
-                        OUString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
+                        OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
                         if( nAryLen > 0L )
                         {
@@ -912,12 +912,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
                     {
-                        rtl::OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
+                        OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm >> nTerminator;
                         DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
 
-                        OUString aStr(rtl::OStringToOUString(aByteStr, eActualCharSet));
+                        OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
                         rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
@@ -1278,7 +1278,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_uInt8*      pData;
                     sal_Int32       nFollowingActionCount;
 
-                    rtl::OString aComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
+                    OString aComment = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStm);
                     rIStm >> nValue >> nDataSize;
 
                     if( nDataSize )
@@ -1678,7 +1678,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
                 String          aUniText( pAct->GetText() );
-                rtl::OString aText(rtl::OUStringToOString(aUniText,
+                OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
                 const sal_uLong nStrLen = aText.getLength();
 
@@ -1699,7 +1699,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXTARRAY_ACTION ):
             {
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
-                rtl::OString aText(rtl::OUStringToOString(pAct->GetText(),
+                OString aText(OUStringToOString(pAct->GetText(),
                     rActualCharSet));
                 String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
                 sal_uLong               nAryLen;
@@ -1743,7 +1743,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
                 String                  aUniText( pAct->GetText() );
-                rtl::OString aText(rtl::OUStringToOString(aUniText,
+                OString aText(OUStringToOString(aUniText,
                     rActualCharSet));
                 const sal_uLong nStrLen = aText.getLength();
 
@@ -2406,7 +2406,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 #ifdef DBG_UTIL
             default:
             {
-                rtl::OStringBuffer aStr("Missing implementation for Action#: ");
+                OStringBuffer aStr("Missing implementation for Action#: ");
                 aStr.append(static_cast<sal_Int32>(pAction->GetType()));
                 aStr.append('!');
                 OSL_FAIL(aStr.getStr());

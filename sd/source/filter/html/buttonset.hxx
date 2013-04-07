@@ -37,8 +37,8 @@ public:
 
     int getCount() const;
 
-    bool getPreview( int nSet, const std::vector< rtl::OUString >& rButtons, Image& rImage );
-    bool exportButton( int nSet, const rtl::OUString& rPath, const rtl::OUString& rName );
+    bool getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage );
+    bool exportButton( int nSet, const OUString& rPath, const OUString& rName );
 
 private:
     ButtonSetImpl* mpImpl;

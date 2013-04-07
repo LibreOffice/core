@@ -41,8 +41,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::std::set;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValue;

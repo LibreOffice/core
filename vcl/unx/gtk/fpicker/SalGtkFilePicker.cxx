@@ -236,7 +236,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
     gtk_container_add (GTK_CONTAINER (m_pFilterExpander), scrolled_window);
     gtk_widget_show (scrolled_window);
 
-    rtl::OString sExpand(getenv("SAL_EXPANDFPICKER"));
+    OString sExpand(getenv("SAL_EXPANDFPICKER"));
     sal_Int32 nExpand  = sExpand.toInt32();
     switch (nExpand)
     {
@@ -368,22 +368,22 @@ void SalGtkFilePicker::impl_controlStateChanged( FilePickerEvent aEvent )
 struct FilterEntry
 {
 protected:
-    ::rtl::OUString     m_sTitle;
-    ::rtl::OUString     m_sFilter;
+    OUString     m_sTitle;
+    OUString     m_sFilter;
 
     UnoFilterList       m_aSubFilters;
 
 public:
-    FilterEntry( const ::rtl::OUString& _rTitle, const ::rtl::OUString& _rFilter )
+    FilterEntry( const OUString& _rTitle, const OUString& _rFilter )
         :m_sTitle( _rTitle )
         ,m_sFilter( _rFilter )
     {
     }
 
-    FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters );
+    FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters );
 
-    ::rtl::OUString     getTitle() const { return m_sTitle; }
-    ::rtl::OUString     getFilter() const { return m_sFilter; }
+    OUString     getTitle() const { return m_sTitle; }
+    OUString     getFilter() const { return m_sFilter; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
     sal_Bool        hasSubFilters( ) const;
@@ -402,7 +402,7 @@ public:
 //=====================================================================
 
 //---------------------------------------------------------------------
-FilterEntry::FilterEntry( const ::rtl::OUString& _rTitle, const UnoFilterList& _rSubFilters )
+FilterEntry::FilterEntry( const OUString& _rTitle, const UnoFilterList& _rSubFilters )
     :m_sTitle( _rTitle )
     ,m_aSubFilters( _rSubFilters )
 {
@@ -422,13 +422,13 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 }
 
 static bool
-isFilterString( const rtl::OUString &rFilterString, const char *pMatch )
+isFilterString( const OUString &rFilterString, const char *pMatch )
 {
         sal_Int32 nIndex = 0;
-        rtl::OUString aToken;
+        OUString aToken;
         bool bIsFilter = true;
 
-        rtl::OUString aMatch(rtl::OUString::createFromAscii(pMatch));
+        OUString aMatch(OUString::createFromAscii(pMatch));
 
         do
         {
@@ -444,8 +444,8 @@ isFilterString( const rtl::OUString &rFilterString, const char *pMatch )
         return bIsFilter;
 }
 
-static rtl::OUString
-shrinkFilterName( const rtl::OUString &rFilterName, bool bAllowNoStar = false )
+static OUString
+shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
 {
     int i;
     int nBracketLen = -1;
@@ -463,11 +463,11 @@ shrinkFilterName( const rtl::OUString &rFilterName, bool bAllowNoStar = false )
             if( nBracketEnd <= 0 )
                 continue;
             if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
-                aRealName = aRealName.replaceAt( i, nBracketLen + 1, rtl::OUString() );
+                aRealName = aRealName.replaceAt( i, nBracketLen + 1, OUString() );
             else if (bAllowNoStar)
             {
                 if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
-                    aRealName = aRealName.replaceAt( i, nBracketLen + 1, rtl::OUString() );
+                    aRealName = aRealName.replaceAt( i, nBracketLen + 1, OUString() );
             }
         }
     }
@@ -503,10 +503,10 @@ namespace {
     struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
     {
     protected:
-        const ::rtl::OUString& rTitle;
+        const OUString& rTitle;
 
     public:
-        FilterTitleMatch( const ::rtl::OUString& _rTitle ) : rTitle( _rTitle ) { }
+        FilterTitleMatch( const OUString& _rTitle ) : rTitle( _rTitle ) { }
 
         //............................................................................
         bool operator () ( const FilterEntry& _rEntry )
@@ -536,7 +536,7 @@ namespace {
 
 
 //------------------------------------------------------------------------------------
-sal_Bool SalGtkFilePicker::FilterNameExists( const ::rtl::OUString& rTitle )
+sal_Bool SalGtkFilePicker::FilterNameExists( const OUString& rTitle )
 {
     sal_Bool bRet = sal_False;
 
@@ -574,7 +574,7 @@ sal_Bool SalGtkFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilte
 }
 
 //------------------------------------------------------------------------------------
-void SalGtkFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrentFilter )
+void SalGtkFilePicker::ensureFilterList( const OUString& _rInitialCurrentFilter )
 {
     if( !m_pFilterList )
     {
@@ -591,7 +591,7 @@ void SalGtkFilePicker::ensureFilterList( const ::rtl::OUString& _rInitialCurrent
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFilePicker::appendFilter( const rtl::OUString& aTitle, const rtl::OUString& aFilter )
+void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUString& aFilter )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -612,7 +612,7 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const rtl::OUString& aTitle, const
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFilePicker::setCurrentFilter( const rtl::OUString& aTitle )
+void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -679,7 +679,7 @@ void SalGtkFilePicker::UpdateFilterfromUI()
     }
 }
 
-rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -699,7 +699,7 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getCurrentFilter() throw( uno::RuntimeE
 // XFilterGroupManager functions
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
+void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle*/, const uno::Sequence<beans::StringPair>& aFilters )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -713,7 +713,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const rtl::OUString& /*sGroup
             throw IllegalArgumentException();
 
     // ensure that we have a filter list
-    ::rtl::OUString sInitialCurrentFilter;
+    OUString sInitialCurrentFilter;
     if( aFilters.getLength() )
         sInitialCurrentFilter = aFilters[0].First;
 
@@ -740,7 +740,7 @@ void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( u
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER(m_pDialog), bMode );
 }
 
-void SAL_CALL SalGtkFilePicker::setDefaultName( const rtl::OUString& aName )
+void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
     throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -755,7 +755,7 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const rtl::OUString& aName )
         gtk_file_chooser_set_current_name( GTK_FILE_CHOOSER( m_pDialog ), aStr.getStr() );
 }
 
-void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const rtl::OUString& rDirectory )
+void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const OUString& rDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -763,18 +763,18 @@ void SAL_CALL SalGtkFilePicker::setDisplayDirectory( const rtl::OUString& rDirec
     implsetDisplayDirectory(rDirectory);
 }
 
-rtl::OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
     return implgetDisplayDirectory();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException )
 {
     // no member access => no mutex needed
 
-    uno::Sequence< rtl::OUString > aFiles = getSelectedFiles();
+    uno::Sequence< OUString > aFiles = getSelectedFiles();
     /*
       The previous multiselection API design was completely broken
       and unimplementable for some hetrogenous pseudo-URIs eg. search://
@@ -784,7 +784,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
     return aFiles;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -800,7 +800,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
     GtkFileChooserAction eAction = gtk_file_chooser_get_action(
         GTK_FILE_CHOOSER( m_pDialog ));
 
-    uno::Sequence< rtl::OUString > aSelectedFiles(nCount);
+    uno::Sequence< OUString > aSelectedFiles(nCount);
 
     // Convert to OOo
     for( GSList *pElem = pPathList; pElem; pElem = pElem->next)
@@ -828,7 +828,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
             {
                 if( aSelectedFiles[nIndex].indexOf('.') > 0 )
                 {
-                    rtl::OUString sExtension;
+                    OUString sExtension;
                     nTokenIndex = 0;
                     do
                         sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
@@ -838,8 +838,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                     {
                         static const OUString aStarDot( "*." );
 
-                        ::rtl::OUString aNewFilter;
-                        ::rtl::OUString aOldFilter = getCurrentFilter();
+                        OUString aNewFilter;
+                        OUString aOldFilter = getCurrentFilter();
                         sal_Bool bChangeFilter = sal_True;
                         for ( FilterList::iterator aListIter = m_pFilterList->begin();
                               aListIter != m_pFilterList->end();
@@ -886,8 +886,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
                 OUStringToOString( aFilter, RTL_TEXTENCODING_UTF8 ).getStr() );
 
             nTokenIndex = 0;
-            rtl::OUString sToken;
-            //   rtl::OUString strExt;
+            OUString sToken;
+            //   OUString strExt;
             do
             {
                 sToken = aFilter.getToken( 0, '.', nTokenIndex );
@@ -930,7 +930,7 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw
 // XExecutableDialog functions
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFilePicker::setTitle( const rtl::OUString& rTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkFilePicker::setTitle( const OUString& rTitle ) throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -1131,11 +1131,11 @@ static void HackWidthToFirst(GtkComboBox *pWidget)
     gtk_widget_set_size_request(GTK_WIDGET(pWidget), requisition.width, -1);
 }
 
-static void ComboBoxAppendText(GtkComboBox *pCombo, const rtl::OUString &rStr)
+static void ComboBoxAppendText(GtkComboBox *pCombo, const OUString &rStr)
 {
   GtkTreeIter aIter;
   GtkListStore *pStore = GTK_LIST_STORE(gtk_combo_box_get_model(pCombo));
-  rtl::OString aStr = rtl::OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
+  OString aStr = OUStringToOString(rStr, RTL_TEXTENCODING_UTF8);
   gtk_list_store_append(pStore, &aIter);
   gtk_list_store_set(pStore, &aIter, 0, aStr.getStr(), -1);
 }
@@ -1349,7 +1349,7 @@ throw( uno::RuntimeException )
         OSL_TRACE("enable unknown control %d", nControlId );
 }
 
-void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUString& rLabel )
+void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& rLabel )
     throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -1386,7 +1386,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const ::rtl::OUS
         OSL_TRACE("Can't set label on list");
 }
 
-rtl::OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
+OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
     throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -1469,8 +1469,8 @@ void SalGtkFilePicker::implChangeType( GtkTreeSelection *selection )
     {
         gchar *title;
         gtk_tree_model_get (model, &iter, 2, &title, -1);
-        aLabel += rtl::OUString( ": " );
-        aLabel += rtl::OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
+        aLabel += OUString( ": " );
+        aLabel += OUString( title, strlen(title), RTL_TEXTENCODING_UTF8 );
         g_free (title);
     }
     gtk_expander_set_label (GTK_EXPANDER (m_pFilterExpander),
@@ -1604,7 +1604,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(
-            rtl::OUString( "no arguments" ),
+            OUString( "no arguments" ),
             static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
@@ -1612,7 +1612,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( ( aAny.getValueType() != ::getCppuType( ( sal_Int16* )0 ) ) &&
          (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
          throw lang::IllegalArgumentException(
-            rtl::OUString( "invalid argument type" ),
+            OUString( "invalid argument type" ),
             static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -1701,7 +1701,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         default:
                 throw lang::IllegalArgumentException(
-                rtl::OUString( "Unknown template" ),
+                OUString( "Unknown template" ),
                 static_cast< XFilePicker2* >( this ),
                 1 );
     }
@@ -1831,7 +1831,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     GtkFileFilter *filter = gtk_file_filter_new();
 
     OUString aShrunkName = shrinkFilterName( rFilter );
-    OString aFilterName = rtl::OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
+    OString aFilterName = OUStringToOString( aShrunkName, RTL_TEXTENCODING_UTF8 );
     gtk_file_filter_set_name( filter, aFilterName.getStr() );
 
     static const OUString aStarDot( "*." );
@@ -1843,7 +1843,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
     else
     {
         sal_Int32 nIndex = 0;
-        rtl::OUString aToken;
+        OUString aToken;
         do
         {
             aToken = rType.getToken( 0, ';', nIndex );
@@ -1858,16 +1858,16 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                 aTokens = aTokens += aToken;
                 gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_URI,
                     case_insensitive_filter,
-                    g_strdup( rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
+                    g_strdup( OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() ),
                     (GDestroyNotify) g_free );
 
-                OSL_TRACE( "fustering with %s", rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
+                OSL_TRACE( "fustering with %s", OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
             }
 #if OSL_DEBUG_LEVEL > 0
             else
             {
                 g_warning( "Duff filter token '%s'\n",
-                    rtl::OUStringToOString(
+                    OUStringToOString(
                         rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 #endif
@@ -1906,7 +1906,7 @@ void SalGtkFilePicker::SetFilters()
     if (m_aInitialFilter.isEmpty())
         m_aInitialFilter = m_aCurrentFilter;
 
-    rtl::OUString sPseudoFilter;
+    OUString sPseudoFilter;
     if( GTK_FILE_CHOOSER_ACTION_SAVE == gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) ) )
     {
         std::set<OUString> aAllFormats;
@@ -1932,7 +1932,7 @@ void SalGtkFilePicker::SetFilters()
         }
         if (aAllFormats.size() > 1)
         {
-            rtl::OUString sAllFilter;
+            OUString sAllFilter;
             std::set<OUString>::const_iterator aEnd = aAllFormats.end();
             for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
             {

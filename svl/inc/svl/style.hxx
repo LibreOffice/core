@@ -110,10 +110,10 @@ public:
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
-    virtual rtl::OUString GetDisplayName() const;
+    virtual OUString GetDisplayName() const;
 
     // sets the display name of this style
-    virtual void SetDisplayName( const rtl::OUString& );
+    virtual void SetDisplayName( const OUString& );
 
     virtual const UniString& GetParent() const;
     virtual bool SetParent( const UniString& );
@@ -169,7 +169,7 @@ public:
     virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
-    virtual SfxStyleSheetBase* Find(const rtl::OUString& rStr);
+    virtual SfxStyleSheetBase* Find(const OUString& rStr);
     virtual ~SfxStyleSheetIterator();
 
 protected:
@@ -284,7 +284,7 @@ public:
 
 protected:
     SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
-        : SfxStyleSheetBase(rtl::OUString("dummy"),
+        : SfxStyleSheetBase(OUString("dummy"),
             NULL, SFX_STYLE_FAMILY_ALL, 0)
     {
         assert(false);

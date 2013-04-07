@@ -34,7 +34,6 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace std;
 
-using ::rtl::OUString;
 
 TypeDetectionImporter::TypeDetectionImporter( Reference< XMultiServiceFactory >& xMSF )
 :   mxMSF(xMSF),

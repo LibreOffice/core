@@ -597,7 +597,7 @@ void I18NStatus::setStatusText( const String& rText )
             else
                 pBuffer[i] = pCopy[i];
         }
-        rtl::OUString aText( pBuffer );
+        OUString aText( pBuffer );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
 

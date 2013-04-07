@@ -80,12 +80,12 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
     MoreButton      aBtnMore;
-    const rtl::OUString aStrUndefined;
-    const rtl::OUString aStrNone;
-    const rtl::OUString aStrEmpty;
-    const rtl::OUString aStrNotEmpty;
-    const rtl::OUString aStrRow;
-    const rtl::OUString aStrColumn;
+    const OUString aStrUndefined;
+    const OUString aStrNone;
+    const OUString aStrEmpty;
+    const OUString aStrNotEmpty;
+    const OUString aStrRow;
+    const OUString aStrColumn;
 
     const sal_uInt16    nWhichQuery;
     const ScQueryParam  theQueryData;

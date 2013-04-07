@@ -173,7 +173,7 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )
 }
 
 // XNameContainer
-void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODefinitionContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -186,7 +186,7 @@ void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName,
     notifyByName( aGuard, _rName, xNewElement, NULL, E_INSERTED, ContainerListemers );
 }
 
-void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -210,7 +210,7 @@ void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName 
 }
 
 // XNameReplace
-void SAL_CALL ODefinitionContainer::replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
@@ -267,7 +267,7 @@ namespace
     };
 }
 
-void ODefinitionContainer::notifyByName( ResettableMutexGuard& _rGuard, const ::rtl::OUString& _rName,
+void ODefinitionContainer::notifyByName( ResettableMutexGuard& _rGuard, const OUString& _rName,
         const Reference< XContent >& _xNewElement, const Reference< XContent >& _xOldElement,
         ContainerOperation _eOperation, ListenerType _eType )
 {
@@ -379,14 +379,14 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
     return makeAny(xProp);
 }
 
-Any SAL_CALL ODefinitionContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any SAL_CALL ODefinitionContainer::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
     return makeAny( implGetByName( _rName, sal_True ) );
 }
 
-Reference< XContent > ODefinitionContainer::implGetByName(const ::rtl::OUString& _rName, sal_Bool _bReadIfNeccessary) throw (NoSuchElementException)
+Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, sal_Bool _bReadIfNeccessary) throw (NoSuchElementException)
 {
     Documents::iterator aMapPos = m_aDocumentMap.find(_rName);
     if (aMapPos == m_aDocumentMap.end())
@@ -407,12 +407,12 @@ Reference< XContent > ODefinitionContainer::implGetByName(const ::rtl::OUString&
     return xProp;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
-    Sequence< ::rtl::OUString > aNames(m_aDocumentMap.size());
-    ::rtl::OUString* pNames = aNames.getArray();
+    Sequence< OUString > aNames(m_aDocumentMap.size());
+    OUString* pNames = aNames.getArray();
     Documents::iterator aEnd = m_aDocumentMap.end();
     for (   Documents::iterator aNameIter = m_aDocumentMap.begin();
             aNameIter != aEnd;
@@ -425,7 +425,7 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) t
     return aNames;
 }
 
-sal_Bool SAL_CALL ODefinitionContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
+sal_Bool SAL_CALL ODefinitionContainer::hasByName( const OUString& _rName ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -450,7 +450,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
     }
 }
 
-void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
+void ODefinitionContainer::implRemove(const OUString& _rName)
 {
     // from the object maps
     Documents::iterator aFind = m_aDocumentMap.find(_rName);
@@ -467,7 +467,7 @@ void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
 
 namespace
 {
-    bool    lcl_ensureName( const Reference< XContent >& _rxContent, const ::rtl::OUString& _rName )
+    bool    lcl_ensureName( const Reference< XContent >& _rxContent, const OUString& _rName )
     {
         if ( !_rxContent.is() )
             return true;
@@ -479,7 +479,7 @@ namespace
             Reference< XPropertySet > xProps( _rxContent, UNO_QUERY );
             if ( xProps.is() )
             {
-                ::rtl::OUString sCurrentName;
+                OUString sCurrentName;
                 OSL_VERIFY( xProps->getPropertyValue( PROPERTY_NAME ) >>= sCurrentName );
                 if ( sCurrentName.equals( _rName ) )
                     return true;
@@ -508,7 +508,7 @@ namespace
     }
 }
 
-void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
+void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
     MutexGuard aGuard(m_aMutex);
     try
@@ -551,7 +551,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
     }
 }
 
-void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
+void ODefinitionContainer::implReplace(const OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
     OSL_ENSURE(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
@@ -561,7 +561,7 @@ void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Refe
     addObjectListener(aFind->second);
 }
 
-void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
+void ODefinitionContainer::approveNewObject(const OUString& _sName,const Reference< XContent >& _rxObject) const
 {
     // check the arguments
     if ( _sName.isEmpty() )
@@ -605,12 +605,12 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ClearableMutexGuard aGuard(m_aMutex);
-    if( evt.PropertyName == (rtl::OUString) PROPERTY_NAME || evt.PropertyName ==  "Title" )
+    if( evt.PropertyName == (OUString) PROPERTY_NAME || evt.PropertyName ==  "Title" )
     {
         m_bInPropertyChange = sal_True;
         try
         {
-            ::rtl::OUString sNewName,sOldName;
+            OUString sNewName,sOldName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
             Reference<XContent> xContent( evt.Source, UNO_QUERY );
@@ -632,9 +632,9 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
 {
     MutexGuard aGuard(m_aMutex);
 
-    if( aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME || aEvent.PropertyName == "Title" )
+    if( aEvent.PropertyName == (OUString) PROPERTY_NAME || aEvent.PropertyName == "Title" )
     {
-        ::rtl::OUString sNewName;
+        OUString sNewName;
         aEvent.NewValue >>= sNewName;
         if(hasByName(sNewName))
             throw PropertyVetoException();
@@ -662,7 +662,7 @@ void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xN
     }
 }
 
-sal_Bool ODefinitionContainer::checkExistence(const ::rtl::OUString& _rName)
+sal_Bool ODefinitionContainer::checkExistence(const OUString& _rName)
 {
     return m_aDocumentMap.find(_rName) != m_aDocumentMap.end();
 }

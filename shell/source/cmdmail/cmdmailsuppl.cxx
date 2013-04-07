@@ -47,10 +47,6 @@ using com::sun::star::system::XSimpleMailClient;
 using com::sun::star::system::XSimpleMailMessage;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::NoSuchElementException;
-using rtl::OUString;
-using rtl::OUStringToOString;
-using rtl::OString;
-using rtl::OStringBuffer;
 using osl::MutexGuard;
 using osl::FileBase;
 

@@ -41,7 +41,7 @@ namespace svxform
         // the layout manager
         Reference< XPropertySet > xFrameProps( _rxFrame, UNO_QUERY );
         if ( xFrameProps.is() )
-            xFrameProps->getPropertyValue( ::rtl::OUString( "LayoutManager" ) ) >>= m_xLayouter;
+            xFrameProps->getPropertyValue( OUString( "LayoutManager" ) ) >>= m_xLayouter;
     }
 
     //--------------------------------------------------------------------
@@ -53,7 +53,7 @@ namespace svxform
             OSL_ENSURE( xManager. is(), "FormToolboxes::toggleToolbox: couldn't obtain the layout manager!" );
             if ( xManager. is() )
             {
-                ::rtl::OUString sToolboxResource( getToolboxResourceName( _nSlotId ) );
+                OUString sToolboxResource( getToolboxResourceName( _nSlotId ) );
                 if ( xManager->isElementVisible( sToolboxResource ) )
                 {
                     xManager->hideElement( sToolboxResource );
@@ -80,7 +80,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
+    OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
     {
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );
@@ -91,8 +91,8 @@ namespace svxform
         else if ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS )
             pToolBarName = "formdesign";
 
-        ::rtl::OUString aToolBarResStr( "private:resource/toolbar/" );
-        aToolBarResStr += ::rtl::OUString::createFromAscii( pToolBarName );
+        OUString aToolBarResStr( "private:resource/toolbar/" );
+        aToolBarResStr += OUString::createFromAscii( pToolBarName );
         return aToolBarResStr;
     }
 

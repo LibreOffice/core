@@ -180,7 +180,7 @@ private:
     sal_uInt32 m_nNumberFormat;
     bool       m_bIsFixedLanguage;
 
-    sal_uInt32 GetNumberFormat(::rtl::OUString const & rContent) const;
+    sal_uInt32 GetNumberFormat(OUString const & rContent) const;
     void SetNumberFormat(sal_uInt32 nNumberFormat);
     bool IsFixedLanguage() const    { return m_bIsFixedLanguage; }
     void SetIsFixedLanguage(bool b) { m_bIsFixedLanguage = b; }
@@ -192,7 +192,7 @@ private:
 public:
     /// get prefix/suffix from the RDF repository. @throws RuntimeException
     void GetPrefixAndSuffix(
-        ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix);
+        OUString *const o_pPrefix, OUString *const o_pSuffix);
 };
 
     /// knows all meta-fields in the document.

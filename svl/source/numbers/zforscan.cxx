@@ -169,7 +169,7 @@ void ImpSvNumberformatScan::InitKeywords() const
 
 /** Extract the name of General, Standard, Whatever, ignoring leading modifiers
     such as [NatNum1]. */
-static OUString lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
+static OUString lcl_extractStandardGeneralName( const OUString & rCode )
 {
     OUString aStr;
     const sal_Unicode* p = rCode.getStr();
@@ -2356,7 +2356,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         return nPos;
                     }
                     bThousand = true;           // bei Time frei
-                    cChar = pChrCls->uppercase(rtl::OUString(NextChar(i)))[0];
+                    cChar = pChrCls->uppercase(OUString(NextChar(i)))[0];
                     if ( cChar == cOldKeyH )
                     {
                         nThousand = 1;      // H

@@ -244,7 +244,7 @@ SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
 
 XubString SvxDoubleItem::GetValueText() const
 {
-    rtl::OString aOStr( rtl::math::doubleToString( fVal, rtl_math_StringFormat_E, 4, '.', false ) );
+    OString aOStr( rtl::math::doubleToString( fVal, rtl_math_StringFormat_E, 4, '.', false ) );
     return String( aOStr.getStr(), (sal_uInt16)aOStr.getLength() );
 }
 

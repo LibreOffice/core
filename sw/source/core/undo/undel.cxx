@@ -460,7 +460,7 @@ sal_Bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
     sal_Unicode cDelChar = pDelTxtNd->GetTxt()[ pStt->nContent.GetIndex() ];
     CharClass& rCC = GetAppCharClass();
     if( ( CH_TXTATR_BREAKWORD == cDelChar || CH_TXTATR_INWORD == cDelChar ) ||
-        rCC.isLetterNumeric( rtl::OUString( cDelChar ), 0 ) !=
+        rCC.isLetterNumeric( OUString( cDelChar ), 0 ) !=
         rCC.isLetterNumeric( *pSttStr, nUChrPos ) )
         return sal_False;
 
@@ -579,7 +579,7 @@ static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
 
             case CH_TXTATR_INWORD:
             case CH_TXTATR_BREAKWORD:
-                aResult = rtl::OUString(UNDO_ARG2);
+                aResult = OUString(UNDO_ARG2);
 
                 break;
 
@@ -638,7 +638,7 @@ String DenoteSpecialCharacters(const String & rStr)
         aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
     }
     else
-        aResult = rtl::OUString(UNDO_ARG2);
+        aResult = OUString(UNDO_ARG2);
 
     return aResult;
 }
@@ -686,7 +686,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
             else
             {
-                aStr = rtl::OUString(UNDO_ARG2);
+                aStr = OUString(UNDO_ARG2);
             }
         }
 
@@ -1084,7 +1084,7 @@ void SwUndoDelete::SetTableName(const String & rName)
 
 String SwRewriter::Apply(const String & rStr) const
 {
-    rtl::OUString aResult = rStr;
+    OUString aResult = rStr;
     std::vector<SwRewriteRule>::const_iterator aIt;
 
     for (aIt = mRules.begin(); aIt != mRules.end(); ++aIt)

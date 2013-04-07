@@ -174,7 +174,7 @@ sal_Bool SvMetaAttribute::IsVariable() const
     return pType->GetType() != TYPE_METHOD;
 }
 
-rtl::OString SvMetaAttribute::GetMangleName( sal_Bool ) const
+OString SvMetaAttribute::GetMangleName( sal_Bool ) const
 {
     return GetName().getString();
 }
@@ -413,7 +413,7 @@ void SvMetaAttribute::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm
             {
                 WriteTab( rOutStm, nTab );
                 rOutStm << "id("
-                    << rtl::OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase,bVar))).getStr()
+                    << OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase,bVar))).getStr()
                     << ")," << endl;
             }
             if( bVar && (bReadonly || IsMethod()) )
@@ -455,12 +455,12 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
         }
     }
     rOutStm << "pODKCallFunction( "
-        << rtl::OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase, IsVariable()))).getStr();
+        << OString::valueOf(static_cast<sal_Int32>(MakeSlotValue(rBase, IsVariable()))).getStr();
     rOutStm << ',' << endl;
     WriteTab( rOutStm, 3 );
     rOutStm << " h" << rBase.aIFaceName.getStr() << " , ";
 
-    rtl::OString aParserStr;
+    OString aParserStr;
     if( pBaseType->GetType() == TYPE_METHOD || bSet )
         aParserStr = pBaseType->GetParserString();
     if( !aParserStr.isEmpty() )
@@ -491,7 +491,7 @@ void SvMetaAttribute::WriteCSource( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         rOutStm << ", ";
         if( IsMethod() )
-            pBaseType->WriteParamNames( rBase, rOutStm, rtl::OString() );
+            pBaseType->WriteParamNames( rBase, rOutStm, OString() );
         else if( bSet )
             pBaseType->WriteParamNames( rBase, rOutStm, GetName().getString() );
     }
@@ -581,7 +581,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     {
         if( !bVariable && IsMethod() )
         {
-            rtl::OString name = rBase.aIFaceName + GetName().getString();
+            OString name = rBase.aIFaceName + GetName().getString();
             const char * pName = name.getStr();
             WriteTab( rOutStm, nTab );
             pBaseType->WriteTypePrefix( rBase, rOutStm, nTab, nT );
@@ -603,7 +603,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             }
             else
             {
-                rtl::OString name = GetName().getString();
+                OString name = GetName().getString();
 
                 sal_Bool bReadonly = GetReadonly() || ( nA & WA_READONLY );
                 if ( !bReadonly && !IsMethod() )
@@ -708,7 +708,7 @@ void SvMetaAttribute::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-sal_uLong SvMetaAttribute::MakeSfx( rtl::OStringBuffer& rAttrArray )
+sal_uLong SvMetaAttribute::MakeSfx( OStringBuffer& rAttrArray )
 {
     SvMetaType * pType = GetType();
     DBG_ASSERT( pType, "no type for attribute" );
@@ -727,7 +727,7 @@ sal_uLong SvMetaAttribute::MakeSfx( rtl::OStringBuffer& rAttrArray )
     }
 }
 
-void SvMetaAttribute::Insert (SvSlotElementList&, const rtl::OString&, SvIdlDataBase&)
+void SvMetaAttribute::Insert (SvSlotElementList&, const OString&, SvIdlDataBase&)
 {
 }
 
@@ -751,8 +751,8 @@ SvMetaType::SvMetaType()
 {
 }
 
-SvMetaType::SvMetaType( const rtl::OString& rName, char cPC,
-                        const rtl::OString& rCName )
+SvMetaType::SvMetaType( const OString& rName, char cPC,
+                        const OString& rCName )
     CTOR
 {
     SetName( rName );
@@ -760,13 +760,13 @@ SvMetaType::SvMetaType( const rtl::OString& rName, char cPC,
     aCName.setString(rCName);
 }
 
-SvMetaType::SvMetaType( const rtl::OString& rName,
-                        const rtl::OString& rSbxName,
-                        const rtl::OString& rOdlName,
+SvMetaType::SvMetaType( const OString& rName,
+                        const OString& rSbxName,
+                        const OString& rOdlName,
                         char cPc,
-                        const rtl::OString& rCName,
-                        const rtl::OString& rBasicName,
-                        const rtl::OString& rBasicPostfix )
+                        const OString& rCName,
+                        const OString& rBasicName,
+                        const OString& rBasicPostfix )
     CTOR
 {
     SetName( rName );
@@ -864,7 +864,7 @@ void SvMetaType::SetType( int nT )
     }
     else if( nType == TYPE_CLASS )
     {
-        rtl::OStringBuffer aTmp(C_PREF);
+        OStringBuffer aTmp(C_PREF);
         aTmp.append(RTL_CONSTASCII_STRINGPARAM("Object *"));
         aCName.setString(aTmp.makeStringAndClear());
     }
@@ -884,7 +884,7 @@ SvMetaType * SvMetaType::GetReturnType() const
     return (SvMetaType *)GetRef();
 }
 
-const rtl::OString& SvMetaType::GetBasicName() const
+const OString& SvMetaType::GetBasicName() const
 {
     if( aBasicName.IsSet() || !GetRef() )
         return aBasicName.getString();
@@ -892,10 +892,10 @@ const rtl::OString& SvMetaType::GetBasicName() const
         return ((SvMetaType*)GetRef())->GetBasicName();
 }
 
-rtl::OString SvMetaType::GetBasicPostfix() const
+OString SvMetaType::GetBasicPostfix() const
 {
     // MBN and Co always want "As xxx"
-    return rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(" As ")).
+    return OStringBuffer(RTL_CONSTASCII_STRINGPARAM(" As ")).
         append(GetBasicName()).
         makeStringAndClear();
 }
@@ -964,7 +964,7 @@ int SvMetaType::GetCall1() const
         return ((SvMetaType *)GetRef())->GetCall1();
 }
 
-const rtl::OString& SvMetaType::GetSvName() const
+const OString& SvMetaType::GetSvName() const
 {
     if( aSvName.IsSet() || !GetRef() )
         return aSvName.getString();
@@ -972,7 +972,7 @@ const rtl::OString& SvMetaType::GetSvName() const
         return ((SvMetaType *)GetRef())->GetSvName();
 }
 
-const rtl::OString& SvMetaType::GetSbxName() const
+const OString& SvMetaType::GetSbxName() const
 {
     if( aSbxName.IsSet() || !GetRef() )
         return aSbxName.getString();
@@ -980,7 +980,7 @@ const rtl::OString& SvMetaType::GetSbxName() const
         return ((SvMetaType *)GetRef())->GetSbxName();
 }
 
-const rtl::OString& SvMetaType::GetOdlName() const
+const OString& SvMetaType::GetOdlName() const
 {
     if( aOdlName.IsSet() || !GetRef() )
         return aOdlName.getString();
@@ -988,7 +988,7 @@ const rtl::OString& SvMetaType::GetOdlName() const
         return ((SvMetaType *)GetRef())->GetOdlName();
 }
 
-const rtl::OString& SvMetaType::GetCName() const
+const OString& SvMetaType::GetCName() const
 {
     if( aCName.IsSet() || !GetRef() )
         return aCName.getString();
@@ -996,7 +996,7 @@ const rtl::OString& SvMetaType::GetCName() const
         return ((SvMetaType *)GetRef())->GetCName();
 }
 
-sal_Bool SvMetaType::SetName( const rtl::OString& rName, SvIdlDataBase * pBase )
+sal_Bool SvMetaType::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
     aSvName.setString(rName);
     aSbxName.setString(rName);
@@ -1006,9 +1006,9 @@ sal_Bool SvMetaType::SetName( const rtl::OString& rName, SvIdlDataBase * pBase )
     return SvMetaReference::SetName( rName, pBase );
 }
 
-rtl::OString SvMetaType::GetCString() const
+OString SvMetaType::GetCString() const
 {
-    rtl::OStringBuffer out( GetSvName() );
+    OStringBuffer out( GetSvName() );
     if( aCall0 == (int)CALL_POINTER )
         out.append(" *");
     else if( aCall0 == (int)CALL_REFERENCE )
@@ -1081,7 +1081,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            rtl::OString aStr("wrong typedef: ");
+            OString aStr("wrong typedef: ");
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -1098,7 +1098,7 @@ sal_Bool SvMetaType::ReadSvIdl( SvIdlDataBase & rBase,
 {
     if( ReadHeaderSvIdl( rBase, rInStm ) )
     {
-        rBase.Write(rtl::OString('.'));
+        rBase.Write(OString('.'));
         return SvMetaExtern::ReadSvIdl( rBase, rInStm );
     }
     return sal_False;
@@ -1152,7 +1152,7 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
         // write only enum
         return;
 
-    rtl::OString name = GetName().getString();
+    OString name = GetName().getString();
     if( nT == WRITE_ODL || nT == WRITE_C_HEADER || nT == WRITE_CXX_HEADER )
     {
         switch( nType )
@@ -1173,7 +1173,7 @@ void SvMetaType::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             {
                 if ( nT == WRITE_C_HEADER )
                 {
-                    rtl::OString aStr = name.toAsciiUpperCase();
+                    OString aStr = name.toAsciiUpperCase();
                     rOutStm << "#ifndef " << C_PREF << aStr.getStr() << "_DEF " << endl;
                     rOutStm << "#define " << C_PREF << aStr.getStr() << "_DEF " << endl;
                 }
@@ -1305,7 +1305,7 @@ void SvMetaType::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                        sal_uInt16 nTab )
 {
     SvMetaExtern::WriteAttributesSvIdl( rBase, rOutStm, nTab );
-    rtl::OString name = GetName().getString();
+    OString name = GetName().getString();
     if( aSvName.getString() != name || aSbxName.getString() != name || aOdlName.getString() != name )
     {
         WriteTab( rOutStm, nTab );
@@ -1373,7 +1373,7 @@ void SvMetaType::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaExtern::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 }
 
-sal_uLong SvMetaType::MakeSfx( rtl::OStringBuffer& rAttrArray )
+sal_uLong SvMetaType::MakeSfx( OStringBuffer& rAttrArray )
 {
     sal_uLong nC = 0;
 
@@ -1392,16 +1392,16 @@ sal_uLong SvMetaType::MakeSfx( rtl::OStringBuffer& rAttrArray )
 }
 
 void SvMetaType::WriteSfxItem(
-    const rtl::OString& rItemName, SvIdlDataBase &, SvStream & rOutStm )
+    const OString& rItemName, SvIdlDataBase &, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
-    rtl::OStringBuffer aVarName(RTL_CONSTASCII_STRINGPARAM(" a"));
+    OStringBuffer aVarName(RTL_CONSTASCII_STRINGPARAM(" a"));
     aVarName.append(rItemName).append(RTL_CONSTASCII_STRINGPARAM("_Impl"));
 
-    rtl::OStringBuffer aTypeName(RTL_CONSTASCII_STRINGPARAM("SfxType"));
-    rtl::OStringBuffer aAttrArray;
+    OStringBuffer aTypeName(RTL_CONSTASCII_STRINGPARAM("SfxType"));
+    OStringBuffer aAttrArray;
     sal_uLong   nAttrCount = MakeSfx( aAttrArray );
-    rtl::OString aAttrCount(
+    OString aAttrCount(
         OString::number(nAttrCount));
     aTypeName.append(aAttrCount);
 
@@ -1589,7 +1589,7 @@ void SvMetaType::WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm,
                     rOutStm << "[out] ";
             }
 
-            rtl::OString out;
+            OString out;
             if( GetType() == TYPE_METHOD )
                 out = GetReturnType()->GetBaseType()->GetOdlName();
             else
@@ -1678,14 +1678,14 @@ void SvMetaType::WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm,
         WriteMethodArgs( rBase, rOutStm, nTab +2, nT );
 }
 
-rtl::OString SvMetaType::GetParserString() const
+OString SvMetaType::GetParserString() const
 {
     SvMetaType * pBT = GetBaseType();
     if( pBT != this )
         return pBT->GetParserString();
 
     int type = GetType();
-    rtl::OString aPStr;
+    OString aPStr;
 
     if( TYPE_METHOD == type || TYPE_STRUCT == type )
     {
@@ -1698,13 +1698,13 @@ rtl::OString SvMetaType::GetParserString() const
         }
     }
     else
-        aPStr = rtl::OString(GetParserChar());
+        aPStr = OString(GetParserChar());
     return aPStr;
 }
 
 void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
                                    SvStream & rOutStm,
-                                   const rtl::OString& rChief )
+                                   const OString& rChief )
 {
     SvMetaType * pBT = GetBaseType();
     if( pBT != this )
@@ -1720,7 +1720,7 @@ void SvMetaType::WriteParamNames( SvIdlDataBase & rBase,
             for( sal_uLong n = 0; n < nAttrCount; n++ )
             {
                 SvMetaAttribute * pA = (*pAttrList)[n];
-                rtl::OString aStr = pA->GetName().getString();
+                OString aStr = pA->GetName().getString();
                 pA->GetType()->WriteParamNames( rBase, rOutStm, aStr );
                 if( n +1 < nAttrCount )
                     rOutStm << ", ";
@@ -1841,7 +1841,7 @@ void SvMetaTypeEnum::Save( SvPersistStream & rStm )
 
 namespace
 {
-    rtl::OString getCommonSubPrefix(const rtl::OString &rA, const rtl::OString &rB)
+    OString getCommonSubPrefix(const OString &rA, const OString &rB)
     {
         sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
         sal_Int32 nI = 0;
@@ -1965,9 +1965,9 @@ void SvMetaTypevoid::Save( SvPersistStream & rStm )
     SvMetaType::Save( rStm );
 }
 
-rtl::OString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
+OString SvMetaAttribute::Compare( SvMetaAttribute* pAttr )
 {
-    rtl::OStringBuffer aStr;
+    OStringBuffer aStr;
 
     if ( aType.Is() )
     {

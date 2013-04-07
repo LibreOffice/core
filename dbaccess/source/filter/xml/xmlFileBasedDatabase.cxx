@@ -38,7 +38,7 @@ namespace dbaxml
 DBG_NAME(OXMLFileBasedDatabase)
 
 OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& _sLocalName,
+                sal_uInt16 nPrfx, const OUString& _sLocalName,
                 const Reference< XAttributeList > & _xAttrList) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
@@ -53,15 +53,15 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     PropertyValue aProperty;
 
     const sal_Int16 nLength = (xDataSource.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
-    ::rtl::OUString sLocation,sMediaType,sFileTypeExtension;
+    OUString sLocation,sMediaType,sFileTypeExtension;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        const OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = ::rtl::OUString();
+        aProperty.Name = OUString();
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
@@ -69,7 +69,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
             case XML_TOK_DB_HREF:
                 {
                     SvtPathOptions aPathOptions;
-                    rtl::OUString sFileName = aPathOptions.SubstituteVariable(sValue);
+                    OUString sFileName = aPathOptions.SubstituteVariable(sValue);
                     if ( sValue == sFileName )
                     {
                         const sal_Int32 nFileNameLength = sFileName.getLength();
@@ -101,7 +101,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     if ( !(sLocation.isEmpty() || sMediaType.isEmpty()) )
     {
         ::dbaccess::ODsnTypeCollection aTypeCollection(rImport.GetComponentContext());
-        ::rtl::OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
+        OUString sURL(aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension));
         sURL += sLocation;
         try
         {

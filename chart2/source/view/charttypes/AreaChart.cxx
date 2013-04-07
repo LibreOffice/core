@@ -719,13 +719,13 @@ void AreaChart::createShapes()
 
     //therefore create an own group for the texts and the error bars to move them to front
     //(because the text group is created after the series group the texts are displayed on top)
-    m_xSeriesTarget   = createGroupShape( m_xLogicTarget,rtl::OUString() );
+    m_xSeriesTarget   = createGroupShape( m_xLogicTarget,OUString() );
     if( m_bArea )
-        m_xErrorBarTarget = createGroupShape( m_xLogicTarget,rtl::OUString() );
+        m_xErrorBarTarget = createGroupShape( m_xLogicTarget,OUString() );
     else
         m_xErrorBarTarget = m_xSeriesTarget;
-    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() );
-    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() );
+    m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
+    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() );
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -979,7 +979,7 @@ void AreaChart::createShapes()
                         continue;
 
                     //create a group shape for this point and add to the series shape:
-                    rtl::OUString aPointCID = ObjectIdentifier::createPointCID(
+                    OUString aPointCID = ObjectIdentifier::createPointCID(
                         (*aSeriesIter)->getPointCID_Stub(), nIndex );
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes(
                         createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );

@@ -477,7 +477,7 @@ void METWriter::WriteChrSets()
         *pMET << (sal_uInt8)0x03 << (sal_uInt8)0x52;
 
         *pMET << (sal_uInt8)0x24 << (sal_uInt8)0x02 << (sal_uInt8)0x08 << (sal_uInt8)0x00;
-        rtl::OString n(rtl::OUStringToOString(pCS->aName,
+        OString n(OUStringToOString(pCS->aName,
             osl_getThreadTextEncoding()));
         for (i=0; i<32; i++)
         {
@@ -1358,7 +1358,7 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
 
 void METWriter::METChrStr( Point aPt, String aUniStr )
 {
-    rtl::OString aStr(rtl::OUStringToOString(aUniStr,
+    OString aStr(OUStringToOString(aUniStr,
         osl_getThreadTextEncoding()));
     sal_uInt16 nLen = aStr.getLength();
     WillWriteOrder( 11 + nLen );
@@ -1901,7 +1901,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                                 aPt2 = aPolyDummy.GetPoint( 0 );
                             }
                         }
-                        METChrStr( aPt2, rtl::OUString( aStr.GetChar( i ) ) );
+                        METChrStr( aPt2, OUString( aStr.GetChar( i ) ) );
                     }
                 }
                 else
@@ -1955,7 +1955,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
                             aPt2 = aPolyDummy.GetPoint( 0 );
                         }
                     }
-                    METChrStr( aPt2, rtl::OUString( aStr.GetChar( i ) ) );
+                    METChrStr( aPt2, OUString( aStr.GetChar( i ) ) );
                 }
 
                 delete[] pDXAry;
@@ -2487,7 +2487,7 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }

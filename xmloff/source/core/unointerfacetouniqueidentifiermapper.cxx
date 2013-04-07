@@ -23,7 +23,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
-using ::rtl::OUString;
 
 namespace comphelper
 {

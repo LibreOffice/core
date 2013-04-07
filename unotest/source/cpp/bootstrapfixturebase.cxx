@@ -55,15 +55,15 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
 #ifdef WNT
     if (pSrcRoot[1] == ':')
     {
-        m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
+        m_aSrcRootURL += OUString::createFromAscii( "/" );
     }
     if (pSolverRoot[1] == ':')
     {
-        m_aSolverRootURL += rtl::OUString::createFromAscii( "/" );
+        m_aSolverRootURL += OUString::createFromAscii( "/" );
     }
     if (pWorkdirRoot[1] == ':')
     {
-        m_aWorkdirRootURL += rtl::OUString::createFromAscii( "/" );
+        m_aWorkdirRootURL += OUString::createFromAscii( "/" );
     }
 #endif
 #else
@@ -71,13 +71,13 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
     const char* pSolverRoot = "/assets";
     const char* pWorkdirRoot = "/assets";
 #endif
-    m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
+    m_aSrcRootPath = OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
 
-    m_aSolverRootPath = rtl::OUString::createFromAscii( pSolverRoot );
+    m_aSolverRootPath = OUString::createFromAscii( pSolverRoot );
     m_aSolverRootURL += m_aSolverRootPath;
 
-    m_aWorkdirRootPath = rtl::OUString::createFromAscii( pWorkdirRoot );
+    m_aWorkdirRootPath = OUString::createFromAscii( pWorkdirRoot );
     m_aWorkdirRootURL += m_aWorkdirRootPath;
 
 }
@@ -86,25 +86,25 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
 {
 }
 
-::rtl::OUString test::BootstrapFixtureBase::getURLFromSrc( const char *pPath )
+OUString test::BootstrapFixtureBase::getURLFromSrc( const char *pPath )
 {
-    return m_aSrcRootURL + rtl::OUString::createFromAscii( pPath );
+    return m_aSrcRootURL + OUString::createFromAscii( pPath );
 }
 
-::rtl::OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
+OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
 {
-    return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
+    return m_aSrcRootPath + OUString::createFromAscii( pPath );
 }
 
 
-::rtl::OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
+OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
 {
-    return m_aWorkdirRootURL + rtl::OUString::createFromAscii( pPath );
+    return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
 }
 
-::rtl::OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
+OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
 {
-    return m_aWorkdirRootPath + rtl::OUString::createFromAscii( pPath );
+    return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
 
 }
 
@@ -112,8 +112,8 @@ void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
     rtl::Bootstrap aDefaultVars;
-    rtl::OUString sUserInstallURL = m_aSolverRootURL + rtl::OUString("/unittest");
-    aDefaultVars.set(rtl::OUString("UserInstallation"), sUserInstallURL);
+    OUString sUserInstallURL = m_aSolverRootURL + OUString("/unittest");
+    aDefaultVars.set(OUString("UserInstallation"), sUserInstallURL);
 
     m_xContext = comphelper::getProcessComponentContext();
     m_xFactory = m_xContext->getServiceManager();

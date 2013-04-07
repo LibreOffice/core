@@ -47,15 +47,15 @@ namespace treeview {
             VENDORSHORT };
         ConfigData();
         int                    m_vAdd[5];
-        rtl::OUString          m_vReplacement[5];
-        rtl::OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
+        OUString          m_vReplacement[5];
+        OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
 
         std::vector< sal_uInt64 >       vFileLen;
-        std::vector< rtl::OUString >    vFileURL;
-        rtl::OUString locale,system;
-        rtl::OUString appendix;
+        std::vector< OUString >    vFileURL;
+        OUString locale,system;
+        OUString appendix;
 
-        void SAL_CALL replaceName( rtl::OUString& oustring ) const;
+        void SAL_CALL replaceName( OUString& oustring ) const;
     };
 
 
@@ -162,29 +162,29 @@ namespace treeview {
         // XNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
+        getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException) = 0;
 
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
             throw( com::sun::star::uno::RuntimeException ) = 0;
 
         virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
+        hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException ) = 0;
 
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByHierarchicalName( const rtl::OUString& aName )
+        getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::uno::RuntimeException ) = 0;
 
         virtual sal_Bool SAL_CALL
-        hasByHierarchicalName( const rtl::OUString& aName )
+        hasByHierarchicalName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException ) = 0;
 
     }; // end class TVBase
@@ -206,36 +206,36 @@ namespace treeview {
         // XNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
+        getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
+        hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByHierarchicalName( const rtl::OUString& aName )
+        getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
-        hasByHierarchicalName( const rtl::OUString& aName )
+        hasByHierarchicalName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
 
     private:
 
-        rtl::OUString                    Title;
-        rtl::OUString                    TargetURL;
+        OUString                    Title;
+        OUString                    TargetURL;
         rtl::Reference< TVChildTarget >  Children;
 
     };  // end class TVRead
@@ -257,29 +257,29 @@ namespace treeview {
         ~TVChildTarget();
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByName( const rtl::OUString& aName )
+        getByName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
-        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getElementNames( )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
-        hasByName( const rtl::OUString& aName )
+        hasByName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
 
         // XHierarchicalNameAccess
 
         virtual com::sun::star::uno::Any SAL_CALL
-        getByHierarchicalName( const rtl::OUString& aName )
+        getByHierarchicalName( const OUString& aName )
             throw( com::sun::star::container::NoSuchElementException,
                    com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
-        hasByHierarchicalName( const rtl::OUString& aName )
+        hasByHierarchicalName( const OUString& aName )
             throw( com::sun::star::uno::RuntimeException );
 
 
@@ -297,7 +297,7 @@ namespace treeview {
         getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& rxProvider,
                        const char* file ) const;
 
-      ::rtl::OUString
+      OUString
       getKey( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& xHierAccess,
                 const char* key ) const;
 
@@ -308,7 +308,7 @@ namespace treeview {
 
       void subst(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr,
-            rtl::OUString& instpath ) const;
+            OUString& instpath ) const;
 
     bool SearchAndInsert(TVDom* p, TVDom* tvDom);
 
@@ -328,7 +328,7 @@ namespace treeview {
     class ExtensionIteratorBase
     {
     public:
-        ExtensionIteratorBase( const rtl::OUString& aLanguage );
+        ExtensionIteratorBase( const OUString& aLanguage );
         void init( void );
 
     private:
@@ -344,7 +344,7 @@ namespace treeview {
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
 
-        void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
+        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         osl::Mutex                                                                  m_aMutex;
@@ -352,7 +352,7 @@ namespace treeview {
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFA;
 
         IteratorState                                                               m_eState;
-        rtl::OUString                                                               m_aLanguage;
+        OUString                                                               m_aLanguage;
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference
             < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
@@ -377,15 +377,15 @@ namespace treeview {
     class TreeFileIterator : public ExtensionIteratorBase
     {
     public:
-        TreeFileIterator( const rtl::OUString& aLanguage )
+        TreeFileIterator( const OUString& aLanguage )
             : ExtensionIteratorBase( aLanguage )
         {}
 
-        rtl::OUString nextTreeFile( sal_Int32& rnFileSize );
+        OUString nextTreeFile( sal_Int32& rnFileSize );
 
     private:
-        rtl::OUString expandURL( const rtl::OUString& aURL );
-        rtl::OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
+        OUString expandURL( const OUString& aURL );
+        OUString implGetTreeFileFromPackage( sal_Int32& rnFileSize,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
     }; // end class TreeFileIterator

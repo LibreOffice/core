@@ -58,8 +58,6 @@
 using namespace com::sun::star::xml::xpath;
 using namespace com::sun::star::xml::dom::events;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using std::vector;
 using xforms::Binding;
 using xforms::MIP;
@@ -843,7 +841,7 @@ bool Binding::isValid_DataType()
         : true;
 }
 
-rtl::OUString Binding::explainInvalid_DataType()
+OUString Binding::explainInvalid_DataType()
 {
     Reference<XDataType> xDataType = getDataType();
     return xDataType.is()
@@ -1065,7 +1063,7 @@ Binding::Any_t Binding::getValue( const Type_t& rType )
     // return string value (if present; else return empty Any)
     Binding::Any_t result = Any();
     if(maBindingExpression.hasValue()) {
-        rtl::OUString pathExpr(maBindingExpression.getString());
+        OUString pathExpr(maBindingExpression.getString());
         Convert &rConvert = Convert::get();
         result = rConvert.toAny(pathExpr,rType);
     }
@@ -1213,7 +1211,7 @@ sal_Bool Binding::isValid( const Any_t& )
     return isValid();
 }
 
-rtl::OUString Binding::explainInvalid(
+OUString Binding::explainInvalid(
     const Any_t& /*Value*/ )
     throw( RuntimeException )
 {
@@ -1379,13 +1377,13 @@ void Binding::removeModifyListener(
 
 
 
-rtl::OUString Binding::getName()
+OUString Binding::getName()
     throw( RuntimeException )
 {
     return getBindingID();
 }
 
-void SAL_CALL Binding::setName( const rtl::OUString& rName )
+void SAL_CALL Binding::setName( const OUString& rName )
     throw( RuntimeException )
 {
     // use the XPropertySet methods, so the change in the name is notified to the

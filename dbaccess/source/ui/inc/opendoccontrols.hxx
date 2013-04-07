@@ -41,7 +41,7 @@ namespace dbaui
     class OpenDocumentButton : public PushButton
     {
     private:
-        ::rtl::OUString     m_sModule;
+        OUString     m_sModule;
 
     public:
         OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName );
@@ -59,7 +59,7 @@ namespace dbaui
         typedef ::std::pair< String, String >       StringPair;
         typedef ::std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
 
-        ::rtl::OUString         m_sModule;
+        OUString         m_sModule;
         MapIndexToStringPair    m_aURLs;
 
     public:

@@ -779,15 +779,15 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 #endif
         if( isfile && stype == NP_ASFILEONLY )
         {
-            rtl::OString aFileName;
+            OString aFileName;
             if( url.startsWith("file:") )
             {
                 OUString aSysName;
                 osl_getSystemPathFromFileURL( url.pData, &aSysName.pData );
-                aFileName = rtl::OUStringToOString( aSysName, m_aEncoding );
+                aFileName = OUStringToOString( aSysName, m_aEncoding );
             }
             else
-                aFileName = rtl::OUStringToOString( url, m_aEncoding );
+                aFileName = OUStringToOString( url, m_aEncoding );
             m_pPluginComm->
                 NPP_StreamAsFile( &m_aInstance,
                                   pStream->getStream(),

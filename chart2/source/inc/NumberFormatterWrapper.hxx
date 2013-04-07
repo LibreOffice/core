@@ -43,7 +43,7 @@ public:
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 
-    rtl::OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
+    OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
     Date    getNullDate() const;
 
 private: //private member
@@ -62,7 +62,7 @@ public:
         , sal_Int32 nNumberFormatKey );
     virtual ~FixedNumberFormatter();
 
-    rtl::OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
+    OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
 
 private:
     NumberFormatterWrapper      m_aNumberFormatterWrapper;

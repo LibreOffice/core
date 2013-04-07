@@ -51,16 +51,16 @@ class ConfigurationAccess_ControllerFactory : // interfaces
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::rtl::OUString& _sRoot,bool _bAskValue = false );
+                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue = false );
     virtual       ~ConfigurationAccess_ControllerFactory();
 
     void          readConfigurationData();
     void          updateConfigurationData();
 
-    rtl::OUString getServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const;
-    rtl::OUString getValueFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule ) const;
-    void          addServiceToCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule, const rtl::OUString& rServiceSpecifier );
-    void          removeServiceFromCommandModule( const rtl::OUString& rCommandURL, const rtl::OUString& rModule );
+    OUString getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const;
+    OUString getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const;
+    void          addServiceToCommandModule( const OUString& rCommandURL, const OUString& rModule, const OUString& rServiceSpecifier );
+    void          removeServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule );
     inline bool   hasValue() const { return m_bAskValue; }
 
     // container.XContainerListener
@@ -74,15 +74,15 @@ public:
 private:
     struct ControllerInfo
     {
-        rtl::OUString m_aImplementationName;
-        rtl::OUString m_aValue;
-        ControllerInfo(const ::rtl::OUString& _aImplementationName,const ::rtl::OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
+        OUString m_aImplementationName;
+        OUString m_aValue;
+        ControllerInfo(const OUString& _aImplementationName,const OUString& _aValue) : m_aImplementationName(_aImplementationName),m_aValue(_aValue){}
         ControllerInfo(){}
     };
-    class MenuControllerMap : public boost::unordered_map< rtl::OUString,
+    class MenuControllerMap : public boost::unordered_map< OUString,
                                                          ControllerInfo,
-                                                         rtl::OUStringHash,
-                                                         ::std::equal_to< ::rtl::OUString > >
+                                                         OUStringHash,
+                                                         ::std::equal_to< OUString > >
     {
         inline void free()
         {
@@ -90,13 +90,13 @@ private:
         }
     };
 
-    sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, rtl::OUString& aCommand, rtl::OUString& aModule, rtl::OUString& aServiceSpecifier,rtl::OUString& aValue ) const;
+    sal_Bool impl_getElementProps( const ::com::sun::star::uno::Any& aElement, OUString& aCommand, OUString& aModule, OUString& aServiceSpecifier,OUString& aValue ) const;
 
-    rtl::OUString                     m_aPropCommand;
-    rtl::OUString                     m_aPropModule;
-    rtl::OUString                     m_aPropController;
-    rtl::OUString                     m_aPropValue;
-    rtl::OUString                     m_sRoot;
+    OUString                     m_aPropCommand;
+    OUString                     m_aPropModule;
+    OUString                     m_aPropController;
+    OUString                     m_aPropValue;
+    OUString                     m_sRoot;
     MenuControllerMap                 m_aMenuControllerMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;

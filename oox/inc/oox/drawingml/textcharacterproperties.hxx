@@ -42,7 +42,7 @@ struct TextCharacterProperties
     Color               maCharColor;
     Color               maUnderlineColor;
     Color               maHighlightColor;
-    OptValue< ::rtl::OUString > moLang;
+    OptValue< OUString > moLang;
     OptValue< sal_Int32 > moHeight;
     OptValue< sal_Int32 > moSpacing;
     OptValue< sal_Int32 > moUnderline;

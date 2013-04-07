@@ -21,7 +21,6 @@
 #include <xmlsecurity/certvalidity.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 
-using ::rtl::OUString ;
 using namespace ::com::sun::star::security ;
 
 #define VALID_STR "valid certificate"
@@ -42,7 +41,7 @@ using namespace ::com::sun::star::security ;
 #define ROOT_INVALID_STR "invalid root certificate"
 #define CHAIN_INCOMPLETE_STR "invalid certification path"
 
-rtl::OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
+OUString certificateValidityToOUString( ::sal_Int32 certValidity ) {
     OUString aValidity ;
 
     if( certValidity == CertificateValidity::VALID ) {

@@ -42,7 +42,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::ContextHandlerRef;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -364,7 +363,7 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
         maTableData.mbRef2Deleted = rAttribs.getBool( XML_del2, false );
     }
 
-    maFormulaStr = rtl::OUString();
+    maFormulaStr = OUString();
 }
 
 void SheetDataContext::importRow( SequenceInputStream& rStrm )

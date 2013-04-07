@@ -144,14 +144,14 @@ namespace rptui
         *
         * @param _sType
         */
-        void createDefault(const ::rtl::OUString& _sType);
+        void createDefault(const OUString& _sType);
 
         /** creates a new default custom shape
         *
         * \param _sType
         * \param _pObj
         */
-        void createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj);
+        void createDefault(const OUString& _sType,SdrObject* _pObj);
         void stopScrollTimer();
 
         /** deactivate the currect active ole object if any

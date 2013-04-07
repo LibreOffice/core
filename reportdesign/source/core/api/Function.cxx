@@ -40,7 +40,7 @@ DBG_NAME( rpt_OFunction )
 // -----------------------------------------------------------------------------
 OFunction::OFunction(uno::Reference< uno::XComponentContext > const & _xContext)
 :FunctionBase(m_aMutex)
-,FunctionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< ::rtl::OUString >())
+,FunctionPropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
 ,m_xContext(_xContext)
 ,m_bPreEvaluated(sal_False)
 ,m_bDeepTraversing(sal_False)
@@ -62,31 +62,31 @@ void SAL_CALL OFunction::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OFunction::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OFunction::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OFunction");
+    return OUString("com.sun.star.comp.report.OFunction");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFunction::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL OFunction::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > OFunction::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OFunction::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_FUNCTION;
 
     return aServices;
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OFunction::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OFunction::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OFunction::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL OFunction::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -96,32 +96,32 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OFunction::getPropertySetInfo
     return FunctionPropertySet::getPropertySetInfo();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFunction::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FunctionPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 // -----------------------------------------------------------------------------
-uno::Any SAL_CALL OFunction::getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL OFunction::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return FunctionPropertySet::getPropertyValue( PropertyName);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFunction::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FunctionPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFunction::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FunctionPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFunction::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FunctionPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL OFunction::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     FunctionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
@@ -152,36 +152,36 @@ void SAL_CALL OFunction::setDeepTraversing(::sal_Bool the_value) throw (uno::Run
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OFunction::getName() throw (uno::RuntimeException)
+OUString SAL_CALL OFunction::getName() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_sName;
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL OFunction::setName(const ::rtl::OUString & the_value) throw (uno::RuntimeException)
+void SAL_CALL OFunction::setName(const OUString & the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_NAME,the_value,m_sName);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFunction::getFormula() throw (uno::RuntimeException)
+OUString SAL_CALL OFunction::getFormula() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_sFormula;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::setFormula(const ::rtl::OUString & the_value) throw (uno::RuntimeException)
+void SAL_CALL OFunction::setFormula(const OUString & the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_FORMULA,the_value,m_sFormula);
 }
 // -----------------------------------------------------------------------------
-beans::Optional< ::rtl::OUString> SAL_CALL OFunction::getInitialFormula() throw (uno::RuntimeException)
+beans::Optional< OUString> SAL_CALL OFunction::getInitialFormula() throw (uno::RuntimeException)
 {
     osl::MutexGuard g(m_aMutex);
     return m_sInitialFormula;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFunction::setInitialFormula(const beans::Optional< ::rtl::OUString> & the_value) throw (uno::RuntimeException)
+void SAL_CALL OFunction::setInitialFormula(const beans::Optional< OUString> & the_value) throw (uno::RuntimeException)
 {
     set(PROPERTY_INITIALFORMULA,the_value,m_sInitialFormula);
 }

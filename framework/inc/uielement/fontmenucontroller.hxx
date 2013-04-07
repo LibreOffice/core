@@ -65,9 +65,9 @@ namespace framework
         private:
             virtual void impl_setPopupMenu();
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
-            void fillPopupMenu( const com::sun::star::uno::Sequence< ::rtl::OUString >& rFontNameSeq, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+            void fillPopupMenu( const com::sun::star::uno::Sequence< OUString >& rFontNameSeq, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
 
-            rtl::OUString                                                       m_aFontFamilyName;
+            OUString                                                       m_aFontFamilyName;
             com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >  m_xFontListDispatch;
     };
 }

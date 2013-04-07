@@ -45,14 +45,14 @@ public:
     static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, sal_Int32 _languageid ) throw (css::uno::RuntimeException);
 
     // Attributes
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setName( const rtl::OUString& Name ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& Name ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getLanguageID( ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setNameLocal( const ::rtl::OUString& _namelocal ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setNameLocal( const OUString& _namelocal ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getAutomaticallyUpdate() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAutomaticallyUpdate( ::sal_Bool _automaticallyupdate ) throw (css::uno::RuntimeException);
@@ -63,11 +63,11 @@ public:
     virtual ::sal_Int32 SAL_CALL getListLevelNumber() throw (css::uno::RuntimeException);
 
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return rtl::OUString("Name"); }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Name"); }
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif //SW_VBA_AXIS_HXX

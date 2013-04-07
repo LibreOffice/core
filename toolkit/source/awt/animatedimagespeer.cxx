@@ -73,7 +73,7 @@ namespace toolkit
     //==================================================================================================================
     struct CachedImage
     {
-        ::rtl::OUString                 sImageURL;
+        OUString                 sImageURL;
         mutable Reference< XGraphic >   xGraphic;
 
         CachedImage()
@@ -82,7 +82,7 @@ namespace toolkit
         {
         }
 
-        CachedImage( ::rtl::OUString const& i_imageURL )
+        CachedImage( OUString const& i_imageURL )
             :sImageURL( i_imageURL )
             ,xGraphic()
         {
@@ -107,7 +107,7 @@ namespace toolkit
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
-        ::rtl::OUString lcl_getHighContrastURL( ::rtl::OUString const& i_imageURL )
+        OUString lcl_getHighContrastURL( OUString const& i_imageURL )
         {
             INetURLObject aURL( i_imageURL );
             if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
@@ -120,7 +120,7 @@ namespace toolkit
             const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
-            ::rtl::OUStringBuffer composer;
+            OUStringBuffer composer;
             composer.append( i_imageURL.copy( 0, separatorPos ) );
             composer.appendAscii( "/hicontrast" );
             composer.append( i_imageURL.copy( separatorPos ) );
@@ -168,7 +168,7 @@ namespace toolkit
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        void lcl_init( Sequence< ::rtl::OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
+        void lcl_init( Sequence< OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
         {
             o_images.resize(0);
             size_t count = size_t( i_imageURLs.getLength() );
@@ -277,7 +277,7 @@ namespace toolkit
                 i_data.aCachedImageSets.resize(0);
                 for ( sal_Int32 set = 0;  set < nImageSetCount; ++set )
                 {
-                    const Sequence< ::rtl::OUString > aImageURLs( i_images->getImageSet( set ) );
+                    const Sequence< OUString > aImageURLs( i_images->getImageSet( set ) );
                     ::std::vector< CachedImage > aImages;
                     lcl_init( aImageURLs, aImages );
                     i_data.aCachedImageSets.push_back( aImages );
@@ -336,7 +336,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL AnimatedImagesPeer::setProperty( const ::rtl::OUString& i_propertyName, const Any& i_value ) throw(RuntimeException)
+    void SAL_CALL AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -383,7 +383,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Any SAL_CALL AnimatedImagesPeer::getProperty( const ::rtl::OUString& i_propertyName ) throw(RuntimeException)
+    Any SAL_CALL AnimatedImagesPeer::getProperty( const OUString& i_propertyName ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -455,7 +455,7 @@ namespace toolkit
             lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
         }
 
-        Sequence< ::rtl::OUString > aImageURLs;
+        Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
@@ -497,7 +497,7 @@ namespace toolkit
             lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
         }
 
-        Sequence< ::rtl::OUString > aImageURLs;
+        Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );

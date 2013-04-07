@@ -34,7 +34,7 @@ namespace http_dav_ucp
     SerfRequestProcessorImpl* createPropFindReqProcImpl( const char* inPath,
                                                          const DAVRequestHeaders& inRequestHeaders,
                                                          const Depth inDepth,
-                                                         const std::vector< ::rtl::OUString > & inPropNames,
+                                                         const std::vector< OUString > & inPropNames,
                                                          std::vector< DAVResource > & ioResources );
 
     SerfRequestProcessorImpl* createPropFindReqProcImpl( const char* inPath,
@@ -53,7 +53,7 @@ namespace http_dav_ucp
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
                                                     const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
-                                                    const std::vector< ::rtl::OUString > & inHeaderNames,
+                                                    const std::vector< OUString > & inHeaderNames,
                                                     DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
@@ -63,12 +63,12 @@ namespace http_dav_ucp
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
                                                     const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
-                                                    const std::vector< ::rtl::OUString > & inHeaderNames,
+                                                    const std::vector< OUString > & inHeaderNames,
                                                     DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createHeadReqProcImpl( const char* inPath,
                                                      const DAVRequestHeaders& inRequestHeaders,
-                                                     const std::vector< ::rtl::OUString > & inHeaderNames,
+                                                     const std::vector< OUString > & inHeaderNames,
                                                      DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createPutReqProcImpl( const char* inPath,

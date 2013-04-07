@@ -179,7 +179,7 @@ namespace
 }
 
 //-------------------------------------------------------------------------
-static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const ::rtl::OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue > aInfo )
+static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& aPath, const SfxFilter* pFilter, sal_uInt32 nPasswordHash, const uno::Sequence< beans::PropertyValue > aInfo )
 {
     // TODO/LATER: In future the info should replace the direct hash completely
     sal_Bool bResult = ( !nPasswordHash && !aInfo.getLength() );
@@ -214,7 +214,7 @@ static sal_Bool AskPasswordToModify_Impl( const uno::Reference< task::XInteracti
                 else
                 {
                     // the binary format
-                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( "com.sun.star.text.TextDocument"  ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
+                    bResult = ( SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), OUString( "com.sun.star.text.TextDocument"  ).equals( pFilter->GetServiceName() ) ) == nPasswordHash );
                 }
             }
             else
@@ -363,7 +363,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 SfxAllItemSet aSet( pApp->GetPool() );
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::NO_DECODE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                aSet.Put( SfxStringItem( SID_TARGETNAME, rtl::OUString("_blank") ) );
+                aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
                 SFX_ITEMSET_ARG( pMed->GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False );
                 if ( pReferer )
                     aSet.Put( *pReferer );
@@ -411,7 +411,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                   && ( pSh->GetModifyPasswordHash() || pSh->GetModifyPasswordInfo().getLength() )
                   && !pSh->IsModifyPasswordEntered() )
                 {
-                    ::rtl::OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                    OUString aDocumentName = INetURLObject( pMed->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
                     if( !AskPasswordToModify_Impl( pMed->GetInteractionHandler(), aDocumentName, pMed->GetOrigFilter(), pSh->GetModifyPasswordHash(), pSh->GetModifyPasswordInfo() ) )
                     {
                         // this is a read-only document, if it has "Password to modify"
@@ -449,7 +449,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             // doing
 
-            rtl::OUString aTemp;
+            OUString aTemp;
             utl::LocalFileHelper::ConvertPhysicalNameToURL( pMed->GetPhysicalName(), aTemp );
             INetURLObject aPhysObj( aTemp );
             SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(),
@@ -768,7 +768,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                            aSet.Put( SfxStringItem( SID_TARGETNAME, rtl::OUString("_blank") ) );
+                            aSet.Put( SfxStringItem( SID_TARGETNAME, OUString("_blank") ) );
                             if ( pSavedOptions )
                                 aSet.Put( *pSavedOptions );
                             if ( pSavedReferer )
@@ -1953,12 +1953,12 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
     else
         aTransformLoadArgs.remove( "Hidden" );
 
-    ::rtl::OUString sURL( "private:object"  );
+    OUString sURL( "private:object"  );
     if ( sURL.isEmpty() )
         sURL = i_rDoc.GetFactory().GetFactoryURL();
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
-    xLoader->loadComponentFromURL( sURL, ::rtl::OUString("_self"), 0,
+    xLoader->loadComponentFromURL( sURL, OUString("_self"), 0,
         aTransformLoadArgs.getPropertyValues() );
 
     SfxViewShell* pViewShell = SfxViewShell::Get( i_rFrame->getController() );
@@ -2085,7 +2085,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const sal_uInt16 i_nNewViewId )
         for ( sal_Int32 i=0; i<nCount; ++i )
         {
             const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
-            ::rtl::OUString sViewId( aCurViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
+            OUString sViewId( aCurViewData.getOrDefault( "ViewId", OUString() ) );
             if ( sViewId.isEmpty() )
                 continue;
 
@@ -2332,9 +2332,9 @@ sal_Bool impl_maxOpenDocCountReached()
         css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 xContext,
-                                ::rtl::OUString("org.openoffice.Office.Common/"),
-                                ::rtl::OUString("Misc"),
-                                ::rtl::OUString("MaxOpenDocuments"),
+                                OUString("org.openoffice.Office.Common/"),
+                                OUString("Misc"),
+                                OUString("MaxOpenDocuments"),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -2551,7 +2551,7 @@ void SfxViewFrame::Resize( sal_Bool bForce )
 
 #define LINE_SEP 0x0A
 
-void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines )
+void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;
@@ -2577,7 +2577,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
         else
             nEndPos++;
 
-        ::rtl::OUString aEndStr = rStr.copy( nEndPos );
+        OUString aEndStr = rStr.copy( nEndPos );
         rStr = rStr.copy( 0, nStartPos );
         rStr += aEndStr;
     }
@@ -2590,7 +2590,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
 
         if ( n > nStartPos )
         {
-            ::rtl::OUString aEndStr = rStr.copy( n );
+            OUString aEndStr = rStr.copy( n );
             rStr = rStr.copy( 0, nStartPos );
             rStr += aEndStr;
         }
@@ -2602,7 +2602,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
     lib container. It generates a new unique id for it and insert the macro
     by using this number as name for the modul
  */
-void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
+void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 {
 #ifdef DISABLE_SCRIPTING
     (void) sMacro;
@@ -2631,7 +2631,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         if ( xUrl.is() )
         {
             // get name
-            ::rtl::OUString aName = xUrl->getName();
+            OUString aName = xUrl->getName();
             sal_Unicode cTok = '.';
             sal_Int32 nIndex = 0;
             aLibName = aName.getToken( 0, cTok, nIndex );
@@ -2641,7 +2641,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                 aMacroName = aName.getToken( 0, cTok, nIndex );
 
             // get location
-            ::rtl::OUString aLocKey("location");
+            OUString aLocKey("location");
             if ( xUrl->hasParameter( aLocKey ) )
                 aLocation = xUrl->getParameter( aLocKey );
         }
@@ -2657,7 +2657,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
             pBasMgr = GetObjectShell()->GetBasicManager();
         }
 
-        ::rtl::OUString aOUSource;
+        OUString aOUSource;
         if ( pBasMgr)
         {
             StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
@@ -2700,7 +2700,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
                 xLibCont,
                 com::sun::star::uno::UNO_QUERY);
 
-        ::rtl::OUString sLib( aLibName );
+        OUString sLib( aLibName );
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xLib;
         if(xRoot->hasByName(sLib))
         {
@@ -2717,13 +2717,13 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         }
 
         // pack the macro as direct usable "sub" routine
-        ::rtl::OUString sCode;
-        ::rtl::OUStringBuffer sRoutine(10000);
-        ::rtl::OUString sMacroName( aMacroName );
+        OUString sCode;
+        OUStringBuffer sRoutine(10000);
+        OUString sMacroName( aMacroName );
         sal_Bool bReplace = sal_False;
 
         // get module
-        ::rtl::OUString sModule( aModuleName );
+        OUString sModule( aModuleName );
         if(xLib->hasByName(sModule))
         {
             if ( !aOUSource.isEmpty() )
@@ -2794,7 +2794,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
-            ::rtl::OUString sProperty("DispatchRecorderSupplier");
+            OUString sProperty("DispatchRecorderSupplier");
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
                     GetFrame().GetFrameInterface(),
                     com::sun::star::uno::UNO_QUERY);
@@ -2865,7 +2865,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+                    Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
                     aValue >>= xLayoutManager;
                 }
                 catch ( Exception& )
@@ -2875,7 +2875,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
             if ( xLayoutManager.is() )
             {
-                rtl::OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
+                OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
                 // Evaluate parameter.
                 SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), sal_False);
                 sal_Bool bShow( sal_True );
@@ -2919,7 +2919,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                     {
                         try
                         {
-                            Any aValue = xPropSet->getPropertyValue( rtl::OUString( "LayoutManager" ));
+                            Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ));
                             aValue >>= xLayoutManager;
                         }
                         catch ( Exception& )
@@ -2936,7 +2936,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             try
                             {
                                 xLMPropSet->setPropertyValue(
-                                    ::rtl::OUString( "HideCurrentUI" ),
+                                    OUString( "HideCurrentUI" ),
                                     makeAny( bNewFullScreenMode ));
                             }
                             catch ( ::com::sun::star::beans::UnknownPropertyException& )
@@ -2995,7 +2995,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    ::rtl::OUString sProperty("DispatchRecorderSupplier");
+                    OUString sProperty("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
@@ -3020,7 +3020,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         break;
                     }
 
-                    ::rtl::OUString sProperty("DispatchRecorderSupplier");
+                    OUString sProperty("DispatchRecorderSupplier");
                     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
@@ -3039,13 +3039,13 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                             GetFrame().GetFrameInterface(),
                             com::sun::star::uno::UNO_QUERY);
                     com::sun::star::uno::Any aProp = xSet->getPropertyValue(
-                        rtl::OUString( "LayoutManager" ) );
+                        OUString( "LayoutManager" ) );
 
                     if ( !( aProp >>= xLayoutManager ))
                         rSet.Put( SfxBoolItem( nWhich, sal_False ));
                     else
                     {
-                        rtl::OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
+                        OUString aStatusbarResString( "private:resource/statusbar/statusbar" );
                         sal_Bool bShow = xLayoutManager->isElementVisible( aStatusbarResString );
                         rSet.Put( SfxBoolItem( nWhich, bShow ));
                     }
@@ -3124,7 +3124,7 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         else
         {
             ::com::sun::star::util::URL aTargetURL;
-            aTargetURL.Complete = ::rtl::OUString(".component:DB/DataSourceBrowser");
+            aTargetURL.Complete = OUString(".component:DB/DataSourceBrowser");
             Reference < ::com::sun::star::util::XURLTransformer > xTrans(
                     ::com::sun::star::util::URLTransformer::create(
                          ::comphelper::getProcessComponentContext() ) );
@@ -3133,13 +3133,13 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
             Reference < ::com::sun::star::frame::XDispatch > xDisp;
             if ( xProv.is() )
-                xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString("_beamer"), 31 );
+                xDisp = xProv->queryDispatch( aTargetURL, OUString("_beamer"), 31 );
             if ( xDisp.is() )
             {
                 Sequence < ::com::sun::star::beans::PropertyValue > aArgs(1);
                 ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = rtl::OUString("Referer");
-                pArg[0].Value <<= ::rtl::OUString("private:user");
+                pArg[0].Name = OUString("Referer");
+                pArg[0].Value <<= OUString("private:user");
                 xDisp->dispatch( aTargetURL, aArgs );
             }
         }
@@ -3313,7 +3313,7 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const ::rtl::OUString& i_rPanelURL )
+void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame, const OUString& i_rPanelURL )
 {
     SolarMutexGuard aGuard;
 
@@ -3331,7 +3331,7 @@ void SfxViewFrame::ActivateToolPanel( const ::com::sun::star::uno::Reference< ::
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
+void SfxViewFrame::ActivateToolPanel_Impl( const OUString& i_rPanelURL )
 {
     // ensure the task pane is visible
     ENSURE_OR_RETURN_VOID( KnowsChildWindow( SID_TASKPANE ), "SfxViewFrame::ActivateToolPanel: this frame/module does not allow for a task pane!" );
@@ -3346,7 +3346,7 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
 
-void SfxViewFrame::AppendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
+void SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage, std::vector< PushButton* > aButtons )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3362,7 +3362,7 @@ void SfxViewFrame::AppendInfoBar( const rtl::OUString& sId, const rtl::OUString&
     }
 }
 
-void SfxViewFrame::RemoveInfoBar( const rtl::OUString& sId )
+void SfxViewFrame::RemoveInfoBar( const OUString& sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 

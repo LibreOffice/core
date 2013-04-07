@@ -29,10 +29,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-using rtl::OStringBuffer;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -754,7 +750,7 @@ PyObject* PyUNO_new_UNCHECKED (
 
         Reference<XInvocation2> tmp_invocation (tmp_interface, UNO_QUERY);
         if (!tmp_invocation.is()) {
-            throw RuntimeException (rtl::OUString::createFromAscii (
+            throw RuntimeException (OUString::createFromAscii (
                 "XInvocation2 not implemented, cannot interact with object"),
                 Reference< XInterface > ());
         }

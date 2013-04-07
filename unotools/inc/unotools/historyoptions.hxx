@@ -163,10 +163,10 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtHistoryOptions : public utl::detail:
         *//*-*****************************************************************************************************/
 
         void AppendItem(            EHistoryType        eHistory    ,
-                            const   ::rtl::OUString&    sURL        ,
-                            const   ::rtl::OUString&    sFilter     ,
-                            const   ::rtl::OUString&    sTitle      ,
-                            const   ::rtl::OUString&    sPassword   );
+                            const   OUString&    sURL        ,
+                            const   OUString&    sFilter     ,
+                            const   OUString&    sTitle      ,
+                            const   OUString&    sPassword   );
 
     private:
 

@@ -156,11 +156,11 @@ void SwGlossaryGroupDlg::Apply()
     for (OUVector_t::const_iterator it(m_RenamedArr.begin());
             it != m_RenamedArr.end(); ++it)
     {
-        ::rtl::OUString const sOld(
+        OUString const sOld(
                 ::comphelper::string::getToken(*it, 0, RENAME_TOKEN_DELIM));
         String sNew(
                 ::comphelper::string::getToken(*it, 1, RENAME_TOKEN_DELIM));
-        ::rtl::OUString const sTitle(
+        OUString const sTitle(
                 ::comphelper::string::getToken(*it, 2, RENAME_TOKEN_DELIM));
         pGlosHdl->RenameGroup(sOld, sNew, sTitle);
         if (it == m_RenamedArr.begin())
@@ -239,7 +239,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
         return 0;
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
-    ::rtl::OUString const sEntry(pUserData->sGroupName);
+    OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     bool bDelete = true;
     for (OUVector_t::iterator it(m_InsertedArr.begin());

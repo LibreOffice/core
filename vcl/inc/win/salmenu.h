@@ -37,9 +37,9 @@ public:
     virtual void SetFrame( const SalFrame* pFrame );
     virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
     virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
-    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const rtl::OUString& rText );
+    virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage );
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const rtl::OUString& rKeyName );
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 
     HMENU mhMenu;           // the menu handle

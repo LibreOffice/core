@@ -2919,7 +2919,7 @@ inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, dou
 }
 
 /** Appends a digit (0 to 9) to the passed string. */
-void lclAppendDigit( rtl::OStringBuffer& rText, sal_Int32 nDigit )
+void lclAppendDigit( OStringBuffer& rText, sal_Int32 nDigit )
 {
     switch( nDigit )
     {
@@ -2941,7 +2941,7 @@ void lclAppendDigit( rtl::OStringBuffer& rText, sal_Int32 nDigit )
     @param nDigit  A digit in the range from 1 to 9.
     @param nPow10  A value in the range from 2 to 5.
  */
-void lclAppendPow10( rtl::OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
+void lclAppendPow10( OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow10 )
 {
     OSL_ENSURE( (1 <= nDigit) && (nDigit <= 9), "lclAppendPow10 - illegal digit" );
     lclAppendDigit( rText, nDigit );
@@ -2956,7 +2956,7 @@ void lclAppendPow10( rtl::OStringBuffer& rText, sal_Int32 nDigit, sal_Int32 nPow
 }
 
 /** Appends a block of 6 digits (value from 1 to 999,999) to the passed string. */
-void lclAppendBlock( rtl::OStringBuffer& rText, sal_Int32 nValue )
+void lclAppendBlock( OStringBuffer& rText, sal_Int32 nValue )
 {
     OSL_ENSURE( (1 <= nValue) && (nValue <= 999999), "lclAppendBlock - illegal value" );
     if( nValue >= 100000 )
@@ -3027,7 +3027,7 @@ void ScInterpreter::ScBahtText()
         sal_Int32 nSatang = 0;
         lclSplitBlock( fBaht, nSatang, fValue, 100.0 );
 
-        rtl::OStringBuffer aText;
+        OStringBuffer aText;
 
         // generate text for Baht value
         if( fBaht == 0.0 )
@@ -3037,7 +3037,7 @@ void ScInterpreter::ScBahtText()
         }
         else while( fBaht > 0.0 )
         {
-            rtl::OStringBuffer aBlock;
+            OStringBuffer aBlock;
             sal_Int32 nBlock = 0;
             lclSplitBlock( fBaht, nBlock, fBaht, 1.0e6 );
             if( nBlock > 0 )
@@ -3045,7 +3045,7 @@ void ScInterpreter::ScBahtText()
             // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
                 aBlock.insert(
-                    0, rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E6)));
+                    0, OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_1E6)));
 
             aText.insert(0, aBlock.makeStringAndClear());
         }
@@ -3066,9 +3066,9 @@ void ScInterpreter::ScBahtText()
         // add the minus sign
         if( bMinus )
             aText.insert(
-                0, rtl::OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_MINUS)));
+                0, OString(RTL_CONSTASCII_STRINGPARAM(UTF8_TH_MINUS)));
 
-        PushString( rtl::OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
+        PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }
 }
 

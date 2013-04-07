@@ -49,7 +49,7 @@ public:
     virtual sal_uInt32                              getCount() const;
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const;
-    virtual const formula::IFunctionDescription*    getFunctionByName(const ::rtl::OUString& _sFunctionName) const;
+    virtual const formula::IFunctionDescription*    getFunctionByName(const OUString& _sFunctionName) const;
     virtual sal_Unicode                       getSingleToken(const EToken _eToken) const;
 
     ::boost::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
@@ -64,18 +64,18 @@ public:
     FunctionDescription(const formula::IFunctionCategory* _pFunctionCategory,const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription);
     virtual ~FunctionDescription(){}
 
-    virtual ::rtl::OUString getFunctionName() const ;
+    virtual OUString getFunctionName() const ;
     virtual const formula::IFunctionCategory* getCategory() const ;
-    virtual ::rtl::OUString getDescription() const ;
+    virtual OUString getDescription() const ;
     virtual xub_StrLen getSuppressedArgumentCount() const ;
-    virtual ::rtl::OUString getFormula(const ::std::vector< ::rtl::OUString >& _aArguments) const ;
+    virtual OUString getFormula(const ::std::vector< OUString >& _aArguments) const ;
     virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
-    virtual ::rtl::OUString getSignature() const ;
-    virtual rtl::OString getHelpId() const ;
+    virtual OUString getSignature() const ;
+    virtual OString getHelpId() const ;
     virtual sal_uInt32 getParameterCount() const ;
-    virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const ;
-    virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterName(sal_uInt32 _nPos) const ;
+    virtual OUString getParameterDescription(sal_uInt32 _nPos) const ;
     virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 };
 //============================================================================
@@ -94,7 +94,7 @@ public:
     virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const;
     virtual sal_uInt32                              getNumber() const;
     virtual const formula::IFunctionManager*        getFunctionManager() const;
-    virtual ::rtl::OUString                         getName() const;
+    virtual OUString                         getName() const;
 };
 // =============================================================================
 } // rptui

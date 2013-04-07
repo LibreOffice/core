@@ -35,7 +35,7 @@ class OOX_DLLPUBLIC ThemeFragmentHandler : public ::oox::core::FragmentHandler2
 public:
     explicit            ThemeFragmentHandler(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             Theme& rTheme );
     virtual             ~ThemeFragmentHandler();
 

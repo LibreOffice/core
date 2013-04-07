@@ -82,14 +82,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
-using ::rtl::OUString;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form
 
-#define IDX_FILE_EXTENSION rtl::OUString("*.sdi")
+#define IDX_FILE_EXTENSION OUString("*.sdi")
 
 static String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, bool bOpen )
@@ -298,7 +297,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                 }
                 else
                 {
-                    pDescArr[nArrayIndex]->SetAuthBrackets(rtl::OUString("[]"));
+                    pDescArr[nArrayIndex]->SetAuthBrackets(OUString("[]"));
                 }
             }
         }
@@ -439,14 +438,14 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                                             rSh.GetFldType(RES_AUTHORITY, aEmptyStr);
             if(pFType)
             {
-                String sBrackets = rtl::OUString(pFType->GetPrefix());
+                String sBrackets = OUString(pFType->GetPrefix());
                 sBrackets += pFType->GetSuffix();
                 pDescArr[nIndex]->SetAuthBrackets(sBrackets);
                 pDescArr[nIndex]->SetAuthSequence(pFType->IsSequence());
             }
             else
             {
-                pDescArr[nIndex]->SetAuthBrackets(rtl::OUString("[]"));
+                pDescArr[nIndex]->SetAuthBrackets(OUString("[]"));
             }
         }
         else if(TOX_INDEX == eType.eType)
@@ -491,7 +490,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
         if(!pExampleFrame && !bExampleCreated)
         {
             bExampleCreated = sal_True;
-            String sTemplate(rtl::OUString("internal"));
+            String sTemplate(OUString("internal"));
             sTemplate += INET_PATH_TOKEN;
             sTemplate.AppendAscii( RTL_CONSTASCII_STRINGPARAM("idxexample") );
             String sTemplateWithoutExt( sTemplate );
@@ -1963,10 +1962,10 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aSortDocPosRB.Check();
 
     aFillCharCB.SetMaxTextLen(1);
-    aFillCharCB.InsertEntry(rtl::OUString(' '));
-    aFillCharCB.InsertEntry(rtl::OUString('.'));
-    aFillCharCB.InsertEntry(rtl::OUString('-'));
-    aFillCharCB.InsertEntry(rtl::OUString('_'));
+    aFillCharCB.InsertEntry(OUString(' '));
+    aFillCharCB.InsertEntry(OUString('.'));
+    aFillCharCB.InsertEntry(OUString('-'));
+    aFillCharCB.InsertEntry(OUString('_'));
 
     aButtonPositions[0] = aEntryNoPB.GetPosPixel();
     aButtonPositions[1] = aEntryPB.GetPosPixel();
@@ -2347,7 +2346,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         String sToInsert(aAuthFieldsLB.GetSelectEntry());
         SwFormToken aInsert(TOKEN_AUTHORITY);
         aInsert.nAuthorityField = (sal_uInt16)(sal_uIntPtr)aAuthFieldsLB.GetEntryData(nSelPos);
-        aTokenWIN.InsertAtSelection(rtl::OUString::createFromAscii(
+        aTokenWIN.InsertAtSelection(OUString::createFromAscii(
                                             SwForm::aFormAuth), aInsert);
         aAuthFieldsLB.RemoveEntry(sToInsert);
         aAuthFieldsLB.SelectEntryPos( nSelPos ? nSelPos - 1 : 0);
@@ -2579,7 +2578,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     {
         aTabPosMF.SetValue(aTabPosMF.Normalize(pToken->nTabStopPosition), FUNIT_TWIP);
         aAutoRightCB.Check(SVX_TAB_ADJUST_END == pToken->eTabAlign);
-        aFillCharCB.SetText(rtl::OUString(pToken->cTabFillChar));
+        aFillCharCB.SetText(OUString(pToken->cTabFillChar));
         aTabPosFT.Enable(!aAutoRightCB.IsChecked());
         aTabPosMF.Enable(!aAutoRightCB.IsChecked());
     }
@@ -2903,8 +2902,8 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 default:; //prevent warning
                 }
 
-                InsertItem( pTmp ? rtl::OUString::createFromAscii(pTmp)
-                                 : rtl::OUString(), aToken );
+                InsertItem( pTmp ? OUString::createFromAscii(pTmp)
+                                 : OUString(), aToken );
                 bLastWasText = false;
             }
 
@@ -3327,9 +3326,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     const long nSpace = aCtrlParentWin.GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
-    String sMessage(rtl::OUString("Space: "));
+    String sMessage(OUString("Space: "));
     sMessage += OUString::number(nSpace);
-    sMessage += rtl::OUString(" | ");
+    sMessage += OUString(" | ");
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
@@ -3339,9 +3338,9 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
 
         sMessage += OUString::number( nDebugXPos );
-        sMessage += rtl::OUString(" ");
+        sMessage += OUString(" ");
         sMessage += OUString::number(nDebugXPos + nDebugWidth);
-        sMessage += rtl::OUString(" | ");
+        sMessage += OUString(" | ");
     }
 
 #endif
@@ -4116,7 +4115,7 @@ void    SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
         AutoMarkEntry* pEntry = &aEntryArr[i];
         if(pEntry->sComment.Len())
         {
-            String sWrite = rtl::OUString('#');
+            String sWrite = OUString('#');
             sWrite += pEntry->sComment;
             rOutStr.WriteByteStringLine( sWrite, eTEnc );
         }

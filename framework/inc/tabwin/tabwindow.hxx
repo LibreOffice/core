@@ -154,7 +154,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         sal_Int32   impl_GetPageIdFromIndex( ::sal_Int32 nIndex ) const;
         sal_Bool    impl_CheckIndex( ::sal_Int32 nIndex ) const;
         void        implts_LayoutWindows() const;
-        void        impl_SetTitle( const ::rtl::OUString& rTitle );
+        void        impl_SetTitle( const OUString& rTitle );
         TabControl* impl_GetTabControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& xTabControlWindow ) const;
         void        implts_SendNotification( Notification eNotify, sal_Int32 ID ) const;
         void        implts_SendNotification( Notification eNotify, sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rSeq ) const;
@@ -164,8 +164,8 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         sal_Bool                                                                         m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
         sal_Int32                                                                        m_nNextTabID;
-        ::rtl::OUString                                                                  m_aTitlePropName;
-        ::rtl::OUString                                                                  m_aPosPropName;
+        OUString                                                                  m_aTitlePropName;
+        OUString                                                                  m_aPosPropName;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTopWindow >            m_xTopWindow;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >               m_xContainerWindow;

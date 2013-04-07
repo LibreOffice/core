@@ -83,7 +83,7 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID( ToolPanelChildWindow );
 
     // ::sfx2::ITaskPaneToolPanelAccess
-    virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
+    virtual void ActivateToolPanel( const OUString& i_rPanelURL );
 };
 
 

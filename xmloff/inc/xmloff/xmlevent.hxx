@@ -45,15 +45,15 @@ class XMLEventsImportContext;
 struct XMLEventName
 {
     sal_uInt16 m_nPrefix;
-    ::rtl::OUString m_aName;
+    OUString m_aName;
 
     XMLEventName() : m_nPrefix( 0 ) {}
     XMLEventName( sal_uInt16 n, const sal_Char *p ) :
         m_nPrefix( n ),
-        m_aName( ::rtl::OUString::createFromAscii(p) )
+        m_aName( OUString::createFromAscii(p) )
        {}
 
-    XMLEventName( sal_uInt16 n, const ::rtl::OUString& r ) :
+    XMLEventName( sal_uInt16 n, const OUString& r ) :
         m_nPrefix( n ),
         m_aName( r )
        {}
@@ -96,7 +96,7 @@ public:
 
     virtual void Export(
         SvXMLExport& rExport,                   /// the current XML export
-        const ::rtl::OUString& rEventQName,     /// the XML name of the event
+        const OUString& rEventQName,     /// the XML name of the event
         ::com::sun::star::uno::Sequence<        /// the values for the event
             ::com::sun::star::beans::PropertyValue> & rValues,
          sal_Bool bUseWhitespace) = 0;  /// create whitespace around elements?
@@ -129,15 +129,15 @@ public:
     virtual SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,               /// import context
         sal_uInt16 nPrefix,                 /// element: namespace prefix
-        const ::rtl::OUString& rLocalName,  /// element: local name
+        const OUString& rLocalName,  /// element: local name
         const ::com::sun::star::uno::Reference<     /// attribute list
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         /// the context for the enclosing <script:events> element
         XMLEventsImportContext* rEvents,
         /// the event name (as understood by the API)
-        const ::rtl::OUString& rApiEventName,
+        const OUString& rApiEventName,
         /// the event type name (as registered)
-        const ::rtl::OUString& rApiLanguage) = 0;
+        const OUString& rApiLanguage) = 0;
 };
 
 

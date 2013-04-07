@@ -152,7 +152,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     char cTmpSymbol;
     rStrm >> cTmpSymbol;
     //convert single byte to unicode
-    cSymbol = rtl::OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
+    cSymbol = OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
 
     rStrm >> nScale;
 
@@ -352,7 +352,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     rStrm << static_cast<sal_Int32>(nWidth);
     rStrm << nStart;
     rStrm << nJustify;
-    rStrm << rtl::OUStringToOString(rtl::OUString(cSymbol), aFont.GetCharSet()).toChar();
+    rStrm << OUStringToOString(OUString(cSymbol), aFont.GetCharSet()).toChar();
     rStrm << nScale;
 
     // UNICODE: rStrm << aPrevText;

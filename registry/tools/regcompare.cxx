@@ -37,7 +37,7 @@
 using namespace rtl;
 using namespace registry::tools;
 
-typedef std::set< rtl::OUString > StringSet;
+typedef std::set< OUString > StringSet;
 
 class Options_Impl : public Options
 {
@@ -80,12 +80,12 @@ protected:
 
 #define U2S( s ) OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()
 
-inline rtl::OUString makeOUString (std::string const & s)
+inline OUString makeOUString (std::string const & s)
 {
-    return rtl::OUString(s.c_str(), s.size(), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    return OUString(s.c_str(), s.size(), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
-inline rtl::OUString shortName(rtl::OUString const & fullName)
+inline OUString shortName(OUString const & fullName)
 {
     return fullName.copy(fullName.lastIndexOf('/') + 1);
 }
@@ -441,7 +441,7 @@ static void printConstValue(RTConstValue& constValue)
         case RT_TYPE_STRING:
             fprintf(
                 stdout, "%s",
-                (rtl::OUStringToOString(
+                (OUStringToOString(
                     constValue.m_value.aString, RTL_TEXTENCODING_UTF8).
                  getStr()));
             break;
@@ -553,11 +553,11 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
                     fprintf(
                         stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
                         index1,
-                        rtl::OUStringToOString(
-                            rtl::OUString::valueOf(constValue1.m_value.aHyper),
+                        OUStringToOString(
+                            OUString::valueOf(constValue1.m_value.aHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr(),
-                        rtl::OUStringToOString(
-                            rtl::OUString::valueOf(constValue2.m_value.aHyper),
+                        OUStringToOString(
+                            OUString::valueOf(constValue2.m_value.aHyper),
                             RTL_TEXTENCODING_ASCII_US).getStr());
                 }
                 return 1;
@@ -572,13 +572,13 @@ static sal_uInt32 checkConstValue(Options_Impl const & options,
                     fprintf(
                         stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n",
                         index1,
-                        rtl::OUStringToOString(
-                            rtl::OUString::valueOf(
+                        OUStringToOString(
+                            OUString::valueOf(
                                 static_cast< sal_Int64 >(
                                     constValue1.m_value.aUHyper)),
                             RTL_TEXTENCODING_ASCII_US).getStr(),
-                        rtl::OUStringToOString(
-                            rtl::OUString::valueOf(
+                        OUStringToOString(
+                            OUString::valueOf(
                                 static_cast< sal_Int64 >(
                                     constValue2.m_value.aUHyper)),
                             RTL_TEXTENCODING_ASCII_US).getStr());
@@ -1644,10 +1644,10 @@ static sal_uInt32 checkValueDifference(
 static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key)
 {
     RegistryKeyNames subKeyNames;
-    key.getKeyNames(rtl::OUString(), subKeyNames);
+    key.getKeyNames(OUString(), subKeyNames);
     for (sal_uInt32 i = 0; i < subKeyNames.getLength(); ++i)
     {
-        rtl::OUString keyName(subKeyNames.getElement(i));
+        OUString keyName(subKeyNames.getElement(i));
         if (!options.matchedWithExcludeKey(keyName))
         {
             keyName = keyName.copy(keyName.lastIndexOf('/') + 1);
@@ -1668,7 +1668,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
             {
                 RegValueType type;
                 sal_uInt32 size;
-                if (subKey.getValueInfo(rtl::OUString(), &type, &size) != REG_NO_ERROR)
+                if (subKey.getValueInfo(OUString(), &type, &size) != REG_NO_ERROR)
                 {
                     if (options.forceOutput())
                     {
@@ -1684,7 +1684,7 @@ static bool hasPublishedChildren(Options_Impl const & options, RegistryKey & key
                 {
                     bool published = false;
                     std::vector< sal_uInt8 > value(size);
-                    if (subKey.getValue(rtl::OUString(), &value[0]) != REG_NO_ERROR)
+                    if (subKey.getValue(OUString(), &value[0]) != REG_NO_ERROR)
                     {
                         if (options.forceOutput())
                         {
@@ -1747,7 +1747,7 @@ static sal_uInt32 checkDifferences(
             }
             else
             {
-                rtl::OUString keyName(subKeyNames1.getElement(i));
+                OUString keyName(subKeyNames1.getElement(i));
                 if (!options.matchedWithExcludeKey(keyName))
                 {
                     keyName = keyName.copy(keyName.lastIndexOf('/') + 1);
@@ -1769,7 +1769,7 @@ static sal_uInt32 checkDifferences(
                     {
                         RegValueType type;
                         sal_uInt32 size;
-                        if (subKey.getValueInfo(rtl::OUString(), &type, &size) != REG_NO_ERROR)
+                        if (subKey.getValueInfo(OUString(), &type, &size) != REG_NO_ERROR)
                         {
                             if (options.forceOutput())
                             {
@@ -1785,7 +1785,7 @@ static sal_uInt32 checkDifferences(
                         else if (type == RG_VALUETYPE_BINARY)
                         {
                             std::vector< sal_uInt8 > value(size);
-                            if (subKey.getValue(rtl::OUString(), &value[0]) != REG_NO_ERROR)
+                            if (subKey.getValue(OUString(), &value[0]) != REG_NO_ERROR)
                             {
                                 if (options.forceOutput())
                                 {

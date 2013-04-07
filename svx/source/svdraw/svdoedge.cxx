@@ -1930,7 +1930,7 @@ String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
     else
     {
-        rtl::OUString aStr;
+        OUString aStr;
         ImpTakeDescriptionStr(STR_DragEdgeTail, aStr);
 
         return aStr;

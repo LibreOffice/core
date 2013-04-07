@@ -40,7 +40,7 @@ namespace connectivity
                 @param  _xRow
                     The current row from the resultset given to fillNames.
             */
-            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
+            virtual OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
 
         public:
             virtual void refreshTables();

@@ -35,12 +35,12 @@ using namespace ::com::sun::star::lang;
 IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View");
 // -------------------------------------------------------------------------
 OView::OView(sal_Bool _bCase,
-            const ::rtl::OUString& _Name,
+            const OUString& _Name,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
             sal_Int32 _CheckOption,
-            const ::rtl::OUString& _Command,
-            const ::rtl::OUString& _SchemaName,
-            const ::rtl::OUString& _CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
+            const OUString& _Command,
+            const OUString& _SchemaName,
+            const OUString& _CatalogName) : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper,_bCase)
             ,m_CatalogName(_CatalogName)
             ,m_SchemaName(_SchemaName)
             ,m_Command(_Command)
@@ -69,9 +69,9 @@ void OView::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(static_cast< ::rtl::OUString*>(0)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(static_cast< ::rtl::OUString*>(0)));
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND),         PROPERTY_ID_COMMAND,    nAttrib,&m_Command,     ::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,nAttrib,&m_CatalogName, ::getCppuType(static_cast< OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME, nAttrib,&m_SchemaName,  ::getCppuType(static_cast< OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND),         PROPERTY_ID_COMMAND,    nAttrib,&m_Command,     ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CHECKOPTION),     PROPERTY_ID_CHECKOPTION,nAttrib,&m_CheckOption, ::getCppuType(static_cast< sal_Int32*>(0)));
 }
 // -------------------------------------------------------------------------
@@ -103,9 +103,9 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
     return *const_cast<OView*>(this)->getArrayHelper(isNew() ? 1 : 0);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sComposedName;
+    OUString sComposedName;
     if(m_xMetaData.is())
         sComposedName = ::dbtools::composeTableName( m_xMetaData, m_CatalogName, m_SchemaName, m_Name, sal_False, ::dbtools::eInDataManipulation );
     else
@@ -122,7 +122,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException)
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OView::setName( const ::rtl::OUString& ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OView::setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------

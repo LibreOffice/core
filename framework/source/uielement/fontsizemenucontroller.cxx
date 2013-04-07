@@ -71,9 +71,9 @@ FontSizeMenuController::~FontSizeMenuController()
 }
 
 // private function
-rtl::OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame )
+OUString FontSizeMenuController::retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame )
 {
-    rtl::OUString aPrinterName;
+    OUString aPrinterName;
 
     if ( rFrame.is() )
     {
@@ -137,7 +137,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     {
         FontList*       pFontList = 0;
         Printer*        pInfoPrinter = 0;
-        rtl::OUString   aPrinterName;
+        OUString   aPrinterName;
 
         SolarMutexGuard aSolarMutexGuard;
 
@@ -166,13 +166,13 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             nSizeCount++;
 
         sal_uInt16 nPos = 0;
-        const rtl::OUString aFontHeightCommand( ".uno:FontHeight?FontHeight.Height:float=" );
+        const OUString aFontHeightCommand( ".uno:FontHeight?FontHeight.Height:float=" );
 
         // first insert font size names (for simplified/traditional chinese)
         float           fPoint;
         FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
         m_pHeightArray = new long[nSizeCount+aFontSizeNames.Count()];
-        rtl::OUString   aCommand;
+        OUString   aCommand;
 
         if ( !aFontSizeNames.IsEmpty() )
         {
@@ -190,7 +190,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                     fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                     // Create dispatchable .uno command and set it
-                    aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+                    aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
                     pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                 }
             }
@@ -209,7 +209,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                         fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
                         // Create dispatchable .uno command and set it
-                        aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+                        aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
                         pVCLPopupMenu->SetItemCommand( nPos, aCommand );
                     }
                     pTempAry++;
@@ -228,7 +228,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             fPoint = float( m_pHeightArray[nPos-1] ) / 10;
 
             // Create dispatchable .uno command and set it
-            aCommand = aFontHeightCommand + rtl::OUString::valueOf( fPoint );
+            aCommand = aFontHeightCommand + OUString::valueOf( fPoint );
             pVCLPopupMenu->SetItemCommand( nPos, aCommand );
 
             pTempAry++;
@@ -298,9 +298,9 @@ void FontSizeMenuController::impl_setPopupMenu()
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     com::sun::star::util::URL aTargetURL;
     // Register for font name updates which gives us info about the current font!
-    aTargetURL.Complete = rtl::OUString( ".uno:CharFontName" );
+    aTargetURL.Complete = OUString( ".uno:CharFontName" );
     m_xURLTransformer->parseStrict( aTargetURL );
-    m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+    m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
 void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
@@ -311,7 +311,7 @@ void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( ::com::sun::star
 
     Reference< XDispatch > xDispatch( m_xCurrentFontDispatch );
     com::sun::star::util::URL aTargetURL;
-    aTargetURL.Complete = rtl::OUString( ".uno:CharFontName" );
+    aTargetURL.Complete = OUString( ".uno:CharFontName" );
     m_xURLTransformer->parseStrict( aTargetURL );
     aLock.clear();
 

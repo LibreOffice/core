@@ -42,7 +42,7 @@ using stoc::registry_tdprovider::StructTypeDescription;
 StructTypeDescription::StructTypeDescription(
     css::uno::Reference< css::container::XHierarchicalNameAccess > const &
         manager,
-    rtl::OUString const & name, rtl::OUString const & baseTypeName,
+    OUString const & name, OUString const & baseTypeName,
     css::uno::Sequence< sal_Int8 > const & data, bool published):
     m_data(data),
     m_base(
@@ -60,7 +60,7 @@ css::uno::TypeClass StructTypeDescription::getTypeClass()
     return m_base->getTypeClass();
 }
 
-rtl::OUString StructTypeDescription::getName()
+OUString StructTypeDescription::getName()
     throw (css::uno::RuntimeException)
 {
     return m_base->getName();
@@ -78,13 +78,13 @@ StructTypeDescription::getMemberTypes() throw (css::uno::RuntimeException)
     return m_base->getMemberTypes();
 }
 
-css::uno::Sequence< rtl::OUString > StructTypeDescription::getMemberNames()
+css::uno::Sequence< OUString > StructTypeDescription::getMemberNames()
     throw (css::uno::RuntimeException)
 {
     return m_base->getMemberNames();
 }
 
-css::uno::Sequence< rtl::OUString > StructTypeDescription::getTypeParameters()
+css::uno::Sequence< OUString > StructTypeDescription::getTypeParameters()
     throw (css::uno::RuntimeException)
 {
     try {
@@ -93,13 +93,13 @@ css::uno::Sequence< rtl::OUString > StructTypeDescription::getTypeParameters()
             TYPEREG_VERSION_1);
         OSL_ASSERT(reader.isValid());
         sal_uInt16 n = reader.getReferenceCount();
-        css::uno::Sequence< rtl::OUString > parameters(n);
+        css::uno::Sequence< OUString > parameters(n);
         for (sal_uInt16 i = 0; i < n; ++i) {
             if (reader.getReferenceFlags(i) != RT_ACCESS_INVALID
                 || reader.getReferenceSort(i) != RT_REF_TYPE_PARAMETER)
             {
                 throw css::uno::RuntimeException(
-                    rtl::OUString(
+                    OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "type parameter of polymorphic struct type template"
                             " not RT_ACCESS_INVALID/RT_REF_TYPE_PARAMETER")),
@@ -110,7 +110,7 @@ css::uno::Sequence< rtl::OUString > StructTypeDescription::getTypeParameters()
         return parameters;
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString("std::bad_alloc"),
+            OUString("std::bad_alloc"),
             static_cast< cppu::OWeakObject * >(this));
     }
 }

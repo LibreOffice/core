@@ -40,7 +40,7 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 private:
     const sal_uInt16 theSlotId;
     ValueSet       aColorSet;
-    rtl::OUString  maCommand;
+    OUString  maCommand;
     const Color    mLastColor;
 
     DECL_LINK( SelectHdl, void * );
@@ -50,7 +50,7 @@ protected:
     virtual sal_Bool    Close();
 
 public:
-    SvxColorWindow_Impl( const rtl::OUString& rCommand,
+    SvxColorWindow_Impl( const OUString& rCommand,
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const String& rWndTitle,

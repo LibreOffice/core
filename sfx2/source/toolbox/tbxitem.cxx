@@ -129,7 +129,7 @@ static Window* GetTopMostParentSystemWindow( Window* pWindow )
     return NULL;
 }
 
-svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL )
+svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const OUString& aCommandURL )
 {
     SolarMutexGuard aGuard;
 
@@ -422,7 +422,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
 
 void SfxToolBoxControl::Dispatch(
     const Reference< XDispatchProvider >& rProvider,
-    const rtl::OUString& rCommand,
+    const OUString& rCommand,
     Sequence< ::PropertyValue >& aArgs )
 {
     if ( rProvider.is() )
@@ -432,13 +432,13 @@ void SfxToolBoxControl::Dispatch(
         Reference < XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
 
-        Reference < XDispatch > xDispatch = rProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        Reference < XDispatch > xDispatch = rProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if ( xDispatch.is() )
             xDispatch->dispatch( aTargetURL, aArgs );
     }
 }
 
-void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
 {
     Reference < XController > xController;
 
@@ -453,7 +453,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
         aTargetURL.Complete = aCommand;
         getURLTransformer()->parseStrict( aTargetURL );
 
-        Reference < XDispatch > xDispatch = xProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        Reference < XDispatch > xDispatch = xProvider->queryDispatch( aTargetURL, OUString(), 0 );
         if ( xDispatch.is() )
             xDispatch->dispatch( aTargetURL, aArgs );
     }
@@ -499,7 +499,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
     if ( xProvider.is() )
     {
-        Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, ::rtl::OUString(), 0 );
+        Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
             Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
@@ -559,9 +559,9 @@ throw ( ::com::sun::star::uno::RuntimeException )
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+                else if ( pType == ::getCppuType((const OUString*)0) )
                 {
-                    ::rtl::OUString sTemp ;
+                    OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
@@ -604,12 +604,12 @@ throw ( ::com::sun::star::uno::RuntimeException )
     return sal_False;
 }
 
-::rtl::OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SfxToolBoxControl::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString();
+    return OUString();
 }
 
-void SAL_CALL SfxToolBoxControl::functionSelected( const ::rtl::OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxToolBoxControl::functionSelected( const OUString& /*aCommand*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     // must be implemented by sub-class
 }
@@ -690,7 +690,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aSubToolBarResName;
+    OUString aSubToolBarResName;
     if ( pImpl->mxUIElement.is() )
     {
         Reference< XPropertySet > xPropSet( pImpl->mxUIElement, UNO_QUERY );
@@ -698,7 +698,7 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             try
             {
-                xPropSet->getPropertyValue( ::rtl::OUString( "ResourceURL" )) >>= aSubToolBarResName;
+                xPropSet->getPropertyValue( OUString( "ResourceURL" )) >>= aSubToolBarResName;
             }
             catch ( com::sun::star::beans::UnknownPropertyException& )
             {
@@ -732,7 +732,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
             if ( xSubToolBar.is() && xProp.is() )
             {
-                rtl::OUString aPersistentString( "Persistent" );
+                OUString aPersistentString( "Persistent" );
                 try
                 {
                     Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
@@ -748,7 +748,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
                         xLayoutManager->showElement( aSubToolBarResName );
 
-                        xProp->setPropertyValue( rtl::OUString( "Persistent" ), a );
+                        xProp->setPropertyValue( OUString( "Persistent" ), a );
                     }
                 }
                 catch ( ::com::sun::star::uno::RuntimeException& )
@@ -763,13 +763,13 @@ throw (::com::sun::star::uno::RuntimeException)
     }
 }
 
-::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& /*xFrame*/, const ::rtl::OUString& /*rSubToolBarResName*/ )
+::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& /*xFrame*/, const OUString& /*rSubToolBarResName*/ )
 {
     ::Size  aToolboxSize;
     return aToolboxSize;
 }
 
-void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSubToolBarResName )
+void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBarResName )
 {
     SolarMutexGuard aGuard;
 
@@ -796,11 +796,11 @@ void SfxToolBoxControl::createAndPositionSubToolBar( const ::rtl::OUString& rSub
         }
 
         Sequence< PropertyValue > aPropSeq( 3 );
-        aPropSeq[0].Name = rtl::OUString( "Frame" );
+        aPropSeq[0].Name = OUString( "Frame" );
         aPropSeq[0].Value <<= xFrame;
-        aPropSeq[1].Name = rtl::OUString( "Persistent" );
+        aPropSeq[1].Name = OUString( "Persistent" );
         aPropSeq[1].Value <<= sal_False;
-        aPropSeq[2].Name = rtl::OUString( "PopupMode" );
+        aPropSeq[2].Name = OUString( "PopupMode" );
         aPropSeq[2].Value <<= sal_True;
 
         try
@@ -1045,7 +1045,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
     Reference < XDispatchProvider > xProvider( xController, UNO_QUERY );
     if ( xProvider.is() )
     {
-        Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, ::rtl::OUString(), 0 );
+        Reference < XDispatch > xDisp = xProvider->queryDispatch( rEvent.FeatureURL, OUString(), 0 );
         if ( xDisp.is() )
         {
             Reference< XUnoTunnel > xTunnel( xDisp, UNO_QUERY );
@@ -1106,9 +1106,9 @@ throw ( ::com::sun::star::uno::RuntimeException )
                     rEvent.State >>= nTemp ;
                     pItem = new SfxUInt32Item( nSlotId, nTemp );
                 }
-                else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+                else if ( pType == ::getCppuType((const OUString*)0) )
                 {
-                    ::rtl::OUString sTemp ;
+                    OUString sTemp ;
                     rEvent.State >>= sTemp ;
                     pItem = new SfxStringItem( nSlotId, sTemp );
                 }
@@ -1253,7 +1253,7 @@ void SfxPopupWindow::UnbindListener()
 
 //--------------------------------------------------------------------
 
-void SfxPopupWindow::AddStatusListener( const rtl::OUString& rCommandURL )
+void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 {
     GetOrCreateStatusListener();
     if ( m_xStatusListener.is() )
@@ -1582,7 +1582,7 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             aTargetURL.Complete = aLastURL;
             getURLTransformer()->parseStrict( aTargetURL );
 
-            ::rtl::OUString aTarget( ::rtl::OUString("_default"));
+            OUString aTarget( OUString("_default"));
             if ( pMenu )
             {
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -1598,8 +1598,8 @@ void SfxAppToolBoxControl_Impl::Select( sal_Bool bMod1 )
             {
                 Sequence< PropertyValue > aArgs( 1 );
 
-                aArgs[0].Name = ::rtl::OUString("Referer");
-                aArgs[0].Value = makeAny( ::rtl::OUString(SFX_REFERER_USER ) );
+                aArgs[0].Name = OUString("Referer");
+                aArgs[0].Value = makeAny( OUString(SFX_REFERER_USER ) );
 
                 ExecuteInfo* pExecuteInfo = new ExecuteInfo;
                 pExecuteInfo->xDispatch     = xDispatch;
@@ -1632,10 +1632,10 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
 
     Reference < XDispatch > xDisp;
     if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
-        xDisp = xDesktop->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        xDisp = xDesktop->queryDispatch( aTargetURL, OUString(), 0 );
     else
     {
-        ::rtl::OUString aTargetFrame( ::rtl::OUString("_blank") );
+        OUString aTargetFrame( OUString("_blank") );
         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 
@@ -1680,7 +1680,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                     if ( bShowMenuImages )
                     {
                         sal_Bool        bImageSet = sal_False;
-                        ::rtl::OUString aImageId;
+                        OUString aImageId;
                         ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                             (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
 

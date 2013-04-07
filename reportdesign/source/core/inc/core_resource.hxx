@@ -59,7 +59,7 @@ namespace reportdesign
     public:
         /** loads the string with the specified resource id from the FormLayer resource file
         */
-        static ::rtl::OUString loadString(sal_uInt16 _nResId,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >& _rM);
+        static OUString loadString(sal_uInt16 _nResId,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >& _rM);
     };
 
 //.........................................................................

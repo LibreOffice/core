@@ -144,8 +144,8 @@ LoadEnv::~LoadEnv()
 
 css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const css::uno::Reference< css::frame::XComponentLoader >&    xLoader,
                                                                            const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                                                                           const ::rtl::OUString&                                        sURL   ,
-                                                                           const ::rtl::OUString&                                        sTarget,
+                                                                           const OUString&                                        sURL   ,
+                                                                           const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nFlags ,
                                                                            const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
     throw(css::lang::IllegalArgumentException,
@@ -222,10 +222,10 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
 }
 
 
-void LoadEnv::initializeLoading(const ::rtl::OUString&                                           sURL            ,
+void LoadEnv::initializeLoading(const OUString&                                           sURL            ,
                                 const css::uno::Sequence< css::beans::PropertyValue >&           lMediaDescriptor,
                                 const css::uno::Reference< css::frame::XFrame >&                 xBaseFrame      ,
-                                const ::rtl::OUString&                                           sTarget         ,
+                                const OUString&                                           sTarget         ,
                                       sal_Int32                                                  nSearchFlags    ,
                                       EFeature                                                   eFeature        , // => use default ...
                                       EContentType                                               eContentType    ) // => use default ...
@@ -559,7 +559,7 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
     TODO: Is it a good idea to change Sequence<>
           parameter to stl-adapter?
 -----------------------------------------------*/
-LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&                                 sURL            ,
+LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                                 sURL            ,
                                                const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor)
 {
     //-------------------------------------------
@@ -639,12 +639,12 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
          xContext->getServiceManager()->createInstanceWithContext(SERVICENAME_TYPEDETECTION, xContext),
          css::uno::UNO_QUERY);
 
-    ::rtl::OUString sType = xDetect->queryTypeByURL(sURL);
+    OUString sType = xDetect->queryTypeByURL(sURL);
 
     css::uno::Sequence< css::beans::NamedValue >           lQuery(1)   ;
     css::uno::Reference< css::container::XContainerQuery > xContainer  ;
     css::uno::Reference< css::container::XEnumeration >    xSet        ;
-    css::uno::Sequence< ::rtl::OUString >                  lTypesReg(1);
+    css::uno::Sequence< OUString >                  lTypesReg(1);
 
 
     //-------------------------------------------
@@ -661,7 +661,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //      Because there exist some types, which are referenced by
     //      other objects ... but not by filters nor frame loaders!
 
-    rtl::OUString sPROP_TYPES(PROP_TYPES);
+    OUString sPROP_TYPES(PROP_TYPES);
 
     lTypesReg[0]      = sType;
     lQuery[0].Name    = sPROP_TYPES;
@@ -766,8 +766,8 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 void LoadEnv::impl_detectTypeAndFilter()
     throw(LoadEnvException, css::uno::RuntimeException)
 {
-    static ::rtl::OUString TYPEPROP_PREFERREDFILTER("PreferredFilter");
-    static ::rtl::OUString FILTERPROP_FLAGS        ("Flags");
+    static OUString TYPEPROP_PREFERREDFILTER("PreferredFilter");
+    static OUString FILTERPROP_FLAGS        ("Flags");
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
     // SAFE ->
@@ -782,7 +782,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     aReadLock.unlock();
     // <- SAFE
 
-    rtl::OUString sType, sFilter;
+    OUString sType, sFilter;
 
     if (queryOrcusTypeAndFilter(lDescriptor, sType, sFilter) && !sType.isEmpty() && !sFilter.isEmpty())
     {
@@ -810,7 +810,7 @@ void LoadEnv::impl_detectTypeAndFilter()
     m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()] <<= sType;
     // Is there an already detected (may be preselected) filter?
     // see below ...
-    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), ::rtl::OUString());
+    sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_FILTERNAME(), OUString());
 
     aWriteLock.unlock();
     // <- SAFE
@@ -830,7 +830,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         try
         {
             ::comphelper::SequenceAsHashMap lTypeProps(xTypeCont->getByName(sType));
-            sFilter = lTypeProps.getUnpackedValueOrDefault(TYPEPROP_PREFERREDFILTER, ::rtl::OUString());
+            sFilter = lTypeProps.getUnpackedValueOrDefault(TYPEPROP_PREFERREDFILTER, OUString());
             if (!sFilter.isEmpty())
             {
                 // SAFE ->
@@ -886,7 +886,7 @@ sal_Bool LoadEnv::impl_handleContent()
     ReadGuard aReadLock(m_aLock);
 
     // the type must exist inside the descriptor ... otherwise this class is implemented wrong :-)
-    ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -903,20 +903,20 @@ sal_Bool LoadEnv::impl_handleContent()
     // <- SAFE -----------------------------------
 
     // query
-    css::uno::Sequence< ::rtl::OUString > lTypeReg(1);
+    css::uno::Sequence< OUString > lTypeReg(1);
     lTypeReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = rtl::OUString(PROP_TYPES);
+    lQuery[0].Name    = OUString(PROP_TYPES);
     lQuery[0].Value <<= lTypeReg;
 
-    ::rtl::OUString sPROP_NAME(PROP_NAME);
+    OUString sPROP_NAME(PROP_NAME);
 
     css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
-        ::rtl::OUString                 sHandler = lProps.getUnpackedValueOrDefault(sPROP_NAME, ::rtl::OUString());
+        OUString                 sHandler = lProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
 
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
@@ -961,9 +961,9 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 comphelper::getComponentContext(xSMGR),
-                                ::rtl::OUString("org.openoffice.Office.Common/"),
-                                ::rtl::OUString("Misc"),
-                                ::rtl::OUString("MaxOpenDocuments"),
+                                OUString("org.openoffice.Office.Common/"),
+                                OUString("Misc"),
+                                OUString("MaxOpenDocuments"),
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
@@ -1035,7 +1035,7 @@ sal_Bool LoadEnv::impl_loadContent()
     WriteGuard aWriteLock(m_aLock);
 
     // search or create right target frame
-    ::rtl::OUString sTarget = m_sTarget;
+    OUString sTarget = m_sTarget;
     if (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_DEFAULT))
     {
         m_xTargetFrame = impl_searchAlreadyLoaded();
@@ -1128,7 +1128,7 @@ sal_Bool LoadEnv::impl_loadContent()
     // convert media descriptor and URL to right format for later interface call!
     css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
     m_lMediaDescriptor >> lDescriptor;
-    ::rtl::OUString sURL = m_aURL.Complete;
+    OUString sURL = m_aURL.Complete;
 
     // try to locate any interested frame loader
     css::uno::Reference< css::uno::XInterface >                xLoader     = impl_searchLoader();
@@ -1191,7 +1191,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     // Otherwhise ...
     // We need this type information to locate an registered frame loader
     // Without such information we can't work!
-    ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), ::rtl::OUString());
+    OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_TYPENAME(), OUString());
     if (sType.isEmpty())
         throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
 
@@ -1202,14 +1202,14 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     aReadLock.unlock();
     // <- SAFE -----------------------------------
 
-    css::uno::Sequence< ::rtl::OUString > lTypesReg(1);
+    css::uno::Sequence< OUString > lTypesReg(1);
     lTypesReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = rtl::OUString(PROP_TYPES);
+    lQuery[0].Name    = OUString(PROP_TYPES);
     lQuery[0].Value <<= lTypesReg;
 
-    ::rtl::OUString sPROP_NAME(PROP_NAME);
+    OUString sPROP_NAME(PROP_NAME);
 
     css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -1217,7 +1217,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         // try everyone ...
         // Ignore any loader, which makes trouble :-)
         ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
-        ::rtl::OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, ::rtl::OUString());
+        OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
         css::uno::Reference< css::uno::XInterface > xLoader     ;
         try
         {
@@ -1252,7 +1252,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
     // <- SAFE
 
     css::util::URL aCmd;
-    aCmd.Complete = ::rtl::OUString(".uno:JumpToMark");
+    aCmd.Complete = OUString(".uno:JumpToMark");
 
     css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
     xParser->parseStrict(aCmd);
@@ -1262,7 +1262,7 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
         return;
 
     ::comphelper::SequenceAsHashMap lArgs;
-    lArgs[::rtl::OUString("Bookmark")] <<= aURL.Mark;
+    lArgs[OUString("Bookmark")] <<= aURL.Mark;
     xDispatcher->dispatch(aCmd, lArgs.getAsConstPropertyValueList());
 }
 
@@ -1344,7 +1344,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
             // don't check the complete URL here.
             // use its main part - ignore optional jumpmarks!
-            const ::rtl::OUString sURL = xModel->getURL();
+            const OUString sURL = xModel->getURL();
             if (!::utl::UCBContentHelper::EqualURLs( m_aURL.Main, sURL ))
             {
                 xTask.clear ();
@@ -1597,7 +1597,7 @@ void LoadEnv::impl_reactForLoadingState()
         ::comphelper::MediaDescriptor::const_iterator pFrameName = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_FRAMENAME());
         if (pFrameName != m_lMediaDescriptor.end())
         {
-            ::rtl::OUString sFrameName;
+            OUString sFrameName;
             pFrameName->second >>= sFrameName;
             // Check the name again. e.g. "_default" isnt allowed.
             // On the other side "_beamer" is a valid name :-)
@@ -1699,9 +1699,9 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             css::uno::Any const a =
                 ::comphelper::ConfigurationHelper::readDirectKey(
                   comphelper::getComponentContext(xSMGR),
-                  ::rtl::OUString("org.openoffice.Office.Common/View"),
-                  ::rtl::OUString("NewDocumentHandling"),
-                  ::rtl::OUString("ForceFocusAndToFront"),
+                  OUString("org.openoffice.Office.Common/View"),
+                  OUString("NewDocumentHandling"),
+                  OUString("ForceFocusAndToFront"),
                   ::comphelper::ConfigurationHelper::E_READONLY);
             a >>= bForceFrontAndFocus;
         }
@@ -1716,7 +1716,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
 void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    static ::rtl::OUString PACKAGE_SETUP_MODULES("/org.openoffice.Setup/Office/Factories");
+    static OUString PACKAGE_SETUP_MODULES("/org.openoffice.Setup/Office/Factories");
 
     // no window -> action not possible
     if (!xWindow.is())
@@ -1756,9 +1756,9 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
     ReadGuard aReadLock(m_aLock);
 
     // no filter -> no module -> no persistent window state
-    ::rtl::OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
+    OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
                                     ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
-                                    ::rtl::OUString());
+                                    OUString());
     if (sFilter.isEmpty())
         return;
 
@@ -1774,7 +1774,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
             xSMGR->createInstance(SERVICENAME_FILTERFACTORY),
             css::uno::UNO_QUERY_THROW);
         ::comphelper::SequenceAsHashMap lProps (xFilterCfg->getByName(sFilter));
-        ::rtl::OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
+        OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
         css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
@@ -1786,7 +1786,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         // read window state from the configuration
         // and apply it on the window.
         // Do nothing, if no configuration entry exists!
-        ::rtl::OUString sWindowState ;
+        OUString sWindowState ;
         ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES) >>= sWindowState;
         if (!sWindowState.isEmpty())
         {
@@ -1803,7 +1803,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
                 return;
 
             SystemWindow* pSystemWindow = (SystemWindow*)pWindowCheck;
-            pSystemWindow->SetWindowState(rtl::OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
+            pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
             // <- SOLAR SAFE
         }
     }

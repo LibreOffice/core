@@ -29,8 +29,6 @@
 #include <xmloff/xmltoken.hxx>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -39,7 +37,7 @@ using namespace ::xmloff::token;
 
 SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport& rImport,
                                     sal_uInt16 p_nPrefix,
-                                    const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLImportContext ( rImport, p_nPrefix, rLocalName )
@@ -48,20 +46,20 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
-        const rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        const OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName(sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_TABLE && IsXMLToken( aLocalName, XML_DATE_VALUE ) )
         {
             util::DateTime aNullDate;
-            const rtl::OUString sValue = xAttrList->getValueByIndex( i );
+            const OUString sValue = xAttrList->getValueByIndex( i );
             ::sax::Converter::convertDateTime(aNullDate, sValue);
             m_aNullDate <<= aNullDate;
         }
     }
 }
 SvXMLImportContext* SchXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     return new SchXMLCalculationSettingsContext(GetImport(),nPrefix,rLocalName,xAttrList);

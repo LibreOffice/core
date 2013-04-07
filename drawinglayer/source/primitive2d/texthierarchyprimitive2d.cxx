@@ -101,7 +101,7 @@ namespace drawinglayer
         TextHierarchyFieldPrimitive2D::TextHierarchyFieldPrimitive2D(
             const Primitive2DSequence& rChildren,
             const FieldType& rFieldType,
-            const rtl::OUString& rString)
+            const OUString& rString)
         :   GroupPrimitive2D(rChildren),
             meType(rFieldType),
             maString(rString)

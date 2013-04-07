@@ -172,7 +172,7 @@ ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, sal_uInt1
 //----------------------------------------------------------------------------------------------------------------------
 struct DelayedToolPanelActivation
 {
-    DelayedToolPanelActivation( ToolPanelChildWindow& i_rToolPanelWindow, const ::rtl::OUString& i_rPanelURL )
+    DelayedToolPanelActivation( ToolPanelChildWindow& i_rToolPanelWindow, const OUString& i_rPanelURL )
         :m_rToolPanelWindow( i_rToolPanelWindow )
         ,m_sPanelURL( i_rPanelURL )
     {
@@ -185,11 +185,11 @@ struct DelayedToolPanelActivation
 
 private:
     ToolPanelChildWindow&   m_rToolPanelWindow;
-    const ::rtl::OUString   m_sPanelURL;
+    const OUString   m_sPanelURL;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+void ToolPanelChildWindow::ActivateToolPanel( const OUString& i_rPanelURL )
 {
     SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
     ViewShellBase* pViewShellBase = ViewShellBase::GetViewShellBase( pDockingWindow->GetBindings().GetDispatcher()->GetFrame() );

@@ -300,7 +300,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
 
     aPrinter.getArray()[0].Name = "Name";
     String sStringTemp = pPrinter->GetName() ;
-    aPrinter.getArray()[0].Value <<= ::rtl::OUString( sStringTemp );
+    aPrinter.getArray()[0].Value <<= OUString( sStringTemp );
 
     return aPrinter;
 }
@@ -334,7 +334,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            ::rtl::OUString aPrinterName;
+            OUString aPrinterName;
             if ( ! ( rProp.Value >>= aPrinterName ) )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
@@ -408,13 +408,13 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // PrinterTray-Property
         else if ( rProp.Name.compareToAscii( "PrinterPaperTray" ) == 0 )
         {
-            rtl::OUString aTmp;
+            OUString aTmp;
             if ( ( rProp.Value >>= aTmp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
             sal_uInt16 nCount = pPrinter->GetPaperBinCount();
             for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
             {
-                ::rtl::OUString aName( pPrinter->GetPaperBinName(nBin) );
+                OUString aName( pPrinter->GetPaperBinName(nBin) );
                 if ( aName == aTmp )
                 {
                     pPrinter->SetPaperBin(nBin);
@@ -533,19 +533,19 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 if (aSplitter.removeSegment() && sFileName.Len()>0)
                 {
                     ::ucbhelper::Content aSource(
-                            ::rtl::OUString((*ppTempFile)->GetURL()),
+                            OUString((*ppTempFile)->GetURL()),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
-                            ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
+                            OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     aTarget.transferContent(
                             aSource,
                             ::ucbhelper::InsertOperation_COPY,
-                            ::rtl::OUString(sFileName),
+                            OUString(sFileName),
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
             }
@@ -618,9 +618,9 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
             // unpack th URL and check for a valid and well known protocol
-            ::rtl::OUString sTemp;
+            OUString sTemp;
             if (
-                ( rProp.Value.getValueType()!=::getCppuType((const ::rtl::OUString*)0))  ||
+                ( rProp.Value.getValueType()!=::getCppuType((const OUString*)0))  ||
                 (!(rProp.Value>>=sTemp))
                )
             {
@@ -640,16 +640,16 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // No ucb or thread will be necessary then. In case it couldnt be
                 // converted its not an URL nor a system path. Then we can't accept
                 // this parameter and have to throw an exception.
-                ::rtl::OUString sSystemPath(sTemp);
-                ::rtl::OUString sFileURL;
+                OUString sSystemPath(sTemp);
+                OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
                     throw ::com::sun::star::lang::IllegalArgumentException();
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sFileURL;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
-                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( sTemp );
+                aCheckedArgs[nProps].Name = OUString("LocalFileName");
+                aCheckedArgs[nProps++].Value <<= OUString( sTemp );
             }
             else
             // It's a valid URL. but now we must know, if it is a local one or not.
@@ -664,7 +664,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 aCheckedArgs[nProps++].Value <<= sTemp;
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
-                aCheckedArgs[nProps].Name = rtl::OUString("LocalFileName");
+                aCheckedArgs[nProps].Name = OUString("LocalFileName");
                 aCheckedArgs[nProps++].Value <<= sPath;
             }
             else
@@ -683,7 +683,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
                 //FIXME: does it work?
                 aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= ::rtl::OUString( pUCBPrintTempFile->GetFileName() );
+                aCheckedArgs[nProps++].Value <<= OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
         }
@@ -707,7 +707,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             sal_Bool bTemp = sal_Bool();
             if ( rProp.Value >>= bTemp )
             {
-                aCheckedArgs[nProps].Name = rtl::OUString("Collate");
+                aCheckedArgs[nProps].Name = OUString("Collate");
                 aCheckedArgs[nProps++].Value <<= bTemp;
             }
             else
@@ -717,7 +717,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         // Pages-Property
         else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
         {
-            ::rtl::OUString sTemp;
+            OUString sTemp;
             if( rProp.Value >>= sTemp )
             {
                 aCheckedArgs[nProps].Name = rProp.Name;

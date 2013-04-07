@@ -47,7 +47,7 @@ class SidebarTxtControl : public Control
         virtual void    Command( const CommandEvent& rCEvt );
         virtual void    LoseFocus();
         virtual void    RequestHelp(const HelpEvent &rEvt);
-        virtual rtl::OUString GetSurroundingText() const;
+        virtual OUString GetSurroundingText() const;
         virtual Selection GetSurroundingTextSelection() const;
 
         DECL_LINK( Select, Menu* );

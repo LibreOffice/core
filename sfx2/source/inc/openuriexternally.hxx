@@ -48,7 +48,7 @@ namespace sfx2 {
 ///
 /// @return true iff execution was successful
 bool openUriExternally(
-    rtl::OUString const & uri, bool handleSystemShellExecuteException);
+    OUString const & uri, bool handleSystemShellExecuteException);
 
 }
 

@@ -44,13 +44,13 @@ QString valueOfKabField(const ::KABC::Addressee &aAddressee, sal_Int32 nFieldNum
 }
 // ------------------------------------------------------------------------------
 // search the KDE address book field number of a given column name
-sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(SQLException)
+sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
 {
     QString aQtName;
-    ::rtl::OUString aName;
+    OUString aName;
 
     aQtName = KABC::Addressee::revisionLabel();
-    aName = ::rtl::OUString((const sal_Unicode *) aQtName.ucs2());
+    aName = OUString((const sal_Unicode *) aQtName.ucs2());
     if (columnName == aName)
         return KAB_FIELD_REVISION;
 
@@ -63,14 +63,14 @@ sal_uInt32 findKabField(const ::rtl::OUString& columnName) throw(SQLException)
             ++aField, ++nResult)
     {
         aQtName = (*aField)->label();
-        aName = ::rtl::OUString((const sal_Unicode *) aQtName.ucs2());
+        aName = OUString((const sal_Unicode *) aQtName.ucs2());
 
         if (columnName == aName)
             return nResult;
     }
 
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_INVALID_COLUMNNAME,
             "$columnname$",columnName
          ) );

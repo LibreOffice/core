@@ -134,7 +134,7 @@ sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 
 Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
-    const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags )
+    const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 
     throw( RuntimeException )
 
@@ -218,12 +218,12 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
 // -----------------------------------------------------------------------
 // XInterceptorInfo
 
-Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
+Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
     throw( RuntimeException )
 
 {
-    Sequence< ::rtl::OUString > aURLList( 1 );
+    Sequence< OUString > aURLList( 1 );
     aURLList[0] = "vnd.sun.star.help://*";
     return aURLList;
 }

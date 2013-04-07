@@ -57,7 +57,7 @@ namespace comphelper
     {
     private:
         GenericAnyMapImpl   maAnyMap;
-        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString, ::rtl::OUStringHash,UStringEqual> m_aListener;
+        ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, OUStringHash,UStringEqual> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException );
@@ -78,13 +78,13 @@ namespace comphelper
         virtual  Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw( RuntimeException);
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL getImplementationName() throw(  RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw(  RuntimeException );
-        virtual  Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw(  RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(  RuntimeException );
+        virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException );
 
         // XPropertySet
-        virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     };
 
 }
@@ -100,7 +100,7 @@ GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 GenericPropertySet::~GenericPropertySet() throw()
 {
 }
-void SAL_CALL GenericPropertySet::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
     if ( xInfo.is() )
@@ -122,7 +122,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const ::rtl::OUStri
     }
 }
 
-void SAL_CALL GenericPropertySet::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard( maMutex );
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );

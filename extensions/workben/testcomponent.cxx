@@ -40,9 +40,7 @@
 
 using namespace usr;
 
-using ::rtl::OString;
 using ::rtl::OWStringToOString;
-using ::rtl::OStringToOWString;
 
 
 // Needed to switch on solaris threads

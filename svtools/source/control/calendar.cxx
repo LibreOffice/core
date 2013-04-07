@@ -191,7 +191,7 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mbAllSel                = sal_False;
     mbDropPos               = sal_False;
 
-    ::rtl::OUString aGregorian( "gregorian");
+    OUString aGregorian( "gregorian");
     maCalendarWrapper.loadCalendar( aGregorian,
             Application::GetAppLocaleDataWrapper().getLanguageTag().getLocale());
     if (maCalendarWrapper.getUniqueID() != aGregorian)
@@ -329,7 +329,7 @@ void Calendar::ImplFormat()
         if ( (aOutSize.Width() <= 1) || (aOutSize.Height() <= 1) )
             return;
 
-        rtl::OUString a99Text("99");
+        OUString a99Text("99");
 
         Font aOldFont = GetFont();
 
@@ -958,7 +958,7 @@ void Calendar::ImplDraw( sal_Bool bPaint )
                 for ( sal_uInt16 nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
                 {
                     sal_Int32 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                    rtl::OUString aWeekText(rtl::OUString::valueOf(nWeek));
+                    OUString aWeekText(OUString::valueOf(nWeek));
                     long    nOffX = (mnWeekWidth-WEEKNUMBER_OFFX)-GetTextWidth( aWeekText );
                     long    nOffY = (mnDayHeight-GetTextHeight())/2;
                     DrawText( Point( nDayX+nOffX, nDayY+nOffY ), aWeekText );
@@ -2146,7 +2146,7 @@ void Calendar::EndSelection()
 Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
                                     long nCalcLines ) const
 {
-    rtl::OUString a99Text("99");
+    OUString a99Text("99");
     Font        aOldFont = GetFont();
 
     // Wochenanzeige beruecksichtigen

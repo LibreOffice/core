@@ -127,7 +127,7 @@ public: // XKeysSupplier
     getKeys(  ) throw (::com::sun::star::uno::RuntimeException);
 
 public: // XRename
-    virtual void SAL_CALL rename( const ::rtl::OUString& newName )
+    virtual void SAL_CALL rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException);
@@ -135,7 +135,7 @@ public: // XRename
 public: // XAlterTable
     // Methods
     virtual void SAL_CALL alterColumnByName(
-        const ::rtl::OUString& colName,
+        const OUString& colName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::NoSuchElementException,
@@ -149,12 +149,12 @@ public: // XAlterTable
                ::com::sun::star::uno::RuntimeException);
 
 public: // TODO: remove again
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const ::rtl::OUString& aPropertyName)
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(const OUString& aPropertyName)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 public: // XNamed
-    virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 

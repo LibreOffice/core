@@ -69,8 +69,8 @@ public:
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getLocked() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getLinkedCell() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLinkedCell() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex ) throw (css::uno::RuntimeException);

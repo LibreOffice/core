@@ -83,10 +83,10 @@ public:
     LwpObjectID* GetInitialLayoutID(){ return &m_InitialLayoutID;}
     LwpObjectID* GetFillerPageTextID(){ return &m_FillerPageTextID;}
     // add by  ,03/14/2004
-    rtl::OUString GetDivName() { return m_Name.str(); }
+    OUString GetDivName() { return m_Name.str(); }
     // end add
 
-    rtl::OUString GetClassName() { return m_ClassName.str(); }
+    OUString GetClassName() { return m_ClassName.str(); }
     inline sal_Bool HasContents();
     inline sal_Bool IsOleDivision();
     inline sal_Bool IsScrollable();

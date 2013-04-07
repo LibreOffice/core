@@ -56,7 +56,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 // min, max
 #define Max(a,b) (a > b ? a : b)
@@ -122,7 +121,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         // (or better speaking: the list of dictionaries using the
         // new configuration entries).
         std::list< SvtLinguConfigDictionaryEntry > aDics;
-        uno::Sequence< rtl::OUString > aFormatList;
+        uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Hyphenators",
                 "org.openoffice.lingu.LibHnjHyphenator", aFormatList );
         sal_Int32 nLen = aFormatList.getLength();
@@ -149,11 +148,11 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
         {
             // get supported locales from the dictionaries-to-use...
             sal_Int32 k = 0;
-            std::set< rtl::OUString, lt_rtl_OUString > aLocaleNamesSet;
+            std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
-                uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                 sal_Int32 nLen2 = aLocaleNames.getLength();
                 for (k = 0;  k < nLen2;  ++k)
                 {
@@ -162,7 +161,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             }
             // ... and add them to the resulting sequence
             aSuppLocales.realloc( aLocaleNamesSet.size() );
-            std::set< rtl::OUString, lt_rtl_OUString >::const_iterator aItB;
+            std::set< OUString, lt_rtl_OUString >::const_iterator aItB;
             k = 0;
             for (aItB = aLocaleNamesSet.begin();  aItB != aLocaleNamesSet.end();  ++aItB)
             {
@@ -188,7 +187,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                 if (aDictIt->aLocaleNames.getLength() > 0 &&
                     aDictIt->aLocations.getLength() > 0)
                 {
-                    uno::Sequence< rtl::OUString > aLocaleNames( aDictIt->aLocaleNames );
+                    uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
                     // currently only one language per dictionary is supported in the actual implementation...
@@ -204,7 +203,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                         // also both files have to be in the same directory and the
                         // file names must only differ in the extension (.aff/.dic).
                         // Thus we use the first location only and strip the extension part.
-                        rtl::OUString aLocation = aDictIt->aLocations[0];
+                        OUString aLocation = aDictIt->aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
                         aDicts[k].aName = aLocation;
@@ -252,7 +251,7 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 }
 
 
-Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUString& aWord,
+Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWord,
        const ::com::sun::star::lang::Locale& aLocale,
        sal_Int16 nMaxLeading,
        const ::com::sun::star::beans::PropertyValues& aProperties )
@@ -508,7 +507,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
 
 
 Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
-        const ::rtl::OUString& /*aWord*/,
+        const OUString& /*aWord*/,
         const ::com::sun::star::lang::Locale& /*aLocale*/,
         sal_Int16 /*nIndex*/,
         const ::com::sun::star::beans::PropertyValues& /*aProperties*/ )
@@ -520,7 +519,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
   return NULL;
 }
 
-Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const ::rtl::OUString& aWord,
+Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const OUString& aWord,
         const ::com::sun::star::lang::Locale& aLocale,
         const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)

@@ -52,7 +52,7 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
 
 void ScShowTabDlg::SetDescription(
         const String& rTitle, const String& rFixedText,
-        const rtl::OString& rDlgHelpId, const rtl::OString& sLbHelpId )
+        const OString& rDlgHelpId, const OString& sLbHelpId )
 {
     SetText( rTitle );
     aFtLbTitle.SetText( rFixedText );

@@ -47,7 +47,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -798,7 +797,7 @@ OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& r
     if( bSheetEvent && (nTab < 0) )
         throw lang::IllegalArgumentException();
 
-    rtl::OUString aCodeName;
+    OUString aCodeName;
     if( bSheetEvent )
         mpDoc->GetCodeName( nTab, aCodeName );
     else

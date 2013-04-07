@@ -210,7 +210,7 @@ OOO_DLLPUBLIC_CHARTTOOLS
         ::com::sun::star::chart2::data::XDataSequence > & xDataSequence );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-::com::sun::star::uno::Sequence< rtl::OUString > DataSequenceToStringSequence(
+::com::sun::star::uno::Sequence< OUString > DataSequenceToStringSequence(
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > & xDataSequence );
 
@@ -261,9 +261,9 @@ OOO_DLLPUBLIC_CHARTTOOLS
 sal_Int16 getShortForLongAlso( const ::com::sun::star::uno::Any& rAny );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-bool replaceParamterInString( rtl::OUString & rInOutResourceString,
-                            const rtl::OUString & rParamToReplace,
-                            const rtl::OUString & rReplaceWith );
+bool replaceParamterInString( OUString & rInOutResourceString,
+                            const OUString & rParamToReplace,
+                            const OUString & rReplaceWith );
 
 //.............................................................................
 } //namespace chart

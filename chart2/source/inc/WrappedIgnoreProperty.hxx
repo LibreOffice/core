@@ -32,7 +32,7 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedIgnoreProperty : public WrappedProperty
 {
 public:
-    WrappedIgnoreProperty( const ::rtl::OUString& rOuterName, const ::com::sun::star::uno::Any& rDefaultValue );
+    WrappedIgnoreProperty( const OUString& rOuterName, const ::com::sun::star::uno::Any& rDefaultValue );
     virtual ~WrappedIgnoreProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

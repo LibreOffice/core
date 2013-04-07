@@ -61,9 +61,9 @@ namespace connectivity
         ~SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
-        static const ::rtl::OUString& getMessagePrefix();
-        ::rtl::OUString     getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
-        ::rtl::OUString     getSQLState( const ErrorCondition _eCondition );
+        static const OUString& getMessagePrefix();
+        OUString     getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
+        OUString     getSQLState( const ErrorCondition _eCondition );
         static ErrorCode    getErrorCode( const ErrorCondition _eCondition );
         void                raiseException( const ErrorCondition _eCondition, const Reference< XInterface >& _rxContext, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
         void                raiseException( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 );
@@ -72,11 +72,11 @@ namespace connectivity
 
     private:
         /// returns the basic error message associated with the given error condition, without any parameter replacements
-        ::rtl::OUString
+        OUString
                 impl_getErrorMessage( const ErrorCondition& _eCondition );
 
         /// returns the SQLState associated with the given error condition
-        ::rtl::OUString
+        OUString
                 impl_getSQLState( const ErrorCondition& _eCondition );
 
         /// returns an SQLException describing the given error condition
@@ -111,9 +111,9 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString& SQLError_Impl::getMessagePrefix()
+    const OUString& SQLError_Impl::getMessagePrefix()
     {
-        static ::rtl::OUString s_sMessagePrefix( "[OOoBase]" );
+        static OUString s_sMessagePrefix( "[OOoBase]" );
         return s_sMessagePrefix;
     }
 
@@ -123,7 +123,7 @@ namespace connectivity
         //................................................................
         /** substitutes a given placeholder in the given message with the given value
         */
-        void    lcl_substitutePlaceholder( ::rtl::OUString& _rMessage, const sal_Char* _pPlaceholder, ParamValue _rParamValue )
+        void    lcl_substitutePlaceholder( OUString& _rMessage, const sal_Char* _pPlaceholder, ParamValue _rParamValue )
         {
             size_t nPlaceholderLen( strlen( _pPlaceholder ) );
             sal_Int32 nIndex = _rMessage.indexOfAsciiL( _pPlaceholder, nPlaceholderLen );
@@ -146,9 +146,9 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
+    OUString SQLError_Impl::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 )
     {
-        ::rtl::OUString sErrorMessage( impl_getErrorMessage( _eCondition ) );
+        OUString sErrorMessage( impl_getErrorMessage( _eCondition ) );
 
         lcl_substitutePlaceholder( sErrorMessage, "$1$", _rParamValue1 );
         lcl_substitutePlaceholder( sErrorMessage, "$2$", _rParamValue2 );
@@ -158,7 +158,7 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError_Impl::getSQLState( const ErrorCondition _eCondition )
+    OUString SQLError_Impl::getSQLState( const ErrorCondition _eCondition )
     {
         return impl_getSQLState( _eCondition );
     }
@@ -234,13 +234,13 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError_Impl::impl_getErrorMessage( const ErrorCondition& _eCondition )
+    OUString SQLError_Impl::impl_getErrorMessage( const ErrorCondition& _eCondition )
     {
-        ::rtl::OUStringBuffer aMessage;
+        OUStringBuffer aMessage;
 
         if ( impl_initResources() )
         {
-            ::rtl::OUString sResMessage( m_pResources->loadString( lcl_getResourceID( _eCondition, false ) ) );
+            OUString sResMessage( m_pResources->loadString( lcl_getResourceID( _eCondition, false ) ) );
             OSL_ENSURE( !sResMessage.isEmpty(), "SQLError_Impl::impl_getErrorMessage: illegal error condition, or invalid resource!" );
             aMessage.append( getMessagePrefix() ).appendAscii( " " ).append( sResMessage );
         }
@@ -249,9 +249,9 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError_Impl::impl_getSQLState( const ErrorCondition& _eCondition )
+    OUString SQLError_Impl::impl_getSQLState( const ErrorCondition& _eCondition )
     {
-        ::rtl::OUString sState;
+        OUString sState;
 
         if ( impl_initResources() )
         {
@@ -261,7 +261,7 @@ namespace connectivity
         }
 
         if ( sState.isEmpty() )
-            sState = ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
+            sState = OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
 
         return sState;
     }
@@ -296,13 +296,13 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
-    const ::rtl::OUString& SQLError::getMessagePrefix()
+    const OUString& SQLError::getMessagePrefix()
     {
         return SQLError_Impl::getMessagePrefix();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SQLError::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
+    OUString SQLError::getErrorMessage( const ErrorCondition _eCondition, const ParamValue& _rParamValue1, const ParamValue& _rParamValue2, const ParamValue& _rParamValue3 ) const
     {
         return m_pImpl->getErrorMessage( _eCondition, _rParamValue1, _rParamValue2, _rParamValue3 );
     }

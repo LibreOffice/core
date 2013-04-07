@@ -78,7 +78,7 @@ private:
 
 private:
     ViewShellBase& mrBase;
-    const rtl::OUString msTableTemplate;
+    const OUString msTableTemplate;
 
     boost::scoped_ptr< Control > mxControls[DESIGNPANE_CONTROL_COUNT];
     int mnOrgOffsetY[DESIGNPANE_CONTROL_COUNT];

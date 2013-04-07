@@ -33,8 +33,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 
@@ -327,9 +325,9 @@ void ErrorBar::fireModifyEvent()
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > ErrorBar::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = "com.sun.star.chart2.ErrorBar";
     return aServices;

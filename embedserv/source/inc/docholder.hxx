@@ -92,7 +92,7 @@ private:
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XFrame > m_xFrame;
 
-    ::rtl::OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
+    OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
 
     CComPtr< IDispatch > m_pIDispatch;
 
@@ -165,11 +165,11 @@ public:
 
     void resizeWin( const SIZEL& rNewSize );
 
-    void setTitle(const rtl::OUString& aDocumentName);
-    rtl::OUString getTitle() const { return m_aDocumentNamePart; }
+    void setTitle(const OUString& aDocumentName);
+    OUString getTitle() const { return m_aDocumentNamePart; }
 
-    void setContainerName(const rtl::OUString& aContainerName);
-    rtl::OUString getContainerName() const { return m_aContainerName; }
+    void setContainerName(const OUString& aContainerName);
+    OUString getContainerName() const { return m_aContainerName; }
     void OnPosRectChanged(LPRECT lpRect) const;
     void show();
 

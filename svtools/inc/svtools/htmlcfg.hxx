@@ -42,8 +42,8 @@ struct HtmlOptions_Impl;
 class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {
     HtmlOptions_Impl*pImp;
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
-    void Load( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
+    const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
+    void Load( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
     void CallListeners();
 
 public:
@@ -51,7 +51,7 @@ public:
     ~SvxHtmlOptions();
 
     virtual void    Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 
     sal_uInt16      GetFontSize(sal_uInt16 nPos) const;
     void        SetFontSize(sal_uInt16 nPos, sal_uInt16 nSize);

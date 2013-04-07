@@ -28,18 +28,18 @@
 using namespace ::com::sun::star;
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString( "com.sun.star.embed.HatchWindowFactory" );
-    aRet[1] = ::rtl::OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = OUString( "com.sun.star.embed.HatchWindowFactory" );
+    aRet[1] = OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OHatchWindowFactory::impl_staticGetImplementationName()
+OUString SAL_CALL OHatchWindowFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
+    return OUString( "com.sun.star.comp.embed.HatchWindowFactory" );
 }
 
 //-------------------------------------------------------------------------
@@ -67,17 +67,17 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OHatchWindowFactory::getImplementationName()
+OUString SAL_CALL OHatchWindowFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -87,7 +87,7 @@ sal_Bool SAL_CALL OHatchWindowFactory::supportsService( const ::rtl::OUString& S
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OHatchWindowFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();

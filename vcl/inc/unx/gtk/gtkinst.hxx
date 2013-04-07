@@ -109,7 +109,7 @@ public:
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* );
     virtual void                DestroyMenuItem( SalMenuItem* pItem );
     virtual SalTimer*           CreateSalTimer();
-    virtual void                AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType);
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
                                                      long nDX, long nDY,
                                                      sal_uInt16 nBitCount,

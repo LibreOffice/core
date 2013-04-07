@@ -49,24 +49,24 @@ struct OptionInfo
 
 struct LockFileException : public css::uno::Exception
 {
-    LockFileException(::rtl::OUString const & sMessage) :
+    LockFileException(OUString const & sMessage) :
         css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
 };
 
 //==============================================================================
-::rtl::OUString toString( OptionInfo const * info );
+OUString toString( OptionInfo const * info );
 
 //==============================================================================
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
-    ::rtl::OUString const & opt, sal_Unicode copt = '\0' );
+    OUString const & opt, sal_Unicode copt = '\0' );
 
 //==============================================================================
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex );
 
 //==============================================================================
 bool readArgument(
-    ::rtl::OUString * pValue, OptionInfo const * option_info,
+    OUString * pValue, OptionInfo const * option_info,
     sal_uInt32 * pIndex );
 
 //==============================================================================
@@ -87,14 +87,14 @@ inline bool readOption(
 */
 bool isBootstrapVariable(sal_uInt32 * pIndex);
 //==============================================================================
-::rtl::OUString const & getExecutableDir();
+OUString const & getExecutableDir();
 
 //==============================================================================
-::rtl::OUString const & getProcessWorkingDir();
+OUString const & getProcessWorkingDir();
 
 //==============================================================================
-::rtl::OUString makeAbsoluteFileUrl(
-    ::rtl::OUString const & sys_path, ::rtl::OUString const & base_url,
+OUString makeAbsoluteFileUrl(
+    OUString const & sys_path, OUString const & base_url,
     bool throw_exc = true );
 
 //##############################################################################
@@ -102,7 +102,7 @@ bool isBootstrapVariable(sal_uInt32 * pIndex);
 //==============================================================================
 css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
-    ::rtl::OUString const & logFile,
+    OUString const & logFile,
     bool option_force_overwrite,
     bool option_verbose,
     bool option_suppressLicense);

@@ -79,8 +79,8 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strID;
-    rtl::OUString   m_strLabel;
+    OUString   m_strID;
+    OUString   m_strLabel;
     XFContentContainer  m_aContents;
 };
 
@@ -95,7 +95,7 @@ inline void XFEndNote::SetLabel(sal_Unicode label)
     chs[0] = label;
     chs[1] = 0;
 
-    m_strLabel = rtl::OUString(chs);
+    m_strLabel = OUString(chs);
 }
 
 inline void XFEndNote::ToXml(IXFStream *pStrm)

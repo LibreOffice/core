@@ -25,7 +25,6 @@
 //
 //------------------------------------------------------------------------
 
-using rtl::OUString;
 using osl::Mutex;
 
 //------------------------------------------------------------------------
@@ -110,7 +109,7 @@ CHelpPopupWindow::~CHelpPopupWindow( )
 //
 //---------------------------------------------------
 
-void SAL_CALL CHelpPopupWindow::setText( const rtl::OUString& aHelpText )
+void SAL_CALL CHelpPopupWindow::setText( const OUString& aHelpText )
 {
     m_HelpText = aHelpText;
 }

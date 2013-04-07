@@ -298,7 +298,7 @@ void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
     }
 #if OSL_DEBUG_LEVEL > 0
     else
-        sTxt = rtl::OUString("Action-Text fehlt");
+        sTxt = OUString("Action-Text fehlt");
 #endif
 
     pDoc->SetAutoFmtRedlineComment( &sTxt, nSeqNo );
@@ -1258,7 +1258,7 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
                 DeleteSel( *pNxt );
                 if( !bHasBlnks )
                 {
-                    pDoc->InsertString( *pNxt, rtl::OUString(' ') );
+                    pDoc->InsertString( *pNxt, OUString(' ') );
                 }
             }
 
@@ -1317,7 +1317,7 @@ void SwAutoFormat::BuildIndent()
                         IsSentenceAtEnd( *pNxtNd );
                 if( DeleteAktNxtPara( pNxtNd->GetTxt() ))
                 {
-                    pDoc->InsertString( aDelPam, rtl::OUString(' ') );
+                    pDoc->InsertString( aDelPam, OUString(' ') );
                 }
                 if( bBreak )
                     break;
@@ -1358,7 +1358,7 @@ void SwAutoFormat::BuildTextIndent()
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
+                pDoc->InsertString( aDelPam, OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1394,7 +1394,7 @@ void SwAutoFormat::BuildText()
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
+                pDoc->InsertString( aDelPam, OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1503,8 +1503,8 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                         aFmt.SetBulletChar( cBullChar );
                         aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         // #i93908# clear suffix for bullet lists
-                        aFmt.SetPrefix(::rtl::OUString());
-                        aFmt.SetSuffix(::rtl::OUString());
+                        aFmt.SetPrefix(OUString());
+                        aFmt.SetSuffix(OUString());
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
                         if( !aFmt.GetCharFmt() )
@@ -1666,7 +1666,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
         if( !aFlags.bSetNumRule )
         {
-            String sChgStr = rtl::OUString('\t');
+            String sChgStr = OUString('\t');
             if( bChgBullet )
                 sChgStr.Insert( aFlags.cBullet, 0 );
             pDoc->InsertString( aDelPam, sChgStr );
@@ -1710,7 +1710,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 IsSentenceAtEnd( *pNxtNd );
         if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
         {
-            pDoc->InsertString( aDelPam, rtl::OUString(' ') );
+            pDoc->InsertString( aDelPam, OUString(' ') );
         }
         if( bBreak )
             break;
@@ -1780,7 +1780,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
             DeleteSel( aDelPam );
             if( bInsTab )
             {
-                pDoc->InsertString( aDelPam, rtl::OUString('\t') );
+                pDoc->InsertString( aDelPam, OUString('\t') );
             }
         }
     }
@@ -1800,7 +1800,7 @@ void SwAutoFormat::BuildNegIndent( SwTwips nSpaces )
                     IsSentenceAtEnd( *pNxtNd );
             if( DeleteAktNxtPara( pNxtNd->GetTxt() ) )
             {
-                pDoc->InsertString( aDelPam, rtl::OUString(' ') );
+                pDoc->InsertString( aDelPam, OUString(' ') );
             }
             if( bBreak )
                 break;
@@ -1818,7 +1818,7 @@ void SwAutoFormat::BuildHeadLine( sal_uInt16 nLvl )
     {
         String sTxt(ViewShell::GetShellRes()->GetAutoFmtNameLst()[
                                     STR_AUTOFMTREDL_SET_TMPL_HEADLINE ] );
-        sTxt.SearchAndReplace( rtl::OUString("$(ARG1)"),
+        sTxt.SearchAndReplace( OUString("$(ARG1)"),
                                 OUString::number( nLvl + 1 ) );
         pDoc->SetAutoFmtRedlineComment( &sTxt );
     }
@@ -1931,7 +1931,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                 aDelPam.DeleteMark();
                 if( bSetHardBlank )
                 {
-                    pDoc->InsertString( aDelPam, rtl::OUString(CHAR_HARDBLANK) );
+                    pDoc->InsertString( aDelPam, OUString(CHAR_HARDBLANK) );
                     ++nPos;
                 }
             }
@@ -1986,7 +1986,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                         if( bSetHardBlank )
                         {
                             aDelPam.GetPoint()->nContent = nPos;
-                            pDoc->InsertString( aDelPam, rtl::OUString(CHAR_HARDBLANK) );
+                            pDoc->InsertString( aDelPam, OUString(CHAR_HARDBLANK) );
                             aDelPam.GetPoint()->nContent = ++nPos;
                         }
                     }

@@ -329,7 +329,7 @@ ImageList::ImageList( const ResId& rResId ) :
         BitmapEx aEmpty;
         for( sal_Int32 i = 0; i < nCount; ++i )
         {
-            rtl::OUString aName = pResMgr->ReadString();
+            OUString aName = pResMgr->ReadString();
             sal_uInt16 nId = static_cast< sal_uInt16 >( pResMgr->ReadLong() );
             mpImplData->AddImage( aName, nId, aEmpty );
         }
@@ -339,8 +339,8 @@ ImageList::ImageList( const ResId& rResId ) :
     }
 }
 
-ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
-                      const ::rtl::OUString& rPrefix,
+ImageList::ImageList( const ::std::vector< OUString >& rNameVector,
+                      const OUString& rPrefix,
                       const Color* ) :
     mpImplData( NULL ),
     mnInitSize( 1 ),
@@ -386,15 +386,15 @@ void ImageList::ImplInit( sal_uInt16 nItems, const Size &rSize )
     mpImplData->maImageSize = rSize;
 }
 
-void ImageAryData::Load(const rtl::OUString &rPrefix)
+void ImageAryData::Load(const OUString &rPrefix)
 {
     static ImplImageTreeSingletonRef aImageTree;
 
-    ::rtl::OUString aSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+    OUString aSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
     BitmapEx aBmpEx;
 
-    rtl::OUString aFileName = rPrefix;
+    OUString aFileName = rPrefix;
     aFileName += maName;
 #if OSL_DEBUG_LEVEL > 0
     bool bSuccess =
@@ -403,9 +403,9 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 #if OSL_DEBUG_LEVEL > 0
     if ( !bSuccess )
     {
-        ::rtl::OStringBuffer aMessage;
+        OStringBuffer aMessage;
         aMessage.append( "ImageAryData::Load: failed to load image '" );
-        aMessage.append( ::rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aMessage.append( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() );
         aMessage.append( "'" );
         OSL_FAIL( aMessage.makeStringAndClear().getStr() );
     }
@@ -452,7 +452,7 @@ BitmapEx ImageList::GetAsHorizontalStrip() const
 }
 
 void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
-                                           const std::vector< rtl::OUString > &rNameVector )
+                                           const std::vector< OUString > &rNameVector )
 {
     sal_uInt16 nItems = sal::static_int_cast< sal_uInt16 >( rNameVector.size() );
 
@@ -490,11 +490,11 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
 
-    std::vector< rtl::OUString > aNames( nCount );
+    std::vector< OUString > aNames( nCount );
     InsertFromHorizontalStrip( aBmpEx, aNames );
 }
 
-sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
+sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -505,7 +505,7 @@ sal_uInt16 ImageList::ImplGetImageId( const ::rtl::OUString& rImageName ) const
         return 0;
 }
 
-void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage )
+void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
 {
     DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );
 
@@ -516,7 +516,7 @@ void ImageList::AddImage( const ::rtl::OUString& rImageName, const Image& rImage
                           rImage.GetBitmapEx() );
 }
 
-void ImageList::ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage )
+void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 {
     const sal_uInt16 nId = ImplGetImageId( rImageName );
 
@@ -577,7 +577,7 @@ Image ImageList::GetImage( sal_uInt16 nId ) const
     return aRet;
 }
 
-Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
+Image ImageList::GetImage( const OUString& rImageName ) const
 {
     if( mpImplData )
     {
@@ -622,7 +622,7 @@ bool ImageList::HasImageAtPos( sal_uInt16 nId ) const
     return GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND;
 }
 
-sal_uInt16 ImageList::GetImagePos( const ::rtl::OUString& rImageName ) const
+sal_uInt16 ImageList::GetImagePos( const OUString& rImageName ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
@@ -648,29 +648,29 @@ sal_uInt16 ImageList::GetImageId( sal_uInt16 nPos ) const
     return 0;
 }
 
-::rtl::OUString ImageList::GetImageName( sal_uInt16 nPos ) const
+OUString ImageList::GetImageName( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
     if( mpImplData && (nPos < GetImageCount()) )
         return mpImplData->maImages[ nPos ]->maName;
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
+void ImageList::GetImageNames( ::std::vector< OUString >& rNames ) const
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl: ImageList::GetImageNames" );
 
     DBG_CHKTHIS( ImageList, NULL );
 
-    rNames = ::std::vector< ::rtl::OUString >();
+    rNames = ::std::vector< OUString >();
 
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
         {
-            const rtl::OUString& rName( mpImplData->maImages[ i ]->maName );
+            const OUString& rName( mpImplData->maImages[ i ]->maName );
             if( !rName.isEmpty())
                 rNames.push_back( rName );
         }

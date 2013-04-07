@@ -57,7 +57,7 @@ class VCL_DLLPUBLIC PPDKey
 {
     friend class PPDParser;
 
-    typedef ::boost::unordered_map< ::rtl::OUString, PPDValue, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< OUString, PPDValue, OUStringHash > hash_type;
     typedef ::std::vector< PPDValue* > value_type;
 
     String              m_aKey;
@@ -121,7 +121,7 @@ class VCL_DLLPUBLIC PPDParser
     friend class CUPSManager;
     friend class PPDCache;
 
-    typedef ::boost::unordered_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
+    typedef ::boost::unordered_map< OUString, PPDKey*, OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
 
     void insertKey( const String& rKey, PPDKey* pKey );
@@ -178,12 +178,12 @@ private:
     PPDParser( const String& rFile );
     ~PPDParser();
 
-    void parseOrderDependency(const rtl::OString& rLine);
-    void parseOpenUI(const rtl::OString& rLine);
-    void parseConstraint(const rtl::OString& rLine);
-    void parse( std::list< rtl::OString >& rLines );
+    void parseOrderDependency(const OString& rLine);
+    void parseOpenUI(const OString& rLine);
+    void parseConstraint(const OString& rLine);
+    void parse( std::list< OString >& rLines );
 
-    String handleTranslation(const rtl::OString& i_rString, bool i_bIsGlobalized);
+    String handleTranslation(const OString& i_rString, bool i_bIsGlobalized);
 
     static void scanPPDDir( const String& rDir );
     static void initPPDFiles();
@@ -192,7 +192,7 @@ public:
     static const PPDParser* getParser( const String& rFile );
     static String getPPDPrinterName( const String& rFile );
     static void freeAll();
-    static void getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool bRefresh = false );
+    static void getKnownPPDDrivers( std::list< OUString >& o_rDrivers, bool bRefresh = false );
 
     const String&   getFilename() const { return m_aFile; }
 
@@ -250,10 +250,10 @@ public:
     String          getFont( int ) const;
 
 
-    rtl::OUString   translateKey( const rtl::OUString& i_rKey,
+    OUString   translateKey( const OUString& i_rKey,
                                   const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
-    rtl::OUString   translateOption( const rtl::OUString& i_rKey,
-                                     const rtl::OUString& i_rOption,
+    OUString   translateOption( const OUString& i_rKey,
+                                     const OUString& i_rOption,
                                      const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
 };
 
@@ -301,7 +301,7 @@ public:
 
     // width, height in points, paper will contain the name of the selected
     // paper after the call
-    void getPageSize( rtl::OUString& rPaper, int& rWidth, int& rHeight ) const;
+    void getPageSize( OUString& rPaper, int& rWidth, int& rHeight ) const;
 };
 
 } // namespace

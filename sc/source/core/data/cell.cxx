@@ -183,9 +183,9 @@ bool ScBaseCell::HasStringData() const
     }
 }
 
-rtl::OUString ScBaseCell::GetStringData() const
+OUString ScBaseCell::GetStringData() const
 {
-    rtl::OUString aStr;
+    OUString aStr;
     switch ( eCellType )
     {
         case CELLTYPE_STRING:
@@ -231,7 +231,7 @@ ScValueCell::~ScValueCell()
 
 // ============================================================================
 
-ScStringCell::ScStringCell( const rtl::OUString& rString ) :
+ScStringCell::ScStringCell( const OUString& rString ) :
     ScBaseCell( CELLTYPE_STRING ),
     maString( rString.intern() )
 {

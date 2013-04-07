@@ -38,13 +38,13 @@
 
 #include "dp_misc_api.hxx"
 
-#define LOCKFILE_SUFFIX   rtl::OUString( "/.lock" )
-#define LOCKFILE_GROUP    rtl::OString( "Lockdata" )
-#define LOCKFILE_USERKEY  rtl::OString( "User" )
-#define LOCKFILE_HOSTKEY  rtl::OString( "Host" )
-#define LOCKFILE_STAMPKEY rtl::OString( "Stamp" )
-#define LOCKFILE_TIMEKEY  rtl::OString( "Time" )
-#define LOCKFILE_IPCKEY   rtl::OString( "IPCServer" )
+#define LOCKFILE_SUFFIX   OUString( "/.lock" )
+#define LOCKFILE_GROUP    OString( "Lockdata" )
+#define LOCKFILE_USERKEY  OString( "User" )
+#define LOCKFILE_HOSTKEY  OString( "Host" )
+#define LOCKFILE_STAMPKEY OString( "Stamp" )
+#define LOCKFILE_TIMEKEY  OString( "Time" )
+#define LOCKFILE_IPCKEY   OString( "IPCServer" )
 
 namespace desktop {
 
@@ -71,13 +71,13 @@ namespace desktop {
     private:
         bool m_bIPCserver;
         // full qualified name (file://-url) of the lockfile
-        rtl::OUString m_aLockname;
+        OUString m_aLockname;
         // flag whether the d'tor should delete the lock
         sal_Bool m_bRemove;
         sal_Bool m_bIsLocked;
         // ID
-        rtl::OUString m_aId;
-        rtl::OUString m_aDate;
+        OUString m_aId;
+        OUString m_aDate;
         // access to data in file
         void syncToFile(void) const;
         sal_Bool isStale(void) const;

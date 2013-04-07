@@ -81,7 +81,7 @@ namespace slideshow
 
                         // skip comment if not a special XTEXT... comment
                         if( pAct->GetComment().matchIgnoreAsciiCase(
-                                rtl::OString(RTL_CONSTASCII_STRINGPARAM("XTEXT")),
+                                OString(RTL_CONSTASCII_STRINGPARAM("XTEXT")),
                                 0) )
                         {
                             // fill classification vector with NOOPs,
@@ -161,7 +161,7 @@ namespace slideshow
                         {
                             MetaTextAction* pText = static_cast<MetaTextAction*>(pCurrAct);
                             VERBOSE_TRACE( "Shape text \"%s\" at action #%d",
-                                           rtl::OUStringToOString(pText->GetText(),
+                                           OUStringToOString(pText->GetText(),
                                                       RTL_TEXTENCODING_ISO_8859_1).getStr(),
                                            nActionIndex );
                         }

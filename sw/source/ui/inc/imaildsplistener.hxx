@@ -63,7 +63,7 @@ public:
         Called for every mail message whose delivery
         failed.
     */
-    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage, const rtl::OUString& sErrorMessage) = 0;
+    virtual void mailDeliveryError(::rtl::Reference<MailDispatcher> xMailDispatcher, ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage> xMailMessage, const OUString& sErrorMessage) = 0;
 };
 
 #endif // INCLUDED_IMAILDISPATCHERLISTENER_HXX

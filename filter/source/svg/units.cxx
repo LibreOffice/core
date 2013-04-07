@@ -81,12 +81,12 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
     return fRet;
 }
 
-double convLength( const rtl::OUString& sValue, const State& rState, char dir )
+double convLength( const OUString& sValue, const State& rState, char dir )
 {
     //FIXME: convert deprecated spirit::classic to use spirit::qi
     using namespace ::boost::spirit::classic;
 
-    rtl::OString aUTF8 = rtl::OUStringToOString( sValue,
+    OString aUTF8 = OUStringToOString( sValue,
                                                  RTL_TEXTENCODING_UTF8 );
 
     double  nVal=0.0;

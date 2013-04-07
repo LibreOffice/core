@@ -39,19 +39,19 @@ namespace pcr
     public:
         /** retrieves all descriptions of all possible values of the enumeration property
         */
-        virtual ::std::vector< ::rtl::OUString > SAL_CALL getDescriptions(
+        virtual ::std::vector< OUString > SAL_CALL getDescriptions(
             ) const = 0;
 
         /** converts a given description into a property value
         */
         virtual void SAL_CALL getValueFromDescription(
-                const ::rtl::OUString& _rDescription,
+                const OUString& _rDescription,
                 ::com::sun::star::uno::Any& _out_rValue
             ) const = 0;
 
         /** converts a given property value into a description
         */
-        virtual ::rtl::OUString SAL_CALL getDescriptionForValue(
+        virtual OUString SAL_CALL getDescriptionForValue(
                 const ::com::sun::star::uno::Any& _rEnumValue
             ) const = 0;
 

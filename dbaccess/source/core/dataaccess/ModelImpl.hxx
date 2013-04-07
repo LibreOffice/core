@@ -199,7 +199,7 @@ private:
 
     ::comphelper::NamedValueCollection                                          m_aMediaDescriptor;
     /// the URL the document was loaded from
-    ::rtl::OUString                                                             m_sDocFileLocation;
+    OUString                                                             m_sDocFileLocation;
 
     oslInterlockedCount                                 m_refCount;
 
@@ -220,7 +220,7 @@ private:
         ->m_sDocumentURL then is the URL of the document which actually had
         been recovered.
     */
-    ::rtl::OUString                                     m_sDocumentURL;
+    OUString                                     m_sDocumentURL;
 
 public:
     OWeakConnectionArray                                                        m_aConnections;
@@ -232,11 +232,11 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                                                         m_xNumberFormatsSupplier;
-    ::rtl::OUString                                     m_sConnectURL;
-    ::rtl::OUString                                     m_sName;        // transient, our creator has to tell us the title
-    ::rtl::OUString                                     m_sUser;
-    ::rtl::OUString                                     m_aPassword;    // transient !
-    ::rtl::OUString                                     m_sFailedPassword;
+    OUString                                     m_sConnectURL;
+    OUString                                     m_sName;        // transient, our creator has to tell us the title
+    OUString                                     m_sUser;
+    OUString                                     m_aPassword;    // transient !
+    OUString                                     m_sFailedPassword;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                                         m_aLayoutInformation;
     sal_Int32                                           m_nLoginTimeout;
@@ -247,8 +247,8 @@ public:
     sal_Bool                                            m_bDocumentReadOnly : 1;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyAccess >
                                                         m_xSettings;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableFilter;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
+    ::com::sun::star::uno::Sequence< OUString >  m_aTableFilter;
+    ::com::sun::star::uno::Sequence< OUString >  m_aTableTypeFilter;
     OSharedConnectionManager*                           m_pSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >
                                                         m_xSharedConnectionManager;
@@ -282,7 +282,7 @@ public:
     virtual ~ODatabaseModelImpl();
 
     ODatabaseModelImpl(
-        const ::rtl::OUString& _rRegistrationName,
+        const OUString& _rRegistrationName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
         ODatabaseContext& _rDBContext
         );
@@ -294,8 +294,8 @@ public:
 
     void dispose();
 
-    inline ::rtl::OUString getURL() const               { return m_sDocumentURL;     }
-    inline ::rtl::OUString getDocFileLocation() const   { return m_sDocFileLocation; }
+    inline OUString getURL() const               { return m_sDocumentURL;     }
+    inline OUString getDocFileLocation() const   { return m_sDocFileLocation; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
             getStorage(
@@ -312,11 +312,11 @@ public:
             getMediaDescriptor() const { return m_aMediaDescriptor; }
 
     void    setResource(
-                const ::rtl::OUString& _rURL,
+                const OUString& _rURL,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs
             );
     void    setDocFileLocation(
-                const ::rtl::OUString& i_rLoadedFrom
+                const OUString& i_rLoadedFrom
             );
 
     static ::comphelper::NamedValueCollection
@@ -403,7 +403,7 @@ public:
 
     /** returns the name of the storage which is used to stored objects of the given type, if applicable
     */
-    static ::rtl::OUString
+    static OUString
                     getObjectContainerStorageName( const ObjectType _eType );
 
     /** revokes the data source registration at the database context
@@ -414,7 +414,7 @@ public:
     */
     static bool     objectHasMacros(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxContainerStorage,
-                        const ::rtl::OUString& _rPersistentName
+                        const OUString& _rPersistentName
                     );
 
     /** determines which kind of embedded macros are present in the document
@@ -487,7 +487,7 @@ public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const;
     virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 );
-    virtual ::rtl::OUString getDocumentLocation() const;
+    virtual OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign();
     virtual sal_Bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
@@ -512,7 +512,7 @@ private:
         URL where the doc was loaded/recovered from
     */
     void    impl_switchToLogicalURL(
-                const ::rtl::OUString& i_rDocumentURL
+                const OUString& i_rDocumentURL
             );
 
 };

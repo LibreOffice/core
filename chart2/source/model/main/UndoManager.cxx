@@ -143,7 +143,7 @@ namespace chart
         void UndoManager_Impl::checkDisposed_lck()
         {
             if ( m_bDisposed )
-                throw DisposedException( ::rtl::OUString(), getThis() );
+                throw DisposedException( OUString(), getThis() );
         }
 
         //==============================================================================================================
@@ -240,7 +240,7 @@ namespace chart
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL UndoManager::enterUndoContext( const ::rtl::OUString& i_title ) throw (RuntimeException)
+    void SAL_CALL UndoManager::enterUndoContext( const OUString& i_title ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         m_pImpl->getUndoHelper().enterUndoContext( i_title, aGuard );
@@ -300,28 +300,28 @@ namespace chart
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL UndoManager::getCurrentUndoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getCurrentUndoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
+    OUString SAL_CALL UndoManager::getCurrentRedoActionTitle(  ) throw (EmptyUndoStackException, RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getCurrentRedoActionTitle();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL UndoManager::getAllUndoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getAllUndoActionTitles();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL UndoManager::getAllRedoActionTitles(  ) throw (RuntimeException)
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         return m_pImpl->getUndoHelper().getAllRedoActionTitles();
@@ -395,7 +395,7 @@ namespace chart
     {
         UndoManagerMethodGuard aGuard( *m_pImpl );
         (void)i_parent;
-        throw NoSupportException( ::rtl::OUString(), m_pImpl->getThis() );
+        throw NoSupportException( OUString(), m_pImpl->getThis() );
     }
 
     //------------------------------------------------------------------------------------------------------------------

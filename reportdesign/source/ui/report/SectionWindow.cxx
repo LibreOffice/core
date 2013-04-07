@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 DBG_NAME( rpt_OSectionWindow )
-OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry)
+OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry)
 : Window( _pParent,WB_DIALOGCONTROL)
 ,OPropertyChangeListener(m_aMutex)
 ,m_pParent(_pParent)
@@ -176,15 +176,15 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
     if ( bRet )
     {
-        ::rtl::OUString sExpression = _xGroup->getExpression();
-        ::rtl::OUString sLabel = getViewsWindow()->getView()->getReportView()->getController().getColumnLabel_throw(sExpression);
+        OUString sExpression = _xGroup->getExpression();
+        OUString sLabel = getViewsWindow()->getView()->getReportView()->getController().getColumnLabel_throw(sExpression);
         if ( !sLabel.isEmpty() )
         {
             sExpression = sLabel;
         }
 
         String sTitle = ModuleRes(_nResId).toString();
-        sTitle.SearchAndReplace(rtl::OUString('#') ,sExpression);
+        sTitle.SearchAndReplace(OUString('#') ,sExpression);
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
     }

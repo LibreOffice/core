@@ -25,8 +25,6 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;

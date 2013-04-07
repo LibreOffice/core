@@ -65,7 +65,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     explicit            XclExpString(
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 
@@ -83,7 +83,7 @@ public:
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                Assign(
-                            const ::rtl::OUString& rString,
+                            const OUString& rString,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
 

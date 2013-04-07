@@ -200,7 +200,7 @@ void    XFFrameStyle::ToXml(IXFStream *pStrm)
     //protect:
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
-        rtl::OUString protect;
+        OUString protect;
         if( m_bProtectContent )
             protect += A2OUSTR("content");
         if( m_bProtectSize )

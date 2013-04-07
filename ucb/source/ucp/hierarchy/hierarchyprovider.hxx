@@ -66,7 +66,7 @@ struct ConfigProviderMapEntry
 struct equalString
 {
     bool operator()(
-        const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+        const OUString& rKey1, const OUString& rKey2 ) const
     {
         return !!( rKey1 == rKey2 );
     }
@@ -74,7 +74,7 @@ struct equalString
 
 struct hashString
 {
-    size_t operator()( const rtl::OUString & rName ) const
+    size_t operator()( const OUString & rName ) const
     {
         return rName.hashCode();
     }
@@ -82,7 +82,7 @@ struct hashString
 
 typedef boost::unordered_map
 <
-    rtl::OUString,  // servcie specifier
+    OUString,  // servcie specifier
     ConfigProviderMapEntry,
     hashString,
     equalString
@@ -131,10 +131,10 @@ public:
     // Non-Interface methods
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory >
-    getConfigProvider( const rtl::OUString & rServiceSpecifier );
+    getConfigProvider( const OUString & rServiceSpecifier );
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
-    getRootConfigReadNameAccess( const rtl::OUString & rServiceSpecifier );
+    getRootConfigReadNameAccess( const OUString & rServiceSpecifier );
 
     // Note: may retrun an empty reference.
     com::sun::star::uno::Reference<

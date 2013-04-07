@@ -36,7 +36,7 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XSearchable
 {
 public:
-    XSearchable(const rtl::OUString& rString, sal_Int32 nCount) : maSearchString(rString), mnCount(nCount) {}
+    XSearchable(const OUString& rString, sal_Int32 nCount) : maSearchString(rString), mnCount(nCount) {}
     XSearchable() : maSearchString(RTL_CONSTASCII_USTRINGPARAM("SearchString")), mnCount(1) {}
     virtual ~XSearchable();
 
@@ -47,7 +47,7 @@ public:
     virtual uno::Reference< uno::XInterface > init() = 0;
 
 private:
-    rtl::OUString maSearchString;
+    OUString maSearchString;
     sal_Int32 mnCount;
 };
 

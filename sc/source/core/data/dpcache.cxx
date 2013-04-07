@@ -103,18 +103,18 @@ private:
     ScDocument* mpDoc;
 };
 
-rtl::OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
     if (aDocStr.isEmpty())
     {
         // Replace an empty label string with column name.
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(ScGlobal::GetRscString(STR_COLUMN));
         aBuf.append(sal_Unicode(' '));
 
         ScAddress aColAddr(nCol, 0, 0);
-        rtl::OUString aColStr;
+        OUString aColStr;
         aColAddr.Format(aColStr, SCA_VALID_COL, NULL);
         aBuf.append(aColStr);
         aDocStr = aBuf.makeStringAndClear();
@@ -126,7 +126,7 @@ void initFromCell(
     ScDPCache& rCache, ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
     ScDPItemData& rData, sal_uLong& rNumFormat)
 {
-    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
     rNumFormat = 0;
 
     ScAddress aPos(nCol, nRow, nTab);
@@ -399,7 +399,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
 
         for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
-            rtl::OUString aColTitle = rDB.getColumnLabel(nCol);
+            OUString aColTitle = rDB.getColumnLabel(nCol);
             AddLabel(aColTitle);
         }
 
@@ -575,7 +575,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
                     }
                     else
                     {
-                        const rtl::OUString& rQueryStr = rEntry.GetQueryItem().maString;
+                        const OUString& rQueryStr = rEntry.GetQueryItem().maString;
                         ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                         String aCell = pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(), &xOff);
@@ -667,7 +667,7 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
     return NULL;
 }
 
-rtl::OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
+OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
 {
     OSL_ENSURE(nDim < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
@@ -677,19 +677,19 @@ rtl::OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
         return maLabelNames[nDim+1];
     }
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 namespace {
 
-typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> LabelSet;
+typedef boost::unordered_set<OUString, OUStringHash> LabelSet;
 
-class InsertLabel : public std::unary_function<rtl::OUString, void>
+class InsertLabel : public std::unary_function<OUString, void>
 {
     LabelSet& mrNames;
 public:
     InsertLabel(LabelSet& rNames) : mrNames(rNames) {}
-    void operator() (const rtl::OUString& r)
+    void operator() (const OUString& r)
     {
         mrNames.insert(r);
     }
@@ -727,7 +727,7 @@ void ScDPCache::Clear()
     maStringPool.clear();
 }
 
-void ScDPCache::AddLabel(const rtl::OUString& rLabel)
+void ScDPCache::AddLabel(const OUString& rLabel)
 {
 
     if ( maLabelNames.empty() )
@@ -737,7 +737,7 @@ void ScDPCache::AddLabel(const rtl::OUString& rLabel)
     LabelSet aExistingNames;
     std::for_each(maLabelNames.begin(), maLabelNames.end(), InsertLabel(aExistingNames));
     sal_Int32 nSuffix = 1;
-    rtl::OUString aNewName = rLabel;
+    OUString aNewName = rLabel;
     while (true)
     {
         if (!aExistingNames.count(aNewName))
@@ -748,7 +748,7 @@ void ScDPCache::AddLabel(const rtl::OUString& rLabel)
         }
 
         // Name already exists.
-        rtl::OUStringBuffer aBuf(rLabel);
+        OUStringBuffer aBuf(rLabel);
         aBuf.append(++nSuffix);
         aNewName = aBuf.makeStringAndClear();
     }
@@ -863,7 +863,7 @@ long ScDPCache::GetDimMemberCount(long nDim) const
     return maFields[nDim].maItems.size();
 }
 
-SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
+SCCOL ScDPCache::GetDimensionIndex(const OUString& sName) const
 {
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
@@ -873,7 +873,7 @@ SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
     return -1;
 }
 
-const rtl::OUString* ScDPCache::InternString(const rtl::OUString& rStr) const
+const OUString* ScDPCache::InternString(const OUString& rStr) const
 {
     StringSetType::iterator it = maStringPool.find(rStr);
     if (it != maStringPool.end())
@@ -948,7 +948,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     return -1;
 }
 
-rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
 {
     if (nDim < 0)
         return rItem.GetString();
@@ -1156,9 +1156,9 @@ long ScDPCache::GetColumnCount() const
 
 namespace {
 
-std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
+std::ostream& operator<< (::std::ostream& os, const OUString& str)
 {
-    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
+    return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
 
 void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, size_t nOffset)

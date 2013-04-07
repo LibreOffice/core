@@ -110,17 +110,17 @@ static const char* UIELEMENTTYPENAMES[] =
 static const char       RESOURCEURL_PREFIX[] = "private:resource/";
 static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 
-static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
+static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
     if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
-        rtl::OUString aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
+        OUString aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
         sal_Int32     nIndex      = aTmpStr.indexOf( '/' );
         if (( nIndex > 0 ) &&  ( aTmpStr.getLength() > nIndex ))
         {
-            rtl::OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
+            OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
             for ( int i = 0; i < UIElementType::COUNT; i++ )
             {
                 if ( aTypeStr.equalsAscii( UIELEMENTTYPENAMES[i] ))
@@ -132,7 +132,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL 
     return UIElementType::UNKNOWN;
 }
 
-static rtl::OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
+static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
     if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
@@ -142,7 +142,7 @@ static rtl::OUString RetrieveNameFromResourceURL( const rtl::OUString& aResource
             return aResourceURL.copy( nIndex+1 );
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType )
@@ -159,7 +159,7 @@ void UIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfo
         if ( pDataSettings && !pDataSettings->bDefault )
         {
             // Retrieve user interface name from XPropertySet interface
-            rtl::OUString aUIName;
+            OUString aUIName;
             Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
             if ( xPropSet.is() )
             {
@@ -183,15 +183,15 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            rtl::OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
+            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
             aBuf.appendAscii( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.appendAscii( "/" );
-            rtl::OUString aResURLPrefix( aBuf.makeStringAndClear() );
+            OUString aResURLPrefix( aBuf.makeStringAndClear() );
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;
             Reference< XNameAccess > xNameAccess( xElementTypeStorage, UNO_QUERY );
-            Sequence< rtl::OUString > aUIElementNames = xNameAccess->getElementNames();
+            Sequence< OUString > aUIElementNames = xNameAccess->getElementNames();
             for ( sal_Int32 n = 0; n < aUIElementNames.getLength(); n++ )
             {
                 UIElementData aUIElementData;
@@ -200,8 +200,8 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                 sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
                 if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
                 {
-                    rtl::OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
-                    rtl::OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
+                    OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
+                    OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
                     if (!aUIElementName.isEmpty() &&
                         ( aExtension.equalsIgnoreAsciiCase("xml")))
@@ -325,7 +325,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
     aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer()), UNO_QUERY );
 }
 
-UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElementData( const rtl::OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
+UIConfigurationManager::UIElementData* UIConfigurationManager::impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
 {
     // preload list of element types on demand
     impl_preloadUIElementTypeList( nElementType );
@@ -549,7 +549,7 @@ void UIConfigurationManager::impl_Initialize()
             Reference< XStorage > xElementTypeStorage;
             try
             {
-                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
+                xElementTypeStorage = m_xDocConfigStorage->openStorageElement( OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), nModes );
             }
             catch ( const com::sun::star::container::NoSuchElementException& )
             {
@@ -697,7 +697,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 {
                     bool bCommitSubStorage( false );
                     Reference< XNameAccess > xSubStorageNameAccess( xSubStorage, UNO_QUERY );
-                    Sequence< rtl::OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
+                    Sequence< OUString > aUIElementStreamNames = xSubStorageNameAccess->getElementNames();
                     for ( sal_Int32 j = 0; j < aUIElementStreamNames.getLength(); j++ )
                     {
                         xSubStorage->removeElement( aUIElementStreamNames[j] );
@@ -808,7 +808,7 @@ Reference< XIndexContainer > SAL_CALL UIConfigurationManager::createSettings() t
     return Reference< XIndexContainer >( static_cast< OWeakObject * >( new RootItemContainer()), UNO_QUERY );
 }
 
-sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const ::rtl::OUString& ResourceURL )
+sal_Bool SAL_CALL UIConfigurationManager::hasSettings( const OUString& ResourceURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -826,7 +826,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     return sal_False;
 }
 
-Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const ::rtl::OUString& ResourceURL, sal_Bool bWriteable )
+Reference< XIndexAccess > SAL_CALL UIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -855,7 +855,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     throw NoSuchElementException();
 }
 
-void SAL_CALL UIConfigurationManager::replaceSettings( const ::rtl::OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData )
+void SAL_CALL UIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -914,7 +914,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     }
 }
 
-void SAL_CALL UIConfigurationManager::removeSettings( const ::rtl::OUString& ResourceURL )
+void SAL_CALL UIConfigurationManager::removeSettings( const OUString& ResourceURL )
 throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException, RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -972,7 +972,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
     }
 }
 
-void SAL_CALL UIConfigurationManager::insertSettings( const ::rtl::OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
+void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
 throw ( ElementExistException, IllegalArgumentException, IllegalAccessException, RuntimeException )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
@@ -1061,10 +1061,10 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager() throw
 
         Sequence< Any > aPropSeq( 2 );
         PropertyValue aPropValue;
-        aPropValue.Name  = rtl::OUString( "UserConfigStorage" );
+        aPropValue.Name  = OUString( "UserConfigStorage" );
         aPropValue.Value = makeAny( m_xDocConfigStorage );
         aPropSeq[0] = makeAny( aPropValue );
-        aPropValue.Name  = rtl::OUString( "ModuleIdentifier" );
+        aPropValue.Name  = OUString( "ModuleIdentifier" );
         aPropValue.Value = makeAny( m_aModuleIdentifier );
         aPropSeq[1] = makeAny( aPropValue );
 
@@ -1092,7 +1092,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
     Reference< XInitialization > xInit      (xAccConfig, UNO_QUERY_THROW);
 
     PropertyValue aProp;
-    aProp.Name    = ::rtl::OUString("DocumentRoot");
+    aProp.Name    = OUString("DocumentRoot");
     aProp.Value <<= xDocumentRoot;
 
     Sequence< Any > lArgs(1);
@@ -1159,7 +1159,7 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
             try
             {
                 long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue( rtl::OUString( "OpenMode" ));
+                Any a = xPropSet->getPropertyValue( OUString( "OpenMode" ));
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
@@ -1273,7 +1273,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
             try
             {
                 Reference< XStorage > xElementTypeStorage( Storage->openStorageElement(
-                                                           rtl::OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
+                                                           OUString::createFromAscii( UIELEMENTTYPENAMES[i] ), ElementModes::READWRITE ));
                 UIElementType& rElementType = m_aUIElements[i];
 
                 if ( rElementType.bModified && xElementTypeStorage.is() )

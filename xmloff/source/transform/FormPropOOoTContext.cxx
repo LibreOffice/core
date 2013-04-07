@@ -27,7 +27,6 @@
 #include "TransformerBase.hxx"
 #include "FormPropOOoTContext.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
@@ -35,7 +34,7 @@ using namespace ::xmloff::token;
 class XMLFormPropValueTContext_Impl : public XMLTransformerContext
 {
     OUString m_aAttrQName;
-    ::rtl::OUString m_aCharacters;
+    OUString m_aCharacters;
     sal_Bool m_bPersistent;
     sal_Bool m_bIsVoid;
 
@@ -56,19 +55,19 @@ public:
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual sal_Bool IsPersistent() const;
 
     sal_Bool IsVoid() const { return m_bIsVoid; }
-    const ::rtl::OUString& GetTextContent() const { return m_aCharacters; }
+    const OUString& GetTextContent() const { return m_aCharacters; }
 };
 
 TYPEINIT1( XMLFormPropValueTContext_Impl, XMLTransformerContext );
 
 XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
-        const ::rtl::OUString& rQName ) :
+        const OUString& rQName ) :
     XMLTransformerContext( rTransformer, rQName ),
     m_bPersistent( sal_True ),
     m_bIsVoid( sal_False )
@@ -77,7 +76,7 @@ XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
 
 XMLFormPropValueTContext_Impl::XMLFormPropValueTContext_Impl(
         XMLTransformerBase& rTransformer,
-        const ::rtl::OUString& rQName,
+        const OUString& rQName,
         sal_uInt16 nAttrPrefix,
         XMLTokenEnum eAttrToken ) :
     XMLTransformerContext( rTransformer, rQName ),

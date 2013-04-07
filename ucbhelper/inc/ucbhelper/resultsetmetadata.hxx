@@ -73,10 +73,10 @@ struct ResultSetColumnData
     sal_Int32       columnDisplaySize;
 
     /** @see ResultSetMetaData::getColumnLabel */
-    ::rtl::OUString columnLabel;
+    OUString columnLabel;
 
     /** @see ResultSetMetaData::getSchemaName */
-    ::rtl::OUString schemaName;
+    OUString schemaName;
 
     /** @see ResultSetMetaData::getPrecision */
     sal_Int32       precision;
@@ -85,13 +85,13 @@ struct ResultSetColumnData
     sal_Int32       scale;
 
     /** @see ResultSetMetaData::getTableName */
-    ::rtl::OUString tableName;
+    OUString tableName;
 
     /** @see ResultSetMetaData::getCatalogName */
-    ::rtl::OUString catalogName;
+    OUString catalogName;
 
     /** @see ResultSetMetaData::getColumnTypeName */
-    ::rtl::OUString columnTypeName;
+    OUString columnTypeName;
 
     /** @see ResultSetMetaData::isReadOnly */
     sal_Bool        isReadOnly;
@@ -103,7 +103,7 @@ struct ResultSetColumnData
     sal_Bool        isDefinitelyWritable;
 
     /** @see ResultSetMetaData::getColumnServiceName */
-    ::rtl::OUString columnServiceName;
+    OUString columnServiceName;
 
     inline ResultSetColumnData();
 };
@@ -300,7 +300,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the column label.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getColumnLabel( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
@@ -311,7 +311,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the name of the property that corresponds to column.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getColumnName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
@@ -325,7 +325,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the schema name of column or an empty string.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getSchemaName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
@@ -366,11 +366,11 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the table name for column or an empty string.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getTableName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     /**
       * Gets the catalog name for the table from which column of this
       * result set was derived.
@@ -409,7 +409,7 @@ public:
       *         be returned. The first column is 1, the second is 2, ...
       * @return the column type name.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getColumnTypeName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );
@@ -457,7 +457,7 @@ public:
       * @return the service name for column or an empty string, if no service
       *         is applicable.
       */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getColumnServiceName( sal_Int32 column )
         throw( ::com::sun::star::sdbc::SQLException,
                ::com::sun::star::uno::RuntimeException );

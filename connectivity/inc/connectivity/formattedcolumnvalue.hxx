@@ -94,8 +94,8 @@ namespace dbtools
         virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >&
                             getColumnUpdate() const;
 
-        virtual bool            setFormattedValue( const ::rtl::OUString& _rFormattedStringValue ) const;
-        virtual ::rtl::OUString getFormattedValue() const;
+        virtual bool            setFormattedValue( const OUString& _rFormattedStringValue ) const;
+        virtual OUString getFormattedValue() const;
 
     private:
         ::std::auto_ptr< FormattedColumnValue_Data >    m_pData;

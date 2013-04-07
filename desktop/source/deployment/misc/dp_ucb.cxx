@@ -34,7 +34,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
-using ::rtl::OUString;
 
 namespace dp_misc
 {
@@ -210,7 +209,7 @@ bool readLine( OUString * res, OUString const & startingWith,
     {
         if (file.match( startingWith, pos ))
         {
-            ::rtl::OUStringBuffer buf;
+            OUStringBuffer buf;
             sal_Int32 start = pos;
             pos += startingWith.getLength();
             for (;;)
@@ -254,7 +253,7 @@ bool readLine( OUString * res, OUString const & startingWith,
     return false;
 }
 
-bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString> > & out_result,
+bool readProperties( ::std::list< ::std::pair< OUString, OUString> > & out_result,
                      ::ucbhelper::Content & ucb_content )
 {
     // read whole file:
@@ -266,7 +265,7 @@ bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString>
     for (;;)
     {
 
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         sal_Int32 start = pos;
 
         bool bEOF = false;

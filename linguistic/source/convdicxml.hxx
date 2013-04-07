@@ -45,7 +45,7 @@ class ConvDicXMLExport : public SvXMLExport
 
 public:
     ConvDicXMLExport( ConvDic &rConvDic,
-        const rtl::OUString &rFileName,
+        const OUString &rFileName,
         com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > &rHandler) :
         SvXMLExport ( comphelper::getProcessComponentContext(), rFileName,
                       ::com::sun::star::util::MeasureUnit::CM, rHandler ),
@@ -58,7 +58,7 @@ public:
     }
 
     // XServiceInfo (override parent method)
-    ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     // SvXMLExport
     void _ExportAutoStyles()    {}
@@ -86,7 +86,7 @@ class ConvDicXMLImport : public SvXMLImport
 public:
 
     //!!  see comment for pDic member
-    ConvDicXMLImport( ConvDic *pConvDic, const rtl::OUString /*&rFileName*/ ) :
+    ConvDicXMLImport( ConvDic *pConvDic, const OUString /*&rFileName*/ ) :
         SvXMLImport ( comphelper::getProcessComponentContext(), IMPORT_ALL ),
         pDic        ( pConvDic )
     {
@@ -100,13 +100,13 @@ public:
     }
 
     // XServiceInfo (override parent method)
-    ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL startDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL endDocument(void) throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     virtual SvXMLImportContext * CreateContext(
-        sal_uInt16 nPrefix, const rtl::OUString &rLocalName,
+        sal_uInt16 nPrefix, const OUString &rLocalName,
         const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList );
 
     ConvDic *   GetDic()                    { return pDic; }

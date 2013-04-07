@@ -42,8 +42,6 @@
 
 #include <limits>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 #define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
                                    ScGlobal::GetRscString(rid) ).Execute()
@@ -280,7 +278,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
-        rtl::OUString aValStr;
+        OUString aValStr;
         size_t nCondPos = 0;
         size_t nFieldSelPos = 0;
 
@@ -439,7 +437,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP, pDocP->GetAddressConvention() );
         aEdCopyArea.SetRefString( aRefStr );
     }
@@ -477,7 +475,7 @@ void ScFilterDlg::FillFieldLists()
 
     if ( pDoc )
     {
-        rtl::OUString aFieldName;
+        OUString aFieldName;
         SCTAB   nTab        = nSrcTab;
         SCCOL   nFirstCol   = theQueryData.nCol1;
         SCROW   nFirstRow   = theQueryData.nRow1;
@@ -490,7 +488,7 @@ void ScFilterDlg::FillFieldLists()
             aFieldName = pDoc->GetString(col, nFirstRow, nTab);
             if (!aBtnHeader.IsChecked() || aFieldName.isEmpty())
             {
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 aBuf.append(aStrColumn);
                 aBuf.append(sal_Unicode(' '));
                 aBuf.append(ScColToAlpha(col));
@@ -514,7 +512,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
         ComboBox*   pValList        = maValueEdArr[nList-1];
         sal_uInt16      nFieldSelPos    = maFieldLbArr[nList-1]->GetSelectEntryPos();
         sal_uInt16      nListPos        = 0;
-        rtl::OUString aCurValue = pValList->GetText();
+        OUString aCurValue = pValList->GetText();
 
         pValList->Clear();
         pValList->InsertEntry( aStrNotEmpty, 0 );
@@ -629,7 +627,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
 
     const ScTypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
 
-    const rtl::OUString& aHdrStr = rHdrEntry.GetString();
+    const OUString& aHdrStr = rHdrEntry.GetString();
     bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
     bool bInclude = !aBtnHeader.IsChecked();
 
@@ -1106,7 +1104,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     size_t nQE = i + nOffset;
     if ( pEd )
     {
-        rtl::OUString aStrVal = pEd->GetText();
+        OUString aStrVal = pEd->GetText();
         ListBox*  pLbCond   = &aLbCond1;
         ListBox*  pLbField  = &aLbField1;
         if ( pEd == &aEdVal2 )
@@ -1133,7 +1131,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
-            pLbCond->SelectEntry(rtl::OUString('='));
+            pLbCond->SelectEntry(OUString('='));
             pLbCond->Disable();
         }
         else
@@ -1210,7 +1208,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
 
     for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
-        rtl::OUString aValStr;
+        OUString aValStr;
         size_t nCondPos = 0;
         size_t nFieldSelPos = 0;
         size_t nQE = i + nOffset;
@@ -1226,7 +1224,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            const rtl::OUString& rQueryStr = rItem.maString;
+            const OUString& rQueryStr = rItem.maString;
             if (rEntry.IsQueryByEmpty())
             {
                 aValStr = aStrEmpty;

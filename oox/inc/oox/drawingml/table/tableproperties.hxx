@@ -42,7 +42,7 @@ public:
     std::vector< sal_Int32 >& getTableGrid() { return mvTableGrid; };
     std::vector< TableRow >& getTableRows() { return mvTableRows; };
 
-    rtl::OUString&                      getStyleId(){ return maStyleId; };
+    OUString&                      getStyleId(){ return maStyleId; };
     boost::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
     sal_Bool&                           isRtl(){ return mbRtl; };
     sal_Bool&                           isFirstRow(){ return mbFirstRow; };
@@ -59,7 +59,7 @@ private:
 
     const TableStyle&                   getUsedTableStyle( const ::oox::core::XmlFilterBase& rFilterBase );
 
-    rtl::OUString                       maStyleId;              // either StyleId is available
+    OUString                       maStyleId;              // either StyleId is available
     boost::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;

@@ -59,16 +59,16 @@ XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& 
     if( rEntry.GetType() == COLORSCALE_FORMULA )
     {
         const ScTokenArray* pArr = rEntry.GetFormula();
-        rtl::OUString aFormula;
+        OUString aFormula;
         if(pArr)
         {
             aFormula = XclXmlUtils::ToOUString( GetRoot().GetDoc(), rSrcPos,
                     pArr->Clone(), GetRoot().GetOpCodeMap() );
         }
-        maValue = rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
+        maValue = OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8 );
     }
     else
-        maValue = rtl::OString::valueOf(rEntry.GetValue());
+        maValue = OString::valueOf(rEntry.GetValue());
 }
 
 namespace {
@@ -159,7 +159,7 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElementNS( XML_x14, XML_dataBar );
 }
 
-XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const rtl::OString& rId ):
+XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId ):
     XclExpRoot(rRoot),
     maId(rId)
 {
@@ -180,7 +180,7 @@ void XclExpExtCfRule::SaveXml( XclExpXmlStream& rStrm )
 
 }
 
-XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const rtl::OString& rId ):
+XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot& rRoot, const ScDataBarFormat& rFormat, const ScAddress& rPos, const OString& rId ):
     XclExpRoot(rRoot)
 {
     maCfRule.reset( new XclExpExtCfRule( *this, rFormat, rPos, rId ) );
@@ -206,7 +206,7 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
 XclExpExtCondFormat::XclExpExtCondFormat( const XclExpRoot& rRoot ):
     XclExpExt( rRoot )
 {
-    maURI = rtl::OString("{78C0D931-6437-407d-A8EE-F0AAD7539E65}");
+    maURI = OString("{78C0D931-6437-407d-A8EE-F0AAD7539E65}");
 }
 
 void XclExpExtCondFormat::SaveXml( XclExpXmlStream& rStrm )

@@ -41,10 +41,10 @@ public:
 
     virtual ~ObjectContainer1() SAL_THROW(());
 
-    rtl::Reference< Object1 > get(rtl::OUString const & rKey);
+    rtl::Reference< Object1 > get(OUString const & rKey);
 
 private:
-    typedef std::map< rtl::OUString, Object1 * > Map;
+    typedef std::map< OUString, Object1 * > Map;
 
     Map m_aMap;
     osl::Mutex m_aMutex;

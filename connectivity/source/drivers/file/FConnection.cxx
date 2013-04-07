@@ -53,7 +53,6 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
 using namespace ::ucbhelper;
-using rtl::OUString;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
@@ -94,11 +93,11 @@ sal_Bool OConnection::matchesExtension( const String& _rExt ) const
 }
 
 //-----------------------------------------------------------------------------
-void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
 
-    ::rtl::OUString aExt;
+    OUString aExt;
     const PropertyValue *pIter  = info.getConstArray();
     const PropertyValue *pEnd    = pIter + info.getLength();
     for(;pIter != pEnd;++pIter)
@@ -107,7 +106,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             OSL_VERIFY( pIter->Value >>= aExt );
         else if(0 == pIter->Name.compareToAscii("CharSet"))
         {
-            ::rtl::OUString sIanaName;
+            OUString sIanaName;
             OSL_VERIFY( pIter->Value >>= sIanaName );
 
             ::dbtools::OCharsetMap aLookupIanaName;
@@ -130,7 +129,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     {
         sal_Int32 nLen = url.indexOf(':');
         nLen = url.indexOf(':',nLen+1);
-        ::rtl::OUString aDSN(url.copy(nLen+1));
+        OUString aDSN(url.copy(nLen+1));
 
         String aFileName = aDSN;
         INetURLObject aURL;
@@ -199,7 +198,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             throwUrlNotValid(getURL(),e.Message);
         }
         if(!m_xDir.is() || !m_xContent.is())
-            throwUrlNotValid(getURL(),::rtl::OUString());
+            throwUrlNotValid(getURL(),OUString());
 
         if (m_aFilenameExtension.Search('*') != STRING_NOTFOUND || m_aFilenameExtension.Search('?') != STRING_NOTFOUND)
             throw SQLException();
@@ -228,7 +227,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return xReturn;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -241,13 +240,13 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const ::
     return pStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::nativeSQL( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     return sql;
 }
@@ -317,14 +316,14 @@ sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeExcepti
     return m_bReadOnly;
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // --------------------------------------------------------------------------------
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
@@ -395,9 +394,9 @@ Reference< XTablesSupplier > OConnection::createCatalog()
 Reference< XDynamicResultSet > OConnection::getDir() const
 {
     Reference<XDynamicResultSet> xContent;
-    Sequence< ::rtl::OUString > aProps(1);
-    ::rtl::OUString* pProps = aProps.getArray();
-    pProps[ 0 ] = ::rtl::OUString("Title");
+    Sequence< OUString > aProps(1);
+    OUString* pProps = aProps.getArray();
+    pProps[ 0 ] = OUString("Title");
     try
     {
         Reference<XContentIdentifier> xIdent = getContent()->getIdentifier();
@@ -432,7 +431,7 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
-void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage)
+void OConnection::throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage)
 {
     SQLException aError;
     aError.Message = getResources().getResourceStringWithSubstitution(
@@ -440,11 +439,11 @@ void OConnection::throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::O
                 "$URL$", _rsUrl
             );
 
-    aError.SQLState = ::rtl::OUString("S1000");
+    aError.SQLState = OUString("S1000");
     aError.ErrorCode = 0;
     aError.Context = static_cast< XConnection* >(this);
     if (!_rsMessage.isEmpty())
-        aError.NextException <<= SQLException(_rsMessage, aError.Context, ::rtl::OUString(), 0, Any());
+        aError.NextException <<= SQLException(_rsMessage, aError.Context, OUString(), 0, Any());
 
     throw aError;
 }

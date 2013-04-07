@@ -155,13 +155,13 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
 {
     static SfxItemPropertyMapEntry aCellsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -173,15 +173,15 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -250,7 +250,7 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellsPropertySet( aCellsPropertyMap_Impl );
@@ -264,13 +264,13 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
 {
     static SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -282,15 +282,15 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -374,13 +374,13 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
 {
     static SfxItemPropertyMapEntry aCellPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -392,15 +392,15 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -432,7 +432,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR2), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_FORMLOC),  SC_WID_UNO_FORMLOC, &getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FORMRT),   SC_WID_UNO_FORMRT,  &getCppuType((table::CellContentType*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &getCppuType((table::CellHoriJustify*)0), 0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
@@ -474,7 +474,7 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),   EE_CHAR_ESCAPEMENT, &getCppuType((sal_Int32*)0),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
@@ -488,13 +488,13 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
 {
     static SfxItemPropertyMapEntry aColumnPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -506,15 +506,15 @@ static const SfxItemPropertySet* lcl_GetColumnPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -600,13 +600,13 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
 {
     static SfxItemPropertyMapEntry aRowPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -618,15 +618,15 @@ static const SfxItemPropertySet* lcl_GetRowPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -713,7 +713,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
 {
     static SfxItemPropertyMapEntry aSheetPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((rtl::OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ABSNAME),  SC_WID_UNO_ABSNAME, &getCppuType((OUString*)0),        0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),                 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BORDCOL),  SC_WID_UNO_BORDCOL, &getCppuType((sal_Int32*)0),            0, 0 },
@@ -721,7 +721,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLSTYL), SC_WID_UNO_CELLSTYL,&getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&getBooleanCppuType(),                 0, MID_CROSSED_OUT },
@@ -733,15 +733,15 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &getCppuType((float*)0),                0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&getCppuType((float*)0),               0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -785,11 +785,11 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER2),ATTR_BORDER,      &::getCppuType((const table::BorderLine2*)0), 0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  SC_WID_UNO_LINKDISPBIT,&getCppuType((uno::Reference<awt::XBitmap>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), SC_WID_UNO_LINKDISPNAME,&getCppuType((rtl::OUString*)0),    0 | beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), SC_WID_UNO_LINKDISPNAME,&getCppuType((OUString*)0),    0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &getCppuType((sal_Int32*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_STACKED,       &getCppuType((table::CellOrientation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PAGESTL),  SC_WID_UNO_PAGESTL, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PAGESTL),  SC_WID_UNO_PAGESTL, &getCppuType((OUString*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &getCppuType((sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_PINDENT),  ATTR_INDENT,        &getCppuType((sal_Int16*)0),            0, 0 }, //! CONVERT_TWIPS
@@ -825,7 +825,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, &getCppuType((sal_Int32*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const rtl::OUString * >(0)),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CODENAME),        SC_WID_UNO_CODENAME, &getCppuType(static_cast< const OUString * >(0)),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES), SC_WID_UNO_NAMES, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
@@ -905,7 +905,7 @@ static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet&
         sal_uLong nCount = aSeq.getLength();
         for (sal_uLong i=0; i<nCount; i++)
         {
-            rtl::OUString aName(pAry[i].Name);
+            OUString aName(pAry[i].Name);
             rDest.setPropertyValue( aName, rSource.getPropertyValue( aName ) );
         }
     }
@@ -1230,7 +1230,7 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 
                     case uno::TypeClass_STRING:
                     {
-                        rtl::OUString aUStr;
+                        OUString aUStr;
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
                         {
@@ -1289,7 +1289,7 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
 }
 
 static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
-        const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
+        const uno::Sequence< uno::Sequence<OUString> >& aData,
         const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -1308,7 +1308,7 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
 
     long nCols = 0;
     long nRows = aData.getLength();
-    const uno::Sequence<rtl::OUString>* pArray = aData.getConstArray();
+    const uno::Sequence<OUString>* pArray = aData.getConstArray();
     if ( nRows )
         nCols = pArray[0].getLength();
 
@@ -1332,11 +1332,11 @@ static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRang
     SCROW nDocRow = nStartRow;
     for (long nRow=0; nRow<nRows; nRow++)
     {
-        const uno::Sequence<rtl::OUString>& rColSeq = pArray[nRow];
+        const uno::Sequence<OUString>& rColSeq = pArray[nRow];
         if ( rColSeq.getLength() == nCols )
         {
             SCCOL nDocCol = nStartCol;
-            const rtl::OUString* pColArr = rColSeq.getConstArray();
+            const OUString* pColArr = rColSeq.getConstArray();
             for (long nCol=0; nCol<nCols; nCol++)
             {
                 String aText(pColArr[nCol]);
@@ -1988,7 +1988,7 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhic
     return eRet;
 }
 
-beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const rtl::OUString& aPropertyName )
+beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2003,7 +2003,7 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const rtl::OUS
 }
 
 uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates(
-                                const uno::Sequence<rtl::OUString>& aPropertyNames )
+                                const uno::Sequence<OUString>& aPropertyNames )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2022,7 +2022,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
     return aRet;
 }
 
-void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aPropertyName )
+void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2067,7 +2067,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const rtl::OUString& aProp
     }
 }
 
-uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
@@ -2113,7 +2113,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const rtl::OUString& aPr
                         ScUnoHelpFunctions::SetBoolInAny( aAny, false );
                         break;
                     case SC_WID_UNO_CELLSTYL:
-                        aAny <<= rtl::OUString( ScStyleNameConversion::DisplayToProgrammaticName(
+                        aAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
                                     ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA ) );
                         break;
                     case SC_WID_UNO_TBLBORD:
@@ -2295,7 +2295,7 @@ static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const
 }
 
 void SAL_CALL ScCellRangesBase::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -2397,7 +2397,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     break;
                 case SC_WID_UNO_CELLSTYL:
                     {
-                        rtl::OUString aStrVal;
+                        OUString aStrVal;
                         aValue >>= aStrVal;
                         String aString(ScStyleNameConversion::ProgrammaticToDisplayName(
                                                             aStrVal, SFX_STYLE_FAMILY_PARA ));
@@ -2492,7 +2492,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     }
 }
 
-uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScCellRangesBase::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -2568,7 +2568,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(*GetMarkData());
                         if (pStyle)
                             aStyleName = pStyle->GetName();
-                        rAny <<= rtl::OUString( ScStyleNameConversion::DisplayToProgrammaticName(
+                        rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
                                                                 aStyleName, SFX_STYLE_FAMILY_PARA ) );
                     }
                     break;
@@ -2648,13 +2648,13 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                     {
                         String sRet;
                         aRanges.Format(sRet, SCR_ABS_3D, pDocShell->GetDocument());
-                        rAny <<= rtl::OUString(sRet);
+                        rAny <<= OUString(sRet);
                     }
             }
     }
 }
 
-void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const rtl::OUString& /* aPropertyName */,
+void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
                             throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException, uno::RuntimeException)
@@ -2666,7 +2666,7 @@ void SAL_CALL ScCellRangesBase::addPropertyChangeListener( const rtl::OUString& 
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const rtl::OUString& /* aPropertyName */,
+void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const OUString& /* aPropertyName */,
                             const uno::Reference<beans::XPropertyChangeListener>& /* aListener */)
                             throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException, uno::RuntimeException)
@@ -2678,7 +2678,7 @@ void SAL_CALL ScCellRangesBase::removePropertyChangeListener( const rtl::OUStrin
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellRangesBase::addVetoableChangeListener( const rtl::OUString&,
+void SAL_CALL ScCellRangesBase::addVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
                             throw(beans::UnknownPropertyException,
                                 lang::WrappedTargetException, uno::RuntimeException)
@@ -2686,7 +2686,7 @@ void SAL_CALL ScCellRangesBase::addVetoableChangeListener( const rtl::OUString&,
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const rtl::OUString&,
+void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const OUString&,
                             const uno::Reference<beans::XVetoableChangeListener>&)
                             throw(beans::UnknownPropertyException,
                                 lang::WrappedTargetException, uno::RuntimeException)
@@ -2696,7 +2696,7 @@ void SAL_CALL ScCellRangesBase::removeVetoableChangeListener( const rtl::OUStrin
 
 // XMultiPropertySet
 
-void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames,
+void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
                                     const uno::Sequence< uno::Any >& aValues )
                                 throw (beans::PropertyVetoException,
                                     lang::IllegalArgumentException,
@@ -2713,7 +2713,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
     if ( pDocShell && nCount )
     {
         const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();      // from derived class
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
         const SfxItemPropertySimpleEntry** pEntryArray = new const SfxItemPropertySimpleEntry*[nCount];
@@ -2791,7 +2791,7 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< rtl::OUS
 }
 
 uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
-                                const uno::Sequence< rtl::OUString >& aPropertyNames )
+                                const uno::Sequence< OUString >& aPropertyNames )
                                     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2808,7 +2808,7 @@ uno::Sequence<uno::Any> SAL_CALL ScCellRangesBase::getPropertyValues(
     return aRet;
 }
 
-void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const uno::Sequence< rtl::OUString >& /* aPropertyNames */,
+void SAL_CALL ScCellRangesBase::addPropertiesChangeListener( const uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                 throw (uno::RuntimeException)
 {
@@ -2821,7 +2821,7 @@ void SAL_CALL ScCellRangesBase::removePropertiesChangeListener( const uno::Refer
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< rtl::OUString >& /* aPropertyNames */,
+void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< OUString >& /* aPropertyNames */,
                                     const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                 throw (uno::RuntimeException)
 {
@@ -2843,7 +2843,7 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 }
 
 // XTolerantMultiPropertySet
-uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames,
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::setPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames,
                                     const uno::Sequence< uno::Any >& aValues )
                                     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -2860,7 +2860,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         beans::SetPropertyTolerantFailed* pReturns = aReturns.getArray();
 
         const SfxItemPropertyMap& rPropertyMap = GetItemPropertyMap();     // from derived class
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
         const SfxItemPropertySimpleEntry** pMapArray = new const SfxItemPropertySimpleEntry*[nCount];
@@ -2967,7 +2967,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
     return uno::Sequence < beans::SetPropertyTolerantFailed >();
 }
 
-uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::getPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
                                     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2997,7 +2997,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL ScCellRangesBase::get
     return aReturns;
 }
 
-uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBase::getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL ScCellRangesBase::getDirectPropertyValuesTolerant( const uno::Sequence< OUString >& aPropertyNames )
                                     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3227,7 +3227,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
         throw uno::RuntimeException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
+uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3235,19 +3235,19 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
     if ( pMemChart )
     {
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
-        uno::Sequence<rtl::OUString> aSeq( nRowCount );
-        rtl::OUString* pAry = aSeq.getArray();
+        uno::Sequence<OUString> aSeq( nRowCount );
+        OUString* pAry = aSeq.getArray();
         for (sal_Int32 nRow = 0; nRow < nRowCount; nRow++)
             pAry[nRow] = pMemChart->GetRowText(static_cast<short>(nRow));
 
         delete pMemChart;
         return aSeq;
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
 void SAL_CALL ScCellRangesBase::setRowDescriptions(
-                        const uno::Sequence<rtl::OUString>& aRowDescriptions )
+                        const uno::Sequence<OUString>& aRowDescriptions )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3266,7 +3266,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
             {
                 if ( pPosMap->GetRowCount() == static_cast<SCROW>(nRowCount) )
                 {
-                    const rtl::OUString* pArray = aRowDescriptions.getConstArray();
+                    const OUString* pArray = aRowDescriptions.getConstArray();
                     for (long nRow=0; nRow<nRowCount; nRow++)
                     {
                         const ScAddress* pPos = pPosMap->GetRowHeaderPosition(
@@ -3299,7 +3299,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
         throw uno::RuntimeException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
+uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3307,19 +3307,19 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
-        uno::Sequence<rtl::OUString> aSeq( nColCount );
-        rtl::OUString* pAry = aSeq.getArray();
+        uno::Sequence<OUString> aSeq( nColCount );
+        OUString* pAry = aSeq.getArray();
         for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
             pAry[nCol] = pMemChart->GetColText(static_cast<short>(nCol));
 
         delete pMemChart;
         return aSeq;
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
 void SAL_CALL ScCellRangesBase::setColumnDescriptions(
-                        const uno::Sequence<rtl::OUString>& aColumnDescriptions )
+                        const uno::Sequence<OUString>& aColumnDescriptions )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -3338,7 +3338,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
             {
                 if ( pPosMap->GetColCount() == static_cast<SCCOL>(nColCount) )
                 {
-                    const rtl::OUString* pArray = aColumnDescriptions.getConstArray();
+                    const OUString* pArray = aColumnDescriptions.getConstArray();
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetColHeaderPosition(
@@ -3406,7 +3406,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
         ScChartListenerCollection* pColl = pDoc->GetChartListenerCollection();
-        rtl::OUString aName = pColl->getUniqueName(rtl::OUString("__Uno"));
+        OUString aName = pColl->getUniqueName(OUString("__Uno"));
         if (aName.isEmpty())
             // failed to create unique name.
             return;
@@ -3979,7 +3979,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
 
                 ScMarkData aMark(*GetMarkData());
 
-                rtl::OUString aDummyUndo;
+                OUString aDummyUndo;
                 ScRangeList aMatchedRanges;
                 SCCOL nCol = 0;
                 SCROW nRow = 0;
@@ -4028,7 +4028,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                     ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 }
 
-                rtl::OUString aDummyUndo;
+                OUString aDummyUndo;
                 ScRangeList aMatchedRanges;
                 bool bFound = pDoc->SearchAndReplace(
                     *pSearchItem, nCol, nRow, nTab, aMark, aMatchedRanges, aDummyUndo, NULL);
@@ -4119,7 +4119,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     SCCOL nCol = 0;
                     SCROW nRow = 0;
 
-                    rtl::OUString aUndoStr;
+                    OUString aUndoStr;
                     ScDocument* pUndoDoc = NULL;
                     if (bUndo)
                     {
@@ -4338,7 +4338,7 @@ uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells
     return NULL;
 }
 
-rtl::OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
+OUString SAL_CALL ScCellRangesObj::getRangeAddressesAsString()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -4470,7 +4470,7 @@ static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const Str
             rNamedEntries.erase( rNamedEntries.begin() + n );
 }
 
-void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScCellRangesObj::insertByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::ElementExistException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -4599,7 +4599,7 @@ static sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
     return false;       // not found
 }
 
-void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
+void SAL_CALL ScCellRangesObj::removeByName( const OUString& aName )
                                 throw(container::NoSuchElementException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -4664,7 +4664,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
 
 // XNameReplace
 
-void SAL_CALL ScCellRangesObj::replaceByName( const rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScCellRangesObj::replaceByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::NoSuchElementException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -4676,7 +4676,7 @@ void SAL_CALL ScCellRangesObj::replaceByName( const rtl::OUString& aName, const 
 
 // XNameAccess
 
-uno::Any SAL_CALL ScCellRangesObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScCellRangesObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -4715,7 +4715,7 @@ static sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
     return false;
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getElementNames()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -4728,8 +4728,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getElementNames()
         ScDocument* pDoc = pDocSh->GetDocument();
         size_t nCount = rRanges.size();
 
-        uno::Sequence<rtl::OUString> aSeq(nCount);
-        rtl::OUString* pAry = aSeq.getArray();
+        uno::Sequence<OUString> aSeq(nCount);
+        OUString* pAry = aSeq.getArray();
         for (size_t i=0; i < nCount; i++)
         {
             //  use given name if for exactly this range, otherwise just format
@@ -4743,10 +4743,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<rtl::OUString>(0);
+    return uno::Sequence<OUString>(0);
 }
 
-sal_Bool SAL_CALL ScCellRangesObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -4764,7 +4764,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumerat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.SheetCellRangesEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SheetCellRangesEnumeration"));
 }
 
 // XIndexAccess
@@ -4803,12 +4803,12 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScCellRangesObj" );
+    return OUString( "ScCellRangesObj" );
 }
 
-sal_Bool SAL_CALL ScCellRangesObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScCellRangesObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr(rServiceName);
@@ -4818,15 +4818,15 @@ sal_Bool SAL_CALL ScCellRangesObj::supportsService( const rtl::OUString& rServic
            aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(4);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGES_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    uno::Sequence<OUString> aRet(4);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGES_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
     return aRet;
 }
 
@@ -5017,13 +5017,13 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
-                        const rtl::OUString& aName ) throw(uno::RuntimeException)
+                        const OUString& aName ) throw(uno::RuntimeException)
 {
     return getCellRangeByName( aName, ScAddress::detailsOOOa1 );
 }
 
 uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
-                        const rtl::OUString& aName, const ScAddress::Details& rDetails  ) throw(uno::RuntimeException)
+                        const OUString& aName, const ScAddress::Details& rDetails  ) throw(uno::RuntimeException)
 {
     //  name refers to the whole document (with the range's table as default),
     //  valid only if the range is within this range
@@ -5126,7 +5126,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellRangeObj::getSpreadsheet()
 
 // XArrayFormulaRange
 
-rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5160,8 +5160,8 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
     return aFormula;
 }
 
-void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
-        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+void ScCellRangeObj::SetArrayFormula_Impl( const OUString& rFormula,
+        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
@@ -5187,16 +5187,16 @@ void ScCellRangeObj::SetArrayFormula_Impl( const rtl::OUString& rFormula,
     }
 }
 
-void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
+void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     // GRAM_PODF_A1 for API compatibility.
-    SetArrayFormula_Impl( aFormula, ::rtl::OUString(), formula::FormulaGrammar::GRAM_PODF_A1);
+    SetArrayFormula_Impl( aFormula, OUString(), formula::FormulaGrammar::GRAM_PODF_A1);
 }
 
-void ScCellRangeObj::SetArrayFormulaWithGrammar( const rtl::OUString& rFormula,
-        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+void ScCellRangeObj::SetArrayFormulaWithGrammar( const OUString& rFormula,
+        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SetArrayFormula_Impl( rFormula, rFormulaNmsp, eGrammar);
@@ -5322,7 +5322,7 @@ void SAL_CALL ScCellRangeObj::setDataArray(
 
 // XCellRangeFormula
 
-uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
+uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArray()
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -5344,12 +5344,12 @@ uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormul
         SCROW nRowCount = nEndRow + 1 - nStartRow;
         SCTAB nTab = aRange.aStart.Tab();
 
-        uno::Sequence< uno::Sequence<rtl::OUString> > aRowSeq( nRowCount );
-        uno::Sequence<rtl::OUString>* pRowAry = aRowSeq.getArray();
+        uno::Sequence< uno::Sequence<OUString> > aRowSeq( nRowCount );
+        uno::Sequence<OUString>* pRowAry = aRowSeq.getArray();
         for (SCROW nRowIndex = 0; nRowIndex < nRowCount; nRowIndex++)
         {
-            uno::Sequence<rtl::OUString> aColSeq( nColCount );
-            rtl::OUString* pColAry = aColSeq.getArray();
+            uno::Sequence<OUString> aColSeq( nColCount );
+            OUString* pColAry = aColSeq.getArray();
             for (SCCOL nColIndex = 0; nColIndex < nColCount; nColIndex++)
                 pColAry[nColIndex] = lcl_GetInputString( pDocSh->GetDocument(),
                                     ScAddress( nStartCol+nColIndex, nStartRow+nRowIndex, nTab ), sal_True );
@@ -5364,7 +5364,7 @@ uno::Sequence< uno::Sequence<rtl::OUString> > SAL_CALL ScCellRangeObj::getFormul
 }
 
 void SAL_CALL ScCellRangeObj::setFormulaArray(
-                        const uno::Sequence< uno::Sequence<rtl::OUString> >& aArray )
+                        const uno::Sequence< uno::Sequence<OUString> >& aArray )
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -5581,7 +5581,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
 
 // XAutoFormattable
 
-void SAL_CALL ScCellRangeObj::autoFormat( const rtl::OUString& aName )
+void SAL_CALL ScCellRangeObj::autoFormat( const OUString& aName )
                     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -6094,12 +6094,12 @@ const SfxItemPropertyMap& ScCellRangeObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScCellRangeObj" );
+    return OUString( "ScCellRangeObj" );
 }
 
-sal_Bool SAL_CALL ScCellRangeObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScCellRangeObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -6110,16 +6110,16 @@ sal_Bool SAL_CALL ScCellRangeObj::supportsService( const rtl::OUString& rService
            aServiceStr.EqualsAscii( SCPARAPROPERTIES_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(5);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    uno::Sequence<OUString> aRet(5);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    pArray[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
     return aRet;
 }
 
@@ -6327,7 +6327,7 @@ void ScCellObj::SetValue_Impl(double fValue)
 
 // only for XML import
 
-void ScCellObj::InputEnglishString( const ::rtl::OUString& rText )
+void ScCellObj::InputEnglishString( const OUString& rText )
 {
     // This is like a mixture of setFormula and property FormulaLocal:
     // The cell's number format is checked for "text", a new cell format may be set,
@@ -6418,13 +6418,13 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
     return xCursor;
 }
 
-rtl::OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getString() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return GetOutputString_Impl();
 }
 
-void SAL_CALL ScCellObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setString( const OUString& aText ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     String aString(aText);
@@ -6436,7 +6436,7 @@ void SAL_CALL ScCellObj::setString( const rtl::OUString& aText ) throw(uno::Runt
 }
 
 void SAL_CALL ScCellObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                        const rtl::OUString& aString, sal_Bool bAbsorb )
+                                        const OUString& aString, sal_Bool bAbsorb )
                                     throw(uno::RuntimeException)
 {
     // special handling for ScCellTextCursor is no longer needed,
@@ -6564,13 +6564,13 @@ sal_Bool SAL_CALL ScCellObj::hasElements() throw(uno::RuntimeException)
 
 //  XCell
 
-rtl::OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getFormula() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return GetInputString_Impl( true /* English */ );
 }
 
-void SAL_CALL ScCellObj::setFormula( const rtl::OUString& aFormula ) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setFormula( const OUString& aFormula ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     String aString(aFormula);
@@ -6589,7 +6589,7 @@ void SAL_CALL ScCellObj::setValue( double nValue ) throw(uno::RuntimeException)
     SetValue_Impl(nValue);
 }
 
-void SAL_CALL ScCellObj::setFormulaString( const rtl::OUString& aFormula) throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::setFormulaString( const OUString& aFormula) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     ScDocShell *pDocSh = GetDocShell();
@@ -6784,7 +6784,7 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
     {
         if ( pEntry->nWID == SC_WID_UNO_FORMLOC )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             aValue >>= aStrVal;
             String aString(aStrVal);
             SetString_Impl(aString, sal_True, false);   // lokal interpretieren
@@ -6808,7 +6808,7 @@ void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
         if ( pEntry->nWID == SC_WID_UNO_FORMLOC )
         {
             // sal_False = lokal
-            rAny <<= rtl::OUString( GetInputString_Impl(false) );
+            rAny <<= OUString( GetInputString_Impl(false) );
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
         {
@@ -6827,12 +6827,12 @@ const SfxItemPropertyMap& ScCellObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScCellObj" );
+    return OUString( "ScCellObj" );
 }
 
-sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScCellObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     //  CellRange/SheetCellRange are not in SheetCell service description,
@@ -6849,18 +6849,18 @@ sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName 
            aServiceStr.EqualsAscii( SCCELLRANGE_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(7);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELL_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELL_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
-    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    uno::Sequence<OUString> aRet(7);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELL_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELL_SERVICE ));
+    pArray[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
     return aRet;
 }
 
@@ -7120,7 +7120,7 @@ uno::Reference<sheet::XSheetAnnotations> SAL_CALL ScTableSheetObj::getAnnotation
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByName(
-                        const rtl::OUString& rRange ) throw(uno::RuntimeException)
+                        const OUString& rRange ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByName( rRange );
@@ -7288,17 +7288,17 @@ void SAL_CALL ScTableSheetObj::removeAllManualPageBreaks() throw(uno::RuntimeExc
 
 // XNamed
 
-rtl::OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    rtl::OUString aName;
+    OUString aName;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
         pDocSh->GetDocument()->GetName( GetTab_Impl(), aName );
     return aName;
 }
 
-void SAL_CALL ScTableSheetObj::setName( const rtl::OUString& aNewName )
+void SAL_CALL ScTableSheetObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -7709,14 +7709,14 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
 
     //! Filter und Options aus altem Link suchen
 
-    rtl::OUString aUrl(getLinkUrl());
-    rtl::OUString aSheet(getLinkSheetName());
+    OUString aUrl(getLinkUrl());
+    OUString aSheet(getLinkSheetName());
 
-    rtl::OUString aEmpty;
+    OUString aEmpty;
     link( aUrl, aSheet, aEmpty, aEmpty, nLinkMode );
 }
 
-rtl::OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     String aFile;
@@ -7726,7 +7726,7 @@ rtl::OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException
     return aFile;
 }
 
-void SAL_CALL ScTableSheetObj::setLinkUrl( const rtl::OUString& aLinkUrl )
+void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -7734,13 +7734,13 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const rtl::OUString& aLinkUrl )
     //! Filter und Options aus altem Link suchen
 
     sheet::SheetLinkMode eMode = getLinkMode();
-    rtl::OUString aSheet(getLinkSheetName());
+    OUString aSheet(getLinkSheetName());
 
-    rtl::OUString aEmpty;
+    OUString aEmpty;
     link( aLinkUrl, aSheet, aEmpty, aEmpty, eMode );
 }
 
-rtl::OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     String aSheet;
@@ -7750,7 +7750,7 @@ rtl::OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeExc
     return aSheet;
 }
 
-void SAL_CALL ScTableSheetObj::setLinkSheetName( const rtl::OUString& aLinkSheetName )
+void SAL_CALL ScTableSheetObj::setLinkSheetName( const OUString& aLinkSheetName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -7758,14 +7758,14 @@ void SAL_CALL ScTableSheetObj::setLinkSheetName( const rtl::OUString& aLinkSheet
     //! Filter und Options aus altem Link suchen
 
     sheet::SheetLinkMode eMode = getLinkMode();
-    rtl::OUString aUrl(getLinkUrl());
+    OUString aUrl(getLinkUrl());
 
-    rtl::OUString aEmpty;
+    OUString aEmpty;
     link( aUrl, aLinkSheetName, aEmpty, aEmpty, eMode );
 }
 
-void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUString& aSheetName,
-                        const rtl::OUString& aFilterName, const rtl::OUString& aFilterOptions,
+void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aSheetName,
+                        const OUString& aFilterName, const OUString& aFilterOptions,
                         sheet::SheetLinkMode nMode ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -7775,10 +7775,10 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        rtl::OUString aFileString = aUrl;
-        rtl::OUString aFilterString = aFilterName;
-        rtl::OUString aOptString = aFilterOptions;
-        rtl::OUString aSheetString = aSheetName;
+        OUString aFileString = aUrl;
+        OUString aFilterString = aFilterName;
+        OUString aOptString = aFilterOptions;
+        OUString aSheetString = aSheetName;
 
         aFileString = ScGlobal::GetAbsDocName( aFileString, pDocSh );
         if (aFilterString.isEmpty())
@@ -8027,7 +8027,7 @@ void SAL_CALL ScTableSheetObj::showLevel( sal_Int16 nLevel, table::TableOrientat
 
 // XProtectable
 
-void SAL_CALL ScTableSheetObj::protect( const rtl::OUString& aPassword )
+void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
                                             throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -8040,7 +8040,7 @@ void SAL_CALL ScTableSheetObj::protect( const rtl::OUString& aPassword )
     }
 }
 
-void SAL_CALL ScTableSheetObj::unprotect( const rtl::OUString& aPassword )
+void SAL_CALL ScTableSheetObj::unprotect( const OUString& aPassword )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -8077,22 +8077,22 @@ sal_Bool SAL_CALL ScTableSheetObj::getIsScenario() throw(uno::RuntimeException)
     return false;
 }
 
-rtl::OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getScenarioComment() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        rtl::OUString aComment;
+        OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
         pDocSh->GetDocument()->GetScenarioData( GetTab_Impl(), aComment, aColor, nFlags );
         return aComment;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
-void SAL_CALL ScTableSheetObj::setScenarioComment( const rtl::OUString& aScenarioComment )
+void SAL_CALL ScTableSheetObj::setScenarioComment( const OUString& aScenarioComment )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -8102,8 +8102,8 @@ void SAL_CALL ScTableSheetObj::setScenarioComment( const rtl::OUString& aScenari
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
 
-        rtl::OUString aName;
-        rtl::OUString aComment;
+        OUString aName;
+        OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
         pDoc->GetName( nTab, aName );
@@ -8161,7 +8161,7 @@ void SAL_CALL ScTableSheetObj::apply() throw(uno::RuntimeException)
     {
         ScDocument* pDoc = pDocSh->GetDocument();
         SCTAB nTab = GetTab_Impl();
-        rtl::OUString aName;
+        OUString aName;
         pDoc->GetName( nTab, aName );       // Name dieses Szenarios
 
         SCTAB nDestTab = nTab;
@@ -8210,7 +8210,7 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
 
 // XExternalSheetName
 
-void ScTableSheetObj::setExternalName( const ::rtl::OUString& aUrl, const ::rtl::OUString& aSheetName )
+void ScTableSheetObj::setExternalName( const OUString& aUrl, const OUString& aSheetName )
     throw (container::ElementExistException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -8225,7 +8225,7 @@ void ScTableSheetObj::setExternalName( const ::rtl::OUString& aUrl, const ::rtl:
             const String aDocTabName( ScGlobal::GetDocTabName( aAbsDocName, aSheetName ) );
             if ( !pDoc->RenameTab( nTab, aDocTabName, false /*bUpdateRef*/, sal_True /*bExternalDocument*/ ) )
             {
-                throw container::ElementExistException( ::rtl::OUString(), *this );
+                throw container::ElementExistException( OUString(), *this );
             }
         }
     }
@@ -8277,9 +8277,9 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
 
         if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             aValue >>= aStrVal;
-            rtl::OUString aNewStr(ScStyleNameConversion::ProgrammaticToDisplayName(
+            OUString aNewStr(ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PAGE ));
 
             //! Undo? (auch bei SID_STYLE_APPLY an der View)
@@ -8321,8 +8321,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                 sal_Int32 nNewColor = 0;
                 if (aValue >>= nNewColor)
                 {
-                    rtl::OUString aName;
-                    rtl::OUString aComment;
+                    OUString aName;
+                    OUString aComment;
                     Color  aColor;
                     sal_uInt16 nFlags;
                     pDoc->GetName( nTab, aName );
@@ -8338,8 +8338,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8371,8 +8371,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8404,8 +8404,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8437,8 +8437,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8470,8 +8470,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8503,8 +8503,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aName;
-                rtl::OUString aComment;
+                OUString aName;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetName( nTab, aName );
@@ -8566,7 +8566,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
-            rtl::OUString aCodeName;
+            OUString aCodeName;
             if ( pDocSh && ( aValue >>= aCodeName ) )
             {
                 pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), aCodeName );
@@ -8595,7 +8595,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
         {
-            rAny <<= rtl::OUString( ScStyleNameConversion::DisplayToProgrammaticName(
+            rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
                                 pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE ) );
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
@@ -8622,7 +8622,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8634,7 +8634,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8646,7 +8646,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8658,7 +8658,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8670,7 +8670,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8682,7 +8682,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8694,7 +8694,7 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             if (pDoc->IsScenario(nTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nFlags );
@@ -8720,10 +8720,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_CODENAME )
         {
-            rtl::OUString aCodeName;
+            OUString aCodeName;
             if ( pDocSh )
                 pDocSh->GetDocument()->GetCodeName( GetTab_Impl(), aCodeName );
-            rAny <<= rtl::OUString( aCodeName );
+            rAny <<= OUString( aCodeName );
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);
@@ -8737,12 +8737,12 @@ const SfxItemPropertyMap& ScTableSheetObj::GetItemPropertyMap()
 
 // XServiceInfo
 
-rtl::OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString( "ScTableSheetObj" );
+    return OUString( "ScTableSheetObj" );
 }
 
-sal_Bool SAL_CALL ScTableSheetObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScTableSheetObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     String aServiceStr( rServiceName );
@@ -8755,18 +8755,18 @@ sal_Bool SAL_CALL ScTableSheetObj::supportsService( const rtl::OUString& rServic
            aServiceStr.EqualsAscii( SCLINKTARGET_SERVICE );
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    uno::Sequence<rtl::OUString> aRet(7);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEET_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
-    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
+    uno::Sequence<OUString> aRet(7);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEET_SERVICE ));
+    pArray[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
+    pArray[2] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    pArray[3] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
+    pArray[4] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
+    pArray[5] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[6] = OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
     return aRet;
 }
 
@@ -8864,7 +8864,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScTableColumnObj::getImplementationId() throw(u
 
 // XNamed
 
-rtl::OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -8875,7 +8875,7 @@ rtl::OUString SAL_CALL ScTableColumnObj::getName() throw(uno::RuntimeException)
     return ScColToAlpha( nCol );        // from global.hxx
 }
 
-void SAL_CALL ScTableColumnObj::setName( const rtl::OUString& /* aNewName */ )
+void SAL_CALL ScTableColumnObj::setName( const OUString& /* aNewName */ )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

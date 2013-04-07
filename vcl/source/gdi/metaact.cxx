@@ -1181,7 +1181,7 @@ IMPL_META_ACTION( Text, META_TEXT_ACTION )
 
 // ------------------------------------------------------------------------
 
-MetaTextAction::MetaTextAction( const Point& rPt, const rtl::OUString& rStr,
+MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
                                 sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_TEXT_ACTION ),
     maPt        ( rPt ),
@@ -1291,7 +1291,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 // ------------------------------------------------------------------------
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
-                                          const rtl::OUString& rStr,
+                                          const OUString& rStr,
                                           const sal_Int32* pDXAry,
                                           sal_uInt16 nIndex,
                                           sal_uInt16 nLen ) :
@@ -1452,7 +1452,7 @@ IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
-                                              const rtl::OUString& rStr,
+                                              const OUString& rStr,
                                               sal_uInt16 nIndex, sal_uInt16 nLen ) :
     MetaAction  ( META_STRETCHTEXT_ACTION ),
     maPt        ( rPt ),
@@ -1541,7 +1541,7 @@ IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 // ------------------------------------------------------------------------
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
-                                        const rtl::OUString& rStr, sal_uInt16 nStyle ) :
+                                        const OUString& rStr, sal_uInt16 nStyle ) :
     MetaAction  ( META_TEXTRECT_ACTION ),
     maRect      ( rRect ),
     maStr       ( rStr ),
@@ -3956,7 +3956,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
 
 // ------------------------------------------------------------------------
 
-MetaCommentAction::MetaCommentAction( const rtl::OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
+MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
     maComment   ( rComment ),
     mnValue     ( nValue )

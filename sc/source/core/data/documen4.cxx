@@ -52,7 +52,7 @@ using namespace formula;
 // Nach der Regula Falsi Methode
 bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                         SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
-                        const rtl::OUString& sValStr, double& nX)
+                        const OUString& sValStr, double& nX)
 {
     bool bRet = false;
     nX = 0.0;
@@ -115,7 +115,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
 void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      SCCOL nCol2, SCROW nRow2,
                                      const ScMarkData& rMark,
-                                     const rtl::OUString& rFormula,
+                                     const OUString& rFormula,
                                      const ScTokenArray* pArr,
                                      const formula::FormulaGrammar::Grammar eGram,
                                      bool bDirtyFlag )
@@ -227,7 +227,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     }
 
     ScRefAddress aRef;
-    rtl::OUStringBuffer aForString('=');
+    OUStringBuffer aForString('=');
     aForString.append(ScCompiler::GetNativeSymbol(ocTableOp));
     aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
 
@@ -636,7 +636,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                         ScAddress aPos(nCol, nRow, nTab);
                         ScRefCellValue aCell;
                         aCell.assign(const_cast<ScDocument&>(*this), aPos);
-                        rtl::OUString aStyle = pForm->GetCellStyle(aCell, aPos);
+                        OUString aStyle = pForm->GetCellStyle(aCell, aPos);
                         if (!aStyle.isEmpty())
                         {
                             SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
@@ -964,8 +964,8 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
     SCTAB nThisTab;
 
     //  Tabellen mit gleichen Namen vergleichen
-    rtl::OUString aThisName;
-    rtl::OUString aOtherName;
+    OUString aThisName;
+    OUString aOtherName;
     for (nThisTab=0; nThisTab<nThisCount; nThisTab++)
     {
         SCTAB nOtherTab = SCTAB_MAX;
@@ -1034,11 +1034,11 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             sal_uLong n1,n2;    // fuer AppendDeleteRange
 
             //! ein Progress ueber alle Tabellen ???
-            rtl::OUString aTabName;
+            OUString aTabName;
             GetName( nThisTab, aTabName );
-            rtl::OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
+            OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);
             sal_Int32 nIndex = 0;
-            rtl::OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
+            OUStringBuffer aProText = aTemplate.getToken( 0, '#', nIndex );
             aProText.append(aTabName);
             nIndex = 0;
             aProText.append(aTemplate.getToken( 1, '#', nIndex ));

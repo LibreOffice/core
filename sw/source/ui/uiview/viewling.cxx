@@ -87,7 +87,6 @@
 #include <editeng/editerr.hxx>
 
 using namespace sw::mark;
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -121,7 +120,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                 {
                     Reference< ui::dialogs::XExecutableDialog > xDialog(
                             xMCF->createInstanceWithContext(
-                                rtl::OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
                                 , xContext), UNO_QUERY);
                     Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                     if( xInit.is() )
@@ -131,7 +130,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         Sequence<Any> aSeq(1);
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
-                        aParam.Name = rtl::OUString("ParentWindow");
+                        aParam.Name = OUString("ParentWindow");
                         aParam.Value <<= makeAny(xDialogParentWindow);
                         pArray[0] <<= makeAny(aParam);
                         xInit->initialize( aSeq );
@@ -665,13 +664,13 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             Reference< XSpellAlternatives >  xAlt( m_pWrtShell->GetCorrection(&rPt, aToFill) );
             ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
-            uno::Sequence< rtl::OUString > aSuggestions;
+            uno::Sequence< OUString > aSuggestions;
             bool bCorrectionRes = false;
             if (!xAlt.is() || xAlt->getAlternatives().getLength() == 0)
             {
                 sal_Int32 nErrorPosInText = -1;
                 bCorrectionRes = m_pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
-                ::rtl::OUString aMessageText;
+                OUString aMessageText;
                 if (nErrorInResult >= 0)
                     aMessageText = aGrammarCheckRes.aErrors[ nErrorInResult ].aShortComment;
                 // we like to use the grammar checking context menu if we either get
@@ -715,7 +714,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 Menu* pMenu = 0;
 
-                ::rtl::OUString sMenuName  = bUseGrammarContext ?
+                OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
                 if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
@@ -748,7 +747,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                                 aURL.Complete = aCommand;
                                 xURLTransformer->parseStrict(aURL);
                                 uno::Sequence< beans::PropertyValue > aArgs;
-                                xDispatch = xDispatchProvider->queryDispatch( aURL, rtl::OUString(), 0 );
+                                xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
 
 
                                 if (xDispatch.is())
@@ -796,7 +795,7 @@ sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
     // get word that was clicked on
     // This data structure maps a smart tag type string to the property bag
     SwRect aToFill;
-    Sequence< rtl::OUString > aSmartTagTypes;
+    Sequence< OUString > aSmartTagTypes;
     Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;
     Reference<text::XTextRange> xRange;
 
@@ -836,13 +835,13 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
 
-        rtl::OUString sListKey = rtl::OUString(  ODF_FORMDROPDOWN_LISTENTRY  );
+        OUString sListKey = OUString(  ODF_FORMDROPDOWN_LISTENTRY  );
         IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find( sListKey );
         if(pListEntries != pParameters->end())
         {
-            Sequence< ::rtl::OUString > vListEntries;
+            Sequence< OUString > vListEntries;
             pListEntries->second >>= vListEntries;
-            for( ::rtl::OUString* pCurrent = vListEntries.getArray();
+            for( OUString* pCurrent = vListEntries.getArray();
                 pCurrent != vListEntries.getArray() + vListEntries.getLength();
                 ++pCurrent)
             {
@@ -851,7 +850,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         }
 
         // Select the current one
-        rtl::OUString sResultKey = rtl::OUString( ODF_FORMDROPDOWN_RESULT  );
+        OUString sResultKey = OUString( ODF_FORMDROPDOWN_RESULT  );
         IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find( sResultKey );
         if ( pResult != pParameters->end() )
         {
@@ -879,7 +878,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
         sal_Int32 selection = pBox->GetSelectEntryPos();
         if ( selection >= 0 )
         {
-            rtl::OUString sKey = rtl::OUString(  ODF_FORMDROPDOWN_RESULT  );
+            OUString sKey = OUString(  ODF_FORMDROPDOWN_RESULT  );
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
             SwView& rView = ( ( SwEditWin* )GetParent() )->GetView();

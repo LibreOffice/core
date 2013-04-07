@@ -73,9 +73,9 @@ SAL_IMPLEMENT_MAIN()
                 continue;
             }
 
-            rtl::OUString sTag( LanguageTag( eLang).getBcp47());
+            OUString sTag( LanguageTag( eLang).getBcp47());
 
-            std::cout << rtl::OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
+            std::cout << OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
                 << std::endl;
         }
     }

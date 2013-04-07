@@ -34,13 +34,13 @@ namespace package_ucp {
 
 class PackageUri
 {
-    mutable ::rtl::OUString m_aUri;
-    mutable ::rtl::OUString m_aParentUri;
-    mutable ::rtl::OUString m_aPackage;
-    mutable ::rtl::OUString m_aPath;
-    mutable ::rtl::OUString m_aName;
-    mutable ::rtl::OUString m_aParam;
-    mutable ::rtl::OUString m_aScheme;
+    mutable OUString m_aUri;
+    mutable OUString m_aParentUri;
+    mutable OUString m_aPackage;
+    mutable OUString m_aPath;
+    mutable OUString m_aName;
+    mutable OUString m_aParam;
+    mutable OUString m_aScheme;
     mutable bool            m_bValid;
 
 private:
@@ -48,34 +48,34 @@ private:
 
 public:
     PackageUri() : m_bValid( false ) {}
-    PackageUri( const ::rtl::OUString & rPackageUri )
+    PackageUri( const OUString & rPackageUri )
     : m_aUri( rPackageUri ), m_bValid( false ) {}
 
     sal_Bool isValid() const
     { init(); return m_bValid; }
 
-    const ::rtl::OUString & getUri() const
+    const OUString & getUri() const
     { init(); return m_aUri; }
 
-    void setUri( const ::rtl::OUString & rPackageUri )
-    { m_aPath = ::rtl::OUString(); m_aUri = rPackageUri; m_bValid = false; }
+    void setUri( const OUString & rPackageUri )
+    { m_aPath = OUString(); m_aUri = rPackageUri; m_bValid = false; }
 
-    const ::rtl::OUString & getParentUri() const
+    const OUString & getParentUri() const
     { init(); return m_aParentUri; }
 
-    const ::rtl::OUString & getPackage() const
+    const OUString & getPackage() const
     { init(); return m_aPackage; }
 
-    const ::rtl::OUString & getPath() const
+    const OUString & getPath() const
     { init(); return m_aPath; }
 
-    const ::rtl::OUString & getName() const
+    const OUString & getName() const
     { init(); return m_aName; }
 
-    const ::rtl::OUString & getParam() const
+    const OUString & getParam() const
     { init(); return m_aParam; }
 
-    const ::rtl::OUString & getScheme() const
+    const OUString & getScheme() const
     { init(); return m_aScheme; }
 
     inline sal_Bool isRootFolder() const;

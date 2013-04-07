@@ -158,7 +158,7 @@ sal_uInt32 Ppt97Animation::GetSoundRef() const
 {
     return m_aAtom.nSoundRef;
 }
-void Ppt97Animation::SetSoundFileUrl( const ::rtl::OUString& rSoundFileUrl )
+void Ppt97Animation::SetSoundFileUrl( const OUString& rSoundFileUrl )
 {
     m_aSoundFileUrl = rSoundFileUrl;
 }
@@ -256,12 +256,12 @@ sal_Int16 Ppt97Animation::GetTextAnimationType() const
     }
     return nRet;
 }
-::rtl::OUString Ppt97Animation::GetPresetId() const
+OUString Ppt97Animation::GetPresetId() const
 {
     UpdateCacheData();
     return m_aPresetId;
 }
-::rtl::OUString Ppt97Animation::GetPresetSubType() const
+OUString Ppt97Animation::GetPresetSubType() const
 {
     UpdateCacheData();
     return m_aSubType;
@@ -269,7 +269,7 @@ sal_Int16 Ppt97Animation::GetTextAnimationType() const
 
 void Ppt97Animation::ClearCacheData() const
 {
-    m_aPresetId = m_aSubType = rtl::OUString();
+    m_aPresetId = m_aSubType = OUString();
     m_bHasSpecialDuration = false;
     m_fDurationInSeconds = 0.001;
 }

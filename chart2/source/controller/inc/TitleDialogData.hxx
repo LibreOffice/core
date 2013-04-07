@@ -38,7 +38,7 @@ struct TitleDialogData
 {
     ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
     ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
-    ::com::sun::star::uno::Sequence< rtl::OUString > aTextList;
+    ::com::sun::star::uno::Sequence< OUString > aTextList;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ReferenceSizeProvider >    apReferenceSizeProvider;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH

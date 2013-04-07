@@ -112,9 +112,9 @@ namespace rptui
 
         ::boost::shared_ptr<rptui::OReportModel>
                                 m_aReportModel;
-        ::rtl::OUString         m_sName;                /// name for the report definition
-        ::rtl::OUString         m_sLastActivePage;      /// last active property browser page
-        ::rtl::OUString         m_sMode;                /// the current mode of the controller
+        OUString         m_sName;                /// name for the report definition
+        OUString         m_sLastActivePage;      /// last active property browser page
+        OUString         m_sMode;                /// the current mode of the controller
         sal_Int32               m_nSplitPos;            /// the position of the splitter
         sal_Int32               m_nPageNum;             /// the page number from the restoreView call
         sal_Int32               m_nSelectionCount;
@@ -137,7 +137,7 @@ namespace rptui
         * \param _xSection the section where to create the formatted field
         * \param _sFunction the function which will be set at the data field.
         */
-        void createControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,const ::rtl::OUString& _sFunction ,sal_uInt16 _nObjectId = OBJ_DLG_FORMATTEDFIELD);
+        void createControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection,const OUString& _sFunction ,sal_uInt16 _nObjectId = OBJ_DLG_FORMATTEDFIELD);
         /** switch the report header/footer sectionon off with undo or without depending on the given id.
         *
         * \param _nId   Can either be SID_REPORTHEADER_WITHOUT_UNDO or SID_REPORTFOOTER_WITHOUT_UNDO or SID_REPORTHEADERFOOTER.
@@ -201,7 +201,7 @@ namespace rptui
             @param  _bShow  when <TRUE/> the header and footer will be shown otherwise not
         */
         void groupChange( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup
-                         ,const ::rtl::OUString& _sPropName
+                         ,const OUString& _sPropName
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
@@ -304,14 +304,14 @@ namespace rptui
             @param  _sProperty  the property which should be filled in the value
             @param  _rState     the state to fill
         */
-        void impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const;
+        void impl_fillState_nothrow(const OUString& _sProperty,dbaui::FeatureState& _rState) const;
         void impl_fillCustomShapeState_nothrow(const char* _pCustomShapeType,dbaui::FeatureState& _rState) const;
 
         /** set the property at all selected controls.
             @return <TRUE/> when the selection is not empty
         */
         bool impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId
-            ,const ::rtl::OUString& _sProperty
+            ,const OUString& _sProperty
             ,const ::com::sun::star::uno::Any& _aValue
             ,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aArgs);
 
@@ -363,11 +363,11 @@ namespace rptui
         virtual void        SAL_CALL disposing();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
-        static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
             create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
@@ -399,13 +399,13 @@ namespace rptui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
 
         // XTitle
-        virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XModeSelector
-        virtual void SAL_CALL setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException) ;
-        virtual ::rtl::OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException) ;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException) ;
-        virtual ::sal_Bool SAL_CALL supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException) ;
+        virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException) ;
+        virtual ::sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException) ;
 
         // XVisualObject
         virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -462,7 +462,7 @@ namespace rptui
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const;
-        ::rtl::OUString getColumnLabel_throw(const ::rtl::OUString& i_sColumnName) const;
+        OUString getColumnLabel_throw(const OUString& i_sColumnName) const;
 
         SfxUndoManager& getUndoManager() const;
         void            clearUndoManager() const;

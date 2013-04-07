@@ -24,7 +24,7 @@
 
 struct SvxClipboardFmtItem_Impl
 {
-    boost::ptr_vector< boost::nullable<rtl::OUString> > aFmtNms;
+    boost::ptr_vector< boost::nullable<OUString> > aFmtNms;
     std::vector<sal_uIntPtr> aFmtIds;
 
     SvxClipboardFmtItem_Impl() {}
@@ -127,13 +127,13 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const rtl::OUString& rName,
+void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const OUString& rName,
                             sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new rtl::OUString(rName));
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new OUString(rName));
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
@@ -147,9 +147,9 @@ sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
     return pImpl->aFmtIds[ nPos ];
 }
 
-const rtl::OUString SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
+const OUString SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    return pImpl->aFmtNms.is_null(nPos) ? rtl::OUString() : pImpl->aFmtNms[nPos];
+    return pImpl->aFmtNms.is_null(nPos) ? OUString() : pImpl->aFmtNms[nPos];
 }
 
 

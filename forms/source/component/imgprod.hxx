@@ -52,7 +52,7 @@ private:
 
     typedef boost::ptr_vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > ConsumerList_t;
 
-    ::rtl::OUString maURL;
+    OUString maURL;
     ConsumerList_t  maConsList;
     Graphic*        mpGraphic;
     SvStream*       mpStm;
@@ -70,7 +70,7 @@ public:
                     ImageProducer();
                     ~ImageProducer();
 
-    void            SetImage( const ::rtl::OUString& rPath );
+    void            SetImage( const OUString& rPath );
     void            SetImage( SvStream& rStm );
 
     void            NewDataAvailable();

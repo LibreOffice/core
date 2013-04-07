@@ -33,7 +33,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 
-using ::rtl::OUString;
 
 const char cDataSourceHistory[] = "DataSourceHistory";
 
@@ -214,7 +213,7 @@ void BibConfig::SetBibliographyURL(const BibDBDescriptor& rDesc)
     SetModified();
 };
 //---------------------------------------------------------------------------
-void BibConfig::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+void BibConfig::Notify( const com::sun::star::uno::Sequence<OUString>& )
 {
 }
 

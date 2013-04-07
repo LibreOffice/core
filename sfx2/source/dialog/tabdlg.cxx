@@ -234,7 +234,7 @@ SfxTabPage::SfxTabPage( Window *pParent,
 }
 
 
-SfxTabPage::SfxTabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
     : TabPage(pParent, rID, rUIXMLDescription)
     , pSet                ( &rAttrSet )
     , bHasExchangeSupport ( sal_False )
@@ -785,7 +785,7 @@ void SfxTabDialog::Start_Impl()
     SvtViewOptions aDlgOpt( E_TABDIALOG, OUString::number( nResId ) );
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState(rtl::OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
+        SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
         // initial TabPage from Program/Help/config
         nActPage = (sal_uInt16)aDlgOpt.GetPageID();
@@ -1642,7 +1642,7 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
         if ( pViewFrame )
         {
             Window* pWindow = rNEvt.GetWindow();
-            rtl::OString sHelpId;
+            OString sHelpId;
             while ( sHelpId.isEmpty() && pWindow )
             {
                 sHelpId = pWindow->GetHelpId();

@@ -48,8 +48,8 @@ const sal_uInt16 FILTERPROPOSAL  =  0x0004;
 
 DBG_NAME( OEditBaseModel )
 //------------------------------------------------------------------
-OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const ::rtl::OUString& rUnoControlModelName,
-        const ::rtl::OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
+OEditBaseModel::OEditBaseModel( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& rUnoControlModelName,
+        const OUString& rDefault, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OBoundControlModel( _rxFactory, rUnoControlModelName, rDefault, sal_True, _bSupportExternalBinding, _bSupportsValidation )
     ,m_nLastReadVersion(0)
     ,m_bEmptyIsNull(sal_True)
@@ -331,7 +331,7 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            return makeAny(::rtl::OUString());
+            return makeAny(OUString());
         case PROPERTY_ID_FILTERPROPOSAL:
             return Any(makeAny((sal_Bool)sal_False));
         case PROPERTY_ID_DEFAULT_VALUE:

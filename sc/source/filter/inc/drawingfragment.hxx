@@ -47,11 +47,11 @@ namespace xls {
 class ShapeMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
-    explicit            ShapeMacroAttacher( const ::rtl::OUString& rMacroName,
+    explicit            ShapeMacroAttacher( const OUString& rMacroName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape );
 
 private:
-    virtual void        attachMacro( const ::rtl::OUString& rMacroUrl );
+    virtual void        attachMacro( const OUString& rMacroUrl );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
@@ -73,7 +73,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
 private:
-    ::rtl::OUString     maMacroName;
+    OUString     maMacroName;
 };
 
 // ============================================================================
@@ -113,11 +113,11 @@ class DrawingFragment : public WorksheetFragmentBase
 public:
     explicit            DrawingFragment(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
 private:
@@ -136,12 +136,12 @@ private:
 class VmlControlMacroAttacher : public ::oox::ole::VbaMacroAttacherBase
 {
 public:
-    explicit            VmlControlMacroAttacher( const ::rtl::OUString& rMacroName,
+    explicit            VmlControlMacroAttacher( const OUString& rMacroName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rxCtrlFormIC,
                             sal_Int32 nCtrlIndex, sal_Int32 nCtrlType, sal_Int32 nDropStyle );
 
 private:
-    virtual void        attachMacro( const ::rtl::OUString& rMacroUrl );
+    virtual void        attachMacro( const OUString& rMacroUrl );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxCtrlFormIC;
@@ -164,12 +164,12 @@ public:
     virtual bool        isShapeSupported( const ::oox::vml::ShapeBase& rShape ) const;
 
     /** Returns additional base names for automatic shape name creation. */
-    virtual ::rtl::OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const;
+    virtual OUString getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) const;
 
     /** Calculates the shape rectangle from a cell anchor string. */
     virtual bool        convertClientAnchor(
                             ::com::sun::star::awt::Rectangle& orShapeRect,
-                            const ::rtl::OUString& rShapeAnchor ) const;
+                            const OUString& rShapeAnchor ) const;
 
     /** Creates a UNO control shape for legacy drawing controls. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
@@ -186,7 +186,7 @@ public:
 
 private:
     /** Converts the passed VML textbox text color to an OLE color. */
-    sal_uInt32          convertControlTextColor( const ::rtl::OUString& rTextColor ) const;
+    sal_uInt32          convertControlTextColor( const OUString& rTextColor ) const;
     /** Converts the passed VML textbox font to an ActiveX form control font. */
     void                convertControlFontData(
                             ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor,
@@ -194,7 +194,7 @@ private:
     /** Converts the caption, the font settings, and the horizontal alignment
         from the passed VML textbox to ActiveX form control settings. */
     void                convertControlText(
-                            ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor, ::rtl::OUString& rCaption,
+                            ::oox::ole::AxFontData& rAxFontData, sal_uInt32& rnOleTextColor, OUString& rCaption,
                             const ::oox::vml::TextBox* pTextBox, sal_Int32 nTextHAlign ) const;
     /** Converts the passed VML shape background formatting to ActiveX control formatting. */
     void                convertControlBackground(
@@ -213,7 +213,7 @@ class VmlDrawingFragment : public ::oox::vml::DrawingFragment, public WorksheetH
 public:
     explicit            VmlDrawingFragment(
                             const WorksheetHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath );
+                            const OUString& rFragmentPath );
 
 protected:
     virtual void        finalizeImport();

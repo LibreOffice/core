@@ -351,8 +351,8 @@ void sw_GetCellPosition( const String &rCellName,
         // start of number found?
         if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
         {
-            rtl::OUString aColTxt(rCellName.GetBuffer(), pBuf - rCellName.GetBuffer());
-            rtl::OUString aRowTxt(pBuf, (rCellName.GetBuffer() + nLen - pBuf));
+            OUString aColTxt(rCellName.GetBuffer(), pBuf - rCellName.GetBuffer());
+            OUString aRowTxt(pBuf, (rCellName.GetBuffer() + nLen - pBuf));
             if (!aColTxt.isEmpty() && !aRowTxt.isEmpty())
             {
                 sal_Int32 nColIdx = 0;
@@ -461,13 +461,13 @@ String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 #if OSL_DEBUG_LEVEL > 0
     {
         sal_Int32 nCol, nRow2;
-        sw_GetCellPosition( rtl::OUString("z1"), nCol, nRow2);
+        sw_GetCellPosition( OUString("z1"), nCol, nRow2);
         OSL_ENSURE( nCol == 51, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( rtl::OUString("AA1"), nCol, nRow2);
+        sw_GetCellPosition( OUString("AA1"), nCol, nRow2);
         OSL_ENSURE( nCol == 52, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( rtl::OUString("AB1"), nCol, nRow2);
+        sw_GetCellPosition( OUString("AB1"), nCol, nRow2);
         OSL_ENSURE( nCol == 53, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( rtl::OUString("BB1"), nCol, nRow2);
+        sw_GetCellPosition( OUString("BB1"), nCol, nRow2);
         OSL_ENSURE( nCol == 105, "sw_GetCellPosition failed" );
     }
 #endif
@@ -684,14 +684,14 @@ static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableB
     }
 }
 
-static inline rtl::OUString lcl_getString( SwXCell &rCell )
+static inline OUString lcl_getString( SwXCell &rCell )
 {
     // getString is a member function of the base class...
     return rCell.getString();
 }
 
 /*  non UNO function call to set string in SwXCell */
-void sw_setString( SwXCell &rCell, const rtl::OUString &rTxt,
+void sw_setString( SwXCell &rCell, const OUString &rTxt,
         sal_Bool bKeepNumberFmt )
 {
     if(rCell.IsValid())
@@ -2657,7 +2657,7 @@ void SAL_CALL SwXTextTable::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        sw_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *(OUString *) rAny.getValue() );
                     else
                     {
                         double d = 0;
@@ -3049,7 +3049,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
             {
                 case UNO_NAME_TABLE_NAME :
                 {
-                    ::rtl::OUString sName;
+                    OUString sName;
                     aValue >>= sName;
                     setName( sName );
                 }
@@ -4320,7 +4320,7 @@ void SAL_CALL SwXCellRange::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        sw_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *(OUString *) rAny.getValue() );
                     else
                     {
                         double d = 0;

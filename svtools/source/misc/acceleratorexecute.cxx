@@ -178,7 +178,7 @@ sal_Bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
 //-----------------------------------------------
 sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 {
-    ::rtl::OUString sCommand = impl_ts_findCommand(aAWTKey);
+    OUString sCommand = impl_ts_findCommand(aAWTKey);
 
     // No Command found? Do nothing! User isnt interested on any error handling .-)
     if (sCommand.isEmpty())
@@ -199,7 +199,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     xParser->parseStrict(aURL);
 
     // ask for dispatch object
-    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, ::rtl::OUString(), 0);
+    css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, OUString(), 0);
     sal_Bool bRet = xDispatch.is();
     if ( bRet )
     {
@@ -241,12 +241,12 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 //-----------------------------------------------
-::rtl::OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
+OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
 {
     return impl_ts_findCommand(aKey);
 }
 //-----------------------------------------------
-::rtl::OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
+OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -258,7 +258,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    ::rtl::OUString sCommand;
+    OUString sCommand;
 
     try
     {
@@ -296,71 +296,71 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
         switch( aKey.KeyCode )
         {
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
-            return rtl::OUString( ".uno:DelToStartOfLine" );
+            return OUString( ".uno:DelToStartOfLine" );
         case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
-            return rtl::OUString( ".uno:DelToEndOfLine" );
+            return OUString( ".uno:DelToEndOfLine" );
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:DelToStartOfPara" );
+            return OUString( ".uno:DelToStartOfPara" );
         case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:DelToEndOfPara" );
+            return OUString( ".uno:DelToEndOfPara" );
         case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
-            return rtl::OUString( ".uno:DelToStartOfWord" );
+            return OUString( ".uno:DelToStartOfWord" );
         case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
-            return rtl::OUString( ".uno:DelToEndOfWord" );
+            return OUString( ".uno:DelToEndOfWord" );
         case com::sun::star::awt::Key::INSERT_LINEBREAK:
-            return rtl::OUString( ".uno:InsertLinebreak" );
+            return OUString( ".uno:InsertLinebreak" );
         case com::sun::star::awt::Key::INSERT_PARAGRAPH:
-            return rtl::OUString( ".uno:InsertPara" );
+            return OUString( ".uno:InsertPara" );
         case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            return rtl::OUString( ".uno:GoToPrevWord" );
+            return OUString( ".uno:GoToPrevWord" );
         case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            return rtl::OUString( ".uno:GoToNextWord" );
+            return OUString( ".uno:GoToNextWord" );
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-            return rtl::OUString( ".uno:GoToStartOfLine" );
+            return OUString( ".uno:GoToStartOfLine" );
         case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
-            return rtl::OUString( ".uno:GoToEndOfLine" );
+            return OUString( ".uno:GoToEndOfLine" );
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:GoToStartOfPara" );
+            return OUString( ".uno:GoToStartOfPara" );
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:GoToEndOfPara" );
+            return OUString( ".uno:GoToEndOfPara" );
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
-            return rtl::OUString( ".uno:GoToStartOfDoc" );
+            return OUString( ".uno:GoToStartOfDoc" );
         case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
-            return rtl::OUString( ".uno:GoToEndOfDoc" );
+            return OUString( ".uno:GoToEndOfDoc" );
         case com::sun::star::awt::Key::SELECT_BACKWARD:
-            return rtl::OUString( ".uno:CharLeftSel" );
+            return OUString( ".uno:CharLeftSel" );
         case com::sun::star::awt::Key::SELECT_FORWARD:
-            return rtl::OUString( ".uno:CharRightSel" );
+            return OUString( ".uno:CharRightSel" );
         case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            return rtl::OUString( ".uno:WordLeftSel" );
+            return OUString( ".uno:WordLeftSel" );
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
-            return rtl::OUString( ".uno:WordRightSel" );
+            return OUString( ".uno:WordRightSel" );
         case com::sun::star::awt::Key::SELECT_WORD:
-            return rtl::OUString( ".uno:SelectWord" );
+            return OUString( ".uno:SelectWord" );
         case com::sun::star::awt::Key::SELECT_LINE:
-            return rtl::OUString();
+            return OUString();
         case com::sun::star::awt::Key::SELECT_PARAGRAPH:
-            return rtl::OUString( ".uno:SelectText" );
+            return OUString( ".uno:SelectText" );
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-            return rtl::OUString( ".uno:StartOfLineSel" );
+            return OUString( ".uno:StartOfLineSel" );
         case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
-            return rtl::OUString( ".uno:EndOfLineSel" );
+            return OUString( ".uno:EndOfLineSel" );
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:StartOfParaSel" );
+            return OUString( ".uno:StartOfParaSel" );
         case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-            return rtl::OUString( ".uno:EndOfParaSel" );
+            return OUString( ".uno:EndOfParaSel" );
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
-            return rtl::OUString( ".uno:StartOfDocumentSel" );
+            return OUString( ".uno:StartOfDocumentSel" );
         case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
-            return rtl::OUString( ".uno:EndOfDocumentSel" );
+            return OUString( ".uno:EndOfDocumentSel" );
         case com::sun::star::awt::Key::SELECT_ALL:
-            return rtl::OUString( ".uno:SelectAll" );
+            return OUString( ".uno:SelectAll" );
         default:
             break;
         }
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //-----------------------------------------------
@@ -370,7 +370,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     css::uno::Reference< css::frame::XModuleManager2 > xModuleDetection(
         css::frame::ModuleManager::create(rxContext));
 
-    ::rtl::OUString sModule;
+    OUString sModule;
     try
     {
         sModule = xModuleDetection->identify(xFrame);

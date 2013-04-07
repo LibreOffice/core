@@ -93,18 +93,18 @@ namespace framework
             virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL getUIElementsInfo( sal_Int16 ElementType ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > SAL_CALL createSettings(  ) throw (::com::sun::star::uno::RuntimeException);
-            virtual sal_Bool SAL_CALL hasSettings( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( const ::rtl::OUString& ResourceURL, sal_Bool bWriteable ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL replaceSettings( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL removeSettings( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL insertSettings( const ::rtl::OUString& NewResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL hasSettings( const OUString& ResourceURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getSettings( const OUString& ResourceURL, sal_Bool bWriteable ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL replaceSettings( const OUString& ResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeSettings( const OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL insertSettings( const OUString& NewResourceURL, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& aNewData ) throw (::com::sun::star::container::ElementExistException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getImageManager() throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getShortCutManager() throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getEventsManager() throw (::com::sun::star::uno::RuntimeException);
 
             // XModuleUIConfigurationManager
-            virtual sal_Bool SAL_CALL isDefaultSettings( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getDefaultSettings( const ::rtl::OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Bool SAL_CALL isDefaultSettings( const OUString& ResourceURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getDefaultSettings( const OUString& ResourceURL ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
             // XUIConfigurationPersistence
             virtual void SAL_CALL reload() throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -131,18 +131,18 @@ namespace framework
 
             struct UIElementInfo
             {
-                UIElementInfo( const rtl::OUString& rResourceURL, const rtl::OUString& rUIName ) :
+                UIElementInfo( const OUString& rResourceURL, const OUString& rUIName ) :
                     aResourceURL( rResourceURL), aUIName( rUIName ) {}
-                rtl::OUString   aResourceURL;
-                rtl::OUString   aUIName;
+                OUString   aResourceURL;
+                OUString   aUIName;
             };
 
             struct UIElementData
             {
                 UIElementData() : bModified( false ), bDefault( true ), bDefaultNode( true ) {};
 
-                rtl::OUString aResourceURL;
-                rtl::OUString aName;
+                OUString aResourceURL;
+                OUString aName;
                 bool          bModified;        // has been changed since last storing
                 bool          bDefault;         // default settings
                 bool          bDefaultNode;     // this is a default layer element data
@@ -151,7 +151,7 @@ namespace framework
 
             struct UIElementType;
             friend struct UIElementType;
-            typedef ::boost::unordered_map< rtl::OUString, UIElementData, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
+            typedef ::boost::unordered_map< OUString, UIElementData, OUStringHash, ::std::equal_to< OUString > > UIElementDataHashMap;
 
             struct UIElementType
             {
@@ -171,14 +171,14 @@ namespace framework
 
             typedef ::std::vector< UIElementType > UIElementTypesVector;
             typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-            typedef ::boost::unordered_map< rtl::OUString, UIElementInfo, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
+            typedef ::boost::unordered_map< OUString, UIElementInfo, OUStringHash, ::std::equal_to< OUString > > UIElementInfoHashMap;
 
             // private methods
             void            impl_Initialize();
             void            implts_notifyContainerListener( const ::com::sun::star::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
             void            impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType );
             void            impl_preloadUIElementTypeList( Layer eLayer, sal_Int16 nElementType );
-            UIElementData*  impl_findUIElementData( const rtl::OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
+            UIElementData*  impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad = true );
             void            impl_requestUIElementData( sal_Int16 nElementType, Layer eLayer, UIElementData& aUIElementData );
             void            impl_storeElementTypeData( com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage, UIElementType& rElementType, bool bResetModifyState = true );
             void            impl_resetElementTypeData( UIElementType& rUserElementType, UIElementType& rDefaultElementType, ConfigEventNotifyContainer& rRemoveNotifyContainer, ConfigEventNotifyContainer& rReplaceNotifyContainer );
@@ -193,11 +193,11 @@ namespace framework
             bool                                                                            m_bModified;
             bool                                                                            m_bConfigRead;
             bool                                                                            m_bDisposed;
-            rtl::OUString                                                                   m_aXMLPostfix;
-            rtl::OUString                                                                   m_aPropUIName;
-            rtl::OUString                                                                   m_aPropResourceURL;
-            rtl::OUString                                                                   m_aModuleIdentifier;
-            rtl::OUString                                                                   m_aModuleShortName;
+            OUString                                                                   m_aXMLPostfix;
+            OUString                                                                   m_aPropUIName;
+            OUString                                                                   m_aPropResourceURL;
+            OUString                                                                   m_aModuleIdentifier;
+            OUString                                                                   m_aModuleShortName;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >      m_xUserRootCommit;
             com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener

@@ -166,12 +166,12 @@ sal_Bool SvBOOL::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm )
     return sal_True;
 }
 
-rtl::OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
+OString SvBOOL::GetSvIdlString( SvStringHashEntry * pName )
 {
     if( nVal )
         return pName->GetName();
 
-    return rtl::OStringBuffer(pName->GetName()).
+    return OStringBuffer(pName->GetName()).
         append(RTL_CONSTASCII_STRINGPARAM("(FALSE)")).
         makeStringAndClear();
 }
@@ -239,7 +239,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "no value for identifier <"));
             aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
@@ -266,7 +266,7 @@ sal_Bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "no value for identifier <"));
             aStr.append(getString()).append(RTL_CONSTASCII_STRINGPARAM("> "));
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
@@ -365,7 +365,7 @@ sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
             if( pTok->IsString() )
             {
                 pTok = rInStm.GetToken_Next();
-                bOk = MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+                bOk = MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
             }
             if( bOk && bBraket )
                 bOk = rInStm.Read( ')' );
@@ -381,7 +381,7 @@ sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
     // write global id
     rOutStm << SvHash_uuid()->GetName().getStr() << "(\"";
-    rOutStm << rtl::OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << "\")";
+    rOutStm << OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() << "\")";
     return sal_True;
 }
 

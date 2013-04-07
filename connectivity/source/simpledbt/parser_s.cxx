@@ -59,7 +59,7 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    ::rtl::Reference< simple::ISQLParseNode > OSimpleSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
+    ::rtl::Reference< simple::ISQLParseNode > OSimpleSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField) const
     {
         OSimpleParseNode* pReturn = NULL;

@@ -115,7 +115,7 @@ void ODatabaseMetaDataResultSet::checkRecordSet() throw(SQLException)
 }
 // -------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
@@ -347,7 +347,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -356,7 +356,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
     columnIndex = mapColumn(columnIndex);
     if(m_aValue.isNull())
-        return ::rtl::OUString();
+        return OUString();
     if(m_aIntValueRange.size() && (m_aIntValueRangeIter = m_aIntValueRange.find(columnIndex)) != m_aIntValueRange.end())
         return (*m_aIntValueRangeIter).second[m_aValue];
 
@@ -675,10 +675,10 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
     return nValue;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString ODatabaseMetaDataResultSet::getCursorName() const
+OUString ODatabaseMetaDataResultSet::getCursorName() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -701,7 +701,7 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
     Sequence< com::sun::star::beans::Property > aProps(5);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,          ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,          OUString);
     DECL_PROP0(FETCHDIRECTION,      sal_Int32);
     DECL_PROP0(FETCHSIZE,           sal_Int32);
     DECL_PROP0(RESULTSETCONCURRENCY,sal_Int32);
@@ -901,9 +901,9 @@ void ODatabaseMetaDataResultSet::setColumnsMap()
 
     m_aValueRange[12] = aMap;
 
-    ::std::map< sal_Int32,::rtl::OUString> aMap2;
-    aMap2[0] = ::rtl::OUString("YES");
-    aMap2[1] = ::rtl::OUString("NO");
+    ::std::map< sal_Int32,OUString> aMap2;
+    aMap2[0] = OUString("YES");
+    aMap2[1] = OUString("NO");
     m_aIntValueRange[18] = aMap2;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -1034,10 +1034,10 @@ void ODatabaseMetaDataResultSet::setIndexInfoMap()
     aMap[1] = 0;
     m_aValueRange[8] = aMap2;
 
-    ::std::map< sal_Int32,::rtl::OUString> aMap3;
-    aMap3[0]                    = ::rtl::OUString();
-    aMap3[DB_COLLATION_ASC]     = ::rtl::OUString("A");
-    aMap3[DB_COLLATION_DESC]    = ::rtl::OUString("D");
+    ::std::map< sal_Int32,OUString> aMap3;
+    aMap3[0]                    = OUString();
+    aMap3[DB_COLLATION_ASC]     = OUString("A");
+    aMap3[DB_COLLATION_DESC]    = OUString("D");
 
     m_aIntValueRange[21] = aMap3;
 
@@ -1057,9 +1057,9 @@ void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
     m_aColMapping.push_back(6);
     m_aColMapping.push_back(7);
 
-    ::std::map< sal_Int32,::rtl::OUString> aMap;
-    aMap[0] = ::rtl::OUString("YES");
-    aMap[1] = ::rtl::OUString("NO");
+    ::std::map< sal_Int32,OUString> aMap;
+    aMap[0] = OUString("YES");
+    aMap[1] = OUString("NO");
     m_aIntValueRange[7] = aMap;
 
 
@@ -1084,12 +1084,12 @@ void ODatabaseMetaDataResultSet::setCrossReferenceMap()
     m_aColMapping.push_back(16);
     m_aColMapping.push_back(18);
 
-    ::std::map< ::rtl::OUString,sal_Int32> aMap;
-    aMap[ ::rtl::OUString("CASCADE")] = KeyRule::CASCADE;
-    aMap[ ::rtl::OUString("RESTRICT")] = KeyRule::RESTRICT;
-    aMap[ ::rtl::OUString("SET NULL")] = KeyRule::SET_NULL;
-    aMap[ ::rtl::OUString("SET DEFAULT")] = KeyRule::SET_DEFAULT;
-    aMap[ ::rtl::OUString("NO ACTION")] = KeyRule::NO_ACTION;
+    ::std::map< OUString,sal_Int32> aMap;
+    aMap[ OUString("CASCADE")] = KeyRule::CASCADE;
+    aMap[ OUString("RESTRICT")] = KeyRule::RESTRICT;
+    aMap[ OUString("SET NULL")] = KeyRule::SET_NULL;
+    aMap[ OUString("SET DEFAULT")] = KeyRule::SET_DEFAULT;
+    aMap[ OUString("NO ACTION")] = KeyRule::NO_ACTION;
 
     m_aStrValueRange[14] = aMap;
     m_aStrValueRange[15] = aMap;
@@ -1105,8 +1105,8 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     for(;i<19;i++)
         m_aColMapping.push_back(i);
 
-    ::std::map< ::rtl::OUString,sal_Int32> aMap1;
-    aMap1[ ::rtl::OUString()] = 10;
+    ::std::map< OUString,sal_Int32> aMap1;
+    aMap1[ OUString()] = 10;
 
     m_aStrValueRange[18] = aMap1;
 

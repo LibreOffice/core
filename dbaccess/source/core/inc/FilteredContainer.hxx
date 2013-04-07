@@ -51,7 +51,7 @@ namespace dbaccess
         /** returns a string denoting the only type of tables allowed in this container, or an empty string
             if there is no such restriction
         */
-        virtual ::rtl::OUString getTableTypeRestriction() const = 0;
+        virtual OUString getTableTypeRestriction() const = 0;
 
         inline virtual void addMasterContainerListener(){}
         inline virtual void removeMasterContainerListener(){}
@@ -59,7 +59,7 @@ namespace dbaccess
         // ::connectivity::sdbcx::OCollection
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::rtl::OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject);
+        virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject);
 
         /** tell the container to free all elements and all additional resources.<BR>
             After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
@@ -87,7 +87,7 @@ namespace dbaccess
         /** retrieve a table type filter to pass to <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTables</member>,
             according to the current data source settings
         */
-        void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const;
+        void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< OUString >& /* [out] */ _rFilter ) const;
 
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
@@ -114,8 +114,8 @@ namespace dbaccess
             filters given (the connection is the parent object you passed in the ctor).
         */
         void construct(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
+            const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         /** late ctor. The container will fill itself with wrapper objects for the tables returned by the given
@@ -123,8 +123,8 @@ namespace dbaccess
         */
         void construct(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxMasterContainer,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter
+            const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter,
+            const ::com::sun::star::uno::Sequence< OUString >& _rTableTypeFilter
             );
 
         inline sal_Bool isInitialized() const { return m_bConstructed; }

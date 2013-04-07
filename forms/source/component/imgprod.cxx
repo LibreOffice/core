@@ -226,7 +226,7 @@ void ImageProducer::removeConsumer( const ::com::sun::star::uno::Reference< ::co
 
 // ------------------------------------------------------------
 
-void ImageProducer::SetImage( const ::rtl::OUString& rPath )
+void ImageProducer::SetImage( const OUString& rPath )
 {
     maURL = rPath;
     mpGraphic->Clear();
@@ -250,7 +250,7 @@ void ImageProducer::SetImage( const ::rtl::OUString& rPath )
 
 void ImageProducer::SetImage( SvStream& rStm )
 {
-    maURL = ::rtl::OUString();
+    maURL = OUString();
     mpGraphic->Clear();
     mbConsInit = sal_False;
 
@@ -262,7 +262,7 @@ void ImageProducer::SetImage( SvStream& rStm )
 
 void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rInputStmRef )
 {
-    maURL = ::rtl::OUString();
+    maURL = OUString();
     mpGraphic->Clear();
     mbConsInit = sal_False;
     delete mpStm;
@@ -548,7 +548,7 @@ void ImageProducer::initialize( const ::com::sun::star::uno::Sequence< ::com::su
     if ( aArguments.getLength() == 1 )
     {
         ::com::sun::star::uno::Any aArg = aArguments.getConstArray()[0];
-        rtl::OUString aURL;
+        OUString aURL;
         if ( aArg >>= aURL )
         {
             SetImage( aURL );

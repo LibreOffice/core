@@ -165,8 +165,8 @@ XTYPEPROVIDER_IMPL_6( FTPContent,
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
 
 XSERVICEINFO_IMPL_1( FTPContent,
-                     rtl::OUString( "com.sun.star.comp.FTPContent"),
-                     rtl::OUString( "com.sun.star.ucb.FTPContent"));
+                     OUString( "com.sun.star.comp.FTPContent"),
+                     OUString( "com.sun.star.ucb.FTPContent"));
 
 
 
@@ -177,10 +177,10 @@ XSERVICEINFO_IMPL_1( FTPContent,
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL FTPContent::getContentType()
+OUString SAL_CALL FTPContent::getContentType()
     throw( RuntimeException )
 {
-    return rtl::OUString(FTP_CONTENT_TYPE);
+    return OUString(FTP_CONTENT_TYPE);
 }
 
 
@@ -284,7 +284,7 @@ Any SAL_CALL FTPContent::execute(
         try {
             if(action == THROWAUTHENTICATIONREQUEST) {
                 // try to get a continuation first
-                rtl::OUString aRealm,aPassword,aAccount;
+                OUString aRealm,aPassword,aAccount;
                 m_pFCP->forHost(m_aFTPURL.host(),
                                 m_aFTPURL.port(),
                                 m_aFTPURL.username(),
@@ -361,7 +361,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = rtl::OUString("Uri");
+                    value.Name = OUString("Uri");
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -396,7 +396,7 @@ Any SAL_CALL FTPContent::execute(
                 {
                     Sequence<Any> seq(1);
                     PropertyValue value;
-                    value.Name = rtl::OUString("Uri");
+                    value.Name = OUString("Uri");
                     value.Handle = -1;
                     value.Value <<= m_aFTPURL.ident(false,false);
                     value.State = PropertyState_DIRECT_VALUE;
@@ -421,7 +421,7 @@ Any SAL_CALL FTPContent::execute(
                 if(!(aCommand.Argument >>= Properties))
                 {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString( "Wrong argument type!" ),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -435,7 +435,7 @@ Any SAL_CALL FTPContent::execute(
 
                 if( ! ( aCommand.Argument >>= propertyValues ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString( "Wrong argument type!" ),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -456,7 +456,7 @@ Any SAL_CALL FTPContent::execute(
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString( "Wrong argument type!" ),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -471,7 +471,7 @@ Any SAL_CALL FTPContent::execute(
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString( "Wrong argument type!" ),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
 
@@ -514,7 +514,7 @@ Any SAL_CALL FTPContent::execute(
                         if(n) {
                             Sequence<Any> seq(1);
                             PropertyValue value;
-                            value.Name = rtl::OUString("Uri");
+                            value.Name = OUString("Uri");
                             value.Handle = -1;
                             value.Value <<= m_aFTPURL.ident(false,false);
                             value.State = PropertyState_DIRECT_VALUE;
@@ -527,7 +527,7 @@ Any SAL_CALL FTPContent::execute(
                     }
                     else {
                         aRet <<= UnsupportedDataSinkException(
-                            rtl::OUString(),
+                            OUString(),
                             static_cast< cppu::OWeakObject * >(this),
                             aOpenCommand.Sink);
                         ucbhelper::cancelCommandExecution(aRet,Environment);
@@ -558,14 +558,14 @@ Any SAL_CALL FTPContent::execute(
                         OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
                     // Unsupported OpenMode
                     aRet <<= UnsupportedOpenModeException(
-                        rtl::OUString(),
+                        OUString(),
                         static_cast< cppu::OWeakObject * >(this),
                         static_cast< sal_Int16 >(aOpenCommand.Mode));
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
                 else {
                     aRet <<= IllegalArgumentException(
-                                rtl::OUString( "Unexpected OpenMode!" ),
+                                OUString( "Unexpected OpenMode!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1);
 
@@ -577,7 +577,7 @@ Any SAL_CALL FTPContent::execute(
                     ucbhelper::cancelCommandExecution(
                         makeAny(
                             IllegalArgumentException(
-                                rtl::OUString( "Wrong argument type!" ),
+                                OUString( "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >(this),
                                 -1)),
                         Environment);
@@ -614,9 +614,9 @@ Any SAL_CALL FTPContent::execute(
         }
 }
 
-#define FTP_FILE rtl::OUString( "application/vnd.sun.staroffice.ftp-file")
+#define FTP_FILE OUString( "application/vnd.sun.staroffice.ftp-file")
 
-#define FTP_FOLDER rtl::OUString( "application/vnd.sun.staroffice.ftp-folder")
+#define FTP_FOLDER OUString( "application/vnd.sun.staroffice.ftp-folder")
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
@@ -637,9 +637,9 @@ FTPContent::queryCreatableContentsInfo_Static(  )
         | ContentInfoAttribute::KIND_DOCUMENT;
     Sequence< Property > props( 1 );
     props[0] = Property(
-        rtl::OUString("Title"),
+        OUString("Title"),
         -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+        getCppuType( static_cast< OUString* >( 0 ) ),
         PropertyAttribute::MAYBEVOID
         | PropertyAttribute::BOUND );
     seq[0].Properties = props;
@@ -688,7 +688,7 @@ FTPContent::setParent(const Reference<XInterface >& /*Parent*/ )
 
 
 
-rtl::OUString FTPContent::getParentURL()
+OUString FTPContent::getParentURL()
 {
     return m_aFTPURL.parent();
 }
@@ -734,7 +734,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
     if(m_bInserted && !m_bTitleSet) {
         MissingPropertiesException excep;
         excep.Properties.realloc(1);
-        excep.Properties[0] = rtl::OUString("Title");
+        excep.Properties[0] = OUString("Title");
         Any aAny; aAny <<= excep;
         ucbhelper::cancelCommandExecution(aAny,Env);
     }
@@ -816,7 +816,7 @@ Reference< XRow > FTPContent::getPropertyValues(
     FTPDirentry aDirEntry = m_aFTPURL.direntry();
 
     for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
-        const rtl::OUString& Name = seqProp[i].Name;
+        const OUString& Name = seqProp[i].Name;
         if(Name.compareToAscii("Title") == 0)
             xRow->appendString(seqProp[i],aDirEntry.m_aName);
         else if(Name.compareToAscii("CreatableContentsInfo") == 0)
@@ -868,7 +868,7 @@ Sequence<Any> FTPContent::setPropertyValues(
     osl::MutexGuard aGuard(m_aMutex);
     for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
         if ( seqPropVal[i].Name == "Title" ) {
-            rtl::OUString Title;
+            OUString Title;
             if(!(seqPropVal[i].Value >>= Title)) {
                 ret[i] <<= IllegalTypeException();
                 continue;
@@ -884,10 +884,10 @@ Sequence<Any> FTPContent::setPropertyValues(
                 m_bTitleSet = true;
             } else
                 try {
-                    rtl::OUString OldTitle = m_aFTPURL.ren(Title);
+                    OUString OldTitle = m_aFTPURL.ren(Title);
                     evt.realloc(1);
                     evt[0].PropertyName =
-                        rtl::OUString("Title");
+                        OUString("Title");
                     evt[0].Further = false;
                     evt[0].PropertyHandle = -1;
                     evt[0].OldValue <<= OldTitle;
@@ -908,7 +908,7 @@ Sequence<Any> FTPContent::setPropertyValues(
             for(sal_Int32 j = 0; j < props.getLength(); ++j)
                 if(props[j].Name == seqPropVal[i].Name) {
                     ret[i] <<= IllegalAccessException(
-                        rtl::OUString( "Property is read-only!"),
+                        OUString( "Property is read-only!"),
                             //props[j].Attributes & PropertyAttribute::READONLY
                             //    ? "Property is read-only!"
                             //    : "Access denied!"),

@@ -663,13 +663,13 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
         if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
-            aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            aNatRgn, 0, aControlValue, OUString(), aBound, aContent) )
         {
             // if bNoDraw is true then don't call the drawing routine
             // but just update the target rectangle
             if( bNoDraw ||
                 pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
-                                         aControlValue, rtl::OUString()) )
+                                         aControlValue, OUString()) )
             {
                 rRect = aContent;
                 return;
@@ -1072,7 +1072,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
         ImplControlValue    aValue;
         ControlState        nState = 0;
         Rectangle aRect(rStart,rStop);
-        if(nativeSupported && pWin->DrawNativeControl(CTRL_FIXEDLINE,nPart,aRect,nState,aValue,rtl::OUString()))
+        if(nativeSupported && pWin->DrawNativeControl(CTRL_FIXEDLINE,nPart,aRect,nState,aValue,OUString()))
             return;
     }
 

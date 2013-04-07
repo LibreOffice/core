@@ -102,7 +102,7 @@ struct PresentationSettingsEx : public PresentationSettings
 
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) throw (css::lang::IllegalArgumentException);
 
-    void SetPropertyValue( const ::rtl::OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException);
+    void SetPropertyValue( const OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException);
 };
 
 // --------------------------------------------------------------------
@@ -111,7 +111,7 @@ struct WrappedShapeEventImpl
 {
     css::presentation::ClickAction meClickAction;
     sal_Int32 mnVerb;
-    ::rtl::OUString maStrBookmark;
+    OUString maStrBookmark;
     WrappedShapeEventImpl() : meClickAction( css::presentation::ClickAction_NONE ), mnVerb( 0 ) {};
 };
 
@@ -148,7 +148,7 @@ public:
     virtual void SAL_CALL slideTransitionEnded() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideAnimationsEnded() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException);
 
     // css::lang::XEventListener:
     virtual void SAL_CALL disposing(const css::lang::EventObject & Source) throw (css::uno::RuntimeException);
@@ -201,7 +201,7 @@ public:
     virtual void SAL_CALL gotoNextSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoPreviousSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoLastSlide(  ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL gotoBookmark( const ::rtl::OUString& Bookmark ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL gotoBookmark( const OUString& Bookmark ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoSlide( const css::uno::Reference< css::drawing::XDrawPage >& Page ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual void SAL_CALL gotoSlideIndex( ::sal_Int32 Index ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL stopSound(  ) throw (css::uno::RuntimeException);
@@ -227,7 +227,7 @@ public:
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
     void slideEnded(const bool bReverse);
-    void hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
+    void hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
 
     /// ends the presentation async
@@ -311,7 +311,7 @@ private:
     SfxDispatcher* getDispatcher() const;
     SfxBindings* getBindings() const;
 
-    sal_Int32 getSlideNumberForBookmark( const rtl::OUString& rStrBookmark );
+    sal_Int32 getSlideNumberForBookmark( const OUString& rStrBookmark );
 
     void removeShapeEvents();
     void registerShapeEvents( sal_Int32 nSlideNumber );
@@ -388,9 +388,9 @@ private:
     sal_Int32       mnLastSlideNumber;
     WrappedShapeEventImplMap    maShapeEventMap;
 
-    ::rtl::OUString msOnClick;
-    ::rtl::OUString msBookmark;
-    ::rtl::OUString msVerb;
+    OUString msOnClick;
+    OUString msBookmark;
+    OUString msVerb;
 
     css::uno::Reference< css::drawing::XDrawPage > mxPreviewDrawPage;
     css::uno::Reference< css::animations::XAnimationNode > mxPreviewAnimationNode;

@@ -89,7 +89,7 @@ Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
 // -----------------------------------------------------------------------------
 
 Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
-    const URL& aURL, const ::rtl::OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
+    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException )
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 )
@@ -142,11 +142,11 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 
                 if ( nFileSizeSource && nFileSizeDest )
                 {
-                    rtl::OUStringBuffer sBuf( rtl::OUString("Your Presentation has been minimized from:") );
-                    sBuf.append( rtl::OUString::valueOf( nFileSizeSource >> 10 ) );
-                    sBuf.append( rtl::OUString("KB to ") );
-                    sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
-                    sBuf.append( rtl::OUString("KB.") );
+                    OUStringBuffer sBuf( OUString("Your Presentation has been minimized from:") );
+                    sBuf.append( OUString::valueOf( nFileSizeSource >> 10 ) );
+                    sBuf.append( OUString("KB to ") );
+                    sBuf.append( OUString::valueOf( nFileSizeDest >> 10 ) );
+                    sBuf.append( OUString("KB.") );
                     OUString sResult( sBuf.makeStringAndClear() );
                     SAL_INFO("sdext.minimizer", sResult );
                 }

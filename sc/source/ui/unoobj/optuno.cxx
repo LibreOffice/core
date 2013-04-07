@@ -52,7 +52,7 @@ const SfxItemPropertyMapEntry* ScDocOptionsHelper::GetPropertyMap()
 
 sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
-                const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                const OUString& aPropertyName, const uno::Any& aValue )
 {
     //! use map (with new identifiers)
 
@@ -125,7 +125,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
 uno::Any ScDocOptionsHelper::getPropertyValue(
                 const ScDocOptions& rOptions,
                 const SfxItemPropertyMap& rPropMap,
-                const rtl::OUString& aPropertyName )
+                const OUString& aPropertyName )
 {
     uno::Any aRet;
     const SfxItemPropertySimpleEntry* pEntry = rPropMap.getByName( aPropertyName );
@@ -192,7 +192,7 @@ ScDocOptionsObj::~ScDocOptionsObj()
 }
 
 void SAL_CALL ScDocOptionsObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -205,7 +205,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
         ScModelObj::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {

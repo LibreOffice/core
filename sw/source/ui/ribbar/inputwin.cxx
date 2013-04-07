@@ -223,7 +223,7 @@ void SwInputWindow::ShowWin()
 
         // Formel soll immer mit einem "=" beginnen, hier
         // also setzen
-        String sEdit = rtl::OUString('=');
+        String sEdit = OUString('=');
         if( pMgr->GetCurFld() && TYP_FORMELFLD == pMgr->GetCurTypeId() )
         {
             sEdit += pMgr->GetCurFldPar2();
@@ -327,7 +327,7 @@ static const char * const aStrArr[] = {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ( nId <= MN_CALC_ROUND )
     {
-        String aTmp( rtl::OUString::createFromAscii(aStrArr[nId - 1]) );
+        String aTmp( OUString::createFromAscii(aStrArr[nId - 1]) );
         aTmp += ' ';
         aEdit.ReplaceSelected( aTmp );
     }
@@ -467,7 +467,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 
 void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
 {
-    String sEdit = rtl::OUString('=');
+    String sEdit = OUString('=');
     if( rFormula.Len() )
     {
         if( '=' == rFormula.GetChar( 0 ) )
@@ -558,7 +558,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
     const sal_uInt16 nLen = aActText.Len();
     if( !nLen )
     {
-        String aStr = rtl::OUStringBuffer().
+        String aStr = OUStringBuffer().
             append(cOpen).append(aBoxes).append(cClose).
             makeStringAndClear();
         SetText(aStr);
@@ -610,7 +610,7 @@ void InputEdit::UpdateRange(const String& rBoxes,
         }
         else
         {
-            rtl::OUString aTmp = rtl::OUStringBuffer().
+            OUString aTmp = OUStringBuffer().
                 append(cOpen).append(aBoxes).append(cClose).
                 makeStringAndClear();
             nPos = (sal_uInt16)aSelection.Min();

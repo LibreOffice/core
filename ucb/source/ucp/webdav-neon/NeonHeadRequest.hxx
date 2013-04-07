@@ -41,8 +41,8 @@ class NeonHeadRequest
 public:
         // named / allprop
         NeonHeadRequest( HttpSession* inSession,
-                         const rtl::OUString & inPath,
-                         const std::vector< ::rtl::OUString > & inHeaderNames,
+                         const OUString & inPath,
+                         const std::vector< OUString > & inHeaderNames,
                          DAVResource & ioResource,
                          int & nError );
         ~NeonHeadRequest();

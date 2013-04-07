@@ -354,7 +354,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( "en" ), rtl::OUString(), rtl::OUString() ) ) );
+    aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( OUString( "en" ), OUString(), OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -501,45 +501,45 @@ void StyleSettings::Set3DColors( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
+OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
 {
     switch ( nStyle )
     {
-        case STYLE_SYMBOLS_DEFAULT:    return ::rtl::OUString("default");
-        case STYLE_SYMBOLS_HICONTRAST: return ::rtl::OUString("hicontrast");
-        case STYLE_SYMBOLS_INDUSTRIAL: return ::rtl::OUString("tango"); // industrial is dead
-        case STYLE_SYMBOLS_CRYSTAL:    return ::rtl::OUString("crystal");
-        case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString("tango");
-        case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString("oxygen");
-        case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString("classic");
-        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString("human");
-        case STYLE_SYMBOLS_TANGO_TESTING: return ::rtl::OUString("tango_testing");
+        case STYLE_SYMBOLS_DEFAULT:    return OUString("default");
+        case STYLE_SYMBOLS_HICONTRAST: return OUString("hicontrast");
+        case STYLE_SYMBOLS_INDUSTRIAL: return OUString("tango"); // industrial is dead
+        case STYLE_SYMBOLS_CRYSTAL:    return OUString("crystal");
+        case STYLE_SYMBOLS_TANGO:      return OUString("tango");
+        case STYLE_SYMBOLS_OXYGEN:     return OUString("oxygen");
+        case STYLE_SYMBOLS_CLASSIC:    return OUString("classic");
+        case STYLE_SYMBOLS_HUMAN:      return OUString("human");
+        case STYLE_SYMBOLS_TANGO_TESTING: return OUString("tango_testing");
     }
 
-    return ::rtl::OUString("auto");
+    return OUString("auto");
 }
 
 // -----------------------------------------------------------------------
 
-sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
+sal_uLong StyleSettings::ImplNameToSymbolsStyle( const OUString &rName ) const
 {
-    if ( rName == ::rtl::OUString("default") )
+    if ( rName == OUString("default") )
         return STYLE_SYMBOLS_DEFAULT;
-    else if ( rName == ::rtl::OUString("hicontrast") )
+    else if ( rName == OUString("hicontrast") )
         return STYLE_SYMBOLS_HICONTRAST;
-    else if ( rName == ::rtl::OUString("industrial") )
+    else if ( rName == OUString("industrial") )
         return STYLE_SYMBOLS_TANGO; // industrial is dead
-    else if ( rName == ::rtl::OUString("crystal") )
+    else if ( rName == OUString("crystal") )
         return STYLE_SYMBOLS_CRYSTAL;
-    else if ( rName == ::rtl::OUString("tango") )
+    else if ( rName == OUString("tango") )
         return STYLE_SYMBOLS_TANGO;
-    else if ( rName == ::rtl::OUString("oxygen") )
+    else if ( rName == OUString("oxygen") )
         return STYLE_SYMBOLS_OXYGEN;
-    else if ( rName == ::rtl::OUString("classic") )
+    else if ( rName == OUString("classic") )
         return STYLE_SYMBOLS_CLASSIC;
-    else if ( rName == ::rtl::OUString("human") )
+    else if ( rName == OUString("human") )
         return STYLE_SYMBOLS_HUMAN;
-    else if ( rName == ::rtl::OUString("tango_testing") )
+    else if ( rName == OUString("tango_testing") )
         return STYLE_SYMBOLS_TANGO_TESTING;
 
     return STYLE_SYMBOLS_AUTO;
@@ -553,11 +553,11 @@ sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) 
     we check if any registered style name is a case-insensitive
     substring of the preferred style name.
 */
-void StyleSettings::SetPreferredSymbolsStyleName( const ::rtl::OUString &rName )
+void StyleSettings::SetPreferredSymbolsStyleName( const OUString &rName )
 {
     if ( !rName.isEmpty() )
     {
-        ::rtl::OUString rNameLowCase( rName.toAsciiLowerCase() );
+        OUString rNameLowCase( rName.toAsciiLowerCase() );
 
         for( sal_uInt32 n = 0; n <= STYLE_SYMBOLS_THEMES_MAX; n++ )
             if ( rNameLowCase.indexOf( ImplSymbolsStyleToName( n ) ) != -1 )
@@ -621,7 +621,7 @@ sal_uLong StyleSettings::GetCurrentSymbolsStyle() const
 
 sal_uLong StyleSettings::GetAutoSymbolsStyle() const
 {
-    rtl::OUString const & env = Application::GetDesktopEnvironment();
+    OUString const & env = Application::GetDesktopEnvironment();
 
     sal_uLong nRet;
     if ( env.equalsIgnoreAsciiCase("tde") ||
@@ -1047,10 +1047,10 @@ sal_Bool MiscSettings::GetDisablePrinting() const
 {
     if( mpData->mnDisablePrinting == (sal_uInt16)~0 )
     {
-        rtl::OUString aEnable =
+        OUString aEnable =
             vcl::SettingsConfigItem::get()->
-            getValue( rtl::OUString( "DesktopManagement"  ),
-                      rtl::OUString( "DisablePrinting"  ) );
+            getValue( OUString( "DesktopManagement"  ),
+                      OUString( "DisablePrinting"  ) );
         mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? 1 : 0;
     }
 
@@ -1103,10 +1103,10 @@ sal_Bool MiscSettings::GetEnableATToolSupport() const
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
         {
-            rtl::OUString aEnable =
+            OUString aEnable =
                 vcl::SettingsConfigItem::get()->
-                getValue( rtl::OUString( "Accessibility"  ),
-                          rtl::OUString( "EnableATToolSupport"  ) );
+                getValue( OUString( "Accessibility"  ),
+                          OUString( "EnableATToolSupport"  ) );
             mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? 1 : 0;
         }
         else
@@ -1164,9 +1164,9 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
         }
 
         vcl::SettingsConfigItem::get()->
-            setValue( rtl::OUString( "Accessibility"  ),
-                      rtl::OUString( "EnableATToolSupport"  ),
-                      bEnable ? rtl::OUString("true") : rtl::OUString("false" ) );
+            setValue( OUString( "Accessibility"  ),
+                      OUString( "EnableATToolSupport"  ),
+                      bEnable ? OUString("true") : OUString("false" ) );
         mpData->mnEnableATT = bEnable ? 1 : 0;
     }
 }

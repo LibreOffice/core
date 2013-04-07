@@ -38,7 +38,7 @@ DBG_NAME(OXMLDataSourceSettings)
 
 OXMLDataSourceSettings::OXMLDataSourceSettings( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName) :
+                ,const OUString& _sLocalName) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
 {
     DBG_CTOR(OXMLDataSourceSettings,NULL);
@@ -54,7 +54,7 @@ OXMLDataSourceSettings::~OXMLDataSourceSettings()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLDataSourceSettings::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;

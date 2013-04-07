@@ -182,11 +182,11 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
             NonProportionalFontsOnly::set(
                 m_pNonPropFontsOnlyCB->IsChecked(), batch);
     //font name changes cannot be detected by saved values
-    rtl::OUString sFontName;
+    OUString sFontName;
     if(m_pFontNameLB->GetSelectEntryPos())
         sFontName = m_pFontNameLB->GetSelectEntry();
     officecfg::Office::Common::Font::SourceViewFont::FontName::set(
-        boost::optional< rtl::OUString >(sFontName), batch);
+        boost::optional< OUString >(sFontName), batch);
     batch->commit();
 
     return sal_False;
@@ -224,9 +224,9 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
         officecfg::Office::Common::Font::SourceViewFont::
         NonProportionalFontsOnly::get());
     NonPropFontsHdl(m_pNonPropFontsOnlyCB);
-    rtl::OUString sFontName(
+    OUString sFontName(
         officecfg::Office::Common::Font::SourceViewFont::FontName::get().
-        get_value_or(rtl::OUString()));
+        get_value_or(OUString()));
     if(!sFontName.isEmpty())
         m_pFontNameLB->SelectEntry(sFontName);
     else

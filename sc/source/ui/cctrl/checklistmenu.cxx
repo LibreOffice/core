@@ -33,8 +33,6 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::accessibility::XAccessible;
 using ::com::sun::star::accessibility::XAccessibleContext;
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
 using ::std::vector;
 using ::boost::unordered_map;
 using ::std::auto_ptr;

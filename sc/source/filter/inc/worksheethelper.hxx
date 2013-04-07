@@ -57,7 +57,7 @@ class SheetViewSettings;
 class VmlDrawing;
 class WorksheetSettings;
 
-typedef ::std::map< rtl::OUString, void* >  ExtLst;
+typedef ::std::map< OUString, void* >  ExtLst;
 // ============================================================================
 // ============================================================================
 
@@ -139,7 +139,7 @@ struct HyperlinkModel : public ::oox::ole::StdHlinkInfo
 {
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// The cell area containing the hyperlink.
-    ::rtl::OUString     maTooltip;          /// Additional tooltip text.
+    OUString     maTooltip;          /// Additional tooltip text.
 
     explicit            HyperlinkModel();
 };
@@ -152,10 +152,10 @@ struct ValidationModel
     ApiCellRangeList    maRanges;
     ApiTokenSequence    maTokens1;
     ApiTokenSequence    maTokens2;
-    ::rtl::OUString     maInputTitle;
-    ::rtl::OUString     maInputMessage;
-    ::rtl::OUString     maErrorTitle;
-    ::rtl::OUString     maErrorMessage;
+    OUString     maInputTitle;
+    OUString     maInputMessage;
+    OUString     maErrorTitle;
+    OUString     maErrorMessage;
     sal_Int32           mnType;
     sal_Int32           mnOperator;
     sal_Int32           mnErrorStyle;
@@ -247,9 +247,9 @@ public:
     /** Inserts the data validation settings into the spreadsheet. */
     void                setValidation( const ValidationModel& rModel );
     /** Sets the path to the DrawingML fragment of this sheet. */
-    void                setDrawingPath( const ::rtl::OUString& rDrawingPath );
+    void                setDrawingPath( const OUString& rDrawingPath );
     /** Sets the path to the legacy VML drawing fragment of this sheet. */
-    void                setVmlDrawingPath( const ::rtl::OUString& rVmlDrawingPath );
+    void                setVmlDrawingPath( const OUString& rVmlDrawingPath );
 
     /** Extends the used area of this sheet by the passed cell position. */
     void                extendUsedArea( const ::com::sun::star::table::CellAddress& rAddress );
@@ -288,7 +288,7 @@ public:
     /** Inserts a string cell directly into the Calc sheet. */
     void                putString(
                             const ::com::sun::star::table::CellAddress& rAddress,
-                            const ::rtl::OUString& rText ) const;
+                            const OUString& rText ) const;
     /** Inserts a rich-string cell directly into the Calc sheet. */
     void                putRichString(
                             const ::com::sun::star::table::CellAddress& rAddress,
@@ -306,10 +306,10 @@ public:
     /** Final import of drawing objects. Has to be called after all content has been imported */
     void finalizeDrawingImport();
 
-    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
+    void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
     void                setCellFormula( const ::com::sun::star::table::CellAddress& rTokenAddress, sal_Int32  );
-    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const rtl::OUString&  );
-    void                createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const rtl::OUString& rTokens );
+    void                setCellArrayFormula( const ::com::sun::star::table::CellRangeAddress& rRangeAddress, const ::com::sun::star::table::CellAddress& rTokenAddress, const OUString&  );
+    void                createSharedFormulaMapEntry( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens );
     void                setCellFormulaValue( const ::com::sun::star::table::CellAddress& rAddress,
                             double fValue  );
 private:

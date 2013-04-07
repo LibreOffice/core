@@ -251,7 +251,7 @@ public:
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
     //get series names for the z axis labels
-    ::com::sun::star::uno::Sequence< rtl::OUString > getSeriesNames() const;
+    ::com::sun::star::uno::Sequence< OUString > getSeriesNames() const;
 
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
@@ -317,7 +317,7 @@ protected:
                 , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
                 , sal_Int32 nOffset=0 );
 
-    ::rtl::OUString getLabelTextForValue( VDataSeries& rDataSeries
+    OUString getLabelTextForValue( VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue
                 , bool bAsPercentage );
@@ -370,7 +370,7 @@ protected:
                 ::com::sun::star::drawing::XShapes >& xEquationTarget
         , bool bMaySkipPointsInRegressionCalculation );
 
-    virtual void createRegressionCurveEquationShapes( const ::rtl::OUString & rEquationCID
+    virtual void createRegressionCurveEquationShapes( const OUString & rEquationCID
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xEquationProperties
         , const ::com::sun::star::uno::Reference<

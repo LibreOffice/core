@@ -99,7 +99,7 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
             serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
         }
         serf_bucket_headers_set( hdrs_bkt, "Content-Length",
-                                 rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
+                                 OUStringToOString( OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
     }
     if ( mpContentType != 0 )
     {

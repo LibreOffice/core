@@ -32,7 +32,7 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
     return static_cast< sal_uInt16 >( m_pCountEdit->GetValue() );
 }
 
-SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString& sHelpId )
+SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const OString& sHelpId )
     : ModalDialog(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui")
     , aRow(CUI_RESSTR(RID_SVXSTR_ROW))
     , aCol(CUI_RESSTR(RID_SVXSTR_COL))

@@ -49,9 +49,9 @@ class PresenterConfigurationAccess
 public:
     enum WriteMode { READ_WRITE, READ_ONLY };
     typedef ::boost::function<bool(
-        const ::rtl::OUString&,
+        const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&)> Predicate;
-    static const ::rtl::OUString msPresenterScreenRootName;
+    static const OUString msPresenterScreenRootName;
 
     /** Create a new object to access the configuration entries below the
         given root.
@@ -64,7 +64,7 @@ public:
     */
     PresenterConfigurationAccess(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const ::rtl::OUString& rsRootName,
+        const OUString& rsRootName,
         WriteMode eMode);
 
     ~PresenterConfigurationAccess (void);
@@ -74,7 +74,7 @@ public:
             The relative path from the root (as given the constructor) to the node.
     */
     css::uno::Any GetConfigurationNode (
-        const ::rtl::OUString& rsPathToNode);
+        const OUString& rsPathToNode);
 
     /** Return <TRUE/> when opening the configuration (via creating a new
         PresenterConfigurationAccess object) or previous calls to
@@ -85,7 +85,7 @@ public:
 
     /** Move the focused node to the (possibly indirect) child specified by the given path.
     */
-    bool GoToChild (const ::rtl::OUString& rsPathToNode);
+    bool GoToChild (const OUString& rsPathToNode);
 
     /** Move the focused node to the first direct child that fulfills the given predicate.
     */
@@ -95,7 +95,7 @@ public:
         mind to call CommitChanges() to write the change back to the
         configuration.
     */
-    bool SetProperty (const ::rtl::OUString& rsPropertyName, const css::uno::Any& rValue);
+    bool SetProperty (const OUString& rsPropertyName, const css::uno::Any& rValue);
 
     /** Return a configuration node below the given node.
         @param rxNode
@@ -109,11 +109,11 @@ public:
     */
     static css::uno::Any GetConfigurationNode (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const ::rtl::OUString& rsPathToNode);
+        const OUString& rsPathToNode);
 
     static css::uno::Reference<css::beans::XPropertySet> GetNodeProperties (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-        const ::rtl::OUString& rsPathToNode);
+        const OUString& rsPathToNode);
 
     /** Write any changes that have been made back to the configuration.
         This call is ignored when the called ConfigurationAccess object was
@@ -122,10 +122,10 @@ public:
     void CommitChanges (void);
 
     typedef ::boost::function<void(
-        const ::rtl::OUString&,
+        const OUString&,
         const ::std::vector<css::uno::Any>&) > ItemProcessor;
     typedef ::boost::function<void(
-        const ::rtl::OUString&,
+        const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&) > PropertySetProcessor;
 
     /** Execute a functor for all elements of the given container.
@@ -142,7 +142,7 @@ public:
     */
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
-        const ::std::vector<rtl::OUString>& rArguments,
+        const ::std::vector<OUString>& rArguments,
         const ItemProcessor& rProcessor);
     static void ForAll (
         const css::uno::Reference<css::container::XNameAccess>& rxContainer,
@@ -153,8 +153,8 @@ public:
         const Predicate& rPredicate);
 
     static bool IsStringPropertyEqual (
-        const ::rtl::OUString& rsValue,
-        const ::rtl::OUString& rsPropertyName,
+        const OUString& rsValue,
+        const OUString& rsPropertyName,
         const css::uno::Reference<css::beans::XPropertySet>& rxNode);
 
     /** This method wraps a call to getPropertyValue() and returns an empty
@@ -163,7 +163,7 @@ public:
     */
     static css::uno::Any GetProperty (
         const css::uno::Reference<css::beans::XPropertySet>& rxProperties,
-        const ::rtl::OUString& rsKey);
+        const OUString& rsKey);
 
 private:
     css::uno::Reference<css::uno::XInterface> mxRoot;

@@ -36,7 +36,7 @@ namespace frm
 //==================================================================
 PropertyInfoService::PropertyMap PropertyInfoService::s_AllKnownProperties;
 //------------------------------------------------------------------
-sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
+sal_Int32 PropertyInfoService::getPropertyId(const OUString& _rName)
 {
     initialize();
 
@@ -58,7 +58,7 @@ sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
 }
 
 //------------------------------------------------------------------
-sal_Int32 ConcreteInfoService::getPreferedPropertyId(const ::rtl::OUString& _rName)
+sal_Int32 ConcreteInfoService::getPreferedPropertyId(const OUString& _rName)
 {
     return PropertyInfoService::getPropertyId(_rName);
 }

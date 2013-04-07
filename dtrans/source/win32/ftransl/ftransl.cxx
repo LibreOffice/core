@@ -39,19 +39,18 @@
 #define MODULE_PRIVATE
 #define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )
 #define CPPUTYPE_DEFAULT          CPPUTYPE_SEQSALINT8
-#define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
+#define CPPUTYPE_OUSTR            getCppuType( (const OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
 #define EMPTY_OUSTR               OUString()
 
-const rtl::OUString Windows_FormatName ("windows_formatname");
+const OUString Windows_FormatName ("windows_formatname");
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
-const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const ::rtl::OUString*)0);
+const com::sun::star::uno::Type CppuType_String       = ::getCppuType((const OUString*)0);
 
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
 
-using ::rtl::OUString;
 using namespace osl;
 using namespace cppu;
 using namespace std;
@@ -93,14 +92,14 @@ FormatEntry::FormatEntry(
     CLIPFORMAT std_clipboard_format_id,
     ::com::sun::star::uno::Type const & cppu_type)
 {
-    aDataFlavor.MimeType             = rtl::OUString::createFromAscii(mime_content_type);
-    aDataFlavor.HumanPresentableName = rtl::OUString::createFromAscii(human_presentable_name);
+    aDataFlavor.MimeType             = OUString::createFromAscii(mime_content_type);
+    aDataFlavor.HumanPresentableName = OUString::createFromAscii(human_presentable_name);
     aDataFlavor.DataType             = cppu_type;
 
     if (native_format_name)
-        aNativeFormatName = rtl::OUString::createFromAscii(native_format_name);
+        aNativeFormatName = OUString::createFromAscii(native_format_name);
     else
-        aNativeFormatName = rtl::OUString::createFromAscii(human_presentable_name);
+        aNativeFormatName = OUString::createFromAscii(human_presentable_name);
 
     aStandardFormatId = std_clipboard_format_id;
 }

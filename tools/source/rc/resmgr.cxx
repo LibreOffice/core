@@ -51,10 +51,6 @@
 #include <list>
 #include <set>
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
 
 using namespace osl;
 
@@ -183,7 +179,7 @@ void ResMgrContainer::init()
     assert( m_aResFiles.empty() );
 
     // get resource path
-    rtl::OUString uri("$BRAND_BASE_DIR/program/resource/");
+    OUString uri("$BRAND_BASE_DIR/program/resource/");
     rtl::Bootstrap::expandMacros(uri); //TODO: detect failure
 
     // collect all possible resource files
@@ -450,8 +446,8 @@ InternalResMgr::~InternalResMgr()
         {
             SvFileStream aStm( OUString::createFromAscii( pLogFile ), STREAM_WRITE );
             aStm.Seek( STREAM_SEEK_TO_END );
-            rtl::OStringBuffer aLine("FileName: ");
-            aLine.append(rtl::OUStringToOString(aFileName,
+            OStringBuffer aLine("FileName: ");
+            aLine.append(OUStringToOString(aFileName,
                 RTL_TEXTENCODING_UTF8));
             aStm.WriteLine(aLine.makeStringAndClear());
 
@@ -629,7 +625,7 @@ OUString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Return on resource errors
     static int bInUse = sal_False;
-    rtl::OUString aTypStr(OUString::number(rTypeId.GetId()));
+    OUString aTypStr(OUString::number(rTypeId.GetId()));
 
     if ( !bInUse )
     {
@@ -667,14 +663,14 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
     ResMgr* pNewResMgr = new ResMgr( pImp );
 
-    rtl::OStringBuffer aStr(rtl::OUStringToOString(pResMgr->GetFileName(),
+    OStringBuffer aStr(OUStringToOString(pResMgr->GetFileName(),
         RTL_TEXTENCODING_UTF8));
 
     if (aStr.getLength())
         aStr.append('\n');
 
     aStr.append("Class: ");
-    aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
+    aStr.append(OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
         RTL_TEXTENCODING_UTF8));
     aStr.append(", Id: ");
     aStr.append(static_cast<sal_Int32>(nId));
@@ -685,7 +681,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     while( nDepth > 0 )
     {
         aStr.append("Class: ");
-        aStr.append(rtl::OUStringToOString(GetTypeRes_Impl(
+        aStr.append(OUStringToOString(GetTypeRes_Impl(
             ResId(rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
             RTL_TEXTENCODING_UTF8));
         aStr.append(", Id: ");
@@ -802,7 +798,7 @@ void ResMgr::Init( const OUString& rFileName )
     if ( !pImpRes )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aStr("Resourcefile not found:\n");
+        OStringBuffer aStr("Resourcefile not found:\n");
         aStr.append(OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8));
         OSL_FAIL(aStr.getStr());
 #endif
@@ -1049,10 +1045,10 @@ sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             {
                 pTop->Flags |= RC_FALLBACK_DOWN;
 #ifdef DBG_UTIL
-                rtl::OStringBuffer aMess("found resource ");
+                OStringBuffer aMess("found resource ");
                 aMess.append(static_cast<sal_Int32>(nId));
                 aMess.append(" in fallback ");
-                aMess.append(rtl::OUStringToOString(
+                aMess.append(OUStringToOString(
                     pFallbackResMgr->GetFileName(),
                     osl_getThreadTextEncoding()));
                 aMess.append('\n');
@@ -1217,11 +1213,11 @@ sal_uInt32 ResMgr::GetString( OUString& rStr, const sal_uInt8* pStr )
     return nRet;
 }
 
-sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const sal_uInt8* pStr )
+sal_uInt32 ResMgr::GetByteString( OString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
-    rStr = rtl::OString( (const sal_Char*)pStr, nLen );
+    rStr = OString( (const sal_Char*)pStr, nLen );
     return nRet;
 }
 
@@ -1596,14 +1592,14 @@ OUString ResMgr::ReadString()
     return aRet;
 }
 
-rtl::OString ResMgr::ReadByteString()
+OString ResMgr::ReadByteString()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadByteString();
 
-    rtl::OString aRet;
+    OString aRet;
 
     const ImpRCStack& rTop = aStack[nCurStack];
     if( (rTop.Flags & RC_NOTFOUND) )
@@ -1618,7 +1614,7 @@ rtl::OString ResMgr::ReadByteString()
     return aRet;
 }
 
-rtl::OString ResMgr::GetAutoHelpId()
+OString ResMgr::GetAutoHelpId()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
@@ -1627,11 +1623,11 @@ rtl::OString ResMgr::GetAutoHelpId()
 
     OSL_ENSURE( nCurStack, "resource stack empty in Auto help id generation" );
     if( nCurStack < 1 || nCurStack > 2 )
-        return rtl::OString();
+        return OString();
 
     // prepare HID, start with resource prefix
-    rtl::OStringBuffer aHID( 32 );
-    aHID.append( rtl::OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
+    OStringBuffer aHID( 32 );
+    aHID.append( OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
     aHID.append( '.' );
 
     // append type
@@ -1648,7 +1644,7 @@ rtl::OString ResMgr::GetAutoHelpId()
             case RSC_FLOATINGWINDOW:    aHID.append( "FloatingWindow" );   break;
             case RSC_MODALDIALOG:       aHID.append( "ModalDialog" );      break;
             case RSC_TABPAGE:           aHID.append( "TabPage" );          break;
-            default: return rtl::OString();
+            default: return OString();
         }
     }
     else
@@ -1693,11 +1689,11 @@ rtl::OString ResMgr::GetAutoHelpId()
                     case RSC_MOREBUTTON:        aHID.append( "MoreButton" );       break;
                     default:
                         // no type, no auto HID
-                        return rtl::OString();
+                        return OString();
                 }
                 break;
             default:
-                return rtl::OString();
+                return OString();
         }
     }
 
@@ -1772,7 +1768,7 @@ bool SimpleResMgr::IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourc
     return m_pResImpl->IsGlobalAvailable( _resourceType, _resourceId );
 }
 
-rtl::OUString SimpleResMgr::ReadString( sal_uInt32 nId )
+OUString SimpleResMgr::ReadString( sal_uInt32 nId )
 {
     osl::MutexGuard aGuard(m_aAccessSafety);
 

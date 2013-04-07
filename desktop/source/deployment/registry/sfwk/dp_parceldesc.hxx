@@ -40,11 +40,11 @@ class ParcelDescDocHandler : public t_DocHandlerImpl
 {
 private:
     bool m_bIsParsed;
-    ::rtl::OUString m_sLang;
+    OUString m_sLang;
     sal_Int32 skipIndex;
 public:
     ParcelDescDocHandler():m_bIsParsed( false ), skipIndex( 0 ){}
-    ::rtl::OUString getParcelLanguage() { return m_sLang; }
+    OUString getParcelLanguage() { return m_sLang; }
     bool isParsed() { return m_bIsParsed; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
@@ -53,22 +53,22 @@ public:
     virtual void SAL_CALL endDocument()
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
-    virtual void SAL_CALL startElement( const ::rtl::OUString& aName,
+    virtual void SAL_CALL startElement( const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs )
         throw ( css::xml::sax::SAXException,
             css::uno::RuntimeException );
 
-    virtual void SAL_CALL endElement( const ::rtl::OUString & aName )
+    virtual void SAL_CALL endElement( const OUString & aName )
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
-    virtual void SAL_CALL characters( const ::rtl::OUString & aChars )
+    virtual void SAL_CALL characters( const OUString & aChars )
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString & aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString & aWhitespaces )
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
     virtual void SAL_CALL processingInstruction(
-        const ::rtl::OUString & aTarget, const ::rtl::OUString & aData )
+        const OUString & aTarget, const OUString & aData )
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException );
 
     virtual void SAL_CALL setDocumentLocator(

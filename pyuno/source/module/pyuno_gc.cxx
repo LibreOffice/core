@@ -86,8 +86,8 @@ void GCThread::execute()
     }
     catch( const com::sun::star::uno::RuntimeException & e )
     {
-        rtl::OString msg;
-        msg = rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        OString msg;
+        msg = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
         fprintf( stderr, "Leaking python objects bridged to UNO for reason %s\n",msg.getStr());
     }
 }

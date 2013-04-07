@@ -284,8 +284,8 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     // Get the "Delete Rows" commandimagelist images from sfx instead of
     // adding a second copy to sc (see ScTbxInsertCtrl::StateChanged)
 
-    rtl::OUString aSlotURL( "slot:" );
-    aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
+    OUString aSlotURL( "slot:" );
+    aSlotURL += OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
     Image aDelNm = ::GetImage( xFrame, aSlotURL, false );
 
@@ -373,7 +373,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     else
     {
         maRbMax.Check();
-        rtl::OUString aCursorStr;
+        OUString aCursorStr;
         if ( !mpDoc->GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
             rCursorPos.Format( aCursorStr, SCA_ABS, NULL, mpDoc->GetAddressConvention() );
         maEdObjectiveCell.SetRefString( aCursorStr );
@@ -487,7 +487,7 @@ void ScOptSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         if ( bSingle )
             aNewRef.aEnd = aAdr;
 
-        rtl::OUString aName;
+        OUString aName;
         if ( pDocP->GetRangeAtBlock( aNewRef, &aName ) )            // named range: show name
             aStr = aName;
         else                                                        // format cell/range reference
@@ -1038,7 +1038,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     else
     {
-        rtl::OUString aError;
+        OUString aError;
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component

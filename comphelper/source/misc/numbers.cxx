@@ -72,7 +72,7 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
             staruno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
-                static ::rtl::OUString PROPERTY_DECIMALS( "Decimals" );
+                static OUString PROPERTY_DECIMALS( "Decimals" );
                 return xFormat->getPropertyValue(PROPERTY_DECIMALS);
             }
         }
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------------
-Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, sal_Int32 _nKey, const rtl::OUString& _rPropertyName )
+Any getNumberFormatProperty( const Reference< XNumberFormatter >& _rxFormatter, sal_Int32 _nKey, const OUString& _rPropertyName )
 {
     Any aReturn;
 

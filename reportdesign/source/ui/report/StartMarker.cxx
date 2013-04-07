@@ -45,7 +45,7 @@ oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 DBG_NAME( rpt_OStartMarker )
 // -----------------------------------------------------------------------------
-OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sColorEntry)
+OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 ,m_aVRuler(this,WB_VERT)
 ,m_aText(this,WB_HYPHENATION)

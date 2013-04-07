@@ -25,7 +25,7 @@
 class AstUnion : public AstStruct
 {
 public:
-    AstUnion(const ::rtl::OString& name, AstType* pDiscType, AstScope* pScope);
+    AstUnion(const OString& name, AstType* pDiscType, AstScope* pScope);
     virtual ~AstUnion();
 
     AstType* getDiscrimantType()

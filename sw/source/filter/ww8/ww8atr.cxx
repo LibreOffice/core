@@ -833,7 +833,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
     pOutFmtNode = pOldMod;
 }
 
-bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo )
+bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
     const SwTxtNode* pNd;
 
@@ -869,7 +869,7 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pNa
     return false;
 }
 
-String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo )
+String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo )
 {
     String sRet;
     switch ( nTyp )
@@ -1908,7 +1908,7 @@ void WW8Export::StartCommentOutput(const String& rName)
 
 void WW8Export::EndCommentOutput(const String& rName)
 {
-    String sStr(rtl::OUString(" ["));
+    String sStr(OUString(" ["));
     sStr += rName;
     sStr.AppendAscii("] ");
     OutputField(0, ww::eQUOTE, sStr, WRITEFIELD_CMD_END | WRITEFIELD_END |
@@ -2469,7 +2469,7 @@ bool WW8AttributeOutput::DropdownField( const SwField* pFld )
     if ( m_rWW8Export.bWrtWW8 )
     {
         const SwDropDownField& rFld2 = *(SwDropDownField*)pFld;
-        uno::Sequence<rtl::OUString> aItems =
+        uno::Sequence<OUString> aItems =
             rFld2.GetItemSequence();
         GetExport().DoComboBox(rFld2.GetName(),
                            rFld2.GetHelp(),

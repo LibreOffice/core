@@ -91,7 +91,7 @@ protected:
 
     OUString _aLocalName;
     Reference< xml::input::XAttributes > _xAttributes;
-    ::rtl::OUStringBuffer _StrBuffer;
+    OUStringBuffer _StrBuffer;
 
 public:
     ModuleElement(

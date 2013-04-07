@@ -41,7 +41,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 struct HtmlOptions_Impl
 {
@@ -249,7 +248,7 @@ void SvxHtmlOptions::CallListeners()
 }
 
 
-void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
     Load( GetPropertyNames() );
     CallListeners();

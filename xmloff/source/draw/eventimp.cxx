@@ -38,8 +38,6 @@
 #include "eventimp.hxx"
 #include "anim.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;
@@ -265,7 +263,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 }
                 else
                 {
-                    const rtl::OUString &rTmp =
+                    const OUString &rTmp =
                         rImp.GetAbsoluteReference(sValue);
                     INetURLObject::translateToInternal( rTmp, msBookmark,
                         INetURLObject::DECODE_UNAMBIGUOUS,
@@ -509,7 +507,7 @@ SdXMLEventsContext::~SdXMLEventsContext()
 {
 }
 
-SvXMLImportContext * SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, const ::rtl::OUString& rLocalName,
+SvXMLImportContext * SdXMLEventsContext::CreateChildContext( sal_uInt16 nPrfx, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLEventContext( GetImport(), nPrfx, rLocalName,  xAttrList, mxShape );

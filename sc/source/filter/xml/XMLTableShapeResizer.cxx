@@ -37,7 +37,6 @@
 using namespace ::com::sun::star;
 using ::std::auto_ptr;
 using ::std::vector;
-using ::rtl::OUString;
 
 ScMyOLEFixer::ScMyOLEFixer(ScXMLImport& rTempImport)
     : rImport(rTempImport),
@@ -56,8 +55,8 @@ sal_Bool ScMyOLEFixer::IsOLE(uno::Reference< drawing::XShape >& rShape)
 }
 
 void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
-    const rtl::OUString& rName,
-    const rtl::OUString& rRangeList)
+    const OUString& rName,
+    const OUString& rRangeList)
 {
     // This is the minimum required.
     if (!pDoc)
@@ -111,7 +110,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
 }
 
 void ScMyOLEFixer::AddOLE(uno::Reference <drawing::XShape>& rShape,
-       const rtl::OUString &rRangeList)
+       const OUString &rRangeList)
 {
     ScMyToFixupOLE aShape;
     aShape.xShape.set(rShape);
@@ -123,7 +122,7 @@ void ScMyOLEFixer::FixupOLEs()
 {
     if (!aShapes.empty() && rImport.GetModel().is())
     {
-        rtl::OUString sPersistName ("PersistName");
+        OUString sPersistName ("PersistName");
         ScMyToFixupOLEs::iterator aItr(aShapes.begin());
         ScMyToFixupOLEs::iterator aEndItr(aShapes.end());
         ScDocument* pDoc(rImport.GetDocument());
@@ -141,7 +140,7 @@ void ScMyOLEFixer::FixupOLEs()
                 uno::Reference < beans::XPropertySet > xShapeProps ( aItr->xShape, uno::UNO_QUERY );
                 uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
 
-                rtl::OUString sName;
+                OUString sName;
                 if (pDoc && xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
                     (xShapeProps->getPropertyValue(sPersistName) >>= sName))
                     CreateChartListener(pDoc, sName, aItr->sRangeList);

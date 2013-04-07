@@ -38,7 +38,6 @@
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 
-using rtl::OUString;
 using com::sun::star::beans::NamedValue;
 using namespace com::sun::star::uno;
 using com::sun::star::lang::XInitialization;
@@ -175,7 +174,7 @@ Reference<XXPathObject> ComputedExpression::getXPath() const
     return mxResult;
 }
 
-OUString ComputedExpression::getString( const rtl::OUString& rDefault ) const
+OUString ComputedExpression::getString( const OUString& rDefault ) const
 {
     return mxResult.is() ? mxResult->getString() : rDefault;
 }

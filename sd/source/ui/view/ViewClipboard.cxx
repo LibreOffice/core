@@ -74,7 +74,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
     {
         do
         {
-            const std::vector<rtl::OUString> &rBookmarks = rTransferable.GetPageBookmarks();
+            const std::vector<OUString> &rBookmarks = rTransferable.GetPageBookmarks();
 
             if (rBookmarks.empty())
                 break;
@@ -87,7 +87,7 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             if (pDocument == NULL)
                 break;
 
-            std::vector<rtl::OUString>::const_iterator pIter;
+            std::vector<OUString>::const_iterator pIter;
             for ( pIter = rBookmarks.begin(); pIter != rBookmarks.end(); ++pIter )
             {
                 String sName (*pIter);
@@ -207,7 +207,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
-    const std::vector<rtl::OUString> *pBookmarkList = NULL;
+    const std::vector<OUString> *pBookmarkList = NULL;
     DrawDocShell* pDataDocSh;
     if (rTransferable.HasPageBookmarks())
     {
@@ -238,7 +238,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
             pWin->LeaveWait();
 
         rDoc.InsertBookmarkAsPage(
-            pBookmarkList ? *pBookmarkList : std::vector<rtl::OUString>(),
+            pBookmarkList ? *pBookmarkList : std::vector<OUString>(),
             NULL,
             sal_False,
             sal_False,

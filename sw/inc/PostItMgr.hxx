@@ -102,10 +102,10 @@ class SwNoteProps: public utl::ConfigItem
         bool bIsShowAnchor;
     public:
         SwNoteProps()
-            : ConfigItem(::rtl::OUString("Office.Writer/Notes"))
+            : ConfigItem(OUString("Office.Writer/Notes"))
             , bIsShowAnchor(false)
         {
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
+            const ::com::sun::star::uno::Sequence< OUString >& rNames = GetPropertyNames();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
                 const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
                OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
@@ -117,20 +117,20 @@ class SwNoteProps: public utl::ConfigItem
         {
             return bIsShowAnchor;
         }
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetPropertyNames()
+        ::com::sun::star::uno::Sequence< OUString >& GetPropertyNames()
         {
-            static ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames;
+            static ::com::sun::star::uno::Sequence< OUString > aNames;
             if(!aNames.getLength())
             {
                 aNames.realloc(1);
-                ::rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = ::rtl::OUString("ShowAnkor");
+                OUString* pNames = aNames.getArray();
+                pNames[0] = OUString("ShowAnkor");
             }
             return aNames;
         }
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 class SwPostItMgr: public SfxListener

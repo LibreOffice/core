@@ -275,7 +275,7 @@ void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOl
 {
     bool bOldGlobal = pToken->IsGlobal();
     SCTAB aOldTab = aOldPos.Tab();
-    rtl::OUString aRangeName;
+    OUString aRangeName;
     int nOldIndex = pToken->GetIndex();
     ScRangeData* pOldRangeData = NULL;
 
@@ -354,7 +354,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
     ScDBData* pDBData = aOldNamedDBs.findByIndex(pToken->GetIndex());
     if (!pDBData)
         return; //invalid index
-    rtl::OUString aDBName = pDBData->GetUpperName();
+    OUString aDBName = pDBData->GetUpperName();
 
     //search in new document
     ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
@@ -386,7 +386,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 // ============================================================================
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                              const rtl::OUString& rFormula,
+                              const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
                               sal_uInt8 cMatInd ) :
     ScBaseCell( CELLTYPE_FORMULA ),
@@ -615,12 +615,12 @@ ScFormulaVectorState ScFormulaCell::GetVectorState() const
     return pCode->GetVectorState();
 }
 
-void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
+void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
                                 const FormulaGrammar::Grammar eGrammar ) const
 {
     if( pCode->GetCodeError() && !pCode->GetLen() )
     {
-        rBuffer = rtl::OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
+        rBuffer = OUStringBuffer( ScGlobal::GetErrorString( pCode->GetCodeError()));
         return;
     }
     else if( cMatrixFlag == MM_REFERENCE )
@@ -675,9 +675,9 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
     }
 }
 
-void ScFormulaCell::GetFormula( rtl::OUString& rFormula, const FormulaGrammar::Grammar eGrammar ) const
+void ScFormulaCell::GetFormula( OUString& rFormula, const FormulaGrammar::Grammar eGrammar ) const
 {
-    rtl::OUStringBuffer rBuffer( rFormula );
+    OUStringBuffer rBuffer( rFormula );
     GetFormula( rBuffer, eGrammar );
     rFormula = rBuffer.makeStringAndClear();
 }
@@ -697,7 +697,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
-void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
+void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
     if ( pDocument->IsClipOrUndo() )
@@ -788,7 +788,7 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
-    rtl::OUString aFormula, aFormulaNmsp;
+    OUString aFormula, aFormulaNmsp;
     aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
@@ -1633,9 +1633,9 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 }
 
 // Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
-void ScFormulaCell::GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText )
+void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
 {
-    rtl::OUString aCellString;
+    OUString aCellString;
 
     Color* pColor;
 
@@ -1702,8 +1702,8 @@ bool ScFormulaCell::IsHyperLinkCell() const
 
 EditTextObject* ScFormulaCell::CreateURLObject()
 {
-    rtl::OUString aCellText;
-    rtl::OUString aURL;
+    OUString aCellText;
+    OUString aURL;
     GetURLResult( aURL, aCellText );
 
     return ScEditUtil::CreateURLObjectFromURL( *pDocument, aURL, aCellText );
@@ -1748,13 +1748,13 @@ double ScFormulaCell::GetValueAlways()
     return aResult.GetDouble();
 }
 
-rtl::OUString ScFormulaCell::GetString()
+OUString ScFormulaCell::GetString()
 {
     MaybeInterpret();
     if ((!pCode->GetCodeError() || pCode->GetCodeError() == errDoubleRef) &&
             !aResult.GetResultError())
         return aResult.GetString();
-    return rtl::OUString();
+    return OUString();
 }
 
 const ScMatrix* ScFormulaCell::GetMatrix()
@@ -1877,14 +1877,14 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    rtl::OUString aTmp;
-                    rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
+                    OUString aTmp;
+                    OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
                         "broken Matrix, no MatFormula at origin, Pos: "));
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                    aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
+                    aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
                     aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                    aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
+                    aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_ASCII_US));
                     OSL_FAIL(aMsg.getStr());
 #endif
                     return 0;           // bad luck ...
@@ -1910,13 +1910,13 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                rtl::OUString aTmp;
-                rtl::OStringBuffer aMsg( "broken Matrix, Pos: " );
+                OUString aTmp;
+                OStringBuffer aMsg( "broken Matrix, Pos: " );
                 aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
+                aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
                 aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
+                aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
                 aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatCols: "));
                 aMsg.append(static_cast<sal_Int32>( nC ));
                 aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatRows: "));
@@ -2771,7 +2771,7 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
         }
         if ( bRecompile )
         {
-            rtl::OUString aFormula;
+            OUString aFormula;
             GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
             if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
@@ -2818,7 +2818,7 @@ void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
         }
         if ( bRecompile )
         {
-            rtl::OUString aFormula;
+            OUString aFormula;
             GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
             if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {

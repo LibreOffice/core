@@ -115,7 +115,7 @@ public:
     rtl::Reference< DAVSessionFactory > getDAVSessionFactory()
     { return m_xDAVSessionFactory; }
 
-    bool getProperty( const ::rtl::OUString & rPropName,
+    bool getProperty( const OUString & rPropName,
                       ::com::sun::star::beans::Property & rProp,
                       bool bStrict = false );
 };

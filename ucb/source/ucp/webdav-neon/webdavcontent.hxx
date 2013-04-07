@@ -85,13 +85,13 @@ class Content : public ::ucbhelper::ContentImplHelper,
     std::auto_ptr< DAVResourceAccess > m_xResAccess;
     std::auto_ptr< CachableContentProperties >
                       m_xCachedProps; // locally cached props
-    rtl::OUString     m_aEscapedTitle;
+    OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
     bool              m_bTransient;
     bool              m_bCollection;
     bool              m_bDidGetOrHead;
-    std::vector< rtl::OUString > m_aFailedPropNames;
+    std::vector< OUString > m_aFailedPropNames;
 
 private:
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
@@ -100,7 +100,7 @@ private:
     virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
     getCommands( const com::sun::star::uno::Reference<
                      com::sun::star::ucb::XCommandEnvironment > & xEnv );
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     sal_Bool isFolder( const ::com::sun::star::uno::Reference<
                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
@@ -129,7 +129,7 @@ private:
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    const rtl::OUString
+    const OUString
     getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
@@ -228,16 +228,16 @@ public:
     XTYPEPROVIDER_DECL()
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XContent
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
         throw( com::sun::star::uno::RuntimeException );
 
@@ -256,7 +256,7 @@ public:
 
     // XPropertyContainer
     virtual void SAL_CALL
-    addProperty( const rtl::OUString& Name,
+    addProperty( const OUString& Name,
                  sal_Int16 Attributes,
                  const com::sun::star::uno::Any& DefaultValue )
         throw( com::sun::star::beans::PropertyExistException,
@@ -265,7 +265,7 @@ public:
                com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeProperty( const rtl::OUString& Name )
+    removeProperty( const OUString& Name )
         throw( com::sun::star::beans::UnknownPropertyException,
                com::sun::star::beans::NotRemoveableException,
                com::sun::star::uno::RuntimeException );
@@ -299,7 +299,7 @@ public:
                        const ContentProperties& rData,
                        const rtl::Reference<
                            ::ucbhelper::ContentProviderImplHelper >& rProvider,
-                       const ::rtl::OUString& rContentId );
+                       const OUString& rContentId );
 };
 
 }

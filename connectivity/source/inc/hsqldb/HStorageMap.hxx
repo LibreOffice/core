@@ -51,7 +51,7 @@ namespace connectivity
 
 
         DECLARE_STL_USTRINGACCESS_MAP(::boost::shared_ptr<StreamHelper>,TStreamMap);
-        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, ::rtl::OUString > TStorageURLPair;
+        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, OUString > TStorageURLPair;
         typedef ::std::pair< TStorageURLPair, TStreamMap> TStoragePair;
         DECLARE_STL_USTRINGACCESS_MAP(TStoragePair,TStorages);
         /** contains all storages so far accessed.
@@ -59,18 +59,18 @@ namespace connectivity
         class StorageContainer
         {
         public:
-            static ::rtl::OUString registerStorage(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage,const ::rtl::OUString& _sURL);
-            static TStorages::mapped_type getRegisteredStorage(const ::rtl::OUString& _sKey);
-            static ::rtl::OUString getRegisteredKey(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage);
-            static void revokeStorage(const ::rtl::OUString& _sKey,const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener>& _xListener);
+            static OUString registerStorage(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage,const OUString& _sURL);
+            static TStorages::mapped_type getRegisteredStorage(const OUString& _sKey);
+            static OUString getRegisteredKey(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage);
+            static void revokeStorage(const OUString& _sKey,const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener>& _xListener);
 
             static TStreamMap::mapped_type registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode);
             static void revokeStream(JNIEnv * env,jstring name, jstring key);
             static TStreamMap::mapped_type getRegisteredStream( JNIEnv * env, jstring name, jstring key);
 
-            static ::rtl::OUString jstring2ustring(JNIEnv * env, jstring jstr);
-            static ::rtl::OUString removeURLPrefix(const ::rtl::OUString& _sURL,const ::rtl::OUString& _sFileURL);
-            static ::rtl::OUString removeOldURLPrefix(const ::rtl::OUString& _sURL);
+            static OUString jstring2ustring(JNIEnv * env, jstring jstr);
+            static OUString removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL);
+            static OUString removeOldURLPrefix(const OUString& _sURL);
             static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
         };
     //........................................................................

@@ -71,15 +71,15 @@ public:
     String              GetPath(sal_uInt16 nRegion, sal_uInt16 nIdx) const;
 
     // Allows to retrieve the target template URL from the UCB
-    ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
-                                                         const ::rtl::OUString& aTitle );
+    OUString     GetTemplateTargetURLFromComponent( const OUString& aGroupName,
+                                                         const OUString& aTitle );
 
     // Convert a resource string - a template name - to its localised pair
     // if it exists in templatelocnames.src
-    static ::rtl::OUString ConvertResourceString(int nSourceResIds,
+    static OUString ConvertResourceString(int nSourceResIds,
                             int nDestResIds,
                             int nCount,
-                            const ::rtl::OUString& rString);
+                            const OUString& rString);
 
     sal_Bool            Copy(sal_uInt16 nTargetRegion,
                          sal_uInt16 nTargetIdx,
@@ -107,7 +107,7 @@ public:
             sal_True if the action could be performed, sal_False otherwise
 
     */
-    sal_Bool            SetName(const rtl::OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
+    sal_Bool            SetName(const OUString &rName, sal_uInt16 nRegion, sal_uInt16 nIdx);
 
     sal_Bool            CopyTo(sal_uInt16 nRegion, sal_uInt16 nIdx, const String &rName) const;
     sal_Bool            CopyFrom(sal_uInt16 nRegion, sal_uInt16 nIdx, String &rName);

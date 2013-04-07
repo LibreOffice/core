@@ -108,7 +108,7 @@ void SdAnimationInfo::SetBookmark( const String& rBookmark )
 {
     if( meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK )
     {
-        String sURL = rtl::OUString('#');
+        String sURL = OUString('#');
         sURL += rBookmark;
         SvxFieldItem aURLItem( SvxURLField( sURL, sURL ), EE_FEATURE_FIELD );
         mrObject.SetMergedItem( aURLItem );

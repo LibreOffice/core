@@ -46,7 +46,6 @@
 #include "View.hxx"
 #include <memory>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
@@ -267,7 +266,7 @@ Reference<XAccessible> SAL_CALL
         if (nIndex == 0)
             return mxAccessibleOLEObject;
 
-    throw lang::IndexOutOfBoundsException ( "no child with index " + rtl::OUString::valueOf(nIndex), NULL);
+    throw lang::IndexOutOfBoundsException ( "no child with index " + OUString::valueOf(nIndex), NULL);
 }
 
 
@@ -452,17 +451,17 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleDocumentViewBase::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessibleDocumentViewBase");
+    return OUString("AccessibleDocumentViewBase");
 }
 
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleDocumentViewBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -704,11 +703,11 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 
 
 /// Create a name for this view.
-::rtl::OUString
+OUString
     AccessibleDocumentViewBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString ("AccessibleDocumentViewBase");
+    return OUString ("AccessibleDocumentViewBase");
 }
 
 
@@ -717,11 +716,11 @@ void SAL_CALL AccessibleDocumentViewBase::disposing (void)
 /** Create a description for this view.  Use the model's description or URL
     if a description is not available.
 */
-::rtl::OUString
+OUString
     AccessibleDocumentViewBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    rtl::OUString sDescription;
+    OUString sDescription;
 
     uno::Reference<lang::XServiceInfo> xInfo (mxController, uno::UNO_QUERY);
     if (xInfo.is())

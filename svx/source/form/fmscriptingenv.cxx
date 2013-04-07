@@ -107,7 +107,7 @@ namespace svxform
             @return
                 <TRUE/> if and only if the method is declared <code>oneway</code>, i.e. can be called asynchronously
         */
-        bool    impl_allowAsynchronousCall_nothrow( const ::rtl::OUString& _rListenerType, const ::rtl::OUString& _rMethodName ) const;
+        bool    impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName ) const;
 
         /** determines whether the instance is already disposed
         */
@@ -189,7 +189,7 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const ::rtl::OUString& _rListenerType, const ::rtl::OUString& _rMethodName ) const
+    bool FormScriptListener::impl_allowAsynchronousCall_nothrow( const OUString& _rListenerType, const OUString& _rMethodName ) const
     {
         bool bAllowAsynchronousCall = false;
         try
@@ -197,8 +197,8 @@ namespace svxform
             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
             Reference< XHierarchicalNameAccess > xTypeDescriptions( aContext.getSingleton( "com.sun.star.reflection.theTypeDescriptionManager" ), UNO_QUERY_THROW );
 
-            ::rtl::OUString sMethodDescription( _rListenerType );
-            sMethodDescription += ::rtl::OUString( "::" );
+            OUString sMethodDescription( _rListenerType );
+            sMethodDescription += OUString( "::" );
             sMethodDescription += _rMethodName;
 
             Reference< XInterfaceMethodTypeDescription > xMethod( xTypeDescriptions->getByHierarchicalName( sMethodDescription ), UNO_QUERY_THROW );
@@ -224,7 +224,7 @@ namespace svxform
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-       static const ::rtl::OUString vbaInterOp("VBAInterop");
+       static const OUString vbaInterOp("VBAInterop");
        if ( _rEvent.ScriptType.equals(vbaInterOp) )
            return; // not handled here
 
@@ -385,10 +385,10 @@ namespace svxform
         class NewStyleUNOScript : public IScript
         {
             SfxObjectShell&         m_rObjectShell;
-            const ::rtl::OUString   m_sScriptCode;
+            const OUString   m_sScriptCode;
 
         public:
-            NewStyleUNOScript( SfxObjectShell& _rObjectShell, const ::rtl::OUString& _rScriptCode )
+            NewStyleUNOScript( SfxObjectShell& _rObjectShell, const OUString& _rScriptCode )
                 :m_rObjectShell( _rObjectShell )
                 ,m_sScriptCode( _rScriptCode )
             {
@@ -411,7 +411,7 @@ namespace svxform
                 {
                     Reference< XControl > xControl( aEvent.Source, UNO_QUERY_THROW );
                     Reference< XPropertySet > xProps( xControl->getModel(), UNO_QUERY_THROW );
-                    aCaller = xProps->getPropertyValue( rtl::OUString("Name") );
+                    aCaller = xProps->getPropertyValue( OUString("Name") );
                 }
                 catch( Exception& ) {}
             }
@@ -446,8 +446,8 @@ namespace svxform
         }
         else
         {
-            ::rtl::OUString sScriptCode = _rEvent.ScriptCode;
-            ::rtl::OUString sMacroLocation;
+            OUString sScriptCode = _rEvent.ScriptCode;
+            OUString sMacroLocation;
 
             // is there a location in the script name ("application" or "document")?
             sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
@@ -469,19 +469,19 @@ namespace svxform
             {
                 // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
                 if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )
-                    sMacroLocation = ::rtl::OUString( "application" );
+                    sMacroLocation = OUString( "application" );
                 else
-                    sMacroLocation = ::rtl::OUString( "document" );
+                    sMacroLocation = OUString( "document" );
             }
 
-            ::rtl::OUStringBuffer aScriptURI;
+            OUStringBuffer aScriptURI;
             aScriptURI.appendAscii( "vnd.sun.star.script:" );
             aScriptURI.append( sScriptCode );
             aScriptURI.appendAscii( "?language=Basic" );
             aScriptURI.appendAscii( "&location=" );
             aScriptURI.append( sMacroLocation );
 
-            const ::rtl::OUString sScriptURI( aScriptURI.makeStringAndClear() );
+            const OUString sScriptURI( aScriptURI.makeStringAndClear() );
             pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
         }
 

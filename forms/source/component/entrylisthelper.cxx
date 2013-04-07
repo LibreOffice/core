@@ -117,12 +117,12 @@ namespace frm
             )
         {
             // the entries *before* the insertion pos
-            Sequence< ::rtl::OUString > aKeepEntries(
+            Sequence< OUString > aKeepEntries(
                 m_aStringItems.getConstArray(),
                 _rEvent.Position
             );
             // the entries *behind* the insertion pos
-            Sequence< ::rtl::OUString > aMovedEntries(
+            Sequence< OUString > aMovedEntries(
                 m_aStringItems.getConstArray() + _rEvent.Position,
                 m_aStringItems.getLength() - _rEvent.Position
             );

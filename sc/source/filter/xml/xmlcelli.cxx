@@ -127,7 +127,7 @@ ScXMLTableRowCellContext::Field::~Field()
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempIsCovered,
@@ -162,21 +162,21 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.SetRemoveLastChar(false);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    rtl::OUString aLocalName;
-    rtl::OUString* pStyleName = NULL;
-    rtl::OUString* pCurrencySymbol = NULL;
+    OUString aLocalName;
+    OUString* pStyleName = NULL;
+    OUString* pCurrencySymbol = NULL;
     const SvXMLTokenMap& rTokenMap = rImport.GetTableRowCellAttrTokenMap();
     for (sal_Int16 i = 0; i < nAttrCount; ++i)
     {
         sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
             xAttrList->getNameByIndex(i), &aLocalName);
 
-        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        const OUString& sValue = xAttrList->getValueByIndex(i);
         sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
         switch (nToken)
         {
             case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
-                pStyleName = new rtl::OUString(sValue);
+                pStyleName = new OUString(sValue);
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
                 OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
@@ -269,14 +269,14 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 if (!sValue.isEmpty())
                 {
                     OSL_ENSURE(!maFormula, "here should be only one formula");
-                    rtl::OUString aFormula, aFormulaNmsp;
+                    OUString aFormula, aFormulaNmsp;
                     rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
                     maFormula.reset( FormulaWithNamespace(aFormula, aFormulaNmsp) );
                 }
             }
             break;
             case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
-                pCurrencySymbol = new rtl::OUString(sValue);
+                pCurrencySymbol = new OUString(sValue);
             break;
             default:
                 ;
@@ -609,7 +609,7 @@ void ScXMLTableRowCellContext::PushParagraphEnd()
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -980,7 +980,7 @@ void ScXMLTableRowCellContext::SetFormulaCell(ScFormulaCell* pFCell) const
 }
 
 void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
-        const SCCOL nCurrentCol, const ::boost::optional< rtl::OUString >& pOUText )
+        const SCCOL nCurrentCol, const ::boost::optional< OUString >& pOUText )
 {
     bool bDoIncrement = true;
     //matrix reference cells that contain text formula results;
@@ -1116,7 +1116,7 @@ bool isEmptyOrNote( ScDocument* pDoc, const ScAddress& rCurrentPos )
 }
 
 void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
-        const ::boost::optional< rtl::OUString >& pOUText, ScAddress& rCurrentPos )
+        const ::boost::optional< OUString >& pOUText, ScAddress& rCurrentPos )
 {
     ScMyTables& rTables = rXMLImport.GetTables();
     bool bWasEmpty = bIsEmpty;
@@ -1262,7 +1262,7 @@ OUString getOutputString( ScDocument* pDoc, const ScAddress& aCellPos )
 
 void ScXMLTableRowCellContext::AddNonFormulaCell( const ScAddress& rCellPos )
 {
-    ::boost::optional< rtl::OUString > pOUText;
+    ::boost::optional< OUString > pOUText;
 
     if( nCellType == util::NumberFormat::TEXT )
     {

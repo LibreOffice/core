@@ -37,29 +37,29 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString("com.sun.star.sdbcx.VIndexDescriptor");
-    return ::rtl::OUString("com.sun.star.sdbcx.VIndex");
+        return OUString("com.sun.star.sdbcx.VIndexDescriptor");
+    return OUString("com.sun.star.sdbcx.VIndex");
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.IndexDescriptor");
+        aSupported[0] = OUString("com.sun.star.sdbcx.IndexDescriptor");
     else
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.Index");
+        aSupported[0] = OUString("com.sun.star.sdbcx.Index");
 
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OIndex::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -75,8 +75,8 @@ OIndex::OIndex(sal_Bool _bCase) :   ODescriptor_BASE(m_aMutex)
 {
 }
 // -------------------------------------------------------------------------
-OIndex::OIndex( const ::rtl::OUString& _Name,
-                const ::rtl::OUString& _Catalog,
+OIndex::OIndex( const OUString& _Name,
+                const OUString& _Catalog,
                 sal_Bool _isUnique,
                 sal_Bool _isPrimaryKeyIndex,
                 sal_Bool _isClustered,
@@ -132,7 +132,7 @@ void OIndex::construct()
 
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
 
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOG),         PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOG),         PROPERTY_ID_CATALOG,            nAttrib,&m_Catalog,         ::getCppuType(static_cast< OUString*>(0)));
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISUNIQUE),            PROPERTY_ID_ISUNIQUE,           nAttrib,&m_IsUnique,            ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISPRIMARYKEYINDEX),PROPERTY_ID_ISPRIMARYKEYINDEX, nAttrib,&m_IsPrimaryKeyIndex,   ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCLUSTERED),     PROPERTY_ID_ISCLUSTERED,        nAttrib,&m_IsClustered,     ::getBooleanCppuType());
@@ -185,12 +185,12 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OIndex::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OIndex::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OIndex::setName( const ::rtl::OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OIndex::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------

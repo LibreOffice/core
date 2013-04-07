@@ -23,8 +23,6 @@
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using ::xmloff::token::XMLTokenEnum;
 

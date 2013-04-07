@@ -84,7 +84,7 @@ public:
     sal_uInt16 CalcShadowSpace( sal_uInt16 nShadow ) const;
 
     virtual sal_uInt16      GetValueCount() const;
-    virtual rtl::OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const;
     virtual sal_uInt16      GetEnumValue() const;
     virtual void            SetEnumValue( sal_uInt16 nNewVal );
 };

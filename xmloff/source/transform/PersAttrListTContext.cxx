@@ -24,7 +24,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "PersAttrListTContext.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -44,7 +43,7 @@ void XMLPersAttrListTContext::AddAttribute(
 void XMLPersAttrListTContext::AddAttribute(
     sal_uInt16 nAPrefix,
     ::xmloff::token::XMLTokenEnum eAToken,
-    const ::rtl::OUString & rValue )
+    const OUString & rValue )
 {
     OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
                 nAPrefix, ::xmloff::token::GetXMLToken( eAToken ) ) );

@@ -28,10 +28,10 @@
 
 namespace {
 
-rtl::OString createName(
+OString createName(
     AstType const * typeTemplate, DeclList const * typeArguments)
 {
-    rtl::OStringBuffer buf(typeTemplate->getScopedName());
+    OStringBuffer buf(typeTemplate->getScopedName());
     if (typeArguments != 0) {
         buf.append('<');
         for (DeclList::const_iterator i(typeArguments->begin());

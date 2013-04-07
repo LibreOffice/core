@@ -246,7 +246,7 @@ void SbxBasicFormater::InitScan( double _dNum )
     InitExp( get_number_of_digits( dNum ) );
     // maximum of 15 positions behind the decimal point, example: -1.234000000000000E-001
     /*int nCount =*/ sprintf( sBuffer,"%+22.15lE",dNum );
-    sSciNumStrg = rtl::OUString::createFromAscii( sBuffer );
+    sSciNumStrg = OUString::createFromAscii( sBuffer );
 }
 
 
@@ -255,7 +255,7 @@ void SbxBasicFormater::InitExp( double _dNewExp )
     char sBuffer[ MAX_DOUBLE_BUFFER_LENGTH ];
     nNumExp = (short)_dNewExp;
     /*int nCount =*/ sprintf( sBuffer,"%+i",nNumExp );
-    sNumExpStrg = rtl::OUString::createFromAscii( sBuffer );
+    sNumExpStrg = OUString::createFromAscii( sBuffer );
     nExpExp = (short)get_number_of_digits( (double)nNumExp );
 }
 
@@ -386,7 +386,7 @@ OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, sal_
     }
 
     OUString aRetStr;
-    aRetStr = rtl::OUString::createFromAscii( EMPTYFORMATSTRING );
+    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
     return aRetStr;
 }
 
@@ -413,7 +413,7 @@ OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, sal_
         }
     }
     OUString aRetStr;
-    aRetStr = rtl::OUString::createFromAscii( EMPTYFORMATSTRING );
+    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
     return aRetStr;
 }
 
@@ -446,7 +446,7 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, sal_Bo
     }
 
     OUString aRetStr;
-    aRetStr = rtl::OUString::createFromAscii( EMPTYFORMATSTRING );
+    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
     return aRetStr;
 }
 
@@ -475,7 +475,7 @@ OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, sal
     }
 
     OUString aRetStr;
-    aRetStr = rtl::OUString::createFromAscii( EMPTYFORMATSTRING );
+    aRetStr = OUString::createFromAscii( EMPTYFORMATSTRING );
     return aRetStr;
 }
 
@@ -961,7 +961,7 @@ OUString SbxBasicFormater::BasicFormatNull( OUString sFormatStrg )
         return sNullFormatStrg;
     }
     OUString aRetStr;
-    aRetStr = rtl::OUString::createFromAscii( "null" );
+    aRetStr = OUString::createFromAscii( "null" );
     return aRetStr;
 }
 
@@ -972,7 +972,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )
     // analyse format-string concerning predefined formats:
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
     {
-        sFormatStrg = rtl::OUString::createFromAscii( GENERALNUMBER_FORMAT );
+        sFormatStrg = OUString::createFromAscii( GENERALNUMBER_FORMAT );
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_CURRENCY ) )
     {
@@ -980,19 +980,19 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, OUString sFormatStrg )
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_FIXED ) )
     {
-        sFormatStrg = rtl::OUString::createFromAscii( FIXED_FORMAT );
+        sFormatStrg = OUString::createFromAscii( FIXED_FORMAT );
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_STANDARD ) )
     {
-        sFormatStrg = rtl::OUString::createFromAscii( STANDARD_FORMAT );
+        sFormatStrg = OUString::createFromAscii( STANDARD_FORMAT );
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_PERCENT ) )
     {
-        sFormatStrg = rtl::OUString::createFromAscii( PERCENT_FORMAT );
+        sFormatStrg = OUString::createFromAscii( PERCENT_FORMAT );
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_SCIENTIFIC ) )
     {
-        sFormatStrg = rtl::OUString::createFromAscii( SCIENTIFIC_FORMAT );
+        sFormatStrg = OUString::createFromAscii( SCIENTIFIC_FORMAT );
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_YESNO ) )
     {

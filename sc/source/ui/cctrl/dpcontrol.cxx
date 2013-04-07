@@ -27,7 +27,6 @@
 #include "docpool.hxx"
 #include "patattr.hxx"
 
-using rtl::OUString;
 
 ScDPFieldButton::ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX, const Fraction* pZoomY, ScDocument* pDoc) :
     mpDoc(pDoc),

@@ -43,7 +43,7 @@ namespace ucbhelper {
     either a 'root' URL for the most 'local' file content provider, or an
     empty string, if no such URL can meaningfully be constructed.
  */
-UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL()
+UCBHELPER_DLLPUBLIC OUString getLocalFileURL()
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
 //============================================================================
@@ -70,13 +70,13 @@ UCBHELPER_DLLPUBLIC rtl::OUString getLocalFileURL()
     @see
     com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromSystemPath().
  */
-UCBHELPER_DLLPUBLIC rtl::OUString
+UCBHELPER_DLLPUBLIC OUString
 getFileURLFromSystemPath(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XUniversalContentBroker > const &
         rUcb,
-    rtl::OUString const & rBaseURL,
-    rtl::OUString const & rSystemPath)
+    OUString const & rBaseURL,
+    OUString const & rSystemPath)
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
 //============================================================================
@@ -100,12 +100,12 @@ getFileURLFromSystemPath(
     @see
     com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
  */
-UCBHELPER_DLLPUBLIC rtl::OUString
+UCBHELPER_DLLPUBLIC OUString
 getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XUniversalContentBroker > const &
         rUcb,
-    rtl::OUString const & rURL)
+    OUString const & rURL)
     SAL_THROW((com::sun::star::uno::RuntimeException));
 
 }

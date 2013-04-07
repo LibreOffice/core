@@ -65,11 +65,11 @@ using namespace com::sun::star::lang;
 
 struct HitItem
 {
-    rtl::OUString   m_aURL;
+    OUString   m_aURL;
     float           m_fScore;
 
     HitItem( void ) {}
-    HitItem( const rtl::OUString& aURL, float fScore )
+    HitItem( const OUString& aURL, float fScore )
         : m_aURL( aURL )
         , m_fScore( fScore )
     {}
@@ -91,23 +91,23 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 {
     Reference< XExtendedTransliteration > xTrans = Transliteration::create( rxContext );
     Locale aLocale( aURLParameter.get_language(),
-                    rtl::OUString(),
-                    rtl::OUString() );
+                    OUString(),
+                    OUString() );
     xTrans->loadModule(TransliterationModules_UPPERCASE_LOWERCASE,
                        aLocale );
 
-    vector< vector< rtl::OUString > > queryList;
+    vector< vector< OUString > > queryList;
     {
         sal_Int32 idx;
-        rtl::OUString query = m_aURLParameter.get_query();
+        OUString query = m_aURLParameter.get_query();
         while( !query.isEmpty() )
         {
             idx = query.indexOf( sal_Unicode( ' ' ) );
             if( idx == -1 )
                 idx = query.getLength();
 
-            vector< rtl::OUString > currentQuery;
-            rtl::OUString tmp(query.copy( 0,idx ));
+            vector< OUString > currentQuery;
+            OUString tmp(query.copy( 0,idx ));
             rtl:: OUString toliterate = tmp;
             Sequence<sal_Int32> aSeq;
             toliterate = xTrans->transliterate(
@@ -118,19 +118,19 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             int nCpy = 1 + idx;
             if( nCpy >= query.getLength() )
-                query = rtl::OUString();
+                query = OUString();
             else
                 query = query.copy( 1 + idx );
         }
     }
 
-    vector< rtl::OUString > aCompleteResultVector;
-    rtl::OUString scope = m_aURLParameter.get_scope();
+    vector< OUString > aCompleteResultVector;
+    OUString scope = m_aURLParameter.get_scope();
     bool bCaptionsOnly = ( scope.compareToAscii( "Heading" ) == 0 );
     sal_Int32 hitCount = m_aURLParameter.get_hitCount();
 
     IndexFolderIterator aIndexFolderIt( *pDatabases, m_aURLParameter.get_module(), m_aURLParameter.get_language() );
-    rtl::OUString idxDir;
+    OUString idxDir;
     bool bExtension = false;
     int iDir = 0;
     vector< vector<HitItem>* > aIndexFolderResultVectorVector;
@@ -143,7 +143,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         try
         {
             vector< vector<HitItem>* > aQueryListResultVectorVector;
-            set< rtl::OUString > aSet,aCurrent,aResultSet;
+            set< OUString > aSet,aCurrent,aResultSet;
 
             int nQueryListSize = queryList.size();
             if( nQueryListSize > 1 )
@@ -163,12 +163,12 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 }
                 pQueryResultVector->reserve( hitCount );
 
-                rtl::OUString aLang = m_aURLParameter.get_language();
-                const std::vector< rtl::OUString >& aListItem = queryList[i];
-                ::rtl::OUString aNewQueryStr = aListItem[0];
+                OUString aLang = m_aURLParameter.get_language();
+                const std::vector< OUString >& aListItem = queryList[i];
+                OUString aNewQueryStr = aListItem[0];
 
                 vector<float> aScoreVector;
-                vector<rtl::OUString> aPathVector;
+                vector<OUString> aPathVector;
 
                 try
                 {
@@ -313,14 +313,14 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         delete pIndexFolderVector;
     }
 
-    sal_Int32 replIdx = rtl::OUString( "#HLP#" ).getLength();
-    rtl::OUString replWith = rtl::OUString( "vnd.sun.star.help://" );
+    sal_Int32 replIdx = OUString( "#HLP#" ).getLength();
+    OUString replWith = OUString( "vnd.sun.star.help://" );
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
     {
-        rtl::OUString aURL = aCompleteResultVector[r];
-        rtl::OUString aResultStr = replWith + aURL.copy(replIdx);
+        OUString aURL = aCompleteResultVector[r];
+        OUString aResultStr = replWith + aURL.copy(replIdx);
           m_aPath.push_back( aResultStr );
     }
 
@@ -328,16 +328,16 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     m_aIdents.resize( m_aPath.size() );
 
     Command aCommand;
-    aCommand.Name = rtl::OUString( "getPropertyValues" );
+    aCommand.Name = OUString( "getPropertyValues" );
     aCommand.Argument <<= m_sProperty;
 
     for( m_nRow = 0; sal::static_int_cast<sal_uInt32>( m_nRow ) < m_aPath.size(); ++m_nRow )
     {
         m_aPath[m_nRow] =
             m_aPath[m_nRow]                         +
-            rtl::OUString( "?Language=" )           +
+            OUString( "?Language=" )           +
             m_aURLParameter.get_language()          +
-            rtl::OUString( "&System=" )             +
+            OUString( "&System=" )             +
             m_aURLParameter.get_system();
 
         uno::Reference< XContent > content = queryContent();

@@ -37,13 +37,13 @@ namespace mysqlc
     {
         ::std::map<sal_Int32 , rtl_uString*> m_aPropertyMap;
 
-        ::rtl::OUString fillValue(sal_Int32 _nIndex);
+        OUString fillValue(sal_Int32 _nIndex);
     public:
         OPropertyMap()
         {
         }
         ~OPropertyMap();
-        ::rtl::OUString getNameByIndex(sal_Int32 _nIndex) const;
+        OUString getNameByIndex(sal_Int32 _nIndex) const;
 
         static OPropertyMap& getPropMap()
         {
@@ -61,7 +61,7 @@ namespace mysqlc
         sal_Int32 nLength;
 
         UStringDescription(PVFN _fCharFkt);
-        operator ::rtl::OUString() const { return ::rtl::OUString(pZeroTerminatedName,nLength,RTL_TEXTENCODING_ASCII_US); }
+        operator OUString() const { return OUString(pZeroTerminatedName,nLength,RTL_TEXTENCODING_ASCII_US); }
         ~UStringDescription();
     private:
         UStringDescription();

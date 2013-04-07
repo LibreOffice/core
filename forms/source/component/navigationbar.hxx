@@ -52,9 +52,9 @@ namespace frm
         // <properties>
         ::com::sun::star::uno::Any          m_aTabStop;
         ::com::sun::star::uno::Any          m_aBackgroundColor;
-        ::rtl::OUString                     m_sDefaultControl;
-        ::rtl::OUString                     m_sHelpText;
-        ::rtl::OUString                     m_sHelpURL;
+        OUString                     m_sDefaultControl;
+        OUString                     m_sHelpText;
+        OUString                     m_sHelpURL;
         sal_Int16                           m_nIconSize;
         sal_Int16                           m_nBorder;
         sal_Int32                           m_nDelay;
@@ -72,8 +72,8 @@ namespace frm
         DECLARE_DEFAULT_LEAF_XTOR( ONavigationBarModel );
 
         // XServiceInfo - static version
-        static  ::rtl::OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  OUString SAL_CALL getImplementationName_Static();
+        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
         static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     protected:
@@ -82,8 +82,8 @@ namespace frm
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName()  throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
@@ -92,7 +92,7 @@ namespace frm
         virtual void SAL_CALL disposing();
 
         // XPersistObject
-        virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 

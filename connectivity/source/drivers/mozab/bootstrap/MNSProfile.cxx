@@ -31,7 +31,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
 
-using ::rtl::OUString;
 
 // Interfaces Needed
 
@@ -62,7 +61,7 @@ nsProfile::nsProfile()
     Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
     OSL_ENSURE( xFactory.is(), "can't get service factory" );
 
-    Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
+    Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
     xMozillaBootstrap = Reference<XMozillaBootstrap>(xInstance,UNO_QUERY);
 
@@ -135,7 +134,7 @@ NS_IMETHODIMP nsProfile::GetProfileList(PRUint32 *length, PRUnichar ***profileNa
     NS_ENSURE_ARG_POINTER(profileNames);
     *profileNames = nsnull;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > list;
+    ::com::sun::star::uno::Sequence< OUString > list;
 
     *length = xMozillaBootstrap->getProfileList(xMozillaBootstrap->getCurrentProduct(),list);
 
@@ -182,7 +181,7 @@ nsProfile::GetCurrentProfile(PRUnichar **profileName)
         *profileName = (PRUnichar *)nsMemory::Clone(mCurrentProfileName.get(),(mCurrentProfileName.Length() + 1) * sizeof(PRUnichar ));
     else
     {
-        rtl::OUString profile = xMozillaBootstrap->getDefaultProfile(xMozillaBootstrap->getCurrentProduct());
+        OUString profile = xMozillaBootstrap->getDefaultProfile(xMozillaBootstrap->getCurrentProduct());
         *profileName = (PRUnichar *)nsMemory::Clone(profile.getStr(),( profile.getLength() + 1) * sizeof(PRUnichar ));
         SetCurrentProfile(*profileName);
     }
@@ -451,7 +450,7 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
     *profileDir = nsnull;
 
     // PRUnichar != sal_Unicode in mingw
-    rtl::OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
+    OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
 
     nsCOMPtr<nsILocalFile>  localFile;
     // PRUnichar != sal_Unicode in mingw

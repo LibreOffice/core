@@ -58,11 +58,11 @@ protected:
 
 public:
     // loads the string with the specified resource id
-    static ::rtl::OUString loadString( sal_uInt16 nResId );
+    static OUString loadString( sal_uInt16 nResId );
 
     // loads the image with the specified resource id
     static Image loadImage( sal_uInt16 nResId );
-    static Image getImageFromURL( const ::rtl::OUString& i_rImageURL );
+    static Image getImageFromURL( const OUString& i_rImageURL );
 };
 
 

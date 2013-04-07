@@ -169,7 +169,7 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
         const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
         if ( pDesc )
         {
-            const rtl::OString sHelpId = pDesc->getHelpId();
+            const OString sHelpId = pDesc->getHelpId();
             if ( !sHelpId.isEmpty() )
                 aLbFunction.SetHelpId(sHelpId);
         }

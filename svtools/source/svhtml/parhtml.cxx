@@ -420,7 +420,7 @@ int HTMLParser::FilterToken( int nToken )
 
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
-    ::rtl::OUStringBuffer sTmpBuffer( MAX_LEN );
+    OUStringBuffer sTmpBuffer( MAX_LEN );
     int bContinue = true;
     int bEqSignFound = false;
     sal_Unicode cQuote = 0U;
@@ -482,7 +482,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
                             sal_Char cEncodedChar = static_cast<sal_Char>(cChar);
-                            cChar = rtl::OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
+                            cChar = OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
                             if( 0U == cChar )
                             {
                                 // If the character could not be
@@ -497,7 +497,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 }
                 else if( HTML_ISALPHA( nNextCh ) )
                 {
-                    ::rtl::OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
+                    OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
                     xub_StrLen nPos = 0L;
                     do
                     {
@@ -510,7 +510,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 
                     if( IsParserWorking() && !rInput.IsEof() )
                     {
-                        rtl::OUString sEntity(sEntityBuffer.getStr(), nPos);
+                        OUString sEntity(sEntityBuffer.getStr(), nPos);
                         cChar = GetHTMLCharName( sEntity );
 
                         // not found ( == 0 ): plain text
@@ -524,7 +524,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             {
                                 nNextCh = sEntityBuffer[i];
                                 sEntityBuffer.setLength( i );
-                                sEntity = rtl::OUString(sEntityBuffer.getStr(), i);
+                                sEntity = OUString(sEntityBuffer.getStr(), i);
                                 cChar = GetHTMLCharName( sEntity );
                                 if( cChar )
                                 {
@@ -831,7 +831,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
 
 int HTMLParser::_GetNextRawToken()
 {
-    ::rtl::OUStringBuffer sTmpBuffer( MAX_LEN );
+    OUStringBuffer sTmpBuffer( MAX_LEN );
 
     if( bEndTokenFound )
     {
@@ -1100,7 +1100,7 @@ int HTMLParser::_GetNextToken()
                 }
                 if( HTML_ISALPHA( nNextCh ) || '!'==nNextCh )
                 {
-                    ::rtl::OUStringBuffer sTmpBuffer;
+                    OUStringBuffer sTmpBuffer;
                     do {
                         sTmpBuffer.append( nNextCh );
                         if( MAX_LEN == sTmpBuffer.getLength() )
@@ -1867,7 +1867,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // ^<!
     //
     // where the underlined subexpression has to be a HTML token
-    rtl::OString sCmp;
+    OString sCmp;
     bool bUCS2B = false;
     if( bSwitchToUCS2 )
     {
@@ -1901,7 +1901,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
              nLen+=2 )
             ;
 
-        ::rtl::OStringBuffer sTmp( (nLen - 2)/2 );
+        OStringBuffer sTmp( (nLen - 2)/2 );
         for( xub_StrLen nPos = 2; nPos < nLen; nPos += 2 )
         {
             sal_Unicode cUC;
@@ -1945,7 +1945,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // the string following '<' has to be a known HTML token.
     // <DIR> is not interpreted as HTML. Otherwise the output of the DOS command "DIR"
     // could be interpreted as HTML.
-    rtl::OUString sTest(rtl::OStringToOUString(sCmp.copy(nStart, nPos-nStart), RTL_TEXTENCODING_ASCII_US));
+    OUString sTest(OStringToOUString(sCmp.copy(nStart, nPos-nStart), RTL_TEXTENCODING_ASCII_US));
     int nTok = GetHTMLToken( sTest );
     if( 0 != nTok && HTML_DIRLIST_ON != nTok )
         return true;
@@ -2067,7 +2067,7 @@ static HTMLOptionEnum const aHTMLMetaNameTable[] =
 };
 
 
-void HTMLParser::AddMetaUserDefined( ::rtl::OUString const & )
+void HTMLParser::AddMetaUserDefined( OUString const & )
 {
 }
 
@@ -2204,7 +2204,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                     try {
                         xUDProps->addProperty(aName,
                             beans::PropertyAttribute::REMOVABLE,
-                            uno::makeAny(::rtl::OUString(aContent)));
+                            uno::makeAny(OUString(aContent)));
                         AddMetaUserDefined(aName);
                         bChanged = true;
                     } catch (uno::Exception &) {
@@ -2255,7 +2255,7 @@ rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
         const INetContentTypeParameter * pCharset = aParameters.find("charset");
         if (pCharset != 0)
         {
-            OString sValue(rtl::OUStringToOString(pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US));
+            OString sValue(OUStringToOString(pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US));
             return GetExtendedCompatibilityTextEncoding( rtl_getTextEncodingFromMimeCharset( sValue.getStr() ) );
         }
     }

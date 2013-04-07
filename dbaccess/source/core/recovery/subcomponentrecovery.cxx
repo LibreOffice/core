@@ -87,7 +87,7 @@ namespace dbaccess
     namespace
     {
         // .........................................................................
-        static const ::rtl::OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
+        static const OUString& lcl_getComponentStorageBaseName( const SubComponentType i_eType )
         {
             static const OUString s_sFormBaseName( "form" );
             static const OUString s_sReportBaseName( "report" );
@@ -109,7 +109,7 @@ namespace dbaccess
             }
 
             OSL_FAIL( "lcl_getComponentStorageBaseName: unimplemented case!" );
-            static const ::rtl::OUString s_sFallback;
+            static const OUString s_sFallback;
             return s_sFallback;
         }
 
@@ -147,7 +147,7 @@ namespace dbaccess
 
         // .........................................................................
         static Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XDatabaseDocumentUI >& i_rAppUI,
-            const SubComponentType i_eType, const ::rtl::OUString& i_rName )
+            const SubComponentType i_eType, const OUString& i_rName )
         {
             Reference< XController > xController( i_rAppUI, UNO_QUERY_THROW );
             ENSURE_OR_RETURN( ( i_eType == FORM ) || ( i_eType == REPORT ), "lcl_getSubComponentDef_nothrow: illegal controller", NULL );
@@ -206,19 +206,19 @@ namespace dbaccess
         }
 
     public:
-        virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const ::rtl::OUString& i_rValue );
+        virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue );
         virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, enum ::xmloff::token::XMLTokenEnum i_eValue );
         virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace );
         virtual void    EndElement  ( const sal_Bool i_bIgnoreWhitespace );
-        virtual void    Characters( const ::rtl::OUString& i_rCharacters );
+        virtual void    Characters( const OUString& i_rCharacters );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         GetComponentContext() const;
 
     private:
-        ::rtl::OUString impl_prefix( const ::xmloff::token::XMLTokenEnum i_eToken )
+        OUString impl_prefix( const ::xmloff::token::XMLTokenEnum i_eToken )
         {
-            ::rtl::OUStringBuffer aQualifiedName( m_aNamespace );
+            OUStringBuffer aQualifiedName( m_aNamespace );
             aQualifiedName.append( sal_Unicode( ':' ) );
             aQualifiedName.append( ::xmloff::token::GetXMLToken( i_eToken ) );
             return aQualifiedName.makeStringAndClear();
@@ -227,11 +227,11 @@ namespace dbaccess
     private:
         const Reference<XComponentContext>&   m_rContext;
         const StorageXMLOutputStream&           m_rDelegator;
-        const ::rtl::OUStringBuffer             m_aNamespace;
+        const OUStringBuffer             m_aNamespace;
     };
 
     //--------------------------------------------------------------------
-    void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const ::rtl::OUString& i_rValue )
+    void SettingsExportContext::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
     {
         m_rDelegator.addAttribute( impl_prefix( i_eName ), i_rValue );
     }
@@ -260,7 +260,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SettingsExportContext::Characters( const ::rtl::OUString& i_rCharacters )
+    void SettingsExportContext::Characters( const OUString& i_rCharacters )
     {
         m_rDelegator.characters( i_rCharacters );
     }
@@ -292,11 +292,11 @@ namespace dbaccess
         // XDocumentHandler
         virtual void SAL_CALL startDocument(  ) throw (SAXException, RuntimeException);
         virtual void SAL_CALL endDocument(  ) throw (SAXException, RuntimeException);
-        virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
-        virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) throw (SAXException, RuntimeException);
-        virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (SAXException, RuntimeException);
-        virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException);
-        virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (SAXException, RuntimeException);
         virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException);
 
         const ::comphelper::NamedValueCollection&   getSettings() const { return m_aSettings; }
@@ -317,7 +317,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SettingsDocumentHandler::startElement( const ::rtl::OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
+    void SAL_CALL SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
     {
         ::rtl::Reference< SettingsImport >  pNewState;
 
@@ -349,7 +349,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SettingsDocumentHandler::endElement( const ::rtl::OUString& i_Name ) throw (SAXException, RuntimeException)
+    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& i_Name ) throw (SAXException, RuntimeException)
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
         (void)i_Name;
@@ -360,7 +360,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SettingsDocumentHandler::characters( const ::rtl::OUString& i_Chars ) throw (SAXException, RuntimeException)
+    void SAL_CALL SettingsDocumentHandler::characters( const OUString& i_Chars ) throw (SAXException, RuntimeException)
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
 
@@ -369,14 +369,14 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException)
+    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException)
     {
         // ignore them - that's why they're called "ignorable"
         (void)aWhitespaces;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL SettingsDocumentHandler::processingInstruction( const ::rtl::OUString& i_Target, const ::rtl::OUString& i_Data ) throw (SAXException, RuntimeException)
+    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString& i_Target, const OUString& i_Data ) throw (SAXException, RuntimeException)
     {
         OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
         (void)i_Target;
@@ -393,7 +393,7 @@ namespace dbaccess
     //= SubComponentRecovery
     //====================================================================
     //--------------------------------------------------------------------
-    const ::rtl::OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
+    const OUString SubComponentRecovery::getComponentsStorageName( const SubComponentType i_eType )
     {
         static const OUString s_sFormsStorageName( "forms" );
         static const OUString s_sReportsStorageName( "reports" );
@@ -418,7 +418,7 @@ namespace dbaccess
         }
 
         OSL_FAIL( "SubComponentRecovery::getComponentsStorageName: unimplemented case!" );
-        static const ::rtl::OUString s_sFallback;
+        static const OUString s_sFallback;
         return s_sFallback;
     }
 
@@ -431,13 +431,13 @@ namespace dbaccess
             return;
 
         // open the sub storage for the given kind of components
-        const ::rtl::OUString& rStorageName( getComponentsStorageName( m_eType ) );
+        const OUString& rStorageName( getComponentsStorageName( m_eType ) );
         const Reference< XStorage > xComponentsStorage( i_rRecoveryStorage->openStorageElement(
             rStorageName, ElementModes::READWRITE ), UNO_QUERY_THROW );
 
         // find a free sub storage name, and create Yet Another Sub Storage
-        const ::rtl::OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
-        const ::rtl::OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName, true );
+        const OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
+        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage.get(), rBaseName, true );
         const Reference< XStorage > xObjectStor( xComponentsStorage->openStorageElement(
             sStorName, ElementModes::READWRITE ), UNO_QUERY_THROW );
 
@@ -473,13 +473,13 @@ namespace dbaccess
     void SubComponentRecovery::impl_identifyComponent_throw()
     {
         // ask the controller
-        Pair< sal_Int32, ::rtl::OUString > aComponentIdentity = m_xDocumentUI->identifySubComponent( m_xComponent );
+        Pair< sal_Int32, OUString > aComponentIdentity = m_xDocumentUI->identifySubComponent( m_xComponent );
         m_eType = lcl_databaseObjectToSubComponentType( aComponentIdentity.First );
         m_aCompDesc.sName = aComponentIdentity.Second;
 
         // what the controller didn't give us is the information whether this is in edit mode or not ...
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(m_rContext) );
-        const ::rtl::OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
+        const OUString sModuleIdentifier = xModuleManager->identify( m_xComponent );
 
         switch ( m_eType )
         {
@@ -563,7 +563,7 @@ namespace dbaccess
 
     //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::impl_recoverSubDocument_throw( const Reference< XStorage >& i_rRecoveryStorage,
-            const ::rtl::OUString& i_rComponentName, const bool i_bForEditing )
+            const OUString& i_rComponentName, const bool i_bForEditing )
     {
         Reference< XComponent > xSubComponent;
         Reference< XCommandProcessor > xDocDefinition;
@@ -613,7 +613,7 @@ namespace dbaccess
 
     //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::impl_recoverQueryDesign_throw( const Reference< XStorage >& i_rRecoveryStorage,
-        const ::rtl::OUString& i_rComponentName,  const bool i_bForEditing )
+        const OUString& i_rComponentName,  const bool i_bForEditing )
     {
         Reference< XComponent > xSubComponent;
 
@@ -667,7 +667,7 @@ namespace dbaccess
 
     //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::recoverFromStorage( const Reference< XStorage >& i_rRecoveryStorage,
-            const ::rtl::OUString& i_rComponentName, const bool i_bForEditing )
+            const OUString& i_rComponentName, const bool i_bForEditing )
     {
         Reference< XComponent > xSubComponent;
         switch ( m_eType )

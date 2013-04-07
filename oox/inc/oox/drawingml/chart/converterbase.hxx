@@ -67,7 +67,7 @@ public:
 
     /** Creates an instance for the passed service name, using the process service factory. */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                        createInstance( const ::rtl::OUString& rServiceName ) const;
+                        createInstance( const OUString& rServiceName ) const;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         getComponentContext() const;
 

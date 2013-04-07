@@ -160,7 +160,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
 }
 
 SwChapterNumRules::SwChapterNumRules() :
-    SwBaseNumRules(rtl::OUString(CHAPTER_FILENAME))
+    SwBaseNumRules(OUString(CHAPTER_FILENAME))
 {
 }
 
@@ -390,7 +390,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         if( VERSION_53A > nVersion )
         {
             sal_Char cEncoded(aFmt.GetBulletChar());
-            aFmt.SetBulletChar(rtl::OUString(&cEncoded, 1, nCharSet).toChar());
+            aFmt.SetBulletChar(OUString(&cEncoded, 1, nCharSet).toChar());
         }
     }
 

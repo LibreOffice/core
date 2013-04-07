@@ -46,20 +46,20 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
     std::vector< com::sun::star::beans::PropertyValue > maPath;
     std::vector< com::sun::star::beans::PropertyValue > maTextPath;
     std::vector< com::sun::star::beans::PropertyValues > maHandles;
-    std::vector< rtl::OUString > maEquations;
-    std::vector< rtl::OUString > maEquationNames;
+    std::vector< OUString > maEquations;
+    std::vector< OUString > maEquationNames;
 
 public:
 
     TYPEINFO();
 
     XMLEnhancedCustomShapeContext( SvXMLImport& rImport, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &, sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName, std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry );
+        const OUString& rLocalName, std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
-    SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
 

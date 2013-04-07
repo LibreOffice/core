@@ -98,26 +98,26 @@ ScVbaAssistant::setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeE
     m_nAnimation = _animation;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaAssistant::Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     return m_sName;
 }
 
-rtl::OUString
+OUString
 ScVbaAssistant::getServiceImplName()
 {
-    return rtl::OUString("ScVbaAssistant");
+    return OUString("ScVbaAssistant");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaAssistant::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.Assistant" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.Assistant" );
     }
     return aServiceNames;
 }

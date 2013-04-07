@@ -38,7 +38,7 @@ typedef enum { REGPARAM_INT, REGPARAM_FLT } RegParamKind;
 
 
 //==============================================================================
-type_info * mscx_getRTTI( ::rtl::OUString const & rUNOname );
+type_info * mscx_getRTTI( OUString const & rUNOname );
 
 //==============================================================================
 int mscx_filterCppException(

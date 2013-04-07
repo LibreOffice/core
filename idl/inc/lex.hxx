@@ -37,7 +37,7 @@ class SvToken
 friend class SvTokenStream;
     sal_uLong               nLine, nColumn;
     SVTOKEN_ENUM            nType;
-    rtl::OString            aString;
+    OString            aString;
     union
     {
         sal_uLong           nLong;
@@ -51,12 +51,12 @@ public:
             SvToken( sal_uLong n );
             SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b );
             SvToken( char c );
-            SvToken( SVTOKEN_ENUM nTypeP, const rtl::OString& rStr );
+            SvToken( SVTOKEN_ENUM nTypeP, const OString& rStr );
             SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
 
-    rtl::OString GetTokenAsString() const;
+    OString GetTokenAsString() const;
     SVTOKEN_ENUM    GetType() const { return nType; }
 
     void        SetLine( sal_uLong nLineP )     { nLine = nLineP;       }
@@ -81,7 +81,7 @@ public:
     sal_Bool        IsRttiBase() const  { return nType == SVTOKEN_RTTIBASE; }
     sal_Bool        IsEof() const       { return nType == SVTOKEN_EOF; }
 
-    const rtl::OString& GetString() const
+    const OString& GetString() const
                 {
                     return IsIdentifierHash()
                         ? pHash->GetName()
@@ -112,7 +112,7 @@ inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, sal_Bool b )
 inline SvToken::SvToken( char c )
     : nType( SVTOKEN_CHAR ), cChar( c ) {}
 
-inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const rtl::OString& rStr )
+inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const OString& rStr )
     : nType( nTypeP ), aString( rStr ) {}
 
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )
@@ -124,8 +124,8 @@ class SvTokenStream
     int         nBufPos;
     int         c;          // next character
     sal_uInt16      nTabSize;   // length of tabulator
-    rtl::OString    aStrTrue;
-    rtl::OString    aStrFalse;
+    OString    aStrTrue;
+    OString    aStrFalse;
     sal_uLong       nMaxPos;
 
     SvFileStream *  pInStream;
@@ -136,7 +136,7 @@ class SvTokenStream
 
     void        InitCtor();
 
-    rtl::OString aBufStr;
+    OString aBufStr;
     int             GetNextChar();
     int             GetFastNextChar()
                     {

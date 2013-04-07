@@ -100,7 +100,7 @@ class UCBHELPER_DLLPUBLIC Content
 
 protected:
     ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
-                                                rtl::OUString >& rPropertyNames,
+                                                OUString >& rPropertyNames,
                                                 ResultSetInclude eMode )
             throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -121,7 +121,7 @@ public:
       *        implementation to interact with the client and to propagate
       *        errors.
       */
-    Content( const rtl::OUString& rURL,
+    Content( const OUString& rURL,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
              const ::com::sun::star::uno::Reference<
@@ -178,7 +178,7 @@ public:
       * @return true, if the operation was successful - false, otherwise.
       */
     static sal_Bool
-    create( const rtl::OUString& rURL,
+    create( const OUString& rURL,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv,
             const ::com::sun::star::uno::Reference<
@@ -210,7 +210,7 @@ public:
       *
       * @return the URL of the content.
       */
-    const ::rtl::OUString& getURL() const;
+    const OUString& getURL() const;
 
     //////////////////////////////////////////////////////////////////////
     // Command environment.
@@ -276,7 +276,7 @@ public:
       * @return the property value.
       */
     ::com::sun::star::uno::Any
-    getPropertyValue( const rtl::OUString& rPropertyName )
+    getPropertyValue( const OUString& rPropertyName )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -305,7 +305,7 @@ public:
       *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
       */
     ::com::sun::star::uno::Any
-    setPropertyValue( const rtl::OUString& rPropertyName,
+    setPropertyValue( const OUString& rPropertyName,
                       const ::com::sun::star::uno::Any& rValue )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -319,7 +319,7 @@ public:
       */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                                rtl::OUString >& rPropertyNames )
+                                OUString >& rPropertyNames )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -332,7 +332,7 @@ public:
       */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValuesInterface( const ::com::sun::star::uno::Sequence<
-                                rtl::OUString >& rPropertyNames )
+                                OUString >& rPropertyNames )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
@@ -369,7 +369,7 @@ public:
       */
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues( const ::com::sun::star::uno::Sequence<
-                                rtl::OUString >& rPropertyNames,
+                                OUString >& rPropertyNames,
                        const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -391,7 +391,7 @@ public:
       * @return the result of the command according to its specification.
       */
     ::com::sun::star::uno::Any
-    executeCommand( const rtl::OUString& rCommandName,
+    executeCommand( const OUString& rCommandName,
                     const ::com::sun::star::uno::Any& rCommandArgument )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -418,7 +418,7 @@ public:
       */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
     createCursor( const ::com::sun::star::uno::Sequence<
-                                rtl::OUString >& rPropertyNames,
+                                OUString >& rPropertyNames,
                   ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -440,7 +440,7 @@ public:
       */
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
     createDynamicCursor( const ::com::sun::star::uno::Sequence<
-                         rtl::OUString >& rPropertyNames,
+                         OUString >& rPropertyNames,
                          ResultSetInclude eMode
                             = INCLUDE_FOLDERS_AND_DOCUMENTS )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -448,7 +448,7 @@ public:
                ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
-    createSortedCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
+    createSortedCursor( const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
                         ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
@@ -595,9 +595,9 @@ public:
       *        with the new content.
       */
     sal_Bool
-    insertNewContent( const ::rtl::OUString& rContentType,
+    insertNewContent( const OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                        rtl::OUString >& rPropertyNames,
+                        OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::uno::Any >& rPropertyValues,
                       Content& rNewContent )
@@ -631,9 +631,9 @@ public:
       *        with the new content.
       */
     sal_Bool
-    insertNewContent( const ::rtl::OUString& rContentType,
+    insertNewContent( const OUString& rContentType,
                       const ::com::sun::star::uno::Sequence<
-                        rtl::OUString >& rPropertyNames,
+                        OUString >& rPropertyNames,
                       const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::uno::Any >& rPropertyValues,
                       const ::com::sun::star::uno::Reference<
@@ -674,12 +674,12 @@ public:
     sal_Bool
     transferContent( const Content& rSourceContent,
                      InsertOperation eOperation,
-                     const ::rtl::OUString & rTitle,
+                     const OUString & rTitle,
                      const sal_Int32 nNameClashAction,
-                     const ::rtl::OUString & rMimeType = ::rtl::OUString( ),
+                     const OUString & rMimeType = OUString( ),
                      bool bMajorVersion = false,
-                     const ::rtl::OUString & rCommentVersion = ::rtl::OUString( ),
-                     ::rtl::OUString* pResultURL = NULL )
+                     const OUString & rCommentVersion = OUString( ),
+                     OUString* pResultURL = NULL )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );

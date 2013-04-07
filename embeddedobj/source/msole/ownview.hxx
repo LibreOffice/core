@@ -38,17 +38,17 @@ class OwnView_Impl : public ::cppu::WeakImplHelper2 < ::com::sun::star::util::XC
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
 
-    ::rtl::OUString m_aTempFileURL;
-    ::rtl::OUString m_aNativeTempURL;
+    OUString m_aTempFileURL;
+    OUString m_aNativeTempURL;
 
-    ::rtl::OUString m_aFilterName;
+    OUString m_aFilterName;
 
     sal_Bool m_bBusy;
 
     sal_Bool m_bUseNative;
 
 private:
-    sal_Bool CreateModelFromURL( const ::rtl::OUString& aFileURL );
+    sal_Bool CreateModelFromURL( const OUString& aFileURL );
 
     sal_Bool CreateModel( sal_Bool bUseNative );
 
@@ -57,9 +57,9 @@ private:
     void CreateNative();
 
 public:
-    static ::rtl::OUString GetFilterNameFromExtentionAndInStream(
+    static OUString GetFilterNameFromExtentionAndInStream(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
-                                const ::rtl::OUString& aNameWithExtention,
+                                const OUString& aNameWithExtention,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream );
 
     OwnView_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,

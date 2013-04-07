@@ -37,12 +37,12 @@ namespace pcr
     using namespace ::com::sun::star::beans;
 
     //------------------------------------------------------------------------
-    ::rtl::OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
+    OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
     {
         PcrClient aResourceAccess;
             // this ensures that we have our resource file loaded
 
-        ::rtl::OUString sClassName;
+        OUString sClassName;
         switch (nClassId)
         {
             case FormComponentType::TEXTFIELD:

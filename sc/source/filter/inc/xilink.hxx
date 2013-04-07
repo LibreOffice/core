@@ -135,8 +135,8 @@ public:
      * reference, since OLE link doesn't work cross-platform, and is not very
      * reliable even on Windows.
      */
-    bool CreateOleData(ScDocument& rDoc, const ::rtl::OUString& rUrl,
-                       sal_uInt16& rFileId, ::rtl::OUString& rTabName, ScRange& rRange) const;
+    bool CreateOleData(ScDocument& rDoc, const OUString& rUrl,
+                       sal_uInt16& rFileId, OUString& rTabName, ScRange& rRange) const;
 
     bool                HasFormulaTokens() const;
 

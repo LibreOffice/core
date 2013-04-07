@@ -48,7 +48,7 @@ namespace slideshow
 
         boost::shared_ptr<SoundPlayer> SoundPlayer::create(
             EventMultiplexer & rEventMultiplexer,
-            const ::rtl::OUString& rSoundURL,
+            const OUString& rSoundURL,
             const uno::Reference< uno::XComponentContext>&  rComponentContext )
         {
             boost::shared_ptr<SoundPlayer> pPlayer(
@@ -86,7 +86,7 @@ namespace slideshow
 
         SoundPlayer::SoundPlayer(
             EventMultiplexer & rEventMultiplexer,
-            const ::rtl::OUString& rSoundURL,
+            const OUString& rSoundURL,
             const uno::Reference< uno::XComponentContext>&  rComponentContext )
             : mrEventMultiplexer(rEventMultiplexer),
               mThis(),
@@ -112,7 +112,7 @@ namespace slideshow
 
             if( !mxPlayer.is() )
                 throw lang::NoSupportException(
-                    rtl::OUString(
+                    OUString(
                                        "No sound support for ") + rSoundURL,
                     uno::Reference<uno::XInterface>() );
         }
@@ -124,7 +124,7 @@ namespace slideshow
                 dispose();
             }
             catch (uno::Exception &) {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );

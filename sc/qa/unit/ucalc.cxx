@@ -785,7 +785,7 @@ void testFuncNUMBERVALUE( ScDocument* pDoc )
 
     SCROW nRows = SAL_N_ELEMENTS(aData);
     for (SCROW i = 0; i < nRows; ++i)
-        pDoc->SetString(0, i, 0, rtl::OUString::createFromAscii(aData[i]));
+        pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i]));
 
     printRange(pDoc, ScRange(0, 0, 0, 0, nRows - 1, 0), "data range for NUMBERVALUE");
 
@@ -807,14 +807,14 @@ void testFuncNUMBERVALUE( ScDocument* pDoc )
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        pDoc->SetString(0, nRow, 0, rtl::OUString::createFromAscii(aChecks[i].pFormula));
+        pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
     pDoc->CalcAll();
 
     for (SCROW i = 0; i < nRows; ++i)
     {
         SCROW nRow = 20 + i;
-        rtl::OUString aResult = pDoc->GetString(0, nRow, 0);
+        OUString aResult = pDoc->GetString(0, nRow, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             aChecks[i].pFormula, OUString::createFromAscii( aChecks[i].pResult), aResult);
     }

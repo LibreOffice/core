@@ -73,9 +73,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -107,10 +104,10 @@ IndexColumns::IndexColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const rtl::OUString &indexName,
-        const com::sun::star::uno::Sequence< rtl::OUString > &columns )
+        const OUString &schemaName,
+        const OUString &tableName,
+        const OUString &indexName,
+        const com::sun::star::uno::Sequence< OUString > &columns )
     : Container( refMutex, origin, pSettings,  "INDEX_COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName ),
@@ -121,7 +118,7 @@ IndexColumns::IndexColumns(
 IndexColumns::~IndexColumns()
 {}
 
-static sal_Int32 findInSequence( const Sequence< rtl::OUString > & seq , const rtl::OUString &str)
+static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUString &str)
 {
     int index;
     for( index = 0 ; index < seq.getLength() ; index ++ )
@@ -139,7 +136,7 @@ void IndexColumns::refresh()
     {
         if( isLog( m_pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append( "sdbcx.IndexColumns get refreshed for index " );
             buf.append( OUStringToOString( m_indexName, m_pSettings->encoding ) );
             log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear().getStr() );
@@ -204,7 +201,7 @@ void IndexColumns::appendByDescriptor(
 
 }
 
-void IndexColumns::dropByName( const ::rtl::OUString& elementName )
+void IndexColumns::dropByName( const OUString& elementName )
     throw (::com::sun::star::sdbc::SQLException,
            ::com::sun::star::container::NoSuchElementException,
            ::com::sun::star::uno::RuntimeException)
@@ -280,10 +277,10 @@ Reference< com::sun::star::container::XNameAccess > IndexColumns::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const rtl::OUString &schemaName,
-    const rtl::OUString &tableName,
-    const rtl::OUString &indexName,
-    const Sequence< rtl::OUString > &columns )
+    const OUString &schemaName,
+    const OUString &tableName,
+    const OUString &indexName,
+    const Sequence< OUString > &columns )
 {
     IndexColumns *pIndexColumns = new IndexColumns(
         refMutex, origin, pSettings, schemaName, tableName, indexName, columns );

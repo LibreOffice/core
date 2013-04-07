@@ -84,59 +84,59 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            bRet = OTools::getValue( aProps, ::rtl::OUString("ISCASESENSITIVE") );
+            bRet = OTools::getValue( aProps, OUString("ISCASESENSITIVE") );
     }
     return bRet;
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())
         return aField.GetName();
 
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString sTableName;
+    OUString sTableName;
 
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if ( aField.IsValid() )
     {
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
-            sTableName = OTools::getValue( aProps, ::rtl::OUString("BASETABLENAME") );
+            sTableName = OTools::getValue( aProps, OUString("BASETABLENAME") );
     }
     return sTableName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getColumnName(column);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 
@@ -160,14 +160,14 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(
         WpADOProperties aProps( aField.get_Properties() );
         if ( aProps.IsValid() )
         {
-            bRet = OTools::getValue( aProps, ::rtl::OUString("ISAUTOINCREMENT") );
+            bRet = OTools::getValue( aProps, OUString("ISAUTOINCREMENT") );
 #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nCount = aProps.GetItemCount();
             for (sal_Int32 i = 0; i<nCount; ++i)
             {
                 WpADOProperty aProp = aProps.GetItem(i);
-                ::rtl::OUString sName = aProp.GetName();
-                ::rtl::OUString sVal = aProp.GetValue();
+                OUString sName = aProp.GetName();
+                OUString sVal = aProp.GetValue();
             }
 #endif
         }

@@ -31,14 +31,14 @@ ScVbaTextBoxShape::ScVbaTextBoxShape( const uno::Reference< uno::XComponentConte
     m_xModel.set( xModel );
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaTextBoxShape::getText() throw (css::uno::RuntimeException)
 {
     return m_xTextRange->getString();
 }
 
 void SAL_CALL
-ScVbaTextBoxShape::setText( const rtl::OUString& _text ) throw (css::uno::RuntimeException)
+ScVbaTextBoxShape::setText( const OUString& _text ) throw (css::uno::RuntimeException)
 {
     m_xTextRange->setString( _text );
 }
@@ -50,7 +50,7 @@ ScVbaTextBoxShape::characters( const uno::Any& Start, const uno::Any& Length ) t
     ScDocument* pDoc = pDocShell ? pDocShell->GetDocument() : NULL;
 
     if ( !pDoc )
-        throw uno::RuntimeException( rtl::OUString( "Failed to access document from shell" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Failed to access document from shell" ), uno::Reference< uno::XInterface >() );
     uno::Reference< text::XSimpleText > xSimple( m_xTextRange, uno::UNO_QUERY_THROW );
 
     ScVbaPalette aPalette( pDoc->GetDocumentShell() );

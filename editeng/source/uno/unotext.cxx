@@ -88,7 +88,7 @@ const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         {MAP_CHAR_LEN("TextField"),                     EE_FEATURE_FIELD,   &::getCppuType((const uno::Reference< text::XTextField >*)0),   beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN("TextPortionType"),               WID_PORTIONTYPE,    &::getCppuType((const ::rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN("TextPortionType"),               WID_PORTIONTYPE,    &::getCppuType((const OUString*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0,0}
@@ -762,12 +762,12 @@ void SAL_CALL SvxUnoTextRangeBase::addVetoableChangeListener( const OUString& , 
 void SAL_CALL SvxUnoTextRangeBase::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
 // XMultiPropertySet
-void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     _setPropertyValues( aPropertyNames, aValues, -1 );
 }
 
-void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -886,12 +886,12 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
     }
 }
 
-uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
+uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::getPropertyValues( const uno::Sequence< OUString >& aPropertyNames ) throw (uno::RuntimeException)
 {
     return _getPropertyValues( aPropertyNames, -1 );
 }
 
-uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
+uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( const uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -930,7 +930,7 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
     return aValues;
 }
 
-void SAL_CALL SvxUnoTextRangeBase::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::addPropertiesChangeListener( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
 {
 }
 
@@ -938,7 +938,7 @@ void SAL_CALL SvxUnoTextRangeBase::removePropertiesChangeListener( const uno::Re
 {
 }
 
-void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
+void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException)
 {
 }
 
@@ -1877,7 +1877,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
         {
         case text::ControlCharacter::PARAGRAPH_BREAK:
         {
-            const rtl::OUString aText( (sal_Unicode)13 );  // '\r' does not work on Mac
+            const OUString aText( (sal_Unicode)13 );  // '\r' does not work on Mac
             insertString( xRange, aText, bAbsorb );
 
             return;
@@ -1928,7 +1928,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
                 aRange.nEndPos  = aRange.nStartPos;
 
                 pRange->SetSelection( aRange );
-                const rtl::OUString aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
+                const OUString aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
                 pRange->setString( aText );
 
                 aRange.nStartPos = 0;
@@ -2182,7 +2182,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
 }
 
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
-        const ::rtl::OUString& /*rText*/,
+        const OUString& /*rText*/,
         const uno::Sequence< beans::PropertyValue >& /*rCharAndParaProps*/,
         const uno::Reference< text::XTextRange>& /*rTextRange*/ )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
@@ -2193,7 +2193,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
 
 // com::sun::star::text::XTextPortionAppend (new import API)
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
-        const ::rtl::OUString& rText,
+        const OUString& rText,
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {

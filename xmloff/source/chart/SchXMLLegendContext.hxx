@@ -26,7 +26,7 @@
 class SchXMLLegendContext : public SvXMLImportContext
 {
 public:
-    SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const rtl::OUString& rLocalName );
+    SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName );
     virtual ~SchXMLLegendContext();
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );

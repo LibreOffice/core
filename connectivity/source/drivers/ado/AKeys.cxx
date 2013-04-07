@@ -44,7 +44,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OKeys::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeys::createObject(const OUString& _rName)
 {
     return new OAdoKey(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -60,7 +60,7 @@ Reference< XPropertySet > OKeys::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OKeys::appendObject( const OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoKey* pKey = NULL;
     if ( !getImplementation( pKey, descriptor ) || pKey == NULL)
@@ -79,9 +79,9 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
 #endif
 
     WpADOKey aKey = pKey->getImpl();
-    ::rtl::OUString sName = aKey.get_Name();
+    OUString sName = aKey.get_Name();
     if(!sName.getLength())
-        aKey.put_Name(::rtl::OUString("PrimaryKey") );
+        aKey.put_Name(OUString("PrimaryKey") );
 
     ADOKeys* pKeys = m_aCollection;
     if ( FAILED(pKeys->Append(OLEVariant((ADOKey*)aKey),
@@ -97,7 +97,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString&, const Reference< 
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OKeys::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OKeys::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(OLEVariant(_sElementName)))
         ADOS::ThrowException(*m_pConnection->getConnection(),static_cast<XTypeProvider*>(this));

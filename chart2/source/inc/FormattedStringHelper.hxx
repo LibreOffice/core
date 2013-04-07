@@ -38,7 +38,7 @@ public:
             createFormattedStringSequence(
                      const ::com::sun::star::uno::Reference<
                         ::com::sun::star::uno::XComponentContext > & xContext
-                    , const ::rtl::OUString & rString
+                    , const OUString & rString
                     , const ::com::sun::star::uno::Reference<
                         ::com::sun::star::beans::XPropertySet > & xTextProperties ) throw();
 };

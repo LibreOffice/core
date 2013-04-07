@@ -26,11 +26,11 @@ class AstModule : public AstDeclaration
                 , public AstScope
 {
 public:
-    AstModule(const ::rtl::OString& name, AstScope* pScope)
+    AstModule(const OString& name, AstScope* pScope)
         : AstDeclaration(NT_module, name, pScope)
         , AstScope(NT_module)
     {}
-    AstModule(NodeType type, const ::rtl::OString& name, AstScope* pScope)
+    AstModule(NodeType type, const OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
     {}

@@ -37,7 +37,6 @@
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;
 using ::com::sun::star::uno::Reference;

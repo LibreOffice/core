@@ -25,7 +25,6 @@ namespace sun {
 namespace star {
 namespace xforms {
 
-using rtl::OUString;
 using com::sun::star::uno::RuntimeException;
 
 void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,

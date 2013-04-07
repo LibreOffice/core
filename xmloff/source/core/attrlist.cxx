@@ -26,7 +26,6 @@
 
 #include <xmloff/attrlist.hxx>
 
-using ::rtl::OUString;
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -197,7 +196,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
-        const ::rtl::OUString& rValue )
+        const OUString& rValue )
 {
     if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
             < m_pImpl->vecAttribute.size() )

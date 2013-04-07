@@ -34,7 +34,6 @@
 #include "drawdoc.hxx"
 #include "glob.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::style;
 
 class SdTransformOOo2xDocument

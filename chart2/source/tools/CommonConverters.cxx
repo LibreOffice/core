@@ -459,10 +459,10 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     return aResult;
 }
 
-uno::Sequence< rtl::OUString > DataSequenceToStringSequence(
+uno::Sequence< OUString > DataSequenceToStringSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
-    uno::Sequence< rtl::OUString > aResult;
+    uno::Sequence< OUString > aResult;
     if(!xDataSequence.is())
         return aResult;
 
@@ -519,9 +519,9 @@ sal_Int16 getShortForLongAlso( const uno::Any& rAny )
     return nRet;
 }
 
-bool replaceParamterInString( rtl::OUString & rInOutResourceString,
-                            const rtl::OUString & rParamToReplace,
-                            const rtl::OUString & rReplaceWith )
+bool replaceParamterInString( OUString & rInOutResourceString,
+                            const OUString & rParamToReplace,
+                            const OUString & rReplaceWith )
 {
     sal_Int32 nPos = rInOutResourceString.indexOf( rParamToReplace );
     if( nPos == -1 )

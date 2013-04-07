@@ -83,34 +83,34 @@ namespace comphelper { namespace log { namespace convert
     using ::com::sun::star::util::DateTime;
 
     //--------------------------------------------------------------------
-    ::rtl::OUString convertLogArgToString( const Date& _rDate )
+    OUString convertLogArgToString( const Date& _rDate )
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%04i-%02i-%02i",
             (int)_rDate.Year, (int)_rDate.Month, (int)_rDate.Day );
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString convertLogArgToString( const Time& _rTime )
+    OUString convertLogArgToString( const Time& _rTime )
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%02i:%02i:%02i.%02i",
             (int)_rTime.Hours, (int)_rTime.Minutes, (int)_rTime.Seconds, (int)_rTime.HundredthSeconds );
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString convertLogArgToString( const DateTime& _rDateTime )
+    OUString convertLogArgToString( const DateTime& _rDateTime )
     {
         char buffer[ 30 ];
         const size_t buffer_size = sizeof( buffer );
         snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%02i",
             (int)_rDateTime.Year, (int)_rDateTime.Month, (int)_rDateTime.Day,
             (int)_rDateTime.Hours, (int)_rDateTime.Minutes, (int)_rDateTime.Seconds, (int)_rDateTime.HundredthSeconds );
-        return ::rtl::OUString::createFromAscii( buffer );
+        return OUString::createFromAscii( buffer );
     }
 
 //........................................................................

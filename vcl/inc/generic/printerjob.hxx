@@ -36,9 +36,9 @@ class PrinterJob
 {
 private:            // private data
 
-    rtl::OUString           maSpoolDirName;
-    rtl::OUString           maFileName; // empty: spool to command, else spool to named file
-    rtl::OUString           maJobTitle;
+    OUString           maSpoolDirName;
+    OUString           maFileName; // empty: spool to command, else spool to named file
+    OUString           maJobTitle;
     int                     mnFileMode;
 
     osl::File*              mpJobHeader;
@@ -73,8 +73,8 @@ private:            // private data
 
 private:            // private methods
 
-    osl::File*      CreateSpoolFile (const rtl::OUString& rName,
-                                     const rtl::OUString& rExtension);
+    osl::File*      CreateSpoolFile (const OUString& rName,
+                                     const OUString& rExtension);
     void            InitPaperSize (const JobData& rJobSetup);
 
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
@@ -94,7 +94,7 @@ public:             // for usage in PrinterGfx
     osl::File*      GetCurrentPageHeader ();
     osl::File*      GetCurrentPageBody ();
 
-    const ::rtl::OUString& GetPrinterName() const { return m_aLastJobData.m_aPrinterName; }
+    const OUString& GetPrinterName() const { return m_aLastJobData.m_aPrinterName; }
 
 public:
     PrinterJob ();
@@ -114,10 +114,10 @@ public:
      *               the quick command for spooling should be used instead
      *               of the normal command
      */
-    sal_Bool        StartJob (const rtl::OUString& rFileName,
+    sal_Bool        StartJob (const OUString& rFileName,
                               int nMode,
-                              const rtl::OUString& rJobName,
-                              const rtl::OUString& rAppName,
+                              const OUString& rJobName,
+                              const OUString& rAppName,
                               const JobData& rSetupData,
                               PrinterGfx* pGraphics,
                               bool bIsQuickJob

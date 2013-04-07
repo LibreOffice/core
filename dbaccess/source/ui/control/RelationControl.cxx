@@ -311,7 +311,7 @@ namespace dbaui
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
-        rtl::OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
+        OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
@@ -390,9 +390,9 @@ namespace dbaui
                 //sal_Int32 nRows = GetRowCount();
                 Reference<XColumnsSupplier> xSup(_xDest,UNO_QUERY);
                 Reference<XNameAccess> xColumns = xSup->getColumns();
-                Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                const ::rtl::OUString* pIter = aNames.getConstArray();
-                const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+                Sequence< OUString> aNames = xColumns->getElementNames();
+                const OUString* pIter = aNames.getConstArray();
+                const OUString* pEnd = pIter + aNames.getLength();
                 for(;pIter != pEnd;++pIter)
                 {
                     m_pListCell->InsertEntry( *pIter );

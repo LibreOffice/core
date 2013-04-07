@@ -178,7 +178,7 @@ class XmlPortionDumper:public SwPortionHandler
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
         OUString sText( rText );
-        OString sText8 =::rtl::OUStringToOString( sText,
+        OString sText8 =OUStringToOString( sText,
                                                        RTL_TEXTENCODING_UTF8 );
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
                                            "%s", sText8.getStr(  ) );
@@ -335,7 +335,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
             {
                 aTxt = aTxt.replace( i, '*' );
             }
-            OString aTxt8 =::rtl::OUStringToOString( aTxt,
+            OString aTxt8 =OUStringToOString( aTxt,
                                                           RTL_TEXTENCODING_UTF8 );
             xmlTextWriterWriteString( writer,
                                       ( const xmlChar * ) aTxt8.getStr(  ) );
@@ -388,7 +388,7 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     {
         SwHeadFootFrm *pHeadFootFrm = (SwHeadFootFrm*)this;
         OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(rtl::OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFmt());
     }
 }

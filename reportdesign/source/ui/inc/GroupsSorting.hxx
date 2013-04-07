@@ -124,7 +124,7 @@ private:
     /** returns the data type for the given column name
         @param _sColumnName
     */
-    sal_Int32 getColumnDataType(const ::rtl::OUString& _sColumnName);
+    sal_Int32 getColumnDataType(const OUString& _sColumnName);
 
     /** shows the text given by the id in the multiline edit
         @param  _nResId the string id

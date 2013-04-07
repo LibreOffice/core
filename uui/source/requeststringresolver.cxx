@@ -36,19 +36,19 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
     delete m_pImpl;
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
     throw (star::uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii(m_aImplementationName);
+    return OUString::createFromAscii(m_aImplementationName);
 }
 
 sal_Bool SAL_CALL
 UUIInteractionRequestStringResolver::supportsService(
-        rtl::OUString const & rServiceName)
+        OUString const & rServiceName)
     throw (star::uno::RuntimeException)
 {
-    star::uno::Sequence< rtl::OUString >
+    star::uno::Sequence< OUString >
         aNames(getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i < aNames.getLength(); ++i)
         if (aNames[i] == rServiceName)
@@ -56,14 +56,14 @@ UUIInteractionRequestStringResolver::supportsService(
     return false;
 }
 
-star::uno::Sequence< rtl::OUString > SAL_CALL
+star::uno::Sequence< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getSupportedServiceNames()
     throw (star::uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
 
-star::beans::Optional< rtl::OUString > SAL_CALL
+star::beans::Optional< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
     const star::uno::Reference<
         star::task::XInteractionRequest >& Request )

@@ -30,23 +30,23 @@ class SwVbaVariable : public SwVbaVariable_BASE
 {
 private:
     css::uno::Reference< css::beans::XPropertyAccess > mxUserDefined;
-    rtl::OUString maName;
+    OUString maName;
 
 public:
     SwVbaVariable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined, const rtl::OUString& rName ) throw ( css::uno::RuntimeException );
+        const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined, const OUString& rName ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaVariable();
 
    // XVariable
-    virtual rtl::OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setName( const rtl::OUString& ) throw ( css::uno::RuntimeException );
+    virtual OUString SAL_CALL getName() throw ( css::uno::RuntimeException );
+    virtual void SAL_CALL setName( const OUString& ) throw ( css::uno::RuntimeException );
     virtual css::uno::Any SAL_CALL getValue() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL setValue( const css::uno::Any& rValue ) throw ( css::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL getIndex() throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_VARIABLE_HXX */
 

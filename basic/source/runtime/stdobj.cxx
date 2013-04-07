@@ -715,7 +715,7 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
     if( !p->nHash )
       while( p->nArgs != -1 )
     {
-        OUString aName_ = rtl::OUString::createFromAscii( p->pName );
+        OUString aName_ = OUString::createFromAscii( p->pName );
         p->nHash = SbxVariable::MakeHashCode( aName_ );
         p += ( p->nArgs & _ARGSMASK ) + 1;
     }
@@ -791,7 +791,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
                 nAccess |= SBX_CONST;
-            OUString aName_ = rtl::OUString::createFromAscii( p->pName );
+            OUString aName_ = OUString::createFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
             {
@@ -866,7 +866,7 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     for( short i = 0; i < nPar; i++ )
     {
         p++;
-        OUString aName_ = rtl::OUString::createFromAscii( p->pName );
+        OUString aName_ = OUString::createFromAscii( p->pName );
         sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
         {

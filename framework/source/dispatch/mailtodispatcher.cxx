@@ -104,7 +104,7 @@ MailToDispatcher::~MailToDispatcher()
                 at the same implementation.
 */
 css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
-                                                                                       const ::rtl::OUString& /*sTarget*/ ,
+                                                                                       const OUString& /*sTarget*/ ,
                                                                                              sal_Int32        /*nFlags*/  ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatcher;
@@ -229,7 +229,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
         // start mail client
         // Because there is no notofocation about success - we use case of
         // no detected exception as SUCCESS - FAILED otherwise.
-        xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+        xSystemShellExecute->execute( aURL.Complete, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         bSuccess = sal_True;
     }
     catch (const css::lang::IllegalArgumentException&)

@@ -34,7 +34,7 @@ namespace connectivity
         typedef file::OFileTable OFlatTable_BASE;
         class OFlatConnection;
 
-        typedef ::std::map< ::rtl::OUString,
+        typedef ::std::map< OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>, comphelper::UStringMixLess > OContainer;
         typedef ::std::map<sal_Int32, sal_Int32>    TRowPositionsInFile;
 
@@ -69,11 +69,11 @@ namespace connectivity
         public:
             //  DECLARE_CTY_DEFAULTS( OFlatTable_BASE);
             OFlatTable( sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description = OUString(),
+                    const OUString& _SchemaName = OUString(),
+                    const OUString& _CatalogName = OUString()
                 );
 
             void construct(); // can throw any exception

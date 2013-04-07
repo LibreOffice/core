@@ -351,7 +351,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         for( i = 0; i < nStrings; i++ )
         {
             sal_uInt16 nOff = (sal_uInt16) pStringOff[ i ];
-            rtl::OString aStr(rtl::OUStringToOString(rtl::OUString(pStrings + nOff), eCharSet));
+            OString aStr(OUStringToOString(OUString(pStrings + nOff), eCharSet));
             memcpy( pByteStrings + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
         r << (sal_uInt32) nStringSize;

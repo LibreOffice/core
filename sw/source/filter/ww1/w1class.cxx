@@ -61,7 +61,7 @@ sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
     if( rFib.GetStream().Seek( ulFilePos + ulOffset ) == ulFilePos+ulOffset &&
         rFib.GetStream().Read( &cRead, sizeof( cRead ) ) == sizeof( cRead ) )
     {
-        cRet = rtl::OUString(&cRead, 1, RTL_TEXTENCODING_MS_1252).toChar();
+        cRet = OUString(&cRead, 1, RTL_TEXTENCODING_MS_1252).toChar();
     }
     else
         cRet = ' ';
@@ -77,7 +77,7 @@ String Ww1PlainText::GetText( sal_uLong ulOffset, sal_uLong nLen ) const
     bool bSeekOk = rFib.GetStream().Seek(nPos) == nPos;
     return bSeekOk ?
         read_uInt8s_ToOUString(rFib.GetStream(), nLen, RTL_TEXTENCODING_MS_1252) :
-        rtl::OUString();
+        OUString();
 }
 
 ///////////////////////////////////////////////////////////////// Style
@@ -928,7 +928,7 @@ long Ww1Bookmarks::Len() const
 const String Ww1Bookmarks::GetName() const
 {
     if( nIsEnd )
-        return rtl::OUString("???");
+        return OUString("???");
     return aNames.GetStr( nPlcIdx[0] );
 }
 
@@ -1033,12 +1033,12 @@ Ww1Assoc::Ww1Assoc(Ww1Fib& _rFib)
 
 String Ww1Assoc::GetStr(sal_uInt16 code)
 {
-    rtl::OStringBuffer sRet;
+    OStringBuffer sRet;
     OSL_ENSURE(code<MaxFields, "out of range");
     if (pStrTbl[code] != NULL)
         for( sal_uInt16 i=0;i<pStrTbl[code][0];i++ )
             sRet.append(pStrTbl[code][i+1]);
-    return rtl::OStringToOUString(sRet.makeStringAndClear(),
+    return OStringToOUString(sRet.makeStringAndClear(),
         RTL_TEXTENCODING_MS_1252);
 }
 

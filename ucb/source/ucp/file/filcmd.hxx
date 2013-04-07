@@ -68,7 +68,7 @@ namespace fileaccess {
 
         virtual com::sun::star::ucb::CommandInfo SAL_CALL
         getCommandInfoByName(
-            const rtl::OUString& Name )
+            const OUString& Name )
             throw( com::sun::star::ucb::UnsupportedCommandException,
                    com::sun::star::uno::RuntimeException);
 
@@ -80,7 +80,7 @@ namespace fileaccess {
 
         virtual sal_Bool SAL_CALL
         hasCommandByName(
-            const rtl::OUString& Name )
+            const OUString& Name )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL

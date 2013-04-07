@@ -47,8 +47,8 @@ class INetURLObject;
 namespace migration
 {
 
-    ::rtl::OUString SAL_CALL OO3ExtensionMigration_getImplementationName();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OO3ExtensionMigration_getSupportedServiceNames();
+    OUString SAL_CALL OO3ExtensionMigration_getImplementationName();
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL OO3ExtensionMigration_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL OO3ExtensionMigration_create(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
         SAL_THROW( (::com::sun::star::uno::Exception) );
@@ -70,8 +70,8 @@ namespace migration
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XDocumentBuilder >  m_xDocBuilder;
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >       m_xSimpleFileAccess;
         ::osl::Mutex            m_aMutex;
-        ::rtl::OUString         m_sSourceDir;
-        ::rtl::OUString         m_sTargetDir;
+        OUString         m_sSourceDir;
+        OUString         m_sTargetDir;
         TStringVector           m_aBlackList;
 
         enum ScanResult
@@ -82,10 +82,10 @@ namespace migration
         };
 
         ::osl::FileBase::RC     checkAndCreateDirectory( INetURLObject& rDirURL );
-        ScanResult              scanExtensionFolder( const ::rtl::OUString& sExtFolder );
-        void                    scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions );
-        bool                    scanDescriptionXml( const ::rtl::OUString& sDescriptionXmlFilePath );
-        void                    migrateExtension( const ::rtl::OUString& sSourceDir );
+        ScanResult              scanExtensionFolder( const OUString& sExtFolder );
+        void                    scanUserExtensions( const OUString& sSourceDir, TStringVector& aMigrateExtensions );
+        bool                    scanDescriptionXml( const OUString& sDescriptionXmlFilePath );
+        void                    migrateExtension( const OUString& sSourceDir );
 
     public:
         OO3ExtensionMigration(::com::sun::star::uno::Reference<
@@ -93,11 +93,11 @@ namespace migration
         virtual ~OO3ExtensionMigration();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& rServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization

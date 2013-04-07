@@ -72,17 +72,17 @@ static const LanguageDependentProp aLanguageDependentProp[] =
     { 0, 0                 }
 };
 
-static Sequence< ::rtl::OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
+static Sequence< OUString> lcl_ImplGetPropertyNames( const Reference< XMultiPropertySet > & rxModel )
 {
-    Sequence< ::rtl::OUString> aNames;
+    Sequence< OUString> aNames;
     Reference< XPropertySetInfo >  xPSInf = rxModel->getPropertySetInfo();
     DBG_ASSERT( xPSInf.is(), "UpdateFromModel: No PropertySetInfo!" );
     if ( xPSInf.is() )
     {
         Sequence< Property> aProps = xPSInf->getProperties();
         sal_Int32 nLen = aProps.getLength();
-        aNames = Sequence< ::rtl::OUString>( nLen );
-        ::rtl::OUString* pNames = aNames.getArray();
+        aNames = Sequence< OUString>( nLen );
+        OUString* pNames = aNames.getArray();
         const Property* pProps = aProps.getConstArray();
         for ( sal_Int32 n = 0; n < nLen; ++n, ++pProps, ++pNames)
             *pNames = pProps->Name;
@@ -115,7 +115,7 @@ private:
     VclListenerLock& operator=( const VclListenerLock& );   // never implemented
 };
 
-typedef ::std::map< ::rtl::OUString, sal_Int32 >    MapString2Int;
+typedef ::std::map< OUString, sal_Int32 >    MapString2Int;
 struct UnoControl_Data
 {
     MapString2Int   aSuspendedPropertyNotifications;
@@ -158,9 +158,9 @@ UnoControl::~UnoControl()
     DBG_DTOR( UnoControl, NULL );
 }
 
-::rtl::OUString UnoControl::GetComponentServiceName()
+OUString UnoControl::GetComponentServiceName()
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer )
@@ -222,7 +222,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
     return xCompatiblePeer;
 }
 
-bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
+bool UnoControl::ImplCheckLocalize( OUString& _rPossiblyLocalizable )
 {
     if  (   !mpData->bLocalizationSupport
         ||  ( _rPossiblyLocalizable.isEmpty() )
@@ -236,12 +236,12 @@ bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
     {
         Reference< XPropertySet > xPropSet( mxModel, UNO_QUERY_THROW );
         Reference< resource::XStringResourceResolver > xStringResourceResolver(
-            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
             UNO_QUERY
         );
         if ( xStringResourceResolver.is() )
         {
-            ::rtl::OUString aLocalizationKey( _rPossiblyLocalizable.copy( 1 ) );
+            OUString aLocalizationKey( _rPossiblyLocalizable.copy( 1 ) );
             _rPossiblyLocalizable = xStringResourceResolver->resolveString( aLocalizationKey );
             return true;
         }
@@ -253,7 +253,7 @@ bool UnoControl::ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable )
     return false;
 }
 
-void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
+void UnoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal )
 {
     // since a change made in propertiesChange, we can't be sure that this is called with an valid getPeer(),
     // this assumption may be false in some (seldom) multi-threading scenarios (cause propertiesChange
@@ -275,8 +275,8 @@ void UnoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const An
                 ( rPropName.equalsAsciiL( "CurrencySymbol", 14 )) ||
                 ( rPropName.equalsAsciiL( "StringItemList", 14 )) )
             {
-                ::rtl::OUString aValue;
-                uno::Sequence< rtl::OUString > aSeqValue;
+                OUString aValue;
+                uno::Sequence< OUString > aSeqValue;
                 if ( aConvertedValue >>= aValue )
                 {
                     if ( ImplCheckLocalize( aValue ) )
@@ -323,7 +323,7 @@ void UnoControl::updateFromModel()
         Reference< XMultiPropertySet >  xPropSet( mxModel, UNO_QUERY );
         if( xPropSet.is() )
         {
-            Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
+            Sequence< OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->firePropertiesChangeEvent( aNames, this );
         }
     }
@@ -401,7 +401,7 @@ void UnoControl::removeEventListener( const Reference< XEventListener >& rxListe
     maDisposeListeners.removeInterface( rxListener );
 }
 
-sal_Bool UnoControl::requiresNewPeer( const ::rtl::OUString& /* _rPropertyName */ ) const
+sal_Bool UnoControl::requiresNewPeer( const OUString& /* _rPropertyName */ ) const
 {
     return sal_False;
 }
@@ -437,7 +437,7 @@ void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvent
     ImplModelPropertiesChanged( aEvents );
 }
 
-void UnoControl::ImplLockPropertyChangeNotification( const ::rtl::OUString& rPropertyName, bool bLock )
+void UnoControl::ImplLockPropertyChangeNotification( const OUString& rPropertyName, bool bLock )
 {
     MapString2Int::iterator pos = mpData->aSuspendedPropertyNotifications.find( rPropertyName );
     if ( bLock )
@@ -458,9 +458,9 @@ void UnoControl::ImplLockPropertyChangeNotification( const ::rtl::OUString& rPro
     }
 }
 
-void UnoControl::ImplLockPropertyChangeNotifications( const Sequence< ::rtl::OUString >& rPropertyNames, bool bLock )
+void UnoControl::ImplLockPropertyChangeNotifications( const Sequence< OUString >& rPropertyNames, bool bLock )
 {
-    for (   const ::rtl::OUString* pPropertyName = rPropertyNames.getConstArray();
+    for (   const OUString* pPropertyName = rPropertyNames.getConstArray();
             pPropertyName != rPropertyNames.getConstArray() + rPropertyNames.getLength();
             ++pPropertyName
         )
@@ -606,7 +606,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                 if ( bMustBeInserted )
                 {
                     // Add language dependent props at the end
-                    ::rtl::OUString aPropName( ::rtl::OUString::createFromAscii( pLangDepProp->pPropName ));
+                    OUString aPropName( OUString::createFromAscii( pLangDepProp->pPropName ));
                     if ( xPSI.is() && xPSI->hasPropertyByName( aPropName ) )
                     {
                         aPeerPropertiesToSet.push_back(
@@ -1087,7 +1087,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString("createPeer: no model!");
+        aException.Message = OUString("createPeer: no model!");
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
@@ -1139,7 +1139,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         Reference< XPropertySetInfo >  xInfo = xPSet->getPropertySetInfo();
 
         Any aVal;
-        ::rtl::OUString aPropName = GetPropertyName( BASEPROPERTY_BORDER );
+        OUString aPropName = GetPropertyName( BASEPROPERTY_BORDER );
         if ( xInfo->hasPropertyByName( aPropName ) )
         {
             aVal = xPSet->getPropertyValue( aPropName );
@@ -1352,10 +1352,10 @@ sal_Bool UnoControl::setModel( const Reference< XControlModel >& rxModel ) throw
             xPropSet.set( mxModel, UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), UNO_SET_THROW );
 
-            Sequence< ::rtl::OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
+            Sequence< OUString> aNames = lcl_ImplGetPropertyNames( xPropSet );
             xPropSet->addPropertiesChangeListener( aNames, xListener );
 
-            mpData->bLocalizationSupport = xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) );
+            mpData->bLocalizationSupport = xPSI->hasPropertyByName( OUString( "ResourceResolver" ) );
         }
         catch( const Exception& )
         {
@@ -1396,7 +1396,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString("design") : ::rtl::OUString("alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? OUString("design") : OUString("alive" );
     }
 
     // ajust the visibility of our window
@@ -1418,19 +1418,19 @@ sal_Bool UnoControl::isTransparent(  ) throw(RuntimeException)
 }
 
 // XServiceInfo
-::rtl::OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
+OUString UnoControl::getImplementationName(  ) throw(RuntimeException)
 {
     OSL_FAIL( "This method should be overloaded!" );
-    return ::rtl::OUString();
+    return OUString();
 }
 
-sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) throw(RuntimeException)
+sal_Bool UnoControl::supportsService( const OUString& rServiceName ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString* pArray = aSNL.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getConstArray();
+    const OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
     for (; pArray != pArrayEnd; ++pArray )
         if( *pArray == rServiceName )
             break;
@@ -1438,10 +1438,10 @@ sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) thro
     return pArray != pArrayEnd;
 }
 
-Sequence< ::rtl::OUString > UnoControl::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > UnoControl::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    ::rtl::OUString sName( "com.sun.star.awt.UnoControl" );
-    return Sequence< ::rtl::OUString >( &sName, 1 );
+    OUString sName( "com.sun.star.awt.UnoControl" );
+    return Sequence< OUString >( &sName, 1 );
 }
 
 // ------------------------------------------------------------------------

@@ -28,19 +28,19 @@ class SwVbaTemplate : public SwVbaTemplate_BASE
 {
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
-    rtl::OUString msFullUrl;
+    OUString msFullUrl;
 public:
     SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& );
+        const css::uno::Reference< css::frame::XModel >& rModel, const OUString& );
     virtual ~SwVbaTemplate();
 
    // XTemplate
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_TEMPLATE_HXX */
 

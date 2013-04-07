@@ -168,9 +168,9 @@ public:
         @return  An unused name. Will be equal to the suggested name, if not
             contained, otherwise a numerical index will be appended.
      */
-    static ::rtl::OUString getUnusedName(
+    static OUString getUnusedName(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxNameAccess,
-                            const ::rtl::OUString& rSuggestedName,
+                            const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
                             sal_Int32 nFirstIndexToAppend = 1 );
 
@@ -187,7 +187,7 @@ public:
      */
     static bool         insertByName(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
-                            const ::rtl::OUString& rName,
+                            const OUString& rName,
                             const ::com::sun::star::uno::Any& rObject,
                             bool bReplaceOldExisting = true );
 
@@ -217,9 +217,9 @@ public:
             equal to the suggested name, if parameter bRenameOldExisting is
             true.
      */
-    static ::rtl::OUString insertByUnusedName(
+    static OUString insertByUnusedName(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxNameContainer,
-                            const ::rtl::OUString& rSuggestedName,
+                            const OUString& rSuggestedName,
                             sal_Unicode cSeparator,
                             const ::com::sun::star::uno::Any& rObject,
                             bool bRenameOldExisting = false );

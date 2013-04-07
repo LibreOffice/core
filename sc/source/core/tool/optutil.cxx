@@ -36,12 +36,12 @@ sal_Bool ScOptionsUtil::IsMetricSystem()
 
 //------------------------------------------------------------------
 
-ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString& rSubTree ) :
+ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree ) :
     ConfigItem( rSubTree )
 {
 }
 
-ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode ) :
+ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree, sal_Int16 nMode ) :
     ConfigItem( rSubTree, nMode )
 {
 }
@@ -51,7 +51,7 @@ void ScLinkConfigItem::SetCommitLink( const Link& rLink )
     aCommitLink = rLink;
 }
 
-void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& /* aPropertyNames */ )
+void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /* aPropertyNames */ )
 {
     //! not implemented yet...
 }

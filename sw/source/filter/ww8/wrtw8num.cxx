@@ -45,7 +45,7 @@ using namespace sw::util;
 sal_uInt16 MSWordExportBase::DuplicateNumRule( const SwNumRule *pRule, sal_uInt8 nLevel, sal_uInt16 nVal )
 {
     sal_uInt16 nNumId = USHRT_MAX;
-    String sPrefix(rtl::OUString("WW8TempExport"));
+    String sPrefix(OUString("WW8TempExport"));
     sPrefix += OUString::number( nUniqueList++ );
     SwNumRule* pMyNumRule =
             new SwNumRule( pDoc->GetUniqueNumRuleName( &sPrefix ),
@@ -637,7 +637,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
         const Font& rFont = rFmt.GetBulletFont()
                             ? *rFmt.GetBulletFont()
                             : numfunc::GetDefBulletFont();
-        String sNumStr = rtl::OUString(rFmt.GetBulletChar());
+        String sNumStr = OUString(rFmt.GetBulletChar());
         rtl_TextEncoding eChrSet = rFont.GetCharSet();
         String sFontName = rFont.GetName();
 
@@ -673,7 +673,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
                 *rpCh = static_cast< sal_uInt8 >(cChar - 0xF000);
             }
             else
-                *rpCh = rtl::OUStringToOString(rtl::OUString(cChar), eChrSet).toChar();
+                *rpCh = OUStringToOString(OUString(cChar), eChrSet).toChar();
         }
         rpCh++;
         rCharLen--;
@@ -698,7 +698,7 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
 {
     if (!bSubstituteBullets)
         return;
-    rtl::OUString sFontName = rFontName;
+    OUString sFontName = rFontName;
     rNumStr.SetChar(0, msfilter::util::bestFitOpenSymbolToMSFont(rNumStr.GetChar(0),
         rChrSet, sFontName, !SupportsUnicode()));
     rFontName = sFontName;

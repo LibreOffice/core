@@ -66,7 +66,7 @@ struct SfxItemPool_Impl
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
     std::vector<SfxItemPoolUser*> maSfxItemPoolUsers; /// ObjectUser section
-    rtl::OUString                   aName;
+    OUString                   aName;
     SfxPoolItem**                   ppPoolDefaults;
     SfxPoolItem**                   ppStaticDefaults;
     SfxItemPool*                    mpMaster;
@@ -87,7 +87,7 @@ struct SfxItemPool_Impl
     bool                            bStreaming; // in Load() bzw. Store()
     bool                            mbPersistentRefCounts;
 
-    SfxItemPool_Impl( SfxItemPool* pMaster, const rtl::OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
+    SfxItemPool_Impl( SfxItemPool* pMaster, const OUString& rName, sal_uInt16 nStart, sal_uInt16 nEnd )
         : maPoolItems(nEnd - nStart + 1, static_cast<SfxPoolItemArray_Impl*>(NULL))
         , aName(rName)
         , ppPoolDefaults(new SfxPoolItem* [nEnd - nStart + 1])

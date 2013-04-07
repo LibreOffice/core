@@ -38,7 +38,6 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
-using ::rtl::OUString;
 
 //=========================================================================
 //
@@ -62,7 +61,7 @@ struct PropertyTableEntry
 
 static const com::sun::star::uno::Type& OUString_getCppuType()
 {
-    return getCppuType( static_cast< const rtl::OUString * >( 0 ) );
+    return getCppuType( static_cast< const OUString * >( 0 ) );
 }
 
 static const com::sun::star::uno::Type& sal_uInt16_getCppuType()

@@ -43,7 +43,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <ucbhelper/content.hxx>
 
-using rtl::OUString;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
@@ -73,7 +72,7 @@ using namespace com::sun::star::beans;
 
 namespace {
 
-bool isXMLStream(const ::rtl::OString& aHeaderStrm)
+bool isXMLStream(const OString& aHeaderStrm)
 {
     const char* p = aHeaderStrm.getStr();
     size_t n = aHeaderStrm.getLength();
@@ -104,12 +103,12 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
     return true;
 }
 
-::rtl::OUString supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
+OUString supportedByType( const OUString clipBoardFormat ,  const OString resultString, const OUString checkType)
 {
-    ::rtl::OUString sTypeName;
+    OUString sTypeName;
     if ( clipBoardFormat.match(OUString("doctype:")) )
     {
-        ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
+        OString tryStr = OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
         if (resultString.indexOf(tryStr) >= 0)
         {
             sTypeName = checkType;
@@ -120,16 +119,16 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
 
 }
 
-::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
+OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
-    ::rtl::OUString sTypeName;
-    ::rtl::OUString sUrl;
+    OUString sTypeName;
+    OUString sUrl;
     Sequence<PropertyValue > lProps ;
 
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
     const PropertyValue * pValue = aArguments.getConstArray();
     sal_Int32 nLength;
-    ::rtl::OString resultString;
+    OString resultString;
 
     nLength = aArguments.getLength();
     sal_Int32 location=nLength;
@@ -165,16 +164,16 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
         /* long nBytesToRead= */ xInStream->available();
         xInStream->skipBytes (0);
         long bytestRead =xInStream->readBytes (aData,  4000);
-        resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
+        resultString=OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
 
         if (!isXMLStream(resultString))
             // This is not an XML stream.  It makes no sense to try to detect
             // a non-XML file type here.
-            return ::rtl::OUString();
+            return OUString();
 
         // test typedetect code
         Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
-        Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
+        Sequence < OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
 
         sal_Int32 new_nlength=0;
@@ -187,7 +186,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
             sal_Int32 j =0;
             while (j < new_nlength && (sTypeName.isEmpty()))
             {
-                ::rtl::OUString tmpStr;
+                OUString tmpStr;
                 lProps[j].Value >>=tmpStr;
                 if ( lProps[j].Name == "ClipboardFormat" && !tmpStr.isEmpty() )
                 {
@@ -208,7 +207,7 @@ bool isXMLStream(const ::rtl::OString& aHeaderStrm)
         if (location == aArguments.getLength())
         {
             aArguments.realloc(nLength+1);
-            aArguments[location].Name = ::rtl::OUString( "TypeName" );
+            aArguments[location].Name = OUString( "TypeName" );
         }
         aArguments[location].Value <<=sTypeName;
     }

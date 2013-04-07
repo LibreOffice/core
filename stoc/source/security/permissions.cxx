@@ -40,8 +40,6 @@ using namespace ::std;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace stoc_sec
 {
@@ -74,7 +72,7 @@ static inline sal_Int32 makeMask(
             OUStringBuffer buf( 48 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("### ignoring unknown socket action: ") );
             buf.append( item );
-            ::rtl::OString str( ::rtl::OUStringToOString(
+            OString str( OUStringToOString(
                 buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "%s", str.getStr() );
         }
@@ -565,8 +563,8 @@ static void demanded_diag(
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("demanding ") );
     buf.append( perm.toString() );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" => ok.") );
-    ::rtl::OString str(
-        ::rtl::OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+    OString str(
+        OUStringToOString( buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "%s", str.getStr() );
 }
 #endif

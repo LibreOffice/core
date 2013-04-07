@@ -86,7 +86,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             }
 
             /// an internal name describing this path
-            ::rtl::OUString sPathName;
+            OUString sPathName;
 
             /// contains all paths, which are used internaly - but are not visible for the user.
             OUStringList lInternalPaths;
@@ -95,7 +95,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
             OUStringList lUserPaths;
 
             /// this special path is used to generate feature depending content there
-            ::rtl::OUString sWritePath;
+            OUString sWritePath;
 
             /// indicates real single paths, which uses WritePath property only
             sal_Bool bIsSinglePath;
@@ -184,10 +184,10 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         /** read a path info using the old cfg schema.
             This is needed for "migration on demand" reasons only.
             Can be removed for next major release .-) */
-        OUStringList impl_readOldFormat(const ::rtl::OUString& sPath);
+        OUStringList impl_readOldFormat(const OUString& sPath);
 
         /** read a path info using the new cfg schema. */
-        PathSettings::PathInfo impl_readNewFormat(const ::rtl::OUString& sPath);
+        PathSettings::PathInfo impl_readNewFormat(const OUString& sPath);
 
         /** filter "real user defined paths" from the old configuration schema
             and set it as UserPaths on the new schema.
@@ -198,7 +198,7 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
         /** reload one path directly from the new configuration schema (because
             it was updated by any external code) */
-        PathSettings::EChangeOp impl_updatePath(const ::rtl::OUString& sPath          ,
+        PathSettings::EChangeOp impl_updatePath(const OUString& sPath          ,
                                                       sal_Bool         bNotifyListener);
 
         /** replace all might existing placeholder variables inside the given path ...
@@ -214,8 +214,8 @@ class PathSettings : public  css::lang::XTypeProvider             ,
 
 
         /** converts our new string list schema to the old ";" separated schema ... */
-        ::rtl::OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
-        OUStringList    impl_convertOldStyle2Path(const ::rtl::OUString&        sOldStylePath) const;
+        OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
+        OUStringList    impl_convertOldStyle2Path(const OUString&        sOldStylePath) const;
 
         /** remove still known paths from the given lList argument.
             So real user defined paths can be extracted from the list of
@@ -240,15 +240,15 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         const PathSettings::PathInfo* impl_getPathAccessConst(sal_Int32 nHandle) const;
 
         /** it checks, if the given path value seams to be a valid URL or system path. */
-        sal_Bool impl_isValidPath(const ::rtl::OUString& sPath) const;
+        sal_Bool impl_isValidPath(const OUString& sPath) const;
         sal_Bool impl_isValidPath(const OUStringList&    lPath) const;
 
         void impl_storePath(const PathSettings::PathInfo& aPath);
 
-        css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(const ::rtl::OUString& sPath);
+        css::uno::Sequence< sal_Int32 > impl_mapPathName2IDList(const OUString& sPath);
 
         void impl_notifyPropListener(      PathSettings::EChangeOp eOp     ,
-                                           const ::rtl::OUString&        sPath   ,
+                                           const OUString&        sPath   ,
                                            const PathSettings::PathInfo* pPathOld,
                                            const PathSettings::PathInfo* pPathNew);
 

@@ -60,7 +60,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
 
-using ::rtl::OUString;
 
 
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb
@@ -197,8 +196,8 @@ public: // XTestSequence
     virtual void SAL_CALL setALong( ::sal_Int32 _along ) throw (RuntimeException);
     virtual ::sal_uInt32 SAL_CALL getAULong() throw (RuntimeException);
     virtual void SAL_CALL setAULong( ::sal_uInt32 _aulong ) throw (RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAString() throw (RuntimeException);
-    virtual void SAL_CALL setAString( const ::rtl::OUString& _astring ) throw (RuntimeException);
+    virtual OUString SAL_CALL getAString() throw (RuntimeException);
+    virtual void SAL_CALL setAString( const OUString& _astring ) throw (RuntimeException);
     virtual ::sal_Unicode SAL_CALL getAChar() throw (RuntimeException);
     virtual void SAL_CALL setAChar( ::sal_Unicode _achar ) throw (RuntimeException);
     virtual Any SAL_CALL getAAny() throw (RuntimeException);
@@ -794,12 +793,12 @@ void SAL_CALL OComponent::setAULong( ::sal_uInt32 _aulong ) throw (RuntimeExcept
     m_attr_uint32 = _aulong;
 }
 
-::rtl::OUString SAL_CALL OComponent::getAString() throw (RuntimeException)
+OUString SAL_CALL OComponent::getAString() throw (RuntimeException)
 {
     return m_attr_string;
 }
 
-void SAL_CALL OComponent::setAString( const ::rtl::OUString& _astring ) throw (RuntimeException)
+void SAL_CALL OComponent::setAString( const OUString& _astring ) throw (RuntimeException)
 {
     m_attr_string = _astring;
 }

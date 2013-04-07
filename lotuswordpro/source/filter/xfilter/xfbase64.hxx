@@ -75,7 +75,7 @@ public:
     /**
      * @descr   Encode binary buffer to base64 encoding.
      */
-    static rtl::OUString    Encode(sal_uInt8 *buf, sal_Int32 len);
+    static OUString    Encode(sal_uInt8 *buf, sal_Int32 len);
 };
 
 #endif

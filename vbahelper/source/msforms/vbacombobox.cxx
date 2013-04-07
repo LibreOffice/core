@@ -120,7 +120,7 @@ void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
     // booleans are converted to uppercase strings
-    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, ::rtl::OUString(), true ) ) );
+    m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, OUString(), true ) ) );
 }
 
 // see Value
@@ -277,12 +277,12 @@ void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeEx
     ScVbaControl::setLocked( bLocked );
 }
 
-rtl::OUString SAL_CALL ScVbaComboBox::getLinkedCell() throw (uno::RuntimeException)
+OUString SAL_CALL ScVbaComboBox::getLinkedCell() throw (uno::RuntimeException)
 {
     return ScVbaControl::getControlSource();
 }
 
-void SAL_CALL ScVbaComboBox::setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaComboBox::setLinkedCell( const OUString& _linkedcell ) throw (uno::RuntimeException)
 {
     ScVbaControl::setControlSource( _linkedcell );
 }

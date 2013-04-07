@@ -41,14 +41,14 @@ public:
 
     virtual SfxPoolItem*     Clone(SfxItemPool* = 0) const;
 
-    rtl::OUString   aLstMake; // remember last selection
-    rtl::OUString   aLstType;
-    rtl::OUString   sDBName;  // used database
+    OUString   aLstMake; // remember last selection
+    OUString   aLstType;
+    OUString   sDBName;  // used database
 
-    rtl::OUString   aWriting; // label
-    rtl::OUString   aMake;   // label mark
-    rtl::OUString   aType;   // label type
-    rtl::OUString   aBin;    // printer shaft
+    OUString   aWriting; // label
+    OUString   aMake;   // label mark
+    OUString   aType;   // label type
+    OUString   aBin;    // printer shaft
     sal_Int32       lHDist;  // horizontal distance (user)
     sal_Int32       lVDist;  // vertical distance (user)
     sal_Int32       lWidth;  // width (user)
@@ -67,41 +67,41 @@ public:
     sal_Bool        bSynchron;// synchronise all labels
 
     //parts of the business card
-    rtl::OUString   aPrivFirstName;
-    rtl::OUString   aPrivName;
-    rtl::OUString   aPrivShortCut;
-    rtl::OUString   aPrivFirstName2;
-    rtl::OUString   aPrivName2;
-    rtl::OUString   aPrivShortCut2;
-    rtl::OUString   aPrivStreet;
-    rtl::OUString   aPrivZip;
-    rtl::OUString   aPrivCity;
-    rtl::OUString   aPrivCountry;
-    rtl::OUString   aPrivState;
-    rtl::OUString   aPrivTitle;
-    rtl::OUString   aPrivProfession;
-    rtl::OUString   aPrivPhone;
-    rtl::OUString   aPrivMobile;
-    rtl::OUString   aPrivFax;
-    rtl::OUString   aPrivWWW;
-    rtl::OUString   aPrivMail;
-    rtl::OUString   aCompCompany;
-    rtl::OUString   aCompCompanyExt;
-    rtl::OUString   aCompSlogan;
-    rtl::OUString   aCompStreet;
-    rtl::OUString   aCompZip;
-    rtl::OUString   aCompCity;
-    rtl::OUString   aCompCountry;
-    rtl::OUString   aCompState;
-    rtl::OUString   aCompPosition;
-    rtl::OUString   aCompPhone;
-    rtl::OUString   aCompMobile;
-    rtl::OUString   aCompFax;
-    rtl::OUString   aCompWWW;
-    rtl::OUString   aCompMail;
+    OUString   aPrivFirstName;
+    OUString   aPrivName;
+    OUString   aPrivShortCut;
+    OUString   aPrivFirstName2;
+    OUString   aPrivName2;
+    OUString   aPrivShortCut2;
+    OUString   aPrivStreet;
+    OUString   aPrivZip;
+    OUString   aPrivCity;
+    OUString   aPrivCountry;
+    OUString   aPrivState;
+    OUString   aPrivTitle;
+    OUString   aPrivProfession;
+    OUString   aPrivPhone;
+    OUString   aPrivMobile;
+    OUString   aPrivFax;
+    OUString   aPrivWWW;
+    OUString   aPrivMail;
+    OUString   aCompCompany;
+    OUString   aCompCompanyExt;
+    OUString   aCompSlogan;
+    OUString   aCompStreet;
+    OUString   aCompZip;
+    OUString   aCompCity;
+    OUString   aCompCountry;
+    OUString   aCompState;
+    OUString   aCompPosition;
+    OUString   aCompPhone;
+    OUString   aCompMobile;
+    OUString   aCompFax;
+    OUString   aCompWWW;
+    OUString   aCompMail;
 
-    rtl::OUString   sGlossaryGroup;
-    rtl::OUString   sGlossaryBlockName;
+    OUString   sGlossaryGroup;
+    OUString   sGlossaryBlockName;
 };
 
 // class SwLabCfgItem -------------------------------------------------------
@@ -110,14 +110,14 @@ class SwLabCfgItem : public utl::ConfigItem
     SwLabItem   aItem;
     sal_Bool    bIsLabel;
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     SwLabCfgItem(sal_Bool bLabel);
 
     SwLabItem&              GetItem() {return aItem;}
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

@@ -32,7 +32,7 @@
  */
 class XMLStringBufferImportContext : public SvXMLImportContext
 {
-    ::rtl::OUStringBuffer& rTextBuffer;
+    OUStringBuffer& rTextBuffer;
 
 public:
 
@@ -41,19 +41,19 @@ public:
     XMLStringBufferImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& sLocalName,
-        ::rtl::OUStringBuffer& rBuffer);
+        const OUString& sLocalName,
+        OUStringBuffer& rBuffer);
 
     virtual ~XMLStringBufferImportContext();
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void Characters(
-        const ::rtl::OUString& rChars );
+        const OUString& rChars );
 
     virtual void EndElement();
 };

@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 class XMLAxisOASISContext : public XMLPersElemContentTContext
 {
@@ -38,14 +37,14 @@ public:
     TYPEINFO();
 
     XMLAxisOASISContext( XMLTransformerBase& rTransformer,
-                         const ::rtl::OUString& rQName,
+                         const OUString& rQName,
                          ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext );
     ~XMLAxisOASISContext();
 
     virtual XMLTransformerContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::rtl::OUString& rQName,
+        const OUString& rLocalName,
+        const OUString& rQName,
         const Reference< xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList );
@@ -62,7 +61,7 @@ TYPEINIT1( XMLAxisOASISContext, XMLPersElemContentTContext );
 
 XMLAxisOASISContext::XMLAxisOASISContext(
     XMLTransformerBase& rTransformer,
-    const ::rtl::OUString& rQName,
+    const OUString& rQName,
     ::rtl::Reference< XMLPersAttrListTContext > & rOutCategoriesContext ) :
         XMLPersElemContentTContext( rTransformer, rQName ),
         m_rCategoriesContext( rOutCategoriesContext ),
@@ -74,8 +73,8 @@ XMLAxisOASISContext::~XMLAxisOASISContext()
 
 XMLTransformerContext * XMLAxisOASISContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
-    const ::rtl::OUString& rQName,
+    const OUString& rLocalName,
+    const OUString& rQName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     XMLTransformerContext * pContext = 0;
@@ -196,7 +195,7 @@ bool XMLAxisOASISContext::IsCategoryAxis() const
 TYPEINIT1( XMLChartPlotAreaOASISTContext, XMLProcAttrTransformerContext );
 
 XMLChartPlotAreaOASISTContext::XMLChartPlotAreaOASISTContext(
-    XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName ) :
+    XMLTransformerBase & rTransformer, const OUString & rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OASIS_SHAPE_ACTIONS )
 {
 }
@@ -206,8 +205,8 @@ XMLChartPlotAreaOASISTContext::~XMLChartPlotAreaOASISTContext()
 
 XMLTransformerContext * XMLChartPlotAreaOASISTContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
-    const ::rtl::OUString& rQName,
+    const OUString& rLocalName,
+    const OUString& rQName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     XMLTransformerContext *pContext = 0;

@@ -102,30 +102,30 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Required properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "ContentType" ),
+                    OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsDocument" ),
+                    OUString( "IsDocument" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsFolder" ),
+                    OUString( "IsFolder" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "Title" ),
+                    OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -133,14 +133,14 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "TargetURL" ),
+                    OUString( "TargetURL" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString(
+                    OUString(
                         "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
@@ -161,43 +161,43 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Required properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "ContentType" ),
+                    OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsDocument" ),
+                    OUString( "IsDocument" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsFolder" ),
+                    OUString( "IsFolder" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "Title" ),
+                    OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
                 ///////////////////////////////////////////////////////////
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "TargetURL" ),
+                    OUString( "TargetURL" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
                 beans::Property(
-                    rtl::OUString(
+                    OUString(
                         "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
@@ -227,30 +227,30 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Required properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "ContentType" ),
+                    OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsDocument" ),
+                    OUString( "IsDocument" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsFolder" ),
+                    OUString( "IsFolder" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "Title" ),
+                    OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
@@ -258,7 +258,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString(
+                    OUString(
                         "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
@@ -279,37 +279,37 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 // Required properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString( "ContentType" ),
+                    OUString( "ContentType" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsDocument" ),
+                    OUString( "IsDocument" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "IsFolder" ),
+                    OUString( "IsFolder" ),
                     -1,
                     getCppuBooleanType(),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
                 ),
                 beans::Property(
-                    rtl::OUString( "Title" ),
+                    OUString( "Title" ),
                     -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
                 ///////////////////////////////////////////////////////////
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
                 beans::Property(
-                    rtl::OUString(
+                    OUString(
                         "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
@@ -340,30 +340,30 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
             // Required properties
             ///////////////////////////////////////////////////////////////
             beans::Property(
-                rtl::OUString( "ContentType" ),
+                OUString( "ContentType" ),
                 -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( "IsDocument" ),
+                OUString( "IsDocument" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( "IsFolder" ),
+                OUString( "IsFolder" ),
                 -1,
                 getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
             beans::Property(
-                rtl::OUString( "Title" ),
+                OUString( "Title" ),
                 -1,
-                getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
@@ -371,7 +371,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
             beans::Property(
-                    rtl::OUString(
+                    OUString(
                         "CreatableContentsInfo" ),
                     -1,
                     getCppuType( static_cast<
@@ -409,23 +409,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -449,23 +449,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -475,12 +475,12 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "delete" ),
+                    OUString( "delete" ),
                     -1,
                     getCppuBooleanType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "insert" ),
+                    OUString( "insert" ),
                     -1,
                     getCppuVoidType()
                 )
@@ -507,23 +507,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -533,7 +533,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "open" ),
+                    OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
@@ -552,23 +552,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -578,28 +578,28 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "delete" ),
+                    OUString( "delete" ),
                     -1,
                     getCppuBooleanType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "insert" ),
+                    OUString( "insert" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "open" ),
+                    OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "transfer" ),
+                    OUString( "transfer" ),
                     -1,
                     getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "createNewContent" ),
+                    OUString( "createNewContent" ),
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )
@@ -626,23 +626,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -652,7 +652,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "open" ),
+                    OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
@@ -671,23 +671,23 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Required commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "getCommandInfo" ),
+                    OUString( "getCommandInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertySetInfo" ),
+                    OUString( "getPropertySetInfo" ),
                     -1,
                     getCppuVoidType()
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "getPropertyValues" ),
+                    OUString( "getPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast< uno::Sequence< beans::Property > * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "setPropertyValues" ),
+                    OUString( "setPropertyValues" ),
                     -1,
                     getCppuType(
                         static_cast<
@@ -697,18 +697,18 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // Optional standard commands
                 ///////////////////////////////////////////////////////////
                 ucb::CommandInfo(
-                    rtl::OUString( "open" ),
+                    OUString( "open" ),
                     -1,
                     getCppuType(
                         static_cast< ucb::OpenCommandArgument2 * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "transfer" ),
+                    OUString( "transfer" ),
                     -1,
                     getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
                 ),
                 ucb::CommandInfo(
-                    rtl::OUString( "createNewContent" ),
+                    OUString( "createNewContent" ),
                     -1,
                     getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )

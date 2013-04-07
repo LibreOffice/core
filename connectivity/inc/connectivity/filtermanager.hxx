@@ -74,7 +74,7 @@ namespace dbtools
                                             m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                             m_xComponentAggregate;
-        ::std::vector< ::rtl::OUString >    m_aFilterComponents;
+        ::std::vector< OUString >    m_aFilterComponents;
         sal_Bool                            m_bApplyPublicFilter;
 
     public:
@@ -89,8 +89,8 @@ namespace dbtools
         /// makes the object forgetting the references to the database component
         void    dispose( );
 
-        const ::rtl::OUString&  getFilterComponent( FilterComponent _eWhich ) const;
-        void                    setFilterComponent( FilterComponent _eWhich, const ::rtl::OUString& _rComponent );
+        const OUString&  getFilterComponent( FilterComponent _eWhich ) const;
+        void                    setFilterComponent( FilterComponent _eWhich, const OUString& _rComponent );
 
         inline sal_Bool isApplyPublicFilter( ) const { return m_bApplyPublicFilter; }
                void     setApplyPublicFilter( sal_Bool _bApply );
@@ -98,14 +98,14 @@ namespace dbtools
     private:
         /** retrieves a filter which is a conjunction of all single filter components
         */
-        ::rtl::OUString         getComposedFilter( ) const;
+        OUString         getComposedFilter( ) const;
 
         /** appends one filter component to the statement in our composer
         */
-        void    appendFilterComponent( ::rtl::OUStringBuffer& io_appendTo, const ::rtl::OUString& i_component ) const;
+        void    appendFilterComponent( OUStringBuffer& io_appendTo, const OUString& i_component ) const;
 
         /// checks whether there is only one (or even no) non-empty filter component
-        bool    isThereAtMostOneComponent( ::rtl::OUStringBuffer& o_singleComponent ) const;
+        bool    isThereAtMostOneComponent( OUStringBuffer& o_singleComponent ) const;
 
         /// returns the index of the first filter component which should be considered when building the composed filter
         inline  sal_Int32   getFirstApplicableFilterIndex() const

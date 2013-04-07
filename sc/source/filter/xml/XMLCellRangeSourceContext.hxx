@@ -29,10 +29,10 @@ class ScXMLImport;
 
 struct ScMyImpCellRangeSource
 {
-    ::rtl::OUString             sSourceStr;
-    ::rtl::OUString             sFilterName;
-    ::rtl::OUString             sFilterOptions;
-    ::rtl::OUString             sURL;
+    OUString             sSourceStr;
+    OUString             sFilterName;
+    OUString             sFilterOptions;
+    OUString             sURL;
     sal_Int32                   nColumns;
     sal_Int32                   nRows;
     sal_Int32                   nRefresh;
@@ -53,7 +53,7 @@ public:
                                 ScXMLCellRangeSourceContext(
                                     ScXMLImport& rImport,
                                     sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& rLName,
+                                    const OUString& rLName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                     ScMyImpCellRangeSource* pCellRangeSource
                                     );
@@ -61,7 +61,7 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
                                     sal_uInt16 nPrefix,
-                                    const ::rtl::OUString& rLocalName,
+                                    const OUString& rLocalName,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList
                                     );
     virtual void                EndElement();

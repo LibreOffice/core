@@ -97,9 +97,9 @@ namespace dbaui
     {
     }
 
-    extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars);
+    extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const OUString& _sAllowedChars);
     //------------------------------------------------------------------
-    sal_Bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const rtl::OUString& _rNewText )
+    sal_Bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const OUString& _rNewText )
     {
         // first check if this is valid SQL92 name
         if ( isSQL92CheckEnabled(m_xConnection) )
@@ -107,7 +107,7 @@ namespace dbaui
             Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
             if ( xMeta.is() )
             {
-                ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(_rNewText, xMeta->getExtraNameCharacters());
+                OUString sAlias = ::dbtools::convertName2SQLName(_rNewText, xMeta->getExtraNameCharacters());
                 if ( ( xMeta->supportsMixedCaseQuotedIdentifiers() )
                         ?
                         sAlias != _rNewText
@@ -173,13 +173,13 @@ namespace dbaui
     //==================================================================
 DBG_NAME(DbaIndexDialog)
 //------------------------------------------------------------------
-    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< ::rtl::OUString >& _rFieldNames,
+    DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
                                     const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
-        ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString("dbaccess.tabledesign.indexdialog"))
+        ,m_aGeometrySettings(E_DIALOG, OUString("dbaccess.tabledesign.indexdialog"))
         ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
         ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
         ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))

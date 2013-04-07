@@ -25,12 +25,12 @@ namespace scripting_constants
 class ScriptingConstantsPool
 {
 public:
-    const ::rtl::OUString DOC_REF;
-    const ::rtl::OUString DOC_STORAGE_ID;
-    const ::rtl::OUString DOC_URI;
-    const ::rtl::OUString RESOLVED_STORAGE_ID;
-    const ::rtl::OUString SCRIPT_INFO;
-    const ::rtl::OUString SCRIPTSTORAGEMANAGER_SERVICE;
+    const OUString DOC_REF;
+    const OUString DOC_STORAGE_ID;
+    const OUString DOC_URI;
+    const OUString RESOLVED_STORAGE_ID;
+    const OUString SCRIPT_INFO;
+    const OUString SCRIPTSTORAGEMANAGER_SERVICE;
     const sal_Int32 SHARED_STORAGE_ID;
     const sal_Int32 USER_STORAGE_ID;
     const sal_Int32 DOC_STORAGE_ID_NOT_SET;

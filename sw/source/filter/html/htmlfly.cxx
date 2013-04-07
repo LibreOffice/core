@@ -443,7 +443,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         if( bLFPossible && HTML_CNTNR_DIV == nCntnrMode )
             OutNewLine();
 
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         pCntnrStr = (HTML_CNTNR_DIV == nCntnrMode)
                             ? OOO_STRING_SVTOOLS_HTML_division
                             : OOO_STRING_SVTOOLS_HTML_span;
@@ -529,13 +529,13 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
 }
 
 
-rtl::OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
+OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                                      const String& rAlternateTxt,
                                      sal_uInt32 nFrmOpts,
-                                     const rtl::OString &rEndTags )
+                                     const OString &rEndTags )
 {
-    rtl::OString sRetEndTags(rEndTags);
-    rtl::OStringBuffer sOut;
+    OString sRetEndTags(rEndTags);
+    OStringBuffer sOut;
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
 
@@ -934,7 +934,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         rHTMLWrt.aImgMapNames.push_back(aIMapName);
 
-        rtl::OString aIndMap, aIndArea;
+        OString aIndMap, aIndArea;
         const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;
 #if defined(UNX)
         sal_Char aLF[2] = "\x00";
@@ -982,8 +982,8 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         rHTMLWrt.OutNewLine( sal_True );
 
     // Attribute die ausserhelb der Grafik geschreiben werden muessen sammeln
-    rtl::OStringBuffer sOut;
-    rtl::OString aEndTags;
+    OStringBuffer sOut;
+    OString aEndTags;
 
     // implizite Sprungmarke -> <A NAME=...></A>...<IMG ...>
     if( pMarkType && rFrmFmt.GetName().Len() )
@@ -1056,7 +1056,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             }
 
             rWrt.Strm() << ">";
-            aEndTags = rtl::OStringBuffer().append("</").
+            aEndTags = OStringBuffer().append("</").
                 append(OOO_STRING_SVTOOLS_HTML_anchor).
                 append(RTL_CONSTASCII_STRINGPARAM(">")).append(aEndTags).
                 makeStringAndClear();
@@ -1130,7 +1130,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             HTMLOutFuncs::Out_Color( rWrt.Strm(),
                                      pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ) << '>';
 
-            aEndTags = rtl::OStringBuffer().
+            aEndTags = OStringBuffer().
                 append(RTL_CONSTASCII_STRINGPARAM("</")).
                 append(OOO_STRING_SVTOOLS_HTML_font).
                 append('>').append(aEndTags).makeStringAndClear();
@@ -1222,7 +1222,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                 if( rHTMLWrt.GetOrigFileName() )
                     rGrfName = *rHTMLWrt.GetOrigFileName();
                 sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
-                        rtl::OUString("JPG"),
+                        OUString("JPG"),
                         (XOUTBMP_USE_GIF_IF_SENSIBLE |
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
                 if( !nErr )
@@ -1253,7 +1253,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         pLink = &rGrfName;
     }
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     if( pTag )
         sOut.append('<').append(pTag);
 
@@ -1390,7 +1390,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_multicol);
 
     const SwFmtCol& rFmtCol = rFrmFmt.GetCol();
@@ -1465,14 +1465,14 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine( sal_True );
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
         .append(OOO_STRING_SVTOOLS_HTML_SPTYPE_block);
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // ALIGN, WIDTH, HEIGHT
-    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, HTML_FRMOPTS_SPACER );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, HTML_FRMOPTS_SPACER );
 
     rWrt.Strm() << '>';
     if( !aEndTags.isEmpty() )
@@ -1502,14 +1502,14 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(pStr);
 
     rWrt.Strm() << sOut.makeStringAndClear().getStr();
     sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
-    rtl::OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
+    OString aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, nFrmFlags );
     rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmFlags );
     rWrt.Strm() << '>';
 
@@ -1559,7 +1559,7 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aGrfNm = *rHTMLWrt.GetOrigFileName();
     if( aGrf.GetType() == GRAPHIC_NONE ||
         XOutBitmap::WriteGraphic( aGrf, aGrfNm,
-                                  rtl::OUString("JPG"),
+                                  OUString("JPG"),
                                   (XOUTBMP_USE_GIF_IF_POSSIBLE|
                                    XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
     {
@@ -1618,7 +1618,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                         MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
-                rtl::OUString("JPG"), nFlags, &aMM100Size );
+                OUString("JPG"), nFlags, &aMM100Size );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
@@ -1684,7 +1684,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     // als Multicol ausgeben
     rHTMLWrt.OutNewLine();
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append(OOO_STRING_SVTOOLS_HTML_division).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_type).append('=')
         .append(bHeader ? "HEADER" : "FOOTER");
@@ -1699,7 +1699,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     sal_uInt16 nSize = bHeader ? rULSpace.GetLower() : rULSpace.GetUpper();
     rHTMLWrt.nHeaderFooterSpace = nSize;
 
-    rtl::OString aSpacer;
+    OString aSpacer;
     if( rHTMLWrt.IsHTMLMode(HTMLMODE_VERT_SPACER) &&
         nSize > HTML_PARSPACE && Application::GetDefaultDevice() )
     {
@@ -1707,7 +1707,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         nSize = (sal_Int16)Application::GetDefaultDevice()
             ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
 
-        aSpacer = rtl::OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer).
+        aSpacer = OStringBuffer(OOO_STRING_SVTOOLS_HTML_spacer).
             append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
             append('=').append(OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical).
             append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).

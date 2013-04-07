@@ -144,9 +144,9 @@ namespace dbaui
         void                        Remove();
         sal_Bool                        IsActiveWindow(){ return m_bActive; }
 
-        ::rtl::OUString             GetTableName() const { return m_pData->GetTableName(); }
-        ::rtl::OUString             GetWinName() const { return m_pData->GetWinName(); }
-        ::rtl::OUString             GetComposedName() const { return m_pData->GetComposedName(); }
+        OUString             GetTableName() const { return m_pData->GetTableName(); }
+        OUString             GetWinName() const { return m_pData->GetWinName(); }
+        OUString             GetComposedName() const { return m_pData->GetComposedName(); }
         OTableWindowListBox*        GetListBox() const { return m_pListBox; }
         TTableWindowData::value_type GetData() const { return m_pData; }
         OTableWindowTitle*          GetTitleCtrl() { return &m_aTitle; }
@@ -155,7 +155,7 @@ namespace dbaui
             @return
                 The composed name or the window name.
         */
-        virtual ::rtl::OUString     GetName() const = 0;
+        virtual OUString     GetName() const = 0;
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetOriginalColumns() const { return m_pData->getColumns(); }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >    GetTable() const { return m_pData->getTable(); }
@@ -186,7 +186,7 @@ namespace dbaui
         // do I have connections to the outside?
         sal_Bool ExistsAConn() const;
 
-        void EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields);
+        void EnumValidFields(::std::vector< OUString>& arrstrFields);
 
         /** clears the listbox inside. Must be called be the dtor is called.
         */

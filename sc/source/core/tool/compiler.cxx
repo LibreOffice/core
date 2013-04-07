@@ -66,7 +66,6 @@
 
 using namespace formula;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using ::std::vector;
 
 

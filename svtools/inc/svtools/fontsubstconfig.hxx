@@ -27,8 +27,8 @@ struct SvtFontSubstConfig_Impl;
 //-----------------------------------------------------------------------------
 struct SubstitutionStruct
 {
-    rtl::OUString   sFont;
-    rtl::OUString   sReplaceBy;
+    OUString   sFont;
+    OUString   sReplaceBy;
     sal_Bool        bReplaceAlways;
     sal_Bool        bReplaceOnScreenOnly;
 };
@@ -42,7 +42,7 @@ public:
     virtual ~SvtFontSubstConfig();
 
     virtual void            Commit();
-    virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& _rPropertyNames);
 
     sal_Bool                IsEnabled() const {return bIsEnabled;}
     void                    Enable(sal_Bool bSet)  {bIsEnabled = bSet; SetModified();}

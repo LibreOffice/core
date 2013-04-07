@@ -151,7 +151,7 @@ namespace dbaui
         }
 
     protected:
-        TTableWindowData::value_type createTableWindowData(const ::rtl::OUString& _sComposedName,const ::rtl::OUString& _sTableName,const ::rtl::OUString& _sWindowName);
+        TTableWindowData::value_type createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName);
         // ask the user if the design should be saved when it is modified
         virtual short saveModified() = 0;
         // called when the orignal state should be reseted (first time load)

@@ -115,7 +115,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
     SAL_UNUSED_PARAMETER void* /*pServiceManager*/,
     SAL_UNUSED_PARAMETER void* /*pRegistryKey*/ )
 {
-    ::rtl::OUString sImplementationName( ::rtl::OUString::createFromAscii( pImplementationName ) );
+    OUString sImplementationName( OUString::createFromAscii( pImplementationName ) );
 
     Reference< XSingleComponentFactory > xFactory;
 
@@ -124,8 +124,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL pdfimport_component_getFactory(
     {
         if ( 0 == sImplementationName.compareToAscii( pComponents->pAsciiImplementationName ) )
         {
-            Sequence< ::rtl::OUString > sServices(1);
-            sServices[0] = ::rtl::OUString::createFromAscii( pComponents->pAsciiServiceName );
+            Sequence< OUString > sServices(1);
+            sServices[0] = OUString::createFromAscii( pComponents->pAsciiServiceName );
 
             xFactory = ::cppu::createSingleComponentFactory(
                 pComponents->pFactory,

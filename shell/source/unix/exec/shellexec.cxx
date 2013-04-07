@@ -45,10 +45,6 @@
 using com::sun::star::system::XSystemShellExecute;
 using com::sun::star::system::SystemShellExecuteException;
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OStringBuffer;
-using rtl::OUStringBuffer;
 using osl::FileBase;
 
 using namespace ::com::sun::star::uno;
@@ -72,7 +68,7 @@ namespace // private
     }
 }
 
-void escapeForShell( rtl::OStringBuffer & rBuffer, const rtl::OString & rURL)
+void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
 {
     sal_Int32 nmax = rURL.getLength();
     for(sal_Int32 n=0; n < nmax; ++n)
@@ -172,7 +168,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         OUString aProgramURL;
         try {
             aProgramURL = exp->expandMacros(
-                rtl::OUString( "$BRAND_BASE_DIR/program/"));
+                OUString( "$BRAND_BASE_DIR/program/"));
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
@@ -225,7 +221,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)
     {
         throw css::lang::IllegalArgumentException(
-            (rtl::OUString(
+            (OUString(
                     "XSystemShellExecute.execute URIS_ONLY with non-absolute"
                     " URI reference ")
              + aCommand),

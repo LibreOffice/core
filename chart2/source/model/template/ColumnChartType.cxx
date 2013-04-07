@@ -148,7 +148,7 @@ uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL ColumnChartType::getChartType()
+OUString SAL_CALL ColumnChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
@@ -178,9 +178,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertyS
 }
 
 
-uno::Sequence< ::rtl::OUString > ColumnChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ColumnChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_COLUMN;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     return aServices;

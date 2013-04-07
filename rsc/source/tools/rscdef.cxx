@@ -92,9 +92,9 @@ RscId::operator sal_Int32() const
     return( GetNumber() );
 }
 
-rtl::OString RscId::GetName() const
+OString RscId::GetName() const
 {
-    rtl::OStringBuffer aStr;
+    OStringBuffer aStr;
 
     if ( !aExp.IsNothing() )
     {
@@ -107,7 +107,7 @@ rtl::OString RscId::GetName() const
     return aStr.makeStringAndClear();
 }
 
-RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName, sal_Int32 lDefId )
+RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName, sal_Int32 lDefId )
     : StringNode( rDefName )
 {
     nRefCount = 0;
@@ -116,7 +116,7 @@ RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName, sal_Int32 lD
     pExp      = NULL;
 }
 
-RscDefine::RscDefine( sal_uLong lKey, const rtl::OString& rDefName,
+RscDefine::RscDefine( sal_uLong lKey, const OString& rDefName,
                       RscExpression * pExpression  )
     : StringNode( rDefName )
 {
@@ -145,7 +145,7 @@ void RscDefine::DefineToNumber()
     if( pExp )
         delete pExp;
     pExp = NULL;
-    SetName(rtl::OString::valueOf(lId));
+    SetName(OString::valueOf(lId));
 }
 
 sal_Bool RscDefine::Evaluate(){
@@ -161,14 +161,14 @@ RscDefine * RscDefine::Search( const char * pStr ){
     return (RscDefine *)StringNode::Search( pStr );
 }
 
-rtl::OString RscDefine::GetMacro()
+OString RscDefine::GetMacro()
 {
     if( pExp )
         return pExp->GetMacro();
-    return rtl::OString::valueOf(lId);
+    return OString::valueOf(lId);
 }
 
-RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName,
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
                                 sal_Int32 lDefId, size_t lPos )
 {
     RscDefine * pDef;
@@ -186,7 +186,7 @@ RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName
     return pDef;
 }
 
-RscDefine * RscDefineList::New( sal_uLong lFileKey, const rtl::OString& rDefName,
+RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
                                 RscExpression * pExpression, size_t lPos )
 {
     RscDefine * pDef;
@@ -241,7 +241,7 @@ sal_Bool RscExpType::Evaluate( sal_Int32 * plValue ) const{
     return sal_True;
 }
 
-void RscExpType::AppendMacro(rtl::OStringBuffer& rStr) const
+void RscExpType::AppendMacro(OStringBuffer& rStr) const
 {
     if( IsDefinition() )
         rStr.append(aExp.pDef->GetName());
@@ -305,9 +305,9 @@ sal_Bool RscExpression::Evaluate( sal_Int32 * plValue ){
     return sal_False;
 }
 
-rtl::OString RscExpression::GetMacro()
+OString RscExpression::GetMacro()
 {
-    rtl::OStringBuffer aLeft;
+    OStringBuffer aLeft;
 
     // Ausgabeoptimierung
     if( aLeftExp.IsNothing() )
@@ -458,7 +458,7 @@ RscFileTab :: ~RscFileTab(){
     };
 }
 
-sal_uLong  RscFileTab :: Find( const rtl::OString& rName )
+sal_uLong  RscFileTab :: Find( const OString& rName )
 {
     sal_uIntPtr aIndex = FirstIndex();
     while( aIndex != UNIQUEINDEX_ENTRY_NOTFOUND && (Get(aIndex)->aFileName != rName) )
@@ -533,7 +533,7 @@ sal_Bool RscFileTab::TestDef( sal_uLong lFileKey, size_t lPos,
     return sal_True;
 }
 
-RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
                                 sal_Int32 lId, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
@@ -552,7 +552,7 @@ RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName
     return( pDef );
 }
 
-RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const rtl::OString& rDefName,
+RscDefine * RscFileTab::NewDef( sal_uLong lFileKey, const OString& rDefName,
                                 RscExpression * pExp, sal_uLong lPos )
 {
     RscDefine * pDef = FindDef( rDefName );
@@ -594,7 +594,7 @@ void RscFileTab :: DeleteFileContext( sal_uLong lFileKey ){
     }
 }
 
-sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
+sal_uLong  RscFileTab :: NewCodeFile( const OString& rName )
 {
     sal_uLong lKey = Find( rName );
     if( UNIQUEINDEX_ENTRY_NOTFOUND == lKey )
@@ -608,8 +608,8 @@ sal_uLong  RscFileTab :: NewCodeFile( const rtl::OString& rName )
     return lKey;
 }
 
-sal_uLong  RscFileTab :: NewIncFile(const rtl::OString& rName,
-    const rtl::OString& rPath)
+sal_uLong  RscFileTab :: NewIncFile(const OString& rName,
+    const OString& rPath)
 {
     sal_uLong lKey = Find( rName );
     if( UNIQUEINDEX_ENTRY_NOTFOUND == lKey )

@@ -32,7 +32,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-sdbcx::ObjectType ODbaseColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseColumns::createObject(const OUString& _rName)
 {
 
     ODbaseTable* pTable = (ODbaseTable*)m_pTable;
@@ -59,7 +59,7 @@ Reference< XPropertySet > ODbaseColumns::createDescriptor()
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType ODbaseColumns::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseColumns::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     if ( m_pTable->isNew() )
         return cloneDescriptor( descriptor );
@@ -70,7 +70,7 @@ sdbcx::ObjectType ODbaseColumns::appendObject( const ::rtl::OUString& _rForName,
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 // XDrop
-void ODbaseColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
+void ODbaseColumns::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     if(!m_pTable->isNew())
         m_pTable->dropColumn(_nPos);

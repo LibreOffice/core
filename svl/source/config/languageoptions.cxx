@@ -171,8 +171,8 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( "System/L10N")
 {
-    uno::Sequence< rtl::OUString > aPropertyNames(1);
-    rtl::OUString* pNames = aPropertyNames.getArray();
+    uno::Sequence< OUString > aPropertyNames(1);
+    OUString* pNames = aPropertyNames.getArray();
     pNames[0] = "SystemLocale";
     uno::Sequence< uno::Any > aValues = GetProperties( aPropertyNames );
 
@@ -191,7 +191,7 @@ void    SvtSystemLanguageOptions::Commit()
     //does nothing
 }
 
-void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
     // no listeners supported yet
 }

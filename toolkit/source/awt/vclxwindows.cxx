@@ -228,7 +228,7 @@ void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, 
     }
 }
 
-void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -281,7 +281,7 @@ void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const
     }
 }
 
-::com::sun::star::uno::Any VCLXGraphicControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -416,7 +416,7 @@ void VCLXButton::removeItemListener( const ::com::sun::star::uno::Reference< ::c
     maItemListeners.removeInterface( l );
 }
 
-void VCLXButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXButton::setLabel( const OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -425,7 +425,7 @@ void VCLXButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::sta
         pWindow->SetText( rLabel );
 }
 
-void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXButton::setActionCommand( const OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -479,7 +479,7 @@ void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com
     return AWTSize(aSz);
 }
 
-void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXButton::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -524,7 +524,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
     }
 }
 
-::com::sun::star::uno::Any VCLXButton::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXButton::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -683,7 +683,7 @@ void VCLXImageControl::ImplSetNewImage()
     return aSz;
 }
 
-void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -719,7 +719,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
     }
 }
 
-::com::sun::star::uno::Any VCLXImageControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXImageControl::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -837,13 +837,13 @@ void VCLXCheckBox::removeActionListener( const ::com::sun::star::uno::Reference<
     maActionListeners.removeInterface( l );
 }
 
-void VCLXCheckBox::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXCheckBox::setActionCommand( const OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     maActionCommand = rCommand;
 }
 
-void VCLXCheckBox::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXCheckBox::setLabel( const OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -942,7 +942,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
     return AWTSize(aSz);
 }
 
-void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXCheckBox::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -978,7 +978,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
     }
 }
 
-::com::sun::star::uno::Any VCLXCheckBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXCheckBox::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1114,7 +1114,7 @@ void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     VCLXGraphicControl::dispose();
 }
 
-void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXRadioButton::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1156,7 +1156,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
     }
 }
 
-::com::sun::star::uno::Any VCLXRadioButton::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXRadioButton::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1209,7 +1209,7 @@ void VCLXRadioButton::removeActionListener( const ::com::sun::star::uno::Referen
     maActionListeners.removeInterface( l );
 }
 
-void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXRadioButton::setLabel( const OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1218,7 +1218,7 @@ void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun
         pWindow->SetText( rLabel );
 }
 
-void VCLXRadioButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXRadioButton::setActionCommand( const OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     maActionCommand = rCommand;
@@ -1539,7 +1539,7 @@ void VCLXListBox::removeActionListener( const ::com::sun::star::uno::Reference< 
     maActionListeners.removeInterface( l );
 }
 
-void VCLXListBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXListBox::addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1548,7 +1548,7 @@ void VCLXListBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(
         pBox->InsertEntry( aItem, nPos );
 }
 
-void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1556,8 +1556,8 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStri
     if ( pBox )
     {
         sal_uInt16 nP = nPos;
-        const ::rtl::OUString* pItems = aItems.getConstArray();
-        const ::rtl::OUString* pItemsEnd = aItems.getConstArray() + aItems.getLength();
+        const OUString* pItems = aItems.getConstArray();
+        const OUString* pItemsEnd = aItems.getConstArray() + aItems.getLength();
         while ( pItems != pItemsEnd )
         {
             if ( (sal_uInt16)nP == 0xFFFF )
@@ -1592,7 +1592,7 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
     return pBox ? pBox->GetEntryCount() : 0;
 }
 
-::rtl::OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1603,20 +1603,20 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
     return aItem;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXListBox::getItems() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString> VCLXListBox::getItems() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
+    ::com::sun::star::uno::Sequence< OUString> aSeq;
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
         sal_uInt16 nEntries = pBox->GetEntryCount();
-        aSeq = ::com::sun::star::uno::Sequence< ::rtl::OUString>( nEntries );
+        aSeq = ::com::sun::star::uno::Sequence< OUString>( nEntries );
         for ( sal_uInt16 n = nEntries; n; )
         {
             --n;
-            aSeq.getArray()[n] = ::rtl::OUString( pBox->GetEntry( n ) );
+            aSeq.getArray()[n] = OUString( pBox->GetEntry( n ) );
         }
     }
     return aSeq;
@@ -1646,7 +1646,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
     return aSeq;
 }
 
-::rtl::OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1657,18 +1657,18 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
     return aItem;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXListBox::getSelectedItems() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString> VCLXListBox::getSelectedItems() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
+    ::com::sun::star::uno::Sequence< OUString> aSeq;
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
         sal_uInt16 nSelEntries = pBox->GetSelectEntryCount();
-        aSeq = ::com::sun::star::uno::Sequence< ::rtl::OUString>( nSelEntries );
+        aSeq = ::com::sun::star::uno::Sequence< OUString>( nSelEntries );
         for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
-            aSeq.getArray()[n] = ::rtl::OUString( pBox->GetSelectEntry( n ) );
+            aSeq.getArray()[n] = OUString( pBox->GetSelectEntry( n ) );
     }
     return aSeq;
 }
@@ -1723,7 +1723,7 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     }
 }
 
-void VCLXListBox::selectItem( const ::rtl::OUString& rItemText, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXListBox::selectItem( const OUString& rItemText, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1841,7 +1841,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1884,7 +1884,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             break;
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aItems;
+                ::com::sun::star::uno::Sequence< OUString> aItems;
                 if ( Value >>= aItems )
                 {
                     pListBox->Clear();
@@ -1918,7 +1918,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
     }
 }
 
-::com::sun::star::uno::Any VCLXListBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXListBox::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1955,8 +1955,8 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             case BASEPROPERTY_STRINGITEMLIST:
             {
                 sal_uInt16 nItems = pListBox->GetEntryCount();
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq( nItems );
-                ::rtl::OUString* pStrings = aSeq.getArray();
+                ::com::sun::star::uno::Sequence< OUString> aSeq( nItems );
+                OUString* pStrings = aSeq.getArray();
                 for ( sal_uInt16 n = 0; n < nItems; n++ )
                     pStrings[n] = pListBox->GetEntry( n );
                 aProp <<= aSeq;
@@ -2052,7 +2052,7 @@ void VCLXListBox::ImplCallItemListeners()
 }
 namespace
 {
-     Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+     Image lcl_getImageFromURL( const OUString& i_rImageURL )
      {
          if ( i_rImageURL.isEmpty() )
              return Image();
@@ -2083,7 +2083,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) thr
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pListBox->GetEntryCount() ) ),
         "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
     pListBox->InsertEntry(
-        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
+        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString(),
         i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
         i_rEvent.ItemPosition );
 }
@@ -2113,7 +2113,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) thr
 
     // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
 
-    const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
+    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
@@ -2144,20 +2144,20 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) ) )
+    if ( xPSI->hasPropertyByName( OUString( "ResourceResolver" ) ) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
             uno::UNO_QUERY
         );
     }
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
+    uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
-        ::rtl::OUString aLocalizationKey( aItems[i].First );
+        OUString aLocalizationKey( aItems[i].First );
         if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
@@ -2203,7 +2203,7 @@ IMPL_XTYPEPROVIDER_START( VCLXMessageBox )
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMessageBox::setCaptionText( const OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2212,7 +2212,7 @@ void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com:
         pWindow->SetText( rText );
 }
 
-::rtl::OUString VCLXMessageBox::getCaptionText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMessageBox::getCaptionText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2223,7 +2223,7 @@ void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com:
     return aText;
 }
 
-void VCLXMessageBox::setMessageText( const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMessageBox::setMessageText( const OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2232,11 +2232,11 @@ void VCLXMessageBox::setMessageText( const ::rtl::OUString& rText ) throw(::com:
         pBox->SetMessText( rText );
 }
 
-::rtl::OUString VCLXMessageBox::getMessageText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMessageBox::getMessageText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     MessBox* pBox = (MessBox*)GetWindow();
     if ( pBox )
         aText = pBox->GetMessText();
@@ -2302,16 +2302,16 @@ void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeExcept
         pDialog->EndDialog( i_result );
 }
 
-void SAL_CALL VCLXDialog::setHelpId( const ::rtl::OUString& rId ) throw (RuntimeException)
+void SAL_CALL VCLXDialog::setHelpId( const OUString& rId ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
-        pWindow->SetHelpId( rtl::OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
+        pWindow->SetHelpId( OUStringToOString( rId, RTL_TEXTENCODING_UTF8 ) );
 }
 
-void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXDialog::setTitle( const OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2320,11 +2320,11 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
         pWindow->SetText( Title );
 }
 
-::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aTitle;
+    OUString aTitle;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aTitle = pWindow->GetText();
@@ -2399,7 +2399,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
 }
 
 void SAL_CALL VCLXDialog::setProperty(
-    const ::rtl::OUString& PropertyName,
+    const OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2528,11 +2528,11 @@ throw(::com::sun::star::uno::RuntimeException)
     return aInfo;
 }
 
-uno::Any SAL_CALL VCLXMultiPage::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+uno::Any SAL_CALL VCLXMultiPage::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     OSL_TRACE(" **** VCLXMultiPage::getProperty( %s )",
-        rtl::OUStringToOString( PropertyName,
+        OUStringToOString( PropertyName,
         RTL_TEXTENCODING_UTF8 ).getStr() );
     ::com::sun::star::uno::Any aProp;
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
@@ -2551,12 +2551,12 @@ uno::Any SAL_CALL VCLXMultiPage::getProperty( const ::rtl::OUString& PropertyNam
 }
 
 void SAL_CALL VCLXMultiPage::setProperty(
-    const ::rtl::OUString& PropertyName,
+    const OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     TabControl* pTabControl = (TabControl*)GetWindow();
     if ( pTabControl )
@@ -2618,11 +2618,11 @@ sal_Int32 SAL_CALL VCLXMultiPage::insertTab() throw (uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
     TabPage* pTab = new TabPage( pTabControl );
-    rtl::OUString title ("");
+    OUString title ("");
     return static_cast< sal_Int32 >( insertTab( pTab, title ) );
 }
 
-sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, rtl::OUString& sTitle )
+sal_uInt16 VCLXMultiPage::insertTab( TabPage* pPage, OUString& sTitle )
 {
     TabControl *pTabControl = getTabControl();
     sal_uInt16 id = sal::static_int_cast< sal_uInt16 >( mTabId++ );
@@ -2674,12 +2674,12 @@ void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< bea
 
     for (sal_Int32 i = 0; i < Properties.getLength(); ++i)
     {
-        const rtl::OUString &name = Properties[i].Name;
+        const OUString &name = Properties[i].Name;
         const uno::Any &value = Properties[i].Value;
 
         if (name == "Title")
         {
-            rtl::OUString title = value.get<rtl::OUString>();
+            OUString title = value.get<OUString>();
             pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title );
         }
     }
@@ -2695,13 +2695,13 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
 #define ADD_PROP( seq, i, name, val ) {                                \
         beans::NamedValue value;                                                  \
-        value.Name = rtl::OUString( name ); \
+        value.Name = OUString( name ); \
         value.Value = uno::makeAny( val );                                      \
         seq[i] = value;                                                    \
     }
 
     uno::Sequence< beans::NamedValue > props( 2 );
-    ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) ) ) );
+    ADD_PROP( props, 0, "Title", OUString( pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) ) ) );
     ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) ) );
 #undef ADD_PROP
     return props;
@@ -2802,7 +2802,7 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL VCLXTabPage::setProperty(
-    const ::rtl::OUString& PropertyName,
+    const OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2840,7 +2840,7 @@ throw(::com::sun::star::uno::RuntimeException)
             break;
             case BASEPROPERTY_TITLE:
                 {
-                    ::rtl::OUString sTitle;
+                    OUString sTitle;
                     if ( Value >>= sTitle )
                     {
                         pTabPage->SetText(sTitle);
@@ -2918,7 +2918,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
             else
             {
                 // open the URL
-                ::rtl::OUString sURL;
+                OUString sURL;
                 FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
                 if ( pBase )
                     sURL = pBase->GetURL();
@@ -2930,7 +2930,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     {
                         // start browser
                         xSystemShellExecute->execute(
-                            sURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
+                            sURL, OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
                     }
                     catch( uno::Exception& )
                     {
@@ -2950,7 +2950,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFixedHyperlink::setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2959,18 +2959,18 @@ void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun
         pBase->SetText(Text);
 }
 
-::rtl::OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
 }
 
-void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFixedHyperlink::setURL( const OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -2979,11 +2979,11 @@ void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::
         pBase->SetURL( URL );
 }
 
-::rtl::OUString VCLXFixedHyperlink::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXFixedHyperlink::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     FixedHyperlink* pBase = (FixedHyperlink*)GetWindow();
     if ( pBase )
         aText = pBase->GetURL();
@@ -3070,7 +3070,7 @@ void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Refe
     return aSz;
 }
 
-void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFixedHyperlink::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3082,7 +3082,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
         {
             case BASEPROPERTY_LABEL:
             {
-                ::rtl::OUString sNewLabel;
+                OUString sNewLabel;
                 if ( Value >>= sNewLabel )
                     pBase->SetText(sNewLabel);
                 break;
@@ -3090,7 +3090,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
 
             case BASEPROPERTY_URL:
             {
-                ::rtl::OUString sNewURL;
+                OUString sNewURL;
                 if ( Value >>= sNewURL )
                     pBase->SetURL( sNewURL );
                 break;
@@ -3104,7 +3104,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
     }
 }
 
-::com::sun::star::uno::Any VCLXFixedHyperlink::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3117,7 +3117,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
         {
             case BASEPROPERTY_URL:
             {
-                aProp = makeAny( ::rtl::OUString( pBase->GetURL() ) );
+                aProp = makeAny( OUString( pBase->GetURL() ) );
                 break;
             }
 
@@ -3212,7 +3212,7 @@ IMPL_XTYPEPROVIDER_END
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
-void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFixedText::setText( const OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3221,11 +3221,11 @@ void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::sta
         pWindow->SetText( Text );
 }
 
-::rtl::OUString VCLXFixedText::getText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXFixedText::getText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
@@ -3531,7 +3531,7 @@ sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeEx
 }
 
 // ::com::sun::star::awt::VclWindowPeer
-void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXScrollBar::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3646,7 +3646,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
     }
 }
 
-::com::sun::star::uno::Any VCLXScrollBar::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXScrollBar::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3864,7 +3864,7 @@ void VCLXEdit::removeTextListener( const ::com::sun::star::uno::Reference< ::com
     GetTextListeners().removeInterface( l );
 }
 
-void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXEdit::setText( const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3881,7 +3881,7 @@ void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::u
     }
 }
 
-void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -3899,22 +3899,22 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const :
     }
 }
 
-::rtl::OUString VCLXEdit::getText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXEdit::getText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
         aText = pWindow->GetText();
     return aText;
 }
 
-::rtl::OUString VCLXEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aText;
+    OUString aText;
     Edit* pEdit = (Edit*) GetWindow();
     if ( pEdit)
         aText = pEdit->GetSelected();
@@ -3986,7 +3986,7 @@ void VCLXEdit::setEchoChar( sal_Unicode cEcho ) throw(::com::sun::star::uno::Run
         pEdit->SetEchoChar( cEcho );
 }
 
-void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXEdit::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4031,7 +4031,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
     }
 }
 
-::com::sun::star::uno::Any VCLXEdit::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXEdit::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4246,7 +4246,7 @@ void VCLXComboBox::removeActionListener( const ::com::sun::star::uno::Reference<
     maActionListeners.removeInterface( l );
 }
 
-void VCLXComboBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXComboBox::addItem( const OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4255,7 +4255,7 @@ void VCLXComboBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw
         pBox->InsertEntry( aItem, nPos );
 }
 
-void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4296,27 +4296,27 @@ sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcep
     return pBox ? pBox->GetEntryCount() : 0;
 }
 
-::rtl::OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aItem;
+    OUString aItem;
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
         aItem = pBox->GetEntry( nPos );
     return aItem;
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXComboBox::getItems() throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString> VCLXComboBox::getItems() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
+    ::com::sun::star::uno::Sequence< OUString> aSeq;
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
     {
         sal_uInt16 nEntries = pBox->GetEntryCount();
-        aSeq = ::com::sun::star::uno::Sequence< ::rtl::OUString>( nEntries );
+        aSeq = ::com::sun::star::uno::Sequence< OUString>( nEntries );
         for ( sal_uInt16 n = nEntries; n; )
         {
             --n;
@@ -4346,7 +4346,7 @@ sal_Int16 VCLXComboBox::getDropDownLineCount() throw(::com::sun::star::uno::Runt
     return nLines;
 }
 
-void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4372,7 +4372,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             break;
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aItems;
+                ::com::sun::star::uno::Sequence< OUString> aItems;
                 if ( Value >>= aItems )
                 {
                     pComboBox->Clear();
@@ -4396,7 +4396,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
     }
 }
 
-::com::sun::star::uno::Any VCLXComboBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXComboBox::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4420,8 +4420,8 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             case BASEPROPERTY_STRINGITEMLIST:
             {
                 sal_uInt16 nItems = pComboBox->GetEntryCount();
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq( nItems );
-                ::rtl::OUString* pStrings = aSeq.getArray();
+                ::com::sun::star::uno::Sequence< OUString> aSeq( nItems );
+                OUString* pStrings = aSeq.getArray();
                 for ( sal_uInt16 n = 0; n < nItems; n++ )
                     pStrings[n] = pComboBox->GetEntry( n );
                 aProp <<= aSeq;
@@ -4555,7 +4555,7 @@ void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent ) th
     ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pComboBox->GetEntryCount() ) ),
         "VCLXComboBox::listItemInserted: illegal (inconsistent) item position!" );
     pComboBox->InsertEntry(
-        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
+        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString(),
         i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
         i_rEvent.ItemPosition );
 }
@@ -4585,7 +4585,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) th
 
     // VCL's ComboBox does not support changing an entry's text or image, so remove and re-insert
 
-    const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
+    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pComboBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pComboBox->RemoveEntry( i_rEvent.ItemPosition );
@@ -4615,22 +4615,22 @@ void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw
 
     uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-    // bool localize = xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) );
+    // bool localize = xPSI->hasPropertyByName( OUString( "ResourceResolver" ) );
     uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
-    if ( xPSI->hasPropertyByName( ::rtl::OUString( "ResourceResolver" ) ) )
+    if ( xPSI->hasPropertyByName( OUString( "ResourceResolver" ) ) )
     {
         xStringResourceResolver.set(
-            xPropSet->getPropertyValue( ::rtl::OUString( "ResourceResolver" ) ),
+            xPropSet->getPropertyValue( OUString( "ResourceResolver" ) ),
             uno::UNO_QUERY
         );
     }
 
 
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
-    uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
+    uno::Sequence< beans::Pair< OUString, OUString > > aItems = xItemList->getAllItems();
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
-        ::rtl::OUString aLocalizationKey( aItems[i].First );
+        OUString aLocalizationKey( aItems[i].First );
         if ( xStringResourceResolver.is() && !aLocalizationKey.isEmpty() && aLocalizationKey[0] == '&' )
         {
             aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
@@ -4679,7 +4679,7 @@ sal_Bool VCLXFormattedSpinField::isStrictFormat()
 }
 
 
-void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFormattedSpinField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4718,7 +4718,7 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
     }
 }
 
-::com::sun::star::uno::Any VCLXFormattedSpinField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXFormattedSpinField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4812,7 +4812,7 @@ IMPL_XTYPEPROVIDER_START( VCLXDateField )
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXDateField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -4881,7 +4881,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
     }
 }
 
-::com::sun::star::uno::Any VCLXDateField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXDateField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5295,7 +5295,7 @@ sal_Bool VCLXTimeField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 }
 
 
-void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXTimeField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5357,7 +5357,7 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
     }
 }
 
-::com::sun::star::uno::Any VCLXTimeField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXTimeField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5625,7 +5625,7 @@ sal_Int16 VCLXNumericField::getDecimalDigits() throw(::com::sun::star::uno::Runt
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
-void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXNumericField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5694,7 +5694,7 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
     }
 }
 
-::com::sun::star::uno::Any VCLXNumericField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXNumericField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5913,7 +5913,7 @@ sal_Int16 VCLXMetricField::getDecimalDigits() throw(::com::sun::star::uno::Runti
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
 }
 
-void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMetricField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5945,7 +5945,7 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
             }
             case BASEPROPERTY_CUSTOMUNITTEXT:
             {
-                rtl::OUString aStr;
+                OUString aStr;
                 if ( Value >>= aStr )
                     ((MetricField*)GetWindow())->SetCustomUnitText( aStr );
                 break;
@@ -5959,7 +5959,7 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
     }
 }
 
-::com::sun::star::uno::Any VCLXMetricField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -5977,7 +5977,7 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
                 aProp <<= (sal_uInt16) ((MetricField*)GetWindow())->GetUnit();
                 break;
             case BASEPROPERTY_CUSTOMUNITTEXT:
-                aProp <<= rtl::OUString (((MetricField*)GetWindow())->GetCustomUnitText());
+                aProp <<= OUString (((MetricField*)GetWindow())->GetCustomUnitText());
                 break;
             default:
             {
@@ -6221,7 +6221,7 @@ sal_Int16 VCLXCurrencyField::getDecimalDigits() throw(::com::sun::star::uno::Run
     return pCurrencyFormatter ? pCurrencyFormatter->GetDecimalDigits() : 0;
 }
 
-void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXCurrencyField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -6277,7 +6277,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                ::rtl::OUString aString;
+                OUString aString;
                 if ( Value >>= aString )
                      ((LongCurrencyField*)GetWindow())->SetCurrencySymbol( aString );
             }
@@ -6297,7 +6297,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
     }
 }
 
-::com::sun::star::uno::Any VCLXCurrencyField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -6330,7 +6330,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aProp <<= ::rtl::OUString( ((LongCurrencyField*)GetWindow())->GetCurrencySymbol() );
+                aProp <<= OUString( ((LongCurrencyField*)GetWindow())->GetCurrencySymbol() );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
@@ -6403,30 +6403,30 @@ IMPL_XTYPEPROVIDER_START( VCLXPatternField )
     VCLXFormattedSpinField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXPatternField::setMasks( const OUString& EditMask, const OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
     {
-        pPatternField->SetMask( rtl::OUStringToOString(EditMask, RTL_TEXTENCODING_ASCII_US), LiteralMask );
+        pPatternField->SetMask( OUStringToOString(EditMask, RTL_TEXTENCODING_ASCII_US), LiteralMask );
     }
 }
 
-void VCLXPatternField::getMasks( ::rtl::OUString& EditMask, ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXPatternField::getMasks( OUString& EditMask, OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
     {
-        EditMask = rtl::OStringToOUString(pPatternField->GetEditMask(), RTL_TEXTENCODING_ASCII_US);
+        EditMask = OStringToOUString(pPatternField->GetEditMask(), RTL_TEXTENCODING_ASCII_US);
         LiteralMask = pPatternField->GetLiteralMask();
     }
 }
 
-void VCLXPatternField::setString( const ::rtl::OUString& Str ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXPatternField::setString( const OUString& Str ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -6437,11 +6437,11 @@ void VCLXPatternField::setString( const ::rtl::OUString& Str ) throw(::com::sun:
     }
 }
 
-::rtl::OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString aString;
+    OUString aString;
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
         aString = pPatternField->GetString();
@@ -6458,7 +6458,7 @@ sal_Bool VCLXPatternField::isStrictFormat() throw(::com::sun::star::uno::Runtime
     return VCLXFormattedSpinField::isStrictFormat();
 }
 
-void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXPatternField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -6470,10 +6470,10 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
             case BASEPROPERTY_EDITMASK:
             case BASEPROPERTY_LITERALMASK:
             {
-                ::rtl::OUString aString;
+                OUString aString;
                 if ( Value >>= aString )
                 {
-                    ::rtl::OUString aEditMask, aLiteralMask;
+                    OUString aEditMask, aLiteralMask;
                     getMasks( aEditMask, aLiteralMask );
                     if ( nPropType == BASEPROPERTY_EDITMASK )
                         aEditMask = aString;
@@ -6491,7 +6491,7 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
     }
 }
 
-::com::sun::star::uno::Any VCLXPatternField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXPatternField::getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -6504,7 +6504,7 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
             case BASEPROPERTY_EDITMASK:
             case BASEPROPERTY_LITERALMASK:
             {
-                ::rtl::OUString aEditMask, aLiteralMask;
+                OUString aEditMask, aLiteralMask;
                 getMasks( aEditMask, aLiteralMask );
                 if ( nPropType == BASEPROPERTY_EDITMASK )
                     aProp <<= aEditMask;
@@ -6605,7 +6605,7 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 void SAL_CALL VCLXFrame::setProperty(
-    const ::rtl::OUString& PropertyName,
+    const OUString& PropertyName,
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {

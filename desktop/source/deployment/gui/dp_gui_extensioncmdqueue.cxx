@@ -100,7 +100,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 namespace {
 
@@ -405,7 +404,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     }
     else if (request >>= depExc)
     {
-        std::vector< rtl::OUString > deps;
+        std::vector< OUString > deps;
         for (sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength();
              ++i)
         {
@@ -620,8 +619,8 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
 }
 
 //------------------------------------------------------------------------------
-void ExtensionCmdQueue::Thread::addExtension( const ::rtl::OUString &rExtensionURL,
-                                              const ::rtl::OUString &rRepository,
+void ExtensionCmdQueue::Thread::addExtension( const OUString &rExtensionURL,
+                                              const OUString &rRepository,
                                               const bool bWarnUser )
 {
     if ( !rExtensionURL.isEmpty() )
@@ -921,7 +920,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     {}
 
     // Check, if there are still updates to be notified via menu bar icon
-    uno::Sequence< uno::Sequence< rtl::OUString > > aItemList;
+    uno::Sequence< uno::Sequence< OUString > > aItemList;
     UpdateDialog::createNotifyJob( false, aItemList );
 }
 
@@ -1077,8 +1076,8 @@ ExtensionCmdQueue::~ExtensionCmdQueue() {
     stop();
 }
 
-void ExtensionCmdQueue::addExtension( const ::rtl::OUString & extensionURL,
-                                      const ::rtl::OUString & repository,
+void ExtensionCmdQueue::addExtension( const OUString & extensionURL,
+                                      const OUString & repository,
                                       const bool bWarnUser )
 {
     m_thread->addExtension( extensionURL, repository, bWarnUser );

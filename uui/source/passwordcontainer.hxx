@@ -88,7 +88,7 @@ public:
         com::sun::star::uno::Reference<
             com::sun::star::ucb::XInteractionSupplyAuthentication > const &
                 xSupplyAuthentication,
-        rtl::OUString const & rURL,
+        OUString const & rURL,
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionHandler2 > const & xIH )
     SAL_THROW( (com::sun::star::uno::RuntimeException) );
@@ -120,9 +120,9 @@ public:
             False, otherwise.
 
     */
-    bool addRecord( rtl::OUString const & rURL,
-                    rtl::OUString const & rUsername,
-                    com::sun::star::uno::Sequence< rtl::OUString > const &
+    bool addRecord( OUString const & rURL,
+                    OUString const & rUsername,
+                    com::sun::star::uno::Sequence< OUString > const &
                     rPasswords,
                     com::sun::star::uno::Reference<
                         com::sun::star::task::XInteractionHandler2 > const & xIH,
@@ -149,14 +149,14 @@ public:
     virtual ~PasswordContainerInteractionHandler();
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
-    supportsService( const ::rtl::OUString& ServiceName )
+    supportsService( const OUString& ServiceName )
         throw ( com::sun::star::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw ( com::sun::star::uno::RuntimeException );
 
@@ -172,10 +172,10 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // Non-UNO interfaces
-    static rtl::OUString
+    static OUString
     getImplementationName_Static();
 
-    static com::sun::star::uno::Sequence< rtl::OUString >
+    static com::sun::star::uno::Sequence< OUString >
     getSupportedServiceNames_Static();
 
     static com::sun::star::uno::Reference<

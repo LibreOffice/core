@@ -86,7 +86,7 @@ int InitXrmExport( char*, char* pFilename)
 /*****************************************************************************/
 {
     // instanciate Export
-    rtl::OString sFilename( pFilename );
+    OString sFilename( pFilename );
 
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
@@ -179,11 +179,11 @@ XRMResParser::~XRMResParser()
 int XRMResParser::Execute( int nToken, char * pToken )
 /*****************************************************************************/
 {
-    rtl::OString rToken( pToken );
+    OString rToken( pToken );
 
     switch ( nToken ) {
         case XRM_TEXT_START:{
-                rtl::OString sNewGID = GetAttribute( rToken, "id" );
+                OString sNewGID = GetAttribute( rToken, "id" );
                 if ( sNewGID != sGID ) {
                     sGID = sNewGID;
                 }
@@ -196,14 +196,14 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case XRM_TEXT_END: {
                 sCurrentCloseTag = rToken;
-                sResourceType = rtl::OString ( "readmeitem" );
-                sLangAttribute = rtl::OString ( "xml:lang" );
+                sResourceType = OString ( "readmeitem" );
+                sLangAttribute = OString ( "xml:lang" );
                 WorkOnText( sCurrentOpenTag, sCurrentText );
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                 bText = sal_False;
-                rToken = rtl::OString("");
-                sCurrentText  = rtl::OString("");
+                rToken = OString("");
+                sCurrentText  = OString("");
         }
         break;
 
@@ -219,7 +219,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_TEXT_START:{
                 if (bDisplayName) {
-                    sGID = rtl::OString("dispname");
+                    sGID = OString("dispname");
                     bText = sal_True;
                     sCurrentText = "";
                     sCurrentOpenTag = rToken;
@@ -231,14 +231,14 @@ int XRMResParser::Execute( int nToken, char * pToken )
         case DESC_TEXT_END: {
                 if (bDisplayName) {
                     sCurrentCloseTag = rToken;
-                    sResourceType = rtl::OString ( "description" );
-                    sLangAttribute = rtl::OString ( "lang" );
+                    sResourceType = OString ( "description" );
+                    sLangAttribute = OString ( "lang" );
                     WorkOnText( sCurrentOpenTag, sCurrentText );
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     bText = sal_False;
-                    rToken = rtl::OString("");
-                    sCurrentText  = rtl::OString("");
+                    rToken = OString("");
+                    sCurrentText  = OString("");
                 }
         }
         break;
@@ -255,17 +255,17 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_EXTENSION_DESCRIPTION_SRC: {
                 if (bExtensionDescription) {
-                    sGID = rtl::OString("extdesc");
-                    sResourceType = rtl::OString ( "description" );
-                    sLangAttribute = rtl::OString ( "lang" );
+                    sGID = OString("extdesc");
+                    sResourceType = OString ( "description" );
+                    sLangAttribute = OString ( "lang" );
                     sCurrentOpenTag = rToken;
-                    sCurrentText  = rtl::OString("");
+                    sCurrentText  = OString("");
                     Output( rToken );
                     WorkOnDesc( sCurrentOpenTag, sCurrentText );
                     sCurrentCloseTag = rToken;
                     Output( sCurrentText );
-                    rToken = rtl::OString("");
-                    sCurrentText  = rtl::OString("");
+                    rToken = OString("");
+                    sCurrentText  = OString("");
                 }
             }
         break;
@@ -285,13 +285,13 @@ int XRMResParser::Execute( int nToken, char * pToken )
 }
 
 /*****************************************************************************/
-rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::OString &rAttribute )
+OString XRMResParser::GetAttribute( const OString &rToken, const OString &rAttribute )
 /*****************************************************************************/
 {
-    rtl::OString sTmp( rToken );
+    OString sTmp( rToken );
     sTmp = sTmp.replace('\t', ' ');
 
-    rtl::OString sSearch( " " );
+    OString sSearch( " " );
     sSearch += rAttribute;
     sSearch += "=";
     sal_Int32 nPos = sTmp.indexOf( sSearch );
@@ -299,29 +299,29 @@ rtl::OString XRMResParser::GetAttribute( const rtl::OString &rToken, const rtl::
     if ( nPos != -1 )
     {
         sTmp = sTmp.copy( nPos );
-        rtl::OString sId = sTmp.getToken(1, '"');
+        OString sId = sTmp.getToken(1, '"');
         return sId;
     }
-    return rtl::OString();
+    return OString();
 }
 
 
 /*****************************************************************************/
-void XRMResParser::Error( const rtl::OString &rError )
+void XRMResParser::Error( const OString &rError )
 /*****************************************************************************/
 {
     yyerror(( char * ) rError.getStr());
 }
 
 /*****************************************************************************/
-void XRMResParser::ConvertStringToDBFormat( rtl::OString &rString )
+void XRMResParser::ConvertStringToDBFormat( OString &rString )
 /*****************************************************************************/
 {
     rString = rString.trim().replaceAll("\t", "\\t");
 }
 
 /*****************************************************************************/
-void XRMResParser::ConvertStringToXMLFormat( rtl::OString &rString )
+void XRMResParser::ConvertStringToXMLFormat( OString &rString )
 /*****************************************************************************/
 {
     rString = rString.replaceAll("\\t", "\t");
@@ -343,7 +343,7 @@ XRMResExport::XRMResExport(
     pOutputStream.open( rOutputFile, PoOfstream::APP );
     if (!pOutputStream.isOpen())
     {
-        rtl::OString sError( "Unable to open output file: " );
+        OString sError( "Unable to open output file: " );
         sError += rOutputFile;
         Error( sError );
     }
@@ -357,17 +357,17 @@ XRMResExport::~XRMResExport()
     delete pResData;
 }
 
-void XRMResExport::Output( const rtl::OString& ) {}
+void XRMResExport::Output( const OString& ) {}
 
 /*****************************************************************************/
 void XRMResExport::WorkOnDesc(
-    const rtl::OString &rOpenTag,
-    rtl::OString &rText
+    const OString &rOpenTag,
+    OString &rText
 )
 /*****************************************************************************/
 {
-    rtl::OString sDescFileName(
-        sInputFileName.replaceAll("description.xml", rtl::OString()));
+    OString sDescFileName(
+        sInputFileName.replaceAll("description.xml", OString()));
     sDescFileName += GetAttribute( rOpenTag, "xlink:href" );
     ifstream file (sDescFileName.getStr(), ios::in|ios::binary|ios::ate);
     if (file.is_open()) {
@@ -377,7 +377,7 @@ void XRMResExport::WorkOnDesc(
         file.read (memblock, size);
         file.close();
         memblock[size] = '\0';
-        rText = rtl::OString(memblock).replaceAll("\n", "\\n");
+        rText = OString(memblock).replaceAll("\n", "\\n");
         delete[] memblock;
      }
     WorkOnText( rOpenTag, rText );
@@ -386,40 +386,40 @@ void XRMResExport::WorkOnDesc(
 
 //*****************************************************************************/
 void XRMResExport::WorkOnText(
-    const rtl::OString &rOpenTag,
-    rtl::OString &rText
+    const OString &rOpenTag,
+    OString &rText
 )
 /*****************************************************************************/
 {
-    rtl::OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
+    OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( !pResData )
     {
-        rtl::OString sPlatform( "" );
+        OString sPlatform( "" );
         pResData = new ResData( sPlatform, GetGID() );
     }
 
-    rtl::OString sText(rText);
+    OString sText(rText);
     ConvertStringToDBFormat(sText);
     pResData->sText[sLang] = sText;
 }
 
 /*****************************************************************************/
 void XRMResExport::EndOfText(
-    const rtl::OString &,
-    const rtl::OString &
+    const OString &,
+    const OString &
 )
 /*****************************************************************************/
 {
     if ( pResData )
     {
-        rtl::OString sCur;
+        OString sCur;
         for( unsigned int n = 0; n < aLanguages.size(); n++ )
         {
             sCur = aLanguages[ n ];
 
-            rtl::OString sAct(
-                pResData->sText[sCur].replaceAll("\x0A", rtl::OString()));
+            OString sAct(
+                pResData->sText[sCur].replaceAll("\x0A", OString()));
 
             if( !sAct.isEmpty() )
                 common::writePoEntry(
@@ -457,7 +457,7 @@ XRMResMerge::XRMResMerge(
     pOutputStream.open(
         rOutputFile.getStr(), std::ios_base::out | std::ios_base::trunc);
     if (!pOutputStream.is_open()) {
-        rtl::OString sError( "Unable to open output file: " );
+        OString sError( "Unable to open output file: " );
         sError += rOutputFile;
         Error( sError );
     }
@@ -474,8 +474,8 @@ XRMResMerge::~XRMResMerge()
 
 /*****************************************************************************/
 void XRMResMerge::WorkOnDesc(
-    const rtl::OString &rOpenTag,
-    rtl::OString &rText
+    const OString &rOpenTag,
+    OString &rText
 )
 /*****************************************************************************/
 {
@@ -483,32 +483,32 @@ void XRMResMerge::WorkOnDesc(
     if ( pMergeDataFile && pResData ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
-            rtl::OString sCur;
-            rtl::OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
+            OString sCur;
+            OString sDescFilename = GetAttribute ( rOpenTag, "xlink:href" );
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-                rtl::OString sContent;
+                OString sContent;
                 if ( !sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US"))  &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     ( sContent != "-" ) && !sContent.isEmpty())
                 {
-                    rtl::OString sText( sContent );
-                    rtl::OString sAdditionalLine( "\n        " );
+                    OString sText( sContent );
+                    OString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
-                    rtl::OString sSearch = sLangAttribute;
+                    OString sSearch = sLangAttribute;
                     sSearch += "=\"";
-                    rtl::OString sReplace( sSearch );
+                    OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;
                     sAdditionalLine = sAdditionalLine.replaceFirst(
                         sSearch, sReplace);
 
-                    sSearch = rtl::OString("xlink:href=\"");
+                    sSearch = OString("xlink:href=\"");
                     sReplace = sSearch;
 
-                    rtl::OString sLocDescFilename = sDescFilename;
+                    OString sLocDescFilename = sDescFilename;
                     sLocDescFilename = sLocDescFilename.replaceFirst(
                         "en-US", sCur);
 
@@ -526,7 +526,7 @@ void XRMResMerge::WorkOnDesc(
                             << " does not contain any /\n";
                         throw false; //TODO
                     }
-                    rtl::OString sOutputDescFile(
+                    OString sOutputDescFile(
                         sOutputFile.copy(0, i + 1) + sLocDescFilename);
                     sText = sText.replaceAll("\\n", "\n");
                     ofstream file(sOutputDescFile.getStr());
@@ -549,23 +549,23 @@ void XRMResMerge::WorkOnDesc(
 
 /*****************************************************************************/
 void XRMResMerge::WorkOnText(
-    const rtl::OString &rOpenTag,
-    rtl::OString &rText
+    const OString &rOpenTag,
+    OString &rText
 )
 /*****************************************************************************/
 {
-    rtl::OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
+    OString sLang( GetAttribute( rOpenTag, sLangAttribute ));
 
     if ( pMergeDataFile ) {
         if ( !pResData ) {
-            rtl::OString sPlatform( "" );
+            OString sPlatform( "" );
             pResData = new ResData( sPlatform, GetGID() , sFilename );
             pResData->sResTyp = sResourceType;
         }
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
             if ( pEntrys ) {
-                rtl::OString sContent;
+                OString sContent;
                 if ( !sLang.equalsIgnoreAsciiCase("en-US") &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sLang )) &&
@@ -580,7 +580,7 @@ void XRMResMerge::WorkOnText(
 }
 
 /*****************************************************************************/
-void XRMResMerge::Output( const rtl::OString& rOutput )
+void XRMResMerge::Output( const OString& rOutput )
 /*****************************************************************************/
 {
     if (!rOutput.isEmpty())
@@ -589,8 +589,8 @@ void XRMResMerge::Output( const rtl::OString& rOutput )
 
 /*****************************************************************************/
 void XRMResMerge::EndOfText(
-    const rtl::OString &rOpenTag,
-    const rtl::OString &rCloseTag
+    const OString &rOpenTag,
+    const OString &rCloseTag
 )
 /*****************************************************************************/
 {
@@ -599,22 +599,22 @@ void XRMResMerge::EndOfText(
     if ( pMergeDataFile && pResData ) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
-            rtl::OString sCur;
+            OString sCur;
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-                rtl::OString sContent;
+                OString sContent;
                 if (!sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")) &&
                     ( pEntrys->GetText(
                         sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     ( sContent != "-" ) && !sContent.isEmpty() &&
                     helper::isWellFormedXML( sContent ))
                 {
-                    rtl::OString sText( sContent );
-                    rtl::OString sAdditionalLine( "\n        " );
+                    OString sText( sContent );
+                    OString sAdditionalLine( "\n        " );
                     sAdditionalLine += rOpenTag;
-                    rtl::OString sSearch = sLangAttribute;
+                    OString sSearch = sLangAttribute;
                     sSearch += "=\"";
-                    rtl::OString sReplace( sSearch );
+                    OString sReplace( sSearch );
 
                     sSearch += GetAttribute( rOpenTag, sLangAttribute );
                     sReplace += sCur;

@@ -37,12 +37,12 @@ class SfxObjectShell;
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
-    ::rtl::OUString     aEventName;
+    OUString     aEventName;
     sal_uInt16              nEventId;
 
 public:
     TYPEINFO();
-    SfxEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
+    SfxEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj = 0 )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
@@ -51,7 +51,7 @@ public:
     sal_uInt16              GetEventId() const
                         { return nEventId; }
 
-    ::rtl::OUString     GetEventName() const
+    OUString     GetEventName() const
                         { return aEventName; }
 
     SfxObjectShell*     GetObjShell() const
@@ -67,12 +67,12 @@ class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
 public:
     TYPEINFO();
 
-    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController )
                         {}

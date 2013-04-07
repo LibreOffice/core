@@ -108,7 +108,7 @@ PropertiesEventListenerMap;
 
 struct equalStr
 {
-    bool operator()( const rtl::OUString& s1, const rtl::OUString& s2 ) const
+    bool operator()( const OUString& s1, const OUString& s2 ) const
       {
         return !!( s1 == s2 );
     }
@@ -116,7 +116,7 @@ struct equalStr
 
 struct hashStr
 {
-    size_t operator()( const rtl::OUString& rName ) const
+    size_t operator()( const OUString& rName ) const
     {
         return rName.hashCode();
     }
@@ -124,7 +124,7 @@ struct hashStr
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
 <
-    rtl::OUString,
+    OUString,
     hashStr,
     equalStr
 > PropertyChangeListeners;
@@ -265,11 +265,11 @@ XTYPEPROVIDER_IMPL_10( ContentImplHelper,
 
 // virtual
 sal_Bool SAL_CALL ContentImplHelper::supportsService(
-                                            const rtl::OUString& ServiceName )
+                                            const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString* pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getConstArray();
     for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if ( pArray[ i ] == ServiceName )
@@ -425,7 +425,7 @@ sal_Int32 SAL_CALL ContentImplHelper::createCommandIdentifier()
 
 // virtual
 void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
-        const uno::Sequence< rtl::OUString >& PropertyNames,
+        const uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
     throw( uno::RuntimeException )
 {
@@ -440,15 +440,15 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_pImpl->m_pPropertyChangeListeners->addInterface(
-            rtl::OUString(), Listener );
+            OUString(), Listener );
     }
     else
     {
-        const rtl::OUString* pSeq = PropertyNames.getConstArray();
+        const OUString* pSeq = PropertyNames.getConstArray();
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-            const rtl::OUString& rName = pSeq[ n ];
+            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->addInterface(
                     rName, Listener );
@@ -459,7 +459,7 @@ void SAL_CALL ContentImplHelper::addPropertiesChangeListener(
 //=========================================================================
 // virtual
 void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
-        const uno::Sequence< rtl::OUString >& PropertyNames,
+        const uno::Sequence< OUString >& PropertyNames,
         const uno::Reference< beans::XPropertiesChangeListener >& Listener )
     throw( uno::RuntimeException )
 {
@@ -473,15 +473,15 @@ void SAL_CALL ContentImplHelper::removePropertiesChangeListener(
     {
         // Note: An empty sequence means a listener for "all" properties.
         m_pImpl->m_pPropertyChangeListeners->removeInterface(
-            rtl::OUString(), Listener );
+            OUString(), Listener );
     }
     else
     {
-        const rtl::OUString* pSeq = PropertyNames.getConstArray();
+        const OUString* pSeq = PropertyNames.getConstArray();
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-            const rtl::OUString& rName = pSeq[ n ];
+            const OUString& rName = pSeq[ n ];
             if ( !rName.isEmpty() )
                 m_pImpl->m_pPropertyChangeListeners->removeInterface(
                     rName, Listener );
@@ -529,7 +529,7 @@ void SAL_CALL ContentImplHelper::removeCommandInfoChangeListener(
 
 // virtual
 void SAL_CALL ContentImplHelper::addProperty(
-        const rtl::OUString& Name,
+        const OUString& Name,
         sal_Int16 Attributes,
         const uno::Any& DefaultValue )
     throw( beans::PropertyExistException,
@@ -625,7 +625,7 @@ void SAL_CALL ContentImplHelper::addProperty(
 
 //=========================================================================
 // virtual
-void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
+void SAL_CALL ContentImplHelper::removeProperty( const OUString& Name )
     throw( beans::UnknownPropertyException,
            beans::NotRemoveableException,
            uno::RuntimeException )
@@ -699,7 +699,7 @@ void SAL_CALL ContentImplHelper::removeProperty( const rtl::OUString& Name )
                     xReg = xSet->getRegistry();
                 if ( xReg.is() )
                 {
-                    rtl::OUString aKey( xSet->getKey() );
+                    OUString aKey( xSet->getKey() );
                     xSet = 0;
                     xReg->removePropertySet( aKey );
                 }
@@ -769,7 +769,7 @@ uno::Reference< uno::XInterface > SAL_CALL ContentImplHelper::getParent()
     throw( uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xParent;
-    rtl::OUString aURL = getParentURL();
+    OUString aURL = getParentURL();
 
     if ( !aURL.isEmpty() )
     {
@@ -812,8 +812,8 @@ ContentImplHelper::getAdditionalPropertySet( sal_Bool bCreate )
 
 //=========================================================================
 sal_Bool ContentImplHelper::renameAdditionalPropertySet(
-    const rtl::OUString& rOldKey,
-    const rtl::OUString& rNewKey,
+    const OUString& rOldKey,
+    const OUString& rNewKey,
     sal_Bool bRecursive )
 {
     return m_xProvider->renameAdditionalPropertySet(
@@ -822,8 +822,8 @@ sal_Bool ContentImplHelper::renameAdditionalPropertySet(
 
 //=========================================================================
 sal_Bool ContentImplHelper::copyAdditionalPropertySet(
-    const rtl::OUString& rSourceKey,
-    const rtl::OUString& rTargetKey,
+    const OUString& rSourceKey,
+    const OUString& rTargetKey,
     sal_Bool bRecursive )
 {
     return m_xProvider->copyAdditionalPropertySet(
@@ -850,7 +850,7 @@ void ContentImplHelper::notifyPropertiesChange(
         // First, notify listeners interested in changes of every property.
         cppu::OInterfaceContainerHelper* pAllPropsContainer
             = m_pImpl->m_pPropertyChangeListeners->getContainer(
-                rtl::OUString() );
+                OUString() );
         if ( pAllPropsContainer )
         {
             cppu::OInterfaceIteratorHelper aIter( *pAllPropsContainer );
@@ -871,7 +871,7 @@ void ContentImplHelper::notifyPropertiesChange(
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const beans::PropertyChangeEvent& rEvent = pEvents[ n ];
-            const rtl::OUString& rName = rEvent.PropertyName;
+            const OUString& rName = rEvent.PropertyName;
 
             cppu::OInterfaceContainerHelper* pPropsContainer
                 = m_pImpl->m_pPropertyChangeListeners->getContainer( rName );

@@ -166,13 +166,13 @@ void    XFCell::SetValue(double value)
     SetValue(DoubleToOUString(value,18));
 }
 
-void    XFCell::SetValue(rtl::OUString value)
+void    XFCell::SetValue(OUString value)
 {
     m_eValueType = enumXFValueTypeFloat;
     m_strValue = value;
 }
 
-rtl::OUString   XFCell::GetCellName()
+OUString   XFCell::GetCellName()
 {
     XFRow *pRow = m_pOwnerRow;
 
@@ -184,7 +184,7 @@ rtl::OUString   XFCell::GetCellName()
     if( !pTable )
         return A2OUSTR("");
 
-    rtl::OUString name;
+    OUString name;
     if( pTable->IsSubTable() )
     {
         name = pTable->GetTableName() + A2OUSTR(".") + Int32ToOUString(m_nCol) + A2OUSTR(".") + Int32ToOUString(pRow->GetRow());

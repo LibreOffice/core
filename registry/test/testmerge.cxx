@@ -32,7 +32,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
 
 sal_Int32 lValue1   = 123456789;
 sal_Int32 lValue2   = 54321;

@@ -206,9 +206,9 @@ public:
 #define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
 #define LEAVEREGISTRATIONS() LeaveRegistrations(USHRT_MAX, __FILE__, __LINE__)
 #define DENTERREGISTRATIONS() \
-        EnterRegistrations( rtl::OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        EnterRegistrations( OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
 #define DLEAVEREGISTRATIONS(  ) \
-        LeaveRegistrations( USHRT_MAX, rtl::OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
+        LeaveRegistrations( USHRT_MAX, OStringBuffer(__FILE__).append('(').append(reinterpret_cast<sal_Int64>(this)).append(')').getStr(), __LINE__ )
 #else
 #define ENTERREGISTRATIONS() EnterRegistrations()
 #define LEAVEREGISTRATIONS() LeaveRegistrations()

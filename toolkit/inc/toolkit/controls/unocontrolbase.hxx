@@ -34,16 +34,16 @@ protected:
     UnoControlBase() :UnoControl() {}
 
     sal_Bool                    ImplHasProperty( sal_uInt16 nProp );
-    sal_Bool                    ImplHasProperty( const ::rtl::OUString& aPropertyName );
-    void                        ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );
-    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis );
-    ::com::sun::star::uno::Any  ImplGetPropertyValue( const ::rtl::OUString& aPropertyName );
+    sal_Bool                    ImplHasProperty( const OUString& aPropertyName );
+    void                        ImplSetPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );
+    void                        ImplSetPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues, sal_Bool bUpdateThis );
+    ::com::sun::star::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
 
     sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
     sal_Int16       ImplGetPropertyValue_INT16( sal_uInt16 nProp );
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );
-    ::rtl::OUString ImplGetPropertyValue_UString( sal_uInt16 nProp );
+    OUString ImplGetPropertyValue_UString( sal_uInt16 nProp );
 
     // XLayoutConstrains (nur wenn das Control es unterstuetzt!)
     ::com::sun::star::awt::Size Impl_getMinimumSize();

@@ -39,16 +39,16 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector)
+                const ::std::vector< OUString> &_rVector)
             : connectivity::sdbcx::OCollection(*_pKey,sal_True,_rMutex,_rVector)
             ,m_pKey(_pKey)
 {
 }
 // -------------------------------------------------------------------------
-sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aCatalog, aSchema, aTable;
+    OUString aCatalog, aSchema, aTable;
     ::com::sun::star::uno::Any Catalog(m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
     Catalog >>= aCatalog;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
@@ -58,11 +58,11 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
     Reference< XResultSet > xResult = m_pKey->getTable()->getMetaData()->getImportedKeys(
             Catalog, aSchema, aTable);
 
-    ::rtl::OUString aRefColumnName;
+    OUString aRefColumnName;
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aTemp;
+        OUString aTemp;
         while(xResult->next())
         {
             aTemp = xRow->getString(4);
@@ -87,11 +87,11 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const ::rtl::OUString& _rName)
             if ( xRow->getString(4) == _rName )
             {
                 sal_Int32 nDataType = xRow->getInt(5);
-                ::rtl::OUString aTypeName(xRow->getString(6));
+                OUString aTypeName(xRow->getString(6));
                 sal_Int32 nSize = xRow->getInt(7);
                 sal_Int32 nDec  = xRow->getInt(9);
                 sal_Int32 nNull = xRow->getInt(11);
-                ::rtl::OUString sColumnDef;
+                OUString sColumnDef;
                 try
                 {
                     sColumnDef = xRow->getString(13);

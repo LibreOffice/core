@@ -221,9 +221,9 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
         return "";
 
 
-    static const ::rtl::OUString sNotesShapeName (
+    static const OUString sNotesShapeName (
         "com.sun.star.presentation.NotesShape" );
-    static const ::rtl::OUString sTextShapeName (
+    static const OUString sTextShapeName (
         "com.sun.star.drawing.TextShape" );
 
     uno::Reference<container::XIndexAccess> xIndexAccess ( aNotesPage, UNO_QUERY);
@@ -253,7 +253,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
                     xIndexAccess->getByIndex(nIndex), UNO_QUERY);
                 if (xShapeDescriptor.is())
                 {
-                    ::rtl::OUString sType (xShapeDescriptor->getShapeType());
+                    OUString sType (xShapeDescriptor->getShapeType());
                     if (sType.equals(sNotesShapeName) || sType.equals(sTextShapeName))
                     {
                         uno::Reference<text::XTextRange> xText (
@@ -283,7 +283,7 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl )
 {
-    ::rtl::OUString aFilterName( "XHTML Draw File" );
+    OUString aFilterName( "XHTML Draw File" );
     uno::Reference< document::XExporter > xExporter;
 
     {
@@ -298,7 +298,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
         else
             fprintf( stderr, "Couldn't find by name.\n" );
 
-        ::rtl::OUString aFilterImplName;
+        OUString aFilterImplName;
         sal_Int32 nFilterProps = aProps.getLength();
         for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
         {
@@ -384,7 +384,7 @@ sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl 
         if ( !bHasBaseURL )
         {
             aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = ::rtl::OUString( "DocumentBaseURL" );
+            aArgs[nEnd-1].Name = OUString( "DocumentBaseURL" );
             aArgs[nEnd-1].Value <<= rMedium.GetBaseURL( sal_True );
         }
 

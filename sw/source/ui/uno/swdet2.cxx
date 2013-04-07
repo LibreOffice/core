@@ -67,10 +67,10 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
     else
     {
         //Bug 41417: JP 09.07.97: HTML documents should be loaded by WebWriter
-        SfxFilterContainer aFilterContainer( rtl::OUString("swriter/web") );
+        SfxFilterContainer aFilterContainer( OUString("swriter/web") );
         if( !pTmp->GetUserData().equals(sHTML) ||
             pTmp->GetServiceName() == "com.sun.star.text.WebDocument" ||
-            0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( rtl::OUString(sHTML),
+            0 == ( (*ppFilter) = SwIoSystem::GetFilterOfFormat( OUString(sHTML),
                     &aFilterContainer ) ) )
             *ppFilter = pTmp;
     }

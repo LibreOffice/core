@@ -100,7 +100,7 @@ struct ScCondFormatData
     Color* pColorScale;
     ScDataBarInfo* pDataBar;
     ScIconSetInfo* pIconSet;
-    rtl::OUString aStyleName;
+    OUString aStyleName;
 };
 
 class SC_DLLPUBLIC ScFormatEntry
@@ -146,10 +146,10 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     sal_uInt16              nOptions;
     double              nVal1;          // input or calculated
     double              nVal2;
-    rtl::OUString              aStrVal1;       // input or calculated
-    rtl::OUString              aStrVal2;
-    rtl::OUString              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
-    rtl::OUString              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
+    OUString              aStrVal1;       // input or calculated
+    OUString              aStrVal2;
+    OUString              aStrNmsp1;      // namespace to be used on (re)compilation, e.g. in XML import
+    OUString              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
     bool                bIsStr1;        // for recognition of empty strings
@@ -158,7 +158,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     ScTokenArray*       pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
                                         // temporary data:
-    rtl::OUString              aSrcString;     // formula source position as text during XML import
+    OUString              aSrcString;     // formula source position as text during XML import
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
     bool                bRelRef1;
@@ -166,21 +166,21 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     bool                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
-    void    Compile( const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
-                        const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
+    void    Compile( const OUString& rExpr1, const OUString& rExpr2,
+                        const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                         formula::FormulaGrammar::Grammar eGrammar1,
                         formula::FormulaGrammar::Grammar eGrammar2,
                         bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
     bool    IsValid( double nArg, const ScAddress& rPos ) const;
-    bool    IsValidStr( const rtl::OUString& rArg, const ScAddress& rPos ) const;
+    bool    IsValidStr( const OUString& rArg, const ScAddress& rPos ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
-                                const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
+                                const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const rtl::OUString& rExprNmsp1, const rtl::OUString& rExprNmsp2,
+                                const OUString& rExprNmsp1, const OUString& rExprNmsp2,
                                 formula::FormulaGrammar::Grammar eGrammar1,
                                 formula::FormulaGrammar::Grammar eGrammar2 );
             ScConditionEntry( ScConditionMode eOper,
@@ -204,12 +204,12 @@ public:
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 
-    void            SetSrcString( const rtl::OUString& rNew );     // for XML import
+    void            SetSrcString( const OUString& rNew );     // for XML import
 
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    rtl::OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
+    OUString          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
     ScTokenArray*   CreateTokenArry( sal_uInt16 nPos ) const;
@@ -240,7 +240,7 @@ protected:
 
 private:
 
-    bool IsDuplicate(double nArg, const rtl::OUString& rStr) const;
+    bool IsDuplicate(double nArg, const OUString& rStr) const;
     bool IsTopNElement( double nArg ) const;
     bool IsTopNPercent( double nArg ) const;
     bool IsBottomNElement( double nArg ) const;
@@ -254,7 +254,7 @@ private:
 
     struct ScConditionEntryCache
     {
-        typedef std::map<rtl::OUString, sal_Int32> StringCacheType;
+        typedef std::map<OUString, sal_Int32> StringCacheType;
         StringCacheType maStrings;
         typedef std::map<double, sal_Int32, approx_less> ValueCacheType;
         ValueCacheType maValues;
@@ -275,31 +275,31 @@ private:
 
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
-    rtl::OUString                  aStyleName;
+    OUString                  aStyleName;
 
     using ScConditionEntry::operator==;
 
 public:
             ScCondFormatEntry( ScConditionMode eOper,
-                                const rtl::OUString& rExpr1, const rtl::OUString& rExpr2,
+                                const OUString& rExpr1, const OUString& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const rtl::OUString& rStyle,
-                                const rtl::OUString& rExprNmsp1 = EMPTY_STRING,
-                                const rtl::OUString& rExprNmsp2 = EMPTY_STRING,
+                                const OUString& rStyle,
+                                const OUString& rExprNmsp1 = EMPTY_STRING,
+                                const OUString& rExprNmsp2 = EMPTY_STRING,
                                 formula::FormulaGrammar::Grammar eGrammar1 = formula::FormulaGrammar::GRAM_DEFAULT,
                                 formula::FormulaGrammar::Grammar eGrammar2 = formula::FormulaGrammar::GRAM_DEFAULT );
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const rtl::OUString& rStyle );
+                                const OUString& rStyle );
             ScCondFormatEntry( const ScCondFormatEntry& r );
             ScCondFormatEntry( ScDocument* pDocument, const ScCondFormatEntry& r );
     virtual ~ScCondFormatEntry();
 
     int             operator== ( const ScCondFormatEntry& r ) const;
 
-    const rtl::OUString&   GetStyle() const        { return aStyleName; }
-    void            UpdateStyleName(const rtl::OUString& rNew)  { aStyleName=rNew; }
+    const OUString&   GetStyle() const        { return aStyleName; }
+    void            UpdateStyleName(const OUString& rNew)  { aStyleName=rNew; }
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const;
 
 protected:
@@ -338,8 +338,8 @@ public:
     void SetDateType(condformat::ScCondFormatDateType eType);
     condformat::ScCondFormatDateType GetDateType() const;
 
-    const rtl::OUString& GetStyleName() const;
-    void SetStyleName( const rtl::OUString& rStyleName );
+    const OUString& GetStyleName() const;
+    void SetStyleName( const OUString& rStyleName );
 
     virtual condformat::ScFormatEntryType GetType() const { return condformat::DATE; }
     virtual void UpdateReference( UpdateRefMode, const ScRange&,
@@ -360,7 +360,7 @@ private:
 
     mutable boost::scoped_ptr<Date> mpCache;
 
-    rtl::OUString maStyleName;
+    OUString maStyleName;
 };
 
 //
@@ -399,7 +399,7 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bCopyAsMove = false );
     void            DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void            UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-    void            RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew );
+    void            RenameCellStyle( const OUString& rOld, const OUString& rNew );
 
     void            SourceChanged( const ScAddress& rAddr );
 
@@ -457,7 +457,7 @@ public:
     void    CompileXML();
     void    UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void    RenameCellStyle( const rtl::OUString& rOld, const rtl::OUString& rNew );
+    void    RenameCellStyle( const OUString& rOld, const OUString& rNew );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
     void    DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 

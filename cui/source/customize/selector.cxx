@@ -54,7 +54,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;

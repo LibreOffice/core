@@ -141,7 +141,7 @@ void Entry_Impl::checkDependencies()
         deployment::DependencyException depExc;
         if ( e.Cause >>= depExc )
         {
-            rtl::OUString aMissingDep( DialogHelper::getResourceString( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
+            OUString aMissingDep( DialogHelper::getResourceString( RID_STR_ERROR_MISSING_DEPENDENCIES ) );
             for ( sal_Int32 i = 0; i < depExc.UnsatisfiedDependencies.getLength(); ++i )
             {
                 aMissingDep += "\n";
@@ -316,7 +316,7 @@ void ExtensionBox_Impl::checkIndex( sal_Int32 nIndex ) const
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ExtensionBox_Impl::getItemName( sal_Int32 nIndex ) const
+OUString ExtensionBox_Impl::getItemName( sal_Int32 nIndex ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
@@ -324,7 +324,7 @@ rtl::OUString ExtensionBox_Impl::getItemName( sal_Int32 nIndex ) const
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ExtensionBox_Impl::getItemVersion( sal_Int32 nIndex ) const
+OUString ExtensionBox_Impl::getItemVersion( sal_Int32 nIndex ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
@@ -332,7 +332,7 @@ rtl::OUString ExtensionBox_Impl::getItemVersion( sal_Int32 nIndex ) const
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ExtensionBox_Impl::getItemDescription( sal_Int32 nIndex ) const
+OUString ExtensionBox_Impl::getItemDescription( sal_Int32 nIndex ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
@@ -340,7 +340,7 @@ rtl::OUString ExtensionBox_Impl::getItemDescription( sal_Int32 nIndex ) const
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ExtensionBox_Impl::getItemPublisher( sal_Int32 nIndex ) const
+OUString ExtensionBox_Impl::getItemPublisher( sal_Int32 nIndex ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
@@ -348,7 +348,7 @@ rtl::OUString ExtensionBox_Impl::getItemPublisher( sal_Int32 nIndex ) const
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ExtensionBox_Impl::getItemPublisherLink( sal_Int32 nIndex ) const
+OUString ExtensionBox_Impl::getItemPublisherLink( sal_Int32 nIndex ) const
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     checkIndex( nIndex );
@@ -364,7 +364,7 @@ void ExtensionBox_Impl::select( sal_Int32 nIndex )
 }
 
 //------------------------------------------------------------------------------
-void ExtensionBox_Impl::select( const rtl::OUString & sName )
+void ExtensionBox_Impl::select( const OUString & sName )
 {
     const ::osl::MutexGuard aGuard( m_entriesMutex );
     typedef ::std::vector< TEntry_Impl >::const_iterator It;
@@ -403,7 +403,7 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     aSize.Width() -= ICON_OFFSET;
     aSize.Height() = 10000;
 
-    rtl::OUString aText( m_vEntries[ nPos ]->m_sErrorText );
+    OUString aText( m_vEntries[ nPos ]->m_sErrorText );
     if ( !aText.isEmpty() )
         aText += "\n";
     aText += m_vEntries[ nPos ]->m_sDescription;
@@ -621,7 +621,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         aTextHeight = nIconHeight;
 
     // draw description
-    ::rtl::OUString sDescription;
+    OUString sDescription;
     if ( pEntry->m_sErrorText.Len() )
     {
         if ( pEntry->m_bActive )

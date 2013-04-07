@@ -58,7 +58,7 @@ namespace comphelper
     //====================================================================
     //= NamedValueCollection_Impl
     //====================================================================
-    typedef ::boost::unordered_map< ::rtl::OUString, Any, ::rtl::OUStringHash >    NamedValueRepository;
+    typedef ::boost::unordered_map< OUString, Any, OUStringHash >    NamedValueRepository;
 
     struct NamedValueCollection_Impl
     {
@@ -162,9 +162,9 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::std::vector< ::rtl::OUString > NamedValueCollection::getNames() const
+    ::std::vector< OUString > NamedValueCollection::getNames() const
     {
-        ::std::vector< ::rtl::OUString > aNames;
+        ::std::vector< OUString > aNames;
         for ( NamedValueRepository::const_iterator it = m_pImpl->aValues.begin(), end = m_pImpl->aValues.end(); it != end; ++it )
         {
             aNames.push_back( it->first );
@@ -251,7 +251,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool NamedValueCollection::get_ensureType( const ::rtl::OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
+    bool NamedValueCollection::get_ensureType( const OUString& _rValueName, void* _pValueLocation, const Type& _rExpectedValueType ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         if ( pos != m_pImpl->aValues.end() )
@@ -267,7 +267,7 @@ namespace comphelper
                 return true;
 
             // argument exists, but is of wrong type
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.appendAscii( "Invalid value type for '" );
             aBuffer.append     ( _rValueName );
             aBuffer.appendAscii( "'.\nExpected: " );
@@ -287,7 +287,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    const Any& NamedValueCollection::impl_get( const ::rtl::OUString& _rValueName ) const
+    const Any& NamedValueCollection::impl_get( const OUString& _rValueName ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         if ( pos != m_pImpl->aValues.end() )
@@ -297,14 +297,14 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool NamedValueCollection::impl_has( const ::rtl::OUString& _rValueName ) const
+    bool NamedValueCollection::impl_has( const OUString& _rValueName ) const
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         return ( pos != m_pImpl->aValues.end() );
     }
 
     //--------------------------------------------------------------------
-    bool NamedValueCollection::impl_put( const ::rtl::OUString& _rValueName, const Any& _rValue )
+    bool NamedValueCollection::impl_put( const OUString& _rValueName, const Any& _rValue )
     {
         bool bHas = impl_has( _rValueName );
         m_pImpl->aValues[ _rValueName ] = _rValue;
@@ -312,7 +312,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool NamedValueCollection::impl_remove( const ::rtl::OUString& _rValueName )
+    bool NamedValueCollection::impl_remove( const OUString& _rValueName )
     {
         NamedValueRepository::iterator pos = m_pImpl->aValues.find( _rValueName );
         if ( pos == m_pImpl->aValues.end() )

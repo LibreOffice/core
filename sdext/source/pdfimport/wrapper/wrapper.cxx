@@ -136,7 +136,7 @@ class Parser
     const uno::Reference<uno::XComponentContext> m_xContext;
     const ContentSinkSharedPtr                   m_pSink;
     const oslFileHandle                          m_pErr;
-    ::rtl::OString                               m_aLine;
+    OString                               m_aLine;
     FontMapType                                  m_aFontMap;
     sal_Int32                                    m_nNextToken;
     sal_Int32                                    m_nCharIndex;
@@ -144,7 +144,7 @@ class Parser
     const double                                 minAreaThreshold;
     const double                                 minLineWidth;
 
-    ::rtl::OString readNextToken();
+    OString readNextToken();
     void           readInt32( sal_Int32& o_Value );
     sal_Int32      readInt32();
     void           readInt64( sal_Int64& o_Value );
@@ -189,7 +189,7 @@ public:
         minLineWidth( 12 )
     {}
 
-    void parseLine( const ::rtl::OString& rLine );
+    void parseLine( const OString& rLine );
 };
 
 
@@ -200,7 +200,7 @@ namespace
         characters are encoded as pairs of characters: '\\' 'n', resp.
         '\\' 'r'. This function converts them back to '\n', resp. '\r'.
       */
-    rtl::OString lcl_unescapeLineFeeds(const rtl::OString& i_rStr)
+    OString lcl_unescapeLineFeeds(const OString& i_rStr)
     {
         const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
         const sal_Char* const pOrig(i_rStr.getStr());
@@ -238,7 +238,7 @@ namespace
         }
         *pWrite = '\0';
 
-        rtl::OString aResult(pBuffer);
+        OString aResult(pBuffer);
         delete[] pBuffer;
         return aResult;
     }
@@ -246,7 +246,7 @@ namespace
 }
 
 
-::rtl::OString Parser::readNextToken()
+OString Parser::readNextToken()
 {
     OSL_PRECOND(m_nCharIndex!=-1,"insufficient input");
     return m_aLine.getToken(m_nNextToken,' ',m_nCharIndex);
@@ -295,7 +295,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
 
 uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL )
 {
-    const rtl::OString aSubPathMarker( "subpath" );
+    const OString aSubPathMarker( "subpath" );
 
     if( 0 != readNextToken().compareTo( aSubPathMarker ) )
         OSL_PRECOND(false, "broken path");
@@ -311,7 +311,7 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL
 
         sal_Int32 nContiguousControlPoints(0);
         sal_Int32 nDummy=m_nCharIndex;
-        rtl::OString aCurrToken( m_aLine.getToken(m_nNextToken,' ',nDummy) );
+        OString aCurrToken( m_aLine.getToken(m_nNextToken,' ',nDummy) );
 
         while( m_nCharIndex != -1 && 0 != aCurrToken.compareTo(aSubPathMarker) )
         {
@@ -380,12 +380,12 @@ void Parser::readChar()
     readDouble(aUnoMatrix.m10);
     readDouble(aUnoMatrix.m11);
 
-    rtl::OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
+    OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = -1;
 
-    m_pSink->drawGlyphs( rtl::OStringToOUString( aChars,
+    m_pSink->drawGlyphs( OStringToOUString( aChars,
                                                  RTL_TEXTENCODING_UTF8 ),
                          aRect, aUnoMatrix );
 }
@@ -490,7 +490,7 @@ int Parser::parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_
 
 void Parser::parseFontFamilyName( FontAttributes& aResult )
 {
-    rtl::OUStringBuffer aNewFamilyName( aResult.familyName.getLength() );
+    OUStringBuffer aNewFamilyName( aResult.familyName.getLength() );
 
     const sal_Unicode* pCopy = aResult.familyName.getStr();
     sal_Int32 nLen = aResult.familyName.getLength();
@@ -527,7 +527,7 @@ void Parser::parseFontFamilyName( FontAttributes& aResult )
 
 void Parser::readFont()
 {
-    ::rtl::OString aFontName;
+    OString aFontName;
     sal_Int64      nFontID;
     sal_Int32      nIsEmbedded, nIsBold, nIsItalic, nIsUnderline, nFileLen;
     double         nSize;
@@ -558,7 +558,7 @@ void Parser::readFont()
     }
 
     // yet unknown font - get info and add to map
-    FontAttributes aResult( rtl::OStringToOUString( aFontName,
+    FontAttributes aResult( OStringToOUString( aFontName,
                                                     RTL_TEXTENCODING_UTF8 ),
                             nIsBold != 0,
                             nIsItalic != 0,
@@ -582,7 +582,7 @@ void Parser::readFont()
         {
             uno::Reference< beans::XMaterialHolder > xMat(
                 m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    rtl::OUString( "com.sun.star.awt.FontIdentificator"  ),
+                    OUString( "com.sun.star.awt.FontIdentificator"  ),
                     aArgs,
                     m_xContext ),
                 uno::UNO_QUERY );
@@ -608,7 +608,7 @@ void Parser::readFont()
         if( aResult.familyName.isEmpty() )
         {
             // last fallback
-            aResult.familyName  = ::rtl::OUString( "Arial"  );
+            aResult.familyName  = OUString( "Arial"  );
             aResult.isUnderline = false;
         }
 
@@ -621,19 +621,19 @@ void Parser::readFont()
 
 uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 {
-    static const rtl::OString aJpegMarker( "JPEG" );
-    static const rtl::OString aPbmMarker( "PBM" );
-    static const rtl::OString aPpmMarker( "PPM" );
-    static const rtl::OString aPngMarker( "PNG" );
-    static const rtl::OUString aJpegFile( "DUMMY.JPEG" );
-    static const rtl::OUString aPbmFile( "DUMMY.PBM" );
-    static const rtl::OUString aPpmFile( "DUMMY.PPM" );
-    static const rtl::OUString aPngFile( "DUMMY.PNG" );
+    static const OString aJpegMarker( "JPEG" );
+    static const OString aPbmMarker( "PBM" );
+    static const OString aPpmMarker( "PPM" );
+    static const OString aPngMarker( "PNG" );
+    static const OUString aJpegFile( "DUMMY.JPEG" );
+    static const OUString aPbmFile( "DUMMY.PBM" );
+    static const OUString aPpmFile( "DUMMY.PPM" );
+    static const OUString aPngFile( "DUMMY.PNG" );
 
-    rtl::OString aToken = readNextToken();
+    OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
 
-    rtl::OUString           aFileName;
+    OUString           aFileName;
     if( aToken.compareTo( aPngMarker ) == 0 )
         aFileName = aPngFile;
     else if( aToken.compareTo( aJpegMarker ) == 0 )
@@ -655,19 +655,19 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     uno::Reference< uno::XComponentContext > xContext( m_xContext, uno::UNO_SET_THROW );
     uno::Reference< lang::XMultiComponentFactory > xFactory( xContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< io::XInputStream > xDataStream( xFactory->createInstanceWithArgumentsAndContext(
-        ::rtl::OUString( "com.sun.star.io.SequenceInputStream"  ),
+        OUString( "com.sun.star.io.SequenceInputStream"  ),
         aStreamCreationArgs, m_xContext ), uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( ::rtl::OUString("URL"),
+    aSequence[0] = beans::PropertyValue( OUString("URL"),
                                          0,
                                          uno::makeAny(aFileName),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( ::rtl::OUString("InputStream"),
+    aSequence[1] = beans::PropertyValue( OUString("InputStream"),
                                          0,
                                          uno::makeAny( xDataStream ),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( ::rtl::OUString("InputSequence"),
+    aSequence[2] = beans::PropertyValue( OUString("InputSequence"),
                                          0,
                                          uno::makeAny(aDataSequence),
                                          beans::PropertyState_DIRECT_VALUE );
@@ -727,7 +727,7 @@ void Parser::readLink()
     readDouble(aBounds.Y2);
 
     m_pSink->hyperLink( aBounds,
-                        rtl::OStringToOUString( lcl_unescapeLineFeeds(
+                        OStringToOUString( lcl_unescapeLineFeeds(
                                 m_aLine.copy(m_nCharIndex) ),
                                 RTL_TEXTENCODING_UTF8 ) );
     // name gobbles up rest of line
@@ -761,7 +761,7 @@ void Parser::readSoftMaskedImage()
     m_pSink->drawAlphaMaskedImage( aImage, aMask );
 }
 
-void Parser::parseLine( const ::rtl::OString& rLine )
+void Parser::parseLine( const OString& rLine )
 {
     OSL_PRECOND( m_pSink,         "Invalid sink" );
     OSL_PRECOND( m_pErr,          "Invalid filehandle" );
@@ -769,7 +769,7 @@ void Parser::parseLine( const ::rtl::OString& rLine )
 
     m_nNextToken = 0; m_nCharIndex = 0; m_aLine = rLine;
     uno::Reference<rendering::XPolyPolygon2D> xPoly;
-    const ::rtl::OString& rCmd = readNextToken();
+    const OString& rCmd = readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.getStr(),
                                                             rCmd.getLength() );
     OSL_ASSERT(pEntry);
@@ -865,7 +865,7 @@ void Parser::parseLine( const ::rtl::OString& rLine )
     OSL_POSTCOND(m_nCharIndex==-1,"leftover scanner input");
 }
 
-oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
+oslFileError readLine( oslFileHandle pFile, OStringBuffer& line )
 {
     OSL_PRECOND( line.isEmpty(), "line buf not empty" );
 
@@ -893,16 +893,16 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 
 } // namespace
 
-static bool checkEncryption( const rtl::OUString&                               i_rPath,
+static bool checkEncryption( const OUString&                               i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,
-                             rtl::OUString&                                     io_rPwd,
+                             OUString&                                     io_rPwd,
                              bool&                                              o_rIsEncrypted,
-                             const rtl::OUString&                               i_rDocName
+                             const OUString&                               i_rDocName
                              )
 {
     bool bSuccess = false;
-    rtl::OString aPDFFile;
-    aPDFFile = rtl::OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
+    OString aPDFFile;
+    aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
 
     pdfparse::PDFReader aParser;
     boost::scoped_ptr<pdfparse::PDFEntry> pEntry( aParser.read( aPDFFile.getStr() ));
@@ -919,7 +919,7 @@ static bool checkEncryption( const rtl::OUString&                               
                     bool bAuthenticated = false;
                     if( !io_rPwd.isEmpty() )
                     {
-                        rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                        OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
                     }
@@ -933,7 +933,7 @@ static bool checkEncryption( const rtl::OUString&                               
                             do
                             {
                                 bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
-                                rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                OString aIsoPwd = OUStringToOString( io_rPwd,
                                                                                RTL_TEXTENCODING_ISO_8859_1 );
                                 bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
                             } while( bEntered && ! bAuthenticated );
@@ -944,7 +944,7 @@ static bool checkEncryption( const rtl::OUString&                               
                     }
                     if( bAuthenticated )
                     {
-                        rtl::OUStringBuffer aBuf( 128 );
+                        OUStringBuffer aBuf( 128 );
                         aBuf.appendAscii( "_OOO_pdfi_Credentials_" );
                         aBuf.append( pPDFFile->getDecryptionKey() );
                         io_rPwd = aBuf.makeStringAndClear();
@@ -967,15 +967,15 @@ static bool checkEncryption( const rtl::OUString&                               
     return bSuccess;
 }
 
-bool xpdf_ImportFromFile( const ::rtl::OUString&                             rURL,
+bool xpdf_ImportFromFile( const OUString&                             rURL,
                           const ContentSinkSharedPtr&                        rSink,
                           const uno::Reference< task::XInteractionHandler >& xIHdl,
-                          const rtl::OUString&                               rPwd,
+                          const OUString&                               rPwd,
                           const uno::Reference< uno::XComponentContext >&    xContext )
 {
     OSL_ASSERT(rSink);
 
-    ::rtl::OUString aSysUPath;
+    OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
     {
         SAL_WARN(
@@ -983,10 +983,10 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
             "getSystemPathFromFileURL(" << rURL << ") failed");
         return false;
     }
-    rtl::OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+    OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
     // check for encryption, if necessary get password
-    rtl::OUString aPwd( rPwd );
+    OUString aPwd( rPwd );
     bool bIsEncrypted = false;
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
     {
@@ -1018,11 +1018,11 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     sal_uInt32 nEnv = 0;
 
     #if defined UNX && ! defined MACOSX
-    rtl::OUString aStr( "$URE_LIB_DIR"  );
+    OUString aStr( "$URE_LIB_DIR"  );
     rtl_bootstrap_expandMacros( &aStr.pData );
-    rtl::OUString aSysPath;
+    OUString aSysPath;
     osl_getSystemPathFromFileURL( aStr.pData, &aSysPath.pData );
-    rtl::OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
+    OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
     aEnvBuf.appendAscii( "LD_LIBRARY_PATH=" );
     aEnvBuf.append( aSysPath );
     aStr = aEnvBuf.makeStringAndClear();
@@ -1060,9 +1060,9 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
 
         if( pIn )
         {
-            rtl::OStringBuffer aBuf(256);
+            OStringBuffer aBuf(256);
             if( bIsEncrypted )
-                aBuf.append( rtl::OUStringToOString( aPwd, RTL_TEXTENCODING_ISO_8859_1 ) );
+                aBuf.append( OUStringToOString( aPwd, RTL_TEXTENCODING_ISO_8859_1 ) );
             aBuf.append( '\n' );
 
             sal_uInt64 nWritten = 0;
@@ -1075,7 +1075,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
             // OutputDev. stderr is used for alternate streams, like
             // embedded fonts and bitmaps
             Parser aParser(rSink,pErr,xContext);
-            ::rtl::OStringBuffer line;
+            OStringBuffer line;
             while( osl_File_E_None == readLine(pOut, line) && line.getLength() )
                 aParser.parseLine(line.makeStringAndClear());
         }
@@ -1100,7 +1100,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
 bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xInput,
                             const ContentSinkSharedPtr&                       rSink,
                             const uno::Reference<task::XInteractionHandler >& xIHdl,
-                            const rtl::OUString&                              rPwd,
+                            const OUString&                              rPwd,
                             const uno::Reference< uno::XComponentContext >&   xContext )
 {
     OSL_ASSERT(xInput.is());
@@ -1108,7 +1108,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
 
     // convert XInputStream to local temp file
     oslFileHandle aFile = NULL;
-    rtl::OUString aURL;
+    OUString aURL;
     if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
         return false;
 

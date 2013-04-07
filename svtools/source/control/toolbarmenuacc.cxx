@@ -30,7 +30,6 @@
 
 #include "toolbarmenuimp.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -282,7 +281,7 @@ Locale SAL_CALL ToolbarMenuAcc::getLocale() throw (IllegalAccessibleComponentSta
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const ::rtl::OUString aEmptyStr;
+    const OUString aEmptyStr;
     Reference< XAccessible > xParent( getAccessibleParent() );
     Locale aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 
@@ -597,7 +596,7 @@ void ToolbarMenuAcc::ThrowIfDisposed (void) throw (DisposedException)
 {
     if(rBHelper.bDisposed || rBHelper.bInDispose || !mpParent)
     {
-        throw DisposedException ( ::rtl::OUString("object has been already disposed"), static_cast<XWeak*>(this));
+        throw DisposedException ( OUString("object has been already disposed"), static_cast<XWeak*>(this));
     }
 }
 
@@ -727,14 +726,14 @@ sal_Int16 SAL_CALL ToolbarMenuEntryAcc::getAccessibleRole() throw (RuntimeExcept
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleDescription() throw (RuntimeException)
+OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleDescription() throw (RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName() throw (RuntimeException)
+OUString SAL_CALL ToolbarMenuEntryAcc::getAccessibleName() throw (RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
     String              aRet;
@@ -791,7 +790,7 @@ Reference< XAccessibleStateSet > SAL_CALL ToolbarMenuEntryAcc::getAccessibleStat
 
 Locale SAL_CALL ToolbarMenuEntryAcc::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException)
 {
-    const ::rtl::OUString aEmptyStr;
+    const OUString aEmptyStr;
     Locale aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 
     Reference< XAccessible > xParent( getAccessibleParent() );

@@ -46,12 +46,12 @@ namespace tdoc_ucp
 
 struct ResultListEntry
 {
-    rtl::OUString                             aURL;
+    OUString                             aURL;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
 
-    ResultListEntry( const rtl::OUString& rURL ) : aURL( rURL ) {}
+    ResultListEntry( const OUString& rURL ) : aURL( rURL ) {}
 };
 
 //=========================================================================
@@ -74,7 +74,7 @@ struct DataSupplier_Impl
     ResultList                                   m_aResults;
     rtl::Reference< Content >                    m_xContent;
     uno::Reference< uno::XComponentContext >     m_xContext;
-    uno::Sequence< rtl::OUString > *             m_pNamesOfChildren;
+    uno::Sequence< OUString > *             m_pNamesOfChildren;
     sal_Int32                                    m_nOpenMode;
     bool                                         m_bCountFinal;
     bool                                         m_bThrowException;
@@ -123,14 +123,14 @@ ResultSetDataSupplier::~ResultSetDataSupplier()
 }
 
 // virtual
-rtl::OUString
+OUString
 ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aURL;
+        OUString aId = m_pImpl->m_aResults[ nIndex ]->aURL;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -143,7 +143,7 @@ ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         // Note: getResult fills m_pImpl->m_aResults[ nIndex ]->aURL.
         return m_pImpl->m_aResults[ nIndex ]->aURL;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 // virtual
@@ -163,7 +163,7 @@ ResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -238,7 +238,7 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
                       m_pImpl->m_pNamesOfChildren->getLength());
               ++n )
         {
-            const rtl::OUString & rName
+            const OUString & rName
                 = m_pImpl->m_pNamesOfChildren->getConstArray()[ n ];
 
             if ( rName.isEmpty() )
@@ -248,7 +248,7 @@ sal_Bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL = assembleChildURL( rName );
+            OUString aURL = assembleChildURL( rName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
 
@@ -297,7 +297,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
                       m_pImpl->m_pNamesOfChildren->getLength());
               ++n )
         {
-            const rtl::OUString & rName
+            const OUString & rName
                 = m_pImpl->m_pNamesOfChildren->getConstArray()[ n ];
 
             if ( rName.isEmpty() )
@@ -307,7 +307,7 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
             }
 
             // Assemble URL for child.
-            rtl::OUString aURL = assembleChildURL( rName );
+            OUString aURL = assembleChildURL( rName );
 
             m_pImpl->m_aResults.push_back( new ResultListEntry( aURL ) );
         }
@@ -400,8 +400,8 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
 
     if ( m_pImpl->m_pNamesOfChildren == 0 )
     {
-        uno::Sequence< rtl::OUString > * pNamesOfChildren
-            = new uno::Sequence< rtl::OUString >();
+        uno::Sequence< OUString > * pNamesOfChildren
+            = new uno::Sequence< OUString >();
 
         if ( !m_pImpl->m_xContent->getContentProvider()->queryNamesOfChildren(
                 m_pImpl->m_xContent->getIdentifier()->getContentIdentifier(),
@@ -420,16 +420,16 @@ bool ResultSetDataSupplier::queryNamesOfChildren()
     return true;
 }
 
-::rtl::OUString
-ResultSetDataSupplier::assembleChildURL( const ::rtl::OUString& aName )
+OUString
+ResultSetDataSupplier::assembleChildURL( const OUString& aName )
 {
-    rtl::OUString aContURL
+    OUString aContURL
         = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
-    rtl::OUString aURL( aContURL );
+    OUString aURL( aContURL );
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
-        aURL += rtl::OUString("/");
+        aURL += OUString("/");
 
     aURL += aName;
     return aURL;

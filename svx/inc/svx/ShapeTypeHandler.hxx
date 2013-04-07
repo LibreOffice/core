@@ -56,10 +56,10 @@ typedef AccessibleShape* (*tCreateFunction)
 struct ShapeTypeDescriptor
 {
     ShapeTypeId         mnShapeTypeId;
-    rtl::OUString       msServiceName;
+    OUString       msServiceName;
     tCreateFunction     maCreateFunction;
     ShapeTypeDescriptor (
-        ShapeTypeId nId, const rtl::OUString& sName, tCreateFunction aFunction)
+        ShapeTypeId nId, const OUString& sName, tCreateFunction aFunction)
     :   mnShapeTypeId (nId),
         msServiceName (sName),
            maCreateFunction (aFunction)
@@ -95,7 +95,7 @@ public:
              Returns the type id of the shape with the given service name or
              -1 when the service name is not known.
      */
-    ShapeTypeId GetTypeId (const ::rtl::OUString& aServiceName) const;
+    ShapeTypeId GetTypeId (const OUString& aServiceName) const;
 
     /**  Determines the type id of the specified shape.
          @param xShape
@@ -154,7 +154,7 @@ public:
         ShapeTypeDescriptor aDescriptorList[]);
 
     /// get the accessible base name for an object
-    static ::rtl::OUString CreateAccessibleBaseName (
+    static OUString CreateAccessibleBaseName (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape)
             throw (::com::sun::star::uno::RuntimeException);
 
@@ -186,8 +186,8 @@ private:
         given service name.
     */
     typedef ::boost::unordered_map<
-        ::rtl::OUString,ShapeTypeId,
-        ::rtl::OUStringHash,
+        OUString,ShapeTypeId,
+        OUStringHash,
         ::comphelper::UStringEqual> tServiceNameToSlotId;
     mutable tServiceNameToSlotId maServiceNameToSlotId;
 
@@ -199,7 +199,7 @@ private:
              Returns the slot id of the shape with the given service name or
              0 when the service name is not known.
      */
-    SVX_DLLPRIVATE long GetSlotId (const ::rtl::OUString& aServiceName) const;
+    SVX_DLLPRIVATE long GetSlotId (const OUString& aServiceName) const;
 
     /**  Determine the slot id of the specified shape type.  With this id
          internal methods can access the associated type descriptor.

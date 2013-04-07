@@ -45,7 +45,7 @@ StatusIndicatorInterfaceWrapper::~StatusIndicatorInterfaceWrapper()
 
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::start(
-    const ::rtl::OUString& sText,
+    const OUString& sText,
     sal_Int32              nRange )
 throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -83,7 +83,7 @@ throw( ::com::sun::star::uno::RuntimeException )
 }
 
 void SAL_CALL StatusIndicatorInterfaceWrapper::setText(
-    const ::rtl::OUString& sText )
+    const OUString& sText )
 throw( ::com::sun::star::uno::RuntimeException )
 {
     Reference< XComponent > xComp( m_xStatusIndicatorImpl );

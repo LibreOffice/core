@@ -743,7 +743,7 @@ void MasterPagesSelector::ClearPageSet (void)
 
 
 
-void MasterPagesSelector::SetHelpId( const rtl::OString& aId )
+void MasterPagesSelector::SetHelpId( const OString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 

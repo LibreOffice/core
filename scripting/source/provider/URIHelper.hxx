@@ -45,15 +45,15 @@ private:
     css::uno::Reference< css::ucb::XSimpleFileAccess3 > m_xSimpleFileAccess;
     css::uno::Reference<css::uri::XUriReferenceFactory> m_xUriReferenceFactory;
 
-    ::rtl::OUString m_sLanguage;
-    ::rtl::OUString m_sLocation;
-    ::rtl::OUString m_sBaseURI;
+    OUString m_sLanguage;
+    OUString m_sLocation;
+    OUString m_sBaseURI;
 
-    ::rtl::OUString SCRIPTS_PART;
+    OUString SCRIPTS_PART;
 
     bool initBaseURI();
-    ::rtl::OUString getLanguagePart(const ::rtl::OUString& rStorageURI);
-    ::rtl::OUString getLanguagePath(const ::rtl::OUString& rLanguagePart);
+    OUString getLanguagePart(const OUString& rStorageURI);
+    OUString getLanguagePath(const OUString& rLanguagePart);
 
 public:
 
@@ -67,29 +67,29 @@ public:
         initialize( const css::uno::Sequence < css::uno::Any > & args )
             throw ( css::uno::Exception, css::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getRootStorageURI()
             throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL
-        getScriptURI( const ::rtl::OUString& rStorageURI )
+    virtual OUString SAL_CALL
+        getScriptURI( const OUString& rStorageURI )
             throw( css::lang::IllegalArgumentException,
                    css::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL
-        getStorageURI( const ::rtl::OUString& rScriptURI )
+    virtual OUString SAL_CALL
+        getStorageURI( const OUString& rScriptURI )
             throw( css::lang::IllegalArgumentException,
                    css::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName()
             throw( css::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
-        supportsService( const ::rtl::OUString& ServiceName )
+        supportsService( const OUString& ServiceName )
             throw( css::uno::RuntimeException );
 
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( css::uno::RuntimeException );
 };

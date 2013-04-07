@@ -36,9 +36,9 @@
 namespace dp_manager {
 
 typedef ::boost::unordered_map<
-    ::rtl::OUString,
+    OUString,
     ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
-    ::rtl::OUStringHash > id2extensions;
+    OUStringHash > id2extensions;
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
         public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
@@ -47,8 +47,8 @@ public:
     ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager();
 
-    static css::uno::Sequence< ::rtl::OUString > getServiceNames();
-    static ::rtl::OUString getImplName();
+    static css::uno::Sequence< OUString > getServiceNames();
+    static OUString getImplName();
 
     void check();
     void fireModified();
@@ -73,9 +73,9 @@ public:
     createAbortChannel() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addExtension(
-        ::rtl::OUString const & url,
+        OUString const & url,
         css::uno::Sequence<css::beans::NamedValue> const & properties,
-        ::rtl::OUString const & repository,
+        OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -85,9 +85,9 @@ public:
                css::uno::RuntimeException);
 
     virtual void SAL_CALL removeExtension(
-        ::rtl::OUString const & identifier,
-        ::rtl::OUString const & filename,
-        ::rtl::OUString const & repository,
+        OUString const & identifier,
+        OUString const & filename,
+        OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -128,7 +128,7 @@ public:
 
     virtual css::uno::Sequence< css::uno::Reference<css::deployment::XPackage> >
         SAL_CALL getDeployedExtensions(
-        ::rtl::OUString const & repository,
+        OUString const & repository,
         css::uno::Reference<css::task::XAbortChannel> const &,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -139,9 +139,9 @@ public:
 
     virtual css::uno::Reference< css::deployment::XPackage>
         SAL_CALL getDeployedExtension(
-        ::rtl::OUString const & repository,
-        ::rtl::OUString const & identifier,
-        ::rtl::OUString const & filename,
+        OUString const & repository,
+        OUString const & identifier,
+        OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (
             css::deployment::DeploymentException,
@@ -151,8 +151,8 @@ public:
 
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> >
     SAL_CALL getExtensionsWithSameIdentifier(
-        ::rtl::OUString const & identifier,
-        ::rtl::OUString const & filename,
+        OUString const & identifier,
+        OUString const & filename,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (
             css::deployment::DeploymentException,
@@ -171,7 +171,7 @@ public:
             css::uno::RuntimeException);
 
     virtual void SAL_CALL reinstallDeployedExtensions(
-        sal_Bool force, ::rtl::OUString const & repository,
+        sal_Bool force, OUString const & repository,
         css::uno::Reference< css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (
@@ -192,12 +192,12 @@ public:
 
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
-        ::rtl::OUString const & repository,
+        OUString const & repository,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
         throw (css::deployment::DeploymentException,
                css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL isReadOnlyRepository(::rtl::OUString const & repository)
+    virtual sal_Bool SAL_CALL isReadOnlyRepository(OUString const & repository)
         throw (css::uno::RuntimeException);
 
 private:
@@ -207,10 +207,10 @@ private:
 
     struct ExtensionInfos
     {
-        ::rtl::OUString identifier;
-        ::rtl::OUString fileName;
-        ::rtl::OUString displayName;
-        ::rtl::OUString version;
+        OUString identifier;
+        OUString fileName;
+        OUString displayName;
+        OUString version;
     };
 
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
@@ -222,7 +222,7 @@ private:
        priority. That is, the first element is "user" follod by "shared" and
        then "bundled"
      */
-    ::std::list< ::rtl::OUString > m_repositoryNames;
+    ::std::list< OUString > m_repositoryNames;
 
     css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
     css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
@@ -230,15 +230,15 @@ private:
     css::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
     css::uno::Reference<css::deployment::XPackageManager> getBakRepository();
 
-    bool isUserDisabled(::rtl::OUString const & identifier,
-                        ::rtl::OUString const & filename);
+    bool isUserDisabled(OUString const & identifier,
+                        OUString const & filename);
 
     bool isUserDisabled(
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExtSameId);
 
     void activateExtension(
-        ::rtl::OUString const & identifier,
-        ::rtl::OUString const & fileName,
+        OUString const & identifier,
+        OUString const & fileName,
         bool bUserDisabled, bool bStartup,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
@@ -250,33 +250,33 @@ private:
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
     ::std::list<css::uno::Reference<css::deployment::XPackage> >
-    getExtensionsWithSameId(::rtl::OUString  const & identifier,
-                            ::rtl::OUString const & fileName,
+    getExtensionsWithSameId(OUString  const & identifier,
+                            OUString const & fileName,
                             css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv =
                             css::uno::Reference< css::ucb::XCommandEnvironment>());
 
     css::uno::Reference<css::deployment::XPackage> backupExtension(
-        ::rtl::OUString const & identifier, ::rtl::OUString const & fileName,
+        OUString const & identifier, OUString const & fileName,
         css::uno::Reference<css::deployment::XPackageManager> const & xPackageManager,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void checkInstall(
-        ::rtl::OUString const & displayName,
+        OUString const & displayName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & cmdEnv);
 
     void checkUpdate(
-        ::rtl::OUString const & newVersion,
-        ::rtl::OUString const & newDisplayName,
+        OUString const & newVersion,
+        OUString const & newDisplayName,
         css::uno::Reference<css::deployment::XPackage> const & oldExtension,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     void addExtensionsToMap(
         id2extensions & mapExt,
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,
-        ::rtl::OUString const & repository);
+        OUString const & repository);
 
     css::uno::Reference<css::deployment::XPackageManager>
-    getPackageManager(::rtl::OUString const & repository)
+    getPackageManager(OUString const & repository)
         throw (css::lang::IllegalArgumentException);
 
     bool doChecksForAddExtension(

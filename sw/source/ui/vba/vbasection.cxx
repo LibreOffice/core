@@ -65,20 +65,20 @@ SwVbaSection::PageSetup( ) throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, mxPageProps ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaSection::getServiceImplName()
 {
-    return rtl::OUString("SwVbaSection");
+    return OUString("SwVbaSection");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaSection::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Section" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Section" );
     }
     return aServiceNames;
 }

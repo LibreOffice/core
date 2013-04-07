@@ -30,7 +30,6 @@
 
 #include "app.hxx"
 
-using ::rtl::OUString;
 using namespace ::desktop;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -47,7 +46,7 @@ static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rP
     NamedValue aValue( OUString( "nodepath"  ), makeAny( rPath ) );
     aArgs[0] <<= aValue;
     return Reference< XPropertySet >(
-            xConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), aArgs ), UNO_QUERY_THROW );
+            xConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), aArgs ), UNO_QUERY_THROW );
 }
 
 void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )

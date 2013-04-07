@@ -48,7 +48,7 @@ namespace accessibility {
     when no name exists, a string of the form "#RRGGBB" with two hexadecimal
     digits for each color component.
 */
-rtl::OUString lookUpColorName(long color);
+OUString lookUpColorName(long color);
 
 }
 

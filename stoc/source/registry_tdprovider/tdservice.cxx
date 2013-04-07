@@ -30,7 +30,6 @@
 #include <memory>
 
 using namespace com::sun::star;
-using ::rtl::OUStringBuffer;
 
 namespace {
 
@@ -40,7 +39,7 @@ class Constructor:
 public:
     Constructor(
         Reference< XHierarchicalNameAccess > const & manager,
-        rtl::OUString const & name, Sequence< sal_Int8 > const & bytes,
+        OUString const & name, Sequence< sal_Int8 > const & bytes,
         sal_uInt16 index):
         m_desc(manager, name, bytes, index) {}
 
@@ -49,7 +48,7 @@ public:
     virtual sal_Bool SAL_CALL isDefaultConstructor() throw (RuntimeException)
     { return m_desc.getName().isEmpty(); }
 
-    virtual rtl::OUString SAL_CALL getName() throw (RuntimeException)
+    virtual OUString SAL_CALL getName() throw (RuntimeException)
     { return m_desc.getName(); }
 
     virtual Sequence< Reference< XParameter > > SAL_CALL getParameters()
@@ -338,7 +337,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
                     ctorCount));
         SAL_WNODEPRECATED_DECLARATIONS_POP
         for (sal_uInt16 i = 0; i < ctorCount; ++i) {
-            rtl::OUString name(reader.getMethodName(i));
+            OUString name(reader.getMethodName(i));
             if (reader.getMethodFlags(i) != RT_MODE_TWOWAY
                 || (reader.getMethodReturnTypeName(i) != "void")
                 || (name.isEmpty()
@@ -346,7 +345,7 @@ ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
                         || reader.getMethodExceptionCount(i) != 0)))
             {
                 throw RuntimeException(
-                    rtl::OUString(
+                    OUString(
                             "Service has bad constructors"),
                     static_cast< OWeakObject * >(this));
             }
@@ -373,7 +372,7 @@ void ServiceTypeDescriptionImpl::getReferences()
     sal_uInt16 superTypes = aReader.getSuperTypeCount();
     if (superTypes > 1) {
         throw RuntimeException(
-            rtl::OUString(
+            OUString(
                     "Service has more than one supertype"),
             static_cast< OWeakObject * >(this));
     }

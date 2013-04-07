@@ -91,7 +91,7 @@ private:
 typedef ::std::pair< sal_Int32, sal_Int32 > AxPairData;
 
 /** An array of string values as a property. */
-typedef ::std::vector< ::rtl::OUString > AxStringArray;
+typedef ::std::vector< OUString > AxStringArray;
 
 // ============================================================================
 
@@ -115,7 +115,7 @@ public:
     void                writePairProperty( AxPairData& orPairData );
     /** Write a string property to the stream, the respective flag
         in the property mask is set. */
-    void                writeStringProperty( ::rtl::OUString& orValue, bool bCompressed = true );
+    void                writeStringProperty( OUString& orValue, bool bCompressed = true );
 
     /** Skips the next property clears the respective
         flag in the property mask. */
@@ -149,10 +149,10 @@ private:
     /** Complex property for a string value. */
     struct StringProperty : public ComplexProperty
     {
-        ::rtl::OUString&    mrValue;
+        OUString&    mrValue;
         sal_uInt32          mnSize;
 
-        inline explicit     StringProperty( ::rtl::OUString& rValue, sal_uInt32 nSize ) :
+        inline explicit     StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
         virtual bool        writeProperty( AxAlignedOutputStream& rOutStrm );
     };
@@ -175,7 +175,7 @@ private:
     ComplexPropVector   maStreamProps;      ///< Stores info for all used stream data properties.
     AxPairData          maDummyPairData;    ///< Dummy pair for unsupported properties.
     StreamDataSequence  maDummyPicData;     ///< Dummy picture for unsupported properties.
-    ::rtl::OUString     maDummyString;      ///< Dummy string for unsupported properties.
+    OUString     maDummyString;      ///< Dummy string for unsupported properties.
     AxStringArray       maDummyStringArray; ///< Dummy string array for unsupported properties.
     sal_Int16           mnBlockSize;
     sal_Int64           mnPropFlagsStart;     ///< pos of Prop flags

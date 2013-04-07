@@ -38,21 +38,21 @@ private:
     css::uno::Reference< css::text::XText > mxText;
 
 private:
-    void removeBookmarkByName( const rtl::OUString& rName ) throw (css::uno::RuntimeException);
+    void removeBookmarkByName( const OUString& rName ) throw (css::uno::RuntimeException);
 
 public:
     SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~SwVbaBookmarks() {}
 
-    static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const rtl::OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw (css::uno::RuntimeException);
+    static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw (css::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
 
     // SwVbaBookmarks_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
     // XBookmarks
     virtual sal_Int32 SAL_CALL getDefaultSorting() throw (css::uno::RuntimeException);
@@ -60,8 +60,8 @@ public:
     virtual sal_Bool SAL_CALL getShowHidden() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) throw (css::uno::RuntimeException);
 
-    virtual css::uno::Any SAL_CALL Add( const rtl::OUString& rName, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL Exists( const rtl::OUString& rName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) throw (css::uno::RuntimeException);
 };
 
 #endif /* SW_VBA_BOOKMARKS_HXX */

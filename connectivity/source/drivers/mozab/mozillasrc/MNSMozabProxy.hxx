@@ -81,10 +81,10 @@ namespace connectivity
             //XCodeProxy
             virtual sal_Int32 SAL_CALL run(  ) throw (::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::mozilla::MozillaProductType SAL_CALL getProductType(  ) throw (::com::sun::star::uno::RuntimeException);
-            virtual ::rtl::OUString SAL_CALL getProfileName(  ) throw (::com::sun::star::uno::RuntimeException);
+            virtual OUString SAL_CALL getProfileName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         public:
-            sal_Int32 StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile); //Call this to start proxy
+            sal_Int32 StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const OUString &aProfile); //Call this to start proxy
 
         protected:
             nsresult testLDAPConnection();
@@ -95,7 +95,7 @@ namespace connectivity
 
             RunArgs * m_Args;
             ::com::sun::star::mozilla::MozillaProductType m_Product;
-            ::rtl::OUString m_Profile;
+            OUString m_Profile;
 #if OSL_DEBUG_LEVEL > 0
             oslThreadIdentifier m_oThreadID;
 #endif

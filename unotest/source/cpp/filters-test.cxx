@@ -36,7 +36,7 @@
 
 namespace test {
 
-void decode(const rtl::OUString& rIn, const rtl::OUString &rOut)
+void decode(const OUString& rIn, const OUString &rOut)
 {
     rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
     CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != 0);
@@ -71,8 +71,8 @@ void decode(const rtl::OUString& rIn, const rtl::OUString &rOut)
 }
 
 void FiltersTest::recursiveScan(filterStatus nExpected,
-    const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+    const OUString &rFilter, const OUString &rURL,
+    const OUString &rUserData, unsigned int nFilterFlags,
     unsigned int nClipboardID, unsigned int nFilterVersion)
 {
     osl::Directory aDir(rURL);
@@ -83,7 +83,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
     while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
     {
         aItem.getFileStatus(aFileStatus);
-        rtl::OUString sURL = aFileStatus.getFileURL();
+        OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
         {
             recursiveScan(nExpected, rFilter, sURL, rUserData,
@@ -91,7 +91,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
         }
         else
         {
-            rtl::OUString sTmpFile;
+            OUString sTmpFile;
             bool bEncrypted = false;
 
             sal_Int32 nLastSlash = sURL.lastIndexOf('/');
@@ -112,7 +112,7 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
                 }
             }
 
-            rtl::OString aRes(rtl::OUStringToOString(sURL,
+            OString aRes(OUStringToOString(sURL,
                 osl_getThreadTextEncoding()));
 
             if (bEncrypted)
@@ -143,20 +143,20 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
 }
 
-void FiltersTest::testDir(const rtl::OUString &rFilter,
-    const rtl::OUString &rURL, const rtl::OUString &rUserData,
+void FiltersTest::testDir(const OUString &rFilter,
+    const OUString &rURL, const OUString &rUserData,
     unsigned int nFilterFlags, unsigned int nClipboardID,
     unsigned int nFilterVersion)
 {
     fprintf(stderr, "File tested,Test Result,Execution Time (ms)\n");
     recursiveScan(test::pass, rFilter,
-        rURL + rtl::OUString("pass"),
+        rURL + OUString("pass"),
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
     recursiveScan(test::fail, rFilter,
-        rURL + rtl::OUString("fail"),
+        rURL + OUString("fail"),
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
     recursiveScan(test::indeterminate, rFilter,
-        rURL + rtl::OUString("indeterminate"),
+        rURL + OUString("indeterminate"),
         rUserData, nFilterFlags, nClipboardID, nFilterVersion);
 }
 

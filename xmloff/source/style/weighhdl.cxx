@@ -35,8 +35,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;

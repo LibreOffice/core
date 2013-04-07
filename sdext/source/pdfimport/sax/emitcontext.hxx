@@ -41,7 +41,7 @@ namespace pdfi
         ~SaxEmitter();
 
         virtual void beginTag( const char* pTag, const PropertyMap& rProperties );
-        virtual void write( const rtl::OUString& rString );
+        virtual void write( const OUString& rString );
         virtual void endTag( const char* pTag );
     };
 }

@@ -61,7 +61,7 @@ Reference< XStatement > SAL_CALL OConnectionWeakWrapper::createStatement(  ) thr
     return m_xConnection->createStatement();
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -70,7 +70,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareStatemen
     return m_xConnection->prepareStatement(sql);
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -79,7 +79,7 @@ Reference< XPreparedStatement > SAL_CALL OConnectionWeakWrapper::prepareCall( co
     return m_xConnection->prepareCall(sql);
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnectionWeakWrapper::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL OConnectionWeakWrapper::isReadOnly(  ) throw(SQLException, Run
     return m_xConnection->isReadOnly();
 }
 // --------------------------------------------------------------------------------
-void SAL_CALL OConnectionWeakWrapper::setCatalog( const ::rtl::OUString& catalog ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnectionWeakWrapper::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -166,7 +166,7 @@ void SAL_CALL OConnectionWeakWrapper::setCatalog( const ::rtl::OUString& catalog
     m_xConnection->setCatalog(catalog);
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OConnectionWeakWrapper::getCatalog(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);

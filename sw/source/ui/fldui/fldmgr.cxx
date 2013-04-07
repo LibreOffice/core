@@ -76,7 +76,6 @@
 #include <fldui.hrc>
 #include <tox.hxx>
 
-using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -490,7 +489,7 @@ sal_uInt16 SwFldMgr::GetPos(sal_uInt16 nTypeId)
     Description: localise subtypes of a field
  --------------------------------------------------------------------*/
 
-bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<rtl::OUString>& rToFill)
+bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
 {
     bool bRet = false;
     SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
@@ -1262,7 +1261,7 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData, SwPaM *pPam )
             if (nLevel != 0x7f && cSeparator == 0)
                 cSeparator = '.';
 
-            pTyp->SetDelimiter(rtl::OUString(cSeparator));
+            pTyp->SetDelimiter(OUString(cSeparator));
             SwSetExpField* pExpFld = new SwSetExpField(pTyp, rData.sPar2, nFormatId);
             bExp = true;
             pFld = pExpFld;
@@ -1485,7 +1484,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
                 ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
-                sPar2 = rtl::OUString("-1");
+                sPar2 = OUString("-1");
             }
             else
             {
@@ -1664,7 +1663,7 @@ sal_Bool SwFldMgr::ChooseMacro(const String&)
     sal_Bool bRet = sal_False;
 
     // choose script dialog
-    ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
+    OUString aScriptURL = SfxApplication::ChooseScript();
 
     // the script selector dialog returns a valid script URL
     if ( !aScriptURL.isEmpty() )

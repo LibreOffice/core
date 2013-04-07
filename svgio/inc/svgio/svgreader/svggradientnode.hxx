@@ -57,7 +57,7 @@ namespace svgio
             /// link to another gradient used as style. If maXLink
             /// is set, the node can be fetched on demand by using
             // tryToFindLink (buffered)
-            rtl::OUString               maXLink;
+            OUString               maXLink;
             const SvgGradientNode*      mpXLink;
 
             /// link on demand
@@ -71,7 +71,7 @@ namespace svgio
             virtual ~SvgGradientNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// collect gradient stop entries
             void collectGradientEntries(drawinglayer::primitive2d::SvgGradientEntryVector& aVector) const;

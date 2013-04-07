@@ -88,7 +88,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
     return sal_True;
 }
 
-::rtl::OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SvxTbxCtlAlign::getSubToolbarName() throw (::com::sun::star::uno::RuntimeException)
 {
     // Provide the controlled sub-toolbar name, so we are notified whenever
     // this toolbar executes a function.
@@ -96,7 +96,7 @@ SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
     return m_aSubTbName;
 }
 
-void SAL_CALL SvxTbxCtlAlign::functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxTbxCtlAlign::functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
     // Our sub-toolbar wants to executes a function. We have to change
     // the image of our toolbar button to reflect the new function.

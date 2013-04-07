@@ -181,13 +181,13 @@ class SvtMiscOptions_Impl : public ConfigItem
         { return m_bIsSymbolsSizeRO; }
 
         sal_Int16 GetSymbolsStyle() const;
-        ::rtl::OUString GetSymbolsStyleName() const;
+        OUString GetSymbolsStyleName() const;
         sal_Int16 GetCurrentSymbolsStyle() const;
 
         inline void SetSymbolsStyle( sal_Int16 nSet )
-        { ImplSetSymbolsStyle( true, nSet, ::rtl::OUString() ); }
+        { ImplSetSymbolsStyle( true, nSet, OUString() ); }
 
-        inline void SetSymbolsStyleName( ::rtl::OUString &rName )
+        inline void SetSymbolsStyleName( OUString &rName )
         { ImplSetSymbolsStyle( false, 0, rName ); }
 
         inline sal_Bool IsGetSymbolsStyleReadOnly()
@@ -247,7 +247,7 @@ class SvtMiscOptions_Impl : public ConfigItem
         static Sequence< OUString > GetPropertyNames();
 
     protected:
-        void ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName );
+        void ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const OUString &rName );
 };
 
 //*****************************************************************************************************************
@@ -356,7 +356,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 
             case PROPERTYHANDLE_SYMBOLSTYLE :
             {
-                ::rtl::OUString aSymbolsStyle;
+                OUString aSymbolsStyle;
                 if( seqValues[nProperty] >>= aSymbolsStyle )
                     SetSymbolsStyleName( aSymbolsStyle );
                 else
@@ -411,8 +411,8 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
     }
 }
 
-static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
-                const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
+static int lcl_MapPropertyName( const OUString rCompare,
+                const uno::Sequence< OUString>& aInternalPropertyNames)
 {
     for(int nProp = 0; nProp < aInternalPropertyNames.getLength(); ++nProp)
     {
@@ -424,7 +424,7 @@ static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
 
 void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 {
-    const uno::Sequence< ::rtl::OUString> aInternalPropertyNames( GetPropertyNames());
+    const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > seqValues = GetProperties( rPropertyNames  );
 
     // Safe impossible cases.
@@ -483,7 +483,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
                                                         }
                                                     break;
             case PROPERTYHANDLE_SYMBOLSTYLE         :   {
-                                                            ::rtl::OUString aSymbolsStyle;
+                                                            OUString aSymbolsStyle;
                                                             if( seqValues[nProperty] >>= aSymbolsStyle )
                                                                 SetSymbolsStyleName( aSymbolsStyle );
                                                             else
@@ -550,7 +550,7 @@ sal_Int16 SvtMiscOptions_Impl::GetSymbolsStyle() const
     return (sal_Int16)Application::GetSettings().GetStyleSettings().GetSymbolsStyle();
 }
 
-::rtl::OUString SvtMiscOptions_Impl::GetSymbolsStyleName() const
+OUString SvtMiscOptions_Impl::GetSymbolsStyleName() const
 {
     return Application::GetSettings().GetStyleSettings().GetSymbolsStyleName();
 }
@@ -560,7 +560,7 @@ sal_Int16 SvtMiscOptions_Impl::GetCurrentSymbolsStyle() const
     return (sal_Int16)Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyle();
 }
 
-void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const ::rtl::OUString &rName )
+void SvtMiscOptions_Impl::ImplSetSymbolsStyle( bool bValue, sal_Int16 nSet, const OUString &rName )
 {
     if ( ( bValue && ( nSet != GetSymbolsStyle() ) ) ||
          ( !bValue && ( rName != GetSymbolsStyleName() ) ) )

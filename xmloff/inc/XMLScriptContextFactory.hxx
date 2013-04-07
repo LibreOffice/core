@@ -33,9 +33,9 @@ class XMLEventsImportContext;
 
 class XMLScriptContextFactory : public XMLEventContextFactory
 {
-    const ::rtl::OUString sEventType;
-    const ::rtl::OUString sScript;
-    const ::rtl::OUString sURL;
+    const OUString sEventType;
+    const OUString sScript;
+    const OUString sURL;
 
 public:
     XMLScriptContextFactory();
@@ -44,16 +44,16 @@ public:
     virtual SvXMLImportContext *
     CreateContext(SvXMLImport & rImport, /// import context
                   sal_uInt16 nPrefix,    /// element: namespace prefix
-                  const ::rtl::OUString & rLocalName, /// element: local name
+                  const OUString & rLocalName, /// element: local name
                   /// attribute list
                   const ::com::sun::star::uno::Reference<
                   ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
                   /// the context for the enclosing <script:events> element
                   XMLEventsImportContext * rEvents,
                   /// the event name (as understood by the API)
-                  const ::rtl::OUString & rApiEventName,
+                  const OUString & rApiEventName,
                   /// the event type name (as registered)
-                  const ::rtl::OUString & rLanguage);
+                  const OUString & rLanguage);
 };
 
 #endif // _XMLOFF_XMLSCRIPTCONTEXTFACTORY_HXX

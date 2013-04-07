@@ -64,7 +64,6 @@
 
 #define PLATFORM_AIX_POWERPC        "aix_powerpc"
 
-using ::rtl::OUString;
 
 namespace dp_misc
 {
@@ -92,7 +91,7 @@ namespace
     struct StrPlatform : public rtl::StaticWithInit<
         OUString, StrPlatform> {
             const OUString operator () () {
-                ::rtl::OUStringBuffer buf;
+                OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( static_cast<sal_Unicode>('_') );
                 buf.append( StrCPU::get() );

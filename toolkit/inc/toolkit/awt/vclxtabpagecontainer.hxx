@@ -69,7 +69,7 @@ public:
     virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 private:

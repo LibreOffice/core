@@ -81,7 +81,7 @@ namespace frm
             This method allows retrieving status information about features which have an additional
             string information associated with it.
         */
-        virtual ::rtl::OUString getStringState( sal_Int16 _nFeatureId ) const = 0;
+        virtual OUString getStringState( sal_Int16 _nFeatureId ) const = 0;
 
         /** returns the integer state of a feature
 

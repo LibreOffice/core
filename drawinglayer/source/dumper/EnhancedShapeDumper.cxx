@@ -383,7 +383,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
 {
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Type");
-        rtl::OUString sType;
+        OUString sType;
         if(anotherAny >>= sType)
             dumpTypeAsAttribute(sType);
     }
@@ -437,7 +437,7 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Equations");
-        uno::Sequence< rtl::OUString > aEquations;
+        uno::Sequence< OUString > aEquations;
         if(anotherAny >>= aEquations)
             dumpEquationsAsElement(aEquations);
     }
@@ -448,10 +448,10 @@ void EnhancedShapeDumper::dumpEnhancedCustomShapeGeometryService(uno::Reference<
             dumpHandlesAsElement(aHandles);
     }
 }
-void EnhancedShapeDumper::dumpTypeAsAttribute(rtl::OUString sType)
+void EnhancedShapeDumper::dumpTypeAsAttribute(OUString sType)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
-        rtl::OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sType, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void EnhancedShapeDumper::dumpViewBoxAsElement(awt::Rectangle aViewBox)
@@ -493,11 +493,11 @@ void EnhancedShapeDumper::dumpAdjustmentValuesAsElement(uno::Sequence< drawing::
     {
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "EnhancedCustomShapeAdjustmentValue" ));
         uno::Any aAny = aAdjustmentValues[i].Value;
-        rtl::OUString sValue;
+        OUString sValue;
         if(aAny >>= sValue)
         {
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
         switch(aAdjustmentValues[i].State)
         {
@@ -523,15 +523,15 @@ void EnhancedShapeDumper::dumpPropertyValueAsElement(beans::PropertyValue aPrope
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
 
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-        rtl::OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(aPropertyValue.Name, RTL_TEXTENCODING_UTF8).getStr());
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aPropertyValue.Handle);
 
     uno::Any aAny = aPropertyValue.Value;
-    rtl::OUString sValue;
+    OUString sValue;
     if(aAny >>= sValue)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-            rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
     switch(aPropertyValue.State)
     {
@@ -583,14 +583,14 @@ void EnhancedShapeDumper::dumpTextPathAsElement(uno::Sequence< beans::PropertyVa
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void EnhancedShapeDumper::dumpEquationsAsElement(uno::Sequence< rtl::OUString > aEquations)
+void EnhancedShapeDumper::dumpEquationsAsElement(uno::Sequence< OUString > aEquations)
 {
     xmlTextWriterStartElement(xmlWriter, BAD_CAST( "Equations" ));
     sal_Int32 nLength = aEquations.getLength();
     for (sal_Int32 i = 0; i < nLength; ++i)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-            rtl::OUStringToOString(aEquations[i], RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(aEquations[i], RTL_TEXTENCODING_UTF8).getStr());
     }
     xmlTextWriterEndElement( xmlWriter );
 }
@@ -759,11 +759,11 @@ void EnhancedShapeDumper::dumpRefRAsAttribute(sal_Int32 aRefR)
 void EnhancedShapeDumper::dumpEnhancedCustomShapeParameter(drawing::EnhancedCustomShapeParameter aParameter)
 {
     uno::Any aAny = aParameter.Value;
-    rtl::OUString sValue;
+    OUString sValue;
     if(aAny >>= sValue)
     {
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-            rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
     }
     sal_Int32 aType = aParameter.Type;
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%" SAL_PRIdINT32, aType);

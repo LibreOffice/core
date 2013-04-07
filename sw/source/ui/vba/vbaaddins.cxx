@@ -36,14 +36,14 @@ static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const u
     SvtPathOptions aPathOpt;
     // FIXME: temporary the STARTUP path is located in $OO/basic3.1/program/addin
     String aAddinPath = aPathOpt.GetAddinPath();
-    OSL_TRACE("lcl_getAddinCollection: %s", rtl::OUStringToOString( aAddinPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("lcl_getAddinCollection: %s", OUStringToOString( aAddinPath, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( xSFA->isFolder( aAddinPath ) )
     {
-        uno::Sequence< rtl::OUString > sEntries = xSFA->getFolderContents( aAddinPath, sal_False );
+        uno::Sequence< OUString > sEntries = xSFA->getFolderContents( aAddinPath, sal_False );
         sal_Int32 nEntry = sEntries.getLength();
         for( sal_Int32 index = 0; index < nEntry; ++index )
         {
-            rtl::OUString sUrl = sEntries[ index ];
+            OUString sUrl = sEntries[ index ];
             if( !xSFA->isFolder( sUrl ) && sUrl.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
             {
                 maAddins.push_back( uno::Reference< word::XAddin >( new SwVbaAddin( xParent, xContext, sUrl, sal_True ) ) );
@@ -79,20 +79,20 @@ SwVbaAddins::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaAddins::getServiceImplName()
 {
-    return rtl::OUString("SwVbaAddins");
+    return OUString("SwVbaAddins");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaAddins::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Addins");
+        sNames[0] = OUString("ooo.vba.word.Addins");
     }
     return sNames;
 }

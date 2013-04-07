@@ -679,7 +679,7 @@ namespace cppcanvas
                     aRot90.rotate(M_PI_2);
 
                     basegfx::ODFGradientInfo aGradInfo;
-                    rtl::OUString aGradientService;
+                    OUString aGradientService;
                     switch( rGradient.GetStyle() )
                     {
                         case GradientStyle_LINEAR:
@@ -1055,7 +1055,7 @@ namespace cppcanvas
                 pChars[3]=pChars[2]=pChars[1]=pChars[0];
 
                 long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
-                    rtl::OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
+                    OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
 
                 if( nStrikeoutWidth <= 0 )
                     nStrikeoutWidth = 1;
@@ -3086,7 +3086,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 
@@ -3147,7 +3147,7 @@ namespace cppcanvas
             }
             catch( uno::Exception& )
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
 

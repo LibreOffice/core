@@ -170,7 +170,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
         OSL_ENSURE( m_pConnection && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
         if ( m_pConnection )
         {
-            ::rtl::OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
+            OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
             if ( !sStmt.isEmpty() )
             {
                 m_aLogger.log( LogLevel::FINER, STR_LOG_GENERATED_VALUES_FALLBACK, sStmt );
@@ -219,7 +219,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -253,7 +253,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql )
 }
 // -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -303,7 +303,7 @@ Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(Runt
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_Statement::addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -337,7 +337,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
 // -------------------------------------------------------------------------
 
 
-sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -473,7 +473,7 @@ sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, Runtime
     return impl_getProperty("getMaxFieldSize",mID);
 }
 //------------------------------------------------------------------------------
-::rtl::OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
+OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -487,7 +487,7 @@ sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, Runtime
     catch(const SQLException&)
     {
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLException, RuntimeException)
@@ -578,7 +578,7 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
     callVoidMethodWithIntArg("setMaxFieldSize",mID,_par0,true);
 }
 //------------------------------------------------------------------------------
-void java_sql_Statement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -596,7 +596,7 @@ void java_sql_Statement_Base::setCursorName(const ::rtl::OUString &_par0) throw(
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);

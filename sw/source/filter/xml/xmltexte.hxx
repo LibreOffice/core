@@ -32,9 +32,9 @@ namespace com { namespace sun { namespace star { namespace style {
 
 class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
-    const ::rtl::OUString sTextTable;
-    const ::rtl::OUString sEmbeddedObjectProtocol;
-    const ::rtl::OUString sGraphicObjectProtocol;
+    const OUString sTextTable;
+    const OUString sEmbeddedObjectProtocol;
+    const OUString sGraphicObjectProtocol;
 
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;
@@ -73,7 +73,7 @@ public:
     virtual void setTextEmbeddedGraphicURL(
         const ::com::sun::star::uno::Reference <
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
-        ::rtl::OUString& rStreamName ) const;
+        OUString& rStreamName ) const;
 };
 
 

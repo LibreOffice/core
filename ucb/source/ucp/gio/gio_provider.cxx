@@ -38,7 +38,7 @@ ContentProvider::queryContent(
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf(stderr, "QueryContent: '%s'",
-       rtl::OUStringToOString
+       OUStringToOString
        (Identifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
 #endif
 
@@ -85,8 +85,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString( "com.sun.star.comp.GIOContentProvider" ),
-                     rtl::OUString( "com.sun.star.ucb.GIOContentProvider" ) );
+                     OUString( "com.sun.star.comp.GIOContentProvider" ),
+                     OUString( "com.sun.star.ucb.GIOContentProvider" ) );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

@@ -52,8 +52,6 @@ using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
 using ::std::auto_ptr;
 using ::boost::unordered_map;
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -476,7 +474,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         for (size_t i = 0; i < n; ++i)
         {
             const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
-            rtl::OUString aName = rMem.getDisplayName();
+            OUString aName = rMem.getDisplayName();
             if (aName.isEmpty())
                 // Use special string for an empty name.
                 mpDPFieldPopup->addMember(ScGlobal::GetRscString(STR_EMPTYDATA), rMem.mbVisible);
@@ -573,10 +571,10 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         if (itrNameMap == aMemNameMap.end())
         {
             // This is an original member name.  Use it as-is.
-            rtl::OUString aName = itr->first;
+            OUString aName = itr->first;
             if (aName.equals(ScGlobal::GetRscString(STR_EMPTYDATA)))
                 // Translate the special empty name into an empty string.
-                aName = rtl::OUString();
+                aName = OUString();
 
             aResult.insert(
                 ScCheckListMenuWindow::ResultType::value_type(

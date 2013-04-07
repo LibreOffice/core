@@ -76,7 +76,7 @@ StringSequence  OFileControlModel::getSupportedServiceNames() throw(RuntimeExcep
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FILECONTROL;
     return aSupported;
 }
@@ -145,7 +145,7 @@ Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            return makeAny( ::rtl::OUString() );
+            return makeAny( OUString() );
     }
     return OControlModel::getPropertyDefaultByHandle( _nHandle );
 }
@@ -192,13 +192,13 @@ sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& 
 void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
-        DECL_PROP1(DEFAULT_TEXT,    ::rtl::OUString,    BOUND);
+        DECL_PROP1(DEFAULT_TEXT,    OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_FILECONTROL;   // old (non-sun) name for compatibility !
 }
@@ -236,7 +236,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
             break;
         default:
             OSL_FAIL("OFileControlModel::read : unknown version !");
-            m_sDefaultValue = ::rtl::OUString();
+            m_sDefaultValue = OUString();
     }
 
     // Display default values after read

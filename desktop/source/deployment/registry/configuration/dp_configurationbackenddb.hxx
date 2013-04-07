@@ -42,13 +42,13 @@ namespace configuration {
 class ConfigurationBackendDb: public dp_registry::backend::BackendDb
 {
 protected:
-    virtual ::rtl::OUString getDbNSName();
+    virtual OUString getDbNSName();
 
-    virtual ::rtl::OUString getNSPrefix();
+    virtual OUString getNSPrefix();
 
-    virtual ::rtl::OUString getRootElementName();
+    virtual OUString getRootElementName();
 
-    virtual ::rtl::OUString getKeyElementName();
+    virtual OUString getKeyElementName();
 
 public:
     struct Data
@@ -56,21 +56,21 @@ public:
         /* the URL to the folder containing the xcu or xcs files which contained
            %origin%
          */
-        ::rtl::OUString dataUrl;
+        OUString dataUrl;
         /* the URL of the xcu or xcs file which is written in to the configmgr.ini
          */
-        ::rtl::OUString iniEntry;
+        OUString iniEntry;
     };
 
 public:
 
     ConfigurationBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        ::rtl::OUString const & url);
+                        OUString const & url);
 
-    void addEntry(::rtl::OUString const & url, Data const & data);
+    void addEntry(OUString const & url, Data const & data);
 
-    ::boost::optional<Data> getEntry(::rtl::OUString const & url);
-    ::std::list< ::rtl::OUString> getAllDataUrls();
+    ::boost::optional<Data> getEntry(OUString const & url);
+    ::std::list< OUString> getAllDataUrls();
 };
 
 

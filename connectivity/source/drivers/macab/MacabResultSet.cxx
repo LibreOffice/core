@@ -127,7 +127,7 @@ void MacabResultSet::sortMacabRecords(const MacabOrder *pOrder)
 
 }
 // -------------------------------------------------------------------------
-void MacabResultSet::setTableName(::rtl::OUString _sTableName)
+void MacabResultSet::setTableName(OUString _sTableName)
 {
     m_sTableName = _sTableName;
 }
@@ -175,7 +175,7 @@ Sequence<  Type > SAL_CALL MacabResultSet::getTypes() throw(RuntimeException)
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL MacabResultSet::findColumn(const ::rtl::OUString& columnName) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -191,7 +191,7 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const ::rtl::OUString& columnName)
                 return i;
 
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_NO_ELEMENT_NAME,
             "$name$", columnName
          ) );
@@ -201,12 +201,12 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const ::rtl::OUString& columnName)
     return 0;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString aRet;
+    OUString aRet;
     sal_Int32 nRecords = m_aMacabRecords->size();
     m_bWasNull = true;
 
@@ -809,7 +809,7 @@ void SAL_CALL MacabResultSet::updateDouble(sal_Int32, double) throw(SQLException
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL MacabResultSet::updateString(sal_Int32, const ::rtl::OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateString(sal_Int32, const OUString&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -879,7 +879,7 @@ Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeExceptio
 
     if (m_nRowPos != -1 && m_nRowPos != nRecords)
     {
-        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString("UID"));
+        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,OUString("UID"));
         if(uidField != NULL)
         {
             if(uidField->type == kABStringProperty)
@@ -896,17 +896,17 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sBookmark = comphelper::getString(bookmark);
+    OUString sBookmark = comphelper::getString(bookmark);
         sal_Int32 nRecords = m_aMacabRecords->size();
 
     for (sal_Int32 nRow = 0; nRow < nRecords; nRow++)
     {
-        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,::rtl::OUString("UID"));
+        macabfield *uidField = m_aMacabRecords->getField(m_nRowPos,OUString("UID"));
         if(uidField != NULL)
         {
             if(uidField->type == kABStringProperty)
             {
-                ::rtl::OUString sUniqueIdentifier = CFStringToOUString( (CFStringRef) uidField->value );
+                OUString sUniqueIdentifier = CFStringToOUString( (CFStringRef) uidField->value );
                 if (sUniqueIdentifier == sBookmark)
                 {
                     m_nRowPos = nRow;
@@ -944,8 +944,8 @@ sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sFirst = comphelper::getString(firstItem);
-    ::rtl::OUString sSecond = comphelper::getString(secondItem);
+    OUString sFirst = comphelper::getString(firstItem);
+    OUString sSecond = comphelper::getString(secondItem);
 
     if (sFirst < sSecond)
         return CompareBookmark::LESS;
@@ -964,7 +964,7 @@ sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark) throw( SQL
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 
-    ::rtl::OUString sBookmark = comphelper::getString(bookmark);
+    OUString sBookmark = comphelper::getString(bookmark);
 
     return sBookmark.hashCode();
 }
@@ -983,7 +983,7 @@ IPropertyArrayHelper* MacabResultSet::createArrayHelper() const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP1IMPL(CURSORNAME,          ::rtl::OUString) PropertyAttribute::READONLY);
+    DECL_PROP1IMPL(CURSORNAME,          OUString) PropertyAttribute::READONLY);
     DECL_PROP0(FETCHDIRECTION,          sal_Int32);
     DECL_PROP0(FETCHSIZE,               sal_Int32);
     DECL_BOOL_PROP1IMPL(ISBOOKMARKABLE) PropertyAttribute::READONLY);

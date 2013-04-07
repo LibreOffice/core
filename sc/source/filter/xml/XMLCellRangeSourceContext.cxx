@@ -28,7 +28,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlimprt.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 
@@ -59,7 +58,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( nIndex ));
+        const OUString& sAttrName(xAttrList->getNameByIndex( nIndex ));
         const OUString& sValue(xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );

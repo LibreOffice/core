@@ -40,14 +40,14 @@ namespace rtl {
 
 class XMLChangedRegionImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sEmpty;
+    const OUString sEmpty;
 
     /// if we replace the current XTextCursor/XText by the ones for
     /// the redline, we remember the old cursor here.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> xOldCursor;
 
-    ::rtl::OUString sID;        /// redline-ID
+    OUString sID;        /// redline-ID
 
     sal_Bool bMergeLastPara;    /// merge-last-paragraph flag
 
@@ -58,7 +58,7 @@ public:
     XMLChangedRegionImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName);
+        const OUString& rLocalName);
 
     ~XMLChangedRegionImportContext();
 
@@ -68,7 +68,7 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
          const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
@@ -76,10 +76,10 @@ public:
 
 
     /// change info: To be called from change-info context
-    void SetChangeInfo(const ::rtl::OUString& rType,
-                       const ::rtl::OUString& rAuthor,
-                       const ::rtl::OUString& rComment,
-                       const ::rtl::OUString& rDate);
+    void SetChangeInfo(const OUString& rType,
+                       const OUString& rAuthor,
+                       const OUString& rComment,
+                       const OUString& rDate);
 
     /// create redline XText/XTextCursor on demand and register with
     /// XMLTextImportHelper

@@ -112,7 +112,7 @@ namespace svx{
                 TEXT("ReturnAddress"),
                 szBuffer,
                 sizeof(szBuffer) ) )
-                maEMailAddrED.SetText(rtl::OUString((sal_Unicode *)szBuffer));
+                maEMailAddrED.SetText(OUString((sal_Unicode *)szBuffer));
 
             DWORD   fAllowContact = sal_False;
             RegReadValue(
@@ -196,7 +196,7 @@ namespace svx{
 
             if ( fp )
             {
-                rtl::OString strUTF8(rtl::OUStringToOString(GetUsing(),
+                OString strUTF8(OUStringToOString(GetUsing(),
                     RTL_TEXTENCODING_UTF8));
 
                 fwrite( strUTF8.getStr(), 1, strUTF8.getLength(), fp );

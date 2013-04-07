@@ -187,7 +187,7 @@ public: // XResultSet
 public: // XRow
     virtual sal_Bool SAL_CALL wasNull(  )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex )
+    virtual OUString SAL_CALL getString( sal_Int32 columnIndex )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex )
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -229,7 +229,7 @@ public: // XRow
         throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
 public: // XColumnLocate
-//      virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName )
+//      virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
 //          throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
 
 public: // OPropertySetHelper

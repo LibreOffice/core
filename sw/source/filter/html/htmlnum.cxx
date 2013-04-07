@@ -789,7 +789,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
         rWrt.aBulletGrfs[i].Erase();
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append('<');
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );
         sal_Int16 eType = rNumFmt.GetNumberingType();

@@ -27,11 +27,10 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
-const ::rtl::OUString PresenterConfigurationAccess::msPresenterScreenRootName =
+const OUString PresenterConfigurationAccess::msPresenterScreenRootName =
     "/org.openoffice.Office.PresenterScreen/";
 
 PresenterConfigurationAccess::PresenterConfigurationAccess (
@@ -78,7 +77,7 @@ PresenterConfigurationAccess::PresenterConfigurationAccess (
     catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while opening configuration: %s",
-            ::rtl::OUStringToOString(rException.Message,
+            OUStringToOString(rException.Message,
                 RTL_TEXTENCODING_UTF8).getStr());
     }
 }
@@ -99,7 +98,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (const OUString& sPathToN
         sPathToNode);
 }
 
-bool PresenterConfigurationAccess::GoToChild (const ::rtl::OUString& rsPathToNode)
+bool PresenterConfigurationAccess::GoToChild (const OUString& rsPathToNode)
 {
     if ( ! IsValid())
         return false;
@@ -132,7 +131,7 @@ bool PresenterConfigurationAccess::GoToChild (const Predicate& rPredicate)
 }
 
 bool PresenterConfigurationAccess::SetProperty (
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsPropertyName,
     const Any& rValue)
 {
     Reference<beans::XPropertySet> xProperties (maNode, UNO_QUERY);
@@ -162,8 +161,8 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
     catch (const Exception& rException)
     {
         OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            ::rtl::OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(sPathToNode, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(rException.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return Any();
@@ -171,7 +170,7 @@ Any PresenterConfigurationAccess::GetConfigurationNode (
 
 Reference<beans::XPropertySet> PresenterConfigurationAccess::GetNodeProperties (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-    const ::rtl::OUString& rsPathToNode)
+    const OUString& rsPathToNode)
 {
     return Reference<beans::XPropertySet>(GetConfigurationNode(rxNode, rsPathToNode), UNO_QUERY);
 }
@@ -257,8 +256,8 @@ Any PresenterConfigurationAccess::Find (
 }
 
 bool PresenterConfigurationAccess::IsStringPropertyEqual (
-    const ::rtl::OUString& rsValue,
-    const ::rtl::OUString& rsPropertyName,
+    const OUString& rsValue,
+    const OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertySet>& rxNode)
 {
     OUString sValue;

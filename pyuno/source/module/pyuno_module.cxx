@@ -44,12 +44,6 @@
 
 using osl::Module;
 
-using rtl::OString;
-using rtl::OUString;
-using rtl::OUStringHash;
-using rtl::OUStringToOString;
-using rtl::OUStringBuffer;
-using rtl::OStringBuffer;
 
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -171,7 +165,7 @@ static void fillStruct(
         {
             const OUString OUMemberName (pCompType->ppMemberNames[i]);
             PyObject *pyMemberName =
-                PyStr_FromString(::rtl::OUStringToOString(OUMemberName,
+                PyStr_FromString(OUStringToOString(OUMemberName,
                         RTL_TEXTENCODING_UTF8).getStr());
             if ( PyObject *element = PyDict_GetItem(kwinitializer, pyMemberName ) )
             {

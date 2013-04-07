@@ -29,14 +29,12 @@
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
 
-using ::rtl::OString;
-using ::rtl::OUString;
 
 namespace {
 
-void failed(rtl::OString const & typeName, CppuOptions * options) {
+void failed(OString const & typeName, CppuOptions * options) {
     fprintf(stderr, "%s ERROR: %s\n", options->getProgramName().getStr(),
-            rtl::OString("cannot dump Type '" + typeName + "'").getStr());
+            OString("cannot dump Type '" + typeName + "'").getStr());
     exit(99);
 }
 
@@ -52,7 +50,7 @@ void produce(
 }
 
 void produce(
-    rtl::OString const & typeName,
+    OString const & typeName,
     rtl::Reference< TypeManager > const & typeMgr,
     codemaker::GeneratedTypeSet & generated, CppuOptions * options)
 {

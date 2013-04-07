@@ -22,18 +22,18 @@
 
 #include <idlc/idlctypes.hxx>
 
-typedef ::boost::unordered_map< ::rtl::OString,
-                         ::rtl::OString,
+typedef ::boost::unordered_map< OString,
+                         OString,
                          HashString,
                          EqualString > OptionMap;
 
 class IllegalArgument
 {
 public:
-    IllegalArgument(const ::rtl::OString& msg)
+    IllegalArgument(const OString& msg)
         : m_message(msg) {}
 
-    ::rtl::OString  m_message;
+    OString  m_message;
 };
 
 
@@ -57,12 +57,12 @@ public:
         throw( IllegalArgument );
 #endif /* @@@ */
 
-    ::rtl::OString prepareHelp();
-    ::rtl::OString prepareVersion();
+    OString prepareHelp();
+    OString prepareVersion();
 
-    const ::rtl::OString&   getProgramName() const;
-    bool                isValid(const ::rtl::OString& option);
-    const ::rtl::OString&   getOption(const ::rtl::OString& option)
+    const OString&   getProgramName() const;
+    bool                isValid(const OString& option);
+    const OString&   getOption(const OString& option)
         throw( IllegalArgument );
 
     const StringVector& getInputFiles() const { return m_inputFiles; }
@@ -71,7 +71,7 @@ public:
     bool quiet() const { return m_quiet; }
 
 protected:
-    ::rtl::OString  m_program;
+    OString  m_program;
     StringVector    m_inputFiles;
     bool            m_stdin;
     bool            m_verbose;

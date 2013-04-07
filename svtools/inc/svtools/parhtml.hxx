@@ -225,7 +225,7 @@ protected:
     static rtl_TextEncoding GetEncodingByMIME( const String& rMime );
 
     /// template method: called when ParseMetaOptions adds a user-defined meta
-    virtual void AddMetaUserDefined( ::rtl::OUString const & i_rMetaName );
+    virtual void AddMetaUserDefined( OUString const & i_rMetaName );
 
 private:
     /// parse meta options into XDocumentProperties and encoding

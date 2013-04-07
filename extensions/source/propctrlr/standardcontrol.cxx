@@ -181,14 +181,14 @@ namespace pcr
     //------------------------------------------------------------------
     void SAL_CALL OEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        ::rtl::OUString sText;
+        OUString sText;
         if ( m_bIsPassword )
         {
             sal_Int16 nValue = 0;
             _rValue >>= nValue;
             if ( nValue )
             {
-                sText = rtl::OUString(static_cast<sal_Unicode>(nValue));
+                sText = OUString(static_cast<sal_Unicode>(nValue));
             }
         }
         else
@@ -202,7 +202,7 @@ namespace pcr
     {
         Any aPropValue;
 
-        ::rtl::OUString sText( getTypedControlWindow()->GetText() );
+        OUString sText( getTypedControlWindow()->GetText() );
         if ( m_bIsPassword )
         {
             if ( !sText.isEmpty() )
@@ -217,7 +217,7 @@ namespace pcr
     //------------------------------------------------------------------
     Type SAL_CALL OEditControl::getValueType() throw (RuntimeException)
     {
-        return m_bIsPassword ? ::getCppuType( static_cast< sal_Int16* >( NULL ) ) : ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return m_bIsPassword ? ::getCppuType( static_cast< sal_Int16* >( NULL ) ) : ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
     //------------------------------------------------------------------
@@ -423,14 +423,14 @@ namespace pcr
     //--------------------------------------------------------------------
     Any SAL_CALL OHyperlinkControl::getValue() throw (RuntimeException)
     {
-        ::rtl::OUString sText = getTypedControlWindow()->GetText();
+        OUString sText = getTypedControlWindow()->GetText();
         return makeAny( sText );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OHyperlinkControl::setValue( const Any& _value ) throw (IllegalTypeException, RuntimeException)
     {
-        ::rtl::OUString sText;
+        OUString sText;
         _value >>= sText;
         getTypedControlWindow()->SetText( sText );
     }
@@ -438,7 +438,7 @@ namespace pcr
     //--------------------------------------------------------------------
     Type SAL_CALL OHyperlinkControl::getValueType() throw (RuntimeException)
     {
-        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
     //--------------------------------------------------------------------
@@ -466,7 +466,7 @@ namespace pcr
     //------------------------------------------------------------------
     IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, /*_NotInterestedIn*/ )
     {
-        ActionEvent aEvent( *this, ::rtl::OUString( "clicked" ) );
+        ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
             boost::bind(
                 &XActionListener::actionPerformed,
@@ -715,7 +715,7 @@ namespace pcr
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
                 {   // the given color is not part of the list -> insert a new entry with the hex code of the color
-                    String aStr = rtl::OUString("0x");
+                    String aStr = OUString("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
                     getTypedControlWindow()->SelectEntry( aRgbCol );
@@ -723,7 +723,7 @@ namespace pcr
             }
             else
             {
-                ::rtl::OUString sNonColorValue;
+                OUString sNonColorValue;
                 if ( !( _rValue >>= sNonColorValue ) )
                     throw IllegalTypeException();
                 getTypedControlWindow()->SelectEntry( sNonColorValue );
@@ -741,7 +741,7 @@ namespace pcr
         Any aPropValue;
         if ( getTypedControlWindow()->GetSelectEntryCount() > 0 )
         {
-            ::rtl::OUString sSelectedEntry = getTypedControlWindow()->GetSelectEntry();
+            OUString sSelectedEntry = getTypedControlWindow()->GetSelectEntry();
             if ( m_aNonColorEntries.find( sSelectedEntry ) != m_aNonColorEntries.end() )
                 aPropValue <<= sSelectedEntry;
             else
@@ -766,24 +766,24 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OColorControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OColorControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
         m_aNonColorEntries.insert( NewEntry );
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OColorControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OColorControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
         m_aNonColorEntries.insert( NewEntry );
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OColorControl::getListEntries(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OColorControl::getListEntries(  ) throw (RuntimeException)
     {
         if ( !m_aNonColorEntries.empty() )
-            return Sequence< ::rtl::OUString >(&(*m_aNonColorEntries.begin()),m_aNonColorEntries.size());
-        return Sequence< ::rtl::OUString >();
+            return Sequence< OUString >(&(*m_aNonColorEntries.begin()),m_aNonColorEntries.size());
+        return Sequence< OUString >();
     }
 
     //------------------------------------------------------------------
@@ -814,7 +814,7 @@ namespace pcr
     //------------------------------------------------------------------
     Any SAL_CALL OListboxControl::getValue() throw (RuntimeException)
     {
-        ::rtl::OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
+        OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
 
         Any aPropValue;
         if ( !sControlValue.isEmpty() )
@@ -825,7 +825,7 @@ namespace pcr
     //------------------------------------------------------------------
     Type SAL_CALL OListboxControl::getValueType() throw (RuntimeException)
     {
-        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
     //------------------------------------------------------------------
@@ -835,7 +835,7 @@ namespace pcr
             getTypedControlWindow()->SetNoSelection();
         else
         {
-            ::rtl::OUString sSelection;
+            OUString sSelection;
             _rValue >>= sSelection;
 
             if ( !sSelection.equals( getTypedControlWindow()->GetSelectEntry() ) )
@@ -856,22 +856,22 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OListboxControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OListboxControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
     {
         const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
-        Sequence< ::rtl::OUString > aRet(nCount);
-        ::rtl::OUString* pIter = aRet.getArray();
+        Sequence< OUString > aRet(nCount);
+        OUString* pIter = aRet.getArray();
         for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
@@ -902,7 +902,7 @@ namespace pcr
     //------------------------------------------------------------------
     void SAL_CALL OComboboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
-        ::rtl::OUString sText;
+        OUString sText;
         _rValue >>= sText;
         getTypedControlWindow()->SetText( sText );
     }
@@ -910,13 +910,13 @@ namespace pcr
     //------------------------------------------------------------------
     Any SAL_CALL OComboboxControl::getValue() throw (RuntimeException)
     {
-        return makeAny( ::rtl::OUString( getTypedControlWindow()->GetText() ) );
+        return makeAny( OUString( getTypedControlWindow()->GetText() ) );
     }
 
     //------------------------------------------------------------------
     Type SAL_CALL OComboboxControl::getValueType() throw (RuntimeException)
     {
-        return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
+        return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
     //------------------------------------------------------------------
@@ -926,22 +926,22 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OComboboxControl::prependListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL OComboboxControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
+    void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
     {
         const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
-        Sequence< ::rtl::OUString > aRet(nCount);
-        ::rtl::OUString* pIter = aRet.getArray();
+        Sequence< OUString > aRet(nCount);
+        OUString* pIter = aRet.getArray();
         for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
@@ -1158,20 +1158,20 @@ namespace pcr
     namespace
     {
         //..............................................................
-        StlSyntaxSequence< ::rtl::OUString > lcl_convertMultiLineToList( const String& _rCompsedTextWithLineBreaks )
+        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const String& _rCompsedTextWithLineBreaks )
         {
             xub_StrLen nLines( comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n') );
-            StlSyntaxSequence< ::rtl::OUString > aStrings( nLines );
-            StlSyntaxSequence< ::rtl::OUString >::iterator stringItem = aStrings.begin();
+            StlSyntaxSequence< OUString > aStrings( nLines );
+            StlSyntaxSequence< OUString >::iterator stringItem = aStrings.begin();
             for ( xub_StrLen token = 0; token < nLines; ++token, ++stringItem )
                 *stringItem = _rCompsedTextWithLineBreaks.GetToken( token, '\n' );
             return aStrings;
         }
 
-        String lcl_convertListToMultiLine( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
+        String lcl_convertListToMultiLine( const StlSyntaxSequence< OUString >& _rStrings )
         {
             String sMultiLineText;
-            for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator item = _rStrings.begin();
+            for (   StlSyntaxSequence< OUString >::const_iterator item = _rStrings.begin();
                     item != _rStrings.end();
                 )
             {
@@ -1183,10 +1183,10 @@ namespace pcr
         }
 
         //..............................................................
-        String lcl_convertListToDisplayText( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
+        String lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
         {
-            ::rtl::OUStringBuffer aComposed;
-            for (   StlSyntaxSequence< ::rtl::OUString >::const_iterator strings = _rStrings.begin();
+            OUStringBuffer aComposed;
+            for (   StlSyntaxSequence< OUString >::const_iterator strings = _rStrings.begin();
                     strings != _rStrings.end();
                     ++strings
                 )
@@ -1325,20 +1325,20 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void DropDownEditControl::SetStringListValue( const StlSyntaxSequence< ::rtl::OUString >& _rStrings )
+    void DropDownEditControl::SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings )
     {
         SetText( lcl_convertListToDisplayText( _rStrings ) );
         m_pFloatingEdit->getEdit()->SetText( lcl_convertListToMultiLine( _rStrings ) );
     }
 
     //------------------------------------------------------------------
-    StlSyntaxSequence< ::rtl::OUString > DropDownEditControl::GetStringListValue() const
+    StlSyntaxSequence< OUString > DropDownEditControl::GetStringListValue() const
     {
         return lcl_convertMultiLineToList( m_pFloatingEdit->getEdit()->GetText() );
     }
 
     //------------------------------------------------------------------
-    void DropDownEditControl::SetTextValue( const ::rtl::OUString& _rText )
+    void DropDownEditControl::SetTextValue( const OUString& _rText )
     {
         OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::SetTextValue: illegal call!" );
 
@@ -1347,7 +1347,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString DropDownEditControl::GetTextValue() const
+    OUString DropDownEditControl::GetTextValue() const
     {
         OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::GetTextValue: illegal call!" );
         return GetText();
@@ -1375,7 +1375,7 @@ namespace pcr
         {
         case eMultiLineText:
         {
-            ::rtl::OUString sText;
+            OUString sText;
             if ( !( _rValue >>= sText ) && _rValue.hasValue() )
                 throw IllegalTypeException();
             getTypedControlWindow()->SetTextValue( sText );
@@ -1383,7 +1383,7 @@ namespace pcr
         break;
         case eStringList:
         {
-            Sequence< ::rtl::OUString > aStringLines;
+            Sequence< OUString > aStringLines;
             if ( !( _rValue >>= aStringLines ) && _rValue.hasValue() )
                 throw IllegalTypeException();
             getTypedControlWindow()->SetStringListValue( aStringLines );
@@ -1414,8 +1414,8 @@ namespace pcr
     Type SAL_CALL OMultilineEditControl::getValueType() throw (RuntimeException)
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
-            return ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
-        return ::getCppuType( static_cast< Sequence< ::rtl::OUString >* >( NULL ) );
+            return ::getCppuType( static_cast< OUString* >( NULL ) );
+        return ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
     }
 
 //............................................................................

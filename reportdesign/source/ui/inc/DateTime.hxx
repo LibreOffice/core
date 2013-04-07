@@ -68,7 +68,7 @@ class ODateTimeDialog : public ModalDialog
     * \param _bTime
     * \return
     */
-    ::rtl::OUString getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats>& _xFormats,bool _bTime);
+    OUString getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats>& _xFormats,bool _bTime);
 
     /** returns the number format key
         @param  _nNumberFormatIndex the number format index @see com::sun::star::i18n::NumberFormatIndex

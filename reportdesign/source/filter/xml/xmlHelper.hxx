@@ -69,7 +69,7 @@ namespace rptxml
 
         static const XMLPropertyMapEntry* GetRowStyleProps();
 
-        static void copyStyleElements(const bool _bOld,const ::rtl::OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet>& _xProp);
+        static void copyStyleElements(const bool _bOld,const OUString& _sStyleName,const SvXMLStylesContext* _pAutoStyles,const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet>& _xProp);
         static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet> createBorderPropertySet();
 
         static SvXMLTokenMap* GetReportElemTokenMap();

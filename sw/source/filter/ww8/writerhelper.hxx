@@ -530,7 +530,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const rtl::OUString& rName);
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const OUString& rName);
 
         /** Get a Character Style which fits a given name
 
@@ -548,7 +548,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const rtl::OUString& rName);
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const OUString& rName);
 
         /** Sort sequence of Paragraph Styles by assigned outline style list level
 
@@ -757,7 +757,7 @@ namespace sw
             @author
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
-        bool IsStarSymbol(const rtl::OUString &rFontName);
+        bool IsStarSymbol(const OUString &rFontName);
 
         /** Make setting a drawing object's layer in a Writer document easy
 
@@ -889,7 +889,7 @@ namespace sw
         class DrawingOLEAdaptor
         {
         private:
-            rtl::OUString msOrigPersistName;
+            OUString msOrigPersistName;
             com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
             const Graphic* mpGraphic;
@@ -923,7 +923,7 @@ namespace sw
                 @return On success true is returned, otherwise false. On
                 success rName is then suitable for user with SwDoc::InsertOLE
             */
-            bool TransferToDoc(rtl::OUString &rName);
+            bool TransferToDoc(OUString &rName);
         private:
             /// No assigning allowed
             DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&);

@@ -105,15 +105,15 @@ public:
 class FmNavNameChangedHint : public SfxHint
 {
     FmEntryData*    pEntryData;
-    ::rtl::OUString          aNewName;
+    OUString          aNewName;
 
 public:
     TYPEINFO();
-    FmNavNameChangedHint( FmEntryData* pData, const ::rtl::OUString& rNewName );
+    FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
     virtual ~FmNavNameChangedHint();
 
     FmEntryData*    GetEntryData() const { return pEntryData; }
-    ::rtl::OUString          GetNewName() const { return aNewName; }
+    OUString          GetNewName() const { return aNewName; }
 };
 
 //========================================================================
@@ -148,7 +148,7 @@ private:
 
 protected:
     Image               m_aNormalImage;
-    ::rtl::OUString     aText;
+    OUString     aText;
 
     FmEntryDataList*    pChildList;
     FmEntryData*        pParent;
@@ -164,12 +164,12 @@ public:
     virtual ~FmEntryData();
 
     void    Clear();
-    void    SetText( const ::rtl::OUString& rText ){ aText = rText; }
+    void    SetText( const OUString& rText ){ aText = rText; }
     void    SetParent( FmEntryData* pParentData ){ pParent = pParentData; }
 
     const Image&    GetNormalImage() const { return m_aNormalImage; }
 
-    ::rtl::OUString          GetText() const { return aText; }
+    OUString          GetText() const { return aText; }
     FmEntryData*    GetParent() const { return pParent; }
     FmEntryDataList* GetChildList() const { return pChildList; }
 
@@ -390,7 +390,7 @@ namespace svxform
                                               sal_Bool bAlterModel = sal_False );
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
-        sal_Bool Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText );
+        sal_Bool Rename( FmEntryData* pEntryData, const OUString& rNewText );
 
         void Clear();
         void SetModified( sal_Bool bMod=sal_True );
@@ -399,7 +399,7 @@ namespace svxform
         FmFormShell*        GetFormShell() const { return m_pFormShell; }
         FmFormPage*         GetFormPage() const { return m_pFormPage; }
         FmEntryData*        FindData( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElement, FmEntryDataList* pDataList, sal_Bool bRecurs=sal_True );
-        FmEntryData*        FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
+        FmEntryData*        FindData( const OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
         SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
@@ -454,7 +454,7 @@ namespace svxform
 
 
         void            UpdateContent();
-        FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName = sal_True );
+        FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvTreeListEntry* pParentEntry );
         SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
@@ -521,12 +521,12 @@ namespace svxform
         sal_Bool IsFormEntry( SvTreeListEntry* pEntry );
         sal_Bool IsFormComponentEntry( SvTreeListEntry* pEntry );
 
-        ::rtl::OUString GenerateName( FmEntryData* pEntryData );
+        OUString GenerateName( FmEntryData* pEntryData );
 
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
         SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
 
-        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
         virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
         virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection& );
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

@@ -49,8 +49,6 @@
 #include <utility>
 #include <vector>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::com::sun::star;

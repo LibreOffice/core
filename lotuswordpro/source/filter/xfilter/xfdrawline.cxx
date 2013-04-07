@@ -102,7 +102,7 @@ void XFDrawLine::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("svg:y2"), DoubleToOUString(m_aPoint2.GetY()) + A2OUSTR("cm") );
 
     //transform
-    rtl::OUString   strTransform;
+    OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
         strTransform = A2OUSTR("rotate (") + DoubleToOUString(m_fRotate) + A2OUSTR(") ");
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )

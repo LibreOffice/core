@@ -553,7 +553,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     uno::Sequence< uno::Any > aDeviceParams;
     ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams );
 
-    ::rtl::OUString aImplName;
+    OUString aImplName;
     aDeviceParams[ 0 ] >>= aImplName;
 
     sal_Int64 aVal = 0;

@@ -261,11 +261,11 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -352,19 +352,19 @@ protected:
 
     /** Create a base name string that contains the accessible name.
     */
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleBaseName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
     */
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Create a description string that contains the accessible description.
-    virtual ::rtl::OUString
+    virtual OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException);
 

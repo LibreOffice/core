@@ -48,8 +48,8 @@ private:
     bool InRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
     bool InEqualRange( const css::uno::Reference< css::text::XTextRange >& xCurrentRange ) throw ( css::uno::RuntimeException );
     void SetReplace( sal_Int32 type );
-    void SetReplaceWith( const rtl::OUString& rText ) throw ( css::uno::RuntimeException );
-    rtl::OUString GetReplaceWith() throw ( css::uno::RuntimeException );
+    void SetReplaceWith( const OUString& rText ) throw ( css::uno::RuntimeException );
+    OUString GetReplaceWith() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::text::XTextRange > FindOneElement() throw ( css::uno::RuntimeException );
     sal_Bool SearchReplace() throw ( css::uno::RuntimeException );
 
@@ -58,8 +58,8 @@ public:
     virtual ~SwVbaFind();
 
     // Attributes
-    virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getReplacement() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setReplacement( const css::uno::Any& _replacement ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getForward() throw (css::uno::RuntimeException);
@@ -86,8 +86,8 @@ public:
     virtual void SAL_CALL ClearFormatting(  ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_FIND_HXX */
 

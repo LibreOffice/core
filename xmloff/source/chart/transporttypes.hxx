@@ -35,11 +35,11 @@ enum SchXMLCellType
 
 struct SchXMLCell
 {
-    rtl::OUString aString;
-    ::com::sun::star::uno::Sequence< rtl::OUString > aComplexString;
+    OUString aString;
+    ::com::sun::star::uno::Sequence< OUString > aComplexString;
     double fValue;
     SchXMLCellType eType;
-    rtl::OUString aRangeId;
+    OUString aRangeId;
 
     SchXMLCell(): fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
     {}
@@ -58,7 +58,7 @@ struct SchXMLTable
     bool bHasHeaderRow;
     bool bHasHeaderColumn;
 
-    ::rtl::OUString aTableNameOfFile;                   /// the table name read at the table:table element
+    OUString aTableNameOfFile;                   /// the table name read at the table:table element
 
     ::std::vector< sal_Int32 > aHiddenColumns;
 
@@ -122,8 +122,8 @@ struct SchXMLAxis
 {
     enum SchXMLAxisDimension eDimension;
     sal_Int8 nAxisIndex;//0->primary axis; 1->secondary axis
-    rtl::OUString aName;
-    rtl::OUString aTitle;
+    OUString aName;
+    OUString aTitle;
     bool bHasCategories;
 
     SchXMLAxis() : eDimension( SCH_XML_AXIS_UNDEF ), nAxisIndex( 0 ), bHasCategories( false ) {}
@@ -144,10 +144,10 @@ struct GlobalSeriesImportInfo
 
     sal_Int32 nCurrentDataIndex;
 
-    ::rtl::OUString aFirstFirstDomainAddress;
+    OUString aFirstFirstDomainAddress;
     sal_Int32 nFirstFirstDomainIndex;
 
-    ::rtl::OUString aFirstSecondDomainAddress;
+    OUString aFirstSecondDomainAddress;
     sal_Int32 nFirstSecondDomainIndex;
 };
 
@@ -175,8 +175,8 @@ struct DataRowPointStyle
                 ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
-    ::rtl::OUString msStyleName;
-    ::rtl::OUString msSeriesStyleNameForDonuts;
+    OUString msStyleName;
+    OUString msSeriesStyleNameForDonuts;
     sal_Int32 mnAttachedAxis;
     bool mbSymbolSizeForSeriesIsMissingInFile;
 
@@ -185,7 +185,7 @@ struct DataRowPointStyle
                           ::com::sun::star::chart2::XDataSeries >& xSeries
                         , sal_Int32 nPointIndex
                         , sal_Int32 nPointRepeat
-                        , ::rtl::OUString sStyleName
+                        , OUString sStyleName
                         , sal_Int32 nAttachedAxis = 0 ) :
             meType( eType ),
             m_xSeries( xSeries ),
@@ -198,7 +198,7 @@ struct DataRowPointStyle
         {}
 };
 
-typedef ::std::multimap< ::rtl::OUString, ::com::sun::star::uno::Reference<
+typedef ::std::multimap< OUString, ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > > tSchXMLRangeSequenceMap;
 
 #endif  // SCH_XML_TRANSPORTTYPES_HXX_

@@ -38,7 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 namespace {
@@ -96,19 +95,19 @@ Reference<XInterface> SAL_CALL BasicPaneFactory_createInstance (
 
 
 
-::rtl::OUString BasicPaneFactory_getImplementationName (void) throw(RuntimeException)
+OUString BasicPaneFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.BasicPaneFactory");
+    return OUString("com.sun.star.comp.Draw.framework.BasicPaneFactory");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicPaneFactory");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.framework.BasicPaneFactory");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

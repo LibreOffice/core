@@ -102,7 +102,7 @@ public:
                ::com::sun::star::uno::RuntimeException);
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual ::rtl::OUString SAL_CALL getShapeType()
+    virtual OUString SAL_CALL getShapeType()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XNumberFormatsSupplier ____

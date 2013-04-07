@@ -74,7 +74,7 @@ namespace xmloff { namespace metadata
         // for some attribute or property, and otherwise delegate to the next instance.
 
         //..............................................................................................................
-        typedef ::boost::unordered_map< ::rtl::OUString, const PropertyDescription*, ::rtl::OUStringHash > DescriptionsByName;
+        typedef ::boost::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
 
         //..............................................................................................................
         const DescriptionsByName& lcl_getPropertyDescriptions()
@@ -115,7 +115,7 @@ namespace xmloff { namespace metadata
         }
 
         //..............................................................................................................
-        typedef ::boost::unordered_map< ::rtl::OUString, XMLTokenEnum, ::rtl::OUStringHash > ReverseTokenLookup;
+        typedef ::boost::unordered_map< OUString, XMLTokenEnum, OUStringHash > ReverseTokenLookup;
 
         //..............................................................................................................
         const ReverseTokenLookup& getReverseTokenLookup()
@@ -192,7 +192,7 @@ namespace xmloff { namespace metadata
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    const PropertyDescription* getPropertyDescription( const ::rtl::OUString& i_propertyName )
+    const PropertyDescription* getPropertyDescription( const OUString& i_propertyName )
     {
         const DescriptionsByName& rAllDescriptions( lcl_getPropertyDescriptions() );
         DescriptionsByName::const_iterator pos = rAllDescriptions.find( i_propertyName );
@@ -248,7 +248,7 @@ namespace xmloff { namespace metadata
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const ::rtl::OUString& i_attributeName )
+    AttributeDescription getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName )
     {
         AttributeDescription attribute;
         const ReverseTokenLookup& rTokenLookup( getReverseTokenLookup() );

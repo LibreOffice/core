@@ -797,7 +797,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
-        rtl::OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
+        OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );
@@ -809,7 +809,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     {
         xub_StrLen nOldIdx(rInf.GetIdx());
         xub_StrLen nOldLen(rInf.GetLen());
-        rtl::OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
+        OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
         rInf.SetText( aNewText );
         rInf.SetIdx( 0 );
         rInf.SetLen( aNewText.getLength() );

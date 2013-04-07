@@ -390,11 +390,11 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
     }
 }
 
-rtl::OUString ORptUndoPropertyAction::GetComment() const
+OUString ORptUndoPropertyAction::GetComment() const
 {
     String aStr(ModuleRes(RID_STR_UNDO_PROPERTY).toString());
 
-    aStr.SearchAndReplace(rtl::OUString('#'), m_aPropertyName);
+    aStr.SearchAndReplace(OUString('#'), m_aPropertyName);
     return aStr;
 }
 

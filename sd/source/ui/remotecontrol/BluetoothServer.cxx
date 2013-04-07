@@ -290,7 +290,7 @@ OSXBluetoothWrapper::OSXBluetoothWrapper( IOBluetoothRFCOMMChannel* channel ) :
     SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::OSXBluetoothWrapper(): mnMTU=" << mnMTU );
 }
 
-sal_Int32 OSXBluetoothWrapper::readLine( rtl::OString& aLine )
+sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
 {
     SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine()" );
 

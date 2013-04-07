@@ -32,9 +32,9 @@ namespace vcl
     //= ImageRepository
     //====================================================================
     //--------------------------------------------------------------------
-    bool ImageRepository::loadImage( const ::rtl::OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
+    bool ImageRepository::loadImage( const OUString& _rName, BitmapEx& _out_rImage, bool _bSearchLanguageDependent, bool loadMissing )
     {
-        ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
         ImplImageTreeSingletonRef aImplImageTree;
         return aImplImageTree->loadImage( _rName, sCurrentSymbolsStyle, _out_rImage, _bSearchLanguageDependent, loadMissing );
@@ -42,7 +42,7 @@ namespace vcl
 
     bool ImageRepository::loadDefaultImage( BitmapEx& _out_rImage)
     {
-        ::rtl::OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
+        OUString sCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
         ImplImageTreeSingletonRef aImplImageTree;
         return aImplImageTree->loadDefaultImage( sCurrentSymbolsStyle,_out_rImage);
     }

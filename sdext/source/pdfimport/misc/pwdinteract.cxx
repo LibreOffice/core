@@ -50,19 +50,19 @@ class PDFPasswordRequest:
 private:
     mutable osl::Mutex            m_aMutex;
     uno::Any                      m_aRequest;
-    rtl::OUString                 m_aPassword;
+    OUString                 m_aPassword;
     bool                          m_bSelected;
 
 public:
-    explicit PDFPasswordRequest(bool bFirstTry, const rtl::OUString& rName);
+    explicit PDFPasswordRequest(bool bFirstTry, const OUString& rName);
 
     // XInteractionRequest
     virtual uno::Any SAL_CALL getRequest(  ) throw (uno::RuntimeException);
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw (uno::RuntimeException);
 
     // XInteractionPassword
-    virtual void SAL_CALL setPassword( const rtl::OUString& rPwd ) throw (uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getPassword() throw (uno::RuntimeException);
+    virtual void SAL_CALL setPassword( const OUString& rPwd ) throw (uno::RuntimeException);
+    virtual OUString SAL_CALL getPassword() throw (uno::RuntimeException);
 
     // XInteractionContinuation
     virtual void SAL_CALL select() throw (uno::RuntimeException);
@@ -73,7 +73,7 @@ private:
     virtual ~PDFPasswordRequest() {}
 };
 
-PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const rtl::OUString& rName ) :
+PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
     m_aRequest(
         uno::makeAny(
             task::DocumentPasswordRequest(
@@ -98,14 +98,14 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > PDFPasswordReq
     return aRet;
 }
 
-void PDFPasswordRequest::setPassword( const rtl::OUString& rPwd ) throw (uno::RuntimeException)
+void PDFPasswordRequest::setPassword( const OUString& rPwd ) throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
 
     m_aPassword = rPwd;
 }
 
-rtl::OUString PDFPasswordRequest::getPassword() throw (uno::RuntimeException)
+OUString PDFPasswordRequest::getPassword() throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
 
@@ -151,9 +151,9 @@ namespace pdfi
 {
 
 bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
-                  rtl::OUString&                                     rOutPwd,
+                  OUString&                                     rOutPwd,
                   bool                                               bFirstTry,
-                  const rtl::OUString&                               rDocName
+                  const OUString&                               rDocName
                   )
 {
     bool bSuccess = false;

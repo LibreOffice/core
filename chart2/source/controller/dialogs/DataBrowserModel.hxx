@@ -77,21 +77,21 @@ public:
     eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow ) const;
     /// If getCellType( nAtColumn, nAtRow ) returns TEXT, the result will be Nan
     double getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow );
-    ::rtl::OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
+    OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     ::com::sun::star::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     sal_uInt32 getNumberFormatKey( sal_Int32 nAtColumn, sal_Int32 nAtRow );
 
     /// returns </sal_True> if the number could successfully be set at the given position
     bool setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue );
     /// returns </sal_True> if the text could successfully be set at the given position
-    bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::rtl::OUString & rText );
+    bool setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText );
     bool setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::com::sun::star::uno::Any & aValue );
 
     sal_Int32 getColumnCount() const;
     sal_Int32 getMaxRowCount() const;
 
     // returns the UI string of the corresponding role
-    ::rtl::OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
+    OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
     bool isCategoriesColumn( sal_Int32 nColumnIndex ) const;
 
     struct tDataHeader

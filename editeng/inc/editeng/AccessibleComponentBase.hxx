@@ -120,9 +120,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
         getFont (void)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTitledBorderText (void)
+    virtual OUString SAL_CALL getTitledBorderText (void)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getToolTipText (void)
+    virtual OUString SAL_CALL getToolTipText (void)
         throw (::com::sun::star::uno::RuntimeException);
 
 

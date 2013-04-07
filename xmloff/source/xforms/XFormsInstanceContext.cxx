@@ -38,7 +38,6 @@
 #include <xmloff/nmspmap.hxx>
 
 
-using rtl::OUString;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
@@ -121,7 +120,7 @@ void XFormsInstanceContext::EndElement()
 
 void XFormsInstanceContext::HandleAttribute(
     sal_uInt16 nToken,
-    const rtl::OUString& rValue )
+    const OUString& rValue )
 {
     switch( nToken )
     {

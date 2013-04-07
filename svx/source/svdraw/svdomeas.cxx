@@ -112,7 +112,7 @@ void SdrMeasureObj::TakeRepresentation( XubString& rStr, SdrMeasureFieldKind eMe
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
-                rtl::OUString aTmp;
+                OUString aTmp;
                 pModel->TakeMetricStr(nLen, aTmp, true, nNumDigits);
                 rStr = aTmp;
 

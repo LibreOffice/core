@@ -88,7 +88,6 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::text;
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using ::com::sun::star::view::XSelectionSupplier;

@@ -105,11 +105,11 @@ void SvObjectServerList::FillInsertObjects()
         uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory =
             configuration::theDefaultProvider::get(xContext);
 
-        ::rtl::OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
+        OUString sReaderService( "com.sun.star.configuration.ConfigurationAccess" );
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue aPathProp;
-        aPathProp.Name = ::rtl::OUString( "nodepath" );
-        aPathProp.Value <<= ::rtl::OUString( "/org.openoffice.Office.Embedding/ObjectNames" );
+        aPathProp.Name = OUString( "nodepath" );
+        aPathProp.Value <<= OUString( "/org.openoffice.Office.Embedding/ObjectNames" );
         aArguments[0] <<= aPathProp;
 
         uno::Reference< container::XNameAccess > xNameAccess(
@@ -118,13 +118,13 @@ void SvObjectServerList::FillInsertObjects()
 
         if( xNameAccess.is())
         {
-            uno::Sequence< ::rtl::OUString > seqNames= xNameAccess->getElementNames();
+            uno::Sequence< OUString > seqNames= xNameAccess->getElementNames();
             sal_Int32 nInd;
 
-            ::rtl::OUString aStringProductName( "%PRODUCTNAME" );
+            OUString aStringProductName( "%PRODUCTNAME" );
             sal_Int32 nStringProductNameLength = aStringProductName.getLength();
 
-            ::rtl::OUString aStringProductVersion( "%PRODUCTVERSION" );
+            OUString aStringProductVersion( "%PRODUCTVERSION" );
             sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
             for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
@@ -133,10 +133,10 @@ void SvObjectServerList::FillInsertObjects()
                 xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
                 if ( xEntry.is() )
                 {
-                    ::rtl::OUString aUIName;
-                    ::rtl::OUString aClassID;
-                    xEntry->getByName( ::rtl::OUString( "ObjectUIName" ) ) >>= aUIName;
-                    xEntry->getByName( ::rtl::OUString( "ClassID" ) ) >>= aClassID;
+                    OUString aUIName;
+                    OUString aClassID;
+                    xEntry->getByName( OUString( "ObjectUIName" ) ) >>= aUIName;
+                    xEntry->getByName( OUString( "ClassID" ) ) >>= aClassID;
 
                     if ( !aUIName.isEmpty() )
                     {

@@ -159,12 +159,12 @@ OCommonStatement::createTrue()
 }
 
 EBookQuery *
-OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
+OCommonStatement::createTest( const OUString &aColumnName,
                              EBookQueryTest eTest,
-                             const ::rtl::OUString &aMatch )
+                             const OUString &aMatch )
 {
-    ::rtl::OString sMatch = rtl::OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
-    ::rtl::OString sColumnName = rtl::OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
+    OString sMatch = OUStringToOString( aMatch, RTL_TEXTENCODING_UTF8 );
+    OString sColumnName = OUStringToOString( aColumnName, RTL_TEXTENCODING_UTF8 );
 
     return e_book_query_field_test( e_contact_field_id( sColumnName.getStr() ),
                                     eTest, sMatch.getStr() );
@@ -172,11 +172,11 @@ OCommonStatement::createTest( const ::rtl::OUString &aColumnName,
 
 // -------------------------------------------------------------------------
 
-::rtl::OUString OCommonStatement::impl_getColumnRefColumnName_throw( const OSQLParseNode& _rColumnRef )
+OUString OCommonStatement::impl_getColumnRefColumnName_throw( const OSQLParseNode& _rColumnRef )
 {
     ENSURE_OR_THROW( SQL_ISRULE( &_rColumnRef, column_ref ), "internal error: only column_refs supported as LHS" );
 
-    ::rtl::OUString sColumnName;
+    OUString sColumnName;
     switch ( _rColumnRef.count() )
     {
     case 3: // SQL_TOKEN_NAME '.' column_val
@@ -233,7 +233,7 @@ void OCommonStatement::orderByAnalysis( const OSQLParseNode* _pOrderByClause, So
         // column name -> column field
         if ( !SQL_ISRULE( pColumnRef, column_ref ) )
             m_pConnection->throwGenericSQLException( STR_SORT_BY_COL_ONLY, *this );
-        const ::rtl::OUString sColumnName( impl_getColumnRefColumnName_throw( *pColumnRef ) );
+        const OUString sColumnName( impl_getColumnRefColumnName_throw( *pColumnRef ) );
         guint nField = evoab::findEvoabField( sColumnName );
         // ascending/descending?
         bool bAscending = true;
@@ -324,9 +324,9 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             return ( nLHS == nRHS ) ? createTrue() : NULL;
         }
 
-        ::rtl::OUString aColumnName( impl_getColumnRefColumnName_throw( *pLHS ) );
+        OUString aColumnName( impl_getColumnRefColumnName_throw( *pLHS ) );
 
-        ::rtl::OUString aMatchString;
+        OUString aMatchString;
         if ( pRHS->isToken() )
             aMatchString = pRHS->getTokenValue();
         else
@@ -346,7 +346,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
         if( ! SQL_ISRULE( parseTree->getChild( 0 ), column_ref) )
             m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
 
-        ::rtl::OUString aColumnName( impl_getColumnRefColumnName_throw( *parseTree->getChild( 0 ) ) );
+        OUString aColumnName( impl_getColumnRefColumnName_throw( *parseTree->getChild( 0 ) ) );
 
         OSQLParseNode *pAtom      = pPart2->getChild( pPart2->count() - 2 );     // Match String
         bool bNotLike             = pPart2->getChild(0)->isToken();
@@ -363,15 +363,15 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
 
         const sal_Unicode WILDCARD = '%';
 
-        rtl::OUString aMatchString;
+        OUString aMatchString;
         aMatchString = pAtom->getTokenValue();
 
         // Determine where '%' character is...
-        if( aMatchString.equals( ::rtl::OUString::valueOf( WILDCARD ) ) )
+        if( aMatchString.equals( OUString::valueOf( WILDCARD ) ) )
         {
             // String containing only a '%' and nothing else matches everything
             pResult = createTest( aColumnName, E_BOOK_QUERY_CONTAINS,
-                                  rtl::OUString("") );
+                                  OUString("") );
         }
         else if( aMatchString.indexOf( WILDCARD ) == -1 )
         {   // Simple string , eg. "to match" "contains in evo"
@@ -410,14 +410,14 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
     return pResult;
 }
 
-rtl::OUString OCommonStatement::getTableName()
+OUString OCommonStatement::getTableName()
 {
-    ::rtl::OUString aTableName;
+    OUString aTableName;
 
     if( m_pParseTree && m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
     {
         Any aCatalog;
-        ::rtl::OUString aSchema;
+        OUString aSchema;
         const OSQLParseNode *pSelectStmnt = m_aSQLIterator.getParseTree();
         const OSQLParseNode *pAllTableNames = pSelectStmnt->getChild( 3 )->getChild( 0 )->getChild( 1 );
 
@@ -443,13 +443,13 @@ rtl::OUString OCommonStatement::getTableName()
     return aTableName;
 }
 
-void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQueryData )
+void OCommonStatement::parseSql( const OUString& sql, QueryData& _out_rQueryData )
 {
     SAL_INFO( "evoab2", "parsing " << sql );
 
     _out_rQueryData.eFilterType = eFilterOther;
 
-    ::rtl::OUString aErr;
+    OUString aErr;
     m_pParseTree = m_aParser.parseTree( aErr, sql );
     m_aSQLIterator.setParseTree( m_pParseTree );
     m_aSQLIterator.traverseAll();
@@ -461,7 +461,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     if ( pOrderByClause )
     {
     #if OSL_DEBUG_LEVEL > 1
-        ::rtl::OUString sTreeDebug;
+        OUString sTreeDebug;
         pOrderByClause->showParseTree( sTreeDebug );
         SAL_INFO( "evoab2", "found order-by tree:\n" << sTreeDebug );
     #endif
@@ -472,7 +472,7 @@ void OCommonStatement::parseSql( const rtl::OUString& sql, QueryData& _out_rQuer
     if ( pWhereClause && SQL_ISRULE( pWhereClause, where_clause ) )
     {
     #if OSL_DEBUG_LEVEL > 1
-        ::rtl::OUString sTreeDebug;
+        OUString sTreeDebug;
         pWhereClause->showParseTree( sTreeDebug );
         SAL_INFO( "evoab2", "found where tree:\n" << sTreeDebug );
     #endif
@@ -544,7 +544,7 @@ void SAL_CALL OCommonStatement::release() throw()
 }
 
 // -------------------------------------------------------------------------
-QueryData OCommonStatement::impl_getEBookQuery_throw( const ::rtl::OUString& _rSql )
+QueryData OCommonStatement::impl_getEBookQuery_throw( const OUString& _rSql )
 {
     QueryData aData;
     parseSql( _rSql, aData );
@@ -580,7 +580,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
 }
 
 // -------------------------------------------------------------------------
-Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const ::rtl::OUString& _rSql )
+Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const OUString& _rSql )
 {
     SAL_INFO( "evoab2", "OCommonStatement::impl_executeQuery_throw(" << _rSql << "%s)\n" );
 
@@ -611,7 +611,7 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OCommonStatement, OStatement_IBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OCommonStatement, OStatement_IBase )
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement::execute( const OUString& _sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -621,7 +621,7 @@ sal_Bool SAL_CALL OStatement::execute( const ::rtl::OUString& _sql ) throw(SQLEx
 }
 
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString& _sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& _sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -630,7 +630,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const ::rtl::OUString
 }
 
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);

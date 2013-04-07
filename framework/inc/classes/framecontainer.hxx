@@ -100,8 +100,8 @@ class FrameContainer : private ThreadHelpBase
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
 
         /// special helper for Frame::findFrame()
-        css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const ::rtl::OUString& sName ) const;
-        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const ::rtl::OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const OUString& sName ) const;
 
 }; // class FrameContainer
 

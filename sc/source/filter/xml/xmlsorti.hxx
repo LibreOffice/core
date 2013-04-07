@@ -34,9 +34,9 @@ class ScXMLSortContext : public SvXMLImportContext
 
     com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
     com::sun::star::table::CellAddress aOutputPosition;
-    rtl::OUString   sCountry;
-    rtl::OUString   sLanguage;
-    rtl::OUString   sAlgorithm;
+    OUString   sCountry;
+    OUString   sLanguage;
+    OUString   sAlgorithm;
     sal_Int16   nUserListIndex;
     bool        bCopyOutputData;
     bool        bBindFormatsToContent;
@@ -49,7 +49,7 @@ class ScXMLSortContext : public SvXMLImportContext
 public:
 
     ScXMLSortContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -57,22 +57,22 @@ public:
     virtual ~ScXMLSortContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
 
-    void AddSortField(const rtl::OUString& sFieldNumber, const rtl::OUString& sDataType, const rtl::OUString& sOrder);
+    void AddSortField(const OUString& sFieldNumber, const OUString& sDataType, const OUString& sOrder);
 };
 
 class ScXMLSortByContext : public SvXMLImportContext
 {
     ScXMLSortContext* pSortContext;
 
-    rtl::OUString   sFieldNumber;
-    rtl::OUString   sDataType;
-    rtl::OUString   sOrder;
+    OUString   sFieldNumber;
+    OUString   sDataType;
+    OUString   sOrder;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -80,7 +80,7 @@ class ScXMLSortByContext : public SvXMLImportContext
 public:
 
     ScXMLSortByContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLSortContext* pTempSortContext);
@@ -88,7 +88,7 @@ public:
     virtual ~ScXMLSortByContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

@@ -33,9 +33,9 @@ public:
     sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
             throw( IllegalArgument );
 
-    ::rtl::OString  prepareHelp();
+    OString  prepareHelp();
 
-    ::rtl::OString  prepareVersion();
+    OString  prepareVersion();
 
 protected:
 };

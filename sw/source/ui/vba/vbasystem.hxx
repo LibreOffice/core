@@ -29,13 +29,13 @@ typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XSystem > SwVbaSystem_BAS
 class PrivateProfileStringListener : public PropListener
 {
 private:
-    rtl::OUString maFileName;
-    rtl::OString maGroupName;
-    rtl::OString maKey;
+    OUString maFileName;
+    OString maGroupName;
+    OString maKey;
 public:
     PrivateProfileStringListener(){};
     virtual ~PrivateProfileStringListener();
-    void Initialize( const rtl::OUString& rFileName, const rtl::OString& rGroupName, const rtl::OString& rKey );
+    void Initialize( const OUString& rFileName, const OString& rGroupName, const OString& rKey );
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value );
@@ -54,11 +54,11 @@ public:
     // XSystem
     virtual sal_Int32 SAL_CALL getCursor() throw ( css::uno::RuntimeException );
     virtual void SAL_CALL setCursor( sal_Int32 _cursor ) throw ( css::uno::RuntimeException );
-    virtual css::uno::Any SAL_CALL PrivateProfileString( const rtl::OUString& rFilename, const rtl::OUString& rSection, const rtl::OUString& rKey ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_SYSTEM_HXX */
 

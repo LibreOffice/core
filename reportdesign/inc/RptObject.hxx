@@ -38,7 +38,7 @@
 
 namespace rptui
 {
-typedef ::std::multimap< sal_Int16, ::rtl::OUString, ::std::less< sal_Int16 > > IndexToNameMap;
+typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexToNameMap;
     enum DlgEdHintKind
     {
         RPTUI_HINT_UNKNOWN,
@@ -83,11 +83,11 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>          m_xContainerListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>                       m_xSection;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >                       m_xKeepShapeAlive;
-    ::rtl::OUString m_sComponentName;
+    OUString m_sComponentName;
     sal_Bool        m_bIsListening;
 
     OObjectBase(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-    OObjectBase(const ::rtl::OUString& _sComponentName);
+    OObjectBase(const OUString& _sComponentName);
 
     virtual ~OObjectBase();
 
@@ -115,14 +115,14 @@ public:
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
     virtual void initializeOle() {}
 
-    sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
+    sal_Bool        supportsService( const OUString& _sServiceName ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
     inline void setOldParent(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) { m_xSection = _xSection; }
     inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getOldParent() const { return m_xSection;}
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getSection() const;
-    inline const ::rtl::OUString getServiceName() const { return m_sComponentName; }
+    inline const OUString getServiceName() const { return m_sComponentName; }
 
     /** releases the reference to our UNO shape (m_xKeepShapeAlive)
     */
@@ -147,7 +147,7 @@ public:
 
 protected:
     OCustomShape(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-    OCustomShape(const ::rtl::OUString& _sComponentName);
+    OCustomShape(const OUString& _sComponentName);
 
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -189,7 +189,7 @@ public:
     }
 protected:
     OOle2Obj(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,sal_uInt16 _nType);
-    OOle2Obj(const ::rtl::OUString& _sComponentName,sal_uInt16 _nType);
+    OOle2Obj(const OUString& _sComponentName,sal_uInt16 _nType);
 
 
     virtual void NbcMove( const Size& rSize );
@@ -231,11 +231,11 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
 
     sal_uInt16   m_nObjectType;
 protected:
-    OUnoObject(const ::rtl::OUString& _sComponentName
-                ,const ::rtl::OUString& rModelName
+    OUnoObject(const OUString& _sComponentName
+                ,const OUString& rModelName
                 ,sal_uInt16   _nObjectType);
     OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
-                ,const ::rtl::OUString& rModelName
+                ,const OUString& rModelName
                 ,sal_uInt16   _nObjectType);
 
     virtual ~OUnoObject();
@@ -261,7 +261,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
-    static ::rtl::OUString GetDefaultName(const OUnoObject* _pObj);
+    static OUString GetDefaultName(const OUnoObject* _pObj);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     virtual sal_uInt16 GetObjIdentifier() const;

@@ -40,9 +40,9 @@ OFlatCatalog::OFlatCatalog(OFlatConnection* _pCon) : file::OFileCatalog(_pCon)
 void OFlatCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes;
+    Sequence< OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString("%"),::rtl::OUString("%"),aTypes);
+        OUString("%"),OUString("%"),aTypes);
 
     if(xResult.is())
     {

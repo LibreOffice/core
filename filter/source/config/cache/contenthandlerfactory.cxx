@@ -49,7 +49,7 @@ ContentHandlerFactory::~ContentHandlerFactory()
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const ::rtl::OUString& sHandler)
+css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstance(const OUString& sHandler)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
@@ -58,7 +58,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const ::rtl::OUString&                     sHandler  ,
+css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::createInstanceWithArguments(const OUString&                     sHandler  ,
                                                                                                         const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -68,7 +68,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    ::rtl::OUString sRealHandler = sHandler;
+    OUString sRealHandler = sHandler;
 
     #ifdef _FILTER_CONFIG_MIGRATION_Q_
 
@@ -82,7 +82,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         {
             _FILTER_CONFIG_LOG_("ContentHandlerFactory::createInstanceWithArguments() ... simulate old type search functionality!\n");
 
-            css::uno::Sequence< ::rtl::OUString > lTypes(1);
+            css::uno::Sequence< OUString > lTypes(1);
             lTypes[0] = sHandler;
 
             css::uno::Sequence< css::beans::NamedValue > lQuery(1);
@@ -139,7 +139,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 
 
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
+css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
     // must be the same list as ((XNameAccess*)this)->getElementNames() return!

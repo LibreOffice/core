@@ -58,7 +58,7 @@ public:
         getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
-    virtual ::rtl::OUString SAL_CALL getServiceName()
+    virtual OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
@@ -90,7 +90,7 @@ public:
         getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
-    virtual ::rtl::OUString SAL_CALL getServiceName()
+    virtual OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:

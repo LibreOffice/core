@@ -43,7 +43,6 @@ using namespace com::sun::star::lang;
 using namespace osl;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 class EmptyComponentContext : public WeakImplHelper1< XComponentContext >
 {

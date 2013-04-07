@@ -42,7 +42,6 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 // Defines - CSV Import Preserve Options
 #define FIXED_WIDTH         "FixedWidth"
@@ -460,7 +459,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 // ----------------------------------------------------------------------------
 
-bool ScImportAsciiDlg::GetLine( sal_uLong nLine, rtl::OUString &rText )
+bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )
 {
     if (nLine >= ASCIIDLG_MAXROWS || !mpDatStream)
         return false;
@@ -560,7 +559,7 @@ void ScImportAsciiDlg::SaveParameters()
 
 void ScImportAsciiDlg::SetSeparators()
 {
-    rtl::OString sString(rtl::OUStringToOString(maFieldSeparators,
+    OString sString(OUStringToOString(maFieldSeparators,
         RTL_TEXTENCODING_MS_1252));
     const sal_Char *aSep = sString.getStr();
     int len = maFieldSeparators.Len();
@@ -722,7 +721,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
             break;
     }
     for (; i < CSV_PREVIEW_LINES; i++)
-        maPreviewLine[i] = rtl::OUString();
+        maPreviewLine[i] = OUString();
 
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = (pCkbAsOnce->IsChecked() == sal_True);

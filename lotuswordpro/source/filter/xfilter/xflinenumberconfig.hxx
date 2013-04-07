@@ -74,11 +74,11 @@ public:
 
     void    SetNumberIncrement(sal_Int32 increment);
 
-    void    SetSeperator(sal_Int32 increment, rtl::OUString seperator);
+    void    SetSeperator(sal_Int32 increment, OUString seperator);
 
-    void    SetNumberFormat(rtl::OUString numfmt = A2OUSTR("1"));
+    void    SetNumberFormat(OUString numfmt = A2OUSTR("1"));
 
-    void    SetTextStyle(rtl::OUString style);
+    void    SetTextStyle(OUString style);
 
     void    SetRestartOnPage(sal_Bool restart = sal_True);
 
@@ -93,9 +93,9 @@ private:
     double      m_fOffset;
     sal_Int32   m_nIncrement;
     sal_Int32   m_nSepIncrement;
-    rtl::OUString   m_strSeparator;
-    rtl::OUString   m_strNumFmt;
-    rtl::OUString   m_strTextStyle;
+    OUString   m_strSeparator;
+    OUString   m_strNumFmt;
+    OUString   m_strTextStyle;
     sal_Bool    m_bRestartOnPage;
     sal_Bool    m_bCountEmptyLines;
     sal_Bool    m_bCountFrameLines;
@@ -127,18 +127,18 @@ inline void XFLineNumberConfig::SetNumberIncrement(sal_Int32 increment)
     m_nIncrement = increment;
 }
 
-inline void XFLineNumberConfig::SetSeperator(sal_Int32 increment, rtl::OUString seperator)
+inline void XFLineNumberConfig::SetSeperator(sal_Int32 increment, OUString seperator)
 {
     m_nSepIncrement = increment;
     m_strSeparator = seperator;
 }
 
-inline void XFLineNumberConfig::SetNumberFormat(rtl::OUString numfmt)
+inline void XFLineNumberConfig::SetNumberFormat(OUString numfmt)
 {
     m_strNumFmt = numfmt;
 }
 
-inline void XFLineNumberConfig::SetTextStyle(rtl::OUString style)
+inline void XFLineNumberConfig::SetTextStyle(OUString style)
 {
     m_strTextStyle = style;
 }

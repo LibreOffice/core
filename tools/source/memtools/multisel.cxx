@@ -34,7 +34,6 @@
 #define DBG(x)
 #endif
 
-using ::rtl::OUString;
 
 #ifdef MI_DEBUG
 static void Print( const MultiSelection* pSel )
@@ -606,7 +605,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 
 // StringRangeEnumerator
 
-StringRangeEnumerator::StringRangeEnumerator( const rtl::OUString& i_rInput,
+StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
                                               sal_Int32 i_nMinNumber,
                                               sal_Int32 i_nMaxNumber,
                                               sal_Int32 i_nLogicalOffset
@@ -703,13 +702,13 @@ bool StringRangeEnumerator::insertJoinedRanges(
     return true;
 }
 
-bool StringRangeEnumerator::setRange( const rtl::OUString& i_rNewRange, bool i_bStrict )
+bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStrict )
 {
     mnCount = 0;
     maSequence.clear();
 
     const sal_Unicode* pInput = i_rNewRange.getStr();
-    rtl::OUStringBuffer aNumberBuf( 16 );
+    OUStringBuffer aNumberBuf( 16 );
     std::vector< sal_Int32 > aNumbers;
     bool bSequence = false;
     while( *pInput )

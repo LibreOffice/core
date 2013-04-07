@@ -68,7 +68,7 @@ public:
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
                  sal_Bool bIsEncrypted,
-                 const ::rtl::OUString& aMediaType,
+                 const OUString& aMediaType,
                  sal_Bool bRecoveryMode );
 
     // allows to read package raw stream

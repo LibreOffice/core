@@ -89,7 +89,7 @@ class OOX_DLLPUBLIC ProgressBar : public IProgressBar
 public:
     explicit            ProgressBar(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >& rxIndicator,
-                            const ::rtl::OUString& rText );
+                            const OUString& rText );
 
     virtual             ~ProgressBar();
 
@@ -113,7 +113,7 @@ class OOX_DLLPUBLIC SegmentProgressBar : public ISegmentProgressBar
 public:
     explicit            SegmentProgressBar(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >& rxIndicator,
-                            const ::rtl::OUString& rText );
+                            const OUString& rText );
 
     /** Returns the current position of the progress bar segment. */
     virtual double      getPosition() const;

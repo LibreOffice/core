@@ -77,12 +77,12 @@ public:
             tools::prepareForPolygonOperation(aShiftedRectangle));
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s input LHS - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         aSelfIntersect),
                     RTL_TEXTENCODING_UTF8).getStr() );
         fprintf(stderr, "%s input RHS - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(
                         aRect),
                     RTL_TEXTENCODING_UTF8).getStr() );
@@ -93,12 +93,12 @@ public:
 
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "%s - svg:d=\"%s\"\n",
-                pName, rtl::OUStringToOString(
+                pName, OUStringToOString(
                     basegfx::tools::exportToSvgD(aRes),
                     RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 
-        rtl::OUString aValid=rtl::OUString::createFromAscii(pValidSvgD);
+        OUString aValid=OUString::createFromAscii(pValidSvgD);
 
         CPPUNIT_ASSERT_MESSAGE(pName,
                                basegfx::tools::exportToSvgD(aRes) == aValid);
@@ -132,8 +132,8 @@ public:
                            const char* pInputSvgD,
                            const char* pValidSvgD)
     {
-        rtl::OUString aInput=rtl::OUString::createFromAscii(pInputSvgD);
-        rtl::OUString aValid=rtl::OUString::createFromAscii(pValidSvgD);
+        OUString aInput=OUString::createFromAscii(pInputSvgD);
+        OUString aValid=OUString::createFromAscii(pValidSvgD);
         B2DPolyPolygon aInputPoly, aValidPoly;
 
         tools::importFromSvgD(aInputPoly, aInput);

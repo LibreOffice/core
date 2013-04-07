@@ -28,7 +28,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
-using ::rtl::OUString;
 
 SwXMLBlockListContext::SwXMLBlockListContext(
    SwXMLBlockListImport& rImport,
@@ -223,7 +222,7 @@ SwXMLTextBlockParContext::SwXMLTextBlockParContext(
 {
 }
 
-void SwXMLTextBlockParContext::Characters( const ::rtl::OUString& rChars )
+void SwXMLTextBlockParContext::Characters( const OUString& rChars )
 {
     rLocalRef.m_rText.Append ( rChars.getStr());
 }

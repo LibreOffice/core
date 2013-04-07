@@ -292,7 +292,7 @@ namespace comphelper
             xParentContext = xParent->getAccessibleContext();
 
         if ( !xParentContext.is() )
-            throw IllegalAccessibleComponentStateException( ::rtl::OUString(), *this );
+            throw IllegalAccessibleComponentStateException( OUString(), *this );
 
         return xParentContext->getLocale();
     }

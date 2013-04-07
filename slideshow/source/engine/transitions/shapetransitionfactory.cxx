@@ -112,7 +112,7 @@ ClippingAnimation::~ClippingAnimation()
     }
     catch (uno::Exception &)
     {
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -354,7 +354,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                         pGeneratedActivity = ActivitiesFactory::createSimpleActivity(
                             rParms,
                             AnimationFactory::createNumberPropertyAnimation(
-                                ::rtl::OUString("Opacity"),
+                                OUString("Opacity"),
                                 rShape,
                                 rShapeManager,
                                 rSlideSize ),

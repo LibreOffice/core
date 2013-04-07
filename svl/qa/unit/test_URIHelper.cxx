@@ -79,10 +79,10 @@ public:
         return m_identifier;
     }
 
-    virtual rtl::OUString SAL_CALL getContentType()
+    virtual OUString SAL_CALL getContentType()
         throw (css::uno::RuntimeException)
     {
-        return rtl::OUString();
+        return OUString();
     }
 
     virtual void SAL_CALL addContentEventListener(
@@ -123,7 +123,7 @@ Content::Content(
     m_identifier(identifier)
 {
     assert(m_identifier.is());
-    rtl::OUString uri(m_identifier->getContentIdentifier());
+    OUString uri(m_identifier->getContentIdentifier());
     if (!uri.matchIgnoreAsciiCase(m_prefix)
         || uri.indexOf('#', RTL_CONSTASCII_LENGTH(m_prefix)) != -1)
     {
@@ -146,10 +146,10 @@ css::uno::Any Content::execute(
     // otherwise, if the last non-empty segment starts with '1', add a final
     // slash, and if the last non-empty segment starts with '2', remove a final
     // slash (if any); also, turn the given uri into all-lowercase:
-    rtl::OUString uri(m_identifier->getContentIdentifier());
+    OUString uri(m_identifier->getContentIdentifier());
     sal_Unicode c = '0';
     for (sal_Int32 i = RTL_CONSTASCII_LENGTH(m_prefix); i != -1;) {
-        rtl::OUString seg(uri.getToken(0, '/', i));
+        OUString seg(uri.getToken(0, '/', i));
         if (seg.getLength() > 0) {
             c = seg[0];
             if (c < '0' || c > '2') {
@@ -228,7 +228,7 @@ void Test::finish() {
 void Test::testNormalizedMakeRelative() {
     css::ucb::UniversalContentBroker::create(m_context)->
         registerContentProvider(
-            new Provider, rtl::OUString("test"),
+            new Provider, OUString("test"),
             true);
     struct Data {
         char const * base;
@@ -259,14 +259,14 @@ void Test::testNormalizedMakeRelative() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
         css::uno::Reference< css::uri::XUriReference > ref(
             URIHelper::normalizedMakeRelative(
-                m_context, rtl::OUString::createFromAscii(tests[i].base),
-                rtl::OUString::createFromAscii(tests[i].absolute)));
+                m_context, OUString::createFromAscii(tests[i].base),
+                OUString::createFromAscii(tests[i].absolute)));
         bool ok = tests[i].relative == 0
             ? !ref.is()
             : ref.is() && ref->getUriReference().equalsAscii(tests[i].relative);
-        rtl::OString msg;
+        OString msg;
         if (!ok) {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append('<');
             buf.append(tests[i].base);
             buf.append(">, <");
@@ -275,7 +275,7 @@ void Test::testNormalizedMakeRelative() {
             if (ref.is()) {
                 buf.append('<');
                 buf.append(
-                    rtl::OUStringToOString(
+                    OUStringToOString(
                         ref->getUriReference(), RTL_TEXTENCODING_UTF8));
                 buf.append('>');
             } else {
@@ -386,19 +386,19 @@ void Test::testFindFirstURLInText() {
     };
     CharClass charClass( m_context, LanguageTag( com::sun::star::lang::Locale("en", "US", "")));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(tests); ++i) {
-        rtl::OUString input(rtl::OUString::createFromAscii(tests[i].input));
+        OUString input(OUString::createFromAscii(tests[i].input));
         sal_Int32 begin = 0;
         sal_Int32 end = input.getLength();
-        rtl::OUString result(
+        OUString result(
             URIHelper::FindFirstURLInText(input, begin, end, charClass));
         bool ok = tests[i].result == 0
             ? (result.getLength() == 0 && begin == input.getLength()
                && end == input.getLength())
             : (result.equalsAscii(tests[i].result) && begin == tests[i].begin
                && end == tests[i].end);
-        rtl::OString msg;
+        OString msg;
         if (!ok) {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append('"');
             buf.append(tests[i].input);
             buf.append("\" -> ");
@@ -409,7 +409,7 @@ void Test::testFindFirstURLInText() {
             buf.append(static_cast< sal_Int32 >(tests[i].end));
             buf.append(')');
             buf.append(" != ");
-            buf.append(rtl::OUStringToOString(result, RTL_TEXTENCODING_UTF8));
+            buf.append(OUStringToOString(result, RTL_TEXTENCODING_UTF8));
             buf.append(" (");
             buf.append(static_cast< sal_Int32 >(begin));
             buf.append(", ");

@@ -41,7 +41,7 @@ namespace connectivity
             ,aProfile(NULL)
         {
         }
-            ::sal_Int32 ProfileManager::bootupProfile( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+            ::sal_Int32 ProfileManager::bootupProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
             {
                 if (!aProfile)
                 {
@@ -60,22 +60,22 @@ namespace connectivity
             {
                 return m_CurrentProduct;
             }
-            ::rtl::OUString ProfileManager::getCurrentProfile(  ) throw (::com::sun::star::uno::RuntimeException)
+            OUString ProfileManager::getCurrentProfile(  ) throw (::com::sun::star::uno::RuntimeException)
             {
                 nsresult rv;
                 nsCOMPtr<nsIProfile> theProfile(do_GetService(NS_PROFILE_CONTRACTID,&rv));
-                     if (NS_FAILED(rv)) return ::rtl::OUString();
+                     if (NS_FAILED(rv)) return OUString();
                 nsXPIDLString currentProfileStr;
                 //call GetCurrentProfile before call SetCurrentProfile will get the default profile
                 rv = theProfile->GetCurrentProfile(getter_Copies(currentProfileStr));
                 if (NS_FAILED(rv) || currentProfileStr.get() == nsnull)
-                    return ::rtl::OUString();
+                    return OUString();
                 // PRUnichar != sal_Unicode in mingw
-                return ::rtl::OUString(reinterpret_cast_mingw_only<const sal_Unicode *>(currentProfileStr.get()));
+                return OUString(reinterpret_cast_mingw_only<const sal_Unicode *>(currentProfileStr.get()));
             }
-            ::rtl::OUString ProfileManager::setCurrentProfile( ::com::sun::star::mozilla::MozillaProductType product, const ::rtl::OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
+            OUString ProfileManager::setCurrentProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
             {
-                ::rtl::OUString currentProfile = getCurrentProfile();
+                OUString currentProfile = getCurrentProfile();
                 //if profileName not given, then skip and return curernt profile
                 if (profileName.isEmpty() && m_CurrentProduct == product)
                     return currentProfile;
@@ -88,13 +88,13 @@ namespace connectivity
                 //get profile mozilla profile service
                 nsresult rv;
                 nsCOMPtr<nsIProfile> theProfile(do_GetService(NS_PROFILE_CONTRACTID,&rv));
-                if (NS_FAILED(rv)) return ::rtl::OUString();
+                if (NS_FAILED(rv)) return OUString();
 
                 // PRUnichar != sal_Unicode in mingw
                 const PRUnichar* pUsedProfile = reinterpret_cast_mingw_only<const PRUnichar *>(profileName.getStr());
                 //set current profile
                 rv = theProfile->SetCurrentProfile( pUsedProfile );
-                if (NS_FAILED(rv)) return ::rtl::OUString();
+                if (NS_FAILED(rv)) return OUString();
                 return currentProfile;
             }
 

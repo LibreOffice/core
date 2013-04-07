@@ -70,11 +70,11 @@ public:
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
     SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
 
-    void setPath( const rtl::OUString& rPath ) { maPath = rPath; }
-    const rtl::OUString getPath() const { return maPath; }
+    void setPath( const OUString& rPath ) { maPath = rPath; }
+    const OUString getPath() const { return maPath; }
 
-    void setLayoutPath( const rtl::OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
-    const rtl::OUString getLayoutPath() const { return maLayoutPath; }
+    void setLayoutPath( const OUString& rLayoutPath ) { maLayoutPath = rLayoutPath; }
+    const OUString getLayoutPath() const { return maLayoutPath; }
 
     void setTheme( const oox::drawingml::ThemePtr pThemePtr ){ mpThemePtr = pThemePtr; }
     oox::drawingml::ThemePtr getTheme() const { return mpThemePtr; }
@@ -113,16 +113,16 @@ public:
     void createBackground( const oox::core::XmlFilterBase& rFilterBase );
     void applyTextStyles( const oox::core::XmlFilterBase& rFilterBase );
 
-    std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
-    ::oox::drawingml::ShapePtr getShape( const ::rtl::OUString & id ) { return maShapeMap[ id ]; }
+    std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& getAnimNodesMap() { return maAnimNodesMap; };
+    ::oox::drawingml::ShapePtr getShape( const OUString & id ) { return maShapeMap[ id ]; }
     ::oox::drawingml::ShapeIdMap& getShapeMap() { return maShapeMap; }
 
     CommentList& getCommentsList() { return maCommentsList; }
     CommentAuthorList& getCommentAuthors() { return maCommentAuthors; }
 
 private:
-    rtl::OUString                                                           maPath;
-    rtl::OUString                                                           maLayoutPath;
+    OUString                                                           maPath;
+    OUString                                                           maLayoutPath;
     ::boost::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
@@ -146,8 +146,8 @@ private:
     oox::drawingml::TextListStylePtr                                        maNotesTextStylePtr;
     oox::drawingml::TextListStylePtr                                        maOtherTextStylePtr;
 
-    std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > > maAnimNodesMap;
-    std::map< ::rtl::OUString, ::oox::drawingml::ShapePtr > maShapeMap;
+    std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > > maAnimNodesMap;
+    std::map< OUString, ::oox::drawingml::ShapePtr > maShapeMap;
 
     // slide comments
     CommentList                                                             maCommentsList;

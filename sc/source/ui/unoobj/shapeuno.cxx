@@ -61,8 +61,8 @@ static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
-        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_URL), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_URL), 0, &getCppuType((OUString*)0), 0, 0 },
 
         {0,0,0,0,0,0}
     };
@@ -271,14 +271,14 @@ static sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 static sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
     sal_Bool bReturn = false;
-    rtl::OUString sType(xShape->getShapeType());
+    OUString sType(xShape->getShapeType());
     sal_Bool bCaptionShape( sType == "com.sun.star.drawing.CaptionShape" );
     if (bCaptionShape)
     {
         uno::Reference < beans::XPropertySet > xShapeProp (xShape, uno::UNO_QUERY);
         if (xShapeProp.is())
         {
-            xShapeProp->getPropertyValue( rtl::OUString( "CaptionPoint" ) ) >>= rCaptionPoint;
+            xShapeProp->getPropertyValue( OUString( "CaptionPoint" ) ) >>= rCaptionPoint;
             bReturn = sal_True;
         }
     }
@@ -332,7 +332,7 @@ static awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape,
 }
 
 void SAL_CALL ScShapeObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -446,7 +446,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
         else
-            throw lang::IllegalArgumentException(rtl::OUString("only XCell or XSpreadsheet objects allowed"), static_cast<cppu::OWeakObject*>(this), 0);
+            throw lang::IllegalArgumentException(OUString("only XCell or XSpreadsheet objects allowed"), static_cast<cppu::OWeakObject*>(this), 0);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_IMAGEMAP ) )
     {
@@ -642,7 +642,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
                aNameString.EqualsAscii( SC_UNONAME_URL) )
     {
-        rtl::OUString sHlink;
+        OUString sHlink;
         ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this, true);
         if ( ( aValue >>= sHlink ) && pInfo )
             pInfo->SetHlink( sHlink );
@@ -664,7 +664,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -827,7 +827,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
     else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
               aNameString.EqualsAscii( SC_UNONAME_URL ) )
     {
-        rtl::OUString sHlink;
+        OUString sHlink;
         if ( ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this) )
             sHlink = pInfo->GetHlink();
         aAny <<= sHlink;
@@ -849,7 +849,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
     return aAny;
 }
 
-void SAL_CALL ScShapeObj::addPropertyChangeListener( const rtl::OUString& aPropertyName,
+void SAL_CALL ScShapeObj::addPropertyChangeListener( const OUString& aPropertyName,
                             const uno::Reference<beans::XPropertyChangeListener>& aListener)
                             throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException, uno::RuntimeException)
@@ -873,7 +873,7 @@ void SAL_CALL ScShapeObj::addPropertyChangeListener( const rtl::OUString& aPrope
     }
 }
 
-void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPropertyName,
+void SAL_CALL ScShapeObj::removePropertyChangeListener( const OUString& aPropertyName,
                             const uno::Reference<beans::XPropertyChangeListener>& aListener)
                             throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException, uno::RuntimeException)
@@ -885,7 +885,7 @@ void SAL_CALL ScShapeObj::removePropertyChangeListener( const rtl::OUString& aPr
         pShapePropertySet->removePropertyChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL ScShapeObj::addVetoableChangeListener( const rtl::OUString& aPropertyName,
+void SAL_CALL ScShapeObj::addVetoableChangeListener( const OUString& aPropertyName,
                             const uno::Reference<beans::XVetoableChangeListener>& aListener)
                             throw(beans::UnknownPropertyException,
                                 lang::WrappedTargetException, uno::RuntimeException)
@@ -897,7 +897,7 @@ void SAL_CALL ScShapeObj::addVetoableChangeListener( const rtl::OUString& aPrope
         pShapePropertySet->addVetoableChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPropertyName,
+void SAL_CALL ScShapeObj::removeVetoableChangeListener( const OUString& aPropertyName,
                             const uno::Reference<beans::XVetoableChangeListener>& aListener)
                             throw(beans::UnknownPropertyException,
                                 lang::WrappedTargetException, uno::RuntimeException)
@@ -911,7 +911,7 @@ void SAL_CALL ScShapeObj::removeVetoableChangeListener( const rtl::OUString& aPr
 
 //  XPropertyState
 
-beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString& aPropertyName )
+beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -945,14 +945,14 @@ beans::PropertyState SAL_CALL ScShapeObj::getPropertyState( const rtl::OUString&
 }
 
 uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
-                                const uno::Sequence<rtl::OUString>& aPropertyNames )
+                                const uno::Sequence<OUString>& aPropertyNames )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     //  simple loop to get own and aggregated states
 
-    const rtl::OUString* pNames = aPropertyNames.getConstArray();
+    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
@@ -960,7 +960,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScShapeObj::getPropertyStates(
     return aRet;
 }
 
-void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyName )
+void SAL_CALL ScShapeObj::setPropertyToDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -991,7 +991,7 @@ void SAL_CALL ScShapeObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
     }
 }
 
-uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                         uno::RuntimeException)
 {
@@ -1102,7 +1102,7 @@ void SAL_CALL ScShapeObj::removeEventListener(
 
 static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
 {
-    rtl::OUString aNameStr(rtl::OUString::createFromAscii(pName));
+    OUString aNameStr(OUString::createFromAscii(pName));
     try
     {
         rDest.setPropertyValue( aNameStr, rSource.getPropertyValue( aNameStr ) );
@@ -1200,7 +1200,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
 }
 
 void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                        const rtl::OUString& aString, sal_Bool bAbsorb )
+                                        const OUString& aString, sal_Bool bAbsorb )
                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1260,7 +1260,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd() throw(uno::Runtim
 //    return uno::Reference<text::XTextRange>();
 }
 
-rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1270,10 +1270,10 @@ rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
     else
         throw uno::RuntimeException();
 
-//    return rtl::OUString();
+//    return OUString();
 }
 
-void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScShapeObj::setString( const OUString& aText ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -1360,7 +1360,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScShapeObj::getImplementationId()
 
         if( xAggShape.is() )
         {
-            const rtl::OUString aShapeType( xAggShape->getShapeType() );
+            const OUString aShapeType( xAggShape->getShapeType() );
             // did we already compute an implementation id for the agregated shape type?
             ScShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find(aShapeType ) );
             if( aIter == aImplementationIdMap.end() )
@@ -1403,9 +1403,9 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
     return NULL;
 }
 
-#define SC_EVENTACC_ONCLICK     ::rtl::OUString( "OnClick" )
-#define SC_EVENTACC_SCRIPT      ::rtl::OUString( "Script" )
-#define SC_EVENTACC_EVENTTYPE   ::rtl::OUString( "EventType" )
+#define SC_EVENTACC_ONCLICK     OUString( "OnClick" )
+#define SC_EVENTACC_SCRIPT      OUString( "Script" )
+#define SC_EVENTACC_EVENTTYPE   OUString( "EventType" )
 
 typedef ::cppu::WeakImplHelper1< container::XNameReplace > ShapeUnoEventAcess_BASE;
 class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
@@ -1424,7 +1424,7 @@ public:
     }
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -1443,7 +1443,7 @@ public:
             }
             if ( isEventType && (pProperties->Name == SC_EVENTACC_SCRIPT) )
             {
-                rtl::OUString sValue;
+                OUString sValue;
                 if ( pProperties->Value >>= sValue )
                 {
                     ScMacroInfo* pInfo = getInfo( sal_True );
@@ -1460,7 +1460,7 @@ public:
     }
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Sequence< beans::PropertyValue > aProperties;
         ScMacroInfo* pInfo = getInfo();
@@ -1484,14 +1484,14 @@ public:
         return uno::Any( aProperties );
     }
 
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames() throw(uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames() throw(uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aSeq( 1 );
+        uno::Sequence< OUString > aSeq( 1 );
         aSeq[ 0 ] = SC_EVENTACC_ONCLICK;
         return aSeq;
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(uno::RuntimeException)
     {
         return aName == SC_EVENTACC_ONCLICK;
     }
@@ -1515,15 +1515,15 @@ ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
     return new ShapeUnoEventAccessImpl( this );
 }
 
-::rtl::OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeException)
+OUString SAL_CALL ScShapeObj::getImplementationName(  ) throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( "com.sun.star.comp.sc.ScShapeObj" );
+    return OUString( "com.sun.star.comp.sc.ScShapeObj" );
 }
 
-::sal_Bool SAL_CALL ScShapeObj::supportsService( const ::rtl::OUString& _ServiceName ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL ScShapeObj::supportsService( const OUString& _ServiceName ) throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSupported( getSupportedServiceNames() );
-    for ( const ::rtl::OUString* pSupported = aSupported.getConstArray();
+    uno::Sequence< OUString > aSupported( getSupportedServiceNames() );
+    for ( const OUString* pSupported = aSupported.getConstArray();
           pSupported != aSupported.getConstArray() + aSupported.getLength();
           ++pSupported
         )
@@ -1532,23 +1532,23 @@ ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
     return false;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ScShapeObj::getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Reference<lang::XServiceInfo> xSI;
     if ( mxShapeAgg.is() )
         mxShapeAgg->queryAggregation( lang::XServiceInfo::static_type() ) >>= xSI;
 
-    uno::Sequence< ::rtl::OUString > aSupported;
+    uno::Sequence< OUString > aSupported;
     if ( xSI.is() )
         aSupported = xSI->getSupportedServiceNames();
 
     aSupported.realloc( aSupported.getLength() + 1 );
-    aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( "com.sun.star.sheet.Shape" );
+    aSupported[ aSupported.getLength() - 1 ] = OUString( "com.sun.star.sheet.Shape" );
 
     if( bIsNoteCaption )
     {
         aSupported.realloc( aSupported.getLength() + 1 );
-        aSupported[ aSupported.getLength() - 1 ] = ::rtl::OUString( "com.sun.star.sheet.CellAnnotationShape" );
+        aSupported[ aSupported.getLength() - 1 ] = OUString( "com.sun.star.sheet.CellAnnotationShape" );
     }
 
     return aSupported;

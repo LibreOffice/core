@@ -55,7 +55,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::io::XPersistObject
-    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlDialogModel, ControlModelContainerBase, szServiceName2_UnoControlDialogModel )
@@ -78,7 +78,7 @@ public:
 
                                 UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
                                 ~UnoDialogControl();
-    ::rtl::OUString             GetComponentServiceName();
+    OUString             GetComponentServiceName();
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -99,11 +99,11 @@ public:
 
     // ::com::sun::star::awt::XDialog2
     virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHelpId( const rtl::OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( const OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XDialog
-    void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
-    ::rtl::OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setTitle( const OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
+    OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute() throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL endExecute() throw(::com::sun::star::uno::RuntimeException);
 
@@ -133,10 +133,10 @@ public:
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, ControlModelContainerBase, szServiceName_UnoMultiPageModel )
 
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
     // XNamedContainer
-    void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // Override the method of parent Class
     virtual sal_Bool SAL_CALL getGroupControl(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -155,7 +155,7 @@ class UnoMultiPageControl :  public ControlContainerBase
 public:
     UnoMultiPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoMultiPageControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, szServiceName_UnoMultiPageControl )
@@ -208,7 +208,7 @@ public:
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoPageModel, ControlModelContainerBase, szServiceName_UnoPageModel )
 
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
 
     // Override the method of parent Class
@@ -224,7 +224,7 @@ class UnoPageControl :  public ControlContainerBase
 public:
     UnoPageControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoPageControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
 
     // ::com::sun::star::lang::XServiceInfo
@@ -242,7 +242,7 @@ public:
 
     DECLIMPL_SERVICEINFO_DERIVED( UnoFrameModel, ControlModelContainerBase, szServiceName_UnoFrameModel )
 
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -257,7 +257,7 @@ protected:
 public:
     UnoFrameControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
     ~UnoFrameControl();
-    ::rtl::OUString     GetComponentServiceName();
+    OUString     GetComponentServiceName();
 
 // ::com::sun::star::lang::XServiceInfo
 DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, szServiceName_UnoPageControl )

@@ -107,14 +107,14 @@ namespace dbaccess
 
         void onDocumentInitialized();
 
-        void    notifyDocumentEvent( const ::rtl::OUString& _EventName, const Reference< XController2 >& _ViewController,
+        void    notifyDocumentEvent( const OUString& _EventName, const Reference< XController2 >& _ViewController,
                     const Any& _Supplement )
         {
             impl_notifyEvent_nothrow( DocumentEvent(
                 m_rDocument, _EventName, _ViewController, _Supplement ) );
         }
 
-        void    notifyDocumentEventAsync( const ::rtl::OUString& _EventName, const Reference< XController2 >& _ViewController,
+        void    notifyDocumentEventAsync( const OUString& _EventName, const Reference< XController2 >& _ViewController,
                     const Any& _Supplement )
         {
             impl_notifyEventAsync_nothrow( DocumentEvent(
@@ -278,13 +278,13 @@ namespace dbaccess
         m_pImpl->removeDocumentEventListener( _Listener );
     }
 
-    void DocumentEventNotifier::notifyDocumentEvent( const ::rtl::OUString& _EventName,
+    void DocumentEventNotifier::notifyDocumentEvent( const OUString& _EventName,
         const Reference< XController2 >& _ViewController, const Any& _Supplement )
     {
         m_pImpl->notifyDocumentEvent( _EventName, _ViewController, _Supplement );
     }
 
-    void DocumentEventNotifier::notifyDocumentEventAsync( const ::rtl::OUString& _EventName,
+    void DocumentEventNotifier::notifyDocumentEventAsync( const OUString& _EventName,
         const Reference< XController2 >& _ViewController, const Any& _Supplement )
     {
         m_pImpl->notifyDocumentEventAsync( _EventName, _ViewController, _Supplement );

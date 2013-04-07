@@ -24,18 +24,18 @@
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
-            const ::rtl::OUString & _rComponentName,
+            const OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            const ::com::sun::star::uno::Sequence< OUString > & _rServiceNames,
             rtl_ModuleCount* _p
         );
 
 //==========================================================================
 class OModuleRegistration
 {
-    static  ::com::sun::star::uno::Sequence< ::rtl::OUString >*
+    static  ::com::sun::star::uno::Sequence< OUString >*
         s_pImplementationNames;
-    static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
+    static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >*
         s_pSupportedServices;
     static  ::com::sun::star::uno::Sequence< sal_Int64 >*
         s_pCreationFunctionPointers;
@@ -54,8 +54,8 @@ public:
         @see revokeComponent
     */
     static void registerComponent(
-        const ::rtl::OUString& _rImplementationName,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
+        const OUString& _rImplementationName,
+        const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentInstantiation _pCreateFunction,
         FactoryInstantiation _pFactoryFunction);
 
@@ -63,7 +63,7 @@ public:
         @param      _rImplementationName        the implementation name of the component
     */
     static void revokeComponent(
-        const ::rtl::OUString& _rImplementationName);
+        const OUString& _rImplementationName);
 
     /** creates a Factory for the component with the given implementation name. Usually used from within component_getFactory.
         @param      _rxServiceManager       a pointer to an XMultiServiceFactory interface as got in component_getFactory
@@ -71,7 +71,7 @@ public:
         @return                             the XInterface access to a factory for the component
     */
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-        const ::rtl::OUString& _rImplementationName,
+        const OUString& _rImplementationName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
         );
 };
@@ -82,8 +82,8 @@ class OMultiInstanceAutoRegistration
 {
 public:
     /** assumed that the template argument has the three methods<BR>
-        <code>static ::rtl::OUString getImplementationName_Static()</code><BR>
-        <code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><BR>
+        <code>static OUString getImplementationName_Static()</code><BR>
+        <code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
         and<BR>
         <code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code><BR>
@@ -118,8 +118,8 @@ class OOneInstanceAutoRegistration
 {
 public:
     /** provided that the template argument has three methods<BR>
-        <code>static ::rtl::OUString getImplementationName_Static()</code><BR>
-        <code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><BR>
+        <code>static OUString getImplementationName_Static()</code><BR>
+        <code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><BR>
         and<BR>
         <code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code><BR>

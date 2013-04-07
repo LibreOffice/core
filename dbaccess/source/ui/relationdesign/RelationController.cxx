@@ -90,25 +90,25 @@ using namespace ::comphelper;
 using namespace ::osl;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
+OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.ORelationDesign");
+    return OUString("org.openoffice.comp.dbu.ORelationDesign");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> ORelationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.RelationDesign");
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.RelationDesign");
     return aSupported;
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -240,9 +240,9 @@ void ORelationController::impl_initialize()
 
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORelationController::getPrivateTitle( ) const
+OUString ORelationController::getPrivateTitle( ) const
 {
-    ::rtl::OUString sName = getDataSourceName();
+    OUString sName = getDataSourceName();
     return ::dbaui::getStrippedDatabaseName(getDataSource(),sName);
 }
 // -----------------------------------------------------------------------------
@@ -275,10 +275,10 @@ namespace
 {
     class RelationLoader : public ::osl::Thread
     {
-        DECLARE_STL_MAP(::rtl::OUString,::boost::shared_ptr<OTableWindowData>,::comphelper::UStringMixLess,TTableDataHelper);
+        DECLARE_STL_MAP(OUString,::boost::shared_ptr<OTableWindowData>,::comphelper::UStringMixLess,TTableDataHelper);
         TTableDataHelper                    m_aTableData;
         TTableConnectionData                m_vTableConnectionData;
-        const Sequence< ::rtl::OUString>    m_aTableList;
+        const Sequence< OUString>    m_aTableList;
         ORelationController*                m_pParent;
         const Reference< XDatabaseMetaData> m_xMetaData;
         const Reference< XNameAccess >      m_xTables;
@@ -289,7 +289,7 @@ namespace
         RelationLoader(ORelationController* _pParent
                         ,const Reference< XDatabaseMetaData>& _xMetaData
                         ,const Reference< XNameAccess >& _xTables
-                        ,const Sequence< ::rtl::OUString>& _aTableList
+                        ,const Sequence< OUString>& _aTableList
                         ,const sal_Int32 _nStartIndex
                         ,const sal_Int32 _nEndIndex)
             :m_aTableData(_xMetaData.is() && _xMetaData->supportsMixedCaseQuotedIdentifiers())
@@ -313,10 +313,10 @@ namespace
 
     void SAL_CALL RelationLoader::run()
     {
-        const ::rtl::OUString* pIter = m_aTableList.getConstArray() + m_nStartIndex;
+        const OUString* pIter = m_aTableList.getConstArray() + m_nStartIndex;
         for(sal_Int32 i = m_nStartIndex; i < m_nEndIndex;++i,++pIter)
         {
-            ::rtl::OUString sCatalog,sSchema,sTable;
+            OUString sCatalog,sSchema,sTable;
             ::dbtools::qualifiedNameComponents(m_xMetaData,
                                                 *pIter,
                                                 sCatalog,
@@ -351,7 +351,7 @@ namespace
     void RelationLoader::loadTableData(const Any& _aTable)
     {
         Reference<XPropertySet> xTableProp(_aTable,UNO_QUERY);
-        const ::rtl::OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
+        const OUString sSourceName = ::dbtools::composeTableName( m_xMetaData, xTableProp, ::dbtools::eInTableDefinitions, false, false, false );
         TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
         if ( aFind == m_aTableData.end() )
         {
@@ -378,7 +378,7 @@ namespace
                 xKey->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
                 if ( KeyType::FOREIGN == nKeyType )
                 {
-                    ::rtl::OUString sReferencedTable;
+                    OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
                     //////////////////////////////////////////////////////////////////////
                     // insert windows
@@ -396,7 +396,7 @@ namespace
                     }
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 
-                    ::rtl::OUString sKeyName;
+                    OUString sKeyName;
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
                     //////////////////////////////////////////////////////////////////////
                     // insert connection
@@ -407,10 +407,10 @@ namespace
                     const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
                     const Reference<XNameAccess> xColumns       = xColsSup->getColumns();
-                    const Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                    const ::rtl::OUString* pIter    = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
-                    ::rtl::OUString sColumnName,sRelatedName;
+                    const Sequence< OUString> aNames = xColumns->getElementNames();
+                    const OUString* pIter    = aNames.getConstArray();
+                    const OUString* pEnd     = pIter + aNames.getLength();
+                    OUString sColumnName,sRelatedName;
                     for(sal_uInt16 j=0;pIter != pEnd;++pIter,++j)
                     {
                         const Reference<XPropertySet> xPropSet(xColumns->getByName(*pIter),UNO_QUERY);
@@ -502,7 +502,7 @@ void ORelationController::loadData()
         DatabaseMetaData aMeta(getConnection());
         // this may take some time
         const Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
-        const Sequence< ::rtl::OUString> aNames = m_xTables->getElementNames();
+        const Sequence< OUString> aNames = m_xTables->getElementNames();
         const sal_Int32 nCount = aNames.getLength();
         if ( aMeta.supportsThreads() )
         {
@@ -537,7 +537,7 @@ void ORelationController::loadData()
     }
 }
 // -----------------------------------------------------------------------------
-TTableWindowData::value_type ORelationController::existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase)  const
+TTableWindowData::value_type ORelationController::existsTable(const OUString& _rComposedTableName,sal_Bool _bCase)  const
 {
     ::comphelper::UStringMixEqual bCase(_bCase);
     TTableWindowData::const_iterator aIter = m_vTableData.begin();

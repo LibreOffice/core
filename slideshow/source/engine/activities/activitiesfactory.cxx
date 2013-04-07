@@ -691,7 +691,7 @@ AnimationActivitySharedPtr createActivity(
                                        rParms.mbAutoReverse );
 
     // is a formula given?
-    const ::rtl::OUString& rFormulaString( xNode->getFormula() );
+    const OUString& rFormulaString( xNode->getFormula() );
     if( !rFormulaString.isEmpty() )
     {
         // yep, parse and pass to ActivityParameters

@@ -795,22 +795,22 @@ void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName(void)
+OUString SAL_CALL ScAccessibleSpreadsheet::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleSpreadsheet");
+    return OUString("ScAccessibleSpreadsheet");
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
     ScAccessibleSpreadsheet::getSupportedServiceNames (void)
         throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleTableBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.AccessibleSpreadsheet");
+    pNames[nOldSize] = OUString("com.sun.star.AccessibleSpreadsheet");
 
     return aSequence;
 }

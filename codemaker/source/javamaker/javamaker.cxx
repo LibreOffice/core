@@ -28,8 +28,6 @@
 #include "javaoptions.hxx"
 #include "javatype.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OString;
 sal_Bool produceAllTypes(RegistryKey& rTypeKey, sal_Bool bIsExtraType,
                          rtl::Reference< TypeManager > const & typeMgr,
                          codemaker::GeneratedTypeSet & generated,

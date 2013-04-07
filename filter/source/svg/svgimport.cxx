@@ -63,7 +63,7 @@ sal_Bool SVGFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     if(!xInputStream.is())
         return sal_False;
 
-    rtl::OUString sXMLImportService ( "com.sun.star.comp.Draw.XMLOasisImporter" );
+    OUString sXMLImportService ( "com.sun.star.comp.Draw.XMLOasisImporter" );
     Reference < XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..

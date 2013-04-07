@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::svt;
 
-const rtl::OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
+const OString aGroupIdent(RTL_CONSTASCII_STRINGPARAM("dBase III"));
 
 // ODbaseIndexDialog ----------------------------------------------------------
 DBG_NAME(ODbaseIndexDialog)
@@ -309,22 +309,22 @@ void ODbaseIndexDialog::Init()
 
     // first assume for all indexes they're free
 
-    Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
+    Sequence< OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    ::rtl::OUString aIndexExt("ndx");
-    ::rtl::OUString aTableExt("dbf");
+    OUString aIndexExt("ndx");
+    OUString aTableExt("dbf");
 
     ::std::vector< String > aUsedIndexes;
 
-    const ::rtl::OUString *pBegin = aFolderContent.getConstArray();
-    const ::rtl::OUString *pEnd   = pBegin + aFolderContent.getLength();
+    const OUString *pBegin = aFolderContent.getConstArray();
+    const OUString *pEnd   = pBegin + aFolderContent.getLength();
     aURL.SetSmartProtocol(INET_PROT_FILE);
     for(;pBegin != pEnd;++pBegin)
     {
-        rtl::OUString aName;
+        OUString aName;
         ::utl::LocalFileHelper::ConvertURLToPhysicalName(pBegin->getStr(),aName);
         aURL.SetSmartURL(aName);
-        rtl::OUString aExt = aURL.getExtension();
+        OUString aExt = aURL.getExtension();
         if (aExt == aIndexExt)
         {
             m_aFreeIndexList.push_back( OTableIndex(aURL.getName()) );
@@ -335,15 +335,15 @@ void ODbaseIndexDialog::Init()
             OTableInfo& rTabInfo = m_aTableInfoList.back();
 
             // open the INF file
-            aURL.setExtension(rtl::OUString::createFromAscii("inf"));
+            aURL.setExtension(OUString::createFromAscii("inf"));
             OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
             Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
             aInfFile.SetGroup( aGroupIdent );
 
             // fill the indexes list
-            rtl::OString aNDX;
+            OString aNDX;
             sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
-            rtl::OString aKeyName;
+            OString aKeyName;
             String aEntry;
 
             for( sal_uInt16 nKey = 0; nKey < nKeyCnt; nKey++ )
@@ -355,7 +355,7 @@ void ODbaseIndexDialog::Init()
                 // yes -> add to the tables index list
                 if (aNDX.equalsL(RTL_CONSTASCII_STRINGPARAM("NDX")))
                 {
-                    aEntry = rtl::OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
+                    aEntry = OStringToOUString(aInfFile.ReadKey(aKeyName), osl_getThreadTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
                     // and remove it from the free index list
@@ -439,21 +439,21 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
     }
     aURL.SetSmartURL(aDsn);
     aURL.Append(aTableName);
-    aURL.setExtension(rtl::OUString::createFromAscii("inf"));
+    aURL.setExtension(OUString::createFromAscii("inf"));
 
     OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
     Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
     aInfFile.SetGroup( aGroupIdent );
 
     // first, delete all table indizes
-    rtl::OString aNDX;
+    OString aNDX;
     sal_uInt16 nKeyCnt = aInfFile.GetKeyCount();
     sal_uInt16 nKey = 0;
 
     while( nKey < nKeyCnt )
     {
         // Does the key point to an index file?...
-        rtl::OString aKeyName = aInfFile.GetKeyName( nKey );
+        OString aKeyName = aInfFile.GetKeyName( nKey );
         aNDX = aKeyName.copy(0,3);
 
         //...if yes, delete index file, nKey is at subsequent key
@@ -474,12 +474,12 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
             ++aIndex, ++nPos
         )
     {
-        rtl::OStringBuffer aKeyName(RTL_CONSTASCII_STRINGPARAM("NDX"));
+        OStringBuffer aKeyName(RTL_CONSTASCII_STRINGPARAM("NDX"));
         if( nPos > 0 )  // first index contains no number
             aKeyName.append(static_cast<sal_Int32>(nPos));
         aInfFile.WriteKey(
             aKeyName.makeStringAndClear(),
-            rtl::OUStringToOString(aIndex->GetIndexFileName(),
+            OUStringToOString(aIndex->GetIndexFileName(),
                 osl_getThreadTextEncoding()));
     }
 
@@ -491,7 +491,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
-            aContent.executeCommand( rtl::OUString("delete"),makeAny( sal_Bool( sal_True ) ) );
+            aContent.executeCommand( OUString("delete"),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )
         {

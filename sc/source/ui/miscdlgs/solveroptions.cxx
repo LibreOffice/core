@@ -45,7 +45,7 @@ using namespace com::sun::star;
 struct ScSolverOptionsEntry
 {
     sal_Int32       nPosition;
-    rtl::OUString   aDescription;
+    OUString   aDescription;
 
     ScSolverOptionsEntry() : nPosition(0) {}
 
@@ -93,13 +93,13 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
     Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
 
-    rtl::OUString sTxt( ' ' );
+    OUString sTxt( ' ' );
     if ( mbIsDouble )
         sTxt += rtl::math::doubleToUString( mfDoubleValue,
             rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
             ScGlobal::GetpLocaleData()->getNumDecimalSep()[0], true );
     else
-        sTxt += rtl::OUString::valueOf(mnIntValue);
+        sTxt += OUString::valueOf(mnIntValue);
     rDev.SetFont( aFont );
     rDev.DrawText( aNewPos, sTxt );
 
@@ -109,8 +109,8 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
 //------------------------------------------------------------------
 
 ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
-                        const uno::Sequence<rtl::OUString>& rImplNames,
-                        const uno::Sequence<rtl::OUString>& rDescriptions,
+                        const uno::Sequence<OUString>& rImplNames,
+                        const uno::Sequence<OUString>& rDescriptions,
                         const String& rEngine,
                         const uno::Sequence<beans::PropertyValue>& rProperties )
     : ModalDialog( pParent, ScResId( RID_SCDLG_SOLVEROPTIONS ) ),
@@ -231,8 +231,8 @@ void ScSolverOptionsDialog::FillListBox()
     std::vector<ScSolverOptionsEntry> aDescriptions( nCount );
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
-        rtl::OUString aPropName( maProperties[nPos].Name );
-        rtl::OUString aVisName;
+        OUString aPropName( maProperties[nPos].Name );
+        OUString aVisName;
         if ( xDesc.is() )
             aVisName = xDesc->getPropertyDescription( aPropName );
         if ( aVisName.isEmpty() )
@@ -264,7 +264,7 @@ void ScSolverOptionsDialog::FillListBox()
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
-        rtl::OUString aVisName = aDescriptions[nPos].aDescription;
+        OUString aVisName = aDescriptions[nPos].aDescription;
 
         uno::Any aValue = maProperties[nPos].Value;
         uno::TypeClass eClass = aValue.getValueTypeClass();

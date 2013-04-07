@@ -95,17 +95,17 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
     public:
-                                  ConfigurationAccess_UICommand( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
+                                  ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand();
 
         // XNameAccess
-        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
             throw (::com::sun::star::uno::RuntimeException);
 
-        virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
         // XElementAccess
@@ -124,7 +124,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     protected:
-        virtual ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const ::rtl::OUString& aName );
+        virtual ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
 
         struct CmdToInfoMap
         {
@@ -132,55 +132,55 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
                              bCommandNameCreated( false ),
                              nProperties( 0 ) {}
 
-            rtl::OUString       aLabel;
-            rtl::OUString       aContextLabel;
-            rtl::OUString       aCommandName;
+            OUString       aLabel;
+            OUString       aContextLabel;
+            OUString       aCommandName;
             bool                bPopup : 1,
                                 bCommandNameCreated : 1;
             sal_Int32           nProperties;
         };
 
-        Any                       getSequenceFromCache( const rtl::OUString& aCommandURL );
-        Any                       getInfoFromCommand( const rtl::OUString& rCommandURL );
-        void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const rtl::OUString& aLabel );
-        Any                       getUILabelFromCommand( const rtl::OUString& rCommandURL );
-        Sequence< rtl::OUString > getAllCommands();
+        Any                       getSequenceFromCache( const OUString& aCommandURL );
+        Any                       getInfoFromCommand( const OUString& rCommandURL );
+        void                      fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel );
+        Any                       getUILabelFromCommand( const OUString& rCommandURL );
+        Sequence< OUString > getAllCommands();
         sal_Bool                  fillCache();
         sal_Bool                  addGenericInfoToCache();
         void                      impl_fill(const Reference< XNameAccess >& _xConfigAccess,sal_Bool _bPopup,
-                                                std::vector< ::rtl::OUString >& aImageCommandVector,
-                                                std::vector< ::rtl::OUString >& aImageRotateVector,
-                                                std::vector< ::rtl::OUString >& aImageMirrorVector);
+                                                std::vector< OUString >& aImageCommandVector,
+                                                std::vector< OUString >& aImageRotateVector,
+                                                std::vector< OUString >& aImageMirrorVector);
 
     private:
-        typedef ::boost::unordered_map< ::rtl::OUString,
+        typedef ::boost::unordered_map< OUString,
                                  CmdToInfoMap,
-                                 rtl::OUStringHash,
-                                 ::std::equal_to< ::rtl::OUString > > CommandToInfoCache;
+                                 OUStringHash,
+                                 ::std::equal_to< OUString > > CommandToInfoCache;
 
         sal_Bool initializeConfigAccess();
 
-        rtl::OUString                     m_aConfigCmdAccess;
-        rtl::OUString                     m_aConfigPopupAccess;
-        rtl::OUString                     m_aPropUILabel;
-        rtl::OUString                     m_aPropUIContextLabel;
-        rtl::OUString                     m_aPropLabel;
-        rtl::OUString                     m_aPropName;
-        rtl::OUString                     m_aPropPopup;
-        rtl::OUString                     m_aPropProperties;
-        rtl::OUString                     m_aXMLFileFormatVersion;
-        rtl::OUString                     m_aVersion;
-        rtl::OUString                     m_aExtension;
-        rtl::OUString                     m_aPrivateResourceURL;
+        OUString                     m_aConfigCmdAccess;
+        OUString                     m_aConfigPopupAccess;
+        OUString                     m_aPropUILabel;
+        OUString                     m_aPropUIContextLabel;
+        OUString                     m_aPropLabel;
+        OUString                     m_aPropName;
+        OUString                     m_aPropPopup;
+        OUString                     m_aPropProperties;
+        OUString                     m_aXMLFileFormatVersion;
+        OUString                     m_aVersion;
+        OUString                     m_aExtension;
+        OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
         Reference< XNameAccess >          m_xConfigAccessPopups;
         Reference< XContainerListener >   m_xConfigAccessListener;
-        Sequence< rtl::OUString >         m_aCommandImageList;
-        Sequence< rtl::OUString >         m_aCommandRotateImageList;
-        Sequence< rtl::OUString >         m_aCommandMirrorImageList;
+        Sequence< OUString >         m_aCommandImageList;
+        Sequence< OUString >         m_aCommandRotateImageList;
+        Sequence< OUString >         m_aCommandMirrorImageList;
         CommandToInfoCache                m_aCmdInfoCache;
         sal_Bool                          m_bConfigAccessInitialized;
         sal_Bool                          m_bCacheFilled;
@@ -190,7 +190,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
+ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     ThreadHelpBase(),
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
@@ -208,12 +208,12 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
 {
     // Create configuration hierachical access name
     m_aConfigCmdAccess += aModuleName;
-    m_aConfigCmdAccess += rtl::OUString( CONFIGURATION_CMD_ELEMENT_ACCESS );
+    m_aConfigCmdAccess += OUString( CONFIGURATION_CMD_ELEMENT_ACCESS );
 
     m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     m_aConfigPopupAccess += aModuleName;
-    m_aConfigPopupAccess += rtl::OUString( CONFIGURATION_POP_ELEMENT_ACCESS );
+    m_aConfigPopupAccess += OUString( CONFIGURATION_POP_ELEMENT_ACCESS );
 }
 
 ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
@@ -230,7 +230,7 @@ ConfigurationAccess_UICommand::~ConfigurationAccess_UICommand()
 
 
 // XNameAccess
-Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const ::rtl::OUString& rCommandURL )
+Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
 {
     static sal_Int32 nRequests  = 0;
 
@@ -265,7 +265,7 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const ::rtl::OUString
     }
 }
 
-Any SAL_CALL ConfigurationAccess_UICommand::getByName( const ::rtl::OUString& rCommandURL )
+Any SAL_CALL ConfigurationAccess_UICommand::getByName( const OUString& rCommandURL )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     Any aRet( getByNameImpl( rCommandURL ) );
@@ -275,13 +275,13 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
     return aRet;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
+Sequence< OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
 throw ( RuntimeException )
 {
     return getAllCommands();
 }
 
-sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const ::rtl::OUString& rCommandURL )
+sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
 throw (::com::sun::star::uno::RuntimeException)
 {
     return getByNameImpl( rCommandURL ).hasValue();
@@ -301,18 +301,18 @@ throw ( RuntimeException )
     return sal_True;
 }
 
-void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const rtl::OUString& aLabel )
+void ConfigurationAccess_UICommand::fillInfoFromResult( CmdToInfoMap& rCmdInfo, const OUString& aLabel )
 {
     String rStr( aLabel );
     rStr.SearchAndReplaceAllAscii(
         "%PRODUCTNAME", utl::ConfigManager::getProductName() );
-    rCmdInfo.aLabel       = ::rtl::OUString( rStr );
+    rCmdInfo.aLabel       = OUString( rStr );
     rStr = comphelper::string::stripEnd(rStr, '.'); // Remove "..." from string
-    rCmdInfo.aCommandName = ::rtl::OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
+    rCmdInfo.aCommandName = OUString( MnemonicGenerator::EraseAllMnemonicChars( rStr ));
     rCmdInfo.bCommandNameCreated = sal_True;
 }
 
-Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& aCommandURL )
+Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aCommandURL )
 {
     CommandToInfoCache::iterator pIter = m_aCmdInfoCache.find( aCommandURL );
     if ( pIter != m_aCmdInfoCache.end() )
@@ -336,13 +336,13 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const ::rtl::OUString& 
     return Any();
 }
 void ConfigurationAccess_UICommand::impl_fill(const Reference< XNameAccess >& _xConfigAccess,sal_Bool _bPopup,
-                                                std::vector< ::rtl::OUString >& aImageCommandVector,
-                                                std::vector< ::rtl::OUString >& aImageRotateVector,
-                                                std::vector< ::rtl::OUString >& aImageMirrorVector)
+                                                std::vector< OUString >& aImageCommandVector,
+                                                std::vector< OUString >& aImageRotateVector,
+                                                std::vector< OUString >& aImageMirrorVector)
 {
     if ( _xConfigAccess.is() )
     {
-        Sequence< ::rtl::OUString> aNameSeq = _xConfigAccess->getElementNames();
+        Sequence< OUString> aNameSeq = _xConfigAccess->getElementNames();
         const sal_Int32 nCount = aNameSeq.getLength();
         for ( sal_Int32 i = 0; i < nCount; i++ )
         {
@@ -384,9 +384,9 @@ sal_Bool ConfigurationAccess_UICommand::fillCache()
     if ( m_bCacheFilled )
         return sal_True;
 
-    std::vector< ::rtl::OUString > aImageCommandVector;
-    std::vector< ::rtl::OUString > aImageRotateVector;
-    std::vector< ::rtl::OUString > aImageMirrorVector;
+    std::vector< OUString > aImageCommandVector;
+    std::vector< OUString > aImageRotateVector;
+    std::vector< OUString > aImageMirrorVector;
 
     impl_fill(m_xConfigAccess,sal_False,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
     impl_fill(m_xConfigAccessPopups,sal_True,aImageCommandVector,aImageRotateVector,aImageMirrorVector);
@@ -404,12 +404,12 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
 {
     if ( m_xGenericUICommands.is() && !m_bGenericDataRetrieved )
     {
-        Sequence< rtl::OUString > aCommandNameSeq;
+        Sequence< OUString > aCommandNameSeq;
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aCommandNameSeq )
-                m_aCommandRotateImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandRotateImageList, aCommandNameSeq );
+                    OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST )) >>= aCommandNameSeq )
+                m_aCommandRotateImageList = comphelper::concatSequences< OUString >( m_aCommandRotateImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)
         {
@@ -422,8 +422,8 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         try
         {
             if ( m_xGenericUICommands->getByName(
-                    rtl::OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aCommandNameSeq )
-                m_aCommandMirrorImageList = comphelper::concatSequences< rtl::OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
+                    OUString( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST )) >>= aCommandNameSeq )
+                m_aCommandMirrorImageList = comphelper::concatSequences< OUString >( m_aCommandMirrorImageList, aCommandNameSeq );
         }
         catch (const RuntimeException&)
         {
@@ -439,7 +439,7 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
     return sal_True;
 }
 
-Any ConfigurationAccess_UICommand::getInfoFromCommand( const rtl::OUString& rCommandURL )
+Any ConfigurationAccess_UICommand::getInfoFromCommand( const OUString& rCommandURL )
 {
     Any a;
 
@@ -475,7 +475,7 @@ Any ConfigurationAccess_UICommand::getInfoFromCommand( const rtl::OUString& rCom
     return a;
 }
 
-Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
+Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 {
     // SAFE
     ResetableGuard aLock( m_aLock );
@@ -493,18 +493,18 @@ Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
 
         try
         {
-            Sequence< ::rtl::OUString > aNameSeq = m_xConfigAccess->getElementNames();
+            Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();
 
             if ( m_xGenericUICommands.is() )
             {
                 // Create concat list of supported user interface commands of the module
-                Sequence< ::rtl::OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
+                Sequence< OUString > aGenericNameSeq = m_xGenericUICommands->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
 
                 aNameSeq.realloc( nCount1 + nCount2 );
-                ::rtl::OUString* pNameSeq = aNameSeq.getArray();
-                const ::rtl::OUString* pGenericSeq = aGenericNameSeq.getConstArray();
+                OUString* pNameSeq = aNameSeq.getArray();
+                const OUString* pGenericSeq = aGenericNameSeq.getConstArray();
                 for ( sal_uInt32 i = 0; i < nCount2; i++ )
                     pNameSeq[nCount1+i] = pGenericSeq[i];
             }
@@ -519,7 +519,7 @@ Sequence< rtl::OUString > ConfigurationAccess_UICommand::getAllCommands()
         }
     }
 
-    return Sequence< rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
@@ -529,7 +529,7 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 
     try
     {
-        aPropValue.Name  = rtl::OUString( "nodepath" );
+        aPropValue.Name  = OUString( "nodepath" );
         aPropValue.Value <<= m_aConfigCmdAccess;
         aArgs[0] <<= aPropValue;
 
@@ -630,7 +630,7 @@ UICommandDescription::UICommandDescription( const Reference< XComponentContext >
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericUICommand( "GenericCommands" );
+    OUString aGenericUICommand( "GenericCommands" );
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, m_xContext );
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");
@@ -655,16 +655,16 @@ UICommandDescription::~UICommandDescription()
 void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 {
     m_xModuleManager.set( ModuleManager::create( m_xContext ) );
-    Sequence< rtl::OUString > aElementNames = m_xModuleManager->getElementNames();
+    Sequence< OUString > aElementNames = m_xModuleManager->getElementNames();
     Sequence< PropertyValue > aSeq;
-    ::rtl::OUString                  aModuleIdentifier;
+    OUString                  aModuleIdentifier;
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
         aModuleIdentifier = aElementNames[i];
         if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
-            ::rtl::OUString aCommandStr;
+            OUString aCommandStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
             {
                 if ( aSeq[y].Name.equalsAscii(_pName) )
@@ -684,12 +684,12 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
         }
     } // for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
 }
-Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const ::rtl::OUString& _sName)
+Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const OUString& _sName)
 {
     return new ConfigurationAccess_UICommand( _sName, m_xGenericUICommands, m_xContext );
 }
 
-Any SAL_CALL UICommandDescription::getByName( const ::rtl::OUString& aName )
+Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::getByName" );
@@ -700,7 +700,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     ModuleToCommandFileMap::const_iterator pM2CIter = m_aModuleToCommandFileMap.find( aName );
     if ( pM2CIter != m_aModuleToCommandFileMap.end() )
     {
-        ::rtl::OUString aCommandFile( pM2CIter->second );
+        OUString aCommandFile( pM2CIter->second );
         UICommandsHashMap::iterator pIter = m_aUICommandsHashMap.find( aCommandFile );
         if ( pIter != m_aUICommandsHashMap.end() )
         {
@@ -731,13 +731,13 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     return a;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL UICommandDescription::getElementNames()
+Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
 throw (::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::getElementNames" );
     ResetableGuard aLock( m_aLock );
 
-    Sequence< rtl::OUString > aSeq( m_aModuleToCommandFileMap.size() );
+    Sequence< OUString > aSeq( m_aModuleToCommandFileMap.size() );
 
     sal_Int32 n = 0;
     ModuleToCommandFileMap::const_iterator pIter = m_aModuleToCommandFileMap.begin();
@@ -750,7 +750,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return aSeq;
 }
 
-sal_Bool SAL_CALL UICommandDescription::hasByName( const ::rtl::OUString& aName )
+sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
 throw (::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::hasByName" );

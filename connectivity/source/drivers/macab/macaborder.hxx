@@ -44,7 +44,7 @@ namespace connectivity
             sal_Bool m_bAscending;
 
         public:
-            MacabSimpleOrder(MacabHeader *header, ::rtl::OUString &sColumnName, sal_Bool bAscending);
+            MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, sal_Bool bAscending);
 
             virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const;
         };

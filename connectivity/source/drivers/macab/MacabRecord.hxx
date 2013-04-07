@@ -59,8 +59,8 @@ namespace connectivity
                 macabfield *get(const sal_Int32 i) const;
 
                 static sal_Int32 compareFields(const macabfield *_field1, const macabfield *_field2);
-                static macabfield *createMacabField(const ::rtl::OUString _newFieldString, const ABPropertyType _abtype);
-                static ::rtl::OUString fieldToString(const macabfield *_aField);
+                static macabfield *createMacabField(const OUString _newFieldString, const ABPropertyType _abtype);
+                static OUString fieldToString(const macabfield *_aField);
 
         };
     }

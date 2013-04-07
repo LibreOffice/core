@@ -183,7 +183,7 @@ extern "C" int LockEntrySequence_endelement_callback(
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
+bool LockEntrySequence::createFromXML( const OString & rInData,
                                        uno::Sequence<
                                                 ucb::LockEntry > & rOutData )
 {

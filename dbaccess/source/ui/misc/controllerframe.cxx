@@ -223,7 +223,7 @@ namespace dbaui
         {
             if ( _rData.m_xDocEventBroadcaster.is() )
             {
-                ::rtl::OUString sEventName = _bActive ? rtl::OUString("OnFocus") : rtl::OUString("OnUnfocus");
+                OUString sEventName = _bActive ? OUString("OnFocus") : OUString("OnUnfocus");
                 Reference< XController2 > xController( _rData.m_rController.getXController(), UNO_QUERY_THROW );
                 _rData.m_xDocEventBroadcaster->notifyDocumentEvent( sEventName, xController, Any() );
             }
@@ -299,7 +299,7 @@ namespace dbaui
     void FrameWindowActivationListener::impl_checkDisposed_throw() const
     {
         if ( !m_pData )
-            throw DisposedException( ::rtl::OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
+            throw DisposedException( OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
     }
 
     //--------------------------------------------------------------------

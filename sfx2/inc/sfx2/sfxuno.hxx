@@ -68,8 +68,8 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 
 // Macros to convert string -> unicode and unicode -> string.
 // We use UTF8 everytime. Its the best way to do this!
-#define S2U(STRING)                             ::rtl::OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
-#define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
+#define S2U(STRING)                             OStringToOUString(STRING, RTL_TEXTENCODING_UTF8)
+#define U2S(STRING)                             OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 //________________________________________________________________________________________________________________________
 //  macros for declaration and definition of uno-services
@@ -111,13 +111,13 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 //************************************************************************************************************************
 #define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                         \
     /* XServiceInfo */                                                                                                          \
-    virtual rtl::OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );                                 \
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& sServiceName ) throw( css::uno::RuntimeException );         \
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );        \
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );                                 \
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException );         \
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException );        \
                                                                                                                                 \
     /* Helper for XServiceInfo */                                                                                               \
-    static css::uno::Sequence< rtl::OUString > impl_getStaticSupportedServiceNames();                                           \
-    static rtl::OUString impl_getStaticImplementationName();                                                                    \
+    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();                                           \
+    static OUString impl_getStaticImplementationName();                                                                    \
                                                                                                                                 \
     /* Helper for registry */                                                                                                   \
     static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
@@ -480,16 +480,16 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 #define SFX_IMPL_XSERVICEINFO( IMPLCLASS, IMPLSERVICENAME, IMPLNAME )                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    rtl::OUString SAL_CALL IMPLCLASS::getImplementationName() throw( css::uno::RuntimeException )                                                   \
+    OUString SAL_CALL IMPLCLASS::getImplementationName() throw( css::uno::RuntimeException )                                                   \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    sal_Bool SAL_CALL IMPLCLASS::supportsService( const rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
+    sal_Bool SAL_CALL IMPLCLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
     {                                                                                                                                               \
-        css::uno::Sequence< rtl::OUString > seqServiceNames = getSupportedServiceNames();                                                           \
-        const rtl::OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
+        css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();                                                           \
+        const OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
         for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )                                                              \
         {                                                                                                                                           \
             if ( pArray[nCounter] == sServiceName )                                                                                                 \
@@ -501,23 +501,23 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    css::uno::Sequence< rtl::OUString > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                          \
+    css::uno::Sequence< OUString > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                          \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    css::uno::Sequence< rtl::OUString > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                            \
+    css::uno::Sequence< OUString > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                            \
     {                                                                                                                                               \
-        css::uno::Sequence< rtl::OUString > seqServiceNames( 1 );                                                                                   \
-        seqServiceNames.getArray() [0] = rtl::OUString::createFromAscii( IMPLSERVICENAME );                                                         \
+        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                   \
+        seqServiceNames.getArray() [0] = OUString::createFromAscii( IMPLSERVICENAME );                                                         \
         return seqServiceNames ;                                                                                                                    \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    rtl::OUString IMPLCLASS::impl_getStaticImplementationName()                                                                                     \
+    OUString IMPLCLASS::impl_getStaticImplementationName()                                                                                     \
     {                                                                                                                                               \
-        return rtl::OUString::createFromAscii( IMPLNAME );                                                                                          \
+        return OUString::createFromAscii( IMPLNAME );                                                                                          \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for registry */                                                                                                                       \
@@ -537,16 +537,16 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 #define SFX_IMPL_XSERVICEINFO_CTX( IMPLCLASS, IMPLSERVICENAME, IMPLNAME )                                                                           \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    rtl::OUString SAL_CALL IMPLCLASS::getImplementationName() throw( css::uno::RuntimeException )                                                   \
+    OUString SAL_CALL IMPLCLASS::getImplementationName() throw( css::uno::RuntimeException )                                                   \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    sal_Bool SAL_CALL IMPLCLASS::supportsService( const rtl::OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
+    sal_Bool SAL_CALL IMPLCLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException )                           \
     {                                                                                                                                               \
-        css::uno::Sequence< rtl::OUString > seqServiceNames = getSupportedServiceNames();                                                           \
-        const rtl::OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
+        css::uno::Sequence< OUString > seqServiceNames = getSupportedServiceNames();                                                           \
+        const OUString*         pArray          = seqServiceNames.getConstArray();                                                             \
         for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )                                                              \
         {                                                                                                                                           \
             if ( pArray[nCounter] == sServiceName )                                                                                                 \
@@ -558,23 +558,23 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
     }                                                                                                                                               \
                                                                                                                                                     \
     /* XServiceInfo */                                                                                                                              \
-    css::uno::Sequence< rtl::OUString > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                          \
+    css::uno::Sequence< OUString > SAL_CALL IMPLCLASS::getSupportedServiceNames() throw( css::uno::RuntimeException )                          \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    css::uno::Sequence< rtl::OUString > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                            \
+    css::uno::Sequence< OUString > IMPLCLASS::impl_getStaticSupportedServiceNames()                                                            \
     {                                                                                                                                               \
-        css::uno::Sequence< rtl::OUString > seqServiceNames( 1 );                                                                                   \
-        seqServiceNames.getArray() [0] = rtl::OUString::createFromAscii( IMPLSERVICENAME );                                                         \
+        css::uno::Sequence< OUString > seqServiceNames( 1 );                                                                                   \
+        seqServiceNames.getArray() [0] = OUString::createFromAscii( IMPLSERVICENAME );                                                         \
         return seqServiceNames ;                                                                                                                    \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for XServiceInfo */                                                                                                                   \
-    rtl::OUString IMPLCLASS::impl_getStaticImplementationName()                                                                                     \
+    OUString IMPLCLASS::impl_getStaticImplementationName()                                                                                     \
     {                                                                                                                                               \
-        return rtl::OUString::createFromAscii( IMPLNAME );                                                                                          \
+        return OUString::createFromAscii( IMPLNAME );                                                                                          \
     }                                                                                                                                               \
                                                                                                                                                     \
     /* Helper for registry */                                                                                                                       \
@@ -628,7 +628,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, css::uno::Sequence< css::be
 //************************************************************************************************************************
 #define IF_NAME_CREATECOMPONENTFACTORY(CLASS)                                                                           \
                                                                                                                         \
-    if ( CLASS::impl_getStaticImplementationName().equals( rtl::OUString::createFromAscii( pImplementationName ) ) )    \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )    \
     {                                                                                                                   \
         CREATEFACTORY ( CLASS )                                                                                         \
     }

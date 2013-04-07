@@ -32,9 +32,6 @@
 
 #include "event.hxx"
 
-
-using ::rtl::OUString;
-
 namespace DOM { namespace events {
 
 typedef ::cppu::ImplInheritanceHelper1< CEvent, XMutationEvent >

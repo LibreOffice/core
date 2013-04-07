@@ -58,7 +58,7 @@ namespace dbaui
     //= OGeneralPage
     //=========================================================================
     //-------------------------------------------------------------------------
-    OGeneralPage::OGeneralPage( Window* pParent, const rtl::OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
+    OGeneralPage::OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems )
         :OGenericAdministrationPage( pParent, "PageGeneral", _rUIXMLDescription, _rItems )
         ,m_pSpecialMessage              ( NULL )
         ,m_eNotSupportedKnownType       ( ::dbaccess::DST_UNKNOWN )

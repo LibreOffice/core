@@ -72,7 +72,7 @@ class LogoTextStatusbarController : public svt::StatusbarController
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        rtl::OUString   m_aLogoText;
+        OUString   m_aLogoText;
 };
 
 }

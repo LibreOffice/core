@@ -52,7 +52,6 @@ namespace svx
     using namespace ::com::sun::star::linguistic2;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
-    using ::rtl::OUString;
 
     //-------------------------------------------------------------------------
     namespace
@@ -614,12 +613,12 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::FillSuggestions( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions )
+    void HangulHanjaConversionDialog::FillSuggestions( const ::com::sun::star::uno::Sequence< OUString >& _rSuggestions )
     {
         m_aSuggestions.Clear();
 
-        const ::rtl::OUString* pSuggestions = _rSuggestions.getConstArray();
-        const ::rtl::OUString* pSuggestionsEnd = _rSuggestions.getConstArray() + _rSuggestions.getLength();
+        const OUString* pSuggestions = _rSuggestions.getConstArray();
+        const OUString* pSuggestionsEnd = _rSuggestions.getConstArray() + _rSuggestions.getLength();
         while ( pSuggestions != pSuggestionsEnd )
             m_aSuggestions.InsertEntry( *pSuggestions++ );
 
@@ -779,7 +778,7 @@ namespace svx
 
     //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetCurrentString( const String& _rNewString,
-        const Sequence< ::rtl::OUString >& _rSuggestions, bool _bOriginatesFromDocument )
+        const Sequence< OUString >& _rSuggestions, bool _bOriginatesFromDocument )
     {
         m_pPlayground->SetCurrentText( _rNewString );
 
@@ -941,9 +940,9 @@ namespace svx
         Reference< XNameAccess >    xNameAccess = Reference< XNameAccess >( xNameCont, UNO_QUERY );
         if( xNameAccess.is() )
         {
-            Sequence< ::rtl::OUString >     aDictNames( xNameAccess->getElementNames() );
+            Sequence< OUString >     aDictNames( xNameAccess->getElementNames() );
 
-            const ::rtl::OUString*          pDic = aDictNames.getConstArray();
+            const OUString*          pDic = aDictNames.getConstArray();
             sal_Int32                       nCount = aDictNames.getLength();
 
             sal_Int32                       i;

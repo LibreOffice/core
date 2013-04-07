@@ -60,15 +60,15 @@ Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XM
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OUserSettingsDialog::getImplementationName() throw(RuntimeException)
+OUString SAL_CALL OUserSettingsDialog::getImplementationName() throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeException)
+OUString OUserSettingsDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString("org.openoffice.comp.dbu.OUserSettingsDialog");
+    return OUString("org.openoffice.comp.dbu.OUserSettingsDialog");
 }
 
 //-------------------------------------------------------------------------
@@ -81,7 +81,7 @@ Reference< XInterface > SAL_CALL OUserSettingsDialog::Create(const Reference< XM
 ::comphelper::StringSequence OUserSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.UserAdministrationDialog");
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.UserAdministrationDialog");
     return aSupported;
 }
 

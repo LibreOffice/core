@@ -32,16 +32,16 @@ namespace util
 {
 
 //------------------------------------------------------------------------------
-inline ::System::String ^ ustring_to_String( ::rtl::OUString const & ustr )
+inline ::System::String ^ ustring_to_String( OUString const & ustr )
 {
     return gcnew ::System::String( ustr.getStr(), 0, ustr.getLength() );
 }
 //------------------------------------------------------------------------------
-inline ::rtl::OUString String_to_ustring( ::System::String ^ str )
+inline OUString String_to_ustring( ::System::String ^ str )
 {
     OSL_ASSERT( sizeof (wchar_t) == sizeof (sal_Unicode) );
     pin_ptr<wchar_t const> chars = PtrToStringChars( str );
-    return ::rtl::OUString( chars, str->Length );
+    return OUString( chars, str->Length );
 }
 
 template< typename T >

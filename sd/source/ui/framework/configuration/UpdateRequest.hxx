@@ -70,13 +70,13 @@ public:
     /** Return a human readable string representation.  This is used for
         debugging purposes.
     */
-    virtual ::rtl::OUString SAL_CALL getName (void)
+    virtual OUString SAL_CALL getName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
-    virtual void SAL_CALL setName (const ::rtl::OUString& rName)
+    virtual void SAL_CALL setName (const OUString& rName)
         throw (::com::sun::star::uno::RuntimeException);
 };
 

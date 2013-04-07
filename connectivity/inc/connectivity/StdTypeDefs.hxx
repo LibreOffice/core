@@ -29,11 +29,11 @@ namespace rtl { class OUString; }
 
 namespace connectivity
 {
-    typedef ::std::vector< ::rtl::OUString>         TStringVector;
+    typedef ::std::vector< OUString>         TStringVector;
     typedef ::std::vector< sal_Int32>               TIntVector;
     typedef ::std::map<sal_Int32,sal_Int32>         TInt2IntMap;
-    typedef ::std::map< ::rtl::OUString,sal_Int32>  TString2IntMap;
-    typedef ::std::map< sal_Int32,::rtl::OUString>  TInt2StringMap;
+    typedef ::std::map< OUString,sal_Int32>  TString2IntMap;
+    typedef ::std::map< sal_Int32,OUString>  TInt2StringMap;
 }
 
 #endif // CONNECTIVITY_STDTYPEDEFS_HXX

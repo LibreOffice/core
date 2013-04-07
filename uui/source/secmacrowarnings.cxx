@@ -324,7 +324,7 @@ void MacroWarning::FitControls()
 }
 
 void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
-                               const ::rtl::OUString& aODFVersion,
+                               const OUString& aODFVersion,
                                const css::uno::Sequence< security::DocumentSignatureInformation >& rInfos )
 {
     mxStore = rxStore;
@@ -333,7 +333,7 @@ void MacroWarning::SetStorage( const css::uno::Reference < css::embed::XStorage 
     if( mxStore.is() && nCnt > 0 )
     {
         mpInfos = &rInfos;
-        rtl::OUString aCN_Id("CN");
+        OUString aCN_Id("CN");
         String      s;
         s = GetContentPart( rInfos[ 0 ].Signer->getSubjectName(), aCN_Id );
 
@@ -353,7 +353,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        rtl::OUString aCN_Id("CN");
+        OUString aCN_Id("CN");
         String  s;
         s = GetContentPart( mxCert->getSubjectName(), aCN_Id );
         maSignsFI.SetText( s );

@@ -51,7 +51,6 @@
 #error SwScrollNaviPopup-CTOR static Array falsche Size. Wurden neue IDs zugefuegt ??
 #endif
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -77,8 +76,8 @@ SwTbxInsertCtrl::~SwTbxInsertCtrl()
 void SAL_CALL SwTbxInsertCtrl::update() throw (uno::RuntimeException)
 {
     ToolBox& rTbx = GetToolBox();
-    rtl::OUString aSlotURL( "slot:" );
-    aSlotURL += rtl::OUString::valueOf( sal_Int32( nLastSlotId ));
+    OUString aSlotURL( "slot:" );
+    aSlotURL += OUString::valueOf( sal_Int32( nLastSlotId ));
     Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
 
     rTbx.SetItemImage(GetId(), aImage);
@@ -103,8 +102,8 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
             if( nLastSlotId )
                 nId = nLastSlotId;
 
-            rtl::OUString aSlotURL( "slot:" );
-            aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+            OUString aSlotURL( "slot:" );
+            aSlotURL += OUString::valueOf( sal_Int32( nId ));
             ToolBox& rBox = GetToolBox();
             Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
             rBox.SetItemImage(GetId(), aImage);
@@ -296,7 +295,7 @@ IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
             default:
                 pChar = ".uno:InsertFieldCtrl";
         }
-        Dispatch( rtl::OUString::createFromAscii( pChar ),aArgs );
+        Dispatch( OUString::createFromAscii( pChar ),aArgs );
     }
     else
     {
@@ -500,11 +499,11 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         SfxBoolItem aNext(FN_SCROLL_NEXT_PREV, NID_NEXT == nSet);
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = rtl::OUString( "ScrollNextPrev" );
+        aArgs[0].Name = OUString( "ScrollNextPrev" );
         aNext.QueryValue( a );
         aArgs[0].Value = a;
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
-                                     rtl::OUString( ".uno:ScrollNextPrev" ),
+                                     OUString( ".uno:ScrollNextPrev" ),
                                      aArgs );
     }
     return 0;
@@ -681,12 +680,12 @@ void    SwZoomBox_Impl::Select()
         {
             Any a;
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = rtl::OUString( "PreviewZoom" );
+            aArgs[0].Name = OUString( "PreviewZoom" );
             aItem.QueryValue( a );
             aArgs[0].Value = a;
             SfxToolBoxControl::Dispatch(
                 m_xDispatchProvider,
-                rtl::OUString( ".uno:PreviewZoom" ),
+                OUString( ".uno:PreviewZoom" ),
                 aArgs );
         }
 

@@ -60,9 +60,6 @@
 using namespace psp;
 using namespace com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
-using ::rtl::OUStringToOString;
 
 /*
  *  static helpers
@@ -79,19 +76,19 @@ typedef int(*faxFunction)(OUString&);
 static faxFunction pFaxNrFunction           = NULL;
 }
 
-static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
+static OUString getPdfDir( const PrinterInfo& rInfo )
 {
-    rtl::OUString aDir;
+    OUString aDir;
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
         if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
             aDir = aToken.getToken( 1, '=', nPos );
             if( aDir.isEmpty() && getenv( "HOME" ) )
-                aDir = rtl::OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
+                aDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
             break;
         }
     }
@@ -227,14 +224,14 @@ static bool passFileToCommandLine( const OUString& rFilename, const OUString& rC
     bool bSuccess = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    rtl::OString aCmdLine(rtl::OUStringToOString(rCommandLine, aEncoding));
-    rtl::OString aFilename(rtl::OUStringToOString(rFilename, aEncoding));
+    OString aCmdLine(OUStringToOString(rCommandLine, aEncoding));
+    OString aFilename(OUStringToOString(rFilename, aEncoding));
 
     bool bPipe = aCmdLine.indexOf( "(TMP)" ) != -1 ? false : true;
 
     // setup command line for exec
     if( ! bPipe )
-        aCmdLine = aCmdLine.replaceAll(rtl::OString("(TMP)"), aFilename);
+        aCmdLine = aCmdLine.replaceAll(OString("(TMP)"), aFilename);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "%s commandline: \"%s\"\n",
@@ -362,7 +359,7 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
         bSuccess = false;
 
     // clean up temp file
-    unlink(rtl::OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr());
+    unlink(OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr());
 
     return bSuccess;
 #else
@@ -465,7 +462,7 @@ void SalGenericInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            rtl::OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
             if( aToken.match( "pdf=" ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
@@ -487,7 +484,7 @@ void SalGenericInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
     mbPrinterInit = true;
 }
 
-rtl::OUString SalGenericInstance::GetDefaultPrinter()
+OUString SalGenericInstance::GetDefaultPrinter()
 {
     mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
@@ -642,7 +639,7 @@ sal_Bool PspSalInfoPrinter::SetData(
                     TenMuToPt( pJobSetup->mnPaperWidth ),
                     TenMuToPt( pJobSetup->mnPaperHeight ) );
             else
-                aPaper = rtl::OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
+                aPaper = OStringToOUString(PaperInfo::toPSName(pJobSetup->mePaperFormat), RTL_TEXTENCODING_ISO_8859_1);
 
             pKey = aData.m_pParser->getKey( OUString("PageSize") );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
@@ -779,7 +776,7 @@ sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
     return pKey ? pKey->countValues() : 0;
 }
 
-rtl::OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
+OUString PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -879,9 +876,9 @@ PspSalPrinter::~PspSalPrinter()
 {
 }
 
-static rtl::OUString getTmpName()
+static OUString getTmpName()
 {
-    rtl::OUString aTmp, aSys;
+    OUString aTmp, aSys;
     osl_createTempFile( NULL, NULL, &aTmp.pData );
     osl_getSystemPathFromFileURL( aTmp.pData, &aSys.pData );
 
@@ -889,9 +886,9 @@ static rtl::OUString getTmpName()
 }
 
 sal_Bool PspSalPrinter::StartJob(
-    const rtl::OUString* pFileName,
-    const rtl::OUString& rJobName,
-    const rtl::OUString& rAppName,
+    const OUString* pFileName,
+    const OUString& rJobName,
+    const OUString& rAppName,
     sal_uLong nCopies,
     bool bCollate,
     bool bDirect,
@@ -902,8 +899,8 @@ sal_Bool PspSalPrinter::StartJob(
 
     m_bFax      = false;
     m_bPdf      = false;
-    m_aFileName = pFileName ? *pFileName : rtl::OUString();
-    m_aTmpFile  = rtl::OUString();
+    m_aFileName = pFileName ? *pFileName : OUString();
+    m_aTmpFile  = OUString();
     m_nCopies   = nCopies;
     m_bCollate  = bCollate;
 
@@ -930,7 +927,7 @@ sal_Bool PspSalPrinter::StartJob(
             m_aTmpFile = getTmpName();
             nMode = S_IRUSR | S_IWUSR;
 
-            ::boost::unordered_map< OUString, OUString, ::rtl::OUStringHash >::const_iterator it;
+            ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             it = pJobSetup->maValueMap.find( OUString("FAX#") );
             if( it != pJobSetup->maValueMap.end() )
                 m_aFaxNr = it->second;
@@ -948,7 +945,7 @@ sal_Bool PspSalPrinter::StartJob(
 
             if( m_aFileName.isEmpty() )
             {
-                rtl::OUStringBuffer aFileName( getPdfDir( rInfo ) );
+                OUStringBuffer aFileName( getPdfDir( rInfo ) );
                 aFileName.append( '/' );
                 aFileName.append( rJobName );
                 aFileName.appendAscii( ".pdf" );
@@ -1061,18 +1058,18 @@ struct PDFNewJobParameters
 
 struct PDFPrintFile
 {
-    rtl::OUString       maTmpURL;
+    OUString       maTmpURL;
     PDFNewJobParameters maParameters;
 
-    PDFPrintFile( const rtl::OUString& i_rURL, const PDFNewJobParameters& i_rNewParameters )
+    PDFPrintFile( const OUString& i_rURL, const PDFNewJobParameters& i_rNewParameters )
     : maTmpURL( i_rURL )
     , maParameters( i_rNewParameters ) {}
 };
 
-sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::OUString& i_rJobName, const rtl::OUString& i_rAppName,
+sal_Bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJobName, const OUString& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
-    OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? rtl::OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
+    OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
     // mark for endjob
     m_bIsPDFWriterJob = true;
     // reset IsLastPage
@@ -1174,7 +1171,7 @@ sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::O
                 {
                     // this is not a file URL, but it should
                     // form it into a osl friendly file URL
-                    rtl::OUString aTmp;
+                    OUString aTmp;
                     osl_getFileURLFromSystemPath( aPDFUrl.pData, &aTmp.pData );
                     aPDFUrl = aTmp;
                 }
@@ -1270,7 +1267,7 @@ sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::O
                                     break;
                             }
                         } while( nBytesRead == buffer.size() );
-                        rtl::OUStringBuffer aBuf( i_rJobName.getLength() + 8 );
+                        OUStringBuffer aBuf( i_rJobName.getLength() + 8 );
                         aBuf.append( i_rJobName );
                         if( i > 0 || nCurJob > 0 )
                         {
@@ -1295,7 +1292,7 @@ sal_Bool PspSalPrinter::StartJob( const rtl::OUString* i_pFileName, const rtl::O
         for( size_t i = 0; i < aPDFFiles.size(); i++ )
         {
             osl_removeFile( aPDFFiles[i].maTmpURL.pData );
-            OSL_TRACE( "removed print PDF file %s", rtl::OUStringToOString( aPDFFiles[i].maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE( "removed print PDF file %s", OUStringToOString( aPDFFiles[i].maTmpURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
     }
 

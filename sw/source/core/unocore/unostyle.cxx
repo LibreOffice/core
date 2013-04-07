@@ -420,15 +420,15 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     uno::Any aVal;
     sal_Bool bTemp = sal_True;
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[0] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[0] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_TEXT_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[1] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[1] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_FRAME_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[2] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[2] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_PAGE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[3] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[3] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_LOAD_NUMBERING_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     aVal.setValue(&bTemp, ::getCppuBooleanType());
-    pArray[4] = beans::PropertyValue(rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[4] = beans::PropertyValue(OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_OVERWRITE_STYLES)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
     return aSeq;
 }
 
@@ -960,12 +960,12 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SwXStyleFamily::getPropertySe
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL SwXStyleFamily::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
 
@@ -1002,22 +1002,22 @@ uno::Any SAL_CALL SwXStyleFamily::getPropertyValue( const ::rtl::OUString& sProp
     return aRet;
 }
 
-void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
@@ -1059,11 +1059,11 @@ public:
     SwStyleProperties_Impl(const SfxItemPropertyMap& rMap);
     ~SwStyleProperties_Impl();
 
-    sal_Bool    SetProperty(const ::rtl::OUString& rName, uno::Any aVal);
-    sal_Bool    GetProperty(const ::rtl::OUString& rName, uno::Any*& rpAny);
-    sal_Bool    ClearProperty( const ::rtl::OUString& rPropertyName );
+    sal_Bool    SetProperty(const OUString& rName, uno::Any aVal);
+    sal_Bool    GetProperty(const OUString& rName, uno::Any*& rpAny);
+    sal_Bool    ClearProperty( const OUString& rPropertyName );
     void    ClearAllProperties( );
-    void        GetProperty(const ::rtl::OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
+    void        GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
 
     const PropertyEntryVector_t& GetPropertyVector() const {return aPropertyEntries; }
 
@@ -1087,7 +1087,7 @@ SwStyleProperties_Impl::~SwStyleProperties_Impl()
     delete[] pAnyArr;
 }
 
-sal_Bool SwStyleProperties_Impl::SetProperty(const ::rtl::OUString& rName, uno::Any aVal)
+sal_Bool SwStyleProperties_Impl::SetProperty(const OUString& rName, uno::Any aVal)
 {
     sal_uInt16 nPos = 0;
     sal_Bool bRet = sal_False;
@@ -1136,7 +1136,7 @@ void SwStyleProperties_Impl::ClearAllProperties( )
     }
 }
 
-sal_Bool SwStyleProperties_Impl::GetProperty(const ::rtl::OUString& rName, uno::Any*& rpAny )
+sal_Bool SwStyleProperties_Impl::GetProperty(const OUString& rName, uno::Any*& rpAny )
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nPos = 0;
@@ -2290,7 +2290,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     }
 
                     pSeq[n].Name  = GetCommandContextByIndex(n);
-                    pSeq[n].Value <<= rtl::OUString( aStyleName );
+                    pSeq[n].Value <<= OUString( aStyleName );
                 }
                 aRet <<= aSeq;
             }
@@ -3601,7 +3601,7 @@ sal_Bool SwXAutoStyles::hasElements(  ) throw(uno::RuntimeException)
     return sal_True;
 }
 
-uno::Any SwXAutoStyles::getByName(const rtl::OUString& Name)
+uno::Any SwXAutoStyles::getByName(const OUString& Name)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Any aRet;
@@ -3616,7 +3616,7 @@ uno::Any SwXAutoStyles::getByName(const rtl::OUString& Name)
     return aRet;
 }
 
-uno::Sequence< rtl::OUString > SwXAutoStyles::getElementNames(void)
+uno::Sequence< OUString > SwXAutoStyles::getElementNames(void)
             throw( uno::RuntimeException )
 {
     uno::Sequence< OUString > aNames(AUTOSTYLE_FAMILY_COUNT);
@@ -3627,7 +3627,7 @@ uno::Sequence< rtl::OUString > SwXAutoStyles::getElementNames(void)
     return aNames;
 }
 
-sal_Bool SwXAutoStyles::hasByName(const rtl::OUString& Name)
+sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
             throw( uno::RuntimeException )
 {
     if( Name.compareToAscii("CharacterStyles") == 0 ||
@@ -3927,7 +3927,7 @@ void SwXAutoStyle::removeVetoableChangeListener( const OUString& /*PropertyName*
 }
 
 void SwXAutoStyle::setPropertyValues(
-        const uno::Sequence< ::rtl::OUString >& /*aPropertyNames*/,
+        const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Sequence< uno::Any >& /*aValues*/ )
             throw (beans::PropertyVetoException, lang::IllegalArgumentException,
                 lang::WrappedTargetException, uno::RuntimeException)
@@ -3980,7 +3980,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 }
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
-        const uno::Sequence< ::rtl::OUString >& rPropertyNames )
+        const uno::Sequence< OUString >& rPropertyNames )
             throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -4004,7 +4004,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
 }
 
 void SwXAutoStyle::addPropertiesChangeListener(
-        const uno::Sequence< ::rtl::OUString >& /*aPropertyNames*/,
+        const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
             throw (uno::RuntimeException)
 {
@@ -4017,7 +4017,7 @@ void SwXAutoStyle::removePropertiesChangeListener(
 }
 
 void SwXAutoStyle::firePropertiesChangeEvent(
-        const uno::Sequence< ::rtl::OUString >& /*aPropertyNames*/,
+        const uno::Sequence< OUString >& /*aPropertyNames*/,
         const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
             throw (uno::RuntimeException)
 {
@@ -4052,7 +4052,7 @@ uno::Any SwXAutoStyle::getPropertyDefault( const OUString& rPropertyName )
 }
 
 uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
-        const uno::Sequence< ::rtl::OUString >& rPropertyNames )
+        const uno::Sequence< OUString >& rPropertyNames )
             throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     if( !pSet.get() )
@@ -4092,13 +4092,13 @@ void SwXAutoStyle::setAllPropertiesToDefault(  )
 }
 
 void SwXAutoStyle::setPropertiesToDefault(
-        const uno::Sequence< ::rtl::OUString >& /*aPropertyNames*/ )
+        const uno::Sequence< OUString >& /*aPropertyNames*/ )
             throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
 }
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
-        const uno::Sequence< ::rtl::OUString >& /*aPropertyNames*/ )
+        const uno::Sequence< OUString >& /*aPropertyNames*/ )
             throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     uno::RuntimeException)
 {

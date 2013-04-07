@@ -116,10 +116,10 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------------
-    void OModule::registerImplementation( const ::rtl::OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
+    void OModule::registerImplementation( const OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
     {
-        ComponentDescription aComponent( _rImplementationName, _rServiceNames, ::rtl::OUString(), _pCreateFunction, _pFactoryFunction );
+        ComponentDescription aComponent( _rImplementationName, _rServiceNames, OUString(), _pCreateFunction, _pFactoryFunction );
         registerImplementation( aComponent );
     }
 
@@ -127,12 +127,12 @@ namespace comphelper
     void* OModule::getComponentFactory( const sal_Char* _pImplementationName )
     {
         Reference< XInterface > xFactory( getComponentFactory(
-            ::rtl::OUString::createFromAscii( _pImplementationName ) ) );
+            OUString::createFromAscii( _pImplementationName ) ) );
         return xFactory.get();
     }
 
     //--------------------------------------------------------------------------
-    Reference< XInterface > OModule::getComponentFactory( const ::rtl::OUString& _rImplementationName )
+    Reference< XInterface > OModule::getComponentFactory( const OUString& _rImplementationName )
     {
         Reference< XInterface > xReturn;
 

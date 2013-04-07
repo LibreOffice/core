@@ -44,11 +44,11 @@
 
 namespace {
 
-rtl::OUString toString(css::lang::Locale const & locale) {
+OUString toString(css::lang::Locale const & locale) {
     SAL_WARN_IF(
         locale.Language.indexOf('-') != -1, "svl",
         "Locale language \"" << locale.Language << "\" contains \"-\"");
-    rtl::OUStringBuffer buf(locale.Language);
+    OUStringBuffer buf(locale.Language);
     SAL_WARN_IF(
         locale.Country.isEmpty() && !locale.Variant.isEmpty(), "svl",
         "Locale has empty country but non-empty variant \"" << locale.Variant
@@ -113,7 +113,7 @@ void SvxAsianConfig::SetCharDistanceCompression(sal_Int16 value) {
 css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
     const
 {
-    css::uno::Sequence< rtl::OUString > ns(
+    css::uno::Sequence< OUString > ns(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
             impl_->context)->
         getElementNames());
@@ -128,8 +128,8 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
 }
 
 bool SvxAsianConfig::GetStartEndChars(
-    css::lang::Locale const & locale, rtl::OUString & startChars,
-    rtl::OUString & endChars) const
+    css::lang::Locale const & locale, OUString & startChars,
+    OUString & endChars) const
 {
     css::uno::Reference< css::container::XNameAccess > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
@@ -143,20 +143,20 @@ bool SvxAsianConfig::GetStartEndChars(
     css::uno::Reference< css::beans::XPropertySet > el(
         v.get< css::uno::Reference< css::beans::XPropertySet > >(),
         css::uno::UNO_SET_THROW);
-    startChars = el->getPropertyValue("StartCharacters").get< rtl::OUString >();
-    endChars = el->getPropertyValue("EndCharacters").get< rtl::OUString >();
+    startChars = el->getPropertyValue("StartCharacters").get< OUString >();
+    endChars = el->getPropertyValue("EndCharacters").get< OUString >();
     return true;
 }
 
 void SvxAsianConfig::SetStartEndChars(
-    css::lang::Locale const & locale, rtl::OUString const * startChars,
-    rtl::OUString const * endChars)
+    css::lang::Locale const & locale, OUString const * startChars,
+    OUString const * endChars)
 {
     assert((startChars == 0) == (endChars == 0));
     css::uno::Reference< css::container::XNameContainer > set(
         officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
             impl_->batch, impl_->context));
-    rtl::OUString name(toString(locale));
+    OUString name(toString(locale));
     if (startChars == 0) {
         try {
             set->removeByName(name);

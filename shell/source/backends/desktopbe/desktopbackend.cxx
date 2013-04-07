@@ -53,15 +53,15 @@
 
 namespace {
 
-rtl::OUString SAL_CALL getDefaultImplementationName() {
-    return rtl::OUString(
+OUString SAL_CALL getDefaultImplementationName() {
+    return OUString(
             "com.sun.star.comp.configuration.backend.DesktopBackend");
 }
 
-css::uno::Sequence< rtl::OUString > SAL_CALL getDefaultSupportedServiceNames() {
-    rtl::OUString name(
+css::uno::Sequence< OUString > SAL_CALL getDefaultSupportedServiceNames() {
+    OUString name(
             "com.sun.star.configuration.backend.DesktopBackend");
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
+    return css::uno::Sequence< OUString >(&name, 1);
 }
 
 class Default:
@@ -75,15 +75,15 @@ public:
 private:
     virtual ~Default() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return getDefaultImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
     { return ServiceName == getSupportedServiceNames()[0]; }
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return getDefaultSupportedServiceNames(); }
 
@@ -92,7 +92,7 @@ private:
     { return css::uno::Reference< css::beans::XPropertySetInfo >(); }
 
     virtual void SAL_CALL setPropertyValue(
-        rtl::OUString const &, css::uno::Any const &)
+        OUString const &, css::uno::Any const &)
         throw (
             css::beans::UnknownPropertyException,
             css::beans::PropertyVetoException,
@@ -100,13 +100,13 @@ private:
             css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     virtual css::uno::Any SAL_CALL getPropertyValue(
-        rtl::OUString const & PropertyName)
+        OUString const & PropertyName)
         throw (
             css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException, css::uno::RuntimeException);
 
     virtual void SAL_CALL addPropertyChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -114,7 +114,7 @@ private:
     {}
 
     virtual void SAL_CALL removePropertyChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XPropertyChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -122,7 +122,7 @@ private:
     {}
 
     virtual void SAL_CALL addVetoableChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -130,7 +130,7 @@ private:
     {}
 
     virtual void SAL_CALL removeVetoableChangeListener(
-        rtl::OUString const &,
+        OUString const &,
         css::uno::Reference< css::beans::XVetoableChangeListener > const &)
         throw (
             css::beans::UnknownPropertyException,
@@ -138,18 +138,18 @@ private:
     {}
 };
 
-void Default::setPropertyValue(rtl::OUString const &, css::uno::Any const &)
+void Default::setPropertyValue(OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString("setPropertyValue not supported"),
+        OUString("setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
-css::uno::Any Default::getPropertyValue(rtl::OUString const & PropertyName)
+css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -168,7 +168,7 @@ css::uno::Any Default::getPropertyValue(rtl::OUString const & PropertyName)
 
 css::uno::Reference< css::uno::XInterface > createBackend(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    rtl::OUString const & name)
+    OUString const & name)
 {
     try {
         return css::uno::Reference< css::lang::XMultiComponentFactory >(
@@ -181,8 +181,8 @@ css::uno::Reference< css::uno::XInterface > createBackend(
         // Assuming these exceptions indicate that the service is not installed:
         OSL_TRACE(
             "createInstance(%s) failed with %s",
-            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         return css::uno::Reference< css::uno::XInterface >();
     }
 }
@@ -190,12 +190,12 @@ css::uno::Reference< css::uno::XInterface > createBackend(
 css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    rtl::OUString desktop;
+    OUString desktop;
     css::uno::Reference< css::uno::XCurrentContext > current(
         css::uno::getCurrentContext());
     if (current.is()) {
         current->getValueByName(
-            rtl::OUString("system.desktop-environment")) >>=
+            OUString("system.desktop-environment")) >>=
             desktop;
     }
 
@@ -204,17 +204,17 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
     if ( desktop == "GNOME" ) {
         backend = createBackend(
             context,
-            rtl::OUString(
+            OUString(
                     "com.sun.star.configuration.backend.GconfBackend"));
     } else if ( desktop == "KDE" ) {
         backend = createBackend(
             context,
-            rtl::OUString(
+            OUString(
                     "com.sun.star.configuration.backend.KDEBackend"));
     } else if ( desktop == "KDE4" ) {
         backend = createBackend(
             context,
-            rtl::OUString(
+            OUString(
                     "com.sun.star.configuration.backend.KDE4Backend"));
     }
     return backend.is()

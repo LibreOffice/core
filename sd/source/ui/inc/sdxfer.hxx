@@ -67,10 +67,10 @@ public:
 
     sal_Bool                            HasSourceDoc( const SdDrawDocument* pDoc ) const { return( mpSourceDoc == pDoc ); }
 
-    void                            SetPageBookmarks( const std::vector<rtl::OUString>& rPageBookmarks, sal_Bool bPersistent );
+    void                            SetPageBookmarks( const std::vector<OUString>& rPageBookmarks, sal_Bool bPersistent );
     sal_Bool                            IsPageTransferable() const { return mbPageTransferable; }
     sal_Bool                            HasPageBookmarks() const { return( mpPageDocShell && ( !maPageBookmarks.empty() ) ); }
-    const std::vector<rtl::OUString>& GetPageBookmarks() const { return maPageBookmarks; }
+    const std::vector<OUString>& GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*                 GetPageDocShell() const { return mpPageDocShell; }
 
     sal_Bool                        SetTableRTF( SdDrawDocument*, const ::com::sun::star::datatransfer::DataFlavor& );
@@ -119,7 +119,7 @@ private:
 
     SfxObjectShellRef               maDocShellRef;
     ::sd::DrawDocShell*             mpPageDocShell;
-    std::vector<rtl::OUString>      maPageBookmarks;
+    std::vector<OUString>      maPageBookmarks;
     TransferableDataHelper*         mpOLEDataHelper;
     TransferableObjectDescriptor*   mpObjDesc;
     const ::sd::View*               mpSdView;

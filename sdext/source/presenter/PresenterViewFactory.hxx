@@ -79,12 +79,12 @@ class PresenterViewFactory
       public PresenterViewFactoryInterfaceBase
 {
 public:
-    static const ::rtl::OUString msCurrentSlidePreviewViewURL;
-    static const ::rtl::OUString msNextSlidePreviewViewURL;
-    static const ::rtl::OUString msNotesViewURL;
-    static const ::rtl::OUString msToolBarViewURL;
-    static const ::rtl::OUString msSlideSorterURL;
-    static const ::rtl::OUString msHelpViewURL;
+    static const OUString msCurrentSlidePreviewViewURL;
+    static const OUString msNextSlidePreviewViewURL;
+    static const OUString msNotesViewURL;
+    static const OUString msToolBarViewURL;
+    static const OUString msSlideSorterURL;
+    static const OUString msHelpViewURL;
 
     /** Create a new instance of this class and register it as resource
         factory in the drawing framework of the given controller.
@@ -98,8 +98,8 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory (void);
 
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static (void);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));
@@ -127,7 +127,7 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
         css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
-    typedef ::std::map<rtl::OUString, ViewResourceDescriptor> ResourceContainer;
+    typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
     ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
 
     PresenterViewFactory (

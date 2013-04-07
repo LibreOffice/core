@@ -180,7 +180,7 @@ namespace connectivity { namespace hsqldb
                 if ( !m_bReadOnly )
                 {
                     Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                    xStmt->execute( ::rtl::OUString( "CHECKPOINT DEFRAG" ) );
+                    xStmt->execute( OUString( "CHECKPOINT DEFRAG" ) );
                 }
             }
 
@@ -208,7 +208,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const ::rtl::OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
+    Reference< XGraphic > SAL_CALL OHsqlConnection::getTableIcon( const OUString& _TableName, ::sal_Int32 /*_ColorMode*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
 
@@ -220,7 +220,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const ::rtl::OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
+    Reference< XInterface > SAL_CALL OHsqlConnection::getTableEditor( const Reference< XDatabaseDocumentUI >& _DocumentUI, const OUString& _TableName ) throw (IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         MethodGuard aGuard( *this );
 
@@ -231,7 +231,7 @@ namespace connectivity { namespace hsqldb
         if ( !_DocumentUI.is() )
         {
             ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_DOCUMENTUI));
+            const OUString sError( aResources.getResourceString(STR_NO_DOCUMENTUI));
             throw IllegalArgumentException(
                 sError,
                 *this,
@@ -261,7 +261,7 @@ namespace connectivity { namespace hsqldb
         catch( const Exception& )
         {
             ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceString(STR_NO_TABLE_CONTAINER));
+            const OUString sError( aResources.getResourceString(STR_NO_TABLE_CONTAINER));
             throw WrappedTargetException( sError ,*this, ::cppu::getCaughtException() );
         }
 
@@ -271,7 +271,7 @@ namespace connectivity { namespace hsqldb
 
     //TODO: resource
     // -------------------------------------------------------------------
-    void OHsqlConnection::impl_checkExistingTable_throw( const ::rtl::OUString& _rTableName )
+    void OHsqlConnection::impl_checkExistingTable_throw( const OUString& _rTableName )
     {
         bool bDoesExist = false;
         try
@@ -290,7 +290,7 @@ namespace connectivity { namespace hsqldb
         if ( !bDoesExist )
         {
             ::connectivity::SharedResources aResources;
-            const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+            const OUString sError( aResources.getResourceStringWithSubstitution(
                 STR_NO_TABLENAME,
                 "$tablename$", _rTableName
             ));
@@ -299,7 +299,7 @@ namespace connectivity { namespace hsqldb
     }
 
     // -------------------------------------------------------------------
-    bool OHsqlConnection::impl_isTextTable_nothrow( const ::rtl::OUString& _rTableName )
+    bool OHsqlConnection::impl_isTextTable_nothrow( const OUString& _rTableName )
     {
         bool bIsTextTable = false;
         try
@@ -308,11 +308,11 @@ namespace connectivity { namespace hsqldb
 
             // split the fully qualified name
             Reference< XDatabaseMetaData > xMetaData( xMe->getMetaData(), UNO_QUERY_THROW );
-            ::rtl::OUString sCatalog, sSchema, sName;
+            OUString sCatalog, sSchema, sName;
             ::dbtools::qualifiedNameComponents( xMetaData, _rTableName, sCatalog, sSchema, sName, ::dbtools::eComplete );
 
             // get the table information
-            ::rtl::OUStringBuffer sSQL;
+            OUStringBuffer sSQL;
             sSQL.appendAscii( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
             HTools::appendTableFilterCrit( sSQL, sCatalog, sSchema, sName, true );
             sSQL.appendAscii( " AND TABLE_TYPE = 'TABLE'" );
@@ -323,7 +323,7 @@ namespace connectivity { namespace hsqldb
             if ( xTableHsqlType->next() )   // might not succeed in case of VIEWs
             {
                 Reference< XRow > xValueAccess( xTableHsqlType, UNO_QUERY_THROW );
-                ::rtl::OUString sTableType = xValueAccess->getString( 1 );
+                OUString sTableType = xValueAccess->getString( 1 );
                 bIsTextTable = sTableType == "TEXT";
             }
         }
@@ -347,18 +347,18 @@ namespace connectivity { namespace hsqldb
                 xProvider.set( GraphicProvider::create(m_xContext) );
 
             // assemble the image URL
-            ::rtl::OUStringBuffer aImageURL;
+            OUStringBuffer aImageURL;
             // load the graphic from the global graphic repository
             aImageURL.appendAscii( "private:graphicrepository/" );
             // the relative path within the images.zip
             aImageURL.appendAscii( "database/" );
             aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
             // the name of the graphic to use
-            ::rtl::OUString sImageURL( aImageURL.makeStringAndClear() );
+            OUString sImageURL( aImageURL.makeStringAndClear() );
 
             // ask the provider to obtain a graphic
             Sequence< PropertyValue > aMediaProperties( 1 );
-            aMediaProperties[0].Name = ::rtl::OUString( "URL" );
+            aMediaProperties[0].Name = OUString( "URL" );
             aMediaProperties[0].Value <<= sImageURL;
             xGraphic = xProvider->queryGraphic( aMediaProperties );
             OSL_ENSURE( xGraphic.is(), "OHsqlConnection::impl_getTextTableIcon_nothrow: the provider did not give us a graphic object!" );

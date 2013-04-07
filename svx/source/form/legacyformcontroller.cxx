@@ -97,9 +97,9 @@ namespace svxform
         virtual void SAL_CALL activateLast(  ) throw (RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     private:
         const Reference< form::runtime::XFormController >   m_xDelegator;
@@ -178,16 +178,16 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL LegacyFormController::getImplementationName(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.svx.LegacyFormController" );
+        return OUString( "org.openoffice.comp.svx.LegacyFormController" );
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL LegacyFormController::supportsService( const ::rtl::OUString& _serviceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL LegacyFormController::supportsService( const OUString& _serviceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( getSupportedServiceNames() );
-        const ::rtl::OUString* pServices = aServices.getConstArray();
+        Sequence< OUString > aServices( getSupportedServiceNames() );
+        const OUString* pServices = aServices.getConstArray();
         for ( sal_Int32 i = 0; i < aServices.getLength(); ++i, ++pServices )
             if( pServices->equals( _serviceName ) )
                 return sal_True;
@@ -195,11 +195,11 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL LegacyFormController::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices(2);
-        aServices.getArray()[0] = ::rtl::OUString( "com.sun.star.form.FormController" );
-        aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.control.TabController");
+        Sequence< OUString > aServices(2);
+        aServices.getArray()[0] = OUString( "com.sun.star.form.FormController" );
+        aServices.getArray()[1] = OUString("com.sun.star.awt.control.TabController");
         return aServices;
     }
 

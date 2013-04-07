@@ -35,7 +35,7 @@ class OOX_DLLPUBLIC DrawingFragment : public ::oox::core::FragmentHandler2
 public:
     explicit            DrawingFragment(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             Drawing& rDrawing );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >

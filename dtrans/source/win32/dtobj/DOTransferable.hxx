@@ -76,12 +76,12 @@ private:
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
 
     ByteSequence_t SAL_CALL getClipboardData( CFormatEtc& aFormatEtc );
-    rtl::OUString  SAL_CALL synthesizeUnicodeText( );
+    OUString  SAL_CALL synthesizeUnicodeText( );
 
     void SAL_CALL clipDataToByteStream( CLIPFORMAT cf, STGMEDIUM stgmedium, ByteSequence_t& aByteSequence );
 
     ::com::sun::star::uno::Any SAL_CALL byteStreamToAny( ByteSequence_t& aByteStream, const com::sun::star::uno::Type& aRequestedDataType );
-    rtl::OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
+    OUString              SAL_CALL byteStreamToOUString( ByteSequence_t& aByteStream );
 
     LCID SAL_CALL getLocaleFromClipboard( );
 

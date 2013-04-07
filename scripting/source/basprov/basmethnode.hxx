@@ -55,12 +55,12 @@ namespace basprov
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::rtl::OUString m_sScriptingContext;
+    OUString m_sScriptingContext;
         SbMethod* m_pMethod;
         bool m_bIsAppScript;
 
         // properties
-        ::rtl::OUString m_sURI;
+        OUString m_sURI;
         bool m_bEditable;
 
     protected:
@@ -72,7 +72,7 @@ namespace basprov
 
     public:
         BasicMethodNodeImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::rtl::OUString& sScriptingContext,
+            const OUString& sScriptingContext,
             SbMethod* pMethod, bool isAppScript = true );
         virtual ~BasicMethodNodeImpl();
 
@@ -83,7 +83,7 @@ namespace basprov
         DECLARE_XTYPEPROVIDER()
 
         // XBrowseNode
-        virtual ::rtl::OUString SAL_CALL getName(  )
+        virtual OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
@@ -100,20 +100,20 @@ namespace basprov
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL invoke(
-            const ::rtl::OUString& aFunctionName,
+            const OUString& aFunctionName,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
             ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
             throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::script::CannotConvertException,
                    ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
+        virtual void SAL_CALL setValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::script::CannotConvertException,
                    ::com::sun::star::reflection::InvocationTargetException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName )
+        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName )
+        virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
     };
 

@@ -45,7 +45,7 @@ namespace svgio
             virtual ~SvgSymbolNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// viewBox content
             const basegfx::B2DRange* getViewBox() const { return mpViewBox; }

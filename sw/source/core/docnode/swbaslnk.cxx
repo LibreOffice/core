@@ -105,7 +105,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         nFmt == sfx2::LinkManager::RegisterStatusInfoId() )
     {
         // Only a status change - serve Events?
-        ::rtl::OUString sState;
+        OUString sState;
         if( rValue.hasValue() && ( rValue >>= sState ))
         {
             sal_uInt16 nEvent = 0;

@@ -53,7 +53,6 @@
 #include <document.hxx>
 #include <view.hxx>
 
-using rtl::OUString;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -469,7 +468,7 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
         sal_Int32 nIndex,
-        const uno::Sequence< ::rtl::OUString > & /*rRequestedAttributes*/ )
+        const uno::Sequence< OUString > & /*rRequestedAttributes*/ )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -766,7 +765,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::copyText(
         Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
         if ( xClipboard.is() )
         {
-            ::rtl::OUString sText( getTextRange(nStartIndex, nEndIndex) );
+            OUString sText( getTextRange(nStartIndex, nEndIndex) );
 
             ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
@@ -1858,14 +1857,14 @@ sal_Int16 SAL_CALL SmEditAccessible::getAccessibleRole(  )
     return AccessibleRole::PANEL /*TEXT ?*/;
 }
 
-rtl::OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
+OUString SAL_CALL SmEditAccessible::getAccessibleDescription(  )
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     return OUString();  // empty as agreed with product-management
 }
 
-rtl::OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
+OUString SAL_CALL SmEditAccessible::getAccessibleName(  )
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;

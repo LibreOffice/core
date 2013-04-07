@@ -374,7 +374,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
                     {
                         pEntry = InsertEntry( aTitle, aDocumentImage, aDocumentImage, pParent );
                         Any aAny( ::utl::UCBContentHelper::GetProperty( aURL, String("TargetURL"  ) ) );
-                        rtl::OUString aTargetURL;
+                        OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
                             pEntry->SetUserData( new ContentEntry_Impl( aTargetURL, sal_False ) );
                     }
@@ -570,7 +570,7 @@ namespace sfx2 {
 
     struct equalOUString
     {
-        bool operator()( const ::rtl::OUString& rKey1, const ::rtl::OUString& rKey2 ) const
+        bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
         {
             return !!( rKey1 == rKey2 );
         }
@@ -579,20 +579,20 @@ namespace sfx2 {
 
     struct hashOUString
     {
-        size_t operator()( const ::rtl::OUString& rName ) const
+        size_t operator()( const OUString& rName ) const
         {
             return rName.hashCode();
         }
     };
 
-    typedef ::boost::unordered_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
+    typedef ::boost::unordered_map< OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \
     it =                                                                                            \
     aInfo.insert( sfx2::KeywordInfo::value_type( aToken, 0 ) ).first;                               \
     if ( ( tmp = it->second++ ) != 0 )                                                              \
-       nPos = aIndexCB.InsertEntry( aToken + rtl::OUString( append, tmp ) );                        \
+       nPos = aIndexCB.InsertEntry( aToken + OUString( append, tmp ) );                        \
     else                                                                                            \
        nPos = aIndexCB.InsertEntry( aToken )
 
@@ -629,7 +629,7 @@ void IndexTabPage_Impl::InitializeIndex()
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropSeq( 4 );
+            ::com::sun::star::uno::Sequence< OUString > aPropSeq( 4 );
             aPropSeq[0] = PROPERTY_KEYWORDLIST;
             aPropSeq[1] = PROPERTY_KEYWORDREF;
             aPropSeq[2] = PROPERTY_ANCHORREF;
@@ -639,10 +639,10 @@ void IndexTabPage_Impl::InitializeIndex()
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aAnySeq =
                   aCnt.getPropertyValues( aPropSeq );
 
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aKeywordList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aKeywordRefList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aAnchorRefList;
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > aTitleRefList;
+            ::com::sun::star::uno::Sequence< OUString > aKeywordList;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aKeywordRefList;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aAnchorRefList;
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > aTitleRefList;
 
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
@@ -650,18 +650,18 @@ void IndexTabPage_Impl::InitializeIndex()
                 sal_Bool insert;
                 sal_uInt16 nPos;
                 int ndx,tmp;
-                ::rtl::OUString aIndex, aTempString;
-                ::rtl::OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
+                OUString aIndex, aTempString;
+                OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
                 sfx2::KeywordInfo::iterator it;
 
                 for ( int i = 0; i < aKeywordList.getLength(); ++i )
                 {
                     // abi: Do not copy, but use references
-                    const ::rtl::OUString& aKeywordPair = aKeywordList[i];
+                    const OUString& aKeywordPair = aKeywordList[i];
                     DBG_ASSERT( !aKeywordPair.isEmpty(), "invalid help index" );
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRefList = aKeywordRefList[i];
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAnchorList = aAnchorRefList[i];
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aTitleList = aTitleRefList[i];
+                    const ::com::sun::star::uno::Sequence< OUString >& aRefList = aKeywordRefList[i];
+                    const ::com::sun::star::uno::Sequence< OUString >& aAnchorList = aAnchorRefList[i];
+                    const ::com::sun::star::uno::Sequence< OUString >& aTitleList = aTitleRefList[i];
 
                     DBG_ASSERT( aRefList.getLength() == aAnchorList.getLength(),"reference list and title list of different length" );
 
@@ -677,7 +677,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         }
                     }
                     else
-                        aIndex = ::rtl::OUString();
+                        aIndex = OUString();
 
                     // Assume the token is trimed
                     UNIFY_AND_INSERT_TOKEN( aKeywordPair );
@@ -976,7 +976,7 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
     {
         String aUserData;
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-        ::rtl::OUString aTemp;
+        OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
             aUserData = String( aTemp );
@@ -1012,7 +1012,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        rtl::OUString aText = aSearchED.GetEntry(i);
+        OUString aText = aSearchED.GetEntry(i);
         aUserData += String(INetURLObject::encode(
             aText, INetURLObject::PART_UNO_PARAM_VALUE, '%',
             INetURLObject::ENCODE_ALL ));
@@ -1020,7 +1020,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
     }
 
     aUserData = comphelper::string::stripEnd(aUserData, ';');
-    Any aUserItem = makeAny( ::rtl::OUString( aUserData ) );
+    Any aUserItem = makeAny( OUString( aUserData ) );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 }
 
@@ -1217,8 +1217,8 @@ sal_Bool SearchTabPage_Impl::OpenKeyword( const String& rKeyword )
 void GetBookmarkEntry_Impl
 (
     Sequence< PropertyValue >& aBookmarkEntry,
-    ::rtl::OUString& rTitle,
-    ::rtl::OUString& rURL
+    OUString& rTitle,
+    OUString& rURL
 )
 {
     for ( int i = 0; i < aBookmarkEntry.getLength(); i++ )
@@ -1247,13 +1247,13 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     // save bookmarks to configuration
     SvtHistoryOptions aHistOpt;
     aHistOpt.Clear( eHELPBOOKMARKS );
-    rtl::OUString sEmpty;
+    OUString sEmpty;
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         String aTitle = GetEntry(i);
         String* pURL = (String*)(sal_uIntPtr)GetEntryData(i);
-        aHistOpt.AppendItem( eHELPBOOKMARKS, rtl::OUString( *pURL ), sEmpty, rtl::OUString( aTitle ), sEmpty );
+        aHistOpt.AppendItem( eHELPBOOKMARKS, OUString( *pURL ), sEmpty, OUString( aTitle ), sEmpty );
         delete pURL;
     }
 }
@@ -1279,7 +1279,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
                 {
                     String* pURL = (String*)(sal_uIntPtr)GetEntryData( nPos );
                     RemoveEntry( nPos );
-                    rtl::OUString aImageURL = IMAGE_URL;
+                    OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
                     nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL, false ) );
                     SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( *pURL ) ) );
@@ -1366,8 +1366,8 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
     Sequence< Sequence< PropertyValue > > aBookmarkSeq;
     aBookmarkSeq = SvtHistoryOptions().GetList( eHELPBOOKMARKS );
 
-    ::rtl::OUString aTitle;
-    ::rtl::OUString aURL;
+    OUString aTitle;
+    OUString aURL;
 
     sal_uInt32 i, nCount = aBookmarkSeq.getLength();
     for ( i = 0; i < nCount; ++i )
@@ -1452,18 +1452,18 @@ String BookmarksTabPage_Impl::GetSelectEntry() const
 
 void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rURL )
 {
-    rtl::OUString aImageURL = IMAGE_URL;
+    OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
     sal_uInt16 nPos = aBookmarksBox.InsertEntry( rTitle, SvFileInformationManager::GetImage( aImageURL, false ) );
     aBookmarksBox.SetEntryData( nPos, (void*)(sal_uIntPtr)( new String( rURL ) ) );
 }
 
-::rtl::OUString SfxHelpWindow_Impl::buildHelpURL(const ::rtl::OUString& sFactory        ,
-                                                 const ::rtl::OUString& sContent        ,
-                                                 const ::rtl::OUString& sAnchor         ,
+OUString SfxHelpWindow_Impl::buildHelpURL(const OUString& sFactory        ,
+                                                 const OUString& sContent        ,
+                                                 const OUString& sAnchor         ,
                                                        sal_Bool         bUseQuestionMark)
 {
-    ::rtl::OUStringBuffer sHelpURL(256);
+    OUStringBuffer sHelpURL(256);
     sHelpURL.append(HELP_URL);
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
@@ -1473,7 +1473,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     return sHelpURL.makeStringAndClear();
 }
 
-void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bool bAddToHistory)
+void SfxHelpWindow_Impl::loadHelpContent(const OUString& sHelpURL, sal_Bool bAddToHistory)
 {
     Reference< XComponentLoader > xLoader(getTextFrame(), UNO_QUERY);
     if (!xLoader.is())
@@ -2006,7 +2006,7 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
 // remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
 static void lcl_disableLayoutOfFrame(const Reference< XFrame >& xFrame)
 {
-    static const ::rtl::OUString PROP_LAYOUT_MANAGER("LayoutManager");
+    static const OUString PROP_LAYOUT_MANAGER("LayoutManager");
 
     Reference< XPropertySet > xPropSet(xFrame, UNO_QUERY_THROW);
     xPropSet->setPropertyValue(PROP_LAYOUT_MANAGER, makeAny(Reference< XLayoutManager >()));
@@ -2160,9 +2160,9 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInterface > xConfig;
-    ::rtl::OUString sPath( PATH_OFFICE_FACTORIES );
+    OUString sPath( PATH_OFFICE_FACTORIES );
     sPath += sCurrentFactory;
-    ::rtl::OUString sKey( KEY_HELP_ON_OPEN );
+    OUString sKey( KEY_HELP_ON_OPEN );
 
     // Attention: This check boy knows two states:
     // 1) Reading of the config key fails with an exception or by getting an empty Any (!) => check box must be hidden
@@ -2195,7 +2195,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 
         if ( xConfiguration.is() )
         {
-            ::rtl::OUString sTemp;
+            OUString sTemp;
             sKey = KEY_UI_NAME;
             try
             {
@@ -2213,7 +2213,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
         {
             // set module name in checkbox text
             String sText( aOnStartupText );
-            sText.SearchAndReplace( rtl::OUString("%MODULENAME"), sModuleName );
+            sText.SearchAndReplace( OUString("%MODULENAME"), sModuleName );
             aOnStartupCB.SetText( sText );
             // and show it
             aOnStartupCB.Show();
@@ -2479,7 +2479,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, CheckBox*, pBox )
     if ( xConfiguration.is() )
     {
         sal_Bool bChecked = pBox->IsChecked();
-        ::rtl::OUString sPath( PATH_OFFICE_FACTORIES );
+        OUString sPath( PATH_OFFICE_FACTORIES );
         sPath += sCurrentFactory;
         try
         {
@@ -2575,7 +2575,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aURL.Complete = ".uno:SelectTextMode";
             PARSE_URL( aURL );
             Reference < XDispatch > xDisp = xProv.is() ?
-                    xProv->queryDispatch( aURL, rtl::OUString(), 0 ) : Reference < XDispatch >();
+                    xProv->queryDispatch( aURL, OUString(), 0 ) : Reference < XDispatch >();
             if(xDisp.is())
             {
                 HelpStatusListener_Impl* pStateListener;
@@ -2720,7 +2720,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                 {
                     Reference < XText > xText = xRange->getText();
                     Reference < XPropertySet > xProps( xText->createTextCursorByRange( xRange ), UNO_QUERY );
-                    ::rtl::OUString sStyleName;
+                    OUString sStyleName;
                     if ( xProps->getPropertyValue( "PageStyleName" ) >>= sStyleName )
                     {
                         Reference < XStyleFamiliesSupplier > xStyles( xController->getModel(), UNO_QUERY );
@@ -2936,7 +2936,7 @@ void SfxHelpWindow_Impl::LoadConfig()
         bIndex = aViewOpt.IsVisible();
         String aUserData;
         Any aUserItem = aViewOpt.GetUserItem( USERITEM_NAME );
-        rtl::OUString aTemp;
+        OUString aTemp;
         if ( aUserItem >>= aTemp )
         {
             aUserData = String( aTemp );
@@ -2994,16 +2994,16 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += ';';
     aUserData += OUString::number( aWinPos.Y() );
 
-    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( rtl::OUString( aUserData ) ) );
+    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
 }
 
 // -----------------------------------------------------------------------
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
-    ::rtl::OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
+    OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
                                                                 "/start",
-                                                                ::rtl::OUString(),
+                                                                OUString(),
                                                                 sal_True);
     loadHelpContent(sHelpURL);
 }
@@ -3031,16 +3031,16 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
     if ( aEntry.Len() < 1 )
         return 0;
 
-    ::rtl::OUString sHelpURL;
+    OUString sHelpURL;
 
-    bool bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString("vnd.sun.star.help"),0);
+    bool bComplete = OUString(aEntry).toAsciiLowerCase().match(OUString("vnd.sun.star.help"),0);
 
     if (bComplete)
-        sHelpURL = ::rtl::OUString(aEntry);
+        sHelpURL = OUString(aEntry);
     else
     {
         String aId;
-        String aAnchor = rtl::OUString('#');
+        String aAnchor = OUString('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
             aId = aEntry.GetToken( 0, '#' );
@@ -3093,7 +3093,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 // -----------------------------------------------------------------------
 
-void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
+void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
                                         sal_Bool         bSuccess)
 {
     INetURLObject aObj( sURL );
@@ -3327,7 +3327,7 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                     if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
                     {
                         ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
-                        rtl::OUString aValue;
+                        OUString aValue;
                         if ( aAny >>= aValue )
                         {
                             String aTitle( aValue );

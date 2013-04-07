@@ -44,9 +44,6 @@ using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 namespace // private
 {
@@ -681,7 +678,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor
   return dp;
 }
 
-bool DataFlavorMapper::isValidMimeContentType(const rtl::OUString& contentType) const
+bool DataFlavorMapper::isValidMimeContentType(const OUString& contentType) const
 {
   bool result = true;
 

@@ -113,13 +113,13 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     uno::Reference<beans::XPropertySet> xPropertySet(aTempAny, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        rtl::OUString sErrorMessage;
+        OUString sErrorMessage;
         xPropertySet->getPropertyValue(sERRMESS) >>= sErrorMessage;
-        rtl::OUString sErrorTitle;
+        OUString sErrorTitle;
         xPropertySet->getPropertyValue(sERRTITLE) >>= sErrorTitle;
-        rtl::OUString sImputMessage;
+        OUString sImputMessage;
         xPropertySet->getPropertyValue(sINPMESS) >>= sImputMessage;
-        rtl::OUString sImputTitle;
+        OUString sImputTitle;
         xPropertySet->getPropertyValue(sINPTITLE) >>= sImputTitle;
         bool bShowErrorMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWERR));
         bool bShowImputMessage = ::cppu::any2bool(xPropertySet->getPropertyValue(sSHOWINP));
@@ -162,8 +162,8 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
             else
             {
                 sal_Int32 nNameIndex(nCount + 1);
-                rtl::OUString sCount(rtl::OUString::valueOf(nNameIndex));
-                rtl::OUString sPrefix("val");
+                OUString sCount(OUString::valueOf(nNameIndex));
+                OUString sPrefix("val");
                 aValidation.sName += sPrefix;
                 aValidation.sName += sCount;
                 aValidationVec.push_back(aValidation);
@@ -175,39 +175,39 @@ bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
     return bAdded;
 }
 
-rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)
+OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMyValidation& aValidation)
 {
     /* ATTENTION! Should the condition to not write sheet::ValidationType_ANY
      * ever be changed, adapt the conditional call of
      * MarkUsedExternalReferences() in
      * ScTableValidationObj::ScTableValidationObj() accordingly! */
-    rtl::OUString sCondition;
+    OUString sCondition;
     if (aValidation.aValidationType != sheet::ValidationType_ANY)
     {
         switch (aValidation.aValidationType)
         {
             //case sheet::ValidationType_CUSTOM
             case sheet::ValidationType_DATE :
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date()"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date()"));
             break;
             case sheet::ValidationType_DECIMAL :
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number()"));
             break;
             case sheet::ValidationType_LIST :
-                sCondition += rtl::OUString("cell-content-is-in-list(");
+                sCondition += OUString("cell-content-is-in-list(");
                 sCondition += aValidation.sFormula1;
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
             break;
             case sheet::ValidationType_TEXT_LEN :
                 if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                     aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
-                    sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length()"));
+                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length()"));
             break;
             case sheet::ValidationType_TIME :
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time()"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time()"));
             break;
             case sheet::ValidationType_WHOLE :
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
             break;
             default:
             {
@@ -221,31 +221,31 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
             !aValidation.sFormula2.isEmpty())))
         {
             if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                sCondition += rtl::OUString(" and ");
+                sCondition += OUString(" and ");
             if (aValidation.aOperator != sheet::ConditionOperator_BETWEEN &&
                 aValidation.aOperator != sheet::ConditionOperator_NOT_BETWEEN)
             {
                 if (aValidation.aValidationType != sheet::ValidationType_TEXT_LEN)
-                    sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
+                    sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content()"));
                 switch (aValidation.aOperator)
                 {
                     case sheet::ConditionOperator_EQUAL :
-                        sCondition += rtl::OUString("=");
+                        sCondition += OUString("=");
                     break;
                     case sheet::ConditionOperator_GREATER :
-                        sCondition += rtl::OUString(">");
+                        sCondition += OUString(">");
                     break;
                     case sheet::ConditionOperator_GREATER_EQUAL :
-                        sCondition += rtl::OUString(">=");
+                        sCondition += OUString(">=");
                     break;
                     case sheet::ConditionOperator_LESS :
-                        sCondition += rtl::OUString("<");
+                        sCondition += OUString("<");
                     break;
                     case sheet::ConditionOperator_LESS_EQUAL :
-                        sCondition += rtl::OUString("<=");
+                        sCondition += OUString("<=");
                     break;
                     case sheet::ConditionOperator_NOT_EQUAL :
-                        sCondition += rtl::OUString("!=");
+                        sCondition += OUString("!=");
                     break;
                     default:
                     {
@@ -259,26 +259,26 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                 if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += rtl::OUString("cell-content-text-length-is-between(");
+                        sCondition += OUString("cell-content-text-length-is-between(");
                     else
-                        sCondition += rtl::OUString("cell-content-text-length-is-not-between(");
+                        sCondition += OUString("cell-content-text-length-is-not-between(");
                 }
                 else
                 {
                     if (aValidation.aOperator == sheet::ConditionOperator_BETWEEN)
-                        sCondition += rtl::OUString("cell-content-is-between(");
+                        sCondition += OUString("cell-content-is-between(");
                     else
-                        sCondition += rtl::OUString("cell-content-is-not-between(");
+                        sCondition += OUString("cell-content-is-not-between(");
                 }
                 sCondition += aValidation.sFormula1;
-                sCondition += rtl::OUString(",");
+                sCondition += OUString(",");
                 sCondition += aValidation.sFormula2;
-                sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                sCondition += OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
             }
         }
         else
             if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
-                sCondition = rtl::OUString();
+                sCondition = OUString();
     }
     if (!sCondition.isEmpty())
     {
@@ -290,15 +290,15 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
     return sCondition;
 }
 
-rtl::OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
+OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
 {
-    rtl::OUString sAddress;
+    OUString sAddress;
     ScRangeStringConverter::GetStringFromAddress( sAddress, aCell, pDoc, ::formula::FormulaGrammar::CONV_OOO );
     return sAddress;
 }
 
 void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
-    const rtl::OUString& sTitle, const rtl::OUString& sOUMessage,
+    const OUString& sTitle, const OUString& sOUMessage,
     const bool bShowMessage, const bool bIsHelpMessage)
 {
     if (!sTitle.isEmpty())
@@ -315,8 +315,8 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     if (!sOUMessage.isEmpty())
     {
         sal_Int32 i(0);
-        rtl::OUStringBuffer sTemp;
-        rtl::OUString sText(convertLineEnd(sOUMessage, LINEEND_LF));
+        OUStringBuffer sTemp;
+        OUString sText(convertLineEnd(sOUMessage, LINEEND_LF));
         bool bPrevCharWasSpace(true);
         while(i < sText.getLength())
         {
@@ -349,7 +349,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
         while (aItr != aEndItr)
         {
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
-            rtl::OUString sCondition(GetCondition(rExport, *aItr));
+            OUString sCondition(GetCondition(rExport, *aItr));
             if (!sCondition.isEmpty())
             {
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
@@ -444,7 +444,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
     }
 }
 
-const rtl::OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
+const OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
 {
     OSL_ENSURE( static_cast<size_t>(nIndex) < aValidationVec.size(), "out of range" );
     return aValidationVec[nIndex].sName;
@@ -862,7 +862,7 @@ void ScFormatRangeStyles::AddNewTable(const sal_Int32 nTable)
         }
 }
 
-bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& rIndex, const bool bIsAutoStyle)
+bool ScFormatRangeStyles::AddStyleName(OUString* rpString, sal_Int32& rIndex, const bool bIsAutoStyle)
 {
     if (bIsAutoStyle)
     {
@@ -896,10 +896,10 @@ bool ScFormatRangeStyles::AddStyleName(rtl::OUString* rpString, sal_Int32& rInde
     }
 }
 
-sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, bool& bIsAutoStyle)
+sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix, bool& bIsAutoStyle)
 {
     sal_Int32 nPrefixLength(rPrefix.getLength());
-    rtl::OUString sTemp(rString.copy(nPrefixLength));
+    OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
     if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1)->equals(rString))
     {
@@ -1101,7 +1101,7 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellR
     pFormatRanges->push_back(aFormatRange);
 }
 
-rtl::OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle)
+OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const bool bIsAutoStyle)
 {
     if (bIsAutoStyle)
         return aAutoStyleNames[nIndex];
@@ -1135,16 +1135,16 @@ ScColumnRowStylesBase::~ScColumnRowStylesBase()
     }
 }
 
-sal_Int32 ScColumnRowStylesBase::AddStyleName(rtl::OUString* pString)
+sal_Int32 ScColumnRowStylesBase::AddStyleName(OUString* pString)
 {
     aStyleNames.push_back(pString);
     return aStyleNames.size() - 1;
 }
 
-sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
+sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix)
 {
     sal_Int32 nPrefixLength(rPrefix.getLength());
-    rtl::OUString sTemp(rString.copy(nPrefixLength));
+    OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
     if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1)->equals(rString))
         return nIndex - 1;
@@ -1166,7 +1166,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
     }
 }
 
-rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
+OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 {
     if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
@@ -1230,7 +1230,7 @@ void ScColumnStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 n
     aTables[nTable][nField] = aStyle;
 }
 
-rtl::OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
+OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
 {
     bool bTemp;
     return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField, bTemp));
@@ -1310,7 +1310,7 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nSta
     r.insert_back(nStartField, nEndField+1, nStringIndex);
 }
 
-rtl::OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
+OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
 {
     return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField));
 }

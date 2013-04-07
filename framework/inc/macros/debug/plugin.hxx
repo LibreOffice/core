@@ -51,7 +51,7 @@
     #define LOG_URLSEND( SFRAMENAME, SSENDMODE, SINTERNALURL, SEXTERNALURL )                                \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                     \
+                    OStringBuffer sBuffer(1024);                                                     \
                     sBuffer.append( "PlugInFrame [ \""  );                                                  \
                     sBuffer.append( SFRAMENAME          );                                                  \
                     sBuffer.append( "\" ] send "        );                                                  \
@@ -77,7 +77,7 @@
     #define LOG_URLRECEIVE( SFRAMENAME, SRECEIVEMODE, SEXTERNALURL, SINTERNALURL )                          \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                     \
+                    OStringBuffer sBuffer(1024);                                                     \
                     sBuffer.append( "PlugInFrame [ \""      );                                              \
                     sBuffer.append( U2B( SFRAMENAME )       );                                              \
                     sBuffer.append( "\" ] receive "         );                                              \
@@ -99,7 +99,7 @@
     #define LOG_PARAMETER_NEWURL( SFRAMENAME, SMIMETYPE, SURL, sFILTER, AANY )                              \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                     \
+                    OStringBuffer sBuffer(1024);                                                     \
                     sBuffer.append( "PlugInFrame [ \""              );                                      \
                     sBuffer.append( U2B( SFRAMENAME )               );                                      \
                     sBuffer.append( "\" ] called with newURL( \""   );                                      \
@@ -130,7 +130,7 @@
     #define LOG_PARAMETER_NEWSTREAM( SFRAMENAME, SMIMETYPE, SURL, SFILTER, XSTREAM, AANY )                  \
                 /* Use new scope to declare local private variables! */                                     \
                 {                                                                                           \
-                    ::rtl::OStringBuffer sBuffer(1024);                                                     \
+                    OStringBuffer sBuffer(1024);                                                     \
                     sBuffer.append( "PlugInFrame [ \""              );                                      \
                     sBuffer.append( U2B( SFRAMENAME )               );                                      \
                     sBuffer.append( "\" ] called with newStream( \"");                                      \

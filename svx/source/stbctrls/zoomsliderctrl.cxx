@@ -353,7 +353,7 @@ sal_Bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     aZoomSliderItem.QueryValue( a );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = rtl::OUString( "ZoomSlider" );
+    aArgs[0].Name = OUString( "ZoomSlider" );
     aArgs[0].Value = a;
 
     execute( aArgs );
@@ -396,7 +396,7 @@ sal_Bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
             aZoomSliderItem.QueryValue( a );
 
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = rtl::OUString( "ZoomSlider" );
+            aArgs[0].Name = OUString( "ZoomSlider" );
             aArgs[0].Value = a;
 
             execute( aArgs );

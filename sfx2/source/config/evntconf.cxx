@@ -161,17 +161,17 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(3);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aType(STAR_BASIC );
-            ::rtl::OUString aLib  = pMacro->GetLibName();
-            ::rtl::OUString aMacro = pMacro->GetMacName();
+            OUString aType(STAR_BASIC );
+            OUString aLib  = pMacro->GetLibName();
+            OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
             pValues[ 0 ].Value <<= aType;
 
-            pValues[ 1 ].Name = ::rtl::OUString(PROP_LIBRARY );
+            pValues[ 1 ].Name = OUString(PROP_LIBRARY );
             pValues[ 1 ].Value <<= aLib;
 
-            pValues[ 2 ].Name = ::rtl::OUString(PROP_MACRO_NAME );
+            pValues[ 2 ].Name = OUString(PROP_MACRO_NAME );
             pValues[ 2 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -181,13 +181,13 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aLib   = pMacro->GetLibName();
-            ::rtl::OUString aMacro = pMacro->GetMacName();
+            OUString aLib   = pMacro->GetLibName();
+            OUString aMacro = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
             pValues[ 0 ].Value <<= aLib;
 
-            pValues[ 1 ].Name = ::rtl::OUString(PROP_SCRIPT );
+            pValues[ 1 ].Name = OUString(PROP_SCRIPT );
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -197,12 +197,12 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             uno::Sequence < beans::PropertyValue > aProperties(2);
             beans::PropertyValue *pValues = aProperties.getArray();
 
-            ::rtl::OUString aMacro  = pMacro->GetMacName();
+            OUString aMacro  = pMacro->GetMacName();
 
-            pValues[ 0 ].Name = ::rtl::OUString(PROP_EVENT_TYPE );
-            pValues[ 0 ].Value <<= ::rtl::OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+            pValues[ 0 ].Name = OUString(PROP_EVENT_TYPE );
+            pValues[ 0 ].Value <<= OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
 
-            pValues[ 1 ].Name = ::rtl::OUString(PROP_MACRO_NAME );
+            pValues[ 1 ].Name = OUString(PROP_MACRO_NAME );
             pValues[ 1 ].Value <<= aMacro;
 
             aEventData <<= aProperties;
@@ -222,7 +222,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 }
 
 //--------------------------------------------------------------------------
-void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const SvxMacro* pMacro )
+void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMacro* pMacro )
 {
     uno::Reference < document::XEventsSupplier > xSupplier;
     if ( pDoc )
@@ -263,7 +263,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, rtl::OUString aEventName, const 
 }
 
 //--------------------------------------------------------------------------------------------------------
-void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
+void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     boost::scoped_ptr<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )

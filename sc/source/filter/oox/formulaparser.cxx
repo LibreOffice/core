@@ -45,7 +45,6 @@ using namespace ::com::sun::star::sheet::ReferenceFlags;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -548,7 +547,7 @@ private:
     // finalize token sequence ------------------------------------------------
 
     virtual const FunctionInfo* resolveBadFuncName( const OUString& rTokenData ) const;
-    virtual ::rtl::OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
+    virtual OUString resolveDefinedName( sal_Int32 nTokenIndex ) const;
 
 protected:
     const sal_Int32     mnMaxApiCol;                /// Maximum column index in own document.

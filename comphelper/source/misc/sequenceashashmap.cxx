@@ -211,7 +211,7 @@ sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
            pCheck != rCheck.end()  ;
          ++pCheck                  )
     {
-        const ::rtl::OUString& sCheckName  = pCheck->first;
+        const OUString& sCheckName  = pCheck->first;
         const css::uno::Any&   aCheckValue = pCheck->second;
               const_iterator   pFound      = find(sCheckName);
 
@@ -233,7 +233,7 @@ void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
            pUpdate != rUpdate.end()  ;
          ++pUpdate                   )
     {
-        const ::rtl::OUString& sName  = pUpdate->first;
+        const OUString& sName  = pUpdate->first;
         const css::uno::Any&   aValue = pUpdate->second;
 
         (*this)[sName] = aValue;

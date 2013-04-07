@@ -33,7 +33,7 @@
 namespace tools {
 
 void appendUnixShellWord(
-    rtl::OStringBuffer * accumulator, rtl::OString const & text)
+    OStringBuffer * accumulator, OString const & text)
 {
     OSL_ASSERT(accumulator != NULL);
     if (text.isEmpty()) {

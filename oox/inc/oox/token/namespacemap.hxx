@@ -29,7 +29,7 @@ namespace oox {
 // ============================================================================
 
 /** A map that contains all XML namespace URLs used in the filters. */
-struct NamespaceMap : public ::std::map< sal_Int32, ::rtl::OUString > { NamespaceMap(); };
+struct NamespaceMap : public ::std::map< sal_Int32, OUString > { NamespaceMap(); };
 
 /** Thread-save singleton of a map of all supported XML namespace URLs. */
 struct StaticNamespaceMap : public ::rtl::Static< NamespaceMap, StaticNamespaceMap > {};

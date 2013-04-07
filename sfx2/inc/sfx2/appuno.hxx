@@ -65,10 +65,10 @@ public:
     SfxMacroLoader( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
     {}
 
-    static ErrCode loadMacro( const ::rtl::OUString& aURL, ::com::sun::star::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( ::com::sun::star::uno::RuntimeException );
+    static ErrCode loadMacro( const OUString& aURL, ::com::sun::star::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( ::com::sun::star::uno::RuntimeException );
 
     virtual ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > SAL_CALL
-                    queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
+                    queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTargetFrameName,
                     FrameSearchFlags eSearchFlags ) throw( ::com::sun::star::uno::RuntimeException ) ;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > SAL_CALL
                     queryDispatches( const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )
@@ -93,7 +93,7 @@ public:
 
     SFX_DECL_XSERVICEINFO
     virtual ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > SAL_CALL
-                    queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
+                    queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& sTargetFrameName,
                     FrameSearchFlags eSearchFlags ) throw( ::com::sun::star::uno::RuntimeException ) ;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > SAL_CALL
                     queryDispatches( const ::com::sun::star::uno::Sequence < ::com::sun::star::frame::DispatchDescriptor >& seqDescriptor )

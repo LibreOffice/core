@@ -53,7 +53,7 @@ GenericToolboxController::GenericToolboxController( const Reference< XMultiServi
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbox,
                                                     sal_uInt16                                   nID,
-                                                    const ::rtl::OUString&                          aCommand ) :
+                                                    const OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbox( pToolbox )
     ,   m_nID( nID )
@@ -86,7 +86,7 @@ throw ( RuntimeException )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
-    ::rtl::OUString                     aCommandURL;
+    OUString                     aCommandURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -142,7 +142,7 @@ throw ( RuntimeException )
         TriState eTri = STATE_NOCHECK;
 
         sal_Bool        bValue = sal_Bool();
-        rtl::OUString   aStrValue;
+        OUString   aStrValue;
         ItemStatus      aItemState;
 
         if ( Event.State >>= bValue )

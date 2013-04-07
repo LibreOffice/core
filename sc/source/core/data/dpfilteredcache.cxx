@@ -42,7 +42,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::std::vector;
 using ::std::pair;
 using ::std::auto_ptr;
@@ -291,7 +290,7 @@ void  ScDPFilteredCache::getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow, bool
         rVal.Set(0.0, ScDPValue::Empty);
 }
 
-rtl::OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
+OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
 {
     return mrCache.GetDimensionName(nIndex);
 }

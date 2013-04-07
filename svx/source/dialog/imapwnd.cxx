@@ -63,7 +63,7 @@ IMapWindow::IMapWindow( Window* pParent, const ResId& rResId, const Reference< X
 
     pItemInfo = new SfxItemInfo[ 1 ];
     memset( pItemInfo, 0, sizeof( SfxItemInfo ) );
-    pIMapPool = new SfxItemPool( rtl::OUString("IMapItemPool"),
+    pIMapPool = new SfxItemPool( OUString("IMapItemPool"),
                                  SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, pItemInfo );
     pIMapPool->FreezeIdRanges();
 }
@@ -640,8 +640,8 @@ void IMapWindow::DoMacroAssign()
         SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
 
         SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
-        aNamesItem.AddEvent( rtl::OUString("MouseOver"), String(), SFX_EVENT_MOUSEOVER_OBJECT );
-        aNamesItem.AddEvent( rtl::OUString("MouseOut"), String(), SFX_EVENT_MOUSEOUT_OBJECT );
+        aNamesItem.AddEvent( OUString("MouseOver"), String(), SFX_EVENT_MOUSEOVER_OBJECT );
+        aNamesItem.AddEvent( OUString("MouseOut"), String(), SFX_EVENT_MOUSEOUT_OBJECT );
         aSet.Put( aNamesItem );
 
         SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);

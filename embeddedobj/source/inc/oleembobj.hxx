@@ -127,18 +127,18 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aClassID;
-    ::rtl::OUString m_aClassName;
+    OUString m_aClassName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedClient > m_xClientSite;
 
-    ::rtl::OUString m_aContainerName;
+    OUString m_aContainerName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xClosePreventer;
 
     sal_Bool m_bWaitSaveCompleted;
     sal_Bool m_bNewVisReplInStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewCachedVisRepl;
-    ::rtl::OUString m_aNewEntryName;
+    OUString m_aNewEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xNewParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xNewObjectStream;
     sal_Bool m_bStoreLoaded;
@@ -167,12 +167,12 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     sal_Int64 m_nStatusAspect;
 
     // embedded object related stuff
-    ::rtl::OUString m_aEntryName;
+    OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > m_xObjectStream;
 
     // link related stuff
-    ::rtl::OUString m_aLinkURL; // ???
+    OUString m_aLinkURL; // ???
 
     // points to own view provider if the object has no server
     OwnView_Impl*   m_pOwnView;
@@ -180,9 +180,9 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     // whether the object should be initialized from clipboard in case of default initialization
     sal_Bool m_bFromClipboard;
 
-    ::rtl::OUString m_aTempURL;
+    OUString m_aTempURL;
 
-    ::rtl::OUString m_aTempDumpURL;
+    OUString m_aTempDumpURL;
 
     // STAMPIT solution
     // the following member is used during verb execution to detect whether the verb execution modifies the object
@@ -206,7 +206,7 @@ protected:
 #ifdef WNT
     void SwitchComponentToRunningState_Impl();
 #endif
-    void MakeEventListenerNotification_Impl( const ::rtl::OUString& aEventName );
+    void MakeEventListenerNotification_Impl( const OUString& aEventName );
 #ifdef WNT
     void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > GetStreamForSaving();
@@ -224,17 +224,17 @@ protected:
     void SwitchOwnPersistence(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xNewObjectStream,
-                const ::rtl::OUString& aNewName );
+                const OUString& aNewName );
 
     void SwitchOwnPersistence(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
-                const ::rtl::OUString& aNewName );
+                const OUString& aNewName );
 
     void GetRidOfComponent();
 
     void StoreToLocation_Impl(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                            const ::rtl::OUString& sEntName,
+                            const OUString& sEntName,
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs,
                             sal_Bool bSaveAs )
         throw ( ::com::sun::star::uno::Exception );
@@ -271,22 +271,22 @@ protected:
     void SetObjectIsLink_Impl( sal_Bool bIsLink ) { m_bIsLink = bIsLink; }
 
 #ifdef WNT
-    ::rtl::OUString CreateTempURLEmpty_Impl();
-    ::rtl::OUString GetTempURL_Impl();
+    OUString CreateTempURLEmpty_Impl();
+    OUString GetTempURL_Impl();
 #endif
-    ::rtl::OUString GetContainerName_Impl() { return m_aContainerName; }
+    OUString GetContainerName_Impl() { return m_aContainerName; }
 
     // the following 4 methods are related to switch to wrapping mode
     void MoveListeners();
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > CreateTemporarySubstorage( ::rtl::OUString& o_aStorageName );
-    ::rtl::OUString MoveToTemporarySubstream();
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > CreateTemporarySubstorage( OUString& o_aStorageName );
+    OUString MoveToTemporarySubstream();
     sal_Bool TryToConvertToOOo();
 
 public:
     // in case a new object must be created the class ID must be specified
     OleEmbeddedObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID,
-                        const ::rtl::OUString& aClassName );
+                        const OUString& aClassName );
 
     // in case object will be loaded from a persistent entry or from a file the class ID will be detected on loading
     // factory can do it for OOo objects, but for OLE objects OS dependent code is required
@@ -354,7 +354,7 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setContainerName( const ::rtl::OUString& sName )
+    virtual void SAL_CALL setContainerName( const OUString& sName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
 
@@ -387,7 +387,7 @@ public:
 
     virtual void SAL_CALL setPersistentEntry(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                    const ::rtl::OUString& sEntName,
+                    const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
@@ -397,7 +397,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::rtl::OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
+    virtual void SAL_CALL storeToEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -406,7 +406,7 @@ public:
 
     virtual void SAL_CALL storeAsEntry(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                const ::rtl::OUString& sEntName,
+                const OUString& sEntName,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
@@ -424,14 +424,14 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getEntryName()
+    virtual OUString SAL_CALL getEntryName()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
 // XLinkageSupport
 
     virtual void SAL_CALL breakLink( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                                     const ::rtl::OUString& sEntName )
+                                     const OUString& sEntName )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::io::IOException,
@@ -442,7 +442,7 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getLinkURL()
+    virtual OUString SAL_CALL getLinkURL()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException);
@@ -472,11 +472,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getClassID()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getClassName()
+    virtual OUString SAL_CALL getClassName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setClassInfo(
-                const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const ::rtl::OUString& aClassName )
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName )
         throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
 

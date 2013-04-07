@@ -52,8 +52,6 @@
 
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::xmloff::token;
 
 class SwXMLConditionParser_Impl
@@ -745,7 +743,7 @@ protected:
 
     virtual uno::Reference < container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
-    virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
     // HACK
 
 public:

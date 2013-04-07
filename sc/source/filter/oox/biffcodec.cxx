@@ -33,9 +33,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OStringToOUString;
 
 // ============================================================================
 

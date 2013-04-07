@@ -38,13 +38,13 @@
 #include "bluthsndapi.hxx"
 
 SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                            const rtl::OUString& rType )
+                            const OUString& rType )
 {
     SaveResult		eSaveResult;
     SendMailResult  eResult = SEND_MAIL_ERROR;
-    rtl::OUString   aFileName;
+    OUString   aFileName;
 
-    eSaveResult  = SaveDocumentAsFormat( rtl::OUString(), xFrame, rType, aFileName );
+    eSaveResult  = SaveDocumentAsFormat( OUString(), xFrame, rType, aFileName );
     if( eSaveResult == SAVE_SUCCESSFULL )
     {
         maAttachedDocuments.push_back( aFileName );
@@ -60,8 +60,8 @@ SfxBluetoothModel::SendMailResult SfxBluetoothModel::Send( const ::com::sun::sta
 {
     char bthsend[300];
     SendMailResult eResult = SEND_MAIL_OK;
-    rtl::OUString aFileName = maAttachedDocuments[0];
-    snprintf(bthsend,300,"bluetooth-sendto %s",rtl::OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8).getStr() );
+    OUString aFileName = maAttachedDocuments[0];
+    snprintf(bthsend,300,"bluetooth-sendto %s",OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8).getStr() );
     if( !system( bthsend ) )
         eResult = SEND_MAIL_ERROR;
     return eResult;

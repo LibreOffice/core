@@ -63,7 +63,6 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 
-using ::rtl::OUString;
 
 namespace framework
 {

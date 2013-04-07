@@ -40,8 +40,8 @@ namespace prv { class ContextStack; }
 struct RecordInputSource
 {
     BinaryInputStreamRef mxInStream;
-    ::rtl::OUString     maPublicId;
-    ::rtl::OUString     maSystemId;
+    OUString     maPublicId;
+    OUString     maSystemId;
 };
 
 // ============================================================================

@@ -46,7 +46,7 @@ FixedNumberFormatter::~FixedNumberFormatter()
 {
 }
 
-rtl::OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
+OUString FixedNumberFormatter::getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
     return m_aNumberFormatterWrapper.getFormattedString(
         m_nNumberFormatKey, fValue, rLabelColor, rbColorChanged );
@@ -62,7 +62,7 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
 
 {
     uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
-    rtl::OUString sNullDate( "NullDate" );
+    OUString sNullDate( "NullDate" );
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
         m_aNullDate = xProp->getPropertyValue(sNullDate);
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
@@ -99,7 +99,7 @@ Date NumberFormatterWrapper::getNullDate() const
     return aRet;
 }
 
-rtl::OUString NumberFormatterWrapper::getFormattedString(
+OUString NumberFormatterWrapper::getFormattedString(
     sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const
 {
     String aText;
@@ -130,7 +130,7 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
     {
         m_pNumberFormatter->ChangeNullDate(nDay,nMonth,nYear);
     }
-    rtl::OUString aRet( aText );
+    OUString aRet( aText );
 
     if(pTextColor)
     {

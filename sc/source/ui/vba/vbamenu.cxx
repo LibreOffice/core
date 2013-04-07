@@ -36,14 +36,14 @@ ScVbaMenu::ScVbaMenu( const uno::Reference< ov::XHelperInterface > xParent, cons
 {
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaMenu::getCaption() throw ( uno::RuntimeException )
 {
     return m_xCommandBarControl->getCaption();
 }
 
 void SAL_CALL
-ScVbaMenu::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
+ScVbaMenu::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
 {
     m_xCommandBarControl->setCaption( _caption );
 }
@@ -66,20 +66,20 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex ) throw (script::BasicErrorExceptio
     return uno::makeAny( xMenuItems );
 }
 
-rtl::OUString
+OUString
 ScVbaMenu::getServiceImplName()
 {
-    return rtl::OUString("ScVbaMenu");
+    return OUString("ScVbaMenu");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaMenu::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Menu" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Menu" );
     }
     return aServiceNames;
 }

@@ -54,21 +54,21 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.APreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const ::rtl::OUString& sql)
+OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql)
     : OStatement_Base( _pConnection )
     ,m_aTypeInfo(_TypeInfo)
 {
     osl_atomic_increment( &m_refCount );
 
     OSQLParser aParser(comphelper::getComponentContext(_pConnection->getDriver()->getORB()));
-    ::rtl::OUString sErrorMessage;
-    ::rtl::OUString sNewSql;
+    OUString sErrorMessage;
+    OUString sNewSql;
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
     {   // special handling for parameters
         /* we recusive replace all occurrences of ? in the statement and replace them with name like "æ¬å" */
         sal_Int32 nParameterCount = 0;
-        ::rtl::OUString sDefaultName( "parame" );
+        OUString sDefaultName( "parame" );
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
         pNode->parseNodeToStr( sNewSql, _pConnection );
         delete pNode;
@@ -215,8 +215,8 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     m_pParameters->get_Count(&nCount);
     if(nCount < (parameterIndex-1))
     {
-        ::rtl::OUString sDefaultName( "parame" );
-        sDefaultName += ::rtl::OUString::valueOf(parameterIndex);
+        OUString sDefaultName( "parame" );
+        sDefaultName += OUString::valueOf(parameterIndex);
         ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
         {
@@ -241,7 +241,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         if(pParam)
         {
 #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OUString sParam = aParam.GetName();
+            OUString sParam = aParam.GetName();
 
 #endif // OSL_DEBUG_LEVEL
 
@@ -264,7 +264,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException)
 {
     setParameter( parameterIndex, adLongVarWChar, ::std::numeric_limits< sal_Int32 >::max(), x );
 }
@@ -420,7 +420,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     setNull(parameterIndex,sqlType);
 }
@@ -430,9 +430,9 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                "$position$", OUString::valueOf(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }
@@ -491,7 +491,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
             WpADOParameter aParam(pParam);
             if(pParam)
             {
-                ::rtl::OUString sParam = aParam.GetName();
+                OUString sParam = aParam.GetName();
                 CHECK_RETURN(aParam.PutValue(aVal));
             }
         }
@@ -529,7 +529,7 @@ void SAL_CALL OPreparedStatement::release() throw()
 }
 // -----------------------------------------------------------------------------
 void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
-                                                  const ::rtl::OUString& _sDefaultName,
+                                                  const OUString& _sDefaultName,
                                                   sal_Int32& _rParameterCount)
 {
     sal_Int32 nCount = _pNode->count();
@@ -538,10 +538,10 @@ void OPreparedStatement::replaceParameterNodeName(OSQLParseNode* _pNode,
         OSQLParseNode* pChildNode = _pNode->getChild(i);
         if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() == 1)
         {
-            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(":") ,SQL_NODE_PUNCTUATION,0);
+            OSQLParseNode* pNewNode = new OSQLParseNode(OUString(":") ,SQL_NODE_PUNCTUATION,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
-            ::rtl::OUString sParameterName = _sDefaultName;
-            sParameterName += ::rtl::OUString::valueOf(++_rParameterCount);
+            OUString sParameterName = _sDefaultName;
+            sParameterName += OUString::valueOf(++_rParameterCount);
             pChildNode->append(new OSQLParseNode( sParameterName,SQL_NODE_NAME,0));
         }
         else

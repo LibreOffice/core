@@ -36,7 +36,7 @@ namespace comphelper {
     public:
         /** retrieves the UI title of the given document
         */
-        static ::rtl::OUString  getDocumentTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+        static OUString  getDocumentTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
 
     private:
         DocumentInfo(); // never implemented

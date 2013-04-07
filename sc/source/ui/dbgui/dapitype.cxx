@@ -30,7 +30,6 @@
 #include "dapitype.hrc"
 
 using namespace com::sun::star;
-using ::rtl::OUString;
 
 //-------------------------------------------------------------------------
 
@@ -109,7 +108,7 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
 //-------------------------------------------------------------------------
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
-                                const uno::Sequence<rtl::OUString>& rServices ) :
+                                const uno::Sequence<OUString>& rServices ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPISERVICE ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -128,7 +127,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
     aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     long nCount = rServices.getLength();
-    const rtl::OUString* pArray = rServices.getConstArray();
+    const OUString* pArray = rServices.getConstArray();
     for (long i=0; i<nCount; i++)
     {
         String aName = pArray[i];

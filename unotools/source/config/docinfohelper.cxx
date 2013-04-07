@@ -28,15 +28,15 @@ using namespace ::com::sun::star;
 namespace utl
 {
 
-::rtl::OUString DocInfoHelper::GetGeneratorString()
+OUString DocInfoHelper::GetGeneratorString()
 {
-    rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
 
     // First product: branded name + version
     // version is <product_versions>_<product_extension>$<platform>
 
     // plain product name
-    rtl::OUString aValue( utl::ConfigManager::getProductName() );
+    OUString aValue( utl::ConfigManager::getProductName() );
     if ( !aValue.isEmpty() )
     {
         aResult.append( aValue.replace( ' ', '_' ) );
@@ -54,8 +54,8 @@ namespace utl
             }
         }
 
-        ::rtl::OUString os( "$_OS" );
-        ::rtl::OUString arch( "$_ARCH" );
+        OUString os( "$_OS" );
+        OUString arch( "$_ARCH" );
         ::rtl::Bootstrap::expandMacros(os);
         ::rtl::Bootstrap::expandMacros(arch);
         aResult.append( (sal_Unicode)'$' );
@@ -70,8 +70,8 @@ namespace utl
     // and ':' replaced by '-'
     {
         aResult.appendAscii( "LibreOffice_project/" );
-        ::rtl::OUString aDefault;
-        ::rtl::OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
+        OUString aDefault;
+        OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
         for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
         {
             sal_Unicode c = aBuildId[i];

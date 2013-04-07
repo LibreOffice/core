@@ -57,8 +57,8 @@ namespace {
 void
 handleLockedDocumentRequest_(
     Window * pParent,
-    const ::rtl::OUString& aDocumentURL,
-    const ::rtl::OUString& aInfo,
+    const OUString& aDocumentURL,
+    const OUString& aInfo,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     sal_uInt16 nMode )
@@ -79,8 +79,8 @@ handleLockedDocumentRequest_(
         if (!xManager.get())
             return;
 
-        ::rtl::OUString aMessage;
-        std::vector< rtl::OUString > aArguments;
+        OUString aMessage;
+        std::vector< OUString > aArguments;
         aArguments.push_back( aDocumentURL );
 
         sal_Int32 nResult = RET_CANCEL;

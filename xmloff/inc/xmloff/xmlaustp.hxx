@@ -77,37 +77,37 @@ public:
         if bAsFamily is sal_False, the family name is used as element name
      */
     // TODO: Remove this ugly method as soon as possible
-    void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName, SvXMLExportPropertyMapper* pMapper, ::rtl::OUString aStrPrefix, sal_Bool bAsFamily = sal_True );
-    void AddFamily( sal_Int32 nFamily, const ::rtl::OUString& rStrName,
+    void AddFamily( sal_Int32 nFamily, const OUString& rStrName, SvXMLExportPropertyMapper* pMapper, OUString aStrPrefix, sal_Bool bAsFamily = sal_True );
+    void AddFamily( sal_Int32 nFamily, const OUString& rStrName,
                     const UniReference< SvXMLExportPropertyMapper >& rMapper,
-                    const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
+                    const OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void SetFamilyPropSetMapper( sal_Int32 nFamily,
                     const UniReference< SvXMLExportPropertyMapper >& rMapper );
 
     /// Register a name that must not be used as a generated name.
-    void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
+    void RegisterName( sal_Int32 nFamily, const OUString& rName );
 
     /// retrieve the registered names (names + families)
     void GetRegisteredNames(
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
-        com::sun::star::uno::Sequence<rtl::OUString>& aNames );
+        com::sun::star::uno::Sequence<OUString>& aNames );
 
     /// register (families + names)
     void RegisterNames(
         com::sun::star::uno::Sequence<sal_Int32>& aFamilies,
-        com::sun::star::uno::Sequence<rtl::OUString>& aNames );
+        com::sun::star::uno::Sequence<OUString>& aNames );
 
     /// Add an item set to the pool and return its generated name.
-    ::rtl::OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
-    ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
-    sal_Bool        Add( ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
+    OUString Add( sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties );
+    OUString Add( sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties, bool bDontSeek = false );
+    sal_Bool        Add( OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties );
 
     /// Add an item set with a pre-defined name (needed for saving sheets separately in Calc).
-    sal_Bool        AddNamed( const ::rtl::OUString& rName, sal_Int32 nFamily, const ::rtl::OUString& rParent,
+    sal_Bool        AddNamed( const OUString& rName, sal_Int32 nFamily, const OUString& rParent,
                               const ::std::vector< XMLPropertyState >& rProperties );
 
     /// Find an item set's name.
-    ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
+    OUString Find( sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     /** Export all item sets ofs a certain class in the order in that they have been added. */
     void exportXML( sal_Int32 nFamily

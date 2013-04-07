@@ -33,9 +33,7 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::rtl::OUString;
 
-using rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -58,11 +56,11 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetTableScenarioAttrTokenMap());
     for( sal_Int16 i = 0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
         OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {

@@ -73,8 +73,8 @@ enum IndexSourceParamEnum
  */
 class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sCreateFromChapter;
-    const ::rtl::OUString sIsRelativeTabstops;
+    const OUString sCreateFromChapter;
+    const OUString sIsRelativeTabstops;
 
     sal_Bool bUseLevelFormats;
 
@@ -94,7 +94,7 @@ public:
     XMLIndexSourceBaseContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_Bool bLevelFormats);
@@ -109,13 +109,13 @@ protected:
 
     virtual void ProcessAttribute(
         enum IndexSourceParamEnum eParam,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

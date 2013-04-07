@@ -180,29 +180,29 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
+    OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException )
+    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
+    OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.form.ONavigationBarControl" );
+        return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
+    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
     {
-        Sequence< ::rtl::OUString > aServices( 2 );
-        aServices[ 0 ] = ::rtl::OUString( "com.sun.star.awt.UnoControl" );
-        aServices[ 1 ] = ::rtl::OUString( "com.sun.star.form.control.NavigationToolBar" );
+        Sequence< OUString > aServices( 2 );
+        aServices[ 0 ] = OUString( "com.sun.star.awt.UnoControl" );
+        aServices[ 1 ] = OUString( "com.sun.star.form.control.NavigationToolBar" );
         return aServices;
     }
 
@@ -297,7 +297,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void SAL_CALL ONavigationBarPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException )
+    void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
 
@@ -377,7 +377,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    Any SAL_CALL ONavigationBarPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( RuntimeException )
+    Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
 
@@ -450,7 +450,7 @@ namespace frm
             }
             else if ( _nFeatureId == FormFeature::MoveAbsolute )
             {
-                pNavBar->setFeatureText( _nFeatureId, rtl::OUString::valueOf(getIntegerState(_nFeatureId)) );
+                pNavBar->setFeatureText( _nFeatureId, OUString::valueOf(getIntegerState(_nFeatureId)) );
             }
         }
 

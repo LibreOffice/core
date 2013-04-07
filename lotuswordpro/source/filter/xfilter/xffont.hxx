@@ -120,17 +120,17 @@ public:
     /**
      * @descr   Set font name.
      */
-    void    SetFontName(rtl::OUString name);
+    void    SetFontName(OUString name);
 
     /**
      * @descr   Set font name for asia locale.
      */
-    void    SetFontNameAsia(rtl::OUString name);
+    void    SetFontNameAsia(OUString name);
 
     /**
      * @descr   Set font name for BIDI locale.
      */
-    void    SetFontNameComplex(rtl::OUString name);
+    void    SetFontNameComplex(OUString name);
 
     /**
      * @descr   Set font size.
@@ -262,9 +262,9 @@ public:
     friend bool operator!=(XFFont& f1, XFFont& f2);
     friend class    XFFontFactory;
 private:
-    rtl::OUString   m_strFontName;
-    rtl::OUString   m_strFontNameAsia;
-    rtl::OUString   m_strFontNameComplex;
+    OUString   m_strFontName;
+    OUString   m_strFontNameAsia;
+    OUString   m_strFontNameComplex;
     sal_Int16   m_nFontSize;
     sal_Int16   m_nFontSizeAsia;
     sal_Int16   m_nFontSizeComplex;
@@ -298,7 +298,7 @@ private:
 };
 
 
-inline void XFFont::SetFontName(rtl::OUString name)
+inline void XFFont::SetFontName(OUString name)
 {
     m_strFontName = name;
     m_nFlag |= XFFONT_FLAG_NAME;
@@ -307,13 +307,13 @@ inline void XFFont::SetFontName(rtl::OUString name)
     SetFontNameComplex(name);
 }
 
-inline void XFFont::SetFontNameAsia(rtl::OUString name)
+inline void XFFont::SetFontNameAsia(OUString name)
 {
     m_strFontNameAsia = name;
     m_nFlag |= XFFONT_FLAG_NAME_ASIA;
 }
 
-inline void XFFont::SetFontNameComplex(rtl::OUString name)
+inline void XFFont::SetFontNameComplex(OUString name)
 {
     m_strFontNameComplex = name;
     m_nFlag |= XFFONT_FLAG_NAME_COMPLEX;

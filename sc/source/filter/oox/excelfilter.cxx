@@ -39,7 +39,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
-using ::rtl::OUString;
 using ::oox::drawingml::table::TableStyleListPtr;
 
 // ============================================================================

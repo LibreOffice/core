@@ -121,10 +121,10 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
     SvXMLAttributeList          *mpAttrList;        // a common attribute list
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
 
-    ::rtl::OUString     msOrigFileName; // the original URL
-    ::rtl::OUString     msGraphicObjectProtocol;
-    ::rtl::OUString     msEmbeddedObjectProtocol;
-    ::rtl::OUString     msFilterName;
+    OUString     msOrigFileName; // the original URL
+    OUString     msGraphicObjectProtocol;
+    OUString     msEmbeddedObjectProtocol;
+    OUString     msFilterName;
     SvXMLNamespaceMap           *mpNamespaceMap;    // the namepspace map
     SvXMLUnitConverter          *mpUnitConv;        // the unit converter
     SvXMLNumFmtExport           *mpNumExport;
@@ -152,7 +152,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
 
 public:
 
-    const ::rtl::OUString               msWS;           // " "
+    const OUString               msWS;           // " "
 
 private:
 
@@ -271,13 +271,13 @@ public:
 
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::rtl::OUString& rFileName,
+        const OUString& rFileName,
         sal_Int16 const eDefaultMeasureUnit /*css::util::MeasureUnit*/,
 		const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler);
 
     SvXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::rtl::OUString& rFileName,
+        const OUString& rFileName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &,
         sal_Int16 const eDefaultFieldUnit );
@@ -298,13 +298,13 @@ public:
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     // XNamed
-    virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -337,18 +337,18 @@ public:
     void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName,
                             const sal_Char *pValue );
     void AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName,
-                       const ::rtl::OUString& rValue );
-    void AddAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rName,
-                       const ::rtl::OUString& rValue );
+                       const OUString& rValue );
+    void AddAttribute( sal_uInt16 nPrefix, const OUString& rName,
+                       const OUString& rValue );
     void AddAttribute( sal_uInt16 nPrefix,
                        enum ::xmloff::token::XMLTokenEnum eName,
-                       const ::rtl::OUString& rValue );
+                       const OUString& rValue );
     void AddAttribute( sal_uInt16 nPrefix,
                        enum ::xmloff::token::XMLTokenEnum eName,
                        enum ::xmloff::token::XMLTokenEnum eValue );
-    void AddAttribute( const ::rtl::OUString& rQName,
-                       const ::rtl::OUString& rValue );
-    void AddAttribute( const ::rtl::OUString& rQName,
+    void AddAttribute( const OUString& rQName,
+                       const OUString& rValue );
+    void AddAttribute( const OUString& rQName,
                        enum ::xmloff::token::XMLTokenEnum eValue );
     // add several attributes to the common attribute list
     void AddAttributeList( const ::com::sun::star::uno::Reference<
@@ -367,7 +367,7 @@ public:
     }
 
     // Get original ::com::sun::star::util::URL.
-    const ::rtl::OUString& GetOrigFileName() const { return msOrigFileName; }
+    const OUString& GetOrigFileName() const { return msOrigFileName; }
 
     // Get (const) namespace map.
     const SvXMLNamespaceMap& GetNamespaceMap() const { return *mpNamespaceMap; }
@@ -385,7 +385,7 @@ public:
     virtual void addDataStyle(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False );
     virtual void exportDataStyles();
     virtual void exportAutoDataStyles();
-    virtual rtl::OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
+    virtual OUString getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool bTimeFormat = sal_False ) const;
     sal_Int32 dataStyleForceSystemLanguage(sal_Int32 nFormat) const;
 
     virtual void exportAnnotationMeta( const com::sun::star::uno::Reference < com::sun::star::drawing::XShape >& xShape);
@@ -438,17 +438,17 @@ public:
     /// get the export for image maps
     XMLImageMapExport& GetImageMapExport();
 
-    ::rtl::OUString AddEmbeddedGraphicObject(
-                            const ::rtl::OUString& rGraphicObjectURL );
+    OUString AddEmbeddedGraphicObject(
+                            const OUString& rGraphicObjectURL );
     sal_Bool AddEmbeddedGraphicObjectAsBase64(
-                            const ::rtl::OUString& rGraphicObjectURL );
+                            const OUString& rGraphicObjectURL );
 
-    ::rtl::OUString AddEmbeddedObject(
-                            const ::rtl::OUString& rEmbeddedObjectURL );
+    OUString AddEmbeddedObject(
+                            const OUString& rEmbeddedObjectURL );
     sal_Bool AddEmbeddedObjectAsBase64(
-                            const ::rtl::OUString& rEmbeddedObjectURL );
+                            const OUString& rEmbeddedObjectURL );
 
-    ::rtl::OUString EncodeStyleName( const ::rtl::OUString& rName,
+    OUString EncodeStyleName( const OUString& rName,
                                      sal_Bool *pEncoded=0 ) const;
 
     // save linked sections?
@@ -461,19 +461,19 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XComponent >& rComp );
 
-    rtl::OUString GetRelativeReference(const rtl::OUString& rValue);
+    OUString GetRelativeReference(const OUString& rValue);
 
     // methods for accessing the document handler and handling SAX errors
     void StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSOutside );
-    void StartElement(const ::rtl::OUString& rName,
+    void StartElement(const OUString& rName,
                         sal_Bool bIgnWSOutside );
-    void Characters(const ::rtl::OUString& rChars);
+    void Characters(const OUString& rChars);
     void EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSInside );
-    void EndElement(const ::rtl::OUString& rName,
+    void EndElement(const OUString& rName,
                         sal_Bool bIgnWSInside );
     void IgnorableWhitespace();
 
@@ -486,16 +486,16 @@ public:
         /// error ID, may contain an error flag
         sal_Int32 nId,
         /// string parameters for the error message
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams,
+        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams,
         /// original exception message (if applicable)
-        const ::rtl::OUString& rExceptionMessage,
+        const OUString& rExceptionMessage,
         /// error location (if applicable)
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XLocator> & rLocator );
 
     void SetError(
         sal_Int32 nId,
-        const ::com::sun::star::uno::Sequence< ::rtl::OUString> & rMsgParams);
+        const ::com::sun::star::uno::Sequence< OUString> & rMsgParams);
 
     /** return current error flags (logical 'or' of all error flags so far) */
     sal_uInt16 GetErrorFlags()  { return mnErrorFlags; }
@@ -522,13 +522,13 @@ public:
     SvtSaveOptions::ODFDefaultVersion getDefaultVersion() const;
 
     /// name of stream in package, e.g., "content.xml"
-    ::rtl::OUString GetStreamName() const;
+    OUString GetStreamName() const;
 
     // FIXME: this is only for legacy stuff that has not yet been adapted
     //        to implement XMetadatable; this can write duplicate IDs!
     /// add xml:id and legacy namespace id
     void SAL_DLLPRIVATE AddAttributeIdLegacy(
-            sal_uInt16 const nLegacyPrefix, ::rtl::OUString const& rValue);
+            sal_uInt16 const nLegacyPrefix, OUString const& rValue);
 
     /// add xml:id attribute (for RDF metadata)
     void AddAttributeXmlId(::com::sun::star::uno::Reference<
@@ -621,12 +621,12 @@ inline void SvXMLExport::SetGraphicResolver(
 class XMLOFF_DLLPUBLIC SvXMLElementExport
 {
     SvXMLExport& rExport;
-    ::rtl::OUString aName;
+    OUString aName;
     sal_Bool bIgnWS : 1;
     sal_Bool bDoSomething : 1;
 
     SAL_DLLPRIVATE void StartElement( SvXMLExport& rExp, sal_uInt16 nPrefix,
-                       const ::rtl::OUString& rName,
+                       const OUString& rName,
                        sal_Bool bIgnWSOutside );
 
 public:
@@ -637,12 +637,12 @@ public:
                         const sal_Char *pName,
                         sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
-                        const ::rtl::OUString& rName,
+                        const OUString& rName,
                         sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
     SvXMLElementExport( SvXMLExport& rExp, sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
-    SvXMLElementExport( SvXMLExport& rExp, const ::rtl::OUString& rQName,
+    SvXMLElementExport( SvXMLExport& rExp, const OUString& rQName,
                         sal_Bool bIgnWSOutside, sal_Bool bIgnWSInside );
 
     // Thes constructors do nothing if bDoSomething is not set

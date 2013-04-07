@@ -94,7 +94,7 @@ enumXFStyle XFRubyStyle::GetStyleFamily()
 void XFRubyStyle::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
 
     pAttrList->Clear();
     if( !style.isEmpty() )

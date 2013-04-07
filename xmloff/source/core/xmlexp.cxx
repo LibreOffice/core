@@ -88,7 +88,6 @@
 
 #include <comphelper/xmltools.hxx>
 
-using ::rtl::OUString;
 
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -155,7 +154,7 @@ public:
     }
 
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
-                                  const ::rtl::OUString& i_rValue );
+                                  const OUString& i_rValue );
     virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
                                   enum ::xmloff::token::XMLTokenEnum i_eValue );
 
@@ -163,16 +162,16 @@ public:
                                   const sal_Bool i_bIgnoreWhitespace );
     virtual void    EndElement(   const sal_Bool i_bIgnoreWhitespace );
 
-    virtual void    Characters( const ::rtl::OUString& i_rCharacters );
+    virtual void    Characters( const OUString& i_rCharacters );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                     GetComponentContext() const;
 private:
     SvXMLExport&                    m_rExport;
-    ::std::stack< ::rtl::OUString > m_aElements;
+    ::std::stack< OUString > m_aElements;
 };
 
-void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const ::rtl::OUString& i_rValue )
+void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const OUString& i_rValue )
 {
     m_rExport.AddAttribute( XML_NAMESPACE_CONFIG, i_eName, i_rValue );
 }
@@ -184,19 +183,19 @@ void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eN
 
 void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
 {
-    const ::rtl::OUString sElementName( m_rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_CONFIG, GetXMLToken( i_eName ) ) );
+    const OUString sElementName( m_rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_CONFIG, GetXMLToken( i_eName ) ) );
     m_rExport.StartElement( sElementName, i_bIgnoreWhitespace );
     m_aElements.push( sElementName );
 }
 
 void SettingsExportFacade::EndElement( const sal_Bool i_bIgnoreWhitespace )
 {
-    const ::rtl::OUString sElementName( m_aElements.top() );
+    const OUString sElementName( m_aElements.top() );
     m_rExport.EndElement( sElementName, i_bIgnoreWhitespace );
     m_aElements.pop();
 }
 
-void SettingsExportFacade::Characters( const ::rtl::OUString& i_rCharacters )
+void SettingsExportFacade::Characters( const OUString& i_rCharacters )
 {
     m_rExport.GetDocHandler()->characters( i_rCharacters );
 }
@@ -251,8 +250,8 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
     uno::Reference< uri::XUriReferenceFactory >         mxUriReferenceFactory;
-    rtl::OUString                                       msPackageURI;
-    rtl::OUString                                       msPackageURIScheme;
+    OUString                                       msPackageURI;
+    OUString                                       msPackageURIScheme;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     sal_Bool                                            mbOutlineStyleAsNormalListStyle;
     sal_Bool                                            mbSaveBackwardCompatibleODF;
@@ -262,10 +261,10 @@ public:
     SvtSaveOptions                                      maSaveOptions;
 
     /// relative path of stream in package, e.g. "someobject/content.xml"
-    ::rtl::OUString mStreamPath;
+    OUString mStreamPath;
 
     /// name of stream in package, e.g., "content.xml"
-    ::rtl::OUString mStreamName;
+    OUString mStreamName;
 
     /// stack of backed up namespace maps
     /// long: depth at which namespace map has been backed up into the stack
@@ -278,7 +277,7 @@ public:
     sal_Bool                                            mbExportTextNumberElement;
     sal_Bool                                            mbNullDateInitialized;
 
-    void SetSchemeOf( const ::rtl::OUString& rOrigFileName )
+    void SetSchemeOf( const OUString& rOrigFileName )
     {
         sal_Int32 nSep = rOrigFileName.indexOf(':');
         if( nSep != -1 )
@@ -775,7 +774,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
 
         // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
-        const ::rtl::OUString sOutlineStyleAsNormalListStyle(
+        const OUString sOutlineStyleAsNormalListStyle(
                 "OutlineStyleAsNormalListStyle" );
         if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
         {
@@ -787,7 +786,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
             mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
 
-        const ::rtl::OUString sExportTextNumberElement(
+        const OUString sExportTextNumberElement(
                 "ExportTextNumberElement" );
         if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
         {
@@ -841,12 +840,12 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         if (GetModel().is())
         {
             // print a trace message with the URL
-            rtl::OString aUrl(rtl::OUStringToOString(GetModel()->getURL(),
+            OString aUrl(OUStringToOString(GetModel()->getURL(),
                              RTL_TEXTENCODING_ASCII_US));
             RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "%s", aUrl.getStr() );
 
             // we also want a trace message with the document class
-            rtl::OString aClass(rtl::OUStringToOString(GetXMLToken(meClass),
+            OString aClass(OUStringToOString(GetXMLToken(meClass),
                                RTL_TEXTENCODING_ASCII_US));
             RTL_LOGFILE_CONTEXT_TRACE1( aLogContext, "class=\"%s\"",
                                         aClass.getStr() );
@@ -875,13 +874,13 @@ void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
     SetError(XMLERROR_CANCEL|XMLERROR_FLAG_SEVERE, aEmptySeq);
 }
 
-::rtl::OUString SAL_CALL SvXMLExport::getName(  )
+OUString SAL_CALL SvXMLExport::getName(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
     return msFilterName;
 }
 
-void SAL_CALL SvXMLExport::setName( const ::rtl::OUString& )
+void SAL_CALL SvXMLExport::setName( const OUString& )
     throw (::com::sun::star::uno::RuntimeException)
 {
     // do nothing, because it is not possible to set the FilterName
@@ -913,11 +912,11 @@ uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
 
 ///////////////////////////////////////////////////////////////////////
 
-::rtl::OUString
-SvXMLExport::EnsureNamespace(::rtl::OUString const & i_rNamespace,
-    ::rtl::OUString const & i_rPreferredPrefix)
+OUString
+SvXMLExport::EnsureNamespace(OUString const & i_rNamespace,
+    OUString const & i_rPreferredPrefix)
 {
-    ::rtl::OUString sPrefix;
+    OUString sPrefix;
     sal_uInt16 nKey( _GetNamespaceMap().GetKeyByName( i_rNamespace ) );
     if( XML_NAMESPACE_UNKNOWN == nKey )
     {
@@ -926,7 +925,7 @@ SvXMLExport::EnsureNamespace(::rtl::OUString const & i_rNamespace,
         sPrefix = i_rPreferredPrefix;
         nKey = _GetNamespaceMap().GetKeyByPrefix( sPrefix );
         sal_Int32 n( 0 );
-        ::rtl::OUStringBuffer buf;
+        OUStringBuffer buf;
         while( nKey != USHRT_MAX )
         {
             buf.append( i_rPreferredPrefix );
@@ -1006,15 +1005,15 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
         GetXMLToken(eValue) );
 }
 
-void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
-                                const ::rtl::OUString& rValue )
+void SvXMLExport::AddAttribute( const OUString& rQName,
+                                const OUString& rValue )
 {
       mpAttrList->AddAttribute(
         rQName,
         rValue );
 }
 
-void SvXMLExport::AddAttribute( const ::rtl::OUString& rQName,
+void SvXMLExport::AddAttribute( const OUString& rQName,
                                 enum ::xmloff::token::XMLTokenEnum eValue )
 {
       mpAttrList->AddAttribute(
@@ -1222,7 +1221,7 @@ void SvXMLExport::addChaffWhenEncryptedStorage()
 
     if (xEncr.is() && xEncr->hasEncryptionData() && mxExtHandler.is())
     {
-        mxExtHandler->comment(rtl::OStringToOUString(comphelper::xml::makeXMLChaff(), RTL_TEXTENCODING_ASCII_US));
+        mxExtHandler->comment(OStringToOUString(comphelper::xml::makeXMLChaff(), RTL_TEXTENCODING_ASCII_US));
     }
 }
 
@@ -1266,7 +1265,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             ::comphelper::PropertyMapEntry aInfoMap[] =
             {
                 { "Class", sizeof("Class")-1, 0,
-                    &::getCppuType((::rtl::OUString*)0),
+                    &::getCppuType((OUString*)0),
                       PropertyAttribute::MAYBEVOID, 0},
                 { NULL, 0, 0, NULL, 0, 0 }
             };
@@ -1481,8 +1480,8 @@ void SvXMLExport::_ExportScripts()
     // export Basic macros (only for FlatXML)
     if ( mnExportFlags & EXPORT_EMBEDDED )
     {
-        ::rtl::OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
-        aValue += ::rtl::OUString(  ":Basic"  );
+        OUString aValue( GetNamespaceMap().GetPrefixByKey( XML_NAMESPACE_OOO ) );
+        aValue += OUString(  ":Basic"  );
         AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, aValue );
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SCRIPT, sal_True, sal_True );
@@ -1492,7 +1491,7 @@ void SvXMLExport::_ExportScripts()
         {
             Reference< beans::XPropertySet > xPSet( mxModel, UNO_QUERY );
             if ( xPSet.is() )
-                xPSet->getPropertyValue( ::rtl::OUString(  "BasicLibraries"  ) );
+                xPSet->getPropertyValue( OUString(  "BasicLibraries"  ) );
         }
 
         Reference < XDocumentHandler > xHdl( new XMLBasicExportFilter( mxHandler ) );
@@ -2201,7 +2200,7 @@ void SvXMLExport::StartElement(const OUString& rName,
     ++mpImpl->mDepth; // increment nesting depth counter
 }
 
-void SvXMLExport::Characters(const ::rtl::OUString& rChars)
+void SvXMLExport::Characters(const OUString& rChars)
 {
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
@@ -2361,14 +2360,14 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
     return SvtSaveOptions::ODFVER_012;
 }
 
-::rtl::OUString SvXMLExport::GetStreamName() const
+OUString SvXMLExport::GetStreamName() const
 {
     return mpImpl->mStreamName;
 }
 
 void
 SvXMLExport::AddAttributeIdLegacy(
-        sal_uInt16 const nLegacyPrefix, ::rtl::OUString const& rValue)
+        sal_uInt16 const nLegacyPrefix, OUString const& rValue)
 {
     switch (getDefaultVersion()) {
         case SvtSaveOptions::ODFVER_011: // fall thru
@@ -2399,7 +2398,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
         const beans::StringPair mdref( xMeta->getMetadataReference() );
         if ( !mdref.Second.isEmpty() )
         {
-            const ::rtl::OUString streamName( GetStreamName() );
+            const OUString streamName( GetStreamName() );
             if ( !streamName.isEmpty() )
             {
                 if ( streamName.equals(mdref.First) )

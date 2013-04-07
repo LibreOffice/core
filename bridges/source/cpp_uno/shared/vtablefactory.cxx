@@ -245,7 +245,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
             strDirectory = "/tmp";
 
         strDirectory += "/.execoooXXXXXX";
-        rtl::OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
+        OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
         if ((block.fd = mkstemp(tmpfname)) == -1)

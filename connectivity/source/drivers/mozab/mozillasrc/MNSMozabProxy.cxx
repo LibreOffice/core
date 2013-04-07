@@ -53,7 +53,7 @@ using namespace connectivity::mozab;
 /* Implementation file */
 
 static ::osl::Mutex m_aThreadMutex;
-extern nsresult NewAddressBook(const ::rtl::OUString * aName);
+extern nsresult NewAddressBook(const OUString * aName);
 
 
 MNSMozabProxy::MNSMozabProxy()
@@ -69,7 +69,7 @@ MNSMozabProxy::~MNSMozabProxy()
 {
 }
 
-sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const ::rtl::OUString &aProfile)
+sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::MozillaProductType aProduct,const OUString &aProfile)
 {
     OSL_TRACE( "IN : MNSMozabProxy::StartProxy()" );
     ::osl::MutexGuard aGuard(m_aThreadMutex);
@@ -80,7 +80,7 @@ sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::Mo
     {
         Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
         OSL_ENSURE( xFactory.is(), "can't get service factory" );
-        ::com::sun::star::uno::Reference<XInterface> xInstance = xFactory->createInstance(::rtl::OUString("com.sun.star.mozilla.MozillaBootstrap") );
+        ::com::sun::star::uno::Reference<XInterface> xInstance = xFactory->createInstance(OUString("com.sun.star.mozilla.MozillaBootstrap") );
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
         xRunner = ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XProxyRunner >(xInstance,UNO_QUERY);
     }
@@ -89,15 +89,15 @@ sal_Int32 MNSMozabProxy::StartProxy(RunArgs * args,::com::sun::star::mozilla::Mo
 }
 
 extern nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryType,MNameMapper *nmap,
-                        ::std::vector< ::rtl::OUString >*   _rStrings,
-                        ::std::vector< ::rtl::OUString >*   _rTypes,
+                        ::std::vector< OUString >*   _rStrings,
+                        ::std::vector< OUString >*   _rTypes,
                         sal_Int32* pErrorId );
 
 ::com::sun::star::mozilla::MozillaProductType SAL_CALL MNSMozabProxy::getProductType(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return m_Product;
 }
-::rtl::OUString SAL_CALL MNSMozabProxy::getProfileName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL MNSMozabProxy::getProfileName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     return m_Profile;
 }
@@ -123,8 +123,8 @@ sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeE
         rv = getTableStringsProxied((const sal_Char*)m_Args->arg1,
                                 (sal_Int32 *)m_Args->arg2,
                                 (MNameMapper *)m_Args->arg3,
-                                (::std::vector< ::rtl::OUString >*)m_Args->arg4,
-                                (::std::vector< ::rtl::OUString >*)m_Args->arg5,
+                                (::std::vector< OUString >*)m_Args->arg4,
+                                (::std::vector< OUString >*)m_Args->arg5,
                                 (sal_Int32 *)m_Args->arg6);
         break;
     case ProxiedFunc::FUNC_EXECUTE_QUERY:
@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL MNSMozabProxy::run(  ) throw (::com::sun::star::uno::RuntimeE
     case ProxiedFunc::FUNC_NEW_ADDRESS_BOOK:
         if (m_Args->arg1)
         {
-            rv = NewAddressBook((const ::rtl::OUString*)m_Args->arg1 );
+            rv = NewAddressBook((const OUString*)m_Args->arg1 );
         }
         break;
     default:

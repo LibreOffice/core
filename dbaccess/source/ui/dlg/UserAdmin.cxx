@@ -175,8 +175,8 @@ void OUserAdmin::FillUserNames()
                 m_LB_USER.Clear();
 
                 m_aUserNames = m_xUsers->getElementNames();
-                const ::rtl::OUString* pBegin = m_aUserNames.getConstArray();
-                const ::rtl::OUString* pEnd   = pBegin + m_aUserNames.getLength();
+                const OUString* pBegin = m_aUserNames.getConstArray();
+                const OUString* pEnd   = pBegin + m_aUserNames.getLength();
                 for(;pBegin != pEnd;++pBegin)
                     m_LB_USER.InsertEntry(*pBegin);
 
@@ -223,8 +223,8 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
                 if(xNewUser.is())
                 {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(rtl::OUString(aPwdDlg.GetUser())));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(rtl::OUString(aPwdDlg.GetPassword())));
+                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(OUString(aPwdDlg.GetUser())));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(OUString(aPwdDlg.GetPassword())));
                     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
                     if(xAppend.is())
                         xAppend->appendByDescriptor(xNewUser);
@@ -241,7 +241,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 m_xUsers->getByName(sName) >>= xUser;
                 if(xUser.is())
                 {
-                    ::rtl::OUString sNewPassword,sOldPassword;
+                    OUString sNewPassword,sOldPassword;
                     OPasswordDialog aDlg(this,sName);
                     if(aDlg.Execute() == RET_OK)
                     {

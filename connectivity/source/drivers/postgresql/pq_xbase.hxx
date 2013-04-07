@@ -76,8 +76,8 @@ class ReflectionBase :
         public com::sun::star::container::XNamed
 {
 protected:
-    const rtl::OUString m_implName;
-    const ::com::sun::star::uno::Sequence< rtl::OUString > m_supportedServices;
+    const OUString m_implName;
+    const ::com::sun::star::uno::Sequence< OUString > m_supportedServices;
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_conn;
     ConnectionSettings *m_pSettings;
@@ -85,8 +85,8 @@ protected:
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_values;
 public:
     ReflectionBase(
-        const ::rtl::OUString &implName,
-        const ::com::sun::star::uno::Sequence< rtl::OUString > &supportedServices,
+        const OUString &implName,
+        const ::com::sun::star::uno::Sequence< OUString > &supportedServices,
         const ::rtl::Reference< RefCountedMutex > refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
         ConnectionSettings *pSettings,
@@ -97,7 +97,7 @@ public:
 
 public: // for initialization purposes only, not exported via an interface !
     void setPropertyValue_NoBroadcast_public(
-        const rtl::OUString & name, const com::sun::star::uno::Any & value );
+        const OUString & name, const com::sun::star::uno::Any & value );
 
 public: //XInterface
     virtual void SAL_CALL acquire() throw() { OComponentHelper::acquire(); }
@@ -132,11 +132,11 @@ public: // OPropertySetHelper
         throw(com::sun::star::uno::RuntimeException);
 
 public: // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
         throw(::com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void)
         throw(::com::sun::star::uno::RuntimeException);
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
@@ -150,8 +150,8 @@ public: // XDataDescriptorFactory
     createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
 public: // XNamed
-    virtual ::rtl::OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 

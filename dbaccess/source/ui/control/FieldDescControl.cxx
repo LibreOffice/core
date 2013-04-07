@@ -259,10 +259,10 @@ OFieldDescControl::~OFieldDescControl()
 String OFieldDescControl::BoolStringPersistent(const String& rUIString) const
 {
     if (rUIString == aNo)
-        return rtl::OUString('0');
+        return OUString('0');
     if (rUIString == aYes)
-        return rtl::OUString('1');
-    return rtl::OUString();
+        return OUString('1');
+    return OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -526,7 +526,7 @@ String OFieldDescControl::GetControlText( sal_uInt16 nControlId )
             break;
         case FIELD_PROPERTY_TEXTLEN:
             if (pTextLen)
-                return rtl::OUString::valueOf(static_cast<sal_Int64>(pTextLen->GetValue()));
+                return OUString::valueOf(static_cast<sal_Int64>(pTextLen->GetValue()));
         case FIELD_PROPERTY_NUMTYPE:
             if (pNumType)
                 return pNumType->GetSelectEntry();
@@ -925,7 +925,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_nPos++;
         {
             sal_uInt32 nMax = EDIT_NOLIMIT;
-            ::rtl::OUString aTmpString;
+            OUString aTmpString;
             try
             {
                 Reference< XDatabaseMetaData> xMetaData = getMetaData();
@@ -960,11 +960,11 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType = new OPropListBoxCtrl( this, STR_HELP_NUMERIC_TYPE, FIELD_PROPERTY_NUMTYPE, WB_DROPDOWN );
         pNumType->SetDropDownLineCount(5);
 
-        pNumType->InsertEntry( rtl::OUString("Byte") );
-        pNumType->InsertEntry( rtl::OUString("SmallInt") );
-        pNumType->InsertEntry( rtl::OUString("Integer") );
-        pNumType->InsertEntry( rtl::OUString("Single") );
-        pNumType->InsertEntry( rtl::OUString("Double") );
+        pNumType->InsertEntry( OUString("Byte") );
+        pNumType->InsertEntry( OUString("SmallInt") );
+        pNumType->InsertEntry( OUString("Integer") );
+        pNumType->InsertEntry( OUString("Single") );
+        pNumType->InsertEntry( OUString("Double") );
         pNumType->SelectEntryPos(2);
         InitializeControl(pNumType,HID_TAB_ENT_NUMTYP,true);
         break;
@@ -1022,7 +1022,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OString& _sHelpId,bool _bAddChangeHandler)
+void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
 {
     _pControl->SetHelpId(_sHelpId);
     if ( _bAddChangeHandler )
@@ -1041,7 +1041,7 @@ FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
     return pFixedText;
 }
 // -----------------------------------------------------------------------------
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const OString& _sHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
@@ -1287,7 +1287,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             ActivateAggregate( tpScale );
             pScale->SetMax(::std::max<sal_Int32>(pFieldType->nMaximumScale,pFieldDescr->GetScale()));
             pScale->SetMin(pFieldType->nMinimumScale);
-            static const ::rtl::OUString s_sPRECISION("PRECISION");
+            static const OUString s_sPRECISION("PRECISION");
             pScale->SetSpecialReadOnly(pFieldType->aCreateParams.isEmpty() || pFieldType->aCreateParams == s_sPRECISION);
         }
         else
@@ -1430,7 +1430,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     if( pBoolDefault )
     {
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>
-        ::rtl::OUString sValue;
+        OUString sValue;
         pFieldDescr->GetControlDefault() >>= sValue;
         String sDef = BoolStringUI(sValue);
 
@@ -1445,7 +1445,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             else
                 pBoolDefault->SelectEntry(sDef);
 
-            pFieldDescr->SetControlDefault(makeAny(::rtl::OUString(BoolStringPersistent(pBoolDefault->GetSelectEntry()))));
+            pFieldDescr->SetControlDefault(makeAny(OUString(BoolStringPersistent(pBoolDefault->GetSelectEntry()))));
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
@@ -1614,7 +1614,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
 
     //////////////////////////////////////////////////////////////////////
     // Read out Controls
-    ::rtl::OUString sDefault;
+    OUString sDefault;
     if (pDefault)
     {
         sDefault = pDefault->GetText();
@@ -1786,7 +1786,7 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
 // -----------------------------------------------------------------------------
 String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDescr ,sal_Bool _bCheck) const
 {
-    ::rtl::OUString sDefault;
+    OUString sDefault;
     sal_Bool bCheck = !_bCheck || _pFieldDescr->GetControlDefault().hasValue();
     if ( bCheck )
     {
@@ -1809,7 +1809,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                         }
                         catch(const Exception&)
                         {
-                            return ::rtl::OUString(); // return empty string for format example
+                            return OUString(); // return empty string for format example
                         }
                     }
                 }
@@ -1821,13 +1821,13 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
             Reference< ::com::sun::star::util::XNumberFormatter> xNumberFormatter = GetFormatter();
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
-            ::rtl::OUString sFormat;
-            xFormSet->getPropertyValue(::rtl::OUString("FormatString")) >>= sFormat;
+            OUString sFormat;
+            xFormSet->getPropertyValue(OUString("FormatString")) >>= sFormat;
 
             if ( !bTextFormat )
             {
                 Locale aLocale;
-                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString("Locale")) >>= aLocale;
+                ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,OUString("Locale")) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
                 if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE

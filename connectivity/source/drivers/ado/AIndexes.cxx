@@ -38,7 +38,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OIndexes::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexes::createObject(const OUString& _rName)
 {
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
@@ -54,7 +54,7 @@ Reference< XPropertySet > OIndexes::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoIndex* pIndex = NULL;
     if ( !getImplementation(pIndex,descriptor) || pIndex == NULL )
@@ -71,7 +71,7 @@ sdbcx::ObjectType OIndexes::appendObject( const ::rtl::OUString& _rForName, cons
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OIndexes::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OIndexes::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     m_aCollection.Delete(_sElementName);
 }

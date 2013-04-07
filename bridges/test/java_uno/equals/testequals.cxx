@@ -52,28 +52,28 @@ class Service: public cppu::WeakImplHelper2<
     css::lang::XServiceInfo, test::java_uno::equals::XTestInterface >
 {
 public:
-    virtual inline rtl::OUString SAL_CALL getImplementationName()
+    virtual inline OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return rtl::OUString::createFromAscii(getImplementationName_static()); }
+    { return OUString::createFromAscii(getImplementationName_static()); }
 
     virtual sal_Bool SAL_CALL supportsService(
-        rtl::OUString const & rServiceName) throw (css::uno::RuntimeException);
+        OUString const & rServiceName) throw (css::uno::RuntimeException);
 
-    virtual inline css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual inline css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()  throw (css::uno::RuntimeException)
     { return getSupportedServiceNames_static(); }
 
-    virtual void SAL_CALL connect(rtl::OUString const & rConnection,
-                                  rtl::OUString const & rProtocol)
+    virtual void SAL_CALL connect(OUString const & rConnection,
+                                  OUString const & rProtocol)
         throw (css::uno::Exception);
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL get(
-        rtl::OUString const & rName) throw (css::uno::RuntimeException);
+        OUString const & rName) throw (css::uno::RuntimeException);
 
     static inline sal_Char const * getImplementationName_static()
     { return "com.sun.star.test.bridges.testequals.impl"; }
 
-    static css::uno::Sequence< rtl::OUString >
+    static css::uno::Sequence< OUString >
     getSupportedServiceNames_static();
 
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
@@ -91,10 +91,10 @@ private:
 
 }
 
-sal_Bool Service::supportsService(rtl::OUString const & rServiceName)
+sal_Bool Service::supportsService(OUString const & rServiceName)
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< rtl::OUString > aNames(
+    css::uno::Sequence< OUString > aNames(
         getSupportedServiceNames_static());
     for (sal_Int32 i = 0; i< aNames.getLength(); ++i)
         if (aNames[i] == rServiceName)
@@ -102,31 +102,31 @@ sal_Bool Service::supportsService(rtl::OUString const & rServiceName)
     return false;
 }
 
-void Service::connect(rtl::OUString const & rConnection,
-                      rtl::OUString const & rProtocol)
+void Service::connect(OUString const & rConnection,
+                      OUString const & rProtocol)
     throw (css::uno::Exception)
 {
     css::uno::Reference< css::connection::XConnection > xConnection(
         css::connection::Connector::create(m_xContext)->connect(rConnection));
     css::uno::Reference< css::bridge::XBridgeFactory > xBridgeFactory(
         m_xContext->getServiceManager()->createInstanceWithContext(
-            rtl::OUString( "com.sun.star.bridge.BridgeFactory" ),
+            OUString( "com.sun.star.bridge.BridgeFactory" ),
             m_xContext),
         css::uno::UNO_QUERY);
-    m_xBridge = xBridgeFactory->createBridge(rtl::OUString(), rProtocol,
+    m_xBridge = xBridgeFactory->createBridge(OUString(), rProtocol,
                                              xConnection, 0);
 }
 
 css::uno::Reference< css::uno::XInterface >
-Service::get(rtl::OUString const & rName) throw (css::uno::RuntimeException)
+Service::get(OUString const & rName) throw (css::uno::RuntimeException)
 {
     return m_xBridge->getInstance(rName);
 }
 
-css::uno::Sequence< rtl::OUString > Service::getSupportedServiceNames_static()
+css::uno::Sequence< OUString > Service::getSupportedServiceNames_static()
 {
-    css::uno::Sequence< rtl::OUString > aNames(1);
-    aNames[0] = rtl::OUString( "com.sun.star.test.bridges.testequals" );
+    css::uno::Sequence< OUString > aNames(1);
+    aNames[0] = OUString( "com.sun.star.test.bridges.testequals" );
     return aNames;
 }
 
@@ -160,7 +160,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char co
             css::uno::Reference< css::lang::XSingleComponentFactory >
                 xFactory(cppu::createSingleComponentFactory(
                              &Service::createInstance,
-                             rtl::OUString::createFromAscii(
+                             OUString::createFromAscii(
                                  Service::getImplementationName_static()),
                              Service::getSupportedServiceNames_static()));
             if (xFactory.is())
@@ -175,11 +175,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char co
 namespace {
 
 bool writeInfo(void * pRegistryKey, sal_Char const * pImplementationName,
-               css::uno::Sequence< rtl::OUString > const & rServiceNames)
+               css::uno::Sequence< OUString > const & rServiceNames)
 {
-    rtl::OUString aKeyName( "/" );
-    aKeyName += rtl::OUString::createFromAscii(pImplementationName);
-    aKeyName += rtl::OUString( "/UNO/SERVICES" );
+    OUString aKeyName( "/" );
+    aKeyName += OUString::createFromAscii(pImplementationName);
+    aKeyName += OUString( "/UNO/SERVICES" );
     css::uno::Reference< css::registry::XRegistryKey > xKey;
     try
     {

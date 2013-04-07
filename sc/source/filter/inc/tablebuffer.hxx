@@ -33,8 +33,8 @@ struct TableModel
 {
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// Original (unchecked) range of the table.
-    ::rtl::OUString     maProgName;         /// Programmatical name.
-    ::rtl::OUString     maDisplayName;      /// Display name.
+    OUString     maProgName;         /// Programmatical name.
+    OUString     maDisplayName;      /// Display name.
     sal_Int32           mnId;               /// Unique table identifier.
     sal_Int32           mnType;             /// Table type (worksheet, query, etc.).
     sal_Int32           mnHeaderRows;       /// Number of header rows.
@@ -65,7 +65,7 @@ public:
     /** Returns the token index used in API token arrays (com.sun.star.sheet.FormulaToken). */
     inline sal_Int32    getTokenIndex() const { return mnTokenIndex; }
     /** Returns the original display name of the table. */
-    inline const ::rtl::OUString& getDisplayName() const { return maModel.maDisplayName; }
+    inline const OUString& getDisplayName() const { return maModel.maDisplayName; }
 
     /** Returns the original (unchecked) total range of the table. */
     inline const ::com::sun::star::table::CellRangeAddress& getOriginalRange() const { return maModel.maRange; }
@@ -83,7 +83,7 @@ public:
 private:
     TableModel          maModel;
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
-    ::rtl::OUString     maDBRangeName;      /// Name of the databae range in the Calc document.
+    OUString     maDBRangeName;      /// Name of the databae range in the Calc document.
     ::com::sun::star::table::CellRangeAddress
                         maDestRange;        /// Validated range of the table in the worksheet.
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.
@@ -107,7 +107,7 @@ public:
     /** Returns a table by its identifier. */
     TableRef            getTable( sal_Int32 nTableId ) const;
     /** Returns a table by its display name. */
-    TableRef            getTable( const ::rtl::OUString& rDispName ) const;
+    TableRef            getTable( const OUString& rDispName ) const;
 
 private:
     /** Inserts the passed table into the maps according to its identifier and name. */
@@ -116,7 +116,7 @@ private:
 private:
     typedef RefVector< Table >                  TableVector;
     typedef RefMap< sal_Int32, Table >          TableIdMap;
-    typedef RefMap< ::rtl::OUString, Table >    TableNameMap;
+    typedef RefMap< OUString, Table >    TableNameMap;
 
     TableVector         maTables;
     TableIdMap          maIdTables;

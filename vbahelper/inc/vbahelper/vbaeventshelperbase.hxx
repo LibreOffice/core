@@ -83,7 +83,7 @@ protected:
     {
         sal_Int32 mnEventId;
         sal_Int32 mnModuleType;
-        ::rtl::OUString maMacroName;
+        OUString maMacroName;
         sal_Int32 mnCancelIndex;
         css::uno::Any maUserData;
     };
@@ -133,12 +133,12 @@ protected:
         bool bCancel ) throw (css::uno::RuntimeException) = 0;
 
     /** Derived classes have to return the name of the Basic document module. */
-    virtual ::rtl::OUString implGetDocumentModuleName(
+    virtual OUString implGetDocumentModuleName(
         const EventHandlerInfo& rInfo,
         const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException) = 0;
 
 private:
-    typedef ::std::map< sal_Int32, ::rtl::OUString > ModulePathMap;
+    typedef ::std::map< sal_Int32, OUString > ModulePathMap;
 
     /** Starts listening at the document model. */
     void startListening();
@@ -149,7 +149,7 @@ private:
     const EventHandlerInfo& getEventHandlerInfo( sal_Int32 nEventId ) const throw (css::lang::IllegalArgumentException);
 
     /** Searches the event handler in the document and returns its full script path. */
-    ::rtl::OUString getEventHandlerPath(
+    OUString getEventHandlerPath(
         const EventHandlerInfo& rInfo,
         const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
@@ -157,10 +157,10 @@ private:
     void ensureVBALibrary() throw (css::uno::RuntimeException);
 
     /** Returns the type of the Basic module with the specified name. */
-    sal_Int32 getModuleType( const ::rtl::OUString& rModuleName ) throw (css::uno::RuntimeException);
+    sal_Int32 getModuleType( const OUString& rModuleName ) throw (css::uno::RuntimeException);
 
     /** Updates the map containing paths to event handlers for a Basic module. */
-    ModulePathMap& updateModulePathMap( const ::rtl::OUString& rModuleName ) throw (css::uno::RuntimeException);
+    ModulePathMap& updateModulePathMap( const OUString& rModuleName ) throw (css::uno::RuntimeException);
 
 protected:
     css::uno::Reference< css::frame::XModel > mxModel;
@@ -168,12 +168,12 @@ protected:
 
 private:
     typedef ::std::map< sal_Int32, EventHandlerInfo > EventHandlerInfoMap;
-    typedef boost::unordered_map< ::rtl::OUString, ModulePathMap, ::rtl::OUStringHash > EventHandlerPathMap;
+    typedef boost::unordered_map< OUString, ModulePathMap, OUStringHash > EventHandlerPathMap;
 
     EventHandlerInfoMap maEventInfos;
     EventHandlerPathMap maEventPaths;
     css::uno::Reference< css::script::vba::XVBAModuleInfo > mxModuleInfos;
-    ::rtl::OUString maLibraryName;
+    OUString maLibraryName;
     bool mbDisposed;
 };
 

@@ -38,7 +38,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::container;
 
-sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OViews::createObject(const OUString& _rName)
 {
     OAdoView* pView = new OAdoView(isCaseSensitive(),m_aCollection.GetItem(_rName));
     pView->setNew(sal_False);
@@ -57,7 +57,7 @@ Reference< XPropertySet > OViews::createDescriptor()
 
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     OAdoView* pView = NULL;
     if ( !getImplementation( pView, descriptor ) || pView == NULL )
@@ -68,7 +68,7 @@ sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const 
     if ( !aCommand.IsValid() )
         m_pCatalog->getConnection()->throwGenericSQLException( STR_VIEW_NO_COMMAND_ERROR,static_cast<XTypeProvider*>(this) );
 
-    ::rtl::OUString sName( _rForName );
+    OUString sName( _rForName );
     aCommand.put_Name(sName);
     aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
     ADOViews* pViews = (ADOViews*)m_aCollection;
@@ -83,7 +83,7 @@ sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const 
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OViews::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OViews::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     if(!m_aCollection.Delete(_sElementName))
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));

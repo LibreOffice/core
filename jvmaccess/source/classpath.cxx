@@ -40,7 +40,7 @@
 
 void * ::jvmaccess::ClassPath::doTranslateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    void * environment, ::rtl::OUString const & classPath)
+    void * environment, OUString const & classPath)
 {
     OSL_ASSERT(context.is() && environment != 0);
     ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
@@ -55,7 +55,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     }
     ::std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
-        ::rtl::OUString url(classPath.getToken(0, ' ', i));
+        OUString url(classPath.getToken(0, ' ', i));
         if (!url.isEmpty()) {
             css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expUrl(
@@ -68,7 +68,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                     url = expUrl->expand( expander );
                 } catch (const css::lang::IllegalArgumentException & e) {
                     throw css::uno::RuntimeException(
-                        (::rtl::OUString(
+                        (OUString(
                                 "com.sun.star.lang.IllegalArgumentException: ")
                          + e.Message),
                         css::uno::Reference< css::uno::XInterface >());
@@ -91,7 +91,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     jobjectArray result = env->NewObjectArray(
         static_cast< jsize >(urls.size()), classUrl, 0);
         // static_cast is ok, as each element of urls occupied at least one
-        // character of the ::rtl::OUString classPath
+        // character of the OUString classPath
     if (result == 0) {
         return 0;
     }
@@ -105,8 +105,8 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
 
 void * ::jvmaccess::ClassPath::doLoadClass(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    void * environment, ::rtl::OUString const & classPath,
-    ::rtl::OUString const & name)
+    void * environment, OUString const & classPath,
+    OUString const & name)
 {
     OSL_ASSERT(context.is() && environment != 0);
     ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);

@@ -43,8 +43,6 @@
 #include <editeng/memberids.hrc>
 #include <comphelper/processfactory.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;

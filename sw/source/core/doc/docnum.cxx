@@ -106,7 +106,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     }
 
     mpOutlineRule->SetRuleType( OUTLINE_RULE );
-    mpOutlineRule->SetName( rtl::OUString::createFromAscii(
+    mpOutlineRule->SetName( OUString::createFromAscii(
                                         SwNumRule::GetOutlineRuleName() ),
                            *this);
 

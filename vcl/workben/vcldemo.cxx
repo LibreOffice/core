@@ -46,7 +46,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( "types.rdb" ), rtl::OUString( "applicat.rdb" ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( OUString( "types.rdb" ), OUString( "applicat.rdb" ), sal_True );
 
     comphelper::setProcessServiceFactory( xMS );
 
@@ -76,7 +76,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( rtl::OUString( "VCLDemo - VCL Workbench" ) );
+    aMainWin.SetText( OUString( "VCLDemo - VCL Workbench" ) );
     aMainWin.Show();
 
     Application::Execute();

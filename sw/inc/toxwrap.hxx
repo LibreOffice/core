@@ -53,7 +53,7 @@ public:
 
     String GetFollowingText( sal_Bool bMorePages ) const;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
     GetAlgorithmList( const ::com::sun::star::lang::Locale& rLcl ) const;
 
     sal_Bool LoadAlgorithm( const ::com::sun::star::lang::Locale& rLcl,

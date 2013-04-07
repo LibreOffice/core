@@ -27,13 +27,13 @@ namespace filter{
 
 
 
-QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
+QueryTokenizer::QueryTokenizer(const OUString& sQuery)
     : m_bValid(sal_True)
 {
     sal_Int32 token = 0;
     while(token != -1)
     {
-        ::rtl::OUString sToken = sQuery.getToken(0, ':', token);
+        OUString sToken = sQuery.getToken(0, ':', token);
         if (!sToken.isEmpty())
         {
             sal_Int32 equal = sToken.indexOf('=');
@@ -42,8 +42,8 @@ QueryTokenizer::QueryTokenizer(const ::rtl::OUString& sQuery)
                 m_bValid = sal_False;
             OSL_ENSURE(m_bValid, "QueryTokenizer::QueryTokenizer()\nFound non boolean query parameter ... but its key is empty. Will be ignored!\n");
 
-            ::rtl::OUString sKey;
-            ::rtl::OUString sVal;
+            OUString sKey;
+            OUString sVal;
 
             sKey = sToken;
             if (equal > 0)

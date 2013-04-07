@@ -499,8 +499,8 @@ ELockType& LockHelper::implts_getLockType()
         {
             static ELockType eType = FALLBACK_LOCKTYPE;
 
-            ::rtl::OUString     aEnvVar( ENVVAR_LOCKTYPE );
-            ::rtl::OUString     sValue      ;
+            OUString     aEnvVar( ENVVAR_LOCKTYPE );
+            OUString     sValue      ;
             if( osl_getEnvironment( aEnvVar.pData, &sValue.pData ) == osl_Process_E_None )
             {
                 eType = (ELockType)(sValue.toInt32());

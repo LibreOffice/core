@@ -497,7 +497,7 @@ void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
     if (pListItem && pListItem->GetValue())
     {
         std::vector<String> aFaxList;
-        const std::vector<rtl::OUString>& rPrinters = Printer::GetPrinterQueues();
+        const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
         for (unsigned int i = 0; i < rPrinters.size(); ++i)
             aFaxList.insert(aFaxList.begin(), rPrinters[i]);
         SetFax( aFaxList );
@@ -1770,10 +1770,10 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aMarkColorLB.SetSelectHdl( aLk );
 
     //solution: set different accessible name of four color box
-    aInsertColorLB.SetAccessibleName(::rtl::OUString( aInsertFT.GetDisplayText()) + ::rtl::OUString(aInsertColorFT.GetDisplayText()));
-    aDeletedColorLB.SetAccessibleName(::rtl::OUString( aDeletedFT.GetDisplayText()) + ::rtl::OUString( aDeletedColorFT.GetDisplayText()));
-    aChangedColorLB.SetAccessibleName(::rtl::OUString( aChangedFT.GetDisplayText()) + ::rtl::OUString( aChangedColorFT.GetDisplayText()));
-    aMarkColorLB.SetAccessibleName(::rtl::OUString( aMarkPosFT.GetDisplayText()) + ::rtl::OUString( aMarkColorFT.GetDisplayText()));
+    aInsertColorLB.SetAccessibleName(OUString( aInsertFT.GetDisplayText()) + OUString(aInsertColorFT.GetDisplayText()));
+    aDeletedColorLB.SetAccessibleName(OUString( aDeletedFT.GetDisplayText()) + OUString( aDeletedColorFT.GetDisplayText()));
+    aChangedColorLB.SetAccessibleName(OUString( aChangedFT.GetDisplayText()) + OUString( aChangedColorFT.GetDisplayText()));
+    aMarkColorLB.SetAccessibleName(OUString( aMarkPosFT.GetDisplayText()) + OUString( aMarkColorFT.GetDisplayText()));
 }
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()

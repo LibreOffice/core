@@ -67,8 +67,8 @@
 #include "cmis_provider.hxx"
 #include "cmis_resultset.hxx"
 
-#define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
-#define STD_TO_OUSTR( str ) rtl::OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
+#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
 using namespace std;
@@ -106,8 +106,8 @@ namespace
                     vector< string > aCmisStrings = pProperty->getStrings( );
                     if ( bMultiValued )
                     {
-                        uno::Sequence< rtl::OUString > aStrings( aCmisStrings.size( ) );
-                        rtl::OUString* aStringsArr = aStrings.getArray( );
+                        uno::Sequence< OUString > aStrings( aCmisStrings.size( ) );
+                        OUString* aStringsArr = aStrings.getArray( );
                         sal_Int32 i = 0;
                         for ( vector< string >::iterator it = aCmisStrings.begin( );
                                 it != aCmisStrings.end( ); ++it, ++i )
@@ -262,13 +262,13 @@ namespace cmis
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
         const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
                 INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
-        rtl::OUString sProxy = rProxy.aName;
+        OUString sProxy = rProxy.aName;
         if ( rProxy.nPort > 0 )
-            sProxy += ":" + rtl::OUString::valueOf( rProxy.nPort );
+            sProxy += ":" + OUString::valueOf( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
 
         // Look for a cached session, key is binding url + repo id
-        rtl::OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
+        OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( NULL == m_pSession )
             m_pSession = m_pProvider->getSession( sSessionId );
 
@@ -290,7 +290,7 @@ namespace cmis
                                         ucb::IOErrorCode_INVALID_DEVICE,
                                         uno::Sequence< uno::Any >( 0 ),
                                         xEnv,
-                                        rtl::OUString( ) );
+                                        OUString( ) );
                 m_pProvider->registerSession( sSessionId, m_pSession );
             }
             else
@@ -371,7 +371,7 @@ namespace cmis
                     INetURLObject aParentUrl( m_sURL );
                     string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
                     aParentUrl.removeSegment( );
-                    rtl::OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
+                    OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
 
                     Content aParent( m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl ) );
                     libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( aParent.getObject( xEnv ) );
@@ -396,7 +396,7 @@ namespace cmis
             {
                 m_pObject = getSession( xEnv )->getRootFolder( );
                 m_sObjectPath = "/";
-                m_sObjectId = rtl::OUString( );
+                m_sObjectId = OUString( );
             }
         }
 
@@ -417,7 +417,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what( ) ) );
+                                OUString::createFromAscii( e.what( ) ) );
         }
         return bIsFolder;
     }
@@ -425,7 +425,7 @@ namespace cmis
     uno::Any Content::getBadArgExcept()
     {
         return uno::makeAny( lang::IllegalArgumentException(
-            rtl::OUString("Wrong argument type!"),
+            OUString("Wrong argument type!"),
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
@@ -477,7 +477,7 @@ namespace cmis
                 }
                 else if ( rProp.Name == "Title" )
                 {
-                    rtl::OUString sTitle;
+                    OUString sTitle;
                     try
                     {
                         sTitle = STD_TO_OUSTR( getObject( xEnv )->getName() );
@@ -499,7 +499,7 @@ namespace cmis
                     // Nothing worked... get it from the path
                     if ( sTitle.isEmpty( ) )
                     {
-                        rtl::OUString sPath = m_sObjectPath;
+                        OUString sPath = m_sObjectPath;
 
                         // Get rid of the trailing slash problem
                         if ( sPath[ sPath.getLength( ) - 1 ] == '/' )
@@ -726,7 +726,7 @@ namespace cmis
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
             uno::Any aErr = uno::makeAny(
-                ucb::InteractiveAugmentedIOException(rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
                     bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
             );
@@ -757,7 +757,7 @@ namespace cmis
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny ( ucb::UnsupportedOpenModeException
-                        ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                        ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                           sal_Int16( rOpenCommand.Mode ) ) ),
                         xEnv );
             }
@@ -771,7 +771,7 @@ namespace cmis
 
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny (ucb::UnsupportedDataSinkException
-                        ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ),
+                        ( OUString(), static_cast< cppu::OWeakObject * >( this ),
                           rOpenCommand.Sink ) ),
                         xEnv );
             }
@@ -782,7 +782,7 @@ namespace cmis
         return aRet;
     }
 
-    rtl::OUString Content::checkIn( const ucb::CheckinArgument& rArg,
+    OUString Content::checkIn( const ucb::CheckinArgument& rArg,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
     {
@@ -834,10 +834,10 @@ namespace cmis
         return aCmisUrl.asString( );
     }
 
-    rtl::OUString Content::checkOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    OUString Content::checkOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
     {
-        rtl::OUString aRet;
+        OUString aRet;
         try
         {
             // Checkout the document if possible
@@ -876,15 +876,15 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                OUString::createFromAscii( e.what() ) );
         }
         return aRet;
     }
 
-    rtl::OUString Content::cancelCheckOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+    OUString Content::cancelCheckOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
     {
-        rtl::OUString aRet;
+        OUString aRet;
         try
         {
             libcmis::DocumentPtr pPwc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
@@ -942,7 +942,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                OUString::createFromAscii( e.what() ) );
         }
         return aRet;
     }
@@ -955,13 +955,13 @@ namespace cmis
         INetURLObject aSourceUrl( rTransferInfo.SourceURL );
         if ( aSourceUrl.GetProtocol() != INET_PROT_CMIS )
         {
-            rtl::OUString sSrcBindingUrl = URL( rTransferInfo.SourceURL ).getBindingUrl( );
+            OUString sSrcBindingUrl = URL( rTransferInfo.SourceURL ).getBindingUrl( );
             if ( sSrcBindingUrl != m_aURL.getBindingUrl( ) )
             {
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
                         ucb::InteractiveBadTransferURLException(
-                            rtl::OUString("Unsupported URL scheme!"),
+                            OUString("Unsupported URL scheme!"),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
                     xEnv );
             }
@@ -971,7 +971,7 @@ namespace cmis
     }
 
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const rtl::OUString& rMimeType,
+        sal_Bool bReplaceExisting, const OUString& rMimeType,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception )
     {
@@ -979,14 +979,14 @@ namespace cmis
         {
             ucbhelper::cancelCommandExecution( uno::makeAny
                 ( ucb::MissingInputStreamException
-                  ( rtl::OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
+                  ( OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
         }
 
         // For transient content, the URL is the one of the parent
         if ( m_bTransient )
         {
-            rtl::OUString sNewPath;
+            OUString sNewPath;
 
             // Try to get the object from the server if there is any
             libcmis::Folder* pFolder = NULL;
@@ -1149,7 +1149,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                OUString::createFromAscii( e.what() ) );
         }
 
         sal_Int32 nCount = rValues.getLength();
@@ -1167,17 +1167,17 @@ namespace cmis
                  rValue.Name == "Size" ||
                  rValue.Name == "CreatableContentsInfo" )
             {
-                lang::IllegalAccessException e ( rtl::OUString("Property is read-only!"),
+                lang::IllegalAccessException e ( OUString("Property is read-only!"),
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
             }
             else if ( rValue.Name == "Title" )
             {
-                rtl::OUString aNewTitle;
+                OUString aNewTitle;
                 if (!( rValue.Value >>= aNewTitle ))
                 {
                     aRet[ n ] <<= beans::IllegalTypeException
-                        ( rtl::OUString("Property value has wrong type!"),
+                        ( OUString("Property value has wrong type!"),
                           static_cast< cppu::OWeakObject * >( this ) );
                     continue;
                 }
@@ -1185,7 +1185,7 @@ namespace cmis
                 if ( aNewTitle.getLength() <= 0 )
                 {
                     aRet[ n ] <<= lang::IllegalArgumentException
-                        ( rtl::OUString("Empty title not allowed!"),
+                        ( OUString("Empty title not allowed!"),
                           static_cast< cppu::OWeakObject * >( this ), -1 );
                     continue;
 
@@ -1197,7 +1197,7 @@ namespace cmis
             else
             {
                 SAL_INFO( "cmisucp", "Couln't set property: " << rValue.Name );
-                lang::IllegalAccessException e ( rtl::OUString("Property is read-only!"),
+                lang::IllegalAccessException e ( OUString("Property is read-only!"),
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
             }
@@ -1217,7 +1217,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                OUString::createFromAscii( e.what() ) );
         }
 
         return aRet;
@@ -1260,7 +1260,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                OUString::createFromAscii( e.what() ) );
         }
 
         return sal_True;
@@ -1271,52 +1271,52 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( rtl::OUString( "IsDocument" ),
+            beans::Property( OUString( "IsDocument" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "IsFolder" ),
+            beans::Property( OUString( "IsFolder" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "Title" ),
-                -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::Property( OUString( "Title" ),
+                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "TitleOnServer" ),
-                -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::Property( OUString( "TitleOnServer" ),
+                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "IsReadOnly" ),
+            beans::Property( OUString( "IsReadOnly" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "DateCreated" ),
+            beans::Property( OUString( "DateCreated" ),
                 -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "DateModified" ),
+            beans::Property( OUString( "DateModified" ),
                 -1, getCppuType( static_cast< const util::DateTime * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "Size" ),
+            beans::Property( OUString( "Size" ),
                 -1, getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "CreatableContentsInfo" ),
+            beans::Property( OUString( "CreatableContentsInfo" ),
                 -1, getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "MediaType" ),
-                -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::Property( OUString( "MediaType" ),
+                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "CmisPropertiesValues" ),
+            beans::Property( OUString( "CmisPropertiesValues" ),
                 -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "CmisPropertiesDisplayNames" ),
+            beans::Property( OUString( "CmisPropertiesDisplayNames" ),
                 -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "IsVersionable" ),
+            beans::Property( OUString( "IsVersionable" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "CanCheckOut" ),
+            beans::Property( OUString( "CanCheckOut" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "CanCancelCheckOut" ),
+            beans::Property( OUString( "CanCancelCheckOut" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "CanCheckIn" ),
+            beans::Property( OUString( "CanCheckIn" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -1332,41 +1332,41 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( rtl::OUString( "getCommandInfo" ),
+            ( OUString( "getCommandInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( "getPropertySetInfo" ),
+            ( OUString( "getPropertySetInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( "getPropertyValues" ),
+            ( OUString( "getPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
             ucb::CommandInfo
-            ( rtl::OUString( "setPropertyValues" ),
+            ( OUString( "setPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( rtl::OUString( "delete" ),
+            ( OUString( "delete" ),
               -1, getCppuBooleanType() ),
             ucb::CommandInfo
-            ( rtl::OUString( "insert" ),
+            ( OUString( "insert" ),
               -1, getCppuType( static_cast<ucb::InsertCommandArgument2 * >( 0 ) ) ),
             ucb::CommandInfo
-            ( rtl::OUString( "open" ),
+            ( OUString( "open" ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
             // Mandatory CMIS-only commands
-            ucb::CommandInfo ( rtl::OUString( "checkout" ), -1, getCppuVoidType() ),
-            ucb::CommandInfo ( rtl::OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
-            ucb::CommandInfo ( rtl::OUString( "checkIn" ), -1,
+            ucb::CommandInfo ( OUString( "checkout" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( OUString( "checkIn" ), -1,
                     getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
-            ( rtl::OUString( "transfer" ),
+            ( OUString( "transfer" ),
               -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
             ucb::CommandInfo
-            ( rtl::OUString( "createNewContent" ),
+            ( OUString( "createNewContent" ),
               -1, getCppuType( static_cast<ucb::ContentInfo * >( 0 ) ) )
         };
 
@@ -1374,9 +1374,9 @@ namespace cmis
         return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, isFolder( xEnv ) ? nProps : nProps - 2);
     }
 
-    ::rtl::OUString Content::getParentURL( )
+    OUString Content::getParentURL( )
     {
-        rtl::OUString sRet;
+        OUString sRet;
 
         SAL_INFO( "cmisucp", "Content::getParentURL()" );
 
@@ -1443,24 +1443,24 @@ namespace cmis
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
     }
 
-    rtl::OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException )
     {
-       return rtl::OUString("com.sun.star.comp.CmisContent");
+       return OUString("com.sun.star.comp.CmisContent");
     }
 
-    uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
            throw( uno::RuntimeException )
     {
-           uno::Sequence< rtl::OUString > aSNS( 1 );
+           uno::Sequence< OUString > aSNS( 1 );
            aSNS.getArray()[ 0 ] = "com.sun.star.ucb.CmisContent";
            return aSNS;
     }
 
-    rtl::OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
+    OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
     {
         return isFolder( uno::Reference< ucb::XCommandEnvironment >() )
-            ? rtl::OUString(CMIS_FOLDER_TYPE)
-            : rtl::OUString(CMIS_FILE_TYPE);
+            ? OUString(CMIS_FOLDER_TYPE)
+            : OUString(CMIS_FILE_TYPE);
     }
 
     uno::Any SAL_CALL Content::execute(
@@ -1547,7 +1547,7 @@ namespace cmis
                                     ucb::IOErrorCode_GENERAL,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    rtl::OUString::createFromAscii( e.what() ) );
+                                    OUString::createFromAscii( e.what() ) );
             }
         }
         else if ( aCommand.Name == "checkout" )
@@ -1573,7 +1573,7 @@ namespace cmis
 
             ucbhelper::cancelCommandExecution
                 ( uno::makeAny( ucb::UnsupportedCommandException
-                  ( rtl::OUString(),
+                  ( OUString(),
                     static_cast< cppu::OWeakObject * >( this ) ) ),
                   xEnv );
         }
@@ -1608,7 +1608,7 @@ namespace cmis
             return uno::Reference< ucb::XContent >();
         }
 
-        rtl::OUString sParentURL = m_xIdentifier->getContentIdentifier();
+        OUString sParentURL = m_xIdentifier->getContentIdentifier();
         URL aParentURL( sParentURL );
 
         // Set the parent URL for the transient objects
@@ -1672,19 +1672,19 @@ namespace cmis
             // Minimum set of props we really need
             uno::Sequence< beans::Property > props( 1 );
             props[0] = beans::Property(
-                rtl::OUString("Title"),
+                OUString("Title"),
                 -1,
-                getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                getCppuType( static_cast< OUString* >( 0 ) ),
                 beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
             // file
-            seq[0].Type       = rtl::OUString(CMIS_FILE_TYPE);
+            seq[0].Type       = OUString(CMIS_FILE_TYPE);
             seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                                   ucb::ContentInfoAttribute::KIND_DOCUMENT );
             seq[0].Properties = props;
 
             // folder
-            seq[1].Type       = rtl::OUString(CMIS_FOLDER_TYPE);
+            seq[1].Type       = OUString(CMIS_FOLDER_TYPE);
             seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
             seq[1].Properties = props;
 
@@ -1716,7 +1716,7 @@ namespace cmis
                     // TODO Cache the objects
 
                     URL aUrl( m_sURL );
-                    rtl::OUString sPath( m_sObjectPath );
+                    OUString sPath( m_sObjectPath );
                     if ( sPath[sPath.getLength( ) - 1] != '/' )
                         sPath += "/";
                     sPath += STD_TO_OUSTR( ( *it )->getName( ) );

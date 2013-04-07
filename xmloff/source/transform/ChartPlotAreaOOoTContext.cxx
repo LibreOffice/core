@@ -30,7 +30,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 class XMLAxisOOoContext : public XMLPersElemContentTContext
 {
@@ -38,7 +37,7 @@ public:
     TYPEINFO();
 
     XMLAxisOOoContext( XMLTransformerBase& rTransformer,
-                       const ::rtl::OUString& rQName );
+                       const OUString& rQName );
     ~XMLAxisOOoContext();
 
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList );
@@ -53,7 +52,7 @@ TYPEINIT1( XMLAxisOOoContext, XMLPersElemContentTContext );
 
 XMLAxisOOoContext::XMLAxisOOoContext(
     XMLTransformerBase& rTransformer,
-    const ::rtl::OUString& rQName ) :
+    const OUString& rQName ) :
         XMLPersElemContentTContext( rTransformer, rQName ),
         m_bIsCategoryAxis( false )
 {}
@@ -128,7 +127,7 @@ bool XMLAxisOOoContext::IsCategoryAxis() const
 TYPEINIT1( XMLChartPlotAreaOOoTContext, XMLProcAttrTransformerContext )
 
 XMLChartPlotAreaOOoTContext::XMLChartPlotAreaOOoTContext(
-    XMLTransformerBase & rTransformer, const ::rtl::OUString & rQName ) :
+    XMLTransformerBase & rTransformer, const OUString & rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OOO_SHAPE_ACTIONS )
 {
 }
@@ -138,8 +137,8 @@ XMLChartPlotAreaOOoTContext::~XMLChartPlotAreaOOoTContext()
 
 XMLTransformerContext * XMLChartPlotAreaOOoTContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
-    const ::rtl::OUString& rQName,
+    const OUString& rLocalName,
+    const OUString& rQName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     XMLTransformerContext *pContext = 0;

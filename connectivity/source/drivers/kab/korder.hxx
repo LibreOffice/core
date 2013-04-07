@@ -44,7 +44,7 @@ namespace connectivity
 
             QString value(const ::KABC::Addressee &aAddressee) const;
         public:
-            KabSimpleOrder(::rtl::OUString &sColumnName, sal_Bool bAscending);
+            KabSimpleOrder(OUString &sColumnName, sal_Bool bAscending);
 
             virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const;
         };

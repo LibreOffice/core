@@ -105,13 +105,13 @@ public:
     ::com::sun::star::awt::Size CalculateTheRealSize( const ::com::sun::star::awt::Size& aContSize, sal_Bool bUpdate );
 
     // ==== Initialization ==================================================
-    void LoadEmbeddedObject( const ::rtl::OUString& aTempURL );
+    void LoadEmbeddedObject( const OUString& aTempURL );
     void CreateObjectFromClipboard();
     void CreateNewEmbeddedObject( const ::com::sun::star::uno::Sequence< sal_Int8 >& aSeqCLSID );
     void CreateObjectFromData(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransfer );
-    void CreateObjectFromFile( const ::rtl::OUString& aFileName );
-    void CreateLinkFromFile( const ::rtl::OUString& aFileName );
+    void CreateObjectFromFile( const OUString& aFileName );
+    void CreateLinkFromFile( const OUString& aFileName );
     void InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent );
 
     // ======================================================================
@@ -121,7 +121,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > GetVerbList();
 
     void ExecuteVerb( sal_Int32 nVerbID );
-    void SetHostName( const ::rtl::OUString& aContName, const ::rtl::OUString& aEmbDocName );
+    void SetHostName( const OUString& aContName, const OUString& aEmbDocName );
     void SetExtent( const ::com::sun::star::awt::Size& aVisAreaSize, sal_Int64 nAspect );
 
     ::com::sun::star::awt::Size GetExtent( sal_Int64 nAspect );

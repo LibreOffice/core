@@ -112,16 +112,16 @@ enumXFStyle XFTextStyle::GetStyleFamily()
 void    XFTextStyle::ToXml(IXFStream *strm)
 {
     IXFAttrList *pAttrList = strm->GetAttrList();
-    rtl::OUString style = GetStyleName();
+    OUString style = GetStyleName();
 
     pAttrList->Clear();
     if( !style.isEmpty() )
-        pAttrList->AddAttribute(rtl::OUString("style:name"),GetStyleName());
+        pAttrList->AddAttribute(OUString("style:name"),GetStyleName());
     if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
-    pAttrList->AddAttribute(rtl::OUString("style:family"),A2OUSTR("text") );
-    strm->StartElement(rtl::OUString("style:style"));
+    pAttrList->AddAttribute(OUString("style:family"),A2OUSTR("text") );
+    strm->StartElement(OUString("style:style"));
 
     //Font properties:
     pAttrList->Clear();
@@ -129,10 +129,10 @@ void    XFTextStyle::ToXml(IXFStream *strm)
     if( m_pFont )
         m_pFont->ToXml(strm);
 
-    strm->StartElement(rtl::OUString("style:properties"));
-    strm->EndElement(rtl::OUString("style:properties"));
+    strm->StartElement(OUString("style:properties"));
+    strm->EndElement(OUString("style:properties"));
 
-    strm->EndElement(rtl::OUString("style:style"));
+    strm->EndElement(OUString("style:style"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

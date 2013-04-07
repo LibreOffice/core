@@ -145,7 +145,7 @@ JobData::~JobData()
     @param      sAlias
                     the alias name of this job, used to locate job properties inside cfg
 */
-void JobData::setAlias( const ::rtl::OUString& sAlias )
+void JobData::setAlias( const OUString& sAlias )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
@@ -158,7 +158,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
     // try to open the configuration set of this job directly and get a property access to it
     // We open it readonly here
-    ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
+    OUString sKey(OUString::createFromAscii(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
     ConfigAccess aConfig(m_xContext, sKey);
@@ -175,22 +175,22 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
         css::uno::Any aValue;
 
         // read uno implementation name
-        aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_SERVICE));
+        aValue   = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_SERVICE));
         aValue >>= m_sService;
 
         // read module context list
-        aValue   = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_CONTEXT));
+        aValue   = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_CONTEXT));
         aValue >>= m_sContext;
 
         // read whole argument list
-        aValue = xJobProperties->getPropertyValue(::rtl::OUString::createFromAscii(JOBCFG_PROP_ARGUMENTS));
+        aValue = xJobProperties->getPropertyValue(OUString::createFromAscii(JOBCFG_PROP_ARGUMENTS));
         css::uno::Reference< css::container::XNameAccess > xArgumentList;
         if (
             (aValue >>= xArgumentList)  &&
             (xArgumentList.is()      )
            )
         {
-            css::uno::Sequence< ::rtl::OUString > lArgumentNames = xArgumentList->getElementNames();
+            css::uno::Sequence< OUString > lArgumentNames = xArgumentList->getElementNames();
             sal_Int32                             nCount         = lArgumentNames.getLength();
             m_lArguments.realloc(nCount);
             for (sal_Int32 i=0; i<nCount; ++i)
@@ -215,7 +215,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
     @param      sService
                     the uno service name of this "non configured" job
 */
-void JobData::setService( const ::rtl::OUString& sService )
+void JobData::setService( const OUString& sService )
 {
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
@@ -249,8 +249,8 @@ void JobData::setService( const ::rtl::OUString& sService )
     @param      sAlias
                     mark the required job inside event registration list
 */
-void JobData::setEvent( const ::rtl::OUString& sEvent ,
-                        const ::rtl::OUString& sAlias )
+void JobData::setEvent( const OUString& sEvent ,
+                        const OUString& sAlias )
 {
     // share code to read all job properties!
     setAlias(sAlias);
@@ -292,7 +292,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         // It doesn't matter if this config object was already opened before.
         // It doesn nothing here then ... or it change the mode automaticly, if
         // it was opened using another one before.
-        ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
+        OUString sKey(OUString::createFromAscii(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
         ConfigAccess aConfig(m_xContext, sKey);
@@ -304,7 +304,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         if (xArgumentList.is())
         {
             sal_Int32                             nCount = m_lArguments.getLength();
-            css::uno::Sequence< ::rtl::OUString > lNames (nCount);
+            css::uno::Sequence< OUString > lNames (nCount);
             css::uno::Sequence< css::uno::Any >   lValues(nCount);
 
             for (sal_Int32 i=0; i<nCount; ++i)
@@ -393,23 +393,23 @@ JobData::EEnvironment JobData::getEnvironment() const
 
 //________________________________
 
-::rtl::OUString JobData::getEnvironmentDescriptor() const
+OUString JobData::getEnvironmentDescriptor() const
 {
-    ::rtl::OUString sDescriptor;
+    OUString sDescriptor;
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
     switch(m_eEnvironment)
     {
         case E_EXECUTION :
-            sDescriptor = ::rtl::OUString("EXECUTOR");
+            sDescriptor = OUString("EXECUTOR");
             break;
 
         case E_DISPATCH :
-            sDescriptor = ::rtl::OUString("DISPATCH");
+            sDescriptor = OUString("DISPATCH");
             break;
 
         case E_DOCUMENTEVENT :
-            sDescriptor = ::rtl::OUString("DOCUMENTEVENT");
+            sDescriptor = OUString("DOCUMENTEVENT");
             break;
         default:
             break;
@@ -420,7 +420,7 @@ JobData::EEnvironment JobData::getEnvironment() const
 
 //________________________________
 
-::rtl::OUString JobData::getService() const
+OUString JobData::getService() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -430,7 +430,7 @@ JobData::EEnvironment JobData::getEnvironment() const
 
 //________________________________
 
-::rtl::OUString JobData::getEvent() const
+OUString JobData::getEvent() const
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -460,15 +460,15 @@ css::uno::Sequence< css::beans::NamedValue > JobData::getConfig() const
         lConfig.realloc(3);
         sal_Int32 i = 0;
 
-        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_ALIAS);
+        lConfig[i].Name = OUString::createFromAscii(PROP_ALIAS);
         lConfig[i].Value <<= m_sAlias;
         ++i;
 
-        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_SERVICE);
+        lConfig[i].Name = OUString::createFromAscii(PROP_SERVICE);
         lConfig[i].Value <<= m_sService;
         ++i;
 
-        lConfig[i].Name = ::rtl::OUString::createFromAscii(PROP_CONTEXT);
+        lConfig[i].Name = OUString::createFromAscii(PROP_CONTEXT);
         lConfig[i].Value <<= m_sContext;
         ++i;
     }
@@ -521,7 +521,7 @@ void JobData::disableJob()
     // It doesn't matter if this config object was already opened before.
     // It doesn nothing here then ... or it change the mode automaticly, if
     // it was opened using another one before.
-    ::rtl::OUStringBuffer sKey(256);
+    OUStringBuffer sKey(256);
     sKey.appendAscii(JobData::EVENTCFG_ROOT                       );
     sKey.append     (::utl::wrapConfigurationElementName(m_sEvent));
     sKey.appendAscii(JobData::EVENTCFG_PATH_JOBLIST               );
@@ -539,7 +539,7 @@ void JobData::disableJob()
         // Convert and write the user timestamp to the configuration.
         css::uno::Any aValue;
         aValue <<= Converter::convert_DateTime2ISO8601(DateTime( DateTime::SYSTEM));
-        xPropSet->setPropertyValue(::rtl::OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
+        xPropSet->setPropertyValue(OUString::createFromAscii(EVENTCFG_PROP_USERTIME), aValue);
     }
 
     aConfig.close();
@@ -551,15 +551,15 @@ void JobData::disableJob()
 //________________________________
 /**
  */
-sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
-                    const ::rtl::OUString& sUserTime  )
+sal_Bool isEnabled( const OUString& sAdminTime ,
+                    const OUString& sUserTime  )
 {
     /*Attention!
         To prevent interpreting of TriGraphs inside next const string value,
         we have to encode all '?' signs. Otherwhise e.g. "??-" will be translated
         to "~" ...
      */
-    static ::rtl::OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*");
+    static OUString PATTERN_ISO8601("\?\?\?\?-\?\?-\?\?*");
     WildCard aISOPattern(PATTERN_ISO8601);
 
     sal_Bool bValidAdmin = aISOPattern.Matches(sAdminTime);
@@ -577,10 +577,10 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
 /**
  */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
-                                         const ::rtl::OUString&                                                 sEvent ,
+                                         const OUString&                                                 sEvent ,
                                                ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  )
 {
-    css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
+    css::uno::Sequence< OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
     sal_Int32                             c               = lAdditionalJobs.getLength();
     sal_Int32                             i               = 0;
 
@@ -594,7 +594,7 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
 //________________________________
 /**
  */
-sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
+sal_Bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 {
     sal_Int32 nContextLen  = m_sContext.getLength();
     sal_Int32 nModuleIdLen = rModuleIdent.getLength();
@@ -607,7 +607,7 @@ sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
         sal_Int32 nIndex = m_sContext.indexOf( rModuleIdent );
         if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
     {
-        ::rtl::OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
+        OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
         return sContextModule.equals( rModuleIdent );
     }
     }
@@ -618,49 +618,49 @@ sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
 //________________________________
 /**
  */
-css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                       const ::rtl::OUString&                                    sEvent )
+css::uno::Sequence< OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                       const OUString&                                    sEvent )
 {
     // these static values may perform following loop for reading time stamp values ...
-    static ::rtl::OUString ADMINTIME = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
-    static ::rtl::OUString USERTIME  = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_USERTIME );
-    static ::rtl::OUString ROOT      = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT          );
-    static ::rtl::OUString JOBLIST   = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PATH_JOBLIST  );
+    static OUString ADMINTIME = OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
+    static OUString USERTIME  = OUString::createFromAscii(JobData::EVENTCFG_PROP_USERTIME );
+    static OUString ROOT      = OUString::createFromAscii(JobData::EVENTCFG_ROOT          );
+    static OUString JOBLIST   = OUString::createFromAscii(JobData::EVENTCFG_PATH_JOBLIST  );
 
     // create a config access to "/org.openoffice.Office.Jobs/Events"
     ConfigAccess aConfig(rxContext,ROOT);
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
-        return css::uno::Sequence< ::rtl::OUString >();
+        return css::uno::Sequence< OUString >();
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > xEventRegistry(aConfig.cfg(), css::uno::UNO_QUERY);
     if (!xEventRegistry.is())
-        return css::uno::Sequence< ::rtl::OUString >();
+        return css::uno::Sequence< OUString >();
 
     // check if the given event exist inside list of registered ones
-    ::rtl::OUString sPath(sEvent);
+    OUString sPath(sEvent);
     sPath += JOBLIST;
     if (!xEventRegistry->hasByHierarchicalName(sPath))
-        return css::uno::Sequence< ::rtl::OUString >();
+        return css::uno::Sequence< OUString >();
 
     // step to the job list, which is a child of the event node inside cfg
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>/JobList"
     css::uno::Any aJobList = xEventRegistry->getByHierarchicalName(sPath);
     css::uno::Reference< css::container::XNameAccess > xJobList;
     if (!(aJobList >>= xJobList) || !xJobList.is())
-        return css::uno::Sequence< ::rtl::OUString >();
+        return css::uno::Sequence< OUString >();
 
     // get all alias names of jobs, which are part of this job list
     // But Some of them can be disabled by it's time stamp values.
     // We create an additional job name list with the same size, then the original list ...
     // step over all job entries ... check her time stamps ... and put only job names to the
     // destination list, which represent an enabled job.
-    css::uno::Sequence< ::rtl::OUString > lAllJobs = xJobList->getElementNames();
-    ::rtl::OUString* pAllJobs = lAllJobs.getArray();
+    css::uno::Sequence< OUString > lAllJobs = xJobList->getElementNames();
+    OUString* pAllJobs = lAllJobs.getArray();
     sal_Int32 c = lAllJobs.getLength();
 
-    css::uno::Sequence< ::rtl::OUString > lEnabledJobs(c);
-    ::rtl::OUString* pEnabledJobs = lEnabledJobs.getArray();
+    css::uno::Sequence< OUString > lEnabledJobs(c);
+    OUString* pEnabledJobs = lEnabledJobs.getArray();
     sal_Int32 d = 0;
 
     for (sal_Int32 s=0; s<c; ++s)
@@ -674,10 +674,10 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
            continue;
         }
 
-        ::rtl::OUString sAdminTime;
+        OUString sAdminTime;
         xJob->getPropertyValue(ADMINTIME) >>= sAdminTime;
 
-        ::rtl::OUString sUserTime;
+        OUString sUserTime;
         xJob->getPropertyValue(USERTIME) >>= sUserTime;
 
         if (!isEnabled(sAdminTime, sUserTime))
@@ -711,10 +711,10 @@ void JobData::impl_reset()
     WriteGuard aWriteLock(m_aLock);
     m_eMode        = E_UNKNOWN_MODE;
     m_eEnvironment = E_UNKNOWN_ENVIRONMENT;
-    m_sAlias       = ::rtl::OUString();
-    m_sService     = ::rtl::OUString();
-    m_sContext     = ::rtl::OUString();
-    m_sEvent       = ::rtl::OUString();
+    m_sAlias       = OUString();
+    m_sService     = OUString();
+    m_sContext     = OUString();
+    m_sEvent       = OUString();
     m_lArguments   = css::uno::Sequence< css::beans::NamedValue >();
     aWriteLock.unlock();
     /* } SAFE */

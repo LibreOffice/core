@@ -81,7 +81,6 @@
 #include "rtl/strbuf.hxx"
 #endif
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // =======================================================================
@@ -217,14 +216,14 @@ public:
         : m_xNextContext( ctx ) {}
 
     // XCurrentContext
-    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+    virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
             throw (com::sun::star::uno::RuntimeException);
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
 };
 
-uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Name) throw (uno::RuntimeException)
+uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name) throw (uno::RuntimeException)
 {
     uno::Any retVal;
 
@@ -284,11 +283,11 @@ sal_Bool InitVCL()
         pSVData->mpApp->Init();
 
     // Fetch AppFileName and make it absolute before the workdir changes...
-    rtl::OUString aExeFileName;
+    OUString aExeFileName;
     osl_getExecutableFile( &aExeFileName.pData );
 
     // convert path to native file format
-    rtl::OUString aNativeFileName;
+    OUString aNativeFileName;
     osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
     pSVData->maAppData.mpAppFileName = new String( aNativeFileName );
 
@@ -362,7 +361,7 @@ void DeInitVCL()
     pSVData->mpImeStatus = NULL;
 
     #if OSL_DEBUG_LEVEL > 0
-    rtl::OStringBuffer aBuf( 256 );
+    OStringBuffer aBuf( 256 );
     aBuf.append( "DeInitVCL: some top Windows are still alive\n" );
     long nTopWindowCount = Application::GetTopWindowCount();
     long nBadTopWindows = nTopWindowCount;
@@ -376,7 +375,7 @@ void DeInitVCL()
         else
         {
             aBuf.append( "text = \"" );
-            aBuf.append( rtl::OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) );
+            aBuf.append( OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) );
             aBuf.append( "\" type = \"" );
             aBuf.append( typeid(*pWin).name() );
             aBuf.append( "\", ptr = 0x" );

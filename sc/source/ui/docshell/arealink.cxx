@@ -114,7 +114,7 @@ void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
-        rtl::OUString aFile, aArea, aFilter;
+        OUString aFile, aArea, aFilter;
         pLinkManager->GetDisplayNames(this, NULL, &aFile, &aArea, &aFilter);
 
         //  the file dialog returns the filter name with the application prefix

@@ -53,8 +53,8 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-std::vector<TCHAR> OUStringToTCHARVec(rtl::OUString const &rStr);
-rtl::OUString TCHARArrayToOUString(TCHAR const *str);
+std::vector<TCHAR> OUStringToTCHARVec(OUString const &rStr);
+OUString TCHARArrayToOUString(TCHAR const *str);
 
 #endif
 

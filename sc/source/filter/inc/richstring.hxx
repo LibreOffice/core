@@ -55,7 +55,7 @@ public:
     explicit            RichStringPortion( const WorkbookHelper& rHelper );
 
     /** Sets text data for this portion. */
-    void                setText( const ::rtl::OUString& rText );
+    void                setText( const OUString& rText );
     /** Creates and returns a new font formatting object. */
     FontRef             createFont();
     /** Links this portion to a font object from the global font list. */
@@ -65,7 +65,7 @@ public:
     void                finalizeImport();
 
     /** Returns the text data of this portion. */
-    inline const ::rtl::OUString& getText() const { return maText; }
+    inline const OUString& getText() const { return maText; }
     /** Returns true, if the portion fontains font formatting. */
     inline bool         hasFont() const { return mxFont.get() != 0; }
 
@@ -81,7 +81,7 @@ public:
         const Font* pFont ) const;
 
 private:
-    ::rtl::OUString     maText;         /// Portion text.
+    OUString     maText;         /// Portion text.
     FontRef             mxFont;         /// Embedded portion font, may be empty.
     sal_Int32           mnFontId;       /// Link to global font list.
 };
@@ -173,14 +173,14 @@ public:
     explicit            RichStringPhonetic( const WorkbookHelper& rHelper );
 
     /** Sets text data for this phonetic portion. */
-    void                setText( const ::rtl::OUString& rText );
+    void                setText( const OUString& rText );
     /** Imports attributes of a phonetic run (rPh element). */
     void                importPhoneticRun( const AttributeList& rAttribs );
     /** Sets the associated range in base text for this phonetic portion. */
     void                setBaseRange( sal_Int32 nBasePos, sal_Int32 nBaseEnd );
 
 private:
-    ::rtl::OUString     maText;         /// Portion text.
+    OUString     maText;         /// Portion text.
     sal_Int32           mnBasePos;      /// Start position in base text.
     sal_Int32           mnBaseEnd;      /// One-past-end position in base text.
 };
@@ -244,7 +244,7 @@ public:
     /** Tries to extract a plain string from this object. Returns the string,
         if there is only one unformatted portion. */
     bool                extractPlainString(
-                            ::rtl::OUString& orString,
+                            OUString& orString,
                             const Font* pFirstPortionFont = 0 ) const;
 
     /** Converts the string and writes it into the passed XText.
@@ -265,9 +265,9 @@ private:
     RichStringPhoneticRef createPhonetic();
 
     /** Create base text portions from the passed string and character formatting. */
-    void                createTextPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
+    void                createTextPortions( const OUString& rText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */
-    void                createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
+    void                createPhoneticPortions( const OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
 
 private:
     typedef RefVector< RichStringPortion >  PortionVector;

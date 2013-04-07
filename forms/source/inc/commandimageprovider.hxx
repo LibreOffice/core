@@ -35,7 +35,7 @@ namespace frm
     //=====================================================================
     //= ICommandImageProvider
     //=====================================================================
-    typedef ::rtl::OUString                                 CommandURL;
+    typedef OUString                                 CommandURL;
     typedef ::com::sun::star::uno::Sequence< CommandURL >   CommandURLs;
     typedef ::std::vector< Image >                          CommandImages;
 

@@ -52,12 +52,12 @@ namespace padmin {
 
         void Import();
 
-        std::list< rtl::OUString >  m_aImportedFiles;
+        std::list< OUString >  m_aImportedFiles;
     public:
         PPDImportDialog( Window* pParent );
         ~PPDImportDialog();
 
-        const std::list< rtl::OUString >& getImportedFiles() const
+        const std::list< OUString >& getImportedFiles() const
         { return m_aImportedFiles; }
     };
 

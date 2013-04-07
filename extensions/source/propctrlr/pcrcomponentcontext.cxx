@@ -55,7 +55,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Any ComponentContext::getContextValueByName( const ::rtl::OUString& _rName ) const
+    Any ComponentContext::getContextValueByName( const OUString& _rName ) const
     {
         Any aReturn;
         try
@@ -70,7 +70,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > ComponentContext::createComponent( const ::rtl::OUString& _rServiceName ) const
+    Reference< XInterface > ComponentContext::createComponent( const OUString& _rServiceName ) const
     {
         Reference< XInterface > xComponent(
             m_xORB->createInstanceWithContext( _rServiceName, m_xContext )

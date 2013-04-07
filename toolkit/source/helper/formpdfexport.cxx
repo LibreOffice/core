@@ -63,7 +63,7 @@ namespace toolkitform
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
         {
-            static const ::rtl::OUString FM_PROP_CLASSID("ClassId");
+            static const OUString FM_PROP_CLASSID("ClassId");
             sal_Int16 nControlType = FormComponentType::CONTROL;
 
             Reference< XPropertySetInfo > xPSI;
@@ -154,8 +154,8 @@ namespace toolkitform
             ::std::vector< sal_Int32 >                 aPath;
 
             Reference< XInterface > xNormalizedLookup( _rxRadioModel, UNO_QUERY );
-            ::rtl::OUString sRadioGroupName;
-            OSL_VERIFY( _rxRadioModel->getPropertyValue( rtl::OUString(FM_PROP_NAME) ) >>= sRadioGroupName );
+            OUString sRadioGroupName;
+            OSL_VERIFY( _rxRadioModel->getPropertyValue( OUString(FM_PROP_NAME) ) >>= sRadioGroupName );
 
             Reference< XIndexAccess > xCurrentContainer( xRoot );
             sal_Int32 nStartWithChild = 0;
@@ -203,9 +203,9 @@ namespace toolkitform
                     if ( xElement.get() == xNormalizedLookup.get() )
                     {
                         // look up the name of the radio group in the list of all element names
-                        Sequence< ::rtl::OUString > aElementNames( xElementNameAccess->getElementNames() );
-                        const ::rtl::OUString* pElementNames = aElementNames.getConstArray();
-                        const ::rtl::OUString* pElementNamesEnd = pElementNames + aElementNames.getLength();
+                        Sequence< OUString > aElementNames( xElementNameAccess->getElementNames() );
+                        const OUString* pElementNames = aElementNames.getConstArray();
+                        const OUString* pElementNamesEnd = pElementNames + aElementNames.getLength();
                         while ( pElementNames != pElementNamesEnd )
                         {
                             if ( *pElementNames == sRadioGroupName )
@@ -241,13 +241,13 @@ namespace toolkitform
         //--------------------------------------------------------------------
         /** copies a StringItemList to a PDF widget's list
         */
-        void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< ::rtl::OUString >& _rVector )
+        void getStringItemVector( const Reference< XPropertySet >& _rxModel, ::std::vector< OUString >& _rVector )
         {
-            static const ::rtl::OUString FM_PROP_STRINGITEMLIST("StringItemList");
-            Sequence< ::rtl::OUString > aListEntries;
+            static const OUString FM_PROP_STRINGITEMLIST("StringItemList");
+            Sequence< OUString > aListEntries;
             OSL_VERIFY( _rxModel->getPropertyValue( FM_PROP_STRINGITEMLIST ) >>= aListEntries );
             ::std::copy( aListEntries.getConstArray(), aListEntries.getConstArray() + aListEntries.getLength(),
-                ::std::back_insert_iterator< ::std::vector< ::rtl::OUString > >( _rVector ) );
+                ::std::back_insert_iterator< ::std::vector< OUString > >( _rVector ) );
         }
     }
 
@@ -282,12 +282,12 @@ namespace toolkitform
 
             // --------------------------------
             // Name, Description, Text
-            OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
-            static const ::rtl::OUString FM_PROP_HELPTEXT("HelpText");
+            OSL_VERIFY( xModelProps->getPropertyValue( OUString(FM_PROP_NAME) ) >>= _rpDescriptor->Name );
+            static const OUString FM_PROP_HELPTEXT("HelpText");
             OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_HELPTEXT ) >>= _rpDescriptor->Description );
             Any aText;
-            static const ::rtl::OUString FM_PROP_TEXT("Text");
-            static const ::rtl::OUString FM_PROP_LABEL("Label");
+            static const OUString FM_PROP_TEXT("Text");
+            static const OUString FM_PROP_LABEL("Label");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
@@ -297,21 +297,21 @@ namespace toolkitform
 
             // --------------------------------
             // readonly
-            static const ::rtl::OUString FM_PROP_READONLY("ReadOnly");
+            static const OUString FM_PROP_READONLY("ReadOnly");
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= _rpDescriptor->ReadOnly );
 
             // --------------------------------
             // border
             {
-                static const ::rtl::OUString FM_PROP_BORDER("Border");
+                static const OUString FM_PROP_BORDER("Border");
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     sal_Int16 nBorderType = 0;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_BORDER ) >>= nBorderType );
                     _rpDescriptor->Border = ( nBorderType != 0 );
 
-                    ::rtl::OUString sBorderColorPropertyName( "BorderColor" );
+                    OUString sBorderColorPropertyName( "BorderColor" );
                     if ( xPSI->hasPropertyByName( sBorderColorPropertyName ) )
                     {
                         sal_Int32 nBoderColor = COL_TRANSPARENT;
@@ -325,7 +325,7 @@ namespace toolkitform
 
             // --------------------------------
             // background color
-            static const ::rtl::OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
+            static const OUString FM_PROP_BACKGROUNDCOLOR("BackgroundColor");
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
                 sal_Int32 nBackColor = COL_TRANSPARENT;
@@ -336,7 +336,7 @@ namespace toolkitform
 
             // --------------------------------
             // text color
-            static const ::rtl::OUString FM_PROP_TEXTCOLOR("TextColor");
+            static const OUString FM_PROP_TEXTCOLOR("TextColor");
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
                 sal_Int32 nTextColor = COL_TRANSPARENT;
@@ -351,7 +351,7 @@ namespace toolkitform
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
-            static const ::rtl::OUString FM_PROP_MULTILINE("MultiLine");
+            static const OUString FM_PROP_MULTILINE("MultiLine");
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
                 sal_Bool bMultiLine = sal_False;
@@ -361,7 +361,7 @@ namespace toolkitform
             }
             // ............................
             // horizontal alignment
-            static const ::rtl::OUString FM_PROP_ALIGN("Align");
+            static const OUString FM_PROP_ALIGN("Align");
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
@@ -380,7 +380,7 @@ namespace toolkitform
             // ............................
             // vertical alignment
             {
-                ::rtl::OUString sVertAlignPropertyName( "VerticalAlign" );
+                OUString sVertAlignPropertyName( "VerticalAlign" );
                 if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                 {
                     sal_Int16 nAlign = VerticalAlignment_MIDDLE;
@@ -397,7 +397,7 @@ namespace toolkitform
             }
 
             // font
-            static const ::rtl::OUString FM_PROP_FONT("FontDescriptor");
+            static const OUString FM_PROP_FONT("FontDescriptor");
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
                 FontDescriptor aUNOFont;
@@ -406,7 +406,7 @@ namespace toolkitform
             }
 
             // tab order
-            rtl::OUString aTabIndexString( "TabIndex" );
+            OUString aTabIndexString( "TabIndex" );
             if ( xPSI->hasPropertyByName( aTabIndexString ) )
             {
                 sal_Int16 nIndex = -1;
@@ -426,7 +426,7 @@ namespace toolkitform
                 pEditWidget->MultiLine = ( _rpDescriptor->TextStyle & TEXT_DRAW_MULTILINE ) != 0;
                 // ............................
                 // password input
-                ::rtl::OUString sEchoCharPropName( "EchoChar" );
+                OUString sEchoCharPropName( "EchoChar" );
                 if ( xPSI->hasPropertyByName( sEchoCharPropName ) )
                 {
                     sal_Int16 nEchoChar = 0;
@@ -435,12 +435,12 @@ namespace toolkitform
                 }
                 // ............................
                 // file select
-                static const ::rtl::OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
+                static const OUString FM_SUN_COMPONENT_FILECONTROL("com.sun.star.form.component.FileControl");
                 if ( xSI->supportsService( FM_SUN_COMPONENT_FILECONTROL ) )
                     pEditWidget->FileSelect = true;
                 // ............................
                 // maximum text length
-                static const ::rtl::OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
+                static const OUString FM_PROP_MAXTEXTLEN("MaxTextLen");
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
@@ -458,8 +458,8 @@ namespace toolkitform
             {
                 ::vcl::PDFWriter::PushButtonWidget* pButtonWidget = static_cast< ::vcl::PDFWriter::PushButtonWidget* >( _rpDescriptor.get() );
                 FormButtonType eButtonType = FormButtonType_PUSH;
-                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "ButtonType" ) ) >>= eButtonType );
-                static const ::rtl::OUString FM_PROP_TARGET_URL("TargetURL");
+                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "ButtonType" ) ) >>= eButtonType );
+                static const OUString FM_PROP_TARGET_URL("TargetURL");
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
                     // if a button is a submit button, then it uses the URL at it's parent form
@@ -470,19 +470,19 @@ namespace toolkitform
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );
-                        if ( xParentSI.is() && xParentSI->supportsService( ::rtl::OUString( "com.sun.star.form.component.HTMLForm" ) ) )
+                        if ( xParentSI.is() && xParentSI->supportsService( OUString( "com.sun.star.form.component.HTMLForm" ) ) )
                         {
                             OSL_VERIFY( xParentProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= pButtonWidget->URL );
                             pButtonWidget->Submit = true;
                             FormSubmitMethod eMethod = FormSubmitMethod_POST;
-                            OSL_VERIFY( xParentProps->getPropertyValue( rtl::OUString( "SubmitMethod" ) ) >>= eMethod );
+                            OSL_VERIFY( xParentProps->getPropertyValue( OUString( "SubmitMethod" ) ) >>= eMethod );
                             pButtonWidget->SubmitGet = (eMethod == FormSubmitMethod_GET);
                         }
                     }
                 }
                 else if ( eButtonType == FormButtonType_URL )
                 {
-                    ::rtl::OUString sURL;
+                    OUString sURL;
                     OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_TARGET_URL ) >>= sURL );
                     const bool bDocumentLocalTarget = !sURL.isEmpty() && ( sURL.getStr()[0] == '#' );
                     if ( bDocumentLocalTarget )
@@ -518,7 +518,7 @@ namespace toolkitform
 
             // --------------------------------
             // check boxes
-            static const ::rtl::OUString FM_PROP_STATE("State");
+            static const OUString FM_PROP_STATE("State");
             if ( _rpDescriptor->getType() == ::vcl::PDFWriter::CheckBox )
             {
                 ::vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< ::vcl::PDFWriter::CheckBoxWidget* >( _rpDescriptor.get() );
@@ -538,12 +538,12 @@ namespace toolkitform
                 pRadioWidget->RadioGroup = determineRadioGroupId( xModelProps );
                 try
                 {
-                    static const ::rtl::OUString FM_PROP_REFVALUE("RefValue");
+                    static const OUString FM_PROP_REFVALUE("RefValue");
                     xModelProps->getPropertyValue( FM_PROP_REFVALUE ) >>= pRadioWidget->OnValue;
                 }
                 catch(...)
                 {
-                    pRadioWidget->OnValue = rtl::OUString( "On" );
+                    pRadioWidget->OnValue = OUString( "On" );
                 }
             }
 
@@ -554,11 +554,11 @@ namespace toolkitform
                 ::vcl::PDFWriter::ListBoxWidget* pListWidget = static_cast< ::vcl::PDFWriter::ListBoxWidget* >( _rpDescriptor.get() );
                 // ............................
                 // drop down
-                static const ::rtl::OUString FM_PROP_DROPDOWN("Dropdown");
+                static const OUString FM_PROP_DROPDOWN("Dropdown");
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_DROPDOWN ) >>= pListWidget->DropDown );
                 // ............................
                 // multi selection
-                OSL_VERIFY( xModelProps->getPropertyValue( ::rtl::OUString( "MultiSelection" ) ) >>= pListWidget->MultiSelect );
+                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "MultiSelection" ) ) >>= pListWidget->MultiSelect );
                 // ............................
                 // entries
                 getStringItemVector( xModelProps, pListWidget->Entries );
@@ -568,7 +568,7 @@ namespace toolkitform
 
                 // get selected items
                 Sequence< sal_Int16 > aSelectIndices;
-                OSL_VERIFY( xModelProps->getPropertyValue( rtl::OUString( "SelectedItems" ) ) >>= aSelectIndices );
+                OSL_VERIFY( xModelProps->getPropertyValue( OUString( "SelectedItems" ) ) >>= aSelectIndices );
                 if( aSelectIndices.getLength() > 0 )
                 {
                     pListWidget->SelectedEntries.resize( 0 );

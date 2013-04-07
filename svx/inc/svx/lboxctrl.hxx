@@ -56,8 +56,8 @@ public:
 
 class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl
 {
-    std::vector< ::rtl::OUString > aUndoRedoList;
-    ::rtl::OUString                aDefaultText;
+    std::vector< OUString > aUndoRedoList;
+    OUString                aDefaultText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

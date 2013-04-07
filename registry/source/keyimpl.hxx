@@ -28,7 +28,7 @@ class ORegKey
 {
 public:
 
-    ORegKey(const rtl::OUString& keyName, ORegistry* pReg);
+    ORegKey(const OUString& keyName, ORegistry* pReg);
     ~ORegKey();
 
       sal_uInt32    acquire()
@@ -39,62 +39,62 @@ public:
 
     RegError    releaseKey(RegKeyHandle hKey);
 
-    RegError    createKey(const rtl::OUString& keyName, RegKeyHandle* phNewKey);
+    RegError    createKey(const OUString& keyName, RegKeyHandle* phNewKey);
 
-    RegError    openKey(const rtl::OUString& keyName, RegKeyHandle* phOpenKey);
+    RegError    openKey(const OUString& keyName, RegKeyHandle* phOpenKey);
 
-    RegError    openSubKeys(const rtl::OUString& keyName,
+    RegError    openSubKeys(const OUString& keyName,
                             RegKeyHandle** phOpenSubKeys,
                             sal_uInt32* pnSubKeys);
 
-    RegError    getKeyNames(const rtl::OUString& keyName,
+    RegError    getKeyNames(const OUString& keyName,
                             rtl_uString*** pSubKeyNames,
                             sal_uInt32* pnSubKeys);
 
     RegError    closeKey(RegKeyHandle hKey);
 
-    RegError    deleteKey(const rtl::OUString& keyName);
+    RegError    deleteKey(const OUString& keyName);
 
-    RegError    getValueInfo(const rtl::OUString& valueName,
+    RegError    getValueInfo(const OUString& valueName,
                              RegValueType* pValueTye,
                              sal_uInt32* pValueSize) const;
 
-    RegError    setValue(const rtl::OUString& valueName,
+    RegError    setValue(const OUString& valueName,
                          RegValueType vType,
                          RegValue value,
                          sal_uInt32 vSize);
 
-    RegError    setLongListValue(const rtl::OUString& valueName,
+    RegError    setLongListValue(const OUString& valueName,
                                   sal_Int32* pValueList,
                                  sal_uInt32 len);
 
-    RegError    setStringListValue(const rtl::OUString& valueName,
+    RegError    setStringListValue(const OUString& valueName,
                                    sal_Char** pValueList,
                                   sal_uInt32 len);
 
-    RegError    setUnicodeListValue(const rtl::OUString& valueName,
+    RegError    setUnicodeListValue(const OUString& valueName,
                                    sal_Unicode** pValueList,
                                   sal_uInt32 len);
 
-    RegError    getValue(const rtl::OUString& valueName, RegValue value) const;
+    RegError    getValue(const OUString& valueName, RegValue value) const;
 
-    RegError    getLongListValue(const rtl::OUString& valueName,
+    RegError    getLongListValue(const OUString& valueName,
                                   sal_Int32** pValueList,
                                  sal_uInt32* pLen) const;
 
-    RegError    getStringListValue(const rtl::OUString& valueName,
+    RegError    getStringListValue(const OUString& valueName,
                                     sal_Char*** pValueList,
                                    sal_uInt32* pLen) const;
 
-    RegError    getUnicodeListValue(const rtl::OUString& valueName,
+    RegError    getUnicodeListValue(const OUString& valueName,
                                      sal_Unicode*** pValueList,
                                     sal_uInt32* pLen) const;
 
-    RegError    getKeyType(const rtl::OUString& name,
+    RegError    getKeyType(const OUString& name,
                            RegKeyType* pKeyType) const;
 
-    RegError    getResolvedKeyName(const rtl::OUString& keyName,
-                                   rtl::OUString& resolvedName);
+    RegError    getResolvedKeyName(const OUString& keyName,
+                                   OUString& resolvedName);
 
     bool isDeleted() const
         { return m_bDeleted != 0; }
@@ -121,17 +121,17 @@ public:
 
     store::OStoreDirectory getStoreDir();
 
-    const rtl::OUString& getName() const
+    const OUString& getName() const
                     { return m_name; }
 
     sal_uInt32 getRefCount() const
                     { return m_refCount; }
 
-    rtl::OUString getFullPath(rtl::OUString const & path) const;
+    OUString getFullPath(OUString const & path) const;
 
 private:
     sal_uInt32              m_refCount;
-    rtl::OUString           m_name;
+    OUString           m_name;
     int                     m_bDeleted:1;
     int                     m_bModified:1;
     ORegistry*              m_pRegistry;

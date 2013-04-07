@@ -28,14 +28,14 @@ namespace rptxml
     class OXMLFormatCondition : public SvXMLImportContext
     {
         ORptFilter& m_rImport;
-        ::rtl::OUString m_sStyleName;
+        OUString m_sStyleName;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition >  m_xComponent;
         OXMLFormatCondition(const OXMLFormatCondition&);
         void operator =(const OXMLFormatCondition&);
     public:
 
         OXMLFormatCondition( ORptFilter& rImport, sal_uInt16 nPrfx,
-                    const ::rtl::OUString& rLName,
+                    const OUString& rLName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFormatCondition >& _xComponent
                     );

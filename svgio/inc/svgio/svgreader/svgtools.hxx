@@ -34,16 +34,16 @@ namespace svgio
     {
 #ifdef DBG_UTIL
         // error helper
-        void myAssert(const rtl::OUString& rMessage);
+        void myAssert(const OUString& rMessage);
 #endif
 
         // common non-token strings
         struct commonStrings
         {
-            static const rtl::OUString aStrUserSpaceOnUse;
-            static const rtl::OUString aStrObjectBoundingBox;
-            static const rtl::OUString aStrNonzero;
-            static const rtl::OUString aStrEvenOdd;
+            static const OUString aStrUserSpaceOnUse;
+            static const OUString aStrObjectBoundingBox;
+            static const OUString aStrNonzero;
+            static const OUString aStrEvenOdd;
         };
 
         enum SvgUnits
@@ -181,40 +181,40 @@ namespace svgio
             basegfx::B2DHomMatrix createMapping(const basegfx::B2DRange& rTarget, const basegfx::B2DRange& rSource) const;
         };
 
-        void skip_char(const rtl::OUString& rCandidate, const sal_Unicode& rChar, sal_Int32& nPos, const sal_Int32 nLen);
-        void skip_char(const rtl::OUString& rCandidate, const sal_Unicode& rCharA, const sal_Unicode& rCharB, sal_Int32& nPos, const sal_Int32 nLen);
-        void copySign(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyNumber(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyHex(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyString(const rtl::OUString& rCandidate, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen);
-        void copyToLimiter(const rtl::OUString& rCandidate, const sal_Unicode& rLimiter, sal_Int32& nPos, rtl::OUStringBuffer& rTarget, const sal_Int32 nLen);
-        bool readNumber(const rtl::OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen);
-        SvgUnit readUnit(const rtl::OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen);
-        bool readNumberAndUnit(const rtl::OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
-        bool readAngle(const rtl::OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen);
+        void skip_char(const OUString& rCandidate, const sal_Unicode& rChar, sal_Int32& nPos, const sal_Int32 nLen);
+        void skip_char(const OUString& rCandidate, const sal_Unicode& rCharA, const sal_Unicode& rCharB, sal_Int32& nPos, const sal_Int32 nLen);
+        void copySign(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyNumber(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyHex(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyString(const OUString& rCandidate, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        void copyToLimiter(const OUString& rCandidate, const sal_Unicode& rLimiter, sal_Int32& nPos, OUStringBuffer& rTarget, const sal_Int32 nLen);
+        bool readNumber(const OUString& rCandidate, sal_Int32& nPos, double& fNum, const sal_Int32 nLen);
+        SvgUnit readUnit(const OUString& rCandidate, sal_Int32& nPos, const sal_Int32 nLen);
+        bool readNumberAndUnit(const OUString& rCandidate, sal_Int32& nPos, SvgNumber& aNum, const sal_Int32 nLen);
+        bool readAngle(const OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen);
         sal_Int32 read_hex(const sal_Unicode& rChar);
-        bool match_colorKeyword(basegfx::BColor& rColor, const rtl::OUString& rName);
-        bool read_color(const rtl::OUString& rCandidate, basegfx::BColor& rColor);
-        basegfx::B2DRange readViewBox(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider);
-        basegfx::B2DHomMatrix readTransform(const rtl::OUString& rCandidate, InfoProvider& rInfoProvider);
-        bool readSingleNumber(const rtl::OUString& rCandidate, SvgNumber& aNum);
-        bool readLocalUrl(const rtl::OUString& rCandidate, rtl::OUString& rURL);
-        bool readSvgPaint(const rtl::OUString& rCandidate, SvgPaint& rSvgPaint, rtl::OUString& rURL);
+        bool match_colorKeyword(basegfx::BColor& rColor, const OUString& rName);
+        bool read_color(const OUString& rCandidate, basegfx::BColor& rColor);
+        basegfx::B2DRange readViewBox(const OUString& rCandidate, InfoProvider& rInfoProvider);
+        basegfx::B2DHomMatrix readTransform(const OUString& rCandidate, InfoProvider& rInfoProvider);
+        bool readSingleNumber(const OUString& rCandidate, SvgNumber& aNum);
+        bool readLocalUrl(const OUString& rCandidate, OUString& rURL);
+        bool readSvgPaint(const OUString& rCandidate, SvgPaint& rSvgPaint, OUString& rURL);
 
-        bool readSvgNumberVector(const rtl::OUString& rCandidate, SvgNumberVector& rSvgNumberVector);
+        bool readSvgNumberVector(const OUString& rCandidate, SvgNumberVector& rSvgNumberVector);
         ::std::vector< double > solveSvgNumberVector(const SvgNumberVector& rInput, const InfoProvider& rInfoProvider, NumberType aNumberType = length);
 
-        SvgAspectRatio readSvgAspectRatio(const rtl::OUString& rCandidate);
+        SvgAspectRatio readSvgAspectRatio(const OUString& rCandidate);
 
-        typedef ::std::vector< rtl::OUString > SvgStringVector;
-        bool readSvgStringVector(const rtl::OUString& rCandidate, SvgStringVector& rSvgStringVector);
+        typedef ::std::vector< OUString > SvgStringVector;
+        bool readSvgStringVector(const OUString& rCandidate, SvgStringVector& rSvgStringVector);
 
-        void readImageLink(const rtl::OUString& rCandidate, rtl::OUString& rXLink, rtl::OUString& rUrl, rtl::OUString& rMimeType, rtl::OUString& rData);
+        void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData);
 
-        rtl::OUString convert(const rtl::OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove);
-        rtl::OUString consolidateContiguosSpace(const rtl::OUString& rCandidate);
-        rtl::OUString whiteSpaceHandlingDefault(const rtl::OUString& rCandidate);
-        rtl::OUString whiteSpaceHandlingPreserve(const rtl::OUString& rCandidate);
+        OUString convert(const OUString& rCandidate, const sal_Unicode& rPattern, const sal_Unicode& rNew, bool bRemove);
+        OUString consolidateContiguosSpace(const OUString& rCandidate);
+        OUString whiteSpaceHandlingDefault(const OUString& rCandidate);
+        OUString whiteSpaceHandlingPreserve(const OUString& rCandidate);
 
     } // end of namespace svgreader
 } // end of namespace svgio

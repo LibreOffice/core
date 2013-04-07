@@ -94,7 +94,7 @@ bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 }
 
 ScTypedStrData::ScTypedStrData(
-    const rtl::OUString& rStr, double nVal, StringType nType ) :
+    const OUString& rStr, double nVal, StringType nType ) :
     maStrValue(rStr),
     mfValue(nVal),
     meStrType(nType) {}
@@ -109,7 +109,7 @@ bool ScTypedStrData::IsStrData() const
     return meStrType != Value;
 }
 
-const rtl::OUString& ScTypedStrData::GetString() const
+const OUString& ScTypedStrData::GetString() const
 {
     return maStrValue;
 }

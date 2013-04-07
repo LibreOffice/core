@@ -26,7 +26,6 @@
 
 using namespace ::oox;
 
-using ::rtl::OString;
 
 // Workbook view settings records =============================================
 

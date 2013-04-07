@@ -24,7 +24,6 @@
 #include "xmlimp.hxx"
 #include "xmlexp.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // ---------------------------------------------------------------------

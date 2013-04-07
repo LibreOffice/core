@@ -77,7 +77,7 @@ void Manager::addProvider(rtl::Reference< Provider > const & provider) {
     providers_.push_back(provider);
 }
 
-rtl::Reference< Entity > Manager::findEntity(rtl::OUString const & name) const {
+rtl::Reference< Entity > Manager::findEntity(OUString const & name) const {
     //TODO: add caching
     for (std::vector< rtl::Reference< Provider > >::const_iterator i(
              providers_.begin());

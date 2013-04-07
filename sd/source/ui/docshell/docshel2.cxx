@@ -367,7 +367,7 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
         else
         {
             // check for upper/lower case roman numbering
-            String sReserved( rtl::OUString("cdilmvx") );
+            String sReserved( OUString("cdilmvx") );
 
             // gobble up all following characters contained in one reserved class
             String sRemainder = rInOutPageName.GetToken( 1, sal_Unicode(' ') );

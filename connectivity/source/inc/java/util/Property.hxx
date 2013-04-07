@@ -34,7 +34,7 @@ namespace connectivity
         // A ctor that is needed for returning the object
         java_util_Properties( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
         java_util_Properties( );
-        void setProperty(const ::rtl::OUString key, const ::rtl::OUString& value);
+        void setProperty(const OUString key, const OUString& value);
     };
 }
 

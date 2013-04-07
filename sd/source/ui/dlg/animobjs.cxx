@@ -287,7 +287,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
         bDisableCtrls = sal_True;
         aBtnStop.Enable();
         aBtnStop.Update();
-        rtl::OUString aStr("Animator:"); // here we should think about something smart
+        OUString aStr("Animator:"); // here we should think about something smart
         pProgress = new SfxProgress( NULL, aStr, nFullTime );
     }
 
@@ -581,7 +581,7 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
     aCtlDisplay.Invalidate();
     aCtlDisplay.Update();
 
-    aFiCount.SetText(rtl::OUString::valueOf(
+    aFiCount.SetText(OUString::valueOf(
                 static_cast<sal_Int64>(m_FrameList.size())));
 
     if (!m_FrameList.empty() && !bMovie)
@@ -887,7 +887,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
                             if( !nLoopCount ) // endless
                                 aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
                             else
-                                aLbLoopCount.SelectEntry(rtl::OUString::valueOf( nLoopCount ) );
+                                aLbLoopCount.SelectEntry(OUString::valueOf( nLoopCount ) );
                         }
 
                         long nTime = rAnimBmp.nWait;

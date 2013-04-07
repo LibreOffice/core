@@ -25,8 +25,8 @@
 
 struct eqFunc
 {
-    sal_Bool operator()( const rtl::OUString &r1,
-                         const rtl::OUString &r2) const
+    sal_Bool operator()( const OUString &r1,
+                         const OUString &r2) const
     {
         return r1 == r2;
     }
@@ -37,19 +37,19 @@ namespace com { namespace sun { namespace star { namespace packages {
 class ContentInfo;
 } } } }
 
-typedef boost::unordered_map < rtl::OUString,
+typedef boost::unordered_map < OUString,
                         ZipPackageFolder *,
-                        ::rtl::OUStringHash,
+                        OUStringHash,
                         eqFunc > FolderHash;
 
-typedef boost::unordered_map < rtl::OUString,
+typedef boost::unordered_map < OUString,
                         rtl::Reference < com::sun::star::packages::ContentInfo >,
-                        ::rtl::OUStringHash,
+                        OUStringHash,
                         eqFunc > ContentHash;
 
-typedef boost::unordered_map < rtl::OUString,
+typedef boost::unordered_map < OUString,
                         ZipEntry,
-                        rtl::OUStringHash,
+                        OUStringHash,
                         eqFunc > EntryHash;
 
 #endif

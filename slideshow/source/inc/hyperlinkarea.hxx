@@ -46,7 +46,7 @@ namespace slideshow
         {
         public:
             typedef std::pair< ::basegfx::B2DRange,
-                               ::rtl::OUString >    HyperlinkRegion;
+                               OUString >    HyperlinkRegion;
 
             typedef std::vector<HyperlinkRegion>    HyperlinkRegions;
 

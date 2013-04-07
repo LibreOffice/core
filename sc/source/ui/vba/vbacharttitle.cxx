@@ -25,21 +25,21 @@ ScVbaChartTitle::ScVbaChartTitle( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
-rtl::OUString
+OUString
 ScVbaChartTitle::getServiceImplName()
 {
-    return rtl::OUString("ScVbaChartTitle");
+    return OUString("ScVbaChartTitle");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaChartTitle::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
-        uno::Sequence< rtl::OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
+        uno::Sequence< OUString > BaseServiceNames = ChartTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Chart" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Chart" );
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

@@ -221,7 +221,7 @@ struct FileHandle
             return store_E_InvalidParameter;
 
         // Convert into FileUrl.
-        rtl::OUString aFileUrl;
+        OUString aFileUrl;
         if (osl_getFileURLFromSystemPath (pFilename, &(aFileUrl.pData)) != osl_File_E_None)
         {
             // Not system path. Assume file url.
@@ -230,7 +230,7 @@ struct FileHandle
         if (!aFileUrl.startsWith("file://"))
         {
             // Not file url. Assume relative path.
-            rtl::OUString aCwdUrl;
+            OUString aCwdUrl;
             (void) osl_getProcessWorkingDir (&(aCwdUrl.pData));
 
             // Absolute file url.

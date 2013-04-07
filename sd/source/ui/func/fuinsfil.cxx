@@ -64,7 +64,6 @@
 #include "Outliner.hxx"
 #include "sdabstdlg.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
@@ -107,8 +106,8 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 SFXWB_INSERT );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-        rtl::OUString aOwnCont;
-        rtl::OUString aOtherCont;
+        OUString aOwnCont;
+        OUString aOtherCont;
         const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
@@ -134,7 +133,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 String  aExt;
                 String  aAllSpec( SdResId( STR_ALL_FILES ) );
 
-                xFilterManager->appendFilter( aAllSpec, rtl::OUString("*.*") );
+                xFilterManager->appendFilter( aAllSpec, OUString("*.*") );
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
                 // Get main filter
@@ -160,7 +159,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
                 // get Powerpoint filter
-                aExt = rtl::OUString(".ppt");
+                aExt = OUString(".ppt");
                 pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -343,7 +342,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     {
         /* list with page names (if NULL, then all pages)
            First, insert pages */
-        std::vector<rtl::OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
+        std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
         sal_Bool bLink = pDlg->IsLink();
         sal_Bool bReplace = sal_False;
         SdPage* pPage = NULL;
@@ -373,8 +372,8 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         }
 
         sal_Bool  bNameOK;
-        std::vector<rtl::OUString> aExchangeList;
-        std::vector<rtl::OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // objects
+        std::vector<OUString> aExchangeList;
+        std::vector<OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // objects
 
         /* if pBookmarkList is NULL, we insert selected pages, and/or selected
            objects or everything. */

@@ -32,7 +32,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace connectivity::mysqlc;
-using ::rtl::OUString;
 #include <stdio.h>
 
 #include <cppconn/exception.h>
@@ -83,7 +82,7 @@ OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getImplementationName_Static");
-    return ::rtl::OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
+    return OUString( "com.sun.star.comp.sdbc.mysqlc.MysqlCDriver"  );
 }
 /* }}} */
 
@@ -146,7 +145,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
 #else
     if ( !m_bAttemptedLoadCppConn )
     {
-        const ::rtl::OUString sModuleName(CPPCONN_LIB );
+        const OUString sModuleName(CPPCONN_LIB );
         m_hCppConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
         m_bAttemptedLoadCppConn = true;
     }
@@ -156,16 +155,16 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
         throw SQLException(
-            ::rtl::OUString( "Unable to load the " CPPCONN_LIB " library."  ),
+            OUString( "Unable to load the " CPPCONN_LIB " library."  ),
             *this,
-            ::rtl::OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
     }
 
     // find the factory symbol
-    const ::rtl::OUString sSymbolName = ::rtl::OUString( "sql_mysql_get_driver_instance"  );
+    const OUString sSymbolName = OUString( "sql_mysql_get_driver_instance"  );
     typedef void* (* FGetMySQLDriver)();
 
     const FGetMySQLDriver pFactoryFunction = (FGetMySQLDriver)( osl_getFunctionSymbol( m_hCppConnModule, sSymbolName.pData ) );
@@ -173,9 +172,9 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
         throw SQLException(
-            ::rtl::OUString( CPPCONN_LIB " is invalid: missing the driver factory function."  ),
+            OUString( CPPCONN_LIB " is invalid: missing the driver factory function."  ),
             *this,
-            ::rtl::OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -186,9 +185,9 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     if ( !cppDriver )
     {
         throw SQLException(
-            ::rtl::OUString( "Unable to obtain the MySQL_Driver instance from Connector/C++."  ),
+            OUString( "Unable to obtain the MySQL_Driver instance from Connector/C++."  ),
             *this,
-            ::rtl::OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  // "unable to connect"
             0,
             Any()
         );
@@ -211,7 +210,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
         impl_initCppConn_lck_throw();
         OSL_POSTCOND( cppDriver, "MySQLCDriver::connect: internal error." );
         if ( !cppDriver )
-            throw RuntimeException( ::rtl::OUString( "MySQLCDriver::connect: internal error."  ), *this );
+            throw RuntimeException( OUString( "MySQLCDriver::connect: internal error."  ), *this );
     }
 
     Reference< XConnection > xConn;

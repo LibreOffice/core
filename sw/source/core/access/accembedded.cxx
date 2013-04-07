@@ -27,7 +27,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextEmbeddedObject";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleEmbeddedObject";

@@ -47,14 +47,14 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 //--------------------------------------------------
 
 sal_uInt32 SAL_CALL getWinCPFromMimeCharset(
-    const rtl::OUString& charset );
+    const OUString& charset );
 
 //--------------------------------------------------
 // returns a windows codepage appropriate to the
 // given locale and locale type
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getWinCPFromLocaleId(
+OUString SAL_CALL getWinCPFromLocaleId(
     LCID lcid, LCTYPE lctype );
 
 //--------------------------------------------------
@@ -63,8 +63,8 @@ rtl::OUString SAL_CALL getWinCPFromLocaleId(
 // given, e.g. "windows-" or "cp"
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getMimeCharsetFromWinCP(
-    sal_uInt32 cp, const rtl::OUString& aPrefix );
+OUString SAL_CALL getMimeCharsetFromWinCP(
+    sal_uInt32 cp, const OUString& aPrefix );
 
 //--------------------------------------------------
 // returns a mime charset parameter value appropriate
@@ -72,8 +72,8 @@ rtl::OUString SAL_CALL getMimeCharsetFromWinCP(
 // prefix can be given, e.g. "windows-" or "cp"
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL getMimeCharsetFromLocaleId(
-    LCID lcid, LCTYPE lctype, const rtl::OUString& aPrefix  );
+OUString SAL_CALL getMimeCharsetFromLocaleId(
+    LCID lcid, LCTYPE lctype, const OUString& aPrefix  );
 
 //-----------------------------------------------------
 // returns true, if a given codepage is an oem codepage
@@ -85,7 +85,7 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage );
 // converts a codepage into a string representation
 //--------------------------------------------------
 
-rtl::OUString SAL_CALL cptostr( sal_uInt32 codepage );
+OUString SAL_CALL cptostr( sal_uInt32 codepage );
 
 #endif
 

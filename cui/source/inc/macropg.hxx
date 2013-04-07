@@ -33,7 +33,7 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
+typedef ::boost::unordered_map< OUString, ::std::pair< OUString, OUString >, OUStringHash, ::std::equal_to< OUString > > EventsHash;
 
 struct EventDisplayName
 {
@@ -75,8 +75,8 @@ protected:
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
     void                        EnableButtons();
-    ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
-    ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
+    ::com::sun::star::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
+    ::std::pair< OUString, OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
 public:
 

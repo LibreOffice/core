@@ -152,9 +152,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                     uno::Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySetInfo > xInfo = xPropSet->getPropertySetInfo();
 
-                    rtl::OUString sPropButtonType( "ButtonType" );
-                    rtl::OUString sPropTargetURL( "TargetURL" );
-                    rtl::OUString sPropLabel( "Label" );
+                    OUString sPropButtonType( "ButtonType" );
+                    OUString sPropTargetURL( "TargetURL" );
+                    OUString sPropLabel( "Label" );
 
                     if(xInfo->hasPropertyByName( sPropButtonType ))
                     {
@@ -166,7 +166,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                             if(xInfo->hasPropertyByName( sPropTargetURL ))
                             {
                                 aAny = xPropSet->getPropertyValue( sPropTargetURL );
-                                rtl::OUString sTmp;
+                                OUString sTmp;
                                 if ( (aAny >>= sTmp) && !sTmp.isEmpty() )
                                 {
                                     String aUrl = sTmp;
@@ -537,7 +537,7 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                     try
                     {
                         uno::Sequence < beans::PropertyValue > aSeq;
-                        ::rtl::OUString aDummyName("Dummy");
+                        OUString aDummyName("Dummy");
                         xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
                         if ( xWorkStore->isStreamElement( aDummyName ) )
                         {

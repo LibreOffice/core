@@ -1788,7 +1788,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             case FILL_TAB:
             case FILL_SPACE:
                 {
-                    rtl::OUStringBuffer sInsert;
+                    OUStringBuffer sInsert;
                     if (aFPos.nTabCnt)
                         comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
                     if (aFPos.nSpaceCnt)

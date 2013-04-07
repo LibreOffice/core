@@ -51,9 +51,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 namespace stoc_impreg
 {

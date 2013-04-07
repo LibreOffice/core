@@ -105,7 +105,7 @@ void UndoAnimation::Redo()
     }
 }
 
-rtl::OUString UndoAnimation::GetComment() const
+OUString UndoAnimation::GetComment() const
 {
     return SdResId(STR_UNDO_ANIMATION).toString();
 }
@@ -114,8 +114,8 @@ struct UndoAnimationPathImpl
 {
     SdPage*         mpPage;
     sal_Int32       mnEffectOffset;
-    ::rtl::OUString msUndoPath;
-    ::rtl::OUString msRedoPath;
+    OUString msUndoPath;
+    OUString msRedoPath;
 
     UndoAnimationPathImpl( SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
         : mpPage( pThePage )
@@ -183,7 +183,7 @@ void UndoAnimationPath::Redo()
     }
 }
 
-rtl::OUString UndoAnimationPath::GetComment() const
+OUString UndoAnimationPath::GetComment() const
 {
     return SdResId(STR_UNDO_ANIMATION).toString();
 }
@@ -273,7 +273,7 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;
 }
 
-rtl::OUString UndoTransition::GetComment() const
+OUString UndoTransition::GetComment() const
 {
     return SdResId(STR_UNDO_SLIDE_PARAMS).toString();
 }

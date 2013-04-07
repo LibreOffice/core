@@ -66,11 +66,11 @@ MacabAddressBook::~MacabAddressBook()
 /* Get the address book's default table name. This is the table name that
  * refers to the table containing _all_ records in the address book.
  */
-const ::rtl::OUString & MacabAddressBook::getDefaultTableName()
+const OUString & MacabAddressBook::getDefaultTableName()
 {
     /* This string probably needs to be localized. */
-    static const ::rtl::OUString aDefaultTableName
-        (::rtl::OUString("Address Book"));
+    static const OUString aDefaultTableName
+        (OUString("Address Book"));
 
     return aDefaultTableName;
 }
@@ -93,7 +93,7 @@ MacabRecords *MacabAddressBook::getMacabRecords()
 /* Get the MacabRecords for a given name: either a group name or the
  * default table name.
  */
-MacabRecords *MacabAddressBook::getMacabRecords(const ::rtl::OUString _tableName)
+MacabRecords *MacabAddressBook::getMacabRecords(const OUString _tableName)
 {
     if(_tableName == getDefaultTableName())
     {
@@ -106,7 +106,7 @@ MacabRecords *MacabAddressBook::getMacabRecords(const ::rtl::OUString _tableName
 }
 
 // -----------------------------------------------------------------------------
-MacabRecords *MacabAddressBook::getMacabRecordsMatch(const ::rtl::OUString _tableName)
+MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString _tableName)
 {
     if(match(_tableName, getDefaultTableName(), '\0'))
     {
@@ -155,7 +155,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const ::rtl::OUString _tabl
 }
 
 // -----------------------------------------------------------------------------
-MacabGroup *MacabAddressBook::getMacabGroup(::rtl::OUString _groupName)
+MacabGroup *MacabAddressBook::getMacabGroup(OUString _groupName)
 {
     // initialize groups if not already initialized
     if(m_bRetrievedGroups == sal_False)
@@ -179,7 +179,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(::rtl::OUString _groupName)
 }
 
 // -----------------------------------------------------------------------------
-MacabGroup *MacabAddressBook::getMacabGroupMatch(::rtl::OUString _groupName)
+MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString _groupName)
 {
     // initialize groups if not already initialized
     if(m_bRetrievedGroups == sal_False)
@@ -235,10 +235,10 @@ void MacabAddressBook::manageDuplicateGroups(::std::vector<MacabGroup *> _xGroup
         // duplicate!
         if(count != 1)
         {
-            ::rtl::OUString sName = (*iter1)->getName();
-            sName += ::rtl::OUString(" (") +
-                ::rtl::OUString::valueOf(count) +
-                ::rtl::OUString(")");
+            OUString sName = (*iter1)->getName();
+            sName += OUString(" (") +
+                OUString::valueOf(count) +
+                OUString(")");
             (*iter1)->setName(sName);
         }
     }

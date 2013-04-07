@@ -42,7 +42,7 @@ namespace slideshow
             const ::com::sun::star::uno::Reference<
                ::com::sun::star::drawing::XShape >& xShape,
             double                                  nPrio,
-            const ::rtl::OUString&                  rServiceName,
+            const OUString&                  rServiceName,
             const char**                            pPropCopyTable,
             sal_Size                                nNumPropEntries,
             const SlideShowContext&                 rContext );

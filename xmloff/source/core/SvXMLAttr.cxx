@@ -31,8 +31,8 @@
 #include <limits.h>    //USHRT_MAX
 #include "SvXMLAttr.hxx"
 
-SvXMLAttr::SvXMLAttr( const rtl::OUString& rLName,
-                      const rtl::OUString& rValue ) :
+SvXMLAttr::SvXMLAttr( const OUString& rLName,
+                      const OUString& rValue ) :
         aPrefixPos(USHRT_MAX),
         aLName(rLName),
         aValue(rValue)
@@ -40,8 +40,8 @@ SvXMLAttr::SvXMLAttr( const rtl::OUString& rLName,
 }
 
 SvXMLAttr::SvXMLAttr( const sal_uInt16 nPos,
-                      const rtl::OUString& rLName,
-                      const rtl::OUString& rValue ) :
+                      const OUString& rLName,
+                      const OUString& rValue ) :
         aPrefixPos(nPos),
         aLName(rLName),
         aValue(rValue)
@@ -60,12 +60,12 @@ sal_uInt16 SvXMLAttr::getPrefixPos() const
     return aPrefixPos;
 }
 
-const rtl::OUString& SvXMLAttr::getLName() const
+const OUString& SvXMLAttr::getLName() const
 {
     return aLName;
 }
 
-const rtl::OUString& SvXMLAttr::getValue() const {
+const OUString& SvXMLAttr::getValue() const {
     return aValue;
 }
 

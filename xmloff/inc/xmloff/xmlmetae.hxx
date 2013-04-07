@@ -59,7 +59,7 @@ private:
     std::vector< ::com::sun::star::beans::StringPair > m_preservedNSs;
 
     SAL_DLLPRIVATE void SimpleStringElement(
-        const ::rtl::OUString& rText, sal_uInt16 nNamespace,
+        const OUString& rText, sal_uInt16 nNamespace,
         enum ::xmloff::token::XMLTokenEnum eElementName );
     SAL_DLLPRIVATE void SimpleDateTimeElement(
         const ::com::sun::star::util::DateTime & rDate, sal_uInt16 nNamespace,
@@ -78,7 +78,7 @@ public:
     /// export via XSAXWriter interface, with fallback to _MExport
     void Export();
 
-    static ::rtl::OUString GetISODateTimeString(
+    static OUString GetISODateTimeString(
                         const ::com::sun::star::util::DateTime& rDateTime );
 
     // ::com::sun::star::xml::sax::XDocumentHandler:
@@ -88,23 +88,23 @@ public:
     virtual void SAL_CALL endDocument()
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
-    virtual void SAL_CALL startElement(const ::rtl::OUString & i_rName,
+    virtual void SAL_CALL startElement(const OUString & i_rName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttribs)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
-    virtual void SAL_CALL endElement(const ::rtl::OUString & i_rName)
+    virtual void SAL_CALL endElement(const OUString & i_rName)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
-    virtual void SAL_CALL characters(const ::rtl::OUString & i_rChars)
+    virtual void SAL_CALL characters(const OUString & i_rChars)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
     virtual void SAL_CALL ignorableWhitespace(
-        const ::rtl::OUString & i_rWhitespaces)
+        const OUString & i_rWhitespaces)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
     virtual void SAL_CALL processingInstruction(
-        const ::rtl::OUString & i_rTarget, const ::rtl::OUString & i_rData)
+        const OUString & i_rTarget, const OUString & i_rData)
         throw (::com::sun::star::uno::RuntimeException,
                ::com::sun::star::xml::sax::SAXException);
     virtual void SAL_CALL setDocumentLocator(

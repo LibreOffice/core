@@ -46,7 +46,7 @@ namespace framework{
  */
 #define THROW_PARSEEXCEPTION(COMMENT)                                   \
     {                                                                   \
-        ::rtl::OUStringBuffer sMessage(256);                            \
+        OUStringBuffer sMessage(256);                            \
         sMessage.append     (implts_getErrorLineString());              \
         sMessage.appendAscii(COMMENT                    );              \
                                                                         \
@@ -102,7 +102,7 @@ void SAL_CALL AcceleratorConfigurationReader::endDocument()
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString&                                      sElement      ,
+void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
                                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
@@ -119,15 +119,15 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
             THROW_PARSEEXCEPTION("An element \"accel:item\" is not a container.")
         m_bInsideAcceleratorItem = sal_True;
 
-        ::rtl::OUString    sCommand;
+        OUString    sCommand;
         css::awt::KeyEvent aEvent  ;
 
         sal_Int16 c = xAttributeList->getLength();
         sal_Int16 i = 0;
         for (i=0; i<c; ++i)
         {
-            ::rtl::OUString sAttribute = xAttributeList->getNameByIndex(i);
-            ::rtl::OUString sValue     = xAttributeList->getValueByIndex(i);
+            OUString sAttribute = xAttributeList->getNameByIndex(i);
+            OUString sValue     = xAttributeList->getValueByIndex(i);
             EXMLAttribute   eAttribute = AcceleratorConfigurationReader::implst_classifyAttribute(sAttribute);
             switch(eAttribute)
             {
@@ -175,7 +175,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
             // Attention: Its not realy a reason to throw an exception and kill the office, if the configuration contains
             // multiple registrations for the same key :-) Show a warning ... and ignore the second item.
             // THROW_PARSEEXCEPTION("Command is registered for the same key more then once.")
-            ::rtl::OUStringBuffer sMsg(256);
+            OUStringBuffer sMsg(256);
             sMsg.appendAscii("Double registration detected.\nCommand = \"");
             sMsg.append     (sCommand                                     );
             sMsg.appendAscii("\"\nKeyCode = "                             );
@@ -198,7 +198,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& sElement)
+void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElement)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
@@ -222,22 +222,22 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& 
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::characters(const ::rtl::OUString&)
+void SAL_CALL AcceleratorConfigurationReader::characters(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const ::rtl::OUString&)
+void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
 //-----------------------------------------------
-void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const ::rtl::OUString& /*sTarget*/,
-                                                                    const ::rtl::OUString& /*sData*/  )
+void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTarget*/,
+                                                                    const OUString& /*sData*/  )
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
@@ -252,7 +252,7 @@ void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno:
 }
 
 //-----------------------------------------------
-AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const ::rtl::OUString& sElement)
+AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const OUString& sElement)
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
 
@@ -269,7 +269,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
 }
 
 //-----------------------------------------------
-AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const ::rtl::OUString& sAttribute)
+AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const OUString& sAttribute)
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
 
@@ -294,12 +294,12 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
 }
 
 //-----------------------------------------------
-::rtl::OUString AcceleratorConfigurationReader::implts_getErrorLineString()
+OUString AcceleratorConfigurationReader::implts_getErrorLineString()
 {
     if (!m_xLocator.is())
         return DECLARE_ASCII("Error during parsing XML. (No further info available ...)");
 
-    ::rtl::OUStringBuffer sMsg(256);
+    OUStringBuffer sMsg(256);
     sMsg.appendAscii("Error during parsing XML in\nline = ");
     sMsg.append     (m_xLocator->getLineNumber()           );
     sMsg.appendAscii("\ncolumn = "                         );

@@ -44,14 +44,14 @@ private:
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
 protected:
-    void add( rtl::OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, rtl::OUString& rText );
+    void add( OUString& rNumberStyle, sal_Bool bLong, sal_Bool bTextual, sal_Bool  bDecimal02, OUString& rText );
 
 public:
     TYPEINFO();
 
     SdXMLNumberFormatImportContext( SdXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         SvXMLNumImpData* pNewData, sal_uInt16 nNewType,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         SvXMLStylesContext& rStyles);
@@ -59,7 +59,7 @@ public:
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     sal_Int32 GetDrawKey() const { return mnKey; }

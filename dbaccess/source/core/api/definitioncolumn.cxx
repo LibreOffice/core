@@ -86,14 +86,14 @@ void OTableColumnDescriptor::impl_registerProperties()
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
 // ::com::sun::star::lang::XServiceInfo
-rtl::OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.OTableColumnDescriptor");
+    return OUString("com.sun.star.sdb.OTableColumnDescriptor");
 }
 
-Sequence< ::rtl::OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = m_bActAsDescriptor ? SERVICE_SDBCX_COLUMNDESCRIPTOR : SERVICE_SDBCX_COLUMN;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
@@ -135,7 +135,7 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
 //============================================================
 DBG_NAME(OTableColumn);
 
-OTableColumn::OTableColumn( const ::rtl::OUString& _rName )
+OTableColumn::OTableColumn( const OUString& _rName )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
 {
     DBG_CTOR(OTableColumn,NULL);
@@ -149,9 +149,9 @@ OTableColumn::~OTableColumn()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumn )
 
-rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.OTableColumn");
+    return OUString("com.sun.star.sdb.OTableColumn");
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL OTableColumn::getInfoHelper()
@@ -169,7 +169,7 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 // =========================================================================
 DBG_NAME( OQueryColumn );
 
-OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const ::rtl::OUString &i_sLabel )
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const OUString &i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
     ,m_sLabel(i_sLabel)
 {
@@ -200,7 +200,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     // copy some optional properties from the parser column
     struct PropertyDescriptor
     {
-        ::rtl::OUString sName;
+        OUString sName;
         sal_Int32       nHandle;
     };
     PropertyDescriptor aProps[] =
@@ -240,14 +240,14 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
     {
         // determine the composed table name, plus the column name, as indicated by the
         // respective properties
-        ::rtl::OUString sCatalog, sSchema, sTable;
+        OUString sCatalog, sSchema, sTable;
         OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
         OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
         OSL_VERIFY( getPropertyValue( PROPERTY_TABLENAME ) >>= sTable );
         if ( sCatalog.isEmpty() && sSchema.isEmpty() && sTable.isEmpty() )
             return NULL;
 
-        ::rtl::OUString sComposedTableName = ::dbtools::composeTableName(
+        OUString sComposedTableName = ::dbtools::composeTableName(
             _rxConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
 
         // retrieve the table in question
@@ -259,7 +259,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         Reference< XColumnsSupplier > xSuppCols( xTables->getByName( sComposedTableName ), UNO_QUERY_THROW );
         Reference< XNameAccess > xColumns( xSuppCols->getColumns(), UNO_QUERY_THROW );
 
-        ::rtl::OUString sColumn;
+        OUString sColumn;
         OSL_VERIFY( getPropertyValue( PROPERTY_REALNAME ) >>= sColumn );
         if ( !xColumns->hasByName( sColumn ) )
             return NULL;
@@ -275,9 +275,9 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OQueryColumn )
 
-::rtl::OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OQueryColumn::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString( "org.openoffice.comp.dbaccess.OQueryColumn"  );
+    return OUString( "org.openoffice.comp.dbaccess.OQueryColumn"  );
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL OQueryColumn::getInfoHelper()
@@ -309,7 +309,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     try
     {
         // determine original property name
-        ::rtl::OUString sPropName;
+        OUString sPropName;
         sal_Int16 nAttributes( 0 );
         const_cast< OQueryColumn* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
         OSL_ENSURE( !sPropName.isEmpty(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
@@ -356,9 +356,9 @@ OColumnWrapper::~OColumnWrapper()
     DBG_DTOR(OColumnWrapper,NULL);
 }
 
-::rtl::OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const
+OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandle ) const
 {
-    ::rtl::OUString sPropName;
+    OUString sPropName;
     sal_Int16 nAttributes( 0 );
     const_cast< OColumnWrapper* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
     OSL_ENSURE( !sPropName.isEmpty(), "OColumnWrapper::impl_getPropertyNameFromHandle: property not found!" );
@@ -436,14 +436,14 @@ OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< X
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
 // ::com::sun::star::lang::XServiceInfo
-rtl::OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");
+    return OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");
 }
 
-Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMNDESCRIPTOR;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;
@@ -465,19 +465,19 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     DECL_PROP0( PRECISION,          sal_Int32       );
     DECL_PROP0( SCALE,              sal_Int32       );
     DECL_PROP0( TYPE,               sal_Int32       );
-    DECL_PROP0( TYPENAME,           ::rtl::OUString );
+    DECL_PROP0( TYPENAME,           OUString );
 
     if ( nId & HAS_AUTOINCREMENT_CREATION )
     {
-        DECL_PROP1( AUTOINCREMENTCREATION, ::rtl::OUString, MAYBEVOID );
+        DECL_PROP1( AUTOINCREMENTCREATION, OUString, MAYBEVOID );
     }
     if ( nId & HAS_DEFAULTVALUE )
     {
-        DECL_PROP0( DEFAULTVALUE, ::rtl::OUString );
+        DECL_PROP0( DEFAULTVALUE, OUString );
     }
     if ( nId & HAS_DESCRIPTION )
     {
-        DECL_PROP0( DESCRIPTION, ::rtl::OUString );
+        DECL_PROP0( DESCRIPTION, OUString );
     }
     if ( nId & HAS_ROWVERSION )
     {
@@ -485,15 +485,15 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     }
     if ( nId & HAS_CATALOGNAME )
     {
-        DECL_PROP0( CATALOGNAME, ::rtl::OUString );
+        DECL_PROP0( CATALOGNAME, OUString );
     }
     if ( nId & HAS_SCHEMANAME )
     {
-        DECL_PROP0( SCHEMANAME, ::rtl::OUString );
+        DECL_PROP0( SCHEMANAME, OUString );
     }
     if ( nId & HAS_TABLENAME )
     {
-        DECL_PROP0( TABLENAME, ::rtl::OUString );
+        DECL_PROP0( TABLENAME, OUString );
     }
 
     END_PROPERTY_SEQUENCE()
@@ -603,14 +603,14 @@ OTableColumnWrapper::~OTableColumnWrapper()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnWrapper )
 
-rtl::OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
+OUString OTableColumnWrapper::getImplementationName(  ) throw (RuntimeException)
 {
-    return rtl::OUString("com.sun.star.sdb.OTableColumnWrapper" );
+    return OUString("com.sun.star.sdb.OTableColumnWrapper" );
 }
 
-Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
+    Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;
     aSNS[1] = SERVICE_SDB_COLUMNSETTINGS;
     return aSNS;

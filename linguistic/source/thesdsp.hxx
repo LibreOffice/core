@@ -87,7 +87,7 @@ public:
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
-        queryMeanings( const ::rtl::OUString& aTerm,
+        queryMeanings( const OUString& aTerm,
                 const ::com::sun::star::lang::Locale& aLocale,
                 const ::com::sun::star::beans::PropertyValues& aProperties )
             throw(::com::sun::star::lang::IllegalArgumentException,
@@ -97,8 +97,8 @@ public:
     virtual void
         SetServiceList( const ::com::sun::star::lang::Locale &rLocale,
                 const ::com::sun::star::uno::Sequence<
-                    rtl::OUString > &rSvcImplNames );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString >
+                    OUString > &rSvcImplNames );
+    virtual ::com::sun::star::uno::Sequence< OUString >
         GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
     virtual DspType
         GetDspType() const;

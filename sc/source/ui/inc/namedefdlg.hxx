@@ -72,7 +72,7 @@ private:
     OUString maName;
     OUString maScope;
 
-    std::map<rtl::OUString, ScRangeName*> maRangeMap;
+    std::map<OUString, ScRangeName*> maRangeMap;
 
     void CancelPushed();
     void AddPushed();
@@ -90,7 +90,7 @@ protected:
 
 public:
     ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-                    ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+                    ScViewData* pViewData, std::map<OUString, ScRangeName*> aRangeMap,
                     const ScAddress& aCursorPos, const bool bUndo);
 
     virtual ~ScNameDefDlg() {};
@@ -101,7 +101,7 @@ public:
     virtual void    SetActive();
     virtual sal_Bool    Close();
 
-    void GetNewData( rtl::OUString& rName, rtl::OUString& rScope );
+    void GetNewData( OUString& rName, OUString& rScope );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

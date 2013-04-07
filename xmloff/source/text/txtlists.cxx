@@ -133,10 +133,10 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
 }
 
 // Handling for parameter <sListStyleDefaultListId> (#i92811#)
-void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
-                                              ::rtl::OUString sListStyleName,
-                                              ::rtl::OUString sContinueListId,
-                                              ::rtl::OUString sListStyleDefaultListId )
+void XMLTextListsHelper::KeepListAsProcessed( OUString sListId,
+                                              OUString sListStyleName,
+                                              OUString sContinueListId,
+                                              OUString sListStyleDefaultListId )
 {
     if ( IsListProcessed( sListId ) )
     {
@@ -150,7 +150,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
         mpProcessedLists = new tMapForLists();
     }
 
-    ::std::pair< ::rtl::OUString, ::rtl::OUString >
+    ::std::pair< OUString, OUString >
                                 aListData( sListStyleName, sContinueListId );
     (*mpProcessedLists)[ sListId ] = aListData;
 
@@ -168,7 +168,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
         if ( mpMapListIdToListStyleDefaultListId->find( sListStyleName ) ==
                                 mpMapListIdToListStyleDefaultListId->end() )
         {
-            ::std::pair< ::rtl::OUString, ::rtl::OUString >
+            ::std::pair< OUString, OUString >
                                 aListIdMapData( sListId, sListStyleDefaultListId );
             (*mpMapListIdToListStyleDefaultListId)[ sListStyleName ] =
                                                                 aListIdMapData;
@@ -176,7 +176,7 @@ void XMLTextListsHelper::KeepListAsProcessed( ::rtl::OUString sListId,
     }
 }
 
-sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) const
+sal_Bool XMLTextListsHelper::IsListProcessed( const OUString sListId ) const
 {
     if ( mpProcessedLists == 0 )
     {
@@ -186,8 +186,8 @@ sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) co
     return mpProcessedLists->find( sListId ) != mpProcessedLists->end();
 }
 
-::rtl::OUString XMLTextListsHelper::GetListStyleOfProcessedList(
-                                            const ::rtl::OUString sListId ) const
+OUString XMLTextListsHelper::GetListStyleOfProcessedList(
+                                            const OUString sListId ) const
 {
     if ( mpProcessedLists != 0 )
     {
@@ -198,11 +198,11 @@ sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) co
         }
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
-                                            const ::rtl::OUString sListId ) const
+OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
+                                            const OUString sListId ) const
 {
     if ( mpProcessedLists != 0 )
     {
@@ -213,30 +213,30 @@ sal_Bool XMLTextListsHelper::IsListProcessed( const ::rtl::OUString sListId ) co
         }
     }
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
-const ::rtl::OUString& XMLTextListsHelper::GetLastProcessedListId() const
+const OUString& XMLTextListsHelper::GetLastProcessedListId() const
 {
     return msLastProcessedListId;
 }
 
-const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() const
+const OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() const
 {
     return msListStyleOfLastProcessedList;
 }
 
-::rtl::OUString XMLTextListsHelper::GenerateNewListId() const
+OUString XMLTextListsHelper::GenerateNewListId() const
 {
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    ::rtl::OUString sTmpStr( "list"  );
+    OUString sTmpStr( "list"  );
     sal_Int64 n = Time( Time::SYSTEM ).GetTime();
     n += Date( Date::SYSTEM ).GetDate();
     n += rand();
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
-    sTmpStr += ::rtl::OUString::valueOf( n );
+    sTmpStr += OUString::valueOf( n );
 
-    ::rtl::OUString sNewListId( sTmpStr );
+    OUString sNewListId( sTmpStr );
     if ( mpProcessedLists != 0 )
     {
         long nHitCount = 0;
@@ -244,7 +244,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
         {
             ++nHitCount;
             sNewListId = sTmpStr;
-            sNewListId += ::rtl::OUString::valueOf( nHitCount );
+            sNewListId += OUString::valueOf( nHitCount );
         }
     }
 
@@ -252,9 +252,9 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
 }
 
 // Provide list id for a certain list block for import (#i92811#)
-::rtl::OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
+OUString XMLTextListsHelper::GetListIdForListBlock( XMLTextListBlockContext& rListBlock )
 {
-    ::rtl::OUString sListBlockListId( rListBlock.GetContinueListId() );
+    OUString sListBlockListId( rListBlock.GetContinueListId() );
     if ( sListBlockListId.isEmpty() )
     {
         sListBlockListId = rListBlock.GetListId();
@@ -264,7 +264,7 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
     {
         if ( !sListBlockListId.isEmpty() )
         {
-            const ::rtl::OUString sListStyleName =
+            const OUString sListStyleName =
                                 GetListStyleOfProcessedList( sListBlockListId );
 
             tMapForLists::const_iterator aIter =
@@ -282,8 +282,8 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
     return sListBlockListId;
 }
 
-void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
-                                                  ::rtl::OUString sContinuingListId )
+void XMLTextListsHelper::StoreLastContinuingList( OUString sListId,
+                                                  OUString sContinuingListId )
 {
     if ( mpContinuingLists == 0 )
     {
@@ -293,8 +293,8 @@ void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
     (*mpContinuingLists)[ sListId ] = sContinuingListId;
 }
 
-::rtl::OUString XMLTextListsHelper::GetLastContinuingListId(
-                                                ::rtl::OUString sListId ) const
+OUString XMLTextListsHelper::GetLastContinuingListId(
+                                                OUString sListId ) const
 {
     if ( mpContinuingLists != 0)
     {
@@ -309,14 +309,14 @@ void XMLTextListsHelper::StoreLastContinuingList( ::rtl::OUString sListId,
     return sListId;
 }
 
-void XMLTextListsHelper::PushListOnStack( ::rtl::OUString sListId,
-                                          ::rtl::OUString sListStyleName )
+void XMLTextListsHelper::PushListOnStack( OUString sListId,
+                                          OUString sListStyleName )
 {
     if ( mpListStack == 0 )
     {
         mpListStack = new tStackForLists();
     }
-    ::std::pair< ::rtl::OUString, ::rtl::OUString >
+    ::std::pair< OUString, OUString >
                                 aListData( sListId, sListStyleName );
     mpListStack->push_back( aListData );
 }
@@ -329,17 +329,17 @@ void XMLTextListsHelper::PopListFromStack()
     }
 }
 
-sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const ::rtl::OUString sListId ) const
+sal_Bool XMLTextListsHelper::EqualsToTopListStyleOnStack( const OUString sListId ) const
 {
     return mpListStack != 0
            ? sListId == mpListStack->back().second
            : sal_False;
 }
 
-::rtl::OUString
+OUString
 XMLTextListsHelper::GetNumberedParagraphListId(
     const sal_uInt16 i_Level,
-    const ::rtl::OUString i_StyleName)
+    const OUString i_StyleName)
 {
     if (i_StyleName.isEmpty()) {
         OSL_FAIL("invalid numbered-paragraph: no style-name");
@@ -372,13 +372,13 @@ ClampLevel(uno::Reference<container::XIndexReplace> const& i_xNumRules,
 uno::Reference<container::XIndexReplace>
 XMLTextListsHelper::EnsureNumberedParagraph(
     SvXMLImport & i_rImport,
-    const ::rtl::OUString i_ListId,
-    sal_Int16 & io_rLevel, const ::rtl::OUString i_StyleName)
+    const OUString i_ListId,
+    sal_Int16 & io_rLevel, const OUString i_StyleName)
 {
     OSL_ENSURE(!i_ListId.isEmpty(), "invalid ListId");
     OSL_ENSURE(io_rLevel >= 0, "invalid Level");
     NumParaList_t & rNPList( mNPLists[i_ListId] );
-    const ::rtl::OUString none; // default
+    const OUString none; // default
     if ( rNPList.empty() && (0 != io_rLevel)) {
         // create default list style for top level
         sal_Int16 lev(0);
@@ -434,17 +434,17 @@ uno::Reference<container::XIndexReplace>
 XMLTextListsHelper::MakeNumRule(
     SvXMLImport & i_rImport,
     const uno::Reference<container::XIndexReplace>& i_rNumRule,
-    const ::rtl::OUString i_ParentStyleName,
-    const ::rtl::OUString i_StyleName,
+    const OUString i_ParentStyleName,
+    const OUString i_StyleName,
     sal_Int16 & io_rLevel,
     sal_Bool* o_pRestartNumbering,
     sal_Bool* io_pSetDefaults)
 {
-    static ::rtl::OUString s_NumberingRules( "NumberingRules");
+    static OUString s_NumberingRules( "NumberingRules");
     uno::Reference<container::XIndexReplace> xNumRules(i_rNumRule);
     if ( !i_StyleName.isEmpty() && i_StyleName != i_ParentStyleName )
     {
-        const ::rtl::OUString sDisplayStyleName(
+        const OUString sDisplayStyleName(
             i_rImport.GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
                                              i_StyleName) );
         const uno::Reference < container::XNameContainer >& rNumStyles(

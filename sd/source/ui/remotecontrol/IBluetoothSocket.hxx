@@ -26,7 +26,7 @@ namespace sd
             @return whatever the last call of recv returned, i.e. 0 or less
                     if there was a problem in communications.
          */
-        virtual sal_Int32 readLine(rtl::OString& aLine) = 0;
+        virtual sal_Int32 readLine(OString& aLine) = 0;
 
         /** Write a number of bytes
 

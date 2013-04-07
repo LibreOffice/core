@@ -53,11 +53,11 @@ class OOO_DLLPUBLIC_UNOTEST FiltersTest
 public:
     void testDir(
         //filter name
-        const rtl::OUString &rFilter,
+        const OUString &rFilter,
         //root dir of test files, must contain pass, fail, indeterminate
-        const rtl::OUString &rURL,
+        const OUString &rURL,
         //additional filter data for SfxFilter
-        const rtl::OUString &rUserData = rtl::OUString(),
+        const OUString &rUserData = OUString(),
         //SfxFilterFlags for SfxFilter
         unsigned int nFilterFlags = SFX_FILTER_IMPORT,
         //Clipboard id for SfxFilter
@@ -66,9 +66,9 @@ public:
         unsigned int nFilterVersion = 0);
 
     virtual bool load(
-        const rtl::OUString &rFilter,
-        const rtl::OUString &rURL,
-        const rtl::OUString &rUserData,
+        const OUString &rFilter,
+        const OUString &rURL,
+        const OUString &rUserData,
         unsigned int nFilterFlags,
         unsigned int nClipboardID,
         unsigned int nFilterVersion) = 0;
@@ -78,9 +78,9 @@ protected:
 
     void recursiveScan(
         filterStatus nExpected,
-        const rtl::OUString &rFilter,
-        const rtl::OUString &rURL,
-        const rtl::OUString &rUserData,
+        const OUString &rFilter,
+        const OUString &rURL,
+        const OUString &rUserData,
         unsigned int nFilterFlags,
         unsigned int nClipboardID,
         unsigned int nFilterVersion);

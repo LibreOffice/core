@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -168,15 +167,15 @@ uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL NetChartType::getChartType()
+OUString SAL_CALL NetChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_NET;
 }
 
-uno::Sequence< ::rtl::OUString > NetChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > NetChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    uno::Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_NET;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";

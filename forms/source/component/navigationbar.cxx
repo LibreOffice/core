@@ -58,7 +58,7 @@ namespace frm
     DBG_NAME( ONavigationBarModel )
     //------------------------------------------------------------------
     ONavigationBarModel::ONavigationBarModel( const Reference< XMultiServiceFactory >& _rxFactory )
-        :OControlModel( _rxFactory, ::rtl::OUString() )
+        :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
     {
         DBG_CTOR( ONavigationBarModel, NULL );
@@ -159,31 +159,31 @@ namespace frm
     IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
+    OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
+    OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
-        return ::rtl::OUString( "com.sun.star.comp.form.ONavigationBarModel" );
+        return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
+    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
     {
-        Sequence< ::rtl::OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
+        Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
         aSupported.realloc( aSupported.getLength() + 2 );
 
-        ::rtl::OUString* pArray = aSupported.getArray();
-        pArray[ aSupported.getLength() - 2 ] = ::rtl::OUString( "com.sun.star.awt.UnoControlModel" );
+        OUString* pArray = aSupported.getArray();
+        pArray[ aSupported.getLength() - 2 ] = OUString( "com.sun.star.awt.UnoControlModel" );
         pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_NAVTOOLBAR;
         return aSupported;
     }
@@ -201,7 +201,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException )
+    OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException )
     {
         return FRM_SUN_COMPONENT_NAVTOOLBAR;
     }
@@ -447,12 +447,12 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aDefault <<= ::rtl::OUString( "com.sun.star.form.control.NavigationToolBar" );
+            aDefault <<= OUString( "com.sun.star.form.control.NavigationToolBar" );
             break;
 
         case PROPERTY_ID_HELPTEXT:
         case PROPERTY_ID_HELPURL:
-            aDefault <<= ::rtl::OUString();
+            aDefault <<= OUString();
             break;
 
         case PROPERTY_ID_BORDER:

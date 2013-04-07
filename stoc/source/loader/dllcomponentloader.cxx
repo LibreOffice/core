@@ -53,7 +53,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace osl;
-using ::rtl::OUString;
 extern rtl_StandardModuleCount g_moduleCount;
 
 namespace stoc_bootstrap
@@ -189,15 +188,15 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
     throw(CannotActivateFactoryException, RuntimeException)
 {
-    rtl::OUString aPrefix;
+    OUString aPrefix;
     if( xKey.is() )
     {
         Reference<XRegistryKey > xActivatorKey = xKey->openKey(
-                rtl::OUString("/UNO/ACTIVATOR") );
+                OUString("/UNO/ACTIVATOR") );
         if (xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
         {
             Reference<XRegistryKey > xPrefixKey = xKey->openKey(
-                rtl::OUString("/UNO/PREFIX") );
+                OUString("/UNO/PREFIX") );
             if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
             {
                 aPrefix = xPrefixKey->getAsciiValue();

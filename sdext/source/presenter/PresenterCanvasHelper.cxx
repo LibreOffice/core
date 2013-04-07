@@ -261,7 +261,7 @@ void PresenterCanvasHelper::SetDeviceColor(
 
 css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-    const ::rtl::OUString& rsText,
+    const OUString& rsText,
     const sal_Int8 nTextDirection)
 {
     if (rxFont.is() && !rsText.isEmpty())
@@ -279,7 +279,7 @@ css::geometry::RealRectangle2D PresenterCanvasHelper::GetTextBoundingBox (
 
 css::geometry::RealSize2D PresenterCanvasHelper::GetTextSize (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-    const ::rtl::OUString& rsText,
+    const OUString& rsText,
     const sal_Int8 nTextDirection)
 {
     const geometry::RealRectangle2D aTextBBox (GetTextBoundingBox(rxFont, rsText, nTextDirection));

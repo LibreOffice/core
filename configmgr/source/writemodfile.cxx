@@ -57,11 +57,11 @@ class Components;
 
 namespace {
 
-rtl::OString convertToUtf8(
+OString convertToUtf8(
     OUString const & text, sal_Int32 offset, sal_Int32 length)
 {
     assert(offset <= text.getLength() && text.getLength() - offset >= length);
-    rtl::OString s;
+    OString s;
     if (!rtl_convertUStringToString(
             &s.pData, text.pData->buffer + offset, length,
             RTL_TEXTENCODING_UTF8,
@@ -115,7 +115,7 @@ void writeData(oslFileHandle handle, char const * begin, sal_Int32 length) {
     }
 }
 
-void writeData(oslFileHandle handle, rtl::OString const & text) {
+void writeData(oslFileHandle handle, OString const & text) {
     writeData(handle, text.getStr(), text.getLength());
 }
 
@@ -177,15 +177,15 @@ void writeValueContent(oslFileHandle handle, sal_Int16 value) {
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int32 value) {
-    writeData(handle, rtl::OString::valueOf(value));
+    writeData(handle, OString::valueOf(value));
 }
 
 void writeValueContent(oslFileHandle handle, sal_Int64 value) {
-    writeData(handle, rtl::OString::valueOf(value));
+    writeData(handle, OString::valueOf(value));
 }
 
 void writeValueContent(oslFileHandle handle, double value) {
-    writeData(handle, rtl::OString::valueOf(value));
+    writeData(handle, OString::valueOf(value));
 }
 
 void writeValueContent(oslFileHandle handle, OUString const & value) {

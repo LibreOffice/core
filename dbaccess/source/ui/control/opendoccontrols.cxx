@@ -62,14 +62,14 @@ namespace dbaui
         using ::com::sun::star::frame::UICommandDescription;
         using ::com::sun::star::graphic::XGraphic;
 
-        String GetCommandText( const sal_Char* _pCommandURL, const ::rtl::OUString& _rModuleName )
+        String GetCommandText( const sal_Char* _pCommandURL, const OUString& _rModuleName )
         {
-            ::rtl::OUString sLabel;
+            OUString sLabel;
             if ( !_pCommandURL || !*_pCommandURL )
                 return sLabel;
 
             Reference< XNameAccess > xUICommandLabels;
-            ::rtl::OUString sCommandURL = ::rtl::OUString::createFromAscii( _pCommandURL );
+            OUString sCommandURL = OUString::createFromAscii( _pCommandURL );
 
             try
             {
@@ -93,7 +93,7 @@ namespace dbaui
                     sal_Int32 nCount( aProperties.getLength() );
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {
-                        ::rtl::OUString sPropertyName( aProperties[i].Name );
+                        OUString sPropertyName( aProperties[i].Name );
                         if ( sPropertyName == "Label" )
                         {
                             aProperties[i].Value >>= sLabel;
@@ -111,14 +111,14 @@ namespace dbaui
             return sLabel;
         }
 
-        Image GetCommandIcon( const sal_Char* _pCommandURL, const ::rtl::OUString& _rModuleName )
+        Image GetCommandIcon( const sal_Char* _pCommandURL, const OUString& _rModuleName )
         {
             Image aIcon;
             if ( !_pCommandURL || !*_pCommandURL )
                 return aIcon;
 
             Reference< XNameAccess > xUICommandLabels;
-            ::rtl::OUString sCommandURL = ::rtl::OUString::createFromAscii( _pCommandURL );
+            OUString sCommandURL = OUString::createFromAscii( _pCommandURL );
             try
             {
                 do
@@ -138,7 +138,7 @@ namespace dbaui
                     if ( !xImageManager.is() )
                         break;
 
-                    Sequence< ::rtl::OUString > aCommandList( &sCommandURL, 1 );
+                    Sequence< OUString > aCommandList( &sCommandURL, 1 );
                     Sequence<Reference< XGraphic> > xIconList( xImageManager->getImages( 0, aCommandList ) );
                     if ( !xIconList.hasElements() )
                         break;
@@ -179,7 +179,7 @@ namespace dbaui
     void OpenDocumentButton::impl_init( const sal_Char* _pAsciiModuleName )
     {
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
-        m_sModule = ::rtl::OUString::createFromAscii( _pAsciiModuleName );
+        m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
         // our label should equal the UI text of the "Open" command
         String sLabel( GetCommandText( ".uno:Open", m_sModule ) );
@@ -220,7 +220,7 @@ namespace dbaui
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
         xFilterFactory = xFilterFactory.query( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString( "com.sun.star.document.FilterFactory" ) ) );
+            OUString( "com.sun.star.document.FilterFactory" ) ) );
 
         sal_uInt32 nCount = aHistory.getLength();
         for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
@@ -229,10 +229,10 @@ namespace dbaui
             {
                 //  Get the current history item's properties.
                 ::comphelper::SequenceAsHashMap aItemProperties( aHistory[ nItem ] );
-                ::rtl::OUString sURL = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_URL, ::rtl::OUString() );
-                ::rtl::OUString sFilter = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_FILTER, ::rtl::OUString() );
-                String          sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, ::rtl::OUString() );
-                ::rtl::OUString sPassword = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_PASSWORD, ::rtl::OUString() );
+                OUString sURL = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_URL, OUString() );
+                OUString sFilter = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_FILTER, OUString() );
+                String          sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, OUString() );
+                OUString sPassword = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_PASSWORD, OUString() );
 
                 //  If the entry is an impress file then insert it into the
                 //  history list and the list box.
@@ -240,8 +240,8 @@ namespace dbaui
                 xFilterFactory->getByName( sFilter ) >>= aProps;
 
                 ::comphelper::SequenceAsHashMap aFilterProperties( aProps );
-                ::rtl::OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
-                    ::rtl::OUString( "DocumentService" ), ::rtl::OUString() );
+                OUString sDocumentService = aFilterProperties.getUnpackedValueOrDefault(
+                    OUString( "DocumentService" ), OUString() );
                 if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
                 {
                     // yes, it's a Base document

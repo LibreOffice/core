@@ -121,7 +121,7 @@ void XFContentContainer::RemoveAt(sal_uInt32 nPos)
 {
     m_aContents.erase(m_aContents.begin()+nPos);
 }
-void    XFContentContainer::Add(const rtl::OUString& text)
+void    XFContentContainer::Add(const OUString& text)
 {
     XFTextContent *pTC = new XFTextContent();
     pTC->SetText(text);

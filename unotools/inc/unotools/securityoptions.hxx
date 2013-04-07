@@ -89,15 +89,15 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             MA_RUN
         };
 
-        typedef ::com::sun::star::uno::Sequence< ::rtl::OUString > Certificate;
+        typedef ::com::sun::star::uno::Sequence< OUString > Certificate;
 
         /*
         // MT: Doesn't work for sequence...
         struct Certificate
         {
-            ::rtl::OUString SubjectName;
-            ::rtl::OUString SerialNumber;
-            ::rtl::OUString RawData;
+            OUString SubjectName;
+            OUString SerialNumber;
+            OUString RawData;
         };
         */
 
@@ -152,8 +152,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetSecureURLs(                                                                      ) const ;
-        void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& seqURLList )       ;
+        ::com::sun::star::uno::Sequence< OUString >  GetSecureURLs(                                                                      ) const ;
+        void                                                SetSecureURLs( const ::com::sun::star::uno::Sequence< OUString >& seqURLList )       ;
 
         /*-****************************************************************************************************//**
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
@@ -194,8 +194,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
             @onerror    No error should occurre!
         *//*-*****************************************************************************************************/
 
-        sal_Bool IsSecureURL(   const   ::rtl::OUString&    sURL        ,
-                                const   ::rtl::OUString&    sReferer    ) const ;
+        sal_Bool IsSecureURL(   const   OUString&    sURL        ,
+                                const   OUString&    sReferer    ) const ;
 
         ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const ;
         void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    )       ;

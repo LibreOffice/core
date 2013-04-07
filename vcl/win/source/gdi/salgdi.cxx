@@ -37,7 +37,6 @@
 
 #include <region.h>
 
-using ::rtl::OStringBuffer;
 // =======================================================================
 
 // comment out to prevent use of beziers on GDI functions

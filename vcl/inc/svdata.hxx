@@ -320,7 +320,7 @@ struct ImplSVData
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
-    boost::unordered_map< int, rtl::OUString >*     mpPaperNames;
+    boost::unordered_map< int, OUString >*     mpPaperNames;
 };
 
 void        ImplInitSVData();

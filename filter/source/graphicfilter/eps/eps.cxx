@@ -211,7 +211,7 @@ private:
     void                ImplText( const String& rUniString, const Point& rPos, const sal_Int32* pDXArry, sal_Int32 nWidth, VirtualDevice& rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( sal_Char );
-    void                ImplWriteString( const rtl::OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
+    void                ImplWriteString( const OString&, VirtualDevice& rVDev, const sal_Int32* pDXArry = NULL, sal_Bool bStretch = sal_False );
     void                ImplDefineFont( const char*, const char* );
 
     void                ImplClosePathDraw( sal_uLong nMode = PS_RET );
@@ -271,7 +271,7 @@ sal_Bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Fi
         xStatusIndicator = pFilterConfigItem->GetStatusIndicator();
         if ( xStatusIndicator.is() )
         {
-            rtl::OUString aMsg;
+            OUString aMsg;
             xStatusIndicator->start( aMsg, 100 );
         }
     }
@@ -1246,7 +1246,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     {
                         SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );
                         sal_Bool        bSkipSequence = sal_False;
-                        rtl::OString sSeqEnd;
+                        OString sSeqEnd;
 
                         if( pA->GetComment().equals( "XPATHSTROKE_SEQ_BEGIN" ) )
                         {
@@ -1396,7 +1396,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 pMA = rMtf.GetAction( nCurAction );
                                 if ( pMA->GetType() == META_COMMENT_ACTION )
                                 {
-                                    rtl::OString sComment( ((MetaCommentAction*)pMA)->GetComment() );
+                                    OString sComment( ((MetaCommentAction*)pMA)->GetComment() );
                                     if ( sComment.equals( sSeqEnd ) )
                                         break;
                                 }
@@ -1996,7 +1996,7 @@ void PSWriter::ImplWriteCharacter( sal_Char nChar )
 
 //---------------------------------------------------------------------------------
 
-void PSWriter::ImplWriteString( const rtl::OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
+void PSWriter::ImplWriteString( const OString& rString, VirtualDevice& rVDev, const sal_Int32* pDXArry, sal_Bool bStretch )
 {
     sal_Int32 nLen = rString.getLength();
     if ( nLen )
@@ -2009,7 +2009,7 @@ void PSWriter::ImplWriteString( const rtl::OString& rString, VirtualDevice& rVDe
             {
                 if ( i > 0 )
                     nx = pDXArry[ i - 1 ];
-                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( rtl::OUString(rString[i]) ) );
+                ImplWriteDouble( ( bStretch ) ? nx : rVDev.GetTextWidth( OUString(rString[i]) ) );
                 ImplWriteDouble( nx );
                 ImplWriteLine( "(", PS_NONE );
                 ImplWriteCharacter( rString[i] );
@@ -2080,7 +2080,7 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const sal_
         if ( mnTextMode == 2 )  // forcing output one complete text packet, by
             pDXArry = NULL;     // ignoring the kerning array
         ImplSetAttrForText( rPos );
-        rtl::OString aStr(rtl::OUStringToOString(rUniString,
+        OString aStr(OUStringToOString(rUniString,
             maFont.GetCharSet()));
         ImplWriteString( aStr, rVDev, pDXArry, nWidth != 0 );
         if ( maFont.GetOrientation() )
@@ -2426,7 +2426,7 @@ void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 
 void PSWriter::ImplWriteLong(sal_Int32 nNumber, sal_uLong nMode)
 {
-    const rtl::OString aNumber(rtl::OString::valueOf(nNumber));
+    const OString aNumber(OString::valueOf(nNumber));
     mnCursorPos += aNumber.getLength();
     *mpPS << aNumber.getStr();
     ImplExecMode(nMode);
@@ -2442,7 +2442,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
     if ( !nPTemp && nATemp && ( fNumber < 0.0 ) )
         *mpPS << (sal_Char)'-';
 
-    const rtl::OString aNumber1(rtl::OString::valueOf(nPTemp));
+    const OString aNumber1(OString::valueOf(nPTemp));
     *mpPS << aNumber1.getStr();
     mnCursorPos += aNumber1.getLength();
 
@@ -2451,7 +2451,7 @@ void PSWriter::ImplWriteDouble( double fNumber, sal_uLong nMode )
         int zCount = 0;
         *mpPS << (sal_uInt8)'.';
         mnCursorPos++;
-        const rtl::OString aNumber2(rtl::OString::valueOf(nATemp));
+        const OString aNumber2(OString::valueOf(nATemp));
 
         sal_Int16 n, nLen = aNumber2.getLength();
         if ( nLen < 8 )
@@ -2488,7 +2488,7 @@ void PSWriter::ImplWriteF( sal_Int32 nNumber, sal_uLong nCount, sal_uLong nMode 
         nNumber = -nNumber;
         mnCursorPos++;
     }
-    const rtl::OString aScaleFactor(rtl::OString::valueOf(nNumber));
+    const OString aScaleFactor(OString::valueOf(nNumber));
     sal_uLong nLen = aScaleFactor.getLength();
     long nStSize =  ( nCount + 1 ) - nLen;
     if ( nStSize >= 1 )

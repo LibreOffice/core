@@ -115,7 +115,7 @@ protected:
     CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
     CSS::uno::Reference< CSS::io::XInputStream >            m_aResultStream;
     CSS::uno::Reference< CSS::uno::XComponentContext >      m_xContext;
-    rtl::OUString m_aEncoding;
+    OUString m_aEncoding;
 
     ::std::auto_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
                                                   ,com::sun::star::uno::Reference<com::sun::star::ucb::XCommandEnvironment>& _rOutEnv);
@@ -130,7 +130,7 @@ public:
         UNKNOWN_ERROR
     };
 
-    CSubmission(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+    CSubmission(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
         , m_xContext(::comphelper::getProcessComponentContext())
@@ -138,13 +138,13 @@ public:
 
     virtual ~CSubmission() {}
 
-    virtual void setEncoding(const rtl::OUString& aEncoding)
+    virtual void setEncoding(const OUString& aEncoding)
     {
         m_aEncoding = aEncoding;
     }
     virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& ) = 0;
 
-    virtual SubmissionResult replace(const rtl::OUString&, const CSS::uno::Reference< CSS::xml::dom::XDocument >&, const CSS::uno::Reference< CSS::frame::XFrame>&);
+    virtual SubmissionResult replace(const OUString&, const CSS::uno::Reference< CSS::xml::dom::XDocument >&, const CSS::uno::Reference< CSS::frame::XFrame>&);
 
 };
 

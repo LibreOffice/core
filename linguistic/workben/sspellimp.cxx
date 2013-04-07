@@ -40,7 +40,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 
 sal_Bool operator == ( const Locale &rL1, const Locale &rL2 )
@@ -220,7 +219,7 @@ Reference< XSpellAlternatives >
         {
             aTmp.SearchAndReplaceAllAscii( "liss", "liz" );
             xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
+                        SpellFailure::IS_NEGATIVE_WORD, ::com::sun::star::uno::Sequence< OUString >() );
         }
         else if (STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'x' )  ||
                  STRING_NOTFOUND != aTmp.Search( (sal_Unicode) 'X' ))
@@ -252,7 +251,7 @@ Reference< XSpellAlternatives >
                         (sal_Unicode) 'S': (sal_Unicode) 's';
                 aTmp.GetBufferAccess()[0] = cNewChar;
                 xRes = new SpellAlternatives( aTmp, nLang,
-                        SpellFailure::CAPTION_ERROR, ::com::sun::star::uno::Sequence< ::rtl::OUString >() );
+                        SpellFailure::CAPTION_ERROR, ::com::sun::star::uno::Sequence< OUString >() );
             }
         }
     }

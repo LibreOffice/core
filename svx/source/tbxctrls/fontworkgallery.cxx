@@ -53,7 +53,6 @@
 
 #include "helpid.hrc"
 
-using ::rtl::OUString;
 using ::svtools::ToolbarMenu;
 
 using namespace ::com::sun::star;
@@ -263,7 +262,7 @@ SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
 
 SfxPopupWindow* FontWorkShapeTypeControl::CreatePopupWindow()
 {
-    rtl::OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );
+    OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );
     createAndPositionSubToolBar( aSubTbxResName );
     return NULL;
 }
@@ -296,7 +295,7 @@ private:
     Image maImgAlgin4;
     Image maImgAlgin5;
 
-    const rtl::OUString msFontworkAlignment;
+    const OUString msFontworkAlignment;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -410,8 +409,8 @@ public:
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -482,8 +481,8 @@ public:
 private:
     svt::ToolboxController& mrController;
 
-    const rtl::OUString msFontworkCharacterSpacing;
-    const rtl::OUString msFontworkKernCharacterPairs;
+    const OUString msFontworkCharacterSpacing;
+    const OUString msFontworkKernCharacterPairs;
 
     DECL_LINK( SelectHdl, void * );
 
@@ -648,8 +647,8 @@ public:
     virtual ::Window* createPopupWindow( ::Window* pParent );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     using svt::PopupWindowController::createPopupWindow;
 };

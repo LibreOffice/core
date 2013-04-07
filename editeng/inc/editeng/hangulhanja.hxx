@@ -156,7 +156,7 @@ namespace editeng
                 or 'traditional'.)
         */
         virtual void    GetNextPortion(
-                ::rtl::OUString& /* [out] */ _rNextPortion,
+                OUString& /* [out] */ _rNextPortion,
                 LanguageType& /* [out] */ _rLangOfPortion,
                 sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) = 0;
 
@@ -249,8 +249,8 @@ namespace editeng
         */
         virtual void    ReplaceUnit(
                             const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd,
-                            const ::rtl::OUString& _rOrigText,
-                            const ::rtl::OUString& _rReplaceWith,
+                            const OUString& _rOrigText,
+                            const OUString& _rReplaceWith,
                             const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
                             ReplacementAction _eAction,
                             LanguageType *pNewUnitLanguage

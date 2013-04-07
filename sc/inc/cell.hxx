@@ -85,7 +85,7 @@ public:
     bool            HasEmptyData() const;
     bool            HasValueData() const;
     bool            HasStringData() const;
-    rtl::OUString   GetStringData() const;          // only real strings
+    OUString   GetStringData() const;          // only real strings
 
 private:
     ScBaseCell&     operator=( const ScBaseCell& );
@@ -145,18 +145,18 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScStringCell )
 #endif
 
-    explicit        ScStringCell(const rtl::OUString& rString);
+    explicit        ScStringCell(const OUString& rString);
 
 #if OSL_DEBUG_LEVEL > 0
                     ~ScStringCell();
 #endif
 
-    inline void     SetString( const rtl::OUString& rString ) { maString = rString; }
-    inline const    rtl::OUString& GetString() const { return maString; }
+    inline void     SetString( const OUString& rString ) { maString = rString; }
+    inline const    OUString& GetString() const { return maString; }
     const OUString* GetStringPtr() const { return &maString; }
 
 private:
-    rtl::OUString   maString;
+    OUString   maString;
 };
 
 class ScEditCell : public ScBaseCell

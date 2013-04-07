@@ -72,7 +72,7 @@ void SwLabDlg::_ReplaceGroup( const String &rMake )
 {
     // Remove old entries
     pRecs->erase(pRecs->begin() + 1, pRecs->end());
-    aLabelsCfg.FillLabels(rtl::OUString(rMake), *pRecs);
+    aLabelsCfg.FillLabels(OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
 
@@ -153,7 +153,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         pRecs->insert( pRecs->begin(), pRec );
 
     sal_uInt16 nLstGroup = 0;
-    const std::vector<rtl::OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const std::vector<OUString>& rMan = aLabelsCfg.GetManufacturers();
     for(sal_uInt16 nMan = 0; nMan < rMan.size(); nMan++)
     {
         aMakes.push_back(rMan[nMan]);
@@ -274,7 +274,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     const sal_uInt16 nCount = (sal_uInt16)GetParentSwLabDlg()->Makes().size();
     for(size_t i = 0; i < nCount; ++i)
     {
-        rtl::OUString& rStr = GetParentSwLabDlg()->Makes()[i];
+        OUString& rStr = GetParentSwLabDlg()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
 
         if ( rStr == aItem.aLstMake)
@@ -489,8 +489,8 @@ void SwLabPage::InitDatabaseBox()
     if( GetNewDBMgr() )
     {
         aDatabaseLB.Clear();
-        ::com::sun::star::uno::Sequence<rtl::OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
-        const rtl::OUString* pDataNames = aDataNames.getConstArray();
+        ::com::sun::star::uno::Sequence<OUString> aDataNames = SwNewDBMgr::GetExistingDatabaseNames();
+        const OUString* pDataNames = aDataNames.getConstArray();
         for (long i = 0; i < aDataNames.getLength(); i++)
             aDatabaseLB.InsertEntry(pDataNames[i]);
         String sDBName = sActDBName.GetToken( 0, DB_DELIM );
@@ -558,7 +558,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aAddrBox    .Check      ( aItem.bAddr );
     aWritingEdit.SetText    ( aWriting );
 
-    for(std::vector<rtl::OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
+    for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
         if(aMakeBox.GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
             aMakeBox.InsertEntry(*i);
@@ -600,7 +600,7 @@ void SwVisitingCardPage::ClearUserData()
 }
 
 void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
-                const rtl::OUString* pNames, const rtl::OUString* pValues )
+                const OUString* pNames, const OUString* pValues )
 {
     for( sal_uInt32 i = 0; i < nCnt; ++i )
     {

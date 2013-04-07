@@ -59,19 +59,19 @@
  ************************************************************************/
 #include "xffontdecl.hxx"
 
-XFFontDecl::XFFontDecl(rtl::OUString name, rtl::OUString family, sal_Bool fixed)
+XFFontDecl::XFFontDecl(OUString name, OUString family, sal_Bool fixed)
 {
     m_strFontName = name;
     m_strFontFamily = family;
     m_bPitchFixed = fixed;
 }
 
-rtl::OUString   XFFontDecl::GetFontName()
+OUString   XFFontDecl::GetFontName()
 {
     return m_strFontName;
 }
 
-rtl::OUString   XFFontDecl::GetFontFamily()
+OUString   XFFontDecl::GetFontFamily()
 {
     return m_strFontFamily;
 }

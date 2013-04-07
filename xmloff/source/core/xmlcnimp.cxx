@@ -41,47 +41,47 @@ int SvXMLAttrContainerData::operator ==( const SvXMLAttrContainerData& rCmp ) co
     return ( *(rCmp.pimpl) == *(pimpl) );
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const rtl::OUString& rLName,
-                                          const rtl::OUString& rValue )
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rLName,
+                                          const OUString& rValue )
 {
     return pimpl->AddAttr(rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const rtl::OUString& rPrefix,
-                                          const rtl::OUString& rNamespace,
-                                          const rtl::OUString& rLName,
-                                          const rtl::OUString& rValue )
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+                                          const OUString& rNamespace,
+                                          const OUString& rLName,
+                                          const OUString& rValue )
 {
     return pimpl->AddAttr(rPrefix, rNamespace, rLName, rValue);
 }
 
-sal_Bool SvXMLAttrContainerData::AddAttr( const rtl::OUString& rPrefix,
-                                          const rtl::OUString& rLName,
-                                          const rtl::OUString& rValue )
+sal_Bool SvXMLAttrContainerData::AddAttr( const OUString& rPrefix,
+                                          const OUString& rLName,
+                                          const OUString& rValue )
 {
     return pimpl->AddAttr(rPrefix, rLName, rValue);
 }
 
 sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
-                                        const rtl::OUString& rLName,
-                                        const rtl::OUString& rValue )
+                                        const OUString& rLName,
+                                        const OUString& rValue )
 {
     return pimpl->SetAt(i, rLName, rValue);
 }
 
 sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
-                                        const rtl::OUString& rPrefix,
-                                        const rtl::OUString& rNamespace,
-                                        const rtl::OUString& rLName,
-                                        const rtl::OUString& rValue )
+                                        const OUString& rPrefix,
+                                        const OUString& rNamespace,
+                                        const OUString& rLName,
+                                        const OUString& rValue )
 {
     return pimpl->SetAt(i, rPrefix, rNamespace, rLName, rValue);
 }
 
 sal_Bool SvXMLAttrContainerData::SetAt( size_t i,
-                                        const rtl::OUString& rPrefix,
-                                        const rtl::OUString& rLName,
-                                        const rtl::OUString& rValue )
+                                        const OUString& rPrefix,
+                                        const OUString& rLName,
+                                        const OUString& rValue )
 {
     return pimpl->SetAt(i, rPrefix, rLName, rValue);
 }
@@ -96,32 +96,32 @@ size_t SvXMLAttrContainerData::GetAttrCount() const
     return pimpl->GetAttrCount();
 }
 
-const rtl::OUString& SvXMLAttrContainerData::GetAttrLName(size_t i) const
+const OUString& SvXMLAttrContainerData::GetAttrLName(size_t i) const
 {
     return pimpl->GetAttrLName(i);
 }
 
-const rtl::OUString& SvXMLAttrContainerData::GetAttrValue(size_t i) const
+const OUString& SvXMLAttrContainerData::GetAttrValue(size_t i) const
 {
     return pimpl->GetAttrValue(i);
 }
 
-const rtl::OUString SvXMLAttrContainerData::GetAttrNamespace( size_t i ) const
+const OUString SvXMLAttrContainerData::GetAttrNamespace( size_t i ) const
 {
     return pimpl->GetAttrNamespace(i);
 }
 
-const rtl::OUString SvXMLAttrContainerData::GetAttrPrefix( size_t i ) const
+const OUString SvXMLAttrContainerData::GetAttrPrefix( size_t i ) const
 {
     return pimpl->GetAttrPrefix(i);
 }
 
-const rtl::OUString& SvXMLAttrContainerData::GetNamespace( sal_uInt16 i ) const
+const OUString& SvXMLAttrContainerData::GetNamespace( sal_uInt16 i ) const
 {
     return pimpl->GetNamespace(i);
 }
 
-const rtl::OUString& SvXMLAttrContainerData::GetPrefix( sal_uInt16 i ) const
+const OUString& SvXMLAttrContainerData::GetPrefix( sal_uInt16 i ) const
 {
     return pimpl->GetPrefix(i);
 }

@@ -49,9 +49,9 @@ class ProgressBarWrapper : public UIElementWrapperBase
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getStatusBar() const;
 
         // wrapped methods of ::com::sun::star::task::XStatusIndicator
-        void start( const ::rtl::OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException);
+        void start( const OUString& Text, ::sal_Int32 Range ) throw (::com::sun::star::uno::RuntimeException);
         void end() throw (::com::sun::star::uno::RuntimeException);
-        void setText( const ::rtl::OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
+        void setText( const OUString& Text ) throw (::com::sun::star::uno::RuntimeException);
         void setValue( ::sal_Int32 Value ) throw (::com::sun::star::uno::RuntimeException);
         void reset() throw (::com::sun::star::uno::RuntimeException);
 
@@ -78,7 +78,7 @@ class ProgressBarWrapper : public UIElementWrapperBase
         sal_Bool                                                                   m_bOwnsInstance; // Indicator that we are owner of the XWindow
         sal_Int32                                                                  m_nRange;
         sal_Int32                                                                  m_nValue;
-        rtl::OUString                                                              m_aText;
+        OUString                                                              m_aText;
 };      //  class ProgressBarWrapper
 
 }       //  namespace framework

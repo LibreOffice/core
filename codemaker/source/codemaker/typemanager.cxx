@@ -23,12 +23,8 @@
 #include "registry/reader.hxx"
 #include "registry/version.h"
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringToOString;
 
-sal_Bool TypeManager::isBaseType(const ::rtl::OString& name)
+sal_Bool TypeManager::isBaseType(const OString& name)
 {
     if ( name == "short" )
         return sal_True;
@@ -108,7 +104,7 @@ sal_Bool TypeManager::init(
     return sal_True;
 }
 
-::rtl::OString TypeManager::getTypeName(RegistryKey& rTypeKey) const
+OString TypeManager::getTypeName(RegistryKey& rTypeKey) const
 {
     OString typeName = OUStringToOString(rTypeKey.getName(), RTL_TEXTENCODING_UTF8);
 
@@ -306,7 +302,7 @@ RegistryKey TypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtra
     return key;
 }
 
-RegistryKeyList TypeManager::getTypeKeys(const ::rtl::OString& name_) const
+RegistryKeyList TypeManager::getTypeKeys(const OString& name_) const
 {
     RegistryKeyList keyList= RegistryKeyList();
     OString tmpName;

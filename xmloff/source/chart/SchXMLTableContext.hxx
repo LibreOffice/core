@@ -51,13 +51,13 @@ private:
 public:
     SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                         SvXMLImport& rImport,
-                        const rtl::OUString& rLocalName,
+                        const OUString& rLocalName,
                         SchXMLTable& aTable );
     virtual ~SchXMLTableContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
@@ -71,8 +71,8 @@ public:
 class SchXMLTableHelper
 {
 private:
-    static void GetCellAddress( const rtl::OUString& rStr, sal_Int32& rCol, sal_Int32& rRow );
-    static sal_Bool GetCellRangeAddress( const rtl::OUString& rStr, SchNumericCellRangeAddress& rResult );
+    static void GetCellAddress( const OUString& rStr, sal_Int32& rCol, sal_Int32& rRow );
+    static sal_Bool GetCellRangeAddress( const OUString& rStr, SchNumericCellRangeAddress& rResult );
     static void PutTableContentIntoSequence(
         const SchXMLTable& rTable,
         SchNumericCellRangeAddress& rAddress,
@@ -112,13 +112,13 @@ private:
 
 public:
     SchXMLTableColumnsContext( SvXMLImport& rImport,
-                               const rtl::OUString& rLocalName,
+                               const OUString& rLocalName,
                                SchXMLTable& aTable );
     virtual ~SchXMLTableColumnsContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -131,7 +131,7 @@ private:
 
 public:
     SchXMLTableColumnContext( SvXMLImport& rImport,
-                              const rtl::OUString& rLocalName,
+                              const OUString& rLocalName,
                               SchXMLTable& aTable );
     virtual ~SchXMLTableColumnContext();
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -150,13 +150,13 @@ private:
 public:
     SchXMLTableRowsContext( SchXMLImportHelper& rImpHelper,
                             SvXMLImport& rImport,
-                            const rtl::OUString& rLocalName,
+                            const OUString& rLocalName,
                             SchXMLTable& aTable );
     virtual ~SchXMLTableRowsContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -171,13 +171,13 @@ private:
 public:
     SchXMLTableRowContext( SchXMLImportHelper& rImpHelper,
                            SvXMLImport& rImport,
-                           const rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            SchXMLTable& aTable );
     virtual ~SchXMLTableRowContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -190,20 +190,20 @@ class SchXMLTableCellContext : public SvXMLImportContext
 private:
     SchXMLImportHelper& mrImportHelper;
     SchXMLTable& mrTable;
-    rtl::OUString maCellContent;
-    rtl::OUString maRangeId;
+    OUString maCellContent;
+    OUString maRangeId;
     sal_Bool mbReadText;
 
 public:
     SchXMLTableCellContext( SchXMLImportHelper& rImpHelper,
                             SvXMLImport& rImport,
-                            const rtl::OUString& rLocalName,
+                            const OUString& rLocalName,
                             SchXMLTable& aTable );
     virtual ~SchXMLTableCellContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();

@@ -225,7 +225,7 @@ void SwCSS1Parser::SetLinkCharFmts()
     OSL_ENSURE( !bLinkCharFmtsSet, "Aufruf von SetLinkCharFmts unnoetig" );
 
     SvxCSS1MapEntry *pStyleEntry =
-        GetTag( rtl::OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
+        GetTag( OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
     SwCharFmt *pUnvisited = 0, *pVisited = 0;
     if( pStyleEntry )
     {
@@ -241,7 +241,7 @@ void SwCSS1Parser::SetLinkCharFmts()
         bBodyVLinkSet |= bColorSet;
     }
 
-    String sTmp( rtl::OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
+    String sTmp( OUString(OOO_STRING_SVTOOLS_HTML_anchor) );
     sTmp.Append( ':' );
     sTmp.AppendAscii( sCSS1_link );
     pStyleEntry = GetTag( sTmp );
@@ -1195,7 +1195,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
     }
     else
     {
-        String sCName( rtl::OUString::createFromAscii(sName) );
+        String sCName( OUString::createFromAscii(sName) );
         pCFmt = pDoc->FindCharFmtByName( sCName );
         if( !pCFmt )
         {
@@ -1872,7 +1872,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
 
     }
 
-    pPageEntry = GetPage( rtl::OUString::createFromAscii(sCSS1_first), sal_True );
+    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_first), sal_True );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetFirstPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1880,7 +1880,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
         bSetFirstPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( rtl::OUString::createFromAscii(sCSS1_right), sal_True );
+    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_right), sal_True );
     if( pPageEntry )
     {
         SetPageDescAttrs( GetRightPageDesc(sal_True), pPageEntry->GetItemSet(),
@@ -1888,7 +1888,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
         bSetRightPageDesc = sal_True;
     }
 
-    pPageEntry = GetPage( rtl::OUString::createFromAscii(sCSS1_left), sal_True );
+    pPageEntry = GetPage( OUString::createFromAscii(sCSS1_left), sal_True );
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(sal_True), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );

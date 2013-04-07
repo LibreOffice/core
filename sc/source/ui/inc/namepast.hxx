@@ -43,14 +43,14 @@ private:
 
     ScRangeManagerTable* mpTable;
 
-    std::vector<rtl::OUString> maSelectedNames;
-    boost::ptr_map<rtl::OUString, ScRangeName> maRangeMap;
+    std::vector<OUString> maSelectedNames;
+    boost::ptr_map<OUString, ScRangeName> maRangeMap;
 public:
     ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool bInsList=true );
 
     virtual ~ScNamePasteDlg();
 
-    std::vector<rtl::OUString> GetSelectedNames() const;
+    std::vector<OUString> GetSelectedNames() const;
     bool            IsAllSelected() const;
 };
 

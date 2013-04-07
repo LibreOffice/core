@@ -160,12 +160,12 @@ void DocxExport::ExportGrfBullet(const SwTxtNode&)
     CollectGrfsOfBullets();
 }
 
-::rtl::OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget )
+OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget )
 {
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
            rType, rTarget, true );
 
-    return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
 bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
@@ -240,11 +240,11 @@ void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*
 #endif
 }
 
-void DocxExport::DoComboBox(const rtl::OUString& rName,
-                             const rtl::OUString& rHelp,
-                             const rtl::OUString& rToolTip,
-                             const rtl::OUString& rSelected,
-                             uno::Sequence<rtl::OUString>& rListItems)
+void DocxExport::DoComboBox(const OUString& rName,
+                             const OUString& rHelp,
+                             const OUString& rToolTip,
+                             const OUString& rSelected,
+                             uno::Sequence<OUString>& rListItems)
 {
     m_pDocumentFS->startElementNS( XML_w, XML_ffData, FSEND );
 
@@ -278,7 +278,7 @@ void DocxExport::DoComboBox(const rtl::OUString& rName,
     }
 
     m_pDocumentFS->singleElementNS( XML_w, XML_result,
-            FSNS( XML_w, XML_val ), rtl::OString::valueOf( nId ).getStr( ),
+            FSNS( XML_w, XML_val ), OString::valueOf( nId ).getStr( ),
             FSEND );
 
     // Loop over the entries
@@ -300,7 +300,7 @@ void DocxExport::DoFormText(const SwInputField* /*pFld*/)
     OSL_TRACE( "TODO DocxExport::ForFormText()" );
 }
 
-rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
+OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_Int32 nCount )
 {
     OUString aFileName = "charts/chart" + OUString::valueOf(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
@@ -314,7 +314,7 @@ rtl::OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, s
 
     oox::drawingml::ChartExport aChartExport( XML_w, pChartFS, xModel, m_pFilter, oox::drawingml::DrawingML::DOCUMENT_DOCX );
     aChartExport.ExportContent();
-    return ::rtl::OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
 }
 
 void DocxExport::ExportDocument_Impl()
@@ -634,7 +634,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // and write the reference
     m_pDocumentFS->singleElementNS( XML_w, nReference,
             FSNS( XML_w, XML_type ), pType,
-            FSNS( XML_r, XML_id ), rtl::OUStringToOString( aRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_r, XML_id ), OUStringToOString( aRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
 }
 
@@ -700,7 +700,7 @@ void DocxExport::WriteSettings()
             FSEND );
 
     // Zoom
-    rtl::OString aZoom(rtl::OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
+    OString aZoom(OString::valueOf(sal_Int32(pViewShell->GetViewOptions()->GetZoom())));
     pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
     if( pDoc->get( IDocumentSettingAccess::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
@@ -708,7 +708,7 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
     if( settings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
-            rtl::OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );
+            OString::valueOf( sal_Int32( settings.defaultTabStop )).getStr(), FSEND );
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 

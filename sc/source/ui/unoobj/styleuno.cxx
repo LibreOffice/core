@@ -88,15 +88,15 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_FAMILY_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,          &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,      &getCppuType((sal_Int16*)0),            0, MID_FONT_PITCH },
-        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
-        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((OUString*)0),        0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &::getCppuType((const float*)0),            0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,&::getCppuType((const float*)0),           0, MID_FONTHEIGHT | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,&::getCppuType((const float*)0),           0, MID_FONTHEIGHT | CONVERT_TWIPS },
@@ -123,7 +123,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_BLTR2), ATTR_BORDER_BLTR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine*)0), 0, 0 | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_DIAGONAL_TLBR2), ATTR_BORDER_TLBR, &::getCppuType((const table::BorderLine2*)0), 0, 0 | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME), SC_WID_UNO_DISPNAME,&::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME), SC_WID_UNO_DISPNAME,&::getCppuType((OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &::getCppuType((const table::CellHoriJustify*)0),   0, MID_HORJUST_HORJUST },
         {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS_METHOD), ATTR_HOR_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
@@ -159,7 +159,7 @@ static const SfxItemPropertySet* lcl_GetCellStyleSet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_HIDDEN),   ATTR_HIDDEN,        &getCppuType((sal_Bool*)0),             0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((rtl::OUString*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK),  ATTR_HYPERLINK, &getCppuType((OUString*)0),        0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );
@@ -173,9 +173,9 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
     static SfxItemPropertyMapEntry aPageStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_BACKCOLOR),   ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICFILT), ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICFILT), ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },
         {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICLOC),  ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICURL),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICURL),  ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_BACKTRANS),   ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_BACKCOLOR),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_BORDERDIST),  ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, BORDER_DISTANCE | CONVERT_TWIPS },
@@ -184,13 +184,13 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {MAP_CHAR_LEN(SC_UNO_PAGE_BOTTMARGIN),  ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_CENTERHOR),   ATTR_PAGE_HORCENTER,&::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_CENTERVER),   ATTR_PAGE_VERCENTER,&::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME),     SC_WID_UNO_DISPNAME,&::getCppuType((rtl::OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_DISPNAME),     SC_WID_UNO_DISPNAME,&::getCppuType((OUString*)0),  beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FIRSTPAGE),   ATTR_PAGE_FIRSTPAGENO,&::getCppuType((const sal_Int16*)0),      0, 0 },
 //
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  SC_WID_UNO_FOOTERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  SC_WID_UNO_FOOTERSET,&::getCppuType((const OUString*)0),     0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   SC_WID_UNO_FOOTERSET,&::getCppuType((const style::GraphicLocation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   SC_WID_UNO_FOOTERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   SC_WID_UNO_FOOTERSET,&::getCppuType((const OUString*)0),     0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), SC_WID_UNO_FOOTERSET,&::getBooleanCppuType(),                       0, 0 },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
@@ -215,9 +215,9 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRTOPBDIS),  SC_WID_UNO_FOOTERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
 //
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  SC_WID_UNO_HEADERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  SC_WID_UNO_HEADERSET,&::getCppuType((const OUString*)0),     0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   SC_WID_UNO_HEADERSET,&::getCppuType((const style::GraphicLocation*)0), 0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   SC_WID_UNO_HEADERSET,&::getCppuType((const ::rtl::OUString*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   SC_WID_UNO_HEADERSET,&::getCppuType((const OUString*)0),     0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), SC_WID_UNO_HEADERSET,&::getCppuType((const sal_Int32*)0),           0, 0 },
@@ -261,7 +261,7 @@ static const SfxItemPropertySet * lcl_GetPageStyleSet()
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTHEADER), ATTR_PAGE_HEADERS,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTOBJS),   ATTR_PAGE_OBJECTS,  &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_PRINTZERO),   ATTR_PAGE_NULLVALS, &::getBooleanCppuType(),            0, 0 },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ATTR_PAGE_PAPERBIN, &::getCppuType((const ::rtl::OUString*)0),      0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_PAPERTRAY),   ATTR_PAGE_PAPERBIN, &::getCppuType((const OUString*)0),      0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBORDER), ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, RIGHT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTBRDDIST),ATTR_BORDER,        &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNO_PAGE_RIGHTMARGIN), ATTR_LRSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_R_MARGIN | CONVERT_TWIPS },
@@ -294,9 +294,9 @@ static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
     static SfxItemPropertyMapEntry aHeaderStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_LO_MARGIN | CONVERT_TWIPS },
@@ -333,9 +333,9 @@ static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
     static SfxItemPropertyMapEntry aFooterStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_FILTER },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFLOC),   ATTR_BACKGROUND,    &::getCppuType((const style::GraphicLocation*)0),   0, MID_GRAPHIC_POSITION },
-        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_URL },
+        {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFURL),   ATTR_BACKGROUND,    &::getCppuType((const OUString*)0),          0, MID_GRAPHIC_URL },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKCOL), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBODYDIST), ATTR_ULSPACE,       &::getCppuType((const sal_Int32*)0),            0, MID_UP_MARGIN | CONVERT_TWIPS },
@@ -424,19 +424,19 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         if ( !bCellMapFilled )
         {
             aCellMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
-            aCellMap[0].aProgName = rtl::OUString( SC_STYLE_PROG_STANDARD );
+            aCellMap[0].aProgName = OUString( SC_STYLE_PROG_STANDARD );
 
             aCellMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT );
-            aCellMap[1].aProgName = rtl::OUString( SC_STYLE_PROG_RESULT );
+            aCellMap[1].aProgName = OUString( SC_STYLE_PROG_RESULT );
 
             aCellMap[2].aDispName = ScGlobal::GetRscString( STR_STYLENAME_RESULT1 );
-            aCellMap[2].aProgName = rtl::OUString( SC_STYLE_PROG_RESULT1 );
+            aCellMap[2].aProgName = OUString( SC_STYLE_PROG_RESULT1 );
 
             aCellMap[3].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE );
-            aCellMap[3].aProgName = rtl::OUString( SC_STYLE_PROG_HEADLINE );
+            aCellMap[3].aProgName = OUString( SC_STYLE_PROG_HEADLINE );
 
             aCellMap[4].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE1 );
-            aCellMap[4].aProgName = rtl::OUString( SC_STYLE_PROG_HEADLINE1 );
+            aCellMap[4].aProgName = OUString( SC_STYLE_PROG_HEADLINE1 );
 
             //  last entry remains empty
 
@@ -451,10 +451,10 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
         if ( !bPageMapFilled )
         {
             aPageMap[0].aDispName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
-            aPageMap[0].aProgName = rtl::OUString( SC_STYLE_PROG_STANDARD );
+            aPageMap[0].aProgName = OUString( SC_STYLE_PROG_STANDARD );
 
             aPageMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_REPORT );
-            aPageMap[1].aProgName = rtl::OUString( SC_STYLE_PROG_REPORT );
+            aPageMap[1].aProgName = OUString( SC_STYLE_PROG_REPORT );
 
             //  last entry remains empty
 
@@ -596,7 +596,7 @@ ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) c
     return NULL;    // ungueltiger Index
 }
 
-ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const rtl::OUString& aName) const
+ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByName_Impl(const OUString& aName) const
 {
     if ( pDocShell )
     {
@@ -644,7 +644,7 @@ sal_Bool SAL_CALL ScStyleFamiliesObj::hasElements() throw(uno::RuntimeException)
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
                     throw(container::NoSuchElementException,
                         lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -657,18 +657,18 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const rtl::OUString& aName )
 //    return uno::Any();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<rtl::OUString> aNames(SC_STYLE_FAMILY_COUNT);
-    rtl::OUString* pNames = aNames.getArray();
-    pNames[0] = rtl::OUString(SC_FAMILYNAME_CELL );
-    pNames[1] = rtl::OUString(SC_FAMILYNAME_PAGE );
+    uno::Sequence<OUString> aNames(SC_STYLE_FAMILY_COUNT);
+    OUString* pNames = aNames.getArray();
+    pNames[0] = OUString(SC_FAMILYNAME_CELL );
+    pNames[1] = OUString(SC_FAMILYNAME_PAGE );
     return aNames;
 }
 
-sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -678,15 +678,15 @@ sal_Bool SAL_CALL ScStyleFamiliesObj::hasByName( const rtl::OUString& aName )
 
 // style::XStyleLoader
 
-void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
+void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
                         const uno::Sequence<beans::PropertyValue>& aOptions )
                                 throw(io::IOException, uno::RuntimeException)
 {
     //! use aOptions (like Writer)
     //! set flag to disable filter option dialogs when importing
 
-    rtl::OUString aFilter;     // empty - detect
-    rtl::OUString aFiltOpt;
+    OUString aFilter;     // empty - detect
+    OUString aFiltOpt;
     ScDocumentLoader aLoader( aURL, aFilter, aFiltOpt );
 
     ScDocShell* pSource = aLoader.GetDocShell();
@@ -726,13 +726,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
     uno::Sequence<beans::PropertyValue> aSequence(3);
     beans::PropertyValue* pArray = aSequence.getArray();
 
-    pArray[0].Name = rtl::OUString(SC_UNONAME_OVERWSTL );
+    pArray[0].Name = OUString(SC_UNONAME_OVERWSTL );
     ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, true );
 
-    pArray[1].Name = rtl::OUString(SC_UNONAME_LOADCELL );
+    pArray[1].Name = OUString(SC_UNONAME_LOADCELL );
     ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, true );
 
-    pArray[2].Name = rtl::OUString(SC_UNONAME_LOADPAGE );
+    pArray[2].Name = OUString(SC_UNONAME_LOADPAGE );
     ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, true );
 
     return aSequence;
@@ -786,7 +786,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
     return NULL;
 }
 
-ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const rtl::OUString& aName)
+ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
 {
     if ( pDocShell )
     {
@@ -800,7 +800,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const rtl::OUString& aName)
     return NULL;
 }
 
-void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::ElementExistException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -846,7 +846,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const 
     }
 }
 
-void SAL_CALL ScStyleFamilyObj::replaceByName( const rtl::OUString& aName, const uno::Any& aElement )
+void SAL_CALL ScStyleFamilyObj::replaceByName( const OUString& aName, const uno::Any& aElement )
                             throw(lang::IllegalArgumentException, container::NoSuchElementException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -856,7 +856,7 @@ void SAL_CALL ScStyleFamilyObj::replaceByName( const rtl::OUString& aName, const
     insertByName( aName, aElement );
 }
 
-void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
+void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                                 throw(container::NoSuchElementException,
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -954,7 +954,7 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasElements() throw(uno::RuntimeException)
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScStyleFamilyObj::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -968,7 +968,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const rtl::OUString& aName )
 //    return uno::Any();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -980,8 +980,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         sal_uInt16 nCount = aIter.Count();
 
-        uno::Sequence<rtl::OUString> aSeq(nCount);
-        rtl::OUString* pAry = aSeq.getArray();
+        uno::Sequence<OUString> aSeq(nCount);
+        OUString* pAry = aSeq.getArray();
         SfxStyleSheetBase* pStyle = aIter.First();
         sal_uInt16 nPos = 0;
         while (pStyle)
@@ -994,10 +994,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         }
         return aSeq;
     }
-    return uno::Sequence<rtl::OUString>();
+    return uno::Sequence<OUString>();
 }
 
-sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
                                         throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1021,12 +1021,12 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ScStyleFamilyObj::getProperty
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
-void SAL_CALL ScStyleFamilyObj::setPropertyValue( const ::rtl::OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ScStyleFamilyObj::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
 
@@ -1045,34 +1045,34 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPr
         }
         if ( nResId > 0 )
         {
-            ::rtl::OUString sDisplayName( ScGlobal::GetRscString( static_cast< sal_uInt16 >( nResId ) ) );
+            OUString sDisplayName( ScGlobal::GetRscString( static_cast< sal_uInt16 >( nResId ) ) );
             aRet = uno::makeAny( sDisplayName );
         }
     }
     else
     {
-        throw beans::UnknownPropertyException( ::rtl::OUString( "unknown property: " ) + sPropertyName, static_cast<OWeakObject *>(this) );
+        throw beans::UnknownPropertyException( OUString( "unknown property: " ) + sPropertyName, static_cast<OWeakObject *>(this) );
     }
 
     return aRet;
 }
 
-void SAL_CALL ScStyleFamilyObj::addPropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ScStyleFamilyObj::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL ScStyleFamilyObj::removePropertyChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ScStyleFamilyObj::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL ScStyleFamilyObj::addVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ScStyleFamilyObj::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL( "###unexpected!" );
 }
@@ -1185,16 +1185,16 @@ sal_Bool SAL_CALL ScStyleObj::isInUse() throw(uno::RuntimeException)
     return false;
 }
 
-rtl::OUString SAL_CALL ScStyleObj::getParentStyle() throw(uno::RuntimeException)
+OUString SAL_CALL ScStyleObj::getParentStyle() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
         return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetParent(), sal::static_int_cast<sal_uInt16>(eFamily) );
-    return rtl::OUString();
+    return OUString();
 }
 
-void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
+void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
                 throw(container::NoSuchElementException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1241,16 +1241,16 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
 
 // container::XNamed
 
-rtl::OUString SAL_CALL ScStyleObj::getName() throw(uno::RuntimeException)
+OUString SAL_CALL ScStyleObj::getName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
         return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetName(), sal::static_int_cast<sal_uInt16>(eFamily) );
-    return rtl::OUString();
+    return OUString();
 }
 
-void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
+void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1295,7 +1295,7 @@ uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 
 // beans::XPropertyState
 
-const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const ::rtl::OUString& rPropName,
+const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const OUString& rPropName,
                                         const SfxItemPropertySimpleEntry*& rpResultEntry )
 {
     //! OUString as argument?
@@ -1331,7 +1331,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const ::rtl::OUString& rProp
     return NULL;
 }
 
-beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString& aPropertyName )
+beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1372,14 +1372,14 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
 }
 
 uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates(
-                            const uno::Sequence<rtl::OUString>& aPropertyNames )
+                            const uno::Sequence<OUString>& aPropertyNames )
                     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     //  duemmliche Default-Implementierung: alles einzeln per getPropertyState holen
     //! sollte optimiert werden!
 
     SolarMutexGuard aGuard;
-    const rtl::OUString* pNames = aPropertyNames.getConstArray();
+    const OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     for(sal_Int32 i = 0; i < aPropertyNames.getLength(); i++)
@@ -1387,7 +1387,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScStyleObj::getPropertyStates(
     return aRet;
 }
 
-void SAL_CALL ScStyleObj::setPropertyToDefault( const rtl::OUString& aPropertyName )
+void SAL_CALL ScStyleObj::setPropertyToDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1400,7 +1400,7 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
     SetOnePropertyValue( aPropertyName, pEntry, NULL );
 }
 
-uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName )
                             throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                     uno::RuntimeException)
 {
@@ -1492,7 +1492,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
 
 // XMultiPropertySet
 
-void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString >& aPropertyNames,
+void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< OUString >& aPropertyNames,
                                                 const uno::Sequence< uno::Any >& aValues )
                                 throw (beans::PropertyVetoException, lang::IllegalArgumentException,
                                         lang::WrappedTargetException, uno::RuntimeException)
@@ -1505,7 +1505,7 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString 
 
     if ( nCount )
     {
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
         const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
@@ -1518,7 +1518,7 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString 
 }
 
 uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues(
-                                    const uno::Sequence< rtl::OUString >& aPropertyNames )
+                                    const uno::Sequence< OUString >& aPropertyNames )
                                 throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1536,7 +1536,7 @@ uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyValues(
     return aSequence;
 }
 
-void SAL_CALL ScStyleObj::addPropertiesChangeListener( const uno::Sequence<rtl::OUString>& /* aPropertyNames */,
+void SAL_CALL ScStyleObj::addPropertiesChangeListener( const uno::Sequence<OUString>& /* aPropertyNames */,
                                     const uno::Reference<beans::XPropertiesChangeListener>& /* xListener */ )
                                 throw (uno::RuntimeException)
 {
@@ -1550,7 +1550,7 @@ void SAL_CALL ScStyleObj::removePropertiesChangeListener(
     // no bound properties
 }
 
-void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const uno::Sequence<rtl::OUString>& /* aPropertyNames */,
+void SAL_CALL ScStyleObj::firePropertiesChangeEvent( const uno::Sequence<OUString>& /* aPropertyNames */,
                                     const uno::Reference<beans::XPropertiesChangeListener>& /* xListener */ )
                                 throw (uno::RuntimeException)
 {
@@ -1606,7 +1606,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeExcepti
     }
 }
 
-void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUString>& aPropertyNames )
+void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<OUString>& aPropertyNames )
                                 throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1614,7 +1614,7 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUStr
     sal_Int32 nCount = aPropertyNames.getLength();
     if ( nCount )
     {
-        const rtl::OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = aPropertyNames.getConstArray();
 
         const SfxItemPropertyMap& rPropertyMap = pPropSet->getPropertyMap();
         for (sal_Int32 i = 0; i < nCount; i++)
@@ -1626,7 +1626,7 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUStr
 }
 
 uno::Sequence<uno::Any> SAL_CALL ScStyleObj::getPropertyDefaults(
-                                const uno::Sequence<rtl::OUString>& aPropertyNames )
+                                const uno::Sequence<OUString>& aPropertyNames )
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                                 uno::RuntimeException)
 {
@@ -1655,7 +1655,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScStyleObj::getPropertySetInfo(
 }
 
 void SAL_CALL ScStyleObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -1669,7 +1669,7 @@ void SAL_CALL ScStyleObj::setPropertyValue(
     SetOnePropertyValue( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
+void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1830,7 +1830,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                     sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS;
                                     sal_Bool bFound = false;
 
-                                    rtl::OUString aName;
+                                    OUString aName;
                                     if ( *pValue >>= aName )
                                     {
                                         if ( aName == SC_PAPERBIN_DEFAULTNAME )
@@ -1976,7 +1976,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
     }
 }
 
-uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -1988,7 +1988,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
         //  core always has the display name
         SfxStyleSheetBase* pStyle = GetStyle_Impl();
         if (pStyle)
-            aAny <<= rtl::OUString( pStyle->GetName() );
+            aAny <<= OUString( pStyle->GetName() );
     }
     else
     {
@@ -2043,9 +2043,9 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                             // property PrinterPaperTray is the name of the tray
 
                             sal_uInt8 nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
-                            rtl::OUString aName;
+                            OUString aName;
                             if ( nValue == PAPERBIN_PRINTER_SETTINGS )
-                                aName = rtl::OUString(SC_PAPERBIN_DEFAULTNAME );
+                                aName = OUString(SC_PAPERBIN_DEFAULTNAME );
                             else
                             {
                                 Printer* pPrinter = pDocShell->GetPrinter();
@@ -2119,12 +2119,12 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScStyleObj )
 
 // lang::XServiceInfo
 
-rtl::OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeException)
+OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString("ScStyleObj" );
+    return OUString("ScStyleObj" );
 }
 
-sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL ScStyleObj::supportsService( const OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
     sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
@@ -2133,15 +2133,15 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName
             RTL_CONSTASCII_STRINGPARAM ( bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE ));
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
+uno::Sequence<OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
     sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
-    uno::Sequence<rtl::OUString> aRet(2);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(SCSTYLE_SERVICE );
-    pArray[1] = bPage ? rtl::OUString(SCPAGESTYLE_SERVICE)
-                      : rtl::OUString(SCCELLSTYLE_SERVICE);
+    uno::Sequence<OUString> aRet(2);
+    OUString* pArray = aRet.getArray();
+    pArray[0] = OUString(SCSTYLE_SERVICE );
+    pArray[1] = bPage ? OUString(SCPAGESTYLE_SERVICE)
+                      : OUString(SCCELLSTYLE_SERVICE);
     return aRet;
 }
 

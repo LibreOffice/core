@@ -71,9 +71,6 @@ using namespace osl;
 using namespace std;
 using namespace jfw_plugin;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
 
 namespace {
 
@@ -132,7 +129,7 @@ OString getPluginJarPath(
         }
         OSL_ASSERT(!sPath.isEmpty());
     }
-    ret = rtl::OUStringToOString(sPath, osl_getThreadTextEncoding());
+    ret = OUStringToOString(sPath, osl_getThreadTextEncoding());
 
     return ret;
 }
@@ -144,18 +141,18 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     JavaInfo* pInfo = (JavaInfo*) rtl_allocateMemory(sizeof(JavaInfo));
     if (pInfo == NULL)
         return NULL;
-    rtl::OUString sVendor = info->getVendor();
+    OUString sVendor = info->getVendor();
     pInfo->sVendor = sVendor.pData;
     rtl_uString_acquire(sVendor.pData);
-    rtl::OUString sHome = info->getHome();
+    OUString sHome = info->getHome();
     pInfo->sLocation = sHome.pData;
     rtl_uString_acquire(pInfo->sLocation);
-    rtl::OUString sVersion = info->getVersion();
+    OUString sVersion = info->getVersion();
     pInfo->sVersion = sVersion.pData;
     rtl_uString_acquire(pInfo->sVersion);
     pInfo->nFeatures = info->supportsAccessibility() ? 1 : 0;
     pInfo->nRequirements = info->needsRestart() ? JFW_REQUIRE_NEEDRESTART : 0;
-    rtl::OUStringBuffer buf(1024);
+    OUStringBuffer buf(1024);
     buf.append(info->getRuntimeLibrary());
     if (!info->getLibraryPaths().isEmpty())
     {
@@ -164,7 +161,7 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
         buf.appendAscii("\n");
     }
 
-    rtl::OUString sVendorData = buf.makeStringAndClear();
+    OUString sVendorData = buf.makeStringAndClear();
     rtl::ByteSequence byteSeq( (sal_Int8*) sVendorData.pData->buffer,
                                sVendorData.getLength() * sizeof(sal_Unicode));
     pInfo->arVendorData = byteSeq.get();
@@ -173,14 +170,14 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     return pInfo;
 }
 
-rtl::OUString getRuntimeLib(const rtl::ByteSequence & data)
+OUString getRuntimeLib(const rtl::ByteSequence & data)
 {
     const sal_Unicode* chars = (sal_Unicode*) data.getConstArray();
     sal_Int32 len = data.getLength();
-    rtl::OUString sData(chars, len / 2);
+    OUString sData(chars, len / 2);
     //the runtime lib is on the first line
     sal_Int32 index = 0;
-    rtl::OUString aToken = sData.getToken( 0, '\n', index);
+    OUString aToken = sData.getToken( 0, '\n', index);
 
     return aToken;
 }
@@ -287,7 +284,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         bool bExclude = false;
         for (int j = 0; j < nLenList; j++)
         {
-            rtl::OUString sExVer(arExcludeList[j]);
+            OUString sExVer(arExcludeList[j]);
             try
             {
                 if (cur->compareVersions(sExVer) == 0)
@@ -414,7 +411,7 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
 
     for (int i = 0; i < nLenList; i++)
     {
-        rtl::OUString sExVer(arExcludeList[i]);
+        OUString sExVer(arExcludeList[i]);
         int nRes = 0;
         try
         {
@@ -569,7 +566,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     //Check if the Vendor (pInfo->sVendor) is supported by this plugin
     if ( ! isVendorSupported(pInfo->sVendor))
         return JFW_PLUGIN_E_WRONG_VENDOR;
-    rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
+    OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
     JFW_TRACE2("[Java framework] Using Java runtime library: "
               + sRuntimeLib + ".\n");
 
@@ -599,26 +596,26 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 #ifdef UNX
     //Setting the JAVA_HOME is needed for awt
-    rtl::OUString javaHome("JAVA_HOME=");
-    rtl::OUString sPathLocation;
+    OUString javaHome("JAVA_HOME=");
+    OUString sPathLocation;
     osl_getSystemPathFromFileURL(pInfo->sLocation, & sPathLocation.pData);
     javaHome += sPathLocation;
-    rtl::OString osJavaHome = rtl::OUStringToOString(
+    OString osJavaHome = OUStringToOString(
         javaHome, osl_getThreadTextEncoding());
     putenv(strdup(osJavaHome.getStr()));
 #endif
 
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
-    rtl::OUString sSymbolCreateJava("JNI_CreateJavaVM");
+    OUString sSymbolCreateJava("JNI_CreateJavaVM");
 
     JNI_CreateVM_Type * pCreateJavaVM = (JNI_CreateVM_Type *) osl_getFunctionSymbol(
         moduleRt, sSymbolCreateJava.pData);
     if (!pCreateJavaVM)
     {
         OSL_ASSERT(0);
-        rtl::OString sLib = rtl::OUStringToOString(
+        OString sLib = OUStringToOString(
             sRuntimeLib, osl_getThreadTextEncoding());
-        rtl::OString sSymbol = rtl::OUStringToOString(
+        OString sSymbol = OUStringToOString(
             sSymbolCreateJava, osl_getThreadTextEncoding());
         fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
                 "Java runtime library: %s does not export symbol %s !\n",
@@ -647,20 +644,20 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     options[n].optionString= (char *) "abort";
     options[n].extraInfo= (void* )(sal_IntPtr)abort_handler;
     ++n;
-    rtl::OString sClassPathProp("-Djava.class.path=");
-    rtl::OString sClassPathOption;
+    OString sClassPathProp("-Djava.class.path=");
+    OString sClassPathOption;
     for (int i = 0; i < cOptions; i++)
     {
 #ifdef UNX
     // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
     // in the class path in order to have applet support.
-        rtl::OString sClassPath = arOptions[i].optionString;
+        OString sClassPath = arOptions[i].optionString;
         if (sClassPath.match(sClassPathProp, 0) == sal_True)
         {
             char sep[] =  {SAL_PATHSEPARATOR, 0};
             OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             if (!sAddPath.isEmpty())
-                sClassPathOption = sClassPath + rtl::OString(sep) + sAddPath;
+                sClassPathOption = sClassPath + OString(sep) + sAddPath;
             else
                 sClassPathOption = sClassPath;
             options[n].optionString = (char *) sClassPathOption.getStr();
@@ -756,7 +753,7 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     javaPluginError ret = JFW_PLUGIN_E_NONE;
     if (!pInfo || !exist)
         return JFW_PLUGIN_E_INVALID_ARG;
-    ::rtl::OUString sLocation(pInfo->sLocation);
+    OUString sLocation(pInfo->sLocation);
 
     if (sLocation.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
@@ -780,7 +777,7 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     //true although the runtime library may not be loadable.
     if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
     {
-        rtl::OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
+        OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
         JFW_TRACE2("[Java framework] Checking existence of Java runtime library.\n");
 
         ::osl::DirectoryItem itemRt;

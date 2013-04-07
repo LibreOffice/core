@@ -35,7 +35,7 @@ namespace chart
 //.............................................................................
 
 OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > createNameContainer(
-    const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName );
+    const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName );
 
 namespace impl
 {
@@ -49,26 +49,26 @@ typedef ::cppu::WeakImplHelper3<
 class NameContainer : public impl::NameContainer_Base
 {
 public:
-    NameContainer( const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName );
+    NameContainer( const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName );
     explicit NameContainer( const NameContainer & rOther );
     virtual ~NameContainer();
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  rtl::OUString& aName, const  com::sun::star::uno::Any& aElement ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const  rtl::OUString& Name ) throw( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  com::sun::star::uno::Any& aElement ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::ElementExistException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  rtl::OUString& aName, const  com::sun::star::uno::Any& aElement ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  com::sun::star::uno::Any& aElement ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
 
     // XNameAccess
-    virtual com::sun::star::uno::Any SAL_CALL getByName( const  rtl::OUString& aName ) throw( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence<  rtl::OUString > SAL_CALL getElementNames(  ) throw( com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const  rtl::OUString& aName ) throw( com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Any SAL_CALL getByName( const  OUString& aName ) throw( com::sun::star::container::NoSuchElementException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( com::sun::star::uno::RuntimeException);
 
     // XElementAccess
     virtual sal_Bool SAL_CALL hasElements(  ) throw( com::sun::star::uno::RuntimeException);
@@ -82,10 +82,10 @@ private: //methods
 
 private: //member
     const ::com::sun::star::uno::Type   m_aType;
-    const rtl::OUString                 m_aServicename;
-    const rtl::OUString                 m_aImplementationName;
+    const OUString                 m_aServicename;
+    const OUString                 m_aImplementationName;
 
-    typedef ::std::map< ::rtl::OUString, com::sun::star::uno::Any > tContentMap;
+    typedef ::std::map< OUString, com::sun::star::uno::Any > tContentMap;
 
     tContentMap m_aMap;
 };

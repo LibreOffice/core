@@ -83,16 +83,16 @@ public:
     virtual ~ScriptProtocolHandler();
 
     /* XServiceInfo */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& sServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName )
         throw( css::uno::RuntimeException );
-    virtual css::uno::Sequence < ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual css::uno::Sequence < OUString > SAL_CALL getSupportedServiceNames()
         throw( css::uno::RuntimeException );
 
     /* Helper for XServiceInfo */
-    static css::uno::Sequence < ::rtl::OUString > impl_getStaticSupportedServiceNames();
-    static ::rtl::OUString impl_getStaticImplementationName();
+    static css::uno::Sequence < OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
 
     /* Helper for registry */
     static css::uno::Reference < css::uno::XInterface > SAL_CALL
@@ -104,7 +104,7 @@ public:
 
     /* Implementation for XDispatchProvider */
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL
-    queryDispatch( const css::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
+    queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName,
                    sal_Int32 eSearchFlags ) throw( css::uno::RuntimeException ) ;
     virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL
     queryDispatches(

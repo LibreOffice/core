@@ -118,7 +118,7 @@ namespace sd { namespace toolpanel {
 // = misc helper
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
-PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL, const bool i_bIgnoreUnknown )
+PanelId GetStandardPanelId( const OUString& i_rTaskPanelResourceURL, const bool i_bIgnoreUnknown )
 {
     PanelId ePanelId( PID_UNKNOWN );
 
@@ -152,7 +152,7 @@ PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL, cons
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-PanelId GetStandardPanelId( const ::rtl::OUString& i_rTaskPanelResourceURL )
+PanelId GetStandardPanelId( const OUString& i_rTaskPanelResourceURL )
 {
     return GetStandardPanelId( i_rTaskPanelResourceURL, false );
 }
@@ -184,7 +184,7 @@ protected:
     void impl_checkDisposed_throw()
     {
         if ( !m_pShellImpl )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
     }
 
 private:
@@ -218,13 +218,13 @@ public:
 
     /** activates the panel which has the given resource URL
     */
-    void    ActivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL );
+    void    ActivatePanelByResource( const OUString& i_rPanelResourceURL );
 
     /** de-activates the panel given by its resource URL, bypassing the configuration controller
 
         If the panel is not active currently, nothing happens.
     */
-    void    DeactivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL );
+    void    DeactivatePanelByResource( const OUString& i_rPanelResourceURL );
 
     /** provides access to the VCL window of the panel deck
     */
@@ -248,12 +248,12 @@ private:
     virtual void Dying();
 
     // IToolPanelCompare overridables
-    virtual short compareToolPanelsURLs( const ::rtl::OUString& i_rLHS, const ::rtl::OUString& i_rRHS ) const;
+    virtual short compareToolPanelsURLs( const OUString& i_rLHS, const OUString& i_rRHS ) const;
 
 private:
     struct InitialPanel
     {
-        ::rtl::OUString sPanelResourceURL;
+        OUString sPanelResourceURL;
         bool            bActivateDirectly;
         InitialPanel()
             :sPanelResourceURL()
@@ -262,7 +262,7 @@ private:
         }
     };
     InitialPanel        impl_determineInitialPanel();
-    ::rtl::OUString     impl_getPanelURL( const ::boost::optional< size_t >& i_rPanel );
+    OUString     impl_getPanelURL( const ::boost::optional< size_t >& i_rPanel );
 
 private:
     ToolPanelViewShell&                             m_rPanelViewShell;
@@ -289,7 +289,7 @@ ConfigurationListener::ConfigurationListener( ToolPanelViewShell_Impl& i_rShellI
 
     osl_atomic_increment( &m_refCount );
     {
-        xBroadcaster->addConfigurationChangeListener( this, ::rtl::OUString(), Any() );
+        xBroadcaster->addConfigurationChangeListener( this, OUString(), Any() );
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -315,7 +315,7 @@ void SAL_CALL ConfigurationListener::notifyConfigurationChange( const Configurat
         xAnchorId = i_rEvent.ResourceId->getAnchor();
     if ( !xAnchorId.is() )
         return;
-    const ::rtl::OUString sAnchorURL( xAnchorId->getResourceURL() );
+    const OUString sAnchorURL( xAnchorId->getResourceURL() );
     if ( sAnchorURL != FrameworkHelper::msTaskPaneURL )
         return;
 
@@ -376,7 +376,7 @@ ToolPanelViewShell_Impl::InitialPanel ToolPanelViewShell_Impl::impl_determineIni
 
         if ( aViewIds.getLength() > 0 )
         {
-            const ::rtl::OUString sResourceURL( aViewIds[0]->getResourceURL() );
+            const OUString sResourceURL( aViewIds[0]->getResourceURL() );
             PanelId nRequestedPanel = GetStandardPanelId( sResourceURL );
             if ( nRequestedPanel != PID_UNKNOWN )
             {
@@ -434,7 +434,7 @@ void ToolPanelViewShell_Impl::Cleanup()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::ActivatePanelByResource( const ::rtl::OUString& i_rResourceURL )
+void ToolPanelViewShell_Impl::ActivatePanelByResource( const OUString& i_rResourceURL )
 {
     // determine position of the requested panel
     ::boost::optional< size_t > aPanelPos = GetTaskPane().GetPanelPos( i_rResourceURL );
@@ -444,7 +444,7 @@ void ToolPanelViewShell_Impl::ActivatePanelByResource( const ::rtl::OUString& i_
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell_Impl::DeactivatePanelByResource( const ::rtl::OUString& i_rPanelResourceURL )
+void ToolPanelViewShell_Impl::DeactivatePanelByResource( const OUString& i_rPanelResourceURL )
 {
     // determine position of the requested panel
     ::boost::optional< size_t > aPanelPos = GetTaskPane().GetPanelPos( i_rPanelResourceURL );
@@ -500,7 +500,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     mpHorizontalRuler.reset();
     mpVerticalRuler.reset();
 
-    SetName( rtl::OUString( "ToolPanelViewShell" ) );
+    SetName( OUString( "ToolPanelViewShell" ) );
 
     // enforce the creation of the Accessible object here.
     // In some not-always-to-reproduce situations, creating the accessible on demand only leads to some
@@ -672,8 +672,8 @@ namespace
     struct PanelFactory
     {
         ControlFactoryFactory   pFactory;
-        rtl::OString            sHelpID;
-        PanelFactory( const ControlFactoryFactory i_pFactory, const rtl::OString& i_nHelpID )
+        OString            sHelpID;
+        PanelFactory( const ControlFactoryFactory i_pFactory, const OString& i_nHelpID )
             :pFactory( i_pFactory )
             ,sHelpID( i_nHelpID )
         {
@@ -702,7 +702,7 @@ namespace
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Reference< XFrame >& i_rDocFrame, const ::rtl::OUString& i_rPanelResourceURL )
+Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Reference< XFrame >& i_rDocFrame, const OUString& i_rPanelResourceURL )
 {
     const PanelId ePanelId( GetStandardPanelId( i_rPanelResourceURL ) );
     ENSURE_OR_RETURN( ePanelId != PID_UNKNOWN, "ToolPanelViewShell::CreatePanelUIElement: illegal panel URL!", NULL );
@@ -727,7 +727,7 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::ActivatePanel( const ::rtl::OUString& i_rPanelResourceURL )
+void ToolPanelViewShell::ActivatePanel( const OUString& i_rPanelResourceURL )
 {
     OSL_ENSURE( i_rPanelResourceURL.indexOf( FrameworkHelper::msTaskPanelURLPrefix ) < 0,
         "ToolPanelViewShell::ActivatePanel: for drawing-framework-controller panels, please use FrameworkHelper::RequestTaskPanel!" );
@@ -735,7 +735,7 @@ void ToolPanelViewShell::ActivatePanel( const ::rtl::OUString& i_rPanelResourceU
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::DeactivatePanel( const ::rtl::OUString& i_rPanelResourceURL )
+void ToolPanelViewShell::DeactivatePanel( const OUString& i_rPanelResourceURL )
 {
     mpImpl->DeactivatePanelByResource( i_rPanelResourceURL );
 }
@@ -777,15 +777,15 @@ void ToolPanelViewShell_Impl::PanelRemoved( const size_t i_nPosition )
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-::rtl::OUString ToolPanelViewShell_Impl::impl_getPanelURL( const ::boost::optional< size_t >& i_rPanel )
+OUString ToolPanelViewShell_Impl::impl_getPanelURL( const ::boost::optional< size_t >& i_rPanel )
 {
-    ::rtl::OUString sPanelURL;
+    OUString sPanelURL;
     if ( !!i_rPanel )
     {
         sPanelURL = GetTaskPane().GetPanelResourceURL( *i_rPanel );
         const PanelId ePanelId( GetStandardPanelId( sPanelURL, true ) );
         if ( ePanelId == PID_UNKNOWN )
-            sPanelURL = ::rtl::OUString();
+            sPanelURL = OUString();
     }
     return sPanelURL;
 }
@@ -796,8 +796,8 @@ void ToolPanelViewShell_Impl::ActivePanelChanged( const ::boost::optional< size_
     // update the configuration controller, since this change in the active panel might have been triggered by means other
     // than the drawing framework, so it does not yet know about it.
 
-    const ::rtl::OUString sOldPanelURL( impl_getPanelURL( i_rOldActive ) );
-    const ::rtl::OUString sNewPanelURL( impl_getPanelURL( i_rNewActive ) );
+    const OUString sOldPanelURL( impl_getPanelURL( i_rOldActive ) );
+    const OUString sNewPanelURL( impl_getPanelURL( i_rNewActive ) );
 
     const ::boost::shared_ptr< FrameworkHelper > pFrameworkHelper( FrameworkHelper::Instance( GetAntiImpl().GetViewShellBase() ) );
     if ( !sNewPanelURL.isEmpty() )
@@ -842,7 +842,7 @@ void ToolPanelViewShell_Impl::Dying()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-short ToolPanelViewShell_Impl::compareToolPanelsURLs( const ::rtl::OUString& i_rLHS, const ::rtl::OUString& i_rRHS ) const
+short ToolPanelViewShell_Impl::compareToolPanelsURLs( const OUString& i_rLHS, const OUString& i_rRHS ) const
 {
     const PanelId eLHS( GetStandardPanelId( i_rLHS, true ) );
     const PanelId eRHS( GetStandardPanelId( i_rRHS, true ) );

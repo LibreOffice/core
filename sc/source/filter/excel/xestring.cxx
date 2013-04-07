@@ -27,8 +27,6 @@
 
 using namespace ::oox;
 
-using ::rtl::OString;
-using ::rtl::OUString;
 
 // ============================================================================
 
@@ -136,7 +134,7 @@ void XclExpString::AssignByte(
         const String& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     // length may differ from length of rString
-    rtl::OString aByteStr(rtl::OUStringToOString(rString, eTextEnc));
+    OString aByteStr(OUStringToOString(rString, eTextEnc));
     Build(aByteStr.getStr(), aByteStr.getLength(), nFlags, nMaxLen);
 }
 
@@ -152,7 +150,7 @@ void XclExpString::AppendByte( const String& rString, rtl_TextEncoding eTextEnc 
     if( rString.Len() > 0 )
     {
         // length may differ from length of rString
-        rtl::OString aByteStr(rtl::OUStringToOString(rString, eTextEnc));
+        OString aByteStr(OUStringToOString(rString, eTextEnc));
         BuildAppend(aByteStr.getStr(), aByteStr.getLength());
     }
 }
@@ -166,7 +164,7 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
     }
     else
     {
-        rtl::OString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
+        OString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
         BuildAppend( aByteStr.getStr(), aByteStr.getLength() );
     }
 }

@@ -313,7 +313,7 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         aSlider.Hide();
-        rtl::OString sHelpId = pFuncDesc->getHelpId();
+        OString sHelpId = pFuncDesc->getHelpId();
         SetHelpId( sHelpId );
         aEdArg1.SetHelpId( sHelpId );
         aEdArg2.SetHelpId( sHelpId );

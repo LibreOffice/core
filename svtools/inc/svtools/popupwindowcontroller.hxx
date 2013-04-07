@@ -38,7 +38,7 @@ class SVT_DLLPUBLIC PopupWindowController : public svt::ToolboxController, publi
 public:
     PopupWindowController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
-                           const rtl::OUString& aCommandURL );
+                           const OUString& aCommandURL );
     ~PopupWindowController();
 
     virtual ::Window* createPopupWindow( ::Window* pParent ) = 0;
@@ -49,9 +49,9 @@ public:
     virtual void SAL_CALL release() throw ();
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) = 0;
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) = 0;
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException ) = 0;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);

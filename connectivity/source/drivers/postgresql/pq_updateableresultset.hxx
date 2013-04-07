@@ -84,9 +84,9 @@ class UpdateableResultSet :
         public com::sun::star::sdbc::XRowUpdate
 {
     ConnectionSettings **m_ppSettings;
-    rtl::OUString m_schema;
-    rtl::OUString m_table;
-    com::sun::star::uno::Sequence< rtl::OUString > m_primaryKey;
+    OUString m_schema;
+    OUString m_table;
+    com::sun::star::uno::Sequence< OUString > m_primaryKey;
     UpdateableFieldVector m_updateableField;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > m_meta;
     bool  m_insertRow;
@@ -95,12 +95,12 @@ protected:
     UpdateableResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
-        const com::sun::star::uno::Sequence< rtl::OUString > &colNames,
+        const com::sun::star::uno::Sequence< OUString > &colNames,
         const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
         ConnectionSettings **ppSettings,
-        const rtl::OUString &schema,
-        const rtl::OUString &table,
-        const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey)
+        const OUString &schema,
+        const OUString &table,
+        const com::sun::star::uno::Sequence< OUString > &primaryKey)
         : SequenceResultSet( mutex, owner, colNames, data, (*ppSettings)->tc ),
           m_ppSettings( ppSettings ),
           m_schema( schema ),
@@ -129,7 +129,7 @@ protected:
             com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
     }
 
-    rtl::OUString buildWhereClause();
+    OUString buildWhereClause();
     void checkUpdate( sal_Int32 column );
 
 public:
@@ -138,9 +138,9 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
         ConnectionSettings **ppSettings,
         PGresult *result,
-        const rtl::OUString &schema,
-        const rtl::OUString &table,
-        const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey );
+        const OUString &schema,
+        const OUString &table,
+        const com::sun::star::uno::Sequence< OUString > &primaryKey );
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() { SequenceResultSet::acquire(); }
@@ -172,7 +172,7 @@ public: // XRowUpdate
     virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

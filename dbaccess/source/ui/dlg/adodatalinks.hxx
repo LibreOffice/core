@@ -23,6 +23,6 @@
 #include <osl/module.h>
 #include "commontypes.hxx"
 
-::rtl::OUString getAdoDatalink(long hWnd,::rtl::OUString& oldLink);
+OUString getAdoDatalink(long hWnd,OUString& oldLink);
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

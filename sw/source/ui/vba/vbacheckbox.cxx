@@ -30,10 +30,10 @@ using namespace ::com::sun::star;
 
 SwVbaCheckBox::SwVbaCheckBox( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& rModel, const uno::Reference< text::XFormField >& xFormField ) throw ( uno::RuntimeException ) : SwVbaCheckBox_BASE( rParent, rContext ), mxModel( rModel ), mxFormField( xFormField )
 {
-    rtl::OUString sType = mxFormField->getFieldType();
+    OUString sType = mxFormField->getFieldType();
     if( !sType.equalsIgnoreAsciiCaseAscii( ECMA_FORMCHECKBOX ) )
     {
-        throw uno::RuntimeException( rtl::OUString(
+        throw uno::RuntimeException( OUString(
             "It is not a CheckBox"), uno::Reference< uno::XInterface >() );
     }
 }
@@ -62,24 +62,24 @@ sal_Bool SAL_CALL SwVbaCheckBox::getValue() throw ( uno::RuntimeException )
 
 void SAL_CALL SwVbaCheckBox::setValue( sal_Bool value ) throw ( uno::RuntimeException )
 {
-    rtl::OUString sValue = value ? rtl::OUString("on") : rtl::OUString("off");
-    mxFormField->addParam( rtl::OUString( ECMA_FORMCHECKBOX_CHECKED ), sValue, sal_True );
+    OUString sValue = value ? OUString("on") : OUString("off");
+    mxFormField->addParam( OUString( ECMA_FORMCHECKBOX_CHECKED ), sValue, sal_True );
 }
 
-rtl::OUString
+OUString
 SwVbaCheckBox::getServiceImplName()
 {
-    return rtl::OUString("SwVbaCheckBox");
+    return OUString("SwVbaCheckBox");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaCheckBox::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString( "ooo.vba.word.CheckBox"  );
+        aServiceNames[ 0 ] = OUString( "ooo.vba.word.CheckBox"  );
     }
     return aServiceNames;
 }

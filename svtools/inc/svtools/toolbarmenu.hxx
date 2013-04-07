@@ -95,7 +95,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     // todo: move to new base class that will replace SfxPopupWindow
-    void AddStatusListener( const rtl::OUString& rCommandURL );
+    void AddStatusListener( const OUString& rCommandURL );
 
     bool IsInPopupMode();
     void EndPopupMode();

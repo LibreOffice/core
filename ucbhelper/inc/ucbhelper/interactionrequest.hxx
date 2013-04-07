@@ -337,10 +337,10 @@ class UCBHELPER_DLLPUBLIC InteractionSupplyAuthentication :
                   m_aRememberPasswordModes;
     com::sun::star::uno::Sequence< com::sun::star::ucb::RememberAuthentication >
                   m_aRememberAccountModes;
-    rtl::OUString m_aRealm;
-    rtl::OUString m_aUserName;
-    rtl::OUString m_aPassword;
-    rtl::OUString m_aAccount;
+    OUString m_aRealm;
+    OUString m_aUserName;
+    OUString m_aPassword;
+    OUString m_aAccount;
     com::sun::star::ucb::RememberAuthentication m_eRememberPasswordMode;
     com::sun::star::ucb::RememberAuthentication m_eDefaultRememberPasswordMode;
     com::sun::star::ucb::RememberAuthentication m_eRememberAccountMode;
@@ -454,21 +454,21 @@ public:
     canSetRealm()
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
-    setRealm( const rtl::OUString& Realm )
+    setRealm( const OUString& Realm )
         throw( com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
     canSetUserName()
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
-    setUserName( const rtl::OUString& UserName )
+    setUserName( const OUString& UserName )
         throw( com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL
     canSetPassword()
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
-    setPassword( const rtl::OUString& Password )
+    setPassword( const OUString& Password )
         throw( com::sun::star::uno::RuntimeException );
 
     virtual com::sun::star::uno::Sequence<
@@ -484,7 +484,7 @@ public:
     canSetAccount()
         throw( com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL
-    setAccount( const rtl::OUString& Account )
+    setAccount( const OUString& Account )
         throw( com::sun::star::uno::RuntimeException );
 
     virtual com::sun::star::uno::Sequence<
@@ -510,7 +510,7 @@ public:
       *
       * @return the realm.
       */
-    const rtl::OUString & getRealm()    const { return m_aRealm; }
+    const OUString & getRealm()    const { return m_aRealm; }
 
     /**
       * This method returns the username that was supplied by the interaction
@@ -518,7 +518,7 @@ public:
       *
       * @return the username.
       */
-    const rtl::OUString & getUserName() const { return m_aUserName; }
+    const OUString & getUserName() const { return m_aUserName; }
 
     /**
       * This method returns the password that was supplied by the interaction
@@ -526,7 +526,7 @@ public:
       *
       * @return the password.
       */
-    const rtl::OUString & getPassword() const { return m_aPassword; }
+    const OUString & getPassword() const { return m_aPassword; }
 
     /**
       * This method returns the account that was supplied by the interaction
@@ -534,7 +534,7 @@ public:
       *
       * @return the account.
       */
-    const rtl::OUString & getAccount()  const { return m_aAccount; }
+    const OUString & getAccount()  const { return m_aAccount; }
 
     /**
       * This method returns the authentication remember-mode for the password
@@ -634,7 +634,7 @@ class InteractionSupplyName : public InteractionContinuation,
                               public com::sun::star::lang::XTypeProvider,
                               public com::sun::star::ucb::XInteractionSupplyName
 {
-    rtl::OUString m_aName;
+    OUString m_aName;
 
 public:
     InteractionSupplyName( InteractionRequest * pRequest )
@@ -662,7 +662,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     // XInteractionSupplyName
-    virtual void SAL_CALL setName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL setName( const OUString& Name )
         throw ( com::sun::star::uno::RuntimeException );
 
     // Non-interface methods.
@@ -673,7 +673,7 @@ public:
       *
       * @return the name.
       */
-    const rtl::OUString & getName() const { return m_aName; }
+    const OUString & getName() const { return m_aName; }
 };
 
 //============================================================================

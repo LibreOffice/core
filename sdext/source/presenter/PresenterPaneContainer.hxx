@@ -82,14 +82,14 @@ public:
         typedef ::boost::function<void(bool)> Activator;
         typedef ::boost::function<boost::shared_ptr<PresenterSprite>()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
-        ::rtl::OUString msViewURL;
+        OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
         css::uno::Reference<css::drawing::framework::XView> mxView;
         css::uno::Reference<css::awt::XWindow> mxContentWindow;
         css::uno::Reference<css::awt::XWindow> mxBorderWindow;
-        ::rtl::OUString msTitleTemplate;
-        ::rtl::OUString msAccessibleTitleTemplate;
-        ::rtl::OUString msTitle;
+        OUString msTitleTemplate;
+        OUString msAccessibleTitleTemplate;
+        OUString msTitle;
         ViewInitializationFunction maViewInitialization;
         double mnLeft;
         double mnTop;
@@ -113,9 +113,9 @@ public:
 
     void PreparePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const ::rtl::OUString& rsViewURL,
-        const ::rtl::OUString& rsTitle,
-        const ::rtl::OUString& rsAccessibleTitle,
+        const OUString& rsViewURL,
+        const OUString& rsTitle,
+        const OUString& rsAccessibleTitle,
         const bool bIsOpaque,
         const ViewInitializationFunction& rViewIntialization,
         const double nLeft,
@@ -156,16 +156,16 @@ public:
 
     /** Find the pane whose pane URL is identical to the given URL string.
     */
-    SharedPaneDescriptor FindPaneURL (const ::rtl::OUString& rsPaneURL);
+    SharedPaneDescriptor FindPaneURL (const OUString& rsPaneURL);
 
     /** Find the pane whose resource id is identical to the given one.
     */
     SharedPaneDescriptor FindPaneId (const css::uno::Reference<
         css::drawing::framework::XResourceId>& rxPaneId);
 
-    SharedPaneDescriptor FindViewURL (const ::rtl::OUString& rsViewURL);
+    SharedPaneDescriptor FindViewURL (const OUString& rsViewURL);
 
-    ::rtl::OUString GetPaneURLForViewURL (const ::rtl::OUString& rsViewURL);
+    OUString GetPaneURLForViewURL (const OUString& rsViewURL);
 
     void ToTop (const SharedPaneDescriptor& rpDescriptor);
 
@@ -178,7 +178,7 @@ public:
 private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
 
-    PaneList::const_iterator FindIteratorForPaneURL (const ::rtl::OUString& rsPaneURL);
+    PaneList::const_iterator FindIteratorForPaneURL (const OUString& rsPaneURL);
 };
 
 } } // end of namespace ::sdext::presenter

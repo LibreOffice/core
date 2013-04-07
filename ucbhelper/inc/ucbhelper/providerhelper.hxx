@@ -111,7 +111,7 @@ protected:
       *         does not exist.
       */
     rtl::Reference< ContentImplHelper >
-    queryExistingContent( const ::rtl::OUString& rURL );
+    queryExistingContent( const OUString& rURL );
 
     /**
       * This method registers a newly created content instance with the
@@ -158,13 +158,13 @@ public:
     // XServiceInfo
     //////////////////////////////////////////////////////////////////////
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException ) = 0;
     virtual sal_Bool SAL_CALL
-    supportsService( const ::rtl::OUString& ServiceName )
+    supportsService( const OUString& ServiceName )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
@@ -228,7 +228,7 @@ public:
       */
     ::com::sun::star::uno::Reference<
         com::sun::star::ucb::XPersistentPropertySet >
-    getAdditionalPropertySet( const ::rtl::OUString& rKey, sal_Bool bCreate );
+    getAdditionalPropertySet( const OUString& rKey, sal_Bool bCreate );
 
     /**
       * This method renames the propertyset containing the Additional Core
@@ -240,8 +240,8 @@ public:
       *         children described by rOldKey shall be renamed, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool renameAdditionalPropertySet( const ::rtl::OUString& rOldKey,
-                                          const ::rtl::OUString& rNewKey,
+    sal_Bool renameAdditionalPropertySet( const OUString& rOldKey,
+                                          const OUString& rNewKey,
                                           sal_Bool bRecursive );
 
     /**
@@ -254,8 +254,8 @@ public:
       *         children described by rSourceKey shall be copied, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool copyAdditionalPropertySet( const ::rtl::OUString& rSourceKey,
-                                        const ::rtl::OUString& rTargetKey,
+    sal_Bool copyAdditionalPropertySet( const OUString& rSourceKey,
+                                        const OUString& rTargetKey,
                                         sal_Bool bRecursive );
 
     /**
@@ -267,7 +267,7 @@ public:
       *         children described by rOldKey shall be removed, too.
       * @return True, if the operation succeeded - False, otherwise.
       */
-    sal_Bool removeAdditionalPropertySet( const ::rtl::OUString& rKey,
+    sal_Bool removeAdditionalPropertySet( const OUString& rKey,
                                           sal_Bool bRecursive );
 };
 

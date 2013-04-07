@@ -220,27 +220,27 @@ throw (::com::sun::star::uno::RuntimeException)
 }
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
+::com::sun::star::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
 throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const sal_Bool bIsPopupMenu = IsPopupMenu();
     aGuard.clear();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( 1 );
+    ::com::sun::star::uno::Sequence< OUString > aNames( 1 );
     if ( bIsPopupMenu )
-        aNames[ 0 ] = ::rtl::OUString::createFromAscii( szServiceName2_PopupMenu );
+        aNames[ 0 ] = OUString::createFromAscii( szServiceName2_PopupMenu );
     else
-        aNames[ 0 ] = ::rtl::OUString::createFromAscii( szServiceName2_MenuBar );
+        aNames[ 0 ] = OUString::createFromAscii( szServiceName2_MenuBar );
 
     return aNames;
 }
 
 
-::sal_Bool SAL_CALL VCLXMenu::supportsService( const ::rtl::OUString& rServiceName )
+::sal_Bool SAL_CALL VCLXMenu::supportsService( const OUString& rServiceName )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+    ::com::sun::star::uno::Sequence< OUString > aServiceNames( getSupportedServiceNames() );
 
     if ( aServiceNames[ 0 ] == rServiceName )
         return sal_True;
@@ -401,7 +401,7 @@ void VCLXMenu::removeMenuListener( const ::com::sun::star::uno::Reference< ::com
     maMenuListeners.removeInterface( rxListener );
 }
 
-void VCLXMenu::insertItem( sal_Int16 nItemId, const ::rtl::OUString& aText, sal_Int16 nItemStyle, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::insertItem( sal_Int16 nItemId, const OUString& aText, sal_Int16 nItemStyle, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -466,7 +466,7 @@ sal_Bool VCLXMenu::isItemEnabled( sal_Int16 nItemId ) throw(::com::sun::star::un
     return mpMenu ? mpMenu->IsItemEnabled( nItemId ) : sal_False;
 }
 
-void VCLXMenu::setItemText( sal_Int16 nItemId, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXMenu::setItemText( sal_Int16 nItemId, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -475,12 +475,12 @@ void VCLXMenu::setItemText( sal_Int16 nItemId, const ::rtl::OUString& aText ) th
         mpMenu->SetItemText( nItemId, aText );
 }
 
-::rtl::OUString VCLXMenu::getItemText( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
+OUString VCLXMenu::getItemText( sal_Int16 nItemId ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::rtl::OUString aItemText;
+    OUString aItemText;
     if ( mpMenu )
         aItemText = mpMenu->GetItemText( nItemId );
     return aItemText;
@@ -590,7 +590,7 @@ sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun:
 }
 
 
-void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -599,18 +599,18 @@ void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const ::rtl::OUString& aC
         mpMenu->SetItemCommand( nItemId, aCommand );
 }
 
-::rtl::OUString SAL_CALL VCLXMenu::getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::rtl::OUString aItemCommand;
+    OUString aItemCommand;
     if ( mpMenu )
         aItemCommand = mpMenu->GetItemCommand( nItemId );
     return aItemCommand;
 }
 
-void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -619,12 +619,12 @@ void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString
         mpMenu->SetHelpCommand( nItemId, aHelp );
 }
 
-::rtl::OUString SAL_CALL VCLXMenu::getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL VCLXMenu::getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::rtl::OUString aHelpCommand;
+    OUString aHelpCommand;
     if ( mpMenu )
         aHelpCommand = mpMenu->GetHelpCommand( nItemId );
     return aHelpCommand;
@@ -895,7 +895,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-void SAL_CALL VCLXMenu::setHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sHelpText )
+void SAL_CALL VCLXMenu::setHelpText( ::sal_Int16 nItemId, const OUString& sHelpText )
 throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::uno::RuntimeException)
 {
@@ -910,14 +910,14 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-::rtl::OUString SAL_CALL VCLXMenu::getHelpText( ::sal_Int16 nItemId )
+OUString SAL_CALL VCLXMenu::getHelpText( ::sal_Int16 nItemId )
 throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    rtl::OUString sHelpText;
+    OUString sHelpText;
     if ( mpMenu && IsPopupMenu() )
     {
         THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getHelpText()", nItemId )
@@ -928,7 +928,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-void SAL_CALL VCLXMenu::setTipHelpText( ::sal_Int16 nItemId, const ::rtl::OUString& sTipHelpText )
+void SAL_CALL VCLXMenu::setTipHelpText( ::sal_Int16 nItemId, const OUString& sTipHelpText )
 throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::uno::RuntimeException)
 {
@@ -943,14 +943,14 @@ throw ( ::com::sun::star::container::NoSuchElementException,
 }
 
 
-::rtl::OUString SAL_CALL VCLXMenu::getTipHelpText( ::sal_Int16 nItemId )
+OUString SAL_CALL VCLXMenu::getTipHelpText( ::sal_Int16 nItemId )
 throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    rtl::OUString sTipHelpText;
+    OUString sTipHelpText;
     if ( mpMenu && IsPopupMenu() )
     {
         THROW_MENUITEM_NOT_FOUND( "VCLXMenu::getTipHelpText()", nItemId )

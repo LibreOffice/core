@@ -179,10 +179,10 @@ public:
 
     /** @return  The description of a row.
         @param _nRow The row which description is in demand. */
-    virtual ::rtl::OUString         GetRowDescription( sal_Int32 _nRow ) const;
+    virtual OUString         GetRowDescription( sal_Int32 _nRow ) const;
     /** @return  The description of a column.
         @param _nColumn The column which description is in demand. */
-    virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumn ) const;
+    virtual OUString         GetColumnDescription( sal_uInt16 _nColumn ) const;
 
     /** @return  <TRUE/>, if the object has a row header. */
     virtual sal_Bool                HasRowHeader() const; //GetColumnId
@@ -224,8 +224,8 @@ public:
     virtual sal_Bool                ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint );
     virtual sal_Bool                ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint );
 
-    virtual ::rtl::OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
-    virtual ::rtl::OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
+    virtual OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
+    virtual OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const;
     virtual Window*                 GetWindowInstance();
 
     using SvTreeListBox::FillAccessibleStateSet;

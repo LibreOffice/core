@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+extern OUString  getFilterNameFromGUID_Impl( GUID* );
 
 // add mutex locking ???
 
@@ -120,21 +120,21 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
         aAny <<= uno::Reference<uno::XInterface>(
             m_xDocument, uno::UNO_QUERY);
         aSeq[0] = beans::PropertyValue(
-            rtl::OUString("Model"),
+            OUString("Model"),
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
 
         aAny <<= sal_False;
         aSeq[1] = beans::PropertyValue(
-            rtl::OUString("ReadOnly"),
+            OUString("ReadOnly"),
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
 
         aAny <<= (sal_Bool) sal_True;
         aSeq[2] = beans::PropertyValue(
-            rtl::OUString("NoAutoSave"),
+            OUString("NoAutoSave"),
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
@@ -144,7 +144,7 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
             aSeq.realloc( ++nLen );
             aAny <<= (sal_Int16) 3;
             aSeq[nLen-1] = beans::PropertyValue(
-                rtl::OUString("PluginMode"),
+                OUString("PluginMode"),
                 -1,
                 aAny,
                 beans::PropertyState_DIRECT_VALUE);
@@ -153,21 +153,21 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
         aSeq.realloc( nLen+=2 );
         aAny <<= xHandler;
         aSeq[nLen-2] = beans::PropertyValue(
-            rtl::OUString("InteractionHandler"),
+            OUString("InteractionHandler"),
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
 
         aAny <<= m_nMacroExecMode;
         aSeq[nLen-1] = beans::PropertyValue(
-            rtl::OUString("MacroExecutionMode"),
+            OUString("MacroExecutionMode"),
             -1,
             aAny,
             beans::PropertyState_DIRECT_VALUE);
 
         xComponentLoader->loadComponentFromURL(
-            rtl::OUString("private:object"),
-            rtl::OUString("_self"),
+            OUString("private:object"),
+            OUString("_self"),
             0,
             aSeq);
 
@@ -348,7 +348,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             m_xFrame->activate();
         else {
             // create frame and initialize it with with the created window
-            static const ::rtl::OUString aFrameServiceName( "com.sun.star.frame.Frame" );
+            static const OUString aFrameServiceName( "com.sun.star.frame.Frame" );
             m_xFrame = uno::Reference<frame::XFrame>(
                 m_xFactory->createInstance(aFrameServiceName),
                 uno::UNO_QUERY);
@@ -367,7 +367,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             if( xPS.is() )
             {
                 aAny = xPS->getPropertyValue(
-                    rtl::OUString("LayoutManager"));
+                    OUString("LayoutManager"));
                 aAny >>= m_xLayoutManager;
             }
 
@@ -384,7 +384,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             if(m_xLayoutManager.is()) {
                 uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
-                        rtl::OUString(
+                        OUString(
                             "private:resource/menubar/menubar")));
                 OSL_ENSURE(xUIEl.is(),"no menubar");
                 uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
@@ -396,7 +396,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                 if( aAny >>= tmp )
                     m_nMenuHandle = HMENU(tmp);
                 m_xLayoutManager->hideElement(
-                    rtl::OUString(
+                    OUString(
                             "private:resource/menubar/menubar" ));
             }
         }
@@ -735,9 +735,9 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString( "SetEmbedded" );
+        aSeq[0].Name = OUString( "SetEmbedded" );
         aSeq[0].Value <<= sal_True;
-        m_xDocument->attachResource(::rtl::OUString(),aSeq);
+        m_xDocument->attachResource(OUString(),aSeq);
     }
 }
 
@@ -796,7 +796,7 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
         // this is so only for outplace activation
         if( xFrame.is() )
             m_xFrame = xFrame->findFrame(
-                rtl::OUString("_blank"),0);
+                OUString("_blank"),0);
 
         uno::Reference< util::XCloseBroadcaster > xBroadcaster(
             m_xFrame, uno::UNO_QUERY );
@@ -872,11 +872,11 @@ void DocumentHolder::show()
             if ( xProps.is() )
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                xProps->getPropertyValue( rtl::OUString( "LayoutManager" ) ) >>= xLayoutManager;
+                xProps->getPropertyValue( OUString( "LayoutManager" ) ) >>= xLayoutManager;
                 uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
                 if ( xLMProps.is() )
                 {
-                    xLMProps->setPropertyValue( ::rtl::OUString( "MenuBarCloser" ),
+                    xLMProps->setPropertyValue( OUString( "MenuBarCloser" ),
                                                 uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
                 }
             }
@@ -957,13 +957,13 @@ void DocumentHolder::resizeWin( const SIZEL& rNewSize )
     }
 }
 
-void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
+void DocumentHolder::setTitle(const OUString& aDocumentName)
 {
     if(m_xFrame.is())
     {
         if(m_aFilterName.getLength() == 0)
         {
-            rtl::OUString aFilterName;
+            OUString aFilterName;
             uno::Sequence<beans::PropertyValue> aSeq;
             if(m_xDocument.is())
             {
@@ -972,7 +972,7 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
                 for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
                 {
                     if(aSeq[j].Name ==
-                       rtl::OUString("FilterName"))
+                       OUString("FilterName"))
                     {
                         aSeq[j].Value >>= aFilterName;
                         break;
@@ -984,7 +984,7 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
             {
                 uno::Reference<container::XNameAccess> xNameAccess(
                     m_xFactory->createInstance(
-                        rtl::OUString(
+                        OUString(
                             "com.sun.star.document.FilterFactory")),
                     uno::UNO_QUERY);
                 try {
@@ -993,7 +993,7 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
                     {
                         for(sal_Int32 j = 0; j < aSeq.getLength(); ++j)
                             if(aSeq[j].Name ==
-                               rtl::OUString("UIName"))
+                               OUString("UIName"))
                             {
                                 aSeq[j].Value >>= m_aFilterName;
                                 break;
@@ -1013,14 +1013,14 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
             uno::Any aAny;
             static const sal_Unicode u[] = { ' ','(',0 };
             static const sal_Unicode c[] = { ')',0 };
-            rtl::OUString aTotalName(m_aFilterName);
-            aTotalName += rtl::OUString(u);
+            OUString aTotalName(m_aFilterName);
+            aTotalName += OUString(u);
             aTotalName += aDocumentName;
-            aTotalName += rtl::OUString(c);
+            aTotalName += OUString(c);
             aAny <<= aTotalName;
             try {
                 xPropSet->setPropertyValue(
-                    rtl::OUString("Title"),
+                    OUString("Title"),
                     aAny);
             }
             catch( const uno::Exception& ) {
@@ -1047,7 +1047,7 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
 }
 
 
-void DocumentHolder::setContainerName(const rtl::OUString& aContainerName)
+void DocumentHolder::setContainerName(const OUString& aContainerName)
 {
     m_aContainerName = aContainerName;
 }
@@ -1066,7 +1066,7 @@ IDispatch* DocumentHolder::GetIDispatch()
 {
     if ( !m_pIDispatch && m_xDocument.is() )
     {
-        const ::rtl::OUString aServiceName (
+        const OUString aServiceName (
                 "com.sun.star.bridge.OleBridgeSupplier2" );
         uno::Reference< bridge::XBridgeSupplier2 > xSupplier(
             m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );

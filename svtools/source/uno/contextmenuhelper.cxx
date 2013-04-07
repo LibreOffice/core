@@ -57,7 +57,7 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
     public:
         StateEventHelper( const uno::Reference< frame::XDispatchProvider >& xDispatchProvider,
                           const uno::Reference< util::XURLTransformer >& xURLTransformer,
-                          const rtl::OUString& aCommandURL );
+                          const OUString& aCommandURL );
         virtual ~StateEventHelper();
 
         bool isCommandEnabled();
@@ -79,7 +79,7 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
         StateEventHelper& operator=( const StateEventHelper& );
 
         bool                                       m_bCurrentCommandEnabled;
-        ::rtl::OUString                            m_aCommandURL;
+        OUString                            m_aCommandURL;
         uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
         uno::Reference< util::XURLTransformer >    m_xURLTransformer;
         osl::Condition                             m_aCondition;
@@ -88,7 +88,7 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
 StateEventHelper::StateEventHelper(
     const uno::Reference< frame::XDispatchProvider >& xDispatchProvider,
     const uno::Reference< util::XURLTransformer >& xURLTransformer,
-    const rtl::OUString& rCommandURL ) :
+    const OUString& rCommandURL ) :
     m_bCurrentCommandEnabled( true ),
     m_aCommandURL( rCommandURL ),
     m_xDispatchProvider( xDispatchProvider ),
@@ -157,7 +157,7 @@ bool StateEventHelper::isCommandEnabled()
         SolarMutexGuard aSolarGuard;
         if ( m_xDispatchProvider.is() && m_xURLTransformer.is() )
         {
-            ::rtl::OUString aSelf( "_self" );
+            OUString aSelf( "_self" );
 
             aTargetURL.Complete = m_aCommandURL;
             m_xURLTransformer->parseStrict( aTargetURL );
@@ -238,13 +238,13 @@ static const PopupMenu* lcl_FindPopupFromItemId( const PopupMenu* pPopupMenu, sa
     return NULL;
 }
 
-static ::rtl::OUString lcl_GetItemCommandRecursive( const PopupMenu* pPopupMenu, sal_uInt16 nItemId )
+static OUString lcl_GetItemCommandRecursive( const PopupMenu* pPopupMenu, sal_uInt16 nItemId )
 {
     const PopupMenu* pPopup = lcl_FindPopupFromItemId( pPopupMenu, nItemId );
     if ( pPopup )
         return pPopup->GetItemCommand( nItemId );
     else
-        return ::rtl::OUString();
+        return OUString();
 }
 
 /*************************************************************************/
@@ -318,7 +318,7 @@ ContextMenuHelper::executePopupMenu(
 
                 if ( nResult > 0 )
                 {
-                    ::rtl::OUString aCommand = lcl_GetItemCommandRecursive( pMenu, nResult );
+                    OUString aCommand = lcl_GetItemCommandRecursive( pMenu, nResult );
                     if ( !aCommand.isEmpty() )
                         dispatchCommand( xFrame, aCommand );
                 }
@@ -330,7 +330,7 @@ ContextMenuHelper::executePopupMenu(
 bool
 ContextMenuHelper::dispatchCommand(
     const uno::Reference< ::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aCommandURL )
+    const OUString& aCommandURL )
 {
     if ( !m_xURLTransformer.is() )
     {
@@ -412,7 +412,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
                 frame::ModuleManager::create( ::comphelper::getProcessComponentContext() ) );
 
             uno::Reference< ui::XImageManager > xModuleImageManager;
-            rtl::OUString                       aModuleId;
+            OUString                       aModuleId;
             // retrieve module image manager
             aModuleId = xModuleManager->identify( xFrame );
 
@@ -456,14 +456,14 @@ ContextMenuHelper::associateUIConfigurationManagers()
 }
 
 Image
-ContextMenuHelper::getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) const
+ContextMenuHelper::getImageFromCommandURL( const OUString& aCmdURL ) const
 {
     Image     aImage;
     sal_Int16 nImageType( ui::ImageType::COLOR_NORMAL|
                           ui::ImageType::SIZE_DEFAULT );
 
     uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
-    uno::Sequence< ::rtl::OUString > aImageCmdSeq( 1 );
+    uno::Sequence< OUString > aImageCmdSeq( 1 );
     aImageCmdSeq[0] = aCmdURL;
 
     if ( m_xDocImageMgr.is() )
@@ -509,11 +509,11 @@ ContextMenuHelper::getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) cons
     return aImage;
 }
 
-rtl::OUString
+OUString
 ContextMenuHelper::getLabelFromCommandURL(
-    const ::rtl::OUString& aCmdURL ) const
+    const OUString& aCmdURL ) const
 {
-    ::rtl::OUString aLabel;
+    OUString aLabel;
 
     if ( m_xUICommandLabels.is() )
     {
@@ -521,7 +521,7 @@ ContextMenuHelper::getLabelFromCommandURL(
         {
             if ( !aCmdURL.isEmpty() )
             {
-                rtl::OUString aStr;
+                OUString aStr;
                 uno::Sequence< beans::PropertyValue > aPropSeq;
                 uno::Any a( m_xUICommandLabels->getByName( aCmdURL ));
                 if ( a >>= aPropSeq )
@@ -576,7 +576,7 @@ ContextMenuHelper::completeMenuProperties(
                 completeMenuProperties( pPopupMenu );
             if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
             {
-                ::rtl::OUString aCmdURL( pMenu->GetItemCommand( nId ));
+                OUString aCmdURL( pMenu->GetItemCommand( nId ));
 
                 if ( bShowMenuImages )
                 {
@@ -590,7 +590,7 @@ ContextMenuHelper::completeMenuProperties(
 
                 if ( pMenu->GetItemText( nId ).Len() == 0 )
                 {
-                    ::rtl::OUString aLabel( getLabelFromCommandURL( aCmdURL ));
+                    OUString aLabel( getLabelFromCommandURL( aCmdURL ));
                     pMenu->SetItemText( nId, aLabel );
                 }
 

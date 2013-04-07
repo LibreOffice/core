@@ -30,15 +30,15 @@ class WinSalSystem : public SalSystem
     public:
     struct DisplayMonitor
     {
-        rtl::OUString        m_aName;
-        rtl::OUString        m_aDeviceName;
+        OUString        m_aName;
+        OUString        m_aDeviceName;
         Rectangle            m_aArea;
         Rectangle            m_aWorkArea;
         sal_Int32            m_nStateFlags;
 
         DisplayMonitor() : m_nStateFlags( 0 ) {}
-        DisplayMonitor( const rtl::OUString& rName,
-                        const rtl::OUString& rDevName,
+        DisplayMonitor( const OUString& rName,
+                        const OUString& rDevName,
                         const Rectangle& rArea,
                         const Rectangle& rWorkArea,
                         DWORD nStateFlags )
@@ -53,7 +53,7 @@ class WinSalSystem : public SalSystem
     };
     private:
     std::vector<DisplayMonitor>             m_aMonitors;
-    std::map<rtl::OUString, unsigned int>   m_aDeviceNameToMonitor;
+    std::map<OUString, unsigned int>   m_aDeviceNameToMonitor;
     unsigned int                            m_nPrimary;
 public:
     WinSalSystem() : m_nPrimary( 0 ) {}
@@ -63,9 +63,9 @@ public:
     virtual unsigned int GetDisplayBuiltInScreen();
     virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
     virtual Rectangle GetDisplayScreenWorkAreaPosSizePixel( unsigned int nScreen );
-    virtual rtl::OUString GetDisplayScreenName( unsigned int nScreen );
-    virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
-                                      const rtl::OUString& rMessage,
+    virtual OUString GetDisplayScreenName( unsigned int nScreen );
+    virtual int ShowNativeMessageBox( const OUString& rTitle,
+                                      const OUString& rMessage,
                                       int nButtonCombination,
                                       int nDefaultButton, bool bUseResources);
     bool initMonitors();

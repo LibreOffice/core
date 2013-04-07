@@ -48,7 +48,7 @@
 
     #define LOG_FILTERDBG( SOPERATION, SMESSAGE )                                                               \
                 {                                                                                               \
-                    ::rtl::OStringBuffer _sBuffer( 256 );                                                       \
+                    OStringBuffer _sBuffer( 256 );                                                       \
                     _sBuffer.append( SOPERATION );                                                              \
                     _sBuffer.append( "\t"       );                                                              \
                     _sBuffer.append( SMESSAGE   );                                                              \
@@ -64,7 +64,7 @@
 
     #define LOG_FILTERDBG_1_PARAM( SOPERATION, SPARAM, SMESSAGE )                                               \
                 {                                                                                               \
-                    ::rtl::OStringBuffer _sBuffer( 256 );                                                       \
+                    OStringBuffer _sBuffer( 256 );                                                       \
                     _sBuffer.append( SOPERATION );                                                              \
                     _sBuffer.append( "\t\""     );                                                              \
                     _sBuffer.append( SPARAM     );                                                              \

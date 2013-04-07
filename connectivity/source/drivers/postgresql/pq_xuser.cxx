@@ -163,11 +163,11 @@ Any User::queryInterface( const Type & reqType ) throw (RuntimeException)
 
 
 void User::changePassword(
-    const ::rtl::OUString& oldPassword, const ::rtl::OUString& newPassword )
+    const OUString& oldPassword, const OUString& newPassword )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) oldPassword;
-    rtl::OUStringBuffer buf(128);
+    OUStringBuffer buf(128);
     buf.append( "ALTER USER " );
     bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ), m_pSettings );
     buf.append( " PASSWORD " );
@@ -177,7 +177,7 @@ void User::changePassword(
     stmt->executeUpdate( buf.makeStringAndClear() );
 }
 
-sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType )
+sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 ret = 0xffffffff;
@@ -185,7 +185,7 @@ sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType
     {
         Statics & st = getStatics();
 
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.append( "User::getPrivileges[" + extractStringProperty( this, st.NAME ) +
                     "] got called for " + objName + "(type=" +
                     OUString::number(objType) + ")");
@@ -195,7 +195,7 @@ sal_Int32 User::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType
     return ret;
 }
 
-sal_Int32 User::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType )
+sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType;
@@ -203,7 +203,7 @@ sal_Int32 User::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int3
     return 0xffffffff;
 }
 
-void User::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType; (void) objPrivileges;
@@ -211,7 +211,7 @@ void User::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, s
                                              *this, OUString(), 1, Any() );
 }
 
-void User::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
+void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType; (void) objPrivileges;

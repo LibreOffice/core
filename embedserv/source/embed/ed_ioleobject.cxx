@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 
 
-extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
+extern OUString  getFilterNameFromGUID_Impl( GUID* );
 
 //-------------------------------------------------------------------------------
 // IOleObject
@@ -50,10 +50,10 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     if ( !m_aFileName.getLength() )
     {
         m_pDocHolder->setTitle(
-            rtl::OUString(
+            OUString(
                 (sal_Unicode*)szContainerObj));
         m_pDocHolder->setContainerName(
-            rtl::OUString(
+            OUString(
                 (sal_Unicode*)szContainerApp));
     }
 
@@ -425,7 +425,7 @@ HRESULT EmbedDocument_Impl::SaveObject()
     }
     else if ( m_aFileName.getLength() && IsDirty() == S_OK )
     {
-        ::rtl::OUString aPreservFileName = m_aFileName;
+        OUString aPreservFileName = m_aFileName;
 
         // in case of links the containers does not provide client site sometimes
         hr = Save( (LPCOLESTR)NULL, FALSE ); // triggers saving to the link location

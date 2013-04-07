@@ -91,7 +91,7 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 *************************************************************************/
 
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
-    SfxStringItem(_nWhich, rtl::OUString()),
+    SfxStringItem(_nWhich, OUString()),
     nPalIndex(nIndex)
 {
 }
@@ -1000,9 +1000,9 @@ bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMem
             aLineDash.Distance = rXD.GetDistance();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = rtl::OUString( "Name" );
+            aPropSeq[0].Name    = OUString( "Name" );
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = rtl::OUString( "LineDash" );
+            aPropSeq[1].Name    = OUString( "LineDash" );
             aPropSeq[1].Value   = uno::makeAny( aLineDash );
             rVal = uno::makeAny( aPropSeq );
             break;
@@ -1091,7 +1091,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
             ::com::sun::star::drawing::LineDash     aLineDash;
-            rtl::OUString                           aName;
+            OUString                           aName;
             sal_Bool                                bLineDash( sal_False );
 
             if ( rVal >>= aPropSeq )
@@ -1133,7 +1133,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
         case MID_NAME:
         {
-            rtl::OUString aName;
+            OUString aName;
             if (!(rVal >>= aName))
                 return false;
             SetName( aName );
@@ -3397,9 +3397,9 @@ bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 
             aGradient2.StepCount = aXGradient.GetSteps();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = rtl::OUString( "Name" );
+            aPropSeq[0].Name    = OUString( "Name" );
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = rtl::OUString( "FillGradient" );
+            aPropSeq[1].Name    = OUString( "FillGradient" );
             aPropSeq[1].Value   = uno::makeAny( aGradient2 );
             rVal = uno::makeAny( aPropSeq );
             break;
@@ -3461,7 +3461,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
             ::com::sun::star::awt::Gradient         aGradient2;
-            rtl::OUString                           aName;
+            OUString                           aName;
             bool                                    bGradient( false );
 
             if ( rVal >>= aPropSeq )
@@ -3504,7 +3504,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
         case MID_NAME:
         {
-            rtl::OUString aName;
+            OUString aName;
             if (!(rVal >>= aName ))
                 return false;
             SetName( aName );
@@ -3985,9 +3985,9 @@ bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
             aUnoHatch.Angle = aHatch.GetAngle();
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
-            aPropSeq[0].Name    = rtl::OUString( "Name" );
+            aPropSeq[0].Name    = OUString( "Name" );
             aPropSeq[0].Value   = uno::makeAny( aApiName );
-            aPropSeq[1].Name    = rtl::OUString( "FillHatch" );
+            aPropSeq[1].Name    = OUString( "FillHatch" );
             aPropSeq[1].Value   = uno::makeAny( aUnoHatch );
             rVal = uno::makeAny( aPropSeq );
             break;
@@ -4039,7 +4039,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
         {
             uno::Sequence< beans::PropertyValue >   aPropSeq;
             ::com::sun::star::drawing::Hatch        aUnoHatch;
-            rtl::OUString                           aName;
+            OUString                           aName;
             bool                                    bHatch( false );
 
             if ( rVal >>= aPropSeq )
@@ -4085,7 +4085,7 @@ bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
         case MID_NAME:
         {
-            rtl::OUString aName;
+            OUString aName;
             if (!(rVal >>= aName ))
                 return false;
             SetName( aName );

@@ -98,7 +98,7 @@ struct TAccInfo
         sal_Int32 m_nKeyPos;
         sal_Int32 m_nListPos;
         sal_Bool m_bIsConfigurable;
-        ::rtl::OUString m_sCommand;
+        OUString m_sCommand;
         KeyCode m_aKey;
 };
 
@@ -146,9 +146,9 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xUICmdDescription;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
 
-    ::rtl::OUString m_sModuleLongName;
-    ::rtl::OUString m_sModuleShortName;
-    ::rtl::OUString m_sModuleUIName;
+    OUString m_sModuleLongName;
+    OUString m_sModuleShortName;
+    OUString m_sModuleUIName;
 
     DECL_LINK(ChangeHdl, void *);
     DECL_LINK(RemoveHdl, void *);

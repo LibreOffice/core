@@ -39,7 +39,6 @@
 #include "TransformerActions.hxx"
 #include "OOo2Oasis.hxx"
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1087,16 +1086,16 @@ static XMLTokenEnum aTokenMap[] =
 
 class XMLDocumentTransformerContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
-    ::rtl::OUString m_aOldClass;
+    OUString m_aElemQName;
+    OUString m_aOldClass;
 
 public:
     TYPEINFO();
 
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
     XMLDocumentTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken  );
 
@@ -1245,7 +1244,7 @@ public:
     TYPEINFO();
 
     XMLBodyTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLBodyTransformerContext_Impl();
 
@@ -1309,7 +1308,7 @@ public:
     TYPEINFO();
 
     XMLTabStopOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLTabStopOOoTContext_Impl();
 
@@ -1412,7 +1411,7 @@ public:
     TYPEINFO();
 
     XMLTrackedChangesOOoTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                                sal_uInt16 nPrefix,
                             XMLTokenEnum eToken );
 
@@ -1484,13 +1483,13 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
 
 class XMLTableOOoTransformerContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
 
 public:
     TYPEINFO();
 
     XMLTableOOoTransformerContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     virtual ~XMLTableOOoTransformerContext_Impl();
 

@@ -20,21 +20,21 @@ public:
 
     virtual ~TemplateViewItem ();
 
-    void setPath (const rtl::OUString &rPath) { maPath = rPath; }
+    void setPath (const OUString &rPath) { maPath = rPath; }
 
-    const rtl::OUString& getPath () const { return maPath; }
+    const OUString& getPath () const { return maPath; }
 
-    void setAuthor (const rtl::OUString &rAuthor) { maAuthor = rAuthor; }
+    void setAuthor (const OUString &rAuthor) { maAuthor = rAuthor; }
 
-    const rtl::OUString& getAuthor () const { return maAuthor; }
+    const OUString& getAuthor () const { return maAuthor; }
 
-    void setKeywords (const rtl::OUString &rKeywords) { maKeywords = rKeywords; }
+    void setKeywords (const OUString &rKeywords) { maKeywords = rKeywords; }
 
-    const rtl::OUString& getKeywords () const { return maKeywords; }
+    const OUString& getKeywords () const { return maKeywords; }
 
-    void setSubTitle (const rtl::OUString &rTitle) { maSubTitle = rTitle; }
+    void setSubTitle (const OUString &rTitle) { maSubTitle = rTitle; }
 
-    const rtl::OUString& getSubTitle () const { return maSubTitle; }
+    const OUString& getSubTitle () const { return maSubTitle; }
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLenght,
@@ -48,10 +48,10 @@ public:
 
 private:
 
-    rtl::OUString maPath;
-    rtl::OUString maAuthor;
-    rtl::OUString maKeywords;
-    rtl::OUString maSubTitle;
+    OUString maPath;
+    OUString maAuthor;
+    OUString maKeywords;
+    OUString maSubTitle;
 
     Point maSubTitlePos;
 };

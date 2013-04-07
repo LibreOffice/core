@@ -50,12 +50,12 @@ namespace rptui
         // IPropertyInfoService
         sal_Int32                           getPropertyId(const String& _rName) const;
         String                              getPropertyTranslation(sal_Int32 _nId) const;
-        rtl::OString                        getPropertyHelpId(sal_Int32 _nId) const;
+        OString                        getPropertyHelpId(sal_Int32 _nId) const;
         sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
         static void                         getExcludeProperties(::std::vector< com::sun::star::beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler);
 
         bool                                isComposable(
-                                                const ::rtl::OUString& _rPropertyName,
+                                                const OUString& _rPropertyName,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler
                                             );
 
@@ -73,7 +73,7 @@ namespace rptui
     class HelpIdUrl
     {
     public:
-        static ::rtl::OUString getHelpURL( const rtl::OString& _sHelpId );
+        static OUString getHelpURL( const OString& _sHelpId );
     };
 
     //========================================================================

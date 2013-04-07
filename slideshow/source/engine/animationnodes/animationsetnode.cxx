@@ -44,7 +44,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
 {
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const xAnimateNode = getXAnimateNode();
-    rtl::OUString const attrName( xAnimateNode->getAttributeName() );
+    OUString const attrName( xAnimateNode->getAttributeName() );
     AttributableShapeSharedPtr const pShape( getShape() );
 
     // make deactivation a two-step procedure. Normally, we

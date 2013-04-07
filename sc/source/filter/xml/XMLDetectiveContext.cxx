@@ -33,7 +33,6 @@
 
 #include <algorithm>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -134,8 +133,8 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -213,8 +212,8 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
 
     for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
-        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
+        const OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         sal_uInt16 nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 

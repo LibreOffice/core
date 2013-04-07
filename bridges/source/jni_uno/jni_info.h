@@ -46,10 +46,10 @@ inline bool type_equals(
 {
     if (type1 == type2)
         return true;
-    ::rtl::OUString const & name1 =
-          ::rtl::OUString::unacquired( &type1->pTypeName );
-    ::rtl::OUString const & name2 =
-          ::rtl::OUString::unacquired( &type2->pTypeName );
+    OUString const & name1 =
+          OUString::unacquired( &type1->pTypeName );
+    OUString const & name2 =
+          OUString::unacquired( &type2->pTypeName );
     return ((type1->eTypeClass == type2->eTypeClass) && name1.equals( name2 ));
 }
 
@@ -57,7 +57,7 @@ inline bool type_equals(
 inline bool is_XInterface( typelib_TypeDescriptionReference * type )
 {
     return ((typelib_TypeClass_INTERFACE == type->eTypeClass) &&
-            ::rtl::OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
+            OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
 }
 
 //==============================================================================
@@ -112,7 +112,7 @@ struct JNI_type_info_holder
 };
 
 typedef ::boost::unordered_map<
-    ::rtl::OUString, JNI_type_info_holder, ::rtl::OUStringHash > t_str2type;
+    OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
 //==============================================================================
 class JNI_info
@@ -211,10 +211,10 @@ public:
         typelib_TypeDescriptionReference * type ) const;
     JNI_type_info const * get_type_info(
         JNI_context const & jni,
-        ::rtl::OUString const & uno_name ) const;
+        OUString const & uno_name ) const;
     //
     inline static void append_sig(
-        ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
+        OStringBuffer * buf, typelib_TypeDescriptionReference * type,
         bool use_Object_for_type_XInterface = true, bool use_slashes = true );
 
     // get this
@@ -242,7 +242,7 @@ inline void JNI_info::destroy( JNIEnv * jni_env )
 
 //______________________________________________________________________________
 inline void JNI_info::append_sig(
-    ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type,
+    OStringBuffer * buf, typelib_TypeDescriptionReference * type,
     bool use_Object_for_type_XInterface, bool use_slashes )
 {
     switch (type->eTypeClass)
@@ -302,20 +302,20 @@ inline void JNI_info::append_sig(
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
     {
-        ::rtl::OUString const & uno_name =
-              ::rtl::OUString::unacquired( &type->pTypeName );
+        OUString const & uno_name =
+              OUString::unacquired( &type->pTypeName );
         buf->append( 'L' );
         // Erase type arguments of instantiated polymorphic struct types:
         sal_Int32 i = uno_name.indexOf( '<' );
         if ( i < 0 ) {
             buf->append(
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     use_slashes ? uno_name.replace( '.', '/' ) : uno_name,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
         } else {
-            rtl::OUString s( uno_name.copy( 0, i ) );
+            OUString s( uno_name.copy( 0, i ) );
             buf->append(
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     use_slashes ? s.replace( '.', '/' ) : s,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
         }
@@ -342,11 +342,11 @@ inline void JNI_info::append_sig(
         }
         else
         {
-            ::rtl::OUString const & uno_name =
-                  ::rtl::OUString::unacquired( &type->pTypeName );
+            OUString const & uno_name =
+                  OUString::unacquired( &type->pTypeName );
             buf->append( 'L' );
             buf->append(
-                ::rtl::OUStringToOString(
+                OUStringToOString(
                     use_slashes ? uno_name.replace( '.', '/' ) : uno_name,
                     RTL_TEXTENCODING_JAVA_UTF8 ) );
             buf->append( ';' );
@@ -355,7 +355,7 @@ inline void JNI_info::append_sig(
     default:
         throw BridgeRuntimeError(
             "unsupported type: " +
-            ::rtl::OUString::unacquired( &type->pTypeName ) );
+            OUString::unacquired( &type->pTypeName ) );
     }
 }
 

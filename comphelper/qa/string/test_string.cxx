@@ -62,25 +62,25 @@ public:
 
 void TestString::testDecimalStringToNumber()
 {
-    rtl::OUString s1("1234");
+    OUString s1("1234");
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)1234, comphelper::string::decimalStringToNumber(s1));
-    s1 += rtl::OUString(static_cast<sal_Unicode>(0x07C6));
+    s1 += OUString(static_cast<sal_Unicode>(0x07C6));
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)12346, comphelper::string::decimalStringToNumber(s1));
     // Codepoints on 2 16bits words
     sal_uInt32 utf16String[] = { 0x1D7FE /* 8 */, 0x1D7F7 /* 1 */};
-    s1 = rtl::OUString(utf16String, 2);
+    s1 = OUString(utf16String, 2);
     CPPUNIT_ASSERT_EQUAL((sal_uInt32)81, comphelper::string::decimalStringToNumber(s1));
 }
 
 void TestString::testIsdigitAsciiString()
 {
-    rtl::OString s1("1234");
+    OString s1("1234");
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s1), true);
 
-    rtl::OString s2("1A34");
+    OString s2("1A34");
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s2), false);
 
-    rtl::OString s3;
+    OString s3;
     CPPUNIT_ASSERT_EQUAL(comphelper::string::isdigitAsciiString(s3), true);
 }
 
@@ -90,29 +90,29 @@ class testCollator : public cppu::WeakImplHelper1< i18n::XCollator >
 {
 public:
     virtual sal_Int32 SAL_CALL compareSubstring(
-        const rtl::OUString& str1, sal_Int32 off1, sal_Int32 len1,
-        const rtl::OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(uno::RuntimeException)
+        const OUString& str1, sal_Int32 off1, sal_Int32 len1,
+        const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(uno::RuntimeException)
     {
         return str1.copy(off1, len1).compareTo(str2.copy(off2, len2));
     }
     virtual sal_Int32 SAL_CALL compareString(
-        const rtl::OUString& str1,
-        const rtl::OUString& str2) throw(uno::RuntimeException)
+        const OUString& str1,
+        const OUString& str2) throw(uno::RuntimeException)
     {
         return str1.compareTo(str2);
     }
     virtual sal_Int32 SAL_CALL loadDefaultCollator(const lang::Locale&, sal_Int32)
         throw(uno::RuntimeException) {return 0;}
-    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(const rtl::OUString&,
+    virtual sal_Int32 SAL_CALL loadCollatorAlgorithm(const OUString&,
         const lang::Locale&, sal_Int32) throw(uno::RuntimeException) {return 0;}
-    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption(const rtl::OUString&,
+    virtual void SAL_CALL loadCollatorAlgorithmWithEndUserOption(const OUString&,
         const lang::Locale&, const uno::Sequence< sal_Int32 >&) throw(uno::RuntimeException) {}
-    virtual uno::Sequence< rtl::OUString > SAL_CALL listCollatorAlgorithms(const lang::Locale&)
+    virtual uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms(const lang::Locale&)
         throw(uno::RuntimeException)
     {
-        return uno::Sequence< rtl::OUString >();
+        return uno::Sequence< OUString >();
     }
-    virtual uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions(const rtl::OUString&)
+    virtual uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions(const OUString&)
         throw(uno::RuntimeException)
     {
         return uno::Sequence< sal_Int32 >();
@@ -124,42 +124,42 @@ public:
 class testBreakIterator : public cppu::WeakImplHelper1< i18n::XBreakIterator >
 {
 public:
-    virtual sal_Int32 SAL_CALL nextCharacters( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL nextCharacters( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& )
             throw(uno::RuntimeException) {return -1;}
-    virtual sal_Int32 SAL_CALL previousCharacters( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL previousCharacters( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Int32, sal_Int32& )
             throw(uno::RuntimeException) {return -1;}
 
-    virtual i18n::Boundary SAL_CALL previousWord( const rtl::OUString&, sal_Int32,
+    virtual i18n::Boundary SAL_CALL previousWord( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16) throw(uno::RuntimeException)
         { return i18n::Boundary(); }
-    virtual i18n::Boundary SAL_CALL nextWord( const rtl::OUString&, sal_Int32,
+    virtual i18n::Boundary SAL_CALL nextWord( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16) throw(uno::RuntimeException)
         { return i18n::Boundary(); }
-    virtual i18n::Boundary SAL_CALL getWordBoundary( const rtl::OUString&, sal_Int32,
+    virtual i18n::Boundary SAL_CALL getWordBoundary( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16, sal_Bool )
         throw(uno::RuntimeException)
         { return i18n::Boundary(); }
 
-    virtual sal_Bool SAL_CALL isBeginWord( const rtl::OUString&, sal_Int32,
+    virtual sal_Bool SAL_CALL isBeginWord( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException)
         { return false; }
-    virtual sal_Bool SAL_CALL isEndWord( const rtl::OUString&, sal_Int32,
+    virtual sal_Bool SAL_CALL isEndWord( const OUString&, sal_Int32,
         const lang::Locale& , sal_Int16 ) throw(uno::RuntimeException)
         { return false; }
-    virtual sal_Int16 SAL_CALL getWordType( const rtl::OUString&, sal_Int32,
+    virtual sal_Int16 SAL_CALL getWordType( const OUString&, sal_Int32,
         const lang::Locale& ) throw(uno::RuntimeException)
         { return 0; }
 
-    virtual sal_Int32 SAL_CALL beginOfSentence( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL beginOfSentence( const OUString&, sal_Int32,
         const lang::Locale& ) throw(uno::RuntimeException)
         { return 0; }
-    virtual sal_Int32 SAL_CALL endOfSentence( const rtl::OUString& rText, sal_Int32,
+    virtual sal_Int32 SAL_CALL endOfSentence( const OUString& rText, sal_Int32,
         const lang::Locale& ) throw(uno::RuntimeException)
         { return rText.getLength(); }
 
-    virtual i18n::LineBreakResults SAL_CALL getLineBreak( const rtl::OUString&, sal_Int32,
+    virtual i18n::LineBreakResults SAL_CALL getLineBreak( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int32,
         const i18n::LineBreakHyphenationOptions&,
         const i18n::LineBreakUserOptions&)
@@ -168,20 +168,20 @@ public:
         return i18n::LineBreakResults();
     }
 
-    virtual sal_Int16 SAL_CALL getScriptType( const rtl::OUString&, sal_Int32 )
+    virtual sal_Int16 SAL_CALL getScriptType( const OUString&, sal_Int32 )
         throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL beginOfScript( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL beginOfScript( const OUString&, sal_Int32,
         sal_Int16 ) throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL endOfScript( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL endOfScript( const OUString&, sal_Int32,
         sal_Int16 ) throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL previousScript( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL previousScript( const OUString&, sal_Int32,
         sal_Int16 ) throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL nextScript( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL nextScript( const OUString&, sal_Int32,
         sal_Int16 ) throw(uno::RuntimeException) { return -1; }
 
-    virtual sal_Int32 SAL_CALL beginOfCharBlock( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL beginOfCharBlock( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL endOfCharBlock( const rtl::OUString& rText, sal_Int32 nStartPos,
+    virtual sal_Int32 SAL_CALL endOfCharBlock( const OUString& rText, sal_Int32 nStartPos,
         const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException)
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
@@ -195,9 +195,9 @@ public:
         }
         return -1;
     }
-    virtual sal_Int32 SAL_CALL previousCharBlock( const rtl::OUString&, sal_Int32,
+    virtual sal_Int32 SAL_CALL previousCharBlock( const OUString&, sal_Int32,
         const lang::Locale&, sal_Int16 ) throw(uno::RuntimeException) { return -1; }
-    virtual sal_Int32 SAL_CALL nextCharBlock( const rtl::OUString& rText, sal_Int32 nStartPos,
+    virtual sal_Int32 SAL_CALL nextCharBlock( const OUString& rText, sal_Int32 nStartPos,
         const lang::Locale&, sal_Int16 CharType ) throw(uno::RuntimeException)
     {
         const sal_Unicode *pStr = rText.getStr()+nStartPos;
@@ -280,8 +280,8 @@ void TestString::testNatural()
 
 void TestString::testRemove()
 {
-    ::rtl::OString aIn("abc");
-    ::rtl::OString aOut;
+    OString aIn("abc");
+    OString aOut;
 
     aOut = ::comphelper::string::remove(aIn, 'b');
     CPPUNIT_ASSERT(aOut == "ac");
@@ -294,8 +294,8 @@ void TestString::testRemove()
 
 void TestString::testStripStart()
 {
-    ::rtl::OString aIn("abc");
-    ::rtl::OString aOut;
+    OString aIn("abc");
+    OString aOut;
 
     aOut = ::comphelper::string::stripStart(aIn, 'b');
     CPPUNIT_ASSERT(aOut == "abc");
@@ -314,8 +314,8 @@ void TestString::testStripStart()
 
 void TestString::testStripEnd()
 {
-    ::rtl::OString aIn("abc");
-    ::rtl::OString aOut;
+    OString aIn("abc");
+    OString aOut;
 
     aOut = ::comphelper::string::stripEnd(aIn, 'b');
     CPPUNIT_ASSERT(aOut == "abc");
@@ -334,8 +334,8 @@ void TestString::testStripEnd()
 
 void TestString::testStrip()
 {
-    ::rtl::OString aIn("abc");
-    ::rtl::OString aOut;
+    OString aIn("abc");
+    OString aOut;
 
     aOut = ::comphelper::string::strip(aIn, 'b');
     CPPUNIT_ASSERT(aOut == "abc");
@@ -354,8 +354,8 @@ void TestString::testStrip()
 
 void TestString::testToken()
 {
-    ::rtl::OString aIn("10.11.12");
-    ::rtl::OString aOut;
+    OString aIn("10.11.12");
+    OString aOut;
 
     aOut = ::comphelper::string::getToken(aIn, -1, '.');
     CPPUNIT_ASSERT(aOut.isEmpty());
@@ -375,7 +375,7 @@ void TestString::testToken()
 
 void TestString::testTokenCount()
 {
-    ::rtl::OString aIn("10.11.12");
+    OString aIn("10.11.12");
     sal_Int32 nOut;
 
     nOut = ::comphelper::string::getTokenCount(aIn, '.');
@@ -384,26 +384,26 @@ void TestString::testTokenCount()
     nOut = ::comphelper::string::getTokenCount(aIn, 'X');
     CPPUNIT_ASSERT(nOut == 1);
 
-    nOut = ::comphelper::string::getTokenCount(rtl::OString(), 'X');
+    nOut = ::comphelper::string::getTokenCount(OString(), 'X');
     CPPUNIT_ASSERT(nOut == 0);
 }
 
 void TestString::testReverseString()
 {
-    ::rtl::OString aIn("ABC");
-    ::rtl::OString aOut = ::comphelper::string::reverseString(aIn);
+    OString aIn("ABC");
+    OString aOut = ::comphelper::string::reverseString(aIn);
 
     CPPUNIT_ASSERT(aOut == "CBA");
 }
 
 void TestString::testEqualsString()
 {
-    ::rtl::OString aIn("A");
+    OString aIn("A");
     CPPUNIT_ASSERT(::comphelper::string::equals(aIn, 'A'));
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'B'));
-    aIn = ::rtl::OString("AA");
+    aIn = OString("AA");
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
-    aIn = ::rtl::OString();
+    aIn = OString();
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
 }
 

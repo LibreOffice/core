@@ -89,7 +89,7 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
 
 
 
-void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
+void DescriptionGenerator::Initialize (OUString sPrefix)
 {
     msDescription = sPrefix;
     if (mxSet.is())
@@ -127,7 +127,7 @@ void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
 
 
 
-::rtl::OUString DescriptionGenerator::operator() (void)
+OUString DescriptionGenerator::operator() (void)
 {
     msDescription.append (sal_Unicode ('.'));
     return msDescription.makeStringAndClear();
@@ -196,7 +196,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
 
 
 
-void DescriptionGenerator::AppendString (const ::rtl::OUString& sString)
+void DescriptionGenerator::AppendString (const OUString& sString)
 {
     msDescription.append (sString);
 }

@@ -100,7 +100,7 @@ void ORelationTableView::ReSync()
     // Es kann sein, dass in der DB Tabellen ausgeblendet wurden, die eigentlich Bestandteil einer Relation sind. Oder eine Tabelle
     // befand sich im Layout (durchaus ohne Relation), existiert aber nicht mehr. In beiden Faellen wird das Anlegen des TabWins schief
     // gehen, und alle solchen TabWinDatas oder darauf bezogenen ConnDatas muss ich dann loeschen.
-    ::std::vector< ::rtl::OUString> arrInvalidTables;
+    ::std::vector< OUString> arrInvalidTables;
 
     //////////////////////////////////////////////////////////////////////
     // create and insert windows
@@ -141,7 +141,7 @@ void ORelationTableView::ReSync()
         if ( !arrInvalidTables.empty() )
         {
             // gibt es die beiden Tabellen zur Connection ?
-            ::rtl::OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
+            OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
             sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
@@ -193,8 +193,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
                                                                                    pDestWin->GetData()));
 
     // die Namen der betroffenen Felder
-    ::rtl::OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
-    ::rtl::OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
+    OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
+    OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
     // die Anzahl der PKey-Felder in der Quelle
     const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
@@ -296,7 +296,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
 }
 
 //------------------------------------------------------------------------------
-void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
+void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
@@ -411,7 +411,7 @@ void ORelationTableView::_elementInserted( const container::ContainerEvent& /*_r
 void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException)
 {
     m_bInRemove = true;
-    ::rtl::OUString sName;
+    OUString sName;
     if ( _rEvent.Accessor >>= sName )
     {
         OTableWindow* pTableWindow = GetTabWindow(sName);

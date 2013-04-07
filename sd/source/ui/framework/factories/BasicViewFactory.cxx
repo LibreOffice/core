@@ -49,7 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
-using ::rtl::OUString;
 using ::sd::framework::FrameworkHelper;
 
 
@@ -65,19 +64,19 @@ Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
 
 
 
-::rtl::OUString BasicViewFactory_getImplementationName (void) throw(RuntimeException)
+OUString BasicViewFactory_getImplementationName (void) throw(RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.Draw.framework.BasicViewFactory");
+    return OUString("com.sun.star.comp.Draw.framework.BasicViewFactory");
 }
 
 
 
 
-Sequence<rtl::OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.BasicViewFactory");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    static const OUString sServiceName("com.sun.star.drawing.framework.BasicViewFactory");
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 

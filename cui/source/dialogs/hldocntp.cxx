@@ -167,7 +167,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
     {
         uno::Sequence< beans::PropertyValue >& rDynamicMenuEntry = aDynamicMenuEntries[ i ];
 
-        rtl::OUString aDocumentUrl, aTitle, aImageId, aTargetName;
+        OUString aDocumentUrl, aTitle, aImageId, aTargetName;
 
            for ( int e = 0; e < rDynamicMenuEntry.getLength(); e++ )
         {
@@ -338,13 +338,13 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
                     // create items
                     SfxStringItem aName( SID_FILE_NAME, aStrDocName );
-                    SfxStringItem aReferer( SID_REFERER, rtl::OUString("private:user") );
-                    SfxStringItem aFrame( SID_TARGETNAME, rtl::OUString("_blank") );
+                    SfxStringItem aReferer( SID_REFERER, OUString("private:user") );
+                    SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
 
-                    rtl::OUString aStrFlags('S');
+                    OUString aStrFlags('S');
                     if ( maRbtEditLater.IsChecked() )
                     {
-                        aStrFlags += rtl::OUString('H');
+                        aStrFlags += OUString('H');
                     }
                     SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 

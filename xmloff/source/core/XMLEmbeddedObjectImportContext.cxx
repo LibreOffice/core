@@ -32,8 +32,6 @@
 #include "xmloff/XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -76,21 +74,21 @@ public:
     TYPEINFO();
 
     XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                                    const ::rtl::OUString& rLName,
+                                    const OUString& rLName,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~XMLEmbeddedObjectImportContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 TYPEINIT1( XMLEmbeddedObjectImportContext_Impl, SvXMLImportContext );
@@ -219,7 +217,7 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         };
         for (int k=0; aTmp[k]; k++)
         {
-            ::rtl::OUString sTmpString = ::rtl::OUString::createFromAscii(aTmp[k]);
+            OUString sTmpString = OUString::createFromAscii(aTmp[k]);
             if( sMime.matchAsciiL( aTmp[k], sTmpString.getLength() ) )
             {
                 sClass = sMime.copy( sTmpString.getLength() );
@@ -325,7 +323,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
     }
 }
 
-void XMLEmbeddedObjectImportContext::Characters( const ::rtl::OUString& rChars )
+void XMLEmbeddedObjectImportContext::Characters( const OUString& rChars )
 {
     if( xHandler.is() )
         xHandler->characters( rChars );

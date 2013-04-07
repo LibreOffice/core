@@ -52,10 +52,10 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
     static const char* pDir = getenv( "DBG_PDFIMPORT_DIR" );
     if( pDir )
     {
-        rtl::OUString aStr( rtl::OStringToOUString( pDir, RTL_TEXTENCODING_UTF8 ) );
-        rtl::OUString aFileURL;
+        OUString aStr( OStringToOUString( pDir, RTL_TEXTENCODING_UTF8 ) );
+        OUString aFileURL;
         osl_getFileURLFromSystemPath( aStr.pData, &aFileURL.pData );
-        rtl::OUStringBuffer aBuf( 256 );
+        OUStringBuffer aBuf( 256 );
         aBuf.append( aFileURL );
         aBuf.appendAscii( "/pdfimport.xml" );
         pStream = new osl::File( aBuf.makeStringAndClear() );
@@ -91,7 +91,7 @@ SaxEmitter::~SaxEmitter()
 
 void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
 {
-    rtl::OUString aTag = rtl::OUString::createFromAscii( pTag );
+    OUString aTag = OUString::createFromAscii( pTag );
     uno::Reference< xml::sax::XAttributeList > xAttr(
         new SaxAttrList( rProperties ) );
     try
@@ -108,15 +108,15 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
         for( int i = 0; i < nIndent; i++ )
             pStream->write( "    ", 4, nWritten );
 
-        rtl::OStringBuffer aBuf( 1024 );
+        OStringBuffer aBuf( 1024 );
         aBuf.append( '<' );
         aBuf.append( pTag );
         for( PropertyMap::const_iterator it = rProperties.begin(); it != rProperties.end(); ++it )
         {
             aBuf.append( ' ' );
-            aBuf.append( rtl::OUStringToOString( it->first, RTL_TEXTENCODING_UTF8 ) );
+            aBuf.append( OUStringToOString( it->first, RTL_TEXTENCODING_UTF8 ) );
             aBuf.append( "=\"" );
-            aBuf.append( rtl::OUStringToOString( it->second, RTL_TEXTENCODING_UTF8 ) );
+            aBuf.append( OUStringToOString( it->second, RTL_TEXTENCODING_UTF8 ) );
             aBuf.append( "\"" );
         }
         aBuf.append( ">\n" );
@@ -126,7 +126,7 @@ void SaxEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
 #endif
 }
 
-void SaxEmitter::write( const rtl::OUString& rText )
+void SaxEmitter::write( const OUString& rText )
 {
     try
     {
@@ -138,7 +138,7 @@ void SaxEmitter::write( const rtl::OUString& rText )
 #if OSL_DEBUG_LEVEL > 1
     if( pStream )
     {
-        rtl::OString aStr( rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ) );
+        OString aStr( OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ) );
         sal_uInt64 nWritten = 0;
         pStream->write( aStr.getStr(), aStr.getLength(), nWritten );
     }
@@ -147,7 +147,7 @@ void SaxEmitter::write( const rtl::OUString& rText )
 
 void SaxEmitter::endTag( const char* pTag )
 {
-    rtl::OUString aTag = rtl::OUString::createFromAscii( pTag );
+    OUString aTag = OUString::createFromAscii( pTag );
     try
     {
         m_xDocHdl->endElement( aTag );
@@ -162,7 +162,7 @@ void SaxEmitter::endTag( const char* pTag )
         for( int i = 0; i < nIndent; i++ )
             pStream->write( "    ", 4, nWritten );
 
-        rtl::OStringBuffer aBuf( 1024 );
+        OStringBuffer aBuf( 1024 );
         aBuf.append( "</" );
         aBuf.append( pTag );
         aBuf.append( ">\n" );

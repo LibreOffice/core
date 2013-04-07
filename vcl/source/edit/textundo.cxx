@@ -41,7 +41,7 @@ namespace
 {
 
 // Shorten() -- inserts ellipsis (...) in the middle of a long text
-void Shorten (rtl::OUString& rString)
+void Shorten (OUString& rString)
 {
     unsigned nLen = rString.getLength();
     if (nLen > 48)
@@ -149,9 +149,9 @@ TextUndo::~TextUndo()
 {
 }
 
-rtl::OUString TextUndo::GetComment() const
+OUString TextUndo::GetComment() const
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 void TextUndo::SetSelection( const TextSelection& rSel )
@@ -214,7 +214,7 @@ void TextUndoDelPara::Redo()
     SetSelection( aPaM );
 }
 
-rtl::OUString TextUndoDelPara::GetComment () const
+OUString TextUndoDelPara::GetComment () const
 {
     return ResId(STR_TEXTUNDO_DELPARA, *ImplGetResMgr());
 }
@@ -248,7 +248,7 @@ void TextUndoConnectParas::Redo()
     SetSelection( aPaM );
 }
 
-rtl::OUString TextUndoConnectParas::GetComment () const
+OUString TextUndoConnectParas::GetComment () const
 {
     return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr());
 }
@@ -282,7 +282,7 @@ void TextUndoSplitPara::Redo()
     SetSelection( aPaM );
 }
 
-rtl::OUString TextUndoSplitPara::GetComment () const
+OUString TextUndoSplitPara::GetComment () const
 {
     return ResId(STR_TEXTUNDO_SPLITPARA, *ImplGetResMgr());
 }
@@ -334,12 +334,12 @@ sal_Bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
     return sal_False;
 }
 
-rtl::OUString TextUndoInsertChars::GetComment () const
+OUString TextUndoInsertChars::GetComment () const
 {
     // multiple lines?
-    rtl::OUString sText(maText);
+    OUString sText(maText);
     Shorten(sText);
-    return rtl::OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
+    return OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
 }
 
 
@@ -371,12 +371,12 @@ void TextUndoRemoveChars::Redo()
     SetSelection( aPaM );
 }
 
-rtl::OUString TextUndoRemoveChars::GetComment () const
+OUString TextUndoRemoveChars::GetComment () const
 {
     // multiple lines?
-    rtl::OUString sText(maText);
+    OUString sText(maText);
     Shorten(sText);
-    return rtl::OUString(ResId(STR_TEXTUNDO_REMOVECHARS, *ImplGetResMgr())).replaceAll("$1", sText);
+    return OUString(ResId(STR_TEXTUNDO_REMOVECHARS, *ImplGetResMgr())).replaceAll("$1", sText);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -98,7 +98,7 @@ namespace sfx2
                 we could replace this method with a newly introduced method
                 getDocumentModel and some internal code.
         */
-        virtual ::rtl::OUString
+        virtual OUString
                     getDocumentLocation() const = 0;
 
         /** returns a zip-storage based on the last commited version of the document,

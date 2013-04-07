@@ -47,7 +47,7 @@ namespace frm
         /** returns an URL object for the given URL string
         */
         ::com::sun::star::util::URL
-            getStrictURL( const ::rtl::OUString& _rURL ) const;
+            getStrictURL( const OUString& _rURL ) const;
 
         /** returns an URL object for the given URL ASCII string
         */

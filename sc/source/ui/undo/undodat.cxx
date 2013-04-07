@@ -87,7 +87,7 @@ ScUndoDoOutline::~ScUndoDoOutline()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoDoOutline::GetComment() const
+OUString ScUndoDoOutline::GetComment() const
 {   // Show outline" "Hide outline"
     return bShow ?
         ScGlobal::GetRscString( STR_UNDO_DOOUTLINE ) :
@@ -176,7 +176,7 @@ ScUndoMakeOutline::~ScUndoMakeOutline()
     delete pUndoTable;
 }
 
-rtl::OUString ScUndoMakeOutline::GetComment() const
+OUString ScUndoMakeOutline::GetComment() const
 {   // "Grouping" "Undo grouping"
     return bMake ?
         ScGlobal::GetRscString( STR_UNDO_MAKEOUTLINE ) :
@@ -261,7 +261,7 @@ ScUndoOutlineLevel::~ScUndoOutlineLevel()
     delete pUndoTable;
 }
 
-rtl::OUString ScUndoOutlineLevel::GetComment() const
+OUString ScUndoOutlineLevel::GetComment() const
 {   // "Select outline level"
     return ScGlobal::GetRscString( STR_UNDO_OUTLINELEVEL );
 }
@@ -346,7 +346,7 @@ ScUndoOutlineBlock::~ScUndoOutlineBlock()
     delete pUndoTable;
 }
 
-rtl::OUString ScUndoOutlineBlock::GetComment() const
+OUString ScUndoOutlineBlock::GetComment() const
 {   // "Show outline" "Hide outline"
     return bShow ?
         ScGlobal::GetRscString( STR_UNDO_DOOUTLINEBLK ) :
@@ -447,7 +447,7 @@ ScUndoRemoveAllOutlines::~ScUndoRemoveAllOutlines()
     delete pUndoTable;
 }
 
-rtl::OUString ScUndoRemoveAllOutlines::GetComment() const
+OUString ScUndoRemoveAllOutlines::GetComment() const
 {   // "Remove outlines"
     return ScGlobal::GetRscString( STR_UNDO_REMOVEALLOTLNS );
 }
@@ -532,7 +532,7 @@ ScUndoAutoOutline::~ScUndoAutoOutline()
     delete pUndoTable;
 }
 
-rtl::OUString ScUndoAutoOutline::GetComment() const
+OUString ScUndoAutoOutline::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_AUTOOUTLINE );
 }
@@ -641,7 +641,7 @@ ScUndoSubTotals::~ScUndoSubTotals()
     delete pUndoDB;
 }
 
-rtl::OUString ScUndoSubTotals::GetComment() const
+OUString ScUndoSubTotals::GetComment() const
 {   // "Subtotals"
     return ScGlobal::GetRscString( STR_UNDO_SUBTOTALS );
 }
@@ -765,7 +765,7 @@ ScUndoSort::~ScUndoSort()
     delete pUndoDB;
 }
 
-rtl::OUString ScUndoSort::GetComment() const
+OUString ScUndoSort::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_SORT );
 }
@@ -891,7 +891,7 @@ ScUndoQuery::~ScUndoQuery()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoQuery::GetComment() const
+OUString ScUndoQuery::GetComment() const
 {   // "Filter";
     return ScGlobal::GetRscString( STR_UNDO_QUERY );
 }
@@ -1029,7 +1029,7 @@ sal_Bool ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //      Show or hide AutoFilter buttons (doesn't include filter settings)
 
 ScUndoAutoFilter::ScUndoAutoFilter( ScDocShell* pNewDocShell, const ScRange& rRange,
-                                    const ::rtl::OUString& rName, bool bSet ) :
+                                    const OUString& rName, bool bSet ) :
     ScDBFuncUndo( pNewDocShell, rRange ),
     aDBName( rName ),
     bFilterSet( bSet )
@@ -1040,7 +1040,7 @@ ScUndoAutoFilter::~ScUndoAutoFilter()
 {
 }
 
-rtl::OUString ScUndoAutoFilter::GetComment() const
+OUString ScUndoAutoFilter::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_QUERY );    // same as ScUndoQuery
 }
@@ -1120,7 +1120,7 @@ ScUndoDBData::~ScUndoDBData()
     delete pRedoColl;
 }
 
-rtl::OUString ScUndoDBData::GetComment() const
+OUString ScUndoDBData::GetComment() const
 {   // "Change database range";
     return ScGlobal::GetRscString( STR_UNDO_DBDATA );
 }
@@ -1198,7 +1198,7 @@ ScUndoImportData::~ScUndoImportData()
     delete pRedoDBData;
 }
 
-rtl::OUString ScUndoImportData::GetComment() const
+OUString ScUndoImportData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
 }
@@ -1417,7 +1417,7 @@ ScUndoRepeatDB::~ScUndoRepeatDB()
     delete pUndoDB;
 }
 
-rtl::OUString ScUndoRepeatDB::GetComment() const
+OUString ScUndoRepeatDB::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REPEATDB );
 }
@@ -1571,7 +1571,7 @@ ScUndoDataPilot::~ScUndoDataPilot()
     delete pNewUndoDoc;
 }
 
-rtl::OUString ScUndoDataPilot::GetComment() const
+OUString ScUndoDataPilot::GetComment() const
 {
     sal_uInt16 nIndex;
     if ( pOldUndoDoc && pNewUndoDoc )
@@ -1728,7 +1728,7 @@ ScUndoConsolidate::~ScUndoConsolidate()
     delete pUndoData;
 }
 
-rtl::OUString ScUndoConsolidate::GetComment() const
+OUString ScUndoConsolidate::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CONSOLIDATE );
 }
@@ -1885,7 +1885,7 @@ ScUndoChartData::~ScUndoChartData()
 {
 }
 
-rtl::OUString ScUndoChartData::GetComment() const
+OUString ScUndoChartData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CHARTDATA );
 }
@@ -1958,7 +1958,7 @@ ScUndoDataForm::~ScUndoDataForm()
         delete pRefRedoData;
 }
 
-rtl::OUString ScUndoDataForm::GetComment() const
+OUString ScUndoDataForm::GetComment() const
 {
         return ScGlobal::GetRscString( STR_UNDO_PASTE );
 }

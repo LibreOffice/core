@@ -31,7 +31,6 @@
 #include "undoanim.hxx"
 #include "EffectMigration.hxx"
 
-using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::animations;

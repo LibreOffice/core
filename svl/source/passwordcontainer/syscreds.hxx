@@ -36,37 +36,37 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         //virtual ~SysCredentialsConfigItem();
 
         virtual void Notify(
-            const com::sun::star::uno::Sequence< rtl::OUString > &
+            const com::sun::star::uno::Sequence< OUString > &
                 seqPropertyNames );
         virtual void Commit();
 
-        com::sun::star::uno::Sequence< rtl::OUString >
+        com::sun::star::uno::Sequence< OUString >
         getSystemCredentialsURLs();
 
         void setSystemCredentialsURLs(
-            const com::sun::star::uno::Sequence< rtl::OUString > &
+            const com::sun::star::uno::Sequence< OUString > &
                 seqURLList );
 
-        //bool isSystemCredentialsURL( const rtl::OUString & rURL ) const;
+        //bool isSystemCredentialsURL( const OUString & rURL ) const;
 
 private:
         ::osl::Mutex m_aMutex;
         bool m_bInited;
-        com::sun::star::uno::Sequence< rtl::OUString > m_seqURLs;
+        com::sun::star::uno::Sequence< OUString > m_seqURLs;
         SysCredentialsConfig * m_pOwner;
 };
 
-typedef std::set< rtl::OUString > StringSet;
+typedef std::set< OUString > StringSet;
 
 class SysCredentialsConfig
 {
     public:
         SysCredentialsConfig();
 
-        rtl::OUString find( rtl::OUString const & rURL );
-        void add( rtl::OUString const & rURL, bool bPersistent );
-        void remove( rtl::OUString const & rURL );
-        com::sun::star::uno::Sequence< rtl::OUString > list( bool bOnlyPersistent );
+        OUString find( OUString const & rURL );
+        void add( OUString const & rURL, bool bPersistent );
+        void remove( OUString const & rURL );
+        com::sun::star::uno::Sequence< OUString > list( bool bOnlyPersistent );
 
         void persistentConfigChanged();
 

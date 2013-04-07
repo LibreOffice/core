@@ -35,7 +35,6 @@
 // namespace directives
 //-------------------------------------------------------------------
 
-using ::rtl::OUString;
 
 //-------------------------------------------------------------------------------------
 // ctor
@@ -218,13 +217,13 @@ sal_Bool SAL_CALL CFilterContainer::getNextFilter( FILTER_ENTRY_T& nextFilterEnt
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL CFilterContainer::setCurrentFilter( const ::rtl::OUString& aName )
+void SAL_CALL CFilterContainer::setCurrentFilter( const OUString& aName )
 {
     m_sCurrentFilter = aName;
 }
 
 //-----------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL CFilterContainer::getCurrentFilter() const
+OUString SAL_CALL CFilterContainer::getCurrentFilter() const
 {
     return m_sCurrentFilter;
 }
@@ -278,7 +277,7 @@ void _wcsmemcpy( sal_Unicode* pDest, const sal_Unicode* pSrc, sal_uInt32 nLength
 // e.g. "Text\0*.txt\0Doc\0*.doc;*xls\0\0"
 //-------------------------------------------------------------------
 
-rtl::OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
+OUString SAL_CALL makeWinFilterBuffer( CFilterContainer& aFilterContainer )
 {
     // calculate the required buffer size
     sal_uInt32 reqBuffSize = _getTotalFilterLength( aFilterContainer );

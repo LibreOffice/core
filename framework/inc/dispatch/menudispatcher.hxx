@@ -54,9 +54,9 @@ namespace framework{
     We implement this as a hashtable for strings.
 *//*-*************************************************************************************************************/
 
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString         ,
-                                                        rtl::OUStringHash,
-                                                        std::equal_to< ::rtl::OUString > > IMPL_ListenerHashContainer;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  OUString         ,
+                                                        OUStringHash,
+                                                        std::equal_to< OUString > > IMPL_ListenerHashContainer;
 
 
 /*-************************************************************************************************************//**

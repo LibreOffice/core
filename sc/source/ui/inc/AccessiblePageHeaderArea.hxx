@@ -87,14 +87,14 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext and Accessible service.
     */
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -107,8 +107,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleDescription(void) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL createAccessibleName(void) throw (::com::sun::star::uno::RuntimeException);
 
     virtual Rectangle GetBoundingBoxOnScreen(void) const throw(::com::sun::star::uno::RuntimeException);
     virtual Rectangle GetBoundingBox(void) const throw (::com::sun::star::uno::RuntimeException);

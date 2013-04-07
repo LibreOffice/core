@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWrapper
-        , const rtl::OUString& rObjectCID
+        , const OUString& rObjectCID
         , const Reference< frame::XModel >& xChartModel
         , RotationDirection eRotationDirection )
     : DragMethod_Base( rDrawViewWrapper, rObjectCID, xChartModel, ActionDescriptionProvider::ROTATE )

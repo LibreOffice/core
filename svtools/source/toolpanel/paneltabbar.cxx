@@ -217,7 +217,7 @@ namespace svt
 //        bool bNativeOK = m_rTargetWindow.GetNativeControlRegion(
 //            CTRL_TOOLBAR, PART_BUTTON,
 //            i_rContentArea, nState,
-//            aControlValue, ::rtl::OUString(),
+//            aControlValue, OUString(),
 //            aBoundingRegion, aContentRegion
 //        );
         (void)i_nItemFlags;
@@ -235,7 +235,7 @@ namespace svt
         ImplControlValue aControlValue;
         aControlValue.setTristateVal( ( i_nItemFlags & ITEM_STATE_ACTIVE ) ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
 
-        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, i_rContentRect, nState, aControlValue, rtl::OUString() );
+        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, i_rContentRect, nState, aControlValue, OUString() );
         (void)bNativeOK;
         OSL_ENSURE( bNativeOK, "NWFToolboxItemRenderer::preRenderItem: inconsistent NWF implementation!" );
             // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
@@ -286,7 +286,7 @@ namespace svt
 
         aBackground.Top() = aBackground.Bottom();
         getTargetDevice().DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, aBackground,
-            CTRL_STATE_ENABLED, ImplControlValue(), ::rtl::OUString() );
+            CTRL_STATE_ENABLED, ImplControlValue(), OUString() );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ namespace svt
         bool bNativeOK = getTargetDevice().GetNativeControlRegion(
             CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
             i_rContentArea, nState,
-            tiValue, ::rtl::OUString(),
+            tiValue, OUString(),
             aBoundingRegion, aContentRegion
         );
         (void)bNativeOK;
@@ -321,7 +321,7 @@ namespace svt
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
 
 
-        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, i_rContentRect, nState, tiValue, rtl::OUString() );
+        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, i_rContentRect, nState, tiValue, OUString() );
         (void)bNativeOK;
         OSL_ENSURE( bNativeOK, "NWFTabItemRenderer::preRenderItem: inconsistent NWF implementation!" );
             // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
@@ -587,7 +587,7 @@ namespace svt
         const Image aImage( i_pPanel->GetImage() );
         const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
 
-        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const OUString sItemText( i_pPanel->GetDisplayName() );
         const bool bUseText = ( !sItemText.isEmpty() ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
 
         Size aItemContentSize;
@@ -658,7 +658,7 @@ namespace svt
             m_rTabBar.DrawImage( aImagePos, aItemImage );
         }
 
-        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const OUString sItemText( i_pPanel->GetDisplayName() );
         const bool bUseText = ( !sItemText.isEmpty() ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
 
         if ( bUseText )
@@ -1173,7 +1173,7 @@ namespace svt
             // if the text is displayed for the item, we do not need to show it as tooltip
             return;
 
-        const ::rtl::OUString sItemText( rItem.pPanel->GetDisplayName() );
+        const OUString sItemText( rItem.pPanel->GetDisplayName() );
         if ( i_rHelpEvent.GetMode() == HELPMODE_BALLOON )
             Help::ShowBalloon( this, OutputToScreenPixel( rItem.GetCurrentRect().Center() ), rItem.GetCurrentRect(), sItemText );
         else

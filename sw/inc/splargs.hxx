@@ -68,7 +68,7 @@ struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 
 struct SwConversionArgs : SwArgsBase
 {
-    rtl::OUString   aConvText;          // convertible text found
+    OUString   aConvText;          // convertible text found
     LanguageType    nConvSrcLang;       // (source) language to look for
     LanguageType    nConvTextLang;      // language of aConvText (if the latter one was found)
 

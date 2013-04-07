@@ -144,7 +144,7 @@ OComponentDefinition::~OComponentDefinition()
 
 
 OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxContainer
-                                       ,const ::rtl::OUString& _rElementName
+                                       ,const OUString& _rElementName
                                        ,const Reference< XComponentContext >& _xORB
                                        ,const TContentPtr& _pImpl
                                        ,sal_Bool _bTable)
@@ -168,21 +168,21 @@ OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeExc
     return OUString("com.sun.star.comp.dba.OComponentDefinition");
 }
 
-::rtl::OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
 }
 
-Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
+Sequence< OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aServices(2);
-    aServices.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.TableDefinition");
-    aServices.getArray()[1] = ::rtl::OUString("com.sun.star.ucb.Content");
+    Sequence< OUString > aServices(2);
+    aServices.getArray()[0] = OUString("com.sun.star.sdb.TableDefinition");
+    aServices.getArray()[1] = OUString("com.sun.star.ucb.Content");
 
     return aServices;
 }
 
-Sequence< ::rtl::OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
@@ -219,11 +219,11 @@ Reference< XPropertySetInfo > SAL_CALL OComponentDefinition::getPropertySetInfo(
     return xInfo;
 }
 
-::rtl::OUString OComponentDefinition::determineContentType() const
+OUString OComponentDefinition::determineContentType() const
 {
     return m_bTable
-        ?   ::rtl::OUString( "application/vnd.org.openoffice.DatabaseTable" )
-        :   ::rtl::OUString( "application/vnd.org.openoffice.DatabaseCommandDefinition" );
+        ?   OUString( "application/vnd.org.openoffice.DatabaseTable" )
+        :   OUString( "application/vnd.org.openoffice.DatabaseCommandDefinition" );
 }
 
 Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeException)
@@ -233,7 +233,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
 
     if ( !m_pColumns.get() )
     {
-        ::std::vector< ::rtl::OUString> aNames;
+        ::std::vector< OUString> aNames;
 
         const OComponentDefinition_Impl& rDefinition( getDefinition() );
         aNames.reserve( rDefinition.size() );
@@ -249,13 +249,13 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
     return m_pColumns.get();
 }
 
-OColumn* OComponentDefinition::createColumn(const ::rtl::OUString& _rName) const
+OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
 {
     const OComponentDefinition_Impl& rDefinition( getDefinition() );
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
     if ( aFind != rDefinition.end() )
     {
-        aFind->second->addPropertyChangeListener(::rtl::OUString(),m_xColumnPropertyListener.getRef());
+        aFind->second->addPropertyChangeListener(OUString(),m_xColumnPropertyListener.getRef());
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
     OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );
@@ -274,7 +274,7 @@ void OComponentDefinition::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
     notifyDataSourceModified();
 }
 
-void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName)
+void OComponentDefinition::columnDropped(const OUString& _sName)
 {
     getDefinition().erase( _sName );
     notifyDataSourceModified();
@@ -282,7 +282,7 @@ void OComponentDefinition::columnDropped(const ::rtl::OUString& _sName)
 
 void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxSourceDescriptor )
 {
-    ::rtl::OUString sName;
+    OUString sName;
     _rxSourceDescriptor->getPropertyValue( PROPERTY_NAME ) >>= sName;
 
     Reference<XPropertySet> xColDesc = new OTableColumnDescriptor( true );

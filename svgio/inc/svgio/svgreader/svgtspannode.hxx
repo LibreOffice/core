@@ -46,7 +46,7 @@ namespace svgio
             virtual ~SvgTspanNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// access to SvgTextPositions
             const SvgTextPositions& getSvgTextPositions() const { return maSvgTextPositions; }

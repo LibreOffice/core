@@ -361,7 +361,7 @@ void SwEditShell::ApplyAutoMark()
             nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
                             SearchFlags::REG_NOT_ENDOFLINE );
         //
-        rtl::OUString sEmpty;
+        OUString sEmpty;
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
                             sEmpty, sEmpty,
@@ -371,7 +371,7 @@ void SwEditShell::ApplyAutoMark()
 
         while( !rStrm.GetError() && !rStrm.IsEof() )
         {
-            rtl::OString aRdLine;
+            OString aRdLine;
             rStrm.ReadLine( aRdLine );
 
             // # -> comment
@@ -380,7 +380,7 @@ void SwEditShell::ApplyAutoMark()
             // Leading and trailing blanks are ignored
             if( !aRdLine.isEmpty() && '#' != aRdLine[0] )
             {
-                String sLine(rtl::OStringToOUString(aRdLine, eChrSet));
+                String sLine(OStringToOUString(aRdLine, eChrSet));
 
                 sal_Int32 nTokenPos = 0;
                 String sToSelect( sLine.GetToken(0, ';', nTokenPos ) );

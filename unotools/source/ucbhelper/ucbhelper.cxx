@@ -60,13 +60,13 @@
 
 namespace {
 
-rtl::OUString canonic(rtl::OUString const & url) {
+OUString canonic(OUString const & url) {
     INetURLObject o(url);
     SAL_WARN_IF(o.HasError(), "unotools.ucbhelper", "Invalid URL \"" << url << '"');
     return o.GetMainURL(INetURLObject::NO_DECODE);
 }
 
-ucbhelper::Content content(rtl::OUString const & url) {
+ucbhelper::Content content(OUString const & url) {
     return ucbhelper::Content(
         canonic(url),
         css::uno::Reference<css::ucb::XCommandEnvironment>(),
@@ -80,12 +80,12 @@ ucbhelper::Content content(INetURLObject const & url) {
         comphelper::getProcessComponentContext());
 }
 
-std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
+std::vector<OUString> getContents(OUString const & url) {
     try {
-        std::vector<rtl::OUString> cs;
+        std::vector<OUString> cs;
         ucbhelper::Content c(content(url));
-        css::uno::Sequence<rtl::OUString> args(1);
-        args[0] = rtl::OUString("Title");
+        css::uno::Sequence<OUString> args(1);
+        args[0] = OUString("Title");
         css::uno::Reference<css::sdbc::XResultSet> res(
             c.createCursor(args, ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS),
             css::uno::UNO_SET_THROW);
@@ -106,16 +106,16 @@ std::vector<rtl::OUString> getContents(rtl::OUString const & url) {
             "unotools.ucbhelper",
             "getContents(" << url << ") " << e.getValueType().getTypeName()
                 << " \"" << e.get<css::uno::Exception>().Message << '"');
-        return std::vector<rtl::OUString>();
+        return std::vector<OUString>();
     }
 }
 
-rtl::OUString getCasePreservingUrl(INetURLObject url) {
+OUString getCasePreservingUrl(INetURLObject url) {
     return
         content(url).executeCommand(
-            rtl::OUString("getCasePreservingURL"),
+            OUString("getCasePreservingURL"),
             css::uno::Any()).
-        get<rtl::OUString>();
+        get<OUString>();
 }
 
 DateTime convert(css::util::DateTime const & dt) {
@@ -126,7 +126,7 @@ DateTime convert(css::util::DateTime const & dt) {
 
 }
 
-bool utl::UCBContentHelper::IsDocument(rtl::OUString const & url) {
+bool utl::UCBContentHelper::IsDocument(OUString const & url) {
     try {
         return content(url).isDocument();
     } catch (css::uno::RuntimeException const &) {
@@ -146,7 +146,7 @@ bool utl::UCBContentHelper::IsDocument(rtl::OUString const & url) {
 }
 
 css::uno::Any utl::UCBContentHelper::GetProperty(
-    rtl::OUString const & url, rtl::OUString const & property)
+    OUString const & url, OUString const & property)
 {
     try {
         return content(url).getPropertyValue(property);
@@ -166,7 +166,7 @@ css::uno::Any utl::UCBContentHelper::GetProperty(
     }
 }
 
-bool utl::UCBContentHelper::IsFolder(rtl::OUString const & url) {
+bool utl::UCBContentHelper::IsFolder(OUString const & url) {
     try {
         return content(url).isFolder();
     } catch (css::uno::RuntimeException const &) {
@@ -186,11 +186,11 @@ bool utl::UCBContentHelper::IsFolder(rtl::OUString const & url) {
 }
 
 bool utl::UCBContentHelper::GetTitle(
-    rtl::OUString const & url, rtl::OUString * title)
+    OUString const & url, OUString * title)
 {
     assert(title != 0);
     try {
-        return content(url).getPropertyValue(rtl::OUString("Title")) >>= *title;
+        return content(url).getPropertyValue(OUString("Title")) >>= *title;
     } catch (css::uno::RuntimeException const &) {
         throw;
     } catch (css::ucb::CommandAbortedException const &) {
@@ -207,10 +207,10 @@ bool utl::UCBContentHelper::GetTitle(
     }
 }
 
-bool utl::UCBContentHelper::Kill(rtl::OUString const & url) {
+bool utl::UCBContentHelper::Kill(OUString const & url) {
     try {
         content(url).executeCommand(
-            rtl::OUString("delete"),
+            OUString("delete"),
             css::uno::makeAny(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
@@ -230,7 +230,7 @@ bool utl::UCBContentHelper::Kill(rtl::OUString const & url) {
 }
 
 bool utl::UCBContentHelper::MakeFolder(
-    ucbhelper::Content & parent, rtl::OUString const & title,
+    ucbhelper::Content & parent, OUString const & title,
     ucbhelper::Content & result, bool exclusive)
 {
     bool exists = false;
@@ -248,8 +248,8 @@ bool utl::UCBContentHelper::MakeFolder(
                 {
                     continue;
                 }
-                css::uno::Sequence<rtl::OUString> keys(1);
-                keys[0] = rtl::OUString("Title");
+                css::uno::Sequence<OUString> keys(1);
+                keys[0] = OUString("Title");
                 css::uno::Sequence<css::uno::Any> values(1);
                 values[0] <<= title;
                 if (parent.insertNewContent(info[i].Type, keys, values, result))
@@ -293,10 +293,10 @@ bool utl::UCBContentHelper::MakeFolder(
     }
 }
 
-sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
+sal_Int64 utl::UCBContentHelper::GetSize(OUString const & url) {
     try {
         sal_Int64 n = 0;
-        bool ok = (content(url).getPropertyValue(rtl::OUString("Size")) >>= n);
+        bool ok = (content(url).getPropertyValue(OUString("Size")) >>= n);
         SAL_INFO_IF(
             !ok, "unotools.ucbhelper",
             "UCBContentHelper::GetSize(" << url
@@ -319,17 +319,17 @@ sal_Int64 utl::UCBContentHelper::GetSize(rtl::OUString const & url) {
 }
 
 bool utl::UCBContentHelper::IsYounger(
-    rtl::OUString const & younger, rtl::OUString const & older)
+    OUString const & younger, OUString const & older)
 {
     try {
         return
             convert(
                 content(younger).getPropertyValue(
-                    rtl::OUString("DateModified")).
+                    OUString("DateModified")).
                 get<css::util::DateTime>())
             > convert(
                 content(older).getPropertyValue(
-                    rtl::OUString("DateModified")).
+                    OUString("DateModified")).
                 get<css::util::DateTime>());
     } catch (css::uno::RuntimeException const &) {
         throw;
@@ -347,11 +347,11 @@ bool utl::UCBContentHelper::IsYounger(
     }
 }
 
-bool utl::UCBContentHelper::Exists(rtl::OUString const & url) {
-    rtl::OUString pathname;
+bool utl::UCBContentHelper::Exists(OUString const & url) {
+    OUString pathname;
     if (utl::LocalFileHelper::ConvertURLToPhysicalName(url, pathname)) {
         // Try to create a directory entry for the given URL:
-        rtl::OUString url2;
+        OUString url2;
         if (osl::FileBase::getFileURLFromSystemPath(pathname, url2)
             == osl::FileBase::E_None)
         {
@@ -365,15 +365,15 @@ bool utl::UCBContentHelper::Exists(rtl::OUString const & url) {
     } else {
         // Divide URL into folder and name part:
         INetURLObject o(url);
-        rtl::OUString name(
+        OUString name(
             o.getName(
                 INetURLObject::LAST_SEGMENT, true,
                 INetURLObject::DECODE_WITH_CHARSET));
         o.removeSegment();
         o.removeFinalSlash();
-        std::vector<rtl::OUString> cs(
+        std::vector<OUString> cs(
             getContents(o.GetMainURL(INetURLObject::NO_DECODE)));
-        for (std::vector<rtl::OUString>::iterator i(cs.begin()); i != cs.end();
+        for (std::vector<OUString>::iterator i(cs.begin()); i != cs.end();
              ++i)
         {
             if (INetURLObject(*i).getName(
@@ -389,7 +389,7 @@ bool utl::UCBContentHelper::Exists(rtl::OUString const & url) {
 }
 
 bool utl::UCBContentHelper::IsSubPath(
-    rtl::OUString const & parent, rtl::OUString const & child)
+    OUString const & parent, OUString const & child)
 {
     // The comparison is done in the following way:
     // - First, compare case sensitively
@@ -438,7 +438,7 @@ bool utl::UCBContentHelper::IsSubPath(
 }
 
 bool utl::UCBContentHelper::EqualURLs(
-    rtl::OUString const & url1, rtl::OUString const & url2)
+    OUString const & url1, OUString const & url2)
 {
     if (url1.isEmpty() || url2.isEmpty()) {
         return false;

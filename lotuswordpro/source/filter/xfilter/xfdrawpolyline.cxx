@@ -71,13 +71,13 @@ void XFDrawPolyline::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     //view-box:
     XFRect  rect = CalcViewBox();
-    rtl::OUString strViewBox = A2OUSTR("0 0 ");
+    OUString strViewBox = A2OUSTR("0 0 ");
     strViewBox += DoubleToOUString(rect.GetWidth()*1000) + A2OUSTR(" ");
     strViewBox += DoubleToOUString(rect.GetHeight()*1000);
     pAttrList->AddAttribute( A2OUSTR("svg:viewBox"), strViewBox);
 
     //points
-    rtl::OUString   strPoints;
+    OUString   strPoints;
     for( it = m_aPoints.begin(); it != m_aPoints.end(); ++it )
     {
         XFPoint pt = *it;

@@ -29,7 +29,6 @@ using namespace cppu;
 using namespace osl;
 
 using ::dtrans::GenericClipboard;
-using ::rtl::OUString;
 
 GenericClipboard::GenericClipboard() :
     WeakComponentImplHelper4< XClipboardEx, XClipboardNotifier, XServiceInfo, XInitialization > (m_aMutex),

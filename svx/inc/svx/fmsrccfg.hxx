@@ -54,9 +54,9 @@ namespace svxform
 
     public:
         // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                         aHistory;
-        ::rtl::OUString sSingleSearchField;
+        OUString sSingleSearchField;
 
         sal_Int16       nSearchForType;
         sal_Int16       nPosition;
@@ -101,8 +101,8 @@ namespace svxform
 
         // wrapper properties:
         // some of the members of FmSearchParams are must be translated to be stored in the configuration
-        ::rtl::OUString     m_sSearchForType;
-        ::rtl::OUString     m_sSearchPosition;
+        OUString     m_sSearchForType;
+        OUString     m_sSearchPosition;
 
         sal_Bool            m_bIsMatchCase;
         sal_Bool            m_bIsMatchFullHalfWidthForms;

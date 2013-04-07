@@ -103,7 +103,7 @@ public:
     static void RemoveFactory( SbxFactory* );
 
     static SbxBase* Create( sal_uInt16, sal_uInt32=SBXCR_SBX );
-    static SbxObject* CreateObject( const rtl::OUString& );
+    static SbxObject* CreateObject( const OUString& );
 };
 
 SV_DECL_REF(SbxBase)

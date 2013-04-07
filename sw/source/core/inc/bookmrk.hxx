@@ -49,7 +49,7 @@ namespace sw {
         public:
             virtual SwPosition& GetMarkPos() const
                 { return *m_pPos1; }
-            virtual const ::rtl::OUString& GetName() const
+            virtual const OUString& GetName() const
                 { return m_aName; }
             virtual SwPosition& GetOtherMarkPos() const
             {
@@ -77,14 +77,14 @@ namespace sw {
             virtual bool IsExpanded() const
                 { return static_cast< bool >(m_pPos2); }
 
-            virtual void SetName(const ::rtl::OUString& rName)
+            virtual void SetName(const OUString& rName)
                 { m_aName = rName; }
             virtual void SetMarkPos(const SwPosition& rNewPos);
             virtual void SetOtherMarkPos(const SwPosition& rNewPos);
             virtual void ClearOtherMarkPos()
                 { m_pPos2.reset(); }
 
-            virtual rtl::OUString ToString( ) const;
+            virtual OUString ToString( ) const;
 
             virtual void Swap()
             {
@@ -109,11 +109,11 @@ namespace sw {
             // SwClient
             virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
-            MarkBase(const SwPaM& rPaM, const ::rtl::OUString& rName);
+            MarkBase(const SwPaM& rPaM, const OUString& rName);
             ::boost::scoped_ptr<SwPosition> m_pPos1;
             ::boost::scoped_ptr<SwPosition> m_pPos2;
-            ::rtl::OUString m_aName;
-            static ::rtl::OUString GenerateNewName(const ::rtl::OUString& rPrefix);
+            OUString m_aName;
+            static OUString GenerateNewName(const OUString& rPrefix);
 
             ::com::sun::star::uno::WeakReference<
                 ::com::sun::star::text::XTextContent> m_wXBookmark;
@@ -164,15 +164,15 @@ namespace sw {
         public:
             Bookmark(const SwPaM& rPaM,
                 const KeyCode& rCode,
-                const ::rtl::OUString& rName,
-                const ::rtl::OUString& rShortName);
+                const OUString& rName,
+                const OUString& rShortName);
             virtual void InitDoc(SwDoc* const io_Doc);
 
-            virtual const ::rtl::OUString& GetShortName() const
+            virtual const OUString& GetShortName() const
                 { return m_sShortName; }
             virtual const KeyCode& GetKeyCode() const
                 { return m_aCode; }
-            virtual void SetShortName(const ::rtl::OUString& rShortName)
+            virtual void SetShortName(const OUString& rShortName)
                 { m_sShortName = rShortName; }
             virtual void SetKeyCode(const KeyCode& rCode)
                 { m_aCode = rCode; }
@@ -187,7 +187,7 @@ namespace sw {
 
         private:
             KeyCode m_aCode;
-            ::rtl::OUString m_sShortName;
+            OUString m_sShortName;
         };
 
         class Fieldmark
@@ -197,9 +197,9 @@ namespace sw {
         public:
             Fieldmark(const SwPaM& rPaM);
 
-            virtual ::rtl::OUString GetFieldname() const
+            virtual OUString GetFieldname() const
                 { return m_aFieldname; }
-            virtual ::rtl::OUString GetFieldHelptext() const
+            virtual OUString GetFieldHelptext() const
                 { return m_aFieldHelptext; }
 
             virtual IFieldmark::parameter_map_t* GetParameters()
@@ -208,19 +208,19 @@ namespace sw {
             virtual const IFieldmark::parameter_map_t* GetParameters() const
                 { return &m_vParams; }
 
-            virtual void SetFieldname(const ::rtl::OUString& aFieldname)
+            virtual void SetFieldname(const OUString& aFieldname)
                 { m_aFieldname = aFieldname; }
-            virtual void SetFieldHelptext(const ::rtl::OUString& aFieldHelptext)
+            virtual void SetFieldHelptext(const OUString& aFieldHelptext)
                 { m_aFieldHelptext = aFieldHelptext; }
 
             virtual void ReleaseDoc(SwDoc* const) = 0;
 
             virtual void Invalidate();
-            virtual rtl::OUString ToString() const;
+            virtual OUString ToString() const;
 
         private:
-            ::rtl::OUString m_aFieldname;
-            ::rtl::OUString m_aFieldHelptext;
+            OUString m_aFieldname;
+            OUString m_aFieldHelptext;
             IFieldmark::parameter_map_t m_vParams;
         };
 
@@ -244,7 +244,7 @@ namespace sw {
             bool IsChecked() const;
             void SetChecked(bool checked);
 
-            virtual rtl::OUString toString( ) const;
+            virtual OUString toString( ) const;
         };
     }
 }

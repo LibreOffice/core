@@ -38,8 +38,8 @@ class AccessibleScrollPanel
 public:
     AccessibleScrollPanel (
         ::sd::toolpanel::ScrollPanel& rScrollPanel,
-        const ::rtl::OUString& rsName,
-        const ::rtl::OUString& rsDescription);
+        const OUString& rsName,
+        const OUString& rsDescription);
     ~AccessibleScrollPanel (void);
 
     //=====  XAccessibleContext  ==============================================
@@ -59,7 +59,7 @@ public:
 
     /** Returns an identifier for the implementation of this object.
     */
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 

@@ -74,7 +74,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::animations;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -1137,9 +1136,9 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
 
 // --------------------------------------------------------------------
 
-::rtl::OUString CustomAnimationEffect::getPath() const
+OUString CustomAnimationEffect::getPath() const
 {
-    ::rtl::OUString aPath;
+    OUString aPath;
 
     if( mxNode.is() ) try
     {
@@ -1165,7 +1164,7 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
 
 // --------------------------------------------------------------------
 
-void CustomAnimationEffect::setPath( const ::rtl::OUString& rPath )
+void CustomAnimationEffect::setPath( const OUString& rPath )
 {
     if( mxNode.is() ) try
     {

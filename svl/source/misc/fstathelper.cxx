@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const rtl::OUString& rURL,
+sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const OUString& rURL,
                                         Date* pDate, Time* pTime )
 {
     sal_Bool bRet = sal_False;
@@ -59,7 +59,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const rtl::OUString& rURL,
     return bRet;
 }
 
-sal_Bool FStatHelper::IsDocument( const rtl::OUString& rURL )
+sal_Bool FStatHelper::IsDocument( const OUString& rURL )
 {
     sal_Bool bExist = sal_False;
     try
@@ -75,7 +75,7 @@ sal_Bool FStatHelper::IsDocument( const rtl::OUString& rURL )
     return bExist;
 }
 
-sal_Bool FStatHelper::IsFolder( const rtl::OUString& rURL )
+sal_Bool FStatHelper::IsFolder( const OUString& rURL )
 {
     sal_Bool bExist = sal_False;
     try

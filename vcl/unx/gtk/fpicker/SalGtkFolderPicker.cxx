@@ -70,7 +70,7 @@ void SAL_CALL SalGtkFolderPicker::disposing( const lang::EventObject& )
 {
 }
 
-void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDirectory )
+void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard g;
@@ -91,7 +91,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const rtl::OUString& aDir
         aTxt.getStr() );
 }
 
-rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -105,7 +105,7 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory() throw( uno::Run
     return aCurrentFolderName;
 }
 
-rtl::OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -119,7 +119,7 @@ rtl::OUString SAL_CALL SalGtkFolderPicker::getDirectory() throw( uno::RuntimeExc
     return aSelectedFolderName;
 }
 
-void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& /*rDescription*/ )
+void SAL_CALL SalGtkFolderPicker::setDescription( const OUString& /*rDescription*/ )
     throw( uno::RuntimeException )
 {
 }
@@ -128,13 +128,13 @@ void SAL_CALL SalGtkFolderPicker::setDescription( const rtl::OUString& /*rDescri
 // XExecutableDialog functions
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL SalGtkFolderPicker::setTitle( const rtl::OUString& aTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle ) throw( uno::RuntimeException )
 {
     SolarMutexGuard g;
 
     OSL_ASSERT( m_pDialog != NULL );
 
-    ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
+    OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
 }

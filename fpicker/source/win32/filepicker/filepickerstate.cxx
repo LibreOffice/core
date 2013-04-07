@@ -38,7 +38,6 @@
 //
 //---------------------------------------------
 
-using rtl::OUString;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
@@ -152,7 +151,7 @@ void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, s
 //
 //---------------------------------------------
 
-void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const ::rtl::OUString& aLabel )
+void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
 {
     CLabelControlCommand* label_command = new CLabelControlCommand(
         aControlId, aLabel );
@@ -207,9 +206,9 @@ OUString MatchFixBrokenPath(const OUString& path)
 //-----------------------------------------------------------------------------------------
 //
 //-----------------------------------------------------------------------------------------
-static ::rtl::OUString trimTrailingSpaces(const ::rtl::OUString& rString)
+static OUString trimTrailingSpaces(const OUString& rString)
 {
-    rtl::OUString aResult(rString);
+    OUString aResult(rString);
 
     sal_Int32 nIndex = rString.lastIndexOf(' ');
     if (nIndex == rString.getLength()-1)
@@ -219,7 +218,7 @@ static ::rtl::OUString trimTrailingSpaces(const ::rtl::OUString& rString)
         if (nIndex >= 0)
             aResult = rString.copy(0,nIndex+1);
         else
-            aResult = ::rtl::OUString();
+            aResult = OUString();
     }
     return aResult;
 }

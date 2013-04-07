@@ -50,7 +50,7 @@ public:
     virtual ~AccessibleChartShape();
 
     // ________ XServiceInfo ________
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ________ XAccessibleContext ________
@@ -62,9 +62,9 @@ public:
                ::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+    virtual OUString SAL_CALL getAccessibleDescription()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getAccessibleName()
+    virtual OUString SAL_CALL getAccessibleName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ________ XAccessibleComponent ________
@@ -81,9 +81,9 @@ public:
     // ________ XAccessibleExtendedComponent ________
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTitledBorderText()
+    virtual OUString SAL_CALL getTitledBorderText()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getToolTipText()
+    virtual OUString SAL_CALL getToolTipText()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:

@@ -52,13 +52,13 @@ long NumEditAction::Notify( NotifyEvent& rNEvt )
 
 NoSpaceEdit::NoSpaceEdit( Window* pParent, const ResId& rResId)
     : Edit(pParent, rResId)
-    , sForbiddenChars(rtl::OUString(" "))
+    , sForbiddenChars(OUString(" "))
 {
 }
 
 NoSpaceEdit::NoSpaceEdit(Window* pParent)
     : Edit(pParent, WB_BORDER|WB_TABSTOP)
-    , sForbiddenChars(rtl::OUString(" "))
+    , sForbiddenChars(OUString(" "))
 {
 }
 
@@ -71,7 +71,7 @@ void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
     bool bCallParent = true;
     if(rEvt.GetCharCode())
     {
-        rtl::OUString sKey(rEvt.GetCharCode());
+        OUString sKey(rEvt.GetCharCode());
         if( STRING_NOTFOUND != sForbiddenChars.Search(sKey))
             bCallParent = false;
     }

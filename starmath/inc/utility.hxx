@@ -89,7 +89,7 @@ public:
         Font(), nBorderWidth(-1) { Impl_Init(); }
     SmFace(const Font& rFont) :
         Font(rFont), nBorderWidth(-1) { Impl_Init(); }
-    SmFace(const rtl::OUString& rName, const Size& rSize) :
+    SmFace(const OUString& rName, const Size& rSize) :
         Font(rName, rSize), nBorderWidth(-1) { Impl_Init(); }
     SmFace( FontFamily eFamily, const Size& rSize) :
         Font(eFamily, rSize), nBorderWidth(-1) { Impl_Init(); }

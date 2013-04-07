@@ -38,7 +38,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -280,7 +279,7 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 
 
 com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
-        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt )
+        const OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< OUString > &rAlt )
 {
     SpellAlternatives* pAlt = new SpellAlternatives;
     pAlt->SetWordLanguage( rWord, nLang );

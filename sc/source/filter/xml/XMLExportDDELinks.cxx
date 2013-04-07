@@ -32,7 +32,6 @@ class ScMatrix;
 
 using namespace com::sun::star;
 using namespace xmloff::token;
-using ::rtl::OUStringBuffer;
 
 ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
     : rExport(rTempExport)
@@ -123,7 +122,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
     uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
     if (xPropertySet.is())
     {
-        uno::Reference<container::XIndexAccess> xIndex(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DDELINKS))), uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndex(xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DDELINKS))), uno::UNO_QUERY);
         if (xIndex.is())
         {
             sal_Int32 nCount = xIndex->getCount();

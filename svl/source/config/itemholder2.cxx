@@ -52,8 +52,8 @@ ItemHolder2::ItemHolder2()
         if(bMessage)
         {
             bMessage = sal_False;
-            ::rtl::OString sMsg("CreateInstance with arguments exception: ");
-            sMsg += ::rtl::OString(rEx.Message.getStr(),
+            OString sMsg("CreateInstance with arguments exception: ");
+            sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
             OSL_FAIL(sMsg.getStr());

@@ -39,7 +39,7 @@ struct ScXMLExternalTabData
 
 class ScXMLTableContext : public SvXMLImportContext
 {
-    rtl::OUString   sPrintRanges;
+    OUString   sPrintRanges;
     ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
     sal_Int32       nStartOffset;
     bool            bStartFormPage;
@@ -51,14 +51,14 @@ class ScXMLTableContext : public SvXMLImportContext
 public:
 
     ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -73,14 +73,14 @@ class ScXMLTableProtectionContext : public SvXMLImportContext
 
 public:
     ScXMLTableProtectionContext( ScXMLImport& rImport, sal_uInt16 nPrefix,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableProtectionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

@@ -90,7 +90,7 @@ namespace frm
         if  (   ( nOldLength != m_aOldValues.getLength() )
             ||  ( nOldLength != m_aNewValues.getLength() )
             )
-            throw RuntimeException( ::rtl::OUString(), m_rModel );
+            throw RuntimeException( OUString(), m_rModel );
 
         m_aHandles.realloc( nOldLength + 1 );
         m_aHandles[ nOldLength ] = _nHandle;
@@ -132,7 +132,7 @@ namespace frm
 //=============================================================================
 DBG_NAME(frm_OControl)
 //------------------------------------------------------------------------------
-OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+OControl::OControl( const Reference< XMultiServiceFactory >& _rxFactory, const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
             :OComponentHelper(m_aMutex)
             ,m_aContext( _rxFactory )
 {
@@ -241,10 +241,10 @@ void OControl::disposing()
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName) throw ( RuntimeException)
+sal_Bool SAL_CALL OControl::supportsService(const OUString& _rsServiceName) throw ( RuntimeException)
 {
-    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
-    const rtl::OUString* pSupported = aSupported.getConstArray();
+    Sequence<OUString> aSupported = getSupportedServiceNames();
+    const OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rsServiceName))
             return sal_True;
@@ -252,9 +252,9 @@ sal_Bool SAL_CALL OControl::supportsService(const rtl::OUString& _rsServiceName)
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OControl::getAggregateServiceNames()
+Sequence< OUString > OControl::getAggregateServiceNames()
 {
-    Sequence< ::rtl::OUString > aAggServices;
+    Sequence< OUString > aAggServices;
     Reference< XServiceInfo > xInfo;
     if ( query_aggregation( m_xAggregate, xInfo ) )
         aAggServices = xInfo->getSupportedServiceNames();
@@ -262,7 +262,7 @@ Sequence< ::rtl::OUString > OControl::getAggregateServiceNames()
 }
 
 //------------------------------------------------------------------------------
-Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
+Sequence<OUString> SAL_CALL OControl::getSupportedServiceNames() throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -271,10 +271,10 @@ Sequence<rtl::OUString> SAL_CALL OControl::getSupportedServiceNames() throw(Runt
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString > SAL_CALL OControl::getSupportedServiceNames_Static() throw( RuntimeException )
 {
     // no own supported service names
-    return Sequence< ::rtl::OUString >();
+    return Sequence< OUString >();
 }
 
 // XEventListener
@@ -391,7 +391,7 @@ sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException)
 DBG_NAME(frm_OBoundControl);
 //------------------------------------------------------------------
 OBoundControl::OBoundControl( const Reference< XMultiServiceFactory >& _rxFactory,
-            const ::rtl::OUString& _rAggregateService, const sal_Bool _bSetDelegator )
+            const OUString& _rAggregateService, const sal_Bool _bSetDelegator )
     :OControl( _rxFactory, _rAggregateService, _bSetDelegator )
     ,m_bLocked(sal_False)
     ,m_aOriginalFont( EmptyFontDescriptor() )
@@ -542,7 +542,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
 //------------------------------------------------------------------------------
 void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
 {
-    ::rtl::OUString sHelpText;
+    OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
     try
     {
@@ -558,7 +558,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
 //------------------------------------------------------------------------------
 void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream)
 {
-    ::rtl::OUString sHelpText;
+    OUString sHelpText;
     try
     {
         if (m_xAggregateSet.is())
@@ -574,8 +574,8 @@ void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XO
 //------------------------------------------------------------------
 OControlModel::OControlModel(
                         const Reference<com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-            const ::rtl::OUString& _rUnoControlModelTypeName,
-            const ::rtl::OUString& rDefault, const sal_Bool _bSetDelegator)
+            const OUString& _rUnoControlModelTypeName,
+            const OUString& rDefault, const sal_Bool _bSetDelegator)
     :OComponentHelper(m_aMutex)
     ,OPropertySetAggregationHelper(OComponentHelper::rBHelper)
     ,m_aContext( _rxFactory )
@@ -723,25 +723,25 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
 
 // XNamed
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
+OUString SAL_CALL OControlModel::getName() throw(RuntimeException)
 {
-    ::rtl::OUString aReturn;
+    OUString aReturn;
     OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
     return aReturn;
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControlModel::setName(const ::rtl::OUString& _rName) throw(RuntimeException)
+void SAL_CALL OControlModel::setName(const OUString& _rName) throw(RuntimeException)
 {
         setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
 }
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceName) throw ( RuntimeException)
+sal_Bool SAL_CALL OControlModel::supportsService(const OUString& _rServiceName) throw ( RuntimeException)
 {
-    Sequence<rtl::OUString> aSupported = getSupportedServiceNames();
-    const rtl::OUString* pSupported = aSupported.getConstArray();
+    Sequence<OUString> aSupported = getSupportedServiceNames();
+    const OUString* pSupported = aSupported.getConstArray();
     for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
         if (pSupported->equals(_rServiceName))
             return sal_True;
@@ -749,9 +749,9 @@ sal_Bool SAL_CALL OControlModel::supportsService(const rtl::OUString& _rServiceN
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
+Sequence< OUString > OControlModel::getAggregateServiceNames()
 {
-    Sequence< ::rtl::OUString > aAggServices;
+    Sequence< OUString > aAggServices;
     Reference< XServiceInfo > xInfo;
     if ( query_aggregation( m_xAggregate, xInfo ) )
         aAggServices = xInfo->getSupportedServiceNames();
@@ -759,7 +759,7 @@ Sequence< ::rtl::OUString > OControlModel::getAggregateServiceNames()
 }
 
 //------------------------------------------------------------------------------
-Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
+Sequence<OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
         getAggregateServiceNames(),
@@ -768,11 +768,11 @@ Sequence<rtl::OUString> SAL_CALL OControlModel::getSupportedServiceNames() throw
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString > SAL_CALL OControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aServiceNames( 2 );
+    Sequence< OUString > aServiceNames( 2 );
     aServiceNames[ 0 ] = FRM_SUN_FORMCOMPONENT;
-    aServiceNames[ 1 ] = ::rtl::OUString("com.sun.star.form.FormControlModel");
+    aServiceNames[ 1 ] = OUString("com.sun.star.form.FormControlModel");
     return aServiceNames;
 }
 
@@ -964,7 +964,7 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         case PROPERTY_ID_NAME:
         case PROPERTY_ID_TAG:
-            aReturn <<= ::rtl::OUString();
+            aReturn <<= OUString();
             break;
 
         case PROPERTY_ID_CLASSID:
@@ -1064,12 +1064,12 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
     switch (_nHandle)
     {
         case PROPERTY_ID_NAME:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const ::rtl::OUString*)NULL),
+            DBG_ASSERT(_rValue.getValueType() == getCppuType((const OUString*)NULL),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_aName;
             break;
         case PROPERTY_ID_TAG:
-            DBG_ASSERT(_rValue.getValueType() == getCppuType((const ::rtl::OUString*)NULL),
+            DBG_ASSERT(_rValue.getValueType() == getCppuType((const OUString*)NULL),
                 "OControlModel::setFastPropertyValue_NoBroadcast : invalid type" );
             _rValue >>= m_aTag;
             break;
@@ -1098,9 +1098,9 @@ void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES( 5 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
-        DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
+        DECL_PROP1      (NAME,        OUString,  BOUND);
         DECL_BOOL_PROP2 (NATIVE_LOOK,                   BOUND, TRANSIENT);
-        DECL_PROP1      (TAG,         ::rtl::OUString,  BOUND);
+        DECL_PROP1      (TAG,         OUString,  BOUND);
         DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
     END_DESCRIBE_PROPERTIES()
 }
@@ -1148,13 +1148,13 @@ Reference< XPropertySetInfo> SAL_CALL OControlModel::getPropertySetInfo() throw(
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OControlModel::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+void SAL_CALL OControlModel::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
     m_aPropertyBagHelper.addProperty( _rName, _nAttributes, _rInitialValue );
 }
 
 //--------------------------------------------------------------------
-void SAL_CALL OControlModel::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+void SAL_CALL OControlModel::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
     m_aPropertyBagHelper.removeProperty( _rName );
 }
@@ -1228,7 +1228,7 @@ Any SAL_CALL OBoundControlModel::queryAggregation( const Type& _rType ) throw (R
 //------------------------------------------------------------------
 OBoundControlModel::OBoundControlModel(
         const Reference< XMultiServiceFactory>& _rxFactory,
-        const ::rtl::OUString& _rUnoControlModelTypeName, const ::rtl::OUString& _rDefault,
+        const OUString& _rUnoControlModelTypeName, const OUString& _rDefault,
         const sal_Bool _bCommitable, const sal_Bool _bSupportExternalBinding, const sal_Bool _bSupportsValidation )
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, sal_False )
     ,OPropertyChangeListener( m_aMutex )
@@ -1387,7 +1387,7 @@ void OBoundControlModel::implInitValuePropertyListening( ) const
 }
 
 //-----------------------------------------------------------------------------
-void OBoundControlModel::initOwnValueProperty( const ::rtl::OUString& i_rValuePropertyName )
+void OBoundControlModel::initOwnValueProperty( const OUString& i_rValuePropertyName )
 {
     OSL_PRECOND( m_sValuePropertyName.isEmpty() && -1 == m_nValuePropertyAggregateHandle,
         "OBoundControlModel::initOwnValueProperty: value property is already initialized!" );
@@ -1396,7 +1396,7 @@ void OBoundControlModel::initOwnValueProperty( const ::rtl::OUString& i_rValuePr
 }
 
 //-----------------------------------------------------------------------------
-void OBoundControlModel::initValueProperty( const ::rtl::OUString& _rValuePropertyName, sal_Int32 _nValuePropertyExternalHandle )
+void OBoundControlModel::initValueProperty( const OUString& _rValuePropertyName, sal_Int32 _nValuePropertyExternalHandle )
 {
     OSL_PRECOND( m_sValuePropertyName.isEmpty() && -1 == m_nValuePropertyAggregateHandle,
         "OBoundControlModel::initValueProperty: value property is already initialized!" );
@@ -1540,7 +1540,7 @@ void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) th
 }
 
 //------------------------------------------------------------------------------
-void OBoundControlModel::startAggregatePropertyListening( const ::rtl::OUString& _rPropertyName )
+void OBoundControlModel::startAggregatePropertyListening( const OUString& _rPropertyName )
 {
     OSL_PRECOND( m_pAggPropMultiplexer, "OBoundControlModel::startAggregatePropertyListening: no multiplexer!" );
     OSL_ENSURE( !_rPropertyName.isEmpty(), "OBoundControlModel::startAggregatePropertyListening: invalid property name!" );
@@ -1653,10 +1653,10 @@ StringSequence SAL_CALL OBoundControlModel::getSupportedServiceNames() throw(Run
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Static() throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > aOwnServiceNames( 1 );
-    aOwnServiceNames[ 0 ] = ::rtl::OUString("com.sun.star.form.DataAwareControlModel");
+    Sequence< OUString > aOwnServiceNames( 1 );
+    aOwnServiceNames[ 0 ] = OUString("com.sun.star.form.DataAwareControlModel");
 
     return ::comphelper::concatSequences(
         OControlModel::getSupportedServiceNames_Static(),
@@ -1843,7 +1843,7 @@ Any OBoundControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             break;
 
         case PROPERTY_ID_CONTROLSOURCE:
-            aDefault <<= ::rtl::OUString();
+            aDefault <<= OUString();
             break;
 
         case PROPERTY_ID_CONTROLLABEL:
@@ -1949,7 +1949,7 @@ void SAL_CALL OBoundControlModel::propertyChange( const PropertyChangeEvent& evt
         OSL_ENSURE( evt.Source == m_xExternalBinding, "OBoundControlModel::propertyChange: where did this come from?" );
 
         // our binding has properties which can control properties of ourself
-        ::rtl::OUString sBindingControlledProperty;
+        OUString sBindingControlledProperty;
         bool bForwardToLabelControl = false;
         if ( evt.PropertyName.equals( PROPERTY_READONLY ) )
         {
@@ -3058,10 +3058,10 @@ void OBoundControlModel::recheckValidity( bool _bForceNotification )
 void OBoundControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OControlModel )
-        DECL_PROP1      ( CONTROLSOURCE,           ::rtl::OUString,     BOUND );
+        DECL_PROP1      ( CONTROLSOURCE,           OUString,     BOUND );
         DECL_IFACE_PROP3( BOUNDFIELD,               XPropertySet,       BOUND, READONLY, TRANSIENT );
         DECL_IFACE_PROP2( CONTROLLABEL,             XPropertySet,       BOUND, MAYBEVOID );
-        DECL_PROP2      ( CONTROLSOURCEPROPERTY,    ::rtl::OUString,    READONLY, TRANSIENT );
+        DECL_PROP2      ( CONTROLSOURCEPROPERTY,    OUString,    READONLY, TRANSIENT );
         DECL_BOOL_PROP1 ( INPUT_REQUIRED,                               BOUND );
     END_DESCRIBE_PROPERTIES()
 }

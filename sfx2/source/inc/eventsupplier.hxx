@@ -57,7 +57,7 @@ class SvxMacro;
 
 class SfxEvents_Impl : public ::cppu::WeakImplHelper2< css::container::XNameReplace, css::document::XEventListener  >
 {
-    css::uno::Sequence< ::rtl::OUString >     maEventNames;
+    css::uno::Sequence< OUString >     maEventNames;
     css::uno::Sequence< css::uno::Any >                 maEventData;
     css::uno::Reference< css::document::XEventBroadcaster >  mxBroadcaster;
     ::osl::Mutex                    maMutex;
@@ -71,16 +71,16 @@ public:
                                ~SfxEvents_Impl();
 
     //  --- XNameReplace ---
-    virtual void SAL_CALL       replaceByName( const ::rtl::OUString & aName, const css::uno::Any & aElement )
+    virtual void SAL_CALL       replaceByName( const OUString & aName, const css::uno::Any & aElement )
                                     throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException,
                                            css::lang::WrappedTargetException, css::uno::RuntimeException );
 
     //  --- XNameAccess ( parent of XNameReplace ) ---
-    virtual css::uno::Any SAL_CALL        getByName( const ::rtl::OUString& aName )
+    virtual css::uno::Any SAL_CALL        getByName( const OUString& aName )
                                     throw( css::container::NoSuchElementException, css::lang::WrappedTargetException,
                                            css::uno::RuntimeException );
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw ( css::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL   hasByName( const ::rtl::OUString& aName ) throw ( css::uno::RuntimeException );
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw ( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   hasByName( const OUString& aName ) throw ( css::uno::RuntimeException );
 
     //  --- XElementAccess ( parent of XNameAccess ) ---
     virtual css::uno::Type SAL_CALL    getElementType() throw ( css::uno::RuntimeException );
@@ -181,7 +181,7 @@ public:
     // css.document.XDocumentEventBroadcaster
     virtual void SAL_CALL addDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeDocumentEventListener( const css::uno::Reference< css::document::XDocumentEventListener >& _Listener ) throw (css::uno::RuntimeException);
-    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& _EventName, const css::uno::Reference< css::frame::XController2 >& _ViewController, const css::uno::Any& _Supplement ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException);
 
     // css.document.XEventListener
     virtual void SAL_CALL notifyEvent(const css::document::EventObject& aEvent)

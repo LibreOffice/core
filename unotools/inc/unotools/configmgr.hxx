@@ -39,27 +39,27 @@ namespace utl {
 
 class UNOTOOLS_DLLPUBLIC ConfigManager: private boost::noncopyable {
 public:
-    static rtl::OUString getAboutBoxProductVersion();
+    static OUString getAboutBoxProductVersion();
 
-    static rtl::OUString getAboutBoxProductVersionSuffix();
+    static OUString getAboutBoxProductVersionSuffix();
 
-    static rtl::OUString getDefaultCurrency();
+    static OUString getDefaultCurrency();
 
-    static rtl::OUString getLocale();
+    static OUString getLocale();
 
-    static rtl::OUString getProductExtension();
+    static OUString getProductExtension();
 
-    static rtl::OUString getProductName();
+    static OUString getProductName();
 
-    static rtl::OUString getProductXmlFileFormat();
+    static OUString getProductXmlFileFormat();
 
-    static rtl::OUString getProductXmlFileFormatVersion();
+    static OUString getProductXmlFileFormatVersion();
 
-    static rtl::OUString getProductVersion();
+    static OUString getProductVersion();
 
-    static rtl::OUString getVendor();
+    static OUString getVendor();
 
-    static rtl::OUString getWriterCompatibilityVersionOOo_1_1();
+    static OUString getWriterCompatibilityVersionOOo_1_1();
 
     static void storeConfigItems();
 

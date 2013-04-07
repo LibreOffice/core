@@ -51,7 +51,7 @@ OEvoabPreparedStatement::OEvoabPreparedStatement( OEvoabConnection* _pConnection
 }
 
 // -----------------------------------------------------------------------------
-void OEvoabPreparedStatement::construct( const ::rtl::OUString& _sql )
+void OEvoabPreparedStatement::construct( const OUString& _sql )
 {
     m_sSqlStatement = _sql;
 
@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const ::rtl::OUString& /*x*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setString", *this );
 }
@@ -260,7 +260,7 @@ void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterI
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setObjectNull", *this );
 }
@@ -270,9 +270,9 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( getOwnConnection()->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                "$position$", OUString::valueOf(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

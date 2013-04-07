@@ -134,7 +134,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
     }
     else
     {
-        rtl::OUString aUrl( GetPath() );
+        OUString aUrl( GetPath() );
         if ( !aUrl.isEmpty() )
         {
             try
@@ -305,25 +305,25 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 {
     String aDescr;
     aDescr = String(SdResId(STR_ALL_FILES));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.*"));
+    mpImpl->AddFilter( aDescr, OUString("*.*"));
 
     // setup filter
 #if defined UNX
     aDescr = String(SdResId(STR_AU_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.au;*.snd" ));
+    mpImpl->AddFilter( aDescr, OUString("*.au;*.snd" ));
     aDescr = String(SdResId(STR_VOC_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.voc" ));
+    mpImpl->AddFilter( aDescr, OUString("*.voc" ));
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.wav" ));
+    mpImpl->AddFilter( aDescr, OUString("*.wav" ));
     aDescr = String(SdResId(STR_AIFF_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.aiff" ));
+    mpImpl->AddFilter( aDescr, OUString("*.aiff" ));
     aDescr = String(SdResId(STR_SVX_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.svx" ));
+    mpImpl->AddFilter( aDescr, OUString("*.svx" ));
 #else
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.wav;*.mp3;*.ogg" ));
+    mpImpl->AddFilter( aDescr, OUString("*.wav;*.mp3;*.ogg" ));
     aDescr = String(SdResId(STR_MIDI_FILE));
-    mpImpl->AddFilter( aDescr, rtl::OUString("*.mid" ));
+    mpImpl->AddFilter( aDescr, OUString("*.mid" ));
 #endif
 }
 

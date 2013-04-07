@@ -39,13 +39,13 @@ jclass java_lang_Class::getMyClass() const
     return theClass;
 }
 
-java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
+java_lang_Class * java_lang_Class::forName( const OUString& _par0 )
 {
     jobject out(NULL);
     SDBThreadAttach t;
 
     {
-        ::rtl::OString sClassName = ::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
+        OString sClassName = OUStringToOString(_par0, RTL_TEXTENCODING_JAVA_UTF8);
         sClassName = sClassName.replace('.','/');
         out = t.pEnv->FindClass(sClassName.getStr());
         ThrowSQLException(t.pEnv,0);

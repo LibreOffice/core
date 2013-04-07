@@ -61,8 +61,8 @@ public:
      * @return source range.
      */
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
-    SC_DLLPUBLIC void SetRangeName(const ::rtl::OUString& rName);
-    SC_DLLPUBLIC const ::rtl::OUString& GetRangeName() const;
+    SC_DLLPUBLIC void SetRangeName(const OUString& rName);
+    SC_DLLPUBLIC const OUString& GetRangeName() const;
     bool HasRangeName() const;
     void SetQueryParam(const ScQueryParam& rParam);
     const ScQueryParam& GetQueryParam() const;
@@ -80,7 +80,7 @@ public:
 
 private:
     mutable ScRange maSourceRange;
-    ::rtl::OUString maRangeName;
+    OUString maRangeName;
     ScQueryParam    maQueryParam;
     ScDocument*     mpDoc;
 };
@@ -102,7 +102,7 @@ public:
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
-    virtual rtl::OUString           getDimensionName(long nColumn);
+    virtual OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual sal_uLong                   GetNumberFormat(long nDim);

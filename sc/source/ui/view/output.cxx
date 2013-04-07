@@ -91,8 +91,8 @@ class ScActionColorChanger
 {
 private:
     const ScAppOptions&     rOpt;
-    const std::set<rtl::OUString>& rUsers;
-    rtl::OUString           aLastUserName;
+    const std::set<OUString>& rUsers;
+    OUString           aLastUserName;
     size_t                  nLastUserIndex;
     ColorData               nColor;
 
@@ -143,7 +143,7 @@ void ScActionColorChanger::Update( const ScChangeAction& rAction )
         if (!aLastUserName.equals(rAction.GetUser()))
         {
             aLastUserName = rAction.GetUser();
-            std::set<rtl::OUString>::const_iterator it = rUsers.find(aLastUserName);
+            std::set<OUString>::const_iterator it = rUsers.find(aLastUserName);
             if (it == rUsers.end())
             {
                 // empty string is possible if a name wasn't found while saving a 5.0 file

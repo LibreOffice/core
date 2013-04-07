@@ -44,14 +44,14 @@ public:
     virtual             ~VbaSiteModel();
 
     /** Allows to set single properties specified by XML token identifier. */
-    void                importProperty( sal_Int32 nPropId, const ::rtl::OUString& rValue );
+    void                importProperty( sal_Int32 nPropId, const OUString& rValue );
     /** Imports the site model data from the passed input stream. */
     bool                importBinaryModel( BinaryInputStream& rInStrm );
     /** Moves the control relative to its current position by the passed distance. */
     void                moveRelative( const AxPairData& rDistance );
 
     /** Returns the programmatical name of the control. */
-    inline const ::rtl::OUString& getName() const { return maName; }
+    inline const OUString& getName() const { return maName; }
     /** Returns the position of the control in its parent. */
     inline const AxPairData& getPosition() const { return maPos; }
     /** Returns the unique identifier of this control. */
@@ -61,7 +61,7 @@ public:
     /** Returns the length of the stream data for stream based controls. */
     sal_uInt32          getStreamLength() const;
     /** Returns the name of the substorage for the container control data. */
-    ::rtl::OUString     getSubStorageName() const;
+    OUString     getSubStorageName() const;
     /** Returns the tab index of the control. */
     inline sal_Int16    getTabIndex() const { return mnTabIndex; }
 
@@ -75,11 +75,11 @@ public:
                             sal_Int32 nCtrlIndex ) const;
 
 protected:
-    ::rtl::OUString     maName;             ///< Name of the control.
-    ::rtl::OUString     maTag;              ///< User defined tag.
-    ::rtl::OUString     maToolTip;          ///< Tool tip for the control.
-    ::rtl::OUString     maControlSource;    ///< Linked cell for the control value in a spreadsheet.
-    ::rtl::OUString     maRowSource;        ///< Source data for the control in a spreadsheet.
+    OUString     maName;             ///< Name of the control.
+    OUString     maTag;              ///< User defined tag.
+    OUString     maToolTip;          ///< Tool tip for the control.
+    OUString     maControlSource;    ///< Linked cell for the control value in a spreadsheet.
+    OUString     maRowSource;        ///< Source data for the control in a spreadsheet.
 
     AxPairData          maPos;              ///< Position in parent container.
     sal_Int32           mnId;               ///< Control identifier.
@@ -116,7 +116,7 @@ public:
                             const AxClassTable& rClassTable );
 
     /** Returns the programmatical name of the control. */
-    ::rtl::OUString     getControlName() const;
+    OUString     getControlName() const;
 
     /** Creates the UNO control model, inserts it into the passed container,
         and converts all control properties. */
@@ -186,7 +186,7 @@ public:
     void                importForm(
                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxDialogLib,
                            StorageBase& rVbaFormStrg,
-                           const ::rtl::OUString& rModuleName,
+                           const OUString& rModuleName,
                            rtl_TextEncoding eTextEnc );
 
 private:

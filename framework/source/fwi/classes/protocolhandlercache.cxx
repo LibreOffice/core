@@ -49,7 +49,7 @@ namespace framework{
     @return     An iterator which points to the found item inside the hash or PatternHash::end()
                 if no pattern match this given <var>sURL</var>.
  */
-PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
+PatternHash::iterator PatternHash::findPatternKey( const OUString& sURL )
 {
     PatternHash::iterator pItem = this->begin();
     while( pItem!=this->end() )
@@ -139,7 +139,7 @@ HandlerCache::~HandlerCache()
     @descr      It frees all used memory. In further implementations (may if we support write access too)
                 it's a good place to flush changes back to the configuration - but not needed yet.
  */
-sal_Bool HandlerCache::search( const ::rtl::OUString& sURL, ProtocolHandler* pReturn ) const
+sal_Bool HandlerCache::search( const OUString& sURL, ProtocolHandler* pReturn ) const
 {
     sal_Bool bFound = sal_False;
     /* SAFE */{
@@ -198,10 +198,10 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     @param      sPackage
                 specifies the package name of the configuration data which should be used
  */
-HandlerCFGAccess::HandlerCFGAccess( const ::rtl::OUString& sPackage )
+HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
     : ConfigItem( sPackage )
 {
-    css::uno::Sequence< ::rtl::OUString > lListenPaths(1);
+    css::uno::Sequence< OUString > lListenPaths(1);
     lListenPaths[0] = SETNAME_HANDLER;
     EnableNotification(lListenPaths);
 }
@@ -223,18 +223,18 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
                              PatternHash** ppPattern )
 {
     // list of all uno implementation names without encoding
-    css::uno::Sequence< ::rtl::OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::CONFIG_NAME_LOCAL_PATH );
+    css::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::CONFIG_NAME_LOCAL_PATH );
     sal_Int32 nSourceCount = lNames.getLength();
     sal_Int32 nTargetCount = nSourceCount;
     // list of all full qualified path names of configuration entries
-    css::uno::Sequence< ::rtl::OUString > lFullNames ( nTargetCount );
+    css::uno::Sequence< OUString > lFullNames ( nTargetCount );
 
     // expand names to full path names
     sal_Int32 nSource=0;
     sal_Int32 nTarget=0;
     for( nSource=0; nSource<nSourceCount; ++nSource )
     {
-        ::rtl::OUStringBuffer sPath( SETNAME_HANDLER );
+        OUStringBuffer sPath( SETNAME_HANDLER );
         sPath.append(CFG_PATH_SEPERATOR);
         sPath.append(lNames[nSource]);
         sPath.append(CFG_PATH_SEPERATOR);
@@ -257,7 +257,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
         aHandler.m_sUNOName = ::utl::extractFirstFromConfigurationPath(lNames[nSource]);
 
         // unpack all values of this handler
-        css::uno::Sequence< ::rtl::OUString > lTemp;
+        css::uno::Sequence< OUString > lTemp;
         lValues[nTarget] >>= lTemp;
         aHandler.m_lProtocols = Converter::convert_seqOUString2OUStringList(lTemp);
 
@@ -276,7 +276,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
 }
 
 //_________________________________________________________________________________________________________________
-void HandlerCFGAccess::Notify(const css::uno::Sequence< rtl::OUString >& /*lPropertyNames*/)
+void HandlerCFGAccess::Notify(const css::uno::Sequence< OUString >& /*lPropertyNames*/)
 {
     HandlerHash* pHandler = new HandlerHash;
     PatternHash* pPattern = new PatternHash;

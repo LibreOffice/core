@@ -94,7 +94,7 @@ public:
     const SfxFilter*    GetFilter4FilterName( const String& rName, SfxFilterFlags nMust = 0, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
 
     SAL_DLLPRIVATE static void ReadFilters_Impl( sal_Bool bUpdate=sal_False );
-    SAL_DLLPRIVATE static void ReadSingleFilter_Impl( const ::rtl::OUString& rName,
+    SAL_DLLPRIVATE static void ReadSingleFilter_Impl( const OUString& rName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xTypeCFG,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                             sal_Bool bUpdate );
@@ -120,7 +120,7 @@ public:
     sal_uInt32               GuessFilterControlDefaultUI( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED, sal_Bool bDefUI = sal_True ) const;
     sal_uInt32               DetectFilter( SfxMedium& rMedium, const SfxFilter **, sal_Bool bPlugIn, sal_Bool bAPI = sal_False ) const;
 
-    const SfxFilter*    GetFilter4Mime( const ::rtl::OUString& rMime, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED) const;
+    const SfxFilter*    GetFilter4Mime( const OUString& rMime, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED) const;
     const SfxFilter*    GetFilter4ClipBoardId( sal_uInt32 nId, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4EA( const String& rEA, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;
     const SfxFilter*    GetFilter4Extension( const String& rExt, SfxFilterFlags nMust = SFX_FILTER_IMPORT, SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED ) const;

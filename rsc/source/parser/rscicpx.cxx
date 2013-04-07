@@ -33,7 +33,7 @@
 #include <rsclex.hxx>
 #include <rscyacc.hxx>
 
-void RscTypCont::InsWinBit( RscTop * pClass, const rtl::OString& rName,
+void RscTypCont::InsWinBit( RscTop * pClass, const OString& rName,
                             Atom nVal )
 {
     RscClient * pClient;

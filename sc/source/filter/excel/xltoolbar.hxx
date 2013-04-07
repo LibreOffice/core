@@ -79,7 +79,7 @@ public:
     bool IsMenuToolbar();
     bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
     bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
-    rtl::OUString GetName() { return tb.getName().getString(); }
+    OUString GetName() { return tb.getName().getString(); }
 
 
 };
@@ -115,7 +115,7 @@ public:
     bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
-    ScCTB* GetCustomizationData( const rtl::OUString& name );
+    ScCTB* GetCustomizationData( const OUString& name );
 };
 
 

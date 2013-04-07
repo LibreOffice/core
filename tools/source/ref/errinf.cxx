@@ -177,10 +177,10 @@ public:
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
-    rtl::OStringBuffer aErr("Aktion: ");
-    aErr.append(rtl::OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
+    OStringBuffer aErr("Aktion: ");
+    aErr.append(OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
     aErr.append(" Fehler: ");
-    aErr.append(rtl::OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
+    aErr.append(OUStringToOString(rErr, RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL(aErr.getStr());
 }
 
@@ -307,10 +307,10 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         {
             if(!pData->pDsp)
             {
-                rtl::OStringBuffer aStr("Action: ");
-                aStr.append(rtl::OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
+                OStringBuffer aStr("Action: ");
+                aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
                 aStr.append("\nFehler: ");
-                aStr.append(rtl::OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
+                aStr.append(OUStringToOString(aErr, RTL_TEXTENCODING_ASCII_US));
                 OSL_FAIL(aStr.getStr());
             }
             else
@@ -377,7 +377,7 @@ sal_Bool SimpleErrorHandler::CreateString(
     const ErrorInfo *pInfo, OUString &rStr, sal_uInt16 &) const
 {
     sal_uIntPtr nId = pInfo->GetErrorCode();
-    rtl::OStringBuffer aStr("Id ");
+    OStringBuffer aStr("Id ");
     aStr.append(static_cast<sal_Int32>(nId));
     aStr.append(" only handled by SimpleErrorHandler");
     aStr.append("\nErrorCode: ");
@@ -395,7 +395,7 @@ sal_Bool SimpleErrorHandler::CreateString(
         aStr.append("\nDId ");
         aStr.append(static_cast<sal_Int32>(*pDyn));
     }
-    rStr = rtl::OStringToOUString(aStr.makeStringAndClear(),
+    rStr = OStringToOUString(aStr.makeStringAndClear(),
         RTL_TEXTENCODING_ASCII_US);
     return sal_True;
 }

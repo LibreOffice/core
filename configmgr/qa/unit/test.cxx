@@ -58,15 +58,15 @@
 namespace {
 
 void normalize(
-    rtl::OUString const & path, rtl::OUString const & relative,
-    rtl::OUString * normalizedPath, rtl::OUString * name)
+    OUString const & path, OUString const & relative,
+    OUString * normalizedPath, OUString * name)
 {
     sal_Int32 i = relative.lastIndexOf('/');
     if (i == -1) {
         *normalizedPath = path;
         *name = relative;
     } else {
-        rtl::OUStringBuffer buf(path);
+        OUStringBuffer buf(path);
         buf.append(sal_Unicode('/'));
         buf.append(relative.copy(0, i));
         *normalizedPath = buf.makeStringAndClear();
@@ -89,19 +89,19 @@ public:
     void testCrossThreads();
 
     css::uno::Any getKey(
-        rtl::OUString const & path, rtl::OUString const & relative) const;
+        OUString const & path, OUString const & relative) const;
 
     void setKey(
-        rtl::OUString const & path, rtl::OUString const & name,
+        OUString const & path, OUString const & name,
         css::uno::Any const & value) const;
 
-    bool resetKey(rtl::OUString const & path, rtl::OUString const & name) const;
+    bool resetKey(OUString const & path, OUString const & name) const;
 
     css::uno::Reference< css::uno::XInterface > createViewAccess(
-        rtl::OUString const & path) const;
+        OUString const & path) const;
 
     css::uno::Reference< css::uno::XInterface > createUpdateAccess(
-        rtl::OUString const & path) const;
+        OUString const & path) const;
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testKeyFetch);
@@ -159,20 +159,20 @@ void TestThread::run() {
 class ReaderThread: public TestThread {
 public:
     ReaderThread(
-        osl::Condition & stop, Test const & test, rtl::OUString const & path,
-        rtl::OUString const & relative);
+        osl::Condition & stop, Test const & test, OUString const & path,
+        OUString const & relative);
 
 private:
     virtual bool iteration();
 
     Test const & test_;
-    rtl::OUString path_;
-    rtl::OUString relative_;
+    OUString path_;
+    OUString relative_;
 };
 
 ReaderThread::ReaderThread(
-    osl::Condition & stop, Test const & test, rtl::OUString const & path,
-    rtl::OUString const & relative):
+    osl::Condition & stop, Test const & test, OUString const & path,
+    OUString const & relative):
     TestThread(stop), test_(test), path_(path), relative_(relative)
 {
     create();
@@ -185,21 +185,21 @@ bool ReaderThread::iteration() {
 class WriterThread: public TestThread {
 public:
     WriterThread(
-        osl::Condition & stop, Test const & test, rtl::OUString const & path,
-        rtl::OUString const & relative);
+        osl::Condition & stop, Test const & test, OUString const & path,
+        OUString const & relative);
 
 private:
     virtual bool iteration();
 
     Test const & test_;
-    rtl::OUString path_;
-    rtl::OUString name_;
+    OUString path_;
+    OUString name_;
     std::size_t index_;
 };
 
 WriterThread::WriterThread(
-    osl::Condition & stop, Test const & test, rtl::OUString const & path,
-    rtl::OUString const & relative):
+    osl::Condition & stop, Test const & test, OUString const & path,
+    OUString const & relative):
     TestThread(stop), test_(test), index_(0)
 {
     normalize(path, relative, &path_, &name_);
@@ -207,13 +207,13 @@ WriterThread::WriterThread(
 }
 
 bool WriterThread::iteration() {
-    rtl::OUString options[] = {
-        rtl::OUString("fish"),
-        rtl::OUString("chips"),
-        rtl::OUString("kippers"),
-        rtl::OUString("bloaters") };
+    OUString options[] = {
+        OUString("fish"),
+        OUString("chips"),
+        OUString("kippers"),
+        OUString("bloaters") };
     test_.setKey(path_, name_, css::uno::makeAny(options[index_]));
-    index_ = (index_ + 1) % (sizeof options / sizeof (rtl::OUString));
+    index_ = (index_ + 1) % (sizeof options / sizeof (OUString));
     return true;
 }
 
@@ -253,13 +253,13 @@ RecursiveTest::RecursiveTest(
 void RecursiveTest::test() {
     properties_ = css::uno::Reference< css::beans::XPropertySet >(
         test_.createUpdateAccess(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                     "dotuno:WebHtml"))),
         css::uno::UNO_QUERY_THROW);
     properties_->addPropertyChangeListener(
-        rtl::OUString("Label"), this);
+        OUString("Label"), this);
     step();
     CPPUNIT_ASSERT(count_ == 0);
     css::uno::Reference< css::lang::XComponent >(
@@ -302,12 +302,12 @@ SimpleRecursiveTest::SimpleRecursiveTest(
 
 void SimpleRecursiveTest::step() const {
     test_.setKey(
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString("Label"),
-        css::uno::makeAny(rtl::OUString("step")));
+        OUString("Label"),
+        css::uno::makeAny(OUString("step")));
 }
 
 class CrossThreadTest: public RecursiveTest {
@@ -328,17 +328,17 @@ void CrossThreadTest::step() const {
     stop.set();
     WriterThread(
         stop, test_,
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString("Label")).join();
+        OUString("Label")).join();
     test_.resetKey(
-        rtl::OUString(
+        OUString(
             RTL_CONSTASCII_USTRINGPARAM(
                 "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                 "dotuno:WebHtml")),
-        rtl::OUString("Label"));
+        OUString("Label"));
 }
 
 void Test::setUp() {
@@ -354,9 +354,9 @@ void Test::setUp() {
     context_ = css::uno::Reference< css::uno::XComponentContext >(
         css::uno::Reference< css::beans::XPropertySet >(
             cppu::createRegistryServiceFactory(
-                rtl::OUString(registry, SAL_NO_ACQUIRE)),
+                OUString(registry, SAL_NO_ACQUIRE)),
             css::uno::UNO_QUERY_THROW)->getPropertyValue(
-                rtl::OUString("DefaultContext")),
+                OUString("DefaultContext")),
         css::uno::UNO_QUERY_THROW);
     provider_ = css::configuration::theDefaultProvider::get(context_);
 }
@@ -367,74 +367,74 @@ void Test::tearDown() {
 }
 
 void Test::testKeyFetch() {
-    rtl::OUString s;
+    OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString("/org.openoffice.Setup"),
-            rtl::OUString("L10N/ooLocale")) >>=
+            OUString("/org.openoffice.Setup"),
+            OUString("L10N/ooLocale")) >>=
         s);
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString("/org.openoffice.Setup"),
-            rtl::OUString("Test/AString")) >>=
+            OUString("/org.openoffice.Setup"),
+            OUString("Test/AString")) >>=
         s);
 }
 
 void Test::testKeySet() {
     setKey(
-        rtl::OUString("/org.openoffice.Setup/Test"),
-        rtl::OUString("AString"),
-        css::uno::makeAny(rtl::OUString("baa")));
-    rtl::OUString s;
+        OUString("/org.openoffice.Setup/Test"),
+        OUString("AString"),
+        css::uno::makeAny(OUString("baa")));
+    OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString("/org.openoffice.Setup/Test"),
-            rtl::OUString("AString")) >>=
+            OUString("/org.openoffice.Setup/Test"),
+            OUString("AString")) >>=
         s);
     CPPUNIT_ASSERT( s == "baa" );
 }
 
 void Test::testKeyReset() {
     if (resetKey(
-            rtl::OUString("/org.openoffice.Setup/Test"),
-            rtl::OUString("AString")))
+            OUString("/org.openoffice.Setup/Test"),
+            OUString("AString")))
     {
-        rtl::OUString s;
+        OUString s;
         CPPUNIT_ASSERT(
             getKey(
-                rtl::OUString("/org.openoffice.Setup/Test"),
-                rtl::OUString("AString")) >>=
+                OUString("/org.openoffice.Setup/Test"),
+                OUString("AString")) >>=
             s);
         CPPUNIT_ASSERT( s == "Foo" );
     }
 }
 
 void Test::testSetSetMemberName() {
-    rtl::OUString s;
+    OUString s;
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                     ".uno:FontworkShapeType")),
-            rtl::OUString("Label")) >>=
+            OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Shape" );
 
     css::uno::Reference< css::container::XNameAccess > access(
         createUpdateAccess(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/"
                     "Commands"))),
         css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNamed > member;
     access->getByName(
-        rtl::OUString(".uno:FontworkGalleryFloater")) >>=
+        OUString(".uno:FontworkGalleryFloater")) >>=
         member;
     CPPUNIT_ASSERT(member.is());
     member->setName(
-        rtl::OUString(".uno:FontworkShapeType"));
+        OUString(".uno:FontworkShapeType"));
     css::uno::Reference< css::util::XChangesBatch >(
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference< css::lang::XComponent >(
@@ -442,11 +442,11 @@ void Test::testSetSetMemberName() {
 
     CPPUNIT_ASSERT(
         getKey(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/Commands/"
                     ".uno:FontworkShapeType")),
-            rtl::OUString("Label")) >>=
+            OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Gallery" );
 }
@@ -454,12 +454,12 @@ void Test::testSetSetMemberName() {
 void Test::testReadCommands() {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
-            rtl::OUString(
+            OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "/org.openoffice.UI.GenericCommands/UserInterface/"
                     "Commands"))),
         css::uno::UNO_QUERY_THROW);
-    css::uno::Sequence< rtl::OUString > names(access->getElementNames());
+    css::uno::Sequence< OUString > names(access->getElementNames());
     CPPUNIT_ASSERT(names.getLength() == 695);
         // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
@@ -469,11 +469,11 @@ void Test::testReadCommands() {
             if (access->getByName(names[j]) >>= child) {
                 CPPUNIT_ASSERT(child.is());
                 child->getByName(
-                    rtl::OUString("Label"));
+                    OUString("Label"));
                 child->getByName(
-                    rtl::OUString("ContextLabel"));
+                    OUString("ContextLabel"));
                 child->getByName(
-                    rtl::OUString("Properties"));
+                    OUString("Properties"));
             }
         }
     }
@@ -484,28 +484,28 @@ void Test::testReadCommands() {
 }
 
 void Test::testThreads() {
-    struct Entry { rtl::OUString path; rtl::OUString relative; };
+    struct Entry { OUString path; OUString relative; };
     Entry list[] = {
-        { rtl::OUString("/org.openoffice.Setup"),
-          rtl::OUString("Test/AString") },
-        { rtl::OUString("/org.openoffice.Setup"),
-          rtl::OUString("Test/AString") },
-        { rtl::OUString(
+        { OUString("/org.openoffice.Setup"),
+          OUString("Test/AString") },
+        { OUString("/org.openoffice.Setup"),
+          OUString("Test/AString") },
+        { OUString(
                   "/org.openoffice.UI.GenericCommands"),
-          rtl::OUString(
+          OUString(
                   "UserInterface/Commands/dotuno:WebHtml/Label") },
-        { rtl::OUString(
+        { OUString(
                   "/org.openoffice.UI.GenericCommands"),
-          rtl::OUString(
+          OUString(
                   "UserInterface/Commands/dotuno:NewPresentation/Label") },
-        { rtl::OUString(
+        { OUString(
                   "/org.openoffice.UI.GenericCommands"),
-          rtl::OUString(
+          OUString(
                   "UserInterface/Commands/dotuno:RecentFileList/Label") },
-        { rtl::OUString("/org.openoffice.Setup"),
-          rtl::OUString("L10N/ooLocale") },
-        { rtl::OUString("/org.openoffice.Setup"),
-          rtl::OUString("Test/ABoolean") }
+        { OUString("/org.openoffice.Setup"),
+          OUString("L10N/ooLocale") },
+        { OUString("/org.openoffice.Setup"),
+          OUString("Test/ABoolean") }
     };
     std::size_t const numReaders = sizeof list / sizeof (Entry);
     std::size_t const numWriters = numReaders - 2;
@@ -523,8 +523,8 @@ void Test::testThreads() {
     }
     for (int i = 0; i < 5; ++i) {
         for (std::size_t j = 0; j < numReaders; ++j) {
-            rtl::OUString path;
-            rtl::OUString name;
+            OUString path;
+            OUString name;
             normalize(list[j].path, list[j].relative, &path, &name);
             resetKey(path, name);
             osl::Thread::yield();
@@ -560,7 +560,7 @@ void Test::testCrossThreads() {
 }
 
 css::uno::Any Test::getKey(
-    rtl::OUString const & path, rtl::OUString const & relative) const
+    OUString const & path, OUString const & relative) const
 {
     css::uno::Reference< css::container::XHierarchicalNameAccess > access(
         createViewAccess(path), css::uno::UNO_QUERY_THROW);
@@ -571,7 +571,7 @@ css::uno::Any Test::getKey(
 }
 
 void Test::setKey(
-    rtl::OUString const & path, rtl::OUString const & name,
+    OUString const & path, OUString const & name,
     css::uno::Any const & value) const
 {
     css::uno::Reference< css::container::XNameReplace > access(
@@ -583,7 +583,7 @@ void Test::setKey(
         access, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-bool Test::resetKey(rtl::OUString const & path, rtl::OUString const & name)
+bool Test::resetKey(OUString const & path, OUString const & name)
     const
 {
     //TODO: support setPropertyToDefault
@@ -602,29 +602,29 @@ bool Test::resetKey(rtl::OUString const & path, rtl::OUString const & name)
 }
 
 css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                rtl::OUString("nodepath"),
+                OUString("nodepath"),
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
-        rtl::OUString(
+        OUString(
                 "com.sun.star.configuration.ConfigurationAccess"),
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 
 css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
-    rtl::OUString const & path) const
+    OUString const & path) const
 {
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                rtl::OUString("nodepath"),
+                OUString("nodepath"),
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
-        rtl::OUString(
+        OUString(
                 "com.sun.star.configuration.ConfigurationUpdateAccess"),
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }

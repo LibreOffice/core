@@ -184,7 +184,7 @@ static storeError __store_namei (
     const sal_Unicode *pszName,
     OStorePageKey     &rKey)
 {
-    rtl::OString aName (
+    OString aName (
         pszName, rtl_ustr_getLength (pszName), RTL_TEXTENCODING_UTF8);
 
     rtl_String *pszNameA = 0;
@@ -304,7 +304,7 @@ int SAL_CALL main (int argc, char **argv)
 
     rtl::Reference<ILockBytes> xLockBytes;
 
-    rtl::OUString aFilename (
+    OUString aFilename (
         argv[1], rtl_str_getLength(argv[1]),
         osl_getThreadTextEncoding());
 

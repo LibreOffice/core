@@ -61,7 +61,7 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
         throw io::NotConnectedException();
 
     if (!g_seekable_can_seek(G_SEEKABLE(mpStream)))
-        throw io::IOException(rtl::OUString("Seek unsupported"),
+        throw io::IOException(OUString("Seek unsupported"),
             static_cast< cppu::OWeakObject * >(this));
 
     GError *pError=NULL;

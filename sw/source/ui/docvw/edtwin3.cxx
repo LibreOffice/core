@@ -70,7 +70,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 
 // Notify for page number update
 void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
-                                                    const rtl::OUString& rPgStr)
+                                                    const OUString& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if ( pSfxVwSh && pSfxVwSh->ISA(SwView) &&
@@ -121,7 +121,7 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark )
+bool JumpToSwMark( ViewShell* pVwSh, const OUString& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )

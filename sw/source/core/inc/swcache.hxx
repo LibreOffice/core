@@ -72,7 +72,7 @@ class SwCache
     void DeleteObj( SwCacheObj *pObj );
 
 #ifdef DBG_UTIL
-    rtl::OString m_aName;
+    OString m_aName;
     long m_nAppend;           /// number of entries appended
     long m_nInsertFree;       /// number of entries inserted on freed position
     long m_nReplace;          /// number of LRU replacements
@@ -94,7 +94,7 @@ public:
 
     //nur sal_uInt8 hineinstecken!!!
 #ifdef DBG_UTIL
-    SwCache( const sal_uInt16 nInitSize, const rtl::OString &rNm );
+    SwCache( const sal_uInt16 nInitSize, const OString &rNm );
 #else
     SwCache( const sal_uInt16 nInitSize );
 #endif

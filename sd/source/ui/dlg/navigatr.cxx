@@ -564,7 +564,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        rtl::OUString aURLStr;
+        OUString aURLStr;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aURLStr );
         aURL = INetURLObject( aURLStr );
     }
@@ -586,7 +586,7 @@ sal_Bool SdNavigatorWin::InsertFile(const String& rFileName)
         if (aFileName != maDropFileName)
         {
             SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE));
-            SfxFilterMatcher aMatch( rtl::OUString("simpress") );
+            SfxFilterMatcher aMatch( OUString("simpress") );
             aMed.UseInteractionHandler( sal_True );
             nErr = aMatch.GuessFilter(aMed, &pFilter);
         }

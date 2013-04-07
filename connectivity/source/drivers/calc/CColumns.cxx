@@ -30,7 +30,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 
-sdbcx::ObjectType OCalcColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OCalcColumns::createObject(const OUString& _rName)
 {
     OCalcTable* pTable = (OCalcTable*)m_pTable;
     ::rtl::Reference<OSQLColumns> aCols = pTable->getTableColumns();

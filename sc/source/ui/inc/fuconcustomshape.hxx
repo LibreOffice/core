@@ -24,7 +24,7 @@
 
 class FuConstCustomShape : public FuConstruct
 {
-    rtl::OUString aCustomShape;
+    OUString aCustomShape;
 
     void SetAttributes( SdrObject* pObj );
 

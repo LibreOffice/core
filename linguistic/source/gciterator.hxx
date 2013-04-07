@@ -53,7 +53,7 @@ struct FPEntry
     ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > m_xPara;
 
     // document ID to identify different documents
-    ::rtl::OUString m_aDocId;
+    OUString m_aDocId;
 
     // the starting position to be checked
     sal_Int32       m_nStartIndex;
@@ -97,19 +97,19 @@ class GrammarCheckingIterator:
     sal_Bool        m_bEnd;
 
     // Note that it must be the pointer and not the uno-reference to check if it is the same implementation object
-    typedef std::map< XComponent *, ::rtl::OUString > DocMap_t;
+    typedef std::map< XComponent *, OUString > DocMap_t;
     DocMap_t        m_aDocIdMap;
 
 
     // language -> implname mapping
-    typedef std::map< LanguageType, ::rtl::OUString > GCImplNames_t;
+    typedef std::map< LanguageType, OUString > GCImplNames_t;
     GCImplNames_t   m_aGCImplNamesByLang;
 
     // implname -> UNO reference mapping
-    typedef std::map< ::rtl::OUString, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > > GCReferences_t;
+    typedef std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > > GCReferences_t;
     GCReferences_t  m_aGCReferencesByService;
 
-    ::rtl::OUString m_aCurCheckedDocId;
+    OUString m_aCurCheckedDocId;
     sal_Bool        m_bGCServicesChecked;
     sal_Int32       m_nDocIdCounter;
     sal_Int32       m_nLastEndOfSentencePos;
@@ -127,18 +127,18 @@ class GrammarCheckingIterator:
     void TerminateThread();
 
     sal_Int32 NextDocId();
-    ::rtl::OUString GetOrCreateDocId( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xComp );
+    OUString GetOrCreateDocId( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &xComp );
 
     void AddEntry(
             ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraphIterator > xFlatParaIterator,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::text::XFlatParagraph > xFlatPara,
-            const ::rtl::OUString &rDocId, sal_Int32 nStartIndex, sal_Bool bAutomatic );
+            const OUString &rDocId, sal_Int32 nStartIndex, sal_Bool bAutomatic );
 
     void ProcessResult( const ::com::sun::star::linguistic2::ProofreadingResult &rRes,
             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIterator > &rxFlatParagraphIterator,
             bool bIsAutomaticChecking );
 
-    sal_Int32 GetSuggestedEndOfSentence( const ::rtl::OUString &rText, sal_Int32 nSentenceStartPos, const ::com::sun::star::lang::Locale &rLocale );
+    sal_Int32 GetSuggestedEndOfSentence( const OUString &rText, sal_Int32 nSentenceStartPos, const ::com::sun::star::lang::Locale &rLocale );
 
     void GetConfiguredGCSvcs_Impl();
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > GetGrammarChecker( const ::com::sun::star::lang::Locale & rLocale );
@@ -158,7 +158,7 @@ public:
 
     // XProofreadingIterator
     virtual void SAL_CALL startProofreading( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDocument, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraphIteratorProvider >& xIteratorProvider ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::linguistic2::ProofreadingResult SAL_CALL checkSentenceAtPosition( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDocument, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xFlatParagraph, const ::rtl::OUString& aText, const ::com::sun::star::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::linguistic2::ProofreadingResult SAL_CALL checkSentenceAtPosition( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDocument, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFlatParagraph >& xFlatParagraph, const OUString& aText, const ::com::sun::star::lang::Locale& aLocale, ::sal_Int32 nStartOfSentencePosition, ::sal_Int32 nSuggestedBehindEndOfSentencePosition, ::sal_Int32 nErrorPositionInParagraph ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL resetIgnoreRules(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isProofreading( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xDocument ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -178,13 +178,13 @@ public:
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // LinguDispatcher
-    virtual void SetServiceList( const ::com::sun::star::lang::Locale &rLocale, const ::com::sun::star::uno::Sequence< rtl::OUString > &rSvcImplNames );
-    virtual ::com::sun::star::uno::Sequence< rtl::OUString > GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
+    virtual void SetServiceList( const ::com::sun::star::lang::Locale &rLocale, const ::com::sun::star::uno::Sequence< OUString > &rSvcImplNames );
+    virtual ::com::sun::star::uno::Sequence< OUString > GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const;
     virtual DspType GetDspType() const;
 };
 

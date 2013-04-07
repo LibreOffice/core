@@ -34,7 +34,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sot_component_getFactory(
 {
     void * pRet = 0;
 
-    ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
+    OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     if ( pServiceManager && aImplName.equals( OLESimpleStorage::impl_staticGetImplementationName() ) )

@@ -82,7 +82,7 @@ namespace connectivity
             inline WpADOView& operator=(const WpADOView& rhs)
                 {WpOLEBase<ADOView>::operator=(rhs); return *this;}
 
-            ::rtl::OUString get_Name() const;
+            OUString get_Name() const;
             void get_Command(OLEVariant& _rVar) const;
             void put_Command(OLEVariant& _rVar);
         };
@@ -98,8 +98,8 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
+            OUString get_Name() const;
+            void put_Name(const OUString& _rName);
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType);
@@ -122,9 +122,9 @@ namespace connectivity
 
             void Create();
 
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd);
+            OUString get_Name() const;
+            void put_Name(const OUString& _rName);
+            sal_Bool ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd);
             WpADOGroups get_Groups();
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,

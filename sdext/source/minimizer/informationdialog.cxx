@@ -58,7 +58,7 @@ using namespace ::com::sun::star::container;
 
 // -----------------------------------------------------------------------------
 
-rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl::OUString& rControlName, const OUString& rLabel,
+OUString InsertFixedText( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -83,14 +83,14 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
 
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     rInformationDialog.insertFixedText( rControlName, aNames, aValues );
     return rControlName;
 }
 
-rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
+OUString InsertImage( InformationDialog& rInformationDialog, const OUString& rControlName, const OUString& rURL,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     OUString pNames[] = {
@@ -112,14 +112,14 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         Any( nWidth ) };
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     rInformationDialog.insertImage( rControlName, aNames, aValues );
     return rControlName;
 }
 
-rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
+OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUString& rControlName,
     const Reference< XItemListener > xItemListener, const OUString& rLabel,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex )
 {
@@ -145,7 +145,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
 
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     Reference< XCheckBox > xCheckBox( rInformationDialog.insertCheckBox( rControlName, aNames, aValues ) );
@@ -154,7 +154,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
     return rControlName;
 }
 
-rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
+OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, PPPOptimizerTokenEnum nResID )
 {
     OUString pNames[] = {
@@ -182,7 +182,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
 
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     rInformationDialog.insertButton( rControlName, xActionListener, aNames, aValues );
@@ -195,7 +195,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 20 );
     fVal += 0.05;
-    rtl::OUStringBuffer aVal( OUString::valueOf( fVal ) );
+    OUStringBuffer aVal( OUString::valueOf( fVal ) );
     sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
     if ( nX > 0 )
         aVal.setLength( nX + 2 );
@@ -204,7 +204,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal )
 
 OUString InformationDialog::ImpGetStandardImage( const OUString& sPrivateURL )
 {
-    rtl::OUString sURL;
+    OUString sURL;
     try
     {
         mxTempFile = Reference< XStream >( io::TempFile::create(mxMSF), UNO_QUERY_THROW );
@@ -263,7 +263,7 @@ void InformationDialog::InitDialog()
 
     sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
-    Sequence< rtl::OUString >   aNames( pNames, nCount );
+    Sequence< OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
@@ -290,20 +290,20 @@ void InformationDialog::InitDialog()
         nDest = mnApproxSize;
     }
 
-    rtl::OUString aTitle;
+    OUString aTitle;
     if ( !maSaveAsURL.isEmpty() )
     {
         Reference< XURLTransformer > xURLTransformer( URLTransformer::create(mxMSF) );
         util::URL aURL, aPresentationURL;
         aURL.Complete = maSaveAsURL;
-        xURLTransformer->parseSmart( aURL, rtl::OUString() );
+        xURLTransformer->parseSmart( aURL, OUString() );
 
         const OUString sFileProtocol( "file:///" );
         aPresentationURL.Complete = sFileProtocol.concat( aURL.Name );
         aTitle = xURLTransformer->getPresentation( aPresentationURL, sal_False );
 
         if ( aTitle.match( sFileProtocol, 0 ) )
-            aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), rtl::OUString() );
+            aTitle = aTitle.replaceAt( 0, sFileProtocol.getLength(), OUString() );
     }
 
     OUString aInfoString( getString( eInfoString ) );
@@ -325,11 +325,11 @@ void InformationDialog::InitDialog()
         aInfoString = aInfoString.replaceAt( k, aTitlePlaceholder.getLength(), aTitle );
 
     com::sun::star::uno::Reference< com::sun::star::awt::XItemListener > xItemListener;
-    InsertImage( *this, rtl::OUString("aboutimage"), ImpGetStandardImage( rtl::OUString("private:standardimage/query") ), 5, 5, 25, 25 );
-    InsertFixedText( *this, rtl::OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
+    InsertImage( *this, OUString("aboutimage"), ImpGetStandardImage( OUString("private:standardimage/query") ), 5, 5, 25, 25 );
+    InsertFixedText( *this, OUString("fixedtext"), aInfoString, PAGE_POS_X, 6, PAGE_WIDTH, 24, sal_True, 0 );
     if ( !maSaveAsURL.isEmpty() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
-    InsertButton( *this, rtl::OUString("button"), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+    InsertButton( *this, OUString("button"), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
 
     sal_Bool bOpenNewDocument = mrbOpenNewDocument;
     setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
@@ -337,7 +337,7 @@ void InformationDialog::InitDialog()
 
 // -----------------------------------------------------------------------------
 
-InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, const rtl::OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
+InformationDialog::InformationDialog( const Reference< XComponentContext > &rxMSF, Reference< XFrame >& rxFrame, const OUString& rSaveAsURL, sal_Bool& rbOpenNewDocument, const sal_Int64& rSourceSize, const sal_Int64& rDestSize, const sal_Int64& rApproxSize ) :
     UnoDialog( rxMSF, rxFrame ),
     ConfigurationAccess( rxMSF, NULL ),
     mxMSF( rxMSF ),

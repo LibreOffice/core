@@ -49,8 +49,8 @@
 #include "cmis_repo_content.hxx"
 #include "cmis_resultset.hxx"
 
-#define OUSTR_TO_STDSTR(s) string( rtl::OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
-#define STD_TO_OUSTR( str ) rtl::OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
+#define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
+#define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
 
 using namespace com::sun::star;
 using namespace std;
@@ -68,7 +68,7 @@ namespace cmis
         m_aRepositories( aRepos )
     {
         // Split the URL into bits
-        rtl::OUString sURL = m_xIdentifier->getContentIdentifier( );
+        OUString sURL = m_xIdentifier->getContentIdentifier( );
         SAL_INFO( "cmisucp", "RepoContent::RepoContent() " << sURL );
 
         m_sRepositoryId = m_aURL.getObjectPath( );
@@ -84,7 +84,7 @@ namespace cmis
     uno::Any RepoContent::getBadArgExcept()
     {
         return uno::makeAny( lang::IllegalArgumentException(
-            rtl::OUString("Wrong argument type!"),
+            OUString("Wrong argument type!"),
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
@@ -144,9 +144,9 @@ namespace cmis
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
         const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
                 INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
-        rtl::OUString sProxy = rProxy.aName;
+        OUString sProxy = rProxy.aName;
         if ( rProxy.nPort > 0 )
-            sProxy += ":" + rtl::OUString::valueOf( rProxy.nPort );
+            sProxy += ":" + OUString::valueOf( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
 
         if ( m_aRepositories.empty() )
@@ -174,7 +174,7 @@ namespace cmis
                                     ucb::IOErrorCode_ABORT,
                                     uno::Sequence< uno::Any >( 0 ),
                                     xEnv,
-                                    rtl::OUString::createFromAscii( "Authentication cancelled" ) );
+                                    OUString::createFromAscii( "Authentication cancelled" ) );
             }
         }
     }
@@ -203,16 +203,16 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( rtl::OUString( "IsDocument" ),
+            beans::Property( OUString( "IsDocument" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "IsFolder" ),
+            beans::Property( OUString( "IsFolder" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( rtl::OUString( "Title" ),
-                -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::Property( OUString( "Title" ),
+                -1, getCppuType( static_cast< const OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( rtl::OUString( "IsReadOnly" ),
+            beans::Property( OUString( "IsReadOnly" ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -228,21 +228,21 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( rtl::OUString( "getCommandInfo" ),
+            ( OUString( "getCommandInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( "getPropertySetInfo" ),
+            ( OUString( "getPropertySetInfo" ),
               -1, getCppuVoidType() ),
             ucb::CommandInfo
-            ( rtl::OUString( "getPropertyValues" ),
+            ( OUString( "getPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::Property > * >( 0 ) ) ),
             ucb::CommandInfo
-            ( rtl::OUString( "setPropertyValues" ),
+            ( OUString( "setPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( rtl::OUString( "open" ),
+            ( OUString( "open" ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
         };
 
@@ -250,9 +250,9 @@ namespace cmis
         return uno::Sequence< ucb::CommandInfo >(aCommandInfoTable, nProps );
     }
 
-    ::rtl::OUString RepoContent::getParentURL( )
+    OUString RepoContent::getParentURL( )
     {
-        rtl::OUString sRet;
+        OUString sRet;
 
         SAL_INFO( "cmisucp", "RepoContent::getParentURL()" );
 
@@ -278,22 +278,22 @@ namespace cmis
         return ContentImplHelper::queryInterface(rType);
     }
 
-    rtl::OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL RepoContent::getImplementationName() throw( uno::RuntimeException )
     {
-       return rtl::OUString("com.sun.star.comp.CmisRepoContent");
+       return OUString("com.sun.star.comp.CmisRepoContent");
     }
 
-    uno::Sequence< rtl::OUString > SAL_CALL RepoContent::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL RepoContent::getSupportedServiceNames()
            throw( uno::RuntimeException )
     {
-       uno::Sequence< rtl::OUString > aSNS( 1 );
+       uno::Sequence< OUString > aSNS( 1 );
        aSNS.getArray()[ 0 ] = "com.sun.star.ucb.Content";
        return aSNS;
     }
 
-    rtl::OUString SAL_CALL RepoContent::getContentType() throw( uno::RuntimeException )
+    OUString SAL_CALL RepoContent::getContentType() throw( uno::RuntimeException )
     {
-        return rtl::OUString( CMIS_REPO_TYPE );
+        return OUString( CMIS_REPO_TYPE );
     }
 
     uno::Any SAL_CALL RepoContent::execute(
@@ -383,8 +383,8 @@ namespace cmis
         else
         {
             // Return the repository root as child
-            rtl::OUString sUrl;
-            rtl::OUString sEncodedBinding = rtl::Uri::encode(
+            OUString sUrl;
+            OUString sEncodedBinding = rtl::Uri::encode(
                     m_aURL.getBindingUrl( ) + "#" + m_sRepositoryId,
                     rtl_UriCharClassRelSegment,
                     rtl_UriEncodeKeepEscapes,

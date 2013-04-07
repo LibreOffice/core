@@ -59,14 +59,14 @@ namespace dbaui
         */
         HierarchicalNameCheck(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >& _rxNames,
-            const ::rtl::OUString& _rRelativeRoot
+            const OUString& _rRelativeRoot
         );
 
         ~HierarchicalNameCheck();
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(
-            const ::rtl::OUString& _rObjectName,
+            const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
         ) const;
 
@@ -118,7 +118,7 @@ namespace dbaui
 
         // IObjectNameCheck overridables
         virtual bool    isNameValid(
-            const ::rtl::OUString& _rObjectName,
+            const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
         ) const;
 

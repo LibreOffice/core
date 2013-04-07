@@ -83,8 +83,8 @@ public:
 private:
     enumXFTab   m_eType;
     double      m_fLength;
-    rtl::OUString   m_strDelimiter;
-    rtl::OUString   m_strLeader;
+    OUString   m_strDelimiter;
+    OUString   m_strLeader;
 };
 
 inline void XFTabStyle::SetTabType(enumXFTab type)
@@ -103,7 +103,7 @@ inline void XFTabStyle::SetDelimiter(sal_Unicode delimiter)
     chs[0] = delimiter;
     chs[1] = 0;
 
-    m_strDelimiter = rtl::OUString(chs);
+    m_strDelimiter = OUString(chs);
 }
 
 inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
@@ -112,7 +112,7 @@ inline void XFTabStyle::SetLeaderChar(sal_Unicode leader)
     chs[0] = leader;
     chs[1] = 0;
 
-    m_strLeader = rtl::OUString(chs);
+    m_strLeader = OUString(chs);
 }
 
 

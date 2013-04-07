@@ -103,11 +103,11 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static const ::rtl::OUString s_sDataFieldProperty   ("DataField");
-        static const ::rtl::OUString s_sLabelProperty       ("Label");
-        static const ::rtl::OUString s_sWidthProperty       ("Width");
-        static const ::rtl::OUString s_sMouseWheelBehavior ("MouseWheelBehavior");
-        static const ::rtl::OUString s_sEmptyString;
+        static const OUString s_sDataFieldProperty   ("DataField");
+        static const OUString s_sLabelProperty       ("Label");
+        static const OUString s_sWidthProperty       ("Width");
+        static const OUString s_sMouseWheelBehavior ("MouseWheelBehavior");
+        static const OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
         std::vector< OUString > aColumnServiceNames;  // service names to be used with the XGridColumnFactory
@@ -119,8 +119,8 @@ namespace dbp
         aFormFieldNames.reserve(getSettings().aSelectedFields.getLength());
 
         // loop through the selected field names
-        const ::rtl::OUString* pSelectedFields = getSettings().aSelectedFields.getConstArray();
-        const ::rtl::OUString* pEnd = pSelectedFields + getSettings().aSelectedFields.getLength();
+        const OUString* pSelectedFields = getSettings().aSelectedFields.getConstArray();
+        const OUString* pEnd = pSelectedFields + getSettings().aSelectedFields.getLength();
         for (;pSelectedFields < pEnd; ++pSelectedFields)
         {
             // get the information for the selected column
@@ -134,14 +134,14 @@ namespace dbp
             {
                 case DataType::BIT:
                 case DataType::BOOLEAN:
-                    aColumnServiceNames.push_back(::rtl::OUString("CheckBox"));
+                    aColumnServiceNames.push_back(OUString("CheckBox"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
                 case DataType::INTEGER:
-                    aColumnServiceNames.push_back(::rtl::OUString("NumericField"));
+                    aColumnServiceNames.push_back(OUString("NumericField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
@@ -150,31 +150,31 @@ namespace dbp
                 case DataType::DOUBLE:
                 case DataType::NUMERIC:
                 case DataType::DECIMAL:
-                    aColumnServiceNames.push_back(::rtl::OUString("FormattedField"));
+                    aColumnServiceNames.push_back(OUString("FormattedField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::DATE:
-                    aColumnServiceNames.push_back(::rtl::OUString("DateField"));
+                    aColumnServiceNames.push_back(OUString("DateField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIME:
-                    aColumnServiceNames.push_back(::rtl::OUString("TimeField"));
+                    aColumnServiceNames.push_back(OUString("TimeField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
                     break;
 
                 case DataType::TIMESTAMP:
-                    aColumnServiceNames.push_back(::rtl::OUString("DateField"));
+                    aColumnServiceNames.push_back(OUString("DateField"));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_DATEPOSTFIX)));
 
                     aFormFieldNames.push_back(*pSelectedFields);
-                    aColumnServiceNames.push_back(::rtl::OUString("TimeField"));
+                    aColumnServiceNames.push_back(OUString("TimeField"));
                     aColumnLabelPostfixes.push_back(String(ModuleRes(RID_STR_TIMEPOSTFIX)));
                     break;
 
                 default:
-                    aColumnServiceNames.push_back(::rtl::OUString("TextField"));
+                    aColumnServiceNames.push_back(OUString("TextField"));
                     aColumnLabelPostfixes.push_back(s_sEmptyString);
             }
         }
@@ -200,13 +200,13 @@ namespace dbp
                     Reference< XPropertySet > xColumn( xColumnFactory->createColumn(*pColumnServiceName), UNO_SET_THROW );
                     Reference< XPropertySetInfo > xColumnPSI( xColumn->getPropertySetInfo(), UNO_SET_THROW );
 
-                    ::rtl::OUString sColumnName(*pColumnServiceName);
+                    OUString sColumnName(*pColumnServiceName);
                     disambiguateName(xExistenceChecker, sColumnName);
 
                     // the data field the column should be bound to
                     xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
                     // the label
-                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(::rtl::OUString(*pFormFieldName) += *pColumnLabelPostfix));
+                    xColumn->setPropertyValue(s_sLabelProperty, makeAny(OUString(*pFormFieldName) += *pColumnLabelPostfix));
                     // the width (<void/> => column will be auto-sized)
                     xColumn->setPropertyValue(s_sWidthProperty, Any());
 
@@ -346,8 +346,8 @@ namespace dbp
 
         m_aSelFields.Clear();
         const OGridSettings& rSettings = getSettings();
-        const ::rtl::OUString* pSelected = rSettings.aSelectedFields.getConstArray();
-        const ::rtl::OUString* pEnd = pSelected + rSettings.aSelectedFields.getLength();
+        const OUString* pSelected = rSettings.aSelectedFields.getConstArray();
+        const OUString* pEnd = pSelected + rSettings.aSelectedFields.getLength();
         for (; pSelected < pEnd; ++pSelected)
         {
             m_aSelFields.InsertEntry(*pSelected);
@@ -367,7 +367,7 @@ namespace dbp
         sal_uInt16 nSelected = m_aSelFields.GetEntryCount();
 
         rSettings.aSelectedFields.realloc(nSelected);
-        ::rtl::OUString* pSelected = rSettings.aSelectedFields.getArray();
+        OUString* pSelected = rSettings.aSelectedFields.getArray();
 
         for (sal_uInt16 i=0; i<nSelected; ++i, ++pSelected)
             *pSelected = m_aSelFields.GetEntry(i);

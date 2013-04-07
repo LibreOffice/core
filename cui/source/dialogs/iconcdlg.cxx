@@ -36,17 +36,17 @@ using ::std::vector;
 
 // some stuff for easier changes for SvtViewOptions
 static const sal_Char*      pViewOptDataName = "dialog data";
-#define VIEWOPT_DATANAME    ::rtl::OUString::createFromAscii( pViewOptDataName )
+#define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const String& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, ::com::sun::star::uno::makeAny( ::rtl::OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, ::com::sun::star::uno::makeAny( OUString( rData ) ) );
 }
 
 static inline String GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     ::com::sun::star::uno::Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
-    ::rtl::OUString aUserData;
+    OUString aUserData;
     aAny >>= aUserData;
 
     return String( aUserData );
@@ -254,7 +254,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     // save configuration at INI-Manager
     // and remove pages
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
-    aTabDlgOpt.SetWindowState(::rtl::OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
+    aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
@@ -1002,7 +1002,7 @@ void IconChoiceDialog::Start_Impl()
     if ( aTabDlgOpt.Exists() )
     {
         // possibly position from config
-        SetWindowState(rtl::OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
+        SetWindowState(OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
         // initial TabPage from program/help/config
         nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();

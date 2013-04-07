@@ -82,15 +82,15 @@ public:
     void    SetColor(const XFColor& color);
     XFColor GetColor(){return m_aColor;}
 
-    void    SetPrefix(rtl::OUString prefix);
+    void    SetPrefix(OUString prefix);
 
-    void    SetSurfix(rtl::OUString surfix);
+    void    SetSurfix(OUString surfix);
 
-    void    SetNegativeStyle(rtl::OUString prefix, rtl::OUString suffix, const XFColor& color=XFColor(255,0,0));
+    void    SetNegativeStyle(OUString prefix, OUString suffix, const XFColor& color=XFColor(255,0,0));
 
     void    SetNumberType(enumXFNumberType type);
 
-    void    SetCurrencySymbol(sal_Bool post, rtl::OUString symbol, sal_Bool bShowSpace=sal_False);
+    void    SetCurrencySymbol(sal_Bool post, OUString symbol, sal_Bool bShowSpace=sal_False);
 
     virtual enumXFStyle GetStyleFamily();
 
@@ -117,14 +117,14 @@ protected:
     sal_Bool    m_bGroup;
     XFColor     m_aColor;
     sal_Bool    m_bCurrencySymbolPost;
-    rtl::OUString   m_strCurrencySymbol;
-    rtl::OUString   m_strPrefix;
-    rtl::OUString   m_strSuffix;
+    OUString   m_strCurrencySymbol;
+    OUString   m_strPrefix;
+    OUString   m_strSuffix;
 
     sal_Bool    m_bRedIfNegative;
     XFColor     m_aNegativeColor;
-    rtl::OUString   m_strNegativePrefix;
-    rtl::OUString   m_strNegativeSuffix;
+    OUString   m_strNegativePrefix;
+    OUString   m_strNegativeSuffix;
 };
 
 inline void XFNumberStyle::SetDecimalDigits(sal_Int32 decimal)
@@ -142,7 +142,7 @@ inline void XFNumberStyle::SetMinExponent(sal_Int32 exponent)
     m_nMinExponent = exponent;
 }
 
-inline void XFNumberStyle::SetNegativeStyle(rtl::OUString prefix, rtl::OUString suffix, const XFColor& color)
+inline void XFNumberStyle::SetNegativeStyle(OUString prefix, OUString suffix, const XFColor& color)
 {
     m_bRedIfNegative = sal_True;
     m_aNegativeColor = color;
@@ -165,17 +165,17 @@ inline void XFNumberStyle::SetNumberType(enumXFNumberType type)
     m_eType = type;
 }
 
-inline void XFNumberStyle::SetPrefix(rtl::OUString prefix)
+inline void XFNumberStyle::SetPrefix(OUString prefix)
 {
     m_strPrefix = prefix;
 }
 
-inline void XFNumberStyle::SetSurfix(rtl::OUString surfix)
+inline void XFNumberStyle::SetSurfix(OUString surfix)
 {
     m_strSuffix = surfix;
 }
 
-inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, rtl::OUString symbol, sal_Bool bShowSpace)
+inline void XFNumberStyle::SetCurrencySymbol(sal_Bool post, OUString symbol, sal_Bool bShowSpace)
 {
     m_bCurrencySymbolPost = post;
     m_strCurrencySymbol = symbol;

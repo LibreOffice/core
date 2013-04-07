@@ -414,7 +414,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     double fA;
     sal_uInt16 nHeight;
     short nAng;
-    rtl::OString aStr( rE.sText );
+    OString aStr( rE.sText );
     DXFTransform aT( DXFTransform(rE.fXScale,rE.fHeight,1.0,rE.fRotAngle,rE.aP0), rTransform );
     aT.TransDir(DXFVector(0,1,0),aV);
     nHeight=(sal_uInt16)(aV.Abs()+0.5);
@@ -423,7 +423,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     aT.TransDir(DXFVector(1,0,0),aV);
     if ( SetFontAttribute( rE,nAng, nHeight, aV. Abs() ) )
     {
-        rtl::OUString aUString(rtl::OStringToOUString(aStr, pDXF->getTextEncoding()));
+        OUString aUString(OStringToOUString(aStr, pDXF->getTextEncoding()));
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
         pVirDev->DrawText( aPt, aUString );
     }
@@ -473,7 +473,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         double fA;
         sal_uInt16 nHeight;
         short nAng;
-        rtl::OString aStr( rE.sText );
+        OString aStr( rE.sText );
         DXFTransform aT( DXFTransform( rE.fXScale, rE.fHeight, 1.0, rE.fRotAngle, rE.aP0 ), rTransform );
         aT.TransDir(DXFVector(0,1,0),aV);
         nHeight=(sal_uInt16)(aV.Abs()+0.5);
@@ -482,7 +482,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         aT.TransDir(DXFVector(1,0,0),aV);
         if (SetFontAttribute(rE,nAng,nHeight,aV.Abs()))
         {
-            rtl::OUString aUString(rtl::OStringToOUString(aStr, pDXF->getTextEncoding()));
+            OUString aUString(OStringToOUString(aStr, pDXF->getTextEncoding()));
             aT.Transform( DXFVector( 0, 0, 0 ), aPt );
             pVirDev->DrawText( aPt, aUString );
         }

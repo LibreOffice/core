@@ -63,13 +63,13 @@ public:
             is the cloned model from before the changes, which the Undo action represents, have been applied.
             Upon <member>invoking</member>, the clone model is applied to the document model.
     */
-    UndoElement( const ::rtl::OUString & i_actionString,
+    UndoElement( const OUString & i_actionString,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_documentModel,
                  const ::boost::shared_ptr< ChartModelClone >& i_modelClone
                );
 
     // XUndoAction
-    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL undo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL redo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
 
@@ -83,7 +83,7 @@ private:
     void    impl_toggleModelState();
 
 private:
-    ::rtl::OUString                                                     m_sActionString;
+    OUString                                                     m_sActionString;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocumentModel;
     ::boost::shared_ptr< ChartModelClone >                              m_pModelClone;
 };
@@ -98,7 +98,7 @@ public:
     ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
 
     // XUndoAction
-    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL undo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL redo(  ) throw (::com::sun::star::document::UndoFailedException, ::com::sun::star::uno::RuntimeException);
 

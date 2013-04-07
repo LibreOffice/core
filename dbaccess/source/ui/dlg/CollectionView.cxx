@@ -63,7 +63,7 @@ using namespace comphelper;
 DBG_NAME(OCollectionView)
 OCollectionView::OCollectionView( Window * pParent
                                  ,const Reference< XContent>& _xContent
-                                 ,const ::rtl::OUString& _sDefaultName
+                                 ,const OUString& _sDefaultName
                                  ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : ModalDialog( pParent, ModuleRes(DLG_COLLECTION_VIEW))
     , m_aFTCurrentPath( this, ModuleRes( FT_EXPLORERFILE_CURRENTPATH ) )
@@ -115,12 +115,12 @@ Reference< XContent> OCollectionView::getSelectedFolder() const
 // -----------------------------------------------------------------------------
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {
-    ::rtl::OUString sName = m_aName.GetText();
+    OUString sName = m_aName.GetText();
     if ( sName.isEmpty() )
         return 0;
     try
     {
-        ::rtl::OUString sSubFolder = m_aView.GetCurrentURL();
+        OUString sSubFolder = m_aView.GetCurrentURL();
         sal_Int32 nIndex = sName.lastIndexOf('/') + 1;
         if ( nIndex )
         {
@@ -154,17 +154,17 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                 {
                     Sequence< Any > aValues(2);
                     PropertyValue aValue;
-                    aValue.Name = ::rtl::OUString("ResourceName");
+                    aValue.Name = OUString("ResourceName");
                     aValue.Value <<= sSubFolder;
                     aValues[0] <<= aValue;
 
-                    aValue.Name = ::rtl::OUString("ResourceType");
-                    aValue.Value <<= ::rtl::OUString("folder");
+                    aValue.Name = OUString("ResourceType");
+                    aValue.Value <<= OUString("folder");
                     aValues[1] <<= aValue;
 
                     InteractionClassification eClass = InteractionClassification_ERROR;
                     ::com::sun::star::ucb::IOErrorCode eError = IOErrorCode_NOT_EXISTING_PATH;
-                    ::rtl::OUString sTemp;
+                    OUString sTemp;
                     InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
 
 
@@ -253,7 +253,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
         Reference<XNameAccess> xNameAccess(m_xContent,UNO_QUERY);
         if ( xNameAccess.is() )
         {
-            ::rtl::OUString sSubFolder = m_aView.GetCurrentURL();
+            OUString sSubFolder = m_aView.GetCurrentURL();
             sal_Int32 nIndex = sSubFolder.lastIndexOf('/') + 1;
             sSubFolder = sSubFolder.getToken(0,'/',nIndex);
             if ( !sSubFolder.isEmpty() )
@@ -284,11 +284,11 @@ void OCollectionView::initCurrentPath()
     {
         if ( m_xContent.is() )
         {
-            const ::rtl::OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
-            const static ::rtl::OUString s_sFormsCID("private:forms");
-            const static ::rtl::OUString s_sReportsCID("private:reports");
+            const OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
+            const static OUString s_sFormsCID("private:forms");
+            const static OUString s_sReportsCID("private:reports");
             m_bCreateForm = s_sFormsCID == sCID ;
-            ::rtl::OUString sPath("/");
+            OUString sPath("/");
             if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
                 sPath = sCID.copy(s_sFormsCID.getLength());
             else if ( !m_bCreateForm && sCID.getLength() != s_sReportsCID.getLength() )
@@ -306,7 +306,7 @@ void OCollectionView::initCurrentPath()
     m_aUp.Enable(bEnable);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OCollectionView::getName() const
+OUString OCollectionView::getName() const
 {
     return m_aName.GetText();
 }

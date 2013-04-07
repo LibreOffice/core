@@ -44,7 +44,7 @@ DBG_NAME(OXMLColumn)
 
 OXMLColumn::OXMLColumn( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XNameAccess >& _xParentContainer
                 ,const Reference< XPropertySet >& _xTable
@@ -61,13 +61,13 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
     const SvXMLTokenMap& rTokenMap = rImport.GetColumnElemTokenMap();
 
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    ::rtl::OUString sType;
+    OUString sType;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {

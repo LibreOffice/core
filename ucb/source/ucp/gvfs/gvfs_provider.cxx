@@ -76,8 +76,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     rtl::OUString( "com.sun.star.comp.GnomeVFSContentProvider" ),
-                     rtl::OUString( "com.sun.star.ucb.GnomeVFSContentProvider" ) );
+                     OUString( "com.sun.star.comp.GnomeVFSContentProvider" ),
+                     OUString( "com.sun.star.ucb.GnomeVFSContentProvider" ) );
 //=========================================================================
 //
 // Service factory implementation.
@@ -101,7 +101,7 @@ ContentProvider::queryContent(
 {
 #if OSL_DEBUG_LEVEL > 1
     g_warning ("QueryContent: '%s'",
-               rtl::OUStringToOString (Identifier->getContentIdentifier(),
+               OUStringToOString (Identifier->getContentIdentifier(),
                                        RTL_TEXTENCODING_UTF8).getStr() );
 #endif
 

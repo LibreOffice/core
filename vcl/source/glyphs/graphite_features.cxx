@@ -38,14 +38,14 @@ const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
-GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString lang)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString lang)
     : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
     maLang.label[0] = maLang.label[1] = maLang.label[2] = maLang.label[3] = '\0';
     setLang(pFace, lang);
 }
 
-GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString features, const ::rtl::OString lang)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const OString features, const OString lang)
     : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
     sal_Int32 nEquals = 0;
@@ -62,7 +62,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString fea
             break;
         }
         // check for a lang=xxx specification
-        const ::rtl::OString aLangPrefix("lang");
+        const OString aLangPrefix("lang");
         if (features.match(aLangPrefix, pos ))
         {
             pos = nEquals + 1;
@@ -146,7 +146,7 @@ GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString fea
     }
 }
 
-void GrFeatureParser::setLang(const gr_face * pFace, const rtl::OString & lang)
+void GrFeatureParser::setLang(const gr_face * pFace, const OString & lang)
 {
     FeatId aLang;
     aLang.num = 0;
@@ -201,7 +201,7 @@ GrFeatureParser::~GrFeatureParser()
     }
 }
 
-bool GrFeatureParser::isCharId(const rtl::OString & id, size_t offset, size_t length)
+bool GrFeatureParser::isCharId(const OString & id, size_t offset, size_t length)
 {
     if (length > 4) return false;
     for (size_t i = 0; i < length; i++)
@@ -215,7 +215,7 @@ bool GrFeatureParser::isCharId(const rtl::OString & id, size_t offset, size_t le
     return true;
 }
 
-gr_uint32 GrFeatureParser::getCharId(const rtl::OString & id, size_t offset, size_t length)
+gr_uint32 GrFeatureParser::getCharId(const OString & id, size_t offset, size_t length)
 {
     FeatId charId;
     charId.num = 0;
@@ -233,7 +233,7 @@ gr_uint32 GrFeatureParser::getCharId(const rtl::OString & id, size_t offset, siz
     return charId.num;
 }
 
-short GrFeatureParser::getIntValue(const rtl::OString & id, size_t offset, size_t length)
+short GrFeatureParser::getIntValue(const OString & id, size_t offset, size_t length)
 {
     short value = 0;
     int sign = 1;

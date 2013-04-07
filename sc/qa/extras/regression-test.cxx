@@ -65,14 +65,14 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-bool checkDumpAgainstFile( const rtl::OUString& rDump, const rtl::OUString aFilePath, const rtl::OUString& rToleranceFile)
+bool checkDumpAgainstFile( const OUString& rDump, const OUString aFilePath, const OUString& rToleranceFile)
 {
-    rtl::OString aOFile = rtl::OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
-    rtl::OString aToleranceFile = rtl::OUStringToOString(rToleranceFile, RTL_TEXTENCODING_UTF8);
+    OString aOFile = OUStringToOString(aFilePath, RTL_TEXTENCODING_UTF8);
+    OString aToleranceFile = OUStringToOString(rToleranceFile, RTL_TEXTENCODING_UTF8);
 
     CPPUNIT_ASSERT_MESSAGE("dump is empty", !rDump.isEmpty());
 
-    rtl::OString aDump = rtl::OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
+    OString aDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     return doXMLDiff(aOFile.getStr(), aDump.getStr(),
             static_cast<int>(rDump.getLength()), aToleranceFile.getStr());
 }
@@ -84,7 +84,7 @@ class ScChartRegressionTest : public test::BootstrapFixture, public unotest::Mac
 public:
     ScChartRegressionTest();
 
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -97,14 +97,14 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-    rtl::OUString m_aBaseString;
+    OUString m_aBaseString;
 };
 
 
-void ScChartRegressionTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void ScChartRegressionTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    rtl::OUString aSep("/");
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
+    OUString aSep("/");
+    OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
@@ -112,7 +112,7 @@ void ScChartRegressionTest::createFileURL(const rtl::OUString& aFileBase, const 
 
 void ScChartRegressionTest::test()
 {
-    rtl::OUString aFileName;
+    OUString aFileName;
     createFileURL( "testChart.", "ods", aFileName);
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
@@ -146,7 +146,7 @@ void ScChartRegressionTest::test()
     uno::Reference< qa::XDumper > xDumper( xChartDoc, UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xDumper.is());
 
-    rtl::OUString aDump = xDumper->dump();
+    OUString aDump = xDumper->dump();
     std::cout << aDump;
     bool bCompare = checkDumpAgainstFile( aDump, getPathFromSrc("/chart2/qa/unit/data/reference/testChart.xml"), getPathFromSrc("/chart2/qa/unit/data/tolerance.xml") );
     CPPUNIT_ASSERT(bCompare);
@@ -164,7 +164,7 @@ void ScChartRegressionTest::setUp()
     // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xCalcComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString("com.sun.star.comp.Calc.SpreadsheetDocument"));
+        getMultiServiceFactory()->createInstance(OUString("com.sun.star.comp.Calc.SpreadsheetDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }

@@ -49,7 +49,7 @@ public:
 protected:
     ~XNamedRange() {}
 
-    virtual uno::Reference< sheet::XNamedRange> getNamedRange(const rtl::OUString&) = 0;
+    virtual uno::Reference< sheet::XNamedRange> getNamedRange(const OUString&) = 0;
 
 };
 

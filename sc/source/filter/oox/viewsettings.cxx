@@ -51,7 +51,6 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
-using ::rtl::OUString;
 
 // ============================================================================
 

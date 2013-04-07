@@ -53,9 +53,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::sheet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringHash;
 using ::std::auto_ptr;
 
 #define SC_DPSAVEMODE_DONTKNOW 2

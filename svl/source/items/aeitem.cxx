@@ -34,7 +34,7 @@ TYPEINIT1_AUTOFACTORY(SfxAllEnumItem, SfxEnumItem)
 struct SfxAllEnumValue_Impl
 {
     sal_uInt16 nValue;
-    rtl::OUString aText;
+    OUString aText;
 };
 
 class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl*>
@@ -136,7 +136,7 @@ sal_uInt16 SfxAllEnumItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SfxAllEnumItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     DBG_ASSERT( pValues && nPos < pValues->size(), "enum overflow" );
@@ -216,7 +216,7 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 
 // -----------------------------------------------------------------------
 
-void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const rtl::OUString &rValue )
+void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     SfxAllEnumValue_Impl *pVal = new SfxAllEnumValue_Impl;

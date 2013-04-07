@@ -97,7 +97,7 @@ public:
 
     /** Returns the fragment path from the first relation of the passed type,
         used for fragments referred by the root relations. */
-    ::rtl::OUString     getFragmentPathFromFirstType( const ::rtl::OUString& rType );
+    OUString     getFragmentPathFromFirstType( const OUString& rType );
 
     /** Imports a fragment using the passed fragment handler, which contains
         the full path to the fragment stream.
@@ -114,7 +114,7 @@ public:
         fragment could be imported.
      */
     ::com::sun::star::uno::Reference<
-       ::com::sun::star::xml::dom::XDocument> importFragment( const ::rtl::OUString& rFragmentPath );
+       ::com::sun::star::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
 
     /** Imports a fragment from an xml::dom::XDocument using the
         passed fragment handler
@@ -135,7 +135,7 @@ public:
 
         @return  The relations collection of the specified fragment.
      */
-    RelationsRef        importRelations( const ::rtl::OUString& rFragmentPath );
+    RelationsRef        importRelations( const OUString& rFragmentPath );
 
     /** Adds new relation.
 
@@ -147,7 +147,7 @@ public:
 
         @return  Added relation Id.
      */
-    ::rtl::OUString     addRelation( const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const OUString& rType, const OUString& rTarget, bool bExternal = false );
 
     /** Adds new relation to part's relations.
 
@@ -162,7 +162,7 @@ public:
 
         @return  Added relation Id.
      */
-    ::rtl::OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const ::rtl::OUString& rType, const ::rtl::OUString& rTarget, bool bExternal = false );
+    OUString     addRelation( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutputStream, const OUString& rType, const OUString& rTarget, bool bExternal = false );
 
     /** Returns a stack of used textfields, used by the pptx importer to replace links to slidepages with rhe real page name */
     TextFieldStack& getTextFieldStack() const;
@@ -183,8 +183,8 @@ public:
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
                         openFragmentStream(
-                            const ::rtl::OUString& rStreamName,
-                            const ::rtl::OUString& rMediaType );
+                            const OUString& rStreamName,
+                            const OUString& rMediaType );
 
     /** Opens specified output stream from the base storage with specified
         media type and returns new fast serializer for that stream.
@@ -203,16 +203,16 @@ public:
      */
     ::sax_fastparser::FSHelperPtr
                         openFragmentStreamWithSerializer(
-                            const ::rtl::OUString& rStreamName,
-                            const ::rtl::OUString& rMediaType );
+                            const OUString& rStreamName,
+                            const OUString& rMediaType );
 
     /** Returns new unique ID for exported document.
 
         @return newly created ID.
      */
     inline sal_Int32 GetUniqueId() { return mnMaxDocId++; }
-    inline ::rtl::OString GetUniqueIdOString() { return ::rtl::OString::valueOf( mnMaxDocId++ ); }
-    inline ::rtl::OUString GetUniqueIdOUString() { return ::rtl::OUString::valueOf( mnMaxDocId++ ); }
+    inline OString GetUniqueIdOString() { return OString::valueOf( mnMaxDocId++ ); }
+    inline OUString GetUniqueIdOUString() { return OUString::valueOf( mnMaxDocId++ ); }
 
     /** Write the document properties into into the current OPC package.
 
@@ -222,9 +222,9 @@ public:
      */
     XmlFilterBase& exportDocumentProperties( ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties > xProperties );
 
-    ::rtl::OUString getNamespaceURL( const ::rtl::OUString& rPrefix );
+    OUString getNamespaceURL( const OUString& rPrefix );
 
-    sal_Int32 getNamespaceId( const ::rtl::OUString& rUrl );
+    sal_Int32 getNamespaceId( const OUString& rUrl );
 
     void importDocumentProperties();
 

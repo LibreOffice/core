@@ -208,7 +208,7 @@ SdPageObjsTLB::SdPageObjsTransferable* SdPageObjsTLB::SdPageObjsTransferable::ge
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId (void)
 {
     if (mnListBoxDropFormatId == SAL_MAX_UINT32)
-        mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(rtl::OUString(
+        mnListBoxDropFormatId = SotExchange::RegisterFormatMimeType(OUString(
         "application/x-openoffice-treelistbox-moveonly;windows_formatname=\"SV_LBOX_DD_FORMAT_MOVE\""));
     return mnListBoxDropFormatId;
 }
@@ -420,7 +420,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
 void SdPageObjsTLB::AddShapeList (
     const SdrObjList& rList,
     SdrObject* pShape,
-    const ::rtl::OUString& rsName,
+    const OUString& rsName,
     const bool bIsExcluded,
     SvTreeListEntry* pParentEntry,
     const IconProvider& rIconProvider)
@@ -626,9 +626,9 @@ String SdPageObjsTLB::GetSelectEntry()
     return( GetEntryText( GetCurEntry() ) );
 }
 
-std::vector<rtl::OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
+std::vector<OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
 {
-    std::vector<rtl::OUString> aEntries;
+    std::vector<OUString> aEntries;
     SvTreeListEntry* pEntry = FirstSelected();
 
     while( pEntry )

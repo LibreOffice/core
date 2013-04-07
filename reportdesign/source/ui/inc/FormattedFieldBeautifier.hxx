@@ -40,7 +40,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer > getVclWindowPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xComponent) throw(::com::sun::star::uno::RuntimeException);
 
         void setPlaceholderText( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
-        void setPlaceholderText( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, const ::rtl::OUString& _rText );
+        void setPlaceholderText( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _xVclWindowPeer, const OUString& _rText );
 
         sal_Int32 getTextColor();
 

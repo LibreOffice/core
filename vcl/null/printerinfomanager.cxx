@@ -24,10 +24,6 @@
 using namespace psp;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringHash;
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
@@ -141,7 +137,7 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
     return m_aSystemPrintQueues;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& /* rPrinterName */, const char* /* pToken */ ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const char* /* pToken */ ) const
 {
     return false;
 }

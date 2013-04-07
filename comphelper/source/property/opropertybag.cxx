@@ -121,22 +121,22 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OPropertyBag::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL OPropertyBag::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL OPropertyBag::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL OPropertyBag::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( getSupportedServiceNames_static() );
-        const ::rtl::OUString* pStart = aServices.getConstArray();
-        const ::rtl::OUString* pEnd = aServices.getConstArray() + aServices.getLength();
+        Sequence< OUString > aServices( getSupportedServiceNames_static() );
+        const OUString* pStart = aServices.getConstArray();
+        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL OPropertyBag::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
@@ -225,7 +225,7 @@ namespace comphelper
         // If we ever have a smarter XPropertyContainer::addProperty interface, we can remove this, ehm, well, hack.
         Property aProperty;
         if ( !( _element >>= aProperty ) )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         ::osl::ClearableMutexGuard g( m_aMutex );
 
@@ -234,7 +234,7 @@ namespace comphelper
         if  (   !m_aAllowedTypes.empty()
             &&  m_aAllowedTypes.find( aProperty.Type ) == m_aAllowedTypes.end()
             )
-            throw IllegalTypeException( ::rtl::OUString(), *this );
+            throw IllegalTypeException( OUString(), *this );
 
         m_aDynamicProperties.addVoidProperty( aProperty.Name, aProperty.Type, findFreeHandle(), aProperty.Attributes );
 
@@ -250,7 +250,7 @@ namespace comphelper
     {
         // XSet is only a workaround for addProperty not being able to add default-void properties.
         // So, everything of XSet except insert is implemented empty
-        throw NoSuchElementException( ::rtl::OUString(), *this );
+        throw NoSuchElementException( OUString(), *this );
     }
 
 
@@ -332,7 +332,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OPropertyBag::addProperty( const ::rtl::OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
+    void SAL_CALL OPropertyBag::addProperty( const OUString& _rName, ::sal_Int16 _nAttributes, const Any& _rInitialValue ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
         ::osl::ClearableMutexGuard g( m_aMutex );
 
@@ -343,7 +343,7 @@ namespace comphelper
             &&  !m_aAllowedTypes.empty()
             &&  m_aAllowedTypes.find( aPropertyType ) == m_aAllowedTypes.end()
             )
-            throw IllegalTypeException( ::rtl::OUString(), *this );
+            throw IllegalTypeException( OUString(), *this );
 
         m_aDynamicProperties.addProperty( _rName, findFreeHandle(), _nAttributes, _rInitialValue );
 
@@ -355,7 +355,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OPropertyBag::removeProperty( const ::rtl::OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
+    void SAL_CALL OPropertyBag::removeProperty( const OUString& _rName ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
     {
         ::osl::ClearableMutexGuard g( m_aMutex );
 
@@ -380,9 +380,9 @@ namespace comphelper
         };
 
         template< typename CLASS >
-        struct TransformPropertyToName : public ::std::unary_function< CLASS, ::rtl::OUString >
+        struct TransformPropertyToName : public ::std::unary_function< CLASS, OUString >
         {
-            const ::rtl::OUString& operator()( const CLASS& _rProp )
+            const OUString& operator()( const CLASS& _rProp )
             {
                 return _rProp.Name;
             }
@@ -407,7 +407,7 @@ namespace comphelper
         m_aDynamicProperties.describeProperties( aProperties );
 
         // their names
-        Sequence< ::rtl::OUString > aNames( aProperties.getLength() );
+        Sequence< OUString > aNames( aProperties.getLength() );
         ::std::transform(
             aProperties.getConstArray(),
             aProperties.getConstArray() + aProperties.getLength(),
@@ -436,8 +436,8 @@ namespace comphelper
         ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
 
         Sequence< PropertyValue > aPropertyValues( aNames.getLength() );
-        const ::rtl::OUString* pName = aNames.getConstArray();
-        const ::rtl::OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
+        const OUString* pName = aNames.getConstArray();
+        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         const Any* pValue = aValues.getArray();
         PropertyValue* pPropertyValue = aPropertyValues.getArray();
 
@@ -464,7 +464,7 @@ namespace comphelper
         );
 
         // a sequence of names
-        Sequence< ::rtl::OUString > aNames( aProperties.getLength() );
+        Sequence< OUString > aNames( aProperties.getLength() );
         ::std::transform(
             aProperties.getConstArray(),
             aProperties.getConstArray() + aProperties.getLength(),
@@ -485,7 +485,7 @@ namespace comphelper
             Sequence< sal_Int32 > aHandles( nCount );
             sal_Int32* pHandle = aHandles.getArray();
             const PropertyValue* pProperty = aProperties.getConstArray();
-            for (   const ::rtl::OUString* pName = aNames.getConstArray();
+            for (   const OUString* pName = aNames.getConstArray();
                     pName != aNames.getConstArray() + aNames.getLength();
                     ++pName, ++pHandle, ++pProperty
                 )
@@ -526,7 +526,7 @@ namespace comphelper
         catch( const UnknownPropertyException& )    { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( ::rtl::OUString(), *this, ::cppu::getCaughtException() );
+            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
         }
     }
 

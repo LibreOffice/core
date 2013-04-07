@@ -26,9 +26,9 @@
 
 class XMLRenameElemTransformerContext : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
-    ::rtl::OUString m_aAttrQName;
-    ::rtl::OUString m_aAttrValue;
+    OUString m_aElemQName;
+    OUString m_aAttrQName;
+    OUString m_aAttrValue;
 
 public:
     TYPEINFO();
@@ -36,7 +36,7 @@ public:
     // The following consutructor renames the element names "rQName"
     // to bPrefix/eToken
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken  );
 
@@ -44,7 +44,7 @@ public:
     // to bPrefix/eToken and adds an attribute nAPrefix/eAToken that has
     // the value eVToken.
     XMLRenameElemTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nAPrefix,

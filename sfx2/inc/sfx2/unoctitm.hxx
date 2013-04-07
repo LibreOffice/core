@@ -78,11 +78,11 @@ public:
 
 struct SfxStatusDispatcher_Impl_hashType
 {
-    size_t operator()(const ::rtl::OUString& s) const
+    size_t operator()(const OUString& s) const
         { return s.hashCode(); }
 };
 
-typedef ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString, SfxStatusDispatcher_Impl_hashType, std::equal_to< ::rtl::OUString > >   SfxStatusDispatcher_Impl_ListenerContainer ;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar< OUString, SfxStatusDispatcher_Impl_hashType, std::equal_to< OUString > >   SfxStatusDispatcher_Impl_ListenerContainer ;
 
 class SfxStatusDispatcher   :   public ::com::sun::star::frame::XNotifyingDispatch,
                                 public ::com::sun::star::lang::XTypeProvider,
@@ -145,7 +145,7 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
 
     static sal_Bool         IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
-    static rtl::OUString    GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
+    static OUString    GetMasterUnoCommand( const ::com::sun::star::util::URL& aURL );
 
     void                    SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
 
@@ -179,7 +179,7 @@ public:
                                                     const ::com::sun::star::util::URL& rURL );
                         ~SfxDispatchController_Impl();
 
-    static rtl::OUString getSlaveCommand( const ::com::sun::star::util::URL& rURL );
+    static OUString getSlaveCommand( const ::com::sun::star::util::URL& rURL );
 
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );

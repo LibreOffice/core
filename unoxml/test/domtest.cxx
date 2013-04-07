@@ -124,7 +124,7 @@ struct DocumentHandler
                   Element & 0xFFFF, Element & 0xFFFF0000);
     }
 
-    virtual void SAL_CALL startUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const uno::Reference< xml::sax::XFastAttributeList >& Attribs ) throw (xml::sax::SAXException, uno::RuntimeException)
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const uno::Reference< xml::sax::XFastAttributeList >& Attribs ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 
@@ -132,7 +132,7 @@ struct DocumentHandler
     {
     }
 
-    virtual void SAL_CALL endUnknownElement( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name ) throw (xml::sax::SAXException, uno::RuntimeException)
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 
@@ -141,12 +141,12 @@ struct DocumentHandler
         return this;
     }
 
-    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const ::rtl::OUString& Namespace, const ::rtl::OUString& Name, const uno::Reference< xml::sax::XFastAttributeList >& Attribs ) throw (xml::sax::SAXException, uno::RuntimeException)
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const uno::Reference< xml::sax::XFastAttributeList >& Attribs ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         return this;
     }
 
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
+    virtual void SAL_CALL characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 
@@ -167,18 +167,18 @@ struct DocumentHandler
 struct TokenHandler
     : public ::cppu::WeakImplHelper1< xml::sax::XFastTokenHandler >
 {
-    virtual ::sal_Int32 SAL_CALL getToken( const ::rtl::OUString& Identifier ) throw (uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getToken( const OUString& Identifier ) throw (uno::RuntimeException)
     {
         CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getToken() unexpected call",
                                 false );
         return -1;
     }
 
-    virtual ::rtl::OUString SAL_CALL getIdentifier( ::sal_Int32 Token ) throw (uno::RuntimeException)
+    virtual OUString SAL_CALL getIdentifier( ::sal_Int32 Token ) throw (uno::RuntimeException)
     {
         CPPUNIT_ASSERT_MESSAGE( "TokenHandler::getIdentifier() unexpected call",
                                 false );
-        return rtl::OUString();
+        return OUString();
     }
 
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException)
@@ -282,7 +282,7 @@ struct SerializerTest : public CppUnit::TestFixture
     rtl::Reference<SequenceInputStream>                      mxInStream;
     rtl::Reference<DocumentHandler>                          mxHandler;
     rtl::Reference<TokenHandler>                             mxTokHandler;
-    uno::Sequence< beans::Pair< rtl::OUString, sal_Int32 > > maRegisteredNamespaces;
+    uno::Sequence< beans::Pair< OUString, sal_Int32 > > maRegisteredNamespaces;
     bool                                                     mbUnoInitialized;
 
     void setUp()
@@ -293,12 +293,12 @@ struct SerializerTest : public CppUnit::TestFixture
             const char* pArgs( getForwardString() );
             CPPUNIT_ASSERT_MESSAGE("Test file parameter", pArgs);
 
-            const rtl::OUString sBaseDir=rtl::OUString::createFromAscii(pArgs);
+            const OUString sBaseDir=OUString::createFromAscii(pArgs);
 
             // bootstrap UNO
             try
             {
-                ::rtl::OUString aIniUrl;
+                OUString aIniUrl;
                 CPPUNIT_ASSERT_MESSAGE(
                     "Converting ini file to URL",
                     osl_getFileURLFromSystemPath(
@@ -330,10 +330,10 @@ struct SerializerTest : public CppUnit::TestFixture
 
         maRegisteredNamespaces.realloc(2);
         maRegisteredNamespaces[0] = beans::make_Pair(
-            rtl::OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
+            OUString( "urn:oasis:names:tc:opendocument:xmlns:office:1.0" ),
             xml::sax::FastToken::NAMESPACE);
         maRegisteredNamespaces[1] = beans::make_Pair(
-            rtl::OUString( "http://www.w3.org/1999/xlink" ),
+            OUString( "http://www.w3.org/1999/xlink" ),
             2*xml::sax::FastToken::NAMESPACE);
     }
 

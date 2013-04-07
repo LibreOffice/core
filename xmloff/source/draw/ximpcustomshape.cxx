@@ -55,7 +55,7 @@ TYPEINIT1( XMLEnhancedCustomShapeContext, SvXMLImportContext );
 
 XMLEnhancedCustomShapeContext::XMLEnhancedCustomShapeContext( SvXMLImport& rImport,
             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                sal_uInt16 nPrefix, const rtl::OUString& rLocalName,
+                sal_uInt16 nPrefix, const OUString& rLocalName,
                     std::vector< com::sun::star::beans::PropertyValue >& rCustomShapeGeometry ) :
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrUnitConverter( rImport.GetMM100UnitConverter() ),
@@ -73,7 +73,7 @@ const SvXMLEnumMapEntry aXML_GluePointEnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     bool bAttrBool;
     if (::sax::Converter::convertBool( bAttrBool, rValue ))
@@ -86,7 +86,7 @@ void GetBool( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetInt32( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nAttrNumber;
     if (::sax::Converter::convertNumber( nAttrNumber, rValue ))
@@ -99,7 +99,7 @@ void GetInt32( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
     if (::sax::Converter::convertDouble( fAttrDouble, rValue ))
@@ -112,7 +112,7 @@ void GetDouble( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetDistance( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
     sal_Int16 const eSrcUnit( ::sax::Converter::GetUnitFromString(
@@ -128,7 +128,7 @@ void GetDistance( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetString( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     beans::PropertyValue aProp;
     aProp.Name = EASGet( eDestProp );
@@ -137,7 +137,7 @@ void GetString( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
+                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry& rMap )
 {
     sal_uInt16 eKind;
@@ -152,7 +152,7 @@ void GetEnum( std::vector< com::sun::star::beans::PropertyValue >& rDest,
 }
 
 void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
             rValue, util::MeasureUnit::MM_100TH);
@@ -172,7 +172,7 @@ void GetDoublePercentage( std::vector< com::sun::star::beans::PropertyValue >& r
 }
 
 void GetB3DVector( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                         const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     ::basegfx::B3DVector aB3DVector;
     if ( SvXMLUnitConverter::convertB3DVector( aB3DVector, rValue ) )
@@ -185,7 +185,7 @@ void GetB3DVector( std::vector< com::sun::star::beans::PropertyValue >& rDest,
     }
 }
 
-sal_Bool GetEquationName( const rtl::OUString& rEquation, const sal_Int32 nStart, rtl::OUString& rEquationName )
+sal_Bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
 {
     sal_Int32 nIndex = nStart;
     while( nIndex < rEquation.getLength() )
@@ -208,7 +208,7 @@ sal_Bool GetEquationName( const rtl::OUString& rEquation, const sal_Int32 nStart
     return bValid;
 }
 
-sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const rtl::OUString& rParaString )
+sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
         return sal_False;
@@ -228,7 +228,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
     {
         nIndex++;
         bNumberRequired = sal_False;
-        rtl::OUString aEquationName;
+        OUString aEquationName;
         bValid = GetEquationName( rParaString, nIndex, aEquationName );
         if ( bValid )
         {
@@ -397,7 +397,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                 bValid = sal_False;
             if ( bValid )
             {
-                rtl::OUString aNumber( rParaString.copy( nStartIndex, nIndex - nStartIndex ) );
+                OUString aNumber( rParaString.copy( nStartIndex, nIndex - nStartIndex ) );
                 if ( bE || bDot )
                 {
                     double fAttrDouble;
@@ -426,7 +426,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
 }
 
 void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         SvXMLUnitConverter& rUnitConverter )
 {
     drawing::Position3D aPosition3D;
@@ -440,14 +440,14 @@ void GetPosition3D( std::vector< com::sun::star::beans::PropertyValue >& rDest, 
 }
 
 void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
     sal_Int32 nIndex = 0;
     do
     {
         double fAttrDouble;
-        rtl::OUString aToken( rValue.getToken( 0, ',', nIndex ) );
+        OUString aToken( rValue.getToken( 0, ',', nIndex ) );
         if (!::sax::Converter::convertDouble( fAttrDouble, aToken ))
             break;
         else
@@ -473,14 +473,14 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
 }
 
 void GetSizeSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,
-                      const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                      const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< sal_Int32 > vNum;
     sal_Int32 nIndex = 0;
     do
     {
         sal_Int32 n;
-        rtl::OUString aToken( rValue.getToken( 0, ' ', nIndex ) );
+        OUString aToken( rValue.getToken( 0, ' ', nIndex ) );
         if (!::sax::Converter::convertNumber( n, aToken ))
             break;
         else
@@ -510,7 +510,7 @@ void GetSizeSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest
 }
 
 void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
     com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
@@ -524,7 +524,7 @@ void GetEnhancedParameter( std::vector< com::sun::star::beans::PropertyValue >& 
 }
 
 void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
     com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair;
@@ -539,7 +539,7 @@ void GetEnhancedParameterPair( std::vector< com::sun::star::beans::PropertyValue
 }
 
 sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair > vParameter;
     com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameter;
@@ -569,7 +569,7 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::
 }
 
 void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
-                        const rtl::OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
     com::sun::star::drawing::EnhancedCustomShapeTextFrame aParameter;
@@ -601,7 +601,7 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
 }
 
 void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
-                        const rtl::OUString& rValue )
+                        const OUString& rValue )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >      vSegments;
@@ -855,7 +855,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
 }
 
 void GetAdjustmentValues( std::vector< com::sun::star::beans::PropertyValue >& rDest,               // draw:adjustments
-                        const rtl::OUString& rValue )
+                        const OUString& rValue )
 {
     std::vector< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
     com::sun::star::drawing::EnhancedCustomShapeParameter aParameter;
@@ -900,8 +900,8 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
         sal_Int32               nAttrNumber;
         for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {
-            rtl::OUString aLocalName;
-            const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
+            OUString aLocalName;
+            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
             /* sven fixme, this must be checked! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
 
             switch( EASGet( aLocalName ) )
@@ -959,7 +959,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                             ::sax::Converter::GetUnitFromString(
                                 rValue, util::MeasureUnit::MM_100TH));
 
-                        rtl::OUStringBuffer aUnitStr;
+                        OUStringBuffer aUnitStr;
                         double fFactor = ::sax::Converter::GetConversionFactor(
                             aUnitStr, util::MeasureUnit::MM_100TH, eSrcUnit);
                         if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
@@ -1153,7 +1153,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
 
 void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
                                     const std::vector< beans::PropertyValues >& rElement,
-                                        const rtl::OUString& rElementName )
+                                        const OUString& rElementName )
 {
     if ( !rElement.empty() )
     {
@@ -1173,15 +1173,15 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 }
 
 void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
-                                    const std::vector< rtl::OUString >& rElement,
-                                        const rtl::OUString& rElementName )
+                                    const std::vector< OUString >& rElement,
+                                        const OUString& rElementName )
 {
     if ( !rElement.empty() )
     {
-        uno::Sequence< rtl::OUString > aPropSeq( rElement.size() );
-        std::vector< rtl::OUString >::const_iterator aIter = rElement.begin();
-        std::vector< rtl::OUString >::const_iterator aEnd = rElement.end();
-        rtl::OUString* pValues = aPropSeq.getArray();
+        uno::Sequence< OUString > aPropSeq( rElement.size() );
+        std::vector< OUString >::const_iterator aIter = rElement.begin();
+        std::vector< OUString >::const_iterator aEnd = rElement.end();
+        OUString* pValues = aPropSeq.getArray();
 
         while ( aIter != aEnd )
             *pValues++ = *aIter++;
@@ -1195,7 +1195,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
 
 void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::PropertyValue >& rPropVec,
                                     const std::vector< com::sun::star::beans::PropertyValue >& rElement,
-                                        const rtl::OUString& rElementName )
+                                        const OUString& rElementName )
 {
     if ( !rElement.empty() )
     {
@@ -1214,15 +1214,15 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
-typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, OUStringEqFunc> EquationHashMap;
+typedef boost::unordered_map< OUString, sal_Int32, OUStringHash, OUStringEqFunc> EquationHashMap;
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
-   will be converted from rtl::OUString to index */
+   will be converted from OUString to index */
 void CheckAndResolveEquationParameter( com::sun::star::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
 {
     if ( rPara.Type == com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )
     {
-        rtl::OUString aEquationName;
+        OUString aEquationName;
         if ( rPara.Value >>= aEquationName )
         {
             sal_Int32 nIndex = 0;
@@ -1241,8 +1241,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
     {
         // creating hash map containing the name and index of each equation
         EquationHashMap* pH = new EquationHashMap;
-        std::vector< rtl::OUString >::iterator aEquationNameIter = maEquationNames.begin();
-        std::vector< rtl::OUString >::iterator aEquationNameEnd  = maEquationNames.end();
+        std::vector< OUString >::iterator aEquationNameIter = maEquationNames.begin();
+        std::vector< OUString >::iterator aEquationNameEnd  = maEquationNames.end();
         while( aEquationNameIter != aEquationNameEnd )
         {
             (*pH)[ *aEquationNameIter ] = (sal_Int32)( aEquationNameIter - maEquationNames.begin() );
@@ -1250,8 +1250,8 @@ void XMLEnhancedCustomShapeContext::EndElement()
         }
 
         // resolve equation
-        std::vector< rtl::OUString >::iterator aEquationIter = maEquations.begin();
-        std::vector< rtl::OUString >::iterator aEquationEnd  = maEquations.end();
+        std::vector< OUString >::iterator aEquationIter = maEquations.begin();
+        std::vector< OUString >::iterator aEquationEnd  = maEquations.end();
         while( aEquationIter != aEquationEnd )
         {
             sal_Int32 nIndexOf = 0;
@@ -1260,16 +1260,16 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 nIndexOf = aEquationIter->indexOf( '?', nIndexOf );
                 if ( nIndexOf != -1 )
                 {
-                    rtl::OUString aEquationName;
+                    OUString aEquationName;
                     if ( GetEquationName( *aEquationIter, nIndexOf + 1, aEquationName ) )
                     {
                         // copying first characters inclusive '?'
-                        rtl::OUString aNew( aEquationIter->copy( 0, nIndexOf + 1 ) );
+                        OUString aNew( aEquationIter->copy( 0, nIndexOf + 1 ) );
                         sal_Int32 nIndex = 0;
                         EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
                         if ( aHashIter != pH->end() )
                             nIndex = (*aHashIter).second;
-                        aNew += rtl::OUString::valueOf( nIndex );
+                        aNew += OUString::valueOf( nIndex );
                         aNew += aEquationIter->copy( nIndexOf + aEquationName.getLength() + 1 );
                         *aEquationIter = aNew;
                     }
@@ -1368,7 +1368,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
-SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const rtl::OUString& rLocalName,
+SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt16 nPrefix,const OUString& rLocalName,
                                                                     const uno::Reference< xml::sax::XAttributeList> & xAttrList )
 {
     EnhancedCustomShapeTokenEnum aTokenEnum = EASGet( rLocalName );
@@ -1377,12 +1377,12 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
         sal_Int16 nLength = xAttrList->getLength();
         if ( nLength )
         {
-            rtl::OUString aFormula;
-            rtl::OUString aFormulaName;
+            OUString aFormula;
+            OUString aFormulaName;
             for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
             {
-                rtl::OUString aLocalName;
-                const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
+                OUString aLocalName;
+                const OUString& rValue = xAttrList->getValueByIndex( nAttr );
                 /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
 
                 switch( EASGet( aLocalName ) )
@@ -1410,8 +1410,8 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( sal_uInt1
         const sal_Int16 nLength = xAttrList->getLength();
         for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {
-            rtl::OUString aLocalName;
-            const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );
+            OUString aLocalName;
+            const OUString& rValue = xAttrList->getValueByIndex( nAttr );
             /* fixme sven, this needs to be chekced! sal_uInt16 nPrefix = */ GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttr ), &aLocalName );
             switch( EASGet( aLocalName ) )
             {

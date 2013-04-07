@@ -83,7 +83,7 @@ OViewContainer::~OViewContainer()
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER.ascii, SERVICE_SDBCX_TABLES.ascii)
 
-ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
+ObjectType OViewContainer::createObject(const OUString& _rName)
 {
     ObjectType xProp;
     if ( m_xMasterContainer.is() && m_xMasterContainer->hasByName(_rName) )
@@ -91,7 +91,7 @@ ObjectType OViewContainer::createObject(const ::rtl::OUString& _rName)
 
     if ( !xProp.is() )
     {
-        ::rtl::OUString sCatalog,sSchema,sTable;
+        OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,
                                             _rName,
                                             sCatalog,
@@ -125,10 +125,10 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
 }
 
 // XAppend
-ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+ObjectType OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     // append the new table with a create stmt
-    ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
+    OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
 
     Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
     Reference< XPropertySet > xProp = descriptor;
@@ -142,14 +142,14 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
     }
     else
     {
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
+        OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
         if(sComposedName.isEmpty())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-        ::rtl::OUString sCommand;
+        OUString sCommand;
         descriptor->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
 
-        ::rtl::OUStringBuffer aSQL;
+        OUStringBuffer aSQL;
         aSQL.appendAscii( "CREATE VIEW " );
         aSQL.append     ( sComposedName );
         aSQL.appendAscii( " AS " );
@@ -169,7 +169,7 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
 }
 
 // XDrop
-void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void OViewContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     if ( !m_bInElementRemoved )
     {
@@ -178,7 +178,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             xDrop->dropByName(_sElementName);
         else
         {
-            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+            OUString sCatalog,sSchema,sTable,sComposedName;
 
             Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
             if ( xTable.is() )
@@ -193,7 +193,7 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
             if(sComposedName.isEmpty())
                 ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-            ::rtl::OUString aSql("DROP VIEW ");
+            OUString aSql("DROP VIEW ");
             aSql += sComposedName;
             Reference<XConnection> xCon = m_xConnection;
             OSL_ENSURE(xCon.is(),"Connection is null!");
@@ -211,16 +211,16 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
 void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString sName;
+    OUString sName;
     if  (   ( Event.Accessor >>= sName )
         &&  ( !m_nInAppend )
         &&  ( !hasByName( sName ) )
         )
     {
         Reference<XPropertySet> xProp(Event.Element,UNO_QUERY);
-        ::rtl::OUString sType;
+        OUString sType;
         xProp->getPropertyValue(PROPERTY_TYPE) >>= sType;
-        if ( sType == ::rtl::OUString("VIEW") )
+        if ( sType == OUString("VIEW") )
             insertElement(sName,createObject(sName));
     }
 }
@@ -228,7 +228,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
 void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
-    ::rtl::OUString sName;
+    OUString sName;
     if ( (Event.Accessor >>= sName) && hasByName(sName) )
     {
         m_bInElementRemoved = true;
@@ -253,10 +253,10 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 {
 }
 
-::rtl::OUString OViewContainer::getTableTypeRestriction() const
+OUString OViewContainer::getTableTypeRestriction() const
 {
     // no restriction at all (other than the ones provided externally)
-    return ::rtl::OUString( "VIEW"  );
+    return OUString( "VIEW"  );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

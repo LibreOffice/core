@@ -45,7 +45,7 @@ namespace dbaui
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos);
         virtual const OTypeInfoMap*             getTypeInfo() const;
         virtual sal_Bool                        isAutoIncrementValueEnabled() const;
-        virtual ::rtl::OUString                 getAutoIncrementValue() const;
+        virtual OUString                 getAutoIncrementValue() const;
 
     public:
         OTableFieldControl( Window* pParent, OTableDesignHelpBar* pHelpBar);

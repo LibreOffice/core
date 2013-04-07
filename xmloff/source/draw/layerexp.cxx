@@ -28,8 +28,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "layerexp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 
 using namespace ::cppu;

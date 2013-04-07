@@ -224,9 +224,9 @@ public:
     protected:
         WidgetType          Type;       // primitive RTTI
     public:
-        rtl::OUString       Name;       // a distinct name to identify the control
-        rtl::OUString       Description;// descriptive text for the contro (e.g. for tool tip)
-        rtl::OUString       Text;       // user text to appear on the control
+        OUString       Name;       // a distinct name to identify the control
+        OUString       Description;// descriptive text for the contro (e.g. for tool tip)
+        OUString       Text;       // user text to appear on the control
         sal_uInt16              TextStyle;  // style flags
         bool                ReadOnly;
         Rectangle           Location;   // describes the area filled by the control
@@ -319,7 +319,7 @@ public:
            will appear literally in the PDF file produced
         */
         sal_Int32           Dest;
-        rtl::OUString       URL;
+        OUString       URL;
         bool                Submit;
         bool                SubmitGet;
 
@@ -356,7 +356,7 @@ public:
         bool                Selected;
         sal_Int32           RadioGroup;
         bool                ButtonIsLeft;
-        rtl::OUString       OnValue; // the value of the radio button if it is selected
+        OUString       OnValue; // the value of the radio button if it is selected
 
         RadioButtonWidget()
                 : AnyWidget( vcl::PDFWriter::RadioButton ),
@@ -405,7 +405,7 @@ public:
         bool                            DropDown;
         bool                            Sort;
         bool                            MultiSelect;
-        std::vector<rtl::OUString>      Entries;
+        std::vector<OUString>      Entries;
         std::vector<sal_Int32>          SelectedEntries;
          // if MultiSelect is false only the first entry of SelectedEntries
          // will be taken into account. the same is implicit for PDF < 1.4
@@ -428,7 +428,7 @@ public:
     struct ComboBoxWidget : public AnyWidget
     {
         bool                            Sort;
-        std::vector<rtl::OUString>      Entries;
+        std::vector<OUString>      Entries;
         // set the current value in AnyWidget::Text
 
         ComboBoxWidget()
@@ -448,9 +448,9 @@ public:
         // the Location member of the AnyWidget which spcifies the coordinates
         // of the signature
 
-        rtl::OUString                    SigLocation;
-        rtl::OUString                    SigReason;
-        rtl::OUString                    SigContactInfo;
+        OUString                    SigLocation;
+        OUString                    SigReason;
+        OUString                    SigContactInfo;
         bool                             SigHidden;
 
         SignatureWidget()
@@ -565,9 +565,9 @@ The following structure describes the permissions used in PDF security
     struct PDFWriterContext
     {
         /* must be a valid file: URL usable by osl */
-        rtl::OUString                   URL;
+        OUString                   URL;
         /* the URL of the document being exported, used for relative links*/
-        rtl::OUString                   BaseURL;
+        OUString                   BaseURL;
         /*if relative to file system should be formed*/
         bool                            RelFsys;//i56629, i49415?, i64585?
         /*the action to set the PDF hyperlink to*/
@@ -622,10 +622,10 @@ The following structure describes the permissions used in PDF security
         PDFWriter::PDFDocInfo           DocumentInfo;
 
         bool                            SignPDF;
-        rtl::OUString                   SignLocation;
-        rtl::OUString                   SignPassword;
-        rtl::OUString                   SignReason;
-        rtl::OUString                   SignContact;
+        OUString                   SignLocation;
+        OUString                   SignPassword;
+        OUString                   SignReason;
+        OUString                   SignContact;
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
         sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
                                                         // 0 here specifies a default handling
@@ -726,8 +726,8 @@ The following structure describes the permissions used in PDF security
     std::set< ErrorCode > GetErrors();
 
     static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
-           InitEncryption( const rtl::OUString& i_rOwnerPassword,
-                           const rtl::OUString& i_rUserPassword,
+           InitEncryption( const OUString& i_rOwnerPassword,
+                           const OUString& i_rUserPassword,
                            bool b128Bit
                          );
 
@@ -895,7 +895,7 @@ The following structure describes the permissions used in PDF security
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32           CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
+    sal_Int32           CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
     /** Create a new destination to be used in a link
 
     @param rRect
@@ -979,7 +979,7 @@ The following structure describes the permissions used in PDF security
         0 for success
         -1 in case the link id does not exist
     */
-    sal_Int32           SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL );
+    sal_Int32           SetLinkURL( sal_Int32 nLinkId, const OUString& rURL );
     /** Resolve link in logical structure
         <p>
         If a link is created after the corresponding visual appearance was drawn
@@ -1026,7 +1026,7 @@ The following structure describes the permissions used in PDF security
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const rtl::OUString& rText = rtl::OUString(), sal_Int32 nDestID = -1 );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
 
     /** Set an outline item's parent
 
@@ -1055,7 +1055,7 @@ The following structure describes the permissions used in PDF security
     0 if the item exists and the text was changed
     -1 if the item does not exist
     */
-    sal_Int32 SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText );
+    sal_Int32 SetOutlineItemText( sal_Int32 nItem, const OUString& rText );
 
     /** Set an outline item's destination
 
@@ -1137,7 +1137,7 @@ The following structure describes the permissions used in PDF security
     @returns
     the new structure element's id for use in <code>SetCurrentStructureElement</code>
      */
-     sal_Int32 BeginStructureElement( enum StructElement eType, const rtl::OUString& rAlias = rtl::OUString() );
+     sal_Int32 BeginStructureElement( enum StructElement eType, const OUString& rAlias = OUString() );
     /** end the current logical structure element
 
     <p>

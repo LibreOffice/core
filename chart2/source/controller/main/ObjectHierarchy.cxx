@@ -50,7 +50,6 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
@@ -375,12 +374,12 @@ void ImplObjectHierarchy::createWallAndFloor(
     if( bHasWall && bIsThreeD )
     {
         rContainer.push_back(
-            ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) ) );
+            ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) ) );
 
         Reference< beans::XPropertySet > xFloor( xDiagram->getFloor());
         if( xFloor.is())
             rContainer.push_back(
-                ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, rtl::OUString() ) ) );
+                ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_FLOOR, OUString() ) ) );
     }
 
 }
@@ -443,7 +442,7 @@ void ImplObjectHierarchy::createDataSeriesTree(
                     // data lablels
                     if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
                     {
-                        rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
+                        OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
                         aChildParticle+=("=");
                         aSeriesSubContainer.push_back(
                                     ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForParticles( aSeriesParticle, aChildParticle ) ) );

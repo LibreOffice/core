@@ -71,7 +71,7 @@ namespace svx
     {
         struct FeatureDescription
         {
-            ::rtl::OUString sURL;           // the URL
+            OUString sURL;           // the URL
             sal_Int32       nSlotId;        // the SFX-compatible slot ID
             sal_Int16       nFormFeature;   // the css.form.runtime.FormFeature ID
         };
@@ -122,8 +122,8 @@ namespace svx
         //................................................................
         struct MatchFeatureDescriptionByURL : public ::std::unary_function< FeatureDescription, bool >
         {
-            const ::rtl::OUString&  m_rURL;
-            MatchFeatureDescriptionByURL( const ::rtl::OUString& _rURL ) :m_rURL( _rURL ) { }
+            const OUString&  m_rURL;
+            MatchFeatureDescriptionByURL( const OUString& _rURL ) :m_rURL( _rURL ) { }
 
             bool operator()( const FeatureDescription& _compare )
             {
@@ -166,7 +166,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    sal_Int32 FeatureSlotTranslation::getControllerFeatureSlotIdForURL( const ::rtl::OUString& _rMainURL )
+    sal_Int32 FeatureSlotTranslation::getControllerFeatureSlotIdForURL( const OUString& _rMainURL )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
         FeatureDescriptions::const_iterator pos = ::std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionByURL( _rMainURL ) );
@@ -325,7 +325,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void FormControllerHelper::execute( sal_Int32 _nSlotId, const ::rtl::OUString& _rParamName, const Any& _rParamValue ) const
+    void FormControllerHelper::execute( sal_Int32 _nSlotId, const OUString& _rParamName, const Any& _rParamValue ) const
     {
         Sequence< NamedValue > aArguments(1);
         aArguments[0].Name = _rParamName;
@@ -507,7 +507,7 @@ namespace svx
             bool bEscapeProcessing( false );
             OSL_VERIFY( xCursorProperties->getPropertyValue( FM_PROP_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
 
-            ::rtl::OUString sActiveCommand;
+            OUString sActiveCommand;
             OSL_VERIFY( xCursorProperties->getPropertyValue( FM_PROP_ACTIVECOMMAND ) >>= sActiveCommand );
 
             bool bInsertOnlyForm( false );

@@ -50,7 +50,7 @@ namespace utl
         ::std::auto_ptr< OComponentResModuleImpl >  m_pImpl;
 
     public:
-        OComponentResourceModule( const ::rtl::OString& _rResFilePrefix );
+        OComponentResourceModule( const OString& _rResFilePrefix );
         ~OComponentResourceModule();
 
         /// get the vcl res manager of the module
@@ -161,7 +161,7 @@ namespace utl
     }; \
     \
     ModuleClass::ModuleClass() \
-        :BaseClass( ::rtl::OString( resprefix ) ) \
+        :BaseClass( OString( resprefix ) ) \
     { \
     } \
     \

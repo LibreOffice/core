@@ -72,11 +72,11 @@ namespace
     const bool STARTUP_SUSPENDED = true;
     const bool STARTUP_ALIVE     = false;
 
-    css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
+    css::uno::Sequence< OUString > SAL_CALL VistaFilePicker_getSupportedServiceNames()
     {
-        css::uno::Sequence< ::rtl::OUString > aRet(2);
-        aRet[0] = ::rtl::OUString("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = ::rtl::OUString("com.sun.star.ui.dialogs.SystemFilePicker");
+        css::uno::Sequence< OUString > aRet(2);
+        aRet[0] = OUString("com.sun.star.ui.dialogs.FilePicker");
+        aRet[1] = OUString("com.sun.star.ui.dialogs.SystemFilePicker");
         return aRet;
     }
 }
@@ -137,7 +137,7 @@ void SAL_CALL VistaFilePicker::setMultiSelectionMode(::sal_Bool bMode)
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::setTitle(const ::rtl::OUString& sTitle)
+void SAL_CALL VistaFilePicker::setTitle(const OUString& sTitle)
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -148,8 +148,8 @@ void SAL_CALL VistaFilePicker::setTitle(const ::rtl::OUString& sTitle)
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::appendFilter(const ::rtl::OUString& sTitle ,
-                                            const ::rtl::OUString& sFilter)
+void SAL_CALL VistaFilePicker::appendFilter(const OUString& sTitle ,
+                                            const OUString& sFilter)
     throw(css::lang::IllegalArgumentException,
           css::uno::RuntimeException         )
 {
@@ -162,7 +162,7 @@ void SAL_CALL VistaFilePicker::appendFilter(const ::rtl::OUString& sTitle ,
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::setCurrentFilter(const ::rtl::OUString& sTitle)
+void SAL_CALL VistaFilePicker::setCurrentFilter(const OUString& sTitle)
     throw(css::lang::IllegalArgumentException,
           css::uno::RuntimeException         )
 {
@@ -174,7 +174,7 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const ::rtl::OUString& sTitle)
 }
 
 //-----------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VistaFilePicker::getCurrentFilter()
+OUString SAL_CALL VistaFilePicker::getCurrentFilter()
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -182,12 +182,12 @@ void SAL_CALL VistaFilePicker::setCurrentFilter(const ::rtl::OUString& sTitle)
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
 
-    const  ::rtl::OUString sTitle = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, ::rtl::OUString());
+    const  OUString sTitle = rRequest->getArgumentOrDefault(PROP_FILTER_TITLE, OUString());
     return sTitle;
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::appendFilterGroup(const ::rtl::OUString&                              /*sGroupTitle*/,
+void SAL_CALL VistaFilePicker::appendFilterGroup(const OUString&                              /*sGroupTitle*/,
                                                  const css::uno::Sequence< css::beans::StringPair >& rFilters   )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -200,7 +200,7 @@ void SAL_CALL VistaFilePicker::appendFilterGroup(const ::rtl::OUString&         
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& sName )
+void SAL_CALL VistaFilePicker::setDefaultName(const OUString& sName )
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -211,13 +211,13 @@ void SAL_CALL VistaFilePicker::setDefaultName(const ::rtl::OUString& sName )
 }
 
 //-----------------------------------------------------------------------------------------
-void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirectory)
+void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
 {
-    const ::rtl::OUString aPackage("org.openoffice.Office.Common/");
-    const ::rtl::OUString aRelPath("Path/Info");
-    const ::rtl::OUString aKey("WorkPathChanged");
+    const OUString aPackage("org.openoffice.Office.Common/");
+    const OUString aRelPath("Path/Info");
+    const OUString aKey("WorkPathChanged");
 
     css::uno::Any aValue = ::comphelper::ConfigurationHelper::readDirectKey(
         comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, ::comphelper::ConfigurationHelper::E_READONLY);
@@ -238,20 +238,20 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
 }
 
 //-----------------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
+OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_GET_DIRECTORY);
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::NON_BLOCKED);
-    const ::rtl::OUString sDirectory = rRequest->getArgumentOrDefault(PROP_FILENAME, ::rtl::OUString());
+    const OUString sDirectory = rRequest->getArgumentOrDefault(PROP_FILENAME, OUString());
 
     return sDirectory;
 }
 
 //-----------------------------------------------------------------------------------------
 // @deprecated cant be supported any longer ... see IDL description for further details
-css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getFiles()
+css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -259,13 +259,13 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getFiles()
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
 
-    const  css::uno::Sequence< ::rtl::OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< ::rtl::OUString >());
+    const  css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
     m_lLastFiles = lFiles;
     return lFiles;
 }
 
 //-----------------------------------------------------------------------------------------
-css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
+css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
     throw(css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -273,7 +273,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSelectedFiles
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
 
-    const  css::uno::Sequence< ::rtl::OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< ::rtl::OUString >());
+    const  css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
     m_lLastFiles = lFiles;
     return lFiles;
 }
@@ -303,7 +303,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSelectedFiles
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::PROCESS_MESSAGES);
 
     const ::sal_Bool bOK          = rRequest->getArgumentOrDefault(PROP_DIALOG_SHOW_RESULT, (::sal_Bool)sal_False                  );
-                     m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< ::rtl::OUString >());
+                     m_lLastFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES    , css::uno::Sequence< OUString >());
 
     ::sal_Int16 nResult = css::ui::dialogs::ExecutableDialogResults::CANCEL;
     if (bOK)
@@ -368,7 +368,7 @@ void SAL_CALL VistaFilePicker::enableControl(::sal_Int16 nControlId,
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
-                                         const ::rtl::OUString& sLabel    )
+                                         const OUString& sLabel    )
     throw (css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -383,7 +383,7 @@ void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
 //
 //-----------------------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
+OUString SAL_CALL VistaFilePicker::getLabel(::sal_Int16 nControlId)
     throw (css::uno::RuntimeException)
 {
     RequestRef rRequest(new Request());
@@ -391,7 +391,7 @@ void SAL_CALL VistaFilePicker::setLabel(      ::sal_Int16      nControlId,
     rRequest->setArgument(PROP_CONTROL_ID, nControlId);
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
-    const ::rtl::OUString sLabel = rRequest->getArgumentOrDefault(PROP_CONTROL_LABEL, ::rtl::OUString());
+    const OUString sLabel = rRequest->getArgumentOrDefault(PROP_CONTROL_LABEL, OUString());
     return sLabel;
 }
 
@@ -476,7 +476,7 @@ void SAL_CALL VistaFilePicker::initialize(const css::uno::Sequence< css::uno::An
 {
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XInitialization::initialize() called without arguments." )),
+                OUString(RTL_CONSTASCII_USTRINGPARAM( "XInitialization::initialize() called without arguments." )),
                 static_cast< css::ui::dialogs::XFilePicker2* >( this ),
                 1);
 
@@ -603,20 +603,20 @@ void SAL_CALL VistaFilePicker::cancel()
 // XServiceInfo
 // -------------------------------------------------
 
-::rtl::OUString SAL_CALL VistaFilePicker::getImplementationName()
+OUString SAL_CALL VistaFilePicker::getImplementationName()
     throw(css::uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.fpicker.VistaFileDialog");
+    return OUString("com.sun.star.comp.fpicker.VistaFileDialog");
 }
 
 // -------------------------------------------------
 //  XServiceInfo
 // -------------------------------------------------
 
-sal_Bool SAL_CALL VistaFilePicker::supportsService(const ::rtl::OUString& sServiceName)
+sal_Bool SAL_CALL VistaFilePicker::supportsService(const OUString& sServiceName)
     throw(css::uno::RuntimeException )
 {
-    css::uno::Sequence< ::rtl::OUString > lSupportedServicesNames = VistaFilePicker_getSupportedServiceNames();
+    css::uno::Sequence< OUString > lSupportedServicesNames = VistaFilePicker_getSupportedServiceNames();
 
     for (sal_Int32 n = lSupportedServicesNames.getLength(); n--;)
         if (lSupportedServicesNames[n] == sServiceName)
@@ -629,7 +629,7 @@ sal_Bool SAL_CALL VistaFilePicker::supportsService(const ::rtl::OUString& sServi
 //  XServiceInfo
 // -------------------------------------------------
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL VistaFilePicker::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
     return VistaFilePicker_getSupportedServiceNames();

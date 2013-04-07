@@ -24,14 +24,14 @@
 
 class XMLControlOASISTransformerContext : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
     sal_Bool m_bCreateControl;
 
 public:
     TYPEINFO();
 
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_Bool bCreateControl );
 
     virtual ~XMLControlOASISTransformerContext();

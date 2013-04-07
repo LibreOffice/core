@@ -27,7 +27,7 @@
 
 namespace sw {
     namespace mark {
-    typedef boost::unordered_map<rtl::OUString, sal_Int32, rtl::OUStringHash> MarkBasenameMapUniqueOffset_t;
+    typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> MarkBasenameMapUniqueOffset_t;
 
     class MarkManager
         : private ::boost::noncopyable
@@ -36,19 +36,19 @@ namespace sw {
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
             // IDocumentMarkAccess
-            virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const ::rtl::OUString& rName, IDocumentMarkAccess::MarkType eMark);
+            virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const OUString& rName, IDocumentMarkAccess::MarkType eMark);
 
             virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
-                const rtl::OUString& rName,
-                const rtl::OUString& rType);
+                const OUString& rName,
+                const OUString& rType);
             virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
-                const rtl::OUString& rName,
-                const rtl::OUString& rType);
+                const OUString& rName,
+                const OUString& rType);
 
             virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode, IDocumentMarkAccess::MarkType eMark);
 
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM);
-            virtual bool renameMark(::sw::mark::IMark* io_pMark, const ::rtl::OUString& rNewName);
+            virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName);
             virtual void correctMarksAbsolute(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const xub_StrLen nOffset);
             virtual void correctMarksRelative(const SwNodeIndex& rOldNode, const SwPosition& rNewPos, const xub_StrLen nOffset);
 
@@ -64,14 +64,14 @@ namespace sw {
             virtual const_iterator_t getMarksBegin() const;
             virtual const_iterator_t getMarksEnd() const;
             virtual sal_Int32 getMarksCount() const;
-            virtual const_iterator_t findMark(const ::rtl::OUString& rName) const;
-            virtual bool hasMark(const ::rtl::OUString& rName) const;
+            virtual const_iterator_t findMark(const OUString& rName) const;
+            virtual bool hasMark(const OUString& rName) const;
 
             // bookmarks
             virtual const_iterator_t getBookmarksBegin() const;
             virtual const_iterator_t getBookmarksEnd() const;
             virtual sal_Int32 getBookmarksCount() const;
-            virtual const_iterator_t findBookmark(const ::rtl::OUString& rName) const;
+            virtual const_iterator_t findBookmark(const OUString& rName) const;
 
             // Fieldmarks
             virtual ::sw::mark::IFieldmark* getFieldmarkFor(const SwPosition& rPos) const;
@@ -81,13 +81,13 @@ namespace sw {
             void dumpAsXml(xmlTextWriterPtr w);
         private:
             // make names
-            ::rtl::OUString getUniqueMarkName(const ::rtl::OUString& rName) const;
+            OUString getUniqueMarkName(const OUString& rName) const;
             void sortMarks();
 
             container_t m_vMarks;
             container_t m_vBookmarks;
             container_t m_vFieldmarks;
-            boost::unordered_set<rtl::OUString, rtl::OUStringHash> m_aMarkNamesSet;
+            boost::unordered_set<OUString, OUStringHash> m_aMarkNamesSet;
             mutable MarkBasenameMapUniqueOffset_t m_aMarkBasenameMapUniqueOffset;
             SwDoc * const m_pDoc;
     };

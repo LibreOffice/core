@@ -109,16 +109,16 @@ CWinFileOpenImpl::~CWinFileOpenImpl()
 // we expect the directory in URL format
 //------------------------------------------------------------------------
 
-void CWinFileOpenImpl::setDisplayDirectory(const rtl::OUString& aDirectory)
+void CWinFileOpenImpl::setDisplayDirectory(const OUString& aDirectory)
     throw( IllegalArgumentException, uno::RuntimeException )
 {
-    rtl::OUString aSysDirectory;
+    OUString aSysDirectory;
     if( aDirectory.getLength() > 0)
     {
         if ( ::osl::FileBase::E_None !=
              ::osl::FileBase::getSystemPathFromFileURL(aDirectory,aSysDirectory))
             throw IllegalArgumentException(
-                rtl::OUString("Invalid directory"),
+                OUString("Invalid directory"),
                 static_cast<XFilePicker2*>(m_FilePicker), 1);
 
         // we ensure that there is a trailing '/' at the end of
@@ -139,7 +139,7 @@ void CWinFileOpenImpl::setDisplayDirectory(const rtl::OUString& aDirectory)
 // we return the directory in URL format
 //------------------------------------------------------------------------
 
-rtl::OUString CWinFileOpenImpl::getDisplayDirectory() throw(uno::RuntimeException)
+OUString CWinFileOpenImpl::getDisplayDirectory() throw(uno::RuntimeException)
 {
     return m_FilePickerState->getDisplayDirectory(this);
 }
@@ -148,7 +148,7 @@ rtl::OUString CWinFileOpenImpl::getDisplayDirectory() throw(uno::RuntimeExceptio
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::setDefaultName(const rtl::OUString& aName)
+void SAL_CALL CWinFileOpenImpl::setDefaultName(const OUString& aName)
     throw( IllegalArgumentException, uno::RuntimeException )
 {
     // we don't set the default name directly
@@ -169,7 +169,7 @@ void SAL_CALL CWinFileOpenImpl::setDefaultName(const rtl::OUString& aName)
 //    the first entry is the path url, all other entries are file names
 //-----------------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL CWinFileOpenImpl::getFiles()
+uno::Sequence<OUString> SAL_CALL CWinFileOpenImpl::getFiles()
     throw(uno::RuntimeException)
 {
     return m_FilePickerState->getFiles(this);
@@ -189,7 +189,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
         rc = ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
     else
         throw uno::RuntimeException(
-            rtl::OUString("Error executing dialog"),
+            OUString("Error executing dialog"),
             static_cast<XFilePicker2*>(m_FilePicker));
 
     return rc;
@@ -201,14 +201,14 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
 // empty
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::appendFilter(const rtl::OUString& aTitle, const rtl::OUString& aFilter)
+void SAL_CALL CWinFileOpenImpl::appendFilter(const OUString& aTitle, const OUString& aFilter)
     throw(IllegalArgumentException, uno::RuntimeException)
 {
     sal_Bool bRet = m_filterContainer->addFilter(aTitle, aFilter);
 
     if (!bRet)
         throw IllegalArgumentException(
-            rtl::OUString("filter already exists"),
+            OUString("filter already exists"),
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // #95345# see MSDN OPENFILENAME
@@ -226,14 +226,14 @@ void SAL_CALL CWinFileOpenImpl::appendFilter(const rtl::OUString& aTitle, const 
 // sets a current filter
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const rtl::OUString& aTitle)
+void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const OUString& aTitle)
     throw( IllegalArgumentException, uno::RuntimeException)
 {
     sal_Int32 filterPos = m_filterContainer->getFilterPos(aTitle);
 
     if (filterPos < 0)
         throw IllegalArgumentException(
-            rtl::OUString("filter doesn't exist"),
+            OUString("filter doesn't exist"),
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // filter index of the base class starts with 1
@@ -244,11 +244,11 @@ void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const rtl::OUString& aTitle)
 // returns the currently selected filter
 //-----------------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter() throw(uno::RuntimeException)
+OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter() throw(uno::RuntimeException)
 {
     sal_uInt32 nIndex = getSelectedFilterIndex();
 
-    rtl::OUString currentFilter;
+    OUString currentFilter;
     if (nIndex > 0)
     {
         // filter index of the base class starts with 1
@@ -273,7 +273,7 @@ inline void SAL_CALL CWinFileOpenImpl::appendFilterGroupSeparator()
 // XFilterGroupManager
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const rtl::OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
+void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
     throw (IllegalArgumentException, uno::RuntimeException)
 {
     (void) sGroupTitle; // avoid warning
@@ -350,7 +350,7 @@ void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, sal_Bool bEna
 //
 //-----------------------------------------------------------------------------------------
 
-void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const rtl::OUString& aLabel )
+void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const OUString& aLabel )
     throw (uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
@@ -362,14 +362,14 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const rtl::OUStr
 //
 //-----------------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
+OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
         throw (uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( aControlId ))
         return m_FilePickerState->getLabel(aControlId);
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 //-----------------------------------------------------------------------------------------
@@ -570,7 +570,7 @@ void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
     //-----------------------------------------
 
     sal_Int16 aCtrlId = sal::static_int_cast< sal_Int16 >(GetDlgCtrlID(hWnd));
-    rtl::OUString aLabel = m_ResProvider.getResString(aCtrlId);
+    OUString aLabel = m_ResProvider.getResString(aCtrlId);
     if (aLabel.getLength())
         setLabel(aCtrlId, aLabel);
 }
@@ -872,7 +872,7 @@ void CWinFileOpenImpl::onCustomControlHelpRequest(LPHELPINFO lphi)
     FilePickerEvent evt;
     evt.ElementId = sal::static_int_cast< sal_Int16 >(lphi->iCtrlId);
 
-    rtl::OUString aPopupHelpText = m_FilePicker->helpRequested(evt);
+    OUString aPopupHelpText = m_FilePicker->helpRequested(evt);
 
     if (aPopupHelpText.getLength())
     {
@@ -941,7 +941,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
         {
             sal_uInt32 nIndex = getSelectedFilterIndex();
 
-            rtl::OUString currentFilter;
+            OUString currentFilter;
             if (nIndex > 0)
             {
                 // filter index of the base class starts with 1
@@ -949,7 +949,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
 
                 if (currentFilter.getLength())
                 {
-                    rtl::OUString FilterExt;
+                    OUString FilterExt;
                     m_filterContainer->getFilter(currentFilter, FilterExt);
 
                     sal_Int32 posOfPoint = FilterExt.indexOf(L'.');
@@ -959,7 +959,7 @@ void SAL_CALL CWinFileOpenImpl::SetDefaultExtension()
                     if (posOfSemiColon < 0)
                         posOfSemiColon = FilterExt.getLength() - 1;
 
-                    FilterExt = rtl::OUString(pFirstExtStart, posOfSemiColon - posOfPoint);
+                    FilterExt = OUString(pFirstExtStart, posOfSemiColon - posOfPoint);
 
                     SendMessage(m_hwndFileOpenDlg, CDM_SETDEFEXT, 0, reinterpret_cast<LPARAM>(FilterExt.getStr()));
                  }

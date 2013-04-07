@@ -788,7 +788,7 @@ PrinterGfx::PSSetFont ()
                 && rCurrent.maEncoding <= RTL_TEXTENCODING_USER_END)
            )
         {
-            rtl::OString aReencodedFont =
+            OString aReencodedFont =
                         psp::GlyphSet::GetReencodedFontName (rCurrent.maEncoding,
                                                                 rCurrent.maFont);
 
@@ -1163,9 +1163,9 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
     // first search the BoundingBox of the EPS data
     SvMemoryStream aStream( pPtr, nSize, STREAM_READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
-    rtl::OString aLine;
+    OString aLine;
 
-    rtl::OString aDocTitle;
+    OString aDocTitle;
     double fLeft = 0, fRight = 0, fTop = 0, fBottom = 0;
     bool bEndComments = false;
     while( ! aStream.IsEof()
@@ -1179,7 +1179,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
             char cChar = aLine[1];
             if( cChar == '%' )
             {
-                if( aLine.matchIgnoreAsciiCase( rtl::OString( "%%BoundingBox:") ) )
+                if( aLine.matchIgnoreAsciiCase( OString( "%%BoundingBox:") ) )
                 {
                     aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
                     if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )

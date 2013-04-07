@@ -60,7 +60,7 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId( HID_SCSHELL_AUDIT );
-    SetName(rtl::OUString("Auditing"));
+    SetName(OUString("Auditing"));
 }
 
 //------------------------------------------------------------------------

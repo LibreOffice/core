@@ -87,9 +87,9 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER()
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     protected:
         ~DataAccessDescriptor();
@@ -106,22 +106,22 @@ namespace dbaccess
         Reference<XComponentContext> m_xContext;
 
         // </properties>
-        ::rtl::OUString             m_sDataSourceName;
-        ::rtl::OUString             m_sDatabaseLocation;
-        ::rtl::OUString             m_sConnectionResource;
+        OUString             m_sDataSourceName;
+        OUString             m_sDatabaseLocation;
+        OUString             m_sConnectionResource;
         Sequence< PropertyValue >   m_aConnectionInfo;
         Reference< XConnection >    m_xActiveConnection;
-        ::rtl::OUString             m_sCommand;
+        OUString             m_sCommand;
         sal_Int32                   m_nCommandType;
-        ::rtl::OUString             m_sFilter;
-        ::rtl::OUString             m_sOrder;
-        ::rtl::OUString             m_sHavingClause;
-        ::rtl::OUString             m_sGroupBy;
+        OUString             m_sFilter;
+        OUString             m_sOrder;
+        OUString             m_sHavingClause;
+        OUString             m_sGroupBy;
         sal_Bool                    m_bEscapeProcessing;
         Reference< XResultSet >     m_xResultSet;
         Sequence< Any >             m_aSelection;
         sal_Bool                    m_bBookmarkSelection;
-        ::rtl::OUString             m_sColumnName;
+        OUString             m_sColumnName;
         Reference< XPropertySet >   m_xColumn;
         // </properties>
     };
@@ -184,11 +184,11 @@ namespace dbaccess
         return OUString( "com.sun.star.comp.dba.DataAccessDescriptor" );
     }
 
-    ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL DataAccessDescriptor::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( getSupportedServiceNames() );
-        const ::rtl::OUString* pStart = aServices.getConstArray();
-        const ::rtl::OUString* pEnd = aServices.getConstArray() + aServices.getLength();
+        Sequence< OUString > aServices( getSupportedServiceNames() );
+        const OUString* pStart = aServices.getConstArray();
+        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
@@ -227,15 +227,15 @@ namespace dbaccess
     {
     public:
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
         // XServiceInfo - static versions
-        static Sequence< ::rtl::OUString >  getSupportedServiceNames_static(void) throw( RuntimeException );
-        static ::rtl::OUString              getImplementationName_static(void) throw( RuntimeException );
+        static Sequence< OUString >  getSupportedServiceNames_static(void) throw( RuntimeException );
+        static OUString              getImplementationName_static(void) throw( RuntimeException );
         static Reference< XInterface >      Create(const Reference< XComponentContext >& _rxContext);
-        static ::rtl::OUString              getSingletonName_static();
+        static OUString              getSingletonName_static();
 
         // XDataAccessDescriptorFactory
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException);
@@ -262,9 +262,9 @@ namespace dbaccess
         return OUString( "com.sun.star.sdb.DataAccessDescriptorFactory" );
     }
 
-    Sequence< ::rtl::OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
+    Sequence< OUString > DataAccessDescriptorFactory::getSupportedServiceNames_static() throw( RuntimeException )
     {
-        Sequence< ::rtl::OUString > aServices(1);
+        Sequence< OUString > aServices(1);
         aServices[0] = getSingletonName_static();
         return aServices;
     }
@@ -279,20 +279,20 @@ namespace dbaccess
         return *( new DataAccessDescriptorFactory( _rxContext ) );
     }
 
-    ::rtl::OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName() throw (RuntimeException)
+    OUString SAL_CALL DataAccessDescriptorFactory::getImplementationName() throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    ::sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL DataAccessDescriptorFactory::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( getSupportedServiceNames_static() );
-        const ::rtl::OUString* pStart = aServices.getConstArray();
-        const ::rtl::OUString* pEnd = aServices.getConstArray() + aServices.getLength();
+        Sequence< OUString > aServices( getSupportedServiceNames_static() );
+        const OUString* pStart = aServices.getConstArray();
+        const OUString* pEnd = aServices.getConstArray() + aServices.getLength();
         return ::std::find( pStart, pEnd, rServiceName ) != pEnd;
     }
 
-    Sequence< ::rtl::OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DataAccessDescriptorFactory::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }

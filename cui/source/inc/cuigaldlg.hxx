@@ -292,7 +292,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
     virtual sal_Bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return sal_True; }
-    ::rtl::OUString     addExtension( const ::rtl::OUString&, const ::rtl::OUString& );
+    OUString     addExtension( const OUString&, const OUString& );
     void                FillFilterList();
 
     void                SearchFiles();

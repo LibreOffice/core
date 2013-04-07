@@ -80,7 +80,7 @@ public:
         );
 
     //XInterceptorInfo
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    virtual ::com::sun::star::uno::Sequence< OUString >
     SAL_CALL getInterceptedURLs(  )
         throw (
             ::com::sun::star::uno::RuntimeException
@@ -91,7 +91,7 @@ public:
     ::com::sun::star::frame::XDispatch > SAL_CALL
     queryDispatch(
         const ::com::sun::star::util::URL& URL,
-        const ::rtl::OUString& TargetFrameName,
+        const OUString& TargetFrameName,
         sal_Int32 SearchFlags )
         throw (
             ::com::sun::star::uno::RuntimeException
@@ -149,7 +149,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xMasterDispatchProvider;
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aInterceptedURL;
+    static ::com::sun::star::uno::Sequence< OUString > m_aInterceptedURL;
 
     cppu::OInterfaceContainerHelper*    m_pDisposeEventListeners;
     StatusChangeListenerContainer*    m_pStatCL;

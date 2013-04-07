@@ -40,11 +40,11 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > & xScaling );
 
 protected:
-    virtual ::rtl::OUString ImplGetRepresentation(
+    virtual OUString ImplGetRepresentation(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
         ::sal_Int32 nNumberFormatKey ) const = 0;
 
-    ::rtl::OUString getFormattedString(
+    OUString getFormattedString(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
         ::sal_Int32 nNumberFormatKey,
         double fNumber ) const;
@@ -71,9 +71,9 @@ protected:
                ::com::sun::star::uno::RuntimeException);
     virtual double SAL_CALL getCorrelationCoefficient()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRepresentation()
+    virtual OUString SAL_CALL getRepresentation()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getFormattedRepresentation(
+    virtual OUString SAL_CALL getFormattedRepresentation(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumFmtSupplier,
         ::sal_Int32 nNumberFormatKey )
         throw (::com::sun::star::uno::RuntimeException);

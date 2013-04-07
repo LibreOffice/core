@@ -902,7 +902,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                                 }
 
                                 Any value =
-                                    xPropSet->getPropertyValue( rtl::OUString("URI") );
+                                    xPropSet->getPropertyValue( OUString("URI") );
                                 value >>= uri;
 
                                 String* pScriptURI = new String( uri );

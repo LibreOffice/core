@@ -559,10 +559,10 @@ public:
     /// Closes parenthesis of nUndoId, not used by UI.
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
 
-    bool     GetLastUndoInfo(::rtl::OUString *const o_pStr,
+    bool     GetLastUndoInfo(OUString *const o_pStr,
                              SwUndoId *const o_pId) const;
-    bool     GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
-    SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
+    bool     GetFirstRedoInfo(OUString *const o_pStr) const;
+    SwUndoId GetRepeatInfo(OUString *const o_pStr) const;
 
     /// is it forbidden to modify cursors via API calls?
     bool CursorsLocked() const;
@@ -766,7 +766,7 @@ public:
     bool GetGrammarCorrection( ::com::sun::star::linguistic2::ProofreadingResult /*out*/ &rResult,
             sal_Int32 /*out*/ &rErrorPosInText,
             sal_Int32 /*out*/ &rErrorIndexInResult,
-            ::com::sun::star::uno::Sequence< rtl::OUString > /*out*/ &rSuggestions,
+            ::com::sun::star::uno::Sequence< OUString > /*out*/ &rSuggestions,
             const Point* pPt, SwRect& rSelectRect );
 
     void IgnoreGrammarErrorAt( SwPaM& rErrorPosition );
@@ -777,7 +777,7 @@ public:
 
     /**  @return names of all references set in document.
       If ArrayPointer == 0 then return only whether a RefMark is set in document. */
-    sal_uInt16 GetRefMarks( std::vector<rtl::OUString>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<OUString>* = 0 ) const;
 
     /// Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsertMode = sal_True,

@@ -39,11 +39,11 @@ KabResultSetMetaData::~KabResultSetMetaData()
 void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const ::rtl::OUString aName("Name");
+    static const OUString aName("Name");
 
     for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
     {
-        ::rtl::OUString aFieldName;
+        OUString aFieldName;
         sal_uInt32 nFieldNumber;
 
         (*aIter)->getPropertyValue(aName) >>= aFieldName;
@@ -72,12 +72,12 @@ sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLExce
     return sal_True;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nFieldNumber = m_aKabFields[column - 1];
     ::KABC::Field::List aFields = ::KABC::Field::allFields();
@@ -91,34 +91,34 @@ sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLExce
         default:
             aQtName = aFields[nFieldNumber - KAB_DATA_FIELDS]->label();
     }
-    ::rtl::OUString aName((const sal_Unicode *) aQtName.ucs2());
+    OUString aName((const sal_Unicode *) aQtName.ucs2());
 
     return aName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return KabDatabaseMetaData::getAddressBookTableName();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)

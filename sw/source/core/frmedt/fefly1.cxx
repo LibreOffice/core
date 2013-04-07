@@ -69,7 +69,6 @@
 #include <ndole.hxx>
 #include <editeng/opaqitem.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // To register Flys in Flys in ...

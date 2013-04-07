@@ -47,13 +47,13 @@ namespace pcr
         // IPropertyInfoService
         virtual sal_Int32                           getPropertyId(const String& _rName) const;
         virtual String                              getPropertyTranslation(sal_Int32 _nId) const;
-        virtual rtl::OString                        getPropertyHelpId(sal_Int32 _nId) const;
+        virtual OString                        getPropertyHelpId(sal_Int32 _nId) const;
         virtual sal_Int16                           getPropertyPos(sal_Int32 _nId) const;
         virtual sal_uInt32                          getPropertyUIFlags(sal_Int32 _nId) const;
-        virtual ::std::vector< ::rtl::OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
+        virtual ::std::vector< OUString >    getPropertyEnumRepresentations(sal_Int32 _nId) const;
         virtual String                              getPropertyName( sal_Int32 _nPropId );
 
-        virtual sal_Bool                isComposeable( const ::rtl::OUString& _rPropertyName ) const;
+        virtual sal_Bool                isComposeable( const OUString& _rPropertyName ) const;
 
     protected:
         static const OPropertyInfoImpl* getPropertyInfo();
@@ -91,10 +91,10 @@ namespace pcr
 
     protected:
         // IPropertyEnumRepresentation implementqation
-        virtual ::std::vector< ::rtl::OUString >
+        virtual ::std::vector< OUString >
                                     SAL_CALL getDescriptions() const;
-        virtual void                SAL_CALL getValueFromDescription( const ::rtl::OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
-        virtual ::rtl::OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
+        virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
+        virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
 
         // IReference implementqation
         virtual oslInterlockedCount SAL_CALL acquire();

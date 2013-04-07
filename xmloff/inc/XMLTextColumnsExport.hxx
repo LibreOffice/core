@@ -27,14 +27,14 @@ class XMLTextColumnsExport
 {
     SvXMLExport&        rExport;
 
-    const ::rtl::OUString sSeparatorLineIsOn;
-    const ::rtl::OUString sSeparatorLineWidth;
-    const ::rtl::OUString sSeparatorLineColor;
-    const ::rtl::OUString sSeparatorLineRelativeHeight;
-    const ::rtl::OUString sSeparatorLineVerticalAlignment;
-    const ::rtl::OUString sIsAutomatic;
-    const ::rtl::OUString sAutomaticDistance;
-    const ::rtl::OUString sSeparatorLineStyle;
+    const OUString sSeparatorLineIsOn;
+    const OUString sSeparatorLineWidth;
+    const OUString sSeparatorLineColor;
+    const OUString sSeparatorLineRelativeHeight;
+    const OUString sSeparatorLineVerticalAlignment;
+    const OUString sIsAutomatic;
+    const OUString sAutomaticDistance;
+    const OUString sSeparatorLineStyle;
 
 protected:
 

@@ -62,7 +62,7 @@ public:
         line-end character, the next call to this function will turn the stream
         into EOF state and return an empty string.
      */
-    ::rtl::OUString     readLine();
+    OUString     readLine();
 
     /** Reads a text portion from the stream until the specified character is
         found.
@@ -85,7 +85,7 @@ public:
                 returned as first character in the next call of this function
                 or readLine().
      */
-    ::rtl::OUString     readToChar( sal_Unicode cChar, bool bIncludeChar );
+    OUString     readToChar( sal_Unicode cChar, bool bIncludeChar );
 
     // ------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ private:
                             rtl_TextEncoding eTextEnc );
 
     /** Adds the pending character in front of the passed string, if existing. */
-    ::rtl::OUString     createFinalString( const ::rtl::OUString& rString );
+    OUString     createFinalString( const OUString& rString );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XTextInputStream2 >

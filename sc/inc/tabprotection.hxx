@@ -45,9 +45,9 @@ public:
         returns false. */
     static bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
 
-    static ::rtl::OUString getHashURI(ScPasswordHash eHash);
+    static OUString getHashURI(ScPasswordHash eHash);
 
-    static ScPasswordHash getHashTypeFromURI(const ::rtl::OUString& rURI);
+    static ScPasswordHash getHashTypeFromURI(const OUString& rURI);
 
 private:
     ScPassHashHelper();

@@ -40,13 +40,13 @@ void FileControl::ImplBrowseFile( )
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createWithMode( xContext, dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         // transform the system notation text into a file URL
-        ::rtl::OUString sSystemNotation = GetText(), sFileURL;
+        OUString sSystemNotation = GetText(), sFileURL;
         oslFileError nError = osl_getFileURLFromSystemPath( sSystemNotation.pData, &sFileURL.pData );
         if ( nError == osl_File_E_INVAL )
             sFileURL = GetText();   // #97709# Maybe URL is already a file URL...
 
         //#90430# Check if URL is really a file URL
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( osl_getSystemPathFromFileURL( sFileURL.pData, &aTmp.pData ) == osl_File_E_None )
         {
             // initially set this directory
@@ -55,7 +55,7 @@ void FileControl::ImplBrowseFile( )
 
         if ( xFilePicker->execute() )
         {
-            Sequence < rtl::OUString > aPathSeq = xFilePicker->getFiles();
+            Sequence < OUString > aPathSeq = xFilePicker->getFiles();
 
             if ( aPathSeq.getLength() )
             {

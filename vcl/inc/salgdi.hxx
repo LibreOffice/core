@@ -72,7 +72,7 @@ namespace basegfx {
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
-typedef std::map< sal_Ucs, rtl::OString > Ucs2OStrMap;
+typedef std::map< sal_Ucs, OString > Ucs2OStrMap;
 typedef std::vector< sal_Int32 > Int32Vector;
 
 // note: if you add any new methods to class SalGraphics using coordinates
@@ -152,9 +152,9 @@ protected:
                                                   const Point& aPos, sal_Bool& rIsInside );
     virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               const rtl::OUString& aCaption );
+                                               const OUString& aCaption );
     virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
-                                                    const ImplControlValue& aValue, const rtl::OUString& aCaption,
+                                                    const ImplControlValue& aValue, const OUString& aCaption,
                                                     Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     /** Render bitmap with alpha channel
@@ -251,7 +251,7 @@ public:
     // OutputDevice for all its device specific preferred font substitutions
     virtual void            GetDevFontSubstList( OutputDevice* ) = 0;
 
-    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName ) = 0;
+    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName ) = 0;
 
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
@@ -265,7 +265,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual sal_Bool        CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool        CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace* pFont,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -346,7 +346,7 @@ public:
         true: a substitution has taken place and rNewText rLen, rCutStart and rCutStop have been filled accordingly
         false: no substitution has taken place, rNewText, rLen, rCutStart, rCutStop remain unchanged
      */
-    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText,
+    virtual bool            filterText( const OUString& rOrigText, OUString& rNewText,
                                         sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop );
 
     virtual bool            supportsOperation( OutDevSupportType ) const = 0;
@@ -472,7 +472,7 @@ public:
                                                const Rectangle& rControlRegion,
                                                ControlState nState,
                                                const ImplControlValue& aValue,
-                                               const rtl::OUString& aCaption,
+                                               const OUString& aCaption,
                                                const OutputDevice *pOutDev );
 
     // Query the native control's actual drawing region (including adornment)
@@ -481,7 +481,7 @@ public:
                                                     const Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
-                                                    const rtl::OUString& aCaption,
+                                                    const OUString& aCaption,
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion,
                                                     const OutputDevice *pOutDev );

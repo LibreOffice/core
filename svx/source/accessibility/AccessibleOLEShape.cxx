@@ -66,7 +66,7 @@ sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
 
 
 
-::rtl::OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
+OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
     throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException)
 {
@@ -122,7 +122,7 @@ void SAL_CALL
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessibleOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -132,19 +132,19 @@ void SAL_CALL
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+::com::sun::star::uno::Sequence< OUString> SAL_CALL
     AccessibleOLEShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
-    uno::Sequence< ::rtl::OUString > aServiceNames =
+    uno::Sequence< OUString > aServiceNames =
         AccessibleShape::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
     // ...and add additional names.
     aServiceNames.realloc (nCount + 1);
-    static const ::rtl::OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleOLEShape");
+    static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleOLEShape");
     aServiceNames[nCount] = sAdditionalServiceName;
 
     return aServiceNames;
@@ -175,7 +175,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString
+OUString
     AccessibleOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -209,7 +209,7 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 
-::rtl::OUString
+OUString
     AccessibleOLEShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

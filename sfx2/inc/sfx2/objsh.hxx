@@ -275,18 +275,18 @@ public:
 
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     sal_Bool                    IsDocShared() const;
-    ::rtl::OUString             GetSharedFileURL() const;
+    OUString             GetSharedFileURL() const;
     sal_Bool                    SwitchToShared( sal_Bool bShared, sal_Bool bSave );
     SAL_DLLPRIVATE void         FreeSharedFile();
-    SAL_DLLPRIVATE void         FreeSharedFile( const ::rtl::OUString& aTempFileURL );
+    SAL_DLLPRIVATE void         FreeSharedFile( const OUString& aTempFileURL );
     SAL_DLLPRIVATE void         DoNotCleanShareControlFile();
     void                        SetSharedXMLFlag( sal_Bool bFlag ) const;
     sal_Bool                    HasSharedXMLFlagSet() const;
 #else
     sal_Bool                    IsDocShared() const
         { return sal_False; };
-    ::rtl::OUString             GetSharedFileURL() const
-        { return ::rtl::OUString(); };
+    OUString             GetSharedFileURL() const
+        { return OUString(); };
 #endif
 
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
@@ -295,9 +295,9 @@ public:
     void                        ResetError();
     sal_uInt32                  GetError() const;
     sal_uInt32                  GetErrorCode() const;
-    void                        SetError( sal_uInt32 rErr, const ::rtl::OUString& aLogMessage );
+    void                        SetError( sal_uInt32 rErr, const OUString& aLogMessage );
 
-    void                        AddLog( const ::rtl::OUString& aMessage );
+    void                        AddLog( const OUString& aMessage );
     void                        StoreLog();
 
     /**
@@ -308,7 +308,7 @@ public:
     bool                        DoInitUnitTest();
     sal_Bool                    DoInitNew( SfxMedium* pMedium=0 );
     sal_Bool                    DoLoad( SfxMedium* pMedium );
-    bool                        DoLoadExternal(SfxMedium* pMed, const rtl::OUString& rProvider);
+    bool                        DoLoadExternal(SfxMedium* pMed, const OUString& rProvider);
     sal_Bool                    DoSave();
     sal_Bool                    DoSaveAs( SfxMedium &rNewStor );
     sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, sal_Bool bCommit );
@@ -329,7 +329,7 @@ public:
     virtual sal_Bool            SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
-    virtual bool                LoadExternal(SfxMedium& rMedium, const rtl::OUString& rProvider);
+    virtual bool                LoadExternal(SfxMedium& rMedium, const OUString& rProvider);
     /**
      * Called when the Options dialog is dismissed with the OK button, to
      * handle potentially conflicting option settings.
@@ -374,7 +374,7 @@ public:
 
     static ErrCode  CallXScript(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxScriptContext,
-        const ::rtl::OUString& rScriptURL,
+        const OUString& rScriptURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
@@ -553,7 +553,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
     // Only temporarily for the applications!
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
@@ -656,11 +656,11 @@ public:
     SAL_DLLPRIVATE sal_Bool DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium );
 
     SAL_DLLPRIVATE sal_Bool PutURLContentsToVersionStream_Impl(
-                    ::rtl::OUString aURL,
+                    OUString aURL,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xDocStorage,
-                    ::rtl::OUString aStreamName );
+                    OUString aStreamName );
 
-    SAL_DLLPRIVATE ::rtl::OUString CreateTempCopyOfStorage_Impl(
+    SAL_DLLPRIVATE OUString CreateTempCopyOfStorage_Impl(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     SAL_DLLPRIVATE void InitOwnModel_Impl();

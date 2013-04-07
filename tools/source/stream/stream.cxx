@@ -519,24 +519,24 @@ void SvStream::ResetError()
     ClearError();
 }
 
-sal_Bool SvStream::ReadByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+sal_Bool SvStream::ReadByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                        sal_Int32 nMaxBytesToRead )
 {
-    rtl::OString aStr;
+    OString aStr;
     sal_Bool bRet = ReadLine( aStr, nMaxBytesToRead);
-    rStr = rtl::OStringToOUString(aStr, eSrcCharSet);
+    rStr = OStringToOUString(aStr, eSrcCharSet);
     return bRet;
 }
 
 sal_Bool SvStream::ReadByteStringLine( String& rStr, rtl_TextEncoding eSrcCharSet )
 {
-    rtl::OString aStr;
+    OString aStr;
     sal_Bool bRet = ReadLine(aStr);
-    rStr = rtl::OStringToOUString(aStr, eSrcCharSet);
+    rStr = OStringToOUString(aStr, eSrcCharSet);
     return bRet;
 }
 
-sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
+sal_Bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
 {
     sal_Char    buf[256+1];
     sal_Bool        bEnd        = sal_False;
@@ -544,7 +544,7 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
     sal_Char    c           = 0;
     sal_Size       nTotalLen   = 0;
 
-    rtl::OStringBuffer aBuf(4096);
+    OStringBuffer aBuf(4096);
     while( !bEnd && !GetError() )   // Don't test for EOF as we
                                     // are reading block-wise!
     {
@@ -555,7 +555,7 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
             {
                 // Exit on first block-read error
                 bIsEof = sal_True;
-                rStr = rtl::OString();
+                rStr = OString();
                 return sal_False;
             }
             else
@@ -610,7 +610,7 @@ sal_Bool SvStream::ReadLine( rtl::OString& rStr, sal_Int32 nMaxBytesToRead )
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepointsToRead )
+sal_Bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead )
 {
     sal_Unicode buf[256+1];
     sal_Bool        bEnd        = sal_False;
@@ -620,7 +620,7 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
 
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "ReadUniStringLine: swapping sizeof(sal_Unicode) not implemented" );
 
-    rtl::OUStringBuffer aBuf(4096);
+    OUStringBuffer aBuf(4096);
     while( !bEnd && !GetError() )   // Don't test for EOF as we
                                     // are reading block-wise!
     {
@@ -632,7 +632,7 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
             {
                 // exit on first BlockRead error
                 bIsEof = sal_True;
-                rStr = rtl::OUString();
+                rStr = OUString();
                 return sal_False;
             }
             else
@@ -696,7 +696,7 @@ sal_Bool SvStream::ReadUniStringLine( rtl::OUString& rStr, sal_Int32 nMaxCodepoi
     return bEnd;
 }
 
-sal_Bool SvStream::ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncoding eSrcCharSet,
+sal_Bool SvStream::ReadUniOrByteStringLine( OUString& rStr, rtl_TextEncoding eSrcCharSet,
                                             sal_Int32 nMaxCodepointsToRead )
 {
     if ( eSrcCharSet == RTL_TEXTENCODING_UNICODE )
@@ -705,9 +705,9 @@ sal_Bool SvStream::ReadUniOrByteStringLine( rtl::OUString& rStr, rtl_TextEncodin
         return ReadByteStringLine( rStr, eSrcCharSet, nMaxCodepointsToRead );
 }
 
-rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
+OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
 {
-    rtl::OStringBuffer aOutput(256);
+    OStringBuffer aOutput(256);
 
     sal_Char buf[ 256 + 1 ];
     sal_Bool bEnd = sal_False;
@@ -738,15 +738,15 @@ rtl::OString read_zeroTerminated_uInt8s_ToOString(SvStream& rStream)
     return aOutput.makeStringAndClear();
 }
 
-rtl::OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextEncoding eEnc)
+OUString read_zeroTerminated_uInt8s_ToOUString(SvStream& rStream, rtl_TextEncoding eEnc)
 {
-    return rtl::OStringToOUString(
+    return OStringToOUString(
         read_zeroTerminated_uInt8s_ToOString(rStream), eEnc);
 }
 
 /** Attempt to write a prefixed sequence of nUnits 16bit units from an OUString,
     returned value is number of bytes written */
-sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const rtl::OUString& rStr,
+sal_Size write_uInt16s_FromOUString(SvStream& rStrm, const OUString& rStr,
     sal_Size nUnits)
 {
     DBG_ASSERT( sizeof(sal_Unicode) == sizeof(sal_uInt16), "write_uInt16s_FromOUString: swapping sizeof(sal_Unicode) not implemented" );
@@ -782,7 +782,7 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
     }
     else
     {
-        rtl::OString aStr(rtl::OUStringToOString(rStr, eDestCharSet));
+        OString aStr(OUStringToOString(rStr, eDestCharSet));
         write_uInt8s_FromOString(*this, aStr, aStr.getLength());
         return nError == SVSTREAM_OK;
     }
@@ -790,10 +790,10 @@ sal_Bool SvStream::WriteUnicodeOrByteText( const String& rStr, rtl_TextEncoding 
 
 sal_Bool SvStream::WriteByteStringLine( const String& rStr, rtl_TextEncoding eDestCharSet )
 {
-    return WriteLine(rtl::OUStringToOString(rStr, eDestCharSet));
+    return WriteLine(OUStringToOString(rStr, eDestCharSet));
 }
 
-sal_Bool SvStream::WriteLine(const rtl::OString& rStr)
+sal_Bool SvStream::WriteLine(const OString& rStr)
 {
     Write(rStr.getStr(), rStr.getLength());
     endl(*this);
@@ -806,7 +806,7 @@ sal_Bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCha
         *this << ch;
     else
     {
-        rtl::OString aStr(&ch, 1, eDestCharSet);
+        OString aStr(&ch, 1, eDestCharSet);
         Write(aStr.getStr(), aStr.getLength());
     }
     return nError == SVSTREAM_OK;
@@ -1228,7 +1228,7 @@ SvStream& SvStream::operator<< ( SvStream& rStream )
     return *this;
 }
 
-rtl::OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
+OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
 {
     // read UTF-16 string directly from stream ?
     if (eSrcCharSet == RTL_TEXTENCODING_UNICODE)
@@ -1236,7 +1236,7 @@ rtl::OUString SvStream::ReadUniOrByteString( rtl_TextEncoding eSrcCharSet )
     return read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(*this, eSrcCharSet);
 }
 
-SvStream& SvStream::WriteUniOrByteString( const rtl::OUString& rStr, rtl_TextEncoding eDestCharSet )
+SvStream& SvStream::WriteUniOrByteString( const OUString& rStr, rtl_TextEncoding eDestCharSet )
 {
     // write UTF-16 string directly into stream ?
     if (eDestCharSet == RTL_TEXTENCODING_UNICODE)
@@ -1605,7 +1605,7 @@ unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersi
     return nCryptMask;
 }
 
-void SvStream::SetCryptMaskKey(const rtl::OString& rCryptMaskKey)
+void SvStream::SetCryptMaskKey(const OString& rCryptMaskKey)
 {
     m_aCryptMaskKey = rCryptMaskKey;
     nCryptMask = implGetCryptMask(m_aCryptMaskKey.getStr(),
@@ -1967,7 +1967,7 @@ void SvDataCopyStream::Assign( const SvDataCopyStream& )
 }
 
 //Create a OString of nLen bytes from rStream
-rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
+OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
 {
     rtl_String *pStr = NULL;
     if (nLen)
@@ -1988,11 +1988,11 @@ rtl::OString read_uInt8s_ToOString(SvStream& rStrm, sal_Size nLen)
     }
 
     //take ownership of buffer and return, otherwise return empty string
-    return pStr ? rtl::OString(pStr, SAL_NO_ACQUIRE) : rtl::OString();
+    return pStr ? OString(pStr, SAL_NO_ACQUIRE) : OString();
 }
 
 //Create a OUString of nLen sal_Unicodes from rStream
-rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
+OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
 {
     rtl_uString *pStr = NULL;
     if (nLen)
@@ -2018,7 +2018,7 @@ rtl::OUString read_uInt16s_ToOUString(SvStream& rStrm, sal_Size nLen)
     }
 
     //take ownership of buffer and return, otherwise return empty string
-    return pStr ? rtl::OUString(pStr, SAL_NO_ACQUIRE) : rtl::OUString();
+    return pStr ? OUString(pStr, SAL_NO_ACQUIRE) : OUString();
 }
 
 namespace
@@ -2102,14 +2102,14 @@ namespace
     }
 }
 
-rtl::OString convertLineEnd(const rtl::OString &rIn, LineEnd eLineEnd)
+OString convertLineEnd(const OString &rIn, LineEnd eLineEnd)
 {
-    return tmpl_convertLineEnd<rtl::OString, rtl::OStringBuffer>(rIn, eLineEnd);
+    return tmpl_convertLineEnd<OString, OStringBuffer>(rIn, eLineEnd);
 }
 
-rtl::OUString convertLineEnd(const rtl::OUString &rIn, LineEnd eLineEnd)
+OUString convertLineEnd(const OUString &rIn, LineEnd eLineEnd)
 {
-    return tmpl_convertLineEnd<rtl::OUString, rtl::OUStringBuffer>(rIn, eLineEnd);
+    return tmpl_convertLineEnd<OUString, OUStringBuffer>(rIn, eLineEnd);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

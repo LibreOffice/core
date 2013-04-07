@@ -68,9 +68,9 @@ protected:
     explicit FormattedString( const FormattedString & rOther );
 
     // ____ XFormattedString ____
-    virtual ::rtl::OUString SAL_CALL getString()
+    virtual OUString SAL_CALL getString()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setString( const ::rtl::OUString& String )
+    virtual void SAL_CALL setString( const OUString& String )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ OPropertySet ____
@@ -114,7 +114,7 @@ protected:
     void fireModifyEvent();
 
 private:
-    ::rtl::OUString m_aString;
+    OUString m_aString;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
 };

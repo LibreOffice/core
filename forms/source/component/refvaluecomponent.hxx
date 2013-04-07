@@ -37,18 +37,18 @@ namespace frm
     {
     private:
         // <properties>
-        ::rtl::OUString     m_sReferenceValue;          // the reference value to use for data exchange
-        ::rtl::OUString     m_sNoCheckReferenceValue;   // the reference value to be exchanged when the control is not checked
+        OUString     m_sReferenceValue;          // the reference value to use for data exchange
+        OUString     m_sNoCheckReferenceValue;   // the reference value to be exchanged when the control is not checked
         ToggleState         m_eDefaultChecked;          // the default check state
         // </properties>
 
         sal_Bool            m_bSupportSecondRefValue;       // do we support the SecondaryRefValue property?
 
     protected:
-        const ::rtl::OUString& getReferenceValue() const { return m_sReferenceValue; }
-        void                   setReferenceValue( const ::rtl::OUString& _rRefValue );
+        const OUString& getReferenceValue() const { return m_sReferenceValue; }
+        void                   setReferenceValue( const OUString& _rRefValue );
 
-        const ::rtl::OUString& getNoCheckReferenceValue() const { return m_sNoCheckReferenceValue; }
+        const OUString& getNoCheckReferenceValue() const { return m_sNoCheckReferenceValue; }
 
         ToggleState            getDefaultChecked() const { return m_eDefaultChecked; }
         void                   setDefaultChecked( ToggleState _eChecked ) { m_eDefaultChecked = _eChecked; }
@@ -56,8 +56,8 @@ namespace frm
     protected:
         OReferenceValueComponent(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
-            const ::rtl::OUString& _rUnoControlModelTypeName,
-            const ::rtl::OUString& _rDefault,
+            const OUString& _rUnoControlModelTypeName,
+            const OUString& _rDefault,
             sal_Bool _bSupportNoCheckRefValue = sal_False
         );
         DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )

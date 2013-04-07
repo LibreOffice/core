@@ -72,12 +72,12 @@ private:
     sal_uLong                   nTipVisible;
     Window*                 pTipVisibleSecParent;
     sal_uLong                   nTipVisibleSec;
-    rtl::OUString           aManualTip;
-    rtl::OUString           aAutoSearch;
+    OUString           aManualTip;
+    OUString           aAutoSearch;
 
-    rtl::OUString           aCurrentText;
+    OUString           aCurrentText;
 
-    rtl::OUString           aFormText;                  // for autopilot function
+    OUString           aFormText;                  // for autopilot function
     xub_StrLen              nFormSelStart;              // Selection for autopilot function
     xub_StrLen              nFormSelEnd;
 
@@ -169,8 +169,8 @@ public:
                                                   eMode != SC_INPUT_TYPE); }
     bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
 
-    const rtl::OUString& GetEditString();
-    const rtl::OUString& GetFormString() const { return aFormText; }
+    const OUString& GetEditString();
+    const OUString& GetFormString() const { return aFormText; }
 
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
@@ -232,7 +232,7 @@ public:
     // Communication with the autopilot function
     void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
     void            InputSetSelection       ( xub_StrLen nStart, xub_StrLen nEnd );
-    void            InputReplaceSelection   ( const rtl::OUString& rStr );
+    void            InputReplaceSelection   ( const OUString& rStr );
 
     bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }

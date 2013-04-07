@@ -178,13 +178,13 @@ using namespace ::cppu;
 namespace
 {
     // comparing two PropertyValue instances
-    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, ::rtl::OUString , bool >
+    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString , bool >
     {
-        bool operator() (const beans::PropertyValue& x, const ::rtl::OUString& y) const
+        bool operator() (const beans::PropertyValue& x, const OUString& y) const
         {
             return x.Name.equals(y);
         }
-        bool operator() (const ::rtl::OUString& x,const beans::PropertyValue& y) const
+        bool operator() (const OUString& x,const beans::PropertyValue& y) const
         {
             return x.equals(y.Name);
         }
@@ -250,25 +250,25 @@ static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
         _xWindow = VCLUnoHelper::GetInterface(_pView);
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OReportController::getImplementationName_Static() throw( RuntimeException )
+OUString OReportController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString("com.sun.star.report.comp.ReportDesign");
+    return OUString("com.sun.star.report.comp.ReportDesign");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OReportController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.ReportDesign");
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.sdb.ReportDesign");
     return aSupported;
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OReportController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -307,9 +307,9 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
     m_pReportControllerObserver->acquire();
 
-    m_sMode =  ::rtl::OUString("normal");
+    m_sMode =  OUString("normal");
     DBG_CTOR( rpt_OReportController,NULL);
-    registerProperty(::rtl::OUString("ZoomValue"),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(static_cast< sal_Int16*>(0)));
+    registerProperty(OUString("ZoomValue"),PROPERTY_ID_ZOOMVALUE,beans::PropertyAttribute::BOUND| beans::PropertyAttribute::TRANSIENT,&m_nZoomValue,::getCppuType(static_cast< sal_Int16*>(0)));
 
 }
 // -----------------------------------------------------------------------------
@@ -334,7 +334,7 @@ void OReportController::disposing()
     if ( m_pGroupsFloater )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_GROUPS_SORTING ) );
-        aDlgOpt.SetWindowState(::rtl::OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
+        aDlgOpt.SetWindowState(OStringToOUString(m_pGroupsFloater->GetWindowState(WINDOWSTATE_MASK_ALL), RTL_TEXTENCODING_ASCII_US));
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<FloatingWindow> aTemp(m_pGroupsFloater);
         SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -424,7 +424,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_REPORTHEADERFOOTER:
             {
                 aReturn.bEnabled = isEditable();
-                ::rtl::OUString sText = String(ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
+                OUString sText = String(ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT));
                 aReturn.sTitle = sText;
             }
             break;
@@ -433,7 +433,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_PAGEHEADERFOOTER:
             {
                 aReturn.bEnabled = isEditable();
-                ::rtl::OUString sText = String(ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
+                OUString sText = String(ModuleRes((m_xReportDefinition.is() && m_xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
                 aReturn.sTitle = sText;
             }
             break;
@@ -459,7 +459,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 if ( aReturn.bEnabled )
                 {
                     // TODO: add "Undo/Redo: prefix"
-                    rtl::OUString ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
+                    OUString ( SfxUndoManager::*retrieveComment )( size_t, bool const ) const =
                         ( _nId == SID_UNDO ) ? &SfxUndoManager::GetUndoActionComment : &SfxUndoManager::GetRedoActionComment;
                     aReturn.sTitle = (rUndoManager.*retrieveComment)( 0, ::svl::IUndoManager::TopLevel );
                 }
@@ -586,7 +586,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = !pSectionWindow->getReportSection().isUiActive();
             }
             {
-                ::rtl::OUString sText = String(ModuleRes(RID_STR_DELETE));
+                OUString sText = String(ModuleRes(RID_STR_DELETE));
                 aReturn.sTitle = sText;
             }
             break;
@@ -1355,28 +1355,28 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 URL aUrl = getURLForId(_nId);
                 sal_Int32 nIndex = 1;
-                ::rtl::OUString sType = aUrl.Complete.getToken(0,'.',nIndex);
+                OUString sType = aUrl.Complete.getToken(0,'.',nIndex);
                 if ( nIndex == -1 || sType.isEmpty() )
                 {
                     switch(_nId)
                     {
                         case SID_DRAWTBX_CS_SYMBOL:
-                            sType = ::rtl::OUString("smiley");
+                            sType = OUString("smiley");
                             break;
                         case SID_DRAWTBX_CS_ARROW:
-                            sType = ::rtl::OUString("left-right-arrow");
+                            sType = OUString("left-right-arrow");
                             break;
                         case SID_DRAWTBX_CS_FLOWCHART:
-                            sType = ::rtl::OUString("flowchart-internal-storage");
+                            sType = OUString("flowchart-internal-storage");
                             break;
                         case SID_DRAWTBX_CS_CALLOUT:
-                            sType = ::rtl::OUString("round-rectangular-callout");
+                            sType = OUString("round-rectangular-callout");
                             break;
                         case SID_DRAWTBX_CS_STAR:
-                            sType = ::rtl::OUString("star5");
+                            sType = OUString("star5");
                             break;
                         default:
-                            sType = ::rtl::OUString("diamond");
+                            sType = OUString("diamond");
                     }
                 }
                 else
@@ -1661,7 +1661,7 @@ void OReportController::impl_initialize( )
 
     const ::comphelper::NamedValueCollection& rArguments( getInitParams() );
 
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_REPORTNAME, m_sName );
+    rArguments.get_ensureType( (OUString)PROPERTY_REPORTNAME, m_sName );
     if ( m_sName.isEmpty() )
         rArguments.get_ensureType( "DocumentTitle", m_sName );
 
@@ -1680,7 +1680,7 @@ void OReportController::impl_initialize( )
             UndoSuppressor aSuppressUndo( getUndoManager() );
 
             ::comphelper::NamedValueCollection aArgs(getModel()->getArgs());
-            setMode(aArgs.getOrDefault("Mode", ::rtl::OUString("normal")));
+            setMode(aArgs.getOrDefault("Mode", OUString("normal")));
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
@@ -1688,14 +1688,14 @@ void OReportController::impl_initialize( )
             m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
 
             ::comphelper::MediaDescriptor aDescriptor( m_xReportDefinition->getArgs() );
-            ::rtl::OUString sHierarchicalDocumentName;
-            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(::rtl::OUString("HierarchicalDocumentName"),sHierarchicalDocumentName);
+            OUString sHierarchicalDocumentName;
+            sHierarchicalDocumentName = aDescriptor.getUnpackedValueOrDefault(OUString("HierarchicalDocumentName"),sHierarchicalDocumentName);
 
             if ( sHierarchicalDocumentName.isEmpty() && getConnection().is() )
             {
                 uno::Reference<sdbcx::XTablesSupplier> xTablesSup(getConnection(),uno::UNO_QUERY_THROW);
                 uno::Reference<container::XNameAccess> xTables = xTablesSup->getTables();
-                const uno::Sequence< ::rtl::OUString > aNames( xTables->getElementNames() );
+                const uno::Sequence< OUString > aNames( xTables->getElementNames() );
 
                 if ( aNames.hasElements() )
                 {
@@ -1740,7 +1740,7 @@ void OReportController::impl_initialize( )
 
         if ( m_bShowProperties && m_nPageNum == -1 )
         {
-            m_sLastActivePage = ::rtl::OUString("Data");
+            m_sLastActivePage = OUString("Data");
             getDesignView()->setCurrentPage(m_sLastActivePage);
             uno::Sequence< beans::PropertyValue> aArgs;
             executeUnChecked(SID_SELECT_REPORT,aArgs);
@@ -1781,7 +1781,7 @@ void OReportController::doOpenHelpAgent()
 {
     if (getFrame().is())
     {
-        rtl::OUString suURL("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
+        OUString suURL("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
         openHelpAgent(suURL);
     }
     else
@@ -2103,15 +2103,15 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
 {
     if ( _xLayoutManager.is() )
     {
-        static const ::rtl::OUString s_sMenu[] = {
-             ::rtl::OUString("private:resource/statusbar/statusbar")
-            ,::rtl::OUString("private:resource/toolbar/reportcontrols")
-            ,::rtl::OUString("private:resource/toolbar/drawbar")
-            ,::rtl::OUString("private:resource/toolbar/Formatting")
-            ,::rtl::OUString("private:resource/toolbar/alignmentbar")
-            ,::rtl::OUString("private:resource/toolbar/sectionalignmentbar")
-            ,::rtl::OUString("private:resource/toolbar/resizebar")
-            ,::rtl::OUString("private:resource/toolbar/sectionshrinkbar")
+        static const OUString s_sMenu[] = {
+             OUString("private:resource/statusbar/statusbar")
+            ,OUString("private:resource/toolbar/reportcontrols")
+            ,OUString("private:resource/toolbar/drawbar")
+            ,OUString("private:resource/toolbar/Formatting")
+            ,OUString("private:resource/toolbar/alignmentbar")
+            ,OUString("private:resource/toolbar/sectionalignmentbar")
+            ,OUString("private:resource/toolbar/resizebar")
+            ,OUString("private:resource/toolbar/sectionshrinkbar")
         };
         for (size_t i = 0; i< sizeof(s_sMenu)/sizeof(s_sMenu[0]); ++i)
         {
@@ -2308,11 +2308,11 @@ static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XG
     return nNonVisibleGroups;
 }
 // -----------------------------------------------------------------------------
-void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const ::rtl::OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
+void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGroup,const OUString& _sPropName,sal_Int32 _nGroupPos,bool _bShow)
 {
     ::std::mem_fun_t<sal_Bool,OGroupHelper> pMemFun = ::std::mem_fun(&OGroupHelper::getHeaderOn);
     ::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
-    ::rtl::OUString sColor(DBGROUPHEADER);
+    OUString sColor(DBGROUPHEADER);
     sal_uInt16 nPosition = 0;
     bool bHandle = false;
     if ( _sPropName.equals( PROPERTY_HEADERON ) )
@@ -2405,7 +2405,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         SID_ATTR_METRIC,SID_ATTR_METRIC,
         0
     };
-    SfxItemPool* pPool( new SfxItemPool(rtl::OUString("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
+    SfxItemPool* pPool( new SfxItemPool(OUString("ReportPageProperties"), RPTUI_ID_LRSPACE,RPTUI_ID_METRIC, aItemInfos, pDefaults) );
     pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -2539,7 +2539,7 @@ void OReportController::openSortingAndGroupingDialog()
         m_pGroupsFloater = new OGroupsSortingDialog(getView(),!isEditable(),this);
         SvtViewOptions aDlgOpt( E_WINDOW, OUString::number( RID_GROUPS_SORTING) );
         if ( aDlgOpt.Exists() )
-            m_pGroupsFloater->SetWindowState(::rtl::OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
+            m_pGroupsFloater->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pGroupsFloater->AddEventListener(LINK(this,OReportController,EventLstHdl));
     }
     else if ( isUiVisible() )
@@ -2715,7 +2715,7 @@ uno::Any SAL_CALL OReportController::getViewData(void) throw( uno::RuntimeExcept
     {
         const FeatureState aFeatureState = GetState( nCommandIDs[i] );
 
-        ::rtl::OUString sCommandURL( getURLForId( nCommandIDs[i] ).Main );
+        OUString sCommandURL( getURLForId( nCommandIDs[i] ).Main );
         OSL_ENSURE( sCommandURL.indexOfAsciiL( ".uno:", 5 ) == 0, "OReportController::getViewData: illegal command URL!" );
         sCommandURL = sCommandURL.copy( 5 );
 
@@ -2778,9 +2778,9 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
 
 
         ::comphelper::NamedValueCollection aCommandProperties( aViewData.get( "CommandProperties" ) );
-        const ::std::vector< ::rtl::OUString > aCommandNames( aCommandProperties.getNames() );
+        const ::std::vector< OUString > aCommandNames( aCommandProperties.getNames() );
 
-        for (   ::std::vector< ::rtl::OUString >::const_iterator commandName = aCommandNames.begin();
+        for (   ::std::vector< OUString >::const_iterator commandName = aCommandNames.begin();
                 commandName != aCommandNames.end();
                 ++commandName
             )
@@ -2792,10 +2792,10 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data) throw( 
             if ( getView() )
             {
                 util::URL aCommand;
-                aCommand.Complete = ::rtl::OUString( ".uno:" ) + *commandName;
+                aCommand.Complete = OUString( ".uno:" ) + *commandName;
 
                 Sequence< PropertyValue > aCommandArgs(1);
-                aCommandArgs[0].Name = ::rtl::OUString( "Value" );
+                aCommandArgs[0].Name = OUString( "Value" );
                 aCommandArgs[0].Value = rCommandValue;
 
                 executeUnChecked( aCommand, aCommandArgs );
@@ -2839,7 +2839,7 @@ Reference<XFrame> OReportController::getXFrame()
         m_xFrameLoader.set( frame::Desktop::create(m_xContext) );
     }
     const sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-    const ::rtl::OUString sTarget("_blank");
+    const OUString sTarget("_blank");
     Reference<XFrame> xFrame = m_xFrameLoader->findFrame(sTarget,nFrameSearchFlag);
     return xFrame;
 }
@@ -2883,7 +2883,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                     if ( !m_bShowProperties )
                         executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
 
-                    m_sLastActivePage = ::rtl::OUString("Data");
+                    m_sLastActivePage = OUString("Data");
                     getDesignView()->setCurrentPage(m_sLastActivePage);
                     nCommand = SID_SELECT_REPORT;
                 }
@@ -3022,10 +3022,10 @@ void OReportController::insertGraphic()
             xController->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
             uno::Sequence<beans::PropertyValue> aArgs(2);
             aArgs[0].Name = PROPERTY_IMAGEURL;
-            aArgs[0].Value <<= ::rtl::OUString(aDialog.GetPath());
+            aArgs[0].Value <<= OUString(aDialog.GetPath());
             aArgs[1].Name = PROPERTY_PRESERVEIRI;
             aArgs[1].Value <<= bLink;
-            createControl(aArgs,xSection,::rtl::OUString(),OBJ_DLG_IMAGECONTROL);
+            createControl(aArgs,xSection,OUString(),OBJ_DLG_IMAGECONTROL);
         }
     }
     catch(const Exception&)
@@ -3105,7 +3105,7 @@ void SAL_CALL OReportController::removeSelectionChangeListener( const Reference<
 void OReportController::createNewFunction(const uno::Any& _aValue)
 {
     uno::Reference< container::XIndexContainer> xFunctions(_aValue,uno::UNO_QUERY_THROW);
-    const ::rtl::OUString sNewName = String(ModuleRes(RID_STR_FUNCTION));
+    const OUString sNewName = String(ModuleRes(RID_STR_FUNCTION));
     uno::Reference< report::XFunction> xFunction(report::Function::create(m_xContext));
     xFunction->setName(sNewName);
     // the call below will also create an undo action -> listener
@@ -3118,7 +3118,7 @@ IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const ::rtl::OUString& _sFunction,sal_uInt16 _nObjectId)
+void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,sal_uInt16 _nObjectId)
 {
     SequenceAsHashMap aMap(_aArgs);
     getDesignView()->setMarked(_xSection ,sal_True);
@@ -3141,9 +3141,9 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     {
         pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pSectionWindow->getReportSection().getPage(),m_aReportModel.get() );
         xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
-        ::rtl::OUString sCustomShapeType = getDesignView()->GetInsertObjString();
+        OUString sCustomShapeType = getDesignView()->GetInsertObjString();
         if ( sCustomShapeType.isEmpty() )
-            sCustomShapeType = ::rtl::OUString("diamond");
+            sCustomShapeType = OUString("diamond");
         pSectionWindow->getReportSection().createDefault(sCustomShapeType,pNewControl);
         pNewControl->SetLogicRect(Rectangle(3000,500,6000,3500)); // switch height and width
     }
@@ -3165,7 +3165,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         SdrUnoObj* pControl( NULL );
         FmFormView::createControlLabelPair( getDesignView()
                             ,nLeftMargin,0
-                            ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
+                            ,NULL,NULL,_nObjectId,OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                          NULL,pSectionWindow->getReportSection().getPage(),m_aReportModel.get(),
                          pLabel,pControl);
         delete pLabel;
@@ -3177,7 +3177,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
 
-        const ::rtl::OUString sProps[] = {   PROPERTY_NAME
+        const OUString sProps[] = {   PROPERTY_NAME
                                             ,PROPERTY_FONTDESCRIPTOR
                                             ,PROPERTY_FONTDESCRIPTORASIAN
                                             ,PROPERTY_FONTDESCRIPTORCOMPLEX
@@ -3206,7 +3206,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
             xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
 
-        ::rtl::OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,::rtl::OUString());
+        OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,OUString());
         if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
             xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
 
@@ -3244,18 +3244,18 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     aMap.createItemIfMissing(PROPERTY_FORMATKEY,aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYDATE,sal_Int32(0)));
 
     uno::Reference< report::XSection> xSection = aMap.getUnpackedValueOrDefault(PROPERTY_SECTION,uno::Reference< report::XSection>());
-    ::rtl::OUString sFunction;
+    OUString sFunction;
 
     sal_Bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
     if ( bDate )
     {
-        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TODAY()"));
+        sFunction = OUString (RTL_CONSTASCII_USTRINGPARAM("TODAY()"));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
     sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
-        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TIMEVALUE(NOW())"));
+        sFunction = OUString (RTL_CONSTASCII_USTRINGPARAM("TIMEVALUE(NOW())"));
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
@@ -3278,14 +3278,14 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     sal_Bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
 
     String sFunction = String(ModuleRes(STR_RPT_PN_PAGE));
-    ::rtl::OUString sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-    sFunction.SearchAndReplace(rtl::OUString("#PAGENUMBER#"),sPageNumber);
+    OUString sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
+    sFunction.SearchAndReplace(OUString("#PAGENUMBER#"),sPageNumber);
 
     if ( bStateOfPage )
     {
-        ::rtl::OUString sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+        OUString sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
         sFunction += String(ModuleRes(STR_RPT_PN_PAGE_OF));
-        sFunction.SearchAndReplace(rtl::OUString("#PAGECOUNT#"),sPageCount);
+        sFunction.SearchAndReplace(OUString("#PAGECOUNT#"),sPageCount);
     }
 
     sal_Bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
@@ -3327,7 +3327,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             }
             ::svx::ODataAccessDescriptor aDescriptor(aValue);
             SequenceAsHashMap aMap(aValue);
-            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault(::rtl::OUString("Section"),xCurrentSection);
+            uno::Reference<report::XSection> xSection = aMap.getUnpackedValueOrDefault(OUString("Section"),xCurrentSection);
             uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
 
             getDesignView()->setMarked(xSection,sal_True);
@@ -3339,7 +3339,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 aPos.X = nLeftMargin;
 
             // LLA: new feature, add the Label in dependency of the given DND_ACTION one section up, normal or one section down
-            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(::rtl::OUString("DNDAction"), sal_Int8(0));
+            sal_Int8 nDNDAction = aMap.getUnpackedValueOrDefault(OUString("DNDAction"), sal_Int8(0));
             pSectionWindow[1] = pSectionWindow[0];
             sal_Bool bLabelAboveTextField = nDNDAction == DND_ACTION_COPY;
             if ( bLabelAboveTextField || nDNDAction == DND_ACTION_LINK )
@@ -3359,8 +3359,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             uno::Reference< lang::XComponent > xHoldAlive;
             if ( !xField.is() )
             {
-                ::rtl::OUString sCommand;
-                ::rtl::OUString sColumnName;
+                OUString sCommand;
+                OUString sColumnName;
                 sal_Int32 nCommandType( -1 );
                 OSL_VERIFY( aDescriptor[ ::svx::daCommand ] >>= sCommand );
                 OSL_VERIFY( aDescriptor[ ::svx::daColumnName ] >>= sColumnName );
@@ -3387,7 +3387,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     try
                     {
                         uno::Reference< beans::XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        ::rtl::OUString sRowSetCommand;
+                        OUString sRowSetCommand;
                         sal_Int32 nRowSetCommandType( -1 );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMAND ) >>= sRowSetCommand );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nRowSetCommandType );
@@ -3411,8 +3411,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     for ( sal_Int32 i=0; i<nParamCount; ++i)
                     {
                         uno::Reference< beans::XPropertySet > xParamCol( xParams->getByIndex(i), uno::UNO_QUERY_THROW );
-                        ::rtl::OUString sParamName;
-                        OSL_VERIFY( xParamCol->getPropertyValue( ::rtl::OUString( "Name" ) ) >>= sParamName );
+                        OUString sParamName;
+                        OSL_VERIFY( xParamCol->getPropertyValue( OUString( "Name" ) ) >>= sParamName );
                         if ( sParamName == sColumnName )
                         {
                             xField = xParamCol;
@@ -3458,7 +3458,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             // find this in svx
             FmFormView::createControlLabelPair( getDesignView()
                 ,nLeftMargin,0
-                ,xField,xNumberFormats,nOBJID,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
+                ,xField,xNumberFormats,nOBJID,OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
                 pSectionWindow[1]->getReportSection().getPage(),pSectionWindow[0]->getReportSection().getPage(),m_aReportModel.get(),
                 pControl[0],pControl[1]);
             if ( pControl[0] && pControl[1] )
@@ -3468,7 +3468,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 pPgViews[1] = pSectionViews[1]->GetSdrPageView();
                 if ( pPgViews[0] && pPgViews[1] )
                 {
-                    ::rtl::OUString sDefaultName;
+                    OUString sDefaultName;
                     size_t i = 0;
                     OUnoObject* pObjs[2];
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
@@ -3480,7 +3480,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
                         uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
                         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-                        const ::rtl::OUString sProps[] = {   PROPERTY_FONTDESCRIPTOR
+                        const OUString sProps[] = {   PROPERTY_FONTDESCRIPTOR
                                                             ,PROPERTY_FONTDESCRIPTORASIAN
                                                             ,PROPERTY_FONTDESCRIPTORCOMPLEX
                                                             ,PROPERTY_BORDER
@@ -3493,7 +3493,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         }
                         if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
                         {
-                            ::rtl::OUString sName;
+                            OUString sName;
                             xUnoProp->getPropertyValue(PROPERTY_DATAFIELD) >>= sName;
                             sDefaultName = sName;
                             xUnoProp->setPropertyValue(PROPERTY_NAME,uno::makeAny(sDefaultName));
@@ -3516,7 +3516,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             aPos.Y += xShapeProp->getHeight();
                         aPos.X += nShapeWidth;
                     }
-                    ::rtl::OUString sLabel;
+                    OUString sLabel;
                     if ( xField->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
                         xField->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
 
@@ -3650,12 +3650,12 @@ void OReportController::changeZOrder(sal_Int32 _nId)
 // -----------------------------------------------------------------------------
 void OReportController::listen(const bool _bAdd)
 {
-    const ::rtl::OUString aProps [] = {    PROPERTY_REPORTHEADERON,PROPERTY_REPORTFOOTERON
+    const OUString aProps [] = {    PROPERTY_REPORTHEADERON,PROPERTY_REPORTFOOTERON
                                             ,PROPERTY_PAGEHEADERON,PROPERTY_PAGEFOOTERON
                                             ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE,PROPERTY_CAPTION
     };
 
-    void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const ::rtl::OUString&, const uno::Reference< XPropertyChangeListener >& ) =
+    void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const OUString&, const uno::Reference< XPropertyChangeListener >& ) =
         _bAdd ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
 
     for (size_t i = 0; i < sizeof(aProps)/sizeof(aProps[0]); ++i)
@@ -3666,8 +3666,8 @@ void OReportController::listen(const bool _bAdd)
     uno::Sequence< beans::Property> aSeq = m_xReportDefinition->getPropertySetInfo()->getProperties();
     const beans::Property* pIter = aSeq.getConstArray();
     const beans::Property* pEnd   = pIter + aSeq.getLength();
-    const ::rtl::OUString* pPropsBegin = &aProps[0];
-    const ::rtl::OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 3;
+    const OUString* pPropsBegin = &aProps[0];
+    const OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 3;
     for(;pIter != pEnd;++pIter)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,pIter->Name) == pPropsEnd )
@@ -3962,7 +3962,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
 
     if ( xSection.is() )
     {
-        const ::rtl::OUString sKeyModifier("KeyModifier");
+        const OUString sKeyModifier("KeyModifier");
         const beans::PropertyValue* pIter = _aArgs.getConstArray();
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
         const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
@@ -3971,7 +3971,7 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         {
             Sequence< PropertyValue > aCreateArgs;
             getDesignView()->unmarkAllObjects(NULL);
-            createControl(aCreateArgs,xSection,::rtl::OUString(),getDesignView()->GetInsertObj());
+            createControl(aCreateArgs,xSection,OUString(),getDesignView()->GetInsertObj());
         }
     }
 }
@@ -3986,8 +3986,8 @@ void OReportController::checkChartEnabled()
     if ( !m_bChartEnabledAsked )
     {
         m_bChartEnabledAsked = true;
-        const ::rtl::OUString sConfigName( "/org.openoffice.Office.ReportDesign" );
-        const ::rtl::OUString sPropertyName( "UserData/Chart" );
+        const OUString sConfigName( "/org.openoffice.Office.ReportDesign" );
+        const OUString sPropertyName( "UserData/Chart" );
 
         try
         {
@@ -4007,7 +4007,7 @@ void OReportController::checkChartEnabled()
 // -----------------------------------------------------------------------------
 
 // css.frame.XTitle
-::rtl::OUString SAL_CALL OReportController::getTitle()
+OUString SAL_CALL OReportController::getTitle()
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -4047,27 +4047,27 @@ void SAL_CALL OReportController::setFastPropertyValue_NoBroadcast(sal_Int32 _nHa
         impl_zoom_nothrow();
     }
 }
-void SAL_CALL OReportController::setMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OReportController::setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     m_sMode = aMode;
 }
-::rtl::OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OReportController::getMode(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_sMode;
 }
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OReportController::getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    static ::rtl::OUString s_sModes[] = { ::rtl::OUString("remote"),
-                                          ::rtl::OUString("normal") };
-    return uno::Sequence< ::rtl::OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
+    static OUString s_sModes[] = { OUString("remote"),
+                                          OUString("normal") };
+    return uno::Sequence< OUString> (&s_sModes[0],sizeof(s_sModes)/sizeof(s_sModes[0]));
 }
-::sal_Bool SAL_CALL OReportController::supportsMode( const ::rtl::OUString& aMode ) throw (::com::sun::star::uno::RuntimeException)
+::sal_Bool SAL_CALL OReportController::supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString> aModes = getSupportedModes();
-    const ::rtl::OUString* pIter = aModes.getConstArray();
-    const ::rtl::OUString* pEnd  = pIter + aModes.getLength();
+    uno::Sequence< OUString> aModes = getSupportedModes();
+    const OUString* pIter = aModes.getConstArray();
+    const OUString* pEnd  = pIter + aModes.getLength();
     for(;pIter != pEnd;++pIter)
     {
         if ( pIter->equals(aMode ) )
@@ -4081,7 +4081,7 @@ bool OReportController::isUiVisible() const
     return m_sMode != "remote";
 }
 // -----------------------------------------------------------------------------
-void OReportController::impl_fillState_nothrow(const ::rtl::OUString& _sProperty,dbaui::FeatureState& _rState) const
+void OReportController::impl_fillState_nothrow(const OUString& _sProperty,dbaui::FeatureState& _rState) const
 {
     _rState.bEnabled = isEditable();
     if ( _rState.bEnabled )
@@ -4157,7 +4157,7 @@ sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const un
     return bRet;
 }
 // -----------------------------------------------------------------------------
-bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId,const ::rtl::OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
+bool OReportController::impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId,const OUString& _sProperty,const uno::Any& _aValue,const Sequence< PropertyValue >& _aArgs)
 {
     ::std::vector< uno::Reference< uno::XInterface > > aSelection;
     uno::Reference< awt::XWindow> xWindow;
@@ -4216,7 +4216,7 @@ void OReportController::openZoomDialog()
             SID_ATTR_ZOOM,SID_ATTR_ZOOM,
             0
         };
-        SfxItemPool* pPool( new SfxItemPool(rtl::OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
+        SfxItemPool* pPool( new SfxItemPool(OUString("ZoomProperties"), SID_ATTR_ZOOM,SID_ATTR_ZOOM, aItemInfos, pDefaults) );
         pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );    // ripped, don't understand why
         pPool->FreezeIdRanges();                        // the same
         try
@@ -4329,9 +4329,9 @@ uno::Reference< container::XNameAccess > OReportController::getColumns() const
     return m_xColumns;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OReportController::getColumnLabel_throw(const ::rtl::OUString& i_sColumnName) const
+OUString OReportController::getColumnLabel_throw(const OUString& i_sColumnName) const
 {
-    ::rtl::OUString sLabel;
+    OUString sLabel;
     uno::Reference< container::XNameAccess > xColumns = getColumns();
     if ( xColumns.is() && xColumns->hasByName(i_sColumnName) )
     {

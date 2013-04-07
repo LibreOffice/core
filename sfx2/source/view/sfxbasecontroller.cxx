@@ -210,16 +210,16 @@ public:
                                 --m_refCount;
                             }
 
-    virtual void SAL_CALL   start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(RuntimeException);
+    virtual void SAL_CALL   start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException);
     virtual void SAL_CALL   end(void) throw(RuntimeException);
-    virtual void SAL_CALL   setText(const ::rtl::OUString& aText) throw(RuntimeException);
+    virtual void SAL_CALL   setText(const OUString& aText) throw(RuntimeException);
     virtual void SAL_CALL   setValue(sal_Int32 nValue) throw(RuntimeException);
     virtual void SAL_CALL   reset() throw(RuntimeException);
 
     virtual void SAL_CALL   disposing( const lang::EventObject& Source ) throw(RuntimeException);
 };
 
-void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 nRange) throw(RuntimeException)
+void SAL_CALL SfxStatusIndicator::start(const OUString& aText, sal_Int32 nRange) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     if ( xOwner.is() )
@@ -253,7 +253,7 @@ void SAL_CALL SfxStatusIndicator::end(void) throw(RuntimeException)
     }
 }
 
-void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(RuntimeException)
+void SAL_CALL SfxStatusIndicator::setText(const OUString& aText) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
     if ( xOwner.is() )
@@ -376,7 +376,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
                     pShell->TakeFrameOwnership_Impl();
             }
 
-            throw util::CloseVetoException(::rtl::OUString("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
+            throw util::CloseVetoException(OUString("Controller disagree ..."),static_cast< ::cppu::OWeakObject*>(this));
         }
     }
 }
@@ -505,7 +505,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
     return Reference< XWindow >( GetViewFrame_Impl().GetFrame().GetWindow().GetComponentInterface(), UNO_QUERY_THROW );
 }
 
-::rtl::OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
+OUString SAL_CALL SfxBaseController::getViewControllerName() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     if ( !m_pData->m_pViewShell || !m_pData->m_pViewShell->GetObjectShell() )
@@ -515,7 +515,7 @@ Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (Run
     sal_uInt16 nViewNo = rDocFac.GetViewNo_Impl( GetViewFrame_Impl().GetCurViewId(), rDocFac.GetViewFactoryCount() );
     OSL_ENSURE( nViewNo < rDocFac.GetViewFactoryCount(), "SfxBaseController::getViewControllerName: view ID not found in view factories!" );
 
-    ::rtl::OUString sViewName;
+    OUString sViewName;
     if ( nViewNo < rDocFac.GetViewFactoryCount() )
         sViewName = rDocFac.GetViewFactory( nViewNo ).GetAPIViewName();
 
@@ -672,7 +672,7 @@ uno::Any SfxBaseController::getViewData() throw( RuntimeException )
     if ( m_pData->m_pViewShell )
     {
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
-        ::rtl::OUString    sData( sData1 );
+        OUString    sData( sData1 );
         aAny <<= sData ;
     }
 
@@ -688,7 +688,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        ::rtl::OUString sData;
+        OUString sData;
         aValue >>= sData ;
         m_pData->m_pViewShell->ReadUserData( sData ) ;
     }
@@ -719,7 +719,7 @@ Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( Runtime
 //________________________________________________________________________________________________________
 
 Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const   util::URL&             aURL            ,
-                                                                    const   ::rtl::OUString&            sTargetFrameName,
+                                                                    const   OUString&            sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -748,7 +748,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
             if ( aURL.Protocol == ".uno:" )
             {
-                rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
+                OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
                 sal_Bool      bMasterCommand( !aMasterCommand.isEmpty() );
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
@@ -1180,7 +1180,7 @@ throw (RuntimeException)
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
-        rtl::OUString aCmdPrefix( ".uno:" );
+        OUString aCmdPrefix( ".uno:" );
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
         for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
@@ -1197,7 +1197,7 @@ throw (RuntimeException)
                         if ( pSfxSlot->GetMode() & nMode )
                         {
                             frame::DispatchInformation aCmdInfo;
-                            ::rtl::OUStringBuffer aBuf( aCmdPrefix );
+                            OUStringBuffer aBuf( aCmdPrefix );
                             aBuf.appendAscii( pSfxSlot->GetUnoName() );
                             aCmdInfo.Command = aBuf.makeStringAndClear();
                             aCmdInfo.GroupId = nCommandGroup;
@@ -1260,8 +1260,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     {
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         Reference< beans::XPropertySet > xLayouterProps(
-                            xFrameProps->getPropertyValue( ::rtl::OUString( "LayoutManager"  ) ), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue( ::rtl::OUString( "PreserveContentSize"  ), uno::makeAny( sal_True ) );
+                            xFrameProps->getPropertyValue( OUString( "LayoutManager"  ) ), uno::UNO_QUERY_THROW );
+                        xLayouterProps->setPropertyValue( OUString( "PreserveContentSize"  ), uno::makeAny( sal_True ) );
                     }
                     catch (const uno::Exception&)
                     {
@@ -1345,7 +1345,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
             // if there's a JumpMark given, then, well, jump to it
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
-            const ::rtl::OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", ::rtl::OUString() );
+            const OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", OUString() );
             const bool bHasJumpMark = !sJumpMark.isEmpty();
             OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )
                     ||  ( sJumpMark.isEmpty() ),
@@ -1385,7 +1385,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {
                         const ::comphelper::NamedValueCollection aViewData( xViewData->getByIndex(i) );
-                        ::rtl::OUString sViewId( aViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
+                        OUString sViewId( aViewData.getOrDefault( "ViewId", OUString() ) );
                         if ( sViewId.isEmpty() )
                             continue;
 
@@ -1492,7 +1492,7 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 
 //=============================================================================
 // frame::XTitle
-::rtl::OUString SAL_CALL SfxBaseController::getTitle()
+OUString SAL_CALL SfxBaseController::getTitle()
     throw (RuntimeException)
 {
     return impl_getTitleHelper()->getTitle ();
@@ -1500,7 +1500,7 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 
 //=============================================================================
 // frame::XTitle
-void SAL_CALL SfxBaseController::setTitle(const ::rtl::OUString& sTitle)
+void SAL_CALL SfxBaseController::setTitle(const OUString& sTitle)
     throw (RuntimeException)
 {
     impl_getTitleHelper()->setTitle (sTitle);

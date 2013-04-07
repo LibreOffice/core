@@ -342,14 +342,14 @@ public:
     XubString           GetItemText( sal_uInt16 nItemId ) const;
 
     XubString           GetHelpText( sal_uInt16 nItemId ) const;
-    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
+    OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     Size                CalcWindowSizePixel() const;
 
     inline void             SetHelpText( const String& rText )      { Window::SetHelpText( rText ); }
     inline const String&    GetHelpText() const                     { return Window::GetHelpText(); }
-    inline void             SetHelpId( const rtl::OString& rId )    { Window::SetHelpId( rId ); }
-    inline const rtl::OString& GetHelpId() const                    { return Window::GetHelpId(); }
+    inline void             SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
+    inline const OString& GetHelpId() const                    { return Window::GetHelpId(); }
 
     inline void         SetStartDragHdl( const Link& rLink )        { maStartDragHdl = rLink; }
     inline const Link&  GetStartDragHdl() const                     { return maStartDragHdl; }

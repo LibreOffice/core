@@ -48,9 +48,9 @@ using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
 #if defined(WNT)
-rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
+OString Win_GetShortPathName( const OUString &rLongPathName )
 {
-    rtl::OString aRes;
+    OString aRes;
 
     sal_Unicode aShortBuffer[1024] = {0};
     sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
@@ -62,7 +62,7 @@ rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
             nShortBufSize );
 
     if (nShortLen < nShortBufSize) // conversion successful?
-        aRes = rtl::OString( OU2ENC( rtl::OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
+        aRes = OString( OU2ENC( OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
         OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
@@ -82,12 +82,12 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (!pDicType)
         return aRes;
 
-    rtl::OUString aFormatName;
+    OUString aFormatName;
     String aDicExtension;
 #ifdef SYSTEM_DICTS
-    rtl::OUString aSystemDir;
-    rtl::OUString aSystemPrefix;
-    rtl::OUString aSystemSuffix;
+    OUString aSystemDir;
+    OUString aSystemPrefix;
+    OUString aSystemSuffix;
 #endif
     if (strcmp( pDicType, "DICT" ) == 0)
     {
@@ -194,7 +194,7 @@ void MergeNewStyleDicsAndOldStyleDics(
     std::list< SvtLinguConfigDictionaryEntry >::const_iterator aIt;
     for (aIt = rNewStyleDics.begin() ;  aIt != rNewStyleDics.end();  ++aIt)
     {
-        const uno::Sequence< rtl::OUString > aLocaleNames( aIt->aLocaleNames );
+        const uno::Sequence< OUString > aLocaleNames( aIt->aLocaleNames );
         sal_Int32 nLocaleNames = aLocaleNames.getLength();
         for (sal_Int32 k = 0;  k < nLocaleNames; ++k)
         {

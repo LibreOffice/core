@@ -72,7 +72,7 @@ void SwEditShell::Insert( sal_Unicode c, sal_Bool bOnlyCurrCrsr )
     StartAllAction();
     FOREACHPAM_START(this)
 
-        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, rtl::OUString(c));
+        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, OUString(c));
         OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
         (void) bSuccess;
 
@@ -508,7 +508,7 @@ const SwFmtRefMark* SwEditShell::GetRefMark( const String& rName ) const
 }
 
     // returne die Namen aller im Doc gesetzten Referenzen
-sal_uInt16 SwEditShell::GetRefMarks( std::vector<rtl::OUString>* pStrings ) const
+sal_uInt16 SwEditShell::GetRefMarks( std::vector<OUString>* pStrings ) const
 {
     return GetDoc()->GetRefMarks( pStrings );
 }
@@ -1062,7 +1062,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, sal_Bool bInsText 
     String sRet;
     if( pDel )
     {
-        rtl::OUString sTmp;
+        OUString sTmp;
         SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );

@@ -39,7 +39,7 @@ namespace connectivity
         typedef file::OFileTable OCalcTable_BASE;
         class OCalcConnection;
 
-        typedef ::std::map< ::rtl::OUString,
+        typedef ::std::map< OUString,
                         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed>,
                         comphelper::UStringMixLess > OContainer;
 
@@ -69,11 +69,11 @@ namespace connectivity
 
         public:
             OCalcTable( sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description = ::rtl::OUString(),
-                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                    const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description = OUString(),
+                    const OUString& _SchemaName = OUString(),
+                    const OUString& _CatalogName = OUString()
                 );
 
             virtual sal_Int32 getCurrentLastPos() const;

@@ -65,7 +65,7 @@ StringSequence OPatternControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_PATTERNFIELD;
     return aSupported;
 }
@@ -122,7 +122,7 @@ StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_PATTERNFIELD;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_PATTERNFIELD;
     return aSupported;
@@ -133,7 +133,7 @@ StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
-        DECL_PROP2(DEFAULT_TEXT,    ::rtl::OUString,    BOUND, MAYBEDEFAULT);
+        DECL_PROP2(DEFAULT_TEXT,    OUString,    BOUND, MAYBEDEFAULT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                  BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
@@ -141,7 +141,7 @@ void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) con
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OPatternModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_PATTERNFIELD;  // old (non-sun) name for compatibility !
 }
@@ -153,7 +153,7 @@ sal_Bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
     if ( aNewValue != m_aLastKnownValue )
     {
-        ::rtl::OUString sNewValue;
+        OUString sNewValue;
         aNewValue >>= sNewValue;
 
         if  (   !aNewValue.hasValue()
@@ -207,7 +207,7 @@ Any OPatternModel::translateDbColumnToControlValue()
 
     if ( m_pFormattedValue.get() )
     {
-        ::rtl::OUString sValue( m_pFormattedValue->getFormattedValue() );
+        OUString sValue( m_pFormattedValue->getFormattedValue() );
         if  (   sValue.isEmpty()
             &&  m_pFormattedValue->getColumn().is()
             &&  m_pFormattedValue->getColumn()->wasNull()
@@ -223,7 +223,7 @@ Any OPatternModel::translateDbColumnToControlValue()
     else
         m_aLastKnownValue.clear();
 
-    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( ::rtl::OUString() );
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( OUString() );
         // (m_aLastKnownValue is alllowed to be VOID, the control value isn't)
 }
 

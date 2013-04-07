@@ -103,23 +103,23 @@ public:
 
     sal_Bool IsBulletOrdered();
 
-    rtl::OUString GetBulletFontName();
+    OUString GetBulletFontName();
 
-    inline rtl::OUString GetBulletStyleName() const;
+    inline OUString GetBulletStyleName() const;
 
     UChar32 GetBulletChar();
 
-    rtl::OUString GetPrefix() { return rtl::OUString(); }
+    OUString GetPrefix() { return OUString(); }
 
-    rtl::OUString GetSuffix() { return rtl::OUString(); }
+    OUString GetSuffix() { return OUString(); }
 
-    inline rtl::OUString GetNumberingName();
+    inline OUString GetNumberingName();
 
     inline LwpPara* GetNumberingPara();
 
     sal_Bool HasName();
 
-    static rtl::OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
+    static OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
 
     inline sal_Bool IsPosCumulative(sal_uInt16 nHideLevels);
     inline sal_Bool IsLesserLevel(sal_uInt16 nPos);
@@ -129,11 +129,11 @@ public:
 
     sal_uInt16 GetDisplayLevel(sal_uInt8 nPos);
 
-    rtl::OUString GetAdditionalName(sal_uInt8 nPos);
+    OUString GetAdditionalName(sal_uInt8 nPos);
 
-    rtl::OUString GetDivisionName();
+    OUString GetDivisionName();
 
-    rtl::OUString GetSectionName();
+    OUString GetSectionName();
 
 private:
     sal_uInt16      m_nFlags;
@@ -143,7 +143,7 @@ private:
     LwpAtomHolder*  m_pAtomHolder;
 
     LwpPara* m_pBulletPara;
-    rtl::OUString m_strStyleName;
+    OUString m_strStyleName;
     sal_uInt16 m_pHideLevels[10];
 
 private:
@@ -156,12 +156,12 @@ private:
         CUMULATIVE      = 0x10
     };
 };
-inline rtl::OUString LwpSilverBullet::GetBulletStyleName() const
+inline OUString LwpSilverBullet::GetBulletStyleName() const
 {
     return m_strStyleName;
 }
 
-inline rtl::OUString LwpSilverBullet::GetNumberingName()
+inline OUString LwpSilverBullet::GetNumberingName()
 {
     return GetName()->str();
 }

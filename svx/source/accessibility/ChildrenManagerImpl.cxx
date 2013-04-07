@@ -121,7 +121,7 @@ uno::Reference<XAccessible>
     // Check whether the given index is valid.
     if (nIndex < 0 || (unsigned long)nIndex >= maVisibleChildren.size())
         throw lang::IndexOutOfBoundsException (
-            "no accessible child with index " + ::rtl::OUString::valueOf(nIndex),
+            "no accessible child with index " + OUString::valueOf(nIndex),
             mxParent);
 
     return GetChild (maVisibleChildren[nIndex],nIndex);
@@ -666,8 +666,8 @@ void SAL_CALL
         const document::EventObject& rEventObject)
     throw (uno::RuntimeException)
 {
-    static const ::rtl::OUString sShapeInserted ("ShapeInserted");
-    static const ::rtl::OUString sShapeRemoved ("ShapeRemoved");
+    static const OUString sShapeInserted ("ShapeInserted");
+    static const OUString sShapeRemoved ("ShapeRemoved");
 
 
     if (rEventObject.EventName == sShapeInserted)

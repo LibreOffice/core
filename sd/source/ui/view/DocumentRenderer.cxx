@@ -56,7 +56,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 
 namespace sd {
@@ -195,7 +194,7 @@ namespace {
         OUString GetPrinterSelection (sal_Int32 nPageCount, sal_Int32 nCurrentPageIndex) const
         {
             sal_Int32 nContent = static_cast<sal_Int32>(mrProperties.getIntValue( "PrintContent", 0 ));
-            OUString sFullRange = ::rtl::OUStringBuffer()
+            OUString sFullRange = OUStringBuffer()
                  .append(static_cast<sal_Int32>(1))
                  .append(static_cast<sal_Unicode>('-'))
                  .append(nPageCount).makeStringAndClear();
@@ -291,8 +290,8 @@ namespace {
 
         const Printer* mpPrinter;
         sal_uLong mnDrawMode;
-        ::rtl::OUString msTimeDate;
-        ::rtl::OUString msPageString;
+        OUString msTimeDate;
+        OUString msPageString;
         Size maPrintSize;
         Size maPageSize;
         Orientation meOrientation;
@@ -343,7 +342,7 @@ namespace {
     */
     void PrintMessage (
         Printer& rPrinter,
-        const ::rtl::OUString& rsPageString,
+        const OUString& rsPageString,
         const Point& rPageStringOffset)
     {
         const Font aOriginalFont (rPrinter.OutputDevice::GetFont());
@@ -397,11 +396,11 @@ namespace {
         {
             // load the writer PrinterOptions into the custom tab
             beans::PropertyValue aOptionsUIFile;
-            aOptionsUIFile.Name = rtl::OUString("OptionsUIFile");
+            aOptionsUIFile.Name = OUString("OptionsUIFile");
             if( mbImpress )
-                aOptionsUIFile.Value <<= rtl::OUString("modules/simpress/ui/printeroptions.ui");
+                aOptionsUIFile.Value <<= OUString("modules/simpress/ui/printeroptions.ui");
             else
-                aOptionsUIFile.Value <<= rtl::OUString("modules/sdraw/ui/printeroptions.ui");
+                aOptionsUIFile.Value <<= OUString("modules/sdraw/ui/printeroptions.ui");
             maProperties.push_back(aOptionsUIFile);
 
             SvtModuleOptions aOpt;
@@ -410,7 +409,7 @@ namespace {
                                            aOpt.GetModuleName( mbImpress ? SvtModuleOptions::E_SIMPRESS : SvtModuleOptions::E_SDRAW ) );
             AddDialogControl(vcl::PrinterOptionsHelper::setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage"));
 
-            uno::Sequence< rtl::OUString > aHelpIds, aWidgetIds;
+            uno::Sequence< OUString > aHelpIds, aWidgetIds;
             if( mbImpress )
             {
                 vcl::PrinterOptionsHelper::UIControlOptions aPrintOpt;
@@ -623,7 +622,7 @@ namespace {
                              );
 
             // create a choice for the content to create
-            rtl::OUString aPrintRangeName( "PrintContent" );
+            OUString aPrintRangeName( "PrintContent" );
             aHelpIds.realloc( 3 );
             aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
             aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
@@ -656,22 +655,22 @@ namespace {
             maProperties.push_back( aVal );
         }
 
-        Sequence<rtl::OUString> CreateChoice (const sal_uInt16 nResourceId) const
+        Sequence<OUString> CreateChoice (const sal_uInt16 nResourceId) const
         {
             SdResId aResourceId (nResourceId);
             ResStringArray aChoiceStrings (aResourceId);
 
             const sal_uInt32 nCount (aChoiceStrings.Count());
-            Sequence<rtl::OUString> aChoices (nCount);
+            Sequence<OUString> aChoices (nCount);
             for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
                 aChoices[nIndex] = aChoiceStrings.GetString(nIndex);
 
             return aChoices;
         }
 
-        Sequence<rtl::OUString> GetSlidesPerPageSequence()
+        Sequence<OUString> GetSlidesPerPageSequence()
         {
-            const Sequence<rtl::OUString> aChoice (
+            const Sequence<OUString> aChoice (
                 CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
             maSlidesPerPage.clear();
             maSlidesPerPage.push_back(0); // first is using the default
@@ -702,7 +701,7 @@ namespace {
             const PageKind ePageKind,
             const MapMode& rMapMode,
             const bool bPrintMarkedOnly,
-            const ::rtl::OUString& rsPageString,
+            const OUString& rsPageString,
             const Point& rPageStringOffset,
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
@@ -737,7 +736,7 @@ namespace {
         const PageKind mePageKind;
         const MapMode maMap;
         const bool mbPrintMarkedOnly;
-        const ::rtl::OUString msPageString;
+        const OUString msPageString;
         const Point maPageStringOffset;
         const sal_uLong mnDrawMode;
         const Orientation meOrientation;
@@ -758,7 +757,7 @@ namespace {
             const PageKind ePageKind,
             const MapMode& rMapMode,
             const bool bPrintMarkedOnly,
-            const ::rtl::OUString& rsPageString,
+            const OUString& rsPageString,
             const Point& rPageStringOffset,
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
@@ -815,7 +814,7 @@ namespace {
             const PageKind ePageKind,
             const sal_Int32 nGap,
             const bool bPrintMarkedOnly,
-            const ::rtl::OUString& rsPageString,
+            const OUString& rsPageString,
             const Point& rPageStringOffset,
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
@@ -975,7 +974,7 @@ namespace {
             const sal_uInt16 nHandoutPageIndex,
             const ::std::vector<sal_uInt16>& rPageIndices,
             const MapMode& rMapMode,
-            const ::rtl::OUString& rsPageString,
+            const OUString& rsPageString,
             const Point& rPageStringOffset,
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
@@ -999,7 +998,7 @@ namespace {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PK_HANDOUT));
 
             Reference< com::sun::star::beans::XPropertySet > xHandoutPage( rHandoutPage.getUnoPage(), UNO_QUERY );
-            const rtl::OUString sPageNumber( "Number" );
+            const OUString sPageNumber( "Number" );
 
             // Collect the page objects of the handout master.
             std::vector<SdrPageObj*> aHandoutPageObjects;
@@ -1120,7 +1119,7 @@ namespace {
         OutlinerPrinterPage (
             OutlinerParaObject* pParaObject,
             const MapMode& rMapMode,
-            const ::rtl::OUString& rsPageString,
+            const OUString& rsPageString,
             const Point& rPageStringOffset,
             const sal_uLong nDrawMode,
             const Orientation eOrientation,
@@ -1499,7 +1498,7 @@ private:
             if (mpOptions->IsDate())
             {
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getDate( Date( Date::SYSTEM ) );
-                aInfo.msTimeDate += ::rtl::OUString((sal_Unicode)' ');
+                aInfo.msTimeDate += OUString((sal_Unicode)' ');
             }
 
             if (mpOptions->IsTime())
@@ -2006,7 +2005,7 @@ private:
             if (mpOptions->IsPrintPageName())
             {
                 rInfo.msPageString = pPage->GetName();
-                rInfo.msPageString += rtl::OUString(sal_Unicode(' '));
+                rInfo.msPageString += OUString(sal_Unicode(' '));
             }
             else
                 rInfo.msPageString = "";

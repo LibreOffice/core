@@ -106,12 +106,12 @@ public:
 
     virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
 
-    virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
     virtual void ExportGrfBullet(const SwTxtNode&);
 
     /// Returns the relationd id
-    rtl::OString AddRelation( const rtl::OUString& rType, const rtl::OUString& rTarget );
+    OString AddRelation( const OUString& rType, const OUString& rTarget );
 
     virtual void WriteCR( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/ ) { /* FIXME no-op for docx, most probably should not even be in MSWordExportBase */ }
     virtual void WriteChar( sal_Unicode ) { /* FIXME */ fprintf( stderr, "HACK! WriteChar() has nothing to do for docx.\n" ); }
@@ -131,18 +131,18 @@ public:
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
     virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
-    virtual void DoComboBox(const rtl::OUString &rName,
-                    const rtl::OUString &rHelp,
-                    const rtl::OUString &ToolTip,
-                    const rtl::OUString &rSelected,
-                    com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
+    virtual void DoComboBox(const OUString &rName,
+                    const OUString &rHelp,
+                    const OUString &ToolTip,
+                    const OUString &rSelected,
+                    com::sun::star::uno::Sequence<OUString> &rListItems);
 
     virtual void DoFormText(const SwInputField * pFld);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
 
     /// Returns the relationd id
-    rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
+    OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 
@@ -165,7 +165,7 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
-    virtual void OutputLinkedOLE( const rtl::OUString& );
+    virtual void OutputLinkedOLE( const OUString& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 

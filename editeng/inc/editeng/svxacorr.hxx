@@ -142,8 +142,8 @@ struct CompareSvxAutocorrWordList
 };
 
 typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> SvxAutocorrWordList_Set;
-typedef ::boost::unordered_map< ::rtl::OUString, SvxAutocorrWord *,
-                                ::rtl::OUStringHash >          SvxAutocorrWordList_Hash;
+typedef ::boost::unordered_map< OUString, SvxAutocorrWord *,
+                                OUStringHash >          SvxAutocorrWordList_Hash;
 
 class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {

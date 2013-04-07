@@ -69,11 +69,11 @@ class SwAddRenameEntryDialog : public SfxModalDialog
     CancelButton            m_aCancel;
     HelpButton              m_aHelp;
 
-    const ::std::vector< ::rtl::OUString >& m_rCSVHeader;
+    const ::std::vector< OUString >& m_rCSVHeader;
 
     DECL_LINK(ModifyHdl_Impl, Edit*);
 public:
-    SwAddRenameEntryDialog(Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& aCSVHeader);
+    SwAddRenameEntryDialog(Window* pParent, bool bRename, const ::std::vector< OUString >& aCSVHeader);
     ~SwAddRenameEntryDialog();
 
     void                SetFieldName(const String& rName) {m_aFieldNameED.SetText(rName);}

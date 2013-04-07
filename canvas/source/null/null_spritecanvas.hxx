@@ -123,7 +123,7 @@ namespace nullcanvas
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
 
      private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;

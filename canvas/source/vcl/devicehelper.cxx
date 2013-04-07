@@ -213,9 +213,9 @@ namespace vclcanvas
 
         if( mpOutDev )
         {
-            rtl::OUString aFilename("dbg_frontbuffer");
-            aFilename += rtl::OUString::valueOf(nFilePostfixCount);
-            aFilename += rtl::OUString(".bmp");
+            OUString aFilename("dbg_frontbuffer");
+            aFilename += OUString::valueOf(nFilePostfixCount);
+            aFilename += OUString(".bmp");
 
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 

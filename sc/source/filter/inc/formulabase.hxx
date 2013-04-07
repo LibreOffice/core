@@ -484,10 +484,10 @@ enum FunctionLibraryType
  */
 struct FunctionInfo
 {
-    ::rtl::OUString     maOdfFuncName;      /// ODF function name.
-    ::rtl::OUString     maOoxFuncName;      /// OOXML function name.
-    ::rtl::OUString     maBiffMacroName;    /// Expected macro name in EXTERN.CALL function.
-    ::rtl::OUString     maExtProgName;      /// Programmatic function name for external functions.
+    OUString     maOdfFuncName;      /// ODF function name.
+    OUString     maOoxFuncName;      /// OOXML function name.
+    OUString     maBiffMacroName;    /// Expected macro name in EXTERN.CALL function.
+    OUString     maExtProgName;      /// Programmatic function name for external functions.
     FunctionLibraryType meFuncLibType;      /// The external library this function is part of.
     sal_Int32           mnApiOpCode;        /// API function opcode.
     sal_uInt16          mnBiff12FuncId;     /// BIFF12 function identifier.
@@ -544,7 +544,7 @@ public:
     virtual             ~FunctionProvider();
 
     /** Returns the function info for an OOXML function name, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromOoxFuncName( const ::rtl::OUString& rFuncName ) const;
+    const FunctionInfo* getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const;
 
     /** Returns the function info for a BIFF12 function index, or 0 on error. */
     const FunctionInfo* getFuncInfoFromBiff12FuncId( sal_uInt16 nFuncId ) const;
@@ -554,11 +554,11 @@ public:
 
     /** Returns the function info for a macro function referred by the
         EXTERN.CALL function, or 0 on error. */
-    const FunctionInfo* getFuncInfoFromMacroName( const ::rtl::OUString& rFuncName ) const;
+    const FunctionInfo* getFuncInfoFromMacroName( const OUString& rFuncName ) const;
 
     /** Returns the library type associated with the passed URL of a function
         library (function add-in). */
-    FunctionLibraryType getFuncLibTypeFromLibraryName( const ::rtl::OUString& rLibraryName ) const;
+    FunctionLibraryType getFuncLibTypeFromLibraryName( const OUString& rLibraryName ) const;
 
 protected:
     /** Returns the list of all function infos. */
@@ -616,7 +616,7 @@ public:
 
     /** Calls the XFormulaParser::parseFormula() function of the API parser. */
     ApiTokenSequence    parseFormula(
-                            const ::rtl::OUString& rFormula,
+                            const OUString& rFormula,
                             const ::com::sun::star::table::CellAddress& rRefPos );
 
 private:
@@ -641,7 +641,7 @@ public:
         @param rAddress  The cell address containing column and row index.
         @param bAbsolute  True = adds dollar signs before column and row.
      */
-    static ::rtl::OUString generateAddress2dString(
+    static OUString generateAddress2dString(
                             const ::com::sun::star::table::CellAddress& rAddress,
                             bool bAbsolute );
 
@@ -651,7 +651,7 @@ public:
         @param rAddress  The cell address containing column and row index.
         @param bAbsolute  True = adds dollar signs before column and row.
      */
-    static ::rtl::OUString generateAddress2dString(
+    static OUString generateAddress2dString(
                             const BinAddress& rAddress,
                             bool bAbsolute );
 
@@ -664,14 +664,14 @@ public:
         @return  The string enclosed in double quotes, where all contained
             quote characters are doubled.
      */
-    static ::rtl::OUString generateApiString( const ::rtl::OUString& rString );
+    static OUString generateApiString( const OUString& rString );
 
     /** Generates an array string in Calc formula notation from the passed
         matrix with Any's containing double values or strings.
 
         @param rMatrix  The matrix containing double values or strings.
      */
-    static ::rtl::OUString generateApiArray( const Matrix< ::com::sun::star::uno::Any >& rMatrix );
+    static OUString generateApiArray( const Matrix< ::com::sun::star::uno::Any >& rMatrix );
 
     // ------------------------------------------------------------------------
 
@@ -750,7 +750,7 @@ public:
             contains the string extracted from the token sequence.
      */
     bool                extractString(
-                            ::rtl::OUString& orString,
+                            OUString& orString,
                             const ApiTokenSequence& rTokens ) const;
 
     /** Tries to extract information about a special token used for array

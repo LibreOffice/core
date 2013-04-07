@@ -64,23 +64,23 @@ using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
+OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
-    return ::rtl::OUString("com.sun.star.sdbcx.evoab.ResultSet");
+    return OUString("com.sun.star.sdbcx.evoab.ResultSet");
 }
 // -------------------------------------------------------------------------
- Sequence< ::rtl::OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
+ Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
-     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString("com.sun.star.sdbc.ResultSet");
+     Sequence< OUString > aSupported(1);
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OEvoabResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
+sal_Bool SAL_CALL OEvoabResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -99,12 +99,12 @@ struct ComparisonData
     }
 };
 
-static ::rtl::OUString
+static OUString
 valueToOUString( GValue& _rValue )
 {
     const char *pStr = g_value_get_string( &_rValue );
-    rtl::OString aStr( pStr ? pStr : "" );
-    ::rtl::OUString sResult( ::rtl::OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) );
+    OString aStr( pStr ? pStr : "" );
+    OUString sResult( OStringToOUString( aStr, RTL_TEXTENCODING_UTF8 ) );
     g_value_unset( &_rValue );
     return sResult;
 }
@@ -317,7 +317,7 @@ int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData 
     bool bLhsNull = true;
     bool bRhsNull = true;
 
-    ::rtl::OUString sLhs, sRhs;
+    OUString sLhs, sRhs;
     bool bLhs(false), bRhs(false);
 
     const ComparisonData& rCompData = *static_cast< const ComparisonData* >( _userData );
@@ -578,7 +578,7 @@ public:
 
         if( isAuthRequired( pBook ) )
         {
-            rtl::OString aUser( getUserName( pBook ) );
+            OString aUser( getUserName( pBook ) );
             const char *pAuth = e_source_get_property( pSource, "auth" );
             bAuthSuccess = e_book_authenticate_user( pBook, aUser.getStr(), rPassword.getStr(), pAuth, NULL );
         }
@@ -693,7 +693,7 @@ void OEvoabResultSet::construct( const QueryData& _rData )
     }
     if ( bExecuteQuery )
     {
-        rtl::OString aPassword = m_pConnection->getPassword();
+        OString aPassword = m_pConnection->getPassword();
         m_pVersionHelper->executeQuery(pBook, _rData.getQuery(), aPassword);
         m_pConnection->setPassword( aPassword );
 
@@ -752,11 +752,11 @@ Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
  * If the equivalent NResultSetMetaData.cxx marks the columntype of
  * nColumnNum as DataType::VARCHAR this accessor is used.
  */
-::rtl::OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    rtl::OUString aResult;
+    OUString aResult;
     if ( m_xMetaData.is())
     {
         OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
@@ -1113,7 +1113,7 @@ Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeExcepti
 }
 // -------------------------------------------------------------------------
 //XColumnLocate Interface
-sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);

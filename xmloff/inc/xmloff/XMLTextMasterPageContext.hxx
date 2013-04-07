@@ -31,11 +31,11 @@ namespace com { namespace sun { namespace star {
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageContext : public SvXMLStyleContext
 {
-    const ::rtl::OUString sIsPhysical;
-    const ::rtl::OUString sPageStyleLayout;
-    const ::rtl::OUString sFollowStyle;
-    ::rtl::OUString       sFollow;
-    ::rtl::OUString       sPageMasterName;
+    const OUString sIsPhysical;
+    const OUString sPageStyleLayout;
+    const OUString sFollowStyle;
+    OUString       sFollow;
+    OUString       sPageMasterName;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > xStyle;
 
@@ -62,7 +62,7 @@ public:
     TYPEINFO();
 
     XMLTextMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Bool bOverwrite );
@@ -70,12 +70,12 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
             const sal_Bool bLeft,

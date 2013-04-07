@@ -46,7 +46,7 @@ public:
     TYPEINFO();
 
     XMLElementPropertyContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                               const ::rtl::OUString& rLName,
+                               const OUString& rLName,
                                const XMLPropertyState& rProp,
                                 ::std::vector< XMLPropertyState > &rProps );
 

@@ -42,9 +42,9 @@ namespace FORMS_MODULE_NAMESPACE
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
         (
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
-            const ::rtl::OUString & _rComponentName,
+            const OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            const ::com::sun::star::uno::Sequence< OUString > & _rServiceNames,
             rtl_ModuleCount* _pModuleCounter
         );
 
@@ -59,9 +59,9 @@ namespace FORMS_MODULE_NAMESPACE
 
     protected:
         // auto registration administration
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString >*
+        static  ::com::sun::star::uno::Sequence< OUString >*
             s_pImplementationNames;
-        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > >*
+        static  ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > >*
             s_pSupportedServices;
         static  ::com::sun::star::uno::Sequence< sal_Int64 >*
             s_pCreationFunctionPointers;
@@ -81,8 +81,8 @@ namespace FORMS_MODULE_NAMESPACE
             @see revokeComponent
         */
         static void registerComponent(
-            const ::rtl::OUString& _rImplementationName,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
+            const OUString& _rImplementationName,
+            const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
             ::cppu::ComponentInstantiation _pCreateFunction,
             FactoryInstantiation _pFactoryFunction);
 
@@ -91,7 +91,7 @@ namespace FORMS_MODULE_NAMESPACE
                 the implementation name of the component
         */
         static void revokeComponent(
-            const ::rtl::OUString& _rImplementationName);
+            const OUString& _rImplementationName);
 
         /** creates a Factory for the component with the given implementation name.
             <p>Usually used from within component_getFactory.<p/>
@@ -103,7 +103,7 @@ namespace FORMS_MODULE_NAMESPACE
                         the XInterface access to a factory for the component
         */
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-            const ::rtl::OUString& _rImplementationName,
+            const OUString& _rImplementationName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
             );
 
@@ -124,8 +124,8 @@ namespace FORMS_MODULE_NAMESPACE
         /** automatically registeres a multi instance component
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_Static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><li/>
+                    <li><code>static OUString getImplementationName_Static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><li/>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>
@@ -167,8 +167,8 @@ namespace FORMS_MODULE_NAMESPACE
         /** automatically registeres a single instance component
             <p>Assumed that the template argument has the three methods
                 <ul>
-                    <li><code>static ::rtl::OUString getImplementationName_Static()</code><li/>
-                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static()</code><li/>
+                    <li><code>static OUString getImplementationName_Static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static()</code><li/>
                     <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>
@@ -204,11 +204,11 @@ namespace FORMS_MODULE_NAMESPACE
     //= OMultiInstanceAutoRegistration or OOneInstanceAutoRegistration
     //==========================================================================
     #define DECLARE_SERVICE_REGISTRATION( classname ) \
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException); \
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException); \
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException); \
         \
-        static  ::rtl::OUString SAL_CALL getImplementationName_Static(); \
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static(); \
+        static  OUString SAL_CALL getImplementationName_Static(); \
+        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(); \
         static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory ); \
         \
         friend class OOneInstanceAutoRegistration< classname >; \
@@ -216,10 +216,10 @@ namespace FORMS_MODULE_NAMESPACE
 
     #define IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
         \
-        ::rtl::OUString SAL_CALL classname::getImplementationName(  ) throw ( RuntimeException ) \
+        OUString SAL_CALL classname::getImplementationName(  ) throw ( RuntimeException ) \
         { return getImplementationName_Static(); } \
         \
-        Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw (RuntimeException) \
+        Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw (RuntimeException) \
         { \
             return ::comphelper::concatSequences( \
                 getAggregateServiceNames(), \
@@ -227,8 +227,8 @@ namespace FORMS_MODULE_NAMESPACE
             ); \
         } \
         \
-        ::rtl::OUString SAL_CALL classname::getImplementationName_Static() \
-        { return ::rtl::OUString( "com.sun.star.comp.forms."#classname ); } \
+        OUString SAL_CALL classname::getImplementationName_Static() \
+        { return OUString( "com.sun.star.comp.forms."#classname ); } \
         \
         Reference< XInterface > SAL_CALL classname::Create( const Reference< XMultiServiceFactory >& _rxFactory ) \
         { return static_cast< XServiceInfo* >( new classname( _rxFactory ) ); } \
@@ -237,9 +237,9 @@ namespace FORMS_MODULE_NAMESPACE
     #define IMPLEMENT_SERVICE_REGISTRATION_1( classname, baseclass, service1 ) \
         IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
         \
-        Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+        Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
         { \
-            Sequence< ::rtl::OUString > aOwnNames( 1 ); \
+            Sequence< OUString > aOwnNames( 1 ); \
             aOwnNames[ 0 ] = service1; \
             \
             return ::comphelper::concatSequences( \
@@ -251,9 +251,9 @@ namespace FORMS_MODULE_NAMESPACE
     #define IMPLEMENT_SERVICE_REGISTRATION_2( classname, baseclass, service1, service2 ) \
         IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
         \
-        Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+        Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
         { \
-            Sequence< ::rtl::OUString > aOwnNames( 2 ); \
+            Sequence< OUString > aOwnNames( 2 ); \
             aOwnNames[ 0 ] = service1; \
             aOwnNames[ 1 ] = service2; \
             \
@@ -266,9 +266,9 @@ namespace FORMS_MODULE_NAMESPACE
     #define IMPLEMENT_SERVICE_REGISTRATION_7( classname, baseclass, service1, service2, service3, service4 , service5, service6, service7 ) \
         IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
         \
-           Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+           Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
            { \
-                   Sequence< ::rtl::OUString > aOwnNames( 7 ); \
+                   Sequence< OUString > aOwnNames( 7 ); \
                    aOwnNames[ 0 ] = service1; \
                    aOwnNames[ 1 ] = service2; \
                    aOwnNames[ 2 ] = service3; \
@@ -286,9 +286,9 @@ namespace FORMS_MODULE_NAMESPACE
     #define IMPLEMENT_SERVICE_REGISTRATION_8( classname, baseclass, service1, service2, service3, service4 , service5, service6, service7, service8 ) \
         IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
         \
-           Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+           Sequence< OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
            { \
-                   Sequence< ::rtl::OUString > aOwnNames( 8 ); \
+                   Sequence< OUString > aOwnNames( 8 ); \
                    aOwnNames[ 0 ] = service1; \
                    aOwnNames[ 1 ] = service2; \
                    aOwnNames[ 2 ] = service3; \

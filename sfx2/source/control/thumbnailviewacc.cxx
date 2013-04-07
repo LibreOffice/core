@@ -200,20 +200,20 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
             : accessibility::AccessibleRole::LIST );
 }
 
-::rtl::OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
+OUString SAL_CALL ThumbnailViewAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    return rtl::OUString("ThumbnailView");
+    return OUString("ThumbnailView");
 }
 
-::rtl::OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
+OUString SAL_CALL ThumbnailViewAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    rtl::OUString aRet;
+    OUString aRet;
 
     if ( mpParent )
         aRet = mpParent->GetAccessibleName();
@@ -260,7 +260,7 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const ::rtl::OUString                           aEmptyStr;
+    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 
@@ -601,7 +601,7 @@ void ThumbnailViewAcc::ThrowIfDisposed (void)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            ::rtl::OUString("object has been already disposed"),
+            OUString("object has been already disposed"),
             static_cast<uno::XWeak*>(this));
     }
     else
@@ -712,17 +712,17 @@ sal_Int16 SAL_CALL ThumbnailViewItemAcc::getAccessibleRole()
     return accessibility::AccessibleRole::LIST_ITEM;
 }
 
-::rtl::OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleDescription()
+OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
+OUString SAL_CALL ThumbnailViewItemAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    rtl::OUString aRet;
+    OUString aRet;
 
     if( mpParent )
     {
@@ -730,7 +730,7 @@ sal_Int16 SAL_CALL ThumbnailViewItemAcc::getAccessibleRole()
 
         if( aRet.isEmpty() )
         {
-            rtl::OUStringBuffer aBuffer("Item ");
+            OUStringBuffer aBuffer("Item ");
             aBuffer.append(static_cast<sal_Int32>(mpParent->mnId));
             aRet = aBuffer.makeStringAndClear();
         }
@@ -779,7 +779,7 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    const ::rtl::OUString                           aEmptyStr;
+    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 

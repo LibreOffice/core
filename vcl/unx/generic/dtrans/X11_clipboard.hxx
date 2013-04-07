@@ -61,7 +61,7 @@ namespace x11 {
         X11Clipboard( SelectionManager& rManager, Atom aSelection );
         virtual ~X11Clipboard();
 
-        static X11Clipboard* get( const ::rtl::OUString& rDisplayName, Atom aSelection );
+        static X11Clipboard* get( const OUString& rDisplayName, Atom aSelection );
 
         /*
          *  XInitialization
@@ -72,13 +72,13 @@ namespace x11 {
          * XServiceInfo
          */
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        virtual OUString SAL_CALL getImplementationName(  )
             throw(RuntimeException);
 
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw(RuntimeException);
 
-        virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
             throw(RuntimeException);
 
         /*
@@ -93,7 +93,7 @@ namespace x11 {
             const com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
             throw(RuntimeException);
 
-        virtual ::rtl::OUString SAL_CALL getName()
+        virtual OUString SAL_CALL getName()
             throw(RuntimeException);
 
         /*
@@ -125,7 +125,7 @@ namespace x11 {
 
 // ------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > SAL_CALL X11Clipboard_getSupportedServiceNames();
+    Sequence< OUString > SAL_CALL X11Clipboard_getSupportedServiceNames();
     com::sun::star::uno::Reference< XInterface > SAL_CALL X11Clipboard_createInstance(
         const com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
 

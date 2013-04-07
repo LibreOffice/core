@@ -117,7 +117,7 @@ class WindowCommandDispatch : private ThreadHelpBase
             @param  sCommand
                     the command for dispatch
          */
-        void impl_dispatchCommand(const ::rtl::OUString& sCommand);
+        void impl_dispatchCommand(const OUString& sCommand);
 
 }; // class MACDispatch
 

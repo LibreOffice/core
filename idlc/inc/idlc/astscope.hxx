@@ -45,12 +45,12 @@ public:
     sal_uInt16 getNodeCount(NodeType nType);
 
     // Name look up mechanism
-    AstDeclaration* lookupByName(const ::rtl::OString& scopedName);
+    AstDeclaration* lookupByName(const OString& scopedName);
     // Look up the identifier 'name' specified only in the local scope
-    AstDeclaration* lookupByNameLocal(const ::rtl::OString& name) const;
+    AstDeclaration* lookupByNameLocal(const OString& name) const;
 
-    AstDeclaration* lookupInForwarded(const ::rtl::OString& scopedName);
-    AstDeclaration* lookupInInherited(const ::rtl::OString& scopedName) const;
+    AstDeclaration* lookupInForwarded(const OString& scopedName);
+    AstDeclaration* lookupInInherited(const OString& scopedName) const;
 
     // Look up a predefined type by its ExprType
     AstDeclaration* lookupPrimitiveType(ExprType type);

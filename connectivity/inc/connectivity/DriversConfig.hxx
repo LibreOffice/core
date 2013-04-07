@@ -34,8 +34,8 @@ namespace connectivity
         ::comphelper::NamedValueCollection aProperties;
         ::comphelper::NamedValueCollection aFeatures;
         ::comphelper::NamedValueCollection aMetaData;
-        ::rtl::OUString sDriverFactory;
-        ::rtl::OUString sDriverTypeDisplayName;
+        OUString sDriverFactory;
+        OUString sDriverTypeDisplayName;
     } TInstalledDriver;
     DECLARE_STL_USTRINGACCESS_MAP( TInstalledDriver, TInstalledDrivers);
 
@@ -56,7 +56,7 @@ namespace connectivity
     {
         typedef salhelper::SingletonRef<DriversConfigImpl> OSharedConfigNode;
 
-        const ::comphelper::NamedValueCollection& impl_get(const ::rtl::OUString& _sURL,sal_Int32 _nProps) const;
+        const ::comphelper::NamedValueCollection& impl_get(const OUString& _sURL,sal_Int32 _nProps) const;
     public:
         DriversConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
         ~DriversConfig();
@@ -64,12 +64,12 @@ namespace connectivity
         DriversConfig( const DriversConfig& );
         DriversConfig& operator=( const DriversConfig& );
 
-        ::rtl::OUString getDriverFactoryName(const ::rtl::OUString& _sUrl) const;
-        ::rtl::OUString getDriverTypeDisplayName(const ::rtl::OUString& _sUrl) const;
-        const ::comphelper::NamedValueCollection& getProperties(const ::rtl::OUString& _sURL) const;
-        const ::comphelper::NamedValueCollection& getFeatures(const ::rtl::OUString& _sURL) const;
-        const ::comphelper::NamedValueCollection& getMetaData(const ::rtl::OUString& _sURL) const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > getURLs() const;
+        OUString getDriverFactoryName(const OUString& _sUrl) const;
+        OUString getDriverTypeDisplayName(const OUString& _sUrl) const;
+        const ::comphelper::NamedValueCollection& getProperties(const OUString& _sURL) const;
+        const ::comphelper::NamedValueCollection& getFeatures(const OUString& _sURL) const;
+        const ::comphelper::NamedValueCollection& getMetaData(const OUString& _sURL) const;
+        ::com::sun::star::uno::Sequence< OUString > getURLs() const;
     private:
         OSharedConfigNode   m_aNode;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xORB;

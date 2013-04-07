@@ -66,11 +66,11 @@ protected:
 
   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxDoc;
 
-  ::rtl::OUString msFilterName;
+  OUString msFilterName;
 
-  ::com::sun::star::uno::Sequence< ::rtl::OUString > msUserData;
+  ::com::sun::star::uno::Sequence< OUString > msUserData;
 
-   ::rtl::OUString msTemplateName;
+   OUString msTemplateName;
 
 
 
@@ -100,7 +100,7 @@ public:
 
 
      //XExtendedFilterDetection
-     virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
+     virtual OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
             throw( com::sun::star::uno::RuntimeException );
 
 
@@ -114,15 +114,15 @@ public:
 
     // XServiceInfo
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
 
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
 
         throw (::com::sun::star::uno::RuntimeException);
 

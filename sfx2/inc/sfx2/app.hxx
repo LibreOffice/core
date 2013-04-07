@@ -183,7 +183,7 @@ public:
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );
-    static ::rtl::OUString      ChooseScript();
+    static OUString      ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
     static ErrCode              CallBasic( const String&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
     static ErrCode              CallAppBasic( const String& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )

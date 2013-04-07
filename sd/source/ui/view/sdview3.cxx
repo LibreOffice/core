@@ -328,7 +328,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 xStm->Seek( 0 );
 
-                rtl::OString aLine;
+                OString aLine;
                 while (xStm->ReadLine(aLine))
                 {
                     sal_Int32 x = aLine.indexOf( "\\trowd" );
@@ -785,7 +785,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
     }
     else if( CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE ) )
     {
-        ::rtl::OUString aOUString;
+        OUString aOUString;
 
         if( aDataHelper.GetString( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, aOUString ) )
         {
@@ -867,7 +867,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
             else
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 uno::Reference < embed::XEmbeddedObject > xObj = mpDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 if ( xObj.is() )
                 {
@@ -995,7 +995,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
             if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj;
-                ::rtl::OUString aName;
+                OUString aName;
 
                 if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
                     aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
@@ -1402,7 +1402,7 @@ sal_Bool View::InsertData( const TransferableDataHelper& rDataHelper,
               !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
               !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) ) )
         {
-            ::rtl::OUString aOUString;
+            OUString aOUString;
 
             if( aDataHelper.GetString( FORMAT_STRING, aOUString ) )
             {

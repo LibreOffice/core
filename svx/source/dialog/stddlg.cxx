@@ -42,7 +42,7 @@ SvxStandardDialog::SvxStandardDialog( Window *pParent, const ResId &rResId )
 {
 }
 
-SvxStandardDialog::SvxStandardDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription )
+SvxStandardDialog::SvxStandardDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
 {
 }

@@ -55,9 +55,9 @@ public:
       *        InteractionReplaceExistingData continuation shall be supplied
       *        with the interaction request.
       */
-    SimpleNameClashResolveRequest( const rtl::OUString & rTargetFolderURL,
-                                   const rtl::OUString & rClashingName,
-                                   const rtl::OUString & rProposedNewName,
+    SimpleNameClashResolveRequest( const OUString & rTargetFolderURL,
+                                   const OUString & rClashingName,
+                                   const OUString & rProposedNewName,
                                    sal_Bool bSupportsOverwriteData = sal_True );
     /**
       * This method returns the new name that was supplied by the interaction
@@ -65,7 +65,7 @@ public:
       *
       * @return the new name, if supplied.
       */
-    const rtl::OUString getNewName() const
+    const OUString getNewName() const
     { return m_xNameSupplier->getName(); }
 
 };

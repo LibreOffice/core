@@ -42,16 +42,16 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
         virtual void SAL_CALL release() throw ();
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
-        static ::rtl::OUString getImplementationName_Static() throw()
+        static OUString getImplementationName_Static() throw()
         {
-            return ::rtl::OUString("com.sun.star.svx.FontHeightToolBoxController");
+            return OUString("com.sun.star.svx.FontHeightToolBoxController");
         }
 
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString >  getSupportedServiceNames_Static() throw();
+        static ::com::sun::star::uno::Sequence< OUString >  getSupportedServiceNames_Static() throw();
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);

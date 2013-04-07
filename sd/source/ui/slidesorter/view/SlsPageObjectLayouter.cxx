@@ -243,16 +243,16 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 
     String sPageNumberTemplate;
     if (nPageCount < 10)
-        sPageNumberTemplate = rtl::OUString("9");
+        sPageNumberTemplate = OUString("9");
     else if (nPageCount < 100)
-        sPageNumberTemplate = rtl::OUString("99");
+        sPageNumberTemplate = OUString("99");
     else if (nPageCount < 200)
         // Just for the case that 1 is narrower than 9.
-        sPageNumberTemplate = rtl::OUString("199");
+        sPageNumberTemplate = OUString("199");
     else if (nPageCount < 1000)
-        sPageNumberTemplate = rtl::OUString("999");
+        sPageNumberTemplate = OUString("999");
     else
-        sPageNumberTemplate = rtl::OUString("9999");
+        sPageNumberTemplate = OUString("9999");
     // More then 9999 pages are not handled.
 
     const Size aSize (

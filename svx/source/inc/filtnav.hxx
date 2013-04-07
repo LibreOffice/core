@@ -60,19 +60,19 @@ class FmFilterData
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
     FmParentData*           m_pParent;
-    ::rtl::OUString         m_aText;
+    OUString         m_aText;
 
 public:
     TYPEINFO();
-    FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const ::rtl::OUString& rText = ::rtl::OUString())
+    FmFilterData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent = NULL, const OUString& rText = OUString())
         :m_xORB( _rxFactory )
         ,m_pParent( pParent )
         ,m_aText( rText )
     {}
     virtual ~FmFilterData(){}
 
-    void    SetText( const ::rtl::OUString& rText ){ m_aText = rText; }
-    ::rtl::OUString  GetText() const { return m_aText; }
+    void    SetText( const OUString& rText ){ m_aText = rText; }
+    OUString  GetText() const { return m_aText; }
     FmParentData* GetParent() const {return m_pParent;}
 
     virtual Image GetImage() const;
@@ -86,7 +86,7 @@ protected:
 
 public:
     TYPEINFO();
-    FmParentData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent, const ::rtl::OUString& rText)
+    FmParentData(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* pParent, const OUString& rText)
         : FmFilterData(_rxFactory,pParent, rText)
     {}
     virtual ~FmParentData();
@@ -106,7 +106,7 @@ public:
 
     FmFormItem(  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmParentData* _pParent,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & _xController,
-                 const ::rtl::OUString& _rText)
+                 const OUString& _rText)
         :FmParentData( _rxFactory, _pParent, _rText )
         ,m_xController( _xController )
         ,m_xFilterController( _xController, ::com::sun::star::uno::UNO_QUERY_THROW )
@@ -127,8 +127,8 @@ class FmFilterItems : public FmParentData
 {
 public:
     TYPEINFO();
-    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, ::rtl::OUString()){}
-    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const ::rtl::OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
+    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory):FmParentData(_rxFactory,NULL, OUString()){}
+    FmFilterItems(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,FmFormItem* pParent, const OUString& rText ):FmParentData(_rxFactory,pParent, rText){}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;
     virtual Image GetImage() const;
@@ -137,7 +137,7 @@ public:
 //========================================================================
 class FmFilterItem : public FmFilterData
 {
-    ::rtl::OUString     m_aFieldName;
+    OUString     m_aFieldName;
     const sal_Int32     m_nComponentIndex;
 
 public:
@@ -145,12 +145,12 @@ public:
     FmFilterItem(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory,
         FmFilterItems* pParent,
-        const ::rtl::OUString& aFieldName,
-        const ::rtl::OUString& aCondition,
+        const OUString& aFieldName,
+        const OUString& aCondition,
         const sal_Int32 _nComponentIndex
     );
 
-    const ::rtl::OUString& GetFieldName() const {return m_aFieldName;}
+    const OUString& GetFieldName() const {return m_aFieldName;}
     sal_Int32 GetComponentIndex() const { return m_nComponentIndex; }
 
     virtual Image GetImage() const;
@@ -178,7 +178,7 @@ public:
     void Clear();
     sal_Bool ValidateText(FmFilterItem* pItem, OUString& rText, OUString& rErrorMsg) const;
     void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
-    void SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText);
+    void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
     FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? (FmFormItem*)m_pCurrentItems->GetParent() : NULL;}
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
@@ -278,7 +278,7 @@ protected:
     virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
     virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
     virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection );
-    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );

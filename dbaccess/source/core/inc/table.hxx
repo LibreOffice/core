@@ -70,10 +70,10 @@ namespace dbaccess
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
 
         // IColumnFactory
-        virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+        virtual OColumn*    createColumn(const OUString& _rName) const;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
         virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
-        virtual void columnDropped(const ::rtl::OUString& _sName);
+        virtual void columnDropped(const OUString& _sName);
 
         /** creates the column collection for the table
             @param  _rNames
@@ -107,11 +107,11 @@ namespace dbaccess
         */
         ODBTable(connectivity::sdbcx::OCollection* _pTables
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
-                ,const ::rtl::OUString& _rCatalog
-                , const ::rtl::OUString& _rSchema
-                , const ::rtl::OUString& _rName
-                ,const ::rtl::OUString& _rType
-                , const ::rtl::OUString& _rDesc
+                ,const OUString& _rCatalog
+                , const OUString& _rSchema
+                , const OUString& _rName
+                ,const OUString& _rType
+                , const OUString& _rDesc
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumnDefinitions)
             throw(::com::sun::star::sdbc::SQLException);
 
@@ -137,10 +137,10 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
 
     // ::com::sun::star::sdbcx::XRename,
-        virtual void SAL_CALL rename( const ::rtl::OUString& _rNewName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rename( const OUString& _rNewName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbcx::XAlterTable,
-        virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDescriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL alterColumnByName( const OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDescriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);

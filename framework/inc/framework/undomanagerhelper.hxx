@@ -117,7 +117,7 @@ namespace framework
         void disposing();
 
         // XUndoManager equivalents
-        void            enterUndoContext( const ::rtl::OUString& i_title, IMutexGuard& i_instanceLock );
+        void            enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock );
         void            enterHiddenUndoContext( IMutexGuard& i_instanceLock );
         void            leaveUndoContext( IMutexGuard& i_instanceLock );
         void            addUndoAction( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoAction >& i_action, IMutexGuard& i_instanceLock );
@@ -125,11 +125,11 @@ namespace framework
         void            redo( IMutexGuard& i_instanceLock );
         ::sal_Bool      isUndoPossible() const;
         ::sal_Bool      isRedoPossible() const;
-        ::rtl::OUString getCurrentUndoActionTitle() const;
-        ::rtl::OUString getCurrentRedoActionTitle() const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        OUString getCurrentUndoActionTitle() const;
+        OUString getCurrentRedoActionTitle() const;
+        ::com::sun::star::uno::Sequence< OUString >
                         getAllUndoActionTitles() const;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                         getAllRedoActionTitles() const;
         void            clear( IMutexGuard& i_instanceLock );
         void            clearRedo( IMutexGuard& i_instanceLock );

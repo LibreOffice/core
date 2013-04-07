@@ -74,9 +74,9 @@ private:
     ContentProvider*       m_pProvider;
     libcmis::Session*      m_pSession;
     libcmis::ObjectPtr     m_pObject;
-    rtl::OUString          m_sObjectPath;
-    rtl::OUString          m_sObjectId;
-    rtl::OUString          m_sURL;
+    OUString          m_sObjectPath;
+    OUString          m_sObjectId;
+    OUString          m_sURL;
     cmis::URL              m_aURL;
 
     // Members to be set for non-persistent content
@@ -112,18 +112,18 @@ private:
             throw( com::sun::star::uno::Exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const ::rtl::OUString & rMimeType,
+        sal_Bool bReplaceExisting, const OUString & rMimeType,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
-    rtl::OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
+    OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
             throw( com::sun::star::uno::Exception );
 
-    rtl::OUString checkOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    OUString checkOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
             throw( com::sun::star::uno::Exception );
 
-    rtl::OUString cancelCheckOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+    OUString cancelCheckOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
             throw( com::sun::star::uno::Exception );
 
     void destroy( ) throw( com::sun::star::uno::Exception );
@@ -163,21 +163,21 @@ public:
         getCommands( const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
-    virtual ::rtl::OUString getParentURL();
+    virtual OUString getParentURL();
 
     XINTERFACE_DECL()
 
     XTYPEPROVIDER_DECL()
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getImplementationName()
             throw( com::sun::star::uno::RuntimeException );
 
-    virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getContentType()
             throw( com::sun::star::uno::RuntimeException );
 

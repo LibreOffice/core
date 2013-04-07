@@ -42,19 +42,19 @@ MacabCatalog::MacabCatalog(MacabConnection* _pCon)
 void MacabCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("%");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("%");
     Reference< XResultSet > xResult = m_xMetaData->getTables(
         Any(),
-        ::rtl::OUString("%"),
-        ::rtl::OUString("%"),
+        OUString("%"),
+        OUString("%"),
         aTypes);
 
     if (xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName;
-        // const ::rtl::OUString& sDot = MacabCatalog::getDot();
+        OUString aName;
+        // const OUString& sDot = MacabCatalog::getDot();
 
         while (xResult->next())
         {
@@ -82,9 +82,9 @@ void MacabCatalog::refreshUsers()
 {
 }
 // -------------------------------------------------------------------------
-const ::rtl::OUString& MacabCatalog::getDot()
+const OUString& MacabCatalog::getDot()
 {
-    static const ::rtl::OUString sDot = ::rtl::OUString(".");
+    static const OUString sDot = OUString(".");
     return sDot;
 }
 // -----------------------------------------------------------------------------

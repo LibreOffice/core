@@ -74,7 +74,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-using ::rtl::OUString;
 
 struct SwMailMergeDlg_Impl
 {
@@ -369,7 +368,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
     for(sal_uInt16 nEntry = 0; nEntry < aAddressFldLB.GetEntryCount(); nEntry++)
         aColumnLB.InsertEntry(aAddressFldLB.GetEntry(nEntry));
 
-    aAddressFldLB.SelectEntry(rtl::OUString("EMAIL"));
+    aAddressFldLB.SelectEntry(OUString("EMAIL"));
 
     String sPath(pModOpt->GetMailingPath());
     if(!sPath.Len())
@@ -385,7 +384,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
 
     if (!bColumn )
     {
-        aColumnLB.SelectEntry(rtl::OUString("NAME"));
+        aColumnLB.SelectEntry(OUString("NAME"));
     }
     else
         aColumnLB.SelectEntry(pModOpt->GetNameFromColumn());
@@ -416,7 +415,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         sCommand += OUString::number(SFX_FILTER_NOTINFILEDLG);
         sCommand += ":default_first";
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
-        const ::rtl::OUString sName("Name");
+        const OUString sName("Name");
         sal_uInt16 nODT = USHRT_MAX;
         while(xList->hasMoreElements())
         {
@@ -426,7 +425,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
             uno::Any aProps = xFilterFactory->getByName(sFilter);
             uno::Sequence< beans::PropertyValue > aFilterProperties;
             aProps >>= aFilterProperties;
-            ::rtl::OUString sUIName2;
+            OUString sUIName2;
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
             for(int nProp = 0; nProp < aFilterProperties.getLength(); nProp++)
             {
@@ -441,7 +440,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 sal_uInt16 nFilter = aFilterLB.InsertEntry( sUIName2 );
                 if( 0 == sFilter.compareToAscii("writer8") )
                     nODT = nFilter;
-                aFilterLB.SetEntryData( nFilter, new ::rtl::OUString( sFilter ) );
+                aFilterLB.SetEntryData( nFilter, new OUString( sFilter ) );
             }
         }
         aFilterLB.SelectEntryPos( nODT );
@@ -463,7 +462,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
 
     for( sal_uInt16 nFilter = 0; nFilter < aFilterLB.GetEntryCount(); ++nFilter )
     {
-        ::rtl::OUString* pData = reinterpret_cast< ::rtl::OUString* >( aFilterLB.GetEntryData(nFilter) );
+        OUString* pData = reinterpret_cast< OUString* >( aFilterLB.GetEntryData(nFilter) );
         delete pData;
     }
     delete pImpl;
@@ -679,7 +678,7 @@ bool SwMailMergeDlg::ExecQryShell()
             URIHelper::SmartRel2Abs(
                 aAbs, aPathED.GetText(), URIHelper::GetMaybeFileHdl()));
         pModOpt->SetMailingPath(sPath);
-        String sDelim = rtl::OUString(INET_PATH_TOKEN);
+        String sDelim = OUString(INET_PATH_TOKEN);
 
         if (sPath.Len() >= sDelim.Len() &&
             sPath.Copy(sPath.Len()-sDelim.Len()).CompareTo(sDelim) != COMPARE_EQUAL)
@@ -692,12 +691,12 @@ bool SwMailMergeDlg::ExecQryShell()
             pMgr->SetEMailColumn(aColumnLB.GetSelectEntry());
             pModOpt->SetNameFromColumn(aColumnLB.GetSelectEntry());
             if( aFilterLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-                m_sSaveFilter = *static_cast<const ::rtl::OUString*>(aFilterLB.GetEntryData( aFilterLB.GetSelectEntryPos() ));
+                m_sSaveFilter = *static_cast<const OUString*>(aFilterLB.GetEntryData( aFilterLB.GetSelectEntryPos() ));
         }
         else
         {
             //#i97667# reset column name - otherwise it's remembered from the last run
-            pMgr->SetEMailColumn(::rtl::OUString());
+            pMgr->SetEMailColumn(OUString());
             //start save as dialog
             String sFilter;
             sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);

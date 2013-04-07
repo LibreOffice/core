@@ -64,7 +64,7 @@ public:
             An introductory description of the shape that is made more
             specific by later calls to <member>addProperty</member>.
     */
-    void Initialize (::rtl::OUString sPrefix);
+    void Initialize (OUString sPrefix);
 
     /** Initialize the description with the specified string from the
         resource followed by the shape's style in parantheses and a colon.
@@ -80,7 +80,7 @@ public:
          @return
              The description string in its current form.
     */
-    ::rtl::OUString operator() (void);
+    OUString operator() (void);
 
     /** Add the given property name and its associated value to the
         description string.  If the property value does not differ from the
@@ -98,9 +98,9 @@ public:
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
     */
-    void AddProperty (const ::rtl::OUString& sPropertyName,
+    void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
-        const ::rtl::OUString& sLocalizedName=::rtl::OUString(),
+        const OUString& sLocalizedName=OUString(),
         long nWhichId=-1);
 
     /** Add the given property name and its associated value to the
@@ -120,7 +120,7 @@ public:
             This which id is used to localize the property value.  If it is
             not known a value of -1 signals to use a default representation.
     */
-    void AddProperty (const ::rtl::OUString& sPropertyName,
+    void AddProperty (const OUString& sPropertyName,
         PropertyType aType,
         sal_Int32 nResourceId,
         long nWhichId=-1);
@@ -130,7 +130,7 @@ public:
             String to append to the current description.  It is not modified
             in any way.
     */
-    void AppendString (const ::rtl::OUString& sString);
+    void AppendString (const OUString& sString);
 
     /** Add properties that describe line and border attributes.
     */
@@ -156,7 +156,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> mxSet;
 
     /// The description string that is build.
-    ::rtl::OUStringBuffer msDescription;
+    OUStringBuffer msDescription;
 
     /** This flag is used to determine whether to insert a separator e.g. a
         comma before the next property.
@@ -165,20 +165,20 @@ private:
 
     /** Add a property value formated as color to the description string.
     */
-    SVX_DLLPRIVATE void AddColor (const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sLocalizedName);
+    SVX_DLLPRIVATE void AddColor (const OUString& sPropertyName,
+        const OUString& sLocalizedName);
 
     /** Add a property value formated as integer to the description string.
     */
-    SVX_DLLPRIVATE void AddInteger (const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sLocalizedName);
+    SVX_DLLPRIVATE void AddInteger (const OUString& sPropertyName,
+        const OUString& sLocalizedName);
 
     /** Add a property value formated as string to the description string.
         @param sPropertyName
             Name of the property.
     */
-    SVX_DLLPRIVATE void AddString (const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sLocalizedName, long nWhichId = -1);
+    SVX_DLLPRIVATE void AddString (const OUString& sPropertyName,
+        const OUString& sLocalizedName, long nWhichId = -1);
 
     /** Add a property value formated as fill style to the description
         string.  If the fill style is <const>HATCH</const>,
@@ -187,8 +187,8 @@ private:
         @param sPropertyName
             Name of the property.  Usually this will be "FillStyle".
     */
-    SVX_DLLPRIVATE void AddFillStyle (const ::rtl::OUString& sPropertyName,
-        const ::rtl::OUString& sLocalizedName);
+    SVX_DLLPRIVATE void AddFillStyle (const OUString& sPropertyName,
+        const OUString& sLocalizedName);
 };
 
 

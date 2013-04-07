@@ -211,11 +211,11 @@ namespace formula
         FormulaHelper
                         m_aFormulaHelper;
 
-        rtl::OString    m_aEditHelpId;
+        OString    m_aEditHelpId;
 
-        rtl::OString    aOldHelp;
-        rtl::OString    aOldUnique;
-        rtl::OString    aActivWinId;
+        OString    aOldHelp;
+        OString    aOldUnique;
+        OString    aActivWinId;
         sal_Bool            bIsShutDown;
 
         Font            aFntBold;
@@ -224,7 +224,7 @@ namespace formula
         sal_Bool            bEditFlag;
         const IFunctionDescription* pFuncDesc;
         xub_StrLen      nArgs;
-        ::std::vector< ::rtl::OUString > m_aArguments;
+        ::std::vector< OUString > m_aArguments;
         Selection       aFuncSel;
 
         FormulaDlg_Impl(Dialog* pParent
@@ -433,10 +433,10 @@ uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeM
         m_aBinaryOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::BINARY_OPERATORS);
         m_pBinaryOpCodesEnd = m_aBinaryOpCodes.getConstArray() + m_aBinaryOpCodes.getLength();
 
-        uno::Sequence< ::rtl::OUString > aArgs(3);
-        aArgs[TOKEN_OPEN]   = ::rtl::OUString("(");
-        aArgs[TOKEN_CLOSE]  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-        aArgs[TOKEN_SEP]    = ::rtl::OUString(";");
+        uno::Sequence< OUString > aArgs(3);
+        aArgs[TOKEN_OPEN]   = OUString("(");
+        aArgs[TOKEN_CLOSE]  = OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+        aArgs[TOKEN_SEP]    = OUString(";");
         m_aSeparatorsOpCodes = m_xOpCodeMapper->getMappings(aArgs,sheet::FormulaLanguage::ODFF);
 
         m_aSpecialOpCodes = m_xOpCodeMapper->getAvailableMappings(sheet::FormulaLanguage::ODFF,sheet::FormulaMapGroup::SPECIAL);
@@ -447,7 +447,7 @@ uno::Reference< sheet::XFormulaOpCodeMapper > FormulaDlg_Impl::GetFormulaOpCodeM
 
 void FormulaDlg_Impl::DeleteArgs()
 {
-    ::std::vector< ::rtl::OUString>().swap(m_aArguments);
+    ::std::vector< OUString>().swap(m_aArguments);
     nArgs = 0;
 }
 namespace
@@ -845,7 +845,7 @@ void FormulaDlg_Impl::FillControls(sal_Bool &rbNext, sal_Bool &rbPrev)
             aFtEditName.SetText( pFuncDesc->getFunctionName() );
             aFtEditName.Show();
             pParaWin->Show();
-            const rtl::OString aHelpId = pFuncDesc->getHelpId();
+            const OString aHelpId = pFuncDesc->getHelpId();
             if ( !aHelpId.isEmpty() )
                 pMEdit->SetHelpId(aHelpId);
         }
@@ -936,7 +936,7 @@ void FormulaDlg_Impl::ClearAllParas()
 }
 String FormulaDlg_Impl::RepairFormula(const String& aFormula)
 {
-    rtl::OUString aResult('=');
+    OUString aResult('=');
     try
     {
         UpdateTokenArray(aFormula);
@@ -1171,7 +1171,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
         for(i=0;i<=nEd;i++)
         {
             if ( m_aArguments[i].isEmpty() )
-                m_aArguments[i] = ::rtl::OUString(" ");
+                m_aArguments[i] = OUString(" ");
         }
         if(pParaWin->GetArgument(nEd).Len()!=0)
             m_aArguments[nEd] = pParaWin->GetArgument(nEd);
@@ -1187,7 +1187,7 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
 
         for(i=nClearPos;i<nArgs;i++)
         {
-            m_aArguments[i] = ::rtl::OUString();
+            m_aArguments[i] = OUString();
         }
     }
 }
@@ -1696,7 +1696,7 @@ void FormulaModalDialog::RefInputDoneAfter( sal_Bool bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-void FormulaModalDialog::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
+void FormulaModalDialog::SetFocusWin(Window *pWin,const OString& nUniqueId)
 {
     if(pWin->GetUniqueId()==nUniqueId)
     {
@@ -1813,7 +1813,7 @@ void FormulaDlg::RefInputDoneAfter( sal_Bool bForced )
     m_pImpl->RefInputDoneAfter( bForced );
 }
 
-void FormulaDlg::SetFocusWin(Window *pWin,const rtl::OString& nUniqueId)
+void FormulaDlg::SetFocusWin(Window *pWin,const OString& nUniqueId)
 {
     if(pWin->GetUniqueId()==nUniqueId)
     {
@@ -1885,7 +1885,7 @@ IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
     if (pData) // won't be destroyed over Close;
     {
         m_pImpl->m_pHelper->setReferenceInput(pData);
-        rtl::OString nUniqueId(pData->GetUniqueId());
+        OString nUniqueId(pData->GetUniqueId());
         SetFocusWin(this,nUniqueId);
     }
     return 0;
@@ -1910,7 +1910,7 @@ void FormEditData::Reset()
     nOffset = 0;
     nEdFocus = 0;
     bMatrix =sal_False;
-    aUniqueId=rtl::OString();
+    aUniqueId=OString();
     aSelection.Min()=0;
     aSelection.Max()=0;
     aUndoStr.Erase();

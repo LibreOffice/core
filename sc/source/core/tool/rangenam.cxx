@@ -37,14 +37,13 @@
 using namespace formula;
 using ::std::pair;
 using ::std::unary_function;
-using ::rtl::OUString;
 
 //========================================================================
 // ScRangeData
 //========================================================================
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const rtl::OUString& rName,
+                          const OUString& rName,
                           const String& rSymbol,
                           const ScAddress& rAddress,
                           RangeType nType,
@@ -76,7 +75,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const rtl::OUString& rName,
+                          const OUString& rName,
                           const ScTokenArray& rArr,
                           const ScAddress& rAddress,
                           RangeType nType ) :
@@ -96,7 +95,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData( ScDocument* pDok,
-                          const rtl::OUString& rName,
+                          const OUString& rName,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->uppercase( rName ) ),
@@ -257,7 +256,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
     rSymbol = aStr;
 }
 
-void ScRangeData::UpdateSymbol( rtl::OUStringBuffer& rBuffer, const ScAddress& rPos,
+void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -833,7 +832,7 @@ bool ScRangeName::insert(ScRangeData* p)
             p->SetIndex(maIndexToData.size() + 1);
     }
 
-    rtl::OUString aName(p->GetUpperName());
+    OUString aName(p->GetUpperName());
     erase(aName); // ptr_map won't insert it if a duplicate name exists.
     pair<DataType::iterator, bool> r = maData.insert(aName, p);
     if (r.second)
@@ -852,7 +851,7 @@ void ScRangeName::erase(const ScRangeData& r)
     erase(r.GetUpperName());
 }
 
-void ScRangeName::erase(const rtl::OUString& rName)
+void ScRangeName::erase(const OUString& rName)
 {
     DataType::iterator itr = maData.find(rName);
     if (itr != maData.end())

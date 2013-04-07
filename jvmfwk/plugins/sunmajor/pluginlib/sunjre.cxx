@@ -86,9 +86,9 @@ char const* const* SunInfo::getLibraryPaths(int* size)
 #endif
 }
 
-int SunInfo::compareVersions(const rtl::OUString& sSecond) const
+int SunInfo::compareVersions(const OUString& sSecond) const
 {
-    rtl::OUString sFirst = getVersion();
+    OUString sFirst = getVersion();
 
     SunVersion version1(sFirst);
     JFW_ENSURE(version1, "[Java framework] sunjavaplugin" SAL_DLLEXTENSION

@@ -68,8 +68,8 @@ ItemHolder1::ItemHolder1()
         if(bMessage)
         {
             bMessage = sal_False;
-            ::rtl::OString sMsg("CreateInstance with arguments exception: ");
-            sMsg += ::rtl::OString(rEx.Message.getStr(),
+            OString sMsg("CreateInstance with arguments exception: ");
+            sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                         RTL_TEXTENCODING_ASCII_US);
             OSL_FAIL(sMsg.getStr());
@@ -221,19 +221,19 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
             break;
 
         case E_VIEWOPTIONS_DIALOG :
-            rItem.pItem = new SvtViewOptions(E_DIALOG, ::rtl::OUString());
+            rItem.pItem = new SvtViewOptions(E_DIALOG, OUString());
             break;
 
         case E_VIEWOPTIONS_TABDIALOG :
-            rItem.pItem = new SvtViewOptions(E_TABDIALOG, ::rtl::OUString());
+            rItem.pItem = new SvtViewOptions(E_TABDIALOG, OUString());
             break;
 
         case E_VIEWOPTIONS_TABPAGE :
-            rItem.pItem = new SvtViewOptions(E_TABPAGE, ::rtl::OUString());
+            rItem.pItem = new SvtViewOptions(E_TABPAGE, OUString());
             break;
 
         case E_VIEWOPTIONS_WINDOW :
-            rItem.pItem = new SvtViewOptions(E_WINDOW, ::rtl::OUString());
+            rItem.pItem = new SvtViewOptions(E_WINDOW, OUString());
             break;
 
         case E_USEROPTIONS :

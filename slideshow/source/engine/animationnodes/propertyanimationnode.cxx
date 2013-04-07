@@ -35,7 +35,7 @@ AnimationActivitySharedPtr PropertyAnimationNode::createActivity() const
     // Create AnimationActivity from common XAnimate parameters:
     ActivitiesFactory::CommonParameters aParms( fillCommonParameters() );
     uno::Reference<animations::XAnimate> const& xAnimateNode =getXAnimateNode();
-    rtl::OUString const attrName( xAnimateNode->getAttributeName() );
+    OUString const attrName( xAnimateNode->getAttributeName() );
     AttributableShapeSharedPtr const pShape( getShape() );
 
     switch (AnimationFactory::classifyAttributeName( attrName )) {

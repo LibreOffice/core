@@ -161,7 +161,7 @@ class SwSaveLabelDlg : public ModalDialog
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);
 
-    void    SetLabel(const rtl::OUString& rMake, const rtl::OUString& rType)
+    void    SetLabel(const OUString& rMake, const OUString& rType)
         {
             aMakeCB.SetText(String(rMake));
             aTypeED.SetText(String(rType));

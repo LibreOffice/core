@@ -110,7 +110,7 @@ class AbstractSdInsertLayerDlg : public VclAbstractDialog  //add for SdInsertLay
 public:
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) = 0;
     //from class ::Window
-    virtual void    SetHelpId( const rtl::OString& rHelpId ) = 0;
+    virtual void    SetHelpId( const OString& rHelpId ) = 0;
 };
 
 class AbstractSdInsertPasteDlg : public VclAbstractDialog  //add for SdInsertPasteDlg
@@ -123,7 +123,7 @@ class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog  //add for SdInser
 {
 public:
     virtual ::Window*   GetWindow() = 0;  //this method is added for return a ::Window type pointer
-    virtual std::vector<rtl::OUString> GetList ( const sal_uInt16 nType ) = 0;
+    virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) = 0;
     virtual sal_Bool        IsLink() = 0;
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const = 0;
 };

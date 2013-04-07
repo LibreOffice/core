@@ -56,7 +56,6 @@ const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
 
 //============================================================================
 
-using ::rtl::OUString;
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ErrorBox( this, WinBits(WB_OK|WB_DEF_OK), \

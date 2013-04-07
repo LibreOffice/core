@@ -42,7 +42,6 @@
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 /*--------------------------------------------------------------------
     Beschreibung: Datenbanktrenner durch Punkte fuer Anzeige ersetzen
@@ -70,7 +69,7 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
 {
     if(!aDBData.sDataSource.isEmpty() || !aDBData.sCommand.isEmpty())
     {
-        sName = rtl::OUStringBuffer(aDBData.sDataSource).append(DB_DELIM).
+        sName = OUStringBuffer(aDBData.sDataSource).append(DB_DELIM).
             append(aDBData.sCommand).append(DB_DELIM).makeStringAndClear();
     }
     sName += GetColumnName();
@@ -88,7 +87,7 @@ SwFieldType* SwDBFieldType::Copy() const
 }
 
 //------------------------------------------------------------------------------
-const rtl::OUString& SwDBFieldType::GetName() const
+const OUString& SwDBFieldType::GetName() const
 {
     return sName;
 }
@@ -205,7 +204,7 @@ void SwDBField::InitContent()
 {
     if (!IsInitialized())
     {
-        aContent = rtl::OUStringBuffer().append('<')
+        aContent = OUStringBuffer().append('<')
             .append(((const SwDBFieldType*)GetTyp())->GetColumnName())
             .append('>').makeStringAndClear();
     }
@@ -364,7 +363,7 @@ void SwDBField::Evaluate()
     Beschreibung: Namen erfragen
  --------------------------------------------------------------------*/
 
-const rtl::OUString& SwDBField::GetPar1() const
+const OUString& SwDBField::GetPar1() const
 {
     return ((const SwDBFieldType*)GetTyp())->GetName();
 }
@@ -640,12 +639,12 @@ void SwDBNextSetField::Evaluate(SwDoc* pDoc)
     Beschreibung: Bedingung
  --------------------------------------------------------------------*/
 
-const rtl::OUString& SwDBNextSetField::GetPar1() const
+const OUString& SwDBNextSetField::GetPar1() const
 {
     return aCond;
 }
 
-void SwDBNextSetField::SetPar1(const rtl::OUString& rStr)
+void SwDBNextSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
 }
@@ -743,12 +742,12 @@ void SwDBNumSetField::Evaluate(SwDoc* pDoc)
     Beschreibung: LogDBName
  --------------------------------------------------------------------*/
 
-const rtl::OUString& SwDBNumSetField::GetPar1() const
+const OUString& SwDBNumSetField::GetPar1() const
 {
     return aCond;
 }
 
-void SwDBNumSetField::SetPar1(const rtl::OUString& rStr)
+void SwDBNumSetField::SetPar1(const OUString& rStr)
 {
     aCond = rStr;
 }
@@ -757,12 +756,12 @@ void SwDBNumSetField::SetPar1(const rtl::OUString& rStr)
     Beschreibung: Bedingung
  --------------------------------------------------------------------*/
 
-rtl::OUString SwDBNumSetField::GetPar2() const
+OUString SwDBNumSetField::GetPar2() const
 {
     return aPar2;
 }
 
-void SwDBNumSetField::SetPar2(const rtl::OUString& rStr)
+void SwDBNumSetField::SetPar2(const OUString& rStr)
 {
     aPar2 = rStr;
 }

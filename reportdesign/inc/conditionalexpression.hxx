@@ -38,14 +38,14 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ConditionalExpression
     {
     private:
-        const ::rtl::OUString       m_sPattern;
+        const OUString       m_sPattern;
 
     public:
         ConditionalExpression( const sal_Char* _pAsciiPattern );
 
         /** assembles an expression string from a field data source, and one or two operands
         */
-        ::rtl::OUString     assembleExpression( const ::rtl::OUString& _rFieldDataSource, const ::rtl::OUString& _rLHS, const ::rtl::OUString& _rRHS ) const;
+        OUString     assembleExpression( const OUString& _rFieldDataSource, const OUString& _rLHS, const OUString& _rRHS ) const;
 
         /** matches the given expression string to the expression pattern represented by the object
             @param  _rExpression
@@ -60,7 +60,7 @@ namespace rptui
                 <TRUE/> if and only if the expression string could be successfully matched to
                 the pattern.
         */
-        bool                matchExpression( const ::rtl::OUString& _rExpression, const ::rtl::OUString& _rFieldDataSource, ::rtl::OUString& _out_rLHS, ::rtl::OUString& _out_rRHS ) const;
+        bool                matchExpression( const OUString& _rExpression, const OUString& _rFieldDataSource, OUString& _out_rLHS, OUString& _out_rRHS ) const;
     };
 
     //========================================================================

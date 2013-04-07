@@ -24,14 +24,14 @@
 
 class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
 {
-    ::rtl::OUString m_aAttrQName;
-    ::rtl::OUString m_aAttrValue;
+    OUString m_aAttrQName;
+    OUString m_aAttrValue;
 
 public:
     TYPEINFO();
 
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap,

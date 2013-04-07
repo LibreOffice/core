@@ -68,7 +68,7 @@ class SwXMLExport : public SvXMLExport
     void ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                  sal_uInt32 nAbsWidth,
                                  sal_uInt32 nBaseWidth,
-                                 const ::rtl::OUString& rNamePrefix,
+                                 const OUString& rNamePrefix,
                                  SwXMLTableColumnsSortByWidth_Impl& rExpCols,
                                  SwXMLTableFrmFmtsSort_Impl& rExpRows,
                                  SwXMLTableFrmFmtsSort_Impl& rExpCells,
@@ -101,9 +101,9 @@ class SwXMLExport : public SvXMLExport
     virtual sal_Int32 GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings );
 
     // string constants for table cell export
-    const ::rtl::OUString sNumberFormat;
-    const ::rtl::OUString sIsProtected;
-    const ::rtl::OUString sCell;
+    const OUString sNumberFormat;
+    const OUString sIsProtected;
+    const OUString sCell;
 
     void setBlockMode();
 private:
@@ -145,7 +145,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo (override parent method)
-    ::rtl::OUString SAL_CALL getImplementationName()
+    OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     const SwDoc* getDoc() const;

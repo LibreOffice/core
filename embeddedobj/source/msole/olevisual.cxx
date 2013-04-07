@@ -54,16 +54,16 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a bitmap
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
-            ::rtl::OUString( "Bitmap" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" )),
+            OUString( "Bitmap" ),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }
     else
     {
         // it's a metafile
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
-            ::rtl::OUString( "Windows Metafile" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+            OUString( "Windows Metafile" ),
             ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     }
 
@@ -100,11 +100,11 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
@@ -180,11 +180,11 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     awt::Size aResult;
@@ -218,7 +218,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                     catch( const uno::Exception& )
                     {
                         throw embed::NoVisualAreaSizeException(
-                                ::rtl::OUString( "No size available!\n" ),
+                                OUString( "No size available!\n" ),
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
                     }
                 }
@@ -261,7 +261,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
                 if ( !bSuccess )
                     throw embed::NoVisualAreaSizeException(
-                                    ::rtl::OUString( "No size available!\n" ),
+                                    OUString( "No size available!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
                 aGuard.reset();
@@ -280,7 +280,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         catch ( const uno::Exception& )
         {
             throw embed::NoVisualAreaSizeException(
-                            ::rtl::OUString( "No size available!\n" ),
+                            OUString( "No size available!\n" ),
                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
         }
     }
@@ -296,7 +296,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         else
         {
             throw embed::NoVisualAreaSizeException(
-                            ::rtl::OUString( "No size available!\n" ),
+                            OUString( "No size available!\n" ),
                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
         }
     }
@@ -328,13 +328,13 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // TODO: if the object has cached representation then it should be returned
     // TODO: if the object has no cached representation and is in loaded state it should switch itself to the running state
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     embed::VisualRepresentation aVisualRepr;
@@ -361,8 +361,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 changeState( embed::EmbedStates::RUNNING );
 
             datatransfer::DataFlavor aDataFlavor(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
-                    ::rtl::OUString( "Windows Metafile" ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" )),
+                    OUString( "Windows Metafile" ),
                     ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
 
             aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );
@@ -394,7 +394,7 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
     if ( !m_xCachedVisualRepresentation.is() )
     {
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -421,11 +421,11 @@ sal_Int32 SAL_CALL OleEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString( "The object is not loaded!\n" ),
+        throw embed::WrongStateException( OUString( "The object is not loaded!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;

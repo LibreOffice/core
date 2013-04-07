@@ -62,7 +62,7 @@ class SvxPopupWindowListBox : public SfxPopupWindow
     ToolBox &       rToolBox;
     sal_Bool            bUserSel;
     sal_uInt16          nTbxId;
-    rtl::OUString   maCommandURL;
+    OUString   maCommandURL;
     // disallow copy-constructor and assignment-operator
 
     SvxPopupWindowListBox(const int& );
@@ -71,7 +71,7 @@ class SvxPopupWindowListBox : public SfxPopupWindow
 //  SvxPopupWindowListBox( sal_uInt16 nSlotId, ToolBox& rTbx, sal_uInt16 nTbxItemId );
 
 public:
-    SvxPopupWindowListBox( sal_uInt16 nSlotId, const rtl::OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
+    SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
     virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
@@ -89,7 +89,7 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const rtl::OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
+SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
     rToolBox    ( rTbx ),
     bUserSel    ( sal_False ),
@@ -284,7 +284,7 @@ void SvxUndoRedoControl::StateChanged(
 
             const std::vector<String> &aLst = rItem.GetList();
             for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )
-                aUndoRedoList.push_back( rtl::OUString( aLst[nI] ));
+                aUndoRedoList.push_back( OUString( aLst[nI] ));
         }
     }
 }
@@ -294,9 +294,9 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
     DBG_ASSERT(( SID_UNDO == GetSlotId() || SID_REDO == GetSlotId() ), "mismatching ids" );
 
     if ( m_aCommandURL == ".uno:Undo" )
-        updateStatus( rtl::OUString( ".uno:GetUndoStrings" ));
+        updateStatus( OUString( ".uno:GetUndoStrings" ));
     else
-        updateStatus( rtl::OUString( ".uno:GetRedoStrings" ));
+        updateStatus( OUString( ".uno:GetRedoStrings" ));
 
     ToolBox& rBox = GetToolBox();
 

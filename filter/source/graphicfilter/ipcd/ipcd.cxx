@@ -177,7 +177,7 @@ void PCDReader::CheckPCDImagePacFile()
     m_rPCD.Seek( 2048 );
     m_rPCD.Read( Buf, 7 );
     Buf[ 7 ] = 0;
-    if (rtl::OString(Buf) != "PCD_IPI")
+    if (OString(Buf) != "PCD_IPI")
         bStatus = sal_False;
 }
 

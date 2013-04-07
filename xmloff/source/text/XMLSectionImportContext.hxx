@@ -52,19 +52,19 @@ class XMLSectionImportContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> xSectionPropertySet;
 
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sIndexHeaderSection;
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sProtectionKey;
-    const ::rtl::OUString sIsProtected;
-    const ::rtl::OUString sIsCurrentlyVisible;
-    const ::rtl::OUString sEmpty;
+    const OUString sTextSection;
+    const OUString sIndexHeaderSection;
+    const OUString sCondition;
+    const OUString sIsVisible;
+    const OUString sProtectionKey;
+    const OUString sIsProtected;
+    const OUString sIsCurrentlyVisible;
+    const OUString sEmpty;
 
-    ::rtl::OUString sXmlId;
-    ::rtl::OUString sStyleName;
-    ::rtl::OUString sName;
-    ::rtl::OUString sCond;
+    OUString sXmlId;
+    OUString sStyleName;
+    OUString sName;
+    OUString sCond;
     ::com::sun::star::uno::Sequence<sal_Int8> aSequence;
     sal_Bool bProtect;
     sal_Bool bCondOK;
@@ -83,7 +83,7 @@ public:
     XMLSectionImportContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const OUString& rLocalName );
 
     ~XMLSectionImportContext();
 
@@ -97,7 +97,7 @@ protected:
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 

@@ -69,7 +69,7 @@ public:
     void FillValueSets();
 
     // ____ RangeSelectionListenerParent ____
-    virtual void listeningFinished( const ::rtl::OUString & rNewRange );
+    virtual void listeningFinished( const OUString & rNewRange );
     virtual void disposingRangeSelection();
 
 private:

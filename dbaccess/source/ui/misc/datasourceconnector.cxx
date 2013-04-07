@@ -71,7 +71,7 @@ namespace dbaui
 
     //---------------------------------------------------------------------
     ODatasourceConnector::ODatasourceConnector( const Reference< XComponentContext >& _rxContext, Window* _pMessageParent,
-        const ::rtl::OUString& _rContextInformation )
+        const OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
         ,m_sContextInformation( _rContextInformation )
@@ -79,7 +79,7 @@ namespace dbaui
     }
 
     //---------------------------------------------------------------------
-    Reference< XConnection > ODatasourceConnector::connect( const ::rtl::OUString& _rDataSourceName,
+    Reference< XConnection > ODatasourceConnector::connect( const OUString& _rDataSourceName,
         ::dbtools::SQLExceptionInfo* _pErrorInfo ) const
     {
         Reference< XConnection > xConnection;
@@ -110,7 +110,7 @@ namespace dbaui
             return xConnection;
 
         // get user/password
-        ::rtl::OUString sPassword, sUser;
+        OUString sPassword, sUser;
         sal_Bool bPwdRequired = sal_False;
         Reference<XPropertySet> xProp(_xDataSource,UNO_QUERY);
         try

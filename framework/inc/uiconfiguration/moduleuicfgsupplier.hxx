@@ -76,11 +76,11 @@ namespace framework
                 throw (::com::sun::star::uno::RuntimeException);
 
             // XModuleUIConfigurationManagerSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const ::rtl::OUString& ModuleIdentifier )
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const OUString& ModuleIdentifier )
                 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
         private:
-            typedef ::boost::unordered_map< rtl::OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, rtl::OUStringHash, ::std::equal_to< rtl::OUString > > ModuleToModuleCfgMgr;
+            typedef ::boost::unordered_map< OUString, com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
 
 //TODO_AS            void impl_initStorages();
 
@@ -88,8 +88,8 @@ namespace framework
             ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
             bool                                                                                m_bDisposed;
 // TODO_AS            bool                                                                                m_bInit;
-            rtl::OUString                                                                       m_aDefaultConfigURL;
-            rtl::OUString                                                                       m_aUserConfigURL;
+            OUString                                                                       m_aDefaultConfigURL;
+            OUString                                                                       m_aUserConfigURL;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xDefaultCfgRootStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XStorage >                   m_xUserCfgRootStorage;
             com::sun::star::uno::Reference< com::sun::star::embed::XTransactedObject >          m_xUserRootCommit;

@@ -109,11 +109,11 @@ public:
 
 typedef ::boost::unordered_map
 <
-   rtl::OUString,
+   OUString,
    sal_Int32,
-   rtl::OUStringHash,
-   ::std::equal_to< rtl::OUString >,
-   Allocator< ::std::pair< const ::rtl::OUString , sal_Int32 > >
+   OUStringHash,
+   ::std::equal_to< OUString >,
+   Allocator< ::std::pair< const OUString , sal_Int32 > >
 > String2IntMap;
 
 typedef ::cppu::WeakComponentImplHelper8
@@ -136,14 +136,14 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_origin;
     String2IntMap m_name2index;  // maps the element name to an index
     ::com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_values; // contains the real values
-    ::rtl::OUString m_type;
+    OUString m_type;
 
 public:
     Container(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const ::rtl::OUString & type  // for exception messages
+        const OUString & type  // for exception messages
         );
 
 public: // XIndexAccess
@@ -159,13 +159,13 @@ public: // XEnumerationAccess
     SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException);
 
 public: // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw (::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::lang::WrappedTargetException,
                ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
     // Methods
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
@@ -185,13 +185,13 @@ public: // XAppend
 
     // helper method !
     void append(
-        const rtl::OUString & str,
+        const OUString & str,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
         throw ( ::com::sun::star::container::ElementExistException );
 
 
 public: // XDrop
-    virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName )
+    virtual void SAL_CALL dropByName( const OUString& elementName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
@@ -226,7 +226,7 @@ public:
     virtual void SAL_CALL disposing();
 
 public:
-    void rename( const rtl::OUString & oldName, const rtl::OUString &newName );
+    void rename( const OUString & oldName, const OUString &newName );
 
 protected:
     void fire( const EventBroadcastHelper & helper );

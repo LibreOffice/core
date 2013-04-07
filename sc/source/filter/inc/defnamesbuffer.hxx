@@ -55,8 +55,8 @@ const sal_Unicode BIFF_DEFNAME_UNKNOWN          = '\x0E';
 
 struct DefinedNameModel
 {
-    ::rtl::OUString     maName;         /// The original name.
-    ::rtl::OUString     maFormula;      /// The formula string.
+    OUString     maName;         /// The original name.
+    OUString     maFormula;      /// The formula string.
     sal_Int32           mnSheet;        /// Sheet index for local names.
     sal_Int32           mnFuncGroupId;  /// Function group identifier.
     bool                mbMacro;        /// True = Macro name (VBA or sheet macro).
@@ -76,12 +76,12 @@ public:
     explicit            DefinedNameBase( const WorkbookHelper& rHelper );
 
     /** Returns the original name as imported from or exported to the file. */
-    inline const ::rtl::OUString& getModelName() const { return maModel.maName; }
+    inline const OUString& getModelName() const { return maModel.maName; }
     /** Returns the name as used in the Calc document. */
-    inline const ::rtl::OUString& getCalcName() const { return maCalcName; }
+    inline const OUString& getCalcName() const { return maCalcName; }
 
     /** Returns the original name as imported from or exported to the file. */
-    const ::rtl::OUString& getUpcaseModelName() const;
+    const OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
     ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddr ) const;
 
@@ -95,8 +95,8 @@ protected:
 
 protected:
     DefinedNameModel    maModel;            /// Model data for this defined name.
-    mutable ::rtl::OUString maUpModelName;  /// Model name converted to uppercase ASCII.
-    ::rtl::OUString     maCalcName;         /// Final name used in the Calc document.
+    mutable OUString maUpModelName;  /// Model name converted to uppercase ASCII.
+    OUString     maCalcName;         /// Final name used in the Calc document.
     ::com::sun::star::uno::Any maRefAny;    /// Single cell/range reference.
 };
 
@@ -110,7 +110,7 @@ public:
     /** Sets the attributes for this defined name from the passed attribute set. */
     void                importDefinedName( const AttributeList& rAttribs );
     /** Sets the formula string from the body of the definedName element. */
-    void                setFormula( const ::rtl::OUString& rFormula );
+    void                setFormula( const OUString& rFormula );
     /** Imports the defined name from a DEFINEDNAME record in the passed stream. */
     void                importDefinedName( SequenceInputStream& rStrm );
 
@@ -181,7 +181,7 @@ public:
         @param nSheet  The sheet index for local names or -1 for global names.
             If no local name is found, tries to find a matching global name.
         @return  Reference to the defined name or empty reference. */
-    DefinedNameRef      getByModelName( const ::rtl::OUString& rModelName, sal_Int16 nCalcSheet = -1 ) const;
+    DefinedNameRef      getByModelName( const OUString& rModelName, sal_Int16 nCalcSheet = -1 ) const;
     /** Returns a built-in defined name by its built-in identifier.
         @param nSheet  The sheet index of the built-in name.
         @return  Reference to the defined name or empty reference. */
@@ -191,7 +191,7 @@ private:
     DefinedNameRef      createDefinedName();
 
 private:
-    typedef ::std::pair< sal_Int16, ::rtl::OUString >   SheetNameKey;
+    typedef ::std::pair< sal_Int16, OUString >   SheetNameKey;
     typedef ::std::pair< sal_Int16, sal_Unicode >       BuiltinKey;
 
     typedef RefVector< DefinedName >            DefNameVector;

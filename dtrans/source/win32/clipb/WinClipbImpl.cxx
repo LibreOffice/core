@@ -50,7 +50,6 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::datatransfer::clipboard::RenderingCapabilities;
 
-using ::rtl::OUString;
 
 // definition of static members
 CWinClipbImpl* CWinClipbImpl::s_pCWinClipbImpl = NULL;

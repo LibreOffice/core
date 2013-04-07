@@ -36,7 +36,7 @@ namespace frm
     class SAL_NO_VTABLE ICommandDescriptionProvider
     {
     public:
-        virtual ::rtl::OUString getCommandDescription( const ::rtl::OUString& _rCommandURL ) const = 0;
+        virtual OUString getCommandDescription( const OUString& _rCommandURL ) const = 0;
 
         virtual ~ICommandDescriptionProvider() { }
     };

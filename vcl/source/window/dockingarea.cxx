@@ -185,7 +185,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
             Rectangle aCtrlRegion( tmp, GetOutputSizePixel() );
 
             DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
-                               aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                               aCtrlRegion, nState, aControlValue, OUString() );
 
             if( !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
@@ -248,7 +248,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
                     aTBRect.Bottom()    = aOutSz.Height() - 1;
                 }
                 DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
-                                   aTBRect, nState, aControlValue, rtl::OUString() );
+                                   aTBRect, nState, aControlValue, OUString() );
             }
         }
     }

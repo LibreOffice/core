@@ -64,16 +64,16 @@ protected:
 
 private:
     const SfxFilter*    impl_getFilterFromServiceName_nothrow(
-                            const ::rtl::OUString& i_rServiceName
+                            const OUString& i_rServiceName
                         ) const;
 
-    ::rtl::OUString     impl_askForFilter_nothrow(
+    OUString     impl_askForFilter_nothrow(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& i_rxHandler,
-                            const ::rtl::OUString& i_rDocumentURL
+                            const OUString& i_rDocumentURL
                         ) const;
 
     const SfxFilter*    impl_detectFilterForURL(
-                            const ::rtl::OUString& _rURL,
+                            const OUString& _rURL,
                             const ::comphelper::NamedValueCollection& i_rDescriptor,
                             const SfxFilterMatcher& rMatcher
                         ) const;
@@ -93,7 +93,7 @@ private:
                         ) const;
 
     sal_uInt16              impl_findSlotParam(
-                            const ::rtl::OUString& i_rFactoryURL
+                            const OUString& i_rFactoryURL
                         ) const;
 
     SfxObjectShellRef   impl_findObjectShell(
@@ -129,7 +129,7 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel2 >& i_rModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rFrame,
                             const ::comphelper::NamedValueCollection& i_rViewFactoryArgs,
-                            const ::rtl::OUString& i_rViewName
+                            const OUString& i_rViewName
                         );
 };
 

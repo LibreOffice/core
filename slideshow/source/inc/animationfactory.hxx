@@ -77,7 +77,7 @@ namespace slideshow
                 CLASS_BOOL_PROPERTY
             };
 
-            static AttributeClass classifyAttributeName( const ::rtl::OUString& rAttrName );
+            static AttributeClass classifyAttributeName( const OUString& rAttrName );
 
             /// Collection of flags common to all factory methods
             enum FactoryFlags
@@ -89,19 +89,19 @@ namespace slideshow
                 FLAG_NO_SPRITE = 1
             };
 
-            static NumberAnimationSharedPtr createNumberPropertyAnimation( const ::rtl::OUString&               rAttrName,
+            static NumberAnimationSharedPtr createNumberPropertyAnimation( const OUString&               rAttrName,
                                                                            const AnimatableShapeSharedPtr&      rShape,
                                                                            const ShapeManagerSharedPtr&         rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
-            static EnumAnimationSharedPtr createEnumPropertyAnimation( const ::rtl::OUString&                   rAttrName,
+            static EnumAnimationSharedPtr createEnumPropertyAnimation( const OUString&                   rAttrName,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags=0 );
 
-            static ColorAnimationSharedPtr  createColorPropertyAnimation( const ::rtl::OUString&                rAttrName,
+            static ColorAnimationSharedPtr  createColorPropertyAnimation( const OUString&                rAttrName,
                                                                           const AnimatableShapeSharedPtr&       rShape,
                                                                           const ShapeManagerSharedPtr&          rShapeManager,
                                                                           const ::basegfx::B2DVector&           rSlideSize,
@@ -120,19 +120,19 @@ namespace slideshow
                                                                          sal_Int16                              nTransformType,
                                                                          int                                    nFlags=0 );
 
-            static StringAnimationSharedPtr createStringPropertyAnimation( const ::rtl::OUString&               rAttrName,
+            static StringAnimationSharedPtr createStringPropertyAnimation( const OUString&               rAttrName,
                                                                            const AnimatableShapeSharedPtr&      rShape,
                                                                            const ShapeManagerSharedPtr&         rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
-            static BoolAnimationSharedPtr   createBoolPropertyAnimation( const ::rtl::OUString&                 rAttrName,
+            static BoolAnimationSharedPtr   createBoolPropertyAnimation( const OUString&                 rAttrName,
                                                                          const AnimatableShapeSharedPtr&        rShape,
                                                                          const ShapeManagerSharedPtr&           rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          int                                    nFlags=0 );
 
-            static NumberAnimationSharedPtr createPathMotionAnimation( const ::rtl::OUString&                   rSVGDPath,
+            static NumberAnimationSharedPtr createPathMotionAnimation( const OUString&                   rSVGDPath,
                                                                        sal_Int16                                nAdditive,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,

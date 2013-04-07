@@ -36,7 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
-using ::rtl::OUString ;
 
 using ::com::sun::star::security::XCertificateExtension ;
 
@@ -111,7 +110,7 @@ namespace {
                 case certOtherName: {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_OTHER_NAME;
                     ::com::sun::star::beans::PropertyValue otherNameProp;
-                    otherNameProp.Name = ::rtl::OUString::createFromAscii(CERT_GetOidString(&current->name.OthName.oid));
+                    otherNameProp.Name = OUString::createFromAscii(CERT_GetOidString(&current->name.OthName.oid));
 
                     Sequence< sal_Int8 > otherName( current->name.OthName.name.len ) ;
                     for( unsigned int r = 0; r < current->name.OthName.name.len ; r ++ )
@@ -124,11 +123,11 @@ namespace {
                                     }
                 case certRFC822Name:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                    arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certDNSName:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                    arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certX400Address: {
                     // unsupported
@@ -147,7 +146,7 @@ namespace {
                                         }
                 case certURI:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                    arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certIPAddress: {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_IP_ADDRESS;
@@ -163,9 +162,9 @@ namespace {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_REGISTERED_ID;
 
 
-                    rtl::OString nssOid = ::rtl::OString(CERT_GetOidString(&current->name.other));
-                    rtl::OString unoOid = removeOIDFromString(nssOid);
-                    arrCertAltNameEntry[i].Value <<= rtl::OStringToOUString( unoOid, RTL_TEXTENCODING_ASCII_US );
+                    OString nssOid = OString(CERT_GetOidString(&current->name.other));
+                    OString unoOid = removeOIDFromString(nssOid);
+                    arrCertAltNameEntry[i].Value <<= OStringToOUString( unoOid, RTL_TEXTENCODING_ASCII_US );
                     break;
             }
             current = CERT_GetNextGeneralName(current);
@@ -183,10 +182,10 @@ namespace {
     return m_Entries;
 }
 
-::rtl::OString SanExtensionImpl :: removeOIDFromString( const ::rtl::OString &oidString)
+OString SanExtensionImpl :: removeOIDFromString( const OString &oidString)
 {
-    ::rtl::OString objID;
-    ::rtl::OString oid("OID.");
+    OString objID;
+    OString oid("OID.");
     if (oidString.match(oid))
         objID = oidString.copy(oid.getLength());
     else

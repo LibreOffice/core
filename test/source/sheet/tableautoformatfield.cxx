@@ -37,7 +37,7 @@ namespace apitest {
 
 uno::Reference< beans::XPropertySet > TableAutoFormatField::initTest()
 {
-    uno::Reference< container::XIndexAccess > xAutoFormatFields( getServiceFactory()->createInstance(rtl::OUString("com.sun.star.sheet.TableAutoFormats")), UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xAutoFormatFields( getServiceFactory()->createInstance(OUString("com.sun.star.sheet.TableAutoFormats")), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xAutoFormatFields.is());
     uno::Reference< container::XIndexAccess > xIndex( xAutoFormatFields->getByIndex(0), UNO_QUERY_THROW );
     CPPUNIT_ASSERT(xIndex.is());
@@ -49,7 +49,7 @@ uno::Reference< beans::XPropertySet > TableAutoFormatField::initTest()
 void TableAutoFormatField::testRotateReference()
 {
     uno::Reference< beans::XPropertySet > xTableAutoFormatField = initTest();
-    rtl::OUString aRotateReference("RotateReference");
+    OUString aRotateReference("RotateReference");
     uno::Any aOldRotateReference = xTableAutoFormatField->getPropertyValue(aRotateReference);
     sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldRotateReference >>= aValue);
@@ -67,7 +67,7 @@ void TableAutoFormatField::testRotateReference()
 void TableAutoFormatField::testVertJustify()
 {
     uno::Reference< beans::XPropertySet > xTableAutoFormatField = initTest();
-    rtl::OUString aVertJustify("VertJustify");
+    OUString aVertJustify("VertJustify");
     uno::Any aOldVertJustify = xTableAutoFormatField->getPropertyValue(aVertJustify);
     sal_Int32 aValue = 0;
     CPPUNIT_ASSERT(aOldVertJustify >>= aValue);

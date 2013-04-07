@@ -60,7 +60,7 @@ class FcGlyphFallbackSubstititution
 {
     // TODO: add a cache
 public:
-    bool FindFontSubstitute( FontSelectPattern&, rtl::OUString& rMissingCodes ) const;
+    bool FindFontSubstitute( FontSelectPattern&, OUString& rMissingCodes ) const;
 };
 
 int SalGenericInstance::FetchFontSubstitutionFlags()
@@ -116,7 +116,7 @@ void SalGenericInstance::RegisterFontSubstitutors( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
-static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, rtl::OUString& rMissingCodes )
+static FontSelectPattern GetFcSubstitute(const FontSelectPattern &rFontSelData, OUString& rMissingCodes )
 {
     FontSelectPattern aSubstituted(rFontSelData);
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -193,9 +193,9 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const rtl::OString aOrigName(rtl::OUStringToOString(rFontSelData.maTargetName,
+    const OString aOrigName(OUStringToOString(rFontSelData.maTargetName,
         RTL_TEXTENCODING_UTF8));
-    const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
+    const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcPreMatchSubstititution \"%s\" bipw=%d%d%d%d -> ",
         aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),
@@ -223,7 +223,7 @@ bool FcPreMatchSubstititution::FindFontSubstitute( FontSelectPattern &rFontSelDa
 // -----------------------------------------------------------------------
 
 bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData,
-    rtl::OUString& rMissingCodes ) const
+    OUString& rMissingCodes ) const
 {
     // We dont' actually want to talk to Fontconfig at all for symbol fonts
     if( rFontSelData.IsSymbolFont() )
@@ -244,9 +244,9 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFont
     const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
 
 #ifdef DEBUG
-    const rtl::OString aOrigName(rtl::OUStringToOString(rFontSelData.maTargetName,
+    const OString aOrigName(OUStringToOString(rFontSelData.maTargetName,
         RTL_TEXTENCODING_UTF8));
-    const rtl::OString aSubstName(rtl::OUStringToOString(aOut.maSearchName,
+    const OString aSubstName(OUStringToOString(aOut.maSearchName,
         RTL_TEXTENCODING_UTF8));
     printf( "FcGFSubstititution \"%s\" bipw=%d%d%d%d ->",
         aOrigName.getStr(), rFontSelData.GetWeight(), rFontSelData.GetSlant(),

@@ -98,14 +98,14 @@ public:
     // shell functions
     sal_Bool SAL_CALL browseForFolder( );
 
-    virtual void  SAL_CALL setDisplayDirectory( const rtl::OUString& aDirectory );
-    virtual rtl::OUString  SAL_CALL getDisplayDirectory( );
-    virtual rtl::OUString SAL_CALL getDirectory( );
+    virtual void  SAL_CALL setDisplayDirectory( const OUString& aDirectory );
+    virtual OUString  SAL_CALL getDisplayDirectory( );
+    virtual OUString SAL_CALL getDirectory( );
 
-    virtual void SAL_CALL setDescription( const rtl::OUString& aDescription );
+    virtual void SAL_CALL setDescription( const OUString& aDescription );
 
-    virtual void SAL_CALL setTitle( const rtl::OUString& aTitle );
-    rtl::OUString  SAL_CALL getTitle( );
+    virtual void SAL_CALL setTitle( const OUString& aTitle );
+    OUString  SAL_CALL getTitle( );
 
     //-----------------------------------------------------
     // XCancellable
@@ -115,18 +115,18 @@ public:
 
 protected:
     void SAL_CALL enableOk( sal_Bool bEnable );
-    void SAL_CALL setSelection( const rtl::OUString& aDirectory );
-    void SAL_CALL setStatusText( const rtl::OUString& aStatusText );
+    void SAL_CALL setSelection( const OUString& aDirectory );
+    void SAL_CALL setStatusText( const OUString& aStatusText );
 
     virtual void SAL_CALL onInitialized( );
-    virtual void SAL_CALL onSelChanged( const rtl::OUString& aNewPath ) = 0;
+    virtual void SAL_CALL onSelChanged( const OUString& aNewPath ) = 0;
 
 private:
     sal_uInt32 onValidateFailed();
 
     // helper functions
-    LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const rtl::OUString& aDirectory );
-    rtl::OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
+    LPITEMIDLIST  SAL_CALL getItemIdListFromPath( const OUString& aDirectory );
+    OUString SAL_CALL getPathFromItemIdList( LPCITEMIDLIST lpItemIdList );
     void SAL_CALL releaseItemIdList( LPITEMIDLIST lpItemIdList );
 
     unsigned int run( );
@@ -159,10 +159,10 @@ private:
     unsigned                    m_uStaThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndStaRequestWnd;
-    rtl::OUString               m_dialogTitle;
-    rtl::OUString               m_Description;
-    rtl::OUString               m_displayDir;
-    rtl::OUString               m_SelectedDir;
+    OUString               m_dialogTitle;
+    OUString               m_Description;
+    OUString               m_displayDir;
+    OUString               m_SelectedDir;
     BROWSEINFOW                 m_bi;
     CAutoPathBuff               m_pathBuff;
     HINSTANCE                   m_hInstance;

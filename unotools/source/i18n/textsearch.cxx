@@ -36,7 +36,7 @@ namespace utl
 {
 // ............................................................................
 
-SearchParam::SearchParam( const rtl::OUString &rText,
+SearchParam::SearchParam( const OUString &rText,
                                 SearchType eType,
                                 sal_Bool bCaseSensitive,
                                 sal_Bool bWrdOnly,
@@ -237,7 +237,7 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
     return nRet;
 }
 
-sal_Bool TextSearch::SearchForward( const ::rtl::OUString &rStr,
+sal_Bool TextSearch::SearchForward( const OUString &rStr,
                     sal_Int32* pStart, sal_Int32* pEnd,
                     ::com::sun::star::util::SearchResult* pRes)
 {
@@ -305,7 +305,7 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
 {
     if( rResult.subRegExpressions > 0 )
     {
-        rtl::OUString sTab( '\t' );
+        OUString sTab( '\t' );
         sal_Unicode sSrchChrs[] = {'\\', '&', '$', 0};
         String sTmp;
         xub_StrLen nPos = 0;

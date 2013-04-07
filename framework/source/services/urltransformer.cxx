@@ -83,7 +83,7 @@ namespace
             // Don't add last segment as it is the name!
             --nCount;
 
-            rtl::OUStringBuffer aPath;
+            OUStringBuffer aPath;
             for ( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
             {
                 aPath.append( sal_Unicode( '/' ));
@@ -111,8 +111,8 @@ namespace
         if ( _bUseIntern )
             _rURL.Complete   = _rURL.Complete.intern();
 
-        _rParser.SetMark    ( ::rtl::OUString() );
-        _rParser.SetParam( ::rtl::OUString() );
+        _rParser.SetMark    ( OUString() );
+        _rParser.SetParam( OUString() );
 
         _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
     }
@@ -130,7 +130,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
     }
     // Try to extract the protocol
     sal_Int32 nURLIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
-    ::rtl::OUString aProtocol;
+    OUString aProtocol;
     if ( nURLIndex > 1 )
     {
         aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
@@ -174,7 +174,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
 //  XURLTransformer
 //*****************************************************************************************************************
 sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( RuntimeException )
+                                                const   OUString&    sSmartProtocol  ) throw( RuntimeException )
 {
     // Safe impossible cases.
     if  (( &aURL                            ==  NULL    ) ||
@@ -202,7 +202,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart(           URL&        aURL        
         {
             // Try to extract the protocol
             sal_Int32 nIndex = aURL.Complete.indexOf( sal_Unicode( ':' ));
-            ::rtl::OUString aProtocol;
+            OUString aProtocol;
             if ( nIndex > 1 )
             {
                 aProtocol = aURL.Complete.copy( 0, nIndex+1 );
@@ -240,7 +240,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 
     if ( INetURLObject::CompareProtocolScheme( aURL.Protocol ) != INET_PROT_NOT_VALID )
     {
-        ::rtl::OUStringBuffer aCompletePath( aURL.Path );
+        OUStringBuffer aCompletePath( aURL.Path );
 
         // Concat the name if it is provided, just support a final slash
         if ( !aURL.Name.isEmpty() )
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
     else if ( !aURL.Protocol.isEmpty() )
     {
         // Minimal support for unknown protocols
-        ::rtl::OUStringBuffer aBuffer( aURL.Protocol );
+        OUStringBuffer aBuffer( aURL.Protocol );
         aBuffer.append( aURL.Path );
         aURL.Complete   = aBuffer.makeStringAndClear();
         aURL.Main       = aURL.Complete;
@@ -292,7 +292,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
 //*****************************************************************************************************************
 //  XURLTransformer
 //*****************************************************************************************************************
-::rtl::OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
+OUString SAL_CALL URLTransformer::getPresentation(   const   URL&        aURL            ,
                                                             sal_Bool    bWithPassword   ) throw( RuntimeException )
 {
     // Safe impossible cases.
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
             (( bWithPassword            !=  sal_True    )   &&
              ( bWithPassword            !=  sal_False   )       ) )
     {
-        return ::rtl::OUString();
+        return OUString();
     }
 
     // Check given URL
@@ -312,18 +312,18 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         if ( !bWithPassword && !aTestURL.Password.isEmpty() )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = ::rtl::OUString("<******>");
+            aTestURL.Password = OUString("<******>");
             assemble( aTestURL );
         }
 
         // Convert internal URLs to "praesentation"-URLs!
-        rtl::OUString sPraesentationURL;
+        OUString sPraesentationURL;
         INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::DECODE_UNAMBIGUOUS );
 
         return sPraesentationURL;
     }
     else
-        return ::rtl::OUString();
+        return OUString();
 }
 
 //_________________________________________________________________________________________________________________

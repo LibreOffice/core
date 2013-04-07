@@ -51,7 +51,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
     public:
         ButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                  ToolBox*             pToolBar,
-                                 const rtl::OUString& aCommand );
+                                 const OUString& aCommand );
         virtual ~ButtonToolbarController();
 
         // XInterface
@@ -86,7 +86,7 @@ class ButtonToolbarController : public ::com::sun::star::frame::XStatusListener,
     private:
         sal_Bool                                                                         m_bInitialized : 1,
                                                                                          m_bDisposed : 1;
-        rtl::OUString                                                                    m_aCommandURL;
+        OUString                                                                    m_aCommandURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >      m_xURLTransformer;

@@ -38,27 +38,27 @@ namespace webdav_ucp
 class UCBDeadPropertyValue
 {
 private:
-    static const rtl::OUString aTypeString;
-    static const rtl::OUString aTypeLong;
-    static const rtl::OUString aTypeShort;
-    static const rtl::OUString aTypeBoolean;
-    static const rtl::OUString aTypeChar;
-    static const rtl::OUString aTypeByte;
-    static const rtl::OUString aTypeHyper;
-    static const rtl::OUString aTypeFloat;
-    static const rtl::OUString aTypeDouble;
+    static const OUString aTypeString;
+    static const OUString aTypeLong;
+    static const OUString aTypeShort;
+    static const OUString aTypeBoolean;
+    static const OUString aTypeChar;
+    static const OUString aTypeByte;
+    static const OUString aTypeHyper;
+    static const OUString aTypeFloat;
+    static const OUString aTypeDouble;
 
-    static const rtl::OUString aXMLPre;
-    static const rtl::OUString aXMLMid;
-    static const rtl::OUString aXMLEnd;
+    static const OUString aXMLPre;
+    static const OUString aXMLMid;
+    static const OUString aXMLEnd;
 
 public:
     static bool supportsType( const com::sun::star::uno::Type & rType );
 
-    static bool createFromXML( const rtl::OString & rInData,
+    static bool createFromXML( const OString & rInData,
                                com::sun::star::uno::Any & rOutData );
     static bool toXML( const com::sun::star::uno::Any & rInData,
-                       rtl::OUString & rOutData );
+                       OUString & rOutData );
 };
 
 }

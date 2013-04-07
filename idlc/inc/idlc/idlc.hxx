@@ -45,8 +45,8 @@ public:
 
     void init();
 
-    bool dumpDeps(::rtl::OString const& rDepFile,
-                  ::rtl::OString const& rTarget);
+    bool dumpDeps(OString const& rDepFile,
+                  OString const& rTarget);
 
     Options* getOptions()
         { return m_pOptions; }
@@ -56,24 +56,24 @@ public:
         { return m_pRoot; }
     ErrorHandler* error()
         { return m_pErrorHandler; }
-    const ::rtl::OString& getFileName()
+    const OString& getFileName()
         { return m_fileName; }
-    void setFileName(const ::rtl::OString& fileName)
+    void setFileName(const OString& fileName)
         { m_fileName = fileName; addInclude(fileName); }
-    const ::rtl::OString& getMainFileName()
+    const OString& getMainFileName()
         { return m_mainFileName; }
-    void setMainFileName(const ::rtl::OString& mainFileName)
+    void setMainFileName(const OString& mainFileName)
         { m_mainFileName = mainFileName; }
-    const ::rtl::OString& getRealFileName()
+    const OString& getRealFileName()
         { return m_realFileName; }
-    void setRealFileName(const ::rtl::OString& realFileName)
+    void setRealFileName(const OString& realFileName)
         { m_realFileName = realFileName; }
-    const ::rtl::OString& getDocumentation()
+    const OString& getDocumentation()
         {
             m_bIsDocValid = sal_False;
             return m_documentation;
         }
-    void setDocumentation(const ::rtl::OString& documentation)
+    void setDocumentation(const OString& documentation)
         {
             m_documentation = documentation;
             m_bIsDocValid = sal_True;
@@ -112,7 +112,7 @@ public:
     void setParseState(ParseState parseState)
         { m_parseState = parseState; }
 
-    void addInclude(const ::rtl::OString& inc)
+    void addInclude(const OString& inc)
         { m_includes.insert(inc); }
     StringSet* getIncludes()
         { return &m_includes; }
@@ -126,10 +126,10 @@ private:
     AstStack*           m_pScopes;
     AstModule*          m_pRoot;
     ErrorHandler*       m_pErrorHandler;
-    ::rtl::OString      m_fileName;
-    ::rtl::OString      m_mainFileName;
-    ::rtl::OString      m_realFileName;
-    ::rtl::OString      m_documentation;
+    OString      m_fileName;
+    OString      m_mainFileName;
+    OString      m_realFileName;
+    OString      m_documentation;
     sal_Bool            m_bIsDocValid;
     sal_Bool            m_bGenerateDoc;
     sal_Bool            m_bIsInMainfile;
@@ -144,21 +144,21 @@ private:
 };
 
 
-typedef ::std::pair< ::rtl::OString, ::rtl::OString > sPair_t;
-sal_Int32 compileFile(const ::rtl::OString * pathname);
+typedef ::std::pair< OString, OString > sPair_t;
+sal_Int32 compileFile(const OString * pathname);
     // a null pathname means stdin
-sal_Int32 produceFile(const ::rtl::OString& filenameBase,
+sal_Int32 produceFile(const OString& filenameBase,
         sPair_t const*const pDepFile);
     // filenameBase is filename without ".idl"
-void removeIfExists(const ::rtl::OString& pathname);
+void removeIfExists(const OString& pathname);
 
-::rtl::OString makeTempName(const ::rtl::OString& prefix, const ::rtl::OString& postfix);
-sal_Bool copyFile(const ::rtl::OString* source, const ::rtl::OString& target);
+OString makeTempName(const OString& prefix, const OString& postfix);
+sal_Bool copyFile(const OString* source, const OString& target);
     // a null source means stdin
 
-sal_Bool isFileUrl(const ::rtl::OString& fileName);
-::rtl::OString convertToAbsoluteSystemPath(const ::rtl::OString& fileName);
-::rtl::OString convertToFileUrl(const ::rtl::OString& fileName);
+sal_Bool isFileUrl(const OString& fileName);
+OString convertToAbsoluteSystemPath(const OString& fileName);
+OString convertToFileUrl(const OString& fileName);
 
 Idlc* SAL_CALL idlc();
 Idlc* SAL_CALL setIdlc(Options* pOptions);

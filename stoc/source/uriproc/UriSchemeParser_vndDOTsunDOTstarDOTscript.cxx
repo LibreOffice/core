@@ -52,7 +52,7 @@ int getHexWeight(sal_Unicode c) {
         : -1;
 }
 
-int parseEscaped(rtl::OUString const & part, sal_Int32 * index) {
+int parseEscaped(OUString const & part, sal_Int32 * index) {
     if (part.getLength() - *index < 3 || part[*index] != '%') {
         return -1;
     }
@@ -65,10 +65,10 @@ int parseEscaped(rtl::OUString const & part, sal_Int32 * index) {
     return (n1 << 4) | n2;
 }
 
-rtl::OUString parsePart(
-    rtl::OUString const & part, bool namePart, sal_Int32 * index)
+OUString parsePart(
+    OUString const & part, bool namePart, sal_Int32 * index)
 {
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     while (*index < part.getLength()) {
         sal_Unicode c = part[*index];
         if (namePart ? c == '?' : c == '&' || c == '=') {
@@ -140,7 +140,7 @@ rtl::OUString parsePart(
 
 namespace
 {
-    static rtl::OUString encodeNameOrParamFragment( rtl::OUString const & fragment )
+    static OUString encodeNameOrParamFragment( OUString const & fragment )
     {
         static sal_Bool const aCharClass[] =
         { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, /* NameOrParamFragment */
@@ -162,7 +162,7 @@ namespace
     }
 }
 
-bool parseSchemeSpecificPart(rtl::OUString const & part) {
+bool parseSchemeSpecificPart(OUString const & part) {
     sal_Int32 len = part.getLength();
     sal_Int32 i = 0;
     if (parsePart(part, true, &i).isEmpty() || part[0] == '/') {
@@ -193,12 +193,12 @@ class UrlReference:
     public cppu::WeakImplHelper1< css::uri::XVndSunStarScriptUrlReference >
 {
 public:
-    UrlReference(rtl::OUString const & scheme, rtl::OUString const & path):
+    UrlReference(OUString const & scheme, OUString const & path):
         m_base(
-            scheme, false, false, rtl::OUString(), path, false, rtl::OUString())
+            scheme, false, false, OUString(), path, false, OUString())
     {}
 
-    virtual rtl::OUString SAL_CALL getUriReference()
+    virtual OUString SAL_CALL getUriReference()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getUriReference(); }
 
@@ -206,11 +206,11 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.isAbsolute(); }
 
-    virtual rtl::OUString SAL_CALL getScheme()
+    virtual OUString SAL_CALL getScheme()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getScheme(); }
 
-    virtual rtl::OUString SAL_CALL getSchemeSpecificPart()
+    virtual OUString SAL_CALL getSchemeSpecificPart()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getSchemeSpecificPart(); }
 
@@ -222,11 +222,11 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.hasAuthority(); }
 
-    virtual rtl::OUString SAL_CALL getAuthority()
+    virtual OUString SAL_CALL getAuthority()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getAuthority(); }
 
-    virtual rtl::OUString SAL_CALL getPath()
+    virtual OUString SAL_CALL getPath()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getPath(); }
 
@@ -238,7 +238,7 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getPathSegmentCount(); }
 
-    virtual rtl::OUString SAL_CALL getPathSegment(sal_Int32 index)
+    virtual OUString SAL_CALL getPathSegment(sal_Int32 index)
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getPathSegment(index); }
 
@@ -246,7 +246,7 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.hasQuery(); }
 
-    virtual rtl::OUString SAL_CALL getQuery()
+    virtual OUString SAL_CALL getQuery()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getQuery(); }
 
@@ -254,11 +254,11 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.hasFragment(); }
 
-    virtual rtl::OUString SAL_CALL getFragment()
+    virtual OUString SAL_CALL getFragment()
         throw (com::sun::star::uno::RuntimeException)
     { return m_base.getFragment(); }
 
-    virtual void SAL_CALL setFragment(rtl::OUString const & fragment)
+    virtual void SAL_CALL setFragment(OUString const & fragment)
         throw (com::sun::star::uno::RuntimeException)
     { m_base.setFragment(fragment); }
 
@@ -266,18 +266,18 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { m_base.clearFragment(); }
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setName(rtl::OUString const & name)
+    virtual void SAL_CALL setName(OUString const & name)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
-    virtual sal_Bool SAL_CALL hasParameter(rtl::OUString const & key)
+    virtual sal_Bool SAL_CALL hasParameter(OUString const & key)
         throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getParameter(rtl::OUString const & key)
+    virtual OUString SAL_CALL getParameter(OUString const & key)
         throw (css::uno::RuntimeException);
 
-    virtual void SAL_CALL setParameter(rtl::OUString const & key, rtl::OUString const & value)
+    virtual void SAL_CALL setParameter(OUString const & key, OUString const & value)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
 
 private:
@@ -286,54 +286,54 @@ private:
 
     virtual ~UrlReference() {}
 
-    sal_Int32 findParameter(rtl::OUString const & key);
+    sal_Int32 findParameter(OUString const & key);
 
     stoc::uriproc::UriReference m_base;
 };
 
-rtl::OUString UrlReference::getName() throw (css::uno::RuntimeException) {
+OUString UrlReference::getName() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = 0;
     return parsePart(m_base.m_path, true, &i);
 }
 
-void SAL_CALL UrlReference::setName(rtl::OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
+void SAL_CALL UrlReference::setName(OUString const & name) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     if (name.isEmpty())
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString(), *this, 1);
+            OUString(), *this, 1);
 
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = 0;
     parsePart(m_base.m_path, true, &i);
 
-    rtl::OUStringBuffer newPath;
+    OUStringBuffer newPath;
     newPath.append(encodeNameOrParamFragment(name));
     newPath.append(m_base.m_path.copy(i));
     m_base.m_path = newPath.makeStringAndClear();
 }
 
-sal_Bool UrlReference::hasParameter(rtl::OUString const & key)
+sal_Bool UrlReference::hasParameter(OUString const & key)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_base.m_mutex);
     return findParameter(key) >= 0;
 }
 
-rtl::OUString UrlReference::getParameter(rtl::OUString const & key)
+OUString UrlReference::getParameter(OUString const & key)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
-    return i >= 0 ? parsePart(m_base.m_path, false, &i) : rtl::OUString();
+    return i >= 0 ? parsePart(m_base.m_path, false, &i) : OUString();
 }
 
-void UrlReference::setParameter(rtl::OUString const & key, rtl::OUString const & value)
+void UrlReference::setParameter(OUString const & key, OUString const & value)
     throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     if (key.isEmpty())
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString(), *this, 1);
+            OUString(), *this, 1);
 
     osl::MutexGuard g(m_base.m_mutex);
     sal_Int32 i = findParameter(key);
@@ -342,7 +342,7 @@ void UrlReference::setParameter(rtl::OUString const & key, rtl::OUString const &
         i = m_base.m_path.getLength();
     }
 
-    rtl::OUStringBuffer newPath;
+    OUStringBuffer newPath;
     newPath.append(m_base.m_path.copy(0, i));
     if (!bExistent) {
         newPath.append(sal_Unicode(m_base.m_path.indexOf('?') < 0 ? '?' : '&'));
@@ -359,7 +359,7 @@ void UrlReference::setParameter(rtl::OUString const & key, rtl::OUString const &
     m_base.m_path = newPath.makeStringAndClear();
 }
 
-sal_Int32 UrlReference::findParameter(rtl::OUString const & key) {
+sal_Int32 UrlReference::findParameter(OUString const & key) {
     sal_Int32 i = 0;
     parsePart(m_base.m_path, true, &i); // skip name
     for (;;) {
@@ -367,7 +367,7 @@ sal_Int32 UrlReference::findParameter(rtl::OUString const & key) {
             return -1;
         }
         ++i; // skip '?' or '&'
-        rtl::OUString k = parsePart(m_base.m_path, false, &i);
+        OUString k = parsePart(m_base.m_path, false, &i);
         ++i; // skip '='
         if (k == key) {
             return i;
@@ -382,18 +382,18 @@ class Parser: public cppu::WeakImplHelper2<
 public:
     Parser() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
-        rtl::OUString const & scheme, rtl::OUString const & schemeSpecificPart)
+        OUString const & scheme, OUString const & schemeSpecificPart)
         throw (css::uno::RuntimeException);
 
 private:
@@ -403,21 +403,21 @@ private:
     virtual ~Parser() {}
 };
 
-rtl::OUString Parser::getImplementationName()
+OUString Parser::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     return stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTscript::
         getImplementationName();
 }
 
-sal_Bool Parser::supportsService(rtl::OUString const & serviceName)
+sal_Bool Parser::supportsService(OUString const & serviceName)
     throw (css::uno::RuntimeException)
 {
     return stoc::uriproc::supportsService(
         getSupportedServiceNames(), serviceName);
 }
 
-css::uno::Sequence< rtl::OUString > Parser::getSupportedServiceNames()
+css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     return stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTscript::
@@ -426,7 +426,7 @@ css::uno::Sequence< rtl::OUString > Parser::getSupportedServiceNames()
 
 css::uno::Reference< css::uri::XUriReference >
 Parser::parse(
-    rtl::OUString const & scheme, rtl::OUString const & schemeSpecificPart)
+    OUString const & scheme, OUString const & schemeSpecificPart)
     throw (css::uno::RuntimeException)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
@@ -436,7 +436,7 @@ Parser::parse(
         return new UrlReference(scheme, schemeSpecificPart);
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString("std::bad_alloc"), 0);
+            OUString("std::bad_alloc"), 0);
     }
 }
 
@@ -455,17 +455,17 @@ css::uno::Reference< css::uno::XInterface > create(
         return static_cast< cppu::OWeakObject * >(new Parser);
     } catch (std::bad_alloc &) {
         throw css::uno::RuntimeException(
-            rtl::OUString("std::bad_alloc"), 0);
+            OUString("std::bad_alloc"), 0);
     }
 }
 
-rtl::OUString getImplementationName() {
-    return rtl::OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
+OUString getImplementationName() {
+    return OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
 }
 
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = rtl::OUString("com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
+css::uno::Sequence< OUString > getSupportedServiceNames() {
+    css::uno::Sequence< OUString > s(1);
+    s[0] = OUString("com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript");
     return s;
 }
 

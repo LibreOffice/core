@@ -67,7 +67,6 @@ using namespace com::sun::star::system;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
-using ::rtl::OUString;
 
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
 {
@@ -526,7 +525,7 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 {
     Reference< XSystemShellExecute > xSystemShellExecute(
           SystemShellExecute::create(comphelper::getProcessComponentContext()) );
-    xSystemShellExecute->execute( rURL, rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
+    xSystemShellExecute->execute( rURL, OUString(), SystemShellExecuteFlags::URIS_ONLY );
 }
 
 void XMLFilterTestDialog::onImportBrowse()

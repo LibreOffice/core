@@ -198,8 +198,8 @@ class GalleryHint : public SfxHint
 private:
 
     sal_uIntPtr         mnType;
-    rtl::OUString       maThemeName;
-    rtl::OUString       maStringData;
+    OUString       maThemeName;
+    OUString       maStringData;
     sal_uIntPtr         mnData1;
     sal_uIntPtr         mnData2;
 
@@ -212,8 +212,8 @@ public:
                         mnType( nType ), maThemeName( rThemeName ), maStringData( rStringData ), mnData1( nData1 ), mnData2( nData2 ) {}
 
     sal_uIntPtr          GetType() const { return mnType; }
-    const rtl::OUString& GetThemeName() const { return maThemeName; }
-    const rtl::OUString& GetStringData() const { return maStringData; }
+    const OUString& GetThemeName() const { return maThemeName; }
+    const OUString& GetStringData() const { return maStringData; }
     sal_uIntPtr          GetData1() const { return mnData1; }
     sal_uIntPtr          GetData2() const { return mnData2; }
 };

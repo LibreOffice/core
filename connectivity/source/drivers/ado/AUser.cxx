@@ -46,7 +46,7 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
         m_aUser.Create();
 }
 // -------------------------------------------------------------------------
-OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const ::rtl::OUString& _Name)
+OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const OUString& _Name)
     : OUser_TYPEDEF(_Name,_bCase)
     , m_pCatalog(_pParent)
 {
@@ -100,7 +100,7 @@ void OAdoUser::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVa
         {
             case PROPERTY_ID_NAME:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aUser.put_Name(aVal);
                 }
@@ -127,7 +127,7 @@ OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase,    ADOUser* _pUser)
 {
 }
 // -------------------------------------------------------------------------
-OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUString& _Name)
+OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const OUString& _Name)
     : OAdoUser(_pParent,_bCase,_Name)
 {
 }
@@ -136,7 +136,7 @@ OUserExtend::OUserExtend(OCatalog* _pParent,sal_Bool _bCase, const ::rtl::OUStri
 void OUserExtend::construct()
 {
     OUser_TYPEDEF::construct();
-    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(static_cast< ::rtl::OUString*>(0)));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD),    PROPERTY_ID_PASSWORD,0,&m_Password,::getCppuType(static_cast< OUString*>(0)));
 }
 // -----------------------------------------------------------------------------
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
@@ -162,7 +162,7 @@ void SAL_CALL OAdoUser::release() throw()
     OUser_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-sal_Int32 SAL_CALL OAdoUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OAdoUser::getPrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -170,7 +170,7 @@ sal_Int32 SAL_CALL OAdoUser::getPrivileges( const ::rtl::OUString& objName, sal_
     return ADOS::mapAdoRights2Sdbc(m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType)));
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const ::rtl::OUString& objN
     return nRights;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+void SAL_CALL OAdoUser::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -191,7 +191,7 @@ void SAL_CALL OAdoUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
+void SAL_CALL OAdoUser::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -200,7 +200,7 @@ void SAL_CALL OAdoUser::revokePrivileges( const ::rtl::OUString& objName, sal_In
 }
 // -----------------------------------------------------------------------------
 // XUser
-void SAL_CALL OAdoUser::changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
+void SAL_CALL OAdoUser::changePassword( const OUString& objPassword, const OUString& newPassword ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);

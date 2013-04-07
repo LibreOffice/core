@@ -336,7 +336,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
 {
     Type eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
-    rtl::OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
+    OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {
         const FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
         if (pFuncData)
@@ -360,7 +360,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         }
     }
 
-    rtl::OUString aUnoName =
+    OUString aUnoName =
         ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false);
 
     if (!aUnoName.isEmpty())
@@ -434,9 +434,9 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
         }
         if ( nArgs > CommonData::nMaxParams )
         {
-            rtl::OStringBuffer aBuf;
+            OStringBuffer aBuf;
             aBuf.append("ScParameterClassification::Init: too many arguments in listed function: ");
-            aBuf.append(rtl::OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
+            aBuf.append(OUStringToOString(*(pDesc->pFuncName), RTL_TEXTENCODING_UTF8));
             aBuf.append(": ");
             aBuf.append(sal_Int32(nArgs));
             OSL_FAIL( aBuf.getStr());
@@ -485,7 +485,7 @@ void ScParameterClassification::GenerateDocumentation()
         if ( xMap->getSymbol(eOp).Len() )
         {
             fprintf( stdout, "%s: ", aEnvVarName);
-            rtl::OStringBuffer aStr(rtl::OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aStr(OUStringToOString(xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8));
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);

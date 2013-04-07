@@ -41,7 +41,7 @@ namespace tools {
         the text to add
 */
 TOOLS_DLLPUBLIC void appendUnixShellWord(
-    rtl::OStringBuffer * accumulator, rtl::OString const & text);
+    OStringBuffer * accumulator, OString const & text);
 
 }
 #endif

@@ -83,7 +83,7 @@ class ProtocolCheck
         It returns the right enum value.
         Protocols are defined above ...
      */
-    static EProtocol specifyProtocol( const ::rtl::OUString& sURL )
+    static EProtocol specifyProtocol( const OUString& sURL )
     {
         // because "private:" is part of e.g. "private:object" too ...
         // we must check it before all other ones!!!
@@ -126,7 +126,7 @@ class ProtocolCheck
         It should be used instead of specifyProtocol() if only this question
         is interesting to perform the code. We must not check for all possible protocols here...
      */
-    static sal_Bool isProtocol( const ::rtl::OUString& sURL, EProtocol eRequired )
+    static sal_Bool isProtocol( const OUString& sURL, EProtocol eRequired )
     {
         sal_Bool bRet = sal_False;
         switch(eRequired)

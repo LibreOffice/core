@@ -47,7 +47,7 @@ public:
     };
 
     AstInterface(
-        const ::rtl::OString& name, AstInterface const * pInherits,
+        const OString& name, AstInterface const * pInherits,
         AstScope* pScope);
     virtual ~AstInterface();
 
@@ -77,7 +77,7 @@ public:
 
     void addInheritedInterface(
         AstType const * ifc, bool optional,
-        rtl::OUString const & documentation);
+        OUString const & documentation);
 
     DoubleMemberDeclarations checkMemberClashes(
         AstDeclaration const * member) const;
@@ -97,18 +97,18 @@ private:
         explicit VisibleMember(AstDeclaration const * theMandatory = 0):
             mandatory(theMandatory) {}
 
-        typedef std::map< rtl::OString, AstDeclaration const * > Optionals;
+        typedef std::map< OString, AstDeclaration const * > Optionals;
 
         AstDeclaration const * mandatory;
         Optionals optionals;
     };
 
-    typedef std::map< rtl::OString, InterfaceKind > VisibleInterfaces;
-    typedef std::map< rtl::OString, VisibleMember > VisibleMembers;
+    typedef std::map< OString, InterfaceKind > VisibleInterfaces;
+    typedef std::map< OString, VisibleMember > VisibleMembers;
 
     void checkInheritedInterfaceClashes(
         DoubleDeclarations & doubleDeclarations,
-        std::set< rtl::OString > & seenInterfaces, AstInterface const * ifc,
+        std::set< OString > & seenInterfaces, AstInterface const * ifc,
         bool optional, bool direct, bool mainOptional) const;
 
     void checkMemberClashes(

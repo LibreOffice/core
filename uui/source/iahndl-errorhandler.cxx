@@ -44,8 +44,8 @@ sal_uInt16
 executeErrorDialog(
     Window * pParent,
     task::InteractionClassification eClassification,
-    rtl::OUString const & rContext,
-    rtl::OUString const & rMessage,
+    OUString const & rContext,
+    OUString const & rMessage,
     WinBits nButtonMask)
     SAL_THROW((uno::RuntimeException))
 {
@@ -132,12 +132,12 @@ void
 UUIInteractionHelper::handleErrorHandlerRequest(
     task::InteractionClassification eClassification,
     ErrCode nErrorCode,
-    std::vector< rtl::OUString > const & rArguments,
+    std::vector< OUString > const & rArguments,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
-    rtl::OUString & rErrorString)
+    OUString & rErrorString)
         SAL_THROW((uno::RuntimeException))
 {
     if (bObtainErrorStringOnly)
@@ -147,7 +147,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             return;
     }
 
-    rtl::OUString aMessage;
+    OUString aMessage;
     {
         enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
         static char const * const aManager[4] = { "ofa", "cnt", "svx", "uui" };
@@ -250,7 +250,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             return;
 
         //TODO! remove this backwards compatibility?
-        rtl::OUString aContext(getContextProperty());
+        OUString aContext(getContextProperty());
         if (aContext.isEmpty() && nErrorCode != 0)
         {
             SolarMutexGuard aGuard;

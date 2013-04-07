@@ -59,8 +59,8 @@ public:
     /** Remember the given URL as one of a center pane view for which to
         activate the resource managed by the called object.
     */
-    void AddActiveMainView (const ::rtl::OUString& rsMainViewURL);
-    sal_Bool IsResourceActive (const ::rtl::OUString& rsMainViewURL);
+    void AddActiveMainView (const OUString& rsMainViewURL);
+    sal_Bool IsResourceActive (const OUString& rsMainViewURL);
     virtual void SaveResourceState (void);
 
     virtual void SAL_CALL disposing (void);
@@ -91,10 +91,10 @@ private:
     /// The anchor of the main view.
     css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
 
-    ::rtl::OUString msCurrentMainViewURL;
+    OUString msCurrentMainViewURL;
 
     void HandleMainViewSwitch (
-        const ::rtl::OUString& rsViewURL,
+        const OUString& rsViewURL,
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
         const bool bIsActivated);

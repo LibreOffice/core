@@ -30,9 +30,9 @@ typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
 class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 {
 protected:
-    virtual css::uno::Any getItemByStringIndex( const rtl::OUString& sIndex ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException);
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 public:
     ScVbaOLEObjects( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );

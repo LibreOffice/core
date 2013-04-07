@@ -58,7 +58,7 @@ using namespace ::com::sun::star::uno;
 
 // -----------------------------------------------------------------------
 
-bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< ::rtl::OUString >& rListB )
+bool areListsEqual( const Sequence< OUString >& rListA, const Sequence< OUString >& rListB )
 {
     bool bRet = true;
     const sal_Int32 nLen = rListA.getLength();
@@ -67,8 +67,8 @@ bool areListsEqual( const Sequence< ::rtl::OUString >& rListA, const Sequence< :
         bRet = false;
     else
     {
-        const ::rtl::OUString* pStringA = rListA.getConstArray();
-        const ::rtl::OUString* pStringB = rListB.getConstArray();
+        const OUString* pStringA = rListA.getConstArray();
+        const OUString* pStringB = rListB.getConstArray();
 
         for ( sal_Int32 i = 0; i < nLen; ++i )
         {
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
 {
-    Sequence< ::rtl::OUString > aParameterList;
+    Sequence< OUString > aParameterList;
     if ( !m_pParamDlg )
     {
         m_pParamDlg = new SvxJavaParameterDlg( this );
@@ -277,11 +277,11 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
         {
             rtl_uString** pParamArr = m_parParameters;
             aParameterList.realloc( m_nParamSize );
-            ::rtl::OUString* pParams = aParameterList.getArray();
+            OUString* pParams = aParameterList.getArray();
             for ( sal_Int32 i = 0; i < m_nParamSize; ++i )
             {
                 rtl_uString* pParam = *pParamArr++;
-                pParams[i] = ::rtl::OUString( pParam );
+                pParams[i] = OUString( pParam );
             }
             m_pParamDlg->SetParameters( aParameterList );
         }
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
         javaFrameworkError eErr = jfw_getUserClassPath( &m_pClassPath );
         if ( JFW_E_NONE == eErr && m_pClassPath )
         {
-            sClassPath = String( ::rtl::OUString( m_pClassPath ) );
+            sClassPath = String( OUString( m_pClassPath ) );
             m_pPathDlg->SetClassPath( sClassPath );
         }
     }
@@ -478,7 +478,7 @@ void SvxJavaOptionsPage::LoadJREs()
 
 void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
 {
-    rtl::OUStringBuffer sEntry;
+    OUStringBuffer sEntry;
     sEntry.append('\t');
     sEntry.append(_pInfo->sVendor);
     sEntry.append('\t');
@@ -487,7 +487,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry.append(m_sAccessibilityText);
     SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry.makeStringAndClear());
-    INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
+    INetURLObject aLocObj( OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
 }
@@ -516,7 +516,7 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvTreeListEntry* _pEntry )
 
 // -----------------------------------------------------------------------
 
-void SvxJavaOptionsPage::AddFolder( const ::rtl::OUString& _rFolder )
+void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 {
     bool bStartAgain = true;
     JavaInfo* pInfo = NULL;
@@ -600,11 +600,11 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
     javaFrameworkError eErr = JFW_E_NONE;
     if ( m_pParamDlg )
     {
-        Sequence< ::rtl::OUString > aParamList = m_pParamDlg->GetParameters();
+        Sequence< OUString > aParamList = m_pParamDlg->GetParameters();
         sal_Int32 i, nSize = aParamList.getLength();
         rtl_uString** pParamArr = (rtl_uString**)rtl_allocateMemory( sizeof(rtl_uString*) * nSize );
         rtl_uString** pParamArrIter = pParamArr;
-        const ::rtl::OUString* pList = aParamList.getConstArray();
+        const OUString* pList = aParamList.getConstArray();
         for ( i = 0; i < nSize; ++i )
             pParamArr[i] = pList[i].pData;
         eErr = jfw_setVMParameters( pParamArrIter, nSize );
@@ -633,7 +633,7 @@ sal_Bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
 
     if ( m_pPathDlg )
     {
-        ::rtl::OUString sPath( m_pPathDlg->GetClassPath() );
+        OUString sPath( m_pPathDlg->GetClassPath() );
         if ( m_pPathDlg->GetOldPath() != String( sPath ) )
         {
             eErr = jfw_setUserClassPath( sPath.pData );
@@ -771,7 +771,7 @@ SvxJavaParameterDlg::~SvxJavaParameterDlg()
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 {
-    rtl::OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
+    OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
     m_aAssignBtn.Enable(!sParam.isEmpty());
 
     return 0;
@@ -781,7 +781,7 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, ModifyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaParameterDlg, AssignHdl_Impl)
 {
-    rtl::OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
+    OUString sParam = comphelper::string::strip(m_aParameterEdit.GetText(), ' ');
     if (!sParam.isEmpty())
     {
         sal_uInt16 nPos = m_aAssignedList.GetEntryPos( sParam );
@@ -846,23 +846,23 @@ short SvxJavaParameterDlg::Execute()
 
 // -----------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > SvxJavaParameterDlg::GetParameters() const
+Sequence< OUString > SvxJavaParameterDlg::GetParameters() const
 {
     sal_uInt16 nCount = m_aAssignedList.GetEntryCount();
-    Sequence< ::rtl::OUString > aParamList( nCount );
-    ::rtl::OUString* pArray = aParamList.getArray();
+    Sequence< OUString > aParamList( nCount );
+    OUString* pArray = aParamList.getArray();
      for ( sal_uInt16 i = 0; i < nCount; ++i )
-         pArray[i] = ::rtl::OUString( m_aAssignedList.GetEntry(i) );
+         pArray[i] = OUString( m_aAssignedList.GetEntry(i) );
     return aParamList;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxJavaParameterDlg::SetParameters( Sequence< ::rtl::OUString >& rParams )
+void SvxJavaParameterDlg::SetParameters( Sequence< OUString >& rParams )
 {
     m_aAssignedList.Clear();
     sal_uLong i, nCount = rParams.getLength();
-    const ::rtl::OUString* pArray = rParams.getConstArray();
+    const OUString* pArray = rParams.getConstArray();
     for ( i = 0; i < nCount; ++i )
     {
         String sParam = String( *pArray++ );
@@ -937,7 +937,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), rtl::OUString("*.jar;*.zip") );
+    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), OUString("*.jar;*.zip") );
     String sFolder;
     if ( m_aPathList.GetSelectEntryCount() > 0 )
     {

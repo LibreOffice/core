@@ -53,7 +53,6 @@ extern sal_Bool bDrawIsInUndo; // somewhere as member!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::std::auto_ptr;
 using ::std::vector;
 using ::boost::shared_ptr;
@@ -93,7 +92,7 @@ ScUndoInsertTab::~ScUndoInsertTab()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoInsertTab::GetComment() const
+OUString ScUndoInsertTab::GetComment() const
 {
     if (bAppend)
         return ScGlobal::GetRscString( STR_UNDO_APPEND_TAB );
@@ -170,7 +169,7 @@ sal_Bool ScUndoInsertTab::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
-                                        std::vector<rtl::OUString>& newNameList) :
+                                        std::vector<OUString>& newNameList) :
     ScSimpleUndo( pNewDocShell ),
     pDrawUndo( NULL ),
     aNameList( newNameList ),
@@ -186,7 +185,7 @@ ScUndoInsertTables::~ScUndoInsertTables()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoInsertTables::GetComment() const
+OUString ScUndoInsertTables::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_INSERT_TAB );
 }
@@ -276,7 +275,7 @@ ScUndoDeleteTab::~ScUndoDeleteTab()
     theTabs.clear();
 }
 
-rtl::OUString ScUndoDeleteTab::GetComment() const
+OUString ScUndoDeleteTab::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETE_TAB );
 }
@@ -317,7 +316,7 @@ void ScUndoDeleteTab::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
 
     sal_Bool bLink = false;
-    rtl::OUString aName;
+    OUString aName;
 
     for(i=0; i<theTabs.size(); ++i)
     {
@@ -331,7 +330,7 @@ void ScUndoDeleteTab::Undo()
         {
             pRefUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,false, pDoc );
 
-            rtl::OUString aOldName;
+            OUString aOldName;
             pRefUndoDoc->GetName( nTab, aOldName );
             pDoc->RenameTab( nTab, aOldName, false );
             if (pRefUndoDoc->IsLinked(nTab))
@@ -345,7 +344,7 @@ void ScUndoDeleteTab::Undo()
             if ( pRefUndoDoc->IsScenario(nTab) )
             {
                 pDoc->SetScenario( nTab, sal_True );
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
                 pRefUndoDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -437,7 +436,7 @@ ScUndoRenameTab::~ScUndoRenameTab()
 {
 }
 
-rtl::OUString ScUndoRenameTab::GetComment() const
+OUString ScUndoRenameTab::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_RENAME_TAB );
 }
@@ -499,7 +498,7 @@ ScUndoMoveTab::~ScUndoMoveTab()
 {
 }
 
-rtl::OUString ScUndoMoveTab::GetComment() const
+OUString ScUndoMoveTab::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_MOVE_TAB );
 }
@@ -606,7 +605,7 @@ ScUndoCopyTab::~ScUndoCopyTab()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoCopyTab::GetComment() const
+OUString ScUndoCopyTab::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_COPY_TAB );
 }
@@ -685,7 +684,7 @@ void ScUndoCopyTab::Redo()
         if ( pDoc->IsScenario(nAdjSource) )
         {
             pDoc->SetScenario(nNewTab, sal_True );
-            rtl::OUString aComment;
+            OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData(nAdjSource, aComment, aColor, nScenFlags );
@@ -747,7 +746,7 @@ ScUndoTabColor::~ScUndoTabColor()
 {
 }
 
-rtl::OUString ScUndoTabColor::GetComment() const
+OUString ScUndoTabColor::GetComment() const
 {
     if (aTabColorList.size() > 1)
         return ScGlobal::GetRscString(STR_UNDO_SET_MULTI_TAB_BG_COLOR);
@@ -816,7 +815,7 @@ ScUndoMakeScenario::~ScUndoMakeScenario()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoMakeScenario::GetComment() const
+OUString ScUndoMakeScenario::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_MAKESCENARIO );
 }
@@ -897,7 +896,7 @@ ScUndoImportTab::~ScUndoImportTab()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-rtl::OUString ScUndoImportTab::GetComment() const
+OUString ScUndoImportTab::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_INSERT_TAB );
 }
@@ -936,7 +935,7 @@ void ScUndoImportTab::Undo()
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, nTab,nTab+nCount-1, sal_True,sal_True );
 
-        rtl::OUString aOldName;
+        OUString aOldName;
         for (i=0; i<nCount; i++)
         {
             SCTAB nTabPos=nTab+i;
@@ -949,7 +948,7 @@ void ScUndoImportTab::Undo()
             if ( pDoc->IsScenario(nTabPos) )
             {
                 pRedoDoc->SetScenario(nTabPos, sal_True );
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
                 pDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
@@ -985,7 +984,7 @@ void ScUndoImportTab::Redo()
     }
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    rtl::OUString aName;
+    OUString aName;
     SCTAB i;
     for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
     {
@@ -1004,7 +1003,7 @@ void ScUndoImportTab::Redo()
         if ( pRedoDoc->IsScenario(nTabPos) )
         {
             pDoc->SetScenario(nTabPos, sal_True );
-            rtl::OUString aComment;
+            OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
@@ -1051,7 +1050,7 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
     {
         sal_uInt8 nMode = pDoc->GetLinkMode(i);
         if (nMode)
-            if (pDoc->GetLinkDoc(i) == rtl::OUString(aDocName))
+            if (pDoc->GetLinkDoc(i) == OUString(aDocName))
             {
                 if (!nCount)
                 {
@@ -1061,8 +1060,8 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                 }
                 else
                 {
-                    OSL_ENSURE(rtl::OUString(aFltName) == pDoc->GetLinkFlt(i) &&
-                               rtl::OUString(aOptions) == pDoc->GetLinkOpt(i),
+                    OSL_ENSURE(OUString(aFltName) == pDoc->GetLinkFlt(i) &&
+                               OUString(aOptions) == pDoc->GetLinkOpt(i),
                                     "different Filter for a Document?");
                 }
                 pTabs[nCount] = i;
@@ -1080,7 +1079,7 @@ ScUndoRemoveLink::~ScUndoRemoveLink()
     delete[] pTabNames;
 }
 
-rtl::OUString ScUndoRemoveLink::GetComment() const
+OUString ScUndoRemoveLink::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVELINK );
 }
@@ -1170,7 +1169,7 @@ sal_Bool ScUndoShowHideTab::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-rtl::OUString ScUndoShowHideTab::GetComment() const
+OUString ScUndoShowHideTab::GetComment() const
 {
     sal_uInt16 nId;
     if (undoTabs.size() > 1)
@@ -1250,7 +1249,7 @@ sal_Bool ScUndoDocProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;       // makes no sense
 }
 
-rtl::OUString ScUndoDocProtect::GetComment() const
+OUString ScUndoDocProtect::GetComment() const
 {
     sal_uInt16 nId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_DOC : STR_UNDO_UNPROTECT_DOC;
     return ScGlobal::GetRscString( nId );
@@ -1322,7 +1321,7 @@ sal_Bool ScUndoTabProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;       // makes no sense
 }
 
-rtl::OUString ScUndoTabProtect::GetComment() const
+OUString ScUndoTabProtect::GetComment() const
 {
     sal_uInt16 nId = mpProtectSettings->isProtected() ? STR_UNDO_PROTECT_TAB : STR_UNDO_UNPROTECT_TAB;
     return ScGlobal::GetRscString( nId );
@@ -1384,7 +1383,7 @@ sal_Bool ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;       // makes no sense
 }
 
-rtl::OUString ScUndoPrintRange::GetComment() const
+OUString ScUndoPrintRange::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PRINTRANGES );
 }
@@ -1409,7 +1408,7 @@ ScUndoScenarioFlags::~ScUndoScenarioFlags()
 {
 }
 
-rtl::OUString ScUndoScenarioFlags::GetComment() const
+OUString ScUndoScenarioFlags::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_EDITSCENARIO );
 }
@@ -1472,7 +1471,7 @@ ScUndoRenameObject::~ScUndoRenameObject()
 {
 }
 
-rtl::OUString ScUndoRenameObject::GetComment() const
+OUString ScUndoRenameObject::GetComment() const
 {
     //  string resource shared with title for dialog
     return String( ScResId(SCSTR_RENAMEOBJECT) );
@@ -1584,7 +1583,7 @@ sal_Bool ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-rtl::OUString ScUndoLayoutRTL::GetComment() const
+OUString ScUndoLayoutRTL::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
 }

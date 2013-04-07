@@ -757,7 +757,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         if( PickObj( aPos, getHitTolLog(), pPickObj, pPageView ) )
                         {
                             // insert as clip action => jump
-                            rtl::OUString       aBookmark( aINetBookmark.GetURL() );
+                            OUString       aBookmark( aINetBookmark.GetURL() );
                             SdAnimationInfo*    pInfo = mrDoc.GetAnimationInfo( pPickObj );
                             sal_Bool                bCreated = sal_False;
 
@@ -841,20 +841,20 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
     {
         Point   aPos;
-        rtl::OUString  aBookmark;
+        OUString  aBookmark;
         SdPage* pPage = (SdPage*) GetSdrPageView()->GetPage();
         sal_uInt16  nPgPos = 0xFFFF;
 
         if( pSdNavigatorDropEvent->mpTargetWindow )
             aPos = pSdNavigatorDropEvent->mpTargetWindow->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
 
-        const rtl::OUString aURL( aINetBookmark.GetURL() );
+        const OUString aURL( aINetBookmark.GetURL() );
         sal_Int32 nIndex = aURL.indexOf( (sal_Unicode)'#' );
         if( nIndex != -1 )
             aBookmark = aURL.copy( nIndex+1 );
 
-        std::vector<rtl::OUString> aExchangeList;
-        std::vector<rtl::OUString> aBookmarkList(1,aBookmark);
+        std::vector<OUString> aExchangeList;
+        std::vector<OUString> aBookmarkList(1,aBookmark);
 
         if( !pPage->IsMasterPage() )
         {
@@ -889,8 +889,8 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     return 0;
 }
 
-bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
-                            std::vector<rtl::OUString> &rBookmarkList,
+bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
+                            std::vector<OUString> &rBookmarkList,
                             const sal_uInt16 nType)
 {
     assert(rExchangeList.empty());
@@ -898,7 +898,7 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
     bool bListIdentical = true; ///< Bookmark list and exchange list are identical
     bool bNameOK = true;        ///< name is unique
 
-    std::vector<rtl::OUString>::const_iterator pIter;
+    std::vector<OUString>::const_iterator pIter;
     for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
     {
         String aNewName = *pIter;
@@ -910,8 +910,8 @@ bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
         {
             if( mrDoc.GetObj( aNewName ) )
             {
-                rtl::OUString aTitle(SD_RESSTR(STR_TITLE_NAMEGROUP));
-                rtl::OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
+                OUString aTitle(SD_RESSTR(STR_TITLE_NAMEGROUP));
+                OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 AbstractSvxNameDialog* pDlg = 0;

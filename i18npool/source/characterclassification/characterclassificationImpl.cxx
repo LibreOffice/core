@@ -24,8 +24,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -210,7 +208,7 @@ CharacterClassificationImpl::getImplementationName(void)
 }
 
 sal_Bool SAL_CALL
-CharacterClassificationImpl::supportsService(const rtl::OUString& rServiceName)
+CharacterClassificationImpl::supportsService(const OUString& rServiceName)
                 throw( RuntimeException )
 {
     return !rServiceName.compareToAscii(cClass);

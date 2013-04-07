@@ -24,8 +24,6 @@
 // --
 #include <xmloff/xmltoken.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;

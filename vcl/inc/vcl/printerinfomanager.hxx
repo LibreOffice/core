@@ -38,18 +38,18 @@ class SystemQueueInfo;
 struct PrinterInfo : JobData
 {
     // basename of PPD
-    rtl::OUString             m_aDriverName;
+    OUString             m_aDriverName;
     // can be the queue
-    rtl::OUString             m_aLocation;
+    OUString             m_aLocation;
     // a user defined comment
-    rtl::OUString             m_aComment;
+    OUString             m_aComment;
     // a command line to pipe a PS-file to
-    rtl::OUString             m_aCommand;
+    OUString             m_aCommand;
     // a command line to pipe a PS-file to in case of direct print
-    rtl::OUString             m_aQuickCommand;
+    OUString             m_aQuickCommand;
     // a list of special features separated by ',' not used by psprint
     // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
-    rtl::OUString             m_aFeatures;
+    OUString             m_aFeatures;
     // a mapping of fonts to other fonts.
     // this provides a method for the user
     // to replace arbitrary fonts by printer builtin fonts
@@ -60,7 +60,7 @@ struct PrinterInfo : JobData
     // this vector is currently implicitly given by the adobe
     // standard encoding
     bool                        m_bPerformFontSubstitution;
-    boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >
+    boost::unordered_map< OUString, OUString, OUStringHash >
     m_aFontSubstitutes;
     boost::unordered_map< fontID, fontID >
     m_aFontSubstitutions;
@@ -78,9 +78,9 @@ public:
 
     struct SystemPrintQueue
     {
-        rtl::OUString       m_aQueue;
-        rtl::OUString       m_aLocation;
-        rtl::OUString       m_aComment;
+        OUString       m_aQueue;
+        OUString       m_aLocation;
+        OUString       m_aComment;
     };
 protected:
     // needed for checkPrintersChanged: files (not necessarily existant)
@@ -88,7 +88,7 @@ protected:
     struct WatchFile
     {
         // the file in question
-        rtl::OUString         m_aFilePath;
+        OUString         m_aFilePath;
         // the last know modification time or 0, if file did not exist
         TimeValue               m_aModified;
     };
@@ -98,25 +98,25 @@ protected:
     {
         // configuration file containing this printer
         // empty means a freshly added printer that has to be saved yet
-        rtl::OUString         m_aFile;
+        OUString         m_aFile;
         // details other config files that have this printer
         // in case of removal all have to be removed
-        std::list< rtl::OUString > m_aAlternateFiles;
+        std::list< OUString > m_aAlternateFiles;
         // group in m_aFile containing the printer
         // this must be unique over all configuration files
         // it usually should be the printer name
-        rtl::OString          m_aGroup;
+        OString          m_aGroup;
         // whether changes need to be saved
         bool                    m_bModified;
         // the corresponding info and job data
         PrinterInfo             m_aInfo;
     };
 
-    boost::unordered_map< rtl::OUString, Printer, rtl::OUStringHash > m_aPrinters;
+    boost::unordered_map< OUString, Printer, OUStringHash > m_aPrinters;
     PrinterInfo                         m_aGlobalDefaults;
     std::list< WatchFile >            m_aWatchFiles;
-    rtl::OUString                     m_aDefaultPrinter;
-    rtl::OUString                     m_aSystemPrintCommand;
+    OUString                     m_aDefaultPrinter;
+    OUString                     m_aSystemPrintCommand;
 
     std::list< SystemPrintQueue >     m_aSystemPrintQueues;
 
@@ -125,7 +125,7 @@ protected:
     Type                              m_eType;
     bool                              m_bUseIncludeFeature;
     bool                              m_bUseJobPatch;
-    rtl::OUString                     m_aSystemDefaultPaper;
+    OUString                     m_aSystemDefaultPaper;
 
     bool                              m_bDisableCUPS;
 
@@ -154,21 +154,21 @@ public:
     Type getType() const { return m_eType; }
 
     // lists the names of all known printers
-    void listPrinters( std::list< rtl::OUString >& rList ) const;
+    void listPrinters( std::list< OUString >& rList ) const;
 
     // gets the number of known printers
     int countPrinters() const { return m_aPrinters.size(); }
 
     // gets info about a named printer
-    const PrinterInfo& getPrinterInfo( const rtl::OUString& rPrinter ) const;
+    const PrinterInfo& getPrinterInfo( const OUString& rPrinter ) const;
 
     // gets the name of the default printer
-    const rtl::OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }
+    const OUString& getDefaultPrinter() const { return m_aDefaultPrinter; }
 
     virtual void setupJobContextData( JobData& rData );
 
     // changes the info about a named printer
-    virtual void changePrinterInfo( const rtl::OUString& rPrinter, const PrinterInfo& rNewInfo );
+    virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo );
 
     // check if the printer configuration has changed
     // if bwait is true, then this method waits for eventual asynchronous
@@ -180,14 +180,14 @@ public:
     // add a named printer
     // addPrinter fails if a printer with the same name already exists
     // or the driver does not exist
-    virtual bool addPrinter( const rtl::OUString& rPrinterName, const rtl::OUString& rDriverName );
+    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName );
 
     // remove a named printer
     // this fails if the config file belonging to this printer
     // is not writeable
     // if bCheckOnly is true, the printer is not really removed;
     // this is for checking if the removal would fail
-    virtual bool removePrinter( const rtl::OUString& rPrinterName, bool bCheckOnly = false );
+    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly = false );
 
     // save the changes to all printers. this fails if there
     // is no writable config file at all
@@ -195,24 +195,24 @@ public:
 
     // set a new default printer
     // fails if the specified printer does not exist
-    virtual bool setDefaultPrinter( const rtl::OUString& rPrinterName );
+    virtual bool setDefaultPrinter( const OUString& rPrinterName );
 
     // primarily used internally but also by padmin
     // returns the printer queue names
     virtual const std::list< SystemPrintQueue >& getSystemPrintQueues();
 
     // similar but returnse whole commandlines
-    virtual void getSystemPrintCommands( std::list< rtl::OUString >& rCommands );
+    virtual void getSystemPrintCommands( std::list< OUString >& rCommands );
 
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to
     // this may either be a regular file or the result of popen()
-    virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
+    virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand );
     // close the FILE* returned by startSpool and does the actual spooling
     // set bBanner to "false" will attempt to suppress banner printing
     // set bBanner to "true" will rely on the system default
     // returns a numerical job id
-    virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
+    virtual int endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner );
 
     // for spadmin: whether adding or removing a printer is possible
     virtual bool addOrRemovePossible() const;
@@ -221,7 +221,7 @@ public:
     bool getUseJobPatch() const { return m_bUseJobPatch; }
 
     // check whether a printer's feature string contains a subfeature
-    bool checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const;
+    bool checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const;
 
     // set m_bDisableCUPS and update printer config
     void setCUPSDisabled( bool );

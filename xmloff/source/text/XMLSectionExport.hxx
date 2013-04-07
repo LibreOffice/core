@@ -74,65 +74,65 @@ enum SectionTypeEnum
  */
 class XMLSectionExport
 {
-    const ::rtl::OUString sCondition;
-    const ::rtl::OUString sCreateFromChapter;
-    const ::rtl::OUString sCreateFromEmbeddedObjects;
-    const ::rtl::OUString sCreateFromGraphicObjects;
-    const ::rtl::OUString sCreateFromLabels;
-    const ::rtl::OUString sCreateFromMarks;
-    const ::rtl::OUString sCreateFromOtherEmbeddedObjects;
-    const ::rtl::OUString sCreateFromOutline;
-    const ::rtl::OUString sCreateFromStarCalc;
-    const ::rtl::OUString sCreateFromStarChart;
-    const ::rtl::OUString sCreateFromStarDraw;
-    const ::rtl::OUString sCreateFromStarImage;
-    const ::rtl::OUString sCreateFromStarMath;
-    const ::rtl::OUString sCreateFromTables;
-    const ::rtl::OUString sCreateFromTextFrames;
-    const ::rtl::OUString sDdeCommandElement;
-    const ::rtl::OUString sDdeCommandFile;
-    const ::rtl::OUString sDdeCommandType;
-    const ::rtl::OUString sFileLink;
-    const ::rtl::OUString sIsCaseSensitive;
-    const ::rtl::OUString sIsProtected;
-    const ::rtl::OUString sIsVisible;
-    const ::rtl::OUString sLabelCategory;
-    const ::rtl::OUString sLabelDisplayType;
-    const ::rtl::OUString sLevel;
-    const ::rtl::OUString sLevelFormat;
-    const ::rtl::OUString sLevelParagraphStyles;
-    const ::rtl::OUString sLinkRegion;
-    const ::rtl::OUString sMainEntryCharacterStyleName;
-    const ::rtl::OUString sParaStyleHeading;
-    const ::rtl::OUString sParaStyleLevel;
-    const ::rtl::OUString sTitle;
-    const ::rtl::OUString sName;
-    const ::rtl::OUString sUseAlphabeticalSeparators;
-    const ::rtl::OUString sUseCombinedEntries;
-    const ::rtl::OUString sUseDash;
-    const ::rtl::OUString sUseKeyAsEntry;
-    const ::rtl::OUString sUseLevelFromSource;
-    const ::rtl::OUString sUsePP;
-    const ::rtl::OUString sUseUpperCase;
-    const ::rtl::OUString sIsCommaSeparated;
-    const ::rtl::OUString sIsAutomaticUpdate;
-    const ::rtl::OUString sIsRelativeTabstops;
-    const ::rtl::OUString sCreateFromLevelParagraphStyles;
-    const ::rtl::OUString sDocumentIndex;
-    const ::rtl::OUString sContentSection;
-    const ::rtl::OUString sHeaderSection;
+    const OUString sCondition;
+    const OUString sCreateFromChapter;
+    const OUString sCreateFromEmbeddedObjects;
+    const OUString sCreateFromGraphicObjects;
+    const OUString sCreateFromLabels;
+    const OUString sCreateFromMarks;
+    const OUString sCreateFromOtherEmbeddedObjects;
+    const OUString sCreateFromOutline;
+    const OUString sCreateFromStarCalc;
+    const OUString sCreateFromStarChart;
+    const OUString sCreateFromStarDraw;
+    const OUString sCreateFromStarImage;
+    const OUString sCreateFromStarMath;
+    const OUString sCreateFromTables;
+    const OUString sCreateFromTextFrames;
+    const OUString sDdeCommandElement;
+    const OUString sDdeCommandFile;
+    const OUString sDdeCommandType;
+    const OUString sFileLink;
+    const OUString sIsCaseSensitive;
+    const OUString sIsProtected;
+    const OUString sIsVisible;
+    const OUString sLabelCategory;
+    const OUString sLabelDisplayType;
+    const OUString sLevel;
+    const OUString sLevelFormat;
+    const OUString sLevelParagraphStyles;
+    const OUString sLinkRegion;
+    const OUString sMainEntryCharacterStyleName;
+    const OUString sParaStyleHeading;
+    const OUString sParaStyleLevel;
+    const OUString sTitle;
+    const OUString sName;
+    const OUString sUseAlphabeticalSeparators;
+    const OUString sUseCombinedEntries;
+    const OUString sUseDash;
+    const OUString sUseKeyAsEntry;
+    const OUString sUseLevelFromSource;
+    const OUString sUsePP;
+    const OUString sUseUpperCase;
+    const OUString sIsCommaSeparated;
+    const OUString sIsAutomaticUpdate;
+    const OUString sIsRelativeTabstops;
+    const OUString sCreateFromLevelParagraphStyles;
+    const OUString sDocumentIndex;
+    const OUString sContentSection;
+    const OUString sHeaderSection;
 
-    const ::rtl::OUString sTextSection;
-    const ::rtl::OUString sIsGlobalDocumentSection;
-    const ::rtl::OUString sProtectionKey;
-    const ::rtl::OUString sSortAlgorithm;
-    const ::rtl::OUString sLocale;
-    const ::rtl::OUString sUserIndexName;
+    const OUString sTextSection;
+    const OUString sIsGlobalDocumentSection;
+    const OUString sProtectionKey;
+    const OUString sSortAlgorithm;
+    const OUString sLocale;
+    const OUString sUserIndexName;
 
-    const ::rtl::OUString sIsCurrentlyVisible;
-    const ::rtl::OUString sHeadingStyleName;
+    const OUString sIsCurrentlyVisible;
+    const OUString sHeadingStyleName;
 
-    const ::rtl::OUString sEmpty;
+    const OUString sEmpty;
 
     SvXMLExport& rExport;
     XMLTextParagraphExport& rParaExport;
@@ -282,7 +282,7 @@ protected:
             ::com::sun::star::text::XDocumentIndex > & rIndex) const;
 
     /// map service name to section type
-    enum SectionTypeEnum MapSectionType(const ::rtl::OUString& rSectionName);
+    enum SectionTypeEnum MapSectionType(const OUString& rSectionName);
 
     /**
      * Export the index element start (for all index types).
@@ -349,7 +349,7 @@ protected:
     void ExportBoolean(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
-        const ::rtl::OUString& sPropertyName,
+        const OUString& sPropertyName,
         enum ::xmloff::token::XMLTokenEnum eAttributeName,
         sal_Bool bDefault,
         sal_Bool bInvert = sal_False);

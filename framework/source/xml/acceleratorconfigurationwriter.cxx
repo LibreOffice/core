@@ -72,10 +72,10 @@ void AcceleratorConfigurationWriter::flush()
     xCFG->startDocument();
 
     xExtendedCFG->unknown(DOCTYPE_ACCELERATORS);
-    xCFG->ignorableWhitespace(::rtl::OUString());
+    xCFG->ignorableWhitespace(OUString());
 
     xCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);
-    xCFG->ignorableWhitespace(::rtl::OUString());
+    xCFG->ignorableWhitespace(OUString());
 
     // TODO think about threadsafe using of cache
     AcceleratorCache::TKeyList                 lKeys = m_rContainer.getAllKeys();
@@ -85,7 +85,7 @@ void AcceleratorConfigurationWriter::flush()
          ++pKey                 )
     {
         const css::awt::KeyEvent& rKey     = *pKey;
-        const ::rtl::OUString&    rCommand = m_rContainer.getCommandByKey(rKey);
+        const OUString&    rCommand = m_rContainer.getCommandByKey(rKey);
         impl_ts_writeKeyCommandPair(rKey, rCommand, xCFG);
     }
 
@@ -95,43 +95,43 @@ void AcceleratorConfigurationWriter::flush()
         WriteAcceleratorItem( *p );
     */
 
-    xCFG->ignorableWhitespace(::rtl::OUString());
+    xCFG->ignorableWhitespace(OUString());
     xCFG->endElement(AL_ELEMENT_ACCELERATORLIST);
-    xCFG->ignorableWhitespace(::rtl::OUString());
+    xCFG->ignorableWhitespace(OUString());
     xCFG->endDocument();
 }
 
 //-----------------------------------------------
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
-                                                                 const ::rtl::OUString&                                        sCommand,
+                                                                 const OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
 {
     ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs (static_cast< css::xml::sax::XAttributeList* >(pAttribs) , css::uno::UNO_QUERY_THROW);
 
-    ::rtl::OUString sKey = m_rKeyMapping->mapCodeToIdentifier(aKey.KeyCode);
+    OUString sKey = m_rKeyMapping->mapCodeToIdentifier(aKey.KeyCode);
     // TODO check if key is empty!
 
     pAttribs->AddAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
     pAttribs->AddAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
 
     if ((aKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_SHIFT, ATTRIBUTE_TYPE_CDATA, OUString("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD1) == css::awt::KeyModifier::MOD1)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD1, ATTRIBUTE_TYPE_CDATA, OUString("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD2) == css::awt::KeyModifier::MOD2)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD2, ATTRIBUTE_TYPE_CDATA, OUString("true"));
 
     if ((aKey.Modifiers & css::awt::KeyModifier::MOD3) == css::awt::KeyModifier::MOD3)
-        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, ::rtl::OUString("true"));
+        pAttribs->AddAttribute(AL_ATTRIBUTE_MOD_MOD3, ATTRIBUTE_TYPE_CDATA, OUString("true"));
 
-    xConfig->ignorableWhitespace(::rtl::OUString());
+    xConfig->ignorableWhitespace(OUString());
     xConfig->startElement(AL_ELEMENT_ITEM, xAttribs);
-    xConfig->ignorableWhitespace(::rtl::OUString());
+    xConfig->ignorableWhitespace(OUString());
     xConfig->endElement(AL_ELEMENT_ITEM);
-    xConfig->ignorableWhitespace(::rtl::OUString());
+    xConfig->ignorableWhitespace(OUString());
 }
 
 } // namespace framework

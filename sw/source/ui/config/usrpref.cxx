@@ -37,7 +37,6 @@ using namespace utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-using ::rtl::OUString;
 
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
@@ -358,7 +357,7 @@ void SwLayoutViewConfig::Load()
     }
 }
 
-void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwGridConfig::GetPropertyNames()
 {
@@ -452,7 +451,7 @@ void SwGridConfig::Load()
     }
 }
 
-void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 Sequence<OUString> SwCursorConfig::GetPropertyNames()
 {
@@ -466,7 +465,7 @@ Sequence<OUString> SwCursorConfig::GetPropertyNames()
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
-        pNames[i] = rtl::OUString::createFromAscii(aPropNames[i]);
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
     return aNames;
 }
 
@@ -534,7 +533,7 @@ void SwCursorConfig::Load()
     }
 }
 
-void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 SwWebColorConfig::SwWebColorConfig(SwMasterUsrPref& rPar) :
     ConfigItem("Office.WriterWeb/Background",
@@ -563,7 +562,7 @@ void SwWebColorConfig::Commit()
     PutProperties(aPropNames, aValues);
 }
 
-void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
 
 void SwWebColorConfig::Load()
 {

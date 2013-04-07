@@ -38,7 +38,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::packages::zip::ZipIOException;
-using ::rtl::OUString;
 
 XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
@@ -48,7 +47,7 @@ XUnbufferedStream::XUnbufferedStream(
                       const ::rtl::Reference< EncryptionData >& rData,
                       sal_Int8 nStreamMode,
                       sal_Bool bIsEncrypted,
-                      const ::rtl::OUString& aMediaType,
+                      const OUString& aMediaType,
                       sal_Bool bRecoveryMode )
 : maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
 , mxZipStream ( xNewZipStream )

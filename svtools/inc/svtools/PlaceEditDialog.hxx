@@ -73,8 +73,8 @@ public :
      // Returns a place instance with given informations
      boost::shared_ptr<Place> GetPlace();
 
-    rtl::OUString GetServerName() { return m_pEDServerName->GetText(); }
-     rtl::OUString GetServerUrl();
+    OUString GetServerName() { return m_pEDServerName->GetText(); }
+     OUString GetServerUrl();
 
 private:
 

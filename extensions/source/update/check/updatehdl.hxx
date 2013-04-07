@@ -92,71 +92,71 @@ private:
 
     osl::Mutex              maMutex;
 
-    rtl::OUString           msNextVersion;
-    rtl::OUString           msDownloadPath;
-    rtl::OUString           msDownloadFile;
-    rtl::OUString           msDescriptionMsg;
-    rtl::OUString           msChecking;         // RID_UPDATE_STR_CHECKING
-    rtl::OUString           msCheckingError;    // RID_UPDATE_STR_CHECKING_ERR
-    rtl::OUString           msNoUpdFound;       // RID_UPDATE_STR_NO_UPD_FOUND
-    rtl::OUString           msUpdFound;         // RID_UPDATE_STR_UPD_FOUND
-    rtl::OUString           msDlgTitle;         // RID_UPDATE_STR_DLG_TITLE
-    rtl::OUString           msDownloadPause;    // RID_UPDATE_STR_DOWNLOAD_PAUSE
-    rtl::OUString           msDownloadError;    // RID_UPDATE_STR_DOWNLOAD_ERR
-    rtl::OUString           msDownloadWarning;  // RID_UPDATE_STR_DOWNLOAD_WARN
-    rtl::OUString           msDownloadDescr;    // RID_UPDATE_STR_DOWNLOAD_WARN
-    rtl::OUString           msDownloadNotAvail; // RID_UPDATE_STR_DOWNLOAD_UNAVAIL
-    rtl::OUString           msDownloading;      // RID_UPDATE_STR_DOWNLOADING
-    rtl::OUString           msReady2Install;    // RID_UPDATE_STR_READY_INSTALL
-    rtl::OUString           msCancelTitle;      // RID_UPDATE_STR_CANCEL_TITLE
-    rtl::OUString           msCancelMessage;    // RID_UPDATE_STR_CANCEL_DOWNLOAD
-    rtl::OUString           msInstallMessage;   // RID_UPDATE_STR_BEGIN_INSTALL
-    rtl::OUString           msInstallNow;       // RID_UPDATE_STR_INSTALL_NOW
-    rtl::OUString           msInstallLater;     // RID_UPDATE_STR_INSTALL_LATER
-    rtl::OUString           msInstallError;     // RID_UPDATE_STR_INSTALL_ERROR
-    rtl::OUString           msOverwriteWarning; // RID_UPDATE_STR_OVERWRITE_WARNING
-    rtl::OUString           msPercent;          // RID_UPDATE_STR_PERCENT
-    rtl::OUString           msReloadWarning;    // RID_UPDATE_STR_OVERWRITE_WARNING
-    rtl::OUString           msReloadReload;     // RID_UPDATE_STR_OVERWRITE_WARNING
-    rtl::OUString           msReloadContinue;   // RID_UPDATE_STR_OVERWRITE_WARNING
-    rtl::OUString           msStatusFL;         // RID_UPDATE_FT_STATUS
-    rtl::OUString           msDescription;      // RID_UPDATE_FT_DESCRIPTION
-    rtl::OUString           msClose;            // RID_UPDATE_BTN_CLOSE
-    rtl::OUString           msDownload;         // RID_UPDATE_BTN_DOWNLOAD
-    rtl::OUString           msInstall;          // RID_UPDATE_BTN_INSTALL
-    rtl::OUString           msPauseBtn;         // RID_UPDATE_BTN_PAUSE
-    rtl::OUString           msResumeBtn;        // RID_UPDATE_BTN_RESUME
-    rtl::OUString           msCancelBtn;        // RID_UPDATE_BTN_CANCEL
-    rtl::OUString           msButtonIDs[ BUTTON_COUNT ];
-    rtl::OUString           msBubbleTexts[ UPDATESTATES_COUNT ];
-    rtl::OUString           msBubbleTitles[ UPDATESTATES_COUNT ];
+    OUString           msNextVersion;
+    OUString           msDownloadPath;
+    OUString           msDownloadFile;
+    OUString           msDescriptionMsg;
+    OUString           msChecking;         // RID_UPDATE_STR_CHECKING
+    OUString           msCheckingError;    // RID_UPDATE_STR_CHECKING_ERR
+    OUString           msNoUpdFound;       // RID_UPDATE_STR_NO_UPD_FOUND
+    OUString           msUpdFound;         // RID_UPDATE_STR_UPD_FOUND
+    OUString           msDlgTitle;         // RID_UPDATE_STR_DLG_TITLE
+    OUString           msDownloadPause;    // RID_UPDATE_STR_DOWNLOAD_PAUSE
+    OUString           msDownloadError;    // RID_UPDATE_STR_DOWNLOAD_ERR
+    OUString           msDownloadWarning;  // RID_UPDATE_STR_DOWNLOAD_WARN
+    OUString           msDownloadDescr;    // RID_UPDATE_STR_DOWNLOAD_WARN
+    OUString           msDownloadNotAvail; // RID_UPDATE_STR_DOWNLOAD_UNAVAIL
+    OUString           msDownloading;      // RID_UPDATE_STR_DOWNLOADING
+    OUString           msReady2Install;    // RID_UPDATE_STR_READY_INSTALL
+    OUString           msCancelTitle;      // RID_UPDATE_STR_CANCEL_TITLE
+    OUString           msCancelMessage;    // RID_UPDATE_STR_CANCEL_DOWNLOAD
+    OUString           msInstallMessage;   // RID_UPDATE_STR_BEGIN_INSTALL
+    OUString           msInstallNow;       // RID_UPDATE_STR_INSTALL_NOW
+    OUString           msInstallLater;     // RID_UPDATE_STR_INSTALL_LATER
+    OUString           msInstallError;     // RID_UPDATE_STR_INSTALL_ERROR
+    OUString           msOverwriteWarning; // RID_UPDATE_STR_OVERWRITE_WARNING
+    OUString           msPercent;          // RID_UPDATE_STR_PERCENT
+    OUString           msReloadWarning;    // RID_UPDATE_STR_OVERWRITE_WARNING
+    OUString           msReloadReload;     // RID_UPDATE_STR_OVERWRITE_WARNING
+    OUString           msReloadContinue;   // RID_UPDATE_STR_OVERWRITE_WARNING
+    OUString           msStatusFL;         // RID_UPDATE_FT_STATUS
+    OUString           msDescription;      // RID_UPDATE_FT_DESCRIPTION
+    OUString           msClose;            // RID_UPDATE_BTN_CLOSE
+    OUString           msDownload;         // RID_UPDATE_BTN_DOWNLOAD
+    OUString           msInstall;          // RID_UPDATE_BTN_INSTALL
+    OUString           msPauseBtn;         // RID_UPDATE_BTN_PAUSE
+    OUString           msResumeBtn;        // RID_UPDATE_BTN_RESUME
+    OUString           msCancelBtn;        // RID_UPDATE_BTN_CANCEL
+    OUString           msButtonIDs[ BUTTON_COUNT ];
+    OUString           msBubbleTexts[ UPDATESTATES_COUNT ];
+    OUString           msBubbleTitles[ UPDATESTATES_COUNT ];
 
     void                    createDialog();
     void                    updateState( UpdateState eNewState );
     void                    startThrobber( bool bStart = true );
-    void                    setControlProperty( const rtl::OUString &rCtrlName,
-                                                const rtl::OUString &rPropName,
+    void                    setControlProperty( const OUString &rCtrlName,
+                                                const OUString &rPropName,
                                                 const com::sun::star::uno::Any &rPropValue );
-    void                    showControl( const rtl::OUString &rCtrlName, bool bShow = true );
+    void                    showControl( const OUString &rCtrlName, bool bShow = true );
     void                    showControls( short nControls );
     void                    focusControl( DialogControls eID );
     void                    enableControls( short nCtrlState );
     void                    setDownloadBtnLabel( bool bAppendDots );
     void                    loadStrings();
-    rtl::OUString           loadString( const com::sun::star::uno::Reference< com::sun::star::resource::XResourceBundle > xBundle,
+    OUString           loadString( const com::sun::star::uno::Reference< com::sun::star::resource::XResourceBundle > xBundle,
                                         sal_Int32 nResourceId ) const;
-    rtl::OUString           substVariables( const rtl::OUString &rSource ) const;
+    OUString           substVariables( const OUString &rSource ) const;
     static void             setProperty( com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > &rProps,
-                                         const int nIndex, const rtl::OUString &rPropName, const com::sun::star::uno::Any &rPropValue )
+                                         const int nIndex, const OUString &rPropName, const com::sun::star::uno::Any &rPropValue )
                                          { rProps[ nIndex ].Name = rPropName; rProps[ nIndex ].Value = rPropValue; }
     static void             insertControlModel( com::sun::star::uno::Reference< com::sun::star::awt::XControlModel > & rxDialogModel,
-                                                rtl::OUString const & rServiceName,
-                                                rtl::OUString const & rControlName,
+                                                OUString const & rServiceName,
+                                                OUString const & rControlName,
                                                 com::sun::star::awt::Rectangle const & rPosSize,
                                                 com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > const & rProps );
 
-    void                    setFullVersion( rtl::OUString& rString );
-    void                    searchAndReplaceAll( rtl::OUString &rText, const rtl::OUString &rWhat, const rtl::OUString &rWith ) const;
+    void                    setFullVersion( OUString& rString );
+    void                    searchAndReplaceAll( OUString &rText, const OUString &rWhat, const OUString &rWith ) const;
 
 public:
                             UpdateHandler( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & rxContext,
@@ -167,19 +167,19 @@ public:
     bool                    isMinimized() const { return mbMinimized; }
     void                    setVisible( bool bVisible = true );
     void                    setProgress( sal_Int32 nPercent );
-    void                    setNextVersion( const rtl::OUString &rNextVersion ) { msNextVersion = rNextVersion; }
-    void                    setDownloadPath( const rtl::OUString &rPath ) { msDownloadPath = rPath; }
-    void                    setDownloadFile( const rtl::OUString &rPath );
-    void                    setErrorMessage( const rtl::OUString &rErrorMsg );
-    void                    setDescription( const rtl::OUString &rDescription ){ msDescriptionMsg = rDescription; }
+    void                    setNextVersion( const OUString &rNextVersion ) { msNextVersion = rNextVersion; }
+    void                    setDownloadPath( const OUString &rPath ) { msDownloadPath = rPath; }
+    void                    setDownloadFile( const OUString &rPath );
+    void                    setErrorMessage( const OUString &rErrorMsg );
+    void                    setDescription( const OUString &rDescription ){ msDescriptionMsg = rDescription; }
 
     void                    setState( UpdateState eState );
-    rtl::OUString           getBubbleText( UpdateState eState );
-    rtl::OUString           getBubbleTitle( UpdateState eState );
-    rtl::OUString           getDefaultInstErrMsg();
-    bool                    showWarning( const rtl::OUString &rWarning ) const;
-    bool                    showWarning( const rtl::OUString &rWarning, const rtl::OUString& rBtnText_1, const rtl::OUString& rBtnText_2 ) const;
-    bool                    showOverwriteWarning( const rtl::OUString &rFileName ) const;
+    OUString           getBubbleText( UpdateState eState );
+    OUString           getBubbleTitle( UpdateState eState );
+    OUString           getDefaultInstErrMsg();
+    bool                    showWarning( const OUString &rWarning ) const;
+    bool                    showWarning( const OUString &rWarning, const OUString& rBtnText_1, const OUString& rBtnText_2 ) const;
+    bool                    showOverwriteWarning( const OUString &rFileName ) const;
     bool                    showOverwriteWarning() const;
 
     // Allows runtime exceptions to be thrown by const methods

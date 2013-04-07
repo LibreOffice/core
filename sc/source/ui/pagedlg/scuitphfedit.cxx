@@ -624,7 +624,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aSel.nEndPos = aPageEntry.Len();
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             ++aSel.nEndPos;
-            String aPageOfEntry = rtl::OUStringBuffer().append(' ').
+            String aPageOfEntry = OUStringBuffer().append(' ').
                 append(ScGlobal::GetRscString( STR_HF_OF )).append(' ').
                 makeStringAndClear();
             aWndCenter.GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));

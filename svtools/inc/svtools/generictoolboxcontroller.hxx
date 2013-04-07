@@ -35,7 +35,7 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                   ToolBox* pToolBox,
                                   sal_uInt16   nID,
-                                  const rtl::OUString& aCommand );
+                                  const OUString& aCommand );
         virtual ~GenericToolboxController();
 
         // XComponent

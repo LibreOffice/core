@@ -163,7 +163,7 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
     DECL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl,SdInsertLayerDlg)
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) ;
     //from class Window
-    virtual void    SetHelpId( const rtl::OString& rHelpId ) ;
+    virtual void    SetHelpId( const OString& rHelpId ) ;
 };
 
 // add for SdInsertPasteDlg
@@ -180,7 +180,7 @@ class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl,SdInsertPagesObjsDlg)
     virtual ::Window *  GetWindow(); //this method is added for return a Window type pointer
-    virtual std::vector<rtl::OUString> GetList ( const sal_uInt16 nType );
+    virtual std::vector<OUString> GetList ( const sal_uInt16 nType );
     virtual sal_Bool        IsLink();
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const;
 };

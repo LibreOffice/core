@@ -82,10 +82,10 @@ bool SfxEnumItemInterface::PutValue(const com::sun::star::uno::Any& rVal,
 }
 
 //============================================================================
-rtl::OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
+OUString SfxEnumItemInterface::GetValueTextByPos(sal_uInt16) const
 {
     DBG_WARNING("SfxEnumItemInterface::GetValueTextByPos(): Pure virtual");
-    return rtl::OUString();
+    return OUString();
 }
 
 //============================================================================
@@ -272,9 +272,9 @@ sal_uInt16 CntBoolItem::GetValueCount() const
 
 //============================================================================
 // virtual
-rtl::OUString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
+OUString CntBoolItem::GetValueTextByVal(sal_Bool bTheValue) const
 {
-    return bTheValue ?  rtl::OUString("TRUE") : rtl::OUString("FALSE");
+    return bTheValue ?  OUString("TRUE") : OUString("FALSE");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

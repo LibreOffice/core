@@ -59,9 +59,6 @@ using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::XControlModel;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
 // no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
 // ============================================================================
@@ -103,7 +100,7 @@ Shape::Shape( const WorksheetHelper& rHelper, const AttributeList& rAttribs, con
 
 void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& rxShapes )
 {
-    rtl::OUString sURL;
+    OUString sURL;
     getShapeProperties()[ PROP_URL ] >>= sURL;
     getWorksheets().convertSheetNameRef( sURL );
     if( !maMacroName.isEmpty() && mxShape.is() )

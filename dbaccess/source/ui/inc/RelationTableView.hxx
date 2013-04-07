@@ -38,7 +38,7 @@ namespace dbaui
         bool m_bInRemove;
 
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);
+        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False);
 
         virtual OTableWindow* createWindow(const TTableWindowData::value_type& _pData);
 

@@ -34,8 +34,6 @@
 
 #include "sdpropls.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -65,7 +63,7 @@ XMLShapeStyleContext::~XMLShapeStyleContext()
 {
 }
 
-void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName, const OUString& rValue )
 {
     if (m_sControlDataStyleName.isEmpty() && (::xmloff::token::GetXMLToken(::xmloff::token::XML_DATA_STYLE_NAME) == rLocalName))
     {

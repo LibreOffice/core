@@ -38,7 +38,7 @@ namespace dbaui
     class OGeneralPage : public OGenericAdministrationPage
     {
     protected:
-        OGeneralPage( Window* pParent, const rtl::OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
+        OGeneralPage( Window* pParent, const OUString& _rUIXMLDescription, const SfxItemSet& _rItems );
         ~OGeneralPage();
 
     private:

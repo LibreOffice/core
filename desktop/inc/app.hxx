@@ -49,7 +49,7 @@ namespace desktop
  --------------------------------------------------------------------*/
 class CommandLineArgs;
 class Lockfile;
-class AcceptorMap : public std::map< rtl::OUString, Reference<XInitialization> > {};
+class AcceptorMap : public std::map< OUString, Reference<XInitialization> > {};
 struct ConvertData;
 class Desktop : public Application
 {
@@ -128,7 +128,7 @@ class Desktop : public Application
         static void             SetRestartState();
 
         void                    SynchronizeExtensionRepositories();
-        void                    SetSplashScreenText( const ::rtl::OUString& rText );
+        void                    SetSplashScreenText( const OUString& rText );
         void                    SetSplashScreenProgress( sal_Int32 );
 
         // Bootstrap methods
@@ -144,18 +144,18 @@ class Desktop : public Application
         void                    CreateTemporaryDirectory();
         void                    RemoveTemporaryDirectory();
 
-        sal_Bool                InitializeInstallation( const rtl::OUString& rAppFilename );
+        sal_Bool                InitializeInstallation( const OUString& rAppFilename );
         bool                    InitializeConfiguration();
         void                    FlushConfiguration();
         static sal_Bool         shouldLaunchQuickstart();
         sal_Bool                InitializeQuickstartMode( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
 
-        void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const ::rtl::OUString& aMsg );
-        void                    StartSetup( const ::rtl::OUString& aParameters );
+        void                    HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
+        void                    StartSetup( const OUString& aParameters );
 
         // Create a error message depending on bootstrap failure code and an optional file url
-        ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
-                                                      const ::rtl::OUString& aFileURL );
+        OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
+                                                      const OUString& aFileURL );
 
         static void             PreloadModuleData( const CommandLineArgs& );
         static void             PreloadConfigurationData();
@@ -184,9 +184,9 @@ class Desktop : public Application
         static sal_Bool         isUIOnSessionShutdownAllowed();
 
         // on-demand acceptors
-        static void                         createAcceptor(const rtl::OUString& aDescription);
+        static void                         createAcceptor(const OUString& aDescription);
         static void                         enableAcceptors();
-        static void                         destroyAcceptor(const rtl::OUString& aDescription);
+        static void                         destroyAcceptor(const OUString& aDescription);
 
         bool                            m_bCleanedExtensionCache;
         bool                            m_bServicesRegistered;

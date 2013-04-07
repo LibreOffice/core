@@ -81,14 +81,14 @@ public:
 
 SwRewriter SW_DLLPRIVATE
 MakeUndoReplaceRewriter(sal_uLong const ocurrences,
-    ::rtl::OUString const& sOld, ::rtl::OUString const& sNew);
+    OUString const& sOld, OUString const& sNew);
 
 class SwUndoReplace
     : public SwUndo
 {
 public:
     SwUndoReplace(SwPaM const& rPam,
-            ::rtl::OUString const& rInsert, bool const bRegExp);
+            OUString const& rInsert, bool const bRegExp);
 
     virtual ~SwUndoReplace();
 

@@ -124,7 +124,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
     if (!pDrawLayer)
     {
-        rtl::OUString aName;
+        OUString aName;
         if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
@@ -146,7 +146,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (maTabs[nTab])
             {
-                rtl::OUString aTabName;
+                OUString aTabName;
                 maTabs[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 

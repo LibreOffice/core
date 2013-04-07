@@ -30,7 +30,7 @@ const ::comphelper::StringSequence& getColumnTypes()
     static ::comphelper::StringSequence aColumnTypes(10);
     if (aColumnTypes.getConstArray()[0].isEmpty())
     {
-        ::rtl::OUString* pNames = aColumnTypes.getArray();
+        OUString* pNames = aColumnTypes.getArray();
         pNames[TYPE_CHECKBOX] = FM_COL_CHECKBOX;
         pNames[TYPE_COMBOBOX] = FM_COL_COMBOBOX;
         pNames[TYPE_CURRENCYFIELD] = FM_COL_CURRENCYFIELD;
@@ -49,16 +49,16 @@ const ::comphelper::StringSequence& getColumnTypes()
 // Vergleichen von PropertyInfo
 extern "C" int SAL_CALL NameCompare(const void* pFirst, const void* pSecond)
 {
-    return ((::rtl::OUString*)pFirst)->compareTo(*(::rtl::OUString*)pSecond);
+    return ((OUString*)pFirst)->compareTo(*(OUString*)pSecond);
 }
 
 namespace
 {
     //------------------------------------------------------------------------------
-    sal_Int32 lcl_findPos(const ::rtl::OUString& aStr, const Sequence< ::rtl::OUString>& rList)
+    sal_Int32 lcl_findPos(const OUString& aStr, const Sequence< OUString>& rList)
     {
-        const ::rtl::OUString* pStrList = rList.getConstArray();
-        ::rtl::OUString* pResult = (::rtl::OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(::rtl::OUString),
+        const OUString* pStrList = rList.getConstArray();
+        OUString* pResult = (OUString*) bsearch(&aStr, (void*)pStrList, rList.getLength(), sizeof(OUString),
             &NameCompare);
 
         if (pResult)
@@ -69,10 +69,10 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
+sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
-    const ::rtl::OUString aModelPrefix("com.sun.star.form.component.");
-    const ::rtl::OUString aCompatibleModelPrefix("stardiv.one.form.component.");
+    const OUString aModelPrefix("com.sun.star.form.component.");
+    const OUString aCompatibleModelPrefix("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FM_COMPONENT_EDIT)
@@ -85,7 +85,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
         DBG_ASSERT( (nPrefixPos != -1) ||   (nCompatiblePrefixPos != -1), "::getColumnTypeByModelName() : wrong servivce !");
 #endif
 
-        ::rtl::OUString aColumnType = (nPrefixPos != -1)
+        OUString aColumnType = (nPrefixPos != -1)
             ? aModelName.copy(aModelPrefix.getLength())
             : aModelName.copy(aCompatibleModelPrefix.getLength());
 

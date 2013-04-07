@@ -49,8 +49,8 @@ private:
     Link                m_aCloseHdl;
 
     String              m_sToggleText;
-    ::rtl::OUString     m_sConfigName;
-    ::rtl::OString      m_sWinState;
+    OUString     m_sConfigName;
+    OString      m_sWinState;
 
     bool                m_bIsConstructed;
 
@@ -61,7 +61,7 @@ private:
     DECL_LINK(ToggleHdl, void *);
 
 public:
-    SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName );
+    SearchDialog( Window* pWindow, const OUString& rConfigName );
     ~SearchDialog();
 
     inline void         SetFindHdl( const Link& rLink ) { m_aFindHdl = rLink; }

@@ -59,7 +59,7 @@ public:
 
     // ScVbaCollectionBase
     virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource );
-    virtual css::uno::Any getItemByStringIndex( const ::rtl::OUString& rIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any getItemByStringIndex( const OUString& rIndex ) throw (css::uno::RuntimeException);
 
 protected:
     ScVbaObjectContainerRef mxContainer;

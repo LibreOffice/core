@@ -43,7 +43,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDest;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xDestInfo;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDestContainer;
-        ::rtl::OUString     m_sName;
+        OUString     m_sName;
         sal_Bool            m_bInInsert;
 
     protected:
@@ -52,8 +52,8 @@ namespace dbaccess
     public:
         OPropertyForward( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSource,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xDestContainer,
-                          const ::rtl::OUString& _sName,
-                          const ::std::vector< ::rtl::OUString >& _aPropertyList
+                          const OUString& _sName,
+                          const ::std::vector< OUString >& _aPropertyList
                          );
 
         // ::com::sun::star::beans::XPropertyChangeListener
@@ -62,7 +62,7 @@ namespace dbaccess
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException);
 
-        inline void setName( const ::rtl::OUString& _sName ) { m_sName = _sName; }
+        inline void setName( const OUString& _sName ) { m_sName = _sName; }
         void setDefinition( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDest);
         inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDefinition() const { return m_xDest; }
     };

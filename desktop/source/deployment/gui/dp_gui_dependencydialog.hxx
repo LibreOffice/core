@@ -37,7 +37,7 @@ namespace dp_gui {
 class DependencyDialog: public ModalDialog {
 public:
     DependencyDialog(
-        Window * parent, std::vector< rtl::OUString > const & dependencies);
+        Window * parent, std::vector< OUString > const & dependencies);
 
     ~DependencyDialog();
 

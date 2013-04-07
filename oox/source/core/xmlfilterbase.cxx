@@ -72,9 +72,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 using ::comphelper::MediaDescriptor;
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
@@ -496,7 +493,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTi
 }
 
 static void
-writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< rtl::OUString > aItems )
+writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, Sequence< OUString > aItems )
 {
     if( aItems.getLength() == 0 )
         return;

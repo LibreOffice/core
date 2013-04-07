@@ -54,7 +54,7 @@ class AxControlFragment : public ::oox::core::FragmentHandler2
 public:
     explicit            AxControlFragment(
                             ::oox::core::XmlFilterBase& rFilter,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             EmbeddedControl& rControl );
 
     virtual ::oox::core::ContextHandlerRef

@@ -567,14 +567,14 @@ void ErrorHandler::coercionError(AstExpression *pExpr, ExprType et)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::lookupError(const ::rtl::OString& n)
+void ErrorHandler::lookupError(const OString& n)
 {
     errorHeader(EIDL_LOOKUP_ERROR);
     fprintf(stderr, "'%s'\n", n.getStr());
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::lookupError(ErrorCode e, const ::rtl::OString& n, AstDeclaration* pScope)
+void ErrorHandler::lookupError(ErrorCode e, const OString& n, AstDeclaration* pScope)
 {
     errorHeader(e);
     fprintf(stderr, "'%s' in '%s'\n", n.getStr(), pScope->getFullName().getStr());
@@ -635,7 +635,7 @@ void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstD
 }
 
 void ErrorHandler::forwardLookupError(AstDeclaration* pForward,
-                                      const ::rtl::OString& name)
+                                      const OString& name)
 {
     errorHeader(EIDL_FWD_DECL_LOOKUP);
     fprintf(stderr, "trying to look up '%s' in undefined forward declared interface '%s'\n",
@@ -644,7 +644,7 @@ void ErrorHandler::forwardLookupError(AstDeclaration* pForward,
 }
 
 void ErrorHandler::constantExpected(AstDeclaration* pDecl,
-                                    const ::rtl::OString& name)
+                                    const OString& name)
 {
     errorHeader(EIDL_CONSTANT_EXPECTED);
     fprintf(stderr, "'%s' is bound to '%s'\n", name.getStr(), pDecl->getScopedName().getStr());
@@ -665,7 +665,7 @@ void ErrorHandler::enumValExpected(AstUnion* pUnion)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const ::rtl::OString& name)
+void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const OString& name)
 {
     errorHeader(EIDL_ENUM_VAL_NOT_FOUND);
     fprintf(stderr, " union %s, enum %s, enumerator %s\n",

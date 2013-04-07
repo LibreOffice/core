@@ -62,10 +62,10 @@ public:
 
     /** @return  The description of a row.
         @param _nRow The row which description is in demand. */
-    virtual ::rtl::OUString         GetRowDescription( sal_Int32 _nRow ) const = 0;
+    virtual OUString         GetRowDescription( sal_Int32 _nRow ) const = 0;
     /** @return  The description of a column.
         @param _nColumn The column which description is in demand. */
-    virtual ::rtl::OUString         GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
+    virtual OUString         GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
 
     /** @return  <TRUE/>, if the object has a row header. */
     virtual sal_Bool                HasRowHeader() const = 0; //GetColumnId
@@ -105,8 +105,8 @@ public:
     virtual sal_Bool                ConvertPointToRowHeader( sal_Int32& _rnRow, const Point& _rPoint ) = 0;
     virtual sal_Bool                ConvertPointToColumnHeader( sal_uInt16& _rnColPos, const Point& _rPoint ) = 0;
 
-    virtual ::rtl::OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
-    virtual ::rtl::OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString         GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
+    virtual OUString         GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const = 0;
 
     virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const = 0;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;

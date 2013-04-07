@@ -31,12 +31,12 @@ class XMLGradientStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
 
 public:
     TYPEINFO();
 
-    XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLGradientStyleContext();
 
@@ -52,12 +52,12 @@ class XMLHatchStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
 
 public:
     TYPEINFO();
 
-    XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLHatchStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLHatchStyleContext();
 
@@ -73,19 +73,19 @@ class XMLBitmapStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
     TYPEINFO();
 
-    XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();
@@ -100,12 +100,12 @@ class XMLTransGradientStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
 
 public:
     TYPEINFO();
 
-    XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLTransGradientStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLTransGradientStyleContext();
 
@@ -121,12 +121,12 @@ class XMLMarkerStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
 
 public:
     TYPEINFO();
 
-    XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLMarkerStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLMarkerStyleContext();
 
@@ -142,12 +142,12 @@ class XMLDashStyleContext: public SvXMLStyleContext
 {
 private:
     ::com::sun::star::uno::Any  maAny;
-    rtl::OUString               maStrName;
+    OUString               maStrName;
 
 public:
     TYPEINFO();
 
-    XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
+    XMLDashStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLDashStyleContext();
 

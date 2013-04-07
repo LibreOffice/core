@@ -104,14 +104,14 @@ void        XFSaxStream::EndDocument()
         m_aHandler->endDocument();
 }
 
-void        XFSaxStream::StartElement(const rtl::OUString& oustr)
+void        XFSaxStream::StartElement(const OUString& oustr)
 {
     if (m_aHandler.is())
         m_aHandler->startElement( oustr, m_pAttrList->GetAttributeList() );
     m_pAttrList->Clear();
 }
 
-void        XFSaxStream::EndElement(const rtl::OUString& oustr)
+void        XFSaxStream::EndElement(const OUString& oustr)
 {
     if (m_aHandler.is())
         m_aHandler->endElement(oustr);
@@ -120,7 +120,7 @@ void        XFSaxStream::EndElement(const rtl::OUString& oustr)
         m_pAttrList->Clear();
 }
 
-void        XFSaxStream::Characters(const rtl::OUString& oustr)
+void        XFSaxStream::Characters(const OUString& oustr)
 {
     if (m_aHandler.is())
         m_aHandler->characters(oustr);

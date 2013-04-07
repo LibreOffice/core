@@ -111,7 +111,7 @@ public:
     void SetCharacterOffset (const sal_Int32 nCharacterOffset);
     sal_Int32 GetCharacterCount (void) const;
     sal_Unicode GetCharacter (const sal_Int32 nGlobalCharacterIndex) const;
-    ::rtl::OUString GetText (void) const;
+    OUString GetText (void) const;
     cssa::TextSegment GetTextSegment (
         const sal_Int32 nOffset,
         const sal_Int32 nGlobalCharacterIndex,
@@ -142,7 +142,7 @@ public:
     css::awt::Size GetSize (void);
 
 private:
-    ::rtl::OUString msParagraphText;
+    OUString msParagraphText;
     const sal_Int32 mnParagraphIndex;
     SharedPresenterTextCaret mpCaret;
 
@@ -174,7 +174,7 @@ private:
         cssu::Sequence<css::geometry::RealRectangle2D> maCellBoxes;
 
         void ProvideLayoutedLine (
-            const ::rtl::OUString& rsParagraphText,
+            const OUString& rsParagraphText,
             const PresenterTheme::SharedFontDescriptor& rpFont,
             const sal_Int8 nTextDirection);
         void ProvideCellBoxes (void);

@@ -58,8 +58,8 @@ namespace editeng
     class HangulHanjaConversion_Impl
     {
     private:
-        typedef ::std::set< ::rtl::OUString, ::std::less< ::rtl::OUString > >                   StringBag;
-        typedef ::std::map< ::rtl::OUString, ::rtl::OUString, ::std::less< ::rtl::OUString > >  StringMap;
+        typedef ::std::set< OUString, ::std::less< OUString > >                   StringBag;
+        typedef ::std::map< OUString, OUString, ::std::less< OUString > >  StringMap;
 
     private:
         StringBag               m_sIgnoreList;
@@ -104,14 +104,14 @@ namespace editeng
         bool                    m_bAutoReplaceUnique;
 
         // state
-        ::rtl::OUString                m_sCurrentPortion;      // the text which we are currently working on
+        OUString                m_sCurrentPortion;      // the text which we are currently working on
         LanguageType            m_nCurrentPortionLang;  // language of m_sCurrentPortion found
         sal_Int32               m_nCurrentStartIndex;   // the start index within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nCurrentEndIndex;     // the end index (excluding) within m_sCurrentPortion of the current convertible portion
         sal_Int32               m_nReplacementBaseIndex;// index which ReplaceUnit-calls need to be relative to
         sal_Int32               m_nCurrentConversionOption;
         sal_Int16               m_nCurrentConversionType;
-        Sequence< ::rtl::OUString >
+        Sequence< OUString >
                                 m_aCurrentSuggestions;  // the suggestions for the current unit
                                                         // (means for the text [m_nCurrentStartIndex, m_nCurrentEndIndex) in m_sCurrentPortion)
         sal_Bool                m_bTryBothDirections;   // specifies if other conversion directions should be tried when looking for convertible characters
@@ -175,7 +175,7 @@ namespace editeng
         void    implProceed( bool _bRepeatCurrentUnit );
 
         // change the current convertible, and do _not_ proceed
-        void    implChange( const ::rtl::OUString& _rChangeInto );
+        void    implChange( const OUString& _rChangeInto );
 
         /** find the next convertible piece of text, with possibly advancing to the next portion
 
@@ -218,7 +218,7 @@ namespace editeng
 
         /** get the string currently considered to be replaced or ignored
         */
-        ::rtl::OUString GetCurrentUnit() const;
+        OUString GetCurrentUnit() const;
 
         /** read options from configuration, update suggestion list and dialog content
         */
@@ -412,13 +412,13 @@ namespace editeng
             //put recently used string to front:
             if( m_bShowRecentlyUsedFirst && m_aCurrentSuggestions.getLength()>1 )
             {
-                ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
+                OUString sCurrentUnit( GetCurrentUnit() );
                 StringMap::const_iterator aRecentlyUsed = m_aRecentlyUsedList.find( sCurrentUnit );
                 bool bUsedBefore = aRecentlyUsed != m_aRecentlyUsedList.end();
                 if( bUsedBefore && m_aCurrentSuggestions[0] != aRecentlyUsed->second )
                 {
                     sal_Int32 nCount = m_aCurrentSuggestions.getLength();
-                    Sequence< ::rtl::OUString > aTmp(nCount);
+                    Sequence< OUString > aTmp(nCount);
                     aTmp[0]=aRecentlyUsed->second;
                     sal_Int32 nDiff = 1;
                     for( sal_Int32 n=1; n<nCount; n++)//we had 0 already
@@ -475,7 +475,7 @@ namespace editeng
     {
         sal_Bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
 
-        m_sCurrentPortion = ::rtl::OUString();
+        m_sCurrentPortion = OUString();
         m_nCurrentPortionLang = LANGUAGE_NONE;
         m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang, bAllowImplicitChanges );
         m_nReplacementBaseIndex = 0;
@@ -519,7 +519,7 @@ namespace editeng
         return sal_False;
     }
 
-    ::rtl::OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
+    OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
     {
         DBG_ASSERT( m_nCurrentStartIndex < m_sCurrentPortion.getLength(),
             "HangulHanjaConversion_Impl::GetCurrentUnit: invalid index into current portion!" );
@@ -528,7 +528,7 @@ namespace editeng
         DBG_ASSERT( m_nCurrentStartIndex <= m_nCurrentEndIndex,
             "HangulHanjaConversion_Impl::GetCurrentUnit: invalid interval!" );
 
-        ::rtl::OUString sCurrentUnit = m_sCurrentPortion.copy( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
+        OUString sCurrentUnit = m_sCurrentPortion.copy( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
         return sCurrentUnit;
     }
 
@@ -539,7 +539,7 @@ namespace editeng
 
         while ( !bDocumentDone && !bNeedUserInteraction && implNextConvertible( _bRepeatCurrentUnit ) )
         {
-            ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
+            OUString sCurrentUnit( GetCurrentUnit() );
 
             // do we need to ignore it?
             sal_Bool bAlwaysIgnoreThis = m_sIgnoreList.end() != m_sIgnoreList.find( sCurrentUnit );
@@ -704,7 +704,7 @@ namespace editeng
         }
     }
 
-    void HangulHanjaConversion_Impl::implChange( const ::rtl::OUString& _rChangeInto )
+    void HangulHanjaConversion_Impl::implChange( const OUString& _rChangeInto )
     {
         if( _rChangeInto.isEmpty() )
             return;
@@ -811,7 +811,7 @@ namespace editeng
 
         if(m_pConversionDialog)
         {
-            ::rtl::OUString sCurrentUnit( GetCurrentUnit() );
+            OUString sCurrentUnit( GetCurrentUnit() );
 
             m_pConversionDialog->SetCurrentString( sCurrentUnit, m_aCurrentSuggestions );
             m_pConversionDialog->FocusSuggestion();
@@ -873,8 +873,8 @@ namespace editeng
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
         {
-            ::rtl::OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
-            ::rtl::OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
+            OUString sCurrentUnit( m_pConversionDialog->GetCurrentString() );
+            OUString sChangeInto( m_pConversionDialog->GetCurrentSuggestion( ) );
 
             if( !sChangeInto.isEmpty() )
             {
@@ -916,8 +916,8 @@ namespace editeng
         {
             try
             {
-                ::rtl::OUString sNewOriginal( m_pConversionDialog->GetCurrentSuggestion( ) );
-                Sequence< ::rtl::OUString > aSuggestions;
+                OUString sNewOriginal( m_pConversionDialog->GetCurrentSuggestion( ) );
+                Sequence< OUString > aSuggestions;
 
                 DBG_ASSERT( m_xConverter.is(), "HangulHanjaConversion_Impl::OnFind: no converter!" );
                 TextConversionResult aToHanja = m_xConverter->getConversions(

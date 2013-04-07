@@ -53,7 +53,7 @@ public:
 
     virtual bool operator () (const ThumbnailViewItem *pItem);
 
-    bool isValid (const rtl::OUString& rPath) const;
+    bool isValid (const OUString& rPath) const;
 
 protected:
 
@@ -120,7 +120,7 @@ public:
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
-    static BitmapEx getDefaultThumbnail( const rtl::OUString& rPath );
+    static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
     static BitmapEx fetchThumbnail (const OUString &msURL, long width, long height);
 

@@ -52,7 +52,7 @@ ScDoubleField::ScDoubleField( Window* pParent, const ResId& rResId ) :
 
 bool ScDoubleField::GetValue( double& rfValue ) const
 {
-    rtl::OUString aStr(comphelper::string::strip(GetText(), ' '));
+    OUString aStr(comphelper::string::strip(GetText(), ' '));
     bool bOk = !aStr.isEmpty();
     if( bOk )
     {

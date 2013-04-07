@@ -22,13 +22,9 @@
 
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 #include <vector>
-
-namespace rtl
-{
-    class OUString;
-}
 
 //........................................................................
 namespace offapp
@@ -52,7 +48,7 @@ namespace offapp
     public:
         ODriverEnumeration() throw();
         ~ODriverEnumeration() throw();
-        typedef ::std::vector< ::rtl::OUString >::const_iterator const_iterator;
+        typedef ::std::vector< OUString >::const_iterator const_iterator;
 
         const_iterator  begin() const throw();
         const_iterator  end() const throw();

@@ -249,7 +249,7 @@ bool isMainSequenceRootNode_(
     // detect main sequence root node (need that for
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
-        rtl::OUString( "node-type" ),
+        OUString( "node-type" ),
         uno::makeAny( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
@@ -717,13 +717,13 @@ void BaseNode::showState() const
                                                             uno::UNO_QUERY );
 
             // read shape name
-            ::rtl::OUString aName;
+            OUString aName;
             if( (xPropSet->getPropertyValue(
-                     ::rtl::OUString("Name") )
+                     OUString("Name") )
                  >>= aName) )
             {
-                const ::rtl::OString& rAsciiName(
-                    ::rtl::OUStringToOString( aName,
+                const OString& rAsciiName(
+                    OUStringToOString( aName,
                                               RTL_TEXTENCODING_ASCII_US ) );
 
                 VERBOSE_TRACE( "Node info: n0x%X, name \"%s\"",

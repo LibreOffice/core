@@ -245,7 +245,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
 
         // unmark all objects
         m_pView->UnmarkAll();
-        const ::rtl::OUString sSectionName = m_xSection->getName();
+        const OUString sSectionName = m_xSection->getName();
         const sal_Int32 nLength = _aAllreadyCopiedObjects.getLength();
         const beans::NamedValue* pIter = _aAllreadyCopiedObjects.getConstArray();
         const beans::NamedValue* pEnd  = pIter + nLength;
@@ -450,7 +450,7 @@ void lcl_insertMenuItemImages(
             }
             else
             {
-                const ::rtl::OUString sCommand = rContextMenu.GetItemCommand(nId);
+                const OUString sCommand = rContextMenu.GetItemCommand(nId);
                 rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
@@ -492,7 +492,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
                 if ( nId == SID_ATTR_CHAR_COLOR_BACKGROUND )
                 {
                     aArgs.realloc(1);
-                    aArgs[0].Name = ::rtl::OUString("Selection");
+                    aArgs[0].Name = OUString("Selection");
                     aArgs[0].Value <<= m_xSection;
                 }
                 rController.executeChecked(nId,aArgs);
@@ -614,7 +614,7 @@ void OReportSection::deactivateOle()
         m_pFunc->deactivateOle(true);
 }
 // -----------------------------------------------------------------------------
-void OReportSection::createDefault(const ::rtl::OUString& _sType)
+void OReportSection::createDefault(const OUString& _sType)
 {
     SdrObject* pObj = m_pView->GetCreateObj();
     if ( !pObj )
@@ -622,17 +622,17 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType)
     createDefault(_sType,pObj);
 }
 // -----------------------------------------------------------------------------
-void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj)
+void OReportSection::createDefault(const OUString& _sType,SdrObject* _pObj)
 {
     sal_Bool bAttributesAppliedFromGallery = sal_False;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
-        std::vector< rtl::OUString > aObjList;
+        std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
-            std::vector< rtl::OUString >::iterator aIter = aObjList.begin();
-            std::vector< rtl::OUString >::iterator aEnd = aObjList.end();
+            std::vector< OUString >::iterator aIter = aObjList.begin();
+            std::vector< OUString >::iterator aEnd = aObjList.end();
             for (sal_uInt32 i=0 ; aIter != aEnd; ++aIter,++i)
             {
                 if ( aIter->equalsIgnoreAsciiCase( _sType ) )
@@ -833,10 +833,10 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                 aCurrent[nLength].Name = PROPERTY_POSITION;
                 aCurrent[nLength++].Value <<= AWTPoint(aDropPos);
                 // give also the DND Action (Shift|Ctrl) Key to really say what we want
-                aCurrent[nLength].Name = ::rtl::OUString("DNDAction");
+                aCurrent[nLength].Name = OUString("DNDAction");
                 aCurrent[nLength++].Value <<= _rEvt.mnAction;
 
-                aCurrent[nLength].Name = ::rtl::OUString("Section");
+                aCurrent[nLength].Name = OUString("Section");
                 aCurrent[nLength++].Value <<= getSection();
                 pIter->Value <<= aCurrent;
             }

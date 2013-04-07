@@ -187,15 +187,15 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 {
     // Load from disk
     // ---------------------------------------------------------------------
-    rtl::OUString aBaseName = ( rtl::OUString("/") +
-                                rtl::OUString::createFromAscii( pName ) );
-    rtl::OUString aSvg( ".svg" );
+    OUString aBaseName = ( OUString("/") +
+                                OUString::createFromAscii( pName ) );
+    OUString aSvg( ".svg" );
 
     rtl_Locale *pLoc = NULL;
     osl_getProcessLocale (&pLoc);
     LanguageTag aLanguageTag( *pLoc);
 
-    rtl::OUString uri = rtl::OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
+    OUString uri = OUString::createFromAscii( "$BRAND_BASE_DIR/program" ) + aBaseName+aSvg;
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
     SvgData aSvgData(aObj.PathToFileName());
@@ -219,7 +219,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     // UNO dance to render from drawinglayer
     // ---------------------------------------------------------------------
     uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-    const rtl::OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
+    const OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
 
     try
     {

@@ -59,9 +59,9 @@ namespace reportdesign
     }
 
     //------------------------------------------------------------------
-    ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId,const uno::Reference< lang::XMultiComponentFactory >& _rM)
+    OUString ResourceManager::loadString(sal_uInt16 _nResId,const uno::Reference< lang::XMultiComponentFactory >& _rM)
     {
-        ::rtl::OUString sReturn;
+        OUString sReturn;
 
         ensureImplExists(_rM);
         if (m_pImpl)

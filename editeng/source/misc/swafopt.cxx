@@ -24,7 +24,7 @@
 #include <editeng/swafopt.hxx>
 
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
-    : aBulletFont( rtl::OUString("StarSymbol"),
+    : aBulletFont( OUString("StarSymbol"),
                     Size( 0, 14 ) )
 {
     bAutoCorrect =

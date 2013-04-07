@@ -630,7 +630,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyHyperlinkClicked( ::rtl::OUString const& hyperLink );
+    bool notifyHyperlinkClicked( OUString const& hyperLink );
 
 private:
     boost::scoped_ptr<EventMultiplexerImpl> mpImpl;

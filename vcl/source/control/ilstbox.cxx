@@ -2662,7 +2662,7 @@ sal_Bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, sal_Unicode cSep )
+void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
     sal_Bool bChanges = GetEntryList()->GetMRUCount() ? sal_True : sal_False;
 
@@ -2695,7 +2695,7 @@ void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, sal_Unicode cSep
 
 // -----------------------------------------------------------------------
 
-rtl::OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
+OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
 {
     OUStringBuffer aEntries;
     for ( sal_uInt16 n = 0; n < GetEntryList()->GetMRUCount(); n++ )
@@ -2824,11 +2824,11 @@ void ImplWin::ImplDraw( bool bLayout )
             {
                 Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
                 pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentRect,
-                                         nState, aControlValue, rtl::OUString() );
+                                         nState, aControlValue, OUString() );
             }
 
             bNativeOK = DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                aControlValue, rtl::OUString() );
+                aControlValue, OUString() );
         }
 
         if( IsEnabled() )

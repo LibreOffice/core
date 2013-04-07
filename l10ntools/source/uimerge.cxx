@@ -29,8 +29,8 @@
 #include <fstream>
 #include <vector>
 
-rtl::OString sInputFileName;
-rtl::OString sOutputFile;
+OString sInputFileName;
+OString sOutputFile;
 
 int extractTranslations()
 {
@@ -43,7 +43,7 @@ int extractTranslations()
 
     exsltRegisterAll();
 
-    rtl::OString sStyleSheet = rtl::OString(getenv("SRC_ROOT"))  + rtl::OString("/solenv/bin/uilangfilter.xslt");
+    OString sStyleSheet = OString(getenv("SRC_ROOT"))  + OString("/solenv/bin/uilangfilter.xslt");
 
     xsltStylesheetPtr stylesheet = xsltParseStylesheetFile ((const xmlChar *)sStyleSheet.getStr());
 
@@ -89,8 +89,8 @@ namespace
 {
     bool lcl_MergeLang(
             const MergeDataHashMap &rMap,
-            const rtl::OString &rLanguage,
-            const rtl::OString &rDestinationFile)
+            const OString &rLanguage,
+            const OString &rDestinationFile)
     {
         std::ofstream aDestination(
             rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
@@ -107,7 +107,7 @@ namespace
                 continue;
 
             PFormEntrys* pFoo = aI->second->GetPFormEntries();
-            rtl::OString sOut;
+            OString sOut;
             pFoo->GetText( sOut, STRING_TYP_TEXT, rLanguage );
 
             if (sOut.isEmpty())
@@ -136,8 +136,8 @@ bool Merge(
     {
         bool bDestinationIsDir(false);
 
-        const rtl::OUString aDestDir(rtl::OStringToOUString(rDestinationDir, RTL_TEXTENCODING_UTF8));
-        rtl::OUString aDestDirUrl;
+        const OUString aDestDir(OStringToOUString(rDestinationDir, RTL_TEXTENCODING_UTF8));
+        OUString aDestDirUrl;
         if (osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aDestDir, aDestDirUrl))
         {
             osl::DirectoryItem aTmp;
@@ -157,22 +157,22 @@ bool Merge(
     }
 
     MergeDataFile aMergeDataFile( rPOFile, rSourceFile, sal_False );
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
     if( rLanguage.equalsIgnoreAsciiCase("ALL") )
         aLanguages = aMergeDataFile.GetLanguages();
     else
         aLanguages.push_back(rLanguage);
 
     const MergeDataHashMap& rMap = aMergeDataFile.getMap();
-    const rtl::OString aDestinationDir(rDestinationDir + "/");
+    const OString aDestinationDir(rDestinationDir + "/");
 
     bool bResult = true;
     for(size_t n = 0; n < aLanguages.size(); ++n)
     {
-        rtl::OString sCur = aLanguages[ n ];
+        OString sCur = aLanguages[ n ];
         if (sCur.isEmpty() || sCur.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("en-US")))
             continue;
-        const rtl::OString aDestinationFile(aDestinationDir + sCur + ".ui");
+        const OString aDestinationFile(aDestinationDir + sCur + ".ui");
         if (!lcl_MergeLang(rMap, sCur, aDestinationFile))
             bResult = false;
     }

@@ -89,7 +89,7 @@ namespace cppcanvas
          */
         virtual ::basegfx::B2DPolyPolygon const* getClip() const = 0;
 
-        virtual FontSharedPtr                    createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const = 0;
+        virtual FontSharedPtr                    createFont( const OUString& rFontName, const double& rCellSize ) const = 0;
 
         virtual ColorSharedPtr                   createColor() const = 0;
 

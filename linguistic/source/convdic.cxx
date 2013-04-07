@@ -65,7 +65,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
@@ -279,7 +278,7 @@ void ConvDic::Save()
 }
 
 
-ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const rtl::OUString &rFirstText, const rtl::OUString &rSecondText )
+ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const OUString &rFirstText, const OUString &rSecondText )
 {
     pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rMap.equal_range( rFirstText );

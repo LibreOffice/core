@@ -85,15 +85,13 @@
 #include <memory>
 
 using namespace com::sun::star;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUString;
 using ::editeng::SvxBorderLine;
 
 using ::std::vector;
 using ::std::auto_ptr;
 
 // helper func defined in docfunc.cxx
-void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName );
+void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName );
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -1290,7 +1288,7 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
             {
                 ScRangeList aChangeRanges;
                 aChangeRanges.Append( aRange );
-                pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
+                pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
             }
         }
     }
@@ -1351,7 +1349,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                     break;
             }
             aChangeRanges.Append( aChangeRange );
-            pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
+            pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
         }
     }
 }
@@ -1609,7 +1607,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     std::auto_ptr<ScDocument> pUndoDoc;
     std::auto_ptr<ScMarkData> pUndoMark;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    rtl::OUString aUndoStr;
+    OUString aUndoStr;
     if (bAddUndo)
     {
         pUndoMark.reset(new ScMarkData(rMark));                // Mark is being modified
@@ -1950,7 +1948,7 @@ sal_Bool ScViewFunc::InsertTable( const String& rName, SCTAB nTab, sal_Bool bRec
 //----------------------------------------------------------------------------
 //  Insert tables
 
-sal_Bool ScViewFunc::InsertTables(std::vector<rtl::OUString>& aNames, SCTAB nTab,
+sal_Bool ScViewFunc::InsertTables(std::vector<OUString>& aNames, SCTAB nTab,
                                             SCTAB nCount, sal_Bool bRecord )
 {
     ScDocShell* pDocSh    = GetViewData()->GetDocShell();
@@ -2069,7 +2067,7 @@ bool ScViewFunc::DeleteTables( const SCTAB nTab, SCTAB nSheets )
         {
             for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
             {
-                rtl::OUString sCodeName;
+                OUString sCodeName;
                 bool bHasCodeName = pDoc->GetCodeName( nTab + aTab, sCodeName );
                 if ( bHasCodeName )
                     VBA_DeleteModule( *pDocSh, sCodeName );
@@ -2116,7 +2114,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         SCTAB nCount = pDoc->GetTableCount();
 
-        rtl::OUString aOldName;
+        OUString aOldName;
         for(unsigned int i=0; i<TheTabs.size(); ++i)
         {
             SCTAB nTab = TheTabs[i];
@@ -2139,7 +2137,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
             if ( pDoc->IsScenario(nTab) )
             {
                 pUndoDoc->SetScenario( nTab, sal_True );
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nScenFlags;
                 pDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -2169,7 +2167,7 @@ sal_Bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, sal_Bool bRecord
 
     for(int i=TheTabs.size()-1; i>=0; --i)
     {
-        rtl::OUString sCodeName;
+        OUString sCodeName;
         sal_Bool bHasCodeName = pDoc->GetCodeName( TheTabs[i], sCodeName );
         if (pDoc->DeleteTab( TheTabs[i], pUndoDoc ))
         {
@@ -2283,9 +2281,9 @@ void ScViewFunc::InsertTableLink( const String& rFile,
                                     const String& rFilter, const String& rOptions,
                                     const String& rTabName )
 {
-    rtl::OUString aFilterName = rFilter;
-    rtl::OUString aOpt = rOptions;
-    rtl::OUString aURL = rFile;
+    OUString aFilterName = rFilter;
+    OUString aOpt = rOptions;
+    OUString aURL = rFile;
     ScDocumentLoader aLoader( aURL, aFilterName, aOpt );
     if (!aLoader.IsError())
     {
@@ -2296,7 +2294,7 @@ void ScViewFunc::InsertTableLink( const String& rFile,
             nTab = 0;
         else
         {
-            rtl::OUString aTemp;
+            OUString aTemp;
             SCTAB nCount = pSrcDoc->GetTableCount();
             for (SCTAB i=0; i<nCount; i++)
             {
@@ -2339,7 +2337,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
     SCTAB i;
     for( i=0; i<nCount; i++ )
     {   // insert sheets first and update all references
-        rtl::OUString aName;
+        OUString aName;
         pSrcDoc->GetName( pSrcTabs[i], aName );
         pDoc->CreateValidTabName( aName );
         if ( !pDoc->InsertTab( nTab+i, aName ) )
@@ -2388,7 +2386,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         sal_Bool bWasThere = pDoc->HasLink( aFileName, aFilterName, aOptions );
 
         sal_uLong nRefresh = 0;
-        rtl::OUString aTabStr;
+        OUString aTabStr;
         for (i=0; i<nInsCount; i++)
         {
             pSrcDoc->GetName( pSrcTabs[i], aTabStr );
@@ -2441,7 +2439,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 //  Move/Copy table to another document
 
 void ScViewFunc::MoveTable(
-    sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const rtl::OUString* pNewTabName )
+    sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName )
 {
     ScDocument* pDoc       = GetViewData()->GetDocument();
     ScDocShell* pDocShell  = GetViewData()->GetDocShell();
@@ -2458,10 +2456,10 @@ void ScViewFunc::MoveTable(
 
         //  execute without SFX_CALLMODE_RECORD, because already contained in move command
 
-        String aUrl = rtl::OUString("private:factory/");
+        String aUrl = OUString("private:factory/");
         aUrl.AppendAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));               // "scalc"
         SfxStringItem aItem( SID_FILE_NAME, aUrl );
-        SfxStringItem aTarget( SID_TARGETNAME, rtl::OUString("_blank") );
+        SfxStringItem aTarget( SID_TARGETNAME, OUString("_blank") );
 
         const SfxPoolItem* pRetItem = GetViewData()->GetDispatcher().Execute(
                     SID_OPENDOC, SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON, &aItem, &aTarget, 0L );
@@ -2506,7 +2504,7 @@ void ScViewFunc::MoveTable(
         {
             while (pDestDoc->GetTableCount() > 1)
                 pDestDoc->DeleteTab(0);
-            pDestDoc->RenameTab( 0, rtl::OUString("______42_____"),
+            pDestDoc->RenameTab( 0, OUString("______42_____"),
                         false );
         }
 
@@ -2519,7 +2517,7 @@ void ScViewFunc::MoveTable(
         {
             if(rMark.GetTableSelect(i))
             {
-                rtl::OUString aTabName;
+                OUString aTabName;
                 pDoc->GetName( i, aTabName);
                 TheTabs.push_back(i);
                 for(SCTAB j=i+1;j<nTabCount;j++)
@@ -2550,7 +2548,7 @@ void ScViewFunc::MoveTable(
         ScClipParam aParam;
         for( sal_uInt16 j=0; j<TheTabs.size(); ++j, ++nDestTab1 )
         {   // insert sheets first and update all references
-            rtl::OUString aName;
+            OUString aName;
             if (bRename)
                 aName = *pNewTabName;
             else
@@ -2575,7 +2573,7 @@ void ScViewFunc::MoveTable(
                 nDestTab1++;
             }
         }
-        rtl::OUString sName;
+        OUString sName;
         if (!bNewDoc && bUndo)
         {
             pDestDoc->GetName(nDestTab, sName);
@@ -2671,13 +2669,13 @@ void ScViewFunc::MoveTable(
         pSrcTabs->reserve(nTabCount);
         pDestTabs->reserve(nTabCount);
         pTabNames->reserve(nTabCount);
-        rtl::OUString aDestName;
+        OUString aDestName;
 
         for(SCTAB i=0;i<nTabCount;i++)
         {
             if(rMark.GetTableSelect(i))
             {
-                rtl::OUString aTabName;
+                OUString aTabName;
                 pDoc->GetName( i, aTabName);
                 pTabNames->push_back(aTabName);
 
@@ -2716,7 +2714,7 @@ void ScViewFunc::MoveTable(
 
             if(bCopy && pDoc->IsScenario(nMovTab))
             {
-                rtl::OUString aComment;
+                OUString aComment;
                 Color  aColor;
                 sal_uInt16 nFlags;
 
@@ -2751,7 +2749,7 @@ void ScViewFunc::MoveTable(
             for (size_t j = 0; j < n; ++j)
             {
                 SCTAB nRenameTab = (*pDestTabs)[j];
-                rtl::OUString aTabName = *pNewTabName;
+                OUString aTabName = *pNewTabName;
                 pDoc->CreateValidTabName( aTabName );
                 pDestNames->push_back(aTabName);
                 pDoc->RenameTab(nRenameTab, aTabName);
@@ -2803,7 +2801,7 @@ void ScViewFunc::ShowTable( const std::vector<String>& rNames )
     sal_Bool bUndo(pDoc->IsUndoEnabled());
 
     std::vector<SCTAB> undoTabs;
-    rtl::OUString aName;
+    OUString aName;
     SCTAB nPos = 0;
 
     bool bFound(false);

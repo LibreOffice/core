@@ -280,7 +280,7 @@ private:
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const String rName );
     void    SetCurrentTable( SCTAB nTab );
-    void    SetCurrentTableStr( const rtl::OUString& rName );
+    void    SetCurrentTableStr( const OUString& rName );
     void    SetCurrentObject( const String rName );
     void    SetCurrentDoc( const String& rDocName );
 

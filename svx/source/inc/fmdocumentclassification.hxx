@@ -61,10 +61,10 @@ namespace svxform
                             ) SAL_THROW(());
 
         static  DocumentType getDocumentTypeForModuleIdentifier(
-                                const ::rtl::OUString& _rModuleIdentifier
+                                const OUString& _rModuleIdentifier
                             );
 
-        static  ::rtl::OUString getModuleIdentifierForDocumentType(
+        static  OUString getModuleIdentifierForDocumentType(
                                 DocumentType _eType
                             );
     };

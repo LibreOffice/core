@@ -434,7 +434,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager(getLayoutManager());
     if ( xLayoutManager.is() )
     {
-        const static rtl::OUString aMenuBarURL(  "private:resource/menubar/menubar" );
+        const static OUString aMenuBarURL(  "private:resource/menubar/menubar" );
         if ( !xLayoutManager->isElementVisible( aMenuBarURL ) )
             xLayoutManager->createElement( aMenuBarURL );
     }
@@ -450,7 +450,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue( ::rtl::OUString("LayoutManager") ),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue( OUString("LayoutManager") ),uno::UNO_QUERY);
     }
     catch ( uno::Exception& )
     {
@@ -918,8 +918,8 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                         uno::Sequence< beans::PropertyValue > aArgs( 1 );
-                        aArgs[0].Name = ::rtl::OUString(  "URL"  );
-                        aArgs[0].Value <<= ::rtl::OUString( aNewLinkURL );
+                        aArgs[0].Name = OUString(  "URL"  );
+                        aArgs[0].Value <<= OUString( aNewLinkURL );
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;
@@ -933,7 +933,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
                         OSL_FAIL(
                             OString(OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
                                     "exception caught: ") +
-                            rtl::OUStringToOString(
+                            OUStringToOString(
                                 comphelper::anyToString( cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 )).getStr() );
                     }
@@ -975,7 +975,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
                 OSL_FAIL(
                     OString(OString("SdrOle2Obj::BreakFileLink_Impl(), "
                             "exception caught: ") +
-                    rtl::OUStringToOString(
+                    OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 )).getStr() );
             }
@@ -1026,7 +1026,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::CheckFileLink_Impl(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -1060,7 +1060,7 @@ void SdrOle2Obj::Connect_Impl()
                     if ( xObjRef.is() )
                     {
                         // object came from the outside, now add it to the container
-                        ::rtl::OUString aTmp;
+                        OUString aTmp;
                         rContainer.InsertEmbeddedObject( xObjRef.GetObject(), aTmp );
                         mpImpl->aPersistName = aTmp;
                     }
@@ -1110,7 +1110,7 @@ void SdrOle2Obj::Connect_Impl()
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::Connect_Impl(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -1197,7 +1197,7 @@ void SdrOle2Obj::RemoveListeners_Impl()
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::RemoveListeners_Impl(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -1279,7 +1279,7 @@ void SdrOle2Obj::Disconnect_Impl()
         OSL_FAIL(
             OString(OString("SdrOle2Obj::Disconnect_Impl(), "
                     "exception caught: ") +
-            rtl::OUStringToOString(
+            OUStringToOString(
                 comphelper::anyToString( cppu::getCaughtException() ),
                 RTL_TEXTENCODING_UTF8 )).getStr() );
     }
@@ -1397,7 +1397,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         try
         {
             // move the object's storage; ObjectRef remains the same, but PersistName may change
-            ::rtl::OUString aTmp;
+            OUString aTmp;
             comphelper::EmbeddedObjectContainer& rContainer = pSrcPers->getEmbeddedObjectContainer();
             uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
             DBG_ASSERT( !xObjRef.is() || xObjRef.GetObject() == xObj, "Wrong object identity!" );
@@ -1414,7 +1414,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::SetModel(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -1647,7 +1647,7 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
                 uno::Reference < embed::XEmbeddedObject > xObj = rContainer.GetEmbeddedObject( mpImpl->aPersistName );
                 if ( xObj.is() )
                 {
-                    ::rtl::OUString aTmp;
+                    OUString aTmp;
                     xObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject( rContainer, xObj, aTmp ), rOle2Obj.GetAspect() );
                     m_bTypeAsked = false;
                     mpImpl->aPersistName = aTmp;
@@ -1937,7 +1937,7 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
             OSL_FAIL(
                 OString(OString("SdrOle2Obj::Unload=(), "
                         "exception caught: ") +
-                rtl::OUStringToOString(
+                OUStringToOString(
                     comphelper::anyToString( cppu::getCaughtException() ),
                     RTL_TEXTENCODING_UTF8 )).getStr() );
         }
@@ -2091,13 +2091,13 @@ sal_Bool SdrOle2Obj::IsChart() const
 }
 
 // -----------------------------------------------------------------------------
-void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const ::rtl::OUString& aMediaType )
+void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const OUString& aMediaType )
 {
     xObjRef.SetGraphic( aGraphic, aMediaType );
 }
 
 // -----------------------------------------------------------------------------
-void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const ::rtl::OUString& aMediaType )
+void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrStream, const OUString& aMediaType )
 {
     xObjRef.SetGraphicStream( xGrStream, aMediaType );
 }

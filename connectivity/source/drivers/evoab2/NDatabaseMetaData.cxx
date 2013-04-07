@@ -177,14 +177,14 @@ namespace connectivity
         return nType == G_TYPE_STRING ? DataType::VARCHAR : DataType::BIT;
     }
 
-    guint findEvoabField(const rtl::OUString& aColName)
+    guint findEvoabField(const OUString& aColName)
     {
         guint nRet = (guint)-1;
         sal_Bool bFound = sal_False;
         initFields();
         for (guint i=0;(i < nFields) && !bFound;i++)
         {
-            rtl::OUString aName = getFieldName(i);
+            OUString aName = getFieldName(i);
             if (aName == aColName)
             {
                 nRet = i;
@@ -194,30 +194,30 @@ namespace connectivity
         return nRet;
     }
 
-    rtl::OUString
+    OUString
     getFieldTypeName( guint nCol )
     {
         switch( getFieldType( nCol ) )
         {
             case DataType::BIT:
-                return ::rtl::OUString("BIT");
+                return OUString("BIT");
             case DataType::VARCHAR:
-                return ::rtl::OUString("VARCHAR");
+                return OUString("VARCHAR");
             default:
                 break;
         }
-        return ::rtl::OUString();
+        return OUString();
     }
 
-    rtl::OUString
+    OUString
     getFieldName( guint nCol )
     {
         const GParamSpec *pSpec = getField( nCol )->pField;
-        rtl::OUString aName;
+        OUString aName;
         initFields();
 
         if( pSpec )
-            aName = rtl::OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
+            aName = OStringToOUString( g_param_spec_get_name( ( GParamSpec * )pSpec ),
                                             RTL_TEXTENCODING_UTF8 );
             aName = aName.replace( '-', '_' );
         return aName;
@@ -259,7 +259,7 @@ OEvoabDatabaseMetaData::~OEvoabDatabaseMetaData()
 }
 
 // -------------------------------------------------------------------------
-ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const ::rtl::OUString& columnNamePattern )
+ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const OUString& columnNamePattern )
 {
     static ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow  aRow(19);
@@ -270,9 +270,9 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     // ****************************************************
 
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(::rtl::OUString(""));
+    aRow[1] = new ORowSetValueDecorator(OUString(""));
     // Schema
-    aRow[2] = new ORowSetValueDecorator(::rtl::OUString(""));
+    aRow[2] = new ORowSetValueDecorator(OUString(""));
     // COLUMN_SIZE
     aRow[7] = new ORowSetValueDecorator(s_nCOLUMN_SIZE);
     // BUFFER_LENGTH, not used
@@ -294,10 +294,10 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     // CHAR_OCTET_LENGTH, refer to [5]
     aRow[16] = new ORowSetValueDecorator(s_nCHAR_OCTET_LENGTH);
     // IS_NULLABLE
-    aRow[18] = new ORowSetValueDecorator(::rtl::OUString("YES"));
+    aRow[18] = new ORowSetValueDecorator(OUString("YES"));
 
 
-    aRow[3] = new ORowSetValueDecorator(::rtl::OUString("TABLE"));
+    aRow[3] = new ORowSetValueDecorator(OUString("TABLE"));
     ::osl::MutexGuard aGuard( m_aMutex );
 
     initFields();
@@ -320,9 +320,9 @@ ODatabaseMetaDataResultSet::ORows& OEvoabDatabaseMetaData::getColumnRows( const 
     return aRows ;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
+OUString OEvoabDatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -442,22 +442,22 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(S
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aVal;
+    OUString aVal;
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+OUString OEvoabDatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    ::rtl::OUString aVal("\"");
+    OUString aVal("\"");
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aVal;
+    OUString aVal;
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -791,52 +791,52 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) thro
     return sal_False;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_pConnection->getURL();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)1);
+    OUString aValue = OUString::valueOf((sal_Int32)1);
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue = ::rtl::OUString::valueOf((sal_Int32)0);
+    OUString aValue = OUString::valueOf((sal_Int32)0);
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -855,36 +855,36 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getDriverMinorVersion(  ) throw(Runti
     return 0;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     return aValue;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabDatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabDatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsExtendedSQLGrammar(  ) throw(SQLException, RuntimeException)
@@ -1002,16 +1002,16 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
     /* Dont need to change as evoab driver supports only table */
 
     // there exists no possibility to get table types so we have to check
-    static ::rtl::OUString sTableTypes[] =
+    static OUString sTableTypes[] =
     {
-        ::rtl::OUString("TABLE"),
+        OUString("TABLE"),
         // Currently we only support a 'TABLE' nothing more complex
     };
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
+    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(OUString);
     ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)
     {
@@ -1043,7 +1043,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.reserve(19);
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString("VARCHAR")));
+        aRow.push_back(new ORowSetValueDecorator(OUString("VARCHAR")));
         aRow.push_back(new ORowSetValueDecorator(DataType::VARCHAR));
         aRow.push_back(new ORowSetValueDecorator((sal_Int32)s_nCHAR_OCTET_LENGTH));
         aRow.push_back(ODatabaseMetaDataResultSet::getQuoteValue());
@@ -1065,7 +1065,7 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString("VARCHAR"));
+        aRow[1] = new ORowSetValueDecorator(OUString("VARCHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::VARCHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)65535);
         aRows.push_back(aRow);
@@ -1075,8 +1075,8 @@ Reference< XResultSet > OEvoabDatabaseMetaData::impl_getTypeInfo_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*tableNamePattern*/,
-    const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*tableNamePattern*/,
+    const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
@@ -1097,8 +1097,8 @@ bool isSourceBackend(ESource *pSource, const char *backendname)
 }
 
 Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-    const ::rtl::OUString& /*tableNamePattern*/, const Sequence< ::rtl::OUString >& types ) throw(SQLException, RuntimeException)
+    const Any& /*catalog*/, const OUString& /*schemaPattern*/,
+    const OUString& /*tableNamePattern*/, const Sequence< OUString >& types ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1108,7 +1108,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    const ::rtl::OUString aTable("TABLE");
+    const OUString aTable("TABLE");
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -1116,8 +1116,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
         {
             bTableFound = sal_False;
 
-            const ::rtl::OUString* pBegin = types.getConstArray();
-            const ::rtl::OUString* pEnd = pBegin + nLength;
+            const OUString* pBegin = types.getConstArray();
+            const OUString* pEnd = pBegin + nLength;
             for(;pBegin != pEnd;++pBegin)
                 {
                     if(*pBegin == aTable)
@@ -1212,7 +1212,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
             {
                 ESource *pSource = E_SOURCE (s->data);
 
-                rtl::OUString aName = rtl::OStringToOUString( e_source_peek_name( pSource ),
+                OUString aName = OStringToOUString( e_source_peek_name( pSource ),
                                                               RTL_TEXTENCODING_UTF8 );
 
                 ODatabaseMetaDataResultSet::ORow aRow(3);
@@ -1230,7 +1230,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getUDTs( const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XDatabaseMetaDaza::getUDTs", *this );
     return NULL;

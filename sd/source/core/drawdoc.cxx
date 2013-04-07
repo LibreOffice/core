@@ -84,7 +84,6 @@
 
 #include <tools/tenccvt.hxx>
 
-using ::rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -949,7 +948,7 @@ void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
     pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
 }
 
-sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAuthor )
+sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 {
     // force current user to have first color
     if( maAnnotationAuthors.empty() )

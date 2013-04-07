@@ -35,10 +35,10 @@ namespace connectivity
     typedef sal_Int32   OrdinalPosition;
     struct ColumnDesc
     {
-        ::rtl::OUString sName;
-        ::rtl::OUString aField6;
-        ::rtl::OUString sField12; // REMARKS
-        ::rtl::OUString sField13;
+        OUString sName;
+        OUString aField6;
+        OUString sField12; // REMARKS
+        OUString sField13;
         sal_Int32       nField5
                     ,   nField7
                     ,   nField9
@@ -47,14 +47,14 @@ namespace connectivity
         OrdinalPosition nOrdinalPosition;
 
         ColumnDesc() {}
-        ColumnDesc( const ::rtl::OUString& _rName
+        ColumnDesc( const OUString& _rName
             , sal_Int32     _nField5
-            , const ::rtl::OUString& _aField6
+            , const OUString& _aField6
             , sal_Int32     _nField7
             , sal_Int32     _nField9
             , sal_Int32     _nField11
-            , const ::rtl::OUString& _sField12
-            , const ::rtl::OUString& _sField13
+            , const OUString& _sField12
+            , const OUString& _sField13
             ,OrdinalPosition _nPosition )
             :sName( _rName )
             ,aField6(_aField6)
@@ -70,7 +70,7 @@ namespace connectivity
     };
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-    OOO_DLLPUBLIC_DBTOOLS ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
+    OOO_DLLPUBLIC_DBTOOLS OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
     DECLARE_STL_USTRINGACCESS_MAP( sdbcx::TKeyProperties , TKeyMap);
 
@@ -110,7 +110,7 @@ namespace connectivity
         *
         * \return The start of the rename statement.
         */
-        virtual ::rtl::OUString getRenameStart() const;
+        virtual OUString getRenameStart() const;
 
         virtual ~OTableHelper();
 
@@ -119,7 +119,7 @@ namespace connectivity
         virtual void refreshKeys();
         virtual void refreshIndexes();
 
-        const ColumnDesc* getColumnDescription(const ::rtl::OUString& _sName) const;
+        const ColumnDesc* getColumnDescription(const OUString& _sName) const;
 
     public:
         OTableHelper(   sdbcx::OCollection* _pTables,
@@ -128,11 +128,11 @@ namespace connectivity
         OTableHelper(   sdbcx::OCollection* _pTables,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
                         sal_Bool _bCase,
-                        const ::rtl::OUString& _Name,
-                        const ::rtl::OUString& _Type,
-                        const ::rtl::OUString& _Description = ::rtl::OUString(),
-                        const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                        const ::rtl::OUString& _CatalogName = ::rtl::OUString()
+                        const OUString& _Name,
+                        const OUString& _Type,
+                        const OUString& _Description = OUString(),
+                        const OUString& _SchemaName = OUString(),
+                        const OUString& _CatalogName = OUString()
             );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
@@ -142,18 +142,18 @@ namespace connectivity
         virtual void SAL_CALL release() throw();
 
         // XRename
-        virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
         // XAlterTable
         virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         // XNamed
-        virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
         // helper method to get key properties
-        sdbcx::TKeyProperties getKeyProperties(const ::rtl::OUString& _sName) const;
-        void addKey(const ::rtl::OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
+        sdbcx::TKeyProperties getKeyProperties(const OUString& _sName) const;
+        void addKey(const OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
 
-        virtual ::rtl::OUString getTypeCreatePattern() const;
+        virtual OUString getTypeCreatePattern() const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableRename>      getRenameService() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableAlteration>  getAlterService() const;

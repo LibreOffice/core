@@ -57,7 +57,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
-using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
 static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
@@ -386,12 +385,12 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     }
 }
 
-rtl::OUString SwGetExpField::GetPar2() const
+OUString SwGetExpField::GetPar2() const
 {
     return GetFormula();
 }
 
-void SwGetExpField::SetPar2(const rtl::OUString& rStr)
+void SwGetExpField::SetPar2(const OUString& rStr)
 {
     SetFormula(rStr);
 }
@@ -443,7 +442,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= rtl::OUString(GetExpStr());
+        rAny <<= OUString(GetExpStr());
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);
@@ -495,7 +494,7 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt1
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
     pOutlChgNd( 0 ),
-    sDelim( rtl::OUString(".") ),
+    sDelim( OUString(".") ),
     nType(nTyp), nLevel( UCHAR_MAX ),
     bDeleted( sal_False )
 {
@@ -513,7 +512,7 @@ SwFieldType* SwSetExpFieldType::Copy() const
     return pNew;
 }
 
-const rtl::OUString& SwSetExpFieldType::GetName() const
+const OUString& SwSetExpFieldType::GetName() const
 {
     return sName;
 }
@@ -674,7 +673,7 @@ bool SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if( ::GetString( rAny, sTmp ).Len() )
                 SetDelimiter( sTmp );
             else
-                SetDelimiter(rtl::OUString(" "));
+                SetDelimiter(OUString(" "));
         }
         break;
     case FIELD_PROP_SHORT1:
@@ -944,12 +943,12 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
     Beschreibung: Parameter setzen
  --------------------------------------------------------------------*/
 
-const rtl::OUString& SwSetExpField::GetPar1() const
+const OUString& SwSetExpField::GetPar1() const
 {
     return ((const SwSetExpFieldType*)GetTyp())->GetName();
 }
 
-rtl::OUString SwSetExpField::GetPar2() const
+OUString SwSetExpField::GetPar2() const
 {
     sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
@@ -958,7 +957,7 @@ rtl::OUString SwSetExpField::GetPar2() const
     return GetExpandedFormula();
 }
 
-void SwSetExpField::SetPar2(const rtl::OUString& rStr)
+void SwSetExpField::SetPar2(const OUString& rStr)
 {
     sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
@@ -1084,12 +1083,12 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwInputField::SetPar1(const rtl::OUString& rStr)
+void SwInputField::SetPar1(const OUString& rStr)
 {
     aContent = rStr;
 }
 
-const rtl::OUString& SwInputField::GetPar1() const
+const OUString& SwInputField::GetPar1() const
 {
     return aContent;
 }
@@ -1098,12 +1097,12 @@ const rtl::OUString& SwInputField::GetPar1() const
     Beschreibung: True/False Text
  --------------------------------------------------------------------*/
 
-void SwInputField::SetPar2(const rtl::OUString& rStr)
+void SwInputField::SetPar2(const OUString& rStr)
 {
     aPText = rStr;
 }
 
-rtl::OUString SwInputField::GetPar2() const
+OUString SwInputField::GetPar2() const
 {
     return aPText;
 }
@@ -1200,7 +1199,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= rtl::OUString(GetExpStr());
+        rAny <<= OUString(GetExpStr());
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);

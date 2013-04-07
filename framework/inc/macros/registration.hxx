@@ -44,7 +44,7 @@ ________________________________________________________________________________
 #define IFFACTORY( CLASS )                                                                                                              \
     /* If searched name found ... */                                                                                                    \
     /* You can't add some statements before follow line ... Here can be an ELSE-statement! */                                           \
-    if ( CLASS::impl_getStaticImplementationName().equals( ::rtl::OUString::createFromAscii( pImplementationName ) ) )                  \
+    if ( CLASS::impl_getStaticImplementationName().equals( OUString::createFromAscii( pImplementationName ) ) )                  \
     {                                                                                                                                   \
         LOG_REGISTRATION_GETFACTORY( "\t\tImplementationname found - try to create factory! ...\n" )                                    \
         /* ... then create right factory for this service.                                  */                                          \

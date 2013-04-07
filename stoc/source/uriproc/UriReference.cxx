@@ -30,9 +30,9 @@
 using stoc::uriproc::UriReference;
 
 UriReference::UriReference(
-    rtl::OUString const & scheme, bool bIsHierarchical, bool bHasAuthority,
-    rtl::OUString const & authority, rtl::OUString const & path,
-    bool bHasQuery, rtl::OUString const & query):
+    OUString const & scheme, bool bIsHierarchical, bool bHasAuthority,
+    OUString const & authority, OUString const & path,
+    bool bHasQuery, OUString const & query):
     m_scheme(scheme),
     m_authority(authority),
     m_path(path),
@@ -51,10 +51,10 @@ UriReference::UriReference(
 
 UriReference::~UriReference() {}
 
-rtl::OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
+OUString UriReference::getUriReference() throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     if (!m_scheme.isEmpty()) {
         buf.append(m_scheme);
         buf.append(static_cast< sal_Unicode >(':'));
@@ -71,15 +71,15 @@ sal_Bool UriReference::isAbsolute() throw (css::uno::RuntimeException) {
     return !m_scheme.isEmpty();
 }
 
-rtl::OUString UriReference::getScheme() throw (css::uno::RuntimeException) {
+OUString UriReference::getScheme() throw (css::uno::RuntimeException) {
     return m_scheme;
 }
 
-rtl::OUString UriReference::getSchemeSpecificPart()
+OUString UriReference::getSchemeSpecificPart()
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
-    rtl::OUStringBuffer buf;
+    OUStringBuffer buf;
     appendSchemeSpecificPart(buf);
     return buf.makeStringAndClear();
 }
@@ -94,12 +94,12 @@ sal_Bool UriReference::hasAuthority() throw (css::uno::RuntimeException) {
     return m_hasAuthority;
 }
 
-rtl::OUString UriReference::getAuthority() throw (css::uno::RuntimeException) {
+OUString UriReference::getAuthority() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     return m_authority;
 }
 
-rtl::OUString UriReference::getPath() throw (css::uno::RuntimeException) {
+OUString UriReference::getPath() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     return m_path;
 }
@@ -128,7 +128,7 @@ sal_Int32 UriReference::getPathSegmentCount() throw (css::uno::RuntimeException)
     }
 }
 
-rtl::OUString UriReference::getPathSegment(sal_Int32 index)
+OUString UriReference::getPathSegment(sal_Int32 index)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
@@ -144,7 +144,7 @@ rtl::OUString UriReference::getPathSegment(sal_Int32 index)
             }
         }
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Bool UriReference::hasQuery() throw (css::uno::RuntimeException) {
@@ -152,7 +152,7 @@ sal_Bool UriReference::hasQuery() throw (css::uno::RuntimeException) {
     return m_hasQuery;
 }
 
-rtl::OUString UriReference::getQuery() throw (css::uno::RuntimeException) {
+OUString UriReference::getQuery() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     return m_query;
 }
@@ -162,12 +162,12 @@ sal_Bool UriReference::hasFragment() throw (css::uno::RuntimeException) {
     return m_hasFragment;
 }
 
-rtl::OUString UriReference::getFragment() throw (css::uno::RuntimeException) {
+OUString UriReference::getFragment() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     return m_fragment;
 }
 
-void UriReference::setFragment(rtl::OUString const & fragment)
+void UriReference::setFragment(OUString const & fragment)
     throw (css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
@@ -178,10 +178,10 @@ void UriReference::setFragment(rtl::OUString const & fragment)
 void UriReference::clearFragment() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     m_hasFragment = false;
-    m_fragment = rtl::OUString();
+    m_fragment = OUString();
 }
 
-void UriReference::appendSchemeSpecificPart(rtl::OUStringBuffer & buffer) const
+void UriReference::appendSchemeSpecificPart(OUStringBuffer & buffer) const
 {
     if (m_hasAuthority) {
         buffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));

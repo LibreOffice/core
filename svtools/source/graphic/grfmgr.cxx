@@ -89,7 +89,7 @@ GraphicObject::GraphicObject( const GraphicObject& rGraphicObj, const GraphicMan
     ImplSetGraphicManager( pMgr, NULL, &rGraphicObj );
 }
 
-GraphicObject::GraphicObject( const rtl::OString& rUniqueID, const GraphicManager* pMgr ) :
+GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pMgr ) :
     mpLink      ( NULL ),
     mpUserData  ( NULL )
 {
@@ -146,7 +146,7 @@ void GraphicObject::ImplAssignGraphicData()
     mnAnimationLoopCount = ( mbAnimated ? maGraphic.GetAnimationLoopCount() : 0 );
 }
 
-void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const rtl::OString* pID, const GraphicObject* pCopyObj )
+void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OString* pID, const GraphicObject* pCopyObj )
 {
     if( !mpMgr || ( pMgr != mpMgr ) )
     {
@@ -208,7 +208,7 @@ void GraphicObject::ImplAutoSwapIn()
                     {
                         if( HasLink() )
                         {
-                            rtl::OUString aURLStr;
+                            OUString aURLStr;
 
                             if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
                             {
@@ -364,12 +364,12 @@ void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
     *this = (const GraphicObject& ) rCopyStream;
 }
 
-rtl::OString GraphicObject::GetUniqueID() const
+OString GraphicObject::GetUniqueID() const
 {
     if ( !IsInSwapIn() && IsEPS() )
         const_cast<GraphicObject*>(this)->FireSwapInRequest();
 
-    rtl::OString aRet;
+    OString aRet;
 
     if( mpMgr )
         aRet = mpMgr->ImplGetUniqueID( *this );
@@ -1096,7 +1096,7 @@ SvStream& operator>>( SvStream& rIStm, GraphicObject& rGraphicObj )
 
     if( bLink )
     {
-        rtl::OUString aLink = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_UTF8);
+        OUString aLink = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStm, RTL_TEXTENCODING_UTF8);
         rGraphicObj.SetLink(aLink);
     }
     else
@@ -1122,13 +1122,13 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
 
-GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &rURL )
+GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
 {
     const String aURL( rURL ), aPrefix( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
     if( aURL.Search( aPrefix ) == 0 )
     {
         // graphic manager url
-        rtl::OString aUniqueID(rtl::OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
+        OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
         return GraphicObject( aUniqueID );
     }
     else
@@ -1146,16 +1146,16 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &
 }
 
 void
-GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< rtl::OUString >& rvEmbedImgUrls )
+GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& xIf,  std::vector< OUString >& rvEmbedImgUrls )
 {
-    static rtl::OUString sImageURL( "ImageURL" );
+    static OUString sImageURL( "ImageURL" );
     Reference< XPropertySet > xProps( xIf, UNO_QUERY );
     if ( xProps.is() )
     {
 
         if ( xProps->getPropertySetInfo()->hasPropertyByName( sImageURL ) )
         {
-            rtl::OUString sURL;
+            OUString sURL;
             xProps->getPropertyValue( sImageURL ) >>= sURL;
             if ( !sURL.isEmpty() && sURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
                 rvEmbedImgUrls.push_back( sURL );
@@ -1164,7 +1164,7 @@ GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& x
     Reference< XNameContainer > xContainer( xIf, UNO_QUERY );
     if ( xContainer.is() )
     {
-        Sequence< rtl::OUString > sNames = xContainer->getElementNames();
+        Sequence< OUString > sNames = xContainer->getElementNames();
         sal_Int32 nContainees = sNames.getLength();
         for ( sal_Int32 index = 0; index < nContainees; ++index )
         {

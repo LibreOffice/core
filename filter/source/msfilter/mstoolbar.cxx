@@ -73,12 +73,12 @@ void CustomToolBarImportHelper::applyIcons()
 {
     for ( std::vector< iconcontrolitem >::iterator it = iconcommands.begin(); it != iconcommands.end(); ++it )
     {
-        uno::Sequence< rtl::OUString > commands(1);
+        uno::Sequence< OUString > commands(1);
         commands[ 0 ] = it->sCommand;
         uno::Sequence< uno::Reference< graphic::XGraphic > > images(1);
         images[ 0 ] = it->image;
 
-        OSL_TRACE("About to applyIcons for command %s, have image ? %s", rtl::OUStringToOString( commands[ 0 ], RTL_TEXTENCODING_UTF8 ).getStr(), images[ 0 ].is() ? "yes" : "no" );
+        OSL_TRACE("About to applyIcons for command %s, have image ? %s", OUStringToOString( commands[ 0 ], RTL_TEXTENCODING_UTF8 ).getStr(), images[ 0 ].is() ? "yes" : "no" );
         uno::Reference< ui::XImageManager > xImageManager( getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         sal_uInt16 nColor = ui::ImageType::COLOR_NORMAL;
 
@@ -93,7 +93,7 @@ void CustomToolBarImportHelper::applyIcons()
     }
 }
 
-void CustomToolBarImportHelper::addIcon( const uno::Reference< graphic::XGraphic >& xImage, const rtl::OUString& sString )
+void CustomToolBarImportHelper::addIcon( const uno::Reference< graphic::XGraphic >& xImage, const OUString& sString )
 {
     iconcontrolitem item;
     item.sCommand = sString;
@@ -120,55 +120,55 @@ CustomToolBarImportHelper::getAppCfgManager()
 }
 
 uno::Any
-CustomToolBarImportHelper::createCommandFromMacro( const rtl::OUString& sCmd )
+CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
 {
 //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static rtl::OUString scheme( "vnd.sun.star.script:" );
-    static rtl::OUString part2( "?language=Basic&location=document" );
+    static OUString scheme( "vnd.sun.star.script:" );
+    static OUString part2( "?language=Basic&location=document" );
     // create script url
-    rtl::OUString scriptURL = scheme + sCmd + part2;
+    OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
 }
 
-rtl::OUString CustomToolBarImportHelper::MSOCommandToOOCommand( sal_Int16 msoCmd )
+OUString CustomToolBarImportHelper::MSOCommandToOOCommand( sal_Int16 msoCmd )
 {
-    rtl::OUString result;
+    OUString result;
     if ( pMSOCmdConvertor.get() )
         result = pMSOCmdConvertor->MSOCommandToOOCommand( msoCmd );
     return result;
 }
 
-rtl::OUString CustomToolBarImportHelper::MSOTCIDToOOCommand( sal_Int16 msoTCID )
+OUString CustomToolBarImportHelper::MSOTCIDToOOCommand( sal_Int16 msoTCID )
 {
-    rtl::OUString result;
+    OUString result;
     if ( pMSOCmdConvertor.get() )
         result = pMSOCmdConvertor->MSOTCIDToOOCommand( msoTCID );
     return result;
 }
 
 bool
-CustomToolBarImportHelper::createMenu( const rtl::OUString& rName, const uno::Reference< container::XIndexAccess >& xMenuDesc, bool bPersist )
+CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Reference< container::XIndexAccess >& xMenuDesc, bool bPersist )
 {
     bool bRes = true;
     try
     {
         uno::Reference< ui::XUIConfigurationManager > xCfgManager( getCfgManager() );
-        rtl::OUString sMenuBar("private:resource/menubar/");
+        OUString sMenuBar("private:resource/menubar/");
         sMenuBar += rName;
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
-        xProps->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( rName ) );
+        xProps->setPropertyValue( OUString("UIName"), uno::makeAny( rName ) );
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
-            aPopupMenu[0].Name = rtl::OUString("CommandURL");
-            aPopupMenu[0].Value = uno::makeAny( rtl::OUString("vnd.openoffice.org:") + rName );
-            aPopupMenu[1].Name = rtl::OUString("Label");
+            aPopupMenu[0].Name = OUString("CommandURL");
+            aPopupMenu[0].Value = uno::makeAny( OUString("vnd.openoffice.org:") + rName );
+            aPopupMenu[1].Name = OUString("Label");
             aPopupMenu[1].Value <<= rName;
-            aPopupMenu[2].Name = rtl::OUString("ItemDescriptorContainer");
+            aPopupMenu[2].Name = OUString("ItemDescriptorContainer");
             aPopupMenu[2].Value = uno::makeAny( xMenuDesc );
-            aPopupMenu[3].Name = rtl::OUString("Type" );
+            aPopupMenu[3].Name = OUString("Type" );
             aPopupMenu[3].Value <<= sal_Int32( 0 );
 
             xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
@@ -297,7 +297,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     bBeginGroup = rHeader.isBeginGroup();
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
-    aProp.Name = rtl::OUString("Visible") ;
+    aProp.Name = OUString("Visible") ;
     aProp.Value = uno::makeAny( rHeader.isVisible() ); // where is the visible attribute stored
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
@@ -307,7 +307,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
         if ( pSpecificInfo )
         {
             // if we have a icon then lets  set it for the command
-            rtl::OUString sCommand;
+            OUString sCommand;
             for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it )
             {
                 if ( it->Name == "CommandURL" )
@@ -332,10 +332,10 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             else if ( pSpecificInfo->getBtnFace() )
             {
 
-                rtl::OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
+                OUString sBuiltInCmd = helper.MSOTCIDToOOCommand(  *pSpecificInfo->getBtnFace() );
                 if ( !sBuiltInCmd.isEmpty() )
                 {
-                    uno::Sequence< rtl::OUString> sCmds(1);
+                    uno::Sequence< OUString> sCmds(1);
                     sCmds[ 0 ] = sBuiltInCmd;
                     uno::Reference< ui::XImageManager > xImageManager( helper.getAppCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
                     // 0 = default image size
@@ -348,8 +348,8 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     else if ( rHeader.getTct() == 0x0a )
     {
-        aProp.Name = rtl::OUString("CommandURL") ;
-        rtl::OUString sMenuBar("private:resource/menubar/");
+        aProp.Name = OUString("CommandURL") ;
+        OUString sMenuBar("private:resource/menubar/");
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
@@ -359,7 +359,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
 
     short icontext =  ( rHeader.getTbct() & 0x03 );
-    aProp.Name = rtl::OUString("Style") ;
+    aProp.Name = OUString("Style") ;
     if ( bIsMenuBar )
     {
         nStyle |= ui::ItemStyle::TEXT;
@@ -431,20 +431,20 @@ TBCExtraInfo::Print( FILE* fp )
     Indent a;
     indent_printf( fp, "[ 0x%x ] TBCExtraInfo -- dump\n", nOffSet );
     indent_printf( fp, "  wstrHelpFile %s\n",
-        rtl::OUStringToOString( wstrHelpFile.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( wstrHelpFile.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  idHelpContext 0x%x\n", static_cast< unsigned int >( idHelpContext ) );
     indent_printf( fp, "  wstrTag %s\n",
-        rtl::OUStringToOString( wstrTag.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( wstrTag.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  wstrOnAction %s\n",
-        rtl::OUStringToOString( wstrOnAction.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( wstrOnAction.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  wstrParam %s\n",
-        rtl::OUStringToOString( wstrParam.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( wstrParam.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  tbcu 0x%x\n", tbcu );
     indent_printf( fp, "  tbmg 0x%x\n", tbmg );
 
 }
 
-rtl::OUString
+OUString
 TBCExtraInfo::getOnAction()
 {
     return wstrOnAction.getString();
@@ -476,11 +476,11 @@ TBCGeneralInfo::Print( FILE* fp )
     indent_printf( fp, "[ 0x%x ] TBCGeneralInfo -- dump\n", nOffSet );
     indent_printf( fp, "  bFlags 0x%x\n", bFlags );
     indent_printf( fp, "  customText %s\n",
-        rtl::OUStringToOString( customText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( customText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  description %s\n",
-        rtl::OUStringToOString( descriptionText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( descriptionText.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf( fp, "  tooltip %s\n",
-        rtl::OUStringToOString( tooltip.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( tooltip.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     if ( bFlags & 0x4 )
         extraInfo.Print( fp );
 }
@@ -495,24 +495,24 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
         if ( !extraInfo.getOnAction().isEmpty() )
         {
-            aProp.Name = rtl::OUString("CommandURL");
+            aProp.Name = OUString("CommandURL");
             ooo::vba::MacroResolvedInfo aMacroInf = ooo::vba::resolveVBAMacro( &helper.GetDocShell(), extraInfo.getOnAction(), true );
             if ( aMacroInf.mbFound )
                 aProp.Value = helper.createCommandFromMacro( aMacroInf.msResolvedMacro );
             else
-                aProp.Value <<= rtl::OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( rtl::OUString( "]" ) );
+                aProp.Value <<= OUString( "UnResolvedMacro[" ).concat( extraInfo.getOnAction() ).concat( OUString( "]" ) );
             sControlData.push_back( aProp );
         }
 
-        aProp.Name = rtl::OUString("Label");
+        aProp.Name = OUString("Label");
         aProp.Value = uno::makeAny( customText.getString().replace('&','~') );
         sControlData.push_back( aProp );
 
-        aProp.Name = rtl::OUString("Type");
+        aProp.Name = OUString("Type");
         aProp.Value = uno::makeAny( ui::ItemType::DEFAULT );
         sControlData.push_back( aProp );
 
-        aProp.Name = rtl::OUString("Tooltip");
+        aProp.Name = OUString("Tooltip");
         aProp.Value = uno::makeAny( tooltip.getString() );
         sControlData.push_back( aProp );
 /*
@@ -554,13 +554,13 @@ TBCMenuSpecific::Print( FILE* fp )
     indent_printf( fp, "[ 0x%x ] TBCMenuSpecific -- dump\n", nOffSet );
     indent_printf( fp, "  tbid 0x%x\n", static_cast< unsigned int >( tbid ) );
     if ( tbid == 1 )
-        indent_printf( fp, "  name %s\n", rtl::OUStringToOString( name->getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        indent_printf( fp, "  name %s\n", OUStringToOString( name->getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 
 }
 
-rtl::OUString TBCMenuSpecific::Name()
+OUString TBCMenuSpecific::Name()
 {
-    rtl::OUString aName;
+    OUString aName;
     if ( name.get() )
         aName = name->getString();
     return aName;
@@ -627,7 +627,7 @@ void TBCBSpecific::Print( FILE* fp )
         indent_printf( fp, "  iBtnFace 0x%x\n", *(iBtnFace.get()) );
     }
     bResult = ( wstrAcc.get() != NULL );
-    indent_printf( fp, "  option string present? %s ->%s<-\n", bResult ? "true" : "false", bResult ? rtl::OUStringToOString( wstrAcc->getString(), RTL_TEXTENCODING_UTF8 ).getStr() : "N/A" );
+    indent_printf( fp, "  option string present? %s ->%s<-\n", bResult ? "true" : "false", bResult ? OUStringToOString( wstrAcc->getString(), RTL_TEXTENCODING_UTF8 ).getStr() : "N/A" );
 }
 
 TBCBitMap*
@@ -704,13 +704,13 @@ void TBCCDData::Print( FILE* fp)
     for ( sal_Int32 index=0; index < cwstrItems; ++index )
     {
         Indent b;
-        indent_printf(fp, "  wstrList[%d] %s", static_cast< int >( index ), rtl::OUStringToOString( wstrList[index].getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+        indent_printf(fp, "  wstrList[%d] %s", static_cast< int >( index ), OUStringToOString( wstrList[index].getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     }
     indent_printf(fp,"  cwstrMRU num most recently used string 0x%d item\n", cwstrMRU);
     indent_printf(fp,"  iSel index of selected item 0x%d item\n", iSel);
     indent_printf(fp,"  cLines num of suggested lines to display 0x%d", cLines);
     indent_printf(fp,"  dxWidth width in pixels 0x%d", dxWidth);
-    indent_printf(fp,"  wstrEdit %s", rtl::OUStringToOString( wstrEdit.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    indent_printf(fp,"  wstrEdit %s", OUStringToOString( wstrEdit.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 TBCBitMap::TBCBitMap() : cbDIB( 0 )
@@ -780,7 +780,7 @@ void TB::Print( FILE* fp )
     indent_printf(fp,"  ltbtr 0x%x\n", ltbtr );
     indent_printf(fp,"  cRowsDefault 0x%x\n", cRowsDefault );
     indent_printf(fp,"  bFlags 0x%x\n", bFlags );
-    indent_printf(fp, "  name %s\n", rtl::OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    indent_printf(fp, "  name %s\n", OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
 TBVisualData::TBVisualData() : tbds(0), tbv(0), tbdsDock(0), iRow(0)

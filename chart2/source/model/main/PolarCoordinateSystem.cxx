@@ -26,7 +26,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 namespace
 {
@@ -58,13 +57,13 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 {}
 
 // ____ XCoordinateSystem ____
-::rtl::OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
+OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
     throw (RuntimeException)
 {
     return CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
 }
 
-::rtl::OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
+OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
     throw (RuntimeException)
 {
     return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;

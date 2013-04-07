@@ -29,7 +29,7 @@ namespace connectivity
     namespace hsqldb
     {
 
-        ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
+        OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
         class OHSQLTable;
         typedef ::comphelper::OIdPropertyArrayUsageHelper< OHSQLTable > OHSQLTable_PROP;
@@ -42,7 +42,7 @@ namespace connectivity
                 @param  _rStatement
                     The statement to execute.
                 */
-            void executeStatement(const ::rtl::OUString& _rStatement );
+            void executeStatement(const OUString& _rStatement );
         protected:
 
             /** creates the column collection for the table
@@ -80,11 +80,11 @@ namespace connectivity
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
             OHSQLTable( sdbcx::OCollection* _pTables,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                            const ::rtl::OUString& _Name,
-                            const ::rtl::OUString& _Type,
-                            const ::rtl::OUString& _Description = ::rtl::OUString(),
-                            const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
-                            const ::rtl::OUString& _CatalogName = ::rtl::OUString(),
+                            const OUString& _Name,
+                            const OUString& _Type,
+                            const OUString& _Description = OUString(),
+                            const OUString& _SchemaName = OUString(),
+                            const OUString& _CatalogName = OUString(),
                             sal_Int32 _nPrivileges = 0
                 );
 
@@ -98,20 +98,20 @@ namespace connectivity
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
 
             // XRename
-            virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
             /**
                 returns the ALTER TABLE XXX COLUMN statement
             */
-            ::rtl::OUString getAlterTableColumnPart();
+            OUString getAlterTableColumnPart();
 
             // some methods to alter table structures
-            void alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
-            void alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
-            void dropDefaultValue(const ::rtl::OUString& _sNewDefault);
+            void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
+            void alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName);
+            void dropDefaultValue(const OUString& _sNewDefault);
 
         };
     }

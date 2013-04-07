@@ -38,7 +38,7 @@ namespace connectivity
                 @param  _rNames
                     The container for the names to be filled.
             */
-            void refreshObjects(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames);
+            void refreshObjects(const ::com::sun::star::uno::Sequence< OUString >& _sKindOfObject,TStringVector& _rNames);
 
         public:
             // implementation of the pure virtual methods

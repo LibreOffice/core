@@ -91,12 +91,12 @@ namespace
         if ( _rModule )
         {
             //
-            const ::rtl::OUString sSymbolName = ::rtl::OUString::createFromAscii( _pAsciiSymbolName );
+            const OUString sSymbolName = OUString::createFromAscii( _pAsciiSymbolName );
             _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
             {   // did not find the symbol
-                rtl::OStringBuffer aBuf;
+                OStringBuffer aBuf;
                 aBuf.append( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " );
                 aBuf.append( _pAsciiSymbolName );
                 OSL_FAIL( aBuf.makeStringAndClear().getStr() );
@@ -119,7 +119,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const ::rtl::OUString sModuleName( SAL_MODULENAME( "kabdrv1"  ));
+    const OUString sModuleName( SAL_MODULENAME( "kabdrv1"  ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -184,17 +184,17 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
             com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
         Sequence< Any > aCreationArgs(1);
         aCreationArgs[0] <<= PropertyValue(
-                                ::rtl::OUString(  "nodepath"  ),
+                                OUString(  "nodepath"  ),
                                 0,
                                 makeAny( KabDriver::impl_getConfigurationSettingsPath() ),
                                 PropertyState_DIRECT_VALUE );
         Reference< XPropertySet > xSettings( xConfigProvider->createInstanceWithArguments(
-                ::rtl::OUString(  "com.sun.star.configuration.ConfigurationAccess"  ),
+                OUString(  "com.sun.star.configuration.ConfigurationAccess"  ),
                 aCreationArgs ),
             UNO_QUERY_THROW );
 
         sal_Bool bDisableCheck = sal_False;
-        xSettings->getPropertyValue( ::rtl::OUString(  "DisableKDEMaximumVersionCheck"  ) ) >>= bDisableCheck;
+        xSettings->getPropertyValue( OUString(  "DisableKDEMaximumVersionCheck"  ) ) >>= bDisableCheck;
 
         return bDisableCheck != sal_False;
     }
@@ -209,7 +209,7 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
 void KabImplModule::impl_throwNoKdeException()
 {
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceString(
+    const OUString sError( aResources.getResourceString(
             STR_NO_KDE_INST
          ) );
     impl_throwGenericSQLException( sError );
@@ -219,20 +219,20 @@ void KabImplModule::impl_throwNoKdeException()
 void KabImplModule::impl_throwKdeTooOldException()
 {
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(
+    const OUString sError( aResources.getResourceStringWithSubstitution(
             STR_KDE_VERSION_TOO_OLD,
-            "$major$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
-            "$minor$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+            "$major$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
          ) );
     impl_throwGenericSQLException( sError );
 }
 
 // --------------------------------------------------------------------------------
-void KabImplModule::impl_throwGenericSQLException( const ::rtl::OUString& _rMessage )
+void KabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
 {
     SQLException aError;
     aError.Message = _rMessage;
-    aError.SQLState = ::rtl::OUString(  "S1000"  );
+    aError.SQLState = OUString(  "S1000"  );
     aError.ErrorCode = 0;
     throw aError;
 }
@@ -245,14 +245,14 @@ void KabImplModule::impl_throwKdeTooNewException()
     SQLException aError;
     aError.Message = aResources.getResourceStringWithSubstitution(
             STR_KDE_VERSION_TOO_NEW,
-            "$major$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
-            "$minor$",::rtl::OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
+            "$major$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MAJOR),
+            "$minor$",OUString::valueOf((sal_Int32)MIN_KDE_VERSION_MINOR)
          );
-    aError.SQLState = ::rtl::OUString(  "S1000"  );
+    aError.SQLState = OUString(  "S1000"  );
     aError.ErrorCode = 0;
 
     SQLContext aDetails;
-    ::rtl::OUStringBuffer aMessage;
+    OUStringBuffer aMessage;
     aMessage.append( aResources.getResourceString(STR_KDE_VERSION_TOO_NEW_WORK_AROUND) );
 
     aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
@@ -340,43 +340,43 @@ void KabDriver::disposing()
 }
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii( impl_getAsciiImplementationName() );
+    return OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
+    Sequence< OUString > aSNS( 1 );
+    aSNS[0] = OUString("com.sun.star.sdbc.Driver");
 
     return aSNS;
 }
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL KabDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL KabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
 //------------------------------------------------------------------
-sal_Bool SAL_CALL KabDriver::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL KabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
 
     while (pSupported != pEnd && !pSupported->equals(_rServiceName))
         ++pSupported;
     return pSupported != pEnd;
 }
 //------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL KabDriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL KabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -399,7 +399,7 @@ Reference< XConnection > SAL_CALL KabDriver::connect( const ::rtl::OUString& url
     return xConnection;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -411,7 +411,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const ::rtl::OUString& url )
     return url.startsWith("sdbc:address:kab:");
 }
 // --------------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const ::rtl::OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
@@ -449,9 +449,9 @@ const sal_Char* KabDriver::impl_getAsciiImplementationName()
         // Please be careful when changing it.
 }
 // --------------------------------------------------------------------------------
-::rtl::OUString KabDriver::impl_getConfigurationSettingsPath()
+OUString KabDriver::impl_getConfigurationSettingsPath()
 {
-    ::rtl::OUStringBuffer aPath;
+    OUStringBuffer aPath;
     aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
     aPath.appendAscii( "com.sun.star.comp.sdbc.kab.Driver" );
     return aPath.makeStringAndClear();

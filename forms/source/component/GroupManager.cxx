@@ -153,7 +153,7 @@ public:
 
 DBG_NAME(OGroup)
 //------------------------------------------------------------------
-OGroup::OGroup( const ::rtl::OUString& rGroupName )
+OGroup::OGroup( const OUString& rGroupName )
         :m_aGroupName( rGroupName )
         ,m_nInsertPos(0)
 {
@@ -257,7 +257,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( ::rtl::OUString("AllComponentGroup") ) )
+    :m_pCompGroup( new OGroup( OUString("AllComponentGroup") ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);
@@ -293,7 +293,7 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
     }
 }
 // -----------------------------------------------------------------------------
-void OGroupManager::removeFromGroupMap(const ::rtl::OUString& _sGroupName,const Reference<XPropertySet>& _xSet)
+void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Reference<XPropertySet>& _xSet)
 {
     // Component aus CompGroup entfernen
     m_pCompGroup->RemoveComponent( _xSet );
@@ -338,7 +338,7 @@ void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt) thro
     Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName;
+    OUString     sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xSet ))
         xSet->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
     if (evt.PropertyName == PROPERTY_NAME) {
@@ -410,7 +410,7 @@ sal_Int32 OGroupManager::getGroupCount()
 }
 
 //------------------------------------------------------------------
-void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
+void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, OUString& _rName)
 {
     OSL_ENSURE(nGroup >= 0 && (size_t)nGroup < m_aActiveGroupMap.size(),"OGroupManager::getGroup: Invalid group index!");
     OGroupArr::iterator aGroupPos   = m_aActiveGroupMap[nGroup];
@@ -419,7 +419,7 @@ void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel
 }
 
 //------------------------------------------------------------------
-void OGroupManager::getGroupByName(const ::rtl::OUString& _rName, Sequence< Reference<XControlModel>  >& _rGroup)
+void OGroupManager::getGroupByName(const OUString& _rName, Sequence< Reference<XControlModel>  >& _rGroup)
 {
     OGroupArr::iterator aFind = m_aGroupArr.find(_rName);
     if ( aFind != m_aGroupArr.end() )
@@ -438,7 +438,7 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
     m_pCompGroup->InsertComponent( xSet );
 
     // Component in Gruppe aufnehmen
-    ::rtl::OUString sGroupName( GetGroupName( xSet ) );
+    OUString sGroupName( GetGroupName( xSet ) );
 
     OGroupArr::iterator aFind = m_aGroupArr.find(sGroupName);
 
@@ -494,16 +494,16 @@ void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
         return;
 
     // Component aus Gruppe entfernen
-    ::rtl::OUString     sGroupName( GetGroupName( xSet ) );
+    OUString     sGroupName( GetGroupName( xSet ) );
 
     removeFromGroupMap(sGroupName,xSet);
 }
 
-::rtl::OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent )
+OUString OGroupManager::GetGroupName( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xComponent )
 {
     if (!xComponent.is())
-        return ::rtl::OUString();
-    ::rtl::OUString sGroupName;
+        return OUString();
+    OUString sGroupName;
     if (hasProperty( PROPERTY_GROUP_NAME, xComponent )) {
         xComponent->getPropertyValue( PROPERTY_GROUP_NAME ) >>= sGroupName;
         if (sGroupName.isEmpty())

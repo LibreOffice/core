@@ -93,7 +93,7 @@ public:
     void removeElementCollector(const ElementCollector* pElementCollector);
     ElementMark* getBlocker() const;
     void setBlocker(const ElementMark* pBlocker);
-    rtl::OUString printChildren() const;
+    OUString printChildren() const;
     bool hasAnything() const;
     bool hasChildren() const;
     std::vector< const BufferNode* >* getChildren() const;

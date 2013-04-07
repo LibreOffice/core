@@ -35,12 +35,12 @@ public:
     TableStyleList();
     ~TableStyleList();
 
-    rtl::OUString&              getDefaultStyleId() { return maDefaultStyleId; };
+    OUString&              getDefaultStyleId() { return maDefaultStyleId; };
     std::vector< TableStyle >&  getTableStyles(){ return maTableStyles; };
 
 private:
 
-    rtl::OUString               maDefaultStyleId;
+    OUString               maDefaultStyleId;
     std::vector< TableStyle >   maTableStyles;
 
 };

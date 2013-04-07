@@ -41,7 +41,7 @@ namespace dbaccess
     {
     private:
         typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;
-        typedef ::std::map< ::rtl::OUString, TPropertyForward >     PropertyForwardList;
+        typedef ::std::map< OUString, TPropertyForward >     PropertyForwardList;
         PropertyForwardList                                                             m_aForwardList;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xSettings;    // can not be weak
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >     m_xContainer;   // can not be weak
@@ -62,7 +62,7 @@ namespace dbaccess
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-        void notifyElementCreated(const ::rtl::OUString& _sElementName
+        void notifyElementCreated(const OUString& _sElementName
                                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xElement);
 
     private:
@@ -74,7 +74,7 @@ namespace dbaccess
         /** initializes the properties of the given object from its counterpart in our settings container
         */
         void    impl_initSettings_nothrow(
-                    const ::rtl::OUString& _rName,
+                    const OUString& _rName,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDestination
                 );
     };

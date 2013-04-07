@@ -31,7 +31,6 @@
 
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
 
 struct SdXMLDataStyleNumber
 {
@@ -500,26 +499,26 @@ public:
 
     SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
         SvXMLImportContext* pSlaveContext );
     virtual ~SdXMLNumberFormatMemberImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 };
 
 TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
 
-SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SdXMLNumberFormatImportContext* pParent, SvXMLImportContext* pSlaveContext )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpParent( pParent ),
     maNumberStyle( rLocalName ),
@@ -561,7 +560,7 @@ SdXMLNumberFormatMemberImportContext::~SdXMLNumberFormatMemberImportContext()
 }
 
 SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( sal_uInt16 nPrefix,
-                           const ::rtl::OUString& rLocalName,
+                           const OUString& rLocalName,
                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     return mpSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
@@ -580,7 +579,7 @@ void SdXMLNumberFormatMemberImportContext::EndElement()
         mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
 }
 
-void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rChars )
+void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
 {
     mpSlaveContext->Characters( rChars );
     maText += rChars;
@@ -589,7 +588,7 @@ void SdXMLNumberFormatMemberImportContext::Characters( const ::rtl::OUString& rC
 TYPEINIT1( SdXMLNumberFormatImportContext, SvXMLImportContext );
 
 
-SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
+SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName, SvXMLNumImpData* pNewData, sal_uInt16 nNewType, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList, SvXMLStylesContext& rStyles)
 :   SvXMLNumFormatContext(rImport, nPrfx, rLocalName, pNewData, nNewType, xAttrList, rStyles),
     mbAutomatic( sal_False ),
     mnIndex(0),
@@ -723,7 +722,7 @@ void SdXMLNumberFormatImportContext::EndElement()
     }
 }
 
-SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
     return new SdXMLNumberFormatMemberImportContext( GetImport(), nPrefix, rLocalName, xAttrList, this, SvXMLNumFormatContext::CreateChildContext( nPrefix, rLocalName, xAttrList ) );
 }

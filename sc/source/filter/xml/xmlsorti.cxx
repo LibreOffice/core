@@ -39,7 +39,7 @@ using namespace xmloff::token;
 
 ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
@@ -58,11 +58,11 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetSortAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -105,7 +105,7 @@ ScXMLSortContext::~ScXMLSortContext()
 }
 
 SvXMLImportContext *ScXMLSortContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -139,37 +139,37 @@ void ScXMLSortContext::EndElement()
     if (nAlgoLength)
         ++i;
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
-    aSortDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT));
+    aSortDescriptor[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT));
     aSortDescriptor[0].Value = ::cppu::bool2any(bBindFormatsToContent);
-    aSortDescriptor[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT));
+    aSortDescriptor[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT));
     aSortDescriptor[1].Value = ::cppu::bool2any(bCopyOutputData);
-    aSortDescriptor[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE));
+    aSortDescriptor[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE));
     aSortDescriptor[2].Value = ::cppu::bool2any(bIsCaseSensitive);
-    aSortDescriptor[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST));
+    aSortDescriptor[3].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST));
     aSortDescriptor[3].Value = ::cppu::bool2any(bEnabledUserList);
-    aSortDescriptor[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS));
+    aSortDescriptor[4].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS));
     aSortDescriptor[4].Value <<= aOutputPosition;
-    aSortDescriptor[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX));
+    aSortDescriptor[5].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX));
     aSortDescriptor[5].Value <<= nUserListIndex;
-    aSortDescriptor[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD));
+    aSortDescriptor[6].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD));
     aSortDescriptor[6].Value <<= aSortFields;
     if (nLangLength || nCountryLength)
     {
         lang::Locale aLocale;
         aLocale.Language = sLanguage;
         aLocale.Country = sCountry;
-        aSortDescriptor[7].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLLOC));
+        aSortDescriptor[7].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLLOC));
         aSortDescriptor[7].Value <<= aLocale;
     }
     if (nAlgoLength)
     {
-        aSortDescriptor[6 + i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLALG));
+        aSortDescriptor[6 + i].Name = OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COLLALG));
         aSortDescriptor[6 + i].Value <<= sAlgorithm;
     }
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
 
-void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl::OUString& sDataType, const rtl::OUString& sOrder)
+void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString& sDataType, const OUString& sOrder)
 {
     util::SortField aSortField;
     aSortField.Field = sFieldNumber.toInt32();
@@ -179,7 +179,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
         aSortField.SortAscending = false;
     if (sDataType.getLength() > 8)
     {
-        rtl::OUString sTemp = sDataType.copy(0, 8);
+        OUString sTemp = sDataType.copy(0, 8);
         if (sTemp.compareToAscii(SC_USERLIST) == 0)
         {
             bEnabledUserList = true;
@@ -205,7 +205,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
 
 ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLSortContext* pTempSortContext) :
@@ -218,11 +218,11 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetSortSortByAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -250,7 +250,7 @@ ScXMLSortByContext::~ScXMLSortByContext()
 }
 
 SvXMLImportContext *ScXMLSortByContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {

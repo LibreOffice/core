@@ -119,7 +119,7 @@ void SvxFontSizeBox_Impl::Select()
         float fSelVal     = float( nSelVal ) / 10;
 
         uno::Sequence< beans::PropertyValue > aArgs( 1 );
-        aArgs[0].Name  = ::rtl::OUString( "FontHeight.Height" );
+        aArgs[0].Name  = OUString( "FontHeight.Height" );
         aArgs[0].Value = uno::makeAny( fSelVal );
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
@@ -242,10 +242,10 @@ FontHeightToolBoxControl::FontHeightToolBoxControl(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager ) :
     svt::ToolboxController( rServiceManager,
                             uno::Reference< frame::XFrame >(),
-                            ::rtl::OUString( ".uno:FontHeight" ) ),
+                            OUString( ".uno:FontHeight" ) ),
     m_pBox( NULL )
 {
-    addStatusListener( ::rtl::OUString( ".uno:CharFontName" ));
+    addStatusListener( OUString( ".uno:CharFontName" ));
 }
 
 FontHeightToolBoxControl::~FontHeightToolBoxControl()
@@ -274,11 +274,11 @@ void SAL_CALL FontHeightToolBoxControl::release() throw ()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& ServiceName )
 throw(uno::RuntimeException)
 {
-    const uno::Sequence< ::rtl::OUString > aSNL( getSupportedServiceNames() );
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    const uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
+    const OUString * pArray = aSNL.getConstArray();
 
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
@@ -287,23 +287,23 @@ throw(uno::RuntimeException)
     return false;
 }
 
-::rtl::OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
+OUString SAL_CALL FontHeightToolBoxControl::getImplementationName()
 throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
+uno::Sequence< OUString > SAL_CALL FontHeightToolBoxControl::getSupportedServiceNames(  )
 throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< ::rtl::OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static()
+uno::Sequence< OUString > FontHeightToolBoxControl::getSupportedServiceNames_Static()
 throw()
 {
-    uno::Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString( "com.sun.star.frame.ToolbarController" );
+    uno::Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( "com.sun.star.frame.ToolbarController" );
     return aSNS;
 }
 
@@ -402,9 +402,9 @@ void FontHeightToolBoxControl::dispatchCommand(
         uno::Reference< frame::XDispatch >      xDispatch;
         uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
 
-        aURL.Complete = ::rtl::OUString( ".uno:FontHeight" );
+        aURL.Complete = OUString( ".uno:FontHeight" );
         xURLTransformer->parseStrict( aURL );
-        xDispatch = xDispatchProvider->queryDispatch( aURL, ::rtl::OUString(), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
         if ( xDispatch.is() )
             xDispatch->dispatch( aURL, rArgs );
     }

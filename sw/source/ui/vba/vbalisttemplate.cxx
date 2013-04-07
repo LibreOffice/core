@@ -45,23 +45,23 @@ SwVbaListTemplate::ListLevels( const uno::Any& index ) throw (uno::RuntimeExcept
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexReplace > xNumberingRules = pListHelper->getNumberingRules();
-    xProps->setPropertyValue( rtl::OUString("NumberingRules") , uno::makeAny( xNumberingRules ) );
+    xProps->setPropertyValue( OUString("NumberingRules") , uno::makeAny( xNumberingRules ) );
 }
 
-rtl::OUString
+OUString
 SwVbaListTemplate::getServiceImplName()
 {
-    return rtl::OUString("SwVbaListTemplate");
+    return OUString("SwVbaListTemplate");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaListTemplate::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.ListTemplate" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.ListTemplate" );
     }
     return aServiceNames;
 }

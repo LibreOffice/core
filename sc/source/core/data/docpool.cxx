@@ -186,7 +186,7 @@ static SfxItemInfo const  aItemInfos[] =
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
 
-    :   SfxItemPool ( rtl::OUString("ScDocumentPool"),
+    :   SfxItemPool ( OUString("ScDocumentPool"),
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
                         aItemInfos, NULL, bLoadRefCounts ),
         pSecondary  ( pSecPool )
@@ -282,7 +282,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_SHADOW          - ATTR_STARTINDEX ] = new SvxShadowItem( ATTR_SHADOW );
     ppPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
     ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
-    ppPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, rtl::OUString() ) ;
+    ppPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, OUString() ) ;
 
     //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
     //! zusaetzliche Methode ScGlobal::IsInit() oder so...
@@ -291,7 +291,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
     else
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet,
-            rtl::OUString(STRING_STANDARD) ); //! without name?
+            OUString(STRING_STANDARD) ); //! without name?
 
     ppPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     ppPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );

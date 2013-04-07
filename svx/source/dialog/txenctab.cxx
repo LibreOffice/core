@@ -39,14 +39,14 @@ SvxTextEncodingTable::~SvxTextEncodingTable()
 
 //------------------------------------------------------------------------
 
-const rtl::OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
+const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
 {
     sal_uInt32 nPos = FindIndex( (long)nEnc );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
 
-    return rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------------------------

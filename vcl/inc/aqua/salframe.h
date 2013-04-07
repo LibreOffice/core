@@ -107,9 +107,9 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
     virtual sal_Bool                PostEvent( void* pData );
-    virtual void                SetTitle( const rtl::OUString& rTitle );
+    virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
-    virtual void                SetRepresentedURL( const rtl::OUString& );
+    virtual void                SetRepresentedURL( const OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
     virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
@@ -134,7 +134,7 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -147,7 +147,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetExtendedFrameStyle( SalExtStyle );
     virtual void                SetScreenNumber(unsigned int);
-    virtual void                SetApplicationID( const rtl::OUString &rApplicationID );
+    virtual void                SetApplicationID( const OUString &rApplicationID );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

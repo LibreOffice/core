@@ -809,7 +809,7 @@ void SwHTMLParser::InsertBodyOptions()
     {
         const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        rtl::OUString aEvent;
+        OUString aEvent;
         sal_Bool bSetEvent = sal_False;
 
         switch( rOption.GetToken() )

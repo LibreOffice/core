@@ -27,7 +27,7 @@
 
 using namespace ::rtl;
 
-AstInterface::AstInterface(const ::rtl::OString& name,
+AstInterface::AstInterface(const OString& name,
                            AstInterface const * pInherits,
                            AstScope* pScope)
     : AstType(NT_interface, name, pScope)
@@ -39,7 +39,7 @@ AstInterface::AstInterface(const ::rtl::OString& name,
     , m_bSingleInheritance(pInherits != 0)
 {
     if (pInherits != 0) {
-        addInheritedInterface(pInherits, false, rtl::OUString());
+        addInheritedInterface(pInherits, false, OUString());
     }
 }
 
@@ -51,14 +51,14 @@ AstInterface::DoubleDeclarations AstInterface::checkInheritedInterfaceClashes(
     AstInterface const * ifc, bool optional) const
 {
     DoubleDeclarations doubleDecls;
-    std::set< rtl::OString > seen;
+    std::set< OString > seen;
     checkInheritedInterfaceClashes(
         doubleDecls, seen, ifc, true, optional, optional);
     return doubleDecls;
 }
 
 void AstInterface::addInheritedInterface(
-    AstType const * ifc, bool optional, rtl::OUString const & documentation)
+    AstType const * ifc, bool optional, OUString const & documentation)
 {
     m_inheritedInterfaces.push_back(
         InheritedInterface(ifc, optional, documentation));
@@ -258,7 +258,7 @@ sal_Bool AstInterface::dump(RegistryKey& rKey)
 
 void AstInterface::checkInheritedInterfaceClashes(
     DoubleDeclarations & doubleDeclarations,
-    std::set< rtl::OString > & seenInterfaces, AstInterface const * ifc,
+    std::set< OString > & seenInterfaces, AstInterface const * ifc,
     bool direct, bool optional, bool mainOptional) const
 {
     if (direct || optional

@@ -79,10 +79,10 @@ const sal_uInt16 FONT_PAGE_ID = 99;
 
 struct CustomProperty
 {
-    ::rtl::OUString             m_sName;
+    OUString             m_sName;
     com::sun::star::uno::Any    m_aValue;
 
-    CustomProperty( const ::rtl::OUString& sName,
+    CustomProperty( const OUString& sName,
             const com::sun::star::uno::Any& rValue ) :
         m_sName( sName ), m_aValue( rValue ) {}
 
@@ -117,7 +117,7 @@ namespace {
 
 String CreateSizeText( sal_Int64 nSize )
 {
-    String aUnitStr = rtl::OUString(' ');
+    String aUnitStr = OUString(' ');
     aUnitStr += SfxResId(STR_BYTES).toString();
     sal_Int64 nSize1 = nSize;
     sal_Int64 nSize2 = nSize1;
@@ -179,7 +179,7 @@ String ConvertDateTime_Impl( const String& rName,
      String aStr( rWrapper.getDate( aD ) );
      aStr += pDelim;
      aStr += rWrapper.getTime( aT, sal_True, sal_False );
-     rtl::OUString aAuthor = comphelper::string::stripStart(rName, ' ');
+     OUString aAuthor = comphelper::string::stripStart(rName, ' ');
      if (!aAuthor.isEmpty())
      {
         aStr += pDelim;
@@ -347,15 +347,15 @@ int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 }
 
 //------------------------------------------------------------------------
-void SfxDocumentInfoItem::resetUserData(const ::rtl::OUString & i_rAuthor)
+void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
     DateTime now( DateTime::SYSTEM );
     setCreationDate( util::DateTime(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
         now.GetDay(), now.GetMonth(), now.GetYear() ) );
-    setModifiedBy(::rtl::OUString());
-    setPrintedBy(::rtl::OUString());
+    setModifiedBy(OUString());
+    setPrintedBy(OUString());
     setModificationDate(util::DateTime());
     setPrintDate(util::DateTime());
     setEditingDuration(0);
@@ -372,7 +372,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
         i_xDocProps->setAutoloadURL(getAutoloadURL());
     } else {
         i_xDocProps->setAutoloadSecs(0);
-        i_xDocProps->setAutoloadURL(::rtl::OUString());
+        i_xDocProps->setAutoloadURL(OUString());
     }
     i_xDocProps->setDefaultTarget(getDefaultTarget());
     i_xDocProps->setAuthor(getAuthor());
@@ -475,7 +475,7 @@ void SfxDocumentInfoItem::ClearCustomProperties()
     m_aCustomProperties.clear();
 }
 
-void SfxDocumentInfoItem::AddCustomProperty( const ::rtl::OUString& sName, const Any& rValue )
+void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& rValue )
 {
     CustomProperty* pProp = new CustomProperty( sName, rValue );
     m_aCustomProperties.push_back( pProp );
@@ -534,7 +534,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
      }
 
     if ( bIsString )
-        rVal <<= ::rtl::OUString( aValue );
+        rVal <<= OUString( aValue );
     else if ( bIsInt )
         rVal <<= nValue;
     else
@@ -544,7 +544,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 
 bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     sal_Int32 nValue=0;
     sal_Bool bValue = sal_False;
     bool bRet = false;
@@ -784,7 +784,7 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
     // on the main list enable/disable the pushbutton accordingly
     SvtCommandOptions aCmdOptions;
     if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
-                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( DOCUMENT_SIGNATURE_MENU_CMD ) ) ) )
+                             OUString( RTL_CONSTASCII_USTRINGPARAM( DOCUMENT_SIGNATURE_MENU_CMD ) ) ) )
         m_pSignatureBtn->Disable();
 }
 
@@ -806,7 +806,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     m_pPrintValFt->SetText( aEmpty );
     const Time aTime( 0 );
     m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
-    m_pDocNoValFt->SetText(rtl::OUString('1'));
+    m_pDocNoValFt->SetText(OUString('1'));
     bHandleDelete = sal_True;
     return 0;
 }
@@ -838,7 +838,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
         if (!pFilter)
             break;
 
-        rtl::OUString aDocName;
+        OUString aDocName;
         sfx2::RequestPassword(pFilter, aDocName, pMedSet);
         pShell->SetModified(true);
     }
@@ -865,7 +865,7 @@ void SfxDocumentPage::ImplUpdateSignatures()
                 s = m_aMultiSignedStr;
             else if ( aInfos.getLength() == 1 )
             {
-                rtl::OUString aCN_Id("CN");
+                OUString aCN_Id("CN");
                 const security::DocumentSignatureInformation& rInfo = aInfos[ 0 ];
                 s = GetDateTimeString( rInfo.SignatureDate, rInfo.SignatureTime );
                 s.AppendAscii( ", " );
@@ -952,7 +952,7 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfoItem newItem( *m_pInfoItem );
             newItem.resetUserData( bUseAuthor
                 ? SvtUserOptions().GetFullName()
-                : ::rtl::OUString() );
+                : OUString() );
             m_pInfoItem->SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
             newItem.SetUseUserData( STATE_CHECK == m_pUseUserDataCB->GetState() );
 
@@ -1290,14 +1290,14 @@ void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 void CustomPropertiesDurationField::SetDuration( const util::Duration& rDuration )
 {
     m_aDuration = rDuration;
-    String sText(rDuration.Negative ? rtl::OUString('-') : rtl::OUString('+'));
+    String sText(rDuration.Negative ? OUString('-') : OUString('+'));
     sText += m_pLine->m_sDurationFormat;
-    sText.SearchAndReplace(rtl::OUString("%1"), OUString::number( rDuration.Years ) );
-    sText.SearchAndReplace(rtl::OUString("%2"), OUString::number( rDuration.Months ) );
-    sText.SearchAndReplace(rtl::OUString("%3"), OUString::number( rDuration.Days   ) );
-    sText.SearchAndReplace(rtl::OUString("%4"), OUString::number( rDuration.Hours  ) );
-    sText.SearchAndReplace(rtl::OUString("%5"), OUString::number( rDuration.Minutes) );
-    sText.SearchAndReplace(rtl::OUString("%6"), OUString::number( rDuration.Seconds) );
+    sText.SearchAndReplace(OUString("%1"), OUString::number( rDuration.Years ) );
+    sText.SearchAndReplace(OUString("%2"), OUString::number( rDuration.Months ) );
+    sText.SearchAndReplace(OUString("%3"), OUString::number( rDuration.Days   ) );
+    sText.SearchAndReplace(OUString("%4"), OUString::number( rDuration.Hours  ) );
+    sText.SearchAndReplace(OUString("%5"), OUString::number( rDuration.Minutes) );
+    sText.SearchAndReplace(OUString("%6"), OUString::number( rDuration.Seconds) );
     SetText( sText );
 }
 
@@ -1666,7 +1666,7 @@ void CustomPropertiesWindow::updateLineWidth()
     }
 }
 
-void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
+void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
 {
     CustomPropertyLine* pNewLine = new CustomPropertyLine( this );
     pNewLine->m_aTypeBox.SetSelectHdl( LINK( this, CustomPropertiesWindow, TypeHdl ) );
@@ -1711,7 +1711,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
 
     double nTmpValue = 0;
     bool bTmpValue = false;
-    ::rtl::OUString sTmpValue;
+    OUString sTmpValue;
     util::DateTime aTmpDateTime;
     util::Date aTmpDate;
     util::Duration aTmpDuration;
@@ -1883,7 +1883,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             }
             else
             {
-                ::rtl::OUString sValue( pLine->m_aValueEdit.GetText() );
+                OUString sValue( pLine->m_aValueEdit.GetText() );
                 aPropertiesSeq[i].Value <<= makeAny( sValue );
             }
         }
@@ -1992,7 +1992,7 @@ IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl)
     return 0;
 }
 
-void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny, bool bInteractive )
+void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bInteractive )
 {
     m_pPropertiesWin->AddLine( sName, rAny );
     m_pVertScroll->SetRangeMax( m_pPropertiesWin->GetVisibleLineCount() + 1 );
@@ -2012,7 +2012,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItem
 IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
 {
     Any aAny;
-    m_pPropertiesCtrl->AddLine( ::rtl::OUString(), aAny, true );
+    m_pPropertiesCtrl->AddLine( OUString(), aAny, true );
     return 0;
 }
 

@@ -31,11 +31,11 @@ protected:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
 protected:
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
     virtual void setAsMSObehavior();
-    sal_Int32 getMargin( rtl::OUString sMarginType );
-    void setMargin( rtl::OUString sMarginType, float fMargin );
+    sal_Int32 getMargin( OUString sMarginType );
+    void setMargin( OUString sMarginType, float fMargin );
 public:
     VbaTextFrame( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext , css::uno::Reference< css::drawing::XShape > xShape);
     virtual ~VbaTextFrame() {}

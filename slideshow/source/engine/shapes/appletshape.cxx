@@ -74,7 +74,7 @@ namespace slideshow
             AppletShape( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::drawing::XShape >& xShape,
                          double                                     nPrio,
-                         const ::rtl::OUString&                     rServiceName,
+                         const OUString&                     rServiceName,
                          const char**                               pPropCopyTable,
                          sal_Size                                   nNumPropEntries,
                          const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
@@ -102,7 +102,7 @@ namespace slideshow
             virtual bool implIsIntrinsicAnimationPlaying() const;
             virtual void implSetIntrinsicAnimationTime(double);
 
-            const ::rtl::OUString                           maServiceName;
+            const OUString                           maServiceName;
             const char**                                    mpPropCopyTable;
             const sal_Size                                  mnNumPropEntries;
 
@@ -114,7 +114,7 @@ namespace slideshow
 
         AppletShape::AppletShape( const uno::Reference< drawing::XShape >& xShape,
                                   double                                   nPrio,
-                                  const ::rtl::OUString&                   rServiceName,
+                                  const OUString&                   rServiceName,
                                   const char**                             pPropCopyTable,
                                   sal_Size                                 nNumPropEntries,
                                   const SlideShowContext&                  rContext ) :
@@ -301,7 +301,7 @@ namespace slideshow
         boost::shared_ptr<Shape> createAppletShape(
             const uno::Reference< drawing::XShape >& xShape,
             double                                   nPrio,
-            const ::rtl::OUString&                   rServiceName,
+            const OUString&                   rServiceName,
             const char**                             pPropCopyTable,
             sal_Size                                 nNumPropEntries,
             const SlideShowContext&                  rContext )

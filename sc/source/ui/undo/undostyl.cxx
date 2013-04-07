@@ -101,7 +101,7 @@ ScUndoModifyStyle::~ScUndoModifyStyle()
 {
 }
 
-rtl::OUString ScUndoModifyStyle::GetComment() const
+OUString ScUndoModifyStyle::GetComment() const
 {
     sal_uInt16 nId = (eFamily == SFX_STYLE_FAMILY_PARA) ?
                                 STR_UNDO_EDITCELLSTYLE :
@@ -255,7 +255,7 @@ void ScUndoApplyPageStyle::AddSheetAction( SCTAB nTab, const String& rOldStyle )
     maEntries.push_back( ApplyStyleEntry( nTab, rOldStyle ) );
 }
 
-rtl::OUString ScUndoApplyPageStyle::GetComment() const
+OUString ScUndoApplyPageStyle::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_APPLYPAGESTYLE );
 }

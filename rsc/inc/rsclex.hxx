@@ -24,7 +24,7 @@
 // a buffer for unique strings
 class StringContainer
 {
-    boost::unordered_set< rtl::OString, rtl::OStringHash >      m_aStrings;
+    boost::unordered_set< OString, OStringHash >      m_aStrings;
 public:
     StringContainer() {}
     ~StringContainer() {}

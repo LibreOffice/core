@@ -50,8 +50,8 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterPane (void);
 
-    static ::rtl::OUString getImplementationName_static (void);
-    static css::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static (void);
+    static OUString getImplementationName_static (void);
+    static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         SAL_THROW((css::uno::Exception));

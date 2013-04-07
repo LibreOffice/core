@@ -162,7 +162,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         ScImportExport aImpEx( pDocSh->GetDocument(),
             ScAddress( nStartCol, nStartRow, GetViewData()->GetTabNo() ) );
 
-        ::rtl::OUString aStr;
+        OUString aStr;
         SotStorageStreamRef xStream;
         if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
             // mba: clipboard always must contain absolute URLs (could be from alien source)
@@ -613,7 +613,7 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
             SfxStringItem aFileNameItem( SID_FILE_NAME, aStrURL );
             SfxStringItem aFilterItem( SID_FILTER_NAME, pFlt->GetName() );
             // #i69524# add target, as in SfxApplication when the Open dialog is used
-            SfxStringItem aTargetItem( SID_TARGETNAME, rtl::OUString("_default") );
+            SfxStringItem aTargetItem( SID_TARGETNAME, OUString("_default") );
 
             // Asynchron oeffnen, kann naemlich auch aus D&D heraus passieren
             // und das bekommt dem MAC nicht so gut ...
@@ -665,11 +665,11 @@ sal_Bool ScViewFunc::PasteFile( const Point& rPos, const String& rFile, sal_Bool
         //TODO/LATER: what about "bLink"?
 
         uno::Sequence < beans::PropertyValue > aMedium(1);
-        aMedium[0].Name = ::rtl::OUString( "URL" );
-        aMedium[0].Value <<= ::rtl::OUString( aStrURL );
+        aMedium[0].Name = OUString( "URL" );
+        aMedium[0].Value <<= OUString( aStrURL );
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );
-        ::rtl::OUString aName;
+        OUString aName;
         uno::Reference < embed::XEmbeddedObject > xObj = aCnt.InsertEmbeddedObject( aMedium, aName );
         if( xObj.is() )
             return PasteObject( rPos, xObj );

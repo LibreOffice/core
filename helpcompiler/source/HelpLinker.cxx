@@ -65,12 +65,12 @@ IndexerPreProcessor::~IndexerPreProcessor()
 
 std::string getEncodedPath( const std::string& Path )
 {
-    rtl::OString aOStr_Path( Path.c_str() );
-    rtl::OUString aOUStr_Path( rtl::OStringToOUString
+    OString aOStr_Path( Path.c_str() );
+    OUString aOUStr_Path( OStringToOUString
         ( aOStr_Path, fs::getThreadTextEncoding() ) );
-    rtl::OUString aPathURL;
+    OUString aPathURL;
     osl::File::getFileURLFromSystemPath( aOUStr_Path, aPathURL );
-    rtl::OString aOStr_PathURL( rtl::OUStringToOString
+    OString aOStr_PathURL( OUStringToOString
         ( aPathURL, fs::getThreadTextEncoding() ) );
     std::string aStdStr_PathURL( aOStr_PathURL.getStr() );
     return aStdStr_PathURL;
@@ -550,7 +550,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
 void HelpLinker::main( std::vector<std::string> &args,
                        std::string* pExtensionPath, std::string* pDestination,
-                       const rtl::OUString* pOfficeHelpPath )
+                       const OUString* pOfficeHelpPath )
     throw( HelpProcessingException )
 {
     bExtensionMode = false;
@@ -809,10 +809,10 @@ void HelpLinker::main( std::vector<std::string> &args,
     {
         //This part is used when compileExtensionHelp is called from the extensions manager.
         //If extension help is compiled using helplinker in the build process
-        rtl::OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
-        aIdxCaptionPathFileURL += rtl::OUString("/idxcaption.xsl");
+        OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
+        aIdxCaptionPathFileURL += OUString("/idxcaption.xsl");
 
-        rtl::OString aOStr_IdxCaptionPathFileURL( rtl::OUStringToOString
+        OString aOStr_IdxCaptionPathFileURL( OUStringToOString
             ( aIdxCaptionPathFileURL, fs::getThreadTextEncoding() ) );
         std::string aStdStr_IdxCaptionPathFileURL( aOStr_IdxCaptionPathFileURL.getStr() );
 
@@ -834,10 +834,10 @@ void HelpLinker::main( std::vector<std::string> &args,
         //If extension help is compiled using helplinker in the build process
         //then  -idxcontent must be supplied
         //This part is used when compileExtensionHelp is called from the extensions manager.
-        rtl::OUString aIdxContentPathFileURL( *pOfficeHelpPath );
-        aIdxContentPathFileURL += rtl::OUString("/idxcontent.xsl");
+        OUString aIdxContentPathFileURL( *pOfficeHelpPath );
+        aIdxContentPathFileURL += OUString("/idxcontent.xsl");
 
-        rtl::OString aOStr_IdxContentPathFileURL( rtl::OUStringToOString
+        OString aOStr_IdxContentPathFileURL( OUStringToOString
             ( aIdxContentPathFileURL, fs::getThreadTextEncoding() ) );
         std::string aStdStr_IdxContentPathFileURL( aOStr_IdxContentPathFileURL.getStr() );
 
@@ -899,10 +899,10 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )
 {
     m_eErrorClass = e.m_eErrorClass;
-    rtl::OString tmpErrorMsg( e.m_aErrorMsg.c_str() );
-    m_aErrorMsg = rtl::OStringToOUString( tmpErrorMsg, fs::getThreadTextEncoding() );
-    rtl::OString tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
-    m_aXMLParsingFile = rtl::OStringToOUString( tmpXMLParsingFile, fs::getThreadTextEncoding() );
+    OString tmpErrorMsg( e.m_aErrorMsg.c_str() );
+    m_aErrorMsg = OStringToOUString( tmpErrorMsg, fs::getThreadTextEncoding() );
+    OString tmpXMLParsingFile( e.m_aXMLParsingFile.c_str() );
+    m_aXMLParsingFile = OStringToOUString( tmpXMLParsingFile, fs::getThreadTextEncoding() );
     m_nXMLParsingLine = e.m_nXMLParsingLine;
     return *this;
 }
@@ -911,11 +911,11 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
-    const rtl::OUString& aOfficeHelpPath,
-    const rtl::OUString& aExtensionName,
-    const rtl::OUString& aExtensionLanguageRoot,
-    sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
-    const rtl::OUString& aDestination,
+    const OUString& aOfficeHelpPath,
+    const OUString& aExtensionName,
+    const OUString& aExtensionLanguageRoot,
+    sal_Int32 nXhpFileCount, const OUString* pXhpFiles,
+    const OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 )
 {
@@ -924,21 +924,21 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     std::vector<std::string> args;
     args.reserve(nXhpFileCount + 2);
     args.push_back(std::string("-mod"));
-    rtl::OString aOExtensionName = rtl::OUStringToOString( aExtensionName, fs::getThreadTextEncoding() );
+    OString aOExtensionName = OUStringToOString( aExtensionName, fs::getThreadTextEncoding() );
     args.push_back(std::string(aOExtensionName.getStr()));
 
     for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
     {
-        rtl::OUString aXhpFile = pXhpFiles[iXhp];
+        OUString aXhpFile = pXhpFiles[iXhp];
 
-        rtl::OString aOXhpFile = rtl::OUStringToOString( aXhpFile, fs::getThreadTextEncoding() );
+        OString aOXhpFile = OUStringToOString( aXhpFile, fs::getThreadTextEncoding() );
         args.push_back(std::string(aOXhpFile.getStr()));
     }
 
-    rtl::OString aOExtensionLanguageRoot = rtl::OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
+    OString aOExtensionLanguageRoot = OUStringToOString( aExtensionLanguageRoot, fs::getThreadTextEncoding() );
     const char* pExtensionPath = aOExtensionLanguageRoot.getStr();
     std::string aStdStrExtensionPath = pExtensionPath;
-    rtl::OString aODestination = rtl::OUStringToOString(aDestination, fs::getThreadTextEncoding());
+    OString aODestination = OUStringToOString(aDestination, fs::getThreadTextEncoding());
     const char* pDestination = aODestination.getStr();
     std::string aStdStrDestination = pDestination;
 
@@ -968,8 +968,8 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     xmlSetStructuredErrorFunc( NULL, NULL );
 
     // i83624: Tree files
-    ::rtl::OUString aTreeFileURL = aExtensionLanguageRoot;
-    aTreeFileURL += rtl::OUString("/help.tree");
+    OUString aTreeFileURL = aExtensionLanguageRoot;
+    aTreeFileURL += OUString("/help.tree");
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
     osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileSize );
@@ -991,7 +991,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         {
             XML_Error nError = XML_GetErrorCode( parser );
             o_rHelpProcessingErrorInfo.m_eErrorClass = HELPPROCESSING_XMLPARSING_ERROR;
-            o_rHelpProcessingErrorInfo.m_aErrorMsg = rtl::OUString::createFromAscii( XML_ErrorString( nError ) );;
+            o_rHelpProcessingErrorInfo.m_aErrorMsg = OUString::createFromAscii( XML_ErrorString( nError ) );;
             o_rHelpProcessingErrorInfo.m_aXMLParsingFile = aTreeFileURL;
             // CRAHSES!!! o_rHelpProcessingErrorInfo.m_nXMLParsingLine = XML_GetCurrentLineNumber( parser );
             bSuccess = false;

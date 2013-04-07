@@ -33,23 +33,23 @@ namespace migration
 //.........................................................................
 
 
-    static ::rtl::OUString sSourceSubDir( "/user/wordbook" );
-    static ::rtl::OUString sTargetSubDir( "/user/wordbook" );
+    static OUString sSourceSubDir( "/user/wordbook" );
+    static OUString sTargetSubDir( "/user/wordbook" );
 
 
     // =============================================================================
     // component operations
     // =============================================================================
 
-    ::rtl::OUString WordbookMigration_getImplementationName()
+    OUString WordbookMigration_getImplementationName()
     {
-        static ::rtl::OUString* pImplName = 0;
+        static OUString* pImplName = 0;
         if ( !pImplName )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pImplName )
             {
-                static ::rtl::OUString aImplName( "com.sun.star.comp.desktop.migration.Wordbooks" );
+                static OUString aImplName( "com.sun.star.comp.desktop.migration.Wordbooks" );
                 pImplName = &aImplName;
             }
         }
@@ -58,16 +58,16 @@ namespace migration
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > WordbookMigration_getSupportedServiceNames()
+    Sequence< OUString > WordbookMigration_getSupportedServiceNames()
     {
-        static Sequence< ::rtl::OUString >* pNames = 0;
+        static Sequence< OUString >* pNames = 0;
         if ( !pNames )
         {
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(1);
-                aNames.getArray()[0] = ::rtl::OUString( "com.sun.star.migration.Wordbooks" );
+                static Sequence< OUString > aNames(1);
+                aNames.getArray()[0] = OUString( "com.sun.star.migration.Wordbooks" );
                 pNames = &aNames;
             }
         }
@@ -90,7 +90,7 @@ namespace migration
 
     // -----------------------------------------------------------------------------
 
-    TStringVectorPtr WordbookMigration::getFiles( const ::rtl::OUString& rBaseURL ) const
+    TStringVectorPtr WordbookMigration::getFiles( const OUString& rBaseURL ) const
     {
         TStringVectorPtr aResult( new TStringVector );
         ::osl::Directory aDir( rBaseURL);
@@ -144,7 +144,7 @@ namespace migration
     }
 
 #define MAX_HEADER_LENGTH 16
-bool IsUserWordbook( const ::rtl::OUString& rFile )
+bool IsUserWordbook( const OUString& rFile )
 {
     static const sal_Char*      pVerStr2    = "WBSWG2";
     static const sal_Char*      pVerStr5    = "WBSWG5";
@@ -190,7 +190,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
 
     void WordbookMigration::copyFiles()
     {
-        ::rtl::OUString sTargetDir;
+        OUString sTargetDir;
         ::utl::Bootstrap::PathStatus aStatus = ::utl::Bootstrap::locateUserInstallation( sTargetDir );
         if ( aStatus == ::utl::Bootstrap::PATH_EXISTS )
         {
@@ -201,17 +201,17 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
             {
                 if (IsUserWordbook(*aI) )
                 {
-                    ::rtl::OUString sSourceLocalName = aI->copy( m_sSourceDir.getLength() );
-                    ::rtl::OUString sTargetName = sTargetDir + sSourceLocalName;
+                    OUString sSourceLocalName = aI->copy( m_sSourceDir.getLength() );
+                    OUString sTargetName = sTargetDir + sSourceLocalName;
                     INetURLObject aURL( sTargetName );
                     aURL.removeSegment();
                     checkAndCreateDirectory( aURL );
                     ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                     if ( aResult != ::osl::FileBase::E_None )
                     {
-                        ::rtl::OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
-                        aMsg += ::rtl::OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
-                             +  ::rtl::OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
+                        OString aMsg( "WordbookMigration::copyFiles: cannot copy " );
+                        aMsg += OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 ) + " to "
+                             +  OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
                         OSL_FAIL( aMsg.getStr() );
                     }
                 }
@@ -228,7 +228,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
     // XServiceInfo
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString WordbookMigration::getImplementationName() throw (RuntimeException)
+    OUString WordbookMigration::getImplementationName() throw (RuntimeException)
     {
         return WordbookMigration_getImplementationName();
     }
@@ -243,7 +243,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
 
     // -----------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException)
+    Sequence< OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return WordbookMigration_getSupportedServiceNames();
     }

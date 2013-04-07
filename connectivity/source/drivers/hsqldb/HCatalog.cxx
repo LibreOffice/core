@@ -41,11 +41,11 @@ OHCatalog::OHCatalog(const Reference< XConnection >& _xConnection) : sdbcx::OCat
 {
 }
 // -----------------------------------------------------------------------------
-void OHCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames)
+void OHCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-                                                            ::rtl::OUString("%"),
-                                                            ::rtl::OUString("%"),
+                                                            OUString("%"),
+                                                            OUString("%"),
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
@@ -53,10 +53,10 @@ void OHCatalog::refreshObjects(const Sequence< ::rtl::OUString >& _sKindOfObject
 void OHCatalog::refreshTables()
 {
     TStringVector aVector;
-    static const ::rtl::OUString s_sTableTypeView("VIEW");
-    static const ::rtl::OUString s_sTableTypeTable("TABLE");
+    static const OUString s_sTableTypeView("VIEW");
+    static const OUString s_sTableTypeTable("TABLE");
 
-    Sequence< ::rtl::OUString > sTableTypes(2);
+    Sequence< OUString > sTableTypes(2);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
 
@@ -70,8 +70,8 @@ void OHCatalog::refreshTables()
 // -------------------------------------------------------------------------
 void OHCatalog::refreshViews()
 {
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("VIEW");
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("VIEW");
 
     sal_Bool bSupportsViews = sal_False;
     try
@@ -108,7 +108,7 @@ void OHCatalog::refreshUsers()
 {
     TStringVector aVector;
     Reference< XStatement > xStmt = m_xConnection->createStatement(  );
-    Reference< XResultSet >  xResult = xStmt->executeQuery(::rtl::OUString("select User from hsqldb.user group by User"));
+    Reference< XResultSet >  xResult = xStmt->executeQuery(OUString("select User from hsqldb.user group by User"));
     if ( xResult.is() )
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);

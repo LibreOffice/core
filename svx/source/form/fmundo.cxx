@@ -121,7 +121,7 @@ private:
             // SfxObjectShellRef is good here since the model controls the lifetime of the shell
             SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
             ENSURE_OR_THROW( xObjectShell.Is(), "no object shell!" );
-            xListenerProps->setPropertyValue( ::rtl::OUString( "Model" ), makeAny( xObjectShell->GetModel() ) );
+            xListenerProps->setPropertyValue( OUString( "Model" ), makeAny( xObjectShell->GetModel() ) );
 
             m_vbaListener = xScriptListener;
         }
@@ -552,11 +552,11 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             return;
 
         // if it's a "default value" property of a control model, set the according "value" property
-        static ::rtl::OUString pDefaultValueProperties[] = {
+        static OUString pDefaultValueProperties[] = {
             OUString(FM_PROP_DEFAULT_TEXT), OUString(FM_PROP_DEFAULTCHECKED), OUString(FM_PROP_DEFAULT_DATE), OUString(FM_PROP_DEFAULT_TIME),
             OUString(FM_PROP_DEFAULT_VALUE), OUString(FM_PROP_DEFAULT_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_DEFAULT)
         };
-        const ::rtl::OUString aValueProperties[] = {
+        const OUString aValueProperties[] = {
             OUString(FM_PROP_TEXT), OUString(FM_PROP_STATE), OUString(FM_PROP_DATE), OUString(FM_PROP_TIME),
             OUString(FM_PROP_VALUE), OUString(FM_PROP_SELECT_SEQ), OUString(FM_PROP_EFFECTIVE_VALUE)
         };
@@ -643,7 +643,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
                 {
                     Any aControlSourceProperty = xSet->getPropertyValue(FM_PROP_CONTROLSOURCEPROPERTY);
-                    ::rtl::OUString sControlSourceProperty;
+                    OUString sControlSourceProperty;
                     aControlSourceProperty >>= sControlSourceProperty;
 
                     aNewEntry.bIsValueProperty = (sControlSourceProperty.equals(evt.PropertyName));
@@ -691,7 +691,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 // TODO: we should cache all those things, else this might be too expensive.
                 // However, this requires we're notified of changes in the value binding
 
-                static const ::rtl::OUString s_sExternalData( "ExternalData" );
+                static const OUString s_sExternalData( "ExternalData" );
                 if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
                 {
                     sal_Bool bExternalData = sal_True;
@@ -841,9 +841,9 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
     if (xSet.is())
     {
         if (!bReadOnly)
-            xSet->addPropertyChangeListener( ::rtl::OUString(), this );
+            xSet->addPropertyChangeListener( OUString(), this );
         else
-            xSet->removePropertyChangeListener( ::rtl::OUString(), this );
+            xSet->removePropertyChangeListener( OUString(), this );
     }
 }
 
@@ -920,9 +920,9 @@ void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObje
             if ( xProps.is() )
             {
                 if ( _bStartListening )
-                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->addPropertyChangeListener( OUString(), this );
                 else
-                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
+                    xProps->removePropertyChangeListener( OUString(), this );
             }
         }
 
@@ -1044,12 +1044,12 @@ void FmUndoPropertyAction::Redo()
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString FmUndoPropertyAction::GetComment() const
+OUString FmUndoPropertyAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoPropertyAction::GetComment" );
     String aStr(static_STR_UNDO_PROPERTY);
 
-    aStr.SearchAndReplace( rtl::OUString('#'), aPropertyName );
+    aStr.SearchAndReplace( OUString('#'), aPropertyName );
     return aStr;
 }
 
@@ -1287,7 +1287,7 @@ void FmUndoModelReplaceAction::Undo()
             Reference< XPropertySet > xCurrentAsSet( xCurrentModel, UNO_QUERY );
             DBG_ASSERT( ::comphelper::hasProperty(FM_PROP_NAME, xCurrentAsSet ), "FmUndoModelReplaceAction::Undo : one of the models is invalid !");
 
-            ::rtl::OUString sName;
+            OUString sName;
             xCurrentAsSet->getPropertyValue( FM_PROP_NAME ) >>= sName;
             xCurrentsParent->replaceByName( sName, makeAny( xComponent ) );
 
@@ -1304,7 +1304,7 @@ void FmUndoModelReplaceAction::Undo()
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString FmUndoModelReplaceAction::GetComment() const
+OUString FmUndoModelReplaceAction::GetComment() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmUndoModelReplaceAction::GetComment" );
     return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);

@@ -58,7 +58,7 @@ WpADOProperties WpADOConnection::get_Properties() const
     return aProps;
 }
 
-rtl::OUString WpADOConnection::GetConnectionString() const
+OUString WpADOConnection::GetConnectionString() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -66,7 +66,7 @@ rtl::OUString WpADOConnection::GetConnectionString() const
     return aBSTR;
 }
 
-sal_Bool WpADOConnection::PutConnectionString(const ::rtl::OUString &aCon) const
+sal_Bool WpADOConnection::PutConnectionString(const OUString &aCon) const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(aCon);
@@ -109,7 +109,7 @@ sal_Bool WpADOConnection::Close( )
     return (SUCCEEDED(pInterface->Close()));
 }
 
-sal_Bool WpADOConnection::Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
+sal_Bool WpADOConnection::Execute(const OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString sStr1(_CommandText);
@@ -136,7 +136,7 @@ sal_Bool WpADOConnection::RollbackTrans( )
     return SUCCEEDED(pInterface->RollbackTrans());
 }
 
-sal_Bool WpADOConnection::Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options)
+sal_Bool WpADOConnection::Open(const OUString& ConnectionString, const OUString& UserID,const OUString& Password,long Options)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString sStr1(ConnectionString);
@@ -152,14 +152,14 @@ sal_Bool WpADOConnection::GetErrors(ADOErrors** pErrors)
     return SUCCEEDED(pInterface->get_Errors(pErrors));
 }
 
-::rtl::OUString WpADOConnection::GetDefaultDatabase() const
+OUString WpADOConnection::GetDefaultDatabase() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
     return aBSTR;
 }
 
-sal_Bool WpADOConnection::PutDefaultDatabase(const ::rtl::OUString& _bstr)
+sal_Bool WpADOConnection::PutDefaultDatabase(const OUString& _bstr)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_bstr);
@@ -224,14 +224,14 @@ sal_Bool WpADOConnection::put_Mode(const ConnectModeEnum &eNum)
     return SUCCEEDED(pInterface->put_Mode(eNum));
 }
 
-::rtl::OUString WpADOConnection::get_Provider() const
+OUString WpADOConnection::get_Provider() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR; pInterface->get_Provider(&aBSTR);
     return aBSTR;
 }
 
-sal_Bool WpADOConnection::put_Provider(const ::rtl::OUString& _bstr)
+sal_Bool WpADOConnection::put_Provider(const OUString& _bstr)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_bstr);
@@ -252,7 +252,7 @@ sal_Bool WpADOConnection::OpenSchema(SchemaEnum eNum,OLEVariant& Restrictions,OL
     return SUCCEEDED(pInterface->OpenSchema(eNum,Restrictions,SchemaID,pprset));
 }
 
-::rtl::OUString WpADOConnection::get_Version() const
+OUString WpADOConnection::get_Version() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -313,7 +313,7 @@ sal_Int32 WpADOCommand::get_State() const
     return nRet;
 }
 
-::rtl::OUString WpADOCommand::get_CommandText() const
+OUString WpADOCommand::get_CommandText() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -321,7 +321,7 @@ sal_Int32 WpADOCommand::get_State() const
     return aBSTR;
 }
 
-sal_Bool WpADOCommand::put_CommandText(const ::rtl::OUString &aCon)
+sal_Bool WpADOCommand::put_CommandText(const OUString &aCon)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(aCon);
@@ -364,7 +364,7 @@ sal_Bool WpADOCommand::Execute(OLEVariant& RecordsAffected,OLEVariant& Params,lo
     return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Params,Options,ppiRset));
 }
 
-ADOParameter* WpADOCommand::CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
+ADOParameter* WpADOCommand::CreateParameter(const OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     ADOParameter* pPara = NULL;
@@ -397,7 +397,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
 }
 
 // returns the name of the field
-::rtl::OUString WpADOCommand::GetName() const
+OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -405,7 +405,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
     return aBSTR;
 }
 
-sal_Bool WpADOCommand::put_Name(const ::rtl::OUString& _Name)
+sal_Bool WpADOCommand::put_Name(const OUString& _Name)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_Name);
@@ -419,7 +419,7 @@ sal_Bool WpADOCommand::Cancel()
     return SUCCEEDED(pInterface->Cancel());
 }
 
-::rtl::OUString WpADOError::GetDescription() const
+OUString WpADOError::GetDescription() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -427,7 +427,7 @@ sal_Bool WpADOCommand::Cancel()
     return aBSTR;
 }
 
- ::rtl::OUString WpADOError::GetSource() const
+ OUString WpADOError::GetSource() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -443,7 +443,7 @@ sal_Bool WpADOCommand::Cancel()
     return nErrNr;
 }
 
- ::rtl::OUString WpADOError::GetSQLState() const
+ OUString WpADOError::GetSQLState() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -502,7 +502,7 @@ sal_Int32 WpADOField::GetDefinedSize() const
 }
 
 // returns the name of the field
-::rtl::OUString WpADOField::GetName() const
+OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -655,7 +655,7 @@ sal_Bool WpADOProperty::PutValue(const OLEVariant &aValVar)
     return (SUCCEEDED(pInterface->put_Value(aValVar)));
 }
 
- ::rtl::OUString WpADOProperty::GetName() const
+ OUString WpADOProperty::GetName() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -944,7 +944,7 @@ WpADOProperties WpADORecordset::get_Properties() const
     return SUCCEEDED(pInterface->UpdateBatch(AffectRecords));
 }
 
- ::rtl::OUString WpADOParameter::GetName() const
+ OUString WpADOParameter::GetName() const
 {
      OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1028,7 +1028,7 @@ sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
     return (SUCCEEDED(pInterface->put_Size(_nSize)));
 }
 
-::rtl::OUString WpADOColumn::get_Name() const
+OUString WpADOColumn::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1036,7 +1036,7 @@ sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
     return aBSTR;
 }
 
-::rtl::OUString WpADOColumn::get_RelatedColumn() const
+OUString WpADOColumn::get_RelatedColumn() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1044,14 +1044,14 @@ sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
     return aBSTR;
 }
 
-void WpADOColumn::put_Name(const ::rtl::OUString& _rName)
+void WpADOColumn::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
     (void)bErg;
 }
-void WpADOColumn::put_RelatedColumn(const ::rtl::OUString& _rName)
+void WpADOColumn::put_RelatedColumn(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
@@ -1147,7 +1147,7 @@ WpADOProperties WpADOColumn::get_Properties() const
     return aProps;
 }
 
-::rtl::OUString WpADOKey::get_Name() const
+OUString WpADOKey::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1155,7 +1155,7 @@ WpADOProperties WpADOColumn::get_Properties() const
     return aBSTR;
 }
 
-void WpADOKey::put_Name(const ::rtl::OUString& _rName)
+void WpADOKey::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
@@ -1177,7 +1177,7 @@ void WpADOKey::put_Type(const KeyTypeEnum& _eNum)
     pInterface->put_Type(_eNum);
 }
 
-::rtl::OUString WpADOKey::get_RelatedTable() const
+OUString WpADOKey::get_RelatedTable() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1185,7 +1185,7 @@ void WpADOKey::put_Type(const KeyTypeEnum& _eNum)
     return aBSTR;
 }
 
-void WpADOKey::put_RelatedTable(const ::rtl::OUString& _rName)
+void WpADOKey::put_RelatedTable(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
@@ -1231,7 +1231,7 @@ WpADOColumns WpADOKey::get_Columns() const
     return aCols;
 }
 
-::rtl::OUString WpADOIndex::get_Name() const
+OUString WpADOIndex::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1239,7 +1239,7 @@ WpADOColumns WpADOKey::get_Columns() const
     return aBSTR;
 }
 
-void WpADOIndex::put_Name(const ::rtl::OUString& _rName)
+void WpADOIndex::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
@@ -1353,7 +1353,7 @@ ADOProcedures* WpADOCatalog::get_Procedures()
     return pRet;
 }
 
-::rtl::OUString WpADOTable::get_Name() const
+OUString WpADOTable::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1361,7 +1361,7 @@ ADOProcedures* WpADOCatalog::get_Procedures()
     return aBSTR;
 }
 
-void WpADOTable::put_Name(const ::rtl::OUString& _rName)
+void WpADOTable::put_Name(const OUString& _rName)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString bstr(_rName);
@@ -1369,7 +1369,7 @@ void WpADOTable::put_Name(const ::rtl::OUString& _rName)
     (void)bErg;
 }
 
-::rtl::OUString WpADOTable::get_Type() const
+OUString WpADOTable::get_Type() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1427,7 +1427,7 @@ WpADOProperties WpADOTable::get_Properties() const
     return aProps;
 }
 
-::rtl::OUString WpADOView::get_Name() const
+OUString WpADOView::get_Name() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
@@ -1446,14 +1446,14 @@ void WpADOView::put_Command(OLEVariant& _rVar)
     pInterface->put_Command(_rVar);
 }
 
-::rtl::OUString WpADOGroup::get_Name() const
+OUString WpADOGroup::get_Name() const
 {
     OLEString aBSTR;
     pInterface->get_Name(&aBSTR);
     return aBSTR;
 }
 
-void WpADOGroup::put_Name(const ::rtl::OUString& _rName)
+void WpADOGroup::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
@@ -1491,21 +1491,21 @@ WpADOUsers WpADOGroup::get_Users( )
     return aRet;
 }
 
-::rtl::OUString WpADOUser::get_Name() const
+OUString WpADOUser::get_Name() const
 {
     OLEString aBSTR;
     pInterface->get_Name(&aBSTR);
     return aBSTR;
 }
 
-void WpADOUser::put_Name(const ::rtl::OUString& _rName)
+void WpADOUser::put_Name(const OUString& _rName)
 {
     OLEString bstr(_rName);
     sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
     (void)bErg;
 }
 
-sal_Bool WpADOUser::ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
+sal_Bool WpADOUser::ChangePassword(const OUString& _rPwd,const OUString& _rNewPwd)
 {
     OLEString sStr1(_rPwd);
     OLEString sStr2(_rNewPwd);
@@ -1620,7 +1620,7 @@ WpBase::operator IDispatch*()
     return pIUnknown;
 }
 
-ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table )
+ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1660,7 +1660,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
     return pRecordset;
 }
 // -----------------------------------------------------------------------------
-ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table )
+ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1702,7 +1702,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
 
 }
 // -----------------------------------------------------------------------------
-ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table )
+ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1741,7 +1741,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getIndexInfo(
-    const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
+    const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table,
     sal_Bool /*unique*/, sal_Bool /*approximate*/ )
 {
     // Create elements used in the array
@@ -1784,8 +1784,8 @@ ADORecordset* WpADOConnection::getIndexInfo(
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern )
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern )
 {
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
@@ -1826,11 +1826,11 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
-                                                  const ::rtl::OUString& primarySchema,
-                                                  const ::rtl::OUString& primaryTable,
+                                                  const OUString& primarySchema,
+                                                  const OUString& primaryTable,
                                                   const ::com::sun::star::uno::Any& foreignCatalog,
-                                                  const ::rtl::OUString& foreignSchema,
-                                                  const ::rtl::OUString& foreignTable)
+                                                  const OUString& foreignSchema,
+                                                  const OUString& foreignTable)
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1879,8 +1879,8 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& procedureNamePattern )
+                                                  const OUString& schemaPattern,
+                                                  const OUString& procedureNamePattern )
 {
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
@@ -1918,9 +1918,9 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& procedureNamePattern,
-                                                  const ::rtl::OUString& columnNamePattern )
+                                                  const OUString& schemaPattern,
+                                                  const OUString& procedureNamePattern,
+                                                  const OUString& columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1963,16 +1963,16 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern,
-                                                  const ::com::sun::star::uno::Sequence< ::rtl::OUString >& types )
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern,
+                                                  const ::com::sun::star::uno::Sequence< OUString >& types )
 {
     // Create elements used in the array
     HRESULT hr = S_OK;
     OLEVariant varCriteria[4];
 
     sal_Int32 nPos=0;
-    ::rtl::OUString sCatalog;
+    OUString sCatalog;
     if ( catalog.hasValue() && (catalog >>= sCatalog) )
         varCriteria[nPos].setString(sCatalog);
 
@@ -1985,10 +1985,10 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
         varCriteria[nPos].setString(tableNamePattern);
 
     ++nPos;
-    ::rtl::OUStringBuffer aTypes;
-    ::rtl::OUString aComma( "," );
-    const ::rtl::OUString* pIter = types.getConstArray();
-    const ::rtl::OUString* pEnd = pIter + types.getLength();
+    OUStringBuffer aTypes;
+    OUString aComma( "," );
+    const OUString* pIter = types.getConstArray();
+    const OUString* pEnd = pIter + types.getLength();
     for( ; pIter != pEnd ; ++pIter)
     {
         if ( aTypes.getLength() )
@@ -1996,7 +1996,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
         aTypes.append(*pIter);
     }
 
-    ::rtl::OUString sTypeNames = aTypes.makeStringAndClear();
+    OUString sTypeNames = aTypes.makeStringAndClear();
     if ( sTypeNames.getLength() )
         varCriteria[nPos].setString(sTypeNames);
 
@@ -2027,9 +2027,9 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schemaPattern,
-                                                  const ::rtl::OUString& tableNamePattern,
-                                                  const ::rtl::OUString& columnNamePattern )
+                                                  const OUString& schemaPattern,
+                                                  const OUString& tableNamePattern,
+                                                  const OUString& columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -2071,9 +2071,9 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
 }
 // -----------------------------------------------------------------------------
 ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
-                                                  const ::rtl::OUString& schema,
-                                                  const ::rtl::OUString& table,
-                                                  const ::rtl::OUString& columnNamePattern )
+                                                  const OUString& schema,
+                                                  const OUString& table,
+                                                  const OUString& columnNamePattern )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];

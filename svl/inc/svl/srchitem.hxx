@@ -92,7 +92,7 @@ public:
                                     OUString &rText, const IntlWrapper * = 0 ) const;
 
     // ConfigItem
-    virtual void            Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void            Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames );
     virtual void            Commit();
 
             sal_uInt16      GetCommand() const { return nCommand; }

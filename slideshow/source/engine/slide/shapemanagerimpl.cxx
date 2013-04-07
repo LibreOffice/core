@@ -137,7 +137,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 
     // first check for hyperlinks, because these have
     // highest prio:
-    rtl::OUString const hyperlink( checkForHyperlink(aPosition) );
+    OUString const hyperlink( checkForHyperlink(aPosition) );
     if( !hyperlink.isEmpty() )
     {
         mrMultiplexer.notifyHyperlinkClicked(hyperlink);
@@ -400,7 +400,7 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
     return true;
 }
 
-rtl::OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) const
+OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) const
 {
     // find matching region (scan reversely, to coarsely match
     // paint order): set is ordered by priority
@@ -421,7 +421,7 @@ rtl::OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitP
         }
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 void ShapeManagerImpl::addIntrinsicAnimationHandler( const IntrinsicAnimationEventHandlerSharedPtr& rHandler )

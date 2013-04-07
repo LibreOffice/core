@@ -40,7 +40,7 @@ using namespace cppu;
 // -----------------------------------------------------------------------------
 OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
-             const ::std::vector< ::rtl::OUString> &_rVector
+             const ::std::vector< OUString> &_rVector
              )
     : OCollection(*_pTable,sal_True,_rMutex,_rVector)
     ,m_pTable(_pTable)
@@ -48,14 +48,14 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
 }
 // -----------------------------------------------------------------------------
 
-sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
         return NULL;
 
     sdbcx::ObjectType xRet;
-    ::rtl::OUString aName,aQualifier;
+    OUString aName,aQualifier;
     sal_Int32 nLen = _rName.indexOf('.');
     if ( nLen != -1 )
     {
@@ -66,7 +66,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
         aName       = _rName;
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aSchema,aTable;
+    OUString aSchema,aTable;
     m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
     m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
@@ -121,7 +121,7 @@ Reference< XPropertySet > OIndexesHelper::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if ( !xConnection.is() )
@@ -136,18 +136,18 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
     else
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        ::rtl::OUStringBuffer aSql( ::rtl::OUString("CREATE "));
-        ::rtl::OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot( "." );
+        OUStringBuffer aSql( OUString("CREATE "));
+        OUString aQuote  = m_pTable->getMetaData()->getIdentifierQuoteString(  );
+        OUString aDot( "." );
 
         if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
             aSql.appendAscii("UNIQUE ");
         aSql.appendAscii("INDEX ");
 
 
-        ::rtl::OUString aCatalog,aSchema,aTable;
+        OUString aCatalog,aSchema,aTable;
         dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
-        ::rtl::OUString aComposedName;
+        OUString aComposedName;
 
         aComposedName = dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,sal_True,::dbtools::eInIndexDefinitions);
         if (!_rForName.isEmpty() )
@@ -199,7 +199,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if ( xStmt.is() )
         {
-            ::rtl::OUString sSql = aSql.makeStringAndClear();
+            OUString sSql = aSql.makeStringAndClear();
             xStmt->execute(sSql);
             ::comphelper::disposeComponent(xStmt);
         }
@@ -209,7 +209,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const ::rtl::OUString& _rForName
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
+void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
     if( xConnection.is() && !m_pTable->isNew())
@@ -220,20 +220,20 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElem
         }
         else
         {
-            ::rtl::OUString aName,aSchema;
+            OUString aName,aSchema;
             sal_Int32 nLen = _sElementName.indexOf('.');
             if(nLen != -1)
                 aSchema = _sElementName.copy(0,nLen);
             aName   = _sElementName.copy(nLen+1);
 
-            ::rtl::OUString aSql( "DROP INDEX " );
+            OUString aSql( "DROP INDEX " );
 
-            ::rtl::OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::eInIndexDefinitions, false, false, true );
-            ::rtl::OUString sIndexName,sTemp;
+            OUString aComposedName = dbtools::composeTableName( m_pTable->getMetaData(), m_pTable, ::dbtools::eInIndexDefinitions, false, false, true );
+            OUString sIndexName,sTemp;
             sIndexName = dbtools::composeTableName( m_pTable->getMetaData(), sTemp, aSchema, aName, sal_True, ::dbtools::eInIndexDefinitions );
 
             aSql += sIndexName
-                    + ::rtl::OUString(" ON ")
+                    + OUString(" ON ")
                         + aComposedName;
 
             Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );

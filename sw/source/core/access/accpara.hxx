@@ -44,10 +44,10 @@ namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleHyperlink; }
 } } }
 
-typedef ::boost::unordered_map< ::rtl::OUString,
+typedef ::boost::unordered_map< OUString,
                          ::com::sun::star::beans::PropertyValue,
-                         ::rtl::OUStringHash,
-                         ::std::equal_to< ::rtl::OUString > > tAccParaPropValMap;
+                         OUStringHash,
+                         ::std::equal_to< OUString > > tAccParaPropValMap;
 
 class SwAccessibleParagraph :
         public SwClient, // #i108125#
@@ -61,7 +61,7 @@ class SwAccessibleParagraph :
 {
     friend class SwAccessibleHyperlink;
 
-    ::rtl::OUString sDesc;  // protected by base classes mutex
+    OUString sDesc;  // protected by base classes mutex
 
     // data for this paragraph's text portions; this contains the
     // mapping from the core 'model string' to the accessible text
@@ -86,9 +86,9 @@ class SwAccessibleParagraph :
     const SwTxtNode* GetTxtNode() const;
 
     /// get the (accessible) text string (requires frame; check before)
-    ::rtl::OUString GetString();
+    OUString GetString();
 
-    ::rtl::OUString GetDescription();
+    OUString GetDescription();
 
     // get the current care position
     sal_Int32 GetCaretPos();
@@ -133,12 +133,12 @@ class SwAccessibleParagraph :
 
     // #i63870#
     void _getDefaultAttributesImpl(
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+            const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rDefAttrSeq,
             const bool bOnlyCharAttrs = false );
     void _getRunAttributesImpl(
             const sal_Int32 nIndex,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes,
+            const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rRunAttrSeq );
 
 public:
@@ -183,31 +183,31 @@ protected:
     //helpers for word boundaries
 
     sal_Bool GetCharBoundary( com::sun::star::i18n::Boundary& rBound,
-                              const rtl::OUString& rText,
+                              const OUString& rText,
                               sal_Int32 nPos );
     sal_Bool GetWordBoundary( com::sun::star::i18n::Boundary& rBound,
-                              const rtl::OUString& rText,
+                              const OUString& rText,
                               sal_Int32 nPos );
     sal_Bool GetSentenceBoundary( com::sun::star::i18n::Boundary& rBound,
-                                  const rtl::OUString& rText,
+                                  const OUString& rText,
                                   sal_Int32 nPos );
     sal_Bool GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
-                              const rtl::OUString& rText,
+                              const OUString& rText,
                               sal_Int32 nPos );
     sal_Bool GetParagraphBoundary( com::sun::star::i18n::Boundary& rBound,
-                                   const rtl::OUString& rText,
+                                   const OUString& rText,
                                    sal_Int32 nPos );
     sal_Bool GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
-                                   const rtl::OUString& rText,
+                                   const OUString& rText,
                                    sal_Int32 nPos );
     sal_Bool GetGlyphBoundary( com::sun::star::i18n::Boundary& rBound,
-                               const rtl::OUString& rText,
+                               const OUString& rText,
                                sal_Int32 nPos );
 
     // get boundaries of word/sentence/etc. for specified text type
     // Does all argument checking, and then delegates to helper methods above.
     sal_Bool GetTextBoundary( com::sun::star::i18n::Boundary& rBound,
-                              const rtl::OUString& rText,
+                              const OUString& rText,
                               sal_Int32 nPos,
                               sal_Int16 aTextType )
         throw (
@@ -229,7 +229,7 @@ public:
     // XAccessibleContext
 
     // Return this object's description.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getAccessibleDescription (void)
         throw (com::sun::star::uno::RuntimeException);
 
@@ -258,18 +258,18 @@ public:
     // XServiceInfo
 
     // Returns an identifier for the implementation of this object.
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
 
     // Return whether the specified service is supported by this class.
     virtual sal_Bool SAL_CALL
-        supportsService (const ::rtl::OUString& sServiceName)
+        supportsService (const OUString& sServiceName)
         throw (::com::sun::star::uno::RuntimeException);
 
     // Returns a list of all supported services.  In this case that is just
     // the AccessibleContext service.
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -298,16 +298,16 @@ public:
     virtual sal_Int32 SAL_CALL getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getCharacterCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getIndexAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSelectedText(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSelectionStart(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getSelectionEnd(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getText(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -317,10 +317,10 @@ public:
     virtual sal_Bool SAL_CALL cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL pasteText( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL deleteText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL insertText( const ::rtl::OUString& sText, sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::rtl::OUString& sReplacement ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL insertText( const OUString& sText, sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aAttributeSet ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL setText( const ::rtl::OUString& sText ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL setText( const OUString& sText ) throw (::com::sun::star::uno::RuntimeException);
 
     // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild(
@@ -401,8 +401,8 @@ public:
 
     // #i63870#
     // XAccesibleTextAttributes
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 };
 
 inline SwAccessibleParagraph::operator ::com::sun::star::accessibility::XAccessibleText *()

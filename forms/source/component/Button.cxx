@@ -112,8 +112,8 @@ void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
         DECL_PROP1( BUTTONTYPE,             FormButtonType,             BOUND );
         DECL_PROP1( DEFAULT_STATE,          sal_Int16,                  BOUND );
         DECL_PROP1( DISPATCHURLINTERNAL,    sal_Bool,                   BOUND );
-        DECL_PROP1( TARGET_URL,             ::rtl::OUString,            BOUND );
-        DECL_PROP1( TARGET_FRAME,           ::rtl::OUString,            BOUND );
+        DECL_PROP1( TARGET_URL,             OUString,            BOUND );
+        DECL_PROP1( TARGET_FRAME,           OUString,            BOUND );
         DECL_PROP1( TABINDEX,               sal_Int16,                  BOUND );
     END_DESCRIBE_PROPERTIES();
 }
@@ -128,14 +128,14 @@ StringSequence  OButtonModel::getSupportedServiceNames() throw()
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
     aSupported.realloc( aSupported.getLength() + 1 );
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[ aSupported.getLength() - 1 ] = FRM_SUN_COMPONENT_COMMANDBUTTON;
 
     return aSupported;
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
+OUString OButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
     return FRM_COMPONENT_COMMANDBUTTON; // old (non-sun) name for compatibility !
 }
@@ -153,7 +153,7 @@ void OButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) thr
 
         _rxOutStream->writeShort( (sal_uInt16)m_eButtonType );
 
-        ::rtl::OUString sTmp = INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
+        OUString sTmp = INetURLObject::decode( m_sTargetURL, '%', INetURLObject::DECODE_UNAMBIGUOUS);
         _rxOutStream << sTmp;
         _rxOutStream << m_sTargetFrame;
         writeHelpTextCompatibly(_rxOutStream);
@@ -215,8 +215,8 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         default:
             OSL_FAIL("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
-            m_sTargetURL = ::rtl::OUString();
-            m_sTargetFrame = ::rtl::OUString();
+            m_sTargetURL = OUString();
+            m_sTargetFrame = OUString();
             break;
     }
 }
@@ -358,7 +358,7 @@ StringSequence  OButtonControl::getSupportedServiceNames() throw()
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString*pArray = aSupported.getArray();
+    OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_COMMANDBUTTON;
     return aSupported;
 }
@@ -517,7 +517,7 @@ void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::co
 
 // XButton
 //------------------------------------------------------------------------------
-void OButtonControl::setLabel(const ::rtl::OUString& Label) throw( RuntimeException )
+void OButtonControl::setLabel(const OUString& Label) throw( RuntimeException )
 {
     Reference<XButton>  xButton;
     query_aggregation( m_xAggregate, xButton );
@@ -526,7 +526,7 @@ void OButtonControl::setLabel(const ::rtl::OUString& Label) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OButtonControl::setActionCommand(const ::rtl::OUString& _rCommand) throw( RuntimeException )
+void SAL_CALL OButtonControl::setActionCommand(const OUString& _rCommand) throw( RuntimeException )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -566,7 +566,7 @@ public:
         bool _bStart
     );
 
-    void    handleListening( const ::rtl::OUString& _rPropertyName );
+    void    handleListening( const OUString& _rPropertyName );
 };
 
 //..............................................................................
@@ -582,7 +582,7 @@ DoPropertyListening::DoPropertyListening(
 }
 
 //..............................................................................
-void DoPropertyListening::handleListening( const ::rtl::OUString& _rPropertyName )
+void DoPropertyListening::handleListening( const OUString& _rPropertyName )
 {
     if ( m_xProps.is() )
     {
@@ -652,7 +652,7 @@ void SAL_CALL OButtonControl::propertyChange( const PropertyChangeEvent& _rEvent
 //------------------------------------------------------------------------------
 namespace
 {
-    bool isFormControllerURL( const ::rtl::OUString& _rURL )
+    bool isFormControllerURL( const OUString& _rURL )
     {
         return  ( _rURL.getLength() > RTL_CONSTASCII_LENGTH( ".uno:FormController/" ) )
             &&  ( _rURL.startsWith( ".uno:FormController/" ) );
@@ -665,7 +665,7 @@ sal_Int16 OButtonControl::getModelUrlFeatureId( ) const
     sal_Int16 nFeatureId = -1;
 
     // some URL related properties of the model
-    ::rtl::OUString sUrl;
+    OUString sUrl;
     FormButtonType eButtonType = FormButtonType_PUSH;
 
     Reference< XPropertySet > xModelProps( const_cast< OButtonControl* >( this )->getModel(), UNO_QUERY );

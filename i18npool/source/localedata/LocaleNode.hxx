@@ -47,26 +47,26 @@ public:
 
 OFileWriter(const char *pcFile, const char *locale );
 virtual ~OFileWriter();
-    virtual void  writeStringCharacters(const ::rtl::OUString& str) const;
+    virtual void  writeStringCharacters(const OUString& str) const;
     virtual void  writeAsciiString(const char *str)const ;
     virtual void  writeInt(sal_Int16 nb) const;
     virtual void  writeFunction(const char *func, const char *count, const char *array) const;
-    virtual void  writeRefFunction(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction(const char *func, const OUString& useLocale) const;
     virtual void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
-    virtual void  writeRefFunction(const char *func, const ::rtl::OUString& useLocale, const char *to) const;
+    virtual void  writeRefFunction(const char *func, const OUString& useLocale, const char *to) const;
     virtual void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
-    virtual void  writeRefFunction2(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction2(const char *func, const OUString& useLocale) const;
     virtual void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
-    virtual void  writeRefFunction3(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeRefFunction3(const char *func, const OUString& useLocale) const;
     virtual void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
-    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const;
-    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count) const;
-    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, const sal_Int16 count) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const;
-    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str, sal_Int16 count) const;
+    virtual bool  writeDefaultParameter(const sal_Char* pAsciiStr, const OUString& str) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, const sal_Int16 count) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
     virtual void  flush(void) const ;
     virtual void  closeOutput(void) const;
     /// Return the locale string, something like en_US or de_DE
@@ -132,14 +132,14 @@ public:
     // ++nError with output to stderr
     void incError( const char* pStr ) const;
     // ++nError with output to stderr
-    void incError( const ::rtl::OUString& rStr ) const;
+    void incError( const OUString& rStr ) const;
     // ++nError with output to stderr, pStr should contain "%d", otherwise appended
     void incErrorInt( const char* pStr, int nVal ) const;
     // ++nError with output to stderr, pStr should contain "%s", otherwise appended
-    void incErrorStr( const char* pStr, const ::rtl::OUString& rVal ) const;
+    void incErrorStr( const char* pStr, const OUString& rVal ) const;
     // ++nError with output to stderr, pStr should contain "%s %s", otherwise
     // appended
-    void incErrorStrStr( const char* pStr, const ::rtl::OUString& rVal1, const ::rtl::OUString& rVal2 ) const;
+    void incErrorStrStr( const char* pStr, const OUString& rVal1, const OUString& rVal2 ) const;
     // used by incError...(), returns a pointer to a static buffer,
     // pDefaultConversion is appended if pFormat doesn't contain a %
     // specification and should be something like ": %d" or ": %s" or similar.

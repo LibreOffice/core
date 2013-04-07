@@ -76,7 +76,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
     pTxtNd->SetIgnoreDontExpand( true );
 
-    pTxtNd->InsertText( rtl::OUString(cIns), rPos.nContent,
+    pTxtNd->InsertText( OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND );
     aInsStr.Insert( cIns );
 
@@ -116,7 +116,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
     // ask the char that should be inserted
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
-        rCC.isLetterNumeric( rtl::OUString( cIns ), 0 ) !=
+        rCC.isLetterNumeric( OUString( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.Len()-1 ) )
         return sal_False;
 
@@ -200,7 +200,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( aDelStr.Len() )
     {
-        String aTmpStr = rtl::OUString('1');
+        String aTmpStr = OUString('1');
         sal_Unicode* pTmpStr = aTmpStr.GetBufferAccess();
 
         bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
@@ -248,10 +248,10 @@ void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-        rDoc.Overwrite(*pAktPam, rtl::OUString(aInsStr.GetChar(0)));
+        rDoc.Overwrite(*pAktPam, OUString(aInsStr.GetChar(0)));
     }
     for( xub_StrLen n = 1; n < aInsStr.Len(); ++n )
-        rDoc.Overwrite( *pAktPam, rtl::OUString(aInsStr.GetChar(n)) );
+        rDoc.Overwrite( *pAktPam, OUString(aInsStr.GetChar(n)) );
 }
 
 void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
@@ -282,7 +282,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         // do it individually, to keep the attributes!
         OUString const ins(
-                pTxtNd->InsertText( rtl::OUString(aInsStr.GetChar(n)), rIdx,
+                pTxtNd->InsertText( OUString(aInsStr.GetChar(n)), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND) );
         assert(ins.getLength() == 1); // cannot fail
         if( n < aDelStr.Len() )

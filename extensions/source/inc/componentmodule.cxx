@@ -48,7 +48,7 @@ namespace COMPMOD_NAMESPACE
     {
         ResMgr*     m_pResources;
         sal_Bool    m_bInitialized;
-        rtl::OString m_sFilePrefix;
+        OString m_sFilePrefix;
 
     public:
         /// ctor
@@ -57,7 +57,7 @@ namespace COMPMOD_NAMESPACE
 
         /// get the manager for the resources of the module
         ResMgr* getResManager();
-        void    setResourceFilePrefix(const ::rtl::OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
+        void    setResourceFilePrefix(const OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
     };
 
     //-------------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace COMPMOD_NAMESPACE
             // create a manager with a fixed prefix
             m_pResources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
             DBG_ASSERT(m_pResources,
-                    rtl::OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
+                    OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
                 .append(m_sFilePrefix)
                 .append(")!").getStr());
 
@@ -99,7 +99,7 @@ namespace COMPMOD_NAMESPACE
     ::osl::Mutex    OModule::s_aMutex;
     sal_Int32       OModule::s_nClients = 0;
     OModuleImpl*    OModule::s_pImpl = NULL;
-    ::rtl::OString  OModule::s_sResPrefix;
+    OString  OModule::s_sResPrefix;
     //-------------------------------------------------------------------------
     ResMgr* OModule::getResManager()
     {
@@ -108,7 +108,7 @@ namespace COMPMOD_NAMESPACE
     }
 
     //-------------------------------------------------------------------------
-    void OModule::setResourceFilePrefix(const ::rtl::OString& _rPrefix)
+    void OModule::setResourceFilePrefix(const OString& _rPrefix)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         s_sResPrefix = _rPrefix;
@@ -147,15 +147,15 @@ namespace COMPMOD_NAMESPACE
     //- registration helper
     //--------------------------------------------------------------------------
 
-    Sequence< ::rtl::OUString >*                OModule::s_pImplementationNames = NULL;
-    Sequence< Sequence< ::rtl::OUString > >*    OModule::s_pSupportedServices = NULL;
+    Sequence< OUString >*                OModule::s_pImplementationNames = NULL;
+    Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = NULL;
 
     //--------------------------------------------------------------------------
     void OModule::registerComponent(
-        const ::rtl::OUString& _rImplementationName,
-        const Sequence< ::rtl::OUString >& _rServiceNames,
+        const OUString& _rImplementationName,
+        const Sequence< OUString >& _rServiceNames,
         ComponentInstantiation _pCreateFunction,
         FactoryInstantiation _pFactoryFunction)
     {
@@ -163,8 +163,8 @@ namespace COMPMOD_NAMESPACE
         {
             OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
                 "OModule::registerComponent : inconsistent state (the pointers (1)) !");
-            s_pImplementationNames = new Sequence< ::rtl::OUString >;
-            s_pSupportedServices = new Sequence< Sequence< ::rtl::OUString > >;
+            s_pImplementationNames = new Sequence< OUString >;
+            s_pSupportedServices = new Sequence< Sequence< OUString > >;
             s_pCreationFunctionPointers = new Sequence< sal_Int64 >;
             s_pFactoryFunctionPointers = new Sequence< sal_Int64 >;
         }
@@ -189,7 +189,7 @@ namespace COMPMOD_NAMESPACE
     }
 
     //--------------------------------------------------------------------------
-    void OModule::revokeComponent(const ::rtl::OUString& _rImplementationName)
+    void OModule::revokeComponent(const OUString& _rImplementationName)
     {
         if (!s_pImplementationNames)
         {
@@ -204,7 +204,7 @@ namespace COMPMOD_NAMESPACE
             "OModule::revokeComponent : inconsistent state !");
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
-        const ::rtl::OUString* pImplNames = s_pImplementationNames->getConstArray();
+        const OUString* pImplNames = s_pImplementationNames->getConstArray();
         for (sal_Int32 i=0; i<nLen; ++i, ++pImplNames)
         {
             if (pImplNames->equals(_rImplementationName))
@@ -228,7 +228,7 @@ namespace COMPMOD_NAMESPACE
 
     //--------------------------------------------------------------------------
     Reference< XInterface > OModule::getComponentFactory(
-        const ::rtl::OUString& _rImplementationName,
+        const OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)
     {
         OSL_ENSURE(_rxServiceManager.is(), "OModule::getComponentFactory : invalid argument (service manager) !");
@@ -251,8 +251,8 @@ namespace COMPMOD_NAMESPACE
 
 
         sal_Int32 nLen = s_pImplementationNames->getLength();
-        const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
-        const Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
+        const OUString* pImplName = s_pImplementationNames->getConstArray();
+        const Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
         const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
         const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
 

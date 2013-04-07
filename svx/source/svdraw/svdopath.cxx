@@ -920,7 +920,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
         const SdrObjKind eKindMerk(meObjectKind);
         mrSdrPathObject.meKind = pU->eAktKind;
-        rtl::OUString aTmp;
+        OUString aTmp;
         mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aTmp);
         aStr = aTmp;
         mrSdrPathObject.meKind = eKindMerk;
@@ -934,7 +934,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         aNow -= aPrev;
         aStr.AppendAscii(" (");
 
-        rtl::OUString aMetr;
+        OUString aMetr;
 
         if(pU->bCircle)
         {
@@ -972,7 +972,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
     {
         // #i103058# fallback when no model and/or Handle, both needed
         // for else-path
-        rtl::OUString aTmp;
+        OUString aTmp;
         mrSdrPathObject.ImpTakeDescriptionStr(STR_DragPathObj, aTmp);
         aStr = aTmp;
     }
@@ -997,7 +997,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         if(!pDragData->IsMultiPointDrag() && pDragData->bEliminate)
         {
             // point of ...
-            rtl::OUString aTmp;
+            OUString aTmp;
             mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewMarkedPoint, aTmp);
             aStr = aTmp;
 
@@ -1013,7 +1013,7 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
         // dx=0.00 dy=0.00                -- both sides bezier
         // dx=0.00 dy=0.00  l=0.00 0.00°  -- one bezier/lever on one side, a start, or an ending
         // dx=0.00 dy=0.00  l=0.00 0.00° / l=0.00 0.00° -- in between
-        rtl::OUString aMetr;
+        OUString aMetr;
         Point aBeg(rDrag.GetStart());
         Point aNow(rDrag.GetNow());
 

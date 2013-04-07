@@ -34,11 +34,11 @@ namespace com { namespace sun { namespace star {
 
 class XMLStarBasicExportHandler : public XMLEventExportHandler
 {
-    const ::rtl::OUString sStarBasic;
-    const ::rtl::OUString sLibrary;
-    const ::rtl::OUString sMacroName;
-    const ::rtl::OUString sStarOffice;
-    const ::rtl::OUString sApplication;
+    const OUString sStarBasic;
+    const OUString sLibrary;
+    const OUString sMacroName;
+    const OUString sStarOffice;
+    const OUString sApplication;
 
 public:
     XMLStarBasicExportHandler();
@@ -46,7 +46,7 @@ public:
 
     virtual void Export(
         SvXMLExport& rExport,
-        const ::rtl::OUString& rEventName,
+        const OUString& rEventName,
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues,
         sal_Bool bUseWhitespace);

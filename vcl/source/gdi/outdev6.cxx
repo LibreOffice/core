@@ -1126,7 +1126,7 @@ void OutputDevice::Erase()
 
             if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
             bNativeOK = pWindow->DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
-                                                    nState, aControlValue, rtl::OUString() );
+                                                    nState, aControlValue, OUString() );
         }
     }
 

@@ -68,9 +68,9 @@ struct PDFEntry
 
 struct PDFComment : public PDFEntry
 {
-    rtl::OString  m_aComment;
+    OString  m_aComment;
 
-    PDFComment( const rtl::OString& rComment )
+    PDFComment( const OString& rComment )
     : PDFEntry(), m_aComment( rComment ) {}
     virtual ~PDFComment();
     virtual bool emit( EmitContext& rWriteContext ) const;
@@ -86,28 +86,28 @@ struct PDFValue : public PDFEntry
 
 struct PDFName : public PDFValue
 {
-    rtl::OString  m_aName;
+    OString  m_aName;
 
-    PDFName( const rtl::OString& rName )
+    PDFName( const OString& rName )
     : PDFValue(), m_aName( rName ) {}
     virtual ~PDFName();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
 
-    rtl::OUString getFilteredName() const;
+    OUString getFilteredName() const;
 };
 
 struct PDFString : public PDFValue
 {
-    rtl::OString  m_aString;
+    OString  m_aString;
 
-    PDFString( const rtl::OString& rString )
+    PDFString( const OString& rString )
     : PDFValue(), m_aString( rString ) {}
     virtual ~PDFString();
     virtual bool emit( EmitContext& rWriteContext ) const;
     virtual PDFEntry* clone() const;
 
-    rtl::OString getFilteredString() const;
+    OString getFilteredString() const;
 };
 
 struct PDFNumber : public PDFValue
@@ -180,7 +180,7 @@ struct PDFArray : public PDFContainer
 
 struct PDFDict : public PDFContainer
 {
-    typedef boost::unordered_map<rtl::OString,PDFEntry*,rtl::OStringHash> Map;
+    typedef boost::unordered_map<OString,PDFEntry*,OStringHash> Map;
     Map m_aMap;
 
     PDFDict() {}
@@ -190,9 +190,9 @@ struct PDFDict : public PDFContainer
 
     // inserting a value of NULL will remove rName and the previous value
     // from the dictionary
-    void insertValue( const rtl::OString& rName, PDFEntry* pValue );
+    void insertValue( const OString& rName, PDFEntry* pValue );
     // removes a name/value pair from the dict
-    void eraseValue( const rtl::OString& rName );
+    void eraseValue( const OString& rName );
     // builds new map as of sub elements
     // returns NULL if successful, else the first offending element
     PDFEntry* buildMap();
@@ -250,13 +250,13 @@ struct PDFFile : public PDFContainer
     // this method checks whether rPwd is compatible with
     // either user or owner password and sets up decrypt data in that case
     // returns true if decryption can be done
-    bool setupDecryptionData( const rtl::OString& rPwd ) const;
+    bool setupDecryptionData( const OString& rPwd ) const;
 
     bool decrypt( const sal_uInt8* pInBuffer, sal_uInt32 nLen,
                   sal_uInt8* pOutBuffer,
                   unsigned int nObject, unsigned int nGeneration ) const;
 
-    rtl::OUString getDecryptionKey() const;
+    OUString getDecryptionKey() const;
 };
 
 struct PDFObject : public PDFContainer

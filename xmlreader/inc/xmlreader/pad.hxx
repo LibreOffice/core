@@ -43,7 +43,7 @@ private:
     SAL_DLLPRIVATE void flushSpan();
 
     Span span_;
-    rtl::OStringBuffer buffer_;
+    OStringBuffer buffer_;
 };
 
 }

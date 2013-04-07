@@ -135,7 +135,7 @@ class DAVException
 
     private:
         ExceptionCode   mExceptionCode;
-        rtl::OUString   mData;
+        OUString   mData;
         sal_uInt16      mStatusCode;
 
     public:
@@ -145,13 +145,13 @@ class DAVException
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
-                       const rtl::OUString & rData )
+                       const OUString & rData )
              : mExceptionCode( inExceptionCode )
              , mData( rData )
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
-                       const rtl::OUString & rData,
+                       const OUString & rData,
                        sal_uInt16 nStatusCode )
             : mExceptionCode( inExceptionCode )
             , mData( rData )
@@ -160,7 +160,7 @@ class DAVException
         ~DAVException( ) {};
 
     const ExceptionCode & getError() const { return mExceptionCode; }
-    const rtl::OUString & getData() const  { return mData; }
+    const OUString & getData() const  { return mData; }
     sal_uInt16 getStatus() const { return mStatusCode; }
 };
 

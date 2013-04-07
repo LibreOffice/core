@@ -47,14 +47,14 @@ namespace xmloff
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
+    OUString VCLDateHandler::getAttributeValue( const PropertyValues& /*i_propertyValues*/ ) const
     {
         OSL_ENSURE( false, "VCLDateHandler::getAttributeValue: unexpected call!" );
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
+    OUString VCLDateHandler::getAttributeValue( const Any& i_propertyValue ) const
     {
         sal_Int32 nVCLDate(0);
         OSL_VERIFY( i_propertyValue >>= nVCLDate );
@@ -65,13 +65,13 @@ namespace xmloff
         aDateTime.Month = aVCLDate.GetMonth();
         aDateTime.Year = aVCLDate.GetYear();
 
-        ::rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         ::sax::Converter::convertDateTime( aBuffer, aDateTime, false );
         return aBuffer.makeStringAndClear();
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    bool VCLDateHandler::getPropertyValues( const ::rtl::OUString i_attributeValue, PropertyValues& o_propertyValues ) const
+    bool VCLDateHandler::getPropertyValues( const OUString i_attributeValue, PropertyValues& o_propertyValues ) const
     {
         sal_Int32 nVCLDate(0);
 

@@ -35,7 +35,7 @@ class PagePropertySetContext : public SvXMLPropertySetContext
 
 public:
     PagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
+                const OUString& rLName,
                  const ::com::sun::star::uno::Reference<
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                  sal_uInt32 nFam,
@@ -48,7 +48,7 @@ public:
 
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp);

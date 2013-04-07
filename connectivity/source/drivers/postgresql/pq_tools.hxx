@@ -72,102 +72,102 @@ namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );
 
-rtl::OUString date2String( const com::sun::star::util::Date & date );
-com::sun::star::util::Date string2Date( const rtl::OUString & str );
+OUString date2String( const com::sun::star::util::Date & date );
+com::sun::star::util::Date string2Date( const OUString & str );
 
-rtl::OUString time2String( const com::sun::star::util::Time & time );
-com::sun::star::util::Time string2Time( const rtl::OUString & str );
+OUString time2String( const com::sun::star::util::Time & time );
+com::sun::star::util::Time string2Time( const OUString & str );
 
-rtl::OUString dateTime2String( const com::sun::star::util::DateTime & dateTime );
-com::sun::star::util::DateTime string2DateTime( const rtl::OUString & dateTime );
+OUString dateTime2String( const com::sun::star::util::DateTime & dateTime );
+com::sun::star::util::DateTime string2DateTime( const OUString & dateTime );
 
-rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b);
+OUString concatQualified( const OUString & a, const OUString &b);
 
-rtl::OString OUStringToOString( rtl::OUString str, ConnectionSettings *settings);
+OString OUStringToOString( OUString str, ConnectionSettings *settings);
 
-void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
-void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
+void bufferQuoteConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
+void bufferQuoteAnyConstant( OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
 
-void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
+void bufferEscapeConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
 
-::rtl::OUString sqltype2string(
+OUString sqltype2string(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & column );
 
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &name, ConnectionSettings *settings );
+    OUStringBuffer & buf, const OUString &schema, const OUString &name, ConnectionSettings *settings );
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf,
-    const rtl::OUString &schema,
-    const rtl::OUString &name,
-    const rtl::OUString &col,
+    OUStringBuffer & buf,
+    const OUString &schema,
+    const OUString &name,
+    const OUString &col,
     ConnectionSettings *settings );
 
-void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings );
+void bufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings );
 void bufferKey2TableConstraint(
-    rtl::OUStringBuffer &buf,
+    OUStringBuffer &buf,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > &key,
     ConnectionSettings *settings  );
 
-rtl::OUString extractStringProperty(
+OUString extractStringProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
-    const rtl::OUString &name );
+    const OUString &name );
 
 sal_Int32 extractIntProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
-    const rtl::OUString &name );
+    const OUString &name );
 
 sal_Bool extractBoolProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
-    const rtl::OUString &name );
+    const OUString &name );
 
 void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 void disposeObject( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
 
-::rtl::OUString extractTableFromInsert( const rtl::OUString & sql );
-::rtl::OString extractSingleTableFromSelect( const OStringVector &vec );
+OUString extractTableFromInsert( const OUString & sql );
+OString extractSingleTableFromSelect( const OStringVector &vec );
 
-void tokenizeSQL( const rtl::OString & sql, OStringVector &vec  );
-void splitSQL( const rtl::OString & sql, OStringVector &vec  );
-com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const ::rtl::OUString & str );
-com::sun::star::uno::Sequence< com::sun::star::uno::Any > parseArray( const ::rtl::OUString & str )
+void tokenizeSQL( const OString & sql, OStringVector &vec  );
+void splitSQL( const OString & sql, OStringVector &vec  );
+com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str );
+com::sun::star::uno::Sequence< com::sun::star::uno::Any > parseArray( const OUString & str )
     throw( com::sun::star::sdbc::SQLException );
 
-rtl::OUString array2String( const com::sun::star::uno::Sequence< com::sun::star::uno::Any > &seq );
+OUString array2String( const com::sun::star::uno::Sequence< com::sun::star::uno::Any > &seq );
 
 com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > extractConnectionFromStatement(
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & stmt );
 
-void splitConcatenatedIdentifier( const rtl::OUString & source, rtl::OUString *first, rtl::OUString *second);
+void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second);
 
 
 void fillAttnum2attnameMap(
     Int2StringMap &map,
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
-    const rtl::OUString &schema,
-    const rtl::OUString &table );
+    const OUString &schema,
+    const OUString &table );
 
-com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUString & str );
+com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str );
 
-com::sun::star::uno::Sequence< rtl::OUString > convertMappedIntArray2StringArray(
+com::sun::star::uno::Sequence< OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const com::sun::star::uno::Sequence< sal_Int32> &source );
 
 typedef ::boost::unordered_map
 <
-    ::rtl::OString,
-    ::rtl::OString,
-    ::rtl::OStringHash,
-    ::std::equal_to< rtl::OString >,
-    Allocator< ::std::pair< rtl::OString, ::rtl::OString > >
+    OString,
+    OString,
+    OStringHash,
+    ::std::equal_to< OString >,
+    Allocator< ::std::pair< OString, OString > >
 > String2StringMap;
 
-rtl::OUString querySingleValue(
+OUString querySingleValue(
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &connection,
-    const rtl::OUString &query );
+    const OUString &query );
 
-void extractNameValuePairsFromInsert( String2StringMap & map, const rtl::OString & lastQuery );
-sal_Int32 typeNameToDataType( const rtl::OUString &typeName, const rtl::OUString &typtype );
+void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery );
+sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype );
 
 // copied from connectivity/source/dbtools, can't use the function directly
 bool implSetObject(	const com::sun::star::uno::Reference< com::sun::star::sdbc::XParameters >& _rxParameters,
@@ -192,7 +192,7 @@ public:
     ~TransactionGuard( );
 
     void commit();
-    void executeUpdate( const rtl::OUString & sql );
+    void executeUpdate( const OUString & sql );
 };
 
 template < typename T, typename Allocator > com::sun::star::uno::Sequence<T> sequence_of_vector ( const std::vector<T, Allocator> &vec )

@@ -45,9 +45,9 @@ OSimpleLogRing::~OSimpleLogRing()
 }
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
+uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames_static()
 {
-    uno::Sequence< rtl::OUString > aResult( 1 );
+    uno::Sequence< OUString > aResult( 1 );
     aResult[0] = getServiceName_static();
     return aResult;
 }
@@ -78,7 +78,7 @@ uno::Reference< uno::XInterface > SAL_CALL OSimpleLogRing::Create( SAL_UNUSED_PA
 
 // XSimpleLogRing
 // ----------------------------------------------------------
-void SAL_CALL OSimpleLogRing::logString( const ::rtl::OUString& aMessage ) throw (uno::RuntimeException)
+void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -94,13 +94,13 @@ void SAL_CALL OSimpleLogRing::logString( const ::rtl::OUString& aMessage ) throw
 }
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nResLen = m_bFull ? m_aMessages.getLength() : m_nPos;
     sal_Int32 nStart = m_bFull ? m_nPos : 0;
-    uno::Sequence< ::rtl::OUString > aResult( nResLen );
+    uno::Sequence< OUString > aResult( nResLen );
 
     for ( sal_Int32 nInd = 0; nInd < nResLen; nInd++ )
         aResult[nInd] = m_aMessages[ ( nStart + nInd ) % m_aMessages.getLength() ];
@@ -136,15 +136,15 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 
 // XServiceInfo
 // ----------------------------------------------------------
-::rtl::OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException)
+OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();
 }
 
 // ----------------------------------------------------------
-::sal_Bool SAL_CALL OSimpleLogRing::supportsService( const ::rtl::OUString& aServiceName ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException)
 {
-    const uno::Sequence< rtl::OUString > & aSupportedNames = getSupportedServiceNames_static();
+    const uno::Sequence< OUString > & aSupportedNames = getSupportedServiceNames_static();
     for ( sal_Int32 nInd = 0; nInd < aSupportedNames.getLength(); nInd++ )
     {
         if ( aSupportedNames[ nInd ].equals( aServiceName ) )
@@ -155,7 +155,7 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 }
 
 // ----------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException)
 {
     return getSupportedServiceNames_static();
 }

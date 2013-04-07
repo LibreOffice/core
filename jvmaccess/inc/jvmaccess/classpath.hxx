@@ -67,7 +67,7 @@ public:
     translateToUrls(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, ::rtl::OUString const & classPath)
+        ::JNIEnv * environment, OUString const & classPath)
     {
         return
             static_cast< ::jobjectArray >(
@@ -103,8 +103,8 @@ public:
     static inline ::jclass loadClass(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, ::rtl::OUString const & classPath,
-        ::rtl::OUString const & name)
+        ::JNIEnv * environment, OUString const & classPath,
+        OUString const & name)
     {
         return
             static_cast< ::jclass >(
@@ -124,13 +124,13 @@ private:
     static void * doTranslateToUrls(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        void * environment, ::rtl::OUString const & classPath);
+        void * environment, OUString const & classPath);
 
     static void * doLoadClass(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        void * environment, ::rtl::OUString const & classPath,
-        ::rtl::OUString const & name);
+        void * environment, OUString const & classPath,
+        OUString const & name);
 };
 
 }

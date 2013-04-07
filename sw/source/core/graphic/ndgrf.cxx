@@ -885,7 +885,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             String aExtStr = _aStrmName.Copy( nExtPos );
             if ( GetGrfObj().GetType() != GRAPHIC_NONE )
             {
-                _aStrmName = rtl::OStringToOUString(GetGrfObj().GetUniqueID(),
+                _aStrmName = OStringToOUString(GetGrfObj().GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US);
                 _aStrmName += aExtStr;
             }

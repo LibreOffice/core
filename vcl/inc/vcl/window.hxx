@@ -326,7 +326,7 @@ class VclSizeGroup;
 struct WindowResHeader
 {
     sal_uLong nObjMask;
-    rtl::OString aHelpId;
+    OString aHelpId;
     sal_uLong nRSStyle;
 };
 
@@ -929,11 +929,11 @@ public:
     void                SetQuickHelpText( const XubString& rHelpText );
     const XubString&    GetQuickHelpText() const;
 
-    void                SetHelpId( const rtl::OString& );
-    const rtl::OString& GetHelpId() const;
+    void                SetHelpId( const OString& );
+    const OString& GetHelpId() const;
 
-    void                SetUniqueId( const rtl::OString& );
-    const rtl::OString& GetUniqueId() const;
+    void                SetUniqueId( const OString& );
+    const OString& GetUniqueId() const;
 
     Window*             FindWindow( const Point& rPos ) const;
 
@@ -1210,14 +1210,14 @@ public:
      *
      * @return false if property is unknown
      */
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 
     /*
      * Sets a font attribute
      *
      * @return false if attribute is unknown
      */
-    bool set_font_attribute(const rtl::OString &rKey, const rtl::OString &rValue);
+    bool set_font_attribute(const OString &rKey, const OString &rValue);
 
     /*
      * Adds this widget to the xGroup VclSizeGroup
@@ -1269,7 +1269,7 @@ public:
 
     void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
 
-    virtual rtl::OUString GetSurroundingText() const;
+    virtual OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 };
 

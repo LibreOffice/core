@@ -102,7 +102,7 @@ public:
     AstExpression(sal_Int64         h);
     AstExpression(sal_uInt64        uh);
     AstExpression(double            d);
-    AstExpression(::rtl::OString* scopedName);
+    AstExpression(OString* scopedName);
 
     virtual ~AstExpression();
 
@@ -115,9 +115,9 @@ public:
         { return m_lineNo; }
     void setLine(sal_Int32 l)
         { m_lineNo = l; }
-    const ::rtl::OString& getFileName()
+    const OString& getFileName()
         { return m_fileName; }
-    void setFileName(const ::rtl::OString& fileName)
+    void setFileName(const OString& fileName)
         { m_fileName = fileName; }
     ExprComb getCombOperator()
         { return m_combOperator; }
@@ -135,9 +135,9 @@ public:
         { return m_subExpr2; }
     void setExpr2(AstExpression *pExpr)
         { m_subExpr2 = pExpr; }
-    ::rtl::OString* getSymbolicName()
+    OString* getSymbolicName()
         { return m_pSymbolicName; }
-    void setSymbolicName(::rtl::OString* pSymbolicName)
+    void setSymbolicName(OString* pSymbolicName)
         { m_pSymbolicName = pSymbolicName; }
 
     // Evaluation and value coercion
@@ -150,7 +150,7 @@ public:
     sal_Bool operator==(AstExpression *pExpr);
     sal_Bool compare(AstExpression *pExpr);
 
-    ::rtl::OString toString();
+    OString toString();
     void dump() {}
 private:
     // Fill out the lineno, filename and definition scope details
@@ -165,13 +165,13 @@ private:
 
     AstScope*       m_pScope;       // scope defined in
     sal_Int32       m_lineNo;       // line number defined in
-    ::rtl::OString  m_fileName;     // fileName defined in
+    OString  m_fileName;     // fileName defined in
 
     ExprComb        m_combOperator;
     AstExpression*  m_subExpr1;
     AstExpression*  m_subExpr2;
     AstExprValue*   m_exprValue;
-    ::rtl::OString* m_pSymbolicName;
+    OString* m_pSymbolicName;
 };
 
 #endif // _IDLC_ASTEXPRESSION_HXX_

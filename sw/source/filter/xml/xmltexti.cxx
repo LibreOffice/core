@@ -63,8 +63,6 @@
 #include <svl/urihelper.hxx>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -278,12 +276,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             {
                 // create object with desired ClassId
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
-                ::rtl::OUString aName("DummyName");
+                OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
                 uno::Reference < embed::XEmbeddedObject > xObj =
                     uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-                    aClass, ::rtl::OUString(), xStorage, aName,
+                    aClass, OUString(), xStorage, aName,
                     uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
@@ -315,12 +313,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             SwOLENode* pExistingOLENd = pNd->GetOLENode();
             if( pExistingOLENd )
             {
-                ::rtl::OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
+                OUString aExistingName = pExistingOLENd->GetOLEObj().GetCurrentPersistName();
                 if ( aExistingName.equals( aObjName ) )
                 {
                     OSL_FAIL( "The document contains duplicate object references, means it is partially broken, please let developers know how this document was generated!\n" );
 
-                    ::rtl::OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
+                    OUString aTmpName = pDoc->GetPersist()->GetEmbeddedObjectContainer().CreateUniqueObjectName();
                     try
                     {
                         pDoc->GetPersist()->GetStorage()->copyElementTo( aObjName,
@@ -567,13 +565,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName("DummyName");
+        OUString aName("DummyName");
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
-        aMediaDescriptor[0].Name = ::rtl::OUString("URL");
-        aMediaDescriptor[0].Value <<= ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        aMediaDescriptor[0].Name = OUString("URL");
+        aMediaDescriptor[0].Value <<= OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( pDoc && pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
             uno::Reference< task::XInteractionHandler > xInteraction =
@@ -581,7 +579,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             if ( xInteraction.is() )
             {
                 aMediaDescriptor.realloc( 2 );
-                aMediaDescriptor[1].Name = ::rtl::OUString( "InteractionHandler" );
+                aMediaDescriptor[1].Name = OUString( "InteractionHandler" );
                 aMediaDescriptor[1].Value <<= xInteraction;
             }
         }
@@ -698,12 +696,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName("DummyName");
+        OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-            aClass, ::rtl::OUString(), xStorage, aName,
+            aClass, OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
@@ -718,11 +716,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             if ( xSet.is() )
             {
                 if( bValidURL )
-                    xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
-                        makeAny( ::rtl::OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                    xSet->setPropertyValue( OUString("PluginURL"),
+                        makeAny( OUString( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 if( bValidMimeType )
-                    xSet->setPropertyValue( ::rtl::OUString("PluginMimeType"),
-                        makeAny( ::rtl::OUString( rMimeType ) ) );
+                    xSet->setPropertyValue( OUString("PluginMimeType"),
+                        makeAny( OUString( rMimeType ) ) );
             }
 
             SwFrmFmt *pFrmFmt = pDoc->Insert( *pTxtCrsr->GetPaM(),
@@ -829,12 +827,12 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     try
     {
         // create object with desired ClassId
-        ::rtl::OUString aName("DummyName");
+        OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
         uno::Reference < embed::XEmbeddedObject > xObj =
             uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
-            aClass, ::rtl::OUString(), xStorage, aName,
+            aClass, OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
         // set size to the object
@@ -848,31 +846,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString("FrameURL"),
-                    makeAny( ::rtl::OUString( URIHelper::SmartRel2Abs(
+                xSet->setPropertyValue( OUString("FrameURL"),
+                    makeAny( OUString( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameName"),
-                    makeAny( ::rtl::OUString( rName ) ) );
+                xSet->setPropertyValue( OUString("FrameName"),
+                    makeAny( OUString( rName ) ) );
 
                 if ( eScrollMode == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoScroll"),
+                    xSet->setPropertyValue( OUString("FrameIsAutoScroll"),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsScrollingMode"),
+                    xSet->setPropertyValue( OUString("FrameIsScrollingMode"),
                         makeAny( (sal_Bool) (eScrollMode == ScrollingYes) ) );
 
                 if ( bIsBorderSet )
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsBorder"),
+                    xSet->setPropertyValue( OUString("FrameIsBorder"),
                         makeAny( bHasBorder ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoBorder"),
+                    xSet->setPropertyValue( OUString("FrameIsAutoBorder"),
                         makeAny( sal_True ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameMarginWidth"),
+                xSet->setPropertyValue( OUString("FrameMarginWidth"),
                     makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString("FrameMarginHeight"),
+                xSet->setPropertyValue( OUString("FrameMarginHeight"),
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
@@ -897,7 +895,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
 
 void SwXMLTextImportHelper::endAppletOrPlugin(
         const uno::Reference < XPropertySet > &rPropSet,
-        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap)
+        ::std::map < const OUString, OUString, ::comphelper::UStringLess > &rParamMap)
 {
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
@@ -922,8 +920,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             const sal_Int32 nCount = rParamMap.size();
             uno::Sequence< beans::PropertyValue > aCommandSequence( nCount );
 
-            ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aIter = rParamMap.begin();
-            ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > ::iterator aEnd = rParamMap.end();
+            ::std::map < const OUString, OUString, ::comphelper::UStringLess > ::iterator aIter = rParamMap.begin();
+            ::std::map < const OUString, OUString, ::comphelper::UStringLess > ::iterator aEnd = rParamMap.end();
             sal_Int32 nIndex=0;
             while (aIter != aEnd )
             {
@@ -935,14 +933,14 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             }
 
             // unfortunately the names of the properties are depending on the object
-            ::rtl::OUString aParaName("AppletCommands");
+            OUString aParaName("AppletCommands");
             try
             {
                 xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
             }
             catch ( uno::Exception& )
             {
-                aParaName = ::rtl::OUString("PluginCommands");
+                aParaName = OUString("PluginCommands");
                 try
                 {
                     xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );

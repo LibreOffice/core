@@ -134,7 +134,7 @@ SvtLanguageTable::~SvtLanguageTable()
 
 //------------------------------------------------------------------------
 
-const rtl::OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
+const OUString SvtLanguageTable::GetString( const LanguageType eType, bool bUserInterfaceSelection ) const
 {
     LanguageType eLang = MsLangId::getReplacementForObsoleteLanguage( eType, bUserInterfaceSelection);
     sal_uInt32 nPos = FindIndex( eLang );

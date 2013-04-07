@@ -48,11 +48,11 @@ static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
     static SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((rtl::OUString*)0),                0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_ERRTITLE), 0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRTITLE), 0,  &getCppuType((OUString*)0),                0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_IGNOREBL), 0,  &getBooleanCppuType(),                          0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_INPMESS),  0,  &getCppuType((rtl::OUString*)0),                0, 0},
-        {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPMESS),  0,  &getCppuType((OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((OUString*)0),                0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_SHOWERR),  0,  &getBooleanCppuType(),                          0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_SHOWINP),  0,  &getBooleanCppuType(),                          0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_SHOWLIST), 0,  &getCppuType((sal_Int16*)0),                    0, 0},
@@ -279,7 +279,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else if ( rProp.Name == SC_UNONAME_FORMULA1 )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExpr1 = aStrVal;
@@ -291,7 +291,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else if ( rProp.Name == SC_UNONAME_FORMULA2 )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExpr2 = aStrVal;
@@ -309,26 +309,26 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
         else if ( rProp.Name == SC_UNONAME_SOURCESTR )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maPosStr = String( aStrVal );
         }
         else if ( rProp.Name == SC_UNONAME_STYLENAME )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PARA );
         }
         else if ( rProp.Name == SC_UNONAME_FORMULANMSP1 )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExprNmsp1 = aStrVal;
         }
         else if ( rProp.Name == SC_UNONAME_FORMULANMSP2 )
         {
-            rtl::OUString aStrVal;
+            OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
                 aEntry.maExprNmsp2 = aStrVal;
         }
@@ -383,7 +383,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, rtl::OUString("com.sun.star.sheet.TableConditionalEntryEnumeration"));
+    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableConditionalEntryEnumeration"));
 }
 
 // XIndexAccess
@@ -421,14 +421,14 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
 //  conditional format entries have no real names
 //  -> generate name from index
 
-static rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
+static OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
-    rtl::OUString aRet( "Entry" );
-    aRet += rtl::OUString::valueOf( nIndex );
+    OUString aRet( "Entry" );
+    aRet += OUString::valueOf( nIndex );
     return aRet;
 }
 
-uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aName )
+uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -449,21 +449,21 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
         throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
+uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     long nCount = aEntries.size();
-    uno::Sequence<rtl::OUString> aNames(nCount);
-    rtl::OUString* pArray = aNames.getArray();
+    uno::Sequence<OUString> aNames(nCount);
+    OUString* pArray = aNames.getArray();
     for (long i=0; i<nCount; i++)
         pArray[i] = lcl_GetEntryNameFromIndex(i);
 
     return aNames;
 }
 
-sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aName )
+sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const OUString& aName )
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -557,26 +557,26 @@ void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator
     aData.meMode = ScConditionEntry::GetModeFromApi( nOperator );
 }
 
-rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aData.maExpr1;
 }
 
-void SAL_CALL ScTableConditionalEntry::setFormula1( const rtl::OUString& aFormula1 )
+void SAL_CALL ScTableConditionalEntry::setFormula1( const OUString& aFormula1 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     aData.maExpr1 = String( aFormula1 );
 }
 
-rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aData.maExpr2;
 }
 
-void SAL_CALL ScTableConditionalEntry::setFormula2( const rtl::OUString& aFormula2 )
+void SAL_CALL ScTableConditionalEntry::setFormula2( const OUString& aFormula2 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -602,13 +602,13 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 
 // XSheetConditionalEntry
 
-rtl::OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return ScStyleNameConversion::DisplayToProgrammaticName( aData.maStyle, SFX_STYLE_FAMILY_PARA );
 }
 
-void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyleName )
+void SAL_CALL ScTableConditionalEntry::setStyleName( const OUString& aStyleName )
                                             throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -755,26 +755,26 @@ void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
     nMode = sal::static_int_cast<sal_uInt16>( ScConditionEntry::GetModeFromApi( nOperator ) );
 }
 
-rtl::OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aExpr1;
 }
 
-void SAL_CALL ScTableValidationObj::setFormula1( const rtl::OUString& aFormula1 )
+void SAL_CALL ScTableValidationObj::setFormula1( const OUString& aFormula1 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     aExpr1 = String( aFormula1 );
 }
 
-rtl::OUString SAL_CALL ScTableValidationObj::getFormula2() throw(uno::RuntimeException)
+OUString SAL_CALL ScTableValidationObj::getFormula2() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return aExpr2;
 }
 
-void SAL_CALL ScTableValidationObj::setFormula2( const rtl::OUString& aFormula2 )
+void SAL_CALL ScTableValidationObj::setFormula2( const OUString& aFormula2 )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -842,7 +842,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getProper
 }
 
 void SAL_CALL ScTableValidationObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -856,25 +856,25 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aValue >>= nShowList;
     else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) )
     {
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             aInputTitle = String( aStrVal );
     }
     else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )
     {
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             aInputMessage = String( aStrVal );
     }
     else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) )
     {
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             aErrorTitle = String( aStrVal );
     }
     else if ( aString.EqualsAscii( SC_UNONAME_ERRMESS ) )
     {
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             aErrorMessage = String( aStrVal );
     }
@@ -918,7 +918,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             aPosString = String( aStrVal );
     }
@@ -926,7 +926,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             maExprNmsp1 = aStrVal;
     }
@@ -934,7 +934,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     {
         // internal - only for XML filter, not in PropertySetInfo, only set
 
-        rtl::OUString aStrVal;
+        OUString aStrVal;
         if ( aValue >>= aStrVal )
             maExprNmsp2 = aStrVal;
     }
@@ -956,7 +956,7 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
     }
 }
 
-uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -968,10 +968,10 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const rtl::OUString& a
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWERR ) )  ScUnoHelpFunctions::SetBoolInAny( aRet, bShowError );
     else if ( aString.EqualsAscii( SC_UNONAME_IGNOREBL ) ) ScUnoHelpFunctions::SetBoolInAny( aRet, bIgnoreBlank );
     else if ( aString.EqualsAscii( SC_UNONAME_SHOWLIST ) ) aRet <<= nShowList;
-    else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) ) aRet <<= rtl::OUString( aInputTitle );
-    else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )  aRet <<= rtl::OUString( aInputMessage );
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) ) aRet <<= rtl::OUString( aErrorTitle );
-    else if ( aString.EqualsAscii( SC_UNONAME_ERRMESS ) )  aRet <<= rtl::OUString( aErrorMessage );
+    else if ( aString.EqualsAscii( SC_UNONAME_INPTITLE ) ) aRet <<= OUString( aInputTitle );
+    else if ( aString.EqualsAscii( SC_UNONAME_INPMESS ) )  aRet <<= OUString( aInputMessage );
+    else if ( aString.EqualsAscii( SC_UNONAME_ERRTITLE ) ) aRet <<= OUString( aErrorTitle );
+    else if ( aString.EqualsAscii( SC_UNONAME_ERRMESS ) )  aRet <<= OUString( aErrorMessage );
     else if ( aString.EqualsAscii( SC_UNONAME_TYPE ) )
     {
         sheet::ValidationType eType = sheet::ValidationType_ANY;

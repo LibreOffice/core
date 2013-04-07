@@ -118,7 +118,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
     SfxMediumList* pMediumList = new SfxMediumList;
     if (!m_nError && m_pItemSet && !m_pURLList.empty())
     {
-        for(std::vector<rtl::OUString>::const_iterator i = m_pURLList.begin(); i != m_pURLList.end(); ++i)
+        for(std::vector<OUString>::const_iterator i = m_pURLList.begin(); i != m_pURLList.end(); ++i)
         {
             SfxMedium* pMedium = new SfxMedium(
                     *i, SFX_STREAM_READONLY,
@@ -144,11 +144,11 @@ SfxMediumList* DocumentInserter::CreateMediumList()
     return pMediumList;
 }
 
-void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<rtl::OUString>& _rpURLList )
+void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<OUString>& _rpURLList )
 {
     DBG_ASSERT( _pFileDlg, "DocumentInserter::fillURLList(): invalid file dialog" );
 
-    Sequence < ::rtl::OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
+    Sequence < OUString > aPathSeq = _pFileDlg->GetSelectedFiles();
 
     if ( aPathSeq.getLength() )
     {

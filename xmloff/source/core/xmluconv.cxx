@@ -53,8 +53,6 @@ using namespace com::sun::star::style;
 using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
@@ -274,7 +272,7 @@ void SvXMLUnitConverter::convertDouble(OUStringBuffer& rBuffer,
 
 /** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, sal_Bool bLookForUnits) const
+    const OUString& rString, sal_Bool bLookForUnits) const
 {
     if(bLookForUnits)
     {
@@ -297,13 +295,13 @@ sal_Bool SvXMLUnitConverter::setNullDate(const com::sun::star::uno::Reference <c
     if (xNumberFormatsSupplier.is())
     {
         const com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> xPropertySet = xNumberFormatsSupplier->getNumberFormatSettings();
-        return xPropertySet.is() && (xPropertySet->getPropertyValue(rtl::OUString(XML_NULLDATE)) >>= m_pImpl->m_aNullDate);
+        return xPropertySet.is() && (xPropertySet->getPropertyValue(OUString(XML_NULLDATE)) >>= m_pImpl->m_aNullDate);
     }
     return sal_False;
 }
 
 /** convert double to ISO Date Time String */
-void SvXMLUnitConverter::convertDateTime(::rtl::OUStringBuffer& rBuffer,
+void SvXMLUnitConverter::convertDateTime(OUStringBuffer& rBuffer,
                      const double& fDateTime, bool const bAddTimeIf0AM)
 {
     convertDateTime(rBuffer, fDateTime, m_pImpl->m_aNullDate, bAddTimeIf0AM);
@@ -311,7 +309,7 @@ void SvXMLUnitConverter::convertDateTime(::rtl::OUStringBuffer& rBuffer,
 
 /** convert ISO Date Time String to double */
 bool SvXMLUnitConverter::convertDateTime(double& fDateTime,
-                     const ::rtl::OUString& rString)
+                     const OUString& rString)
 {
     return convertDateTime(fDateTime, rString, m_pImpl->m_aNullDate);
 }

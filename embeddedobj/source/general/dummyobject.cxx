@@ -44,12 +44,12 @@ void ODummyEmbeddedObject::CheckInit()
         throw lang::DisposedException();
 
     if ( m_nObjectState == -1 )
-        throw embed::WrongStateException( ::rtl::OUString( "The object has no persistence!\n" ),
+        throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
 //----------------------------------------------
-void ODummyEmbeddedObject::PostEvent_Impl( const ::rtl::OUString& aEventName )
+void ODummyEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
 {
     if ( m_pInterfaceContainer )
     {
@@ -208,7 +208,7 @@ sal_Int64 SAL_CALL ODummyEmbeddedObject::getStatus( sal_Int64 )
 }
 
 //----------------------------------------------
-void SAL_CALL ODummyEmbeddedObject::setContainerName( const ::rtl::OUString& )
+void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -228,7 +228,7 @@ void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     m_nCachedAspect = nAspect;
@@ -249,12 +249,12 @@ awt::Size SAL_CALL ODummyEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_bHasCachedSize || m_nCachedAspect != nAspect )
         throw embed::NoVisualAreaSizeException(
-                ::rtl::OUString( "No size available!\n" ),
+                OUString( "No size available!\n" ),
                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aCachedSize;
@@ -271,7 +271,7 @@ sal_Int32 SAL_CALL ODummyEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
         // no representation can be retrieved
-        throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+        throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return embed::EmbedMapUnits::ONE_100TH_MM;
@@ -288,14 +288,14 @@ embed::VisualRepresentation SAL_CALL ODummyEmbeddedObject::getPreferredVisualRep
     CheckInit();
 
     // no representation can be retrieved
-    throw embed::WrongStateException( ::rtl::OUString( "Illegal call!\n" ),
+    throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 }
 
 //----------------------------------------------
 void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
                     const uno::Reference< embed::XStorage >& xStorage,
-                    const ::rtl::OUString& sEntName,
+                    const OUString& sEntName,
                     sal_Int32 nEntryConnectionMode,
                     const uno::Sequence< beans::PropertyValue >& /* lArguments */,
                     const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
@@ -310,12 +310,12 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
         throw lang::DisposedException(); // TODO
 
     if ( !xStorage.is() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "No parent storage is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             1 );
 
     if ( sEntName.isEmpty() )
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Empty element name is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Empty element name is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
@@ -323,7 +323,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
       && ( m_nObjectState == -1 || nEntryConnectionMode != embed::EntryInitModes::NO_INIT ) )
     {
         throw embed::WrongStateException(
-                    ::rtl::OUString( "Can't change persistent representation of activated object!\n" ),
+                    OUString( "Can't change persistent representation of activated object!\n" ),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -333,7 +333,7 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
             saveCompleted( ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) ) );
         else
             throw embed::WrongStateException(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 
@@ -348,20 +348,20 @@ void SAL_CALL ODummyEmbeddedObject::setPersistentEntry(
             m_nObjectState = embed::EmbedStates::LOADED;
         }
         else
-            throw lang::IllegalArgumentException( ::rtl::OUString( "Wrong entry is provided!\n" ),
+            throw lang::IllegalArgumentException( OUString( "Wrong entry is provided!\n" ),
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                 2 );
 
     }
     else
-        throw lang::IllegalArgumentException( ::rtl::OUString( "Wrong connection mode is provided!\n" ),
+        throw lang::IllegalArgumentException( OUString( "Wrong connection mode is provided!\n" ),
                                 uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
                                 3 );
 }
 
 //------------------------------------------------------
 void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::XStorage >& xStorage,
-                            const ::rtl::OUString& sEntName,
+                            const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& /* lArguments */,
                             const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
         throw ( lang::IllegalArgumentException,
@@ -375,7 +375,7 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
@@ -383,7 +383,7 @@ void SAL_CALL ODummyEmbeddedObject::storeToEntry( const uno::Reference< embed::X
 
 //------------------------------------------------------
 void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::XStorage >& xStorage,
-                            const ::rtl::OUString& sEntName,
+                            const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& /* lArguments */,
                             const uno::Sequence< beans::PropertyValue >& /* lObjArgs */ )
         throw ( lang::IllegalArgumentException,
@@ -397,10 +397,10 @@ void SAL_CALL ODummyEmbeddedObject::storeAsEntry( const uno::Reference< embed::X
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    PostEvent_Impl( ::rtl::OUString( "OnSaveAs" ) );
+    PostEvent_Impl( OUString( "OnSaveAs" ) );
 
     m_xParentStorage->copyElementTo( m_aEntryName, xStorage, sEntName );
 
@@ -435,11 +435,11 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         m_xParentStorage = m_xNewParentStorage;
         m_aEntryName = m_aNewEntryName;
 
-        PostEvent_Impl( ::rtl::OUString( "OnSaveAsDone" ) );
+        PostEvent_Impl( OUString( "OnSaveAsDone" ) );
     }
 
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
-    m_aNewEntryName = ::rtl::OUString();
+    m_aNewEntryName = OUString();
     m_bWaitSaveCompleted = sal_False;
 }
 
@@ -453,7 +453,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     if ( !m_aEntryName.isEmpty() )
@@ -463,7 +463,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
 }
 
 //------------------------------------------------------
-::rtl::OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
+OUString SAL_CALL ODummyEmbeddedObject::getEntryName()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
@@ -472,7 +472,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::hasEntry()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     return m_aEntryName;
@@ -490,7 +490,7 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // the object can not be activated or changed
@@ -507,7 +507,7 @@ sal_Bool SAL_CALL ODummyEmbeddedObject::isReadonly()
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // this object can not be changed
@@ -529,7 +529,7 @@ void SAL_CALL ODummyEmbeddedObject::reload(
 
     if ( m_bWaitSaveCompleted )
         throw embed::WrongStateException(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "The object waits for saveCompleted() call!\n" )),
                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
     // nothing to reload
@@ -548,19 +548,19 @@ uno::Sequence< sal_Int8 > SAL_CALL ODummyEmbeddedObject::getClassID()
 }
 
 //------------------------------------------------------
-::rtl::OUString SAL_CALL ODummyEmbeddedObject::getClassName()
+OUString SAL_CALL ODummyEmbeddedObject::getClassName()
         throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 //------------------------------------------------------
 void SAL_CALL ODummyEmbeddedObject::setClassInfo(
-                const uno::Sequence< sal_Int8 >& /*aClassID*/, const ::rtl::OUString& /*aClassName*/ )
+                const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )
         throw ( lang::NoSupportException,
                 uno::RuntimeException )
 {

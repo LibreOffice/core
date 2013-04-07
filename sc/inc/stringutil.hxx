@@ -127,7 +127,7 @@ public:
      * @return true if the string is a valid number, false otherwise.
      */
     static bool parseSimpleNumber(
-        const ::rtl::OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
+        const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal);
 
     static sal_Int32 SC_DLLPUBLIC GetQuotedTokenCount(const OUString &rIn, const OUString& rQuotedPairs, sal_Unicode cTok = ';' );
     static OUString  SC_DLLPUBLIC GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,

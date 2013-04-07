@@ -56,7 +56,7 @@ public:
             const BitmapEx& aBitmap,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xStream );
 
-    static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const ::rtl::OUString& aFactoryShortName,
+    static sal_uInt16 getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName,
                                                                     sal_Bool bIsTemplate );
 
     static sal_Bool getThumbnailReplacement_Impl(

@@ -68,8 +68,8 @@ class PluginModel : public BroadcasterHelperHolder,
                     public com::sun::star::awt::XControlModel
 {
   private:
-    rtl::OUString m_aCreationURL;
-    rtl::OUString m_aMimeType;
+    OUString m_aCreationURL;
+    OUString m_aMimeType;
 
     std::list< Reference< com::sun::star::lang::XEventListener > >
         m_aDisposeListeners;
@@ -81,12 +81,12 @@ class PluginModel : public BroadcasterHelperHolder,
         { rtl_freeMemory( pMem ); }
 
     PluginModel();
-    PluginModel( const rtl::OUString& rURL, const rtl::OUString& rMimeType );
+    PluginModel( const OUString& rURL, const OUString& rMimeType );
     virtual ~PluginModel();
 
 
-    const rtl::OUString& getCreationURL() { return m_aCreationURL; }
-    void setMimeType( const rtl::OUString& rMime ) { m_aMimeType = rMime; }
+    const OUString& getCreationURL() { return m_aCreationURL; }
+    void setMimeType( const OUString& rMime ) { m_aMimeType = rMime; }
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( com::sun::star::uno::RuntimeException )
@@ -101,11 +101,11 @@ class PluginModel : public BroadcasterHelperHolder,
 
     // com::sun::star::lang::XTypeProvider
 
-    static Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
-    static rtl::OUString SAL_CALL getImplementationName_Static() throw(  )
+    static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw(  );
+    static OUString SAL_CALL getImplementationName_Static() throw(  )
     {
         /** the soplayer uses this name in its source! maybe not after 5.2 */
-        return rtl::OUString( "com.sun.star.extensions.PluginModel" );
+        return OUString( "com.sun.star.extensions.PluginModel" );
     }
 
     // OPropertySetHelper
@@ -121,7 +121,7 @@ class PluginModel : public BroadcasterHelperHolder,
     virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw();
 
     // com::sun::star::io::XPersistObject
-    virtual rtl::OUString SAL_CALL getServiceName() throw();
+    virtual OUString SAL_CALL getServiceName() throw();
     virtual void SAL_CALL write(const Reference< com::sun::star::io::XObjectOutputStream > & OutStream) throw();
     virtual void SAL_CALL read(const Reference< com::sun::star::io::XObjectInputStream > & InStream) throw();
 

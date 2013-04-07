@@ -48,7 +48,6 @@ using namespace com::sun::star::reflection;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
 
 
 #define SERVICENAME "com.sun.star.script.EventAttacher"
@@ -419,7 +418,7 @@ Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterSe
     Guard< Mutex > aGuard( m_aMutex );
     if( !m_xInvocationAdapterFactory.is() )
     {
-        Reference< XInterface > xIFace( m_xSMgr->createInstance( rtl::OUString("com.sun.star.script.InvocationAdapterFactory") ) );
+        Reference< XInterface > xIFace( m_xSMgr->createInstance( OUString("com.sun.star.script.InvocationAdapterFactory") ) );
         m_xInvocationAdapterFactory = Reference< XInvocationAdapterFactory >( xIFace, UNO_QUERY );
     }
     return m_xInvocationAdapterFactory;

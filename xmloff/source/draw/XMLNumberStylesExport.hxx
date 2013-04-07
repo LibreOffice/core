@@ -37,8 +37,8 @@ public:
     static sal_Int32 getDateStyleCount() { return SdXMLDateFormatCount; }
     static sal_Int32 getTimeStyleCount() { return SdXMLTimeFormatCount; }
 
-    static rtl::OUString getTimeStyleName(const sal_Int32 nTimeFormat );
-    static rtl::OUString getDateStyleName(const sal_Int32 nDateFormat );
+    static OUString getTimeStyleName(const sal_Int32 nTimeFormat );
+    static OUString getDateStyleName(const sal_Int32 nDateFormat );
 };
 
 #endif  //  _XMLOFF_NUMBERSTYLESEXPORT_HXX

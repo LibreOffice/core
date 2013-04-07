@@ -54,8 +54,6 @@
 #include "lwpfilter.hxx"
 
 using namespace com::sun::star;
-using rtl::OString;
-using rtl::OUStringBuffer;
 using com::sun::star::uno::Sequence;
 using com::sun::star::lang::XComponent;
 using com::sun::star::uno::Any;
@@ -326,18 +324,18 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
         }
         catch ( Exception& )
         {
-            return ::rtl::OUString();
+            return OUString();
         }
 
         if (!xInputStream.is())
-            return ::rtl::OUString();
+            return OUString();
     }
 
     Sequence< ::sal_Int8 > aData;
     sal_Int32 nLen = SAL_N_ELEMENTS( header );
     if ( !( ( nLen == xInputStream->readBytes( aData, nLen ) )
                 && ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 ) ) )
-        sTypeName = ::rtl::OUString();
+        sTypeName = OUString();
 
     return sTypeName;
 }

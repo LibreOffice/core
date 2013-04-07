@@ -83,7 +83,7 @@ namespace comphelper
 
     // XPropertyState
     //---------------------------------------------------------------------
-    ::com::sun::star::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -95,7 +95,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -107,7 +107,7 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const ::rtl::OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::lang::WrappedTargetException,  ::com::sun::star::uno::RuntimeException)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -119,12 +119,12 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rPropertyNames) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  ::com::sun::star::uno::Sequence< OUString >& _rPropertyNames) throw( ::com::sun::star::beans::UnknownPropertyException,  ::com::sun::star::uno::RuntimeException)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyState> aRet(nLen);
         ::com::sun::star::beans::PropertyState* pValues = aRet.getArray();
-        const ::rtl::OUString* pNames = _rPropertyNames.getConstArray();
+        const OUString* pNames = _rPropertyNames.getConstArray();
 
         cppu::IPropertyArrayHelper& rHelper = getInfoHelper();
 

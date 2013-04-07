@@ -46,7 +46,7 @@ public:
     void SetNumFormatter( SvNumberFormatter* pFormatter );
 
     void SetCrossingAxisIsCategoryAxis( bool bCrossingAxisIsCategoryAxis );
-    void SetCategories( const ::com::sun::star::uno::Sequence< rtl::OUString >& rCategories );
+    void SetCategories( const ::com::sun::star::uno::Sequence< OUString >& rCategories );
 
     void SupportAxisPositioning( bool bSupportAxisPositioning );
 
@@ -91,7 +91,7 @@ private: //member:
     SvNumberFormatter*  m_pNumFormatter;
 
     bool    m_bCrossingAxisIsCategoryAxis;
-    ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;
+    ::com::sun::star::uno::Sequence< OUString > m_aCategories;
 
     bool    m_bSupportAxisPositioning;
 };

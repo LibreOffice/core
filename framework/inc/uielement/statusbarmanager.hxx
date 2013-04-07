@@ -56,7 +56,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
     public:
         StatusBarManager( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServicveManager,
                           const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                          const rtl::OUString& rResourceName,
+                          const OUString& rResourceName,
                           StatusBar* pStatusBar );
         virtual ~StatusBarManager();
 
@@ -96,7 +96,7 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         DECL_LINK(DoubleClick, void *);
 
         void RemoveControllers();
-        rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
+        OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
         void CreateControllers();
         void UpdateControllers();
         void AddFrameActionListener();
@@ -110,8 +110,8 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
                                                                                                         m_bUpdateControllers : 1;
         sal_Bool                                                                                        m_bModuleIdentified;
         StatusBar*                                                                                      m_pStatusBar;
-        rtl::OUString                                                                                   m_aModuleIdentifier;
-        rtl::OUString                                                                                   m_aResourceName;
+        OUString                                                                                   m_aModuleIdentifier;
+        OUString                                                                                   m_aResourceName;
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                                 m_xFrame;
         com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >                        m_xUICommandLabels;
         StatusBarControllerVector                                                                       m_aControllerVector;

@@ -101,7 +101,7 @@ namespace rptui
         @return
             <TRUE/> if and only if the user successfully chose a clause
     */
-    bool openDialogFormula_nothrow( ::rtl::OUString& _in_out_rFormula
+    bool openDialogFormula_nothrow( OUString& _in_out_rFormula
                                , const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext
                                , const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>& _xWindow
                                , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
@@ -153,7 +153,7 @@ namespace rptui
 
     /** retrieves the names of the parameters of the command which the given RowSet is bound to
     */
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    ::com::sun::star::uno::Sequence< OUString >
         getParameterNames( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet );
 
     /** ensures that no control overlaps the given one.

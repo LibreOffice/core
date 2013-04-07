@@ -71,7 +71,7 @@ private:
     SvtFileView_Impl*       mpImp;
     sal_Bool                bSortColumn;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > mpBlackList;
+    ::com::sun::star::uno::Sequence< OUString > mpBlackList;
 
     DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
     DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
@@ -91,8 +91,8 @@ public:
     sal_Bool                GetParentURL( String& _rParentURL ) const;
     void                    CreatedFolder( const String& rUrl, const String& rNewFolder );
 
-    void                    SetHelpId( const rtl::OString& rHelpId );
-    const rtl::OString&     GetHelpId( ) const;
+    void                    SetHelpId( const OString& rHelpId );
+    const OString&     GetHelpId( ) const;
     void                    SetSizePixel( const Size& rNewSize );
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize );
     void                    SetSortColumn( sal_Bool bValue ) { bSortColumn = bValue; }
@@ -112,7 +112,7 @@ public:
                                 const String& rFolderURL,
                                 const String& rFilter,
                                 const FileViewAsyncAction* pAsyncDescriptor,
-                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList
+                                const ::com::sun::star::uno::Sequence< OUString >& rBlackList
                             );
 
     FileViewResult          Initialize(
@@ -124,7 +124,7 @@ public:
         This method will never return <member>eStillRunning</member>, since it will fill the
         view synchronously
     */
-    sal_Bool                Initialize( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
+    sal_Bool                Initialize( const ::com::sun::star::uno::Sequence< OUString >& aContents );
 
     /** initializes the view with the content of a folder given by an UCB content
     */
@@ -205,9 +205,9 @@ protected:
 struct SvtContentEntry
 {
     sal_Bool    mbIsFolder;
-    rtl::OUString maURL;
+    OUString maURL;
 
-    SvtContentEntry( const rtl::OUString& rURL, sal_Bool bIsFolder ) :
+    SvtContentEntry( const OUString& rURL, sal_Bool bIsFolder ) :
         mbIsFolder( bIsFolder ), maURL( rURL ) {}
 };
 

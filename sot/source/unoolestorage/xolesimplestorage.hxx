@@ -59,10 +59,10 @@ class OLESimpleStorage  : public ::cppu::WeakImplHelper3
 
     void UpdateOriginal_Impl();
 
-    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
+    static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream )
     throw ( ::com::sun::star::uno::Exception );
 
-    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, ::rtl::OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xNameAccess )
+    static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, OUString aName, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xNameAccess )
     throw ( ::com::sun::star::uno::Exception );
 
 public:
@@ -71,8 +71,8 @@ public:
 
     virtual ~OLESimpleStorage();
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();
-    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
+    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+    static OUString SAL_CALL impl_staticGetImplementationName();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         impl_staticCreateSelfInstance(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
@@ -90,32 +90,32 @@ public:
     //  XNameContainer
     //____________________________________________________________________________________________________
 
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::ElementExistException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw ( ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
@@ -160,11 +160,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getClassID()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::rtl::OUString SAL_CALL getClassName()
+    virtual OUString SAL_CALL getClassName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setClassInfo( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aClassID,
-                                        const ::rtl::OUString& sClassName )
+                                        const OUString& sClassName )
         throw ( ::com::sun::star::lang::NoSupportException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -172,13 +172,13 @@ public:
     //  XServiceInfo
     //____________________________________________________________________________________________________
 
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw ( ::com::sun::star::uno::RuntimeException );
 
 };

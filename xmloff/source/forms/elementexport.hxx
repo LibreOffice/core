@@ -92,8 +92,8 @@ namespace xmloff
         DECLARE_STL_STDKEY_SET(sal_Int16, Int16Set);
             // used below
 
-        ::rtl::OUString         m_sControlId;           // the control id to use when exporting
-        ::rtl::OUString         m_sReferringControls;   // list of referring controls (i.e. their id's)
+        OUString         m_sControlId;           // the control id to use when exporting
+        OUString         m_sReferringControls;   // list of referring controls (i.e. their id's)
         sal_Int16               m_nClassId;             // class id of the control we're representing
         ElementType             m_eType;                // (XML) type of the control we're representing
         sal_Int32               m_nIncludeCommon;       // common control attributes to include
@@ -118,8 +118,8 @@ namespace xmloff
         */
         OControlExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
-            const ::rtl::OUString& _rControlId,
-            const ::rtl::OUString& _rReferringControls,
+            const OUString& _rControlId,
+            const OUString& _rReferringControls,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
         ~OControlExport();
 
@@ -207,7 +207,7 @@ namespace xmloff
             @param _rOut
                 out parameter. The set of integers.
         */
-        void getSequenceInt16PropertyAsSet(const ::rtl::OUString& _rPropertyName, Int16Set& _rOut);
+        void getSequenceInt16PropertyAsSet(const OUString& _rPropertyName, Int16Set& _rOut);
 
         /** exports the attribute which descrives a cell value binding of a control
             in a spreadsheet document
@@ -244,7 +244,7 @@ namespace xmloff
 
         /** retrieves the string specifying the ListSource of a list or combo box
         */
-        ::rtl::OUString getScalarListSourceValue() const;
+        OUString getScalarListSourceValue() const;
 
         /** determines whether the list entries (of a combo or list box) are supplied by the user
 
@@ -272,7 +272,7 @@ namespace xmloff
         */
         OColumnExport(IFormsExportContext& _rContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
-            const ::rtl::OUString& _rControlId,
+            const OUString& _rControlId,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rxEvents);
 
         ~OColumnExport();

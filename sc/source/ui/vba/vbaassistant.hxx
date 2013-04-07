@@ -36,7 +36,7 @@ private:
     sal_Bool        m_bIsVisible;
     sal_Int32       m_nPointsLeft;
     sal_Int32       m_nPointsTop;
-    rtl::OUString   m_sName;
+    OUString   m_sName;
     sal_Int32       m_nAnimation;
 public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface > xParent, const css::uno::Reference< css::uno::XComponentContext > xContext );
@@ -53,10 +53,10 @@ public:
     virtual ::sal_Int32 SAL_CALL getAnimation() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif//SC_VBA_ASSISTANT_HXX

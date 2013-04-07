@@ -98,7 +98,7 @@ class JobExecutor : public  css::lang::XTypeProvider
         DECLARE_XSERVICEINFO
 
         // task.XJobExecutor
-        virtual void SAL_CALL trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
 
         // document.XEventListener
         virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);

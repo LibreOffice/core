@@ -107,7 +107,7 @@ void    XFStyleManager::AddFontDecl(XFFontDecl& aFontDecl)
 IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
 {
     assert(pStyle);
-    rtl::OUString   name;
+    OUString   name;
     IXFStyle    *pStyleRet = NULL;
 
     if( !pStyle )
@@ -219,7 +219,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     return pStyleRet;
 }
 
-IXFStyle*   XFStyleManager::FindStyle(rtl::OUString name)
+IXFStyle*   XFStyleManager::FindStyle(OUString name)
 {
     IXFStyle *pStyle = (IXFStyle*)FindParaStyle(name);
     if( pStyle )
@@ -272,7 +272,7 @@ IXFStyle*   XFStyleManager::FindStyle(rtl::OUString name)
     return NULL;
 }
 
-XFParaStyle*    XFStyleManager::FindParaStyle(rtl::OUString name)
+XFParaStyle*    XFStyleManager::FindParaStyle(OUString name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
@@ -281,7 +281,7 @@ XFParaStyle*    XFStyleManager::FindParaStyle(rtl::OUString name)
         return (XFParaStyle*)s_aStdParaStyles.FindStyle(name);
 }
 
-XFTextStyle*    XFStyleManager::FindTextStyle(rtl::OUString name)
+XFTextStyle*    XFStyleManager::FindTextStyle(OUString name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )

@@ -39,7 +39,7 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( CUI_DLL_NAME  ),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
         fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
 #else
     fp = CreateDialogFactory;
 #endif

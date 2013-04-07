@@ -126,7 +126,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
         return;
 
     // unknown module -> no configuration available!
-    ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xContext, xFrame);
+    OUString sModuleName = PersistentWindowState::implst_identifyModule(xContext, xFrame);
     if (sModuleName.isEmpty())
         return;
 
@@ -136,7 +136,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
             {
                 if (bRestoreWindowState)
                 {
-                    ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
+                    OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
                     // SAFE -> ----------------------------------
                     WriteGuard aWriteLock(m_aLock);
@@ -156,7 +156,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
         case css::frame::FrameAction_COMPONENT_DETACHING :
             {
-                ::rtl::OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
+                OUString sWindowState = PersistentWindowState::implst_getWindowStateFromWindow(xWindow);
                 PersistentWindowState::implst_setWindowStateOnConfig(xContext, sModuleName, sWindowState);
             }
             break;
@@ -173,10 +173,10 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
-    ::rtl::OUString sModuleName;
+    OUString sModuleName;
 
     css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
         css::frame::ModuleManager::create( rxContext );
@@ -188,25 +188,25 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sModuleName = ::rtl::OUString(); }
+        { sModuleName = OUString(); }
 
     return sModuleName;
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                       const ::rtl::OUString&                                    sModuleName)
+OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                       const OUString&                                    sModuleName)
 {
-    ::rtl::OUString sWindowState;
+    OUString sWindowState;
 
-    ::rtl::OUStringBuffer sRelPathBuf(256);
+    OUStringBuffer sRelPathBuf(256);
     sRelPathBuf.appendAscii("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
 
-    ::rtl::OUString sPackage("org.openoffice.Setup/");
-    ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    ::rtl::OUString sKey("ooSetupFactoryWindowAttributes");
+    OUString sPackage("org.openoffice.Setup/");
+    OUString sRelPath = sRelPathBuf.makeStringAndClear();
+    OUString sKey("ooSetupFactoryWindowAttributes");
 
     try
     {
@@ -219,24 +219,24 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sWindowState = ::rtl::OUString(); }
+        { sWindowState = OUString(); }
 
     return sWindowState;
 }
 
 //*****************************************************************************************************************
 void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                          const ::rtl::OUString&                                    sModuleName ,
-                                                          const ::rtl::OUString&                                    sWindowState)
+                                                          const OUString&                                    sModuleName ,
+                                                          const OUString&                                    sWindowState)
 {
-    ::rtl::OUStringBuffer sRelPathBuf(256);
+    OUStringBuffer sRelPathBuf(256);
     sRelPathBuf.appendAscii("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
     sRelPathBuf.appendAscii("\"]"                  );
 
-    ::rtl::OUString sPackage("org.openoffice.Setup/");
-    ::rtl::OUString sRelPath = sRelPathBuf.makeStringAndClear();
-    ::rtl::OUString sKey("ooSetupFactoryWindowAttributes");
+    OUString sPackage("org.openoffice.Setup/");
+    OUString sRelPath = sRelPathBuf.makeStringAndClear();
+    OUString sKey("ooSetupFactoryWindowAttributes");
 
     try
     {
@@ -254,9 +254,9 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
+OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
-    ::rtl::OUString sWindowState;
+    OUString sWindowState;
 
     if (xWindow.is())
     {
@@ -272,7 +272,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
         {
             sal_uLong nMask  =   WINDOWSTATE_MASK_ALL;
                   nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
-            sWindowState = rtl::OStringToOUString(
+            sWindowState = OStringToOUString(
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
@@ -285,7 +285,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 
 //*********************************************************************************************************
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                                                          const ::rtl::OUString&                          sWindowState)
+                                                          const OUString&                          sWindowState)
 {
     if (
         (!xWindow.is()                ) ||
@@ -314,9 +314,9 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     if (pWorkWindow->IsMinimized())
         return;
 
-    ::rtl::OUString sOldWindowState = ::rtl::OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
+    OUString sOldWindowState = OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
     if ( sOldWindowState != sWindowState )
-        pSystemWindow->SetWindowState(rtl::OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
+        pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
     // <- SOLAR SAFE ------------------------
 }
 

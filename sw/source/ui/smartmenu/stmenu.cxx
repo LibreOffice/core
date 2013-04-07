@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
-                                  Sequence< rtl::OUString >& rSmartTagTypes,
+                                  Sequence< OUString >& rSmartTagTypes,
                                   Sequence< Reference< container::XStringKeyMap > >& rStringKeyMaps,
                                   Reference< text::XTextRange > xTextRange ) :
     PopupMenu( SW_RES(MN_SMARTTAG_POPUP) ),
@@ -49,10 +49,10 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     sal_uInt16 nMenuId = 1;
     sal_uInt16 nSubMenuId = MN_ST_INSERT_START;
 
-    const rtl::OUString aRangeText = mxTextRange->getString();
+    const OUString aRangeText = mxTextRange->getString();
 
     SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
-    const rtl::OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
+    const OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
 
     Sequence < Sequence< Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
     Sequence < Sequence< sal_Int32 > > aActionIndicesSequence;
@@ -81,8 +81,8 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
             continue;
 
         const sal_Int32 nSmartTagIndex = rActionIndices[0];
-        const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
-        const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, aLocale );
+        const OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
+        const OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, aLocale );
 
         // no sub-menus if there's only one smart tag type listed:
         PopupMenu* pSbMenu = this;
@@ -94,7 +94,7 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
         }
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
+        const OUString aSmartTagCaption2 = aSmartTagCaption + ": " + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem(nMenuId++, aSmartTagCaption2, MIB_NOSELECT, OString(), nSubMenuPos++);
         pSbMenu->InsertSeparator(OString(), nSubMenuPos++);
@@ -107,12 +107,12 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
             for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController ); ++k )
             {
                 const sal_uInt32 nActionID = xAction->getActionID( aSmartTagType, k, xController  );
-                rtl::OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
+                OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
                                                                                 aApplicationName,
                                                                                 aLocale,
                                                                                 xSmartTagProperties,
                                                                                 aRangeText,
-                                                                                rtl::OUString(),
+                                                                                OUString(),
                                                                                 xController,
                                                                                 mxTextRange );
 
@@ -159,7 +159,7 @@ sal_uInt16 SwSmartTagPopup::Execute( const Rectangle& rWordPos, Window* pWin )
                                            mxTextRange,
                                            maInvokeActions[ nId ].mxSmartTagProperties,
                                            mxTextRange->getString(),
-                                           rtl::OUString(),
+                                           OUString(),
                                            SW_BREAKITER()->GetLocale( GetAppLanguageTag() )  );
         }
     }

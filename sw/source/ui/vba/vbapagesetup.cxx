@@ -59,9 +59,9 @@ void SAL_CALL SwVbaPageSetup::setGutter( double _gutter ) throw (uno::RuntimeExc
 double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException)
 {
     sal_Bool isHeaderOn = sal_False;
-    mxPageProps->getPropertyValue( rtl::OUString("HeaderIsOn")) >>= isHeaderOn;
+    mxPageProps->getPropertyValue( OUString("HeaderIsOn")) >>= isHeaderOn;
     if( !isHeaderOn )
-        mxPageProps->setPropertyValue( rtl::OUString("HeaderIsOn"), uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue( OUString("HeaderIsOn"), uno::makeAny( sal_True ) );
     return VbaPageSetupBase::getHeaderMargin();
 }
 
@@ -82,29 +82,29 @@ void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw 
     sal_Int32 aktSpacing = 0;
     sal_Int32 aktHeaderHeight = 0;
 
-    mxPageProps->getPropertyValue( rtl::OUString("HeaderIsOn")) >>= isHeaderOn;
+    mxPageProps->getPropertyValue( OUString("HeaderIsOn")) >>= isHeaderOn;
     if( !isHeaderOn )
-        mxPageProps->setPropertyValue( rtl::OUString("HeaderIsOn"), uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue( OUString("HeaderIsOn"), uno::makeAny( sal_True ) );
 
-    mxPageProps->getPropertyValue( rtl::OUString("TopMargin")) >>= aktTopMargin;
-    mxPageProps->getPropertyValue( rtl::OUString("HeaderBodyDistance")) >>= aktSpacing;
-    mxPageProps->getPropertyValue( rtl::OUString("HeaderHeight")) >>= aktHeaderHeight;
+    mxPageProps->getPropertyValue( OUString("TopMargin")) >>= aktTopMargin;
+    mxPageProps->getPropertyValue( OUString("HeaderBodyDistance")) >>= aktSpacing;
+    mxPageProps->getPropertyValue( OUString("HeaderHeight")) >>= aktHeaderHeight;
 
     sal_Int32 newSpacing = aktSpacing - ( newHeaderDistance - aktTopMargin );
     sal_Int32 height = aktHeaderHeight - aktSpacing;
     sal_Int32 newHeaderHeight = newSpacing + height;
 
-    mxPageProps->setPropertyValue( rtl::OUString("TopMargin"), uno::makeAny( newHeaderDistance ) );
-    mxPageProps->setPropertyValue( rtl::OUString("HeaderBodyDistance"), uno::makeAny( newSpacing ) );
-    mxPageProps->setPropertyValue( rtl::OUString("HeaderHeight"), uno::makeAny( newHeaderHeight ) );
+    mxPageProps->setPropertyValue( OUString("TopMargin"), uno::makeAny( newHeaderDistance ) );
+    mxPageProps->setPropertyValue( OUString("HeaderBodyDistance"), uno::makeAny( newSpacing ) );
+    mxPageProps->setPropertyValue( OUString("HeaderHeight"), uno::makeAny( newHeaderHeight ) );
 }
 
 double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException)
 {
     sal_Bool isFooterOn = sal_False;
-    mxPageProps->getPropertyValue( rtl::OUString("FooterIsOn")) >>= isFooterOn;
+    mxPageProps->getPropertyValue( OUString("FooterIsOn")) >>= isFooterOn;
     if( !isFooterOn )
-        mxPageProps->setPropertyValue( rtl::OUString("FooterIsOn"), uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue( OUString("FooterIsOn"), uno::makeAny( sal_True ) );
     return VbaPageSetupBase::getFooterMargin();
 }
 
@@ -116,26 +116,26 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
     sal_Int32 aktSpacing = 0;
     sal_Int32 aktFooterHeight = 0;
 
-    mxPageProps->getPropertyValue( rtl::OUString("FooterIsOn")) >>= isFooterOn;
+    mxPageProps->getPropertyValue( OUString("FooterIsOn")) >>= isFooterOn;
     if( !isFooterOn )
-        mxPageProps->setPropertyValue( rtl::OUString("FooterIsOn"), uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue( OUString("FooterIsOn"), uno::makeAny( sal_True ) );
 
-    mxPageProps->getPropertyValue( rtl::OUString("BottomMargin")) >>= aktBottomMargin;
-    mxPageProps->getPropertyValue( rtl::OUString("FooterBodyDistance")) >>= aktSpacing;
-    mxPageProps->getPropertyValue( rtl::OUString("FooterHeight")) >>= aktFooterHeight;
+    mxPageProps->getPropertyValue( OUString("BottomMargin")) >>= aktBottomMargin;
+    mxPageProps->getPropertyValue( OUString("FooterBodyDistance")) >>= aktSpacing;
+    mxPageProps->getPropertyValue( OUString("FooterHeight")) >>= aktFooterHeight;
 
     sal_Int32 newSpacing = aktSpacing - ( newFooterDistance - aktBottomMargin );
     sal_Int32 height = aktFooterHeight - aktSpacing;
     sal_Int32 newFooterHeight = newSpacing + height;
 
-    mxPageProps->setPropertyValue( rtl::OUString("BottomMargin"), uno::makeAny( newFooterDistance ) );
-    mxPageProps->setPropertyValue( rtl::OUString("FooterBodyDistance"), uno::makeAny( newSpacing ) );
-    mxPageProps->setPropertyValue( rtl::OUString("FooterHeight"), uno::makeAny( newFooterHeight ) );
+    mxPageProps->setPropertyValue( OUString("BottomMargin"), uno::makeAny( newFooterDistance ) );
+    mxPageProps->setPropertyValue( OUString("FooterBodyDistance"), uno::makeAny( newSpacing ) );
+    mxPageProps->setPropertyValue( OUString("FooterHeight"), uno::makeAny( newFooterHeight ) );
 }
 
 sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno::RuntimeException)
 {
-    rtl::OUString pageStyle = getStyleOfFirstPage();
+    OUString pageStyle = getStyleOfFirstPage();
     if ( pageStyle == "First Page" )
         return sal_True;
 
@@ -147,34 +147,34 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     if( status == getDifferentFirstPageHeaderFooter() )
         return;
 
-    rtl::OUString newStyle;
+    OUString newStyle;
     if( status )
-        newStyle = rtl::OUString("First Page");
+        newStyle = OUString("First Page");
     else
-        newStyle = rtl::OUString("Standard");
+        newStyle = OUString("Standard");
 
     uno::Reference< beans::XPropertySet > xStyleProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
     sal_Int32 nTopMargin = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("TopMargin")) >>= nTopMargin;
+    xStyleProps->getPropertyValue( OUString("TopMargin")) >>= nTopMargin;
     sal_Int32 nBottomMargin = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("BottomMargin")) >>= nBottomMargin;
+    xStyleProps->getPropertyValue( OUString("BottomMargin")) >>= nBottomMargin;
     sal_Int32 nLeftMargin = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("LeftMargin")) >>= nLeftMargin;
+    xStyleProps->getPropertyValue( OUString("LeftMargin")) >>= nLeftMargin;
     sal_Int32 nRightMargin = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("RightMargin")) >>= nRightMargin;
+    xStyleProps->getPropertyValue( OUString("RightMargin")) >>= nRightMargin;
     sal_Int32 nHeaderHeight = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("HeaderHeight")) >>= nHeaderHeight;
+    xStyleProps->getPropertyValue( OUString("HeaderHeight")) >>= nHeaderHeight;
     sal_Int32 nFooterHeight = 0;
-    xStyleProps->getPropertyValue( rtl::OUString("FooterHeight")) >>= nFooterHeight;
+    xStyleProps->getPropertyValue( OUString("FooterHeight")) >>= nFooterHeight;
 
     sal_Bool isHeaderOn = sal_False;
-    xStyleProps->getPropertyValue( rtl::OUString("HeaderIsOn")) >>= isHeaderOn;
+    xStyleProps->getPropertyValue( OUString("HeaderIsOn")) >>= isHeaderOn;
     if( isHeaderOn )
     {
         nTopMargin += nHeaderHeight;
         nBottomMargin += nFooterHeight;
-        xStyleProps->setPropertyValue( rtl::OUString("HeaderIsOn"), uno::makeAny( sal_False ) );
-        xStyleProps->setPropertyValue( rtl::OUString("FooterIsOn"), uno::makeAny( sal_False ) );
+        xStyleProps->setPropertyValue( OUString("HeaderIsOn"), uno::makeAny( sal_False ) );
+        xStyleProps->setPropertyValue( OUString("FooterIsOn"), uno::makeAny( sal_False ) );
     }
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
     if( xPageCursor->getPage() != 1 )
@@ -183,26 +183,26 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     }
 
     uno::Reference< beans::XPropertySet > xCursorProps( xPageCursor, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xTableProps( xCursorProps->getPropertyValue( rtl::OUString("TextTable") ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xTableProps( xCursorProps->getPropertyValue( OUString("TextTable") ), uno::UNO_QUERY );
     if( xTableProps.is() )
     {
-        xTableProps->setPropertyValue(  rtl::OUString("PageDescName"), uno::makeAny( newStyle ) );
+        xTableProps->setPropertyValue(  OUString("PageDescName"), uno::makeAny( newStyle ) );
     }
     else
     {
-        xCursorProps->setPropertyValue(  rtl::OUString("PageDescName"), uno::makeAny( newStyle ) );
+        xCursorProps->setPropertyValue(  OUString("PageDescName"), uno::makeAny( newStyle ) );
     }
 
     uno::Reference< beans::XPropertySet > xFirstPageProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
-    xFirstPageProps->setPropertyValue(  rtl::OUString("TopMargin"), uno::makeAny( nTopMargin ) );
-    xFirstPageProps->setPropertyValue(  rtl::OUString("BottomMargin"), uno::makeAny( nBottomMargin ) );
-    xFirstPageProps->setPropertyValue(  rtl::OUString("LeftMargin"), uno::makeAny( nLeftMargin ) );
-    xFirstPageProps->setPropertyValue(  rtl::OUString("RightMargin"), uno::makeAny( nRightMargin ) );
+    xFirstPageProps->setPropertyValue(  OUString("TopMargin"), uno::makeAny( nTopMargin ) );
+    xFirstPageProps->setPropertyValue(  OUString("BottomMargin"), uno::makeAny( nBottomMargin ) );
+    xFirstPageProps->setPropertyValue(  OUString("LeftMargin"), uno::makeAny( nLeftMargin ) );
+    xFirstPageProps->setPropertyValue(  OUString("RightMargin"), uno::makeAny( nRightMargin ) );
 }
 
-rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
+OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
 {
-    rtl::OUString styleFirstPage;
+    OUString styleFirstPage;
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
     if( xPageCursor->getPage() != 1 )
     {
@@ -210,14 +210,14 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
     }
 
     uno::Reference< beans::XPropertySet > xCursorProps( xPageCursor, uno::UNO_QUERY_THROW );
-    uno::Reference< beans::XPropertySet > xTableProps( xCursorProps->getPropertyValue( rtl::OUString("TextTable") ), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xTableProps( xCursorProps->getPropertyValue( OUString("TextTable") ), uno::UNO_QUERY );
     if( xTableProps.is() )
     {
-        xTableProps->getPropertyValue( rtl::OUString("PageDescName") ) >>= styleFirstPage;
+        xTableProps->getPropertyValue( OUString("PageDescName") ) >>= styleFirstPage;
     }
     else
     {
-        xCursorProps->getPropertyValue( rtl::OUString("PageDescName") ) >>= styleFirstPage;
+        xCursorProps->getPropertyValue( OUString("PageDescName") ) >>= styleFirstPage;
     }
     return styleFirstPage;
 }
@@ -227,7 +227,7 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
     // FIXME:
     sal_Int32 wdSectionStart = word::WdSectionStart::wdSectionNewPage;
     uno::Reference< container::XNamed > xNamed( mxPageProps, uno::UNO_QUERY_THROW );
-    rtl::OUString sStyleName = xNamed->getName();
+    OUString sStyleName = xNamed->getName();
     if ( sStyleName == "Left Page" )
         wdSectionStart = word::WdSectionStart::wdSectionEvenPage;
     else if ( sStyleName == "Right Page" )
@@ -243,20 +243,20 @@ void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) t
     // #FIXME:
 }
 
-rtl::OUString
+OUString
 SwVbaPageSetup::getServiceImplName()
 {
-    return rtl::OUString("SwVbaPageSetup");
+    return OUString("SwVbaPageSetup");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaPageSetup::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.PageSetup" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.PageSetup" );
     }
     return aServiceNames;
 }

@@ -32,7 +32,7 @@ namespace connectivity
         protected:
             KabTable*   m_pTable;
 
-            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
 
         public:

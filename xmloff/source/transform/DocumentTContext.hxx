@@ -32,7 +32,7 @@ public:
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     XMLDocumentTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     // A contexts destructor does anything that is required if an element
     // ends. By default, nothing is done.

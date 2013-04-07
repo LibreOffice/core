@@ -73,10 +73,6 @@
 using osl::Mutex;
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringToOString;
-using rtl::OUStringBuffer;
-using rtl::OString;
 
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::beans::XPropertySet;
@@ -550,7 +546,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
     else
     {
         // if this is a binary, it must contain escaped data !
-        OString val = rtl::OUStringToOString( ustr, RTL_TEXTENCODING_ASCII_US );
+        OString val = OUStringToOString( ustr, RTL_TEXTENCODING_ASCII_US );
 
         size_t length;
         char * res = (char*) PQunescapeBytea( (unsigned char *)val.getStr() , &length);

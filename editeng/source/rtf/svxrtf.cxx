@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 static CharSet lcl_GetDefaultTextEncodingForRTF()
 {
 
-    ::rtl::OUString aLangString( Application::GetSettings().GetLanguageTag().getLanguage());
+    OUString aLangString( Application::GetSettings().GetLanguageTag().getLanguage());
 
     if ( aLangString == "ru" || aLangString == "uk" )
         return RTL_TEXTENCODING_MS_1251;
@@ -204,7 +204,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_LDBLQUOTE:		cCh = 0x201C;	goto INSINGLECHAR;
     case RTF_RDBLQUOTE:		cCh = 0x201D;	goto INSINGLECHAR;
 INSINGLECHAR:
-        aToken = rtl::OUString(cCh);
+        aToken = OUString(cCh);
         // no Break, aToken is set as Text
     case RTF_TEXTTOKEN:
         {
@@ -707,7 +707,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             break;
         case RTF_KEYWORDS:
             {
-                ::rtl::OUString sTemp = GetTextToEndGroup( sStr );
+                OUString sTemp = GetTextToEndGroup( sStr );
                 m_xDocProps->setKeywords(
                     ::comphelper::string::convertCommaSeparated(sTemp) );
                 break;

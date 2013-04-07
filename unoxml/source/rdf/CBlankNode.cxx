@@ -41,15 +41,15 @@ public:
     virtual ~CBlankNode() {}
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     // ::com::sun::star::lang::XInitialization:
     virtual void SAL_CALL initialize(const css::uno::Sequence< ::com::sun::star::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception);
 
     // ::com::sun::star::rdf::XNode:
-    virtual ::rtl::OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException);
 
 private:
     CBlankNode(const CBlankNode &); // not defined
@@ -57,7 +57,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    ::rtl::OUString m_NodeID;
+    OUString m_NodeID;
 };
 
 CBlankNode::CBlankNode(css::uno::Reference< css::uno::XComponentContext > const & context) :
@@ -65,14 +65,14 @@ CBlankNode::CBlankNode(css::uno::Reference< css::uno::XComponentContext > const 
 {}
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL CBlankNode::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL CBlankNode::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_CBlankNode::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL CBlankNode::supportsService(::rtl::OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL CBlankNode::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > serviceNames = comp_CBlankNode::_getSupportedServiceNames();
+    css::uno::Sequence< OUString > serviceNames = comp_CBlankNode::_getSupportedServiceNames();
     for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
         if (serviceNames[i] == serviceName)
             return sal_True;
@@ -80,7 +80,7 @@ CBlankNode::CBlankNode(css::uno::Reference< css::uno::XComponentContext > const 
     return sal_False;
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL CBlankNode::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL CBlankNode::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     return comp_CBlankNode::_getSupportedServiceNames();
 }
@@ -90,14 +90,14 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
 {
     if (aArguments.getLength() != 1) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString("CBlankNode::initialize: "
+            OUString("CBlankNode::initialize: "
                 "must give exactly 1 argument"), *this, 1);
     }
 
-    ::rtl::OUString arg;
+    OUString arg;
     if (!(aArguments[0] >>= arg)) {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString("CBlankNode::initialize: "
+            OUString("CBlankNode::initialize: "
                 "argument must be string"), *this, 0);
     }
 
@@ -106,13 +106,13 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
         m_NodeID = arg;
     } else {
         throw css::lang::IllegalArgumentException(
-            ::rtl::OUString("CBlankNode::initialize: "
+            OUString("CBlankNode::initialize: "
                 "argument is not valid blank node ID"), *this, 0);
     }
 }
 
 // ::com::sun::star::rdf::XNode:
-::rtl::OUString SAL_CALL CBlankNode::getStringValue() throw (css::uno::RuntimeException)
+OUString SAL_CALL CBlankNode::getStringValue() throw (css::uno::RuntimeException)
 {
     return m_NodeID;
 }
@@ -124,8 +124,8 @@ void SAL_CALL CBlankNode::initialize(const css::uno::Sequence< ::com::sun::star:
 // component helper namespace
 namespace comp_CBlankNode {
 
-::rtl::OUString SAL_CALL _getImplementationName() {
-    return ::rtl::OUString( "CBlankNode");
+OUString SAL_CALL _getImplementationName() {
+    return OUString( "CBlankNode");
 }
 
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()

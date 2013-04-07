@@ -46,7 +46,7 @@ public:
     ~SwDbtoolsClient();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
-        const ::rtl::OUString& _rsRegisteredName,
+        const OUString& _rsRegisteredName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
             );
 
@@ -56,7 +56,7 @@ public:
         const ::com::sun::star::lang::Locale& _rLocale
             );
 
-    ::rtl::OUString getFormattedValue(
+    OUString getFormattedValue(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
         const ::com::sun::star::lang::Locale& _rLocale,

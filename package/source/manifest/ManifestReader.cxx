@@ -37,7 +37,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::packages::manifest;
-using ::rtl::OUString;
 
 ManifestReader::ManifestReader( const Reference < XComponentContext > & xContext )
 : m_xContext ( xContext )

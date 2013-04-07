@@ -71,9 +71,9 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString AnimatedImagesControl::GetComponentServiceName()
+    OUString AnimatedImagesControl::GetComponentServiceName()
     {
-        return ::rtl::OUString( "AnimatedImages" );
+        return OUString( "AnimatedImages" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -102,17 +102,17 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AnimatedImagesControl::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL AnimatedImagesControl::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString( "org.openoffice.comp.toolkit.AnimatedImagesControl" );
+        return OUString( "org.openoffice.comp.toolkit.AnimatedImagesControl" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AnimatedImagesControl::getSupportedServiceNames() throw(RuntimeException)
+    Sequence< OUString > SAL_CALL AnimatedImagesControl::getSupportedServiceNames() throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
+        Sequence< OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
-        aServices[ aServices.getLength() - 1 ] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControl );
+        aServices[ aServices.getLength() - 1 ] = OUString::createFromAscii( szServiceName_AnimatedImagesControl );
         return aServices;
     }
 
@@ -194,7 +194,7 @@ namespace toolkit
     //==================================================================================================================
     struct AnimatedImagesControlModel_Data
     {
-        ::std::vector< Sequence< ::rtl::OUString > >    aImageSets;
+        ::std::vector< Sequence< OUString > >    aImageSets;
     };
 
     namespace
@@ -203,12 +203,12 @@ namespace toolkit
             const bool i_forInsert = false )
         {
             if ( ( i_index < 0 ) || ( size_t( i_index ) > i_data.aImageSets.size() + ( i_forInsert ? 1 : 0 ) ) )
-                throw IndexOutOfBoundsException( ::rtl::OUString(), i_context );
+                throw IndexOutOfBoundsException( OUString(), i_context );
         }
 
         void lcl_notify( ::osl::ClearableMutexGuard& i_guard, ::cppu::OBroadcastHelper& i_broadcaseHelper,
             void ( SAL_CALL XContainerListener::*i_notificationMethod )( const ContainerEvent& ),
-            const sal_Int32 i_accessor, const Sequence< ::rtl::OUString >& i_imageURLs, const Reference< XInterface >& i_context )
+            const sal_Int32 i_accessor, const Sequence< OUString >& i_imageURLs, const Reference< XInterface >& i_context )
         {
             ::cppu::OInterfaceContainerHelper* pContainerListeners = i_broadcaseHelper.getContainer( XContainerListener::static_type() );
             if ( pContainerListeners == NULL )
@@ -270,22 +270,22 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AnimatedImagesControlModel::getServiceName() throw(RuntimeException)
+    OUString SAL_CALL AnimatedImagesControlModel::getServiceName() throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        return OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.toolkit.AnimatedImagesControlModel");
+        return OUString("org.openoffice.comp.toolkit.AnimatedImagesControlModel");
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(2);
-        aServiceNames[0] = ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
+        aServiceNames[0] = OUString::createFromAscii( szServiceName_AnimatedImagesControlModel );
         aServiceNames[1] = "com.sun.star.awt.UnoControlModel";
         return aServiceNames;
     }
@@ -303,7 +303,7 @@ namespace toolkit
                 &&  ( nImageScaleMode != ImageScaleMode::Isotropic )
                 &&  ( nImageScaleMode != ImageScaleMode::Anisotropic )
                 )
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+                throw IllegalArgumentException( OUString(), *this, 1 );
         }
         break;
         }
@@ -317,7 +317,7 @@ namespace toolkit
         switch ( i_propertyId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( ::rtl::OUString::createFromAscii( szServiceName_AnimatedImagesControl ) );
+            return makeAny( OUString::createFromAscii( szServiceName_AnimatedImagesControl ) );
 
         case BASEPROPERTY_BORDER:
             return makeAny( VisualEffect::NONE );
@@ -401,7 +401,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL AnimatedImagesControlModel::getImageSet( ::sal_Int32 i_index ) throw (IndexOutOfBoundsException, RuntimeException)
+    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getImageSet( ::sal_Int32 i_index ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
@@ -413,7 +413,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL AnimatedImagesControlModel::insertImageSet( ::sal_Int32 i_index, const Sequence< ::rtl::OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL AnimatedImagesControlModel::insertImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         // sanity checks
@@ -430,7 +430,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< ::rtl::OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         // sanity checks
@@ -457,8 +457,8 @@ namespace toolkit
         lcl_checkIndex( *m_pData, i_index, *this );
 
         // actual removal
-        ::std::vector< Sequence< ::rtl::OUString > >::iterator removalPos = m_pData->aImageSets.begin() + i_index;
-        Sequence< ::rtl::OUString > aRemovedElement( *removalPos );
+        ::std::vector< Sequence< OUString > >::iterator removalPos = m_pData->aImageSets.begin() + i_index;
+        Sequence< OUString > aRemovedElement( *removalPos );
         m_pData->aImageSets.erase( removalPos );
 
         // listener notification

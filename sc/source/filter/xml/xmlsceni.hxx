@@ -29,7 +29,7 @@ class ScXMLImport;
 class ScXMLTableScenarioContext : public SvXMLImportContext
 {
 private:
-    rtl::OUString   sComment;
+    OUString   sComment;
     Color           aBorderColor;
     ScRangeList     aScenarioRanges;
     bool            bDisplayBorder;
@@ -45,14 +45,14 @@ private:
 public:
 
     ScXMLTableScenarioContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual ~ScXMLTableScenarioContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

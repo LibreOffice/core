@@ -825,7 +825,7 @@ FltError ImportExcel8::Read( void )
 
     bool bSheetHasCodeName = false;
 
-    std::vector<rtl::OUString> aCodeNames;
+    std::vector<OUString> aCodeNames;
     std::vector < SCTAB > nTabsWithNoCodeName;
 
     while( eAkt != EXC_STATE_END )
@@ -1104,7 +1104,7 @@ FltError ImportExcel8::Read( void )
                     case 0x0A:                          // EOF          [ 2345   ]
                     {
                         eAkt = EXC_STATE_SHEET;
-                        rtl::OUString sName;
+                        OUString sName;
                         GetDoc().GetName( GetCurrScTab(), sName );
                         if ( !bSheetHasCodeName )
                         {
@@ -1113,10 +1113,10 @@ FltError ImportExcel8::Read( void )
                         }
                         else
                         {
-                            rtl::OUString sCodeName;
+                            OUString sCodeName;
                             GetDoc().GetCodeName( GetCurrScTab(), sCodeName );
                             OSL_TRACE("Have CodeName %s for SheetName %s",
-                                rtl::OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(),  rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                OUStringToOString( sCodeName, RTL_TEXTENCODING_UTF8 ).getStr(),  OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
                             aCodeNames.push_back( sCodeName );
                         }
 
@@ -1252,12 +1252,12 @@ FltError ImportExcel8::Read( void )
             OSL_TRACE("Trying to find suitable codename for %d", *it );
             while ( true )
             {
-                rtl::OUStringBuffer aBuf;
+                OUStringBuffer aBuf;
                 aBuf.appendAscii("Sheet");
                 aBuf.append(static_cast<sal_Int32>(nTab++));
-                rtl::OUString sTmpName = aBuf.makeStringAndClear();
-                std::vector<rtl::OUString>::iterator codeName_It = aCodeNames.begin();
-                std::vector<rtl::OUString>::iterator codeName_It_end = aCodeNames.end();
+                OUString sTmpName = aBuf.makeStringAndClear();
+                std::vector<OUString>::iterator codeName_It = aCodeNames.begin();
+                std::vector<OUString>::iterator codeName_It_end = aCodeNames.end();
                 // search for codename
                 for ( ; codeName_It != codeName_It_end; ++codeName_It )
                 {
@@ -1267,7 +1267,7 @@ FltError ImportExcel8::Read( void )
 
                 if ( codeName_It == codeName_It_end ) // generated codename not found
                 {
-                    OSL_TRACE("Using generated codename %s", rtl::OUStringToOString( sTmpName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_TRACE("Using generated codename %s", OUStringToOString( sTmpName, RTL_TEXTENCODING_UTF8 ).getStr() );
                     // Set new codename
                     GetDoc().SetCodeName( *it, sTmpName );
                     // Record newly used codename

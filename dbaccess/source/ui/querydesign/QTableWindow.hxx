@@ -30,16 +30,16 @@ namespace dbaui
     class OQueryTableWindow : public OTableWindow
     {
         sal_Int32           m_nAliasNum;
-        ::rtl::OUString     m_strInitialAlias;
+        OUString     m_strInitialAlias;
     public:
         OQueryTableWindow( Window* pParent, const TTableWindowData::value_type& pTabWinData, sal_Unicode* pszInitialAlias = NULL );
         virtual ~OQueryTableWindow();
 
-        ::rtl::OUString GetAliasName() const
+        OUString GetAliasName() const
         {
             return static_cast<OQueryTableWindowData*>(GetData().get())->GetAliasName();
         }
-        void            SetAliasName(const ::rtl::OUString& strNewAlias)
+        void            SetAliasName(const OUString& strNewAlias)
         {
             static_cast<OQueryTableWindowData*>(GetData().get())->SetAliasName(strNewAlias);
         }
@@ -49,10 +49,10 @@ namespace dbaui
 
         inline sal_Int32        GetAliasNum() const { return m_nAliasNum; }
 
-        sal_Bool            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
+        sal_Bool            ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo);
         sal_Bool            ExistsAVisitedConn() const;
 
-        virtual ::rtl::OUString     GetName() const { return GetWinName(); }
+        virtual OUString     GetName() const { return GetWinName(); }
 
     protected:
         virtual void    KeyInput( const KeyEvent& rEvt );

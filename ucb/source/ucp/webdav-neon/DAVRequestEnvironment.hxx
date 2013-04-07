@@ -34,19 +34,19 @@
 
 namespace webdav_ucp
 {
-    typedef std::pair< rtl::OUString, rtl::OUString > DAVRequestHeader;
+    typedef std::pair< OUString, OUString > DAVRequestHeader;
     typedef std::vector< DAVRequestHeader > DAVRequestHeaders;
 
 struct DAVRequestEnvironment
 {
-    rtl::OUString m_aRequestURI;
+    OUString m_aRequestURI;
     rtl::Reference< DAVAuthListener >     m_xAuthListener;
 //    rtl::Reference< DAVStatusListener >   m_xStatusListener;
 //    rtl::Reference< DAVProgressListener > m_xStatusListener;
     DAVRequestHeaders                     m_aRequestHeaders;
     uno::Reference< ucb::XCommandEnvironment > m_xEnv;
 
-DAVRequestEnvironment( const rtl::OUString & rRequestURI,
+DAVRequestEnvironment( const OUString & rRequestURI,
                            const rtl::Reference< DAVAuthListener > & xListener,
                            const DAVRequestHeaders & rRequestHeaders,
                            const uno::Reference< ucb::XCommandEnvironment > & xEnv)

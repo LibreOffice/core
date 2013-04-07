@@ -69,8 +69,8 @@ public:
 
 class XMLTableStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString             sDataStyleName;
-    rtl::OUString               sPageStyle;
+    OUString             sDataStyleName;
+    OUString               sPageStyle;
     SvXMLStylesContext*         pStyles;
     sal_Int32                   nNumberFormat;
     SCTAB                       nLastSheet;
@@ -84,22 +84,22 @@ class XMLTableStyleContext : public XMLPropStyleContext
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
-                               const ::rtl::OUString& rLocalName,
-                               const ::rtl::OUString& rValue );
+                               const OUString& rLocalName,
+                               const OUString& rValue );
 
 public:
 
     TYPEINFO();
 
     XMLTableStyleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void FillPropertySet(const ::com::sun::star::uno::Reference<
@@ -131,10 +131,10 @@ class XMLTableStylesContext : public SvXMLStylesContext
                     ::com::sun::star::container::XNameContainer > xRowStyles;
     ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer > xTableStyles;
-    const ::rtl::OUString sCellStyleServiceName;
-    const ::rtl::OUString sColumnStyleServiceName;
-    const ::rtl::OUString sRowStyleServiceName;
-    const ::rtl::OUString sTableStyleServiceName;
+    const OUString sCellStyleServiceName;
+    const OUString sColumnStyleServiceName;
+    const OUString sRowStyleServiceName;
+    const OUString sTableStyleServiceName;
     sal_Int32 nNumberFormatIndex;
     sal_Int32 nConditionalFormatIndex;
     sal_Int32 nCellStyleIndex;
@@ -155,19 +155,19 @@ protected:
     virtual SvXMLStyleContext *CreateStyleStyleChildContext(
             sal_uInt16 nFamily,
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 public:
 
     XMLTableStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx ,
-            const ::rtl::OUString& rLName ,
+            const OUString& rLName ,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const bool bAutoStyles );
     virtual ~XMLTableStylesContext();
@@ -179,7 +179,7 @@ public:
     virtual ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer >
         GetStylesContainer( sal_uInt16 nFamily ) const;
-    virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
+    virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
 
     sal_Int32 GetIndex(const sal_Int16 nContextID);
 };
@@ -188,12 +188,12 @@ class ScXMLMasterStylesContext : public SvXMLStylesContext
 {
 protected:
     virtual SvXMLStyleContext *CreateStyleChildContext( sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
-        sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -203,7 +203,7 @@ public:
     TYPEINFO();
 
     ScXMLMasterStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList);
 
@@ -218,17 +218,17 @@ namespace com { namespace sun { namespace star {
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
-    const rtl::OUString     sEmpty;
+    const OUString     sEmpty;
     sal_Bool                bContainsRightHeader;
     sal_Bool                bContainsRightFooter;
 
-    void ClearContent(const rtl::OUString& rContent);
+    void ClearContent(const OUString& rContent);
 public:
 
     TYPEINFO();
 
     ScMasterPageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             bool bOverwrite );
@@ -236,12 +236,12 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual SvXMLImportContext *CreateHeaderFooterContext(
             sal_uInt16 nPrefix,
-            const ::rtl::OUString& rLocalName,
+            const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const sal_Bool bFooter,
             const sal_Bool bLeft,
@@ -259,7 +259,7 @@ class ScCellTextStyleContext : public XMLTextStyleContext
 
 public:
     ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStyles, sal_uInt16 nFamily,

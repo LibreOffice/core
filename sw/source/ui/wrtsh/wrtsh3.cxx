@@ -37,7 +37,6 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 extern bool bNoInterrupt;       // in mainwn.cxx
 
@@ -123,7 +122,7 @@ void SwWrtShell::DrawSelChanged( )
     bNoInterrupt = bOldVal;
 }
 
-sal_Bool SwWrtShell::GotoMark( const ::rtl::OUString& rName )
+sal_Bool SwWrtShell::GotoMark( const OUString& rName )
 {
     IDocumentMarkAccess::const_iterator_t ppMark = getIDocumentMarkAccess()->findMark( rName );
     if(ppMark == getIDocumentMarkAccess()->getMarksEnd()) return false;

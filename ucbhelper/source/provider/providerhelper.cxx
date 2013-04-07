@@ -53,7 +53,7 @@ namespace ucbhelper_impl
 struct equalString
 {
     bool operator()(
-        const rtl::OUString& rKey11, const rtl::OUString& rKey22 ) const
+        const OUString& rKey11, const OUString& rKey22 ) const
       {
           return !!( rKey11 == rKey22 );
       }
@@ -61,7 +61,7 @@ struct equalString
 
 struct hashString
 {
-    size_t operator()( const rtl::OUString & rName ) const
+    size_t operator()( const OUString & rName ) const
     {
         return rName.hashCode();
     }
@@ -69,7 +69,7 @@ struct hashString
 
 typedef boost::unordered_map
 <
-    rtl::OUString,
+    OUString,
     uno::WeakReference< ucb::XContent >,
     hashString,
     equalString
@@ -146,11 +146,11 @@ XTYPEPROVIDER_IMPL_3( ContentProviderImplHelper,
 
 // virtual
 sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
-                                            const rtl::OUString& ServiceName )
+                                            const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString* pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString* pArray = aSNL.getConstArray();
     for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if ( pArray[ i ] == ServiceName )
@@ -174,8 +174,8 @@ sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
 {
     // Simply do a string compare.
 
-    rtl::OUString aURL1( Id1->getContentIdentifier() );
-    rtl::OUString aURL2( Id2->getContentIdentifier() );
+    OUString aURL1( Id1->getContentIdentifier() );
+    OUString aURL2( Id2->getContentIdentifier() );
 
     return aURL1.compareTo( aURL2 );
 }
@@ -216,7 +216,7 @@ void ContentProviderImplHelper::removeContent( ContentImplHelper* pContent )
 
     cleanupRegisteredContents();
 
-    const rtl::OUString aURL(
+    const OUString aURL(
         pContent->getIdentifier()->getContentIdentifier() );
 
     ucbhelper_impl::Contents::iterator it = m_pImpl->m_aContents.find( aURL );
@@ -236,7 +236,7 @@ ContentProviderImplHelper::queryExistingContent(
 
 //=========================================================================
 rtl::Reference< ContentImplHelper >
-ContentProviderImplHelper::queryExistingContent( const rtl::OUString& rURL )
+ContentProviderImplHelper::queryExistingContent( const OUString& rURL )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -294,7 +294,7 @@ void ContentProviderImplHelper::registerNewContent(
 
         cleanupRegisteredContents();
 
-        const rtl::OUString aURL(
+        const OUString aURL(
             xContent->getIdentifier()->getContentIdentifier() );
         ucbhelper_impl::Contents::const_iterator it
             = m_pImpl->m_aContents.find( aURL );
@@ -318,7 +318,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 
         // Open/create a registry.
         m_pImpl->m_xPropertySetRegistry
-            = xRegFac->createPropertySetRegistry( rtl::OUString() );
+            = xRegFac->createPropertySetRegistry( OUString() );
 
         OSL_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
                 "ContentProviderImplHelper::getAdditionalPropertySet - "
@@ -332,7 +332,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
 //=========================================================================
 uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
 ContentProviderImplHelper::getAdditionalPropertySet(
-    const rtl::OUString& rKey, sal_Bool bCreate )
+    const OUString& rKey, sal_Bool bCreate )
 {
     // Get propertyset registry.
     getAdditionalPropertySetRegistry();
@@ -350,8 +350,8 @@ ContentProviderImplHelper::getAdditionalPropertySet(
 
 //=========================================================================
 sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
-    const rtl::OUString& rOldKey,
-    const rtl::OUString& rNewKey,
+    const OUString& rOldKey,
+    const OUString& rNewKey,
     sal_Bool bRecursive )
 {
     if ( rOldKey == rNewKey )
@@ -370,34 +370,34 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
                 m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
-                uno::Sequence< rtl::OUString > aKeys
+                uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
-                    rtl::OUString aOldKeyWithSlash = rOldKey;
-                    rtl::OUString aOldKeyWithoutSlash;
+                    OUString aOldKeyWithSlash = rOldKey;
+                    OUString aOldKeyWithoutSlash;
                     if ( aOldKeyWithSlash.lastIndexOf(
                              sal_Unicode('/')
                                  != aOldKeyWithSlash.getLength() - 1 ) )
                     {
-                        aOldKeyWithSlash += rtl::OUString( sal_Unicode('/') );
+                        aOldKeyWithSlash += OUString( sal_Unicode('/') );
                         aOldKeyWithoutSlash = rOldKey;
                     }
                     else if ( !rOldKey.isEmpty() )
                         aOldKeyWithoutSlash
                             = rOldKey.copy( 0, rOldKey.getLength() - 1 );
 
-                    const rtl::OUString* pKeys = aKeys.getConstArray();
+                    const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
-                        const rtl::OUString& rKey = pKeys[ n ];
+                        const OUString& rKey = pKeys[ n ];
                         if ( rKey.compareTo(
                                  aOldKeyWithSlash,
                                  aOldKeyWithSlash.getLength() ) == 0
                              || rKey.equals( aOldKeyWithoutSlash ) )
                         {
-                            rtl::OUString aNewKey
+                            OUString aNewKey
                                 = rKey.replaceAt(
                                     0, rOldKey.getLength(), rNewKey );
                             if ( !renameAdditionalPropertySet(
@@ -437,8 +437,8 @@ sal_Bool ContentProviderImplHelper::renameAdditionalPropertySet(
 
 //=========================================================================
 sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
-    const rtl::OUString& rSourceKey,
-    const rtl::OUString& rTargetKey,
+    const OUString& rSourceKey,
+    const OUString& rTargetKey,
     sal_Bool bRecursive )
 {
     if ( rSourceKey == rTargetKey )
@@ -457,34 +457,34 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
                 m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
-                uno::Sequence< rtl::OUString > aKeys
+                uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
-                    rtl::OUString aSrcKeyWithSlash = rSourceKey;
-                    rtl::OUString aSrcKeyWithoutSlash;
+                    OUString aSrcKeyWithSlash = rSourceKey;
+                    OUString aSrcKeyWithoutSlash;
                     if ( aSrcKeyWithSlash.lastIndexOf(
                              sal_Unicode('/')
                              != aSrcKeyWithSlash.getLength() - 1 ) )
                     {
-                        aSrcKeyWithSlash += rtl::OUString( sal_Unicode('/') );
+                        aSrcKeyWithSlash += OUString( sal_Unicode('/') );
                         aSrcKeyWithoutSlash = rSourceKey;
                     }
                     else if ( !rSourceKey.isEmpty() )
                         aSrcKeyWithoutSlash = rSourceKey.copy(
                             0, rSourceKey.getLength() - 1 );
 
-                    const rtl::OUString* pKeys = aKeys.getConstArray();
+                    const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
-                        const rtl::OUString& rKey = pKeys[ n ];
+                        const OUString& rKey = pKeys[ n ];
                         if ( rKey.compareTo(
                                  aSrcKeyWithSlash,
                                  aSrcKeyWithSlash.getLength() ) == 0
                              || rKey.equals( aSrcKeyWithoutSlash ) )
                         {
-                            rtl::OUString aNewKey
+                            OUString aNewKey
                                 = rKey.replaceAt(
                                     0, rSourceKey.getLength(), rTargetKey );
                             if ( !copyAdditionalPropertySet(
@@ -581,7 +581,7 @@ sal_Bool ContentProviderImplHelper::copyAdditionalPropertySet(
 
 //=========================================================================
 sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
-    const rtl::OUString& rKey, sal_Bool bRecursive )
+    const OUString& rKey, sal_Bool bRecursive )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -596,28 +596,28 @@ sal_Bool ContentProviderImplHelper::removeAdditionalPropertySet(
                 m_pImpl->m_xPropertySetRegistry, uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
-                uno::Sequence< rtl::OUString > aKeys
+                uno::Sequence< OUString > aKeys
                     = xNameAccess->getElementNames();
                 sal_Int32 nCount = aKeys.getLength();
                 if ( nCount > 0 )
                 {
-                    rtl::OUString aKeyWithSlash = rKey;
-                    rtl::OUString aKeyWithoutSlash;
+                    OUString aKeyWithSlash = rKey;
+                    OUString aKeyWithoutSlash;
                     if ( aKeyWithSlash.lastIndexOf(
                              sal_Unicode('/')
                              != aKeyWithSlash.getLength() - 1 ) )
                     {
-                        aKeyWithSlash += rtl::OUString( (sal_Unicode)'/' );
+                        aKeyWithSlash += OUString( (sal_Unicode)'/' );
                         aKeyWithoutSlash = rKey;
                     }
                     else if ( !rKey.isEmpty() )
                         aKeyWithoutSlash
                             = rKey.copy( 0, rKey.getLength() - 1 );
 
-                    const rtl::OUString* pKeys = aKeys.getConstArray();
+                    const OUString* pKeys = aKeys.getConstArray();
                     for ( sal_Int32 n = 0; n < nCount; ++n )
                     {
-                        const rtl::OUString& rCurrKey = pKeys[ n ];
+                        const OUString& rCurrKey = pKeys[ n ];
                         if ( rCurrKey.compareTo(
                                  aKeyWithSlash,
                                  aKeyWithSlash.getLength() ) == 0

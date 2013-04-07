@@ -62,7 +62,7 @@ namespace fileaccess {
     public:
 
         XResultSet_impl( shell* pMyShell,
-                         const rtl::OUString& aUnqPath,
+                         const OUString& aUnqPath,
                          sal_Int32 OpenMode,
                          const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq,
                          const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo >& seqSort );
@@ -74,7 +74,7 @@ namespace fileaccess {
             return 0;
         }
 
-        virtual ContentEventNotifier*        cEXC( const rtl::OUString )
+        virtual ContentEventNotifier*        cEXC( const OUString )
         {
             return 0;
         }
@@ -94,7 +94,7 @@ namespace fileaccess {
             return 0;
         }
 
-        virtual rtl::OUString                  getKey( void )
+        virtual OUString                  getKey( void )
         {
             return m_aBaseDirectory;
         }
@@ -160,7 +160,7 @@ namespace fileaccess {
             return m_nWasNull;
         }
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
@@ -169,7 +169,7 @@ namespace fileaccess {
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 return m_aItems[m_nRow]->getString( columnIndex );
             else
-                return rtl::OUString();
+                return OUString();
         }
 
         virtual sal_Bool SAL_CALL
@@ -540,7 +540,7 @@ namespace fileaccess {
 
         // XContentAccess
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -569,7 +569,7 @@ namespace fileaccess {
             throw( com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL setPropertyValue(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::beans::PropertyVetoException,
@@ -579,14 +579,14 @@ namespace fileaccess {
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
-            const rtl::OUString& PropertyName )
+            const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL
         addPropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -594,7 +594,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removePropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -602,14 +602,14 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL removeVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -631,12 +631,12 @@ namespace fileaccess {
 
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > >         ItemSet;
-        typedef std::vector< rtl::OUString >                        UnqPathSet;
+        typedef std::vector< OUString >                        UnqPathSet;
 
         IdentSet                            m_aIdents;
         ItemSet                             m_aItems;
         UnqPathSet                          m_aUnqPath;
-        const rtl::OUString                 m_aBaseDirectory;
+        const OUString                 m_aBaseDirectory;
 
         osl::Directory                        m_aFolder;
         com::sun::star::uno::Sequence< com::sun::star::beans::Property >      m_sProperty;

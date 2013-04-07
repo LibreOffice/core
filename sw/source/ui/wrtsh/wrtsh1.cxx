@@ -349,7 +349,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
         if ( pName )
         {
             comphelper::EmbeddedObjectContainer aCnt( xStor );
-            ::rtl::OUString aName;
+            OUString aName;
             // TODO/LATER: get aspect?
             xObj.Assign( aCnt.CreateEmbeddedObject( pName->GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
         }
@@ -371,16 +371,16 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 {
                     SfxSlotPool* pSlotPool = SW_MOD()->GetSlotPool();
                     const SfxSlot* pSlot = pSlotPool->GetSlot(nSlotId);
-                    rtl::OString aCmd(".uno:");
+                    OString aCmd(".uno:");
                     aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( GetWin(), rtl::OStringToOUString( aCmd, RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
+                            pFact->CreateInsertObjectDialog( GetWin(), OStringToOUString( aCmd, RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
                     if ( pDlg )
                     {
                         pDlg->Execute();
                         bDoVerb = pDlg->IsCreateNew();
-                        ::rtl::OUString aIconMediaType;
+                        OUString aIconMediaType;
                         uno::Reference< io::XInputStream > xIconMetaFile = pDlg->GetIconIfIconified( &aIconMediaType );
                         xObj.Assign( pDlg->GetObject(),
                                      xIconMetaFile.is() ? embed::Aspects::MSOLE_ICON : embed::Aspects::MSOLE_CONTENT );
@@ -480,7 +480,7 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
                 {
                     try
                     {
-                        xSet->setPropertyValue( ::rtl::OUString("Formula"), uno::makeAny( ::rtl::OUString( aMathData ) ) );
+                        xSet->setPropertyValue( OUString("Formula"), uno::makeAny( OUString( aMathData ) ) );
                         bActivate = sal_False;
                     }
                     catch (const uno::Exception&)
@@ -533,12 +533,12 @@ sal_Bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyF
             svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
             uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
             if ( xProps.is() &&
-                 ( xProps->getPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
+                 ( xProps->getPropertyValue( OUString( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog ) &&
                  bDisableDataTableDialog )
             {
-                xProps->setPropertyValue( ::rtl::OUString( "DisableDataTableDialog" ),
+                xProps->setPropertyValue( OUString( "DisableDataTableDialog" ),
                     uno::makeAny( sal_False ) );
-                xProps->setPropertyValue( ::rtl::OUString( "DisableComplexChartTypes" ),
+                xProps->setPropertyValue( OUString( "DisableComplexChartTypes" ),
                     uno::makeAny( sal_False ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )
@@ -900,7 +900,7 @@ void SwWrtShell::InsertLineBreak()
         if( pACorr )
             AutoCorrect( *pACorr, cIns );
         else
-            SwWrtShell::Insert( rtl::OUString( cIns ) );
+            SwWrtShell::Insert( OUString( cIns ) );
     }
 }
 
@@ -1185,8 +1185,8 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                     aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFmt.SetPrefix(::rtl::OUString());
-                    aFmt.SetSuffix(::rtl::OUString());
+                    aFmt.SetPrefix(OUString());
+                    aFmt.SetSuffix(OUString());
                 }
                 aNumRule.Set(static_cast<sal_uInt16>(nLevel), aFmt);
             }
@@ -1243,8 +1243,8 @@ void SwWrtShell::NumOrBulletOn(sal_Bool bNum)
                 aFmt.SetBulletChar( numfunc::GetBulletChar(nLvl) );
                 aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 // #i93908# clear suffix for bullet lists
-                aFmt.SetPrefix(::rtl::OUString());
-                aFmt.SetSuffix(::rtl::OUString());
+                aFmt.SetPrefix(OUString());
+                aFmt.SetSuffix(OUString());
             }
 
             // #i95907#

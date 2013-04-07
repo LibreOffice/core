@@ -42,8 +42,6 @@
 #include <com/sun/star/style/NumberingType.hpp>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;

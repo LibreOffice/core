@@ -358,7 +358,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             }
             else // this is a metafile
             {
-                rtl::OUString aDestMimeType( aSourceMimeType );
+                OUString aDestMimeType( aSourceMimeType );
                 Reference< XStream > xTempFile( io::TempFile::create(rxMSF), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
                 Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create( rxMSF ) );
@@ -424,7 +424,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                         {
                             if ( aGraphicUserIter->mxShape.is() )
                             {
-                                rtl::OUString sEmptyGraphicURL;
+                                OUString sEmptyGraphicURL;
                                 Reference< XPropertySet > xShapePropertySet( aGraphicUserIter->mxShape, UNO_QUERY_THROW );
                                 xShapePropertySet->setPropertyValue( TKGet( TK_GraphicURL ), Any( sEmptyGraphicURL ) );
                                 xShapePropertySet->setPropertyValue( TKGet( TK_Graphic ), Any( xNewGraphic ) );

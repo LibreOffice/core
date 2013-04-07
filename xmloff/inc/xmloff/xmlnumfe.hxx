@@ -44,41 +44,41 @@ class XMLOFF_DLLPUBLIC SvXMLNumFmtExport
 {
 private:
     SvXMLExport&                rExport;
-    ::rtl::OUString             sPrefix;
+    OUString             sPrefix;
     SvNumberFormatter*          pFormatter;
-    ::rtl::OUStringBuffer       sTextContent;
+    OUStringBuffer       sTextContent;
     SvXMLNumUsedList_Impl*      pUsedList;
     CharClass*                  pCharClass;
     LocaleDataWrapper*          pLocaleData;
 
-    SAL_DLLPRIVATE void AddCalendarAttr_Impl( const ::rtl::OUString& rCalendar );
+    SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( sal_Bool bLong );
     SAL_DLLPRIVATE void AddTextualAttr_Impl( sal_Bool bText );
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
 
-    SAL_DLLPRIVATE void AddToTextElement_Impl( const ::rtl::OUString& rString );
+    SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
     SAL_DLLPRIVATE void FinishTextElement_Impl();
 
     SAL_DLLPRIVATE void WriteColorElement_Impl( const Color& rColor );
     SAL_DLLPRIVATE void WriteNumberElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
-                                        const ::rtl::OUString& rDashStr, sal_Bool bVarDecimals,
+                                        const OUString& rDashStr, sal_Bool bVarDecimals,
                                         sal_Bool bGrouping, sal_Int32 nTrailingThousands,
                                         const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries );
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nInteger,
                                         sal_Bool bGrouping, sal_Int32 nExp );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, sal_Bool bGrouping,
                                         sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator );
-    SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const ::rtl::OUString& rString,
-                                        const ::rtl::OUString& rExt );
+    SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const OUString& rString,
+                                        const OUString& rExt );
     SAL_DLLPRIVATE void WriteBooleanElement_Impl();
     SAL_DLLPRIVATE void WriteTextContentElement_Impl();
-    SAL_DLLPRIVATE void WriteDayElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteMonthElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong, sal_Bool bText );
-    SAL_DLLPRIVATE void WriteYearElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteEraElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteDayOfWeekElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong );
-    SAL_DLLPRIVATE void WriteWeekElement_Impl( const ::rtl::OUString& rCalendar );
-    SAL_DLLPRIVATE void WriteQuarterElement_Impl( const ::rtl::OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteDayElement_Impl( const OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteMonthElement_Impl( const OUString& rCalendar, sal_Bool bLong, sal_Bool bText );
+    SAL_DLLPRIVATE void WriteYearElement_Impl( const OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteEraElement_Impl( const OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteDayOfWeekElement_Impl( const OUString& rCalendar, sal_Bool bLong );
+    SAL_DLLPRIVATE void WriteWeekElement_Impl( const OUString& rCalendar );
+    SAL_DLLPRIVATE void WriteQuarterElement_Impl( const OUString& rCalendar, sal_Bool bLong );
     SAL_DLLPRIVATE void WriteHoursElement_Impl( sal_Bool bLong );
     SAL_DLLPRIVATE void WriteMinutesElement_Impl( sal_Bool bLong );
     SAL_DLLPRIVATE void WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDecimals );
@@ -87,7 +87,7 @@ private:
                                     sal_Int32 nKey, sal_Int32 nPart );
 
     SAL_DLLPRIVATE void  WriteRepeatedElement_Impl( sal_Unicode ch );
-    SAL_DLLPRIVATE sal_Bool WriteTextWithCurrency_Impl( const ::rtl::OUString& rString,
+    SAL_DLLPRIVATE sal_Bool WriteTextWithCurrency_Impl( const OUString& rString,
                             const ::com::sun::star::lang::Locale& rLocale );
     SAL_DLLPRIVATE void ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey,
                                 sal_uInt16 nPart, sal_Bool bDefPart );
@@ -101,7 +101,7 @@ public:
     SvXMLNumFmtExport( SvXMLExport& rExport,
                        const ::com::sun::star::uno::Reference<
                         ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
-                       const rtl::OUString& rPrefix );
+                       const OUString& rPrefix );
 
     virtual ~SvXMLNumFmtExport();
 
@@ -112,7 +112,7 @@ public:
     void SetUsed( sal_uInt32 nKey );
 
     // get the style name that was generated for a key
-    ::rtl::OUString GetStyleName( sal_uInt32 nKey );
+    OUString GetStyleName( sal_uInt32 nKey );
 
     void GetWasUsed(com::sun::star::uno::Sequence<sal_Int32>& rWasUsed);
     void SetWasUsed(const com::sun::star::uno::Sequence<sal_Int32>& rWasUsed);

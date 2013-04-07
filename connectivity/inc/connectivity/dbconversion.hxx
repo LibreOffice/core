@@ -80,7 +80,7 @@ namespace dbtools
         static void setValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate>& xVariant,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                     const ::com::sun::star::util::Date& rNullDate,
-                                    const ::rtl::OUString& rString,
+                                    const OUString& rString,
                                     sal_Int32 nKey,
                                     sal_Int16 nFieldType,
                                     sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
@@ -94,13 +94,13 @@ namespace dbtools
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type
-        static ::rtl::OUString getFormattedValue(
+        static OUString getFormattedValue(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::lang::Locale& _rLocale,
                                         const ::com::sun::star::util::Date& rNullDate);
 
-        static ::rtl::OUString getFormattedValue(
+        static OUString getFormattedValue(
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::util::Date& rNullDate,
@@ -108,11 +108,11 @@ namespace dbtools
                                         sal_Int16 nKeyType);
 
         static ::com::sun::star::util::Date     toDate(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::Date     toDate(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::Date     toDate(const OUString& _sSQLDate);
         static ::com::sun::star::util::Time     toTime(double dVal);
-        static ::com::sun::star::util::Time     toTime(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::Time     toTime(const OUString& _sSQLDate);
         static ::com::sun::star::util::DateTime toDateTime(double dVal, const ::com::sun::star::util::Date& _rNullDate = getStandardDate());
-        static ::com::sun::star::util::DateTime toDateTime(const ::rtl::OUString& _sSQLDate);
+        static ::com::sun::star::util::DateTime toDateTime(const OUString& _sSQLDate);
 
 
         static sal_Int32 getMsFromTime(const ::com::sun::star::util::Time& rVal);
@@ -142,13 +142,13 @@ namespace dbtools
         static ::com::sun::star::util::Date getNULLDate(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > &xSupplier);
 
         // return the date in the format %04d-%02d-%02d
-        static ::rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate);
+        static OUString toDateString(const ::com::sun::star::util::Date& rDate);
         // return the time in the format %02d:%02d:%02d
-        static ::rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime);
+        static OUString toTimeString(const ::com::sun::star::util::Time& rTime);
         // return the DateTime in the format %04d-%02d-%02d %02d:%02d:%02d
-        static ::rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
+        static OUString toDateTimeString(const ::com::sun::star::util::DateTime& _rDateTime);
         // return the any in an sql standard format
-        static ::rtl::OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
+        static OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >&  _rxTypeConverter);
 
         /** converts a Unicode string into a 8-bit string, using the given encoding
@@ -168,8 +168,8 @@ namespace dbtools
                 the length of the converted string
         */
         static sal_Int32 convertUnicodeString(
-            const ::rtl::OUString& _rSource,
-            ::rtl::OString&  _rDest,
+            const OUString& _rSource,
+            OString&  _rDest,
             rtl_TextEncoding _eEncoding
         )
             SAL_THROW((::com::sun::star::sdbc::SQLException));
@@ -198,8 +198,8 @@ namespace dbtools
                 the length of the converted string
         */
         static sal_Int32 convertUnicodeStringToLength(
-            const ::rtl::OUString& _rSource,
-            ::rtl::OString&  _rDest,
+            const OUString& _rSource,
+            OString&  _rDest,
             sal_Int32 _nMaxLen,
             rtl_TextEncoding _eEncoding
        )

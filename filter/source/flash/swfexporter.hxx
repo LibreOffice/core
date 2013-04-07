@@ -39,14 +39,14 @@ typedef ::std::map<sal_uInt32, sal_uInt16> ChecksumCache;
 
 class GDIMetaFile;
 
-inline ::rtl::OUString STR(const sal_Char * in)
+inline OUString STR(const sal_Char * in)
 {
-    return ::rtl::OUString::createFromAscii(in);
+    return OUString::createFromAscii(in);
 }
 
-inline ::rtl::OUString VAL(sal_Int32 in)
+inline OUString VAL(sal_Int32 in)
 {
-    return ::rtl::OUString::valueOf(in);
+    return OUString::valueOf(in);
 }
 
 namespace swf {
@@ -72,7 +72,7 @@ public:
     sal_Int32       mnPresOrder;
 
     ::com::sun::star::presentation::ClickAction     meClickAction;
-    ::rtl::OUString maBookmark;
+    OUString maBookmark;
 
     sal_Int32       mnDimColor;
     sal_Bool        mbDimHide;
@@ -80,7 +80,7 @@ public:
 
     sal_Bool        mbSoundOn;
     sal_Bool        mbPlayFull;
-    ::rtl::OUString maSoundURL;
+    OUString maSoundURL;
 
     sal_Int32       mnBlueScreenColor;
 

@@ -100,7 +100,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
     rStm.Seek( nPos );
 }
 
-sal_Bool SvMetaModule::SetName( const rtl::OString& rName, SvIdlDataBase * pBase )
+sal_Bool SvMetaModule::SetName( const OString& rName, SvIdlDataBase * pBase )
 {
     if( pBase )
     {
@@ -132,9 +132,9 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     if( aSlotIdFile.ReadSvIdl( SvHash_SlotIdFile(), rInStm ) )
     {
         sal_uInt32 nTokPos = rInStm.Tell();
-        if( !rBase.ReadIdFile( rtl::OStringToOUString(aSlotIdFile.getString(), RTL_TEXTENCODING_ASCII_US)) )
+        if( !rBase.ReadIdFile( OStringToOUString(aSlotIdFile.getString(), RTL_TEXTENCODING_ASCII_US)) )
         {
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot read file: "));
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot read file: "));
             aStr.append(aSlotIdFile.getString());
             rBase.SetError( aStr.makeStringAndClear(), rInStm.GetToken() );
             rBase.WriteError( rInStm );
@@ -222,7 +222,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
         SvToken * pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
         {
-            OUString aFullName(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+            OUString aFullName(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
             rBase.StartNewFile( aFullName );
             osl::FileBase::RC searchError = osl::File::searchFileURL(aFullName, rBase.GetPath(), aFullName);
             osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
@@ -256,15 +256,15 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 }
                 else
                 {
-                    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot open file: "));
-                    aStr.append(rtl::OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
+                    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot open file: "));
+                    aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                     rBase.SetError(aStr.makeStringAndClear(), pTok);
                 }
             }
             else
             {
-                rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot find file:"));
-                aStr.append(rtl::OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
+                OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("cannot find file:"));
+                aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
                 rBase.SetError(aStr.makeStringAndClear(), pTok);
             }
         }
@@ -324,14 +324,14 @@ sal_Bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm 
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aBeginName.MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+             bOk = aBeginName.MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
     }
     rInStm.ReadDelemiter();
     if( bOk )
     {
         pTok = rInStm.GetToken_Next();
         if( pTok->IsString() )
-             bOk = aEndName.MakeId(rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
+             bOk = aEndName.MakeId(OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US));
     }
     rInStm.ReadDelemiter();
     if( bOk )

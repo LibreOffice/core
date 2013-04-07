@@ -52,47 +52,47 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     does not work as expected under windows (under unix it works as well)
                     these way must be used :-(
           */
-        static const ::rtl::OUString& PROP_ABORTED();
-        static const ::rtl::OUString& PROP_ASTEMPLATE();
-        static const ::rtl::OUString& PROP_COMPONENTDATA();
-        static const ::rtl::OUString& PROP_DOCUMENTSERVICE();
-        static const ::rtl::OUString& PROP_ENCRYPTIONDATA();
-        static const ::rtl::OUString& PROP_FILENAME();
-        static const ::rtl::OUString& PROP_FILTERNAME();
-        static const ::rtl::OUString& PROP_FILTERPROVIDER();
-        static const ::rtl::OUString& PROP_FILTEROPTIONS();
-        static const ::rtl::OUString& PROP_FRAME();
-        static const ::rtl::OUString& PROP_FRAMENAME();
-        static const ::rtl::OUString& PROP_HIDDEN();
-        static const ::rtl::OUString& PROP_INPUTSTREAM();
-        static const ::rtl::OUString& PROP_INTERACTIONHANDLER();
-        static const ::rtl::OUString& PROP_JUMPMARK();
-        static const ::rtl::OUString& PROP_MACROEXECUTIONMODE();
-        static const ::rtl::OUString& PROP_MEDIATYPE();
-        static const ::rtl::OUString& PROP_MINIMIZED();
-        static const ::rtl::OUString& PROP_NOAUTOSAVE();
-        static const ::rtl::OUString& PROP_OPENNEWVIEW();
-        static const ::rtl::OUString& PROP_OUTPUTSTREAM();
-        static const ::rtl::OUString& PROP_PASSWORD();
-        static const ::rtl::OUString& PROP_POSTDATA();
-        static const ::rtl::OUString& PROP_PREVIEW();
-        static const ::rtl::OUString& PROP_READONLY();
-        static const ::rtl::OUString& PROP_REFERRER();
-        static const ::rtl::OUString& PROP_SALVAGEDFILE();
-        static const ::rtl::OUString& PROP_STATUSINDICATOR();
-        static const ::rtl::OUString& PROP_STREAM();
-        static const ::rtl::OUString& PROP_STREAMFOROUTPUT();
-        static const ::rtl::OUString& PROP_TEMPLATENAME();
-        static const ::rtl::OUString& PROP_TITLE();
-        static const ::rtl::OUString& PROP_TYPENAME();
-        static const ::rtl::OUString& PROP_UCBCONTENT();
-        static const ::rtl::OUString& PROP_UPDATEDOCMODE();
-        static const ::rtl::OUString& PROP_URL();
-        static const ::rtl::OUString& PROP_VERSION();
-        static const ::rtl::OUString& PROP_DOCUMENTTITLE();
-        static const ::rtl::OUString& PROP_MODEL();
-        static const ::rtl::OUString& PROP_VIEWONLY();
-        static const ::rtl::OUString& PROP_DOCUMENTBASEURL();
+        static const OUString& PROP_ABORTED();
+        static const OUString& PROP_ASTEMPLATE();
+        static const OUString& PROP_COMPONENTDATA();
+        static const OUString& PROP_DOCUMENTSERVICE();
+        static const OUString& PROP_ENCRYPTIONDATA();
+        static const OUString& PROP_FILENAME();
+        static const OUString& PROP_FILTERNAME();
+        static const OUString& PROP_FILTERPROVIDER();
+        static const OUString& PROP_FILTEROPTIONS();
+        static const OUString& PROP_FRAME();
+        static const OUString& PROP_FRAMENAME();
+        static const OUString& PROP_HIDDEN();
+        static const OUString& PROP_INPUTSTREAM();
+        static const OUString& PROP_INTERACTIONHANDLER();
+        static const OUString& PROP_JUMPMARK();
+        static const OUString& PROP_MACROEXECUTIONMODE();
+        static const OUString& PROP_MEDIATYPE();
+        static const OUString& PROP_MINIMIZED();
+        static const OUString& PROP_NOAUTOSAVE();
+        static const OUString& PROP_OPENNEWVIEW();
+        static const OUString& PROP_OUTPUTSTREAM();
+        static const OUString& PROP_PASSWORD();
+        static const OUString& PROP_POSTDATA();
+        static const OUString& PROP_PREVIEW();
+        static const OUString& PROP_READONLY();
+        static const OUString& PROP_REFERRER();
+        static const OUString& PROP_SALVAGEDFILE();
+        static const OUString& PROP_STATUSINDICATOR();
+        static const OUString& PROP_STREAM();
+        static const OUString& PROP_STREAMFOROUTPUT();
+        static const OUString& PROP_TEMPLATENAME();
+        static const OUString& PROP_TITLE();
+        static const OUString& PROP_TYPENAME();
+        static const OUString& PROP_UCBCONTENT();
+        static const OUString& PROP_UPDATEDOCMODE();
+        static const OUString& PROP_URL();
+        static const OUString& PROP_VERSION();
+        static const OUString& PROP_DOCUMENTTITLE();
+        static const OUString& PROP_MODEL();
+        static const OUString& PROP_VIEWONLY();
+        static const OUString& PROP_DOCUMENTBASEURL();
 
         static const OUString& PROP_DEEPDETECTION();
 
@@ -179,7 +179,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                 Any.
          */
         ::com::sun::star::uno::Any getComponentDataEntry(
-            const ::rtl::OUString& rName ) const;
+            const OUString& rName ) const;
 
         //---------------------------------------
         /** Inserts a value into the sequence contained in the property
@@ -198,7 +198,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                 'ComponentData' property.
          */
         void setComponentDataEntry(
-            const ::rtl::OUString& rName,
+            const OUString& rName,
             const ::com::sun::star::uno::Any& rValue );
 
         //---------------------------------------
@@ -214,7 +214,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                 of the 'ComponentData' property.
          */
         void clearComponentDataEntry(
-            const ::rtl::OUString& rName );
+            const OUString& rName );
 
     //-------------------------------------------
     // helper
@@ -267,7 +267,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     if the MediaDescriptor seems to be invalid!
          */
         COMPHELPER_DLLPRIVATE sal_Bool impl_openStreamWithURL(
-            const ::rtl::OUString& sURL,
+            const OUString& sURL,
             sal_Bool bLockFile
             ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -281,7 +281,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
             @return [string]
                     the "normalized" URL (e.g. without jumpmark)
          */
-        COMPHELPER_DLLPRIVATE ::rtl::OUString impl_normalizeURL(const ::rtl::OUString& sURL);
+        COMPHELPER_DLLPRIVATE OUString impl_normalizeURL(const OUString& sURL);
 
         //---------------------------------------
         /** @short  it checks if the descriptor already has a valid

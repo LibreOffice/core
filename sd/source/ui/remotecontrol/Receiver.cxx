@@ -23,8 +23,6 @@
 
 using namespace sd;
 using namespace ::com::sun::star;
-using rtl::OUString;
-using rtl::OString;
 using namespace ::osl;
 using namespace std;
 
@@ -50,7 +48,7 @@ void Receiver::Timeout()
 {
     if( maExecQueue.size() )
     {
-        std::vector< rtl::OString > aCommands( maExecQueue.front() );
+        std::vector< OString > aCommands( maExecQueue.front() );
         maExecQueue.pop_front();
         if( !aCommands.empty() )
             executeCommand( aCommands );

@@ -86,7 +86,7 @@ public:
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
-            throw uno::RuntimeException( rtl::OUString(""), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString(""), uno::Reference< uno::XInterface >() );
 
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )
@@ -95,7 +95,7 @@ public:
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
@@ -110,7 +110,7 @@ public:
             maCachedObject = maWorkbook;
         else
         {
-            rtl::OUString sCodeName;
+            OUString sCodeName;
             SCTAB nCount = pDoc->GetTableCount();
             for( SCTAB i = 0; i < nCount; i++ )
             {
@@ -119,7 +119,7 @@ public:
                 // from the code name
                 if( String(sCodeName).EqualsIgnoreCaseAscii( sName ) )
                 {
-                    rtl::OUString sSheetName;
+                    OUString sSheetName;
                     if( pDoc->GetName( i, sSheetName ) )
                     {
                         uno::Reference< frame::XModel > xModel( mpDocShell->GetModel() );
@@ -130,7 +130,7 @@ public:
                         uno::Sequence< uno::Any > aArgs(3);
                         aArgs[0] = maWorkbook;
                         aArgs[1] = uno::Any( xModel );
-                        aArgs[2] = uno::Any( rtl::OUString( sSheetName ) );
+                        aArgs[2] = uno::Any( OUString( sSheetName ) );
                         // use the convience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;
@@ -141,25 +141,25 @@ public:
         return maCachedObject.hasValue();
 
     }
-    ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+    ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
         OSL_TRACE("ScVbaObjectForCodeNameProvider::getByName( %s )",
-            rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr() );
         if ( !hasByName( aName ) )
             throw ::com::sun::star::container::NoSuchElementException();
         return maCachedObject;
     }
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
         SCTAB nCount = pDoc->GetTableCount();
-        uno::Sequence< rtl::OUString > aNames( nCount + 1 );
+        uno::Sequence< OUString > aNames( nCount + 1 );
         SCTAB index = 0;
-        rtl::OUString sCodeName;
+        OUString sCodeName;
         for( ; index < nCount; ++index )
         {
             pDoc->GetCodeName( index, sCodeName );
@@ -180,10 +180,10 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNam
 public:
     ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
-    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
-        rtl::OUString sCodeName;
+        OUString sCodeName;
 
         // need to find the page ( and index )  for this control
         uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
@@ -206,7 +206,7 @@ public:
                     bMatched = ( xControl == xIf );
                     if ( bMatched )
                     {
-                        rtl::OUString sName;
+                        OUString sName;
                         mrDocShell.GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
                         sCodeName = sName;
                     }
@@ -220,7 +220,7 @@ public:
          return sCodeName;
     }
 
-    rtl::OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer )
+    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer )
             throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -237,14 +237,14 @@ public:
                 uno::Reference<container::XIndexAccess> xFormControls(xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW);
                 if (xFormControls == xContainer)
                 {
-                    rtl::OUString aName;
+                    OUString aName;
                     if (mrDocShell.GetDocument()->GetCodeName(static_cast<SCTAB>(i), aName))
                         return aName;
                 }
             }
             catch( uno::Exception& ) {}
         }
-        return rtl::OUString();
+        return OUString();
     }
 };
 
@@ -632,7 +632,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDocShell->GetModel();
-                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( "ooo.vba.excel.Globals" ), aArgs );
+                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( OUString( "ooo.vba.excel.Globals" ), aArgs );
                     pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
                     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
                     if ( pAppMgr )
@@ -651,14 +651,14 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     return xRet;
 }
 
-uno::Sequence<rtl::OUString> ScServiceProvider::GetAllServiceNames()
+uno::Sequence<OUString> ScServiceProvider::GetAllServiceNames()
 {
     const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
-    uno::Sequence<rtl::OUString> aRet(nEntries);
-    rtl::OUString* pArray = aRet.getArray();
+    uno::Sequence<OUString> aRet(nEntries);
+    OUString* pArray = aRet.getArray();
     for (sal_uInt16 i = 0; i < nEntries; i++)
     {
-        pArray[i] = rtl::OUString::createFromAscii( aProvNamesId[i].pName );
+        pArray[i] = OUString::createFromAscii( aProvNamesId[i].pName );
     }
     return aRet;
 }

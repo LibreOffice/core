@@ -104,33 +104,33 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         virtual ~SvtModuleOptions();
 
         sal_Bool        IsModuleInstalled         (       EModule          eModule    ) const;
-        ::rtl::OUString GetModuleName             (       EModule          eModule    ) const;
-        ::rtl::OUString GetFactoryName            (       EFactory         eFactory   ) const;
-        ::rtl::OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
-        ::rtl::OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
-        ::rtl::OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
+        OUString GetModuleName             (       EModule          eModule    ) const;
+        OUString GetFactoryName            (       EFactory         eFactory   ) const;
+        OUString GetFactoryStandardTemplate(       EFactory         eFactory   ) const;
+        OUString GetFactoryEmptyDocumentURL(       EFactory         eFactory   ) const;
+        OUString GetFactoryDefaultFilter   (       EFactory         eFactory   ) const;
         sal_Bool        IsDefaultFilterReadonly   (       EFactory         eFactory   ) const;
         sal_Int32       GetFactoryIcon            (       EFactory         eFactory   ) const;
-        static sal_Bool ClassifyFactoryByName     ( const ::rtl::OUString& sName      ,
+        static sal_Bool ClassifyFactoryByName     ( const OUString& sName      ,
                                                           EFactory&        eFactory   );
         void            SetFactoryStandardTemplate(       EFactory         eFactory   ,
-                                                    const ::rtl::OUString& sTemplate  );
+                                                    const OUString& sTemplate  );
         void            SetFactoryDefaultFilter   (       EFactory         eFactory   ,
-                                                    const ::rtl::OUString& sFilter    );
+                                                    const OUString& sFilter    );
 
         //_______________________________________
 
         /** @short  return the corresponding application ID for the given
                     document service name.
          */
-        static EFactory ClassifyFactoryByServiceName(const ::rtl::OUString& sName);
+        static EFactory ClassifyFactoryByServiceName(const OUString& sName);
 
         //_______________________________________
 
         /** @short  return the corresponding application ID for the given
                     short name.
          */
-        static EFactory ClassifyFactoryByShortName(const ::rtl::OUString& sName);
+        static EFactory ClassifyFactoryByShortName(const OUString& sName);
 
         //_______________________________________
 
@@ -152,7 +152,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
 
             @return A suitable enum value. See EFactory above.
          */
-        static EFactory ClassifyFactoryByURL(const ::rtl::OUString&                                                           sURL            ,
+        static EFactory ClassifyFactoryByURL(const OUString&                                                           sURL            ,
                                              const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lMediaDescriptor);
 
         //_______________________________________
@@ -172,7 +172,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
          */
         static EFactory ClassifyFactoryByModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
-        ::rtl::OUString GetDefaultModuleName();
+        OUString GetDefaultModuleName();
 
         sal_Bool   IsMath     () const;
         sal_Bool   IsChart    () const;
@@ -183,7 +183,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         sal_Bool   IsBasicIDE () const;
         sal_Bool   IsDataBase () const;
 
-        ::com::sun::star::uno::Sequence < ::rtl::OUString > GetAllServiceNames();
+        ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();
 
     private:
         UNOTOOLS_DLLPRIVATE static ::osl::Mutex& impl_GetOwnStaticMutex();

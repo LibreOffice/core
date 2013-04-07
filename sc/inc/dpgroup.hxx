@@ -57,7 +57,7 @@ class ScDPGroupDimension
 {
     long                        nSourceDim;
     long                        nGroupDim;
-    rtl::OUString               aGroupName;
+    OUString               aGroupName;
     ScDPGroupItemVec            aItems;
     mutable std::vector<SCROW> maMemberEntries;
     bool mbDateDimension;
@@ -73,7 +73,7 @@ public:
 
     long        GetSourceDim() const    { return nSourceDim; }
     long        GetGroupDim() const     { return nGroupDim; }
-    const rtl::OUString& GetName() const { return aGroupName; }
+    const OUString& GetName() const { return aGroupName; }
 
     const std::vector< SCROW >&  GetColumnEntries( const ScDPFilteredCache&  rCacheTable ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
@@ -121,7 +121,7 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
-    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > StringHashSet;
+    typedef ::boost::unordered_set< OUString, OUStringHash, ::std::equal_to< OUString > > StringHashSet;
 
     ::boost::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
@@ -147,7 +147,7 @@ public:
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );
-    long        GetDimensionIndex( const rtl::OUString& rName );
+    long        GetDimensionIndex( const OUString& rName );
 
     ScDocument* GetDocument()   { return pDoc; }
 
@@ -157,7 +157,7 @@ public:
     virtual const ScDPItemData* GetMemberById( long nDim, long nId);
     virtual long Compare( long nDim, long nDataId1, long nDataId2);
 
-    virtual rtl::OUString           getDimensionName(long nColumn);
+    virtual OUString           getDimensionName(long nColumn);
     virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
     virtual sal_Bool                    IsDateDimension(long nDim);
     virtual sal_uLong                  GetNumberFormat(long nDim);

@@ -368,9 +368,9 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
 
 void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 nValue )
 {
-    String aFieldStr = rtl::OUString("( 1 -");
-    aFieldStr += rtl::OUString::valueOf(nValue);
-    aFieldStr += rtl::OUString(" )");
+    String aFieldStr = OUString("( 1 -");
+    aFieldStr += OUString::valueOf(nValue);
+    aFieldStr += OUString(" )");
     rField.SetText( aFieldStr );
 }
 

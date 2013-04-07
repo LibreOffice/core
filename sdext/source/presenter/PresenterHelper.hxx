@@ -35,19 +35,19 @@ class PresenterHelper
     : ::boost::noncopyable
 {
 public:
-    static const ::rtl::OUString msPaneURLPrefix;
-    static const ::rtl::OUString msCenterPaneURL;
-    static const ::rtl::OUString msFullScreenPaneURL;
+    static const OUString msPaneURLPrefix;
+    static const OUString msCenterPaneURL;
+    static const OUString msFullScreenPaneURL;
 
-    static const ::rtl::OUString msViewURLPrefix;
-    static const ::rtl::OUString msPresenterScreenURL;
-    static const ::rtl::OUString msSlideSorterURL;
+    static const OUString msViewURLPrefix;
+    static const OUString msPresenterScreenURL;
+    static const OUString msSlideSorterURL;
 
-    static const ::rtl::OUString msResourceActivationEvent;
-    static const ::rtl::OUString msResourceDeactivationEvent;
+    static const OUString msResourceActivationEvent;
+    static const OUString msResourceDeactivationEvent;
 
-    static const ::rtl::OUString msDefaultPaneStyle;
-    static const ::rtl::OUString msDefaultViewStyle;
+    static const OUString msDefaultPaneStyle;
+    static const OUString msDefaultViewStyle;
 
     /** Return the slide show controller of a running presentation that has
         the same document as the given framework controller.

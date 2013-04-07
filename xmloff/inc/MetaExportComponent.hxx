@@ -56,11 +56,11 @@ protected:
 
 // global functions to support the component
 
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+::com::sun::star::uno::Sequence< OUString > SAL_CALL
     XMLMetaExportComponent_getSupportedServiceNames()
     throw();
 
-::rtl::OUString SAL_CALL XMLMetaExportComponent_getImplementationName()
+OUString SAL_CALL XMLMetaExportComponent_getImplementationName()
     throw();
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL

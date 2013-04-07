@@ -129,7 +129,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
-                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                            else if ( ( pAny->getValueType() == ::getCppuType((const OUString*)0) ) &&
                                         ( aIt->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
@@ -143,7 +143,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
-                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                            else if ( ( pAny->getValueType() == ::getCppuType((const OUString*)0) ) &&
                                         ( aIt->nMemberId == MID_NAME ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );
@@ -158,7 +158,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                             {
                                 setPropertyValue( aPropertyName, *pAny );
                             }
-                            else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                            else if ( ( pAny->getValueType() == ::getCppuType((const OUString*)0) ) &&
                                         ( ( aIt->nMemberId == MID_NAME ) || ( aIt->nMemberId == MID_GRAFURL ) ) )
                             {
                                 setPropertyValue( aPropertyName, *pAny );

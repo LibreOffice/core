@@ -34,7 +34,7 @@ namespace connectivity
         // a Constructor, that is needed for when Returning the Object is needed:
         java_lang_String( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
-        operator ::rtl::OUString();
+        operator OUString();
 
         static jclass st_getMyClass();
     };

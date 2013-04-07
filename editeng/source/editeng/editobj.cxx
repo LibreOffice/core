@@ -871,7 +871,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
     rOStream << static_cast<sal_uInt16>(nParagraphs);
 
     sal_Unicode nUniChar = CH_FEATURE;
-    char cFeatureConverted = rtl::OString(&nUniChar, 1, eEncoding).toChar();
+    char cFeatureConverted = OString(&nUniChar, 1, eEncoding).toChar();
 
     // The individual paragraphs ...
     for (size_t nPara = 0; nPara < nParagraphs; ++nPara)
@@ -879,7 +879,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         const ContentInfo& rC = aContents[nPara];
 
         // Text...
-        rtl::OStringBuffer aBuffer(rtl::OUStringToOString(rC.GetText(), eEncoding));
+        OStringBuffer aBuffer(OUStringToOString(rC.GetText(), eEncoding));
 
         // Symbols?
         bool bSymbolPara = false;
@@ -888,7 +888,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
             const SvxFontItem& rFontItem = (const SvxFontItem&)rC.GetParaAttribs().Get(EE_CHAR_FONTINFO);
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                aBuffer = rtl::OStringBuffer(rtl::OUStringToOString(rC.GetText(), RTL_TEXTENCODING_SYMBOL));
+                aBuffer = OStringBuffer(OUStringToOString(rC.GetText(), RTL_TEXTENCODING_SYMBOL));
                 bSymbolPara = true;
             }
         }
@@ -904,7 +904,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                 {
                     // Not correctly converted
                     String aPart( rC.GetText(), rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart() );
-                    rtl::OString aNew(rtl::OUStringToOString(aPart, rFontItem.GetCharSet()));
+                    OString aNew(OUStringToOString(aPart, rFontItem.GetCharSet()));
                     aBuffer.remove(rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart());
                     aBuffer.insert(rAttr.GetStart(), aNew);
                 }
@@ -918,7 +918,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                     for (sal_uInt16 nChar = rAttr.GetStart(); nChar < rAttr.GetEnd(); ++nChar)
                     {
                         sal_Unicode cOld = rC.GetText().GetChar( nChar );
-                        char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
+                        char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                         if ( cConv )
                             aBuffer[nChar] = cConv;
                     }
@@ -948,7 +948,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
                 if (it == rAttribs.end())
                 {
                     sal_Unicode cOld = rC.GetText().GetChar( nChar );
-                    char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
+                    char cConv = OUStringToOString(OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                     if ( cConv )
                         aBuffer[nChar] = cConv;
                 }
@@ -960,7 +960,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
 
         // Convert CH_FEATURE to CH_FEATURE_OLD
-        rtl::OString aText = aBuffer.makeStringAndClear().replace(cFeatureConverted, CH_FEATURE_OLD);
+        OString aText = aBuffer.makeStringAndClear().replace(cFeatureConverted, CH_FEATURE_OLD);
         write_lenPrefixed_uInt8s_FromOString<sal_uInt16>(rOStream, aText);
 
         // StyleName and Family...
@@ -1058,8 +1058,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         ContentInfo* pC = CreateAndInsertContent();
 
         // The Text...
-        rtl::OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
-        pC->GetText() = rtl::OStringToOUString(aByteString, eSrcEncoding);
+        OString aByteString = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rIStream);
+        pC->GetText() = OStringToOUString(aByteString, eSrcEncoding);
 
         // StyleName and Family...
         pC->GetStyle() = rIStream.ReadUniOrByteString(eSrcEncoding);
@@ -1094,7 +1094,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
                 {
                     sal_Char cEncodedChar = aByteString[nStart];
-                    sal_Unicode cChar = rtl::OUString(&cEncodedChar, 1,
+                    sal_Unicode cChar = OUString(&cEncodedChar, 1,
                         ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
                     pC->GetText().SetChar(nStart, cChar);
                 }
@@ -1123,7 +1123,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
             {
-                pC->GetText() = rtl::OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
+                pC->GetText() = OStringToOUString(aByteString, RTL_TEXTENCODING_SYMBOL);
                 bSymbolPara = true;
             }
         }
@@ -1138,8 +1138,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                       || ( bSymbolPara && ( rFontItem.GetCharSet() != RTL_TEXTENCODING_SYMBOL ) ) )
                 {
                     // Not correctly converted
-                    rtl::OString aPart(aByteString.copy(rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart()));
-                    rtl::OUString aNew(rtl::OStringToOUString(aPart, rFontItem.GetCharSet()));
+                    OString aPart(aByteString.copy(rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart()));
+                    OUString aNew(OStringToOUString(aPart, rFontItem.GetCharSet()));
                     pC->GetText().Erase( rAttr.GetStart(), rAttr.GetEnd()-rAttr.GetStart() );
                     pC->GetText().Insert( aNew, rAttr.GetStart() );
                 }
@@ -1254,7 +1254,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 {
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode));
-                    rC.GetText() = rtl::OUString(pStr, SAL_NO_ACQUIRE);
+                    rC.GetText() = OUString(pStr, SAL_NO_ACQUIRE);
                 }
 
                 // StyleSheetName
@@ -1263,7 +1263,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                 {
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode) );
-                    rC.GetStyle() = rtl::OUString(pStr, SAL_NO_ACQUIRE);
+                    rC.GetStyle() = OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }
         }

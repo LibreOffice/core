@@ -25,7 +25,7 @@
 class AstArray : public AstType
 {
 public:
-    AstArray(const ::rtl::OString& name, AstType* pType, const ExprList& rDimExpr, AstScope* pScope);
+    AstArray(const OString& name, AstType* pType, const ExprList& rDimExpr, AstScope* pScope);
     AstArray(AstType* pType, const ExprList& rDimExpr, AstScope* pScope);
 
     virtual ~AstArray() {}
@@ -43,7 +43,7 @@ public:
         {   return m_dimension; }
 
 private:
-    ::rtl::OString makeName();
+    OString makeName();
 
     AstType*    m_pType;
     sal_uInt32  m_dimension;

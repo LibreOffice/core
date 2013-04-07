@@ -36,7 +36,7 @@ using namespace xmloff::token;
 
 ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -56,11 +56,11 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -104,7 +104,7 @@ ScXMLCalculationSettingsContext::~ScXMLCalculationSettingsContext()
 }
 
 SvXMLImportContext *ScXMLCalculationSettingsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -131,15 +131,15 @@ void ScXMLCalculationSettingsContext::EndElement()
         uno::Reference <beans::XPropertySet> xPropertySet (GetScImport().GetModel(), uno::UNO_QUERY);
         if (xPropertySet.is())
         {
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_CALCASSHOWN)), uno::makeAny(bCalcAsShown) );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_IGNORECASE)), uno::makeAny(bIgnoreCase) );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS)), uno::makeAny(bLookUpLabels) );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE)), uno::makeAny(bMatchWholeCell) );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REGEXENABLED)), uno::makeAny(bUseRegularExpressions) );
-            xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED)), uno::makeAny(bIsIterationEnabled) );
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT)), uno::makeAny(nIterationCount) );
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)), uno::makeAny(fIterationEpsilon) );
-            xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), uno::makeAny(aNullDate) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_CALCASSHOWN)), uno::makeAny(bCalcAsShown) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_IGNORECASE)), uno::makeAny(bIgnoreCase) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LOOKUPLABELS)), uno::makeAny(bLookUpLabels) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MATCHWHOLE)), uno::makeAny(bMatchWholeCell) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REGEXENABLED)), uno::makeAny(bUseRegularExpressions) );
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERENABLED)), uno::makeAny(bIsIterationEnabled) );
+            xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT)), uno::makeAny(nIterationCount) );
+            xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON)), uno::makeAny(fIterationEpsilon) );
+            xPropertySet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), uno::makeAny(aNullDate) );
             if (GetScImport().GetDocument())
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
@@ -153,7 +153,7 @@ void ScXMLCalculationSettingsContext::EndElement()
 
 ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
@@ -162,11 +162,11 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DATE_VALUE))
         {
@@ -186,7 +186,7 @@ ScXMLNullDateContext::~ScXMLNullDateContext()
 }
 
 SvXMLImportContext *ScXMLNullDateContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
@@ -201,7 +201,7 @@ void ScXMLNullDateContext::EndElement()
 
 ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLCalculationSettingsContext* pCalcSet) :
@@ -210,11 +210,11 @@ ScXMLIterationContext::ScXMLIterationContext( ScXMLImport& rImport,
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         if (nPrefix == XML_NAMESPACE_TABLE)
         {
@@ -244,7 +244,7 @@ ScXMLIterationContext::~ScXMLIterationContext()
 }
 
 SvXMLImportContext *ScXMLIterationContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {

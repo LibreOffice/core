@@ -57,12 +57,12 @@ inline void jstring_to_ustring(
 }
 
 //------------------------------------------------------------------------------
-inline ::rtl::OUString jstring_to_oustring(
+inline OUString jstring_to_oustring(
     JNI_context const & jni, jstring jstr )
 {
     rtl_uString * ustr = 0;
     jstring_to_ustring( jni, &ustr, jstr );
-    return ::rtl::OUString( ustr, SAL_NO_ACQUIRE );
+    return OUString( ustr, SAL_NO_ACQUIRE );
 }
 
 //------------------------------------------------------------------------------

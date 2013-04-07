@@ -61,7 +61,7 @@ namespace xforms
         DBG_CTOR( ODataTypeRepository, NULL );
 
         // insert some basic types
-        ::rtl::OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
+        OUString sName( FRM_RES_STRING( RID_STR_DATATYPE_STRING ) );
         m_aRepository[ sName ] = new OStringType( sName, ::com::sun::star::xsd::DataTypeClass::STRING );
 
         sName = FRM_RES_STRING( RID_STR_DATATYPE_URL );
@@ -105,11 +105,11 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const ::rtl::OUString& _rName, bool _bAllowMiss ) SAL_THROW( ( NoSuchElementException ) )
+    ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss ) SAL_THROW( ( NoSuchElementException ) )
     {
         Repository::iterator aTypePos = m_aRepository.find( _rName );
         if ( aTypePos == m_aRepository.end() && !_bAllowMiss )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         return aTypePos;
     }
@@ -129,19 +129,19 @@ namespace xforms
         }
 
         if ( !xReturn.is() )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         return xReturn;
     }
 
     //--------------------------------------------------------------------
-    Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const ::rtl::OUString& sourceName, const ::rtl::OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException)
+    Reference< XDataType > SAL_CALL ODataTypeRepository::cloneDataType( const OUString& sourceName, const OUString& newName ) throw (NoSuchElementException, ElementExistException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Repository::iterator aTypePos = implLocate( newName, true );
         if ( aTypePos != m_aRepository.end() )
-            throw ElementExistException( ::rtl::OUString(), *this );
+            throw ElementExistException( OUString(), *this );
 
         aTypePos = implLocate( sourceName );
         OXSDDataType* pClone = aTypePos->second->clone( newName );
@@ -151,20 +151,20 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL ODataTypeRepository::revokeDataType( const ::rtl::OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException)
+    void SAL_CALL ODataTypeRepository::revokeDataType( const OUString& typeName ) throw (NoSuchElementException, VetoException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Repository::iterator aTypePos = implLocate( typeName );
         if ( aTypePos->second->getIsBasic() )
-            throw VetoException( ::rtl::OUString( "This is a built-in type and cannot be removed." ), *this );
+            throw VetoException( OUString( "This is a built-in type and cannot be removed." ), *this );
             // TODO: localize this error message
 
         m_aRepository.erase( aTypePos );
     }
 
     //--------------------------------------------------------------------
-    Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const ::rtl::OUString& typeName ) throw (NoSuchElementException, RuntimeException)
+    Reference< XDataType > SAL_CALL ODataTypeRepository::getDataType( const OUString& typeName ) throw (NoSuchElementException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return implLocate( typeName, false )->second.get();
@@ -178,17 +178,17 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL ODataTypeRepository::getByName( const ::rtl::OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         return makeAny( getDataType( aName ) );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL ODataTypeRepository::getElementNames(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        Sequence< ::rtl::OUString > aNames( m_aRepository.size() );
+        Sequence< OUString > aNames( m_aRepository.size() );
         ::std::transform(
             m_aRepository.begin(),
             m_aRepository.end(),
@@ -199,7 +199,7 @@ namespace xforms
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL ODataTypeRepository::hasByName( const ::rtl::OUString& aName ) throw (RuntimeException)
+    sal_Bool SAL_CALL ODataTypeRepository::hasByName( const OUString& aName ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_aRepository.find( aName ) != m_aRepository.end();

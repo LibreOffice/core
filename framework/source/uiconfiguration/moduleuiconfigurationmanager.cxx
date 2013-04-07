@@ -45,7 +45,6 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-using rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::embed;
@@ -110,7 +109,7 @@ static const char       RESOURCEURL_PREFIX[] = "private:resource/";
 static const sal_Int32  RESOURCEURL_PREFIX_SIZE = 17;
 static const char       RESOURCEURL_CUSTOM_ELEMENT[] = "custom_";
 
-static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL )
+static sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
 {
 
     if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
@@ -132,7 +131,7 @@ static sal_Int16 RetrieveTypeFromResourceURL( const rtl::OUString& aResourceURL 
     return UIElementType::UNKNOWN;
 }
 
-static OUString RetrieveNameFromResourceURL( const rtl::OUString& aResourceURL )
+static OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
     if (( aResourceURL.indexOf( RESOURCEURL_PREFIX ) == 0 ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
@@ -166,7 +165,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
             if ( pDataSettings )
             {
                 // Retrieve user interface name from XPropertySet interface
-                rtl::OUString aUIName;
+                OUString aUIName;
                 Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
                 if ( xPropSet.is() )
                 {
@@ -204,7 +203,7 @@ void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIEleme
                 if ( pDataSettings )
                 {
                     // Retrieve user interface name from XPropertySet interface
-                    rtl::OUString aUIName;
+                    OUString aUIName;
                     Reference< XPropertySet > xPropSet( pDataSettings->xSettings, UNO_QUERY );
                     if ( xPropSet.is() )
                     {
@@ -237,7 +236,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         Reference< XStorage > xElementTypeStorage = rElementTypeData.xStorage;
         if ( xElementTypeStorage.is() )
         {
-            rtl::OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
+            OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
             aBuf.appendAscii( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.appendAscii( "/" );
@@ -384,7 +383,7 @@ void ModuleUIConfigurationManager::impl_requestUIElementData( sal_Int16 nElement
     aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer() ), UNO_QUERY );
 }
 
-ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl_findUIElementData( const rtl::OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
+ModuleUIConfigurationManager::UIElementData*  ModuleUIConfigurationManager::impl_findUIElementData( const OUString& aResourceURL, sal_Int16 nElementType, bool bLoad )
 {
     // preload list of element types on demand
     impl_preloadUIElementTypeList( LAYER_USERDEFINED, nElementType );
@@ -811,12 +810,12 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString("ModuleIdentifier"), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(OUString("ModuleIdentifier"), OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(OUString("ModuleShortName"), OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
-            rtl::OUString aResourceType;
+            OUString aResourceType;
             if ( i == ::com::sun::star::ui::UIElementType::MENUBAR )
                 aResourceType = PresetHandler::RESOURCETYPE_MENUBAR();
             else if ( i == ::com::sun::star::ui::UIElementType::TOOLBAR )
@@ -848,7 +847,7 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
             if ( xPropSet.is() )
             {
                 long nOpenMode = 0;
-                Any a = xPropSet->getPropertyValue( rtl::OUString( "OpenMode" ));
+                Any a = xPropSet->getPropertyValue( OUString( "OpenMode" ));
                 if ( a >>= nOpenMode )
                     m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
             }
@@ -1018,7 +1017,7 @@ Reference< XIndexContainer > SAL_CALL ModuleUIConfigurationManager::createSettin
     return Reference< XIndexContainer >( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
 }
 
-sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const ::rtl::OUString& ResourceURL )
+sal_Bool SAL_CALL ModuleUIConfigurationManager::hasSettings( const OUString& ResourceURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -1041,7 +1040,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     return sal_False;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const ::rtl::OUString& ResourceURL, sal_Bool bWriteable )
+Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getSettings( const OUString& ResourceURL, sal_Bool bWriteable )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -1070,7 +1069,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     throw NoSuchElementException();
 }
 
-void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const ::rtl::OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData )
+void SAL_CALL ModuleUIConfigurationManager::replaceSettings( const OUString& ResourceURL, const Reference< ::com::sun::star::container::XIndexAccess >& aNewData )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -1180,7 +1179,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
     }
 }
 
-void SAL_CALL ModuleUIConfigurationManager::removeSettings( const ::rtl::OUString& ResourceURL )
+void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& ResourceURL )
 throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException, RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -1259,7 +1258,7 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
     }
 }
 
-void SAL_CALL ModuleUIConfigurationManager::insertSettings( const ::rtl::OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
+void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewResourceURL, const Reference< XIndexAccess >& aNewData )
 throw ( ElementExistException, IllegalArgumentException, IllegalAccessException, RuntimeException )
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
@@ -1337,13 +1336,13 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
 
         Sequence< Any > aPropSeq( 3 );
         PropertyValue aPropValue;
-        aPropValue.Name  = rtl::OUString( "UserConfigStorage" );
+        aPropValue.Name  = OUString( "UserConfigStorage" );
         aPropValue.Value = makeAny( m_xUserConfigStorage );
         aPropSeq[0] = makeAny( aPropValue );
-        aPropValue.Name  = rtl::OUString( "ModuleIdentifier" );
+        aPropValue.Name  = OUString( "ModuleIdentifier" );
         aPropValue.Value = makeAny( m_aModuleIdentifier );
         aPropSeq[1] = makeAny( aPropValue );
-        aPropValue.Name  = rtl::OUString( "UserRootCommit" );
+        aPropValue.Name  = OUString( "UserRootCommit" );
         aPropValue.Value = makeAny( m_xUserRootCommit );
         aPropSeq[2] = makeAny( aPropValue );
 
@@ -1361,7 +1360,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         throw DisposedException();
 
     Reference< XMultiServiceFactory > xSMGR   = m_xServiceManager;
-    ::rtl::OUString                   aModule = m_aModuleIdentifier;
+    OUString                   aModule = m_aModuleIdentifier;
 
     if ( !m_xModuleAcceleratorManager.is() )
     {
@@ -1369,7 +1368,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
 
         PropertyValue aProp;
-        aProp.Name    = ::rtl::OUString("ModuleIdentifier");
+        aProp.Name    = OUString("ModuleIdentifier");
         aProp.Value <<= aModule;
 
         Sequence< Any > lArgs(1);
@@ -1388,7 +1387,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getEventsManager(
 }
 
 // XModuleUIConfigurationManager
-sal_Bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const ::rtl::OUString& ResourceURL )
+sal_Bool SAL_CALL ModuleUIConfigurationManager::isDefaultSettings( const OUString& ResourceURL )
 throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
@@ -1411,7 +1410,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     return sal_False;
 }
 
-Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const ::rtl::OUString& ResourceURL )
+Reference< XIndexAccess > SAL_CALL ModuleUIConfigurationManager::getDefaultSettings( const OUString& ResourceURL )
 throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );

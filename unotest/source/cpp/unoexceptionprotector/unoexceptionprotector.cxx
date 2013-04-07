@@ -37,8 +37,8 @@
 namespace {
 
 // Best effort conversion:
-std::string convert(rtl::OUString const & s16) {
-    rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
+std::string convert(OUString const & s16) {
+    OString s8(OUStringToOString(s16, osl_getThreadTextEncoding()));
     BOOST_STATIC_ASSERT(sizeof (sal_Int32) <= sizeof (std::string::size_type));
         // ensure following cast is legitimate
     return std::string(
@@ -68,7 +68,7 @@ bool Prot::protect(
             context,
             CppUnit::Message(
                 convert(
-                    rtl::OUString("An uncaught exception of type ")
+                    OUString("An uncaught exception of type ")
                     + a.getValueTypeName()),
                 convert(e.Message)));
     }

@@ -86,7 +86,7 @@ namespace pcr
         bool    GetFieldName( LinkParticipant _eWhich, String& /* [out] */ _rName ) const;
         void    SetFieldName( LinkParticipant _eWhich, const String& _rName );
 
-        void    fillList( LinkParticipant _eWhich, const Sequence< ::rtl::OUString >& _rFieldNames );
+        void    fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames );
 
     private:
         DECL_LINK( OnFieldNameChanged, ComboBox* );
@@ -109,12 +109,12 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< ::rtl::OUString >& _rFieldNames )
+    void FieldLinkRow::fillList( LinkParticipant _eWhich, const Sequence< OUString >& _rFieldNames )
     {
         ComboBox* pBox = ( _eWhich == eDetailField ) ? &m_aDetailColumn : &m_aMasterColumn;
 
-        const ::rtl::OUString* pFieldName    = _rFieldNames.getConstArray();
-        const ::rtl::OUString* pFieldNameEnd = pFieldName + _rFieldNames.getLength();
+        const OUString* pFieldName    = _rFieldNames.getConstArray();
+        const OUString* pFieldNameEnd = pFieldName + _rFieldNames.getLength();
         for ( ; pFieldName != pFieldNameEnd; ++pFieldName )
             pBox->InsertEntry( *pFieldName );
     }
@@ -149,9 +149,9 @@ namespace pcr
     //------------------------------------------------------------------------
     FormLinkDialog::FormLinkDialog( Window* _pParent, const Reference< XPropertySet >& _rxDetailForm,
             const Reference< XPropertySet >& _rxMasterForm, const Reference< XComponentContext >& _rxContext,
-            const ::rtl::OUString& _sExplanation,
-            const ::rtl::OUString& _sDetailLabel,
-            const ::rtl::OUString& _sMasterLabel)
+            const OUString& _sExplanation,
+            const OUString& _sDetailLabel,
+            const OUString& _sMasterLabel)
         :ModalDialog( _pParent, PcrRes( RID_DLG_FORMLINKS ) )
         ,m_aExplanation( this, PcrRes( FT_EXPLANATION  ) )
         ,m_aDetailLabel( this, PcrRes( FT_DETAIL_LABEL ) )
@@ -194,8 +194,8 @@ namespace pcr
     void FormLinkDialog::commitLinkPairs()
     {
         // collect the field lists from the rows
-        ::std::vector< ::rtl::OUString > aDetailFields; aDetailFields.reserve( 4 );
-        ::std::vector< ::rtl::OUString > aMasterFields; aMasterFields.reserve( 4 );
+        ::std::vector< OUString > aDetailFields; aDetailFields.reserve( 4 );
+        ::std::vector< OUString > aMasterFields; aMasterFields.reserve( 4 );
 
         const FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
@@ -219,10 +219,10 @@ namespace pcr
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
             if ( xDetailFormProps.is() )
             {
-                ::rtl::OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
-                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aDetailFields.size() ) ) );
+                OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
+                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< OUString >( pFields, aDetailFields.size() ) ) );
                 pFields = aMasterFields.empty() ? 0 : &aMasterFields[0];
-                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< ::rtl::OUString >( pFields, aMasterFields.size() ) ) );
+                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< OUString >( pFields, aMasterFields.size() ) ) );
             }
         }
         catch( const Exception& )
@@ -245,10 +245,10 @@ namespace pcr
     //------------------------------------------------------------------------
     void FormLinkDialog::initializeFieldLists()
     {
-        Sequence< ::rtl::OUString > sDetailFields;
+        Sequence< OUString > sDetailFields;
         getFormFields( m_xDetailForm, sDetailFields );
 
-        Sequence< ::rtl::OUString > sMasterFields;
+        Sequence< OUString > sMasterFields;
         getFormFields( m_xMasterForm, sMasterFields );
 
         FieldLinkRow* aRows[] = {
@@ -293,14 +293,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void FormLinkDialog::initializeFieldRowsFrom( Sequence< ::rtl::OUString >& _rDetailFields, Sequence< ::rtl::OUString >& _rMasterFields )
+    void FormLinkDialog::initializeFieldRowsFrom( Sequence< OUString >& _rDetailFields, Sequence< OUString >& _rMasterFields )
     {
         // our UI does allow 4 fields max
         _rDetailFields.realloc( 4 );
         _rMasterFields.realloc( 4 );
 
-        const ::rtl::OUString* pDetailFields = _rDetailFields.getConstArray();
-        const ::rtl::OUString* pMasterFields = _rMasterFields.getConstArray();
+        const OUString* pDetailFields = _rDetailFields.getConstArray();
+        const OUString* pMasterFields = _rMasterFields.getConstArray();
 
         FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
@@ -317,8 +317,8 @@ namespace pcr
     {
         try
         {
-            Sequence< ::rtl::OUString > aDetailFields;
-            Sequence< ::rtl::OUString > aMasterFields;
+            Sequence< OUString > aDetailFields;
+            Sequence< OUString > aMasterFields;
 
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
             if ( xDetailFormProps.is() )
@@ -370,7 +370,7 @@ namespace pcr
         try
         {
             sal_Int32       nCommandType = CommandType::COMMAND;
-            ::rtl::OUString sCommand;
+            OUString sCommand;
 
             xFormProps->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nCommandType;
             xFormProps->getPropertyValue( PROPERTY_COMMAND     ) >>= sCommand;
@@ -388,12 +388,12 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void FormLinkDialog::getFormFields( const Reference< XPropertySet >& _rxForm, Sequence< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(( ))
+    void FormLinkDialog::getFormFields( const Reference< XPropertySet >& _rxForm, Sequence< OUString >& /* [out] */ _rNames ) const SAL_THROW(( ))
     {
         _rNames.realloc( 0 );
 
         ::dbtools::SQLExceptionInfo aErrorInfo;
-        ::rtl::OUString sCommand;
+        OUString sCommand;
         try
         {
             WaitObject aWaitCursor( const_cast< FormLinkDialog* >( this ) );
@@ -430,7 +430,7 @@ namespace pcr
             {
                 ::svt::OLocalResourceAccess aStringAccess( PcrRes( RID_DLG_FORMLINKS ), RSC_MODALDIALOG );
                 sErrorMessage = PcrRes(STR_ERROR_RETRIEVING_COLUMNS).toString();
-                sErrorMessage.SearchAndReplace(rtl::OUString('#'), sCommand);
+                sErrorMessage.SearchAndReplace(OUString('#'), sCommand);
             }
 
             SQLContext aContext;
@@ -476,7 +476,7 @@ namespace pcr
             Reference< XNameAccess > xTables;
             if ( xTablesInForm.is() )
                 xTables = xTablesInForm->getTables();
-            Sequence< ::rtl::OUString > aTableNames;
+            Sequence< OUString > aTableNames;
             if ( xTables.is() )
                 aTableNames = xTables->getElementNames();
 
@@ -496,7 +496,7 @@ namespace pcr
     //------------------------------------------------------------------------
     sal_Bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
             // TODO: fix the usage of _rxRHS. This is issue #i81956#.
-        Sequence< ::rtl::OUString >& _rLeftFields, Sequence< ::rtl::OUString >& _rRightFields ) const
+        Sequence< OUString >& _rLeftFields, Sequence< OUString >& _rRightFields ) const
     {
         try
         {
@@ -511,14 +511,14 @@ namespace pcr
                 Reference< XColumnsSupplier > xKeyColSupp( xKey, UNO_QUERY );
                 Reference< XIndexAccess >     xKeyColumns;
                 Reference< XPropertySet >     xKeyColumn;
-                ::rtl::OUString sColumnName, sRelatedColumnName;
+                OUString sColumnName, sRelatedColumnName;
 
                 const sal_Int32 keyCount = xKeys->getCount();
                 for ( sal_Int32 key = 0; key < keyCount; ++key )
                 {
                     xKeys->getByIndex( key ) >>= xKey;
                     sal_Int32 nKeyType = 0;
-                    xKey->getPropertyValue( ::rtl::OUString( "Type" ) ) >>= nKeyType;
+                    xKey->getPropertyValue( OUString( "Type" ) ) >>= nKeyType;
                     if ( nKeyType != KeyType::FOREIGN )
                         continue;
 
@@ -542,7 +542,7 @@ namespace pcr
                         if ( xKeyColumn.is() )
                         {
                             xKeyColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
-                            xKeyColumn->getPropertyValue( ::rtl::OUString( "RelatedColumn" ) ) >>= sRelatedColumnName;
+                            xKeyColumn->getPropertyValue( OUString( "RelatedColumn" ) ) >>= sRelatedColumnName;
 
                             _rLeftFields[ column ]  = sColumnName;
                             _rRightFields[ column ] = sRelatedColumnName;
@@ -574,7 +574,7 @@ namespace pcr
             // only show the button when both forms are based on the same data source
             if ( bEnable )
             {
-                ::rtl::OUString sMasterDS, sDetailDS;
+                OUString sMasterDS, sDetailDS;
                 xMasterFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sMasterDS;
                 xDetailFormProps->getPropertyValue( PROPERTY_DATASOURCE ) >>= sDetailDS;
                 bEnable = ( sMasterDS == sDetailDS );

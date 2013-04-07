@@ -26,10 +26,10 @@
 #include <swtypes.hxx>
 #include <istyleaccess.hxx>
 
-typedef ::boost::unordered_map< const ::rtl::OUString,
+typedef ::boost::unordered_map< const OUString,
                          StylePool::SfxItemSet_Pointer_t,
-                         ::rtl::OUStringHash,
-                         ::std::equal_to< ::rtl::OUString > > SwStyleNameCache;
+                         OUStringHash,
+                         ::std::equal_to< OUString > > SwStyleNameCache;
 
 class SwStyleCache
 {
@@ -39,7 +39,7 @@ public:
     void addStyleName( StylePool::SfxItemSet_Pointer_t pStyle )
         { mMap[ StylePool::nameOf(pStyle) ] = pStyle; }
     void addCompletePool( StylePool& rPool );
-    StylePool::SfxItemSet_Pointer_t getByName( const rtl::OUString& rName ) { return mMap[rName]; }
+    StylePool::SfxItemSet_Pointer_t getByName( const OUString& rName ) { return mMap[rName]; }
 };
 
 void SwStyleCache::addCompletePool( StylePool& rPool )
@@ -48,7 +48,7 @@ void SwStyleCache::addCompletePool( StylePool& rPool )
     StylePool::SfxItemSet_Pointer_t pStyle = pIter->getNext();
     while( pStyle.get() )
     {
-        rtl::OUString aName( StylePool::nameOf(pStyle) );
+        OUString aName( StylePool::nameOf(pStyle) );
         mMap[ aName ] = pStyle;
         pStyle = pIter->getNext();
     }
@@ -73,7 +73,7 @@ public:
     virtual ~SwStyleManager();
     virtual StylePool::SfxItemSet_Pointer_t getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
-    virtual StylePool::SfxItemSet_Pointer_t getByName( const rtl::OUString& rName,
+    virtual StylePool::SfxItemSet_Pointer_t getByName( const OUString& rName,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
     virtual void getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> &rStyles,
                                                                IStyleAccess::SwAutoStyleFamily eFamily );
@@ -121,7 +121,7 @@ StylePool::SfxItemSet_Pointer_t SwStyleManager::cacheAutomaticStyle( const SfxIt
     return pStyle;
 }
 
-StylePool::SfxItemSet_Pointer_t SwStyleManager::getByName( const rtl::OUString& rName,
+StylePool::SfxItemSet_Pointer_t SwStyleManager::getByName( const OUString& rName,
                                                            IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;

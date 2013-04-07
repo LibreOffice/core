@@ -83,7 +83,7 @@ void ShapeController::disposing( const lang::EventObject& /* Source */ )
 {
 }
 
-FeatureState ShapeController::getState( const ::rtl::OUString& rCommand )
+FeatureState ShapeController::getState( const OUString& rCommand )
 {
     FeatureState aReturn;
     aReturn.bEnabled = false;
@@ -150,7 +150,7 @@ FeatureState ShapeController::getState( const ::rtl::OUString& rCommand )
     return aReturn;
 }
 
-void ShapeController::execute( const ::rtl::OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
+void ShapeController::execute( const OUString& rCommand, const Sequence< beans::PropertyValue>& rArgs )
 {
     (void)rArgs;
 
@@ -470,7 +470,7 @@ void ShapeController::executeDispatch_RenameObject()
             SdrObject* pSelectedObj = pDrawViewWrapper->getSelectedObject();
             if ( pSelectedObj )
             {
-                rtl::OUString aName = pSelectedObj->GetName();
+                OUString aName = pSelectedObj->GetName();
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {

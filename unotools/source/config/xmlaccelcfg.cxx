@@ -27,7 +27,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;
 
-using ::rtl::OUString;
 
 #define ELEMENT_ACCELERATORLIST     "acceleratorlist"
 #define ELEMENT_ACCELERATORITEM     "item"
@@ -52,14 +51,14 @@ public:
 
 public:
     virtual sal_Int16 SAL_CALL getLength(void) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getTypeByName(const ::rtl::OUString& aName) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString  SAL_CALL getValueByName(const ::rtl::OUString& aName) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString  SAL_CALL getTypeByName(const OUString& aName) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString  SAL_CALL getValueByName(const OUString& aName) throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    void addAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
+    void addAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
 
 private:
     struct AttributeListImpl_impl *m_pImpl;
@@ -206,7 +205,7 @@ throw(  SAXException, RuntimeException )
     m_xLocator = xLocator;
 }
 
-::rtl::OUString OReadAccelatorDocumentHandler::getErrorLineString()
+OUString OReadAccelatorDocumentHandler::getErrorLineString()
 {
     char buffer[32];
 
@@ -295,7 +294,7 @@ throw( SAXException, RuntimeException )
 }
 
 
-void SAL_CALL OReadAccelatorDocumentHandler::characters(const rtl::OUString&)
+void SAL_CALL OReadAccelatorDocumentHandler::characters(const OUString&)
 throw(  SAXException, RuntimeException )
 {
 }

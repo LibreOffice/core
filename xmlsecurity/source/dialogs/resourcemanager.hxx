@@ -41,10 +41,10 @@ namespace XmlSec
     OUString        GetDateTimeString( const ::com::sun::star::util::DateTime& _rDT );
     OUString        GetDateString( const ::com::sun::star::util::DateTime& _rDT );
 
-    std::vector< std::pair< ::rtl::OUString, ::rtl::OUString> >
-        parseDN(const ::rtl::OUString& rRawString);
-    std::pair< ::rtl::OUString, ::rtl::OUString> GetDNForCertDetailsView(
-        const ::rtl::OUString & rRawString);
+    std::vector< std::pair< OUString, OUString> >
+        parseDN(const OUString& rRawString);
+    std::pair< OUString, OUString> GetDNForCertDetailsView(
+        const OUString & rRawString);
     OUString        GetContentPart( const OUString& _rRawString );
 
     OUString        GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep = ":", sal_uInt16 _nLineBreak = 0xFFFF );

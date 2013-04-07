@@ -184,7 +184,7 @@ public:
 
     /** Processes the passed URL field (tries to create a HLINK record).
         @return  The representation string of the URL field. */
-    rtl::OUString ProcessUrlField( const SvxURLField& rUrlField );
+    OUString ProcessUrlField( const SvxURLField& rUrlField );
 
     /** Returns true, if a single HLINK record has been created. */
     bool                HasLinkRecord() const;
@@ -402,9 +402,9 @@ class XclExpUrlHelper : boost::noncopyable
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
         @param pTableName  Optional pointer to a table name to be encoded in this URL. */
-    static rtl::OUString EncodeUrl( const XclExpRoot& rRoot, const rtl::OUString& rAbsUrl, const rtl::OUString* pTableName = 0 );
+    static OUString EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName = 0 );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
-    static rtl::OUString EncodeDde( const rtl::OUString& rApplic, const rtl::OUString& rTopic );
+    static OUString EncodeDde( const OUString& rApplic, const OUString& rTopic );
 
 private:
     /** We don't want anybody to instantiate this class, since it is just a

@@ -584,7 +584,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
 
 namespace
 {
-    FontInfo makeMissing(ImplFontListFontInfo* pFontNameInfo, const rtl::OUString &rName,
+    FontInfo makeMissing(ImplFontListFontInfo* pFontNameInfo, const OUString &rName,
         FontWeight eWeight, FontItalic eItalic)
     {
         FontInfo aInfo;
@@ -592,7 +592,7 @@ namespace
         if (pFontNameInfo)
         {
             aInfo = *pFontNameInfo;
-            aInfo.SetStyleName(rtl::OUString());
+            aInfo.SetStyleName(OUString());
         }
 
         aInfo.SetWeight(eWeight);
@@ -600,7 +600,7 @@ namespace
 
         //If this is a known but uninstalled symbol font which we can remap to
         //OpenSymbol then toggle its charset to be a symbol font
-        if (ConvertChar::GetRecodeData(rName, rtl::OUString("OpenSymbol")))
+        if (ConvertChar::GetRecodeData(rName, OUString("OpenSymbol")))
             aInfo.SetCharSet(RTL_TEXTENCODING_SYMBOL);
 
         return aInfo;
@@ -891,7 +891,7 @@ long FontSizeNames::Name2Size( const String& rName ) const
 {
     if ( mnElem )
     {
-        rtl::OString aName(rtl::OUStringToOString(rName,
+        OString aName(OUStringToOString(rName,
             RTL_TEXTENCODING_UTF8));
 
         // linear search is sufficient for this rare case

@@ -26,7 +26,6 @@
 namespace func_provider
 {
 
-using ::rtl::OUString;
 namespace uno = ::com::sun::star::uno;
 namespace ucb = ::com::sun::star::ucb;
 namespace lang = ::com::sun::star::lang;
@@ -215,7 +214,7 @@ OUString SAL_CALL
 ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-    ::rtl::OUStringBuffer buf(120);
+    OUStringBuffer buf(120);
 
     buf.appendAscii("vnd.sun.star.script:");
     buf.append(getLanguagePart(rStorageURI));
@@ -245,7 +244,7 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
                 uno::Reference< uno::XInterface >(), 1 );
     }
 
-    ::rtl::OUStringBuffer buf(120);
+    OUStringBuffer buf(120);
     buf.append(m_sBaseURI);
     buf.append(OUString("/"));
     buf.append(getLanguagePath(sLanguagePart));
@@ -284,16 +283,16 @@ ScriptingFrameworkURIHelper::supportsService( const OUString& serviceName )
     return sal_False;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 ScriptingFrameworkURIHelper::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    ::rtl::OUString serviceNameList[] = {
-        ::rtl::OUString(
+    OUString serviceNameList[] = {
+        OUString(
             "com.sun.star.script.provider.ScriptURIHelper" ) };
 
-    uno::Sequence< ::rtl::OUString > serviceNames = uno::Sequence <
-        ::rtl::OUString > ( serviceNameList, 1 );
+    uno::Sequence< OUString > serviceNames = uno::Sequence <
+        OUString > ( serviceNameList, 1 );
 
     return serviceNames;
 }

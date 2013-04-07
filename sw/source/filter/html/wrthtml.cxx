@@ -189,7 +189,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     const sal_Char *pHelpHack = getenv( "HelpEx" );
     if( pHelpHack )
     {
-        rtl::OString aTmp(pHelpHack);
+        OString aTmp(pHelpHack);
         if (aTmp.equalsIgnoreAsciiCase("Hilfe"))
             nHTMLMode |= HTMLMODE_NO_BR_AT_PAREND;
     }
@@ -279,7 +279,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     GetNumInfo().Clear();
     pNextNumRuleInfo = 0;
 
-    rtl::OString aStartTags;
+    OString aStartTags;
 
     // Tabellen und Bereiche am Doc.-Anfang beachten
     {
@@ -310,11 +310,11 @@ sal_uLong SwHTMLWriter::WriteStream()
                         "Export gelinkter Bereiche am Dok-Anfang ist nicht implemntiert" );
 
                 // nur das Tag fuer die Section merken
-                rtl::OString aName = HTMLOutFuncs::ConvertStringToHTML(
+                OString aName = HTMLOutFuncs::ConvertStringToHTML(
                     pSNd->GetSection().GetSectionName(), eDestEnc,
                     &aNonConvertableCharacters );
 
-                rtl::OStringBuffer sOut;
+                OStringBuffer sOut;
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division)
                     .append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id)
                     .append("=\"").append(aName).append('\"').append('>')
@@ -526,7 +526,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
 
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(pTag);
 
     const String& rName = rSection.GetSectionName();
@@ -851,7 +851,7 @@ static void OutBodyColor( const sal_Char *pTag, const SwFmt *pFmt,
 
     if( pColorItem )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(pTag).append('=');
         rHWrt.Strm() << sOut.makeStringAndClear().getStr();
         Color aColor( pColorItem->GetValue() );
@@ -907,7 +907,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append(OOO_STRING_SVTOOLS_HTML_doctype).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_doctype40);
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
@@ -922,7 +922,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     IncIndentLevel();   // Inhalt von <HEAD> einruecken
 
     // DokumentInfo
-    rtl::OString sIndent = GetIndentString();
+    OString sIndent = GetIndentString();
     using namespace ::com::sun::star;
     uno::Reference<document::XDocumentProperties> xDocProps;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -1029,7 +1029,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
 void SwHTMLWriter::OutAnchor( const String& rName )
 {
-    rtl::OStringBuffer sOut;
+    OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor).append(' ')
         .append(OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     Strm() << sOut.makeStringAndClear().getStr();
@@ -1130,7 +1130,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
         Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_Color( Strm(), rBackColor, eDestEnc);
@@ -1152,7 +1152,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
             if(pTempFileName)
                 rEmbGrfNm = *pTempFileName;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, rEmbGrfNm,
-                    rtl::OUString("JPG"),
+                    OUString("JPG"),
                     XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
@@ -1218,7 +1218,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
 {
     if( LANGUAGE_DONTKNOW != nLang )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_lang)
             .append("=\"");
         Strm() << sOut.makeStringAndClear().getStr();
@@ -1267,16 +1267,16 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     }
     if( pValue != 0 )
     {
-        rtl::OStringBuffer sOut;
+        OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
             .append("=\"").append(pValue).append('\"');
         Strm() << sOut.makeStringAndClear().getStr();
     }
 }
 
-rtl::OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
+OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)
 {
-    rtl::OString sRet;
+    OString sRet;
 
     // etwas umstaendlich, aber wir haben nur einen Indent-String!
     sal_uInt16 nLevel = nIndentLvl + nIncLvl;

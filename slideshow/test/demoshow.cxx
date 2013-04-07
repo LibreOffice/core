@@ -245,12 +245,12 @@ private:
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& /*aPropertyName*/,
+    virtual void SAL_CALL setPropertyValue( const OUString& /*aPropertyName*/,
                                             const uno::Any& /*aValue*/ ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
         typedef ::canvas::tools::ValueMap< sal_Int16 > PropMapT;
 
@@ -276,22 +276,22 @@ private:
         return uno::makeAny(aRes);
     }
 
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& /*aPropertyName*/,
                                                      const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& /*aPropertyName*/,
                                                         const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& /*PropertyName*/,
                                                      const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& /*PropertyName*/,
                                                         const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
@@ -357,7 +357,7 @@ void ChildWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                   OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
 
@@ -371,7 +371,7 @@ void ChildWindow::Paint( const Rectangle& /*rRect*/ )
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   ::rtl::OUStringToOString( e.Message,
+                   OUStringToOString( e.Message,
                                              RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
@@ -410,7 +410,7 @@ DemoWindow::DemoWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString("Slideshow Demo" ) );
+    SetText( OUString("Slideshow Demo" ) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -449,7 +449,7 @@ void DemoWindow::init()
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
-                                     rtl::OUString("RehearseTimings"),
+                                     OUString("RehearseTimings"),
                                      0,
                                      uno::makeAny( sal_True ),
                                      beans::PropertyState_DIRECT_VALUE ));
@@ -459,7 +459,7 @@ void DemoWindow::init()
     catch (const uno::Exception &e)
     {
         OSL_TRACE( "Exception '%s' thrown\n" ,
-                   ::rtl::OUStringToOString( e.Message,
+                   OUStringToOString( e.Message,
                                              RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 }
@@ -503,7 +503,7 @@ void DemoApp::Main()
 
     for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
-        ::rtl::OUString aParam = GetCommandLineParam( i );
+        OUString aParam = GetCommandLineParam( i );
 
         if( aParam == "--help" || aParam == "-h" )
                 bHelp = true;
@@ -531,7 +531,7 @@ void DemoApp::Main()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( rtl::OUStringToOString(
+        OSL_FAIL( OUStringToOString(
                         comphelper::anyToString( cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }

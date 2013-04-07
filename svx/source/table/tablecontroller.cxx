@@ -64,7 +64,6 @@
 #include <vcl/msgbox.hxx>
 
 using ::editeng::SvxBorderLine;
-using ::rtl::OUString;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

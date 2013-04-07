@@ -190,14 +190,14 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 // cell contents --------------------------------------------------------------
 
 void ScCsvTableBox::SetUniStrings(
-        const rtl::OUString* pTextLines, const String& rSepChars,
+        const OUString* pTextLines, const String& rSepChars,
         sal_Unicode cTextSep, bool bMergeSep )
 {
     // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
     // -> will be dynamic sometime
     DisableRepaint();
     sal_Int32 nEndLine = GetFirstVisLine() + CSV_PREVIEW_LINES;
-    const rtl::OUString* pString = pTextLines;
+    const OUString* pString = pTextLines;
     for( sal_Int32 nLine = GetFirstVisLine(); nLine < nEndLine; ++nLine, ++pString )
     {
         if( mbFixedMode )

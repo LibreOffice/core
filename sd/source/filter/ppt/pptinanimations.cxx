@@ -66,8 +66,6 @@
 #include <algorithm>
 
 using ::std::map;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -236,10 +234,10 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
 
 #ifdef DBG_ANIM_LOG
     static int ppt_anim_debug_stream_number = 1;
-    rtl::OUString ppt_anim_debug_filename("ppt-animation-import-debug-output-");
-    ppt_anim_debug_filename += rtl::OUString::valueOf(ppt_anim_debug_stream_number++);
-    ppt_anim_debug_filename += rtl::OUString(".xml");
-    mpFile = fopen( rtl::OUStringToOString( ppt_anim_debug_filename, RTL_TEXTENCODING_UTF8).getStr() , "w+" );
+    OUString ppt_anim_debug_filename("ppt-animation-import-debug-output-");
+    ppt_anim_debug_filename += OUString::valueOf(ppt_anim_debug_stream_number++);
+    ppt_anim_debug_filename += OUString(".xml");
+    mpFile = fopen( OUStringToOString( ppt_anim_debug_filename, RTL_TEXTENCODING_UTF8).getStr() , "w+" );
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -1310,7 +1308,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     // TODO: DFF_ANIM_ID
     if( rSet.hasProperty( DFF_ANIM_ID ) )
     {
-        rtl::OUString aString;
+        OUString aString;
         rSet.getProperty( DFF_ANIM_ID ) >>= aString;
         //if( !aString.isEmpty() )
         //{
@@ -1320,7 +1318,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     // TODO: DFF_ANIM_EVENT_FILTER
     if( rSet.hasProperty( DFF_ANIM_EVENT_FILTER ) )
     {
-        rtl::OUString aString;
+        OUString aString;
         rSet.getProperty( DFF_ANIM_EVENT_FILTER ) >>= aString;
         //if( !aString.isEmpty() )
         //{
@@ -1333,7 +1331,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         Reference< XAnimate > xAnim( xNode, UNO_QUERY );
         if( xAnim.is() )
         {
-            rtl::OUString aString;
+            OUString aString;
             rSet.getProperty( DFF_ANIM_TIMEFILTER ) >>= aString;
             if( !aString.isEmpty() )
             {
@@ -1624,7 +1622,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
                     Any aAny;
                     if ( importAttributeValue( pChildAtom, aAny ) )
                     {
-                        rtl::OUString filter;
+                        OUString filter;
                         aAny >>= filter;
 
                         dump( " filter=\"%s\"", filter );
@@ -2132,7 +2130,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                 Any aPath;
                 if ( importAttributeValue( pChildAtom, aPath ) )
                 {
-                    rtl::OUString aStr;
+                    OUString aStr;
                     if ( aPath >>= aStr )
                     {
                         aStr = aStr.replace( 'E', ' ' );
@@ -2754,7 +2752,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
 
             if( aValues[i] >>= aStr )
                 dump( "%s",
-                      ::rtl::OUStringToOString( aStr,
+                      OUStringToOString( aStr,
                                                 RTL_TEXTENCODING_ASCII_US ).getStr() );
             else if( aValues[i] >>= nVal )
                 dump( "%f", nVal );
@@ -2766,7 +2764,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
                 {
                     if( aValuePair.First >>= aStr )
                         dump( "%s",
-                              ::rtl::OUStringToOString( aStr,
+                              OUStringToOString( aStr,
                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
                     else if( aValuePair.First >>= nVal )
                         dump( "%f", nVal );
@@ -2775,7 +2773,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
 
                     if( aValuePair.Second >>= aStr )
                         dump( ",%s",
-                              ::rtl::OUStringToOString( aStr,
+                              OUStringToOString( aStr,
                                                         RTL_TEXTENCODING_ASCII_US ).getStr() );
                     else if( aValuePair.Second >>= nVal )
                         dump( ",%f", nVal );
@@ -2853,7 +2851,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                 {
                     if ( ( nRecLen & 1 ) && ( nRecLen > 1 ) )
                     {
-                        rtl::OUString aOUString = mpPPTImport->MSDFFReadZString( mrStCtrl, nRecLen - 1, sal_True );
+                        OUString aOUString = mpPPTImport->MSDFFReadZString( mrStCtrl, nRecLen - 1, sal_True );
                         rAny <<= aOUString;
 
                         bOk = true;
@@ -3282,7 +3280,7 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
                     if( importAttributeValue( pChildAtom, aValue ) )
                     {
                         sal_Int32 nInt;
-                        rtl::OUString aString;
+                        OUString aString;
                         double fDouble;
 
                         if( aValue >>= nInt )
@@ -3292,7 +3290,7 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
                         else if( aValue >>= aString )
                         {
                             fprintf(mpFile, " value=\"%s\"",
-                                rtl::OUStringToOString(aString,
+                                OUStringToOString(aString,
                                     RTL_TEXTENCODING_UTF8).getStr());
                         }
                         else if( aValue >>= fDouble )
@@ -3443,7 +3441,7 @@ void AnimationImporter::dump( Any& rAny )
     }
     else if( rAny >>= aString )
     {
-        fprintf( mpFile, "%s", rtl::OUStringToOString(aString,
+        fprintf( mpFile, "%s", OUStringToOString(aString,
             RTL_TEXTENCODING_UTF8).getStr() );
     }
     else if( rAny >>= nInt )
@@ -3655,11 +3653,11 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_ID:
         {
-            rtl::OUString aString;
+            OUString aString;
             if( aAny >>= aString )
             {
                 fprintf( mpFile, " id=\"%s\"",
-                    rtl::OUStringToOString(aString,
+                    OUStringToOString(aString,
                         RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
@@ -3668,11 +3666,11 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_EVENT_FILTER:
         {
-            rtl::OUString aString;
+            OUString aString;
             if( aAny >>= aString )
             {
                 fprintf( mpFile, " eventFilter=\"%s\"",
-                    rtl::OUStringToOString(aString,
+                    OUStringToOString(aString,
                         RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
@@ -3691,11 +3689,11 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_TIMEFILTER:
         {
-            rtl::OUString aString;
+            OUString aString;
             if( aAny >>= aString )
             {
                 fprintf( mpFile, " timeFilter=\"%s\"",
-                    rtl::OUStringToOString(aString,
+                    OUStringToOString(aString,
                         RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
@@ -3704,11 +3702,11 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_RUNTIMECONTEXT:
         {
-            rtl::OUString aString;
+            OUString aString;
             if( aAny >>= aString )
             {
                 fprintf( mpFile, " runtimeContext=\"%s\"",
-                    rtl::OUStringToOString(aString,
+                    OUStringToOString(aString,
                         RTL_TEXTENCODING_UTF8).getStr() );
                 bKnown = true;
             }
@@ -3786,9 +3784,9 @@ void AnimationImporter::dump( const char * pText )
     fprintf( mpFile, "%s", pText );
 }
 
-void AnimationImporter::dump( const rtl::OUString& rString )
+void AnimationImporter::dump( const OUString& rString )
 {
-    fprintf( mpFile, rtl::OUStringToOString(rString,
+    fprintf( mpFile, OUStringToOString(rString,
         RTL_TEXTENCODING_UTF8).getStr() );
 }
 
@@ -3814,7 +3812,7 @@ void AnimationImporter::dump( const char * pText, const char * pText2 )
 
 void AnimationImporter::dump( const char * pText, const OUString& rString )
 {
-    fprintf( mpFile, pText, rtl::OUStringToOString(rString,
+    fprintf( mpFile, pText, OUStringToOString(rString,
         RTL_TEXTENCODING_UTF8).getStr() );
 }
 
@@ -3860,7 +3858,7 @@ void AnimationImporter::dump( const char * , const char *  )
 {
 }
 
-void AnimationImporter::dump( const char * , const rtl::OUString&  )
+void AnimationImporter::dump( const char * , const OUString&  )
 {
 }
 

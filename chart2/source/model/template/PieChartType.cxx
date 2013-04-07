@@ -30,7 +30,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -152,7 +151,7 @@ uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
 }
 
 // ____ XChartType ____
-::rtl::OUString SAL_CALL PieChartType::getChartType()
+OUString SAL_CALL PieChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_PIE;
@@ -220,9 +219,9 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetI
     return *StaticPieChartTypeInfo::get();
 }
 
-uno::Sequence< ::rtl::OUString > PieChartType::getSupportedServiceNames_Static()
+uno::Sequence< OUString > PieChartType::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 3 );
+    uno::Sequence< OUString > aServices( 3 );
     aServices[ 0 ] = CHART2_SERVICE_NAME_CHARTTYPE_PIE;
     aServices[ 1 ] = "com.sun.star.chart2.ChartType";
     aServices[ 2 ] = "com.sun.star.beans.PropertySet";

@@ -28,13 +28,13 @@ class XMLFormPropOASISTransformerContext :
     sal_Bool m_bIsList;
     sal_Bool m_bIsListValue;
 
-    ::xmloff::token::XMLTokenEnum GetValueType( const ::rtl::OUString& rValue );
+    ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
 
 public:
     TYPEINFO();
 
     XMLFormPropOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               ::xmloff::token::XMLTokenEnum eLocalName );
 
     virtual ~XMLFormPropOASISTransformerContext();

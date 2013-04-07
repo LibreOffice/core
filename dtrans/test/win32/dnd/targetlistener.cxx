@@ -24,7 +24,6 @@
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace com::sun::star::datatransfer;
 
-using ::rtl::OUString;
 
 DropTargetListener::DropTargetListener(HWND hEdit):m_hEdit( hEdit)
 {

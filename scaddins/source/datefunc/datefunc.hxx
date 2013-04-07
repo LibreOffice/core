@@ -93,40 +93,40 @@ public:
 
                                 using ScaList::Count;
 
-    inline const ::rtl::OUString* Get( sal_uInt32 nIndex ) const;
+    inline const OUString* Get( sal_uInt32 nIndex ) const;
 
-    inline ::rtl::OUString*     First();
-    inline ::rtl::OUString*     Next();
+    inline OUString*     First();
+    inline OUString*     Next();
 
     using ScaList::Append;
-    inline void                 Append( ::rtl::OUString* pNew );
-    inline void                 Append( const ::rtl::OUString& rNew );
+    inline void                 Append( OUString* pNew );
+    inline void                 Append( const OUString& rNew );
 };
 
 
-inline const ::rtl::OUString* ScaStringList::Get( sal_uInt32 nIndex ) const
+inline const OUString* ScaStringList::Get( sal_uInt32 nIndex ) const
 {
-    return static_cast< const ::rtl::OUString* >( ScaList::GetObject( nIndex ) );
+    return static_cast< const OUString* >( ScaList::GetObject( nIndex ) );
 }
 
-inline ::rtl::OUString* ScaStringList::First()
+inline OUString* ScaStringList::First()
 {
-    return static_cast< ::rtl::OUString* >( ScaList::First() );
+    return static_cast< OUString* >( ScaList::First() );
 }
 
-inline ::rtl::OUString* ScaStringList::Next()
+inline OUString* ScaStringList::Next()
 {
-    return static_cast< ::rtl::OUString* >( ScaList::Next() );
+    return static_cast< OUString* >( ScaList::Next() );
 }
 
-inline void ScaStringList::Append( ::rtl::OUString* pNew )
+inline void ScaStringList::Append( OUString* pNew )
 {
     ScaList::Append( pNew );
 }
 
-inline void ScaStringList::Append( const ::rtl::OUString& rNew )
+inline void ScaStringList::Append( const OUString& rNew )
 {
-    ScaList::Append( new ::rtl::OUString( rNew ) );
+    ScaList::Append( new OUString( rNew ) );
 }
 
 
@@ -204,7 +204,7 @@ public:
 class ScaFuncRes : public Resource
 {
 public:
-                                ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, ::rtl::OUString& rRet );
+                                ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet );
 };
 
 
@@ -236,7 +236,7 @@ struct ScaFuncDataBase
 class ScaFuncData
 {
 private:
-    ::rtl::OUString             aIntName;           // internal name (get***)
+    OUString             aIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
@@ -257,7 +257,7 @@ public:
     inline sal_Bool             HasIntParam() const     { return bWithOpt; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline sal_Bool             Is( const ::rtl::OUString& rCompare ) const
+    inline sal_Bool             Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
     inline const ScaStringList& GetCompNameList() const { return aCompList; }
@@ -268,7 +268,7 @@ public:
 
 class ScaFuncDataList : private ScaList
 {
-    ::rtl::OUString             aLastName;
+    OUString             aLastName;
     sal_uInt32                  nLast;
 
 public:
@@ -278,7 +278,7 @@ public:
                                 using ScaList::Count;
 
     inline const ScaFuncData*   Get( sal_uInt32 nIndex ) const;
-    const ScaFuncData*          Get( const ::rtl::OUString& rProgrammaticName ) const;
+    const ScaFuncData*          Get( const OUString& rProgrammaticName ) const;
     inline ScaFuncData*         First();
     inline ScaFuncData*         Next();
 
@@ -332,39 +332,39 @@ private:
     ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException );
     void                        InitData();
 
-    ::rtl::OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException );
-    ::rtl::OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException );
 
 public:
                                 ScaDateAddIn();
     virtual                     ~ScaDateAddIn();
 
-    static ::rtl::OUString      getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
+    static OUString      getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual ::rtl::OUString SAL_CALL getProgrammaticFuntionName( const ::rtl::OUString& aDisplayName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayFunctionName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getFunctionDescription( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayArgumentName( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getArgumentDescription( const ::rtl::OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getProgrammaticCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getDisplayCategoryName( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
 
                                 // XCompatibilityNames
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const ::rtl::OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( ::com::sun::star::uno::RuntimeException );
 
                                 // XLocalizable
     virtual void SAL_CALL       setLocale( const ::com::sun::star::lang::Locale& eLocale ) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::lang::Locale SAL_CALL getLocale() throw( ::com::sun::star::uno::RuntimeException );
 
                                 // XServiceName
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException );
 
                                 // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL   supportsService( const ::rtl::OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
     //  methods from own interfaces start here
 
@@ -408,8 +408,8 @@ public:
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
                                 // XMiscFunctions
-    virtual ::rtl::OUString SAL_CALL getRot13(
-                                    const ::rtl::OUString& aSrcText )
+    virtual OUString SAL_CALL getRot13(
+                                    const OUString& aSrcText )
                                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 };
 

@@ -181,7 +181,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 InfoBox aInfoBox(&GetEditWin(), SW_RES(MSG_ERR_NO_FAX));
                 String sMsg = aInfoBox.GetMessText();
                 sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                sMsg.SearchAndReplace(rtl::OUString("%1"), String(SW_RES(nResNo)));
+                sMsg.SearchAndReplace(OUString("%1"), String(SW_RES(nResNo)));
                 aInfoBox.SetMessText(sMsg);
                 aInfoBox.Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);

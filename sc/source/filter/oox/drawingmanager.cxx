@@ -44,7 +44,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
 
-using ::rtl::OUString;
 
 // ============================================================================
 

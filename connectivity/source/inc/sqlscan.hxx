@@ -33,8 +33,8 @@ namespace connectivity
     class OOO_DLLPUBLIC_DBTOOLS OSQLScanner
     {
         const IParseContext*    m_pContext;                 // context for parse, knows all international stuff
-        ::rtl::OString          m_sStatement;               // statement to parse
-        ::rtl::OUString         m_sErrorMessage;
+        OString          m_sStatement;               // statement to parse
+        OUString         m_sErrorMessage;
 
         sal_Int32               m_nCurrentPos;             // next position to read from the statement
         sal_Bool                m_bInternational;          // do we have a statement which may uses
@@ -60,9 +60,9 @@ namespace connectivity
         virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
-        void prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational);
-        const ::rtl::OUString& getErrorMessage() const {return m_sErrorMessage;}
-        ::rtl::OString getStatement() const { return m_sStatement; }
+        void prepareScan(const OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational);
+        const OUString& getErrorMessage() const {return m_sErrorMessage;}
+        OString getStatement() const { return m_sStatement; }
 
         sal_Int32 SQLlex();
         // set this as scanner for flex

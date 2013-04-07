@@ -34,26 +34,26 @@ ScVbaMenuItem::ScVbaMenuItem( const uno::Reference< ov::XHelperInterface > xPare
 {
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaMenuItem::getCaption() throw ( uno::RuntimeException )
 {
     return m_xCommandBarControl->getCaption();
 }
 
 void SAL_CALL
-ScVbaMenuItem::setCaption( const ::rtl::OUString& _caption ) throw (uno::RuntimeException)
+ScVbaMenuItem::setCaption( const OUString& _caption ) throw (uno::RuntimeException)
 {
     m_xCommandBarControl->setCaption( _caption );
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaMenuItem::getOnAction() throw ( uno::RuntimeException )
 {
     return m_xCommandBarControl->getOnAction();
 }
 
 void SAL_CALL
-ScVbaMenuItem::setOnAction( const ::rtl::OUString& _onaction ) throw (uno::RuntimeException)
+ScVbaMenuItem::setOnAction( const OUString& _onaction ) throw (uno::RuntimeException)
 {
     m_xCommandBarControl->setOnAction( _onaction );
 }
@@ -64,20 +64,20 @@ ScVbaMenuItem::Delete( ) throw (script::BasicErrorException, uno::RuntimeExcepti
     m_xCommandBarControl->Delete();
 }
 
-rtl::OUString
+OUString
 ScVbaMenuItem::getServiceImplName()
 {
-    return rtl::OUString("ScVbaMenuItem");
+    return OUString("ScVbaMenuItem");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 ScVbaMenuItem::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.MenuItem" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.MenuItem" );
     }
     return aServiceNames;
 }

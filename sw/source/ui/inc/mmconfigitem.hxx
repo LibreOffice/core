@@ -48,20 +48,20 @@ struct SwDocMergeInfo
 
 class SW_DLLPUBLIC SwMailMergeConfigItem
 {
-//    com::sun::star::uno::Sequence< ::rtl::OUString>     m_aSavedDocuments;
+//    com::sun::star::uno::Sequence< OUString>     m_aSavedDocuments;
     SwMailMergeConfigItem_Impl*                                 m_pImpl;
     //session information - not stored in configuration
     bool                                                        m_bAddressInserted;
     bool                                                        m_bMergeDone;
     bool                                                        m_bGreetingInserted;
     sal_Int32                                                   m_nGreetingMoves;
-    ::rtl::OUString                                             m_rAddressBlockFrame;
+    OUString                                             m_rAddressBlockFrame;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aSelection;
 
     sal_uInt16                                                      m_nStartPrint;
     sal_uInt16                                                      m_nEndPrint;
 
-    ::rtl::OUString                                             m_sSelectedPrinter;
+    OUString                                             m_sSelectedPrinter;
 
     SwView*                                                     m_pSourceView;
     SwView*                                                     m_pTargetView;
@@ -99,8 +99,8 @@ public:
 
     void                DisposeResultSet();
 
-    ::rtl::OUString&    GetFilter() const;
-    void                SetFilter(::rtl::OUString&);
+    OUString&    GetFilter() const;
+    void                SetFilter(OUString&);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>
                         GetSelection()const;
@@ -117,9 +117,9 @@ public:
     bool                IsRecordExcluded(sal_Int32 nRecord);
     void                ExcludeRecord(sal_Int32 nRecord, bool bExclude);
 
-    const com::sun::star::uno::Sequence< ::rtl::OUString>&
+    const com::sun::star::uno::Sequence< OUString>&
                         GetSavedDocuments() const;
-    void                AddSavedDocument(::rtl::OUString rName);
+    void                AddSavedDocument(OUString rName);
 
     sal_Bool            IsOutputToLetter()const;
     void                SetOutputToLetter(sal_Bool bSet);
@@ -130,16 +130,16 @@ public:
     sal_Bool            IsHideEmptyParagraphs() const;
     void                SetHideEmptyParagraphs(sal_Bool bSet);
 
-    const com::sun::star::uno::Sequence< ::rtl::OUString>
+    const com::sun::star::uno::Sequence< OUString>
                         GetAddressBlocks() const;
-    void                SetAddressBlocks(const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks);
+    void                SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks);
 
     void                SetCurrentAddressBlockIndex( sal_Int32 nSet );
     sal_Int32           GetCurrentAddressBlockIndex() const;
 
     sal_Bool            IsIncludeCountry() const;
-    rtl::OUString&      GetExcludeCountry() const;
-    void                SetCountrySettings(sal_Bool bSet, const rtl::OUString& sCountry);
+    OUString&      GetExcludeCountry() const;
+    void                SetCountrySettings(sal_Bool bSet, const OUString& sCountry);
 
     sal_Bool            IsIndividualGreeting(sal_Bool bInEMail) const;
     void                SetIndividualGreeting(sal_Bool bSet, sal_Bool bInEMail);
@@ -147,42 +147,42 @@ public:
     sal_Bool            IsGreetingLine(sal_Bool bInEMail) const;
     void                SetGreetingLine(sal_Bool bSet, sal_Bool bInEMail);
 
-    const com::sun::star::uno::Sequence< ::rtl::OUString>
+    const com::sun::star::uno::Sequence< OUString>
                         GetGreetings(Gender eType) const;
-    void                SetGreetings(Gender eType, const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks);
+    void                SetGreetings(Gender eType, const com::sun::star::uno::Sequence< OUString>& rBlocks);
 
     sal_Int32           GetCurrentGreeting(Gender eType) const;
     void                SetCurrentGreeting(Gender eType, sal_Int32 nIndex);
 
     //the content of the gender column that marks it as female
-    const ::rtl::OUString& GetFemaleGenderValue() const;
-    void                   SetFemaleGenderValue(const ::rtl::OUString rValue);
+    const OUString& GetFemaleGenderValue() const;
+    void                   SetFemaleGenderValue(const OUString rValue);
 
     //returns the assignment in the order of the default headers (GetDefaultAddressHeaders())
-    com::sun::star::uno::Sequence< ::rtl::OUString >
+    com::sun::star::uno::Sequence< OUString >
                         GetColumnAssignment( const SwDBData& rDBData ) const;
     void                SetColumnAssignment(
                             const SwDBData& rDBData,
-                            const com::sun::star::uno::Sequence< ::rtl::OUString>& );
+                            const com::sun::star::uno::Sequence< OUString>& );
 
     bool                IsAddressFieldsAssigned() const;
     bool                IsGreetingFieldsAssigned() const;
 
     //e-Mail settings:
-    ::rtl::OUString     GetMailDisplayName() const;
-    void                SetMailDisplayName(const ::rtl::OUString& rName);
+    OUString     GetMailDisplayName() const;
+    void                SetMailDisplayName(const OUString& rName);
 
-    ::rtl::OUString     GetMailAddress() const;
-    void                SetMailAddress(const ::rtl::OUString& rAddress);
+    OUString     GetMailAddress() const;
+    void                SetMailAddress(const OUString& rAddress);
 
     sal_Bool            IsMailReplyTo() const;
     void                SetMailReplyTo(sal_Bool bSet);
 
-    ::rtl::OUString     GetMailReplyTo() const;
-    void                SetMailReplyTo(const ::rtl::OUString& rReplyTo);
+    OUString     GetMailReplyTo() const;
+    void                SetMailReplyTo(const OUString& rReplyTo);
 
-    ::rtl::OUString     GetMailServer() const;
-    void                SetMailServer(const ::rtl::OUString& rAddress);
+    OUString     GetMailServer() const;
+    void                SetMailServer(const OUString& rAddress);
 
     sal_Int16           GetMailPort() const;
     void                SetMailPort(sal_Int16 nSet);
@@ -193,17 +193,17 @@ public:
     sal_Bool            IsAuthentication() const;
     void                SetAuthentication(sal_Bool bSet);
 
-    ::rtl::OUString     GetMailUserName() const;
-    void                SetMailUserName(const ::rtl::OUString& rName);
+    OUString     GetMailUserName() const;
+    void                SetMailUserName(const OUString& rName);
 
-    ::rtl::OUString     GetMailPassword() const;
-    void                SetMailPassword(const ::rtl::OUString& rPassword);
+    OUString     GetMailPassword() const;
+    void                SetMailPassword(const OUString& rPassword);
 
     sal_Bool            IsSMTPAfterPOP() const;
     void                SetSMTPAfterPOP(sal_Bool bSet);
 
-    ::rtl::OUString     GetInServerName() const;
-    void                SetInServerName(const ::rtl::OUString& rServer);
+    OUString     GetInServerName() const;
+    void                SetInServerName(const OUString& rServer);
 
     sal_Int16           GetInServerPort() const;
     void                SetInServerPort(sal_Int16 nSet);
@@ -211,15 +211,15 @@ public:
     sal_Bool            IsInServerPOP() const;
     void                SetInServerPOP(sal_Bool bSet);
 
-    ::rtl::OUString     GetInServerUserName() const;
-    void                SetInServerUserName(const ::rtl::OUString& rName);
+    OUString     GetInServerUserName() const;
+    void                SetInServerUserName(const OUString& rName);
 
-    ::rtl::OUString     GetInServerPassword() const;
-    void                SetInServerPassword(const ::rtl::OUString& rPassword);
+    OUString     GetInServerPassword() const;
+    void                SetInServerPassword(const OUString& rPassword);
 
     //session information
     bool                IsAddressInserted() const { return m_bAddressInserted; }
-    void                SetAddressInserted(const ::rtl::OUString& rFrameName)
+    void                SetAddressInserted(const OUString& rFrameName)
                             { m_bAddressInserted = true;
                               m_rAddressBlockFrame = rFrameName;
                             }
@@ -251,8 +251,8 @@ public:
     sal_uInt16              GetPrintRangeStart() const  {return m_nStartPrint;}
     sal_uInt16              GetPrintRangeEnd() const {return m_nEndPrint;}
 
-    const ::rtl::OUString&  GetSelectedPrinter() const {return m_sSelectedPrinter;}
-    void                    SetSelectedPrinter(const ::rtl::OUString& rSet )
+    const OUString&  GetSelectedPrinter() const {return m_sSelectedPrinter;}
+    void                    SetSelectedPrinter(const OUString& rSet )
                                     {m_sSelectedPrinter = rSet;}
 
 
@@ -263,7 +263,7 @@ public:
     void                SetSourceView(SwView* pView);
 
     //helper methods
-    ::rtl::OUString     GetAssignedColumn(sal_uInt32 nColumn)const;
+    OUString     GetAssignedColumn(sal_uInt32 nColumn)const;
 };
 
 #endif

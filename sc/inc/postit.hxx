@@ -43,8 +43,8 @@ struct SC_DLLPUBLIC ScNoteData
 {
     typedef ::boost::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
 
-    ::rtl::OUString     maDate;             /// Creation date of the note.
-    ::rtl::OUString     maAuthor;           /// Author of the note.
+    OUString     maDate;             /// Creation date of the note.
+    OUString     maAuthor;           /// Author of the note.
     ScCaptionInitDataRef mxInitData;        /// Initial data for invisible notes without SdrObject.
     SdrCaptionObj*      mpCaption;          /// Drawing object representing the cell note.
     bool                mbShown;            /// True = note is visible.
@@ -102,14 +102,14 @@ public:
     inline const ScNoteData& GetNoteData() const { return maNoteData; }
 
     /** Returns the creation date of this note. */
-    inline const ::rtl::OUString& GetDate() const { return maNoteData.maDate; }
+    inline const OUString& GetDate() const { return maNoteData.maDate; }
     /** Sets a new creation date for this note. */
-    inline void         SetDate( const ::rtl::OUString& rDate ) { maNoteData.maDate = rDate; }
+    inline void         SetDate( const OUString& rDate ) { maNoteData.maDate = rDate; }
 
     /** Returns the author date of this note. */
-    inline const ::rtl::OUString& GetAuthor() const { return maNoteData.maAuthor; }
+    inline const OUString& GetAuthor() const { return maNoteData.maAuthor; }
     /** Sets a new author date for this note. */
-    inline void         SetAuthor( const ::rtl::OUString& rAuthor ) { maNoteData.maAuthor = rAuthor; }
+    inline void         SetAuthor( const OUString& rAuthor ) { maNoteData.maAuthor = rAuthor; }
 
     /** Sets date and author from system settings. */
     void                AutoStamp();
@@ -120,9 +120,9 @@ public:
     const EditTextObject* GetEditTextObject() const;
 
     /** Returns the caption text of this note. */
-    ::rtl::OUString     GetText() const;
+    OUString     GetText() const;
     /** Changes the caption text of this note. All text formatting will be lost. */
-    void                SetText( const ScAddress& rPos, const ::rtl::OUString& rText );
+    void                SetText( const ScAddress& rPos, const OUString& rText );
 
     /** Returns an existing note caption object. returns null, if the note
         contains initial caption data needed to construct a caption object. */
@@ -170,7 +170,7 @@ public:
 
     /** Creates and returns a caption object for a temporary caption. */
     static SdrCaptionObj* CreateTempCaption( ScDocument& rDoc, const ScAddress& rPos,
-                            SdrPage& rDrawPage, const ::rtl::OUString& rUserText,
+                            SdrPage& rDrawPage, const OUString& rUserText,
                             const Rectangle& rVisRect, bool bTailFront );
 
     /** Creates a cell note using the passed caption drawing object.
@@ -246,7 +246,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromString(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            const ::rtl::OUString& rNoteText, bool bShown,
+                            const OUString& rNoteText, bool bShown,
                             bool bAlwaysCreateCaption );
 };
 

@@ -45,8 +45,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::task;
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;

@@ -52,8 +52,8 @@ struct Library {
 
 typedef struct
 {
-    rtl::OUString Server;
-    rtl::OUString Port;
+    OUString Server;
+    OUString Port;
 } ProxyEntry;
 
 //------------------------------------------------------------------------
@@ -62,7 +62,7 @@ typedef struct
 
 namespace // private
 {
-    ProxyEntry ReadProxyEntry(const rtl::OUString& aProxy, sal_Int32& i)
+    ProxyEntry ReadProxyEntry(const OUString& aProxy, sal_Int32& i)
     {
         ProxyEntry aProxyEntry;
 
@@ -73,14 +73,14 @@ namespace // private
         return aProxyEntry;
     }
 
-    ProxyEntry FindProxyEntry(const rtl::OUString& aProxyList, const rtl::OUString& aType)
+    ProxyEntry FindProxyEntry(const OUString& aProxyList, const OUString& aType)
     {
         sal_Int32 nIndex = 0;
 
         do
         {
             // get the next token, e.g. ftp=server:port
-            rtl::OUString nextToken = aProxyList.getToken( 0, SPACE, nIndex );
+            OUString nextToken = aProxyList.getToken( 0, SPACE, nIndex );
 
             // split the next token again into the parts separated
             // through '=', e.g. ftp=server:port -> ftp and server:port
@@ -167,8 +167,8 @@ WinInetBackend::WinInetBackend()
             // an empty proxy list, so we don't have to check if
             // proxy is enabled or not
 
-            rtl::OUString aProxyList       = rtl::OUString::createFromAscii( lpi->lpszProxy );
-            rtl::OUString aProxyBypassList = rtl::OUString::createFromAscii( lpi->lpszProxyBypass );
+            OUString aProxyList       = OUString::createFromAscii( lpi->lpszProxy );
+            OUString aProxyBypassList = OUString::createFromAscii( lpi->lpszProxyBypass );
 
             // override default for ProxyType, which is "0" meaning "No proxies".
             sal_Int32 nProperties = 1;
@@ -179,11 +179,11 @@ WinInetBackend::WinInetBackend()
             // fill proxy bypass list
             if( aProxyBypassList.getLength() > 0 )
             {
-                rtl::OUStringBuffer aReverseList;
+                OUStringBuffer aReverseList;
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    rtl::OUString aToken = aProxyBypassList.getToken( 0, SPACE, nIndex );
+                    OUString aToken = aProxyBypassList.getToken( 0, SPACE, nIndex );
                     if ( aProxyList.indexOf( aToken ) == -1 )
                     {
                         if ( aReverseList.getLength() )
@@ -222,13 +222,13 @@ WinInetBackend::WinInetBackend()
                 // there is one and it has a port
                 //-------------------------------------------------
 
-                ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, rtl::OUString());
-                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, rtl::OUString(
+                ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, OUString());
+                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, OUString(
                     "http"  ) );
-                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, rtl::OUString(
+                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, OUString(
                     "https"  ) );
 
-                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, rtl::OUString(
+                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, OUString(
                     "ftp"  ) );
 
                 if( aTypeIndepProxy.Server.getLength() )
@@ -312,20 +312,20 @@ WinInetBackend* WinInetBackend::createInstance()
 // ---------------------------------------------------------------------------------------
 
 void WinInetBackend::setPropertyValue(
-    rtl::OUString const &, css::uno::Any const &)
+    OUString const &, css::uno::Any const &)
     throw (
         css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
         css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
-        rtl::OUString(
+        OUString(
             "setPropertyValue not supported"),
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 
 css::uno::Any WinInetBackend::getPropertyValue(
-    rtl::OUString const & PropertyName)
+    OUString const & PropertyName)
     throw (
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
@@ -362,13 +362,13 @@ css::uno::Any WinInetBackend::getPropertyValue(
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL WinInetBackend::getBackendName(void) {
-    return rtl::OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
+OUString SAL_CALL WinInetBackend::getBackendName(void) {
+    return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL WinInetBackend::getImplementationName(void)
+OUString SAL_CALL WinInetBackend::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return getBackendName() ;
@@ -376,20 +376,20 @@ rtl::OUString SAL_CALL WinInetBackend::getImplementationName(void)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
+uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames(void)
 {
-    uno::Sequence<rtl::OUString> aServiceNameList(1);
-    aServiceNameList[0] = rtl::OUString( "com.sun.star.configuration.backend.WinInetBackend") ;
+    uno::Sequence<OUString> aServiceNameList(1);
+    aServiceNameList[0] = OUString( "com.sun.star.configuration.backend.WinInetBackend") ;
 
     return aServiceNameList ;
 }
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL WinInetBackend::supportsService(const rtl::OUString& aServiceName)
+sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > const svc = getBackendServiceNames();
+    uno::Sequence< OUString > const svc = getBackendServiceNames();
 
     for(sal_Int32 i = 0; i < svc.getLength(); ++i )
         if(svc[i] == aServiceName)
@@ -400,7 +400,7 @@ sal_Bool SAL_CALL WinInetBackend::supportsService(const rtl::OUString& aServiceN
 
 //------------------------------------------------------------------------------
 
-uno::Sequence<rtl::OUString> SAL_CALL WinInetBackend::getSupportedServiceNames(void)
+uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
     return getBackendServiceNames() ;

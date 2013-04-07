@@ -218,7 +218,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             the instance lock to be released before doing synchronous notifications
     */
     void impl_storeAs_throw(
-            const ::rtl::OUString& _rURL,
+            const OUString& _rURL,
             const ::comphelper::NamedValueCollection& _rArguments,
             const StoreType _eType,
             DocumentGuard& _rGuard
@@ -297,13 +297,13 @@ public:
     }
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
         SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
@@ -325,8 +325,8 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XModel
-    virtual sal_Bool SAL_CALL attachResource( const ::rtl::OUString& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::rtl::OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL attachResource( const OUString& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getArgs(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::uno::RuntimeException) ;
@@ -339,17 +339,17 @@ public:
 
     // XModel2
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL getControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createDefaultViewController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createViewController( const ::rtl::OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 > SAL_CALL createViewController( const OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
 
     // XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
-    virtual ::rtl::OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual OUString SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual sal_Bool SAL_CALL isReadonly(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL store(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL storeAsURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
-    virtual void SAL_CALL storeToURL( const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
+    virtual void SAL_CALL storeAsURL( const OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
+    virtual void SAL_CALL storeToURL( const OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException) ;
 
     // XModifyBroadcaster
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -366,7 +366,7 @@ public:
     // XDocumentEventBroadcaster
     virtual void SAL_CALL addDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeDocumentEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentEventListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL notifyDocumentEvent( const ::rtl::OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyDocumentEvent( const OUString& _EventName, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& _ViewController, const ::com::sun::star::uno::Any& _Supplement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
     // XPrintable
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (::com::sun::star::uno::RuntimeException) ;
@@ -388,8 +388,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XDocumentSubStorageSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, sal_Int32 nMode ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XOfficeDatabaseDocument
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException);
@@ -422,12 +422,12 @@ public:
 
     // css.document.XDocumentRecovery
     virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave() throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
-    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void SAL_CALL storeToRecoveryFile( const OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void SAL_CALL recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
 
     // XTitle
-    virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle( const OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
 
     // XTitleChangeBroadcaster
     virtual void SAL_CALL addTitleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitleChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -437,7 +437,7 @@ public:
     virtual ::sal_Int32 SAL_CALL leaseNumber( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL releaseNumber( ::sal_Int32 nNumber ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL releaseNumberForComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getUntitledPrefix(  ) throw (::com::sun::star::uno::RuntimeException);
 
     /** clears the given object container
 
@@ -456,7 +456,7 @@ public:
     inline void checkInitialized() const
     {
         if ( !impl_isInitialized() )
-            throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), getThis() );
+            throw ::com::sun::star::lang::NotInitializedException( OUString(), getThis() );
     }
 
     /** checks the document is currently in the initialization phase, or already initialized.
@@ -468,7 +468,7 @@ public:
             // fine
             return;
 
-        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), getThis() );
+        throw ::com::sun::star::lang::NotInitializedException( OUString(), getThis() );
     }
 
     /** checks whether the document is currently being initialized, or already initialized,
@@ -477,7 +477,7 @@ public:
     inline void checkNotInitialized() const
     {
         if ( impl_isInitializing() || impl_isInitialized() )
-            throw ::com::sun::star::frame::DoubleInitializationException( ::rtl::OUString(), getThis() );
+            throw ::com::sun::star::frame::DoubleInitializationException( OUString(), getThis() );
     }
 
 private:
@@ -556,7 +556,7 @@ private:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
             impl_createStorageFor_throw(
-                const ::rtl::OUString& _rURL
+                const OUString& _rURL
             ) const;
 
     /** sets our "modified" flag
@@ -615,7 +615,7 @@ private:
             is the guard which currently protects the document instance
     */
     sal_Bool    impl_attachResource(
-                    const ::rtl::OUString& i_rLogicalDocumentURL,
+                    const OUString& i_rLogicalDocumentURL,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
                     DocumentGuard& _rDocGuard
                 );
@@ -625,7 +625,7 @@ private:
     */
     void        impl_throwIOExceptionCausedBySave_throw(
                     const ::com::sun::star::uno::Any& i_rError,
-                    const ::rtl::OUString& i_rTargetURL
+                    const OUString& i_rTargetURL
                 ) const;
 };
 

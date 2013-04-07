@@ -81,8 +81,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findPlaceInFormComponentHierarchy(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
-        const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
-        const ::rtl::OUString& rCursorSource = ::rtl::OUString(),
+        const OUString& rDBTitle = OUString(),
+        const OUString& rCursorSource = OUString(),
         sal_Int32 nCommandType = 0
     );
 
@@ -110,12 +110,12 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findFormForDataSource(
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& rForm,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase,
-        const ::rtl::OUString& rCommand,
+        const OUString& rCommand,
         sal_Int32 nCommandType
     );
 
 public:
-    ::rtl::OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
+    OUString setUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xFormComponent, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& xControls);
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );

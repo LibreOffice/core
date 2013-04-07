@@ -35,11 +35,6 @@
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 
-using rtl::OUString;
-using rtl::OUStringToOString;
-using rtl::OUStringBuffer;
-using rtl::OStringBuffer;
-using rtl::OString;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -915,7 +910,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
                 PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
                 PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
                 PyRef pyStr( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
-                str = rtl::OUString::createFromAscii( PyStr_AsString(pyStr.get()) );
+                str = OUString::createFromAscii( PyStr_AsString(pyStr.get()) );
             }
             else
             {
@@ -980,7 +975,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         e.Message = buf.makeStringAndClear();
 #if OSL_DEBUG_LEVEL > 0
         fprintf( stderr, "Python exception: %s\n",
-                 rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
         ret = com::sun::star::uno::makeAny( e );
     }
@@ -989,7 +984,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 
 
 static const char * g_NUMERICID = "pyuno.lcNumeric";
-static ::std::vector< rtl::OString > g_localeList;
+static ::std::vector< OString > g_localeList;
 
 static const char *ensureUnlimitedLifetime( const char *str )
 {

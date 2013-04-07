@@ -1540,7 +1540,7 @@ sal_uInt16 SvxShadowItem::GetValueCount() const
 
 // -----------------------------------------------------------------------
 
-rtl::OUString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxShadowItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < SVX_SHADOW_END, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + nPos );
@@ -2928,7 +2928,7 @@ SfxItemPresentation SvxFmtBreakItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-rtl::OUString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
+OUString SvxFmtBreakItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < SVX_BREAK_END, "enum overflow!" );
     return EE_RESSTR(RID_SVXITEMS_BREAK_BEGIN + nPos);
@@ -3598,7 +3598,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             {
                 OUString sPrefix(
                     UNO_NAME_GRAPHOBJ_URLPREFIX);
-                OUString sId(rtl::OStringToOUString(
+                OUString sId(OStringToOUString(
                     pImpl->pGraphicObject->GetUniqueID(),
                     RTL_TEXTENCODING_ASCII_US));
                 sLink = sPrefix + sId;
@@ -3689,7 +3689,7 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     DELETEZ( pStrLink );
                     String sTmp( sLink );
-                    rtl::OString sId(rtl::OUStringToOString(sTmp.Copy(
+                    OString sId(OUStringToOString(sTmp.Copy(
                         sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX)-1),
                         RTL_TEXTENCODING_ASCII_US));
                     GraphicObject *pOldGrfObj = pImpl->pGraphicObject;

@@ -66,7 +66,7 @@ public:
                         ::com::sun::star::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
                         throw (::com::sun::star::uno::RuntimeException);
 
-    void setParticle( const rtl::OUString& rCooSysParticle );
+    void setParticle( const OUString& rCooSysParticle );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
     ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen();
@@ -122,7 +122,7 @@ public:
     sal_Int32 getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const;
 
     virtual bool needSeriesNamesForAxis() const;
-    void setSeriesNamesForAxis( const ::com::sun::star::uno::Sequence< rtl::OUString >& rSeriesNames );
+    void setSeriesNamesForAxis( const ::com::sun::star::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods
     VCoordinateSystem( const ::com::sun::star::uno::Reference<
@@ -135,10 +135,10 @@ protected: //methods
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    rtl::OUString createCIDForAxis( const ::com::sun::star::uno::Reference<
+    OUString createCIDForAxis( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis >& xAxis
                     , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
-    rtl::OUString createCIDForGrid( const ::com::sun::star::uno::Reference<
+    OUString createCIDForGrid( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis >& xAxis
                     , sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
@@ -155,7 +155,7 @@ protected: //member
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem > m_xCooSysModel;
 
-    rtl::OUString m_aCooSysParticle;
+    OUString m_aCooSysParticle;
 
     typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 
@@ -177,7 +177,7 @@ protected: //member
     //
     MergedMinimumAndMaximumSupplier m_aMergedMinimumAndMaximumSupplier; //this is used only for autoscaling purpose
 
-    ::com::sun::star::uno::Sequence< rtl::OUString > m_aSeriesNamesForZAxis;
+    ::com::sun::star::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
 
     typedef std::map< tFullAxisIndex, ::boost::shared_ptr< VAxisBase > > tVAxisMap;
 

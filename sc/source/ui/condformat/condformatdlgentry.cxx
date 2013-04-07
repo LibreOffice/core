@@ -65,8 +65,8 @@ long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
 void ScCondFrmtEntry::SetIndex(sal_Int32 nIndex)
 {
     mnIndex = nIndex;
-    rtl::OUStringBuffer aBuffer(maStrCondition);
-    aBuffer.append(rtl::OUString::valueOf(nIndex));
+    OUStringBuffer aBuffer(maStrCondition);
+    aBuffer.append(OUString::valueOf(nIndex));
     maFtCondNr.SetText(aBuffer.makeStringAndClear());
 }
 
@@ -97,7 +97,7 @@ void ScCondFrmtEntry::SetHeight()
 
 void ScCondFrmtEntry::Select()
 {
-    maFtCondition.SetText(rtl::OUString());
+    maFtCondition.SetText(OUString());
     maFtCondition.Hide();
     maLbType.Show();
     mbActive = true;
@@ -106,7 +106,7 @@ void ScCondFrmtEntry::Select()
 
 void ScCondFrmtEntry::Deselect()
 {
-    rtl::OUString maCondText = GetExpressionString();
+    OUString maCondText = GetExpressionString();
     maFtCondition.SetText(maCondText);
     maFtCondition.Show();
     maLbType.Hide();
@@ -121,7 +121,7 @@ bool ScCondFrmtEntry::IsSelected() const
 
 IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 {
-    rtl::OUString aFormula = pEdit->GetText();
+    OUString aFormula = pEdit->GetText();
     ScCompiler aComp( mpDoc, maPos );
     aComp.SetGrammar( mpDoc->GetGrammar() );
     boost::scoped_ptr<ScTokenArray> mpCode(aComp.CompileString(aFormula));
@@ -144,14 +144,14 @@ namespace {
 void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 {
     rLbStyle.SetSeparatorPos(0);
-    std::set<rtl::OUString> aStyleNames;
+    std::set<OUString> aStyleNames;
     SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
     {
-        rtl::OUString aName = pStyle->GetName();
+        OUString aName = pStyle->GetName();
         aStyleNames.insert(aName);
     }
-    for(std::set<rtl::OUString>::const_iterator itr = aStyleNames.begin(), itrEnd = aStyleNames.end();
+    for(std::set<OUString>::const_iterator itr = aStyleNames.begin(), itrEnd = aStyleNames.end();
                         itr != itrEnd; ++itr)
     {
         rLbStyle.InsertEntry( *itr );
@@ -177,7 +177,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
 
     if(pFormatEntry)
     {
-        rtl::OUString aStyleName = pFormatEntry->GetStyle();
+        OUString aStyleName = pFormatEntry->GetStyle();
         maLbStyle.SelectEntry(aStyleName);
         StyleSelectHdl(NULL);
         ScConditionMode eMode = pFormatEntry->GetOperation();
@@ -306,7 +306,7 @@ void ScConditionFrmtEntry::Init()
 ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 {
     ScConditionMode eMode;
-    rtl::OUString aExpr2;
+    OUString aExpr2;
     switch(maLbCondType.GetSelectEntryPos())
     {
         case 0:
@@ -392,14 +392,14 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             return NULL;
     }
 
-    rtl::OUString aExpr1 = maEdVal1.GetText();
+    OUString aExpr1 = maEdVal1.GetText();
 
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
 
     return pEntry;
 }
 
-rtl::OUString ScConditionFrmtEntry::GetExpressionString()
+OUString ScConditionFrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos(), maEdVal1.GetText(), maEdVal2.GetText());
 }
@@ -467,12 +467,12 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         bool bFound = false;
         for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
         {
-            rtl::OUString aName = pStyle->GetName();
+            OUString aName = pStyle->GetName();
             if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
             {
                 for( sal_uInt16 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
                 {
-                    rtl::OUString aStyleName = ScGlobal::pCharClass->uppercase(rtl::OUString(rLbStyle.GetEntry(i)));
+                    OUString aStyleName = ScGlobal::pCharClass->uppercase(OUString(rLbStyle.GetEntry(i)));
                     if( i == n )
                     {
                         rLbStyle.InsertEntry(aName);
@@ -490,7 +490,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         }
     }
 
-    rtl::OUString aStyleName = rLbStyle.GetSelectEntry();
+    OUString aStyleName = rLbStyle.GetSelectEntry();
     SfxStyleSheetBase* pStyleSheet = pDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
     if(pStyleSheet)
     {
@@ -553,11 +553,11 @@ IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl)
 ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
 {
     ScConditionMode eMode = SC_COND_DIRECT;
-    rtl::OUString aFormula = maEdFormula.GetText();
+    OUString aFormula = maEdFormula.GetText();
     if(aFormula.isEmpty())
         return NULL;
 
-    rtl::OUString aExpr2;
+    OUString aExpr2;
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
     return pEntry;
 }
@@ -567,7 +567,7 @@ ScFormatEntry* ScFormulaFrmtEntry::GetEntry() const
     return createFormulaEntry();
 }
 
-rtl::OUString ScFormulaFrmtEntry::GetExpressionString()
+OUString ScFormulaFrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression(FORMULA, 0, maEdFormula.GetText());
 }
@@ -613,7 +613,7 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
             {
                 double nVal = rEntry.GetValue();
                 SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-                rtl::OUString aText;
+                OUString aText;
                 pNumberFormatter->GetInputLineString(nVal, 0, aText);
                 rEdit.SetText(aText);
             }
@@ -755,7 +755,7 @@ ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
     return pColorScale;
 }
 
-rtl::OUString ScColorScale2FrmtEntry::GetExpressionString()
+OUString ScColorScale2FrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression( COLORSCALE, 0 );
 }
@@ -921,7 +921,7 @@ ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
     return pColorScale;
 }
 
-rtl::OUString ScColorScale3FrmtEntry::GetExpressionString()
+OUString ScColorScale3FrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression( COLORSCALE, 0 );
 }
@@ -1040,7 +1040,7 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
             {
                 double nVal = rEntry.GetValue();
                 SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-                rtl::OUString aText;
+                OUString aText;
                 pNumberFormatter->GetInputLineString(nVal, 0, aText);
                 rEdit.SetText(aText);
             }
@@ -1116,7 +1116,7 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
     return pDataBar;
 }
 
-rtl::OUString ScDataBarFrmtEntry::GetExpressionString()
+OUString ScDataBarFrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression( DATABAR, 0 );
 }
@@ -1194,7 +1194,7 @@ ScDateFrmtEntry::ScDateFrmtEntry( Window* pParent, ScDocument* pDoc, const ScCon
         sal_Int32 nPos = static_cast<sal_Int32>(pFormat->GetDateType());
         maLbDateEntry.SelectEntryPos(nPos);
 
-        rtl::OUString aStyleName = pFormat->GetStyleName();
+        OUString aStyleName = pFormat->GetStyleName();
         maLbStyle.SelectEntry(aStyleName);
     }
 
@@ -1238,7 +1238,7 @@ ScFormatEntry* ScDateFrmtEntry::GetEntry() const
     return pNewEntry;
 }
 
-rtl::OUString ScDateFrmtEntry::GetExpressionString()
+OUString ScDateFrmtEntry::GetExpressionString()
 {
     return ScCondFormatHelper::GetExpression(DATE, 0);
 }
@@ -1308,7 +1308,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry( Window* pParent, ScIconSetType e
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument* pDoc, const ScAddress& rPos) const
 {
     sal_Int32 nPos = maLbEntryType.GetSelectEntryPos();
-    rtl::OUString aText = maEdEntry.GetText();
+    OUString aText = maEdEntry.GetText();
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
     sal_uInt32 nIndex = 0;

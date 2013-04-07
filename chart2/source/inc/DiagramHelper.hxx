@@ -53,7 +53,7 @@ public:
     typedef ::std::pair<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate >,
-            ::rtl::OUString >
+            OUString >
         tTemplateWithServiceName;
 
     /** tries to find a template in the chart-type manager that matches the
@@ -75,7 +75,7 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory > & xChartTypeManager,
-            const ::rtl::OUString & rPreferredTemplateName = ::rtl::OUString());
+            const OUString & rPreferredTemplateName = OUString());
 
     /** Sets the "SwapXAndYAxis" property at all coordinate systems found in the
         given diagram.
@@ -224,12 +224,12 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-    static ::com::sun::star::uno::Sequence< rtl::OUString >
+    static ::com::sun::star::uno::Sequence< OUString >
         getExplicitSimpleCategories(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< rtl::OUString >
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString >
         generateAutomaticCategoriesFromCooSys(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );

@@ -36,10 +36,10 @@ using namespace ::com::sun::star;
 
 // FIXME
 static G_CONST_RETURN gchar *
-getAsConst( const rtl::OString& rString )
+getAsConst( const OString& rString )
 {
     static const int nMax = 10;
-    static rtl::OString aUgly[nMax];
+    static OString aUgly[nMax];
     static int nIdx = 0;
     nIdx = (nIdx + 1) % nMax;
     aUgly[nIdx] = rString;
@@ -116,13 +116,13 @@ action_wrapper_get_localized_name (AtkAction *, gint)
 }
 
 #define ACTION_NAME_PAIR( OOoName, AtkName ) \
-    std::pair< const rtl::OUString, const gchar * > ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OOoName ) ), AtkName )
+    std::pair< const OUString, const gchar * > ( OUString( RTL_CONSTASCII_USTRINGPARAM( OOoName ) ), AtkName )
 
 static G_CONST_RETURN gchar *
 action_wrapper_get_name (AtkAction *action,
                          gint       i)
 {
-    static std::map< rtl::OUString, const gchar * > aNameMap;
+    static std::map< OUString, const gchar * > aNameMap;
 
     if( aNameMap.empty() )
     {
@@ -135,15 +135,15 @@ action_wrapper_get_name (AtkAction *action,
         accessibility::XAccessibleAction* pAction = getAction( action );
         if( pAction )
         {
-            std::map< rtl::OUString, const gchar * >::iterator iter;
+            std::map< OUString, const gchar * >::iterator iter;
 
-            rtl::OUString aDesc( pAction->getAccessibleActionDescription( i ) );
+            OUString aDesc( pAction->getAccessibleActionDescription( i ) );
 
             iter = aNameMap.find( aDesc );
             if( iter != aNameMap.end() )
                 return iter->second;
 
-            std::pair< const rtl::OUString, const gchar * > aNewVal( aDesc,
+            std::pair< const OUString, const gchar * > aNewVal( aDesc,
                 g_strdup( OUStringToConstGChar(aDesc) ) );
 
             if( aNameMap.insert( aNewVal ).second )
@@ -166,7 +166,7 @@ action_wrapper_get_name (AtkAction *action,
 */
 
 static inline void
-appendKeyStrokes(rtl::OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& rKeyStrokes)
+appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& rKeyStrokes)
 {
     for( sal_Int32 i = 0; i < rKeyStrokes.getLength(); i++ )
     {
@@ -222,7 +222,7 @@ action_wrapper_get_keybinding (AtkAction *action,
 
             if( xBinding.is() )
             {
-                rtl::OStringBuffer aRet;
+                OStringBuffer aRet;
 
                 sal_Int32 nmax = std::min( xBinding->getAccessibleKeyBindingCount(), (sal_Int32) 3 );
                 for( sal_Int32 n = 0; n < nmax; n++ )

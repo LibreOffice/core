@@ -48,17 +48,17 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return 11 * arg; }
 
-    virtual rtl::OUString SAL_CALL fn12(rtl::OUString const & arg)
+    virtual OUString SAL_CALL fn12(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString("12") + arg; }
+    { return OUString("12") + arg; }
 
     virtual sal_Int32 SAL_CALL fn21(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException)
     { return 21 * arg; }
 
-    virtual rtl::OUString SAL_CALL fn22(rtl::OUString const & arg)
+    virtual OUString SAL_CALL fn22(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString("22") + arg; }
+    { return OUString("22") + arg; }
 
     virtual double SAL_CALL getatt3()
         throw (com::sun::star::uno::RuntimeException)
@@ -72,9 +72,9 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return 31 * arg; }
 
-    virtual rtl::OUString SAL_CALL fn32(rtl::OUString const & arg)
+    virtual OUString SAL_CALL fn32(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString("32") + arg; }
+    { return OUString("32") + arg; }
 
     virtual sal_Int32 SAL_CALL fn33()
         throw (com::sun::star::uno::RuntimeException)
@@ -88,17 +88,17 @@ public:
         throw (com::sun::star::uno::RuntimeException)
     { return 61 * arg; }
 
-    virtual rtl::OUString SAL_CALL fn62(rtl::OUString const & arg)
+    virtual OUString SAL_CALL fn62(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString("62") + arg; }
+    { return OUString("62") + arg; }
 
     virtual sal_Int32 SAL_CALL fn71(sal_Int32 arg)
         throw (com::sun::star::uno::RuntimeException)
     { return 71 * arg; }
 
-    virtual rtl::OUString SAL_CALL fn72(rtl::OUString const & arg)
+    virtual OUString SAL_CALL fn72(OUString const & arg)
         throw (com::sun::star::uno::RuntimeException)
-    { return rtl::OUString("72") + arg; }
+    { return OUString("72") + arg; }
 
     virtual sal_Int32 SAL_CALL fn73()
         throw (com::sun::star::uno::RuntimeException)
@@ -109,7 +109,7 @@ private:
     double m_attribute3;
 };
 
-rtl::OUString testMulti(
+OUString testMulti(
     com::sun::star::uno::Reference< test::testtools::bridgetest::XMulti >
     const & multi);
 

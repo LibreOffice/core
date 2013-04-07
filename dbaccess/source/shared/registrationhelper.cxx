@@ -27,15 +27,15 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-uno::Sequence< ::rtl::OUString >*                   OModuleRegistration::s_pImplementationNames = NULL;
-uno::Sequence< uno::Sequence< ::rtl::OUString > >*  OModuleRegistration::s_pSupportedServices = NULL;
+uno::Sequence< OUString >*                   OModuleRegistration::s_pImplementationNames = NULL;
+uno::Sequence< uno::Sequence< OUString > >*  OModuleRegistration::s_pSupportedServices = NULL;
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pCreationFunctionPointers = NULL;
 uno::Sequence< sal_Int64 >*                 OModuleRegistration::s_pFactoryFunctionPointers = NULL;
 
 //--------------------------------------------------------------------------
 void OModuleRegistration::registerComponent(
-    const ::rtl::OUString& _rImplementationName,
-    const uno::Sequence< ::rtl::OUString >& _rServiceNames,
+    const OUString& _rImplementationName,
+    const uno::Sequence< OUString >& _rServiceNames,
     ComponentInstantiation _pCreateFunction,
     FactoryInstantiation _pFactoryFunction)
 {
@@ -43,8 +43,8 @@ void OModuleRegistration::registerComponent(
     {
         OSL_ENSURE(!s_pSupportedServices && !s_pCreationFunctionPointers && !s_pFactoryFunctionPointers,
             "OModuleRegistration::registerComponent : inconsistent state (the pointers (1)) !");
-        s_pImplementationNames = new uno::Sequence< ::rtl::OUString >;
-        s_pSupportedServices = new uno::Sequence< uno::Sequence< ::rtl::OUString > >;
+        s_pImplementationNames = new uno::Sequence< OUString >;
+        s_pSupportedServices = new uno::Sequence< uno::Sequence< OUString > >;
         s_pCreationFunctionPointers = new uno::Sequence< sal_Int64 >;
         s_pFactoryFunctionPointers = new uno::Sequence< sal_Int64 >;
     }
@@ -69,7 +69,7 @@ void OModuleRegistration::registerComponent(
 }
 
 //--------------------------------------------------------------------------
-void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementationName)
+void OModuleRegistration::revokeComponent(const OUString& _rImplementationName)
 {
     if (!s_pImplementationNames)
     {
@@ -84,7 +84,7 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
         "OModuleRegistration::revokeComponent : inconsistent state !");
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
-    const ::rtl::OUString* pImplNames = s_pImplementationNames->getConstArray();
+    const OUString* pImplNames = s_pImplementationNames->getConstArray();
     for (sal_Int32 i=0; i<nLen; ++i, ++pImplNames)
     {
         if (pImplNames->equals(_rImplementationName))
@@ -108,7 +108,7 @@ void OModuleRegistration::revokeComponent(const ::rtl::OUString& _rImplementatio
 
 //--------------------------------------------------------------------------
 uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
-    const ::rtl::OUString& _rImplementationName,
+    const OUString& _rImplementationName,
     const uno::Reference< lang::XMultiServiceFactory >& _rxServiceManager)
 {
     OSL_ENSURE(_rxServiceManager.is(), "OModuleRegistration::getComponentFactory : invalid argument (service manager) !");
@@ -131,8 +131,8 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
 
 
     sal_Int32 nLen = s_pImplementationNames->getLength();
-    const ::rtl::OUString* pImplName = s_pImplementationNames->getConstArray();
-    const uno::Sequence< ::rtl::OUString >* pServices = s_pSupportedServices->getConstArray();
+    const OUString* pImplName = s_pImplementationNames->getConstArray();
+    const uno::Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
     const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
     const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
 

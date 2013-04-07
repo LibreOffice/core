@@ -49,7 +49,7 @@ namespace connectivity
             const ::com::sun::star::util::Date& rNullDate ) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString getFormattedValue(
+        virtual OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
             const ::com::sun::star::util::Date& _rNullDate,
@@ -57,7 +57,7 @@ namespace connectivity
             sal_Int16 _nKeyType) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString getFormattedValue(
+        virtual OUString getFormattedValue(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
             const ::com::sun::star::lang::Locale& _rLocale,
@@ -67,9 +67,9 @@ namespace connectivity
         // IDataAccessTools
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rUser,
-            const ::rtl::OUString& _rPwd,
+            const OUString& _rDataSourceName,
+            const OUString& _rUser,
+            const OUString& _rPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
@@ -108,21 +108,21 @@ namespace connectivity
         ) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString quoteName(
-            const ::rtl::OUString& _rQuote,
-            const ::rtl::OUString& _rName
+        virtual OUString quoteName(
+            const OUString& _rQuote,
+            const OUString& _rName
         ) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString composeTableNameForSelect(
+        virtual OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::rtl::OUString& _rCatalog,
-            const ::rtl::OUString& _rSchema,
-            const ::rtl::OUString& _rName
+            const OUString& _rCatalog,
+            const OUString& _rSchema,
+            const OUString& _rName
         ) const;
 
         // ------------------------------------------------
-        virtual ::rtl::OUString composeTableNameForSelect(
+        virtual OUString composeTableNameForSelect(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable
         ) const;
@@ -131,13 +131,13 @@ namespace connectivity
         virtual ::com::sun::star::sdb::SQLContext prependContextInfo(
             ::com::sun::star::sdbc::SQLException& _rException,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
-            const ::rtl::OUString& _rContextDescription,
-            const ::rtl::OUString& _rContextDetails
+            const OUString& _rContextDescription,
+            const OUString& _rContextDetails
         ) const;
 
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > getDataSource(
-            const ::rtl::OUString& _rsRegisteredName,
+            const OUString& _rsRegisteredName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const;
 
@@ -164,17 +164,17 @@ namespace connectivity
             getFieldsByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
-                const ::rtl::OUString& _rCommand,
+                const OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        virtual ::com::sun::star::uno::Sequence< OUString >
             getFieldNamesByCommandDescriptor(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                 const sal_Int32 _nCommandType,
-                const ::rtl::OUString& _rCommand,
+                const OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 

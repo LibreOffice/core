@@ -92,7 +92,7 @@ void Close(){
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 {
 
-    global::exporter->pParseQueue->Push( QueueEntry( nTyp , rtl::OString(pTokenText) ) );
+    global::exporter->pParseQueue->Push( QueueEntry( nTyp , OString(pTokenText) ) );
     return 1;
 }
 
@@ -126,7 +126,7 @@ int GetError()
 //
 
 /*****************************************************************************/
-sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
+sal_Bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
 /*****************************************************************************/
 {
     if ( nLevel > nIdLevel )
@@ -136,7 +136,7 @@ sal_Bool ResData::SetId( const rtl::OString& rId, sal_uInt16 nLevel )
 
         if ( bChild && bChildWithText )
         {
-            rtl::OString sError(RTL_CONSTASCII_STRINGPARAM("ResId after child definition"));
+            OString sError(RTL_CONSTASCII_STRINGPARAM("ResId after child definition"));
             yyerror(sError.getStr());
             SetError();
         }
@@ -243,7 +243,7 @@ void Export::Init()
     bNextMustBeDefineEOL = sal_False;
     nLevel = 0;
     nList = LIST_NON;
-    m_sListLang = rtl::OString();
+    m_sListLang = OString();
     nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
@@ -283,15 +283,15 @@ int Export::Execute( int nToken, const char * pToken )
 /*****************************************************************************/
 {
 
-    rtl::OString sToken( pToken );
-    rtl::OString sOrig( sToken );
+    OString sToken( pToken );
+    OString sOrig( sToken );
     sal_Bool bWriteToMerged = bMergeMode;
 
     if ( nToken == CONDITION )
     {
-        rtl::OString sTestToken(pToken);
-        sTestToken = sTestToken.replaceAll("\t", rtl::OString()).
-            replaceAll(" ", rtl::OString());
+        OString sTestToken(pToken);
+        sTestToken = sTestToken.replaceAll("\t", OString()).
+            replaceAll(" ", OString());
         if (( !bReadOver ) && ( sTestToken.indexOf("#ifndef__RSC_PARSER") == 0 ))
             bReadOver = sal_True;
         else if (( bReadOver ) && ( sTestToken.indexOf("#endif") == 0 ))
@@ -417,14 +417,14 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            sToken = sToken.replaceAll("\n", rtl::OString()).
-                replaceAll("\r", rtl::OString()).
-                replaceAll("{", rtl::OString()).replace('\t', ' ');
+            sToken = sToken.replaceAll("\n", OString()).
+                replaceAll("\r", OString()).
+                replaceAll("{", OString()).replace('\t', ' ');
             sToken = sToken.trim();
-            rtl::OString sTLower = sToken.getToken(0, ' ').toAsciiLowerCase();
+            OString sTLower = sToken.getToken(0, ' ').toAsciiLowerCase();
             pResData->sResTyp = sTLower;
-            rtl::OString sId( sToken.copy( pResData->sResTyp.getLength() + 1 ));
-            rtl::OString sCondition;
+            OString sId( sToken.copy( pResData->sResTyp.getLength() + 1 ));
+            OString sCondition;
             if ( sId.indexOf( '#' ) != -1 )
             {
                 // between ResTyp, Id and paranthes is a precomp. condition
@@ -435,7 +435,7 @@ int Export::Execute( int nToken, const char * pToken )
             }
             sId = sId.getToken(0, '/');
             CleanValue( sId );
-            sId = sId.replaceAll("\t", rtl::OString());
+            sId = sId.replaceAll("\t", OString());
             pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
             if (!sCondition.isEmpty())
             {
@@ -456,12 +456,12 @@ int Export::Execute( int nToken, const char * pToken )
 
             pResData = new ResData( sActPForm, FullId() , sFilename );
             aResStack.push_back( pResData );
-            sToken = sToken.replaceAll("\n", rtl::OString()).
-                replaceAll("\r", rtl::OString()).
-                replaceAll("{", rtl::OString()).
-                replaceAll("\t", rtl::OString()).
-                replaceAll(" ", rtl::OString()).
-                replaceAll("\\", rtl::OString()).toAsciiLowerCase();
+            sToken = sToken.replaceAll("\n", OString()).
+                replaceAll("\r", OString()).
+                replaceAll("{", OString()).
+                replaceAll("\t", OString()).
+                replaceAll(" ", OString()).
+                replaceAll("\\", OString()).toAsciiLowerCase();
             pResData->sResTyp = sToken;
         }
         break;
@@ -473,7 +473,7 @@ int Export::Execute( int nToken, const char * pToken )
                 break;
 
             bDontWriteOutput = sal_False;
-            rtl::OString sLowerTyp;
+            OString sLowerTyp;
             if ( pResData )
                 sLowerTyp = "unknown";
             nLevel++;
@@ -521,17 +521,17 @@ int Export::Execute( int nToken, const char * pToken )
             bDontWriteOutput = sal_False;
             // interpret different types of assignement
             sal_Int32 n = 0;
-            rtl::OString sKey = sToken.getToken(0, '=', n).
-                replaceAll(" ", rtl::OString()).
-                replaceAll("\t", rtl::OString());
-            rtl::OString sValue = sToken.getToken(0, '=', n);
+            OString sKey = sToken.getToken(0, '=', n).
+                replaceAll(" ", OString()).
+                replaceAll("\t", OString());
+            OString sValue = sToken.getToken(0, '=', n);
             CleanValue( sValue );
             sKey = sKey.toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("IDENTIFIER")))
             {
-                rtl::OString sId(
-                    sValue.replaceAll("\t", rtl::OString()).
-                    replaceAll(" ", rtl::OString()));
+                OString sId(
+                    sValue.replaceAll("\t", OString()).
+                    replaceAll(" ", OString()));
                 pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
             }
             else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("HELPID")))
@@ -574,14 +574,14 @@ int Export::Execute( int nToken, const char * pToken )
         case LISTASSIGNMENT:
         {
             bDontWriteOutput = sal_False;
-            rtl::OString sTmpToken(
-                sToken.replaceAll(" ", rtl::OString()).toAsciiLowerCase());
+            OString sTmpToken(
+                sToken.replaceAll(" ", OString()).toAsciiLowerCase());
             sal_Int32 nPos = sTmpToken.indexOf("[en-us]=");
             if (nPos != -1) {
-                rtl::OString sKey(
-                    sTmpToken.copy(0 , nPos).replaceAll(" ", rtl::OString()).
-                    replaceAll("\t", rtl::OString()));
-                rtl::OString sValue = sToken.getToken(1, '=');
+                OString sKey(
+                    sTmpToken.copy(0 , nPos).replaceAll(" ", OString()).
+                    replaceAll("\t", OString()));
+                OString sValue = sToken.getToken(1, '=');
                 CleanValue( sValue );
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
@@ -630,9 +630,9 @@ int Export::Execute( int nToken, const char * pToken )
             {
                 // new res. is a String- or FilterList
                 sal_Int32 n = 0;
-                rtl::OString sKey(
-                    sToken.getToken(0, '[', n).replaceAll(" ", rtl::OString()).
-                    replaceAll("\t", rtl::OString()).toAsciiUpperCase());
+                OString sKey(
+                    sToken.getToken(0, '[', n).replaceAll(" ", OString()).
+                    replaceAll("\t", OString()).toAsciiUpperCase());
                 if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("STRINGLIST")))
                     nList = LIST_STRING;
                 else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("FILTERLIST")))
@@ -644,7 +644,7 @@ int Export::Execute( int nToken, const char * pToken )
                 else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("UIENTRIES")))
                     nList = LIST_UIENTRIES;
                 if ( nList ) {
-                    rtl::OString sLang = sToken.getToken(0, ']', n);
+                    OString sLang = sToken.getToken(0, ']', n);
                     CleanValue( sLang );
                     m_sListLang = sLang;
                     nListIndex = 0;
@@ -660,7 +660,7 @@ int Export::Execute( int nToken, const char * pToken )
             if ( nList ) {
                 SetChildWithText();
                 sal_Int32 n = 0;
-                rtl::OString sEntry(sToken.getToken(1, '"', n));
+                OString sEntry(sToken.getToken(1, '"', n));
                 if ( lcl_countOccurrences(sToken, '"') > 2 )
                     sEntry += "\"";
                 if ( sEntry == "\\\"" )
@@ -681,20 +681,20 @@ int Export::Execute( int nToken, const char * pToken )
                 CutComment( sToken );
 
                 // this is a text line!!!
-                rtl::OString t(sToken.getToken(0, '='));
-                rtl::OString sKey(
-                    t.getToken(0, '[').replaceAll(" ", rtl::OString()).
-                    replaceAll("\t", rtl::OString()));
-                rtl::OString sText( GetText( sToken, nToken ));
-                rtl::OString sLang;
+                OString t(sToken.getToken(0, '='));
+                OString sKey(
+                    t.getToken(0, '[').replaceAll(" ", OString()).
+                    replaceAll("\t", OString()));
+                OString sText( GetText( sToken, nToken ));
+                OString sLang;
                 if ( sToken.getToken(0, '=').indexOf('[') != -1 )
                 {
                     sLang = sToken.getToken(0, '=').getToken(1, '[').
                         getToken(0, ']');
                     CleanValue( sLang );
                 }
-                rtl::OString sLangIndex = sLang;
-                rtl::OString sOrigKey = sKey;
+                OString sLangIndex = sLang;
+                OString sOrigKey = sKey;
                 if ( !sText.isEmpty() && !sLang.isEmpty() )
                 {
                     sKey = sKey.toAsciiUpperCase();
@@ -717,7 +717,7 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sText[ sLangIndex ].isEmpty())
                             {
-                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
                                 sError.append(RTL_CONSTASCII_STRINGPARAM("defined twice"));
                                 yyerror(sError.getStr());
@@ -734,7 +734,7 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sHelpText[ sLangIndex ].isEmpty())
                             {
-                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
                                 sError.append(" defined twice");
                                 YYWarning(sError.getStr());
@@ -751,7 +751,7 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if (!pResData->sQuickHelpText[ sLangIndex ].isEmpty())
                             {
-                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
                                 sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
                                 YYWarning(sError.getStr());
@@ -768,7 +768,7 @@ int Export::Execute( int nToken, const char * pToken )
                         {
                             if ( !pResData->sTitle[ sLangIndex ].isEmpty())
                             {
-                                rtl::OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
+                                OStringBuffer sError(RTL_CONSTASCII_STRINGPARAM("Language "));
                                 sError.append(sLangIndex);
                                 sError.append(RTL_CONSTASCII_STRINGPARAM(" defined twice"));
                                 YYWarning(sError.getStr());
@@ -795,14 +795,14 @@ int Export::Execute( int nToken, const char * pToken )
             // this is a AppfontMapping, so look if its a definition
             // of field size
             sal_Int32 n = 0;
-            rtl::OString sKey(
-                sToken.getToken(0, '=', n).replaceAll(" ", rtl::OString()).
-                replaceAll("\t", rtl::OString()));
-            rtl::OString sMapping = sToken.getToken(0, '=', n);
+            OString sKey(
+                sToken.getToken(0, '=', n).replaceAll(" ", OString()).
+                replaceAll("\t", OString()));
+            OString sMapping = sToken.getToken(0, '=', n);
             sMapping = sMapping.getToken(1, '(');
             sMapping = sMapping.getToken(0, ')').
-                replaceAll(rtl::OString(' '), rtl::OString()).
-                replaceAll(rtl::OString('\t'), rtl::OString()).
+                replaceAll(OString(' '), OString()).
+                replaceAll(OString('\t'), OString()).
                 toAsciiUpperCase();
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("SIZE"))) {
                 pResData->nWidth = sMapping.getToken(0, ',').toInt32();
@@ -825,7 +825,7 @@ int Export::Execute( int nToken, const char * pToken )
                 }
             }
             sal_Int32 n = 0;
-            rtl::OString sCondition(sToken.getToken(0, ' ', n));
+            OString sCondition(sToken.getToken(0, ' ', n));
             if ( sCondition == "#ifndef" ) {
                 sActPForm = "!defined ";
                 sActPForm += sToken.getToken(0, ' ', n);
@@ -894,11 +894,11 @@ int Export::Execute( int nToken, const char * pToken )
 }
 
 /*****************************************************************************/
-void Export::CutComment( rtl::OString &rText )
+void Export::CutComment( OString &rText )
 /*****************************************************************************/
 {
     if (rText.indexOf("//") != -1) {
-        rtl::OString sWork(rText.replaceAll("\\\"", "XX"));
+        OString sWork(rText.replaceAll("\\\"", "XX"));
         bool bInner = false;
         for (sal_Int32 i = 0; i < sWork.getLength() - 1; ++i) {
             if (sWork[i] == '"') {
@@ -931,17 +931,17 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         (  !pResData->sTitle[ SOURCE_LANGUAGE ].isEmpty()))
 
        {
-        rtl::OString sGID = pResData->sGId;
-        rtl::OString sLID;
+        OString sGID = pResData->sGId;
+        OString sLID;
         if (sGID.isEmpty())
             sGID = pResData->sId;
         else
             sLID = pResData->sId;
 
-        rtl::OString sXText;
-        rtl::OString sXHText;
-        rtl::OString sXQHText;
-        rtl::OString sXTitle;
+        OString sXText;
+        OString sXHText;
+        OString sXQHText;
+        OString sXTitle;
 
         sXText = pResData->sText[ SOURCE_LANGUAGE ];
         if (!pResData->sText[ X_COMMENT ].isEmpty())
@@ -975,31 +975,31 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
         }
     }
     if ( pResData->pStringList ) {
-        rtl::OString sList( "stringlist" );
+        OString sList( "stringlist" );
         WriteExportList( pResData, pResData->pStringList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pStringList = 0;
     }
     if ( pResData->pFilterList ) {
-        rtl::OString sList( "filterlist" );
+        OString sList( "filterlist" );
         WriteExportList( pResData, pResData->pFilterList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pFilterList = 0;
     }
     if ( pResData->pItemList ) {
-        rtl::OString sList( "itemlist" );
+        OString sList( "itemlist" );
         WriteExportList( pResData, pResData->pItemList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pItemList = 0;
     }
     if ( pResData->pPairedList ) {
-        rtl::OString sList( "pairedlist" );
+        OString sList( "pairedlist" );
         WriteExportList( pResData, pResData->pPairedList, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pPairedList = 0;
     }
     if ( pResData->pUIEntries ) {
-        rtl::OString sList( "uientries" );
+        OString sList( "uientries" );
         WriteExportList( pResData, pResData->pUIEntries, sList, bCreateNew );
         if ( bCreateNew )
             pResData->pUIEntries = 0;
@@ -1007,32 +1007,32 @@ sal_Bool Export::WriteData( ResData *pResData, sal_Bool bCreateNew )
     return sal_True;
 }
 
-rtl::OString Export::GetPairedListID(const rtl::OString& rText)
+OString Export::GetPairedListID(const OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
     return rText.getToken(1, ';').toAsciiUpperCase().replace('\t', ' ').trim();
 }
 
-rtl::OString Export::GetPairedListString(const rtl::OString& rText)
+OString Export::GetPairedListString(const OString& rText)
 {
 // < "STRING" ; IDENTIFIER ; > ;
-    rtl::OString sString(rText.getToken(0, ';').replace('\t', ' '));
+    OString sString(rText.getToken(0, ';').replace('\t', ' '));
     sString = sString.trim();
-    rtl::OString s1(sString.copy(sString.indexOf('"') + 1));
+    OString s1(sString.copy(sString.indexOf('"') + 1));
     sString = s1.copy(0, s1.lastIndexOf('"'));
     return sString.trim();
 }
 
-rtl::OString Export::StripList(const rtl::OString & rText)
+OString Export::StripList(const OString & rText)
 {
-    rtl::OString s1 = rText.copy( rText.indexOf('\"') + 1);
+    OString s1 = rText.copy( rText.indexOf('\"') + 1);
     return s1.copy( 0 , s1.lastIndexOf('\"'));
 }
 
 sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
-    const rtl::OString &rTyp, sal_Bool bCreateNew)
+    const OString &rTyp, sal_Bool bCreateNew)
 {
-    rtl::OString sGID(pResData->sGId);
+    OString sGID(pResData->sGId);
     if (sGID.isEmpty())
         sGID = pResData->sId;
     else {
@@ -1043,18 +1043,18 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
         }
     }
 
-    rtl::OString sCur;
+    OString sCur;
     for ( size_t i = 0; pExportList != NULL && i < pExportList->size(); i++ )
     {
         ExportListEntry *pEntry = (*pExportList)[  i ];
 
-        rtl::OString sLID(rtl::OString::valueOf(static_cast<sal_Int64>(i + 1)));
+        OString sLID(OString::valueOf(static_cast<sal_Int64>(i + 1)));
         for (unsigned int n = 0; n < aLanguages.size(); ++n)
         {
             sCur = aLanguages[ n ];
             if (!(*pEntry)[ SOURCE_LANGUAGE ].isEmpty())
             {
-                rtl::OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
+                OString sText((*pEntry)[ SOURCE_LANGUAGE ] );
 
                 // Strip PairList Line String
                 if (rTyp.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("pairedlist")))
@@ -1084,22 +1084,22 @@ sal_Bool Export::WriteExportList(ResData *pResData, ExportList *pExportList,
     return sal_True;
 }
 
-rtl::OString Export::FullId()
+OString Export::FullId()
 {
-    rtl::OStringBuffer sFull;
+    OStringBuffer sFull;
     if ( nLevel > 1 )
     {
         sFull.append(aResStack[ 0 ]->sId);
         for ( size_t i = 1; i < nLevel - 1; ++i )
         {
-            rtl::OString sToAdd = aResStack[ i ]->sId;
+            OString sToAdd = aResStack[ i ]->sId;
             if (!sToAdd.isEmpty())
                 sFull.append('.').append(sToAdd);
         }
     }
     if (sFull.getLength() > 255)
     {
-        rtl::OString sError(RTL_CONSTASCII_STRINGPARAM("GroupId > 255 chars"));
+        OString sError(RTL_CONSTASCII_STRINGPARAM("GroupId > 255 chars"));
         printf("GroupID = %s\n", sFull.getStr());
         yyerror(sError.getStr());
     }
@@ -1107,7 +1107,7 @@ rtl::OString Export::FullId()
     return sFull.makeStringAndClear();
 }
 
-void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLine)
+void Export::InsertListEntry(const OString &rText, const OString &rLine)
 {
     ResData *pResData = ( nLevel-1 < aResStack.size() ) ? aResStack[ nLevel-1 ] : NULL;
 
@@ -1179,7 +1179,7 @@ void Export::InsertListEntry(const rtl::OString &rText, const rtl::OString &rLin
 }
 
 /*****************************************************************************/
-void Export::CleanValue( rtl::OString &rValue )
+void Export::CleanValue( OString &rValue )
 /*****************************************************************************/
 {
     while ( !rValue.isEmpty()) {
@@ -1205,18 +1205,18 @@ void Export::CleanValue( rtl::OString &rValue )
 #define TXT_STATE_TEXT  0x001
 #define TXT_STATE_MACRO 0x002
 
-rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
+OString Export::GetText(const OString &rSource, int nToken)
 {
-    rtl::OString sReturn;
+    OString sReturn;
     switch ( nToken )
     {
         case TEXTLINE:
         case LONGTEXTLINE:
         {
-            rtl::OString sTmp(rSource.copy(rSource.indexOf('=')));
+            OString sTmp(rSource.copy(rSource.indexOf('=')));
             CleanValue( sTmp );
-            sTmp = sTmp.replaceAll("\n", rtl::OString()).
-                replaceAll("\r", rtl::OString()).
+            sTmp = sTmp.replaceAll("\n", OString()).
+                replaceAll("\r", OString()).
                 replaceAll("\\\\\"", "-=<[BSlashBSlashHKom]>=-\"").
                 replaceAll("\\\"", "-=<[Hochkomma]>=-").
                 replaceAll("\\", "-=<[0x7F]>=-").
@@ -1225,7 +1225,7 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
             sal_uInt16 nState = TXT_STATE_TEXT;
             for (sal_Int32 i = 1; i <= lcl_countOccurrences(sTmp, '"'); ++i)
             {
-                rtl::OString sToken(sTmp.getToken(i, '"'));
+                OString sToken(sTmp.getToken(i, '"'));
                 if (!sToken.isEmpty()) {
                     if ( nState == TXT_STATE_TEXT ) {
                         sReturn += sToken;
@@ -1262,9 +1262,9 @@ rtl::OString Export::GetText(const rtl::OString &rSource, int nToken)
     return sReturn;
 }
 
-void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
+void Export::WriteToMerged(const OString &rText , bool bSDFContent)
 {
-    rtl::OString sText(rText);
+    OString sText(rText);
     for (;;) {
         sal_Int32 n = 0;
         sText = sText.replaceFirst(" \n", "\n", &n);
@@ -1312,15 +1312,15 @@ void Export::WriteToMerged(const rtl::OString &rText , bool bSDFContent)
 }
 
 /*****************************************************************************/
-void Export::ConvertMergeContent( rtl::OString &rText )
+void Export::ConvertMergeContent( OString &rText )
 /*****************************************************************************/
 {
     sal_Bool bNoOpen = ( rText.indexOf( "\\\"" ) != 0 );
     sal_Bool bNoClose = !rText.endsWithL(RTL_CONSTASCII_STRINGPARAM("\\\""));
-    rtl::OStringBuffer sNew;
+    OStringBuffer sNew;
     for ( sal_Int32 i = 0; i < rText.getLength(); i++ )
     {
-        rtl::OString sChar( rText[i]);
+        OString sChar( rText[i]);
         if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\\")))
         {
             if (( i + 1 ) < rText.getLength())
@@ -1328,41 +1328,41 @@ void Export::ConvertMergeContent( rtl::OString &rText )
                 sal_Char cNext = rText[i + 1];
                 if ( cNext == '\"' )
                 {
-                    sChar = rtl::OString('\"');
+                    sChar = OString('\"');
                     i++;
                 }
                 else if ( cNext == 'n' )
                 {
-                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\n"));
+                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\n"));
                     i++;
                 }
                 else if ( cNext == 't' )
                 {
-                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\t"));
+                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\t"));
                     i++;
                 }
                 else if ( cNext == '\'' )
                 {
-                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\'"));
+                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\'"));
                     i++;
                 }
                 else
                 {
-                    sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
+                    sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
                 }
             }
             else
             {
-                sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
+                sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\\"));
             }
         }
         else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("\"")))
         {
-            sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\\""));
+            sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\\""));
         }
         else if (sChar.equalsL(RTL_CONSTASCII_STRINGPARAM("")))
         {
-            sChar = rtl::OString(RTL_CONSTASCII_STRINGPARAM("\\0x7F"));
+            sChar = OString(RTL_CONSTASCII_STRINGPARAM("\\0x7F"));
         }
         sNew.append(sChar);
     }
@@ -1370,7 +1370,7 @@ void Export::ConvertMergeContent( rtl::OString &rText )
     rText = sNew.makeStringAndClear();
 
     if ( bNoOpen ) {
-        rtl::OString sTmp( rText );
+        OString sTmp( rText );
         rText = "\"";
         rText += sTmp;
     }
@@ -1378,17 +1378,17 @@ void Export::ConvertMergeContent( rtl::OString &rText )
         rText += "\"";
 }
 
-sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
-    rtl::OString &rLangIndex, ResData *pResData)
+sal_Bool Export::PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
+    OString &rLangIndex, ResData *pResData)
 {
     // position to merge in:
     sal_Int32 nStart = 0;
     sal_Int32 nEnd = 0;
-    rtl::OString sOldId = pResData->sId;
-    rtl::OString sOldGId = pResData->sGId;
-    rtl::OString sOldTyp = pResData->sResTyp;
+    OString sOldId = pResData->sId;
+    OString sOldGId = pResData->sGId;
+    OString sOldTyp = pResData->sResTyp;
 
-    rtl::OString sOrigText( rText );
+    OString sOrigText( rText );
 
     switch ( nTyp ) {
         case LIST_STRING :
@@ -1454,7 +1454,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
             if (( sLastListLine.indexOf( '>' ) != -1 ) &&
                 ( sLastListLine.indexOf( '<' ) == -1 ))
             {
-                rtl::OString sTmp = sLastListLine;
+                OString sTmp = sLastListLine;
                 sLastListLine = "<";
                 sLastListLine += sTmp;
             }
@@ -1465,7 +1465,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
             else pResData->sId = OString::number(nListIndex);
 
             if (!pResData->sGId.isEmpty())
-                pResData->sGId = pResData->sGId + rtl::OString('.');
+                pResData->sGId = pResData->sGId + OString('.');
             pResData->sGId = pResData->sGId + sOldId;
             nTyp = STRING_TYP_TEXT;
         }
@@ -1538,7 +1538,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
         return sal_False; // no data found
     }
 
-    rtl::OString sContent;
+    OString sContent;
     pEntrys->GetTransex3Text(sContent, nTyp, rLangIndex);
     if (sContent.isEmpty() && !rLangIndex.equalsIgnoreAsciiCase("en-US"))
     {
@@ -1549,7 +1549,7 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     if (rLangIndex.equalsIgnoreAsciiCase("en-US"))
         return sal_False;
 
-    rtl::OString sPostFix( rText.copy( ++nEnd ));
+    OString sPostFix( rText.copy( ++nEnd ));
     rText = rText.copy(0, nStart);
 
     ConvertMergeContent( sContent );
@@ -1563,19 +1563,19 @@ sal_Bool Export::PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
     return sal_True;
 }
 
-void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::OString& rTextType )
+void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OString& rTextType )
 {
     sal_Bool bAddSemicolon = sal_False;
     sal_Bool bFirst = sal_True;
-    rtl::OString sCur;
+    OString sCur;
 
     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
         sCur = aLanguages[ n ];
 
-        rtl::OString sText;
+        OString sText;
         sal_Bool bText = pEntry->GetTransex3Text( sText, nType, sCur , sal_True );
         if ( bText && !sText.isEmpty() && sText != "-" ) {
-            rtl::OString sOutput;
+            OString sOutput;
             if ( bNextMustBeDefineEOL)  {
                 if ( bFirst )
                     sOutput += "\t\\\n";
@@ -1610,7 +1610,7 @@ void Export::ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::O
 
 
     if ( bAddSemicolon ) {
-        rtl::OString sOutput( ";" );
+        OString sOutput( ";" );
         WriteToMerged( sOutput , false );
     }
 }
@@ -1640,23 +1640,23 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                     ResData2Output( pEntry, STRING_TYP_TEXT, pResData->sTextTyp );
 
                 if ( pResData->bQuickHelpText )
-                    ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, rtl::OString("QuickHelpText") );
+                    ResData2Output( pEntry, STRING_TYP_QUICKHELPTEXT, OString("QuickHelpText") );
 
                 if ( pResData->bTitle )
-                    ResData2Output( pEntry, STRING_TYP_TITLE, rtl::OString("Title") );
+                    ResData2Output( pEntry, STRING_TYP_TITLE, OString("Title") );
             }
 
             // Merge Lists
 
             if ( pResData->bList ) {
                 bool bPairedList = false;
-                rtl::OString sOldId = pResData->sId;
-                rtl::OString sOldGId = pResData->sGId;
-                rtl::OString sOldTyp = pResData->sResTyp;
+                OString sOldId = pResData->sId;
+                OString sOldGId = pResData->sGId;
+                OString sOldTyp = pResData->sResTyp;
                 if (!pResData->sGId.isEmpty())
-                    pResData->sGId = pResData->sGId + rtl::OString('.');
+                    pResData->sGId = pResData->sGId + OString('.');
                 pResData->sGId = pResData->sGId + sOldId;
-                rtl::OString sSpace;
+                OString sSpace;
                 for ( sal_uInt16 i = 1; i < nLevel-1; i++ )
                     sSpace += "\t";
                 for ( sal_uInt16 nT = LIST_STRING; nT <= LIST_UIENTRIES; nT++ ) {
@@ -1668,7 +1668,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         case LIST_ITEM : pResData->sResTyp = "itemlist"; pList = pResData->pItemList;       bPairedList = false; break;
                         case LIST_PAIRED : pResData->sResTyp = "pairedlist"; pList = pResData->pPairedList; bPairedList = true;  break;
                     }
-                    rtl::OString sCur;
+                    OString sCur;
                     for( unsigned int n = 0; n < aLanguages.size(); n++ )
                     {
                         sCur = aLanguages[ n ];
@@ -1711,7 +1711,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                         while(( nLIndex < nMaxIndex )) {
                             if ( nIdx == 1 )
                             {
-                                rtl::OStringBuffer sHead;
+                                OStringBuffer sHead;
                                 if ( bNextMustBeDefineEOL )
                                     sHead.append(RTL_CONSTASCII_STRINGPARAM("\\\n\t"));
                                 sHead.append(sSpace);
@@ -1750,7 +1750,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 }
                                 WriteToMerged(sHead.makeStringAndClear() , true);
                             }
-                            rtl::OString sLine;
+                            OString sLine;
                             if ( pList && (*pList)[ nLIndex ] )
                                 sLine = ( *(*pList)[ nLIndex ])[ SOURCE_LANGUAGE ];
                             if ( sLine.isEmpty())
@@ -1778,7 +1778,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                     sal_Int32 nStart, nEnd;
                                     nStart = sLine.indexOf( '"' );
 
-                                    rtl::OString sPostFix;
+                                    OString sPostFix;
                                     if( !bPairedList ){
                                         nEnd = sLine.lastIndexOf( '"' );
                                         sPostFix = sLine.copy( ++nEnd );
@@ -1799,7 +1799,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                                 }
                             }
 
-                            rtl::OString sText1( "\t" );
+                            OString sText1( "\t" );
                             sText1 += sLine;
                             if ( bDefine || bNextMustBeDefineEOL )
                                 sText1 += " ;\\\n";
@@ -1828,7 +1828,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
                             nLIndex++;
                         }
                         if ( nIdx > 1 ) {
-                            rtl::OString sFooter;
+                            OString sFooter;
                             if (!sSpace.isEmpty()) {
                                 sFooter = sSpace.copy(1);
                             }
@@ -1865,7 +1865,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             std::size_t nMaxIndex = 0;
             if ( pList )
                 nMaxIndex = pList->GetSourceLanguageListEntryCount();
-            rtl::OString sLine;
+            OString sLine;
             if ( pList && (*pList)[ nListIndex ] )
                 sLine = ( *(*pList)[ nListIndex ])[ SOURCE_LANGUAGE ];
             if ( sLine.isEmpty())
@@ -1883,7 +1883,7 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
             }
 
             while( PrepareTextToMerge( sLine, nList, m_sListLang, pResData ) && ( nListIndex <= nMaxIndex )) {
-                rtl::OString sText( "\t" );
+                OString sText( "\t" );
                 sText += sLine;
                 sText += " ;";
                 sText += "\n";
@@ -1903,10 +1903,10 @@ void Export::MergeRest( ResData *pResData, sal_uInt16 nMode )
     pParseQueue->bMflag = false;
 }
 
-rtl::OString Export::MergePairedList( rtl::OString const & sLine , rtl::OString const & sText ){
+OString Export::MergePairedList( OString const & sLine , OString const & sText ){
 // < "xy" ; IDENTIFIER ; >
-    rtl::OString sPre  = sLine.copy( 0 , sLine.indexOf('"') );
-    rtl::OString sPost = sLine.copy( sLine.lastIndexOf('"') + 1 );
+    OString sPre  = sLine.copy( 0 , sLine.indexOf('"') );
+    OString sPost = sLine.copy( sLine.lastIndexOf('"') + 1 );
     sPre += sText;
     sPre += sPost;
     return sPre;
@@ -1927,13 +1927,13 @@ void Export::InitLanguages( bool bMerge ){
 
     if( !isInitialized )
     {
-        rtl::OString sTmp;
+        OString sTmp;
         OStringBoolHashMap aEnvLangs;
 
         sal_Int32 nIndex = 0;
         do
         {
-            rtl::OString aToken = sLanguages.getToken(0, ',', nIndex);
+            OString aToken = sLanguages.getToken(0, ',', nIndex);
             sTmp = aToken.getToken(0, '=').trim();
             if( bMerge && sTmp.equalsIgnoreAsciiCase("en-US") ){}
             else if( !( (sTmp[0]=='x' || sTmp[0]=='X') && sTmp[1]=='-' ) ){

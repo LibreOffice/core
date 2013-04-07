@@ -52,8 +52,8 @@ namespace comphelper {
         OIHWrapNoFilterDialog( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction );
         ~OIHWrapNoFilterDialog();
 
-        static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL impl_staticGetSupportedServiceNames();
+        static OUString SAL_CALL impl_staticGetImplementationName();
+        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
 
 
         //____________________________________________________________________________________________________
@@ -83,13 +83,13 @@ namespace comphelper {
         // XServiceInfo
         //____________________________________________________________________________________________________
 
-        virtual ::rtl::OUString SAL_CALL getImplementationName()
+        virtual OUString SAL_CALL getImplementationName()
             throw ( ::com::sun::star::uno::RuntimeException );
 
-        virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
             throw ( ::com::sun::star::uno::RuntimeException );
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
             throw ( ::com::sun::star::uno::RuntimeException );
 
     };

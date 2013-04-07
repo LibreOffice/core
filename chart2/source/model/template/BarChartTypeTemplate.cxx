@@ -36,7 +36,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
-using ::rtl::OUString;
 
 namespace
 {

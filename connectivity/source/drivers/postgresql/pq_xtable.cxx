@@ -175,7 +175,7 @@ Reference< XIndexAccess > Table::getKeys(  ) throw (::com::sun::star::uno::Runti
     return m_keys;
 }
 
-void Table::rename( const ::rtl::OUString& newName )
+void Table::rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException)
@@ -183,9 +183,9 @@ void Table::rename( const ::rtl::OUString& newName )
     MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
 
-    ::rtl::OUString oldName = extractStringProperty(this,st.NAME );
-    ::rtl::OUString schema = extractStringProperty(this,st.SCHEMA_NAME );
-    ::rtl::OUString fullOldName = concatQualified( schema, oldName );
+    OUString oldName = extractStringProperty(this,st.NAME );
+    OUString schema = extractStringProperty(this,st.SCHEMA_NAME );
+    OUString fullOldName = concatQualified( schema, oldName );
 
     OUString newTableName;
     OUString newSchemaName;
@@ -201,7 +201,7 @@ void Table::rename( const ::rtl::OUString& newName )
         newTableName = newName;
         newSchemaName = schema;
     }
-    ::rtl::OUString fullNewName = concatQualified( newSchemaName, newTableName );
+    OUString fullNewName = concatQualified( newSchemaName, newTableName );
 
     if( extractStringProperty( this, st.TYPE ).equals( st.VIEW ) && m_pSettings->views.is() )
     {
@@ -262,7 +262,7 @@ void Table::rename( const ::rtl::OUString& newName )
 }
 
 void Table::alterColumnByName(
-    const ::rtl::OUString& colName,
+    const OUString& colName,
     const Reference< XPropertySet >& descriptor )
     throw (SQLException,NoSuchElementException,RuntimeException)
 {
@@ -346,14 +346,14 @@ Any Table::queryInterface( const Type & reqType ) throw (RuntimeException)
     return ret;
 }
 
-::com::sun::star::uno::Any Table::getPropertyValue(const ::rtl::OUString& aPropertyName)
+::com::sun::star::uno::Any Table::getPropertyValue(const OUString& aPropertyName)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     return ReflectionBase::getPropertyValue( aPropertyName );
 }
 
 
-::rtl::OUString Table::getName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString Table::getName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -361,7 +361,7 @@ Any Table::queryInterface( const Type & reqType ) throw (RuntimeException)
         extractStringProperty( this, st.NAME ) );
 }
 
-void Table::setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+void Table::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
 {
     rename( aName );
 }

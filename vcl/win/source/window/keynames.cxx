@@ -183,7 +183,7 @@ namespace vcl_sal {
     };
 
     // translate keycodes, used within the displayed menu shortcuts
-    rtl::OUString getKeysReplacementName( rtl::OUString pLang, LONG nSymbol )
+    OUString getKeysReplacementName( OUString pLang, LONG nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {
@@ -193,12 +193,12 @@ namespace vcl_sal {
                 for( int m = aKeyboards[n].nReplacements ; m ; )
                 {
                     if( nSymbol == pRepl[--m].aSymbol )
-                        return rtl::OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
+                        return OUString( pRepl[m].pName, strlen(pRepl[m].pName), RTL_TEXTENCODING_UTF8 );
                 }
             }
         }
 
-        return rtl::OUString();
+        return OUString();
     }
 
 }

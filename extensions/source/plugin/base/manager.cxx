@@ -77,9 +77,9 @@ PluginManager::PluginManager()
 {
 }
 
-const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
+const Sequence< OUString >& PluginManager::getAdditionalSearchPaths()
 {
-    static Sequence< ::rtl::OUString > aPaths;
+    static Sequence< OUString > aPaths;
 
     if( ! aPaths.getLength() )
     {
@@ -105,7 +105,7 @@ Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< 
 }
 
 // ::com::sun::star::lang::XServiceInfo
-::rtl::OUString XPluginManager_Impl::getImplementationName() throw(  )
+OUString XPluginManager_Impl::getImplementationName() throw(  )
 
 {
     return getImplementationName_Static();
@@ -113,10 +113,10 @@ Reference< XInterface > SAL_CALL PluginManager_CreateInstance( const Reference< 
 }
 
 // ::com::sun::star::lang::XServiceInfo
-sal_Bool XPluginManager_Impl::supportsService(const ::rtl::OUString& ServiceName) throw(  )
+sal_Bool XPluginManager_Impl::supportsService(const OUString& ServiceName) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
@@ -124,16 +124,16 @@ sal_Bool XPluginManager_Impl::supportsService(const ::rtl::OUString& ServiceName
 }
 
 // ::com::sun::star::lang::XServiceInfo
-Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames(void) throw(  )
+Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
 // XPluginManager_Impl
-Sequence< ::rtl::OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
+Sequence< OUString > XPluginManager_Impl::getSupportedServiceNames_Static(void) throw(  )
 {
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.plugin.PluginManager");
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString("com.sun.star.plugin.PluginManager");
     return aSNS;
 }
 
@@ -178,8 +178,8 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     Sequence<com::sun::star::plugin::PluginDescription> aRet;
 
     vcl::SettingsConfigItem* pCfg = vcl::SettingsConfigItem::get();
-    rtl::OUString aVal( pCfg->getValue( rtl::OUString(  "BrowserPlugins"  ),
-                                        rtl::OUString(  "Disabled"  ) ) );
+    OUString aVal( pCfg->getValue( OUString(  "BrowserPlugins"  ),
+                                        OUString(  "Disabled"  ) ) );
     if( ! aVal.toBoolean() )
     {
         aRet = impl_getPluginDescriptions();
@@ -187,7 +187,7 @@ Sequence<com::sun::star::plugin::PluginDescription> XPluginManager_Impl::getPlug
     return aRet;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
+Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin( const Reference< ::com::sun::star::plugin::XPluginContext >& acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const ::com::sun::star::plugin::PluginDescription& plugintype)
     throw( RuntimeException,::com::sun::star::plugin::PluginException )
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
@@ -203,7 +203,7 @@ Reference< ::com::sun::star::plugin::XPlugin > XPluginManager_Impl::createPlugin
     return pImpl;
 }
 
-Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< ::rtl::OUString >& argn, const Sequence< ::rtl::OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const ::rtl::OUString& url ) throw()
+Reference< ::com::sun::star::plugin::XPlugin >  XPluginManager_Impl::createPluginFromURL( const Reference< ::com::sun::star::plugin::XPluginContext > & acontext, sal_Int16 mode, const Sequence< OUString >& argn, const Sequence< OUString >& argv, const Reference< ::com::sun::star::awt::XToolkit > & toolkit, const Reference< ::com::sun::star::awt::XWindowPeer > & parent, const OUString& url ) throw()
 {
     XPlugin_Impl* pImpl = new XPlugin_Impl( Reference< ::com::sun::star::lang::XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW) );
     Reference< ::com::sun::star::plugin::XPlugin >  xRef = pImpl;

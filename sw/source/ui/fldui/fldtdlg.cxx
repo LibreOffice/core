@@ -89,14 +89,14 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
         utl::OConfigurationTreeRoot aCfgRoot
             = utl::OConfigurationTreeRoot::createWithComponentContext(
                 ::comphelper::getProcessComponentContext(),
-                rtl::OUString(
+                OUString(
                         "/org.openoffice.Office.DataAccess/Policies/Features/Writer" ),
                 -1,
                 utl::OConfigurationTreeRoot::CM_READONLY);
 
         sal_Bool bDatabaseFields = sal_True;
         aCfgRoot.getNodeValue(
-            rtl::OUString("DatabaseFields")) >>= bDatabaseFields;
+            OUString("DatabaseFields")) >>= bDatabaseFields;
 
         if (bDatabaseFields)
             AddTabPage(TP_FLD_DB, SwFldDBPage::Create, 0);

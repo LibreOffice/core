@@ -27,7 +27,7 @@ class AstEnum : public AstType
               , public AstScope
 {
 public:
-    AstEnum(const ::rtl::OString& name, AstScope* pScope);
+    AstEnum(const OString& name, AstScope* pScope);
 
     virtual ~AstEnum();
 

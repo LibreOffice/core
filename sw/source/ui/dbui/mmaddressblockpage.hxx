@@ -116,7 +116,7 @@ class SwSelectAddressBlockDialog : public SfxModalDialog
     CancelButton        m_aCancel;
     HelpButton          m_aHelp;
 
-    com::sun::star::uno::Sequence< ::rtl::OUString>    m_aAddressBlocks;
+    com::sun::star::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
     DECL_LINK(NewCustomizeHdl_Impl, PushButton*);
@@ -129,13 +129,13 @@ public:
     SwSelectAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig);
     ~SwSelectAddressBlockDialog();
 
-    void    SetAddressBlocks(const com::sun::star::uno::Sequence< ::rtl::OUString>& rBlocks,
+    void    SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
-    const com::sun::star::uno::Sequence< ::rtl::OUString>&    GetAddressBlocks();
+    const com::sun::star::uno::Sequence< OUString>&    GetAddressBlocks();
 
-    void                SetSettings(sal_Bool bIsCountry, ::rtl::OUString sCountry);
+    void                SetSettings(sal_Bool bIsCountry, OUString sCountry);
     sal_Bool            IsIncludeCountry() const {return !m_aNeverRB.IsChecked();}
-    ::rtl::OUString     GetCountry() const;
+    OUString     GetCountry() const;
 };
 
 class SwCustomizeAddressBlockDialog;
@@ -268,8 +268,8 @@ public:
     SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
     ~SwCustomizeAddressBlockDialog();
 
-    void            SetAddress(const ::rtl::OUString& rAddress);
-    ::rtl::OUString GetAddress();
+    void            SetAddress(const OUString& rAddress);
+    OUString GetAddress();
 };
 
 class SwAssignFieldsControl;
@@ -288,18 +288,18 @@ class SwAssignFieldsDialog : public SfxModalDialog
     HelpButton              m_aHelp;
 
     String                  m_sNone;
-    ::rtl::OUString         m_rPreviewString;
+    OUString         m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > CreateAssignments();
+    ::com::sun::star::uno::Sequence< OUString > CreateAssignments();
     DECL_LINK(OkHdl_Impl, void *);
     DECL_LINK(AssignmentModifyHdl_Impl, void*);
 
 public:
     SwAssignFieldsDialog(Window* pParent,
                 SwMailMergeConfigItem& rConfigItem,
-                const ::rtl::OUString& rPreview,
+                const OUString& rPreview,
                 bool bIsAddressBlock);
     ~SwAssignFieldsDialog();
 };

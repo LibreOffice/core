@@ -154,7 +154,7 @@ protected:
             SfxItemSet* pSet = pSrcMed->GetItemSet();
             pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
         }
-        printf("about to load %s\n", rtl::OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        printf("about to load %s\n", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         if (!xDocShRef->DoLoad(pSrcMed))
         {
             xDocShRef->DoClose();

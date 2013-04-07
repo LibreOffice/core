@@ -25,16 +25,16 @@ namespace rptui
 {
     struct ColumnInfo
     {
-        ::rtl::OUString sColumnName;
-        ::rtl::OUString sLabel;
+        OUString sColumnName;
+        OUString sLabel;
         bool bColumn;
-        ColumnInfo(const ::rtl::OUString& i_sColumnName,const ::rtl::OUString& i_sLabel)
+        ColumnInfo(const OUString& i_sColumnName,const OUString& i_sLabel)
             : sColumnName(i_sColumnName)
             , sLabel(i_sLabel)
             , bColumn(true)
         {
         }
-        ColumnInfo(const ::rtl::OUString& i_sColumnName)
+        ColumnInfo(const OUString& i_sColumnName)
             : sColumnName(i_sColumnName)
             , bColumn(false)
         {

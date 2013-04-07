@@ -26,7 +26,6 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
-using ::rtl::OUString;
 
 DropTarget::DropTarget() :
         ::cppu::WeakComponentImplHelper3<

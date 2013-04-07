@@ -84,11 +84,11 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString   m_strSectionName;
+    OUString   m_strSectionName;
     sal_Bool    m_bProtected;
     sal_Bool    m_bHiden;
     XFColor     m_aBackColor;
-    rtl::OUString   m_strSourceLink;
+    OUString   m_strSourceLink;
 };
 
 #endif

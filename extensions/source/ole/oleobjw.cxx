@@ -67,9 +67,6 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OUStringBuffer;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
 #define JSCRIPT_ID          L"jscript"
@@ -408,15 +405,15 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+            throw CannotConvertException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw IllegalArgumentException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+            throw IllegalArgumentException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                             static_cast<XWeak*>(this)), ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr )) ;
             break;
         case DISP_E_TYPEMISMATCH:
-            throw CannotConvertException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+            throw CannotConvertException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::UNKNOWN, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_UNKNOWNINTERFACE:
@@ -426,7 +423,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw CannotConvertException(rtl::OUString("call to OLE object failed"),static_cast<XInterface*>(
+            throw CannotConvertException(OUString("call to OLE object failed"),static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
         default:
@@ -489,12 +486,12 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         {
             if ( pInfo && m_sTypeName.getLength() == 0 )
             {
-                 m_sTypeName = rtl::OUString("IDispatch");
+                 m_sTypeName = OUString("IDispatch");
                 CComBSTR sName;
 
                 if ( SUCCEEDED( pInfo->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
                 {
-                    rtl::OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
+                    OUString sTmp( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
                     if ( sTmp.indexOf('_')  == 0 )
                        sTmp = sTmp.copy(1);
                     // do we own the memory for pTypeLib, msdn doco is vague
@@ -505,8 +502,8 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
                     {
                         if ( SUCCEEDED( pTypeLib->GetDocumentation( -1, &sName, NULL, NULL, NULL  ) ) )
                         {
-                            rtl::OUString sLibName( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
-                            m_sTypeName = sLibName.concat( rtl::OUString(".") ).concat( sTmp );
+                            OUString sLibName( reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName)));
+                            m_sTypeName = sLibName.concat( OUString(".") ).concat( sTmp );
 
                         }
                     }
@@ -1177,7 +1174,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     }
 
     if( !bConvRet) // conversion of return or out parameter failed
-        throw CannotConvertException( rtl::OUString("Call to COM object failed. Conversion of return or out value failed"),
+        throw CannotConvertException( OUString("Call to COM object failed. Conversion of return or out value failed"),
                                       Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
                                       FailReason::UNKNOWN, 0);// lookup error code
     // conversion of return or out parameter failed
@@ -1201,15 +1198,15 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw IllegalArgumentException();
         break;
     case DISP_E_OVERFLOW:
-        throw CannotConvertException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+        throw CannotConvertException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
         break;
     case DISP_E_PARAMNOTFOUND:
-        throw IllegalArgumentException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+        throw IllegalArgumentException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                            static_cast<XWeak*>(this)), ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
         break;
     case DISP_E_TYPEMISMATCH:
-        throw CannotConvertException(rtl::OUString("call to OLE object failed"),static_cast<XInterface*>(
+        throw CannotConvertException(OUString("call to OLE object failed"),static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
         break;
     case DISP_E_UNKNOWNINTERFACE:
@@ -1219,7 +1216,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw RuntimeException() ;
         break;
     case DISP_E_PARAMNOTOPTIONAL:
-        throw CannotConvertException(rtl::OUString("call to OLE object failed"), static_cast<XInterface*>(
+        throw CannotConvertException(OUString("call to OLE object failed"), static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
                 break;
     default:
@@ -1317,7 +1314,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
 
 // --------------------------
 // XDirectInvocation
-uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const ::rtl::OUString& aName, const uno::Sequence< uno::Any >& aParams )
+uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& aParams )
     throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     Any aResult;
@@ -1528,7 +1525,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const ::rtl::OUString& aNa
                       "returned DISP_E_NONAMEDARGS",0, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
                 break;
             case DISP_E_OVERFLOW:
-                throw CannotConvertException(rtl::OUString("[automation bridge] Call failed."),
+                throw CannotConvertException(OUString("[automation bridge] Call failed."),
                                              static_cast<XInterface*>(
                     static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
                 break;
@@ -1566,7 +1563,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const ::rtl::OUString& aNa
     return aResult;
 }
 
-::sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const ::rtl::OUString& aName )
+::sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const OUString& aName )
     throw (uno::RuntimeException)
 {
     if ( ! m_spDispatch )
@@ -2160,7 +2157,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                   "returned DISP_E_NONAMEDARGS",0, ::sal::static_int_cast< sal_Int16, unsigned int >( uArgErr ));
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException(rtl::OUString("[automation bridge] Call failed."),
+            throw CannotConvertException(OUString("[automation bridge] Call failed."),
                                          static_cast<XInterface*>(
                 static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;

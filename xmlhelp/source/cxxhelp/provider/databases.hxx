@@ -60,22 +60,22 @@ namespace chelp {
     {
     private:
 
-        rtl::OUString m_aStartId;
-        rtl::OUString m_aProgramSwitch;
-        rtl::OUString m_aTitle;
-        rtl::OUString m_aHeading;
-        rtl::OUString m_aFulltext;
+        OUString m_aStartId;
+        OUString m_aProgramSwitch;
+        OUString m_aTitle;
+        OUString m_aHeading;
+        OUString m_aFulltext;
         int m_nOrder;
 
 
     public:
 
-        StaticModuleInformation( rtl::OUString aTitle,
-                                 rtl::OUString aStartId,
-                                 rtl::OUString aProgramSwitch,
-                                 rtl::OUString aHeading,
-                                 rtl::OUString aFulltext,
-                                 rtl::OUString aOrder )
+        StaticModuleInformation( OUString aTitle,
+                                 OUString aStartId,
+                                 OUString aProgramSwitch,
+                                 OUString aHeading,
+                                 OUString aFulltext,
+                                 OUString aOrder )
             : m_aStartId( aStartId ),
               m_aProgramSwitch( aProgramSwitch ),
               m_aTitle( aTitle ),
@@ -87,11 +87,11 @@ namespace chelp {
 
         ~StaticModuleInformation() { }
 
-        rtl::OUString get_title() const { return m_aTitle; }
-        rtl::OUString get_id() const { return m_aStartId; }
-        rtl::OUString get_program() const { return m_aProgramSwitch; }
-        rtl::OUString get_heading() const { return m_aHeading; }
-        rtl::OUString get_fulltext() const { return m_aFulltext; }
+        OUString get_title() const { return m_aTitle; }
+        OUString get_id() const { return m_aStartId; }
+        OUString get_program() const { return m_aProgramSwitch; }
+        OUString get_heading() const { return m_aHeading; }
+        OUString get_fulltext() const { return m_aFulltext; }
         int get_order() const { return m_nOrder; }
     };  // end class StaticModuleInformation
 
@@ -110,17 +110,17 @@ namespace chelp {
 
             KeywordElement( Databases* pDatabases,
                             helpdatafileproxy::Hdf* pHdf,
-                            rtl::OUString& key,
-                            rtl::OUString& ids );
+                            OUString& key,
+                            OUString& ids );
 
         private:
 
-            rtl::OUString key;
-            com::sun::star::uno::Sequence< rtl::OUString > listId;
-            com::sun::star::uno::Sequence< rtl::OUString > listAnchor;
-            com::sun::star::uno::Sequence< rtl::OUString > listTitle;
+            OUString key;
+            com::sun::star::uno::Sequence< OUString > listId;
+            com::sun::star::uno::Sequence< OUString > listAnchor;
+            com::sun::star::uno::Sequence< OUString > listTitle;
 
-            void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const rtl::OUString& ids );
+            void init( Databases *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
         };
 
 
@@ -128,22 +128,22 @@ namespace chelp {
 
         ~KeywordInfo() { };
 
-        com::sun::star::uno::Sequence< rtl::OUString >&
+        com::sun::star::uno::Sequence< OUString >&
         getKeywordList() { return listKey; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > >&
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
         getIdList() { return listId; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > >&
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
         getAnchorList() { return listAnchor; }
 
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > >&
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > >&
         getTitleList() { return listTitle; }
 
     private:
 
-        com::sun::star::uno::Sequence< rtl::OUString > listKey;
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > > listId,listAnchor,listTitle;
+        com::sun::star::uno::Sequence< OUString > listKey;
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > listId,listAnchor,listTitle;
     };  // end class KeywordInfo
 
 
@@ -154,7 +154,7 @@ namespace chelp {
 
         struct eq
         {
-            bool operator()( const rtl::OUString& rKey1, const rtl::OUString& rKey2 ) const
+            bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
             {
                 return rKey1.compareTo( rKey2 ) == 0;
             }
@@ -162,7 +162,7 @@ namespace chelp {
 
         struct ha
         {
-            size_t operator()( const rtl::OUString& rName ) const
+            size_t operator()( const OUString& rName ) const
             {
                 return rName.hashCode();
             }
@@ -174,31 +174,31 @@ namespace chelp {
          */
 
         Databases( sal_Bool showBasic,
-                 const rtl::OUString& instPath,
-                 const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
-                 const rtl::OUString& productName,
-                 const rtl::OUString& productVersion,
-                 const rtl::OUString& styleSheet,
+                 const OUString& instPath,
+                 const com::sun::star::uno::Sequence< OUString >& imagesZipPaths,
+                 const OUString& productName,
+                 const OUString& productVersion,
+                 const OUString& styleSheet,
                  com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
 
         ~Databases();
 
-        rtl::OString getImagesZipFileURL();
+        OString getImagesZipFileURL();
 
-        rtl::OUString getInstallPathAsURL();
+        OUString getInstallPathAsURL();
 
-        const std::vector< rtl::OUString >& getModuleList( const rtl::OUString& Language );
+        const std::vector< OUString >& getModuleList( const OUString& Language );
 
-        StaticModuleInformation* getStaticInformationForModule( const rtl::OUString& Module,
-                                                                const rtl::OUString& Language );
+        StaticModuleInformation* getStaticInformationForModule( const OUString& Module,
+                                                                const OUString& Language );
 
-        bool checkModuleMatchForExtension( const rtl::OUString& Database, const rtl::OUString& doclist );
-        KeywordInfo* getKeyword( const rtl::OUString& Module,
-                                 const rtl::OUString& Language );
+        bool checkModuleMatchForExtension( const OUString& Database, const OUString& doclist );
+        KeywordInfo* getKeyword( const OUString& Module,
+                                 const OUString& Language );
 
-        helpdatafileproxy::Hdf* getHelpDataFile( const rtl::OUString& Module,
-                         const rtl::OUString& Language, bool helpText = false,
-                         const rtl::OUString* pExtensionPath = NULL );
+        helpdatafileproxy::Hdf* getHelpDataFile( const OUString& Module,
+                         const OUString& Language, bool helpText = false,
+                         const OUString* pExtensionPath = NULL );
 
 
         /**
@@ -206,8 +206,8 @@ namespace chelp {
          */
 
         com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >
-        getCollator( const rtl::OUString& Language,
-                     const rtl::OUString& System );   // System not used by current implementation
+        getCollator( const OUString& Language,
+                     const OUString& System );   // System not used by current implementation
         //                                            // of XCollator
 
         /**
@@ -222,7 +222,7 @@ namespace chelp {
          *  First try is language directory, second try is main installation directory.
          */
 
-        void cascadingStylesheet( const rtl::OUString& Language,
+        void cascadingStylesheet( const OUString& Language,
                                   char** buffer,
                                   int* byteCount );
 
@@ -231,16 +231,16 @@ namespace chelp {
          *  Changes the stylesheet for further reads.
          */
 
-        void changeCSS(const rtl::OUString& newStyleSheet);
+        void changeCSS(const OUString& newStyleSheet);
 
 
         /**
          *  Returns the active help text for the given module, language and id.
          */
 
-        void setActiveText( const rtl::OUString& Module,
-                            const rtl::OUString& Language,
-                            const rtl::OUString& Id,
+        void setActiveText( const OUString& Module,
+                            const OUString& Language,
+                            const OUString& Id,
                             char** buffer,
                             int* byteCount );
 
@@ -249,19 +249,19 @@ namespace chelp {
          */
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-        jarFile( const rtl::OUString& jar,
-                 const rtl::OUString& Language );
+        jarFile( const OUString& jar,
+                 const OUString& Language );
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
-        findJarFileForPath( const rtl::OUString& jar, const rtl::OUString& Language,
-            const rtl::OUString& path, rtl::OUString* o_pExtensionPath = NULL,
-            rtl::OUString* o_pExtensionRegistryPath = NULL );
+        findJarFileForPath( const OUString& jar, const OUString& Language,
+            const OUString& path, OUString* o_pExtensionPath = NULL,
+            OUString* o_pExtensionRegistryPath = NULL );
 
         /**
          *  Maps a given language-locale combination to language.
          */
 
-        rtl::OUString processLang( const rtl::OUString& Language );
+        OUString processLang( const OUString& Language );
 
 
         /**
@@ -269,17 +269,17 @@ namespace chelp {
          *  The returned string maybe empty
          */
 
-        rtl::OUString country( const rtl::OUString& Language );
+        OUString country( const OUString& Language );
 
 
-        void replaceName( rtl::OUString& oustring ) const;
+        void replaceName( OUString& oustring ) const;
 
-        rtl::OUString getProductName() const { return m_vReplacement[0]; }
-        rtl::OUString getProductVersion() const { return m_vReplacement[1]; }
+        OUString getProductName() const { return m_vReplacement[0]; }
+        OUString getProductVersion() const { return m_vReplacement[1]; }
 
-        rtl::OUString expandURL( const rtl::OUString& aURL );
+        OUString expandURL( const OUString& aURL );
 
-        static rtl::OUString expandURL( const rtl::OUString& aURL,
+        static OUString expandURL( const OUString& aURL,
             com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext );
 
     private:
@@ -294,7 +294,7 @@ namespace chelp {
 
         int    m_nCustomCSSDocLength;
         char*  m_pCustomCSSDoc;
-        rtl::OUString m_aCSS;
+        OUString m_aCSS;
 
         enum {
             PRODUCTNAME = 0,
@@ -307,32 +307,32 @@ namespace chelp {
         };
 
         int                    m_vAdd[7];
-        rtl::OUString          m_vReplacement[7];
-        rtl::OUString          newProdName,newProdVersion,
+        OUString          m_vReplacement[7];
+        OUString          newProdName,newProdVersion,
             prodName,prodVersion,vendName,vendVersion,vendShort;
 
-        rtl::OUString          m_aInstallDirectory;                // Installation directory
-        com::sun::star::uno::Sequence< rtl::OUString > m_aImagesZipPaths;
-        rtl::OString           m_aImagesZipFileURL;
-        rtl::OUString          m_aSymbolsStyleName;
+        OUString          m_aInstallDirectory;                // Installation directory
+        com::sun::star::uno::Sequence< OUString > m_aImagesZipPaths;
+        OString           m_aImagesZipFileURL;
+        OUString          m_aSymbolsStyleName;
 
-        std::vector< rtl::OUString >    m_avModules;
+        std::vector< OUString >    m_avModules;
 
-        typedef boost::unordered_map< rtl::OUString,helpdatafileproxy::Hdf*,ha,eq >   DatabasesTable;
+        typedef boost::unordered_map< OUString,helpdatafileproxy::Hdf*,ha,eq >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
-        typedef  boost::unordered_map< rtl::OUString,rtl::OUString,ha,eq > LangSetTable;
+        typedef  boost::unordered_map< OUString,OUString,ha,eq > LangSetTable;
         LangSetTable m_aLangSet;   // Mapping to of lang-country to lang
 
-        typedef boost::unordered_map< rtl::OUString,StaticModuleInformation*,ha,eq > ModInfoTable;
+        typedef boost::unordered_map< OUString,StaticModuleInformation*,ha,eq > ModInfoTable;
         ModInfoTable m_aModInfo;   // Module information
 
-        typedef boost::unordered_map< rtl::OUString,KeywordInfo*,ha,eq > KeywordInfoTable;
+        typedef boost::unordered_map< OUString,KeywordInfo*,ha,eq > KeywordInfoTable;
         KeywordInfoTable m_aKeywordInfo;   // Module information
 
         typedef
         boost::unordered_map<
-        rtl::OUString,
+        OUString,
              ::com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >,
             ha,
             eq >         ZipFileTable;
@@ -340,7 +340,7 @@ namespace chelp {
 
         typedef
         boost::unordered_map<
-        rtl::OUString,
+        OUString,
              ::com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >,
             ha,
             eq >      CollatorTable;
@@ -349,7 +349,7 @@ namespace chelp {
 
         struct ostring_eq
         {
-            bool operator()( const rtl::OString& rKey1, const rtl::OString& rKey2 ) const
+            bool operator()( const OString& rKey1, const OString& rKey2 ) const
             {
                 return rKey1.compareTo( rKey2 ) == 0;
             }
@@ -357,7 +357,7 @@ namespace chelp {
 
         struct ostring_ha
         {
-            size_t operator()( const rtl::OString& rName ) const
+            size_t operator()( const OString& rName ) const
             {
                 return rName.hashCode();
             }
@@ -365,7 +365,7 @@ namespace chelp {
 
         typedef
         boost::unordered_set<
-            rtl::OString,
+            OString,
             ostring_ha,
             ostring_eq >      EmptyActiveTextSet;
         EmptyActiveTextSet  m_aEmptyActiveTextSet;
@@ -373,7 +373,7 @@ namespace chelp {
 
         // methods
 
-        void setInstallPath( const rtl::OUString& aInstallDirectory );
+        void setInstallPath( const OUString& aInstallDirectory );
 
     }; // end class Databases
 
@@ -392,7 +392,7 @@ namespace chelp {
     // Hashtable to cache extension help status
     typedef boost::unordered_map
     <
-        ::rtl::OUString,
+        OUString,
         bool,
         Databases::ha,
         Databases::eq
@@ -406,9 +406,9 @@ namespace chelp {
 
     public:
         ExtensionIteratorBase( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
-            Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage );
-        ExtensionIteratorBase( Databases& rDatabases, const rtl::OUString& aInitialModule,
-            const rtl::OUString& aLanguage );
+            Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage );
+        ExtensionIteratorBase( Databases& rDatabases, const OUString& aInitialModule,
+            const OUString& aLanguage );
         void init( void );
 
     private:
@@ -423,9 +423,9 @@ namespace chelp {
             ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
         com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetNextBundledHelpPackage
         ( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle );
-        rtl::OUString implGetFileFromPackage( const rtl::OUString& rFileExtension,
+        OUString implGetFileFromPackage( const OUString& rFileExtension,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
-        void implGetLanguageVectorFromPackage( ::std::vector< ::rtl::OUString > &rv,
+        void implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
@@ -433,10 +433,10 @@ namespace chelp {
         Databases&                                                                  m_rDatabases;
 
         IteratorState                                                               m_eState;
-        rtl::OUString                                                               m_aExtensionPath;
+        OUString                                                               m_aExtensionPath;
 
-        rtl::OUString                                                               m_aInitialModule;
-        rtl::OUString                                                               m_aLanguage;
+        OUString                                                               m_aInitialModule;
+        OUString                                                               m_aLanguage;
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference
             < com::sun::star::deployment::XPackage > >                              m_aUserPackagesSeq;
@@ -462,23 +462,23 @@ namespace chelp {
     {
     public:
         DataBaseIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
-            Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage, bool bHelpText )
+            Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
         {}
-        DataBaseIterator( Databases& rDatabases, const rtl::OUString& aInitialModule,
-            const rtl::OUString& aLanguage, bool bHelpText )
+        DataBaseIterator( Databases& rDatabases, const OUString& aInitialModule,
+            const OUString& aLanguage, bool bHelpText )
                 : ExtensionIteratorBase( rDatabases, aInitialModule, aLanguage )
                 , m_bHelpText( bHelpText )
         {}
 
-        helpdatafileproxy::Hdf* nextHdf( rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
+        helpdatafileproxy::Hdf* nextHdf( OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
 
 
     private:
         helpdatafileproxy::Hdf* implGetHdfFromPackage(
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-            rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath );
+            OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath );
 
         bool                                                                        m_bHelpText;
 
@@ -489,14 +489,14 @@ namespace chelp {
     {
     public:
         KeyDataBaseFileIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
-            Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
+            Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
         //Returns a file URL
-        rtl::OUString nextDbFile( bool& o_rbExtension );
+        OUString nextDbFile( bool& o_rbExtension );
 
     private:
-        rtl::OUString implGetDbFileFromPackage(
+        OUString implGetDbFileFromPackage(
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
     }; // end class KeyDataBaseFileIterator
@@ -506,18 +506,18 @@ namespace chelp {
     {
     public:
         JarFileIterator( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext,
-            Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
+            Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
                 : ExtensionIteratorBase( xContext, rDatabases, aInitialModule, aLanguage )
         {}
 
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             nextJarFile( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >& o_xParentPackageBundle,
-                            rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
+                            OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
 
     private:
         com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >
             implGetJarFromPackage(com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-                rtl::OUString* o_pExtensionPath = NULL, rtl::OUString* o_pExtensionRegistryPath = NULL );
+                OUString* o_pExtensionPath = NULL, OUString* o_pExtensionRegistryPath = NULL );
 
     }; // end class JarFileIterator
 
@@ -525,15 +525,15 @@ namespace chelp {
     class IndexFolderIterator : public ExtensionIteratorBase
     {
     public:
-        IndexFolderIterator( Databases& rDatabases, const rtl::OUString& aInitialModule, const rtl::OUString& aLanguage )
+        IndexFolderIterator( Databases& rDatabases, const OUString& aInitialModule, const OUString& aLanguage )
             : ExtensionIteratorBase( rDatabases, aInitialModule, aLanguage )
         {}
 
-        rtl::OUString nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary );
-        void deleteTempIndexFolder( const rtl::OUString& aIndexFolder );
+        OUString nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary );
+        void deleteTempIndexFolder( const OUString& aIndexFolder );
 
     private:
-        rtl::OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
+        OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,
             com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage );
 
     }; // end class KeyDataBaseFileIterator

@@ -30,7 +30,7 @@ using namespace com::sun::star::ucb;
 #include "filinl.hxx"
 
 
-XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const rtl::OUString& aUnqPath )
+XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),
       m_xProvider( pMyShell->m_pProvider ),
       m_count( 0 ),
@@ -109,7 +109,7 @@ XPropertySetInfo_impl::queryInterface(
 
 beans::Property SAL_CALL
 XPropertySetInfo_impl::getPropertyByName(
-                     const rtl::OUString& aName )
+                     const OUString& aName )
   throw( beans::UnknownPropertyException,
      RuntimeException)
 {
@@ -132,7 +132,7 @@ XPropertySetInfo_impl::getProperties(
 
 sal_Bool SAL_CALL
 XPropertySetInfo_impl::hasPropertyByName(
-                     const rtl::OUString& aName )
+                     const OUString& aName )
   throw( RuntimeException )
 {
   for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )

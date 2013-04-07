@@ -409,10 +409,10 @@ Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  ) throw(Runtim
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& ServiceName) throw()
+sal_Bool SAL_CALL FmXGridControl::supportsService(const OUString& ServiceName) throw()
 {
     ::comphelper::StringSequence aSupported = getSupportedServiceNames();
-    const ::rtl::OUString * pArray = aSupported.getConstArray();
+    const OUString * pArray = aSupported.getConstArray();
     for( sal_Int32 i = 0; i < aSupported.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
@@ -420,17 +420,17 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FmXGridControl::getImplementationName() throw()
+OUString SAL_CALL FmXGridControl::getImplementationName() throw()
 {
-    return ::rtl::OUString("com.sun.star.form.FmXGridControl");
+    return OUString("com.sun.star.form.FmXGridControl");
 }
 
 //------------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw()
 {
-    Sequence< ::rtl::OUString > aServiceNames(2);
+    Sequence< OUString > aServiceNames(2);
     aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
-    aServiceNames[1] = ::rtl::OUString("com.sun.star.awt.UnoControl");
+    aServiceNames[1] = OUString("com.sun.star.awt.UnoControl");
     return aServiceNames;
 }
 
@@ -449,9 +449,9 @@ void SAL_CALL FmXGridControl::dispose() throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmXGridControl::GetComponentServiceName()
+OUString FmXGridControl::GetComponentServiceName()
 {
-    ::rtl::OUString aName("DBGrid");
+    OUString aName("DBGrid");
     return aName;
 }
 
@@ -501,7 +501,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 void SAL_CALL FmXGridControl::createPeer(const Reference< ::com::sun::star::awt::XToolkit >& /*rToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( RuntimeException )
 {
     if ( !mxModel.is() )
-        throw DisposedException( ::rtl::OUString(), *this );
+        throw DisposedException( OUString(), *this );
 
     DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // I think this should never assert, now that we're using the base class' mbCreatingPeer in addition to
@@ -791,7 +791,7 @@ void SAL_CALL FmXGridControl::setDesignMode(sal_Bool bOn) throw( RuntimeExceptio
 
         // prepare firing an event
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString( "design" ) : ::rtl::OUString( "alive" );
+        aModeChangeEvent.NewMode = mbDesignMode ? OUString( "design" ) : OUString( "alive" );
     }
 
     // --- </mutex_lock> ---
@@ -855,7 +855,7 @@ void SAL_CALL FmXGridControl::removeContainerListener(const Reference< XContaine
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL FmXGridControl::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatchProvider >  xPeerProvider(getPeer(), UNO_QUERY);
     if (xPeerProvider.is())
@@ -982,7 +982,7 @@ Any SAL_CALL FmXGridControl::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoun
 
 // ::com::sun::star::util::XModeSelector
 //------------------------------------------------------------------------------
-void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( NoSupportException, RuntimeException )
+void SAL_CALL FmXGridControl::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     if (!xPeer.is())
@@ -992,10 +992,10 @@ void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( NoSupp
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException )
+OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
-    return xPeer.is() ? xPeer->getMode() : ::rtl::OUString();
+    return xPeer.is() ? xPeer->getMode() : OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -1006,7 +1006,7 @@ void SAL_CALL FmXGridControl::setMode(const ::rtl::OUString& Mode) throw( NoSupp
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FmXGridControl::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
+sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( RuntimeException )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
@@ -1113,9 +1113,9 @@ void FmXGridPeer::columnChanged()
 //------------------------------------------------------------------
 namespace fmgridif
 {
-    const ::rtl::OUString getDataModeIdentifier()
+    const OUString getDataModeIdentifier()
     {
-        static ::rtl::OUString s_sDataModeIdentifier = ::rtl::OUString(  "DataMode"  );
+        static OUString s_sDataModeIdentifier = OUString(  "DataMode"  );
         return s_sDataModeIdentifier;
     }
 }
@@ -1423,7 +1423,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
                 case TypeClass_STRING           :
                 {
                     String sText = aColumns[ nModelPos ]->GetCellText( xPaintRow, pGrid->getNumberFormatter() );
-                    pReturnArray[i] <<= ::rtl::OUString(sText);
+                    pReturnArray[i] <<= OUString(sText);
                 }
                 break;
                 // everything else is requested in the DatabaseVariant
@@ -1674,7 +1674,7 @@ Reference< XIndexContainer >  FmXGridPeer::getColumns() throw( RuntimeException 
 //------------------------------------------------------------------------------
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    static const ::rtl::OUString aPropsListenedTo[] =
+    static const OUString aPropsListenedTo[] =
     {
         OUString(FM_PROP_LABEL), OUString(FM_PROP_WIDTH), OUString(FM_PROP_HIDDEN), OUString(FM_PROP_ALIGN), OUString(FM_PROP_FORMATKEY)
     };
@@ -1683,8 +1683,8 @@ void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
     // before adding a listener
     Reference< XPropertySetInfo > xInfo = xCol->getPropertySetInfo();
     Property aPropDesc;
-    const ::rtl::OUString* pProps = aPropsListenedTo;
-    const ::rtl::OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
+    const OUString* pProps = aPropsListenedTo;
+    const OUString* pPropsEnd = pProps + sizeof( aPropsListenedTo ) / sizeof( aPropsListenedTo[ 0 ] );
     for (; pProps != pPropsEnd; ++pProps)
     {
         if ( xInfo->hasPropertyByName( *pProps ) )
@@ -1701,7 +1701,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners ... linux has problems with global static UStrings, so
     // we have to do it this way ....
-    static ::rtl::OUString aPropsListenedTo[] =
+    static OUString aPropsListenedTo[] =
     {
         OUString(FM_PROP_LABEL), OUString(FM_PROP_WIDTH), OUString(FM_PROP_HIDDEN), OUString(FM_PROP_ALIGN), OUString(FM_PROP_FORMATKEY)
     };
@@ -1904,7 +1904,7 @@ void FmXGridPeer::elementRemoved(const ContainerEvent& evt) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& Value) throw( RuntimeException )
+void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -1960,12 +1960,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        ::rtl::OUString sHelpURL;
+        OUString sHelpURL;
         OSL_VERIFY( Value >>= sHelpURL );
         INetURLObject aHID( sHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
             sHelpURL = aHID.GetURLPath();
-        pGrid->SetHelpId( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
+        pGrid->SetHelpId( OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {
@@ -2117,7 +2117,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
 }
 
 //------------------------------------------------------------------------------
-Any FmXGridPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( RuntimeException )
+Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
 {
     Any aProp;
     if (GetWindow())
@@ -2439,7 +2439,7 @@ Any FmXGridPeer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException,
 
 // ::com::sun::star::util::XModeSelector
 //------------------------------------------------------------------------------
-void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException, RuntimeException )
+void FmXGridPeer::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException )
 {
     if (!supportsMode(Mode))
         throw NoSupportException();
@@ -2460,7 +2460,7 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString FmXGridPeer::getMode() throw( RuntimeException )
+OUString FmXGridPeer::getMode() throw( RuntimeException )
 {
     return m_aMode;
 }
@@ -2472,18 +2472,18 @@ void FmXGridPeer::setMode(const ::rtl::OUString& Mode) throw( NoSupportException
     if (!aModes.getLength())
     {
         aModes.realloc(2);
-        ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = ::rtl::OUString(  "DataMode"  );
-        pModes[1] = ::rtl::OUString(  "FilterMode"  );
+        OUString* pModes = aModes.getArray();
+        pModes[0] = OUString(  "DataMode"  );
+        pModes[1] = OUString(  "FilterMode"  );
     }
     return aModes;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool FmXGridPeer::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
+sal_Bool FmXGridPeer::supportsMode(const OUString& Mode) throw( RuntimeException )
 {
     ::comphelper::StringSequence aModes(getSupportedModes());
-    const ::rtl::OUString* pModes = aModes.getConstArray();
+    const OUString* pModes = aModes.getConstArray();
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {
         if (pModes[--i] == Mode)
@@ -2535,7 +2535,7 @@ void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
+Reference< ::com::sun::star::frame::XDispatch >  FmXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
     Reference< ::com::sun::star::frame::XDispatch >  xResult;
 
@@ -2767,7 +2767,7 @@ Sequence< ::com::sun::star::util::URL>& FmXGridPeer::getSupportedURLs()
     static Sequence< ::com::sun::star::util::URL> aSupported;
     if (aSupported.getLength() == 0)
     {
-        static ::rtl::OUString sSupported[] = {
+        static OUString sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,
@@ -2808,7 +2808,7 @@ void FmXGridPeer::UpdateDispatches()
     Reference< ::com::sun::star::frame::XDispatch >  xNewDispatch;
     for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
-        xNewDispatch = queryDispatch(*pSupportedURLs, rtl::OUString(), 0);
+        xNewDispatch = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (xNewDispatch != m_pDispatchers[i])
         {
             if (m_pDispatchers[i].is())
@@ -2851,7 +2851,7 @@ void FmXGridPeer::ConnectToDispatcher()
     for (sal_uInt16 i=0; i<aSupportedURLs.getLength(); ++i, ++pSupportedURLs)
     {
         m_pStateCache[i] = 0;
-        m_pDispatchers[i] = queryDispatch(*pSupportedURLs, rtl::OUString(), 0);
+        m_pDispatchers[i] = queryDispatch(*pSupportedURLs, OUString(), 0);
         if (m_pDispatchers[i].is())
         {
             m_pDispatchers[i]->addStatusListener((::com::sun::star::frame::XStatusListener*)this, *pSupportedURLs);

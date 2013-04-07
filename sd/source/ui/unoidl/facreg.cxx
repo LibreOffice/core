@@ -35,7 +35,6 @@
 
 using namespace com::sun::star;
 
-using ::rtl::OUString;
 
 // Forward declarations of the factories.
 
@@ -242,7 +241,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::boost::unordered_map<OUString, FactoryId, rtl::OUStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::boost::unordered_map<OUString, FactoryId, OUStringHash, comphelper::UStringEqual> FactoryMap;
 
 
 namespace {

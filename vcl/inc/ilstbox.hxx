@@ -496,8 +496,8 @@ public:
     sal_Bool            IsSelectionChanged() const                  { return maLBWindow.IsSelectionChanged(); }
     sal_uInt16          GetSelectModifier() const                   { return maLBWindow.GetSelectModifier(); }
 
-    void            SetMRUEntries( const rtl::OUString& rEntries, sal_Unicode cSep );
-    rtl::OUString   GetMRUEntries( sal_Unicode cSep ) const;
+    void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
+    OUString   GetMRUEntries( sal_Unicode cSep ) const;
     void            SetMaxMRUCount( sal_uInt16 n )                  { maLBWindow.GetEntryList()->SetMaxMRUCount( n ); }
     sal_uInt16          GetMaxMRUCount() const                      { return maLBWindow.GetEntryList()->GetMaxMRUCount(); }
     sal_uInt16          GetDisplayLineCount() const

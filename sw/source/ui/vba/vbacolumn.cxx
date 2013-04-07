@@ -62,35 +62,35 @@ SwVbaColumn::Select( ) throw ( uno::RuntimeException )
 
 void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn ) throw ( uno::RuntimeException )
 {
-    rtl::OUStringBuffer aRangeName;
-    rtl::OUString sStartCol = SwVbaTableHelper::getColumnStr( nStartColumn );
+    OUStringBuffer aRangeName;
+    OUString sStartCol = SwVbaTableHelper::getColumnStr( nStartColumn );
     aRangeName.append(sStartCol).append(sal_Int32( 1 ) );
-    rtl::OUString sEndCol = SwVbaTableHelper::getColumnStr( nEndColumn );
+    OUString sEndCol = SwVbaTableHelper::getColumnStr( nEndColumn );
     sal_Int32 nRowCount = xTextTable->getRows()->getCount();
     aRangeName.append(':').append( sEndCol ).append( sal_Int32( nRowCount ) );
 
     uno::Reference< table::XCellRange > xCellRange( xTextTable, uno::UNO_QUERY_THROW );
-    rtl::OUString sSelRange = aRangeName.makeStringAndClear();
+    OUString sSelRange = aRangeName.makeStringAndClear();
     uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( sSelRange );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelection->select( uno::makeAny( xSelRange ) );
 }
 
-rtl::OUString
+OUString
 SwVbaColumn::getServiceImplName()
 {
-    return rtl::OUString("SwVbaColumn");
+    return OUString("SwVbaColumn");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaColumn::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Column" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Column" );
     }
     return aServiceNames;
 }

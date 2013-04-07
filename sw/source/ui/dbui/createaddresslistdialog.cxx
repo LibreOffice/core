@@ -44,7 +44,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
-using ::rtl::OUString;
 
 class SwAddressControl_Impl : public Control
 {
@@ -567,10 +566,10 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
         String sPath( SvtPathOptions().SubstituteVariable(
-                    rtl::OUString("$(userurl)/database") ));
+                    OUString("$(userurl)/database") ));
         aDlgHelper.SetDisplayDirectory( sPath );
         uno::Reference< XFilterManager > xFltMgr(xFP, uno::UNO_QUERY);
-        ::rtl::OUString sCSV("*.csv");
+        OUString sCSV("*.csv");
         xFltMgr->appendFilter( m_sAddressListFilterName, sCSV );
         xFltMgr->setCurrentFilter( m_sAddressListFilterName ) ;
 
@@ -578,7 +577,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
         {
             m_sURL = xFP->getFiles().getConstArray()[0];
             INetURLObject aResult( m_sURL );
-            aResult.setExtension(rtl::OUString("csv"));
+            aResult.setExtension(OUString("csv"));
             m_sURL = aResult.GetMainURL(INetURLObject::NO_DECODE);
         }
     }

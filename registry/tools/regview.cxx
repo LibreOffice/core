@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using rtl::OUString;
 using namespace registry::tools;
 
 #if (defined UNX)

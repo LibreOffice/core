@@ -21,33 +21,32 @@
 #include "TransformerBase.hxx"
 #include "PersMixedContentTContext.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 //------------------------------------------------------------------------------
 class XMLPersTextTContext_Impl : public XMLTransformerContext
 {
-    ::rtl::OUString m_aCharacters;
+    OUString m_aCharacters;
 
 public:
     TYPEINFO();
 
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rChars );
+                           const OUString& rChars );
     virtual ~XMLPersTextTContext_Impl();
 
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual sal_Bool IsPersistent() const;
     virtual void Export();
-    const ::rtl::OUString& GetText() const { return m_aCharacters; }
+    const OUString& GetText() const { return m_aCharacters; }
 };
 
 TYPEINIT1( XMLPersTextTContext_Impl, XMLTransformerContext );

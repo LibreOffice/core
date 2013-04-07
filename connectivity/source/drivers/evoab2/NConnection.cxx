@@ -40,27 +40,27 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-::rtl::OUString implGetExceptionMsg( Exception& e, const ::rtl::OUString& aExceptionType_ )
+OUString implGetExceptionMsg( Exception& e, const OUString& aExceptionType_ )
 {
-     ::rtl::OUString aExceptionType = aExceptionType_;
+     OUString aExceptionType = aExceptionType_;
      if( aExceptionType.isEmpty() )
-         aExceptionType =  ::rtl::OUString("Unknown") ;
+         aExceptionType =  OUString("Unknown") ;
 
-     ::rtl::OUString aTypeLine( "\nType: "  );
+     OUString aTypeLine( "\nType: "  );
      aTypeLine += aExceptionType;
 
-     ::rtl::OUString aMessageLine( "\nMessage: "  );
-         aMessageLine += ::rtl::OUString( e.Message );
+     OUString aMessageLine( "\nMessage: "  );
+         aMessageLine += OUString( e.Message );
 
-     ::rtl::OUString aMsg(aTypeLine);
+     OUString aMsg(aTypeLine);
      aMsg += aMessageLine;
          return aMsg;
 }
 
  // Exception type unknown
-::rtl::OUString implGetExceptionMsg( Exception& e )
+OUString implGetExceptionMsg( Exception& e )
 {
-         ::rtl::OUString aMsg = implGetExceptionMsg( e, ::rtl::OUString() );
+         OUString aMsg = implGetExceptionMsg( e, OUString() );
          return aMsg;
 }
 
@@ -93,12 +93,12 @@ void SAL_CALL OEvoabConnection::release() throw()
 IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connection", "com.sun.star.sdbc.Connection")
 
 //-----------------------------------------------------------------------------
-void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
+void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
     SAL_INFO("evoab2", "OEvoabConnection::construct()::url = " << url );
 
-     ::rtl::OUString sPassword;
+     OUString sPassword;
         const char* pPwd                = "password";
 
         const PropertyValue *pIter      = info.getConstArray();
@@ -119,12 +119,12 @@ void OEvoabConnection::construct(const ::rtl::OUString& url, const Sequence< Pro
     else
         setSDBCAddressType(SDBCAddress::EVO_LOCAL);
     setURL(url);
-    setPassword(::rtl::OUStringToOString(sPassword,RTL_TEXTENCODING_UTF8));
+    setPassword(OUStringToOString(sPassword,RTL_TEXTENCODING_UTF8));
     osl_atomic_decrement( &m_refCount );
 }
 
 // --------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OEvoabConnection::nativeSQL( const ::rtl::OUString& _sSql ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     // when you need to transform SQL92 to you driver specific you can do it here
     return _sSql;
@@ -170,7 +170,7 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQL
     return xStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -183,7 +183,7 @@ Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( con
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw( SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareCall( const OUString& /*sql*/ ) throw( SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
@@ -248,14 +248,14 @@ sal_Bool SAL_CALL OEvoabConnection::isReadOnly(  ) throw(SQLException, RuntimeEx
 {
     return sal_False;
 }
-void SAL_CALL OEvoabConnection::setCatalog( const ::rtl::OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OEvoabConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
 
-::rtl::OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OEvoabConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 void SAL_CALL OEvoabConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {

@@ -30,10 +30,6 @@
 
 using namespace pdfparse;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
 
 void printHelp( const char* pExe )
 {
@@ -268,7 +264,7 @@ int write_addStreamArray( const char* pOutFile, PDFArray* pStreams, PDFFile* pPD
             PDFObject* pObject = pPDFFile->findObject( pStreamRef->m_nNumber, pStreamRef->m_nGeneration );
             if( pObject )
             {
-                rtl::OStringBuffer aOutStream( pOutFile );
+                OStringBuffer aOutStream( pOutFile );
                 aOutStream.append( "_stream_" );
                 aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
                 aOutStream.append( "_" );
@@ -300,7 +296,7 @@ int write_addStreams( const char* pInFile, const char* pOutFile, PDFFile* pPDFFi
         if( pTrailer && pTrailer->m_pDict )
         {
             // search for AdditionalStreams entry
-            boost::unordered_map<rtl::OString,PDFEntry*,rtl::OStringHash>::iterator add_stream;
+            boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator add_stream;
             add_stream = pTrailer->m_pDict->m_aMap.find( "AdditionalStreams" );
             if( add_stream != pTrailer->m_pDict->m_aMap.end() )
             {
@@ -327,7 +323,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         if( ! pDict )
             continue;
 
-        boost::unordered_map<rtl::OString,PDFEntry*,rtl::OStringHash>::iterator map_it =
+        boost::unordered_map<OString,PDFEntry*,OStringHash>::iterator map_it =
                 pDict->m_aMap.find( "Type" );
         if( map_it == pDict->m_aMap.end() )
             continue;
@@ -346,7 +342,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         pName = dynamic_cast<PDFName*>(map_it->second);
         if( ! pName )
             continue;
-        rtl::OString aFontName( pName->m_aName );
+        OString aFontName( pName->m_aName );
 
         PDFObjectRef* pStreamRef = 0;
         const char* pFileType = NULL;
@@ -378,7 +374,7 @@ int write_fonts( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPDFF
         if( ! pStream )
             continue;
 
-        rtl::OStringBuffer aOutStream( i_pOutFile );
+        OStringBuffer aOutStream( i_pOutFile );
         aOutStream.append( "_font_" );
         aOutStream.append( sal_Int32(pStreamRef->m_nNumber) );
         aOutStream.append( "_" );
@@ -414,7 +410,7 @@ int write_objects( const char* i_pInFile, const char* i_pOutFile, PDFFile* i_pPD
             continue;
         }
 
-        rtl::OStringBuffer aOutStream( i_pOutFile );
+        OStringBuffer aOutStream( i_pOutFile );
         aOutStream.append( "_stream_" );
         aOutStream.append( nObject );
         aOutStream.append( "_" );
@@ -472,11 +468,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 nArg++;
                 if( nArg < argc )
                 {
-                    rtl::OString aObjs( argv[nArg] );
+                    OString aObjs( argv[nArg] );
                     sal_Int32 nIndex = 0;
                     while( nIndex != -1 )
                     {
-                        rtl::OString aToken( aObjs.getToken( 0, ',', nIndex ) );
+                        OString aToken( aObjs.getToken( 0, ',', nIndex ) );
                         sal_Int32 nObject = 0;
                         sal_Int32 nGeneration = 0;
                         sal_Int32 nGenIndex = 0;

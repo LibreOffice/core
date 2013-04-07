@@ -563,7 +563,7 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
             eq = eq.replaceAll("\\", "\\\\");
             eq = eq.replaceAll("\"", "\\\"");
             out<<"label= \"Equation: \\\"";
-            out<< rtl::OUStringToOString(eq, RTL_TEXTENCODING_UTF8).getStr();
+            out<< OUStringToOString(eq, RTL_TEXTENCODING_UTF8).getStr();
             out<<"\\\"\";"<<std::endl;
         }
     }
@@ -604,13 +604,13 @@ void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, 
         case NPLACE:           out<<"SmPlaceNode"; break;
         case NTEXT:
             out<<"SmTextNode: ";
-            out<< rtl::OUStringToOString(((SmTextNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
+            out<< OUStringToOString(((SmTextNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
             break;
         case NSPECIAL:             out<<"SmSpecialNode"; break;
         case NGLYPH_SPECIAL:   out<<"SmGlyphSpecialNode"; break;
         case NMATH:
             out<<"SmMathSymbolNode: ";
-            out<< rtl::OUStringToOString(((SmMathSymbolNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
+            out<< OUStringToOString(((SmMathSymbolNode*)this)->GetText(), RTL_TEXTENCODING_UTF8).getStr();
             break;
         case NBLANK:           out<<"SmBlankNode"; break;
         case NERROR:           out<<"SmErrorNode"; break;
@@ -864,7 +864,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         SmTmpDevice  aTmpDev ((OutputDevice &) rDev, sal_True);
         aTmpDev.SetFont(GetFont());
 
-        SmRect aRect = (SmRect(aTmpDev, &rFormat, rtl::OUString("a"),
+        SmRect aRect = (SmRect(aTmpDev, &rFormat, OUString("a"),
                                GetFont().GetBorderWidth()));
         nFormulaBaseline = GetAlignM();
         // move from middle position by constant - distance
@@ -924,7 +924,7 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         //! be sure to use a character that has explicitly defined HiAttribut
         //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
         //! 'vec {a}'.
-        SmRect::operator = (SmRect(aTmpDev, &rFormat, rtl::OUString("a"),
+        SmRect::operator = (SmRect(aTmpDev, &rFormat, OUString("a"),
                             GetFont().GetBorderWidth()));
         // make sure that the rectangle occupies (almost) no space
         SetWidth(1);
@@ -2643,7 +2643,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 {
     sal_Unicode cChar = GetToken().cMathChar;
     if ((sal_Unicode) '\0' != cChar)
-        SetText(rtl::OUString(cChar));
+        SetText(OUString(cChar));
 }
 
 void SmMathSymbolNode::AdaptToX(const OutputDevice &rDev, sal_uLong nWidth)
@@ -3056,7 +3056,7 @@ void SmBlankNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nSpace = nNum * nDist;
 
     // get a SmRect with Baseline and all the bells and whistles
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, rtl::OUString(' '),
+    SmRect::operator = (SmRect(aTmpDev, &rFormat, OUString(' '),
                                GetFont().GetBorderWidth()));
 
     // and resize it to the requested size

@@ -71,7 +71,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
     {
         case FID_TABLE_VISIBLE:
             {
-                rtl::OUString aName;
+                OUString aName;
                 pDoc->GetName( nCurrentTab, aName );
 
                 sal_Bool bVisible=sal_True;
@@ -134,7 +134,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
-                    rtl::OUString aTabName;
+                    OUString aTabName;
                     sal_Bool bFirst = sal_True;
                     for ( SCTAB i=0; i != nTabCount; i++ )
                     {
@@ -256,7 +256,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    std::vector<rtl::OUString> aNames(0);
+                                    std::vector<OUString> aNames(0);
                                     InsertTables( aNames, nTabNr,nCount );
                                 }
                             }
@@ -286,7 +286,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    std::vector<rtl::OUString> aNames(0);
+                                    std::vector<OUString> aNames(0);
                                     InsertTables( aNames, nTabAfter,nCount);
                                 }
                             }
@@ -352,7 +352,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     sal_uInt16      nRet    = RET_OK;
                     sal_Bool        bDone   = false;
                     String      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
-                    rtl::OUString aName;
+                    OUString aName;
                     String      aDlgTitle;
                     const sal_Char* pHelpId = 0;
 
@@ -437,8 +437,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
                 sal_Bool   bCpy = false;
-                rtl::OUString aDocName;
-                rtl::OUString aTabName;
+                OUString aDocName;
+                OUString aTabName;
 
                 if( pReqArgs != NULL )
                 {
@@ -496,7 +496,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    rtl::OUString aDefaultName;
+                    OUString aDefaultName;
                     pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -878,7 +878,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
             case FID_TAB_RENAME:
                 {
-                    rtl::OUString aTabName;
+                    OUString aTabName;
                     pDoc->GetName( nTab, aTabName );
 
                     rSet.Put( SfxStringItem( nWhich, aTabName ));

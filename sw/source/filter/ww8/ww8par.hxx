@@ -458,9 +458,9 @@ namespace sw
 class WW8FieldEntry
 {
     private:
-        ::rtl::OUString msBookmarkName;
-        ::rtl::OUString msMarkType;
-        ::rtl::OUString msMarkCode;
+        OUString msBookmarkName;
+        OUString msMarkType;
+        OUString msMarkCode;
         ::sw::mark::IFieldmark::parameter_map_t maParams;
 
     public:
@@ -475,11 +475,11 @@ class WW8FieldEntry
         SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
         xub_StrLen GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-        ::rtl::OUString GetBookmarkName();
-        ::rtl::OUString GetBookmarkCode();
-        void SetBookmarkName(::rtl::OUString bookmarkName);
-        void SetBookmarkType(::rtl::OUString bookmarkType);
-        void SetBookmarkCode(::rtl::OUString bookmarkCode);
+        OUString GetBookmarkName();
+        OUString GetBookmarkCode();
+        void SetBookmarkName(OUString bookmarkName);
+        void SetBookmarkType(OUString bookmarkType);
+        void SetBookmarkCode(OUString bookmarkCode);
         ::sw::mark::IFieldmark::parameter_map_t& getParameters();
 };
 
@@ -553,7 +553,7 @@ class WW8FormulaControl : private ::boost::noncopyable
 protected:
     SwWW8ImplReader &rRdr;
 public:
-    WW8FormulaControl(const rtl::OUString& rN, SwWW8ImplReader &rR)
+    WW8FormulaControl(const OUString& rN, SwWW8ImplReader &rR)
         : rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
@@ -573,12 +573,12 @@ public:
     sal_uInt16 nChecked;
     sal_uInt16 nDefaultChecked;
 
-    rtl::OUString sTitle;
-    rtl::OUString sDefault;
-    rtl::OUString sFormatting;
-    rtl::OUString sHelp;
-    rtl::OUString sToolTip;
-    std::vector<rtl::OUString> maListEntries;
+    OUString sTitle;
+    OUString sDefault;
+    OUString sFormatting;
+    OUString sHelp;
+    OUString sToolTip;
+    std::vector<OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
@@ -586,7 +586,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz) = 0;
-    rtl::OUString sName;
+    OUString sName;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl
@@ -665,7 +665,7 @@ class SwMSDffManager : public SvxMSDffManager
 private:
     SwWW8ImplReader& rReader;
     SvStream *pFallbackStream;
-    std::map<sal_uInt32,rtl::OString> aOldEscherBlipCache;
+    std::map<sal_uInt32,OString> aOldEscherBlipCache;
 
     virtual sal_Bool GetOLEStorageName( long nOLEId, OUString& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
@@ -840,12 +840,12 @@ public:
 class wwFrameNamer : private ::boost::noncopyable
 {
 private:
-    rtl::OUString msSeed;
+    OUString msSeed;
     sal_Int32 mnImportedGraphicsCount;
     bool mbIsDisabled;
 public:
-    void SetUniqueGraphName(SwFrmFmt *pFrmFmt, const rtl::OUString &rFixedPart);
-    wwFrameNamer(bool bIsDisabled, const rtl::OUString &rSeed)
+    void SetUniqueGraphName(SwFrmFmt *pFrmFmt, const OUString &rFixedPart);
+    wwFrameNamer(bool bIsDisabled, const OUString &rSeed)
         : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
     {
     }
@@ -1255,7 +1255,7 @@ private:
         pReffingStck = 0;
     }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-    void emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString);
+    void emulateMSWordAddTextToParagraph(const OUString& rAddString);
     void simpleAddTextToParagraph(const String& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
@@ -1542,7 +1542,7 @@ private:
     // #i84783#
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
-    bool ReadGlobalTemplateSettings( const rtl::OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
+    bool ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);

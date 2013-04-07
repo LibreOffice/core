@@ -91,12 +91,12 @@ public:
         const enum ParaFrameMode eParaFrameMode, SwFrmFmt *const pFmt = 0);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(
-            const ::rtl::OUString& rServiceName)
+            const OUString& rServiceName)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 

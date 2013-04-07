@@ -98,7 +98,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
-::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
+OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     OSL_FAIL("Here should be a implementation to fill the description");
@@ -107,10 +107,10 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
         throw lang::IndexOutOfBoundsException();
 
     //setAccessibleRowDescription(nRow, xAccessible); // to remember the created Description
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
+OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     OSL_FAIL("Here should be a implementation to fill the description");
@@ -119,7 +119,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
         throw lang::IndexOutOfBoundsException();
 
     //setAccessibleColumnDescription(nColumn, xAccessible); // to remember the created Description
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
@@ -346,23 +346,23 @@ uno::Reference< XAccessible > SAL_CALL
     return getAccessibleCellAt(nRow, nColumn);
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-    return rtl::OUString(sDesc);
+    return OUString(sDesc);
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
     String sName(ScResId(STR_ACC_TABLE_NAME));
-    rtl::OUString sCoreName;
+    OUString sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
         sName.SearchAndReplaceAscii("%1", sCoreName);
-    return rtl::OUString(sName);
+    return OUString(sName);
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
@@ -436,10 +436,10 @@ void SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleTableBase");
+    return OUString("ScAccessibleTableBase");
 }
 
     //=====  XTypeProvider  ===================================================

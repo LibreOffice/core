@@ -30,10 +30,10 @@ namespace test {
 
 namespace detail {
 
-bool getArgument(rtl::OUString const & name, rtl::OUString * value) {
+bool getArgument(OUString const & name, OUString * value) {
     OSL_ASSERT(value != 0);
     return rtl::Bootstrap::get(
-        rtl::OUString("arg-") + name, *value);
+        OUString("arg-") + name, *value);
 }
 
 }

@@ -108,7 +108,7 @@ extern "C"  SAL_DLLPUBLIC_EXPORT void* SAL_CALL dbu_component_getFactory(
     if (pServiceManager && pImplementationName)
     {
         xRet = ::dbaui::OModuleRegistration::getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName),
+            OUString::createFromAscii(pImplementationName),
             static_cast< XMultiServiceFactory* >(pServiceManager));
     }
 

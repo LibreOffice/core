@@ -326,7 +326,7 @@ sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const Rectangle& 
     return pImplementation->registerDestReference( nDestId, rRect, nPageNr, eType );
 }
 //--->i56629
-sal_Int32 PDFWriter::CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+sal_Int32 PDFWriter::CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return pImplementation->createNamedDest( sDestName, rRect, nPageNr, eType );
 }
@@ -340,7 +340,7 @@ sal_Int32 PDFWriter::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
     return pImplementation->setLinkDest( nLinkId, nDestId );
 }
 
-sal_Int32 PDFWriter::SetLinkURL( sal_Int32 nLinkId, const rtl::OUString& rURL )
+sal_Int32 PDFWriter::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     return pImplementation->setLinkURL( nLinkId, rURL );
 }
@@ -350,7 +350,7 @@ void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
     pImplementation->setLinkPropertyId( nLinkId, nPropertyId );
 }
 
-sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const rtl::OUString& rText, sal_Int32 nDestID )
+sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
 {
     return pImplementation->createOutlineItem( nParent, rText, nDestID );
 }
@@ -360,7 +360,7 @@ sal_Int32 PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent
     return pImplementation->setOutlineItemParent( nItem, nNewParent );
 }
 
-sal_Int32 PDFWriter::SetOutlineItemText( sal_Int32 nItem, const rtl::OUString& rText )
+sal_Int32 PDFWriter::SetOutlineItemText( sal_Int32 nItem, const OUString& rText )
 {
     return  pImplementation->setOutlineItemText( nItem, rText );
 }
@@ -375,7 +375,7 @@ void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_In
     pImplementation->createNote( rRect, rNote, nPageNr );
 }
 
-sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
+sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
     return pImplementation->beginStructureElement( eType, rAlias );
 }
@@ -445,8 +445,8 @@ std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 }
 
 com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
-PDFWriter::InitEncryption( const rtl::OUString& i_rOwnerPassword,
-                           const rtl::OUString& i_rUserPassword,
+PDFWriter::InitEncryption( const OUString& i_rOwnerPassword,
+                           const OUString& i_rUserPassword,
                            bool b128Bit
                           )
 {

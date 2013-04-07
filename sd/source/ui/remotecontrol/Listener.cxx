@@ -20,8 +20,6 @@
 using namespace sd;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::frame;
-using rtl::OString;
-using rtl::OStringBuffer;
 
 
 Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
@@ -105,7 +103,7 @@ void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
     (void) bReverse;
 }
 
-void SAL_CALL Listener::hyperLinkClicked (const rtl::OUString &)
+void SAL_CALL Listener::hyperLinkClicked (const OUString &)
     throw (css::uno::RuntimeException)
 {
 }

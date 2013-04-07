@@ -29,7 +29,6 @@
 
 using namespace ftp;
 
-using ::rtl::OUString;
 typedef sal_uInt32 ULONG;
 
 

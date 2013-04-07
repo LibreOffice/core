@@ -136,7 +136,7 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
             }
         } catch (const ::com::sun::star::uno::Exception & e) {
             OSL_TRACE("SwEditShell::Undo(): exception caught:\n %s",
-                ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
         }
 
@@ -191,7 +191,7 @@ bool SwEditShell::Redo(sal_uInt16 const nCount)
             }
         } catch (const ::com::sun::star::uno::Exception & e) {
             OSL_TRACE("SwEditShell::Redo(): exception caught:\n %s",
-                ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+                OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                     .getStr());
         }
 
@@ -221,7 +221,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
             || bRet;
     } catch (const ::com::sun::star::uno::Exception & e) {
         OSL_TRACE("SwEditShell::Repeat(): exception caught:\n %s",
-            ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
                 .getStr());
     }
 

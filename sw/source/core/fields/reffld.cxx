@@ -65,7 +65,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 
 extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
@@ -294,7 +293,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
         return ;
     }
     // where is the category name (e.g. "Illustration")?
-    rtl::OUString const Text = pTxtNd->GetTxt();
+    OUString const Text = pTxtNd->GetTxt();
     unsigned const nCatStart = Text.indexOf(sSetRefName);
     unsigned const nCatEnd = nCatStart == unsigned(-1) ?
         unsigned(-1) : nCatStart + sSetRefName.getLength();
@@ -585,19 +584,19 @@ SwField* SwGetRefField::Copy() const
  --------------------------------------------------------------------*/
 
 
-const rtl::OUString& SwGetRefField::GetPar1() const
+const OUString& SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
 
 
-void SwGetRefField::SetPar1( const rtl::OUString& rName )
+void SwGetRefField::SetPar1( const OUString& rName )
 {
     sSetRefName = rName;
 }
 
 
-rtl::OUString SwGetRefField::GetPar2() const
+OUString SwGetRefField::GetPar2() const
 {
     return Expand();
 }
@@ -658,11 +657,11 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 break;
             }
         }
-        rAny <<= rtl::OUString(sTmp);
+        rAny <<= OUString(sTmp);
     }
     break;
     case FIELD_PROP_PAR3:
-        rAny <<= rtl::OUString(Expand());
+        rAny <<= OUString(Expand());
         break;
     case FIELD_PROP_SHORT1:
         rAny <<= (sal_Int16)nSeqNo;

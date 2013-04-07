@@ -233,7 +233,7 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
     }
 }
 
-sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString& sID)
+sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const OUString& sID)
 {
     sal_uInt32 nResult(0);
     sal_uInt32 nLength(sID.getLength());
@@ -241,7 +241,7 @@ sal_uInt32 ScXMLChangeTrackingImportHelper::GetIDFromString(const rtl::OUString&
     {
         if (sID.compareTo(sIDPrefix, nPrefixLength) == 0)
         {
-            rtl::OUString sValue(sID.copy(nPrefixLength, nLength - nPrefixLength));
+            OUString sValue(sID.copy(nPrefixLength, nLength - nPrefixLength));
             sal_Int32 nValue;
             ::sax::Converter::convertNumber(nValue, sValue);
             OSL_ENSURE(nValue > 0, "wrong change action ID");
@@ -436,8 +436,8 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, S
     if ( aInfo.aDateTime.HundredthSeconds )
         pTrack->SetTime100thSeconds( true );
 
-    const std::set<rtl::OUString>& rUsers = pTrack->GetUserCollection();
-    std::set<rtl::OUString>::const_iterator it = rUsers.find(aInfo.sUser);
+    const std::set<OUString>& rUsers = pTrack->GetUserCollection();
+    std::set<OUString>::const_iterator it = rUsers.find(aInfo.sUser);
     if (it != rUsers.end())
     {
         // It's probably pointless to do this.
@@ -745,7 +745,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         else
                         {
                             sal_uInt8 nMatrixFlag = aCell.mpFormula->GetMatrixFlag();
-                            rtl::OUString sFormula;
+                            OUString sFormula;
                             // With GRAM_ODFF reference detection is faster on compilation.
                             /* FIXME: new cell should be created with a clone
                              * of the token array instead. Any reason why this
@@ -755,7 +755,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                             // #i87826# [Collaboration] Rejected move destroys formulas
                             // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
                             //        is returned and no further string handling is necessary
-                            rtl::OUString sFormula2;
+                            OUString sFormula2;
                             if ( nMatrixFlag != MM_NONE )
                             {
                                 sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );

@@ -39,7 +39,6 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
 using namespace unographic;
 
-using rtl::OUString;
 
 namespace sdecl = comphelper::service_decl;
 

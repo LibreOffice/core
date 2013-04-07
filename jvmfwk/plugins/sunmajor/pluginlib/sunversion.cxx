@@ -27,9 +27,6 @@
 #include "diagnostics.h"
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 namespace jfw_plugin  { //stoc_javadetect
 
 
@@ -41,12 +38,12 @@ public:
 } test;
 #endif
 
-SunVersion::SunVersion(const rtl::OUString &usVer):
+SunVersion::SunVersion(const OUString &usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE),
     usVersion(usVer)
 {
     memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
-    rtl::OString sVersion= rtl::OUStringToOString(usVer, osl_getThreadTextEncoding());
+    OString sVersion= OUStringToOString(usVer, osl_getThreadTextEncoding());
     m_bValid = init(sVersion.getStr());
 }
 SunVersion::SunVersion(const char * szVer):
@@ -54,7 +51,7 @@ SunVersion::SunVersion(const char * szVer):
 {
     memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
     m_bValid = init(szVer);
-    usVersion= rtl::OUString(szVer,strlen(szVer),osl_getThreadTextEncoding());
+    usVersion= OUString(szVer,strlen(szVer),osl_getThreadTextEncoding());
 }
 
 

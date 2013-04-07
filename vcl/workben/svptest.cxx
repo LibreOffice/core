@@ -41,8 +41,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // Forward declaration
 void Main();
@@ -53,7 +51,7 @@ SAL_IMPLEMENT_MAIN()
     tools::extendApplicationEnvironment();
 
     Reference< XMultiServiceFactory > xMS;
-    xMS = cppu::createRegistryServiceFactory( rtl::OUString( "types.rdb" ), rtl::OUString( "applicat.rdb" ), sal_True );
+    xMS = cppu::createRegistryServiceFactory( OUString( "types.rdb" ), OUString( "applicat.rdb" ), sal_True );
 
     comphelper::setProcessServiceFactory( xMS );
 
@@ -84,7 +82,7 @@ public:
 void Main()
 {
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( rtl::OUString( "VCL - Workbench" ) );
+    aMainWin.SetText( OUString( "VCL - Workbench" ) );
     aMainWin.Show();
 
     Application::Execute();

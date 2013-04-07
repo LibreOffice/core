@@ -26,7 +26,7 @@ class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
 typedef std::map<sal_uInt16,Color> RtfColorTbl;
-typedef std::map<sal_uInt16,rtl::OString> RtfStyleTbl;
+typedef std::map<sal_uInt16,OString> RtfStyleTbl;
 typedef std::map<String,sal_uInt16> RtfRedlineTbl;
 class SwNode;
 class SwTxtNode;
@@ -71,7 +71,7 @@ public:
 
     virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
 
-    virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
+    virtual void AppendBookmark( const OUString& rName, bool bSkip = false );
 
     //For i120928,add an interface to export graphic of bullet
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
@@ -97,11 +97,11 @@ public:
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
     virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
-    virtual void DoComboBox(const rtl::OUString &rName,
-                    const rtl::OUString &rHelp,
-                    const rtl::OUString &ToolTip,
-                    const rtl::OUString &rSelected,
-                    com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
+    virtual void DoComboBox(const OUString &rName,
+                    const OUString &rHelp,
+                    const OUString &ToolTip,
+                    const OUString &rSelected,
+                    com::sun::star::uno::Sequence<OUString> &rListItems);
 
     virtual void DoFormText(const SwInputField * pFld);
 
@@ -131,7 +131,7 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
-    virtual void OutputLinkedOLE(const rtl::OUString&);
+    virtual void OutputLinkedOLE(const OUString&);
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
@@ -169,8 +169,8 @@ public:
     sal_uInt16 GetRedline( const String& rAuthor );
     const String* GetRedline( sal_uInt16 nId );
 
-    void InsStyle( sal_uInt16 nId, const rtl::OString& rStyle );
-    rtl::OString* GetStyle( sal_uInt16 nId );
+    void InsStyle( sal_uInt16 nId, const OString& rStyle );
+    OString* GetStyle( sal_uInt16 nId );
 
 private:
     /// No copying.

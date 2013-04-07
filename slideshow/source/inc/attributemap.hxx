@@ -65,7 +65,7 @@ namespace slideshow
             @returns ATTRIBUTE_INVALID, if name was not found in the
             mapping table.
          */
-        AttributeType mapAttributeName( const ::rtl::OUString& rAttrName );
+        AttributeType mapAttributeName( const OUString& rAttrName );
     }
 }
 

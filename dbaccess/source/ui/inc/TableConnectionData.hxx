@@ -71,7 +71,7 @@ namespace dbaui
         virtual OTableConnectionData* NewInstance() const;
 
         sal_Bool SetConnLine( sal_uInt16 nIndex, const String& rSourceFieldName, const String& rDestFieldName );
-        sal_Bool AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName );
+        sal_Bool AppendConnLine( const OUString& rSourceFieldName, const OUString& rDestFieldName );
         /** Deletes list of ConnLines
         */
         void ResetConnLines();

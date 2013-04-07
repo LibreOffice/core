@@ -65,11 +65,11 @@ using namespace ::com::sun::star;
 ScHTMLStyles::ScHTMLStyles() : maEmpty() {}
 
 void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
-                       const rtl::OUString& aProp, const rtl::OUString& aValue)
+                       const OUString& aProp, const OUString& aValue)
 {
     if (pElemName)
     {
-        rtl::OUString aElem(pElemName, nElemName, RTL_TEXTENCODING_UTF8);
+        OUString aElem(pElemName, nElemName, RTL_TEXTENCODING_UTF8);
         aElem = aElem.toAsciiLowerCase();
         if (pClassName)
         {
@@ -90,7 +90,7 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
             }
 
             NamePropsType* pClsProps = itrElem->second;
-            rtl::OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
+            OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
             aClass = aClass.toAsciiLowerCase();
             insertProp(*pClsProps, aClass, aProp, aValue);
         }
@@ -105,15 +105,15 @@ void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pCla
         if (pClassName)
         {
             // Class name only. Add it to the global.
-            rtl::OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
+            OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
             aClass = aClass.toAsciiLowerCase();
             insertProp(maGlobalProps, aClass, aProp, aValue);
         }
     }
 }
 
-const rtl::OUString& ScHTMLStyles::getPropertyValue(
-    const rtl::OUString& rElem, const rtl::OUString& rClass, const rtl::OUString& rPropName) const
+const OUString& ScHTMLStyles::getPropertyValue(
+    const OUString& rElem, const OUString& rClass, const OUString& rPropName) const
 {
     // First, look into the element-class storage.
     {
@@ -158,8 +158,8 @@ const rtl::OUString& ScHTMLStyles::getPropertyValue(
 }
 
 void ScHTMLStyles::insertProp(
-    NamePropsType& rStore, const rtl::OUString& aName,
-    const rtl::OUString& aProp, const rtl::OUString& aValue)
+    NamePropsType& rStore, const OUString& aName,
+    const OUString& aProp, const OUString& aValue)
 {
     NamePropsType::iterator itr = rStore.find(aName);
     if (itr == rStore.end())
@@ -294,11 +294,11 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = rtl::OUString( "text/html; charset=" );
+            String aContentType = OUString( "text/html; charset=" );
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( rtl::OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }
@@ -1060,12 +1060,12 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             break;
             case HTML_O_SDVAL:
             {
-                pActEntry->pValStr = new rtl::OUString( rOption.GetString() );
+                pActEntry->pValStr = new OUString( rOption.GetString() );
             }
             break;
             case HTML_O_SDNUM:
             {
-                pActEntry->pNumStr = new rtl::OUString( rOption.GetString() );
+                pActEntry->pNumStr = new OUString( rOption.GetString() );
             }
             break;
         }
@@ -1397,7 +1397,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
                 if ( !pActEntry->bHasGraphic )
                 {   // ALT text only if not any image loaded
                     if (!pActEntry->aAltText.isEmpty())
-                        pActEntry->aAltText += rtl::OUString("; ");
+                        pActEntry->aAltText += OUString("; ");
 
                     pActEntry->aAltText += rOption.GetString();
                 }
@@ -1443,7 +1443,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
         pActEntry->bHasGraphic = true;
-        pActEntry->aAltText = rtl::OUString();
+        pActEntry->aAltText = OUString();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->pGraphic = pGraphic;
@@ -1523,7 +1523,7 @@ void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
         {
             case HTML_O_NAME:
             {
-                pActEntry->pName = new rtl::OUString(rOption.GetString());
+                pActEntry->pName = new OUString(rOption.GetString());
             }
             break;
         }
@@ -1612,7 +1612,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         case HTML_TITLE_ON:
         {
             bInTitle = true;
-            aString = rtl::OUString();
+            aString = OUString();
         }
         break;
         case HTML_TITLE_OFF:
@@ -2158,9 +2158,9 @@ namespace {
  * Decode a numbert format string stored in Excel-generated HTML's CSS
  * region.
  */
-rtl::OUString decodeNumberFormat(const rtl::OUString& rFmt)
+OUString decodeNumberFormat(const OUString& rFmt)
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     const sal_Unicode* p = rFmt.getStr();
     sal_Int32 n = rFmt.getLength();
     for (sal_Int32 i = 0; i < n; ++i, ++p)
@@ -2186,7 +2186,7 @@ rtl::OUString decodeNumberFormat(const rtl::OUString& rFmt)
             }
             if (nDigitCount)
             {
-                sal_Int32 nVal = rtl::OUString(p1, nDigitCount).toInt32(16);
+                sal_Int32 nVal = OUString(p1, nDigitCount).toInt32(16);
                 aBuf.append(static_cast<sal_Unicode>(nVal));
             }
         }
@@ -2206,7 +2206,7 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<rtl::OUString> pValStr, pNumStr;
+        ::std::auto_ptr<OUString> pValStr, pNumStr;
         SAL_WNODEPRECATED_DECLARATIONS_POP
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
@@ -2222,21 +2222,21 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
                     aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
                 break;
                 case HTML_O_SDVAL:
-                    pValStr.reset(new rtl::OUString(itr->GetString()));
+                    pValStr.reset(new OUString(itr->GetString()));
                 break;
                 case HTML_O_SDNUM:
-                    pNumStr.reset(new rtl::OUString(itr->GetString()));
+                    pNumStr.reset(new OUString(itr->GetString()));
                 break;
                 case HTML_O_CLASS:
                 {
                     // Pick up the number format associated with this class (if
                     // any).
-                    rtl::OUString aElem("td");
-                    rtl::OUString aClass = itr->GetString();
-                    rtl::OUString aProp("mso-number-format");
+                    OUString aElem("td");
+                    OUString aClass = itr->GetString();
+                    OUString aProp("mso-number-format");
                     const ScHTMLStyles& rStyles = mpParser->GetStyles();
-                    const rtl::OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
-                    rtl::OUString aNumFmt = decodeNumberFormat(rVal);
+                    const OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
+                    OUString aNumFmt = decodeNumberFormat(rVal);
 
                     nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
                     if (nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
@@ -2940,11 +2940,11 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const String& rBaseURL  )
         const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( RTL_TEXTENCODING_UTF8 );
         if( pCharSet )
         {
-            String aContentType = rtl::OUString( "text/html; charset=" );
+            String aContentType = OUString( "text/html; charset=" );
             aContentType.AppendAscii( pCharSet );
 
             xValues = new SvKeyValueIterator;
-            xValues->Append( SvKeyValue( rtl::OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
+            xValues->Append( SvKeyValue( OUString( OOO_STRING_SVTOOLS_HTML_META_content_type ), aContentType ) );
             pAttributes = xValues;
         }
     }
@@ -3121,7 +3121,7 @@ void ScHTMLQueryParser::TitleOff( const ImportInfo& rInfo )
 {
     if( mbTitleOn )
     {
-        rtl::OUString aTitle = maTitle.makeStringAndClear().trim();
+        OUString aTitle = maTitle.makeStringAndClear().trim();
         if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
         {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -3236,8 +3236,8 @@ public:
             const SelectorName& rSelName = *itr;
             const MemStr& rElem = rSelName.first;
             const MemStr& rClass = rSelName.second;
-            rtl::OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
-            rtl::OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
+            OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
+            OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
             mrStyles.add(rElem.mp, rElem.mn, rClass.mp, rClass.mn, aName, aValue);
         }
         maPropName = MemStr();
@@ -3247,9 +3247,9 @@ public:
 
 }
 
-void ScHTMLQueryParser::ParseStyle(const rtl::OUString& rStrm)
+void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
 {
-    rtl::OString aStr = rtl::OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
+    OString aStr = OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
     CSSHandler aHdl(GetStyles());
     orcus::css_parser<CSSHandler> aParser(aStr.getStr(), aStr.getLength(), aHdl);
     try

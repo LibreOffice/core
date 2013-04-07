@@ -43,10 +43,10 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-sdbcx::ObjectType ODbaseTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
 {
     ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString("TABLE"));
+                                        _rName,OUString("TABLE"));
 
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();
@@ -64,7 +64,7 @@ Reference< XPropertySet > ODbaseTables::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType ODbaseTables::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
@@ -92,7 +92,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const ::rtl::OUString& _rForName, 
 }
 // -------------------------------------------------------------------------
 // XDrop
-void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
+void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XUnoTunnel> xTunnel;
     try
@@ -113,7 +113,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementNam
     }
     else
     {
-        const ::rtl::OUString sError( static_cast<OFileCatalog&>(m_rParent).getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( static_cast<OFileCatalog&>(m_rParent).getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_TABLE_NOT_DROP,
                     "$tablename$", _sElementName
                  ) );

@@ -102,7 +102,6 @@
 #include <comcore.hrc>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -148,7 +147,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_SOFT_HYPHEN:
         if( CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, 0 ) &&
             CHAR_SOFTHYPHEN != rSh.SwCrsrShell::GetChar( sal_True, -1 ))
-            rSh.Insert( rtl::OUString( CHAR_SOFTHYPHEN ) );
+            rSh.Insert( OUString( CHAR_SOFTHYPHEN ) );
         break;
 
     case FN_INSERT_HARDHYPHEN:
@@ -165,7 +164,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else
-                rSh.Insert( rtl::OUString( cIns ) );
+                rSh.Insert( OUString( cIns ) );
         }
         break;
     case SID_INSERT_RLM :
@@ -181,7 +180,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             case SID_INSERT_ZWSP : cIns = CHAR_ZWSP ; break;
             case SID_INSERT_ZWNBSP: cIns = CHAR_ZWNBSP; break;
         }
-        rSh.Insert( rtl::OUString( cIns ) );
+        rSh.Insert( OUString( cIns ) );
     }
     break;
     case FN_INSERT_BREAK:
@@ -226,7 +225,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             if ( pURL->SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 comphelper::EmbeddedObjectContainer aCnt;
                 svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ), embed::Aspects::MSOLE_CONTENT );
                 if ( xObj.is() )
@@ -237,8 +236,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
-                                uno::makeAny( ::rtl::OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                        xSet->setPropertyValue( OUString("PluginURL"),
+                                uno::makeAny( OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                     }
                 }
 
@@ -278,7 +277,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             {
                 comphelper::EmbeddedObjectContainer aCnt;
-                ::rtl::OUString sName;
+                OUString sName;
                 xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), sName ),
                             embed::Aspects::MSOLE_CONTENT );
                 svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
@@ -288,9 +287,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     try
                     {
                         if ( sClassLocation.Len() )
-                            xSet->setPropertyValue( ::rtl::OUString("PluginURL"),
+                            xSet->setPropertyValue( OUString("PluginURL"),
                                 uno::makeAny(
-                                    ::rtl::OUString(
+                                    OUString(
                                         URIHelper::SmartRel2Abs(
                                             INetURLObject(), sClassLocation,
                                             URIHelper::GetMaybeFileHdl()) ) ) );
@@ -298,7 +297,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         if ( aCommandList.size() )
                         {
                             aCommandList.FillSequence( aSeq );
-                            xSet->setPropertyValue( ::rtl::OUString("PluginCommands"), uno::makeAny( aSeq ) );
+                            xSet->setPropertyValue( OUString("PluginCommands"), uno::makeAny( aSeq ) );
                         }
                     }
                     catch (const uno::Exception&)
@@ -330,7 +329,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if(pURLItem) // URL is a _must_
         {
             comphelper::EmbeddedObjectContainer aCnt;
-            ::rtl::OUString aName;
+            OUString aName;
             xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ),
                         embed::Aspects::MSOLE_CONTENT );
             svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
@@ -348,27 +347,27 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue( ::rtl::OUString("FrameURL"), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue( OUString("FrameURL"), uno::makeAny( OUString( pURLItem->GetValue() ) ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue( ::rtl::OUString("FrameName"), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue( OUString("FrameName"), uno::makeAny( OUString( pNameItem->GetValue() ) ) );
 
                     if ( eScroll == ScrollingAuto )
-                        xSet->setPropertyValue( ::rtl::OUString("FrameIsAutoScroll"),
+                        xSet->setPropertyValue( OUString("FrameIsAutoScroll"),
                             uno::makeAny( sal_True ) );
                     else
-                        xSet->setPropertyValue( ::rtl::OUString("FrameIsScrollingMode"),
+                        xSet->setPropertyValue( OUString("FrameIsScrollingMode"),
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
                     if ( pBorderItem )
-                        xSet->setPropertyValue( ::rtl::OUString("FrameIsBorder"),
+                        xSet->setPropertyValue( OUString("FrameIsBorder"),
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
 
                     if ( pMarginItem )
                     {
-                        xSet->setPropertyValue( ::rtl::OUString("FrameMarginWidth"),
+                        xSet->setPropertyValue( OUString("FrameMarginWidth"),
                             uno::makeAny( sal_Int32( aMargin.Width() ) ) );
 
-                        xSet->setPropertyValue( ::rtl::OUString("FrameMarginHeight"),
+                        xSet->setPropertyValue( OUString("FrameMarginHeight"),
                             uno::makeAny( sal_Int32( aMargin.Height() ) ) );
                     }
                 }
@@ -912,7 +911,7 @@ void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 SwTextShell::SwTextShell(SwView &_rView) :
     SwBaseShell(_rView), pPostItFldMgr( 0 )
 {
-    SetName(rtl::OUString("Text"));
+    SetName(OUString("Text"));
     SetHelpId(SW_TEXTSHELL);
 }
 

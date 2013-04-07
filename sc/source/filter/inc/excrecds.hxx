@@ -271,7 +271,7 @@ public:
 class ExcBundlesheet : public ExcBundlesheetBase
 {
 private:
-    rtl::OString            aName;
+    OString            aName;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
@@ -383,7 +383,7 @@ private:
     sal_uInt16              nCol;
     sal_uInt16              nFlags;
     ExcFilterCondition      aCond[ 2 ];
-    std::vector<rtl::OUString> maMultiValues;
+    std::vector<OUString> maMultiValues;
 
     bool                    AddCondition( ScQueryConnect eConn, sal_uInt8 nType,
                                 sal_uInt8 nOp, double fVal, String* pText,

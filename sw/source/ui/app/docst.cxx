@@ -308,8 +308,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
                         uno::Reference< beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
-                        ::rtl::OUString aUIName;
-                        xInfo->getPropertyValue( ::rtl::OUString("DisplayName") ) >>= aUIName;
+                        OUString aUIName;
+                        xInfo->getPropertyValue( OUString("DisplayName") ) >>= aUIName;
                         if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }

@@ -42,8 +42,8 @@ namespace basprov
     // =============================================================================
 
     BasicLibraryNodeImpl::BasicLibraryNodeImpl( const Reference< XComponentContext >& rxContext,
-         const ::rtl::OUString& sScriptingContext, BasicManager* pBasicManager,
-        const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& sLibName, bool isAppScript )
+         const OUString& sScriptingContext, BasicManager* pBasicManager,
+        const Reference< script::XLibraryContainer >& xLibContainer, const OUString& sLibName, bool isAppScript )
         :m_xContext( rxContext )
     ,m_sScriptingContext( sScriptingContext )
         ,m_pBasicManager( pBasicManager )
@@ -68,7 +68,7 @@ namespace basprov
     // XBrowseNode
     // -----------------------------------------------------------------------------
 
-    ::rtl::OUString BasicLibraryNodeImpl::getName(  ) throw (RuntimeException)
+    OUString BasicLibraryNodeImpl::getName(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -91,9 +91,9 @@ namespace basprov
             StarBASIC* pBasic = m_pBasicManager->GetLib( m_sLibName );
             if ( pBasic && m_xLibrary.is() )
             {
-                Sequence< ::rtl::OUString > aNames = m_xLibrary->getElementNames();
+                Sequence< OUString > aNames = m_xLibrary->getElementNames();
                 sal_Int32 nCount = aNames.getLength();
-                const ::rtl::OUString* pNames = aNames.getConstArray();
+                const OUString* pNames = aNames.getConstArray();
                 aChildNodes.realloc( nCount );
                 Reference< browse::XBrowseNode >* pChildNodes = aChildNodes.getArray();
 

@@ -67,8 +67,8 @@ BaseContainer::~BaseContainer()
 
 
 void BaseContainer::init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext              ,
-                         const ::rtl::OUString&                                        sImplementationName,
-                         const css::uno::Sequence< ::rtl::OUString >&                  lServiceNames      ,
+                         const OUString&                                        sImplementationName,
+                         const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                FilterCache::EItemType                                  eType              )
 {
     // SAFE ->
@@ -152,7 +152,7 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
 
 
 
-::rtl::OUString SAL_CALL BaseContainer::getImplementationName()
+OUString SAL_CALL BaseContainer::getImplementationName()
     throw (css::uno::RuntimeException)
 {
     // SAFE ->
@@ -163,14 +163,14 @@ FilterCache* BaseContainer::impl_getWorkingCache() const
 
 
 
-sal_Bool SAL_CALL BaseContainer::supportsService(const ::rtl::OUString& sServiceName)
+sal_Bool SAL_CALL BaseContainer::supportsService(const OUString& sServiceName)
     throw (css::uno::RuntimeException)
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
           sal_Int32        c      = m_lServiceNames.getLength();
-    const ::rtl::OUString* pNames = m_lServiceNames.getConstArray();
+    const OUString* pNames = m_lServiceNames.getConstArray();
     for (sal_Int32 i=0; i<c; ++i)
     {
         if (pNames[i].equals(sServiceName))
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL BaseContainer::supportsService(const ::rtl::OUString& sService
 
 
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL BaseContainer::getSupportedServiceNames()
     throw (css::uno::RuntimeException)
 {
     // SAFE ->
@@ -193,7 +193,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getSupportedServic
 
 
 
-void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
+void SAL_CALL BaseContainer::insertByName(const OUString& sItem ,
                                           const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException  ,
            css::container::ElementExistException,
@@ -225,7 +225,7 @@ void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
 
     FilterCache* pCache = impl_getWorkingCache();
     if (pCache->hasItem(m_eType, sItem))
-        throw css::container::ElementExistException(::rtl::OUString(), static_cast< css::container::XNameContainer* >(this));
+        throw css::container::ElementExistException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
 
     aLock.clear();
@@ -234,7 +234,7 @@ void SAL_CALL BaseContainer::insertByName(const ::rtl::OUString& sItem ,
 
 
 
-void SAL_CALL BaseContainer::removeByName(const ::rtl::OUString& sItem)
+void SAL_CALL BaseContainer::removeByName(const OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
            css::uno::RuntimeException            )
@@ -256,7 +256,7 @@ void SAL_CALL BaseContainer::removeByName(const ::rtl::OUString& sItem)
 
 
 
-void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
+void SAL_CALL BaseContainer::replaceByName(const OUString& sItem ,
                                            const css::uno::Any&   aValue)
     throw (css::lang::IllegalArgumentException   ,
            css::container::NoSuchElementException,
@@ -288,7 +288,7 @@ void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
 
     FilterCache* pCache = impl_getWorkingCache();
     if (!pCache->hasItem(m_eType, sItem))
-        throw css::container::NoSuchElementException(::rtl::OUString(), static_cast< css::container::XNameContainer* >(this));
+        throw css::container::NoSuchElementException(OUString(), static_cast< css::container::XNameContainer* >(this));
     pCache->setItem(m_eType, sItem, aItem);
 
     aLock.clear();
@@ -297,7 +297,7 @@ void SAL_CALL BaseContainer::replaceByName(const ::rtl::OUString& sItem ,
 
 
 
-css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
+css::uno::Any SAL_CALL BaseContainer::getByName(const OUString& sItem)
     throw (css::container::NoSuchElementException,
            css::lang::WrappedTargetException     ,
            css::uno::RuntimeException            )
@@ -338,10 +338,10 @@ css::uno::Any SAL_CALL BaseContainer::getByName(const ::rtl::OUString& sItem)
 
 
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getElementNames()
+css::uno::Sequence< OUString > SAL_CALL BaseContainer::getElementNames()
     throw (css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > lNames;
+    css::uno::Sequence< OUString > lNames;
 
     impl_loadOnDemand();
 
@@ -367,7 +367,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BaseContainer::getElementNames()
 
 
 
-sal_Bool SAL_CALL BaseContainer::hasByName(const ::rtl::OUString& sItem)
+sal_Bool SAL_CALL BaseContainer::hasByName(const OUString& sItem)
     throw (css::uno::RuntimeException)
 {
     sal_Bool bHasOne = sal_False;
@@ -433,12 +433,12 @@ sal_Bool SAL_CALL BaseContainer::hasElements()
 
 
 
-css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const ::rtl::OUString& /* sQuery */ )
+css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByQuery(const OUString& /* sQuery */ )
     throw (css::uno::RuntimeException)
 {
     OSL_FAIL("not pure virtual ... but not realy implemented .-)");
 
-    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< ::rtl::OUString >());
+    ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, css::uno::Sequence< OUString >());
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
 
@@ -485,7 +485,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
              Further its easiear to work directly with the return value
              instaed of checking of NULL returns! */
 
-    css::uno::Sequence< ::rtl::OUString > lSubSet;
+    css::uno::Sequence< OUString > lSubSet;
     lKeys >> lSubSet;
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSubSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);

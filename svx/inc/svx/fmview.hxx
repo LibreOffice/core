@@ -93,7 +93,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
-        const ::rtl::OUString& _rFieldPostfix,
+        const OUString& _rFieldPostfix,
         sal_uInt32 _nInventor,
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,

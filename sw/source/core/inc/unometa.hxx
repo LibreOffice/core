@@ -125,12 +125,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(
-            const ::rtl::OUString& rServiceName)
+            const OUString& rServiceName)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -188,9 +188,9 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL getEnd()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getString()
+    virtual OUString SAL_CALL getString()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setString(const rtl::OUString& rString)
+    virtual void SAL_CALL setString(const OUString& rString)
         throw (::com::sun::star::uno::RuntimeException);
 
     // XSimpleText
@@ -207,7 +207,7 @@ public:
     virtual void SAL_CALL insertString(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xRange,
-            const rtl::OUString& aString, sal_Bool bAbsorb)
+            const OUString& aString, sal_Bool bAbsorb)
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertControlCharacter(
             const ::com::sun::star::uno::Reference<
@@ -267,12 +267,12 @@ public:
     SwXMetaField(SwDoc *const pDoc);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(
-            const ::rtl::OUString& ServiceName)
+            const OUString& ServiceName)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -294,7 +294,7 @@ public:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValue(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Any& rValue)
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::beans::PropertyVetoException,
@@ -302,33 +302,33 @@ public:
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL
-        getPropertyValue(const ::rtl::OUString& rPropertyName)
+        getPropertyValue(const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removePropertyChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
             ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
@@ -346,7 +346,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XTextField
-    virtual rtl::OUString SAL_CALL getPresentation(sal_Bool bShowCommand)
+    virtual OUString SAL_CALL getPresentation(sal_Bool bShowCommand)
         throw (::com::sun::star::uno::RuntimeException);
 
 };
@@ -357,7 +357,7 @@ void getPrefixAndSuffix(
             ::com::sun::star::frame::XModel>& xModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::rdf::XMetadatable>& xMetaField,
-        ::rtl::OUString *const o_pPrefix, ::rtl::OUString *const o_pSuffix);
+        OUString *const o_pPrefix, OUString *const o_pSuffix);
 
 #endif // SW_UNOMETA_HXX
 

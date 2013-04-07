@@ -50,26 +50,26 @@ sal_Bool SAL_CALL UnxFilePickerCommandThread::result()
     return m_aResult;
 }
 
-::rtl::OUString SAL_CALL UnxFilePickerCommandThread::getCurrentFilter()
+OUString SAL_CALL UnxFilePickerCommandThread::getCurrentFilter()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_aGetCurrentFilter;
 }
 
-::rtl::OUString SAL_CALL UnxFilePickerCommandThread::getDirectory()
+OUString SAL_CALL UnxFilePickerCommandThread::getDirectory()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return m_aGetDirectory;
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
+uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nSize = m_aGetFiles.size();
-    uno::Sequence< ::rtl::OUString > aFiles( ( nSize > 1 )? nSize + 1: nSize );
+    uno::Sequence< OUString > aFiles( ( nSize > 1 )? nSize + 1: nSize );
 
     if ( nSize == 1 )
         aFiles[0] = m_aGetFiles.front();
@@ -78,18 +78,18 @@ uno::Sequence< ::rtl::OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
         // First entry in the sequence must be the dirname, the others are the
         // filenames, so we have to rearrange the list...
 
-        ::rtl::OUString aFront = m_aGetFiles.front();
+        OUString aFront = m_aGetFiles.front();
         sal_Int32 nLastSlash = aFront.lastIndexOf( '/' );
 
-        aFiles[0] = ( nLastSlash >= 0 )? aFront.copy( 0, nLastSlash ): ::rtl::OUString();
+        aFiles[0] = ( nLastSlash >= 0 )? aFront.copy( 0, nLastSlash ): OUString();
         ++nLastSlash;
 
         sal_Int32 nIdx = 1;
-        for ( ::std::list< ::rtl::OUString >::const_iterator it = m_aGetFiles.begin();
+        for ( ::std::list< OUString >::const_iterator it = m_aGetFiles.begin();
                 it != m_aGetFiles.end(); ++it, ++nIdx )
         {
             sal_Int32 nLength = (*it).getLength() - nLastSlash;
-            aFiles[nIdx] = ( nLength >= 0 )? (*it).copy( nLastSlash, nLength ): ::rtl::OUString();
+            aFiles[nIdx] = ( nLength >= 0 )? (*it).copy( nLastSlash, nLength ): OUString();
         }
     }
 
@@ -133,7 +133,7 @@ void SAL_CALL UnxFilePickerCommandThread::run()
                 if ( strcmp( pEntryBegin, "exited" ) == 0 )
                     bShouldExit = sal_True;
                 else
-                    handleCommand( ::rtl::OUString( pEntryBegin, pEntryEnd - pEntryBegin, RTL_TEXTENCODING_UTF8 )/*, bQuit*/ );
+                    handleCommand( OUString( pEntryBegin, pEntryEnd - pEntryBegin, RTL_TEXTENCODING_UTF8 )/*, bQuit*/ );
 
                 pEntryBegin = pEntryEnd + 1;
             }
@@ -162,7 +162,7 @@ void SAL_CALL UnxFilePickerCommandThread::run()
     }
 }
 
-void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &rCommand )
+void SAL_CALL UnxFilePickerCommandThread::handleCommand( const OUString &rCommand )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -171,12 +171,12 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
         OUStringToOString( rCommand, RTL_TEXTENCODING_ASCII_US ).getStr() << "\"" << ::std::endl;
 #endif
 
-    ::std::list< ::rtl::OUString > aList = tokenize( rCommand );
+    ::std::list< OUString > aList = tokenize( rCommand );
 
     if ( aList.empty() )
         return;
 
-    ::rtl::OUString aCommandName = aList.front();
+    OUString aCommandName = aList.front();
     aList.pop_front();
 
     if ( aCommandName == "accept" )
@@ -201,7 +201,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
     }
     else if ( aCommandName == "value" )
     {
-        ::rtl::OUString aType;
+        OUString aType;
         if ( !aList.empty() )
         {
             aType = aList.front();
@@ -226,7 +226,7 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
         }
         else if ( aType == "string" )
         {
-            ::rtl::OUString aValue;
+            OUString aValue;
             if ( !aList.empty() )
                 aValue = aList.front();
 
@@ -235,9 +235,9 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
         }
         else if ( aType == "stringList" )
         {
-            uno::Sequence< ::rtl::OUString > aSequence( aList.size() );
+            uno::Sequence< OUString > aSequence( aList.size() );
             sal_Int32 nIdx = 0;
-            for ( ::std::list< ::rtl::OUString >::const_iterator it = aList.begin(); it != aList.end(); ++it, ++nIdx )
+            for ( ::std::list< OUString >::const_iterator it = aList.begin(); it != aList.end(); ++it, ++nIdx )
                 aSequence[nIdx] = (*it);
 
             m_aGetValue <<= aSequence;
@@ -251,12 +251,12 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
     }
     else if ( aCommandName == "currentFilter" )
     {
-        m_aGetCurrentFilter = aList.empty()? ::rtl::OUString(): aList.front();
+        m_aGetCurrentFilter = aList.empty()? OUString(): aList.front();
         m_aGetCurrentFilterCondition.set();
     }
     else if ( aCommandName == "currentDirectory" )
     {
-        m_aGetDirectory = aList.empty()? ::rtl::OUString(): aList.front();
+        m_aGetDirectory = aList.empty()? OUString(): aList.front();
         m_aGetDirectoryCondition.set();
     }
     else
@@ -268,10 +268,10 @@ void SAL_CALL UnxFilePickerCommandThread::handleCommand( const ::rtl::OUString &
     }
 }
 
-::std::list< ::rtl::OUString > SAL_CALL UnxFilePickerCommandThread::tokenize( const ::rtl::OUString &rCommand )
+::std::list< OUString > SAL_CALL UnxFilePickerCommandThread::tokenize( const OUString &rCommand )
 {
-    ::std::list< ::rtl::OUString > aList;
-    ::rtl::OUStringBuffer aBuffer( 1024 );
+    ::std::list< OUString > aList;
+    OUStringBuffer aBuffer( 1024 );
 
     const sal_Unicode *pUnicode = rCommand.getStr();
     const sal_Unicode *pEnd     = pUnicode + rCommand.getLength();

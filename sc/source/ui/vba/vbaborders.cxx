@@ -42,7 +42,7 @@ typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
 // borders, the enumeration will match the order in this list
 static const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
 
-const static rtl::OUString sTableBorder("TableBorder");
+const static OUString sTableBorder("TableBorder");
 
 //  Equiv widths in in 1/100 mm
 const static sal_Int32 OOLineThin = 35;
@@ -144,17 +144,17 @@ private:
     }
     ScVbaBorder(); // no impl
 protected:
-    virtual rtl::OUString getServiceImplName()
+    virtual OUString getServiceImplName()
     {
-        return rtl::OUString("ScVbaBorder");
+        return OUString("ScVbaBorder");
     }
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames()
+    virtual css::uno::Sequence<OUString> getServiceNames()
     {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Border" );
+            aServiceNames[ 0 ] = OUString("ooo.vba.excel.Border" );
         }
         return aServiceNames;
     }
@@ -167,7 +167,7 @@ public:
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
             return uno::makeAny( OORGBToXLRGB( aBorderLine.Color ) );
-        throw uno::RuntimeException( rtl::OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
     }
     void SAL_CALL setColor( const uno::Any& _color ) throw (uno::RuntimeException)
     {
@@ -180,7 +180,7 @@ public:
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( rtl::OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString( "No Implementation available" ), uno::Reference< uno::XInterface >() );
     }
 
     uno::Any SAL_CALL getColorIndex() throw (uno::RuntimeException)
@@ -231,7 +231,7 @@ public:
                     break;
             }
         }
-        throw uno::RuntimeException( rtl::OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
     }
     void SAL_CALL setWeight( const uno::Any& _weight ) throw (uno::RuntimeException)
     {
@@ -255,12 +255,12 @@ public:
                     aBorderLine.OuterLineWidth = OOLineHairline;
                     break;
                 default:
-                    throw uno::RuntimeException( rtl::OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-                    throw uno::RuntimeException( rtl::OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
     }
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException)
@@ -289,12 +289,12 @@ public:
                 case XlLineStyle::xlSlantDashDot:
                     break;
                 default:
-                    throw uno::RuntimeException( rtl::OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OUString( "Bad param" ), uno::Reference< uno::XInterface >() );
             }
             setBorderLine( aBorderLine );
         }
         else
-            throw uno::RuntimeException( rtl::OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( OUString( "Method failed" ), uno::Reference< uno::XInterface >() );
     }
 };
 
@@ -546,20 +546,20 @@ void SAL_CALL ScVbaBorders::setWeight( const uno::Any& _weight ) throw (uno::Run
 }
 
 
-rtl::OUString
+OUString
 ScVbaBorders::getServiceImplName()
 {
-    return rtl::OUString("ScVbaBorders");
+    return OUString("ScVbaBorders");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaBorders::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Borders" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Borders" );
     }
     return aServiceNames;
 }

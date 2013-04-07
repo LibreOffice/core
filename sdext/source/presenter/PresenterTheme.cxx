@@ -36,7 +36,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -103,7 +102,7 @@ public:
     */
     static PresenterTheme::SharedFontDescriptor ReadFont (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxTheme,
-        const ::rtl::OUString& rsFontPath,
+        const OUString& rsFontPath,
         const PresenterTheme::SharedFontDescriptor& rpDefault);
     static PresenterTheme::SharedFontDescriptor ReadFont (
         const Reference<beans::XPropertySet>& rxFontProperties,
@@ -159,7 +158,7 @@ public:
 private:
     void ProcessPaneStyle (
         ReadContext& rReadContext,
-        const ::rtl::OUString& rsKey,
+        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -220,7 +219,7 @@ private:
 
     void ProcessStyleAssociation(
         ReadContext& rReadContext,
-        const ::rtl::OUString& rsKey,
+        const OUString& rsKey,
         const ::std::vector<css::uno::Any>& rValues);
 };
 
@@ -249,7 +248,7 @@ public:
     StyleAssociationContainer maStyleAssociations;
     Reference<container::XHierarchicalNameAccess> mxThemeRoot;
     ::boost::shared_ptr<PresenterBitmapContainer> mpIconContainer;
-    typedef map<rtl::OUString,SharedFontDescriptor> FontContainer;
+    typedef map<OUString,SharedFontDescriptor> FontContainer;
     FontContainer maFontContainer;
 
     SharedPaneStyle GetPaneStyle (const OUString& rsStyleName) const;
@@ -266,7 +265,7 @@ private:
 
 PresenterTheme::PresenterTheme (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-    const rtl::OUString& rsThemeName,
+    const OUString& rsThemeName,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas)
     : mxContext(rxContext),
       msThemeName(rsThemeName),
@@ -307,7 +306,7 @@ void PresenterTheme::ProvideCanvas (const Reference<rendering::XCanvas>& rxCanva
     }
 }
 
-OUString PresenterTheme::GetStyleName (const ::rtl::OUString& rsResourceURL) const
+OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
 {
     OUString sStyleName;
     ::boost::shared_ptr<Theme> pTheme (mpTheme);
@@ -320,7 +319,7 @@ OUString PresenterTheme::GetStyleName (const ::rtl::OUString& rsResourceURL) con
 }
 
 ::std::vector<sal_Int32> PresenterTheme::GetBorderSize (
-    const ::rtl::OUString& rsStyleName,
+    const OUString& rsStyleName,
     const bool bOuter) const
 {
     OSL_ASSERT(mpTheme.get() != NULL);
@@ -366,7 +365,7 @@ bool PresenterTheme::ConvertToColor (
 }
 
 ::boost::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyle (
-    const ::rtl::OUString& rsStyleName) const
+    const OUString& rsStyleName) const
 {
     if (mpTheme.get() == NULL)
         return ::boost::shared_ptr<PresenterConfigurationAccess>();
@@ -853,7 +852,7 @@ void PaneStyleContainer::Read (
         UNO_QUERY);
     if (xPaneStyleList.is())
     {
-        ::std::vector<rtl::OUString> aProperties;
+        ::std::vector<OUString> aProperties;
         aProperties.reserve(6);
         aProperties.push_back("StyleName");
         aProperties.push_back("ParentStyle");
@@ -1117,7 +1116,7 @@ void StyleAssociationContainer::Read (
         UNO_QUERY);
     if (xStyleAssociationList.is())
     {
-        ::std::vector<rtl::OUString> aProperties (2);
+        ::std::vector<OUString> aProperties (2);
         aProperties[0] = "ResourceURL";
         aProperties[1] = "StyleName";
         PresenterConfigurationAccess::ForAll(

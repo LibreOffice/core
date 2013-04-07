@@ -106,7 +106,7 @@ namespace toolkit
         if  (   ( i_row < 0 ) || ( size_t( i_row ) > m_aData.size() )
             ||  ( i_column < 0 ) || ( i_column > m_nColumnCount )
             )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< DefaultGridDataModel* >( this ) );
+            throw IndexOutOfBoundsException( OUString(), *const_cast< DefaultGridDataModel* >( this ) );
 
         RowData const & rRow( m_aData[ i_row ] );
         if ( size_t( i_column ) < rRow.size() )
@@ -121,7 +121,7 @@ namespace toolkit
     {
         OSL_ENSURE( i_requiredColumnCount <= size_t( m_nColumnCount ), "DefaultGridDataModel::impl_getRowDataAccess_throw: invalid column count!" );
         if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         RowData& rRowData( m_aData[ i_rowIndex ] );
         if ( rRowData.size() < i_requiredColumnCount )
@@ -133,7 +133,7 @@ namespace toolkit
     DefaultGridDataModel::CellData& DefaultGridDataModel::impl_getCellDataAccess_throw( sal_Int32 const i_columnIndex, sal_Int32 const i_rowIndex )
     {
         if  ( ( i_columnIndex < 0 ) || ( i_columnIndex >= m_nColumnCount ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         RowData& rRowData( impl_getRowDataAccess_throw( i_rowIndex, size_t( i_columnIndex + 1 ) ) );
         return rRowData[ i_columnIndex ];
@@ -159,7 +159,7 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_row < 0 ) || ( size_t( i_row ) >= m_aRowHeaders.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         return m_aRowHeaders[ i_row ];
     }
@@ -214,7 +214,7 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         // actually insert the row
         impl_insertRow( i_index, i_heading, i_data );
@@ -235,12 +235,12 @@ namespace toolkit
     void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException)
     {
         if ( i_headings.getLength() != i_data.getLength() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, -1 );
+            throw IllegalArgumentException( OUString(), *this, -1 );
 
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_index < 0 ) || ( i_index > impl_getRowCount_nolck() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         sal_Int32 const rowCount = i_headings.getLength();
         if ( rowCount == 0 )
@@ -276,7 +276,7 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         m_aRowHeaders.erase( m_aRowHeaders.begin() + i_rowIndex );
         m_aData.erase( m_aData.begin() + i_rowIndex );
@@ -323,10 +323,10 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aData.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         if ( i_columnIndexes.getLength() != i_values.getLength() )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+            throw IllegalArgumentException( OUString(), *this, 1 );
 
         sal_Int32 const columnCount = i_columnIndexes.getLength();
         if ( columnCount == 0 )
@@ -335,7 +335,7 @@ namespace toolkit
         for ( sal_Int32 col = 0; col < columnCount; ++col )
         {
             if ( ( i_columnIndexes[col] < 0 ) || ( i_columnIndexes[col] > m_nColumnCount ) )
-                throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+                throw IndexOutOfBoundsException( OUString(), *this );
         }
 
         RowData& rDataRow = m_aData[ i_rowIndex ];
@@ -363,7 +363,7 @@ namespace toolkit
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
         if  ( ( i_rowIndex < 0 ) || ( size_t( i_rowIndex ) >= m_aRowHeaders.size() ) )
-            throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+            throw IndexOutOfBoundsException( OUString(), *this );
 
         m_aRowHeaders[ i_rowIndex ] = i_heading;
 
@@ -421,23 +421,23 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException)
     {
-        static const ::rtl::OUString aImplName( "toolkit.DefaultGridDataModel" );
+        static const OUString aImplName( "toolkit.DefaultGridDataModel" );
         return aImplName;
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+    sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
         return ServiceName.equalsAscii( szServiceName_DefaultGridDataModel );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException)
     {
-        static const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );
-        static const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
+        static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridDataModel ) );
+        static const Sequence< OUString > aSeq( &aServiceName, 1 );
         return aSeq;
     }
 

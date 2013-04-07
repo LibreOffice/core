@@ -380,7 +380,7 @@ private:
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+                sal_uInt16 nPrefix, const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -388,7 +388,7 @@ protected:
     // Code is implemented in XMLPropertyBackpatcher.cxx
     inline XMLPropertyBackpatcher<sal_Int16>& GetFootnoteBP();
     inline XMLPropertyBackpatcher<sal_Int16>& GetSequenceIdBP();
-    inline XMLPropertyBackpatcher< ::rtl::OUString> & GetSequenceNameBP();
+    inline XMLPropertyBackpatcher< OUString> & GetSequenceNameBP();
 
 public:
 
@@ -414,7 +414,7 @@ public:
 
     SvXMLImportContext *CreateTextChildContext(
             SvXMLImport& rImport,
-            sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+            sal_uInt16 nPrefix, const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             XMLTextType eType = XML_TEXT_TYPE_SHAPE );
@@ -445,15 +445,15 @@ public:
     bool IsOrganizerMode() const;
     bool IsProgress() const;
 
-    ::rtl::OUString ConvertStarFonts( const ::rtl::OUString& rChars,
-                                      const ::rtl::OUString& rStyleName,
+    OUString ConvertStarFonts( const OUString& rChars,
+                                      const OUString& rStyleName,
                                       sal_uInt8& rFlags,
                                       sal_Bool bPara,
                                          SvXMLImport& rImport ) const;
     // insert a string without special whitespace processing enabled
-    void InsertString( const ::rtl::OUString& rChars );
+    void InsertString( const OUString& rChars );
     // insert a string with special whitespace processing enabled
-    void InsertString( const ::rtl::OUString& rChars,
+    void InsertString( const OUString& rChars,
                        sal_Bool& rIgnoreLeadingSpace );
     // Delete current paragraph
     void DeleteParagraph();
@@ -464,11 +464,11 @@ public:
 
     // Add parameter <bOutlineLevelAttrFound> (#i73509#)
     // Add parameter <bSetListAttrs> in order to suppress the handling of the list attributes (#i80724#)
-    ::rtl::OUString SetStyleAndAttrs(
+    OUString SetStyleAndAttrs(
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::text::XTextCursor >& rCursor,
-            const ::rtl::OUString& rStyleName,
+            const OUString& rStyleName,
             sal_Bool bPara,
             sal_Bool bOutlineLevelAttrFound = sal_False,
             sal_Int8 nOutlineLevel = -1,
@@ -479,12 +479,12 @@ public:
      *  name for that level. Otherwise, leave rStyleName unmodified.
      */
     // Adjust 2nd parameter (#i69629#)
-    void FindOutlineStyleName( ::rtl::OUString& rStyleName,
+    void FindOutlineStyleName( OUString& rStyleName,
                                sal_Int8 nOutlineLevel );
 
     // Change method name to reflect change of data structure (#i69629#)
     void AddOutlineStyleCandidate( const sal_Int8 nOutlineLevel,
-                                   const ::rtl::OUString& rStyleName );
+                                   const OUString& rStyleName );
 
     void SetOutlineStyles( sal_Bool bSetEmpty );
 
@@ -492,34 +492,34 @@ public:
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::text::XTextCursor >& rCursor,
-            const ::rtl::OUString& rHRef,
-            const ::rtl::OUString& rName,
-            const ::rtl::OUString& rTargetFrameName,
-            const ::rtl::OUString& rStyleName,
-            const ::rtl::OUString& rVisitedStyleName,
+            const OUString& rHRef,
+            const OUString& rName,
+            const OUString& rTargetFrameName,
+            const OUString& rStyleName,
+            const OUString& rVisitedStyleName,
             XMLEventsImportContext* pEvents = NULL);
     void SetRuby(
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::text::XTextCursor >& rCursor,
-            const ::rtl::OUString& rStyleName,
-            const ::rtl::OUString& rTextStyleName,
-            const ::rtl::OUString& rText );
+            const OUString& rStyleName,
+            const OUString& rTextStyleName,
+            const OUString& rText );
 
     /// return key appropriate for use with NumberFormat property
     /// return -1 if style is not found
     /// (may return whether data style uses the system language)
-    sal_Int32 GetDataStyleKey( const ::rtl::OUString& sStyleName,
+    sal_Int32 GetDataStyleKey( const OUString& sStyleName,
                                sal_Bool* pIsSystemLanguage = NULL );
 
     const SvxXMLListStyleContext *FindAutoListStyle(
-            const ::rtl::OUString& rName ) const;
+            const OUString& rName ) const;
     XMLPropStyleContext *FindAutoFrameStyle(
-            const ::rtl::OUString& rName ) const;
+            const OUString& rName ) const;
     XMLPropStyleContext* FindSectionStyle(
-            const ::rtl::OUString& rName ) const;
+            const OUString& rName ) const;
     XMLPropStyleContext* FindPageMaster(
-            const ::rtl::OUString& rName ) const;
+            const OUString& rName ) const;
 
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameContainer> & GetParaStyles() const;
@@ -541,9 +541,9 @@ public:
         ::com::sun::star::container::XIndexReplace > &
         GetChapterNumbering() const;
 
-    sal_Bool HasFrameByName( const ::rtl::OUString& rName ) const;
-    void ConnectFrameChains( const ::rtl::OUString& rFrmName,
-        const ::rtl::OUString& rNextFrmName,
+    sal_Bool HasFrameByName( const OUString& rName ) const;
+    void ConnectFrameChains( const OUString& rFrmName,
+        const OUString& rNextFrmName,
         const ::com::sun::star::uno::Reference <
             ::com::sun::star::beans::XPropertySet >& rFrmPropSet );
 
@@ -566,56 +566,56 @@ public:
 
     /// save the start of a range reference
     void InsertBookmarkStartRange(
-        const ::rtl::OUString & sName,
+        const OUString & sName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & rRange,
-        ::rtl::OUString const& i_rXmlId,
+        OUString const& i_rXmlId,
         ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
             i_rpRDFaAttributes);
 
     /// process the start of a range reference
     sal_Bool FindAndRemoveBookmarkStartRange(
-        const ::rtl::OUString & sName,
+        const OUString & sName,
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
-        ::rtl::OUString & o_rXmlId,
+        OUString & o_rXmlId,
         ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
             o_rpRDFaAttributes);
 
-    ::rtl::OUString FindActiveBookmarkName();
+    OUString FindActiveBookmarkName();
 
-    void pushFieldCtx( ::rtl::OUString name, ::rtl::OUString type );
+    void pushFieldCtx( OUString name, OUString type );
     void popFieldCtx();
-    void addFieldParam( ::rtl::OUString name, ::rtl::OUString value );
+    void addFieldParam( OUString name, OUString value );
     void setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField);
-    ::rtl::OUString getCurrentFieldType();
+    OUString getCurrentFieldType();
     bool hasCurrentFieldCtx();
 
 
     /// insert new footnote ID.
     /// Also fixup open references from the backpatch list to this ID.
     // Code is implemented in XMLPropertyBackpatcher.cxx
-    void InsertFootnoteID(const ::rtl::OUString& sXMLId, sal_Int16 nAPIId);
+    void InsertFootnoteID(const OUString& sXMLId, sal_Int16 nAPIId);
 
     /// set the proper footnote reference ID,
     /// or put into backpatch list if ID is unknown
     // Code is implemented in XMLPropertyBackpatcher.cxx
     void ProcessFootnoteReference(
-        const ::rtl::OUString& sXMLId,
+        const OUString& sXMLId,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
     /// insert new sequence ID
     /// Also fixup open references from backpatch list to this ID.
     // Code is implemented in XMLPropertyBackpatcher.cxx
-    void InsertSequenceID(const ::rtl::OUString& sXMLId,
-                          const ::rtl::OUString& sName,
+    void InsertSequenceID(const OUString& sXMLId,
+                          const OUString& sName,
                           sal_Int16 nAPIId);
 
     /// set sequence ID or insert into backpatch list
     // Code is implemented in XMLPropertyBackpatcher.cxx
     void ProcessSequenceReference(
-        const ::rtl::OUString& sXMLId,
+        const OUString& sXMLId,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet);
 
@@ -625,47 +625,47 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
-                                      const ::rtl::OUString& rHRef,
-                                      const ::rtl::OUString &rStyleName,
-                                      const ::rtl::OUString &rTblName,
+                                      const OUString& rHRef,
+                                      const OUString &rStyleName,
+                                      const OUString &rTblName,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
-                                      const ::rtl::OUString& rHRef,
-                                      const ::rtl::OUString &rStyleName,
-                                      const ::rtl::OUString &rTblName,
+                                      const OUString& rHRef,
+                                      const OUString &rStyleName,
+                                      const OUString &rTblName,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertApplet(
-            const ::rtl::OUString &rName,
-            const ::rtl::OUString &rCode,
+            const OUString &rName,
+            const OUString &rCode,
             sal_Bool bMayScript,
-            const ::rtl::OUString& rHRef,
+            const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertPlugin(
-            const ::rtl::OUString &rMimeType,
-            const ::rtl::OUString& rHRef,
+            const OUString &rMimeType,
+            const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertFloatingFrame(
-            const ::rtl::OUString &rName,
-            const ::rtl::OUString &rHRef,
-            const ::rtl::OUString &rStyleName,
+            const OUString &rName,
+            const OUString &rHRef,
+            const OUString &rStyleName,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual void endAppletOrPlugin(
         const com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> &rPropSet,
-        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess > &rParamMap );
+        ::std::map < const OUString, OUString, ::comphelper::UStringLess > &rParamMap );
 
     // applet helper methods
     // implemented in sw/filter/xml/txtparai.hxx
@@ -674,19 +674,19 @@ public:
     // (to be implemented in sw/filter/xml/txtparai.hxx)
 
     virtual void RedlineAdd(
-        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
-        const ::rtl::OUString& rId,         /// use to identify this redline
-        const ::rtl::OUString& rAuthor,     /// name of the author
-        const ::rtl::OUString& rComment,    /// redline comment
+        const OUString& rType,       /// redline type (insert, del,... )
+        const OUString& rId,         /// use to identify this redline
+        const OUString& rAuthor,     /// name of the author
+        const OUString& rComment,    /// redline comment
         const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
         sal_Bool bMergeLastParagraph);      /// merge last paras
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
             ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> & rOldCursor,
-            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
+            const OUString& rId);    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const ::rtl::OUString& rId,         /// ID used to RedlineAdd() call
+        const OUString& rId,         /// ID used to RedlineAdd() call
         sal_Bool bStart,                    /// start or end Cursor
         sal_Bool bIsOutsideOfParagraph);    /// range is not within <text:p>
     virtual void RedlineAdjustStartNodeCursor(
@@ -697,8 +697,8 @@ public:
         const ::com::sun::star::uno::Sequence<sal_Int8> & rProtectionKey );
 
     // access to the last open redline ID:
-    ::rtl::OUString GetOpenRedlineId();
-    void SetOpenRedlineId( ::rtl::OUString& rId);
+    OUString GetOpenRedlineId();
+    void SetOpenRedlineId( OUString& rId);
     void ResetOpenRedlineId();
 
     // #107848#
@@ -716,8 +716,8 @@ public:
     /// pop the list context stack
     void PopListContext();
 
-    void SetCellParaStyleDefault(::rtl::OUString const& rNewValue);
-    ::rtl::OUString const& GetCellParaStyleDefault();
+    void SetCellParaStyleDefault(OUString const& rNewValue);
+    OUString const& GetCellParaStyleDefault();
 };
 
 #endif

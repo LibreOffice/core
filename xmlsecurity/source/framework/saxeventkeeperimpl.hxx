@@ -192,7 +192,7 @@ private:
 
     void removeElementMarkBuffer(sal_Int32 nId);
 
-    rtl::OUString printBufferNode(
+    OUString printBufferNode(
         BufferNode* pBufferNode, sal_Int32 nIndent) const;
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
@@ -251,7 +251,7 @@ public:
         setNextHandler( const com::sun::star::uno::Reference<
             com::sun::star::xml::sax::XDocumentHandler >& xNewHandler )
         throw (com::sun::star::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL printBufferNodeTree()
+    virtual OUString SAL_CALL printBufferNodeTree()
         throw (com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper > SAL_CALL
@@ -302,18 +302,18 @@ public:
     virtual void SAL_CALL endDocument(  )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL startElement(
-        const rtl::OUString& aName,
+        const OUString& aName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&
         xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endElement( const rtl::OUString& aName )
+    virtual void SAL_CALL endElement( const OUString& aName )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const rtl::OUString& aChars )
+    virtual void SAL_CALL characters( const OUString& aChars )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const rtl::OUString& aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL processingInstruction(
-        const rtl::OUString& aTarget, const rtl::OUString& aData )
+        const OUString& aTarget, const OUString& aData )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XLocator >& xLocator )
@@ -325,21 +325,21 @@ public:
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
     /* XServiceInfo */
-    virtual rtl::OUString SAL_CALL getImplementationName(  )
+    virtual OUString SAL_CALL getImplementationName(  )
         throw (com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName )
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw (com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
         throw (com::sun::star::uno::RuntimeException);
 };
 
-rtl::OUString SAXEventKeeperImpl_getImplementationName()
+OUString SAXEventKeeperImpl_getImplementationName()
     throw ( com::sun::star::uno::RuntimeException );
 
-sal_Bool SAL_CALL SAXEventKeeperImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SAXEventKeeperImpl_supportsService( const OUString& ServiceName )
     throw ( com::sun::star::uno::RuntimeException );
 
-com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
+com::sun::star::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
     throw ( com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

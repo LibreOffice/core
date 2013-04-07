@@ -72,7 +72,7 @@ void DynamicResultSet::initDynamic()
 
 struct ResultListEntry
 {
-    rtl::OUString                             aId;
+    OUString                             aId;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
@@ -144,26 +144,26 @@ DataSupplier::~DataSupplier()
 }
 
 // virtual
-rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() ) {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() ) // cached
             return aId;
     }
 
     if ( getResult( nIndex ) ) {
-        rtl::OUString aId = m_pImpl->m_xContent->getOUURI();
+        OUString aId = m_pImpl->m_xContent->getOUURI();
 
         char *escaped_name;
         escaped_name = gnome_vfs_escape_string( m_pImpl->m_aResults[ nIndex ]->aInfo.name );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString("/");
+            aId += OUString("/");
 
-        aId += rtl::OUString::createFromAscii( escaped_name );
+        aId += OUString::createFromAscii( escaped_name );
 
         g_free( escaped_name );
 
@@ -171,7 +171,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         return aId;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 // virtual
@@ -187,7 +187,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
             return xId;
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() ) {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );

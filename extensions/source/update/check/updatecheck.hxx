@@ -71,7 +71,7 @@ public:
      */
 
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface > createService(
-        const rtl::OUString& aServiceName,
+        const OUString& aServiceName,
         const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext);
 
     // Update internal update info member
@@ -99,13 +99,13 @@ public:
     bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
 
     // DownloadInteractionHandler
-    virtual bool downloadTargetExists(const rtl::OUString& rFileName);
-    virtual void downloadStalled(const rtl::OUString& rErrorMessage);
+    virtual bool downloadTargetExists(const OUString& rFileName);
+    virtual void downloadStalled(const OUString& rErrorMessage);
     virtual void downloadProgressAt(sal_Int8 nProcent);
-    virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
-    virtual void downloadFinished(const rtl::OUString& rLocalFileName);
+    virtual void downloadStarted(const OUString& rLocalFileName, sal_Int64 nFileSize);
+    virtual void downloadFinished(const OUString& rLocalFileName);
     // checks if the download target already exists and asks user what to do next
-    virtual bool checkDownloadDestination( const rtl::OUString& rFile );
+    virtual bool checkDownloadDestination( const OUString& rFile );
 
     // Cancels the download action (and resumes checking if enabled)
     void cancelDownload();
@@ -144,10 +144,10 @@ private:
     rtl::Reference<UpdateHandler> getUpdateHandler();
 
     // Open the given URL in a browser
-    void showReleaseNote(const rtl::OUString& rURL) const;
+    void showReleaseNote(const OUString& rURL) const;
 
     // stores the release note url on disk to be used by setup app
-    static bool storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL);
+    static bool storeReleaseNote(sal_Int8 nNum, const OUString &rURL);
 
     /* This method turns on the menubar icon and triggers the bubble window
      */
@@ -169,7 +169,7 @@ private:
     osl::Condition m_aCondition;
 
     UpdateInfo m_aUpdateInfo;
-    rtl::OUString m_aImageName;
+    OUString m_aImageName;
     bool m_bHasExtensionUpdate;
     bool m_bShowExtUpdDlg;
 

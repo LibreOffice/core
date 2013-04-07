@@ -137,7 +137,6 @@
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
-using ::rtl::OUString;
 using namespace sfx2;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -227,7 +226,7 @@ int SwView::InsertGraphic( const String &rPath, const String &rFilter,
             INetURLObject aTemp(
                 pDocSh->HasName() ?
                     pDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) :
-                    rtl::OUString());
+                    OUString());
 
             String sURL = URIHelper::SmartRel2Abs(
                 aTemp, rPath, URIHelper::GetMaybeFileHdl() );
@@ -1256,7 +1255,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 }
 
                 const sal_uInt32 stringId = selectionStats.nWord? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION;
-                rtl::OUString wordCount(SW_RES(stringId));
+                OUString wordCount(SW_RES(stringId));
                 wordCount = wordCount.replaceAll("$1", OUString::number(documentStats.nWord));
                 wordCount = wordCount.replaceAll("$2", OUString::number(documentStats.nChar));
                 if (selectionStats.nWord)
@@ -1896,7 +1895,7 @@ bool SwView::JumpToSwMark( const String& rMark )
 
                 SearchOptions aSearchOpt(
                                     SearchAlgorithms_ABSOLUTE, 0,
-                                    sName, rtl::OUString(),
+                                    sName, OUString(),
                                     SvtSysLocale().GetLanguageTag().getLocale(),
                                     0,0,0,
                                     TransliterationModules_IGNORE_CASE );
@@ -2030,7 +2029,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const String& rFileName, const Strin
     }
     else
     {
-        rtl::OUString sFactory = rtl::OUString::createFromAscii( pDocSh->GetFactory().GetShortName() );
+        OUString sFactory = OUString::createFromAscii( pDocSh->GetFactory().GetShortName() );
         m_pViewImpl->StartDocumentInserter( sFactory, LINK( this, SwView, DialogClosedHdl ) );
         return -1;
     }

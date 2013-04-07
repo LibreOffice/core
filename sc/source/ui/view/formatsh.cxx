@@ -140,7 +140,7 @@ ScFormatShell::ScFormatShell(ScViewData* pData) :
         pMgr->SetMaxUndoActionCount( 0 );
     }
     SetHelpId(HID_SCSHELL_FORMATSH);
-    SetName(rtl::OUString("Format"));
+    SetName(OUString("Format"));
 }
 
 ScFormatShell::~ScFormatShell()
@@ -342,8 +342,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
                         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
                         xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
-                        ::rtl::OUString aUIName;
-                        xInfo->getPropertyValue( ::rtl::OUString("DisplayName") ) >>= aUIName;
+                        OUString aUIName;
+                        xInfo->getPropertyValue( OUString("DisplayName") ) >>= aUIName;
                         if ( !aUIName.isEmpty() )
                             rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
                     }

@@ -102,7 +102,7 @@ protected:
     LwpObjectID m_pPrevObj;
     LwpObjectID m_pNextObj;
 
-    rtl::OUString m_strStyleName;
+    OUString m_strStyleName;
 };
 
 /**

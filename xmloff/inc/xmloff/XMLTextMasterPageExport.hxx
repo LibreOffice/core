@@ -32,19 +32,19 @@ namespace com { namespace sun { namespace star {
 
 class XMLOFF_DLLPUBLIC XMLTextMasterPageExport : public XMLPageExport
 {
-    const ::rtl::OUString sHeaderText;
-    const ::rtl::OUString sHeaderOn;
-    const ::rtl::OUString sHeaderShareContent;
-    const ::rtl::OUString sHeaderTextFirst;
-    const ::rtl::OUString sHeaderTextLeft;
+    const OUString sHeaderText;
+    const OUString sHeaderOn;
+    const OUString sHeaderShareContent;
+    const OUString sHeaderTextFirst;
+    const OUString sHeaderTextLeft;
 
-    const ::rtl::OUString sFirstShareContent;
+    const OUString sFirstShareContent;
 
-    const ::rtl::OUString sFooterText;
-    const ::rtl::OUString sFooterOn;
-    const ::rtl::OUString sFooterShareContent;
-    const ::rtl::OUString sFooterTextFirst;
-    const ::rtl::OUString sFooterTextLeft;
+    const OUString sFooterText;
+    const OUString sFooterOn;
+    const OUString sFooterShareContent;
+    const OUString sFooterTextFirst;
+    const OUString sFooterTextLeft;
 
 protected:
 

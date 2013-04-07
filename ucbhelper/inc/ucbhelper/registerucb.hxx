@@ -48,11 +48,11 @@ struct ContentProviderRegistrationInfo
 
     /** The arguments the content provider was instantiated with.
      */
-    rtl::OUString m_aArguments;
+    OUString m_aArguments;
 
     /** The URL template the content provider is registered on.
      */
-    rtl::OUString m_aTemplate;
+    OUString m_aTemplate;
 };
 
 typedef std::vector< ContentProviderRegistrationInfo >
@@ -66,20 +66,20 @@ struct ContentProviderData
 {
     /** The UNO service name to use to instanciate the content provider.
      */
-    rtl::OUString ServiceName;
+    OUString ServiceName;
 
     /** The URL template to use to instanciate the content provider.
      */
-    rtl::OUString URLTemplate;
+    OUString URLTemplate;
 
     /** The arguments to use to instanciate the content provider.
      */
-    rtl::OUString Arguments;
+    OUString Arguments;
 
     ContentProviderData() {};
-    ContentProviderData( const rtl::OUString & rService,
-                         const rtl::OUString & rTemplate,
-                         const rtl::OUString & rArgs )
+    ContentProviderData( const OUString & rService,
+                         const OUString & rTemplate,
+                         const OUString & rArgs )
     : ServiceName( rService ), URLTemplate( rTemplate ), Arguments( rArgs ) {}
 };
 
@@ -111,9 +111,9 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
     com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory > const &
         rServiceFactory,
-    rtl::OUString const & rName,
-    rtl::OUString const & rArguments,
-    rtl::OUString const & rTemplate,
+    OUString const & rName,
+    OUString const & rArguments,
+    OUString const & rTemplate,
     ContentProviderRegistrationInfo * pInfo)
     throw (com::sun::star::uno::RuntimeException);
 

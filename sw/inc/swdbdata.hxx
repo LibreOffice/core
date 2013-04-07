@@ -25,8 +25,8 @@
 // contains the description of a data source
 struct SwDBData
 {
-    ::rtl::OUString     sDataSource;
-    ::rtl::OUString     sCommand;       //table, query or statement
+    OUString     sDataSource;
+    OUString     sCommand;       //table, query or statement
     sal_Int32           nCommandType; //com::sun::star::sdb::CommandType
     SwDBData() :
         nCommandType(0){}

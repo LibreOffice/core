@@ -95,7 +95,7 @@ namespace rptui
     public:
         OSectionWindow( OViewsWindow* _pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
-                        ,const ::rtl::OUString& _sColorEntry);
+                        ,const OUString& _sColorEntry);
         virtual ~OSectionWindow();
 
         inline OStartMarker&    getStartMarker()    { return m_aStartMarker;     }

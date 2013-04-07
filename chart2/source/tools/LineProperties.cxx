@@ -54,7 +54,7 @@ void LineProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineDashName",
                   PROP_LINE_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));

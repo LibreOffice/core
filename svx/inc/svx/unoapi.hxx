@@ -55,7 +55,7 @@ SVX_DLLPUBLIC SdrPage* GetSdrPageFromXDrawPage( ::com::sun::star::uno::Reference
 /** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
     with that name
 */
-SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const ::rtl::OUString& aName ) throw();
+SvxNumBulletItem* SvxGetNumBulletItemByName( SfxItemPool* pPool, const OUString& aName ) throw();
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.

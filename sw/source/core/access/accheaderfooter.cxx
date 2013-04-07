@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 const sal_Char sServiceNameHeader[] = "com.sun.star.text.AccessibleHeaderView";
 const sal_Char sServiceNameFooter[] = "com.sun.star.text.AccessibleFooterView";

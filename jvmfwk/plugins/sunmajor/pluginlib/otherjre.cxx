@@ -23,7 +23,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
 using ::rtl::Reference;
 namespace jfw_plugin
 {
@@ -101,7 +100,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 #endif
 }
 
-int OtherInfo::compareVersions(const rtl::OUString& /*sSecond*/) const
+int OtherInfo::compareVersions(const OUString& /*sSecond*/) const
 {
     //Need to provide an own algorithm for comparing version.
     //Because this function returns always 0, which means the version of

@@ -123,7 +123,7 @@ ContentProvider::queryContent(
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException(
-            rtl::OUString( "Invalid URL!" ),
+            OUString( "Invalid URL!" ),
             Identifier );
 
     // Normalize URI.
@@ -161,10 +161,10 @@ ContentProvider::createDocumentContent(
     // model -> id -> content identifier -> queryContent
     if ( m_xDocsMgr.is() )
     {
-        rtl::OUString aDocId = m_xDocsMgr->queryDocumentId( Model );
+        OUString aDocId = m_xDocsMgr->queryDocumentId( Model );
         if ( !aDocId.isEmpty() )
         {
-            rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             aBuffer.appendAscii( TDOC_URL_SCHEME ":/" );
             aBuffer.append( aDocId );
 
@@ -188,7 +188,7 @@ ContentProvider::createDocumentContent(
 
             // no content.
             throw lang::IllegalArgumentException(
-                rtl::OUString(
+                OUString(
                     "Illegal Content Identifier!" ),
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
@@ -196,7 +196,7 @@ ContentProvider::createDocumentContent(
         else
         {
             throw lang::IllegalArgumentException(
-                rtl::OUString(
+                OUString(
                     "Unable to obtain document id from model!" ),
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
@@ -205,7 +205,7 @@ ContentProvider::createDocumentContent(
      else
      {
         throw lang::IllegalArgumentException(
-            rtl::OUString(
+            OUString(
                 "No Document Manager!" ),
             static_cast< cppu::OWeakObject * >( this ),
             1 );
@@ -219,7 +219,7 @@ ContentProvider::createDocumentContent(
 //=========================================================================
 
 // virtual
-void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
+void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
 
@@ -282,7 +282,7 @@ void ContentProvider::notifyDocumentClosed( const rtl::OUString & rDocId )
 
 //=========================================================================
 // virtual
-void ContentProvider::notifyDocumentOpened( const rtl::OUString & rDocId )
+void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
 {
     osl::MutexGuard aGuard( getContentListMutex() );
 
@@ -321,7 +321,7 @@ void ContentProvider::notifyDocumentOpened( const rtl::OUString & rDocId )
 //=========================================================================
 
 uno::Reference< embed::XStorage >
-ContentProvider::queryStorage( const rtl::OUString & rUri,
+ContentProvider::queryStorage( const OUString & rUri,
                                StorageAccessMode eMode ) const
 {
     if ( m_xStgElemFac.is() )
@@ -353,7 +353,7 @@ ContentProvider::queryStorage( const rtl::OUString & rUri,
 
 //=========================================================================
 uno::Reference< embed::XStorage >
-ContentProvider::queryStorageClone( const rtl::OUString & rUri ) const
+ContentProvider::queryStorageClone( const OUString & rUri ) const
 {
     if ( m_xStgElemFac.is() )
     {
@@ -393,8 +393,8 @@ ContentProvider::queryStorageClone( const rtl::OUString & rUri ) const
 
 //=========================================================================
 uno::Reference< io::XInputStream >
-ContentProvider::queryInputStream( const rtl::OUString & rUri,
-                                   const rtl::OUString & rPassword ) const
+ContentProvider::queryInputStream( const OUString & rUri,
+                                   const OUString & rPassword ) const
     throw ( packages::WrongPasswordException )
 {
     if ( m_xStgElemFac.is() )
@@ -430,8 +430,8 @@ ContentProvider::queryInputStream( const rtl::OUString & rUri,
 
 //=========================================================================
 uno::Reference< io::XOutputStream >
-ContentProvider::queryOutputStream( const rtl::OUString & rUri,
-                                    const rtl::OUString & rPassword,
+ContentProvider::queryOutputStream( const OUString & rUri,
+                                    const OUString & rPassword,
                                     bool bTruncate ) const
     throw ( packages::WrongPasswordException )
 {
@@ -470,8 +470,8 @@ ContentProvider::queryOutputStream( const rtl::OUString & rUri,
 
 //=========================================================================
 uno::Reference< io::XStream >
-ContentProvider::queryStream( const rtl::OUString & rUri,
-                              const rtl::OUString & rPassword,
+ContentProvider::queryStream( const OUString & rUri,
+                              const OUString & rPassword,
                               bool bTruncate ) const
     throw ( packages::WrongPasswordException )
 {
@@ -509,7 +509,7 @@ ContentProvider::queryStream( const rtl::OUString & rUri,
 
 //=========================================================================
 bool ContentProvider::queryNamesOfChildren(
-    const rtl::OUString & rUri, uno::Sequence< rtl::OUString > & rNames ) const
+    const OUString & rUri, uno::Sequence< OUString > & rNames ) const
 {
     Uri aUri( rUri );
     if ( aUri.isRoot() )
@@ -568,16 +568,16 @@ bool ContentProvider::queryNamesOfChildren(
 }
 
 //=========================================================================
-rtl::OUString
-ContentProvider::queryStorageTitle( const rtl::OUString & rUri ) const
+OUString
+ContentProvider::queryStorageTitle( const OUString & rUri ) const
 {
-    rtl::OUString aTitle;
+    OUString aTitle;
 
     Uri aUri( rUri );
     if ( aUri.isRoot() )
     {
         // always empty.
-        aTitle = rtl::OUString();
+        aTitle = OUString();
     }
     else if ( aUri.isDocument() )
     {
@@ -599,7 +599,7 @@ ContentProvider::queryStorageTitle( const rtl::OUString & rUri ) const
 
 //=========================================================================
 uno::Reference< frame::XModel >
-ContentProvider::queryDocumentModel( const rtl::OUString & rUri ) const
+ContentProvider::queryDocumentModel( const OUString & rUri ) const
 {
     uno::Reference< frame::XModel > xModel;
 

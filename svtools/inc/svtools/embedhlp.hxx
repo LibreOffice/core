@@ -58,13 +58,13 @@ public:
     static bool TryRunningState( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
     static void SetGraphicToContainer( const Graphic& rGraphic,
                                         comphelper::EmbeddedObjectContainer& aContainer,
-                                        const ::rtl::OUString& aName,
-                                        const ::rtl::OUString& aMediaType );
+                                        const OUString& aName,
+                                        const OUString& aMediaType );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetGraphicReplacementStream(
                                         sal_Int64 nViewAspect,
                                         const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&,
-                                        ::rtl::OUString* pMediaType )
+                                        OUString* pMediaType )
                             throw();
 
     const com::sun::star::uno::Reference <com::sun::star::embed::XEmbeddedObject>& operator->() const;
@@ -83,7 +83,7 @@ public:
     EmbeddedObjectRef( const EmbeddedObjectRef& );
 
     // assigning to a container enables the object to exchange graphical representations with a storage
-    void            AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName );
+    void            AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const OUString& rPersistName );
     comphelper::EmbeddedObjectContainer* GetContainer() const;
 
     sal_Int64       GetViewAspect() const;
@@ -94,10 +94,10 @@ public:
     // no conversion is done if no target mode is provided
     Size            GetSize( MapMode* pTargetMapMode = NULL ) const;
 
-    void            SetGraphic( const Graphic& rGraphic, const ::rtl::OUString& rMediaType );
+    void            SetGraphic( const Graphic& rGraphic, const OUString& rMediaType );
     void            SetGraphicStream(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
-                        const ::rtl::OUString& rMediaType );
+                        const OUString& rMediaType );
 
     void            UpdateReplacement();
     void            UpdateReplacementOnDemand();

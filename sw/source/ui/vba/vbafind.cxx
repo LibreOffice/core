@@ -57,13 +57,13 @@ bool SwVbaFind::InEqualRange( const uno::Reference< text::XTextRange >& xCurrent
     return false;
 }
 
-void SwVbaFind::SetReplaceWith( const rtl::OUString& rText ) throw (uno::RuntimeException)
+void SwVbaFind::SetReplaceWith( const OUString& rText ) throw (uno::RuntimeException)
 {
     mxPropertyReplace->setReplaceString( rText );
     mbReplace = true;
 }
 
-rtl::OUString SwVbaFind::GetReplaceWith() throw (uno::RuntimeException)
+OUString SwVbaFind::GetReplaceWith() throw (uno::RuntimeException)
 {
     return mxPropertyReplace->getReplaceString();
 }
@@ -175,12 +175,12 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
     return result;
 }
 
-::rtl::OUString SAL_CALL SwVbaFind::getText() throw (uno::RuntimeException)
+OUString SAL_CALL SwVbaFind::getText() throw (uno::RuntimeException)
 {
     return mxPropertyReplace->getSearchString();
 }
 
-void SAL_CALL SwVbaFind::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeException)
+void SAL_CALL SwVbaFind::setText( const OUString& _text ) throw (uno::RuntimeException)
 {
     mxPropertyReplace->setSearchString( _text );
 }
@@ -192,20 +192,20 @@ uno::Any SAL_CALL SwVbaFind::getReplacement() throw (uno::RuntimeException)
 
 void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 }
 
 ::sal_Bool SAL_CALL SwVbaFind::getForward() throw (uno::RuntimeException)
 {
     sal_Bool bBackward = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchBackwards") ) >>= bBackward;
+    mxPropertyReplace->getPropertyValue( OUString("SearchBackwards") ) >>= bBackward;
     return !bBackward;
 }
 
 void SAL_CALL SwVbaFind::setForward( ::sal_Bool _forward ) throw (uno::RuntimeException)
 {
     sal_Bool bBackward = !_forward;
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchBackwards"), uno::makeAny( bBackward ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchBackwards"), uno::makeAny( bBackward ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaFind::getWrap() throw (uno::RuntimeException)
@@ -233,76 +233,76 @@ void SAL_CALL SwVbaFind::setFormat( ::sal_Bool _format ) throw (uno::RuntimeExce
 ::sal_Bool SAL_CALL SwVbaFind::getMatchCase() throw (uno::RuntimeException)
 {
     sal_Bool value = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchCaseSensitive") ) >>= value;
+    mxPropertyReplace->getPropertyValue( OUString("SearchCaseSensitive") ) >>= value;
     return value;
 }
 
 void SAL_CALL SwVbaFind::setMatchCase( ::sal_Bool _matchcase ) throw (uno::RuntimeException)
 {
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchCaseSensitive"), uno::makeAny( _matchcase ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchCaseSensitive"), uno::makeAny( _matchcase ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord() throw (uno::RuntimeException)
 {
     sal_Bool value = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchWords") ) >>= value;
+    mxPropertyReplace->getPropertyValue( OUString("SearchWords") ) >>= value;
     return value;
 }
 
 void SAL_CALL SwVbaFind::setMatchWholeWord( ::sal_Bool _matchwholeword ) throw (uno::RuntimeException)
 {
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchWords"), uno::makeAny( _matchwholeword ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchWords"), uno::makeAny( _matchwholeword ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaFind::getMatchWildcards() throw (uno::RuntimeException)
 {
     sal_Bool value = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchRegularExpression") ) >>= value;
+    mxPropertyReplace->getPropertyValue( OUString("SearchRegularExpression") ) >>= value;
     return value;
 }
 
 void SAL_CALL SwVbaFind::setMatchWildcards( ::sal_Bool _matchwildcards ) throw (uno::RuntimeException)
 {
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchRegularExpression"), uno::makeAny( _matchwildcards ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchRegularExpression"), uno::makeAny( _matchwildcards ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike() throw (uno::RuntimeException)
 {
     sal_Bool value = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchSimilarity") ) >>= value;
+    mxPropertyReplace->getPropertyValue( OUString("SearchSimilarity") ) >>= value;
     return value;
 }
 
 void SAL_CALL SwVbaFind::setMatchSoundsLike( ::sal_Bool _matchsoundslike ) throw (uno::RuntimeException)
 {
     // seems not accurate
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchSimilarity"), uno::makeAny( _matchsoundslike ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchSimilarity"), uno::makeAny( _matchsoundslike ) );
 }
 
 ::sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms() throw (uno::RuntimeException)
 {
     sal_Bool value = sal_False;
-    mxPropertyReplace->getPropertyValue( rtl::OUString("SearchSimilarity") ) >>= value;
+    mxPropertyReplace->getPropertyValue( OUString("SearchSimilarity") ) >>= value;
     if( value )
-        mxPropertyReplace->getPropertyValue( rtl::OUString("SearchSimilarityRelax") ) >>= value;
+        mxPropertyReplace->getPropertyValue( OUString("SearchSimilarityRelax") ) >>= value;
     return value;
 }
 
 void SAL_CALL SwVbaFind::setMatchAllWordForms( ::sal_Bool _matchallwordforms ) throw (uno::RuntimeException)
 {
     // seems not accurate
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchSimilarity"), uno::makeAny( _matchallwordforms ) );
-    mxPropertyReplace->setPropertyValue( rtl::OUString("SearchSimilarityRelax"), uno::makeAny( _matchallwordforms ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchSimilarity"), uno::makeAny( _matchallwordforms ) );
+    mxPropertyReplace->setPropertyValue( OUString("SearchSimilarityRelax"), uno::makeAny( _matchallwordforms ) );
 }
 
 uno::Any SAL_CALL SwVbaFind::getStyle() throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL SwVbaFind::setStyle( const uno::Any& /*_style */ ) throw (uno::RuntimeException)
 {
-    throw uno::RuntimeException( rtl::OUString("Not implemented"), uno::Reference< uno::XInterface >() );
+    throw uno::RuntimeException( OUString("Not implemented"), uno::Reference< uno::XInterface >() );
 }
 
 sal_Bool SAL_CALL
@@ -311,7 +311,7 @@ SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const u
     sal_Bool result = sal_False;
     if( FindText.hasValue() )
     {
-        rtl::OUString sText;
+        OUString sText;
         FindText >>= sText;
         setText( sText );
     }
@@ -368,7 +368,7 @@ SwVbaFind::Execute( const uno::Any& FindText, const uno::Any& MatchCase, const u
 
     if( ReplaceWith.hasValue() )
     {
-        rtl::OUString sValue;
+        OUString sValue;
         ReplaceWith >>= sValue;
         SetReplaceWith( sValue );
     }
@@ -392,20 +392,20 @@ SwVbaFind::ClearFormatting(  ) throw (uno::RuntimeException)
     mxPropertyReplace->setSearchAttributes( aSearchAttribs );
 }
 
-rtl::OUString
+OUString
 SwVbaFind::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFind");
+    return OUString("SwVbaFind");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaFind::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Find" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Find" );
     }
     return aServiceNames;
 }

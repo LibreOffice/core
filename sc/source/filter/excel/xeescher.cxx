@@ -80,9 +80,6 @@
 #include <oox/export/utils.hxx>
 #include <boost/shared_ptr.hpp>
 
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -1225,7 +1222,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
     switch( rRoot.GetBiff() )
     {
         case EXC_BIFF5:
-            maNoteText = rtl::OUStringToOString(aNoteText, rRoot.GetTextEncoding());
+            maNoteText = OUStringToOString(aNoteText, rRoot.GetTextEncoding());
         break;
 
         case EXC_BIFF8:
@@ -1410,7 +1407,7 @@ XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxE
 bool
 XclMacroHelper::SetMacroLink( const String& rMacroName )
 {
-    OSL_TRACE("SetMacroLink( macroname:=%s )", rtl::OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_TRACE("SetMacroLink( macroname:=%s )", OUStringToOString( rMacroName, RTL_TEXTENCODING_UTF8 ).getStr() );
     if( rMacroName.Len() )
     {
         sal_uInt16 nExtSheet = GetLocalLinkManager().FindExtSheet( EXC_EXTSH_OWNDOC );

@@ -49,12 +49,12 @@ private:
     sal_Bool        mbEmbedLinkedGraphics;
     sal_Bool        mbOLEOptimization;
     sal_Int32       mnOLEOptimizationType;
-    rtl::OUString   maCustomShowName;
+    OUString   maCustomShowName;
     sal_Bool        mbDeleteUnusedMasterPages;
     sal_Bool        mbDeleteHiddenSlides;
     sal_Bool        mbDeleteNotesPages;
-    rtl::OUString   maSaveAsURL;
-    rtl::OUString   maFilterName;
+    OUString   maSaveAsURL;
+    OUString   maFilterName;
     sal_Bool        mbOpenNewDocument;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XFrame > mxInformationDialog;

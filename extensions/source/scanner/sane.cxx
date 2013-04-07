@@ -137,7 +137,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                 pAction = "SANE_ACTION_SET_AUTO";break;
         }
         dbg_msg( "Option: \"%s\" action: %s\n",
-                 rtl::OUStringToOString(GetOptionName(nOption), osl_getThreadTextEncoding()).getStr(),
+                 OUStringToOString(GetOptionName(nOption), osl_getThreadTextEncoding()).getStr(),
                  pAction );
     }
 #endif
@@ -168,17 +168,17 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    ::rtl::OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
+    OUString sSaneLibName( "libsane" SAL_DLLEXTENSION  );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = ::rtl::OUString("libsane" SAL_DLLEXTENSION ".1" );
+        sSaneLibName = OUString("libsane" SAL_DLLEXTENSION ".1" );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
     {
-        ::rtl::OUString sSaneLibSystemPath( "/usr/local/lib/libsane" SAL_DLLEXTENSION  );
+        OUString sSaneLibSystemPath( "/usr/local/lib/libsane" SAL_DLLEXTENSION  );
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
@@ -292,7 +292,7 @@ sal_Bool Sane::Open( const char* name )
 
     if( mnDevice == -1 )
     {
-        rtl::OString aDevice( name );
+        OString aDevice( name );
         for( int i = 0; i < nDevices; i++ )
         {
             if( aDevice.equals( ppDevices[i]->name ) )
@@ -331,7 +331,7 @@ void Sane::Close()
 int Sane::GetOptionByName( const char* rName )
 {
     int i;
-    rtl::OString aOption( rName );
+    OString aOption( rName );
     for( i = 0; i < mnOptions; i++ )
     {
         if( mppOptions[i]->name && aOption.equals( mppOptions[i]->name ) )
@@ -353,7 +353,7 @@ sal_Bool Sane::GetOptionValue( int n, sal_Bool& rRet )
     return sal_True;
 }
 
-sal_Bool Sane::GetOptionValue( int n, rtl::OString& rRet )
+sal_Bool Sane::GetOptionValue( int n, OString& rRet )
 {
     sal_Bool bSuccess = sal_False;
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
@@ -430,7 +430,7 @@ sal_Bool Sane::SetOptionValue( int n, const String& rSet )
 {
     if( ! maHandle  ||  mppOptions[n]->type != SANE_TYPE_STRING )
         return sal_False;
-    rtl::OString aSet(rtl::OUStringToOString(rSet, osl_getThreadTextEncoding()));
+    OString aSet(OUStringToOString(rSet, osl_getThreadTextEncoding()));
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, (void*)aSet.getStr() );
     if( nStatus != SANE_STATUS_GOOD )
         return sal_False;
@@ -986,7 +986,7 @@ String Sane::GetOptionUnitName( int n )
     SANE_Unit nUnit = mppOptions[n]->unit;
     size_t nUnitAsSize = (size_t)nUnit;
     if (nUnitAsSize >= SAL_N_ELEMENTS( ppUnits ))
-        aText = rtl::OUString("[unknown units]");
+        aText = OUString("[unknown units]");
     else
         aText = String( ppUnits[ nUnit ], osl_getThreadTextEncoding() );
     return aText;

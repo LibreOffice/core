@@ -41,7 +41,7 @@ class ScXMLExportDataPilot
     ScXMLExport&        rExport;
     ScDocument*         pDoc;
 
-    rtl::OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const;
+    OUString getDPOperatorXML(const ScQueryOp aFilterOperator, const bool bUseRegularExpressions) const;
     void WriteDPCondition(const ScQueryEntry& aQueryEntry, bool bIsCaseSensitive, bool bUseRegularExpressions);
     void WriteDPFilter(const ScQueryParam& aQueryParam);
 
@@ -60,7 +60,7 @@ class ScXMLExportDataPilot
     void WriteDimension(ScDPSaveDimension* pDim, const ScDPDimensionSaveData* pDimData);
     void WriteDimensions(ScDPSaveData* pDPSave);
 
-    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const ::rtl::OUString* pGrandTotal);
+    void WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal);
 
 public:
     ScXMLExportDataPilot(ScXMLExport& rExport);

@@ -69,7 +69,7 @@ private:
 
 protected:
     SfxModalDialog(Window *pParent, const ResId& );
-    SfxModalDialog(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription);
+    SfxModalDialog(Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
     SfxModalDialog(Window* pParent, sal_uInt32 nUniqueId, WinBits nWinStyle = WB_STDMODAL );
 
     String&             GetExtraData()      { return aExtraData; }
@@ -104,7 +104,7 @@ protected:
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
                                 Window*, const ResId& );
                             SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-                                Window*, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
+                                Window*, const OString& rID, const OUString& rUIXMLDescription );
                             ~SfxModelessDialog();
     virtual sal_Bool            Close();
     virtual void            Resize();

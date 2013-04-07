@@ -48,8 +48,6 @@
 
 #include <utility>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -468,7 +466,7 @@ struct ScCaptionInitData
 
     SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
     OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
-    ::rtl::OUString     maSimpleText;       /// Simple text without formatting.
+    OUString     maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.
     bool                mbDefaultPosSize;   /// True = use default position and size for caption.

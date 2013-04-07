@@ -46,26 +46,26 @@ namespace framework{
 
 
 // path to module config
-static ::rtl::OUString CFG_PACKAGE_MODULES     ("/org.openoffice.Setup/Office/Factories");
-static ::rtl::OUString CFG_PACKAGE_SETUP       ("/org.openoffice.Setup");
-static ::rtl::OUString CFG_PACKAGE_COMMON      ("/org.openoffice.Office.Common");
-static ::rtl::OUString CFG_PATH_L10N           ("L10N");
-static ::rtl::OUString CFG_PATH_HELP           ("Help");
-static ::rtl::OUString CFG_KEY_LOCALE          ("ooLocale");
-static ::rtl::OUString CFG_KEY_HELPSYSTEM      ("System");
+static OUString CFG_PACKAGE_MODULES     ("/org.openoffice.Setup/Office/Factories");
+static OUString CFG_PACKAGE_SETUP       ("/org.openoffice.Setup");
+static OUString CFG_PACKAGE_COMMON      ("/org.openoffice.Office.Common");
+static OUString CFG_PATH_L10N           ("L10N");
+static OUString CFG_PATH_HELP           ("Help");
+static OUString CFG_KEY_LOCALE          ("ooLocale");
+static OUString CFG_KEY_HELPSYSTEM      ("System");
 
 // props of job environment
-static ::rtl::OUString PROP_ENVIRONMENT        ("Environment");
-static ::rtl::OUString PROP_JOBCONFIG          ("JobConfig");
-static ::rtl::OUString PROP_ENVTYPE            ("EnvType");
-static ::rtl::OUString PROP_MODEL              ("Model");
+static OUString PROP_ENVIRONMENT        ("Environment");
+static OUString PROP_JOBCONFIG          ("JobConfig");
+static OUString PROP_ENVTYPE            ("EnvType");
+static OUString PROP_MODEL              ("Model");
 
 // props of module config
-static ::rtl::OUString PROP_HELP_BASEURL       ("ooSetupFactoryHelpBaseURL");
-static ::rtl::OUString PROP_AUTOMATIC_HELP     ("ooSetupFactoryHelpOnOpen");
+static OUString PROP_HELP_BASEURL       ("ooSetupFactoryHelpBaseURL");
+static OUString PROP_AUTOMATIC_HELP     ("ooSetupFactoryHelpOnOpen");
 
 // special value of job environment
-static ::rtl::OUString ENVTYPE_DOCUMENTEVENT   ("DOCUMENTEVENT");
+static OUString ENVTYPE_DOCUMENTEVENT   ("DOCUMENTEVENT");
 
 //-----------------------------------------------
 
@@ -145,7 +145,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
 {
     // Analyze the given arguments; try to locate a model there and
     // classify it's used application module.
-    ::rtl::OUString sModule = its_getModuleIdFromEnv(lArguments);
+    OUString sModule = its_getModuleIdFromEnv(lArguments);
 
     // Attention: We are bound to events for openeing any document inside the office.
     // That includes e.g. the help module itself. But we have to do nothing then!
@@ -156,7 +156,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     // a) help isnt open                       => show default page for the detected module
     // b) help shows any other default page(!) => show default page for the detected module
     // c) help shows any other content         => do nothing (user travelled to any other content and leaved the set of default pages)
-    ::rtl::OUString sCurrentHelpURL                = its_getCurrentHelpURL();
+    OUString sCurrentHelpURL                = its_getCurrentHelpURL();
     sal_Bool        bCurrentHelpURLIsAnyDefaultURL = its_isHelpUrlADefaultOne(sCurrentHelpURL);
     sal_Bool        bShowIt                        = sal_False;
 
@@ -170,7 +170,7 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     if (bShowIt)
     {
         // retrieve the help URL for the detected application module
-        ::rtl::OUString sModuleDependendHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
+        OUString sModuleDependendHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
         if (!sModuleDependendHelpURL.isEmpty())
         {
             // Show this help page.
@@ -203,7 +203,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 }
 
 //-----------------------------------------------
-::rtl::OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
+OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::beans::NamedValue >& lArguments)
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
     ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault(PROP_ENVIRONMENT, css::uno::Sequence< css::beans::NamedValue >());
@@ -212,13 +212,13 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // check for right environment.
     // If its not a DocumentEvent, which triggered this job,
     // we cant work correctly! => return immediately and do nothing
-    ::rtl::OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(PROP_ENVTYPE, ::rtl::OUString());
+    OUString sEnvType = lEnvironment.getUnpackedValueOrDefault(PROP_ENVTYPE, OUString());
     if (!sEnvType.equals(ENVTYPE_DOCUMENTEVENT))
-        return ::rtl::OUString();
+        return OUString();
 
     css::uno::Reference< css::frame::XModel > xDoc = lEnvironment.getUnpackedValueOrDefault(PROP_MODEL, css::uno::Reference< css::frame::XModel >());
     if (!xDoc.is())
-        return ::rtl::OUString();
+        return OUString();
 
     // be sure that we work on top level documents only, which are registered
     // on the desktop instance. Ignore e.g. life previews, which are top frames too ...
@@ -231,7 +231,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     if (xFrame.is() && xFrame->isTop())
         xDesktopCheck = css::uno::Reference< css::frame::XDesktop >(xFrame->getCreator(), css::uno::UNO_QUERY);
     if (!xDesktopCheck.is())
-        return ::rtl::OUString();
+        return OUString();
 
     // OK - now we are sure this document is a top level document.
     // Classify it.
@@ -241,7 +241,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     aLock.unlock();
     // <- SAFE
 
-    ::rtl::OUString sModuleId;
+    OUString sModuleId;
     try
     {
         sModuleId = xModuleManager->identify(xDoc);
@@ -249,13 +249,13 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sModuleId = ::rtl::OUString(); }
+        { sModuleId = OUString(); }
 
     return sModuleId;
 }
 
 //-----------------------------------------------
-::rtl::OUString HelpOnStartup::its_getCurrentHelpURL()
+OUString HelpOnStartup::its_getCurrentHelpURL()
 {
     // SAFE ->
     ResetableGuard aLock(m_aLock);
@@ -264,13 +264,13 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // <- SAFE
 
     if (!xDesktop.is())
-        return ::rtl::OUString();
+        return OUString();
 
     css::uno::Reference< css::frame::XFrame > xHelp = xDesktop->findFrame(SPECIALTARGET_HELPTASK, css::frame::FrameSearchFlag::CHILDREN);
     if (!xHelp.is())
-        return ::rtl::OUString();
+        return OUString();
 
-    ::rtl::OUString sCurrentHelpURL;
+    OUString sCurrentHelpURL;
     try
     {
         css::uno::Reference< css::frame::XFramesSupplier >  xHelpRoot  (xHelp                 , css::uno::UNO_QUERY_THROW);
@@ -291,13 +291,13 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sCurrentHelpURL = ::rtl::OUString(); }
+        { sCurrentHelpURL = OUString(); }
 
     return sCurrentHelpURL;
 }
 
 //-----------------------------------------------
-::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const ::rtl::OUString& sHelpURL)
+::sal_Bool HelpOnStartup::its_isHelpUrlADefaultOne(const OUString& sHelpURL)
 {
     if (sHelpURL.isEmpty())
         return sal_False;
@@ -305,8 +305,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // SAFE ->
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess >     xConfig = m_xConfig;
-    ::rtl::OUString                                        sLocale = m_sLocale;
-    ::rtl::OUString                                        sSystem = m_sSystem;
+    OUString                                        sLocale = m_sLocale;
+    OUString                                        sSystem = m_sSystem;
     aLock.unlock();
     // <- SAFE
 
@@ -314,8 +314,8 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
         return sal_False;
 
     // check given help url against all default ones
-    const css::uno::Sequence< ::rtl::OUString > lModules = xConfig->getElementNames();
-    const ::rtl::OUString*                      pModules = lModules.getConstArray();
+    const css::uno::Sequence< OUString > lModules = xConfig->getElementNames();
+    const OUString*                      pModules = lModules.getConstArray();
           ::sal_Int32                           c        = lModules.getLength();
           ::sal_Int32                           i        = 0;
 
@@ -328,9 +328,9 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
             if (!xModuleConfig.is())
                 continue;
 
-            ::rtl::OUString sHelpBaseURL;
+            OUString sHelpBaseURL;
             xModuleConfig->getByName(PROP_HELP_BASEURL) >>= sHelpBaseURL;
-            ::rtl::OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
+            OUString sHelpURLForModule = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
             if (sHelpURL.equals(sHelpURLForModule))
                 return sal_True;
         }
@@ -344,17 +344,17 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 }
 
 //-----------------------------------------------
-::rtl::OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const ::rtl::OUString& sModule)
+OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
 {
     // SAFE ->
     ResetableGuard aLock(m_aLock);
     css::uno::Reference< css::container::XNameAccess > xConfig = m_xConfig;
-    ::rtl::OUString                                    sLocale = m_sLocale;
-    ::rtl::OUString                                    sSystem = m_sSystem;
+    OUString                                    sLocale = m_sLocale;
+    OUString                                    sSystem = m_sSystem;
     aLock.unlock();
     // <- SAFE
 
-    ::rtl::OUString sHelpURL;
+    OUString sHelpURL;
 
     try
     {
@@ -368,7 +368,7 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
 
         if (bHelpEnabled)
         {
-            ::rtl::OUString sHelpBaseURL;
+            OUString sHelpBaseURL;
             xModuleConfig->getByName(PROP_HELP_BASEURL) >>= sHelpBaseURL;
             sHelpURL = HelpOnStartup::ist_createHelpURL(sHelpBaseURL, sLocale, sSystem);
         }
@@ -376,17 +376,17 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sHelpURL = ::rtl::OUString(); }
+        { sHelpURL = OUString(); }
 
     return sHelpURL;
 }
 
 //-----------------------------------------------
-::rtl::OUString HelpOnStartup::ist_createHelpURL(const ::rtl::OUString& sBaseURL,
-                                                 const ::rtl::OUString& sLocale ,
-                                                 const ::rtl::OUString& sSystem )
+OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
+                                                 const OUString& sLocale ,
+                                                 const OUString& sSystem )
 {
-    ::rtl::OUStringBuffer sHelpURL(256);
+    OUStringBuffer sHelpURL(256);
     sHelpURL.append     (sBaseURL    );
     sHelpURL.appendAscii("?Language=");
     sHelpURL.append     (sLocale     );

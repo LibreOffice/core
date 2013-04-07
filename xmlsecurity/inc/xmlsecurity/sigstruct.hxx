@@ -36,10 +36,10 @@
 struct SignatureReferenceInformation
 {
     sal_Int32       nType;
-    rtl::OUString   ouURI;
-    rtl::OUString   ouDigestValue;
+    OUString   ouURI;
+    OUString   ouDigestValue;
 
-    SignatureReferenceInformation( sal_Int32 type, rtl::OUString uri )
+    SignatureReferenceInformation( sal_Int32 type, OUString uri )
     {
         nType = type;
         ouURI = uri;
@@ -54,10 +54,10 @@ struct SignatureInformation
     sal_Int32 nSecurityEnvironmentIndex;
     ::com::sun::star::xml::crypto::SecurityOperationStatus nStatus;
     SignatureReferenceInformations  vSignatureReferenceInfors;
-    rtl::OUString ouX509IssuerName;
-    rtl::OUString ouX509SerialNumber;
-    rtl::OUString ouX509Certificate;
-    rtl::OUString ouSignatureValue;
+    OUString ouX509IssuerName;
+    OUString ouX509SerialNumber;
+    OUString ouX509Certificate;
+    OUString ouSignatureValue;
     ::com::sun::star::util::DateTime stDateTime;
 
     //We also keep the date and time as string. This is done when this
@@ -71,9 +71,9 @@ struct SignatureInformation
     //milli seconds (because the document was created by an application other than OOo)
     //and the converted time is written back, then the string looks different
     //and the signature is broken.
-    rtl::OUString ouDateTime;
-    rtl::OUString ouSignatureId;
-    rtl::OUString ouPropertyId;
+    OUString ouDateTime;
+    OUString ouSignatureId;
+    OUString ouPropertyId;
 
     SignatureInformation( sal_Int32 nId )
     {

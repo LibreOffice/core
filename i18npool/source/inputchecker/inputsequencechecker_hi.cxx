@@ -20,7 +20,6 @@
 
 #include <inputsequencechecker_hi.hxx>
 
-using ::rtl::OUString;
 
 namespace com {
 namespace sun {

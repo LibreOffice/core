@@ -79,13 +79,13 @@ public:
     void SetColor(const Color&);
     double GetValue() const;
     void SetValue(double nValue);
-    void SetFormula(const rtl::OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
+    void SetFormula(const OUString& rFormula, ScDocument* pDoc, const ScAddress& rAddr, formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
     void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab, SCTAB nTabNo);
     void UpdateReference( UpdateRefMode eUpdateRefMode,
             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
     const ScTokenArray* GetFormula() const;
-    rtl::OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
+    OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
 
     ScColorScaleEntryType GetType() const;
     void SetType( ScColorScaleEntryType eType );

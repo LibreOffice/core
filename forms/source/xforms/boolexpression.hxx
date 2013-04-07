@@ -38,7 +38,7 @@ public:
 
     /// set the expression string
     /// (overridden for new definition of a simple expression)
-    void setExpression( const rtl::OUString& rExpression );
+    void setExpression( const OUString& rExpression );
 };
 
 } // namespace xforms

@@ -36,7 +36,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 
-using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -67,7 +66,7 @@ static void lcl_AddAsPropertyChangeListener(
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
             rPropSet->addPropertyChangeListener(
-                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+                    OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
         }
     }
 }
@@ -82,7 +81,7 @@ static void lcl_RemoveAsPropertyChangeListener(
         for (int i = 0;  i < NUM_FLUSH_PROPS;  ++i)
         {
             rPropSet->removePropertyChangeListener(
-                    ::rtl::OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
+                    OUString::createFromAscii(aFlushProperties[i].pPropName), xListener );
         }
     }
 }

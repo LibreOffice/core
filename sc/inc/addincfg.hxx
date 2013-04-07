@@ -24,16 +24,16 @@
 
 class ScAddInCfg : public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
             ScAddInCfg();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
     virtual void    Commit();
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any>
-            GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+            GetProperties(const com::sun::star::uno::Sequence< OUString >& rNames)
                             { return ConfigItem::GetProperties( rNames ); }
 
     using ConfigItem::GetNodeNames;

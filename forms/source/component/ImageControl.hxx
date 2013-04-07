@@ -52,10 +52,10 @@ class OImageControlModel
     ImageProducer*                                  m_pImageProducer;
     bool                                            m_bExternalGraphic;
     sal_Bool                                        m_bReadOnly;
-    ::rtl::OUString                                 m_sImageURL;
+    OUString                                 m_sImageURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject >
                                                     m_xGraphicObject;
-    ::rtl::OUString                                 m_sDocumentURL;
+    OUString                                 m_sDocumentURL;
 
 protected:
     // UNO Anbindung
@@ -84,7 +84,7 @@ public:
     virtual void SAL_CALL disposing();
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
@@ -138,7 +138,7 @@ protected:
     /** updates the binary stream, created from loading the file which the given URL points to, into our
         bound field, or the control itself if there is no bound field
     */
-    sal_Bool    impl_updateStreamForURL_lck( const ::rtl::OUString& _rURL, ValueChangeInstigator _eInstigator );
+    sal_Bool    impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator );
 
     DECL_LINK( OnImageImportDone, ::Graphic* );
 };

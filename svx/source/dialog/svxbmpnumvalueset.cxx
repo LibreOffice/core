@@ -62,7 +62,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
-using rtl::OUString;
 
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
@@ -93,7 +92,7 @@ static const sal_Unicode aBulletTypes[] =
 static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
-    static Font aDefBulletFont( rtl::OUString("StarSymbol"),
+    static Font aDefBulletFont( OUString("StarSymbol"),
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
@@ -303,9 +302,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
                     Sequence< PropertyValue > aProperties(2);
                     PropertyValue* pProperties = aProperties.getArray();
-                    pProperties[0].Name = rtl::OUString("NumberingType");
+                    pProperties[0].Name = OUString("NumberingType");
                     pProperties[0].Value <<= aNumberingTypes[i];
-                    pProperties[1].Name = rtl::OUString("Value");
+                    pProperties[1].Name = OUString("Value");
                     pProperties[1].Value <<= (sal_Int32)1;
                     try
                     {

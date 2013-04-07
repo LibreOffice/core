@@ -246,11 +246,11 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     maHintText.Show();
 
     // Help the user with some default values
-    ::rtl::OUString aTempDirURL;
+    OUString aTempDirURL;
     ::osl::File::getTempDirURL( aTempDirURL );
     INetURLObject aURLObj( aTempDirURL );
     aURLObj.insertName( "nss", true );
-    ::rtl::OUString aNSSFolder = aURLObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    OUString aNSSFolder = aURLObj.getFSysPath( INetURLObject::FSYS_DETECT );
     maEditXMLFileName.SetText( aNSSFolder + "demo-sample.xml" );
     maEditBINFileName.SetText( aNSSFolder + "demo-sample.gif" );
     maEditDOCFileName.SetText( aNSSFolder + "demo-sample.sxw" );
@@ -282,7 +282,7 @@ IMPL_LINK_NOARG(MyWin, CryptoCheckBoxHdl)
 
 IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
 {
-    rtl::OUString aDocFileName = maEditDOCFileName.GetText();
+    OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(MyWin, DigitalSignaturesWithServiceHdl)
 
 IMPL_LINK_NOARG(MyWin, VerifyDigitalSignaturesHdl)
 {
-    rtl::OUString aDocFileName = maEditDOCFileName.GetText();
+    OUString aDocFileName = maEditDOCFileName.GetText();
     uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromURL(
             aDocFileName, embed::ElementModes::READWRITE, comphelper::getProcessServiceFactory() );
 

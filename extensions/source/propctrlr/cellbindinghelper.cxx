@@ -60,15 +60,15 @@ namespace pcr
     namespace
     {
         //....................................................................
-        struct StringCompare : public ::std::unary_function< ::rtl::OUString, bool >
+        struct StringCompare : public ::std::unary_function< OUString, bool >
         {
         private:
-            ::rtl::OUString m_sReference;
+            OUString m_sReference;
 
         public:
-            StringCompare( const ::rtl::OUString& _rReference ) : m_sReference( _rReference ) { }
+            StringCompare( const OUString& _rReference ) : m_sReference( _rReference ) { }
 
-            inline bool operator()( const ::rtl::OUString& _rCompare )
+            inline bool operator()( const OUString& _rCompare )
             {
                 return ( _rCompare == m_sReference ) ? true : false;
             }
@@ -147,7 +147,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool CellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress ) const
+    bool CellBindingHelper::convertStringAddress( const OUString& _rAddressDescription, CellAddress& /* [out] */ _rAddress ) const
     {
         Any aAddress;
         return doConvertAddressRepresentations(
@@ -161,15 +161,15 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool CellBindingHelper::doConvertAddressRepresentations( const ::rtl::OUString& _rInputProperty, const Any& _rInputValue,
-        const ::rtl::OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
+    bool CellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
+        const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
     {
         bool bSuccess = false;
 
         Reference< XPropertySet > xConverter(
             createDocumentDependentInstance(
                 _bIsRange ? OUString(SERVICE_RANGEADDRESS_CONVERSION) : OUString(SERVICE_ADDRESS_CONVERSION),
-                ::rtl::OUString(),
+                OUString(),
                 Any()
             ),
             UNO_QUERY
@@ -195,7 +195,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool CellBindingHelper::convertStringAddress( const ::rtl::OUString& _rAddressDescription,
+    bool CellBindingHelper::convertStringAddress( const OUString& _rAddressDescription,
                             CellRangeAddress& /* [out] */ _rAddress ) const
     {
         Any aAddress;
@@ -222,7 +222,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XValueBinding > CellBindingHelper::createCellBindingFromStringAddress( const ::rtl::OUString& _rAddress, bool _bSupportIntegerExchange ) const
+    Reference< XValueBinding > CellBindingHelper::createCellBindingFromStringAddress( const OUString& _rAddress, bool _bSupportIntegerExchange ) const
     {
         Reference< XValueBinding > xBinding;
         if ( !m_xDocument.is() )
@@ -238,7 +238,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XListEntrySource > CellBindingHelper::createCellListSourceFromStringAddress( const ::rtl::OUString& _rAddress ) const
+    Reference< XListEntrySource > CellBindingHelper::createCellListSourceFromStringAddress( const OUString& _rAddress ) const
     {
         Reference< XListEntrySource > xSource;
 
@@ -257,7 +257,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > CellBindingHelper::createDocumentDependentInstance( const ::rtl::OUString& _rService, const ::rtl::OUString& _rArgumentName,
+    Reference< XInterface > CellBindingHelper::createDocumentDependentInstance( const OUString& _rService, const OUString& _rArgumentName,
         const Any& _rArgumentValue ) const
     {
         Reference< XInterface > xReturn;
@@ -322,10 +322,10 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString CellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
+    OUString CellBindingHelper::getStringAddressFromCellBinding( const Reference< XValueBinding >& _rxBinding ) const
     {
         CellAddress aAddress;
-        ::rtl::OUString sAddress;
+        OUString sAddress;
         if ( getAddressFromCellBinding( _rxBinding, aAddress ) )
         {
             Any aStringAddress;
@@ -339,11 +339,11 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString CellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
+    OUString CellBindingHelper::getStringAddressFromCellListSource( const Reference< XListEntrySource >& _rxSource ) const
     {
         OSL_PRECOND( !_rxSource.is() || isCellRangeListSource( _rxSource ), "CellBindingHelper::getStringAddressFromCellListSource: this is no cell list source!" );
 
-        ::rtl::OUString sAddress;
+        OUString sAddress;
         if ( !m_xDocument.is() )
             // very bad ...
             return sAddress;
@@ -372,7 +372,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool CellBindingHelper::isSpreadsheetDocumentWhichSupplies( const ::rtl::OUString& _rService ) const
+    bool CellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const
     {
         bool bYesItIs = false;
 
@@ -382,11 +382,11 @@ namespace pcr
             Reference< XMultiServiceFactory > xDocumentFactory( m_xDocument, UNO_QUERY );
             OSL_ENSURE( xDocumentFactory.is(), "CellBindingHelper::isSpreadsheetDocumentWhichSupplies: spreadsheet document, but no factory?" );
 
-            Sequence< ::rtl::OUString > aAvailableServices;
+            Sequence< OUString > aAvailableServices;
             if ( xDocumentFactory.is() )
                 aAvailableServices = xDocumentFactory->getAvailableServiceNames( );
 
-            const ::rtl::OUString* pFound = ::std::find_if(
+            const OUString* pFound = ::std::find_if(
                 aAvailableServices.getConstArray(),
                 aAvailableServices.getConstArray() + aAvailableServices.getLength(),
                 StringCompare( _rService )
@@ -504,7 +504,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool CellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const ::rtl::OUString& _rService ) const
+    bool CellBindingHelper::doesComponentSupport( const Reference< XInterface >& _rxComponent, const OUString& _rService ) const
     {
         bool bDoes = false;
         Reference< XServiceInfo > xSI( _rxComponent, UNO_QUERY );

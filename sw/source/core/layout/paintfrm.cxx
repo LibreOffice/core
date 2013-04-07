@@ -3566,7 +3566,7 @@ void SwColumnFrm::PaintBreak( ) const
                     aSeq.realloc( aSeq.getLength( ) + 1 );
 
                     // Add the text above
-                    rtl::OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
+                    OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
 
                     basegfx::B2DVector aFontSize;
                     OutputDevice* pOut = pGlobalShell->GetOut();
@@ -6892,7 +6892,7 @@ const Font& SwPageFrm::GetEmptyPageFont()
         pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
         pEmptyPgFont->SetStyleName( aEmptyStr );
-        pEmptyPgFont->SetName(rtl::OUString("Helvetica"));
+        pEmptyPgFont->SetName(OUString("Helvetica"));
         pEmptyPgFont->SetFamily( FAMILY_SWISS );
         pEmptyPgFont->SetTransparent( sal_True );
         pEmptyPgFont->SetColor( COL_GRAY );

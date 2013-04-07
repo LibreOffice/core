@@ -242,7 +242,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL VCLXSpinButton::setProperty( const ::rtl::OUString& PropertyName, const Any& Value ) throw(RuntimeException)
+    void SAL_CALL VCLXSpinButton::setProperty( const OUString& PropertyName, const Any& Value ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
 
@@ -292,7 +292,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL VCLXSpinButton::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+    Any SAL_CALL VCLXSpinButton::getProperty( const OUString& PropertyName ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
 

@@ -40,9 +40,9 @@
 
 namespace {
 
-rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    rtl::OUString aString;
+    OUString aString;
     Color* pColor;
     ScRefCellValue aCell;
     aCell.assign(*pDoc, ScAddress(nCol, nRow, nTab));
@@ -57,9 +57,9 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     return aString;
 }
 
-rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
+OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    rtl::OStringBuffer aString("Error in Table: ");
+    OStringBuffer aString("Error in Table: ");
     aString.append(static_cast<sal_Int32>(nTab));
     aString.append(" Column: ");
     aString.append(static_cast<sal_Int32>(nCol));
@@ -68,20 +68,20 @@ rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab)
     return aString.makeStringAndClear();
 }
 
-rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const rtl::OUString& rExpectedString, const rtl::OUString& rString)
+OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rExpectedString, const OUString& rString)
 {
-    rtl::OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
+    OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
     aString.append("; Expected: '");
-    aString.append(rtl::OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8));
+    aString.append(OUStringToOString(rExpectedString, RTL_TEXTENCODING_UTF8));
     aString.append("' Found: '");
-    aString.append(rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+    aString.append(OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
     aString.append("'");
     return aString.makeStringAndClear();
 }
 
-rtl::OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
+OString createErrorMessage(SCCOL nCol, SCROW nRow, SCTAB nTab, double aExpected, double aValue)
 {
-    rtl::OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
+    OStringBuffer aString(createErrorMessage(nCol, nRow, nTab));
     aString.append("; Expected: '");
     aString.append(aExpected);
     aString.append("' Found: '");
@@ -133,12 +133,12 @@ public:
         }
         else if (meStringType == PureString)
         {
-            rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
-            rtl::OUString aString = mpDoc->GetString(mnCol, mnRow, mnTab);
+            OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+            OUString aString = mpDoc->GetString(mnCol, mnRow, mnTab);
 
 #if DEBUG_CSV_HANDLER
-                std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-                std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "String: " << OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "CSVString: " << OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
@@ -151,7 +151,7 @@ public:
             double nValue = strtod(&aStr[0], &pRemainingChars);
             if (*pRemainingChars)
             {
-                rtl::OUString aString;
+                OUString aString;
                 switch (meStringType)
                 {
                     case StringValue:
@@ -163,10 +163,10 @@ public:
                     default:
                         break;
                 }
-                rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+                OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
 #if DEBUG_CSV_HANDLER
-                std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-                std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "String: " << OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+                std::cout << "CSVString: " << OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
                 std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
 
@@ -222,11 +222,11 @@ public:
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
-        rtl::OUString aString = getConditionalFormatString(mpDoc, mnCol, mnRow, mnTab);
-        rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
+        OUString aString = getConditionalFormatString(mpDoc, mnCol, mnRow, mnTab);
+        OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
 #if DEBUG_CSV_HANDLER
-        std::cout << "String: " << rtl::OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-        std::cout << "CSVString: " << rtl::OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        std::cout << "String: " << OUStringToOString(aString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+        std::cout << "CSVString: " << OUStringToOString(aCSVString, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         std::cout << "result: " << (int)(aCSVString == aString) << std::endl;
 #endif //DEBUG_CSV_HANDLER
         CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab, aCSVString, aString).getStr(), aString == aCSVString );

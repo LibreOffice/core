@@ -1405,7 +1405,7 @@ SdrDragMove::SdrDragMove(SdrDragView& rNewView)
 
 void SdrDragMove::TakeSdrDragComment(XubString& rStr) const
 {
-    rtl::OUString aStr;
+    OUString aStr;
 
     ImpTakeDescriptionStr(STR_DragMethMove, rStr);
     rStr.AppendAscii(" (x=");
@@ -2017,7 +2017,7 @@ void SdrDragRotate::TakeSdrDragComment(XubString& rStr) const
         nTmpWink -= 36000;
     }
 
-    rtl::OUString aStr;
+    OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
     rStr.Append(aStr);
     rStr += sal_Unicode(')');
@@ -2154,7 +2154,7 @@ void SdrDragShear::TakeSdrDragComment(XubString& rStr) const
 
     nTmpWink = NormAngle180(nTmpWink);
 
-    rtl::OUString aStr;
+    OUString aStr;
     getSdrDragView().GetModel()->TakeWinkStr(nTmpWink, aStr);
     rStr.Append(aStr);
     rStr += sal_Unicode(')');
@@ -2741,7 +2741,7 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
             nVal *= 2;
 
         nVal = Abs(nVal);
-        rtl::OUString aStr;
+        OUString aStr;
         getSdrDragView().GetModel()->TakeWinkStr(nVal, aStr);
         rStr.Append(aStr);
         rStr += sal_Unicode(')');
@@ -3392,7 +3392,7 @@ void SdrDragDistort::TakeSdrDragComment(XubString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethDistort, rStr);
 
-    rtl::OUString aStr;
+    OUString aStr;
 
     rStr.AppendAscii(" (x=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);
@@ -3547,7 +3547,7 @@ void SdrDragCrop::TakeSdrDragComment(XubString& rStr) const
 {
     ImpTakeDescriptionStr(STR_DragMethCrop, rStr);
 
-    rtl::OUString aStr;
+    OUString aStr;
 
     rStr.AppendAscii(" (x=");
     getSdrDragView().GetModel()->TakeMetricStr(DragStat().GetDX(), aStr);

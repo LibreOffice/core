@@ -41,7 +41,7 @@
 // ----------
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
-    : SfxItemPool( rtl::OUString("SWG"),
+    : SfxItemPool( OUString("SWG"),
                     POOLATTR_BEGIN, POOLATTR_END-1,
                     aSlotTab, aAttrTab ),
     pDoc( pD )

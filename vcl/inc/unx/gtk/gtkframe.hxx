@@ -201,8 +201,8 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     bool                            m_bSetFocusOnMap;
-    rtl::OUString                   m_aTitle;
-    rtl::OUString                   m_sWMClass;
+    OUString                   m_aTitle;
+    OUString                   m_sWMClass;
 
     IMHandler*                      m_pIMHandler;
 
@@ -351,7 +351,7 @@ public:
     // When Event is called, SalInstance::Yield() must be returned
     virtual sal_Bool                PostEvent( void* pData );
 
-    virtual void                SetTitle( const rtl::OUString& rTitle );
+    virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu *pSalMenu );
     virtual SalMenu*            GetMenu( void );
@@ -397,7 +397,7 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
 
-    virtual rtl::OUString              GetKeyName( sal_uInt16 nKeyCode );
+    virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
 
     // returns the input language used for the last key stroke
@@ -427,7 +427,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
     virtual void                SetScreenNumber( unsigned int );
-    virtual void                SetApplicationID( const rtl::OUString &rWMClass );
+    virtual void                SetApplicationID( const OUString &rWMClass );
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)

@@ -51,9 +51,9 @@ private:
     void onImportRecentDocument();
     void initDialog();
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > getFrontMostDocument( const rtl::OUString& rServiceName );
-    void import( const rtl::OUString& rURL );
-    void displayXMLFile( const rtl::OUString& rURL );
+    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > getFrontMostDocument( const OUString& rServiceName );
+    void import( const OUString& rURL );
+    void displayXMLFile( const OUString& rURL );
     void doExport( com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComp );
 
 private:

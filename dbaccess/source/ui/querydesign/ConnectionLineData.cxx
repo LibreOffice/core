@@ -33,7 +33,7 @@ OConnectionLineData::OConnectionLineData()
 }
 
 //------------------------------------------------------------------------
-OConnectionLineData::OConnectionLineData( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
+OConnectionLineData::OConnectionLineData( const OUString& rSourceFieldName, const OUString& rDestFieldName )
     :m_aSourceFieldName( rSourceFieldName )
     ,m_aDestFieldName( rDestFieldName )
 {
@@ -76,7 +76,7 @@ OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& 
 //------------------------------------------------------------------------
 bool OConnectionLineData::Reset()
 {
-    m_aDestFieldName = m_aSourceFieldName = ::rtl::OUString();
+    m_aDestFieldName = m_aSourceFieldName = OUString();
     return true;
 }
 // -----------------------------------------------------------------------------

@@ -41,19 +41,19 @@ void xforms_addXFormsModel(
     const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
     const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsBinding( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsBinding( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const OUString& );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const OUString& );
 
 void xforms_setValue(
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
-    const rtl::OUString& rName,
+    const OUString& rName,
     const com::sun::star::uno::Any rAny );
 
 template<typename T>
 void xforms_setValue(
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
-    const rtl::OUString& rName,
+    const OUString& rName,
     T& aValue )
 {
     xforms_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
@@ -62,17 +62,17 @@ void xforms_setValue(
 sal_uInt16 xforms_getTypeClass(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
-    const rtl::OUString& rXMLName );
+    const OUString& rXMLName );
 
-rtl::OUString xforms_getTypeName(
+OUString xforms_getTypeName(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
-    const rtl::OUString& rXMLName );
+    const OUString& rXMLName );
 
-rtl::OUString xforms_getBasicTypeName(
+OUString xforms_getBasicTypeName(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
-    const rtl::OUString& rXMLName );
+    const OUString& rXMLName );
 
 #endif
 

@@ -104,7 +104,7 @@ public: //public methods
 
     //set methods
     void SetDimColor( sal_Int32 nDimColor );
-    void SetSoundFileUrl( const ::rtl::OUString& rSoundFileUrl );
+    void SetSoundFileUrl( const OUString& rSoundFileUrl );
     void SetAnimateAssociatedShape( bool bAnimate ); //true if the shape should be animated in addition to the text
 
     //action methods
@@ -116,8 +116,8 @@ public: //public methods
 private: //private methods
 
     //read methods
-    ::rtl::OUString GetPresetId() const;
-    ::rtl::OUString GetPresetSubType() const;
+    OUString GetPresetId() const;
+    OUString GetPresetSubType() const;
     bool HasAfterEffect() const;
     bool HasAfterEffect_ChangeColor() const;
     bool HasAfterEffect_DimAtNextEffect() const;
@@ -146,12 +146,12 @@ private: //private methods
 private: //private member
     //input information:
     Ppt97AnimationInfoAtom  m_aAtom;         ///< pure input from stream
-    ::rtl::OUString         m_aSoundFileUrl; ///< this needs to be set in addition from outside as this class has not the knowledge to translate the sound bits to a file url
+    OUString         m_aSoundFileUrl; ///< this needs to be set in addition from outside as this class has not the knowledge to translate the sound bits to a file url
 
     //cached generated output information:
     mutable bool            m_bDirtyCache;
-    mutable ::rtl::OUString m_aPresetId; // m_aPresetId and m_aSubType match to the values in sd/xml/effects.xml
-    mutable ::rtl::OUString m_aSubType;
+    mutable OUString m_aPresetId; // m_aPresetId and m_aSubType match to the values in sd/xml/effects.xml
+    mutable OUString m_aSubType;
     mutable bool            m_bHasSpecialDuration;
     mutable double          m_fDurationInSeconds;
 };

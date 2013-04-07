@@ -51,7 +51,7 @@ public:
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter();
 
 private:
-    virtual ::rtl::OUString implGetImplementationName() const;
+    virtual OUString implGetImplementationName() const;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     drawingml::ThemePtr mpThemePtr;
 };

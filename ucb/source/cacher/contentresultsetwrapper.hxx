@@ -54,7 +54,7 @@ protected:
 
     struct equalStr_Impl
     {
-            bool operator()( const rtl::OUString& s1, const rtl::OUString& s2 ) const
+            bool operator()( const OUString& s1, const OUString& s2 ) const
           {
             return !!( s1 == s2 );
         }
@@ -62,14 +62,14 @@ protected:
 
     struct hashStr_Impl
     {
-        size_t operator()( const rtl::OUString& rName ) const
+        size_t operator()( const OUString& rName ) const
         {
             return rName.hashCode();
         }
     };
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar
-    < rtl::OUString , hashStr_Impl , equalStr_Impl >
+    < OUString , hashStr_Impl , equalStr_Impl >
     PropertyChangeListenerContainer_Impl;
     //--------------------------------------------------------------------------
     // class ReacquireableGuard
@@ -260,7 +260,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    setPropertyValue( const rtl::OUString& aPropertyName,
+    setPropertyValue( const OUString& aPropertyName,
                       const com::sun::star::uno::Any& aValue )
         throw( com::sun::star::beans::UnknownPropertyException,
                com::sun::star::beans::PropertyVetoException,
@@ -269,13 +269,13 @@ public:
                com::sun::star::uno::RuntimeException );
 
     virtual com::sun::star::uno::Any SAL_CALL
-    getPropertyValue( const rtl::OUString& PropertyName )
+    getPropertyValue( const OUString& PropertyName )
         throw( com::sun::star::beans::UnknownPropertyException,
         com::sun::star::lang::WrappedTargetException,
         com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addPropertyChangeListener( const rtl::OUString& aPropertyName,
+    addPropertyChangeListener( const OUString& aPropertyName,
                                const com::sun::star::uno::Reference<
                                        com::sun::star::beans::XPropertyChangeListener >& xListener )
         throw( com::sun::star::beans::UnknownPropertyException,
@@ -283,7 +283,7 @@ public:
                com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removePropertyChangeListener( const rtl::OUString& aPropertyName,
+    removePropertyChangeListener( const OUString& aPropertyName,
                                   const com::sun::star::uno::Reference<
                                       com::sun::star::beans::XPropertyChangeListener >& aListener )
         throw( com::sun::star::beans::UnknownPropertyException,
@@ -291,7 +291,7 @@ public:
                com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    addVetoableChangeListener( const rtl::OUString& PropertyName,
+    addVetoableChangeListener( const OUString& PropertyName,
                                const com::sun::star::uno::Reference<
                                        com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw( com::sun::star::beans::UnknownPropertyException,
@@ -299,7 +299,7 @@ public:
                com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL
-    removeVetoableChangeListener( const rtl::OUString& PropertyName,
+    removeVetoableChangeListener( const OUString& PropertyName,
                                   const com::sun::star::uno::Reference<
                                       com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw( com::sun::star::beans::UnknownPropertyException,
@@ -325,7 +325,7 @@ public:
     //-----------------------------------------------------------------
     // XContentAccess
     //-----------------------------------------------------------------
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     queryContentIdentifierString()
         throw( com::sun::star::uno::RuntimeException );
 
@@ -424,7 +424,7 @@ public:
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );
 
-    virtual rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
     getString( sal_Int32 columnIndex )
         throw( com::sun::star::sdbc::SQLException,
                com::sun::star::uno::RuntimeException );

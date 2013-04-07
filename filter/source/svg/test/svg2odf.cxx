@@ -40,7 +40,7 @@ namespace
 
     public:
 
-        explicit OutputWrap( const rtl::OUString& rURL ) : maFile(rURL)
+        explicit OutputWrap( const OUString& rURL ) : maFile(rURL)
         {
             maFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
         }
@@ -71,18 +71,18 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         return 1;
     }
 
-    ::rtl::OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
+    OUString aBaseURL, aTmpURL, aSrcURL, aDstURL, aIniUrl;
 
     osl_getProcessWorkingDir(&aBaseURL.pData);
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[1]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[1]).pData,
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aSrcURL.pData);
 
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[2]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[2]).pData,
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
 
-    osl_getFileURLFromSystemPath( rtl::OUString::createFromAscii(argv[3]).pData,
+    osl_getFileURLFromSystemPath( OUString::createFromAscii(argv[3]).pData,
                                 &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aIniUrl.pData);
 

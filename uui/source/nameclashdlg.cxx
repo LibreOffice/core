@@ -32,7 +32,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
     if ( &maBtnRename == pBtn )
     {
         nRet = (long) RENAME;
-        rtl::OUString aNewName = maEDNewName.GetText();
+        OUString aNewName = maEDNewName.GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
             ErrorBox aError( NULL, WB_OK, maSameName );
@@ -51,9 +51,9 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
 
 // -----------------------------------------------------------------------
 NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
-                                  rtl::OUString const & rTargetFolderURL,
-                                  rtl::OUString const & rClashingName,
-                                  rtl::OUString const & rProposedNewName,
+                                  OUString const & rTargetFolderURL,
+                                  OUString const & rClashingName,
+                                  OUString const & rProposedNewName,
                                   bool bAllowOverwrite )
     : ModalDialog( pParent, ResId( DLG_SIMPLE_NAME_CLASH, *pResMgr ) ),
     maFTMessage            ( this, ResId( FT_FILE_EXISTS_WARNING, *pResMgr ) ),
@@ -82,7 +82,7 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
         maBtnOverwrite.Hide();
     }
 
-    rtl::OUString aPath;
+    OUString aPath;
     if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( rTargetFolderURL, aPath ) )
         aPath = rTargetFolderURL;
 

@@ -139,7 +139,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
             OSL_ENSURE(pDestPage,"who is this, Page?");
 
-            ::std::vector< ::rtl::OUString > aExcludedChartNames;
+            ::std::vector< OUString > aExcludedChartNames;
             if ( pDestPage )
             {
                 ScChartHelper::GetChartNames( aExcludedChartNames, pDestPage );
@@ -205,7 +205,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
-        ::std::vector< ::rtl::OUString > aExcludedChartNames;
+        ::std::vector< OUString > aExcludedChartNames;
         SCTAB nTab = GetViewData()->GetTabNo();
         SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
         OSL_ENSURE( pPage, "Page?" );
@@ -277,12 +277,12 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 }
 
 sal_Bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::XEmbeddedObject >& xObj,
-                                const Size* pDescSize, const Graphic* pReplGraph, const ::rtl::OUString& aMediaType, sal_Int64 nAspect )
+                                const Size* pDescSize, const Graphic* pReplGraph, const OUString& aMediaType, sal_Int64 nAspect )
 {
     MakeDrawLayer();
     if ( xObj.is() )
     {
-        ::rtl::OUString aName;
+        OUString aName;
         //TODO/MBA: is that OK?
         comphelper::EmbeddedObjectContainer& aCnt = GetViewData()->GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer();
         if ( !aCnt.HasEmbeddedObject( xObj ) )

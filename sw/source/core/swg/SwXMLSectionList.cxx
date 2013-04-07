@@ -24,7 +24,6 @@
 #include <vector>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 
 sal_Char const sXML_np__office[] = "_ooffice";

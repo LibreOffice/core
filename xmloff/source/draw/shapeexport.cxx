@@ -155,10 +155,10 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = rtl::OUString( "CustomShape" );
+                    aPropValues[ 0 ].Name = OUString( "CustomShape" );
                     aPropValues[ 0 ].Value <<= xShape;
                     sal_Bool bForceGroupWithText = sal_True;
-                    aPropValues[ 1 ].Name = rtl::OUString( "ForceGroupWithText" );
+                    aPropValues[ 1 ].Name = OUString( "ForceGroupWithText" );
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
@@ -321,7 +321,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     uno::Reference< beans::XPropertySet > xControlModel(xControl->getControl(), uno::UNO_QUERY);
                     DBG_ASSERT(xControlModel.is(), "XMLShapeExport::collectShapeAutoStyles: no control model on the control shape!");
 
-                    ::rtl::OUString sNumberStyle = mrExport.GetFormExport()->getControlNumberStyle(xControlModel);
+                    OUString sNumberStyle = mrExport.GetFormExport()->getControlNumberStyle(xControlModel);
                     if (!sNumberStyle.isEmpty())
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
@@ -383,7 +383,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     // * defaults for style properties are not written, but we need to write the "left",
                     //   because we need to distiguish this "left" from the case where not align attribute
                     //   is present which means "void"
-                    static const ::rtl::OUString s_sParaAdjustPropertyName(  "ParaAdjust"  );
+                    static const OUString s_sParaAdjustPropertyName(  "ParaAdjust"  );
                     if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
                         &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
                         )
@@ -1077,14 +1077,14 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
                     if(xPropSet.is())
                     {
-                        rtl::OUString sCLSID;
+                        OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
                             if (sCLSID.equals(mrExport.GetChartExport()->getChartCLSID()))
                             {
                                 eShapeType = XmlShapeTypeDrawChartShape;
                             }
-                            else if (sCLSID.equals(rtl::OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
+                            else if (sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())))
                             {
                                 eShapeType = XmlShapeTypeDrawSheetShape;
                             }
@@ -1127,7 +1127,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 
                     if(xPropSet.is()) try
                     {
-                        rtl::OUString sCLSID;
+                        OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString("CLSID")) >>= sCLSID)
                         {
                             if( sCLSID.equals(OUString( SvGlobalName( SO3_SC_CLASSID ).GetHexName())) )

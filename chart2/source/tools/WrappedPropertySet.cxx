@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 
 WrappedPropertySet::WrappedPropertySet()
                     : MutexContainer()
@@ -248,7 +247,7 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
-        ::rtl::OUString aPropertyName( rNameSeq[nN] );
+        OUString aPropertyName( rNameSeq[nN] );
         try
         {
             this->setPropertyValue( aPropertyName, rValueSeq[nN] );
@@ -276,7 +275,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
         {
             try
             {
-                ::rtl::OUString aPropertyName( rNameSeq[nN] );
+                OUString aPropertyName( rNameSeq[nN] );
                 aRetSeq[nN] = this->getPropertyValue( aPropertyName );
             }
             catch( const beans::UnknownPropertyException& ex )
@@ -328,7 +327,7 @@ beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUStri
     return aState;
 }
 
-const WrappedProperty* WrappedPropertySet::getWrappedProperty( const ::rtl::OUString& rOuterName )
+const WrappedProperty* WrappedPropertySet::getWrappedProperty( const OUString& rOuterName )
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rOuterName );
     return getWrappedProperty( nHandle );
@@ -351,7 +350,7 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            ::rtl::OUString aPropertyName( rNameSeq[nN] );
+            OUString aPropertyName( rNameSeq[nN] );
             aRetSeq[nN] = this->getPropertyState( aPropertyName );
         }
     }
@@ -394,7 +393,7 @@ void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
     const Sequence< beans::Property >&  rPropSeq = getPropertySequence();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
     {
-        ::rtl::OUString aPropertyName( rPropSeq[nN].Name );
+        OUString aPropertyName( rPropSeq[nN].Name );
         this->setPropertyToDefault( aPropertyName );
     }
 }
@@ -403,7 +402,7 @@ void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUStri
 {
     for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
     {
-        ::rtl::OUString aPropertyName( rNameSeq[nN] );
+        OUString aPropertyName( rNameSeq[nN] );
         this->setPropertyToDefault( aPropertyName );
     }
 }
@@ -416,7 +415,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
         aRetSeq.realloc( rNameSeq.getLength() );
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            ::rtl::OUString aPropertyName( rNameSeq[nN] );
+            OUString aPropertyName( rNameSeq[nN] );
             aRetSeq[nN] = this->getPropertyDefault( aPropertyName );
         }
     }

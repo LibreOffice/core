@@ -141,7 +141,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
+        OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -192,7 +192,7 @@ namespace dbaui
             @param  _rNames
                 The list will be filled.
         */
-        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
+        void getSelectionElementNames( ::std::vector< OUString>& _rNames ) const;
 
         /** describes the current selection for the given control
         */
@@ -212,7 +212,7 @@ namespace dbaui
         *
         * \param _aNames the element names
         */
-        void selectElements(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _aNames);
+        void selectElements(const ::com::sun::star::uno::Sequence< OUString>& _aNames);
 
         /** adds a new object to the detail page.
             @param  _eType
@@ -225,7 +225,7 @@ namespace dbaui
                 If we insert a table, the connection must be set.
         */
         SvTreeListEntry* elementAdded(ElementType _eType
-                        ,const ::rtl::OUString& _rName
+                        ,const OUString& _rName
                         ,const ::com::sun::star::uno::Any& _rObject );
 
         /** replaces a objects name with a new one
@@ -241,8 +241,8 @@ namespace dbaui
                 The object which was replaced
         */
         void elementReplaced(ElementType eType
-                        ,const ::rtl::OUString& _rOldName
-                        ,const ::rtl::OUString& _rNewName );
+                        ,const OUString& _rOldName
+                        ,const OUString& _rNewName );
 
         /** removes an element from the detail page.
             @param  _eType
@@ -253,7 +253,7 @@ namespace dbaui
                 If we remove a table, the connection must be set.
         */
         void elementRemoved(ElementType _eType
-                            ,const ::rtl::OUString& _rName );
+                            ,const OUString& _rName );
 
 
         /** changes the container which should be displayed. The select handler will also be called.
@@ -291,9 +291,9 @@ namespace dbaui
                 <TRUE/> if it is a table, otherwise <FALSE/>
             @return void
         */
-        void showPreview(   const ::rtl::OUString& _sDataSourceName,
+        void showPreview(   const OUString& _sDataSourceName,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                            const ::rtl::OUString& _sName,
+                            const OUString& _sName,
                             sal_Bool _bTable);
 
         SvTreeListEntry* getEntry( const Point& _aPosPixel ) const;

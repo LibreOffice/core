@@ -26,7 +26,7 @@
 namespace connectivity
 {
     sal_Bool LoadFunctions(oslModule pODBCso);
-    sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath);
+    sal_Bool LoadLibrary_ODBC3(OUString &_rPath);
     // extern declaration of the function pointer
     extern T3SQLAllocHandle pODBC3SQLAllocHandle;
     extern T3SQLConnect pODBC3SQLConnect;
@@ -97,7 +97,7 @@ namespace connectivity
         {
         protected:
             virtual oslGenericFunction  getOdbcFunction(sal_Int32 _nIndex)  const;
-            virtual SQLHANDLE   EnvironmentHandle(::rtl::OUString &_rPath);
+            virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath);
         public:
             ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
@@ -331,7 +331,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 }
 // -----------------------------------------------------------------------------
 // ODBC Environment (common for all Connections):
-SQLHANDLE ORealObdcDriver::EnvironmentHandle(::rtl::OUString &_rPath)
+SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 {
     // Is (for this instance) already a Enviroment made?
     if (!m_pDriverHandle)

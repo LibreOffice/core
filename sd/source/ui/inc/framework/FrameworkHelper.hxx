@@ -61,47 +61,47 @@ class FrameworkHelper
 {
 public:
     // URLs of frequently used panes.
-    static const ::rtl::OUString msPaneURLPrefix;
-    static const ::rtl::OUString msCenterPaneURL;
-    static const ::rtl::OUString msFullScreenPaneURL;
-    static const ::rtl::OUString msLeftImpressPaneURL;
-    static const ::rtl::OUString msLeftDrawPaneURL;
-    static const ::rtl::OUString msRightPaneURL;
+    static const OUString msPaneURLPrefix;
+    static const OUString msCenterPaneURL;
+    static const OUString msFullScreenPaneURL;
+    static const OUString msLeftImpressPaneURL;
+    static const OUString msLeftDrawPaneURL;
+    static const OUString msRightPaneURL;
 
     // URLs of frequently used views.
-    static const ::rtl::OUString msViewURLPrefix;
-    static const ::rtl::OUString msImpressViewURL;
-    static const ::rtl::OUString msDrawViewURL;
-    static const ::rtl::OUString msOutlineViewURL;
-    static const ::rtl::OUString msNotesViewURL;
-    static const ::rtl::OUString msHandoutViewURL;
-    static const ::rtl::OUString msSlideSorterURL;
-    static const ::rtl::OUString msPresentationViewURL;
-    static const ::rtl::OUString msTaskPaneURL;
+    static const OUString msViewURLPrefix;
+    static const OUString msImpressViewURL;
+    static const OUString msDrawViewURL;
+    static const OUString msOutlineViewURL;
+    static const OUString msNotesViewURL;
+    static const OUString msHandoutViewURL;
+    static const OUString msSlideSorterURL;
+    static const OUString msPresentationViewURL;
+    static const OUString msTaskPaneURL;
 
     // URLs of frequently used tool bars.
-    static const ::rtl::OUString msToolBarURLPrefix;
-    static const ::rtl::OUString msViewTabBarURL;
+    static const OUString msToolBarURLPrefix;
+    static const OUString msViewTabBarURL;
 
     // URLs of task panels.
-    static const ::rtl::OUString msTaskPanelURLPrefix;
-    static const ::rtl::OUString msMasterPagesTaskPanelURL;
-    static const ::rtl::OUString msLayoutTaskPanelURL;
-    static const ::rtl::OUString msTableDesignPanelURL;
-    static const ::rtl::OUString msCustomAnimationTaskPanelURL;
-    static const ::rtl::OUString msSlideTransitionTaskPanelURL;
+    static const OUString msTaskPanelURLPrefix;
+    static const OUString msMasterPagesTaskPanelURL;
+    static const OUString msLayoutTaskPanelURL;
+    static const OUString msTableDesignPanelURL;
+    static const OUString msCustomAnimationTaskPanelURL;
+    static const OUString msSlideTransitionTaskPanelURL;
 
     // Names of frequently used events.
-    static const ::rtl::OUString msResourceActivationRequestEvent;
-    static const ::rtl::OUString msResourceDeactivationRequestEvent;
-    static const ::rtl::OUString msResourceActivationEvent;
-    static const ::rtl::OUString msResourceDeactivationEvent;
-    static const ::rtl::OUString msConfigurationUpdateStartEvent;
-    static const ::rtl::OUString msConfigurationUpdateEndEvent;
+    static const OUString msResourceActivationRequestEvent;
+    static const OUString msResourceDeactivationRequestEvent;
+    static const OUString msResourceActivationEvent;
+    static const OUString msResourceDeactivationEvent;
+    static const OUString msConfigurationUpdateStartEvent;
+    static const OUString msConfigurationUpdateEndEvent;
 
     // Service names of the common controllers.
-    static const ::rtl::OUString msModuleControllerService;
-    static const ::rtl::OUString msConfigurationControllerService;
+    static const OUString msModuleControllerService;
+    static const OUString msConfigurationControllerService;
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is
@@ -132,12 +132,12 @@ public:
         used in a switch statement.  See GetViewURL() for a mapping in the
         opposite direction.
     */
-    static ViewShell::ShellType GetViewId (const rtl::OUString& rsViewURL);
+    static ViewShell::ShellType GetViewId (const OUString& rsViewURL);
 
     /** Return a view URL for the given identifier.  See GetViewId() for a
         mapping in the opposite direction.
     */
-    static ::rtl::OUString GetViewURL (ViewShell::ShellType eType);
+    static OUString GetViewURL (ViewShell::ShellType eType);
 
     /** Return a ViewShell pointer for the given XView reference.  This
         assumes that the given reference is implemented by the
@@ -175,7 +175,7 @@ public:
             of the involved objects does not support XUnoTunnel (where
             necessary).
     */
-    ::boost::shared_ptr<ViewShell> GetViewShell (const ::rtl::OUString& rsPaneURL);
+    ::boost::shared_ptr<ViewShell> GetViewShell (const OUString& rsPaneURL);
 
     /** Return a reference to the view that is displayed in the specified
         pane.  See GetViewShell () for a variant that returns a ViewShell
@@ -208,8 +208,8 @@ public:
             do some initialization after the requested view becomes active.
     */
     css::uno::Reference<css::drawing::framework::XResourceId> RequestView (
-        const ::rtl::OUString& rsResourceURL,
-        const ::rtl::OUString& rsAnchorURL);
+        const OUString& rsResourceURL,
+        const OUString& rsAnchorURL);
 
     /** Request the activation of the specified task panel in the standard
         task pane.
@@ -223,7 +223,7 @@ public:
             is not active then this call is silently ignored.
     */
     void RequestTaskPanel (
-        const ::rtl::OUString& rsTaskPanelURL,
+        const OUString& rsTaskPanelURL,
         const bool bEnsureTaskPaneIsVisible = true);
 
     /** Process a slot call that requests a view shell change.
@@ -240,7 +240,7 @@ public:
         the event it waits for has been sent.
     */
     void RunOnConfigurationEvent(
-        const ::rtl::OUString& rsEventType,
+        const OUString& rsEventType,
         const Callback& rCallback);
 
     /** Run the given callback when the specified resource has been
@@ -272,7 +272,7 @@ public:
         controller.  When the configuration controller is not processing any
         requests the method returns immediately.
     */
-    void WaitForEvent (const ::rtl::OUString& rsEventName) const;
+    void WaitForEvent (const OUString& rsEventName) const;
 
     /** This is a short cut for WaitForEvent(msConfigurationUpdateEndEvent).
         Call this method to execute the pending requests.
@@ -289,7 +289,7 @@ public:
 
     /** Return a string representation of the given XResourceId object.
     */
-    static ::rtl::OUString ResourceIdToString (
+    static OUString ResourceIdToString (
         const css::uno::Reference<
             css::drawing::framework::XResourceId>& rxResourceId);
 
@@ -298,7 +298,7 @@ public:
     static css::uno::Reference<
         css::drawing::framework::XResourceId>
             CreateResourceId (
-                const ::rtl::OUString& rsResourceURL);
+                const OUString& rsResourceURL);
 
     /** Create a new XResourceId object for the given resource URL and a
         single anchor URL.
@@ -306,8 +306,8 @@ public:
     static css::uno::Reference<
         css::drawing::framework::XResourceId>
             CreateResourceId (
-                const ::rtl::OUString& rsResourceURL,
-                const ::rtl::OUString& rsAnchorURL);
+                const OUString& rsResourceURL,
+                const OUString& rsAnchorURL);
 
     /** Create a new XResourceId object for the given resource URL and the
         two given anchor URLs.
@@ -315,16 +315,16 @@ public:
     static css::uno::Reference<
         css::drawing::framework::XResourceId>
             CreateResourceId (
-                const ::rtl::OUString& rsResourceURL,
-                const ::rtl::OUString& rsFirstAnchorURL,
-                const ::rtl::OUString& rsSecondAnchorURL);
+                const OUString& rsResourceURL,
+                const OUString& rsFirstAnchorURL,
+                const OUString& rsSecondAnchorURL);
 
     /** Create a new XResourceId object for the given resource URL.
     */
     static css::uno::Reference<
         css::drawing::framework::XResourceId>
             CreateResourceId (
-                const ::rtl::OUString& rsResourceURL,
+                const OUString& rsResourceURL,
                 const css::uno::Reference<
                     css::drawing::framework::XResourceId>& rxAnchor);
 
@@ -372,7 +372,7 @@ private:
             The callback functor to be called.
     */
     void RunOnEvent(
-        const ::rtl::OUString& rsEventType,
+        const OUString& rsEventType,
         const ConfigurationChangeEventFilter& rFilter,
         const Callback& rCallback) const;
 

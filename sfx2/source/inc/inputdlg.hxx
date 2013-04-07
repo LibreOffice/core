@@ -20,11 +20,11 @@ class InputDialog : public ModalDialog
 {
 public:
 
-    InputDialog (const rtl::OUString &labelText, Window *pParent = NULL);
+    InputDialog (const OUString &labelText, Window *pParent = NULL);
 
     virtual ~InputDialog();
 
-    rtl::OUString getEntryText () const;
+    OUString getEntryText () const;
 
 private:
 

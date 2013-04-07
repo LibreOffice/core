@@ -68,7 +68,7 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
+    void            SetFocusWin(Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const String& _sText);
     void            Update();
@@ -112,7 +112,7 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( sal_Bool bForced = sal_False );
-    void            SetFocusWin(Window *pWin,const rtl::OString& nUniqueId);
+    void            SetFocusWin(Window *pWin,const OString& nUniqueId);
     void            HighlightFunctionParas(const String& aFormula);
 
     void            SetMeText(const String& _sText);

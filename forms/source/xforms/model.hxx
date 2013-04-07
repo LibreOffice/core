@@ -101,7 +101,7 @@ class Model : public Model_t
 
 private:
 
-    rtl::OUString msID;                     /// the model ID
+    OUString msID;                     /// the model ID
     BindingCollection* mpBindings;          /// the bindings
     SubmissionCollection* mpSubmissions;    /// the submissions
     InstanceCollection* mpInstances;        /// the instance(s)
@@ -109,7 +109,7 @@ private:
     XDataTypeRepository_t mxDataTypes;      /// the XSD data-types used
     XDocument_t mxForeignSchema;            /// the XSD-schema part we cannot
                                             /// map onto data types
-    rtl::OUString msSchemaRef;              /// xforms:model/@schema attribute
+    OUString msSchemaRef;              /// xforms:model/@schema attribute
 
     XNameContainer_t mxNamespaces;          /// namespaces for entire model
 
@@ -149,8 +149,8 @@ public:
     void setForeignSchema( const XDocument_t& );
 
     // get/set the xforms:model/@schema attribute
-    rtl::OUString getSchemaRef() const;
-    void setSchemaRef( const rtl::OUString& );
+    OUString getSchemaRef() const;
+    void setSchemaRef( const OUString& );
 
     // get/set namespaces for entire model
     XNameContainer_t getNamespaces() const;
@@ -188,7 +188,7 @@ public:
 
     /// set a data value in the instance
     /// (also defers notifications)
-    bool setSimpleContent( const XNode_t&, const rtl::OUString& );
+    bool setSimpleContent( const XNode_t&, const OUString& );
 
     /// load instance data
     void loadInstance( sal_Int32 nInstance );
@@ -208,10 +208,10 @@ public:
     //
 
 
-    virtual rtl::OUString SAL_CALL getID()
+    virtual OUString SAL_CALL getID()
         throw( RuntimeException_t );
 
-    virtual void SAL_CALL setID( const rtl::OUString& sID )
+    virtual void SAL_CALL setID( const OUString& sID )
         throw( RuntimeException_t );
 
     virtual void SAL_CALL initialize()
@@ -229,10 +229,10 @@ public:
     virtual void SAL_CALL refresh()
         throw( RuntimeException_t );
 
-    virtual void SAL_CALL submit( const rtl::OUString& sID )
+    virtual void SAL_CALL submit( const OUString& sID )
         throw( VetoException_t, WrappedTargetException_t, RuntimeException_t );
 
-    virtual void SAL_CALL submitWithInteraction( const ::rtl::OUString& id, const XInteractionHandler_t& _rxHandler )
+    virtual void SAL_CALL submitWithInteraction( const OUString& id, const XInteractionHandler_t& _rxHandler )
         throw( VetoException_t, WrappedTargetException_t, RuntimeException_t );
 
     virtual XDataTypeRepository_t SAL_CALL getDataTypeRepository(  )
@@ -244,7 +244,7 @@ public:
     virtual XSet_t SAL_CALL getInstances()
         throw( RuntimeException_t );
 
-    virtual XDocument_t SAL_CALL getInstanceDocument( const rtl::OUString& )
+    virtual XDocument_t SAL_CALL getInstanceDocument( const OUString& )
         throw( RuntimeException_t );
 
     virtual XDocument_t SAL_CALL getDefaultInstance()
@@ -260,7 +260,7 @@ public:
     virtual XPropertySet_t SAL_CALL cloneBinding( const XPropertySet_t& )
         throw( RuntimeException_t );
 
-    virtual XPropertySet_t SAL_CALL getBinding( const rtl::OUString& )
+    virtual XPropertySet_t SAL_CALL getBinding( const OUString& )
         throw( RuntimeException_t );
 
     virtual XSet_t SAL_CALL getBindings()
@@ -275,7 +275,7 @@ public:
     virtual XSubmission_t SAL_CALL cloneSubmission( const XPropertySet_t& )
         throw( RuntimeException_t );
 
-    virtual XSubmission_t SAL_CALL getSubmission( const rtl::OUString& )
+    virtual XSubmission_t SAL_CALL getSubmission( const OUString& )
         throw( RuntimeException_t );
 
     virtual XSet_t SAL_CALL getSubmissions()
@@ -283,23 +283,23 @@ public:
 
     // XPropertySet
 
-    virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p)
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p)
         throw( css::uno::RuntimeException )
         { return PropertySetBase::getPropertyValue(p); }
 
-    virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
         throw( css::uno::RuntimeException )
         { PropertySetBase::addPropertyChangeListener(p1, p2); }
 
-    virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2)
         throw( css::uno::RuntimeException )
         { PropertySetBase::removePropertyChangeListener(p1, p2); }
 
-    virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
         throw( css::uno::RuntimeException )
         { PropertySetBase::addVetoableChangeListener(p1, p2); }
 
-    virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2)
         throw( css::uno::RuntimeException )
         { PropertySetBase::removeVetoableChangeListener(p1, p2); }
 
@@ -307,7 +307,7 @@ public:
         throw( css::uno::RuntimeException )
         { return PropertySetBase::getPropertySetInfo(); }
 
-   virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const com::sun::star::uno::Any& p2)
+   virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2)
         throw( css::uno::RuntimeException )
         { PropertySetBase::setPropertyValue(p1, p2); }
 
@@ -318,30 +318,30 @@ public:
 
     /// determine a reasonable control service for a given node
     /// (based on data type MIP assigned to the node)
-    virtual rtl::OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (RuntimeException_t);
+    virtual OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (RuntimeException_t);
 
     /// call getDefaultBindingExpressionForNode with default evaluation context
-    virtual rtl::OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (RuntimeException_t);
+    virtual OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (RuntimeException_t);
 
     /// determine a reasonable default binding expression for a given node
     /// and a given evaluation context
     /// @returns expression, or empty string if no expression could be derived
-    rtl::OUString getDefaultBindingExpressionForNode(
+    OUString getDefaultBindingExpressionForNode(
         const XNode_t&,
         const EvaluationContext& );
 
-    virtual rtl::OUString SAL_CALL getNodeDisplayName( const XNode_t&,
+    virtual OUString SAL_CALL getNodeDisplayName( const XNode_t&,
                                                        sal_Bool bDetail )
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL getNodeName( const XNode_t& )
+    virtual OUString SAL_CALL getNodeName( const XNode_t& )
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL getBindingName( const XPropertySet_t&,
+    virtual OUString SAL_CALL getBindingName( const XPropertySet_t&,
                                                    sal_Bool bDetail )
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL getSubmissionName( const XPropertySet_t&,
+    virtual OUString SAL_CALL getSubmissionName( const XPropertySet_t&,
                                                       sal_Bool bDetail )
         throw( RuntimeException_t );
 
@@ -351,44 +351,44 @@ public:
     virtual void SAL_CALL removeBindingIfUseless( const XPropertySet_t& )
         throw( RuntimeException_t );
 
-    virtual XDocument_t SAL_CALL newInstance( const rtl::OUString& sName,
-                                              const rtl::OUString& sURL,
+    virtual XDocument_t SAL_CALL newInstance( const OUString& sName,
+                                              const OUString& sURL,
                                               sal_Bool bURLOnce )
         throw( RuntimeException_t );
 
-    virtual void SAL_CALL renameInstance( const rtl::OUString& sFrom,
-                                          const rtl::OUString& sTo,
-                                          const rtl::OUString& sURL,
+    virtual void SAL_CALL renameInstance( const OUString& sFrom,
+                                          const OUString& sTo,
+                                          const OUString& sURL,
                                           sal_Bool bURLOnce )
         throw( RuntimeException_t );
 
-    virtual void SAL_CALL removeInstance( const rtl::OUString& sName )
+    virtual void SAL_CALL removeInstance( const OUString& sName )
         throw( RuntimeException_t );
 
 
     virtual XModel_t SAL_CALL newModel( const Frame_XModel_t& xComponent,
-                                        const rtl::OUString& sName )
+                                        const OUString& sName )
         throw( RuntimeException_t );
     virtual void SAL_CALL renameModel( const Frame_XModel_t& xComponent,
-                                       const rtl::OUString& sFrom,
-                                       const rtl::OUString& sTo )
+                                       const OUString& sFrom,
+                                       const OUString& sTo )
         throw( RuntimeException_t );
 
     virtual void SAL_CALL removeModel( const Frame_XModel_t& xComponent,
-                                       const rtl::OUString& sName )
+                                       const OUString& sName )
         throw( RuntimeException_t );
 
 
     virtual XNode_t SAL_CALL createElement( const XNode_t& xParent,
-                                            const rtl::OUString& sName )
+                                            const OUString& sName )
         throw( RuntimeException_t );
 
     virtual XNode_t SAL_CALL createAttribute( const XNode_t& xParent,
-                                              const rtl::OUString& sName )
+                                              const OUString& sName )
         throw( RuntimeException_t );
 
     virtual XNode_t SAL_CALL renameNode( const XNode_t& xNode,
-                                         const rtl::OUString& sName )
+                                         const OUString& sName )
         throw( RuntimeException_t );
 
     virtual XPropertySet_t SAL_CALL getBindingForNode( const XNode_t&,
@@ -398,21 +398,21 @@ public:
     virtual void SAL_CALL removeBindingForNode( const XNode_t& )
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL getResultForExpression(
+    virtual OUString SAL_CALL getResultForExpression(
         const XPropertySet_t& xBinding,
         sal_Bool bIsBindingExpression,
-        const rtl::OUString& sExpression )
+        const OUString& sExpression )
         throw( RuntimeException_t );
 
-    virtual sal_Bool SAL_CALL isValidXMLName( const rtl::OUString& sName )
+    virtual sal_Bool SAL_CALL isValidXMLName( const OUString& sName )
         throw( RuntimeException_t );
 
-    virtual sal_Bool SAL_CALL isValidPrefixName( const rtl::OUString& sName )
+    virtual sal_Bool SAL_CALL isValidPrefixName( const OUString& sName )
         throw( RuntimeException_t );
 
     virtual void SAL_CALL setNodeValue(
         const XNode_t& xNode,
-        const rtl::OUString& sValue )
+        const OUString& sValue )
         throw( RuntimeException_t );
 
 

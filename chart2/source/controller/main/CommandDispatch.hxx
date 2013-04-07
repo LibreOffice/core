@@ -73,10 +73,10 @@ protected:
             called with this parameter set to give an initial state.
      */
     virtual void fireStatusEvent(
-        const ::rtl::OUString & rURL,
+        const OUString & rURL,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener ) = 0;
 
-    /** calls fireStatusEvent( ::rtl::OUString, xSingleListener )
+    /** calls fireStatusEvent( OUString, xSingleListener )
      */
     void fireAllStatusEvents(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
@@ -90,12 +90,12 @@ protected:
             called with this parameter set to give an initial state.
      */
     void fireStatusEventForURL(
-        const ::rtl::OUString & rURL,
+        const OUString & rURL,
         const ::com::sun::star::uno::Any & rState,
         bool bEnabled,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener =
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >(),
-        const ::rtl::OUString & rFeatureDescriptor = ::rtl::OUString() );
+        const OUString & rFeatureDescriptor = OUString() );
 
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
@@ -130,7 +130,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >  m_xURLTransformer;
 
 private:
-    typedef ::std::map< ::rtl::OUString, ::cppu::OInterfaceContainerHelper* >
+    typedef ::std::map< OUString, ::cppu::OInterfaceContainerHelper* >
         tListenerMap;
 
     tListenerMap m_aListeners;

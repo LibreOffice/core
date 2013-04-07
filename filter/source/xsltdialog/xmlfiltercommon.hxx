@@ -30,36 +30,36 @@
 
 // --------------------------------------------------------------------
 
-extern ::rtl::OUString string_encode( const ::rtl::OUString & rText );
-extern ::rtl::OUString string_decode( const ::rtl::OUString & rText );
+extern OUString string_encode( const OUString & rText );
+extern OUString string_decode( const OUString & rText );
 
 // --------------------------------------------------------------------
 
-extern bool isFileURL( const ::rtl::OUString & rURL );
+extern bool isFileURL( const OUString & rURL );
 
 // --------------------------------------------------------------------
 
 bool copyStreams( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xIS, ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOS );
-bool createDirectory( ::rtl::OUString& rURL );
+bool createDirectory( OUString& rURL );
 
 // --------------------------------------------------------------------
 
 class filter_info_impl
 {
 public:
-    rtl::OUString   maFilterName;
-    rtl::OUString   maType;
-    rtl::OUString   maDocumentService;
-    rtl::OUString   maFilterService;
-    rtl::OUString   maInterfaceName;
-    rtl::OUString   maComment;
-    rtl::OUString   maExtension;
-    rtl::OUString   maExportXSLT;
-    rtl::OUString   maImportXSLT;
-    rtl::OUString   maImportTemplate;
-    rtl::OUString   maDocType;
-    rtl::OUString   maImportService;
-    rtl::OUString   maExportService;
+    OUString   maFilterName;
+    OUString   maType;
+    OUString   maDocumentService;
+    OUString   maFilterService;
+    OUString   maInterfaceName;
+    OUString   maComment;
+    OUString   maExtension;
+    OUString   maExportXSLT;
+    OUString   maImportXSLT;
+    OUString   maImportTemplate;
+    OUString   maDocType;
+    OUString   maImportService;
+    OUString   maExportService;
 
     sal_Int32       maFlags;
     sal_Int32       maFileFormatVersion;
@@ -73,17 +73,17 @@ public:
     filter_info_impl( const filter_info_impl& rInfo );
     int operator==( const filter_info_impl& ) const;
 
-    com::sun::star::uno::Sequence< rtl::OUString > getFilterUserData() const;
+    com::sun::star::uno::Sequence< OUString > getFilterUserData() const;
 };
 
 // --------------------------------------------------------------------
 
 struct application_info_impl
 {
-    rtl::OUString   maDocumentService;
-    rtl::OUString   maDocumentUIName;
-    rtl::OUString   maXMLImporter;
-    rtl::OUString   maXMLExporter;
+    OUString   maDocumentService;
+    OUString   maDocumentUIName;
+    OUString   maXMLImporter;
+    OUString   maXMLExporter;
 
     application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter );
 };
@@ -91,8 +91,8 @@ struct application_info_impl
 // --------------------------------------------------------------------
 
 extern std::vector< application_info_impl* >& getApplicationInfos();
-extern rtl::OUString getApplicationUIName( const rtl::OUString& rServiceName );
-extern const application_info_impl* getApplicationInfo( const rtl::OUString& rServiceName );
+extern OUString getApplicationUIName( const OUString& rServiceName );
+extern const application_info_impl* getApplicationInfo( const OUString& rServiceName );
 
 extern ResMgr* getXSLTDialogResMgr();
 

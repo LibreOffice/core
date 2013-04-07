@@ -53,7 +53,7 @@ namespace fileaccess {
 
     public:
 
-        XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock );
+        XStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock );
 
         /**
          *  Returns an error code as given by filerror.hxx

@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CCOLOR)));
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CCOLOR)));
                                 aAny >>= nColor;
                             }
                         }
@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
                             uno::Reference<beans::XPropertySet> xCellProps(xCell, uno::UNO_QUERY);
                             if (xCellProps.is())
                             {
-                                uno::Any aAny = xCellProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLBACK)));
+                                uno::Any aAny = xCellProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLBACK)));
                                 aAny >>= nColor;
                             }
                         }
@@ -199,16 +199,16 @@ sal_Int32
     return mnIndex;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-    rtl::OUString sDescription = String(ScResId(STR_ACC_CELL_DESCR));
+    OUString sDescription = String(ScResId(STR_ACC_CELL_DESCR));
 
     return sDescription;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
@@ -222,7 +222,7 @@ sal_Int32
         contained in cell A1, ZT reads "cell A twelve" instead of "cell A1 - 2".
         Simple solution: Append a space character to the cell address. */
     sName.Append( ' ' );
-    return rtl::OUString(sName);
+    return OUString(sName);
 }
 
     //=====  XAccessibleValue  ================================================
@@ -287,10 +287,10 @@ uno::Any SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
+OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleCellBase");
+    return OUString("ScAccessibleCellBase");
 }
 
     //=====  XTypeProvider  ===================================================

@@ -57,22 +57,22 @@ class SFX2_DLLPUBLIC SfxDocumentInfoItem : public SfxStringItem
 {
 private:
     sal_Int32                           m_AutoloadDelay;
-    ::rtl::OUString                     m_AutoloadURL;
+    OUString                     m_AutoloadURL;
     sal_Bool                            m_isAutoloadEnabled;
-    ::rtl::OUString                     m_DefaultTarget;
-    ::rtl::OUString                     m_TemplateName;
-    ::rtl::OUString                     m_Author;
+    OUString                     m_DefaultTarget;
+    OUString                     m_TemplateName;
+    OUString                     m_Author;
     ::com::sun::star::util::DateTime    m_CreationDate;
-    ::rtl::OUString                     m_ModifiedBy;
+    OUString                     m_ModifiedBy;
     ::com::sun::star::util::DateTime    m_ModificationDate;
-    ::rtl::OUString                     m_PrintedBy;
+    OUString                     m_PrintedBy;
     ::com::sun::star::util::DateTime    m_PrintDate;
     sal_Int16                           m_EditingCycles;
     sal_Int32                           m_EditingDuration;
-    ::rtl::OUString                     m_Description;
-    ::rtl::OUString                     m_Keywords;
-    ::rtl::OUString                     m_Subject;
-    ::rtl::OUString                     m_Title;
+    OUString                     m_Description;
+    OUString                     m_Keywords;
+    OUString                     m_Subject;
+    OUString                     m_Title;
     sal_Bool                            m_bHasTemplate;
     sal_Bool                            m_bDeleteUserData;
     sal_Bool                            m_bUseUserData;
@@ -99,30 +99,30 @@ public:
     void        setAutoloadEnabled(sal_Bool i_val) { m_isAutoloadEnabled = i_val; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
     void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
-    ::rtl::OUString getAutoloadURL() const { return m_AutoloadURL; }
-    void        setAutoloadURL(::rtl::OUString i_val) { m_AutoloadURL = i_val; }
-    ::rtl::OUString getDefaultTarget() const { return m_DefaultTarget; }
-    void        setDefaultTarget(::rtl::OUString i_val) { m_DefaultTarget = i_val; }
-    ::rtl::OUString getTemplateName() const { return m_TemplateName; }
-    void        setTemplateName(::rtl::OUString i_val) { m_TemplateName = i_val; }
-    ::rtl::OUString getAuthor() const { return m_Author; }
-    void        setAuthor(::rtl::OUString i_val) { m_Author = i_val; }
+    OUString getAutoloadURL() const { return m_AutoloadURL; }
+    void        setAutoloadURL(OUString i_val) { m_AutoloadURL = i_val; }
+    OUString getDefaultTarget() const { return m_DefaultTarget; }
+    void        setDefaultTarget(OUString i_val) { m_DefaultTarget = i_val; }
+    OUString getTemplateName() const { return m_TemplateName; }
+    void        setTemplateName(OUString i_val) { m_TemplateName = i_val; }
+    OUString getAuthor() const { return m_Author; }
+    void        setAuthor(OUString i_val) { m_Author = i_val; }
 
     ::com::sun::star::util::DateTime
                 getCreationDate() const { return m_CreationDate; }
     void        setCreationDate(::com::sun::star::util::DateTime i_val) {
                     m_CreationDate = i_val;
                 }
-    ::rtl::OUString getModifiedBy() const { return m_ModifiedBy; }
-    void        setModifiedBy(::rtl::OUString i_val) { m_ModifiedBy = i_val; }
+    OUString getModifiedBy() const { return m_ModifiedBy; }
+    void        setModifiedBy(OUString i_val) { m_ModifiedBy = i_val; }
 
     ::com::sun::star::util::DateTime
                 getModificationDate() const { return m_ModificationDate; }
     void        setModificationDate(::com::sun::star::util::DateTime i_val) {
                     m_ModificationDate = i_val;
                 }
-    ::rtl::OUString getPrintedBy() const { return m_PrintedBy; }
-    void        setPrintedBy(::rtl::OUString i_val) { m_PrintedBy = i_val; }
+    OUString getPrintedBy() const { return m_PrintedBy; }
+    void        setPrintedBy(OUString i_val) { m_PrintedBy = i_val; }
     ::com::sun::star::util::DateTime
                 getPrintDate() const { return m_PrintDate; }
     void        setPrintDate(::com::sun::star::util::DateTime i_val) {
@@ -132,17 +132,17 @@ public:
     void        setEditingCycles(sal_Int16 i_val) { m_EditingCycles = i_val; }
     sal_Int32   getEditingDuration() const { return m_EditingDuration; }
     void        setEditingDuration(sal_Int32 i_val) { m_EditingDuration = i_val; }
-    ::rtl::OUString getDescription() const { return m_Description; }
-    void        setDescription(::rtl::OUString i_val) { m_Description = i_val; }
-    ::rtl::OUString getKeywords() const { return m_Keywords; }
-    void        setKeywords(::rtl::OUString i_val) { m_Keywords = i_val; }
-    ::rtl::OUString getSubject() const { return m_Subject; }
-    void        setSubject(::rtl::OUString i_val) { m_Subject = i_val; }
-    ::rtl::OUString getTitle() const { return m_Title; }
-    void        setTitle(::rtl::OUString i_val) { m_Title = i_val; }
+    OUString getDescription() const { return m_Description; }
+    void        setDescription(OUString i_val) { m_Description = i_val; }
+    OUString getKeywords() const { return m_Keywords; }
+    void        setKeywords(OUString i_val) { m_Keywords = i_val; }
+    OUString getSubject() const { return m_Subject; }
+    void        setSubject(OUString i_val) { m_Subject = i_val; }
+    OUString getTitle() const { return m_Title; }
+    void        setTitle(OUString i_val) { m_Title = i_val; }
 
     /// reset user-specific data (author, modified-by, ...)
-    void        resetUserData(const ::rtl::OUString & i_rAuthor);
+    void        resetUserData(const OUString & i_rAuthor);
 
     void        SetTemplate( sal_Bool b ) { m_bHasTemplate = b; }
     sal_Bool    HasTemplate() const { return m_bHasTemplate; }
@@ -153,7 +153,7 @@ public:
 
     std::vector< CustomProperty* >  GetCustomProperties() const;
     void        ClearCustomProperties();
-    void        AddCustomProperty(  const ::rtl::OUString& sName,
+    void        AddCustomProperty(  const OUString& sName,
                                     const com::sun::star::uno::Any& rValue );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
@@ -431,7 +431,7 @@ public:
     void                InitControls( HeaderBar* pHeaderBar, const ScrollBar* pScrollBar );
     sal_uInt16              GetVisibleLineCount() const;
     inline sal_Int32    GetLineHeight() const { return m_nLineHeight; }
-    void                AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny );
+    void                AddLine( const OUString& sName, com::sun::star::uno::Any& rAny );
     bool                AreAllLinesValid() const;
     void                ClearAllLines();
     void                DoScroll( sal_Int32 nNewPos );
@@ -463,7 +463,7 @@ public:
     CustomPropertiesControl(Window* pParent);
     ~CustomPropertiesControl();
 
-    void            AddLine( const ::rtl::OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
+    void            AddLine( const OUString& sName, com::sun::star::uno::Any& rAny, bool bInteractive );
 
     inline bool     AreAllLinesValid() const { return m_pPropertiesWin->AreAllLinesValid(); }
     inline void     ClearAllLines() { m_pPropertiesWin->ClearAllLines(); }

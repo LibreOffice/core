@@ -162,7 +162,7 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                     continue;
 
                 nInsert = aLbFilterArea.InsertEntry(itr->second->GetName());
-                rtl::OUString aSymbol;
+                OUString aSymbol;
                 itr->second->GetSymbol(aSymbol);
                 aLbFilterArea.SetEntryData(nInsert, new String(aSymbol));
             }

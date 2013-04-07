@@ -55,7 +55,7 @@ namespace apitest {
  */
 void XDatabaseRange::testDataArea()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString("DataArea")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("DataArea")), UNO_QUERY_THROW);
 
     table::CellRangeAddress aCellAddress;
     aCellAddress.Sheet = 0;
@@ -75,67 +75,67 @@ void XDatabaseRange::testDataArea()
 
 void XDatabaseRange::testGetSubtotalDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString("SubtotalDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("SubtotalDescriptor")), UNO_QUERY_THROW);
     uno::Reference< sheet::XSubTotalDescriptor> xSubtotalDescr = xDBRange->getSubTotalDescriptor();
     CPPUNIT_ASSERT(xSubtotalDescr.is());
 }
 
 void XDatabaseRange::testGetSortDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange(init(rtl::OUString("SortDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange(init(OUString("SortDescriptor")), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xSortDescr = xDBRange->getSortDescriptor();
     for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
     {
         beans::PropertyValue xProp = xSortDescr[i];
-        //std::cout << "Prop " << i << " Name: " << rtl::OUString(xProp.Name) << std::endl;
+        //std::cout << "Prop " << i << " Name: " << OUString(xProp.Name) << std::endl;
 
-        if (xProp.Name == rtl::OUString("IsSortColumns"))
+        if (xProp.Name == OUString("IsSortColumns"))
         {
             sal_Bool bIsSortColumns = sal_True;
             xProp.Value >>= bIsSortColumns;
             CPPUNIT_ASSERT(bIsSortColumns == sal_True);
         }
-        else if (xProp.Name == rtl::OUString("ContainsHeader"))
+        else if (xProp.Name == OUString("ContainsHeader"))
         {
             sal_Bool bContainsHeader = sal_True;
             xProp.Value >>= bContainsHeader;
             CPPUNIT_ASSERT(bContainsHeader == sal_True);
         }
-        else if (xProp.Name == rtl::OUString("MaxFieldCount"))
+        else if (xProp.Name == OUString("MaxFieldCount"))
         {
             sal_Int32 nMaxFieldCount = 0;
             xProp.Value >>= nMaxFieldCount;
             std::cout << "Value: " << nMaxFieldCount << std::endl;
 
         }
-        else if (xProp.Name == rtl::OUString("SortFields"))
+        else if (xProp.Name == OUString("SortFields"))
         {
 
         }
-        else if (xProp.Name == rtl::OUString("BindFormatsToContent"))
+        else if (xProp.Name == OUString("BindFormatsToContent"))
         {
             sal_Bool bBindFormatsToContent = sal_False;
             xProp.Value >>= bBindFormatsToContent;
             CPPUNIT_ASSERT(bBindFormatsToContent == sal_True);
         }
-        else if (xProp.Name == rtl::OUString("CopyOutputData"))
+        else if (xProp.Name == OUString("CopyOutputData"))
         {
             sal_Bool bCopyOutputData = sal_True;
             xProp.Value >>= bCopyOutputData;
             CPPUNIT_ASSERT(bCopyOutputData == sal_False);
         }
-        else if (xProp.Name == rtl::OUString("OutputPosition"))
+        else if (xProp.Name == OUString("OutputPosition"))
         {
 
         }
-        else if (xProp.Name == rtl::OUString("IsUserListEnabled"))
+        else if (xProp.Name == OUString("IsUserListEnabled"))
         {
             sal_Bool bIsUserListEnabled  = sal_True;
             xProp.Value >>= bIsUserListEnabled;
             CPPUNIT_ASSERT(bIsUserListEnabled == sal_False);
 
         }
-        else if (xProp.Name == rtl::OUString("UserListIndex"))
+        else if (xProp.Name == OUString("UserListIndex"))
         {
             sal_Int32 nUserListIndex = 1;
             xProp.Value >>= nUserListIndex;
@@ -146,23 +146,23 @@ void XDatabaseRange::testGetSortDescriptor()
 
 void XDatabaseRange::testGetFilterDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString("FilterDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("FilterDescriptor")), UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xFilterDescr( xDBRange->getFilterDescriptor(), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xFilterDescr.is());
 }
 
 void XDatabaseRange::testGetImportDescriptor()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString("ImportDescriptor")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("ImportDescriptor")), UNO_QUERY_THROW);
     uno::Sequence< beans::PropertyValue > xImportDescr = xDBRange->getImportDescriptor();
 }
 
 void XDatabaseRange::testRefresh()
 {
-    uno::Reference< sheet::XDatabaseRange > xDBRange( init(rtl::OUString("Refresh")), UNO_QUERY_THROW);
+    uno::Reference< sheet::XDatabaseRange > xDBRange( init(OUString("Refresh")), UNO_QUERY_THROW);
 
     const sal_Int32 nCol = 0;
-    rtl::OUString aHidden("IsVisible");
+    OUString aHidden("IsVisible");
     uno::Reference< sheet::XCellRangeReferrer > xCellRangeReferrer(xDBRange, UNO_QUERY_THROW);
     uno::Reference< table::XCellRange > xCellRange = xCellRangeReferrer->getReferredCells();
 

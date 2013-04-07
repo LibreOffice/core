@@ -51,7 +51,7 @@ namespace frm
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
                         m_xListSource;      /// our external list source
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
         ::cppu::OInterfaceContainerHelper
                         m_aRefreshListeners;
@@ -63,7 +63,7 @@ namespace frm
         virtual ~OEntryListHelper( );
 
         /// returns the current string item list
-        inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >&
+        inline const ::com::sun::star::uno::Sequence< OUString >&
                     getStringItemList() const { return m_aStringItems; }
         inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >&
                     getExternalListEntrySource() const { return m_xListSource; }

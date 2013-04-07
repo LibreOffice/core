@@ -29,40 +29,40 @@ using namespace com::sun::star;
 
 struct UCBDeadPropertyValueParseContext
 {
-    rtl::OUString * pType;
-    rtl::OUString * pValue;
+    OUString * pType;
+    OUString * pValue;
 
     UCBDeadPropertyValueParseContext() : pType( 0 ), pValue( 0 ) {}
     ~UCBDeadPropertyValueParseContext() { delete pType; delete pValue; }
 };
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aTypeString
-    = rtl::OUString::createFromAscii( "string" );
-const rtl::OUString UCBDeadPropertyValue::aTypeLong
-    = rtl::OUString::createFromAscii( "long" );
-const rtl::OUString UCBDeadPropertyValue::aTypeShort
-    = rtl::OUString::createFromAscii( "short" );
-const rtl::OUString UCBDeadPropertyValue::aTypeBoolean
-    = rtl::OUString::createFromAscii( "boolean" );
-const rtl::OUString UCBDeadPropertyValue::aTypeChar
-    = rtl::OUString::createFromAscii( "char" );
-const rtl::OUString UCBDeadPropertyValue::aTypeByte
-    = rtl::OUString::createFromAscii( "byte" );
-const rtl::OUString UCBDeadPropertyValue::aTypeHyper
-    = rtl::OUString::createFromAscii( "hyper" );
-const rtl::OUString UCBDeadPropertyValue::aTypeFloat
-    = rtl::OUString::createFromAscii( "float" );
-const rtl::OUString UCBDeadPropertyValue::aTypeDouble
-    = rtl::OUString::createFromAscii( "double" );
+const OUString UCBDeadPropertyValue::aTypeString
+    = OUString::createFromAscii( "string" );
+const OUString UCBDeadPropertyValue::aTypeLong
+    = OUString::createFromAscii( "long" );
+const OUString UCBDeadPropertyValue::aTypeShort
+    = OUString::createFromAscii( "short" );
+const OUString UCBDeadPropertyValue::aTypeBoolean
+    = OUString::createFromAscii( "boolean" );
+const OUString UCBDeadPropertyValue::aTypeChar
+    = OUString::createFromAscii( "char" );
+const OUString UCBDeadPropertyValue::aTypeByte
+    = OUString::createFromAscii( "byte" );
+const OUString UCBDeadPropertyValue::aTypeHyper
+    = OUString::createFromAscii( "hyper" );
+const OUString UCBDeadPropertyValue::aTypeFloat
+    = OUString::createFromAscii( "float" );
+const OUString UCBDeadPropertyValue::aTypeDouble
+    = OUString::createFromAscii( "double" );
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aXMLPre
-    = rtl::OUString::createFromAscii( "<ucbprop><type>" );
-const rtl::OUString UCBDeadPropertyValue::aXMLMid
-    = rtl::OUString::createFromAscii( "</type><value>" );
-const rtl::OUString UCBDeadPropertyValue::aXMLEnd
-    = rtl::OUString::createFromAscii( "</value></ucbprop>" );
+const OUString UCBDeadPropertyValue::aXMLPre
+    = OUString::createFromAscii( "<ucbprop><type>" );
+const OUString UCBDeadPropertyValue::aXMLMid
+    = OUString::createFromAscii( "</type><value>" );
+const OUString UCBDeadPropertyValue::aXMLEnd
+    = OUString::createFromAscii( "</value></ucbprop>" );
 
 #define STATE_TOP (1)
 
@@ -116,7 +116,7 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Type already set!" );
             pCtx->pType
-                = new rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             break;
 
         case STATE_VALUE:
@@ -124,7 +124,7 @@ extern "C" int UCBDeadPropertyValue_chardata_callback(
                         "UCBDeadPropertyValue_endelement_callback - "
                         "Value already set!" );
             pCtx->pValue
-                = new rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+                = new OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             break;
     }
     return 0; // zero to continue, non-zero to abort parsing
@@ -162,7 +162,7 @@ extern "C" int UCBDeadPropertyValue_endelement_callback(
 */
 
 //////////////////////////////////////////////////////////////////////////
-static rtl::OUString encodeValue( const rtl::OUString & rValue )
+static OUString encodeValue( const OUString & rValue )
 {
     // Note: I do not use the usual &amp; + &lt; + &gt; encoding, because
     //       I want to prevent any XML parser from trying to 'understand'
@@ -177,7 +177,7 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
     //       PROPFIND:
     //       - parser replaces &lt; by > ==> error (not well formed)
 
-    rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
     const sal_Unicode * pValue = rValue.getStr();
 
     sal_Int32 nCount = rValue.getLength();
@@ -194,14 +194,14 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
         else
             aResult.append( c );
     }
-    return rtl::OUString( aResult );
+    return OUString( aResult );
 }
 
 /*
 //////////////////////////////////////////////////////////////////////////
-static rtl::OUString decodeValue( const rtl::OUString & rValue )
+static OUString decodeValue( const OUString & rValue )
 {
-    rtl::OUStringBuffer aResult;
+    OUStringBuffer aResult;
     const sal_Unicode * pValue = rValue.getStr();
 
     sal_Int32 nPos = 0;
@@ -219,7 +219,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
             {
                 OSL_ENSURE( sal_False,
                     "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                return rtl::OUString();
+                return OUString();
             }
 
             c = pValue[ nPos ];
@@ -232,7 +232,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
 
                 if ( ( 'e' == pValue[ nPos + 1 ] )
@@ -248,7 +248,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
             }
             else if ( 'l' == c )
@@ -259,7 +259,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
 
                 if ( ( 't' == pValue[ nPos + 1 ] )
@@ -273,7 +273,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
             }
             else if ( 'g' == c )
@@ -284,7 +284,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
 
                 if ( ( 't' == pValue[ nPos + 1 ] )
@@ -298,14 +298,14 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 {
                     OSL_ENSURE( sal_False,
                         "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                    return rtl::OUString();
+                    return OUString();
                 }
             }
             else
             {
                 OSL_ENSURE( sal_False,
                     "UCBDeadPropertyValue::decodeValue - syntax error!" );
-                return rtl::OUString();
+                return OUString();
             }
         }
         else
@@ -314,7 +314,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
         nPos++;
     }
 
-    return rtl::OUString( aResult );
+    return OUString( aResult );
 }
 */
 
@@ -322,7 +322,7 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 // static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 {
-    if ( ( rType != getCppuType( static_cast< const rtl::OUString * >( 0 ) ) )
+    if ( ( rType != getCppuType( static_cast< const OUString * >( 0 ) ) )
          &&
          ( rType != getCppuType( static_cast< const sal_Int32 * >( 0 ) ) )
          &&
@@ -348,7 +348,7 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
+bool UCBDeadPropertyValue::createFromXML( const OString & /*rInData*/,
                                           uno::Any & /*rOutData*/ )
 {
     bool success = false;
@@ -375,7 +375,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
             if ( aCtx.pType && aCtx.pValue )
             {
                 // Decode aCtx.pValue! It may contain XML reserved chars.
-                rtl::OUString aStringValue = decodeValue( *aCtx.pValue );
+                OUString aStringValue = decodeValue( *aCtx.pValue );
                 if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeString ) )
                 {
                     rOutData <<= aStringValue;
@@ -391,7 +391,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
-                            rtl::OUString::createFromAscii( "true" ) ) )
+                            OUString::createFromAscii( "true" ) ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );
@@ -435,17 +435,17 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
 //////////////////////////////////////////////////////////////////////////
 // static
 bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
-                                  rtl::OUString & rOutData )
+                                  OUString & rOutData )
 {
     // <ucbprop><type>the_type</type><value>the_value</value></ucbprop>
 
     // Check property type. Extract type and value as string.
 
     const uno::Type& rType = rInData.getValueType();
-    rtl::OUString aStringValue;
-    rtl::OUString aStringType;
+    OUString aStringValue;
+    OUString aStringType;
 
-    if ( rType == getCppuType( static_cast< const rtl::OUString * >( 0 ) ) )
+    if ( rType == getCppuType( static_cast< const OUString * >( 0 ) ) )
     {
         // string
         rInData >>= aStringValue;
@@ -456,7 +456,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // long
         sal_Int32 nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( nValue );
+        aStringValue = OUString::valueOf( nValue );
         aStringType = aTypeLong;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int16 * >( 0 ) ) )
@@ -464,7 +464,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // short
         sal_Int32 nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( nValue );
+        aStringValue = OUString::valueOf( nValue );
         aStringType = aTypeShort;
     }
     else if ( rType == getCppuBooleanType() )
@@ -472,7 +472,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // boolean
         sal_Bool bValue = false;
         rInData >>= bValue;
-        aStringValue = rtl::OUString::valueOf( bValue );
+        aStringValue = OUString::valueOf( bValue );
         aStringType = aTypeBoolean;
     }
     else if ( rType == getCppuCharType() )
@@ -480,7 +480,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // char
         sal_Unicode cValue = 0;
         rInData >>= cValue;
-        aStringValue = rtl::OUString::valueOf( cValue );
+        aStringValue = OUString::valueOf( cValue );
         aStringType = aTypeChar;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int8 * >( 0 ) ) )
@@ -488,7 +488,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // byte
         sal_Int8 nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( sal_Unicode( nValue ) );
+        aStringValue = OUString::valueOf( sal_Unicode( nValue ) );
         aStringType = aTypeByte;
     }
     else if ( rType == getCppuType( static_cast< const sal_Int64 * >( 0 ) ) )
@@ -496,7 +496,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // hyper
         sal_Int64 nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( nValue );
+        aStringValue = OUString::valueOf( nValue );
         aStringType = aTypeHyper;
     }
     else if ( rType == getCppuType( static_cast< const float * >( 0 ) ) )
@@ -504,7 +504,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // float
         float nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( nValue );
+        aStringValue = OUString::valueOf( nValue );
         aStringType = aTypeFloat;
     }
     else if ( rType == getCppuType( static_cast< const double * >( 0 ) ) )
@@ -512,7 +512,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
         // double
         double nValue = 0;
         rInData >>= nValue;
-        aStringValue = rtl::OUString::valueOf( nValue );
+        aStringValue = OUString::valueOf( nValue );
         aStringType = aTypeDouble;
     }
     else

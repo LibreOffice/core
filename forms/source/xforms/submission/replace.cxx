@@ -44,7 +44,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::task;
 using namespace com::sun::star::xml::dom;
 
-CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
+CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
 {
     if (!m_aResultStream.is())
         return CSubmission::UNKNOWN_ERROR;
@@ -63,13 +63,13 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor(2);
-            descriptor[0] = PropertyValue(::rtl::OUString("InputStream"),
+            descriptor[0] = PropertyValue(OUString("InputStream"),
                 -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
-            descriptor[1] = PropertyValue(::rtl::OUString("ReadOnly"),
+            descriptor[1] = PropertyValue(OUString("ReadOnly"),
                 -1, makeAny(sal_True), PropertyState_DIRECT_VALUE);
 
-            ::rtl::OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
-            ::rtl::OUString aTarget = ::rtl::OUString("_default");
+            OUString aURL = m_aURLObj.GetMainURL(INetURLObject::NO_DECODE);
+            OUString aTarget = OUString("_default");
             xLoader->loadComponentFromURL(aURL, aTarget, FrameSearchFlag::ALL, descriptor);
 
             return CSubmission::SUCCESS;
@@ -100,7 +100,7 @@ CSubmission::SubmissionResult CSubmission::replace(const ::rtl::OUString& aRepla
             return CSubmission::SUCCESS;
         }
     } catch (const Exception& e) {
-        ::rtl::OString aMsg("Exception during replace:\n");
+        OString aMsg("Exception during replace:\n");
         aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
         OSL_FAIL(aMsg.getStr());
     }

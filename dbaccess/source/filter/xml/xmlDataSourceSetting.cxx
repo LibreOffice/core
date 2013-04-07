@@ -41,7 +41,7 @@ DBG_NAME(OXMLDataSourceSetting)
 
 OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 ,sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,OXMLDataSourceSetting* _pContainer) :
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
@@ -59,10 +59,10 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
     sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
-        ::rtl::OUString sLocalName;
-        rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+        OUString sLocalName;
+        OUString sAttrName = _xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -78,7 +78,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                         s_aTypeNameMap[GetXMLToken( XML_BOOLEAN)]   = ::getBooleanCppuType();
                         s_aTypeNameMap[GetXMLToken( XML_FLOAT)]     = ::getCppuType( static_cast< double* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_DOUBLE)]    = ::getCppuType( static_cast< double* >(NULL) );
-                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< ::rtl::OUString* >(NULL) );
+                        s_aTypeNameMap[GetXMLToken( XML_STRING)]    = ::getCppuType( static_cast< OUString* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_INT)]       = ::getCppuType( static_cast< sal_Int32* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_SHORT)]     = ::getCppuType( static_cast< sal_Int16* >(NULL) );
                         s_aTypeNameMap[GetXMLToken( XML_VOID)]      = ::getVoidCppuType();
@@ -106,7 +106,7 @@ OXMLDataSourceSetting::~OXMLDataSourceSetting()
 // -----------------------------------------------------------------------------
 SvXMLImportContext* OXMLDataSourceSetting::CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -140,19 +140,19 @@ void OXMLDataSourceSetting::EndElement()
         // if our property is of type string, but was empty, ensure that
         // we don't add a VOID value
         if ( !m_bIsList && ( m_aPropType.getTypeClass() == TypeClass_STRING ) && !m_aSetting.Value.hasValue() )
-            m_aSetting.Value <<= ::rtl::OUString();
+            m_aSetting.Value <<= OUString();
 
         GetOwnImport().addInfo(m_aSetting);
     }
 }
 // -----------------------------------------------------------------------------
-void OXMLDataSourceSetting::Characters( const ::rtl::OUString& rChars )
+void OXMLDataSourceSetting::Characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);
 }
 // -----------------------------------------------------------------------------
-void OXMLDataSourceSetting::addValue(const ::rtl::OUString& _sValue)
+void OXMLDataSourceSetting::addValue(const OUString& _sValue)
 {
     Any aValue;
     if( TypeClass_VOID != m_aPropType.getTypeClass() )
@@ -173,7 +173,7 @@ ODBFilter& OXMLDataSourceSetting::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 // -----------------------------------------------------------------------------
-Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const ::rtl::OUString& _rReadCharacters)
+Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())

@@ -29,8 +29,8 @@ namespace rtl { class OUString; }
 namespace detail {
 
 sal_Int32 findPos(
-    const ::rtl::OUString& aStr,
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rList);
+    const OUString& aStr,
+    const ::com::sun::star::uno::Sequence< OUString >& rList);
 
 }
 

@@ -92,9 +92,9 @@ void SwFldPage::Init()
             {
                 SwDoc* pDoc = pSh->GetDoc();
                 pSh->InsertFldType( SwSetExpFieldType( pDoc,
-                                    rtl::OUString("HTML_ON"), 1));
+                                    OUString("HTML_ON"), 1));
                 pSh->InsertFldType( SwSetExpFieldType(pDoc,
-                                    rtl::OUString("HTML_OFF"), 1));
+                                    OUString("HTML_OFF"), 1));
             }
         }
     }
@@ -171,7 +171,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
             {
                 aReq.AppendItem(SfxStringItem(FN_INSERT_FIELD, rPar1));
                 aReq.AppendItem(SfxStringItem
-                        (FN_PARAM_3, rtl::OUString(cSeparator)));
+                        (FN_PARAM_3, OUString(cSeparator)));
                 aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_SUBTYPE, nSubType));
             }
             aReq.AppendItem(SfxUInt16Item(FN_PARAM_FIELD_TYPE   , nTypeId));
@@ -242,7 +242,7 @@ sal_Bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const Str
             {
                 SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pTmpFld->GetTyp();
                 pTyp->SetOutlineLvl( static_cast< sal_uInt8 >(nSubType & 0xff));
-                pTyp->SetDelimiter(rtl::OUString(cSeparator));
+                pTyp->SetDelimiter(OUString(cSeparator));
 
                 nSubType = nsSwGetSetExpType::GSE_SEQ;
             }

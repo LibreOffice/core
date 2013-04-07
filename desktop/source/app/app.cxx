@@ -426,9 +426,9 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 // are allowed. Otherwise we will force a "crash inside a crash".
 // Thats why we have to use a special native message box here which does not use yield :-)
 //=============================================================================
-void FatalError(const ::rtl::OUString& sMessage)
+void FatalError(const OUString& sMessage)
 {
-    ::rtl::OUString sProductKey = ::utl::Bootstrap::getProductKey();
+    OUString sProductKey = ::utl::Bootstrap::getProductKey();
     if ( sProductKey.isEmpty())
     {
         osl_getExecutableFile( &sProductKey.pData );
@@ -438,7 +438,7 @@ void FatalError(const ::rtl::OUString& sMessage)
             sProductKey = sProductKey.copy( nLastIndex+1 );
     }
 
-    ::rtl::OUStringBuffer sTitle (128);
+    OUStringBuffer sTitle (128);
     sTitle.append      (sProductKey     );
     sTitle.appendAscii (" - Fatal Error");
 
@@ -484,20 +484,20 @@ namespace
         : public rtl::Static< String, WriterCompatibilityVersionOOo11 > {};
 }
 
-rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
+OUString ReplaceStringHookProc( const OUString& rStr )
 {
-    rtl::OUString sRet(rStr);
+    OUString sRet(rStr);
 
     if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
     {
-        rtl::OUString sBrandName = BrandName::get();
-        rtl::OUString sVersion = Version::get();
-        rtl::OUString sBuildId = utl::Bootstrap::getBuildIdData("development");
-        rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
-        rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        rtl::OUString sExtension = Extension::get();
-        rtl::OUString sXMLFileFormatName = XMLFileFormatName::get();
-        rtl::OUString sXMLFileFormatVersion = XMLFileFormatVersion::get();
+        OUString sBrandName = BrandName::get();
+        OUString sVersion = Version::get();
+        OUString sBuildId = utl::Bootstrap::getBuildIdData("development");
+        OUString sAboutBoxVersion = AboutBoxVersion::get();
+        OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+        OUString sExtension = Extension::get();
+        OUString sXMLFileFormatName = XMLFileFormatName::get();
+        OUString sXMLFileFormatVersion = XMLFileFormatVersion::get();
 
         if ( sBrandName.isEmpty() )
         {
@@ -526,7 +526,7 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 
     if ( sRet.indexOf( "%OOOVENDOR" ) != -1 )
     {
-        rtl::OUString sOOOVendor = OOOVendor::get();
+        OUString sOOOVendor = OOOVendor::get();
 
         if ( sOOOVendor.isEmpty() )
         {
@@ -538,7 +538,7 @@ rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 
     if ( sRet.indexOf( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != -1 )
     {
-        rtl::OUString sWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+        OUString sWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
         if ( sWriterCompatibilityVersionOOo11.isEmpty() )
         {
             sWriterCompatibilityVersionOOo11 =
@@ -736,8 +736,8 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 {
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
     {
-        ::rtl::OUString        aProductKey;
-        ::rtl::OUString        aTemp;
+        OUString        aProductKey;
+        OUString        aTemp;
 
         osl_getExecutableFile( &aProductKey.pData );
         sal_uInt32     lastIndex = aProductKey.lastIndexOf('/');
@@ -761,9 +761,9 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 }
 
 // Create a error message depending on bootstrap failure code and an optional file url
-::rtl::OUString    Desktop::CreateErrorMsgString(
+OUString    Desktop::CreateErrorMsgString(
     utl::Bootstrap::FailureCode nFailureCode,
-    const ::rtl::OUString& aFileURL )
+    const OUString& aFileURL )
 {
     OUString        aMsg;
     OUString        aFilePath;
@@ -1121,10 +1121,10 @@ sal_Bool impl_callRecoveryUI(sal_Bool bEmergencySave     ,
                              sal_Bool bCrashed           ,
                              sal_Bool bExistsRecoveryData)
 {
-    static ::rtl::OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
-    static ::rtl::OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
-    static ::rtl::OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
-    static ::rtl::OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
+    static OUString SERVICENAME_RECOVERYUI("com.sun.star.comp.svx.RecoveryUI");
+    static OUString COMMAND_EMERGENCYSAVE("vnd.sun.star.autorecovery:/doEmergencySave");
+    static OUString COMMAND_RECOVERY("vnd.sun.star.autorecovery:/doAutoRecovery");
+    static OUString COMMAND_CRASHREPORT("vnd.sun.star.autorecovery:/doCrashReport");
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
@@ -1182,10 +1182,10 @@ void restartOnMac(bool passArguments) {
     ErrorBox aRestartBox( NULL, WB_OK, aMessage );
     aRestartBox.Execute();
 #else
-    rtl::OUString execUrl;
+    OUString execUrl;
     OSL_VERIFY(osl_getExecutableFile(&execUrl.pData) == osl_Process_E_None);
-    rtl::OUString execPath;
-    rtl::OString execPath8;
+    OUString execPath;
+    OString execPath8;
     if ((osl::FileBase::getSystemPathFromFileURL(execUrl, execPath)
          != osl::FileBase::E_None) ||
         !execPath.convertToString(
@@ -1195,18 +1195,18 @@ void restartOnMac(bool passArguments) {
     {
         std::abort();
     }
-    std::vector< rtl::OString > args;
+    std::vector< OString > args;
     args.push_back(execPath8);
     bool wait = false;
     if (passArguments) {
         sal_uInt32 n = osl_getCommandArgCount();
         for (sal_uInt32 i = 0; i < n; ++i) {
-            rtl::OUString arg;
+            OUString arg;
             OSL_VERIFY(osl_getCommandArg(i, &arg.pData) == osl_Process_E_None);
             if (arg.match("--accept=")) {
                 wait = true;
             }
-            rtl::OString arg8;
+            OString arg8;
             if (!arg.convertToString(
                     &arg8, osl_getThreadTextEncoding(),
                     (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
@@ -1218,7 +1218,7 @@ void restartOnMac(bool passArguments) {
         }
     }
     std::vector< char const * > argPtrs;
-    for (std::vector< rtl::OString >::iterator i(args.begin()); i != args.end();
+    for (std::vector< OString >::iterator i(args.begin()); i != args.end();
          ++i)
     {
         argPtrs.push_back(i->getStr());
@@ -1507,8 +1507,8 @@ int Desktop::Main()
 
 #ifdef DBG_UTIL
         //include buildid in non product builds
-        ::rtl::OUString aDefault("development");
-        aTitle += rtl::OUString(" [");
+        OUString aDefault("development");
+        aTitle += OUString(" [");
         String aVerId( utl::Bootstrap::getBuildIdData(aDefault));
         aTitle += aVerId;
         aTitle += ']';
@@ -1565,7 +1565,7 @@ int Desktop::Main()
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
         css::document::EventObject aEvent;
-        aEvent.EventName = ::rtl::OUString("OnStartApp");
+        aEvent.EventName = OUString("OnStartApp");
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
 
         SetSplashScreenProgress(50);
@@ -1771,7 +1771,7 @@ int Desktop::doShutdown()
     if (pExecGlobals->xGlobalBroadcaster.is())
     {
         css::document::EventObject aEvent;
-        aEvent.EventName = ::rtl::OUString("OnCloseApp");
+        aEvent.EventName = OUString("OnCloseApp");
         pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
     }
 
@@ -2062,15 +2062,15 @@ void Desktop::EnableOleAutomation()
       RTL_LOGFILE_CONTEXT( aLog, "desktop (jl97489) ::Desktop::EnableOleAutomation" );
 #ifdef WNT
     Reference< XMultiServiceFactory > xSMgr=  comphelper::getProcessServiceFactory();
-    xSMgr->createInstance(rtl::OUString("com.sun.star.bridge.OleApplicationRegistration"));
-    xSMgr->createInstance(rtl::OUString("com.sun.star.comp.ole.EmbedServer"));
+    xSMgr->createInstance(OUString("com.sun.star.bridge.OleApplicationRegistration"));
+    xSMgr->createInstance(OUString("com.sun.star.comp.ole.EmbedServer"));
 #endif
 }
 
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {
     Sequence < com::sun::star::beans::PropertyValue > args(1);
-    args[0].Name = ::rtl::OUString("Hidden");
+    args[0].Name = OUString("Hidden");
     args[0].Value <<= sal_True;
     Reference < XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
 
@@ -2078,8 +2078,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/swriter"),
-                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/swriter"),
+                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2090,8 +2090,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/scalc"),
-                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/scalc"),
+                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2102,8 +2102,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/sdraw"),
-                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/sdraw"),
+                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2114,8 +2114,8 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( rtl::OUString("private:factory/simpress"),
-                ::rtl::OUString("_blank"), 0, args ), UNO_QUERY_THROW );
+            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/simpress"),
+                OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
         catch ( const com::sun::star::uno::Exception& )
@@ -2129,10 +2129,10 @@ void Desktop::PreloadConfigurationData()
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XNameAccess > xNameAccess = css::frame::UICommandDescription::create(xContext);
 
-    rtl::OUString aWriterDoc( "com.sun.star.text.TextDocument" );
-    rtl::OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
-    rtl::OUString aDrawDoc( "com.sun.star.drawing.DrawingDocument" );
-    rtl::OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
+    OUString aWriterDoc( "com.sun.star.text.TextDocument" );
+    OUString aCalcDoc( "com.sun.star.sheet.SpreadsheetDocument" );
+    OUString aDrawDoc( "com.sun.star.drawing.DrawingDocument" );
+    OUString aImpressDoc( "com.sun.star.presentation.PresentationDocument" );
 
     // preload commands configuration
     Any a;
@@ -2144,8 +2144,8 @@ void Desktop::PreloadConfigurationData()
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
         {
-            xCmdAccess->getByName( rtl::OUString( ".uno:BasicShapes" ));
-            xCmdAccess->getByName( rtl::OUString( ".uno:EditGlossary" ));
+            xCmdAccess->getByName( OUString( ".uno:BasicShapes" ));
+            xCmdAccess->getByName( OUString( ".uno:EditGlossary" ));
         }
     }
     catch ( const ::com::sun::star::uno::Exception& )
@@ -2157,7 +2157,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aCalcDoc );
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
-            xCmdAccess->getByName( rtl::OUString( ".uno:InsertObjectStarMath" ));
+            xCmdAccess->getByName( OUString( ".uno:InsertObjectStarMath" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2169,7 +2169,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aDrawDoc );
         a >>= xCmdAccess;
         if ( xCmdAccess.is() )
-            xCmdAccess->getByName( rtl::OUString( ".uno:Polygon" ));
+            xCmdAccess->getByName( OUString( ".uno:Polygon" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2183,7 +2183,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aWriterDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2193,7 +2193,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aCalcDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2203,7 +2203,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aDrawDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2213,7 +2213,7 @@ void Desktop::PreloadConfigurationData()
         a = xNameAccess->getByName( aImpressDoc );
         a >>= xWindowAccess;
         if ( xWindowAccess.is() )
-            xWindowAccess->getByName( rtl::OUString( "private:resource/toolbar/standardbar" ));
+            xWindowAccess->getByName( OUString( "private:resource/toolbar/standardbar" ));
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2237,7 +2237,7 @@ void Desktop::PreloadConfigurationData()
     try
     {
         xPopupMenuControllerFactory->hasController(
-                    rtl::OUString( ".uno:CharFontName" ),
+                    OUString( ".uno:CharFontName" ),
                     OUString() );
     }
     catch ( const ::com::sun::star::uno::Exception& )
@@ -2289,7 +2289,7 @@ void Desktop::OpenClients()
     if (!rArgs.IsQuickstart())
     {
         sal_Bool bShowHelp = sal_False;
-        ::rtl::OUStringBuffer aHelpURLBuffer;
+        OUStringBuffer aHelpURLBuffer;
         if (rArgs.IsHelpWriter()) {
             bShowHelp = sal_True;
             aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
@@ -2382,7 +2382,7 @@ void Desktop::OpenClients()
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;
-            aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");
+            aCmd.Complete = OUString("vnd.sun.star.autorecovery:/disableRecovery");
             xParser->parseStrict(aCmd);
 
             xRecovery->dispatch(aCmd, css::uno::Sequence< css::beans::PropertyValue >());
@@ -2432,7 +2432,7 @@ void Desktop::OpenClients()
 
             xSessionListener = SessionListener::createWithOnQuitFlag(::comphelper::getProcessComponentContext(), bAllowUI);
 
-//            css::beans::NamedValue aProperty( ::rtl::OUString( "AllowUserInteractionOnQuit"  ),
+//            css::beans::NamedValue aProperty( OUString( "AllowUserInteractionOnQuit"  ),
  //                                             css::uno::makeAny( bAllowUI ) );
   //          css::uno::Sequence< css::uno::Any > aArgs( 1 );
    //         aArgs[0] <<= aProperty;
@@ -2552,7 +2552,7 @@ void Desktop::OpenDefault()
 
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
-    ::rtl::OUString        aName;
+    OUString        aName;
     SvtModuleOptions    aOpt;
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();
@@ -2603,7 +2603,7 @@ void Desktop::OpenDefault()
 
 
 String GetURL_Impl(
-    const String& rName, boost::optional< rtl::OUString > const & cwdUrl )
+    const String& rName, boost::optional< OUString > const & cwdUrl )
 {
     // if rName is a vnd.sun.star.script URL do not attempt to parse it
     // as INetURLObj does not handle handle there URLs
@@ -2784,15 +2784,15 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
             Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(xContext);
             css::util::URL aCommand;
-            if( rAppEvent.GetData() == ::rtl::OUString("PREFERENCES") )
-                aCommand.Complete = rtl::OUString( ".uno:OptionsTreeDialog"  );
-            else if( rAppEvent.GetData() == ::rtl::OUString("ABOUT") )
-                aCommand.Complete = rtl::OUString( ".uno:About"  );
+            if( rAppEvent.GetData() == OUString("PREFERENCES") )
+                aCommand.Complete = OUString( ".uno:OptionsTreeDialog"  );
+            else if( rAppEvent.GetData() == OUString("ABOUT") )
+                aCommand.Complete = OUString( ".uno:About"  );
             if( !aCommand.Complete.isEmpty() )
             {
                 xParser->parseStrict(aCommand);
 
-                css::uno::Reference< css::frame::XDispatch > xDispatch = xDesktop->queryDispatch(aCommand, rtl::OUString(), 0);
+                css::uno::Reference< css::frame::XDispatch > xDispatch = xDesktop->queryDispatch(aCommand, OUString(), 0);
                 if (xDispatch.is())
                     xDispatch->dispatch(aCommand, css::uno::Sequence< css::beans::PropertyValue >());
             }
@@ -2828,21 +2828,21 @@ void Desktop::OpenSplashScreen()
         // Determine application name from command line parameters
         OUString aAppName;
         if ( rCmdLine.IsWriter() )
-            aAppName = rtl::OUString( "writer" );
+            aAppName = OUString( "writer" );
         else if ( rCmdLine.IsCalc() )
-            aAppName = rtl::OUString( "calc" );
+            aAppName = OUString( "calc" );
         else if ( rCmdLine.IsDraw() )
-            aAppName = rtl::OUString( "draw" );
+            aAppName = OUString( "draw" );
         else if ( rCmdLine.IsImpress() )
-            aAppName = rtl::OUString( "impress" );
+            aAppName = OUString( "impress" );
         else if ( rCmdLine.IsBase() )
-            aAppName = rtl::OUString( "base" );
+            aAppName = OUString( "base" );
         else if ( rCmdLine.IsGlobal() )
-            aAppName = rtl::OUString( "global" );
+            aAppName = OUString( "global" );
         else if ( rCmdLine.IsMath() )
-            aAppName = rtl::OUString( "math" );
+            aAppName = OUString( "math" );
         else if ( rCmdLine.IsWeb() )
-            aAppName = rtl::OUString( "web" );
+            aAppName = OUString( "web" );
 
         // Which splash to use
         OUString aSplashService( "com.sun.star.office.SplashScreen" );
@@ -2872,7 +2872,7 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
     }
 }
 
-void Desktop::SetSplashScreenText( const ::rtl::OUString& rText )
+void Desktop::SetSplashScreenText( const OUString& rText )
 {
     if( m_rSplashScreen.is() )
     {
@@ -2895,7 +2895,7 @@ void Desktop::DoFirstRunInitializations()
     try
     {
         Reference< XJobExecutor > xExecutor = JobExecutor::create( ::comphelper::getProcessComponentContext() );
-        xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
+        xExecutor->trigger( OUString("onFirstRunInitialization") );
     }
     catch(const ::com::sun::star::uno::Exception&)
     {

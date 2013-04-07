@@ -66,7 +66,7 @@ public:
     // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
     using OBoundControlModel::getFastPropertyValue;
@@ -131,7 +131,7 @@ class OEditControl : public OBoundControl
     ::cppu::OInterfaceContainerHelper
                         m_aChangeListeners;
 
-    ::rtl::OUString         m_aHtmlChangeValue;
+    OUString         m_aHtmlChangeValue;
     sal_uInt32              m_nKeyEvent;
 
 public:

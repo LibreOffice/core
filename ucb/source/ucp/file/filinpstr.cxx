@@ -29,7 +29,7 @@ using namespace com::sun::star::ucb;
 
 
 
-XInputStream_impl::XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock )
+XInputStream_impl::XInputStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock )
     : m_xProvider( pMyShell->m_pProvider ),
       m_aFile( aUncPath ),
       m_nErrorCode( TASKHANDLER_NO_ERROR ),

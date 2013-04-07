@@ -36,7 +36,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
@@ -54,10 +53,10 @@ ScXMLExternalRefTabSourceContext::ScXMLExternalRefTabSourceContext(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for (sal_Int16 i = 0; i < nAttrCount; ++i)
     {
-        const rtl::OUString& sAttrName = xAttrList->getNameByIndex(i);
-        rtl::OUString aLocalName;
+        const OUString& sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
         sal_uInt16 nAttrPrefix = mrScImport.GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        const OUString& sValue = xAttrList->getValueByIndex(i);
         if (nAttrPrefix == XML_NAMESPACE_XLINK)
         {
             if (IsXMLToken(aLocalName, XML_HREF))
@@ -182,10 +181,10 @@ ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     const SvXMLTokenMap& rAttrTokenMap = mrScImport.GetTableRowAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName = xAttrList->getNameByIndex(i);
-        rtl::OUString aLocalName;
+        const OUString& sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
         sal_uInt16 nAttrPrefix = mrScImport.GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
-        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        const OUString& sValue = xAttrList->getValueByIndex(i);
 
         switch (rAttrTokenMap.Get(nAttrPrefix, aLocalName))
         {
@@ -268,7 +267,7 @@ ScXMLExternalRefCellContext::ScXMLExternalRefCellContext(
         sal_uInt16 nAttrPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(
             xAttrList->getNameByIndex(i), &aLocalName);
 
-        const rtl::OUString& sValue = xAttrList->getValueByIndex(i);
+        const OUString& sValue = xAttrList->getValueByIndex(i);
         sal_uInt16 nToken = rTokenMap.Get(nAttrPrefix, aLocalName);
 
         switch (nToken)

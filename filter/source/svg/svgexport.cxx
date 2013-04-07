@@ -45,7 +45,6 @@
 
 #include <boost/preprocessor/repetition/repeat.hpp>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // -------------------------------
@@ -97,7 +96,7 @@ static const char    aOOOAttrTextAdjust[] = NSPREFIX "text-adjust";
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define TEXT_FIELD_GET_CLASS_NAME_METHOD( class_name ) \
-virtual ::rtl::OUString getClassName() const                            \
+virtual OUString getClassName() const                            \
 {                                                                       \
     static const char className[] = #class_name;                        \
     return OUString( className );                                       \
@@ -123,7 +122,7 @@ public:
     }
     virtual ~TextField() {}
 protected:
-    void implGrowCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets, ::rtl::OUString sText, ::rtl::OUString sTextFieldId ) const
+    void implGrowCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets, OUString sText, OUString sTextFieldId ) const
     {
         const sal_Unicode * ustr = sText.getStr();
         sal_Int32 nLength = sText.getLength();
@@ -142,7 +141,7 @@ protected:
 class FixedTextField : public TextField
 {
 public:
-    ::rtl::OUString text;
+    OUString text;
 
     TEXT_FIELD_GET_CLASS_NAME_METHOD( FixedTextField )
     virtual sal_Bool equalTo( const TextField & aTextField ) const
@@ -563,7 +562,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             pValue[ i ].Value >>= xOStm;
         else if ( pValue[ i ].Name == "FileName" )
         {
-            ::rtl::OUString aFileName;
+            OUString aFileName;
 
             pValue[ i ].Value >>= aFileName;
             pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC );
@@ -587,7 +586,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         // font embedding
         const char* pSVGDisableFontEmbedding = getenv( "SVG_DISABLE_FONT_EMBEDDING" );
-        rtl::OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
+        OUString aEmbedFontEnv("${SVG_DISABLE_FONT_EMBEDDING}");
         rtl::Bootstrap::expandMacros(aEmbedFontEnv);
         const bool bEmbedFonts=pSVGDisableFontEmbedding ? false : (
             aEmbedFontEnv.getLength() ? false : true);
@@ -605,7 +604,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         maFilterData[ 3 ].Name = SVG_PROP_GLYPHPLACEMENT;
 
         if( pSVGGlyphPlacement )
-            maFilterData[ 3 ].Value <<= ::rtl::OUString::createFromAscii( pSVGGlyphPlacement );
+            maFilterData[ 3 ].Value <<= OUString::createFromAscii( pSVGGlyphPlacement );
         else
             maFilterData[ 3 ].Value <<= OUString("xlist");
 
@@ -1258,7 +1257,7 @@ void SVGFilter::implEmbedBulletGlyphs()
 
 // -----------------------------------------------------------------------------
 
-void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const ::rtl::OUString & sPathData )
+void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData )
 {
     OUString sId = "bullet-char-template(" + OUString::number( (sal_Int32)cBullet ) + ")";
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
@@ -1534,7 +1533,7 @@ sal_Bool SVGFilter::implExportDrawPages( const SVGFilter::XDrawPageSequence & rx
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SVGFilter::implExportPage( const ::rtl::OUString & sPageId,
+sal_Bool SVGFilter::implExportPage( const OUString & sPageId,
                                     const Reference< XDrawPage > & rxPage,
                                     const Reference< XShapes > & xShapes,
                                     sal_Bool bMaster )
@@ -1663,7 +1662,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
     if( xShapePropSet.is() )
     {
-        const ::rtl::OUString   aShapeType( rxShape->getShapeType() );
+        const OUString   aShapeType( rxShape->getShapeType() );
         sal_Bool                    bHideObj = sal_False;
 
         if( mbPresentation )
@@ -1688,7 +1687,7 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
             if( !bRet && mpObjects->find( rxShape ) !=  mpObjects->end() )
             {
-                const ::rtl::OUString*                    pElementId = NULL;
+                const OUString*                    pElementId = NULL;
 
                 ::com::sun::star::awt::Rectangle    aBoundRect;
                 const GDIMetaFile&                  rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
@@ -2086,7 +2085,7 @@ void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 
 // -----------------------------------------------------------------------------
 
-const ::rtl::OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
+const OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
    return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }

@@ -50,7 +50,7 @@ bool ChartTypeHelper::isSupportingAxisSideBySide(
         StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
         if( eStackMode == StackMode_NONE && !bAmbiguous )
         {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
+            OUString aChartTypeName = xChartType->getChartType();
             bResult = ( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
                         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) );
         }
@@ -68,7 +68,7 @@ sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< 
     {
         if(nDimensionCount==3)
         {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
+            OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
                 return sal_True;
             if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
@@ -88,7 +88,7 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
         if(nDimensionCount==3)
             return sal_False;
 
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
@@ -118,7 +118,7 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
     {
          if(nDimensionCount==2)
         {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
+            OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
                 return sal_False;
             if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
@@ -142,7 +142,7 @@ sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XC
         if(nDimensionCount==3)
             return sal_False;
 
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) )
             return sal_True;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
@@ -161,7 +161,7 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
     //@todo ask charttype itself --> need model change first
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
 
@@ -181,7 +181,7 @@ sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChar
          if(nDimensionCount==3)
             return sal_False;
 
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
@@ -203,7 +203,7 @@ sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
          if(nDimensionCount==3)
             return sal_False;
 
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
             return sal_True;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
@@ -229,7 +229,7 @@ sal_Bool ChartTypeHelper::isSupportingBarConnectors(
         if( eStackMode != StackMode_Y_STACKED || bAmbiguous )
             return sal_False;
 
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
             return sal_True;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
@@ -248,7 +248,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
     if( !xChartType.is() )
         return aRet;
 
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
     {
         bool bDonut = false;
@@ -359,7 +359,7 @@ sal_Bool ChartTypeHelper::isSupportingRightAngledAxes( const uno::Reference< cha
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_False;
     }
@@ -370,7 +370,7 @@ bool ChartTypeHelper::isSupportingStartingAngle( const uno::Reference< chart2::X
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return true;
     }
@@ -380,7 +380,7 @@ bool ChartTypeHelper::isSupportingBaseValue( const uno::Reference< chart2::XChar
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA)
@@ -394,7 +394,7 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
@@ -414,7 +414,7 @@ bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChart
         sal_Int32 nType = ChartTypeHelper::getAxisType( xChartType, nDimensionIndex );
         if( nType != AxisType::CATEGORY )
             return false;
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return false;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
@@ -429,7 +429,7 @@ bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< c
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
             || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
@@ -442,7 +442,7 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
 {
     if(xChartType.is())
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             return sal_True;
     }
@@ -454,7 +454,7 @@ sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); // grey
     if( xChartType .is() )
     {
-        rtl::OUString aChartType = xChartType->getChartType();
+        OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
             if( bSimple )
@@ -474,7 +474,7 @@ sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno:
     sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
     if( xChartType .is() )
     {
-        rtl::OUString aChartType = xChartType->getChartType();
+        OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
             if( bSimple )
@@ -491,7 +491,7 @@ drawing::Direction3D ChartTypeHelper::getDefaultSimpleLightDirection( const uno:
     drawing::Direction3D aRet(0.0, 0.0, 1.0);
     if( xChartType .is() )
     {
-        rtl::OUString aChartType = xChartType->getChartType();
+        OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             aRet = drawing::Direction3D(0.0, 0.8, 0.5);
         else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
@@ -506,7 +506,7 @@ drawing::Direction3D ChartTypeHelper::getDefaultRealisticLightDirection( const u
     drawing::Direction3D aRet(0.0, 0.0, 1.0);
     if( xChartType .is() )
     {
-        rtl::OUString aChartType = xChartType->getChartType();
+        OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
             aRet = drawing::Direction3D(0.6, 0.6, 0.6);
         else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
@@ -525,7 +525,7 @@ sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
     if(!xChartType.is())
         return AxisType::CATEGORY;
 
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if(2==nDimensionIndex)//z-axis
         return AxisType::SERIES;
     if(1==nDimensionIndex)//y-axis
@@ -548,7 +548,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
     {
         try
         {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
+            OUString aChartTypeName = xChartType->getChartType();
             if( aChartTypeName.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
             {
                 uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
@@ -580,7 +580,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, 0 );
     bStacked = bFound && (StackMode_Y_STACKED == eStackMode);
 
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
@@ -634,30 +634,30 @@ bool ChartTypeHelper::isSeriesInFrontOfAxisLine( const uno::Reference< XChartTyp
 {
     if( xChartType.is() )
     {
-        rtl::OUString aChartTypeName = xChartType->getChartType();
+        OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
             return false;
     }
     return true;
 }
 
-rtl::OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+OUString ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
 {
-    rtl::OUString aRet( "values-y" );
+    OUString aRet( "values-y" );
     if( !xChartType.is() )
         return aRet;
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         aRet = xChartType->getRoleOfSequenceForSeriesLabel();
     return aRet;
 }
 
-rtl::OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
+OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( const uno::Reference< XChartType >& xChartType )
 {
-    rtl::OUString aRet( "values-y" );
+    OUString aRet( "values-y" );
     if( !xChartType.is() )
         return aRet;
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK)
         || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
         aRet = xChartType->getRoleOfSequenceForSeriesLabel();
@@ -667,7 +667,7 @@ rtl::OUString ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetectio
 bool ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( const uno::Reference< XChartType >& xChartType )
 {
     bool bRet = true;
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
         bRet = false;
     return bRet;
@@ -679,7 +679,7 @@ bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< X
     if( !xChartType.is() )
         return bRet;
 
-    rtl::OUString aChartTypeName = xChartType->getChartType();
+    OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) ||
         aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )

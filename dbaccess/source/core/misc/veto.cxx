@@ -31,7 +31,7 @@ namespace dbaccess
     //= Veto
     //====================================================================
     //--------------------------------------------------------------------
-    Veto::Veto( const ::rtl::OUString& _rReason, const Any& _rDetails )
+    Veto::Veto( const OUString& _rReason, const Any& _rDetails )
         :m_sReason( _rReason )
         ,m_aDetails( _rDetails )
     {
@@ -43,7 +43,7 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL Veto::getReason() throw (RuntimeException)
+    OUString SAL_CALL Veto::getReason() throw (RuntimeException)
     {
         return m_sReason;
     }

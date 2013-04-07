@@ -92,7 +92,7 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxContext 
                     {
                         case TK_DocumentService :
                         {
-                            rtl::OUString sDocumentService;
+                            OUString sDocumentService;
                             rProperty.Value >>= sDocumentService;
                             if ( sDocumentService == "com.sun.star.presentation.PresentationDocument" )
                                 bImpressFilter = sal_True;
@@ -158,20 +158,20 @@ sal_Int16 FileOpenDialog::execute()
 {
     return mxFilePicker->execute();
 }
-void FileOpenDialog::setDefaultName( const rtl::OUString& rDefaultName )
+void FileOpenDialog::setDefaultName( const OUString& rDefaultName )
 {
     mxFilePicker->setDefaultName( rDefaultName );
 }
-::rtl::OUString FileOpenDialog::getURL() const
+OUString FileOpenDialog::getURL() const
 {
     Sequence< OUString > aFileSeq( mxFilePicker->getFiles() );
     return aFileSeq.getLength() ? aFileSeq[ 0 ] : OUString();
 };
-::rtl::OUString FileOpenDialog::getFilterName() const
+OUString FileOpenDialog::getFilterName() const
 {
-    rtl::OUString aFilterName;
+    OUString aFilterName;
     Reference< XFilterManager > xFilterManager( mxFilePicker, UNO_QUERY_THROW );
-    rtl::OUString aUIName( xFilterManager->getCurrentFilter() );
+    OUString aUIName( xFilterManager->getCurrentFilter() );
     for( std::vector< FilterEntry >::const_iterator aIter(aFilterEntryList.begin()), aEnd(aFilterEntryList.end()); aIter != aEnd; ++aIter )
     {
         if ( aIter->maUIName == aUIName )

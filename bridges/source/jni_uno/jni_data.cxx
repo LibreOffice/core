@@ -1797,7 +1797,7 @@ void Bridge::map_to_java(
             {
                 // Do not lose information about type arguments of instantiated
                 // polymorphic struct types:
-                rtl::OUString const & name = rtl::OUString::unacquired(
+                OUString const & name = OUString::unacquired(
                     &pAny->pType->pTypeName);
                 OSL_ASSERT(!name.isEmpty());
                 if (name[name.getLength() - 1] == '>')

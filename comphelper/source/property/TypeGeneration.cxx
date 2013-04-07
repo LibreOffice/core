@@ -123,7 +123,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -204,7 +203,7 @@ namespace comphelper
             case CPPUTYPE_REFTXTTABLE:  pType = &::getCppuType( (Reference<text::XTextTable>*)0 ); break;
             case CPPUTYPE_AWTPOINT:     pType = &::getCppuType( (awt::Point*)0 );    break;
             case CPPUTYPE_REFLIBCONTAINER:  pType = &::getCppuType( (Reference< script::XLibraryContainer >*)0);    break;
-            case CPPUTYPE_OUSTRINGS:    pType = &::getCppuType( (Sequence< ::rtl::OUString >*)0);    break;
+            case CPPUTYPE_OUSTRINGS:    pType = &::getCppuType( (Sequence< OUString >*)0);    break;
             case CPPUTYPE_SEQANY:           pType = &::getCppuType( (Sequence< uno::Any >*)0);    break;
             case CPPUTYPE_REFRESULTSET:     pType = &::getCppuType( (Reference< sdbc::XResultSet >*)0);    break;
             case CPPUTYPE_REFCONNECTION:    pType = &::getCppuType( (Reference< sdbc::XConnection >*)0);    break;

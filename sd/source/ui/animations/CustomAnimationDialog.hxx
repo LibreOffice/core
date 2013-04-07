@@ -106,7 +106,7 @@ public:
     virtual ~PropertySubControl();
 
     virtual             ::com::sun::star::uno::Any getValue() = 0;
-    virtual             void setValue( const ::com::sun::star::uno::Any& rValue, const rtl::OUString& rPresetId ) = 0;
+    virtual             void setValue( const ::com::sun::star::uno::Any& rValue, const OUString& rPresetId ) = 0;
 
     virtual Control*    getControl() = 0;
 
@@ -114,7 +114,7 @@ public:
                         create( sal_Int32 nType,
                                 ::Window* pParent,
                                 const ::com::sun::star::uno::Any& rValue,
-                                const rtl::OUString& rPresetId,
+                                const OUString& rPresetId,
                                 const Link& rModifyHdl );
 
     sal_Int32 getControlType() const { return mnType; }

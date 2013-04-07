@@ -91,7 +91,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
-using ::rtl::OUString;
 
 // =======================================================================
 
@@ -181,7 +180,7 @@ void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
             for ( i = 0; i < nInfoPrn4; i++ )
             {
                 SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-                pInfo->maPrinterName = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
+                pInfo->maPrinterName = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo4[i].pPrinterName) );
                 pInfo->mnStatus      = 0;
                 pInfo->mnJobs        = 0;
                 pInfo->mpSysData     = NULL;
@@ -208,22 +207,22 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
             if( GetPrinterW( hPrinter, 2, (LPBYTE)pWinInfo2, nBytes, &nBytes ) )
             {
                 if( pWinInfo2->pDriverName )
-                    pInfo->maDriver = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
+                    pInfo->maDriver = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pDriverName) );
                 XubString aPortName;
                 if ( pWinInfo2->pPortName )
-                    aPortName = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
+                    aPortName = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
                 // pLocation can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pLocation && *pWinInfo2->pLocation )
-                    pInfo->maLocation = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
+                    pInfo->maLocation = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
                 else
                     pInfo->maLocation = aPortName;
                 // pComment can be 0 (the Windows docu doesn't describe this)
                 if ( pWinInfo2->pComment )
-                    pInfo->maComment = rtl::OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
+                    pInfo->maComment = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
                 pInfo->mnJobs        = pWinInfo2->cJobs;
                 if( ! pInfo->mpSysData )
-                    pInfo->mpSysData = new rtl::OUString(aPortName);
+                    pInfo->mpSysData = new OUString(aPortName);
             }
             rtl_freeMemory(pWinInfo2);
         }
@@ -240,7 +239,7 @@ void WinSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 }
 
 // -----------------------------------------------------------------------
-rtl::OUString WinSalInstance::GetDefaultPrinter()
+OUString WinSalInstance::GetDefaultPrinter()
 {
     DWORD   nChars = 0;
     GetDefaultPrinterW( NULL, &nChars );
@@ -270,7 +269,7 @@ rtl::OUString WinSalInstance::GetDefaultPrinter()
         return ImplSalGetUniString( pBuf, (xub_StrLen)(pTmp-pBuf) );
     }
     else
-        return rtl::OUString();
+        return OUString();
 }
 
 // =======================================================================
@@ -1118,7 +1117,7 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
     pPrinter->maDeviceName  = pQueueInfo->maPrinterName;
     pPrinter->maPortName    = pQueueInfo->mpSysData ?
                                 *pQueueInfo->mpSysData
-                              : rtl::OUString();
+                              : OUString();
 
     // check if the provided setup data match the actual printer
     ImplTestSalJobSetup( pPrinter, pSetupData, TRUE );
@@ -1279,7 +1278,7 @@ sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 
 // -----------------------------------------------------------------------
 
-rtl::OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
+OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
 {
     XubString aPaperBinName;
 
@@ -1519,9 +1518,9 @@ static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
     return nRet;
 }
 
-sal_Bool WinSalPrinter::StartJob( const rtl::OUString* pFileName,
-                           const rtl::OUString& rJobName,
-                           const rtl::OUString&,
+sal_Bool WinSalPrinter::StartJob( const OUString* pFileName,
+                           const OUString& rJobName,
+                           const OUString&,
                            sal_uLong nCopies,
                            bool bCollate,
                            bool /*bDirect*/,

@@ -244,7 +244,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     @return The implementation name of this class.
 */
 
-::rtl::OUString SAL_CALL BackingComp::getImplementationName()
+OUString SAL_CALL BackingComp::getImplementationName()
     throw(css::uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
@@ -264,7 +264,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
             <br><FALSE/> otherwise.
 */
 
-sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sServiceName )
+sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const OUString& sServiceName )
     throw(css::uno::RuntimeException)
 {
     return (
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sS
     @return A list of all supported uno service names.
 */
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceNames()
+css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
     throw(css::uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
@@ -305,7 +305,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceN
     @return The implementation name of this class.
 */
 
-::rtl::OUString BackingComp::impl_getStaticImplementationName()
+OUString BackingComp::impl_getStaticImplementationName()
 {
     return IMPLEMENTATIONNAME_STARTMODULE;
 }
@@ -323,9 +323,9 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceN
     @return A list of all supported uno service names.
 */
 
-css::uno::Sequence< ::rtl::OUString > BackingComp::impl_getStaticSupportedServiceNames()
+css::uno::Sequence< OUString > BackingComp::impl_getStaticSupportedServiceNames()
 {
-    css::uno::Sequence< ::rtl::OUString > lNames(1);
+    css::uno::Sequence< OUString > lNames(1);
     lNames[0] = "com.sun.star.frame.StartModule";
     return lNames;
 }
@@ -444,12 +444,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("already attached"),
+                OUString("already attached"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("invalid frame reference"),
+                OUString("invalid frame reference"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
@@ -635,7 +635,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("unexpected source or called twice"),
+                OUString("unexpected source or called twice"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     m_xWindow = css::uno::Reference< css::awt::XWindow >();
@@ -726,7 +726,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
     throw(css::uno::RuntimeException)
 {
     throw css::uno::RuntimeException(
-            ::rtl::OUString("not supported"),
+            OUString("not supported"),
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
@@ -773,7 +773,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                ::rtl::OUString("already initialized"),
+                OUString("already initialized"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -784,7 +784,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                ::rtl::OUString("wrong or corrupt argument list"),
+                OUString("wrong or corrupt argument list"),
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -795,7 +795,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString("couldn't create component window"),
+                OUString("couldn't create component window"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // start listening for window disposing

@@ -65,7 +65,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
                 if( ( iter->maValue >>= nNumberFormat ) &&
                     ( nNumberFormat != -1 ))
                 {
-                    rtl::OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
+                    OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
                     if( !sAttrValue.isEmpty() )
                     {
                         mrSchXMLExport.AddAttribute(

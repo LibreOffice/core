@@ -76,14 +76,14 @@ class OGridControlModel :public OControlModel
     ::com::sun::star::uno::Any              m_aBackgroundColor;
     ::com::sun::star::uno::Any              m_aCursorColor;             // transient
     ::com::sun::star::uno::Any              m_aBorderColor;
-    ::rtl::OUString                         m_aDefaultControl;
-    ::rtl::OUString                         m_sHelpText;
+    OUString                         m_aDefaultControl;
+    OUString                         m_sHelpText;
 // [properties]
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSelection;
 
 // [properties]
-    ::rtl::OUString             m_sHelpURL;                 // URL
+    OUString             m_sHelpURL;                 // URL
     sal_Int16                   m_nBorder;
     sal_Int16                   m_nWritingMode;
     sal_Int16                   m_nContextWritingMode;
@@ -134,11 +134,11 @@ public:
     virtual void SAL_CALL removeSelectionChangeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener) throw(::com::sun::star::uno::RuntimeException);
 
     // XGridColumnFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> SAL_CALL createColumn(const ::rtl::OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> SAL_CALL createColumn(const OUString& ColumnType) throw ( :: com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual StringSequence SAL_CALL getColumnTypes() throw ( ::com::sun::star::uno::RuntimeException);
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 

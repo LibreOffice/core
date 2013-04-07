@@ -32,7 +32,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace
 {
@@ -356,7 +355,7 @@ void PresenterSlidePreview::ThrowIfDisposed (void)
     if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            ::rtl::OUString( "PresenterSlidePreview object has already been disposed"),
+            OUString( "PresenterSlidePreview object has already been disposed"),
             static_cast<uno::XWeak*>(this));
     }
 }

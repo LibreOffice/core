@@ -61,14 +61,14 @@ void dumpPointSequenceSequence(com::sun::star::drawing::PointSequenceSequence aP
 void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
-void dumpFillTransparenceGradientNameAsAttribute(rtl::OUString sTranspGradName, xmlTextWriterPtr xmlWriter);
+void dumpFillTransparenceGradientNameAsAttribute(OUString sTranspGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceGradientAsElement(com::sun::star::awt::Gradient aTranspGrad, xmlTextWriterPtr xmlWriter);
-void dumpFillGradientNameAsAttribute(rtl::OUString sGradName, xmlTextWriterPtr xmlWriter);
+void dumpFillGradientNameAsAttribute(OUString sGradName, xmlTextWriterPtr xmlWriter);
 void dumpFillGradientAsElement(com::sun::star::awt::Gradient aGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(com::sun::star::drawing::Hatch aHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(sal_Bool bBackground, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapURLAsAttribute(rtl::OUString sBitmapURL, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapURLAsAttribute(OUString sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
@@ -84,13 +84,13 @@ void dumpFillBitmapTileAsAttribute(sal_Bool bBitmapTile, xmlTextWriterPtr xmlWri
 // LineProperties.idl
 void dumpLineStyleAsAttribute(com::sun::star::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
 void dumpLineDashAsElement(com::sun::star::drawing::LineDash aLineDash, xmlTextWriterPtr xmlWriter);
-void dumpLineDashNameAsAttribute(rtl::OUString sLineDashName, xmlTextWriterPtr xmlWriter);
+void dumpLineDashNameAsAttribute(OUString sLineDashName, xmlTextWriterPtr xmlWriter);
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter);
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter);
 void dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter);
 void dumpLineJointAsAttribute(com::sun::star::drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter);
-void dumpLineStartNameAsAttribute(rtl::OUString sLineStartName, xmlTextWriterPtr xmlWriter);
-void dumpLineEndNameAsAttribute(rtl::OUString sLineEndName, xmlTextWriterPtr xmlWriter);
+void dumpLineStartNameAsAttribute(OUString sLineStartName, xmlTextWriterPtr xmlWriter);
+void dumpLineEndNameAsAttribute(OUString sLineEndName, xmlTextWriterPtr xmlWriter);
 void dumpLineStartAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineStart, xmlTextWriterPtr xmlWriter);
 void dumpLineEndAsElement(com::sun::star::drawing::PolyPolygonBezierCoords aLineEnd, xmlTextWriterPtr xmlWriter);
 void dumpLineStartCenterAsAttribute(sal_Bool bLineStartCenter, xmlTextWriterPtr xmlWriter);
@@ -138,22 +138,22 @@ void dumpShadowYDistanceAsAttribute(sal_Int32 aShadowYDistance, xmlTextWriterPtr
 //Shape.idl
 void dumpZOrderAsAttribute(sal_Int32 aZOrder, xmlTextWriterPtr xmlWriter);
 void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter);
-void dumpLayerNameAsAttribute(rtl::OUString sLayerName, xmlTextWriterPtr xmlWriter);
+void dumpLayerNameAsAttribute(OUString sLayerName, xmlTextWriterPtr xmlWriter);
 void dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter);
 void dumpPrintableAsAttribute(sal_Bool bPrintable, xmlTextWriterPtr xmlWriter);
 void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWriter);
-void dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter);
+void dumpNameAsAttribute(OUString sName, xmlTextWriterPtr xmlWriter);
 void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter);
 void dumpHomogenMatrixLine3(com::sun::star::drawing::HomogenMatrixLine3 aLine, xmlTextWriterPtr xmlWriter);
 void dumpTransformationAsElement(com::sun::star::drawing::HomogenMatrix3 aTransformation, xmlTextWriterPtr xmlWriter);
 void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr xmlWriter);
-void dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter);
+void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter);
 
 // CustomShape.idl
-void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeDataAsAttribute(OUString sCustomShapeData, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeGeometryAsElement(com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeReplacementURLAsAttribute(rtl::OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
 // XShape.idl
 void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
@@ -175,7 +175,7 @@ void dumpCustomShapeService(com::sun::star::uno::Reference< com::sun::star::bean
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)
 {
-    rtl::OStringBuffer* pBuffer = static_cast<rtl::OStringBuffer*>(pContext);
+    OStringBuffer* pBuffer = static_cast<OStringBuffer*>(pContext);
     pBuffer->append(sBuffer);
     return nLen;
 }
@@ -222,10 +222,10 @@ void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr x
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparence"), "%" SAL_PRIdINT32, aTransparence);
 }
 
-void dumpFillTransparenceGradientNameAsAttribute(rtl::OUString sTranspGradName, xmlTextWriterPtr xmlWriter)
+void dumpFillTransparenceGradientNameAsAttribute(OUString sTranspGradName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillTransparenceGradientName"), "%s",
-        rtl::OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sTranspGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 //because there's more awt::Gradient properties to dump
@@ -272,10 +272,10 @@ void dumpFillTransparenceGradientAsElement(awt::Gradient aTranspGrad, xmlTextWri
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillGradientNameAsAttribute(rtl::OUString sGradName, xmlTextWriterPtr xmlWriter)
+void dumpFillGradientNameAsAttribute(OUString sGradName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillGradientName"), "%s",
-        rtl::OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sGradName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpFillGradientAsElement(awt::Gradient aGradient, xmlTextWriterPtr xmlWriter)
@@ -328,10 +328,10 @@ void dumpFillBitmapAsElement(uno::Reference<awt::XBitmap> xBitmap, xmlTextWriter
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpFillBitmapURLAsAttribute(rtl::OUString sBitmapURL, xmlTextWriterPtr xmlWriter)
+void dumpFillBitmapURLAsAttribute(OUString sBitmapURL, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("fillBitmapURL"), "%s",
-        rtl::OUStringToOString(sBitmapURL, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sBitmapURL, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter)
@@ -492,10 +492,10 @@ void dumpLineDashAsElement(drawing::LineDash aLineDash, xmlTextWriterPtr xmlWrit
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpLineDashNameAsAttribute(rtl::OUString sLineDashName, xmlTextWriterPtr xmlWriter)
+void dumpLineDashNameAsAttribute(OUString sLineDashName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineDashName"), "%s",
-        rtl::OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sLineDashName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter)
@@ -537,16 +537,16 @@ void dumpLineJointAsAttribute(drawing::LineJoint eLineJoint, xmlTextWriterPtr xm
     }
 }
 
-void dumpLineStartNameAsAttribute(rtl::OUString sLineStartName, xmlTextWriterPtr xmlWriter)
+void dumpLineStartNameAsAttribute(OUString sLineStartName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineStartName"), "%s",
-    rtl::OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
+    OUStringToOString(sLineStartName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpLineEndNameAsAttribute(rtl::OUString sLineEndName, xmlTextWriterPtr xmlWriter)
+void dumpLineEndNameAsAttribute(OUString sLineEndName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("lineEndName"), "%s",
-    rtl::OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
+    OUStringToOString(sLineEndName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpPolyPolygonBezierCoords(drawing::PolyPolygonBezierCoords aPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter)
@@ -977,10 +977,10 @@ void dumpLayerIDAsAttribute(sal_Int32 aLayerID, xmlTextWriterPtr xmlWriter)
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerID"), "%" SAL_PRIdINT32, aLayerID);
 }
 
-void dumpLayerNameAsAttribute(rtl::OUString sLayerName, xmlTextWriterPtr xmlWriter)
+void dumpLayerNameAsAttribute(OUString sLayerName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("layerName"), "%s",
-        rtl::OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sLayerName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpVisibleAsAttribute(sal_Bool bVisible, xmlTextWriterPtr xmlWriter)
@@ -1007,10 +1007,10 @@ void dumpMoveProtectAsAttribute(sal_Bool bMoveProtect, xmlTextWriterPtr xmlWrite
         xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("moveProtect"), "%s", "false");
 }
 
-void dumpNameAsAttribute(rtl::OUString sName, xmlTextWriterPtr xmlWriter)
+void dumpNameAsAttribute(OUString sName, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-        rtl::OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpSizeProtectAsAttribute(sal_Bool bSizeProtect, xmlTextWriterPtr xmlWriter)
@@ -1050,10 +1050,10 @@ void dumpNavigationOrderAsAttribute(sal_Int32 aNavigationOrder, xmlTextWriterPtr
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("navigationOrder"), "%" SAL_PRIdINT32, aNavigationOrder);
 }
 
-void dumpHyperlinkAsAttribute(rtl::OUString sHyperlink, xmlTextWriterPtr xmlWriter)
+void dumpHyperlinkAsAttribute(OUString sHyperlink, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("hyperlink"), "%s",
-        rtl::OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sHyperlink, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 // --------------------------------
@@ -1075,23 +1075,23 @@ void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
 void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s",
-        rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
 }
 
 // -------------------------------------
 // ---------- CustomShape.idl ----------
 // -------------------------------------
 
-void dumpCustomShapeEngineAsAttribute(rtl::OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeEngineAsAttribute(OUString sCustomShapeEngine, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeEngine"), "%s",
-        rtl::OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sCustomShapeEngine, RTL_TEXTENCODING_UTF8).getStr());
 }
 
-void dumpCustomShapeDataAsAttribute(rtl::OUString sCustomShapeData, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeDataAsAttribute(OUString sCustomShapeData, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeData"), "%s",
-        rtl::OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sCustomShapeData, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 void dumpCustomShapeGeometryAsElement(uno::Sequence< beans::PropertyValue> aCustomShapeGeometry, xmlTextWriterPtr xmlWriter)
@@ -1103,15 +1103,15 @@ void dumpCustomShapeGeometryAsElement(uno::Sequence< beans::PropertyValue> aCust
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "PropertyValue" ));
 
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("name"), "%s",
-            rtl::OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(aCustomShapeGeometry[i].Name, RTL_TEXTENCODING_UTF8).getStr());
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("handle"), "%" SAL_PRIdINT32, aCustomShapeGeometry[i].Handle);
 
         uno::Any aAny = aCustomShapeGeometry[i].Value;
-        rtl::OUString sValue;
+        OUString sValue;
         if(aAny >>= sValue)
         {
             xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("value"), "%s",
-                rtl::OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString(sValue, RTL_TEXTENCODING_UTF8).getStr());
         }
         switch(aCustomShapeGeometry[i].State)
         {
@@ -1132,10 +1132,10 @@ void dumpCustomShapeGeometryAsElement(uno::Sequence< beans::PropertyValue> aCust
     xmlTextWriterEndElement( xmlWriter );
 }
 
-void dumpCustomShapeReplacementURLAsAttribute(rtl::OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
+void dumpCustomShapeReplacementURLAsAttribute(OUString sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter)
 {
     xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("customShapeReplacementURL"), "%s",
-        rtl::OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());
+        OUStringToOString(sCustomShapeReplacementURL, RTL_TEXTENCODING_UTF8).getStr());
 }
 
 // methods dumping whole services
@@ -1306,7 +1306,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillTransparenceGradientName");
-        rtl::OUString sTranspGradName;
+        OUString sTranspGradName;
         if(anotherAny >>= sTranspGradName)
             dumpFillTransparenceGradientNameAsAttribute(sTranspGradName, xmlWriter);
     }
@@ -1318,7 +1318,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillGradientName");
-        rtl::OUString sGradName;
+        OUString sGradName;
         if(anotherAny >>= sGradName)
             dumpFillGradientNameAsAttribute(sGradName, xmlWriter);
     }
@@ -1330,7 +1330,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillHatchName");
-        rtl::OUString sHatchName;
+        OUString sHatchName;
         if(anotherAny >>= sHatchName)
             dumpFillGradientNameAsAttribute(sHatchName, xmlWriter);
     }
@@ -1348,7 +1348,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapName");
-        rtl::OUString sBitmapName;
+        OUString sBitmapName;
         if(anotherAny >>= sBitmapName)
             dumpFillGradientNameAsAttribute(sBitmapName, xmlWriter);
     }
@@ -1360,7 +1360,7 @@ void dumpFillPropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("FillBitmapURL");
-        rtl::OUString sBitmapURL;
+        OUString sBitmapURL;
         if(anotherAny >>= sBitmapURL)
             dumpFillBitmapURLAsAttribute(sBitmapURL, xmlWriter);
     }
@@ -1448,7 +1448,7 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineDashName");
-        rtl::OUString sLineDashName;
+        OUString sLineDashName;
         if(anotherAny >>= sLineDashName)
             dumpLineDashNameAsAttribute(sLineDashName, xmlWriter);
     }
@@ -1478,13 +1478,13 @@ void dumpLinePropertiesService(uno::Reference< beans::XPropertySet > xPropSet, x
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineStartName");
-        rtl::OUString sLineStartName;
+        OUString sLineStartName;
         if(anotherAny >>= sLineStartName)
             dumpLineStartNameAsAttribute(sLineStartName, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LineEndName");
-        rtl::OUString sLineEndName;
+        OUString sLineEndName;
         if(anotherAny >>= sLineEndName)
             dumpLineEndNameAsAttribute(sLineEndName, xmlWriter);
     }
@@ -1599,7 +1599,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("LayerName");
-        rtl::OUString sLayerName;
+        OUString sLayerName;
         if(anotherAny >>= sLayerName)
             dumpLayerNameAsAttribute(sLayerName, xmlWriter);
     }
@@ -1623,7 +1623,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Name");
-        rtl::OUString sName;
+        OUString sName;
         if(anotherAny >>= sName)
             dumpNameAsAttribute(sName, xmlWriter);
     }
@@ -1648,7 +1648,7 @@ void dumpShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlTextWri
     if(xInfo->hasPropertyByName("Hyperlink"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("Hyperlink");
-        rtl::OUString sHyperlink;
+        OUString sHyperlink;
         if(anotherAny >>= sHyperlink)
             dumpHyperlinkAsAttribute(sHyperlink, xmlWriter);
     }
@@ -1681,13 +1681,13 @@ void dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlT
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeEngine");
-        rtl::OUString sCustomShapeEngine;
+        OUString sCustomShapeEngine;
         if(anotherAny >>= sCustomShapeEngine)
             dumpCustomShapeEngineAsAttribute(sCustomShapeEngine, xmlWriter);
     }
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeData");
-        rtl::OUString sCustomShapeData;
+        OUString sCustomShapeData;
         if(anotherAny >>= sCustomShapeData)
             dumpCustomShapeDataAsAttribute(sCustomShapeData, xmlWriter);
     }
@@ -1700,7 +1700,7 @@ void dumpCustomShapeService(uno::Reference< beans::XPropertySet > xPropSet, xmlT
     if(xInfo->hasPropertyByName("CustomShapeReplacementURL"))
     {
         uno::Any anotherAny = xPropSet->getPropertyValue("CustomShapeReplacementURL");
-        rtl::OUString sCustomShapeReplacementURL;
+        OUString sCustomShapeReplacementURL;
         if(anotherAny >>= sCustomShapeReplacementURL)
             dumpCustomShapeReplacementURLAsAttribute(sCustomShapeReplacementURL, xmlWriter);
     }
@@ -1711,7 +1711,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-    rtl::OUString aName;
+    OUString aName;
 
     dumpPositionAsAttribute(xShape->getPosition(), xmlWriter);
     dumpSizeAsAttribute(xShape->getSize(), xmlWriter);
@@ -1721,7 +1721,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     // uno::Sequence<beans::Property> aProperties = xPropSetInfo->getProperties();
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
-    uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
+    uno::Sequence< OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
 
     uno::Reference< beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     if(xInfo->hasPropertyByName("Name"))
@@ -1730,7 +1730,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         if (aAny >>= aName)
         {
             if (!aName.isEmpty())
-                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+                xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
         }
     }
 
@@ -1739,9 +1739,9 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
     if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
-        rtl::OUString aText = xText->getString();
+        OUString aText = xText->getString();
         if(!aText.isEmpty())
-            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
     }
     if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
         dumpTextPropertiesService(xPropSet, xmlWriter);
@@ -1810,7 +1810,7 @@ void dumpXShape(uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWr
         for (sal_Int32 i = 0; i < nServices; ++i)
         {
             xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
-            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", rtl::OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
+            xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
             xmlTextWriterEndElement( xmlWriter );
         }
     #endif
@@ -1833,10 +1833,10 @@ void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr x
 }
 } //end of namespace
 
-rtl::OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
+OUString XShapeDumper::dump(uno::Reference<drawing::XShapes> xPageShapes)
 {
 
-    rtl::OStringBuffer aString;
+    OStringBuffer aString;
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );

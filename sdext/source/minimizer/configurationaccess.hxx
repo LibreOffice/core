@@ -38,7 +38,7 @@
 
 struct OptimizerSettings
 {
-    rtl::OUString   maName;
+    OUString   maName;
     sal_Bool        mbJPEGCompression;
     sal_Int32       mnJPEGQuality;
     sal_Bool        mbRemoveCropArea;
@@ -49,10 +49,10 @@ struct OptimizerSettings
     sal_Bool        mbDeleteUnusedMasterPages;
     sal_Bool        mbDeleteHiddenSlides;
     sal_Bool        mbDeleteNotesPages;
-    rtl::OUString   maCustomShowName;
+    OUString   maCustomShowName;
     sal_Bool        mbSaveAs;
-    rtl::OUString   maSaveAsURL;
-    rtl::OUString   maFilterName;
+    OUString   maSaveAsURL;
+    OUString   maFilterName;
     sal_Bool        mbOpenNewDocument;
     sal_Int64       mnEstimatedFileSize;
 
@@ -87,8 +87,8 @@ class ConfigurationAccess
         ~ConfigurationAccess();
         void SaveConfiguration();
 
-        rtl::OUString getPath( const PPPOptimizerTokenEnum );
-        rtl::OUString getString( const PPPOptimizerTokenEnum ) const;
+        OUString getPath( const PPPOptimizerTokenEnum );
+        OUString getString( const PPPOptimizerTokenEnum ) const;
 
         // access to current OptimizerSettings (stored in the first entry of maSettings)
         com::sun::star::uno::Any GetConfigProperty( const PPPOptimizerTokenEnum ) const;
@@ -102,7 +102,7 @@ class ConfigurationAccess
 
         // getting access to the OptimizerSettings list
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };
-        std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const rtl::OUString& rName );
+        std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const OUString& rName );
 
     private :
 
@@ -113,7 +113,7 @@ class ConfigurationAccess
                 return s1 < s2;
             }
         };
-        std::map < PPPOptimizerTokenEnum, rtl::OUString, Compare > maStrings;
+        std::map < PPPOptimizerTokenEnum, OUString, Compare > maStrings;
 
         std::vector< OptimizerSettings > maSettings;
         std::vector< OptimizerSettings > maInitialSettings;
@@ -124,7 +124,7 @@ class ConfigurationAccess
         void LoadConfiguration();
         com::sun::star::uno::Reference< com::sun::star::uno::XInterface > OpenConfiguration( bool bReadOnly );
         com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetConfigurationNode(
-            const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xRoot, const rtl::OUString& sPathToNode );
+            const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xRoot, const OUString& sPathToNode );
 };
 
 #endif  // _CONFIGURATION_ACCESS_HXX_

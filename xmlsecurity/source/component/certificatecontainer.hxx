@@ -42,38 +42,38 @@ using namespace ::com::sun::star::lang;
 class CertificateContainer : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XServiceInfo, ::com::sun::star::security::XCertificateContainer >
 {
     private:
-        typedef std::map< ::rtl::OUString, ::rtl::OUString > Map;
+        typedef std::map< OUString, OUString > Map;
         Map certMap;
         Map certTrustMap;
 
-        ::sal_Bool SAL_CALL searchMap( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name, Map &_certMap  );
-        virtual ::sal_Bool SAL_CALL isTemporaryCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Bool SAL_CALL isCertificateTrust( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
+        ::sal_Bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
+        virtual ::sal_Bool SAL_CALL isTemporaryCertificate( const OUString & url, const OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL isCertificateTrust( const OUString & url, const OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
 
     public:
 
         CertificateContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) {};
         virtual ~CertificateContainer(){};
 
-        virtual ::sal_Bool SAL_CALL addCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name, ::sal_Bool trust ) throw(::com::sun::star::uno::RuntimeException);
-        virtual ::security::CertificateContainerStatus SAL_CALL hasCertificate( const ::rtl::OUString & url, const ::rtl::OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, ::sal_Bool trust ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) throw(::com::sun::star::uno::RuntimeException);
         // provide factory
-    static ::rtl::OUString SAL_CALL
+    static OUString SAL_CALL
                                         impl_getStaticImplementationName( ) throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
                     impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
                                         getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL
-                                        supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+                                        supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
                                         getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 };

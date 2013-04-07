@@ -59,8 +59,8 @@ namespace
     // comparing two property descriptions (by name)
     struct PropertyDescriptionNameMatch : public ::std::unary_function< PropertyDescription, bool >
     {
-        ::rtl::OUString m_rCompare;
-        PropertyDescriptionNameMatch( const ::rtl::OUString& _rCompare ) : m_rCompare( _rCompare ) { }
+        OUString m_rCompare;
+        PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
 
         bool operator() (const PropertyDescription& x ) const
         {
@@ -84,7 +84,7 @@ OPropertyContainerHelper::~OPropertyContainerHelper()
 }
 
 //--------------------------------------------------------------------------
-void OPropertyContainerHelper::registerProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle,
+void OPropertyContainerHelper::registerProperty(const OUString& _rName, sal_Int32 _nHandle,
         sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType)
 {
     OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) == 0,
@@ -112,7 +112,7 @@ void OPropertyContainerHelper::revokeProperty( sal_Int32 _nHandle )
 }
 
 //--------------------------------------------------------------------------
-void OPropertyContainerHelper::registerMayBeVoidProperty(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+void OPropertyContainerHelper::registerMayBeVoidProperty(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         Any* _pPointerToMember, const Type& _rExpectedType)
 {
     OSL_ENSURE((_nAttributes & PropertyAttribute::MAYBEVOID) != 0,
@@ -134,7 +134,7 @@ void OPropertyContainerHelper::registerMayBeVoidProperty(const ::rtl::OUString& 
 
 
 //--------------------------------------------------------------------------
-void OPropertyContainerHelper::registerPropertyNoMember(const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
+void OPropertyContainerHelper::registerPropertyNoMember(const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes,
         const Type& _rType, const void* _pInitialValue)
 {
     OSL_ENSURE(!_rType.equals(::getCppuType(static_cast< Any* >(NULL))),
@@ -161,7 +161,7 @@ sal_Bool OPropertyContainerHelper::isRegisteredProperty( sal_Int32 _nHandle ) co
 }
 
 //--------------------------------------------------------------------------
-sal_Bool OPropertyContainerHelper::isRegisteredProperty( const ::rtl::OUString& _rName ) const
+sal_Bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) const
 {
     // TODO: the current structure is from a time where properties were
     // static, not dynamic. Since we allow that properties are also dynamic,
@@ -214,7 +214,7 @@ namespace
 {
     void lcl_throwIllegalPropertyValueTypeException( const PropertyDescription& _rProperty, const Any& _rValue )
     {
-        ::rtl::OUStringBuffer aErrorMessage;
+        OUStringBuffer aErrorMessage;
         aErrorMessage.appendAscii( "The given value cannot be converted to the required property type." );
         aErrorMessage.appendAscii( "\n(property name \"" );
         aErrorMessage.append( _rProperty.aProperty.Name );
@@ -464,7 +464,7 @@ OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHan
 }
 
 //--------------------------------------------------------------------------
-const Property& OPropertyContainerHelper::getProperty( const ::rtl::OUString& _rName ) const
+const Property& OPropertyContainerHelper::getProperty( const OUString& _rName ) const
 {
     ConstPropertiesIterator pos = ::std::find_if(
         m_aProperties.begin(),

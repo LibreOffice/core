@@ -63,8 +63,6 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-using rtl::OUString;
-using rtl::OUStringToOString;
 
 using osl::MutexGuard;
 
@@ -102,8 +100,8 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
                       const Reference< XInterface > & owner,
                       ConnectionSettings **ppSettings,
                       PGresult * result,
-                      const rtl::OUString &schema,
-                      const rtl::OUString &table)
+                      const OUString &schema,
+                      const OUString &table)
     : BaseResultSet(
         refMutex, owner, PQntuples( result ),
         PQnfields( result ),(*ppSettings)->tc ),
@@ -140,7 +138,7 @@ Any ResultSet::getValue( sal_Int32 columnIndex )
     else
     {
         m_wasNull = false;
-        ret <<= ::rtl::OUString(
+        ret <<= OUString(
             PQgetvalue( m_result, m_row , columnIndex -1 ) ,
             PQgetlength( m_result, m_row , columnIndex -1 ) ,
             (*m_ppSettings)->encoding );
@@ -176,7 +174,7 @@ Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, 
         m_refMutex, this, this, m_ppSettings, m_result, m_schema, m_table );
 }
 
-sal_Int32 ResultSet::findColumn( const ::rtl::OUString& columnName )
+sal_Int32 ResultSet::findColumn( const OUString& columnName )
         throw (SQLException, RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );

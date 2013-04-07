@@ -35,15 +35,15 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-sdbcx::ObjectType MacabTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
 {
-    ::rtl::OUString aName,aSchema;
-    aSchema = ::rtl::OUString("%");
+    OUString aName,aSchema;
+    aSchema = OUString("%");
     aName = _rName;
 
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("%");
-    ::rtl::OUString sEmpty;
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("%");
+    OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 

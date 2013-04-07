@@ -117,9 +117,9 @@ namespace
         catch(Exception&)
         {
     #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
-            sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
-            sMessage += ::rtl::OString("!");
+            OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
+            sMessage += OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
+            sMessage += OString("!");
             OSL_FAIL(sMessage.getStr());
     #endif
         }
@@ -589,9 +589,9 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             catch(Exception&)
             {
 #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
-                aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
-                aMessage += ::rtl::OString("!");
+                OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
+                aMessage += OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
+                aMessage += OString("!");
                 OSL_FAIL(aMessage.getStr());
 #endif
             }
@@ -902,7 +902,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
 
 #if OSL_DEBUG_LEVEL > 0
 //-------------------------------------------------------------------------
-::rtl::OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
+OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
 {
     OUString aString;
 
@@ -918,7 +918,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
             aString = indirectPos->second;
     }
 
-    ::rtl::OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
+    OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
     return aReturn;
 }
 #endif
@@ -937,9 +937,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             }
             else {
                 OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no string)!" )
+                    (   OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=  OString( translatePropertyId( _nId ) )
+                    +=  OString( " should be no string)!" )
                     ).getStr()
                 );
             }
@@ -967,9 +967,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             }
             else {
                 OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no boolean)!" )
+                    (   OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=  OString( translatePropertyId( _nId ) )
+                    +=  OString( " should be no boolean)!" )
                     ).getStr()
                 );
             }
@@ -984,9 +984,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             }
             else {
                 OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no int)!" )
+                    (   OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=  OString( translatePropertyId( _nId ) )
+                    +=  OString( " should be no int)!" )
                     ).getStr()
                 );
             }
@@ -1017,9 +1017,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             }
             else {
                 OSL_FAIL(
-                    (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
-                    +=  ::rtl::OString( translatePropertyId( _nId ) )
-                    +=  ::rtl::OString( " should be no string sequence)!" )
+                    (   OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
+                    +=  OString( translatePropertyId( _nId ) )
+                    +=  OString( " should be no string sequence)!" )
                     ).getStr()
                 );
             }

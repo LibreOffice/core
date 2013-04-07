@@ -68,7 +68,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    Reference< XPropertySet > OFormLayerXMLImport::lookupControl(const ::rtl::OUString& _rId)
+    Reference< XPropertySet > OFormLayerXMLImport::lookupControl(const OUString& _rId)
     {
         return m_pImpl->lookupControlId(_rId);
     }
@@ -77,20 +77,20 @@ namespace xmloff
     SvXMLImportContext* OFormLayerXMLImport::createOfficeFormsContext(
         SvXMLImport& _rImport,
         sal_uInt16 _nPrefix,
-        const rtl::OUString& _rLocalName)
+        const OUString& _rLocalName)
     {
         return m_pImpl->createOfficeFormsContext(_rImport, _nPrefix, _rLocalName);
     }
 
     //---------------------------------------------------------------------
-    SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormLayerXMLImport::createContext(const sal_uInt16 _nPrefix, const OUString& _rLocalName,
         const Reference< xml::sax::XAttributeList >& _rxAttribs)
     {
         return m_pImpl->createContext(_nPrefix, _rLocalName, _rxAttribs);
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
+    void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const OUString& _rControlNumerStyleName)
     {
         m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
     }

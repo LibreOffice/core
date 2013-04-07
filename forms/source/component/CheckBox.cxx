@@ -62,7 +62,7 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 1);
 
-    ::rtl::OUString* pArray = aSupported.getArray();
+    OUString* pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_CHECKBOX;
     return aSupported;
 }
@@ -114,7 +114,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
 
     sal_Int32 nOldLen = aSupported.getLength();
     aSupported.realloc( nOldLen + 8 );
-    ::rtl::OUString* pStoreTo = aSupported.getArray() + nOldLen;
+    OUString* pStoreTo = aSupported.getArray() + nOldLen;
 
     *pStoreTo++ = BINDABLE_CONTROL_MODEL;
     *pStoreTo++ = DATA_AWARE_CONTROL_MODEL;
@@ -139,7 +139,7 @@ void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_CHECKBOX;  // old (non-sun) name for compatibility !
 }
@@ -169,7 +169,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-    ::rtl::OUString sReferenceValue;
+    OUString sReferenceValue;
     sal_Int16       nDefaultChecked( 0 );
     switch ( nVersion )
     {

@@ -32,10 +32,10 @@ public:
     // Methods which are shared.
     sal_Int16 SAL_CALL getType() throw(com::sun::star::uno::RuntimeException);
 
-    rtl::OUString SAL_CALL transliterate(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    OUString SAL_CALL transliterate(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException);
 
-        rtl::OUString SAL_CALL
+        OUString SAL_CALL
         transliterateChar2String( sal_Unicode inChar)
         throw(com::sun::star::uno::RuntimeException);
 
@@ -44,16 +44,16 @@ public:
         throw(com::sun::star::uno::RuntimeException,
         com::sun::star::i18n::MultipleCharsOutputException);
 
-    rtl::OUString SAL_CALL folding(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    OUString SAL_CALL folding(const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         com::sun::star::uno::Sequence< sal_Int32 >& offset) throw(com::sun::star::uno::RuntimeException);
 
     sal_Bool SAL_CALL equals(
-        const rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
-        const rtl::OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
+        const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
+        const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
         throw(com::sun::star::uno::RuntimeException);
 
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL transliterateRange( const rtl::OUString& str1,
-        const rtl::OUString& str2 ) throw(com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence< OUString > SAL_CALL transliterateRange( const OUString& str1,
+        const OUString& str2 ) throw(com::sun::star::uno::RuntimeException);
 
 protected:
     sal_uInt8 nMappingType;
@@ -95,7 +95,7 @@ class Transliteration_titlecase : public Transliteration_body
 public:
     Transliteration_titlecase();
 
-    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
 };
 
 class Transliteration_sentencecase : public Transliteration_body
@@ -103,7 +103,7 @@ class Transliteration_sentencecase : public Transliteration_body
 public:
     Transliteration_sentencecase();
 
-    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
 };
 #endif
 

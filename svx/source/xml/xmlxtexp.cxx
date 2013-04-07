@@ -180,12 +180,12 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
     try
     {
         xProps->setPropertyValue(
-            rtl::OUString( "MediaType" ),
-            uno::makeAny( rtl::OUString( "text/xml" ) ) );
+            OUString( "MediaType" ),
+            uno::makeAny( OUString( "text/xml" ) ) );
 
         // use stock encryption
         xProps->setPropertyValue(
-            rtl::OUString( "UseCommonStoragePasswordEncryption" ),
+            OUString( "UseCommonStoragePasswordEncryption" ),
             uno::makeAny( sal_True ) );
     } catch ( const uno::Exception & )
     {
@@ -199,7 +199,7 @@ static void createStorageStream( uno::Reference < io::XOutputStream > *xOut,
 {
     uno::Reference < io::XStream > xStream;
     xStream = xSubStorage->openStreamElement(
-                        rtl::OUString( "Content.xml" ),
+                        OUString( "Content.xml" ),
                         embed::ElementModes::WRITE );
     *ppGraphicHelper = SvXMLGraphicHelper::Create( xSubStorage, GRAPHICHELPER_MODE_WRITE );
     initializeStreamMetadata( xStream );
@@ -210,7 +210,7 @@ bool SvxXMLXTableExportComponent::save(
         const OUString& rURL,
         const uno::Reference<container::XNameContainer >& xTable,
         const uno::Reference<embed::XStorage >& xStorage,
-        rtl::OUString *pOptName ) throw()
+        OUString *pOptName ) throw()
 {
     bool bRet = false;
     SfxMedium* pMedium = NULL;
@@ -259,7 +259,7 @@ bool SvxXMLXTableExportComponent::save(
         }
         else // save into the xSubStorage
         {
-            rtl::OUString aPath = rURL;
+            OUString aPath = rURL;
 
             if( bSaveAsStorage )
             {
@@ -272,7 +272,7 @@ bool SvxXMLXTableExportComponent::save(
             }
             else
             {
-                aPath += rtl::OUString( ".xml" );
+                aPath += OUString( ".xml" );
                 try {
                     xStream = xStorage->openStreamElement( aPath, eCreate );
                     if( !xStream.is() )

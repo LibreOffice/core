@@ -31,7 +31,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-rtl::OUString sDocCtxName("WordDocumentContext");
+OUString sDocCtxName("WordDocumentContext");
 
 // =============================================================================
 // SwVbaGlobals
@@ -41,7 +41,7 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
 {
     OSL_TRACE("SwVbaGlobals::SwVbaGlobals()");
         uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
-        aInitArgs[ 0 ].Name = rtl::OUString("Application");
+        aInitArgs[ 0 ].Name = OUString("Application");
         aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
         aInitArgs[ 1 ].Name = sDocCtxName;
         aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
@@ -85,7 +85,7 @@ SwVbaGlobals::getActiveWindow() throw (uno::RuntimeException)
     return getApplication()->getActiveWindow();
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaGlobals::getName() throw (uno::RuntimeException)
 {
     return getApplication()->getName();
@@ -138,35 +138,35 @@ float SAL_CALL SwVbaGlobals::CentimetersToPoints( float _Centimeters ) throw (un
     return getApplication()->CentimetersToPoints( _Centimeters );
 }
 
-rtl::OUString
+OUString
 SwVbaGlobals::getServiceImplName()
 {
-    return rtl::OUString("SwVbaGlobals");
+    return OUString("SwVbaGlobals");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaGlobals::getServiceNames()
 {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Globals" );
+                aServiceNames[ 0 ] = OUString("ooo.vba.word.Globals" );
         }
         return aServiceNames;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
     static bool bInit = false;
-    static uno::Sequence< rtl::OUString > serviceNames( SwVbaGlobals_BASE::getAvailableServiceNames() );
+    static uno::Sequence< OUString > serviceNames( SwVbaGlobals_BASE::getAvailableServiceNames() );
     if ( !bInit )
     {
-         rtl::OUString names[] = {
-            ::rtl::OUString( "ooo.vba.word.Document" ),
+         OUString names[] = {
+            OUString( "ooo.vba.word.Document" ),
 //            #FIXME #TODO make Application a proper service
-//            ::rtl::OUString( "ooo.vba.word.Application" ),
+//            OUString( "ooo.vba.word.Application" ),
         };
         sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();

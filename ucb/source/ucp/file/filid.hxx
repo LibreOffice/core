@@ -37,7 +37,7 @@ namespace fileaccess {
         // This implementation has to be reworked
     public:
         FileContentIdentifier( shell* pMyShell,
-                               const rtl::OUString& aUnqPath,
+                               const OUString& aUnqPath,
                                sal_Bool IsNormalized = true );
 
         virtual ~FileContentIdentifier();
@@ -70,21 +70,21 @@ namespace fileaccess {
             throw( com::sun::star::uno::RuntimeException );
 
         // XContentIdentifier
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentIdentifier(
             void )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getContentProviderScheme(
             void )
             throw( com::sun::star::uno::RuntimeException );
 
     private:
         shell* m_pMyShell;
-        rtl::OUString m_aContentId;              // The URL string
-        rtl::OUString m_aNormalizedId;           // The somehow normalized string
-        rtl::OUString m_aProviderScheme;
+        OUString m_aContentId;              // The URL string
+        OUString m_aNormalizedId;           // The somehow normalized string
+        OUString m_aProviderScheme;
     };
 
 } // end namespace fileaccess

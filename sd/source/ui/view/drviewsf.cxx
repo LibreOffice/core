@@ -58,7 +58,6 @@
 #include "cfgids.hxx"
 #include "anminfo.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 namespace sd {

@@ -34,7 +34,7 @@ struct CommentModel
     ::com::sun::star::table::CellRangeAddress
                         maRange;            /// Position of the comment in the worksheet.
     RichStringRef       mxText;             /// Formatted text of the comment (not used in BIFF8).
-    ::rtl::OUString     maAuthor;           /// Comment author (BIFF8 only).
+    OUString     maAuthor;           /// Comment author (BIFF8 only).
     sal_Int32           mnAuthorId;         /// Identifier of the comment's author (OOXML and BIFF12 only).
     sal_uInt16          mnObjId;            /// Drawing object identifier (BIFF8 only).
     sal_Bool            mbAutoFill;         /// Auto Selection of comment object's fill style
@@ -85,7 +85,7 @@ public:
     explicit            CommentsBuffer( const WorksheetHelper& rHelper );
 
     /** Appends a new author to the list of comment authors. */
-    void                appendAuthor( const ::rtl::OUString& rAuthor );
+    void                appendAuthor( const OUString& rAuthor );
     /** Creates and returns a new comment. */
     CommentRef          createComment();
 
@@ -93,7 +93,7 @@ public:
     void                finalizeImport();
 
 private:
-    typedef ::std::vector< ::rtl::OUString >    OUStringVector;
+    typedef ::std::vector< OUString >    OUStringVector;
     typedef RefVector< Comment >                CommentVector;
 
     OUStringVector      maAuthors;

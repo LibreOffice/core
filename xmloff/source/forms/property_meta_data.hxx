@@ -27,7 +27,7 @@ namespace xmloff { namespace metadata
 {
 //......................................................................................................................
 
-    const PropertyDescription* getPropertyDescription( const ::rtl::OUString& i_propertyName );
+    const PropertyDescription* getPropertyDescription( const OUString& i_propertyName );
 
     /** retries the descriptions of all properties which add to the given XML attribute
 
@@ -49,7 +49,7 @@ namespace xmloff { namespace metadata
     /** retrieves the attribute descriptor for the attribute given by namespace prefix and attribute name
     */
     AttributeDescription
-        getAttributeDescription( const sal_uInt16 i_namespacePrefix, const ::rtl::OUString& i_attributeName );
+        getAttributeDescription( const sal_uInt16 i_namespacePrefix, const OUString& i_attributeName );
 
 //......................................................................................................................
 } } // namespace xmloff::metadata

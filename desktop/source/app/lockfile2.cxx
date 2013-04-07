@@ -33,9 +33,9 @@ bool Lockfile_execWarning( Lockfile * that )
     String aLockname = that->m_aLockname;
     Config aConfig(aLockname);
     aConfig.SetGroup( LOCKFILE_GROUP );
-    rtl::OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-    rtl::OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
-    rtl::OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
+    OString aHost  = aConfig.ReadKey( LOCKFILE_HOSTKEY );
+    OString aUser  = aConfig.ReadKey( LOCKFILE_USERKEY );
+    OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
     // display warning and return response
     QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );
@@ -45,11 +45,11 @@ bool Lockfile_execWarning( Lockfile * that )
     // insert values...
     String aMsgText = aBox.GetMessText( );
     aMsgText.SearchAndReplaceAscii(
-        "$u", rtl::OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
+        "$u", OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
     aMsgText.SearchAndReplaceAscii(
-        "$h", rtl::OStringToOUString( aHost, RTL_TEXTENCODING_ASCII_US) );
+        "$h", OStringToOUString( aHost, RTL_TEXTENCODING_ASCII_US) );
     aMsgText.SearchAndReplaceAscii(
-        "$t", rtl::OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
+        "$t", OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
     aBox.SetMessText(aMsgText);
     // do it
     return aBox.Execute( ) == RET_YES;

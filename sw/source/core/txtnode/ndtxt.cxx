@@ -1470,7 +1470,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     {
         // #i111677# cache expansion of source (for clipboard)
         pDest->m_pNumStringCache.reset(
-            new ::rtl::OUString(this->GetNumString()));
+            new OUString(this->GetNumString()));
     }
 
     if( !nLen )
@@ -3157,7 +3157,7 @@ struct containsPos
 
 ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
 {
-    const rtl::OUString& rNodeText = rNode.GetTxt();
+    const OUString& rNodeText = rNode.GetTxt();
     m_aRetText = rNodeText;
 
     if (eMode == PASSTHROUGH)
@@ -3223,7 +3223,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
             const sal_Int32 nHiddenStart = i->m_nStart;
             const sal_Int32 nHiddenLen = i->m_nLen;
 
-            m_aRetText = m_aRetText.replaceAt( nOffset + nHiddenStart, nHiddenLen, rtl::OUString() );
+            m_aRetText = m_aRetText.replaceAt( nOffset + nHiddenStart, nHiddenLen, OUString() );
             m_aMap.push_back( ConversionMapEntry( nHiddenStart, nOffset + nHiddenStart ) );
             nOffset -= nHiddenLen;
         }
@@ -3233,7 +3233,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, int eMode)
             {
                 const SwTxtAttr* pAttr = *j;
                 xub_StrLen nFieldPos = *pAttr->GetStart();
-                rtl::OUString aExpand;
+                OUString aExpand;
                 switch (pAttr->Which())
                 {
                     case RES_TXTATR_FIELD:

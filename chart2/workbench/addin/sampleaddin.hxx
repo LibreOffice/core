@@ -62,8 +62,8 @@ public:
     virtual ~SampleAddIn();
 
     // class specific code
-    static ::rtl::OUString  getImplementationName_Static();
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
+    static OUString  getImplementationName_Static();
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     sal_Bool getLogicalPosition( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xAxis,
                                  double fValue,
@@ -76,7 +76,7 @@ public:
                ::com::sun::star::uno::RuntimeException );
 
     // XDiagram
-    virtual ::rtl::OUString SAL_CALL getDiagramType() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getDiagramType() throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getDataRowProperties( sal_Int32 nRow )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException );
@@ -96,7 +96,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XShapeDescriptor ( ::XShape ::XDiagram )
-    virtual rtl::OUString SAL_CALL getShapeType() throw( com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getShapeType() throw( com::sun::star::uno::RuntimeException );
 
     // XAxisXSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > SAL_CALL getXAxisTitle()
@@ -127,13 +127,13 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceName
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getServiceName() throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XRefreshable

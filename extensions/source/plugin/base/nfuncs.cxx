@@ -90,9 +90,6 @@ void TRACES( char const* s, char const* s2 )
 
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
 
 // Move deprecated functions which no longer appear in npapi.h before
 // their use to avoid errors that they're undeclared at point of use
@@ -139,12 +136,12 @@ NPNetscapeFuncs aNPNFuncs =
     NPN_ForceRedraw
 };
 
-static ::rtl::OString normalizeURL( XPlugin_Impl* plugin, const ::rtl::OString& url )
+static OString normalizeURL( XPlugin_Impl* plugin, const OString& url )
 {
-    ::rtl::OString aLoadURL;
+    OString aLoadURL;
     if( url.indexOf( ':' ) == -1 )
     {
-        aLoadURL = ::rtl::OUStringToOString( plugin->getCreationURL(), plugin->getTextEncoding() );
+        aLoadURL = OUStringToOString( plugin->getCreationURL(), plugin->getTextEncoding() );
         int nPos;
         if( ( nPos = aLoadURL.indexOf( "://" ) ) != -1 )
         {
@@ -316,8 +313,8 @@ extern "C" {
             pImpl->getPluginContext()->
                 newStream(
                     pImpl,
-                    ::rtl::OStringToOUString( type, pImpl->getTextEncoding () ),
-                    ::rtl::OStringToOUString( target, pImpl->getTextEncoding() ),
+                    OStringToOUString( type, pImpl->getTextEncoding () ),
+                    OStringToOUString( target, pImpl->getTextEncoding() ),
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > ( pStream->getOutputStream(), UNO_QUERY )
                     );
             pImpl->leavePluginCallback();
@@ -340,7 +337,7 @@ extern "C" {
 
         ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buf, len );
 
-        ::rtl::OString aPostURL = normalizeURL( pImpl, url );
+        OString aPostURL = normalizeURL( pImpl, url );
         PluginEventListener* pListener =
             new PluginEventListener( pImpl, url, aPostURL.getStr(), notifyData );
 
@@ -357,8 +354,8 @@ extern "C" {
             pImpl->enterPluginCallback();
             pImpl->getPluginContext()->
                 postURLNotify( pImpl,
-                               ::rtl::OStringToOUString( aPostURL, pImpl->getTextEncoding() ),
-                               ::rtl::OStringToOUString( target, pImpl->getTextEncoding() ),
+                               OStringToOUString( aPostURL, pImpl->getTextEncoding() ),
+                               OStringToOUString( target, pImpl->getTextEncoding() ),
                                Bytes,
                                file,
                                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > ( pListener ) );
@@ -381,14 +378,14 @@ extern "C" {
             return NPERR_INVALID_INSTANCE_ERROR;
 
         ::com::sun::star::uno::Sequence<sal_Int8> Bytes( (sal_Int8*)buf, len );
-        ::rtl::OString aPostURL = normalizeURL( pImpl, url );
+        OString aPostURL = normalizeURL( pImpl, url );
         try
         {
             pImpl->enterPluginCallback();
             pImpl->getPluginContext()->
                 postURL( pImpl,
-                         ::rtl::OStringToOUString( aPostURL, pImpl->getTextEncoding() ),
-                         ::rtl::OStringToOUString( window, pImpl->getTextEncoding () ),
+                         OStringToOUString( aPostURL, pImpl->getTextEncoding() ),
+                         OStringToOUString( window, pImpl->getTextEncoding () ),
                          Bytes,
                          file );
             pImpl->leavePluginCallback();
@@ -475,7 +472,7 @@ extern "C" {
         {
             pImpl->enterPluginCallback();
             pImpl->getPluginContext()->
-                displayStatusText( pImpl, ::rtl::OStringToOUString( message, pImpl->getTextEncoding() ) );
+                displayStatusText( pImpl, OStringToOUString( message, pImpl->getTextEncoding() ) );
             pImpl->leavePluginCallback();
         }
         catch( const ::com::sun::star::plugin::PluginException& )
@@ -492,7 +489,7 @@ extern "C" {
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
         if( pImpl )
         {
-            rtl::OUString UserAgent;
+            OUString UserAgent;
             try
             {
                 pImpl->enterPluginCallback();
@@ -501,7 +498,7 @@ extern "C" {
                 pImpl->leavePluginCallback();
                 if( pAgent )
                     free( pAgent );
-                pAgent = strdup( ::rtl::OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
+                pAgent = strdup( OUStringToOString( UserAgent, pImpl->getTextEncoding() ).getStr() );
             }
             catch( const ::com::sun::star::plugin::PluginException& )
             {

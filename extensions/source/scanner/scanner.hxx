@@ -37,8 +37,6 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::scanner;
 
-using ::rtl::OUString;
-
 class ScannerManager : public OWeakObject, XScannerManager2, css::awt::XBitmap
 {
 protected:

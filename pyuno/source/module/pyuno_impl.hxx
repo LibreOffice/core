@@ -144,21 +144,21 @@ static const sal_Int32 ARGS = 2;
 }
 
 bool isLog( RuntimeCargo *cargo, sal_Int32 loglevel );
-void log( RuntimeCargo *cargo, sal_Int32 level, const rtl::OUString &logString );
+void log( RuntimeCargo *cargo, sal_Int32 level, const OUString &logString );
 void log( RuntimeCargo *cargo, sal_Int32 level, const char *str );
 void logCall( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const rtl::OUString & aFunctionName,
+              void * ptr, const OUString & aFunctionName,
               const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
 void logReply( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const rtl::OUString & aFunctionName,
+              void * ptr, const OUString & aFunctionName,
               const com::sun::star::uno::Any &returnValue,
               const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & args );
 void logException( RuntimeCargo *cargo, const char *intro,
-                   void * ptr, const rtl::OUString &aFunctionName,
+                   void * ptr, const OUString &aFunctionName,
                    const void * data, const com::sun::star::uno::Type & type );
 static const sal_Int32 VAL2STR_MODE_DEEP = 0;
 static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
-rtl::OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW(());
+OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW(());
 //--------------------------------------------------
 
 typedef ::boost::unordered_map
@@ -172,18 +172,18 @@ typedef ::boost::unordered_map
 
 typedef ::boost::unordered_map
 <
-rtl::OUString,
+OUString,
 PyRef,
-rtl::OUStringHash,
-std::equal_to<rtl::OUString>
+OUStringHash,
+std::equal_to<OUString>
 > ExceptionClassMap;
 
 typedef ::boost::unordered_map
 <
-    rtl::OUString,
+    OUString,
     com::sun::star::uno::Sequence< sal_Int16 >,
-    rtl::OUStringHash,
-    std::equal_to< rtl::OUString >
+    OUStringHash,
+    std::equal_to< OUString >
 > MethodOutIndexMap;
 
 typedef ::boost::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSet;
@@ -208,9 +208,9 @@ typedef struct
     PyUNOInternals* members;
 } PyUNO;
 
-PyRef ustring2PyUnicode( const rtl::OUString &source );
-PyRef ustring2PyString( const ::rtl::OUString & source );
-rtl::OUString pyString2ustring( PyObject *str );
+PyRef ustring2PyUnicode( const OUString &source );
+PyRef ustring2PyString( const OUString & source );
+OUString pyString2ustring( PyObject *str );
 
 
 PyRef AnyToPyObject (const com::sun::star::uno::Any & a, const Runtime &r )
@@ -226,7 +226,7 @@ com::sun::star::uno::TypeClass StringToTypeClass (char* string);
 
 PyRef PyUNO_callable_new (
     const com::sun::star::uno::Reference<com::sun::star::script::XInvocation2> &xInv,
-    const rtl::OUString &methodName,
+    const OUString &methodName,
     const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> &ssf,
     const com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter> &tc,
     ConversionMode mode = REJECT_UNO_ANY );
@@ -242,7 +242,7 @@ PyRef getBoolClass( const Runtime &);
 PyRef getCharClass( const Runtime &);
 PyRef getByteSequenceClass( const Runtime & );
 PyRef getPyUnoClass();
-PyRef getClass( const rtl::OUString & name , const Runtime & runtime );
+PyRef getClass( const OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
@@ -308,7 +308,7 @@ class Adapter : public cppu::WeakImplHelper2<
     MethodOutIndexMap m_methodOutIndexMap;
 
 private:
-    com::sun::star::uno::Sequence< sal_Int16 > getOutIndexes( const rtl::OUString & functionName );
+    com::sun::star::uno::Sequence< sal_Int16 > getOutIndexes( const OUString & functionName );
 
 public:
 public:
@@ -324,7 +324,7 @@ public:
     virtual com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess >
            SAL_CALL getIntrospection(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL invoke(
-        const ::rtl::OUString& aFunctionName,
+        const OUString& aFunctionName,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aParams,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam )
@@ -334,19 +334,19 @@ public:
                ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setValue(
-        const ::rtl::OUString& aPropertyName,
+        const OUString& aPropertyName,
         const ::com::sun::star::uno::Any& aValue )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::script::CannotConvertException,
                ::com::sun::star::reflection::InvocationTargetException,
                ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName )
+    virtual ::com::sun::star::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
         throw (::com::sun::star::beans::UnknownPropertyException,
                ::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel

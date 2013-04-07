@@ -108,7 +108,7 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
         {
             // determine the type of this property
             ::cppu::IPropertyArrayHelper& rPropertyMetaData = getInfoHelper();
-            ::rtl::OUString sPropName;
+            OUString sPropName;
             OSL_VERIFY( rPropertyMetaData.fillPropertyMembersByHandle( &sPropName, NULL, nHandle ) );
             Property aProperty = rPropertyMetaData.getPropertyByName( sPropName );
             // default construct a value of this type
@@ -161,7 +161,7 @@ sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValu
 {
     PropertyAccessorBase& rAccessor = locatePropertyHandler( nHandle );
     if ( !rAccessor.approveValue( rValue ) )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw IllegalArgumentException( OUString(), *this, 0 );
 
     rAccessor.getValue( rOldValue );
     if ( rOldValue != rValue )

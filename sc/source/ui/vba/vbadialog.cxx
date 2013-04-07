@@ -23,59 +23,59 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const rtl::OUString aStringList[]=
+static const OUString aStringList[]=
 {
-    rtl::OUString( ".uno:Open" ),
-    rtl::OUString( ".uno:FormatCellDialog" ),
-    rtl::OUString( ".uno:InsertCell" ),
-    rtl::OUString( ".uno:Print" ),
-    rtl::OUString( ".uno:PasteSpecial" ),
-    rtl::OUString( ".uno:ToolProtectionDocument" ),
-    rtl::OUString( ".uno:ColumnWidth" ),
-    rtl::OUString( ".uno:DefineName" ),
-    rtl::OUString( ".uno:ConfigureDialog" ),
-    rtl::OUString( ".uno:HyperlinkDialog" ),
-    rtl::OUString( ".uno:InsertGraphic" ),
-    rtl::OUString( ".uno:InsertObject" ),
-    rtl::OUString( ".uno:PageFormatDialog" ),
-    rtl::OUString( ".uno:DataSort" ),
-    rtl::OUString( ".uno:RowHeight" ),
-    rtl::OUString( ".uno:AutoCorrectDlg" ),
-    rtl::OUString( ".uno:ConditionalFormatDialog" ),
-    rtl::OUString( ".uno:DataConsolidate" ),
-    rtl::OUString( ".uno:CreateNames" ),
-    rtl::OUString( ".uno:FillSeries" ),
-    rtl::OUString( ".uno:Validation"),
-    rtl::OUString( ".uno:DefineLabelRange" ),
-    rtl::OUString( ".uno:DataFilterAutoFilter" ),
-    rtl::OUString( ".uno:DataFilterSpecialFilter" ),
-    rtl::OUString( ".uno:AutoFormat" )
+    OUString( ".uno:Open" ),
+    OUString( ".uno:FormatCellDialog" ),
+    OUString( ".uno:InsertCell" ),
+    OUString( ".uno:Print" ),
+    OUString( ".uno:PasteSpecial" ),
+    OUString( ".uno:ToolProtectionDocument" ),
+    OUString( ".uno:ColumnWidth" ),
+    OUString( ".uno:DefineName" ),
+    OUString( ".uno:ConfigureDialog" ),
+    OUString( ".uno:HyperlinkDialog" ),
+    OUString( ".uno:InsertGraphic" ),
+    OUString( ".uno:InsertObject" ),
+    OUString( ".uno:PageFormatDialog" ),
+    OUString( ".uno:DataSort" ),
+    OUString( ".uno:RowHeight" ),
+    OUString( ".uno:AutoCorrectDlg" ),
+    OUString( ".uno:ConditionalFormatDialog" ),
+    OUString( ".uno:DataConsolidate" ),
+    OUString( ".uno:CreateNames" ),
+    OUString( ".uno:FillSeries" ),
+    OUString( ".uno:Validation"),
+    OUString( ".uno:DefineLabelRange" ),
+    OUString( ".uno:DataFilterAutoFilter" ),
+    OUString( ".uno:DataFilterSpecialFilter" ),
+    OUString( ".uno:AutoFormat" )
 };
 
 const sal_Int32 nDialogSize = sizeof (aStringList) / sizeof (aStringList[0]);
 
-rtl::OUString
+OUString
 ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
 {
     if( nIndex < nDialogSize )
         return aStringList[ nIndex ];
-    return rtl::OUString();
+    return OUString();
 }
 
-rtl::OUString
+OUString
 ScVbaDialog::getServiceImplName()
 {
-    return rtl::OUString("ScVbaDialog");
+    return OUString("ScVbaDialog");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaDialog::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Dialog" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Dialog" );
     }
     return aServiceNames;
 }

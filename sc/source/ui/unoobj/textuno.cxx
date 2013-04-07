@@ -321,7 +321,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
 {
-    rtl::OUString aDummy("???");
+    OUString aDummy("???");
     rData.aTitle        = aDummy;
     rData.aLongDocName  = aDummy;
     rData.aShortDocName = aDummy;
@@ -330,10 +330,10 @@ void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
     rData.nTotalPages   = 99;
 }
 
-rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException)
+OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    rtl::OUString aRet;
+    OUString aRet;
     const EditTextObject* pData;
 
     sal_uInt16 nPart = aTextData.GetPart();
@@ -360,7 +360,7 @@ rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeExce
     return aRet;
 }
 
-void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
+void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     String aString(aText);
@@ -372,7 +372,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) thr
 }
 
 void SAL_CALL ScHeaderFooterTextObj::insertString( const uno::Reference<text::XTextRange>& xRange,
-                                            const rtl::OUString& aString, sal_Bool bAbsorb )
+                                            const OUString& aString, sal_Bool bAbsorb )
                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;

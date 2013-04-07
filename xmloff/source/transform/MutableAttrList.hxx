@@ -54,24 +54,24 @@ public:
 
     // ::com::sun::star::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength(void) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getTypeByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getValueByName(const OUString& aName) throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::util::XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()   throw( ::com::sun::star::uno::RuntimeException );
 
     // methods that are not contained in any interface
-    void SetValueByIndex( sal_Int16 i, const ::rtl::OUString& rValue );
-    void AddAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sValue );
+    void SetValueByIndex( sal_Int16 i, const OUString& rValue );
+    void AddAttribute( const OUString &sName , const OUString &sValue );
 //  void Clear();
     void RemoveAttributeByIndex( sal_Int16 i );
-    void RenameAttributeByIndex( sal_Int16 i, const ::rtl::OUString& rNewName );
+    void RenameAttributeByIndex( sal_Int16 i, const OUString& rNewName );
     void AppendAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & );
 
-    sal_Int16 GetIndexByName( const ::rtl::OUString& rName ) const;
+    sal_Int16 GetIndexByName( const OUString& rName ) const;
 };
 
 

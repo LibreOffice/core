@@ -133,7 +133,7 @@ namespace dbaui
 
         void NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos );
 
-        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool bNewTable = sal_False);
+        virtual void AddTabWin(const OUString& _rComposedName, const OUString& rWinName, sal_Bool bNewTable = sal_False);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // hide all TabWins (does NOT delete them; they are put in an UNDO action)
@@ -261,9 +261,9 @@ namespace dbaui
         virtual void EnsureVisible(const OTableWindow* _pWin);
         virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);
 
-        TTableWindowData::value_type createTableWindowData(const ::rtl::OUString& _rComposedName
-                                            ,const ::rtl::OUString& _sTableName
-                                            ,const ::rtl::OUString& _rWinName);
+        TTableWindowData::value_type createTableWindowData(const OUString& _rComposedName
+                                            ,const OUString& _sTableName
+                                            ,const OUString& _rWinName);
 
     protected:
         virtual void MouseButtonUp( const MouseEvent& rEvt );
@@ -281,9 +281,9 @@ namespace dbaui
         ///     resizing) is used, as no scrolling can take place while resizing
         virtual void Command(const CommandEvent& rEvt);
 
-        virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName
-                                            ,const ::rtl::OUString& _sTableName
-                                            ,const ::rtl::OUString& _rWinName);
+        virtual OTableWindowData* CreateImpl(const OUString& _rComposedName
+                                            ,const OUString& _sTableName
+                                            ,const OUString& _rWinName);
 
         /** factory method to create table windows
 

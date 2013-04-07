@@ -154,10 +154,10 @@ public:
 
 struct ScMyAreaLink
 {
-    ::rtl::OUString             sFilter;
-    ::rtl::OUString             sFilterOptions;
-    ::rtl::OUString             sURL;
-    ::rtl::OUString             sSourceStr;
+    OUString             sFilter;
+    OUString             sFilterOptions;
+    OUString             sURL;
+    OUString             sSourceStr;
     ::com::sun::star::table::CellRangeAddress aDestRange;
     sal_Int32                   nRefresh;
 
@@ -297,8 +297,8 @@ struct ScMyCell
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
 
-    rtl::OUString               sStringValue;
-    rtl::OUString               sAnnotationText;
+    OUString               sStringValue;
+    OUString               sAnnotationText;
 
     ScMyAreaLink                aAreaLink;
     ScMyShapeList               aShapeList;

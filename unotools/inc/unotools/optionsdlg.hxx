@@ -34,12 +34,12 @@ public:
                     SvtOptionsDialogOptions();
                     virtual ~SvtOptionsDialogOptions();
 
-    sal_Bool        IsGroupHidden   (   const rtl::OUString& _rGroup ) const;
-    sal_Bool        IsPageHidden    (   const rtl::OUString& _rPage,
-                                        const rtl::OUString& _rGroup ) const;
-    sal_Bool        IsOptionHidden  (   const rtl::OUString& _rOption,
-                                        const rtl::OUString& _rPage,
-                                        const rtl::OUString& _rGroup ) const;
+    sal_Bool        IsGroupHidden   (   const OUString& _rGroup ) const;
+    sal_Bool        IsPageHidden    (   const OUString& _rPage,
+                                        const OUString& _rGroup ) const;
+    sal_Bool        IsOptionHidden  (   const OUString& _rOption,
+                                        const OUString& _rPage,
+                                        const OUString& _rGroup ) const;
 };
 
 #endif

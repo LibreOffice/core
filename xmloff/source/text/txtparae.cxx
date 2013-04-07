@@ -112,8 +112,6 @@
 #include <txtlists.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -403,14 +401,14 @@ void FieldParamExporter::Export()
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
                 Reference< embed::XStorage > xDstStg = xTargetStg->openStorageElement(
-                        rtl::OUString("OLELinks"), embed::ElementModes::WRITE );
+                        OUString("OLELinks"), embed::ElementModes::WRITE );
 
                 if ( !xDstStg->hasByName( sValue ) ) {
                     Reference< XStorageBasedDocument > xStgDoc (
                             m_pExport->GetModel( ), UNO_QUERY );
                     Reference< embed::XStorage > xDocStg = xStgDoc->getDocumentStorage();
                     Reference< embed::XStorage > xOleStg = xDocStg->openStorageElement(
-                            rtl::OUString("OLELinks"), embed::ElementModes::READ );
+                            OUString("OLELinks"), embed::ElementModes::READ );
 
                     xOleStg->copyElementTo( sValue, xDstStg, sValue );
                     Reference< embed::XTransactedObject > xTransact( xDstStg, UNO_QUERY );
@@ -838,7 +836,7 @@ void XMLTextParagraphExport::exportListChange(
             do {
                 for(size_t j = 0; j < 2; ++j)
                 {
-                    rtl::OUString aElem(pListElements->back());
+                    OUString aElem(pListElements->back());
                     pListElements->pop_back();
                     GetExport().EndElement(aElem, sal_True);
                 }
@@ -878,10 +876,10 @@ void XMLTextParagraphExport::exportListChange(
 
         if ( nListLevelsToBeOpened > 0 )
         {
-            const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            const OUString sListStyleName( rNextInfo.GetNumRulesName() );
             // Currently only the text documents support <ListId>.
             // Thus, for other document types <sListId> is empty.
-            const ::rtl::OUString sListId( rNextInfo.GetListId() );
+            const OUString sListId( rNextInfo.GetListId() );
             bool bExportListStyle( true );
             bool bRestartNumberingAtContinuedList( false );
             sal_Int32 nRestartValueForContinuedList( -1 );
@@ -907,11 +905,11 @@ void XMLTextParagraphExport::exportListChange(
                         }
                         mpTextListsHelper->KeepListAsProcessed( sListId,
                                                                 sListStyleName,
-                                                                ::rtl::OUString() );
+                                                                OUString() );
                     }
                     else
                     {
-                        const ::rtl::OUString sNewListId(
+                        const OUString sNewListId(
                                         mpTextListsHelper->GenerateNewListId() );
                         if ( bExportODF &&
                              eODFDefaultVersion >= SvtSaveOptions::ODFVER_012 &&
@@ -925,7 +923,7 @@ void XMLTextParagraphExport::exportListChange(
                                                       sNewListId );
                         }
 
-                        const ::rtl::OUString sContinueListId =
+                        const OUString sContinueListId =
                             mpTextListsHelper->GetLastContinuingListId( sListId );
                         // store that list with list id <sNewListId> is last list,
                         // which has continued list with list id <sListId>
@@ -1003,14 +1001,14 @@ void XMLTextParagraphExport::exportListChange(
 
                 enum XMLTokenEnum eLName = XML_LIST;
 
-                rtl::OUString aElem(GetExport().GetNamespaceMap().GetQNameByKey(
+                OUString aElem(GetExport().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
                 GetExport().StartElement(aElem, sal_False);
 
                 if(!pListElements)
-                    pListElements = new std::vector<rtl::OUString>;
+                    pListElements = new std::vector<OUString>;
                 pListElements->push_back(aElem);
 
                 mpTextListsHelper->PushListOnStack( sListId,
@@ -1043,7 +1041,7 @@ void XMLTextParagraphExport::exportListChange(
                 eLName = ( rNextInfo.IsNumbered() || nListLevelsToBeOpened > 1 )
                          ? XML_LIST_ITEM
                          : XML_LIST_HEADER;
-                aElem = rtl::OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                aElem = OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                             XML_NAMESPACE_TEXT,
                                             GetXMLToken(eLName) ) );
                 GetExport().IgnorableWhitespace();
@@ -1055,7 +1053,7 @@ void XMLTextParagraphExport::exportListChange(
                      eLName == XML_LIST_ITEM && nListLevelsToBeOpened == 1 && // last iteration --> last opened <text:list-item>
                      !rNextInfo.ListLabelString().isEmpty() )
                 {
-                    const ::rtl::OUString aTextNumberElem =
+                    const OUString aTextNumberElem =
                             OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                       XML_NAMESPACE_TEXT,
                                       GetXMLToken(XML_NUMBER) ) );
@@ -1112,7 +1110,7 @@ void XMLTextParagraphExport::exportListChange(
         if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
              GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
-            const ::rtl::OUString sListStyleName( rNextInfo.GetNumRulesName() );
+            const OUString sListStyleName( rNextInfo.GetNumRulesName() );
             if ( !mpTextListsHelper->EqualsToTopListStyleOnStack( sListStyleName ) )
             {
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -1120,7 +1118,7 @@ void XMLTextParagraphExport::exportListChange(
                                           GetExport().EncodeStyleName( sListStyleName ) );
             }
         }
-        rtl::OUString aElem( GetExport().GetNamespaceMap().GetQNameByKey(
+        OUString aElem( GetExport().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT,
                                 GetXMLToken(XML_LIST_ITEM) ) );
         GetExport().IgnorableWhitespace();
@@ -1131,7 +1129,7 @@ void XMLTextParagraphExport::exportListChange(
         if ( GetExport().exportTextNumberElement() &&
              !rNextInfo.ListLabelString().isEmpty() )
         {
-            const ::rtl::OUString aTextNumberElem =
+            const OUString aTextNumberElem =
                     OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                               XML_NAMESPACE_TEXT,
                               GetXMLToken(XML_NUMBER) ) );
@@ -1517,7 +1515,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( sal_Bool bIsProgres
             {
                 Reference < XPropertySet > xSet( xTextField, UNO_QUERY );
                 Reference < XText > xText;
-                Any a = xSet->getPropertyValue( ::rtl::OUString("TextRange") );
+                Any a = xSet->getPropertyValue( OUString("TextRange") );
                 a >>= xText;
                 if ( xText.is() )
                 {
@@ -2207,7 +2205,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 
         if (xPropInfo->hasPropertyByName(sTextPortionType))
         {
-            rtl::OUString sType;
+            OUString sType;
             xPropSet->getPropertyValue(sTextPortionType) >>= sType;
 
             if( sType.equals(sText))

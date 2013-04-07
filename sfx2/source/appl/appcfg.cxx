@@ -135,8 +135,8 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 #ifdef DBG_UTIL
     if (!xRef.Is())
     {
-        rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
-        aTmp.append(rtl::OUStringToOString(aHint.GetEventName(), RTL_TEXTENCODING_UTF8));
+        OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
+        aTmp.append(OUStringToOString(aHint.GetEventName(), RTL_TEXTENCODING_UTF8));
         OSL_TRACE( "%s", aTmp.getStr() );
     }
 #endif
@@ -375,7 +375,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = sal_True;
                         if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
                         {
-                            ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs = aSecurityOptions.GetSecureURLs();
+                            ::com::sun::star::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
                             std::vector<String> aList;
                             sal_uInt32 nCount = seqURLs.getLength();
                             sal_uInt32 nURL;
@@ -457,7 +457,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
                         aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp).toString() );
-                        rtl::OUString aValue;
+                        OUString aValue;
                         switch ( nProp )
                         {
                             case SvtPathOptions::PATH_ADDIN:        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathCfg.GetAddinPath(), aValue ); break;
@@ -783,7 +783,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
         const std::vector<String> &aList = ((SfxStringListItem*)pItem)->GetList();
         sal_uInt32 nCount = aList.size();
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > seqURLs(nCount);
+        ::com::sun::star::uno::Sequence< OUString > seqURLs(nCount);
         for( sal_uInt32 nPosition=0;nPosition<nCount;++nPosition)
             seqURLs[nPosition] = aList[nPosition];
 
@@ -822,17 +822,17 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
         const SfxAllEnumItem* pEnumItem = (const SfxAllEnumItem *)pItem;
         sal_uInt32 nCount = pEnumItem->GetValueCount();
-        rtl::OUString aNoChangeStr( ' ' );
+        OUString aNoChangeStr( ' ' );
         for( sal_uInt32 nPath=0; nPath<nCount; ++nPath )
         {
-            rtl::OUString sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
+            OUString sValue = pEnumItem->GetValueTextByPos((sal_uInt16)nPath);
             if ( sValue != aNoChangeStr )
             {
                 switch( nPath )
                 {
                     case SvtPathOptions::PATH_ADDIN:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetAddinPath( aTmp );
                         break;
@@ -848,7 +848,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_FAVORITES:    aPathOptions.SetFavoritesPath( sValue );break;
                     case SvtPathOptions::PATH_FILTER:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetFilterPath( aTmp );
                         break;
@@ -857,7 +857,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_GRAPHIC:      aPathOptions.SetGraphicPath( sValue );break;
                     case SvtPathOptions::PATH_HELP:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetHelpPath( aTmp );
                         break;
@@ -866,7 +866,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_LINGUISTIC:   aPathOptions.SetLinguisticPath( sValue );break;
                     case SvtPathOptions::PATH_MODULE:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetModulePath( aTmp );
                         break;
@@ -875,7 +875,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
                     case SvtPathOptions::PATH_PALETTE:      aPathOptions.SetPalettePath( sValue );break;
                     case SvtPathOptions::PATH_PLUGIN:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetPluginPath( aTmp );
                         break;
@@ -883,7 +883,7 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
                     case SvtPathOptions::PATH_STORAGE:
                     {
-                        rtl::OUString aTmp;
+                        OUString aTmp;
                         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( sValue, aTmp ) )
                             aPathOptions.SetStoragePath( aTmp );
                         break;
@@ -919,8 +919,8 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron
 #ifdef DBG_UTIL
         if (!pDoc)
         {
-            rtl::OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
-            aTmp.append(rtl::OUStringToOString(rEventHint.GetEventName(), RTL_TEXTENCODING_UTF8));
+            OStringBuffer aTmp(RTL_CONSTASCII_STRINGPARAM("SfxEvent: "));
+            aTmp.append(OUStringToOString(rEventHint.GetEventName(), RTL_TEXTENCODING_UTF8));
             OSL_TRACE( "%s", aTmp.getStr() );
         }
 #endif

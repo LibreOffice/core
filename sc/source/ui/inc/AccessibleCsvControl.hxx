@@ -143,7 +143,7 @@ protected:
         ::com::sun::star::beans::PropertyValue > PropertyValueSeq;
 
 private:
-    ::rtl::OUStringBuffer       maBuffer;   /// Contains the text representation of the ruler.
+    OUStringBuffer       maBuffer;   /// Contains the text representation of the ruler.
 
 public:
     explicit                    ScAccessibleCsvRuler( ScCsvRuler& rRuler );
@@ -189,7 +189,7 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the attributes of the specified character. */
-    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the screen coordinates of the specified character. */
@@ -204,7 +204,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns the selected text (ruler returns empty string). */
-    virtual ::rtl::OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns the start index of the selection (ruler returns -1). */
     virtual sal_Int32 SAL_CALL getSelectionStart() throw( ::com::sun::star::uno::RuntimeException );
@@ -217,10 +217,10 @@ public:
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the entire text. */
-    virtual ::rtl::OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns the specified range [Start,End) of the text. */
-    virtual ::rtl::OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the specified text portion. */
@@ -244,7 +244,7 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** Returns an identifier for the implementation of this object. */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XTypeProvider ----------------------------------------------------------
@@ -265,10 +265,10 @@ public:
     // helpers ----------------------------------------------------------------
 private:
     /** Returns this object's name. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleName()
+    virtual OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
     /** Returns this object's description. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription()
+    virtual OUString SAL_CALL createAccessibleDescription()
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Throws an exception, if the specified character position is invalid (outside 0..len-1). */
@@ -361,11 +361,11 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns the description of the specified row in the table. */
-    virtual ::rtl::OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
+    virtual OUString SAL_CALL getAccessibleRowDescription( sal_Int32 nRow )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the description text of the specified column in the table. */
-    virtual ::rtl::OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
+    virtual OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
         throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the number of rows occupied at a specified row and column.
@@ -472,7 +472,7 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** Returns an identifier for the implementation of this object. */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XTypeProvider ----------------------------------------------------------
@@ -499,10 +499,10 @@ public:
     // helpers ----------------------------------------------------------------
 private:
     /** Returns this object's name. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleName()
+    virtual OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
     /** Returns this object's description. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription()
+    virtual OUString SAL_CALL createAccessibleDescription()
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Throws an exception, if nIndex is not a valid child index. */
@@ -615,7 +615,7 @@ public:
     // XServiceInfo -----------------------------------------------------------
 
     /** Returns an identifier for the implementation of this object. */
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw( ::com::sun::star::uno::RuntimeException );
 
     // helpers ----------------------------------------------------------------
@@ -627,10 +627,10 @@ protected:
 
 private:
     /** Returns this object's name. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleName()
+    virtual OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
     /** Returns this object's description. */
-    virtual ::rtl::OUString SAL_CALL createAccessibleDescription()
+    virtual OUString SAL_CALL createAccessibleDescription()
         throw( ::com::sun::star::uno::RuntimeException );
 
     /** Returns the VCL grid control. Assumes a living object. */

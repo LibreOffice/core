@@ -76,7 +76,7 @@ using namespace toolkit;
 #define PROPERTY_RESOURCERESOLVER OUString( "ResourceResolver" )
 
 //HELPER
-::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
+OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 struct LanguageDependentProp
 {
@@ -127,10 +127,10 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
 struct FindControlModel : public ::std::unary_function< ControlModelContainerBase::UnoControlModelHolder, bool >
 {
 private:
-    const ::rtl::OUString& m_rName;
+    const OUString& m_rName;
 
 public:
-    FindControlModel( const ::rtl::OUString& _rName ) : m_rName( _rName ) { }
+    FindControlModel( const OUString& _rName ) : m_rName( _rName ) { }
 
     bool operator()( const ControlModelContainerBase::UnoControlModelHolder& _rCompare )
     {
@@ -195,16 +195,16 @@ static void lcl_throwElementExistException( )
 }
 
 // ----------------------------------------------------------------------------
-static const ::rtl::OUString& getTabIndexPropertyName( )
+static const OUString& getTabIndexPropertyName( )
 {
-    static const ::rtl::OUString s_sTabIndexProperty( "TabIndex" );
+    static const OUString s_sTabIndexProperty( "TabIndex" );
     return s_sTabIndexProperty;
 }
 
 // ----------------------------------------------------------------------------
-static const ::rtl::OUString& getStepPropertyName( )
+static const OUString& getStepPropertyName( )
 {
-    static const ::rtl::OUString s_sStepProperty( "Step" );
+    static const OUString s_sStepProperty( "Step" );
     return s_sStepProperty;
 }
 
@@ -240,7 +240,7 @@ Any ControlModelContainerBase::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog );
+            aAny <<= OUString::createFromAscii( szServiceName_UnoControlDialog );
             break;
         default:
             aAny = UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -319,13 +319,13 @@ UnoControlModel* ControlModelContainerBase::Clone() const
     return pClone;
 }
 
-ControlModelContainerBase::UnoControlModelHolderList::iterator ControlModelContainerBase::ImplFindElement( const ::rtl::OUString& rName )
+ControlModelContainerBase::UnoControlModelHolderList::iterator ControlModelContainerBase::ImplFindElement( const OUString& rName )
 {
     return ::std::find_if( maModels.begin(), maModels.end(), FindControlModel( rName ) );
 }
 
 // ::XMultiServiceFactory
-Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(Exception, RuntimeException)
+Reference< XInterface > ControlModelContainerBase::createInstance( const OUString& aServiceSpecifier ) throw(Exception, RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -412,7 +412,7 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
     return xNewModel;
 }
 
-Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const Sequence< Any >& i_arguments ) throw(Exception, RuntimeException)
+Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& i_arguments ) throw(Exception, RuntimeException)
 {
     const Reference< XInterface > xInstance( createInstance( ServiceSpecifier ) );
     const Reference< XInitialization > xInstanceInit( xInstance, UNO_QUERY );
@@ -421,39 +421,39 @@ Reference< XInterface > ControlModelContainerBase::createInstanceWithArguments( 
     return xInstance;
 }
 
-Sequence< ::rtl::OUString > ControlModelContainerBase::getAvailableServiceNames() throw(RuntimeException)
+Sequence< OUString > ControlModelContainerBase::getAvailableServiceNames() throw(RuntimeException)
 {
-    static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
+    static Sequence< OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 26 );
-        ::rtl::OUString* pNames = pNamesSeq->getArray();
-        pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
-        pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
-        pNames[2] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFileControlModel );
-        pNames[3] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel );
-        pNames[4] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel );
-        pNames[5] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel );
-        pNames[6] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel );
-        pNames[7] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel );
-        pNames[8] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel );
-        pNames[9] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel );
-        pNames[10] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel );
-        pNames[11] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel );
-        pNames[12] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel );
-        pNames[13] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
-        pNames[14] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
-        pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
-        pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
-        pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
-        pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
-        pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
-        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
-        pNames[21] = ::rtl::OUString::createFromAscii( szServiceName_GridControlModel );
-        pNames[22] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
-        pNames[23] = ::rtl::OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
-        pNames[24] = ::rtl::OUString::createFromAscii( szServiceName_UnoMultiPageModel );
-        pNames[25] = ::rtl::OUString::createFromAscii( szServiceName_UnoFrameModel );
+        pNamesSeq = new Sequence< OUString >( 26 );
+        OUString* pNames = pNamesSeq->getArray();
+        pNames[0] = OUString::createFromAscii( szServiceName2_UnoControlEditModel );
+        pNames[1] = OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
+        pNames[2] = OUString::createFromAscii( szServiceName2_UnoControlFileControlModel );
+        pNames[3] = OUString::createFromAscii( szServiceName2_UnoControlButtonModel );
+        pNames[4] = OUString::createFromAscii( szServiceName2_UnoControlImageControlModel );
+        pNames[5] = OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel );
+        pNames[6] = OUString::createFromAscii( szServiceName2_UnoControlCheckBoxModel );
+        pNames[7] = OUString::createFromAscii( szServiceName2_UnoControlFixedTextModel );
+        pNames[8] = OUString::createFromAscii( szServiceName2_UnoControlGroupBoxModel );
+        pNames[9] = OUString::createFromAscii( szServiceName2_UnoControlListBoxModel );
+        pNames[10] = OUString::createFromAscii( szServiceName2_UnoControlComboBoxModel );
+        pNames[11] = OUString::createFromAscii( szServiceName2_UnoControlDateFieldModel );
+        pNames[12] = OUString::createFromAscii( szServiceName2_UnoControlTimeFieldModel );
+        pNames[13] = OUString::createFromAscii( szServiceName2_UnoControlNumericFieldModel );
+        pNames[14] = OUString::createFromAscii( szServiceName2_UnoControlCurrencyFieldModel );
+        pNames[15] = OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
+        pNames[16] = OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
+        pNames[17] = OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
+        pNames[18] = OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
+        pNames[19] = OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
+        pNames[20] = OUString::createFromAscii( szServiceName_TreeControlModel );
+        pNames[21] = OUString::createFromAscii( szServiceName_GridControlModel );
+        pNames[22] = OUString::createFromAscii( szServiceName_UnoControlTabPageContainerModel );
+        pNames[23] = OUString::createFromAscii( szServiceName_UnoControlTabPageModel );
+        pNames[24] = OUString::createFromAscii( szServiceName_UnoMultiPageModel );
+        pNames[25] = OUString::createFromAscii( szServiceName_UnoFrameModel );
     }
     return *pNamesSeq;
 }
@@ -482,7 +482,7 @@ sal_Bool ControlModelContainerBase::hasElements() throw(RuntimeException)
 }
 
 // XNameContainer, XNameReplace, XNameAccess
-void ControlModelContainerBase::replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+void ControlModelContainerBase::replaceByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -528,7 +528,7 @@ void ControlModelContainerBase::replaceByName( const ::rtl::OUString& aName, con
     implNotifyTabModelChange( aName );
 }
 
-Any ControlModelContainerBase::getByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+Any ControlModelContainerBase::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
@@ -537,9 +537,9 @@ Any ControlModelContainerBase::getByName( const ::rtl::OUString& aName ) throw(N
     return makeAny( aElementPos->first );
 }
 
-Sequence< ::rtl::OUString > ControlModelContainerBase::getElementNames() throw(RuntimeException)
+Sequence< OUString > ControlModelContainerBase::getElementNames() throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aNames( maModels.size() );
+    Sequence< OUString > aNames( maModels.size() );
 
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
@@ -550,12 +550,12 @@ Sequence< ::rtl::OUString > ControlModelContainerBase::getElementNames() throw(R
     return aNames;
 }
 
-sal_Bool ControlModelContainerBase::hasByName( const ::rtl::OUString& aName ) throw(RuntimeException)
+sal_Bool ControlModelContainerBase::hasByName( const OUString& aName ) throw(RuntimeException)
 {
     return maModels.end() != ImplFindElement( aName );
 }
 
-void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void ControlModelContainerBase::insertByName( const OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -570,12 +570,12 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
 
                 Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();
 
-                ::rtl::OUString sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
+                OUString sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
                 if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ) && ImplHasProperty(BASEPROPERTY_DIALOGSOURCEURL) )
                 {
                     Any aUrl = xProps.get()->getPropertyValue(  sImageSourceProperty );
 
-                    ::rtl::OUString absoluteUrl =
+                    OUString absoluteUrl =
                         getPhysicalLocation( getPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL ) ), aUrl );
 
                     aUrl <<= absoluteUrl;
@@ -619,7 +619,7 @@ void ControlModelContainerBase::insertByName( const ::rtl::OUString& aName, cons
     implNotifyTabModelChange( aName );
 }
 
-void ControlModelContainerBase::removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
+void ControlModelContainerBase::removeByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -761,7 +761,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XControlModel > >&, const ::rtl::OUString& ) throw (RuntimeException)
+void SAL_CALL ControlModelContainerBase::setGroup( const Sequence< Reference< XControlModel > >&, const OUString& ) throw (RuntimeException)
 {
     // not supported. We have only implicit grouping:
     // We only have a sequence of control models, and we _know_ (yes, that's a HACK relying on
@@ -795,34 +795,34 @@ void SAL_CALL ControlModelContainerBase::setEnabled( ::sal_Bool _enabled ) throw
 {
     m_bEnabled = _enabled;
 }
-::rtl::OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ControlModelContainerBase::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
-    ::rtl::OUString sTitle;
+    OUString sTitle;
     xThis->getPropertyValue(GetPropertyName(BASEPROPERTY_TITLE)) >>= sTitle;
     return sTitle;
     //return m_sTitle;
 }
-void SAL_CALL ControlModelContainerBase::setTitle( const ::rtl::OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
     xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),makeAny(_title));
 }
-::rtl::OUString SAL_CALL ControlModelContainerBase::getImageURL() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ControlModelContainerBase::getImageURL() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_sImageURL;
 }
-void SAL_CALL ControlModelContainerBase::setImageURL( const ::rtl::OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ControlModelContainerBase::setImageURL( const OUString& _imageurl ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_sImageURL = _imageurl;
 }
-::rtl::OUString SAL_CALL ControlModelContainerBase::getToolTip() throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL ControlModelContainerBase::getToolTip() throw (::com::sun::star::uno::RuntimeException)
 {
     return m_sTooltip;
 }
-void SAL_CALL ControlModelContainerBase::setToolTip( const ::rtl::OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL ControlModelContainerBase::setToolTip( const OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_sTooltip = _tooltip;
 }
@@ -864,7 +864,7 @@ sal_Int32 SAL_CALL ControlModelContainerBase::getGroupCount(  ) throw (RuntimeEx
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, ::rtl::OUString& _rName ) throw (RuntimeException)
+void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, OUString& _rName ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -874,7 +874,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
     {
         OSL_TRACE( "UnoControlDialogModel::getGroup: invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
-        _rName = ::rtl::OUString();
+        _rName = OUString();
     }
     else
     {
@@ -883,16 +883,16 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
         // copy the models
         ::std::copy( aGroupPos->begin(), aGroupPos->end(), _rGroup.getArray() );
         // give the group a name
-        _rName = ::rtl::OUString::valueOf( _nGroup );
+        _rName = OUString::valueOf( _nGroup );
     }
 }
 
 // ----------------------------------------------------------------------------
-void SAL_CALL ControlModelContainerBase::getGroupByName( const ::rtl::OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup ) throw (RuntimeException)
+void SAL_CALL ControlModelContainerBase::getGroupByName( const OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    ::rtl::OUString sDummyName;
+    OUString sDummyName;
     getGroup( _rName.toInt32( ), _rGroup, sDummyName );
 }
 
@@ -909,7 +909,7 @@ void SAL_CALL ControlModelContainerBase::removeChangesListener( const Reference<
 }
 
 // ----------------------------------------------------------------------------
-void ControlModelContainerBase::implNotifyTabModelChange( const ::rtl::OUString& _rAccessor )
+void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAccessor )
 {
     // multiplex to our change listeners:
     // the changes event
@@ -959,14 +959,14 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     sal_Bool    bIsRadioButton;                         // is it a radio button?
 
 #if OSL_DEBUG_LEVEL > 1
-    ::std::vector< ::rtl::OUString > aCurrentGroupLabels;
+    ::std::vector< OUString > aCurrentGroupLabels;
 #endif
 
     for ( ; pControlModels != pControlModelsEnd; ++pControlModels )
     {
         // we'll need this in every state
         xModelSI = xModelSI.query( *pControlModels );
-        bIsRadioButton = xModelSI.is() && xModelSI->supportsService( ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) );
+        bIsRadioButton = xModelSI.is() && xModelSI->supportsService( OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) );
 
         switch ( eState )
         {
@@ -991,9 +991,9 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
+                OUString sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
+                    xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1024,9 +1024,9 @@ void ControlModelContainerBase::implUpdateGroupStructure()
 
 #if OSL_DEBUG_LEVEL > 1
                     Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                    ::rtl::OUString sLabel;
-                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
-                        xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
+                    OUString sLabel;
+                    if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
+                        xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
                     aCurrentGroupLabels.push_back( sLabel );
 #endif
                     continue;
@@ -1054,9 +1054,9 @@ void ControlModelContainerBase::implUpdateGroupStructure()
                 eState = eExpandingGroup;
 #if OSL_DEBUG_LEVEL > 1
                 Reference< XPropertySet > xModelProps( *pControlModels, UNO_QUERY );
-                ::rtl::OUString sLabel;
-                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( ::rtl::OUString("Label") ) )
-                    xModelProps->getPropertyValue( ::rtl::OUString("Label") ) >>= sLabel;
+                OUString sLabel;
+                if ( xModelProps.is() && xModelProps->getPropertySetInfo().is() && xModelProps->getPropertySetInfo()->hasPropertyByName( OUString("Label") ) )
+                    xModelProps->getPropertyValue( OUString("Label") ) >>= sLabel;
                 aCurrentGroupLabels.push_back( sLabel );
 #endif
             }
@@ -1076,7 +1076,7 @@ void SAL_CALL ControlModelContainerBase::propertyChange( const PropertyChangeEve
         "UnoControlDialogModel::propertyChange: not listening for this property!" );
 
     // the accessor for the changed element
-    ::rtl::OUString sAccessor;
+    OUString sAccessor;
     UnoControlModelHolderList::const_iterator aPos =
         ::std::find_if(
             maModels.begin(), maModels.end(),
@@ -1375,11 +1375,11 @@ void ControlContainerBase::createPeer( const Reference< XToolkit > & rxToolkit, 
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 }
 
-void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxModel, const ::rtl::OUString& rName )
+void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxModel, const OUString& rName )
 {
     Reference< XPropertySet > xP( rxModel, UNO_QUERY );
 
-    ::rtl::OUString aDefCtrl;
+    OUString aDefCtrl;
     xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
     Reference < XControl > xCtrl( m_xContext->getServiceManager()->createInstanceWithContext(aDefCtrl, m_xContext), UNO_QUERY );
 
@@ -1420,10 +1420,10 @@ void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
     Reference< XPropertySet > xP( rxCtrl->getModel(), UNO_QUERY );
 
     sal_Int32 nX = 0, nY = 0, nWidth = 0, nHeight = 0;
-    xP->getPropertyValue( ::rtl::OUString( "PositionX" ) ) >>= nX;
-    xP->getPropertyValue( ::rtl::OUString( "PositionY" ) ) >>= nY;
-    xP->getPropertyValue( ::rtl::OUString( "Width" ) ) >>= nWidth;
-    xP->getPropertyValue( ::rtl::OUString( "Height" ) ) >>= nHeight;
+    xP->getPropertyValue( OUString( "PositionX" ) ) >>= nX;
+    xP->getPropertyValue( OUString( "PositionY" ) ) >>= nY;
+    xP->getPropertyValue( OUString( "Width" ) ) >>= nWidth;
+    xP->getPropertyValue( OUString( "Height" ) ) >>= nHeight;
     MapMode aMode( MAP_APPFONT );
     OutputDevice*pOutDev = Application::GetDefaultDevice();
     if ( pOutDev )
@@ -1539,8 +1539,8 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
         Reference< XNameAccess > xNA( getModel(), UNO_QUERY );
         if ( xNA.is() )
         {
-            Sequence< ::rtl::OUString > aNames = xNA->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
+            Sequence< OUString > aNames = xNA->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
             sal_uInt32 nCtrls = aNames.getLength();
 
             Reference< XControlModel > xCtrlModel;
@@ -1595,7 +1595,7 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(
     SolarMutexGuard aGuard;
 
     Reference< XControlModel > xModel;
-    ::rtl::OUString aName;
+    OUString aName;
 
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
@@ -1656,7 +1656,7 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    ::rtl::OUString aName;
+    OUString aName;
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
     ENSURE_OR_RETURN_VOID( xModel.is(), "ControlContainerBase::elementReplaced: invalid new element!" );
@@ -1679,10 +1679,10 @@ void ControlContainerBase::ImplModelPropertiesChanged( const Sequence< PropertyC
 {
     if( !isDesignMode() && !mbCreatingCompatiblePeer )
     {
-        ::rtl::OUString s1( "PositionX" );
-        ::rtl::OUString s2( "PositionY" );
-        ::rtl::OUString s3( "Width" );
-        ::rtl::OUString s4( "Height" );
+        OUString s1( "PositionX" );
+        OUString s2( "PositionY" );
+        OUString s3( "Width" );
+        OUString s4( "Height" );
 
         sal_Int32 nLen = rEvents.getLength();
         for( sal_Int32 i = 0; i < nLen; i++ )
@@ -1728,8 +1728,8 @@ void ControlContainerBase::addingControl( const Reference< XControl >& _rxContro
         Reference< XMultiPropertySet > xProps( _rxControl->getModel(), UNO_QUERY );
         if ( xProps.is() )
         {
-            Sequence< ::rtl::OUString > aNames( 4 );
-            ::rtl::OUString* pNames = aNames.getArray();
+            Sequence< OUString > aNames( 4 );
+            OUString* pNames = aNames.getArray();
             *pNames++ = "PositionX";
             *pNames++ = "PositionY";
             *pNames++ = "Width";
@@ -1766,11 +1766,11 @@ void SAL_CALL ControlContainerBase::changesOccurred( const ChangesEvent& ) throw
 }
 static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XStringResourceResolver >& xStringResourceResolver, const Reference< XControlContainer >& xContainer )
 {
-    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
+    OUString aPropName( PROPERTY_RESOURCERESOLVER );
 
     Any xNewStringResourceResolver; xNewStringResourceResolver <<= xStringResourceResolver;
 
-    Sequence< rtl::OUString > aPropNames(1);
+    Sequence< OUString > aPropNames(1);
     aPropNames[0] = aPropName;
 
     const Sequence< Reference< awt::XControl > > aSeq = xContainer->getControls();
@@ -1829,7 +1829,7 @@ void ControlContainerBase::ImplStartListingForResourceEvents()
 
 void ControlContainerBase::ImplUpdateResourceResolver()
 {
-    rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
+    OUString aPropName( PROPERTY_RESOURCERESOLVER );
     Reference< resource::XStringResourceResolver > xStringResourceResolver;
 
     ImplGetPropertyValue( aPropName ) >>= xStringResourceResolver;
@@ -1852,16 +1852,16 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 ////    Helper Method to convert relative url to physical location
 ////    ----------------------------------------------------
 
-::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
+OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
 
-    ::rtl::OUString baseLocation;
-    ::rtl::OUString url;
+    OUString baseLocation;
+    OUString url;
 
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
-    ::rtl::OUString absoluteURL( url );
+    OUString absoluteURL( url );
     if ( !url.isEmpty() )
     {
         INetURLObject urlObj(baseLocation);
@@ -1872,7 +1872,7 @@ void ControlContainerBase::ImplUpdateResourceResolver()
         const INetProtocol protocol = protocolCheck.GetProtocol();
         if ( protocol == INET_PROT_NOT_VALID )
         {
-            ::rtl::OUString testAbsoluteURL;
+            OUString testAbsoluteURL;
             if ( ::osl::FileBase::E_None == ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, testAbsoluteURL ) )
                 absoluteURL = testAbsoluteURL;
         }
@@ -1882,7 +1882,7 @@ void ControlContainerBase::ImplUpdateResourceResolver()
 }
 
 void
-ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     if ( Operation < Insert || Operation > Remove )
         throw IllegalArgumentException();
@@ -1902,7 +1902,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
                 // global list of containees
                 if ( xProps.is() )
                     xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
-                Sequence< rtl::OUString > aChildNames = xChildContainer->getElementNames();
+                Sequence< OUString > aChildNames = xChildContainer->getElementNames();
                 for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
                     updateUserFormChildren( xAllChildren, aChildNames[ index ], Operation,  Reference< XControlModel > () );
             }
@@ -1918,7 +1918,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
                 Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
                 if ( xProps.is() )
                     xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
-                Sequence< rtl::OUString > aChildNames = xChildContainer->getElementNames();
+                Sequence< OUString > aChildNames = xChildContainer->getElementNames();
                 for ( sal_Int32 index=0; index< aChildNames.getLength(); ++index )
                 {
                     Reference< XControlModel > xChildTarget( xChildContainer->getByName( aChildNames[ index ] ), UNO_QUERY );

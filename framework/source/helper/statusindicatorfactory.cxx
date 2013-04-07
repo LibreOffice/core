@@ -165,7 +165,7 @@ void SAL_CALL StatusIndicatorFactory::update()
 
 //-----------------------------------------------
 void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
-                                   const ::rtl::OUString&                                    sText ,
+                                   const OUString&                                    sText ,
                                          sal_Int32                                           nRange)
 {
     // SAFE -> ----------------------------------
@@ -204,7 +204,7 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     if (pItem != m_aStack.end())
     {
         pItem->m_nValue = 0;
-        pItem->m_sText  = ::rtl::OUString();
+        pItem->m_sText  = OUString();
     }
 
     css::uno::Reference< css::task::XStatusIndicator > xActive   = m_xActiveChild;
@@ -237,7 +237,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
 
     // activate next child ... or finish the progress if there is no further one.
     m_xActiveChild.clear();
-    ::rtl::OUString                  sText;
+    OUString                  sText;
     sal_Int32                        nValue = 0;
     IndicatorStack::reverse_iterator pNext  = m_aStack.rbegin();
     if (pNext != m_aStack.rend())
@@ -280,7 +280,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
 
 //-----------------------------------------------
 void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
-                                     const ::rtl::OUString&                                    sText )
+                                     const OUString&                                    sText )
 {
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -431,9 +431,9 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
             comphelper::getComponentContext(xSMGR),
-            ::rtl::OUString("org.openoffice.Office.Common/View"),
-            ::rtl::OUString("NewDocumentHandling"),
-            ::rtl::OUString("ForceFocusAndToFront"),
+            OUString("org.openoffice.Office.Common/View"),
+            OUString("NewDocumentHandling"),
+            OUString("ForceFocusAndToFront"),
             ::comphelper::ConfigurationHelper::E_READONLY) >>= bForceFrontAndFocus;
 
         pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );
@@ -473,7 +473,7 @@ void StatusIndicatorFactory::impl_createProgress()
             if (xLayoutManager.is())
             {
                 xLayoutManager->lock();
-                rtl::OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
+                OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
                 xLayoutManager->createElement( sPROGRESS_RESOURCE );
                 xLayoutManager->hideElement( sPROGRESS_RESOURCE );
 
@@ -520,7 +520,7 @@ void StatusIndicatorFactory::impl_showProgress()
                 // Be sure that we have always a progress. It can be that our frame
                 // was recycled and therefore the progress was destroyed!
                 // CreateElement does nothing if there is already a valid progress.
-                rtl::OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
+                OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
                 xLayoutManager->createElement( sPROGRESS_RESOURCE );
                 xLayoutManager->showElement( sPROGRESS_RESOURCE );
 
@@ -560,7 +560,7 @@ void StatusIndicatorFactory::impl_hideProgress()
             css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
-                xLayoutManager->hideElement( rtl::OUString(PROGRESS_RESOURCE) );
+                xLayoutManager->hideElement( OUString(PROGRESS_RESOURCE) );
         }
     }
 }

@@ -84,7 +84,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     if ( aArguments.getLength() &&
          sal_False == ( aArguments[ 0 ] >>= m_xFrame ) )
     {
-        ::rtl::OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
+        OUString temp = "ScriptProtocolHandler::initialize: could not extract reference to the frame";
         throw RuntimeException( temp, Reference< XInterface >() );
     }
 
@@ -93,7 +93,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
 }
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
-    const URL& aURL, const ::rtl::OUString& sTargetFrameName, sal_Int32 nSearchFlags )
+    const URL& aURL, const OUString& sTargetFrameName, sal_Int32 nSearchFlags )
     throw( ::com::sun::star::uno::RuntimeException )
 {
     (void)sTargetFrameName;
@@ -107,7 +107,7 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
         xFac->parse( aURL.Complete ), UNO_QUERY );
     if ( uriRef.is() )
     {
-        if ( uriRef->getScheme().equals( ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
+        if ( uriRef->getScheme().equals( OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
         {
             xDispatcher = this;
         }
@@ -232,7 +232,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
         {
             aException = ::cppu::getCaughtException();
 
-            ::rtl::OUString reason = ::rtl::OUString( "ScriptProtocolHandler::dispatch: caught "  );
+            OUString reason = OUString( "ScriptProtocolHandler::dispatch: caught "  );
 
             invokeResult <<= reason.concat( aException.getValueTypeName() ).concat( e.Message );
 
@@ -241,7 +241,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     }
     else
     {
-        ::rtl::OUString reason(
+        OUString reason(
         "ScriptProtocolHandler::dispatchWithNotification failed, ScriptProtocolHandler not initialised"
         );
         invokeResult <<= reason;
@@ -290,7 +290,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             OSL_TRACE(
             "ScriptProtocolHandler::dispatchWithNotification: caught RuntimeException"
             "while dispatchFinished %s",
-            ::rtl::OUStringToOString( e.Message,
+            OUStringToOString( e.Message,
             RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -390,12 +390,12 @@ void ScriptProtocolHandler::createScriptProvider()
     }
     catch ( const RuntimeException & e )
     {
-        ::rtl::OUString temp = "ScriptProtocolHandler::createScriptProvider(),  ";
+        OUString temp = "ScriptProtocolHandler::createScriptProvider(),  ";
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
     catch ( const Exception & e )
     {
-        ::rtl::OUString temp = "ScriptProtocolHandler::createScriptProvider: ";
+        OUString temp = "ScriptProtocolHandler::createScriptProvider: ";
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 }
@@ -410,7 +410,7 @@ ScriptProtocolHandler::~ScriptProtocolHandler()
 }
 
 /* XServiceInfo */
-::rtl::OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
+OUString SAL_CALL ScriptProtocolHandler::getImplementationName( )
 throw( RuntimeException )
 {
     return impl_getStaticImplementationName();
@@ -418,11 +418,11 @@ throw( RuntimeException )
 
 /* XServiceInfo */
 sal_Bool SAL_CALL ScriptProtocolHandler::supportsService(
-const ::rtl::OUString& sServiceName )
+const OUString& sServiceName )
 throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString > seqServiceNames = getSupportedServiceNames();
-    const ::rtl::OUString* pArray = seqServiceNames.getConstArray();
+    Sequence< OUString > seqServiceNames = getSupportedServiceNames();
+    const OUString* pArray = seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter = 0; nCounter < seqServiceNames.getLength(); nCounter++ )
     {
         if ( pArray[ nCounter ] == sServiceName )
@@ -435,26 +435,26 @@ throw( RuntimeException )
 }
 
 /* XServiceInfo */
-Sequence< ::rtl::OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL ScriptProtocolHandler::getSupportedServiceNames()
 throw( RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 /* Helper for XServiceInfo */
-Sequence< ::rtl::OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames()
+Sequence< OUString > ScriptProtocolHandler::impl_getStaticSupportedServiceNames()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    Sequence< OUString > seqServiceNames( 1 );
     seqServiceNames.getArray() [ 0 ] =
-        ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME );
+        OUString::createFromAscii( ::scripting_protocolhandler::MYSERVICENAME );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
-::rtl::OUString ScriptProtocolHandler::impl_getStaticImplementationName()
+OUString ScriptProtocolHandler::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYIMPLNAME );
+    return OUString::createFromAscii( ::scripting_protocolhandler::MYIMPLNAME );
 }
 
 /* Helper for registry */
@@ -504,7 +504,7 @@ extern "C"
             ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
             if ( ::scripting_protocolhandler::ScriptProtocolHandler::impl_getStaticImplementationName().equals(
-                ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+                OUString::createFromAscii( pImplementationName ) ) )
             {
                 xFactory = ::scripting_protocolhandler::ScriptProtocolHandler::impl_createFactory( xServiceManager );
             }

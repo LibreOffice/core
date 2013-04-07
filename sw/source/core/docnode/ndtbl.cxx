@@ -1523,7 +1523,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                 // Inserting the separator
                 SwIndex aCntIdx( pDelPara->pLastNd,
                         pDelPara->pLastNd->GetTxt().getLength());
-                pDelPara->pLastNd->InsertText( rtl::OUString(pDelPara->cCh), aCntIdx,
+                pDelPara->pLastNd->InsertText( OUString(pDelPara->cCh), aCntIdx,
                     IDocumentContentOperations::INS_EMPTYEXPAND );
                 if( pDelPara->pUndo )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
@@ -4196,7 +4196,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
                 if ( pUndo )
                     pUndo->AddNode( *pTxtNode , sal_False );
                 SfxStringItem * pNewItem = (SfxStringItem*)pFmtItem->Clone();
-                pNewItem->SetValue(rtl::OUString());
+                pNewItem->SetValue(OUString());
                 rSet.Put( *pNewItem );
                 pTxtNode->SetAttr( rSet );
                 delete pNewItem;

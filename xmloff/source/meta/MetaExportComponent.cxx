@@ -81,7 +81,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             ::comphelper::PropertyMapEntry aInfoMap[] =
             {
                 { "Class", sizeof("Class")-1, 0,
-                    &::getCppuType((::rtl::OUString*)0),
+                    &::getCppuType((OUString*)0),
                     beans::PropertyAttribute::MAYBEVOID, 0},
                 { NULL, 0, 0, NULL, 0, 0 }
             };
@@ -92,7 +92,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             uno::Any aAny;
             aAny <<= GetXMLToken( XML_TEXT );
             xConvPropSet->setPropertyValue(
-                    ::rtl::OUString("Class"), aAny );
+                    OUString("Class"), aAny );
 
             uno::Reference< beans::XPropertySet > xPropSet =
                 getExportInfo().is()
@@ -149,7 +149,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 
         if( pVersion )
             AddAttribute( XML_NAMESPACE_OFFICE, XML_VERSION,
-                            ::rtl::OUString::createFromAscii(pVersion) );
+                            OUString::createFromAscii(pVersion) );
 
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                     sal_True, sal_True );
@@ -164,7 +164,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 void XMLMetaExportComponent::_ExportMeta()
 {
     if (mxDocProps.is()) {
-        ::rtl::OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
+        OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
         // update generator here
         mxDocProps->setGenerator(generator);
         SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, mxDocProps);
@@ -181,18 +181,18 @@ void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}
 
 
-uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames()
     throw()
 {
-    const rtl::OUString aServiceName(
+    const OUString aServiceName(
          "com.sun.star.document.XMLOasisMetaExporter"  );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
+OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw()
 {
-    return rtl::OUString(  "XMLMetaExportComponent"  );
+    return OUString(  "XMLMetaExportComponent"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(
@@ -202,18 +202,18 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
     return (cppu::OWeakObject*)new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), EXPORT_META|EXPORT_OASIS);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
     throw()
 {
-    const rtl::OUString aServiceName(
+    const OUString aServiceName(
          "com.sun.star.document.XMLMetaExporter"  );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
+OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
 {
-    return rtl::OUString(  "XMLMetaExportOOo"  );
+    return OUString(  "XMLMetaExportOOo"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(

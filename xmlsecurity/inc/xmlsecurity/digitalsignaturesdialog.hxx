@@ -113,13 +113,13 @@ private:
 
     //Checks if a particular stream is a valid xml stream. Those are treated differently
     //when they are signed (c14n transformation)
-    bool isXML(const ::rtl::OUString& rURI );
+    bool isXML(const OUString& rURI );
     bool canAddRemove();
 
 public:
     DigitalSignaturesDialog( Window* pParent, cssu::Reference<
         cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-        sal_Bool bReadOnly, const ::rtl::OUString& sODFVersion, bool bHasDocumentSignature);
+        sal_Bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     ~DigitalSignaturesDialog();
 
     // Initialize the dialog and the security environment, returns TRUE on success

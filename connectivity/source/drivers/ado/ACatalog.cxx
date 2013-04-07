@@ -59,7 +59,7 @@ void OCatalog::refreshTables()
         WpADOTable aElement = aTables.GetItem(i);
           if ( aElement.IsValid() )
           {
-              ::rtl::OUString sTypeName = aElement.get_Type();
+              OUString sTypeName = aElement.get_Type();
                   if ( !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("SYSTEM TABLE"))
                     && !sTypeName.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("ACCESS TABLE")) )
                      aVector.push_back(aElement.get_Name());

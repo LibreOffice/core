@@ -387,14 +387,14 @@ EditEngine& SmDocShell::GetEditEngine()
 
         pEditEngine->EnableUndo( true );
         pEditEngine->SetDefTab( sal_uInt16(
-            Application::GetDefaultDevice()->GetTextWidth(rtl::OUString("XXXX"))) );
+            Application::GetDefaultDevice()->GetTextWidth(OUString("XXXX"))) );
 
         pEditEngine->SetControlWord(
                 (pEditEngine->GetControlWord() | EE_CNTRL_AUTOINDENTING) &
                 (~EE_CNTRL_UNDOATTRIBS) &
                 (~EE_CNTRL_PASTESPECIAL) );
 
-        pEditEngine->SetWordDelimiters( rtl::OUString(" .=+-*/(){}[];\"" ) );
+        pEditEngine->SetWordDelimiters( OUString(" .=+-*/(){}[];\"" ) );
         pEditEngine->SetRefMapMode( MAP_PIXEL );
 
         pEditEngine->SetPaperSize( Size( 800, 0 ) );
@@ -770,7 +770,7 @@ sal_Bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             if ( SotStorage::IsStorageFile( pStream ) )
             {
                 SvStorageRef aStorage = new SotStorage( pStream, false );
-                if ( aStorage->IsStream(rtl::OUString("Equation Native")) )
+                if ( aStorage->IsStream(OUString("Equation Native")) )
                 {
                     // is this a MathType Storage?
                     MathType aEquation( aText );
@@ -817,12 +817,12 @@ sal_Bool SmDocShell::Load( SfxMedium& rMedium )
         uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
         if (
             (
-             xAccess->hasByName( rtl::OUString("content.xml") ) &&
-             xStorage->isStreamElement( rtl::OUString("content.xml") )
+             xAccess->hasByName( OUString("content.xml") ) &&
+             xStorage->isStreamElement( OUString("content.xml") )
             ) ||
             (
-             xAccess->hasByName( rtl::OUString("Content.xml") ) &&
-             xStorage->isStreamElement( rtl::OUString("Content.xml") )
+             xAccess->hasByName( OUString("Content.xml") ) &&
+             xStorage->isStreamElement( OUString("Content.xml") )
             )
            )
         {
@@ -1257,7 +1257,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 sal_Unicode cMod = ' ';
                 if (IsModified())
                     cMod = '*';
-                rSet.Put(SfxStringItem(SID_MODIFYSTATUS, rtl::OUString(cMod)));
+                rSet.Put(SfxStringItem(SID_MODIFYSTATUS, OUString(cMod)));
             }
             break;
 
@@ -1290,7 +1290,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
                 ::svl::IUndoManager* pTmpUndoMgr = GetUndoManager();
                 if( pTmpUndoMgr )
                 {
-                    rtl::OUString(::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
+                    OUString(::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWh )

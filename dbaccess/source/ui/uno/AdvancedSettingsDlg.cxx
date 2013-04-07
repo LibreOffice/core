@@ -48,12 +48,12 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -88,15 +88,15 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString OAdvancedSettingsDialog::getImplementationName_Static() throw(RuntimeException)
+    OUString OAdvancedSettingsDialog::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
+        return OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
     }
 
     //-------------------------------------------------------------------------
@@ -109,7 +109,7 @@ namespace dbaui
     ::comphelper::StringSequence OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog");
+        aSupported.getArray()[0] = OUString("com.sun.star.sdb.AdvancedDatabaseSettingsDialog");
         return aSupported;
     }
 

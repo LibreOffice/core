@@ -240,7 +240,7 @@ void ScRangeList::Format( String& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
 }
 
 
-void ScRangeList::Format( rtl::OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
+void ScRangeList::Format( OUString& rStr, sal_uInt16 nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
                           sal_Unicode cDelimiter ) const
 {
@@ -1356,7 +1356,7 @@ int SAL_CALL ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     const ScRangePairNameSort* ps2 = (const ScRangePairNameSort*)p2;
     const ScAddress& rStartPos1 = ps1->pPair->GetRange(0).aStart;
     const ScAddress& rStartPos2 = ps2->pPair->GetRange(0).aStart;
-    rtl::OUString aStr1, aStr2;
+    OUString aStr1, aStr2;
     sal_Int32 nComp;
     if ( rStartPos1.Tab() == rStartPos2.Tab() )
         nComp = COMPARE_EQUAL;

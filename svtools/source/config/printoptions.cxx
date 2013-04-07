@@ -105,9 +105,9 @@ public:
 //-------------------------------------------------------------------------------------------------------------
 
 private:
-    void impl_setValue (const ::rtl::OUString& sProp,
+    void impl_setValue (const OUString& sProp,
                               ::sal_Bool       bNew );
-    void impl_setValue (const ::rtl::OUString& sProp,
+    void impl_setValue (const OUString& sProp,
                               ::sal_Int16      nNew );
 
 //-------------------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl(const OUString& rConfigRoot)
             using comphelper::string::getTokenCount;
             using comphelper::string::getToken;
             sal_Int32 nTokenCount = getTokenCount(rConfigRoot, '/');
-            rtl::OUString sTok = getToken(rConfigRoot, nTokenCount - 1, '/');
+            OUString sTok = getToken(rConfigRoot, nTokenCount - 1, '/');
             m_xCfg->getByName(sTok) >>= m_xNode;
         }
     }
@@ -447,7 +447,7 @@ SvtPrintOptions_Impl::~SvtPrintOptions_Impl()
     m_xCfg.clear();
 }
 
-void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
+void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
                                                 ::sal_Bool       bNew )
 {
     try
@@ -475,7 +475,7 @@ void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
     }
 }
 
-void SvtPrintOptions_Impl::impl_setValue (const ::rtl::OUString& sProp,
+void SvtPrintOptions_Impl::impl_setValue (const OUString& sProp,
                                                 ::sal_Int16      nNew )
 {
     try

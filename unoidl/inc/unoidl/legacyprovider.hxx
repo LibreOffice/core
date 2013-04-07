@@ -26,13 +26,13 @@ class LO_DLLPUBLIC_UNOIDL LegacyProvider: public Provider {
 public:
     // throws FileFormatException, NoSuchFileException:
     LegacyProvider(
-        rtl::Reference< Manager > const & manager, rtl::OUString const & uri);
+        rtl::Reference< Manager > const & manager, OUString const & uri);
 
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const;
 
     // throws FileFormatException:
-    virtual rtl::Reference< Entity > findEntity(rtl::OUString const & name)
+    virtual rtl::Reference< Entity > findEntity(OUString const & name)
         const;
 
 private:

@@ -38,26 +38,26 @@ class OOX_DLLPUBLIC AttributeConversion
 {
 public:
     /** Returns the XML token identifier from the passed string. */
-    static sal_Int32    decodeToken( const ::rtl::OUString& rValue );
+    static sal_Int32    decodeToken( const OUString& rValue );
 
     /** Returns the decoded string value. All characters in the format
         '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
-    static ::rtl::OUString decodeXString( const ::rtl::OUString& rValue );
+    static OUString decodeXString( const OUString& rValue );
 
     /** Returns the double value from the passed string. */
-    static double       decodeDouble( const ::rtl::OUString& rValue );
+    static double       decodeDouble( const OUString& rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (decimal). */
-    static sal_Int32    decodeInteger( const ::rtl::OUString& rValue );
+    static sal_Int32    decodeInteger( const OUString& rValue );
 
     /** Returns the 32-bit unsigned integer value from the passed string (decimal). */
-    static sal_uInt32   decodeUnsigned( const ::rtl::OUString& rValue );
+    static sal_uInt32   decodeUnsigned( const OUString& rValue );
 
     /** Returns the 64-bit signed integer value from the passed string (decimal). */
-    static sal_Int64    decodeHyper( const ::rtl::OUString& rValue );
+    static sal_Int64    decodeHyper( const OUString& rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
-    static sal_Int32    decodeIntegerHex( const ::rtl::OUString& rValue );
+    static sal_Int32    decodeIntegerHex( const OUString& rValue );
 };
 
 // ============================================================================
@@ -87,11 +87,11 @@ public:
     OptValue< sal_Int32 > getToken( sal_Int32 nAttrToken ) const;
 
     /** Returns the string value of the specified attribute. */
-    OptValue< ::rtl::OUString > getString( sal_Int32 nAttrToken ) const;
+    OptValue< OUString > getString( sal_Int32 nAttrToken ) const;
 
     /** Returns the string value of the specified attribute. All characters in
         the format '_xHHHH_' (H being a hexadecimal digit), will be decoded. */
-    OptValue< ::rtl::OUString > getXString( sal_Int32 nAttrToken ) const;
+    OptValue< OUString > getXString( sal_Int32 nAttrToken ) const;
 
     /** Returns the double value of the specified attribute. */
     OptValue< double >  getDouble( sal_Int32 nAttrToken ) const;
@@ -122,11 +122,11 @@ public:
 
     /** Returns the string value of the specified attribute, or the passed
         default string if the attribute is missing. */
-    ::rtl::OUString     getString( sal_Int32 nAttrToken, const ::rtl::OUString& rDefault ) const;
+    OUString     getString( sal_Int32 nAttrToken, const OUString& rDefault ) const;
 
     /** Returns the decoded string value of the specified attribute, or the
         passed default string if the attribute is missing. */
-    ::rtl::OUString     getXString( sal_Int32 nAttrToken, const ::rtl::OUString& rDefault ) const;
+    OUString     getXString( sal_Int32 nAttrToken, const OUString& rDefault ) const;
 
     /** Returns the double value of the specified attribute, or the passed
         default value if the attribute is missing or not convertible to a double. */

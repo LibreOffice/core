@@ -84,7 +84,7 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
     if ( _rURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
         // graphic manager uniqueid
-        rtl::OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
+        OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
         xOutGraphicObj = graphic::GraphicObject::createWithId( ::comphelper::getProcessComponentContext(), sID );
     }
     else // linked
@@ -2616,8 +2616,8 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
 #if OSL_DEBUG_LEVEL == 0
             (void) e; // suppress warning
 #else
-            ::rtl::OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
+            sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( sMessage.getStr() );
 #endif
         }
@@ -2919,8 +2919,8 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(
 #if OSL_DEBUG_LEVEL == 0
             (void) e; // suppress warning
 #else
-            ::rtl::OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
+            sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
             OSL_FAIL( sMessage.getStr() );
 #endif
         }

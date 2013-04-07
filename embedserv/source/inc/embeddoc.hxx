@@ -157,7 +157,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     DocumentHolder*                     m_pDocHolder;
-    ::rtl::OUString                     m_aFileName;
+    OUString                     m_aFileName;
 
     CComPtr< IStorage >                 m_pMasterStorage;
     CComPtr< IStream >                  m_pOwnStream;

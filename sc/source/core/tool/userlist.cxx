@@ -27,8 +27,6 @@
 
 #include <boost/bind.hpp>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 namespace {
 

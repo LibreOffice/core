@@ -439,9 +439,9 @@ String SdrRectObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             if(nRad < 0)
                 nRad = 0;
 
-            rtl::OUString aStr;
+            OUString aStr;
             ImpTakeDescriptionStr(STR_DragRectEckRad, aStr);
-            rtl::OUStringBuffer aBuf(aStr);
+            OUStringBuffer aBuf(aStr);
             aBuf.appendAscii(" (");
             aBuf.append(GetMetrStr(nRad));
             aBuf.append(sal_Unicode(')'));
@@ -509,7 +509,7 @@ bool SdrRectObj::DoMacro(const SdrObjMacroHitRec& rRec)
     return SdrTextObj::DoMacro(rRec);
 }
 
-rtl::OUString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+OUString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     return SdrTextObj::GetMacroPopupComment(rRec);
 }

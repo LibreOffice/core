@@ -107,7 +107,6 @@
 
 using ::osl::MutexGuard;
 
-using ::rtl::OUString;
 
 using namespace com::sun::star::sdbc;
 
@@ -238,7 +237,7 @@ OUString DatabaseMetaData::getDatabaseProductName(  ) throw (SQLException, Runti
 
 OUString DatabaseMetaData::getDatabaseProductVersion(  ) throw (SQLException, RuntimeException)
 {
-    return rtl::OUString::createFromAscii( PQparameterStatus( m_pSettings->pConnection, "server_version" ) );
+    return OUString::createFromAscii( PQparameterStatus( m_pSettings->pConnection, "server_version" ) );
 }
 OUString DatabaseMetaData::getDriverName(  ) throw (SQLException, RuntimeException)
 {
@@ -1182,7 +1181,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( "DatabaseMetaData::getTables got called with " );
         buf.append( schemaPattern );
         buf.appendAscii( "." );
@@ -1466,7 +1465,7 @@ static void columnMetaData2DatabaseTypeDescription(
 {
     Reference< XRow > row( rs, UNO_QUERY_THROW );
     int domains = 0;
-    rtl::OUStringBuffer queryBuf(128);
+    OUStringBuffer queryBuf(128);
     queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
     while( rs->next() )
     {
@@ -1513,7 +1512,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( "DatabaseMetaData::getColumns got called with " );
         buf.append( schemaPattern );
         buf.appendAscii( "." );
@@ -1697,7 +1696,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( "DatabaseMetaData::getColumnPrivileges got called with " );
         buf.append( schema );
         buf.appendAscii( "." );
@@ -1728,7 +1727,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( "DatabaseMetaData::getTablePrivileges got called with " );
         buf.append( schemaPattern );
         buf.appendAscii( "." );
@@ -1792,7 +1791,7 @@ static void columnMetaData2DatabaseTypeDescription(
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( "DatabaseMetaData::getPrimaryKeys got called with " );
         buf.append( schema );
         buf.appendAscii( "." );
@@ -2060,7 +2059,7 @@ void DatabaseMetaData::init_getReferences_stmt ()
 
 void DatabaseMetaData::init_getPrivs_stmt ()
 {
-    rtl::OUStringBuffer sSQL(300);
+    OUStringBuffer sSQL(300);
     sSQL.append(
             " SELECT dp.TABLE_CAT, dp.TABLE_SCHEM, dp.TABLE_NAME, dp.GRANTOR, pr.rolname AS GRANTEE, dp.privilege, dp.is_grantable "
             " FROM ("

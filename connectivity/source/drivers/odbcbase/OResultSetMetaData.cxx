@@ -31,7 +31,7 @@ OResultSetMetaData::~OResultSetMetaData()
 {
 }
 // -------------------------------------------------------------------------
-::rtl::OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
+OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
     if(_column <(sal_Int32) m_vMapping.size()) // use mapping
@@ -48,12 +48,12 @@ OResultSetMetaData::~OResultSetMetaData()
                                     &nRealLen,
                                     NULL
                                     );
-    ::rtl::OUString sValue;
+    OUString sValue;
     if ( nRet == SQL_SUCCESS )
     {
         if ( nRealLen < 0 )
             nRealLen = BUFFER_LEN;
-        sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+        sValue = OUString(pName,nRealLen,m_pConnection->getTextEncoding());
     }
     delete [] pName;
     OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
@@ -69,7 +69,7 @@ OResultSetMetaData::~OResultSetMetaData()
                                     NULL
                                     );
         if ( nRet == SQL_SUCCESS && nRealLen > 0)
-            sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+            sValue = OUString(pName,nRealLen,m_pConnection->getTextEncoding());
         delete [] pName;
         OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
@@ -177,43 +177,43 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_SCHEMA_NAME);
 }
 // -------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_NAME);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_TABLE_NAME);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_CATALOG_NAME);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnTypeName" );
     return getCharColAttrib(column,SQL_DESC_TYPE_NAME);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnLabel" );
     return getCharColAttrib(column,SQL_DESC_LABEL);
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OResultSetMetaData::getColumnServiceName" );
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 

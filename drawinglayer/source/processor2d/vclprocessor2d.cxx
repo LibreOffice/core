@@ -296,7 +296,7 @@ namespace drawinglayer
                         if ( nWidth )
                             nChars = nWidthToFill / nWidth;
 
-                        rtl::OUStringBuffer aFilled;
+                        OUStringBuffer aFilled;
                         comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText.GetChar(0));
                         aText = aFilled.makeStringAndClear();
                         nPos = 0;

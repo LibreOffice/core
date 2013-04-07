@@ -581,7 +581,7 @@ void ImplDdeItem::AdviseLoop( sal_Bool bOpen )
             // A connection is re-established
             if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
             {
-                pLink->GetObj()->AddDataAdvise( pLink, rtl::OUString("text/plain;charset=utf-16"),  ADVISEMODE_NODATA );
+                pLink->GetObj()->AddDataAdvise( pLink, OUString("text/plain;charset=utf-16"),  ADVISEMODE_NODATA );
                 pLink->GetObj()->AddConnectAdvise( pLink );
             }
         }
@@ -603,7 +603,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
 
     String sNm( rLinkName );
     sal_Int32 nTokenPos = 0;
-    rtl::OUString sService( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
+    OUString sService( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
 
     DdeServices& rSvc = DdeService::GetServices();
     for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
@@ -612,7 +612,7 @@ static DdeTopic* FindTopic( const String & rLinkName, sal_uInt16* pItemStt )
         if( pService->GetName() == sService )
         {
             // then we search for the Topic
-            rtl::OUString sTopic( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
+            OUString sTopic( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
 

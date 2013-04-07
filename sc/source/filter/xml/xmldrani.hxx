@@ -46,14 +46,14 @@ class ScXMLDatabaseRangesContext : public SvXMLImportContext
 public:
 
     ScXMLDatabaseRangesContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDatabaseRangesContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -70,10 +70,10 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
     ScRange maRange;
-    rtl::OUString   sDatabaseRangeName;
-    rtl::OUString   sConnectionResource;
-    rtl::OUString   sDatabaseName;
-    rtl::OUString   sSourceObject;
+    OUString   sDatabaseRangeName;
+    OUString   sConnectionResource;
+    OUString   sDatabaseName;
+    OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
     std::vector < ScSubTotalRule > aSubTotalRules;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
@@ -103,27 +103,27 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    ScDBData* ConvertToDBData(const ::rtl::OUString& rName);
+    ScDBData* ConvertToDBData(const OUString& rName);
 
 public:
 
     ScXMLDatabaseRangeContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLDatabaseRangeContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
 
-    void SetDatabaseName(const rtl::OUString sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
-    void SetConnectionResource(const rtl::OUString sTempConRes) { sConnectionResource = sTempConRes; }
-    void SetSourceObject(const rtl::OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
+    void SetDatabaseName(const OUString sTempDatabaseName) { sDatabaseName = sTempDatabaseName; }
+    void SetConnectionResource(const OUString sTempConRes) { sConnectionResource = sTempConRes; }
+    void SetSourceObject(const OUString sTempSourceObject) { sSourceObject = sTempSourceObject; }
     void SetSourceType(const com::sun::star::sheet::DataImportMode nTempSourceType) { nSourceType = nTempSourceType; }
     void SetNative(const bool bTempNative) { bNative = bTempNative; }
     void SetSubTotalsBindFormatsToContent(const bool bTemp ) { bSubTotalsBindFormatsToContent = bTemp; }
@@ -142,7 +142,7 @@ public:
 class ScXMLSourceSQLContext : public SvXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
-    rtl::OUString               sDBName;
+    OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -150,7 +150,7 @@ class ScXMLSourceSQLContext : public SvXMLImportContext
 public:
 
     ScXMLSourceSQLContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -158,7 +158,7 @@ public:
     virtual ~ScXMLSourceSQLContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -168,7 +168,7 @@ public:
 class ScXMLSourceTableContext : public SvXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
-    rtl::OUString               sDBName;
+    OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -176,7 +176,7 @@ class ScXMLSourceTableContext : public SvXMLImportContext
 public:
 
     ScXMLSourceTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -184,7 +184,7 @@ public:
     virtual ~ScXMLSourceTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -194,7 +194,7 @@ public:
 class ScXMLSourceQueryContext : public SvXMLImportContext
 {
     ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
-    rtl::OUString               sDBName;
+    OUString               sDBName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -202,7 +202,7 @@ class ScXMLSourceQueryContext : public SvXMLImportContext
 public:
 
     ScXMLSourceQueryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -210,7 +210,7 @@ public:
     virtual ~ScXMLSourceQueryContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -227,7 +227,7 @@ class ScXMLConResContext : public SvXMLImportContext
 public:
 
     ScXMLConResContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -235,7 +235,7 @@ public:
     virtual ~ScXMLConResContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -252,7 +252,7 @@ class ScXMLSubTotalRulesContext : public SvXMLImportContext
 public:
 
     ScXMLSubTotalRulesContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -260,7 +260,7 @@ public:
     virtual ~ScXMLSubTotalRulesContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -277,7 +277,7 @@ class ScXMLSortGroupsContext : public SvXMLImportContext
 public:
 
     ScXMLSortGroupsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -285,7 +285,7 @@ public:
     virtual ~ScXMLSortGroupsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -303,7 +303,7 @@ class ScXMLSubTotalRuleContext : public SvXMLImportContext
 public:
 
     ScXMLSubTotalRuleContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
@@ -311,7 +311,7 @@ public:
     virtual ~ScXMLSubTotalRuleContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -325,8 +325,8 @@ public:
 class ScXMLSubTotalFieldContext : public SvXMLImportContext
 {
     ScXMLSubTotalRuleContext* pSubTotalRuleContext;
-    rtl::OUString sFieldNumber;
-    rtl::OUString sFunction;
+    OUString sFieldNumber;
+    OUString sFunction;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -334,7 +334,7 @@ class ScXMLSubTotalFieldContext : public SvXMLImportContext
 public:
 
     ScXMLSubTotalFieldContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLSubTotalRuleContext* pSubTotalRuleContext);
@@ -342,7 +342,7 @@ public:
     virtual ~ScXMLSubTotalFieldContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

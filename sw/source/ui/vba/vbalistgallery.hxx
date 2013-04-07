@@ -41,8 +41,8 @@ public:
     virtual css::uno::Any SAL_CALL ListTemplates( const css::uno::Any& index ) throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif /* SW_VBA_LISTGALLERY_HXX */
 

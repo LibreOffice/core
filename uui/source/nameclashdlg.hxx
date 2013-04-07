@@ -37,18 +37,18 @@ class NameClashDialog : public ModalDialog
     PushButton    maBtnRename;
     CancelButton  maBtnCancel;
     HelpButton    maBtnHelp;
-    rtl::OUString maSameName;
-    rtl::OUString maNewName;
+    OUString maSameName;
+    OUString maNewName;
 
     DECL_LINK( ButtonHdl_Impl, PushButton * );
 
 public:
     NameClashDialog( Window* pParent, ResMgr* pResMgr,
-                     rtl::OUString const & rTargetFolderURL,
-                     rtl::OUString const & rClashingName,
-                     rtl::OUString const & rProposedNewName,
+                     OUString const & rTargetFolderURL,
+                     OUString const & rClashingName,
+                     OUString const & rProposedNewName,
                      bool bAllowOverwrite );
-    rtl::OUString getNewName() const { return maNewName; }
+    OUString getNewName() const { return maNewName; }
 };
 
 #endif // UUI_COOKIEDG_HXX

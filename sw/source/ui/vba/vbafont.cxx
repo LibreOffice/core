@@ -74,9 +74,9 @@ private:
         }
     }
 public:
-    static rtl::OUString propName()
+    static OUString propName()
     {
-        static rtl::OUString sPropName("CharUnderline");
+        static OUString sPropName("CharUnderline");
         return sPropName;
     }
 
@@ -126,10 +126,10 @@ SwVbaFont::setUnderline( const uno::Any& _underline ) throw (uno::RuntimeExcepti
     }
 }
 
-rtl::OUString
+OUString
 SwVbaFont::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFont");
+    return OUString("SwVbaFont");
 }
 
 void SAL_CALL
@@ -220,14 +220,14 @@ SwVbaFont::getShadow() throw (uno::RuntimeException)
     return aLongAnyFalse;
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaFont::getServiceNames()
 {
-        static uno::Sequence< rtl::OUString > aServiceNames;
+        static uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
                 aServiceNames.realloc( 1 );
-                aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Font" );
+                aServiceNames[ 0 ] = OUString("ooo.vba.word.Font" );
         }
         return aServiceNames;
 }

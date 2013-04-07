@@ -40,18 +40,18 @@ OwnSubFilterService::~OwnSubFilterService()
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OwnSubFilterService::impl_getStaticSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OwnSubFilterService::impl_getStaticSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString("com.sun.star.document.OwnSubFilter");
-    aRet[1] = ::rtl::OUString("com.sun.star.comp.document.OwnSubFilter");
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = OUString("com.sun.star.document.OwnSubFilter");
+    aRet[1] = OUString("com.sun.star.comp.document.OwnSubFilter");
     return aRet;
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OwnSubFilterService::impl_getStaticImplementationName()
+OUString SAL_CALL OwnSubFilterService::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString("com.sun.star.comp.document.OwnSubFilter");
+    return OUString("com.sun.star.comp.document.OwnSubFilter");
 }
 
 //-------------------------------------------------------------------------
@@ -125,17 +125,17 @@ void SAL_CALL OwnSubFilterService::initialize( const uno::Sequence< uno::Any >& 
 // XServiceInfo
 
 //-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OwnSubFilterService::getImplementationName()
+OUString SAL_CALL OwnSubFilterService::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return impl_getStaticImplementationName();
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SAL_CALL OwnSubFilterService::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL OwnSubFilterService::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_getStaticSupportedServiceNames();
+    uno::Sequence< OUString > aSeq = impl_getStaticSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -145,7 +145,7 @@ sal_Bool SAL_CALL OwnSubFilterService::supportsService( const ::rtl::OUString& S
 }
 
 //-------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL OwnSubFilterService::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
     return impl_getStaticSupportedServiceNames();

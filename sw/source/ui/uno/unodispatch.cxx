@@ -33,7 +33,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
 
 static const char* cURLFormLetter      = ".uno:DataSourceBrowser/FormLetter";
 static const char* cURLInsertContent   = ".uno:DataSourceBrowser/InsertContent";//data into fields

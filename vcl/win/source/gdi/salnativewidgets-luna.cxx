@@ -49,7 +49,6 @@
 
 using namespace std;
 
-using ::rtl::OUString;
 
 typedef map< wstring, HTHEME > ThemeMap;
 static ThemeMap aThemeMap;

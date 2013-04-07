@@ -46,13 +46,13 @@ namespace pcr
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xListBox;
-        ::rtl::OUString m_sPropertyName;
+        OUString m_sPropertyName;
 
     public:
         ListSelectionDialog(
             Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxListBox,
-            const ::rtl::OUString& _rPropertyName,
+            const OUString& _rPropertyName,
             const String& _rPropertyUIName
         );
 
@@ -63,7 +63,7 @@ namespace pcr
         void    initialize( );
         void    commitSelection();
 
-        void    fillEntryList   ( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rListEntries );
+        void    fillEntryList   ( const ::com::sun::star::uno::Sequence< OUString >& _rListEntries );
 
         void    selectEntries   ( const ::com::sun::star::uno::Sequence< sal_Int16 >& /* [in ] */ _rSelection );
         void    collectSelection(       ::com::sun::star::uno::Sequence< sal_Int16 >& /* [out] */ _rSelection );

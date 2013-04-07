@@ -52,23 +52,23 @@ class SAXHelper
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
         void startElement(
-            const ::rtl::OUString& aName ,
+            const OUString& aName ,
             const com::sun::star::uno::Sequence<
                 com::sun::star::xml::csax::XMLAttribute >& aAttributes )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
-        void endElement( const ::rtl::OUString& aName )
+        void endElement( const OUString& aName )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
-        void characters( const ::rtl::OUString& aChars )
+        void characters( const OUString& aChars )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
-        void ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+        void ignorableWhitespace( const OUString& aWhitespaces )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
         void processingInstruction(
-            const ::rtl::OUString& aTarget ,
-            const ::rtl::OUString& aData )
+            const OUString& aTarget ,
+            const OUString& aData )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
         void setDocumentLocator( const ::com::sun::star::uno::Reference<

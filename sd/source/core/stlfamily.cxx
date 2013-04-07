@@ -39,7 +39,6 @@
 
 #include <map>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
@@ -48,7 +47,7 @@ using namespace ::com::sun::star::beans;
 
 // ----------------------------------------------------------
 
-typedef std::map< rtl::OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
+typedef std::map< OUString, rtl::Reference< SdStyleSheet > > PresStyleMap;
 
 struct SdStyleFamilyImpl
 {
@@ -223,7 +222,7 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException)
 
 // ----------------------------------------------------------
 
-void SAL_CALL SdStyleFamily::setName( const ::rtl::OUString& ) throw (RuntimeException)
+void SAL_CALL SdStyleFamily::setName( const OUString& ) throw (RuntimeException)
 {
 }
 

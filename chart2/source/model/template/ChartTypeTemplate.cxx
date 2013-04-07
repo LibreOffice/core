@@ -44,7 +44,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -130,7 +129,7 @@ namespace chart
 
 ChartTypeTemplate::ChartTypeTemplate(
     Reference< uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName ) :
+    const OUString & rServiceName ) :
         m_xContext( xContext ),
         m_aServiceName( rServiceName )
 {
@@ -523,7 +522,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
 }
 
 // ____ XServiceName ____
-    ::rtl::OUString SAL_CALL ChartTypeTemplate::getServiceName()
+    OUString SAL_CALL ChartTypeTemplate::getServiceName()
     throw (uno::RuntimeException)
 {
     return m_aServiceName;

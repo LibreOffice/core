@@ -49,7 +49,7 @@ struct DAVResource;
 
 struct equalString
 {
-  bool operator()( const rtl::OUString& s1, const rtl::OUString& s2 ) const
+  bool operator()( const OUString& s1, const OUString& s2 ) const
   {
       return !!( s1 == s2 );
   }
@@ -57,7 +57,7 @@ struct equalString
 
 struct hashString
 {
-    size_t operator()( const rtl::OUString & rName ) const
+    size_t operator()( const OUString & rName ) const
     {
         return rName.hashCode();
     }
@@ -91,7 +91,7 @@ public:
 
 typedef boost::unordered_map
 <
-    rtl::OUString,
+    OUString,
     PropertyValue,
     hashString,
     equalString
@@ -108,17 +108,17 @@ public:
     ContentProperties( const DAVResource& rResource );
 
     // Mini props for transient contents.
-    ContentProperties( const rtl::OUString & rTitle, sal_Bool bFolder );
+    ContentProperties( const OUString & rTitle, sal_Bool bFolder );
 
     // Micro props for non-existing contents.
-    ContentProperties( const rtl::OUString & rTitle );
+    ContentProperties( const OUString & rTitle );
 
     ContentProperties( const ContentProperties & rOther );
 
-    bool contains( const rtl::OUString & rName ) const;
+    bool contains( const OUString & rName ) const;
 
     const com::sun::star::uno::Any &
-    getValue( const rtl::OUString & rName ) const;
+    getValue( const OUString & rName ) const;
 
     // Maps the UCB property names contained in rProps with their DAV property
     // counterparts, if possible. All unmappable properties will be included
@@ -130,7 +130,7 @@ public:
     static void UCBNamesToDAVNames( const com::sun::star::uno::Sequence<
                                         com::sun::star::beans::Property > &
                                             rProps,
-                                    std::vector< rtl::OUString > & resources,
+                                    std::vector< OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
     // Maps the UCB property names contained in rProps with their HTTP header
@@ -143,7 +143,7 @@ public:
     static void UCBNamesToHTTPNames( const com::sun::star::uno::Sequence<
                                         com::sun::star::beans::Property > &
                                             rProps,
-                                    std::vector< rtl::OUString > & resources,
+                                    std::vector< OUString > & resources,
                                     bool bIncludeUnmatched = true );
 
     // return true, if all properties contained in rProps are contained in
@@ -152,16 +152,16 @@ public:
     bool containsAllNames(
                     const com::sun::star::uno::Sequence<
                         com::sun::star::beans::Property >& rProps,
-                    std::vector< rtl::OUString > & rNamesNotContained ) const;
+                    std::vector< OUString > & rNamesNotContained ) const;
 
     // adds all properties described by rProps that are actually contained in
     // rContentProps to this instance. In case of duplicates the value
     // already contained in this will left unchanged.
-    void addProperties( const std::vector< rtl::OUString > & rProps,
+    void addProperties( const std::vector< OUString > & rProps,
                         const ContentProperties & rContentProps );
 
     // overwrites probably existing entry.
-    void addProperty( const rtl::OUString & rName,
+    void addProperty( const OUString & rName,
                      const com::sun::star::uno::Any & rValue,
                      bool bIsCaseSensitive );
 
@@ -170,7 +170,7 @@ public:
 
     bool isTrailingSlash() const { return m_bTrailingSlash; }
 
-    const rtl::OUString & getEscapedTitle() const { return m_aEscapedTitle; }
+    const OUString & getEscapedTitle() const { return m_aEscapedTitle; }
 
     // Not good to expose implementation details, but this is actually an
     // internal class.
@@ -178,7 +178,7 @@ public:
     { return m_xProps; }
 
 private:
-    ::rtl::OUString m_aEscapedTitle;
+    OUString m_aEscapedTitle;
     std::auto_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
@@ -186,7 +186,7 @@ private:
 
     ContentProperties & operator=( const ContentProperties & ); // n.i.
 
-    const PropertyValue * get( const rtl::OUString & rName ) const;
+    const PropertyValue * get( const OUString & rName ) const;
 };
 
 class CachableContentProperties
@@ -207,11 +207,11 @@ public:
     bool containsAllNames(
                     const com::sun::star::uno::Sequence<
                         com::sun::star::beans::Property >& rProps,
-                    std::vector< rtl::OUString > & rNamesNotContained ) const
+                    std::vector< OUString > & rNamesNotContained ) const
     { return m_aProps.containsAllNames( rProps, rNamesNotContained ); }
 
     const com::sun::star::uno::Any &
-    getValue( const rtl::OUString & rName ) const
+    getValue( const OUString & rName ) const
     { return m_aProps.getValue( rName ); }
 
     operator const ContentProperties & () const { return m_aProps; }

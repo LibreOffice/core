@@ -731,7 +731,7 @@ protected:
 /** import user docinfo field (<text:user-defined>) */
 class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
-    rtl::OUString aName;
+    OUString aName;
     const OUString sPropertyName;
     const OUString sPropertyNumberFormat;
     const OUString sPropertyIsFixedLanguage;
@@ -1450,20 +1450,20 @@ protected:
 /** dropdown field (filter legacy) */
 class XMLDropDownFieldImportContext : public XMLTextFieldImportContext
 {
-    std::vector<rtl::OUString> aLabels;
-    rtl::OUString sName;
-    rtl::OUString sHelp;
-    rtl::OUString sHint;
+    std::vector<OUString> aLabels;
+    OUString sName;
+    OUString sHelp;
+    OUString sHint;
     sal_Int32 nSelected;
     bool bNameOK;
     bool bHelpOK;
     bool bHintOK;
 
-    const rtl::OUString sPropertyItems;
-    const rtl::OUString sPropertySelectedItem;
-    const rtl::OUString sPropertyName;
-    const rtl::OUString sPropertyHelp;
-    const rtl::OUString sPropertyToolTip;
+    const OUString sPropertyItems;
+    const OUString sPropertySelectedItem;
+    const OUString sPropertyName;
+    const OUString sPropertyHelp;
+    const OUString sPropertyToolTip;
 
 public:
     TYPEINFO();

@@ -60,7 +60,7 @@ private:
 
 protected:
     OColumns*       m_pColumns;                 // our column descriptions
-    ::rtl::OUString m_sElementName;
+    OUString m_sElementName;
     virtual ~OQueryDescriptor_Base();
 
     void        setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
@@ -69,7 +69,7 @@ protected:
     sal_Int32   getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
     void        clearColumns( );
 
-    void        implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn );
+    void        implAppendColumn( const OUString& _rName, OColumn* _pColumn );
 
 public:
     OQueryDescriptor_Base(::osl::Mutex& _rMutex,::cppu::OWeakObject& _rMySelf);
@@ -86,17 +86,17 @@ public:
     DECLARE_IMPLEMENTATION_ID( );
 
 // ::com::sun::star::lang::XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
 
 // IColumnFactory
-    virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
+    virtual OColumn*    createColumn(const OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createColumnDescriptor();
     virtual void columnAppended( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxSourceDescriptor );
-    virtual void columnDropped(const ::rtl::OUString& _sName);
+    virtual void columnDropped(const OUString& _sName);
 
     /** rebuild our columns set
 

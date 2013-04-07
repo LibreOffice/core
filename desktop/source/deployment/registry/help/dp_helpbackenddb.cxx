@@ -30,7 +30,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/help-registry/2010"
 #define NS_PREFIX "help"
@@ -43,7 +42,7 @@ namespace help {
 
 HelpBackendDb::HelpBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):BackendDb(xContext, url)
+    OUString const & url):BackendDb(xContext, url)
 {
 
 }
@@ -69,7 +68,7 @@ OUString HelpBackendDb::getKeyElementName()
 }
 
 
-void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
+void HelpBackendDb::addEntry(OUString const & url, Data const & data)
 {
     try{
         if (!activateEntry(url))
@@ -95,7 +94,7 @@ void HelpBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 
 
 ::boost::optional<HelpBackendDb::Data>
-HelpBackendDb::getEntry(::rtl::OUString const & url)
+HelpBackendDb::getEntry(OUString const & url)
 {
     try
     {

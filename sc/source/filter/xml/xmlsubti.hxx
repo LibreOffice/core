@@ -37,7 +37,7 @@ class ScXMLImport;
 
 struct ScXMLTabProtectionData
 {
-    ::rtl::OUString maPassword;
+    OUString maPassword;
     ScPasswordHash  meHash1;
     ScPasswordHash  meHash2;
     bool            mbProtected;
@@ -58,7 +58,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > xCurrentCellRange;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
-    rtl::OUString                       sCurrentSheetName;
+    OUString                       sCurrentSheetName;
     ScAddress                           maCurrentCellPos;
     ScRangeList                         maMatrixRangeList;
     ScXMLTabProtectionData              maProtectionData;
@@ -69,23 +69,23 @@ private:
     void                                NewRow();
     void                                NewColumn(bool bIsCovered);
 
-    void                                SetTableStyle(const rtl::OUString& sStyleName);
+    void                                SetTableStyle(const OUString& sStyleName);
 public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
-    void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
+    void                                NewSheet(const OUString& sTableName, const OUString& sStyleName,
                                                  const ScXMLTabProtectionData& rProtectData);
     void                                AddRow();
-    void                                SetRowStyle(const rtl::OUString& rCellStyleName);
+    void                                SetRowStyle(const OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     bool                                IsOLE(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape) const
                                             { return ScMyOLEFixer::IsOLE(rShape); }
     void                                DeleteTable();
     ScAddress                           GetCurrentCellPos() const { return maCurrentCellPos; };
-    void                                AddColStyle(const sal_Int32 nRepeat, const rtl::OUString& rCellStyleName);
+    void                                AddColStyle(const sal_Int32 nRepeat, const OUString& rCellStyleName);
     ScXMLTabProtectionData&             GetCurrentProtectionData() { return maProtectionData; }
-    rtl::OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
+    OUString                       GetCurrentSheetName() const { return sCurrentSheetName; }
     SCTAB                               GetCurrentSheet() const { return (maCurrentCellPos.Tab() >= 0) ? maCurrentCellPos.Tab() : 0; }
     SCCOL                               GetCurrentColCount() const { return std::min<sal_Int32>(nCurrentColCount, MAXCOL); }
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
@@ -100,14 +100,14 @@ public:
     bool                                HasDrawPage();
     bool                                HasXShapes();
     void                                AddOLE(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
-                                               const rtl::OUString &rRangeList);
+                                               const OUString &rRangeList);
 
     void                                AddMatrixRange( const SCCOL nStartColumn,
                                             const SCROW nStartRow,
                                             const SCCOL nEndColumn,
                                             const SCROW nEndRow,
-                                            const rtl::OUString& rFormula,
-                                            const rtl::OUString& rFormulaNmsp,
+                                            const OUString& rFormula,
+                                            const OUString& rFormulaNmsp,
                                             const formula::FormulaGrammar::Grammar );
     bool                                IsPartOfMatrix( const ScAddress& rScAddress) const;
 };

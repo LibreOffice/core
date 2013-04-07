@@ -45,14 +45,14 @@ public:
 
     //interface XSubToolbarController:
     virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    rtl::OUString       m_aSubTbName;
-    rtl::OUString       m_aSubTbxResName;
-    rtl::OUString       m_aCommand;
+    OUString       m_aSubTbName;
+    OUString       m_aSubTbxResName;
+    OUString       m_aCommand;
 };
 
 

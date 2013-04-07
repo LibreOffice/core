@@ -56,30 +56,30 @@ namespace rptui
     using namespace util;
     using namespace ui;
 
-::rtl::OUString SAL_CALL OToolboxController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OToolboxController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OToolboxController::getImplementationName_Static() throw( RuntimeException )
+OUString OToolboxController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString("com.sun.star.report.comp.ReportToolboxController");
+    return OUString("com.sun.star.report.comp.ReportToolboxController");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OToolboxController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OToolboxController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.report.ReportToolboxController");
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.report.ReportToolboxController");
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-::sal_Bool SAL_CALL OToolboxController::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
+::sal_Bool SAL_CALL OToolboxController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OToolboxController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
@@ -147,48 +147,48 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         }
         if ( m_aCommandURL == ".uno:BasicShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:BasicShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:BasicShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_BASIC,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:SymbolShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:SymbolShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:SymbolShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_SYMBOL,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:ArrowShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:ArrowShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:ArrowShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_ARROW,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:FlowChartShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:FlowChartShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:FlowChartShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_FLOWCHART,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:CalloutShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:CalloutShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:CalloutShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_CALLOUT,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:StarShapes" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:StarShapes"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:StarShapes"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL == ".uno:CharFontName" )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:CharFontName"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox));
         }
         else if ( m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:FontColor")) || m_aCommandURL.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(".uno:Color")) )
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:FontColor"),sal_True));
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:Color"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxColorExtToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox));
         }
         else
         {
-            m_aStates.insert(TCommandState::value_type(::rtl::OUString(".uno:BackgroundColor"),sal_True));
+            m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),sal_True));
             m_pToolbarController = TToolbarHelper::createFromQuery(new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox));
         }
 
@@ -223,7 +223,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                 if ( nId == 0 )
                     continue;
 
-                rtl::OUString aCmd = rTb.GetItemCommand( nId );
+                OUString aCmd = rTb.GetItemCommand( nId );
                 if ( aCmd == Event.FeatureURL.Complete )
                 {
                     // Enable/disable item
@@ -237,7 +237,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                         rTb.CheckItem( nId, bCheckmark );
                     else
                     {
-                        rtl::OUString aItemText;
+                        OUString aItemText;
 
                         if ( Event.State >>= aItemText )
                             rTb.SetItemText( nId, aItemText );
@@ -290,17 +290,17 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
     return m_nSlotId == SID_DRAWTBX_CS_BASIC;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException)
+OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
     uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
     if ( xSub.is() )
         return xSub->getSubToolbarName();
-    return ::rtl::OUString();
+    return OUString();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OToolboxController::functionSelected( const ::rtl::OUString& rCommand ) throw (uno::RuntimeException)
+void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);

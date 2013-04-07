@@ -99,7 +99,7 @@ namespace slideshow
             }
             catch (uno::Exception &)
             {
-                OSL_FAIL( rtl::OUStringToOString(
+                OSL_FAIL( OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -212,7 +212,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  ::rtl::OUString("Window" )) )
+                                  OUString("Window" )) )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 
@@ -268,7 +268,7 @@ namespace slideshow
                 if( xCanvas.is() )
                 {
                     uno::Reference< beans::XPropertySet >   xPropSet;
-                    ::rtl::OUString                         aURL;
+                    OUString                         aURL;
 
                     try
                     {
@@ -278,13 +278,13 @@ namespace slideshow
                         if (xPropSet.is())
                         {
                             if ((xPropSet->getPropertyValue(
-                                  ::rtl::OUString( "PrivateTempFileURL")) >>= aURL)
+                                  OUString( "PrivateTempFileURL")) >>= aURL)
                                 && !aURL.isEmpty())
                             {
                                 implInitializeMediaPlayer( aURL );
                             }
                             else if (xPropSet->getPropertyValue(
-                                  ::rtl::OUString( "MediaURL")) >>= aURL)
+                                  OUString( "MediaURL")) >>= aURL)
                             {
                                 implInitializeMediaPlayer( aURL );
                             }
@@ -295,7 +295,7 @@ namespace slideshow
 
                         if( ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
                         {
-                            ::rtl::OUString aImplName;
+                            OUString aImplName;
 
                             aDeviceParams[ 0 ] >>= aImplName;
 
@@ -323,7 +323,7 @@ namespace slideshow
                     }
                     catch( uno::Exception& )
                     {
-                        OSL_FAIL( rtl::OUStringToOString(
+                        OSL_FAIL( OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
@@ -346,19 +346,19 @@ namespace slideshow
                     sal_Bool bLoop( false );
                     getPropertyValue( bLoop,
                                       rxProps,
-                                      ::rtl::OUString( "Loop" ));
+                                      OUString( "Loop" ));
                     mxPlayer->setPlaybackLoop( bLoop );
 
                     sal_Bool bMute( false );
                     getPropertyValue( bMute,
                                       rxProps,
-                                      ::rtl::OUString( "Mute" ));
+                                      OUString( "Mute" ));
                     mxPlayer->setMute( bMute || !mbIsSoundEnabled);
 
                     sal_Int16 nVolumeDB(0);
                     getPropertyValue( nVolumeDB,
                                       rxProps,
-                                      ::rtl::OUString( "VolumeDB" ));
+                                      OUString( "VolumeDB" ));
                     mxPlayer->setVolumeDB( nVolumeDB );
 
                     if( mxPlayerWindow.is() )
@@ -366,7 +366,7 @@ namespace slideshow
                         media::ZoomLevel eZoom(media::ZoomLevel_FIT_TO_WINDOW);
                         getPropertyValue( eZoom,
                                           rxProps,
-                                          ::rtl::OUString( "Zoom" ));
+                                          OUString( "Zoom" ));
                         mxPlayerWindow->setZoomLevel( eZoom );
                     }
                 }
@@ -375,7 +375,7 @@ namespace slideshow
 
         // ---------------------------------------------------------------------
 
-        void ViewMediaShape::implInitializeMediaPlayer( const ::rtl::OUString& rMediaURL )
+        void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL )
         {
             if( !mxPlayer.is() )
             {
@@ -394,7 +394,7 @@ namespace slideshow
                 catch( const uno::Exception& )
                 {
                     throw lang::NoSupportException(
-                        rtl::OUString( "No video support for " ) + rMediaURL,
+                        OUString( "No video support for " ) + rMediaURL,
                         uno::Reference<uno::XInterface>() );
                 }
             }
@@ -472,7 +472,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_FAIL( OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
@@ -530,7 +530,7 @@ namespace slideshow
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_FAIL( OUStringToOString(
                                     comphelper::anyToString( cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
                 }

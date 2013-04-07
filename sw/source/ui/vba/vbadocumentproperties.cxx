@@ -74,8 +74,8 @@ public:
                 uno::UNO_SET_THROW);
     }
     virtual ~PropertGetSetHelper() {}
-    virtual uno::Any getPropertyValue( const rtl::OUString& rPropName ) = 0;
-    virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue ) = 0;
+    virtual uno::Any getPropertyValue( const OUString& rPropName ) = 0;
+    virtual void setPropertyValue( const OUString& rPropName, const uno::Any& aValue ) = 0;
     virtual uno::Reference< beans::XPropertySet > getUserDefinedProperties() {
         return uno::Reference<beans::XPropertySet>(
                 m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
@@ -89,7 +89,7 @@ public:
     BuiltinPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :PropertGetSetHelper( xModel )
     {
     }
-    virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
+    virtual uno::Any getPropertyValue( const OUString& rPropName )
     {
         if ( rPropName == "EditingDuration" )
         {
@@ -150,7 +150,7 @@ public:
             return getUserDefinedProperties()->getPropertyValue(rPropName);
         }
     }
-    virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue )
+    virtual void setPropertyValue( const OUString& rPropName, const uno::Any& aValue )
     {
         if ("EditingDuration" == rPropName)
         {
@@ -270,12 +270,12 @@ public:
     CustomPropertyGetSetHelper( const uno::Reference< frame::XModel >& xModel ) :BuiltinPropertyGetSetHelper( xModel )
     {
     }
-    virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
+    virtual uno::Any getPropertyValue( const OUString& rPropName )
     {
         return getUserDefinedProperties()->getPropertyValue(rPropName);
     }
     virtual void setPropertyValue(
-            const rtl::OUString& rPropName, const uno::Any& rValue)
+            const OUString& rPropName, const uno::Any& rValue)
     {
         return getUserDefinedProperties()->setPropertyValue(rPropName, rValue);
     }
@@ -291,7 +291,7 @@ public:
             mxModelProps.set( m_xModel, uno::UNO_QUERY_THROW );
             mpDocShell = word::getDocShell( xModel );
     }
-    virtual uno::Any getPropertyValue( const rtl::OUString& rPropName )
+    virtual uno::Any getPropertyValue( const OUString& rPropName )
     {
         try
         {
@@ -336,7 +336,7 @@ public:
         return aReturn;
     }
 
-    virtual void setPropertyValue( const rtl::OUString& rPropName, const uno::Any& aValue )
+    virtual void setPropertyValue( const OUString& rPropName, const uno::Any& aValue )
     {
         uno::Sequence< beans::NamedValue > stats(
                 m_xDocProps->getDocumentStatistics());
@@ -357,11 +357,11 @@ public:
 class DocPropInfo
 {
 public:
-    rtl::OUString msMSODesc;
-    rtl::OUString msOOOPropName;
+    OUString msMSODesc;
+    OUString msOOOPropName;
     boost::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 
-    static DocPropInfo createDocPropInfo( const rtl::OUString& sDesc, const rtl::OUString& sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
+    static DocPropInfo createDocPropInfo( const OUString& sDesc, const OUString& sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
     {
         DocPropInfo aItem;
         aItem.msMSODesc = sDesc;
@@ -372,7 +372,7 @@ public:
 
     static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
     {
-        return createDocPropInfo( rtl::OUString::createFromAscii( sDesc ), rtl::OUString::createFromAscii( sPropName ), rHelper );
+        return createDocPropInfo( OUString::createFromAscii( sDesc ), OUString::createFromAscii( sPropName ), rHelper );
     }
     uno::Any getValue()
     {
@@ -453,21 +453,21 @@ public:
     SwVbaBuiltInDocumentProperty(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const DocPropInfo& rInfo );
     // XDocumentProperty
     virtual void SAL_CALL Delete(  ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getName(  ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual OUString SAL_CALL getName(  ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual ::sal_Int8 SAL_CALL getType(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setType( ::sal_Int8 Type ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getLinkToContent(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setLinkToContent( ::sal_Bool LinkToContent ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual uno::Any SAL_CALL getValue(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setValue( const uno::Any& Value ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual void SAL_CALL setLinkSource( const rtl::OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual void SAL_CALL setLinkSource( const OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
     //XDefaultProperty
-    virtual ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return rtl::OUString("Value"); }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException) { return OUString("Value"); }
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual uno::Sequence<OUString> getServiceNames();
 };
 
 class SwVbaCustomDocumentProperty : public SwVbaBuiltInDocumentProperty
@@ -479,10 +479,10 @@ public:
     virtual ::sal_Bool SAL_CALL getLinkToContent(  ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setLinkToContent( ::sal_Bool LinkToContent ) throw (script::BasicErrorException, uno::RuntimeException);
 
-    virtual rtl::OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual void SAL_CALL setLinkSource( const rtl::OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual OUString SAL_CALL getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual void SAL_CALL setLinkSource( const OUString& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL Delete(  ) throw (script::BasicErrorException, uno::RuntimeException);
-    virtual void SAL_CALL setName( const ::rtl::OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException);
+    virtual void SAL_CALL setName( const OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException);
     virtual void SAL_CALL setType( ::sal_Int8 Type ) throw (script::BasicErrorException, uno::RuntimeException);
 
 };
@@ -504,21 +504,21 @@ SwVbaCustomDocumentProperty::setLinkToContent( sal_Bool /*bLinkContent*/ ) throw
 {
 }
 
-rtl::OUString
+OUString
 SwVbaCustomDocumentProperty::getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // #FIXME we need to store the link content somewhere
-    return rtl::OUString();
+    return OUString();
 }
 
 void
-SwVbaCustomDocumentProperty::setLinkSource( const rtl::OUString& /*rsLinkContent*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaCustomDocumentProperty::setLinkSource( const OUString& /*rsLinkContent*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // #FIXME we need to store the link source somewhere
 }
 
 void SAL_CALL
-SwVbaCustomDocumentProperty::setName( const ::rtl::OUString& /*Name*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaCustomDocumentProperty::setName( const OUString& /*Name*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // setName on existing property ?
     // #FIXME
@@ -551,14 +551,14 @@ SwVbaBuiltInDocumentProperty::Delete(  ) throw (script::BasicErrorException, uno
     throw uno::RuntimeException();
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaBuiltInDocumentProperty::getName(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     return mPropInfo.msMSODesc;
 }
 
 void SAL_CALL
-SwVbaBuiltInDocumentProperty::setName( const rtl::OUString& ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaBuiltInDocumentProperty::setName( const OUString& ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // not valid for Builtin
     throw uno::RuntimeException();
@@ -605,7 +605,7 @@ SwVbaBuiltInDocumentProperty::setValue( const uno::Any& Value ) throw (script::B
     mPropInfo.setValue( Value );
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 SwVbaBuiltInDocumentProperty::getLinkSource(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // not valid for Builtin
@@ -613,26 +613,26 @@ SwVbaBuiltInDocumentProperty::getLinkSource(  ) throw (script::BasicErrorExcepti
 }
 
 void SAL_CALL
-SwVbaBuiltInDocumentProperty::setLinkSource( const rtl::OUString& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaBuiltInDocumentProperty::setLinkSource( const OUString& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     // not valid for Builtin
     throw uno::RuntimeException();
 }
 
-rtl::OUString
+OUString
 SwVbaBuiltInDocumentProperty::getServiceImplName()
 {
-    return rtl::OUString("SwVbaBuiltinDocumentProperty");
+    return OUString("SwVbaBuiltinDocumentProperty");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaBuiltInDocumentProperty::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.DocumentProperty" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.DocumentProperty" );
     }
     return aServiceNames;
 }
@@ -663,7 +663,7 @@ public:
     }
 };
 
-typedef boost::unordered_map< rtl::OUString, uno::Reference< XDocumentProperty >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > DocPropsByName;
+typedef boost::unordered_map< OUString, uno::Reference< XDocumentProperty >, OUStringHash, ::std::equal_to< OUString > > DocPropsByName;
 
 class BuiltInPropertiesImpl : public PropertiesImpl_BASE
 {
@@ -699,7 +699,7 @@ protected:
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( it->second  );
     }
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -707,17 +707,17 @@ protected:
         return uno::Any( it->second );
 
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > aNames( getCount() );
-        rtl::OUString* pName = aNames.getArray();
+        uno::Sequence< OUString > aNames( getCount() );
+        OUString* pName = aNames.getArray();
         DocPropsByName::iterator it_end = mNamedDocProps.end();
         for(  DocPropsByName::iterator it = mNamedDocProps.begin(); it != it_end; ++it, ++pName )
            *pName = it->first;
         return aNames;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         DocPropsByName::iterator it = mNamedDocProps.find( aName );
         if ( it == mNamedDocProps.end() )
@@ -744,10 +744,10 @@ SwVbaBuiltinDocumentProperties::SwVbaBuiltinDocumentProperties( const uno::Refer
 }
 
 uno::Reference< XDocumentProperty > SAL_CALL
-SwVbaBuiltinDocumentProperties::Add( const ::rtl::OUString& /*Name*/, ::sal_Bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const uno::Any& /*value*/, const uno::Any& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaBuiltinDocumentProperties::Add( const OUString& /*Name*/, ::sal_Bool /*LinkToContent*/, ::sal_Int8 /*Type*/, const uno::Any& /*value*/, const uno::Any& /*LinkSource*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     throw uno::RuntimeException(
-        rtl::OUString("not supported for Builtin properties"), uno::Reference< uno::XInterface >() );
+        OUString("not supported for Builtin properties"), uno::Reference< uno::XInterface >() );
 }
 
 // XEnumerationAccess
@@ -773,20 +773,20 @@ SwVbaBuiltinDocumentProperties::createCollectionObject( const uno::Any& aSource 
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaBuiltinDocumentProperties::getServiceImplName()
 {
-    return rtl::OUString("SwVbaBuiltinDocumentProperties");
+    return OUString("SwVbaBuiltinDocumentProperties");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaBuiltinDocumentProperties::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.DocumentProperties" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.DocumentProperties" );
     }
     return aServiceNames;
 }
@@ -822,7 +822,7 @@ public:
         return uno::makeAny( uno::Reference< XDocumentProperty >( new SwVbaCustomDocumentProperty( m_xParent, m_xContext, aPropInfo ) ) );
     }
 
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
@@ -831,21 +831,21 @@ public:
         return uno::makeAny( uno::Reference< XDocumentProperty >( new SwVbaCustomDocumentProperty( m_xParent, m_xContext, aPropInfo ) ) );
     }
 
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
         uno::Sequence< beans::Property > aProps = mxUserDefinedProp->getPropertySetInfo()->getProperties();
-        uno::Sequence< rtl::OUString > aNames( aProps.getLength() );
-        rtl::OUString* pString = aNames.getArray();
-        rtl::OUString* pEnd = ( pString + aNames.getLength() );
+        uno::Sequence< OUString > aNames( aProps.getLength() );
+        OUString* pString = aNames.getArray();
+        OUString* pEnd = ( pString + aNames.getLength() );
         beans::Property* pProp = aProps.getArray();
         for ( ; pString != pEnd; ++pString, ++pProp )
             *pString = pProp->Name;
         return aNames;
     }
 
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
-        OSL_TRACE("hasByName(%s) returns %d", rtl::OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
+        OSL_TRACE("hasByName(%s) returns %d", OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr(), mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName ) );
         return mxUserDefinedProp->getPropertySetInfo()->hasPropertyByName( aName );
     }
 
@@ -873,7 +873,7 @@ public:
         return  new DocPropEnumeration( simpleDocPropSnapShot );
     }
 
-    void addProp( const ::rtl::OUString& Name, ::sal_Int8 /*Type*/, const uno::Any& Value )
+    void addProp( const OUString& Name, ::sal_Int8 /*Type*/, const uno::Any& Value )
     {
         sal_Int16 attributes = 128;
         uno::Reference< beans::XPropertyContainer > xContainer( mxUserDefinedProp, uno::UNO_QUERY_THROW );
@@ -892,13 +892,13 @@ SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Referen
 }
 
 uno::Reference< XDocumentProperty > SAL_CALL
-SwVbaCustomDocumentProperties::Add( const ::rtl::OUString& Name, ::sal_Bool LinkToContent, ::sal_Int8 Type, const uno::Any& Value, const uno::Any& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException)
+SwVbaCustomDocumentProperties::Add( const OUString& Name, ::sal_Bool LinkToContent, ::sal_Int8 Type, const uno::Any& Value, const uno::Any& LinkSource ) throw (script::BasicErrorException, uno::RuntimeException)
 {
     CustomPropertiesImpl* pCustomProps = dynamic_cast< CustomPropertiesImpl* > ( m_xIndexAccess.get() );
     uno::Reference< XDocumentProperty > xDocProp;
     if ( pCustomProps )
     {
-        rtl::OUString sLinkSource;
+        OUString sLinkSource;
         pCustomProps->addProp( Name, Type, Value );
 
         xDocProp.set( m_xNameAccess->getByName( Name ), uno::UNO_QUERY_THROW );
@@ -911,10 +911,10 @@ SwVbaCustomDocumentProperties::Add( const ::rtl::OUString& Name, ::sal_Bool Link
 }
 
 // XHelperInterface
-rtl::OUString
+OUString
 SwVbaCustomDocumentProperties::getServiceImplName()
 {
-    return rtl::OUString("SwVbaCustomDocumentProperties");
+    return OUString("SwVbaCustomDocumentProperties");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

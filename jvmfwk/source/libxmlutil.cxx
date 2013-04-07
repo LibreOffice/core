@@ -124,10 +124,10 @@ CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
 {
 }
 
-CXmlCharPtr::CXmlCharPtr(const ::rtl::OUString & s):
+CXmlCharPtr::CXmlCharPtr(const OUString & s):
     _object(NULL)
 {
-    ::rtl::OString o = ::rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8);
+    OString o = OUStringToOString(s, RTL_TEXTENCODING_UTF8);
     _object = xmlCharStrdup(o.getStr());
 }
 CXmlCharPtr::CXmlCharPtr():_object(NULL)
@@ -153,20 +153,20 @@ CXmlCharPtr::operator xmlChar*() const
     return _object;
 }
 
-CXmlCharPtr::operator ::rtl::OUString()
+CXmlCharPtr::operator OUString()
 {
-    ::rtl::OUString ret;
+    OUString ret;
     if (_object != NULL)
     {
-        ::rtl::OString aOStr((sal_Char*)_object);
-        ret = ::rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
+        OString aOStr((sal_Char*)_object);
+        ret = OStringToOUString(aOStr, RTL_TEXTENCODING_UTF8);
     }
     return ret;
 }
 
-CXmlCharPtr::operator ::rtl::OString()
+CXmlCharPtr::operator OString()
 {
-    return ::rtl::OString((sal_Char*) _object);
+    return OString((sal_Char*) _object);
 }
 
 

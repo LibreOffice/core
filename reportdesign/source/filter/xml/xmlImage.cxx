@@ -43,7 +43,7 @@ DBG_NAME( rpt_OXMLImage )
 
 // -----------------------------------------------------------------------------
 OXMLImage::OXMLImage( ORptFilter& rImport,
-                sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+                sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XImageControl > & _xComponent
                 ,OXMLTable* _pContainer) :
@@ -54,17 +54,17 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
     OSL_ENSURE(m_xComponent.is(),"Component is NULL!");
     const SvXMLNamespaceMap& rMap = m_rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = m_rImport.GetControlElemTokenMap();
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
+    static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
 
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-         ::rtl::OUString sLocalName;
-            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+         OUString sLocalName;
+            const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            /* const */ rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            /* const */ OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {

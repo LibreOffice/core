@@ -41,20 +41,20 @@ public:
     virtual ~AttributeList();
 
     // methods that are not contained in any interface
-    void AddAttribute( const ::rtl::OUString &sName , const ::rtl::OUString &sType , const ::rtl::OUString &sValue );
+    void AddAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );
 
     // ::com::sun::star::xml::sax::XAttributeList
     virtual sal_Int16 SAL_CALL getLength(void)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getNameByIndex(sal_Int16 i)
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByIndex(sal_Int16 i)
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getTypeByName(const ::rtl::OUString& aName)
+    virtual OUString SAL_CALL getTypeByName(const OUString& aName)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByIndex(sal_Int16 i)
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i)
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual ::rtl::OUString SAL_CALL getValueByName(const ::rtl::OUString& aName)
+    virtual OUString SAL_CALL getValueByName(const OUString& aName)
         throw( ::com::sun::star::uno::RuntimeException );
 
 };

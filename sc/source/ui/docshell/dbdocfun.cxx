@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------
 
-bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRange, sal_Bool /* bApi */ )
+bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, sal_Bool /* bApi */ )
 {
 
     ScDocShellModificator aModificator( rDocShell );
@@ -110,7 +110,7 @@ bool ScDBDocFunc::AddDBRange( const ::rtl::OUString& rName, const ScRange& rRang
     return true;
 }
 
-bool ScDBDocFunc::DeleteDBRange(const ::rtl::OUString& rName)
+bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
 {
     bool bDone = false;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -241,7 +241,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 
 // -----------------------------------------------------------------
 
-bool ScDBDocFunc::RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
+bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed, SCTAB aTab )
 {
     //! auch fuer ScDBFunc::RepeatDB benutzen!
 
@@ -1695,8 +1695,8 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const svx::ODataAccessDes
     ScImportParam aImportParam;
     pData->GetImportParam( aImportParam );
 
-    rtl::OUString sDBName;
-    rtl::OUString sDBTable;
+    OUString sDBName;
+    OUString sDBTable;
     sal_Int32 nCommandType = 0;
     rDescriptor[svx::daDataSource]  >>= sDBName;
     rDescriptor[svx::daCommand]     >>= sDBTable;

@@ -1029,8 +1029,8 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         INetURLObject aPrevUserBasicInetObj_1( aUserBasicInetObj );
         aPrevUserBasicInetObj_1.removeSegment();
         INetURLObject aPrevUserBasicInetObj_2 = aPrevUserBasicInetObj_1;
-        aPrevUserBasicInetObj_1.Append( rtl::OString( strPrevFolderName_1 ));
-        aPrevUserBasicInetObj_2.Append( rtl::OString( strPrevFolderName_2 ));
+        aPrevUserBasicInetObj_1.Append( OString( strPrevFolderName_1 ));
+        aPrevUserBasicInetObj_2.Append( OString( strPrevFolderName_2 ));
 
         // #i93163
         bool bCleanUp = false;
@@ -1095,7 +1095,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 OUString aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
                 INetURLObject aUserBasicTmpInetObj( aUserBasicInetObj );
                 aUserBasicTmpInetObj.removeSegment();
-                aUserBasicTmpInetObj.Append( rtl::OString( "__basic_tmp" ));
+                aUserBasicTmpInetObj.Append( OString( "__basic_tmp" ));
                 OUString aFolderTmp = aUserBasicTmpInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 mxSFI->move( aFolderUserBasic, aFolderTmp );
@@ -1225,7 +1225,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             static const char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
-            aPrevUserBasicInetObj_Err.Append( rtl::OString( strErrorSavFolderName ));
+            aPrevUserBasicInetObj_Err.Append( OString( strErrorSavFolderName ));
             OUString aPrevFolder_Err = aPrevUserBasicInetObj_Err.GetMainURL( INetURLObject::NO_DECODE );
 
             bool bSaved = false;

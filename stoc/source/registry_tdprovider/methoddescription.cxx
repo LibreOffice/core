@@ -44,7 +44,7 @@ public:
     Parameter(
         css::uno::Reference< css::container::XHierarchicalNameAccess > const &
             manager,
-        rtl::OUString const & name, rtl::OUString const & typeName,
+        OUString const & name, OUString const & typeName,
         RTParamMode mode, sal_Int32 position):
         m_manager(manager), m_name(name),
         m_typeName(typeName.replace('/', '.')), m_mode(mode),
@@ -52,7 +52,7 @@ public:
 
     virtual ~Parameter() {}
 
-    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException)
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException)
     { return m_name; }
 
     virtual css::uno::Reference< css::reflection::XTypeDescription > SAL_CALL
@@ -76,8 +76,8 @@ private:
     void operator =(Parameter); // not implemented
 
     css::uno::Reference< css::container::XHierarchicalNameAccess > m_manager;
-    rtl::OUString m_name;
-    rtl::OUString m_typeName;
+    OUString m_name;
+    OUString m_typeName;
     RTParamMode m_mode;
     sal_Int32 m_position;
 };
@@ -91,7 +91,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Parameter::getType()
             css::uno::UNO_QUERY_THROW);
     } catch (const css::container::NoSuchElementException & e) {
         throw new css::uno::RuntimeException(
-            (rtl::OUString(
+            (OUString(
                     "com.sun.star.container.NoSuchElementException: ")
              + e.Message),
             static_cast< cppu::OWeakObject * >(this));
@@ -103,7 +103,7 @@ css::uno::Reference< css::reflection::XTypeDescription > Parameter::getType()
 MethodDescription::MethodDescription(
     css::uno::Reference< css::container::XHierarchicalNameAccess > const &
         manager,
-    rtl::OUString const & name,
+    OUString const & name,
     com::sun::star::uno::Sequence< sal_Int8 > const & bytes,
     sal_uInt16 index):
     FunctionDescription(manager, bytes, index), m_name(name),

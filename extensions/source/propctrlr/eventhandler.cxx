@@ -142,14 +142,14 @@ namespace pcr
     //= EventDescription
     //====================================================================
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
-            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const rtl::OString& _sHelpId, const rtl::OString& _sUniqueBrowseId )
+            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
         :sDisplayName( String( PcrRes( _nDisplayNameResId ) ) )
-        ,sListenerMethodName( ::rtl::OUString::createFromAscii( _pListenerMethodAsciiName ) )
+        ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
         ,sHelpId( _sHelpId )
         ,sUniqueBrowseId( _sUniqueBrowseId )
         ,nId( _nId )
     {
-        ::rtl::OUStringBuffer aQualifiedListenerClass;
+        OUStringBuffer aQualifiedListenerClass;
         aQualifiedListenerClass.appendAscii( "com.sun.star." );
         aQualifiedListenerClass.appendAscii( _pListenerNamespaceAscii );
         aQualifiedListenerClass.appendAscii( "." );
@@ -165,11 +165,11 @@ namespace pcr
         //....................................................................
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
-                ::rtl::OUString::createFromAscii( asciimethod ), \
+                OUString::createFromAscii( asciimethod ), \
                 EventDescription( ++nEventId, asciinamespace, asciilistener, asciimethod, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) ) )
 
         //....................................................................
-        bool lcl_getEventDescriptionForMethod( const ::rtl::OUString& _rMethodName, EventDescription& _out_rDescription )
+        bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
         {
             static EventMap s_aKnownEvents;
             if ( s_aKnownEvents.empty() )
@@ -224,9 +224,9 @@ namespace pcr
         }
 
         //....................................................................
-        ::rtl::OUString lcl_getEventPropertyName( const ::rtl::OUString& _rListenerClassName, const ::rtl::OUString& _rMethodName )
+        OUString lcl_getEventPropertyName( const OUString& _rListenerClassName, const OUString& _rMethodName )
         {
-            ::rtl::OUStringBuffer aPropertyName;
+            OUStringBuffer aPropertyName;
             aPropertyName.append( _rListenerClassName );
             aPropertyName.append( (sal_Unicode)';' );
             aPropertyName.append( _rMethodName.getStr() );
@@ -271,10 +271,10 @@ namespace pcr
 
                 sal_Int32 nPrefixLen = aScriptEvent.ScriptCode.indexOf( ':' );
                 OSL_ENSURE( nPrefixLen > 0, "lcl_getAssignedScriptEvent: illegal location!" );
-                ::rtl::OUString sLocation = aScriptEvent.ScriptCode.copy( 0, nPrefixLen );
-                ::rtl::OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
+                OUString sLocation = aScriptEvent.ScriptCode.copy( 0, nPrefixLen );
+                OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
 
-                ::rtl::OUStringBuffer aNewStyleSpec;
+                OUStringBuffer aNewStyleSpec;
                 aNewStyleSpec.appendAscii( "vnd.sun.star.script:" );
                 aNewStyleSpec.append     ( sMacroPath );
                 aNewStyleSpec.appendAscii( "?language=Basic&location=" );
@@ -283,13 +283,13 @@ namespace pcr
                 aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
 
                 // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
-                aScriptEvent.ScriptType = ::rtl::OUString(  "Script"  );
+                aScriptEvent.ScriptType = OUString(  "Script"  );
             }
             return aScriptEvent;
         }
 
         //................................................................
-        ::rtl::OUString lcl_getQualifiedKnownListenerName( const ScriptEventDescriptor& _rFormComponentEventDescriptor )
+        OUString lcl_getQualifiedKnownListenerName( const ScriptEventDescriptor& _rFormComponentEventDescriptor )
         {
             EventDescription aKnownEvent;
             if ( lcl_getEventDescriptionForMethod( _rFormComponentEventDescriptor.EventMethod, aKnownEvent ) )
@@ -344,7 +344,7 @@ namespace pcr
     class EventHolder : public EventHolder_Base
     {
     private:
-        typedef ::boost::unordered_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
+        typedef ::boost::unordered_map< OUString, ScriptEventDescriptor, OUStringHash >  EventMap;
         typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;
@@ -353,18 +353,18 @@ namespace pcr
     public:
         EventHolder( );
 
-        void addEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent );
+        void addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent );
 
         /** effectively the same as getByName, but instead of converting the ScriptEventDescriptor to the weird
             format used by the macro assignment dialog, it is returned directly
         */
-        ScriptEventDescriptor getNormalizedDescriptorByName( const ::rtl::OUString& _rEventName ) const;
+        ScriptEventDescriptor getNormalizedDescriptorByName( const OUString& _rEventName ) const;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException);
-        virtual Any SAL_CALL getByName( const ::rtl::OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
-        virtual Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
-        virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& _rName ) throw (RuntimeException);
+        virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException);
+        virtual Any SAL_CALL getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
+        virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasByName( const OUString& _rName ) throw (RuntimeException);
         virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
@@ -372,7 +372,7 @@ namespace pcr
         ~EventHolder( );
 
     private:
-        ScriptEventDescriptor impl_getDescriptor_throw( const ::rtl::OUString& _rEventName ) const;
+        ScriptEventDescriptor impl_getDescriptor_throw( const OUString& _rEventName ) const;
     };
 
     DBG_NAME( EventHolder )
@@ -391,7 +391,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void EventHolder::addEvent( EventId _nId, const ::rtl::OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
+    void EventHolder::addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
     {
         ::std::pair< EventMap::iterator, bool > insertionResult =
             m_aEventNameAccess.insert( EventMap::value_type( _rEventName, _rScriptEvent ) );
@@ -400,56 +400,56 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ScriptEventDescriptor EventHolder::getNormalizedDescriptorByName( const ::rtl::OUString& _rEventName ) const
+    ScriptEventDescriptor EventHolder::getNormalizedDescriptorByName( const OUString& _rEventName ) const
     {
         return impl_getDescriptor_throw( _rEventName );
     }
 
     //------------------------------------------------------------------------
-    ScriptEventDescriptor EventHolder::impl_getDescriptor_throw( const ::rtl::OUString& _rEventName ) const
+    ScriptEventDescriptor EventHolder::impl_getDescriptor_throw( const OUString& _rEventName ) const
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rEventName );
         if ( pos == m_aEventNameAccess.end() )
-            throw NoSuchElementException( ::rtl::OUString(), *const_cast< EventHolder* >( this ) );
+            throw NoSuchElementException( OUString(), *const_cast< EventHolder* >( this ) );
         return pos->second;
     }
 
     //------------------------------------------------------------------------
-    void SAL_CALL EventHolder::replaceByName( const ::rtl::OUString& _rName, const Any& _rElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
+    void SAL_CALL EventHolder::replaceByName( const OUString& _rName, const Any& _rElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         EventMap::iterator pos = m_aEventNameAccess.find( _rName );
         if ( pos == m_aEventNameAccess.end() )
-            throw NoSuchElementException( ::rtl::OUString(), *this );
+            throw NoSuchElementException( OUString(), *this );
 
         Sequence< PropertyValue > aScriptDescriptor;
         OSL_VERIFY( _rElement >>= aScriptDescriptor );
 
         ::comphelper::NamedValueCollection aExtractor( aScriptDescriptor );
 
-        pos->second.ScriptType = aExtractor.getOrDefault( "EventType", ::rtl::OUString() );
-        pos->second.ScriptCode = aExtractor.getOrDefault( "Script", ::rtl::OUString() );
+        pos->second.ScriptType = aExtractor.getOrDefault( "EventType", OUString() );
+        pos->second.ScriptCode = aExtractor.getOrDefault( "Script", OUString() );
     }
 
     //------------------------------------------------------------------------
-    Any SAL_CALL EventHolder::getByName( const ::rtl::OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+    Any SAL_CALL EventHolder::getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = ::rtl::OUString("EventType");
+        aScriptDescriptor[0].Name = OUString("EventType");
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = ::rtl::OUString("Script");
+        aScriptDescriptor[1].Name = OUString("Script");
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventHolder::getElementNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHolder::getElementNames(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aReturn( m_aEventIndexAccess.size() );
-        ::rtl::OUString* pReturn = aReturn.getArray();
+        Sequence< OUString > aReturn( m_aEventIndexAccess.size() );
+        OUString* pReturn = aReturn.getArray();
 
         // SvxMacroAssignDlg has a weird API: It expects a XNameReplace, means a container whose
         // main access method is by name. In it's UI, it shows the possible events in exactly the
@@ -469,7 +469,7 @@ namespace pcr
     }
 
      //------------------------------------------------------------------------
-    sal_Bool SAL_CALL EventHolder::hasByName( const ::rtl::OUString& _rName ) throw (RuntimeException)
+    sal_Bool SAL_CALL EventHolder::hasByName( const OUString& _rName ) throw (RuntimeException)
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rName );
         return pos != m_aEventNameAccess.end();
@@ -511,35 +511,35 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EventHandler::getImplementationName(  ) throw (RuntimeException)
+    OUString SAL_CALL EventHandler::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL EventHandler::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
+        StlSyntaxSequence< OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupportedServiceNames(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL EventHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL EventHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(  "com.sun.star.comp.extensions.EventHandler"  );
+        return OUString(  "com.sun.star.comp.extensions.EventHandler"  );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString(  "com.sun.star.form.inspection.EventHandler"  );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString(  "com.sun.star.form.inspection.EventHandler"  );
         return aSupported;
     }
 
@@ -590,7 +590,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -618,7 +618,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL EventHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -651,11 +651,11 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::rtl::OUString sNewScriptCode;
+        OUString sNewScriptCode;
         OSL_VERIFY( _rControlValue >>= sNewScriptCode );
 
         Sequence< ScriptEventDescriptor > aAllAssignedEvents;
@@ -679,7 +679,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL EventHandler::convertToControlValue( const ::rtl::OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL EventHandler::convertToControlValue( const OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -690,7 +690,7 @@ namespace pcr
             "EventHandler::convertToControlValue: unexpected ControlValue type class!" );
         (void)_rControlValueType;
 
-        ::rtl::OUString sScript( aScriptEvent.ScriptCode );
+        OUString sScript( aScriptEvent.ScriptCode );
         if ( !sScript.isEmpty() )
         {
             // format is: "name (location, language)"
@@ -700,16 +700,16 @@ namespace pcr
                 Reference< XUriReferenceFactory > xUriRefFac = UriReferenceFactory::create( m_aContext.getUNOContext() );
                 Reference< XVndSunStarScriptUrlReference > xScriptUri( xUriRefFac->parse( sScript ), UNO_QUERY_THROW );
 
-                ::rtl::OUStringBuffer aComposeBuffer;
+                OUStringBuffer aComposeBuffer;
 
                 // name
                 aComposeBuffer.append( xScriptUri->getName() );
 
                 // location
-                const ::rtl::OUString sLocationParamName(  "location"  );
-                const ::rtl::OUString sLocation = xScriptUri->getParameter( sLocationParamName );
-                const ::rtl::OUString sLangParamName(  "language"  );
-                const ::rtl::OUString sLanguage = xScriptUri->getParameter( sLangParamName );
+                const OUString sLocationParamName(  "location"  );
+                const OUString sLocation = xScriptUri->getParameter( sLocationParamName );
+                const OUString sLangParamName(  "language"  );
+                const OUString sLanguage = xScriptUri->getParameter( sLangParamName );
 
                 if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
                 {
@@ -744,7 +744,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    PropertyState SAL_CALL EventHandler::getPropertyState( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL EventHandler::getPropertyState( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
@@ -779,7 +779,7 @@ namespace pcr
                 sal_Int32 listenerCount = aListeners.getLength();
 
                 Property aCurrentProperty;
-                ::rtl::OUString sListenerClassName;
+                OUString sListenerClassName;
 
                 // loop through all listeners and all methods, and see which we can present at the UI
                 const Type* pListeners = aListeners.getConstArray();
@@ -794,9 +794,9 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    Sequence< ::rtl::OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
+                    Sequence< OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
 
-                    const ::rtl::OUString* pMethods = aMethods.getConstArray();
+                    const OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
 
                     for (sal_uInt32 method = 0 ; method < methodCount ; ++method, ++pMethods )
@@ -829,7 +829,7 @@ namespace pcr
         {
             aOrderedProperties[ loop->second.nId ] = Property(
                 loop->first, loop->second.nId,
-                ::getCppuType( static_cast< const ::rtl::OUString* >( NULL ) ),
+                ::getCppuType( static_cast< const OUString* >( NULL ) ),
                 PropertyAttribute::BOUND );
         }
 
@@ -840,21 +840,21 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         // none
-        return Sequence< ::rtl::OUString >( );
+        return Sequence< OUString >( );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         // none
-        return Sequence< ::rtl::OUString >( );
+        return Sequence< OUString >( );
     }
 
     //--------------------------------------------------------------------
-    LineDescriptor SAL_CALL EventHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+    LineDescriptor SAL_CALL EventHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
@@ -871,20 +871,20 @@ namespace pcr
         const EventDescription& rEvent = impl_getEventForName_throw( _rPropertyName );
         aDescriptor.DisplayName = rEvent.sDisplayName;
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( rEvent.sHelpId );
-        aDescriptor.PrimaryButtonId = rtl::OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
+        aDescriptor.PrimaryButtonId = OStringToOUString(rEvent.sUniqueBrowseId, RTL_TEXTENCODING_UTF8);
         aDescriptor.HasPrimaryButton = sal_True;
-        aDescriptor.Category = ::rtl::OUString(  "Events"  );
+        aDescriptor.Category = OUString(  "Events"  );
         return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL EventHandler::isComposable( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
+    ::sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return sal_False;
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -909,8 +909,8 @@ namespace pcr
         }
 
         // the initial selection in the dialog
-        Sequence< ::rtl::OUString > aNames( pEventHolder->getElementNames() );
-        const ::rtl::OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
+        Sequence< OUString > aNames( pEventHolder->getElementNames() );
+        const OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
         sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.getConstArray() );
 
         // the dialog
@@ -959,7 +959,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL EventHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
@@ -1083,12 +1083,12 @@ namespace pcr
         {
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
             Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
-            Sequence< ::rtl::OUString > aEventNames( xEvents->getElementNames() );
+            Sequence< OUString > aEventNames( xEvents->getElementNames() );
 
             sal_Int32 nEventCount = aEventNames.getLength();
             _out_rEvents.realloc( nEventCount );
 
-            const ::rtl::OUString* pNames = aEventNames.getConstArray();
+            const OUString* pNames = aEventNames.getConstArray();
             ScriptEventDescriptor* pDescs = _out_rEvents.getArray();
 
             for( sal_Int32 i = 0 ; i < nEventCount ; ++i, ++pNames, ++pDescs )
@@ -1117,7 +1117,7 @@ namespace pcr
         }
         else
         {
-            ::rtl::OUString sControlService;
+            OUString sControlService;
             OSL_VERIFY( m_xComponent->getPropertyValue( PROPERTY_DEFAULTCONTROL ) >>= sControlService );
 
             xReturn = m_aContext.createComponent( sControlService );
@@ -1126,7 +1126,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    const EventDescription& EventHandler::impl_getEventForName_throw( const ::rtl::OUString& _rPropertyName ) const
+    const EventDescription& EventHandler::impl_getEventForName_throw( const OUString& _rPropertyName ) const
     {
         EventMap::const_iterator pos = m_aEvents.find( _rPropertyName );
         if ( pos == m_aEvents.end() )
@@ -1137,7 +1137,7 @@ namespace pcr
     //--------------------------------------------------------------------
     namespace
     {
-        static bool lcl_endsWith( const ::rtl::OUString& _rText, const ::rtl::OUString& _rCheck )
+        static bool lcl_endsWith( const OUString& _rText, const OUString& _rCheck )
         {
             sal_Int32 nTextLen = _rText.getLength();
             sal_Int32 nCheckLen = _rCheck.getLength();
@@ -1152,8 +1152,8 @@ namespace pcr
     {
         try
         {
-            ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
-            ::rtl::OUString sScriptType( _rScriptEvent.ScriptType );
+            OUString sScriptCode( _rScriptEvent.ScriptCode );
+            OUString sScriptType( _rScriptEvent.ScriptType );
             bool bResetScript = sScriptCode.isEmpty();
 
             sal_Int32 nObjectIndex = impl_getComponentIndexInParent_throw();
@@ -1211,17 +1211,17 @@ namespace pcr
     {
         try
         {
-            ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
+            OUString sScriptCode( _rScriptEvent.ScriptCode );
             bool bResetScript =  sScriptCode.isEmpty();
 
             Reference< XScriptEventsSupplier > xEventsSupplier( m_xComponent, UNO_QUERY_THROW );
             Reference< XNameContainer > xEvents( xEventsSupplier->getEvents(), UNO_QUERY_THROW );
 
-            ::rtl::OUStringBuffer aCompleteName;
+            OUStringBuffer aCompleteName;
             aCompleteName.append( _rScriptEvent.ListenerType );
             aCompleteName.appendAscii( "::" );
             aCompleteName.append( _rScriptEvent.EventMethod );
-            ::rtl::OUString sCompleteName( aCompleteName.makeStringAndClear() );
+            OUString sCompleteName( aCompleteName.makeStringAndClear() );
 
             bool bExists = xEvents->hasByName( sCompleteName );
 

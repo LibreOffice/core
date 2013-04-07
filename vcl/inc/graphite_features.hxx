@@ -40,8 +40,8 @@ namespace grutils
         static const char FEAT_PREFIX;
         static const char FEAT_SEPARATOR;
         static const char FEAT_ID_VALUE_SEPARATOR;
-        GrFeatureParser(const gr_face * face, const ::rtl::OString features, const ::rtl::OString lang);
-        GrFeatureParser(const gr_face * face, const ::rtl::OString lang);
+        GrFeatureParser(const gr_face * face, const OString features, const OString lang);
+        GrFeatureParser(const gr_face * face, const OString lang);
         ~GrFeatureParser();
         //size_t getFontFeatures(gr::FeatureSetting settings[MAX_FEATURES]) const;
         bool parseErrors() { return mbErrors; };
@@ -53,10 +53,10 @@ namespace grutils
         gr_feature_val * values() const { return mpSettings; };
     private:
         GrFeatureParser(const GrFeatureParser & copy);
-        void setLang(const gr_face * face, const ::rtl::OString & lang);
-        bool isCharId(const ::rtl::OString & id, size_t offset, size_t length);
-        gr_uint32 getCharId(const ::rtl::OString & id, size_t offset, size_t length);
-        short getIntValue(const ::rtl::OString & id, size_t offset, size_t length);
+        void setLang(const gr_face * face, const OString & lang);
+        bool isCharId(const OString & id, size_t offset, size_t length);
+        gr_uint32 getCharId(const OString & id, size_t offset, size_t length);
+        short getIntValue(const OString & id, size_t offset, size_t length);
         size_t mnNumSettings;
         FeatId maLang;
         bool mbErrors;

@@ -34,23 +34,23 @@ class XMLFilterJarHelper
 public:
     XMLFilterJarHelper( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
 
-    bool savePackage( const rtl::OUString& rPackageURL, const XMLFilterVector& rFilters );
-    void openPackage( const rtl::OUString& rPackageURL, XMLFilterVector& rFilters );
+    bool savePackage( const OUString& rPackageURL, const XMLFilterVector& rFilters );
+    void openPackage( const OUString& rPackageURL, XMLFilterVector& rFilters );
 
 private:
-    void addFile( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xRootFolder, com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory, const ::rtl::OUString& rSourceFile ) throw( com::sun::star::uno::Exception );
+    void addFile( com::sun::star::uno::Reference< com::sun::star::uno::XInterface > xRootFolder, com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory, const OUString& rSourceFile ) throw( com::sun::star::uno::Exception );
 
-    bool copyFile( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, ::rtl::OUString& rURL, const ::rtl::OUString& rTargetURL );
+    bool copyFile( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, OUString& rURL, const OUString& rTargetURL );
     bool copyFiles( com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
-    ::rtl::OUString sVndSunStarPackage;
-    ::rtl::OUString sXSLTPath;
-    ::rtl::OUString sTemplatePath;
-    ::rtl::OUString sSpecialConfigManager;
-    ::rtl::OUString sPump;
-    ::rtl::OUString sProgPath;
+    OUString sVndSunStarPackage;
+    OUString sXSLTPath;
+    OUString sTemplatePath;
+    OUString sSpecialConfigManager;
+    OUString sPump;
+    OUString sProgPath;
 };
 
 #endif

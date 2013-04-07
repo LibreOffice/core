@@ -373,7 +373,7 @@ public:
 class SVX_DLLPUBLIC SvxSimpleUndoRedoController : public SfxToolBoxControl
 {
 private:
-    ::rtl::OUString             aDefaultText;
+    OUString             aDefaultText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

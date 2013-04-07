@@ -37,7 +37,7 @@ public:
     using VendorBase::getLibraryPaths;
     virtual char const* const* getRuntimePaths(int * size);
     virtual char const* const* getLibraryPaths(int* size);
-    virtual int compareVersions(const rtl::OUString& sSecond) const;
+    virtual int compareVersions(const OUString& sSecond) const;
 
 };
 

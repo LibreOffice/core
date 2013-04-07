@@ -45,7 +45,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 static const sal_Int32 gnSpaceBelowSeparator (10);
 static const sal_Int32 gnSpaceAboveSeparator (10);
@@ -226,15 +225,15 @@ void PresenterNotesView::CreateToolBar (
 
 void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesPage)
 {
-    static const ::rtl::OUString sNotesShapeName (
+    static const OUString sNotesShapeName (
         "com.sun.star.presentation.NotesShape");
-    static const ::rtl::OUString sTextShapeName (
+    static const OUString sTextShapeName (
         "com.sun.star.drawing.TextShape");
 
     Reference<container::XIndexAccess> xIndexAccess (rxNotesPage, UNO_QUERY);
     if (xIndexAccess.is())
     {
-        ::rtl::OUString sText;
+        OUString sText;
 
         // Iterate over all shapes and find the one that holds the text.
         sal_Int32 nCount (xIndexAccess->getCount());
@@ -258,7 +257,7 @@ void PresenterNotesView::SetSlide (const Reference<drawing::XDrawPage>& rxNotesP
                     xIndexAccess->getByIndex(nIndex), UNO_QUERY);
                 if (xShapeDescriptor.is())
                 {
-                    ::rtl::OUString sType (xShapeDescriptor->getShapeType());
+                    OUString sType (xShapeDescriptor->getShapeType());
                     if (sType.equals(sNotesShapeName) || sType.equals(sTextShapeName))
                     {
                         Reference<text::XTextRange> xText (

@@ -45,7 +45,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    virtual uno::Reference< uno::XInterface > init( const rtl::OUString& rDBName );
+    virtual uno::Reference< uno::XInterface > init( const OUString& rDBName );
 
     ScDatabaseRangeObj();
 
@@ -70,9 +70,9 @@ ScDatabaseRangeObj::ScDatabaseRangeObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const rtl::OUString& rDBName )
+uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const OUString& rDBName )
 {
-    rtl::OUString aFileURL;
+    OUString aFileURL;
     createFileURL("ScDatabaseRangeObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
@@ -80,7 +80,7 @@ uno::Reference< uno::XInterface > ScDatabaseRangeObj::init( const rtl::OUString&
 
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< beans::XPropertySet > xPropSet(xDoc, UNO_QUERY_THROW);
-    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue(rtl::OUString("DatabaseRanges")), UNO_QUERY_THROW);
+    uno::Reference< container::XNameAccess > xNameAccess( xPropSet->getPropertyValue(OUString("DatabaseRanges")), UNO_QUERY_THROW);
     uno::Reference< sheet::XDatabaseRange > xDBRange( xNameAccess->getByName(rDBName), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDBRange.is());
     return xDBRange;

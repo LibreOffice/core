@@ -125,7 +125,7 @@ namespace vcl
         if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
         {
             m_pData->sCurrentSearchString += c;
-            OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", rtl::OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
+            OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
             if ( m_pData->sCurrentSearchString.Len() == 1 )
             {   // first character in the search -> remmeber

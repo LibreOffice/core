@@ -51,7 +51,7 @@ namespace dbtools
         */
         StatementComposer(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::rtl::OUString&  _rCommand,
+            const OUString&  _rCommand,
             const sal_Int32         _nCommandType,
             const sal_Bool          _bEscapeProcessing
         );
@@ -67,8 +67,8 @@ namespace dbtools
         */
         void    setDisposeComposer( bool _bDoDispose );
 
-        void    setFilter( const ::rtl::OUString& _rFilter );
-        void    setOrder( const ::rtl::OUString& _rOrder );
+        void    setFilter( const OUString& _rFilter );
+        void    setOrder( const OUString& _rOrder );
 
         /** returns the composer which has been fed with the current settings
 
@@ -86,7 +86,7 @@ namespace dbtools
             @throws ::com::sun::star::sdbc::SQLException
                 if such an exception occurs while creating the composer
         */
-        ::rtl::OUString
+        OUString
                 getQuery();
 
     private:

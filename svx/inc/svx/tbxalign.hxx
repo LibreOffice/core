@@ -27,8 +27,8 @@ class SVX_DLLPUBLIC SvxTbxCtlAlign: public SfxToolBoxControl
 {
 public:
     virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException);
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
@@ -39,9 +39,9 @@ public:
             SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             ~SvxTbxCtlAlign() {}
 private:
-    rtl::OUString m_aSubTbName;
-    rtl::OUString m_aSubTbResName;
-    rtl::OUString m_aCommand;
+    OUString m_aSubTbName;
+    OUString m_aSubTbResName;
+    OUString m_aCommand;
 };
 #endif
 

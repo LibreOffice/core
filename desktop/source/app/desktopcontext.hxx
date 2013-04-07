@@ -31,7 +31,7 @@ namespace desktop
     DesktopContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
-        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const rtl::OUString& Name )
+        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
             throw (com::sun::star::uno::RuntimeException);
 
     private:

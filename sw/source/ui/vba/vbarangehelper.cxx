@@ -61,7 +61,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
 }
 
 
-void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const rtl::OUString& rStr, sal_Bool _bAbsorb ) throw ( uno::RuntimeException )
+void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, sal_Bool _bAbsorb ) throw ( uno::RuntimeException )
 {
     sal_Int32 nlastIndex = 0;
     sal_Int32 nIndex = 0;
@@ -84,7 +84,7 @@ void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRa
     {
         xRange = xRange->getEnd();
 
-        rtl::OUString aWatt = rStr.copy( nlastIndex );
+        OUString aWatt = rStr.copy( nlastIndex );
         rText->insertString( xRange, aWatt, _bAbsorb );
     }
 }

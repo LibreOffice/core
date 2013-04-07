@@ -66,12 +66,12 @@ namespace toolkit
 
         if ( rtl_str_compare( _pRequiredImplName, _pComponentImplName ) == 0 )
         {
-            Sequence< ::rtl::OUString > aServiceNames( _pAsciiServiceName2 ? 2 : 1 );
-            aServiceNames.getArray()[ 0 ] = ::rtl::OUString::createFromAscii( _pAsciiServiceName1 );
+            Sequence< OUString > aServiceNames( _pAsciiServiceName2 ? 2 : 1 );
+            aServiceNames.getArray()[ 0 ] = OUString::createFromAscii( _pAsciiServiceName1 );
             if ( _pAsciiServiceName2 )
-                aServiceNames.getArray()[ 1 ] = ::rtl::OUString::createFromAscii( _pAsciiServiceName2 );
+                aServiceNames.getArray()[ 1 ] = OUString::createFromAscii( _pAsciiServiceName2 );
             Reference< XSingleServiceFactory > xFactory( ::cppu::createSingleFactory(
-                _rxServiceFactory, ::rtl::OUString::createFromAscii( _pComponentImplName ),
+                _rxServiceFactory, OUString::createFromAscii( _pComponentImplName ),
                 _pInstantiation, aServiceNames
             ) );
             if ( xFactory.is() )

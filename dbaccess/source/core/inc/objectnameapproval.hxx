@@ -68,7 +68,7 @@ namespace dbaccess
         virtual ~ObjectNameApproval();
 
         // IContainerApprove
-        virtual void SAL_CALL approveElement( const ::rtl::OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
+        virtual void SAL_CALL approveElement( const OUString& _rName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
 
     };
 

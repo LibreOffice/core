@@ -1304,7 +1304,7 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
         if (*iEntry != NULL)
             SAL_INFO("sd.view", OSL_THIS_FUNC << ":    " <<
                 *iEntry << " : " <<
-                ::rtl::OUStringToOString((*iEntry)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
+                OUStringToOString((*iEntry)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
         else
             SAL_INFO("sd.view", OSL_THIS_FUNC << "     null");
 }

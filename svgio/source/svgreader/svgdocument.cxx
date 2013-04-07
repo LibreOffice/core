@@ -25,7 +25,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        SvgDocument::SvgDocument(const rtl::OUString& rAbsolutePath)
+        SvgDocument::SvgDocument(const OUString& rAbsolutePath)
         :   maNodes(),
             maAbsolutePath(rAbsolutePath),
             maIdTokenMapperList(),
@@ -49,7 +49,7 @@ namespace svgio
             maNodes.push_back(pNode);
         }
 
-        void SvgDocument::addSvgNodeToMapper(const rtl::OUString& rStr, const SvgNode& rNode)
+        void SvgDocument::addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode)
         {
             if(rStr.getLength())
             {
@@ -57,7 +57,7 @@ namespace svgio
             }
         }
 
-        void SvgDocument::removeSvgNodeFromMapper(const rtl::OUString& rStr)
+        void SvgDocument::removeSvgNodeFromMapper(const OUString& rStr)
         {
             if(rStr.getLength())
             {
@@ -65,7 +65,7 @@ namespace svgio
             }
         }
 
-        const SvgNode* SvgDocument::findSvgNodeById(const rtl::OUString& rStr) const
+        const SvgNode* SvgDocument::findSvgNodeById(const OUString& rStr) const
         {
             const IdTokenMapper::const_iterator aResult(maIdTokenMapperList.find(rStr));
 
@@ -79,7 +79,7 @@ namespace svgio
             }
         }
 
-        void SvgDocument::addSvgStyleAttributesToMapper(const rtl::OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes)
+        void SvgDocument::addSvgStyleAttributesToMapper(const OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes)
         {
             if(rStr.getLength())
             {
@@ -87,7 +87,7 @@ namespace svgio
             }
         }
 
-        const SvgStyleAttributes* SvgDocument::findSvgStyleAttributesById(const rtl::OUString& rStr) const
+        const SvgStyleAttributes* SvgDocument::findSvgStyleAttributesById(const OUString& rStr) const
         {
             const IdStyleTokenMapper::const_iterator aResult(maIdStyleTokenMapperList.find(rStr));
 

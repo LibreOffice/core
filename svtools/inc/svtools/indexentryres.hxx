@@ -33,7 +33,7 @@ class SVT_DLLPUBLIC IndexEntryResource
     public:
         IndexEntryResource ();
         ~IndexEntryResource ();
-        const rtl::OUString& GetTranslation (const rtl::OUString& r_Algorithm);
+        const OUString& GetTranslation (const OUString& r_Algorithm);
 };
 
 #endif /* SVTOOLS_INDEXENTRYRESOURCE_HXX */

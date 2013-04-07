@@ -129,7 +129,7 @@ private:
     SvStreamPtr         mxVarData;          /// Buffer stream with variable data.
     sal_uInt32          mnFlags;            /// Option flags.
     XclExpStringRef     mxTextMark;         /// Location within mxRepr
-    ::rtl::OUString     msTarget;           /// Target URL
+    OUString     msTarget;           /// Target URL
 };
 
 typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
@@ -278,7 +278,7 @@ private:
 
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;
-    rtl::OString maGuid;
+    OString maGuid;
 };
 
 class XclExpIconSet : public XclExpRecord, protected XclExpRoot
@@ -349,9 +349,9 @@ private:
     XclExpString        maErrorText;    /// The error text.
     XclExpStringRef     mxString1;      /// String for first condition formula.
     XclTokenArrayRef    mxTokArr1;      /// Formula for first condition.
-    ::rtl::OUString     msFormula1;     /// OOXML Formula for first condition.
+    OUString     msFormula1;     /// OOXML Formula for first condition.
     XclTokenArrayRef    mxTokArr2;      /// Formula for second condition.
-    ::rtl::OUString     msFormula2;     /// OOXML Formula for second condition.
+    OUString     msFormula2;     /// OOXML Formula for second condition.
     sal_uInt32          mnFlags;        /// Miscellaneous flags.
     sal_uLong               mnScHandle;     /// The core handle for quick list search.
 };

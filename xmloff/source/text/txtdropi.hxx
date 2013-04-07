@@ -28,7 +28,7 @@ namespace rtl { class OUString; }
 class XMLTextDropCapImportContext :public XMLElementPropertyContext
 {
     XMLPropertyState aWholeWordProp;
-    ::rtl::OUString sStyleName;
+    OUString sStyleName;
 
 private:
     void ProcessAttrs(
@@ -40,7 +40,7 @@ public:
 
     XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
         const XMLPropertyState& rProp,
@@ -51,7 +51,7 @@ public:
 
     virtual void EndElement();
 
-    const ::rtl::OUString& GetStyleName() const { return sStyleName; }
+    const OUString& GetStyleName() const { return sStyleName; }
 };
 
 

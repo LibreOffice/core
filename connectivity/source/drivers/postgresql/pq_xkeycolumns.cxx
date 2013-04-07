@@ -71,9 +71,6 @@
 
 using osl::MutexGuard;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OUStringToOString;
 
 using com::sun::star::beans::XPropertySet;
 
@@ -105,10 +102,10 @@ KeyColumns::KeyColumns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
-        const rtl::OUString &schemaName,
-        const rtl::OUString &tableName,
-        const Sequence< rtl::OUString > &columnNames,
-        const Sequence< rtl::OUString > &foreignColumnNames )
+        const OUString &schemaName,
+        const OUString &tableName,
+        const Sequence< OUString > &columnNames,
+        const Sequence< OUString > &foreignColumnNames )
     : Container( refMutex, origin, pSettings,  "KEY_COLUMN" ),
       m_schemaName( schemaName ),
       m_tableName( tableName ),
@@ -127,7 +124,7 @@ void KeyColumns::refresh()
     {
         if( isLog( m_pSettings, LogLevel::INFO ) )
         {
-            rtl::OStringBuffer buf;
+            OStringBuffer buf;
             buf.append( "sdbcx.KeyColumns get refreshed for table " );
             buf.append( OUStringToOString( m_schemaName, m_pSettings->encoding ) );
             buf.append( "." );
@@ -380,10 +377,10 @@ Reference< com::sun::star::container::XNameAccess > KeyColumns::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
-    const rtl::OUString &schemaName,
-    const rtl::OUString &tableName,
-    const Sequence< rtl::OUString > &columnNames ,
-    const Sequence< rtl::OUString > &foreignColumnNames )
+    const OUString &schemaName,
+    const OUString &tableName,
+    const Sequence< OUString > &columnNames ,
+    const Sequence< OUString > &foreignColumnNames )
 {
     KeyColumns *pKeyColumns = new KeyColumns(
         refMutex, origin, pSettings, schemaName, tableName, columnNames, foreignColumnNames );

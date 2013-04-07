@@ -82,7 +82,7 @@ namespace dbaui
             @return
                 <TRUE/> if the command is allowed, otherwise <FALSE/>.
         */
-        virtual sal_Bool isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const = 0;
+        virtual sal_Bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
 
         /** registers a command URL, giving it a unique name
 
@@ -96,7 +96,7 @@ namespace dbaui
             then 0 is returned.
         */
         virtual sal_uInt16
-                        registerCommandURL( const ::rtl::OUString& _rCompleteCommandURL ) = 0;
+                        registerCommandURL( const OUString& _rCompleteCommandURL ) = 0;
 
         /** notifyHiContrastChanged will be called when the hicontrast mode changed.
             @param  _bHiContrast

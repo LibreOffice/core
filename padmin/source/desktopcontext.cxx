@@ -23,7 +23,6 @@
 
 using namespace com::sun::star::uno;
 
-using ::rtl::OUString;
 
 namespace padmin
 {

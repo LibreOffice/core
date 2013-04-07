@@ -36,45 +36,45 @@ namespace svgio
             SvgNodeVector           maNodes;
 
             /// the absolute path of the Svg file in progress (if available)
-            const rtl::OUString     maAbsolutePath;
+            const OUString     maAbsolutePath;
 
             /// hash mapper to find nodes by their id
-            typedef boost::unordered_map< const rtl::OUString, const SvgNode*,
-                      rtl::OUStringHash,
-                      ::std::equal_to< ::rtl::OUString > > IdTokenMapper;
-            typedef std::pair< const rtl::OUString, const SvgNode* > IdTokenValueType;
+            typedef boost::unordered_map< const OUString, const SvgNode*,
+                      OUStringHash,
+                      ::std::equal_to< OUString > > IdTokenMapper;
+            typedef std::pair< const OUString, const SvgNode* > IdTokenValueType;
             IdTokenMapper           maIdTokenMapperList;
 
             /// hash mapper to find css styles by their id
-            typedef boost::unordered_map< const rtl::OUString, const SvgStyleAttributes*, rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > IdStyleTokenMapper;
-            typedef std::pair< const rtl::OUString, const SvgStyleAttributes* > IdStyleTokenValueType;
+            typedef boost::unordered_map< const OUString, const SvgStyleAttributes*, OUStringHash, ::std::equal_to< OUString > > IdStyleTokenMapper;
+            typedef std::pair< const OUString, const SvgStyleAttributes* > IdStyleTokenValueType;
             IdStyleTokenMapper      maIdStyleTokenMapperList;
 
         public:
-            SvgDocument(const rtl::OUString& rAbsolutePath);
+            SvgDocument(const OUString& rAbsolutePath);
             ~SvgDocument();
 
             /// append anopther root node, ownership changes
             void appendNode(SvgNode* pNode);
 
             /// add/remove nodes with Id to mapper
-            void addSvgNodeToMapper(const rtl::OUString& rStr, const SvgNode& rNode);
-            void removeSvgNodeFromMapper(const rtl::OUString& rStr);
+            void addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode);
+            void removeSvgNodeFromMapper(const OUString& rStr);
 
             /// find a node by it's Id
             bool hasSvgNodesById() const { return !maIdTokenMapperList.empty(); }
-            const SvgNode* findSvgNodeById(const rtl::OUString& rStr) const;
+            const SvgNode* findSvgNodeById(const OUString& rStr) const;
 
             /// add/remove styles to mapper
-            void addSvgStyleAttributesToMapper(const rtl::OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes);
+            void addSvgStyleAttributesToMapper(const OUString& rStr, const SvgStyleAttributes& rSvgStyleAttributes);
 
             /// find a style by it's Id
             bool hasSvgStyleAttributesById() const { return !maIdStyleTokenMapperList.empty(); }
-            const SvgStyleAttributes* findSvgStyleAttributesById(const rtl::OUString& rStr) const;
+            const SvgStyleAttributes* findSvgStyleAttributesById(const OUString& rStr) const;
 
             /// data read access
             const SvgNodeVector& getSvgNodeVector() const { return maNodes; }
-            const rtl::OUString& getAbsolutePath() const { return maAbsolutePath; }
+            const OUString& getAbsolutePath() const { return maAbsolutePath; }
         };
     } // end of namespace svgreader
 } // end of namespace svgio

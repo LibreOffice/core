@@ -59,7 +59,6 @@
 
 using ::std::auto_ptr;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::std::vector;
 using ::std::find;
 using ::std::find_if;
@@ -1216,7 +1215,7 @@ void ScExternalRefLink::Closed()
     if (!mbDoRefresh)
         return SUCCESS;
 
-    rtl::OUString aFile, aFilter;
+    OUString aFile, aFilter;
     mpDoc->GetLinkManager()->GetDisplayNames(this, NULL, &aFile, NULL, &aFilter);
     ScExternalRefManager* pMgr = mpDoc->GetExternalRefManager();
 
@@ -2200,7 +2199,7 @@ bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
 
     if (isOwnDocument(rFile))
         return false;
-    rtl::OUString aPhysical;
+    OUString aPhysical;
     if (utl::LocalFileHelper::ConvertURLToPhysicalName(rFile, aPhysical) && !aPhysical.isEmpty())
     {
         // #i114504# try IsFolder/Exists only for file URLs
@@ -2301,7 +2300,7 @@ void ScExternalRefManager::convertToAbsName(OUString& rFile) const
     ScDocShell* pShell = static_cast<ScDocShell*>(SfxObjectShell::GetFirst(&aType, false));
     while (pShell)
     {
-        if (rFile == rtl::OUString(pShell->GetName()))
+        if (rFile == OUString(pShell->GetName()))
             return;
 
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, &aType, false));
@@ -2634,8 +2633,8 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
         if (&(itr->second.maShell) == pShell)
         {
             // found that the shell is marked as unsaved
-            rtl::OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
-            switchSrcFile(itr->first, aFileURL, rtl::OUString());
+            OUString aFileURL = pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
+            switchSrcFile(itr->first, aFileURL, OUString());
             EndListening(*pShell);
             maUnsavedDocShells.erase(itr++);
         }

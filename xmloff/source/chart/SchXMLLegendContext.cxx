@@ -33,7 +33,6 @@
 using namespace ::xmloff::token;
 using namespace com::sun::star;
 
-using rtl::OUString;
 using com::sun::star::uno::Reference;
 
 //----------------------------------------
@@ -84,7 +83,7 @@ struct theLegendAttributeTokenMap : public rtl::Static< LegendAttributeTokenMap,
 
 //----------------------------------------
 
-SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const rtl::OUString& rLocalName ) :
+SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName ) :
     SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
     mrImportHelper( rImpHelper )
 {
@@ -131,14 +130,14 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
     bool bHasExpansion=false;
 
-    rtl::OUString sAutoStyleName;
+    OUString sAutoStyleName;
     uno::Any aAny;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
-        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        OUString aValue = xAttrList->getValueByIndex( i );
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))

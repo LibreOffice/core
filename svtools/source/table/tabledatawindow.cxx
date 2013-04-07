@@ -87,7 +87,7 @@ namespace svt { namespace table
             return;
         }
 
-        ::rtl::OUString sHelpText;
+        OUString sHelpText;
         sal_uInt16 nHelpStyle = 0;
 
         Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );

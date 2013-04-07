@@ -78,7 +78,7 @@ class PluginComm_Impl :
 
     virtual long        doIt();
 public:
-                        PluginComm_Impl( const rtl::OUString& rMIME, const rtl::OUString& rName, HWND hWnd );
+                        PluginComm_Impl( const OUString& rMIME, const OUString& rName, HWND hWnd );
     virtual             ~PluginComm_Impl();
 
 public:

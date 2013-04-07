@@ -50,7 +50,6 @@
 #include "xmlimpit.hxx"
 #include "xmlitem.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -77,7 +76,7 @@ public:
     virtual bool
     handleNoItem(SvXMLItemMapEntry const& rEntry,
                  SfxItemSet & rSet,
-                 ::rtl::OUString const& rValue,
+                 OUString const& rValue,
                  SvXMLUnitConverter const& rUnitConverter,
                  SvXMLNamespaceMap const& rNamespaceMap);
 
@@ -89,7 +88,7 @@ public:
 private:
     void Reset();
 
-    ::rtl::OUString m_FoMarginValue;
+    OUString m_FoMarginValue;
     enum { LEFT = 0, RIGHT = 1, TOP = 2, BOTTOM = 3 };
     bool m_bHaveMargin[4];
 };
@@ -107,7 +106,7 @@ SwXMLImportTableItemMapper_Impl::~SwXMLImportTableItemMapper_Impl()
 
 void SwXMLImportTableItemMapper_Impl::Reset()
 {
-    m_FoMarginValue = ::rtl::OUString();
+    m_FoMarginValue = OUString();
     for (int i = 0; i < 3; ++i)
     {
         m_bHaveMargin[i] = false;
@@ -180,7 +179,7 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
 bool SwXMLImportTableItemMapper_Impl::handleNoItem(
      SvXMLItemMapEntry const& rEntry,
      SfxItemSet & rSet,
-     ::rtl::OUString const& rValue,
+     OUString const& rValue,
      SvXMLUnitConverter const& rUnitConverter,
      SvXMLNamespaceMap const& rNamespaceMap)
 {
@@ -262,7 +261,7 @@ public:
     virtual ~SwXMLItemSetContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                   const ::rtl::OUString& rLocalName,
+                   const OUString& rLocalName,
                    const ::uno::Reference< xml::sax::XAttributeList > & xAttrList,
                    SfxItemSet&  rItemSet,
                    const SvXMLItemMapEntry& rEntry,

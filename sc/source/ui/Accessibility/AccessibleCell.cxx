@@ -266,22 +266,22 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
+OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
         throw (uno::RuntimeException)
 {
-    return rtl::OUString("ScAccessibleCell");
+    return OUString("ScAccessibleCell");
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
     ScAccessibleCell::getSupportedServiceNames(void)
         throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
+    uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
     aSequence.realloc(nOldSize + 1);
-    ::rtl::OUString* pNames = aSequence.getArray();
+    OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString("com.sun.star.sheet.AccessibleCell");
+    pNames[nOldSize] = OUString("com.sun.star.sheet.AccessibleCell");
 
     return aSequence;
 }

@@ -82,14 +82,14 @@ bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
                return false;
      }
 
-    rVal <<= ::rtl::OUString( aValue );
+    rVal <<= OUString( aValue );
 
     return true;
 }
 
 bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    ::rtl::OUString aValue;
+    OUString aValue;
     sal_Bool bRet = false;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )

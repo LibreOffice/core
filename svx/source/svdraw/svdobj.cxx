@@ -207,9 +207,9 @@ bool SdrObjUserData::DoMacro(const SdrObjMacroHitRec& /*rRec*/, SdrObject* /*pOb
     return false;
 }
 
-rtl::OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
+OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/, const SdrObject* /*pObj*/) const
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 SdrObjUserDataList::SdrObjUserDataList() {}
@@ -723,7 +723,7 @@ SdrObject* SdrObject::GetUpGroup() const
     return pObjList!=NULL ? pObjList->GetOwnerObj() : NULL;
 }
 
-void SdrObject::SetName(const rtl::OUString& rStr)
+void SdrObject::SetName(const OUString& rStr)
 {
     if (!rStr.isEmpty() && !pPlusData)
     {
@@ -757,17 +757,17 @@ void SdrObject::SetName(const rtl::OUString& rStr)
     }
 }
 
-rtl::OUString SdrObject::GetName() const
+OUString SdrObject::GetName() const
 {
     if(pPlusData)
     {
         return pPlusData->aObjName;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
-void SdrObject::SetTitle(const rtl::OUString& rStr)
+void SdrObject::SetTitle(const OUString& rStr)
 {
     if (!rStr.isEmpty() && !pPlusData)
     {
@@ -801,17 +801,17 @@ void SdrObject::SetTitle(const rtl::OUString& rStr)
     }
 }
 
-rtl::OUString SdrObject::GetTitle() const
+OUString SdrObject::GetTitle() const
 {
     if(pPlusData)
     {
         return pPlusData->aObjTitle;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
-void SdrObject::SetDescription(const rtl::OUString& rStr)
+void SdrObject::SetDescription(const OUString& rStr)
 {
     if (!rStr.isEmpty() && !pPlusData)
     {
@@ -845,14 +845,14 @@ void SdrObject::SetDescription(const rtl::OUString& rStr)
     }
 }
 
-rtl::OUString SdrObject::GetDescription() const
+OUString SdrObject::GetDescription() const
 {
     if(pPlusData)
     {
         return pPlusData->aObjDescription;
     }
 
-    return rtl::OUString();
+    return OUString();
 }
 
 sal_uInt32 SdrObject::GetOrdNum() const
@@ -1078,7 +1078,7 @@ void SdrObject::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralNONE);
 }
 
-void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, rtl::OUString& rStr, sal_uInt16 nVal) const
+void SdrObject::ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal) const
 {
     rStr = ImpGetResStr(nStrCacheID);
     sal_Int32 nPos = rStr.indexOf("%1");
@@ -1103,18 +1103,18 @@ void SdrObject::ImpForcePlusData()
         pPlusData = NewPlusData();
 }
 
-rtl::OUString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
+OUString SdrObject::GetWinkStr(long nWink, bool bNoDegChar) const
 {
-    rtl::OUString aStr;
+    OUString aStr;
     if (pModel!=NULL) {
         pModel->TakeWinkStr(nWink,aStr,bNoDegChar);
     }
     return aStr;
 }
 
-rtl::OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
+OUString SdrObject::GetMetrStr(long nVal, MapUnit /*eWantMap*/, bool bNoUnitChars) const
 {
-    rtl::OUString aStr;
+    OUString aStr;
     if (pModel!=NULL) {
         pModel->TakeMetricStr(nVal,aStr,bNoUnitChars);
     }
@@ -1874,13 +1874,13 @@ bool SdrObject::DoMacro(const SdrObjMacroHitRec& rRec)
     return false;
 }
 
-rtl::OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
+OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 {
     SdrObjUserData* pData=ImpGetMacroUserData();
     if (pData!=NULL) {
         return pData->GetMacroPopupComment(rRec,this);
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const

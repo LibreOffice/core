@@ -37,7 +37,6 @@
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 
@@ -237,7 +236,7 @@ XMLVersionContext::~XMLVersionContext( void )
 
 // ------------------------------------------------------------------------
 sal_Bool XMLVersionContext::ParseISODateTimeString(
-                                const rtl::OUString& rString,
+                                const OUString& rString,
                                 util::DateTime& rDateTime )
 {
     sal_Bool bSuccess = sal_True;
@@ -404,7 +403,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( xProps.is() )
             {
                 try {
-                    xProps->getPropertyValue( ::rtl::OUString("URL") ) >>= aParserInput.sSystemId;
+                    xProps->getPropertyValue( OUString("URL") ) >>= aParserInput.sSystemId;
                 }
                 catch( uno::Exception& )
                 {}
@@ -447,18 +446,18 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     return aVersions;
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL XMLVersionListPersistence_getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL XMLVersionListPersistence_getSupportedServiceNames()
     throw()
 {
-    const rtl::OUString aServiceName(
+    const OUString aServiceName(
         "com.sun.star.document.DocumentRevisionListPersistence"  );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL XMLVersionListPersistence_getImplementationName() throw()
+OUString SAL_CALL XMLVersionListPersistence_getImplementationName() throw()
 {
-    return rtl::OUString( "XMLVersionListPersistence"  );
+    return OUString( "XMLVersionListPersistence"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionListPersistence_createInstance(
@@ -468,18 +467,18 @@ uno::Reference< uno::XInterface > SAL_CALL XMLVersionListPersistence_createInsta
     return (cppu::OWeakObject*)new XMLVersionListPersistence;
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL XMLVersionImExportOOO_getSupportedServiceNames()
+uno::Sequence< OUString > SAL_CALL XMLVersionImExportOOO_getSupportedServiceNames()
     throw()
 {
-    const rtl::OUString aServiceName(
+    const OUString aServiceName(
         "com.sun.star.document.DocumentRevisionListPersistence"  );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL XMLVersionImExportOOO_getImplementationName() throw()
+OUString SAL_CALL XMLVersionImExportOOO_getImplementationName() throw()
 {
-    return rtl::OUString( "XMLVersionImExportOOo"  );
+    return OUString( "XMLVersionImExportOOo"  );
 }
 
 uno::Reference< uno::XInterface > SAL_CALL XMLVersionImExportOOO_createInstance(

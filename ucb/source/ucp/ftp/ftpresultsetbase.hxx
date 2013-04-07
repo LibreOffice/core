@@ -110,13 +110,13 @@ namespace ftp {
             return m_nWasNull;
         }
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getString(
             sal_Int32 columnIndex )
             throw( com::sun::star::sdbc::SQLException,
                    com::sun::star::uno::RuntimeException)
         {
-            rtl::OUString ret;
+            OUString ret;
             if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
                 ret = m_aItems[m_nRow]->getString( columnIndex );
 
@@ -476,7 +476,7 @@ namespace ftp {
 
         // XContentAccess
 
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         queryContentIdentifierString(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -509,7 +509,7 @@ namespace ftp {
             throw( com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL setPropertyValue(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::beans::PropertyVetoException,
@@ -519,14 +519,14 @@ namespace ftp {
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
-            const rtl::OUString& PropertyName )
+            const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL
         addPropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
@@ -535,7 +535,7 @@ namespace ftp {
 
         virtual void SAL_CALL
         removePropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
@@ -544,7 +544,7 @@ namespace ftp {
 
         virtual void SAL_CALL
         addVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference<
             com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
@@ -552,7 +552,7 @@ namespace ftp {
                    com::sun::star::uno::RuntimeException);
 
         virtual void SAL_CALL removeVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference<
             com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
@@ -574,7 +574,7 @@ namespace ftp {
         com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference<
         com::sun::star::sdbc::XRow > >              ItemSet;
-        typedef std::vector< rtl::OUString >
+        typedef std::vector< OUString >
         PathSet;
 
         IdentSet                            m_aIdents;

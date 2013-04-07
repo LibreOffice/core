@@ -478,8 +478,8 @@ void ScViewFunc::PasteFromSystem()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(rtl::OUString("Biff8"));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(rtl::OUString("Biff5"));
+            sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
+            sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
 
                 //  als erstes SvDraw-Model, dann Grafik
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)
@@ -594,8 +594,8 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     {
             TransferableDataHelper aDataHelper( rxTransferable );
         {
-            sal_uLong nBiff8 = SotExchange::RegisterFormatName(rtl::OUString("Biff8"));
-            sal_uLong nBiff5 = SotExchange::RegisterFormatName(rtl::OUString("Biff5"));
+            sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
+            sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
             sal_uLong nFormatId = 0;
                 //  als erstes SvDraw-Model, dann Grafik
                 //  (Grafik darf nur bei einzelner Grafik drinstehen)
@@ -1249,7 +1249,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
-    ::std::vector< ::rtl::OUString > aExcludedChartNames;
+    ::std::vector< OUString > aExcludedChartNames;
     SdrPage* pPage = NULL;
 
     if ( nFlags & IDF_OBJECTS )
@@ -1720,7 +1720,7 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
             aChangeRanges.Append(aChangeRange);
         }
     }
-    pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
+    pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
 }
 
 

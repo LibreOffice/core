@@ -55,9 +55,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::container;
 
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-using ::rtl::OString;
 
 //==================================================================================================
 class OInterfaceA : public WeakImplHelper1< XInterfaceA >

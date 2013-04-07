@@ -99,9 +99,9 @@ bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nM
         case 0 :
         {
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSeq( VIEWLAYOUT_PARAMS );
-            aSeq[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VIEWLAYOUT_PARAM_COLUMNS ));
+            aSeq[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( VIEWLAYOUT_PARAM_COLUMNS ));
             aSeq[0].Value <<= sal_Int32( GetValue() );
-            aSeq[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( VIEWLAYOUT_PARAM_BOOKMODE ));
+            aSeq[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( VIEWLAYOUT_PARAM_BOOKMODE ));
             aSeq[1].Value <<= sal_Bool( mbBookMode );
             rVal <<= aSeq;
         }

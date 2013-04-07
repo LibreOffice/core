@@ -53,7 +53,7 @@ void NumberedCollection::setOwner(const css::uno::Reference< css::uno::XInterfac
 }
 
 //-----------------------------------------------
-void NumberedCollection::setUntitledPrefix(const ::rtl::OUString& sPrefix)
+void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
 {
     // SYNCHRONIZED ->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
@@ -72,7 +72,7 @@ void NumberedCollection::setUntitledPrefix(const ::rtl::OUString& sPrefix)
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
-            throw css::lang::IllegalArgumentException (rtl::OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
+            throw css::lang::IllegalArgumentException (OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
         long                              pComponent = (long) xComponent.get ();
         TNumberedItemHash::const_iterator pIt        = m_lComponents.find (pComponent);
@@ -148,7 +148,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
         if ( ! xComponent.is ())
-            throw css::lang::IllegalArgumentException (rtl::OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
+            throw css::lang::IllegalArgumentException (OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
         long                        pComponent = (long) xComponent.get ();
         TNumberedItemHash::iterator pIt        = m_lComponents.find (pComponent);
@@ -164,7 +164,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
 }
 
 //-----------------------------------------------
-::rtl::OUString SAL_CALL NumberedCollection::getUntitledPrefix()
+OUString SAL_CALL NumberedCollection::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {
     // SYNCHRONIZED ->

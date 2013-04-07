@@ -50,25 +50,25 @@ WW8FFData::~WW8FFData()
 {
 }
 
-void WW8FFData::setHelp(const ::rtl::OUString & rHelp)
+void WW8FFData::setHelp(const OUString & rHelp)
 {
     msHelp = rHelp;
     mbOwnHelp = true;
 }
 
-void WW8FFData::setStatus(const ::rtl::OUString & rStatus)
+void WW8FFData::setStatus(const OUString & rStatus)
 {
     msStatus = rStatus;
     mbOwnStat = true;
 }
 
-void WW8FFData::addListboxEntry(const ::rtl::OUString & rEntry)
+void WW8FFData::addListboxEntry(const OUString & rEntry)
 {
     mbListBox = true;
     msListEntries.push_back(rEntry);
 }
 
-void WW8FFData::WriteOUString(SvStream * pDataStrm, const ::rtl::OUString & rStr,
+void WW8FFData::WriteOUString(SvStream * pDataStrm, const OUString & rStr,
     bool bAddZero)
 {
     sal_uInt16 nStrLen = msword_cast<sal_uInt16>(rStr.getLength());
@@ -147,11 +147,11 @@ void WW8FFData::Write(SvStream * pDataStrm)
         sal_uInt32 nListboxEntries = msListEntries.size();
         *pDataStrm << nListboxEntries;
 
-        ::std::vector< ::rtl::OUString >::const_iterator aIt = msListEntries.begin();
+        ::std::vector< OUString >::const_iterator aIt = msListEntries.begin();
 
         while (aIt != msListEntries.end())
         {
-            const ::rtl::OUString & rEntry = *aIt;
+            const OUString & rEntry = *aIt;
             WriteOUString(pDataStrm, rEntry, false);
 
             ++aIt;

@@ -86,11 +86,11 @@ public:
     /** deactivates the given panel, bypassing the configuration controller. Only valid for tool panels which are
         not under the drawing framework's control.
     */
-    void    ActivatePanel( const ::rtl::OUString& i_rPanelResourceURL );
+    void    ActivatePanel( const OUString& i_rPanelResourceURL );
 
     /** deactivates the given panel, bypassing the configuration controller
     */
-    void    DeactivatePanel( const ::rtl::OUString& i_rPanelResourceURL );
+    void    DeactivatePanel( const OUString& i_rPanelResourceURL );
 
     /** Return a pointer to the docking window that is the parent or a
         predecessor of the content window.
@@ -118,7 +118,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >
             CreatePanelUIElement(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocFrame,
-                const ::rtl::OUString& i_rPanelResourceURL
+                const OUString& i_rPanelResourceURL
             );
 
 private:

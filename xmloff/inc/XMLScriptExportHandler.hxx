@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star {
 
 class XMLScriptExportHandler : public XMLEventExportHandler
 {
-    const ::rtl::OUString sURL;
+    const OUString sURL;
 
 public:
     XMLScriptExportHandler();
@@ -42,7 +42,7 @@ public:
 
     virtual void Export(
         SvXMLExport& rExport,
-        const ::rtl::OUString& rEventName,
+        const OUString& rEventName,
         ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rValues,
         sal_Bool bUseWhitespace);

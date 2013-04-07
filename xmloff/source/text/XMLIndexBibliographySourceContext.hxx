@@ -44,7 +44,7 @@ public:
     XMLIndexBibliographySourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
@@ -54,13 +54,13 @@ protected:
 
     virtual void ProcessAttribute(
         enum IndexSourceParamEnum eParam,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

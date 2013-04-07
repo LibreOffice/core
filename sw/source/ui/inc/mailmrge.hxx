@@ -113,7 +113,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
 
     Size            m_aDialogSize;
-    ::rtl::OUString m_sSaveFilter;
+    OUString m_sSaveFilter;
 
 
     DECL_LINK( ButtonHdl, Button* pBtn );
@@ -144,7 +144,7 @@ public:
     String GetColumnName() const { return aColumnLB.GetSelectEntry();}
     String GetPath() const { return aPathED.GetText();}
 
-    const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;}
+    const OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 

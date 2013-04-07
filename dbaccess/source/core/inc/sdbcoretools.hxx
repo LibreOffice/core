@@ -38,7 +38,7 @@ namespace dbaccess
 
     /** retrieves a to-be-displayed string for a given caught exception;
     */
-    ::rtl::OUString extractExceptionMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext, const ::com::sun::star::uno::Any& _rError );
+    OUString extractExceptionMessage( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext, const ::com::sun::star::uno::Any& _rError );
 
     namespace tools
     {

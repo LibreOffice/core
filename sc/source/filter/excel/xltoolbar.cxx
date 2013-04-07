@@ -45,7 +45,7 @@
 #include <map>
 using namespace com::sun::star;
 
-typedef std::map< sal_Int16, rtl::OUString > IdToString;
+typedef std::map< sal_Int16, OUString > IdToString;
 
 class MSOExcelCommandConvertor : public MSOCommandConvertor
 {
@@ -53,8 +53,8 @@ class MSOExcelCommandConvertor : public MSOCommandConvertor
    IdToString tcidToOOcmd;
 public:
     MSOExcelCommandConvertor();
-    virtual rtl::OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
-    virtual rtl::OUString MSOTCIDToOOCommand( sal_Int16 key );
+    virtual OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
+    virtual OUString MSOTCIDToOOCommand( sal_Int16 key );
 };
 
 MSOExcelCommandConvertor::MSOExcelCommandConvertor()
@@ -62,27 +62,27 @@ MSOExcelCommandConvertor::MSOExcelCommandConvertor()
 /*
     // mso command id to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-    msoToOOcmd[ 0x20b ] = rtl::OUString(".uno:CloseDoc");
-    msoToOOcmd[ 0x50 ] = rtl::OUString(".uno:Open");
+    msoToOOcmd[ 0x20b ] = OUString(".uno:CloseDoc");
+    msoToOOcmd[ 0x50 ] = OUString(".uno:Open");
 
    // mso tcid to ooo command string
     // #FIXME and *HUNDREDS* of id's to added here
-   tcidToOOcmd[ 0x9d9 ] = rtl::OUString(".uno:Print");
+   tcidToOOcmd[ 0x9d9 ] = OUString(".uno:Print");
 */
 }
 
-rtl::OUString MSOExcelCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
+OUString MSOExcelCommandConvertor::MSOCommandToOOCommand( sal_Int16 key )
 {
-    rtl::OUString sResult;
+    OUString sResult;
     IdToString::iterator it = msoToOOcmd.find( key );
     if ( it != msoToOOcmd.end() )
         sResult = it->second;
     return sResult;
 }
 
-rtl::OUString MSOExcelCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
+OUString MSOExcelCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 {
-    rtl::OUString sResult;
+    OUString sResult;
     IdToString::iterator it = tcidToOOcmd.find( key );
     if ( it != tcidToOOcmd.end() )
         sResult = it->second;
@@ -167,7 +167,7 @@ bool ScCTB::ImportMenuTB( ScCTBWrapper& rWrapper, const css::uno::Reference< css
 bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
 
-    static rtl::OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
+    static OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
     try
     {
@@ -180,16 +180,16 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();
         // set UI name for toolbar
-        xProps->setPropertyValue( rtl::OUString("UIName"), uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue( OUString("UIName"), uno::makeAny( name.getString() ) );
 
-        rtl::OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
+        OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
         for ( std::vector< ScTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
             if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, helper, IsMenuToolbar() ) )
                 return false;
         }
 
-        OSL_TRACE("Name of toolbar :-/ %s", rtl::OUStringToOString( sToolBarName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OSL_TRACE("Name of toolbar :-/ %s", OUStringToOString( sToolBarName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         helper.getCfgManager()->insertSettings( sToolBarName, xIndexAccess );
         helper.applyIcons();
@@ -305,7 +305,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
                  else
                  {
                      beans::PropertyValue aProp;
-                     aProp.Name =  rtl::OUString("ItemDescriptorContainer");
+                     aProp.Name =  OUString("ItemDescriptorContainer");
                      aProp.Value <<= xMenuDesc;
                      props.push_back( aProp );
                  }
@@ -316,7 +316,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
         {
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
-            sProps[ 0 ].Name =  rtl::OUString("Type");
+            sProps[ 0 ].Name =  OUString("Type");
             sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
@@ -399,7 +399,7 @@ ScCTBWrapper::Print( FILE* fp )
     }
 }
 
-ScCTB* ScCTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
+ScCTB* ScCTBWrapper::GetCustomizationData( const OUString& sTBName )
 {
     ScCTB* pCTB = NULL;
     for ( std::vector< ScCTB >::iterator it = rCTB.begin(); it != rCTB.end(); ++it )
@@ -425,7 +425,7 @@ bool ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     for ( std::vector<ScCTB>::iterator it = rCTB.begin(); it != it_end; ++it )
     {
         // for each customtoolbar
-        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( rtl::OUString("com.sun.star.sheet.SpreadsheetDocument" ) ) );
+        CustomToolBarImportHelper helper( rDocSh, xAppCfgSupp->getUIConfigurationManager( OUString("com.sun.star.sheet.SpreadsheetDocument" ) ) );
         helper.setMSOCommandMap( new  MSOExcelCommandConvertor() );
         // Ignore menu toolbars, excel doesn't ( afaics ) store
         // menu customizations ( but you can have menus in a customtoolbar

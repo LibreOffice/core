@@ -124,7 +124,7 @@ public:
         returned object! */
     const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
     void  getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
-    rtl::OUString getFieldName(SCCOL nIndex) const;
+    OUString getFieldName(SCCOL nIndex) const;
 
    /** Get the unique entries for a field specified by index.  The caller must
        make sure that the table is filled before calling function, or it will

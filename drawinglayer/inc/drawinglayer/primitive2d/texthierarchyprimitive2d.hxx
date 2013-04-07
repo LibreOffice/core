@@ -154,18 +154,18 @@ namespace drawinglayer
         {
         private:
             FieldType                               meType;
-            rtl::OUString                           maString;
+            OUString                           maString;
 
         public:
             /// constructor
             TextHierarchyFieldPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const FieldType& rFieldType,
-                const rtl::OUString& rString);
+                const OUString& rString);
 
             /// data read access
             FieldType getType() const { return meType; }
-            const rtl::OUString& getString() const { return maString; }
+            const OUString& getString() const { return maString; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

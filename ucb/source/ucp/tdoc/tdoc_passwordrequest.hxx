@@ -68,7 +68,7 @@ namespace tdoc_ucp {
                         xSelection.get(), uno::UNO_QUERY );
                     if ( xPassword.is() )
                     {
-                        rtl::OUString aPassword = xPassword->getPassword();
+                        OUString aPassword = xPassword->getPassword();
 
                         // @@@
                     }
@@ -83,7 +83,7 @@ namespace tdoc_ucp {
     public:
         DocumentPasswordRequest(
             com::sun::star::task::PasswordRequestMode eMode,
-            const rtl::OUString & rDocumentName );
+            const OUString & rDocumentName );
     };
 
 } // namespace tdoc_ucp

@@ -49,7 +49,7 @@ void ScAddInResult::NewValue()
     uno::Any aAny;
     String aRet = aArg;
     aRet += nTickCount;
-    rtl::OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
+    OUString aUStr = StringToOUString( aRet, CHARSET_SYSTEM );
     aAny <<= aUStr;
 
     sheet::ResultEvent aEvent( (cppu::OWeakObject*)this, aAny );

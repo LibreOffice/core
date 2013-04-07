@@ -39,22 +39,22 @@ namespace drawinglayer
         class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitive2D : public GroupPrimitive2D
         {
         private:
-            rtl::OUString                           maName;
-            rtl::OUString                           maTitle;
-            rtl::OUString                           maDesc;
+            OUString                           maName;
+            OUString                           maTitle;
+            OUString                           maDesc;
 
         public:
             /// constructor
             ObjectInfoPrimitive2D(
                 const Primitive2DSequence& rChildren,
-                const rtl::OUString& rName,
-                const rtl::OUString& rTitle,
-                const rtl::OUString& rDesc);
+                const OUString& rName,
+                const OUString& rTitle,
+                const OUString& rDesc);
 
             /// data read access
-            const rtl::OUString& getName() const { return maName; }
-            const rtl::OUString& getTitle() const { return maTitle; }
-            const rtl::OUString& getDesc() const { return maDesc; }
+            const OUString& getName() const { return maName; }
+            const OUString& getTitle() const { return maTitle; }
+            const OUString& getDesc() const { return maDesc; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

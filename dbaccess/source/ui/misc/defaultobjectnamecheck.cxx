@@ -72,7 +72,7 @@ namespace dbaui
     //====================================================================
     namespace
     {
-        void    lcl_fillNameExistsError( const ::rtl::OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
+        void    lcl_fillNameExistsError( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
         {
             String sErrorMessage = String( ModuleRes( STR_NAMED_OBJECT_ALREADY_EXISTS ) );
             sErrorMessage.SearchAndReplaceAllAscii( "$#$", _rObjectName );
@@ -89,14 +89,14 @@ namespace dbaui
     struct HierarchicalNameCheck_Impl
     {
         Reference< XHierarchicalNameAccess >    xHierarchicalNames;
-        ::rtl::OUString                         sRelativeRoot;
+        OUString                         sRelativeRoot;
     };
 
     //====================================================================
     //= HierarchicalNameCheck
     //====================================================================
     //--------------------------------------------------------------------
-    HierarchicalNameCheck::HierarchicalNameCheck( const Reference< XHierarchicalNameAccess >& _rxNames, const ::rtl::OUString& _rRelativeRoot )
+    HierarchicalNameCheck::HierarchicalNameCheck( const Reference< XHierarchicalNameAccess >& _rxNames, const OUString& _rRelativeRoot )
         :m_pImpl( new HierarchicalNameCheck_Impl )
     {
         m_pImpl->xHierarchicalNames = _rxNames;
@@ -112,11 +112,11 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    bool HierarchicalNameCheck::isNameValid( const ::rtl::OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay ) const
+    bool HierarchicalNameCheck::isNameValid( const OUString& _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay ) const
     {
         try
         {
-            ::rtl::OUStringBuffer aCompleteName;
+            OUStringBuffer aCompleteName;
             if ( !m_pImpl->sRelativeRoot.isEmpty() )
             {
                 aCompleteName.append( m_pImpl->sRelativeRoot );
@@ -124,7 +124,7 @@ namespace dbaui
             }
             aCompleteName.append( _rObjectName );
 
-            ::rtl::OUString sCompleteName( aCompleteName.makeStringAndClear() );
+            OUString sCompleteName( aCompleteName.makeStringAndClear() );
             if ( !m_pImpl->xHierarchicalNames->hasByHierarchicalName( sCompleteName ) )
                 return true;
         }
@@ -170,7 +170,7 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    bool DynamicTableOrQueryNameCheck::isNameValid( const ::rtl::OUString& _rObjectName, ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay ) const
+    bool DynamicTableOrQueryNameCheck::isNameValid( const OUString& _rObjectName, ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay ) const
     {
         try
         {

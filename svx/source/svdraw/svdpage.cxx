@@ -195,7 +195,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         }
     } else {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "SdrObjList::operator=(): Error when cloning "));
 
         if(nCloneErrCnt == 1)

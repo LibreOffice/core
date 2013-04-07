@@ -95,16 +95,16 @@ public:
         ,bSet(true)
         {}
     };
-    typedef ::std::pair< ::rtl::OUString ,::rtl::OUString> TStringPair;
+    typedef ::std::pair< OUString ,OUString> TStringPair;
     typedef struct
     {
-        ::rtl::OUString sText;
-        ::rtl::OUString sField;
-        ::rtl::OUString sDecimal;
-        ::rtl::OUString sThousand;
+        OUString sText;
+        OUString sField;
+        OUString sDecimal;
+        OUString sThousand;
     } TDelimiter;
-    typedef ::std::vector< ::rtl::OUString>                         TStringVec;
-    typedef ::std::map< Reference<XPropertySet> ,::rtl::OUString >  TPropertyStyleMap;
+    typedef ::std::vector< OUString>                         TStringVec;
+    typedef ::std::map< Reference<XPropertySet> ,OUString >  TPropertyStyleMap;
     typedef ::std::map< Reference<XPropertySet> ,  TStringVec>      TGridStyleMap;
     typedef ::std::vector< TCell >                                  TRow;
     typedef ::std::vector< ::std::pair< sal_Bool, TRow > >          TGrid;
@@ -121,10 +121,10 @@ private:
     TGridStyleMap                                   m_aRowStyleNames;
     TGroupFunctionMap                               m_aGroupFunctionMap;
 
-    ::rtl::OUString                                 m_sCharSet;
-    ::rtl::OUString                                 m_sTableStyle;
-    ::rtl::OUString                                 m_sCellStyle;
-    ::rtl::OUString                                 m_sColumnStyle;
+    OUString                                 m_sCharSet;
+    OUString                                 m_sTableStyle;
+    OUString                                 m_sCellStyle;
+    OUString                                 m_sColumnStyle;
     Any                                             m_aPreviewMode;
     UniReference < SvXMLExportPropertyMapper>       m_xExportHelper;
     UniReference < SvXMLExportPropertyMapper>       m_xSectionPropMapper;
@@ -148,7 +148,7 @@ private:
     void                    exportMasterDetailFields(const Reference<XReportComponent>& _xReportComponet);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
     sal_Bool                exportGroup(const Reference<XReportDefinition>& _xReportDefinition,sal_Int32 _nPos,sal_Bool _bExportAutoStyle = sal_False);
-    void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName);
+    void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
     void                    exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph = true);
@@ -162,11 +162,11 @@ private:
     void                    collectComponentStyles();
     void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
-    bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula);
+    bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const OUString& _sFormula);
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
-    ::rtl::OUString         convertFormula(const ::rtl::OUString& _sFormula);
+    OUString         convertFormula(const OUString& _sFormula);
 
-    ::rtl::OUString         implConvertNumber(sal_Int32 _nValue);
+    OUString         implConvertNumber(sal_Int32 _nValue);
 
 private:
                                     ORptExport();
@@ -187,12 +187,12 @@ public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, sal_uInt16 nExportFlag = (EXPORT_CONTENT | EXPORT_AUTOSTYLES | EXPORT_FONTDECLS));
     // XServiceInfo
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
@@ -211,8 +211,8 @@ public:
 class ORptExportHelper
 {
 public:
-    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
@@ -224,8 +224,8 @@ public:
 class ORptContentExportHelper
 {
 public:
-    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
@@ -237,8 +237,8 @@ public:
 class ORptStylesExportHelper
 {
 public:
-    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
@@ -250,8 +250,8 @@ public:
 class ORptMetaExportHelper
 {
 public:
-    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };
@@ -262,8 +262,8 @@ public:
 class ODBFullExportHelper
 {
 public:
-    static ::rtl::OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-    static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+    static OUString getImplementationName_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+    static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 };

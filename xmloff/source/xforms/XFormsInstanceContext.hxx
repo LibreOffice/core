@@ -44,14 +44,14 @@ class XFormsInstanceContext : public TokenContext
 {
     com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> mxModel;
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> mxInstance;
-    rtl::OUString msId;
-    rtl::OUString msURL;
+    OUString msId;
+    OUString msURL;
 
 public:
 
     XFormsInstanceContext( SvXMLImport& rImport,
                            sal_uInt16 nPrfx,
-                           const ::rtl::OUString& rLName,
+                           const OUString& rLName,
                            const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> & xModel );
     virtual ~XFormsInstanceContext();
 
@@ -65,7 +65,7 @@ public:
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
@@ -74,12 +74,12 @@ protected:
 
     virtual void HandleAttribute(
         sal_uInt16 nToken,
-        const rtl::OUString& rValue );
+        const OUString& rValue );
 
     virtual SvXMLImportContext* HandleChild(
         sal_uInt16 nToken,
         sal_uInt16 nNamespace,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 };
 

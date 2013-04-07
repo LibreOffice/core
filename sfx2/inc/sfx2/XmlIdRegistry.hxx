@@ -36,10 +36,10 @@ namespace sfx2 {
 // XML ID utilities --------------------------------------------------
 
 /** is i_rIdref a valid NCName ? */
-bool SFX2_DLLPUBLIC isValidNCName(::rtl::OUString const & i_rIdref);
+bool SFX2_DLLPUBLIC isValidNCName(OUString const & i_rIdref);
 
-bool SFX2_DLLPUBLIC isValidXmlId(::rtl::OUString const & i_rStreamName,
-    ::rtl::OUString const & i_rIdref);
+bool SFX2_DLLPUBLIC isValidXmlId(OUString const & i_rStreamName,
+    OUString const & i_rIdref);
 
 // XML ID handling ---------------------------------------------------
 

@@ -414,13 +414,13 @@ int INetMessageOStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
     // Check for header or body.
     if (!IsHeaderParsed())
     {
-        rtl::OString aField(pData);
+        OString aField(pData);
         sal_Int32 nPos = aField.indexOf(':');
         if (nPos != -1)
         {
-            rtl::OString aName(
+            OString aName(
                 aField.copy(0, nPos));
-            rtl::OString aValue(
+            OString aValue(
                 aField.copy(nPos + 1, aField.getLength() - nPos + 1));
             aValue = comphelper::string::stripStart(aValue, ' ');
 
@@ -1272,7 +1272,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                         if (pMsg->IsMultipart())
                         {
                             // Insert multipart delimiter.
-                            rtl::OStringBuffer aDelim("--");
+                            OStringBuffer aDelim("--");
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append("\r\n");
 
@@ -1290,7 +1290,7 @@ int INetMIMEMessageStream::GetMsgLine (sal_Char *pData, sal_uIntPtr nSize)
                         if (pMsg->IsMultipart())
                         {
                             // Insert close delimiter.
-                            rtl::OStringBuffer aDelim("--");
+                            OStringBuffer aDelim("--");
                             aDelim.append(pMsg->GetMultipartBoundary());
                             aDelim.append("--\r\n");
 
@@ -1437,12 +1437,12 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                 if (pMsg->GetMultipartBoundary().getLength() == 0)
                 {
                     // Determine boundary.
-                    rtl::OString aType(rtl::OUStringToOString(
+                    OString aType(OUStringToOString(
                         pMsg->GetContentType(), RTL_TEXTENCODING_ASCII_US));
-                    rtl::OString aLowerType(aType.toAsciiLowerCase());
+                    OString aLowerType(aType.toAsciiLowerCase());
 
                     sal_Int32 nPos = aLowerType.indexOf("boundary=");
-                    rtl::OString aBoundary(aType.copy(nPos + 9));
+                    OString aBoundary(aType.copy(nPos + 9));
 
                     aBoundary = comphelper::string::strip(aBoundary, ' ');
                     aBoundary = comphelper::string::strip(aBoundary, '"');
@@ -1451,15 +1451,15 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                     pMsg->SetMultipartBoundary (aBoundary);
                 }
 
-                rtl::OString aPlainDelim (pMsg->GetMultipartBoundary());
-                rtl::OString aDelim = rtl::OStringBuffer("--").
+                OString aPlainDelim (pMsg->GetMultipartBoundary());
+                OString aDelim = OStringBuffer("--").
                     append(aPlainDelim).
                     makeStringAndClear();
-                rtl::OString aPlainClose = rtl::OStringBuffer(
+                OString aPlainClose = OStringBuffer(
                     aPlainDelim).
                     append("--").
                     makeStringAndClear();
-                rtl::OString aClose = rtl::OStringBuffer(
+                OString aClose = OStringBuffer(
                     aDelim).
                     append("--").
                     makeStringAndClear();

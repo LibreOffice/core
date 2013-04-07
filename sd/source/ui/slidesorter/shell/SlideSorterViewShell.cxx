@@ -131,7 +131,7 @@ SlideSorterViewShell::SlideSorterViewShell (
         mpFrameView = new FrameView(GetDoc());
     GetFrameView()->Connect();
 
-    SetName (rtl::OUString("SlideSorterViewShell"));
+    SetName (OUString("SlideSorterViewShell"));
 
     pParentWindow->SetStyle(pParentWindow->GetStyle() | WB_DIALOGCONTROL);
 }
@@ -216,12 +216,12 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
     SlideSorterViewShell* pViewShell = NULL;
 
     // Test the center, left, and then the right pane for showing a slide sorter.
-    ::rtl::OUString aPaneURLs[] = {
+    OUString aPaneURLs[] = {
         FrameworkHelper::msCenterPaneURL,
         FrameworkHelper::msFullScreenPaneURL,
         FrameworkHelper::msLeftImpressPaneURL,
         FrameworkHelper::msRightPaneURL,
-        ::rtl::OUString()};
+        OUString()};
 
     try
     {

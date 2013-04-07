@@ -84,7 +84,6 @@
 #include "textapi.hxx"
 #include "sdresid.hxx"
 
-using rtl::OUString;
 using namespace ::sd;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -233,7 +232,7 @@ void AnnotationTextWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-rtl::OUString AnnotationTextWindow::GetSurroundingText() const
+OUString AnnotationTextWindow::GetSurroundingText() const
 {
     if( mpOutlinerView )
     {
@@ -246,7 +245,7 @@ rtl::OUString AnnotationTextWindow::GetSurroundingText() const
             return aEditEngine->GetText(aSelection.nStartPara);
         }
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 Selection AnnotationTextWindow::GetSurroundingTextSelection() const

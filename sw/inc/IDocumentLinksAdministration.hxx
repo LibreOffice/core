@@ -48,11 +48,11 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
 
     /** SS fuers Linken von Dokumentteilen  / ?? for linking of parts of documents.
     */
-    virtual bool GetData(const rtl::OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
+    virtual bool GetData(const OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const = 0;
 
-    virtual bool SetData(const rtl::OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
+    virtual bool SetData(const OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue) = 0;
 
-    virtual ::sfx2::SvLinkSource* CreateLinkSource(const rtl::OUString& rItem) = 0;
+    virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) = 0;
 
     /** Embed all local links (ranges/graphics).
     */

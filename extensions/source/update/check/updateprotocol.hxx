@@ -39,11 +39,11 @@ checkForUpdates(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > & rxInteractionHandler,
     const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider >& rUpdateInfoProvider,
-    const rtl::OUString &rOS,
-    const rtl::OUString &rArch,
-    const ::com::sun::star::uno::Sequence< rtl::OUString > &rRepositoryList,
-    const rtl::OUString &rGitID,
-    const rtl::OUString &rInstallID
+    const OUString &rOS,
+    const OUString &rArch,
+    const ::com::sun::star::uno::Sequence< OUString > &rRepositoryList,
+    const OUString &rGitID,
+    const OUString &rInstallID
 );
 
 // Returns 'true' if there are updates for any extension
@@ -57,7 +57,7 @@ bool checkForPendingUpdates(
 
 bool storeExtensionUpdateInfos(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< rtl::OUString > > &rUpdateInfos
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > &rUpdateInfos
 );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

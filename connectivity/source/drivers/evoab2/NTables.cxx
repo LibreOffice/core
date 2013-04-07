@@ -45,13 +45,13 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace dbtools;
 
-ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
+ObjectType OEvoabTables::createObject(const OUString& aName)
 {
-    ::rtl::OUString aSchema(  "%" );
+    OUString aSchema(  "%" );
 
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString("TABLE");
-    ::rtl::OUString sEmpty;
+    Sequence< OUString > aTypes(1);
+    aTypes[0] = OUString("TABLE");
+    OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 

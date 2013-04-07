@@ -387,9 +387,9 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void    MoveCrsr( sal_Bool bWithSelect = sal_False );
 
     // update input fields
-    sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, rtl::OString* pWindowState = 0);
+    sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, OString* pWindowState = 0);
     // update DropDown fields
-    sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, rtl::OString* pWindowState = 0);
+    sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, OString* pWindowState = 0);
 
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( );
@@ -397,7 +397,7 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     // jump to bookmark and set the "selctions-flags" correctly again
     sal_Bool GotoMark( const ::sw::mark::IMark* const pMark );
     sal_Bool GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bSelect, sal_Bool bStart );
-    sal_Bool GotoMark( const ::rtl::OUString& rName );
+    sal_Bool GotoMark( const OUString& rName );
     sal_Bool GoNextBookmark(); // sal_True when there still was one
     sal_Bool GoPrevBookmark();
 

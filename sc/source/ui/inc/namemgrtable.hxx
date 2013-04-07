@@ -40,9 +40,9 @@ class ScRangeData;
 
 struct ScRangeNameLine
 {
-    rtl::OUString aName;
-    rtl::OUString aExpression;
-    rtl::OUString aScope;
+    OUString aName;
+    OUString aExpression;
+    OUString aScope;
 };
 
 //Implements the table for the manage names dialog
@@ -52,10 +52,10 @@ struct ScRangeNameLine
 class SC_DLLPUBLIC ScRangeManagerTable : public SvxSimpleTable
 {
 private:
-    rtl::OUString maGlobalString;
+    OUString maGlobalString;
 
     // should be const because we should not modify it here
-    const boost::ptr_map<rtl::OUString, ScRangeName>& mrRangeMap;
+    const boost::ptr_map<OUString, ScRangeName>& mrRangeMap;
     // for performance, save which entries already have the formula entry
     // otherwise opening the dialog with a lot of range names is extremelly slow because
     // we would calculate all formula strings during opening
@@ -70,7 +70,7 @@ private:
     void setColWidths();
 
 public:
-    ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<rtl::OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
+    ScRangeManagerTable( SvxSimpleTableContainer& rParent, boost::ptr_map<OUString, ScRangeName>& aTabRangeNames, const ScAddress& rPos );
     virtual ~ScRangeManagerTable();
 
     virtual void Resize();

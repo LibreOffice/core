@@ -88,11 +88,11 @@ namespace
         const Reference< com::sun::star::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
         const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(aContext) );
 
-        ::std::vector< ::rtl::OUString > aImageURLs( Throbber::getDefaultImageURLs( i_imageSet ) );
+        ::std::vector< OUString > aImageURLs( Throbber::getDefaultImageURLs( i_imageSet ) );
         aImages.reserve( aImageURLs.size() );
 
         ::comphelper::NamedValueCollection aMediaProperties;
-        for (   ::std::vector< ::rtl::OUString >::const_iterator imageURL = aImageURLs.begin();
+        for (   ::std::vector< OUString >::const_iterator imageURL = aImageURLs.begin();
                 imageURL != aImageURLs.end();
                 ++imageURL
             )
@@ -220,9 +220,9 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-::std::vector< ::rtl::OUString > Throbber::getDefaultImageURLs( const ImageSet i_imageSet )
+::std::vector< OUString > Throbber::getDefaultImageURLs( const ImageSet i_imageSet )
 {
-    ::std::vector< ::rtl::OUString > aImageURLs;
+    ::std::vector< OUString > aImageURLs;
 
     sal_Char const* const pResolutions[] = { "16", "32", "64" };
     size_t const nImageCounts[] = { 6, 12, 12 };
@@ -242,7 +242,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     aImageURLs.reserve( nImageCounts[index] );
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
-        ::rtl::OUStringBuffer aURL;
+        OUStringBuffer aURL;
         aURL.appendAscii( "private:graphicrepository/vcl/res/spinner-" );
         aURL.appendAscii( pResolutions[index] );
         aURL.appendAscii( "-" );

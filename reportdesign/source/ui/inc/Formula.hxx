@@ -56,7 +56,7 @@ public:
     FormulaDialog( Window* pParent
         , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xServiceFactory
         , const ::boost::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
-        , const ::rtl::OUString& _sFormula
+        , const OUString& _sFormula
         , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet);
     virtual ~FormulaDialog();
 

@@ -211,7 +211,7 @@ class LayoutManagerListener : public ::com::sun::star::frame::XLayoutManagerList
         sal_Bool                                                                m_bHasFrame;
         SfxWorkWindow*                                                          m_pWrkWin;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame > m_xFrame;
-        rtl::OUString                                                           m_aLayoutManagerPropName;
+        OUString                                                           m_aLayoutManagerPropName;
 };
 
 class SfxWorkWindow
@@ -242,10 +242,10 @@ protected:
     sal_Bool                    bIsFullScreen : 1;
     sal_Bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
-    rtl::OUString           m_aStatusBarResName;
-    rtl::OUString           m_aLayoutManagerPropName;
-    rtl::OUString           m_aTbxTypeName;
-    rtl::OUString           m_aProgressBarResName;
+    OUString           m_aStatusBarResName;
+    OUString           m_aLayoutManagerPropName;
+    OUString           m_aTbxTypeName;
+    OUString           m_aProgressBarResName;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xLayoutManagerListener;
 
 protected:

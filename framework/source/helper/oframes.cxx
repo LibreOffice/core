@@ -36,7 +36,6 @@ using namespace ::cppu                          ;
 using namespace ::osl                           ;
 using namespace ::std                           ;
 
-using rtl::OUString;
 
 //*****************************************************************************************************************
 //  constructor

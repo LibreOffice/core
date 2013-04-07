@@ -126,7 +126,7 @@ ScVbaOLEObjects::createCollectionObject( const css::uno::Any& aSource )
 }
 
 uno::Any
-ScVbaOLEObjects::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno::RuntimeException)
+ScVbaOLEObjects::getItemByStringIndex( const OUString& sIndex ) throw (uno::RuntimeException)
 {
     try
     {
@@ -158,20 +158,20 @@ ScVbaOLEObjects::getElementType() throw (uno::RuntimeException)
     return ooo::vba::excel::XOLEObject::static_type(0);
 }
 
-rtl::OUString
+OUString
 ScVbaOLEObjects::getServiceImplName()
 {
-    return rtl::OUString("ScVbaOLEObjects");
+    return OUString("ScVbaOLEObjects");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaOLEObjects::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.OLEObjects" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.OLEObjects" );
     }
     return aServiceNames;
 }

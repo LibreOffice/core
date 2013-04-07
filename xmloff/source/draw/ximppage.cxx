@@ -38,8 +38,6 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -63,7 +61,7 @@ class DrawAnnotationContext : public SvXMLImportContext
 public:
     DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
-    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
 private:
@@ -360,7 +358,7 @@ void SdXMLGenericPageContext::EndElement()
     SetNavigationOrder();
 }
 
-void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
+void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 {
     // set PageProperties?
     if(!rStyleName.isEmpty())

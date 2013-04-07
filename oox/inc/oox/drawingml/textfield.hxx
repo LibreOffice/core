@@ -38,8 +38,8 @@ public:
     inline TextParagraphProperties& getTextParagraphProperties() { return maTextParagraphProperties; }
     inline const TextParagraphProperties& getTextParagraphProperties() const { return maTextParagraphProperties; }
 
-    inline void setType( const ::rtl::OUString& sType ) { msType = sType; }
-    inline void setUuid( const ::rtl::OUString & sUuid ) { msUuid = sUuid; }
+    inline void setType( const OUString& sType ) { msType = sType; }
+    inline void setUuid( const OUString & sUuid ) { msUuid = sUuid; }
 
     virtual sal_Int32    insertAt(
                         const ::oox::core::XmlFilterBase& rFilterBase,
@@ -49,8 +49,8 @@ public:
 
 private:
     TextParagraphProperties  maTextParagraphProperties;
-    ::rtl::OUString msType;
-    ::rtl::OUString msUuid;
+    OUString msType;
+    OUString msUuid;
 };
 
 typedef boost::shared_ptr< TextField > TextFieldPtr;

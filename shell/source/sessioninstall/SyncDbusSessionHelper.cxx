@@ -42,7 +42,7 @@ namespace
     };
     static inline GDBusProxy* lcl_GetPackageKitProxy(const OUString sInterface)
     {
-        const OString sFullInterface = rtl::OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
+        const OString sFullInterface = OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
         GErrorWrapper error(NULL);
         GDBusProxy* proxy = NULL;
         proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
@@ -71,7 +71,7 @@ namespace shell { namespace sessioninstall
         boost::shared_ptr<GVariantBuilder> pBuilder(g_variant_builder_new(G_VARIANT_TYPE ("as")), GVariantBuilderDeleter());
         for( const OUString* pPackage = stl_begin(vPackages); pPackage != stl_end(vPackages); ++pPackage)
         {
-            vPackagesOString.push_back(rtl::OUStringToOString(*pPackage, RTL_TEXTENCODING_ASCII_US));
+            vPackagesOString.push_back(OUStringToOString(*pPackage, RTL_TEXTENCODING_ASCII_US));
             g_variant_builder_add(pBuilder.get(), "s", vPackagesOString.back().getStr());
         }
 

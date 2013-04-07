@@ -87,7 +87,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
 
         // XUIElement
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
-        virtual  ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual  OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
         virtual  ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
         virtual  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
@@ -132,7 +132,7 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                                                                                 m_bConfigListening : 1,
                                                                                                 m_bDisposed : 1,
                                                                                                 m_bNoClose : 1;
-        rtl::OUString                                                                           m_aResourceURL;
+        OUString                                                                           m_aResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >        m_xServiceFactory;
         com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >         m_xConfigSource;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >               m_xConfigData;

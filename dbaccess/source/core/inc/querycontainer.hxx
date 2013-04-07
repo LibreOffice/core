@@ -91,8 +91,8 @@ namespace dbaccess
         };
 
         // ODefinitionContainer
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const ::rtl::OUString& _rName);
-        virtual sal_Bool checkExistence(const ::rtl::OUString& _rName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > createObject( const OUString& _rName);
+        virtual sal_Bool checkExistence(const OUString& _rName);
 
         // helper
         virtual void SAL_CALL disposing();
@@ -140,7 +140,7 @@ namespace dbaccess
         virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbcx::XDrop
-        virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL dropByName( const OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::container::XElementAccess
@@ -148,11 +148,11 @@ namespace dbaccess
     // ::com::sun::star::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) throw(::com::sun::star::uno::RuntimeException);
     // ::com::sun::star::container::XNameAccess
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
         // OContentHelper overridables
-        virtual ::rtl::OUString determineContentType() const;
+        virtual OUString determineContentType() const;
 
     private:
         // helper
@@ -160,7 +160,7 @@ namespace dbaccess
             container will be asked for the given name.<BR>
             The returned object is acquired once.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::rtl::OUString& _rName);
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const OUString& _rName);
         /// create a query object wrapping a CommandDefinition. The returned object is acquired once.
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > implCreateWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >& _rxCommandDesc);
 

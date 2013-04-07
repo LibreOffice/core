@@ -2851,7 +2851,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
     uno::Reference< uno::XInterface > xDocModuleApiObject;
     if ( xSF.is() )
     {
-        xVBACodeNamedObjectAccess.set( xSF->createInstance( rtl::OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY );
+        xVBACodeNamedObjectAccess.set( xSF->createInstance( OUString( "ooo.vba.VBAObjectModuleObjectProvider")), uno::UNO_QUERY );
         xDocModuleApiObject.set( xVBACodeNamedObjectAccess->getByName( sCodeName ), uno::UNO_QUERY );
     }
     return xDocModuleApiObject;
@@ -2866,7 +2866,7 @@ static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sM
     return sModuleInfo;
 }
 
-void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModuleName, const rtl::OUString& sSource )
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sModuleName, const OUString& sSource )
 {
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
@@ -2892,16 +2892,16 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
             genModuleName = sModuleName;
         else
         {
-             genModuleName = rtl::OUString( "Sheet1" );
+             genModuleName = OUString( "Sheet1" );
              nNum = 1;
         }
         while( xLib->hasByName( genModuleName ) )
-            genModuleName = rtl::OUString( "Sheet") + rtl::OUString::valueOf( ++nNum );
+            genModuleName = OUString( "Sheet") + OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
-        rtl::OUString sTmpSource = sSource;
+        OUString sTmpSource = sSource;
         if ( sTmpSource.isEmpty() )
-            sTmpSource = ::rtl::OUString( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" );
+            sTmpSource = OUString( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" );
         aSourceAny <<= sTmpSource;
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
@@ -2915,7 +2915,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
     }
 }
 
-void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName )
+void VBA_DeleteModule( ScDocShell& rDocSh, const OUString& sModuleName )
 {
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
@@ -2981,7 +2981,7 @@ sal_Bool ScDocFunc::InsertTable( SCTAB nTab, const String& rName, sal_Bool bReco
         // Only insert vba modules if vba mode ( and not currently importing XML )
         if( bInsertDocModule )
         {
-            rtl::OUString sSource, sCodeName;
+            OUString sSource, sCodeName;
             VBA_InsertModule( *pDoc, nTab, sCodeName, sSource );
         }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab ) );
@@ -3022,7 +3022,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoDoc->AddUndoTab( 0, nCount-1 );                    // alle Tabs fuer Referenzen
 
         pDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,false, pUndoDoc );
-        rtl::OUString aOldName;
+        OUString aOldName;
         pDoc->GetName( nTab, aOldName );
         pUndoDoc->RenameTab( nTab, aOldName, false );
         if (bWasLinked)
@@ -3034,7 +3034,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         if ( pDoc->IsScenario(nTab) )
         {
             pUndoDoc->SetScenario( nTab, sal_True );
-            rtl::OUString aComment;
+            OUString aComment;
             Color  aColor;
             sal_uInt16 nScenFlags;
             pDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
@@ -3064,7 +3064,7 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         //  Views updaten:
         if( bVbaEnabled )
         {
-            rtl::OUString sCodeName;
+            OUString sCodeName;
             if( pDoc->GetCodeName( nTab, sCodeName ) )
             {
                 VBA_DeleteModule( rDocShell, sCodeName );
@@ -3197,7 +3197,7 @@ sal_Bool ScDocFunc::RenameTable( SCTAB nTab, const String& rName, sal_Bool bReco
     ScDocShellModificator aModificator( rDocShell );
 
     sal_Bool bSuccess = false;
-    rtl::OUString sOldName;
+    OUString sOldName;
     pDoc->GetName(nTab, sOldName);
     if (pDoc->RenameTab( nTab, rName ))
     {
@@ -4864,14 +4864,14 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
     return true;
 }
 
-void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<rtl::OUString, ScRangeName>& rRangeMap )
+void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap )
 {
     ScDocShellModificator aModificator(rDocShell);
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (pDoc->IsUndoEnabled())
     {
-        std::map<rtl::OUString, ScRangeName*> aOldRangeMap;
+        std::map<OUString, ScRangeName*> aOldRangeMap;
         pDoc->GetRangeNameMap(aOldRangeMap);
         rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAllRangeNames(&rDocShell, aOldRangeMap, rRangeMap));
@@ -5117,8 +5117,8 @@ sal_Bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, sal_Bool bApi )
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
 #endif
-            rtl::OUString aName;
-            rtl::OUStringBuffer aContent;
+            OUString aName;
+            OUStringBuffer aContent;
             String aFormula;
             SCROW nOutRow = nStartRow;
             for (j=0; j<nValidCount; j++)
@@ -5258,8 +5258,8 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
             ++nLinkPos;
     }
 
-    rtl::OUString aFilterName = rFilter;
-    rtl::OUString aNewOptions = rOptions;
+    OUString aFilterName = rFilter;
+    OUString aNewOptions = rOptions;
     if (aFilterName.isEmpty())
         ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, true, !bApi );
 

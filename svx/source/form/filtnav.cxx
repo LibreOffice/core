@@ -124,7 +124,7 @@ sal_uInt32 OFilterItemExchange::getFormatId()
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
     if ((sal_uInt32)-1 == s_nFormat)
     {
-        s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
+        s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"form.FilterControlExchange\""));
         DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OFilterExchangeHelper::getFormatId: bad exchange id!");
     }
     return s_nFormat;
@@ -204,8 +204,8 @@ TYPEINIT1(FmFilterItem, FmFilterData);
 //------------------------------------------------------------------------
 FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
                             FmFilterItems* pParent,
-                            const ::rtl::OUString& aFieldName,
-                            const ::rtl::OUString& aText,
+                            const OUString& aFieldName,
+                            const OUString& aText,
                             const sal_Int32 _nComponentIndex )
           :FmFilterData(_rxFactory,pParent, aText)
           ,m_aFieldName(aFieldName)
@@ -321,7 +321,7 @@ public:
 
     void setText(sal_Int32 nPos,
         const FmFilterItem* pFilterItem,
-        const ::rtl::OUString& rText);
+        const OUString& rText);
 };
 
 //------------------------------------------------------------------------
@@ -364,7 +364,7 @@ void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxC
 //------------------------------------------------------------------------
 void FmFilterAdapter::setText(sal_Int32 nRowPos,
                               const FmFilterItem* pFilterItem,
-                              const ::rtl::OUString& rText)
+                              const OUString& rText)
 {
     FmFormItem* pFormItem = PTR_CAST( FmFormItem, pFilterItem->GetParent()->GetParent() );
 
@@ -389,9 +389,9 @@ void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/) throw( Runtim
 //------------------------------------------------------------------------
 namespace
 {
-    ::rtl::OUString lcl_getLabelName_nothrow( const Reference< XControl >& _rxControl )
+    OUString lcl_getLabelName_nothrow( const Reference< XControl >& _rxControl )
     {
-        ::rtl::OUString sLabelName;
+        OUString sLabelName;
         try
         {
             Reference< XControl > xControl( _rxControl, UNO_SET_THROW );
@@ -463,7 +463,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& _Event ) th
     else
     {
         // searching the component by field name
-        ::rtl::OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
+        OUString aFieldName( lcl_getLabelName_nothrow( xFilterController->getFilterComponent( _Event.FilterComponent ) ) );
 
         pFilterItem = new FmFilterItem( m_pModel->getORB(), pFilter, aFieldName, _Event.PredicateExpression, _Event.FilterComponent );
         m_pModel->Insert(pFilter->GetChildren().end(), pFilterItem);
@@ -542,7 +542,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& _Event )
 TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
 FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
-              :FmParentData(_rxFactory,NULL, ::rtl::OUString())
+              :FmParentData(_rxFactory,NULL, OUString())
               ,OSQLParserClient(comphelper::getComponentContext(_rxFactory))
               ,m_xORB(_rxFactory)
               ,m_pAdapter(NULL)
@@ -626,7 +626,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             Reference< XFormController > xController( xControllers->getByIndex(i), UNO_QUERY_THROW );
 
             Reference< XPropertySet > xFormProperties( xController->getModel(), UNO_QUERY_THROW );
-            ::rtl::OUString aName;
+            OUString aName;
             OSL_VERIFY( xFormProperties->getPropertyValue( FM_PROP_NAME ) >>= aName );
 
             // Insert a new item for the form
@@ -638,8 +638,8 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             // insert the existing filters for the form
             String aTitle( SVX_RES( RID_STR_FILTER_FILTER_FOR ) );
 
-            Sequence< Sequence< ::rtl::OUString > > aExpressions = xFilterController->getPredicateExpressions();
-            for (   const Sequence< ::rtl::OUString >* pConjunctionTerm = aExpressions.getConstArray();
+            Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
+            for (   const Sequence< OUString >* pConjunctionTerm = aExpressions.getConstArray();
                     pConjunctionTerm != aExpressions.getConstArray() + aExpressions.getLength();
                     ++pConjunctionTerm
                 )
@@ -648,8 +648,8 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                 FmFilterItems* pFilterItems = new FmFilterItems( m_xORB, pFormItem, aTitle );
                 Insert( pFormItem->GetChildren().end(), pFilterItems );
 
-                const Sequence< ::rtl::OUString >& rDisjunction( *pConjunctionTerm );
-                for (   const ::rtl::OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
+                const Sequence< OUString >& rDisjunction( *pConjunctionTerm );
+                for (   const OUString* pDisjunctiveTerm = rDisjunction.getConstArray();
                         pDisjunctiveTerm != rDisjunction.getConstArray() + rDisjunction.getLength();
                         ++pDisjunctiveTerm
                     )
@@ -662,7 +662,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
 
                     // determine the display name of the control
                     const Reference< XControl > xFilterControl( xFilterController->getFilterComponent( nComponentIndex ) );
-                    const ::rtl::OUString sDisplayName( lcl_getLabelName_nothrow( xFilterControl ) );
+                    const OUString sDisplayName( lcl_getLabelName_nothrow( xFilterControl ) );
 
                     // insert a new entry
                     FmFilterItem* pANDCondition = new FmFilterItem( m_xORB, pFilterItems, sDisplayName, *pDisjunctiveTerm, nComponentIndex );
@@ -823,7 +823,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
                 {
                     ::std::vector< FmFilterData* >::iterator removePos = rChildren.end() - 1;
                     FmFilterItem* pFilterItem = PTR_CAST( FmFilterItem, *removePos );
-                    m_pAdapter->setText( nPos, pFilterItem, ::rtl::OUString() );
+                    m_pAdapter->setText( nPos, pFilterItem, OUString() );
                     Remove( removePos );
                 }
             }
@@ -853,7 +853,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
             // EmptyText removes the filter
-            m_pAdapter->setText(nParentPos, pFilterItem, ::rtl::OUString());
+            m_pAdapter->setText(nParentPos, pFilterItem, OUString());
             Remove( i );
         }
     }
@@ -896,13 +896,13 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, OUString& rText, OUStr
         Reference< XPropertySet > xField( lcl_getBoundField_nothrow( xFilterController->getFilterComponent( pItem->GetComponentIndex() ) ), UNO_SET_THROW );
 
         // parse the given text as filter predicate
-        ::rtl::OUString aErr, aTxt( rText );
+        OUString aErr, aTxt( rText );
         ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( aErr, aTxt, xFormatter, xField );
         rErrorMsg = aErr;
         rText = aTxt;
         if ( xParseNode.is() )
         {
-            ::rtl::OUString aPreparedText;
+            OUString aPreparedText;
             Locale aAppLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             xParseNode->parseNodeToPredicateStr(
                 aPreparedText, xConnection, xFormatter, xField, aAppLocale, '.', getParseContext() );
@@ -925,7 +925,7 @@ void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 }
 
 //------------------------------------------------------------------------
-void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText)
+void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const OUString& rText)
 {
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChildren();
     ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
@@ -1217,7 +1217,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvTreeListEntry* pEntry, Selection& rS
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;

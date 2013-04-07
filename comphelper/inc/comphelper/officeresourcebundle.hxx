@@ -73,7 +73,7 @@ namespace comphelper
                 an empty string is returned. In a non-product version, an OSL_ENSURE will notify you of this
                 then.
         */
-        ::rtl::OUString loadString( sal_Int32 _resourceId ) const;
+        OUString loadString( sal_Int32 _resourceId ) const;
 
         /** determines whether the resource bundle has a string with the given id
             @param  _resourceId

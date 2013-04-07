@@ -152,7 +152,7 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
         {
-            rtl::OUString sName;
+            OUString sName;
             if(GetCharFmt())
                 sName = SwStyleNameMapper::GetProgName(
                         GetCharFmt()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
@@ -240,14 +240,14 @@ int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
+    OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
 
 bool    SwNumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
-    rtl::OUString uName;
+    OUString uName;
     rVal >>= uName;
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;

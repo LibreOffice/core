@@ -38,12 +38,12 @@ namespace connectivity
 
                 struct ltstr
                 {
-                    bool operator()( const ::rtl::OUString &s1, const ::rtl::OUString &s2) const;
+                    bool operator()( const OUString &s1, const OUString &s2) const;
                 };
 
 
-                typedef ::std::multimap< ::rtl::OUString, nsIAbDirectory *, ltstr > dirMap;
-                typedef ::std::multimap< ::rtl::OUString, nsIAbDirectory *, ltstr > uriMap;
+                typedef ::std::multimap< OUString, nsIAbDirectory *, ltstr > dirMap;
+                typedef ::std::multimap< OUString, nsIAbDirectory *, ltstr > uriMap;
 
                 static MNameMapper    *instance;
                 dirMap                     *mDirMap;
@@ -59,13 +59,13 @@ namespace connectivity
                 ~MNameMapper();
 
                 // May modify the name passed in so that it's unique
-                nsresult add( ::rtl::OUString& str, nsIAbDirectory* abook );
+                nsresult add( OUString& str, nsIAbDirectory* abook );
 
                 //reset dirs
                 void reset();
 
                 // Get the directory corresponding to str
-                bool getDir( const ::rtl::OUString& str, nsIAbDirectory* *abook );
+                bool getDir( const OUString& str, nsIAbDirectory* *abook );
 
         };
 

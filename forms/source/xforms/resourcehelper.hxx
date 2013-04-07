@@ -23,21 +23,20 @@
 #include <frm_resource.hrc>
 
 #include <sal/types.h>
-
-namespace rtl { class OUString; }
+#include <rtl/ustring.hxx>
 
 namespace xforms
 {
     /// get a resource string for the current language
-    rtl::OUString getResource( sal_uInt16 );
+    OUString getResource( sal_uInt16 );
 
     // overloaded: get a resource string, and substitute parameters
-    rtl::OUString getResource( sal_uInt16, const rtl::OUString& );
-    rtl::OUString getResource( sal_uInt16, const rtl::OUString&,
-                                           const rtl::OUString& );
-    rtl::OUString getResource( sal_uInt16, const rtl::OUString&,
-                                           const rtl::OUString&,
-                                           const rtl::OUString& );
+    OUString getResource( sal_uInt16, const OUString& );
+    OUString getResource( sal_uInt16, const OUString&,
+                                           const OUString& );
+    OUString getResource( sal_uInt16, const OUString&,
+                                           const OUString&,
+                                           const OUString& );
 
 } // namespace
 

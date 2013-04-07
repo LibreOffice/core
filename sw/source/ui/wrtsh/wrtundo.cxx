@@ -96,7 +96,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
-    ::rtl::OUString aUndoStr;
+    OUString aUndoStr;
     sal_uInt16 nResStr = STR_UNDO;
     switch( eDoType )
     {
@@ -141,7 +141,7 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
 
 String SwWrtShell::GetRepeatString() const
 {
-    ::rtl::OUString str;
+    OUString str;
     GetRepeatInfo(& str);
 
     if (str.isEmpty())

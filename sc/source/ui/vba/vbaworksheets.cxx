@@ -93,16 +93,16 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  sheet::XSpreadsheet::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( !mSheetMap.empty() ); }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return uno::makeAny( *cachePos );
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > sNames( mSheetMap.size() );
-        rtl::OUString* pString = sNames.getArray();
+        uno::Sequence< OUString > sNames( mSheetMap.size() );
+        OUString* pString = sNames.getArray();
         SheetMap::iterator it = mSheetMap.begin();
         SheetMap::iterator it_end = mSheetMap.end();
 
@@ -113,7 +113,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         cachePos = mSheetMap.begin();
         SheetMap::iterator it_end = mSheetMap.end();
@@ -221,7 +221,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
     if ( isSelectedSheets() )
         return uno::Any(); // or should we throw?
 
-    rtl::OUString aStringSheet;
+    OUString aStringSheet;
     sal_Bool bBefore(sal_True);
     SCTAB nSheetIndex = 0;
     SCTAB nNewSheets = 1, nType = 0;
@@ -361,7 +361,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeExcep
         }
     }
     else
-        throw uno::RuntimeException( rtl::OUString( "Visible property doesn't support non boolean #FIXME" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Visible property doesn't support non boolean #FIXME" ), uno::Reference< uno::XInterface >() );
 }
 
 void SAL_CALL
@@ -369,7 +369,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
-        throw uno::RuntimeException( rtl::OUString( "Cannot obtain view shell" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "Cannot obtain view shell" ), uno::Reference< uno::XInterface >() );
 
     ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
     sal_Bool bReplace = sal_True;
@@ -465,33 +465,33 @@ ScVbaWorksheets::Item( const uno::Any& Index, const uno::Any& Index2  ) throw (u
 }
 
 uno::Any
-ScVbaWorksheets::getItemByStringIndex( const rtl::OUString& sIndex ) throw (uno::RuntimeException)
+ScVbaWorksheets::getItemByStringIndex( const OUString& sIndex ) throw (uno::RuntimeException)
 {
     return ScVbaWorksheets_BASE::getItemByStringIndex( sIndex );
 }
 
-rtl::OUString
+OUString
 ScVbaWorksheets::getServiceImplName()
 {
-    return rtl::OUString("ScVbaWorksheets");
+    return OUString("ScVbaWorksheets");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 ScVbaWorksheets::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.excel.Worksheets");
+        sNames[0] = OUString("ooo.vba.excel.Worksheets");
     }
     return sNames;
 }
 
-bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const ::rtl::OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException )
+bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException )
 {
     if (!xSpreadDoc.is())
-        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nameExists() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
+        throw lang::IllegalArgumentException( OUString( RTL_CONSTASCII_USTRINGPARAM( "nameExists() xSpreadDoc is null" ) ), uno::Reference< uno::XInterface  >(), 1 );
     uno::Reference <container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
     if ( xIndex.is() )
     {

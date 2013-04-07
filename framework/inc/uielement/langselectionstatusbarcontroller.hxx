@@ -86,9 +86,9 @@ class LangSelectionStatusbarController : public svt::StatusbarController
 
         sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
         sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
-        ::rtl::OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
-        ::rtl::OUString     m_aKeyboardLang;    // the keyboard language
-        ::rtl::OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
+        OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
+        OUString     m_aKeyboardLang;    // the keyboard language
+        OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
         LanguageGuessingHelper      m_aLangGuessHelper;
 
         void LangMenu() throw (::com::sun::star::uno::RuntimeException);

@@ -54,7 +54,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 // --------------------------------------------------------------------
@@ -67,7 +67,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     String maOldName;

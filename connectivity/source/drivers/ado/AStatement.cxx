@@ -250,7 +250,7 @@ void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
         m_RecordSet.PutRefDataSource( (IDispatch*)m_Command );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -280,7 +280,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
     return m_RecordSet.IsValid();
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -334,7 +334,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement::addBatch( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -351,10 +351,10 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 
     reset();
 
-    ::rtl::OUString aBatchSql;
+    OUString aBatchSql;
     sal_Int32 nLen = 0;
-    for(::std::list< ::rtl::OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
-        aBatchSql = aBatchSql + *i + ::rtl::OUString(";");
+    for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+        aBatchSql = aBatchSql + *i + OUString(";");
 
 
     if ( m_RecordSet.IsValid() )
@@ -389,7 +389,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 
 
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -559,7 +559,7 @@ sal_Int32 OStatement_Base::getMaxFieldSize() const throw(SQLException, RuntimeEx
     return 0;
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OStatement_Base::getCursorName() const throw(SQLException, RuntimeException)
+OUString OStatement_Base::getCursorName() const throw(SQLException, RuntimeException)
 {
     return m_Command.GetName();
 }
@@ -640,7 +640,7 @@ void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/) throw(SQLException, R
     ::dbtools::throwFeatureNotImplementedException( "Statement::MaxFieldSize", *this );
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLException, RuntimeException)
+void OStatement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -654,7 +654,7 @@ void OStatement_Base::setCursorName(const ::rtl::OUString &_par0) throw(SQLExcep
     Sequence< com::sun::star::beans::Property > aProps(10);
     com::sun::star::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);

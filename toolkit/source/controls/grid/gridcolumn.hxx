@@ -60,10 +60,10 @@ public:
     virtual void SAL_CALL setResizeable(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getFlexibility() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHelpText(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setTitle(const OUString & value) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpText(const OUString & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getIndex() throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getDataColumnIndex() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) throw(::com::sun::star::uno::RuntimeException);
@@ -79,9 +79,9 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XUnoTunnel and friends
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& i_identifier ) throw(::com::sun::star::uno::RuntimeException);
@@ -119,8 +119,8 @@ private:
     sal_Int32                                       m_nMinWidth;
     sal_Int32                                       m_nFlexibility;
     sal_Bool                                        m_bResizeable;
-    ::rtl::OUString                                 m_sTitle;
-    ::rtl::OUString                                 m_sHelpText;
+    OUString                                 m_sTitle;
+    OUString                                 m_sHelpText;
     ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;
 };
 

@@ -398,7 +398,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     if( xMgr.is() )
     {
         uno::Reference< awt::XProgressMonitor > xMonitor( xMgr->createInstance(
-                                                      ::rtl::OUString("com.sun.star.awt.XProgressMonitor") ),
+                                                      OUString("com.sun.star.awt.XProgressMonitor") ),
                                                       uno::UNO_QUERY );
 
         if ( xMonitor.is() )

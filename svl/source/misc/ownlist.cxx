@@ -29,9 +29,9 @@ using namespace com::sun::star;
 //============== SvCommandList ============================================
 //=========================================================================
 
-static ::rtl::OUString parseString(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
+static OUString parseString(const OUString & rCmd, sal_Int32 * pIndex)
 {
-    ::rtl::OUString result;
+    OUString result;
 
     if(rCmd[*pIndex] == sal_Unicode('\"')) {
         (*pIndex) ++;
@@ -46,7 +46,7 @@ static ::rtl::OUString parseString(const ::rtl::OUString & rCmd, sal_Int32 * pIn
     return result;
 }
 
-static ::rtl::OUString parseWord(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
+static OUString parseWord(const OUString & rCmd, sal_Int32 * pIndex)
 {
     sal_Int32 begin = *pIndex;
 
@@ -58,7 +58,7 @@ static ::rtl::OUString parseWord(const ::rtl::OUString & rCmd, sal_Int32 * pInde
     return rCmd.copy(begin, *pIndex - begin);
 }
 
-static void eatSpace(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
+static void eatSpace(const OUString & rCmd, sal_Int32 * pIndex)
 {
     while(*pIndex < rCmd.getLength() && isspace(sal::static_int_cast<int>(rCmd[*pIndex])))
         (*pIndex) ++;
@@ -68,7 +68,7 @@ static void eatSpace(const ::rtl::OUString & rCmd, sal_Int32 * pIndex)
 //=========================================================================
 bool SvCommandList::AppendCommands
 (
- const ::rtl::OUString & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
+ const OUString & rCmd,    /* Dieser Text wird in Kommandos umgesetzt */
  sal_Int32 * pEaten         /* Anzahl der Zeichen, die gelesen wurden */
 )
 /*  [Beschreibung]
@@ -87,10 +87,10 @@ bool SvCommandList::AppendCommands
     {
 
         eatSpace(rCmd, &index);
-        ::rtl::OUString name = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
+        OUString name = (rCmd[index] == sal_Unicode('\"')) ? parseString(rCmd, &index) : parseWord(rCmd, &index);
 
         eatSpace(rCmd, &index);
-        ::rtl::OUString value;
+        OUString value;
         if(index < rCmd.getLength() && rCmd[index] == sal_Unicode('='))
         {
             index ++;
@@ -110,8 +110,8 @@ bool SvCommandList::AppendCommands
 //=========================================================================
 SvCommand & SvCommandList::Append
 (
- const ::rtl::OUString & rCommand,    /* das Kommando */
- const ::rtl::OUString & rArg         /* dasArgument des Kommandos */
+ const OUString & rCommand,    /* das Kommando */
+ const OUString & rArg         /* dasArgument des Kommandos */
 )
 /*  [Beschreibung]
 
@@ -130,8 +130,8 @@ SvCommand & SvCommandList::Append
 bool SvCommandList::FillFromSequence( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aCommandSequence )
 {
     const sal_Int32 nCount = aCommandSequence.getLength();
-    ::rtl::OUString aCommand, aArg;
-    ::rtl::OUString aApiArg;
+    OUString aCommand, aArg;
+    OUString aApiArg;
     for( sal_Int32 nIndex=0; nIndex<nCount; nIndex++ )
     {
         aCommand = aCommandSequence[nIndex].Name;

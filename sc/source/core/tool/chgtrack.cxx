@@ -68,7 +68,7 @@ ScChangeAction::ScChangeAction(
     ScChangeActionType eTypeP, const ScBigRange& rRange,
     const sal_uLong nTempAction, const sal_uLong nTempRejectAction,
     const ScChangeActionState eTempState, const DateTime& aTempDateTime,
-    const rtl::OUString& aTempUser,  const rtl::OUString& aTempComment) :
+    const OUString& aTempUser,  const OUString& aTempComment) :
         aBigRange( rRange ),
         aDateTime( aTempDateTime ),
         aUser( aTempUser ),
@@ -431,7 +431,7 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
 
 
 void ScChangeAction::GetDescription(
-    rtl::OUString& rStr, ScDocument* /* pDoc */, bool /* bSplitRange */, bool bWarning ) const
+    OUString& rStr, ScDocument* /* pDoc */, bool /* bSplitRange */, bool bWarning ) const
 {
     if (!IsRejecting() || !bWarning)
         return;
@@ -440,7 +440,7 @@ void ScChangeAction::GetDescription(
     // not properly restored in formulas. See specification at
     // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
 
-    rtl::OUStringBuffer aBuf(rStr); // Take the original string.
+    OUStringBuffer aBuf(rStr); // Take the original string.
     if (GetType() == SC_CAT_MOVE)
     {
         aBuf.append(
@@ -515,10 +515,10 @@ void ScChangeAction::GetDescription(
 }
 
 
-rtl::OUString ScChangeAction::GetRefString(
+OUString ScChangeAction::GetRefString(
     const ScBigRange& rRange, ScDocument* pDoc, bool bFlag3D ) const
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     sal_uInt16 nFlags = ( rRange.IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( !nFlags )
         aBuf.append(ScGlobal::GetRscString(STR_NOREF_STR));
@@ -531,7 +531,7 @@ rtl::OUString ScChangeAction::GetRefString(
             case SC_CAT_DELETE_COLS :
                 if ( bFlag3D )
                 {
-                    rtl::OUString aTmp;
+                    OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
                     aBuf.append(aTmp);
                     aBuf.append(sal_Unicode('.'));
@@ -544,7 +544,7 @@ rtl::OUString ScChangeAction::GetRefString(
             case SC_CAT_DELETE_ROWS :
                 if ( bFlag3D )
                 {
-                    rtl::OUString aTmp;
+                    OUString aTmp;
                     pDoc->GetName( aTmpRange.aStart.Tab(), aTmp );
                     aBuf.append(aTmp);
                     aBuf.append(sal_Unicode('.'));
@@ -558,7 +558,7 @@ rtl::OUString ScChangeAction::GetRefString(
                 if ( bFlag3D || GetType() == SC_CAT_INSERT_TABS )
                     nFlags |= SCA_TAB_3D;
 
-                rtl::OUString aTmp;
+                OUString aTmp;
                 aTmpRange.Format(aTmp, nFlags, pDoc, pDoc->GetAddressConvention());
                 aBuf.append(aTmp);
             }
@@ -572,28 +572,28 @@ rtl::OUString ScChangeAction::GetRefString(
     return aBuf.makeStringAndClear();
 }
 
-const rtl::OUString& ScChangeAction::GetUser() const
+const OUString& ScChangeAction::GetUser() const
 {
     return aUser;
 }
 
-void ScChangeAction::SetUser( const rtl::OUString& r )
+void ScChangeAction::SetUser( const OUString& r )
 {
     aUser = r;
 }
 
-const rtl::OUString& ScChangeAction::GetComment() const
+const OUString& ScChangeAction::GetComment() const
 {
     return aComment;
 }
 
-void ScChangeAction::SetComment( const rtl::OUString& rStr )
+void ScChangeAction::SetComment( const OUString& rStr )
 {
     aComment = rStr;
 }
 
 void ScChangeAction::GetRefString(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     rStr = GetRefString( GetBigRange(), pDoc, bFlag3D );
 }
@@ -717,8 +717,8 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
 ScChangeActionIns::ScChangeActionIns(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
-    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
-    const rtl::OUString& sComment, const ScChangeActionType eTypeP) :
+    const OUString& aUserP, const DateTime& aDateTimeP,
+    const OUString& sComment, const ScChangeActionType eTypeP) :
     ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
 }
@@ -728,7 +728,7 @@ ScChangeActionIns::~ScChangeActionIns()
 }
 
 void ScChangeActionIns::GetDescription(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
+    OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -745,15 +745,15 @@ void ScChangeActionIns::GetDescription(
             nWhatId = STR_AREA;
     }
 
-    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
+    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_INSERT);
     sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
     if (nPos >= 0)
     {
         // Construct a range string to replace '#1' first.
-        rtl::OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
+        OUStringBuffer aBuf(ScGlobal::GetRscString(nWhatId));
         aBuf.append(sal_Unicode(' '));
         aBuf.append(GetRefString(GetBigRange(), pDoc));
-        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
+        OUString aRangeStr = aBuf.makeStringAndClear();
 
         aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the range string.
 
@@ -837,7 +837,7 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
 ScChangeActionDel::ScChangeActionDel(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
-    const rtl::OUString& aUserP, const DateTime& aDateTimeP, const rtl::OUString &sComment,
+    const OUString& aUserP, const DateTime& aDateTimeP, const OUString &sComment,
     const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
     ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     pTrack( pTrackP ),
@@ -973,7 +973,7 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
 
 
 void ScChangeActionDel::GetDescription(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
+    OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
@@ -1002,16 +1002,16 @@ void ScChangeActionDel::GetDescription(
         aTmpRange.aEnd.SetRow( aTmpRange.aEnd.Row() + GetDy() );
     }
 
-    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
+    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_DELETE);
     sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
     if (nPos >= 0)
     {
         // Build a string to replace with.
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(ScGlobal::GetRscString(nWhatId));
         aBuf.append(sal_Unicode(' '));
         aBuf.append(GetRefString(aTmpRange, pDoc));
-        rtl::OUString aRangeStr = aBuf.makeStringAndClear();
+        OUString aRangeStr = aBuf.makeStringAndClear();
         aRsc = aRsc.replaceAt(nPos, 2, aRangeStr); // replace '#1' with the string.
 
         aBuf.append(rStr).append(aRsc);
@@ -1064,7 +1064,7 @@ bool ScChangeActionDel::Reject( ScDocument* pDoc )
                 case SC_CAT_DELETE_TABS :
                 {
 //2do: Tabellennamen merken?
-                    rtl::OUString aName;
+                    OUString aName;
                     pDoc->CreateValidTabName( aName );
                     if ( ( bOk = pDoc->ValidNewTabName( aName ) ) != false )
                         bOk = pDoc->InsertTab( aRange.aStart.Tab(), aName );
@@ -1182,8 +1182,8 @@ void ScChangeActionDel::UndoCutOffInsert()
 ScChangeActionMove::ScChangeActionMove(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aToBigRange,
-    const rtl::OUString& aUserP, const DateTime& aDateTimeP,
-    const rtl::OUString &sComment, const ScBigRange& aFromBigRange,
+    const OUString& aUserP, const DateTime& aDateTimeP,
+    const OUString &sComment, const ScBigRange& aFromBigRange,
     ScChangeTrack* pTrackP) : // wich of nDx and nDy is set is depend on the type
     ScChangeAction(SC_CAT_MOVE, aToBigRange, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     aFromRange(aFromBigRange),
@@ -1234,15 +1234,15 @@ void ScChangeActionMove::GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nD
 
 
 void ScChangeActionMove::GetDescription(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
+    OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
     bool bFlag3D = GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab();
 
-    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
+    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_MOVE);
 
-    rtl::OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
+    OUString aTmpStr = ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D);
     sal_Int32 nPos = aRsc.indexOfAsciiL("#1", 2);
     if (nPos >= 0)
     {
@@ -1258,19 +1258,19 @@ void ScChangeActionMove::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    OUStringBuffer aBuf(rStr); // append to the original string.
     aBuf.append(aRsc);
     rStr = aBuf.makeStringAndClear();
 }
 
 
 void ScChangeActionMove::GetRefString(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     if ( !bFlag3D )
         bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
 
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(ScChangeAction::GetRefString(GetFromRange(), pDoc, bFlag3D));
     aBuf.append(sal_Unicode(','));
     aBuf.append(sal_Unicode(' '));
@@ -1501,13 +1501,13 @@ void ScChangeActionContent::SetOldValue( const OUString& rOld, ScDocument* pDoc 
 }
 
 
-void ScChangeActionContent::GetOldString( rtl::OUString& rStr ) const
+void ScChangeActionContent::GetOldString( OUString& rStr ) const
 {
     GetValueString(rStr, maOldValue, maOldCell);
 }
 
 
-void ScChangeActionContent::GetNewString( rtl::OUString& rStr ) const
+void ScChangeActionContent::GetNewString( OUString& rStr ) const
 {
     GetValueString(rStr, maNewValue, maNewCell);
 }
@@ -1523,13 +1523,13 @@ const ScCellValue& ScChangeActionContent::GetNewCell() const
 }
 
 void ScChangeActionContent::GetDescription(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
+    OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
 {
     ScChangeAction::GetDescription( rStr, pDoc, bSplitRange, bWarning );
 
-    rtl::OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_CELL);
+    OUString aRsc = ScGlobal::GetRscString(STR_CHANGED_CELL);
 
-    rtl::OUString aTmpStr;
+    OUString aTmpStr;
     GetRefString(aTmpStr, pDoc);
 
     sal_Int32 nPos = 0;
@@ -1562,14 +1562,14 @@ void ScChangeActionContent::GetDescription(
         nPos += aTmpStr.getLength();
     }
 
-    rtl::OUStringBuffer aBuf(rStr); // append to the original string.
+    OUStringBuffer aBuf(rStr); // append to the original string.
     aBuf.append(aRsc);
     rStr = aBuf.makeStringAndClear();
 }
 
 
 void ScChangeActionContent::GetRefString(
-    rtl::OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
+    OUString& rStr, ScDocument* pDoc, bool bFlag3D ) const
 {
     sal_uInt16 nFlags = ( GetBigRange().IsValid( pDoc ) ? SCA_VALID : 0 );
     if ( nFlags )
@@ -1595,7 +1595,7 @@ void ScChangeActionContent::GetRefString(
         if ( IsDeletedIn() )
         {
             // Insert the parentheses.
-            rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             aBuf.append(sal_Unicode('('));
             aBuf.append(rStr);
             aBuf.append(sal_Unicode(')'));
@@ -1882,7 +1882,7 @@ void ScChangeActionContent::GetValueString(
 
 
 void ScChangeActionContent::GetFormulaString(
-    rtl::OUString& rStr, const ScFormulaCell* pCell ) const
+    OUString& rStr, const ScFormulaCell* pCell ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( aPos == pCell->aPos || IsDeletedIn() )
@@ -2148,8 +2148,8 @@ bool ScChangeActionContent::IsOldMatrixReference() const
 ScChangeActionReject::ScChangeActionReject(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber,
-    const ScBigRange& aBigRangeP, const rtl::OUString& aUserP,
-    const DateTime& aDateTimeP, const rtl::OUString& sComment) :
+    const ScBigRange& aBigRangeP, const OUString& aUserP,
+    const DateTime& aDateTimeP, const OUString& sComment) :
     ScChangeAction(SC_CAT_CONTENT, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment)
 {
 }
@@ -2189,7 +2189,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
-ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<rtl::OUString>& aTempUserCollection) :
+ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const std::set<OUString>& aTempUserCollection) :
         maUserCollection(aTempUserCollection),
         aFixDateTime( DateTime::SYSTEM ),
         pDoc( pDocP )
@@ -2235,7 +2235,7 @@ void ScChangeTrack::Init()
     bTime100thSeconds = true;
 
     const SvtUserOptions& rUserOpt = SC_MOD()->GetUserOptions();
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(rUserOpt.GetFirstName());
     aBuf.append(sal_Unicode(' '));
     aBuf.append(rUserOpt.GetLastName());
@@ -2301,11 +2301,11 @@ void ScChangeTrack::Clear()
     aGeneratedMap.clear();
     aPasteCutMap.clear();
     maUserCollection.clear();
-    maUser = rtl::OUString();
+    maUser = OUString();
     Init();
 }
 
-const std::set<rtl::OUString>& ScChangeTrack::GetUserCollection() const
+const std::set<OUString>& ScChangeTrack::GetUserCollection() const
 {
     return maUserCollection;
 }
@@ -2317,7 +2317,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
         const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
         size_t nOldCount = maUserCollection.size();
 
-        rtl::OUStringBuffer aBuf;
+        OUStringBuffer aBuf;
         aBuf.append(rUserOptions.GetFirstName());
         aBuf.append(sal_Unicode(' '));
         aBuf.append(rUserOptions.GetLastName());
@@ -2338,7 +2338,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uI
 }
 
 
-void ScChangeTrack::SetUser( const rtl::OUString& rUser )
+void ScChangeTrack::SetUser( const OUString& rUser )
 {
     if ( IsLoadSave() )
         return ;        // nicht die Collection zerschiessen
@@ -2347,7 +2347,7 @@ void ScChangeTrack::SetUser( const rtl::OUString& rUser )
     maUserCollection.insert(maUser);
 }
 
-const rtl::OUString& ScChangeTrack::GetUser() const
+const OUString& ScChangeTrack::GetUser() const
 {
     return maUser;
 }
@@ -4520,7 +4520,7 @@ bool ScChangeTrack::Reject(
 
 
 sal_uLong ScChangeTrack::AddLoadedGenerated(
-    const ScCellValue& rNewCell, const ScBigRange& aBigRange, const rtl::OUString& sNewValue )
+    const ScCellValue& rNewCell, const ScBigRange& aBigRange, const OUString& sNewValue )
 {
     ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, rNewCell, aBigRange, pDoc, sNewValue );
     if ( pAct )

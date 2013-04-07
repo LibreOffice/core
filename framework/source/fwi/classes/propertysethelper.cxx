@@ -76,7 +76,7 @@ void SAL_CALL PropertySetHelper::impl_addPropertyInfo(const css::beans::Property
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::impl_removePropertyInfo(const ::rtl::OUString& sProperty)
+void SAL_CALL PropertySetHelper::impl_removePropertyInfo(const OUString& sProperty)
     throw(css::beans::UnknownPropertyException,
           css::uno::Exception                 )
 {
@@ -184,7 +184,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PropertySetHelper::
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::setPropertyValue(const ::rtl::OUString& sProperty,
+void SAL_CALL PropertySetHelper::setPropertyValue(const OUString& sProperty,
                                                   const css::uno::Any&   aValue   )
     throw(css::beans::UnknownPropertyException,
           css::beans::PropertyVetoException   ,
@@ -250,7 +250,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue(const ::rtl::OUString& sProper
 }
 
 //-----------------------------------------------------------------------------
-css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const ::rtl::OUString& sProperty)
+css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const OUString& sProperty)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
           css::uno::RuntimeException          )
@@ -273,7 +273,7 @@ css::uno::Any SAL_CALL PropertySetHelper::getPropertyValue(const ::rtl::OUString
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::addPropertyChangeListener(const ::rtl::OUString&                                            sProperty,
+void SAL_CALL PropertySetHelper::addPropertyChangeListener(const OUString&                                            sProperty,
                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
@@ -295,7 +295,7 @@ void SAL_CALL PropertySetHelper::addPropertyChangeListener(const ::rtl::OUString
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::removePropertyChangeListener(const ::rtl::OUString&                                            sProperty,
+void SAL_CALL PropertySetHelper::removePropertyChangeListener(const OUString&                                            sProperty,
                                                               const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
@@ -317,7 +317,7 @@ void SAL_CALL PropertySetHelper::removePropertyChangeListener(const ::rtl::OUStr
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::addVetoableChangeListener(const ::rtl::OUString&                                            sProperty,
+void SAL_CALL PropertySetHelper::addVetoableChangeListener(const OUString&                                            sProperty,
                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
@@ -339,7 +339,7 @@ void SAL_CALL PropertySetHelper::addVetoableChangeListener(const ::rtl::OUString
 }
 
 //-----------------------------------------------------------------------------
-void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const ::rtl::OUString&                                            sProperty,
+void SAL_CALL PropertySetHelper::removeVetoableChangeListener(const OUString&                                            sProperty,
                                                               const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener)
     throw(css::beans::UnknownPropertyException,
           css::lang::WrappedTargetException   ,
@@ -385,7 +385,7 @@ css::uno::Sequence< css::beans::Property > SAL_CALL PropertySetHelper::getProper
 }
 
 //-----------------------------------------------------------------------------
-css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const ::rtl::OUString& sName)
+css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const OUString& sName)
     throw(css::beans::UnknownPropertyException,
           css::uno::RuntimeException          )
 {
@@ -403,7 +403,7 @@ css::beans::Property SAL_CALL PropertySetHelper::getPropertyByName(const ::rtl::
 }
 
 //-----------------------------------------------------------------------------
-sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const ::rtl::OUString& sName)
+sal_Bool SAL_CALL PropertySetHelper::hasPropertyByName(const OUString& sName)
     throw(css::uno::RuntimeException)
 {
     TransactionGuard aTransaction(m_rTransactionManager, E_HARDEXCEPTIONS);

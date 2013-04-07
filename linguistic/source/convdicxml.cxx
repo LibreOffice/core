@@ -55,7 +55,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 #define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
@@ -385,7 +384,7 @@ void ConvDicXMLExport::_ExportContent()
     }
 }
 
-::rtl::OUString SAL_CALL ConvDicXMLExport::getImplementationName()
+OUString SAL_CALL ConvDicXMLExport::getImplementationName()
     throw( uno::RuntimeException )
 {
     return OUString( "com.sun.star.lingu2.ConvDicXMLExport" );
@@ -409,7 +408,7 @@ void SAL_CALL ConvDicXMLImport::endDocument(void)
 
 SvXMLImportContext * ConvDicXMLImport::CreateContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString &rLocalName,
+        const OUString &rLocalName,
         const uno::Reference < xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
     SvXMLImportContext *pContext = 0;

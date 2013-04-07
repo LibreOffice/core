@@ -92,9 +92,9 @@ void QProToSc::DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtStr
         bAddIn = sal_True;
         if( pExtString )
         {
-            rtl::OStringBuffer s(RTL_CONSTASCII_STRINGPARAM("QPRO_"));
+            OStringBuffer s(RTL_CONSTASCII_STRINGPARAM("QPRO_"));
             s.append(pExtString);
-            nPush = aPool.Store(eOc, rtl::OStringToOUString(s.makeStringAndClear(), maIn.GetStreamCharSet()));
+            nPush = aPool.Store(eOc, OStringToOUString(s.makeStringAndClear(), maIn.GetStreamCharSet()));
             aPool << nPush;
         }
         else

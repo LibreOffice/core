@@ -37,13 +37,13 @@ extern "C" {
 namespace stoc_javavm {
 
     class JVM {
-        ::std::vector<rtl::OUString> _props;
+        ::std::vector<OUString> _props;
 
     public:
         JVM() throw();
 
-        void pushProp(const ::rtl::OUString & uString);
-        const ::std::vector< ::rtl::OUString> & getProperties() const;
+        void pushProp(const OUString & uString);
+        const ::std::vector< OUString> & getProperties() const;
     };
 }
 

@@ -25,28 +25,28 @@
 
 class ScUnitConverterData
 {
-    rtl::OUString maIndexString;
+    OUString maIndexString;
     double mfValue;
                             // not implemented
     ScUnitConverterData& operator=( const ScUnitConverterData& );
 
 public:
-    ScUnitConverterData( const rtl::OUString& rFromUnit,
-        const rtl::OUString& rToUnit, double fValue = 1.0 );
+    ScUnitConverterData( const OUString& rFromUnit,
+        const OUString& rToUnit, double fValue = 1.0 );
     ScUnitConverterData( const ScUnitConverterData& );
     ~ScUnitConverterData();
 
     double GetValue() const;
-    const rtl::OUString& GetIndexString() const;
+    const OUString& GetIndexString() const;
 
-    static rtl::OUString BuildIndexString(
-        const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit );
+    static OUString BuildIndexString(
+        const OUString& rFromUnit, const OUString& rToUnit );
 };
 
 
 class ScUnitConverter : public boost::noncopyable
 {
-    typedef boost::ptr_map<rtl::OUString, ScUnitConverterData> MapType;
+    typedef boost::ptr_map<OUString, ScUnitConverterData> MapType;
     MapType maData;
 
 public:
@@ -54,7 +54,7 @@ public:
     ~ScUnitConverter();
 
     bool GetValue(
-        double& fValue, const rtl::OUString& rFromUnit, const rtl::OUString& rToUnit ) const;
+        double& fValue, const OUString& rFromUnit, const OUString& rToUnit ) const;
 };
 
 

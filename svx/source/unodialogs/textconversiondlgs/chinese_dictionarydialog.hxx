@@ -47,7 +47,7 @@ namespace textconversiondlgs
 
 struct DictionaryEntry
 {
-    DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+    DictionaryEntry( const OUString& rTerm, const OUString& rMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
                     , sal_Bool bNewEntry = sal_False );
 
@@ -55,8 +55,8 @@ struct DictionaryEntry
 
     bool operator==( const DictionaryEntry& rE ) const;
 
-    rtl::OUString m_aTerm;
-    rtl::OUString m_aMapping;
+    OUString m_aTerm;
+    OUString m_aMapping;
     sal_Int16     m_nConversionPropertyType; //linguistic2::ConversionPropertyType
 
     sal_Bool      m_bNewEntry;
@@ -79,12 +79,12 @@ public:
     void refillFromDictionary( sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ );
     void save();
 
-    DictionaryEntry* getTermEntry( const rtl::OUString& rTerm ) const;
-    bool hasTerm( const rtl::OUString& rTerm ) const;
+    DictionaryEntry* getTermEntry( const OUString& rTerm ) const;
+    bool hasTerm( const OUString& rTerm ) const;
 
-    void addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+    void addEntry( const OUString& rTerm, const OUString& rMapping
             , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, sal_uIntPtr nPos = LIST_APPEND );
-    sal_uIntPtr deleteEntries( const rtl::OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
+    sal_uIntPtr deleteEntries( const OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
     void deleteEntryOnPos( sal_Int32 nPos  );
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;
     DictionaryEntry* getFirstSelectedEntry() const;

@@ -63,13 +63,13 @@ namespace connectivity
     }
 
     //----------------------------------------------------------------
-    void OSimpleParseNode::parseNodeToStr(::rtl::OUString& _rString, const Reference< XConnection >& _rxConnection,const IParseContext* _pContext) const
+    void OSimpleParseNode::parseNodeToStr(OUString& _rString, const Reference< XConnection >& _rxConnection,const IParseContext* _pContext) const
     {
         m_pFullNode->parseNodeToStr( _rString, _rxConnection, _pContext );
     }
 
     //----------------------------------------------------------------
-    void OSimpleParseNode::parseNodeToPredicateStr(::rtl::OUString& _rString, const Reference< XConnection >& _rxConnection,
+    void OSimpleParseNode::parseNodeToPredicateStr(OUString& _rString, const Reference< XConnection >& _rxConnection,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField,
         const Locale& _rIntl, const sal_Char _cDecSeparator,const IParseContext* _pContext) const
     {

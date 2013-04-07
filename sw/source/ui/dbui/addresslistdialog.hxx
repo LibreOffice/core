@@ -104,7 +104,7 @@ public:
                         GetColumnsSupplier();
 
     const SwDBData&     GetDBData() const       {return m_aDBData;}
-    ::rtl::OUString     GetFilter();
+    OUString     GetFilter();
 };
 #endif
 

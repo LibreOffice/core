@@ -266,7 +266,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
+OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -278,7 +278,7 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueSetAcc::getAccessibleName()
+OUString SAL_CALL ValueSetAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
@@ -336,7 +336,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const ::rtl::OUString                           aEmptyStr;
+    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 
@@ -745,7 +745,7 @@ void ValueSetAcc::ThrowIfDisposed (void)
     {
         OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            ::rtl::OUString("object has been already disposed"),
+            OUString("object has been already disposed"),
             static_cast<uno::XWeak*>(this));
     }
     else
@@ -927,19 +927,19 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
+OUString SAL_CALL ValueItemAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueItemAcc::getAccessibleName()
+OUString SAL_CALL ValueItemAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    rtl::OUString aRet;
+    OUString aRet;
 
     if( mpParent )
     {
@@ -947,7 +947,7 @@ sal_Int16 SAL_CALL ValueItemAcc::getAccessibleRole()
 
         if( aRet.isEmpty() )
         {
-            rtl::OUStringBuffer aBuffer("Item ");
+            OUStringBuffer aBuffer("Item ");
             aBuffer.append(static_cast<sal_Int32>(mpParent->mnId));
             aRet = aBuffer.makeStringAndClear();
         }
@@ -1002,7 +1002,7 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    const ::rtl::OUString                           aEmptyStr;
+    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
     lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
 

@@ -164,7 +164,7 @@ String GetDefaultString(sal_uInt16 nChars)
 {
     String aStr;
     for (sal_uInt16 i = 0; i < nChars; i++)
-        aStr += rtl::OUString((char) (i + 65));
+        aStr += OUString((char) (i + 65));
     return aStr;
 }
 

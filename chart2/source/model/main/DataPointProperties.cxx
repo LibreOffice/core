@@ -77,7 +77,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "TransparencyGradientName",
                   PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -85,7 +85,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "GradientName",
                   PROP_DATAPOINT_GRADIENT_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -101,7 +101,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "HatchName",
                   PROP_DATAPOINT_HATCH_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID ));
@@ -109,7 +109,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "FillBitmapName",
                   PROP_DATAPOINT_FILL_BITMAP_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID  ));
@@ -144,7 +144,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "BorderDashName",
                   PROP_DATAPOINT_BORDER_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -177,7 +177,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LineDashName",
                   LineProperties::PROP_LINE_DASH_NAME,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
@@ -277,7 +277,7 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( "LabelSeparator",
                   PROP_DATAPOINT_LABEL_SEPARATOR,
-                  ::getCppuType( reinterpret_cast< const ::rtl::OUString * >(0)),
+                  ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -406,7 +406,7 @@ void DataPointProperties::AddDefaultsToMap(
             sal_False  // ShowLegendSymbol
             ));
 
-    PropertyHelper::setPropertyValueDefault< rtl::OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
+    PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
 
     //@todo maybe choose a different one here -> should be dynamically that of the attached axis
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_ERROR_BAR_X, uno::Reference< beans::XPropertySet >());

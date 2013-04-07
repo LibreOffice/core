@@ -109,9 +109,6 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OUStringToOString;
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -161,9 +158,9 @@ public:
 
     UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
 
-    void SetChartRangeAddress( const ::rtl::OUString& rAddress )
+    void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
-    void SetTableNumberList( const ::rtl::OUString& rList )
+    void SetTableNumberList( const OUString& rList )
         { msTableNumberList = rList; }
 
     void InitRangeSegmentationProperties(
@@ -177,7 +174,7 @@ public:
     /** first parseDocument: collect autostyles and store names in this queue
         second parseDocument: export content and use names from this queue
      */
-    ::std::queue< ::rtl::OUString > maAutoStyleNameQueue;
+    ::std::queue< OUString > maAutoStyleNameQueue;
     void CollectAutoStyle(
         const std::vector< XMLPropertyState >& aStates );
     void AddAutoStyleAttribute(
@@ -251,7 +248,7 @@ public:
     /// fills the member msString with the appropriate String (i.e. "A3")
     void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
     /// exports a string as a paragraph element
-    void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
+    void exportText( const OUString& rText, bool bConvertTabsLFs = false );
     void exportErrorBarRanges();
 
 private:
@@ -264,24 +261,24 @@ public:
     UniReference< XMLPropertySetMapper > mxPropertySetMapper;
     UniReference< XMLChartExportPropertyMapper > mxExpPropMapper;
 
-    rtl::OUString msTableName;
-    rtl::OUStringBuffer msStringBuffer;
-    rtl::OUString msString;
+    OUString msTableName;
+    OUStringBuffer msStringBuffer;
+    OUString msString;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     sal_Bool mbHasSeriesLabels;
     sal_Bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     sal_Bool mbRowSourceColumns;
-    rtl::OUString msChartAddress;
-    rtl::OUString msTableNumberList;
+    OUString msChartAddress;
+    OUString msTableNumberList;
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
-    rtl::OUString msCLSID;
+    OUString msCLSID;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
-    rtl::OUString maCategoriesRange;
+    OUString maCategoriesRange;
 };
 
 namespace
@@ -488,7 +485,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     return bResult;
 }
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
+OUString lcl_ConvertRange( const OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
 {
     OUString aResult = rRange;
     if( !xDoc.is() )
@@ -593,10 +590,10 @@ sal_Int32 lcl_getMaxSequenceLength(
     return nResult;
 }
 
-uno::Sequence< rtl::OUString > lcl_DataSequenceToStringSequence(
+uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
 {
-    uno::Sequence< rtl::OUString > aResult;
+    uno::Sequence< OUString > aResult;
     if(!xDataSequence.is())
         return aResult;
 
@@ -662,7 +659,7 @@ uno::Sequence< rtl::OUString > lcl_DataSequenceToStringSequence(
             {
                 //no double value is countained
                 //is there any text?
-                uno::Sequence< rtl::OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+                uno::Sequence< OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
                 sal_Int32 nTextCount = aStrings.getLength();
                 for( sal_Int32 j = 0; j < nTextCount; ++j )
                 {
@@ -977,7 +974,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
         catch( const uno::Exception & rEx )
         {
 #ifdef DBG_UTIL
-            rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+            OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
             OSL_TRACE( "chart:exporting error bar ranges: %s", aBStr.getStr());
 #else
             (void)rEx; // avoid warning
@@ -988,7 +985,7 @@ void lcl_exportNumberFormat( const OUString& rPropertyName, const Reference< bea
     return aResult;
 }
 
-bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequence > xValues, rtl::OUString& rFirstRangeForThisDomainIndex, SvXMLExport& rExport )
+bool lcl_exportDomainForThisSequence( const Reference< chart2::data::XDataSequence > xValues, OUString& rFirstRangeForThisDomainIndex, SvXMLExport& rExport )
 {
     bool bDomainExported = false;
     if( xValues.is())
@@ -1078,7 +1075,7 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         mbHasSeriesLabels( sal_False ),
         mbHasCategoryLabels( sal_False ),
         mbRowSourceColumns( sal_True ),
-        msCLSID( rtl::OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
+        msCLSID( OUString( SvGlobalName( SO3_SCH_CLASSID ).GetHexName()))
 {
     msTableName = OUString( "local-table" );
 
@@ -1104,13 +1101,13 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
         XML_STYLE_FAMILY_TEXT_PARAGRAPH,
         GetXMLToken( XML_PARAGRAPH ),
         mxExpPropMapper.get(),
-        rtl::OUString( 'P' ));
+        OUString( 'P' ));
     // register text family also for shapes
     mrAutoStylePool.AddFamily(
         XML_STYLE_FAMILY_TEXT_TEXT,
         GetXMLToken( XML_TEXT ),
         mxExpPropMapper.get(),
-        rtl::OUString( 'T' ));
+        OUString( 'T' ));
 }
 
 SchXMLExportHelper_Impl::~SchXMLExportHelper_Impl()
@@ -1129,7 +1126,7 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rC
     DBG_ASSERT( maAutoStyleNameQueue.empty(), "There are still remaining autostyle names in the queue" );
 }
 
-static ::rtl::OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
+static OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
 {
     const sal_Int32* pArray = rSequenceMapping.getConstArray();
     const sal_Int32 nSize = rSequenceMapping.getLength();
@@ -1230,7 +1227,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     {
         SvXMLElementExport aSet( mrExport, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, sal_True, sal_True );
         {
-            ::rtl::OUStringBuffer sBuffer;
+            OUStringBuffer sBuffer;
             ::sax::Converter::convertDateTime(sBuffer, aNullDate);
             mrExport.AddAttribute( XML_NAMESPACE_TABLE,XML_DATE_VALUE,sBuffer.makeStringAndClear());
             SvXMLElementExport aNull( mrExport, XML_NAMESPACE_TABLE, XML_NULL_DATE, sal_True, sal_True );
@@ -1300,7 +1297,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                 enum XMLTokenEnum eTransToken = ::xmloff::token::XML_ROW_MAPPING;
                 if( mbRowSourceColumns )
                     eTransToken = ::xmloff::token::XML_COLUMN_MAPPING;
-                ::rtl::OUString aSequenceMappingStr( lcl_GetStringFromNumberSequence(
+                OUString aSequenceMappingStr( lcl_GetStringFromNumberSequence(
                     maSequenceMapping, mbHasCategoryLabels && !xNewDoc->hasInternalDataProvider() ) );
 
                 mrExport.AddAttribute( XML_NAMESPACE_CHART,
@@ -1458,7 +1455,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
                             {
                                 awt::Size aSize( xLegendShape->getSize() );
                                 addSize( aSize, true );
-                                rtl::OUStringBuffer aAspectRatioString;
+                                OUStringBuffer aAspectRatioString;
                                 ::sax::Converter::convertDouble(
                                     aAspectRatioString,
                                     double(aSize.Width)/double(aSize.Height));
@@ -1988,7 +1985,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
                 OSL_TRACE("chart:TableNumberList property caught: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning
@@ -2024,7 +2021,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             catch( const uno::Exception & rEx )
             {
 #ifdef DBG_UTIL
-                rtl::OString aBStr(rtl::OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+                OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
                 OSL_TRACE( "chart:exportPlotAreaException caught: %s", aBStr.getStr());
 #else
                 (void)rEx; // avoid warning
@@ -2609,7 +2606,7 @@ namespace
         Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
         if( xTextualDataSequence.is() )
         {
-            uno::Sequence< rtl::OUString > aStrings( xTextualDataSequence->getTextualData() );
+            uno::Sequence< OUString > aStrings( xTextualDataSequence->getTextualData() );
             sal_Int32 nCount = aStrings.getLength();
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
@@ -3083,7 +3080,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         {
             Any aAny;
 
-            aAny = xSeriesProp->getPropertyValue( bYError ? rtl::OUString("ErrorBarY") : rtl::OUString("ErrorBarX") );
+            aAny = xSeriesProp->getPropertyValue( bYError ? OUString("ErrorBarY") : OUString("ErrorBarX") );
             aAny >>= xErrorBarProp;
 
             if ( xErrorBarProp.is() )
@@ -3121,7 +3118,7 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 {
                     if ( nCurrentVersion > SvtSaveOptions::ODFVER_012 )
                     {
-                        rtl::OUString aRole, aRange;
+                        OUString aRole, aRange;
                         Reference< beans::XPropertySet > xSeqProp( *aIt, uno::UNO_QUERY_THROW );
                         xSeqProp->getPropertyValue("Role") >>= aRole;
 
@@ -3739,7 +3736,7 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
             {
                 Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
                 Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
-                ::rtl::OUString sCellRange, sBrokenRange;
+                OUString sCellRange, sBrokenRange;
                 bool bBrokenRangeAvailable = false;
                 for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
                 {

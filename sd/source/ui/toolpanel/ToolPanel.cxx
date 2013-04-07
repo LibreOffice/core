@@ -69,7 +69,7 @@ namespace sd { namespace toolpanel
     void ToolPanel::checkDisposed()
     {
         if ( m_pControl.get() == NULL )
-            throw DisposedException( ::rtl::OUString(), *this );
+            throw DisposedException( OUString(), *this );
     }
 
     //------------------------------------------------------------------------------------------------------------------

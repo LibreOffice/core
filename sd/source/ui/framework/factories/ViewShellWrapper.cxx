@@ -55,7 +55,6 @@ using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::rendering::XCanvas;
 using ::com::sun::star::lang::DisposedException;
 
-using ::rtl::OUString;
 using ::sd::toolpanel::ToolPanelViewShell;
 
 namespace sd { namespace framework {

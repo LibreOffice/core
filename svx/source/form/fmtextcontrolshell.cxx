@@ -430,9 +430,9 @@ namespace svx
         }
 
         //....................................................................
-        ::rtl::OUString lcl_getUnoSlotName( SfxApplication&, SfxSlotId _nSlotId )
+        OUString lcl_getUnoSlotName( SfxApplication&, SfxSlotId _nSlotId )
         {
-            ::rtl::OUString sSlotUnoName;
+            OUString sSlotUnoName;
 
             SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( NULL );
             const SfxSlot* pSlot = rSlotPool.GetSlot( _nSlotId );
@@ -456,15 +456,15 @@ namespace svx
 
             if ( pAsciiUnoName )
             {
-                sSlotUnoName = ::rtl::OUString( ".uno:" );
-                sSlotUnoName += ::rtl::OUString::createFromAscii( pAsciiUnoName );
+                sSlotUnoName = OUString( ".uno:" );
+                sSlotUnoName += OUString::createFromAscii( pAsciiUnoName );
             }
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                ::rtl::OString sMessage( "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name!\n" );
+                OString sMessage( "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name!\n" );
                 sMessage += "(slot id: ";
-                sMessage += ::rtl::OString::valueOf( (sal_Int32)_nSlotId );
+                sMessage += OString::valueOf( (sal_Int32)_nSlotId );
                 sMessage += ")";
                 OSL_FAIL( sMessage.getStr() );
             }
@@ -534,7 +534,7 @@ namespace svx
                 Reference< XPropertySetInfo > xPSI;
                 if ( xModelProps.is() )
                     xPSI = xModelProps->getPropertySetInfo();
-                ::rtl::OUString sRichTextPropertyName = ::rtl::OUString( "RichText" );
+                OUString sRichTextPropertyName = OUString( "RichText" );
                 if ( xPSI.is() && xPSI->hasPropertyByName( sRichTextPropertyName ) )
                 {
                     OSL_VERIFY( xModelProps->getPropertyValue( sRichTextPropertyName ) >>= bIsRichText );
@@ -593,13 +593,13 @@ namespace svx
         {
             SfxSlotId nSlotId( aFeature->first );
             #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OUString sUnoSlotName;
+                OUString sUnoSlotName;
                 if ( SFX_APP() )
                     sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotId );
                 else
-                    sUnoSlotName = ::rtl::OUString( "<unknown>" );
-                ::rtl::OString sUnoSlotNameAscii( "\"" );
-                sUnoSlotNameAscii += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    sUnoSlotName = OUString( "<unknown>" );
+                OString sUnoSlotNameAscii( "\"" );
+                sUnoSlotNameAscii += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sUnoSlotNameAscii += "\"";
             #endif
 
@@ -632,7 +632,7 @@ namespace svx
             {
                 #if OSL_DEBUG_LEVEL > 0
                     bool bFeatureIsEnabled = aFeature->second->isFeatureEnabled();
-                    ::rtl::OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
+                    OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
                     sMessage += sUnoSlotNameAscii;
                     if ( !bFeatureIsEnabled )
                         sMessage += " (disabled)";
@@ -644,7 +644,7 @@ namespace svx
             #if OSL_DEBUG_LEVEL > 0
             else
             {
-                ::rtl::OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
+                OString sMessage( "FmTextControlShell::transferFeatureStatesToItemSet: found a feature state for " );
                 sMessage += sUnoSlotNameAscii;
                 sMessage += ", but could not translate it into an item!";
                 OSL_TRACE( "%s", sMessage.getStr() );
@@ -732,7 +732,7 @@ namespace svx
                             if ( pBoolItem )
                             {
                                 aArgs.realloc( 1 );
-                                aArgs[ 0 ].Name = ::rtl::OUString( "Enable" );
+                                aArgs[ 0 ].Name = OUString( "Enable" );
                                 aArgs[ 0 ].Value <<= (sal_Bool)pBoolItem->GetValue();
                             }
                         }
@@ -743,14 +743,14 @@ namespace svx
                 #if OSL_DEBUG_LEVEL > 0
                     else
                     {
-                        ::rtl::OString sError( "FmTextControShell::executeAttributeDialog: Could not handle the following item:" );
-                        sError += "\n  SlotID: "; sError += ::rtl::OString::valueOf( (sal_Int32)nSlotForItemSet );
-                        sError += "\n  WhichID: "; sError += ::rtl::OString::valueOf( (sal_Int32)nWhich );
+                        OString sError( "FmTextControShell::executeAttributeDialog: Could not handle the following item:" );
+                        sError += "\n  SlotID: "; sError += OString::valueOf( (sal_Int32)nSlotForItemSet );
+                        sError += "\n  WhichID: "; sError += OString::valueOf( (sal_Int32)nWhich );
                         sError += "\n  UNO name: ";
 
-                        ::rtl::OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
+                        OUString sUnoSlotName = lcl_getUnoSlotName( *SFX_APP(), nSlotForItemSet );
                         if ( !sUnoSlotName.isEmpty() )
-                            sError += ::rtl::OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
+                            sError += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
                         else
                             sError += "unknown (no SfxSlot)";
                         OSL_FAIL( sError.getStr() );
@@ -798,18 +798,18 @@ namespace svx
                 case SID_COPY:
                 case SID_CUT:
                 {
-                    ::rtl::OUString sSelectedText( m_xActiveTextComponent->getSelectedText() );
+                    OUString sSelectedText( m_xActiveTextComponent->getSelectedText() );
                     ::svt::OStringTransfer::CopyString( sSelectedText, lcl_getWindow( m_xActiveControl ) );
                     if ( SID_CUT == _nSlot )
                     {
                         awt::Selection aSelection( m_xActiveTextComponent->getSelection() );
-                        m_xActiveTextComponent->insertText( aSelection, ::rtl::OUString() );
+                        m_xActiveTextComponent->insertText( aSelection, OUString() );
                     }
                 }
                 break;
                 case SID_PASTE:
                 {
-                    ::rtl::OUString sClipboardContent;
+                    OUString sClipboardContent;
                     OSL_VERIFY( ::svt::OStringTransfer::PasteString( sClipboardContent, lcl_getWindow( m_xActiveControl ) ) );
                     awt::Selection aSelection( m_xActiveTextComponent->getSelection() );
                     m_xActiveTextComponent->insertText( aSelection, sClipboardContent );
@@ -1065,8 +1065,8 @@ namespace svx
     void FmTextControlShell::formActivated( const Reference< XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sTrace( "FmTextControlShell::formActivated: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
+        OString sTrace( "FmTextControlShell::formActivated: 0x" );
+        sTrace += OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1093,8 +1093,8 @@ namespace svx
     void FmTextControlShell::formDeactivated( const Reference< XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
+        OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
+        sTrace += OString::valueOf( (sal_IntPtr)_rxController.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
         (void)_rxController;
@@ -1324,7 +1324,7 @@ namespace svx
         URL aFeatureURL;
         aFeatureURL.Complete = lcl_getUnoSlotName( *_pApplication, _nSlot );
         impl_parseURL_nothrow( aFeatureURL );
-        Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, ::rtl::OUString(), 0xFF );
+        Reference< XDispatch > xDispatcher = _rxProvider->queryDispatch( aFeatureURL, OUString(), 0xFF );
         if ( xDispatcher.is() )
             return new FmTextControlFeature( xDispatcher, aFeatureURL, _nSlot, this );
         return NULL;
@@ -1345,8 +1345,8 @@ namespace svx
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sTrace( "FmTextControlShell::focusGained: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
+        OString sTrace( "FmTextControlShell::focusGained: 0x" );
+        sTrace += OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 
@@ -1361,8 +1361,8 @@ namespace svx
         Reference< XControl > xControl( _rEvent.Source, UNO_QUERY );
 
 #if OSL_DEBUG_LEVEL > 0
-        ::rtl::OString sTrace( "FmTextControlShell::focusLost: 0x" );
-        sTrace += ::rtl::OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
+        OString sTrace( "FmTextControlShell::focusLost: 0x" );
+        sTrace += OString::valueOf( (sal_IntPtr)xControl.get(), 16 );
         OSL_TRACE( "%s", sTrace.getStr() );
 #endif
 

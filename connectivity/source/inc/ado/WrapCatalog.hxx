@@ -34,7 +34,7 @@ namespace connectivity
             inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
                 {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
 
-            ::rtl::OUString GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum);
+            OUString GetObjectOwner(const OUString& _rName, ObjectTypeEnum _eNum);
 
             void putref_ActiveConnection(IDispatch* pCon);
             WpADOTables     get_Tables();

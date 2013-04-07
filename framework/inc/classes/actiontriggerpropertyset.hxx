@@ -56,9 +56,9 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
         virtual FWE_DLLPUBLIC void SAL_CALL release() throw ();
 
         // XServiceInfo
-        virtual FWE_DLLPUBLIC ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -92,7 +92,7 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
         //  helper
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool impl_tryToChangeProperty(  const   rtl::OUString&              aCurrentValue   ,
+        sal_Bool impl_tryToChangeProperty(  const   OUString&              aCurrentValue   ,
                                             const   com::sun::star::uno::Any&   aNewValue       ,
                                             com::sun::star::uno::Any&           aOldValue       ,
                                             com::sun::star::uno::Any&           aConvertedValue ) throw( com::sun::star::lang::IllegalArgumentException );
@@ -111,9 +111,9 @@ class ActionTriggerPropertySet :  public ThreadHelpBase                       , 
         //  members
         //---------------------------------------------------------------------------------------------------------
 
-        rtl::OUString                                                         m_aCommandURL;
-        rtl::OUString                                                         m_aHelpURL;
-        rtl::OUString                                                         m_aText;
+        OUString                                                         m_aCommandURL;
+        OUString                                                         m_aHelpURL;
+        OUString                                                         m_aText;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >    m_xBitmap;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xActionTriggerContainer;
 };

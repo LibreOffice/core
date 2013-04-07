@@ -46,7 +46,7 @@ namespace svt
         /** determines whether the given URL denotes an image within a resource
          ( or an image specified by a vnd.sun.star.GraphicObject scheme URL )
         */
-        SVT_DLLPUBLIC static  bool        isSupportedURL( const ::rtl::OUString& _rURL );
+        SVT_DLLPUBLIC static  bool        isSupportedURL( const OUString& _rURL );
 
         /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
             an SvStream for this image.
@@ -59,7 +59,7 @@ namespace svt
         */
         SVT_DLLPUBLIC static  SvStream*   getImageStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                    const ::rtl::OUString& _rImageResourceURL
+                    const OUString& _rImageResourceURL
                 );
 
         /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
@@ -68,7 +68,7 @@ namespace svt
         SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                 getImageXStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-                    const ::rtl::OUString& _rImageResourceURL
+                    const OUString& _rImageResourceURL
                 );
     };
 

@@ -207,14 +207,14 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     aNumFldDivisionY.SetModifyHdl(
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
 
-    ::rtl::OUString sFlResolution( aFlResolution.GetDisplayText() );
-    ::rtl::OUString sFtDrawX(aFtDrawX.GetDisplayText());
-    ::rtl::OUString sFtDrawY(aFtDrawY.GetDisplayText());
+    OUString sFlResolution( aFlResolution.GetDisplayText() );
+    OUString sFtDrawX(aFtDrawX.GetDisplayText());
+    OUString sFtDrawY(aFtDrawY.GetDisplayText());
     aMtrFldDrawX.SetAccessibleName( sFtDrawX + sFlResolution   );
     aMtrFldDrawY.SetAccessibleName( sFtDrawY + sFlResolution   );
-    ::rtl::OUString sFlDivision( aFlDivision.GetDisplayText() );
-    ::rtl::OUString sFtDivisionX(aFtDivisionX.GetDisplayText());
-    ::rtl::OUString sFtDivisionY(aFtDivisionY.GetDisplayText());
+    OUString sFlDivision( aFlDivision.GetDisplayText() );
+    OUString sFtDivisionX(aFtDivisionX.GetDisplayText());
+    OUString sFtDivisionY(aFtDivisionY.GetDisplayText());
     aNumFldDivisionX.SetAccessibleName(  sFtDivisionX + sFlDivision );
     aNumFldDivisionY.SetAccessibleName(  sFtDivisionY + sFlDivision );
 }

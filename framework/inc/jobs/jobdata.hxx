@@ -133,11 +133,11 @@ class JobData : private ThreadHelpBase
         */
         struct TJob2DocEventBinding
         {
-            ::rtl::OUString m_sJobName;
-            ::rtl::OUString m_sDocEvent;
+            OUString m_sJobName;
+            OUString m_sDocEvent;
 
-            TJob2DocEventBinding(const ::rtl::OUString& sJobName ,
-                                 const ::rtl::OUString& sDocEvent)
+            TJob2DocEventBinding(const OUString& sJobName ,
+                                 const OUString& sDocEvent)
                 : m_sJobName (sJobName )
                 , m_sDocEvent(sDocEvent)
             {}
@@ -180,19 +180,19 @@ class JobData : private ThreadHelpBase
             Is used as entry of configuration set for job registration, to find all
             neccessary properties of it..
          */
-        ::rtl::OUString m_sAlias;
+        OUString m_sAlias;
 
         /**
             the uno implementation name of this job.
             It's readed from the configuration. Don't set it from outside!
          */
-        ::rtl::OUString m_sService;
+        OUString m_sService;
 
         /**
             the module context list of this job.
             It's readed from the configuration. Don't set it from outside!
          */
-        ::rtl::OUString m_sContext;
+        OUString m_sContext;
 
         /**
             a job can be registered for an event.
@@ -203,7 +203,7 @@ class JobData : private ThreadHelpBase
             arguments. A job can be called so, with a) it's onw config data and b) some dynamic
             environment data.
          */
-        ::rtl::OUString m_sEvent;
+        OUString m_sEvent;
 
         /**
             job specific configuration items ... unknown for us!
@@ -233,29 +233,29 @@ class JobData : private ThreadHelpBase
 
         EMode                                        getMode                 () const;
         EEnvironment                                 getEnvironment          () const;
-        ::rtl::OUString                              getEnvironmentDescriptor() const;
-        ::rtl::OUString                              getService              () const;
-        ::rtl::OUString                              getEvent                () const;
+        OUString                              getEnvironmentDescriptor() const;
+        OUString                              getService              () const;
+        OUString                              getEvent                () const;
         css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
         css::uno::Sequence< css::beans::NamedValue > getJobConfig            () const;
 
         sal_Bool                                     hasConfig               () const;
-        sal_Bool                                     hasCorrectContext       ( const ::rtl::OUString& rModuleIdent ) const;
+        sal_Bool                                     hasCorrectContext       ( const OUString& rModuleIdent ) const;
 
         void                                         setEnvironment (       EEnvironment                                  eEnvironment );
-        void                                         setAlias       ( const ::rtl::OUString&                              sAlias       );
-        void                                         setService     ( const ::rtl::OUString&                              sService     );
-        void                                         setEvent       ( const ::rtl::OUString&                              sEvent       ,
-                                                                      const ::rtl::OUString&                              sAlias       );
+        void                                         setAlias       ( const OUString&                              sAlias       );
+        void                                         setService     ( const OUString&                              sService     );
+        void                                         setEvent       ( const OUString&                              sEvent       ,
+                                                                      const OUString&                              sAlias       );
         void                                         setJobConfig   ( const css::uno::Sequence< css::beans::NamedValue >& lArguments   );
         void                                         setResult      ( const JobResult&                                    aResult      );
         void                                         disableJob     (                                                                  );
 
-        static css::uno::Sequence< ::rtl::OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                                                             const ::rtl::OUString&                                    sEvent );
+        static css::uno::Sequence< OUString > getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                             const OUString&                                    sEvent );
 
         static void appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
-                                               const ::rtl::OUString&                                                 sEvent ,
+                                               const OUString&                                                 sEvent ,
                                                      ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  );
 
     //___________________________________

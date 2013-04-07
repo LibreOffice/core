@@ -513,7 +513,7 @@ public:
     void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;
     XubString       GetHelpText( sal_uInt16 nPageId ) const;
-    rtl::OString    GetHelpId( sal_uInt16 nPageId ) const;
+    OString    GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
 
@@ -521,9 +521,9 @@ public:
                         { Window::SetHelpText( rText ); }
     XubString       GetHelpText() const
                         { return Window::GetHelpText(); };
-    void            SetHelpId( const rtl::OString& rId )
+    void            SetHelpId( const OString& rId )
                         { Window::SetHelpId( rId ); }
-    const rtl::OString& GetHelpId() const
+    const OString& GetHelpId() const
                         { return Window::GetHelpId(); }
 
     void            SetStyle( WinBits nStyle );

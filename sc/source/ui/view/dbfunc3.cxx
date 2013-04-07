@@ -81,9 +81,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::sheet::XDimensionsSupplier;
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
-using ::rtl::OUStringBuffer;
 using ::std::auto_ptr;
 using ::std::list;
 using ::std::vector;
@@ -587,7 +584,7 @@ bool ScDBFunc::MakePivotTable(
         SCTAB nSrcTab = GetViewData()->GetTabNo();
 
         String aName( ScGlobal::GetRscString(STR_PIVOT_TABLE) );
-        rtl::OUString aStr;
+        OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
         aName += '_';
@@ -946,7 +943,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     if (aEntries.empty())
         return;
 
-    std::vector<rtl::OUString> aDeletedNames;
+    std::vector<OUString> aDeletedNames;
     bool bIsDataLayout;
     OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
@@ -954,7 +951,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
     // find the source dimension name.
-    rtl::OUString aBaseDimName = aDimName;
+    OUString aBaseDimName = aDimName;
     if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
         aBaseDimName = pBaseGroupDim->GetSourceDimName();
 
@@ -1002,7 +999,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 else
                 {
                     // additional parts: create GroupDimension (shown as additional dimensions)
-                    rtl::OUString aGroupDimName =
+                    OUString aGroupDimName =
                         pDimData->CreateDateGroupDimName(nMask, *pDPObj, true, &aDeletedNames);
                     ScDPSaveGroupDimension aGroupDim( aBaseDimName, aGroupDimName );
                     aGroupDim.SetDateInfo( rInfo, nMask );
@@ -1095,7 +1092,7 @@ void ScDBFunc::GroupDataPilot()
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
     // find original base
-    rtl::OUString aBaseDimName = aDimName;
+    OUString aBaseDimName = aDimName;
     const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
     if ( pBaseGroupDim )
     {
@@ -1114,7 +1111,7 @@ void ScDBFunc::GroupDataPilot()
         ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
         for (; it != itEnd; ++it)
         {
-            const rtl::OUString& aEntryName = *it;
+            const OUString& aEntryName = *it;
             if ( pBaseGroupDim )
             {
                 // for each selected (intermediate) group, remove all its items
@@ -1134,7 +1131,7 @@ void ScDBFunc::GroupDataPilot()
     if ( !pGroupDimension )
     {
         // create a new group dimension
-        rtl::OUString aGroupDimName =
+        OUString aGroupDimName =
             pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
         pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
 
@@ -1164,14 +1161,14 @@ void ScDBFunc::GroupDataPilot()
             }
         }
     }
-    rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
+    OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-    rtl::OUString aGroupName = pGroupDimension->CreateGroupName(ScGlobal::GetRscString(STR_PIVOT_GROUP));
+    OUString aGroupName = pGroupDimension->CreateGroupName(ScGlobal::GetRscString(STR_PIVOT_GROUP));
     ScDPSaveGroupItem aGroup( aGroupName );
     ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
     for (; it != itEnd; ++it)
     {
-        const rtl::OUString& aEntryName = *it;
+        const OUString& aEntryName = *it;
         if ( pBaseGroupDim )
         {
             // for each selected (intermediate) group, add all its items
@@ -1335,7 +1332,7 @@ static OUString lcl_replaceMemberNameInSubtotal(const OUString& rSubtotal, const
     return aBuf.makeStringAndClear();
 }
 
-void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rString )
+void ScDBFunc::DataPilotInput( const ScAddress& rPos, const OUString& rString )
 {
     using namespace ::com::sun::star::sheet;
 
@@ -1624,7 +1621,7 @@ struct ScOUStringCollate
 
     ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
 
-    bool operator()(const rtl::OUString& rStr1, const rtl::OUString& rStr2) const
+    bool operator()(const OUString& rStr1, const OUString& rStr2) const
     {
         return ( mpCollator->compareString(rStr1, rStr2) < 0 );
     }
@@ -1664,7 +1661,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
         list<OUString> aMembers;
-        boost::unordered_set<OUString, ::rtl::OUStringHash> aMemberSet;
+        boost::unordered_set<OUString, OUStringHash> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
               itr != itrEnd; ++itr)
@@ -1785,8 +1782,8 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
         bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
         // look through the source range
-        boost::unordered_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
-        std::vector< rtl::OUString > aMembersVector;  // members in original order, for inserting
+        boost::unordered_set< OUString, OUStringHash, std::equal_to<OUString> > aMembersSet;   // for lookup
+        std::vector< OUString > aMembersVector;  // members in original order, for inserting
         aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
                                           static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );
         for (SCROW nRow = rSource.aStart.Row(); bValid && nRow <= rSource.aEnd.Row(); ++nRow )
@@ -1817,7 +1814,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
                 ScDPSaveDimension* pDim = aData.GetDimensionByName( aDimName );
 
                 // get all member names in source order
-                uno::Sequence<rtl::OUString> aMemberNames;
+                uno::Sequence<OUString> aMemberNames;
                 pDPObj->GetMemberNames( aDestData.Dimension, aMemberNames );
 
                 bool bInserted = false;
@@ -1830,7 +1827,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
                     if ( !bInserted && aMemberNames[nMemberPos] == aDestData.MemberName )
                     {
                         // insert dragged items before this item
-                        for ( std::vector<rtl::OUString>::const_iterator aIter = aMembersVector.begin();
+                        for ( std::vector<OUString>::const_iterator aIter = aMembersVector.begin();
                               aIter != aMembersVector.end(); ++aIter )
                             lcl_MoveToEnd( *pDim, *aIter );
                         bInserted = true;
@@ -1841,7 +1838,7 @@ sal_Bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest
                 }
                 // insert dragged item at end if dest wasn't found (for example, empty)
                 if ( !bInserted )
-                    for ( std::vector<rtl::OUString>::const_iterator aIter = aMembersVector.begin();
+                    for ( std::vector<OUString>::const_iterator aIter = aMembersVector.begin();
                           aIter != aMembersVector.end(); ++aIter )
                         lcl_MoveToEnd( *pDim, *aIter );
 
@@ -1906,7 +1903,7 @@ bool ScDBFunc::HasSelectionForDrillDown( sal_uInt16& rOrientation )
     return bRet;
 }
 
-void ScDBFunc::SetDataPilotDetails(bool bShow, const rtl::OUString* pNewDimensionName)
+void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName)
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
@@ -1968,7 +1965,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const rtl::OUString* pNewDimensio
                     ScDPUniqueStringSet::const_iterator it = aVisibleEntries.begin(), itEnd = aVisibleEntries.end();
                     for (; it != itEnd; ++it)
                     {
-                        const rtl::OUString& aVisName = *it;
+                        const OUString& aVisName = *it;
                         ScDPSaveMember* pMember = pDim->GetMemberByName( aVisName );
                         pMember->SetShowDetails( false );
                     }
@@ -2027,7 +2024,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
         for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
         {
             const Any& rAny = aTabData[nRow][nCol];
-            rtl::OUString aStr;
+            OUString aStr;
             double fVal;
             if (rAny >>= aStr)
             {
@@ -2043,7 +2040,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     // set number format (important for dates)
     for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
     {
-        rtl::OUString aStr;
+        OUString aStr;
         if (!(aTabData[0][nCol] >>= aStr))
             continue;
 
@@ -2051,7 +2048,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
         if (!xPropSet.is())
             continue;
 
-        Any any = xPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_NUMBERFO)) );
+        Any any = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_NUMBERFO)) );
         sal_Int32 nNumFmt = 0;
         if (!(any >>= nNumFmt))
             continue;
@@ -2070,7 +2067,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo );
 
-    rtl::OUString aNewTabName;
+    OUString aNewTabName;
     pDoc->CreateValidTabName(aNewTabName);
     if ( InsertTable(aNewTabName, nNewTab) )
         PasteFromClip( IDF_ALL, pInsDoc.get() );

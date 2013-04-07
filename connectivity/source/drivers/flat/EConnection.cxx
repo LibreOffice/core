@@ -59,7 +59,7 @@ OFlatConnection::~OFlatConnection()
 IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connection", "com.sun.star.sdbc.Connection")
 
 //-----------------------------------------------------------------------------
-void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -71,25 +71,25 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
             OSL_VERIFY( pBegin->Value >>= m_bHeaderLine );
         else if(!pBegin->Name.compareToAscii("FieldDelimiter"))
         {
-            ::rtl::OUString aVal;
+            OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cFieldDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("StringDelimiter"))
         {
-            ::rtl::OUString aVal;
+            OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cStringDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("DecimalDelimiter"))
         {
-            ::rtl::OUString aVal;
+            OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cDecimalDelimiter = aVal.toChar();
         }
         else if(!pBegin->Name.compareToAscii("ThousandDelimiter"))
         {
-            ::rtl::OUString aVal;
+            OUString aVal;
             OSL_VERIFY( pBegin->Value >>= aVal );
             m_cThousandDelimiter = aVal.toChar();
         }
@@ -145,7 +145,7 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLE
     return xStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -159,7 +159,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     return xStmt;
 }
 // --------------------------------------------------------------------------------
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);

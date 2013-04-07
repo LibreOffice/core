@@ -92,7 +92,7 @@
 
 #include "dlgname.hxx"
 
-#define PRTSTR(x) rtl::OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
+#define PRTSTR(x) OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
 
 #define ENTRY_HEIGHT 16
 
@@ -118,7 +118,6 @@ static const char aMenuSeparatorStr[] = " | ";
 #pragma warning (disable:4355)
 #endif
 
-using rtl::OUString;
 namespace uno = com::sun::star::uno;
 namespace frame = com::sun::star::frame;
 namespace lang = com::sun::star::lang;
@@ -440,7 +439,7 @@ OUString GetModuleName( const OUString& aModuleId )
     else if ( aModuleId == "com.sun.star.sdb.DatabaseDocument" )
         return OUString("Database" );
 
-    return ::rtl::OUString();
+    return OUString();
 }
 
 OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< css::frame::XModuleManager2 >& rModuleManager )
@@ -593,7 +592,7 @@ ConvertSvxConfigEntry(
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
     aPropSeq[0].Name = aDescriptorCommandURL;
-    aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
+    aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
 
     aPropSeq[1].Name = aDescriptorType;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
@@ -636,16 +635,16 @@ ConvertSvxConfigEntry(
 
         if ( isDefaultName )
         {
-            aPropSeq[2].Value <<= rtl::OUString();
+            aPropSeq[2].Value <<= OUString();
         }
         else
         {
-            aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+            aPropSeq[2].Value <<= OUString( pEntry->GetName() );
         }
     }
     else
     {
-        aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+        aPropSeq[2].Value <<= OUString( pEntry->GetName() );
     }
 
     return aPropSeq;
@@ -671,7 +670,7 @@ ConvertToolbarEntry(
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
     aPropSeq[0].Name = aDescriptorCommandURL;
-    aPropSeq[0].Value <<= rtl::OUString( pEntry->GetCommand() );
+    aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
 
     aPropSeq[1].Name = aDescriptorType;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
@@ -714,16 +713,16 @@ ConvertToolbarEntry(
 
         if ( isDefaultName )
         {
-            aPropSeq[2].Value <<= rtl::OUString();
+            aPropSeq[2].Value <<= OUString();
         }
         else
         {
-            aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+            aPropSeq[2].Value <<= OUString( pEntry->GetName() );
         }
     }
     else
     {
-        aPropSeq[2].Value <<= rtl::OUString( pEntry->GetName() );
+        aPropSeq[2].Value <<= OUString( pEntry->GetName() );
     }
 
     aPropSeq[3].Name = aIsVisible;
@@ -754,7 +753,7 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
+    static OUString MODULEID_STARTMODULE      ("com.sun.star.frame.StartModule"        );
 
     try
     {
@@ -764,7 +763,7 @@ sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFram
 
         if (xFrame.is())
         {
-            ::rtl::OUString sModuleId = xMM->identify(xFrame);
+            OUString sModuleId = xMM->identify(xFrame);
             if (
                 ( !sModuleId.isEmpty()                 ) &&
                 (!sModuleId.equals(MODULEID_STARTMODULE))
@@ -1061,8 +1060,8 @@ MenuSaveInData::GetEntries()
     if ( pRootEntry == NULL )
     {
         pRootEntry = new SvxConfigEntry(
-            rtl::OUString("MainMenus"),
-            rtl::OUString(), sal_True);
+            OUString("MainMenus"),
+            OUString(), sal_True);
 
         if ( m_xMenuSettings.is() )
         {
@@ -1795,7 +1794,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
                     try{
                         aCheckId = xModuleManager->identify( xf );
                     } catch(const uno::Exception&)
-                        { aCheckId = ::rtl::OUString(); }
+                        { aCheckId = OUString(); }
 
                     if ( aModuleId.equals( aCheckId ) )
                     {
@@ -1858,9 +1857,9 @@ void SvxConfigPage::Reset( const SfxItemSet& )
     }
 }
 
-::rtl::OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::XFrame >& _inout_rxFrame )
+OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::XFrame >& _inout_rxFrame )
 {
-    ::rtl::OUString sModuleID;
+    OUString sModuleID;
     try
     {
         uno::Reference< uno::XComponentContext > xContext(
@@ -2157,7 +2156,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     if (pNewEntryData->IsSeparator())
     {
         pNewEntry = aContentsListBox->InsertEntry(
-            rtl::OUString(aSeparatorStr),
+            OUString(aSeparatorStr),
             0, sal_False, nPos, pNewEntryData);
     }
     else
@@ -3895,10 +3894,10 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
-    typedef ::boost::unordered_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< OUString,
                              bool,
-                             ::rtl::OUStringHash,
-                             ::std::equal_to< ::rtl::OUString > > ToolbarInfo;
+                             OUStringHash,
+                             ::std::equal_to< OUString > > ToolbarInfo;
 
     ToolbarInfo aToolbarInfo;
 
@@ -3906,8 +3905,8 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     {
 
         pRootEntry = new SvxConfigEntry(
-            rtl::OUString("MainToolbars"),
-            rtl::OUString(), sal_True);
+            OUString("MainToolbars"),
+            OUString(), sal_True);
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
@@ -4991,10 +4990,10 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 {
     FreeResource();
 
-    typedef ::boost::unordered_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< OUString,
                              bool,
-                             ::rtl::OUStringHash,
-                             ::std::equal_to< ::rtl::OUString > > ImageInfo;
+                             OUStringHash,
+                             ::std::equal_to< OUString > > ImageInfo;
 
     aTbSymbol.SetPageScroll( sal_True );
 
@@ -5015,12 +5014,12 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         graphic::GraphicProvider::create( xComponentContext ) );
 
     uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( ::rtl::OUString("com.sun.star.util.PathSettings"  ) ),
+        xServiceManager->createInstance( OUString("com.sun.star.util.PathSettings"  ) ),
         uno::UNO_QUERY );
 
-    uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( "UserConfig"  ) );
+    uno::Any aAny = xPropSet->getPropertyValue( OUString( "UserConfig"  ) );
 
-    ::rtl::OUString aDirectory;
+    OUString aDirectory;
 
     aAny >>= aDirectory;
 
@@ -5031,7 +5030,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         sal_Unicode aChar = aDirectory[ aCount-1 ];
         if ( aChar != '/')
         {
-            aDirectory += ::rtl::OUString( "/"  );
+            aDirectory += OUString( "/"  );
         }
     }
     else
@@ -5039,7 +5038,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         aBtnImport.Enable( sal_False );
     }
 
-    aDirectory += ::rtl::OUString( "soffice.cfg/import"  );
+    aDirectory += OUString( "soffice.cfg/import"  );
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
           ::com::sun::star::embed::FileSystemStorageFactory::create( xComponentContext ) );
@@ -5054,17 +5053,17 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     uno::Sequence< uno::Any > aProp( 2 );
     beans::PropertyValue aPropValue;
 
-    aPropValue.Name = ::rtl::OUString( "UserConfigStorage"  );
+    aPropValue.Name = OUString( "UserConfigStorage"  );
     aPropValue.Value <<= xStorage;
     aProp[ 0 ] <<= aPropValue;
 
-    aPropValue.Name = ::rtl::OUString( "OpenMode"  );
+    aPropValue.Name = OUString( "OpenMode"  );
     aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
     aProp[ 1 ] <<= aPropValue;
 
     m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
         xServiceManager->createInstanceWithArguments(
-        ::rtl::OUString("com.sun.star.ui.ImageManager"  ), aProp ),
+        OUString("com.sun.star.ui.ImageManager"  ), aProp ),
         uno::UNO_QUERY );
 
     ImageInfo mImageInfo;
@@ -5219,7 +5218,7 @@ IMPL_LINK( SvxIconSelectorDialog, SelectHdl, ToolBox *, pToolBox )
     sal_uInt16 nId = aTbSymbol.GetCurItemId();
     aTbSymbol.CheckItem( nId );
 
-    ::rtl::OUString aSelImageText = aTbSymbol.GetItemText( nId );
+    OUString aSelImageText = aTbSymbol.GetItemText( nId );
     if ( m_xImportedImageManager->hasImage( GetImageType(), aSelImageText ) )
     {
         aBtnDelete.Enable( sal_True );
@@ -5251,7 +5250,7 @@ IMPL_LINK( SvxIconSelectorDialog, ImportHdl, PushButton *, pButton )
     }
 
     aImportDialog.SetCurrentFilter(
-        rtl::OUString("PNG - Portable Network Graphic"));
+        OUString("PNG - Portable Network Graphic"));
 
     if ( ERRCODE_NONE == aImportDialog.Execute() )
     {
@@ -5279,7 +5278,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
 
             if ( aTbSymbol.IsItemChecked( nId ) )
             {
-                ::rtl::OUString aSelImageText = aTbSymbol.GetItemText( nId );
+                OUString aSelImageText = aTbSymbol.GetItemText( nId );
                 uno::Sequence< OUString > URLs(1);
                 URLs[0] = aSelImageText;
                 aTbSymbol.RemoveItem( aTbSymbol.GetItemPos( nId ) );
@@ -5298,7 +5297,7 @@ IMPL_LINK( SvxIconSelectorDialog, DeleteHdl, PushButton *, pButton )
 }
 
 bool SvxIconSelectorDialog::ReplaceGraphicItem(
-    const ::rtl::OUString& aURL )
+    const OUString& aURL )
 {
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
@@ -5307,7 +5306,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString("URL" );
+    aMediaProps[0].Name = OUString("URL" );
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5386,7 +5385,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString("URL" );
+    aMediaProps[0].Name = OUString("URL" );
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5413,13 +5412,13 @@ void SvxIconSelectorDialog::ImportGraphics(
     }
     else
     {
-        ::rtl::OUString aSourcePath( rPaths[0] );
+        OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + ::rtl::OUString("/"  );
+            aSourcePath = rPaths[0] + OUString("/"  );
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); ++i )
         {
-            ::rtl::OUString aPath = aSourcePath + rPaths[i];
+            OUString aPath = aSourcePath + rPaths[i];
             if ( m_xImportedImageManager->hasImage( GetImageType(), aPath ) )
             {
                 aIndex = rPaths[i].lastIndexOf( '/' );
@@ -5467,7 +5466,7 @@ void SvxIconSelectorDialog::ImportGraphics(
         OUString newLine("\n");
         OUString fPath;
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + ::rtl::OUString("/"  );
+              fPath = rPaths[0].copy(8) + OUString("/"  );
         for ( sal_Int32 i = 0; i < rejectedCount; ++i )
         {
             message += fPath + rejected[i];
@@ -5487,7 +5486,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString("URL" );
+    aMediaProps[0].Name = OUString("URL" );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
@@ -5563,7 +5562,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 *
 *******************************************************************************/
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
-    Window *pWindow, const rtl::OUString& aMessage, bool /*bYestoAll*/ )
+    Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
 MessBox( pWindow, WB_DEF_YES, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
 
@@ -5578,7 +5577,7 @@ MessBox( pWindow, WB_DEF_YES, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM )
 }
 
 SvxIconReplacementDialog :: SvxIconReplacementDialog(
-    Window *pWindow, const rtl::OUString& aMessage )
+    Window *pWindow, const OUString& aMessage )
     :
 MessBox( pWindow, WB_YES_NO_CANCEL, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ) ),  String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) ) )
 {
@@ -5586,11 +5585,11 @@ MessBox( pWindow, WB_YES_NO_CANCEL, String( CUI_RES( RID_SVXSTR_REPLACE_ICON_CON
     SetMessText( ReplaceIconName( aMessage ));
 }
 
-rtl::OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
+OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMessage )
 {
-    rtl::OUString name;
-    rtl::OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
-    rtl::OUString placeholder("%ICONNAME" );
+    OUString name;
+    OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
+    OUString placeholder("%ICONNAME" );
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )
     {
@@ -5611,7 +5610,7 @@ sal_uInt16 SvxIconReplacementDialog :: ShowDialog()
 *
 *******************************************************************************/
 SvxIconChangeDialog::SvxIconChangeDialog(
-    Window *pWindow, const rtl::OUString& aMessage)
+    Window *pWindow, const OUString& aMessage)
     :
     ModalDialog            ( pWindow, CUI_RES( MD_ICONCHANGE ) ),
     aFImageInfo            (this, CUI_RES( FI_INFO ) ),

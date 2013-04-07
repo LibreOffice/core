@@ -25,7 +25,6 @@
 #include <comphelper/servicehelper.hxx>
 #include "MutableAttrList.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -139,7 +138,7 @@ Reference< XCloneable > XMLMutableAttributeList::createClone()
 }
 
 void XMLMutableAttributeList::SetValueByIndex( sal_Int16 i,
-                                               const ::rtl::OUString& rValue )
+                                               const OUString& rValue )
 {
     GetMutableAttrList()->SetValueByIndex( i, rValue );
 }

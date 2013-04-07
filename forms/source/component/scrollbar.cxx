@@ -48,7 +48,7 @@ namespace frm
     //--------------------------------------------------------------------
     Any translateExternalDoubleToControlIntValue(
         const Any& _rExternalValue, const Reference< XPropertySet >& _rxProperties,
-        const ::rtl::OUString& _rMinValueName, const ::rtl::OUString& _rMaxValueName )
+        const OUString& _rMinValueName, const OUString& _rMaxValueName )
     {
         OSL_ENSURE( _rxProperties.is(), "translateExternalDoubleToControlIntValue: no aggregate!?" );
 
@@ -59,7 +59,7 @@ namespace frm
             if ( ::rtl::math::isInf( nExternalValue ) )
             {
                 // set the minimum or maximum of the scroll values
-                ::rtl::OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
+                OUString sLimitPropertyName = ::rtl::math::isSignBitSet( nExternalValue )
                     ? _rMinValueName : _rMaxValueName;
                 if ( _rxProperties.is() )
                     _rxProperties->getPropertyValue( sLimitPropertyName ) >>= nControlValue;
@@ -146,7 +146,7 @@ namespace frm
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
             DECL_PROP1( DEFAULT_SCROLL_VALUE, sal_Int32,       BOUND );
             DECL_PROP1( TABINDEX,             sal_Int16,       BOUND );
-            DECL_PROP2( CONTROLSOURCEPROPERTY,::rtl::OUString, READONLY, TRANSIENT );
+            DECL_PROP2( CONTROLSOURCEPROPERTY,OUString, READONLY, TRANSIENT );
         END_DESCRIBE_PROPERTIES();
     }
 
@@ -238,7 +238,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OScrollBarModel::getServiceName() throw( RuntimeException )
+    OUString SAL_CALL OScrollBarModel::getServiceName() throw( RuntimeException )
     {
         return FRM_SUN_COMPONENT_SCROLLBAR;
     }
@@ -287,8 +287,8 @@ namespace frm
     Any OScrollBarModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         return translateExternalDoubleToControlIntValue( _rExternalValue, m_xAggregateSet,
-            ::rtl::OUString( "ScrollValueMin" ),
-            ::rtl::OUString( "ScrollValueMax" ) );
+            OUString( "ScrollValueMin" ),
+            OUString( "ScrollValueMax" ) );
     }
 
     //--------------------------------------------------------------------

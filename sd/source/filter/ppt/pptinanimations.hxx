@@ -72,7 +72,7 @@ private:
     void importAnimateKeyPoints( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importPropertySetContainer( const Atom* pAtom,PropertySet& rSet );
     bool importAttributeValue( const Atom* pAtom, com::sun::star::uno::Any& rAny );
-    bool importAttributeNamesContainer( const Atom* pAtom, rtl::OUString& rAttributeNames );
+    bool importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames );
     sal_Int32 importTargetElementContainer( const Atom* pAtom, ::com::sun::star::uno::Any& rTarget, sal_Int16& nSubType );
 
     void fillNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTiming, const AnimationNode& rNode, const PropertySet& rSet );
@@ -100,7 +100,7 @@ private:
 #ifdef DBG_ANIM_LOG
     FILE * mpFile;
     void dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen );
-    void dump( const rtl::OUString& rString );
+    void dump( const OUString& rString );
     void dump( sal_uInt32 nLen, bool bNewLine = true );
 #endif
 
@@ -115,7 +115,7 @@ private:
     void dump( const char * pText, sal_Int64 nInt );
     void dump( const char * pText, double fDouble );
     void dump( const char * pText, const char * pText2 );
-    void dump( const char * pText, const rtl::OUString& rString );
+    void dump( const char * pText, const OUString& rString );
 };
 
 } // namespace ppt

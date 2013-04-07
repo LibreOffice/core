@@ -73,28 +73,28 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
+    OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
+        return OUString("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
     }
 
     //------------------------------------------------------------------------
-    Sequence< ::rtl::OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel");
+        Sequence< OUString > aSupported(1);
+        aSupported[0] = OUString("com.sun.star.form.inspection.DefaultFormComponentInspectorModel");
         return aSupported;
     }
 
@@ -152,7 +152,7 @@ namespace pcr
         {
             if ( aFactories[i].isFormOnly && !m_bUseFormComponentHandlers )
                 continue;
-            *pReturn++ <<= ::rtl::OUString::createFromAscii( aFactories[i].serviceName );
+            *pReturn++ <<= OUString::createFromAscii( aFactories[i].serviceName );
         }
         aReturn.realloc( pReturn - aReturn.getArray() );
 
@@ -180,7 +180,7 @@ namespace pcr
         PropertyCategoryDescriptor* pReturn = aReturn.getArray();
         for ( sal_Int32 i=0; i<nCategories; ++i, ++pReturn )
         {
-            pReturn->ProgrammaticName = ::rtl::OUString::createFromAscii( aCategories[i].programmaticName );
+            pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
             pReturn->UIName = String( PcrRes( aCategories[i].uiNameResId ) );
             pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
         }
@@ -189,7 +189,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const ::rtl::OUString& _rPropertyName ) throw (RuntimeException)
+    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
         if ( nPropertyId == -1 )
@@ -221,12 +221,12 @@ namespace pcr
         if ( arguments.size() == 2 )
         {   // constructor: "createWithHelpSection( long, long )"
             if ( !( arguments[0] >>= nMinHelpTextLines ) || !( arguments[1] >>= nMaxHelpTextLines ) )
-                throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+                throw IllegalArgumentException( OUString(), *this, 0 );
             createWithHelpSection( nMinHelpTextLines, nMaxHelpTextLines );
             return;
         }
 
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+        throw IllegalArgumentException( OUString(), *this, 0 );
     }
 
     //--------------------------------------------------------------------
@@ -239,7 +239,7 @@ namespace pcr
     void DefaultFormComponentInspectorModel::createWithHelpSection( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines )
     {
         if ( ( _nMinHelpTextLines <= 0 ) || ( _nMaxHelpTextLines <= 0 ) || ( _nMinHelpTextLines > _nMaxHelpTextLines ) )
-            throw IllegalArgumentException( ::rtl::OUString(), *this, 0 );
+            throw IllegalArgumentException( OUString(), *this, 0 );
 
         enableHelpSectionProperties( _nMinHelpTextLines, _nMaxHelpTextLines );
         m_bConstructed = true;

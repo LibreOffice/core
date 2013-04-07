@@ -64,10 +64,10 @@ namespace ww8
         return nResult;
     }
 
-    ::rtl::OUString WW8Struct::getUString(sal_uInt32 nOffset,
+    OUString WW8Struct::getUString(sal_uInt32 nOffset,
                                           sal_uInt32 nCount)
     {
-        ::rtl::OUString aResult;
+        OUString aResult;
 
         if (nCount > 0)
         {
@@ -79,10 +79,10 @@ namespace ww8
             if (nCount > nAvailable)
                 nCount = nAvailable;
 #if defined OSL_LITENDIAN
-            aResult = rtl::OUString(reinterpret_cast<const sal_Unicode *>(
+            aResult = OUString(reinterpret_cast<const sal_Unicode *>(
                 mp_data.get() + nStartOff), nCount);
 #else
-            rtl::OUStringBuffer aBuf;
+            OUStringBuffer aBuf;
             for (sal_uInt32 i = 0; i < nCount; ++i)
                 aBuf.append(static_cast<sal_Unicode>(getU16(nStartOff+i*2)));
             aResult = aBuf.makeStringAndClear();

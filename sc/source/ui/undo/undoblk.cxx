@@ -110,7 +110,7 @@ ScUndoInsertCells::~ScUndoInsertCells()
     delete []pScenarios;
 }
 
-rtl::OUString ScUndoInsertCells::GetComment() const
+OUString ScUndoInsertCells::GetComment() const
 {
     return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
 }
@@ -349,7 +349,7 @@ ScUndoDeleteCells::~ScUndoDeleteCells()
     delete []pScenarios;
 }
 
-rtl::OUString ScUndoDeleteCells::GetComment() const
+OUString ScUndoDeleteCells::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Delete"
 }
@@ -573,7 +573,7 @@ ScUndoDeleteMulti::~ScUndoDeleteMulti()
     delete [] pRanges;
 }
 
-rtl::OUString ScUndoDeleteMulti::GetComment() const
+OUString ScUndoDeleteMulti::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // like DeleteCells
 }
@@ -752,7 +752,7 @@ ScUndoCut::~ScUndoCut()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoCut::GetComment() const
+OUString ScUndoCut::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CUT ); // "cut"
 }
@@ -867,7 +867,7 @@ ScUndoPaste::~ScUndoPaste()
     delete pRefRedoData;
 }
 
-rtl::OUString ScUndoPaste::GetComment() const
+OUString ScUndoPaste::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "paste"
 }
@@ -1138,7 +1138,7 @@ ScUndoDragDrop::~ScUndoDragDrop()
 {
 }
 
-rtl::OUString ScUndoDragDrop::GetComment() const
+OUString ScUndoDragDrop::GetComment() const
 {   // "Move" : "Copy"
     return bCut ?
         ScGlobal::GetRscString( STR_UNDO_MOVE ) :
@@ -1361,7 +1361,7 @@ ScUndoListNames::~ScUndoListNames()
     delete pRedoDoc;
 }
 
-rtl::OUString ScUndoListNames::GetComment() const
+OUString ScUndoListNames::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_LISTNAMES );
 }
@@ -1427,7 +1427,7 @@ ScUndoUseScenario::~ScUndoUseScenario()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoUseScenario::GetComment() const
+OUString ScUndoUseScenario::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_USESCENARIO );
 }
@@ -1456,7 +1456,7 @@ void ScUndoUseScenario::Undo()
     for (SCTAB i = nTab+1; i<=nEndTab; i++)
     {
         // Flags always
-        rtl::OUString aComment;
+        OUString aComment;
         Color  aColor;
         sal_uInt16 nScenFlags;
         pUndoDoc->GetScenarioData( i, aComment, aColor, nScenFlags );
@@ -1543,7 +1543,7 @@ ScUndoSelectionStyle::~ScUndoSelectionStyle()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoSelectionStyle::GetComment() const
+OUString ScUndoSelectionStyle::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_APPLYCELLSTYLE );
 }
@@ -1648,7 +1648,7 @@ ScUndoEnterMatrix::~ScUndoEnterMatrix()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoEnterMatrix::GetComment() const
+OUString ScUndoEnterMatrix::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERMATRIX );
 }
@@ -1742,7 +1742,7 @@ ScUndoIndent::~ScUndoIndent()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoIndent::GetComment() const
+OUString ScUndoIndent::GetComment() const
 {
     sal_uInt16 nId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
     return ScGlobal::GetRscString( nId );
@@ -1799,7 +1799,7 @@ ScUndoTransliterate::~ScUndoTransliterate()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoTransliterate::GetComment() const
+OUString ScUndoTransliterate::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TRANSLITERATE );
 }
@@ -1864,7 +1864,7 @@ ScUndoClearItems::~ScUndoClearItems()
     delete pWhich;
 }
 
-rtl::OUString ScUndoClearItems::GetComment() const
+OUString ScUndoClearItems::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
 }
@@ -1919,7 +1919,7 @@ ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoRemoveBreaks::GetComment() const
+OUString ScUndoRemoveBreaks::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVEBREAKS );
 }
@@ -1982,7 +1982,7 @@ ScUndoRemoveMerge::~ScUndoRemoveMerge()
     delete pUndoDoc;
 }
 
-rtl::OUString ScUndoRemoveMerge::GetComment() const
+OUString ScUndoRemoveMerge::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "remove merge"
 }
@@ -2124,7 +2124,7 @@ ScUndoBorder::~ScUndoBorder()
     delete pInner;
 }
 
-rtl::OUString ScUndoBorder::GetComment() const
+OUString ScUndoBorder::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! eigener String?
 }

@@ -147,7 +147,7 @@ namespace connectivity
         class OOperandConst : public OOperandValue
         {
         public:
-            OOperandConst(const connectivity::OSQLParseNode& rColumnRef, const rtl::OUString& aStrValue);
+            OOperandConst(const connectivity::OSQLParseNode& rColumnRef, const OUString& aStrValue);
 
             TYPEINFO();
         };

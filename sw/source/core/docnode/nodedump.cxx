@@ -268,10 +268,10 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( "text" );
     writer.writeFormatAttribute( "ptr", "%p", this );
     writer.writeFormatAttribute( "index", "%lu", GetIndex() );
-    rtl::OUString txt = GetTxt();
+    OUString txt = GetTxt();
     for( int i = 0; i < 32; ++i )
         txt = txt.replace( i, '*' );
-    rtl::OString txt8 = ::rtl::OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
+    OString txt8 = OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
     xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
     writer.endElement();
 }

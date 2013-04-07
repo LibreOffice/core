@@ -37,7 +37,6 @@ using namespace ::chart::ContainerHelper;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 // necessary for MS compiler

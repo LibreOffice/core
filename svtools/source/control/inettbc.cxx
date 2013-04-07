@@ -76,8 +76,8 @@ using namespace ::com::sun::star::uno;
 class SvtURLBox_Impl
 {
 public:
-    std::vector<rtl::OUString>      aURLs;
-    std::vector<rtl::OUString>      aCompletions;
+    std::vector<OUString>      aURLs;
+    std::vector<OUString>      aCompletions;
     const IUrlFilter*               pUrlFilter;
     ::std::vector< WildCard >       m_aFilters;
 
@@ -94,9 +94,9 @@ class SvtMatchContext_Impl: public salhelper::Thread
 {
     static ::osl::Mutex*            pDirMutex;
 
-    std::vector<rtl::OUString>      aPickList;
-    std::vector<rtl::OUString>      aCompletions;
-    std::vector<rtl::OUString>      aURLs;
+    std::vector<OUString>      aPickList;
+    std::vector<OUString>      aCompletions;
+    std::vector<OUString>      aURLs;
     svtools::AsynchronLink          aLink;
     String                          aBaseURL;
     String                          aText;
@@ -116,7 +116,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     void                            doExecute();
     void                            Insert( const String& rCompletion, const String& rURL, sal_Bool bForce = sal_False);
     void                            ReadFolder( const String& rURL, const String& rMatch, sal_Bool bSmart );
-    void                            FillPicklist(std::vector<rtl::OUString>& rPickList);
+    void                            FillPicklist(std::vector<OUString>& rPickList);
 
 public:
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
@@ -151,7 +151,7 @@ SvtMatchContext_Impl::~SvtMatchContext_Impl()
     aLink.ClearPendingCall();
 }
 
-void SvtMatchContext_Impl::FillPicklist(std::vector<rtl::OUString>& rPickList)
+void SvtMatchContext_Impl::FillPicklist(std::vector<OUString>& rPickList)
 {
     // Einlesung der Historypickliste
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( eHISTORY );
@@ -231,12 +231,12 @@ IMPL_STATIC_LINK( SvtMatchContext_Impl, Select_Impl, void*, )
     // insert all completed strings into the listbox
     pBox->Clear();
 
-    for(std::vector<rtl::OUString>::iterator i = pThis->aCompletions.begin(); i != pThis->aCompletions.end(); ++i)
+    for(std::vector<OUString>::iterator i = pThis->aCompletions.begin(); i != pThis->aCompletions.end(); ++i)
     {
         String sCompletion(*i);
 
         // convert the file into an URL
-        rtl::OUString sURL( sCompletion );
+        OUString sURL( sCompletion );
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( sCompletion, sURL );
             // note: if this doesn't work, we're not interested in: we're checking the
             // untouched sCompletion then
@@ -303,7 +303,7 @@ void SvtMatchContext_Impl::Insert( const String& rCompletion,
     if( !bForce )
     {
         // avoid doubles
-        if(find(aCompletions.begin(), aCompletions.end(), rtl::OUString(rCompletion)) != aCompletions.end())
+        if(find(aCompletions.begin(), aCompletions.end(), OUString(rCompletion)) != aCompletions.end())
             return;
     }
 
@@ -333,7 +333,7 @@ void SvtMatchContext_Impl::ReadFolder( const String& rURL,
     // for pure home paths ( ~username ) the '.' at the end of rMatch
     // means that it poits to root catalog
     // this is done only for file contents since home paths parsing is useful only for them
-    if ( bPureHomePath && rMatch.Equals( rtl::OUString("file:///.") ) )
+    if ( bPureHomePath && rMatch.Equals( OUString("file:///.") ) )
     {
         // a home that refers to /
 
@@ -721,7 +721,7 @@ void SvtMatchContext_Impl::doExecute()
     aObj.SetSmartProtocol( eSmartProt == INET_PROT_NOT_VALID ? INET_PROT_HTTP : eSmartProt );
     for( ;; )
     {
-        for(std::vector<rtl::OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
+        for(std::vector<OUString>::iterator i = aPickList.begin(); schedule() && i != aPickList.end(); ++i)
         {
             aCurObj.SetURL(*i);
             aCurObj.SetSmartURL( aCurObj.GetURLNoPass());
@@ -1193,7 +1193,7 @@ String SvtURLBox::GetURL()
         return aPlaceHolder;
 
     // try to get the right case preserving URL from the list of URLs
-    for(std::vector<rtl::OUString>::iterator i = pImp->aCompletions.begin(), j = pImp->aURLs.begin(); i != pImp->aCompletions.end() && j != pImp->aURLs.end(); ++i, ++j)
+    for(std::vector<OUString>::iterator i = pImp->aCompletions.begin(), j = pImp->aURLs.begin(); i != pImp->aCompletions.end() && j != pImp->aURLs.end(); ++i, ++j)
     {
         if((*i).equals(aText))
             return *j;
@@ -1223,9 +1223,9 @@ String SvtURLBox::GetURL()
 
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        rtl::OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
+        OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
         aObj.SetURL(aName);
-        ::rtl::OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
+        OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( aURL.isEmpty() )
             // aText itself is invalid, and even together with aBaseURL, it could not
             // made valid -> no chance
@@ -1233,13 +1233,13 @@ String SvtURLBox::GetURL()
 
         bool bSlash = aObj.hasFinalSlash();
         {
-            const rtl::OUString aPropName("CasePreservingURL");
+            const OUString aPropName("CasePreservingURL");
 
-            rtl::OUString aFileURL;
+            OUString aFileURL;
 
             Any aAny = UCBContentHelper::GetProperty(aURL, aPropName);
             sal_Bool success = (aAny >>= aFileURL);
-            rtl::OUString aTitle;
+            OUString aTitle;
             if(success)
                 aTitle = String(
                     INetURLObject(aFileURL).getName(
@@ -1306,7 +1306,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
             if( !aHomeLocation )
                 aHomeLocation = "";
 
-            aParseTilde = rtl::OUString::createFromAscii(aHomeLocation);
+            aParseTilde = OUString::createFromAscii(aHomeLocation);
 
             // in case the whole path is just "~" then there should
             // be no trailing slash at the end
@@ -1317,7 +1317,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
         {
             // covers "~username" and "~username/..." cases
             xub_StrLen nNameEnd = aText.Search( '/' );
-            rtl::OUString aUserName = aText.Copy( 1, ( nNameEnd != STRING_NOTFOUND ) ? nNameEnd : ( aText.Len() - 1 ) );
+            OUString aUserName = aText.Copy( 1, ( nNameEnd != STRING_NOTFOUND ) ? nNameEnd : ( aText.Len() - 1 ) );
 
             struct passwd* pPasswd = NULL;
 #ifdef SOLARIS
@@ -1329,13 +1329,13 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
                                   1024,
                                   &pPasswd );
             if( !nRes && pPasswd )
-                aParseTilde = rtl::OUString::createFromAscii(pPasswd->pw_dir);
+                aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
             else
                 return sal_False; // no such user
 #else
             pPasswd = getpwnam( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr() );
             if( pPasswd )
-                aParseTilde = rtl::OUString::createFromAscii(pPasswd->pw_dir);
+                aParseTilde = OUString::createFromAscii(pPasswd->pw_dir);
             else
                 return sal_False; // no such user
 #endif
@@ -1351,7 +1351,7 @@ sal_Bool SvtURLBox_Impl::TildeParsing(
             if( !aParseTilde.Len() || aParseTilde.EqualsAscii( "/" ) )
             {
                 // "/" path should be converted to "/."
-                aParseTilde = rtl::OUString("/.");
+                aParseTilde = OUString("/.");
             }
             else
             {

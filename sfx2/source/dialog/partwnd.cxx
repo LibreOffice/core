@@ -114,13 +114,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
         xFrame, ::com::sun::star::uno::UNO_QUERY );
     try
     {
-        const ::rtl::OUString aLayoutManager( "LayoutManager" );
+        const OUString aLayoutManager( "LayoutManager" );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet;
 
         ::com::sun::star::uno::Any a = xPropSet->getPropertyValue( aLayoutManager );
         if ( a >>= xLMPropSet )
         {
-            const ::rtl::OUString aAutomaticToolbars( "AutomaticToolbars" );
+            const OUString aAutomaticToolbars( "AutomaticToolbars" );
             xLMPropSet->setPropertyValue( aAutomaticToolbars, ::com::sun::star::uno::Any( sal_False ));
         }
     }

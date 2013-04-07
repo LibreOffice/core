@@ -41,7 +41,6 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -61,7 +60,7 @@ SfxStatusListener::SfxStatusListener( const Reference< XDispatchProvider >& rDis
     Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
-        m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
+        m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, OUString(), 0 );
 }
 
 SfxStatusListener::~SfxStatusListener()
@@ -93,7 +92,7 @@ void SfxStatusListener::ReBind()
     {
         try
         {
-            m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
+            m_xDispatch = m_xDispatchProvider->queryDispatch( m_aCommand, OUString(), 0 );
             if ( m_xDispatch.is() )
                 m_xDispatch->addStatusListener( aStatusListener, m_aCommand );
         }
@@ -198,9 +197,9 @@ throw( RuntimeException )
             rEvent.State >>= nTemp ;
             pItem = new SfxUInt32Item( m_nSlotID, nTemp );
         }
-        else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+        else if ( pType == ::getCppuType((const OUString*)0) )
         {
-            ::rtl::OUString sTemp ;
+            OUString sTemp ;
             rEvent.State >>= sTemp ;
             pItem = new SfxStringItem( m_nSlotID, sTemp );
         }

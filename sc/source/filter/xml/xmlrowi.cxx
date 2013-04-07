@@ -49,7 +49,7 @@ using namespace xmloff::token;
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -57,16 +57,16 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
     nRepeatedRows(1),
     bHasCell(false)
 {
-    rtl::OUString sCellStyleName;
+    OUString sCellStyleName;
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetTableRowAttrTokenMap());
     for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-        rtl::OUString aLocalName;
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
         sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName ));
-        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -107,7 +107,7 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 }
 
 SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
@@ -204,9 +204,9 @@ void ScXMLTableRowContext::EndElement()
                         bFiltered = true;
                     }
                     if (!bVisible)
-                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
+                        xRowProperties->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), uno::makeAny(bVisible));
                     if (bFiltered)
-                        xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
+                        xRowProperties->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), uno::makeAny(bFiltered));
                 }
             }
         }
@@ -215,7 +215,7 @@ void ScXMLTableRowContext::EndElement()
 
 ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
-                                      const ::rtl::OUString& rLName,
+                                      const OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       const bool bTempHeader, const bool bTempGroup ) :
@@ -241,11 +241,11 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
-            const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            rtl::OUString aLocalName;
+            const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+            OUString aLocalName;
             sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName ));
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+            const OUString& sValue(xAttrList->getValueByIndex( i ));
 
             if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_DISPLAY))
                 bGroupDisplay = IsXMLToken(sValue, XML_TRUE);
@@ -258,7 +258,7 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 }
 
 SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefix,
-                                            const ::rtl::OUString& rLName,
+                                            const OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {

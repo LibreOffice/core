@@ -31,7 +31,7 @@ namespace connectivity
         private:
             sal_uInt16      m_nErrorResourceId;
             sal_Int32       m_nErrorCondition;
-            ::rtl::OUString m_sParameter;
+            OUString m_sParameter;
 
         public:
             ErrorDescriptor()
@@ -41,7 +41,7 @@ namespace connectivity
             {
             }
 
-            inline void set( const sal_uInt16 _nErrorResourceId, const sal_Int32 _nErrorCondition, const ::rtl::OUString& _rParam )
+            inline void set( const sal_uInt16 _nErrorResourceId, const sal_Int32 _nErrorCondition, const OUString& _rParam )
             {
                 m_nErrorResourceId = _nErrorResourceId;
                 m_nErrorCondition = _nErrorCondition;
@@ -59,7 +59,7 @@ namespace connectivity
 
             inline sal_uInt16 getResId() const                  { return m_nErrorResourceId; }
             inline sal_Int32  getErrorCondition() const         { return m_nErrorCondition; }
-            inline const ::rtl::OUString& getParameter() const  { return m_sParameter; }
+            inline const OUString& getParameter() const  { return m_sParameter; }
 
             inline bool is() const { return ( m_nErrorResourceId != 0 ) || ( m_nErrorCondition != 0 ); }
         };

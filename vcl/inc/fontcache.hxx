@@ -43,7 +43,7 @@ class VCL_PLUGIN_PUBLIC FontCache
         FontCacheEntry      m_aEntry;
     };
 
-    typedef boost::unordered_map< ::rtl::OString, FontFile, ::rtl::OStringHash > FontDirMap;
+    typedef boost::unordered_map< OString, FontFile, OStringHash > FontDirMap;
     struct FontDir
     {
         sal_Int64   m_nTimestamp;
@@ -71,15 +71,15 @@ public:
     FontCache();
     ~FontCache();
 
-    bool getFontCacheFile( int nDirID, const rtl::OString& rFile, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
+    bool getFontCacheFile( int nDirID, const OString& rFile, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
     void updateFontCacheEntry( const PrintFontManager::PrintFont*, bool bFlush );
     void markEmptyDir( int nDirID, bool bNoFiles = true );
 
     // returns false for non cached directory
     // a cached but empty directory will return true but not append anything
-    bool listDirectory( const rtl::OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
+    bool listDirectory( const OString& rDir, std::list< PrintFontManager::PrintFont* >& rNewFonts ) const;
     // returns true for directoris that contain only user overridden fonts
-    bool scanAdditionalFiles( const rtl::OString& rDir );
+    bool scanAdditionalFiles( const OString& rDir );
 
     void flush();
 };

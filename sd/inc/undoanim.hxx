@@ -43,7 +43,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     boost::scoped_ptr<UndoAnimationImpl>  mpImpl;
@@ -59,7 +59,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     boost::scoped_ptr<UndoAnimationPathImpl> mpImpl;
@@ -76,7 +76,7 @@ public:
     virtual void Undo();
     virtual void Redo();
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     boost::scoped_ptr<UndoTransitionImpl> mpImpl;

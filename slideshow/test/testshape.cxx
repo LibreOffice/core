@@ -83,10 +83,10 @@ private:
     }
 
     // XShape
-    virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (uno::RuntimeException)
+    virtual OUString SAL_CALL getShapeType(  ) throw (uno::RuntimeException)
     {
         CPPUNIT_ASSERT_MESSAGE( "TestShape::getShapeType: unexpected method call", false );
-        return ::rtl::OUString();
+        return OUString();
     }
 
     virtual awt::Point SAL_CALL getPosition(  ) throw (uno::RuntimeException)

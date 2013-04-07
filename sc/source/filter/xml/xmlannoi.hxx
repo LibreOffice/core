@@ -33,10 +33,10 @@ class ScXMLTableRowCellContext;
 struct ScXMLAnnotationStyleEntry
 {
     sal_uInt16          mnFamily;
-    rtl::OUString       maName;
+    OUString       maName;
     ESelection          maSelection;
 
-    ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const rtl::OUString& rNam, const ESelection& rSel ) :
+    ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const OUString& rNam, const ESelection& rSel ) :
         mnFamily( nFam ),
         maName( rNam ),
         maSelection( rSel )
@@ -50,11 +50,11 @@ struct ScXMLAnnotationData
                         mxShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                         mxShapes;
-    ::rtl::OUString     maAuthor;
-    ::rtl::OUString     maCreateDate;
-    ::rtl::OUString     maSimpleText;
-    ::rtl::OUString     maStyleName;
-    ::rtl::OUString     maTextStyle;
+    OUString     maAuthor;
+    OUString     maCreateDate;
+    OUString     maSimpleText;
+    OUString     maStyleName;
+    OUString     maTextStyle;
     bool                mbUseShapePos;
     bool                mbShown;
     std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
@@ -68,7 +68,7 @@ class ScXMLAnnotationContext : public SvXMLImportContext
 public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScXMLAnnotationData& rAnnotationData,
@@ -77,29 +77,29 @@ public:
     virtual ~ScXMLAnnotationContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void EndElement();
 
     void SetShape(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-        const ::rtl::OUString& rStyleName, const ::rtl::OUString& rTextStyle );
+        const OUString& rStyleName, const OUString& rTextStyle );
 
-    void AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection );
+    void AddContentStyle( sal_uInt16 nFamily, const OUString& rName, const ESelection& rSelection );
 
 private:
     ScXMLAnnotationData& mrAnnotationData;
-    rtl::OUStringBuffer maTextBuffer;
-    rtl::OUStringBuffer maAuthorBuffer;
-    rtl::OUStringBuffer maCreateDateBuffer;
-    rtl::OUStringBuffer maCreateDateStringBuffer;
+    OUStringBuffer maTextBuffer;
+    OUStringBuffer maAuthorBuffer;
+    OUStringBuffer maCreateDateBuffer;
+    OUStringBuffer maCreateDateStringBuffer;
     ScXMLTableRowCellContext* pCellContext;
     SvXMLImportContext* pShapeContext;
 

@@ -47,7 +47,7 @@ class DetailsContainer
         VclFrame*       m_pFrame;
 
     public:
-        DetailsContainer( VclBuilderContainer* pBuilder, const rtl::OString& rFrame );
+        DetailsContainer( VclBuilderContainer* pBuilder, const OString& rFrame );
         virtual ~DetailsContainer( );
 
         void setChangeHdl( const Link& rLink ) { m_aChangeHdl = rLink; }
@@ -62,7 +62,7 @@ class DetailsContainer
          */
         virtual bool setUrl( const INetURLObject& rUrl );
 
-        virtual void setUsername( const rtl::OUString& /*rUsername*/ ) { };
+        virtual void setUsername( const OUString& /*rUsername*/ ) { };
 
     protected:
         void notifyChange( );
@@ -73,7 +73,7 @@ class HostDetailsContainer : public DetailsContainer
 {
     private:
         sal_uInt16 m_nDefaultPort;
-        rtl::OUString m_sScheme;
+        OUString m_sScheme;
 
     protected:
         Edit*           m_pEDHost;
@@ -81,7 +81,7 @@ class HostDetailsContainer : public DetailsContainer
         Edit*           m_pEDPath;
 
     public:
-        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, rtl::OUString sScheme );
+        HostDetailsContainer( VclBuilderContainer* pBuilder, sal_uInt16 nPort, OUString sScheme );
         virtual ~HostDetailsContainer( ) { };
 
         virtual void show( bool bShow = true );
@@ -89,12 +89,12 @@ class HostDetailsContainer : public DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 
     protected:
-        void setScheme( rtl::OUString sScheme ) { m_sScheme = sScheme; }
+        void setScheme( OUString sScheme ) { m_sScheme = sScheme; }
 
         /** Verifies that the schement split from the URL can be handled by
             the container and set the proper controls accordingly if needed.
           */
-        virtual bool verifyScheme( const rtl::OUString& rScheme );
+        virtual bool verifyScheme( const OUString& rScheme );
 };
 
 class DavDetailsContainer : public HostDetailsContainer
@@ -109,7 +109,7 @@ class DavDetailsContainer : public HostDetailsContainer
         virtual void show( bool bShow = true );
 
     protected:
-        virtual bool verifyScheme( const rtl::OUString& rScheme );
+        virtual bool verifyScheme( const OUString& rScheme );
 
     private:
         DECL_LINK ( ToggledDavsHdl, CheckBox * pCheckBox );
@@ -133,11 +133,11 @@ class SmbDetailsContainer : public DetailsContainer
 class CmisDetailsContainer : public DetailsContainer
 {
     private:
-        rtl::OUString m_sUsername;
+        OUString m_sUsername;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
-        std::vector< rtl::OUString > m_aServerTypesURLs;
-        std::vector< rtl::OUString > m_aRepoIds;
-        rtl::OUString m_sRepoId;
+        std::vector< OUString > m_aServerTypesURLs;
+        std::vector< OUString > m_aRepoIds;
+        OUString m_sRepoId;
 
         Edit*       m_pEDBinding;
         ListBox*    m_pLBRepository;
@@ -151,7 +151,7 @@ class CmisDetailsContainer : public DetailsContainer
 
         virtual INetURLObject getUrl( );
         virtual bool setUrl( const INetURLObject& rUrl );
-        virtual void setUsername( const rtl::OUString& rUsername );
+        virtual void setUsername( const OUString& rUsername );
 
     private:
         void selectRepository( );

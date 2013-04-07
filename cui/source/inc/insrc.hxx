@@ -36,13 +36,13 @@ class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
     RadioButton*    m_pBeforeBtn;
     RadioButton*    m_pAfterBtn;
 
-    rtl::OUString   aRow;
-    rtl::OUString   aCol;
+    OUString   aRow;
+    OUString   aCol;
 
     bool            bColumn;
 
 public:
-    SvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId );
+    SvxInsRowColDlg( Window* pParent, bool bCol, const OString& sHelpId );
 
     virtual short Execute(void);
 

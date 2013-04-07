@@ -310,7 +310,7 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
     }
 }
 
-rtl::OUString SAXEventKeeperImpl::printBufferNode(
+OUString SAXEventKeeperImpl::printBufferNode(
     BufferNode* pBufferNode, sal_Int32 nIndent) const
 /****** SAXEventKeeperImpl/printBufferNode ***********************************
  *
@@ -344,48 +344,48 @@ rtl::OUString SAXEventKeeperImpl::printBufferNode(
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    rtl::OUString rc;
+    OUString rc;
 
     for ( int i=0; i<nIndent; ++i )
     {
-        rc += rtl::OUString( " " );
+        rc += OUString( " " );
     }
 
     if (pBufferNode == m_pCurrentBufferNode)
     {
-        rc += rtl::OUString( "[%]" );
+        rc += OUString( "[%]" );
     }
 
     if (pBufferNode == m_pCurrentBlockingBufferNode)
     {
-        rc += rtl::OUString( "[B]" );
+        rc += OUString( "[B]" );
     }
 
-    rc += rtl::OUString( " " );
+    rc += OUString( " " );
     rc += m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
 
     BufferNode* pParent = (BufferNode*)pBufferNode->getParent();
     if (pParent != NULL)
     {
-        rc += rtl::OUString( "[" );
+        rc += OUString( "[" );
         rc += m_xXMLDocument->getNodeName(pParent->getXMLElement());
-        rc += rtl::OUString( "]" );
+        rc += OUString( "]" );
     }
 
-    rc += rtl::OUString( ":EC=" );
+    rc += OUString( ":EC=" );
     rc += pBufferNode->printChildren();
-    rc += rtl::OUString( " BR=" );
+    rc += OUString( " BR=" );
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != NULL)
     {
-        rc += rtl::OUString::valueOf( pBlocker->getBufferId() );
-        rc += rtl::OUString( "(SecId=" );
-        rc += rtl::OUString::valueOf( pBlocker->getSecurityId() );
-        rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
-        rc += rtl::OUString( " " );
+        rc += OUString::valueOf( pBlocker->getBufferId() );
+        rc += OUString( "(SecId=" );
+        rc += OUString::valueOf( pBlocker->getSecurityId() );
+        rc += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
+        rc += OUString( " " );
     }
-    rc += rtl::OUString( "\n" );
+    rc += OUString( "\n" );
 
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
     std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
@@ -1051,16 +1051,16 @@ cssu::Reference< cssxs::XDocumentHandler > SAL_CALL SAXEventKeeperImpl::setNextH
     return xOldHandler;
 }
 
-rtl::OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
+OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
     throw (cssu::RuntimeException)
 {
-    rtl::OUString rc;
+    OUString rc;
 
-    rc += rtl::OUString( "ElementMarkBuffers: size = " );
-    rc += rtl::OUString::valueOf((sal_Int32)m_vElementMarkBuffers.size());
-    rc += rtl::OUString( "\nCurrentBufferNode: " );
+    rc += OUString( "ElementMarkBuffers: size = " );
+    rc += OUString::valueOf((sal_Int32)m_vElementMarkBuffers.size());
+    rc += OUString( "\nCurrentBufferNode: " );
     rc += m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement());
-    rc += rtl::OUString( "\n" );
+    rc += OUString( "\n" );
     rc += printBufferNode(m_pRootBufferNode, 0);
 
     return rc;
@@ -1191,7 +1191,7 @@ void SAL_CALL SAXEventKeeperImpl::endDocument(  )
 }
 
 void SAL_CALL SAXEventKeeperImpl::startElement(
-    const rtl::OUString& aName,
+    const OUString& aName,
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
@@ -1236,7 +1236,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     }
 }
 
-void SAL_CALL SAXEventKeeperImpl::endElement( const rtl::OUString& aName )
+void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
         sal_Bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
@@ -1293,7 +1293,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const rtl::OUString& aName )
     }
 }
 
-void SAL_CALL SAXEventKeeperImpl::characters( const rtl::OUString& aChars )
+void SAL_CALL SAXEventKeeperImpl::characters( const OUString& aChars )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     if (!m_bIsForwarding)
@@ -1315,14 +1315,14 @@ void SAL_CALL SAXEventKeeperImpl::characters( const rtl::OUString& aChars )
         }
 }
 
-void SAL_CALL SAXEventKeeperImpl::ignorableWhitespace( const rtl::OUString& aWhitespaces )
+void SAL_CALL SAXEventKeeperImpl::ignorableWhitespace( const OUString& aWhitespaces )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     characters( aWhitespaces );
 }
 
 void SAL_CALL SAXEventKeeperImpl::processingInstruction(
-    const rtl::OUString& aTarget, const rtl::OUString& aData )
+    const OUString& aTarget, const OUString& aData )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
     if (!m_bIsForwarding)
@@ -1365,24 +1365,24 @@ void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >&
     m_pCurrentBufferNode = m_pRootBufferNode;
 }
 
-rtl::OUString SAXEventKeeperImpl_getImplementationName ()
+OUString SAXEventKeeperImpl_getImplementationName ()
     throw (cssu::RuntimeException)
 {
-    return rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( IMPLEMENTATION_NAME ) );
 }
 
-sal_Bool SAL_CALL SAXEventKeeperImpl_supportsService( const rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SAXEventKeeperImpl_supportsService( const OUString& ServiceName )
     throw (cssu::RuntimeException)
 {
     return ServiceName == SERVICE_NAME;
 }
 
-cssu::Sequence< rtl::OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
-    cssu::Sequence < rtl::OUString > aRet(1);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    cssu::Sequence < OUString > aRet(1);
+    OUString* pArray = aRet.getArray();
+    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
     return aRet;
 }
 #undef SERVICE_NAME
@@ -1395,17 +1395,17 @@ cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
 }
 
 /* XServiceInfo */
-rtl::OUString SAL_CALL SAXEventKeeperImpl::getImplementationName(  )
+OUString SAL_CALL SAXEventKeeperImpl::getImplementationName(  )
     throw (cssu::RuntimeException)
 {
     return SAXEventKeeperImpl_getImplementationName();
 }
-sal_Bool SAL_CALL SAXEventKeeperImpl::supportsService( const rtl::OUString& rServiceName )
+sal_Bool SAL_CALL SAXEventKeeperImpl::supportsService( const OUString& rServiceName )
     throw (cssu::RuntimeException)
 {
     return SAXEventKeeperImpl_supportsService( rServiceName );
 }
-cssu::Sequence< rtl::OUString > SAL_CALL SAXEventKeeperImpl::getSupportedServiceNames(  )
+cssu::Sequence< OUString > SAL_CALL SAXEventKeeperImpl::getSupportedServiceNames(  )
     throw (cssu::RuntimeException)
 {
     return SAXEventKeeperImpl_getSupportedServiceNames();

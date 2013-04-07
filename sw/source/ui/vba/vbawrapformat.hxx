@@ -35,8 +35,8 @@ private:
 
 private:
     void makeWrap() throw (css::uno::RuntimeException);
-    float getDistance( const rtl::OUString& sName ) throw (css::uno::RuntimeException);
-    void setDistance( const rtl::OUString& sName, float _distance ) throw (css::uno::RuntimeException);
+    float getDistance( const OUString& sName ) throw (css::uno::RuntimeException);
+    void setDistance( const OUString& sName, float _distance ) throw (css::uno::RuntimeException);
 
 public:
     SwVbaWrapFormat(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
@@ -54,8 +54,8 @@ public:
     virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException);
 
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 
 #endif//SW_VBA_XWRAPFORMAT_HXX

@@ -34,14 +34,14 @@ namespace rptxml
 
         OXMLCondPrtExpr( ORptFilter& _rImport
                     ,sal_uInt16 nPrfx
-                    ,const ::rtl::OUString& rLName
+                    ,const OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & _xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xComponent);
         virtual ~OXMLCondPrtExpr();
 
         // This method is called for all characters that are contained in the
         // current element. The default is to ignore them.
-        virtual void Characters( const ::rtl::OUString& rChars );
+        virtual void Characters( const OUString& rChars );
     };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

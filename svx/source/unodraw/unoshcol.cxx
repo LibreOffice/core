@@ -212,33 +212,33 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 //----------------------------------------------------------------------
 // XServiceInfo
 //----------------------------------------------------------------------
-::rtl::OUString SAL_CALL SvxShapeCollection::getImplementationName()
+OUString SAL_CALL SvxShapeCollection::getImplementationName()
     throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
 }
 
-::rtl::OUString SvxShapeCollection::getImplementationName_Static()
+OUString SvxShapeCollection::getImplementationName_Static()
 {
-    return ::rtl::OUString("com.sun.star.drawing.SvxShapeCollection");
+    return OUString("com.sun.star.drawing.SvxShapeCollection");
 }
 
-sal_Bool SAL_CALL SvxShapeCollection::supportsService( const ::rtl::OUString& ServiceName )
+sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
     throw( uno::RuntimeException )
 {
     return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )
 {
     return getSupportedServiceNames_Static();
 }
 
-uno::Sequence< ::rtl::OUString > SvxShapeCollection::getSupportedServiceNames_Static()
+uno::Sequence< OUString > SvxShapeCollection::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aSeq(2);
-    aSeq.getArray()[0] = ::rtl::OUString("com.sun.star.drawing.Shapes");
-    aSeq.getArray()[1] = ::rtl::OUString("com.sun.star.drawing.ShapeCollection");
+    uno::Sequence< OUString > aSeq(2);
+    aSeq.getArray()[0] = OUString("com.sun.star.drawing.Shapes");
+    aSeq.getArray()[1] = OUString("com.sun.star.drawing.ShapeCollection");
     return aSeq;
 }
 

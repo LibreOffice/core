@@ -47,7 +47,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
         uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-        const rtl::OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
+        const OUString aServiceName("com.sun.star.graphic.Primitive2DTools");
 
         try
         {
@@ -124,7 +124,7 @@ void SvgData::ensureSequenceAndRange()
         {
             // create SVG interpreter
             uno::Reference< lang::XMultiServiceFactory > xFactory(::comphelper::getProcessServiceFactory());
-            const rtl::OUString aServiceName("com.sun.star.graphic.SvgTools");
+            const OUString aServiceName("com.sun.star.graphic.SvgTools");
 
             try
             {
@@ -170,7 +170,7 @@ void SvgData::ensureSequenceAndRange()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const rtl::OUString& rPath)
+SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath)
 :   maSvgDataArray(rSvgDataArray),
     mnSvgDataArrayLength(nSvgDataArrayLength),
     maPath(rPath),

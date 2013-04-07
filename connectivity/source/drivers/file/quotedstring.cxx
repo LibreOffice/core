@@ -79,7 +79,7 @@ namespace connectivity
                 }
             }
         }
-        //OSL_TRACE("QuotedTokenizedString::nTokCount = %d\n", ((OUtoCStr(::rtl::OUString(nTokCount))) ? (OUtoCStr(::rtl::OUString(nTokCount))):("NULL")) );
+        //OSL_TRACE("QuotedTokenizedString::nTokCount = %d\n", ((OUtoCStr(OUString(nTokCount))) ? (OUtoCStr(OUString(nTokCount))):("NULL")) );
 
         return nTokCount;
     }

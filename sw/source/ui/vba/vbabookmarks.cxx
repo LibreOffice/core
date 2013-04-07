@@ -39,7 +39,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Reference< container::XNamed > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        rtl::OUString aName = xNamed->getName();
+        OUString aName = xNamed->getName();
         return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( m_xParent, m_xContext, mxModel, aName ) ) );
     }
 
@@ -62,17 +62,17 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  mxIndexAccess->getElementType(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return mxIndexAccess->hasElements(); }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return cachePos;
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
         return mxNameAccess->getElementNames();
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         if( mxNameAccess->hasByName( aName ) )
         {
@@ -84,7 +84,7 @@ public:
             for( sal_Int32 nIndex = 0; nIndex < mxIndexAccess->getCount(); nIndex++ )
             {
                 uno::Reference< container::XNamed > xNamed( mxIndexAccess->getByIndex( nIndex ), uno::UNO_QUERY_THROW );
-                rtl::OUString aBookmarkName = xNamed->getName();
+                OUString aBookmarkName = xNamed->getName();
                 if( aName.equalsIgnoreAsciiCase( aBookmarkName ) )
                 {
                     cachePos <<= xNamed;
@@ -127,27 +127,27 @@ uno::Any
 SwVbaBookmarks::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< container::XNamed > xNamed( aSource, uno::UNO_QUERY_THROW );
-    rtl::OUString aName = xNamed->getName();
+    OUString aName = xNamed->getName();
     return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
 }
 
-void SwVbaBookmarks::removeBookmarkByName( const rtl::OUString& rName ) throw (uno::RuntimeException)
+void SwVbaBookmarks::removeBookmarkByName( const OUString& rName ) throw (uno::RuntimeException)
 {
     uno::Reference< text::XTextContent > xBookmark( m_xNameAccess->getByName( rName ), uno::UNO_QUERY_THROW );
     word::getXTextViewCursor( mxModel )->getText()->removeTextContent( xBookmark );
 }
 
-void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const rtl::OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
+void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
-    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  rtl::OUString("com.sun.star.text.Bookmark") ), uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance(  OUString("com.sun.star.text.Bookmark") ), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNamed > xNamed( xBookmark, uno::UNO_QUERY_THROW );
     xNamed->setName( rName );
     rTextRange->getText()->insertTextContent( rTextRange, xBookmark, sal_False );
 }
 
 uno::Any SAL_CALL
-SwVbaBookmarks::Add( const rtl::OUString& rName, const uno::Any& rRange ) throw (uno::RuntimeException)
+SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange ) throw (uno::RuntimeException)
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< word::XRange > xRange;
@@ -164,7 +164,7 @@ SwVbaBookmarks::Add( const rtl::OUString& rName, const uno::Any& rRange ) throw 
     }
 
     // remove the exist bookmark
-    rtl::OUString aName = rName;
+    OUString aName = rName;
     if( m_xNameAccess->hasByName( aName ) )
         removeBookmarkByName( aName );
 
@@ -198,26 +198,26 @@ SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ ) throw (css::uno::RuntimeEx
 }
 
 sal_Bool SAL_CALL
-SwVbaBookmarks::Exists( const rtl::OUString& rName ) throw (css::uno::RuntimeException)
+SwVbaBookmarks::Exists( const OUString& rName ) throw (css::uno::RuntimeException)
 {
     sal_Bool bExist = m_xNameAccess->hasByName( rName );
     return bExist;
 }
 
-rtl::OUString
+OUString
 SwVbaBookmarks::getServiceImplName()
 {
-    return rtl::OUString("SwVbaBookmarks");
+    return OUString("SwVbaBookmarks");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaBookmarks::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Bookmarks");
+        sNames[0] = OUString("ooo.vba.word.Bookmarks");
     }
     return sNames;
 }

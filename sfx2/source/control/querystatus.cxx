@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -50,7 +49,7 @@ class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
+        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
 
         // Query method
@@ -90,7 +89,7 @@ SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& 
     Reference< XURLTransformer > xTrans( URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
     xTrans->parseStrict( m_aCommand );
     if ( rDispatchProvider.is() )
-        m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, rtl::OUString(), 0 );
+        m_xDispatch = rDispatchProvider->queryDispatch( m_aCommand, OUString(), 0 );
     m_aCondition.reset();
 }
 
@@ -136,9 +135,9 @@ throw( RuntimeException )
             rEvent.State >>= nTemp ;
             m_pItem = new SfxUInt32Item( m_nSlotID, nTemp );
         }
-        else if ( pType == ::getCppuType((const ::rtl::OUString*)0) )
+        else if ( pType == ::getCppuType((const OUString*)0) )
         {
-            ::rtl::OUString sTemp ;
+            OUString sTemp ;
             rEvent.State >>= sTemp ;
             m_pItem = new SfxStringItem( m_nSlotID, sTemp );
         }

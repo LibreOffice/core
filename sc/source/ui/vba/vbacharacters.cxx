@@ -49,13 +49,13 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
 
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaCharacters::getCaption() throw (css::uno::RuntimeException)
 {
     return m_xTextRange->getString();
 }
 void SAL_CALL
-ScVbaCharacters::setCaption( const ::rtl::OUString& _caption ) throw (css::uno::RuntimeException)
+ScVbaCharacters::setCaption( const OUString& _caption ) throw (css::uno::RuntimeException)
 {
     m_xTextRange->setString( _caption );
 
@@ -67,13 +67,13 @@ ScVbaCharacters::getCount() throw (css::uno::RuntimeException)
     return getCaption().getLength();
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaCharacters::getText() throw (css::uno::RuntimeException)
 {
     return getCaption();
 }
 void SAL_CALL
-ScVbaCharacters::setText( const ::rtl::OUString& _text ) throw (css::uno::RuntimeException)
+ScVbaCharacters::setText( const OUString& _text ) throw (css::uno::RuntimeException)
 {
     setCaption( _text );
 }
@@ -87,13 +87,13 @@ void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException)
 {
     // #TODO #FIXME needs implementation, or can't be done?
-    throw uno::RuntimeException( ::rtl::OUString( "Not Implemented"), uno::Reference< XInterface >() );
+    throw uno::RuntimeException( OUString( "Not Implemented"), uno::Reference< XInterface >() );
 }
 
 
 // Methods
 void SAL_CALL
-ScVbaCharacters::Insert( const ::rtl::OUString& String ) throw (css::uno::RuntimeException)
+ScVbaCharacters::Insert( const OUString& String ) throw (css::uno::RuntimeException)
 {
     m_xSimpleText->insertString( m_xTextRange, String, bReplace );
 }
@@ -103,24 +103,24 @@ ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
 {
     // #FIXME #TODO is this a bit suspect?, I wonder should the contents
     // of the cell be deleted from the parent ( range )
-    m_xSimpleText->setString(rtl::OUString());
+    m_xSimpleText->setString(OUString());
 }
 
 
-rtl::OUString
+OUString
 ScVbaCharacters::getServiceImplName()
 {
-    return rtl::OUString("ScVbaCharacters");
+    return OUString("ScVbaCharacters");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaCharacters::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.Characters" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.Characters" );
     }
     return aServiceNames;
 }

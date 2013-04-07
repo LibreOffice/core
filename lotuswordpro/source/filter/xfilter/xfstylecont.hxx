@@ -74,7 +74,7 @@ class XFStyleContainer : public IXFObject
 public:
     XFStyleContainer(){}
 
-    XFStyleContainer(const rtl::OUString& strStyleNamePrefix);
+    XFStyleContainer(const OUString& strStyleNamePrefix);
 
     XFStyleContainer(const XFStyleContainer& other);
 
@@ -97,7 +97,7 @@ public:
     /**
      * @descr   get style by name.
      */
-    IXFStyle*       FindStyle(rtl::OUString name);
+    IXFStyle*       FindStyle(OUString name);
 
     /**
      * @descr   clear container.
@@ -125,7 +125,7 @@ private:
     static void     ManageStyleFont(IXFStyle *pStyle);
 private:
     std::vector<IXFStyle*>  m_aStyles;
-    rtl::OUString   m_strStyleNamePrefix;
+    OUString   m_strStyleNamePrefix;
 };
 
 inline size_t XFStyleContainer::GetCount() const

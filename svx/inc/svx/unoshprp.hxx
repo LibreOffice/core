@@ -225,14 +225,14 @@
 
 #define LINE_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_LINEDASH),          XATTR_LINEDASH,         &::getCppuType((const ::com::sun::star::drawing::LineDash*)0) ,         0,     MID_LINEDASH},   \
-    { MAP_CHAR_LEN("LineDashName"),             XATTR_LINEDASH,         &::getCppuType((const ::rtl::OUString*)0) ,         0,     MID_NAME},   \
+    { MAP_CHAR_LEN("LineDashName"),             XATTR_LINEDASH,         &::getCppuType((const OUString*)0) ,         0,     MID_NAME},   \
     LINE_PROPERTIES_DEFAULTS
 
 #define LINE_PROPERTIES_START_END \
     { MAP_CHAR_LEN(UNO_NAME_LINEEND),           XATTR_LINEEND,          SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0}, \
-    { MAP_CHAR_LEN("LineEndName"),              XATTR_LINEEND,          &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN("LineEndName"),              XATTR_LINEEND,          &::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_LINESTART),         XATTR_LINESTART,        SEQTYPE(::getCppuType((const ::com::sun::star::drawing::PolyPolygonBezierCoords*)0)),   ::com::sun::star::beans::PropertyAttribute::MAYBEVOID,     0},  \
-    { MAP_CHAR_LEN("LineStartName"),            XATTR_LINESTART,            &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME },
+    { MAP_CHAR_LEN("LineStartName"),            XATTR_LINESTART,            &::getCppuType((const OUString*)0), 0, MID_NAME },
 
 #define FILL_PROPERTIES_BMP \
     { MAP_CHAR_LEN(UNO_NAME_FILLBMP_LOGICAL_SIZE),      XATTR_FILLBMP_SIZELOG,      &::getBooleanCppuType() ,           0,     0}, \
@@ -255,17 +255,17 @@
     FILL_PROPERTIES_DEFAULTS \
     { MAP_CHAR_LEN(UNO_NAME_FILLBACKGROUND),    XATTR_FILLBACKGROUND    , &::getBooleanCppuType(),              0,   0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILLBITMAP),        XATTR_FILLBITMAP        , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0)  ,       0,     MID_BITMAP}, \
-    { MAP_CHAR_LEN("FillBitmapName"),           XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
-    { MAP_CHAR_LEN("FillBitmapURL"),            XATTR_FILLBITMAP        , &::getCppuType((const ::rtl::OUString*)0), 0, MID_GRAFURL }, \
+    { MAP_CHAR_LEN("FillBitmapName"),           XATTR_FILLBITMAP        , &::getCppuType((const OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN("FillBitmapURL"),            XATTR_FILLBITMAP        , &::getCppuType((const OUString*)0), 0, MID_GRAFURL }, \
     { MAP_CHAR_LEN("FillGradientStepCount"),    XATTR_GRADIENTSTEPCOUNT , &::getCppuType((const sal_Int16*)0), 0, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILLGRADIENT),      XATTR_FILLGRADIENT      , &::getCppuType((const ::com::sun::star::awt::Gradient*)0),        0,     MID_FILLGRADIENT}, \
-    { MAP_CHAR_LEN("FillGradientName"),         XATTR_FILLGRADIENT      , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN("FillGradientName"),         XATTR_FILLGRADIENT      , &::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLHATCH),         XATTR_FILLHATCH         , &::getCppuType((const ::com::sun::star::drawing::Hatch*)0),           0,     MID_FILLHATCH}, \
-    { MAP_CHAR_LEN("FillHatchName"),            XATTR_FILLHATCH         , &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN("FillHatchName"),            XATTR_FILLHATCH         , &::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLSTYLE),         XATTR_FILLSTYLE         , &::getCppuType((const ::com::sun::star::drawing::FillStyle*)0) ,      0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_FILL_TRANSPARENCE), XATTR_FILLTRANSPARENCE, &::getCppuType((const sal_Int16*)0) ,           0,     0}, \
     { MAP_CHAR_LEN("FillTransparenceGradient"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::com::sun::star::awt::Gradient*)0),         0,     MID_FILLGRADIENT}, \
-    { MAP_CHAR_LEN("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const ::rtl::OUString*)0), 0, MID_NAME }, \
+    { MAP_CHAR_LEN("FillTransparenceGradientName"), XATTR_FILLFLOATTRANSPARENCE, &::getCppuType((const OUString*)0), 0, MID_NAME }, \
     { MAP_CHAR_LEN(UNO_NAME_FILLCOLOR_2),       XATTR_SECONDARYFILLCOLOR, &::getCppuType((const sal_Int32*)0),          0,     0},
 
 #define EDGERADIUS_PROPERTIES \
@@ -322,20 +322,20 @@
 
 #define SHAPE_DESCRIPTOR_PROPERTIES \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERID),      SDRATTR_LAYERID                 , &::getCppuType((const sal_Int16*)0),          0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),    SDRATTR_LAYERNAME               , &::getCppuType((const ::rtl::OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_LAYERNAME),    SDRATTR_LAYERNAME               , &::getCppuType((const OUString*)0),    0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , &::getBooleanCppuType(),                      0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , &::getCppuType((const ::rtl::OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , &::getCppuType((const OUString*)0),    0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , &::getBooleanCppuType(),                      0,  0},\
-    { MAP_CHAR_LEN("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
-    { MAP_CHAR_LEN("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
+    { MAP_CHAR_LEN("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
+    { MAP_CHAR_LEN("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     /* #i68101# */ \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const ::rtl::OUString*)0),    0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const ::rtl::OUString*)0),    0,  0},
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , &::getCppuType((const OUString*)0),    0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , &::getCppuType((const OUString*)0),    0,  0},
 
 #define LINKTARGET_PROPERTIES \
-    { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
+    { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYNAME),   OWN_ATTR_LDNAME             , &::getCppuType((const OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY, 0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINKDISPLAYBITMAP), OWN_ATTR_LDBITMAP               , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
 
 
@@ -367,7 +367,7 @@
 
 #define SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS \
     { MAP_CHAR_LEN(UNO_NAME_MEASUREBELOWREFEDGE),       SDRATTR_MEASUREBELOWREFEDGE,        &::getBooleanCppuType(),        0,  0}, \
-    { MAP_CHAR_LEN(UNO_NAME_MEASUREFORMATSTRING),       SDRATTR_MEASUREFORMATSTRING,        &::getCppuType((const ::rtl::OUString*)0),      0,  0}, \
+    { MAP_CHAR_LEN(UNO_NAME_MEASUREFORMATSTRING),       SDRATTR_MEASUREFORMATSTRING,        &::getCppuType((const OUString*)0),      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MEASUREHELPLINE1LEN),       SDRATTR_MEASUREHELPLINE1LEN,        &::getCppuType((const sal_Int32*)0),        0,  SFX_METRIC_ITEM}, \
     { MAP_CHAR_LEN(UNO_NAME_MEASUREHELPLINE2LEN),       SDRATTR_MEASUREHELPLINE2LEN,        &::getCppuType((const sal_Int32*)0),        0,  SFX_METRIC_ITEM}, \
     { MAP_CHAR_LEN(UNO_NAME_MEASUREHELPLINEDIST),       SDRATTR_MEASUREHELPLINEDIST,        &::getCppuType((const sal_Int32*)0),        0,  SFX_METRIC_ITEM}, \
@@ -421,9 +421,9 @@
 #define SPECIAL_GRAPHOBJ_PROPERTIES \
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
     { MAP_CHAR_LEN(UNO_NAME_GRAPHIC_GRAPHICCROP),           SDRATTR_GRAFCROP            , &::getCppuType((const ::com::sun::star::text::GraphicCrop*)0),        0,  0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , &::getCppuType((const OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , &::getCppuType((const OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
     { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
     { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
 

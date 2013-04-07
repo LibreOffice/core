@@ -68,14 +68,14 @@ bool XMLSignatureHelper::Init()
     mxSEInitializer = com::sun::star::xml::crypto::SEInitializer::create( mxCtx );
 
     if ( mxSEInitializer.is() )
-        mxSecurityContext = mxSEInitializer->createSecurityContext( ::rtl::OUString() );
+        mxSecurityContext = mxSEInitializer->createSecurityContext( OUString() );
 
     return mxSecurityContext.is();
 }
 
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
-    ::rtl::OUString sODFVersion)
+    OUString sODFVersion)
 {
     DBG_ASSERT( !mxUriBinding.is(), "SetStorage - UriBinding already set!" );
     mxUriBinding = new UriBindingHelper( rxStorage );
@@ -110,9 +110,9 @@ sal_Int32 XMLSignatureHelper::GetNewSecurityId()
 
 void XMLSignatureHelper::SetX509Certificate(
         sal_Int32 nSecurityId,
-        const rtl::OUString& ouX509IssuerName,
-        const rtl::OUString& ouX509SerialNumber,
-        const rtl::OUString& ouX509Cert)
+        const OUString& ouX509IssuerName,
+        const OUString& ouX509SerialNumber,
+        const OUString& ouX509Cert)
 {
     mpXSecController->setX509Certificate(
         nSecurityId,
@@ -134,7 +134,7 @@ void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, 
     mpXSecController->setDate( nSecurityId, stDateTime );
 }
 
-void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool bBinary )
+void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const OUString& uri, const OUString& objectURL, sal_Bool bBinary )
 {
     mpXSecController->signAStream( nSecurityId, uri, objectURL, bBinary );
 }
@@ -157,17 +157,17 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     /*
      * write the xml context for signatures
      */
-    rtl::OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
+    OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
 
     SvXMLAttributeList *pAttributeList = new SvXMLAttributeList();
-    rtl::OUString sNamespace;
+    OUString sNamespace;
     if (mbODFPre1_2)
-        sNamespace = rtl::OUString(NS_DOCUMENTSIGNATURES);
+        sNamespace = OUString(NS_DOCUMENTSIGNATURES);
     else
-        sNamespace = rtl::OUString(NS_DOCUMENTSIGNATURES_ODF_1_2);
+        sNamespace = OUString(NS_DOCUMENTSIGNATURES_ODF_1_2);
 
     pAttributeList->AddAttribute(
-        rtl::OUString(ATTR_XMLNS),
+        OUString(ATTR_XMLNS),
         sNamespace);
 
     xSaxWriter->startDocument();
@@ -180,7 +180,7 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )
 {
-    rtl::OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
+    OUString tag_AllSignatures(TAG_DOCUMENTSIGNATURES);
     xDocumentHandler->endElement( tag_AllSignatures );
     xDocumentHandler->endDocument();
 }

@@ -484,7 +484,7 @@ namespace canvas
 #ifdef DBG_UTIL
                 // Ensure that map entries are sorted (and all lowercase, if this
                 // map is case insensitive)
-                const ::rtl::OString aStr( pMap->maKey );
+                const OString aStr( pMap->maKey );
                 if( !mbCaseSensitive &&
                     aStr != aStr.toAsciiLowerCase() )
                 {
@@ -506,7 +506,7 @@ namespace canvas
                             OSL_FAIL( "ValueMap::ValueMap(): Map is not sorted" );
                         }
 
-                        const ::rtl::OString aStr2( pMap[1].maKey );
+                        const OString aStr2( pMap[1].maKey );
                         if( !mbCaseSensitive &&
                             aStr2 != aStr2.toAsciiLowerCase() )
                         {

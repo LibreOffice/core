@@ -121,7 +121,7 @@ namespace ftp {
     {
     public:
 
-        XInteractionRequestImpl(const rtl::OUString& aName);
+        XInteractionRequestImpl(const OUString& aName);
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(
@@ -160,7 +160,7 @@ namespace ftp {
         XInteractionApproveImpl* p1;
         XInteractionDisapproveImpl* p2;
 
-        rtl::OUString m_aName;
+        OUString m_aName;
 
         com::sun::star::uno::Sequence<
             com::sun::star::uno::Reference<

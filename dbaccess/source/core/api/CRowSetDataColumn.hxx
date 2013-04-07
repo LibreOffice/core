@@ -40,8 +40,8 @@ namespace dbaccess
         ORowSetCacheIterator        m_aColumnValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
-        ::rtl::OUString             m_sLabel;
-        ::rtl::OUString             m_aDescription;     // description
+        OUString             m_sLabel;
+        OUString             m_aDescription;     // description
         ORowSetBase*                m_pRowSet;
 
         virtual ~ORowSetDataColumn();
@@ -51,8 +51,8 @@ namespace dbaccess
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
-                          const ::rtl::OUString& _rDescription,
-                          const ::rtl::OUString& i_sLabel,
+                          const OUString& _rDescription,
+                          const OUString& i_sLabel,
                           const ORowSetCacheIterator& _rColumnValue);
 
 
@@ -81,7 +81,7 @@ namespace dbaccess
     {
         ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
-        virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
+        virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName);
         virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
     public:
         ORowSetDataColumns(
@@ -89,12 +89,12 @@ namespace dbaccess
                         const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< ::rtl::OUString> &_rVector
+                        const ::std::vector< OUString> &_rVector
                         );
         virtual ~ORowSetDataColumns();
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
-        void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector);
+        void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector);
     };
 }
 

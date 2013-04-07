@@ -68,15 +68,15 @@ public:
     XFFootnoteConfig();
 
 public:
-    void    SetBodyStyle(rtl::OUString style);
+    void    SetBodyStyle(OUString style);
 
-    void    SetCitationStyle(rtl::OUString style);
+    void    SetCitationStyle(OUString style);
 
-    void    SetDefaultStyle(rtl::OUString style);
+    void    SetDefaultStyle(OUString style);
 
-    void    SetMasterPage(rtl::OUString masterPage);
+    void    SetMasterPage(OUString masterPage);
 
-    void    SetNumberFormat(rtl::OUString numberFormat);
+    void    SetNumberFormat(OUString numberFormat);
 
     void    SetStartValue(sal_Int32 value=0);
 
@@ -86,26 +86,26 @@ public:
 
     void    SetInsertInPage(sal_Bool page=sal_True);
 
-    void    SetNumPrefix(rtl::OUString numprefix);
+    void    SetNumPrefix(OUString numprefix);
 
-    void    SetNumSuffix(rtl::OUString numsuffix);
+    void    SetNumSuffix(OUString numsuffix);
 
-    void    SetMessageOn(rtl::OUString message);
+    void    SetMessageOn(OUString message);
 
-    void    SetMessageFrom(rtl::OUString message);
+    void    SetMessageFrom(OUString message);
 
     virtual void    ToXml(IXFStream *pStrm);
 
 protected:
-    rtl::OUString   m_strBodyStyle;
-    rtl::OUString   m_strCitationStyle;
-    rtl::OUString   m_strDefaultStyle;
-    rtl::OUString   m_strMasterPage;
-    rtl::OUString   m_strNumFmt;
-    rtl::OUString   m_strNumPrefix;
-    rtl::OUString   m_strNumSuffix;
-    rtl::OUString   m_strMessageFrom;
-    rtl::OUString   m_strMessageOn;
+    OUString   m_strBodyStyle;
+    OUString   m_strCitationStyle;
+    OUString   m_strDefaultStyle;
+    OUString   m_strMasterPage;
+    OUString   m_strNumFmt;
+    OUString   m_strNumPrefix;
+    OUString   m_strNumSuffix;
+    OUString   m_strMessageFrom;
+    OUString   m_strMessageOn;
     sal_Int32   m_nStartValue;
     sal_Int32   m_nRestartType;
     sal_Bool    m_bInsertInPage;
@@ -125,27 +125,27 @@ inline XFFootnoteConfig::XFFootnoteConfig()
     m_bIsFootnote = sal_True;
 }
 
-inline void XFFootnoteConfig::SetBodyStyle(rtl::OUString style)
+inline void XFFootnoteConfig::SetBodyStyle(OUString style)
 {
     m_strBodyStyle = style;
 }
 
-inline void XFFootnoteConfig::SetCitationStyle(rtl::OUString style)
+inline void XFFootnoteConfig::SetCitationStyle(OUString style)
 {
     m_strCitationStyle = style;
 }
 
-inline void XFFootnoteConfig::SetDefaultStyle(rtl::OUString style)
+inline void XFFootnoteConfig::SetDefaultStyle(OUString style)
 {
     m_strDefaultStyle = style;
 }
 
-inline void XFFootnoteConfig::SetMasterPage(rtl::OUString masterPage)
+inline void XFFootnoteConfig::SetMasterPage(OUString masterPage)
 {
     m_strMasterPage = masterPage;
 }
 
-inline void XFFootnoteConfig::SetNumberFormat(rtl::OUString numberFormat)
+inline void XFFootnoteConfig::SetNumberFormat(OUString numberFormat)
 {
     m_strNumFmt = numberFormat;
 }
@@ -172,22 +172,22 @@ inline void XFFootnoteConfig::SetInsertInPage(sal_Bool page)
     m_bInsertInPage = page;
 }
 
-inline void XFFootnoteConfig::SetNumPrefix(rtl::OUString numprefix)
+inline void XFFootnoteConfig::SetNumPrefix(OUString numprefix)
 {
     m_strNumPrefix = numprefix;
 }
 
-inline void XFFootnoteConfig::SetNumSuffix(rtl::OUString numsuffix)
+inline void XFFootnoteConfig::SetNumSuffix(OUString numsuffix)
 {
     m_strNumSuffix = numsuffix;
 }
 
-inline void XFFootnoteConfig::SetMessageOn(rtl::OUString message)
+inline void XFFootnoteConfig::SetMessageOn(OUString message)
 {
     m_strMessageOn = message;
 }
 
-inline void XFFootnoteConfig::SetMessageFrom(rtl::OUString message)
+inline void XFFootnoteConfig::SetMessageFrom(OUString message)
 {
     m_strMessageFrom = message;
 }

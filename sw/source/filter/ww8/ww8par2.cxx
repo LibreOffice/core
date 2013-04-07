@@ -772,7 +772,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( pStyles->pStyRule )         // Bullet-Style already present
         return pStyles->pStyRule;
 
-    const String aBaseName(rtl::OUString("WW8StyleNum"));
+    const String aBaseName(OUString("WW8StyleNum"));
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
@@ -848,7 +848,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
-        String aName(rtl::OUString("Outline"));
+        String aName(OUString("Outline"));
         SwNumRule aNR( rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );
@@ -4299,13 +4299,13 @@ void WW8RStyle::ImportOldFormatStyles()
                 if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
                     sName = String(pStr, RTL_TEXTENCODING_ASCII_US);
                 else
-                    sName = rtl::OUString("Unknown");
+                    sName = OUString("Unknown");
             }
             else               // user style
             {
-                rtl::OString aTmp = read_uInt8s_ToOString(rSt, nCount);
+                OString aTmp = read_uInt8s_ToOString(rSt, nCount);
                 nByteCount += aTmp.getLength();
-                sName = rtl::OStringToOUString(aTmp, eStructChrSet);
+                sName = OStringToOUString(aTmp, eStructChrSet);
             }
             rSI.SetOrgWWIdent(sName, stc);
             rSI.bImported = true;

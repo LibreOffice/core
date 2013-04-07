@@ -104,11 +104,11 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
     {
         if( nIndex <= 0 || nIndex > getCount() )
         {
-            throw  lang::IndexOutOfBoundsException( ::rtl::OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
+            throw  lang::IndexOutOfBoundsException( OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
         }
         return uno::makeAny( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
-    throw  uno::RuntimeException( ::rtl::OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
+    throw  uno::RuntimeException( OUString("Index out of bounds"), uno::Reference< uno::XInterface >() );
 }
 
 // XEnumerationAccess
@@ -129,20 +129,20 @@ SwVbaColumns::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaColumns::getServiceImplName()
 {
-    return rtl::OUString("SwVbaColumns");
+    return OUString("SwVbaColumns");
 }
 
-uno::Sequence<rtl::OUString>
+uno::Sequence<OUString>
 SwVbaColumns::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Columns");
+        sNames[0] = OUString("ooo.vba.word.Columns");
     }
     return sNames;
 }

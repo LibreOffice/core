@@ -62,7 +62,7 @@ namespace
             static const DataFlavorRepresentation aInstance[] =
             {
             /*  0 SOT_FORMAT_SYSTEM_START*/                 { "", "", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-            /*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+            /*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &::getCppuType( (const OUString*) 0 ) },
             /*  2 SOT_FORMAT_BITMAP*/                       { "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  3 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*  4 SOT_FORMAT_PRIVATE*/                      { "application/x-openoffice-private;windows_formatname=\"Private\"", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
@@ -261,7 +261,7 @@ sal_uLong SotExchange::RegisterFormatName( const String& rName )
 
     pNewFlavor->MimeType = rName;
     pNewFlavor->HumanPresentableName = rName;
-    pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
+    pNewFlavor->DataType = ::getCppuType( (const OUString*) 0 );
 
     rL.push_back( pNewFlavor );
 
@@ -296,7 +296,7 @@ sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
 
     pNewFlavor->MimeType = rMimeType;
     pNewFlavor->HumanPresentableName = rMimeType;
-    pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
+    pNewFlavor->DataType = ::getCppuType( (const OUString*) 0 );
 
     rL.push_back( pNewFlavor );
 
@@ -336,8 +336,8 @@ sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavo
     if( SOT_FORMATSTR_ID_USER_END >= nFormat )
     {
         const DataFlavorRepresentation& rData = FormatArray_Impl::get()[nFormat];
-        rFlavor.MimeType = ::rtl::OUString::createFromAscii( rData.pMimeType );
-        rFlavor.HumanPresentableName = ::rtl::OUString::createFromAscii( rData.pName );
+        rFlavor.MimeType = OUString::createFromAscii( rData.pMimeType );
+        rFlavor.HumanPresentableName = OUString::createFromAscii( rData.pName );
         rFlavor.DataType = *rData.pType;
 
         bRet = sal_True;
@@ -417,7 +417,7 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 
     // dann in der dynamischen Liste
     tDataFlavorList& rL = InitFormats_Impl();
-    ::rtl::OUString aMimeType( rMimeType );
+    OUString aMimeType( rMimeType );
     for( i = 0, nMax = rL.size(); i < nMax; i++ )
     {
         DataFlavor* pFlavor = rL[ i ];
@@ -437,7 +437,7 @@ sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
     // teste zuerst die Standard - Name
-    const ::rtl::OUString& rMimeType = rFlavor.MimeType;
+    const OUString& rMimeType = rFlavor.MimeType;
     const String aMimeType( rMimeType );
     sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();

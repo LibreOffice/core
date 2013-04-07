@@ -240,12 +240,12 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
         if( ui::dialogs::ExecutableDialogResults::OK != nRet )
             return 0;
 
-        rtl::OUString aPathStr = xFolderPicker->getDirectory();
+        OUString aPathStr = xFolderPicker->getDirectory();
         INetURLObject aNewObj( aPathStr );
         aNewObj.removeFinalSlash();
 
         // then the new path also an URL else system path
-        ::rtl::OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
+        OUString aSystemFileURL = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID ) ?
             aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
         OUString aNewPathStr(aSystemFileURL);
@@ -311,7 +311,7 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
     {
         for( sal_uInt32 nEntry = 0 ; nEntry < nEntries ; ++nEntry )
         {
-            css::uno::Sequence< ::rtl::OUString >&              rEntry = maTrustedAuthors[ nEntry ];
+            css::uno::Sequence< OUString >&              rEntry = maTrustedAuthors[ nEntry ];
             uno::Reference< css::security::XCertificate >   xCert;
 
             // create from RawData
@@ -384,7 +384,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, M
 
     FillCertLB();
 
-    css::uno::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
+    css::uno::Sequence< OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
     mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
     m_pTrustFileROFI->Show( mbURLsReadonly );
     m_pTrustFileLocLB->Enable( !mbURLsReadonly );
@@ -393,7 +393,7 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(Window* _pParent, M
     sal_Int32 nEntryCnt = aSecureURLs.getLength();
     for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
     {
-        ::rtl::OUString aSystemFileURL( aSecureURLs[ i ] );
+        OUString aSystemFileURL( aSecureURLs[ i ] );
         osl::FileBase::getSystemPathFromFileURL( aSystemFileURL, aSystemFileURL );
         m_pTrustFileLocLB->InsertEntry( aSystemFileURL );
     }
@@ -415,10 +415,10 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     sal_uInt16  nEntryCnt = m_pTrustFileLocLB->GetEntryCount();
     if( nEntryCnt )
     {
-        css::uno::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
+        css::uno::Sequence< OUString > aSecureURLs( nEntryCnt );
         for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
         {
-            ::rtl::OUString aURL( m_pTrustFileLocLB->GetEntry( i ) );
+            OUString aURL( m_pTrustFileLocLB->GetEntry( i ) );
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );
             aSecureURLs[ i ] = aURL;
         }
@@ -428,7 +428,7 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
     // Trusted Path could not be removed (#i33584#)
     // don't forget to remove the old saved SecureURLs
     else
-        mpDlg->maSecOptions.SetSecureURLs( css::uno::Sequence< rtl::OUString >() );
+        mpDlg->maSecOptions.SetSecureURLs( css::uno::Sequence< OUString >() );
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }

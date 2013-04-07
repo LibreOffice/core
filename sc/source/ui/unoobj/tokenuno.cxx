@@ -125,7 +125,7 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 }
 
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
-        const rtl::OUString& aFormula, const table::CellAddress& rReferencePos )
+        const OUString& aFormula, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -150,12 +150,12 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
     return aRet;
 }
 
-rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
+OUString SAL_CALL ScFormulaParserObj::printFormula(
         const uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    rtl::OUString aRet;
+    OUString aRet;
 
     if (mpDocShell)
     {
@@ -168,7 +168,7 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
         aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );
 
-        rtl::OUStringBuffer aBuffer;
+        OUStringBuffer aBuffer;
         aCompiler.CreateStringFromTokenArray( aBuffer );
         aRet = aBuffer.makeStringAndClear();
     }
@@ -187,7 +187,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getProperty
 }
 
 void SAL_CALL ScFormulaParserObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const OUString& aPropertyName, const uno::Any& aValue )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -246,7 +246,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         throw beans::UnknownPropertyException();
 }
 
-uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropertyName )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -362,12 +362,12 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     rAPI.Data <<= rToken.GetDouble();
                     break;
                 case formula::svString:
-                    rAPI.Data <<= rtl::OUString( rToken.GetString() );
+                    rAPI.Data <<= OUString( rToken.GetString() );
                     break;
                 case svExternal:
                     // Function name is stored as string.
                     // Byte (parameter count) is ignored.
-                    rAPI.Data <<= rtl::OUString( rToken.GetExternal() );
+                    rAPI.Data <<= OUString( rToken.GetExternal() );
                     break;
                 case svSingleRef:
                     {
@@ -431,7 +431,7 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
                     {
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
-                        aExtRef.Reference <<= ::rtl::OUString( rToken.GetString() );
+                        aExtRef.Reference <<= OUString( rToken.GetString() );
                         rAPI.Data <<= aExtRef;
                         eOpCode = ocPush;
                     }

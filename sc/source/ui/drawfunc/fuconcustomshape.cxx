@@ -214,7 +214,7 @@ void FuConstCustomShape::SetAttributes( SdrObject* pObj )
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
     {
-        std::vector< rtl::OUString > aObjList;
+        std::vector< OUString > aObjList;
         if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
         {
             sal_uInt16 i;

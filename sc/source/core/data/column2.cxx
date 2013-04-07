@@ -244,7 +244,7 @@ long ScColumn::GetNeededSize(
         if (!bEditEngine)                                   // direct output
         {
             Color* pColor;
-            rtl::OUString aValStr;
+            OUString aValStr;
             ScCellFormat::GetString(
                 aCell, nFormat, aValStr, &pColor, *pFormatter, true, rOptions.bFormula, ftCheck);
 
@@ -561,7 +561,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
         // Try to find the row that has the longest string, and measure the width of that string.
         SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-        rtl::OUString aLongStr;
+        OUString aLongStr;
         Color* pColor;
         if (pParam->mnMaxTextRow >= 0)
         {

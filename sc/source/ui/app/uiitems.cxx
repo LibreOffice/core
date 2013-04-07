@@ -77,7 +77,7 @@ ScInputStatusItem::~ScInputStatusItem()
 
 String ScInputStatusItem::GetValueText() const
 {
-    return rtl::OUString("InputStatus");
+    return OUString("InputStatus");
 }
 
 int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
@@ -185,7 +185,7 @@ ScSortItem::~ScSortItem()
 
 String ScSortItem::GetValueText() const
 {
-    return rtl::OUString("SortItem");
+    return OUString("SortItem");
 }
 
 //------------------------------------------------------------------------
@@ -292,7 +292,7 @@ bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 
 String ScQueryItem::GetValueText() const
 {
-    return rtl::OUString("QueryItem");
+    return OUString("QueryItem");
 }
 
 //------------------------------------------------------------------------
@@ -356,7 +356,7 @@ ScSubTotalItem::~ScSubTotalItem()
 
 String ScSubTotalItem::GetValueText() const
 {
-    return rtl::OUString("SubTotalItem");
+    return OUString("SubTotalItem");
 }
 
 //------------------------------------------------------------------------
@@ -417,7 +417,7 @@ ScUserListItem::~ScUserListItem()
 
 String ScUserListItem::GetValueText() const
 {
-    return rtl::OUString("ScUserListItem");
+    return OUString("ScUserListItem");
 }
 
 //------------------------------------------------------------------------
@@ -483,7 +483,7 @@ ScConsolidateItem::~ScConsolidateItem()
 
 String ScConsolidateItem::GetValueText() const
 {
-    return rtl::OUString("ScConsolidateItem");
+    return OUString("ScConsolidateItem");
 }
 
 //------------------------------------------------------------------------
@@ -544,7 +544,7 @@ ScPivotItem::~ScPivotItem()
 
 String ScPivotItem::GetValueText() const
 {
-    return rtl::OUString("ScPivotItem");
+    return OUString("ScPivotItem");
 }
 
 //------------------------------------------------------------------------
@@ -597,7 +597,7 @@ ScSolveItem::~ScSolveItem()
 
 String ScSolveItem::GetValueText() const
 {
-    return rtl::OUString("ScSolveItem");
+    return OUString("ScSolveItem");
 }
 
 //------------------------------------------------------------------------
@@ -647,7 +647,7 @@ ScTabOpItem::~ScTabOpItem()
 
 String ScTabOpItem::GetValueText() const
 {
-    return rtl::OUString("ScTabOpItem");
+    return OUString("ScTabOpItem");
 }
 
 //------------------------------------------------------------------------

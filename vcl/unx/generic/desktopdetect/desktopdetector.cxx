@@ -35,8 +35,6 @@
 #include <unistd.h>
 #include <string.h>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 
 static bool is_gnome_desktop( Display* pDisplay )
 {
@@ -246,7 +244,7 @@ static bool is_kde_desktop( Display* pDisplay )
             return true; // does not exist => KDE3
         }
 
-        rtl::OUString aVer( "3" );
+        OUString aVer( "3" );
         if ( aVer.equalsIgnoreAsciiCaseAscii( pVer ) )
         {
             return true;
@@ -263,7 +261,7 @@ static bool is_kde4_desktop( Display* pDisplay )
 {
     if ( NULL != getenv( "KDE_FULL_SESSION" ) )
     {
-        rtl::OUString aVer( "4" );
+        OUString aVer( "4" );
 
         const char *pVer = getenv( "KDE_SESSION_VERSION" );
         if ( pVer && aVer.equalsIgnoreAsciiCaseAscii( pVer ) )

@@ -79,7 +79,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     bWaterCan(sal_False),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
-    SetName( rtl::OUString( "StarDraw" ) );  // Do not translate!
+    SetName( OUString( "StarDraw" ) );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
     pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
     StartListening( *SFX_APP() );
@@ -194,7 +194,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
         {
             INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
 
-            aURL.Append( rtl::OUString( "drawing.cfg" ) );
+            aURL.Append( OUString( "drawing.cfg" ) );
 
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 

@@ -53,7 +53,7 @@ static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
     static SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const ::rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
         {0,0,0,0,0,0}
     };
     return aLinkTargetMap_Impl;
@@ -93,7 +93,7 @@ void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
+uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     if (pDocShell)
@@ -107,16 +107,16 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence<rtl::OUString> aRet(SC_LINKTARGETTYPE_COUNT);
-    rtl::OUString* pArray = aRet.getArray();
+    uno::Sequence<OUString> aRet(SC_LINKTARGETTYPE_COUNT);
+    OUString* pArray = aRet.getArray();
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         pArray[i] = aNames[i];
     return aRet;
 }
 
-sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const rtl::OUString& aName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ScLinkTargetTypesObj::hasByName(const OUString& aName) throw( uno::RuntimeException )
 {
     String aNameStr = aName;
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
@@ -199,7 +199,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getProp
     return aRef;
 }
 
-void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPropertyName */,
+void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aPropertyName */,
             const uno::Any& /* aValue */)
         throw(  beans::UnknownPropertyException,
                 beans::PropertyVetoException,
@@ -234,7 +234,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
 }
 
-uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const rtl::OUString& PropertyName)
+uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const OUString& PropertyName)
         throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Any aRet;
@@ -242,7 +242,7 @@ uno::Any SAL_CALL ScLinkTargetTypeObj::getPropertyValue(const rtl::OUString& Pro
     if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPBIT ) )
         SetLinkTargetBitmap( aRet, nType );
     else if ( aNameStr.EqualsAscii( SC_UNO_LINKDISPNAME ) )
-        aRet <<= rtl::OUString( aName );
+        aRet <<= OUString( aName );
 
     return aRet;
 }
@@ -263,7 +263,7 @@ ScLinkTargetsObj::~ScLinkTargetsObj()
 
 // container::XNameAccess
 
-uno::Any SAL_CALL ScLinkTargetsObj::getByName(const rtl::OUString& aName)
+uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
         throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
     uno::Reference< beans::XPropertySet >  xProp( ScUnoHelpFunctions::AnyToInterface( xCollection->getByName(aName) ), uno::UNO_QUERY );
@@ -274,12 +274,12 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const rtl::OUString& aName)
 //    return uno::Any();
 }
 
-uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException )
+uno::Sequence<OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException )
 {
     return xCollection->getElementNames();
 }
 
-sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const rtl::OUString& aName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ScLinkTargetsObj::hasByName(const OUString& aName) throw( uno::RuntimeException )
 {
     return xCollection->hasByName(aName);
 }

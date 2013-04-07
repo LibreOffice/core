@@ -43,7 +43,6 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 class SvTreeListEntry;
 class ThesaurusAlternativesCtrl;

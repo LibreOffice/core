@@ -63,7 +63,7 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
     };
 
     int bRet = sal_False;
-    rtl::OString aName( pName );
+    OString aName( pName );
     if ( sHTML == aName )
         bRet = HTMLParser::IsHTMLFormat( pHeader, sal_True, RTL_TEXTENCODING_DONTKNOW );
     else if ( FILTER_RTF == aName )
@@ -92,21 +92,21 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_,
 const String SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 {
     /* bei den StorageFiltern noch den SubStorageNamen setzen */
-    const rtl::OUString& rUserData = rFltr.GetUserData();
+    const OUString& rUserData = rFltr.GetUserData();
     if (rUserData == FILTER_XML ||
         rUserData == FILTER_XMLV ||
         rUserData == FILTER_XMLVW)
-        return rtl::OUString("content.xml");
+        return OUString("content.xml");
     if (rUserData == sWW6 || rUserData == FILTER_WW8)
-        return rtl::OUString("WordDocument");
-    return rtl::OUString();
+        return OUString("WordDocument");
+    return OUString();
 }
 
 const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     const SfxFilterContainer* pCnt)
 {
-    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
-    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
+    SfxFilterContainer aCntSw( OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
     const SfxFilterContainer* pFltCnt = pCnt ? pCnt : ( IsDocShellRegistered() ? &aCntSw : &aCntSwWeb );
 
     do {
@@ -135,7 +135,7 @@ sal_Bool SwIoSystem::IsValidStgFilter( const com::sun::star::uno::Reference < co
     try
     {
         sal_uLong nStgFmtId = SotStorage::GetFormatID( rStg );
-        bRet = rStg->isStreamElement( ::rtl::OUString("content.xml") );
+        bRet = rStg->isStreamElement( OUString("content.xml") );
         if ( bRet )
             bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
     }
@@ -162,13 +162,13 @@ sal_Bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
         /* Bug 62703 - und auch WinWord Docs ohne ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
-            bRet = !((rStg.IsContained( rtl::OUString("0Table")) ||
-                        rStg.IsContained( rtl::OUString("1Table"))) ^
+            bRet = !((rStg.IsContained( OUString("0Table")) ||
+                        rStg.IsContained( OUString("1Table"))) ^
                     (rFilter.GetUserData() == FILTER_WW8));
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
                 SotStorageStreamRef xRef =
-                    rStg.OpenSotStream(rtl::OUString("WordDocument"),
+                    rStg.OpenSotStream(OUString("WordDocument"),
                             STREAM_STD_READ | STREAM_NOCREATE );
                 xRef->Seek(10);
                 sal_uInt8 nByte;
@@ -200,8 +200,8 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
 {
     sal_Bool bRet = sal_False;
 
-    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
-    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
+    SfxFilterContainer aCntSw( OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
     const SfxFilterContainer& rFltContainer = IsDocShellRegistered() ? aCntSw : aCntSwWeb;
 
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStor;
@@ -220,7 +220,7 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
     const SfxFilter* pFltr = aIter.First();
     while ( pFltr )
     {
-        const rtl::OUString& rUserData = pFltr->GetUserData();
+        const OUString& rUserData = pFltr->GetUserData();
         if (rUserData.equals(rFmtName))
         {
             if( 'C' == rUserData[0] )
@@ -274,8 +274,8 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const String& rFmtName)
 const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     const String& rPrefFltName, SfxMedium* pMedium)
 {
-    SfxFilterContainer aCntSw( rtl::OUString(sSWRITER) );
-    SfxFilterContainer aCntSwWeb( rtl::OUString(sSWRITERWEB) );
+    SfxFilterContainer aCntSw( OUString(sSWRITER) );
+    SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     if( !pFCntnr )
@@ -388,7 +388,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         {
             String sEmptyUserData;
             pNm = aFilterDetect[n].IsReader(aBuffer, nBytesRead, rFileName, sEmptyUserData);
-            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(rtl::OUString::createFromAscii(pNm), pFCntnr) : 0;
+            pFilterTmp = pNm ? SwIoSystem::GetFilterOfFormat(OUString::createFromAscii(pNm), pFCntnr) : 0;
             if (pNm && pFilterTmp)
             {
                 return pFilterTmp;
@@ -550,7 +550,7 @@ const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, sal_uLong nLen
 {
     bool bAuto = IsDetectableText(pBuf, nLen);
     const sal_Char* pNm = bAuto ? FILTER_TEXT : FILTER_TEXT_DLG;
-    return SwIoSystem::GetFilterOfFormat( rtl::OUString::createFromAscii(pNm), 0 );
+    return SwIoSystem::GetFilterOfFormat( OUString::createFromAscii(pNm), 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

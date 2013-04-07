@@ -35,7 +35,7 @@ class SfxQueryStatus_Impl;
 class SFX2_DLLPUBLIC SfxQueryStatus
 {
     public:
-        SfxQueryStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
+        SfxQueryStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& aCommand );
         ~SfxQueryStatus();
 
         // Query method

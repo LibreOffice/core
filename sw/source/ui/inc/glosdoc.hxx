@@ -79,7 +79,7 @@ public:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextGroup >
                             GetAutoTextGroup(
-                                const ::rtl::OUString& _rGroupName,
+                                const OUString& _rGroupName,
                                 bool _bCreate = false
                             );
 
@@ -100,8 +100,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextEntry >
                             GetAutoTextEntry(
                                 const String& _rCompleteGroupName,
-                                const ::rtl::OUString& _rGroupName,
-                                const ::rtl::OUString& _rEntryName,
+                                const OUString& _rGroupName,
+                                const OUString& _rEntryName,
                                 bool _bCreate = false
                             );
 
@@ -118,7 +118,7 @@ public:
     static String   GetDefName();
     static String   GetExtension();
 
-    String          GetCompleteGroupName( const ::rtl::OUString& GroupName );
+    String          GetCompleteGroupName( const OUString& GroupName );
 
     sal_Bool            NewGroupDoc(String &rGroupName, const String& rTitle);
     sal_Bool            RenameGroupDoc(const String& sOldGroup, String& sNewGroup, const String& rNewTitle);

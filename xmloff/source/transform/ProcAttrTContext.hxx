@@ -25,23 +25,23 @@
 
 class XMLProcAttrTransformerContext : public XMLTransformerContext
 {
-    ::rtl::OUString m_aElemQName;
+    OUString m_aElemQName;
     sal_uInt16 m_nActionMap;
 
 protected:
 
-    const ::rtl::OUString& GetElemQName() const { return m_aElemQName; }
+    const OUString& GetElemQName() const { return m_aElemQName; }
     sal_uInt16 GetActionMap() const { return m_nActionMap; }
 
 public:
     TYPEINFO();
 
     XMLProcAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nActionMap );
 
     XMLProcAttrTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );

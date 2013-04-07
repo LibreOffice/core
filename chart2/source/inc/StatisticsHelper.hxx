@@ -76,10 +76,10 @@ public:
             ::com::sun::star::chart2::data::XDataSource > & xDataSource,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataProvider > & xDataProvider,
-        const ::rtl::OUString & rNewRange,
+        const OUString & rNewRange,
         bool bPositiveValue,
         bool bYError = true,
-        ::rtl::OUString * pXMLRange = 0 );
+        OUString * pXMLRange = 0 );
 
     /// @return the newly created or existing error bar object
     static ::com::sun::star::uno::Reference<

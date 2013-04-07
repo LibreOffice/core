@@ -65,7 +65,7 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
         "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
         "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
 #endif
-        rtl::OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     GError *pError = NULL;
     mpPipeline = gst_parse_launch( pPipelineStr, &pError );

@@ -33,8 +33,8 @@ class PageCollector
         com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage;
         bool bUsed;
     };
-    static void CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const rtl::OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
-    static void CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const rtl::OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
+    static void CollectCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
+    static void CollectNonCustomShowPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, const OUString& rCustomShow, std::vector< com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > >& );
     static void CollectMasterPages( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >&, std::vector< MasterPageEntity >& );
 };
 

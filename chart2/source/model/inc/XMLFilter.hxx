@@ -91,10 +91,10 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
 
-    inline ::rtl::OUString getDocumentHandler() const { return m_sDocumentHandler; }
-    inline void setDocumentHandler(const ::rtl::OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
+    inline OUString getDocumentHandler() const { return m_sDocumentHandler; }
+    inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
-    virtual ::rtl::OUString getMediaType(bool _bOasis);
+    virtual OUString getMediaType(bool _bOasis);
 
     /** fills the oasis flag only when a filtername was set
     *
@@ -114,8 +114,8 @@ private:
                                ::com::sun::star::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     sal_Int32 impl_ImportStream(
-        const ::rtl::OUString & rStreamName,
-        const ::rtl::OUString & rServiceName,
+        const OUString & rStreamName,
+        const OUString & rServiceName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::embed::XStorage > & xStorage,
         const ::com::sun::star::uno::Reference<
@@ -134,8 +134,8 @@ private:
                                ::com::sun::star::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
     sal_Int32 impl_ExportStream(
-        const ::rtl::OUString & rStreamName,
-        const ::rtl::OUString & rServiceName,
+        const OUString & rStreamName,
+        const OUString & rServiceName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::embed::XStorage > & xStorage,
         const ::com::sun::star::uno::Reference<
@@ -152,7 +152,7 @@ private:
         ::com::sun::star::lang::XComponent >       m_xTargetDoc;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XComponent >       m_xSourceDoc;
-    ::rtl::OUString                                m_sDocumentHandler; // when set it will be set as doc handler
+    OUString                                m_sDocumentHandler; // when set it will be set as doc handler
 
     volatile bool                                  m_bCancelOperation;
     ::osl::Mutex                                   m_aMutex;
@@ -179,7 +179,7 @@ public:
         return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
     }
 protected:
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getImplementationName()
             throw( ::com::sun::star::uno::RuntimeException )
     {
@@ -207,7 +207,7 @@ protected:
         XMLFilter::setSourceDocument(Document);
     }
 
-    virtual ::rtl::OUString getMediaType(bool _bOasis);
+    virtual OUString getMediaType(bool _bOasis);
 };
 
 } //  namespace chart

@@ -46,8 +46,8 @@ private:
     PushButton*         m_pPrevBtn;
     PushButton*         m_pNextBtn;
 
-    rtl::OUString       aText;
-    rtl::OUString       aType;
+    OUString       aText;
+    OUString       aType;
 
     sal_Bool                bNew;
     sal_Bool                bIsUrl;
@@ -77,9 +77,9 @@ public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
-    rtl::OUString       GetText() { return aText; }
+    OUString       GetText() { return aText; }
 
-    rtl::OUString       GetType() { return aType; }
+    OUString       GetType() { return aType; }
 
     sal_Bool                IsUrl() { return bIsUrl; }
     sal_Bool                IsNew() { return bNew; }

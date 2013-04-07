@@ -29,7 +29,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
-using ::rtl::OUString;
 
 namespace {
 /** Use the XResourceId::compareTo() method to implement a compare operator
@@ -83,11 +82,11 @@ OUString Configuration_getImplementationName (void) throw(RuntimeException)
 
 
 
-Sequence<rtl::OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
+Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const OUString sServiceName("com.sun.star.drawing.framework.Configuration");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
+    return Sequence<OUString>(&sServiceName, 1);
 }
 
 
@@ -185,7 +184,7 @@ void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxRes
 
 Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     const Reference<XResourceId>& rxAnchorId,
-    const ::rtl::OUString& rsResourceURLPrefix,
+    const OUString& rsResourceURLPrefix,
     AnchorBindingMode eMode)
     throw (::com::sun::star::uno::RuntimeException)
 {

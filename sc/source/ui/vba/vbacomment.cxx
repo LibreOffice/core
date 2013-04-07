@@ -47,7 +47,7 @@ ScVbaComment::ScVbaComment(
     mxRange( xRange )
 {
     if  ( !xRange.is() )
-        throw lang::IllegalArgumentException( rtl::OUString( "range is not set " ), uno::Reference< uno::XInterface >() , 1 );
+        throw lang::IllegalArgumentException( OUString( "range is not set " ), uno::Reference< uno::XInterface >() , 1 );
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
 }
 
@@ -108,14 +108,14 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 
 // public vba functions
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaComment::getAuthor() throw (uno::RuntimeException)
 {
     return getAnnotation()->getAuthor();
 }
 
 void SAL_CALL
-ScVbaComment::setAuthor( const rtl::OUString& /*_author*/ ) throw (uno::RuntimeException)
+ScVbaComment::setAuthor( const OUString& /*_author*/ ) throw (uno::RuntimeException)
 {
     // #TODO #FIXME  implementation needed
 }
@@ -163,14 +163,14 @@ ScVbaComment::Previous() throw (uno::RuntimeException)
     return getCommentByIndex( getAnnotationIndex() );
 }
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::Any& Overwrite ) throw (uno::RuntimeException)
 {
-    rtl::OUString sText;
+    OUString sText;
     aText >>= sText;
 
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY_THROW );
-    rtl::OUString sAnnoText = xAnnoText->getString();
+    OUString sAnnoText = xAnnoText->getString();
 
     if ( aStart.hasValue() )
     {
@@ -200,7 +200,7 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
             xAnnoText->insertString( xRange, sText, bOverwrite );
             return xAnnoText->getString();
         }
-        throw uno::RuntimeException( rtl::OUString( "ScVbaComment::Text - bad Start value " ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( OUString( "ScVbaComment::Text - bad Start value " ), uno::Reference< uno::XInterface >() );
     }
     else if ( aText.hasValue() )
     {
@@ -212,20 +212,20 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     return sAnnoText;
 }
 
-rtl::OUString
+OUString
 ScVbaComment::getServiceImplName()
 {
-    return rtl::OUString("ScVbaComment");
+    return OUString("ScVbaComment");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaComment::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.ScVbaComment" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.ScVbaComment" );
     }
     return aServiceNames;
 }

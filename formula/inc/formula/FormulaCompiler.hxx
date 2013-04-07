@@ -170,7 +170,7 @@ public:
         /// Core implementation of XFormulaOpCodeMapper::getMappings()
         ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
             createSequenceOfFormulaTokens(const FormulaCompiler& _rCompiler,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames ) const;
+                    const ::com::sun::star::uno::Sequence< OUString >& rNames ) const;
 
         /// Core implementation of XFormulaOpCodeMapper::getAvailableMappings()
         ::com::sun::star::uno::Sequence<
@@ -229,21 +229,21 @@ public:
     bool  CompileTokenArray();
 
     void CreateStringFromTokenArray( String& rFormula );
-    void CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer );
+    void CreateStringFromTokenArray( OUStringBuffer& rBuffer );
     FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
-    FormulaToken* CreateStringFromToken( rtl::OUStringBuffer& rBuffer, FormulaToken* pToken,
+    FormulaToken* CreateStringFromToken( OUStringBuffer& rBuffer, FormulaToken* pToken,
                                     bool bAllowArrAdvance = false );
 
-    void AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal );
-    void AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal );
-    void AppendString( rtl::OUStringBuffer& rBuffer, const String & rStr );
+    void AppendBoolean( OUStringBuffer& rBuffer, bool bVal );
+    void AppendDouble( OUStringBuffer& rBuffer, double fVal );
+    void AppendString( OUStringBuffer& rBuffer, const String & rStr );
 
     /** Set symbol map corresponding to one of predefined formula::FormulaGrammar::Grammar,
         including an address reference convention. */
     inline  FormulaGrammar::Grammar   GetGrammar() const { return meGrammar; }
 
-    static void UpdateSeparatorsNative( const rtl::OUString& rSep, const rtl::OUString& rArrayColSep, const rtl::OUString& rArrayRowSep );
+    static void UpdateSeparatorsNative( const OUString& rSep, const OUString& rArrayColSep, const OUString& rArrayRowSep );
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
@@ -260,14 +260,14 @@ protected:
     virtual bool HandleSingleRef();
     virtual bool HandleDbData();
 
-    virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP);
-    virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromDoubleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
-    virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
+    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP);
+    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
+    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
+    virtual void CreateStringFromMatrix(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
+    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
 
-    void AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError );
+    void AppendErrorConstant( OUStringBuffer& rBuffer, sal_uInt16 nError );
 
     bool   GetToken();
     OpCode NextToken();

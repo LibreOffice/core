@@ -45,13 +45,13 @@ public:
         com::sun::star::uno::Reference<
             com::sun::star::container::XHierarchicalNameAccess > const &
             manager,
-        rtl::OUString const & name,
+        OUString const & name,
         com::sun::star::uno::Sequence< sal_Int8 > const & bytes,
         sal_uInt16 index);
 
     ~MethodDescription();
 
-    rtl::OUString getName() const { return m_name; }
+    OUString getName() const { return m_name; }
 
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
@@ -62,7 +62,7 @@ private:
     MethodDescription(MethodDescription &); // not implemented
     void operator =(MethodDescription); // not implemented
 
-    rtl::OUString m_name;
+    OUString m_name;
     mutable com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
             com::sun::star::reflection::XParameter > > m_parameters;

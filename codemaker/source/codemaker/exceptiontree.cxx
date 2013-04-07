@@ -34,7 +34,7 @@
 using codemaker::ExceptionTree;
 using codemaker::ExceptionTreeNode;
 
-ExceptionTreeNode * ExceptionTreeNode::add(rtl::OString const & theName) {
+ExceptionTreeNode * ExceptionTreeNode::add(OString const & theName) {
     std::auto_ptr< ExceptionTreeNode > node(new ExceptionTreeNode(theName));
     children.push_back(node.get());
     return node.release();
@@ -48,13 +48,13 @@ void ExceptionTreeNode::clearChildren() {
 }
 
 void ExceptionTree::add(
-    rtl::OString const & name, rtl::Reference< TypeManager > const & manager)
+    OString const & name, rtl::Reference< TypeManager > const & manager)
     throw( CannotDumpException )
 {
-    typedef std::vector< rtl::OString > OStringList;
+    typedef std::vector< OString > OStringList;
     OStringList stringlist;
     bool runtimeException = false;
-    for (rtl::OString n(name); n != "com/sun/star/uno/Exception";) {
+    for (OString n(name); n != "com/sun/star/uno/Exception";) {
         if (n == "com/sun/star/uno/RuntimeException") {
             runtimeException = true;
             break;
@@ -63,13 +63,13 @@ void ExceptionTree::add(
         typereg::Reader reader(manager->getTypeReader(n));
         if (!reader.isValid())
             throw CannotDumpException(
-                ::rtl::OString("Unknown type '" + n.replace('/', '.')
+                OString("Unknown type '" + n.replace('/', '.')
                                + "', incomplete type library."));
 
         OSL_ASSERT(
             reader.getTypeClass() == RT_TYPE_EXCEPTION
             && reader.getSuperTypeCount() == 1);
-        n = rtl::OUStringToOString(
+        n = OUStringToOString(
             reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8);
     }
     if (!runtimeException) {

@@ -70,7 +70,7 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     struct ResultListEntry
     {
-        ::rtl::OUString                 sId;
+        OUString                 sId;
         Reference< XContentIdentifier > xId;
         ::rtl::Reference< Content >     pContent;
         Reference< XRow >               xRow;
@@ -109,11 +109,11 @@ namespace ucb { namespace ucp { namespace ext
     //==================================================================================================================
     namespace
     {
-        ::rtl::OUString lcl_compose( const ::rtl::OUString& i_rBaseURL, const ::rtl::OUString& i_rRelativeURL )
+        OUString lcl_compose( const OUString& i_rBaseURL, const OUString& i_rRelativeURL )
         {
             ENSURE_OR_RETURN( !i_rBaseURL.isEmpty(), "illegal base URL", i_rRelativeURL );
 
-            ::rtl::OUStringBuffer aComposer( i_rBaseURL );
+            OUStringBuffer aComposer( i_rBaseURL );
             if ( i_rBaseURL.getStr()[ i_rBaseURL.getLength() - 1 ] != '/' )
                 aComposer.append( sal_Unicode( '/' ) );
             aComposer.append( i_rRelativeURL );
@@ -140,14 +140,14 @@ namespace ucb { namespace ucp { namespace ext
         {
             const Reference< XPackageInformationProvider > xPackageInfo = PackageInformationProvider::get( m_pImpl->m_xContext );
 
-            const ::rtl::OUString sContentIdentifier( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
+            const OUString sContentIdentifier( m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
 
             switch ( m_pImpl->m_xContent->getExtensionContentType() )
             {
             case E_ROOT:
             {
-                Sequence< Sequence< ::rtl::OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
-                for (   const Sequence< ::rtl::OUString >* pExtInfo = aExtensionInfo.getConstArray();
+                Sequence< Sequence< OUString > > aExtensionInfo( xPackageInfo->getExtensionList() );
+                for (   const Sequence< OUString >* pExtInfo = aExtensionInfo.getConstArray();
                         pExtInfo != aExtensionInfo.getConstArray() + aExtensionInfo.getLength();
                         ++pExtInfo
                     )
@@ -158,9 +158,9 @@ namespace ucb { namespace ucp { namespace ext
                         continue;
                     }
 
-                    const ::rtl::OUString& rLocalId = (*pExtInfo)[0];
+                    const OUString& rLocalId = (*pExtInfo)[0];
                     ResultListEntry aEntry;
-                    aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + ::rtl::OUString( sal_Unicode( '/' ) );
+                    aEntry.sId = ContentProvider::getRootURL() + Content::encodeIdentifier( rLocalId ) + OUString( sal_Unicode( '/' ) );
                     m_pImpl->m_aResults.push_back( aEntry );
                 }
             }
@@ -168,12 +168,12 @@ namespace ucb { namespace ucp { namespace ext
             case E_EXTENSION_ROOT:
             case E_EXTENSION_CONTENT:
             {
-                const ::rtl::OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
+                const OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
                 ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_pImpl->m_xContext );
 
                 // obtain the properties which our result set is set up for from the wrapped content
-                Sequence< ::rtl::OUString > aPropertyNames(1);
-                aPropertyNames[0] = ::rtl::OUString( "Title" );
+                Sequence< OUString > aPropertyNames(1);
+                aPropertyNames[0] = OUString( "Title" );
 
                 const Reference< XResultSet > xFolderContent( aWrappedContent.createCursor( aPropertyNames ), UNO_SET_THROW );
                 const Reference< XRow > xContentRow( xFolderContent, UNO_QUERY_THROW );
@@ -202,19 +202,19 @@ namespace ucb { namespace ucp { namespace ext
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    ::rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
+    OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
         if ( i_nIndex < m_pImpl->m_aResults.size() )
         {
-            const ::rtl::OUString sId = m_pImpl->m_aResults[ i_nIndex ].sId;
+            const OUString sId = m_pImpl->m_aResults[ i_nIndex ].sId;
             if ( !sId.isEmpty() )
                 return sId;
         }
 
         OSL_FAIL( "DataSupplier::queryContentIdentifierString: illegal index, or illegal result entry id!" );
-        return ::rtl::OUString();
+        return OUString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace ucb { namespace ucp { namespace ext
                 return xId;
         }
 
-        ::rtl::OUString sId = queryContentIdentifierString( i_nIndex );
+        OUString sId = queryContentIdentifierString( i_nIndex );
         if ( !sId.isEmpty() )
         {
             Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( sId );
@@ -319,9 +319,9 @@ namespace ucb { namespace ucp { namespace ext
         {
         case E_ROOT:
         {
-            const ::rtl::OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
-            const ::rtl::OUString sRootURL( ContentProvider::getRootURL() );
-            ::rtl::OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
+            const OUString& rId( m_pImpl->m_aResults[ i_nIndex ].sId );
+            const OUString sRootURL( ContentProvider::getRootURL() );
+            OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
             if ( !sTitle.isEmpty() && ( sTitle[ sTitle.getLength() - 1 ] == '/' ) )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
             xRow = Content::getArtificialNodePropertyValues( m_pImpl->m_xContext, getResultSet()->getProperties(), sTitle );

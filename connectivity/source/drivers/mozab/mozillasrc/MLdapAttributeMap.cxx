@@ -62,7 +62,7 @@ namespace connectivity { namespace mozab {
             }
         };
 
-        typedef ::boost::unordered_map< ::rtl::OString, CardPropertyData, ::rtl::OStringHash > MapPropertiesToAttributes;
+        typedef ::boost::unordered_map< OString, CardPropertyData, OStringHash > MapPropertiesToAttributes;
 
         #define DEF_CARD_ACCESS( PropertyName ) \
             &nsIAbCard::Get##PropertyName, &nsIAbCard::Set##PropertyName
@@ -122,7 +122,7 @@ namespace connectivity { namespace mozab {
                 const MapEntry* loop = aEntries;
                 while ( loop->pAsciiPropertyName )
                 {
-                    aMap[ ::rtl::OString( loop->pAsciiPropertyName ) ] =
+                    aMap[ OString( loop->pAsciiPropertyName ) ] =
                         CardPropertyData( loop->pAsciiAttrributeList, loop->PropGetter, loop->PropSetter );
                     ++loop;
                 }
@@ -158,7 +158,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::GetAttributeList(const nsACString & aProperty, nsACString & _retval)
     {
-        ::rtl::OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
+        OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
 
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
         MapPropertiesToAttributes::const_iterator pos = rPropertyMap.find( sProperty );
@@ -188,7 +188,7 @@ namespace connectivity { namespace mozab {
     // -------------------------------------------------------------------
     NS_IMETHODIMP MLdapAttributeMap::GetFirstAttribute(const nsACString & aProperty, nsACString & _retval)
     {
-        ::rtl::OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
+        OString sProperty( MTypeConverter::nsACStringToOString( aProperty ) );
 
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
         MapPropertiesToAttributes::const_iterator pos = rPropertyMap.find( sProperty );
@@ -200,7 +200,7 @@ namespace connectivity { namespace mozab {
         else
         {
             sal_Int32 tokenPos(0);
-            ::rtl::OString sAttributeList( pos->second.pLDAPAttributeList );
+            OString sAttributeList( pos->second.pLDAPAttributeList );
             MTypeConverter::asciiToNsACString( sAttributeList.getToken( 0, ',', tokenPos ).getStr(), _retval );
         }
 
@@ -231,7 +231,7 @@ namespace connectivity { namespace mozab {
     {
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
 
-        ::rtl::OStringBuffer aAllAttributes;
+        OStringBuffer aAllAttributes;
         for (   MapPropertiesToAttributes::const_iterator loop = rPropertyMap.begin();
                 loop != rPropertyMap.end();
                 ++loop
@@ -277,8 +277,8 @@ namespace connectivity { namespace mozab {
             )
         {
             // split the list of attributes for the current property
-            ::rtl::OString sAttributeList( prop->second.pLDAPAttributeList );
-            ::rtl::OString sAttribute;
+            OString sAttributeList( prop->second.pLDAPAttributeList );
+            OString sAttribute;
 
             sal_Int32 tokenPos = 0;
             while ( tokenPos != -1 )
@@ -352,7 +352,7 @@ namespace connectivity { namespace mozab {
     {
         _card.SetPreferMailFormat( nsIAbPreferMailFormat::unknown );
 
-        ::rtl::OUString resultValue;
+        OUString resultValue;
 
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
         for (   MapPropertiesToAttributes::const_iterator prop = rPropertyMap.begin();
@@ -395,7 +395,7 @@ namespace connectivity { namespace mozab {
     void MLdapAttributeMap::fillResultFromCard( MQueryHelperResultEntry& _result, nsIAbCard& _card )
     {
         nsXPIDLString value;
-        ::rtl::OUString resultValue;
+        OUString resultValue;
 
         const MapPropertiesToAttributes& rPropertyMap( lcl_getPropertyMap() );
         for (   MapPropertiesToAttributes::const_iterator prop = rPropertyMap.begin();
@@ -422,7 +422,7 @@ namespace connectivity { namespace mozab {
                     {
                         if ( format == pMailFormatType->formatType )
                         {
-                            resultValue = ::rtl::OUString::createFromAscii( pMailFormatType->description );
+                            resultValue = OUString::createFromAscii( pMailFormatType->description );
                             break;
                         }
                         ++pMailFormatType;

@@ -163,7 +163,7 @@ struct _DB_Column
 struct _DB_ColumnConfigData
 {
     SwInsDBColumns aDBColumns;
-    rtl::OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
+    OUString sSource, sTable, sEdit, sTblList, sTmplNm, sTAutoFmtNm;
     sal_Bool bIsTable : 1,
          bIsField : 1,
          bIsHeadlineOn : 1,
@@ -269,8 +269,8 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             }
         }
         Reference <XNameAccess> xCols = xColSupp->getColumns();
-        Sequence<rtl::OUString> aColNames = xCols->getElementNames();
-        const rtl::OUString* pColNames = aColNames.getConstArray();
+        Sequence<OUString> aColNames = xCols->getElementNames();
+        const OUString* pColNames = aColNames.getConstArray();
         long nCount = aColNames.getLength();
         for (long n = 0; n < nCount; n++)
         {
@@ -278,7 +278,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
-            Any aType = xCol->getPropertyValue(rtl::OUString("Type"));
+            Any aType = xCol->getPropertyValue(OUString("Type"));
             sal_Int32 eDataType = 0;
             aType >>= eDataType;
             switch(eDataType)
@@ -311,7 +311,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
                                 Any aFormatVal = xNumProps->getPropertyValue("FormatString");
                                 Any aLocale = xNumProps->getPropertyValue("Locale");
-                                rtl::OUString sFormat;
+                                OUString sFormat;
                                 aFormatVal >>= sFormat;
                                 lang::Locale aLoc;
                                 aLocale >>= aLoc;
@@ -814,7 +814,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, SelectHdl, ListBox*, pBox )
 
             if( bEnableFmt )
             {
-                (( sTxt += rtl::OUString(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
+                (( sTxt += OUString(" (" )) += String(aSrch.sColumn) ) += (sal_Unicode)')';
             }
 
             sal_Bool bIsDBFmt = (*it)->bIsDBFmt;
@@ -1139,7 +1139,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                     else
                     {
-                        rtl::OUString sVal =  xColumn->getString();
+                        OUString sVal =  xColumn->getString();
                         if(!xColumn->wasNull())
                         {
                             rSh.SwEditShell::Insert2( sVal );
@@ -1148,7 +1148,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
                 catch (const Exception& rExcept)
                 {
-                    OSL_FAIL(rtl::OUStringToOString(rExcept.Message, osl_getThreadTextEncoding()).getStr());
+                    OSL_FAIL(OUStringToOString(rExcept.Message, osl_getThreadTextEncoding()).getStr());
                     (void)rExcept;
                 }
             }
@@ -1239,7 +1239,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
             SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
                                         GetFldType( 0, RES_DBNEXTSETFLD ),
-                                        rtl::OUString("1"), aEmptyStr, aDBData );
+                                        OUString("1"), aEmptyStr, aDBData );
 
 
             bool bSetCrsr = true;
@@ -1364,8 +1364,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             GetfnParaCurr(), GetfnParaStart() );
                         pMark = rSh.SetBookmark(
                             KeyCode(),
-                            ::rtl::OUString(),
-                            ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                            OUString(),
+                            OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
                         bSetCrsr = false;
@@ -1466,10 +1466,10 @@ void SwInsertDBColAutoPilot::SetTabSet()
 
 _DB_ColumnConfigData::~_DB_ColumnConfigData() {}
 
-static Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
+static Sequence<OUString> lcl_createSourceNames(const String& rNodeName)
 {
-    Sequence<rtl::OUString> aSourceNames(11);
-    rtl::OUString* pNames = aSourceNames.getArray();
+    Sequence<OUString> aSourceNames(11);
+    OUString* pNames = aSourceNames.getArray();
 
     String sTmp( rNodeName );
     const xub_StrLen nPos = sTmp.Len();
@@ -1498,10 +1498,10 @@ static Sequence<rtl::OUString> lcl_createSourceNames(const String& rNodeName)
     return aSourceNames;
 }
 
-static Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
+static Sequence<OUString> lcl_CreateSubNames( const String& rSubNodeName )
 {
-    Sequence<rtl::OUString> aSubSourceNames(6);
-    rtl::OUString* pNames = aSubSourceNames.getArray();
+    Sequence<OUString> aSubSourceNames(6);
+    OUString* pNames = aSubSourceNames.getArray();
     String sTmp( rSubNodeName );
     const xub_StrLen nPos = sTmp.Len();
     pNames[0] = sTmp.ReplaceAscii( nPos, STRING_MAXLEN,
@@ -1519,15 +1519,15 @@ static Sequence<rtl::OUString> lcl_CreateSubNames( const String& rSubNodeName )
     return aSubSourceNames;
 }
 
-static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
+static OUString lcl_CreateUniqueName(const Sequence<OUString>& aNames)
 {
     sal_Int32 nIdx = aNames.getLength();
-    const rtl::OUString* pNames = aNames.getConstArray();
-    rtl::OUString sTest("_");
-    rtl::OUString sRet;
+    const OUString* pNames = aNames.getConstArray();
+    OUString sTest("_");
+    OUString sRet;
     while(true)
     {
-        sRet = sTest; sRet += rtl::OUString::valueOf(nIdx++);
+        sRet = sTest; sRet += OUString::valueOf(nIdx++);
         bool bFound = false;
         for(sal_Int32 i = 0; i < aNames.getLength(); i++)
         {
@@ -1543,64 +1543,64 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
     return sRet;
 }
 
-void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >&  ) {}
+void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< OUString >&  ) {}
 
 void SwInsertDBColAutoPilot::Commit()
 {
-    Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());
-    const rtl::OUString* pNames = aNames.getArray();
+    Sequence <OUString> aNames = GetNodeNames(OUString());
+    const OUString* pNames = aNames.getArray();
     //remove entries that contain this data source + table at first
     for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
     {
-        Sequence<rtl::OUString> aSourceNames(2);
-        rtl::OUString* pSourceNames = aSourceNames.getArray();
+        Sequence<OUString> aSourceNames(2);
+        OUString* pSourceNames = aSourceNames.getArray();
         pSourceNames[0] = pNames[nNode];
         pSourceNames[0] += "/DataSource";
         pSourceNames[1] = pNames[nNode];
         pSourceNames[1] += "/Command";
         Sequence<Any> aSourceProperties = GetProperties(aSourceNames);
         const Any* pSourceProps = aSourceProperties.getArray();
-        rtl::OUString sSource, sCommand;
+        OUString sSource, sCommand;
         pSourceProps[0] >>= sSource;
         pSourceProps[1] >>= sCommand;
         if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
-            Sequence<rtl::OUString> aElements(1);
+            Sequence<OUString> aElements(1);
             aElements.getArray()[0] = pNames[nNode];
-            ClearNodeElements(rtl::OUString(), aElements);
+            ClearNodeElements(OUString(), aElements);
         }
     }
 
-    aNames = GetNodeNames(rtl::OUString());
-    rtl::OUString sNewNode = lcl_CreateUniqueName(aNames);
-    Sequence<rtl::OUString> aNodeNames = lcl_createSourceNames(sNewNode);
+    aNames = GetNodeNames(OUString());
+    OUString sNewNode = lcl_CreateUniqueName(aNames);
+    Sequence<OUString> aNodeNames = lcl_createSourceNames(sNewNode);
     Sequence<PropertyValue> aValues(aNodeNames.getLength());
     PropertyValue* pValues = aValues.getArray();
-    const rtl::OUString* pNodeNames = aNodeNames.getConstArray();
-    rtl::OUString sSlash("/");
+    const OUString* pNodeNames = aNodeNames.getConstArray();
+    OUString sSlash("/");
     for(sal_Int32 i = 0; i < aNodeNames.getLength(); i++)
     {
         pValues[i].Name = sSlash;
         pValues[i].Name += pNodeNames[i];
     }
 
-    pValues[0].Value <<= rtl::OUString(aDBData.sDataSource);
-    pValues[1].Value <<= rtl::OUString(aDBData.sCommand);
+    pValues[0].Value <<= OUString(aDBData.sDataSource);
+    pValues[1].Value <<= OUString(aDBData.sCommand);
     pValues[2].Value <<= aDBData.nCommandType;
-    pValues[3].Value <<= rtl::OUString(aEdDbText.GetText());
+    pValues[3].Value <<= OUString(aEdDbText.GetText());
 
     String sTmp;
     for( sal_uInt16 n = 0, nCnt = aLbTableCol.GetEntryCount(); n < nCnt; ++n )
         ( sTmp += aLbTableCol.GetEntry( n ) ) += '\x0a';
 
     if( sTmp.Len() )
-        pValues[4].Value <<= rtl::OUString(sTmp);
+        pValues[4].Value <<= OUString(sTmp);
 
     if( sNoTmpl != (sTmp = aLbDbParaColl.GetSelectEntry()) )
-        pValues[5].Value <<= rtl::OUString(sTmp);
+        pValues[5].Value <<= OUString(sTmp);
 
     if( pTAutoFmt )
-        pValues[6].Value <<= rtl::OUString(pTAutoFmt->GetName());
+        pValues[6].Value <<= OUString(pTAutoFmt->GetName());
 
     const Type& rBoolType = ::getBooleanCppuType();
     sal_Bool bTmp = aRbAsTable.IsChecked();
@@ -1615,18 +1615,18 @@ void SwInsertDBColAutoPilot::Commit()
     bTmp = aRbHeadlEmpty.IsChecked();
     pValues[10].Value.setValue(&bTmp, rBoolType);
 
-    SetSetProperties(rtl::OUString(), aValues);
+    SetSetProperties(OUString(), aValues);
 
     sNewNode += "/ColumnSet";
-    rtl::OUString sDelim("/__");
+    OUString sDelim("/__");
 
     LanguageType ePrevLang = (LanguageType)-1;
-    rtl::OUString sPrevLang;
+    OUString sPrevLang;
 
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(sal_uInt16 nCol = 0; nCol < aDBColumns.size(); nCol++)
     {
-        rtl::OUString sColumnNode = sNewNode;
+        OUString sColumnNode = sNewNode;
          SwInsDBColumn* pColumn = aDBColumns[nCol];
         String sColumnInsertNode(sColumnNode);
         sColumnInsertNode += sDelim;
@@ -1636,10 +1636,10 @@ void SwInsertDBColAutoPilot::Commit()
             sColumnInsertNode += '0';
         sColumnInsertNode += OUString::number(  nCol );
 
-        Sequence <rtl::OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
+        Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sColumnInsertNode);
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
-        const rtl::OUString* pSubNodeNames = aSubNodeNames.getConstArray();
+        const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
         sal_Int32 i;
 
         for( i = 0; i < aSubNodeNames.getLength(); i++)
@@ -1657,12 +1657,12 @@ void SwInsertDBColAutoPilot::Commit()
         LanguageType eLang;
         if( pNF )
         {
-            pSubValues[4].Value <<= rtl::OUString(pNF->GetFormatstring());
+            pSubValues[4].Value <<= OUString(pNF->GetFormatstring());
             eLang = pNF->GetLanguage();
         }
         else
         {
-            pSubValues[4].Value <<= rtl::OUString(sTmp);
+            pSubValues[4].Value <<= OUString(sTmp);
             eLang = GetAppLanguage();
         }
 
@@ -1672,7 +1672,7 @@ void SwInsertDBColAutoPilot::Commit()
             lang::Locale aLocale( LanguageTag( eLang ).getLocale());
             /* umm.. what's this string anyway, "Country-Language" instead of
              * "Language-Country" ??? */
-            (( sPrevLang = aLocale.Country ) += rtl::OUString( '-' )) += aLocale.Language;
+            (( sPrevLang = aLocale.Country ) += OUString( '-' )) += aLocale.Language;
             ePrevLang = eLang;
         }
 
@@ -1683,17 +1683,17 @@ void SwInsertDBColAutoPilot::Commit()
 
 void SwInsertDBColAutoPilot::Load()
 {
-    Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());
-    const rtl::OUString* pNames = aNames.getArray();
+    Sequence <OUString> aNames = GetNodeNames(OUString());
+    const OUString* pNames = aNames.getArray();
     SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
     for(sal_Int32 nNode = 0; nNode < aNames.getLength(); nNode++)
     {
         //search for entries with the appropriate data source and table
-        Sequence<rtl::OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
+        Sequence<OUString> aSourceNames = lcl_createSourceNames(pNames[nNode]);
 
         Sequence< Any> aDataSourceProps = GetProperties(aSourceNames);
         const Any* pDataSourceProps = aDataSourceProps.getConstArray();
-        rtl::OUString sSource, sCommand;
+        OUString sSource, sCommand;
         sal_Int16 nCommandType;
         pDataSourceProps[0] >>= sSource;
         pDataSourceProps[1] >>= sCommand;
@@ -1717,19 +1717,19 @@ void SwInsertDBColAutoPilot::Load()
             if(pDataSourceProps[10].hasValue())
                  pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
 
-            rtl::OUString sSubNodeName(pNames[nNode]);
+            OUString sSubNodeName(pNames[nNode]);
             sSubNodeName += "/ColumnSet/";
-            Sequence <rtl::OUString> aSubNames = GetNodeNames(sSubNodeName);
-            const rtl::OUString* pSubNames = aSubNames.getConstArray();
+            Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
+            const OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)
             {
-                rtl::OUString sSubSubNodeName(sSubNodeName);
+                OUString sSubSubNodeName(sSubNodeName);
                 sSubSubNodeName += pSubNames[nSub];
-                Sequence <rtl::OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
+                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 
-                rtl::OUString sColumn;
+                OUString sColumn;
                 pSubProps[0] >>= sColumn;
                 //check for existance of the loaded column name
                 bool bFound = false;
@@ -1752,7 +1752,7 @@ void SwInsertDBColAutoPilot::Load()
                     pInsDBColumn->bIsDBFmt = *(sal_Bool*)pSubProps[3].getValue();
 
                 pSubProps[4] >>= pInsDBColumn->sUsrNumFmt;
-                rtl::OUString sNumberFormatLocale;
+                OUString sNumberFormatLocale;
                 pSubProps[5] >>= sNumberFormatLocale;
 
                 /* FIXME-BCP47: handle language tags, and cope with the wrong

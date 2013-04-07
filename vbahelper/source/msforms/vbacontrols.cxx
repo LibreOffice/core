@@ -488,7 +488,7 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
     }
     catch (const uno::Exception&)
     {
-        // throw lang::WrappedTargetException( ::rtl::OUString( "Can not create AXControl!" ),
+        // throw lang::WrappedTargetException( OUString( "Can not create AXControl!" ),
         //         uno::Reference< uno::XInterface >(),
         //         uno::makeAny( e ) );
     }

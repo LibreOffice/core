@@ -36,7 +36,6 @@
 #include "defaultsoptions.hxx"
 #include "document.hxx"
 
-using ::rtl::OUString;
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
     SfxTabPage(pParent, ScResId(RID_SCPAGE_DEFAULTS), rCoreSet),

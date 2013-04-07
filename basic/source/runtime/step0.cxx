@@ -1307,7 +1307,7 @@ void SbiRuntime::StepLINPUT()
     pIosys->Read( aInput );
     Error( pIosys->GetError() );
     SbxVariableRef p = PopVar();
-    p->PutString(rtl::OStringToOUString(aInput, osl_getThreadTextEncoding()));
+    p->PutString(OStringToOUString(aInput, osl_getThreadTextEncoding()));
 }
 
 // end of program
@@ -1425,7 +1425,7 @@ void SbiRuntime::StepPRINT()        // print TOS
         s = " ";    // one blank before
     }
     s += s1;
-    OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
+    OString aByteStr(OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1469,7 +1469,7 @@ void SbiRuntime::StepWRITE()        // write TOS
     {
         s += OUString(ch);
     }
-    OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
+    OString aByteStr(OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1496,7 +1496,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
 void SbiRuntime::StepPROMPT()
 {
     SbxVariableRef p = PopVar();
-    rtl::OString aStr(rtl::OUStringToOString(p->GetOUString(), osl_getThreadTextEncoding()));
+    OString aStr(OUStringToOString(p->GetOUString(), osl_getThreadTextEncoding()));
     pIosys->SetPrompt( aStr );
 }
 

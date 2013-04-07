@@ -184,19 +184,19 @@ public:
 
 
     // XMultiServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XStyleFamiliesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getStyleFamilies(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XAnyCompareFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 
     // XModel
-    virtual sal_Bool SAL_CALL attachResource( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getArgs(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException);
@@ -244,12 +244,12 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< OUString > aSeq;
     return aSeq;
@@ -272,14 +272,14 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 }
 
 // XModel
-sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException)
 {
     (void)aURL;
     (void)aArgs;
     return sal_False;
 }
 
-::rtl::OUString SAL_CALL SvxSimpleUnoModel::getURL(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL SvxSimpleUnoModel::getURL(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     OUString aStr;
     return aStr;
@@ -351,7 +351,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
-        const ::rtl::OUString& rFileName,
+        const OUString& rFileName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler );
 
     ~SvxXMLTextExportComponent();
@@ -372,7 +372,7 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
-    const ::rtl::OUString& rFileName,
+    const OUString& rFileName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
 :   SvXMLExport( xContext, rFileName, xHandler, ((frame::XModel*)new SvxSimpleUnoModel()), MAP_CM ),
     maSelection( rSel )

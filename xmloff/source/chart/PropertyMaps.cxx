@@ -202,7 +202,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
     std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    ::rtl::OUString aAutoPropName;
+    OUString aAutoPropName;
     sal_Bool bCheckAuto = sal_False;
 
     // filter properties
@@ -287,12 +287,12 @@ void XMLChartExportPropertyMapper::handleElementItem(
     {
         case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE:
             {
-                ::rtl::OUString aURLStr;
+                OUString aURLStr;
                 rProperty.maValue >>= aURLStr;
 
                 // export as XLink reference into the package
                 // if embedding is off
-                ::rtl::OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
+                OUString sTempURL( mrExport.AddEmbeddedGraphicObject( aURLStr ));
                 if( !sTempURL.isEmpty() )
                 {
                     mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sTempURL );
@@ -320,7 +320,7 @@ void XMLChartExportPropertyMapper::handleElementItem(
 
         case XML_SCH_CONTEXT_SPECIAL_LABEL_SEPARATOR:
             {
-                ::rtl::OUString aSeparator;
+                OUString aSeparator;
                 rProperty.maValue >>= aSeparator;
 
                 if( !aSeparator.isEmpty() )
@@ -359,10 +359,10 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     {
         bHandled = sal_True;
 
-        rtl::OUString sAttrName = maPropMapper->GetEntryXMLName( rProperty.mnIndex );
+        OUString sAttrName = maPropMapper->GetEntryXMLName( rProperty.mnIndex );
         sal_uInt16 nNameSpace = maPropMapper->GetEntryNameSpace( rProperty.mnIndex );
-        rtl::OUStringBuffer sValueBuffer;
-        rtl::OUString sValue;
+        OUStringBuffer sValueBuffer;
+        OUString sValue;
 
         sal_Int32 nValue = 0;
         sal_Bool bValue = sal_False;
@@ -490,7 +490,7 @@ XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()
 bool XMLChartImportPropertyMapper::handleSpecialItem(
     XMLPropertyState& rProperty,
     ::std::vector< XMLPropertyState >& rProperties,
-    const ::rtl::OUString& rValue,
+    const OUString& rValue,
     const SvXMLUnitConverter& rUnitConverter,
     const SvXMLNamespaceMap& rNamespaceMap ) const
 {

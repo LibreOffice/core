@@ -150,7 +150,7 @@ FileProvider::initialize(
     throw (Exception, RuntimeException)
 {
     if( ! m_pMyShell ) {
-        rtl::OUString config;
+        OUString config;
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
             config.compareToAscii("NoConfig") == 0 )
@@ -179,7 +179,7 @@ XTYPEPROVIDER_IMPL_7( FileProvider,
 ////////////////////////////////////////////////////////////////////////////////
 // XServiceInfo methods.
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 FileProvider::getImplementationName()
     throw( RuntimeException )
 {
@@ -189,14 +189,14 @@ FileProvider::getImplementationName()
 
 sal_Bool SAL_CALL
 FileProvider::supportsService(
-                  const rtl::OUString& ServiceName )
+                  const OUString& ServiceName )
   throw( RuntimeException )
 {
-  return ServiceName == rtl::OUString("com.sun.star.ucb.FileContentProvider");
+  return ServiceName == OUString("com.sun.star.ucb.FileContentProvider");
 }
 
 
-Sequence< rtl::OUString > SAL_CALL
+Sequence< OUString > SAL_CALL
 FileProvider::getSupportedServiceNames(
                        void )
   throw( RuntimeException )
@@ -227,10 +227,10 @@ FileProvider::createServiceFactory(
    *  Reference< ::com::sun::star::XSingleServiceFactory > createSingleFactory
    *  (
    *  const ::com::sun::star::Reference< ::com::sun::star::XMultiServiceFactory > & rServiceManager,
-   *  const ::rtl::OUString & rImplementationName,
+   *  const OUString & rImplementationName,
    *  ComponentInstantiation pCreateFunction,
 
-   *  const ::com::sun::star::Sequence< ::rtl::OUString > & rServiceNames
+   *  const ::com::sun::star::Sequence< OUString > & rServiceNames
    *  );
    */
 
@@ -263,12 +263,12 @@ FileProvider::queryContent(
            RuntimeException)
 {
     init();
-    rtl::OUString aUnc;
+    OUString aUnc;
     sal_Bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
                                               aUnc );
 
     if(  err )
-        throw IllegalIdentifierException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw IllegalIdentifierException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 
     return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
 }
@@ -282,14 +282,14 @@ FileProvider::compareContentIds(
   throw( RuntimeException )
 {
     init();
-    rtl::OUString aUrl1 = Id1->getContentIdentifier();
-    rtl::OUString aUrl2 = Id2->getContentIdentifier();
+    OUString aUrl1 = Id1->getContentIdentifier();
+    OUString aUrl2 = Id2->getContentIdentifier();
 
     sal_Int32   iComp = aUrl1.compareTo( aUrl2 );
 
     if ( 0 != iComp )
     {
-        rtl::OUString aPath1, aPath2;
+        OUString aPath1, aPath2;
 
         m_pMyShell->getUnqFromUrl( aUrl1, aPath1 );
         m_pMyShell->getUnqFromUrl( aUrl2, aPath2 );
@@ -336,7 +336,7 @@ FileProvider::compareContentIds(
 
 Reference< XContentIdentifier > SAL_CALL
 FileProvider::createContentIdentifier(
-                      const rtl::OUString& ContentId )
+                      const OUString& ContentId )
   throw( RuntimeException )
 {
     init();
@@ -380,12 +380,12 @@ public:
 
     virtual Property SAL_CALL
     getPropertyByName(
-        const rtl::OUString& aName )
+        const OUString& aName )
         throw( UnknownPropertyException,
                RuntimeException);
 
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const rtl::OUString& Name )
+    hasPropertyByName( const OUString& Name )
         throw( RuntimeException );
 
 
@@ -397,17 +397,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( rtl::OUString("HostName"),
+    m_seq[0] = Property( OUString("HostName"),
                          -1,
-                         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                         getCppuType( static_cast< OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( rtl::OUString("HomeDirectory"),
+    m_seq[1] = Property( OUString("HomeDirectory"),
                          -1,
-                         getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+                         getCppuType( static_cast< OUString* >( 0 ) ),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( rtl::OUString("FileSystemNotation"),
+    m_seq[2] = Property( OUString("FileSystemNotation"),
                          -1,
                          getCppuType( static_cast< sal_Int32* >( 0 ) ),
                          PropertyAttribute::READONLY );
@@ -451,7 +451,7 @@ XPropertySetInfoImpl2::queryInterface(
 
 Property SAL_CALL
 XPropertySetInfoImpl2::getPropertyByName(
-    const rtl::OUString& aName )
+    const OUString& aName )
     throw( UnknownPropertyException,
            RuntimeException)
 {
@@ -459,7 +459,7 @@ XPropertySetInfoImpl2::getPropertyByName(
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+    throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
@@ -475,7 +475,7 @@ XPropertySetInfoImpl2::getProperties(
 
 sal_Bool SAL_CALL
 XPropertySetInfoImpl2::hasPropertyByName(
-    const rtl::OUString& aName )
+    const OUString& aName )
     throw( RuntimeException )
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
@@ -528,7 +528,7 @@ FileProvider::getPropertySetInfo(  )
 
 
 void SAL_CALL
-FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
+FileProvider::setPropertyValue( const OUString& aPropertyName,
                                 const Any& )
     throw( UnknownPropertyException,
            PropertyVetoException,
@@ -541,14 +541,14 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
         aPropertyName.compareToAscii( "HostName" ) == 0 )
         return;
     else
-        throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
 
 Any SAL_CALL
 FileProvider::getPropertyValue(
-    const rtl::OUString& aPropertyName )
+    const OUString& aPropertyName )
     throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
@@ -573,13 +573,13 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw UnknownPropertyException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
+        throw UnknownPropertyException( OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
 }
 
 
 void SAL_CALL
 FileProvider::addPropertyChangeListener(
-    const rtl::OUString&,
+    const OUString&,
     const Reference< XPropertyChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
@@ -591,7 +591,7 @@ FileProvider::addPropertyChangeListener(
 
 void SAL_CALL
 FileProvider::removePropertyChangeListener(
-    const rtl::OUString&,
+    const OUString&,
     const Reference< XPropertyChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
@@ -602,7 +602,7 @@ FileProvider::removePropertyChangeListener(
 
 void SAL_CALL
 FileProvider::addVetoableChangeListener(
-    const rtl::OUString&,
+    const OUString&,
     const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
@@ -614,7 +614,7 @@ FileProvider::addVetoableChangeListener(
 
 void SAL_CALL
 FileProvider::removeVetoableChangeListener(
-    const rtl::OUString&,
+    const OUString&,
     const Reference< XVetoableChangeListener >& )
     throw( UnknownPropertyException,
            WrappedTargetException,
@@ -628,7 +628,7 @@ FileProvider::removeVetoableChangeListener(
 // XFileIdentifierConverter
 
 sal_Int32 SAL_CALL
-FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
+FileProvider::getFileProviderLocality( const OUString& BaseURL )
     throw( RuntimeException )
 {
     // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
@@ -643,23 +643,23 @@ FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
                10 : -1;
 }
 
-rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString&,
-                                                               const rtl::OUString& SystemPath )
+OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const OUString&,
+                                                               const OUString& SystemPath )
     throw( RuntimeException )
 {
-    rtl::OUString aNormalizedPath;
+    OUString aNormalizedPath;
     if ( osl::FileBase::getFileURLFromSystemPath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
-        return rtl::OUString();
+        return OUString();
 
     return aNormalizedPath;
 }
 
-rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& URL )
+OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const OUString& URL )
     throw( RuntimeException )
 {
-    rtl::OUString aSystemPath;
+    OUString aSystemPath;
     if (osl::FileBase::getSystemPathFromFileURL( URL,aSystemPath ) != osl::FileBase::E_None )
-        return rtl::OUString();
+        return OUString();
 
     return aSystemPath;
 }

@@ -53,9 +53,9 @@ namespace sfx2
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
         SFX2_DLLPUBLIC createSfxModelFactory(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,
-            const ::rtl::OUString& _rImplementationName,
+            const OUString& _rImplementationName,
             const SfxModelFactoryFunc _pComponentFactoryFunc,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames
+            const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames
         );
 
 //........................................................................

@@ -72,7 +72,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 class ScUndoApplyPageStyle: public ScSimpleUndo
@@ -89,7 +89,7 @@ public:
     virtual void    Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool    CanRepeat(SfxRepeatTarget& rTarget) const;
 
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     struct ApplyStyleEntry

@@ -329,7 +329,7 @@ namespace pcr
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
         {
             DBG_ASSERT( xGrfObj.is(), "FormComponentPropertyHandler::setPropertyValue() xGrfObj is invalid");
-            rtl::OUString sObjectID(  GRAPHOBJ_URLPREFIX  );
+            OUString sObjectID(  GRAPHOBJ_URLPREFIX  );
             sObjectID = sObjectID + xGrfObj->getUniqueID();
             m_xComponent->setPropertyValue( _rPropertyName, uno::makeAny( sObjectID ) );
         }
@@ -936,28 +936,28 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         ::std::vector< OUString > aInterestingProperties;
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DATASOURCE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_COMMAND) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_COMMANDTYPE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_LISTSOURCE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_LISTSOURCETYPE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_SUBMIT_ENCODING) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_REPEAT) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TABSTOP) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_BORDER) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_CONTROLSOURCE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DROPDOWN) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_IMAGE_URL) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TARGET_URL) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_STRINGITEMLIST) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_BUTTONTYPE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_ESCAPE_PROCESSING) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TRISTATE) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DECIMAL_ACCURACY) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_SHOWTHOUSANDSEP) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_FORMATKEY) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_EMPTY_IS_NULL) );
-        aInterestingProperties.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TOGGLE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_DATASOURCE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_COMMAND) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_COMMANDTYPE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCETYPE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_SUBMIT_ENCODING) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_REPEAT) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_TABSTOP) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_BORDER) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_CONTROLSOURCE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_DROPDOWN) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_IMAGE_URL) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_TARGET_URL) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_STRINGITEMLIST) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_BUTTONTYPE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_ESCAPE_PROCESSING) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_TRISTATE) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_DECIMAL_ACCURACY) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_SHOWTHOUSANDSEP) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_FORMATKEY) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_EMPTY_IS_NULL) );
+        aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_TOGGLE) );
         return Sequence< OUString >( &(*aInterestingProperties.begin()), aInterestingProperties.size() );
     }
 
@@ -1014,39 +1014,39 @@ namespace pcr
         {
         case PROPERTY_ID_DEFAULT_SELECT_SEQ:
         case PROPERTY_ID_SELECTEDITEMS:
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SELECTION);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_SELECTION);
             break;
 
         case PROPERTY_ID_FILTER:
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FILTER);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_FILTER);
             break;
 
         case PROPERTY_ID_SORT:
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_ORDER);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_ORDER);
             break;
 
         case PROPERTY_ID_MASTERFIELDS:
         case PROPERTY_ID_DETAILFIELDS:
             nControlType = PropertyControlType::StringListField;
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FORMLINKFIELDS);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_FORMLINKFIELDS);
             break;
 
         case PROPERTY_ID_COMMAND:
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
             break;
 
         case PROPERTY_ID_TABINDEX:
         {
             Reference< XControlContainer > xControlContext( impl_getContextControlContainer_nothrow() );
             if ( xControlContext.is() )
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_TABINDEX);
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_TABINDEX);
             nControlType = PropertyControlType::NumericField;
         };
         break;
 
         case PROPERTY_ID_FONT:
             bReadOnly = sal_True;
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FONT_TYPE);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_FONT_TYPE);
             break;
 
         case PROPERTY_ID_TARGET_URL:
@@ -1054,7 +1054,7 @@ namespace pcr
         {
             aDescriptor.Control = new OFileUrlControl( impl_getDefaultDialogParent_nothrow(), WB_TABSTOP | WB_BORDER );
 
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(( PROPERTY_ID_TARGET_URL == nPropId )
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(( PROPERTY_ID_TARGET_URL == nPropId )
                 ? UID_PROP_DLG_ATTR_TARGET_URL : UID_PROP_DLG_IMAGE_URL);
         }
         break;
@@ -1072,13 +1072,13 @@ namespace pcr
             switch( nPropId )
             {
             case PROPERTY_ID_BACKGROUNDCOLOR:
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BACKGROUNDCOLOR); break;
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_BACKGROUNDCOLOR); break;
             case PROPERTY_ID_FILLCOLOR:
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_FILLCOLOR); break;
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_FILLCOLOR); break;
             case PROPERTY_ID_SYMBOLCOLOR:
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SYMBOLCOLOR); break;
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_SYMBOLCOLOR); break;
             case PROPERTY_ID_BORDERCOLOR:
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_BORDERCOLOR); break;
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_BORDERCOLOR); break;
             }
             break;
 
@@ -1102,7 +1102,7 @@ namespace pcr
 
         case PROPERTY_ID_CONTROLLABEL:
             bReadOnly = sal_True;
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_CONTROLLABEL);
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_CONTROLLABEL);
             break;
 
         case PROPERTY_ID_FORMATKEY:
@@ -1132,7 +1132,7 @@ namespace pcr
                         aDescriptor.Control = pControl;
                         pControl->SetFormatSupplier( pSupplier );
 
-                        aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_NUMBER_FORMAT);
+                        aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_NUMBER_FORMAT);
                     }
                     else
                     {
@@ -1357,7 +1357,7 @@ namespace pcr
             // DataSource
             case PROPERTY_ID_DATASOURCE:
             {
-                aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_ATTR_DATASOURCE);
+                aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_ATTR_DATASOURCE);
 
                 ::std::vector< OUString > aListEntries;
 
@@ -2458,7 +2458,7 @@ namespace pcr
             _out_rProperty.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_COMMAND );
 
             _out_rProperty.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_COMMAND ) );
-            _out_rProperty.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
+            _out_rProperty.PrimaryButtonId = OUString::createFromAscii(UID_PROP_DLG_SQLCOMMAND);
 
             ////////////////////////////////////////////////////////////
             sal_Int32 nCommandType = CommandType::COMMAND;
@@ -2883,7 +2883,7 @@ namespace pcr
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
-                rtl::OUString("sdatabase"));
+                OUString("sdatabase"));
 
         OUString sDataSource;
         OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
@@ -2893,7 +2893,7 @@ namespace pcr
             // is considered to be potentially expensive
             aFileDlg.SetDisplayDirectory( sDataSource );
 
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName(rtl::OUString("StarOffice XML (Base)"));
+        const SfxFilter* pFilter = SfxFilter::GetFilterByName(OUString("StarOffice XML (Base)"));
         OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
         if ( pFilter )
         {

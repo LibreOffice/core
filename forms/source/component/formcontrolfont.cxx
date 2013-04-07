@@ -207,8 +207,8 @@ namespace frm
         DECL_PROP1      ( FONT_PITCH,         sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_TYPE,          sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_WIDTH,         sal_Int16,        MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_NAME,          ::rtl::OUString,  MAYBEDEFAULT );
-        DECL_PROP1      ( FONT_STYLENAME,     ::rtl::OUString,  MAYBEDEFAULT );
+        DECL_PROP1      ( FONT_NAME,          OUString,  MAYBEDEFAULT );
+        DECL_PROP1      ( FONT_STYLENAME,     OUString,  MAYBEDEFAULT );
         DECL_PROP1      ( FONT_FAMILY,        sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_CHARSET,       sal_Int16,        MAYBEDEFAULT );
         DECL_PROP1      ( FONT_HEIGHT,        float,            MAYBEDEFAULT );
@@ -499,7 +499,7 @@ namespace frm
 
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
-            aReturn <<= ::rtl::OUString();
+            aReturn <<= OUString();
 
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:

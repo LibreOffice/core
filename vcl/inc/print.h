@@ -52,16 +52,16 @@ struct ImplPrnQueueData
 class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
 public:
-    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
+    boost::unordered_map< OUString, sal_Int32, OUStringHash >
                                         m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
-    std::vector< rtl::OUString >        m_aPrinterList;
+    std::vector< OUString >        m_aPrinterList;
 
     ImplPrnQueueList() {}
     ~ImplPrnQueueList();
 
     void                    Add( SalPrinterQueueInfo* pData );
-    ImplPrnQueueData*       Get( const rtl::OUString& rPrinter );
+    ImplPrnQueueData*       Get( const OUString& rPrinter );
 };
 
 // --------------

@@ -43,13 +43,13 @@
 struct SbiDllMgr::Impl {};
 
 SbError SbiDllMgr::Call(
-    rtl::OUString const &, rtl::OUString const &, SbxArray *, SbxVariable &,
+    OUString const &, OUString const &, SbxArray *, SbxVariable &,
     bool)
 {
     return ERRCODE_BASIC_NOT_IMPLEMENTED;
 }
 
-void SbiDllMgr::FreeDll(rtl::OUString const &) {}
+void SbiDllMgr::FreeDll(OUString const &) {}
 
 SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 

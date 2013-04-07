@@ -63,7 +63,6 @@ using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-using ::rtl::OUString;
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -196,7 +195,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         if (xStatusIndicator.is())
                xStatusIndicator->end();
 
-        OSL_FAIL( ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        OSL_FAIL( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         return sal_False;
     }
     if (xStatusIndicator.is()) {
@@ -315,7 +314,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     catch( const Exception& )
 #endif
     {
-        OSL_FAIL( ::rtl::OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        OSL_FAIL( OUStringToOString( exE.Message, RTL_TEXTENCODING_ASCII_US).getStr());
         if (xStatusIndicator.is())
             xStatusIndicator->end();
         return sal_False;

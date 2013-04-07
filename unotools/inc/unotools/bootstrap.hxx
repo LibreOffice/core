@@ -21,10 +21,7 @@
 #ifndef _UTL_BOOTSTRAP_HXX
 #define _UTL_BOOTSTRAP_HXX
 
-namespace rtl
-{
-    class OUString;
-}
+#include <rtl/ustring.hxx>
 
 namespace utl
 {
@@ -41,16 +38,16 @@ namespace utl
     public: // some common information items
 
         /// retrieve the product key; defaults to executable name (without extension)
-        static rtl::OUString getProductKey();
+        static OUString getProductKey();
 
         /// retrieve the product key; uses the given default, if not found
-        static rtl::OUString getProductKey(rtl::OUString const& _sDefault);
+        static OUString getProductKey(OUString const& _sDefault);
 
         /// retrieve the BUILDID information item; uses the given default, if not found
-        static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
+        static OUString getBuildIdData(OUString const& _sDefault);
 
         /// retrieve the BuildVersion information item; uses the given default, if not found
-        static rtl::OUString getBuildVersion(rtl::OUString const& _sDefault);
+        static OUString getBuildVersion(OUString const& _sDefault);
 
         /// reload cached data
         static void reloadData();
@@ -66,19 +63,19 @@ namespace utl
         };
 
         /// get a file URL to the common base installation [${insturl}]
-        static PathStatus locateBaseInstallation(rtl::OUString& _rURL);
+        static PathStatus locateBaseInstallation(OUString& _rURL);
 
         /// get a file URL to the user installation [${userurl}]
-        static PathStatus locateUserInstallation(rtl::OUString& _rURL);
+        static PathStatus locateUserInstallation(OUString& _rURL);
 
         /// get a file URL to the user data directory [default is ${userurl}/user]
-        static PathStatus locateUserData(rtl::OUString& _rURL);
+        static PathStatus locateUserData(OUString& _rURL);
 
     // the next two items are mainly supported for diagnostic purposes. both items may be unused
         /// get a file URL to the bootstrap INI file used [e.g. ${insturl}/program/bootraprc]
-        static PathStatus locateBootstrapFile(rtl::OUString& _rURL);
+        static PathStatus locateBootstrapFile(OUString& _rURL);
         /// get a file URL to the version locator INI file used [e.g. ${SYSUSERCONFIG}/sversion.ini]
-        static PathStatus locateVersionFile(rtl::OUString& _rURL);
+        static PathStatus locateVersionFile(OUString& _rURL);
 
     public: // evaluate the validity of the installation
         /// high-level status of bootstrap success
@@ -108,7 +105,7 @@ namespace utl
         /** Evaluates the status of the installation and returns a diagnostic
             message and error code corresponding to this status
         */
-        static Status checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage, FailureCode& _rErrCode);
+        static Status checkBootstrapStatus(OUString& _rDiagnosticMessage, FailureCode& _rErrCode);
 
     public:
         // singleton impl-class

@@ -79,7 +79,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using rtl::OUString;
 
 //-----------------------------------------------------------------------------
 
@@ -477,8 +476,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         }
         //prepare text
-        ::rtl::OUStringBuffer aText;
-        ::rtl::OUString aSeparator(sal_Unicode(' '));
+        OUStringBuffer aText;
+        OUString aSeparator(sal_Unicode(' '));
         double fRotationDegrees = 0.0;
         try
         {
@@ -1088,7 +1087,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
         if( ! (bShowEquation || bShowCorrCoeff))
             return;
 
-        ::rtl::OUStringBuffer aFormula;
+        OUStringBuffer aFormula;
         sal_Int32 nNumberFormatKey = 0;
         xEquationProperties->getPropertyValue( "NumberFormat") >>= nNumberFormatKey;
 
@@ -1895,11 +1894,11 @@ VDataSeries* VSeriesPlotter::getFirstSeries() const
     return 0;
 }
 
-uno::Sequence< rtl::OUString > VSeriesPlotter::getSeriesNames() const
+uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
 {
-    ::std::vector< rtl::OUString > aRetVector;
+    ::std::vector< OUString > aRetVector;
 
-    rtl::OUString aRole;
+    OUString aRole;
     if( m_xChartTypeModel.is() )
         aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
 
@@ -1919,7 +1918,7 @@ uno::Sequence< rtl::OUString > VSeriesPlotter::getSeriesNames() const
                 uno::Reference< XDataSeries > xSeries( pSeries ? pSeries->getModel() : 0 );
                 if( xSeries.is() )
                 {
-                    rtl::OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );
+                    OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );
                     aRetVector.push_back( aSeriesName );
                 }
             }
@@ -2385,7 +2384,7 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     , sal_Int32 nDimensionCount
     , bool bExcludingPositioning )
 {
-    rtl::OUString aChartType = xChartTypeModel->getChartType();
+    OUString aChartType = xChartTypeModel->getChartType();
 
     //@todo: in future the plotter should be instanciated via service factory
     VSeriesPlotter* pRet=NULL;

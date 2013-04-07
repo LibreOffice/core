@@ -35,29 +35,29 @@ namespace svx{
 struct SpellErrorDescription
 {
     bool                                                bIsGrammarError;
-    ::rtl::OUString                                     sErrorText;
-    ::rtl::OUString                                     sDialogTitle;
-    ::rtl::OUString                                     sExplanation;
-    ::rtl::OUString                                     sExplanationURL;
+    OUString                                     sErrorText;
+    OUString                                     sDialogTitle;
+    OUString                                     sExplanation;
+    OUString                                     sExplanationURL;
     ::com::sun::star::lang::Locale                      aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > xGrammarChecker;
-    ::rtl::OUString                                     sServiceName; ///< service name of GrammarChecker/SpellChecker
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSuggestions;
-    ::rtl::OUString                                     sRuleId;
+    OUString                                     sServiceName; ///< service name of GrammarChecker/SpellChecker
+    ::com::sun::star::uno::Sequence< OUString >  aSuggestions;
+    OUString                                     sRuleId;
 
     SpellErrorDescription() :
         bIsGrammarError( false ){}
 
     SpellErrorDescription( bool bGrammar,
-                      const ::rtl::OUString& rText,
+                      const OUString& rText,
                       const ::com::sun::star::lang::Locale& rLocale,
-                      const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSuggestions,
+                      const ::com::sun::star::uno::Sequence< OUString >& rSuggestions,
                       ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XProofreader > rxGrammarChecker,
-                      const ::rtl::OUString& rServiceName,
-                      const ::rtl::OUString* pDialogTitle = 0,
-                      const ::rtl::OUString* pExplanation = 0,
-                      const ::rtl::OUString* pRuleId = 0,
-                      const ::rtl::OUString* pExplanationURL = 0 ) :
+                      const OUString& rServiceName,
+                      const OUString* pDialogTitle = 0,
+                      const OUString* pExplanation = 0,
+                      const OUString* pRuleId = 0,
+                      const OUString* pExplanationURL = 0 ) :
         bIsGrammarError( bGrammar ),
         sErrorText( rText ),
         sDialogTitle( ),

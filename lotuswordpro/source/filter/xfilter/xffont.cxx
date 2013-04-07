@@ -88,9 +88,9 @@ XFFont::XFFont()
 }
 /*
     The Following variable are to  be compared:
-        rtl::OUString   m_strFontName;
-        rtl::OUString   m_strFontNameAsia;
-        rtl::OUString   m_strFontNameComplex;
+        OUString   m_strFontName;
+        OUString   m_strFontNameAsia;
+        OUString   m_strFontNameComplex;
         sal_Int16       m_nFontSize;
         sal_Int16       m_nFontSizeAsia;
         sal_Int16       m_nFontSizeComplex;
@@ -261,19 +261,19 @@ void XFFont::ToXml(IXFStream *pStrm)
     //font size:
     if( (m_nFlag & XFFONT_FLAG_SIZE) && m_nFontSize != 0 )
     {
-        rtl::OUString strSize = Int32ToOUString(m_nFontSize);
+        OUString strSize = Int32ToOUString(m_nFontSize);
         strSize += A2OUSTR("pt");
         pAttrList->AddAttribute(A2OUSTR("fo:font-size"),strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_ASIA) && m_nFontSizeAsia )
     {
-        rtl::OUString strSize = Int32ToOUString(m_nFontSizeAsia);
+        OUString strSize = Int32ToOUString(m_nFontSizeAsia);
         strSize += A2OUSTR("pt");
         pAttrList->AddAttribute(A2OUSTR("style:font-size-asian"),strSize);
     }
     if( (m_nFlag & XFFONT_FLAG_SIZE_COMPLEX) && m_nFontSizeComplex )
     {
-        rtl::OUString strSize = Int32ToOUString(m_nFontSizeComplex);
+        OUString strSize = Int32ToOUString(m_nFontSizeComplex);
         strSize += A2OUSTR("pt");
         pAttrList->AddAttribute(A2OUSTR("style:font-size-complex"),strSize);
     }
@@ -347,7 +347,7 @@ void XFFont::ToXml(IXFStream *pStrm)
 
     if( (m_nFlag & XFFONT_FLAG_EMPHASIZE) && m_eEmphasize )
     {
-        rtl::OUString empha = GetEmphasizeName(m_eEmphasize);
+        OUString empha = GetEmphasizeName(m_eEmphasize);
         empha += A2OUSTR(" ");
         if( m_bEmphasizeTop )
             empha += A2OUSTR("above");
@@ -375,7 +375,7 @@ void XFFont::ToXml(IXFStream *pStrm)
         ((m_nFlag & XFFONT_FLAG_POSITION) && m_nPosition != 0)
         )
     {
-        rtl::OUString tmp;
+        OUString tmp;
         tmp = Int32ToOUString(m_nPosition) + A2OUSTR("% ");
         tmp += Int32ToOUString(m_nScale) + A2OUSTR("%");
         pAttrList->AddAttribute(A2OUSTR("style:text-position"), tmp );

@@ -75,8 +75,8 @@ ScDataPilotFieldObj::ScDataPilotFieldObj()
 
 uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
 {
-    rtl::OUString aFileURL;
-    createFileURL(rtl::OUString("scdatapilotfieldobj.ods"), aFileURL);
+    OUString aFileURL;
+    createFileURL(OUString("scdatapilotfieldobj.ods"), aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -90,9 +90,9 @@ uno::Reference< uno::XInterface > ScDataPilotFieldObj::init()
     CPPUNIT_ASSERT(xDPTS.is());
     uno::Reference< sheet::XDataPilotTables > xDPT = xDPTS->getDataPilotTables();
     CPPUNIT_ASSERT(xDPT.is());
-    uno::Sequence<rtl::OUString> aElementNames = xDPT->getElementNames();
+    uno::Sequence<OUString> aElementNames = xDPT->getElementNames();
 
-    uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName(rtl::OUString("DataPilot1")),UNO_QUERY_THROW);
+    uno::Reference< sheet::XDataPilotDescriptor > xDPDsc(xDPT->getByName(OUString("DataPilot1")),UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDPDsc.is());
     uno::Reference< container::XIndexAccess > xIA( xDPDsc->getDataPilotFields(), UNO_QUERY_THROW);
     uno::Reference< uno::XInterface > xReturnValue( xIA->getByIndex(0), UNO_QUERY_THROW);

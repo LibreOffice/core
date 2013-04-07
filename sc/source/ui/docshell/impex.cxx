@@ -289,7 +289,7 @@ bool ScImportExport::ExportData( const String& rMimeType,
 }
 
 
-bool ScImportExport::ImportString( const ::rtl::OUString& rText, sal_uLong nFmt )
+bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
 {
     switch ( nFmt )
     {
@@ -304,7 +304,7 @@ bool ScImportExport::ImportString( const ::rtl::OUString& rText, sal_uLong nFmt 
         default:
         {
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-            ::rtl::OString aTmp( rText.getStr(), rText.getLength(), eEnc );
+            OString aTmp( rText.getStr(), rText.getLength(), eEnc );
             SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
@@ -314,15 +314,15 @@ bool ScImportExport::ImportString( const ::rtl::OUString& rText, sal_uLong nFmt 
 }
 
 
-bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
+bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
 {
     OSL_ENSURE( nFmt == FORMAT_STRING, "ScImportExport::ExportString: Unicode not supported for other formats than FORMAT_STRING" );
     if ( nFmt != FORMAT_STRING )
     {
         rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
-        rtl::OString aTmp;
+        OString aTmp;
         bool bOk = ExportByteString( aTmp, eEnc, nFmt );
-        rText = rtl::OStringToOUString( aTmp, eEnc );
+        rText = OStringToOUString( aTmp, eEnc );
         return bOk;
     }
     //  nSizeLimit not needed for OUString
@@ -336,17 +336,17 @@ bool ScImportExport::ExportString( ::rtl::OUString& rText, sal_uLong nFmt )
         aStrm << (sal_Unicode) 0;
         aStrm.Seek( STREAM_SEEK_TO_END );
 
-        rText = rtl::OUString( (const sal_Unicode*) aStrm.GetData() );
+        rText = OUString( (const sal_Unicode*) aStrm.GetData() );
         return true;
     }
-    rText = rtl::OUString();
+    rText = OUString();
     return false;
 
     // ExportStream must handle RTL_TEXTENCODING_UNICODE
 }
 
 
-bool ScImportExport::ExportByteString( rtl::OString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
+bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sal_uLong nFmt )
 {
     OSL_ENSURE( eEnc != RTL_TEXTENCODING_UNICODE, "ScImportExport::ExportByteString: Unicode not supported" );
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
@@ -370,7 +370,7 @@ bool ScImportExport::ExportByteString( rtl::OString& rText, rtl_TextEncoding eEn
             return true;
         }
     }
-    rText = rtl::OString();
+    rText = OString();
     return false;
 }
 
@@ -463,7 +463,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const String& rBaseURL, sal_
 
             // extra bits are used to tell the client to prefer external
             // reference link.
-            ::rtl::OUString aExtraBits("calc:extref");
+            OUString aExtraBits("calc:extref");
 
             WriteUnicodeOrByteString( rStrm, aAppName, true );
             WriteUnicodeOrByteString( rStrm, aDocName, true );
@@ -512,7 +512,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rS
     }
     else
     {
-        rtl::OString aByteStr(rtl::OUStringToOString(rString, eEnc));
+        OString aByteStr(OUStringToOString(rString, eEnc));
         rStrm << aByteStr.getStr();
         if ( bZero )
             rStrm << sal_Char(0);
@@ -723,11 +723,11 @@ static void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_SEMICOLON), rtl::OUString(';') );
+        rString.SearchAndReplaceAll( OUString(DOUBLE_SEMICOLON), OUString(';') );
     else
-        rString.SearchAndReplaceAll( rtl::OUString(DOUBLE_DOUBLEQUOTE), rtl::OUString('"') );
+        rString.SearchAndReplaceAll( OUString(DOUBLE_DOUBLEQUOTE), OUString('"') );
 
-    rString.SearchAndReplaceAll( rtl::OUString(SYLK_LF), rtl::OUString(_LF) );
+    rString.SearchAndReplaceAll( OUString(SYLK_LF), OUString(_LF) );
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
@@ -888,7 +888,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
 
     while( bOk )
     {
-        rtl::OUString aLine;
+        OUString aLine;
         String aCell;
         SCROW nRow = nStartRow;
         rStrm.Seek( nOldPos );
@@ -1155,7 +1155,7 @@ static bool lcl_PutString(
                 if (nFound > 6)
                 {
                     sal_Unicode cDec = '.';
-                    rtl::OUString aT( &cDec, 1);
+                    OUString aT( &cDec, 1);
                     aT += rStr.Copy( nStart[6], nEnd[6]+1-nStart[6]);
                     rtl_math_ConversionStatus eStatus;
                     double fV = rtl::math::stringToDouble( aT, cDec, 0, &eStatus, 0);
@@ -1216,7 +1216,7 @@ static bool lcl_PutString(
 }
 
 
-static String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
+static String lcl_GetFixed( const OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
                      bool& rbIsQuoted, bool& rbOverflowCell )
 {
     sal_Int32 nLen = rLine.getLength();
@@ -1307,7 +1307,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             LanguageTag( LANGUAGE_ENGLISH_US ).getLocale() );
     }
 
-    rtl::OUString aLine;
+    OUString aLine;
     String aCell;
     sal_uInt16 i;
     SCROW nRow = nStartRow;
@@ -1677,7 +1677,7 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     }
                 }
                 if( nCol < nEndCol )
-                    lcl_WriteSimpleString( rStrm, rtl::OUString(cSep) );
+                    lcl_WriteSimpleString( rStrm, OUString(cSep) );
             }
                 WriteUnicodeOrByteEndl( rStrm );
             if( rStrm.GetError() != SVSTREAM_OK )
@@ -1716,7 +1716,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     {
         String aLine;
         String aText;
-        rtl::OString aByteLine;
+        OString aByteLine;
         SCCOL nCol = nStartCol;
         SCROW nRow = nStartRow;
         SCCOL nRefCol = 1;
@@ -1726,7 +1726,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
         {
             //! allow unicode
             rStrm.ReadLine( aByteLine );
-            aLine = rtl::OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
+            aLine = OStringToOUString(aByteLine, rStrm.GetStreamCharSet());
             if( rStrm.IsEof() )
                 break;
             const sal_Unicode* p = aLine.GetBuffer();
@@ -1742,16 +1742,16 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
-                            nRow = rtl::OUString(p).toInt32() + nStartRow - 1;
+                            nRow = OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'C':
-                            nRefCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
+                            nRefCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'R':
-                            nRefRow = rtl::OUString(p).toInt32() + nStartRow - 1;
+                            nRefRow = OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'K':
                         {
@@ -1862,10 +1862,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     switch( ch )
                     {
                         case 'X':
-                            nCol = static_cast<SCCOL>(rtl::OUString(p).toInt32()) + nStartCol - 1;
+                            nCol = static_cast<SCCOL>(OUString(p).toInt32()) + nStartCol - 1;
                             break;
                         case 'Y':
-                            nRow = rtl::OUString(p).toInt32() + nStartRow - 1;
+                            nRow = OUString(p).toInt32() + nStartRow - 1;
                             break;
                         case 'P' :
                             if ( bData )
@@ -1876,7 +1876,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 const sal_Unicode* p0 = p;
                                 while( *p && *p != ';' )
                                     p++;
-                                rtl::OUString aNumber(p0, p - p0);
+                                OUString aNumber(p0, p - p0);
                                 nFormat = aNumber.toInt32();
                             }
                             break;
@@ -1904,11 +1904,11 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             {
                 if ( bData && *p == ';' && *(p+1) == 'P' )
                 {
-                    rtl::OUString aCode( p+2 );
+                    OUString aCode( p+2 );
                     // unescape doubled semicolons
                     aCode = aCode.replaceAll(";;", ";");
                     // get rid of Xcl escape characters
-                    aCode = aCode.replaceAll(rtl::OUString(static_cast<sal_Unicode>(0x1b)), rtl::OUString());
+                    aCode = aCode.replaceAll(OUString(static_cast<sal_Unicode>(0x1b)), OUString());
                     sal_Int32 nCheckPos;
                     short nType;
                     sal_uInt32 nKey;
@@ -2003,7 +2003,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
-                    aCellStr.SearchAndReplaceAll( rtl::OUString(_LF), rtl::OUString(SYLK_LF) );
+                    aCellStr.SearchAndReplaceAll( OUString(_LF), OUString(SYLK_LF) );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += OUString::number( c );
@@ -2023,7 +2023,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                rtl::OUString aOUCellStr;
+                                OUString aOUCellStr;
                                 pFCell->GetFormula( aOUCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
                                 aCellStr = aOUCellStr;
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
@@ -2086,7 +2086,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
             }
         }
     }
-    lcl_WriteSimpleString( rStrm, rtl::OUString( 'E' ) );
+    lcl_WriteSimpleString( rStrm, OUString( 'E' ) );
     WriteUnicodeOrByteEndl( rStrm );
     return rStrm.GetError() == SVSTREAM_OK;
 }
@@ -2271,7 +2271,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
         bLoaded = aModule.load(sFilterLib);
     if (bLoaded)
     {
-        oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString( "ScFilterCreate" ) );
+        oslGenericFunction fn = aModule.getFunctionSymbol( OUString( "ScFilterCreate" ) );
         if (fn != NULL)
             plugin = reinterpret_cast<FilterFn>(fn)();
     }
@@ -2298,10 +2298,10 @@ static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
     return 0;
 }
 
-rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
+OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
         const String& rFieldSeparators, sal_Unicode cFieldQuote )
 {
-    rtl::OUString aStr;
+    OUString aStr;
     rStream.ReadUniOrByteStringLine(aStr, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
 
     if (bEmbeddedLineBreak)
@@ -2399,9 +2399,9 @@ rtl::OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
             else
             {
                 nLastOffset = aStr.getLength();
-                rtl::OUString aNext;
+                OUString aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
-                aStr += rtl::OUString( sal_Unicode(_LF));
+                aStr += OUString( sal_Unicode(_LF));
                 aStr += aNext;
             }
         }

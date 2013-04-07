@@ -58,7 +58,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 namespace
@@ -223,7 +222,7 @@ sal_Bool SAL_CALL ChartModel::hasLocation()
     return !m_aResource.isEmpty();
 }
 
-::rtl::OUString SAL_CALL ChartModel::getLocation()
+OUString SAL_CALL ChartModel::getLocation()
     throw(uno::RuntimeException)
 {
     return impl_g_getLocation();
@@ -244,7 +243,7 @@ void SAL_CALL ChartModel::store()
     if(!aGuard.startApiCall(sal_True)) //start LongLastingCall
         return; //behave passive if already disposed or closed or throw exception @todo?
 
-    ::rtl::OUString aLocation = m_aResource;
+    OUString aLocation = m_aResource;
 
     if( aLocation.isEmpty() )
         throw io::IOException( "no location specified", static_cast< ::cppu::OWeakObject* >(this));
@@ -259,7 +258,7 @@ void SAL_CALL ChartModel::store()
 }
 
 void SAL_CALL ChartModel::storeAsURL(
-    const ::rtl::OUString& rURL,
+    const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
     throw(io::IOException, uno::RuntimeException)
 {
@@ -285,7 +284,7 @@ void SAL_CALL ChartModel::storeAsURL(
 }
 
 void SAL_CALL ChartModel::storeToURL(
-    const ::rtl::OUString& rURL,
+    const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
     throw(io::IOException,
           uno::RuntimeException)
@@ -618,7 +617,7 @@ void ChartModel::impl_loadGraphics(
 
         if( xGraphicsStorage.is() )
         {
-            const uno::Sequence< ::rtl::OUString > aElementNames(
+            const uno::Sequence< OUString > aElementNames(
                 xGraphicsStorage->getElementNames() );
 
             for( int i = 0; i < aElementNames.getLength(); ++i )

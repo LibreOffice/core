@@ -40,10 +40,10 @@
 
 using namespace ::com::sun::star;
 
-static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, const uno::Reference< frame::XFrame >& xFrame )
+static OUString GetLabelFromCommandURL( const OUString& rCommandURL, const uno::Reference< frame::XFrame >& xFrame )
 {
-    rtl::OUString aLabel;
-    rtl::OUString aModuleIdentifier;
+    OUString aLabel;
+    OUString aModuleIdentifier;
     uno::Reference< container::XNameAccess > xUICommandLabels;
     uno::Reference< uno::XComponentContext > xContext;
     uno::Reference< container::XNameAccess > xUICommandDescription;
@@ -172,7 +172,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 {
     // Retrieve label from helper function
     uno::Reference< frame::XFrame > xFrame = GetBindings().GetActiveFrame();
-    rtl::OUString aCommandStr( ".uno:StopRecording" );
+    OUString aCommandStr( ".uno:StopRecording" );
     aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
 
     // Determine size of toolbar

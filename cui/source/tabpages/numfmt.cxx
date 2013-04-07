@@ -144,7 +144,7 @@ void SvxNumberPreview::Paint( const Rectangle& )
 
     if ( mnPos != STRING_NOTFOUND )
     {
-        long nCharWidth = GetTextWidth( rtl::OUString::valueOf( mnChar ) );
+        long nCharWidth = GetTextWidth( OUString::valueOf( mnChar ) );
 
         int nNumCharsToInsert = 0;
         if (nCharWidth > 0) nNumCharsToInsert = nLeadSpace / nCharWidth;
@@ -518,7 +518,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         // is this a calc document
         Reference< XServiceInfo > xSI( pDocSh->GetModel(), UNO_QUERY );
         if ( xSI.is() )
-            bUseStarFormat = xSI->supportsService( rtl::OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
+            bUseStarFormat = xSI->supportsService( OUString( "com.sun.star.sheet.SpreadsheetDocument" ) );
     }
     pNumFmtShell->SetUseStarFormat( bUseStarFormat );
 
@@ -1687,12 +1687,12 @@ void SvxNumberFormatTabPage::SetOkHdl( const Link& rOkHandler )
 
 void SvxNumberFormatTabPage::FillCurrencyBox()
 {
-    std::vector<rtl::OUString> aList;
+    std::vector<OUString> aList;
 
     sal_uInt16  nSelPos=0;
     pNumFmtShell->GetCurrencySymbols(aList, &nSelPos);
 
-    for(std::vector<rtl::OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
+    for(std::vector<OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
         m_pLbCurrency->InsertEntry(*i);
 
     m_pLbCurrency->SelectEntryPos(nSelPos);

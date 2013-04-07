@@ -83,8 +83,8 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties.realloc( nNumProps );
 
     // load the math PrinterOptions into the custom tab
-    m_aUIProperties[nIdx].Name = rtl::OUString("OptionsUIFile");
-    m_aUIProperties[nIdx++].Value <<= rtl::OUString("modules/smath/ui/printeroptions.ui");
+    m_aUIProperties[nIdx].Name = OUString("OptionsUIFile");
+    m_aUIProperties[nIdx++].Value <<= OUString("modules/smath/ui/printeroptions.ui");
 
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
@@ -94,7 +94,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create subgroup for print options
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", aLocalizedStrings.GetString(1), rtl::OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", aLocalizedStrings.GetString(1), OUString());
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", aLocalizedStrings.GetString( 2 ),
@@ -113,23 +113,23 @@ SmPrintUIOptions::SmPrintUIOptions()
                                                   pConfig->IsPrintFrame());
 
     // create subgroup for print format
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", aLocalizedStrings.GetString(5), rtl::OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", aLocalizedStrings.GetString(5), OUString());
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
-    Sequence< rtl::OUString > aChoices( 3 );
+    Sequence< OUString > aChoices( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 6 );
     aChoices[1] = aLocalizedStrings.GetString( 7 );
     aChoices[2] = aLocalizedStrings.GetString( 8 );
-    Sequence< rtl::OUString > aHelpIds( 3 );
+    Sequence< OUString > aHelpIds( 3 );
     aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0";
     aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1";
     aHelpIds[2] = ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2";
-    Sequence< rtl::OUString > aWidgetIds( 3 );
+    Sequence< OUString > aWidgetIds( 3 );
     aWidgetIds[0] = "originalsize";
     aWidgetIds[1] = "fittopage";
     aWidgetIds[2] = "scaling";
     OUString aPrintFormatProp( PRTUIOPT_PRINT_FORMAT );
-    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
+    m_aUIProperties[nIdx++].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                     aHelpIds,
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
@@ -137,7 +137,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
-    m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", rtl::OUString(),
+    m_aUIProperties[nIdx++].Value = setRangeControlOpt("scalingspin", OUString(),
                                                      ".HelpID:vcl:PrintDialog:PrintScale:NumericField",
                                                      PRTUIOPT_PRINT_SCALE,
                                                      pConfig->GetPrintZoomFactor(),    // initial value
@@ -294,7 +294,7 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "RelativeSymbolPrimaryHeight"     ), HANDLE_RELATIVE_SYMBOL_PRIMARY_HEIGHT     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_ORNAMENTSIZE        },
         { RTL_CONSTASCII_STRINGPARAM( "RelativeUpperLimitDistance"      ),  HANDLE_RELATIVE_UPPER_LIMIT_DISTANCE     ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_UPPERLIMIT        },
         { RTL_CONSTASCII_STRINGPARAM( "RightMargin"                       ),    HANDLE_RIGHT_MARGIN                  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
-        { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const rtl::OUString * >(0)),    PropertyAttribute::READONLY, 0 },
+        { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const OUString * >(0)),    PropertyAttribute::READONLY, 0 },
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
@@ -407,9 +407,9 @@ OUString SmModel::getImplementationName(void) throw( uno::RuntimeException )
 }
 
 
-::rtl::OUString SmModel::getImplementationName_Static()
+OUString SmModel::getImplementationName_Static()
 {
-    return rtl::OUString("com.sun.star.comp.math.FormulaDocument");
+    return OUString("com.sun.star.comp.math.FormulaDocument");
 }
 
 sal_Bool SmModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
@@ -863,7 +863,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_USED_SYMBOLS:
             {
                 const bool bUsedSymbolsOnly = (*ppEntries)->mnHandle == HANDLE_USED_SYMBOLS;
-                const std::set< rtl::OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
+                const std::set< OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
 
                 // this is get
                 SmModule *pp = SM_MOD();

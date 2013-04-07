@@ -48,7 +48,7 @@ public:
             ::com::sun::star::frame::XModel >& xChartModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XInterface >& xChartView,
-        const ::rtl::OUString& rSelectedObjectCID );
+        const OUString& rSelectedObjectCID );
 
     void FillItemSet( SfxItemSet& rOutAttrs );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );

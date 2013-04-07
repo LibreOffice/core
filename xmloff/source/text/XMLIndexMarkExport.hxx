@@ -43,18 +43,18 @@ namespace rtl {
  */
 class XMLIndexMarkExport
 {
-    ::rtl::OUString sLevel;
-    ::rtl::OUString sUserIndexName;
-    ::rtl::OUString sPrimaryKey;
-    ::rtl::OUString sSecondaryKey;
-    ::rtl::OUString sDocumentIndexMark;
-    ::rtl::OUString sIsStart;
-    ::rtl::OUString sIsCollapsed;
-    ::rtl::OUString sAlternativeText;
-    ::rtl::OUString sTextReading;
-    ::rtl::OUString sPrimaryKeyReading;
-    ::rtl::OUString sSecondaryKeyReading;
-    ::rtl::OUString sMainEntry;
+    OUString sLevel;
+    OUString sUserIndexName;
+    OUString sPrimaryKey;
+    OUString sSecondaryKey;
+    OUString sDocumentIndexMark;
+    OUString sIsStart;
+    OUString sIsCollapsed;
+    OUString sAlternativeText;
+    OUString sTextReading;
+    OUString sPrimaryKeyReading;
+    OUString sSecondaryKeyReading;
+    OUString sMainEntry;
 
 
     SvXMLExport& rExport;
@@ -97,7 +97,7 @@ protected:
     /// create a numerical ID for this index mark
     /// (represented by its properties)
     void GetID(
-        ::rtl::OUStringBuffer& sBuffer,
+        OUStringBuffer& sBuffer,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 

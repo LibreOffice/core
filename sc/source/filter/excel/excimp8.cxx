@@ -106,7 +106,6 @@
 
 using namespace com::sun::star;
 using namespace ::comphelper;
-using ::rtl::OUString;
 
 //OleNameOverrideContainer
 
@@ -115,8 +114,8 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideCont
 class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
 {
 private:
-    typedef boost::unordered_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
-       ::std::equal_to< ::rtl::OUString > > NamedIndexToOleName;
+    typedef boost::unordered_map< OUString, uno::Reference< container::XIndexContainer >, OUStringHash,
+       ::std::equal_to< OUString > > NamedIndexToOleName;
     NamedIndexToOleName  IdToOleNameHash;
     ::osl::Mutex m_aMutex;
 public:
@@ -128,25 +127,25 @@ public:
         return ( IdToOleNameHash.size() > 0 );
     }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return uno::makeAny( IdToOleNameHash[ aName ] );
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        uno::Sequence< ::rtl::OUString > aResult( IdToOleNameHash.size() );
+        uno::Sequence< OUString > aResult( IdToOleNameHash.size() );
         NamedIndexToOleName::iterator it = IdToOleNameHash.begin();
         NamedIndexToOleName::iterator it_end = IdToOleNameHash.end();
-        rtl::OUString* pName = aResult.getArray();
+        OUString* pName = aResult.getArray();
         for (; it != it_end; ++it, ++pName )
             *pName = it->first;
         return aResult;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
@@ -159,7 +158,7 @@ public:
         return IdToOleNameHash.size();
     }
     // XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( hasByName( aName ) )
@@ -169,14 +168,14 @@ public:
             throw lang::IllegalArgumentException();
        IdToOleNameHash[ aName ] = xElement;
     }
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL removeByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         IdToOleNameHash.erase( IdToOleNameHash.find( aName ) );
     }
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
@@ -244,7 +243,7 @@ void ImportExcel8::Boundsheet( void )
     aIn.EnableDecryption();
     aIn >> nGrbit >> nLen;
 
-    rtl::OUString aName( aIn.ReadUniString( nLen ) );
+    OUString aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
@@ -477,7 +476,7 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
 
 }
 
-void XclImpAutoFilterData::CreateFromDouble( rtl::OUString& rStr, double fVal )
+void XclImpAutoFilterData::CreateFromDouble( OUString& rStr, double fVal )
 {
     rStr += ::rtl::math::doubleToUString(fVal,
                 rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max,
@@ -633,7 +632,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                 rStrm.Ignore( 4 );
                 rStrm >> nStrLen[ nE ];
                 rStrm.Ignore( 3 );
-                rItem.maString = rtl::OUString();
+                rItem.maString = OUString();
             break;
             case EXC_AFTYPE_BOOLERR:
                 rStrm >> nBoolErr >> nVal;
@@ -765,7 +764,7 @@ void XclImpAutoFilterData::CreateScDBData()
     if( bActive || bCriteria)
     {
         ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
-        String aNewName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        String aNewName = OUString(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         pCurrDBData = new ScDBData(aNewName , Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
         if(bCriteria)

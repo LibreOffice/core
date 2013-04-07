@@ -25,7 +25,7 @@ class Text2UnicodeConverter
 {
 
 public:
-    Text2UnicodeConverter( const ::rtl::OString & sEncoding );
+    Text2UnicodeConverter( const OString & sEncoding );
     ~Text2UnicodeConverter();
 
     ::com::sun::star::uno::Sequence < sal_Unicode > convert( const ::com::sun::star::uno::Sequence<sal_Int8> & );
@@ -53,7 +53,7 @@ public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
     ~Unicode2TextConverter();
 
-    inline ::com::sun::star::uno::Sequence<sal_Int8> convert( const ::rtl::OUString &s )
+    inline ::com::sun::star::uno::Sequence<sal_Int8> convert( const OUString &s )
         {
             return convert( s.getStr() , s.getLength() );
         }
@@ -90,7 +90,7 @@ public:
     ~XMLFile2UTFConverter();
 
     void setInputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > &r ) { m_in = r; }
-    void setEncoding( const ::rtl::OString &s ) { m_sEncoding = s; }
+    void setEncoding( const OString &s ) { m_sEncoding = s; }
 
 
 
@@ -124,7 +124,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  m_in;
 
     sal_Bool m_bStarted;
-    ::rtl::OString m_sEncoding;
+    OString m_sEncoding;
 
     Text2UnicodeConverter *m_pText2Unicode;
     Unicode2TextConverter *m_pUnicode2Text;

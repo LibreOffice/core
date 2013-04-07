@@ -414,10 +414,10 @@ namespace slideshow
                 If there is no unique font family, the font family of
                 the first text of the shape is returned.
              */
-            ::rtl::OUString getFontFamily() const;
+            OUString getFontFamily() const;
             /** Set the text font family name globally for the whole shape
              */
-            void setFontFamily( const ::rtl::OUString& rName );
+            void setFontFamily( const OUString& rName );
 
             /** Query whether the italic mode attribute is valid
              */
@@ -481,7 +481,7 @@ namespace slideshow
             ::basegfx::B2DPoint                         maPosition;
             ::basegfx::B2DPolyPolygon                   maClip;
 
-            ::rtl::OUString                             maFontFamily;
+            OUString                             maFontFamily;
 
             double                                      mnRotationAngle;
             double                                      mnShearXAngle;

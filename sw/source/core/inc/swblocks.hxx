@@ -38,7 +38,7 @@ class SwBlockName
 public:
     String aShort;                      // Short name
     String aLong;                       // Long name
-    rtl::OUString aPackageName;         // Package name
+    OUString aPackageName;         // Package name
     sal_Bool bIsOnlyTxtFlagInit : 1;        // ist das Flag gueltig?
     sal_Bool bIsOnlyTxt : 1;                // unformatted text
     sal_Bool bInPutMuchBlocks : 1;          // put serveral block entries
@@ -96,7 +96,7 @@ public:
     sal_uInt16 GetLongIndex( const String& ) const; //Index fuer Langnamen ermitteln
     const String& GetShortName( sal_uInt16 ) const; // Kurzname fuer Index zurueck
     const String& GetLongName( sal_uInt16 ) const;  // Langname fuer Index zurueck
-    rtl::OUString GetPackageName( sal_uInt16 ) const;   // Langname fuer Index zurueck
+    OUString GetPackageName( sal_uInt16 ) const;   // Langname fuer Index zurueck
 
     const String& GetFileName() const {return aFile;}   // phys. Dateinamen liefern
     void SetName( const String& rName )                 // logic name

@@ -50,13 +50,13 @@ class PropertyInfoService
     //..................................................................
     struct PropertyAssignment
     {
-        ::rtl::OUString     sName;
+        OUString     sName;
         sal_Int32           nHandle;
 
         PropertyAssignment() { nHandle = -1; }
         PropertyAssignment(const PropertyAssignment& _rSource)
             :sName(_rSource.sName), nHandle(_rSource.nHandle) { }
-        PropertyAssignment(const ::rtl::OUString& _rName, sal_Int32 _nHandle)
+        PropertyAssignment(const OUString& _rName, sal_Int32 _nHandle)
             :sName(_rName), nHandle(_nHandle) { }
 
     };
@@ -85,8 +85,8 @@ public:
     PropertyInfoService() { }
 
 public:
-    static sal_Int32            getPropertyId(const ::rtl::OUString& _rName);
-    static ::rtl::OUString      getPropertyName(sal_Int32 _nHandle);
+    static sal_Int32            getPropertyId(const OUString& _rName);
+    static OUString      getPropertyName(sal_Int32 _nHandle);
 
 private:
     static void initialize();
@@ -99,7 +99,7 @@ class ConcreteInfoService : public ::comphelper::IPropertyInfoService
 public:
     virtual ~ConcreteInfoService() {}
 
-    virtual sal_Int32 getPreferedPropertyId(const ::rtl::OUString& _rName);
+    virtual sal_Int32 getPreferedPropertyId(const OUString& _rName);
 };
 
 //------------------------------------------------------------------------------

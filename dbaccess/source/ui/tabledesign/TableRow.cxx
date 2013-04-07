@@ -181,7 +181,7 @@ namespace dbaui
                 }
                 case 2:
                     sValue = _rStr.ReadUniOrByteString(_rStr.GetStreamCharSet());
-                    aControlDefault <<= ::rtl::OUString(sValue);
+                    aControlDefault <<= OUString(sValue);
                     break;
             }
 

@@ -73,14 +73,14 @@ public:
                         getXStorage() const;
 
     /** Returns the element name of this storage. */
-    const ::rtl::OUString& getName() const;
+    const OUString& getName() const;
 
     /** Returns the full path of this storage. */
-    ::rtl::OUString     getPath() const;
+    OUString     getPath() const;
 
     /** Fills the passed vector with the names of all direct elements of this
         storage. */
-    void                getElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const;
+    void                getElementNames( ::std::vector< OUString >& orElementNames ) const;
 
     /** Opens and returns the specified sub storage from the storage.
 
@@ -91,7 +91,7 @@ public:
             True = create missing sub storages (for export filters). Must be
             false for storages based on input streams.
      */
-    StorageRef          openSubStorage( const ::rtl::OUString& rStorageName, bool bCreateMissing );
+    StorageRef          openSubStorage( const OUString& rStorageName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage.
 
@@ -102,7 +102,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        openInputStream( const ::rtl::OUString& rStreamName );
+                        openInputStream( const OUString& rStreamName );
 
     /** Opens and returns the specified output stream from the storage.
 
@@ -113,7 +113,7 @@ public:
             can be accessed by passing an empty string as stream name.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        openOutputStream( const ::rtl::OUString& rStreamName );
+                        openOutputStream( const OUString& rStreamName );
 
     /** Copies the specified element from this storage to the passed
          destination storage.
@@ -124,7 +124,7 @@ public:
             case, the element will be copied to the same substorage in the
             destination storage.
      */
-    void                copyToStorage( StorageBase& rDestStrg, const ::rtl::OUString& rElementName );
+    void                copyToStorage( StorageBase& rDestStrg, const OUString& rElementName );
 
     /** Copies all streams of this storage and of all substorages to the passed
         destination. */
@@ -135,7 +135,7 @@ public:
 
 protected:
     /** Special constructor for sub storage objects. */
-    explicit            StorageBase( const StorageBase& rParentStorage, const ::rtl::OUString& rStorageName, bool bReadOnly );
+    explicit            StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName, bool bReadOnly );
 
 private:
                         StorageBase( const StorageBase& );
@@ -149,35 +149,35 @@ private:
                         implGetXStorage() const = 0;
 
     /** Returns the names of all elements of this storage. */
-    virtual void        implGetElementNames( ::std::vector< ::rtl::OUString >& orElementNames ) const = 0;
+    virtual void        implGetElementNames( ::std::vector< OUString >& orElementNames ) const = 0;
 
     /** Implementation of opening a storage element. */
-    virtual StorageRef  implOpenSubStorage( const ::rtl::OUString& rElementName, bool bCreate ) = 0;
+    virtual StorageRef  implOpenSubStorage( const OUString& rElementName, bool bCreate ) = 0;
 
     /** Implementation of opening an input stream element. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implOpenInputStream( const ::rtl::OUString& rElementName ) = 0;
+                        implOpenInputStream( const OUString& rElementName ) = 0;
 
     /** Implementation of opening an output stream element. */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        implOpenOutputStream( const ::rtl::OUString& rElementName ) = 0;
+                        implOpenOutputStream( const OUString& rElementName ) = 0;
 
     /** Commits the current storage. */
     virtual void        implCommit() const = 0;
 
     /** Helper that opens and caches the specified direct substorage. */
-    StorageRef          getSubStorage( const ::rtl::OUString& rElementName, bool bCreateMissing );
+    StorageRef          getSubStorage( const OUString& rElementName, bool bCreateMissing );
 
 private:
-    typedef RefMap< ::rtl::OUString, StorageBase > SubStorageMap;
+    typedef RefMap< OUString, StorageBase > SubStorageMap;
 
     SubStorageMap       maSubStorages;      ///< Map of direct sub storages.
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                         mxInStream;         ///< Cached base input stream (to keep it alive).
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
                         mxOutStream;        ///< Cached base output stream (to keep it alive).
-    ::rtl::OUString     maParentPath;       ///< Full path of parent storage.
-    ::rtl::OUString     maStorageName;      ///< Name of this storage, if it is a substorage.
+    OUString     maParentPath;       ///< Full path of parent storage.
+    OUString     maStorageName;      ///< Name of this storage, if it is a substorage.
     bool                mbBaseStreamAccess; ///< True = access base streams with empty stream name.
     bool                mbReadOnly;         ///< True = storage opened read-only (based on input stream).
 };

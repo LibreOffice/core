@@ -97,7 +97,7 @@ Sequence< Any > make_seq_out_of_struct(
     {
         throw RuntimeException(
             type.getTypeName() +
-            ::rtl::OUString( "is no struct or exception!" ),
+            OUString( "is no struct or exception!" ),
             Reference< XInterface >() );
     }
     typelib_TypeDescription * pTD = 0;
@@ -106,7 +106,7 @@ Sequence< Any > make_seq_out_of_struct(
     if (! pTD)
     {
         throw RuntimeException(
-            ::rtl::OUString( "cannot get type descr of type " ) +
+            OUString( "cannot get type descr of type " ) +
             type.getTypeName(),
             Reference< XInterface >() );
     }
@@ -144,7 +144,7 @@ void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
                                                 const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    ::rtl::OUString aTarget;
+    OUString aTarget;
 
     com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_False );
     m_aStatements.push_back( aStatement );
@@ -154,7 +154,7 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    ::rtl::OUString aTarget;
+    OUString aTarget;
 
     // last parameter must be set to true -> it's a comment
         com::sun::star::frame::DispatchStatement aStatement( aURL.Complete, aTarget, lArguments, 0, sal_True );
@@ -171,15 +171,15 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
 }
 
 //*************************************************************************
-::rtl::OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException )
+OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException )
 {
     /* SAFE{ */
     WriteGuard aWriteLock(m_aLock);
 
     if ( m_aStatements.empty() )
-        return ::rtl::OUString();
+        return OUString();
 
-    ::rtl::OUStringBuffer aScriptBuffer;
+    OUStringBuffer aScriptBuffer;
     aScriptBuffer.ensureCapacity(10000);
     m_nRecordingID = 1;
 
@@ -195,13 +195,13 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
     for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
         implts_recordMacro( p->aCommand, p->aArgs, p->bIsComment, aScriptBuffer );
-    ::rtl::OUString sScript = aScriptBuffer.makeStringAndClear();
+    OUString sScript = aScriptBuffer.makeStringAndClear();
     return sScript;
     /* } */
 }
 
 //*************************************************************************
-void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgumentBuffer )
+void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBuffer& aArgumentBuffer )
 {
     // if value == bool
     if (aValue.getValueTypeClass() == css::uno::TypeClass_STRUCT )
@@ -242,7 +242,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
     else if (aValue.getValueTypeClass() == css::uno::TypeClass_STRING )
     {
         // strings need \"
-        ::rtl::OUString sVal;
+        OUString sVal;
         aValue >>= sVal;
 
         // encode non printable characters or '"' by using the CHR$ function
@@ -315,12 +315,12 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
         }
         catch (const css::script::CannotConvertException&) {}
         catch (const css::uno::Exception&) {}
-        ::rtl::OUString sVal;
+        OUString sVal;
         aNew >>= sVal;
 
         if (aValue.getValueTypeClass() == css::uno::TypeClass_ENUM )
         {
-            ::rtl::OUString aName = aValue.getValueType().getTypeName();
+            OUString aName = aValue.getValueType().getTypeName();
             aArgumentBuffer.append( aName );
             aArgumentBuffer.appendAscii(".");
         }
@@ -329,15 +329,15 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, ::rtl::OUS
     }
 }
 
-void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
+void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
                                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments,
-                                                          sal_Bool bAsComment, ::rtl::OUStringBuffer& aScriptBuffer )
+                                                          sal_Bool bAsComment, OUStringBuffer& aScriptBuffer )
 {
-    ::rtl::OUStringBuffer aArgumentBuffer(1000);
-    ::rtl::OUString       sArrayName;
+    OUStringBuffer aArgumentBuffer(1000);
+    OUString       sArrayName;
     // this value is used to name the arrays of aArgumentBuffer
-    sArrayName = ::rtl::OUString("args");
-    sArrayName += ::rtl::OUString::valueOf((sal_Int32)m_nRecordingID);
+    sArrayName = OUString("args");
+    sArrayName += OUString::valueOf((sal_Int32)m_nRecordingID);
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
 
@@ -348,7 +348,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
         if(!lArguments[i].Value.hasValue())
             continue;
 
-        ::rtl::OUStringBuffer sValBuffer(100);
+        OUStringBuffer sValBuffer(100);
         try
         {
             AppendToBuffer(lArguments[i].Value, sValBuffer);
@@ -438,7 +438,7 @@ com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  t
 {
     if (idx >= (sal_Int32)m_aStatements.size()) {
         throw com::sun::star::lang::IndexOutOfBoundsException(
-            ::rtl::OUString( "Dispatch recorder out of bounds" ),
+            OUString( "Dispatch recorder out of bounds" ),
                     Reference< XInterface >() );
 
     }
@@ -454,13 +454,13 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
     if (element.getValueType() !=
         ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL)) {
                         throw com::sun::star::lang::IllegalArgumentException(
-                        ::rtl::OUString( "Illegal argument in dispatch recorder" ),
+                        OUString( "Illegal argument in dispatch recorder" ),
                         Reference< XInterface >(), 2 );
     }
 
     if (idx >= (sal_Int32)m_aStatements.size()) {
                 throw com::sun::star::lang::IndexOutOfBoundsException(
-                        ::rtl::OUString( "Dispatch recorder out of bounds" ),
+                        OUString( "Dispatch recorder out of bounds" ),
                         Reference< XInterface >() );
 
         }

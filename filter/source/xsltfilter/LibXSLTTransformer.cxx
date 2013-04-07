@@ -179,7 +179,7 @@ namespace XSLT
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
 
-            oh->insertByName(::rtl::OUString::createFromAscii((sal_Char*) streamName->stringval), ::rtl::OString((sal_Char*) value->stringval));
+            oh->insertByName(OUString::createFromAscii((sal_Char*) streamName->stringval), OString((sal_Char*) value->stringval));
             valuePush(ctxt, xmlXPathNewCString(""));
         }
 
@@ -220,7 +220,7 @@ namespace XSLT
             OleHandler * oh = static_cast<OleHandler*> (data);
             xmlXPathObjectPtr streamName = valuePop(ctxt);
             streamName = ensureStringValue(streamName, ctxt);
-            const OString content = oh->getByName(::rtl::OUString::createFromAscii((sal_Char*) streamName->stringval));
+            const OString content = oh->getByName(OUString::createFromAscii((sal_Char*) streamName->stringval));
             valuePush(ctxt, xmlXPathNewCString(content.getStr()));
             xmlXPathFreeObject(streamName);
         }

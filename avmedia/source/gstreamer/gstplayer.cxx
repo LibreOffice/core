@@ -351,7 +351,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         else
             mbFakeVideo = false;
 
-        rtl::OString ascURL = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
+        OString ascURL = OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 );
         g_object_set( G_OBJECT( mpPlaybin ), "uri", ascURL.getStr() , NULL );
 
         pBus = gst_element_get_bus( mpPlaybin );

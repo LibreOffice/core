@@ -45,8 +45,6 @@
 #include "XMLNumberStylesImport.hxx"
 #include "xmloff/xmlerror.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -62,7 +60,7 @@ public:
     TYPEINFO();
 
     SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                const ::rtl::OUString& rLName,
+                const OUString& rLName,
                  const ::com::sun::star::uno::Reference<
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
@@ -72,7 +70,7 @@ public:
 
     using SvXMLPropertySetContext::CreateChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
+                                   const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp);
@@ -143,7 +141,7 @@ public:
     SdXMLDrawingPageStyleContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const rtl::OUString& rLName,
+        const OUString& rLName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         SvXMLStylesContext& rStyles,
         sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
@@ -151,7 +149,7 @@ public:
 
     SvXMLImportContext * CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void Finish( sal_Bool bOverwrite );
@@ -1270,8 +1268,8 @@ void SdXMLStylesContext::SetMasterPageStyles(SdXMLMasterPageContext& rMaster) co
     try
     {
         uno::Reference< container::XNameAccess > xMasterPageStyles( rStyleFamilies->getByName(rMaster.GetDisplayName()), UNO_QUERY_THROW );
-        rtl::OUString sPrefix(rMaster.GetDisplayName());
-        sPrefix += rtl::OUString(static_cast<sal_Unicode>('-'));
+        OUString sPrefix(rMaster.GetDisplayName());
+        sPrefix += OUString(static_cast<sal_Unicode>('-'));
         ImpSetGraphicStyles(xMasterPageStyles, XML_STYLE_FAMILY_SD_PRESENTATION_ID, sPrefix);
     }
     catch (const uno::Exception&)
@@ -1291,7 +1289,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
         const OUString sGraphicStyleName(OUString("graphics"));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sGraphicStyleName), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, rtl::OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_SD_GRAPHICS_ID, OUString());
     }
     catch( uno::Exception& )
     {
@@ -1306,7 +1304,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
         const OUString sCellStyleName(OUString("cell"));
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(sCellStyleName), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString());
+        ImpSetGraphicStyles(xGraphicPageStyles, XML_STYLE_FAMILY_TABLE_CELL, OUString());
     }
     catch( uno::Exception& )
     {
@@ -1317,7 +1315,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
 //////////////////////////////////////////////////////////////////////////////
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 //
-void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const rtl::OUString& rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess >& xPageStyles,  sal_uInt16 nFamily,  const OUString& rPrefix) const
 {
     sal_Int32 nPrefLen(rPrefix.getLength());
 
@@ -1449,7 +1447,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
             if(xStyle.is())
             {
                 // set parent style name
-                ::rtl::OUString sParentStyleDisplayName( const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
+                OUString sParentStyleDisplayName( const_cast< SvXMLImport& >( GetImport() ).GetStyleDisplayName( pStyle->GetFamily(), pStyle->GetParentName() ) );
                 if( nPrefLen )
                 {
                     sal_Int32 nStylePrefLen = sParentStyleDisplayName.lastIndexOf( sal_Unicode('-') ) + 1;
@@ -1498,7 +1496,7 @@ TYPEINIT1( SdXMLMasterStylesContext, SvXMLImportContext );
 SdXMLMasterStylesContext::SdXMLMasterStylesContext(
     SdXMLImport& rImport,
     sal_uInt16 nPrfx,
-    const rtl::OUString& rLName)
+    const OUString& rLName)
 :   SvXMLImportContext( rImport, nPrfx, rLName)
 {
 }
@@ -1512,7 +1510,7 @@ SdXMLMasterStylesContext::~SdXMLMasterStylesContext()
 
 SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLImportContext* pContext = 0;
@@ -1586,7 +1584,7 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
 ///////////////////////////////////////////////////////////////////////
 
 SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName,
+        const OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 : SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList )
 {
@@ -1640,7 +1638,7 @@ void SdXMLHeaderFooterDeclContext::EndElement()
     }
 }
 
-void SdXMLHeaderFooterDeclContext::Characters( const ::rtl::OUString& rChars )
+void SdXMLHeaderFooterDeclContext::Characters( const OUString& rChars )
 {
     maStrText += rChars;
 }

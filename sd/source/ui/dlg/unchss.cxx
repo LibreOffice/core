@@ -132,7 +132,7 @@ StyleSheetUndoAction::~StyleSheetUndoAction()
 }
 
 
-rtl::OUString StyleSheetUndoAction::GetComment() const
+OUString StyleSheetUndoAction::GetComment() const
 {
     return aComment;
 }

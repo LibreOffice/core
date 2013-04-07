@@ -55,32 +55,32 @@ namespace svxform
         return m_xPropertySet->getPropertySetInfo();
     }
 
-    void DataColumn::setPropertyValue(const ::rtl::OUString& aPropertyName, const Any& aValue) throw( UnknownPropertyException,  PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
+    void DataColumn::setPropertyValue(const OUString& aPropertyName, const Any& aValue) throw( UnknownPropertyException,  PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException )
     {
         m_xPropertySet->setPropertyValue(aPropertyName, aValue);
     }
 
-    Any DataColumn::getPropertyValue(const ::rtl::OUString& PropertyName) const throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    Any DataColumn::getPropertyValue(const OUString& PropertyName) const throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
     {
         return m_xPropertySet->getPropertyValue(PropertyName);
     }
 
-    void DataColumn::addPropertyChangeListener(const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener>& xListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    void DataColumn::addPropertyChangeListener(const OUString& aPropertyName, const Reference< XPropertyChangeListener>& xListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
     {
         m_xPropertySet->addPropertyChangeListener(aPropertyName, xListener);
     }
 
-    void DataColumn::removePropertyChangeListener(const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    void DataColumn::removePropertyChangeListener(const OUString& aPropertyName, const Reference< XPropertyChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
     {
         m_xPropertySet->removePropertyChangeListener(aPropertyName, aListener);
     }
 
-    void DataColumn::addVetoableChangeListener(const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    void DataColumn::addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
     {
         m_xPropertySet->addVetoableChangeListener(PropertyName, aListener);
     }
 
-    void DataColumn::removeVetoableChangeListener(const ::rtl::OUString& PropertyName, const Reference< XVetoableChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
+    void DataColumn::removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener>& aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
     {
         m_xPropertySet->removeVetoableChangeListener(PropertyName, aListener);
     }
@@ -91,7 +91,7 @@ namespace svxform
         return m_xColumn->wasNull();
     }
 
-    ::rtl::OUString DataColumn::getString() throw( SQLException, RuntimeException )
+    OUString DataColumn::getString() throw( SQLException, RuntimeException )
     {
         return m_xColumn->getString();
     }
@@ -227,7 +227,7 @@ namespace svxform
         m_xColumnUpdate->updateDouble(x);
     }
 
-    void DataColumn::updateString(const ::rtl::OUString& x) throw( SQLException, RuntimeException )
+    void DataColumn::updateString(const OUString& x) throw( SQLException, RuntimeException )
     {
         m_xColumnUpdate->updateString(x);
     }

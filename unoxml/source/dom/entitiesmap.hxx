@@ -30,7 +30,6 @@
 #include <cppuhelper/implbase1.hxx>
 
 
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
 

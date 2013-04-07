@@ -217,7 +217,7 @@ struct ColumnInfo
     sal_Int32               nNullable;
     sal_Bool                bAutoIncrement;
     sal_Bool                bReadOnly;
-    ::rtl::OUString         sName;
+    OUString         sName;
 
     // information about the control(s) bound to this column
 
@@ -455,7 +455,7 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
 //==================================================================
 struct FmFieldInfo
 {
-    rtl::OUString       aFieldName;
+    OUString       aFieldName;
     Reference< XPropertySet >   xField;
     Reference< XTextComponent >  xText;
 
@@ -478,11 +478,11 @@ public:
     {
     }
 
-    virtual ::rtl::OUString GetComponentServiceName() {return ::rtl::OUString("Edit");}
+    virtual OUString GetComponentServiceName() {return OUString("Edit");}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw( RuntimeException );
 
 protected:
-    virtual void ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal );
+    virtual void ImplSetPeerProperty( const OUString& rPropName, const Any& rVal );
 };
 
 //------------------------------------------------------------------------------
@@ -493,13 +493,13 @@ void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const 
     Reference< XTextComponent >  xText(getPeer() , UNO_QUERY);
     if (xText.is())
     {
-        xText->setText(::rtl::OUString(String(SVX_RES(RID_STR_AUTOFIELD))));
+        xText->setText(OUString(String(SVX_RES(RID_STR_AUTOFIELD))));
         xText->setEditable(sal_False);
     }
 }
 
 //------------------------------------------------------------------------------
-void FmXAutoControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const Any& rVal )
+void FmXAutoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal )
 {
     // these properties are ignored
     if (rPropName == FM_PROP_TEXT)
@@ -563,7 +563,7 @@ FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB 
                   ,m_aFilterListeners(m_aMutex)
                   ,m_pControlBorderManager( new ::svxform::ControlBorderManager )
                   ,m_xFormOperations()
-                  ,m_aMode( ::rtl::OUString( "DataMode"  ) )
+                  ,m_aMode( OUString( "DataMode"  ) )
                   ,m_aLoadEvent( LINK( this, FormController, OnLoad ) )
                   ,m_aToggleEvent( LINK( this, FormController, OnToggleAutoFields ) )
                   ,m_aActivationEvent( LINK( this, FormController, OnActivated ) )
@@ -688,10 +688,10 @@ Sequence< Type > SAL_CALL FormController::getTypes(  ) throw(RuntimeException)
 
 // XServiceInfo
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& ServiceName) throw( RuntimeException )
+sal_Bool SAL_CALL FormController::supportsService(const OUString& ServiceName) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSNL(getSupportedServiceNames());
-    const ::rtl::OUString * pArray = aSNL.getConstArray();
+    Sequence< OUString> aSNL(getSupportedServiceNames());
+    const OUString * pArray = aSNL.getConstArray();
     for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
@@ -699,21 +699,21 @@ sal_Bool SAL_CALL FormController::supportsService(const ::rtl::OUString& Service
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL FormController::getImplementationName() throw( RuntimeException )
 {
-    return ::rtl::OUString("org.openoffice.comp.svx.FormController");
+    return OUString("org.openoffice.comp.svx.FormController");
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL FormController::getSupportedServiceNames(void) throw( RuntimeException )
+Sequence< OUString> SAL_CALL FormController::getSupportedServiceNames(void) throw( RuntimeException )
 {
     // service names which are supported only, but cannot be used to created an
     // instance at a service factory
-    Sequence< ::rtl::OUString > aNonCreatableServiceNames( 1 );
-    aNonCreatableServiceNames[ 0 ] = ::rtl::OUString( "com.sun.star.form.FormControllerDispatcher"  );
+    Sequence< OUString > aNonCreatableServiceNames( 1 );
+    aNonCreatableServiceNames[ 0 ] = OUString( "com.sun.star.form.FormControllerDispatcher"  );
 
     // services which can be used to created an instance at a service factory
-    Sequence< ::rtl::OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );
+    Sequence< OUString > aCreatableServiceNames( getSupportedServiceNames_Static() );
     return ::comphelper::concatSequences( aCreatableServiceNames, aNonCreatableServiceNames );
 }
 
@@ -732,14 +732,14 @@ void SAL_CALL FormController::resetted(const EventObject& rEvent) throw( Runtime
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> FormController::getSupportedServiceNames_Static(void)
+Sequence< OUString> FormController::getSupportedServiceNames_Static(void)
 {
-    static Sequence< ::rtl::OUString> aServices;
+    static Sequence< OUString> aServices;
     if (!aServices.getLength())
     {
         aServices.realloc(2);
         aServices.getArray()[0] = OUString( "com.sun.star.form.runtime.FormController"  );
-        aServices.getArray()[1] = ::rtl::OUString("com.sun.star.awt.control.TabController");
+        aServices.getArray()[1] = OUString("com.sun.star.awt.control.TabController");
     }
     return aServices;
 }
@@ -751,7 +751,7 @@ namespace
     {
         void operator()( const Reference< XTextComponent >& _rxText )
         {
-            _rxText->setText( ::rtl::OUString() );
+            _rxText->setText( OUString() );
         }
     };
 
@@ -826,7 +826,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     {
         case FM_ATTR_FILTER:
         {
-            ::rtl::OUStringBuffer aFilter;
+            OUStringBuffer aFilter;
             OStaticDataAccessTools aStaticTools;
             Reference<XConnection> xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
@@ -849,7 +849,7 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                         if ( rRow.empty() )
                             continue;
 
-                        ::rtl::OUStringBuffer aRowFilter;
+                        OUStringBuffer aRowFilter;
                         for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                         {
                             // get the field of the controls map
@@ -857,9 +857,9 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                             Reference< XPropertySet > xModelProps( xControl->getModel(), UNO_QUERY_THROW );
                             Reference< XPropertySet > xField( xModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ), UNO_QUERY_THROW );
 
-                            ::rtl::OUString sFilterValue( condition->second );
+                            OUString sFilterValue( condition->second );
 
-                            ::rtl::OUString sErrorMsg, sCriteria;
+                            OUString sErrorMsg, sCriteria;
                             const ::rtl::Reference< ISQLParseNode > xParseNode =
                                 predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
                             OSL_ENSURE( xParseNode.is(), "FormController::getFastPropertyValue: could not parse the field value predicate!" );
@@ -923,7 +923,7 @@ void FormController::fillProperties(
     _rProps.realloc(2);
     sal_Int32 nPos = 0;
     Property* pDesc = _rProps.getArray();
-    DECL_PROP1(FILTER, rtl::OUString, READONLY);
+    DECL_PROP1(FILTER, OUString, READONLY);
     DECL_PROP1(FORM_OPERATIONS, Reference< XFormOperations >, READONLY);
 }
 
@@ -965,13 +965,13 @@ void SAL_CALL FormController::removeFilterControllerListener( const Reference< X
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const ::rtl::OUString& _PredicateExpression ) throw( RuntimeException, IndexOutOfBoundsException )
+void SAL_CALL FormController::setPredicateExpression( ::sal_Int32 _Component, ::sal_Int32 _Term, const OUString& _PredicateExpression ) throw( RuntimeException, IndexOutOfBoundsException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
     if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) || ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        throw IndexOutOfBoundsException( OUString(), *this );
 
     Reference< XTextComponent > xText( m_aFilterComponents[ _Component ] );
     xText->setText( _PredicateExpression );
@@ -990,18 +990,18 @@ Reference< XControl > FormController::getFilterComponent( ::sal_Int32 _Component
     impl_checkDisposed_throw();
 
     if ( ( _Component < 0 ) || ( _Component >= getFilterComponents() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        throw IndexOutOfBoundsException( OUString(), *this );
 
     return Reference< XControl >( m_aFilterComponents[ _Component ], UNO_QUERY );
 }
 
 //------------------------------------------------------------------------------
-Sequence< Sequence< ::rtl::OUString > > FormController::getPredicateExpressions() throw( RuntimeException )
+Sequence< Sequence< OUString > > FormController::getPredicateExpressions() throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    Sequence< Sequence< ::rtl::OUString > > aExpressions( m_aFilterRows.size() );
+    Sequence< Sequence< OUString > > aExpressions( m_aFilterRows.size() );
     sal_Int32 termIndex = 0;
     for (   FmFilterRows::const_iterator row = m_aFilterRows.begin();
             row != m_aFilterRows.end();
@@ -1010,7 +1010,7 @@ Sequence< Sequence< ::rtl::OUString > > FormController::getPredicateExpressions(
     {
         const FmFilterRow& rRow( *row );
 
-        Sequence< ::rtl::OUString > aConjunction( m_aFilterComponents.size() );
+        Sequence< OUString > aConjunction( m_aFilterComponents.size() );
         sal_Int32 componentIndex = 0;
         for (   FilterComponents::const_iterator comp = m_aFilterComponents.begin();
                 comp != m_aFilterComponents.end();
@@ -1036,7 +1036,7 @@ void SAL_CALL FormController::removeDisjunctiveTerm( ::sal_Int32 _Term ) throw (
     impl_checkDisposed_throw();
 
     if ( ( _Term < 0 ) || ( _Term >= getDisjunctiveTerms() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        throw IndexOutOfBoundsException( OUString(), *this );
 
     // if the to-be-deleted row is our current row, we need to shift
     if ( _Term == m_nCurrentFilterPosition )
@@ -1096,7 +1096,7 @@ void SAL_CALL FormController::setActiveTerm( ::sal_Int32 _ActiveTerm ) throw (In
     impl_checkDisposed_throw();
 
     if ( ( _ActiveTerm < 0 ) || ( _ActiveTerm >= getDisjunctiveTerms() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *this );
+        throw IndexOutOfBoundsException( OUString(), *this );
 
     if ( _ActiveTerm == getActiveTerm() )
         return;
@@ -1466,7 +1466,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
                         &&  ::comphelper::getBOOL( xField->getPropertyValue(FM_PROP_AUTOINCREMENT ) )
                         )
                     {
-                        ::rtl::OUString sServiceName;
+                        OUString sServiceName;
                         OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
                         Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
                         replaceControl( xControl, xNewControl );
@@ -1504,7 +1504,7 @@ void SAL_CALL FormController::textChanged(const TextEvent& e) throw( RuntimeExce
         return;
 
     Reference< XTextComponent >  xText(e.Source,UNO_QUERY);
-    ::rtl::OUString aText = xText->getText();
+    OUString aText = xText->getText();
 
     if ( m_aFilterRows.empty() )
         appendEmptyDisjunctiveTerm();
@@ -1601,7 +1601,7 @@ void FormController::modified( const EventObject& _rEvent ) throw( RuntimeExcept
 void FormController::impl_checkDisposed_throw() const
 {
     if ( impl_isDisposed_nofail() )
-        throw DisposedException( ::rtl::OUString(), *const_cast< FormController* >( this ) );
+        throw DisposedException( OUString(), *const_cast< FormController* >( this ) );
 }
 
 //------------------------------------------------------------------------------
@@ -3030,17 +3030,17 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
     impl_checkDisposed_throw();
 
     if ( !_ChildController.is() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
 
     // the parent of our (to-be-)child must be our own model
     Reference< XFormComponent > xFormOfChild( _ChildController->getModel(), UNO_QUERY );
     if ( !xFormOfChild.is() )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
 
     if ( xFormOfChild->getParent() != m_xModelAsIndex )
-        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        throw IllegalArgumentException( OUString(), *this, 1 );
         // TODO: (localized) error message
 
     m_aChildren.push_back( _ChildController );
@@ -3106,12 +3106,12 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         {
             Reference< XMultiServiceFactory > xFactory( xConnection, UNO_QUERY_THROW );
             m_xComposer.set(
-                xFactory->createInstance( ::rtl::OUString( "com.sun.star.sdb.SingleSelectQueryComposer"  ) ),
+                xFactory->createInstance( OUString( "com.sun.star.sdb.SingleSelectQueryComposer"  ) ),
                 UNO_QUERY_THROW );
 
             Reference< XPropertySet > xSet( xForm, UNO_QUERY );
-            ::rtl::OUString sStatement  = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_ACTIVECOMMAND ) );
-            ::rtl::OUString sFilter     = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_FILTER ) );
+            OUString sStatement  = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_ACTIVECOMMAND ) );
+            OUString sFilter     = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_FILTER ) );
             m_xComposer->setElementaryQuery( sStatement );
             m_xComposer->setFilter( sFilter );
         }
@@ -3178,7 +3178,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                 try
                 {
                     Reference< XPropertySet > xSet;
-                    ::rtl::OUString aRealName;
+                    OUString aRealName;
 
                     // first look with the given name
                     if (xQueryColumns->hasByName(pRefValues[j].Name))
@@ -3186,7 +3186,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         xQueryColumns->getByName(pRefValues[j].Name) >>= xSet;
 
                         // get the RealName
-                        xSet->getPropertyValue(::rtl::OUString("RealName")) >>= aRealName;
+                        xSet->getPropertyValue(OUString("RealName")) >>= aRealName;
 
                         // compare the condition field name and the RealName
                         if (aCompare(aRealName, pRefValues[j].Name))
@@ -3199,7 +3199,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         for (sal_Int32 n = 0, nCount = xColumnsByIndex->getCount(); n < nCount; n++)
                         {
                             xColumnsByIndex->getByIndex(n) >>= xSet;
-                            xSet->getPropertyValue(::rtl::OUString("RealName")) >>= aRealName;
+                            xSet->getPropertyValue(OUString("RealName")) >>= aRealName;
                             if (aCompare(aRealName, pRefValues[j].Name))
                             {
                                 // get the column by its alias
@@ -3226,22 +3226,22 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
                         // do we already have the control ?
                         if (aRow.find((*iter).xText) != aRow.end())
                         {
-                            ::rtl::OUString aCompText = aRow[(*iter).xText];
-                            aCompText += ::rtl::OUString(" ");
-                            ::rtl::OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
-                            aCompText += ::rtl::OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
-                            aCompText += ::rtl::OUString(" ");
+                            OUString aCompText = aRow[(*iter).xText];
+                            aCompText += OUString(" ");
+                            OString aVal = m_xParser->getContext().getIntlKeywordAscii(OParseContext::KEY_AND);
+                            aCompText += OUString(aVal.getStr(),aVal.getLength(),RTL_TEXTENCODING_ASCII_US);
+                            aCompText += OUString(" ");
                             aCompText += ::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }
                         else
                         {
-                            ::rtl::OUString sPredicate,sErrorMsg;
+                            OUString sPredicate,sErrorMsg;
                             pRefValues[j].Value >>= sPredicate;
                             ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(sErrorMsg, sPredicate, xFormatter, xField);
                             if ( xParseNode.is() )
                             {
-                                ::rtl::OUString sCriteria;
+                                OUString sCriteria;
                                 xParseNode->parseNodeToPredicateStr( sCriteria
                                                                     ,xConnection
                                                                     ,xFormatter
@@ -3320,7 +3320,7 @@ void FormController::startFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( ::rtl::OUString( "FilterMode"  ) );
+                xSelector->setMode( OUString( "FilterMode"  ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3446,7 +3446,7 @@ void FormController::stopFiltering()
             Reference< XModeSelector >  xSelector(xControl, UNO_QUERY);
             if (xSelector.is())
             {
-                xSelector->setMode( ::rtl::OUString( "DataMode"  ) );
+                xSelector->setMode( OUString( "DataMode"  ) );
 
                 // listening for new controls of the selector
                 Reference< XContainer >  xContainer(xSelector, UNO_QUERY);
@@ -3468,7 +3468,7 @@ void FormController::stopFiltering()
                     &&  ::comphelper::getBOOL( xField->getPropertyValue( FM_PROP_SEARCHABLE ) )
                     )
                 {
-                    ::rtl::OUString sServiceName;
+                    OUString sServiceName;
                     OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DEFAULTCONTROL ) >>= sServiceName );
                     Reference< XControl > xNewControl( m_aContext.createComponent( sServiceName ), UNO_QUERY );
                     replaceControl( xControl, xNewControl );
@@ -3498,7 +3498,7 @@ void FormController::stopFiltering()
 
 // XModeSelector
 //------------------------------------------------------------------------------
-void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportException, RuntimeException )
+void FormController::setMode(const OUString& Mode) throw( NoSupportException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3526,7 +3526,7 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL FormController::getMode(void) throw( RuntimeException )
+OUString SAL_CALL FormController::getMode(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
@@ -3535,30 +3535,30 @@ void FormController::setMode(const ::rtl::OUString& Mode) throw( NoSupportExcept
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL FormController::getSupportedModes(void) throw( RuntimeException )
+Sequence< OUString > SAL_CALL FormController::getSupportedModes(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    static Sequence< ::rtl::OUString > aModes;
+    static Sequence< OUString > aModes;
     if (!aModes.getLength())
     {
         aModes.realloc(2);
-        ::rtl::OUString* pModes = aModes.getArray();
-        pModes[0] = ::rtl::OUString( "DataMode"  );
-        pModes[1] = ::rtl::OUString( "FilterMode"  );
+        OUString* pModes = aModes.getArray();
+        pModes[0] = OUString( "DataMode"  );
+        pModes[1] = OUString( "FilterMode"  );
     }
     return aModes;
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FormController::supportsMode(const ::rtl::OUString& Mode) throw( RuntimeException )
+sal_Bool SAL_CALL FormController::supportsMode(const OUString& Mode) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     impl_checkDisposed_throw();
 
-    Sequence< ::rtl::OUString > aModes(getSupportedModes());
-    const ::rtl::OUString* pModes = aModes.getConstArray();
+    Sequence< OUString > aModes(getSupportedModes());
+    const OUString* pModes = aModes.getConstArray();
     for (sal_Int32 i = aModes.getLength(); i > 0; )
     {
         if (pModes[--i] == Mode)
@@ -3585,7 +3585,7 @@ Window* FormController::getDialogParentWindow()
     return pParentWindow;
 }
 //------------------------------------------------------------------------------
-bool FormController::checkFormComponentValidity( ::rtl::OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
+bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
 {
     try
     {
@@ -3676,7 +3676,7 @@ namespace
     {
         try
         {
-            static ::rtl::OUString s_sFormsCheckRequiredFields( "FormsCheckRequiredFields"  );
+            static OUString s_sFormsCheckRequiredFields( "FormsCheckRequiredFields"  );
 
             // first, check whether the form has a property telling us the answer
             // this allows people to use the XPropertyContainer interface of a form to control
@@ -3698,7 +3698,7 @@ namespace
                 return sal_True;
 
             Reference< XPropertySet > xDataSourceSettings(
-                xDataSource->getPropertyValue( ::rtl::OUString( "Settings"  ) ),
+                xDataSource->getPropertyValue( OUString( "Settings"  ) ),
                 UNO_QUERY_THROW );
 
             sal_Bool bShouldValidate = true;
@@ -3739,7 +3739,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
         return bValid;
 
     // if some of the control models are bound to validators, check them
-    ::rtl::OUString sInvalidityExplanation;
+    OUString sInvalidityExplanation;
     Reference< XControlModel > xInvalidModel;
     if ( !checkFormComponentValidity( sInvalidityExplanation, xInvalidModel ) )
     {
@@ -3783,7 +3783,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
                 continue;
 
             String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
-            sMessage.SearchAndReplace( rtl::OUString('#'), rColInfo.sName );
+            sMessage.SearchAndReplace( OUString('#'), rColInfo.sName );
 
             // the control to focus
             Reference< XControl > xControl( rColInfo.xFirstControlWithInputRequired );
@@ -3986,7 +3986,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
                 if (xParam.is())
                 {
 #ifdef DBG_UTIL
-                    ::rtl::OUString sName;
+                    OUString sName;
                     xParam->getPropertyValue(FM_PROP_NAME) >>= sName;
                     DBG_ASSERT(sName.equals(pFinalValues->Name), "FormController::approveParameter: suspicious value names!");
 #endif
@@ -4046,7 +4046,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent) th
     if ( nLength > 1 )
     {
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
-        sTitle.SearchAndReplace( rtl::OUString('#'), rtl::OUString::valueOf(nLength) );
+        sTitle.SearchAndReplace( OUString('#'), OUString::valueOf(nLength) );
     }
     else
         sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );
@@ -4123,7 +4123,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException)
 //------------------------------------------------------------------------------
 Reference< XDispatch >
 FormController::interceptedQueryDispatch( const URL& aURL,
-                                            const ::rtl::OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
+                                            const OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
                                             throw( RuntimeException )
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );

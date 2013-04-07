@@ -159,7 +159,7 @@ private:
 protected:
     virtual SvXMLImportContext *CreateContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
@@ -171,9 +171,9 @@ public:
     virtual ~SchXMLImport() throw ();
 
     // XServiceInfo ( : SvXMLExport )
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
-    SvXMLImportContext* CreateStylesContext( const ::rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateStylesContext( const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     // XImporter

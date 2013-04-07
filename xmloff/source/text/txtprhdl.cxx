@@ -47,8 +47,6 @@
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -260,11 +258,11 @@ public:
 
     /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -313,11 +311,11 @@ public:
     virtual ~XMLOpaquePropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -365,11 +363,11 @@ public:
     virtual ~XMLContourModePropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -417,11 +415,11 @@ public:
     virtual ~XMLParagraphOnlyPropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -483,11 +481,11 @@ public:
     virtual ~XMLWrapPropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -539,11 +537,11 @@ public:
     virtual ~XMLFrameProtectPropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -741,11 +739,11 @@ public:
     virtual ~XMLHoriMirrorPropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -796,11 +794,11 @@ public:
     virtual ~XMLGrfMirrorPropHdl_Impl ();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -897,11 +895,11 @@ public:
     virtual ~XMLTextEmphasizePropHdl_Impl();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -1001,11 +999,11 @@ public:
     virtual ~XMLTextCombineCharPropHdl_Impl();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -1047,11 +1045,11 @@ public:
     virtual ~XMLTextRelWidthHeightPropHdl_Impl();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -1104,11 +1102,11 @@ public:
     virtual ~XMLTextSyncWidthHeightPropHdl_Impl();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -1153,11 +1151,11 @@ public:
     virtual ~XMLTextRotationAnglePropHdl_Impl();
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };
@@ -1217,11 +1215,11 @@ public:
     virtual ~XMLNumber8OneBasedHdl() {};
 
     virtual sal_Bool importXML(
-            const ::rtl::OUString& rStrImpValue,
+            const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
     virtual sal_Bool exportXML(
-            ::rtl::OUString& rStrExpValue,
+            OUString& rStrExpValue,
             const ::com::sun::star::uno::Any& rValue,
             const SvXMLUnitConverter& ) const;
 };

@@ -31,7 +31,7 @@ public:
     TYPEINFO();
 
     XMLSymbolImageContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
-                           const ::rtl::OUString& rLName,
+                           const OUString& rLName,
                            const XMLPropertyState& rProp,
                            ::std::vector< XMLPropertyState > &rProps );
     virtual ~XMLSymbolImageContext();
@@ -39,12 +39,12 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 
 private:
-    ::rtl::OUString msURL;
+    OUString msURL;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 };
 

@@ -48,7 +48,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
                                        ToolBox*             pToolBar,
                                        sal_uInt16               nID,
                                        Style                eStyle,
-                                       const rtl::OUString& aCommand );
+                                       const OUString& aCommand );
         virtual ~ToggleButtonToolbarController();
 
         // XComponent
@@ -65,8 +65,8 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         DECL_LINK( MenuSelectHdl, Menu *);
 
         Style                        m_eStyle;
-        rtl::OUString                m_aCurrentSelection;
-        std::vector< rtl::OUString > m_aDropdownMenuList;
+        OUString                m_aCurrentSelection;
+        std::vector< OUString > m_aDropdownMenuList;
 };
 
 }

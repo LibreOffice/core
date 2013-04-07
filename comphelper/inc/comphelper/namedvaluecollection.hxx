@@ -132,7 +132,7 @@ namespace comphelper
 
         /** returns the names of all elements in the collection
         */
-        ::std::vector< ::rtl::OUString >
+        ::std::vector< OUString >
                 getNames() const;
 
         /** merges the content of another collection into |this|
@@ -171,11 +171,11 @@ namespace comphelper
         template < typename VALUE_TYPE >
         bool get_ensureType( const sal_Char* _pAsciiValueName, VALUE_TYPE& _out_rValue ) const
         {
-            return get_ensureType( ::rtl::OUString::createFromAscii( _pAsciiValueName ), &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
+            return get_ensureType( OUString::createFromAscii( _pAsciiValueName ), &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
 
         template < typename VALUE_TYPE >
-        bool    get_ensureType( const ::rtl::OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
+        bool    get_ensureType( const OUString& _rValueName, VALUE_TYPE& _out_rValue ) const
         {
             return get_ensureType( _rValueName, &_out_rValue, ::cppu::UnoType< VALUE_TYPE >::get() );
         }
@@ -186,11 +186,11 @@ namespace comphelper
         template < typename VALUE_TYPE >
         VALUE_TYPE  getOrDefault( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rDefault ) const
         {
-            return getOrDefault( ::rtl::OUString::createFromAscii( _pAsciiValueName ), _rDefault );
+            return getOrDefault( OUString::createFromAscii( _pAsciiValueName ), _rDefault );
         }
 
         template < typename VALUE_TYPE >
-        VALUE_TYPE  getOrDefault( const ::rtl::OUString& _rValueName, const VALUE_TYPE& _rDefault ) const
+        VALUE_TYPE  getOrDefault( const OUString& _rValueName, const VALUE_TYPE& _rDefault ) const
         {
             VALUE_TYPE retVal( _rDefault );
             get_ensureType( _rValueName, retVal );
@@ -204,7 +204,7 @@ namespace comphelper
         */
         const ::com::sun::star::uno::Any& get( const sal_Char* _pAsciiValueName ) const
         {
-            return get( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
+            return get( OUString::createFromAscii( _pAsciiValueName ) );
         }
 
         /** retrieves a (untyped) value with a given name
@@ -212,7 +212,7 @@ namespace comphelper
             If the collection does not contain a value with the given name, an empty
             Any is returned.
         */
-        const ::com::sun::star::uno::Any& get( const ::rtl::OUString& _rValueName ) const
+        const ::com::sun::star::uno::Any& get( const OUString& _rValueName ) const
         {
             return impl_get( _rValueName );
         }
@@ -220,11 +220,11 @@ namespace comphelper
         /// determines whether a value with a given name is present in the collection
         inline bool has( const sal_Char* _pAsciiValueName ) const
         {
-            return impl_has( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
+            return impl_has( OUString::createFromAscii( _pAsciiValueName ) );
         }
 
         /// determines whether a value with a given name is present in the collection
-        inline bool has( const ::rtl::OUString& _rValueName ) const
+        inline bool has( const OUString& _rValueName ) const
         {
             return impl_has( _rValueName );
         }
@@ -237,7 +237,7 @@ namespace comphelper
         template < typename VALUE_TYPE >
         inline bool put( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rValue )
         {
-            return impl_put( ::rtl::OUString::createFromAscii( _pAsciiValueName ), ::com::sun::star::uno::makeAny( _rValue ) );
+            return impl_put( OUString::createFromAscii( _pAsciiValueName ), ::com::sun::star::uno::makeAny( _rValue ) );
         }
 
         /** puts a value into the collection
@@ -246,17 +246,17 @@ namespace comphelper
                 which case it has been overwritten.
         */
         template < typename VALUE_TYPE >
-        inline bool put( const ::rtl::OUString& _rValueName, const VALUE_TYPE& _rValue )
+        inline bool put( const OUString& _rValueName, const VALUE_TYPE& _rValue )
         {
             return impl_put( _rValueName, ::com::sun::star::uno::makeAny( _rValue ) );
         }
 
         inline bool put( const sal_Char* _pAsciiValueName, const ::com::sun::star::uno::Any& _rValue )
         {
-            return impl_put( ::rtl::OUString::createFromAscii( _pAsciiValueName ), _rValue );
+            return impl_put( OUString::createFromAscii( _pAsciiValueName ), _rValue );
         }
 
-        inline bool put( const ::rtl::OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue )
+        inline bool put( const OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue )
         {
             return impl_put( _rValueName, _rValue );
         }
@@ -267,14 +267,14 @@ namespace comphelper
         */
         inline bool remove( const sal_Char* _pAsciiValueName )
         {
-            return impl_remove( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
+            return impl_remove( OUString::createFromAscii( _pAsciiValueName ) );
         }
 
         /** removes the value with the given name from the collection
 
             @return <TRUE/> if and only if a value with the given name existed in the collection.
         */
-        inline bool remove( const ::rtl::OUString& _rValueName )
+        inline bool remove( const OUString& _rValueName )
         {
             return impl_remove( _rValueName );
         }
@@ -336,19 +336,19 @@ namespace comphelper
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments );
 
         bool    get_ensureType(
-                    const ::rtl::OUString& _rValueName,
+                    const OUString& _rValueName,
                     void* _pValueLocation,
                     const ::com::sun::star::uno::Type& _rExpectedValueType
                 ) const;
 
         const ::com::sun::star::uno::Any&
-                impl_get( const ::rtl::OUString& _rValueName ) const;
+                impl_get( const OUString& _rValueName ) const;
 
-        bool    impl_has( const ::rtl::OUString& _rValueName ) const;
+        bool    impl_has( const OUString& _rValueName ) const;
 
-        bool    impl_put( const ::rtl::OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue );
+        bool    impl_put( const OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue );
 
-        bool    impl_remove( const ::rtl::OUString& _rValueName );
+        bool    impl_remove( const OUString& _rValueName );
 
         template< class VALUE_TYPE >
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > impl_wrap() const

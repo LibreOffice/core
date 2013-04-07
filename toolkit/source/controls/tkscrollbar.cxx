@@ -43,9 +43,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
+    OUString UnoControlScrollBarModel::getServiceName( ) throw(::com::sun::star::uno::RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
+        return OUString::createFromAscii( szServiceName_UnoControlScrollBarModel );
     }
 
     //--------------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace toolkit
         case BASEPROPERTY_LIVE_SCROLL:
             return uno::makeAny( (sal_Bool)sal_False );
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBar ) );
+            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoControlScrollBar ) );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -92,9 +92,9 @@ namespace toolkit
     {
     }
 
-    ::rtl::OUString UnoScrollBarControl::GetComponentServiceName()
+    OUString UnoScrollBarControl::GetComponentServiceName()
     {
-        return ::rtl::OUString("ScrollBar");
+        return OUString("ScrollBar");
     }
 
     // ::com::sun::star::uno::XInterface

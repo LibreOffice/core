@@ -62,7 +62,7 @@ OCommandContainer::~OCommandContainer()
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
 IMPLEMENT_TYPEPROVIDER2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
 
-Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _rName)
+Reference< XContent > OCommandContainer::createObject( const OUString& _rName)
 {
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     OSL_ENSURE( rDefinitions.find(_rName) != rDefinitions.end(), "OCommandContainer::createObject: Invalid entry in map!" );

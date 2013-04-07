@@ -51,7 +51,7 @@ ScrollPanel::ScrollPanel (
 
 void ScrollPanel::Construct()
 {
-    SetAccessibleName (::rtl::OUString("Sub Task Panel"));
+    SetAccessibleName (OUString("Sub Task Panel"));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -107,7 +107,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
-    const rtl::OString& rHelpId)
+    const OString& rHelpId)
 {
     // We are interested only in the title.  The control itself is
     // managed by the content object.

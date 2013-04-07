@@ -877,7 +877,7 @@ namespace drawinglayer
                             uno::Reference< beans::XPropertySetInfo > xPropertyInfo(xModelProperties.is()
                                 ? xModelProperties->getPropertySetInfo()
                                 : uno::Reference< beans::XPropertySetInfo >());
-                            const ::rtl::OUString sPrintablePropertyName("Printable");
+                            const OUString sPrintablePropertyName("Printable");
 
                             if(xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
                             {
@@ -981,9 +981,9 @@ namespace drawinglayer
                     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
                     // thus do the MetafileAction embedding stuff but just handle recursively.
                     const primitive2d::TextHierarchyFieldPrimitive2D& rFieldPrimitive = static_cast< const primitive2d::TextHierarchyFieldPrimitive2D& >(rCandidate);
-                    const rtl::OString aCommentStringCommon(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN"));
-                    const rtl::OString aCommentStringPage(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN;PageField"));
-                    const rtl::OString aCommentStringEnd(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_END"));
+                    const OString aCommentStringCommon(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN"));
+                    const OString aCommentStringPage(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN;PageField"));
+                    const OString aCommentStringEnd(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_END"));
 
                     switch(rFieldPrimitive.getType())
                     {
@@ -999,7 +999,7 @@ namespace drawinglayer
                         }
                         case drawinglayer::primitive2d::FIELD_TYPE_URL :
                         {
-                            const rtl::OUString& rURL = rFieldPrimitive.getString();
+                            const OUString& rURL = rFieldPrimitive.getString();
                             const String aOldString(rURL);
                             mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
@@ -1032,7 +1032,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D :
                 {
                     const primitive2d::TextHierarchyLinePrimitive2D& rLinePrimitive = static_cast< const primitive2d::TextHierarchyLinePrimitive2D& >(rCandidate);
-                    const rtl::OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOL"));
+                    const OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOL"));
 
                     // process recursively and add MetaFile comment
                     process(rLinePrimitive.get2DDecomposition(getViewInformation2D()));
@@ -1045,7 +1045,7 @@ namespace drawinglayer
                     // in Outliner::PaintBullet(), a MetafileComment for bullets is added, too. The
                     // "XTEXT_EOC" is used, use here, too.
                     const primitive2d::TextHierarchyBulletPrimitive2D& rBulletPrimitive = static_cast< const primitive2d::TextHierarchyBulletPrimitive2D& >(rCandidate);
-                    const rtl::OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
+                    const OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
 
                     // process recursively and add MetaFile comment
                     process(rBulletPrimitive.get2DDecomposition(getViewInformation2D()));
@@ -1056,7 +1056,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D :
                 {
                     const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive = static_cast< const primitive2d::TextHierarchyParagraphPrimitive2D& >(rCandidate);
-                    const rtl::OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP"));
+                    const OString aCommentString(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOP"));
 
                     if(mpPDFExtOutDevData)
                     {
@@ -1079,8 +1079,8 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D :
                 {
                     const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive = static_cast< const primitive2d::TextHierarchyBlockPrimitive2D& >(rCandidate);
-                    const rtl::OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN"));
-                    const rtl::OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END"));
+                    const OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN"));
+                    const OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_END"));
 
                     // add MetaFile comment, process recursively and add MetaFile comment
                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA));
@@ -1115,7 +1115,7 @@ namespace drawinglayer
                             mxBreakIterator = i18n::BreakIterator::create(xContext);
                         }
 
-                        const rtl::OUString& rTxt = rTextCandidate.getText();
+                        const OUString& rTxt = rTextCandidate.getText();
                         const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
 
                         if(nTextLength)
@@ -1127,9 +1127,9 @@ namespace drawinglayer
                             sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
                             ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
                             sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
-                            const rtl::OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
-                            const rtl::OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW"));
-                            const rtl::OString aCommentStringC(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOS"));
+                            const OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
+                            const OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW"));
+                            const OString aCommentStringC(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOS"));
 
                             for(sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
                             {

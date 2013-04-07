@@ -36,7 +36,6 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-using ::rtl::OUString;
 
 #define ROUND(x) ((sal_uInt16) ((x) + .5))
 
@@ -83,7 +82,7 @@ SwLabPreview::SwLabPreview( const SwLabFmtPage* pParent, const ResId& rResID ) :
     lPWidthWidth  = GetTextWidth(aPWidthStr);
     lPHeightWidth = GetTextWidth(aPHeightStr);
     lXHeight = GetTextHeight();
-    lXWidth  = GetTextWidth(rtl::OUString('X'));
+    lXWidth  = GetTextWidth(OUString('X'));
 
     // Scale factor
     float fx = (float)(lOutWPix - (2 * (lLeftWidth + 15))) / (float)lOutWPix;
@@ -577,7 +576,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     {
         bModified = false;
         const std::vector<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
-        std::vector<rtl::OUString>& rMakes(GetParentSwLabDlg()->Makes());
+        std::vector<OUString>& rMakes(GetParentSwLabDlg()->Makes());
         if(rMakes.size() < rMan.size())
         {
             rMakes = rMan;
@@ -637,8 +636,8 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
         }
         String sTmp(aQueryMB.GetMessText());
         String sQuery(sTmp);
-        sQuery.SearchAndReplace(rtl::OUString("%1"), sMake);
-        sQuery.SearchAndReplace(rtl::OUString("%2"), sType);
+        sQuery.SearchAndReplace(OUString("%1"), sMake);
+        sQuery.SearchAndReplace(OUString("%2"), sType);
         aQueryMB.SetMessText(sQuery);
 
         short eRet = aQueryMB.Execute();

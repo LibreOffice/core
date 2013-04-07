@@ -33,8 +33,6 @@
 #include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
 
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::stoc_tdmgr;

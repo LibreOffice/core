@@ -46,38 +46,38 @@ void OfficeConnection::setUp() {
     css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
         css::bridge::UnoUrlResolver::create(
             cppu::defaultBootstrap_InitialComponentContext()));
-    rtl::OUString desc;
-    rtl::OUString argSoffice;
+    OUString desc;
+    OUString argSoffice;
     CPPUNIT_ASSERT(
         detail::getArgument(
-            rtl::OUString("soffice"),
+            OUString("soffice"),
             &argSoffice));
     if (argSoffice.match("path:")) {
-        desc = "pipe,name=" + uniquePipeName(rtl::OUString("oootest"));
-        rtl::OUString noquickArg("--quickstart=no");
-        rtl::OUString nofirstArg("--nofirststartwizard");
-        rtl::OUString norestoreArg("--norestore");
-        rtl::OUString nologoArg("--nologo");
+        desc = "pipe,name=" + uniquePipeName(OUString("oootest"));
+        OUString noquickArg("--quickstart=no");
+        OUString nofirstArg("--nofirststartwizard");
+        OUString norestoreArg("--norestore");
+        OUString nologoArg("--nologo");
             // disable use of the unix standalone splash screen app for the
             // tests (probably not needed in combination with --headless?)
-        rtl::OUString headlessArg("--headless");
-        rtl::OUString acceptArg("--accept=" + desc + ";urp");
-        rtl::OUString argUser;
+        OUString headlessArg("--headless");
+        OUString acceptArg("--accept=" + desc + ";urp");
+        OUString argUser;
         CPPUNIT_ASSERT(
-            detail::getArgument(rtl::OUString("user"), &argUser));
-        rtl::OUString userArg(
-            rtl::OUString("-env:UserInstallation=") +
+            detail::getArgument(OUString("user"), &argUser));
+        OUString userArg(
+            OUString("-env:UserInstallation=") +
             toAbsoluteFileUrl(argUser));
-        rtl::OUString jreArg(
+        OUString jreArg(
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true");
-        rtl::OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
+        OUString classpathArg("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
         rtl_uString * args[] = {
             noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
             nologoArg.pData, headlessArg.pData, acceptArg.pData, userArg.pData,
             jreArg.pData, classpathArg.pData };
         rtl_uString ** envs = 0;
-        rtl::OUString argEnv;
-        if (detail::getArgument(rtl::OUString("env"), &argEnv))
+        OUString argEnv;
+        if (detail::getArgument(OUString("env"), &argEnv))
         {
             envs = &argEnv.pData;
         }
@@ -100,9 +100,9 @@ void OfficeConnection::setUp() {
             context_ =
                 css::uno::Reference< css::uno::XComponentContext >(
                     resolver->resolve(
-                        rtl::OUString("uno:") +
+                        OUString("uno:") +
                         desc +
-                        rtl::OUString(";urp;StarOffice.ComponentContext")),
+                        OUString(";urp;StarOffice.ComponentContext")),
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}

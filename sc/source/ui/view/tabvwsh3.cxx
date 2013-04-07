@@ -803,7 +803,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
 
                 // fill all table names with selection state
-                rtl::OUString aTabName;
+                OUString aTabName;
                 for( nTab = 0; nTab < nTabCount; ++nTab )
                 {
                     rDoc.GetName( nTab, aTabName );

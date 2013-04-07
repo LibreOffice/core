@@ -37,40 +37,40 @@ namespace chart
 class ObjectNameProvider
 {
 public:
-    static rtl::OUString getName( ObjectType eObjectType, bool bPlural=false );
-    static rtl::OUString getAxisName( const rtl::OUString& rObjectCID
+    static OUString getName( ObjectType eObjectType, bool bPlural=false );
+    static OUString getAxisName( const OUString& rObjectCID
                         , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xChartModel  );
-    static rtl::OUString getGridName( const rtl::OUString& rObjectCID
+    static OUString getGridName( const OUString& rObjectCID
                         , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xChartModel );
-    static rtl::OUString getTitleName( const rtl::OUString& rObjectCID
+    static OUString getTitleName( const OUString& rObjectCID
                         , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xChartModel );
-    static rtl::OUString getTitleNameByType( TitleHelper::eTitleType eType );
+    static OUString getTitleNameByType( TitleHelper::eTitleType eType );
 
-    static rtl::OUString getNameForCID(
-        const rtl::OUString& rObjectCID,
+    static OUString getNameForCID(
+        const OUString& rObjectCID,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 
-    static rtl::OUString getName_ObjectForSeries(
+    static OUString getName_ObjectForSeries(
         ObjectType eObjectType,
-        const rtl::OUString& rSeriesCID,
+        const OUString& rSeriesCID,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument >& xChartDocument );
-    static rtl::OUString getName_ObjectForAllSeries( ObjectType eObjectType );
+    static OUString getName_ObjectForAllSeries( ObjectType eObjectType );
 
     /** Provides help texts for the various chart elements.
         The parameter rObjectCID has to be a ClassifiedIdentifier - see class ObjectIdentifier.
      */
-    static rtl::OUString getHelpText( const rtl::OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel, bool bVerbose=false );
-    static rtl::OUString getHelpText( const rtl::OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument, bool bVerbose=false );
+    static OUString getHelpText( const OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel, bool bVerbose=false );
+    static OUString getHelpText( const OUString& rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument, bool bVerbose=false );
 
     /** This is used for showing the currently selected object in the status bar
         (command "Context")
      */
-    static rtl::OUString getSelectedObjectText( const rtl::OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
+    static OUString getSelectedObjectText( const OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument );
 };
 
 //.............................................................................

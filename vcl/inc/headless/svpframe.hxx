@@ -74,7 +74,7 @@ public:
 
     virtual sal_Bool            PostEvent( void* pData );
 
-    virtual void                SetTitle( const rtl::OUString& rTitle );
+    virtual void                SetTitle( const OUString& rTitle );
     virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu* pMenu );
     virtual void                DrawMenuBar();
@@ -102,7 +102,7 @@ public:
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
-    virtual rtl::OUString       GetKeyName( sal_uInt16 nKeyCode );
+    virtual OUString       GetKeyName( sal_uInt16 nKeyCode );
     virtual sal_Bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -124,7 +124,7 @@ public:
 
     /*TODO: functional implementation */
     virtual void                SetScreenNumber( unsigned int nScreen ) { (void)nScreen; }
-    virtual void                SetApplicationID(const rtl::OUString &rApplicationID) { (void) rApplicationID; }
+    virtual void                SetApplicationID(const OUString &rApplicationID) { (void) rApplicationID; }
     bool                        IsVisible() { return m_bVisible; }
 
     static SvpSalFrame*         GetFocusFrame() { return s_pFocusFrame; }

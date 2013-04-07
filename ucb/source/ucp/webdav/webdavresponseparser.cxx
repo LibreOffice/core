@@ -48,10 +48,10 @@ namespace
         WebDAVNamespace_last
     };
 
-    WebDAVNamespace StrToWebDAVNamespace(const rtl::OUString& rStr)
+    WebDAVNamespace StrToWebDAVNamespace(const OUString& rStr)
     {
-        static ::rtl::OUString aStrDAV(::rtl::OUString::createFromAscii("DAV:"));
-        static ::rtl::OUString aStrUcbOpenofficeOrgDAVProps(::rtl::OUString::createFromAscii("http://ucb.openoffice.org/dav/props/"));
+        static OUString aStrDAV(OUString::createFromAscii("DAV:"));
+        static OUString aStrUcbOpenofficeOrgDAVProps(OUString::createFromAscii("http://ucb.openoffice.org/dav/props/"));
 
         if(rStr.equals(aStrDAV))
         {
@@ -97,33 +97,33 @@ namespace
         WebDAVName_last
     };
 
-    WebDAVName StrToWebDAVName(const rtl::OUString& rStr)
+    WebDAVName StrToWebDAVName(const OUString& rStr)
     {
-        typedef std::hash_map< rtl::OUString, WebDAVName, rtl::OUStringHash > WebDAVNameMapper;
-        typedef std::pair< rtl::OUString, WebDAVName > WebDAVNameValueType;
+        typedef std::hash_map< OUString, WebDAVName, OUStringHash > WebDAVNameMapper;
+        typedef std::pair< OUString, WebDAVName > WebDAVNameValueType;
         static WebDAVNameMapper aWebDAVNameMapperList;
 
         if(aWebDAVNameMapperList.empty())
         {
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("multistatus"), WebDAVName_multistatus));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("response"), WebDAVName_response));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("href"), WebDAVName_href));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("propstat"), WebDAVName_propstat));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("prop"), WebDAVName_prop));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("resourcetype"), WebDAVName_resourcetype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("collection"), WebDAVName_collection));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("getcontenttype"), WebDAVName_getcontenttype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("supportedlock"), WebDAVName_supportedlock));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("lockentry"), WebDAVName_lockentry));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("lockscope"), WebDAVName_lockscope));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("exclusive"), WebDAVName_exclusive));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("locktype"), WebDAVName_locktype));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("write"), WebDAVName_write));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("shared"), WebDAVName_shared));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("status"), WebDAVName_status));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("getlastmodified"), WebDAVName_getlastmodified));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("creationdate"), WebDAVName_creationdate));
-            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("getcontentlength"), WebDAVName_getcontentlength));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("multistatus"), WebDAVName_multistatus));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("response"), WebDAVName_response));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("href"), WebDAVName_href));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("propstat"), WebDAVName_propstat));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("prop"), WebDAVName_prop));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("resourcetype"), WebDAVName_resourcetype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("collection"), WebDAVName_collection));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getcontenttype"), WebDAVName_getcontenttype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("supportedlock"), WebDAVName_supportedlock));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("lockentry"), WebDAVName_lockentry));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("lockscope"), WebDAVName_lockscope));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("exclusive"), WebDAVName_exclusive));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("locktype"), WebDAVName_locktype));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("write"), WebDAVName_write));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("shared"), WebDAVName_shared));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("status"), WebDAVName_status));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getlastmodified"), WebDAVName_getlastmodified));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("creationdate"), WebDAVName_creationdate));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString::createFromAscii("getcontentlength"), WebDAVName_getcontentlength));
         }
 
         const WebDAVNameMapper::const_iterator aResult(aWebDAVNameMapperList.find(rStr));
@@ -144,37 +144,37 @@ namespace
 
 namespace
 {
-    typedef std::map< ::rtl::OUString, ::rtl::OUString > NamespaceMap;
-    typedef std::pair< const ::rtl::OUString, ::rtl::OUString > NamespaceValueType;
+    typedef std::map< OUString, OUString > NamespaceMap;
+    typedef std::pair< const OUString, OUString > NamespaceValueType;
 
     class WebDAVContext
     {
     private:
         WebDAVContext*              mpParent;
         NamespaceMap                maNamespaceMap;
-        ::rtl::OUString             maWhiteSpace;
+        OUString             maWhiteSpace;
 
-        ::rtl::OUString             maNamespace;
-        ::rtl::OUString             maName;
+        OUString             maNamespace;
+        OUString             maName;
 
         WebDAVNamespace             maWebDAVNamespace;
         WebDAVName                  maWebDAVName;
 
         // local helpers
         void parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs);
-        ::rtl::OUString mapNamespaceToken(const ::rtl::OUString& rToken) const;
-        void splitName(const ::rtl::OUString& rSource);
+        OUString mapNamespaceToken(const OUString& rToken) const;
+        void splitName(const OUString& rSource);
 
     public:
-        WebDAVContext(WebDAVContext* pParent, const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs);
+        WebDAVContext(WebDAVContext* pParent, const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs);
         ~WebDAVContext();
 
         WebDAVContext* getParent() const { return mpParent; }
-        ::rtl::OUString& getWhiteSpace() { return maWhiteSpace; }
-        void setWhiteSpace(const ::rtl::OUString& rNew) { maWhiteSpace = rNew; }
+        OUString& getWhiteSpace() { return maWhiteSpace; }
+        void setWhiteSpace(const OUString& rNew) { maWhiteSpace = rNew; }
 
-        const ::rtl::OUString& getNamespace() const { return maNamespace; }
-        const ::rtl::OUString& getName() const { return maName; }
+        const OUString& getNamespace() const { return maNamespace; }
+        const OUString& getName() const { return maName; }
         const WebDAVNamespace getWebDAVNamespace() const { return maWebDAVNamespace; }
         const WebDAVName getWebDAVName() const { return maWebDAVName; }
     };
@@ -182,11 +182,11 @@ namespace
     void WebDAVContext::parseForNamespaceTokens(const uno::Reference< xml::sax::XAttributeList >& xAttribs)
     {
         const sal_Int16 nAttributes(xAttribs->getLength());
-        static ::rtl::OUString aStrXmlns(::rtl::OUString::createFromAscii("xmlns"));
+        static OUString aStrXmlns(OUString::createFromAscii("xmlns"));
 
         for(sal_Int16 a(0); a < nAttributes; a++)
         {
-            const ::rtl::OUString aName(xAttribs->getNameByIndex(a));
+            const OUString aName(xAttribs->getNameByIndex(a));
             const sal_Int32 nLen(aName.getLength());
 
             if(nLen)
@@ -197,7 +197,7 @@ namespace
 
                     if(-1 != nIndex && nIndex + 1 < nLen)
                     {
-                        const ::rtl::OUString aToken(aName.copy(nIndex + 1));
+                        const OUString aToken(aName.copy(nIndex + 1));
 
                         maNamespaceMap.insert(NamespaceValueType(aToken, xAttribs->getValueByIndex(a)));
                     }
@@ -206,7 +206,7 @@ namespace
         }
     }
 
-    ::rtl::OUString WebDAVContext::mapNamespaceToken(const ::rtl::OUString& rToken) const
+    OUString WebDAVContext::mapNamespaceToken(const OUString& rToken) const
     {
         NamespaceMap::const_iterator iter = maNamespaceMap.find(rToken);
 
@@ -227,7 +227,7 @@ namespace
         }
     }
 
-    void WebDAVContext::splitName(const ::rtl::OUString& rSource)
+    void WebDAVContext::splitName(const OUString& rSource)
     {
         const sal_Int32 nLen(rSource.getLength());
         maNamespace = "";
@@ -245,7 +245,7 @@ namespace
         }
     }
 
-    WebDAVContext::WebDAVContext(WebDAVContext* pParent, const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs)
+    WebDAVContext::WebDAVContext(WebDAVContext* pParent, const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs)
     :   mpParent(pParent),
         maNamespaceMap(),
         maWhiteSpace(),
@@ -293,12 +293,12 @@ namespace
         std::vector< http_dav_ucp::DAVResourceInfo >  maResult_PropName;
 
         WebDAVContext*                              mpContext;
-        ::rtl::OUString                             maHref;
-        ::rtl::OUString                             maStatus;
+        OUString                             maHref;
+        OUString                             maStatus;
         std::vector< http_dav_ucp::DAVPropertyValue > maResponseProperties;
         std::vector< http_dav_ucp::DAVPropertyValue > maPropStatProperties;
-        std::vector< ::rtl::OUString >              maResponseNames;
-        std::vector< ::rtl::OUString >              maPropStatNames;
+        std::vector< OUString >              maResponseNames;
+        std::vector< OUString >              maPropStatNames;
         uno::Sequence< ucb::LockEntry >             maLockEntries;
         ucb::LockScope                              maLockScope;
         ucb::LockType                               maLockType;
@@ -355,11 +355,11 @@ namespace
         // Methods XDocumentHandler
         virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL setDocumentLocator( const uno::Reference< xml::sax::XLocator >& xLocator ) throw (xml::sax::SAXException, uno::RuntimeException);
 
         const std::vector< http_dav_ucp::DAVResource >& getResult_PropFind() const { return maResult_PropFind; }
@@ -405,7 +405,7 @@ namespace
         OSL_ENSURE(!mpContext, "Parser end with existing content (!)");
     }
 
-    void SAL_CALL WebDAVResponseParser::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         const sal_Int32 nLen(aName.getLength());
 
@@ -498,7 +498,7 @@ namespace
         }
     }
 
-    void SAL_CALL WebDAVResponseParser::endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::endElement( const OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         const sal_Int32 nLen(aName.getLength());
         OSL_ENSURE(mpContext, "Parser EndElement without content (!)");
@@ -550,7 +550,7 @@ namespace
                                 // getlastmodified end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:getlastmodified"));
+                                    static OUString aStr(OUString::createFromAscii("DAV:getlastmodified"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStr;
@@ -564,7 +564,7 @@ namespace
                                 // creationdate end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:creationdate"));
+                                    static OUString aStr(OUString::createFromAscii("DAV:creationdate"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStr;
@@ -587,12 +587,12 @@ namespace
                                 // resourcetype end, check for collection
                                 if(hasParent(WebDAVName_prop))
                                 {
-                                    static rtl::OUString aStrA(rtl::OUString::createFromAscii("DAV:resourcetype"));
-                                    static rtl::OUString aStrB(rtl::OUString::createFromAscii("collection"));
+                                    static OUString aStrA(OUString::createFromAscii("DAV:resourcetype"));
+                                    static OUString aStrB(OUString::createFromAscii("collection"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStrA;
-                                    aDAVPropertyValue.Value <<= (mbResourceTypeCollection ? aStrB : rtl::OUString());
+                                    aDAVPropertyValue.Value <<= (mbResourceTypeCollection ? aStrB : OUString());
                                     maPropStatProperties.push_back(aDAVPropertyValue);
                                 }
                                 break;
@@ -602,7 +602,7 @@ namespace
                                 // getcontentlength end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:getcontentlength"));
+                                    static OUString aStr(OUString::createFromAscii("DAV:getcontentlength"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStr;
@@ -616,7 +616,7 @@ namespace
                                 // getcontenttype end, safe if content is correct
                                 if(propertyIsReady())
                                 {
-                                    static rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:getcontenttype"));
+                                    static OUString aStr(OUString::createFromAscii("DAV:getcontenttype"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStr;
@@ -630,7 +630,7 @@ namespace
                                 // supportedlock end
                                 if(hasParent(WebDAVName_prop) && maLockEntries.hasElements())
                                 {
-                                    static rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:supportedlock"));
+                                    static OUString aStr(OUString::createFromAscii("DAV:supportedlock"));
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
 
                                     aDAVPropertyValue.Name = aStr;
@@ -689,7 +689,7 @@ namespace
                                 // propstat end, check status
                                 if(maStatus.getLength())
                                 {
-                                    static ::rtl::OUString aStrStatusOkay(::rtl::OUString::createFromAscii("HTTP/1.1 200 OK"));
+                                    static OUString aStrStatusOkay(OUString::createFromAscii("HTTP/1.1 200 OK"));
 
                                     if(maStatus.equals(aStrStatusOkay))
                                     {
@@ -759,7 +759,7 @@ namespace
         }
     }
 
-    void SAL_CALL WebDAVResponseParser::characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::characters( const OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
         // collect whitespace over evtl. several calls in mpContext
         OSL_ENSURE(mpContext, "Parser characters without content (!)");
@@ -768,16 +768,16 @@ namespace
         if(mpContext && nLen)
         {
             // remove leading/trailing blanks and CRLF
-            const ::rtl::OUString aTrimmedChars(aChars.trim());
+            const OUString aTrimmedChars(aChars.trim());
 
             if(aTrimmedChars.getLength())
             {
-                ::rtl::OUString aNew(mpContext->getWhiteSpace());
+                OUString aNew(mpContext->getWhiteSpace());
 
                 if(aNew.getLength())
                 {
                     // add one char when appending (see html1.1 spec)
-                    aNew += ::rtl::OUString(sal_Unicode(' '));
+                    aNew += OUString(sal_Unicode(' '));
                 }
 
                 aNew += aTrimmedChars;
@@ -786,11 +786,11 @@ namespace
         }
     }
 
-    void SAL_CALL WebDAVResponseParser::ignorableWhitespace( const ::rtl::OUString& /*aWhitespaces*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::ignorableWhitespace( const OUString& /*aWhitespaces*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 
-    void SAL_CALL WebDAVResponseParser::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 

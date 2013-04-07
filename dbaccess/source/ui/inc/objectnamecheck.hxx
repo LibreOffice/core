@@ -20,7 +20,8 @@
 #ifndef DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 #define DBACCESS_SOURCE_UI_INC_OBJECTNAMECHECK_HXX
 
-namespace rtl { class OUString; }
+#include <rtl/ustring.hxx>
+
 namespace dbtools { class SQLExceptionInfo; }
 
 //........................................................................
@@ -48,7 +49,7 @@ namespace dbaui
                 <TRUE/> if and only if the given name is valid.
         */
         virtual bool    isNameValid(
-            const ::rtl::OUString& _rObjectName,
+            const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
         ) const = 0;
 

@@ -66,7 +66,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Any;
-using ::rtl::OUString;
 using ::osl::MutexGuard;
 
 using namespace ::com::sun::star;
@@ -203,12 +202,12 @@ void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
 // private methods
 //-----------------------------------------------------------------
 
-::rtl::OUString ChartModel::impl_g_getLocation()
+OUString ChartModel::impl_g_getLocation()
 {
 
     LifeTimeGuard aGuard(m_aLifeTimeManager);
     if(!aGuard.startApiCall())
-        return ::rtl::OUString(); //behave passive if already disposed or closed or throw exception @todo?
+        return OUString(); //behave passive if already disposed or closed or throw exception @todo?
     //mutex is acquired
     return m_aResource;
 }
@@ -310,9 +309,9 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
 
 APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 
-uno::Sequence< rtl::OUString > ChartModel::getSupportedServiceNames_Static()
+uno::Sequence< OUString > ChartModel::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 3 );
+    uno::Sequence< OUString > aSNS( 3 );
     aSNS[0] = CHART_MODEL_SERVICE_NAME;
     aSNS[1] = "com.sun.star.document.OfficeDocument";
     aSNS[2] = "com.sun.star.chart.ChartDocument";
@@ -324,7 +323,7 @@ uno::Sequence< rtl::OUString > ChartModel::getSupportedServiceNames_Static()
 // frame::XModel (required interface)
 //-----------------------------------------------------------------
 
-sal_Bool SAL_CALL ChartModel::attachResource( const ::rtl::OUString& rURL
+sal_Bool SAL_CALL ChartModel::attachResource( const OUString& rURL
         , const uno::Sequence< beans::PropertyValue >& rMediaDescriptor )
         throw(uno::RuntimeException)
 {
@@ -350,7 +349,7 @@ sal_Bool SAL_CALL ChartModel::attachResource( const ::rtl::OUString& rURL
     return sal_True;
 }
 
-::rtl::OUString SAL_CALL ChartModel::getURL() throw(uno::RuntimeException)
+OUString SAL_CALL ChartModel::getURL() throw(uno::RuntimeException)
 {
     return impl_g_getLocation();
 }
@@ -508,7 +507,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
         if ( xSelectionSupl.is() )
         {
             uno::Any aSel = xSelectionSupl->getSelection();
-            rtl::OUString aObjectCID;
+            OUString aObjectCID;
             if( aSel >>= aObjectCID )
                 xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
         }
@@ -1181,8 +1180,8 @@ enum eServiceType
     SERVICE_NAMESPACE_MAP
 };
 
-typedef ::std::map< ::rtl::OUString, enum eServiceType > tServiceNameMap;
-typedef ::comphelper::MakeMap< ::rtl::OUString, enum eServiceType > tMakeServiceNameMap;
+typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
+typedef ::comphelper::MakeMap< OUString, enum eServiceType > tMakeServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
@@ -1257,7 +1256,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
 Sequence< OUString > SAL_CALL ChartModel::getAvailableServiceNames()
             throw( uno::RuntimeException )
 {
-    uno::Sequence< ::rtl::OUString > aResult;
+    uno::Sequence< OUString > aResult;
 
     if( m_xOldModelAgg.is())
     {
@@ -1347,7 +1346,7 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 }
 
 //XDumper
-rtl::OUString SAL_CALL ChartModel::dump()
+OUString SAL_CALL ChartModel::dump()
     throw (uno::RuntimeException)
 {
     uno::Reference< qa::XDumper > xDumper(
@@ -1355,7 +1354,7 @@ rtl::OUString SAL_CALL ChartModel::dump()
     if (xDumper.is())
         return xDumper->dump();
 
-    return rtl::OUString();
+    return OUString();
 }
 
 }  // namespace chart

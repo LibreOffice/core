@@ -24,7 +24,7 @@
 
 using namespace ::rtl;
 
-AstEnum::AstEnum(const ::rtl::OString& name, AstScope* pScope)
+AstEnum::AstEnum(const OString& name, AstScope* pScope)
     : AstType(NT_enum, name, pScope)
     , AstScope(NT_enum)
     , m_enumValueCount(0)

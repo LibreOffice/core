@@ -35,8 +35,6 @@
 #include <xmloff/attrlist.hxx>
 #include "xmloff/xmlerror.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -196,15 +194,15 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     aValues.realloc( nLen + 2 );
                     PropertyValue *pProps = aValues.getArray() + nLen;
-                    pProps->Name = rtl::OUString("ParaStyleName");
+                    pProps->Name = OUString("ParaStyleName");
                     OUString sParent( GetParentName() );
                     if( !sParent.isEmpty() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
                     else
-                        sParent =  rtl::OUString("Standard");
+                        sParent =  OUString("Standard");
                     pProps->Value <<= sParent;
                     ++pProps;
-                    pProps->Name = rtl::OUString("ParaConditionalStyleName");
+                    pProps->Name = OUString("ParaConditionalStyleName");
                     pProps->Value <<= sParent;
                 }
 
@@ -213,8 +211,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                 {
                     Sequence< OUString > aPropNames(1);
                     aPropNames[0] = GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ?
-                        rtl::OUString("ParaAutoStyleName") :
-                        rtl::OUString("CharAutoStyleName");
+                        OUString("ParaAutoStyleName") :
+                        OUString("CharAutoStyleName");
                     Sequence< Any > aAny = xAutoStyle->getPropertyValues( aPropNames );
                     if( aAny.hasElements() )
                     {

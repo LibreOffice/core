@@ -1128,7 +1128,7 @@ String GraphicDescriptor::GetImportFormatShortName( sal_uInt16 nFormat )
         case( GFF_SVG ) :   pKeyName = "svg";   break;
     }
 
-    return rtl::OUString::createFromAscii(pKeyName);
+    return OUString::createFromAscii(pKeyName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

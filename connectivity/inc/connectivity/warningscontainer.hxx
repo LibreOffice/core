@@ -79,7 +79,7 @@ namespace dbtools
                 the context of the warning
         */
         void appendWarning(
-            const ::rtl::OUString& _rWarning,
+            const OUString& _rWarning,
             const sal_Char* _pAsciiSQLState,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext );
 

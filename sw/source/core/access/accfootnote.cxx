@@ -35,7 +35,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
 
 const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
 const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";

@@ -44,7 +44,7 @@ namespace cppcanvas
     public:
         virtual ~Font() {}
 
-        virtual ::rtl::OUString getName() const = 0;
+        virtual OUString getName() const = 0;
         virtual double          getCellSize() const = 0;
 
         virtual ::com::sun::star::uno::Reference<

@@ -55,7 +55,6 @@
 
 #include "../deployment/inc/dp_misc.h"
 
-using rtl::OUString;
 using namespace desktop;
 using namespace com::sun::star;
 
@@ -217,7 +216,7 @@ static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdat
 
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > &xContext )
 {
-    rtl::OUString sServiceName = "com.sun.star.deployment.ui.UpdateRequiredDialog";
+    OUString sServiceName = "com.sun.star.deployment.ui.UpdateRequiredDialog";
     uno::Reference< uno::XInterface > xService;
     sal_Int16 nRet = 0;
 
@@ -291,7 +290,7 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
                 catch ( const uno::RuntimeException & ) { throw; }
                 catch (const uno::Exception & exc) {
                     (void) exc;
-                    OSL_FAIL( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
 
                 if ( bRegistered )
@@ -327,7 +326,7 @@ static void impl_setNeedsCompatCheck()
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
-            theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
         Any value = makeAny( OUString("never") );
 
@@ -358,7 +357,7 @@ static bool impl_needsCompatCheck()
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
-            theConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
+            theConfigProvider->createInstanceWithArguments( OUString(aAccessSrvc), theArgs ), UNO_QUERY_THROW );
 
         Any result = pset->getPropertyValue( OUString("LastCompatibilityCheckID") );
 

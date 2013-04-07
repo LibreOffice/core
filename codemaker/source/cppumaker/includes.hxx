@@ -37,7 +37,7 @@ public:
 
     ~Includes();
 
-    void add(rtl::OString const & registryType);
+    void add(OString const & registryType);
     void addCassert() { m_includeCassert = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
@@ -59,17 +59,17 @@ public:
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
     void addTypelibTypedescriptionH()
         { m_includeTypelibTypedescriptionH = true; }
-    void dump(FileStream & out, rtl::OString const * companionHdl);
+    void dump(FileStream & out, OString const * companionHdl);
 
     static void dumpInclude(
-        FileStream & out, rtl::OString const & registryType, bool hpp,
-        rtl::OString const & suffix = rtl::OString());
+        FileStream & out, OString const & registryType, bool hpp,
+        OString const & suffix = OString());
 
 private:
     Includes(Includes &); // not implemented
     void operator =(Includes); // not implemented;
 
-    bool isInterfaceType(rtl::OString const & registryType) const;
+    bool isInterfaceType(OString const & registryType) const;
 
     rtl::Reference< TypeManager > m_manager;
     codemaker::Dependencies::Map m_map;

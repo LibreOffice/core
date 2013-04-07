@@ -72,9 +72,9 @@ public:
     CustomAnimationEffectPtr clone() const;
 
     // attributes
-    const rtl::OUString&    getPresetId() const { return maPresetId; }
-    const rtl::OUString&    getPresetSubType() const { return maPresetSubType; }
-    const rtl::OUString&    getProperty() const { return maProperty; }
+    const OUString&    getPresetId() const { return maPresetId; }
+    const OUString&    getPresetSubType() const { return maPresetSubType; }
+    const OUString&    getProperty() const { return maProperty; }
 
     sal_Int16               getPresetClass() const { return mnPresetClass; }
     void                    setPresetClass( sal_Int16 nPresetClass );
@@ -135,8 +135,8 @@ public:
     sal_Bool        getAutoReverse() const { return mbAutoReverse; }
     void            setAutoReverse( sal_Bool bAutoReverse );
 
-    ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue );
-    bool                        setProperty( sal_Int32 nNodeType, const rtl::OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
+    ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue );
+    bool                        setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
 
     ::com::sun::star::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
     bool                        setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const ::com::sun::star::uno::Any& rValue );
@@ -153,8 +153,8 @@ public:
     sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
     SD_DLLPUBLIC void           setTargetSubItem( sal_Int16 nSubItem );
 
-    ::rtl::OUString getPath() const;
-    void setPath( const ::rtl::OUString& rPath );
+    OUString getPath() const;
+    void setPath( const OUString& rPath );
 
     bool checkForText();
     bool calculateIterateDuration();
@@ -185,9 +185,9 @@ protected:
 
 private:
     sal_Int16       mnNodeType;
-    rtl::OUString   maPresetId;
-    rtl::OUString   maPresetSubType;
-    rtl::OUString   maProperty;
+    OUString   maPresetId;
+    OUString   maPresetSubType;
+    OUString   maProperty;
     sal_Int16       mnPresetClass;
     double          mfBegin;
     double          mfDuration;                 // this is the maximum duration of the subeffects
@@ -291,7 +291,7 @@ public:
     SD_DLLPUBLIC void append( const CustomAnimationEffectPtr& pEffect );
     void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
     void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
-    void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const rtl::OUString& rPresetSubType, double fDuration = -1.0 );
+    void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration = -1.0 );
     void remove( const CustomAnimationEffectPtr& pEffect );
 
     void create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );

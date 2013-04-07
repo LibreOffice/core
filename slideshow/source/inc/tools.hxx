@@ -149,7 +149,7 @@ namespace slideshow
                            const basegfx::B2DVector&            rSlideBounds );
 
         /// extract plain string from Any
-        bool extractValue( ::rtl::OUString&                     o_rValue,
+        bool extractValue( OUString&                     o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
                            const boost::shared_ptr<Shape>&      rShape,
                            const basegfx::B2DVector&            rSlideBounds );
@@ -310,7 +310,7 @@ namespace slideshow
             ValueType & rValue,
             com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertySet> const & xPropSet,
-            rtl::OUString const & propName )
+            OUString const & propName )
         {
             try {
                 const com::sun::star::uno::Any& a(
@@ -319,10 +319,10 @@ namespace slideshow
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
                     OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s\n",
-                               ::rtl::OUStringToOString( propName,
+                               OUStringToOString( propName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr(),
                                BOOST_CURRENT_FUNCTION,
-                               ::rtl::OUStringToOString( a.getValueTypeRef()->pTypeName,
+                               OUStringToOString( a.getValueTypeRef()->pTypeName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
                 return bRet;
@@ -342,7 +342,7 @@ namespace slideshow
             com::sun::star::uno::Reference< ValueType >& rIfc,
             com::sun::star::uno::Reference<
             com::sun::star::beans::XPropertySet> const & xPropSet,
-            rtl::OUString const & propName )
+            OUString const & propName )
         {
             try
             {
@@ -355,10 +355,10 @@ namespace slideshow
 #if OSL_DEBUG_LEVEL > 0
                 if( !bRet )
                     OSL_TRACE( "%s: while retrieving property %s, cannot extract Any of type %s to interface\n",
-                               ::rtl::OUStringToOString( propName,
+                               OUStringToOString( propName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr(),
                                BOOST_CURRENT_FUNCTION,
-                               ::rtl::OUStringToOString( a.getValueTypeRef()->pTypeName,
+                               OUStringToOString( a.getValueTypeRef()->pTypeName,
                                                          RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
                 return bRet;

@@ -95,7 +95,7 @@ TabPage::TabPage( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-TabPage::TabPage(Window *pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
+TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Window(WINDOW_TABPAGE)
 {
     ImplInit(pParent, 0);
@@ -156,7 +156,7 @@ void TabPage::Paint( const Rectangle& )
         // that has to be scaled properly, clipping makes sure that we do not paint too much
         Rectangle aCtrlRegion( aPoint, GetOutputSizePixel() );
         DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
-                aControlValue, rtl::OUString() );
+                aControlValue, OUString() );
     }
 }
 

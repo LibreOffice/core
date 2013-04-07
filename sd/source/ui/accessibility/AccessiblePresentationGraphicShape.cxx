@@ -51,22 +51,22 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     AccessiblePresentationGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString("AccessiblePresentationGraphicShape");
+    return OUString("AccessiblePresentationGraphicShape");
 }
 
 
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString
+OUString
     AccessiblePresentationGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    ::rtl::OUString sName;
+    OUString sName;
 
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
@@ -87,7 +87,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 
 
-::rtl::OUString
+OUString
     AccessiblePresentationGraphicShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

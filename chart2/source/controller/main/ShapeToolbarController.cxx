@@ -56,7 +56,7 @@ Sequence< OUString > ShapeToolbarController::getSupportedServiceNames_Static() t
     return aSupported;
 }
 
-::sal_Bool ShapeToolbarController::supportsService( const ::rtl::OUString& ServiceName ) throw (uno::RuntimeException)
+::sal_Bool ShapeToolbarController::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
     return ::comphelper::existsValue( ServiceName, getSupportedServiceNames_Static() );
 }
@@ -198,7 +198,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
                 {
                     continue;
                 }
-                ::rtl::OUString aCmd = rTb.GetItemCommand( nId );
+                OUString aCmd = rTb.GetItemCommand( nId );
                 if ( aCmd == Event.FeatureURL.Complete )
                 {
                     rTb.EnableItem( nId, Event.IsEnabled );
@@ -208,7 +208,7 @@ void ShapeToolbarController::statusChanged( const frame::FeatureStateEvent& Even
                     }
                     else
                     {
-                        ::rtl::OUString aItemText;
+                        OUString aItemText;
                         if ( Event.State >>= aItemText )
                         {
                             rTb.SetItemText( nId, aItemText );
@@ -246,7 +246,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
              m_nSlotId == SID_DRAWTBX_CS_STAR );
 }
 
-::rtl::OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
+OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -255,10 +255,10 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
     {
         return xSub->getSubToolbarName();
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
-void ShapeToolbarController::functionSelected( const ::rtl::OUString& rCommand ) throw (uno::RuntimeException)
+void ShapeToolbarController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );

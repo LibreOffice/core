@@ -45,10 +45,10 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because its not neccessary.
                 But you have to make shure, that ist not used as such :-)
  */
-class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString                    ,
-                                               ::rtl::OUString                    ,
-                                               ::rtl::OUStringHash                ,
-                                               ::std::equal_to< ::rtl::OUString > >
+class QueryTokenizer : public ::boost::unordered_map< OUString                    ,
+                                               OUString                    ,
+                                               OUStringHash                ,
+                                               ::std::equal_to< OUString > >
 {
     //-------------------------------------------
     // member
@@ -78,7 +78,7 @@ class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString           
             @param  sQuery
                     the query string.
          */
-        QueryTokenizer(const ::rtl::OUString& sQuery);
+        QueryTokenizer(const OUString& sQuery);
 
         //---------------------------------------
 

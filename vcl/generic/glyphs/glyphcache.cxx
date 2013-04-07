@@ -89,7 +89,7 @@ size_t GlyphCache::IFSD_Hash::operator()( const FontSelectPattern& rFontSelData 
     if (rFontSelData.maTargetName.indexOf(grutils::GrFeatureParser::FEAT_PREFIX)
         != -1)
     {
-        rtl::OString aFeatName = rtl::OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
+        OString aFeatName = OUStringToOString( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
         nFontId ^= aFeatName.hashCode();
     }
 #endif
@@ -163,7 +163,7 @@ GlyphCache& GlyphCache::GetInstance()
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
+void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
     sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
 {
     if( mpFtManager )

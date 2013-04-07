@@ -37,7 +37,7 @@ using namespace com::sun::star::sdbc;
 
 // -------------------------------------------------------------------------
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)
-    : OIndex_ADO(::rtl::OUString(),::rtl::OUString(),sal_False,sal_False,sal_False,_bCase)
+    : OIndex_ADO(OUString(),OUString(),sal_False,sal_False,sal_False,_bCase)
     ,m_pConnection(_pConnection)
 {
     construct();
@@ -105,14 +105,14 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
         {
             case PROPERTY_ID_NAME:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aIndex.put_Name(aVal);
                 }
                 break;
             case PROPERTY_ID_CATALOG:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aIndex.put_Name(aVal);
                 }

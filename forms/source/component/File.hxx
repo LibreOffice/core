@@ -35,7 +35,7 @@ class OFileControlModel
                 ,public ::com::sun::star::form::XReset
 {
     ::cppu::OInterfaceContainerHelper       m_aResetListeners;
-    ::rtl::OUString                         m_sDefaultValue;
+    OUString                         m_sDefaultValue;
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
@@ -63,7 +63,7 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream) throw ( ::com ::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw ( ::com ::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 

@@ -44,7 +44,7 @@ private:
     FixedText maFtCondition;
 
     sal_Int32 mnIndex;
-    rtl::OUString maStrCondition;
+    OUString maStrCondition;
 protected:
     ListBox maLbType;
 
@@ -56,7 +56,7 @@ protected:
     void Select();
     void Deselect();
 
-    virtual rtl::OUString GetExpressionString() = 0;
+    virtual OUString GetExpressionString() = 0;
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
@@ -88,7 +88,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createConditionEntry() const;
 
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
     void Init();
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
@@ -111,7 +111,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     formula::RefEdit maEdFormula;
 
     ScFormatEntry* createFormulaEntry() const;
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
     void Init();
 
     DECL_LINK( StyleSelectHdl, void* );
@@ -143,7 +143,7 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createColorscaleEntry() const;
 
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
     void Init();
 
     DECL_LINK( EntryTypeHdl, ListBox* );
@@ -176,7 +176,7 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createColorscaleEntry() const;
 
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
     void Init();
 
     DECL_LINK( EntryTypeHdl, ListBox* );
@@ -205,7 +205,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createDatabarEntry() const;
 
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
     void Init();
 
     DECL_LINK( OptionBtnHdl, void* );
@@ -229,7 +229,7 @@ public:
     virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATE; }
 
 protected:
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
 
 private:
     void Init();
@@ -253,7 +253,7 @@ class ScIconSetFrmtEntry : public ScCondFrmtEntry
     typedef boost::ptr_vector<ScIconSetFrmtDataEntry> ScIconSetFrmtDataEntriesType;
     ScIconSetFrmtDataEntriesType maEntries;
 
-    virtual rtl::OUString GetExpressionString();
+    virtual OUString GetExpressionString();
 
     void Init();
 

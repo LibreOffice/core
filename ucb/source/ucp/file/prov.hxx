@@ -80,17 +80,17 @@ namespace fileaccess {
             throw();
 
         // XServiceInfo
-        virtual rtl::OUString SAL_CALL
+        virtual OUString SAL_CALL
         getImplementationName(
             void )
             throw( com::sun::star::uno::RuntimeException );
 
         virtual sal_Bool SAL_CALL
         supportsService(
-            const rtl::OUString& ServiceName )
+            const OUString& ServiceName )
             throw(com::sun::star::uno::RuntimeException );
 
-        virtual com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames(
             void )
             throw( com::sun::star::uno::RuntimeException );
@@ -126,7 +126,7 @@ namespace fileaccess {
 
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > SAL_CALL
         createContentIdentifier(
-            const rtl::OUString& ContentId )
+            const OUString& ContentId )
             throw( com::sun::star::uno::RuntimeException );
 
 
@@ -144,7 +144,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         setPropertyValue(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Any& aValue )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::beans::PropertyVetoException,
@@ -154,14 +154,14 @@ namespace fileaccess {
 
         virtual com::sun::star::uno::Any SAL_CALL
         getPropertyValue(
-            const rtl::OUString& PropertyName )
+            const OUString& PropertyName )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL
         addPropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& xListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -169,7 +169,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removePropertyChangeListener(
-            const rtl::OUString& aPropertyName,
+            const OUString& aPropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XPropertyChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -177,7 +177,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         addVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -185,7 +185,7 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removeVetoableChangeListener(
-            const rtl::OUString& PropertyName,
+            const OUString& PropertyName,
             const com::sun::star::uno::Reference< com::sun::star::beans::XVetoableChangeListener >& aListener )
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
@@ -195,14 +195,14 @@ namespace fileaccess {
         // XFileIdentifierConverter
 
         virtual sal_Int32 SAL_CALL
-        getFileProviderLocality( const rtl::OUString& BaseURL )
+        getFileProviderLocality( const OUString& BaseURL )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL getFileURLFromSystemPath( const rtl::OUString& BaseURL,
-                                                                 const rtl::OUString& SystemPath )
+        virtual OUString SAL_CALL getFileURLFromSystemPath( const OUString& BaseURL,
+                                                                 const OUString& SystemPath )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual rtl::OUString SAL_CALL getSystemPathFromFileURL( const rtl::OUString& URL )
+        virtual OUString SAL_CALL getSystemPathFromFileURL( const OUString& URL )
             throw( com::sun::star::uno::RuntimeException );
 
 
@@ -215,8 +215,8 @@ namespace fileaccess {
 
         void SAL_CALL initProperties( void );
         osl::Mutex   m_aMutex;
-        rtl::OUString m_HostName;
-        rtl::OUString m_HomeDirectory;
+        OUString m_HostName;
+        OUString m_HomeDirectory;
         sal_Int32     m_FileSystemNotation;
 
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo >     m_xPropertySetInfo;

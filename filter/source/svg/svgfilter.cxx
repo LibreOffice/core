@@ -44,7 +44,6 @@
 
 #include "svgfilter.hxx"
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 
 // -------------
@@ -266,7 +265,7 @@ void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc 
 
 // -----------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
+OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException)
 {
     uno::Reference< io::XInputStream > xInput;
 
@@ -279,7 +278,7 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     }
 
     if( !xInput.is() )
-        return rtl::OUString();
+        return OUString();
 
     uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
     if( xSeek.is() )
@@ -295,14 +294,14 @@ rtl::OUString SAL_CALL SVGFilter::detect( Sequence< PropertyValue >& io_rDescrip
     sal_Int8 aMagic1[] = {'<', 's', 'v', 'g'};
     if( std::search(pBuf, pBuf+nBytes,
                     aMagic1, aMagic1+sizeof(aMagic1)/sizeof(*aMagic1)) != pBuf+nBytes )
-        return rtl::OUString("svg_Scalable_Vector_Graphics");
+        return OUString("svg_Scalable_Vector_Graphics");
 
     sal_Int8 aMagic2[] = {'D', 'O', 'C', 'T', 'Y', 'P', 'E', ' ', 's', 'v', 'g'};
     if( std::search(pBuf, pBuf+nBytes,
                     aMagic2, aMagic2+sizeof(aMagic2)/sizeof(*aMagic2)) != pBuf+nBytes )
-        return rtl::OUString("svg_Scalable_Vector_Graphics");
+        return OUString("svg_Scalable_Vector_Graphics");
 
-    return rtl::OUString();
+    return OUString();
 }
 
 // -----------------------------------------------------------------------------

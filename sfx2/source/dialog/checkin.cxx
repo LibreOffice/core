@@ -20,7 +20,7 @@ SfxCheckinDialog::SfxCheckinDialog( Window* pParent ) :
     m_pOKBtn->SetClickHdl( LINK( this, SfxCheckinDialog, OKHdl ) );
 }
 
-rtl::OUString SfxCheckinDialog::GetComment( )
+OUString SfxCheckinDialog::GetComment( )
 {
     return m_pCommentED->GetText( );
 }

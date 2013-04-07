@@ -28,9 +28,9 @@ class AstConstant : public AstDeclaration
 {
 public:
     AstConstant(const ExprType type, const NodeType nodeType,
-                AstExpression* pExpr, const ::rtl::OString& name, AstScope* pScope);
+                AstExpression* pExpr, const OString& name, AstScope* pScope);
     AstConstant(const ExprType type, AstExpression* pExpr,
-                const ::rtl::OString& name, AstScope* pScope);
+                const OString& name, AstScope* pScope);
     virtual ~AstConstant();
 
     AstExpression* getConstValue()

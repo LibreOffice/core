@@ -34,7 +34,7 @@ namespace connectivity
     namespace macab
     {
         // -------------------------------------------------------------------------
-        inline ::rtl::OUString CFStringToOUString(const CFStringRef sOrig)
+        inline OUString CFStringToOUString(const CFStringRef sOrig)
         {
             /* Copied all-but directly from code by Florian Heckl in
              * cws_src680_aquafilepicker01
@@ -43,7 +43,7 @@ namespace connectivity
              * names.
              */
             if (NULL == sOrig) {
-                    return rtl::OUString();
+                    return OUString();
             }
 
             CFRetain(sOrig);
@@ -57,11 +57,11 @@ namespace connectivity
             CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars);
             CFRelease(sOrig);
 
-            return rtl::OUString(unichars);
+            return OUString(unichars);
         }
 
         // -------------------------------------------------------------------------
-        inline CFStringRef OUStringToCFString(const ::rtl::OUString& aString)
+        inline CFStringRef OUStringToCFString(const OUString& aString)
         {
             /* Copied directly from code by Florian Heckl in
              * cws_src680_aquafilepicker01
@@ -97,7 +97,7 @@ namespace connectivity
         }
 
         // -------------------------------------------------------------------------
-        inline ::rtl::OUString fixLabel(const ::rtl::OUString _originalLabel)
+        inline OUString fixLabel(const OUString _originalLabel)
         {
             /* Get the length, and make sure that there is actually a string
              * here.

@@ -32,18 +32,18 @@ namespace connectivity
         class MTypeConverter
         {
         public:
-            static void  ouStringToNsString(const ::rtl::OUString&, nsString&);
-            static void  nsStringToOUString(const nsString&, ::rtl::OUString&);
-            static void  prUnicharToOUString(const PRUnichar*, ::rtl::OUString&);
+            static void  ouStringToNsString(const OUString&, nsString&);
+            static void  nsStringToOUString(const nsString&, OUString&);
+            static void  prUnicharToOUString(const PRUnichar*, OUString&);
             // Use free() for the following 3 calls.
-            static char *ouStringToCCharStringAscii(const ::rtl::OUString&);
+            static char *ouStringToCCharStringAscii(const OUString&);
             static char *nsStringToCCharStringAscii(const nsString&);
-            static char *ouStringToCCharStringUtf8(const ::rtl::OUString&);
+            static char *ouStringToCCharStringUtf8(const OUString&);
             // Convert to stl-string.
-            static ::std::string ouStringToStlString(const ::rtl::OUString&);
+            static ::std::string ouStringToStlString(const OUString&);
             static ::std::string nsStringToStlString(const nsString&);
 
-            static ::rtl::OString nsACStringToOString( const nsACString& _source );
+            static OString nsACStringToOString( const nsACString& _source );
             static void asciiToNsACString( const sal_Char* _asciiString, nsACString& _dest );
 
         private:

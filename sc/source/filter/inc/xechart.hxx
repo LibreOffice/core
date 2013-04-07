@@ -94,7 +94,7 @@ public:
     /** Returns chart type info for a unique chart type identifier. */
     const XclChTypeInfo& GetChartTypeInfo( XclChTypeId eType ) const;
     /** Returns the first fitting chart type info for the passed service name. */
-    const XclChTypeInfo& GetChartTypeInfo( const ::rtl::OUString& rServiceName ) const;
+    const XclChTypeInfo& GetChartTypeInfo( const OUString& rServiceName ) const;
 
     /** Returns an info struct about auto formatting for the passed object type. */
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
@@ -758,7 +758,7 @@ public:
     /** Converts the passed data series for stock charts. */
     bool                ConvertStockSeries(
                             XDataSeriesRef xDataSeries,
-                            const ::rtl::OUString& rValueRole,
+                            const OUString& rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
     bool                ConvertTrendLine( const XclExpChSeries& rParent, XRegressionCurveRef xRegCurve );
@@ -777,11 +777,11 @@ private:
     void                CreateTrendLines( XDataSeriesRef xDataSeries );
     /** Tries to create positive and negative error bar series objects (called at parent series). */
     void                CreateErrorBars( const ScfPropertySet& rPropSet,
-                            const ::rtl::OUString& rBarPropName,
+                            const OUString& rBarPropName,
                             sal_uInt8 nPosBarId, sal_uInt8 nNegBarId );
     /** Tries to create an error bar series object (called at parent series). */
     void                CreateErrorBar( const ScfPropertySet& rPropSet,
-                            const ::rtl::OUString& rShowPropName, sal_uInt8 nBarId );
+                            const OUString& rShowPropName, sal_uInt8 nBarId );
 
     virtual void        WriteBody( XclExpStream& rStrm );
 
@@ -979,7 +979,7 @@ private:
                             XDataSeriesRef xDataSeries );
     /** Creates a single data series of a stock chart. */
     bool                CreateStockSeries( XDataSeriesRef xDataSeries,
-                            const ::rtl::OUString& rValueRole, bool bCloseSymbol );
+                            const OUString& rValueRole, bool bCloseSymbol );
 
     virtual void        WriteBody( XclExpStream& rStrm );
 

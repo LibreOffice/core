@@ -40,9 +40,9 @@ using namespace ::rtl;
 using namespace ::utl;
 
 
-static rtl::OString impl_getHostname()
+static OString impl_getHostname()
 {
-    rtl::OString aHost;
+    OString aHost;
 #ifdef WNT
     /*
        prevent windows from connecting to the net to get it's own
@@ -152,21 +152,21 @@ namespace desktop {
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(LOCKFILE_GROUP);
-        rtl::OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
-        if (!aIPCserver.equalsIgnoreAsciiCase(rtl::OString("true")))
+        OString aIPCserver  = aConfig.ReadKey( LOCKFILE_IPCKEY );
+        if (!aIPCserver.equalsIgnoreAsciiCase(OString("true")))
             return false;
 
-        rtl::OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );
-        rtl::OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY );
+        OString aHost = aConfig.ReadKey( LOCKFILE_HOSTKEY );
+        OString aUser = aConfig.ReadKey( LOCKFILE_USERKEY );
 
         // lockfile from same host?
-        rtl::OString myHost( impl_getHostname() );
+        OString myHost( impl_getHostname() );
         if (aHost == myHost) {
             // lockfile by same UID
             OUString myUserName;
             Security aSecurity;
             aSecurity.getUserName( myUserName );
-            rtl::OString myUser(rtl::OUStringToOString(myUserName, RTL_TEXTENCODING_ASCII_US));
+            OString myUser(OUStringToOString(myUserName, RTL_TEXTENCODING_ASCII_US));
             if (aUser == myUser)
                 return sal_True;
         }
@@ -180,13 +180,13 @@ namespace desktop {
         aConfig.SetGroup(LOCKFILE_GROUP);
 
         // get information
-        rtl::OString aHost( impl_getHostname() );
+        OString aHost( impl_getHostname() );
         OUString aUserName;
         Security aSecurity;
         aSecurity.getUserName( aUserName );
-        rtl::OString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );
-        rtl::OString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
-        rtl::OString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
+        OString aUser  = OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US );
+        OString aTime  = OUStringToOString( m_aDate, RTL_TEXTENCODING_ASCII_US );
+        OString aStamp = OUStringToOString( m_aId, RTL_TEXTENCODING_ASCII_US );
 
         // write information
         aConfig.WriteKey( LOCKFILE_USERKEY,  aUser );
@@ -195,7 +195,7 @@ namespace desktop {
         aConfig.WriteKey( LOCKFILE_TIMEKEY,  aTime );
         aConfig.WriteKey(
             LOCKFILE_IPCKEY,
-            m_bIPCserver ? rtl::OString("true") : rtl::OString("false") );
+            m_bIPCserver ? OString("true") : OString("false") );
         aConfig.Flush( );
     }
 

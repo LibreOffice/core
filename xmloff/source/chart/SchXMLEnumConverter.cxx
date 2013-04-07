@@ -26,7 +26,6 @@
 // header for rtl::Static
 #include <rtl/instance.hxx>
 
-using ::rtl::OUString;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 

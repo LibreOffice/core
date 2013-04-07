@@ -38,7 +38,7 @@ public:
     SerfPropFindReqProcImpl( const char* inPath,
                              const DAVRequestHeaders& inRequestHeaders,
                              const Depth inDepth,
-                             const std::vector< ::rtl::OUString > & inPropNames,
+                             const std::vector< OUString > & inPropNames,
                              std::vector< DAVResource > & ioResources );
 
     SerfPropFindReqProcImpl( const char* inPath,
@@ -62,7 +62,7 @@ private:
     void init( const Depth inDepth );
 
     const char* mDepthStr;
-    const std::vector< ::rtl::OUString > * mpPropNames;
+    const std::vector< OUString > * mpPropNames;
     std::vector< DAVResource > * mpResources;
     std::vector< DAVResourceInfo > * mpResInfo;
 

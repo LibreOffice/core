@@ -31,9 +31,6 @@
 using namespace psp;
 using namespace padmin;
 
-using ::rtl::OUString;
-using ::rtl::OUStringHash;
-using ::rtl::OString;
 
 void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {
@@ -283,7 +280,7 @@ void RTSPaperPage::update()
 
     // input slots
     if( m_pParent->m_aJobData.m_pParser &&
-        (pKey = m_pParent->m_aJobData.m_pParser->getKey( rtl::OUString("InputSlot") )) )
+        (pKey = m_pParent->m_aJobData.m_pParser->getKey( OUString("InputSlot") )) )
     {
         m_pParent->insertAllPPDValues( *m_pSlotBox, m_pParent->m_aJobData.m_pParser, pKey );
     }
@@ -811,12 +808,12 @@ RTSPWDialog::~RTSPWDialog()
 
 OString RTSPWDialog::getUserName() const
 {
-    return rtl::OUStringToOString( m_aUserEdit.GetText(), osl_getThreadTextEncoding() );
+    return OUStringToOString( m_aUserEdit.GetText(), osl_getThreadTextEncoding() );
 }
 
 OString RTSPWDialog::getPassword() const
 {
-    return rtl::OUStringToOString( m_aPassEdit.GetText(), osl_getThreadTextEncoding() );
+    return OUStringToOString( m_aPassEdit.GetText(), osl_getThreadTextEncoding() );
 }
 
 extern "C" {

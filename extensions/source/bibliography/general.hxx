@@ -124,12 +124,12 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     BibDataManager*     pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                AddXControl( const String& rName, Point aPos, Size aSize, const rtl::OString& sHelpId,
+                                AddXControl( const String& rName, Point aPos, Size aSize, const OString& sHelpId,
                                             sal_Int16& rIndex );
 
-    void                        AddControlWithError( const rtl::OUString& rColumnName, const Point& rPos,
+    void                        AddControlWithError( const OUString& rColumnName, const Point& rPos,
                                             const Size& rSize, String& rErrorString, String aColumnUIName,
-                                            const rtl::OString& sHelpId, sal_uInt16 nIndexInFTArray );
+                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray );
 
     void                        AdjustScrollbars();
 

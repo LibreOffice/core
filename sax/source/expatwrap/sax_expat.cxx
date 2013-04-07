@@ -199,7 +199,7 @@ Reference< XInterface > SAL_CALL SaxExpatParser_CreateInstance(
 Sequence< OUString >    SaxExpatParser::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence<OUString> aRet(1);
-    aRet.getArray()[0] = ::rtl::OUString( SERVICE_NAME );
+    aRet.getArray()[0] = OUString( SERVICE_NAME );
     return aRet;
 }
 

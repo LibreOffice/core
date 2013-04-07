@@ -34,7 +34,6 @@
 using namespace usr;
 
 using ::rtl::StringToOUString;
-using ::rtl::OUStringToString;
 
 #define PCHAR_TO_USTRING(x) StringToOUString(String(x),CHARSET_SYSTEM)
 #define USTRING_TO_PCHAR(x) OUStringToString(x , CHARSET_DONTKNOW ).GetCharStr()

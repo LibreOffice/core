@@ -37,7 +37,7 @@ public:
     virtual void Undo();
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rDocSh);
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 };
 
 #endif

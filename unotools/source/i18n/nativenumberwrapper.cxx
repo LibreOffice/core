@@ -37,9 +37,9 @@ NativeNumberWrapper::~NativeNumberWrapper()
 }
 
 
-::rtl::OUString
+OUString
 NativeNumberWrapper::getNativeNumberString(
-                    const ::rtl::OUString& rNumberString,
+                    const OUString& rNumberString,
                     const ::com::sun::star::lang::Locale& rLocale,
                     sal_Int16 nNativeNumberMode ) const
 {
@@ -52,7 +52,7 @@ NativeNumberWrapper::getNativeNumberString(
     {
         SAL_WARN( "unotools.i18n", "getNativeNumberString: Exception caught!" );
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 
 

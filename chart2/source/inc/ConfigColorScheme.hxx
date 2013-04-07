@@ -66,7 +66,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ConfigItemListener ____
-    SAL_DLLPRIVATE virtual void notify( const ::rtl::OUString & rPropertyName );
+    SAL_DLLPRIVATE virtual void notify( const OUString & rPropertyName );
 
 private:
     SAL_DLLPRIVATE void retrieveConfigColors();

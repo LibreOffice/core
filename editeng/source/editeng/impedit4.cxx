@@ -512,7 +512,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 rOutput.WriteNumber( nNumber );
 
                 // Name of the template ...
-                rOutput << " " << rtl::OUStringToOString(pStyle->GetName(), eDestEnc).getStr();
+                rOutput << " " << OUStringToOString(pStyle->GetName(), eDestEnc).getStr();
                 rOutput << ";}";
             }
             rOutput << '}';
@@ -985,11 +985,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             // SWG:
             if ( nEsc )
             {
-                rOutput << "{\\*\\updnprop" << rtl::OString::valueOf(
+                rOutput << "{\\*\\updnprop" << OString::valueOf(
                     static_cast<sal_Int32>(nProp100)).getStr() << '}';
             }
             long nUpDown = nFontHeight * Abs( nEsc ) / 100;
-            rtl::OString aUpDown = rtl::OString::valueOf(
+            OString aUpDown = OString::valueOf(
                 static_cast<sal_Int32>(nUpDown));
             if ( nEsc < 0 )
                 rOutput << OOO_STRING_SVTOOLS_RTF_DN << aUpDown.getStr();
@@ -1636,7 +1636,7 @@ void ImpEditEngine::SetLanguageAndFont(
 }
 
 
-void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang,
+void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
         sal_Bool bAllowImplicitChangesForNotConvertibleText,
         LanguageType nTargetLang, const Font *pTargetFont  )
@@ -3029,7 +3029,7 @@ short ImpEditEngine::ReplaceTextOnly(
         else
         {
             DBG_ASSERT( nDiff == 1, "TransliterateText - Diff other than expected! But should work..." );
-            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), rtl::OUString(rNewText.GetChar(n)) );
+            GetEditDoc().InsertText( EditPaM( pNode, nCurrentPos ), OUString(rNewText.GetChar(n)) );
 
         }
         nDiffs = sal::static_int_cast< short >(nDiffs + nDiff);

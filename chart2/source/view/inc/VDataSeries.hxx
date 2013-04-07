@@ -73,7 +73,7 @@ public:
         ::com::sun::star::chart2::data::XDataSequence >& xValues );
     void setXValuesIfNone( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence >& xValues );
-    void setParticle( const rtl::OUString& rSeriesParticle );
+    void setParticle( const OUString& rSeriesParticle );
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
 
@@ -137,7 +137,7 @@ public:
     void setStartingAngle( sal_Int32 nStartingAngle );
     sal_Int32 getStartingAngle() const;
 
-    void setRoleOfSequenceForDataLabelNumberFormatDetection( const rtl::OUString& rRole );
+    void setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole );
 
     //this is only temporarily here for area chart:
     ::com::sun::star::drawing::PolyPolygonShape3D       m_aPolyPolygonShape3D;
@@ -148,19 +148,19 @@ public:
     //this is here for deep stacking:
     double m_fLogicZPos;//from 0 to series count -1
 
-    rtl::OUString       getCID() const;
-    rtl::OUString       getSeriesParticle() const;
-    rtl::OUString       getPointCID_Stub() const;
-    rtl::OUString       getErrorBarsCID( bool bYError ) const;
-    rtl::OUString       getLabelsCID() const;
-    rtl::OUString       getLabelCID_Stub() const;
-    rtl::OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
+    OUString       getCID() const;
+    OUString       getSeriesParticle() const;
+    OUString       getPointCID_Stub() const;
+    OUString       getErrorBarsCID( bool bYError ) const;
+    OUString       getLabelsCID() const;
+    OUString       getLabelCID_Stub() const;
+    OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
 
     ::com::sun::star::chart2::DataPointLabel*
                         getDataPointLabelIfLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
-    rtl::OUString       getDataCurveEquationCID( sal_Int32 nCurveIndex ) const;
+    OUString       getDataCurveEquationCID( sal_Int32 nCurveIndex ) const;
     bool    isAttributedDataPoint( sal_Int32 index ) const;
 
     bool    isVaryColorsByPoint() const;
@@ -224,10 +224,10 @@ private: //member
 
     sal_Int32               m_nStartingAngle;
 
-    rtl::OUString           m_aSeriesParticle;
-    rtl::OUString           m_aCID;
-    rtl::OUString           m_aPointCID_Stub;
-    rtl::OUString           m_aLabelCID_Stub;
+    OUString           m_aSeriesParticle;
+    OUString           m_aCID;
+    OUString           m_aPointCID_Stub;
+    OUString           m_aLabelCID_Stub;
 
     sal_Int32               m_nGlobalSeriesIndex;
 

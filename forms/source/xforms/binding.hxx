@@ -102,7 +102,7 @@ public:
     typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNodeList> XNodeList_t;
     typedef com::sun::star::uno::Reference<com::sun::star::util::XCloneable> XCloneable_t;
     typedef com::sun::star::uno::Sequence<sal_Int8> IntSequence_t;
-    typedef com::sun::star::uno::Sequence<rtl::OUString> StringSequence_t;
+    typedef com::sun::star::uno::Sequence<OUString> StringSequence_t;
     typedef std::vector<MIP> MIPs_t;
     typedef std::vector<XNode_t> XNodes_t;
 
@@ -114,7 +114,7 @@ private:
     Model_t mxModel;
 
     /// binding-ID. A document-wide unique ID for this binding element.
-    rtl::OUString msBindingID;
+    OUString msBindingID;
 
     /// an XPath-expression to be instantiated on the data instance
     PathExpression maBindingExpression;
@@ -132,7 +132,7 @@ private:
     BoolExpression maConstraint;
 
     /// user-readable explanation of the constraint
-    rtl::OUString msExplainConstraint;
+    OUString msExplainConstraint;
 
     /// an XPath-expression to calculate values
     ComputedExpression maCalculate;
@@ -141,7 +141,7 @@ private:
     XNameContainer_t mxNamespaces;
 
     /// a type name
-    rtl::OUString msTypeName;
+    OUString msTypeName;
 
     /// modify listeners
     ModifyListeners_t maModifyListeners;
@@ -183,33 +183,33 @@ public:
     void _setModel( const Model_t& ); /// set XForms model (only called by Model)
 
 
-    rtl::OUString getModelID() const;   /// get ID of XForms model
+    OUString getModelID() const;   /// get ID of XForms model
 
-    rtl::OUString getBindingID() const;         /// get ID for this binding
-    void setBindingID( const rtl::OUString& );  /// set ID for this binding
+    OUString getBindingID() const;         /// get ID for this binding
+    void setBindingID( const OUString& );  /// set ID for this binding
 
-    rtl::OUString getBindingExpression() const; /// get binding expression
-    void setBindingExpression( const rtl::OUString& );  /// set binding exp.
+    OUString getBindingExpression() const; /// get binding expression
+    void setBindingExpression( const OUString& );  /// set binding exp.
 
     // MIPs (model item properties)
 
-    rtl::OUString getReadonlyExpression() const;         /// get read-only MIP
-    void setReadonlyExpression( const rtl::OUString& );  /// set read-only MIP
+    OUString getReadonlyExpression() const;         /// get read-only MIP
+    void setReadonlyExpression( const OUString& );  /// set read-only MIP
 
-    rtl::OUString getRelevantExpression() const;         /// get relevant MIP
-    void setRelevantExpression( const rtl::OUString& );  /// set relevant MIP
+    OUString getRelevantExpression() const;         /// get relevant MIP
+    void setRelevantExpression( const OUString& );  /// set relevant MIP
 
-    rtl::OUString getRequiredExpression() const;         /// get required MIP
-    void setRequiredExpression( const rtl::OUString& );  /// set required MIP
+    OUString getRequiredExpression() const;         /// get required MIP
+    void setRequiredExpression( const OUString& );  /// set required MIP
 
-    rtl::OUString getConstraintExpression() const;       /// get constraint MIP
-    void setConstraintExpression( const rtl::OUString& );/// set constraint MIP
+    OUString getConstraintExpression() const;       /// get constraint MIP
+    void setConstraintExpression( const OUString& );/// set constraint MIP
 
-    rtl::OUString getCalculateExpression() const;        /// get calculate MIP
-    void setCalculateExpression( const rtl::OUString& ); /// set calculate MIP
+    OUString getCalculateExpression() const;        /// get calculate MIP
+    void setCalculateExpression( const OUString& ); /// set calculate MIP
 
-    rtl::OUString getType() const;         /// get type name MIP (static)
-    void setType( const rtl::OUString& );  /// set type name MIP (static)
+    OUString getType() const;         /// get type name MIP (static)
+    void setType( const OUString& );  /// set type name MIP (static)
 
     // a binding expression can only be interpreted with respect to
     // suitable namespace declarations. We collect those in the model and in a binding.
@@ -271,7 +271,7 @@ public:
     bool isUseful();
 
     /// explain why binding is invalid
-    rtl::OUString explainInvalid();
+    OUString explainInvalid();
 
 
     // the ID for XUnoTunnel calls
@@ -355,7 +355,7 @@ private:
     bool isValid_DataType();
 
     /// explain validity of binding with respect to the given data type
-    rtl::OUString explainInvalid_DataType();
+    OUString explainInvalid_DataType();
 
     /// 'clear' this binding - remove all listeners, etc.
     void clear();
@@ -411,7 +411,7 @@ public:
     virtual sal_Int32 SAL_CALL getListEntryCount()
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL getListEntry( sal_Int32 nPosition )
+    virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition )
         throw( IndexOutOfBoundsException_t,
                RuntimeException_t );
 
@@ -436,7 +436,7 @@ public:
         const Any_t& )
         throw( RuntimeException_t );
 
-    virtual rtl::OUString SAL_CALL explainInvalid(
+    virtual OUString SAL_CALL explainInvalid(
         const Any_t& )
         throw( RuntimeException_t );
 
@@ -476,10 +476,10 @@ public:
 
 public:
 
-    virtual rtl::OUString SAL_CALL getName()
+    virtual OUString SAL_CALL getName()
         throw( RuntimeException_t );
 
-    virtual void SAL_CALL setName( const rtl::OUString& )
+    virtual void SAL_CALL setName( const OUString& )
         throw( RuntimeException_t );
 
 

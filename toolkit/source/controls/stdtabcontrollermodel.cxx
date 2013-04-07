@@ -260,7 +260,7 @@ void StdTabControllerModel::setControlModels( const ::com::sun::star::uno::Seque
     return aSeq;
 }
 
-void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group, const ::rtl::OUString& GroupName ) throw(::com::sun::star::uno::RuntimeException)
+void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& Group, const OUString& GroupName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -316,7 +316,7 @@ sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::
     return nGroups;
 }
 
-void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup, ::rtl::OUString& rName ) throw(::com::sun::star::uno::RuntimeException)
+void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup, OUString& rName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -343,7 +343,7 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, ::com::sun::star::uno::S
     rGroup = aSeq;
 }
 
-void StdTabControllerModel::getGroupByName( const ::rtl::OUString& rName, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup ) throw(::com::sun::star::uno::RuntimeException)
+void StdTabControllerModel::getGroupByName( const OUString& rName, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > >& rGroup ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -356,7 +356,7 @@ void StdTabControllerModel::getGroupByName( const ::rtl::OUString& rName, ::com:
         {
             if ( pEntry->pGroup->GetName() == rName )
             {
-                ::rtl::OUString Dummy;
+                OUString Dummy;
                 getGroup( nGroup, rGroup, Dummy );
                 break;
             }
@@ -367,9 +367,9 @@ void StdTabControllerModel::getGroupByName( const ::rtl::OUString& rName, ::com:
 
 
 // ::com::sun::star::io::XPersistObject
-::rtl::OUString StdTabControllerModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString StdTabControllerModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( szServiceName_TabControllerModel );
+    return OUString::createFromAscii( szServiceName_TabControllerModel );
 }
 
 void StdTabControllerModel::write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
@@ -389,7 +389,7 @@ void StdTabControllerModel::write( const ::com::sun::star::uno::Reference< ::com
     for ( sal_uInt32 n = 0; n < nGroups; n++ )
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aGroupCtrls;
-        ::rtl::OUString aGroupName;
+        OUString aGroupName;
         getGroup( n, aGroupCtrls, aGroupName );
         OutStream->writeUTF( aGroupName );
         ImplWriteControls( OutStream, aGroupCtrls );
@@ -406,7 +406,7 @@ void StdTabControllerModel::read( const ::com::sun::star::uno::Reference< ::com:
     sal_uInt32 nGroups = InStream->readLong();
     for ( sal_uInt32 n = 0; n < nGroups; n++ )
     {
-        ::rtl::OUString aGroupName = InStream->readUTF();
+        OUString aGroupName = InStream->readUTF();
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > > aCtrlSeq = ImplReadControls( InStream );
         setGroup( aCtrlSeq, aGroupName );
     }

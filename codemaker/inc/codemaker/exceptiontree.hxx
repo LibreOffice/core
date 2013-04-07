@@ -37,7 +37,7 @@ struct ExceptionTreeNode {
     typedef std::vector< ExceptionTreeNode * > Children;
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode(rtl::OString const & theName):
+    ExceptionTreeNode(OString const & theName):
         name(theName), present(false) {}
 
     // Internally used by ExceptionTree:
@@ -47,9 +47,9 @@ struct ExceptionTreeNode {
     void setPresent() { present = true; clearChildren(); }
 
     // Internally used by ExceptionTree:
-    ExceptionTreeNode * add(rtl::OString const & theName);
+    ExceptionTreeNode * add(OString const & theName);
 
-    rtl::OString name;
+    OString name;
     bool present;
     Children children;
 
@@ -94,7 +94,7 @@ public:
        type managers
      */
     void add(
-        rtl::OString const & name,
+        OString const & name,
         rtl::Reference< TypeManager > const & manager)
         throw( CannotDumpException );
 

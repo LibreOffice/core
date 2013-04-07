@@ -175,8 +175,8 @@ class ScDocCfg : public ScDocOptions
     DECL_LINK( CalcCommitHdl, void* );
     DECL_LINK( LayoutCommitHdl, void* );
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetCalcPropertyNames();
-    com::sun::star::uno::Sequence<rtl::OUString> GetLayoutPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetCalcPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetLayoutPropertyNames();
 
 public:
             ScDocCfg();

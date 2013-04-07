@@ -55,11 +55,11 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 }
 // -------------------------------------------------------------------------
 OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
-                    const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _Type,
-                    const ::rtl::OUString& _Description ,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _CatalogName
+                    const OUString& _Name,
+                    const OUString& _Type,
+                    const OUString& _Description ,
+                    const OUString& _SchemaName,
+                    const OUString& _CatalogName
                 ) : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers(),
                                   _Name,
                                   _Type,
@@ -90,7 +90,7 @@ void OFileTable::refreshColumns()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileTable::refreshColumns" );
     TStringVector aVector;
         Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                    m_SchemaName,m_Name,::rtl::OUString("%"));
+                                                    m_SchemaName,m_Name,OUString("%"));
 
     if(xResult.is())
     {

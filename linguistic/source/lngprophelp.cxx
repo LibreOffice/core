@@ -40,7 +40,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-using ::rtl::OUString;
 
 namespace linguistic
 {
@@ -69,7 +68,7 @@ PropertyChgHelper::PropertyChgHelper(
     OUString *pName = aPropNames.getArray();
     for (sal_Int32 i = 0;  i < nCHCount;  ++i)
     {
-        pName[i] = ::rtl::OUString::createFromAscii( aCH[i] );
+        pName[i] = OUString::createFromAscii( aCH[i] );
     }
 
     SetDefaultValues();
@@ -106,7 +105,7 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount 
         OUString *pName = GetPropNames().getArray();
         for (sal_Int32 i = 0;  i < nCount;  ++i)
         {
-            pName[ nLen + i ] = ::rtl::OUString::createFromAscii( pNewNames[ i ] );
+            pName[ nLen + i ] = OUString::createFromAscii( pNewNames[ i ] );
 
         }
     }

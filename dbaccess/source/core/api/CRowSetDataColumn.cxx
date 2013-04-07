@@ -45,8 +45,8 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const Reference < XRowUpdate >& _xRowUpdate,
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
-                                      const ::rtl::OUString& _rDescription,
-                                      const ::rtl::OUString& i_sLabel,
+                                      const OUString& _rDescription,
+                                      const OUString& i_sLabel,
                                       const ORowSetCacheIterator& _rColumnValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aColumnValue(_rColumnValue)
@@ -68,7 +68,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
 {
     BEGIN_PROPERTY_SEQUENCE(21)
 
-    DECL_PROP1( CATALOGNAME,                ::rtl::OUString,    READONLY );
+    DECL_PROP1( CATALOGNAME,                OUString,    READONLY );
     DECL_PROP1( DISPLAYSIZE,                sal_Int32,          READONLY );
     DECL_PROP1_BOOL( ISAUTOINCREMENT,                           READONLY );
     DECL_PROP1_BOOL( ISCASESENSITIVE,                           READONLY );
@@ -80,14 +80,14 @@ ORowSetDataColumn::~ORowSetDataColumn()
     DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
     DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
     DECL_PROP1_BOOL( ISWRITABLE,                                READONLY );
-    DECL_PROP1( LABEL,                      ::rtl::OUString,    READONLY );
+    DECL_PROP1( LABEL,                      OUString,    READONLY );
     DECL_PROP1( PRECISION,                  sal_Int32,          READONLY );
     DECL_PROP1( SCALE,                      sal_Int32,          READONLY );
-    DECL_PROP1( SCHEMANAME,                 ::rtl::OUString,    READONLY );
-    DECL_PROP1( SERVICENAME,                ::rtl::OUString,    READONLY );
-    DECL_PROP1( TABLENAME,                  ::rtl::OUString,    READONLY );
+    DECL_PROP1( SCHEMANAME,                 OUString,    READONLY );
+    DECL_PROP1( SERVICENAME,                OUString,    READONLY );
+    DECL_PROP1( TABLENAME,                  OUString,    READONLY );
     DECL_PROP1( TYPE,                       sal_Int32,          READONLY );
-    DECL_PROP1( TYPENAME,                   ::rtl::OUString,    READONLY );
+    DECL_PROP1( TYPENAME,                   OUString,    READONLY );
     DECL_PROP1( VALUE,                      Any,                BOUND );
 
     END_PROPERTY_SEQUENCE()
@@ -216,7 +216,7 @@ ORowSetDataColumns::ORowSetDataColumns(
                 const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
-                const ::std::vector< ::rtl::OUString> &_rVector
+                const ::std::vector< OUString> &_rVector
                 ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                 ,m_aColumns(_rColumns)
 {
@@ -228,7 +228,7 @@ ORowSetDataColumns::~ORowSetDataColumns()
     DBG_DTOR(ORowSetDataColumns ,NULL);
 }
 
-sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ORowSetDataColumns::createObject(const OUString& _rName)
 {
     connectivity::sdbcx::ObjectType xNamed;
 
@@ -246,7 +246,7 @@ void SAL_CALL ORowSetDataColumns::disposing(void)
     m_aColumns = NULL;
 }
 
-void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
+void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector)
 {
     m_aColumns = _rColumns;
     reFill(_rVector);

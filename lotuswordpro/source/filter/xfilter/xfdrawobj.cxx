@@ -114,7 +114,7 @@ void XFDrawObject::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( A2OUSTR("svg:height"), DoubleToOUString(m_aRect.GetHeight()) + A2OUSTR("cm") );
 
     //transform
-    rtl::OUString   strTransform;
+    OUString   strTransform;
     if( m_nFlag&XFDRAWOBJECT_FLAG_ROTATE )
         strTransform = A2OUSTR("rotate (") + DoubleToOUString(m_fRotate) + A2OUSTR(") ");
     if( m_nFlag&XFDRAWOBJECT_FLAG_TRANLATE )

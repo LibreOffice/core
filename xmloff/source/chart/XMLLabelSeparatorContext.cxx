@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 
 XMLLabelSeparatorContext::XMLLabelSeparatorContext(
     SvXMLImport& rImport, sal_uInt16 nPrfx,
-    const ::rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const XMLPropertyState& rProp,
     ::std::vector< XMLPropertyState > &rProps ) :
         XMLElementPropertyContext(
@@ -49,7 +49,7 @@ void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAt
 }
 
 SvXMLImportContext* XMLLabelSeparatorContext::CreateChildContext(
-    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     SvXMLImportContext* pContext = NULL;

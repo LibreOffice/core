@@ -24,7 +24,7 @@
 
 #include <vector>
 
-typedef ::std::vector < ::rtl::OUString> XMLStringVector;
+typedef ::std::vector < OUString> XMLStringVector;
 
 
 #endif  //  _XMLOFF_XMLSTRINGVECTOR_HXX

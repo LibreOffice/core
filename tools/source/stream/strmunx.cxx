@@ -73,7 +73,7 @@ InternalStreamLock::InternalStreamLock(
     osl::DirectoryItem::get( m_pStream->GetFileName(), m_aItem );
     LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
-    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
+    OString aFileName(OUStringToOString(m_pStream->GetFileName(),
                                                   osl_getThreadTextEncoding()));
     fprintf( stderr, "locked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
@@ -94,7 +94,7 @@ InternalStreamLock::~InternalStreamLock()
         }
     }
 #if OSL_DEBUG_LEVEL > 1
-    rtl::OString aFileName(rtl::OUStringToOString(m_pStream->GetFileName(),
+    OString aFileName(OUStringToOString(m_pStream->GetFileName(),
                                                   osl_getThreadTextEncoding()));
     fprintf( stderr, "unlocked %s", aFileName.getStr() );
     if( m_nStartPos || m_nEndPos )
@@ -303,7 +303,7 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 
     SetBufferSize( 1024 );
     // convert URL to SystemPath, if necessary
-    ::rtl::OUString aSystemFileName;
+    OUString aSystemFileName;
     if( FileBase::getSystemPathFromFileURL( rFileName , aSystemFileName )
         != FileBase::E_None )
     {
@@ -348,10 +348,10 @@ sal_uInt16 SvFileStream::IsA() const
 sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("SvFileStream::GetData(): ");
+    OStringBuffer aTraceStr("SvFileStream::GetData(): ");
     aTraceStr.append(static_cast<sal_Int64>(nSize));
     aTraceStr.append(" Bytes from ");
-    aTraceStr.append(rtl::OUStringToOString(aFilename,
+    aTraceStr.append(OUStringToOString(aFilename,
         osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -372,10 +372,10 @@ sal_Size SvFileStream::GetData( void* pData, sal_Size nSize )
 sal_Size SvFileStream::PutData( const void* pData, sal_Size nSize )
 {
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("SvFileStream::PutData(): ");
+    OStringBuffer aTraceStr("SvFileStream::PutData(): ");
     aTraceStr.append(static_cast<sal_Int64>(nSize));
     aTraceStr.append(" Bytes to ");
-    aTraceStr.append(rtl::OUStringToOString(aFilename,
+    aTraceStr.append(OUStringToOString(aFilename,
         osl_getThreadTextEncoding()));
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
@@ -464,7 +464,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
-                 rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr(), nByteOffset, nByteOffset+nBytes );
+                 OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr(), nByteOffset, nByteOffset+nBytes );
 #endif
         return sal_False;
     }
@@ -503,15 +503,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     eStreamMode &= ~STREAM_TRUNC; // don't truncat on reopen
 
     aFilename = rFilename;
-    rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
+    OString aLocalFilename(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
 #ifdef DBG_UTIL
-    rtl::OStringBuffer aTraceStr("SvFileStream::Open(): ");
+    OStringBuffer aTraceStr("SvFileStream::Open(): ");
     aTraceStr.append(aLocalFilename);
     OSL_TRACE( "%s", aTraceStr.getStr() );
 #endif
 
-    rtl::OUString aFileURL;
+    OUString aFileURL;
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_LinkTargetURL );
 
@@ -558,9 +558,9 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 #if OSL_DEBUG_LEVEL > 0
                     fprintf( stderr,
                              "Removing link and replacing with file contents (%s) -> (%s).\n",
-                             rtl::OUStringToOString( aStatus.getLinkTargetURL(),
+                             OUStringToOString( aStatus.getLinkTargetURL(),
                                                      RTL_TEXTENCODING_UTF8).getStr(),
-                             rtl::OUStringToOString( aFileURL,
+                             OUStringToOString( aFileURL,
                                                      RTL_TEXTENCODING_UTF8).getStr() );
 #endif
                 }
@@ -604,8 +604,8 @@ void SvFileStream::Close()
     if ( IsOpen() )
     {
 #ifdef DBG_UTIL
-        rtl::OStringBuffer aTraceStr("SvFileStream::Close(): ");
-        aTraceStr.append(rtl::OUStringToOString(aFilename,
+        OStringBuffer aTraceStr("SvFileStream::Close(): ");
+        aTraceStr.append(OUStringToOString(aFilename,
             osl_getThreadTextEncoding()));
         OSL_TRACE("%s", aTraceStr.getStr());
 #endif

@@ -32,20 +32,20 @@ SwVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
     return uno::Any( aDialog );
 }
 
-rtl::OUString
+OUString
 SwVbaDialogs::getServiceImplName()
 {
-    return rtl::OUString("SwVbaDialogs");
+    return OUString("SwVbaDialogs");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 SwVbaDialogs::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.word.Dialogs" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.word.Dialogs" );
     }
     return aServiceNames;
 }

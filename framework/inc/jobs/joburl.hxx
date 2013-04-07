@@ -87,44 +87,44 @@ class JobURL : private ThreadHelpBase
         sal_uInt32 m_eRequest;
 
         /** holds the event part of a job URL */
-        ::rtl::OUString m_sEvent;
+        OUString m_sEvent;
 
         /** holds the alias part of a job URL */
-        ::rtl::OUString m_sAlias;
+        OUString m_sAlias;
 
         /** holds the service part of a job URL */
-        ::rtl::OUString m_sService;
+        OUString m_sService;
 
         /** holds the event arguments */
-        ::rtl::OUString m_sEventArgs;
+        OUString m_sEventArgs;
 
         /** holds the alias arguments */
-        ::rtl::OUString m_sAliasArgs;
+        OUString m_sAliasArgs;
 
         /** holds the service arguments */
-        ::rtl::OUString m_sServiceArgs;
+        OUString m_sServiceArgs;
 
     //___________________________________
     // native interface
 
     public:
 
-                 JobURL        ( const ::rtl::OUString& sURL         );
+                 JobURL        ( const OUString& sURL         );
         sal_Bool isValid       (                                     ) const;
-        sal_Bool getEvent      (       ::rtl::OUString& sEvent       ) const;
-        sal_Bool getAlias      (       ::rtl::OUString& sAlias       ) const;
-        sal_Bool getService    (       ::rtl::OUString& sService     ) const;
+        sal_Bool getEvent      (       OUString& sEvent       ) const;
+        sal_Bool getAlias      (       OUString& sAlias       ) const;
+        sal_Bool getService    (       OUString& sService     ) const;
 
     //___________________________________
     // private helper
 
     private:
 
-        static sal_Bool implst_split( const ::rtl::OUString& sPart           ,
+        static sal_Bool implst_split( const OUString& sPart           ,
                                       const sal_Char*        pPartIdentifier ,
                                             sal_Int32        nPartLength     ,
-                                            ::rtl::OUString& rPartValue      ,
-                                            ::rtl::OUString& rPartArguments  );
+                                            OUString& rPartValue      ,
+                                            OUString& rPartArguments  );
 
     //___________________________________
     // debug methods!
@@ -143,11 +143,11 @@ class JobURL : private ThreadHelpBase
                                       const sal_Char*  pExpectedEventArgs   ,
                                       const sal_Char*  pExpectedAliasArgs   ,
                                       const sal_Char*  pExpectedServiceArgs );
-        ::rtl::OUString impldbg_toString() const;
+        OUString impldbg_toString() const;
 
-        sal_Bool getServiceArgs(       ::rtl::OUString& sServiceArgs ) const;
-        sal_Bool getEventArgs  (       ::rtl::OUString& sEventArgs   ) const;
-        sal_Bool getAliasArgs  (       ::rtl::OUString& sAliasArgs   ) const;
+        sal_Bool getServiceArgs(       OUString& sServiceArgs ) const;
+        sal_Bool getEventArgs  (       OUString& sEventArgs   ) const;
+        sal_Bool getAliasArgs  (       OUString& sAliasArgs   ) const;
 
     #endif // ENABLE_COMPONENT_SELF_CHECK
 };

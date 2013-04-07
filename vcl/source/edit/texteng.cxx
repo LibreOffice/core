@@ -200,10 +200,10 @@ void TextEngine::SetFont( const Font& rFont )
         maFont.SetAlign( ALIGN_TOP );
         mpRefDev->SetFont( maFont);
         Size aTextSize;
-        aTextSize.Width() = mpRefDev->GetTextWidth(rtl::OUString("    "));
+        aTextSize.Width() = mpRefDev->GetTextWidth(OUString("    "));
         aTextSize.Height() = mpRefDev->GetTextHeight();
         if ( !aTextSize.Width() )
-            aTextSize.Width() = mpRefDev->GetTextWidth(rtl::OUString("XXXX"));
+            aTextSize.Width() = mpRefDev->GetTextWidth(OUString("XXXX"));
 
         mnDefTab = (sal_uInt16)aTextSize.Width();
         if ( !mnDefTab )
@@ -658,7 +658,7 @@ sal_Bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextS
         aCTLOptions.IsCTLFontEnabled() &&
         aCTLOptions.IsCTLSequenceChecking() &&
         nFirstPos != 0 && /* first char needs not to be checked */
-        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( rtl::OUString( c ), 0 );
+        xBI.is() && i18n::ScriptType::COMPLEX == xBI->getScriptType( OUString( c ), 0 );
 
     return bIsSequenceChecking;
 }
@@ -711,8 +711,8 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
                 // the text that needs to be checked is only the one
                 // before the current cursor position
-                rtl::OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).Copy(0, nTmpPos) );
-                rtl::OUString aNewText( aOldText );
+                OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).Copy(0, nTmpPos) );
+                OUString aNewText( aOldText );
                 if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
                 {
                     xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
@@ -752,7 +752,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
         if ( IsUndoEnabled() && !IsInUndo() )
         {
-            TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, rtl::OUString(c) );
+            TextUndoInsertChars* pNewUndo = new TextUndoInsertChars( this, aPaM, OUString(c) );
             sal_Bool bTryMerge = ( !bDoOverwrite && ( c != ' ' ) ) ? sal_True : sal_False;
             InsertUndo( pNewUndo, bTryMerge );
         }
@@ -2556,14 +2556,14 @@ sal_Bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     if ( aSel.HasRange() )
         aSel = ImpDeleteText( aSel );
 
-    rtl::OString aLine;
+    OString aLine;
     sal_Bool bDone = rInput.ReadLine( aLine );
-    rtl::OUString aTmpStr(rtl::OStringToOUString(aLine, rInput.GetStreamCharSet()));
+    OUString aTmpStr(OStringToOUString(aLine, rInput.GetStreamCharSet()));
     while ( bDone )
     {
         aSel = ImpInsertText( aSel, aTmpStr );
         bDone = rInput.ReadLine( aLine );
-        aTmpStr = rtl::OStringToOUString(aLine, rInput.GetStreamCharSet());
+        aTmpStr = OStringToOUString(aLine, rInput.GetStreamCharSet());
         if ( bDone )
             aSel = ImpInsertParaBreak( aSel.GetEnd() );
     }
@@ -2657,7 +2657,7 @@ sal_Bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, sal_Bo
 
             aText.AppendAscii( "</P>" );
         }
-        rOutput.WriteLine(rtl::OUStringToOString(aText,
+        rOutput.WriteLine(OUStringToOString(aText,
             rOutput.GetStreamCharSet()));
     }
 

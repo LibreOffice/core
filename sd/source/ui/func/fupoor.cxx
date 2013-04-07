@@ -823,7 +823,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     if(bPrintable)
                     {
                         // try to activate textedit mode for the selected object
-                        SfxStringItem aInputString(SID_ATTR_CHAR, rtl::OUString(rKEvt.GetCharCode()));
+                        SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,
@@ -874,7 +874,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         mpView->UnMarkAll();
                         mpView->MarkObj(pCandidate, mpView->GetSdrPageView());
-                        SfxStringItem aInputString(SID_ATTR_CHAR, rtl::OUString(rKEvt.GetCharCode()));
+                        SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_ATTR_CHAR,

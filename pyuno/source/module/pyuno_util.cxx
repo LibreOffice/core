@@ -30,11 +30,6 @@
 
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-using rtl::OUStringToOString;
-using rtl::OUString;
-using rtl::OString;
-using rtl::OStringBuffer;
-using rtl::OUStringBuffer;
 
 
 using com::sun::star::uno::TypeDescription;
@@ -127,7 +122,7 @@ bool isLog( RuntimeCargo * cargo, sal_Int32 loglevel )
     return cargo && cargo->logFile && loglevel <= cargo->logLevel;
 }
 
-void log( RuntimeCargo * cargo, sal_Int32 level, const rtl::OUString &logString )
+void log( RuntimeCargo * cargo, sal_Int32 level, const OUString &logString )
 {
     log( cargo, level, OUStringToOString( logString, osl_getThreadTextEncoding() ).getStr() );
 }
@@ -165,7 +160,7 @@ void log( RuntimeCargo * cargo, sal_Int32 level, const char *str )
 
 namespace {
 
-void appendPointer(rtl::OUStringBuffer & buffer, void * pointer) {
+void appendPointer(OUStringBuffer & buffer, void * pointer) {
     buffer.append(
         sal::static_int_cast< sal_Int64 >(
             reinterpret_cast< sal_IntPtr >(pointer)),
@@ -175,12 +170,12 @@ void appendPointer(rtl::OUStringBuffer & buffer, void * pointer) {
 }
 
 void logException( RuntimeCargo *cargo, const char *intro,
-                   void * ptr, const rtl::OUString &aFunctionName,
+                   void * ptr, const OUString &aFunctionName,
                    const void * data, const com::sun::star::uno::Type & type )
 {
     if( isLog( cargo, LogLevel::CALL ) )
     {
-        rtl::OUStringBuffer buf( 128 );
+        OUStringBuffer buf( 128 );
         buf.appendAscii( intro );
         appendPointer(buf, ptr);
         buf.append( "]." );
@@ -197,11 +192,11 @@ void logReply(
     RuntimeCargo *cargo,
     const char *intro,
     void * ptr,
-    const rtl::OUString & aFunctionName,
+    const OUString & aFunctionName,
     const Any &returnValue,
     const Sequence< Any > & aParams )
 {
-    rtl::OUStringBuffer buf( 128 );
+    OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
     buf.append( "]." );
@@ -223,10 +218,10 @@ void logReply(
 }
 
 void logCall( RuntimeCargo *cargo, const char *intro,
-              void * ptr, const rtl::OUString & aFunctionName,
+              void * ptr, const OUString & aFunctionName,
               const Sequence< Any > & aParams )
 {
-    rtl::OUStringBuffer buf( 128 );
+    OUStringBuffer buf( 128 );
     buf.appendAscii( intro );
     appendPointer(buf, ptr);
     buf.append( "]." );

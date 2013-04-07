@@ -21,7 +21,6 @@
 #include <inputsequencechecker_th.hxx>
 #include <wtt.h>
 
-using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

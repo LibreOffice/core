@@ -86,21 +86,21 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL XSDValidationPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL XSDValidationPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.extensions.XSDValidationPropertyHandler" );
+        return OUString( "com.sun.star.comp.extensions.XSDValidationPropertyHandler" );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL XSDValidationPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported( 1 );
-        aSupported[0] = ::rtl::OUString( "com.sun.star.form.inspection.XSDValidationPropertyHandler" );
+        Sequence< OUString > aSupported( 1 );
+        aSupported[0] = OUString( "com.sun.star.form.inspection.XSDValidationPropertyHandler" );
         return aSupported;
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL XSDValidationPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL XSDValidationPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -113,9 +113,9 @@ namespace pcr
         switch ( nPropId )
         {
         // common facets
-        case PROPERTY_ID_XSD_DATA_TYPE:  aReturn = pType.is() ? pType->getFacet( PROPERTY_NAME ) : makeAny( ::rtl::OUString() ); break;
+        case PROPERTY_ID_XSD_DATA_TYPE:  aReturn = pType.is() ? pType->getFacet( PROPERTY_NAME ) : makeAny( OUString() ); break;
         case PROPERTY_ID_XSD_WHITESPACES:aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_WHITESPACES ) : makeAny( WhiteSpaceTreatment::Preserve ); break;
-        case PROPERTY_ID_XSD_PATTERN:    aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_PATTERN ) : makeAny( ::rtl::OUString() ); break;
+        case PROPERTY_ID_XSD_PATTERN:    aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_PATTERN ) : makeAny( OUString() ); break;
 
         // all other properties are simply forwarded, if they exist at the given type
         default:
@@ -130,7 +130,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSDValidationPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
+    void SAL_CALL XSDValidationPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
@@ -140,7 +140,7 @@ namespace pcr
 
         if ( PROPERTY_ID_XSD_DATA_TYPE == nPropId )
         {
-            ::rtl::OUString sTypeName;
+            OUString sTypeName;
             OSL_VERIFY( _rValue >>= sTypeName );
             m_pHelper->setValidatingDataTypeByName( sTypeName );
             impl_setContextDocumentModified_nothrow();
@@ -227,61 +227,61 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL XSDValidationPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::std::vector< ::rtl::OUString > aSuperfluous;
+        ::std::vector< OUString > aSuperfluous;
         if ( m_pHelper.get() )
         {
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_CONTROLSOURCE) );
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_EMPTY_IS_NULL) );
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_FILTERPROPOSAL) );
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_LISTSOURCETYPE) );
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_LISTSOURCE) );
-            aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_BOUNDCOLUMN) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_CONTROLSOURCE) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EMPTY_IS_NULL) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_FILTERPROPOSAL) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCETYPE) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCE) );
+            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_BOUNDCOLUMN) );
 
             bool bAllowBinding = m_pHelper->canBindToAnyDataType();
 
             if ( bAllowBinding )
             {
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_MAXTEXTLEN) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_VALUEMIN) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_VALUEMAX) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DECIMAL_ACCURACY) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TIMEMIN) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_TIMEMAX) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DATEMIN) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_DATEMAX) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_EFFECTIVE_MIN) );
-                aSuperfluous.push_back(  static_cast<const rtl::OUString&>(PROPERTY_EFFECTIVE_MAX) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_MAXTEXTLEN) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_VALUEMIN) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_VALUEMAX) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DECIMAL_ACCURACY) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_TIMEMIN) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_TIMEMAX) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DATEMIN) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DATEMAX) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EFFECTIVE_MIN) );
+                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EFFECTIVE_MAX) );
             }
         }
 
         if ( aSuperfluous.empty() )
-            return Sequence< ::rtl::OUString >();
-        return Sequence< ::rtl::OUString >( &(*aSuperfluous.begin()), aSuperfluous.size() );
+            return Sequence< OUString >();
+        return Sequence< OUString >( &(*aSuperfluous.begin()), aSuperfluous.size() );
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL XSDValidationPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< ::rtl::OUString > aInterestedInActuations( 2 );
+        ::std::vector< OUString > aInterestedInActuations( 2 );
         if ( m_pHelper.get() )
         {
-            aInterestedInActuations.push_back(  static_cast<const rtl::OUString&>(PROPERTY_XSD_DATA_TYPE) );
-            aInterestedInActuations.push_back(  static_cast<const rtl::OUString&>(PROPERTY_XML_DATA_MODEL) );
+            aInterestedInActuations.push_back(  static_cast<const OUString&>(PROPERTY_XSD_DATA_TYPE) );
+            aInterestedInActuations.push_back(  static_cast<const OUString&>(PROPERTY_XML_DATA_MODEL) );
         }
         if ( aInterestedInActuations.empty() )
-            return Sequence< ::rtl::OUString >();
-        return Sequence< ::rtl::OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
+            return Sequence< OUString >();
+        return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
     }
 
     //--------------------------------------------------------------------
     namespace
     {
-        void showPropertyUI( const Reference< XObjectInspectorUI >& _rxInspectorUI, const ::rtl::OUString& _rPropertyName, bool _bShow )
+        void showPropertyUI( const Reference< XObjectInspectorUI >& _rxInspectorUI, const OUString& _rPropertyName, bool _bShow )
         {
             if ( _bShow )
                 _rxInspectorUI->showPropertyUI( _rPropertyName );
@@ -291,7 +291,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    LineDescriptor SAL_CALL XSDValidationPropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+    LineDescriptor SAL_CALL XSDValidationPropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
@@ -309,7 +309,7 @@ namespace pcr
 
         // collect some information about the to-be-created control
         sal_Int16 nControlType = PropertyControlType::TextField;
-        ::std::vector< ::rtl::OUString > aListEntries;
+        ::std::vector< OUString > aListEntries;
         Optional< double > aMinValue( sal_False, 0 );
         Optional< double > aMaxValue( sal_False, 0 );
 
@@ -320,11 +320,11 @@ namespace pcr
 
             implGetAvailableDataTypeNames( aListEntries );
 
-            aDescriptor.PrimaryButtonId = rtl::OUString::createFromAscii(UID_PROP_ADD_DATA_TYPE);
-            aDescriptor.SecondaryButtonId = rtl::OUString::createFromAscii(UID_PROP_REMOVE_DATA_TYPE);;
+            aDescriptor.PrimaryButtonId = OUString::createFromAscii(UID_PROP_ADD_DATA_TYPE);
+            aDescriptor.SecondaryButtonId = OUString::createFromAscii(UID_PROP_REMOVE_DATA_TYPE);;
             aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
-            aDescriptor.PrimaryButtonImageURL = ::rtl::OUString( "private:graphicrepository/extensions/res/buttonplus.png" );
-            aDescriptor.SecondaryButtonImageURL = ::rtl::OUString( "private:graphicrepository/extensions/res/buttonminus.png" );
+            aDescriptor.PrimaryButtonImageURL = OUString( "private:graphicrepository/extensions/res/buttonplus.png" );
+            aDescriptor.SecondaryButtonImageURL = OUString( "private:graphicrepository/extensions/res/buttonminus.png" );
             break;
 
         case PROPERTY_ID_XSD_WHITESPACES:
@@ -419,7 +419,7 @@ namespace pcr
             break;
         }
 
-        aDescriptor.Category = ::rtl::OUString( "Data" );
+        aDescriptor.Category = OUString( "Data" );
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
         aDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( nPropId ) );
 
@@ -427,7 +427,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL XSDValidationPropertyHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -445,7 +445,7 @@ namespace pcr
         {
             if ( _bPrimary )
             {
-                ::rtl::OUString sNewDataTypeName;
+                OUString sNewDataTypeName;
                 if ( implPrepareCloneDataCurrentType( sNewDataTypeName ) )
                 {
                     implDoCloneCurrentDataType( sNewDataTypeName );
@@ -483,7 +483,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    bool XSDValidationPropertyHandler::implPrepareCloneDataCurrentType( ::rtl::OUString& _rNewName ) SAL_THROW(())
+    bool XSDValidationPropertyHandler::implPrepareCloneDataCurrentType( OUString& _rNewName ) SAL_THROW(())
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: this will crash!" );
 
@@ -494,7 +494,7 @@ namespace pcr
             return false;
         }
 
-        ::std::vector< ::rtl::OUString > aExistentNames;
+        ::std::vector< OUString > aExistentNames;
         m_pHelper->getAvailableDataTypeNames( aExistentNames );
 
         NewDataTypeDialog aDialog( NULL, pType->getName(), aExistentNames );  // TODO/eForms: proper parent
@@ -506,7 +506,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    bool XSDValidationPropertyHandler::implDoCloneCurrentDataType( const ::rtl::OUString& _rNewName ) SAL_THROW(())
+    bool XSDValidationPropertyHandler::implDoCloneCurrentDataType( const OUString& _rNewName ) SAL_THROW(())
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implDoCloneCurrentDataType: this will crash!" );
 
@@ -564,7 +564,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -588,7 +588,7 @@ namespace pcr
 
             //------------------------------------------------------------
             // show the facets which are available at the data type
-            ::rtl::OUString aFacets[] = {
+            OUString aFacets[] = {
                 OUString(PROPERTY_XSD_WHITESPACES), OUString(PROPERTY_XSD_PATTERN),
                 OUString(PROPERTY_XSD_LENGTH), OUString(PROPERTY_XSD_MIN_LENGTH), OUString(PROPERTY_XSD_MAX_LENGTH), OUString(PROPERTY_XSD_TOTAL_DIGITS),
                 OUString(PROPERTY_XSD_FRACTION_DIGITS),
@@ -615,7 +615,7 @@ namespace pcr
             };
 
             size_t i=0;
-            const ::rtl::OUString* pLoop = NULL;
+            const OUString* pLoop = NULL;
             for ( i = 0, pLoop = aFacets;
                   i < SAL_N_ELEMENTS( aFacets );
                   ++i, ++pLoop
@@ -631,9 +631,9 @@ namespace pcr
         {
             // The data type which the current binding works with may not be present in the
             // new model. Thus, transfer it.
-            ::rtl::OUString sOldModelName; _rOldValue >>= sOldModelName;
-            ::rtl::OUString sNewModelName; _rNewValue >>= sNewModelName;
-            ::rtl::OUString sDataType = m_pHelper->getValidatingDataTypeName();
+            OUString sOldModelName; _rOldValue >>= sOldModelName;
+            OUString sNewModelName; _rNewValue >>= sNewModelName;
+            OUString sDataType = m_pHelper->getValidatingDataTypeName();
             m_pHelper->copyDataType( sOldModelName, sNewModelName, sDataType );
 
             // the list of available data types depends on the chosen model, so update this
@@ -654,17 +654,17 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( ::std::vector< ::rtl::OUString >& /* [out] */ _rNames ) const SAL_THROW(())
+    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(())
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implGetAvailableDataTypeNames: this will crash!" );
         // start with *all* types which are available at the model
-        ::std::vector< ::rtl::OUString > aAllTypes;
+        ::std::vector< OUString > aAllTypes;
         m_pHelper->getAvailableDataTypeNames( aAllTypes );
         _rNames.clear();
         _rNames.reserve( aAllTypes.size() );
 
         // then allow only those which are "compatible" with our control
-        for ( ::std::vector< ::rtl::OUString >::const_iterator dataType = aAllTypes.begin();
+        for ( ::std::vector< OUString >::const_iterator dataType = aAllTypes.begin();
               dataType != aAllTypes.end();
               ++dataType
             )

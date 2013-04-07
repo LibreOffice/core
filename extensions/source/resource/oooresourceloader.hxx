@@ -31,7 +31,7 @@
 
 namespace extensions { namespace resource
 {
-    typedef ::std::pair< ::rtl::OUString, ::com::sun::star::lang::Locale> ResourceBundleDescriptor;
+    typedef ::std::pair< OUString, ::com::sun::star::lang::Locale> ResourceBundleDescriptor;
 
     struct ResourceBundleDescriptorLess : public ::std::binary_function<ResourceBundleDescriptor, ResourceBundleDescriptor, bool>
     {
@@ -59,8 +59,8 @@ namespace extensions { namespace resource
 
         OpenOfficeResourceLoader(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
         // XResourceBundleLoader
-        virtual  ::com::sun::star::uno::Reference< ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle_Default( const ::rtl::OUString& aBaseName ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException);
-        virtual  ::com::sun::star::uno::Reference<  ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle( const ::rtl::OUString& abaseName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException);
+        virtual  ::com::sun::star::uno::Reference< ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle_Default( const OUString& aBaseName ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException);
+        virtual  ::com::sun::star::uno::Reference<  ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException);
 
     private:
         OpenOfficeResourceLoader();                                             // never implemented

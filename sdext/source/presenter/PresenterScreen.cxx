@@ -46,7 +46,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing::framework;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
@@ -99,7 +98,7 @@ OUString PresenterScreenJob::getImplementationName_static (void)
 
 Sequence<OUString> PresenterScreenJob::getSupportedServiceNames_static (void)
 {
-    return Sequence<rtl::OUString>();
+    return Sequence<OUString>();
 }
 
 Reference<XInterface> PresenterScreenJob::Create (const Reference<uno::XComponentContext>& rxContext)
@@ -684,7 +683,7 @@ void PresenterScreen::ProcessLayout (
                 OUString("Layout")),
             UNO_QUERY_THROW);
 
-        ::std::vector<rtl::OUString> aProperties (6);
+        ::std::vector<OUString> aProperties (6);
         aProperties[0] = OUString("PaneURL");
         aProperties[1] = OUString("ViewURL");
         aProperties[2] = OUString("RelativeX");
@@ -715,7 +714,7 @@ void PresenterScreen::ProcessViewDescriptions (
             rConfiguration.GetConfigurationNode("Presenter/Views"),
             UNO_QUERY_THROW);
 
-        ::std::vector<rtl::OUString> aProperties (4);
+        ::std::vector<OUString> aProperties (4);
         aProperties[0] = OUString("ViewURL");
         aProperties[1] = OUString("Title");
         aProperties[2] = OUString("AccessibleTitle");

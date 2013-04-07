@@ -79,24 +79,24 @@ public:
     virtual ~XFTable();
 
 public:
-    void    SetTableName(rtl::OUString name);
+    void    SetTableName(OUString name);
 
-    void    SetColumnStyle(sal_Int32 col, rtl::OUString style);
+    void    SetColumnStyle(sal_Int32 col, OUString style);
 
     void    AddRow(XFRow *pRow);
 
     void    AddHeaderRow(XFRow *pRow);
 
-    void    SetDefaultCellStyle(rtl::OUString style);
+    void    SetDefaultCellStyle(OUString style);
 
-    void    SetDefaultRowStyle(rtl::OUString style);
+    void    SetDefaultRowStyle(OUString style);
 
-    void    SetDefaultColStyle(rtl::OUString style);
+    void    SetDefaultColStyle(OUString style);
 
 public:
     void    SetOwnerCell(XFCell *pCell);
 
-    rtl::OUString   GetTableName();
+    OUString   GetTableName();
 
     sal_Int32   GetRowCount();
 
@@ -115,18 +115,18 @@ public:
     void        RemoveRow(sal_Int32 row);
 
 private:
-    rtl::OUString   m_strName;
+    OUString   m_strName;
     sal_Bool    m_bSubTable;
     XFCell      *m_pOwnerCell;
     XFContentContainer  m_aHeaderRows;
     std::map<sal_Int32,XFRow*>  m_aRows;
-    std::map<sal_Int32,rtl::OUString>   m_aColumns;
-    rtl::OUString   m_strDefCellStyle;
-    rtl::OUString   m_strDefRowStyle;
-    rtl::OUString   m_strDefColStyle;
+    std::map<sal_Int32,OUString>   m_aColumns;
+    OUString   m_strDefCellStyle;
+    OUString   m_strDefRowStyle;
+    OUString   m_strDefColStyle;
 };
 
-inline void XFTable::SetTableName(rtl::OUString name)
+inline void XFTable::SetTableName(OUString name)
 {
     m_strName = name;
 }
@@ -143,17 +143,17 @@ inline sal_Bool XFTable::IsSubTable()
 }
 
 
-inline void XFTable::SetDefaultCellStyle(rtl::OUString style)
+inline void XFTable::SetDefaultCellStyle(OUString style)
 {
     m_strDefCellStyle = style;
 }
 
-inline void XFTable::SetDefaultRowStyle(rtl::OUString style)
+inline void XFTable::SetDefaultRowStyle(OUString style)
 {
     m_strDefRowStyle = style;
 }
 
-inline void XFTable::SetDefaultColStyle(rtl::OUString style)
+inline void XFTable::SetDefaultColStyle(OUString style)
 {
     m_strDefColStyle = style;
 }

@@ -56,7 +56,7 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
     if( !xCooSysModel.is() )
         return 0;
 
-    rtl::OUString aViewServiceName = xCooSysModel->getViewServiceName();
+    OUString aViewServiceName = xCooSysModel->getViewServiceName();
 
     //@todo: in future the coordinatesystems should be instanciated via service factory
     VCoordinateSystem* pRet=NULL;
@@ -125,7 +125,7 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
     m_xShapeFactory = xShapeFactory;
 }
 
-void VCoordinateSystem::setParticle( const rtl::OUString& rCooSysParticle )
+void VCoordinateSystem::setParticle( const OUString& rCooSysParticle )
 {
     m_aCooSysParticle = rCooSysParticle;
 }
@@ -325,14 +325,14 @@ ExplicitIncrementData VCoordinateSystem::getExplicitIncrement( sal_Int32 nDimens
     return aRet;
 }
 
-rtl::OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
-    rtl::OUString aAxisParticle( ObjectIdentifier::createParticleForAxis( nDimensionIndex, nAxisIndex ) );
+    OUString aAxisParticle( ObjectIdentifier::createParticleForAxis( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aAxisParticle );
 }
-rtl::OUString VCoordinateSystem::createCIDForGrid( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+OUString VCoordinateSystem::createCIDForGrid( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
-    rtl::OUString aGridParticle( ObjectIdentifier::createParticleForGrid( nDimensionIndex, nAxisIndex ) );
+    OUString aGridParticle( ObjectIdentifier::createParticleForGrid( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aGridParticle );
 }
 
@@ -574,7 +574,7 @@ bool VCoordinateSystem::needSeriesNamesForAxis() const
 {
     return ( m_xCooSysModel.is() && m_xCooSysModel->getDimension() == 3 );
 }
-void VCoordinateSystem::setSeriesNamesForAxis( const Sequence< rtl::OUString >& rSeriesNames )
+void VCoordinateSystem::setSeriesNamesForAxis( const Sequence< OUString >& rSeriesNames )
 {
     m_aSeriesNamesForZAxis = rSeriesNames;
 }

@@ -771,7 +771,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
             // start behind the characters (to fix the attributes!)
             if (nStart < pNode->GetTxt().getLength())
                 ++rIdx;
-            pNode->InsertText( rtl::OUString(c), rIdx, INS_EMPTYEXPAND );
+            pNode->InsertText( OUString(c), rIdx, INS_EMPTYEXPAND );
             if( nStart+1 < rIdx.GetIndex() )
             {
                 rIdx = nStart;
@@ -1930,7 +1930,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*(SwTxtNode*)pNd);
-                                rtl::OUString aExpandText = aConversionMap.getViewText();
+                                OUString aExpandText = aConversionMap.getViewText();
 
                                 // get XFlatParagraph to use...
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, aConversionMap );
@@ -2137,7 +2137,7 @@ static bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, bool bRegExpRpl
     if( bRegExpRplc )
     {
         xub_StrLen nPos = 0;
-        rtl::OUString sPara("\\n");
+        OUString sPara("\\n");
         while( STRING_NOTFOUND != ( nPos = rStr.Search( sPara, nPos )) )
         {
             // Has this been escaped?
@@ -2283,7 +2283,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 SetRedlineMode(
@@ -2375,7 +2375,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
                 // If any Redline will change (split!) the node
-                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
+                const ::sw::mark::IMark* pBkmk = getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
 
                 SwIndex& rIdx = aDelPam.GetPoint()->nContent;
                 rIdx.Assign( 0, 0 );

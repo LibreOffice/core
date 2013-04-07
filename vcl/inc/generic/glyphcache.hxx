@@ -72,7 +72,7 @@ public:
 
     static GlyphCache&      GetInstance();
 
-    void                        AddFontFile( const rtl::OString& rNormalizedName,
+    void                        AddFontFile( const OString& rNormalizedName,
                                     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
                                     const ExtraKernInfo* = NULL );
     void                        AnnounceFonts( ImplDevFontList* ) const;
@@ -184,7 +184,7 @@ public:
     ServerFont( const FontSelectPattern&, FtFontInfo* );
     virtual ~ServerFont();
 
-    const ::rtl::OString* GetFontFileName() const;
+    const OString* GetFontFileName() const;
     bool                TestFont() const;
     FT_Face             GetFtFace() const;
     int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }

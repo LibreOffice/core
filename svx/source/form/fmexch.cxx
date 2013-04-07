@@ -334,7 +334,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\""));
+            s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.ControlPathExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getControlPathFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -346,7 +346,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\""));
+            s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.HiddenControlModelsExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getHiddenControlModelsFormatId: bad exchange id!");
         }
         return s_nFormat;
@@ -358,7 +358,7 @@ namespace svxform
         static sal_uInt32 s_nFormat = (sal_uInt32)-1;
         if ((sal_uInt32)-1 == s_nFormat)
         {
-            s_nFormat = SotExchange::RegisterFormatName(rtl::OUString("application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\""));
+            s_nFormat = SotExchange::RegisterFormatName(OUString("application/x-openoffice;windows_formatname=\"svxform.FieldNameExchange\""));
             DBG_ASSERT((sal_uInt32)-1 != s_nFormat, "OControlExchange::getFieldExchangeFormatId: bad exchange id!");
         }
         return s_nFormat;

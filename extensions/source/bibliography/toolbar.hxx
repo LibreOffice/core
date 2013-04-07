@@ -40,7 +40,7 @@ class BibToolBarListener: public cppu::WeakImplHelper1 < ::com::sun::star::frame
 private:
 
     sal_uInt16      nIndex;
-    rtl::OUString           aCommand;
+    OUString           aCommand;
 
 protected:
 
@@ -48,10 +48,10 @@ protected:
 
 public:
 
-    BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
+    BibToolBarListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
     ~BibToolBarListener();
 
-    rtl::OUString           GetCommand() const;
+    OUString           GetCommand() const;
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
@@ -68,7 +68,7 @@ class BibTBListBoxListener: public BibToolBarListener
 {
 public:
 
-    BibTBListBoxListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
+    BibTBListBoxListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
     ~BibTBListBoxListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
@@ -80,7 +80,7 @@ class BibTBEditListener: public BibToolBarListener
 {
 public:
 
-    BibTBEditListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
+    BibTBEditListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
     ~BibTBEditListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
@@ -92,7 +92,7 @@ class BibTBQueryMenuListener:   public BibToolBarListener
 {
 public:
 
-    BibTBQueryMenuListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId);
+    BibTBQueryMenuListener(BibToolBar *pTB,OUString aStr,sal_uInt16 nId);
     ~BibTBQueryMenuListener();
 
     virtual void    SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event)
@@ -122,7 +122,7 @@ class BibToolBar:   public ToolBox
         PopupMenu               aPopupMenu;
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
-        rtl::OUString           aQueryField;
+        OUString           aQueryField;
         Link                    aLayoutManager;
         sal_Int16               nSymbolsSize;
         sal_Int16               nOutStyle;

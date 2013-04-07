@@ -209,7 +209,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
             if ( aPath.EqualsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
             {
                 // extension found
-                aExtension = rtl::OUString::createFromAscii(Fac2ExtMap_Impl[ nIndex ]._pExtension);
+                aExtension = OUString::createFromAscii(Fac2ExtMap_Impl[ nIndex ]._pExtension);
                 // and return it
                 return aExtension;
             }
@@ -227,7 +227,7 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
             xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
             ::com::sun::star::uno::UNO_QUERY );
 
-        ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
+        OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
         ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
         if ( !aInternalType.isEmpty() && xAccess->hasByName( aInternalType ) )
@@ -239,10 +239,10 @@ static String GetImageExtensionByFactory_Impl( const String& rURL )
                 const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
                 if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
                 {
-                    ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
+                    ::com::sun::star::uno::Sequence < OUString > aExtensions;
                     if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
                     {
-                        const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
+                        const OUString* pExtensions = aExtensions.getConstArray();
                         aExtension = String( pExtensions[0] );
                         break;
                     }
@@ -454,7 +454,7 @@ static String GetDescriptionByFactory_Impl( const String& rFactory )
         SolarMutexGuard aGuard;
         return SvtResId(nResId).toString();
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 static sal_uInt16 GetFolderDescriptionId_Impl( const String& rURL )

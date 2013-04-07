@@ -452,7 +452,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     case text::textfield::Type::AUTHOR:
     {
-        ::rtl::OUString aContent;
+        OUString aContent;
         String aFirstName;
         String aLastName;
         String aEmpty;
@@ -876,7 +876,7 @@ sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName 
     return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const ::rtl::OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xRet;
 

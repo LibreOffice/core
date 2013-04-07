@@ -46,16 +46,16 @@
 class PFormEntrys;
 class MergeData;
 
-typedef boost::unordered_map<rtl::OString, rtl::OString, rtl::OStringHash>
+typedef boost::unordered_map<OString, OString, OStringHash>
     OStringHashMap;
 
-typedef boost::unordered_map<rtl::OString, bool, rtl::OStringHash>
+typedef boost::unordered_map<OString, bool, OStringHash>
     OStringBoolHashMap;
 
-typedef boost::unordered_map<rtl::OString, PFormEntrys*, rtl::OStringHash>
+typedef boost::unordered_map<OString, PFormEntrys*, OStringHash>
     PFormEntrysHashMap;
 
-typedef boost::unordered_map<rtl::OString, MergeData*, rtl::OStringHash>
+typedef boost::unordered_map<OString, MergeData*, OStringHash>
     MergeDataHashMap;
 
 #define SOURCE_LANGUAGE "en-US"
@@ -109,10 +109,10 @@ public:
 class ResData
 {
 public:
-    ResData(const rtl::OString &rPF, const rtl::OString &rGId);
-    ResData(const rtl::OString &rPF, const rtl::OString &rGId , const rtl::OString &rFilename);
+    ResData(const OString &rPF, const OString &rGId);
+    ResData(const OString &rPF, const OString &rGId , const OString &rFilename);
     ~ResData();
-    sal_Bool SetId(const rtl::OString &rId, sal_uInt16 nLevel);
+    sal_Bool SetId(const OString &rId, sal_uInt16 nLevel);
 
     sal_Int32 nWidth;
     sal_uInt16 nChildIndex;
@@ -128,11 +128,11 @@ public:
 
     sal_Bool bRestMerged;
 
-    rtl::OString sResTyp;
-    rtl::OString sId;
-    rtl::OString sGId;
-    rtl::OString sHelpId;
-    rtl::OString sFilename;
+    OString sResTyp;
+    OString sId;
+    OString sGId;
+    OString sHelpId;
+    OString sFilename;
 
     OStringHashMap sText;
     sal_uInt16 nTextRefId;
@@ -146,7 +146,7 @@ public:
     OStringHashMap sTitle;
     sal_uInt16 nTitleRefId;
 
-    rtl::OString sTextTyp;
+    OString sTextTyp;
 
     ExportList  *pStringList;
     ExportList  *pUIEntries;
@@ -154,7 +154,7 @@ public:
     ExportList  *pFilterList;
     ExportList  *pPairedList;
 
-    rtl::OString sPForm;
+    OString sPForm;
 };
 
 
@@ -196,57 +196,57 @@ private:
 
     ResStack aResStack;                 // stack for parsing recursive
 
-    rtl::OString sActPForm;               // hold cur. system
+    OString sActPForm;               // hold cur. system
 
     sal_Bool bDefine;                       // cur. res. in a define?
     sal_Bool bNextMustBeDefineEOL;          // define but no \ at lineend
     std::size_t nLevel; // res. recursiv? how deep?
     sal_uInt16 nList;                       // cur. res. is String- or FilterList
-    rtl::OString m_sListLang;
+    OString m_sListLang;
     std::size_t nListIndex;
     std::size_t nListLevel;
     bool bSkipFile;
     sal_Bool bMergeMode;
-    rtl::OString sMergeSrc;
-    rtl::OString sLastListLine;
+    OString sMergeSrc;
+    OString sLastListLine;
     sal_Bool bError;                        // any errors while export?
     sal_Bool bReadOver;
     sal_Bool bDontWriteOutput;
-    rtl::OString sLastTextTyp;
+    OString sLastTextTyp;
     bool isInitialized;
-    rtl::OString sFilename;
-    rtl::OString sLanguages;
+    OString sFilename;
+    OString sLanguages;
 
-    std::vector<rtl::OString> aLanguages;
+    std::vector<OString> aLanguages;
 
     sal_Bool WriteData( ResData *pResData, sal_Bool bCreateNew = sal_False );// called befor dest. cur ResData
     sal_Bool WriteExportList( ResData *pResData, ExportList *pExportList,
-                        const rtl::OString &rTyp, sal_Bool bCreateNew = sal_False );
+                        const OString &rTyp, sal_Bool bCreateNew = sal_False );
 
-    rtl::OString MergePairedList( rtl::OString const & sLine , rtl::OString const & sText );
+    OString MergePairedList( OString const & sLine , OString const & sText );
 
-    rtl::OString FullId();                    // creates cur. GID
+    OString FullId();                    // creates cur. GID
 
-    rtl::OString GetPairedListID(const rtl::OString & rText);
-    rtl::OString GetPairedListString(const rtl::OString& rText);
-    rtl::OString StripList(const rtl::OString& rText);
+    OString GetPairedListID(const OString & rText);
+    OString GetPairedListString(const OString& rText);
+    OString StripList(const OString& rText);
 
-    void InsertListEntry(const rtl::OString &rText, const rtl::OString &rLine);
-    void CleanValue( rtl::OString &rValue );
-    rtl::OString GetText(const rtl::OString &rSource, int nToken);
+    void InsertListEntry(const OString &rText, const OString &rLine);
+    void CleanValue( OString &rValue );
+    OString GetText(const OString &rSource, int nToken);
 
-    sal_Bool PrepareTextToMerge(rtl::OString &rText, sal_uInt16 nTyp,
-        rtl::OString &rLangIndex, ResData *pResData);
-    void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const rtl::OString& rTextType );
+    sal_Bool PrepareTextToMerge(OString &rText, sal_uInt16 nTyp,
+        OString &rLangIndex, ResData *pResData);
+    void ResData2Output( PFormEntrys *pEntry, sal_uInt16 nType, const OString& rTextType );
     void MergeRest( ResData *pResData, sal_uInt16 nMode = MERGE_MODE_NORMAL );
-    void ConvertMergeContent( rtl::OString &rText );
+    void ConvertMergeContent( OString &rText );
 
-    void WriteToMerged(const rtl::OString &rText , bool bSDFContent);
+    void WriteToMerged(const OString &rText , bool bSDFContent);
     void SetChildWithText();
 
     void InitLanguages( bool bMergeMode = false );
 
-    void CutComment( rtl::OString &rText );
+    void CutComment( OString &rText );
 
 public:
     Export(const OString &rOutput, const OString &rLanguage);
@@ -273,8 +273,8 @@ class PFormEntrys
 {
 friend class MergeDataFile;
 private:
-    rtl::OString data_; //TODO
-    rtl::OString sHelpText; // empty string
+    OString data_; //TODO
+    OString sHelpText; // empty string
     OStringHashMap sText;
     OStringBoolHashMap bTextFirst;
     OStringHashMap sQuickHelpText;
@@ -283,9 +283,9 @@ private:
     OStringBoolHashMap bTitleFirst;
 
 public:
-    PFormEntrys( const rtl::OString &rPForm ) : data_( rPForm ) {};
-    void InsertEntry(const rtl::OString &rId, const rtl::OString &rText,
-        const rtl::OString &rQuickHelpText, const rtl::OString &rTitle)
+    PFormEntrys( const OString &rPForm ) : data_( rPForm ) {};
+    void InsertEntry(const OString &rId, const OString &rText,
+        const OString &rQuickHelpText, const OString &rTitle)
     {
 
         sText[ rId ] = rText;
@@ -295,8 +295,8 @@ public:
         sTitle[ rId ] = rTitle;
         bTitleFirst[ rId ] = true;
     }
-    sal_Bool GetText( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
-    sal_Bool GetTransex3Text( rtl::OString &rReturn, sal_uInt16 nTyp, const rtl::OString &nLangIndex, sal_Bool bDel = sal_False );
+    sal_Bool GetText( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
+    sal_Bool GetTransex3Text( OString &rReturn, sal_uInt16 nTyp, const OString &nLangIndex, sal_Bool bDel = sal_False );
 
 };
 
@@ -313,19 +313,19 @@ class MergeDataFile;
 class MergeData
 {
 public:
-    rtl::OString sTyp;
-    rtl::OString sGID;
-    rtl::OString sLID;
-    rtl::OString sFilename;
+    OString sTyp;
+    OString sGID;
+    OString sLID;
+    OString sFilename;
     PFormEntrysHashMap aMap;
 public:
-    MergeData( const rtl::OString &rTyp, const rtl::OString &rGID, const rtl::OString &rLID , const rtl::OString &rFilename )
+    MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename )
             : sTyp( rTyp ), sGID( rGID ), sLID( rLID ) , sFilename( rFilename ) {};
     ~MergeData();
     PFormEntrys* GetPFormEntries();
 
     void Insert( PFormEntrys* pfEntrys );
-    PFormEntrys* GetPFObject( const rtl::OString &rPFO );
+    PFormEntrys* GetPFObject( const OString &rPFO );
 
     sal_Bool operator==( ResData *pData );
 };
@@ -341,43 +341,43 @@ public:
 class MergeDataFile
 {
     private:
-        rtl::OString sErrorLog;
+        OString sErrorLog;
         MergeDataHashMap aMap;
-        std::set<rtl::OString> aLanguageSet;
+        std::set<OString> aLanguageSet;
 
         MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
-        void InsertEntry(const rtl::OString &rTYP, const rtl::OString &rGID,
-            const rtl::OString &rLID, const rtl::OString &rPFO,
-            const rtl::OString &nLang, const rtl::OString &rTEXT,
-            const rtl::OString &rQHTEXT, const rtl::OString &rTITLE,
-            const rtl::OString &sFilename, bool bCaseSensitive);
+        void InsertEntry(const OString &rTYP, const OString &rGID,
+            const OString &rLID, const OString &rPFO,
+            const OString &nLang, const OString &rTEXT,
+            const OString &rQHTEXT, const OString &rTITLE,
+            const OString &sFilename, bool bCaseSensitive);
     public:
         explicit MergeDataFile(
-            const rtl::OString &rFileName, const rtl::OString& rFile,
+            const OString &rFileName, const OString& rFile,
             bool bCaseSensitive, bool bWithQtz = true );
         ~MergeDataFile();
 
 
-        std::vector<rtl::OString> GetLanguages() const;
+        std::vector<OString> GetLanguages() const;
         const MergeDataHashMap& getMap() const { return aMap; }
 
         PFormEntrys *GetPFormEntrys( ResData *pResData );
         PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
-        static rtl::OString CreateKey(const rtl::OString& rTYP, const rtl::OString& rGID,
-            const rtl::OString& rLID, const rtl::OString& rFilename , bool bCaseSensitive = false);
+        static OString CreateKey(const OString& rTYP, const OString& rGID,
+            const OString& rLID, const OString& rFilename , bool bCaseSensitive = false);
 };
 
 
 class QueueEntry
 {
 public:
-    QueueEntry(int nTypVal, const rtl::OString &rLineVal)
+    QueueEntry(int nTypVal, const OString &rLineVal)
         : nTyp(nTypVal), sLine(rLineVal)
     {
     }
     int nTyp;
-    rtl::OString sLine;
+    OString sLine;
 };
 
 class ParserQueue

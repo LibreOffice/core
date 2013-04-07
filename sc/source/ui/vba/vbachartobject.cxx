@@ -28,7 +28,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-const rtl::OUString PERSIST_NAME("PersistName");
+const OUString PERSIST_NAME("PersistName");
 
 ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjectImpl_BASE( _xParent, _xContext ), xTableChart( _xTableChart ), xDrawPageSupplier( _xDrawPageSupplier )
 {
@@ -41,7 +41,7 @@ ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterf
         oShapeHelper.reset(new ShapeHelper(xShape));
 }
 
-rtl::OUString ScVbaChartObject::getPersistName()
+OUString ScVbaChartObject::getPersistName()
 {
     if ( sPersistName.isEmpty() )
         sPersistName = xNamed->getName();
@@ -60,7 +60,7 @@ ScVbaChartObject::setShape() throw ( script::BasicErrorException )
             if (xShape->getShapeType().compareToAscii("com.sun.star.drawing.OLE2Shape") == 0 )
             {
                 uno::Reference< beans::XPropertySet > xShapePropertySet(xShape, uno::UNO_QUERY_THROW );
-                rtl::OUString sName;
+                OUString sName;
                 xShapePropertySet->getPropertyValue(PERSIST_NAME ) >>=sName;
                 if ( sName.equals(sPersistName))
                 {
@@ -72,19 +72,19 @@ ScVbaChartObject::setShape() throw ( script::BasicErrorException )
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
     }
     return NULL;
 }
 
 void SAL_CALL
-ScVbaChartObject::setName( const rtl::OUString& sName ) throw (css::uno::RuntimeException)
+ScVbaChartObject::setName( const OUString& sName ) throw (css::uno::RuntimeException)
 {
     xNamedShape->setName(sName);
 }
 
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
 ScVbaChartObject::getName() throw (css::uno::RuntimeException)
 {
     return xNamedShape->getName();
@@ -100,7 +100,7 @@ ScVbaChartObject::Delete() throw ( css::script::BasicErrorException )
     if (pChartObjectsImpl)
         pChartObjectsImpl->removeByName( getPersistName() );
     else
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( "Parent is not ChartObjects" ) );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString( "Parent is not ChartObjects" ) );
 }
 
 void
@@ -117,7 +117,7 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString( "ChartObject Activate internal error" ) );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, OUString( "ChartObject Activate internal error" ) );
     }
 }
 
@@ -127,20 +127,20 @@ ScVbaChartObject::getChart() throw (css::uno::RuntimeException)
     return new ScVbaChart( this, mxContext, xEmbeddedObjectSupplier->getEmbeddedObject(), xTableChart );
 }
 
-rtl::OUString
+OUString
 ScVbaChartObject::getServiceImplName()
 {
-    return rtl::OUString("ScVbaChartObject");
+    return OUString("ScVbaChartObject");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaChartObject::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
         aServiceNames.realloc( 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.ChartObject" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.ChartObject" );
     }
     return aServiceNames;
 }

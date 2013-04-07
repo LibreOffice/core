@@ -38,59 +38,59 @@ public:
 
     //------------------------------------------------
 
-    virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
+    virtual void SAL_CALL setRecipient( const OUString& aRecipient )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-
-    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aCcRecipient )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCcRecipient(  )
+    virtual OUString SAL_CALL getRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
 
-    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aBccRecipient )
+    virtual void SAL_CALL setCcRecipient( const ::com::sun::star::uno::Sequence< OUString >& aCcRecipient )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getBccRecipient(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-
-    virtual void SAL_CALL setOriginator( const ::rtl::OUString& aOriginator )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::rtl::OUString SAL_CALL getOriginator(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
 
-    virtual void SAL_CALL setSubject( const ::rtl::OUString& aSubject )
+    virtual void SAL_CALL setBccRecipient( const ::com::sun::star::uno::Sequence< OUString >& aBccRecipient )
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL getSubject(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
 
-    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aAttachement )
+    virtual void SAL_CALL setOriginator( const OUString& aOriginator )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual OUString SAL_CALL getOriginator(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+
+    virtual void SAL_CALL setSubject( const OUString& aSubject )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual OUString SAL_CALL getSubject(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+
+    virtual void SAL_CALL setAttachement( const ::com::sun::star::uno::Sequence< OUString >& aAttachement )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  )
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAttachement(  )
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    rtl::OUString                                   m_aRecipient;
-    rtl::OUString                                   m_aOriginator;
-    rtl::OUString                                   m_aSubject;
-    com::sun::star::uno::Sequence< rtl::OUString >  m_CcRecipients;
-    com::sun::star::uno::Sequence< rtl::OUString >  m_BccRecipients;
-    com::sun::star::uno::Sequence< rtl::OUString >  m_Attachements;
+    OUString                                   m_aRecipient;
+    OUString                                   m_aOriginator;
+    OUString                                   m_aSubject;
+    com::sun::star::uno::Sequence< OUString >  m_CcRecipients;
+    com::sun::star::uno::Sequence< OUString >  m_BccRecipients;
+    com::sun::star::uno::Sequence< OUString >  m_Attachements;
 };
 
 #endif

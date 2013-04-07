@@ -35,32 +35,32 @@ namespace connectivity
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
         uno::Reference< sdbc::XConnection > xConnection;
-        xConnection = aArgs.getUnpackedValueOrDefault(::rtl::OUString("ActiveConnection"),xConnection);
+        xConnection = aArgs.getUnpackedValueOrDefault(OUString("ActiveConnection"),xConnection);
         m_xConnection = xConnection;
     }
     //------------------------------------------------------------------------------
-    rtl::OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.helper.ParameterSubstitution");
+        return OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
     //------------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
     //------------------------------------------------------------------
-    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-        const ::rtl::OUString* pSupported = aSupported.getConstArray();
-        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+        Sequence< OUString > aSupported(getSupportedServiceNames());
+        const OUString* pSupported = aSupported.getConstArray();
+        const OUString* pEnd = pSupported + aSupported.getLength();
         for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
             ;
 
         return pSupported != pEnd;
     }
     //------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
@@ -78,17 +78,17 @@ namespace connectivity
         return *(new ParameterSubstitution(_xContext));
     }
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ParameterSubstitution::substituteVariables( const ::rtl::OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
-        ::rtl::OUString sRet = _sText;
+        OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;
         if ( xConnection.is() )
         {
             try
             {
                 OSQLParser aParser( m_xContext );
-                ::rtl::OUString sErrorMessage;
-                ::rtl::OUString sNewSql;
+                OUString sErrorMessage;
+                OUString sNewSql;
                 OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sText);
                 if(pNode)
                 {   // special handling for parameters
@@ -105,12 +105,12 @@ namespace connectivity
         return sRet;
     }
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const ::rtl::OUString& _sText ) throw (::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (::com::sun::star::uno::RuntimeException)
     {
         return _sText;
     }
     //------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const ::rtl::OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
+    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
         throw container::NoSuchElementException();
     }

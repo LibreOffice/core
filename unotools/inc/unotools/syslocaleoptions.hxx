@@ -97,8 +97,8 @@ public:
     // config value access methods
 
     /// The config string may be empty to denote the SYSTEM locale
-            const ::rtl::OUString&  GetLocaleConfigString() const;
-            void                SetLocaleConfigString( const ::rtl::OUString& rStr );
+            const OUString&  GetLocaleConfigString() const;
+            void                SetLocaleConfigString( const OUString& rStr );
             /** Get locale set, if empty denotes SYSTEM locale, not resolved
                 to the real locale. */
             LanguageTag         GetLanguageTag() const;
@@ -106,18 +106,18 @@ public:
             const LanguageTag&  GetRealLanguageTag() const;
 
     /// The config string may be empty to denote the SYSTEM locale
-            void                SetUILocaleConfigString( const ::rtl::OUString& rStr );
+            void                SetUILocaleConfigString( const OUString& rStr );
             /** Get UI locale set, always resolved to the real locale. */
             const LanguageTag&  GetRealUILanguageTag() const;
 
     /// The config string may be empty to denote the default currency of the locale
-            const ::rtl::OUString&  GetCurrencyConfigString() const;
-            void                SetCurrencyConfigString( const ::rtl::OUString& rStr );
+            const OUString&  GetCurrencyConfigString() const;
+            void                SetCurrencyConfigString( const OUString& rStr );
 
     /** The config string may be empty to denote the default
         DateAcceptancePatterns of the locale */
-            const ::rtl::OUString&  GetDatePatternsConfigString() const;
-            void                SetDatePatternsConfigString( const ::rtl::OUString& rStr );
+            const OUString&  GetDatePatternsConfigString() const;
+            void                SetDatePatternsConfigString( const OUString& rStr );
 
     // determine whether the decimal separator defined in the keyboard layout is used
     // or the one approriate to the locale
@@ -135,10 +135,10 @@ public:
     static  void                GetCurrencyAbbrevAndLanguage(
                                     String& rAbbrev,
                                     LanguageType& eLang,
-                                    const ::rtl::OUString& rConfigString );
+                                    const OUString& rConfigString );
 
     /// Create an USD-en-US or EUR-de-DE string
-    static  ::rtl::OUString     CreateCurrencyConfigString(
+    static  OUString     CreateCurrencyConfigString(
                                     const String& rAbbrev,
                                     LanguageType eLang );
 

@@ -190,7 +190,7 @@ SwMediaShell::SwMediaShell(SwView &_rView) :
     SwBaseShell(_rView)
 
 {
-    SetName(rtl::OUString("Media Playback"));
+    SetName(OUString("Media Playback"));
     SetHelpId(SW_MEDIASHELL);
 }
 

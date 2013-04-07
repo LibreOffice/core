@@ -40,7 +40,6 @@
 #include <unomid.h>
 
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
 {
@@ -109,7 +108,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             {
                 // #105638# OJ
                 aTmp <<= sal_True;
-                xPropSet->setPropertyValue( rtl::OUString( "DispatchURLInternal" ), aTmp );
+                xPropSet->setPropertyValue( OUString( "DispatchURLInternal" ), aTmp );
             }
         }
 

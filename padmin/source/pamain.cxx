@@ -43,7 +43,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace comphelper;
 
-using ::rtl::OUString;
 
 class MyApp : public Application
 {
@@ -51,7 +50,7 @@ public:
     int Main();
     virtual sal_uInt16  Exception( sal_uInt16 nError );
 
-    static rtl::OUString ReadStringHook( const rtl::OUString& );
+    static OUString ReadStringHook( const OUString& );
 };
 
 void vclmain::createApplication()
@@ -59,10 +58,10 @@ void vclmain::createApplication()
     static MyApp aMyApp;
 }
 
-rtl::OUString MyApp::ReadStringHook( const rtl::OUString& rStr )
+OUString MyApp::ReadStringHook( const OUString& rStr )
 {
     return rStr.replaceAll(
-        rtl::OUString("%PRODUCTNAME"), utl::ConfigManager::getProductName() );
+        OUString("%PRODUCTNAME"), utl::ConfigManager::getProductName() );
 };
 
 
@@ -73,7 +72,7 @@ sal_uInt16 MyApp::Exception( sal_uInt16 nError )
     switch( nError & EXC_MAJORTYPE )
     {
         case EXC_RSCNOTLOADED:
-            Abort( rtl::OUString( "Error: could not load language resources.\nPlease check your installation.\n" ) );
+            Abort( OUString( "Error: could not load language resources.\nPlease check your installation.\n" ) );
             break;
     }
     return 0;

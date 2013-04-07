@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "PropertySetMerger.hxx"
 
-using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -44,9 +44,9 @@ private:
     formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
     ScCalcConfig aCalcConfig;
 
-    ::rtl::OUString aFormulaSepArg;
-    ::rtl::OUString aFormulaSepArrayRow;
-    ::rtl::OUString aFormulaSepArrayCol;
+    OUString aFormulaSepArg;
+    OUString aFormulaSepArrayRow;
+    OUString aFormulaSepArrayCol;
 
     ScRecalcOptions meOOXMLRecalc;
     ScRecalcOptions meODFRecalc;
@@ -68,14 +68,14 @@ public:
     void SetUseEnglishFuncName( bool bVal ) { bUseEnglishFuncName = bVal; }
     bool GetUseEnglishFuncName() const { return bUseEnglishFuncName; }
 
-    void SetFormulaSepArg(const ::rtl::OUString& rSep) { aFormulaSepArg = rSep; }
-    ::rtl::OUString GetFormulaSepArg() const { return aFormulaSepArg; }
+    void SetFormulaSepArg(const OUString& rSep) { aFormulaSepArg = rSep; }
+    OUString GetFormulaSepArg() const { return aFormulaSepArg; }
 
-    void SetFormulaSepArrayRow(const ::rtl::OUString& rSep) { aFormulaSepArrayRow = rSep; }
-    ::rtl::OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
+    void SetFormulaSepArrayRow(const OUString& rSep) { aFormulaSepArrayRow = rSep; }
+    OUString GetFormulaSepArrayRow() const { return aFormulaSepArrayRow; }
 
-    void SetFormulaSepArrayCol(const ::rtl::OUString& rSep) { aFormulaSepArrayCol = rSep; }
-    ::rtl::OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
+    void SetFormulaSepArrayCol(const OUString& rSep) { aFormulaSepArrayCol = rSep; }
+    OUString GetFormulaSepArrayCol() const { return aFormulaSepArrayCol; }
 
     void SetOOXMLRecalcOptions( ScRecalcOptions eOpt ) { meOOXMLRecalc = eOpt; }
     ScRecalcOptions GetOOXMLRecalcOptions() const { return meOOXMLRecalc; }
@@ -85,7 +85,7 @@ public:
 
     void ResetFormulaSeparators();
 
-    static void GetDefaultFormulaSeparators(rtl::OUString& rSepArg, rtl::OUString& rSepArrayCol, rtl::OUString& rSepArrayRow);
+    static void GetDefaultFormulaSeparators(OUString& rSepArg, OUString& rSepArrayCol, OUString& rSepArrayRow);
 
     static const LocaleDataWrapper& GetLocaleDataWrapper();
 
@@ -123,14 +123,14 @@ private:
 
 class ScFormulaCfg : public ScFormulaOptions, public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     ScFormulaCfg();
 
     void SetOptions( const ScFormulaOptions& rNew );
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

@@ -50,7 +50,7 @@ sal_Bool KabConditionConstant::eval(const ::KABC::Addressee &) const
     return m_bValue;
 }
 // -----------------------------------------------------------------------------
-KabConditionColumn::KabConditionColumn(const ::rtl::OUString &sColumnName) throw(SQLException)
+KabConditionColumn::KabConditionColumn(const OUString &sColumnName) throw(SQLException)
     : KabCondition(),
       m_nFieldNumber(findKabField(sColumnName))
 {
@@ -68,7 +68,7 @@ sal_Bool KabConditionColumn::isAlwaysFalse() const
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-KabConditionNull::KabConditionNull(const ::rtl::OUString &sColumnName) throw(SQLException)
+KabConditionNull::KabConditionNull(const OUString &sColumnName) throw(SQLException)
     : KabConditionColumn(sColumnName)
 {
 }
@@ -82,7 +82,7 @@ sal_Bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
 // But it might do it someday
 }
 // -----------------------------------------------------------------------------
-KabConditionNotNull::KabConditionNotNull(const ::rtl::OUString &sColumnName) throw(SQLException)
+KabConditionNotNull::KabConditionNotNull(const OUString &sColumnName) throw(SQLException)
     : KabConditionColumn(sColumnName)
 {
 }
@@ -96,13 +96,13 @@ sal_Bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
 // But it might do it someday
 }
 // -----------------------------------------------------------------------------
-KabConditionCompare::KabConditionCompare(const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+KabConditionCompare::KabConditionCompare(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionColumn(sColumnName),
       m_sMatchString(sMatchString)
 {
 }
 // -----------------------------------------------------------------------------
-KabConditionEqual::KabConditionEqual(const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+KabConditionEqual::KabConditionEqual(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
@@ -117,11 +117,11 @@ sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return sal_False;
 
-    ::rtl::OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue == m_sMatchString;
 }
 // -----------------------------------------------------------------------------
-KabConditionDifferent::KabConditionDifferent(const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+KabConditionDifferent::KabConditionDifferent(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
@@ -132,11 +132,11 @@ sal_Bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return sal_False;
 
-    ::rtl::OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue != m_sMatchString;
 }
 // -----------------------------------------------------------------------------
-KabConditionSimilar::KabConditionSimilar(const ::rtl::OUString &sColumnName, const ::rtl::OUString &sMatchString) throw(SQLException)
+KabConditionSimilar::KabConditionSimilar(const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
     : KabConditionCompare(sColumnName, sMatchString)
 {
 }
@@ -147,7 +147,7 @@ sal_Bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
 
     if (aQtName.isNull()) return sal_False;
 
-    ::rtl::OUString sValue((const sal_Unicode *) aQtName.ucs2());
+    OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return match(m_sMatchString, sValue, '\0');
 }
 // -----------------------------------------------------------------------------

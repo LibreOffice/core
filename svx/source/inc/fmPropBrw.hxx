@@ -45,7 +45,7 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
     sal_Bool        m_bInitialStateChange;
     bool            m_bInStateChange;
-    ::rtl::OUString m_sLastActivePage;
+    OUString m_sLastActivePage;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
                         m_xInspectorContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -73,7 +73,7 @@ protected:
     void implSetNewSelection( const InterfaceBag& _rSelection );
     void implDetachController();
     bool implIsReadOnlyModel() const;
-    ::rtl::OUString getCurrentPage() const;
+    OUString getCurrentPage() const;
 
 public:
     FmPropBrw(

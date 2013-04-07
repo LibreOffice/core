@@ -99,14 +99,14 @@ void SVTXGridControl::SetWindow( Window* pWindow )
 void SVTXGridControl::impl_checkColumnIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_columnIndex ) const
 {
     if ( ( i_columnIndex < 0 ) || ( i_columnIndex >= i_table.GetColumnCount() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< SVTXGridControl* >( this ) );
+        throw IndexOutOfBoundsException( OUString(), *const_cast< SVTXGridControl* >( this ) );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 void SVTXGridControl::impl_checkRowIndex_throw( ::svt::table::TableControl const & i_table, sal_Int32 const i_rowIndex ) const
 {
     if ( ( i_rowIndex < 0 ) || ( i_rowIndex >= i_table.GetRowCount() ) )
-        throw IndexOutOfBoundsException( ::rtl::OUString(), *const_cast< SVTXGridControl* >( this ) );
+        throw IndexOutOfBoundsException( OUString(), *const_cast< SVTXGridControl* >( this ) );
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -184,7 +184,7 @@ void SAL_CALL SVTXGridControl::removeSelectionListener(const Reference< XGridSel
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
+void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -402,7 +402,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             Reference< XGridDataModel > const xDataModel( aValue, UNO_QUERY );
             if ( !xDataModel.is() )
-                throw GridInvalidDataException( ::rtl::OUString( "Invalid data model." ), *this );
+                throw GridInvalidDataException( OUString( "Invalid data model." ), *this );
 
             m_pTableModel->setDataModel( xDataModel );
             impl_checkTableModelInit();
@@ -414,7 +414,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             // obtain new col model
             Reference< XGridColumnModel > const xColumnModel( aValue, UNO_QUERY );
             if ( !xColumnModel.is() )
-                throw GridInvalidModelException( ::rtl::OUString( "Invalid column model." ), *this );
+                throw GridInvalidModelException( OUString( "Invalid column model." ), *this );
 
             // remove all old columns
             m_pTableModel->removeAllColumns();
@@ -468,7 +468,7 @@ namespace
     }
 }
 
-Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
+Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 

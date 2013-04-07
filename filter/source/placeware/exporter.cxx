@@ -40,8 +40,6 @@
 #include "zip.hxx"
 #include "tempfile.hxx"
 
-using rtl::OUString;
-using rtl::OString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::container;
@@ -74,10 +72,10 @@ class PageEntry
 {
 private:
     TempFile maTempFile;
-    rtl::OUString maName;
-    rtl::OUString maTitle;
-    rtl::OUString maNotes;
-    rtl::OUString maURL;
+    OUString maName;
+    OUString maTitle;
+    OUString maNotes;
+    OUString maURL;
 
 public:
     PageEntry();
@@ -85,17 +83,17 @@ public:
 
     OUString getTempURL() { return maTempFile.getFileURL(); }
 
-    void setName( const rtl::OUString& rName ) { maName = rName; }
-    const rtl::OUString& getName() const { return maName; }
+    void setName( const OUString& rName ) { maName = rName; }
+    const OUString& getName() const { return maName; }
 
-    void setTitle( const rtl::OUString& rTitle ) { maTitle = rTitle; }
-    const rtl::OUString& getTitle() const { return maTitle; }
+    void setTitle( const OUString& rTitle ) { maTitle = rTitle; }
+    const OUString& getTitle() const { return maTitle; }
 
-    void setNotes( const rtl::OUString& rNotes ) { maNotes = rNotes; }
-    const rtl::OUString& getNotes() const { return maNotes; }
+    void setNotes( const OUString& rNotes ) { maNotes = rNotes; }
+    const OUString& getNotes() const { return maNotes; }
 
-    void setURL( const rtl::OUString& rURL ) { maURL = rURL; }
-    const rtl::OUString& getURL() const { return maURL; }
+    void setURL( const OUString& rURL ) { maURL = rURL; }
+    const OUString& getURL() const { return maURL; }
 };
 
 PageEntry::PageEntry()
@@ -152,7 +150,7 @@ static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream >& xOut
 
             nLen -= nRead;
 
-            rtl::OUStringBuffer aStrBuffer;
+            OUStringBuffer aStrBuffer;
             ::sax::Converter::encodeBase64(aStrBuffer, aInBuffer);
 
             sal_Int32 nCount = aStrBuffer.getLength();
@@ -183,7 +181,7 @@ static OString convertString( OUString aInput )
     return aRet;
 }
 
-static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, const rtl::OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
+static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
 {
     OString aInfo;
 
@@ -287,7 +285,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
 //#define PLACEWARE_DEBUG 1
 
 sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
-                                        const rtl::OUString& rURL, Reference < XInterface > /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
+                                        const OUString& rURL, Reference < XInterface > /* xHandler */, Reference < XStatusIndicator >& xStatusIndicator )
 {
     sal_Bool bRet = sal_False;
 

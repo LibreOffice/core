@@ -30,14 +30,14 @@ public:
     TYPEINFO();
 
     XMLEventOASISTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
     virtual ~XMLEventOASISTransformerContext();
 
     static XMLTransformerOASISEventMap_Impl *CreateFormEventMap();
     static XMLTransformerOASISEventMap_Impl *CreateEventMap();
     static void FlushEventMap( XMLTransformerOASISEventMap_Impl *p );
-    static ::rtl::OUString GetEventName( sal_uInt16 nPrefix,
-                             const ::rtl::OUString& rName,
+    static OUString GetEventName( sal_uInt16 nPrefix,
+                             const OUString& rName,
                              XMLTransformerOASISEventMap_Impl& rMap,
                              XMLTransformerOASISEventMap_Impl* pMap2    );
 

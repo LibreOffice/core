@@ -56,7 +56,6 @@ using namespace com::sun::star::packages;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-using rtl::OUString;
 using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
@@ -194,7 +193,7 @@ uno::Reference< xml::crypto::XCipherContext > ZipFile::StaticGetCipher( const un
 
 void ZipFile::StaticFillHeader( const ::rtl::Reference< EncryptionData >& rData,
                                 sal_Int64 nSize,
-                                const ::rtl::OUString& aMediaType,
+                                const OUString& aMediaType,
                                 sal_Int8 * & pHeader )
 {
     // I think it's safe to restrict vector and salt length to 2 bytes !
@@ -294,7 +293,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
                                     sal_Int32 &rDerivedKeySize,
                                     sal_Int32 &rStartKeyGenID,
                                     sal_Int32 &rSize,
-                                    ::rtl::OUString& aMediaType,
+                                    OUString& aMediaType,
                                     const uno::Reference< XInputStream >& rStream )
 {
     sal_Bool bOk = sal_False;
@@ -364,7 +363,7 @@ sal_Bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rDa
 
                         if ( nMediaTypeLength == rStream->readBytes ( aBuffer, nMediaTypeLength ) )
                         {
-                            aMediaType = ::rtl::OUString( (sal_Unicode*)aBuffer.getConstArray(),
+                            aMediaType = OUString( (sal_Unicode*)aBuffer.getConstArray(),
                                                             nMediaTypeLength / sizeof( sal_Unicode ) );
                             bOk = sal_True;
                         }
@@ -517,7 +516,7 @@ uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
             sal_Bool bIsEncrypted,
-            ::rtl::OUString aMediaType )
+            OUString aMediaType )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -616,7 +615,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
 uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
-        const ::rtl::OUString& aMediaType,
+        const OUString& aMediaType,
         SotMutexHolderRef aMutexHolder )
     throw ( packages::NoEncryptionException,
             IOException,
@@ -671,7 +670,7 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
         if ( nRead < aNameBuffer.getLength() )
                 aNameBuffer.realloc( nRead );
 
-        ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
+        OUString sLOCPath = OUString::intern( (sal_Char *) aNameBuffer.getArray(),
                                                           aNameBuffer.getLength(),
                                                           RTL_TEXTENCODING_UTF8 );
 
@@ -849,7 +848,7 @@ sal_Int32 ZipFile::readCEN()
                 throw ZipException("unexpected extra header info length", uno::Reference < XInterface > () );
 
             // read always in UTF8, some tools seem not to set UTF8 bit
-            aEntry.sPath = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
+            aEntry.sPath = OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
                                                    aEntry.nPathLen,
                                                    RTL_TEXTENCODING_UTF8 );
 

@@ -78,7 +78,7 @@ namespace slideshow
                 }
                 catch (uno::Exception &)
                 {
-                    OSL_FAIL( rtl::OUStringToOString(
+                    OSL_FAIL( OUStringToOString(
                                     comphelper::anyToString(
                                         cppu::getCaughtException() ),
                                     RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -244,7 +244,7 @@ namespace slideshow
                         // since this will also capture segmentation
                         // violations and the like. In such a case, we
                         // still better let our clients now...
-                        OSL_FAIL( rtl::OUStringToOString(
+                        OSL_FAIL( OUStringToOString(
                                         comphelper::anyToString( cppu::getCaughtException() ),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
                     }

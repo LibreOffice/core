@@ -45,7 +45,7 @@ public:
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
@@ -81,12 +81,12 @@ class ExternalLinkFragment : public WorkbookFragmentBase
 public:
     explicit            ExternalLinkFragment(
                             const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
+                            const OUString& rFragmentPath,
                             ExternalLink& rExtLink );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
     virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
@@ -99,7 +99,7 @@ private:
 private:
     ExternalLink&       mrExtLink;
     ExternalNameRef     mxExtName;
-    ::rtl::OUString     maResultValue;
+    OUString     maResultValue;
     sal_Int32           mnResultType;
 };
 

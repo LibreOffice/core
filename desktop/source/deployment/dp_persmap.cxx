@@ -329,7 +329,7 @@ bool PersistentMap::importFromBDB()
         return false;
 
     // get the name of its BDB counterpart
-    rtl::OUString aDBName = m_MapFileName;
+    OUString aDBName = m_MapFileName;
     if( !aDBName.endsWith( ".pmap" ))
         return false;
     aDBName = aDBName.replaceAt( aDBName.getLength()-5, 5, ".db");

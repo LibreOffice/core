@@ -313,7 +313,7 @@ sal_Int16 SAL_CALL
     return maRole;
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        ScAccessibleContextBase::getAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
@@ -463,7 +463,7 @@ void SAL_CALL ScAccessibleContextBase::notifyEvent(
 
 //=====  XServiceInfo  ========================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
        ScAccessibleContextBase::getImplementationName(void)
     throw (uno::RuntimeException)
 {
@@ -476,7 +476,7 @@ sal_Bool SAL_CALL
 {
     //  Iterate over all supported service names and return true if on of them
     //  matches the given name.
-    uno::Sequence< ::rtl::OUString> aSupportedServices (
+    uno::Sequence< OUString> aSupportedServices (
         getSupportedServiceNames ());
     sal_Int32 nLength(aSupportedServices.getLength());
     const OUString* pServiceNames = aSupportedServices.getConstArray();
@@ -486,7 +486,7 @@ sal_Bool SAL_CALL
     return false;
 }
 
-uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence< OUString> SAL_CALL
        ScAccessibleContextBase::getSupportedServiceNames(void)
     throw (uno::RuntimeException)
 {
@@ -523,20 +523,20 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
     OSL_FAIL("should be implemented in the abrevated class");
-    return rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString SAL_CALL
+OUString SAL_CALL
     ScAccessibleContextBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
     OSL_FAIL("should be implemented in the abrevated class");
-    return rtl::OUString();
+    return OUString();
 }
 
 void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent) const
@@ -552,7 +552,7 @@ void ScAccessibleContextBase::ChangeName()
     aEvent.Source = uno::Reference< XAccessibleContext >(const_cast<ScAccessibleContextBase*>(this));
     aEvent.OldValue <<= msName;
 
-    msName = rtl::OUString(); // reset the name so it will be hold again
+    msName = OUString(); // reset the name so it will be hold again
     getAccessibleName(); // create the new name
 
     aEvent.NewValue <<= msName;

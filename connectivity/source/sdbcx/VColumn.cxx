@@ -32,29 +32,29 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 // -----------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     if(isNew())
-        return ::rtl::OUString("com.sun.star.sdbcx.VColumnDescription");
-    return ::rtl::OUString("com.sun.star.sdbcx.VColumn");
+        return OUString("com.sun.star.sdbcx.VColumnDescription");
+    return OUString("com.sun.star.sdbcx.VColumn");
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
+    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
     if(isNew())
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.ColumnDescription");
+        aSupported[0] = OUString("com.sun.star.sdbcx.ColumnDescription");
     else
-        aSupported[0] = ::rtl::OUString("com.sun.star.sdbcx.Column");
+        aSupported[0] = OUString("com.sun.star.sdbcx.Column");
 
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
-    const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    Sequence< OUString > aSupported(getSupportedServiceNames());
+    const OUString* pSupported = aSupported.getConstArray();
+    const OUString* pEnd = pSupported + aSupported.getLength();
     for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
         ;
 
@@ -75,10 +75,10 @@ OColumn::OColumn(sal_Bool _bCase)
     construct();
 }
 // -------------------------------------------------------------------------
-OColumn::OColumn(   const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    const ::rtl::OUString& _Description,
+OColumn::OColumn(   const OUString& _Name,
+                    const OUString& _TypeName,
+                    const OUString& _DefaultValue,
+                    const OUString& _Description,
                     sal_Int32       _IsNullable,
                     sal_Int32       _Precision,
                     sal_Int32       _Scale,
@@ -87,9 +87,9 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
                     sal_Bool        _IsRowVersion,
                     sal_Bool        _IsCurrency,
                     sal_Bool        _bCase,
-                    const ::rtl::OUString& _CatalogName,
-                    const ::rtl::OUString& _SchemaName,
-                    const ::rtl::OUString& _TableName)
+                    const OUString& _CatalogName,
+                    const OUString& _SchemaName,
+                    const OUString& _TableName)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
     ,m_TypeName(_TypeName)
@@ -217,12 +217,12 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
 }
 // -----------------------------------------------------------------------------
 // XNamed
-::rtl::OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return m_Name;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OColumn::setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OColumn::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
 {
     m_Name = aName;
 }

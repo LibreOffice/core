@@ -58,7 +58,7 @@ ORelationTableConnectionData::ORelationTableConnectionData()
 //------------------------------------------------------------------------
 ORelationTableConnectionData::ORelationTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,
                                                             const TTableWindowData::value_type& _pReferencedTable,
-                                                            const ::rtl::OUString& rConnName )
+                                                            const OUString& rConnName )
     :OTableConnectionData( _pReferencingTable, _pReferencedTable )
     ,m_nUpdateRules(KeyRule::NO_ACTION)
     ,m_nDeleteRules(KeyRule::NO_ACTION)
@@ -102,7 +102,7 @@ sal_Bool ORelationTableConnectionData::DropRelation()
             OSL_ENSURE(xKey.is(),"Key is not valid!");
             if(xKey.is())
             {
-                ::rtl::OUString sName;
+                OUString sName;
                 xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
                 if(String(sName) == m_aConnName)
                 {
@@ -124,7 +124,7 @@ void ORelationTableConnectionData::ChangeOrientation()
     DBG_CHKTHIS(ORelationTableConnectionData,NULL);
     //////////////////////////////////////////////////////////////////////
     // Source- und DestFieldName der Linien austauschen
-    ::rtl::OUString sTempString;
+    OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
     OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
     for(;aIter != aEnd;++aIter)
@@ -172,9 +172,9 @@ sal_Bool ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropert
     const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
     if ( xKeyColumns.is() )
     {
-        Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
-        const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
-        const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
+        Sequence< OUString> aKeyColumns = xKeyColumns->getElementNames();
+        const OUString* pKeyIter = aKeyColumns.getConstArray();
+        const OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
         for(;pKeyIter != pKeyEnd;++pKeyIter)
         {
@@ -301,14 +301,14 @@ sal_Bool ORelationTableConnectionData::Update()
     if ( xKey.is() && xTableProp.is() )
     {
         // build a foreign key name
-        ::rtl::OUString sSourceName;
+        OUString sSourceName;
         xTableProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
-        ::rtl::OUString sKeyName = sSourceName;
+        OUString sKeyName = sSourceName;
         sKeyName += getReferencedTable()->GetTableName();
 
         xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
         xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
-        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(getReferencedTable()->GetTableName())));
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(OUString(getReferencedTable()->GetTableName())));
         xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
         xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
     }
@@ -345,7 +345,7 @@ sal_Bool ORelationTableConnectionData::Update()
     }
 
     // get the name of foreign key // search for columns
-    m_aConnName = ::rtl::OUString();
+    m_aConnName = OUString();
 xKey.clear();
     bool bDropRelation = false;
     for(sal_Int32 i=0;i<xKeys->getCount();++i)
@@ -356,20 +356,20 @@ xKey.clear();
         {
             sal_Int32 nType = 0;
             xKey->getPropertyValue(PROPERTY_TYPE) >>= nType;
-            ::rtl::OUString sReferencedTable;
+            OUString sReferencedTable;
             xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
-            if ( sReferencedTable == ::rtl::OUString(getReferencedTable()->GetTableName()) )
+            if ( sReferencedTable == OUString(getReferencedTable()->GetTableName()) )
             {
                 xColSup.set(xKey,UNO_QUERY_THROW);
                 try
                 {
                     Reference<XNameAccess> xColumns = xColSup->getColumns();
-                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                    const ::rtl::OUString* pIter = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+                    Sequence< OUString> aNames = xColumns->getElementNames();
+                    const OUString* pIter = aNames.getConstArray();
+                    const OUString* pEnd = pIter + aNames.getLength();
 
                     Reference<XPropertySet> xColumn;
-                    ::rtl::OUString sName,sRelatedColumn;
+                    OUString sName,sRelatedColumn;
                     for ( ; pIter != pEnd ; ++pIter )
                     {
                         xColumn.set(xColumns->getByName(*pIter),UNO_QUERY_THROW);
@@ -418,13 +418,13 @@ xKey.clear();
     {
         OConnectionLineDataVec().swap(m_vConnLineData);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
-        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+        Sequence< OUString> aNames = xColumns->getElementNames();
+        const OUString* pIter = aNames.getConstArray();
+        const OUString* pEnd = pIter + aNames.getLength();
 
         m_vConnLineData.reserve( aNames.getLength() );
         Reference<XPropertySet> xColumn;
-        ::rtl::OUString sName,sRelatedColumn;
+        OUString sName,sRelatedColumn;
 
         for(;pIter != pEnd;++pIter)
         {

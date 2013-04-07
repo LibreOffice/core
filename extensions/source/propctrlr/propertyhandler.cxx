@@ -129,19 +129,19 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL PropertyHandler::getSupersededProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL PropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
-        return Sequence< ::rtl::OUString >();
+        return Sequence< OUString >();
     }
 
     //--------------------------------------------------------------------
-    Sequence< ::rtl::OUString > SAL_CALL PropertyHandler::getActuatingProperties( ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL PropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
-        return Sequence< ::rtl::OUString >();
+        return Sequence< OUString >();
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL PropertyHandler::convertToPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL PropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
@@ -154,7 +154,7 @@ namespace pcr
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_ENUM ) != 0 )
         {
-            ::rtl::OUString sControlValue;
+            OUString sControlValue;
             OSL_VERIFY( _rControlValue >>= sControlValue );
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, aProperty.Type, nPropId ) );
@@ -168,7 +168,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any SAL_CALL PropertyHandler::convertToControlValue( const ::rtl::OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
+    Any SAL_CALL PropertyHandler::convertToControlValue( const OUString& _rPropertyName, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
@@ -188,13 +188,13 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    PropertyState SAL_CALL PropertyHandler::getPropertyState( const ::rtl::OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
+    PropertyState SAL_CALL PropertyHandler::getPropertyState( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException)
     {
         return PropertyState_DIRECT_VALUE;
     }
 
     //--------------------------------------------------------------------
-    LineDescriptor SAL_CALL PropertyHandler::describePropertyLine( const ::rtl::OUString& _rPropertyName,
+    LineDescriptor SAL_CALL PropertyHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
@@ -219,28 +219,28 @@ namespace pcr
         aDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( nPropId );
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_DATA_PROPERTY ) != 0 )
-            aDescriptor.Category = ::rtl::OUString( "Data" );
+            aDescriptor.Category = OUString( "Data" );
         else
-            aDescriptor.Category = ::rtl::OUString( "General" );
+            aDescriptor.Category = OUString( "General" );
         return aDescriptor;
     }
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL PropertyHandler::isComposable( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
+    ::sal_Bool SAL_CALL PropertyHandler::isComposable( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pInfoService->isComposeable( _rPropertyName );
     }
 
     //--------------------------------------------------------------------
-    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const ::rtl::OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
+    InteractiveSelectionResult SAL_CALL PropertyHandler::onInteractivePropertySelection( const OUString& /*_rPropertyName*/, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/ ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         OSL_FAIL( "PropertyHandler::onInteractivePropertySelection: not implemented!" );
         return InteractiveSelectionResult_Cancelled;
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const ::rtl::OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
+    void SAL_CALL PropertyHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         OSL_FAIL( "PropertyHandler::actuatingPropertyChanged: not implemented!" );
     }
@@ -279,7 +279,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void PropertyHandler::firePropertyChange( const ::rtl::OUString& _rPropName, PropertyId _nPropId, const Any& _rOldValue, const Any& _rNewValue ) SAL_THROW(())
+    void PropertyHandler::firePropertyChange( const OUString& _rPropName, PropertyId _nPropId, const Any& _rOldValue, const Any& _rNewValue ) SAL_THROW(())
     {
         PropertyChangeEvent aEvent;
         aEvent.Source = m_xComponent;
@@ -313,7 +313,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    const Property& PropertyHandler::impl_getPropertyFromName_throw( const ::rtl::OUString& _rPropertyName ) const
+    const Property& PropertyHandler::impl_getPropertyFromName_throw( const OUString& _rPropertyName ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
         StlSyntaxSequence< Property >::const_iterator pFound = ::std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
@@ -326,7 +326,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void PropertyHandler::implAddPropertyDescription( ::std::vector< Property >& _rProperties, const ::rtl::OUString& _rPropertyName, const Type& _rType, sal_Int16 _nAttribs ) const
+    void PropertyHandler::implAddPropertyDescription( ::std::vector< Property >& _rProperties, const OUString& _rPropertyName, const Type& _rType, sal_Int16 _nAttribs ) const
     {
         _rProperties.push_back( Property(
             _rPropertyName,
@@ -343,7 +343,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    PropertyId PropertyHandler::impl_getPropertyId_throw( const ::rtl::OUString& _rPropertyName ) const
+    PropertyId PropertyHandler::impl_getPropertyId_throw( const OUString& _rPropertyName ) const
     {
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
         if ( nPropId == -1 )
@@ -360,7 +360,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool PropertyHandler::impl_componentHasProperty_throw( const ::rtl::OUString& _rPropName ) const
+    bool PropertyHandler::impl_componentHasProperty_throw( const OUString& _rPropName ) const
     {
         return m_xComponentPropertyInfo.is() && m_xComponentPropertyInfo->hasPropertyByName( _rPropName );
     }
@@ -375,32 +375,32 @@ namespace pcr
         if ( xDocumentSI.is() )
         {
             // determine the application type we live in
-            ::rtl::OUString sConfigurationLocation;
-            ::rtl::OUString sConfigurationProperty;
+            OUString sConfigurationLocation;
+            OUString sConfigurationProperty;
             if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.WriterWeb/Layout/Other" );
-                sConfigurationProperty = ::rtl::OUString( "MeasureUnit" );
+                sConfigurationLocation = OUString( "/org.openoffice.Office.WriterWeb/Layout/Other" );
+                sConfigurationProperty = OUString( "MeasureUnit" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
             {   // writer
-                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Writer/Layout/Other" );
-                sConfigurationProperty = ::rtl::OUString( "MeasureUnit" );
+                sConfigurationLocation = OUString( "/org.openoffice.Office.Writer/Layout/Other" );
+                sConfigurationProperty = OUString( "MeasureUnit" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
             {   // calc
-                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" );
-                sConfigurationProperty = ::rtl::OUString( "Metric" );
+                sConfigurationLocation = OUString( "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = OUString( "Metric" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_DRAWING_DOCUMENT ) )
             {
-                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" );
-                sConfigurationProperty = ::rtl::OUString( "Metric" );
+                sConfigurationLocation = OUString( "/org.openoffice.Office.Draw/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = OUString( "Metric" );
             }
             else if ( xDocumentSI->supportsService( SERVICE_PRESENTATION_DOCUMENT ) )
             {
-                sConfigurationLocation = ::rtl::OUString( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" );
-                sConfigurationProperty = ::rtl::OUString( "Metric" );
+                sConfigurationLocation = OUString( "/org.openoffice.Office.Impress/Layout/Other/MeasureUnit" );
+                sConfigurationProperty = OUString( "Metric" );
             }
 
             // read the measurement unit from the configuration
@@ -440,9 +440,9 @@ namespace pcr
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( PropertyHandlerComponent, PropertyHandler, PropertyHandlerComponent_Base )
 
     //--------------------------------------------------------------------
-    ::sal_Bool SAL_CALL PropertyHandlerComponent::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+    ::sal_Bool SAL_CALL PropertyHandlerComponent::supportsService( const OUString& ServiceName ) throw (RuntimeException)
     {
-        StlSyntaxSequence< ::rtl::OUString > aAllServices( getSupportedServiceNames() );
+        StlSyntaxSequence< OUString > aAllServices( getSupportedServiceNames() );
         return ::std::find( aAllServices.begin(), aAllServices.end(), ServiceName ) != aAllServices.end();
     }
 

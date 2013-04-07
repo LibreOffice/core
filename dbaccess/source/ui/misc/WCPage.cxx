@@ -97,7 +97,7 @@ OCopyTable::OCopyTable( Window * pParent )
 
         m_aFT_KeyName.Enable(sal_False);
         m_edKeyName.Enable(sal_False);
-        ::rtl::OUString sKeyName("ID");
+        OUString sKeyName("ID");
         sKeyName = m_pParent->createUniqueName(sKeyName);
         m_edKeyName.SetText(sKeyName);
 
@@ -186,9 +186,9 @@ sal_Bool OCopyTable::LeavePage()
 
         // have to check the length of the table name
         Reference< XDatabaseMetaData > xMeta = m_pParent->m_xDestConnection->getMetaData();
-        ::rtl::OUString sCatalog;
-        ::rtl::OUString sSchema;
-        ::rtl::OUString sTable;
+        OUString sCatalog;
+        OUString sSchema;
+        OUString sTable;
         ::dbtools::qualifiedNameComponents( xMeta,
                                             m_edTableName.GetText(),
                                             sCatalog,
@@ -208,7 +208,7 @@ sal_Bool OCopyTable::LeavePage()
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
-            aInfoString += rtl::OUString(' ');
+            aInfoString += OUString(' ');
             aInfoString += m_pParent->m_aKeyName;
             m_pParent->showError(aInfoString);
             return sal_False;
@@ -327,7 +327,7 @@ sal_Bool OCopyTable::checkAppendData()
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName )
+void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
     bool bCreatePK = m_bPKeyAllowed && _bDoCreate;
     m_aCB_PrimaryColumn.Check( bCreatePK );

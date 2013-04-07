@@ -32,16 +32,16 @@ typedef std::vector< uno::Reference< text::XFormField > > XFormFieldVec;
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > FormFiledEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > FormFieldCollectionHelper_BASE;
 
-rtl::OUString lcl_getFormFieldName( const uno::Reference< text::XFormField >& xFormField )
+OUString lcl_getFormFieldName( const uno::Reference< text::XFormField >& xFormField )
 {
-    rtl::OUString sName;
+    OUString sName;
     sal_Int32 nCount = xFormField->getParamCount();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
         if( xFormField->getParamName(i).equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("Name")) )
         {
             sName = xFormField->getParamValue(i);
-            OSL_TRACE("lcl_getFormFieldName: %s", rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
+            OSL_TRACE("lcl_getFormFieldName: %s", OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr() );
             break;
         }
     }
@@ -101,17 +101,17 @@ public:
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  word::XFormField::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
     // XNameAcess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         uno::Reference< text::XFormField > xFormField( *cachePos, uno::UNO_QUERY_THROW );
         return uno::makeAny( uno::Reference< word::XFormField >( new SwVbaFormField( mxParent, mxContext, mxModel, xFormField ) ) );
     }
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException)
     {
-        uno::Sequence< rtl::OUString > sNames( mxFormFields.size() );
-        rtl::OUString* pString = sNames.getArray();
+        uno::Sequence< OUString > sNames( mxFormFields.size() );
+        OUString* pString = sNames.getArray();
         XFormFieldVec::iterator it = mxFormFields.begin();
         XFormFieldVec::iterator it_end = mxFormFields.end();
         for ( ; it != it_end; ++it, ++pString )
@@ -121,7 +121,7 @@ public:
         }
         return sNames;
     }
-    virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+    virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException)
     {
         cachePos = mxFormFields.begin();
         XFormFieldVec::iterator it_end = mxFormFields.end();
@@ -174,20 +174,20 @@ SwVbaFormFields::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString
+OUString
 SwVbaFormFields::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFormFields");
+    return OUString("SwVbaFormFields");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaFormFields::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.FormFields");
+        sNames[0] = OUString("ooo.vba.word.FormFields");
     }
     return sNames;
 }

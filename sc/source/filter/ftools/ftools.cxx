@@ -261,9 +261,9 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const OUStr
 
 // *** byte string import operations *** --------------------------------------
 
-rtl::OString ScfTools::read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft)
+OString ScfTools::read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft)
 {
-    rtl::OString aRet(::read_zeroTerminated_uInt8s_ToOString(rStrm));
+    OString aRet(::read_zeroTerminated_uInt8s_ToOString(rStrm));
     rnBytesLeft -= aRet.getLength(); //we read this number of bytes anyway
     if (rStrm.good()) //if the stream is happy we read the null terminator as well
         --rnBytesLeft;

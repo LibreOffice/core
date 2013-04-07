@@ -1203,7 +1203,7 @@ namespace sdr { namespace contact {
         bool bSuccess = false;
         try
         {
-            const ::rtl::OUString sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
+            const OUString sControlServiceName( _rUnoObject.GetUnoControlTypeName() );
 
             Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
             _out_rControl = Reference< XControl >( xFactory->createInstance( sControlServiceName ), UNO_QUERY_THROW );
@@ -1382,9 +1382,9 @@ namespace sdr { namespace contact {
         {
             Reference< XPropertySet > xModelProperties( m_aControl.getModel(), UNO_QUERY_THROW );
             if ( _bStart )
-                xModelProperties->addPropertyChangeListener( ::rtl::OUString(), this );
+                xModelProperties->addPropertyChangeListener( OUString(), this );
             else
-                xModelProperties->removePropertyChangeListener( ::rtl::OUString(), this );
+                xModelProperties->removePropertyChangeListener( OUString(), this );
         }
         catch( const Exception& )
         {
@@ -1403,7 +1403,7 @@ namespace sdr { namespace contact {
         try
         {
             Reference< XPropertySet > xModelProperties( pUnoObject->GetUnoControlModel(), UNO_QUERY_THROW );
-            static const ::rtl::OUString s_sPrintablePropertyName( "Printable" );
+            static const OUString s_sPrintablePropertyName( "Printable" );
             OSL_VERIFY( xModelProperties->getPropertyValue( s_sPrintablePropertyName ) >>= bIsPrintable );
         }
         catch( const Exception& )

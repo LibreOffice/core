@@ -87,19 +87,19 @@ namespace dbaui
         virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
 
         // Overrides to resolve inheritance ambiguity
-        virtual void SAL_CALL setPropertyValue(const rtl::OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
-        virtual css::uno::Any SAL_CALL getPropertyValue(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+        virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::uno::RuntimeException)
             { return ODatabaseAdministrationDialog::getPropertyValue(p1); }
-        virtual void SAL_CALL addPropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL addPropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::addPropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL removePropertyChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL removePropertyChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XPropertyChangeListener>& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::removePropertyChangeListener(p1, p2); }
-        virtual void SAL_CALL addVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL addVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::addVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL removeVetoableChangeListener(const rtl::OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::removeVetoableChangeListener(p1, p2); }
-        virtual void SAL_CALL setTitle(const rtl::OUString& p1) throw (css::uno::RuntimeException)
+        virtual void SAL_CALL setTitle(const OUString& p1) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::setTitle(p1); }
         virtual sal_Int16 SAL_CALL execute() throw (css::uno::RuntimeException)
             { return ODatabaseAdministrationDialog::execute(); }
@@ -166,44 +166,44 @@ namespace dbaui
         aProps.realloc( nProp + 6 );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "HeaderLine" ),
+            OUString( "HeaderLine" ),
             PROPERTY_ID_HEADER_LINE,
             ::cppu::UnoType< sal_Bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "FieldDelimiter" ),
+            OUString( "FieldDelimiter" ),
             PROPERTY_ID_FIELD_DELIMITER,
-            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "StringDelimiter" ),
+            OUString( "StringDelimiter" ),
             PROPERTY_ID_STRING_DELIMITER,
-            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "DecimalDelimiter" ),
+            OUString( "DecimalDelimiter" ),
             PROPERTY_ID_DECIMAL_DELIMITER,
-            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "ThousandDelimiter" ),
+            OUString( "ThousandDelimiter" ),
             PROPERTY_ID_THOUSAND_DELIMITER,
-            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            ::rtl::OUString( "CharSet" ),
+            OUString( "CharSet" ),
             PROPERTY_ID_ENCODING,
-            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 

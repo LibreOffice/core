@@ -223,9 +223,9 @@ void Wall::fireModifyEvent()
 
 // ================================================================================
 
-uno::Sequence< ::rtl::OUString > Wall::getSupportedServiceNames_Static()
+uno::Sequence< OUString > Wall::getSupportedServiceNames_Static()
 {
-    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    uno::Sequence< OUString > aServices( 2 );
     aServices[ 0 ] = "com.sun.star.chart2.Wall";
     aServices[ 1 ] = "com.sun.star.beans.PropertySet";
     return aServices;

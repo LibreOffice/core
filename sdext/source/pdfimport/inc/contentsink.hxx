@@ -48,7 +48,7 @@ namespace pdfi
 {
     struct FontAttributes
     {
-        FontAttributes( const rtl::OUString& familyName_,
+        FontAttributes( const OUString& familyName_,
                         bool                 isBold_,
                         bool                 isItalic_,
                         bool                 isUnderline_,
@@ -71,7 +71,7 @@ namespace pdfi
             size(0.0)
         {}
 
-        ::rtl::OUString     familyName;
+        OUString     familyName;
         bool                isBold;
         bool                isItalic;
         bool                isUnderline;
@@ -104,7 +104,7 @@ namespace pdfi
         virtual void endPage() = 0;
 
         virtual void hyperLink( const ::com::sun::star::geometry::RealRectangle2D& rBounds,
-                                const ::rtl::OUString&                             rURI ) = 0;
+                                const OUString&                             rURI ) = 0;
 
         virtual void pushState() = 0;
         virtual void popState() = 0;
@@ -136,7 +136,7 @@ namespace pdfi
         virtual void intersectEoClip(const ::com::sun::star::uno::Reference<
                                            ::com::sun::star::rendering::XPolyPolygon2D >& rPath) = 0;
 
-        virtual void drawGlyphs( const rtl::OUString&                               rGlyphs,
+        virtual void drawGlyphs( const OUString&                               rGlyphs,
                                  const ::com::sun::star::geometry::RealRectangle2D& rRect,
                                  const ::com::sun::star::geometry::Matrix2D&        rFontMatrix ) = 0;
 

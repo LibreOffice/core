@@ -148,25 +148,25 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
-        virtual void SAL_CALL startElement(const ::rtl::OUString&                                      sElement      ,
+        virtual void SAL_CALL startElement(const OUString&                                      sElement      ,
                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const ::rtl::OUString& sElement)
+        virtual void SAL_CALL endElement(const OUString& sElement)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const ::rtl::OUString& sChars)
+        virtual void SAL_CALL characters(const OUString& sChars)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
-        virtual void SAL_CALL ignorableWhitespace(const ::rtl::OUString& sWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& sWhitespaces)
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const ::rtl::OUString& sTarget,
-                                                    const ::rtl::OUString& sData  )
+        virtual void SAL_CALL processingInstruction(const OUString& sTarget,
+                                                    const OUString& sData  )
             throw(css::xml::sax::SAXException,
                   css::uno::RuntimeException );
 
@@ -181,15 +181,15 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
 
         //---------------------------------------
         /** TODO document me */
-        static EXMLElement implst_classifyElement(const ::rtl::OUString& sElement);
+        static EXMLElement implst_classifyElement(const OUString& sElement);
 
         //---------------------------------------
         /** TODO document me */
-        static EXMLAttribute implst_classifyAttribute(const ::rtl::OUString& sAttribute);
+        static EXMLAttribute implst_classifyAttribute(const OUString& sAttribute);
 
         //---------------------------------------
         /** TODO document me */
-        ::rtl::OUString implts_getErrorLineString();
+        OUString implts_getErrorLineString();
 };
 
 } // namespace framework

@@ -67,10 +67,10 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >           m_xMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                      m_xMessageParent;
 
-        typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > MapString2String;
+        typedef ::boost::unordered_map< OUString, OUString, OUStringHash > MapString2String;
         MapString2String                m_aDisplayItemToValueItem;
 
-        ::rtl::OUString                 m_aText;
+        OUString                 m_aText;
         ::connectivity::OSQLParser      m_aParser;
         sal_Int16                       m_nControlClass;        // which kind of control do we use?
         sal_Bool                        m_bFilterList : 1;
@@ -87,7 +87,7 @@ namespace frm
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject);
         ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
-        virtual ::rtl::OUString GetComponentServiceName();
+        virtual OUString GetComponentServiceName();
         virtual void SAL_CALL   createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > & rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  & rParentPeer ) throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::lang::XComponent
@@ -96,10 +96,10 @@ namespace frm
     // ::com::sun::star::awt::XTextComponent
         virtual void            SAL_CALL addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
         virtual void            SAL_CALL removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void            SAL_CALL setText( const ::rtl::OUString& aText ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void            SAL_CALL insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::rtl::OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException );
+        virtual void            SAL_CALL setText( const OUString& aText ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void            SAL_CALL insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException );
         virtual void            SAL_CALL setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::awt::Selection SAL_CALL getSelection() throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool        SAL_CALL isEditable() throw( ::com::sun::star::uno::RuntimeException );
@@ -126,18 +126,18 @@ namespace frm
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // com::sun::star::lang::XServiceInfo - static version
-        static  ::rtl::OUString SAL_CALL getImplementationName_Static();
-        static  ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_Static();
+        static  OUString SAL_CALL getImplementationName_Static();
+        static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
         static  ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory );
 
     protected:
         virtual void PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );
-        virtual void ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
+        virtual void ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
         sal_Bool ensureInitialized( );
 

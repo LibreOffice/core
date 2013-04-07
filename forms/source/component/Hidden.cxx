@@ -49,7 +49,7 @@ InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceF
 DBG_NAME( OHiddenModel )
 //------------------------------------------------------------------
 OHiddenModel::OHiddenModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OControlModel(_rxFactory, ::rtl::OUString())
+    :OControlModel(_rxFactory, OUString())
 {
     DBG_CTOR( OHiddenModel, NULL );
     m_nClassId = FormComponentType::HIDDENCONTROL;
@@ -120,9 +120,9 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES(4)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP1(HIDDEN_VALUE,    ::rtl::OUString,    BOUND);
-        DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
-        DECL_PROP1(TAG,             ::rtl::OUString,    BOUND);
+        DECL_PROP1(HIDDEN_VALUE,    OUString,    BOUND);
+        DECL_PROP1(NAME,            OUString,    BOUND);
+        DECL_PROP1(TAG,             OUString,    BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
@@ -137,7 +137,7 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
+OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
     return FRM_COMPONENT_HIDDEN;    // old (non-sun) name for compatibility !
 }
@@ -165,9 +165,9 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     DBG_ASSERT(nVersion != 1, "OHiddenModel::read : this version is obsolete !");
     switch (nVersion)
     {
-        case 1 : { ::rtl::OUString sDummy; _rxInStream >> sDummy; _rxInStream >> m_sHiddenValue; } break;
+        case 1 : { OUString sDummy; _rxInStream >> sDummy; _rxInStream >> m_sHiddenValue; } break;
         case 2 : _rxInStream >> m_sHiddenValue; break;
-        default : OSL_FAIL("OHiddenModel::read : unknown version !"); m_sHiddenValue = ::rtl::OUString();
+        default : OSL_FAIL("OHiddenModel::read : unknown version !"); m_sHiddenValue = OUString();
     }
     OControlModel::read(_rxInStream);
 }

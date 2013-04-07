@@ -36,7 +36,7 @@ namespace rptui
         Link                                m_aCollapsedLink;
         svtools::ColorConfig                m_aColorConfig;
         svtools::ExtendedColorConfig        m_aExtendedColorConfig;
-        ::rtl::OUString                     m_sColorEntry;
+        OUString                     m_sColorEntry;
         sal_Int32                           m_nColor;
         sal_Int32                           m_nTextBoundaries;
         sal_Bool                            m_bCollapsed;
@@ -46,7 +46,7 @@ namespace rptui
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt );
     public:
-        OColorListener(Window* _pParent,const ::rtl::OUString& _sColorEntry);
+        OColorListener(Window* _pParent,const OUString& _sColorEntry);
         virtual ~OColorListener();
 
         using Window::Notify;

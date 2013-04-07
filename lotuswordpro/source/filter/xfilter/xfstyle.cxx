@@ -68,22 +68,22 @@ XFStyle::~XFStyle()
 {
 }
 
-rtl::OUString   XFStyle::GetStyleName()
+OUString   XFStyle::GetStyleName()
 {
     return m_strStyleName;
 }
 
-void    XFStyle::SetStyleName(const rtl::OUString& styleName)
+void    XFStyle::SetStyleName(const OUString& styleName)
 {
     m_strStyleName = styleName;
 }
 
-rtl::OUString   XFStyle::GetParentStyleName()
+OUString   XFStyle::GetParentStyleName()
 {
     return m_strParentStyleName;
 }
 
-void    XFStyle::SetParentStyleName(const rtl::OUString& styleName)
+void    XFStyle::SetParentStyleName(const OUString& styleName)
 {
     m_strParentStyleName = styleName;
 }

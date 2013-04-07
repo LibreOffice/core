@@ -67,22 +67,22 @@ namespace helpdatafileproxy {
 
     struct eq
     {
-        bool operator()( const rtl::OString& rKey1, const rtl::OString& rKey2 ) const
+        bool operator()( const OString& rKey1, const OString& rKey2 ) const
             { return rKey1.compareTo( rKey2 ) == 0; }
     };
 
     struct ha
     {
-        size_t operator()( const rtl::OString& rName ) const
+        size_t operator()( const OString& rName ) const
             { return rName.hashCode(); }
     };
 
-    typedef boost::unordered_map< rtl::OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
-    typedef boost::unordered_map< rtl::OString,rtl::OString,ha,eq >     StringToDataMap;
+    typedef boost::unordered_map< OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
+    typedef boost::unordered_map< OString,OString,ha,eq >     StringToDataMap;
 
     class Hdf : hdf_internal::Noncopyable
     {
-        rtl::OUString       m_aFileURL;
+        OUString       m_aFileURL;
         StringToDataMap*    m_pStringToDataMap;
         StringToValPosMap*  m_pStringToValPosMap;
         com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >
@@ -100,7 +100,7 @@ namespace helpdatafileproxy {
         //HDFHelp must get a fileURL which can then directly be used by simple file access.
         //SimpleFileAccess requires file URLs as arguments. Passing file path may work but fails
         //for example when using long file paths on Windows, which start with "\\?\"
-        Hdf( const rtl::OUString& rFileURL,
+        Hdf( const OUString& rFileURL,
             com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 > xSFA )
                 : m_aFileURL( rFileURL )
                 , m_pStringToDataMap( NULL )
@@ -118,7 +118,7 @@ namespace helpdatafileproxy {
         void createHashMap( bool bOptimizeForPerformance = false );
         void releaseHashMap( void );
 
-        bool getValueForKey( const rtl::OString& rKey, HDFData& rValue );
+        bool getValueForKey( const OString& rKey, HDFData& rValue );
 
         bool startIteration( void );
         bool getNextKeyAndValue( HDFData& rKey, HDFData& rValue );

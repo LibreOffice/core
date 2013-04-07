@@ -66,7 +66,7 @@ public:
     void ReleaseInterceptor();
 
     // XDispatchProvider
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > SAL_CALL queryDispatch( const ::com::sun::star::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts ) throw (::com::sun::star::uno::RuntimeException);
     // XDispatchProviderInterceptor
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > SAL_CALL getSlaveDispatchProvider(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -92,9 +92,9 @@ private:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
         BibInterceptorHelper* m_pInterceptorHelper;
 
-        ::rtl::OUString                     aActiveDataTable;
-        ::rtl::OUString                     aDataSourceURL;
-        ::rtl::OUString                     aQuoteChar;
+        OUString                     aActiveDataTable;
+        OUString                     aDataSourceURL;
+        OUString                     aQuoteChar;
         ::com::sun::star::uno::Any                      aUID;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >              xBibCursor;
 
@@ -103,19 +103,19 @@ private:
         ::bib::BibView*             pBibView;
         BibToolBar*                 pToolbar;
 
-        rtl::OUString               sIdentifierMapping;
+        OUString               sIdentifierMapping;
 protected:
 
         void                        InsertFields(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
         void                        SetMeAsUidListener();
         void                        RemoveMeAsUidListener();
 
-        void                        UpdateAddressbookCursor(::rtl::OUString aSourceName);
+        void                        UpdateAddressbookCursor(OUString aSourceName);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
                                     updateGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > & xDbForm);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                    createGridModel( const ::rtl::OUString& rName );
+                                    createGridModel( const OUString& rName );
 
         // XLoadable
         virtual void SAL_CALL load(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -143,32 +143,32 @@ public:
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            updateGridModel();
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString>           getDataSources();
+        ::com::sun::star::uno::Sequence< OUString>           getDataSources();
 
-        ::rtl::OUString             getActiveDataSource() {return aDataSourceURL;}
-        void                        setActiveDataSource(const ::rtl::OUString& rURL);
+        OUString             getActiveDataSource() {return aDataSourceURL;}
+        void                        setActiveDataSource(const OUString& rURL);
 
-        ::rtl::OUString             getActiveDataTable();
-        void                        setActiveDataTable(const ::rtl::OUString& rTable);
+        OUString             getActiveDataTable();
+        void                        setActiveDataTable(const OUString& rTable);
 
-        void                        setFilter(const ::rtl::OUString& rQuery);
-        ::rtl::OUString                     getFilter();
+        void                        setFilter(const OUString& rQuery);
+        OUString                     getFilter();
 
-        ::com::sun::star::uno::Sequence< ::rtl::OUString>           getQueryFields();
-        ::rtl::OUString                     getQueryField();
-        void                        startQueryWith(const ::rtl::OUString& rQuery);
+        ::com::sun::star::uno::Sequence< OUString>           getQueryFields();
+        OUString                     getQueryField();
+        void                        startQueryWith(const OUString& rQuery);
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
 
 
-        ::rtl::OUString                     getControlName(sal_Int32 nFormatKey );
+        OUString                     getControlName(sal_Int32 nFormatKey );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const ::rtl::OUString& rName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            loadControlModel(const OUString& rName,
                                                         sal_Bool bForceListBox = sal_False);
 
         void                        CreateMappingDialog(Window* pParent);
-        ::rtl::OUString             CreateDBChangeDialog(Window* pParent);
+        OUString             CreateDBChangeDialog(Window* pParent);
 
         void                        DispatchDBChangeDialog();
         sal_Bool                    HasActiveConnection() const;
@@ -177,8 +177,8 @@ public:
 
         void                        SetToolbar(BibToolBar* pSet);
 
-        const rtl::OUString&        GetIdentifierMapping();
-        void                        ResetIdentifierMapping() {sIdentifierMapping = rtl::OUString();}
+        const OUString&        GetIdentifierMapping();
+        void                        ResetIdentifierMapping() {sIdentifierMapping = OUString();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
         // #100312# ----------

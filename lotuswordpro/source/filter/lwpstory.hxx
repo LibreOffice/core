@@ -80,7 +80,7 @@ private:
     LwpObjectID m_FirstParaStyle;
 
     // for bullet , 05/23/2005
-    typedef std::pair<rtl::OUString, sal_uInt8> NamePosPair;
+    typedef std::pair<OUString, sal_uInt8> NamePosPair;
     std::vector <NamePosPair> m_vBulletStyleNameList;
 
     // , 02/16/2005
@@ -133,8 +133,8 @@ public:
     LwpPara* GetLastParaOfPreviousStory();
 
     OUString GetContentText(sal_Bool bAllText = sal_False);//add by ,for CHB,05/5/25
-    inline void AddBullStyleName2List(const rtl::OUString& rStyleName, const sal_uInt8& nPos);
-    sal_Bool IsBullStyleUsedBefore(const rtl::OUString& rStyleName, const sal_uInt8& nPos);
+    inline void AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos);
+    sal_Bool IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos);
 
     OUString RegisterFirstFribStyle();
 };
@@ -193,7 +193,7 @@ LwpHyperlinkMgr* LwpStory::GetHyperlinkMgr()
 {
     return m_pHyperlinkMgr;
 }
-inline void LwpStory::AddBullStyleName2List(const rtl::OUString& rStyleName, const sal_uInt8& nPos)
+inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos)
 {
     m_vBulletStyleNameList.push_back(std::make_pair(rStyleName, nPos));
 }

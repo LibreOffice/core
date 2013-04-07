@@ -103,7 +103,7 @@ public:
         The current element identifier can be accessed with getCurrentElement()
         or isCurrentElement(). Used by OOXML import only.
      */
-    virtual void        onCharacters( const ::rtl::OUString& rChars ) = 0;
+    virtual void        onCharacters( const OUString& rChars ) = 0;
 
     /** Will be called when the current element is about to be left.
 
@@ -179,7 +179,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& rxAttribs );
 
     /** Must be called from characters() in derived classes. */
-    void                implCharacters( const ::rtl::OUString& rChars );
+    void                implCharacters( const OUString& rChars );
 
     /** Must be called from endFastElement() in derived classes. */
     void                implEndElement( sal_Int32 nElement );
@@ -236,7 +236,7 @@ public:
                             throw(  ::com::sun::star::xml::sax::SAXException,
                                     ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL characters( const ::rtl::OUString& rChars )
+    virtual void SAL_CALL characters( const OUString& rChars )
                             throw(  ::com::sun::star::xml::sax::SAXException,
                                     ::com::sun::star::uno::RuntimeException );
 
@@ -254,7 +254,7 @@ public:
 
     virtual ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
     virtual void        onStartElement( const AttributeList& rAttribs );
-    virtual void        onCharacters( const ::rtl::OUString& rChars );
+    virtual void        onCharacters( const OUString& rChars );
     virtual void        onEndElement();
 
     virtual ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );

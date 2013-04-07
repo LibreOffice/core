@@ -36,7 +36,6 @@
 
 #include <tools/debug.hxx>
 
-using rtl::OUString;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;

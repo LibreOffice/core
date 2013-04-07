@@ -99,7 +99,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
         {
             case PROPERTY_ID_NAME:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aKey.put_Name(aVal);
                     ADOS::ThrowException(*m_pConnection->getConnection(),*this);
@@ -115,7 +115,7 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
                 break;
             case PROPERTY_ID_REFERENCEDTABLE:
                 {
-                    ::rtl::OUString aVal;
+                    OUString aVal;
                     rValue >>= aVal;
                     m_aKey.put_RelatedTable(aVal);
                     ADOS::ThrowException(*m_pConnection->getConnection(),*this);

@@ -39,9 +39,9 @@ class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
  protected:
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
-    rtl::OUString*                     m_pPhoneNr;
+    OUString*                     m_pPhoneNr;
     bool                        m_bSwallowFaxNo;
-    rtl::OUString                      m_aPhoneCollection;
+    OUString                      m_aPhoneCollection;
     bool                        m_bPhoneCollectionActive;
 
     ServerFont*                 m_pServerFont[ MAX_FALLBACK ];
@@ -52,7 +52,7 @@ public:
     virtual ~GenPspGraphics();
 
     void  Init( psp::JobData* pJob, psp::PrinterGfx* pGfx,
-                rtl::OUString* pPhone, bool bSwallow,
+                OUString* pPhone, bool bSwallow,
                 SalInfoPrinter* pInfoPrinter );
 
     // helper methods
@@ -97,9 +97,9 @@ public:
     // graphics must drop any cached font info
     virtual void ClearDevFontCache();
     virtual void            GetDevFontSubstList( OutputDevice* );
-    virtual bool            AddTempDevFont( ImplDevFontList*, const rtl::OUString& rFileURL, const rtl::OUString& rFontName );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const OUString& rFileURL, const OUString& rFontName );
 
-    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_Int32* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -175,7 +175,7 @@ public:
     virtual void            invert( sal_uIntPtr nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
     virtual sal_Bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uIntPtr nSize );
-    virtual bool            filterText( const rtl::OUString& rOrigText, rtl::OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop );
+    virtual bool            filterText( const OUString& rOrigText, OUString& rNewText, sal_Int32 nIndex, sal_Int32& rLen, sal_Int32& rCutStart, sal_Int32& rCutStop );
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,

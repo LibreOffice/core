@@ -54,7 +54,7 @@ namespace test_ftp {
         virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > SAL_CALL
         createInstance(
-            const ::rtl::OUString& aServiceSpecifier
+            const OUString& aServiceSpecifier
         )
             throw (
                 ::com::sun::star::uno::Exception,
@@ -65,7 +65,7 @@ namespace test_ftp {
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > SAL_CALL
         createInstanceWithArguments(
-            const ::rtl::OUString& ServiceSpecifier,
+            const OUString& ServiceSpecifier,
             const ::com::sun::star::uno::Sequence
             < ::com::sun::star::uno::Any >& Arguments
         )
@@ -74,7 +74,7 @@ namespace test_ftp {
                 ::com::sun::star::uno::RuntimeException
             );
 
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
         getAvailableServiceNames(
         )
             throw (

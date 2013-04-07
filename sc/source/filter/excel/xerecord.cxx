@@ -179,7 +179,7 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
     if( mnAttribute == -1 )
         return;
     rStrm.WriteAttributes(
-        mnAttribute,    rtl::OString::valueOf( maValue ).getStr(),
+        mnAttribute,    OString::valueOf( maValue ).getStr(),
         FSEND );
 }
 

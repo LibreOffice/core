@@ -30,7 +30,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-MacabResultSetMetaData::MacabResultSetMetaData(MacabConnection* _pConnection, ::rtl::OUString _sTableName)
+MacabResultSetMetaData::MacabResultSetMetaData(MacabConnection* _pConnection, OUString _sTableName)
     : m_pConnection(_pConnection),
         m_sTableName(_sTableName),
       m_aMacabFields()
@@ -44,7 +44,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
 {
     OSQLColumns::Vector::const_iterator aIter;
-    static const ::rtl::OUString aName("Name");
+    static const OUString aName("Name");
     MacabRecords *aRecords;
     MacabHeader *aHeader;
 
@@ -60,7 +60,7 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
     for (aIter = xColumns->get().begin(); aIter != xColumns->get().end(); ++aIter)
     {
-        ::rtl::OUString aFieldName;
+        OUString aFieldName;
         sal_uInt32 nFieldNumber;
 
         (*aIter)->getPropertyValue(aName) >>= aFieldName;
@@ -112,12 +112,12 @@ sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLEx
     return sal_True;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
 {
     sal_uInt32 nFieldNumber = m_aMacabFields[column - 1];
     MacabRecords *aRecords;
@@ -132,34 +132,34 @@ sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLEx
     }
 
     aHeader = aRecords->getHeader();
-    ::rtl::OUString aName = aHeader->getString(nFieldNumber);
+    OUString aName = aHeader->getString(nFieldNumber);
 
     return aName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
 {
     return m_sTableName;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)

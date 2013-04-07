@@ -116,8 +116,8 @@ public:
     virtual String      GetFieldName() const;
 
     /// Change formula.
-    virtual rtl::OUString GetPar2() const;
-    virtual void        SetPar2(const rtl::OUString& rStr);
+    virtual OUString GetPar2() const;
+    virtual void        SetPar2(const OUString& rStr);
 
     virtual sal_uInt16  GetSubType() const;
     virtual void        SetSubType(sal_uInt16 nType);
@@ -147,7 +147,7 @@ class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
-    rtl::OUString sName;
+    OUString sName;
     const SwNode* pOutlChgNd;
     String      sDelim;
     sal_uInt16      nType;
@@ -161,7 +161,7 @@ public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,
                         sal_uInt16 nType = nsSwGetSetExpType::GSE_EXPR );
     virtual SwFieldType*    Copy() const;
-    virtual const rtl::OUString&   GetName() const;
+    virtual const OUString&   GetName() const;
 
     inline void             SetType(sal_uInt16 nTyp);
     inline sal_uInt16       GetType() const;
@@ -173,7 +173,7 @@ public:
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
     /// Overlay, because set-field takes care for its being updated by itself.
-    inline const rtl::OUString& GetSetRefName() const;
+    inline const OUString& GetSetRefName() const;
 
     sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );
 
@@ -205,7 +205,7 @@ inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
 inline sal_uInt16 SwSetExpFieldType::GetType() const
     { return nType;   }
 
-inline const rtl::OUString& SwSetExpFieldType::GetSetRefName() const
+inline const OUString& SwSetExpFieldType::GetSetRefName() const
     { return sName; }
 
 
@@ -248,11 +248,11 @@ public:
     inline sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
 
     /// Query name only.
-    virtual const rtl::OUString& GetPar1()   const;
+    virtual const OUString& GetPar1()   const;
 
     /// Query formula.
-    virtual rtl::OUString       GetPar2()   const;
-    virtual void                SetPar2(const rtl::OUString& rStr);
+    virtual OUString       GetPar2()   const;
+    virtual void                SetPar2(const OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
@@ -293,7 +293,7 @@ public:
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
-    rtl::OUString aContent;
+    OUString aContent;
     String  aPText;
     String  aHelp;
     String  aToolTip;
@@ -311,12 +311,12 @@ public:
     virtual String          GetFieldName() const;
 
     /// Content
-    virtual const rtl::OUString&   GetPar1() const;
-    virtual void            SetPar1(const rtl::OUString& rStr);
+    virtual const OUString&   GetPar1() const;
+    virtual void            SetPar1(const OUString& rStr);
 
     /// aPromptText
-    virtual rtl::OUString   GetPar2() const;
-    virtual void            SetPar2(const rtl::OUString& rStr);
+    virtual OUString   GetPar2() const;
+    virtual void            SetPar2(const OUString& rStr);
 
     virtual String          GetHelp() const;
     virtual void            SetHelp(const String & rStr);
@@ -400,8 +400,8 @@ public:
     virtual String      GetFieldName() const;
 
     /// The formula.
-    virtual rtl::OUString GetPar2()   const;
-    virtual void        SetPar2(const rtl::OUString& rStr);
+    virtual OUString GetPar2()   const;
+    virtual void        SetPar2(const OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };

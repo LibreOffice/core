@@ -77,57 +77,57 @@ namespace drawinglayer
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
             // the local UNO API strings
-            const ::rtl::OUString& getNamePropertyObjectTransformation()
+            const OUString& getNamePropertyObjectTransformation()
             {
-                static ::rtl::OUString s_sNameProperty("ObjectTransformation");
+                static OUString s_sNameProperty("ObjectTransformation");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyOrientation()
+            const OUString& getNamePropertyOrientation()
             {
-                static ::rtl::OUString s_sNameProperty("Orientation");
+                static OUString s_sNameProperty("Orientation");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyProjection()
+            const OUString& getNamePropertyProjection()
             {
-                static ::rtl::OUString s_sNameProperty("Projection");
+                static OUString s_sNameProperty("Projection");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyProjection_30()
+            const OUString& getNamePropertyProjection_30()
             {
-                static ::rtl::OUString s_sNameProperty("Projection30");
+                static OUString s_sNameProperty("Projection30");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyProjection_31()
+            const OUString& getNamePropertyProjection_31()
             {
-                static ::rtl::OUString s_sNameProperty("Projection31");
+                static OUString s_sNameProperty("Projection31");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyProjection_32()
+            const OUString& getNamePropertyProjection_32()
             {
-                static ::rtl::OUString s_sNameProperty("Projection32");
+                static OUString s_sNameProperty("Projection32");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyProjection_33()
+            const OUString& getNamePropertyProjection_33()
             {
-                static ::rtl::OUString s_sNameProperty("Projection33");
+                static OUString s_sNameProperty("Projection33");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyDeviceToView()
+            const OUString& getNamePropertyDeviceToView()
             {
-                static ::rtl::OUString s_sNameProperty("DeviceToView");
+                static OUString s_sNameProperty("DeviceToView");
                 return s_sNameProperty;
             }
 
-            const ::rtl::OUString& getNamePropertyTime()
+            const OUString& getNamePropertyTime()
             {
-                static ::rtl::OUString s_sNamePropertyTime("Time");
+                static OUString s_sNamePropertyTime("Time");
                 return s_sNamePropertyTime;
             }
 

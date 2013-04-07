@@ -128,7 +128,7 @@ Reference< XPropertySet > View::createDataDescriptor(  ) throw (RuntimeException
     return Reference< XPropertySet > ( pView );
 }
 
-void View::rename( const ::rtl::OUString& newName )
+void View::rename( const OUString& newName )
         throw (::com::sun::star::sdbc::SQLException,
                ::com::sun::star::container::ElementExistException,
                ::com::sun::star::uno::RuntimeException)
@@ -137,9 +137,9 @@ void View::rename( const ::rtl::OUString& newName )
 
     Statics & st = getStatics();
 
-    ::rtl::OUString oldName = extractStringProperty(this,st.NAME );
-    ::rtl::OUString schema = extractStringProperty(this,st.SCHEMA_NAME );
-    ::rtl::OUString fullOldName = concatQualified( schema, oldName );
+    OUString oldName = extractStringProperty(this,st.NAME );
+    OUString schema = extractStringProperty(this,st.SCHEMA_NAME );
+    OUString fullOldName = concatQualified( schema, oldName );
 
     OUString newTableName;
     OUString newSchemaName;
@@ -155,7 +155,7 @@ void View::rename( const ::rtl::OUString& newName )
         newTableName = newName;
         newSchemaName = schema;
     }
-    ::rtl::OUString fullNewName = concatQualified( newSchemaName, newTableName );
+    OUString fullNewName = concatQualified( newSchemaName, newTableName );
 
     if( ! schema.equals( newSchemaName ) )
     {
@@ -234,7 +234,7 @@ Any View::queryInterface( const Type & reqType ) throw (RuntimeException)
     return ret;
 }
 
-::rtl::OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException)
+OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -242,7 +242,7 @@ Any View::queryInterface( const Type & reqType ) throw (RuntimeException)
         extractStringProperty( this, st.NAME ) );
 }
 
-void View::setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
+void View::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException)
 {
     rename( aName );
 }

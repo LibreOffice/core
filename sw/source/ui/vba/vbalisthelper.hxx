@@ -47,7 +47,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
     sal_Int32 mnGalleryType;
     sal_Int32 mnTemplateType;
-    rtl::OUString msStyleName;
+    OUString msStyleName;
 
     void Init() throw( css::uno::RuntimeException );
     void CreateListTemplate() throw( css::uno::RuntimeException );
@@ -67,8 +67,8 @@ public:
 
     sal_Int32 getGalleryType() const { return mnGalleryType; }
     css::uno::Reference< css::container::XIndexReplace > getNumberingRules() const { return mxNumberingRules; }
-    css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const rtl::OUString& sName ) throw( css::uno::RuntimeException );
-    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const rtl::OUString& sName, const css::uno::Any& aValue ) throw( css::uno::RuntimeException );
+    css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName ) throw( css::uno::RuntimeException );
+    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const css::uno::Any& aValue ) throw( css::uno::RuntimeException );
 
 };
 

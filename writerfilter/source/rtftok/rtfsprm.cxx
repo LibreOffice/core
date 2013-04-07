@@ -32,7 +32,6 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <doctok/resourceids.hxx> // NS_rtf namespace
 
-using rtl::OStringBuffer;
 
 namespace writerfilter {
 namespace rtftok {

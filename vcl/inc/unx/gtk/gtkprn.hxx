@@ -46,15 +46,15 @@ public:
 
     using PspSalPrinter::StartJob;
     virtual sal_Bool StartJob(
-            const rtl::OUString* i_pFileName, const rtl::OUString& i_rJobName,
-            const rtl::OUString& i_rAppName, ImplJobSetup* io_pSetupData,
+            const OUString* i_pFileName, const OUString& i_rJobName,
+            const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
             vcl::PrinterController& io_rController);
     virtual sal_Bool EndJob();
 
 private:
     bool impl_doJob(
-            const rtl::OUString* i_pFileName, const rtl::OUString& i_rJobName,
-            const rtl::OUString& i_rAppName, ImplJobSetup* io_pSetupData,
+            const OUString* i_pFileName, const OUString& i_rJobName,
+            const OUString& i_rAppName, ImplJobSetup* io_pSetupData,
             int i_nCopies, bool i_bCollate, vcl::PrinterController& io_rController);
 
 private:

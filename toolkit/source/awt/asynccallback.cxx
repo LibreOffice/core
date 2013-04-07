@@ -32,8 +32,8 @@
 namespace comp_AsyncCallback {
 
 // component and service helper functions:
-::rtl::OUString SAL_CALL _getImplementationName();
-css::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+OUString SAL_CALL _getImplementationName();
+css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
 } // closing component helper namespace
@@ -52,9 +52,9 @@ public:
     explicit AsyncCallback(css::uno::Reference< css::uno::XComponentContext > const & context);
 
     // ::com::sun::star::lang::XServiceInfo:
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService(const ::rtl::OUString & ServiceName) throw (css::uno::RuntimeException);
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
     // ::com::sun::star::awt::XRequestCallback:
     virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const ::com::sun::star::uno::Any & aData) throw (css::uno::RuntimeException);
@@ -85,14 +85,14 @@ AsyncCallback::AsyncCallback(css::uno::Reference< css::uno::XComponentContext > 
 {}
 
 // com.sun.star.uno.XServiceInfo:
-::rtl::OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::RuntimeException)
+OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_AsyncCallback::_getImplementationName();
 }
 
-::sal_Bool SAL_CALL AsyncCallback::supportsService(::rtl::OUString const & serviceName) throw (css::uno::RuntimeException)
+::sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException)
 {
-    const css::uno::Sequence< ::rtl::OUString > serviceNames = comp_AsyncCallback::_getSupportedServiceNames();
+    const css::uno::Sequence< OUString > serviceNames = comp_AsyncCallback::_getSupportedServiceNames();
     for (::sal_Int32 i = 0; i < serviceNames.getLength(); ++i) {
         if (serviceNames[i] == serviceName)
             return sal_True;
@@ -100,7 +100,7 @@ AsyncCallback::AsyncCallback(css::uno::Reference< css::uno::XComponentContext > 
     return sal_False;
 }
 
-css::uno::Sequence< ::rtl::OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException)
 {
     return comp_AsyncCallback::_getSupportedServiceNames();
 }

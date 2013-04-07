@@ -50,7 +50,7 @@ public:
 
     virtual ~CurrentContext();
 
-    virtual css::uno::Any SAL_CALL getValueByName(::rtl::OUString const & Name)
+    virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name)
         throw (css::uno::RuntimeException);
 
 private:
@@ -62,11 +62,11 @@ CurrentContext::CurrentContext() {}
 
 CurrentContext::~CurrentContext() {}
 
-css::uno::Any CurrentContext::getValueByName(::rtl::OUString const & Name)
+css::uno::Any CurrentContext::getValueByName(OUString const & Name)
     throw (css::uno::RuntimeException)
 {
     return Name == KEY
-        ? css::uno::makeAny(::rtl::OUString::createFromAscii(VALUE))
+        ? css::uno::makeAny(OUString::createFromAscii(VALUE))
         : css::uno::Any();
 }
 
@@ -103,11 +103,11 @@ bool testtools::bridgetest::CurrentContextChecker::performCheck(
             return false;
         }
         css::uno::Any a(
-            context->getValueByName(::rtl::OUString::createFromAscii(KEY)));
-        if (a.getValueType() != ::cppu::UnoType< ::rtl::OUString >::get()) {
+            context->getValueByName(OUString::createFromAscii(KEY)));
+        if (a.getValueType() != ::cppu::UnoType< OUString >::get()) {
             return false;
         }
-        ::rtl::OUString s;
+        OUString s;
         OSL_VERIFY(a >>= s);
         return s == VALUE;
     } else {

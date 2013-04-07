@@ -64,7 +64,7 @@ void WriterXmlEmitter::visit( TextElement& elem, const std::list< Element* >::co
     PropertyMap aProps;
     if( elem.StyleId != -1 )
     {
-        aProps[ rtl::OUString( "text:style-name" ) ] =
+        aProps[ OUString( "text:style-name" ) ] =
             m_rEmitContext.rStyles.getStyleName( elem.StyleId );
     }
 
@@ -127,13 +127,13 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         {
             PageElement* pPage = dynamic_cast<PageElement*>(pAnchor);
             rProps[ "text:anchor-type" ] = "page";
-            rProps[ "text:anchor-page-number" ] = rtl::OUString::valueOf(pPage->PageNumber);
+            rProps[ "text:anchor-page-number" ] = OUString::valueOf(pPage->PageNumber);
         }
         rel_x -= pAnchor->x;
         rel_y -= pAnchor->y;
     }
 
-    rProps[ "draw:z-index" ] = rtl::OUString::valueOf( rElem.ZOrder );
+    rProps[ "draw:z-index" ] = OUString::valueOf( rElem.ZOrder );
     rProps[ "draw:style-name"] = rEmitContext.rStyles.getStyleName( rElem.StyleId );
     rProps[ "svg:width" ]   = convertPixelToUnitString( rElem.w );
     rProps[ "svg:height" ]  = convertPixelToUnitString( rElem.h );
@@ -155,7 +155,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
         rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
 
-        rtl::OUStringBuffer aBuf( 256 );
+        OUStringBuffer aBuf( 256 );
 
         // TODO(F2): general transformation case missing; if implemented, note
         // that ODF rotation is oriented the other way
@@ -269,7 +269,7 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >
 
     PropertyMap aProps;
     fillFrameProps( elem, aProps, m_rEmitContext );
-    rtl::OUStringBuffer aBuf( 64 );
+    OUStringBuffer aBuf( 64 );
     aBuf.appendAscii( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
     aBuf.append( sal_Unicode(' ') );
@@ -856,7 +856,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
             aVec.setX ( convPx2mmPrec2( aVec.getX() )*100.0 );
             aVec.setY ( convPx2mmPrec2( aVec.getY() )*100.0 );
 
-            aGCProps[ "svg:stroke-width" ] = rtl::OUString::valueOf( aVec.getLength() );
+            aGCProps[ "svg:stroke-width" ] = OUString::valueOf( aVec.getLength() );
         }
     }
     else
@@ -923,10 +923,10 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
         aFontProps[ "style:text-outline" ]  = "true";
     }
     // size
-    rtl::OUStringBuffer aBuf( 32 );
+    OUStringBuffer aBuf( 32 );
     aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
     aBuf.appendAscii( "pt" );
-    rtl::OUString aFSize = aBuf.makeStringAndClear();
+    OUString aFSize = aBuf.makeStringAndClear();
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;
@@ -975,7 +975,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         if( ! bIsCenter && elem.x > p_x + p_w/10 )
         {
             // indent
-            rtl::OUStringBuffer aBuf( 32 );
+            OUStringBuffer aBuf( 32 );
             aBuf.append( convPx2mm( elem.x - p_x ) );
             aBuf.appendAscii( "mm" );
             aParaProps[ "fo:margin-left" ] = aBuf.makeStringAndClear();
@@ -991,7 +991,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         {
             if( pNextPara->y - (elem.y+elem.h) > convmm2Px( 10 ) )
             {
-                rtl::OUStringBuffer aBuf( 32 );
+                OUStringBuffer aBuf( 32 );
                 aBuf.append( convPx2mm( pNextPara->y - (elem.y+elem.h) ) );
                 aBuf.appendAscii( "mm" );
                 aParaProps[ "fo:margin-bottom" ] = aBuf.makeStringAndClear();
@@ -1036,7 +1036,7 @@ void WriterXmlFinalizer::visit( ImageElement&, const std::list< Element* >::cons
 
 void WriterXmlFinalizer::setFirstOnPage( ParagraphElement&    rElem,
                                          StyleContainer&      rStyles,
-                                         const rtl::OUString& rMasterPageName )
+                                         const OUString& rMasterPageName )
 {
     PropertyMap aProps;
     if( rElem.StyleId != -1 )
@@ -1161,7 +1161,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     sal_Int32 nPageStyle = m_rStyleContainer.impl_getStyleId( aStyle, false );
 
     // create master page
-    rtl::OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
+    OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
     aPageProps[ "style:page-layout-name" ] = aMasterPageLayoutName;
     StyleContainer::Style aMPStyle( "style:master-page", aPageProps );
     StyleContainer::Style aHeaderStyle( "style:header", PropertyMap() );
@@ -1181,7 +1181,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     elem.StyleId = m_rStyleContainer.impl_getStyleId( aMPStyle,false );
 
 
-    rtl::OUString aMasterPageName = m_rStyleContainer.getStyleName( elem.StyleId );
+    OUString aMasterPageName = m_rStyleContainer.getStyleName( elem.StyleId );
 
     // create styles for children
     elem.applyToChildren(*this);

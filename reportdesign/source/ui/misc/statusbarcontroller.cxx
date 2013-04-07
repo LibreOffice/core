@@ -39,30 +39,30 @@ namespace rptui
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
 
-::rtl::OUString SAL_CALL OStatusbarController::getImplementationName() throw( RuntimeException )
+OUString SAL_CALL OStatusbarController::getImplementationName() throw( RuntimeException )
 {
     return getImplementationName_Static();
 }
 
 //------------------------------------------------------------------------------
-::rtl::OUString OStatusbarController::getImplementationName_Static() throw( RuntimeException )
+OUString OStatusbarController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString("com.sun.star.report.comp.StatusbarController");
+    return OUString("com.sun.star.report.comp.StatusbarController");
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString> OStatusbarController::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< OUString> OStatusbarController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
-    Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.frame.StatusbarController");
+    Sequence< OUString> aSupported(1);
+    aSupported.getArray()[0] = OUString("com.sun.star.frame.StatusbarController");
     return aSupported;
 }
 // -----------------------------------------------------------------------------
-::sal_Bool SAL_CALL OStatusbarController::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
+::sal_Bool SAL_CALL OStatusbarController::supportsService( const OUString& ServiceName ) throw (RuntimeException)
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
 //-------------------------------------------------------------------------
-Sequence< ::rtl::OUString> SAL_CALL OStatusbarController::getSupportedServiceNames() throw(RuntimeException)
+Sequence< OUString> SAL_CALL OStatusbarController::getSupportedServiceNames() throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }

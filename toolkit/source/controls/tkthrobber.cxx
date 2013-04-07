@@ -46,9 +46,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoThrobberControlModel::getServiceName( ) throw ( uno::RuntimeException )
+    OUString UnoThrobberControlModel::getServiceName( ) throw ( uno::RuntimeException )
     {
-        return ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
+        return OUString::createFromAscii( szServiceName_UnoThrobberControlModel );
     }
 
     //--------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace toolkit
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
+            return uno::makeAny( OUString::createFromAscii( szServiceName_UnoThrobberControl ) );
         case BASEPROPERTY_BORDER:
             return uno::makeAny( (sal_Int16) 0 );
         default:
@@ -86,22 +86,22 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoThrobberControlModel::getImplementationName()
+    OUString SAL_CALL UnoThrobberControlModel::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoThrobberControlModel" );
+        return OUString( "com.sun.star.comp.toolkit.UnoThrobberControlModel" );
     }
 
     //--------------------------------------------------------------------
-    uno::Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControlModel::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL UnoThrobberControlModel::getSupportedServiceNames()
         throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aServices( UnoControlModel::getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( UnoControlModel::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 2 );
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 2] =
-            ::rtl::OUString::createFromAscii(szServiceName_UnoThrobberControlModel);
+            OUString::createFromAscii(szServiceName_UnoThrobberControlModel);
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 1] =
-            ::rtl::OUString::createFromAscii(szServiceName2_UnoThrobberControlModel);
+            OUString::createFromAscii(szServiceName2_UnoThrobberControlModel);
         return aServices;
     }
 
@@ -115,9 +115,9 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
+    OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString("Throbber");
+        return OUString("Throbber");
     }
 
     //--------------------------------------------------------------------
@@ -141,22 +141,22 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL UnoThrobberControl::getImplementationName()
+    OUString SAL_CALL UnoThrobberControl::getImplementationName()
         throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( "com.sun.star.comp.toolkit.UnoThrobberControl" );
+        return OUString( "com.sun.star.comp.toolkit.UnoThrobberControl" );
     }
 
     //--------------------------------------------------------------------
-    uno::Sequence< ::rtl::OUString > SAL_CALL UnoThrobberControl::getSupportedServiceNames()
+    uno::Sequence< OUString > SAL_CALL UnoThrobberControl::getSupportedServiceNames()
         throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aServices( UnoControlBase::getSupportedServiceNames() );
+        uno::Sequence< OUString > aServices( UnoControlBase::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 2 );
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 2] =
-            ::rtl::OUString::createFromAscii(szServiceName_UnoThrobberControl);
+            OUString::createFromAscii(szServiceName_UnoThrobberControl);
         aServices[sal::static_int_cast<sal_uInt32>(aServices.getLength()) - 1] =
-            ::rtl::OUString::createFromAscii(szServiceName2_UnoThrobberControl);
+            OUString::createFromAscii(szServiceName2_UnoThrobberControl);
         return aServices;
     }
 

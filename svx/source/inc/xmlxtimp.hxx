@@ -42,13 +42,13 @@ public:
 
     virtual ~SvxXMLXTableImport() throw ();
 
-    static bool load( const rtl::OUString &rPath,
+    static bool load( const OUString &rPath,
                       const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > &xStorage,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xTable,
                       bool *bOptLoadedFromStorage ) throw();
 protected:
     virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
+                                      const OUString& rLocalName,
                                       const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:

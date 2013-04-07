@@ -48,7 +48,7 @@ namespace framework
             //                   the above mentioned restriction!!!
 
             static com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer > CreateActionTriggerContainerFromMenu(
-                const Menu* pMenu, const ::rtl::OUString* pMenuIdentifier );
+                const Menu* pMenu, const OUString* pMenuIdentifier );
 
             // Fills the submitted rActionTriggerContainer with the structure of the menu
             // provided as the second parameter

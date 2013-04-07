@@ -28,13 +28,13 @@ namespace connectivity
 {
     class OOO_DLLPUBLIC_DBTOOLS OColumn
     {
-        ::rtl::OUString m_CatalogName;
-        ::rtl::OUString m_SchemaName;
-        ::rtl::OUString m_TableName;
-        ::rtl::OUString m_ColumnName;
-        ::rtl::OUString m_ColumnLabel;
-        ::rtl::OUString m_ColumnTypeName;
-        ::rtl::OUString m_ColumnServiceName;
+        OUString m_CatalogName;
+        OUString m_SchemaName;
+        OUString m_TableName;
+        OUString m_ColumnName;
+        OUString m_ColumnLabel;
+        OUString m_ColumnTypeName;
+        OUString m_ColumnServiceName;
 
         sal_Int32       m_Nullable;
         sal_Int32       m_ColumnDisplaySize;
@@ -53,8 +53,8 @@ namespace connectivity
 
     public:
         OColumn() {}
-        OColumn(const ::rtl::OUString &_aTableName,
-                const ::rtl::OUString &_aColumnName,
+        OColumn(const OUString &_aTableName,
+                const OUString &_aColumnName,
 
                 sal_Int32       _aNullable=0,
                 sal_Int32       _aColumnDisplaySize=0,
@@ -71,9 +71,9 @@ namespace connectivity
                 sal_Bool        _aWritable=sal_False,
                 sal_Bool        _aDefinitelyWritable=sal_False,
 
-                const ::rtl::OUString &_aColumnLabel = ::rtl::OUString(),
-                const ::rtl::OUString &_aColumnTypeName = ::rtl::OUString(),
-                const ::rtl::OUString &_aColumnServiceName = ::rtl::OUString())
+                const OUString &_aColumnLabel = OUString(),
+                const OUString &_aColumnTypeName = OUString(),
+                const OUString &_aColumnServiceName = OUString())
         :   m_TableName(_aTableName),
             m_ColumnName(_aColumnName),
             m_ColumnLabel(_aColumnLabel),
@@ -123,13 +123,13 @@ namespace connectivity
         sal_Int32 getScale()                    const { return m_Scale; }
         sal_Int32 getColumnType()               const { return m_ColumnType; }
 
-        const ::rtl::OUString& getColumnLabel()         const { return m_ColumnLabel; }
-        const ::rtl::OUString& getColumnName()          const { return m_ColumnName; }
-        const ::rtl::OUString& getSchemaName()          const { return m_SchemaName; }
-        const ::rtl::OUString& getTableName()           const { return m_TableName; }
-        const ::rtl::OUString& getCatalogName()         const { return m_CatalogName; }
-        const ::rtl::OUString& getColumnTypeName()      const { return m_ColumnTypeName; }
-        const ::rtl::OUString& getColumnServiceName()   const { return m_ColumnServiceName; }
+        const OUString& getColumnLabel()         const { return m_ColumnLabel; }
+        const OUString& getColumnName()          const { return m_ColumnName; }
+        const OUString& getSchemaName()          const { return m_SchemaName; }
+        const OUString& getTableName()           const { return m_TableName; }
+        const OUString& getCatalogName()         const { return m_CatalogName; }
+        const OUString& getColumnTypeName()      const { return m_ColumnTypeName; }
+        const OUString& getColumnServiceName()   const { return m_ColumnServiceName; }
 
     };
 }

@@ -32,23 +32,23 @@ class BreakIterator_CTL : public BreakIterator_Unicode
 public:
     BreakIterator_CTL();
     ~BreakIterator_CTL();
-    virtual sal_Int32 SAL_CALL previousCharacters(const rtl::OUString& text, sal_Int32 start,
+    virtual sal_Int32 SAL_CALL previousCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL nextCharacters(const rtl::OUString& text, sal_Int32 start,
+    virtual sal_Int32 SAL_CALL nextCharacters(const OUString& text, sal_Int32 start,
         const lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 count,
         sal_Int32& nDone) throw(com::sun::star::uno::RuntimeException);
-    virtual LineBreakResults SAL_CALL getLineBreak( const rtl::OUString& Text, sal_Int32 nStartPos,
+    virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const com::sun::star::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
         throw(com::sun::star::uno::RuntimeException);
 protected:
-    rtl::OUString cachedText; // for cell index
+    OUString cachedText; // for cell index
     sal_Int32* nextCellIndex;
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
 
-    virtual void SAL_CALL makeIndex(const rtl::OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(com::sun::star::uno::RuntimeException);
 };
 
 } } } }

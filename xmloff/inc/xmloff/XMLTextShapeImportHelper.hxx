@@ -28,9 +28,9 @@ class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
 {
     SvXMLImport& rImport;
 
-    const ::rtl::OUString sAnchorType;
-    const ::rtl::OUString sAnchorPageNo;
-    const ::rtl::OUString sVertOrientPosition;
+    const OUString sAnchorType;
+    const OUString sAnchorPageNo;
+    const OUString sVertOrientPosition;
 
 public:
 

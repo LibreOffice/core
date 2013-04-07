@@ -37,22 +37,22 @@ namespace rtl { class OUString; }
  */
 class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
 {
-    const ::rtl::OUString sMainEntryCharacterStyleName;
-    const ::rtl::OUString sUseAlphabeticalSeparators;
-    const ::rtl::OUString sUseCombinedEntries;
-    const ::rtl::OUString sIsCaseSensitive;
-    const ::rtl::OUString sUseKeyAsEntry;
-    const ::rtl::OUString sUseUpperCase;
-    const ::rtl::OUString sUseDash;
-    const ::rtl::OUString sUsePP;
-    const ::rtl::OUString sIsCommaSeparated;
-    const ::rtl::OUString sSortAlgorithm;
-    const ::rtl::OUString sLocale;
+    const OUString sMainEntryCharacterStyleName;
+    const OUString sUseAlphabeticalSeparators;
+    const OUString sUseCombinedEntries;
+    const OUString sIsCaseSensitive;
+    const OUString sUseKeyAsEntry;
+    const OUString sUseUpperCase;
+    const OUString sUseDash;
+    const OUString sUsePP;
+    const OUString sIsCommaSeparated;
+    const OUString sSortAlgorithm;
+    const OUString sLocale;
 
     ::com::sun::star::lang::Locale aLocale;
-    ::rtl::OUString sAlgorithm;
+    OUString sAlgorithm;
 
-    ::rtl::OUString sMainEntryStyleName;
+    OUString sMainEntryStyleName;
     sal_Bool bMainEntryStyleNameOK;
 
     sal_Bool bSeparators;
@@ -71,7 +71,7 @@ public:
     XMLIndexAlphabeticalSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
 
@@ -81,13 +81,13 @@ protected:
 
     virtual void ProcessAttribute(
         enum IndexSourceParamEnum eParam,
-        const ::rtl::OUString& rValue);
+        const OUString& rValue);
 
     virtual void EndElement();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };

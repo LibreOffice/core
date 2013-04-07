@@ -64,27 +64,27 @@ public:
         return new ScVbaFont( BaseClass::mxParent, BaseClass::mxContext, m_Palette, xShapePropertySet );
 
     }
-    void SAL_CALL setText( const ::rtl::OUString& Text ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    void SAL_CALL setText( const OUString& Text ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
         try
         {
-            xShapePropertySet->setPropertyValue( rtl::OUString("String"), css::uno::makeAny( Text ));
+            xShapePropertySet->setPropertyValue( OUString("String"), css::uno::makeAny( Text ));
         }
         catch ( css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
         }
     }
-    ::rtl::OUString SAL_CALL getText(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    OUString SAL_CALL getText(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
     {
-        ::rtl::OUString sText;
+        OUString sText;
         try
         {
-            xShapePropertySet->getPropertyValue( rtl::OUString("String") ) >>= sText;
+            xShapePropertySet->getPropertyValue( OUString("String") ) >>= sText;
         }
         catch ( css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
         }
         return sText;
     }
@@ -117,11 +117,11 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue(rtl::OUString("TextRotation"), css::uno::makeAny(_nOrientation*100));
+            xShapePropertySet->setPropertyValue(OUString("TextRotation"), css::uno::makeAny(_nOrientation*100));
         }
         catch (css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
         }
     }
     ::sal_Int32 SAL_CALL getOrientation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
@@ -129,26 +129,26 @@ public:
         sal_Int32 nSOOrientation = 0;
         try
         {
-            xShapePropertySet->getPropertyValue( rtl::OUString("TextRotation")) >>= nSOOrientation;
+            xShapePropertySet->getPropertyValue( OUString("TextRotation")) >>= nSOOrientation;
         }
         catch (css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), SbERR_METHOD_FAILED, OUString() );
         }
         return static_cast< sal_Int32 >(nSOOrientation / 100) ;
     }
 // XHelperInterface
-    rtl::OUString getServiceImplName()
+    OUString getServiceImplName()
     {
-        return rtl::OUString("TitleImpl");
+        return OUString("TitleImpl");
     }
-    css::uno::Sequence< rtl::OUString > getServiceNames()
+    css::uno::Sequence< OUString > getServiceNames()
     {
-        static css::uno::Sequence< rtl::OUString > aServiceNames;
+        static css::uno::Sequence< OUString > aServiceNames;
         if ( aServiceNames.getLength() == 0 )
         {
             aServiceNames.realloc( 1 );
-            aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.XTitle" );
+            aServiceNames[ 0 ] = OUString("ooo.vba.excel.XTitle" );
         }
         return aServiceNames;
     }

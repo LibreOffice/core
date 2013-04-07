@@ -91,9 +91,9 @@ SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 // -----------------------------------------------------------------------
 void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 {
-    rtl::OUString aDateStr;
-    rtl::OUString aTimeStr;
-    rtl::OUString aText;
+    OUString aDateStr;
+    OUString aTimeStr;
+    OUString aText;
     sal_Int64 lastChecked = 0;
 
     m_xUpdateAccess->getByName("LastCheck") >>= lastChecked;
@@ -204,7 +204,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    rtl::OUString sValue, aURL;
+    OUString sValue, aURL;
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) ) &&
@@ -254,7 +254,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     m_pDestPath->Enable(sal_True);
     m_pChangePathButton->Enable(sal_True);
 
-    rtl::OUString sValue, aPath;
+    OUString sValue, aPath;
     m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
     uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
 
-    rtl::OUString aURL;
+    OUString aURL;
     if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) )
         osl::Security().getHomeDir(aURL);
 
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl)
 
     if ( ui::dialogs::ExecutableDialogResults::OK == nRet )
     {
-        rtl::OUString aFolder;
+        OUString aFolder;
         if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(xFolderPicker->getDirectory(), aFolder))
             m_pDestPath->SetText( aFolder );
     }
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
         uno::Reference< frame::XDispatchProvider > xDispatchProvider(
             xDesktop->getCurrentFrame(), uno::UNO_QUERY );
 
-        uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
+        uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, OUString(), 0);
 
         if( xDispatch.is() )
         {
@@ -352,7 +352,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
     catch( const uno::Exception& e )
     {
          OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return 0;

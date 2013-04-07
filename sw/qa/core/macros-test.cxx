@@ -73,10 +73,10 @@ class SwMacrosTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     SwMacrosTest();
 
-    SwDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
+    SwDocShellRef load(const OUString &rFilter, const OUString &rURL,
+        const OUString &rUserData, const OUString& rTypeName, sal_uLong nFormatType=0);
 
-    void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
+    void createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath);
 
     virtual void setUp();
     virtual void tearDown();
@@ -97,13 +97,13 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xWriterComponent;
-    ::rtl::OUString m_aBaseString;
+    OUString m_aBaseString;
 };
 
-void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath)
+void SwMacrosTest::createFileURL(const OUString& aFileBase, const OUString& aFileExtension, OUString& rFilePath)
 {
-    rtl::OUString aSep("/");
-    rtl::OUStringBuffer aBuffer( getSrcRootURL() );
+    OUString aSep("/");
+    OUStringBuffer aBuffer( getSrcRootURL() );
     aBuffer.append(m_aBaseString).append(aSep).append(aFileExtension);
     aBuffer.append(aSep).append(aFileBase).append(aFileExtension);
     rFilePath = aBuffer.makeStringAndClear();
@@ -113,15 +113,15 @@ void SwMacrosTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUSt
 
 void SwMacrosTest::testStarBasic()
 {
-    const rtl::OUString aFileNameBase("StarBasic.");
-    rtl::OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFileName;
+    const OUString aFileNameBase("StarBasic.");
+    OUString aFileExtension(aFileFormats[0].pName, strlen(aFileFormats[0].pName), RTL_TEXTENCODING_UTF8 );
+    OUString aFileName;
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
 
-    rtl::OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
+    OUString aURL("vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document");
     String sUrl = aURL;
     Any aRet;
     Sequence< sal_Int16 > aOutParamIndex;
@@ -142,19 +142,19 @@ void SwMacrosTest::testVba()
 {
     TestMacroInfo testInfo[] = {
         {
-            rtl::OUString("testVba."),
-            rtl::OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
+            OUString("testVba."),
+            OUString("vnd.sun.Star.script:Project.NewMacros.Macro1?language=Basic&location=document")
         }
     };
-    rtl::OUString aFileExtension( "doc" );
+    OUString aFileExtension( "doc" );
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( testInfo ); ++i )
     {
-        rtl::OUString aFileName;
+        OUString aFileName;
         createFileURL(testInfo[i].sFileBaseName, aFileExtension, aFileName);
         uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
-        rtl::OUStringBuffer sMsg( rtl::OUString("Failed to load ") );
+        OUStringBuffer sMsg( OUString("Failed to load ") );
         sMsg.append ( aFileName );
-        CPPUNIT_ASSERT_MESSAGE( rtl::OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
+        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(), xComponent.is() );
 
         String sUrl = testInfo[i].sMacroUrl;
         Any aRet;
@@ -166,9 +166,9 @@ void SwMacrosTest::testVba()
 
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         pFoundShell->CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
-        rtl::OUString aStringRes;
+        OUString aStringRes;
         aRet >>= aStringRes;
-        std::cout << "value of Ret " << rtl::OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
         //CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
     }
@@ -219,7 +219,7 @@ void SwMacrosTest::setUp()
     // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
     // which is a private symbol to us, gets called
     m_xWriterComponent =
-        getMultiServiceFactory()->createInstance(rtl::OUString(
+        getMultiServiceFactory()->createInstance(OUString(
         "com.sun.star.comp.Writer.TextDocument"));
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
     mxDesktop = com::sun::star::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );

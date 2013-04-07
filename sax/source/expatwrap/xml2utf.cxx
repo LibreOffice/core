@@ -30,7 +30,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-using ::rtl::OString;
 
 #include "xml2utf.hxx"
 

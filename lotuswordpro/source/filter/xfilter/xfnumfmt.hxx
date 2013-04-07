@@ -82,7 +82,7 @@ public:
                     (2 item2
      * @param:      prefix
      *********************************************************************/
-    void    SetPrefix(rtl::OUString prefix)
+    void    SetPrefix(OUString prefix)
     {
         m_strPrefix = prefix;
     }
@@ -93,7 +93,7 @@ public:
                     2) item2
      * @param:      prefix
      *********************************************************************/
-    void    SetSuffix(rtl::OUString suffix)
+    void    SetSuffix(OUString suffix)
     {
         m_strSuffix = suffix;
     }
@@ -117,7 +117,7 @@ public:
                         '','','','','',
      * @param:      prefix
      *********************************************************************/
-    void    SetFormat(rtl::OUString format)
+    void    SetFormat(OUString format)
     {
         m_strFormat = format;
     }
@@ -140,9 +140,9 @@ public:
             pAttrList->AddAttribute( A2OUSTR("text:start-value"), Int16ToOUString(m_nStartValue) );
     }
 private:
-    rtl::OUString   m_strPrefix;
-    rtl::OUString   m_strSuffix;
-    rtl::OUString   m_strFormat;
+    OUString   m_strPrefix;
+    OUString   m_strSuffix;
+    OUString   m_strFormat;
     sal_Int16   m_nStartValue;
 };
 

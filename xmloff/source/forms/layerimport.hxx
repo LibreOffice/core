@@ -67,7 +67,7 @@ namespace xmloff
         MapDrawPage2Map         m_aControlIds;          // ids of the controls on all known page
         MapDrawPage2MapIterator m_aCurrentPageIds;      // ifs of the controls on the current page
 
-        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, ::rtl::OUString >
+        typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, OUString >
                                 ModelStringPair;
         ::std::vector< ModelStringPair >
                                 m_aControlReferences;   // control reference descriptions for current page
@@ -89,44 +89,44 @@ namespace xmloff
         // IControlIdMap
         void    registerControlId(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
-            const ::rtl::OUString& _rId);
+            const OUString& _rId);
         void    registerControlReferences(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControl,
-            const ::rtl::OUString& _rReferringControls);
+            const OUString& _rReferringControls);
 
         // OFormLayerXMLImport_Impl
         inline OAttribute2Property&         getAttributeMap()   { return m_aAttributeMetaData; }
         inline SvXMLImport&                 getGlobalContext()  { return m_rImporter; }
-        const SvXMLStyleContext*            getStyleElement(const ::rtl::OUString& _rStyleName) const;
+        const SvXMLStyleContext*            getStyleElement(const OUString& _rStyleName) const;
         void                                enterEventContext();
         void                                leaveEventContext();
         void                                applyControlNumberStyle(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rControlNumerStyleName
+            const OUString& _rControlNumerStyleName
         );
         void                        registerCellValueBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rCellAddress
+            const OUString& _rCellAddress
         );
 
         void                        registerCellRangeListSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rCellRangeAddress
+            const OUString& _rCellRangeAddress
         );
 
         void                        registerXFormsValueBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rBindingID
+            const OUString& _rBindingID
         );
 
         void                        registerXFormsListBinding(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rBindingID
+            const OUString& _rBindingID
         );
 
         void                        registerXFormsSubmission(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
-            const ::rtl::OUString& _rSubmissionID
+            const OUString& _rSubmissionID
         );
 
     protected:
@@ -147,20 +147,20 @@ namespace xmloff
         SvXMLImportContext* createOfficeFormsContext(
             SvXMLImport& _rImport,
             sal_uInt16 _nPrefix,
-            const rtl::OUString& _rLocalName);
+            const OUString& _rLocalName);
 
         /** create an <type>SvXMLImportContext</type> instance which is able to import the &lt;form:form&gt;
             element.
         */
         SvXMLImportContext* createContext(
             const sal_uInt16 _nPrefix,
-            const rtl::OUString& _rLocalName,
+            const OUString& _rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttribs);
 
         /** get the control with the given id
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                lookupControlId(const ::rtl::OUString& _rControlId);
+                lookupControlId(const OUString& _rControlId);
 
         /** announces the auto-style context to the form importer
         */

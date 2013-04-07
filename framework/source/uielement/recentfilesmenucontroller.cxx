@@ -148,24 +148,24 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                     aMenuShortCut.append( ": " );
                 }
 
-                rtl::OUStringBuffer aStrBuffer;
+                OUStringBuffer aStrBuffer;
                 aStrBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( CMD_PREFIX ) );
                 aStrBuffer.append( sal_Int32( i ) );
-                rtl::OUString  aURLString( aStrBuffer.makeStringAndClear() );
+                OUString  aURLString( aStrBuffer.makeStringAndClear() );
 
                 // Abbreviate URL
-                rtl::OUString   aTipHelpText;
-                rtl::OUString   aMenuTitle;
+                OUString   aTipHelpText;
+                OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
                     // Do handle file URL differently => convert it to a system
                     // path and abbreviate it with a special function:
-                    rtl::OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+                    OUString aSystemPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
                     aTipHelpText = aSystemPath;
 
-                    ::rtl::OUString aCompactedSystemPath;
+                    OUString aCompactedSystemPath;
                     if ( osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, MAX_STR_WIDTH, NULL ) == osl_File_E_None )
                         aMenuTitle = aCompactedSystemPath;
                     else
@@ -190,7 +190,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
                                        String( FwkResId( STR_CLEAR_RECENT_FILES ) ) );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
-                                           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_CLEAR_LIST ) ) );
+                                           OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_CLEAR_LIST ) ) );
             pVCLPopupMenu->SetHelpText( sal_uInt16( nCount + 1 ),
                                         String( FwkResId( STR_CLEAR_RECENT_FILES_HELP ) ) );
         }
@@ -290,9 +290,9 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
 
     if ( xMenuExt.is() )
     {
-        const rtl::OUString aCommand( xMenuExt->getCommand( rEvent.MenuId ) );
+        const OUString aCommand( xMenuExt->getCommand( rEvent.MenuId ) );
         OSL_TRACE( "RecentFilesMenuController::select() - Command : %s",
-                   rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+                   OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
         if ( aCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( CMD_CLEAR_LIST ) ) )
             SvtHistoryOptions().Clear( ePICKLIST );

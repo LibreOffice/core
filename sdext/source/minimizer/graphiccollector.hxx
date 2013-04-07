@@ -57,8 +57,8 @@ class GraphicCollector
         com::sun::star::uno::Reference< com::sun::star::drawing::XShape >       mxShape;            // if mbFillBitmap is false the xShape has
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >   mxPagePropertySet;
-        rtl::OUString                       maGraphicURL;
-        rtl::OUString                       maGraphicStreamURL;
+        OUString                       maGraphicURL;
+        OUString                       maGraphicStreamURL;
         com::sun::star::text::GraphicCrop   maGraphicCropLogic;
         com::sun::star::awt::Size           maLogicalSize;
         sal_Bool                            mbFillBitmap;

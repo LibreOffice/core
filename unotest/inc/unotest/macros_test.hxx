@@ -37,8 +37,8 @@
 
 struct TestMacroInfo
 {
-    rtl::OUString sFileBaseName;
-    rtl::OUString sMacroUrl;
+    OUString sFileBaseName;
+    OUString sMacroUrl;
 };
 
 namespace unotest {

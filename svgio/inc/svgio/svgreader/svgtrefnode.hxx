@@ -38,7 +38,7 @@ namespace svgio
 
             /// link to text content. If maXLink
             /// is set, the node can be fetched on demand
-            rtl::OUString               maXLink;
+            OUString               maXLink;
 
         public:
             SvgTrefNode(
@@ -47,7 +47,7 @@ namespace svgio
             virtual ~SvgTrefNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
 
             /// access to referenced SvgTextNode
             const SvgTextNode* getReferencedSvgTextNode() const;

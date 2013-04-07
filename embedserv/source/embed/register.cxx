@@ -43,16 +43,16 @@ throw (uno::Exception)
     return xService;
 }
 
-::rtl::OUString SAL_CALL EmbedServer_getImplementationName() throw()
+OUString SAL_CALL EmbedServer_getImplementationName() throw()
 {
-    return ::rtl::OUString("com.sun.star.comp.ole.EmbedServer");
+    return OUString("com.sun.star.comp.ole.EmbedServer");
 
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
+uno::Sequence< OUString > SAL_CALL EmbedServer_getSupportedServiceNames() throw()
 {
-    uno::Sequence< ::rtl::OUString > aServiceNames( 1 );
-    aServiceNames[0] = ::rtl::OUString( "com.sun.star.document.OleEmbeddedServerRegistration" );
+    uno::Sequence< OUString > aServiceNames( 1 );
+    aServiceNames[0] = OUString( "com.sun.star.document.OleEmbeddedServerRegistration" );
     return aServiceNames;
 }
 
@@ -62,7 +62,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL emser_component_getFactory( const sal_Char 
 {
     void * pRet = 0;
 
-    ::rtl::OUString aImplName( ::rtl::OUString::createFromAscii( pImplName ) );
+    OUString aImplName( OUString::createFromAscii( pImplName ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
     if(pServiceManager && aImplName.equals( EmbedServer_getImplementationName() ) )

@@ -33,8 +33,8 @@ public:
     TableStyle();
     ~TableStyle();
 
-    rtl::OUString&  getStyleId(){ return maStyleId; }
-    rtl::OUString&  getStyleName() { return maStyleName; }
+    OUString&  getStyleId(){ return maStyleId; }
+    OUString&  getStyleName() { return maStyleName; }
 
     ::oox::drawingml::ShapeStyleRef&        getBackgroundFillStyleRef(){ return maFillStyleRef; }
 
@@ -56,8 +56,8 @@ public:
 
 private:
 
-    rtl::OUString           maStyleId;
-    rtl::OUString           maStyleName;
+    OUString           maStyleId;
+    OUString           maStyleName;
 
     ::oox::drawingml::ShapeStyleRef maFillStyleRef;
 

@@ -49,7 +49,7 @@ m_xMetaData.clear();
     OFileCatalog_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OFileCatalog::buildName(const Reference< XRow >& _xRow)
+OUString OFileCatalog::buildName(const Reference< XRow >& _xRow)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::buildName" );
     return _xRow->getString(3);
@@ -59,9 +59,9 @@ void OFileCatalog::refreshTables()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OFileCatalog::refreshTables" );
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes;
+    Sequence< OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString("%"),::rtl::OUString("%"),aTypes);
+        OUString("%"),OUString("%"),aTypes);
     fillNames(xResult,aVector);
 
     if(m_pTables)

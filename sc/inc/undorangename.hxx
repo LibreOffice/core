@@ -42,8 +42,8 @@ class ScUndoAllRangeNames : public ScSimpleUndo
 {
 public:
     ScUndoAllRangeNames(ScDocShell* pDocSh,
-                        const std::map<rtl::OUString, ScRangeName*>& rOldNames,
-                        const boost::ptr_map<rtl::OUString, ScRangeName>& rNewNames);
+                        const std::map<OUString, ScRangeName*>& rOldNames,
+                        const boost::ptr_map<OUString, ScRangeName>& rNewNames);
 
     virtual ~ScUndoAllRangeNames();
 
@@ -51,14 +51,14 @@ public:
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
-    void DoChange(const boost::ptr_map<rtl::OUString, ScRangeName>& rNames);
+    void DoChange(const boost::ptr_map<OUString, ScRangeName>& rNames);
 
 private:
-    boost::ptr_map<rtl::OUString, ScRangeName> maOldNames;
-    boost::ptr_map<rtl::OUString, ScRangeName> maNewNames;
+    boost::ptr_map<OUString, ScRangeName> maOldNames;
+    boost::ptr_map<OUString, ScRangeName> maNewNames;
 };
 
 class ScUndoAddRangeData : public ScSimpleUndo
@@ -73,7 +73,7 @@ public:
     virtual void Redo();
     virtual void Repeat(SfxRepeatTarget& rTarget);
     virtual sal_Bool CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual rtl::OUString GetComment() const;
+    virtual OUString GetComment() const;
 
 private:
     ScRangeData* mpRangeData;

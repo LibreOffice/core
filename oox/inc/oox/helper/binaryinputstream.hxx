@@ -157,7 +157,7 @@ public:
 
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
-    ::rtl::OUString     readNulUnicodeArray();
+    OUString     readNulUnicodeArray();
 
     /** Reads a byte character array and returns the string.
 
@@ -168,7 +168,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars = false );
+    OString      readCharArray( sal_Int32 nChars, bool bAllowNulChars = false );
 
     /** Reads a byte character array and returns a Unicode string.
 
@@ -182,7 +182,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
+    OUString     readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars = false );
 
     /** Reads a Unicode character array and returns the string.
 
@@ -193,7 +193,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars = false );
+    OUString     readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars = false );
 
     /** Reads a Unicode character array (may be compressed) and returns the
         string.
@@ -209,7 +209,7 @@ public:
             True = NUL characters are inserted into the imported string.
             False = NUL characters are replaced by question marks (default).
      */
-    ::rtl::OUString     readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars = false );
+    OUString     readCompressedUnicodeArray( sal_Int32 nChars, bool bCompressed, bool bAllowNulChars = false );
 
     /** Copies nBytes bytes from the current position to the passed output stream.
      */

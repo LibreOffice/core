@@ -44,7 +44,7 @@ namespace hierarchy_ucp
 
 struct ResultListEntry
 {
-    rtl::OUString                             aId;
+    OUString                             aId;
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
@@ -131,14 +131,14 @@ HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 
 //=========================================================================
 // virtual
-rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
+OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
-        rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
+        OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
         {
             // Already cached.
@@ -148,18 +148,18 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
 
     if ( getResult( nIndex ) )
     {
-        rtl::OUString aId
+        OUString aId
             = m_pImpl->m_xContent->getIdentifier()->getContentIdentifier();
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString("/");
+            aId += OUString("/");
 
         aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
     }
-    return rtl::OUString();
+    return OUString();
 }
 
 //=========================================================================
@@ -180,7 +180,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    rtl::OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId

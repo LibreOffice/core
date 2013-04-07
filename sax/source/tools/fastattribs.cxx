@@ -21,8 +21,6 @@
 
 #include <sax/fastattribs.hxx>
 
-using ::rtl::OUString;
-using ::rtl::OString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml;
 using namespace ::com::sun::star::xml::sax;

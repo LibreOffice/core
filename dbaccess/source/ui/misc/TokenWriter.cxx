@@ -405,11 +405,11 @@ sal_Bool ORTFImportExport::Write()
         m_xObject->getPropertyValue(PROPERTY_TEXTCOLOR) >>= nColor;
     ::Color aColor(nColor);
 
-    rtl::OString aFonts(rtl::OUStringToOString(m_aFont.Name, eDestEnc));
+    OString aFonts(OUStringToOString(m_aFont.Name, eDestEnc));
     if (aFonts.isEmpty())
     {
-        rtl::OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
-        aFonts = rtl::OUStringToOString(aName, eDestEnc);
+        OUString aName = Application::GetSettings().GetStyleSettings().GetAppFont().GetName();
+        aFonts = OUStringToOString(aName, eDestEnc);
     }
 
     (*m_pStream)    << "{\\fonttbl";
@@ -447,8 +447,8 @@ sal_Bool ORTFImportExport::Write()
     {
         Reference<XColumnsSupplier> xColSup(m_xObject,UNO_QUERY);
         Reference<XNameAccess> xColumns = xColSup->getColumns();
-        Sequence< ::rtl::OUString> aNames(xColumns->getElementNames());
-        const ::rtl::OUString* pIter = aNames.getConstArray();
+        Sequence< OUString> aNames(xColumns->getElementNames());
+        const OUString* pIter = aNames.getConstArray();
 
         sal_Int32 nCount = aNames.getLength();
         sal_Bool bUseResultMetaData = sal_False;
@@ -470,12 +470,12 @@ sal_Bool ORTFImportExport::Write()
         (*m_pStream) << aTRRH;
 
 
-        ::rtl::OString* pHorzChar = new ::rtl::OString[nCount];
+        OString* pHorzChar = new OString[nCount];
 
         for ( sal_Int32 i=1; i <= nCount; ++i )
         {
             sal_Int32 nAlign = 0;
-            ::rtl::OUString sColumnName;
+            OUString sColumnName;
             if ( bUseResultMetaData )
                 sColumnName = m_xResultSetMetaData->getColumnName(i);
             else
@@ -563,7 +563,7 @@ sal_Bool ORTFImportExport::Write()
     return ((*m_pStream).GetError() == SVSTREAM_OK);
 }
 // -----------------------------------------------------------------------------
-void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
+void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
 {
     if(!m_pRowMarker || m_pRowMarker[kk] == k)
     {
@@ -607,7 +607,7 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
             {
                 Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                 dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
-                ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
+                OUString sValue = aFormatedValue.getFormattedValue();
                 if ( !sValue.isEmpty() )
                     RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
             }
@@ -749,7 +749,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     (*m_pStream) << sMyBegComment; OUT_LF();
-    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << ::rtl::OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() << '\"';
+    (*m_pStream) << OOO_STRING_SVTOOLS_HTML_body " { " << sFontFamily << '"' << OUStringToOString(m_aFont.Name, osl_getThreadTextEncoding()).getStr() << '\"';
         // TODO : think about the encoding of the font name
     (*m_pStream) << "; " << sFontSize;
     m_pStream->WriteNumber(static_cast<sal_Int32>(m_aFont.Height));
@@ -781,13 +781,13 @@ void OHTMLImportExport::WriteBody()
 void OHTMLImportExport::WriteTables()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteTables" );
-    ::rtl::OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
+    OString aStrOut  = OOO_STRING_SVTOOLS_HTML_table;
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_frame;
     aStrOut = aStrOut + "=";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_TF_void;
 
-    Sequence< ::rtl::OUString> aNames;
+    Sequence< OUString> aNames;
     Reference<XNameAccess> xColumns;
     sal_Bool bUseResultMetaData = sal_False;
     if(m_xObject.is())
@@ -812,11 +812,11 @@ void OHTMLImportExport::WriteTables()
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cellspacing;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + ::rtl::OString::valueOf((sal_Int32)nCellSpacing);
+    aStrOut = aStrOut + OString::valueOf((sal_Int32)nCellSpacing);
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_cols;
     aStrOut = aStrOut + "=";
-    aStrOut = aStrOut + ::rtl::OString::valueOf(aNames.getLength());
+    aStrOut = aStrOut + OString::valueOf(aNames.getLength());
     aStrOut = aStrOut + " ";
     aStrOut = aStrOut + OOO_STRING_SVTOOLS_HTML_O_border;
     aStrOut = aStrOut + "=1";
@@ -829,7 +829,7 @@ void OHTMLImportExport::WriteTables()
     TAG_ON( OOO_STRING_SVTOOLS_HTML_caption );
     TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
 
-    (*m_pStream)    << ::rtl::OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr();
+    (*m_pStream)    << OUStringToOString(m_sName, osl_getThreadTextEncoding()).getStr();
         // TODO : think about the encoding of the name
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_bold );
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_caption );
@@ -856,8 +856,8 @@ void OHTMLImportExport::WriteTables()
         m_xObject->getPropertyValue(PROPERTY_ROW_HEIGHT) >>= nHeight;
 
         // 1. writing the column description
-        const ::rtl::OUString* pIter = aNames.getConstArray();
-        const ::rtl::OUString* pEnd = pIter + aNames.getLength();
+        const OUString* pIter = aNames.getConstArray();
+        const OUString* pEnd = pIter + aNames.getLength();
 
         for( sal_Int32 i=0;pIter != pEnd; ++pIter,++i )
         {
@@ -916,7 +916,7 @@ void OHTMLImportExport::WriteTables()
                     {
                         Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                         dbtools::FormattedColumnValue aFormatedValue(m_xContext,xRowSet,xColumn);
-                        ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
+                        OUString sValue = aFormatedValue.getFormattedValue();
                         if (!sValue.isEmpty())
                         {
                             aValue = sValue;
@@ -955,7 +955,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
                                    const String& rValue,const char* pHtmlTag)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteCell" );
-    ::rtl::OString aStrTD = pHtmlTag;
+    OString aStrTD = pHtmlTag;
 
     nWidthPixel  = nWidthPixel  ? nWidthPixel   : 86;
     nHeightPixel = nHeightPixel ? nHeightPixel  : 17;
@@ -966,12 +966,12 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_width;
     aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + ::rtl::OString::valueOf((sal_Int32)nWidthPixel);
+    aStrTD = aStrTD + OString::valueOf((sal_Int32)nWidthPixel);
     // line height
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_height;
     aStrTD = aStrTD + "=";
-    aStrTD = aStrTD + ::rtl::OString::valueOf((sal_Int32)nHeightPixel);
+    aStrTD = aStrTD + OString::valueOf((sal_Int32)nHeightPixel);
 
     aStrTD = aStrTD + " ";
     aStrTD = aStrTD + OOO_STRING_SVTOOLS_HTML_O_align;
@@ -1034,13 +1034,13 @@ void OHTMLImportExport::FontOn()
 #endif
 
     // <FONT FACE="xxx">
-    ::rtl::OString aStrOut  = "<";
+    OString aStrOut  = "<";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_font;
     aStrOut  = aStrOut + " ";
     aStrOut  = aStrOut + OOO_STRING_SVTOOLS_HTML_O_face;
     aStrOut  = aStrOut + "=";
     aStrOut  = aStrOut + "\"";
-    aStrOut  = aStrOut + ::rtl::OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding());
+    aStrOut  = aStrOut + OUStringToOString(m_aFont.Name,osl_getThreadTextEncoding());
         // TODO : think about the encoding of the font name
     aStrOut  = aStrOut + "\"";
     aStrOut  = aStrOut + " ";

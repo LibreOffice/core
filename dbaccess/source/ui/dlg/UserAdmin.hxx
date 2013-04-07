@@ -52,7 +52,7 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aUserNames;
+    ::com::sun::star::uno::Sequence< OUString>                               m_aUserNames;
 
     String              m_UserName;
 

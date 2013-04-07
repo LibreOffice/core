@@ -37,15 +37,15 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
 {
-    ::rtl::OUString sFile = m_pTable->getConnection()->getURL();
+    OUString sFile = m_pTable->getConnection()->getURL();
     sFile += OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DELIMITER);
     sFile += _rName;
-    sFile += ::rtl::OUString(".ndx");
+    sFile += OUString(".ndx");
     if ( !UCBContentHelper::Exists(sFile) )
     {
-        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_FILE,
                 "$filename$", sFile
             ) );
@@ -70,7 +70,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const ::rtl::OUString& _rName)
     }
     else
     {
-        const ::rtl::OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pTable->getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COULD_NOT_LOAD_FILE,
                 "$filename$", sFile
              ) );
@@ -91,7 +91,7 @@ Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType ODbaseIndexes::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
     if(xTunnel.is())
@@ -105,7 +105,7 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const ::rtl::OUString& _rForName,
 }
 // -------------------------------------------------------------------------
 // XDrop
-void ODbaseIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
+void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
     if ( xTunnel.is() )

@@ -32,7 +32,7 @@ typedef ScVbaCondition< ov::excel::XFormatCondition >  ScVbaFormatCondition_BASE
 class ScVbaFormatCondition : public ScVbaFormatCondition_BASE
 {
 protected:
-    rtl::OUString msStyleName;
+    OUString msStyleName;
     css::uno::Reference< css::sheet::XSheetConditionalEntry > mxSheetConditionalEntry;
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
     css::uno::Reference< ov::excel::XFormatConditions> moFormatConditions;
@@ -56,8 +56,8 @@ public:
     virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif
 

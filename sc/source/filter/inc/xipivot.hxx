@@ -77,7 +77,7 @@ public:
     // general field/item access ----------------------------------------------
 
     /** Returns the name of the field, uses the passed visible name if supported. */
-    const rtl::OUString& GetFieldName( const ScfStringVec& rVisNames ) const;
+    const OUString& GetFieldName( const ScfStringVec& rVisNames ) const;
 
     /** Returns the base field if this is a grouping field. */
     const XclImpPCField* GetGroupBaseField() const;
@@ -158,7 +158,7 @@ public:
     /** Returns the data source range read from the DCONREF record. */
     inline const ScRange& GetSourceRange() const { return maSrcRange; }
 
-    const ::rtl::OUString& GetSourceRangeName() const { return maSrcRangeName; }
+    const OUString& GetSourceRangeName() const { return maSrcRangeName; }
 
     /** Returns the number of pivot cache fields. */
     sal_uInt16          GetFieldCount() const;
@@ -193,7 +193,7 @@ private:
     ScRange             maSrcRange;         /// Source range in the spreadsheet.
     String              maUrl;              /// URL of the source data.
     String              maTabName;          /// Sheet name of the source data.
-    ::rtl::OUString     maSrcRangeName;     /// Name of the source data range.
+    OUString     maSrcRangeName;     /// Name of the source data range.
     sal_uInt16          mnStrmId;           /// Pivot cache stream identifier.
     sal_uInt16          mnSrcType;          /// Source data type.
     bool                mbSelfRef;          /// true = Source data from own document.
@@ -215,7 +215,7 @@ public:
     explicit            XclImpPTItem( const XclImpPCField* pCacheField );
 
     /** Returns the internal name of the item or 0, if no name could be found. */
-    const rtl::OUString* GetItemName() const;
+    const OUString* GetItemName() const;
 
     /** Reads an SXVI record containing data of this item. */
     void                ReadSxvi( XclImpStream& rStrm );
@@ -242,14 +242,14 @@ public:
     /** Returns the corresponding pivot cache field of this field. */
     const XclImpPCField* GetCacheField() const;
     /** Returns the name of this field that is used to create the Calc dimensions. */
-    rtl::OUString        GetFieldName() const;
+    OUString        GetFieldName() const;
     /** Returns the internally set visible name of this field. */
-    rtl::OUString        GetVisFieldName() const;
+    OUString        GetVisFieldName() const;
 
     /** Returns the specified item. */
     const XclImpPTItem* GetItem( sal_uInt16 nItemIdx ) const;
     /** Returns the internal name of the specified item. */
-    const rtl::OUString* GetItemName( sal_uInt16 nItemIdx ) const;
+    const OUString* GetItemName( sal_uInt16 nItemIdx ) const;
 
     /** Returns the flags of the axes this field is part of. */
     inline sal_uInt16   GetAxes() const { return maFieldInfo.mnAxes; }
@@ -326,7 +326,7 @@ public:
     const String&       GetFieldName( sal_uInt16 nFieldIdx ) const;
 
     const XclImpPTField* GetDataField( sal_uInt16 nDataFieldIdx ) const;
-    rtl::OUString GetDataFieldName( sal_uInt16 nDataFieldIdx ) const;
+    OUString GetDataFieldName( sal_uInt16 nDataFieldIdx ) const;
 
     // records ----------------------------------------------------------------
 

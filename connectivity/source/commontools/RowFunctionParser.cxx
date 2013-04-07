@@ -177,7 +177,7 @@ public:
     }
     void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
     {
-        rtl::OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+        OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
         mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( new ORowSetValueDecorator( sVal ) ) ) );
     }
 };
@@ -199,7 +199,7 @@ public:
     }
     void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
     {
-        rtl::OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+        OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
         (void)sVal;
     }
 };
@@ -443,13 +443,13 @@ const ParserContextSharedPtr& getParserContext()
 #endif
 }
 
-ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& _sFunction)
+ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& _sFunction)
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space
     // etc. to ASCII space here)
-    const ::rtl::OString& rAsciiFunction(
-        rtl::OUStringToOString( _sFunction, RTL_TEXTENCODING_ASCII_US ) );
+    const OString& rAsciiFunction(
+        OUStringToOString( _sFunction, RTL_TEXTENCODING_ASCII_US ) );
 
     StringIteratorT aStart( rAsciiFunction.getStr() );
     StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );

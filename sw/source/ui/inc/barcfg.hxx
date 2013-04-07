@@ -24,14 +24,14 @@ class SwToolbarConfigItem : public utl::ConfigItem
 {
     sal_Int32            aTbxIdArray[5];
 
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
 public:
     SwToolbarConfigItem( bool bWeb );
     ~SwToolbarConfigItem();
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
     void        SetTopToolbar( sal_Int32 nSelType, sal_Int32 nBarId );
 };

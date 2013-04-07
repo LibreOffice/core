@@ -36,8 +36,6 @@
 
 using namespace ::com::sun::star;
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
@@ -94,13 +92,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     const sal_uInt32 nManLength = rManList.getLength();
 
     // find the mediatype of the document if any
-    ::rtl::OUString aDocMediaType;
-    ::rtl::OUString aDocVersion;
+    OUString aDocMediaType;
+    OUString aDocVersion;
     for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
     {
-        ::rtl::OUString aMediaType;
-        ::rtl::OUString aPath;
-        ::rtl::OUString aVersion;
+        OUString aMediaType;
+        OUString aPath;
+        OUString aVersion;
 
         const beans::PropertyValue *pValue = pSequence[nInd].getConstArray();
         for (sal_uInt32 j = 0, nNum = pSequence[nInd].getLength(); j < nNum; j++, pValue++)
@@ -192,7 +190,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     {
         ::comphelper::AttributeList *pAttrList = new ::comphelper::AttributeList;
         const beans::PropertyValue *pValue = pSequence[i].getConstArray();
-        ::rtl::OUString aString;
+        OUString aString;
         const uno::Any *pVector = NULL, *pSalt = NULL, *pIterationCount = NULL, *pDigest = NULL, *pDigestAlg = NULL, *pEncryptAlg = NULL, *pStartKeyAlg = NULL, *pDerivedKeySize = NULL;
         for (sal_uInt32 j = 0, nNum = pSequence[i].getLength(); j < nNum; j++, pValue++)
         {
@@ -217,7 +215,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 sal_Int64 nSize = 0;
                 pValue->Value >>= nSize;
-                ::rtl::OUStringBuffer aBuffer;
+                OUStringBuffer aBuffer;
                 aBuffer.append ( nSize );
                 pAttrList->AddAttribute ( sSizeAttribute, sCdataAttribute, aBuffer.makeStringAndClear() );
             }
@@ -247,13 +245,13 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             // ==== Encryption Data
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
-            ::rtl::OUStringBuffer aBuffer;
+            OUStringBuffer aBuffer;
             uno::Sequence < sal_Int8 > aSequence;
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
             // ==== Digest
-            ::rtl::OUString sChecksumType;
+            OUString sChecksumType;
             sal_Int32 nDigestAlgID = 0;
             *pDigestAlg >>= nDigestAlgID;
             if ( nDigestAlgID == xml::crypto::DigestID::SHA256_1K )
@@ -279,7 +277,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             *pEncryptAlg >>= nEncAlgID;
             *pDerivedKeySize >>= nDerivedKeySize;
 
-            ::rtl::OUString sEncAlgName;
+            OUString sEncAlgName;
             if ( nEncAlgID == xml::crypto::CipherID::AES_CBC_W3C_PADDING )
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
@@ -340,8 +338,8 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 pNewAttrList = new ::comphelper::AttributeList;
                 xNewAttrList = pNewAttrList;
 
-                ::rtl::OUString sStartKeyAlg;
-                ::rtl::OUString sStartKeySize;
+                OUString sStartKeyAlg;
+                OUString sStartKeySize;
                 sal_Int32 nStartKeyAlgID = 0;
                 *pStartKeyAlg >>= nStartKeyAlgID;
                 if ( nStartKeyAlgID == xml::crypto::DigestID::SHA256 )

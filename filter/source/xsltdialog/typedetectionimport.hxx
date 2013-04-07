@@ -48,11 +48,11 @@ enum ImportState
     e_Unknown
 };
 
-DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, PropertyMap );
+DECLARE_STL_USTRINGACCESS_MAP( OUString, PropertyMap );
 
 struct Node
 {
-    ::rtl::OUString maName;
+    OUString maName;
     PropertyMap maPropertyMap;
 };
 
@@ -70,15 +70,15 @@ public:
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL endDocument(  )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
+    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL endElement( const ::rtl::OUString& aName )
+    virtual void SAL_CALL endElement( const OUString& aName )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL characters( const ::rtl::OUString& aChars )
+    virtual void SAL_CALL characters( const OUString& aChars )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces )
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData )
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
         throw(::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
@@ -86,7 +86,7 @@ public:
 private:
     void fillFilterVector(  XMLFilterVector& rFilters );
     filter_info_impl* createFilterForNode( Node * pNode );
-    Node* findTypeNode( const ::rtl::OUString& rType );
+    Node* findTypeNode( const OUString& rType );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
@@ -96,24 +96,24 @@ private:
     NodeVector maFilterNodes;
     NodeVector maTypeNodes;
 
-    ::rtl::OUString maValue;
-    ::rtl::OUString maNodeName;
-    ::rtl::OUString maPropertyName;
+    OUString maValue;
+    OUString maNodeName;
+    OUString maPropertyName;
 
-    const ::rtl::OUString sRootNode;
-    const ::rtl::OUString sNode;
-    const ::rtl::OUString sName;
-    const ::rtl::OUString sProp;
-    const ::rtl::OUString sValue;
-    const ::rtl::OUString sUIName;
-    const ::rtl::OUString sData;
-    const ::rtl::OUString sFilters;
-    const ::rtl::OUString sTypes;
-    const ::rtl::OUString sFilterAdaptorService;
-    const ::rtl::OUString sXSLTFilterService;
+    const OUString sRootNode;
+    const OUString sNode;
+    const OUString sName;
+    const OUString sProp;
+    const OUString sValue;
+    const OUString sUIName;
+    const OUString sData;
+    const OUString sFilters;
+    const OUString sTypes;
+    const OUString sFilterAdaptorService;
+    const OUString sXSLTFilterService;
 
-    const ::rtl::OUString sCdataAttribute;
-    const ::rtl::OUString sWhiteSpace;
+    const OUString sCdataAttribute;
+    const OUString sWhiteSpace;
 
 };
 #endif

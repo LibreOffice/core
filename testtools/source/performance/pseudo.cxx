@@ -26,7 +26,6 @@
 #include <uno/mapping.h>
 #include <uno/lbnames.h>
 
-using ::rtl::OUString;
 
 namespace pseudo_uno
 {

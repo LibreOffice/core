@@ -98,13 +98,13 @@ extern "C" int LinkSequence_chardata_callback(
     {
         case STATE_DST:
             pCtx->pLink->Destination
-                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+                = OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             pCtx->hasDestination = true;
             break;
 
         case STATE_SRC:
             pCtx->pLink->Source
-                = rtl::OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
+                = OUString( buf, len, RTL_TEXTENCODING_ASCII_US );
             pCtx->hasSource = true;
             break;
     }
@@ -135,7 +135,7 @@ extern "C" int LinkSequence_endelement_callback(
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool LinkSequence::createFromXML( const rtl::OString & rInData,
+bool LinkSequence::createFromXML( const OString & rInData,
                                   uno::Sequence< ucb::Link > & rOutData )
 {
     const sal_Int32 TOKEN_LENGTH = 7; // </link>
@@ -191,16 +191,16 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
 //////////////////////////////////////////////////////////////////////////
 // static
 bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
-                          rtl::OUString & rOutData )
+                          OUString & rOutData )
 {
     // <link><src>value</src><dst>value</dst></link><link><src>....
 
     sal_Int32 nCount = rInData.getLength();
     if ( nCount )
     {
-        rtl::OUString aPre( "<link><src>" );
-        rtl::OUString aMid( "</src><dst>" );
-        rtl::OUString aEnd( "</dst></link>" );
+        OUString aPre( "<link><src>" );
+        OUString aMid( "</src><dst>" );
+        OUString aEnd( "</dst></link>" );
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {

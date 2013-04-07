@@ -59,7 +59,7 @@ public:
             The set of URLs may be empty.  The result is then the same as
             returned by ResourceId() default constructor.
     */
-    ResourceId (const ::std::vector<rtl::OUString>& rsResourceURLs);
+    ResourceId (const ::std::vector<OUString>& rsResourceURLs);
 
     /** Create a new resource id that has an empty anchor.
         @param rsResourceURL
@@ -68,7 +68,7 @@ public:
             had been called.
     */
     ResourceId (
-        const ::rtl::OUString& rsResourceURL);
+        const OUString& rsResourceURL);
 
     /** Create a new resource id for the given resource type and an anchor
         that is specified by a single URL.  This constructor can be used for
@@ -79,8 +79,8 @@ public:
             The single URL of the anchor.
     */
     ResourceId (
-        const ::rtl::OUString& rsResourceURL,
-        const ::rtl::OUString& rsAnchorURL);
+        const OUString& rsResourceURL,
+        const OUString& rsAnchorURL);
 
     /** Create a new resource id for the specified resource type and the
         given list of anchor URLs.
@@ -90,8 +90,8 @@ public:
             The possibly empty list of anchor URLs.
     */
     ResourceId (
-        const ::rtl::OUString& rsResourceURL,
-        const ::std::vector<rtl::OUString>& rAnchorURLs);
+        const OUString& rsResourceURL,
+        const ::std::vector<OUString>& rAnchorURLs);
 
     /** Create a new resource id with an anchor that consists of a sequence
         of URLs that is extended by a further URL.
@@ -103,20 +103,20 @@ public:
             An anchor as it is returned by XResourceId::getAnchorURLs().
     */
     ResourceId (
-        const ::rtl::OUString& rsResourceURL,
-        const ::rtl::OUString& rsFirstAnchorURL,
-        const css::uno::Sequence<rtl::OUString>& rAnchorURLs);
+        const OUString& rsResourceURL,
+        const OUString& rsFirstAnchorURL,
+        const css::uno::Sequence<OUString>& rAnchorURLs);
 
     virtual ~ResourceId (void);
 
     /** Return the list of URLs of both the resource URL and the anchor
         URLs.
     */
-    const ::std::vector<rtl::OUString>& GetResourceURLs (void) const;
+    const ::std::vector<OUString>& GetResourceURLs (void) const;
 
     //===== XResourceId =======================================================
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getResourceURL (void)
         throw(css::uno::RuntimeException);
 
@@ -133,11 +133,11 @@ public:
         getAnchor (void)
         throw (css::uno::RuntimeException);
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL
+    virtual css::uno::Sequence<OUString> SAL_CALL
         getAnchorURLs (void)
         throw (css::uno::RuntimeException);
 
-    virtual ::rtl::OUString SAL_CALL
+    virtual OUString SAL_CALL
         getResourceTypePrefix (void)
         throw (css::uno::RuntimeException);
 
@@ -155,7 +155,7 @@ public:
 
     virtual sal_Bool SAL_CALL
         isBoundToURL (
-            const ::rtl::OUString& rsAnchorURL,
+            const OUString& rsAnchorURL,
             css::drawing::framework::AnchorBindingMode eMode)
         throw (css::uno::RuntimeException);
 
@@ -174,7 +174,7 @@ private:
     /** The set of URLs that consist of the resource URL at index 0 and the
         anchor URLs and indices 1 and above.
     */
-    ::std::vector<rtl::OUString> maResourceURLs;
+    ::std::vector<OUString> maResourceURLs;
 
     ::boost::scoped_ptr<css::util::URL> mpURL;
 
@@ -208,8 +208,8 @@ private:
             it can be bound indirectly, too.
     */
     bool IsBoundToAnchor (
-        const rtl::OUString* psFirstAnchorURL,
-        const css::uno::Sequence<rtl::OUString>* paAnchorURLs,
+        const OUString* psFirstAnchorURL,
+        const css::uno::Sequence<OUString>* paAnchorURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
     /** Return whether the called ResourceId object is bound to the anchor
@@ -222,7 +222,7 @@ private:
             it can be bound indirectly, too.
     */
     bool IsBoundToAnchor (
-        const ::std::vector<rtl::OUString>& rResourceURLs,
+        const ::std::vector<OUString>& rResourceURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
     void ParseResourceURL (void);

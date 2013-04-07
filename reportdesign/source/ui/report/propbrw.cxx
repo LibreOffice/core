@@ -72,8 +72,8 @@ namespace
 {
     static bool lcl_shouldEnableHelpSection( const Reference< XComponentContext >& _rxContext )
     {
-        const ::rtl::OUString sConfigName( "/org.openoffice.Office.ReportDesign/PropertyBrowser/" );
-        const ::rtl::OUString sPropertyName( "DirectHelp" );
+        const OUString sConfigName( "/org.openoffice.Office.ReportDesign/PropertyBrowser/" );
+        const OUString sPropertyName( "DirectHelp" );
 
         ::utl::OConfigurationTreeRoot aConfiguration(
             ::utl::OConfigurationTreeRoot::createWithComponentContext( _rxContext, sConfigName ) );
@@ -107,11 +107,11 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString("com.sun.star.frame.Frame")), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(OUString("com.sun.star.frame.Frame")), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString("report property browser"));  // change name!
+            m_xMeAsFrame->setName(OUString("report property browser"));  // change name!
         }
     }
     catch (Exception&)
@@ -129,9 +129,9 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString( "ContextDocument" ), makeAny( m_pDesignView->getController().getModel() )),
-                ::cppu::ContextEntry_Init( ::rtl::OUString( "DialogParentWindow" ), makeAny( VCLUnoHelper::GetInterface ( this ) )),
-                ::cppu::ContextEntry_Init( ::rtl::OUString( "ActiveConnection" ), makeAny( m_pDesignView->getController().getConnection() ) ),
+                ::cppu::ContextEntry_Init( OUString( "ContextDocument" ), makeAny( m_pDesignView->getController().getModel() )),
+                ::cppu::ContextEntry_Init( OUString( "DialogParentWindow" ), makeAny( VCLUnoHelper::GetInterface ( this ) )),
+                ::cppu::ContextEntry_Init( OUString( "ActiveConnection" ), makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
@@ -145,7 +145,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             m_xBrowserController = inspection::ObjectInspector::createWithModel(m_xInspectorContext, xInspectorModel);
             if ( !m_xBrowserController.is() )
             {
-                const ::rtl::OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
+                const OUString sServiceName( "com.sun.star.inspection.ObjectInspector" );
                 ShowServiceNotAvailableError(pParent, sServiceName, sal_True);
             }
             else
@@ -199,9 +199,9 @@ PropBrw::~PropBrw()
         uno::Reference<container::XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
         if ( xName.is() )
         {
-            const ::rtl::OUString pProps[] = { ::rtl::OUString( "ContextDocument" )
-                                            ,  ::rtl::OUString( "DialogParentWindow" )
-                                            , ::rtl::OUString( "ActiveConnection" )};
+            const OUString pProps[] = { OUString( "ContextDocument" )
+                                            ,  OUString( "DialogParentWindow" )
+                                            , OUString( "ActiveConnection" )};
             for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
                 xName->removeByName(pProps[i]);
         }
@@ -214,7 +214,7 @@ PropBrw::~PropBrw()
     DBG_DTOR( rpt_PropBrw,NULL);
 }
 // -----------------------------------------------------------------------------
-void PropBrw::setCurrentPage(const ::rtl::OUString& _sLastActivePage)
+void PropBrw::setCurrentPage(const OUString& _sLastActivePage)
 {
     m_sLastActivePage = _sLastActivePage;
 }
@@ -236,9 +236,9 @@ void PropBrw::implDetachController()
     m_xBrowserComponentWindow.clear();
 }
 //-----------------------------------------------------------------------
-::rtl::OUString PropBrw::getCurrentPage() const
+OUString PropBrw::getCurrentPage() const
 {
-    ::rtl::OUString sCurrentPage;
+    OUString sCurrentPage;
     try
     {
         if ( m_xBrowserController.is() )
@@ -336,9 +336,9 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )
+OUString PropBrw::GetHeadlineName( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )
 {
-    ::rtl::OUString aName;
+    OUString aName;
     if ( !_aObjects.getLength() )
     {
         aName = String(ModuleRes(RID_STR_BRWTITLE_NO_PROPERTIES));
@@ -348,7 +348,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
-        Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(::rtl::OUString("ReportComponent")), UNO_QUERY );
+        Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(OUString("ReportComponent")), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
             sal_uInt16 nResId = 0;
@@ -419,9 +419,9 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
                                                               ,const uno::Reference< uno::XInterface>& _xReportComponent)
 {
     uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast<Reference<XInterface> * >(NULL)));
-    xNameCont->insertByName(::rtl::OUString("FormComponent"),uno::makeAny(_xFormComponent));
-    xNameCont->insertByName(::rtl::OUString("ReportComponent"),uno::makeAny(_xReportComponent));
-    xNameCont->insertByName(::rtl::OUString("RowSet")
+    xNameCont->insertByName(OUString("FormComponent"),uno::makeAny(_xFormComponent));
+    xNameCont->insertByName(OUString("ReportComponent"),uno::makeAny(_xReportComponent));
+    xNameCont->insertByName(OUString("RowSet")
             ,uno::makeAny(uno::Reference< uno::XInterface>(m_pDesignView->getController().getRowSet())));
 
     return xNameCont.get();
@@ -534,7 +534,7 @@ void PropBrw::Update( OSectionView* pNewView )
             uno::Reference< uno::XInterface> xTemp(m_pView->getReportSection()->getSection());
             m_xLastSection = xTemp;
             uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(::getCppuType(static_cast<Reference<XInterface> * >(NULL)));
-            xNameCont->insertByName(::rtl::OUString("ReportComponent"),uno::makeAny(xTemp));
+            xNameCont->insertByName(OUString("ReportComponent"),uno::makeAny(xTemp));
             xTemp = xNameCont;
 
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );

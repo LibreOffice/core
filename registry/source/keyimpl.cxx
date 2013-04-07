@@ -26,8 +26,6 @@
 #include "rtl/alloc.h"
 #include "rtl/ustrbuf.hxx"
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using namespace store;
 
 namespace { static char const VALUE_PREFIX[] = "$VL_"; }

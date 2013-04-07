@@ -113,7 +113,7 @@ namespace rptui
     class UndoContext
     {
     public:
-        UndoContext( SfxUndoManager& i_undoManager, const ::rtl::OUString& i_undoTitle )
+        UndoContext( SfxUndoManager& i_undoManager, const OUString& i_undoTitle )
             :m_rUndoManager( i_undoManager )
         {
             m_rUndoManager.EnterListAction( i_undoTitle, String() );
@@ -164,7 +164,7 @@ namespace rptui
                             ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();
 
-        virtual rtl::OUString GetComment() const { return m_strComment; }
+        virtual OUString GetComment() const { return m_strComment; }
         virtual void        Undo();
         virtual void        Redo();
     };
@@ -252,7 +252,7 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xObj;
-        ::rtl::OUString                     m_aPropertyName;
+        OUString                     m_aPropertyName;
         ::com::sun::star::uno::Any          m_aNewValue;
         ::com::sun::star::uno::Any          m_aOldValue;
 
@@ -270,7 +270,7 @@ namespace rptui
         virtual void Undo();
         virtual void Redo();
 
-        virtual rtl::OUString GetComment() const;
+        virtual OUString GetComment() const;
     };
 
     //==================================================================

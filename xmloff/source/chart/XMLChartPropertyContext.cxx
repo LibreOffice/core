@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 XMLChartPropertyContext::XMLChartPropertyContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
-    const ::rtl::OUString& rLName,
+    const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     sal_uInt32 nFamily,
     ::std::vector< XMLPropertyState >& rProps,
@@ -44,7 +44,7 @@ XMLChartPropertyContext::~XMLChartPropertyContext()
 
 SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const ::rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList > & xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
     const XMLPropertyState& rProp )

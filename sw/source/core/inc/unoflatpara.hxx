@@ -50,7 +50,7 @@ class SwXFlatParagraph:
     public SwXTextMarkup
 {
 public:
-    SwXFlatParagraph( SwTxtNode& rTxtNode, rtl::OUString aExpandText, const ModelToViewHelper& rConversionMap );
+    SwXFlatParagraph( SwTxtNode& rTxtNode, OUString aExpandText, const ModelToViewHelper& rConversionMap );
     virtual ~SwXFlatParagraph();
 
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
@@ -62,16 +62,16 @@ public:
 
     // text::XTextMarkup:
     virtual css::uno::Reference< css::container::XStringKeyMap > SAL_CALL getMarkupInfoContainer() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const ::rtl::OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL commitTextMarkup(::sal_Int32 nType, const OUString & aIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (css::uno::RuntimeException);
 
     // text::XFlatParagraph:
-    virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isModified() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setChecked(::sal_Int32 nType, ::sal_Bool bVal) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isChecked(::sal_Int32 nType) throw (css::uno::RuntimeException);
     virtual css::lang::Locale SAL_CALL getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::lang::Locale SAL_CALL getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
-    virtual void SAL_CALL changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const ::rtl::OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
+    virtual void SAL_CALL changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual void SAL_CALL changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException);
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() throw (css::uno::RuntimeException);
 
@@ -87,7 +87,7 @@ private:
     SwXFlatParagraph( const SwXFlatParagraph & ); // not defined
     SwXFlatParagraph & operator = ( const SwXFlatParagraph & ); // not defined
 
-    rtl::OUString maExpandText;
+    OUString maExpandText;
 };
 
 /******************************************************************************

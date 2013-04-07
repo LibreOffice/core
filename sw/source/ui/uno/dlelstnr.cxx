@@ -38,7 +38,6 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;

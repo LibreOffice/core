@@ -28,7 +28,7 @@
 #include <set>
 
 class XMLFontAutoStylePool_Impl;
-typedef std::set<rtl::OUString> XMLFontAutoStylePoolNames_Impl;
+typedef std::set<OUString> XMLFontAutoStylePoolNames_Impl;
 class SvXMLExport;
 
 class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public UniRefBase
@@ -50,20 +50,20 @@ public:
     XMLFontAutoStylePool( SvXMLExport& rExport, bool tryToEmbedFonts = false );
     ~XMLFontAutoStylePool();
 
-    ::rtl::OUString Add(
-            const ::rtl::OUString& rFamilyName,
-            const ::rtl::OUString& rStyleName,
+    OUString Add(
+            const OUString& rFamilyName,
+            const OUString& rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc );
 
-    ::rtl::OUString Find(
-            const ::rtl::OUString& rFamilyName,
-            const ::rtl::OUString& rStyleName,
+    OUString Find(
+            const OUString& rFamilyName,
+            const OUString& rStyleName,
             FontFamily nFamily,
             FontPitch nPitch,
             rtl_TextEncoding eEnc )const;
-    ::rtl::OUString Find( const ::rtl::OUString& rInternalName ) const;
+    OUString Find( const OUString& rInternalName ) const;
 
     void exportXML();
 };

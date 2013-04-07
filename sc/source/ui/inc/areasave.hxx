@@ -31,10 +31,10 @@ class ScAreaLink;
 class ScAreaLinkSaver
 {
 private:
-    ::rtl::OUString aFileName;
-    ::rtl::OUString aFilterName;
-    ::rtl::OUString aOptions;
-    ::rtl::OUString aSourceArea;
+    OUString aFileName;
+    OUString aFilterName;
+    OUString aOptions;
+    OUString aSourceArea;
     ScRange aDestArea;
     sal_uLong nRefresh;
 

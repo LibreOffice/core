@@ -77,7 +77,7 @@ XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 {
 }
 
-sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, bool& bIsStandard)
+sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, OUString& sCurrency, bool& bIsStandard)
 {
     XMLNumberFormat aFormat(sEmpty, nNumberFormat, 0);
     XMLNumberFormatSet::iterator aItr(aNumberFormats.find(aFormat));
@@ -103,7 +103,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
 void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExport,
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
-                                const rtl::OUString& rCurrency,
+                                const OUString& rCurrency,
                                 sal_Bool bExportValue)
 {
     sal_Bool bWasSetTypeAttribute = sal_False;
@@ -140,7 +140,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
 
             if (bExportValue)
             {
-                rtl::OUString sValue( ::rtl::math::doubleToUString( rValue,
+                OUString sValue( ::rtl::math::doubleToUString( rValue,
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', sal_True));
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sValue);
@@ -159,7 +159,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             {
                 if ( rXMLExport.SetNullDateOnUnitConverter() )
                 {
-                    rtl::OUStringBuffer sBuffer;
+                    OUStringBuffer sBuffer;
                     rXMLExport.GetMM100UnitConverter().convertDateTime(sBuffer, rValue);
                     rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DATE_VALUE, sBuffer.makeStringAndClear());
                 }
@@ -175,7 +175,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
             }
             if (bExportValue)
             {
-                rtl::OUStringBuffer sBuffer;
+                OUStringBuffer sBuffer;
                 ::sax::Converter::convertDuration(sBuffer, rValue);
                 rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TIME_VALUE, sBuffer.makeStringAndClear());
             }
@@ -203,7 +203,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                     }
                     else
                     {
-                        rtl::OUString sValue( ::rtl::math::doubleToUString(
+                        OUString sValue( ::rtl::math::doubleToUString(
                                     fTempValue,
                                     rtl_math_StringFormat_Automatic,
                                     rtl_math_DecimalPlaces_Max, '.',
@@ -222,7 +222,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
                 bWasSetTypeAttribute = sal_True;
                 if (bExportValue)
                 {
-                    rtl::OUString sValue( ::rtl::math::doubleToUString( rValue,
+                    OUString sValue( ::rtl::math::doubleToUString( rValue,
                                 rtl_math_StringFormat_Automatic,
                                 rtl_math_DecimalPlaces_Max, '.', sal_True));
                     rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, sValue);
@@ -233,7 +233,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
     }
 }
 
-sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& sCurrencySymbol,
+sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& sCurrencySymbol,
     uno::Reference <util::XNumberFormatsSupplier>& xNumberFormatsSupplier)
 {
     if (xNumberFormatsSupplier.is())
@@ -302,14 +302,14 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
 {
     sal_Bool bIsStandard;
     sal_Int16 nTypeKey = GetCellType(nNumberFormat, bIsStandard, rXMLExport.GetNumberFormatsSupplier());
-    rtl::OUString sCurrency;
+    OUString sCurrency;
     if ((nTypeKey & ~util::NumberFormat::DEFINED) == util::NumberFormat::CURRENCY)
         GetCurrencySymbol(nNumberFormat, sCurrency, rXMLExport.GetNumberFormatsSupplier());
     WriteAttributes(rXMLExport, nTypeKey, rValue, sCurrency, bExportValue);
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExport& rXMLExport,
-    const rtl::OUString& rValue, const rtl::OUString& rCharacters,
+    const OUString& rValue, const OUString& rCharacters,
     sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
 {
     if (bExportTypeAttribute)
@@ -318,7 +318,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(SvXMLExpor
         rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_STRING_VALUE, rValue);
 }
 
-sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, rtl::OUString& rCurrencySymbol)
+sal_Bool XMLNumberFormatAttributesExportHelper::GetCurrencySymbol(const sal_Int32 nNumberFormat, OUString& rCurrencySymbol)
 {
     if (!xNumberFormats.is() && pExport && pExport->GetNumberFormatsSupplier().is())
         xNumberFormats.set(pExport->GetNumberFormatsSupplier()->getNumberFormats());
@@ -383,7 +383,7 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
 void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                                 const sal_Int16 nTypeKey,
                                 const double& rValue,
-                                const rtl::OUString& rCurrency,
+                                const OUString& rCurrency,
                                 sal_Bool bExportValue)
 {
     if (!pExport)
@@ -423,7 +423,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
 
             if (bExportValue)
             {
-                rtl::OUString sValue( ::rtl::math::doubleToUString( rValue,
+                OUString sValue( ::rtl::math::doubleToUString( rValue,
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max, '.', sal_True));
                 pExport->AddAttribute(sAttrValue, sValue);
@@ -442,7 +442,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             {
                 if ( pExport->SetNullDateOnUnitConverter() )
                 {
-                    rtl::OUStringBuffer sBuffer;
+                    OUStringBuffer sBuffer;
                     pExport->GetMM100UnitConverter().convertDateTime(sBuffer, rValue);
                     pExport->AddAttribute(sAttrDateValue, sBuffer.makeStringAndClear());
                 }
@@ -458,7 +458,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
             }
             if (bExportValue)
             {
-                rtl::OUStringBuffer sBuffer;
+                OUStringBuffer sBuffer;
                 ::sax::Converter::convertDuration(sBuffer, rValue);
                 pExport->AddAttribute(sAttrTimeValue, sBuffer.makeStringAndClear());
             }
@@ -486,7 +486,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                     }
                     else
                     {
-                        rtl::OUString sValue( ::rtl::math::doubleToUString(
+                        OUString sValue( ::rtl::math::doubleToUString(
                                     fTempValue,
                                     rtl_math_StringFormat_Automatic,
                                     rtl_math_DecimalPlaces_Max, '.',
@@ -505,7 +505,7 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
                 bWasSetTypeAttribute = sal_True;
                 if (bExportValue)
                 {
-                    rtl::OUString sValue( ::rtl::math::doubleToUString( rValue,
+                    OUString sValue( ::rtl::math::doubleToUString( rValue,
                                 rtl_math_StringFormat_Automatic,
                                 rtl_math_DecimalPlaces_Max, '.', sal_True));
                     pExport->AddAttribute(sAttrValue, sValue);
@@ -522,7 +522,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     if (pExport)
     {
         bool bIsStandard;
-        rtl::OUString sCurrency;
+        OUString sCurrency;
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue);
     }
@@ -532,7 +532,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
-    const rtl::OUString& rValue, const rtl::OUString& rCharacters,
+    const OUString& rValue, const OUString& rCharacters,
     sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
 {
     if (pExport)

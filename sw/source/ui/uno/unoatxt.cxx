@@ -52,7 +52,6 @@
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )

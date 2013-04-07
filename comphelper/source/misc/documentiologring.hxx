@@ -37,7 +37,7 @@ class OSimpleLogRing : public ::cppu::WeakImplHelper3< ::com::sun::star::logging
                                                            ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aMessages;
+    ::com::sun::star::uno::Sequence< OUString > m_aMessages;
 
     sal_Bool m_bInitialized;
     sal_Bool m_bFull;
@@ -47,29 +47,29 @@ public:
     OSimpleLogRing();
     virtual ~OSimpleLogRing();
 
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL
             getSupportedServiceNames_static();
 
-    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static OUString SAL_CALL getImplementationName_static();
 
-    static ::rtl::OUString SAL_CALL getSingletonName_static();
+    static OUString SAL_CALL getSingletonName_static();
 
-    static ::rtl::OUString SAL_CALL getServiceName_static();
+    static OUString SAL_CALL getServiceName_static();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         Create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XSimpleLogRing
-    virtual void SAL_CALL logString( const ::rtl::OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getCollectedLog() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL logString( const OUString& aMessage ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getCollectedLog() throw (::com::sun::star::uno::RuntimeException);
 
 // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
 // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 

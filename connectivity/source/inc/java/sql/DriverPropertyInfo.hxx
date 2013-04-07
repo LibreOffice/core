@@ -41,11 +41,11 @@ namespace connectivity
         java_sql_DriverPropertyInfo( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
                 operator ::com::sun::star::sdbc::DriverPropertyInfo();
 
-        ::rtl::OUString name();
-        ::rtl::OUString description();
-        ::rtl::OUString value();
+        OUString name();
+        OUString description();
+        OUString value();
         sal_Bool        required();
-                ::com::sun::star::uno::Sequence< ::rtl::OUString> choices();
+                ::com::sun::star::uno::Sequence< OUString> choices();
     };
 }
 

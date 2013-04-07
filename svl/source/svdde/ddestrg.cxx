@@ -34,7 +34,7 @@ DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p )
 
 // --- DdeString::DdeString() --------------------------------------
 
-DdeString::DdeString( DWORD hDdeInst, const rtl::OUString& r)
+DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
 {
     hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)r.getStr(), CP_WINUNICODE );

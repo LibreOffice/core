@@ -83,7 +83,7 @@ ScUndoCursorAttr::~ScUndoCursorAttr()
     pPool->Remove(*pApplyPattern);
 }
 
-rtl::OUString ScUndoCursorAttr::GetComment() const
+OUString ScUndoCursorAttr::GetComment() const
 {
     //! own text for automatic attribution
 
@@ -181,7 +181,7 @@ ScUndoEnterData::ScUndoEnterData(
 
 ScUndoEnterData::~ScUndoEnterData() {}
 
-rtl::OUString ScUndoEnterData::GetComment() const
+OUString ScUndoEnterData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
 }
@@ -267,7 +267,7 @@ void ScUndoEnterData::Undo()
         {
             aChangeRanges.Append( ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
+        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
     }
 }
 
@@ -306,7 +306,7 @@ void ScUndoEnterData::Redo()
         {
             aChangeRanges.Append(ScRange(maPos.Col(), maPos.Row(), maOldValues[i].mnTab));
         }
-        pModelObj->NotifyChanges( ::rtl::OUString( "cell-change" ), aChangeRanges );
+        pModelObj->NotifyChanges( OUString( "cell-change" ), aChangeRanges );
     }
 }
 
@@ -340,7 +340,7 @@ ScUndoEnterValue::~ScUndoEnterValue()
 {
 }
 
-rtl::OUString ScUndoEnterValue::GetComment() const
+OUString ScUndoEnterValue::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERDATA ); // "Input"
 }
@@ -517,7 +517,7 @@ ScUndoPageBreak::~ScUndoPageBreak()
 {
 }
 
-rtl::OUString ScUndoPageBreak::GetComment() const
+OUString ScUndoPageBreak::GetComment() const
 {
     //"Column break" | "Row break"  "insert" | "delete"
     return String ( bColumn ?
@@ -596,7 +596,7 @@ ScUndoPrintZoom::~ScUndoPrintZoom()
 {
 }
 
-rtl::OUString ScUndoPrintZoom::GetComment() const
+OUString ScUndoPrintZoom::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PRINTSCALE );
 }
@@ -685,7 +685,7 @@ ScUndoThesaurus::~ScUndoThesaurus()
     delete pRedoTObject;
 }
 
-rtl::OUString ScUndoThesaurus::GetComment() const
+OUString ScUndoThesaurus::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_THESAURUS );    // "Thesaurus"
 }
@@ -844,7 +844,7 @@ sal_Bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
     return false;
 }
 
-rtl::OUString ScUndoReplaceNote::GetComment() const
+OUString ScUndoReplaceNote::GetComment() const
 {
     return ScGlobal::GetRscString( maNewData.mpCaption ?
         (maOldData.mpCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
@@ -914,7 +914,7 @@ sal_Bool ScUndoShowHideNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
     return false;
 }
 
-rtl::OUString ScUndoShowHideNote::GetComment() const
+OUString ScUndoShowHideNote::GetComment() const
 {
     return ScGlobal::GetRscString( mbShown ? STR_UNDO_SHOWNOTE : STR_UNDO_HIDENOTE );
 }
@@ -941,7 +941,7 @@ ScUndoDetective::~ScUndoDetective()
     delete pOldList;
 }
 
-rtl::OUString ScUndoDetective::GetComment() const
+OUString ScUndoDetective::GetComment() const
 {
     sal_uInt16 nId = STR_UNDO_DETDELALL;
     if ( !bIsDelete )
@@ -1039,7 +1039,7 @@ ScUndoRangeNames::~ScUndoRangeNames()
     delete pNewRanges;
 }
 
-rtl::OUString ScUndoRangeNames::GetComment() const
+OUString ScUndoRangeNames::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_RANGENAMES );
 }

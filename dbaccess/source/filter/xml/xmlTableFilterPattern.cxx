@@ -29,7 +29,7 @@ DBG_NAME(OXMLTableFilterPattern)
 
 OXMLTableFilterPattern::OXMLTableFilterPattern( SvXMLImport& rImport,
                 sal_uInt16 nPrfx
-                ,const ::rtl::OUString& _sLocalName
+                ,const OUString& _sLocalName
                 ,sal_Bool _bNameFilter
                 ,OXMLTableFilterList& _rParent)
     :SvXMLImportContext( rImport, nPrfx, _sLocalName )
@@ -47,7 +47,7 @@ OXMLTableFilterPattern::~OXMLTableFilterPattern()
     DBG_DTOR(OXMLTableFilterPattern,NULL);
 }
 // -----------------------------------------------------------------------------
-void OXMLTableFilterPattern::Characters( const ::rtl::OUString& rChars )
+void OXMLTableFilterPattern::Characters( const OUString& rChars )
 {
     if ( m_bNameFilter )
         m_rParent.pushTableFilterPattern(rChars);

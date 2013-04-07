@@ -33,7 +33,7 @@ SfxViewShell *SfxViewFactory::CreateInstance(SfxViewFrame *pFrame, SfxViewShell 
 
 String SfxViewFactory::GetLegacyViewName() const
 {
-    ::rtl::OUStringBuffer aViewName;
+    OUStringBuffer aViewName;
     aViewName.appendAscii(RTL_CONSTASCII_STRINGPARAM("view"));
     aViewName.append( sal_Int32( GetOrdinal() ) );
     return aViewName.makeStringAndClear();
@@ -45,7 +45,7 @@ String SfxViewFactory::GetAPIViewName() const
         return m_sViewName;
 
     if ( GetOrdinal() == 0 )
-        return rtl::OUString( "Default" );
+        return OUString( "Default" );
 
     return GetLegacyViewName();
 }
@@ -56,7 +56,7 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC,
                                 sal_uInt16 nOrdinal, const sal_Char* asciiViewName ):
     fnCreate(fnC),
     nOrd(nOrdinal),
-    m_sViewName( rtl::OUString::createFromAscii( asciiViewName ) )
+    m_sViewName( OUString::createFromAscii( asciiViewName ) )
 {
     DBG_CTOR(SfxViewFactory, 0);
 }

@@ -23,30 +23,30 @@ namespace shell { namespace sessioninstall
             SyncDbusSessionHelper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
             virtual ~SyncDbusSessionHelper() {}
             // XModify Methods
-            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* packages */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* packages */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException);
 
-            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* mime_types */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* mime_types */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* types */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* resources */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* types */, const ::com::sun::star::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL RemovePackageByFiles( SAL_UNUSED_PARAMETER ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL RemovePackageByFiles( SAL_UNUSED_PARAMETER ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
-            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* files */, const ::rtl::OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 /* xid */, const ::com::sun::star::uno::Sequence< OUString >& /* files */, const OUString& /* interaction */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
             // XQuery Methods
-            virtual void SAL_CALL IsInstalled( const ::rtl::OUString& /* package_name */, const ::rtl::OUString& /* interaction */, ::sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, ::sal_Bool& /* installed */ ) throw (::com::sun::star::uno::RuntimeException);
 
-            virtual void SAL_CALL SearchFile( const ::rtl::OUString& /* file_name */, const ::rtl::OUString& /* interaction */, ::sal_Bool& /* installed */, ::rtl::OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException)
+            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, ::sal_Bool& /* installed */, OUString& /* package_name */ ) throw (::com::sun::star::uno::RuntimeException)
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
 
         private:

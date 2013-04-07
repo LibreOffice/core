@@ -25,9 +25,9 @@ using namespace ucbhelper;
 
 //=========================================================================
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
-                                    const rtl::OUString & rTargetFolderURL,
-                                    const rtl::OUString & rClashingName,
-                                    const rtl::OUString & rProposedNewName,
+                                    const OUString & rTargetFolderURL,
+                                    const OUString & rClashingName,
+                                    const OUString & rProposedNewName,
                                     sal_Bool bSupportsOverwriteData )
 {
     // Fill request...

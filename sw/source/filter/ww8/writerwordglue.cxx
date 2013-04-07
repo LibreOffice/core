@@ -758,10 +758,10 @@ namespace sw
 
             // Force to NatNum when finding one of 'oOA'
             String sOldParams( rParams );
-            rParams.SearchAndReplaceAll( rtl::OUString( "o" ),
-                                         rtl::OUString( "m" ) );
-            rParams.SearchAndReplaceAll( rtl::OUString( "O" ),
-                                         rtl::OUString( "M" ) );
+            rParams.SearchAndReplaceAll( OUString( "o" ),
+                                         OUString( "m" ) );
+            rParams.SearchAndReplaceAll( OUString( "O" ),
+                                         OUString( "M" ) );
             bool bForceNatNum = !sOldParams.Equals( rParams );
             if (LANGUAGE_FRENCH != nDocLang)
             {
@@ -811,7 +811,7 @@ namespace sw
                         // But not if it's a '/' inside AM/PM
                         if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
                         {
-                            rParams.Replace(nI, 1, rtl::OUString("\\/"));
+                            rParams.Replace(nI, 1, OUString("\\/"));
                         }
                         nI++;
                         nLen++;
@@ -942,10 +942,10 @@ namespace sw
                 rLang = LANGUAGE_JAPANESE;
 
             if (bForceNatNum)
-                rParams.Insert(rtl::OUString("[NatNum1][$-411]"),0);
+                rParams.Insert(OUString("[NatNum1][$-411]"),0);
 
             if (bHijri)
-                rParams.Insert(rtl::OUString("[~hijri]"), 0);
+                rParams.Insert(OUString("[~hijri]"), 0);
 
             OUString sTemp(rParams);
             pFormatter->PutEntry(sTemp, nCheckPos, nType, nKey, rLang);

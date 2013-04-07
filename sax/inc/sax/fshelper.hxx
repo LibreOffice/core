@@ -125,13 +125,13 @@ public:
         { startElement( FSNS( namespaceTokenId, elementTokenId ), xAttrList ); }
 
     FastSerializerHelper* write(const char* value);
-    FastSerializerHelper* write(const rtl::OUString& value);
+    FastSerializerHelper* write(const OUString& value);
     FastSerializerHelper* write(sal_Int32 value);
     FastSerializerHelper* write(sal_Int64 value);
     FastSerializerHelper* write(double value);
 
     FastSerializerHelper* writeEscaped(const char* value);
-    FastSerializerHelper* writeEscaped(const rtl::OUString& value);
+    FastSerializerHelper* writeEscaped(const OUString& value);
 
     FastSerializerHelper* writeId(sal_Int32 tokenId);
 

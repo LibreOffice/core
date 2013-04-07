@@ -106,12 +106,12 @@ class SwXMailMerge :
     com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >  xResultSet;
     com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > xConnection;
     com::sun::star::uno::Reference< com::sun::star::frame::XModel >     xModel;
-    rtl::OUString   aDataSourceName;
-    rtl::OUString   aDataCommand;
-    rtl::OUString   aFilter;
-    rtl::OUString   aDocumentURL;
-    rtl::OUString   aOutputURL;
-    rtl::OUString   aFileNamePrefix;
+    OUString   aDataSourceName;
+    OUString   aDataCommand;
+    OUString   aFilter;
+    OUString   aDocumentURL;
+    OUString   aOutputURL;
+    OUString   aFileNamePrefix;
     sal_Int32       nDataCommandType;
     sal_Int16       nOutputType;
     sal_Bool        bEscapeProcessing;
@@ -119,23 +119,23 @@ class SwXMailMerge :
     sal_Bool        bFileNameFromColumn;
 
 
-    ::rtl::OUString                                         sInServerPassword;
-    ::rtl::OUString                                         sOutServerPassword;
-    ::rtl::OUString                                         sSubject;
-    ::rtl::OUString                                         sAddressFromColumn;
-    ::rtl::OUString                                         sMailBody;
-    ::rtl::OUString                                         sAttachmentName;
-    ::rtl::OUString                                         sAttachmentFilter;
-    com::sun::star::uno::Sequence< ::rtl::OUString >        aCopiesTo;
-    com::sun::star::uno::Sequence< ::rtl::OUString >        aBlindCopiesTo;
+    OUString                                         sInServerPassword;
+    OUString                                         sOutServerPassword;
+    OUString                                         sSubject;
+    OUString                                         sAddressFromColumn;
+    OUString                                         sMailBody;
+    OUString                                         sAttachmentName;
+    OUString                                         sAttachmentFilter;
+    com::sun::star::uno::Sequence< OUString >        aCopiesTo;
+    com::sun::star::uno::Sequence< OUString >        aBlindCopiesTo;
     sal_Bool                                                bSendAsHTML;
     sal_Bool                                                bSendAsAttachment;
 
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aPrintSettings;
 
     sal_Bool                                                bSaveAsSingleFile;
-    ::rtl::OUString                                         sSaveFilter;
-    ::rtl::OUString                                         sSaveFilterOptions;
+    OUString                                         sSaveFilter;
+    OUString                                         sSaveFilterOptions;
     com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSaveFilterData;
 
 
@@ -161,12 +161,12 @@ public:
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
     // XMailMergeBroadcaster
     virtual void SAL_CALL addMailMergeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XMailMergeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -178,14 +178,14 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 
-extern com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() throw();
-extern rtl::OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
+extern com::sun::star::uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( com::sun::star::uno::Exception );
 
 ////////////////////////////////////////////////////////////

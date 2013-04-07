@@ -118,11 +118,11 @@ UpdateCheckROModel::isDownloadPaused() const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
 {
     uno::Any aAny( m_aNameAccess.getValue(pStr) );
-    rtl::OUString aRet;
+    OUString aRet;
 
     aAny >>= aRet;
 
@@ -131,7 +131,7 @@ UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString UpdateCheckROModel::getLocalFileName() const
+OUString UpdateCheckROModel::getLocalFileName() const
 {
     return getStringValue(LOCAL_FILE);
 };
@@ -149,7 +149,7 @@ sal_Int64 UpdateCheckROModel::getDownloadSize() const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckROModel::getUpdateEntryVersion() const
 {
     return getStringValue(OLD_VERSION);
@@ -169,11 +169,11 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
 
     rInfo.Sources.push_back( DownloadSource( isDirectDownload, getStringValue(DOWNLOAD_URL) ) );
 
-    rtl::OString aStr(RELEASE_NOTE);
+    OString aStr(RELEASE_NOTE);
     for(sal_Int32 n=1; n < 6; ++n )
     {
-        rtl::OUString aUStr = getStringValue(
-            OString(aStr + rtl::OString::valueOf(n)).getStr());
+        OUString aUStr = getStringValue(
+            OString(aStr + OString::valueOf(n)).getStr());
         if( !aUStr.isEmpty() )
             rInfo.ReleaseNotes.push_back(ReleaseNote((sal_Int8) n, aUStr));
     }
@@ -182,23 +182,23 @@ UpdateCheckROModel::getUpdateEntry(UpdateInfo& rInfo) const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString UpdateCheckConfig::getDesktopDirectory()
+OUString UpdateCheckConfig::getDesktopDirectory()
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
 #ifdef WNT
     WCHAR szPath[MAX_PATH];
 
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_DESKTOPDIRECTORY, true ) ) )
     {
-        aRet = rtl::OUString( reinterpret_cast< sal_Unicode * >(szPath) );
+        aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else
     // This should become a desktop specific setting in some system backend ..
-    rtl::OUString aHomeDir;
+    OUString aHomeDir;
     osl::Security().getHomeDir( aHomeDir );
-    aRet = aHomeDir + rtl::OUString("/Desktop");
+    aRet = aHomeDir + OUString("/Desktop");
 
     // Set path to home directory when there is no /Desktop directory
     osl::Directory aDocumentsDir( aRet );
@@ -211,16 +211,16 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
 
 //------------------------------------------------------------------------------
 
-rtl::OUString UpdateCheckConfig::getAllUsersDirectory()
+OUString UpdateCheckConfig::getAllUsersDirectory()
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
 #ifdef WNT
     WCHAR szPath[MAX_PATH];
 
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_COMMON_DOCUMENTS, true ) ) )
     {
-        aRet = rtl::OUString( reinterpret_cast< sal_Unicode * >(szPath) );
+        aRet = OUString( reinterpret_cast< sal_Unicode * >(szPath) );
         osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
     }
 #else
@@ -300,10 +300,10 @@ UpdateCheckConfig::isAutoDownloadEnabled() const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckConfig::getUpdateEntryVersion() const
 {
-    rtl::OUString aValue;
+    OUString aValue;
 
     // getByName is defined as non const in XNameAccess
     const_cast < UpdateCheckConfig *> (this)->getByName( OLD_VERSION ) >>= aValue;
@@ -339,11 +339,11 @@ UpdateCheckConfig::getCheckInterval() const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckConfig::getLocalFileName() const
 {
-    rtl::OUString aName = LOCAL_FILE;
-    rtl::OUString aRet;
+    OUString aName = LOCAL_FILE;
+    OUString aRet;
 
     if( m_xContainer->hasByName(aName) )
         m_xContainer->getByName(aName) >>= aRet;
@@ -353,7 +353,7 @@ UpdateCheckConfig::getLocalFileName() const
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckConfig::getDownloadDestination() const
 {
     OUString aName = DOWNLOAD_DESTINATION;
@@ -367,7 +367,7 @@ UpdateCheckConfig::getDownloadDestination() const
 //------------------------------------------------------------------------------
 
 void
-UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
+UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     const sal_uInt8 nItems = 2;
     const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
@@ -426,7 +426,7 @@ UpdateCheckConfig::updateLastChecked()
 //------------------------------------------------------------------------------
 
 void
-UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const rtl::OUString& aCurrentBuild)
+UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const OUString& aCurrentBuild)
 
 {
     bool autoDownloadEnabled = isAutoDownloadEnabled();
@@ -446,10 +446,10 @@ UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const rtl::OUStrin
         uno::makeAny(aCurrentBuild)
     };
 
-    rtl::OUString aName;
+    OUString aName;
     for( sal_uInt32 n=0; n < nUpdateEntryProperties; ++n )
     {
-        aName = rtl::OUString::createFromAscii(aUpdateEntryProperties[n]);
+        aName = OUString::createFromAscii(aUpdateEntryProperties[n]);
 
         if( m_xContainer->hasByName(aName) )
             m_xContainer->replaceByName(aName, aValues[n]);
@@ -465,11 +465,11 @@ UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const rtl::OUStrin
 void
 UpdateCheckConfig::clearUpdateFound()
 {
-    rtl::OUString aName;
+    OUString aName;
 
     for( sal_uInt32 n=0; n < nUpdateEntryProperties; ++n )
     {
-        aName = rtl::OUString::createFromAscii(aUpdateEntryProperties[n]);
+        aName = OUString::createFromAscii(aUpdateEntryProperties[n]);
 
         try {
             if( m_xContainer->hasByName(aName) )
@@ -477,7 +477,7 @@ UpdateCheckConfig::clearUpdateFound()
         } catch(const lang::WrappedTargetException& ) {
             // Can not remove value, probably in share layer
             OSL_ASSERT(false);
-            m_xContainer->replaceByName(aName, uno::makeAny(rtl::OUString()));
+            m_xContainer->replaceByName(aName, uno::makeAny(OUString()));
         }
     }
 
@@ -491,20 +491,20 @@ UpdateCheckConfig::clearUpdateFound()
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 UpdateCheckConfig::getServiceNames()
 {
-    uno::Sequence< rtl::OUString > aServiceList(1);
+    uno::Sequence< OUString > aServiceList(1);
     aServiceList[0] = "com.sun.star.setup.UpdateCheckConfig";
     return aServiceList;
 }
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
+OUString
 UpdateCheckConfig::getImplName()
 {
-    return rtl::OUString("vnd.sun.UpdateCheckConfig");
+    return OUString("vnd.sun.UpdateCheckConfig");
 }
 
 //------------------------------------------------------------------------------
@@ -526,7 +526,7 @@ UpdateCheckConfig::hasElements() throw (uno::RuntimeException)
 //------------------------------------------------------------------------------
 
 uno::Any SAL_CALL
-UpdateCheckConfig::getByName( const ::rtl::OUString& aName )
+UpdateCheckConfig::getByName( const OUString& aName )
     throw (container::NoSuchElementException, lang::WrappedTargetException,  uno::RuntimeException)
 {
     uno::Any aValue = m_xContainer->getByName( aName );
@@ -534,7 +534,7 @@ UpdateCheckConfig::getByName( const ::rtl::OUString& aName )
     // Provide dynamic default value
     if( aName.equalsAscii(DOWNLOAD_DESTINATION) )
     {
-        rtl::OUString aStr;
+        OUString aStr;
         aValue >>= aStr;
 
         if( aStr.isEmpty() )
@@ -546,7 +546,7 @@ UpdateCheckConfig::getByName( const ::rtl::OUString& aName )
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException)
 {
     return m_xContainer->getElementNames();
@@ -555,7 +555,7 @@ UpdateCheckConfig::getElementNames(  ) throw (uno::RuntimeException)
 //------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
-UpdateCheckConfig::hasByName( const ::rtl::OUString& aName ) throw (uno::RuntimeException)
+UpdateCheckConfig::hasByName( const OUString& aName ) throw (uno::RuntimeException)
 {
     return m_xContainer->hasByName( aName );
 }
@@ -563,7 +563,7 @@ UpdateCheckConfig::hasByName( const ::rtl::OUString& aName ) throw (uno::Runtime
 //------------------------------------------------------------------------------
 
 void SAL_CALL
-UpdateCheckConfig::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+UpdateCheckConfig::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw (lang::IllegalArgumentException, container::NoSuchElementException,
            lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -586,7 +586,7 @@ UpdateCheckConfig::commitChanges()
         if( m_rListener.is() )
         {
             const sal_Int32 nChanges = aChangesSet.getLength();
-            rtl::OUString aString;
+            OUString aString;
 
             for( sal_Int32 i=0; i<nChanges; ++i )
             {
@@ -647,8 +647,8 @@ UpdateCheckConfig::getPendingChanges(  ) throw (uno::RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-bool UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionName,
-                                               const rtl::OUString& rVersion )
+bool UpdateCheckConfig::storeExtensionVersion( const OUString& rExtensionName,
+                                               const OUString& rVersion )
 {
     bool bNotify = true;
 
@@ -663,7 +663,7 @@ bool UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionNa
 
     if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
     {
-        ::rtl::OUString aIgnoredVersion;
+        OUString aIgnoredVersion;
         uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aValue >>= aIgnoredVersion;
         if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
@@ -678,18 +678,18 @@ bool UpdateCheckConfig::storeExtensionVersion( const rtl::OUString& rExtensionNa
 }
 
 //------------------------------------------------------------------------------
-bool UpdateCheckConfig::checkExtensionVersion( const rtl::OUString& rExtensionName,
-                                               const rtl::OUString& rVersion )
+bool UpdateCheckConfig::checkExtensionVersion( const OUString& rExtensionName,
+                                               const OUString& rVersion )
 {
     if ( m_xAvailableUpdates->hasByName( rExtensionName ) )
     {
-        ::rtl::OUString aStoredVersion;
+        OUString aStoredVersion;
         uno::Any aValue( uno::Reference< beans::XPropertySet >( m_xAvailableUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
         aValue >>= aStoredVersion;
 
         if ( m_xIgnoredUpdates->hasByName( rExtensionName ) )
         {
-            ::rtl::OUString aIgnoredVersion;
+            OUString aIgnoredVersion;
             uno::Any aValue2( uno::Reference< beans::XPropertySet >( m_xIgnoredUpdates->getByName( rExtensionName ), uno::UNO_QUERY_THROW )->getPropertyValue( PROPERTY_VERSION ) );
             aValue2 >>= aIgnoredVersion;
             if ( aIgnoredVersion.isEmpty() ) // no version means ignore all updates
@@ -711,7 +711,7 @@ bool UpdateCheckConfig::checkExtensionVersion( const rtl::OUString& rExtensionNa
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString UpdateCheckConfig::getSubVersion( const rtl::OUString& rVersion,
+OUString UpdateCheckConfig::getSubVersion( const OUString& rVersion,
                                                 sal_Int32 *nIndex )
 {
     while ( *nIndex < rVersion.getLength() && rVersion[*nIndex] == '0')
@@ -725,13 +725,13 @@ rtl::OUString UpdateCheckConfig::getSubVersion( const rtl::OUString& rVersion,
 //------------------------------------------------------------------------------
 // checks if the second version string is greater than the first one
 
-bool UpdateCheckConfig::isVersionGreater( const rtl::OUString& rVersion1,
-                                          const rtl::OUString& rVersion2 )
+bool UpdateCheckConfig::isVersionGreater( const OUString& rVersion1,
+                                          const OUString& rVersion2 )
 {
     for ( sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0; )
     {
-        ::rtl::OUString sSub1( getSubVersion( rVersion1, &i1 ) );
-        ::rtl::OUString sSub2( getSubVersion( rVersion2, &i2 ) );
+        OUString sSub1( getSubVersion( rVersion1, &i1 ) );
+        OUString sSub2( getSubVersion( rVersion2, &i2 ) );
 
         if ( sSub1.getLength() < sSub2.getLength() ) {
             return true;
@@ -750,7 +750,7 @@ bool UpdateCheckConfig::isVersionGreater( const rtl::OUString& rVersion1,
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL
+OUString SAL_CALL
 UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException)
 {
     return getImplName();
@@ -759,10 +759,10 @@ UpdateCheckConfig::getImplementationName()  throw (uno::RuntimeException)
 //------------------------------------------------------------------------------
 
 sal_Bool SAL_CALL
-UpdateCheckConfig::supportsService(rtl::OUString const & serviceName)
+UpdateCheckConfig::supportsService(OUString const & serviceName)
     throw (uno::RuntimeException)
 {
-    uno::Sequence< rtl::OUString > aServiceNameList = getServiceNames();
+    uno::Sequence< OUString > aServiceNameList = getServiceNames();
 
     for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
         if( aServiceNameList[n].equals(serviceName) )
@@ -773,7 +773,7 @@ UpdateCheckConfig::supportsService(rtl::OUString const & serviceName)
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UpdateCheckConfig::getSupportedServiceNames()  throw (uno::RuntimeException)
 {
     return getServiceNames();

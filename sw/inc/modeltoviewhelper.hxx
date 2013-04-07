@@ -79,7 +79,7 @@ class ModelToViewHelper
 
     ConversionMap m_aMap;
 
-    rtl::OUString m_aRetText;
+    OUString m_aRetText;
 
 public:
 
@@ -133,7 +133,7 @@ public:
     */
     ModelPosition ConvertToModelPosition( sal_uInt32 nViewPos ) const;
 
-    rtl::OUString getViewText() const { return m_aRetText; }
+    OUString getViewText() const { return m_aRetText; }
 };
 
 #endif

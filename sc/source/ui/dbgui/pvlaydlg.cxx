@@ -65,7 +65,6 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
-using ::rtl::OUString;
 using ::std::vector;
 using ::std::for_each;
 
@@ -178,7 +177,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
             maEdInPos.SetText(aRangeName);
         else
         {
-            rtl::OUString aStr;
+            OUString aStr;
             maOldRange = p->GetSourceRange();
             maOldRange.Format(aStr, SCR_ABS_3D, mpDoc, mpDoc->GetAddressConvention());
             maEdInPos.SetText(aStr);
@@ -218,9 +217,9 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         maLbOutPos.InsertEntry( maStrNewTable,  1 );
 
         ScAreaNameIterator aIter( mpDoc );
-        rtl::OUString aName;
+        OUString aName;
         ScRange aRange;
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         while ( aIter.Next( aName, aRange ) )
         {
             if ( !aIter.WasDBName() )       // hier keine DB-Bereiche !
@@ -247,7 +246,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
         if ( maPivotData.nTab != MAXTAB+1 )
         {
-            rtl::OUString aStr;
+            OUString aStr;
             ScAddress( maPivotData.nCol,
                        maPivotData.nRow,
                        maPivotData.nTab ).Format( aStr, STD_FORMAT, mpDoc, mpDoc->GetAddressConvention() );
@@ -1007,13 +1006,13 @@ ScDPLabelData* ScPivotLayoutDlg::GetLabelData( SCCOL nCol )
     return it == maLabelData.end() ? NULL : &(*it);
 }
 
-rtl::OUString ScPivotLayoutDlg::GetLabelString( SCsCOL nCol )
+OUString ScPivotLayoutDlg::GetLabelString( SCsCOL nCol )
 {
     ScDPLabelData* pData = GetLabelData( nCol );
     OSL_ENSURE( pData, "LabelData not found" );
     if (pData)
         return pData->getDisplayName();
-    return rtl::OUString();
+    return OUString();
 }
 
 bool ScPivotLayoutDlg::IsOrientationAllowed( SCsCOL nCol, ScPivotFieldType eType )
@@ -1039,9 +1038,9 @@ bool ScPivotLayoutDlg::IsOrientationAllowed( SCsCOL nCol, ScPivotFieldType eType
     return bAllowed;
 }
 
-rtl::OUString ScPivotLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, bool bIsValue )
+OUString ScPivotLayoutDlg::GetFuncString( sal_uInt16& rFuncMask, bool bIsValue )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
 
     if (   rFuncMask == PIVOT_FUNC_NONE
         || rFuncMask == PIVOT_FUNC_AUTO )
@@ -1234,7 +1233,7 @@ bool ScPivotLayoutDlg::GetPivotArrays(
 
 void ScPivotLayoutDlg::UpdateSrcRange()
 {
-    rtl::OUString aSrcStr = maEdInPos.GetText();
+    OUString aSrcStr = maEdInPos.GetText();
     sal_uInt16  nResult = ScRange().Parse(aSrcStr, mpDoc, mpDoc->GetAddressConvention());
     DataSrcType eSrcType = SRC_INVALID;
     ScRange aNewRange;
@@ -1469,13 +1468,13 @@ void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
     if (mpRefInputEdit == &maEdInPos)
     {
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         rRef.Format( aRefStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
         mpRefInputEdit->SetRefString(aRefStr);
     }
     else if (mpRefInputEdit == &maEdOutPos)
     {
-        rtl::OUString aRefStr;
+        OUString aRefStr;
         rRef.aStart.Format( aRefStr, STD_FORMAT, pDoc, pDoc->GetAddressConvention() );
         mpRefInputEdit->SetRefString(aRefStr);
         maOutputRefStr = aRefStr;
@@ -1529,7 +1528,7 @@ IMPL_LINK( ScPivotLayoutDlg, ClickHdl, PushButton *, pBtn )
 
 IMPL_LINK_NOARG(ScPivotLayoutDlg, OkHdl)
 {
-    rtl::OUString aOutPosStr = maEdOutPos.GetText();
+    OUString aOutPosStr = maEdOutPos.GetText();
     ScAddress   aAdrDest;
     bool bToNewTable = (maLbOutPos.GetSelectEntryPos() == 1);
     sal_uInt16      nResult     = !bToNewTable ? aAdrDest.Parse( aOutPosStr, mpDoc, mpDoc->GetAddressConvention() ) : 0;

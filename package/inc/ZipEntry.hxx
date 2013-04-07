@@ -33,7 +33,7 @@ struct ZipEntry
     sal_Int64 nOffset;
     sal_Int16 nPathLen;
     sal_Int16 nExtraLen;
-    ::rtl::OUString sPath;
+    OUString sPath;
 };
 #endif
 

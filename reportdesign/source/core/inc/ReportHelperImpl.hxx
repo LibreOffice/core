@@ -20,12 +20,12 @@
 #define INCLUDED_REPORTHELPERIMPL_HXX
 // ::com::sun::star::report::XReportComponent:
 #define REPORTCOMPONENT_IMPL3(clazz,arg) \
-::rtl::OUString SAL_CALL clazz::getName() throw (uno::RuntimeException) \
+OUString SAL_CALL clazz::getName() throw (uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return (arg).m_sName; \
 } \
-void SAL_CALL clazz::setName( const ::rtl::OUString& _name ) throw (uno::RuntimeException,beans::PropertyVetoException) \
+void SAL_CALL clazz::setName( const OUString& _name ) throw (uno::RuntimeException,beans::PropertyVetoException) \
 { \
     set(PROPERTY_NAME,_name,(arg).m_sName); \
 } \
@@ -109,41 +109,41 @@ void SAL_CALL clazz::setControlBorderColor( ::sal_Int32 _bordercolor ) throw (un
 }
 
 #define REPORTCOMPONENT_MASTERDETAIL(clazz,arg) \
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
+::com::sun::star::uno::Sequence< OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return (arg).m_aMasterFields; \
 } \
-void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< OUString >& _masterfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     set(PROPERTY_MASTERFIELDS,_masterfields,(arg).m_aMasterFields); \
 } \
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+::com::sun::star::uno::Sequence< OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return (arg).m_aDetailFields; \
 } \
-void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< OUString >& _detailfields ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     set(PROPERTY_DETAILFIELDS,_detailfields,(arg).m_aDetailFields); \
 }
 
 #define REPORTCOMPONENT_NOMASTERDETAIL(clazz) \
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
+::com::sun::star::uno::Sequence< OUString > SAL_CALL clazz::getMasterFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException) \
 { \
     throw ::com::sun::star::beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setMasterFields( const ::com::sun::star::uno::Sequence< OUString >& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     throw ::com::sun::star::beans::UnknownPropertyException();\
 } \
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+::com::sun::star::uno::Sequence< OUString > SAL_CALL clazz::getDetailFields() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     throw ::com::sun::star::beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< ::rtl::OUString >&  ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setDetailFields( const ::com::sun::star::uno::Sequence< OUString >&  ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     throw ::com::sun::star::beans::UnknownPropertyException();\
 }
@@ -330,24 +330,24 @@ void SAL_CALL clazz::setCharEmphasis( ::sal_Int16 _charemphasis ) throw (beans::
     set(PROPERTY_CHAREMPHASIS,_charemphasis,varName.nFontEmphasisMark); \
 } \
  \
-::rtl::OUString SAL_CALL clazz::getCharFontName() throw (beans::UnknownPropertyException, uno::RuntimeException) \
+OUString SAL_CALL clazz::getCharFontName() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aFontDescriptor.Name; \
 } \
  \
-void SAL_CALL clazz::setCharFontName( const ::rtl::OUString& _charfontname ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
+void SAL_CALL clazz::setCharFontName( const OUString& _charfontname ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     set(PROPERTY_CHARFONTNAME,_charfontname,varName.aFontDescriptor.Name); \
 } \
  \
-::rtl::OUString SAL_CALL clazz::getCharFontStyleName() throw (beans::UnknownPropertyException, uno::RuntimeException) \
+OUString SAL_CALL clazz::getCharFontStyleName() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aFontDescriptor.StyleName; \
 } \
  \
-void SAL_CALL clazz::setCharFontStyleName( const ::rtl::OUString& _charfontstylename ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
+void SAL_CALL clazz::setCharFontStyleName( const OUString& _charfontstylename ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     set(PROPERTY_CHARFONTSTYLENAME,_charfontstylename,varName.aFontDescriptor.StyleName); \
 } \
@@ -502,21 +502,21 @@ void SAL_CALL clazz::setCharCombineIsOn(::sal_Bool the_value) throw (uno::Runtim
 { \
     set(PROPERTY_CHARCOMBINEISON,the_value,varName.bCharCombineIsOn); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharCombinePrefix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getCharCombinePrefix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sCharCombinePrefix; \
 } \
-void SAL_CALL clazz::setCharCombinePrefix(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setCharCombinePrefix(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_CHARCOMBINEPREFIX,the_value,varName.sCharCombinePrefix); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharCombineSuffix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getCharCombineSuffix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sCharCombineSuffix; \
 } \
-void SAL_CALL clazz::setCharCombineSuffix(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setCharCombineSuffix(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_CHARCOMBINESUFFIX,the_value,varName.sCharCombineSuffix); \
 }\
@@ -547,48 +547,48 @@ void SAL_CALL clazz::setCharContoured(::sal_Bool the_value) throw (uno::RuntimeE
 { \
     set(PROPERTY_CHARCONTOURED,the_value,varName.bCharContoured); \
 }\
-::rtl::OUString SAL_CALL clazz::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getHyperLinkURL() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sHyperLinkURL; \
 } \
-void SAL_CALL clazz::setHyperLinkURL(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setHyperLinkURL(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_HYPERLINKURL,the_value,varName.sHyperLinkURL); \
 }\
-::rtl::OUString SAL_CALL clazz::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getHyperLinkTarget() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sHyperLinkTarget; \
 } \
-void SAL_CALL clazz::setHyperLinkTarget(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setHyperLinkTarget(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_HYPERLINKTARGET,the_value,varName.sHyperLinkTarget); \
 }\
-::rtl::OUString SAL_CALL clazz::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getHyperLinkName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sHyperLinkName; \
 } \
-void SAL_CALL clazz::setHyperLinkName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setHyperLinkName(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_HYPERLINKNAME,the_value,varName.sHyperLinkName); \
 }\
-::rtl::OUString SAL_CALL clazz::getVisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getVisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sVisitedCharStyleName; \
 } \
-void SAL_CALL clazz::setVisitedCharStyleName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setVisitedCharStyleName(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_VISITEDCHARSTYLENAME,the_value,varName.sVisitedCharStyleName); \
 }\
-::rtl::OUString SAL_CALL clazz::getUnvisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getUnvisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.sUnvisitedCharStyleName; \
 } \
-void SAL_CALL clazz::setUnvisitedCharStyleName(const ::rtl::OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setUnvisitedCharStyleName(const OUString & the_value) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     set(PROPERTY_UNVISITEDCHARSTYLENAME,the_value,varName.sUnvisitedCharStyleName); \
 }\
@@ -619,21 +619,21 @@ void SAL_CALL clazz::setCharWeightAsian( float the_value ) throw (::com::sun::st
 { \
     set(PROPERTY_CHARWEIGHTASIAN,the_value,varName.aAsianFontDescriptor.Weight); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aAsianFontDescriptor.Name; \
 }\
-void SAL_CALL clazz::setCharFontNameAsian( const ::rtl::OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontNameAsian( const OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     set(PROPERTY_CHARFONTNAMEASIAN,the_value,varName.aAsianFontDescriptor.Name); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aAsianFontDescriptor.StyleName; \
 }\
-void SAL_CALL clazz::setCharFontStyleNameAsian( const ::rtl::OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontStyleNameAsian( const OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     set(PROPERTY_CHARFONTSTYLENAMEASIAN,the_value,varName.aAsianFontDescriptor.StyleName); \
 }\
@@ -711,21 +711,21 @@ void SAL_CALL clazz::setCharWeightComplex( float the_value ) throw (::com::sun::
 { \
     set(PROPERTY_CHARWEIGHTCOMPLEX,the_value,varName.aComplexFontDescriptor.Weight); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aComplexFontDescriptor.Name; \
 }\
-void SAL_CALL clazz::setCharFontNameComplex( const ::rtl::OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontNameComplex( const OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     set(PROPERTY_CHARFONTNAMECOMPLEX,the_value,varName.aComplexFontDescriptor.Name); \
 }\
-::rtl::OUString SAL_CALL clazz::getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
     return varName.aComplexFontDescriptor.StyleName; \
 }\
-void SAL_CALL clazz::setCharFontStyleNameComplex( const ::rtl::OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontStyleNameComplex( const OUString& the_value ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
 { \
     set(PROPERTY_CHARFONTSTYLENAMECOMPLEX,the_value,varName.aComplexFontDescriptor.StyleName); \
 }\
@@ -884,19 +884,19 @@ void SAL_CALL clazz::setCharCombineIsOn(::sal_Bool /*the_value*/) throw (uno::Ru
 { \
     throw beans::UnknownPropertyException();\
 }\
-::rtl::OUString SAL_CALL clazz::getCharCombinePrefix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getCharCombinePrefix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharCombinePrefix(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setCharCombinePrefix(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 }\
-::rtl::OUString SAL_CALL clazz::getCharCombineSuffix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getCharCombineSuffix() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setCharCombineSuffix(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setCharCombineSuffix(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 }\
@@ -924,19 +924,19 @@ void SAL_CALL clazz::setCharContoured(::sal_Bool /*the_value*/) throw (uno::Runt
 { \
     throw beans::UnknownPropertyException();\
 }\
-::rtl::OUString SAL_CALL clazz::getVisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getVisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setVisitedCharStyleName(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setVisitedCharStyleName(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 }\
-::rtl::OUString SAL_CALL clazz::getUnvisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
+OUString SAL_CALL clazz::getUnvisitedCharStyleName() throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 } \
-void SAL_CALL clazz::setUnvisitedCharStyleName(const ::rtl::OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
+void SAL_CALL clazz::setUnvisitedCharStyleName(const OUString & /*the_value*/) throw (uno::RuntimeException, beans::UnknownPropertyException) \
 { \
     throw beans::UnknownPropertyException();\
 }\
@@ -1038,22 +1038,22 @@ void SAL_CALL clazz::setCharEmphasis( ::sal_Int16 /*_charemphasis*/ ) throw (bea
     throw beans::UnknownPropertyException();\
 }\
 \
-::rtl::OUString SAL_CALL clazz::getCharFontName() throw (beans::UnknownPropertyException, uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontName() throw (beans::UnknownPropertyException, uno::RuntimeException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
 \
-void SAL_CALL clazz::setCharFontName( const ::rtl::OUString& /*_charfontname*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontName( const OUString& /*_charfontname*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
 \
-::rtl::OUString SAL_CALL clazz::getCharFontStyleName() throw (beans::UnknownPropertyException, uno::RuntimeException)\
+OUString SAL_CALL clazz::getCharFontStyleName() throw (beans::UnknownPropertyException, uno::RuntimeException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
 \
-void SAL_CALL clazz::setCharFontStyleName( const ::rtl::OUString& /*_charfontstylename*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)\
+void SAL_CALL clazz::setCharFontStyleName( const OUString& /*_charfontstylename*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)\
 {\
     throw beans::UnknownPropertyException();\
 }\
@@ -1143,19 +1143,19 @@ void SAL_CALL clazz::setCharPosture( awt::FontSlant /*_charposture*/ ) throw (be
  {\
     throw beans::UnknownPropertyException();\
 }\
- ::rtl::OUString SAL_CALL clazz::getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ OUString SAL_CALL clazz::getCharFontNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- void SAL_CALL clazz::setCharFontNameAsian( const ::rtl::OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ void SAL_CALL clazz::setCharFontNameAsian( const OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- ::rtl::OUString SAL_CALL clazz::getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ OUString SAL_CALL clazz::getCharFontStyleNameAsian() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- void SAL_CALL clazz::setCharFontStyleNameAsian( const ::rtl::OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ void SAL_CALL clazz::setCharFontStyleNameAsian( const OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
@@ -1215,19 +1215,19 @@ void SAL_CALL clazz::setCharPosture( awt::FontSlant /*_charposture*/ ) throw (be
  {\
     throw beans::UnknownPropertyException();\
 }\
- ::rtl::OUString SAL_CALL clazz::getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ OUString SAL_CALL clazz::getCharFontNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- void SAL_CALL clazz::setCharFontNameComplex( const ::rtl::OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ void SAL_CALL clazz::setCharFontNameComplex( const OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- ::rtl::OUString SAL_CALL clazz::getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ OUString SAL_CALL clazz::getCharFontStyleNameComplex() throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\
- void SAL_CALL clazz::setCharFontStyleNameComplex( const ::rtl::OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
+ void SAL_CALL clazz::setCharFontStyleNameComplex( const OUString& ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)\
  {\
     throw beans::UnknownPropertyException();\
 }\

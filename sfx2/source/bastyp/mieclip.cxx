@@ -37,7 +37,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     if( pStrm )
         delete pStrm, pStrm = 0;
 
-    rtl::OString sLine, sVersion;
+    OString sLine, sVersion;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
     sal_Int32 nIndex = 0;
 
@@ -51,7 +51,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         while( rStream.ReadLine( sLine ) )
         {
             nIndex = 0;
-            rtl::OString sTmp(sLine.getToken(0, ':', nIndex));
+            OString sTmp(sLine.getToken(0, ':', nIndex));
             if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("StartHTML")))
                 nStt = sLine.copy(nIndex).toInt32();
             else if (sTmp.equalsL(RTL_CONSTASCII_STRINGPARAM("EndHTML")))

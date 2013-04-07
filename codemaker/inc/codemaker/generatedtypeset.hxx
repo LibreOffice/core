@@ -47,7 +47,7 @@ public:
 
        @param type a UNO type registry name
      */
-    void add(rtl::OString const & type) { m_set.insert(type); }
+    void add(OString const & type) { m_set.insert(type); }
 
     /**
        Checks whether a given type has already been generated.
@@ -56,14 +56,14 @@ public:
 
        @return true iff the given type has already been generated
      */
-    bool contains(rtl::OString const & type) const
+    bool contains(OString const & type) const
     { return m_set.find(type) != m_set.end(); }
 
 private:
     GeneratedTypeSet(GeneratedTypeSet &); // not implemented
     void operator =(GeneratedTypeSet); // not implemented
 
-    boost::unordered_set< rtl::OString, rtl::OStringHash > m_set;
+    boost::unordered_set< OString, OStringHash > m_set;
 };
 
 }

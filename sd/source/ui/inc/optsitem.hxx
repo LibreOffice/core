@@ -59,15 +59,15 @@ private:
 
 public:
 
-    SdOptionsItem( const SdOptionsGeneric& rParent, const ::rtl::OUString rSubTree );
+    SdOptionsItem( const SdOptionsGeneric& rParent, const OUString rSubTree );
     virtual ~SdOptionsItem();
 
     virtual void            Commit();
-    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
+    virtual void            Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
-                                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
-    sal_Bool                PutProperties( const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+                                const ::com::sun::star::uno::Sequence< OUString >& rNames );
+    sal_Bool                PutProperties( const com::sun::star::uno::Sequence< OUString >& rNames,
                                            const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues );
     void                    SetModified();
 };
@@ -78,14 +78,14 @@ friend class SdOptionsItem;
 
 private:
 
-    ::rtl::OUString         maSubTree;
+    OUString         maSubTree;
     SdOptionsItem*          mpCfgItem;
     sal_uInt16                  mnConfigId;
     sal_Bool                    mbInit          : 1;
     sal_Bool                    mbEnableModify  : 1;
 
     SAL_DLLPRIVATE void Commit( SdOptionsItem& rCfgItem ) const;
-    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > GetPropertyNames() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< OUString > GetPropertyNames() const;
 
 protected:
 
@@ -100,10 +100,10 @@ protected:
 
 public:
 
-                            SdOptionsGeneric( sal_uInt16 nConfigId, const ::rtl::OUString& rSubTree );
+                            SdOptionsGeneric( sal_uInt16 nConfigId, const OUString& rSubTree );
                             virtual ~SdOptionsGeneric();
 
-    const ::rtl::OUString&  GetSubTree() const { return maSubTree; }
+    const OUString&  GetSubTree() const { return maSubTree; }
     sal_uInt16                  GetConfigId() const { return mnConfigId; }
 
     void                    EnableModify( sal_Bool bModify ) { mbEnableModify = bModify; }

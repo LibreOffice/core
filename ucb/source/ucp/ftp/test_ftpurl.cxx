@@ -26,11 +26,11 @@
 #include <vector>
 
 struct ServerInfo {
-    rtl::OUString host;
-    rtl::OUString port;
-    rtl::OUString username;
-    rtl::OUString password;
-    rtl::OUString account;
+    OUString host;
+    OUString port;
+    OUString username;
+    OUString password;
+    OUString account;
 };
 
 
@@ -51,11 +51,11 @@ public:
         return p->handle();
     }
 
-    bool forHost(const rtl::OUString& host,
-                 const rtl::OUString& port,
-                 const rtl::OUString& username,
-                 rtl::OUString& password,
-                 rtl::OUString& account)
+    bool forHost(const OUString& host,
+                 const OUString& port,
+                 const OUString& username,
+                 OUString& password,
+                 OUString& account)
     {
         for(unsigned int i = 0; i < m_ServerInfo.size(); ++i)
             if(host == m_ServerInfo[i].host &&
@@ -69,11 +69,11 @@ public:
         return false;
     }
 
-    virtual bool setHost(const rtl::OUString& host,
-                         const rtl::OUString& port,
-                         const rtl::OUString& username,
-                         const rtl::OUString& password,
-                         const rtl::OUString& account)
+    virtual bool setHost(const OUString& host,
+                         const OUString& port,
+                         const OUString& username,
+                         const OUString& password,
+                         const OUString& account)
     {
         ServerInfo inf;
         inf.host = host;
@@ -110,7 +110,7 @@ private:
 
 #define TESTURL \
 {  \
-ftp::FTPURL url(rtl::OUString::createFromAscii(ascii),&prov); \
+ftp::FTPURL url(OUString::createFromAscii(ascii),&prov); \
 if(!url.username().equalsAscii(n)) {\
 ++number_of_errors;   \
 err_msg("wrong username: ",url.username());  \
@@ -147,7 +147,7 @@ int test_ftplist(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString( "ftp://abi:psswd@abi-1/dir"),
+        OUString( "ftp://abi:psswd@abi-1/dir"),
         &provider);
 
     std::vector<ftp::FTPDirentry> vec =
@@ -169,7 +169,7 @@ int test_ftplist(void) {
 
 #define TESTPARENT   \
     {   \
-        ftp::FTPURL url(rtl::OUString::createFromAscii(ascii),&prov);  \
+        ftp::FTPURL url(OUString::createFromAscii(ascii),&prov);  \
         urlStr = url.parent();          \
         if(!urlStr.equalsAscii(expect)) \
             ++number_of_errors;  \
@@ -181,7 +181,7 @@ int test_ftpparent(void) {
     const char* name = "test_ftpparent";
     FTPHandleProviderI prov;
 
-    rtl::OUString urlStr;
+    OUString urlStr;
     char *ascii,*expect;
 
     ascii = "ftp://abi:psswd@abi-1/file";
@@ -217,7 +217,7 @@ int test_ftpproperties(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString( "ftp://abi:psswd@abi-1/file"),
+        OUString( "ftp://abi:psswd@abi-1/file"),
         &provider);
 
     ftp::FTPDirentry ade(url.direntry());
@@ -240,7 +240,7 @@ int test_ftpopen(void)
 
     FTPHandleProviderI provider;
     ftp::FTPURL url(
-        rtl::OUString( "ftp://abi:psswd@abi-1/file"),
+        OUString( "ftp://abi:psswd@abi-1/file"),
         &provider);
 
     FILE* file = url.open();

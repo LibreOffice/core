@@ -63,7 +63,7 @@ OCalcConnection::~OCalcConnection()
 {
 }
 
-void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)
+void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
     throw(SQLException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::construct" );
@@ -71,7 +71,7 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    ::rtl::OUString aDSN(url.copy(nLen+1));
+    OUString aDSN(url.copy(nLen+1));
 
     m_aFileName = aDSN;
     INetURLObject aURL;
@@ -88,7 +88,7 @@ void OCalcConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
     }
     m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    m_sPassword = ::rtl::OUString();
+    m_sPassword = OUString();
     const char* pPwd        = "password";
 
     const PropertyValue *pIter  = info.getConstArray();
@@ -115,16 +115,16 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     }
     //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
-    aArgs[0].Name = ::rtl::OUString("Hidden");
+    aArgs[0].Name = OUString("Hidden");
     aArgs[0].Value <<= (sal_Bool) sal_True;
-    aArgs[1].Name = ::rtl::OUString("ReadOnly");
+    aArgs[1].Name = OUString("ReadOnly");
     aArgs[1].Value <<= (sal_Bool) sal_True;
 
     if ( !m_sPassword.isEmpty() )
     {
         const sal_Int32 nPos = aArgs.getLength();
         aArgs.realloc(nPos+1);
-        aArgs[nPos].Name = ::rtl::OUString("Password");
+        aArgs[nPos].Name = OUString("Password");
         aArgs[nPos].Value <<= m_sPassword;
     }
 
@@ -134,7 +134,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     try
     {
         xComponent = xDesktop->loadComponentFromURL(
-            m_aFileName, ::rtl::OUString("_blank"), 0, aArgs );
+            m_aFileName, OUString("_blank"), 0, aArgs );
     }
     catch( const Exception& )
     {
@@ -162,7 +162,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
             aErrorDetails <<= aDetailException;
         }
 
-        const ::rtl::OUString sError( m_aResources.getResourceStringWithSubstitution(
+        const OUString sError( m_aResources.getResourceStringWithSubstitution(
             STR_COULD_NOT_LOAD_FILE,
             "$filename$", m_aFileName
          ) );
@@ -246,7 +246,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
 
 // --------------------------------------------------------------------------------
 
-Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const ::rtl::OUString& sql )
+Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
     throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::prepareStatement" );
@@ -263,7 +263,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
 
 // --------------------------------------------------------------------------------
 
-Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const ::rtl::OUString& /*sql*/ )
+Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
     throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcConnection::prepareCall" );

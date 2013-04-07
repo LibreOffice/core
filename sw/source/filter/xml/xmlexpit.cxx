@@ -52,8 +52,6 @@
 
 
 using ::editeng::SvxBorderLine;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using uno::Any;

@@ -121,7 +121,7 @@ private:
     void UpdateAccessibilityHierarchy (
         const css::uno::Reference<css::awt::XWindow>& rxPreviewContentWindow,
         const css::uno::Reference<css::awt::XWindow>& rxPreviewBorderWindow,
-        const ::rtl::OUString& rsTitle,
+        const OUString& rsTitle,
         const css::uno::Reference<css::awt::XWindow>& rxNotesContentWindow,
         const css::uno::Reference<css::awt::XWindow>& rxNotesBorderWindow,
         const ::boost::shared_ptr<PresenterTextView>& rpNotesTextView);

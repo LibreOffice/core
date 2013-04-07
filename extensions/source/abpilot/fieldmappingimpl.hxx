@@ -99,8 +99,8 @@ namespace abp
         */
         void writeTemplateAddressSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::rtl::OUString& _rDataSourceName,
-            const ::rtl::OUString& _rTableName
+            const OUString& _rDataSourceName,
+            const OUString& _rTableName
         ) SAL_THROW ( ( ) );
 
         /** writes the configuration entry which states the pilot has been completed successfully

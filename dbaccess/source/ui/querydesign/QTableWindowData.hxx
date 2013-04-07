@@ -30,11 +30,11 @@ namespace dbaui
     class OQueryTableWindowData : public OTableWindowData
     {
     public:
-        explicit OQueryTableWindowData(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rTableName, const ::rtl::OUString& rTableAlias);
+        explicit OQueryTableWindowData(const OUString& _rComposedName, const OUString& rTableName, const OUString& rTableAlias);
         virtual ~OQueryTableWindowData();
 
-        ::rtl::OUString GetAliasName() { return GetWinName(); }
-        void SetAliasName(const ::rtl::OUString& rNewAlias) { SetWinName(rNewAlias); }
+        OUString GetAliasName() { return GetWinName(); }
+        void SetAliasName(const OUString& rNewAlias) { SetWinName(rNewAlias); }
     };
 }
 #endif // DBAUI_QUERY_TABLEWINDOWDATA_HXX

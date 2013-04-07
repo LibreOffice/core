@@ -84,9 +84,9 @@ SdMoveStyleSheetsUndoAction::~SdMoveStyleSheetsUndoAction()
 {
 }
 
-rtl::OUString SdMoveStyleSheetsUndoAction::GetComment() const
+OUString SdMoveStyleSheetsUndoAction::GetComment() const
 {
-    return rtl::OUString();
+    return OUString();
 }
 
 

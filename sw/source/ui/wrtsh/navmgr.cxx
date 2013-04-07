@@ -227,12 +227,12 @@ bool SwNavigationMgr::addEntry(const SwPosition& rPos) {
         if (xPropSet.is())
         {
             css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" ) );
+            css::uno::Any aValue = xPropSet->getPropertyValue( OUString( "LayoutManager" ) );
 
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                const ::rtl::OUString sResourceURL( "private:resource/toolbar/navigationobjectbar" );
+                const OUString sResourceURL( "private:resource/toolbar/navigationobjectbar" );
                 css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
                 if (!xUIElement.is())
                 {

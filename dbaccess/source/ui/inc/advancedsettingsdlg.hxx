@@ -57,7 +57,7 @@ namespace dbaui
         virtual ~AdvancedSettingsDialog();
 
         /// determines whether or not the given data source type has any advanced setting
-        static  bool    doesHaveAnyAdvancedSettings( const ::rtl::OUString& _sURL );
+        static  bool    doesHaveAnyAdvancedSettings( const OUString& _sURL );
 
         virtual const SfxItemSet* getOutputSet() const;
         virtual SfxItemSet* getWriteOutputSet();
@@ -68,10 +68,10 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
         virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-        virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
+        virtual OUString getDatasourceType(const SfxItemSet& _rSet) const;
         virtual void clearPassword();
         virtual sal_Bool saveDatasource();
-        virtual void setTitle(const ::rtl::OUString& _sTitle);
+        virtual void setTitle(const OUString& _sTitle);
         virtual void enableConfirmSettings( bool _bEnable );
     };
 

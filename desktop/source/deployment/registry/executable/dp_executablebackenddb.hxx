@@ -42,18 +42,18 @@ namespace executable {
 class ExecutableBackendDb: public dp_registry::backend::RegisteredDb
 {
 protected:
-    virtual ::rtl::OUString getDbNSName();
+    virtual OUString getDbNSName();
 
-    virtual ::rtl::OUString getNSPrefix();
+    virtual OUString getNSPrefix();
 
-    virtual ::rtl::OUString getRootElementName();
+    virtual OUString getRootElementName();
 
-    virtual ::rtl::OUString getKeyElementName();
+    virtual OUString getKeyElementName();
 
 public:
 
     ExecutableBackendDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
-                        ::rtl::OUString const & url);
+                        OUString const & url);
 
 };
 

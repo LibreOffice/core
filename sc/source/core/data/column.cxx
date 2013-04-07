@@ -1514,7 +1514,7 @@ void ScColumn::CopyToColumn(
                     // empty cell.
                     if (pNew->GetCellType() == CELLTYPE_STRING)
                     {
-                        rtl::OUString aStr = static_cast<ScStringCell*>(pNew)->GetString();
+                        OUString aStr = static_cast<ScStringCell*>(pNew)->GetString();
                         if (aStr.isEmpty())
                             // A string cell with empty string.  Delete the cell itself.
                             rColumn.Delete(maItems[i].nRow);

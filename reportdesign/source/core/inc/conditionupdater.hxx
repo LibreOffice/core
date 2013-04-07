@@ -50,8 +50,8 @@ namespace rptui
 
         void impl_adjustFormatConditions_nothrow(
             const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportControlModel >& _rxRptControlModel,
-            const ::rtl::OUString& _rOldDataSource,
-            const ::rtl::OUString& _rNewDataSource
+            const OUString& _rOldDataSource,
+            const OUString& _rNewDataSource
         );
 
     private:

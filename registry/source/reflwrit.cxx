@@ -32,13 +32,12 @@
 
 #include "reflcnst.hxx"
 
-using ::rtl::OString;
 
 
 namespace {
 
-inline rtl::OString toByteString(rtl_uString const * str) {
-    return rtl::OString(
+inline OString toByteString(rtl_uString const * str) {
+    return OString(
         str->buffer, str->length, RTL_TEXTENCODING_UTF8,
         OUSTRING_TO_OSTRING_CVTFLAGS);
 }
@@ -662,8 +661,8 @@ public:
     sal_uInt32          m_blopSize;
 
     TypeWriter(typereg_Version version,
-               rtl::OString const & documentation,
-               rtl::OString const & fileName,
+               OString const & documentation,
+               OString const & fileName,
                RTTypeClass      RTTypeClass,
                bool             published,
                const OString&   typeName,
@@ -680,8 +679,8 @@ public:
 };
 
 TypeWriter::TypeWriter(typereg_Version version,
-                       rtl::OString const & documentation,
-                       rtl::OString const & fileName,
+                       OString const & documentation,
+                       OString const & fileName,
                        RTTypeClass      RTTypeClass,
                        bool             published,
                        const OString&   typeName,
@@ -1416,7 +1415,7 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     RTTypeClass typeClass, rtl_uString * typeName, rtl_uString * superTypeName,
     sal_uInt16 fieldCount, sal_uInt16 methodCount, sal_uInt16 referenceCount)
 {
-    rtl::OUString empty;
+    OUString empty;
     sal_uInt16 superTypeCount = rtl_uString_getLength(superTypeName) == 0
         ? 0 : 1;
     TypeWriterImpl t = typereg_writer_create(

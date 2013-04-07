@@ -23,7 +23,6 @@
 #include <xmloff/xmlictxt.hxx>
 
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::PropertyValue;

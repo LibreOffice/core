@@ -40,8 +40,8 @@ struct ShapeTypeModel;
 /** Font settings for a text portion in a textbox. */
 struct OOX_DLLPUBLIC TextFontModel
 {
-    OptValue< ::rtl::OUString > moName;     ///< Font name.
-    OptValue< ::rtl::OUString > moColor;    ///< Font color, HTML encoded, sort of.
+    OptValue< OUString > moName;     ///< Font name.
+    OptValue< OUString > moColor;    ///< Font color, HTML encoded, sort of.
     OptValue< sal_Int32 > monSize;          ///< Font size in twips.
     OptValue< sal_Int32 > monUnderline;     ///< Single or double underline.
     OptValue< sal_Int32 > monEscapement;    ///< Subscript or superscript.
@@ -58,9 +58,9 @@ struct OOX_DLLPUBLIC TextFontModel
 struct TextPortionModel
 {
     TextFontModel       maFont;
-    ::rtl::OUString     maText;
+    OUString     maText;
 
-    explicit            TextPortionModel( const TextFontModel& rFont, const ::rtl::OUString& rText );
+    explicit            TextPortionModel( const TextFontModel& rFont, const OUString& rText );
 };
 
 // ============================================================================
@@ -72,14 +72,14 @@ public:
     explicit            TextBox(ShapeTypeModel& rTypeModel);
 
     /** Appends a new text portion to the textbox. */
-    void                appendPortion( const TextFontModel& rFont, const ::rtl::OUString& rText );
+    void                appendPortion( const TextFontModel& rFont, const OUString& rText );
 
     /** Returns the current number of text portions. */
     inline size_t       getPortionCount() const { return maPortions.size(); }
     /** Returns the font settings of the first text portion. */
     const TextFontModel* getFirstFont() const;
     /** Returns the entire text of all text portions. */
-    ::rtl::OUString     getText() const;
+    OUString     getText() const;
     void convert(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape) const;
 
     ShapeTypeModel&     mrTypeModel;

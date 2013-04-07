@@ -80,7 +80,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
     return impl_callResultSetMethod( "getCatalogs", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString java_sql_DatabaseMetaData::impl_getCatalogSeparator_throw(  )
+OUString java_sql_DatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getCatalogSeparator", mID );
@@ -93,14 +93,14 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getSchemas(  ) throw
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumnPrivileges(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getColumnPrivileges", mID, catalog, schema, table, &columnNamePattern );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getColumns", mID, catalog, schemaPattern, tableNamePattern, &columnNamePattern );
@@ -108,7 +108,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& _types ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const Sequence< OUString >& _types ) throw(SQLException, RuntimeException)
 {
     static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getTables";
@@ -131,7 +131,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         {
             jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), 0 ) );
             OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, sal_True ), "Exception occurred!" );
-            const ::rtl::OUString* typeFilter = _types.getConstArray();
+            const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
             {
@@ -222,21 +222,21 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedureColumns(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& procedureNamePattern, const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getProcedureColumns", mID, catalog, schemaPattern, procedureNamePattern, &columnNamePattern );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedures( const Any&
-                catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
+                catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getProcedures", mID, catalog, schemaPattern, procedureNamePattern );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getVersionColumns(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getVersionColumns", mID, catalog, schema, table );
@@ -315,28 +315,28 @@ sal_Int32 java_sql_DatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getExportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getExportedKeys", mID, catalog, schema, table );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getImportedKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getImportedKeys", mID, catalog, schema, table );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getPrimaryKeys(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schema, const OUString& table ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callResultSetMethodWithStrings( "getPrimaryKeys", mID, catalog, schema, table );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table,
+        const Any& catalog, const OUString& schema, const OUString& table,
         sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException)
 {
     static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ljava/sql/ResultSet;";
@@ -377,7 +377,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier(
-        const Any& catalog, const ::rtl::OUString& schema, const ::rtl::OUString& table, sal_Int32 scope,
+        const Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope,
         sal_Bool nullable ) throw(SQLException, RuntimeException)
 {
     static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IZ)Ljava/sql/ResultSet;";
@@ -417,7 +417,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
+        const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     if ( m_pConnection->isIgnoreDriverPrivilegesEnabled() )
         return new OResultSetPrivileges(this,catalog,schemaPattern,tableNamePattern);
@@ -436,17 +436,17 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
             {
                 // here we know that the count of column doesn't match
                 ::std::map<sal_Int32,sal_Int32> aColumnMatching;
-                static const ::rtl::OUString sPrivs[] = {
-                                            ::rtl::OUString("TABLE_CAT"),
-                                            ::rtl::OUString("TABLE_SCHEM"),
-                                            ::rtl::OUString("TABLE_NAME"),
-                                            ::rtl::OUString("GRANTOR"),
-                                            ::rtl::OUString("GRANTEE"),
-                                            ::rtl::OUString("PRIVILEGE"),
-                                            ::rtl::OUString("IS_GRANTABLE")
+                static const OUString sPrivs[] = {
+                                            OUString("TABLE_CAT"),
+                                            OUString("TABLE_SCHEM"),
+                                            OUString("TABLE_NAME"),
+                                            OUString("GRANTOR"),
+                                            OUString("GRANTEE"),
+                                            OUString("PRIVILEGE"),
+                                            OUString("IS_GRANTABLE")
                                         };
 
-                ::rtl::OUString sColumnName;
+                OUString sColumnName;
                 sal_Int32 nCount = xMeta->getColumnCount();
                 for (sal_Int32 i = 1 ; i <= nCount ; ++i)
                 {
@@ -467,7 +467,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 xReturn = pNewPrivRes;
                 ODatabaseMetaDataResultSet::ORows aRows;
                 Reference< XRow > xRow(xTemp,UNO_QUERY);
-                ::rtl::OUString sValue;
+                OUString sValue;
 
                 ODatabaseMetaDataResultSet::ORow aRow(8);
                 while ( xRow.is() && xTemp->next() )
@@ -493,9 +493,9 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
-        const Any& primaryCatalog, const ::rtl::OUString& primarySchema,
-        const ::rtl::OUString& primaryTable, const Any& foreignCatalog,
-        const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable ) throw(SQLException, RuntimeException)
+        const Any& primaryCatalog, const OUString& primarySchema,
+        const OUString& primaryTable, const Any& foreignCatalog,
+        const OUString& foreignSchema, const OUString& foreignTable ) throw(SQLException, RuntimeException)
 {
     static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getCrossReference";
@@ -551,16 +551,16 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
 }
 
 // -------------------------------------------------------------------------
-::rtl::OUString java_sql_DatabaseMetaData::impl_callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
+OUString java_sql_DatabaseMetaData::impl_callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID )
 {
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, _pMethodName );
 
-    const ::rtl::OUString sReturn( callStringMethod(_pMethodName,_inout_MethodID) );
+    const OUString sReturn( callStringMethod(_pMethodName,_inout_MethodID) );
     if ( m_aLogger.isLoggable( LogLevel::FINEST ) )
     {
-        ::rtl::OUString sLoggedResult( sReturn );
+        OUString sLoggedResult( sReturn );
         if ( sLoggedResult.isEmpty() )
-            sLoggedResult = ::rtl::OUString( "<empty string>" );
+            sLoggedResult = OUString( "<empty string>" );
         m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, sLoggedResult );
     }
 
@@ -599,11 +599,11 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethod( con
 
 // -------------------------------------------------------------------------
 Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithStrings( const char* _pMethodName, jmethodID& _inout_MethodID,
-    const Any& _rCatalog, const ::rtl::OUString& _rSchemaPattern, const ::rtl::OUString& _rLeastPattern,
-    const ::rtl::OUString* _pOptionalAdditionalString )
+    const Any& _rCatalog, const OUString& _rSchemaPattern, const OUString& _rLeastPattern,
+    const OUString* _pOptionalAdditionalString )
 {
     bool bCatalog = _rCatalog.hasValue();
-    ::rtl::OUString sCatalog;
+    OUString sCatalog;
     _rCatalog >>= sCatalog;
 
     bool bSchema = _rSchemaPattern.toChar() != '%';
@@ -611,8 +611,8 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
     // log the call
     if ( m_aLogger.isLoggable( LogLevel::FINEST ) )
     {
-        ::rtl::OUString sCatalogLog = bCatalog ? sCatalog : ::rtl::OUString( "null" );
-        ::rtl::OUString sSchemaLog = bSchema ? _rSchemaPattern : ::rtl::OUString( "null" );
+        OUString sCatalogLog = bCatalog ? sCatalog : OUString( "null" );
+        OUString sSchemaLog = bSchema ? _rSchemaPattern : OUString( "null" );
         if ( _pOptionalAdditionalString )
             m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD_ARG4, _pMethodName, sCatalogLog, sSchemaLog, _rLeastPattern, *_pOptionalAdditionalString );
         else
@@ -735,19 +735,19 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     return impl_callBooleanMethod( "supportsNonNullableColumns", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getCatalogTerm", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString java_sql_DatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
+OUString java_sql_DatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getIdentifierQuoteString", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getExtraNameCharacters", mID );
@@ -1163,9 +1163,9 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     return impl_callBooleanMethod( "supportsANSI92IntermediateSQL", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString sURL = m_pConnection->getURL();
+    OUString sURL = m_pConnection->getURL();
     if ( sURL.isEmpty() )
     {
         static jmethodID mID(NULL);
@@ -1174,43 +1174,43 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
     return sURL;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getUserName", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getDriverName", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getDriverVersion(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getDriverVersion", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getDatabaseProductVersion(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getDatabaseProductVersion", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getDatabaseProductName(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getDatabaseProductName", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getProcedureTerm(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getProcedureTerm", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getSchemaTerm(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getSchemaTerm", mID );
@@ -1234,37 +1234,37 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getDriverMinorVersion(  ) throw(Ru
     return impl_callIntMethod( "getDriverMinorVersion", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getSQLKeywords(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getSQLKeywords", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getSearchStringEscape(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getSearchStringEscape", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getStringFunctions(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getStringFunctions", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getTimeDateFunctions", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getSystemFunctions(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getSystemFunctions", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
+OUString SAL_CALL java_sql_DatabaseMetaData::getNumericFunctions(  ) throw(SQLException, RuntimeException)
 {
     static jmethodID mID(NULL);
     return impl_callStringMethod( "getNumericFunctions", mID );
@@ -1410,7 +1410,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsBatchUpdates(  ) throw(SQLE
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
-        const Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern,
+        const Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern,
         const Sequence< sal_Int32 >& types ) throw(SQLException, RuntimeException)
 {
     jobject out(0);

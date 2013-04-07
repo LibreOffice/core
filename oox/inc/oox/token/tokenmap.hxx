@@ -36,10 +36,10 @@ public:
                         ~TokenMap();
 
     /** Returns the Unicode name of the passed token identifier. */
-    ::rtl::OUString     getUnicodeTokenName( sal_Int32 nToken ) const;
+    OUString     getUnicodeTokenName( sal_Int32 nToken ) const;
 
     /** Returns the token identifier for the passed Unicode token name. */
-    sal_Int32           getTokenFromUnicode( const ::rtl::OUString& rUnicodeName ) const;
+    sal_Int32           getTokenFromUnicode( const OUString& rUnicodeName ) const;
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
     ::com::sun::star::uno::Sequence< sal_Int8 >
@@ -52,7 +52,7 @@ public:
 private:
     struct TokenName
     {
-        ::rtl::OUString maUniName;
+        OUString maUniName;
         ::com::sun::star::uno::Sequence< sal_Int8 > maUtf8Name;
     };
     typedef ::std::vector< TokenName > TokenNameVector;

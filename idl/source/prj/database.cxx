@@ -75,7 +75,7 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
     return aTypeList;
 }
 
-SvMetaModule * SvIdlDataBase::GetModule( const rtl::OString& rName )
+SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
 {
     for( sal_uLong n = 0; n < aModuleList.size(); n++ )
         if( aModuleList[n]->GetName().getString().equals(rName) )
@@ -157,7 +157,7 @@ void SvIdlDataBase::Save( SvStream & rStm, sal_uInt32 nFlags )
     aPStm << nUniqueId;
 }
 
-void SvIdlDataBase::SetError( const rtl::OString& rError, SvToken * pTok )
+void SvIdlDataBase::SetError( const OString& rError, SvToken * pTok )
 {
     if( pTok->GetLine() > 10000 )
         aError.SetText( "hgchcg" );
@@ -175,7 +175,7 @@ void SvIdlDataBase::Push( SvMetaObject * pObj )
     GetStack().Push( pObj );
 }
 
-sal_Bool SvIdlDataBase::FindId( const rtl::OString& rIdName, sal_uLong * pVal )
+sal_Bool SvIdlDataBase::FindId( const OString& rIdName, sal_uLong * pVal )
 {
     if( pIdTable )
     {
@@ -189,7 +189,7 @@ sal_Bool SvIdlDataBase::FindId( const rtl::OString& rIdName, sal_uLong * pVal )
     return sal_False;
 }
 
-sal_Bool SvIdlDataBase::InsertId( const rtl::OString& rIdName, sal_uLong nVal )
+sal_Bool SvIdlDataBase::InsertId( const OString& rIdName, sal_uLong nVal )
 {
     if( !pIdTable )
         pIdTable = new SvStringHashTable( 20003 );
@@ -228,12 +228,12 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                 if( pTok->Is( SvHash_define() ) )
                 {
                     pTok = aTokStm.GetToken_Next();
-                    rtl::OString aDefName;
+                    OString aDefName;
                     if( pTok->IsIdentifier() )
                         aDefName = pTok->GetString();
                     else
                     {
-                        rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OString aStr(RTL_CONSTASCII_STRINGPARAM(
                             "unexpected token after define"));
                         // set error
                         SetError( aStr, pTok );
@@ -264,7 +264,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                               || pTok->GetChar() == '^'
                               || pTok->GetChar() == '~' )
                             {
-                                rtl::OStringBuffer aStr("unknown operator '");
+                                OStringBuffer aStr("unknown operator '");
                                 aStr.append(pTok->GetChar());
                                 aStr.append("'in define");
                                 // set error
@@ -290,7 +290,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                     {
                         if( !InsertId( aDefName, nVal ) )
                         {
-                            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM("hash table overflow: "));
+                            OString aStr(RTL_CONSTASCII_STRINGPARAM("hash table overflow: "));
                             SetError( aStr, pTok );
                             WriteError( aTokStm );
                             return sal_False;
@@ -300,7 +300,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                 else if( pTok->Is( SvHash_include() ) )
                 {
                     pTok = aTokStm.GetToken_Next();
-                    rtl::OStringBuffer aName;
+                    OStringBuffer aName;
                     if( pTok->IsString() )
                         aName.append(pTok->GetString());
                     else if( pTok->IsChar() && pTok->GetChar() == '<' )
@@ -314,7 +314,7 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                         }
                         if( pTok->IsEof() )
                         {
-                            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM(
+                            OString aStr(RTL_CONSTASCII_STRINGPARAM(
                                 "unexpected eof in #include"));
                             // set error
                             SetError(aStr, pTok);
@@ -322,10 +322,10 @@ sal_Bool SvIdlDataBase::ReadIdFile( const String & rFileName )
                             return sal_False;
                         }
                     }
-                    if (!ReadIdFile(rtl::OStringToOUString(aName.toString(),
+                    if (!ReadIdFile(OStringToOUString(aName.toString(),
                         RTL_TEXTENCODING_ASCII_US)))
                     {
-                        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                             "cannot read file: "));
                         aStr.append(aName.makeStringAndClear());
                         SetError(aStr.makeStringAndClear(), pTok);
@@ -352,7 +352,7 @@ SvMetaType * SvIdlDataBase::FindType( const SvMetaType * pPType,
     return NULL;
 }
 
-SvMetaType * SvIdlDataBase::FindType( const rtl::OString& rName )
+SvMetaType * SvIdlDataBase::FindType( const OString& rName )
 {
     for( SvMetaTypeMemberList::const_iterator it = aTypeList.begin(); it != aTypeList.end(); ++it )
         if( rName.equals((*it)->GetName().getString()) )
@@ -401,7 +401,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
 
     if( pTok->IsIdentifier() )
     {
-        rtl::OString aName = pTok->GetString();
+        OString aName = pTok->GetString();
         SvMetaTypeMemberList & rList = GetTypeList();
         SvMetaTypeMemberList::const_iterator it = rList.begin();
         SvMetaType * pType = NULL;
@@ -484,7 +484,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            rtl::OStringBuffer aStr("Nicht gefunden : ");
+            OStringBuffer aStr("Nicht gefunden : ");
             aStr.append(pTok->GetString());
             OSL_FAIL(aStr.getStr());
         }
@@ -530,15 +530,15 @@ SvMetaClass * SvIdlDataBase::ReadKnownClass( SvTokenStream & rInStm )
     return NULL;
 }
 
-void SvIdlDataBase::Write(const rtl::OString& rText)
+void SvIdlDataBase::Write(const OString& rText)
 {
     if( nVerbosity != 0 )
         fprintf( stdout, "%s", rText.getStr() );
 }
 
-void SvIdlDataBase::WriteError( const rtl::OString& rErrWrn,
-                                const rtl::OString& rFileName,
-                                const rtl::OString& rErrorText,
+void SvIdlDataBase::WriteError( const OString& rErrWrn,
+                                const OString& rFileName,
+                                const OString& rErrorText,
                                 sal_uLong nRow, sal_uLong nColumn ) const
 {
     // error treatment
@@ -555,7 +555,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
 {
     // error treatment
     String aFileName( rInStm.GetFileName() );
-    rtl::OStringBuffer aErrorText;
+    OStringBuffer aErrorText;
     sal_uLong   nRow = 0, nColumn = 0;
 
     rInStm.SeekEnd();
@@ -595,7 +595,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
         aError = SvIdlError();
     }
 
-    WriteError("error", rtl::OUStringToOString(aFileName,
+    WriteError("error", OUStringToOString(aFileName,
         RTL_TEXTENCODING_UTF8), aErrorText.makeStringAndClear(), nRow, nColumn);
 
     DBG_ASSERT( pTok, "token must be found" );
@@ -610,7 +610,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     }
     if( pTok && pTok->IsIdentifier() )
     {
-        rtl::OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
+        OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
         if( !aN.isEmpty() )
             fprintf( stderr, "%s versus %s\n", pTok->GetString().getStr(), aN.getStr() );
     }
@@ -636,7 +636,7 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
             {
                 OUString aFullName;
                 if( osl::FileBase::E_None == osl::File::searchFileURL(
-                    rtl::OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
+                    OStringToOUString(pTok->GetString(), RTL_TEXTENCODING_ASCII_US),
                     rPath,
                     aFullName) )
                 {
@@ -648,8 +648,8 @@ sal_Bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, sal_Bool bImported
                     {
                         if( aStm.GetError() == SVSTREAM_WRONGVERSION )
                         {
-                            rtl::OStringBuffer aStr("wrong version, file ");
-                            aStr.append(rtl::OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
+                            OStringBuffer aStr("wrong version, file ");
+                            aStr.append(OUStringToOString( aFullName, RTL_TEXTENCODING_UTF8));
                             SetError(aStr.makeStringAndClear(), pTok);
                             WriteError( rInStm );
                             bOk = sal_False;
@@ -716,7 +716,7 @@ sal_Bool SvIdlWorkingBase::WriteSvIdl( SvStream & rOutStm )
             SvStringHashEntry* pEntry = aList[ i ];
             rOutStm << "#define " << pEntry->GetName().getStr()
                     << '\t'
-                    << rtl::OString::valueOf(static_cast<sal_Int64>(
+                    << OString::valueOf(static_cast<sal_Int64>(
                         pEntry->GetValue())).getStr()
                     << endl;
         }
@@ -834,12 +834,12 @@ void SvIdlDataBase::AddDepFile(String const& rFileName)
 }
 
 #ifdef WNT
-static ::rtl::OString
-lcl_ConvertToCygwin(::rtl::OString const& rString)
+static OString
+lcl_ConvertToCygwin(OString const& rString)
 {
     sal_Int32 i = 0;
     sal_Int32 const len = rString.getLength();
-    ::rtl::OStringBuffer buf(len + 16);
+    OStringBuffer buf(len + 16);
     if ((2 <= len) && (':' == rString[1]))
     {
         buf.append("/cygdrive/");
@@ -866,21 +866,21 @@ lcl_ConvertToCygwin(::rtl::OString const& rString)
 }
 #endif
 
-static ::rtl::OString
-lcl_Convert(::rtl::OUString const& rString)
+static OString
+lcl_Convert(OUString const& rString)
 {
     return
 #ifdef WNT
         lcl_ConvertToCygwin
 #endif
-            (::rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
+            (OUStringToOString(rString, RTL_TEXTENCODING_UTF8));
 }
 
 struct WriteDep
 {
     SvFileStream & m_rStream;
     explicit WriteDep(SvFileStream & rStream) : m_rStream(rStream) { }
-    void operator() (::rtl::OUString const& rItem)
+    void operator() (OUString const& rItem)
     {
         m_rStream << " \\\n ";
         m_rStream << lcl_Convert(rItem).getStr();
@@ -888,7 +888,7 @@ struct WriteDep
 };
 
 bool SvIdlDataBase::WriteDepFile(
-        SvFileStream & rStream, ::rtl::OUString const& rTarget)
+        SvFileStream & rStream, OUString const& rTarget)
 {
     rStream << lcl_Convert(rTarget).getStr();
     rStream << " :";

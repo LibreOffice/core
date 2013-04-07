@@ -117,7 +117,7 @@ void ScFilterOptionsMgr::Init()
 
     if ( pViewData && pDoc )
     {
-        rtl::OUString theAreaStr;
+        OUString theAreaStr;
         ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
                                                 rQueryData.nRow1,
                                                 pViewData->GetTabNo() ),
@@ -125,8 +125,8 @@ void ScFilterOptionsMgr::Init()
                                                 rQueryData.nRow2,
                                                 pViewData->GetTabNo() ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        rtl::OUStringBuffer theDbArea;
-        rtl::OUString   theDbName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
+        OUStringBuffer theDbArea;
+        OUString   theDbName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
@@ -186,8 +186,8 @@ void ScFilterOptionsMgr::Init()
         }
         else
         {
-            rFtDbAreaLabel.SetText( rtl::OUString() );
-            rFtDbArea.SetText( rtl::OUString() );
+            rFtDbAreaLabel.SetText( OUString() );
+            rFtDbArea.SetText( OUString() );
         }
 
         //------------------------------------------------------

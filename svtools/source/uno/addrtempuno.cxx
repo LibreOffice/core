@@ -50,8 +50,8 @@ namespace svt
     protected:
         Sequence< AliasProgrammaticPair >   m_aAliases;
         Reference< XDataSource >            m_xDataSource;
-        ::rtl::OUString                     m_sDataSourceName;
-        ::rtl::OUString                     m_sTable;
+        OUString                     m_sDataSourceName;
+        OUString                     m_sTable;
 
     protected:
         OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
@@ -61,12 +61,12 @@ namespace svt
         virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException);
 
         // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
+        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
         // XServiceInfo - static methods
-        static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( RuntimeException );
-        static ::rtl::OUString getImplementationName_Static(void) throw( RuntimeException );
+        static Sequence< OUString > getSupportedServiceNames_Static(void) throw( RuntimeException );
+        static OUString getImplementationName_Static(void) throw( RuntimeException );
         static Reference< XInterface >
                 SAL_CALL Create(const Reference< com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -101,7 +101,7 @@ namespace svt
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty(::rtl::OUString(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
+        registerProperty(OUString(UNODIALOG_PROPERTY_ALIASES), UNODIALOG_PROPERTY_ID_ALIASES, PropertyAttribute::READONLY,
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
@@ -119,15 +119,15 @@ namespace svt
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //-------------------------------------------------------------------------
-    ::rtl::OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
+    OUString OAddressBookSourceDialogUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
+        return OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
     }
 
     //-------------------------------------------------------------------------
@@ -140,7 +140,7 @@ namespace svt
     ::comphelper::StringSequence OAddressBookSourceDialogUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString( "com.sun.star.ui.AddressBookSourceDialog" );
+        aSupported.getArray()[0] = OUString( "com.sun.star.ui.AddressBookSourceDialog" );
         return aSupported;
     }
 
@@ -181,9 +181,9 @@ namespace svt
         {
             Reference<com::sun::star::awt::XWindow> xParentWindow;
             Reference<com::sun::star::beans::XPropertySet> xDataSource;
-            rtl::OUString sDataSourceName;
-            rtl::OUString sCommand;
-            rtl::OUString sTitle;
+            OUString sDataSourceName;
+            OUString sCommand;
+            OUString sTitle;
             if ( (rArguments[0] >>= xParentWindow)
                && (rArguments[1] >>= xDataSource)
                && (rArguments[2] >>= sDataSourceName)

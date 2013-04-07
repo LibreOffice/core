@@ -28,7 +28,6 @@
 
 
 using namespace ::com::sun::star::uno;
-using ::rtl::OUString;
 
 #define EXTENSION_REG_NS "http://openoffice.org/extensionmanager/script-registry/2010"
 #define NS_PREFIX "script"
@@ -41,7 +40,7 @@ namespace script {
 
 ScriptBackendDb::ScriptBackendDb(
     Reference<XComponentContext> const &  xContext,
-    ::rtl::OUString const & url):RegisteredDb(xContext, url)
+    OUString const & url):RegisteredDb(xContext, url)
 {
 
 }

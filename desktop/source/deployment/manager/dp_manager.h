@@ -42,14 +42,14 @@ typedef ::cppu::WeakComponentImplHelper1<
 class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
 {
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-    ::rtl::OUString m_context;
-    ::rtl::OUString m_registrationData;
-    ::rtl::OUString m_registrationData_expanded;
-    ::rtl::OUString m_registryCache;
+    OUString m_context;
+    OUString m_registrationData;
+    OUString m_registrationData_expanded;
+    OUString m_registryCache;
     bool m_readOnly;
 
-    ::rtl::OUString m_activePackages;
-    ::rtl::OUString m_activePackages_expanded;
+    OUString m_activePackages;
+    OUString m_activePackages_expanded;
     ::std::auto_ptr< ActivePackages > m_activePackagesDB;
     //This mutex is only used for synchronization in addPackage
     ::osl::Mutex m_addMutex;
@@ -62,19 +62,19 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
     void initRegistryBackends();
     void initActivationLayer(
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
-    ::rtl::OUString detectMediaType(
+    OUString detectMediaType(
         ::ucbhelper::Content const & ucbContent, bool throw_exc = true );
-    ::rtl::OUString insertToActivationLayer(
+    OUString insertToActivationLayer(
         css::uno::Sequence<css::beans::NamedValue> const & properties,
-        ::rtl::OUString const & mediaType,
+        OUString const & mediaType,
         ::ucbhelper::Content const & sourceContent,
-        ::rtl::OUString const & title, ActivePackages::Data * dbData );
+        OUString const & title, ActivePackages::Data * dbData );
     void insertToActivationLayerDB(
-        ::rtl::OUString const & id, ActivePackages::Data const & dbData );
+        OUString const & id, ActivePackages::Data const & dbData );
 
     void deletePackageFromCache(
         css::uno::Reference<css::deployment::XPackage> const & xPackage,
-        ::rtl::OUString const & destFolder );
+        OUString const & destFolder );
 
     bool isInstalled(
         css::uno::Reference<css::deployment::XPackage> const & package);
@@ -124,7 +124,7 @@ protected:
     virtual ~PackageManagerImpl();
     inline PackageManagerImpl(
         css::uno::Reference<css::uno::XComponentContext>
-        const & xComponentContext, ::rtl::OUString const & context )
+        const & xComponentContext, OUString const & context )
         : t_pm_helper( getMutex() ),
           m_xComponentContext( xComponentContext ),
           m_context( context ),
@@ -134,7 +134,7 @@ protected:
 public:
     static css::uno::Reference<css::deployment::XPackageManager> create(
         css::uno::Reference<css::uno::XComponentContext>
-        const & xComponentContext, ::rtl::OUString const & context );
+        const & xComponentContext, OUString const & context );
 
     // XComponent
     virtual void SAL_CALL dispose() throw (css::uno::RuntimeException);
@@ -154,7 +154,7 @@ public:
         throw (css::uno::RuntimeException);
 
     // XPackageManager
-    virtual ::rtl::OUString SAL_CALL getContext()
+    virtual OUString SAL_CALL getContext()
         throw (css::uno::RuntimeException);
     virtual css::uno::Sequence<
         css::uno::Reference<css::deployment::XPackageTypeInfo> > SAL_CALL
@@ -164,9 +164,9 @@ public:
     createAbortChannel() throw (css::uno::RuntimeException);
 
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL addPackage(
-        ::rtl::OUString const & url,
+        OUString const & url,
         css::uno::Sequence<css::beans::NamedValue> const & properties,
-        ::rtl::OUString const & mediaType,
+        OUString const & mediaType,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -186,7 +186,7 @@ public:
             css::uno::RuntimeException);
 
     virtual void SAL_CALL removePackage(
-        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+        OUString const & id, OUString const & fileName,
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
@@ -195,17 +195,17 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
-    ::rtl::OUString getDeployPath( ActivePackages::Data const & data );
+    OUString getDeployPath( ActivePackages::Data const & data );
     css::uno::Reference<css::deployment::XPackage> SAL_CALL getDeployedPackage_(
-        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+        OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
     css::uno::Reference<css::deployment::XPackage> getDeployedPackage_(
-        ::rtl::OUString const & id, ActivePackages::Data const & data,
+        OUString const & id, ActivePackages::Data const & data,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
         bool ignoreAlienPlatforms = false );
     virtual css::uno::Reference<css::deployment::XPackage> SAL_CALL
     getDeployedPackage(
-        ::rtl::OUString const & id, ::rtl::OUString const & fileName,
+        OUString const & id, OUString const & fileName,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::DeploymentException,
                css::ucb::CommandFailedException,

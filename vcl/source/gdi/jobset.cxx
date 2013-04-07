@@ -150,23 +150,23 @@ JobSetup::~JobSetup()
     }
 }
 
-rtl::OUString JobSetup::GetPrinterName() const
+OUString JobSetup::GetPrinterName() const
 {
     if ( mpData )
         return mpData->maPrinterName;
     else
-        return rtl::OUString();
+        return OUString();
 }
 
-rtl::OUString JobSetup::GetDriverName() const
+OUString JobSetup::GetDriverName() const
 {
     if ( mpData )
         return mpData->maDriver;
     else
-        return rtl::OUString();
+        return OUString();
 }
 
-void JobSetup::SetValue( const rtl::OUString& rKey, const rtl::OUString& rValue )
+void JobSetup::SetValue( const OUString& rKey, const OUString& rValue )
 {
     if( ! mpData )
         mpData = new ImplJobSetup();
@@ -349,9 +349,9 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
 
             ImplOldJobSetupData aOldData;
             memset( &aOldData, 0, sizeof( aOldData ) );
-            rtl::OString aPrnByteName(rtl::OUStringToOString(rJobSetup.GetPrinterName(), RTL_TEXTENCODING_UTF8));
+            OString aPrnByteName(OUStringToOString(rJobSetup.GetPrinterName(), RTL_TEXTENCODING_UTF8));
             strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
-            rtl::OString aDriverByteName(rtl::OUStringToOString(rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8));
+            OString aDriverByteName(OUStringToOString(rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8));
             strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
 //          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
             int nPos = rOStream.Tell();
@@ -360,7 +360,7 @@ SvStream& operator<<( SvStream& rOStream, const JobSetup& rJobSetup )
             rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
             rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
             rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
-            ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+            ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {
                 write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rOStream, it->first, RTL_TEXTENCODING_UTF8);

@@ -58,12 +58,12 @@ namespace svgio
             // XSvgParser
             virtual uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > SAL_CALL getDecomposition(
                 const uno::Reference< ::io::XInputStream >& xSVGStream,
-                const ::rtl::OUString& aAbsolutePath) throw (uno::RuntimeException);
+                const OUString& aAbsolutePath) throw (uno::RuntimeException);
 
             // XServiceInfo
-            virtual rtl::OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
-            virtual ::sal_Bool SAL_CALL supportsService(const rtl::OUString&) throw(uno::RuntimeException);
-            virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
+            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException);
+            virtual ::sal_Bool SAL_CALL supportsService(const OUString&) throw(uno::RuntimeException);
+            virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException);
         };
     } // end of namespace svgreader
 } // end of namespace svgio
@@ -75,17 +75,17 @@ namespace svgio
 {
     namespace svgreader
     {
-        uno::Sequence< rtl::OUString > XSvgParser_getSupportedServiceNames()
+        uno::Sequence< OUString > XSvgParser_getSupportedServiceNames()
         {
-            static rtl::OUString aServiceName("com.sun.star.graphic.SvgTools" );
-            static uno::Sequence< rtl::OUString > aServiceNames( &aServiceName, 1 );
+            static OUString aServiceName("com.sun.star.graphic.SvgTools" );
+            static uno::Sequence< OUString > aServiceNames( &aServiceName, 1 );
 
             return( aServiceNames );
         }
 
-        rtl::OUString XSvgParser_getImplementationName()
+        OUString XSvgParser_getImplementationName()
         {
-            return rtl::OUString( "svgio::svgreader::XSvgParser" );
+            return OUString( "svgio::svgreader::XSvgParser" );
         }
 
         uno::Reference< uno::XInterface > SAL_CALL XSvgParser_createInstance(const uno::Reference< uno::XComponentContext >& context)
@@ -113,7 +113,7 @@ namespace svgio
 
         uno::Sequence< uno::Reference< ::graphic::XPrimitive2D > > XSvgParser::getDecomposition(
             const uno::Reference< ::io::XInputStream >& xSVGStream,
-            const ::rtl::OUString& aAbsolutePath ) throw (uno::RuntimeException)
+            const OUString& aAbsolutePath ) throw (uno::RuntimeException)
         {
             drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
@@ -173,14 +173,14 @@ namespace svgio
             return aRetval;
         }
 
-        rtl::OUString SAL_CALL XSvgParser::getImplementationName() throw(uno::RuntimeException)
+        OUString SAL_CALL XSvgParser::getImplementationName() throw(uno::RuntimeException)
         {
             return(XSvgParser_getImplementationName());
         }
 
-        sal_Bool SAL_CALL XSvgParser::supportsService(const rtl::OUString& rServiceName) throw(uno::RuntimeException)
+        sal_Bool SAL_CALL XSvgParser::supportsService(const OUString& rServiceName) throw(uno::RuntimeException)
         {
-            const uno::Sequence< rtl::OUString > aServices(XSvgParser_getSupportedServiceNames());
+            const uno::Sequence< OUString > aServices(XSvgParser_getSupportedServiceNames());
 
             for(sal_Int32 nService(0); nService < aServices.getLength(); nService++)
             {
@@ -193,7 +193,7 @@ namespace svgio
             return sal_False;
         }
 
-        uno::Sequence< rtl::OUString > SAL_CALL XSvgParser::getSupportedServiceNames() throw(uno::RuntimeException)
+        uno::Sequence< OUString > SAL_CALL XSvgParser::getSupportedServiceNames() throw(uno::RuntimeException)
         {
             return XSvgParser_getSupportedServiceNames();
         }

@@ -90,19 +90,19 @@ private:
 
     ScColumn        aCol[MAXCOLCOUNT];
 
-    rtl::OUString aName;
-    rtl::OUString aCodeName;
-    rtl::OUString aComment;
+    OUString aName;
+    OUString aCodeName;
+    OUString aComment;
 
-    rtl::OUString       aLinkDoc;
-    rtl::OUString       aLinkFlt;
-    rtl::OUString       aLinkOpt;
-    rtl::OUString       aLinkTab;
+    OUString       aLinkDoc;
+    OUString       aLinkFlt;
+    OUString       aLinkOpt;
+    OUString       aLinkTab;
     sal_uLong           nLinkRefreshDelay;
     sal_uInt8           nLinkMode;
 
     // page style template
-    rtl::OUString   aPageStyle;
+    OUString   aPageStyle;
     Size            aPageSizeTwips;                 // size of the print-page
     SCCOL           nRepeatStartX;                  // repeating rows/columns
     SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
@@ -137,7 +137,7 @@ private:
     ScDocument*     pDocument;
     utl::TextSearch*    pSearchText;
 
-    mutable rtl::OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
+    mutable OUString aUpperName;             // #i62977# filled only on demand, reset in SetName
 
     boost::scoped_ptr<ScAddress2DVec> mxUninitNotes;
 
@@ -191,7 +191,7 @@ friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
 
 public:
-                ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName,
+                ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
 
@@ -236,8 +236,8 @@ public:
 
     bool        IsScenario() const                           { return bScenario; }
     void        SetScenario( bool bFlag );
-    void        GetScenarioComment( rtl::OUString& rComment) const  { rComment = aComment; }
-    void        SetScenarioComment( const rtl::OUString& rComment ) { aComment = rComment; }
+    void        GetScenarioComment( OUString& rComment) const  { rComment = aComment; }
+    void        SetScenarioComment( const OUString& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
     void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
     const Color& GetTabBgColor() const;
@@ -249,28 +249,28 @@ public:
 
     sal_uInt8       GetLinkMode() const                         { return nLinkMode; }
     bool        IsLinked() const                            { return nLinkMode != SC_LINK_NONE; }
-    const rtl::OUString& GetLinkDoc() const                        { return aLinkDoc; }
-    const rtl::OUString& GetLinkFlt() const                        { return aLinkFlt; }
-    const rtl::OUString& GetLinkOpt() const                        { return aLinkOpt; }
-    const rtl::OUString& GetLinkTab() const                        { return aLinkTab; }
+    const OUString& GetLinkDoc() const                        { return aLinkDoc; }
+    const OUString& GetLinkFlt() const                        { return aLinkFlt; }
+    const OUString& GetLinkOpt() const                        { return aLinkOpt; }
+    const OUString& GetLinkTab() const                        { return aLinkTab; }
     sal_uLong       GetLinkRefreshDelay() const                 { return nLinkRefreshDelay; }
 
     void        SetLink( sal_uInt8 nMode, const String& rDoc, const String& rFlt,
                         const String& rOpt, const String& rTab, sal_uLong nRefreshDelay );
 
-    void        GetName( rtl::OUString& rName ) const;
-    void        SetName( const rtl::OUString& rNewName );
+    void        GetName( OUString& rName ) const;
+    void        SetName( const OUString& rNewName );
 
     void        SetAnonymousDBData(ScDBData* pDBData);
     ScDBData*   GetAnonymousDBData();
 
-    void        GetCodeName( rtl::OUString& rName ) const {  rName = aCodeName; }
-    void        SetCodeName( const rtl::OUString& rNewName ) { aCodeName = rNewName; }
+    void        GetCodeName( OUString& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
 
-    const rtl::OUString& GetUpperName() const;
+    const OUString& GetUpperName() const;
 
-    const rtl::OUString&   GetPageStyle() const                    { return aPageStyle; }
-    void            SetPageStyle( const rtl::OUString& rName );
+    const OUString&   GetPageStyle() const                    { return aPageStyle; }
+    void            SetPageStyle( const OUString& rName );
     void            PageStyleModified( const String& rNewName );
 
     bool            IsProtected() const;
@@ -317,10 +317,10 @@ public:
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
 
-    void        GetString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
+    void        GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
     const OUString* GetStringCell( SCCOL nCol, SCROW nRow ) const;
     double* GetValueCell( SCCOL nCol, SCROW nRow );
-    void        GetInputString( SCCOL nCol, SCROW nRow, rtl::OUString& rString ) const;
+    void        GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
     double      GetValue( const ScAddress& rPos ) const
                     {
                         return ValidColRow(rPos.Col(),rPos.Row()) ?
@@ -330,7 +330,7 @@ public:
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
-    void GetFormula( SCCOL nCol, SCROW nRow, rtl::OUString& rFormula ) const;
+    void GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const;
     const ScTokenArray* GetFormulaTokens( SCCOL nCol, SCROW nRow ) const;
     const ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCCOL nCol, SCROW nRow );
@@ -508,7 +508,7 @@ public:
     void        ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl ); // from sw
     bool        SearchAndReplace(
         const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
-        ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+        ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
 
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
 
@@ -841,16 +841,16 @@ private:
     void        GetAutoFormatAttr(SCCOL nCol, SCROW nRow, sal_uInt16 nIndex, ScAutoFormatData& rData);
     void        GetAutoFormatFrame(SCCOL nCol, SCROW nRow, sal_uInt16 nFlags, sal_uInt16 nIndex, ScAutoFormatData& rData);
     bool        SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
-                           const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+                           const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                       const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+                       const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        SearchAll(const SvxSearchItem& rSearchItem, const ScMarkData& rMark,
-                          ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+                          ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        Replace(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                        const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+                        const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        ReplaceAll(
         const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-        rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+        OUString& rUndoStr, ScDocument* pUndoDoc);
 
     bool        SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                             const ScMarkData& rMark);
@@ -864,13 +864,13 @@ private:
     bool        SearchAndReplaceEmptyCells(
                     const SvxSearchItem& rSearchItem,
                     SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
-                    rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+                    OUString& rUndoStr, ScDocument* pUndoDoc);
     bool        SearchRangeForEmptyCell(const ScRange& rRange,
                     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
-                    rtl::OUString& rUndoStr);
+                    OUString& rUndoStr);
     bool        SearchRangeForAllEmptyCells(
         const ScRange& rRange, const SvxSearchItem& rSearchItem,
-        ScRangeList& rMatchedRanges, rtl::OUString& rUndoStr, ScDocument* pUndoDoc);
+        ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
 
                                 // use the global sort parameter:
     bool        IsSorted(SCCOLROW nStart, SCCOLROW nEnd) const;
@@ -888,7 +888,7 @@ private:
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
-    void        GetUpperCellString(SCCOL nCol, SCROW nRow, rtl::OUString& rStr);
+    void        GetUpperCellString(SCCOL nCol, SCROW nRow, OUString& rStr);
 
     bool        RefVisible(ScFormulaCell* pCell);
 

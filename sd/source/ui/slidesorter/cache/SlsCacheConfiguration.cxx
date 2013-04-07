@@ -74,8 +74,8 @@ Timer CacheConfiguration::maReleaseTimer;
 CacheConfiguration::CacheConfiguration (void)
 {
     // Get the cache size from configuration.
-    const ::rtl::OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
-    const ::rtl::OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
+    const OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
+    const OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
 
     try
     {
@@ -126,7 +126,7 @@ CacheConfiguration::CacheConfiguration (void)
 
 
 
-Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
+Any CacheConfiguration::GetValue (const OUString& rName)
 {
     Any aResult;
 

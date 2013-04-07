@@ -47,7 +47,7 @@ public:
 
     XFormsSubmissionContext( SvXMLImport& rImport,
                              sal_uInt16 nPrefix,
-                             const rtl::OUString& rLocalName,
+                             const OUString& rLocalName,
                              const com::sun::star::uno::Reference<com::sun::star::xforms::XModel2>& xModel );
     virtual ~XFormsSubmissionContext();
 
@@ -58,12 +58,12 @@ public:
 
 protected:
     virtual void HandleAttribute( sal_uInt16 nToken,
-                                  const rtl::OUString& rValue );
+                                  const OUString& rValue );
 
     virtual SvXMLImportContext* HandleChild(
         sal_uInt16 nToken,
         sal_uInt16 nNamespace,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
 };

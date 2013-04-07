@@ -58,7 +58,7 @@ DocumentContentFactory::~DocumentContentFactory()
 //=========================================================================
 
 // virtual
-::rtl::OUString SAL_CALL DocumentContentFactory::getImplementationName()
+OUString SAL_CALL DocumentContentFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -67,11 +67,11 @@ DocumentContentFactory::~DocumentContentFactory()
 //=========================================================================
 // virtual
 sal_Bool SAL_CALL
-DocumentContentFactory::supportsService( const ::rtl::OUString& ServiceName )
+DocumentContentFactory::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
 {
-    uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
-    const rtl::OUString * pArray = aSNL.getConstArray();
+    uno::Sequence< OUString > aSNL = getSupportedServiceNames();
+    const OUString * pArray = aSNL.getConstArray();
     for ( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
     {
         if ( pArray[ i ] == ServiceName )
@@ -82,7 +82,7 @@ DocumentContentFactory::supportsService( const ::rtl::OUString& ServiceName )
 
 //=========================================================================
 // virtual
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 DocumentContentFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {
@@ -91,20 +91,20 @@ DocumentContentFactory::getSupportedServiceNames()
 
 //=========================================================================
 // static
-rtl::OUString DocumentContentFactory::getImplementationName_Static()
+OUString DocumentContentFactory::getImplementationName_Static()
 {
-    return rtl::OUString(
+    return OUString(
         "com.sun.star.comp.ucb.TransientDocumentsDocumentContentFactory" );
 }
 
 //=========================================================================
 // static
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 DocumentContentFactory::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-        = rtl::OUString(
+        = OUString(
             "com.sun.star.frame.TransientDocumentsDocumentContentFactory" );
     return aSNS;
 }
@@ -127,7 +127,7 @@ DocumentContentFactory::createDocumentContent(
         xDocFac
             = uno::Reference< frame::XTransientDocumentsDocumentContentFactory >(
                 m_xSMgr->createInstance(
-                    rtl::OUString(
+                    OUString(
                         "com.sun.star.ucb.TransientDocumentsContentProvider" )
                     ),
                 uno::UNO_QUERY );
@@ -141,7 +141,7 @@ DocumentContentFactory::createDocumentContent(
         return xDocFac->createDocumentContent( Model );
 
     throw uno::RuntimeException(
-        rtl::OUString(
+        OUString(
             "Unable to obtain document content factory!" ),
         static_cast< cppu::OWeakObject * >( this ) );
 }

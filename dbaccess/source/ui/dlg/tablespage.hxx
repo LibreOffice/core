@@ -46,7 +46,7 @@ namespace dbaui
         OTableTreeListBox       m_aTablesList;
         FixedText               m_aExplanation;
 
-        ::rtl::OUString         m_sCatalogSeparator;
+        OUString         m_sCatalogSeparator;
         sal_Bool                m_bCatalogAtStart : 1;
 
         ::osl::Mutex            m_aNotifierMutex;
@@ -85,14 +85,14 @@ namespace dbaui
 
         /** check the tables in <member>m_aTablesList</member> according to <arg>_rTables</arg>
         */
-        void implCheckTables(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables);
+        void implCheckTables(const ::com::sun::star::uno::Sequence< OUString >& _rTables);
 
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
         SvTreeListEntry* implNextSibling(SvTreeListEntry* _pEntry) const;
 
         /** return the current selection in <member>m_aTablesList</member>
         */
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > collectDetailedSelection() const;
+        ::com::sun::star::uno::Sequence< OUString > collectDetailedSelection() const;
 
         /// (un)check all entries
         void CheckAll( sal_Bool bCheck = sal_True );
@@ -101,7 +101,7 @@ namespace dbaui
 
         // checks the tables according to the filter given
         // in oppsofite to implCheckTables, this method handles the case of an empty sequence, too ...
-        void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter );
+        void implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter );
     };
 
 //.........................................................................

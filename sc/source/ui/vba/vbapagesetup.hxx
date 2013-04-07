@@ -40,8 +40,8 @@ public:
     virtual ~ScVbaPageSetup(){}
 
     // Attribute
-    virtual rtl::OUString SAL_CALL getPrintArea() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setPrintArea( const rtl::OUString& rAreas ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getPrintArea() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPrintArea( const OUString& rAreas ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getHeaderMargin() throw (css::uno::RuntimeException);
     void SAL_CALL setHeaderMargin( double margin ) throw (css::uno::RuntimeException);
     double SAL_CALL getFooterMargin() throw (css::uno::RuntimeException);
@@ -52,18 +52,18 @@ public:
     virtual void SAL_CALL setFitToPagesWide( const css::uno::Any& fitToPagesWide ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getZoom() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setZoom( const css::uno::Any& zoom ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getLeftHeader() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLeftHeader( const rtl::OUString& leftHeader ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getCenterHeader() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCenterHeader( const rtl::OUString& centerHeader ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getRightHeader() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRightHeader( const rtl::OUString& rightHeader ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getLeftFooter() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setLeftFooter( const rtl::OUString& leftFooter ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getCenterFooter() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setCenterFooter( const rtl::OUString& centerFooter ) throw (css::uno::RuntimeException);
-    virtual rtl::OUString SAL_CALL getRightFooter() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setRightFooter( const rtl::OUString& rightFooter ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLeftHeader() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLeftHeader( const OUString& leftHeader ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCenterHeader() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCenterHeader( const OUString& centerHeader ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRightHeader() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRightHeader( const OUString& rightHeader ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getLeftFooter() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setLeftFooter( const OUString& leftFooter ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getCenterFooter() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCenterFooter( const OUString& centerFooter ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getRightFooter() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setRightFooter( const OUString& rightFooter ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getOrder() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setOrder( sal_Int32 order ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getFirstPageNumber() throw (css::uno::RuntimeException);
@@ -76,8 +76,8 @@ public:
     virtual void SAL_CALL setPrintHeadings( sal_Bool printHeadings ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 };
 #endif
 

@@ -120,7 +120,6 @@ static void debug_i18n_cal_dump( const ::icu::Calendar & r )
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using ::rtl::OUString;
 
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -1173,7 +1172,7 @@ Calendar_gregorian::getImplementationName(void) throw( RuntimeException )
 }
 
 sal_Bool SAL_CALL
-Calendar_gregorian::supportsService(const rtl::OUString& rServiceName) throw( RuntimeException )
+Calendar_gregorian::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
         return !rServiceName.compareToAscii(cCalendar);
 }

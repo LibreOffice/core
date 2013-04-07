@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,"com.sun.star.sdbcx.JPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon, const ::rtl::OUString& sql )
+java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon, const OUString& sql )
     : OStatement_BASE2( pEnv, _rCon )
 {
     m_sSqlStatement = sql;
@@ -111,7 +111,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -346,7 +346,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                         {
                             ORowSetValue aValue;
                             aValue.fill(x);
-                            const ::rtl::OUString sValue = aValue;
+                            const OUString sValue = aValue;
                             if ( !sValue.isEmpty() )
                                 pBigDecimal.reset(new java_math_BigDecimal(sValue));
                             else
@@ -370,7 +370,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const ::rtl::OUString& /*typeName*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -387,9 +387,9 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
-        const ::rtl::OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
+        const OUString sError( m_pConnection->getResources().getResourceStringWithSubstitution(
                 STR_UNKNOWN_PARA_TYPE,
-                "$position$", ::rtl::OUString::valueOf(parameterIndex)
+                "$position$", OUString::valueOf(parameterIndex)
              ) );
         ::dbtools::throwGenericSQLException(sError,*this);
     }

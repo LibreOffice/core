@@ -27,8 +27,6 @@
 
 #include "descriptionimp.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 using namespace ::std;
 using namespace ::cppu;
@@ -75,7 +73,7 @@ void SdXMLDescriptionContext::EndElement()
 
 // This method is called for all characters that are contained in the
 // current element. The default is to ignore them.
-void SdXMLDescriptionContext::Characters( const ::rtl::OUString& rChars )
+void SdXMLDescriptionContext::Characters( const OUString& rChars )
 {
     msText += rChars;
 }

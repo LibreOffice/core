@@ -207,7 +207,7 @@ long PaperInfo::sloppyFitPageDimension(long nDimension)
 
 PaperInfo PaperInfo::getSystemDefaultPaper()
 {
-    rtl::OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
+    OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
 
 #ifdef UNX
     // if set to "use system", get papersize from system
@@ -233,7 +233,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
             if (pBuffer && *pBuffer != 0)
             {
-                rtl::OString aPaper(pBuffer);
+                OString aPaper(pBuffer);
                 aPaper = aPaper.trim();
                 static struct { const char *pName; Paper ePaper; } aCustoms [] =
                 {
@@ -328,7 +328,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         aLocaleStr = officecfg::System::L10N::Locale::get();
 
     if (aLocaleStr.isEmpty())
-        aLocaleStr = rtl::OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
+        aLocaleStr = OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
 
     // convert locale string to locale struct
     ::com::sun::star::lang::Locale aSysLocale;
@@ -368,13 +368,13 @@ PaperInfo::PaperInfo(long nPaperWidth, long nPaperHeight)
     }
 }
 
-rtl::OString PaperInfo::toPSName(Paper ePaper)
+OString PaperInfo::toPSName(Paper ePaper)
 {
     return static_cast<size_t>(ePaper) < nTabSize ?
-        rtl::OString(aDinTab[ePaper].m_pPSName) : rtl::OString();
+        OString(aDinTab[ePaper].m_pPSName) : OString();
 }
 
-Paper PaperInfo::fromPSName(const rtl::OString &rName)
+Paper PaperInfo::fromPSName(const OString &rName)
 {
     if (rName.isEmpty())
         return PAPER_USER;

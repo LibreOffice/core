@@ -259,7 +259,7 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
-        const ::rtl::OUString& _rFieldPostfix,
+        const OUString& _rFieldPostfix,
         sal_uInt32 _nInventor,
         sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
@@ -276,12 +276,12 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
-        const ::rtl::OUString& _rFieldPostfix,
+        const OUString& _rFieldPostfix,
         SdrUnoObj*& _rpLabel,
         SdrUnoObj*& _rpControl,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxDataSource = NULL,
-        const ::rtl::OUString& _rDataSourceName = ::rtl::OUString(),
-        const ::rtl::OUString& _rCommand= ::rtl::OUString(),
+        const OUString& _rDataSourceName = OUString(),
+        const OUString& _rCommand= OUString(),
         const sal_Int32 _nCommandType = -1
     );
 

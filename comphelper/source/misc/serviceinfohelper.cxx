@@ -27,20 +27,20 @@ namespace comphelper
 {
 
 /** returns an empty UString(). most times sufficient */
-::rtl::OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
+OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
 /** the base implementation iterates over the service names from <code>getSupportedServiceNames</code> */
-sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
     return supportsService( ServiceName, getSupportedServiceNames() );
 }
 
-sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const ::rtl::OUString& ServiceName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SupportedServices ) throw()
+sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const OUString& ServiceName, const ::com::sun::star::uno::Sequence< OUString >& SupportedServices ) throw()
 {
-    const ::rtl::OUString * pArray = SupportedServices.getConstArray();
+    const OUString * pArray = SupportedServices.getConstArray();
     for( sal_Int32 i = 0; i < SupportedServices.getLength(); i++ )
         if( pArray[i] == ServiceName )
             return sal_True;
@@ -48,25 +48,25 @@ sal_Bool SAL_CALL ServiceInfoHelper::supportsService( const ::rtl::OUString& Ser
 }
 
 /** the base implementation has no supported services */
-::com::sun::star::uno::Sequence< ::rtl::OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+::com::sun::star::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq(0);
+    ::com::sun::star::uno::Sequence< OUString> aSeq(0);
     return aSeq;
 }
 
 /** this method adds a variable number of char pointer to a given Sequence
  */
-void ServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()
+void ServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< OUString >& rSeq, sal_uInt16 nServices, /* char * */ ... ) throw()
 {
     sal_uInt32 nCount = rSeq.getLength();
 
     rSeq.realloc( nCount + nServices );
-    rtl::OUString* pStrings = rSeq.getArray();
+    OUString* pStrings = rSeq.getArray();
 
     va_list marker;
     va_start( marker, nServices );
     for( sal_uInt16 i = 0 ; i < nServices; i++ )
-        pStrings[nCount++] = rtl::OUString::createFromAscii(va_arg( marker, char*));
+        pStrings[nCount++] = OUString::createFromAscii(va_arg( marker, char*));
     va_end( marker );
 }
 

@@ -25,7 +25,7 @@ class AstSequence : public AstType
 {
 public:
     AstSequence(AstType* pMemberType, AstScope* pScope)
-        : AstType(NT_sequence, ::rtl::OString("[]")+pMemberType->getScopedName(), pScope)
+        : AstType(NT_sequence, OString("[]")+pMemberType->getScopedName(), pScope)
         , m_pMemberType(pMemberType)
         , m_pRelativName(NULL)
     {}
@@ -44,7 +44,7 @@ public:
     virtual const sal_Char* getRelativName() const;
 private:
     AstType*        m_pMemberType;
-    mutable ::rtl::OString* m_pRelativName;
+    mutable OString* m_pRelativName;
 };
 
 #endif // _IDLC_ASTSEQUENCE_HXX_

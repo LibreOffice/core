@@ -90,22 +90,22 @@ NeonUri::NeonUri( const ne_uri * inUri )
     if ( uri == 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
-    init( rtl::OString( uri ), inUri );
+    init( OString( uri ), inUri );
     ne_free( uri );
 
     calculateURI();
 }
 
-NeonUri::NeonUri( const rtl::OUString & inUri )
+NeonUri::NeonUri( const OUString & inUri )
     throw ( DAVException )
 {
     if ( inUri.isEmpty() )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     // #i77023#
-    rtl::OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
+    OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
 
-    rtl::OString theInputUri(
+    OString theInputUri(
         aEscapedUri.getStr(), aEscapedUri.getLength(), RTL_TEXTENCODING_UTF8 );
 
     ne_uri theUri;
@@ -121,7 +121,7 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     calculateURI();
 }
 
-void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
+void NeonUri::init( const OString & rUri, const ne_uri * pUri )
 {
     // Complete URI.
     const ne_uri * pUriDefs
@@ -131,31 +131,31 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
               &g_sUriDefaultsHTTPS :
               &g_sUriDefaultsHTTP;
 
-    mScheme   = rtl::OStringToOUString(
+    mScheme   = OStringToOUString(
                     pUri->scheme ? pUri->scheme : pUriDefs->scheme,
                     RTL_TEXTENCODING_UTF8 );
-    mUserInfo = rtl::OStringToOUString(
+    mUserInfo = OStringToOUString(
                     pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
                     RTL_TEXTENCODING_UTF8 );
-    mHostName = rtl::OStringToOUString(
+    mHostName = OStringToOUString(
                     pUri->host ? pUri->host : pUriDefs->host,
                     RTL_TEXTENCODING_UTF8 );
     mPort     = pUri->port > 0 ? pUri->port : pUriDefs->port;
-    mPath     = rtl::OStringToOUString(
+    mPath     = OStringToOUString(
                     pUri->path ? pUri->path : pUriDefs->path,
                     RTL_TEXTENCODING_UTF8 );
 
     if ( pUri->query )
     {
-        mPath += rtl::OUString("?");
-        mPath += rtl::OStringToOUString(
+        mPath += OUString("?");
+        mPath += OStringToOUString(
             pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += rtl::OUString("#");
-        mPath += rtl::OStringToOUString(
+        mPath += OUString("#");
+        mPath += OStringToOUString(
             pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
 }
@@ -166,7 +166,7 @@ NeonUri::~NeonUri( )
 
 void NeonUri::calculateURI ()
 {
-    rtl::OUStringBuffer aBuf( mScheme );
+    OUStringBuffer aBuf( mScheme );
     aBuf.appendAscii( "://" );
     if ( !mUserInfo.isEmpty() )
     {
@@ -206,14 +206,14 @@ void NeonUri::calculateURI ()
     if ( bAppendPort )
     {
         aBuf.appendAscii( ":" );
-        aBuf.append( rtl::OUString::valueOf( mPort ) );
+        aBuf.append( OUString::valueOf( mPort ) );
     }
     aBuf.append( mPath );
 
     mURI = aBuf.makeStringAndClear();
 }
 
-::rtl::OUString NeonUri::GetPathBaseName () const
+OUString NeonUri::GetPathBaseName () const
 {
     sal_Int32 nPos = mPath.lastIndexOf ('/');
     sal_Int32 nTrail = 0;
@@ -225,7 +225,7 @@ void NeonUri::calculateURI ()
     }
     if (nPos != -1)
     {
-        rtl::OUString aTemp(
+        OUString aTemp(
             mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail) );
 
         // query, fragment present?
@@ -239,7 +239,7 @@ void NeonUri::calculateURI ()
         return aTemp;
     }
     else
-        return rtl::OUString("/");
+        return OUString("/");
 }
 
 bool NeonUri::operator== ( const NeonUri & rOther ) const
@@ -247,22 +247,22 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
     return ( mURI == rOther.mURI );
 }
 
-::rtl::OUString NeonUri::GetPathBaseNameUnescaped () const
+OUString NeonUri::GetPathBaseNameUnescaped () const
 {
     return unescape( GetPathBaseName() );
 }
 
-void NeonUri::AppendPath (const rtl::OUString& rPath)
+void NeonUri::AppendPath (const OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += rtl::OUString("/");
+        mPath += OUString("/");
 
     mPath += rPath;
     calculateURI ();
 };
 
 // static
-rtl::OUString NeonUri::escapeSegment( const rtl::OUString& segment )
+OUString NeonUri::escapeSegment( const OUString& segment )
 {
     return rtl::Uri::encode( segment,
                              rtl_UriCharClassPchar,
@@ -271,7 +271,7 @@ rtl::OUString NeonUri::escapeSegment( const rtl::OUString& segment )
 }
 
 // static
-rtl::OUString NeonUri::unescape( const rtl::OUString& segment )
+OUString NeonUri::unescape( const OUString& segment )
 {
     return rtl::Uri::decode( segment,
                              rtl_UriDecodeWithCharset,
@@ -279,10 +279,10 @@ rtl::OUString NeonUri::unescape( const rtl::OUString& segment )
 }
 
 // static
-rtl::OUString NeonUri::makeConnectionEndPointString(
-                                const rtl::OUString & rHostName, int nPort )
+OUString NeonUri::makeConnectionEndPointString(
+                                const OUString & rHostName, int nPort )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
 
     // Is host a numeric IPv6 address?
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
@@ -300,7 +300,7 @@ rtl::OUString NeonUri::makeConnectionEndPointString(
     if ( ( nPort != DEFAULT_HTTP_PORT ) && ( nPort != DEFAULT_HTTPS_PORT ) )
     {
         aBuf.appendAscii( ":" );
-        aBuf.append( rtl::OUString::valueOf( sal_Int32( nPort ) ) );
+        aBuf.append( OUString::valueOf( sal_Int32( nPort ) ) );
     }
     return aBuf.makeStringAndClear();
 }

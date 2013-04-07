@@ -54,7 +54,6 @@ using com::sun::star::xml::dom::XNode;
 using com::sun::star::xml::dom::XElement;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::dom::NodeType_ELEMENT_NODE;
-using rtl::OUString;
 
 
 // helper functions; implemented below

@@ -30,7 +30,7 @@
 struct NameKey_Impl
 {
     sal_uInt16 m_nPrefix;
-    ::rtl::OUString m_aLocalName;
+    OUString m_aLocalName;
 
     inline NameKey_Impl( sal_uInt16 nPrfx,
                          ::xmloff::token::XMLTokenEnum eLclNm ) :
@@ -39,7 +39,7 @@ struct NameKey_Impl
     {
     }
 
-    inline NameKey_Impl( sal_uInt16 nPrfx, const ::rtl::OUString& rLclNm ) :
+    inline NameKey_Impl( sal_uInt16 nPrfx, const OUString& rLclNm ) :
         m_nPrefix( nPrfx ),
         m_aLocalName( rLclNm )
     {

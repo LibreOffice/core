@@ -41,7 +41,6 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace cppu;
 
-using ::rtl::OUString;
 
 template< class T >
 bool equalSequences(const Sequence<T>& seqIn, const Sequence<Any> & returned);

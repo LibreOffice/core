@@ -49,7 +49,7 @@ public:
 
     TokenContext( SvXMLImport& rImport,
                   sal_uInt16 nPrefix,
-                  const ::rtl::OUString& rLocalName,
+                  const OUString& rLocalName,
                   const SvXMLTokenMapEntry* pAttributes = NULL,
                   const SvXMLTokenMapEntry* pChildren = NULL );
 
@@ -72,20 +72,20 @@ public:
      * handling of defaults. */
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     /** Create a warning for all non-namespace character
      * content. Classes that wish to deal with character content have
      * to overload this method anyway, and will thus get rid of the
      * warnings. */
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
 protected:
     /** will be called for each attribute */
     virtual void HandleAttribute(
         sal_uInt16 nToken,
-        const rtl::OUString& rValue ) = 0;
+        const OUString& rValue ) = 0;
 
     /** will be called for each child element */
     virtual SvXMLImportContext* HandleChild(
@@ -94,7 +94,7 @@ protected:
         // the following attributes are mainly to be used for child
         // context creation
         sal_uInt16 nPrefix,
-        const rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList ) = 0;
 };
 

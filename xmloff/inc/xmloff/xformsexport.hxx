@@ -20,6 +20,7 @@
 #define _XMLOFF_XFORMSEXPORT_HXX
 
 #include "xmloff/dllapi.h"
+#include <rtl/ustring.hxx>
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
@@ -29,17 +30,16 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; struct PropertyValue; }
     namespace container { class XNameAccess; }
 } } }
-namespace rtl { class OUString; }
 
 
 /** export an XForms model. */
 void SAL_DLLPRIVATE exportXForms( SvXMLExport& );
 
-rtl::OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
-rtl::OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsListBindName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
-rtl::OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
+OUString SAL_DLLPRIVATE getXFormsSubmissionName( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xBinding );
 
 
 /** returns the settings of the given XForms container, to be exported as document specific settings

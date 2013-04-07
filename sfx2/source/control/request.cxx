@@ -201,7 +201,7 @@ SfxRequest::SfxRequest
 #ifdef DBG_UTIL
     else
     {
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "Recording unsupported slot: "));
         aStr.append(static_cast<sal_Int32>(pImp->pPool->GetSlotId(nSlotId)));
         OSL_FAIL(aStr.getStr());
@@ -331,9 +331,9 @@ void SfxRequest_Impl::Record
 */
 
 {
-    String aCommand = rtl::OUString(".uno:");
+    String aCommand = OUString(".uno:");
     aCommand.AppendAscii( pSlot->GetUnoName() );
-    ::rtl::OUString aCmd( aCommand );
+    OUString aCmd( aCommand );
     if(xRecorder.is())
     {
         uno::Reference< container::XIndexReplace > xReplace( xRecorder, uno::UNO_QUERY );
@@ -346,8 +346,8 @@ void SfxRequest_Impl::Record
                 uno::Any aElement = xReplace->getByIndex(nCount-1);
                 if ( (aElement >>= aStatement) && aStatement.aCommand == aCmd )
                 {
-                    ::rtl::OUString aStr;
-                    ::rtl::OUString aNew;
+                    OUString aStr;
+                    OUString aNew;
                     aStatement.aArgs[0].Value >>= aStr;
                     rArgs[0].Value >>= aNew;
                     aStr += aNew;
@@ -689,7 +689,7 @@ void SfxRequest::Done_Impl
     // new Recording uses UnoName!
     if ( !pImp->pSlot->pUnoName )
     {
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
             "Recording not exported slot: "));
         aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
         OSL_FAIL(aStr.getStr());
@@ -711,7 +711,7 @@ void SfxRequest::Done_Impl
 #ifdef DBG_UTIL
         if ( SFX_ITEM_SET != eState )
         {
-            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
                 "Recording property not available: "));
             aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
             OSL_FAIL(aStr.getStr());
@@ -812,7 +812,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 
     if(xSet.is())
     {
-        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString("DispatchRecorderSupplier"));
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue(OUString("DispatchRecorderSupplier"));
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
         aProp >>= xSupplier;
         if(xSupplier.is())

@@ -48,10 +48,10 @@ friend class ScVbaAxis;
     css::uno::Reference< css::chart::XTwoAxisXSupplier > xTwoAxisXSupplier;
     css::uno::Reference< css::chart::XTwoAxisYSupplier > xTwoAxisYSupplier;
 
-    css::uno::Sequence< rtl::OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
+    css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
     css::uno::Sequence< css::uno::Sequence< double > > dblValues;
     void setDefaultChartType()throw ( css::script::BasicErrorException ) ;
-    void setDiagram( const rtl::OUString& _sDiagramType) throw( css::script::BasicErrorException );
+    void setDiagram( const OUString& _sDiagramType) throw( css::script::BasicErrorException );
     bool isStacked() throw ( css::uno::RuntimeException );
     bool is100PercentStacked() throw ( css::uno::RuntimeException );
     sal_Int32 getStackedType( sal_Int32 _nStacked, sal_Int32 _n100PercentStacked, sal_Int32 _nUnStacked ) throw ( css::uno::RuntimeException );
@@ -68,7 +68,7 @@ public:
     bool is3D() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException );
     // Methods
-    virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL SeriesCollection(const css::uno::Any&) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getChartType() throw ( css::uno::RuntimeException, css::script::BasicErrorException);
     virtual void SAL_CALL setChartType( ::sal_Int32 _charttype ) throw ( css::uno::RuntimeException, css::script::BasicErrorException);
@@ -86,8 +86,8 @@ public:
     virtual css::uno::Reference< ov::excel::XChartTitle > SAL_CALL getChartTitle(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Axes( const css::uno::Any& Type, const css::uno::Any& AxisGroup ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
 };
 

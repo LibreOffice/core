@@ -61,9 +61,9 @@ namespace slideshow
         }
 
         /// Specialization for non-addable strings
-        template<> ::rtl::OUString accumulate< ::rtl::OUString >( const ::rtl::OUString&,
+        template<> OUString accumulate< OUString >( const OUString&,
                                                                   sal_uInt32,
-                                                                  const ::rtl::OUString&    rCurrValue )
+                                                                  const OUString&    rCurrValue )
         {
             // always return rCurrValue, it's impossible to add strings...
             return rCurrValue;

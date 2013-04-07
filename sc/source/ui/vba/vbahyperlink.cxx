@@ -29,8 +29,6 @@
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 
 // ============================================================================
 

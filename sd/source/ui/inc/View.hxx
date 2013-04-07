@@ -142,7 +142,7 @@ public:
     SdrGrafObj*             InsertGraphic( const Graphic& rGraphic,
                                            sal_Int8& rAction, const Point& rPos,
                                            SdrObject* pSelectedObj, ImageMap* pImageMap );
-    SdrMediaObj*            InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAction,
+    SdrMediaObj*            InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
                                             const Point& rPos, const Size& rSize,
                                             bool const bLink );
 
@@ -164,8 +164,8 @@ public:
         nType == 1 -> objects
         nType == 2 -> pages and objects    */
 
-    bool GetExchangeList( std::vector<rtl::OUString> &rExchangeList,
-                          std::vector<rtl::OUString> &rBookmarkList,
+    bool GetExchangeList( std::vector<OUString> &rExchangeList,
+                          std::vector<OUString> &rBookmarkList,
                           const sal_uInt16 nType );
 
     virtual void onAccessibilityOptionsChanged();

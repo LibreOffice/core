@@ -72,7 +72,7 @@ public:
     };
 
     ScXMLNamedExpressionsContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         Inserter* pInserter );
@@ -80,7 +80,7 @@ public:
     virtual ~ScXMLNamedExpressionsContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -98,7 +98,7 @@ class ScXMLNamedRangeContext : public SvXMLImportContext
 public:
 
     ScXMLNamedRangeContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
@@ -106,7 +106,7 @@ public:
     virtual ~ScXMLNamedRangeContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
@@ -124,7 +124,7 @@ class ScXMLNamedExpressionContext : public SvXMLImportContext
 public:
 
     ScXMLNamedExpressionContext(
-        ScXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
+        ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
         ScXMLNamedExpressionsContext::Inserter* pInserter );
@@ -132,7 +132,7 @@ public:
     virtual ~ScXMLNamedExpressionContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

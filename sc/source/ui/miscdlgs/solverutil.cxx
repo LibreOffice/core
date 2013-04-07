@@ -70,8 +70,8 @@ static uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno
     return xSolver;
 }
 
-void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
-                                       uno::Sequence<rtl::OUString>& rDescriptions )
+void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
+                                       uno::Sequence<OUString>& rDescriptions )
 {
     rImplNames.realloc(0);      // clear
     rDescriptions.realloc(0);
@@ -85,7 +85,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
+                        xEnAc->createContentEnumeration( OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
             sal_Int32 nCount = 0;
@@ -99,8 +99,8 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
                     uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
                     if ( xInfo.is() )
                     {
-                        rtl::OUString sName = xInfo->getImplementationName();
-                        rtl::OUString sDescription;
+                        OUString sName = xInfo->getImplementationName();
+                        OUString sDescription;
 
                         uno::Reference<sheet::XSolver> xSolver = lcl_CreateSolver( xIntFac, xCtx );
                         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
@@ -122,7 +122,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<rtl::OUString>& rImplNames,
     }
 }
 
-uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rImplName )
+uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const OUString& rImplName )
 {
     uno::Reference<sheet::XSolver> xSolver;
 
@@ -135,7 +135,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
+                        xEnAc->createContentEnumeration( OUString(RTL_CONSTASCII_USTRINGPARAM(SCSOLVER_SERVICE)) );
         if ( xEnum.is() )
         {
             while ( xEnum->hasMoreElements() && !xSolver.is() )
@@ -148,7 +148,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
                     uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
                     if ( xInfo.is() )
                     {
-                        rtl::OUString sName = xInfo->getImplementationName();
+                        OUString sName = xInfo->getImplementationName();
                         if ( sName == rImplName )
                             xSolver = lcl_CreateSolver( xIntFac, xCtx );
                     }
@@ -161,7 +161,7 @@ uno::Reference<sheet::XSolver> ScSolverUtil::GetSolver( const rtl::OUString& rIm
     return xSolver;
 }
 
-uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const rtl::OUString& rImplName )
+uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& rImplName )
 {
     uno::Sequence<beans::PropertyValue> aDefaults;
 

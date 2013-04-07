@@ -70,8 +70,8 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         String sTitle = GetText();
         sTitle += pDropField->GetPar2();
         SetText(sTitle);
-        uno::Sequence< rtl::OUString > aItems = pDropField->GetItemSequence();
-        const rtl::OUString* pArray = aItems.getConstArray();
+        uno::Sequence< OUString > aItems = pDropField->GetItemSequence();
+        const OUString* pArray = aItems.getConstArray();
         for(sal_Int32 i = 0; i < aItems.getLength(); i++)
             aListItemsLB.InsertEntry(pArray[i]);
         aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
@@ -92,7 +92,7 @@ void sw::DropDownFieldDialog::Apply()
 {
     if(pDropField)
     {
-        rtl::OUString sSelect = aListItemsLB.GetSelectEntry();
+        OUString sSelect = aListItemsLB.GetSelectEntry();
         if(pDropField->GetPar1() != sSelect)
         {
             rSh.StartAllAction();

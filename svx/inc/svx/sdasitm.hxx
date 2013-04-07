@@ -46,12 +46,12 @@ class SdrCustomShapeDataItem : public SfxStringItem
 class SVX_DLLPUBLIC SdrCustomShapeGeometryItem : public SfxPoolItem
 {
 public:
-    typedef std::pair < const ::rtl::OUString, const ::rtl::OUString > PropertyPair;
+    typedef std::pair < const OUString, const OUString > PropertyPair;
 
 private:
     struct SVX_DLLPUBLIC PropertyEq
     {
-        bool operator()( const rtl::OUString&, const rtl::OUString& ) const;
+        bool operator()( const OUString&, const OUString& ) const;
     };
     struct SVX_DLLPUBLIC PropertyPairEq
     {
@@ -62,7 +62,7 @@ private:
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
     typedef boost::unordered_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
-    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
+    typedef boost::unordered_map< OUString, sal_Int32, OUStringHash, PropertyEq > PropertyHashMap;
 
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
@@ -94,13 +94,13 @@ private:
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 
-            com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName );
-            com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName, const rtl::OUString& rPropName2 );
+            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
+            com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );
 
             void SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal );
-            void SetPropertyValue( const rtl::OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
+            void SetPropertyValue( const OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal );
 
-            void ClearPropertyValue( const rtl::OUString& rPropertyName );
+            void ClearPropertyValue( const OUString& rPropertyName );
 };
 
 class SdrCustomShapeReplacementURLItem : public SfxStringItem

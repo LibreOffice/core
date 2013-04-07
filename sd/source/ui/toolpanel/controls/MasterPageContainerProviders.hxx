@@ -124,15 +124,15 @@ private:
 class TemplatePageObjectProvider : public PageObjectProvider
 {
 public:
-    TemplatePageObjectProvider (const ::rtl::OUString& rsURL);
+    TemplatePageObjectProvider (const OUString& rsURL);
     virtual ~TemplatePageObjectProvider (void) {};
     virtual SdPage* operator () (SdDrawDocument* pDocument);
     virtual int GetCostIndex (void);
     virtual bool operator== (const PageObjectProvider& rProvider);
 private:
-    ::rtl::OUString msURL;
+    OUString msURL;
     SfxObjectShellLock mxDocumentShell;
-    ::sd::DrawDocShell* LoadDocument (const ::rtl::OUString& sFileName);
+    ::sd::DrawDocShell* LoadDocument (const OUString& sFileName);
 };
 
 
@@ -144,13 +144,13 @@ private:
 class TemplatePreviewProvider : public PreviewProvider
 {
 public:
-    TemplatePreviewProvider (const ::rtl::OUString& rsURL);
+    TemplatePreviewProvider (const OUString& rsURL);
     virtual ~TemplatePreviewProvider (void) {};
     virtual Image operator() (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer);
     virtual int GetCostIndex (void);
     virtual bool NeedsPageObject (void);
 private:
-    ::rtl::OUString msURL;
+    OUString msURL;
 };
 
 

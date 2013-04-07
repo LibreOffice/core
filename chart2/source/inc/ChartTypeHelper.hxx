@@ -79,10 +79,10 @@ public:
                     getAxisType( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
                                 , sal_Int32 nDimensionIndex );
 
-    static rtl::OUString getRoleOfSequenceForYAxisNumberFormatDetection( const ::com::sun::star::uno::Reference<
+    static OUString getRoleOfSequenceForYAxisNumberFormatDetection( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartType >& xChartType );
 
-    static rtl::OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const ::com::sun::star::uno::Reference<
+    static OUString getRoleOfSequenceForDataLabelNumberFormatDetection( const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartType >& xChartType );
 
     static bool shouldLabelNumberFormatKeyBeDetectedFromYAxis( const ::com::sun::star::uno::Reference<

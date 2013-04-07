@@ -33,7 +33,6 @@
 #include <svx/unoshtxt.hxx>
 #include <svx/svdotext.hxx>
 
-using ::rtl::OUString;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -296,7 +295,7 @@ Reference<XAccessible > SAL_CALL  AccessibleCell::getAccessibleAtPoint ( const :
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == NULL)
-            throw uno::RuntimeException (::rtl::OUString("AccessibleCell has no valid view forwarder"),static_cast<uno::XWeak*>(this));
+            throw uno::RuntimeException (OUString("AccessibleCell has no valid view forwarder"),static_cast<uno::XWeak*>(this));
 
         ::Size aPixelSize( maShapeTreeInfo.GetViewForwarder()->LogicToPixel(::Size(aCellRect.GetWidth(), aCellRect.GetHeight())) );
         ::Point aPixelPosition( maShapeTreeInfo.GetViewForwarder()->LogicToPixel( aCellRect.TopLeft() ));
@@ -425,14 +424,14 @@ sal_Int32 SAL_CALL AccessibleCell::getBackground (void) throw (RuntimeException)
 
 // --------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL AccessibleCell::getTitledBorderText (void) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL AccessibleCell::getTitledBorderText (void) throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleComponentBase::getTitledBorderText();
 }
 
 // --------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL AccessibleCell::getToolTipText (void) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL AccessibleCell::getToolTipText (void) throw (::com::sun::star::uno::RuntimeException)
 {
     return AccessibleComponentBase::getToolTipText();
 }
@@ -548,7 +547,7 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
     return mnIndexInParent;
 }
 
-::rtl::OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL AccessibleCell::getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed ();
     SolarMutexGuard aSolarGuard;

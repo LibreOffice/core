@@ -61,11 +61,11 @@ SAL_IMPLEMENT_MAIN()
     uno::Reference< deployment::XUpdateInformationProvider > rUpdateInformationProvider =
         deployment::UpdateInformationProvider::create( rComponentContext );
 
-    uno::Sequence< rtl::OUString > theURLs(1);
+    uno::Sequence< OUString > theURLs(1);
     osl_getCommandArg( 0, &theURLs[0].pData );
     // theURLs[0] = "http://localhost/~olli/atomfeed.xml";
 
-    rtl::OUString aExtension = "MyExtension";
+    OUString aExtension = "MyExtension";
 
     try
     {
@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch( const uno::Exception & e )
     {
-        OSL_TRACE( "exception caught: %s", rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr());
+        OSL_TRACE( "exception caught: %s", OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr());
     }
     catch( ... )
     {

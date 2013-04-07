@@ -90,7 +90,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------------
-    Reference< XDispatch > SAL_CALL DispatchInterceptionMultiplexer::queryDispatch( const URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(RuntimeException)
+    Reference< XDispatch > SAL_CALL DispatchInterceptionMultiplexer::queryDispatch( const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard( *m_pMutex );
         Reference< XDispatch> xResult;

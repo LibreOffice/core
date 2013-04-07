@@ -30,12 +30,12 @@
 
 #include <unistd.h>
 
-const rtl::OUString RECENTLY_USED_FILE_NAME(".recently-used");
-const rtl::OUString SLASH("/");
+const OUString RECENTLY_USED_FILE_NAME(".recently-used");
+const OUString SLASH("/");
 
 namespace /* private */ {
 
-inline void ensure_final_slash(/*inout*/ rtl::OUString& path)
+inline void ensure_final_slash(/*inout*/ OUString& path)
 {
     if (!path.isEmpty() &&
         (SLASH.pData->buffer[0] != path.pData->buffer[path.getLength() - 1]))
@@ -49,19 +49,19 @@ recently_used_file::recently_used_file() :
     file_(NULL)
 {
     osl::Security sec;
-    rtl::OUString homedir_url;
+    OUString homedir_url;
 
     if (sec.getHomeDir(homedir_url))
     {
-        rtl::OUString homedir;
+        OUString homedir;
         osl::FileBase::getSystemPathFromFileURL(homedir_url, homedir);
 
-        rtl::OUString rufn = homedir;
+        OUString rufn = homedir;
         ensure_final_slash(rufn);
         rufn += RECENTLY_USED_FILE_NAME;
 
-        rtl::OString tmp =
-            rtl::OUStringToOString(rufn, osl_getThreadTextEncoding());
+        OString tmp =
+            OUStringToOString(rufn, osl_getThreadTextEncoding());
 
         file_ = fopen(tmp.getStr(), "r+");
 

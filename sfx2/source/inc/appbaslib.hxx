@@ -84,7 +84,7 @@ public:
     /** checks if any modules in the SfxLibraryContainer exceed the binary
         limits.
     */
-    sal_Bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& sModules );
+    sal_Bool LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& sModules );
 
 
 private:
@@ -99,8 +99,8 @@ class SfxApplicationScriptLibraryContainer
 {
 public:
     // Service
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
-    static ::rtl::OUString impl_getStaticImplementationName();
+    static ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
             throw( ::com::sun::star::uno::Exception );
@@ -113,8 +113,8 @@ class SfxApplicationDialogLibraryContainer
 {
 public:
     // Service
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > impl_getStaticSupportedServiceNames();
-    static ::rtl::OUString impl_getStaticImplementationName();
+    static ::com::sun::star::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_createInstance
         ( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager )
             throw( ::com::sun::star::uno::Exception );

@@ -25,7 +25,7 @@
 
 class XMLPersTextContentTContext : public XMLPersAttrListTContext
 {
-    ::rtl::OUString m_aCharacters;
+    OUString m_aCharacters;
 
 public:
     TYPEINFO();
@@ -35,11 +35,11 @@ public:
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName );
+                           const OUString& rQName );
 
     // attr list/text content persistence + renaming
     XMLPersTextContentTContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_uInt16 nPrefix,
                               ::xmloff::token::XMLTokenEnum eToken );
 
@@ -51,11 +51,11 @@ public:
 
     // This method is called for all characters that are contained in the
     // current element.
-    virtual void Characters( const ::rtl::OUString& rChars );
+    virtual void Characters( const OUString& rChars );
 
     virtual void ExportContent();
 
-    const ::rtl::OUString& GetTextContent() const { return m_aCharacters; }
+    const OUString& GetTextContent() const { return m_aCharacters; }
 };
 
 #endif  //  _XMLOFF_FLATTCONTEXT_HXX

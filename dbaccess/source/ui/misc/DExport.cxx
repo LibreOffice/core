@@ -217,7 +217,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
             sal_Int32 nPos = 1;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
-            ::rtl::OUString sTypeName = aValue;
+            OUString sTypeName = aValue;
             ++nPos;
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(aTypes.size()),"aTypes: Illegal index for vector");
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
@@ -636,20 +636,20 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
     }
 }
 // -----------------------------------------------------------------------------
-void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
+void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::CreateDefaultColumn" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
     Reference< XDatabaseMetaData>  xDestMetaData(m_xConnection->getMetaData());
     sal_Int32 nMaxNameLen(xDestMetaData->getMaxColumnNameLength());
-    ::rtl::OUString aAlias = _rColumnName;
+    OUString aAlias = _rColumnName;
     if ( isSQL92CheckEnabled(m_xConnection) )
         aAlias = ::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters());
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
         aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ) );
 
-    ::rtl::OUString sName(aAlias);
+    OUString sName(aAlias);
     if(m_aDestColumns.find(sName) != m_aDestColumns.end())
     {
         sal_Int32 nPos = 0;
@@ -657,12 +657,12 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
         while(m_aDestColumns.find(sName) != m_aDestColumns.end())
         {
             sName = aAlias;
-            sName += ::rtl::OUString::valueOf(++nPos);
+            sName += OUString::valueOf(++nPos);
             if(nMaxNameLen && sName.getLength() > nMaxNameLen)
             {
                 aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-nCount, aAlias.getLength() ));
                 sName = aAlias;
-                sName += ::rtl::OUString::valueOf(nPos);
+                sName += OUString::valueOf(nPos);
                 ++nCount;
             }
         }
@@ -698,13 +698,13 @@ sal_Bool ODatabaseExport::createRowSet()
     return m_pUpdateHelper.get() != NULL;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
+sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::executeWizard" );
     DBG_CHKTHIS(ODatabaseExport,NULL);
 
     bool bHaveDefaultTable =  !m_sDefaultTableName.isEmpty();
-    ::rtl::OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
+    OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
     OCopyTableWizard aWizard(
         NULL,
         sTableName,
@@ -823,7 +823,7 @@ void ODatabaseExport::ensureFormatter()
         SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)sal::static_int_cast< sal_IntPtr >(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
         m_pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
         Reference<XPropertySet> xNumberFormatSettings = xSupplier->getNumberFormatSettings();
-        xNumberFormatSettings->getPropertyValue(::rtl::OUString("NullDate")) >>= m_aNullDate;
+        xNumberFormatSettings->getPropertyValue(OUString("NullDate")) >>= m_aNullDate;
     }
 }
 // -----------------------------------------------------------------------------
@@ -832,30 +832,30 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
                                                        ,const TPositions& _rvColumns)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ODatabaseExport::createPreparedStatment" );
-    ::rtl::OUString aSql(::rtl::OUString("INSERT INTO "));
-    ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
+    OUString aSql(OUString("INSERT INTO "));
+    OUString sComposedTableName = ::dbtools::composeTableName( _xMetaData, _xDestTable, ::dbtools::eInDataManipulation, false, false, true );
 
     aSql += sComposedTableName;
-    aSql += ::rtl::OUString(" ( ");
+    aSql += OUString(" ( ");
     // set values and column names
-    ::rtl::OUString aValues(" VALUES ( ");
-    static ::rtl::OUString aPara("?,");
-    static ::rtl::OUString aComma(",");
+    OUString aValues(" VALUES ( ");
+    static OUString aPara("?,");
+    static OUString aComma(",");
 
-    ::rtl::OUString aQuote;
+    OUString aQuote;
     if ( _xMetaData.is() )
         aQuote = _xMetaData->getIdentifierQuoteString();
 
     Reference<XColumnsSupplier> xDestColsSup(_xDestTable,UNO_QUERY_THROW);
 
     // create sql string and set column types
-    Sequence< ::rtl::OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
+    Sequence< OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
     if ( aDestColumnNames.getLength() == 0 )
     {
         return Reference< XPreparedStatement > ();
     }
-    const ::rtl::OUString* pIter = aDestColumnNames.getConstArray();
-    ::std::vector< ::rtl::OUString> aInsertList;
+    const OUString* pIter = aDestColumnNames.getConstArray();
+    ::std::vector< OUString> aInsertList;
     aInsertList.resize(aDestColumnNames.getLength()+1);
     sal_Int32 i = 0;
     for(sal_uInt32 j=0; j < aInsertList.size() ;++i,++j)
@@ -871,8 +871,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     i = 1;
     // create the sql string
-    ::std::vector< ::rtl::OUString>::iterator aInsertEnd = aInsertList.end();
-    for (::std::vector< ::rtl::OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
+    ::std::vector< OUString>::iterator aInsertEnd = aInsertList.end();
+    for (::std::vector< OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
         if ( !aInsertIter->isEmpty() )
         {
@@ -882,8 +882,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         }
     }
 
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aValues = aValues.replaceAt(aValues.getLength()-1,1,OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
 
     aSql += aValues;
     // now create,fill and execute the prepared statement

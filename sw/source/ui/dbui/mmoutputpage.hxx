@@ -136,17 +136,17 @@ public:
 
 struct SwMailDescriptor
 {
-    ::rtl::OUString                             sEMail;
-    ::rtl::OUString                             sAttachmentURL;
-    ::rtl::OUString                             sAttachmentName;
-    ::rtl::OUString                             sMimeType;
-    ::rtl::OUString                             sSubject;
-    ::rtl::OUString                             sBodyMimeType;
-    ::rtl::OUString                             sBodyContent;
+    OUString                             sEMail;
+    OUString                             sAttachmentURL;
+    OUString                             sAttachmentName;
+    OUString                             sMimeType;
+    OUString                             sSubject;
+    OUString                             sBodyMimeType;
+    OUString                             sBodyContent;
 
 
-    ::rtl::OUString                             sCC;
-    ::rtl::OUString                             sBCC;
+    OUString                             sCC;
+    OUString                             sBCC;
 };
 struct SwSendMailDialog_Impl;
 class SwMailMergeConfigItem;
@@ -217,7 +217,7 @@ public:
 
     void                DocumentSent( ::com::sun::star::uno::Reference< ::com::sun::star::mail::XMailMessage>,
                                         bool bResult,
-                                        const ::rtl::OUString* pError );
+                                        const OUString* pError );
     void                AllMailsSent();
 
 };

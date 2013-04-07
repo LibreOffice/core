@@ -126,7 +126,7 @@ XFTable::~XFTable()
     m_aColumns.clear();
 }
 
-void    XFTable::SetColumnStyle(sal_Int32 col, rtl::OUString style)
+void    XFTable::SetColumnStyle(sal_Int32 col, OUString style)
 {
     m_aColumns[col] = style;
 }
@@ -157,7 +157,7 @@ void    XFTable::AddHeaderRow(XFRow *pRow)
     m_aHeaderRows.Add(pRow);
 }
 
-rtl::OUString XFTable::GetTableName()
+OUString XFTable::GetTableName()
 {
     if( m_bSubTable )
     {
@@ -188,7 +188,7 @@ XFRow*  XFTable::GetRow(sal_Int32 row)
 sal_Int32   XFTable::GetColumnCount()
 {
     int     colMax = -1;
-    std::map<sal_Int32,rtl::OUString>::iterator it;
+    std::map<sal_Int32,OUString>::iterator it;
     for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
     {
         if( it->first>colMax )
@@ -225,11 +225,11 @@ void    XFTable::ToXml(IXFStream *pStrm)
     //output columns:
     {
         int lastCol = 0;
-        std::map<sal_Int32,rtl::OUString>::iterator it;
+        std::map<sal_Int32,OUString>::iterator it;
         for( it=m_aColumns.begin(); it!=m_aColumns.end(); ++it )
         {
             sal_Int32   col = (*it).first;
-            rtl::OUString   style = m_aColumns[col];
+            OUString   style = m_aColumns[col];
 
             //default col repeated:
             if( col >lastCol+1 )

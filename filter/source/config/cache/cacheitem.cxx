@@ -53,7 +53,7 @@ void CacheItem::update(const CacheItem& rUpdateItem)
 
 
 
-void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
+void CacheItem::validateUINames(const OUString& sActLocale)
 {
     if (sActLocale.isEmpty())
         return;
@@ -66,7 +66,7 @@ void CacheItem::validateUINames(const ::rtl::OUString& sActLocale)
     if (pUINames != end())
         lUINames << pUINames->second;
 
-    ::rtl::OUString sUIName;
+    OUString sUIName;
     if (pUIName != end())
         pUIName->second >>= sUIName;
 
@@ -99,7 +99,7 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
                         pProp != end()  ;
                       ++pProp           )
     {
-        const ::rtl::OUString& rName  = pProp->first;
+        const OUString& rName  = pProp->first;
         const css::uno::Any&   rValue = pProp->second;
 
         if (!rValue.hasValue())
@@ -151,8 +151,8 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         //---------------------------------------
         case css::uno::TypeClass_STRING :
         {
-            ::rtl::OUString v1;
-            ::rtl::OUString v2;
+            OUString v1;
+            OUString v2;
 
             if (
                 (aSubSet >>= v1) &&
@@ -224,8 +224,8 @@ sal_Bool isSubSet(const css::uno::Any& aSubSet,
         //---------------------------------------
         case css::uno::TypeClass_SEQUENCE :
         {
-            css::uno::Sequence< ::rtl::OUString > uno_s1;
-            css::uno::Sequence< ::rtl::OUString > uno_s2;
+            css::uno::Sequence< OUString > uno_s1;
+            css::uno::Sequence< OUString > uno_s2;
 
             if (
                 (aSubSet >>= uno_s1) &&

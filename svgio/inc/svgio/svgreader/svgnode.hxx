@@ -68,10 +68,10 @@ namespace svgio
             SvgNodeVector               maChildren;
 
             /// Id svan value
-            rtl::OUString*              mpId;
+            OUString*              mpId;
 
             /// Class svan value
-            rtl::OUString*              mpClass;
+            OUString*              mpClass;
 
             /// XmlSpace value
             XmlSpace                    maXmlSpace;
@@ -85,7 +85,7 @@ namespace svgio
 
             void parseAttributes(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs);
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const;
-            virtual void parseAttribute(const rtl::OUString& rTokenName, SVGToken aSVGToken, const rtl::OUString& aContent);
+            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DSequence& rTarget, bool bReferenced) const;
 
             /// basic data read access
@@ -100,12 +100,12 @@ namespace svgio
             virtual double getCurrentXHeight() const;
 
             /// Id access
-            const rtl::OUString* getId() const { return mpId; }
-            void setId(const rtl::OUString* pfId = 0);
+            const OUString* getId() const { return mpId; }
+            void setId(const OUString* pfId = 0);
 
             /// Class access
-            const rtl::OUString* getClass() const { return mpClass; }
-            void setClass(const rtl::OUString* pfClass = 0);
+            const OUString* getClass() const { return mpClass; }
+            void setClass(const OUString* pfClass = 0);
 
             /// XmlSpace access
             XmlSpace getXmlSpace() const;

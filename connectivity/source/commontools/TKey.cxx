@@ -38,7 +38,7 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
 }
 // -------------------------------------------------------------------------
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
-            ,const ::rtl::OUString& _Name
+            ,const OUString& _Name
             ,const sdbcx::TKeyProperties& _rProps
             ) : connectivity::sdbcx::OKey(_Name,_rProps,sal_True)
                 ,m_pTable(_pTable)
@@ -52,14 +52,14 @@ void OTableKeyHelper::refreshColumns()
     if ( !m_pTable )
         return;
 
-    ::std::vector< ::rtl::OUString> aVector;
+    ::std::vector< OUString> aVector;
     if ( !isNew() )
     {
         aVector = m_aProps->m_aKeyColumnNames;
         if ( aVector.empty() )
         {
             ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-            ::rtl::OUString aSchema,aTable;
+            OUString aSchema,aTable;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
             m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
@@ -74,7 +74,7 @@ void OTableKeyHelper::refreshColumns()
                     Reference< XRow > xRow(xResult,UNO_QUERY);
                     while( xResult->next() )
                     {
-                        ::rtl::OUString aForeignKeyColumn = xRow->getString(8);
+                        OUString aForeignKeyColumn = xRow->getString(8);
                         if(xRow->getString(12) == m_Name)
                             aVector.push_back(aForeignKeyColumn);
                     }

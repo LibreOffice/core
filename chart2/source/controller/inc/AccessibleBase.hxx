@@ -254,7 +254,7 @@ protected:
     virtual sal_Int16 SAL_CALL getAccessibleRole()
         throw (::com::sun::star::uno::RuntimeException);
     // has to be implemented by derived classes
-//     virtual ::rtl::OUString SAL_CALL getAccessibleName()
+//     virtual OUString SAL_CALL getAccessibleName()
 //         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
         getAccessibleRelationSet()
@@ -266,7 +266,7 @@ protected:
         throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException,
                ::com::sun::star::uno::RuntimeException);
     // has to be implemented by derived classes
-//     virtual ::rtl::OUString SAL_CALL getAccessibleDescription()
+//     virtual OUString SAL_CALL getAccessibleDescription()
 //         throw (::com::sun::star::uno::RuntimeException);
 
     // ________ XAccessibleComponent ________
@@ -293,12 +293,12 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ________ XServiceInfo ________
-    virtual ::rtl::OUString SAL_CALL getImplementationName()
+    virtual OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(
-        const ::rtl::OUString& ServiceName )
+        const OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
 
     // ________ XEventListener ________

@@ -37,13 +37,13 @@ using namespace ::com::sun::star::lang;
 
 // static ServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString("com.sun.star.comp.sdbc.flat.ODriver");
+    return OUString("com.sun.star.comp.sdbc.flat.ODriver");
 }
 
 //------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
 }
@@ -54,7 +54,7 @@ rtl::OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
     return *(new ODriver(_rxFactory));
 }
 // --------------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -71,62 +71,62 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
     return xCon;
 }
 // --------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODriver::acceptsURL( const ::rtl::OUString& url )
+sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
                 throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:flat:");
 }
 // -----------------------------------------------------------------------------
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
 
-        Sequence< ::rtl::OUString > aBoolean(2);
-        aBoolean[0] = ::rtl::OUString("0");
-        aBoolean[1] = ::rtl::OUString("1");
+        Sequence< OUString > aBoolean(2);
+        aBoolean[0] = OUString("0");
+        aBoolean[1] = OUString("1");
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("FieldDelimiter")
-                ,::rtl::OUString("Field separator.")
+                OUString("FieldDelimiter")
+                ,OUString("Field separator.")
                 ,sal_False
-                ,::rtl::OUString()
-                ,Sequence< ::rtl::OUString >())
+                ,OUString()
+                ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("HeaderLine")
-                ,::rtl::OUString("Text contains headers.")
+                OUString("HeaderLine")
+                ,OUString("Text contains headers.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("StringDelimiter")
-                ,::rtl::OUString("Text separator.")
+                OUString("StringDelimiter")
+                ,OUString("Text separator.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("DecimalDelimiter")
-                ,::rtl::OUString("Decimal separator.")
+                OUString("DecimalDelimiter")
+                ,OUString("Decimal separator.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                ::rtl::OUString("ThousandDelimiter")
-                ,::rtl::OUString("Thousands separator.")
+                OUString("ThousandDelimiter")
+                ,OUString("Thousands separator.")
                 ,sal_False
-                ,::rtl::OUString("0")
+                ,OUString("0")
                 ,aBoolean)
                 );
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),
                                              Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size()));
     }
     ::connectivity::SharedResources aResources;
-    const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+    const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }

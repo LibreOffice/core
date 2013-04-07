@@ -43,9 +43,6 @@
 #endif
 #endif
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
-using rtl::OString;
 
 using pyuno::PyRef;
 using pyuno::Runtime;
@@ -121,7 +118,7 @@ static void setPythonHome ( const OUString & pythonHome )
 {
     OUString systemPythonHome;
     osl_getSystemPathFromFileURL( pythonHome.pData, &(systemPythonHome.pData) );
-    OString o = rtl::OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
+    OString o = OUStringToOString( systemPythonHome, osl_getThreadTextEncoding() );
 #if PY_MAJOR_VERSION >= 3
     // static because Py_SetPythonHome just copies the "wide" pointer
     static wchar_t wide[PATH_MAX + 1];
@@ -145,7 +142,7 @@ static void setPythonHome ( const OUString & pythonHome )
 
 static void prependPythonPath( const OUString & pythonPathBootstrap )
 {
-    rtl::OUStringBuffer bufPYTHONPATH( 256 );
+    OUStringBuffer bufPYTHONPATH( 256 );
     sal_Int32 nIndex = 0;
     while( 1 )
     {
@@ -169,10 +166,10 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
     }
     const char * oldEnv = getenv( "PYTHONPATH");
     if( oldEnv )
-        bufPYTHONPATH.append( rtl::OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
+        bufPYTHONPATH.append( OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
 
-    rtl::OUString envVar("PYTHONPATH");
-    rtl::OUString envValue(bufPYTHONPATH.makeStringAndClear());
+    OUString envVar("PYTHONPATH");
+    OUString envValue(bufPYTHONPATH.makeStringAndClear());
     osl_setEnvironment(envVar.pData, envValue.pData);
 }
 
@@ -203,13 +200,13 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 #ifdef WNT
     //extend PATH under windows to include the branddir/program so ssl libs will be found
     //for use by terminal mailmerge dependency _ssl.pyd
-    rtl::OUString sEnvName("PATH");
-    rtl::OUString sPath;
+    OUString sEnvName("PATH");
+    OUString sPath;
     osl_getEnvironment(sEnvName.pData, &sPath.pData);
-    rtl::OUString sBrandLocation("$BRAND_BASE_DIR/program");
+    OUString sBrandLocation("$BRAND_BASE_DIR/program");
     rtl::Bootstrap::expandMacros(sBrandLocation);
     osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
-    sPath = rtl::OUStringBuffer(sPath).
+    sPath = OUStringBuffer(sPath).
         append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
         append(sBrandLocation).makeStringAndClear();
     osl_setEnvironment(sEnvName.pData, sPath.pData);

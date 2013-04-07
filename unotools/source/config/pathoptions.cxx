@@ -53,9 +53,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
 
 #define SEARCHPATH_DELIMITER  ';'
 #define SIGN_STARTVARIABLE    OUString( "$("  )
@@ -71,7 +68,7 @@ using ::rtl::OStringToOUString;
 
 struct OUStringHashCode
 {
-    size_t operator()( const ::rtl::OUString& sString ) const
+    size_t operator()( const OUString& sString ) const
     {
         return sString.hashCode();
     }
@@ -83,7 +80,7 @@ enum VarNameProperty
     VAR_NEEDS_FILEURL
 };
 
-class NameToHandleMap : public ::boost::unordered_map<  ::rtl::OUString, sal_Int32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > >
+class NameToHandleMap : public ::boost::unordered_map<  OUString, sal_Int32, OUStringHashCode, ::std::equal_to< OUString > >
 {
     public:
         inline void free() { NameToHandleMap().swap( *this ); }
@@ -173,9 +170,9 @@ class SvtPathOptions_Impl
         void            SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
         void            SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
 
-        rtl::OUString   SubstVar( const rtl::OUString& rVar ) const;
-        rtl::OUString   ExpandMacros( const rtl::OUString& rPath ) const;
-        rtl::OUString   UsePathVariables( const rtl::OUString& rPath ) const;
+        OUString   SubstVar( const OUString& rVar ) const;
+        OUString   ExpandMacros( const OUString& rPath ) const;
+        OUString   UsePathVariables( const OUString& rPath ) const;
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
 };
@@ -318,9 +315,9 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Paths ePath, const String& rN
 
 //-------------------------------------------------------------------------
 
-OUString SvtPathOptions_Impl::ExpandMacros( const rtl::OUString& rPath ) const
+OUString SvtPathOptions_Impl::ExpandMacros( const OUString& rPath ) const
 {
-    ::rtl::OUString sExpanded( rPath );
+    OUString sExpanded( rPath );
 
     const INetURLObject aParser( rPath );
     if ( aParser.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
@@ -403,7 +400,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     if ( bConvertLocal )
     {
         // Convert the URL to a system path for special path variables
-        rtl::OUString aReturn;
+        OUString aReturn;
         utl::LocalFileHelper::ConvertURLToPhysicalName( aWorkText, aReturn );
         return aReturn;
     }
@@ -427,7 +424,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
         // #112719#: check for existance
         OSL_FAIL( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
         throw RuntimeException(
-            ::rtl::OUString( "Service com.sun.star.util.PathSettings cannot be created" ),
+            OUString( "Service com.sun.star.util.PathSettings cannot be created" ),
             Reference< XInterface >() );
     }
 
@@ -452,7 +449,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     for ( i = 0; i < nCount; i++ )
     {
         NameToHandleMap::const_iterator pIter =
-            aTempHashMap.find( rtl::OUString::createFromAscii( aPropNames[i].pPropName ));
+            aTempHashMap.find( OUString::createFromAscii( aPropNames[i].pPropName ));
 
         if ( pIter != aTempHashMap.end() )
         {
@@ -865,7 +862,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
         return sal_False;
     }
 
-    rtl::OUString aIniFile = pImp->SubstVar( rIniFile );
+    OUString aIniFile = pImp->SubstVar( rIniFile );
     sal_Bool bRet = sal_False;
 
     switch ( ePath )
@@ -879,7 +876,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
             sal_Int32 nIniIndex = 0;
             do
             {
-                rtl::OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
                 aObj.insertName(aToken);
             }
             while ( nIniIndex >= 0 );
@@ -899,7 +896,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
 
         default:
         {
-            rtl::OUString aPath;
+            OUString aPath;
             switch ( ePath )
             {
                 case PATH_ADDIN:        aPath = GetAddinPath();         break;
@@ -933,26 +930,26 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
             do
             {
                 sal_Bool bIsURL = sal_True;
-                rtl::OUString aPathToken = aPath.getToken( 0, SEARCHPATH_DELIMITER, nPathIndex );
+                OUString aPathToken = aPath.getToken( 0, SEARCHPATH_DELIMITER, nPathIndex );
                 INetURLObject aObj( aPathToken );
                 if ( aObj.HasError() )
                 {
                     bIsURL = sal_False;
-                    rtl::OUString aURL;
+                    OUString aURL;
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
                 }
                 if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
                 {
                     Reference< XMacroExpander > xMacroExpander = theMacroExpander::get( ::comphelper::getProcessComponentContext() );
-                    const ::rtl::OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                    const OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
                     aObj.SetURL( sExpandedPath );
                 }
 
                 sal_Int32 nIniIndex = 0;
                 do
                 {
-                    rtl::OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
+                    OUString aToken = aIniFile.getToken( 0, '/', nIniIndex );
                     aObj.insertName(aToken);
                 }
                 while ( nIniIndex >= 0 );
@@ -963,7 +960,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Paths ePath )
                 {
                     if ( !bIsURL )
                     {
-                        rtl::OUString sTmp(rIniFile);
+                        OUString sTmp(rIniFile);
                         ::utl::LocalFileHelper::ConvertURLToPhysicalName(
                                             aObj.GetMainURL( INetURLObject::NO_DECODE ), sTmp );
                         rIniFile = sTmp;

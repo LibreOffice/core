@@ -173,13 +173,13 @@ namespace xmloff
             return;
         }
 
-        ::rtl::OUString sServiceName = xPersistence->getServiceName();
+        OUString sServiceName = xPersistence->getServiceName();
         // we don't want to write the old service name directly: it's a name used for compatibility reasons, but
         // as we start some kind of new file format here (with this xml export), we don't care about
         // compatibility ...
         // So we translate the old persistence service name into new ones, if possible
 
-        ::rtl::OUString sToWriteServiceName = sServiceName;
+        OUString sToWriteServiceName = sServiceName;
 #define CHECK_N_TRANSLATE( name )   \
         else if (sServiceName.equals(SERVICE_PERSISTENT_COMPONENT_##name)) \
             sToWriteServiceName = SERVICE_##name
@@ -247,7 +247,7 @@ namespace xmloff
     //=====================================================================
     //---------------------------------------------------------------------
     OControlExport::OControlExport(IFormsExportContext& _rContext,  const Reference< XPropertySet >& _rxControl,
-        const ::rtl::OUString& _rControlId, const ::rtl::OUString& _rReferringControls,
+        const OUString& _rControlId, const OUString& _rReferringControls,
         const Sequence< ScriptEventDescriptor >& _rEvents)
         :OElementExport(_rContext, _rxControl, _rEvents)
         ,m_sControlId(_rControlId)
@@ -358,14 +358,14 @@ namespace xmloff
             const XMLPropertyMapEntry* pCharAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_TEXT );
             while ( pCharAttributeProperties->msApiName )
             {
-                exportedProperty( ::rtl::OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
+                exportedProperty( OUString::createFromAscii( pCharAttributeProperties->msApiName ) );
                 ++pCharAttributeProperties;
             }
 
             const XMLPropertyMapEntry* pParaAttributeProperties = XMLTextPropertySetMapper::getPropertyMapForType( TEXT_PROP_MAP_SHAPE_PARA );
             while ( pParaAttributeProperties->msApiName )
             {
-                exportedProperty( ::rtl::OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
+                exportedProperty( OUString::createFromAscii( pParaAttributeProperties->msApiName ) );
                 ++pParaAttributeProperties;
             }
 
@@ -421,7 +421,7 @@ namespace xmloff
             break;
             case COMBOBOX:
             {   // a combox box description has sub elements: the items
-                DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
+                DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< OUString > );
 
                 // don't export the list entries if the are not provided by the user, but obtained implicitly
                 // from other sources
@@ -429,10 +429,10 @@ namespace xmloff
                 if ( controlHasUserSuppliedListEntries() )
                 {
                     // get the item list
-                    Sequence< ::rtl::OUString > aListItems;
+                    Sequence< OUString > aListItems;
                     m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aListItems;
                     // loop through it and write the sub elements
-                    const ::rtl::OUString* pListItems = aListItems.getConstArray();
+                    const OUString* pListItems = aListItems.getConstArray();
                     for (sal_Int32 i=0; i<aListItems.getLength(); ++i, ++pListItems)
                     {
                         m_rContext.getGlobalContext().ClearAttrList();
@@ -494,7 +494,7 @@ namespace xmloff
                     continue;
                 }
 
-                ::rtl::OUString attributeValue;
+                OUString attributeValue;
                 if ( propDescription->propertyGroup == NO_GROUP )
                 {
                     // that's a property which has a direct mapping to an attribute
@@ -571,7 +571,7 @@ namespace xmloff
                 CCA_LABEL, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
-            static ::rtl::OUString aStringPropertyNames[] =
+            static OUString aStringPropertyNames[] =
             {
                 OUString(PROPERTY_LABEL), OUString(PROPERTY_TITLE)
             };
@@ -746,7 +746,7 @@ namespace xmloff
             // However, if the model has a property "PersistenceMaxTextLength", then we prefer this
 
             // determine the name of the property to export
-            ::rtl::OUString sTextLenPropertyName( PROPERTY_MAXTEXTLENGTH );
+            OUString sTextLenPropertyName( PROPERTY_MAXTEXTLENGTH );
             if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_PERSISTENCE_MAXTEXTLENGTH ) )
                 sTextLenPropertyName = PROPERTY_PERSISTENCE_MAXTEXTLENGTH;
 
@@ -823,7 +823,7 @@ namespace xmloff
                 // don't export the current-value if this value originates from a data binding
                 // #i26944#
                 if ( controlHasActiveDataBinding() )
-                    exportedProperty( ::rtl::OUString::createFromAscii( pCurrentValuePropertyName ) );
+                    exportedProperty( OUString::createFromAscii( pCurrentValuePropertyName ) );
                 else
                     exportGenericPropertyAttribute(
                         nCurrentValueAttributeNamespaceKey,
@@ -1078,7 +1078,7 @@ namespace xmloff
 
             if ( SCA_STEP_SIZE & m_nIncludeSpecial )
             {
-                ::rtl::OUString sPropertyName;
+                OUString sPropertyName;
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_LINE_INCREMENT ) )
                     sPropertyName = PROPERTY_LINE_INCREMENT;
                 else if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
@@ -1152,7 +1152,7 @@ namespace xmloff
                 aDuration.Seconds = aTime.GetSec();
                 aDuration.MilliSeconds = nRepeatDelay % 1000;
 
-                ::rtl::OUStringBuffer buf;
+                OUStringBuffer buf;
                 ::sax::Converter::convertDuration(buf, aDuration);
                 AddAttribute(OAttributeMetaData::getSpecialAttributeNamespace( SCA_REPEAT_DELAY )
                             ,OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY )
@@ -1177,7 +1177,7 @@ namespace xmloff
                 m_xProps->getPropertyValue(PROPERTY_ECHO_CHAR) >>= nValue;
                 if (nValue)
                 {
-                    ::rtl::OUString sCharacter(reinterpret_cast<const sal_Unicode*>(&nValue), 1);
+                    OUString sCharacter(reinterpret_cast<const sal_Unicode*>(&nValue), 1);
                     AddAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace(SCA_ECHO_CHAR),
                         OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR),
@@ -1276,13 +1276,13 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OControlExport::getScalarListSourceValue() const
+    OUString OControlExport::getScalarListSourceValue() const
     {
-        ::rtl::OUString sListSource;
+        OUString sListSource;
         Any aListSource = m_xProps->getPropertyValue( PROPERTY_LISTSOURCE );
         if ( !( aListSource >>= sListSource ) )
         {
-            Sequence< ::rtl::OUString > aListSourceSequence;
+            Sequence< OUString > aListSourceSequence;
             aListSource >>= aListSourceSequence;
             if ( aListSourceSequence.getLength() )
                 sListSource = aListSourceSequence[ 0 ];
@@ -1296,7 +1296,7 @@ namespace xmloff
         // DA_LIST_SOURCE needs some special handling
         DBG_CHECK_PROPERTY_NO_TYPE( PROPERTY_LISTSOURCE );
 
-        ::rtl::OUString sListSource = getScalarListSourceValue();
+        OUString sListSource = getScalarListSourceValue();
         if ( !sListSource.isEmpty() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
@@ -1309,7 +1309,7 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OControlExport::getSequenceInt16PropertyAsSet(const ::rtl::OUString& _rPropertyName, Int16Set& _rOut)
+    void OControlExport::getSequenceInt16PropertyAsSet(const OUString& _rPropertyName, Int16Set& _rOut)
     {
         Sequence< sal_Int16 > aValueSequence;
         DBG_CHECK_PROPERTY(_rPropertyName, Sequence< sal_Int16 >);
@@ -1324,11 +1324,11 @@ namespace xmloff
     void OControlExport::exportListSourceAsElements()
     {
         // the string lists
-        Sequence< ::rtl::OUString > aItems, aValues;
-        DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< ::rtl::OUString > );
+        Sequence< OUString > aItems, aValues;
+        DBG_CHECK_PROPERTY( PROPERTY_STRING_ITEM_LIST, Sequence< OUString > );
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
 
-        DBG_CHECK_PROPERTY( PROPERTY_LISTSOURCE, Sequence< ::rtl::OUString > );
+        DBG_CHECK_PROPERTY( PROPERTY_LISTSOURCE, Sequence< OUString > );
         if ( 0 == ( m_nIncludeDatabase & DA_LIST_SOURCE ) )
             m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
         // if we exported the list source as attribute, we do not repeat it as sub elements
@@ -1339,14 +1339,14 @@ namespace xmloff
         getSequenceInt16PropertyAsSet(PROPERTY_DEFAULT_SELECT_SEQ, aDefaultSelection);
 
         // the string for "true"
-        ::rtl::OUString sTrue;
-        ::rtl::OUStringBuffer sBuffer;
+        OUString sTrue;
+        OUStringBuffer sBuffer;
         ::sax::Converter::convertBool(sBuffer, true);
         sTrue = sBuffer.makeStringAndClear();
 
         // loop through both lists ('til the maximum of both lengths)
-        const ::rtl::OUString* pItems = aItems.getConstArray();
-        const ::rtl::OUString* pValues = aValues.getConstArray();
+        const OUString* pItems = aItems.getConstArray();
+        const OUString* pValues = aValues.getConstArray();
 
         sal_Int32 nItems = aItems.getLength();
         sal_Int32 nValues = aValues.getLength();
@@ -1842,7 +1842,7 @@ namespace xmloff
                 {
                     sal_Int16 nLinkageType = aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0;
 
-                    ::rtl::OUStringBuffer sBuffer;
+                    OUStringBuffer sBuffer;
                     m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(
                         sBuffer,
                         (sal_uInt16)nLinkageType,
@@ -1867,19 +1867,19 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OControlExport::exportXFormsBindAttributes()
     {
-        rtl::OUString sBindName = getXFormsBindName( m_xProps );
+        OUString sBindName = getXFormsBindName( m_xProps );
         AddAttribute( XML_NAMESPACE_XFORMS, XML_BIND, sBindName );
     }
     //---------------------------------------------------------------------
     void OControlExport::exportXFormsListAttributes()
     {
-        rtl::OUString sBindName = getXFormsListBindName( m_xProps );
+        OUString sBindName = getXFormsListBindName( m_xProps );
         AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_LIST_SOURCE, sBindName );
     }
     //---------------------------------------------------------------------
     void OControlExport::exportXFormsSubmissionAttributes()
     {
-        rtl::OUString sSubmission = getXFormsSubmissionName( m_xProps );
+        OUString sSubmission = getXFormsSubmissionName( m_xProps );
         AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_SUBMISSION, sSubmission );
     }
     //---------------------------------------------------------------------
@@ -1963,7 +1963,7 @@ namespace xmloff
         try
         {
             // currently exchanging the data with a database column?
-            ::rtl::OUString sBoundFieldPropertyName( "BoundField" );
+            OUString sBoundFieldPropertyName( "BoundField" );
             if ( m_xPropertyInfo.is() && m_xPropertyInfo->hasPropertyByName( sBoundFieldPropertyName ) )
             {
                 Reference< XPropertySet > xBoundField;
@@ -2022,9 +2022,9 @@ namespace xmloff
     //= OColumnExport
     //=====================================================================
     //---------------------------------------------------------------------
-    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl, const ::rtl::OUString& _rControlId,
+    OColumnExport::OColumnExport(IFormsExportContext& _rContext, const Reference< XPropertySet >& _rxControl, const OUString& _rControlId,
         const Sequence< ScriptEventDescriptor >& _rEvents)
-        :OControlExport(_rContext, _rxControl, _rControlId, ::rtl::OUString(), _rEvents)
+        :OControlExport(_rContext, _rxControl, _rControlId, OUString(), _rEvents)
     {
     }
 
@@ -2038,8 +2038,8 @@ namespace xmloff
     void OColumnExport::exportServiceNameAttribute()
     {
         // the attribute "service name" (which has a slightly different meaning for columns
-        DBG_CHECK_PROPERTY( PROPERTY_COLUMNSERVICENAME, ::rtl::OUString );
-        ::rtl::OUString sColumnServiceName;
+        DBG_CHECK_PROPERTY( PROPERTY_COLUMNSERVICENAME, OUString );
+        OUString sColumnServiceName;
         m_xProps->getPropertyValue(PROPERTY_COLUMNSERVICENAME) >>= sColumnServiceName;
         // the service name is a full qualified one (i.e. com.sun.star.form.TextField), but the
         // real service name for the column (for use with the XGridColumnFactory) is only the last
@@ -2077,7 +2077,7 @@ namespace xmloff
             PROPERTY_LABEL);
 
         // the style attribute
-        ::rtl::OUString sStyleName = m_rContext.getObjectStyleName( m_xProps );
+        OUString sStyleName = m_rContext.getObjectStyleName( m_xProps );
         if ( !sStyleName.isEmpty() )
         {
             AddAttribute(
@@ -2126,7 +2126,7 @@ namespace xmloff
         if ( m_bCreateConnectionResourceElement && m_xProps.is() )
         {
             m_rContext.getGlobalContext().ClearAttrList();
-            ::rtl::OUString sPropValue;
+            OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue; // if set it is a file url
             if ( sPropValue.isEmpty() )
                 m_xProps->getPropertyValue( PROPERTY_URL ) >>= sPropValue;
@@ -2163,7 +2163,7 @@ namespace xmloff
             {
                 faName, /*faAction,*/ faCommand, faFilter, faOrder
             };
-            static ::rtl::OUString aStringPropertyNames[] =
+            static OUString aStringPropertyNames[] =
             {
                 OUString(PROPERTY_NAME), /*OUString(PROPERTY_TARGETURL),*/ OUString(PROPERTY_COMMAND), OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER)
             };
@@ -2182,7 +2182,7 @@ namespace xmloff
             // #i112082# xlink:type is added as part of exportTargetLocationAttribute
 
             // now export the data source name or databaselocation or connection resource
-            ::rtl::OUString sPropValue;
+            OUString sPropValue;
             m_xProps->getPropertyValue( PROPERTY_DATASOURCENAME ) >>= sPropValue;
             m_bCreateConnectionResourceElement = sPropValue.isEmpty();
             if ( !m_bCreateConnectionResourceElement )

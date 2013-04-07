@@ -159,7 +159,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  ) throw (
     Reference< XResultSet > xRes;
     if ( m_pConnection )
     {
-        ::rtl::OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
+        OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
         if ( !sStmt.isEmpty() )
         {
             ::comphelper::disposeComponent(m_xGeneratedStatement);
@@ -258,13 +258,13 @@ SQLLEN OStatement_Base::getRowCount () throw( SQLException)
 // true if the concurrency has been changed
 //--------------------------------------------------------------------
 
-sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQLException)
+sal_Bool OStatement_Base::lockIfNecessary (const OUString& sql) throw( SQLException)
 {
     sal_Bool rc = sal_False;
 
     // First, convert the statement to upper case
 
-    ::rtl::OUString sqlStatement = sql.toAsciiUpperCase ();
+    OUString sqlStatement = sql.toAsciiUpperCase ();
 
     // Now, look for the FOR UPDATE keywords.  If there is any extra white
     // space between the FOR and UPDATE, this will fail.
@@ -329,14 +329,14 @@ sal_Int32 OStatement_Base::getColumnCount () throw( SQLException)
 }
 // -------------------------------------------------------------------------
 
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
     m_sSqlStatement = sql;
 
 
-    ::rtl::OString aSql(::rtl::OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
+    OString aSql(OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
     sal_Bool hasResultSet = sal_False;
     SQLWarning aWarning;
@@ -439,7 +439,7 @@ template < typename T, SQLINTEGER BufferLength > SQLRETURN OStatement_Base::setS
 }
 // -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -480,7 +480,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OStatement::addBatch( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+void SAL_CALL OStatement::addBatch( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -495,11 +495,11 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    ::rtl::OString aBatchSql;
+    OString aBatchSql;
     sal_Int32 nLen = 0;
-    for(::std::list< ::rtl::OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+    for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
     {
-        aBatchSql += ::rtl::OUStringToOString(*i,getOwnConnection()->getTextEncoding());
+        aBatchSql += OUStringToOString(*i,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";
     }
 
@@ -523,7 +523,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 // -------------------------------------------------------------------------
 
 
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -543,8 +543,8 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
         // an exception
 
         ::connectivity::SharedResources aResources;
-        const ::rtl::OUString sError( aResources.getResourceString(STR_NO_ROWCOUNT));
-        throw SQLException (sError, *this,::rtl::OUString(),0,Any());
+        const OUString sError( aResources.getResourceString(STR_NO_ROWCOUNT));
+        throw SQLException (sError, *this,OUString(),0,Any());
     }
     return numRows;
 
@@ -725,14 +725,14 @@ sal_Int64 OStatement_Base::getMaxFieldSize() const
     return getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH);
 }
 //------------------------------------------------------------------------------
-::rtl::OUString OStatement_Base::getCursorName() const
+OUString OStatement_Base::getCursorName() const
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLCHAR pName[258];
     SQLSMALLINT nRealLen = 0;
     SQLRETURN nRetCode = N3SQLGetCursorName(m_aStatementHandle,(SQLCHAR*)pName,256,&nRealLen);
     OSL_UNUSED( nRetCode );
-    return ::rtl::OUString::createFromAscii((const char*)pName);
+    return OUString::createFromAscii((const char*)pName);
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setQueryTimeOut(sal_Int64 seconds)
@@ -857,10 +857,10 @@ void OStatement_Base::setMaxFieldSize(sal_Int64 _par0)
     setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_MAX_LENGTH, _par0);
 }
 //------------------------------------------------------------------------------
-void OStatement_Base::setCursorName(const ::rtl::OUString &_par0)
+void OStatement_Base::setCursorName(const OUString &_par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    ::rtl::OString aName(::rtl::OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
+    OString aName(OUStringToOString(_par0,getOwnConnection()->getTextEncoding()));
     N3SQLSetCursorName(m_aStatementHandle,(SDB_ODBC_CHAR*)aName.getStr(),(SQLSMALLINT)aName.getLength());
 }
 // -------------------------------------------------------------------------
@@ -888,7 +888,7 @@ void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    DECL_PROP0(CURSORNAME,  ::rtl::OUString);
+    DECL_PROP0(CURSORNAME,  OUString);
     DECL_BOOL_PROP0(ESCAPEPROCESSING);
     DECL_PROP0(FETCHDIRECTION,sal_Int32);
     DECL_PROP0(FETCHSIZE,   sal_Int32);

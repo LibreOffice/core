@@ -73,7 +73,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
 
         //---------------------------------------
         /** @short  the original queryDispatch() target. */
-        ::rtl::OUString m_sDispatchTarget;
+        OUString m_sDispatchTarget;
 
         //---------------------------------------
         /** @short  list of registered status listener */
@@ -101,7 +101,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
          */
         StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xFrame ,
-                              const ::rtl::OUString&                                        sTarget);
+                              const OUString&                                        sTarget);
 
         //---------------------------------------
         /** @short  does nothing real. */

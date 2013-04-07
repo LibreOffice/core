@@ -104,8 +104,8 @@ using namespace ::com::sun::star;
 
 */
 bool ToolBarMerger::IsCorrectContext(
-    const ::rtl::OUString& rContext,
-    const ::rtl::OUString& rModuleIdentifier )
+    const OUString& rContext,
+    const OUString& rModuleIdentifier )
 {
     return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
 }
@@ -204,12 +204,12 @@ bool ToolBarMerger::ConvertSeqSeqToVector(
 */
 void ToolBarMerger::ConvertSequenceToValues(
     const uno::Sequence< beans::PropertyValue > rSequence,
-    ::rtl::OUString& rCommandURL,
-    ::rtl::OUString& rLabel,
-    ::rtl::OUString& rImageIdentifier,
-    ::rtl::OUString& rTarget,
-    ::rtl::OUString& rContext,
-    ::rtl::OUString& rControlType,
+    OUString& rCommandURL,
+    OUString& rLabel,
+    OUString& rImageIdentifier,
+    OUString& rTarget,
+    OUString& rContext,
+    OUString& rControlType,
     sal_uInt16&      rWidth )
 {
     for ( sal_Int32 i = 0; i < rSequence.getLength(); i++ )
@@ -257,7 +257,7 @@ void ToolBarMerger::ConvertSequenceToValues(
 */
 ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
     ToolBox*               pToolbar,
-    const ::rtl::OUString& rReferencePoint )
+    const OUString& rReferencePoint )
 {
     ReferenceToolbarPathInfo aResult;
     aResult.bResult  = false;
@@ -271,7 +271,7 @@ ReferenceToolbarPathInfo ToolBarMerger::FindReferencePoint(
         const sal_uInt16 nItemId = pToolbar->GetItemId( i );
         if ( nItemId > 0 )
         {
-            const ::rtl::OUString rCmd = pToolbar->GetItemCommand( nItemId );
+            const OUString rCmd = pToolbar->GetItemCommand( nItemId );
             if ( rCmd == rReferencePoint )
             {
                 aResult.bResult = true;
@@ -341,9 +341,9 @@ bool ToolBarMerger::ProcessMergeOperation(
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const ::rtl::OUString&                 rModuleIdentifier,
-    const ::rtl::OUString&                 rMergeCommand,
-    const ::rtl::OUString&                 rMergeCommandParameter,
+    const OUString&                 rModuleIdentifier,
+    const OUString&                 rMergeCommand,
+    const OUString&                 rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN ))
@@ -410,9 +410,9 @@ bool ToolBarMerger::ProcessMergeFallback(
     sal_uInt16                       /*nPos*/,
     sal_uInt16&                      rItemId,
     CommandToInfoMap&                rCommandMap,
-    const ::rtl::OUString&           rModuleIdentifier,
-    const ::rtl::OUString&           rMergeCommand,
-    const ::rtl::OUString&           rMergeFallback,
+    const OUString&           rModuleIdentifier,
+    const OUString&           rMergeCommand,
+    const OUString&           rMergeFallback,
     const AddonToolbarItemContainer& rItems )
 {
     if (( rMergeFallback.equalsAsciiL( MERGEFALLBACK_IGNORE, MERGEFALLBACK_IGNORE_LEN )) ||
@@ -481,7 +481,7 @@ bool ToolBarMerger::MergeItems(
     sal_uInt16                             nModIndex,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const ::rtl::OUString&                 rModuleIdentifier,
+    const OUString&                 rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
@@ -574,7 +574,7 @@ bool ToolBarMerger::ReplaceItem(
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
     CommandToInfoMap&                      rCommandMap,
-    const ::rtl::OUString&                 rModuleIdentifier,
+    const OUString&                 rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );
@@ -609,7 +609,7 @@ bool ToolBarMerger::ReplaceItem(
 bool ToolBarMerger::RemoveItems(
     ToolBox*                  pToolbar,
     sal_uInt16                nPos,
-    const ::rtl::OUString&    rMergeCommandParameter )
+    const OUString&    rMergeCommandParameter )
 {
     sal_Int32 nCount = rMergeCommandParameter.toInt32();
     if ( nCount > 0 )
@@ -652,10 +652,10 @@ bool ToolBarMerger::RemoveItems(
     uno::Reference< lang::XMultiServiceFactory > xSMGR,
     uno::Reference< frame::XFrame > xFrame,
     ToolBox*               pToolbar,
-    const ::rtl::OUString& rCommandURL,
+    const OUString& rCommandURL,
     sal_uInt16             nId,
     sal_uInt16             nWidth,
-    const ::rtl::OUString& rControlType )
+    const OUString& rControlType )
 {
     ::cppu::OWeakObject* pResult( 0 );
 

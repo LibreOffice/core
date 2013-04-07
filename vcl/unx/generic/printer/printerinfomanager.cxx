@@ -54,10 +54,6 @@
 using namespace psp;
 using namespace osl;
 
-using ::rtl::OUString;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::rtl::OUStringHash;
 
 namespace psp
 {
@@ -162,7 +158,7 @@ void PrinterInfoManager::setCUPSDisabled( bool bDisable )
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
-    m_aSystemDefaultPaper = rtl::OStringToOUString(
+    m_aSystemDefaultPaper = OStringToOUString(
         PaperInfo::toPSName(PaperInfo::getSystemDefaultPaper().getPaper()),
         RTL_TEXTENCODING_UTF8);
 }
@@ -258,11 +254,11 @@ void PrinterInfoManager::initialize()
         if( aConfig.HasGroup( GLOBAL_DEFAULTS_GROUP ) )
         {
             #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found global defaults in %s\n", rtl::OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+            fprintf( stderr, "found global defaults in %s\n", OUStringToOString( aFile.PathToFileName(), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
             #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
 
-            rtl::OString aValue( aConfig.ReadKey( "Copies" ) );
+            OString aValue( aConfig.ReadKey( "Copies" ) );
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nCopies = aValue.toInt32();
 
@@ -318,16 +314,16 @@ void PrinterInfoManager::initialize()
             // get the PPDContext of global JobData
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
-                rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                OString aKey( aConfig.GetKeyName( nKey ) );
                 if (aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")))
                 {
                     aValue = aConfig.ReadKey( aKey );
-                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(rtl::OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
+                    const PPDKey* pKey = m_aGlobalDefaults.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
                     if( pKey )
                     {
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
-                        aValue.equals("*nil") ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                        aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                         sal_True );
                     }
                 }
@@ -384,7 +380,7 @@ void PrinterInfoManager::initialize()
         for( int nGroup = 0; nGroup < aConfig.GetGroupCount(); nGroup++ )
         {
             aConfig.SetGroup( aConfig.GetGroupName( nGroup ) );
-            rtl::OString aValue = aConfig.ReadKey( "Printer" );
+            OString aValue = aConfig.ReadKey( "Printer" );
             if (!aValue.isEmpty())
             {
                 OUString aPrinterName;
@@ -403,10 +399,10 @@ void PrinterInfoManager::initialize()
                 aPrinter.m_aInfo.m_aFontSubstitutes.clear();
                 aPrinter.m_aInfo.m_aFontSubstitutions.clear();
 
-                aPrinterName = rtl::OStringToOUString(aValue.copy(nNamePos+1),
+                aPrinterName = OStringToOUString(aValue.copy(nNamePos+1),
                     RTL_TEXTENCODING_UTF8);
                 aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
-                aPrinter.m_aInfo.m_aDriverName = rtl::OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aDriverName = OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
 
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
@@ -460,14 +456,14 @@ void PrinterInfoManager::initialize()
                         aValue = "lpr";
                         #endif
                     }
-                    aPrinter.m_aInfo.m_aCommand = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
+                    aPrinter.m_aInfo.m_aCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
 
                 aValue = aConfig.ReadKey( "QuickCommand" );
-                aPrinter.m_aInfo.m_aQuickCommand = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aQuickCommand = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Features" );
-                aPrinter.m_aInfo.m_aFeatures = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aFeatures = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 // override the settings in m_aGlobalDefaults if keys exist
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
@@ -475,10 +471,10 @@ void PrinterInfoManager::initialize()
                     aDefaultPrinter = aPrinterName;
 
                 aValue = aConfig.ReadKey( "Location" );
-                aPrinter.m_aInfo.m_aLocation = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aLocation = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Comment" );
-                aPrinter.m_aInfo.m_aComment = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aComment = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Copies" );
                 if (!aValue.isEmpty())
@@ -526,16 +522,16 @@ void PrinterInfoManager::initialize()
                 // 2. Font substitution table
                 for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
-                    rtl::OString aKey( aConfig.GetKeyName( nKey ) );
+                    OString aKey( aConfig.GetKeyName( nKey ) );
                     if( aKey.matchL(RTL_CONSTASCII_STRINGPARAM("PPD_")) && aPrinter.m_aInfo.m_pParser )
                     {
                         aValue = aConfig.ReadKey( aKey );
-                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(rtl::OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
+                        const PPDKey* pKey = aPrinter.m_aInfo.m_pParser->getKey(OStringToOUString(aKey.copy(4), RTL_TEXTENCODING_ISO_8859_1));
                         if( pKey )
                         {
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
-                            aValue.equals("*nil") ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
+                            aValue.equals("*nil") ? NULL : pKey->getValue(OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                             sal_True );
                         }
                     }
@@ -622,7 +618,7 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aComment         = it->m_aComment;
         aPrinter.m_aInfo.m_aLocation        = it->m_aLocation;
         aPrinter.m_bModified                = false;
-        aPrinter.m_aGroup                   = rtl::OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent in padmin
+        aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent in padmin
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
@@ -766,22 +762,22 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
             pConfig->SetGroup( it->second.m_aGroup );
 
-            rtl::OStringBuffer aValue(rtl::OUStringToOString(it->second.m_aInfo.m_aDriverName, RTL_TEXTENCODING_UTF8));
+            OStringBuffer aValue(OUStringToOString(it->second.m_aInfo.m_aDriverName, RTL_TEXTENCODING_UTF8));
             aValue.append('/');
-            aValue.append(rtl::OUStringToOString(it->first, RTL_TEXTENCODING_UTF8));
+            aValue.append(OUStringToOString(it->first, RTL_TEXTENCODING_UTF8));
             pConfig->WriteKey("Printer", aValue.makeStringAndClear());
             pConfig->WriteKey( "DefaultPrinter", it->first == m_aDefaultPrinter ? "1" : "0" );
-            pConfig->WriteKey( "Location", rtl::OUStringToOString(it->second.m_aInfo.m_aLocation, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey( "Comment", rtl::OUStringToOString(it->second.m_aInfo.m_aComment, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey( "Command", rtl::OUStringToOString(it->second.m_aInfo.m_aCommand, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey( "QuickCommand", rtl::OUStringToOString(it->second.m_aInfo.m_aQuickCommand, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey( "Features", rtl::OUStringToOString(it->second.m_aInfo.m_aFeatures, RTL_TEXTENCODING_UTF8) );
-            pConfig->WriteKey("Copies", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nCopies)));
+            pConfig->WriteKey( "Location", OUStringToOString(it->second.m_aInfo.m_aLocation, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Comment", OUStringToOString(it->second.m_aInfo.m_aComment, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Command", OUStringToOString(it->second.m_aInfo.m_aCommand, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "QuickCommand", OUStringToOString(it->second.m_aInfo.m_aQuickCommand, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey( "Features", OUStringToOString(it->second.m_aInfo.m_aFeatures, RTL_TEXTENCODING_UTF8) );
+            pConfig->WriteKey("Copies", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nCopies)));
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
-            pConfig->WriteKey("PSLevel", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPSLevel)));
-            pConfig->WriteKey("PDFDevice", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPDFDevice)));
-            pConfig->WriteKey("ColorDevice", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDevice)));
-            pConfig->WriteKey("ColorDepth", rtl::OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDepth)));
+            pConfig->WriteKey("PSLevel", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPSLevel)));
+            pConfig->WriteKey("PDFDevice", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nPDFDevice)));
+            pConfig->WriteKey("ColorDevice", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDevice)));
+            pConfig->WriteKey("ColorDepth", OString::valueOf(static_cast<sal_Int32>(it->second.m_aInfo.m_nColorDepth)));
             aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nLeftMarginAdjust));
             aValue.append(',');
             aValue.append(static_cast<sal_Int32>(it->second.m_aInfo.m_nRightMarginAdjust));
@@ -797,12 +793,12 @@ bool PrinterInfoManager::writePrinterConfig()
                 for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
                 {
                     const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
-                    rtl::OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("PPD_"));
-                    aKey.append(rtl::OUStringToOString(pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1));
+                    OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("PPD_"));
+                    aKey.append(OUStringToOString(pKey->getKey(), RTL_TEXTENCODING_ISO_8859_1));
 
                     const PPDValue* pValue = it->second.m_aInfo.m_aContext.getValue( pKey );
                     if (pValue)
-                        aValue.append(rtl::OUStringToOString(pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1));
+                        aValue.append(OUStringToOString(pValue->m_aOption, RTL_TEXTENCODING_ISO_8859_1));
                     else
                         aValue.append(RTL_CONSTASCII_STRINGPARAM("*nil"));
                     pConfig->WriteKey(aKey.makeStringAndClear(), aValue.makeStringAndClear());
@@ -814,9 +810,9 @@ bool PrinterInfoManager::writePrinterConfig()
             for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
-                rtl::OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("SubstFont_"));
-                aKey.append(rtl::OUStringToOString(subst->first, RTL_TEXTENCODING_ISO_8859_1));
-                pConfig->WriteKey( aKey.makeStringAndClear(), rtl::OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
+                OStringBuffer aKey(RTL_CONSTASCII_STRINGPARAM("SubstFont_"));
+                aKey.append(OUStringToOString(subst->first, RTL_TEXTENCODING_ISO_8859_1));
+                pConfig->WriteKey( aKey.makeStringAndClear(), OUStringToOString( subst->second, RTL_TEXTENCODING_ISO_8859_1 ) );
             }
         }
     }
@@ -871,7 +867,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
-                 rtl::OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
+                 OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
         m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
         m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
@@ -1044,12 +1040,12 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                     fprintf( stderr,
                     "substitute %s %s %d %d\n"
                     " ->        %s %s %d %d\n",
-                             rtl::OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( it->m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                     it->m_eItalic == ITALIC_NONE ? "r" : it->m_eItalic == ITALIC_OBLIQUE ? "o" : it->m_eItalic == ITALIC_NORMAL ? "i" : "u",
                     it->m_eWeight,
                     it->m_eWidth,
 
-                             rtl::OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+                             OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
                     aInfo.m_eItalic == ITALIC_NONE ? "r" : aInfo.m_eItalic == ITALIC_OBLIQUE ? "o" : aInfo.m_eItalic == ITALIC_NORMAL ? "i" : "u",
                     aInfo.m_eWeight,
                     aInfo.m_eWidth
@@ -1095,7 +1091,7 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
     return m_aSystemPrintQueues;
 }
 
-bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const
+bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const char* pToken ) const
 {
     const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
     sal_Int32 nIndex = 0;
@@ -1113,10 +1109,10 @@ bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& rPrinterName, c
 FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
-    const rtl::OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
+    const OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
-    rtl::OString aShellCommand  = rtl::OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
-    aShellCommand += rtl::OString( " 2>/dev/null" );
+    OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
+    aShellCommand += OString( " 2>/dev/null" );
 
     return popen (aShellCommand.getStr(), "w");
 }
@@ -1155,7 +1151,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not setting default paper, already set %s\n",
-                 ::rtl::OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                 OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
         return;
     }
@@ -1172,12 +1168,12 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     if( pPaperVal )
     {
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "setting default paper %s\n", ::rtl::OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "setting default paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
         rContext.setValue( pPageSizeKey, pPaperVal );
         #if OSL_DEBUG_LEVEL > 1
         pPaperVal = rContext.getValue( pPageSizeKey );
-        fprintf( stderr, "-> got paper %s\n", ::rtl::OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        fprintf( stderr, "-> got paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
     }
 }
@@ -1221,7 +1217,7 @@ OUString SystemQueueInfo::getCommand() const
 }
 
 struct SystemCommandParameters;
-typedef void(* tokenHandler)(const std::list< rtl::OString >&,
+typedef void(* tokenHandler)(const std::list< OString >&,
                 std::list< PrinterInfoManager::SystemPrintQueue >&,
                 const SystemCommandParameters*);
 
@@ -1237,7 +1233,7 @@ struct SystemCommandParameters
 
 #if ! (defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
 static void lpgetSysQueueTokenHandler(
-    const std::list< rtl::OString >& i_rLines,
+    const std::list< OString >& i_rLines,
     std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
     const SystemCommandParameters* )
 {
@@ -1251,9 +1247,9 @@ static void lpgetSysQueueTokenHandler(
     // printers are to be used for this user at all
 
     // find _all: line
-    rtl::OString aAllLine( "_all:" );
-    rtl::OString aAllAttr( "all=" );
-    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+    OString aAllLine( "_all:" );
+    OString aAllAttr( "all=" );
+    for( std::list< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         if( it->indexOf( aAllLine, 0 ) == 0 )
@@ -1262,7 +1258,7 @@ static void lpgetSysQueueTokenHandler(
             ++it;
             while( it != i_rLines.end() )
             {
-                rtl::OString aClean( WhitespaceToSpace( *it ) );
+                OString aClean( WhitespaceToSpace( *it ) );
                 if( aClean.indexOf( aAllAttr, 0 ) == 0 )
                 {
                     // insert the comma separated entries into the set of printers to use
@@ -1271,7 +1267,7 @@ static void lpgetSysQueueTokenHandler(
                     {
                         OString aTok( aClean.getToken( 0, ',', nPos ) );
                         if( !aTok.isEmpty() )
-                            aOnlySet.insert( rtl::OStringToOUString( aTok, aEncoding ) );
+                            aOnlySet.insert( OStringToOUString( aTok, aEncoding ) );
                     }
                     break;
                 }
@@ -1281,9 +1277,9 @@ static void lpgetSysQueueTokenHandler(
     }
 
     bool bInsertAttribute = false;
-    rtl::OString aDescrStr( "description=" );
-    rtl::OString aLocStr( "location=" );
-    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+    OString aDescrStr( "description=" );
+    OString aLocStr( "location=" );
+    for( std::list< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
@@ -1291,7 +1287,7 @@ static void lpgetSysQueueTokenHandler(
         nPos = it->indexOf( ':', 0 );
         if( nPos != -1 )
         {
-            OUString aSysQueue( rtl::OStringToOUString( it->copy( 0, nPos ), aEncoding ) );
+            OUString aSysQueue( OStringToOUString( it->copy( 0, nPos ), aEncoding ) );
             // do not insert duplicates (e.g. lpstat tends to produce such lines)
             // in case there was a "_all" section, insert only those printer explicitly
             // set in the "all" attribute
@@ -1315,18 +1311,18 @@ static void lpgetSysQueueTokenHandler(
             nPos = it->indexOf( aDescrStr, 0 );
             if( nPos != -1 )
             {
-                rtl::OString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
+                OString aComment( WhitespaceToSpace( it->copy(nPos+12) ) );
                 if( !aComment.isEmpty() )
-                    o_rQueues.back().m_aComment = rtl::OStringToOUString(aComment, aEncoding);
+                    o_rQueues.back().m_aComment = OStringToOUString(aComment, aEncoding);
                 continue;
             }
             // look for "location" attribute, inser as location
             nPos = it->indexOf( aLocStr, 0 );
             if( nPos != -1 )
             {
-                rtl::OString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
+                OString aLoc( WhitespaceToSpace( it->copy(nPos+9) ) );
                 if( !aLoc.isEmpty() )
-                    o_rQueues.back().m_aLocation = rtl::OStringToOUString(aLoc, aEncoding);
+                    o_rQueues.back().m_aLocation = OStringToOUString(aLoc, aEncoding);
                 continue;
             }
         }
@@ -1334,17 +1330,17 @@ static void lpgetSysQueueTokenHandler(
 }
 #endif
 static void standardSysQueueTokenHandler(
-    const std::list< rtl::OString >& i_rLines,
+    const std::list< OString >& i_rLines,
     std::list< PrinterInfoManager::SystemPrintQueue >& o_rQueues,
     const SystemCommandParameters* i_pParms)
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     boost::unordered_set< OUString, OUStringHash > aUniqueSet;
-    rtl::OString aForeToken( i_pParms->pForeToken );
-    rtl::OString aAftToken( i_pParms->pAftToken );
+    OString aForeToken( i_pParms->pForeToken );
+    OString aAftToken( i_pParms->pAftToken );
     /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing
     */
-    for( std::list< rtl::OString >::const_iterator it = i_rLines.begin();
+    for( std::list< OString >::const_iterator it = i_rLines.begin();
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
@@ -1364,7 +1360,7 @@ static void standardSysQueueTokenHandler(
             if( nAftPos != -1 )
             {
                 // get the queue name between fore and aft tokens
-                OUString aSysQueue( rtl::OStringToOUString( it->copy( nPos, nAftPos - nPos ), aEncoding ) );
+                OUString aSysQueue( OStringToOUString( it->copy( nPos, nAftPos - nPos ), aEncoding ) );
                 // do not insert duplicates (e.g. lpstat tends to produce such lines)
                 if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
                 {
@@ -1396,13 +1392,13 @@ void SystemQueueInfo::run()
 {
     char pBuffer[1024];
     FILE *pPipe;
-    std::list< rtl::OString > aLines;
+    std::list< OString > aLines;
 
     /* Discover which command we can use to get a list of all printer queues */
     for( unsigned int i = 0; i < SAL_N_ELEMENTS(aParms); i++ )
     {
         aLines.clear();
-        rtl::OStringBuffer aCmdLine( 128 );
+        OStringBuffer aCmdLine( 128 );
         aCmdLine.append( aParms[i].pQueueCommand );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "trying print queue command \"%s\" ... ", aParms[i].pQueueCommand );
@@ -1411,7 +1407,7 @@ void SystemQueueInfo::run()
         if( (pPipe = popen( aCmdLine.getStr(), "r" )) )
         {
             while( fgets( pBuffer, 1024, pPipe ) )
-                aLines.push_back( rtl::OString( pBuffer ) );
+                aLines.push_back( OString( pBuffer ) );
             if( ! pclose( pPipe ) )
             {
                 std::list< PrinterInfoManager::SystemPrintQueue > aSysPrintQueues;
@@ -1419,7 +1415,7 @@ void SystemQueueInfo::run()
                 MutexGuard aGuard( m_aMutex );
                 m_bChanged  = true;
                 m_aQueues   = aSysPrintQueues;
-                m_aCommand  = rtl::OUString::createFromAscii( aParms[i].pPrintCommand );
+                m_aCommand  = OUString::createFromAscii( aParms[i].pPrintCommand );
                 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "success\n" );
                 #endif

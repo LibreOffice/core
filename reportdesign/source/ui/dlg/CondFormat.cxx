@@ -213,7 +213,7 @@ namespace rptui
             if ( bLastCondition )
             {
                 Reference< XFormatCondition > xFormatCondition( m_xCopy->getByIndex( 0 ), UNO_QUERY_THROW );
-                xFormatCondition->setFormula( ::rtl::OUString() );
+                xFormatCondition->setFormula( OUString() );
                 (*pos)->setCondition( xFormatCondition );
             }
             else
@@ -429,9 +429,9 @@ namespace rptui
     }
 
     // -----------------------------------------------------------------------------
-    ::rtl::OUString ConditionalFormattingDialog::getDataField() const
+    OUString ConditionalFormattingDialog::getDataField() const
     {
-        ::rtl::OUString sDataField;
+        OUString sDataField;
         try
         {
             sDataField = m_xFormatConditions->getDataField();

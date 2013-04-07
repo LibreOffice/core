@@ -52,13 +52,13 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
 
         char const*const pContent(
                 reinterpret_cast<char const*>(m_aNodePtr->content));
         if (0 == pContent) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OUString const ret(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
         return ret;
@@ -73,13 +73,13 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
 
         char const*const pName(
                 reinterpret_cast<char const*>(m_aNodePtr->name));
         if (0 == pName) {
-            return ::rtl::OUString();
+            return OUString();
         }
         OUString const ret(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
         return ret;
@@ -98,7 +98,7 @@ namespace DOM
         }
 
         OString const data(
-                ::rtl::OUStringToOString(rData, RTL_TEXTENCODING_UTF8));
+                OUStringToOString(rData, RTL_TEXTENCODING_UTF8));
         xmlChar const*const pData(
                 reinterpret_cast<xmlChar const*>(data.getStr()) );
         xmlFree(m_aNodePtr->content);
@@ -111,7 +111,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         if (0 == m_aNodePtr) {
-            return ::rtl::OUString();
+            return OUString();
         }
 
         sal_Char const*const pName =

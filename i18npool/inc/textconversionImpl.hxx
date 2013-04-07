@@ -41,21 +41,21 @@ public:
 
         // Methods
         com::sun::star::i18n::TextConversionResult SAL_CALL
-        getConversions( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+        getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
-        rtl::OUString SAL_CALL
-        getConversion( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+        OUString SAL_CALL
+        getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions )
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException );
-        rtl::OUString SAL_CALL
-        getConversionWithOffset( const ::rtl::OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
+        OUString SAL_CALL
+        getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const ::com::sun::star::lang::Locale& aLocale, sal_Int16 nTextConversionType,
             sal_Int32 nTextConversionOptions, com::sun::star::uno::Sequence< sal_Int32 >& offset )
             throw(  com::sun::star::uno::RuntimeException,
@@ -69,13 +69,13 @@ public:
                     com::sun::star::lang::NoSupportException );
 
     //XServiceInfo
-    rtl::OUString SAL_CALL
+    OUString SAL_CALL
         getImplementationName()
             throw( com::sun::star::uno::RuntimeException );
     sal_Bool SAL_CALL
-        supportsService(const rtl::OUString& ServiceName)
+        supportsService(const OUString& ServiceName)
             throw( com::sun::star::uno::RuntimeException );
-    com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+    com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 private :

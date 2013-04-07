@@ -223,7 +223,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
  * between an OUString and a macabfield (for use when creating and handling
  * SQL statement).
  */
-macabfield *MacabRecord::createMacabField(const ::rtl::OUString _newFieldString, const ABPropertyType _abType)
+macabfield *MacabRecord::createMacabField(const OUString _newFieldString, const ABPropertyType _abType)
 {
     macabfield *newField = NULL;
     switch(_abType)
@@ -291,12 +291,12 @@ macabfield *MacabRecord::createMacabField(const ::rtl::OUString _newFieldString,
  * between an OUString and a macabfield (for use when creating and handling
  * SQL statement).
  */
-::rtl::OUString MacabRecord::fieldToString(const macabfield *_aField)
+OUString MacabRecord::fieldToString(const macabfield *_aField)
 {
     if(_aField == NULL)
-        return ::rtl::OUString();
+        return OUString();
 
-    ::rtl::OUString fieldString;
+    OUString fieldString;
 
     switch(_aField->type)
     {
@@ -316,7 +316,7 @@ macabfield *MacabRecord::createMacabField(const ::rtl::OUString _newFieldString,
                 // Should we check for the wrong type here, e.g., a float?
                 sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
                 if(m_bSuccess != sal_False)
-                    fieldString = ::rtl::OUString::valueOf(nVal);
+                    fieldString = OUString::valueOf(nVal);
             }
             break;
         case kABRealProperty:
@@ -326,7 +326,7 @@ macabfield *MacabRecord::createMacabField(const ::rtl::OUString _newFieldString,
                 // Should we check for the wrong type here, e.g., an int?
                 sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
                 if(m_bSuccess != sal_False)
-                    fieldString = ::rtl::OUString::valueOf(nVal);
+                    fieldString = OUString::valueOf(nVal);
             }
             break;
         default:

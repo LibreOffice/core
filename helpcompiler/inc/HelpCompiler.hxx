@@ -63,36 +63,36 @@ namespace fs
     class path
     {
     public:
-        ::rtl::OUString data;
+        OUString data;
     public:
         path() {}
         path(const path &rOther) : data(rOther.data) {}
         path(const std::string &in, convert)
         {
-            rtl::OUString sWorkingDir;
+            OUString sWorkingDir;
             osl_getProcessWorkingDir(&sWorkingDir.pData);
-            rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
+            OString tmp(in.c_str());
+            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
             osl::File::getFileURLFromSystemPath(ustrSystemPath, data);
             osl::File::getAbsoluteFileURL(sWorkingDir, data, data);
         }
         path(const std::string &FileURL)
         {
-            rtl::OString tmp(FileURL.c_str());
-            data = rtl::OStringToOUString(tmp, getThreadTextEncoding());
+            OString tmp(FileURL.c_str());
+            data = OStringToOUString(tmp, getThreadTextEncoding());
         }
         std::string native_file_string() const
         {
-            ::rtl::OUString ustrSystemPath;
+            OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
-            rtl::OString tmp(rtl::OUStringToOString(ustrSystemPath, getThreadTextEncoding()));
+            OString tmp(OUStringToOString(ustrSystemPath, getThreadTextEncoding()));
             HCDBG(std::cerr << "native_file_string is " << tmp.getStr() << std::endl);
             return std::string(tmp.getStr());
         }
 #ifdef WNT
         wchar_t const * native_file_string_w() const
         {
-            ::rtl::OUString ustrSystemPath;
+            OUString ustrSystemPath;
             osl::File::getSystemPathFromFileURL(data, ustrSystemPath);
             return (wchar_t const *) ustrSystemPath.getStr();
         }
@@ -100,7 +100,7 @@ namespace fs
         std::string native_directory_string() const { return native_file_string(); }
         std::string toUTF8() const
         {
-            rtl::OString tmp(rtl::OUStringToOString(data, RTL_TEXTENCODING_UTF8));
+            OString tmp(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
             return std::string(tmp.getStr());
         }
         bool empty() const { return data.isEmpty(); }
@@ -108,19 +108,19 @@ namespace fs
         {
             path ret(*this);
             HCDBG(std::cerr << "orig was " <<
-                rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
-            rtl::OString tmp(in.c_str());
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
-            ret.data += rtl::OUString(sal_Unicode('/'));
+                OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
+            OString tmp(in.c_str());
+            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
+            ret.data += OUString(sal_Unicode('/'));
             ret.data += ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
-                rtl::OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
+                OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             return ret;
         }
         void append(const char *in)
         {
-            rtl::OString tmp(in);
-            rtl::OUString ustrSystemPath(rtl::OStringToOUString(tmp, getThreadTextEncoding()));
+            OString tmp(in);
+            OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
             data = data + ustrSystemPath;
         }
         void append(const std::string &in) { append(in.c_str()); }

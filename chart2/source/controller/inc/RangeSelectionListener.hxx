@@ -30,7 +30,7 @@ namespace chart
 class RangeSelectionListenerParent
 {
 public:
-    virtual void listeningFinished( const ::rtl::OUString & rNewRange ) = 0;
+    virtual void listeningFinished( const OUString & rNewRange ) = 0;
     virtual void disposingRangeSelection() = 0;
 
 protected:
@@ -46,7 +46,7 @@ class RangeSelectionListener : public
 public:
     explicit RangeSelectionListener(
         RangeSelectionListenerParent & rParent,
-        const ::rtl::OUString & rInitialRange,
+        const OUString & rInitialRange,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel >& xModelToLockController );
     virtual ~RangeSelectionListener();
@@ -64,7 +64,7 @@ protected:
 
 private:
     RangeSelectionListenerParent & m_rParent;
-    ::rtl::OUString m_aRange;
+    OUString m_aRange;
     ControllerLockGuard m_aControllerLockGuard;
 };
 

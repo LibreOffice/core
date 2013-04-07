@@ -47,7 +47,6 @@
 #include "xelink.hxx"
 #include "xehelper.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::i18n::XBreakIterator;
 
@@ -274,9 +273,9 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
 
 namespace {
 
-rtl::OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
+OUString lclGetUrlRepresentation( const SvxURLField& rUrlField )
 {
-    const rtl::OUString& aRepr = rUrlField.GetRepresentation();
+    const OUString& aRepr = rUrlField.GetRepresentation();
     // no representation -> use URL
     return aRepr.isEmpty() ? rUrlField.GetURL() : aRepr;
 }
@@ -296,9 +295,9 @@ XclExpHyperlinkHelper::~XclExpHyperlinkHelper()
 {
 }
 
-rtl::OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
+OUString XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 {
-    rtl::OUString aUrlRepr;
+    OUString aUrlRepr;
 
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
@@ -555,7 +554,7 @@ void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoo
 void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot& rRoot, sal_Unicode cChar )
 {
     if( rRoot.GetBiff() == EXC_BIFF8 )
-        rXclString.Append( rtl::OUString(cChar) );
+        rXclString.Append( OUString(cChar) );
     else
         rXclString.AppendByte( cChar, rRoot.GetTextEncoding() );
 }
@@ -848,7 +847,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
                 else
                 {
                     String aPortionText( mrEE.GetText( aSel ) );
-                    aPortionText.SearchAndReplaceAll( rtl::OUString('&'), rtl::OUString("&&") );
+                    aPortionText.SearchAndReplaceAll( OUString('&'), OUString("&&") );
                     // #i17440# space between font height and numbers in text
                     if( bFontHtChanged && aParaText.Len() && aPortionText.Len() )
                     {
@@ -885,14 +884,14 @@ namespace {
 
 /** Encodes special parts of the URL, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this URL, or 0. */
-rtl::OUString lclEncodeDosUrl(
-    XclBiff eBiff, const rtl::OUString& rUrl, const rtl::OUString& rBase, const rtl::OUString* pTableName)
+OUString lclEncodeDosUrl(
+    XclBiff eBiff, const OUString& rUrl, const OUString& rBase, const OUString* pTableName)
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
 
     if (!rUrl.isEmpty())
     {
-        rtl::OUString aOldUrl = rUrl;
+        OUString aOldUrl = rUrl;
         aBuf.append(EXC_URLSTART_ENCODED);
 
         if ( aOldUrl.getLength() > 2 && aOldUrl.copy(0,2) == "\\\\" )
@@ -961,16 +960,16 @@ rtl::OUString lclEncodeDosUrl(
 
 // ----------------------------------------------------------------------------
 
-rtl::OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const rtl::OUString& rAbsUrl, const rtl::OUString* pTableName )
+OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
 {
-    rtl::OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
-    rtl::OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(INetURLObject::FSYS_DOS);
+    OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(INetURLObject::FSYS_DOS);
+    OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(INetURLObject::FSYS_DOS);
     return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
 }
 
-rtl::OUString XclExpUrlHelper::EncodeDde( const rtl::OUString& rApplic, const rtl::OUString& rTopic )
+OUString XclExpUrlHelper::EncodeDde( const OUString& rApplic, const OUString& rTopic )
 {
-    rtl::OUStringBuffer aBuf;
+    OUStringBuffer aBuf;
     aBuf.append(rApplic).append(EXC_DDE_DELIM).append(rTopic);
     return aBuf.makeStringAndClear();
 }

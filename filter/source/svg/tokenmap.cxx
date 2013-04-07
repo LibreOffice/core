@@ -34,9 +34,9 @@ sal_Int32 getTokenId( const char* sIdent, sal_Int32 nLen )
         return XML_TOKEN_INVALID;
 }
 
-sal_Int32 getTokenId( const rtl::OUString& sIdent )
+sal_Int32 getTokenId( const OUString& sIdent )
 {
-    rtl::OString aUTF8( sIdent.getStr(),
+    OString aUTF8( sIdent.getStr(),
                         sIdent.getLength(),
                         RTL_TEXTENCODING_UTF8 );
     return getTokenId( aUTF8.getStr(), aUTF8.getLength() );

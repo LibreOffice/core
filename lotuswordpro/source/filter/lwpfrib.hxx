@@ -108,10 +108,10 @@ protected:
     LwpFrib* m_pNext;
     sal_uInt8 m_nFribType;
     ModifierInfo* m_pModifiers;
-    rtl::OUString m_StyleName;
+    OUString m_StyleName;
 public:
     sal_Bool m_ModFlag;
-    rtl::OUString GetStyleName(){return m_StyleName;}//add by  1-10
+    OUString GetStyleName(){return m_StyleName;}//add by  1-10
 //  void SetStyle(LwpFoundry* pFoundry);
     sal_Bool IsModified(){return m_ModFlag;}
     void SetModifiers(ModifierInfo* pModifiers);

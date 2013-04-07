@@ -66,12 +66,11 @@
 
 #include "gciterator.hxx"
 
-using ::rtl::OUString;
 using namespace linguistic;
 using namespace ::com::sun::star;
 
 // forward declarations
-static ::rtl::OUString GrammarCheckingIterator_getImplementationName() throw();
+static OUString GrammarCheckingIterator_getImplementationName() throw();
 static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceNames() throw();
 
 
@@ -975,7 +974,7 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
             // get configuration update access
             beans::PropertyValue aValue;
             aValue.Name  = "nodepath";
-            aValue.Value = uno::makeAny( ::rtl::OUString("org.openoffice.Office.Linguistic/ServiceManager") );
+            aValue.Value = uno::makeAny( OUString("org.openoffice.Office.Linguistic/ServiceManager") );
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
             m_xUpdateAccess = uno::Reference< util::XChangesBatch >(
@@ -1119,7 +1118,7 @@ LinguDispatcher::DspType GrammarCheckingIterator::GetDspType() const
 
 static OUString GrammarCheckingIterator_getImplementationName() throw()
 {
-    return ::rtl::OUString( "com.sun.star.lingu2.ProofreadingIterator" );
+    return OUString( "com.sun.star.lingu2.ProofreadingIterator" );
 }
 
 

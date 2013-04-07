@@ -32,7 +32,7 @@ namespace
         CPPUNIT_TEST_SUITE_END();
     };
 
-rtl::OUString sTestEnableRuntime(
+OUString sTestEnableRuntime(
     "Function doUnitTest as Integer\n"
     "Dim Enable as Integer\n"
     "Enable = 1\n"
@@ -41,7 +41,7 @@ rtl::OUString sTestEnableRuntime(
     "End Function\n"
 );
 
-rtl::OUString sTestDimEnable(
+OUString sTestDimEnable(
     "Sub doUnitTest\n"
     "Dim Enable as String\n"
     "End Sub\n"

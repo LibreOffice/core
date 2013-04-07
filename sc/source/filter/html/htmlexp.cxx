@@ -144,9 +144,9 @@ FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const String& 
 }
 
 
-static rtl::OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
+static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 {
-    rtl::OStringBuffer aByteStr(OOO_STRING_SVTOOLS_HTML_colgroup);
+    OStringBuffer aByteStr(OOO_STRING_SVTOOLS_HTML_colgroup);
     aByteStr.append(' ');
     if( nSpan > 1 )
     {
@@ -196,9 +196,9 @@ static void lcl_AddStamp( String& rStr, const String& rName,
 }
 
 
-static rtl::OString lcl_makeHTMLColorTriplet(const Color& rColor)
+static OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
-    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("\"#"));
+    OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("\"#"));
     // <font COLOR="#00FF40">hallo</font>
     sal_Char    buf[64];
     sal_Char*   p = buf;
@@ -415,7 +415,7 @@ void ScHTMLExport::WriteOverview()
         OUT_STR( ScGlobal::GetRscString( STR_OVERVIEW ) );
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head1 );
 
-        rtl::OUString aStr;
+        OUString aStr;
 
         const SCTAB nCount = pDoc->GetTableCount();
         for ( SCTAB nTab = 0; nTab < nCount; nTab++ )
@@ -486,10 +486,10 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 }
 
 
-rtl::OString ScHTMLExport::BorderToStyle(const char* pBorderName,
+OString ScHTMLExport::BorderToStyle(const char* pBorderName,
         const SvxBorderLine* pLine, bool& bInsertSemicolon)
 {
-    rtl::OStringBuffer aOut;
+    OStringBuffer aOut;
 
     if ( pLine )
     {
@@ -637,7 +637,7 @@ void ScHTMLExport::WriteTables()
 {
     const SCTAB nTabCount = pDoc->GetTableCount();
     const OUString  aStrTable( ScResId( SCSTR_TABLE ) );
-    rtl::OUString   aStr;
+    OUString   aStr;
     OUString        aStrOut;
     SCCOL           nStartCol;
     SCROW           nStartRow;
@@ -708,7 +708,7 @@ void ScHTMLExport::WriteTables()
         }
 
         // <TABLE ...>
-        rtl::OStringBuffer aByteStrOut(OOO_STRING_SVTOOLS_HTML_table);
+        OStringBuffer aByteStrOut(OOO_STRING_SVTOOLS_HTML_table);
 
         bTabHasGraphics = bTabAlignedLeft = false;
         if ( bAll && pDrawLayer )
@@ -1086,7 +1086,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     if ( bSetFont )
     {
-        rtl::OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_font);
+        OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_font);
         if ( bSetFontName )
         {
             aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
@@ -1094,7 +1094,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             xub_StrLen nFonts = comphelper::string::getTokenCount(rFontItem.GetFamilyName(), ';');
             if ( nFonts == 1 )
             {
-                rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
+                OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
                     rFontItem.GetFamilyName(), eDestEnc, &aNonConvertibleChars);
                 aStr.append(aTmpStr);
             }
@@ -1103,7 +1103,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                 const String& rList = rFontItem.GetFamilyName();
                 for ( sal_Int32 j = 0, nPos = 0; j < (sal_Int32)nFonts; j++ )
                 {
-                    rtl::OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
+                    OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
                         rList.GetToken( 0, ';', nPos ), eDestEnc,
                         &aNonConvertibleChars);
                     aStr.append(aTmpStr);

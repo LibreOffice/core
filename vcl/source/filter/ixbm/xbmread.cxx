@@ -36,7 +36,7 @@ XBMReader::XBMReader( SvStream& rStm ) :
             bStatus         ( sal_True )
 {
     pHexTable = new short[ 256 ];
-    maUpperName = rtl::OUString("SVIXBM");
+    maUpperName = OUString("SVIXBM");
     InitTable();
 }
 
@@ -90,10 +90,10 @@ void XBMReader::InitTable()
 
 // ------------------------------------------------------------------------
 
-rtl::OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
+OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
 {
-    rtl::OString aRet;
+    OString aRet;
     sal_Int32 nPos1, nPos2, nPos3;
 
     bStatus = sal_False;
@@ -186,9 +186,9 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
 
 // ------------------------------------------------------------------------
 
-sal_Bool XBMReader::ParseData( SvStream* pInStm, const rtl::OString& aLastLine, XBMFormat eFormat )
+sal_Bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
 {
-    rtl::OString    aLine;
+    OString    aLine;
     long            nRow = 0;
     long            nCol = 0;
     long            nBits = ( eFormat == XBM10 ) ? 16 : 8;
@@ -218,7 +218,7 @@ sal_Bool XBMReader::ParseData( SvStream* pInStm, const rtl::OString& aLastLine, 
 
             for( sal_Int32 i = 0; ( i < nCount ) && ( nRow < nHeight ); ++i )
             {
-                const rtl::OString aToken(comphelper::string::getToken(aLine,i, ','));
+                const OString aToken(comphelper::string::getToken(aLine,i, ','));
                 const sal_Int32 nLen = aToken.getLength();
                 sal_Bool bProcessed = sal_False;
 
@@ -274,7 +274,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     {
         rIStm.Seek( nLastPos );
         bStatus = sal_False;
-        rtl::OString aLine = FindTokenLine( &rIStm, "#define", "_width" );
+        OString aLine = FindTokenLine( &rIStm, "#define", "_width" );
 
         if ( bStatus )
         {

@@ -78,20 +78,20 @@ SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
 }
 
-rtl::OUString
+OUString
 SwVbaFrames::getServiceImplName()
 {
-    return rtl::OUString("SwVbaFrames");
+    return OUString("SwVbaFrames");
 }
 
-css::uno::Sequence<rtl::OUString>
+css::uno::Sequence<OUString>
 SwVbaFrames::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > sNames;
+    static uno::Sequence< OUString > sNames;
     if ( sNames.getLength() == 0 )
     {
         sNames.realloc( 1 );
-        sNames[0] = rtl::OUString("ooo.vba.word.Frames");
+        sNames[0] = OUString("ooo.vba.word.Frames");
     }
     return sNames;
 }

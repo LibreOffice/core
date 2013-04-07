@@ -325,8 +325,8 @@ wrapper_get_name( AtkObject *atk_obj )
     {
         uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            rtl::OString aName =
-                rtl::OUStringToOString(
+            OString aName =
+                OUStringToOString(
                     xContext->getAccessibleName(),
                     RTL_TEXTENCODING_UTF8);
 
@@ -357,8 +357,8 @@ wrapper_get_description( AtkObject *atk_obj )
     {
         uno::Reference< accessibility::XAccessibleContext > xContext(obj->mpContext);
         try {
-            rtl::OString aDescription =
-                rtl::OUStringToOString(
+            OString aDescription =
+                OUStringToOString(
                     xContext->getAccessibleDescription(),
                     RTL_TEXTENCODING_UTF8);
 
@@ -711,7 +711,7 @@ ensureTypeFor( uno::XInterface *pAccessible )
 {
     int i;
     int bTypes[ aTypeTableSize ] = { 0, };
-    rtl::OString aTypeName( "OOoAtkObj" );
+    OString aTypeName( "OOoAtkObj" );
 
     for( i = 0; i < aTypeTableSize; i++ )
     {

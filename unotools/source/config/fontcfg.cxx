@@ -46,7 +46,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-using ::rtl::OUString;
 
 /*
  * DefaultFontConfiguration
@@ -285,7 +284,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
         const sal_Unicode aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0 };
         const sal_Unicode aBaekmukGulim[] = { 0xBC31, 0xBC35, 0xAD74, 0xB9BC, 0 };
 
-        rtl::OUStringBuffer aFallBackKoreanLocalized;
+        OUStringBuffer aFallBackKoreanLocalized;
         aFallBackKoreanLocalized.append(aSunGulim);
         aFallBackKoreanLocalized.append(';');
         aFallBackKoreanLocalized.append(aBaekmukGulim);
@@ -319,7 +318,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
         const sal_Unicode aLXGothic[] = { 0x004C, 0x0058, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
         const sal_Unicode aKochiGothic[] = { 0x6771, 0x98A8, 0x30B4, 0x30B7, 0x30C3, 0x30AF, 0 };
 
-        rtl::OUStringBuffer aFallBackJapaneseLocalized;
+        OUStringBuffer aFallBackJapaneseLocalized;
         aFallBackJapaneseLocalized.append("MS UI Gothic;");
         aFallBackJapaneseLocalized.append(FALLBACKFONT_UI_SANS_JAPANESE1);
         aFallBackJapaneseLocalized.append(aMSPGothic);
@@ -337,7 +336,7 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const Locale& rLocale )
         return aFallBackJapaneseLocalized.makeStringAndClear();
     }
 
-    return rtl::OUString(FALLBACKFONT_UI_SANS);
+    return OUString(FALLBACKFONT_UI_SANS);
 }
 
 // ------------------------------------------------------------------------------------
@@ -910,7 +909,7 @@ static const enum_convert pWidthNames[] =
 };
 
 void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                              const rtl::OUString& rType,
+                                              const OUString& rType,
                                               std::vector< String >& rSubstVector ) const
 {
     try
@@ -959,7 +958,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
 }
 
 FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                   const rtl::OUString& rType ) const
+                                                   const OUString& rType ) const
 {
     int weight = -1;
     try
@@ -991,7 +990,7 @@ FontWeight FontSubstConfiguration::getSubstWeight( const com::sun::star::uno::Re
 }
 
 FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                 const rtl::OUString& rType ) const
+                                                 const OUString& rType ) const
 {
     int width = -1;
     try
@@ -1023,7 +1022,7 @@ FontWidth FontSubstConfiguration::getSubstWidth( const com::sun::star::uno::Refe
 }
 
 unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::Reference< XNameAccess > xFont,
-                                                    const rtl::OUString& rType ) const
+                                                    const OUString& rType ) const
 {
     unsigned long type = 0;
     try

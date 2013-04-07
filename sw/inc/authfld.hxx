@@ -156,7 +156,7 @@ public:
 
     const String&       GetFieldText(ToxAuthorityField eField) const;
 
-    virtual void        SetPar1(const rtl::OUString& rStr);
+    virtual void        SetPar1(const OUString& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;

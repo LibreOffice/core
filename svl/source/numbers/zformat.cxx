@@ -1896,19 +1896,19 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
 }
 
 // static
-rtl::OUString SvNumberformat::LoadString( SvStream& rStream )
+OUString SvNumberformat::LoadString( SvStream& rStream )
 {
     CharSet eStream = rStream.GetStreamCharSet();
-    rtl::OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
+    OString aStr = read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);
     sal_Char cStream = NfCurrencyEntry::GetEuroSymbol( eStream );
     if (aStr.indexOf(cStream) < 0)
     {
         // simple conversion to unicode
-        return rtl::OStringToOUString(aStr, eStream);
+        return OStringToOUString(aStr, eStream);
     }
     sal_Unicode cSource = OUString(&cStream, 1, eStream).toChar();
     sal_Unicode cTarget = NfCurrencyEntry::GetEuroSymbol();
-    rtl::OUStringBuffer aBuf(rtl::OStringToOUString(aStr, eStream));
+    OUStringBuffer aBuf(OStringToOUString(aStr, eStream));
     aBuf.replace(cSource, cTarget);
 
     return aBuf.makeStringAndClear();
@@ -2115,7 +2115,7 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
 #if 0
 {
     // debugger test case for ANSI standard correctness
-    ::rtl::OUString aTest;
+    OUString aTest;
     // expect 0.00123   OK
     aTest = ::rtl::math::doubleToUString( 0.001234567,
                                           rtl_math_StringFormat_G, 3, '.', true );
@@ -2325,7 +2325,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
 sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
 {
     sal_uInt16 i;
-    rtl::OUString aDiv;
+    OUString aDiv;
     for( i = 0; i < nAnz; i++ )
     {
         if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV )
@@ -3416,11 +3416,11 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
                                             double& fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    const rtl::OUString &rGregorian = Gregorian::get();
+    const OUString &rGregorian = Gregorian::get();
     if ( rCal.getUniqueID() == rGregorian )
     {
         using namespace ::com::sun::star::i18n;
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals = rCal.getAllCalendars(
+        ::com::sun::star::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
                 rLoc().getLanguageTag().getLocale() );
         sal_Int32 nCnt = xCals.getLength();
         if ( nCnt > 1 )
@@ -3447,7 +3447,7 @@ void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
                                                 double fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    const rtl::OUString &rGregorian = Gregorian::get();
+    const OUString &rGregorian = Gregorian::get();
     if ( rOrgCalendar.getLength() && rCal.getUniqueID() != rGregorian )
     {
         rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
@@ -3459,7 +3459,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
-    const rtl::OUString &rGregorian = Gregorian::get();
+    const OUString &rGregorian = Gregorian::get();
     if ( rCal.getUniqueID() != rGregorian )
     {
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
@@ -5258,16 +5258,16 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
                 sal_Unicode aBuf[2];
                 aBuf[0] = '0';
                 aBuf[1] = '0' + nVal;
-                aStr = rtl::OUString(aBuf, SAL_N_ELEMENTS(aBuf));
+                aStr = OUString(aBuf, SAL_N_ELEMENTS(aBuf));
             }
             else
             {
-                aStr = rtl::OUString::valueOf( nVal );
+                aStr = OUString::valueOf( nVal );
             }
         }
         else
         {
-            OUString aValStr( rtl::OUString::valueOf( nVal ) );
+            OUString aValStr( OUString::valueOf( nVal ) );
             if ( aValStr.getLength() >= nMinDigits )
             {
                 aStr = aValStr;
@@ -5286,7 +5286,7 @@ OUString SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
     }
     else
     {
-        aStr = rtl::OUString::valueOf( nVal );
+        aStr = OUString::valueOf( nVal );
     }
     return impTransliterate(aStr, rNum);
 }

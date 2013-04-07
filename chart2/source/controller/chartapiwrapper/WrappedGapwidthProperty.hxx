@@ -33,8 +33,8 @@ class WrappedBarPositionProperty_Base : public WrappedDefaultProperty
 {
 public:
     WrappedBarPositionProperty_Base(
-              const ::rtl::OUString& rOuterName
-            , const ::rtl::OUString& rInnerSequencePropertyName
+              const OUString& rOuterName
+            , const OUString& rInnerSequencePropertyName
             , sal_Int32 nDefaultValue
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedBarPositionProperty_Base();
@@ -53,7 +53,7 @@ protected:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
     sal_Int32                                   m_nDefaultValue;
-    ::rtl::OUString                             m_InnerSequencePropertyName;
+    OUString                             m_InnerSequencePropertyName;
 
     mutable ::com::sun::star::uno::Any          m_aOuterValue;
 };

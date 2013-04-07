@@ -163,7 +163,7 @@ public:
      * @descr   function of interface XExtendedFilterDetection. If this interface is registered, it will be called whenever
      *          a file is to be loaded.
      */
-    virtual ::rtl::OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (::com::sun::star::uno::RuntimeException);
 
 public:
     uno::Reference< XFilter > rFilter;

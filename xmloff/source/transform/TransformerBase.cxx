@@ -41,8 +41,6 @@
 #include "TransformerBase.hxx"
 #include "TContextVector.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::osl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
@@ -602,7 +600,7 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                                                         ? ((nMeasure*127+36)/72)
                                                         : ((nMeasure*127-36)/72) );
 
-                                rtl::OUStringBuffer aBuffer;
+                                OUStringBuffer aBuffer;
                                 ::sax::Converter::convertMeasure(aBuffer,
                                         nMeasure, util::MeasureUnit::MM_100TH,
                                         nDestUnit );
@@ -1235,14 +1233,14 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::AddNamespacePrefix( ::rtl::OUString& rName,
+sal_Bool XMLTransformerBase::AddNamespacePrefix( OUString& rName,
                              sal_uInt16 nPrefix ) const
 {
     rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, sal_False );
     return sal_True;
 }
 
-sal_Bool XMLTransformerBase::RemoveNamespacePrefix( ::rtl::OUString& rName,
+sal_Bool XMLTransformerBase::RemoveNamespacePrefix( OUString& rName,
                             sal_uInt16 nPrefixOnly ) const
 {
     OUString aLocalName;
@@ -1256,7 +1254,7 @@ sal_Bool XMLTransformerBase::RemoveNamespacePrefix( ::rtl::OUString& rName,
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ConvertURIToOASIS( ::rtl::OUString& rURI,
+sal_Bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
                                         sal_Bool bSupportPackage ) const
 {
     sal_Bool bRet = sal_False;
@@ -1326,7 +1324,7 @@ sal_Bool XMLTransformerBase::ConvertURIToOASIS( ::rtl::OUString& rURI,
     return bRet;
 }
 
-sal_Bool XMLTransformerBase::ConvertURIToOOo( ::rtl::OUString& rURI,
+sal_Bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                                         sal_Bool bSupportPackage ) const
 {
     sal_Bool bRet = sal_False;
@@ -1405,7 +1403,7 @@ sal_Bool XMLTransformerBase::RenameAttributeValue(
 }
 
 // static
-bool XMLTransformerBase::ConvertRNGDateTimeToISO( ::rtl::OUString& rDateTime )
+bool XMLTransformerBase::ConvertRNGDateTimeToISO( OUString& rDateTime )
 {
     if( !rDateTime.isEmpty() &&
         rDateTime.indexOf( sal_Unicode('.')) != -1 )

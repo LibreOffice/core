@@ -27,10 +27,10 @@ class ScXMLImport;
 
 class ScXMLTableSourceContext : public SvXMLImportContext
 {
-    rtl::OUString                           sLink;
-    rtl::OUString                           sTableName;
-    rtl::OUString                           sFilterName;
-    rtl::OUString                           sFilterOptions;
+    OUString                           sLink;
+    OUString                           sTableName;
+    OUString                           sFilterName;
+    OUString                           sFilterOptions;
     sal_Int32                               nRefresh;
     com::sun::star::sheet::SheetLinkMode    nMode;
 
@@ -38,14 +38,14 @@ class ScXMLTableSourceContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
     ScXMLTableSourceContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
-                        const ::rtl::OUString& rLName,
+                        const OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLTableSourceContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                                     const ::rtl::OUString& rLocalName,
+                                     const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

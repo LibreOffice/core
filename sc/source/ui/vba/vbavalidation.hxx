@@ -41,23 +41,23 @@ public:
     virtual void SAL_CALL setShowInput( ::sal_Bool _showinput ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getShowError() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setShowError( ::sal_Bool _showerror ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getInputTitle() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setInputTitle( const ::rtl::OUString& _inputtitle ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getErrorTitle() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setErrorTitle( const ::rtl::OUString& _errortitle ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getInputMessage() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setInputMessage( const ::rtl::OUString& _inputmessage ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getErrorMessage() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL setErrorMessage( const ::rtl::OUString& _errormessage ) throw (css::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getFormula1() throw (css::uno::RuntimeException) ;
-    virtual ::rtl::OUString SAL_CALL getFormula2() throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getInputTitle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setInputTitle( const OUString& _inputtitle ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getErrorTitle() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setErrorTitle( const OUString& _errortitle ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getInputMessage() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setInputMessage( const OUString& _inputmessage ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getErrorMessage() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setErrorMessage( const OUString& _errormessage ) throw (css::uno::RuntimeException);
+    virtual OUString SAL_CALL getFormula1() throw (css::uno::RuntimeException) ;
+    virtual OUString SAL_CALL getFormula2() throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);
     // Methods
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
 };
 

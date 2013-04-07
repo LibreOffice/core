@@ -33,7 +33,6 @@ using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
 
-using ::rtl::OUString;
 
 #define MAX_FLAGS_OFFSET    25
 
@@ -64,7 +63,7 @@ public:
 
     // ConfigItem
     virtual void    Commit();
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
     sal_Bool            GetFlag( sal_uInt16 nOffset ) const;
     void            SetFlag( sal_uInt16 nOffset, sal_Bool bVal );
@@ -94,7 +93,7 @@ void SvtSearchOptions_Impl::Commit()
         Save();
 }
 
-void SvtSearchOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
+void SvtSearchOptions_Impl::Notify( const Sequence< OUString >&  )
 {
 }
 

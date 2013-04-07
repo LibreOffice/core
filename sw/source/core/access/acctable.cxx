@@ -49,8 +49,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using namespace ::sw::access;
 
 const sal_Char sServiceName[] = "com.sun.star.table.AccessibleTableView";

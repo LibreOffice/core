@@ -31,7 +31,7 @@ namespace test {
 // Obtain the value of a test argument (tunneled in via an "arg-testarg.<name>"
 // bootstrap variable):
 OOO_DLLPUBLIC_UNOTEST bool getTestArgument(
-    rtl::OUString const & name, rtl::OUString * value);
+    OUString const & name, OUString * value);
 
 }
 

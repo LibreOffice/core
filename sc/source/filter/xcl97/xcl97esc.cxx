@@ -51,7 +51,6 @@
 #include "xechart.hxx"
 #include "xcl97esc.hxx"
 
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
@@ -523,8 +522,8 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjM
    try
    {
       SvMemoryStream* pMemStrm = NULL;
-      rtl::OUString sHyperLink;
-      rtl::OUString sMacro;
+      OUString sHyperLink;
+      OUString sMacro;
       if ( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( ::GetSdrObjectFromXShape( xShape ) ) )
       {
          sHyperLink = pInfo->GetHlink();

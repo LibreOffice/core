@@ -50,10 +50,10 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLTableContext : public XMLTextTableContext
 {
-    ::rtl::OUString     aStyleName;
-    ::rtl::OUString     aDfltCellStyleName;
+    OUString     aStyleName;
+    OUString     aDfltCellStyleName;
     /// NB: this contains the xml:id only if this table is a subtable!
-    ::rtl::OUString     mXmlId;
+    OUString     mXmlId;
 
     //! Holds basic information about a column's width.
     struct ColumnWidthInfo {
@@ -125,7 +125,7 @@ class SwXMLTableContext : public XMLTextTableContext
     /** sets the appropriate SwTblBoxFmt at pBox. */
     SwTableBoxFmt* GetSharedBoxFormat(
         SwTableBox* pBox,   /// the table box
-        const ::rtl::OUString& rStyleName, /// XML style name
+        const OUString& rStyleName, /// XML style name
         sal_Int32 nColumnWidth,     /// width of column
         sal_Bool bProtected,        /// is cell protected?
         sal_Bool bMayShare, /// may the format be shared (no value, formula...)
@@ -137,29 +137,29 @@ public:
     TYPEINFO();
 
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                   const ::rtl::OUString& rLName,
+                   const OUString& rLName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SwXMLTableContext( SwXMLImport& rImport, sal_uInt16 nPrfx,
-                   const ::rtl::OUString& rLName,
+                   const OUString& rLName,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
                 SwXMLTableContext *pTable,
-                const ::rtl::OUString& i_rXmlId );
+                const OUString& i_rXmlId );
 
     virtual ~SwXMLTableContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                const ::rtl::OUString& rLocalName,
+                const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
 
     void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
-                       const ::rtl::OUString *pDfltCellStyleName = 0 );
+                       const OUString *pDfltCellStyleName = 0 );
     sal_Int32 GetColumnWidth( sal_uInt32 nCol, sal_uInt32 nColSpan=1UL ) const;
-    ::rtl::OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
+    OUString GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const;
     inline sal_uInt32 GetColumnCount() const;
     inline bool HasColumnDefaultCellStyleNames() const;
 
@@ -168,20 +168,20 @@ public:
     bool IsInsertRowPossible() const { return nCurRow < USHRT_MAX; }
     bool IsValid() const { return pTableNode != 0; }
 
-    void InsertCell( const ::rtl::OUString& rStyleName,
+    void InsertCell( const OUString& rStyleName,
                      sal_uInt32 nRowSpan=1U, sal_uInt32 nColSpan=1U,
                      const SwStartNode *pStNd=0,
-                     const ::rtl::OUString & i_rXmlId = ::rtl::OUString(),
+                     const OUString & i_rXmlId = OUString(),
                      SwXMLTableContext *pTable=0,
                      sal_Bool bIsProtected = sal_False,
-                     const ::rtl::OUString *pFormula=0,
+                     const OUString *pFormula=0,
                      sal_Bool bHasValue = sal_False,
                      double fValue = 0.0,
-                     ::rtl::OUString const*const pStringValue = 0);
-    void InsertRow( const ::rtl::OUString& rStyleName,
-                    const ::rtl::OUString& rDfltCellStyleName,
+                     OUString const*const pStringValue = 0);
+    void InsertRow( const OUString& rStyleName,
+                    const OUString& rDfltCellStyleName,
                     bool bInHead,
-                    const ::rtl::OUString & i_rXmlId = ::rtl::OUString() );
+                    const OUString & i_rXmlId = OUString() );
     void FinishRow();
     void InsertRepRows( sal_uInt32 nCount );
     const SwXMLTableCell_Impl *GetCell( sal_uInt32 nRow, sal_uInt32 nCol ) const;

@@ -469,7 +469,7 @@ namespace DOM
         throw (RuntimeException)
     {
         // see CElement/CAttr
-        return ::rtl::OUString();
+        return OUString();
     }
 
 

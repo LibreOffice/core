@@ -36,7 +36,6 @@
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
 const char TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE[] = "SupportsVisible";
 
-using ::rtl::OUString;
 
 using namespace ::cppu;
 using namespace ::com::sun::star::awt;
@@ -63,7 +62,7 @@ struct ToolboxController_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          m_xParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xUrlTransformer;
-    rtl::OUString m_sModuleName;
+    OUString m_sModuleName;
      sal_uInt16 m_nToolBoxId;
 
     DECL_STATIC_LINK( ToolboxController_Impl, ExecuteHdl_Impl, DispatchInfo* );
@@ -77,7 +76,7 @@ ToolboxController::ToolboxController(
 
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >& xFrame,
-    const ::rtl::OUString& aCommandURL ) :
+    const OUString& aCommandURL ) :
     OPropertyContainer(GetBroadcastHelper())
     ,   OWeakObject()
     ,   m_bSupportVisible(sal_False)
@@ -88,7 +87,7 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
-    registerProperty(rtl::OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    registerProperty(OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
@@ -112,7 +111,7 @@ ToolboxController::ToolboxController() :
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
 {
-    registerProperty(rtl::OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    registerProperty(OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
@@ -148,7 +147,7 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
     {
         try
         {
-            xLayoutManager.set(xPropSet->getPropertyValue( ::rtl::OUString( "LayoutManager" )),UNO_QUERY);
+            xLayoutManager.set(xPropSet->getPropertyValue( OUString( "LayoutManager" )),UNO_QUERY);
         }
         catch ( Exception& )
         {
@@ -351,7 +350,7 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XDispatch >       xDispatch;
-    ::rtl::OUString                     aCommandURL;
+    OUString                     aCommandURL;
 
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -380,7 +379,7 @@ throw (::com::sun::star::uno::RuntimeException)
             Sequence<PropertyValue>   aArgs( 1 );
 
             // Provide key modifier information to dispatch function
-            aArgs[0].Name   = rtl::OUString( "KeyModifier" );
+            aArgs[0].Name   = OUString( "KeyModifier" );
             aArgs[0].Value  = makeAny( KeyModifier );
 
             aTargetURL.Complete = aCommandURL;
@@ -416,7 +415,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return Reference< XWindow >();
 }
 
-void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
+void ToolboxController::addStatusListener( const OUString& aCommandURL )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -447,7 +446,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
                 aTargetURL.Complete = aCommandURL;
                 if ( m_pImpl->m_xUrlTransformer.is() )
                     m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
-                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
                 xStatusListener = Reference< XStatusListener >( static_cast< OWeakObject* >( this ), UNO_QUERY );
                 URLToDispatchMap::iterator aIter = m_aListenerMap.find( aCommandURL );
@@ -482,7 +481,7 @@ void ToolboxController::addStatusListener( const rtl::OUString& aCommandURL )
     }
 }
 
-void ToolboxController::removeStatusListener( const rtl::OUString& aCommandURL )
+void ToolboxController::removeStatusListener( const OUString& aCommandURL )
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -553,7 +552,7 @@ void ToolboxController::bindListener()
                 // Query for dispatch object. Old dispatch will be released with this, too.
                 try
                 {
-                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+                    xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
                 }
                 catch ( Exception& )
                 {
@@ -665,7 +664,7 @@ void ToolboxController::updateStatus()
     bindListener();
 }
 
-void ToolboxController::updateStatus( const rtl::OUString aCommandURL )
+void ToolboxController::updateStatus( const OUString aCommandURL )
 {
     Reference< XDispatch > xDispatch;
     Reference< XStatusListener > xStatusListener;
@@ -685,7 +684,7 @@ void ToolboxController::updateStatus( const rtl::OUString aCommandURL )
             aTargetURL.Complete = aCommandURL;
             if ( m_pImpl->m_xUrlTransformer.is() )
                 m_pImpl->m_xUrlTransformer->parseStrict( aTargetURL );
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, rtl::OUString(), 0 );
+            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
         }
     }
 
@@ -716,7 +715,7 @@ Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
     return m_pImpl->m_xParentWindow;
 }
 
-const rtl::OUString& ToolboxController::getModuleName() const
+const OUString& ToolboxController::getModuleName() const
 {
     return m_pImpl->m_sModuleName;
 }

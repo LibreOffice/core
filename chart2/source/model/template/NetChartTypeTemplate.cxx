@@ -31,7 +31,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
@@ -46,7 +45,7 @@ namespace chart
 
 NetChartTypeTemplate::NetChartTypeTemplate(
     Reference< uno::XComponentContext > const & xContext,
-    const ::rtl::OUString & rServiceName,
+    const OUString & rServiceName,
     StackMode eStackMode,
     bool bSymbols,
     bool bHasLines ,

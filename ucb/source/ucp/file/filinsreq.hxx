@@ -76,13 +76,13 @@ namespace fileaccess {
             m_bSelected = true;
         }
 
-        void SAL_CALL setName(const ::rtl::OUString& Name)
+        void SAL_CALL setName(const OUString& Name)
             throw(::com::sun::star::uno::RuntimeException)
         {
             m_aNewName = Name;
         }
 
-        rtl::OUString getName() const
+        OUString getName() const
         {
             return m_aNewName;
         }
@@ -95,7 +95,7 @@ namespace fileaccess {
     private:
 
         bool          m_bSelected;
-        rtl::OUString m_aNewName;
+        OUString m_aNewName;
     };
 
 
@@ -160,7 +160,7 @@ namespace fileaccess {
     public:
 
         XInteractionRequestImpl(
-            const rtl::OUString& aClashingName,
+            const OUString& aClashingName,
             const com::sun::star::uno::Reference<
             com::sun::star::uno::XInterface>& xOrigin,
             shell* pShell,
@@ -203,12 +203,12 @@ namespace fileaccess {
             return p2->isSelected();
         }
 
-        rtl::OUString newName() const
+        OUString newName() const
         {
             if( p1->isSelected() )
                 return p1->getName();
             else
-                return rtl::OUString();
+                return OUString();
         }
 
     private:
@@ -221,7 +221,7 @@ namespace fileaccess {
             com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > m_aSeq;
 
-        rtl::OUString m_aClashingName;
+        OUString m_aClashingName;
         com::sun::star::uno::Reference<
             com::sun::star::uno::XInterface> m_xOrigin;
     };

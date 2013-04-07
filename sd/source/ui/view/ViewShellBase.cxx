@@ -87,7 +87,6 @@ using namespace sd;
 #include "sdslots.hxx"
 
 using ::sd::framework::FrameworkHelper;
-using ::rtl::OUString;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
@@ -177,8 +176,8 @@ public:
     */
     void SetPaneVisibility (
         const SfxRequest& rRequest,
-        const ::rtl::OUString& rsPaneURL,
-        const ::rtl::OUString& rsViewURL);
+        const OUString& rsPaneURL,
+        const OUString& rsViewURL);
 
     void GetSlotState (SfxItemSet& rSet);
 
@@ -301,7 +300,7 @@ ViewShellBase::~ViewShellBase (void)
 
 
 
-void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
+void ViewShellBase::LateInit (const OUString& rsDefaultView)
 {
     StartListening(*GetViewFrame(),sal_True);
     StartListening(*GetDocShell(),sal_True);
@@ -781,7 +780,7 @@ void ViewShellBase::ReadUserDataSequence (
             case ViewShell::ST_NOTES:
             case ViewShell::ST_HANDOUT:
             {
-                ::rtl::OUString sViewURL;
+                OUString sViewURL;
                 switch (PTR_CAST(DrawViewShell, pShell)->GetPageKind())
                 {
                     default:
@@ -1116,9 +1115,9 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 }
 
 
-::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const ::rtl::OUString& aCmdURL )
+OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL )
 {
-    ::rtl::OUString aLabel;
+    OUString aLabel;
 
     if ( !aCmdURL.isEmpty() ) try
     {
@@ -1128,7 +1127,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
         Reference< XModuleManager2 > xModuleManager( ModuleManager::create(xContext) );
         Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
 
-        ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
+        OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
 
         if( !aModuleIdentifier.isEmpty() )
         {
@@ -1156,7 +1155,7 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     return aLabel;
 }
 
-::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+OUString ViewShellBase::RetrieveLabelFromCommand( const OUString& aCmdURL ) const
 {
     Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
     return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
@@ -1295,8 +1294,8 @@ void ViewShellBase::Implementation::ResizePixel (
 
 void ViewShellBase::Implementation::SetPaneVisibility (
     const SfxRequest& rRequest,
-    const ::rtl::OUString& rsPaneURL,
-    const ::rtl::OUString& rsViewURL)
+    const OUString& rsPaneURL,
+    const OUString& rsViewURL)
 {
     try
     {
@@ -1587,7 +1586,7 @@ void CurrentPageSetter::operator() (bool)
             // Switch to the page last edited by setting the CurrentPage
             // property.
             Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-            xSet->setPropertyValue (rtl::OUString("CurrentPage"), aPage);
+            xSet->setPropertyValue (OUString("CurrentPage"), aPage);
         }
         catch (const RuntimeException&)
         {

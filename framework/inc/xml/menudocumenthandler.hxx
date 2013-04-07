@@ -52,25 +52,25 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException ) = 0;
 
-        virtual void SAL_CALL ignorableWhitespace(const rtl::OUString& aWhitespaces)
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL processingInstruction(const rtl::OUString& aTarget,
-                                                    const rtl::OUString& aData)
+        virtual void SAL_CALL processingInstruction(const OUString& aTarget,
+                                                    const OUString& aData)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -80,20 +80,20 @@ class FWE_DLLPUBLIC ReadMenuDocumentHandlerBase : public ThreadHelpBase,    // S
                 ::com::sun::star::uno::RuntimeException );
 
     protected:
-        ::rtl::OUString getErrorLineString();
+        OUString getErrorLineString();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > m_xLocator;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> m_xReader;
         void initPropertyCommon( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rProps,
-                                 const rtl::OUString &rCommandURL, const rtl::OUString &rHelpId,
-                                 const rtl::OUString &rLabel, sal_Int16 nItemStyleBits );
+                                 const OUString &rCommandURL, const OUString &rHelpId,
+                                 const OUString &rLabel, sal_Int16 nItemStyleBits );
     private:
-        rtl::OUString m_aType;
-        rtl::OUString m_aLabel;
-        rtl::OUString m_aContainer;
-        rtl::OUString m_aHelpURL;
-        rtl::OUString m_aCommandURL;
-        rtl::OUString m_aStyle;
+        OUString m_aType;
+        OUString m_aLabel;
+        OUString m_aContainer;
+        OUString m_aHelpURL;
+        OUString m_aCommandURL;
+        OUString m_aStyle;
         ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aItemProp;
 };
 
@@ -115,16 +115,16 @@ class FWE_DLLPUBLIC OReadMenuDocumentHandler : public ReadMenuDocumentHandlerBas
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -154,16 +154,16 @@ class FWE_DLLPUBLIC OReadMenuBarHandler : public ReadMenuDocumentHandlerBase
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -192,16 +192,16 @@ class FWE_DLLPUBLIC OReadMenuHandler : public ReadMenuDocumentHandlerBase
                 ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
         throw(  ::com::sun::star::xml::sax::SAXException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -230,17 +230,17 @@ class FWE_DLLPUBLIC OReadMenuPopupHandler : public ReadMenuDocumentHandlerBase
                     ::com::sun::star::uno::RuntimeException );
 
         virtual void SAL_CALL startElement(
-            const rtl::OUString& aName,
+            const OUString& aName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > &xAttribs)
             throw ( ::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL endElement(const rtl::OUString& aName)
+        virtual void SAL_CALL endElement(const OUString& aName)
             throw ( ::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL characters(const rtl::OUString& aChars)
+        virtual void SAL_CALL characters(const OUString& aChars)
             throw ( ::com::sun::star::xml::sax::SAXException,
                     ::com::sun::star::uno::RuntimeException );
 
@@ -270,13 +270,13 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
         virtual void WriteMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rSubMenuContainer ) throw
             ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteMenuItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL, sal_Int16 nStyle = 0 );
+        virtual void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle = 0 );
         virtual void WriteMenuSeparator();
 
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > m_xMenuBarContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > m_xEmptyList;
-        ::rtl::OUString m_aAttributeType;
+        OUString m_aAttributeType;
 };
 
 } // namespace framework

@@ -67,7 +67,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::lang;
 
-typedef ::std::list<rtl::OUString> FileNameList;
+typedef ::std::list<OUString> FileNameList;
 
 class GalApp : public Application
 {
@@ -79,7 +79,7 @@ protected:
     void Init();
 };
 
-Gallery* createGallery( const rtl::OUString& aGalleryURL )
+Gallery* createGallery( const OUString& aGalleryURL )
 {
     return new Gallery( aGalleryURL );
 }
@@ -89,9 +89,9 @@ void disposeGallery( Gallery* pGallery )
     delete pGallery;
 }
 
-static void createTheme( rtl::OUString aThemeName,
-                         rtl::OUString aGalleryURL,
-                         rtl::OUString aDestDir,
+static void createTheme( OUString aThemeName,
+                         OUString aGalleryURL,
+                         OUString aDestDir,
                          sal_uInt32 nNumFrom,
                          FileNameList &rFiles )
 {
@@ -99,11 +99,11 @@ static void createTheme( rtl::OUString aThemeName,
 
     if (!pGallery ) {
             fprintf( stderr, "Could't acquire '%s'\n",
-                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
+                     OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
             exit( 1 );
     }
     fprintf( stderr, "Work on gallery '%s'\n",
-                     rtl::OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
+                     OUStringToOString(aGalleryURL, RTL_TEXTENCODING_UTF8).getStr() );
 
     fprintf( stderr, "Existing themes: %lu\n",
              sal::static_int_cast< unsigned long >(
@@ -131,7 +131,7 @@ static void createTheme( rtl::OUString aThemeName,
     }
 
     fprintf( stderr, "Using DestDir: %s\n",
-             rtl::OUStringToOString(aDestDir, RTL_TEXTENCODING_UTF8).getStr() );
+             OUStringToOString(aDestDir, RTL_TEXTENCODING_UTF8).getStr() );
     pGalTheme->SetDestDir(String(aDestDir));
 
     FileNameList::const_iterator aIter;
@@ -146,10 +146,10 @@ static void createTheme( rtl::OUString aThemeName,
 
         if ( ! pGalTheme->InsertURL( *aIter ) )
             fprintf( stderr, "Failed to import '%s'\n",
-                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
+                     OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr() );
         else
             fprintf( stderr, "Imported file '%s' (%lu)\n",
-                     rtl::OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
+                     OUStringToOString(*aIter, RTL_TEXTENCODING_UTF8).getStr(),
                      sal::static_int_cast< unsigned long >(
                          pGalTheme->GetObjectCount() ) );
     }
@@ -178,7 +178,7 @@ static void PrintHelp()
     fprintf( stdout, "\t\t\tare required.\n");
 }
 
-static rtl::OUString Smartify( const rtl::OUString &rPath )
+static OUString Smartify( const OUString &rPath )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rPath );
@@ -188,7 +188,7 @@ static rtl::OUString Smartify( const rtl::OUString &rPath )
 void GalApp::Init()
 {
     if( getenv( "OOO_INSTALL_PREFIX" ) == NULL ) {
-        rtl::OUString fileName = GetAppFileName();
+        OUString fileName = GetAppFileName();
         int lastSlash = fileName.lastIndexOf( '/' );
 #ifdef WNT
         // Don't know which directory separators GetAppFileName() returns on Windows.
@@ -196,10 +196,10 @@ void GalApp::Init()
         if( fileName.lastIndexOf( '\\' ) > lastSlash )
             lastSlash = fileName.lastIndexOf( '\\' );
 #endif
-        rtl::OUString baseBinDir = fileName.copy( 0, lastSlash );
-        rtl::OUString installPrefix = baseBinDir + rtl::OUString("/../..");
+        OUString baseBinDir = fileName.copy( 0, lastSlash );
+        OUString installPrefix = baseBinDir + OUString("/../..");
 
-        rtl::OUString envVar("OOO_INSTALL_PREFIX");
+        OUString envVar("OOO_INSTALL_PREFIX");
         osl_setEnvironment(envVar.pData, installPrefix.pData);
     }
     OSL_TRACE( "OOO_INSTALL_PREFIX=%s", getenv( "OOO_INSTALL_PREFIX" ) );
@@ -220,14 +220,14 @@ void GalApp::Init()
 int GalApp::Main()
 {
     bool bHelp = false;
-    rtl::OUString aPath, aDestDir;
-    rtl::OUString aName("Default name");
+    OUString aPath, aDestDir;
+    OUString aName("Default name");
     sal_uInt32 nNumFrom = 0;
     FileNameList aFiles;
 
     for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
     {
-        rtl::OUString aParam = GetCommandLineParam( i );
+        OUString aParam = GetCommandLineParam( i );
 
         if( aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "--help" ) ) ||
             aParam.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-h" ) ) )

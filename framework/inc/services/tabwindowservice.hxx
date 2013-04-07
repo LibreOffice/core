@@ -144,10 +144,10 @@ class TabWindowService :  public css::lang::XTypeProvider
     private:
 
         void impl_initializePropInfo();
-        virtual void SAL_CALL impl_setPropertyValue(const ::rtl::OUString& sProperty,
+        virtual void SAL_CALL impl_setPropertyValue(const OUString& sProperty,
                                                           sal_Int32        nHandle  ,
                                                     const css::uno::Any&   aValue   );
-        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const ::rtl::OUString& sProperty,
+        virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                    sal_Int32        nHandle  );
 
         DECL_DLLPRIVATE_LINK( EventListener, VclSimpleEvent * );
@@ -184,7 +184,7 @@ class TabWindowService :  public css::lang::XTypeProvider
         ::sal_Int32 m_nCurrentPageIndex;
 
         /// title of the tabcontrolled window
-        ::rtl::OUString m_sTitle;
+        OUString m_sTitle;
 
 };      //  class TabWindowService
 

@@ -31,8 +31,6 @@
 using namespace ::com::sun::star::uno;
 
 using ::com::sun::star::xml::sax::XAttributeList;
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_INCREMENT;
 

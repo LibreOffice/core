@@ -45,8 +45,8 @@ public:
 
     // Wrapper implementations of XNativeNumberSupplier
 
-    ::rtl::OUString getNativeNumberString(
-                        const ::rtl::OUString& rNumberString,
+    OUString getNativeNumberString(
+                        const OUString& rNumberString,
                         const ::com::sun::star::lang::Locale& rLocale,
                         sal_Int16 nNativeNumberMode ) const;
 

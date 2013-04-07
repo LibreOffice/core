@@ -48,7 +48,7 @@ namespace connectivity
             @return
                 the string from the resource file
         */
-        ::rtl::OUString
+        OUString
             getResourceString(
                 ResourceId _nResId
             ) const;
@@ -66,11 +66,11 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        ::rtl::OUString
+        OUString
             getResourceStringWithSubstitution(
                 ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace,
-                const ::rtl::OUString& _rStringToSubstitute
+                const OUString& _rStringToSubstitute
             ) const;
 
         /** loads a string from the shared resource file, and replaces
@@ -90,13 +90,13 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        ::rtl::OUString
+        OUString
             getResourceStringWithSubstitution(
                 ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1,
-                const ::rtl::OUString& _rStringToSubstitute1,
+                const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2,
-                const ::rtl::OUString& _rStringToSubstitute2
+                const OUString& _rStringToSubstitute2
             ) const;
 
         /** loads a string from the shared resource file, and replaces
@@ -120,15 +120,15 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        ::rtl::OUString
+        OUString
             getResourceStringWithSubstitution(
                 ResourceId _nResId,
                 const sal_Char* _pAsciiPatternToReplace1,
-                const ::rtl::OUString& _rStringToSubstitute1,
+                const OUString& _rStringToSubstitute1,
                 const sal_Char* _pAsciiPatternToReplace2,
-                const ::rtl::OUString& _rStringToSubstitute2,
+                const OUString& _rStringToSubstitute2,
                 const sal_Char* _pAsciiPatternToReplace3,
-                const ::rtl::OUString& _rStringToSubstitute3
+                const OUString& _rStringToSubstitute3
             ) const;
 
         /** loads a string from the shared resource file, and replaces a given ASCII pattern with a given string
@@ -141,8 +141,8 @@ namespace connectivity
             @return
                 the string from the resource file, with applied string substitution
         */
-        ::rtl::OUString getResourceStringWithSubstitution( ResourceId _nResId,
-                    const ::std::list< ::std::pair<const sal_Char* , ::rtl::OUString > > _aStringToSubstitutes) const;
+        OUString getResourceStringWithSubstitution( ResourceId _nResId,
+                    const ::std::list< ::std::pair<const sal_Char* , OUString > > _aStringToSubstitutes) const;
     };
 
 //........................................................................

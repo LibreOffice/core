@@ -46,8 +46,6 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-using rtl::OUString;
-using rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
@@ -366,11 +364,11 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         if( xAxis.is() )
         {
             Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
-            rtl::OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
+            OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
             sal_Int32 nDimensionIndex=-1;
             sal_Int32 nAxisIndex=-1;
             AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-            rtl::OUString aAxisParticle( createParticleForAxis( nDimensionIndex, nAxisIndex ) );
+            OUString aAxisParticle( createParticleForAxis( nDimensionIndex, nAxisIndex ) );
             return createClassifiedIdentifierForParticles( aCooSysParticle, aAxisParticle );
         }
 
@@ -515,8 +513,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForGrid(
 {
     //-1: main grid, 0: first subgrid etc
 
-    rtl::OUString aAxisCID( createClassifiedIdentifierForObject( xAxis, xChartModel ) );
-    rtl::OUString aGridCID( addChildParticle( aAxisCID
+    OUString aAxisCID( createClassifiedIdentifierForObject( xAxis, xChartModel ) );
+    OUString aGridCID( addChildParticle( aAxisCID
         , createChildParticleWithIndex( OBJECTTYPE_GRID, 0 ) ) );
     if( nSubGridIndex >= 0 )
     {
@@ -1004,7 +1002,7 @@ OUString ObjectIdentifier::createDataCurveEquationCID(
     return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
-OUString ObjectIdentifier::addChildParticle( const rtl::OUString& rParticle, const rtl::OUString& rChildParticle )
+OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, const OUString& rChildParticle )
 {
     OUStringBuffer aRet(rParticle);
 
@@ -1016,7 +1014,7 @@ OUString ObjectIdentifier::addChildParticle( const rtl::OUString& rParticle, con
     return aRet.makeStringAndClear();
 }
 
-rtl::OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex )
+OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType, sal_Int32 nIndex )
 {
     OUStringBuffer aRet( getStringForType( eObjectType ) );
     if( aRet.getLength() )
@@ -1027,7 +1025,7 @@ rtl::OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObject
     return aRet.makeStringAndClear();
 }
 
-sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const rtl::OUString& rParticleOrCID )
+sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticleOrCID )
 {
     sal_Int32 nRet = -1;
 
@@ -1039,9 +1037,9 @@ sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const rtl::OUString& rPar
 }
 
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
-                    , const rtl::OUString& rSeriesParticle
-                    , const rtl::OUString& rDragMethodServiceName
-                    , const rtl::OUString& rDragParameterString )
+                    , const OUString& rSeriesParticle
+                    , const OUString& rDragMethodServiceName
+                    , const OUString& rDragParameterString )
 {
     OUString aChildParticle( getStringForType( eSubObjectType ) );
     aChildParticle+=("=");
@@ -1084,7 +1082,7 @@ OUString ObjectIdentifier::getFullParentParticle( const OUString& rCID )
     return aRet;
 }
 
-OUString ObjectIdentifier::getObjectID( const rtl::OUString& rCID )
+OUString ObjectIdentifier::getObjectID( const OUString& rCID )
 {
     OUString aRet;
 
@@ -1341,7 +1339,7 @@ Reference< XDataSeries > ObjectIdentifier::getDataSeriesForCID(
 }
 
 Reference< XDiagram > ObjectIdentifier::getDiagramForCID(
-                  const rtl::OUString& rObjectCID
+                  const OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel )
 {
     Reference< XDiagram > xDiagram;
@@ -1385,7 +1383,7 @@ OUString ObjectIdentifier::getSeriesParticleFromCID( const OUString& rCID )
     return ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCooSysIndex, nChartTypeIndex, nSeriesIndex );
 }
 
-OUString ObjectIdentifier::getMovedSeriesCID( const ::rtl::OUString& rObjectCID, sal_Bool bForward )
+OUString ObjectIdentifier::getMovedSeriesCID( const OUString& rObjectCID, sal_Bool bForward )
 {
     sal_Int32 nDiagramIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CID/D=" ) );
     sal_Int32 nCooSysIndex = lcl_StringToIndex( lcl_getIndexStringAfterString( rObjectCID, "CS=" ) );

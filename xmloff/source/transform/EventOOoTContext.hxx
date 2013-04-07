@@ -32,21 +32,21 @@ public:
     TYPEINFO();
 
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
-                           const ::rtl::OUString& rQName,
+                           const OUString& rQName,
                               sal_Bool bPersistent = sal_False  );
     virtual ~XMLEventOOoTransformerContext();
 
     static XMLTransformerOOoEventMap_Impl *CreateEventMap();
     static void FlushEventMap( XMLTransformerOOoEventMap_Impl *p );
-    static sal_uInt16 GetEventName( const ::rtl::OUString& rName,
-                                    ::rtl::OUString& rNewName,
+    static sal_uInt16 GetEventName( const OUString& rName,
+                                    OUString& rNewName,
                                        XMLTransformerOOoEventMap_Impl& rMap );
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
-                                   const ::rtl::OUString& rLocalName,
-                                   const ::rtl::OUString& rQName,
+                                   const OUString& rLocalName,
+                                   const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual sal_Bool IsPersistent() const;

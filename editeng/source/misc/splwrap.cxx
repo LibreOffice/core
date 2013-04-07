@@ -163,7 +163,7 @@ SvxSpellWrapper::SvxSpellWrapper( Window* pWn,
     Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
     sal_Bool bWrapReverse = xProp.is() ?
         *(sal_Bool*)xProp->getPropertyValue(
-            ::rtl::OUString(UPN_IS_WRAP_REVERSE) ).getValue()
+            OUString(UPN_IS_WRAP_REVERSE) ).getValue()
         : sal_False;
     bReverse = bRevAllow && bWrapReverse;
     bStartDone = bOther || ( !bReverse && bStart );
@@ -402,7 +402,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
     sal_Bool bWrapReverse = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue(
-                ::rtl::OUString(UPN_IS_WRAP_REVERSE) ).getValue()
+                OUString(UPN_IS_WRAP_REVERSE) ).getValue()
             : sal_False;
     sal_Bool bActRev = bRevAllowed && bWrapReverse;
 
@@ -449,7 +449,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     {
         sal_Bool bIsSpellSpecial = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue(
-                ::rtl::OUString(UPN_IS_SPELL_SPECIAL) ).getValue()
+                OUString(UPN_IS_SPELL_SPECIAL) ).getValue()
             : sal_False;
         // Body area done, ask for special area
         if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
@@ -561,7 +561,7 @@ sal_Bool SvxSpellWrapper::FindSpellError()
         {
             if (IsAllRight() && xAllRightDic.is())
             {
-                xAllRightDic->add( xAlt->getWord(), sal_False, ::rtl::OUString() );
+                xAllRightDic->add( xAlt->getWord(), sal_False, OUString() );
             }
             else
             {

@@ -62,7 +62,7 @@ namespace oox { namespace ppt {
         sal_Int32               mnType;
         sal_Int32               mnRangeType;
         drawingml::IndexRange   maRange;
-        ::rtl::OUString msSubShapeId;
+        OUString msSubShapeId;
     };
 
 
@@ -76,7 +76,7 @@ namespace oox { namespace ppt {
         ::com::sun::star::uno::Any convert(const SlidePersistPtr & pSlide, sal_Int16 & nSubType) const;
 
         sal_Int32                  mnType;
-        ::rtl::OUString            msValue;
+        OUString            msValue;
 
       ShapeTargetElement         maShapeTarget;
     };
@@ -108,8 +108,8 @@ namespace oox { namespace ppt {
 
     struct TimeAnimationValue
     {
-        ::rtl::OUString            msFormula;
-        ::rtl::OUString            msTime;
+        OUString            msFormula;
+        OUString            msTime;
         ::com::sun::star::uno::Any maValue;
     };
 

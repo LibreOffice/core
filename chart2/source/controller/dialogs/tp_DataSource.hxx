@@ -93,7 +93,7 @@ protected:
     DECL_LINK( DownButtonClickedHdl, void* );
 
     // ____ RangeSelectionListenerParent ____
-    virtual void listeningFinished( const ::rtl::OUString & rNewRange );
+    virtual void listeningFinished( const OUString & rNewRange );
     virtual void disposingRangeSelection();
 
     void updateControlState();
@@ -146,7 +146,7 @@ private:
     RangeEdit               m_aEDT_CATEGORIES;
     RangeSelectionButton    m_aIMB_RANGE_CAT;
 
-    ::rtl::OUString         m_aFixedTextRange;
+    OUString         m_aFixedTextRange;
 
     ChartTypeTemplateProvider * m_pTemplateProvider;
     DialogModel &               m_rDialogModel;

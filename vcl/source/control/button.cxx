@@ -1007,7 +1007,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
                     nState |= CTRL_STATE_ROLLOVER;
 
                 bNativeOK = DrawNativeControl( aCtrlType, PART_BUTTON_DOWN, aInRect, nState,
-                                                aControlValue, rtl::OUString() );
+                                                aControlValue, OUString() );
             }
         }
     }
@@ -1062,7 +1062,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if( ((nState & CTRL_STATE_ROLLOVER)) || ! (GetStyle() & WB_FLATBUTTON) )
         {
             bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                            aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
+                            aControlValue, OUString()/*PushButton::GetText()*/ );
         }
         else
         {
@@ -1128,7 +1128,7 @@ void PushButton::ImplSetDefButton( sal_Bool bSet )
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
         if( GetNativeControlRegion( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                nState, aControlValue, rtl::OUString(),
+                                nState, aControlValue, OUString(),
                                 aBound, aCont ) )
         {
             dLeft = aCont.Left() - aBound.Left();
@@ -1707,7 +1707,7 @@ Size PushButton::GetOptimalSize() const
     return CalcMinimumSize();
 }
 
-bool PushButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool PushButton::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "has-default")
     {
@@ -2036,7 +2036,7 @@ void RadioButton::ImplDrawRadioButtonState()
             nState |= CTRL_STATE_ROLLOVER;
 
         bNativeOK = DrawNativeControl( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRect, nState,
-                    aControlValue,rtl::OUString() );
+                    aControlValue,OUString() );
 
     }
 
@@ -2838,7 +2838,7 @@ void RadioButton::SetState( sal_Bool bCheck )
     }
 }
 
-bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool RadioButton::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "active")
         SetState(toBool(rValue));
@@ -2901,7 +2901,7 @@ Size RadioButton::ImplGetRadioImageSize() const
 
         // get native size of a radio button
         if( pThis->GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                           nState, aControlValue, rtl::OUString(),
+                                           nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
@@ -3010,7 +3010,7 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();
@@ -3203,7 +3203,7 @@ void CheckBox::ImplDrawCheckBoxState()
             nState |= CTRL_STATE_ROLLOVER;
 
         bNativeOK = DrawNativeControl( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                                 aControlValue, rtl::OUString() );
+                                 aControlValue, OUString() );
     }
 
     if ( bNativeOK == sal_False )
@@ -3786,7 +3786,7 @@ void CheckBox::SetState( TriState eState )
     }
 }
 
-bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+bool CheckBox::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "active")
         SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
@@ -3835,7 +3835,7 @@ Size CheckBox::ImplGetCheckImageSize() const
 
         // get native size of a check box
         if( pThis->GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                           nState, aControlValue, rtl::OUString(),
+                                           nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
@@ -3923,7 +3923,7 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();
@@ -4123,7 +4123,7 @@ void DisclosureButton::ImplDrawCheckBoxState()
         nState |= CTRL_STATE_ROLLOVER;
 
     if( ! DrawNativeControl( CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                           aControlValue, rtl::OUString() ) )
+                           aControlValue, OUString() ) )
     {
         ImplSVCtrlData& rCtrlData( ImplGetSVData()->maCtrlData );
         if( ! rCtrlData.mpDisclosurePlus )

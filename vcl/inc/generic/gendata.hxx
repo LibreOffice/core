@@ -49,9 +49,9 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     SalGenericDataType m_eType;
     SalGenericDisplay *m_pDisplay;
     // cached hostname to avoid slow lookup
-    rtl::OUString      m_aHostname;
+    OUString      m_aHostname;
     // for transient storage of unicode strings eg. 'u123' by input methods
-    rtl::OUString      m_aUnicodeEntry;
+    OUString      m_aUnicodeEntry;
  public:
     SalGenericData( SalGenericDataType t, SalInstance *pInstance ) : SalData(), m_eType( t ), m_pDisplay( NULL ) { m_pInstance = pInstance; SetSalData( this ); }
     virtual ~SalGenericData() {}
@@ -60,13 +60,13 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     SalGenericDisplay *GetDisplay() const { return m_pDisplay; }
     void               SetDisplay( SalGenericDisplay *pDisp ) { m_pDisplay = pDisp; }
 
-    const rtl::OUString& GetHostname()
+    const OUString& GetHostname()
     {
         if (m_aHostname.isEmpty())
             osl_getLocalHostname( &m_aHostname.pData );
         return m_aHostname;
     }
-    rtl::OUString &GetUnicodeCommand()
+    OUString &GetUnicodeCommand()
     {
         return m_aUnicodeEntry;
     }

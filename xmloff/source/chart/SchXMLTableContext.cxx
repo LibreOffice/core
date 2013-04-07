@@ -54,7 +54,6 @@ using namespace com::sun::star;
 using namespace ::xmloff::token;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 namespace
 {
@@ -62,7 +61,7 @@ namespace
 const char aLabelPrefix[] = "label ";
 const char aCategoriesRange[] = "categories";
 
-typedef ::std::multimap< ::rtl::OUString, ::rtl::OUString >
+typedef ::std::multimap< OUString, OUString >
     lcl_tOriginalRangeToInternalRangeMap;
 
 struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
@@ -194,8 +193,8 @@ bool lcl_mapContainsRange(
 }
 
 bool lcl_tableOfRangeMatches(
-    const ::rtl::OUString & rRange,
-    const ::rtl::OUString & rTableName )
+    const OUString & rRange,
+    const OUString & rTableName )
 {
     // both strings are non-empty and the table name is part of the range
     return ( !rRange.isEmpty() &&
@@ -221,7 +220,7 @@ template< typename T >
 
 SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
-                                        const rtl::OUString& rLName,
+                                        const OUString& rLName,
                                         SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLName ),
         mrImportHelper( rImpHelper ),
@@ -241,7 +240,7 @@ SchXMLTableContext::~SchXMLTableContext()
 
 SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -285,8 +284,8 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if ( nPrefix == XML_NAMESPACE_TABLE )
         {
@@ -423,7 +422,7 @@ void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > 
 
 SchXMLTableColumnsContext::SchXMLTableColumnsContext(
     SvXMLImport& rImport,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
         mrTable( aTable )
@@ -436,7 +435,7 @@ SchXMLTableColumnsContext::~SchXMLTableColumnsContext()
 
 SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -458,7 +457,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
 
 SchXMLTableColumnContext::SchXMLTableColumnContext(
     SvXMLImport& rImport,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
         mrTable( aTable )
@@ -474,21 +473,21 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
         {
-            rtl::OUString aValue = xAttrList->getValueByIndex( i );
+            OUString aValue = xAttrList->getValueByIndex( i );
             if( !aValue.isEmpty())
                 nRepeated = aValue.toInt32();
         }
         else if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_VISIBILITY ) )
         {
-            rtl::OUString aVisibility = xAttrList->getValueByIndex( i );
+            OUString aVisibility = xAttrList->getValueByIndex( i );
             bHidden = aVisibility.equals( GetXMLToken( XML_COLLAPSE ) );
         }
     }
@@ -525,7 +524,7 @@ SchXMLTableColumnContext::~SchXMLTableColumnContext()
 SchXMLTableRowsContext::SchXMLTableRowsContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
         mrImportHelper( rImpHelper ),
@@ -539,7 +538,7 @@ SchXMLTableRowsContext::~SchXMLTableRowsContext()
 
 SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -564,7 +563,7 @@ SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
 SchXMLTableRowContext::SchXMLTableRowContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
         mrImportHelper( rImpHelper ),
@@ -585,7 +584,7 @@ SchXMLTableRowContext::~SchXMLTableRowContext()
 
 SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -615,19 +614,19 @@ class SchXMLRangeSomewhereContext : public SvXMLImportContext
 //-> use description at an empty group element for now
 
 private:
-    ::rtl::OUString& mrRangeString;
-    ::rtl::OUStringBuffer maRangeStringBuffer;
+    OUString& mrRangeString;
+    OUStringBuffer maRangeStringBuffer;
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
                             sal_uInt16 nPrefix,
-                            const ::rtl::OUString& rLocalName,
-                            ::rtl::OUString& rRangeString );
+                            const OUString& rLocalName,
+                            OUString& rRangeString );
     virtual ~SchXMLRangeSomewhereContext();
 
     virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual void EndElement();
 };
@@ -646,7 +645,7 @@ public:
 SchXMLTableCellContext::SchXMLTableCellContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     SchXMLTable& aTable ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_TABLE, rLocalName ),
         mrImportHelper( rImpHelper ),
@@ -661,15 +660,15 @@ SchXMLTableCellContext::~SchXMLTableCellContext()
 void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
-    rtl::OUString aLocalName;
-    rtl::OUString aCellContent;
+    OUString aValue;
+    OUString aLocalName;
+    OUString aCellContent;
     SchXMLCellType eValueType  = SCH_CELL_TYPE_UNKNOWN;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetCellAttrTokenMap();
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString sAttrName = xAttrList->getNameByIndex( i );
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
@@ -711,7 +710,7 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
 
 SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     sal_uInt16 nPrefix,
-    const rtl::OUString& rLocalName,
+    const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {
     SvXMLImportContext* pContext = 0;
@@ -1024,7 +1023,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         if( xDataSource.is() )
                         {
                             bool bHasUnhiddenColumns = false;
-                            rtl::OUString aRange;
+                            OUString aRange;
                             uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
                             for( sal_Int32 nN=0; nN< aSequences.getLength(); ++nN )
                             {
@@ -1069,7 +1068,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         {
                             //first detect which collumns are really used
                             std::map< sal_Int32, bool > aUsageMap;
-                            rtl::OUString aRange;
+                            OUString aRange;
                             Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
                             for( sal_Int32 nN=0; nN< aUsedSequences.getLength(); ++nN )
                             {

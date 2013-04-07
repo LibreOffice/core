@@ -48,7 +48,7 @@ namespace abp
     OABSPilotUno::OABSPilotUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
-        registerProperty( ::rtl::OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
+        registerProperty( OUString("DataSourceName"), PROPERTY_ID_DATASOURCENAME, PropertyAttribute::READONLY ,
             &m_sDataSourceName, ::getCppuType( &m_sDataSourceName ) );
     }
 
@@ -103,15 +103,15 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException)
+    OUString SAL_CALL OABSPilotUno::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
+    OUString OABSPilotUno::getImplementationName_Static() throw(RuntimeException)
     {
-        return ::rtl::OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
+        return OUString("org.openoffice.comp.abp.OAddressBookSourcePilot");
     }
 
     //---------------------------------------------------------------------
@@ -124,7 +124,7 @@ namespace abp
     ::comphelper::StringSequence OABSPilotUno::getSupportedServiceNames_Static() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
-        aSupported.getArray()[0] = ::rtl::OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot");
+        aSupported.getArray()[0] = OUString("com.sun.star.ui.dialogs.AddressBookSourcePilot");
         return aSupported;
     }
 
@@ -154,7 +154,7 @@ namespace abp
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
             Sequence< Any > aNewArgs(1);
-            aNewArgs[0] <<= PropertyValue( ::rtl::OUString("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE );
+            aNewArgs[0] <<= PropertyValue( OUString("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE );
             OGenericUnoDialog::initialize(aNewArgs);
         } else {
             OGenericUnoDialog::initialize(aArguments);
@@ -180,7 +180,7 @@ namespace abp
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lProtocol(1);
-        lProtocol[0].Name    = ::rtl::OUString("Deactivate");
+        lProtocol[0].Name    = OUString("Deactivate");
         lProtocol[0].Value <<= sal_True;
         return makeAny( lProtocol );
     }

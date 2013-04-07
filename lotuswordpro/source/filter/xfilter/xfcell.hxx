@@ -108,12 +108,12 @@ public:
     /**
      * @descr   Set cell number value.
      */
-    void    SetValue(rtl::OUString value);
+    void    SetValue(OUString value);
 
     /**
      * @descr   Set cell formula.
      */
-    void    SetFormula(rtl::OUString formula);
+    void    SetFormula(OUString formula);
 
     /**
      * @descr   Set cell protected.
@@ -133,7 +133,7 @@ public:
     /**
      * @descr   Return cell name. It's a tool function for formula.
      */
-    rtl::OUString   GetCellName();
+    OUString   GetCellName();
 
     /**
      * @descr   Return cell column id.
@@ -167,9 +167,9 @@ private:
     sal_Int32   m_nColSpaned;
     sal_Int32   m_nRepeated;
     enumXFValueType m_eValueType;
-    rtl::OUString   m_strValue;
-    rtl::OUString   m_strDisplay;
-    rtl::OUString   m_strFormula;
+    OUString   m_strValue;
+    OUString   m_strDisplay;
+    OUString   m_strFormula;
     sal_Bool    m_bProtect;
 };
 
@@ -183,7 +183,7 @@ inline void XFCell::SetRepeated(sal_Int32 repeated)
     m_nRepeated = repeated;
 }
 
-inline void XFCell::SetFormula(rtl::OUString formula)
+inline void XFCell::SetFormula(OUString formula)
 {
     m_strFormula = formula;
 }

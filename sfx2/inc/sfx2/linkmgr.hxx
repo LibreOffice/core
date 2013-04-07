@@ -110,8 +110,8 @@ public:
                         const String* pRange = 0 );
 
     bool InsertFileLink(
-        sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const rtl::OUString& rFileNm,
-        const rtl::OUString* pFilterNm = NULL, const rtl::OUString* pRange = NULL);
+        sfx2::SvBaseLink& rLink, sal_uInt16 nFileType, const OUString& rFileNm,
+        const OUString* pFilterNm = NULL, const OUString* pRange = NULL);
 
     void ReconnectDdeLink(SfxObjectShell& rServer);
 
@@ -122,7 +122,7 @@ public:
      * @param rServer server document shell instance
      * @param rLink link object of the client document
      */
-    void LinkServerShell(const ::rtl::OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
+    void LinkServerShell(const OUString& rPath, SfxObjectShell& rServer, ::sfx2::SvBaseLink& rLink) const;
 
     // Obtain the string for the dialog
     bool GetDisplayNames( const SvBaseLink *,
@@ -132,8 +132,8 @@ public:
                                     String* pFilter = 0 ) const;
 
     bool GetDisplayNames(
-        const SvBaseLink* pLink, rtl::OUString* pType, rtl::OUString* pFile = NULL,
-        rtl::OUString* pLinkStr = NULL, rtl::OUString* pFilter = NULL) const;
+        const SvBaseLink* pLink, OUString* pType, OUString* pFile = NULL,
+        OUString* pLinkStr = NULL, OUString* pFilter = NULL) const;
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 

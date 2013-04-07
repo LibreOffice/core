@@ -31,7 +31,7 @@ class SwXMLTextImportHelper : public XMLTextImportHelper
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
                 SvXMLImport& rImport,
-                sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
+                sal_uInt16 nPrefix, const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
@@ -50,63 +50,63 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOLEObject( SvXMLImport& rImport,
-                                      const ::rtl::OUString& rHRef,
-                                      const ::rtl::OUString& rStyleName,
-                                      const ::rtl::OUString& rTblName,
+                                      const OUString& rHRef,
+                                      const OUString& rStyleName,
+                                      const OUString& rTblName,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
-                                      const ::rtl::OUString& rHRef,
-                                      const ::rtl::OUString& rStyleName,
-                                      const ::rtl::OUString& rTblName,
+                                      const OUString& rHRef,
+                                      const OUString& rStyleName,
+                                      const OUString& rTblName,
                                          sal_Int32 nWidth, sal_Int32 nHeight );
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertApplet(
-            const ::rtl::OUString &rName,
-            const ::rtl::OUString &rCode,
+            const OUString &rName,
+            const OUString &rCode,
             sal_Bool bMayScript,
-            const ::rtl::OUString& rHRef,
+            const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertPlugin(
-            const ::rtl::OUString &rMimeType,
-            const ::rtl::OUString& rHRef,
+            const OUString &rMimeType,
+            const OUString& rHRef,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet>
         createAndInsertFloatingFrame(
-            const ::rtl::OUString &rName,
-            const ::rtl::OUString &rHRef,
-            const ::rtl::OUString &rStyleName,
+            const OUString &rName,
+            const OUString &rHRef,
+            const OUString &rStyleName,
             sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual void endAppletOrPlugin(
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > &rPropSet,
-        ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess> &rParamMap);
+        ::std::map < const OUString, OUString, ::comphelper::UStringLess> &rParamMap);
 
     virtual sal_Bool IsInHeaderFooter() const;
 
     // redlining helper methods
     // (here is the real implementation)
     virtual void RedlineAdd(
-        const ::rtl::OUString& rType,       /// redline type (insert, del,... )
-        const ::rtl::OUString& rId,         /// use to identify this redline
-        const ::rtl::OUString& rAuthor,     /// name of the author
-        const ::rtl::OUString& rComment,    /// redline comment
+        const OUString& rType,       /// redline type (insert, del,... )
+        const OUString& rId,         /// use to identify this redline
+        const OUString& rAuthor,     /// name of the author
+        const OUString& rComment,    /// redline comment
         const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
         sal_Bool bMergeLastPara);           /// merge last paragraph
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
             ::com::sun::star::uno::Reference<   /// needed to get the document
                     ::com::sun::star::text::XTextCursor> & rOldCursor,
-            const ::rtl::OUString& rId);    /// ID used to RedlineAdd() call
+            const OUString& rId);    /// ID used to RedlineAdd() call
     virtual void RedlineSetCursor(
-        const ::rtl::OUString& rId,         /// ID used to RedlineAdd() call
+        const OUString& rId,         /// ID used to RedlineAdd() call
         sal_Bool bStart,                    /// start or end Cursor
         sal_Bool bIsOutsideOfParagraph);
     virtual void RedlineAdjustStartNodeCursor(

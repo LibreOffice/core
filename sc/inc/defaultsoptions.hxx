@@ -39,7 +39,7 @@ class SC_DLLPUBLIC ScDefaultsOptions
 {
 private:
     SCTAB nInitTabCount;             // number of Tabs for new Spreadsheet doc
-    ::rtl::OUString aInitTabPrefix;  // The Tab prefix name in new Spreadsheet doc
+    OUString aInitTabPrefix;  // The Tab prefix name in new Spreadsheet doc
 
 
 public:
@@ -51,8 +51,8 @@ public:
 
     SCTAB GetInitTabCount() const           { return nInitTabCount; }
     void   SetInitTabCount( SCTAB nTabs) { nInitTabCount = nTabs; }
-    void   SetInitTabPrefix(const rtl::OUString& aPrefix) { aInitTabPrefix = aPrefix; }
-    ::rtl::OUString GetInitTabPrefix() const { return aInitTabPrefix; }
+    void   SetInitTabPrefix(const OUString& aPrefix) { aInitTabPrefix = aPrefix; }
+    OUString GetInitTabPrefix() const { return aInitTabPrefix; }
 
     ScDefaultsOptions&  operator=  ( const ScDefaultsOptions& rCpy );
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;
@@ -89,14 +89,14 @@ private:
 
 class ScDefaultsCfg : public ScDefaultsOptions, public utl::ConfigItem
 {
-    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
+    com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 public:
     ScDefaultsCfg();
 
     void SetOptions( const ScDefaultsOptions& rNew );
 
     virtual void Commit();
-    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 };
 
 #endif

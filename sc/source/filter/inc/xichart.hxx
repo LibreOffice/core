@@ -422,7 +422,7 @@ public:
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
 
     /** Creates a data sequence containing the link into the Calc document. */
-    XDataSequenceRef    CreateDataSequence( const ::rtl::OUString& rRole ) const;
+    XDataSequenceRef    CreateDataSequence( const OUString& rRole ) const;
     /** Creates a sequence of formatted string objects. */
     XFormattedStringSeq CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
@@ -834,9 +834,9 @@ public:
     inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
 
     /** Creates a labeled data sequence object from value data link. */
-    XLabeledDataSeqRef  CreateValueSequence( const ::rtl::OUString& rValueRole ) const;
+    XLabeledDataSeqRef  CreateValueSequence( const OUString& rValueRole ) const;
     /** Creates a labeled data sequence object from category data link. */
-    XLabeledDataSeqRef  CreateCategSequence( const ::rtl::OUString& rCategRole ) const;
+    XLabeledDataSeqRef  CreateCategSequence( const OUString& rCategRole ) const;
     /** Creates a data series object with initialized source links. */
     XDataSeriesRef      CreateDataSeries() const;
 
@@ -1390,7 +1390,7 @@ public:
         const ::com::sun::star::uno::Reference<
             com::sun::star::chart2::XChartDocument>& xChartDoc,
         XclImpDffConverter& rDffConv,
-        const ::rtl::OUString& rObjName,
+        const OUString& rObjName,
         const Rectangle& rChartRect ) const;
 
 private:
@@ -1488,7 +1488,7 @@ public:
     /** Creates the chart object in the passed component. */
     void                Convert( XModelRef xModel,
                             XclImpDffConverter& rDffConv,
-                            const ::rtl::OUString& rObjName,
+                            const OUString& rObjName,
                             const Rectangle& rChartRect ) const;
 
 private:

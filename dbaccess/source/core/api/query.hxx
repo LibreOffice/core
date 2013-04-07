@@ -61,7 +61,7 @@ class OQuery    :public OContentHelper
     friend struct TRelease;
 
 public:
-    typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
+    typedef ::std::map< OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
 
 protected:
 //  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
@@ -139,17 +139,17 @@ public:
     ::dbtools::IWarningsContainer*  getWarningsContainer( ) const                                       { return m_pWarnings; }
 
     // XRename
-    virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual void SAL_CALL disposing();
 
-    virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
+    virtual OColumn* createColumn(const OUString& _rName) const;
 
     virtual void rebuildColumns( );
 
     // OContentHelper overridables
-    virtual ::rtl::OUString determineContentType() const;
+    virtual OUString determineContentType() const;
 
 private:
     void registerProperties();

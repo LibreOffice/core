@@ -91,14 +91,14 @@ class StringNode : public NameNode
 protected:
     using NameNode::Search;
 
-    rtl::OString m_aName;
+    OString m_aName;
 
 public:
     StringNode() {}
-    StringNode(const rtl::OString& rStr) { m_aName = rStr; }
+    StringNode(const OString& rStr) { m_aName = rStr; }
 
     StringNode*     Search( const char * ) const;
-    rtl::OString    GetName() const { return m_aName; }
+    OString    GetName() const { return m_aName; }
 };
 
 #endif // _RSCTREE_HXX

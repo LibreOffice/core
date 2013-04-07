@@ -41,8 +41,8 @@ using namespace ::com::sun::star;
 
 uno::Reference< lang::XComponent > SynchronousDispatch::dispatch(
         const uno::Reference< uno::XInterface > &xStartPoint,
-        const rtl::OUString &sURL,
-        const rtl::OUString &sTarget,
+        const OUString &sURL,
+        const OUString &sTarget,
         const sal_Int32 nFlags,
         const uno::Sequence< beans::PropertyValue > &lArguments )
 {

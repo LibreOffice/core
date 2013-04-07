@@ -45,16 +45,16 @@ namespace webdav_ucp
 class DateTimeHelper
 {
 private:
-    static sal_Int32 convertMonthToInt (const ::rtl::OUString& );
+    static sal_Int32 convertMonthToInt (const OUString& );
 
-    static bool ISO8601_To_DateTime (const ::rtl::OUString&,
+    static bool ISO8601_To_DateTime (const OUString&,
         ::com::sun::star::util::DateTime& );
 
-    static bool RFC2068_To_DateTime (const ::rtl::OUString&,
+    static bool RFC2068_To_DateTime (const OUString&,
         ::com::sun::star::util::DateTime& );
 
 public:
-    static bool convert (const ::rtl::OUString&,
+    static bool convert (const OUString&,
         ::com::sun::star::util::DateTime& );
 };
 

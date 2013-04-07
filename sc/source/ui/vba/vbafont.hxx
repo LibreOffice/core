@@ -70,8 +70,8 @@ public:
     virtual css::uno::Any SAL_CALL getOutlineFont() throw (css::uno::RuntimeException) ;
     virtual void SAL_CALL setOutlineFont( const css::uno::Any& _outlinefont ) throw (css::uno::RuntimeException) ;
     // XHelperInterface
-    virtual rtl::OUString getServiceImplName();
-    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    virtual OUString getServiceImplName();
+    virtual css::uno::Sequence<OUString> getServiceNames();
 
 };
 

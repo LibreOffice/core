@@ -25,21 +25,21 @@ ScVbaAxisTitle::ScVbaAxisTitle( const uno::Reference< XHelperInterface >& xParen
 {
 }
 
-rtl::OUString
+OUString
 ScVbaAxisTitle::getServiceImplName()
 {
-    return rtl::OUString("ScVbaAxisTitle");
+    return OUString("ScVbaAxisTitle");
 }
 
-uno::Sequence< rtl::OUString >
+uno::Sequence< OUString >
 ScVbaAxisTitle::getServiceNames()
 {
-    static uno::Sequence< rtl::OUString > aServiceNames;
+    static uno::Sequence< OUString > aServiceNames;
     if ( aServiceNames.getLength() == 0 )
     {
-        uno::Sequence< rtl::OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
+        uno::Sequence< OUString > BaseServiceNames = AxisTitleBase::getServiceNames();
         aServiceNames.realloc( BaseServiceNames.getLength() + 1 );
-        aServiceNames[ 0 ] = rtl::OUString("ooo.vba.excel.AxisTitle" );
+        aServiceNames[ 0 ] = OUString("ooo.vba.excel.AxisTitle" );
         for ( sal_Int32 index = 1; index < (BaseServiceNames.getLength() + 1); ++index )
             aServiceNames[ index ] = BaseServiceNames[ index ];
     }

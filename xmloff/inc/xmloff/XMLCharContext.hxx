@@ -38,14 +38,14 @@ public:
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Unicode c,
             sal_Bool bCount );
     XMLCharContext(
             SvXMLImport& rImport,
             sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName,
+            const OUString& rLName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             sal_Int16 nControl );
 
@@ -57,7 +57,7 @@ public:
     virtual void EndElement();
 
     virtual void InsertControlCharacter(sal_Int16   _nControl);
-    virtual void InsertString(const ::rtl::OUString& _sString);
+    virtual void InsertString(const OUString& _sString);
 };
 // ---------------------------------------------------------------------
 #endif // INCLUDED__XMLOFF_CHARCONTEXT_HXX

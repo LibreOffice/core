@@ -60,14 +60,14 @@ sal_Bool FileExists( const String &rMainURL )
     return bExists;
 }
 
-static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
-    const rtl::OUString &rPathPrefix,
+static uno::Sequence< OUString > GetMultiPaths_Impl(
+    const OUString &rPathPrefix,
     sal_Int16 nPathFlags )
 {
-    uno::Sequence< rtl::OUString >   aRes;
-    uno::Sequence< rtl::OUString >   aInternalPaths;
-    uno::Sequence< rtl::OUString >   aUserPaths;
-    rtl::OUString                    aWritablePath;
+    uno::Sequence< OUString >   aRes;
+    uno::Sequence< OUString >   aInternalPaths;
+    uno::Sequence< OUString >   aUserPaths;
+    OUString                    aWritablePath;
 
     bool bSuccess = true;
     uno::Reference< lang::XMultiServiceFactory >  xMgr( comphelper::getProcessServiceFactory() );
@@ -103,14 +103,14 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
         if (!aWritablePath.isEmpty())
             ++nMaxEntries;
         aRes.realloc( nMaxEntries );
-        rtl::OUString *pRes = aRes.getArray();
+        OUString *pRes = aRes.getArray();
         sal_Int32 nCount = 0;   // number of actually added entries
         if ((nPathFlags & PATH_FLAG_WRITABLE) && !aWritablePath.isEmpty())
             pRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
         {
-            const uno::Sequence< rtl::OUString > &rPathSeq = i == 0 ? aUserPaths : aInternalPaths;
-            const rtl::OUString *pPathSeq = rPathSeq.getConstArray();
+            const uno::Sequence< OUString > &rPathSeq = i == 0 ? aUserPaths : aInternalPaths;
+            const OUString *pPathSeq = rPathSeq.getConstArray();
             for (sal_Int32 k = 0;  k < rPathSeq.getLength();  ++k)
             {
                 const bool bAddUser     = &rPathSeq == &aUserPaths     && (nPathFlags & PATH_FLAG_USER);
@@ -125,9 +125,9 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     return aRes;
 }
 
-rtl::OUString GetDictionaryWriteablePath()
+OUString GetDictionaryWriteablePath()
 {
-    uno::Sequence< rtl::OUString > aPaths( GetMultiPaths_Impl( "Dictionary", PATH_FLAG_WRITABLE ) );
+    uno::Sequence< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", PATH_FLAG_WRITABLE ) );
     DBG_ASSERT( aPaths.getLength() == 1, "Dictionary_writable path corrupted?" );
     String aRes;
     if (aPaths.getLength() > 0)
@@ -135,7 +135,7 @@ rtl::OUString GetDictionaryWriteablePath()
     return aRes;
 }
 
-uno::Sequence< rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
+uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
 {
     return GetMultiPaths_Impl( "Dictionary", nPathFlags );
 }

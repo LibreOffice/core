@@ -166,14 +166,14 @@ class SdXMLMasterStylesContext;
 
 struct DateTimeDeclContextImpl
 {
-    rtl::OUString maStrText;
+    OUString maStrText;
     sal_Bool mbFixed;
-    rtl::OUString maStrDateTimeFormat;
+    OUString maStrDateTimeFormat;
 
     DateTimeDeclContextImpl() : mbFixed(sal_True) {}
 };
 
-DECLARE_STL_USTRINGACCESS_MAP( ::rtl::OUString, HeaderFooterDeclMap );
+DECLARE_STL_USTRINGACCESS_MAP( OUString, HeaderFooterDeclMap );
 DECLARE_STL_USTRINGACCESS_MAP( DateTimeDeclContextImpl, DateTimeDeclMap );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -211,8 +211,8 @@ class SdXMLImport: public SvXMLImport
 
     DrawPageIdMap               maDrawPageIds;
 
-    ::rtl::OUString             msPageLayouts;
-    ::rtl::OUString             msPreview;
+    OUString             msPageLayouts;
+    OUString             msPreview;
 
     HeaderFooterDeclMap         maHeaderDeclsMap;
     HeaderFooterDeclMap         maFooterDeclsMap;
@@ -222,7 +222,7 @@ protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
     virtual SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
-      const rtl::OUString& rLocalName,
+      const OUString& rLocalName,
       const com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
@@ -244,18 +244,18 @@ public:
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
     //     the root element (i.e. office:document-meta)
-    SvXMLImportContext* CreateMetaContext(const rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateMetaContext(const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
-    SvXMLImportContext* CreateBodyContext(const rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateScriptContext( const OUString& rLocalName );
+    SvXMLImportContext* CreateBodyContext(const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    SvXMLStylesContext* CreateStylesContext(const rtl::OUString& rLocalName,
+    SvXMLStylesContext* CreateStylesContext(const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    SvXMLStylesContext* CreateAutoStylesContext(const rtl::OUString& rLocalName,
+    SvXMLStylesContext* CreateAutoStylesContext(const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    SvXMLImportContext* CreateMasterStylesContext(const rtl::OUString& rLocalName,
+    SvXMLImportContext* CreateMasterStylesContext(const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
-    SvXMLImportContext *CreateFontDeclsContext(const ::rtl::OUString& rLocalName,
+    SvXMLImportContext *CreateFontDeclsContext(const OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     // Styles and AutoStyles contexts
@@ -300,15 +300,15 @@ public:
     sal_Bool IsPreview() const { return mbPreview; }
 
     // XServiceInfo ( : SvXMLExport )
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
 
-    void AddHeaderDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText );
-    void AddFooterDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText );
-    void AddDateTimeDecl( const ::rtl::OUString& rName, const ::rtl::OUString& rText, sal_Bool bFixed, const ::rtl::OUString& rDateTimeFormat );
+    void AddHeaderDecl( const OUString& rName, const OUString& rText );
+    void AddFooterDecl( const OUString& rName, const OUString& rText );
+    void AddDateTimeDecl( const OUString& rName, const OUString& rText, sal_Bool bFixed, const OUString& rDateTimeFormat );
 
-    ::rtl::OUString GetHeaderDecl( const ::rtl::OUString& rName ) const;
-    ::rtl::OUString GetFooterDecl( const ::rtl::OUString& rName ) const;
-    ::rtl::OUString GetDateTimeDecl( const ::rtl::OUString& rName, sal_Bool& rbFixed, ::rtl::OUString& rDateTimeFormat );
+    OUString GetHeaderDecl( const OUString& rName ) const;
+    OUString GetFooterDecl( const OUString& rName ) const;
+    OUString GetDateTimeDecl( const OUString& rName, sal_Bool& rbFixed, OUString& rDateTimeFormat );
 
     virtual void NotifyEmbeddedFontRead() SAL_OVERRIDE;
 };

@@ -50,7 +50,7 @@
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
-        ScViewData* pViewData, std::map<rtl::OUString, ScRangeName*> aRangeMap,
+        ScViewData* pViewData, std::map<OUString, ScRangeName*> aRangeMap,
         const ScAddress& aCursorPos, const bool bUndo )
     : ScAnyRefDlg( pB, pCW, pParent, "DefineNameDialog", "modules/scalc/ui/definename.ui" )
     ,
@@ -84,7 +84,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParen
     SCTAB n = mpDoc->GetTableCount();
     for (SCTAB i = 0; i < n; ++i)
     {
-        rtl::OUString aTabName;
+        OUString aTabName;
         mpDoc->GetName(i, aTabName);
         m_pLbScope->InsertEntry(aTabName);
     }
@@ -141,13 +141,13 @@ bool ScNameDefDlg::IsFormulaValid()
 
 bool ScNameDefDlg::IsNameValid()
 {
-    rtl::OUString aScope = m_pLbScope->GetSelectEntry();
-    rtl::OUString aName = m_pEdName->GetText();
+    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aName = m_pEdName->GetText();
 
     ScRangeName* pRangeName = NULL;
     if(aScope == maGlobalNameStr)
     {
-        pRangeName = maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        pRangeName = maRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
     }
     else
     {
@@ -190,9 +190,9 @@ bool ScNameDefDlg::IsNameValid()
 
 void ScNameDefDlg::AddPushed()
 {
-    rtl::OUString aScope = m_pLbScope->GetSelectEntry();
-    rtl::OUString aName = m_pEdName->GetText();
-    rtl::OUString aExpression = m_pEdRange->GetText();
+    OUString aScope = m_pLbScope->GetSelectEntry();
+    OUString aName = m_pEdName->GetText();
+    OUString aExpression = m_pEdRange->GetText();
 
     if (aName.isEmpty())
     {
@@ -206,7 +206,7 @@ void ScNameDefDlg::AddPushed()
     ScRangeName* pRangeName = NULL;
     if(aScope == maGlobalNameStr)
     {
-        pRangeName = maRangeMap.find(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
+        pRangeName = maRangeMap.find(OUString(RTL_CONSTASCII_USTRINGPARAM(STR_GLOBAL_RANGE_NAME)))->second;
     }
     else
     {
@@ -283,7 +283,7 @@ void ScNameDefDlg::AddPushed()
     }
 }
 
-void ScNameDefDlg::GetNewData(rtl::OUString& rName, rtl::OUString& rScope)
+void ScNameDefDlg::GetNewData(OUString& rName, OUString& rScope)
 {
     rName = maName;
     rScope = maScope;

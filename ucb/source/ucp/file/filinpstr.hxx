@@ -45,7 +45,7 @@ namespace fileaccess {
     {
     public:
 
-        XInputStream_impl( shell* pMyShell,const rtl::OUString& aUncPath, sal_Bool bLock );
+        XInputStream_impl( shell* pMyShell,const OUString& aUncPath, sal_Bool bLock );
 
         virtual ~XInputStream_impl();
 

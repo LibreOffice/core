@@ -26,8 +26,8 @@
 
 #include "rtl/ref.hxx"
 #include "rtl/string.hxx"
+#include "rtl/ustring.hxx"
 
-namespace rtl { class OUString; }
 class TypeManager;
 
 /// @HTML
@@ -47,7 +47,7 @@ public:
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef std::map< rtl::OString, Kind > Map;
+    typedef std::map< OString, Kind > Map;
 
     /**
        Constructs the dependencies for a given type.
@@ -63,7 +63,7 @@ public:
      */
     Dependencies(
         rtl::Reference< TypeManager > const & manager,
-        rtl::OString const & type);
+        OString const & type);
 
     ~Dependencies();
 
@@ -73,7 +73,7 @@ public:
 
        @param type a UNO type registry name
      */
-    void add(rtl::OString const & type) { insert(type, false); }
+    void add(OString const & type) { insert(type, false); }
 
     bool isValid() const { return m_valid; }
 
@@ -117,9 +117,9 @@ private:
     Dependencies(Dependencies &); // not implemented
     void operator =(Dependencies); // not implemented
 
-    void insert(rtl::OUString const & type, bool base);
+    void insert(OUString const & type, bool base);
 
-    void insert(rtl::OString const & type, bool base);
+    void insert(OString const & type, bool base);
 
     Map m_map;
     bool m_valid;

@@ -42,7 +42,7 @@ public:
     void    init( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::drawing::XShapes >& xTargetPage
              , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory
-             , const rtl::OUString& rCID );
+             , const OUString& rCID );
 
     void    createShapes( const ::com::sun::star::awt::Point& rPos
                           , const ::com::sun::star::awt::Size& rReferenceSize );
@@ -61,7 +61,7 @@ private:
         ::com::sun::star::chart2::XTitle >                  m_xTitle;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >             m_xShape;
-    rtl::OUString   m_aCID;
+    OUString   m_aCID;
 
     double      m_fRotationAngleDegree;
     sal_Int32   m_nXPos;

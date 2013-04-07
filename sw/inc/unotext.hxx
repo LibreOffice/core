@@ -119,7 +119,7 @@ public:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setPropertyValue(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Any& rValue)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
@@ -127,33 +127,33 @@ public:
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
-            const ::rtl::OUString& rPropertyName)
+            const OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removePropertyChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertyChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addVetoableChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeVetoableChangeListener(
-            const ::rtl::OUString& rPropertyName,
+            const OUString& rPropertyName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XVetoableChangeListener >& xListener)
         throw (::com::sun::star::beans::UnknownPropertyException,
@@ -170,16 +170,16 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL getEnd()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getString()
+    virtual OUString SAL_CALL getString()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setString(const ::rtl::OUString& rString)
+    virtual void SAL_CALL setString(const OUString& rString)
         throw (::com::sun::star::uno::RuntimeException);
 
     // XSimpleText
     virtual void SAL_CALL insertString(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xRange,
-            const ::rtl::OUString& aString, sal_Bool bAbsorb)
+            const OUString& aString, sal_Bool bAbsorb)
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertControlCharacter(
             const ::com::sun::star::uno::Reference<
@@ -228,7 +228,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL
         appendTextPortion(
-            const ::rtl::OUString& rText,
+            const OUString& rText,
             const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >&
                 rCharacterAndParagraphProperties)
@@ -238,7 +238,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > SAL_CALL
         insertTextPortion(
-            const ::rtl::OUString& rText,
+            const OUString& rText,
             const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::beans::PropertyValue >&
                 rCharacterAndParagraphProperties,

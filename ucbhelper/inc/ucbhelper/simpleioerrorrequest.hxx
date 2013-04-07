@@ -56,7 +56,7 @@ public:
     SimpleIOErrorRequest( const com::sun::star::ucb::IOErrorCode eError,
                           const com::sun::star::uno::Sequence<
                             com::sun::star::uno::Any > & rArgs,
-                          const rtl::OUString & rMessage,
+                          const OUString & rMessage,
                           const com::sun::star::uno::Reference<
                             com::sun::star::ucb::XCommandProcessor > & xContext
                          );

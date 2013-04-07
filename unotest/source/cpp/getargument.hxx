@@ -29,7 +29,7 @@ namespace detail {
 // Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
 // variable:
 bool getArgument(
-    rtl::OUString const & name, rtl::OUString * value);
+    OUString const & name, OUString * value);
 
 }
 

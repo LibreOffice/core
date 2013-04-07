@@ -92,7 +92,7 @@ public:
 
     RptMLMasterStylesContext_Impl(
             ORptFilter& rImport, sal_uInt16 nPrfx,
-            const ::rtl::OUString& rLName ,
+            const OUString& rLName ,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     virtual ~RptMLMasterStylesContext_Impl();
     virtual void EndElement();
@@ -102,7 +102,7 @@ TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
 DBG_NAME(rpt_RptMLMasterStylesContext_Impl)
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLName ,
+        const OUString& rLName ,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
     ,m_rImport(rImport)
@@ -170,9 +170,9 @@ sal_Int32 ReadThroughComponent(
     catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX parse exception caught while importing:\n"));
-        aError.append(rtl::OUStringToOString(r.Message,
+        aError.append(OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
         aError.append(r.LineNumber);
         aError.append(',');
@@ -213,7 +213,7 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XComponentContext> & rxContext,
     const Reference< document::XGraphicObjectResolver > & _xGraphicObjectResolver,
     const Reference<document::XEmbeddedObjectResolver>& _xEmbeddedObjectResolver,
-    const ::rtl::OUString& _sFilterName
+    const OUString& _sFilterName
     ,const uno::Reference<beans::XPropertySet>& _xProp)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
@@ -227,7 +227,7 @@ sal_Int32 ReadThroughComponent(
         try
         {
             // open stream (and set parser input)
-            ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii(pStreamName);
+            OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
                 // stream name not found! Then try the compatibility name.
@@ -238,7 +238,7 @@ sal_Int32 ReadThroughComponent(
                     return 0;
 
                 // if so, does the stream exist?
-                sStreamName = ::rtl::OUString::createFromAscii(pCompatibilityStreamName);
+                sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
                     return 0;
             }
@@ -247,7 +247,7 @@ sal_Int32 ReadThroughComponent(
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
-            xProps->getPropertyValue( ::rtl::OUString("Encrypted") ) >>= bEncrypted;
+            xProps->getPropertyValue( OUString("Encrypted") ) >>= bEncrypted;
         }
         catch (const packages::WrongPasswordException&)
         {
@@ -299,14 +299,14 @@ uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::
     return static_cast< XServiceInfo* >(new ORptFilter(xContext, IMPORT_SETTINGS ));
 }
 //---------------------------------------------------------------------
-::rtl::OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString(SERVICE_SETTINGSIMPORTER);
+    return OUString(SERVICE_SETTINGSIMPORTER);
 }
 //---------------------------------------------------------------------
-Sequence< ::rtl::OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
+    Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
@@ -317,14 +317,14 @@ Reference< XInterface > ORptContentImportHelper::create(const Reference< XCompon
         IMPORT_FONTDECLS ));
 }
 //---------------------------------------------------------------------
-::rtl::OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString(SERVICE_CONTENTIMPORTER);
+    return OUString(SERVICE_CONTENTIMPORTER);
 }
 //---------------------------------------------------------------------
-Sequence< ::rtl::OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
+    Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
@@ -337,14 +337,14 @@ Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentCont
         IMPORT_FONTDECLS ));
 }
 //---------------------------------------------------------------------
-::rtl::OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString(SERVICE_STYLESIMPORTER);
+    return OUString(SERVICE_STYLESIMPORTER);
 }
 //---------------------------------------------------------------------
-Sequence< ::rtl::OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
+    Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
@@ -356,14 +356,14 @@ Reference< XInterface > ORptMetaImportHelper::create(Reference< XComponentContex
         IMPORT_META));
 }
 //---------------------------------------------------------------------
-::rtl::OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+OUString ORptMetaImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
 {
-    return ::rtl::OUString(SERVICE_METAIMPORTER);
+    return OUString(SERVICE_METAIMPORTER);
 }
 //---------------------------------------------------------------------
-Sequence< ::rtl::OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< OUString > ORptMetaImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSupported(1);
+    Sequence< OUString > aSupported(1);
     aSupported[0] = SERVICE_IMPORTFILTER;
     return aSupported;
 }
@@ -378,11 +378,11 @@ ORptFilter::ORptFilter( const uno::Reference< XComponentContext >& _rxContext,sa
     DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().SetCoreMeasureUnit(util::MeasureUnit::MM_100TH);
     GetMM100UnitConverter().SetXMLMeasureUnit(util::MeasureUnit::CM);
-    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
                         GetXMLToken(XML_N_RPT),
                         XML_NAMESPACE_REPORT );
 
-    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___rpt) ),
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___rpt) ),
                         GetXMLToken(XML_N_RPT_OASIS),
                         XML_NAMESPACE_REPORT );
 
@@ -406,32 +406,32 @@ uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContex
 }
 
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return ::rtl::OUString("com.sun.star.comp.report.OReportFilter");
+    return OUString("com.sun.star.comp.report.OReportFilter");
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORptFilter::getImplementationName(  ) throw(uno::RuntimeException)
+OUString SAL_CALL ORptFilter::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< OUString > aServices(1);
     aServices.getArray()[0] = SERVICE_IMPORTFILTER;
 
     return aServices;
 }
 
 //--------------------------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL ORptFilter::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL ORptFilter::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL ORptFilter::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+sal_Bool SAL_CALL ORptFilter::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
 }
@@ -457,7 +457,7 @@ sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescript
 sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
-    ::rtl::OUString                     sFileName;
+    OUString                     sFileName;
     uno::Reference< embed::XStorage >   xStorage;
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier;
 
@@ -515,9 +515,9 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
 #if OSL_DEBUG_LEVEL > 1
         uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-        uno::Sequence< ::rtl::OUString> aSeq = xAccess->getElementNames();
-        const ::rtl::OUString* pDebugIter = aSeq.getConstArray();
-        const ::rtl::OUString* pDebugEnd      = pDebugIter + aSeq.getLength();
+        uno::Sequence< OUString> aSeq = xAccess->getElementNames();
+        const OUString* pDebugIter = aSeq.getConstArray();
+        const OUString* pDebugEnd      = pDebugIter + aSeq.getLength();
         for(;pDebugIter != pDebugEnd;++pDebugIter)
         {
             (void)*pDebugIter;
@@ -535,29 +535,29 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 uno::UNO_QUERY );
 
         uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
-        aArgs[0] <<= beans::NamedValue(::rtl::OUString("Storage"),uno::makeAny(xStorage));
-        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(::rtl::OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
+        aArgs[0] <<= beans::NamedValue(OUString("Storage"),uno::makeAny(xStorage));
+        xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments(OUString("com.sun.star.document.ImportEmbeddedObjectResolver"),aArgs) , uno::UNO_QUERY);
 
-        static const ::rtl::OUString s_sOld("OldFormat");
+        static const OUString s_sOld("OldFormat");
         static comphelper::PropertyMapEntry pMap[] =
         {
             { MAP_LEN( "OldFormat" ), 1,    &::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
-            { MAP_LEN( "StreamName"), 0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamName"), 0,    &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN("PrivateData"), 0,    &::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
         ::comphelper::MediaDescriptor aDescriptor(rDescriptor);
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
-        const ::rtl::OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),::rtl::OUString()) );
-        xProp->setPropertyValue(rtl::OUString("BaseURI"), uno::makeAny(sVal));
-        const ::rtl::OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(rtl::OUString("HierarchicalDocumentName"),::rtl::OUString()) );
-        xProp->setPropertyValue(rtl::OUString("StreamRelPath"), uno::makeAny(sHierarchicalDocumentName));
+        const OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),OUString()) );
+        xProp->setPropertyValue(OUString("BaseURI"), uno::makeAny(sVal));
+        const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault(OUString("HierarchicalDocumentName"),OUString()) );
+        xProp->setPropertyValue(OUString("StreamRelPath"), uno::makeAny(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
-        static const ::rtl::OUString s_sMeta("meta.xml");
-        static const rtl::OUString s_sStreamName("StreamName");
+        static const OUString s_sMeta("meta.xml");
+        static const OUString s_sStreamName("StreamName");
         xProp->setPropertyValue(s_sStreamName, uno::makeAny(s_sMeta));
         sal_Int32 nRet = ReadThroughComponent( xStorage
                                     ,xModel
@@ -582,7 +582,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("settings.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("settings.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
@@ -596,7 +596,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("styles.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("styles.xml")));
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
                                     ,"styles.xml"
@@ -610,7 +610,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == 0 )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(::rtl::OUString("content.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("content.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"
@@ -656,7 +656,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
-                                      const ::rtl::OUString& rLocalName,
+                                      const OUString& rLocalName,
                                       const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext *pContext = 0;
@@ -674,7 +674,7 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
                 const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString("pm1")));
+                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,OUString("pm1")));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(getReportDefinition().get());
@@ -963,7 +963,7 @@ const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
     return *m_pCellElemTokenMap;
 }
 // -----------------------------------------------------------------------------
-SvXMLImportContext* ORptFilter::CreateStylesContext(const ::rtl::OUString& rLocalName,
+SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
                                      const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
 {
     SvXMLImportContext* pContext = bIsAutoStyle ? GetAutoStyles() : GetStyles();
@@ -992,7 +992,7 @@ void ORptFilter::leaveEventContext()
 }
 // -----------------------------------------------------------------------------
 SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     XMLFontStylesContext *pFSContext =
@@ -1014,7 +1014,7 @@ void ORptFilter::FinishStyles()
         GetStyles()->FinishStyles( sal_True );
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptFilter::convertFormula(const ::rtl::OUString& _sFormula)
+OUString ORptFilter::convertFormula(const OUString& _sFormula)
 {
     return _sFormula;
 }
@@ -1052,7 +1052,7 @@ void ORptFilter::endDocument( void )
     SvXMLImport::endDocument();
 }
 // -----------------------------------------------------------------------------
-void ORptFilter::removeFunction(const ::rtl::OUString& _sFunctionName)
+void ORptFilter::removeFunction(const OUString& _sFunctionName)
 {
     m_aFunctions.erase(_sFunctionName);
 }
@@ -1062,7 +1062,7 @@ void ORptFilter::insertFunction(const ::com::sun::star::uno::Reference< ::com::s
     m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }
 // -----------------------------------------------------------------------------
-SvXMLImportContext* ORptFilter::CreateMetaContext(const ::rtl::OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
+SvXMLImportContext* ORptFilter::CreateMetaContext(const OUString& rLocalName,const uno::Reference<xml::sax::XAttributeList>&)
 {
     SvXMLImportContext* pContext = NULL;
 
@@ -1080,7 +1080,7 @@ sal_Bool ORptFilter::isOldFormat() const
     uno::Reference<beans::XPropertySet> xProp = getImportInfo();
     if ( xProp.is() )
     {
-        const static ::rtl::OUString s_sOld("OldFormat");
+        const static OUString s_sOld("OldFormat");
         if ( xProp->getPropertySetInfo()->hasPropertyByName(s_sOld))
         {
             xProp->getPropertyValue(s_sOld) >>= bOldFormat;

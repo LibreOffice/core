@@ -30,7 +30,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::NamedValue;
 
 using namespace dbaui;
-void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext, ::std::vector< sal_Int32>& _out_rDetailsIds )
+void ODriversSettings::getSupportedIndirectSettings( const OUString& _sURLPrefix,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext, ::std::vector< sal_Int32>& _out_rDetailsIds )
 {
     // for a number of settings, we do not need to use hard-coded here, but can ask a
     // central DataSourceUI instance.
@@ -67,30 +67,30 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
         }
     }
 #endif
-    typedef ::std::pair<sal_uInt16, ::rtl::OUString> TProperties;
-    TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,::rtl::OUString("ShowDeleted"))
-                            ,TProperties(DSID_CHARSET,::rtl::OUString("CharSet"))
-                            ,TProperties(DSID_FIELDDELIMITER,::rtl::OUString("FieldDelimiter"))
-                            ,TProperties(DSID_TEXTDELIMITER,::rtl::OUString("StringDelimiter"))
-                            ,TProperties(DSID_DECIMALDELIMITER,::rtl::OUString("DecimalDelimiter"))
-                            ,TProperties(DSID_THOUSANDSDELIMITER,::rtl::OUString("ThousandDelimiter"))
-                            ,TProperties(DSID_TEXTFILEEXTENSION,::rtl::OUString("Extension"))
-                            ,TProperties(DSID_TEXTFILEHEADER,::rtl::OUString("HeaderLine"))
-                            ,TProperties(DSID_ADDITIONALOPTIONS,::rtl::OUString("SystemDriverSettings"))
-                            ,TProperties(DSID_CONN_SHUTSERVICE,::rtl::OUString("ShutdownDatabase"))
-                            ,TProperties(DSID_CONN_DATAINC,::rtl::OUString("DataCacheSizeIncrement"))
-                            ,TProperties(DSID_CONN_CACHESIZE,::rtl::OUString("DataCacheSize"))
-                            ,TProperties(DSID_CONN_CTRLUSER,::rtl::OUString("ControlUser"))
-                            ,TProperties(DSID_CONN_CTRLPWD,::rtl::OUString("ControlPassword"))
-                            ,TProperties(DSID_USECATALOG,::rtl::OUString("UseCatalog"))
-                            ,TProperties(DSID_CONN_SOCKET,::rtl::OUString("LocalSocket"))
-                            ,TProperties(DSID_NAMED_PIPE,::rtl::OUString("NamedPipe"))
-                            ,TProperties(DSID_JDBCDRIVERCLASS,::rtl::OUString("JavaDriverClass"))
-                            ,TProperties(DSID_CONN_LDAP_BASEDN,::rtl::OUString("BaseDN"))
-                            ,TProperties(DSID_CONN_LDAP_ROWCOUNT,::rtl::OUString("MaxRowCount"))
-                            ,TProperties(DSID_CONN_LDAP_USESSL,::rtl::OUString("UseSSL"))
-                            ,TProperties(DSID_IGNORECURRENCY,::rtl::OUString("IgnoreCurrency"))
-                            ,TProperties(0,::rtl::OUString())
+    typedef ::std::pair<sal_uInt16, OUString> TProperties;
+    TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,OUString("ShowDeleted"))
+                            ,TProperties(DSID_CHARSET,OUString("CharSet"))
+                            ,TProperties(DSID_FIELDDELIMITER,OUString("FieldDelimiter"))
+                            ,TProperties(DSID_TEXTDELIMITER,OUString("StringDelimiter"))
+                            ,TProperties(DSID_DECIMALDELIMITER,OUString("DecimalDelimiter"))
+                            ,TProperties(DSID_THOUSANDSDELIMITER,OUString("ThousandDelimiter"))
+                            ,TProperties(DSID_TEXTFILEEXTENSION,OUString("Extension"))
+                            ,TProperties(DSID_TEXTFILEHEADER,OUString("HeaderLine"))
+                            ,TProperties(DSID_ADDITIONALOPTIONS,OUString("SystemDriverSettings"))
+                            ,TProperties(DSID_CONN_SHUTSERVICE,OUString("ShutdownDatabase"))
+                            ,TProperties(DSID_CONN_DATAINC,OUString("DataCacheSizeIncrement"))
+                            ,TProperties(DSID_CONN_CACHESIZE,OUString("DataCacheSize"))
+                            ,TProperties(DSID_CONN_CTRLUSER,OUString("ControlUser"))
+                            ,TProperties(DSID_CONN_CTRLPWD,OUString("ControlPassword"))
+                            ,TProperties(DSID_USECATALOG,OUString("UseCatalog"))
+                            ,TProperties(DSID_CONN_SOCKET,OUString("LocalSocket"))
+                            ,TProperties(DSID_NAMED_PIPE,OUString("NamedPipe"))
+                            ,TProperties(DSID_JDBCDRIVERCLASS,OUString("JavaDriverClass"))
+                            ,TProperties(DSID_CONN_LDAP_BASEDN,OUString("BaseDN"))
+                            ,TProperties(DSID_CONN_LDAP_ROWCOUNT,OUString("MaxRowCount"))
+                            ,TProperties(DSID_CONN_LDAP_USESSL,OUString("UseSSL"))
+                            ,TProperties(DSID_IGNORECURRENCY,OUString("IgnoreCurrency"))
+                            ,TProperties(0,OUString())
     };
     // TODO: This mapping between IDs and property names already exists - in ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper.
     // Another mapping (which is also duplicated in ODbDataSourceAdministrationHelper) exists in dsmeta.cxx. We should

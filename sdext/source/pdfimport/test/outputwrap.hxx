@@ -38,7 +38,7 @@ typedef ::cppu::WeakComponentImplHelper1<
 
     public:
 
-        explicit OutputWrap( const rtl::OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL)
+        explicit OutputWrap( const OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL)
         {
             maFile.open(osl_File_OpenFlag_Create|osl_File_OpenFlag_Write);
         }

@@ -36,7 +36,7 @@ class SlideSorterModule
 public:
     SlideSorterModule (
         const css::uno::Reference<css::frame::XController>& rxController,
-        const ::rtl::OUString& rsLeftPaneURL);
+        const OUString& rsLeftPaneURL);
     virtual ~SlideSorterModule (void);
 
     virtual void SaveResourceState (void);

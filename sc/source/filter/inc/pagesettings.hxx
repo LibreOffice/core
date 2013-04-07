@@ -35,14 +35,14 @@ class HeaderFooterParser;
 /** Holds page style data for a single sheet. */
 struct PageSettingsModel
 {
-    ::rtl::OUString     maGraphicUrl;           /// URL of the graphic object.
-    ::rtl::OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
-    ::rtl::OUString     maOddHeader;            /// Header string for odd pages.
-    ::rtl::OUString     maOddFooter;            /// Footer string for odd pages.
-    ::rtl::OUString     maEvenHeader;           /// Header string for even pages.
-    ::rtl::OUString     maEvenFooter;           /// Footer string for even pages.
-    ::rtl::OUString     maFirstHeader;          /// Header string for first page of the sheet.
-    ::rtl::OUString     maFirstFooter;          /// Footer string for first page of the sheet.
+    OUString     maGraphicUrl;           /// URL of the graphic object.
+    OUString     maBinSettPath;          /// Relation identifier of binary printer settings.
+    OUString     maOddHeader;            /// Header string for odd pages.
+    OUString     maOddFooter;            /// Footer string for odd pages.
+    OUString     maEvenHeader;           /// Header string for even pages.
+    OUString     maEvenFooter;           /// Footer string for even pages.
+    OUString     maFirstHeader;          /// Header string for first page of the sheet.
+    OUString     maFirstFooter;          /// Footer string for first page of the sheet.
     double              mfLeftMargin;           /// Margin between left edge of page and begin of sheet area.
     double              mfRightMargin;          /// Margin between end of sheet area and right edge of page.
     double              mfTopMargin;            /// Margin between top egde of page and begin of sheet area.
@@ -99,7 +99,7 @@ public:
     /** Imports header and footer settings from a headerFooter element. */
     void                importHeaderFooter( const AttributeList& rAttribs );
     /** Imports header/footer characters from a headerFooter element. */
-    void                importHeaderFooterCharacters( const ::rtl::OUString& rChars, sal_Int32 nElement );
+    void                importHeaderFooterCharacters( const OUString& rChars, sal_Int32 nElement );
     /** Imports the picture element. */
     void                importPicture( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
 
@@ -124,7 +124,7 @@ public:
 
 private:
     /** Imports the binary picture data from the fragment with the passed identifier. */
-    void                importPictureData( const ::oox::core::Relations& rRelations, const ::rtl::OUString& rRelId );
+    void                importPictureData( const ::oox::core::Relations& rRelations, const OUString& rRelId );
 
 private:
     PageSettingsModel   maModel;
@@ -162,8 +162,8 @@ private:
     void                convertHeaderFooterData(
                             PropertySet& rPropSet,
                             HFHelperData& orHFData,
-                            const ::rtl::OUString rOddContent,
-                            const ::rtl::OUString rEvenContent,
+                            const OUString rOddContent,
+                            const OUString rEvenContent,
                             bool bUseEvenContent,
                             double fPageMargin,
                             double fContentMargin );
@@ -171,7 +171,7 @@ private:
     sal_Int32           writeHeaderFooter(
                             PropertySet& rPropSet,
                             sal_Int32 nPropId,
-                            const ::rtl::OUString& rContent );
+                            const OUString& rContent );
 
 private:
     typedef ::std::auto_ptr< HeaderFooterParser > HeaderFooterParserPtr;

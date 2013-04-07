@@ -37,12 +37,12 @@ public:
                                 const ::com::sun::star::uno::Any& rAny2
                                 ) const;
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -57,12 +57,12 @@ class XMLPMPropHdl_NumFormat : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_NumFormat();
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -77,12 +77,12 @@ class XMLPMPropHdl_NumLetterSync : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_NumLetterSync();
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -97,12 +97,12 @@ class XMLPMPropHdl_PaperTrayNumber : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_PaperTrayNumber();
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -115,19 +115,19 @@ public:
 class XMLPMPropHdl_Print : public XMLPropertyHandler
 {
 protected:
-    ::rtl::OUString         sAttrValue;
+    OUString         sAttrValue;
 
 public:
                             XMLPMPropHdl_Print( enum ::xmloff::token::XMLTokenEnum eValue );
     virtual                 ~XMLPMPropHdl_Print();
 
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -141,12 +141,12 @@ class XMLPMPropHdl_CenterHorizontal : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_CenterHorizontal();
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
@@ -157,12 +157,12 @@ class XMLPMPropHdl_CenterVertical : public XMLPropertyHandler
 public:
     virtual                 ~XMLPMPropHdl_CenterVertical();
     virtual sal_Bool        importXML(
-                                const ::rtl::OUString& rStrImpValue,
+                                const OUString& rStrImpValue,
                                 ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;
     virtual sal_Bool        exportXML(
-                                ::rtl::OUString& rStrExpValue,
+                                OUString& rStrExpValue,
                                 const ::com::sun::star::uno::Any& rValue,
                                 const SvXMLUnitConverter& rUnitConverter
                                 ) const;

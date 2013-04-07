@@ -69,7 +69,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
     if ( xFactory.is() )
     {
         bool bChangeOrientation = false;
-        ::rtl::OUString sServiceName = pBaseObj->getServiceName();
+        OUString sServiceName = pBaseObj->getServiceName();
         OSL_ENSURE(!sServiceName.isEmpty(),"No Service Name given!");
 
         if ( pObj->ISA(OUnoObject) )
@@ -101,10 +101,10 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             {
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 uno::Reference < embed::XEmbeddedObject > xObj;
-                ::rtl::OUString sName;
+                OUString sName;
                 xObj = pObj->GetModel()->GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
                     ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
-                    ::rtl::OUString("80243D39-6741-46C5-926E-069164FF87BB")), sName );
+                    OUString("80243D39-6741-46C5-926E-069164FF87BB")), sName );
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
 
                 /**************************************************

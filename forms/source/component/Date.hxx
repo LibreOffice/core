@@ -45,7 +45,7 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( ODateModel );
 
     // XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException );
+    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::beans::XPropertySet
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;

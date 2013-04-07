@@ -76,7 +76,7 @@ public:
     /**
      * @descr   Use file link source.a
      */
-    void    SetFileURL(rtl::OUString url);
+    void    SetFileURL(OUString url);
 
     /**
      * @descr   Use base64 stream.
@@ -89,8 +89,8 @@ public:
     virtual void    ToXml(IXFStream *pStrm);
 
 private:
-    rtl::OUString m_strImageFile;
-    rtl::OUString m_strData;
+    OUString m_strImageFile;
+    OUString m_strData;
     sal_Bool    m_bUseLink;
 };
 

@@ -37,13 +37,13 @@ public:
     template <typename FuncT>
         Delay( FuncT const& func,
                double nTimeout
-            ,  const ::rtl::OUString& rsDescription
+            ,  const OUString& rsDescription
             ) : Event(rsDescription),
             mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
 
     Delay( const boost::function0<void>& func,
            double nTimeout
-        , const ::rtl::OUString& rsDescription
+        , const OUString& rsDescription
         ) : Event(rsDescription),
         mnTimeout(nTimeout),
         maFunc(func),
@@ -75,7 +75,7 @@ private:
     @return generated delay event
 */
 template <typename FuncT>
-inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, rtl::OUString const& rsDescription )
+inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, OUString const& rsDescription )
 {
     return EventSharedPtr( new Delay( func, nTimeout, rsDescription ) );
 }
@@ -88,7 +88,7 @@ inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, rtl::OUStr
     @return generated immediate event.
 */
 template <typename FuncT>
-inline EventSharedPtr makeEvent_( FuncT const& func, rtl::OUString const& rsDescription)
+inline EventSharedPtr makeEvent_( FuncT const& func, OUString const& rsDescription)
 {
     return EventSharedPtr( new Delay( func, 0.0, rsDescription ) );
 }
@@ -104,7 +104,7 @@ public:
     template <typename FuncT>
     Delay_( FuncT const& func, double nTimeout,
         char const* from_function, char const* from_file, int from_line,
-        const ::rtl::OUString& rsDescription)
+        const OUString& rsDescription)
         : Delay(func, nTimeout, rsDescription),
           FROM_FUNCTION(from_function),
           FROM_FILE(from_file), FROM_LINE(from_line) {}
@@ -118,7 +118,7 @@ template <typename FuncT>
 inline EventSharedPtr makeDelay_(
     FuncT const& func, double nTimeout,
     char const* from_function, char const* from_file, int from_line,
-    const ::rtl::OUString& rsDescription)
+    const OUString& rsDescription)
 {
     return EventSharedPtr( new Delay_( func, nTimeout,
             from_function, from_file, from_line, rsDescription) );

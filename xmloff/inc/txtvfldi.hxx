@@ -46,20 +46,20 @@ enum VarType
 class XMLValueImportHelper
 {
 
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyValue;
-    const ::rtl::OUString sPropertyFormula;
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyIsFixedLanguage;
+    const OUString sPropertyContent;
+    const OUString sPropertyValue;
+    const OUString sPropertyFormula;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyIsFixedLanguage;
 
     SvXMLImport& rImport;
     XMLTextImportHelper& rHelper;
 
-    ::rtl::OUString sValue;     /// string value (only valid if bStringValueOK)
+    OUString sValue;     /// string value (only valid if bStringValueOK)
     double fValue;              /// double value (only valid if bFloatValueOK)
     sal_Int32 nFormatKey;       /// format key (only valid of bFormatOK)
-    ::rtl::OUString sFormula;   /// formula string
-    ::rtl::OUString sDefault;   /// default (see bStringDefault/bFormulaDef.)
+    OUString sFormula;   /// formula string
+    OUString sDefault;   /// default (see bStringDefault/bFormulaDef.)
     sal_Bool bIsDefaultLanguage;/// format (of nFormatKey) has system language?
 
     sal_Bool bStringType;       /// is this a string (or a float) type?
@@ -90,7 +90,7 @@ public:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -103,7 +103,7 @@ public:
     /// has format been read?
     inline sal_Bool IsFormatOK() { return bFormatOK; }
 
-    inline void SetDefault(const ::rtl::OUString& sStr) { sDefault = sStr; }
+    inline void SetDefault(const OUString& sStr) { sDefault = sStr; }
 };
 
 
@@ -135,20 +135,20 @@ public:
 class XMLVarFieldImportContext : public XMLTextFieldImportContext
 {
 protected:
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyHint;
-    const ::rtl::OUString sPropertyHelp;
-    const ::rtl::OUString sPropertyTooltip;
-    const ::rtl::OUString sPropertyIsVisible;
-    const ::rtl::OUString sPropertyIsDisplayFormula;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyContent;
+    const OUString sPropertyHint;
+    const OUString sPropertyHelp;
+    const OUString sPropertyTooltip;
+    const OUString sPropertyIsVisible;
+    const OUString sPropertyIsDisplayFormula;
+    const OUString sPropertyCurrentPresentation;
 
 private:
-    ::rtl::OUString sName;              /// name attribute
-    ::rtl::OUString sFormula;           /// formula attribute
-    ::rtl::OUString sDescription;       /// description
-    ::rtl::OUString sHelp;              /// help text
-    ::rtl::OUString sHint;              /// hint
+    OUString sName;              /// name attribute
+    OUString sFormula;           /// formula attribute
+    OUString sDescription;       /// description
+    OUString sHelp;              /// help text
+    OUString sHint;              /// hint
     XMLValueImportHelper aValueHelper;  /// value, value-type, and style
     sal_Bool bDisplayFormula;           /// display formula?(rather than value)
     sal_Bool bDisplayNone;              /// hide field?
@@ -179,7 +179,7 @@ public:
         XMLTextImportHelper& rHlp,      /// text import helper
         const sal_Char* pServiceName,   /// name of SO API service
         sal_uInt16 nPrfx,               /// namespace prefix
-        const ::rtl::OUString& rLocalName,  /// element name w/o prefix
+        const OUString& rLocalName,  /// element name w/o prefix
         // config variables for PrepareField behavior:
         sal_Bool bFormula,              /// set Formula property
         sal_Bool bFormulaDefault,       /// use content as default for formula
@@ -196,7 +196,7 @@ public:
 protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -204,7 +204,7 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
     // various accessor methods:
-    inline ::rtl::OUString GetName()    { return sName; }
+    inline OUString GetName()    { return sName; }
     inline sal_Bool IsStringValue()     { return aValueHelper.IsStringValue();}
     inline sal_Bool IsNameOK()          { return bNameOK; }
     inline sal_Bool IsFormulaOK()       { return bFormulaOK; }
@@ -217,7 +217,7 @@ protected:
 /** import variable get fields (<text:variable-get>) */
 class XMLVariableGetFieldImportContext : public XMLVarFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
+    const OUString sPropertySubType;
 
 public:
 
@@ -227,7 +227,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
 
 protected:
@@ -242,7 +242,7 @@ protected:
 /** import expression fields (<text:expression>) */
 class XMLExpressionFieldImportContext : public XMLVarFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
+    const OUString sPropertySubType;
 
 public:
 
@@ -252,7 +252,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
 protected:
     virtual void PrepareField(
@@ -263,7 +263,7 @@ protected:
 /*** import text input fields (<text:text-input>) */
 class XMLTextInputFieldImportContext : public XMLVarFieldImportContext
 {
-    const ::rtl::OUString sPropertyContent;
+    const OUString sPropertyContent;
 
 public:
 
@@ -273,7 +273,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+        const OUString& sLocalName);     /// element name w/o prefix
 
 protected:
     virtual void PrepareField(
@@ -304,7 +304,7 @@ public:
         XMLTextImportHelper& rHlp,      /// see XMLTextFieldImportContext
         const sal_Char* pServiceName,   /// see XMLTextFieldImportContext
         sal_uInt16 nPrfx,               /// see XMLTextFieldImportContext
-        const ::rtl::OUString& rLocalName, /// see XMLTextFieldImportContext
+        const OUString& rLocalName, /// see XMLTextFieldImportContext
         // for finding appropriate field master (see EndElement())
         VarType eVarType,               /// variable type
         // config variables:
@@ -337,7 +337,7 @@ protected:
 /** import variable set fields (<text:variable-set>) */
 class XMLVariableSetFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
+    const OUString sPropertySubType;
 
 public:
 
@@ -347,7 +347,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
 protected:
     /// prepare XTextField for insertion into document
@@ -361,8 +361,8 @@ protected:
 /** variable input fields (<text:variable-input>) */
 class XMLVariableInputFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const ::rtl::OUString sPropertySubType;
-    const ::rtl::OUString sPropertyIsInput;
+    const OUString sPropertySubType;
+    const OUString sPropertyIsInput;
 
 public:
 
@@ -372,7 +372,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
 protected:
 
@@ -396,7 +396,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 };
 
 /** user input fields (<text:user-field-input>) */
@@ -411,7 +411,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
     virtual void PrepareField(
         const ::com::sun::star::uno::Reference<
@@ -423,13 +423,13 @@ public:
 /** sequence fields (<text:sequence>) */
 class XMLSequenceFieldImportContext : public XMLSetVarFieldImportContext
 {
-    const ::rtl::OUString sPropertyFormula;
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertySequenceValue;
-    ::rtl::OUString sFormula;
-    ::rtl::OUString sNumFormat;
-    ::rtl::OUString sNumFormatSync;
-    ::rtl::OUString sRefName;
+    const OUString sPropertyFormula;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertySequenceValue;
+    OUString sFormula;
+    OUString sNumFormat;
+    OUString sNumFormatSync;
+    OUString sRefName;
 
     sal_Bool bRefNameOK;
 
@@ -441,13 +441,13 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -477,12 +477,12 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName,      /// element name w/o prefix
+        const OUString& rLocalName,      /// element name w/o prefix
         enum VarType eVarType);                 /// variable type
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
+        const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
 };
@@ -493,13 +493,13 @@ public:
  */
 class XMLVariableDeclImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sPropertyName;
-    const ::rtl::OUString sPropertySubType;
-    const ::rtl::OUString sPropertyNumberingLevel;
-    const ::rtl::OUString sPropertyNumberingSeparator;
-    const ::rtl::OUString sPropertyIsExpression;
+    const OUString sPropertyName;
+    const OUString sPropertySubType;
+    const OUString sPropertyNumberingLevel;
+    const OUString sPropertyNumberingSeparator;
+    const OUString sPropertyIsExpression;
 
-    ::rtl::OUString sName;
+    OUString sName;
     XMLValueImportHelper aValueHelper;
     sal_Int8 nNumLevel;
     sal_Unicode cSeparationChar;
@@ -512,7 +512,7 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName,      /// element name w/o prefix
+        const OUString& rLocalName,      /// element name w/o prefix
         const ::com::sun::star::uno::Reference< /// list of element attributes
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         enum VarType eVarType);                 /// variable type
@@ -522,7 +522,7 @@ public:
                                     ::com::sun::star::beans::XPropertySet> & xMaster,
                                     SvXMLImport& rImport,
                                     XMLTextImportHelper& rHelper,
-                                    const ::rtl::OUString& sVarName,
+                                    const OUString& sVarName,
                                     enum VarType eVarType);
 };
 
@@ -531,14 +531,14 @@ public:
 /** import table formula fields (deprecated; for Writer 2.0 compatibility) */
 class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 {
-    const ::rtl::OUString sPropertyNumberFormat;
-    const ::rtl::OUString sPropertyContent;
-    const ::rtl::OUString sPropertyIsShowFormula;
-    const ::rtl::OUString sPropertyCurrentPresentation;
+    const OUString sPropertyNumberFormat;
+    const OUString sPropertyContent;
+    const OUString sPropertyIsShowFormula;
+    const OUString sPropertyCurrentPresentation;
 
     XMLValueImportHelper aValueHelper;
 
-    ::rtl::OUString sFormula;
+    OUString sFormula;
 
     sal_Bool bIsShowFormula;
 
@@ -550,14 +550,14 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
     virtual ~XMLTableFormulaImportContext();
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
     virtual void PrepareField(
@@ -570,14 +570,14 @@ protected:
 /** import database display fields (<text:database-display>) */
 class XMLDatabaseDisplayImportContext : public XMLDatabaseFieldImportContext
 {
-    const ::rtl::OUString sPropertyColumnName;
-    const ::rtl::OUString sPropertyDatabaseFormat;
-    const ::rtl::OUString sPropertyCurrentPresentation;
-    const ::rtl::OUString sPropertyIsVisible;
+    const OUString sPropertyColumnName;
+    const OUString sPropertyDatabaseFormat;
+    const OUString sPropertyCurrentPresentation;
+    const OUString sPropertyIsVisible;
 
     XMLValueImportHelper aValueHelper;
 
-    ::rtl::OUString sColumnName;
+    OUString sColumnName;
     sal_Bool bColumnOK;
 
     sal_Bool bDisplay;
@@ -591,13 +591,13 @@ public:
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
-        const ::rtl::OUString& rLocalName);     /// element name w/o prefix
+        const OUString& rLocalName);     /// element name w/o prefix
 
 protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const ::rtl::OUString& sAttrValue );
+                                   const OUString& sAttrValue );
 
     /// create, prepare and insert database field master and database field
     virtual void EndElement();

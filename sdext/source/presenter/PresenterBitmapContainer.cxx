@@ -31,14 +31,13 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
-using ::rtl::OUString;
 
 namespace sdext { namespace presenter {
 
 //===== PresenterBitmapContainer ==============================================
 
 PresenterBitmapContainer::PresenterBitmapContainer (
-    const ::rtl::OUString& rsConfigurationBase,
+    const OUString& rsConfigurationBase,
     const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
@@ -141,7 +140,7 @@ void PresenterBitmapContainer::LoadBitmaps (
 
 SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
-    const ::rtl::OUString& rsPath,
+    const OUString& rsPath,
     const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const SharedBitmapDescriptor& rpDefault)

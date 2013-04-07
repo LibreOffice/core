@@ -32,22 +32,22 @@ class ElementConfig
 {
 public:
     ElementConfig() : mnType( ECT_HEXDUMP ) {}
-    ElementConfig( const rtl::OUString& rName, ElementConfigType rType ) : maName( rName ), mnType( rType ) {}
-    ElementConfig( const rtl::OUString& rName ) : maName( rName ) {}
+    ElementConfig( const OUString& rName, ElementConfigType rType ) : maName( rName ), mnType( rType ) {}
+    ElementConfig( const OUString& rName ) : maName( rName ) {}
     ElementConfig( ElementConfigType rType ) : mnType( rType ) {}
 
-    virtual rtl::OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 
-    const rtl::OUString& getName() const { return maName; }
+    const OUString& getName() const { return maName; }
     ElementConfigType getType() const { return mnType; }
 
-    static rtl::OUString dump_hex( SvStream& rStream, sal_Size& nLength );
-    static rtl::OUString dump_byte( SvStream& rStream, sal_Size& nLength );
-    static rtl::OUString dump_uint( SvStream& rStream, sal_Size& nLength );
-    static rtl::OUString dump_unistring( SvStream& rStream, sal_Size& nLength );
-    static rtl::OUString dump_float( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_hex( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_byte( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_uint( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_unistring( SvStream& rStream, sal_Size& nLength );
+    static OUString dump_float( SvStream& rStream, sal_Size& nLength );
 private:
-    rtl::OUString maName;
+    OUString maName;
     ElementConfigType mnType;
 };
 typedef boost::shared_ptr< ElementConfig > ElementConfigPtr;
@@ -58,12 +58,12 @@ typedef std::list< ElementConfigPtr > ElementConfigList;
 class ElementValueConfig : public ElementConfig
 {
 public:
-    ElementValueConfig( const rtl::OUString& rName, const rtl::OUString& rValue ) : ElementConfig( rName ), maValue( rValue ) {}
+    ElementValueConfig( const OUString& rName, const OUString& rValue ) : ElementConfig( rName ), maValue( rValue ) {}
 
-    const rtl::OUString& getValue() const { return maValue; }
+    const OUString& getValue() const { return maValue; }
 
 private:
-    rtl::OUString maValue;
+    OUString maValue;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -72,11 +72,11 @@ class ElementConfigContainer : public ElementConfig
 {
 public:
     ElementConfigContainer() : ElementConfig( ETC_CONTAINER ) {}
-    ElementConfigContainer( const ::rtl::OUString& rName, ElementConfigType rType ) : ElementConfig( rName, rType ) {}
-    ElementConfigContainer( const ::rtl::OUString& rName ) : ElementConfig( rName, ETC_CONTAINER ) {}
+    ElementConfigContainer( const OUString& rName, ElementConfigType rType ) : ElementConfig( rName, rType ) {}
+    ElementConfigContainer( const OUString& rName ) : ElementConfig( rName, ETC_CONTAINER ) {}
     ElementConfigContainer( ElementConfigType rType ) : ElementConfig( rType ) {}
 
-    virtual rtl::OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 
     void addElementConfig( ElementConfigPtr p ) { maElementConfigList.push_back( p ); }
 
@@ -89,12 +89,12 @@ protected:
 class CaseElementConfig : public ElementConfigContainer
 {
 public:
-    CaseElementConfig( const rtl::OUString& rValue ) : maValue( rValue ) {}
+    CaseElementConfig( const OUString& rValue ) : maValue( rValue ) {}
 
-    const rtl::OUString& getValue() const { return maValue; }
+    const OUString& getValue() const { return maValue; }
 
 private:
-    rtl::OUString maValue;
+    OUString maValue;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ class SwitchElementConfig : public ElementConfigContainer
 public:
     SwitchElementConfig( ElementConfigType rType ) : ElementConfigContainer( rType ) {}
 
-    virtual rtl::OUString format( SvStream& rStream, sal_Size& nLength ) const;
+    virtual OUString format( SvStream& rStream, sal_Size& nLength ) const;
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -112,7 +112,7 @@ public:
 class AtomConfig : public ElementConfigContainer
 {
 public:
-    AtomConfig( const ::rtl::OUString& rName, bool bIsContainer ) : ElementConfigContainer( rName ), mbIsContainer( bIsContainer ) {}
+    AtomConfig( const OUString& rName, bool bIsContainer ) : ElementConfigContainer( rName ), mbIsContainer( bIsContainer ) {}
 
     bool isContainer() const { return mbIsContainer; }
 
